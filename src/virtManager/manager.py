@@ -109,16 +109,16 @@ class vmmManager(vmmGObjectUI):
             "on_menu_file_quit_activate": self.exit_app,
             "on_menu_file_close_activate": self.close,
             "on_vmm_close_clicked": self.close,
-            "on_vm_open_clicked": self.open_vm_console,
+            "on_vm_open_clicked": self.show_vm,
             "on_vm_run_clicked": self.start_vm,
             "on_vm_new_clicked": self.new_vm,
             "on_vm_shutdown_clicked": self.poweroff_vm,
             "on_vm_pause_clicked": self.pause_vm_button,
-            "on_menu_edit_details_activate": self.open_vm_console,
+            "on_menu_edit_details_activate": self.show_vm,
             "on_menu_edit_delete_activate": self.do_delete,
             "on_menu_host_details_activate": self.show_host,
 
-            "on_vm_list_row_activated": self.open_vm_console,
+            "on_vm_list_row_activated": self.show_vm,
             "on_vm_list_button_press_event": self.popup_vm_menu_button,
             "on_vm_list_key_press_event": self.popup_vm_menu_key,
 
@@ -333,7 +333,7 @@ class vmmManager(vmmGObjectUI):
         add_vm_menu("delete", _("_Delete"), delete_icon, self.do_delete)
 
         add_sep(self.vmmenu, self.vmmenu_items, "hsep2")
-        add_vm_menu("open", gtk.STOCK_OPEN, None, self.open_vm_console)
+        add_vm_menu("open", gtk.STOCK_OPEN, None, self.show_vm)
         self.vmmenu.show()
 
         # Build connection context menu
@@ -522,29 +522,22 @@ class vmmManager(vmmGObjectUI):
         uri = self.current_connection_uri(default_selection=True)
         self.emit("action-show-host", uri)
 
-    def open_vm_console(self, ignore, ignore2=None, ignore3=None):
-        if self.current_vmuuid():
-            self.emit("action-show-console",
-                      self.current_connection_uri(), self.current_vmuuid())
-        elif self.current_connection():
+    def show_vm(self, ignore, ignore2=None, ignore3=None):
+        conn = self.current_connection()
+        vm = self.current_vm()
+        if conn is None:
+            return
+
+        if vm:
+            self.emit("action-show-vm", conn.get_uri(), vm.get_uuid())
+        else:
             if not self.open_connection():
-                self.emit("action-show-host", self.current_connection_uri())
+                self.emit("action-show-host", conn.get_uri())
 
     def open_clone_window(self, ignore1=None, ignore2=None, ignore3=None):
         if self.current_vmuuid():
             self.emit("action-clone-domain", self.current_connection_uri(),
                       self.current_vmuuid())
-
-    def show_vm_details(self, ignore):
-        conn = self.current_connection()
-        if conn is None:
-            return
-        vm = self.current_vm()
-        if vm is None:
-            self.emit("action-show-host", conn.get_uri())
-        else:
-            self.emit("action-show-console",
-                      conn.get_uri(), vm.get_uuid())
 
     def do_delete(self, ignore=None):
         conn = self.current_connection()
@@ -1107,10 +1100,7 @@ class vmmManager(vmmGObjectUI):
 
 vmmGObjectUI.type_register(vmmManager)
 vmmManager.signal_new(vmmManager, "action-show-connect", [])
-vmmManager.signal_new(vmmManager, "action-show-console", [str, str])
-vmmManager.signal_new(vmmManager, "action-show-terminal", [str, str])
-vmmManager.signal_new(vmmManager, "action-refresh-terminal", [str, str])
-vmmManager.signal_new(vmmManager, "action-show-details", [str, str])
+vmmManager.signal_new(vmmManager, "action-show-vm", [str, str])
 vmmManager.signal_new(vmmManager, "action-show-about", [])
 vmmManager.signal_new(vmmManager, "action-show-host", [str])
 vmmManager.signal_new(vmmManager, "action-show-preferences", [])

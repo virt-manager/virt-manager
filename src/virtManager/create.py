@@ -1648,16 +1648,7 @@ class vmmCreate(vmmGObjectUI):
         self.close()
 
         # Launch details dialog for new VM
-        vm = self.conn.get_vm(guest.uuid)
-        gtype = vm.get_graphics_console()[0]
-        if gtype in self.config.embeddable_graphics():
-            self.emit("action-show-console", self.conn.get_uri(),
-                      guest.uuid)
-        elif vm.get_connection().is_remote():
-            self.emit("action-show-terminal", self.conn.get_uri(),
-                      guest.uuid)
-
-
+        self.emit("action-show-vm", self.conn.get_uri(), guest.uuid)
 
     def do_install(self, asyncjob, guest):
         meter = vmmCreateMeter(asyncjob)
@@ -1869,6 +1860,5 @@ class vmmCreate(vmmGObjectUI):
         return self.err.val_err(msg, extra)
 
 vmmGObjectUI.type_register(vmmCreate)
-vmmCreate.signal_new(vmmCreate, "action-show-console", [str, str])
-vmmCreate.signal_new(vmmCreate, "action-show-terminal", [str, str])
+vmmCreate.signal_new(vmmCreate, "action-show-vm", [str, str])
 vmmCreate.signal_new(vmmCreate, "action-show-help", [str])

@@ -213,7 +213,7 @@ class vmmSystray(vmmGObject):
         open_item = gtk.ImageMenuItem("gtk-open")
         open_item.show()
         open_item.connect("activate", self.run_vm_action,
-                          "action-show-console", vm.get_uuid())
+                          "action-show-vm", vm.get_uuid())
 
         vm_action_dict = {}
         vm_action_dict["run"] = run_item
@@ -438,6 +438,5 @@ vmmSystray.signal_new(vmmSystray, "action-shutdown-domain", [str, str])
 vmmSystray.signal_new(vmmSystray, "action-reboot-domain", [str, str])
 vmmSystray.signal_new(vmmSystray, "action-destroy-domain", [str, str])
 vmmSystray.signal_new(vmmSystray, "action-show-host", [str])
-vmmSystray.signal_new(vmmSystray, "action-show-details", [str, str])
-vmmSystray.signal_new(vmmSystray, "action-show-console", [str, str])
+vmmSystray.signal_new(vmmSystray, "action-show-vm", [str, str])
 vmmSystray.signal_new(vmmSystray, "action-exit-app", [])

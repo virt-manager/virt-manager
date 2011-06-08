@@ -300,7 +300,6 @@ class vmmDetails(vmmGObjectUI):
             "on_details_menu_clone_activate": self.control_vm_clone,
             "on_details_menu_migrate_activate": self.control_vm_migrate,
             "on_details_menu_screenshot_activate": self.control_vm_screenshot,
-            "on_details_menu_graphics_activate": self.control_vm_console,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
             "on_details_menu_view_manager_activate": self.view_manager,
             "on_details_menu_view_details_toggled": self.details_console_changed,
@@ -1188,7 +1187,7 @@ class vmmDetails(vmmGObjectUI):
     def exit_app(self, src_ignore):
         self.emit("action-exit-app")
 
-    def activate_console_page(self):
+    def activate_default_page(self):
         pages = self.window.get_widget("details-pages")
         pages.set_current_page(PAGE_CONSOLE)
 
@@ -1204,6 +1203,9 @@ class vmmDetails(vmmGObjectUI):
             self._show_serial_tab(name, serialidx)
             break
 
+    def activate_console_page(self):
+        pages = self.window.get_widget("details-pages")
+        pages.set_current_page(PAGE_CONSOLE)
 
     def activate_performance_page(self):
         self.window.get_widget("details-pages").set_current_page(PAGE_DETAILS)
@@ -1266,10 +1268,6 @@ class vmmDetails(vmmGObjectUI):
 
     def control_vm_reboot(self, src_ignore):
         self.emit("action-reboot-domain",
-                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
-
-    def control_vm_console(self, src_ignore):
-        self.emit("action-show-console",
                   self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def control_vm_save(self, src_ignore):
@@ -3036,7 +3034,6 @@ class vmmDetails(vmmGObjectUI):
 
 
 vmmGObjectUI.type_register(vmmDetails)
-vmmDetails.signal_new(vmmDetails, "action-show-console", [str, str])
 vmmDetails.signal_new(vmmDetails, "action-save-domain", [str, str])
 vmmDetails.signal_new(vmmDetails, "action-destroy-domain", [str, str])
 vmmDetails.signal_new(vmmDetails, "action-suspend-domain", [str, str])

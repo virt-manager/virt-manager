@@ -64,6 +64,10 @@ def default_uri():
 
     return tryuri
 
+DETAILS_PERF = 1
+DETAILS_CONFIG = 2
+DETAILS_CONSOLE = 3
+
 #############################
 # PackageKit lookup helpers #
 #############################
@@ -261,8 +265,7 @@ class vmmEngine(vmmGObject):
         self.systray.connect("action-shutdown-domain", self._do_shutdown_domain)
         self.systray.connect("action-reboot-domain", self._do_reboot_domain)
         self.systray.connect("action-destroy-domain", self._do_destroy_domain)
-        self.systray.connect("action-show-console", self._do_show_console)
-        self.systray.connect("action-show-details", self._do_show_details)
+        self.systray.connect("action-show-vm", self._do_show_vm)
         self.systray.connect("action-exit-app", self.exit_app)
 
     def system_tray_changed(self, *ignore):
@@ -698,22 +701,29 @@ class vmmEngine(vmmGObject):
         obj.connect("details-closed", self.decrement_window_counter)
 
         self.connections[uri]["windowDetails"][uuid] = obj
-        self.connections[uri]["windowDetails"][uuid].show()
         return self.connections[uri]["windowDetails"][uuid]
 
-    def _do_show_details(self, src, uri, uuid):
+    def _show_vm_helper(self, src, uri, uuid, page=None, forcepage=False):
         try:
             details = self._get_details_dialog(uri, uuid)
+
+            if forcepage or not details.is_visible():
+                if page == DETAILS_PERF:
+                    details.activate_performance_page()
+                elif page == DETAILS_CONFIG:
+                    details.activate_config_page()
+                elif page == DETAILS_CONSOLE:
+                    details.activate_console_page()
+                elif page is None:
+                    details.activate_default_page()
+
             details.show()
             return details
         except Exception, e:
             src.err.show_err(_("Error launching details: %s") % str(e))
 
-    def _do_show_console(self, src, uri, uuid):
-        win = self._do_show_details(src, uri, uuid)
-        if not win:
-            return
-        win.activate_console_page()
+    def _do_show_vm(self, src, uri, uuid):
+        self._show_vm_helper(src, uri, uuid)
 
     def get_manager(self):
         if self.windowManager:
@@ -729,8 +739,7 @@ class vmmEngine(vmmGObject):
         obj.connect("action-save-domain", self._do_save_domain)
         obj.connect("action-migrate-domain", self._do_show_migrate)
         obj.connect("action-clone-domain", self._do_show_clone)
-        obj.connect("action-show-console", self._do_show_console)
-        obj.connect("action-show-details", self._do_show_details)
+        obj.connect("action-show-vm", self._do_show_vm)
         obj.connect("action-show-preferences", self._do_show_preferences)
         obj.connect("action-show-create", self._do_show_create)
         obj.connect("action-show-help", self._do_show_help)
@@ -766,7 +775,7 @@ class vmmEngine(vmmGObject):
             return self.windowCreate
 
         obj = vmmCreate(self)
-        obj.connect("action-show-console", self._do_show_console)
+        obj.connect("action-show-vm", self._do_show_vm)
         obj.connect("action-show-help", self._do_show_help)
         self.windowCreate = obj
         return self.windowCreate
@@ -824,22 +833,16 @@ class vmmEngine(vmmGObject):
         self._do_show_create(self.get_manager(), uri)
 
     def show_domain_console(self, uri, uuid):
-        win = self._do_show_details(self.get_manager(), uri, uuid)
-        if not win:
-            return
-        win.activate_console_page()
+        self._show_vm_helper(self.get_manager(), uri, uuid,
+                             page=DETAILS_CONSOLE, forcepage=True)
 
     def show_domain_editor(self, uri, uuid):
-        win = self._do_show_details(self.get_manager(), uri, uuid)
-        if not win:
-            return
-        win.activate_config_page()
+        self._show_vm_helper(self.get_manager(), uri, uuid,
+                             page=DETAILS_CONFIG, forcepage=True)
 
     def show_domain_performance(self, uri, uuid):
-        win = self._do_show_details(self.get_manager(), uri, uuid)
-        if not win:
-            return
-        win.activate_performance_page()
+        self._show_vm_helper(self.get_manager(), uri, uuid,
+                             page=DETAILS_PERF, forcepage=True)
 
     #######################################
     # Domain actions run/destroy/save ... #
