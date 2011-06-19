@@ -34,6 +34,101 @@ import libvirt
 
 from virtManager.baseclass import vmmGObject
 
+class ConsoleConnection(vmmGObject):
+    def __init__(self, vm):
+        vmmGObject.__init__(self)
+
+        self.vm = vm
+        self.conn = vm.get_connection()
+
+    def cleanup(self):
+        vmmGObject.cleanup(self)
+        self.close()
+
+        self.vm = None
+        self.conn = None
+
+    def open(self, ipty, terminal):
+        raise NotImplementedError()
+    def close(self):
+        raise NotImplementedError()
+
+    def send_data(self, src, text, length, terminal):
+        """
+        Callback when data has been entered into VTE terminal
+        """
+        raise NotImplementedError()
+
+class LocalConsoleConnection(ConsoleConnection):
+    def __init__(self, vm):
+        ConsoleConnection.__init__(self, vm)
+
+        self.fd = None
+        self.source = None
+        self.origtermios = None
+
+    def cleanup(self):
+        ConsoleConnection.cleanup(self)
+
+    def open(self, ipty, terminal):
+        if self.fd != None:
+            self.close()
+
+        logging.debug("Opening serial tty path: %s" % ipty)
+        if ipty == None:
+            return
+
+        self.fd = pty.slave_open(ipty)
+        fcntl.fcntl(self.fd, fcntl.F_SETFL, os.O_NONBLOCK)
+        self.source = gobject.io_add_watch(self.fd,
+                            gobject.IO_IN | gobject.IO_ERR | gobject.IO_HUP,
+                            self.display_data, terminal)
+
+        # Save term settings & set to raw mode
+        self.origtermios = termios.tcgetattr(self.fd)
+        tty.setraw(self.fd, termios.TCSANOW)
+
+    def close(self):
+        if self.fd == None:
+            return
+
+        # Restore term settings
+        try:
+            termios.tcsetattr(self.fd, termios.TCSANOW, self.origtermios)
+        except:
+            # domain may already have exited, destroying the pty, so ignore
+            pass
+
+        os.close(self.fd)
+        gobject.source_remove(self.source)
+        self.fd = None
+        self.source = None
+        self.origtermios = None
+
+    def send_data(self, src, text, length, terminal):
+        ignore = src
+        ignore = length
+        ignore = terminal
+
+        if self.fd is None:
+            return
+
+        os.write(self.fd, text)
+
+    def display_data(self, src, cond, terminal):
+        ignore = src
+
+        if cond != gobject.IO_IN:
+            self.close()
+            return False
+
+        data = os.read(self.fd, 1024)
+        terminal.feed(data, len(data))
+        return True
+
+
+
+
 class vmmSerialConsole(vmmGObject):
     def __init__(self, vm, target_port):
         vmmGObject.__init__(self)
@@ -42,9 +137,7 @@ class vmmSerialConsole(vmmGObject):
         self.target_port = target_port
         self.ttypath = None
 
-        self.ptyio = None
-        self.ptysrc = None
-        self.ptytermios = None
+        self.console = LocalConsoleConnection(self.vm)
 
         self.terminal = None
         self.init_terminal()
@@ -70,7 +163,7 @@ class vmmSerialConsole(vmmGObject):
         #self.terminal.set_backspace_binding(vte.ERASE_ASCII_BACKSPACE)
         self.terminal.set_backspace_binding(1)
 
-        self.terminal.connect("commit", self.send_data)
+        self.terminal.connect("commit", self.console.send_data, self.terminal)
         self.terminal.show()
 
     def init_ui(self):
@@ -84,21 +177,24 @@ class vmmSerialConsole(vmmGObject):
     def cleanup(self):
         vmmGObject.cleanup(self)
 
+        self.console.cleanup()
+        self.console = None
+
         self.vm = None
         self.terminal = None
         self.box = None
 
     def handle_realize(self, ignore=None):
-        self.opentty()
+        self.console.open(self.ttypath, self.terminal)
 
     def handle_unrealize(self, src_ignore=None, ignore=None):
-        self.closetty()
+        self.console.close()
 
     def vm_status_changed(self, src_ignore, oldstatus_ignore, status):
         if status in [libvirt.VIR_DOMAIN_RUNNING]:
-            self.opentty()
+            self.console.open(self.ttypath)
         else:
-            self.closetty()
+            self.console.close()
 
     def update_tty_path(self, vm):
         serials = vm.get_serial_devs()
@@ -115,50 +211,3 @@ class vmmSerialConsole(vmmGObject):
         logging.debug("No devices found for serial target port '%s'." %
                       self.target_port)
         self.ttypath = None
-
-    def opentty(self):
-        if self.ptyio != None:
-            self.closetty()
-
-        ipty = self.ttypath
-        logging.debug("Opening serial tty path: %s" % self.ttypath)
-        if ipty == None:
-            return
-
-        self.ptyio = pty.slave_open(ipty)
-        fcntl.fcntl(self.ptyio, fcntl.F_SETFL, os.O_NONBLOCK)
-        self.ptysrc = gobject.io_add_watch(self.ptyio,
-                            gobject.IO_IN | gobject.IO_ERR | gobject.IO_HUP,
-                            self.display_data)
-
-        # Save term settings & set to raw mode
-        self.ptytermios = termios.tcgetattr(self.ptyio)
-        tty.setraw(self.ptyio, termios.TCSANOW)
-
-    def closetty(self):
-        if self.ptyio == None:
-            return
-        # Restore term settings
-        try:
-            termios.tcsetattr(self.ptyio, termios.TCSANOW, self.ptytermios)
-        except:
-            # The domain may already have exited, destroying the pty, so ignore
-            pass
-        os.close(self.ptyio)
-        gobject.source_remove(self.ptysrc)
-        self.ptyio = None
-        self.ptysrc = None
-        self.ptytermios = None
-
-    def send_data(self, src_ignore, text, length_ignore):
-        if self.ptyio != None:
-            os.write(self.ptyio, text)
-
-    def display_data(self, src_ignore, cond):
-        if cond == gobject.IO_IN:
-            data = os.read(self.ptyio, 1024)
-            self.terminal.feed(data, len(data))
-            return True
-        else:
-            self.closetty()
-            return False
