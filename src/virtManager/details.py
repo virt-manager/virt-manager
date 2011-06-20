@@ -866,7 +866,6 @@ class vmmDetails(vmmGObjectUI):
 
     def build_serial_list(self):
         ret = []
-        usable_types = ["pty"]
 
         def add_row(text, err, sensitive, do_radio, cb, serialidx):
             ret.append([text, err, sensitive, do_radio, cb, serialidx])
@@ -882,31 +881,16 @@ class vmmDetails(vmmGObjectUI):
             return "Serial %d" % (dev.vmmindex + 1)
 
         for dev in devs:
-            serialdesc = build_desc(dev)
-            serialtype = dev.char_type
-            serialpath = dev.source_path
-            serialidx = dev.vmmindex
+            desc = build_desc(dev)
+            idx = dev.vmmindex
 
-            sensitive = False
-            err = None
-
-            if self.vm.get_connection().is_remote():
-                err = _("Serial console not yet supported over remote "
-                         "connection.")
-            elif not self.vm.is_active():
-                err = _("Serial console not available for inactive guest.")
-            elif not serialtype in usable_types:
-                err = (_("Console for device type '%s' not yet supported.") %
-                         serialtype)
-            elif serialpath and not os.access(serialpath, os.R_OK | os.W_OK):
-                err = _("Can not access console path '%s'.") % str(serialpath)
-            else:
-                sensitive = True
+            err = vmmSerialConsole.can_connect(self.vm, dev)
+            sensitive = not bool(err)
 
             def cb(src):
-                return self.control_serial_tab(src, serialdesc, serialidx)
+                return self.control_serial_tab(src, desc, idx)
 
-            add_row(serialdesc, err, sensitive, True, cb, serialidx)
+            add_row(desc, err, sensitive, True, cb, idx)
 
         return ret
 

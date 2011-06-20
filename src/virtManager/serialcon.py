@@ -131,6 +131,32 @@ class LocalConsoleConnection(ConsoleConnection):
 
 
 class vmmSerialConsole(vmmGObject):
+
+    @staticmethod
+    def can_connect(vm, dev):
+        """
+        Check if we think we can actually open passed console/serial dev
+        """
+        usable_types = ["pty"]
+
+        ctype = dev.char_type
+        path = dev.source_path
+
+        err = ""
+
+        if vm.get_connection().is_remote():
+            err = _("Serial console not yet supported over remote "
+                    "connection")
+        elif not vm.is_active():
+            err = _("Serial console not available for inactive guest")
+        elif not ctype in usable_types:
+            err = (_("Console for device type '%s' not yet supported") %
+                     ctype)
+        elif path and not os.access(path, os.R_OK | os.W_OK):
+            err = _("Can not access console path '%s'") % str(path)
+
+        return err
+
     def __init__(self, vm, target_port):
         vmmGObject.__init__(self)
 
