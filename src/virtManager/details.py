@@ -1319,10 +1319,10 @@ class vmmDetails(vmmGObjectUI):
             serial = vmmSerialConsole(self.vm, target_port, name)
 
             title = gtk.Label(name)
-            child = serial.box
-            child.show_all()
-            self.window.get_widget("details-pages").append_page(child, title)
+            self.window.get_widget("details-pages").append_page(serial.box,
+                                                                title)
             self.serial_tabs.append(serial)
+            serial.open_console()
 
         page_idx = self.serial_tabs.index(serial) + PAGE_DYNAMIC_OFFSET
         self.window.get_widget("details-pages").set_current_page(page_idx)

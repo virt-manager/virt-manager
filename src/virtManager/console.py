@@ -879,6 +879,10 @@ class vmmConsolePages(vmmGObjectUI):
     ###################
 
     def activate_unavailable_page(self, msg):
+        """
+        This function is passed to serialcon.py at least, so change
+        with care
+        """
         self.close_viewer()
         self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
         self.window.get_widget("details-menu-vm-screenshot").set_sensitive(False)

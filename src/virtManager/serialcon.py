@@ -95,14 +95,16 @@ class LocalConsoleConnection(ConsoleConnection):
 
         # Restore term settings
         try:
-            termios.tcsetattr(self.fd, termios.TCSANOW, self.origtermios)
+            if self.origtermios:
+                termios.tcsetattr(self.fd, termios.TCSANOW, self.origtermios)
         except:
             # domain may already have exited, destroying the pty, so ignore
             pass
 
         os.close(self.fd)
-        gobject.source_remove(self.source)
         self.fd = None
+
+        gobject.source_remove(self.source)
         self.source = None
         self.origtermios = None
 
@@ -177,10 +179,9 @@ class vmmSerialConsole(vmmGObject):
         self.init_terminal()
 
         self.box = None
+        self.error_label = None
         self.init_ui()
 
-        self.box.connect("realize", self.handle_realize)
-        self.box.connect("unrealize", self.handle_unrealize)
         self.vm.connect("status-changed", self.vm_status_changed)
 
     def init_terminal(self):
@@ -209,12 +210,22 @@ class vmmSerialConsole(vmmGObject):
         self.serial_popup.add(self.serial_paste)
 
     def init_ui(self):
-        self.box = gtk.HBox()
+        self.box = gtk.Notebook()
+        self.box.set_show_tabs(False)
+        self.box.set_show_border(False)
+
+        terminalbox = gtk.HBox()
         scrollbar = gtk.VScrollbar()
         scrollbar.set_adjustment(self.terminal.get_adjustment())
 
-        self.box.pack_start(self.terminal)
-        self.box.pack_start(scrollbar, expand=False, fill=False)
+        terminalbox.pack_start(self.terminal)
+        terminalbox.pack_start(scrollbar, expand=False, fill=False)
+
+        self.box.append_page(terminalbox)
+
+        self.error_label = gtk.Label()
+        self.box.append_page(self.error_label)
+        self.box.show_all()
 
     def cleanup(self):
         vmmGObject.cleanup(self)
@@ -226,15 +237,28 @@ class vmmSerialConsole(vmmGObject):
         self.terminal = None
         self.box = None
 
-    def handle_realize(self, ignore=None):
-        self.console.open(self.lookup_dev(), self.terminal)
+    def show_error(self, msg):
+        self.error_label.set_markup("<b>%s</b>" % msg)
+        self.box.set_current_page(1)
 
-    def handle_unrealize(self, src_ignore=None, ignore=None):
-        self.console.close()
+    def open_console(self):
+        try:
+            self.console.open(self.lookup_dev(), self.terminal)
+            self.box.set_current_page(0)
+            return True
+        except Exception, e:
+            logging.exception("Error opening serial console")
+            self.show_error(_("Error connecting to text console: %s") % e)
+            try:
+                self.console.close()
+            except:
+                pass
+
+        return False
 
     def vm_status_changed(self, src_ignore, oldstatus_ignore, status):
         if status in [libvirt.VIR_DOMAIN_RUNNING]:
-            self.console.open(self.lookup_dev(), self.terminal)
+            self.open_console()
         else:
             self.console.close()
 
