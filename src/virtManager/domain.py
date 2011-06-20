@@ -819,17 +819,8 @@ class vmmDomain(vmmLibvirtObject):
         devs = self.get_char_devices()
         devlist = []
 
-        serials  = filter(lambda x: x.virtual_device_type == "serial", devs)
-        consoles = filter(lambda x: x.virtual_device_type == "console", devs)
-
-        for dev in serials:
-            devlist.append(["Serial %s" % (dev.vmmindex + 1), dev.char_type,
-                            dev.source_path, dev.vmmindex])
-
-        for dev in consoles:
-            devlist.append(["Text Console %s" % (dev.vmmindex + 1),
-                            dev.char_type, dev.source_path, dev.vmmindex])
-
+        devlist += filter(lambda x: x.virtual_device_type == "serial", devs)
+        devlist += filter(lambda x: x.virtual_device_type == "console", devs)
         return devlist
 
     def get_graphics_console(self):

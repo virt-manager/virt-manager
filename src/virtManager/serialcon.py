@@ -48,7 +48,7 @@ class ConsoleConnection(vmmGObject):
         self.vm = None
         self.conn = None
 
-    def open(self, ipty, terminal):
+    def open(self, dev, terminal):
         raise NotImplementedError()
     def close(self):
         raise NotImplementedError()
@@ -70,10 +70,11 @@ class LocalConsoleConnection(ConsoleConnection):
     def cleanup(self):
         ConsoleConnection.cleanup(self)
 
-    def open(self, ipty, terminal):
+    def open(self, dev, terminal):
         if self.fd != None:
             self.close()
 
+        ipty = dev and dev.source_path or None
         logging.debug("Opening serial tty path: %s" % ipty)
         if ipty == None:
             return
@@ -135,7 +136,7 @@ class vmmSerialConsole(vmmGObject):
 
         self.vm = vm
         self.target_port = target_port
-        self.ttypath = None
+        self.lastpath = None
 
         self.console = LocalConsoleConnection(self.vm)
 
@@ -147,9 +148,7 @@ class vmmSerialConsole(vmmGObject):
 
         self.box.connect("realize", self.handle_realize)
         self.box.connect("unrealize", self.handle_unrealize)
-        self.vm.connect("config-changed", self.update_tty_path)
         self.vm.connect("status-changed", self.vm_status_changed)
-        self.update_tty_path(self.vm)
 
     def init_terminal(self):
         self.terminal = vte.Terminal()
@@ -185,29 +184,31 @@ class vmmSerialConsole(vmmGObject):
         self.box = None
 
     def handle_realize(self, ignore=None):
-        self.console.open(self.ttypath, self.terminal)
+        self.console.open(self.lookup_dev(), self.terminal)
 
     def handle_unrealize(self, src_ignore=None, ignore=None):
         self.console.close()
 
     def vm_status_changed(self, src_ignore, oldstatus_ignore, status):
         if status in [libvirt.VIR_DOMAIN_RUNNING]:
-            self.console.open(self.ttypath)
+            self.console.open(self.lookup_dev(), self.terminal)
         else:
             self.console.close()
 
-    def update_tty_path(self, vm):
-        serials = vm.get_serial_devs()
-        for s in serials:
-            port = s[3]
-            path = s[2]
+    def lookup_dev(self):
+        devs = self.vm.get_serial_devs()
+        for dev in devs:
+            port = dev.vmmindex
+            path = dev.source_path
+
             if port == self.target_port:
-                if path != self.ttypath:
+                if path != self.lastpath:
                     logging.debug("Serial console '%s' path changed to %s."
-                                   % (self.target_port, path))
-                    self.ttypath = path
-                    return
+                                  % (self.target_port, path))
+                self.lastpath = path
+                return dev
 
         logging.debug("No devices found for serial target port '%s'." %
                       self.target_port)
-        self.ttypath = None
+        self.lastpath = None
+        return None

@@ -415,10 +415,6 @@ class vmmDetails(vmmGObjectUI):
         self.close()
 
         try:
-            self.vm = None
-            self.conn = None
-            self.addhwmenu = None
-
             if self.addhw:
                 self.addhw.cleanup()
                 self.addhw = None
@@ -437,6 +433,10 @@ class vmmDetails(vmmGObjectUI):
 
             self.console.cleanup()
             self.console = None
+
+            self.vm = None
+            self.conn = None
+            self.addhwmenu = None
         except:
             logging.exception("Error cleaning up details")
 
@@ -876,7 +876,17 @@ class vmmDetails(vmmGObjectUI):
             add_row(_("No text console available"),
                     None, False, False, None, None)
 
-        for serialdesc, serialtype, serialpath, serialidx in devs:
+        def build_desc(dev):
+            if dev.virtual_device_type == "console":
+                return "Text Console %d" % (dev.vmmindex + 1)
+            return "Serial %d" % (dev.vmmindex + 1)
+
+        for dev in devs:
+            serialdesc = build_desc(dev)
+            serialtype = dev.char_type
+            serialpath = dev.source_path
+            serialidx = dev.vmmindex
+
             sensitive = False
             err = None
 
