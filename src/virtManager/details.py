@@ -20,7 +20,6 @@
 
 import logging
 import traceback
-import os
 
 import gtk
 
@@ -242,7 +241,6 @@ class vmmDetails(vmmGObjectUI):
 
 
         self.serial_tabs = []
-        self.serial_mappings = {}
         self.last_console_page = PAGE_CONSOLE
         self.addhw = None
         self.media_choosers = {"cdrom": None, "floppy": None}
@@ -262,12 +260,6 @@ class vmmDetails(vmmGObjectUI):
         self.keycombo_menu = None
         self.init_menus()
         self.init_details()
-
-        self.serial_popup = None
-        self.serial_copy = None
-        self.serial_paste = None
-        self.serial_close = None
-        self.init_serial()
 
         self.cpu_usage_graph = None
         self.memory_usage_graph = None
@@ -428,8 +420,8 @@ class vmmDetails(vmmGObjectUI):
                     self.media_choosers[key].cleanup()
             self.media_choosers = {}
 
-            for name in self.serial_tabs:
-                self._close_serial_tab(name)
+            for serial in self.serial_tabs:
+                self._close_serial_tab(serial)
 
             self.console.cleanup()
             self.console = None
@@ -527,23 +519,6 @@ class vmmDetails(vmmGObjectUI):
 
         # XXX: Help docs useless/out of date
         self.window.get_widget("help_menuitem").hide()
-
-    def init_serial(self):
-        self.serial_popup = gtk.Menu()
-
-        self.serial_copy = gtk.ImageMenuItem(gtk.STOCK_COPY)
-        self.serial_popup.add(self.serial_copy)
-
-        self.serial_paste = gtk.ImageMenuItem(gtk.STOCK_PASTE)
-        self.serial_popup.add(self.serial_paste)
-
-        self.serial_popup.add(gtk.SeparatorMenuItem())
-
-        self.serial_close = gtk.ImageMenuItem(_("Close tab"))
-        close_image = gtk.Image()
-        close_image.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU)
-        self.serial_close.set_image(close_image)
-        self.serial_popup.add(self.serial_close)
 
     def init_graphs(self):
         graph_table = self.window.get_widget("graph-table")
@@ -932,7 +907,9 @@ class vmmDetails(vmmGObjectUI):
                 item.connect("toggled", cb)
 
             # Tab is already open, make sure marked as such
-            if sensitive and serial_page_dev and serial_page_dev == msg:
+            if (sensitive and
+                serial_page_dev and
+                serial_page_dev.name == msg):
                 item.set_active(True)
 
             src.add(item)
@@ -1317,73 +1294,48 @@ class vmmDetails(vmmGObjectUI):
         msg.destroy()
 
 
-    # ------------------------------
-    # Serial Console pieces
-    # ------------------------------
+    #########################
+    # Serial Console pieces #
+    #########################
 
     def control_serial_tab(self, src_ignore, name, target_port):
+        pages = self.window.get_widget("details-pages")
         is_graphics = (name == "graphics")
         is_serial = not is_graphics
 
         if is_graphics:
-            self.window.get_widget("details-pages").set_current_page(PAGE_CONSOLE)
+            pages.set_current_page(PAGE_CONSOLE)
         elif is_serial:
             self._show_serial_tab(name, target_port)
 
-    def show_serial_rcpopup(self, src, event):
-        if event.button != 3:
-            return
-
-        self.serial_popup.show_all()
-        self.serial_copy.connect("activate", self.serial_copy_text, src)
-        self.serial_paste.connect("activate", self.serial_paste_text, src)
-        self.serial_close.connect("activate", self.serial_close_tab,
-                                  self.window.get_widget("details-pages").get_current_page())
-
-        if src.get_has_selection():
-            self.serial_copy.set_sensitive(True)
-        else:
-            self.serial_copy.set_sensitive(False)
-        self.serial_popup.popup(None, None, None, 0, event.time)
-
-    def serial_close_tab(self, src_ignore, pagenum):
-        tab_idx = (pagenum - PAGE_DYNAMIC_OFFSET)
-        if (tab_idx < 0) or (tab_idx > len(self.serial_tabs) - 1):
-            return
-        return self._close_serial_tab(self.serial_tabs[tab_idx])
-
-    def serial_copy_text(self, src_ignore, terminal):
-        terminal.copy_clipboard()
-
-    def serial_paste_text(self, src_ignore, terminal):
-        terminal.paste_clipboard()
-
     def _show_serial_tab(self, name, target_port):
-        if not self.serial_tabs.count(name):
-            serial = vmmSerialConsole(self.vm, target_port)
-            serial.terminal.connect("button-press-event",
-                                    self.show_serial_rcpopup)
+        serial = None
+        for s in self.serial_tabs:
+            if s.name == name:
+                serial = s
+                break
+
+        if not serial:
+            serial = vmmSerialConsole(self.vm, target_port, name)
 
             title = gtk.Label(name)
             child = serial.box
             child.show_all()
             self.window.get_widget("details-pages").append_page(child, title)
-            self.serial_tabs.append(name)
-            self.serial_mappings[name] = serial
+            self.serial_tabs.append(serial)
 
-        page_idx = self.serial_tabs.index(name) + PAGE_DYNAMIC_OFFSET
+        page_idx = self.serial_tabs.index(serial) + PAGE_DYNAMIC_OFFSET
         self.window.get_widget("details-pages").set_current_page(page_idx)
 
-    def _close_serial_tab(self, name):
-        if not self.serial_tabs.count(name):
+    def _close_serial_tab(self, serial):
+        if not serial in self.serial_tabs:
             return
 
-        page_idx = self.serial_tabs.index(name) + PAGE_DYNAMIC_OFFSET
+        page_idx = self.serial_tabs.index(serial) + PAGE_DYNAMIC_OFFSET
         self.window.get_widget("details-pages").remove_page(page_idx)
 
-        self.serial_mappings[name].cleanup()
-        del(self.serial_mappings[name])
-        self.serial_tabs.remove(name)
+        serial.cleanup()
+        self.serial_tabs.remove(serial)
 
 
     ############################

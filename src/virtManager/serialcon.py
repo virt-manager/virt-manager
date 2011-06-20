@@ -157,14 +157,21 @@ class vmmSerialConsole(vmmGObject):
 
         return err
 
-    def __init__(self, vm, target_port):
+    def __init__(self, vm, target_port, name):
         vmmGObject.__init__(self)
 
         self.vm = vm
         self.target_port = target_port
+        self.name = name
         self.lastpath = None
 
         self.console = LocalConsoleConnection(self.vm)
+
+        self.serial_popup = None
+        self.serial_copy = None
+        self.serial_paste = None
+        self.serial_close = None
+        self.init_popup()
 
         self.terminal = None
         self.init_terminal()
@@ -188,8 +195,18 @@ class vmmSerialConsole(vmmGObject):
         #self.terminal.set_backspace_binding(vte.ERASE_ASCII_BACKSPACE)
         self.terminal.set_backspace_binding(1)
 
+        self.terminal.connect("button-press-event", self.show_serial_rcpopup)
         self.terminal.connect("commit", self.console.send_data, self.terminal)
         self.terminal.show()
+
+    def init_popup(self):
+        self.serial_popup = gtk.Menu()
+
+        self.serial_copy = gtk.ImageMenuItem(gtk.STOCK_COPY)
+        self.serial_popup.add(self.serial_copy)
+
+        self.serial_paste = gtk.ImageMenuItem(gtk.STOCK_PASTE)
+        self.serial_popup.add(self.serial_paste)
 
     def init_ui(self):
         self.box = gtk.HBox()
@@ -238,3 +255,27 @@ class vmmSerialConsole(vmmGObject):
                       self.target_port)
         self.lastpath = None
         return None
+
+    #######################
+    # Popup menu handling #
+    #######################
+
+    def show_serial_rcpopup(self, src, event):
+        if event.button != 3:
+            return
+
+        self.serial_popup.show_all()
+        self.serial_copy.connect("activate", self.serial_copy_text, src)
+        self.serial_paste.connect("activate", self.serial_paste_text, src)
+
+        if src.get_has_selection():
+            self.serial_copy.set_sensitive(True)
+        else:
+            self.serial_copy.set_sensitive(False)
+        self.serial_popup.popup(None, None, None, 0, event.time)
+
+    def serial_copy_text(self, src_ignore, terminal):
+        terminal.copy_clipboard()
+
+    def serial_paste_text(self, src_ignore, terminal):
+        terminal.paste_clipboard()
