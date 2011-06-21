@@ -129,10 +129,124 @@ class LocalConsoleConnection(ConsoleConnection):
         terminal.feed(data, len(data))
         return True
 
+class LibvirtConsoleConnection(ConsoleConnection):
+    def __init__(self, vm):
+        ConsoleConnection.__init__(self, vm)
+
+        self.stream = None
+
+        self.streamToTerminal = ""
+        self.terminalToStream = ""
+
+    def cleanup(self):
+        ConsoleConnection.cleanup(self)
+        self.close()
+
+    def _event_on_stream(self, stream, events, opaque):
+        ignore = stream
+        terminal = opaque
+
+        if (events & libvirt.VIR_EVENT_HANDLE_ERROR or
+            events & libvirt.VIR_EVENT_HANDLE_HANGUP):
+            logging.debug("Received stream ERROR/HANGUP, closing console")
+            self.close()
+
+        if events & libvirt.VIR_EVENT_HANDLE_READABLE:
+            try:
+                got = self.stream.recv(1024)
+            except:
+                logging.exception("Error receiving stream data")
+                self.close()
+                return
+
+            if got == -2:
+                return
+
+            self.streamToTerminal += got
+            if self.streamToTerminal:
+                self.safe_idle_add(self.display_data, terminal)
+
+        if (events & libvirt.VIR_EVENT_HANDLE_WRITABLE and
+            self.terminalToStream):
+
+            try:
+                done = self.stream.send(self.terminalToStream)
+            except:
+                logging.exception("Error sending stream data")
+                self.close()
+                return
+
+            if done == -2:
+                return
+
+            self.terminalToStream = self.terminalToStream[done:]
+
+        if not self.terminalToStream:
+            self.stream.eventUpdateCallback(libvirt.VIR_STREAM_EVENT_READABLE |
+                                            libvirt.VIR_STREAM_EVENT_ERROR |
+                                            libvirt.VIR_STREAM_EVENT_HANGUP)
 
 
+    def open(self, dev, terminal):
+        if self.stream:
+            self.close()
+
+        self.stream = self.conn.vmm.newStream(libvirt.VIR_STREAM_NONBLOCK)
+
+        name = dev and dev.alias.name or None
+        logging.debug("Opening console stream for dev=%s alias=%s" %
+                      (dev, name))
+        self.vm.open_console(name, self.stream)
+
+        self.stream.eventAddCallback((libvirt.VIR_STREAM_EVENT_READABLE |
+                                      libvirt.VIR_STREAM_EVENT_ERROR |
+                                      libvirt.VIR_STREAM_EVENT_HANGUP),
+                                     self._event_on_stream,
+                                     terminal)
+
+    def close(self):
+        if self.stream:
+            try:
+                self.stream.eventRemoveCallback()
+            except:
+                logging.exception("Error removing stream callback")
+            try:
+                self.stream.finish()
+            except:
+                logging.exception("Error finishing stream")
+
+        self.stream = None
+
+    def send_data(self, src, text, length, terminal):
+        ignore = src
+        ignore = length
+        ignore = terminal
+
+        if self.stream is None:
+            return
+
+        self.terminalToStream += text
+        if self.terminalToStream:
+            self.stream.eventUpdateCallback(libvirt.VIR_STREAM_EVENT_READABLE |
+                                            libvirt.VIR_STREAM_EVENT_WRITABLE |
+                                            libvirt.VIR_STREAM_EVENT_ERROR |
+                                            libvirt.VIR_STREAM_EVENT_HANGUP)
+
+    def display_data(self, terminal):
+        if not self.streamToTerminal:
+            return
+
+        terminal.feed(self.streamToTerminal, len(self.streamToTerminal))
+        self.streamToTerminal = ""
 
 class vmmSerialConsole(vmmGObject):
+
+    @staticmethod
+    def support_remote_console(vm):
+        """
+        Check if we can connect to a remote console
+        """
+        return bool(vm.remote_console_supported)
 
     @staticmethod
     def can_connect(vm, dev):
@@ -143,18 +257,23 @@ class vmmSerialConsole(vmmGObject):
 
         ctype = dev.char_type
         path = dev.source_path
+        is_remote = vm.get_connection().is_remote()
+        support_tunnel = vmmSerialConsole.support_remote_console(vm)
 
         err = ""
 
-        if vm.get_connection().is_remote():
-            err = _("Serial console not yet supported over remote "
-                    "connection")
+        if is_remote:
+            if not support_tunnel:
+                err = _("Serial console not yet supported over remote "
+                        "connection")
         elif not vm.is_active():
             err = _("Serial console not available for inactive guest")
         elif not ctype in usable_types:
             err = (_("Console for device type '%s' not yet supported") %
                      ctype)
-        elif path and not os.access(path, os.R_OK | os.W_OK):
+        elif (not is_remote and
+              not support_tunnel and
+              (path and not os.access(path, os.R_OK | os.W_OK))):
             err = _("Can not access console path '%s'") % str(path)
 
         return err
@@ -167,7 +286,12 @@ class vmmSerialConsole(vmmGObject):
         self.name = name
         self.lastpath = None
 
-        self.console = LocalConsoleConnection(self.vm)
+        # Always use libvirt console streaming if available, so
+        # we exercise the same code path (it's what virsh console does)
+        if vmmSerialConsole.support_remote_console(self.vm):
+            self.console = LibvirtConsoleConnection(self.vm)
+        else:
+            self.console = LocalConsoleConnection(self.vm)
 
         self.serial_popup = None
         self.serial_copy = None

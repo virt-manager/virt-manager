@@ -151,6 +151,7 @@ class vmmDomain(vmmLibvirtObject):
         self.getjobinfo_supported = False
         self.managedsave_supported = False
         self.getvcpus_supported = False
+        self.remote_console_supported = False
 
         self._guest = None
         self._guest_to_define = None
@@ -180,6 +181,10 @@ class vmmDomain(vmmLibvirtObject):
         self.managedsave_supported = self.connection.get_dom_managedsave_supported(self._backend)
         self.getjobinfo_supported = support.check_domain_support(self._backend,
                                             support.SUPPORT_DOMAIN_JOB_INFO)
+
+        self.remote_console_supported = support.check_domain_support(
+                                        self._backend,
+                                        support.SUPPORT_DOMAIN_CONSOLE_STREAM)
 
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
@@ -741,6 +746,8 @@ class vmmDomain(vmmLibvirtObject):
     def abort_job(self):
         self._backend.abortJob()
 
+    def open_console(self, devname, stream, flags=0):
+        return self._backend.openConsole(devname, stream, flags)
 
     ########################
     # XML Parsing routines #
