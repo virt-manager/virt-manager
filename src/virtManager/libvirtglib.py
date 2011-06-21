@@ -44,6 +44,13 @@ class EventWatch(object):
         self.cb = None
         self.opaque = None
 
+    def clear(self):
+        if self.source:
+            gobject.source_remove(self.source)
+
+        self.source = 0
+        self.events = 0
+
 class EventTimer(object):
     def __init__(self):
         self.timer = -1
@@ -52,6 +59,13 @@ class EventTimer(object):
 
         self.cb = None
         self.opaque = None
+
+    def clear(self):
+        if self.source:
+            gobject.source_remove(self.source)
+
+        self.source = 0
+        self.interval = -1
 
 state = GlobalState()
 
@@ -71,7 +85,7 @@ def find_watch(watch):
 
 def glib_event_handle_dispatch(source, cond, opaque):
     ignore = source
-    handle = opaque
+    data = opaque
     events = 0
 
     if cond & gobject.IO_IN:
@@ -83,11 +97,11 @@ def glib_event_handle_dispatch(source, cond, opaque):
     if cond & gobject.IO_ERR:
         events |= libvirt.VIR_EVENT_HANDLE_ERROR
 
-    handle.cb(handle.watch, handle.fd, events, handle.opaque)
+    data.cb(data.watch, data.fd, events, data.opaque)
     return True
 
 def glib_event_handle_add(fd, events, cb, opaque):
-    handle = EventWatch()
+    data = EventWatch()
     cond = 0
 
     state.lock.acquire()
@@ -97,36 +111,36 @@ def glib_event_handle_add(fd, events, cb, opaque):
         if events & libvirt.VIR_EVENT_HANDLE_WRITABLE:
             cond |= gobject.IO_OUT
 
-        handle.watch = state.nextwatch
+        data.watch = state.nextwatch
         state.nextwatch += 1
-        handle.fd = fd
-        handle.events = events
-        handle.cb = cb
-        handle.opaque = opaque
+        data.fd = fd
+        data.events = events
+        data.cb = cb
+        data.opaque = opaque
 
-        handle.source = gobject.io_add_watch(handle.fd,
-                                             cond,
-                                             glib_event_handle_dispatch,
-                                             handle)
-        state.watches.append(handle)
-        return handle.watch
+        data.source = gobject.io_add_watch(data.fd,
+                                           cond,
+                                           glib_event_handle_dispatch,
+                                           data)
+        state.watches.append(data)
+        return data.watch
     finally:
         state.lock.release()
 
 def glib_event_handle_update(watch, events):
     state.lock.acquire()
     try:
-        handle = find_watch(watch)
-        if not handle:
+        data = find_watch(watch)
+        if not data:
             return
 
         if events:
             cond = 0
-            if events == handle.events:
+            if events == data.events:
+                # Nothing to update
                 return
 
-            if handle.source:
-                gobject.source_remove(handle.source)
+            data.clear()
 
             cond |= gobject.IO_HUP
             if events & libvirt.VIR_EVENT_HANDLE_READABLE:
@@ -134,19 +148,14 @@ def glib_event_handle_update(watch, events):
             if events & libvirt.VIR_EVENT_HANDLE_WRITABLE:
                 cond |= gobject.IO_OUT
 
-            handle.source = gobject.io_add_watch(handle.fd,
-                                                 cond,
-                                                 glib_event_handle_dispatch,
-                                                 handle)
-            handle.events = events
+            data.source = gobject.io_add_watch(data.fd,
+                                               cond,
+                                               glib_event_handle_dispatch,
+                                               data)
+            data.events = events
 
         else:
-            if not handle.source:
-                return
-
-            gobject.source_remove(handle.source)
-            handle.source = 0
-            handle.events = 0
+            data.clear()
     finally:
         state.lock.release()
 
@@ -157,12 +166,8 @@ def glib_event_handle_remove(watch):
         if not data:
             return
 
-        if not data.source:
-            return
-
-        gobject.source_remove(data.source)
-        data.source = 0
-        data.events = 0
+        data.clear()
+        state.watches.remove(data)
         return 0
     finally:
         state.lock.release()
@@ -211,11 +216,7 @@ def glib_event_timeout_update(timer, interval):
                                               data)
 
         else:
-            if not data.source:
-                return
-
-            gobject.source_remove(data.source)
-            data.source = 0
+            data.clear()
     finally:
         state.lock.release()
 
@@ -226,11 +227,8 @@ def glib_event_timeout_remove(timer):
         if not data:
             return
 
-        if not data.source:
-            return
-
-        gobject.source_remove(data.source)
-        data.source = 0
+        data.clear()
+        state.timers.remove(data)
         return 0
     finally:
         state.lock.release()
