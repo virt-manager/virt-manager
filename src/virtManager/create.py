@@ -104,6 +104,7 @@ class vmmCreate(vmmGObjectUI):
 
             "on_create_vm_name_activate": self.forward,
             "on_create_conn_changed": self.conn_changed,
+            "on_method_changed": self.method_changed,
 
             "on_install_url_box_changed": self.url_box_changed,
             "on_install_local_cdrom_toggled": self.toggle_local_cdrom,
@@ -991,6 +992,10 @@ class vmmCreate(vmmGObjectUI):
 
         self.set_conn(conn)
 
+    def method_changed(self, src):
+        ignore = src
+        self.set_page_num_text(0)
+
     def netdev_changed(self, ignore):
         self.check_network_selection()
 
@@ -1230,14 +1235,22 @@ class vmmCreate(vmmGObjectUI):
         self.window.get_widget("create-forward").grab_focus()
         notebook.set_current_page(next_page)
 
-    def page_changed(self, ignore1, ignore2, pagenum):
+    def set_page_num_text(self, cur):
+        cur += 1
+        final = PAGE_FINISH + 1
+        if self.skip_disk_page():
+            final -= 1
+            cur = min(cur, final)
 
-        # Update page number
         page_lbl = ("<span color='#59B0E2'>%s</span>" %
                     _("Step %(current_page)d of %(max_page)d") %
-                    {'current_page': pagenum + 1, 'max_page': PAGE_FINISH + 1})
+                    {'current_page': cur, 'max_page': final})
 
         self.window.get_widget("config-pagenum").set_markup(page_lbl)
+
+    def page_changed(self, ignore1, ignore2, pagenum):
+        # Update page number
+        self.set_page_num_text(pagenum)
 
         if pagenum == PAGE_NAME:
             self.window.get_widget("create-back").set_sensitive(False)

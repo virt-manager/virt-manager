@@ -291,6 +291,7 @@
                                             <property name="use_underline">True</property>
                                             <property name="active">True</property>
                                             <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="on_method_changed"/>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
@@ -306,6 +307,7 @@
                                             <property name="use_underline">True</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">method-local</property>
+                                            <signal name="toggled" handler="on_method_changed"/>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
@@ -321,6 +323,7 @@
                                             <property name="use_underline">True</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">method-local</property>
+                                            <signal name="toggled" handler="on_method_changed"/>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
@@ -337,6 +340,7 @@
                                             <property name="active">True</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">method-local</property>
+                                            <signal name="toggled" handler="on_method_changed"/>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
@@ -386,6 +390,7 @@
                                             <property name="use_action_appearance">False</property>
                                             <property name="active">True</property>
                                             <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="on_method_changed"/>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
@@ -402,6 +407,7 @@
                                             <property name="active">True</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">method-container-app</property>
+                                            <signal name="toggled" handler="on_method_changed"/>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
