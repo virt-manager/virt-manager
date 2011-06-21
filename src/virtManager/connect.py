@@ -30,6 +30,7 @@ from virtManager.baseclass import vmmGObjectUI
 
 HV_XEN = 0
 HV_QEMU = 1
+HV_LXC = 2
 
 CONN_SSH = 0
 CONN_TCP = 1
@@ -293,8 +294,10 @@ class vmmConnect(vmmGObjectUI):
         hvstr = ""
         if hv == HV_XEN:
             hvstr = "xen"
-        else:
+        elif hv == HV_QEMU:
             hvstr = "qemu"
+        else:
+            hvstr = "lxc"
 
         addrstr = ""
         if user:
