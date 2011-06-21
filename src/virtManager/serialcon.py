@@ -188,7 +188,6 @@ class vmmSerialConsole(vmmGObject):
         self.terminal = vte.Terminal()
         self.terminal.set_cursor_blinks(True)
         self.terminal.set_emulation("xterm")
-        self.terminal.set_font_from_string("fixed 10")
         self.terminal.set_scrollback_lines(1000)
         self.terminal.set_audible_bell(False)
         self.terminal.set_visible_bell(True)
@@ -214,16 +213,21 @@ class vmmSerialConsole(vmmGObject):
         self.box.set_show_tabs(False)
         self.box.set_show_border(False)
 
+        align = gtk.Alignment()
+        align.set_padding(2, 2, 2, 2)
+        evbox = gtk.EventBox()
+        evbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(0, 0, 0))
         terminalbox = gtk.HBox()
         scrollbar = gtk.VScrollbar()
         scrollbar.set_adjustment(self.terminal.get_adjustment())
+        self.error_label = gtk.Label()
 
-        terminalbox.pack_start(self.terminal)
+        align.add(self.terminal)
+        evbox.add(align)
+        terminalbox.pack_start(evbox)
         terminalbox.pack_start(scrollbar, expand=False, fill=False)
 
         self.box.append_page(terminalbox)
-
-        self.error_label = gtk.Label()
         self.box.append_page(self.error_label)
         self.box.show_all()
 
