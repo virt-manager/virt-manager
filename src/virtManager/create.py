@@ -112,6 +112,7 @@ class vmmCreate(vmmGObjectUI):
             "on_install_local_browse_clicked": self.browse_iso,
             "on_install_import_browse_clicked": self.browse_import,
             "on_install_app_browse_clicked": self.browse_app,
+            "on_install_oscontainer_browse_clicked": self.browse_oscontainer,
 
             "on_install_detect_os_toggled": self.toggle_detect_os,
             "on_install_os_type_changed": self.change_os_type,
@@ -370,6 +371,9 @@ class vmmCreate(vmmGObjectUI):
 
         # Install container app
         self.window.get_widget("install-app-entry").set_text("/bin/sh")
+
+        # Install container OS
+        self.window.get_widget("install-oscontainer-fs").set_text("")
 
         # Mem / CPUs
         self.window.get_widget("config-mem").set_value(DEFAULT_MEM)
@@ -792,19 +796,26 @@ class vmmCreate(vmmGObjectUI):
             install = _("Import existing OS image")
         elif instmethod == INSTALL_PAGE_CONTAINER_APP:
             install = _("Application container")
-        elif instmethod == INSTALL_PAGE_CONTAINER_APP:
+        elif instmethod == INSTALL_PAGE_CONTAINER_OS:
             install = _("Operating system container")
 
-        if len(self.guest.disks) == 0:
-            storage = _("None")
-        else:
+        storagetmpl = "<span size='small' color='#484848'>%s</span>"
+        if len(self.guest.disks):
             disk = self.guest.disks[0]
             storage = "%s" % self.pretty_storage(disk.size)
-            storage += (" <span size='small' color='#484848'>%s</span>" %
-                         disk.path)
+            storage += " " + (storagetmpl % disk.path)
+        elif len(self.guest.get_devices("filesystem")):
+            fs = self.guest.get_devices("filesystem")[0]
+            storage = storagetmpl % fs.source
+        elif self.guest.installer.is_container():
+            storage = _("Host filesystem")
+        else:
+            storage = _("None")
 
         osstr = ""
-        if not dlabel:
+        if self.guest.installer.is_container():
+            osstr = _("Linux")
+        elif not dlabel:
             osstr = _("Generic")
         elif not vlabel:
             osstr = _("Generic") + " " + dlabel
@@ -902,6 +913,9 @@ class vmmCreate(vmmGObjectUI):
 
     def get_config_container_app_path(self):
         return self.window.get_widget("install-app-entry").get_text()
+
+    def get_config_container_fs_path(self):
+        return self.window.get_widget("install-oscontainer-fs").get_text()
 
     def get_default_path(self, name):
         # Don't generate a new path if the install failed
@@ -1098,34 +1112,35 @@ class vmmCreate(vmmGObjectUI):
         else:
             nodetect_label.show()
 
-    def browse_app(self, ignore1=None, ignore2=None):
-        def set_app_path(ignore, path):
-            self.window.get_widget("install-app-entry").set_text(path)
+    def browse_oscontainer(self, ignore1=None, ignore2=None):
+        def set_path(ignore, path):
+            self.window.get_widget("install-oscontainer-fs").set_text(path)
+        self._browse_file(set_path, is_media=False, is_dir=True)
 
-        self._browse_file(set_app_path, is_media=False)
+    def browse_app(self, ignore1=None, ignore2=None):
+        def set_path(ignore, path):
+            self.window.get_widget("install-app-entry").set_text(path)
+        self._browse_file(set_path, is_media=False)
 
     def browse_import(self, ignore1=None, ignore2=None):
-        def set_import_path(ignore, path):
+        def set_path(ignore, path):
             self.window.get_widget("install-import-entry").set_text(path)
-
-        self._browse_file(set_import_path, is_media=False)
+        self._browse_file(set_path, is_media=False)
 
     def browse_iso(self, ignore1=None, ignore2=None):
-        def set_iso_storage_path(ignore, path):
+        def set_path(ignore, path):
             self.window.get_widget("install-local-box").child.set_text(path)
-
-        self._browse_file(set_iso_storage_path, is_media=True)
+        self._browse_file(set_path, is_media=True)
         self.window.get_widget("install-local-box").activate()
+
+    def browse_storage(self, ignore1):
+        def set_path(ignore, path):
+            self.window.get_widget("config-storage-entry").set_text(path)
+        self._browse_file(set_path, is_media=False)
 
     def toggle_enable_storage(self, src):
         self.window.get_widget("config-storage-box").set_sensitive(src.get_active())
 
-    def browse_storage(self, ignore1):
-        def set_disk_storage_path(ignore, path):
-            self.window.get_widget("config-storage-entry").set_text(path)
-
-        self._browse_file(set_disk_storage_path,
-                          is_media=False)
 
     def toggle_storage_select(self, src):
         act = src.get_active()
@@ -1342,6 +1357,7 @@ class vmmCreate(vmmGObjectUI):
         cdrom = False
         is_import = False
         init = None
+        fs = None
         distro, variant, ignore1, ignore2 = self.get_config_os_info()
 
         if instmethod == INSTALL_PAGE_ISO:
@@ -1381,6 +1397,13 @@ class vmmCreate(vmmGObjectUI):
             if not init:
                 return self.verr(_("An application path is required."))
 
+        elif instmethod == INSTALL_PAGE_CONTAINER_OS:
+            instclass = virtinst.ContainerInstaller
+
+            fs = self.get_config_container_fs_path()
+            if not fs:
+                return self.verr(_("An OS directory path is required."))
+
         # Build the installer and Guest instance
         try:
             installer = self.build_installer(instclass)
@@ -1409,6 +1432,12 @@ class vmmCreate(vmmGObjectUI):
 
             if init:
                 self.guest.installer.init = init
+
+            if fs:
+                fsdev = virtinst.VirtualFilesystem(conn=self.guest.conn)
+                fsdev.target = "/"
+                fsdev.source = fs
+                self.guest.add_device(fsdev)
 
         except Exception, e:
             return self.verr(_("Error setting install media location."),
@@ -1899,9 +1928,11 @@ class vmmCreate(vmmGObjectUI):
             logging.exception("Error detecting distro.")
             self.detectedDistro = (None, None)
 
-    def _browse_file(self, callback, is_media=False):
+    def _browse_file(self, callback, is_media=False, is_dir=False):
         if is_media:
             reason = self.config.CONFIG_DIR_MEDIA
+        elif is_dir:
+            reason = self.config.CONFIG_DIR_FS
         else:
             reason = self.config.CONFIG_DIR_IMAGE
 

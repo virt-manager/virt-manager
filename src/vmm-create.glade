@@ -395,6 +395,7 @@
                                         <child>
                                           <widget class="GtkRadioButton" id="method-container-os">
                                             <property name="label" translatable="yes">Operating system container</property>
+                                            <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="use_action_appearance">False</property>
@@ -897,7 +898,9 @@ User shouldn't see this.</property>
                                   <widget class="GtkLabel" id="label43">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Provide the application path:</property>
+                                    <property name="label" translatable="yes">Provide the _application path:</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">install-app-entry</property>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
@@ -924,12 +927,13 @@ User shouldn't see this.</property>
                                         </child>
                                         <child>
                                           <widget class="GtkButton" id="install-app-browse">
-                                            <property name="label" translatable="yes">Browse...</property>
+                                            <property name="label" translatable="yes">B_rowse...</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">True</property>
                                             <property name="use_action_appearance">False</property>
-                                            <signal name="activate" handler="on_install_app_browse_activate"/>
+                                            <property name="use_underline">True</property>
+                                            <signal name="clicked" handler="on_install_app_browse_clicked"/>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
@@ -964,7 +968,108 @@ User shouldn't see this.</property>
                               <widget class="GtkVBox" id="vbozzz">
                                 <property name="visible">True</property>
                                 <child>
-                                  <placeholder/>
+                                  <widget class="GtkVBox" id="vbox8">
+                                    <property name="visible">True</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <widget class="GtkLabel" id="label45">
+                                        <property name="visible">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">Provide the existing OS root _directory:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">install-oscontainer-fs</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkAlignment" id="alignment27">
+                                        <property name="visible">True</property>
+                                        <property name="left_padding">12</property>
+                                        <child>
+                                          <widget class="GtkVBox" id="vbox21">
+                                            <property name="visible">True</property>
+                                            <property name="spacing">12</property>
+                                            <child>
+                                              <widget class="GtkHBox" id="hbox17">
+                                                <property name="visible">True</property>
+                                                <property name="spacing">6</property>
+                                                <child>
+                                                  <widget class="GtkEntry" id="install-oscontainer-fs">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="invisible_char">●</property>
+                                                    <property name="invisible_char_set">True</property>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkButton" id="install-oscontainer-browse">
+                                                    <property name="label" translatable="yes">B_rowse...</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="use_action_appearance">False</property>
+                                                    <property name="use_underline">True</property>
+                                                    <signal name="clicked" handler="on_install_oscontainer_browse_clicked"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                              </widget>
+                                              <packing>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkHBox" id="hbox16">
+                                                <property name="visible">True</property>
+                                                <property name="spacing">6</property>
+                                                <child>
+                                                  <widget class="GtkImage" id="image3">
+                                                    <property name="visible">True</property>
+                                                    <property name="stock">gtk-dialog-warning</property>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkLabel" id="label46">
+                                                    <property name="visible">True</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="label" translatable="yes">&lt;small&gt;The OS directory tree must already exist. Creating an OS directory tree
+is not yet supported.&lt;/small&gt;</property>
+                                                    <property name="use_markup">True</property>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                              </widget>
+                                              <packing>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                        </child>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
                                 </child>
                               </widget>
                               <packing>
