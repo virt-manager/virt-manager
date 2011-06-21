@@ -1132,6 +1132,8 @@ class vmmDetails(vmmGObjectUI):
             c.set_sensitive(not (run or paused))
 
         self.console.update_widget_states(vm, status)
+        if not run:
+            self.activate_default_console_page()
 
         self.window.get_widget("overview-status-text").set_text(
                                                     self.vm.run_status())
@@ -1158,10 +1160,7 @@ class vmmDetails(vmmGObjectUI):
     def exit_app(self, src_ignore):
         self.emit("action-exit-app")
 
-    def activate_default_page(self):
-        pages = self.window.get_widget("details-pages")
-        pages.set_current_page(PAGE_CONSOLE)
-
+    def activate_default_console_page(self):
         if self.vm.get_graphics_devices() or not self.vm.get_serial_devs():
             return
 
@@ -1173,6 +1172,11 @@ class vmmDetails(vmmGObjectUI):
 
             self._show_serial_tab(name, serialidx)
             break
+
+    def activate_default_page(self):
+        pages = self.window.get_widget("details-pages")
+        pages.set_current_page(PAGE_CONSOLE)
+        self.activate_default_console_page()
 
     def activate_console_page(self):
         pages = self.window.get_widget("details-pages")
