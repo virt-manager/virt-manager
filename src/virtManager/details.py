@@ -61,12 +61,13 @@ HW_LIST_TYPE_VIDEO = 12
 HW_LIST_TYPE_WATCHDOG = 13
 HW_LIST_TYPE_CONTROLLER = 14
 HW_LIST_TYPE_FILESYSTEM = 15
+HW_LIST_TYPE_SMARTCARD = 16
 
 remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                 HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
                 HW_LIST_TYPE_HOSTDEV, HW_LIST_TYPE_DISK, HW_LIST_TYPE_VIDEO,
                 HW_LIST_TYPE_WATCHDOG, HW_LIST_TYPE_CONTROLLER,
-                HW_LIST_TYPE_FILESYSTEM]
+                HW_LIST_TYPE_FILESYSTEM, HW_LIST_TYPE_SMARTCARD]
 
 # Boot device columns
 BOOT_DEV_TYPE = 0
@@ -359,6 +360,8 @@ class vmmDetails(vmmGObjectUI):
 
             "on_watchdog_model_combo_changed": self.config_enable_apply,
             "on_watchdog_action_combo_changed": self.config_enable_apply,
+
+            "on_smartcard_mode_combo_changed": self.config_enable_apply,
 
             "on_config_apply_clicked": self.config_apply,
 
@@ -776,6 +779,10 @@ class vmmDetails(vmmGObjectUI):
         uihelpers.build_watchdogaction_combo(self.vm, combo,
                                              no_default=no_default)
 
+        # Smartcard mode
+        sc_mode = self.window.get_widget("smartcard-mode-combo")
+        uihelpers.build_smartcard_mode_combo(self.vm, sc_mode)
+
     # Helper function to handle the combo/label pattern used for
     # video model, sound model, network model, etc.
     def set_combo_label(self, prefix, value, model_idx=0, label="",
@@ -1023,6 +1030,8 @@ class vmmDetails(vmmGObjectUI):
                 self.refresh_controller_page()
             elif pagetype == HW_LIST_TYPE_FILESYSTEM:
                 self.refresh_filesystem_page()
+            elif pagetype == HW_LIST_TYPE_SMARTCARD:
+                self.refresh_smartcard_page()
             else:
                 pagetype = -1
         except Exception, e:
@@ -1630,6 +1639,8 @@ class vmmDetails(vmmGObjectUI):
                 ret = self.config_video_apply(key)
             elif pagetype is HW_LIST_TYPE_WATCHDOG:
                 ret = self.config_watchdog_apply(key)
+            elif pagetype is HW_LIST_TYPE_SMARTCARD:
+                ret = self.config_smartcard_apply(key)
             else:
                 ret = False
         except Exception, e:
@@ -1840,6 +1851,13 @@ class vmmDetails(vmmGObjectUI):
         model = self.get_combo_label_value("sound-model")
         if model:
             return self._change_config_helper(self.vm.define_sound_model,
+                                              (dev_id_info, model))
+
+    # Smartcard options
+    def config_smartcard_apply(self, dev_id_info):
+        model = self.get_combo_label_value("smartcard-mode")
+        if model:
+            return self._change_config_helper(self.vm.define_smartcard_mode,
                                               (dev_id_info, model))
 
     # Network options
@@ -2542,6 +2560,13 @@ class vmmDetails(vmmGObjectUI):
 
         self.set_combo_label("sound-model", sound.model)
 
+    def refresh_smartcard_page(self):
+        sc = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not sc:
+            return
+
+        self.set_combo_label("smartcard-mode", sc.mode)
+
     def refresh_char_page(self):
         chardev = self.get_hw_selection(HW_LIST_COL_DEVICE)
         if not chardev:
@@ -2911,6 +2936,11 @@ class vmmDetails(vmmGObjectUI):
             update_hwlist(HW_LIST_TYPE_FILESYSTEM, fs,
                           _("Filesystem %s") % target,
                           gtk.STOCK_DIRECTORY)
+
+        # Populate list of smartcard devices
+        for sc in self.vm.get_smartcard_devices():
+            update_hwlist(HW_LIST_TYPE_SMARTCARD, sc,
+                          _("Smartcard"), "device_serial")
 
         devs = range(len(hw_list_model))
         devs.reverse()

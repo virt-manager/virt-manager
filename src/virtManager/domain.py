@@ -47,6 +47,7 @@ def compare_device(origdev, newdev, idx):
         "controller" : ["type", "index"],
         "channel"   : ["char_type", "target_name"],
         "filesystem" : ["target" , "vmmindex"],
+        "smartcard" : ["mode" , "vmmindex"],
     }
 
     if id(origdev) == id(newdev):
@@ -633,6 +634,13 @@ class vmmDomain(vmmLibvirtObject):
             editdev.action = newval
         return self._redefine_device(change, devobj)
 
+    # Smartcard define methods
+
+    def define_smartcard_mode(self, devobj, newmodel):
+        def change(editdev):
+            editdev.mode = newmodel
+        return self._redefine_device(change, devobj)
+
 
     ####################
     # Hotplug routines #
@@ -890,6 +898,8 @@ class vmmDomain(vmmLibvirtObject):
         return self._build_device_list("controller")
     def get_filesystem_devices(self):
         return self._build_device_list("filesystem")
+    def get_smartcard_devices(self):
+        return self._build_device_list("smartcard")
 
     def get_disk_devices(self, refresh_if_necc=True, inactive=False):
         devs = self._build_device_list("disk", refresh_if_necc, inactive)

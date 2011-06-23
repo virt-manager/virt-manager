@@ -24,8 +24,9 @@ import traceback
 import gtk
 
 import virtinst
-from virtinst import (VirtualCharDevice, VirtualDevice, VirtualVideoDevice,
-                      VirtualWatchdog, VirtualFilesystem)
+from virtinst import (VirtualCharDevice, VirtualDevice,
+                      VirtualVideoDevice, VirtualWatchdog,
+                      VirtualFilesystem, VirtualSmartCardDevice)
 
 import virtManager.util as util
 import virtManager.uihelpers as uihelpers
@@ -45,6 +46,7 @@ PAGE_CHAR = 7
 PAGE_VIDEO = 8
 PAGE_WATCHDOG = 9
 PAGE_FILESYSTEM = 10
+PAGE_SMARTCARD = 11
 
 char_widget_mappings = {
     "source_path" : "char-path",
@@ -329,6 +331,10 @@ class vmmAddHardware(vmmGObjectUI):
         simple_store_set("fs-mode-combo", VirtualFilesystem.MOUNT_MODES)
         self.show_pair_combo("fs-type", self.conn.is_openvz())
 
+        # Smartcard widgets
+        combo = self.window.get_widget("smartcard-mode")
+        uihelpers.build_smartcard_mode_combo(self.vm, combo)
+
         # Available HW options
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
@@ -391,6 +397,8 @@ class vmmAddHardware(vmmGObjectUI):
                         self.vm.get_hv_type()),
                       _("Not supported for this hypervisor/libvirt "
                         "combination."))
+        add_hw_option("Smartcard", "device_serial", PAGE_SMARTCARD,
+                      True, None)
 
     def reset_state(self):
         # Storage init
@@ -717,6 +725,12 @@ class vmmAddHardware(vmmGObjectUI):
 
         return combo.get_model()[combo.get_active()][0]
 
+    # Smartcard getters
+    def get_config_smartcard_mode(self):
+        mode = self.window.get_widget("smartcard-mode")
+        modestr = mode.get_model().get_value(mode.get_active_iter(), 0)
+        return modestr
+
     ################
     # UI listeners #
     ################
@@ -900,6 +914,8 @@ class vmmAddHardware(vmmGObjectUI):
             return _("Watchdog Device")
         if page == PAGE_FILESYSTEM:
             return _("Filesystem Passthrough")
+        if page == PAGE_SMARTCARD:
+            return _("Smartcard")
 
         if page == PAGE_CHAR:
             return self.get_char_type().capitalize() + " Device"
@@ -1071,6 +1087,8 @@ class vmmAddHardware(vmmGObjectUI):
             return self.validate_page_watchdog()
         elif page_num == PAGE_FILESYSTEM:
             return self.validate_page_filesystem()
+        elif page_num == PAGE_SMARTCARD:
+            return self.validate_page_smartcard()
 
     def validate_page_storage(self):
         bus, device = self.get_config_disk_target()
@@ -1326,6 +1344,16 @@ class vmmAddHardware(vmmGObjectUI):
                 self._dev.type = fstype
         except Exception, e:
             return self.err.val_err(_("Filesystem parameter error"),
+                                    str(e))
+
+    def validate_page_smartcard(self):
+        conn = self.conn.vmm
+        mode = self.get_config_smartcard_mode()
+
+        try:
+            self._dev = VirtualSmartCardDevice(conn, mode)
+        except Exception, e:
+            return self.err.val_err(_("Video device parameter error"),
                                     str(e))
 
 

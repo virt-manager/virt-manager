@@ -214,6 +214,36 @@ def populate_source_mode_combo(vm, combo):
     model.append(["private", "Private"])
     model.append(["passthrough", "Passthrough"])
 
+def build_smartcard_mode_combo(vm, combo):
+    dev_model = gtk.ListStore(str, str)
+    combo.set_model(dev_model)
+    text = gtk.CellRendererText()
+    combo.pack_start(text, True)
+    combo.add_attribute(text, 'text', 1)
+    dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+
+    populate_smartcard_mode_combo(vm, combo)
+
+    idx = -1
+    for rowid in range(len(combo.get_model())):
+        idx = 0
+        row = combo.get_model()[rowid]
+        if row[0] == virtinst.VirtualSmartCardDevice.MODE_DEFAULT:
+            idx = rowid
+            break
+    combo.set_active(idx)
+
+def populate_smartcard_mode_combo(vm, combo):
+    ignore = vm
+    model = combo.get_model()
+    model.clear()
+
+    # [xml value, label]
+    model.append(["passthrough", "Passthrough"])
+    model.append(["host", "Host"])
+# TODO
+#    model.append(["host-certificates", "Host Certificates"])
+
 def build_netmodel_combo(vm, combo):
     dev_model = gtk.ListStore(str, str)
     combo.set_model(dev_model)
