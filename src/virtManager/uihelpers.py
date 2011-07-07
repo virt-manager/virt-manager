@@ -76,7 +76,7 @@ def host_disk_space(conn):
         pool.refresh()
         avail = int(util.xpath(pool.get_xml(), "/pool/available"))
 
-    elif not conn.is_remote():
+    elif not conn.is_remote() and os.path.exists(path):
         vfs = os.statvfs(os.path.dirname(path))
         avail = vfs[statvfs.F_FRSIZE] * vfs[statvfs.F_BAVAIL]
 
