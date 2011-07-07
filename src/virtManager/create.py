@@ -1316,6 +1316,13 @@ class vmmCreate(vmmGObjectUI):
         guest = installer.guest_from_installer()
         guest.name = name
 
+        # Generate UUID (makes customize dialog happy)
+        try:
+            guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
+        except Exception, e:
+            self.err.show_err(_("Error setting UUID: %s") % str(e))
+            return None
+
         # Set up default devices
         try:
             devs = []
