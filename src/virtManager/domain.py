@@ -539,6 +539,11 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine_device(change, devobj)
     def define_disk_bus(self, devobj, newval):
         def change(editdev):
+            if editdev.bus != newval:
+                # Old <address> probably isn't applicable for new bus value
+                editdev.address.clear()
+                # XXX: Need to change target value as well?
+
             editdev.bus = newval
         return self._redefine_device(change, devobj)
 
