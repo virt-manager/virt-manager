@@ -378,10 +378,7 @@ def main():
 
     engine = vmmEngine()
 
-    if (not (options.nodbus) and
-        not ((os.getenv("DBUS_SESSION_BUS_ADDRESS") is None) and
-             (os.getenv("DBUS_STARTER_ADDRESS") is None))):
-
+    if not options.nodbus:
         try:
             managerObj = dbus_config(engine)
             if managerObj:
