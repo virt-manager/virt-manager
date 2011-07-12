@@ -21,7 +21,7 @@ from IPy import IP
 import logging
 import re
 
-from newt_syrup.configscreen import ConfigScreen
+from vmmconfigscreen import VmmTuiConfigScreen
 from networkconfig import NetworkConfig
 
 NETWORK_NAME_PAGE            = 1
@@ -33,9 +33,9 @@ NETWORK_TYPE_PAGE            = 6
 SELECT_PHYSICAL_NETWORK_PAGE = 7
 SUMMARY_PAGE                 = 8
 
-class DefineNetworkConfigScreen(ConfigScreen):
+class DefineNetworkConfigScreen(VmmTuiConfigScreen):
     def __init__(self):
-        ConfigScreen.__init__(self, "Create A Virtual Network Interface")
+        VmmTuiConfigScreen.__init__(self, "Create A Virtual Network Interface")
         self.__config = NetworkConfig()
         self.__end_address = None
         self.__start_address = None
@@ -131,7 +131,7 @@ class DefineNetworkConfigScreen(ConfigScreen):
                 return SUMMARY_PAGE
             else:
                 return SELECT_PHYSICAL_NETWORK_PAGE
-        return ConfigScreen.get_next_page(self, page)
+        return VmmTuiConfigScreen.get_next_page(self, page)
 
     def get_back_page(self, page):
         if page is NETWORK_DETAILS_PAGE:
@@ -141,7 +141,7 @@ class DefineNetworkConfigScreen(ConfigScreen):
                 return NETWORK_TYPE_PAGE
             else:
                 return SELECT_PHYSICAL_NETWORK_PAGE
-        return ConfigScreen.get_back_page(self, page)
+        return VmmTuiConfigScreen.get_back_page(self, page)
 
     def page_has_finish(self, page):
         if page is SUMMARY_PAGE:
