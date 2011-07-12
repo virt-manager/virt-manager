@@ -34,8 +34,21 @@
       <default>1</default>
 
       <locale name="C">
-        <short>Show cpu usage in summary</short>
-        <long>Show the cpu usage field in the domain list summary view</long>
+        <short>Show guest cpu usage in summary</short>
+        <long>Show the guest cpu usage field in the domain list summary view</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/::PACKAGE::/vmlist-fields/host_cpu_usage</key>
+      <applyto>/apps/::PACKAGE::/vmlist-fields/host_cpu_usage</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>bool</type>
+      <default>0</default>
+
+      <locale name="C">
+        <short>Show host cpu usage in summary</short>
+        <long>Show the host cpu usage field in the domain list summary view</long>
       </locale>
     </schema>
 

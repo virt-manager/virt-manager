@@ -1114,6 +1114,7 @@ class vmmDomain(vmmLibvirtObject):
         cpuTime = 0
         cpuTimeAbs = 0
         pcentHostCpu = 0
+        pcentGuestCpu = 0
 
         if len(self.record) > 0:
             prevTimestamp = self.record[0]["timestamp"]
@@ -1124,15 +1125,17 @@ class vmmDomain(vmmLibvirtObject):
             cpuTime = info[4] - prevCpuTime
             cpuTimeAbs = info[4]
             hostcpus = self.connection.host_active_processor_count()
+            guestcpus = self.vcpu_count()
 
-            pcentHostCpu = (((cpuTime) * 100.0) /
-                (((now - prevTimestamp) * 1000.0 * 1000.0 * 1000.0) *
-                hostcpus))
-
+            pcentbase = (((cpuTime) * 100.0) /
+                         ((now - prevTimestamp) * 1000.0 * 1000.0 * 1000.0))
+            pcentHostCpu = pcentbase / hostcpus
+            pcentGuestCpu = pcentbase / guestcpus
 
         pcentHostCpu = max(0.0, min(100.0, pcentHostCpu))
+        pcentGuestCpu = max(0.0, min(100.0, pcentGuestCpu))
 
-        return cpuTime, cpuTimeAbs, pcentHostCpu
+        return cpuTime, cpuTimeAbs, pcentHostCpu, pcentGuestCpu
 
     def _get_cur_rate(self, what):
         if len(self.record) > 1:
@@ -1223,6 +1226,8 @@ class vmmDomain(vmmLibvirtObject):
         return self._get_record_helper("cpuTime")
     def host_cpu_time_percentage(self):
         return self._get_record_helper("cpuHostPercent")
+    def guest_cpu_time_percentage(self):
+        return self._get_record_helper("cpuGuestPercent")
     def network_rx_rate(self):
         return self._get_record_helper("netRxRate")
     def network_tx_rate(self):
@@ -1240,8 +1245,6 @@ class vmmDomain(vmmLibvirtObject):
         return util.pretty_mem(self.get_memory())
     def maximum_memory_pretty(self):
         return util.pretty_mem(self.maximum_memory())
-    def cpu_time_pretty(self):
-        return "%2.2f %%" % self.cpu_time_percentage()
 
     def network_traffic_rate(self):
         return self.network_tx_rate() + self.network_rx_rate()
@@ -1250,6 +1253,8 @@ class vmmDomain(vmmLibvirtObject):
 
     def host_cpu_time_vector(self):
         return self._vector_helper("cpuHostPercent")
+    def guest_cpu_time_vector(self):
+        return self._vector_helper("cpuGuestPercent")
     def stats_memory_vector(self):
         return self._vector_helper("currMemPercent")
     def network_traffic_vector(self):
@@ -1259,6 +1264,11 @@ class vmmDomain(vmmLibvirtObject):
 
     def host_cpu_time_vector_limit(self, limit):
         cpudata = self.host_cpu_time_vector()
+        if len(cpudata) > limit:
+            cpudata = cpudata[0:limit]
+        return cpudata
+    def guest_cpu_time_vector_limit(self, limit):
+        cpudata = self.guest_cpu_time_vector()
         if len(cpudata) > limit:
             cpudata = cpudata[0:limit]
         return cpudata
@@ -1482,7 +1492,8 @@ class vmmDomain(vmmLibvirtObject):
             self.is_management_domain()):
             info[1] = self.connection.host_memory_size()
 
-        cpuTime, cpuTimeAbs, pcentHostCpu = self._sample_cpu_stats(info, now)
+        (cpuTime, cpuTimeAbs,
+         pcentHostCpu, pcentGuestCpu) = self._sample_cpu_stats(info, now)
         (pcentCurrMem, pcentMaxMem,
          curmem, maxmem) = self._sample_mem_stats(info)
         rdBytes, wrBytes = self._sample_disk_io()
@@ -1493,6 +1504,7 @@ class vmmDomain(vmmLibvirtObject):
             "cpuTime": cpuTime,
             "cpuTimeAbs": cpuTimeAbs,
             "cpuHostPercent": pcentHostCpu,
+            "cpuGuestPercent": pcentGuestCpu,
             "curmem": curmem,
             "maxmem": maxmem,
             "currMemPercent": pcentCurrMem,

@@ -70,10 +70,6 @@ class vmmConfig(object):
     CONSOLE_KEYGRAB_FULLSCREEN = 1
     CONSOLE_KEYGRAB_MOUSEOVER = 2
 
-    STATS_CPU = 0
-    STATS_DISK = 1
-    STATS_NETWORK = 2
-
     _PEROBJ_FUNC_SET    = 0
     _PEROBJ_FUNC_GET    = 1
     _PEROBJ_FUNC_LISTEN = 2
@@ -315,25 +311,34 @@ class vmmConfig(object):
     #########################
 
     # Manager stats view preferences
-    def is_vmlist_cpu_usage_visible(self):
+    def is_vmlist_guest_cpu_usage_visible(self):
         return self.conf.get_bool(self.conf_dir + "/vmlist-fields/cpu_usage")
+    def is_vmlist_host_cpu_usage_visible(self):
+        return self.conf.get_bool(self.conf_dir +
+                                  "/vmlist-fields/host_cpu_usage")
     def is_vmlist_disk_io_visible(self):
         return self.conf.get_bool(self.conf_dir + "/vmlist-fields/disk_usage")
     def is_vmlist_network_traffic_visible(self):
         return self.conf.get_bool(self.conf_dir +
                                   "/vmlist-fields/network_traffic")
 
-    def set_vmlist_cpu_usage_visible(self, state):
+    def set_vmlist_guest_cpu_usage_visible(self, state):
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/cpu_usage", state)
+    def set_vmlist_host_cpu_usage_visible(self, state):
+        self.conf.set_bool(self.conf_dir + "/vmlist-fields/host_cpu_usage",
+                           state)
     def set_vmlist_disk_io_visible(self, state):
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/disk_usage", state)
     def set_vmlist_network_traffic_visible(self, state):
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/network_traffic",
                            state)
 
-    def on_vmlist_cpu_usage_visible_changed(self, cb):
+    def on_vmlist_guest_cpu_usage_visible_changed(self, cb):
         return self.conf.notify_add(self.conf_dir + "/vmlist-fields/cpu_usage",
                                     cb)
+    def on_vmlist_host_cpu_usage_visible_changed(self, cb):
+        return self.conf.notify_add(self.conf_dir +
+                                    "/vmlist-fields/host_cpu_usage", cb)
     def on_vmlist_disk_io_visible_changed(self, cb):
         return self.conf.notify_add(self.conf_dir + "/vmlist-fields/disk_usage",
                                     cb)

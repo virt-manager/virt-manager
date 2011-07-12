@@ -1593,6 +1593,7 @@ class vmmConnection(vmmGObject):
 
     def host_cpu_time_vector(self):
         return self._vector_helper("cpuHostPercent")
+    guest_cpu_time_vector = host_cpu_time_vector
     def stats_memory_vector(self):
         return self._vector_helper("memoryPercent")
 
@@ -1601,6 +1602,7 @@ class vmmConnection(vmmGObject):
         if len(cpudata) > limit:
             cpudata = cpudata[0:limit]
         return cpudata
+    guest_cpu_time_vector_limit = host_cpu_time_vector_limit
     def disk_io_vector_limit(self, dummy):
         #No point to accumulate unnormalized I/O for a conenction
         return [0.0]
@@ -1619,6 +1621,7 @@ class vmmConnection(vmmGObject):
         return self._get_record_helper("memoryPercent")
     def host_cpu_time_percentage(self):
         return self._get_record_helper("cpuHostPercent")
+    guest_cpu_time_percentage = host_cpu_time_percentage
 
     def network_rx_rate(self):
         return self._get_record_helper("netRxRate")
