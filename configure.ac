@@ -104,16 +104,6 @@ AM_CONDITIONAL([INSTALL_TUI], [test "x$with_tui" = "xyes"])
 
 
 AC_OUTPUT(Makefile
-          pixmaps/Makefile
-          pixmaps/hicolor/Makefile
-          pixmaps/hicolor/16x16/Makefile
-          pixmaps/hicolor/16x16/actions/Makefile
-          pixmaps/hicolor/22x22/Makefile
-          pixmaps/hicolor/22x22/actions/Makefile
-          pixmaps/hicolor/24x24/Makefile
-          pixmaps/hicolor/24x24/actions/Makefile
-          pixmaps/hicolor/32x32/Makefile
-          pixmaps/hicolor/32x32/actions/Makefile
           po/Makefile.in
           src/Makefile
           src/virtManager/Makefile
@@ -121,7 +111,17 @@ AC_OUTPUT(Makefile
           src/virtManagerTui/importblacklist/Makefile
           man/Makefile
           tests/Makefile
-          virt-manager.spec)
+          virt-manager.spec
+
+          icons/Makefile
+          icons/hicolor/Makefile
+          icons/hicolor/16x16/Makefile
+          icons/hicolor/22x22/Makefile
+          icons/hicolor/24x24/Makefile
+          icons/hicolor/32x32/Makefile
+          icons/hicolor/48x48/Makefile
+          icons/hicolor/256x256/Makefile
+)
 
 
 AC_MSG_NOTICE([])

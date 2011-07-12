@@ -50,7 +50,7 @@ virtinst_version = tuple([int(num) for num in virtinst_str.split('.')])
 gconf_dir = "/apps/" + appname
 asset_dir = "::ASSETDIR::"
 glade_dir = asset_dir
-icon_dir = asset_dir + "/pixmaps"
+icon_dir = asset_dir + "/icons"
 pylib_dir = "::PYLIBDIR::"
 pyarchlib_dir = "::PYARCHLIBDIR::"
 data_dir = "::DATADIR::"
@@ -86,18 +86,14 @@ def setup_glade_i18n():
 
 def setup_pypath():
     global glade_dir, icon_dir, data_dir
-    # Hacks for find assets in local dir for dev purposes
-    if os.path.exists(os.getcwd() + "/src/vmm-about.glade"):
-        glade_dir = os.getcwd() + "/src"
-    if os.path.exists(os.getcwd() + "/pixmaps/state_running.png"):
-        icon_dir = os.getcwd() + "/pixmaps"
-    if os.path.exists(os.getcwd() + "../gnome/help/virt-manager/C/virt-manager.xml"):
-        data_dir = os.getcwd() + "../"
 
+    # Hacks for find assets in local dir for dev purposes
     # First 2 hacks are to point python to local dir for source files in dev,
     # the third is the main path if you have  normal install
-    if os.path.exists(os.getcwd() + "/src/virt-manager.py"):
-        pass
+    if os.path.exists(os.getcwd() + "/src/virt-manager.py.in"):
+        glade_dir = os.path.join(os.getcwd(), "src")
+        icon_dir = os.path.join(os.getcwd(), "icons")
+        data_dir = os.path.join(os.getcwd(), "../")
     elif os.path.exists(os.getcwd() + "/build/src/virt-manager.py"):
         sys.path.insert(0, os.getcwd() + "/src")
     else:
@@ -369,8 +365,7 @@ def main():
 
     from virtManager.engine import vmmEngine
 
-    gtk.window_set_default_icon_from_file(icon_dir + "/" +
-                                          appname + "-icon.svg")
+    gtk.window_set_default_icon_name(appname)
 
     if options.show and options.uri == None:
         raise optparse.OptionValueError("can't use --show-* options "

@@ -48,10 +48,8 @@ class vmmHost(vmmGObjectUI):
         self.title = conn.get_short_hostname() + " " + self.topwin.get_title()
         self.topwin.set_title(self.title)
 
-        self.PIXBUF_STATE_RUNNING = gtk.gdk.pixbuf_new_from_file_at_size(
-                self.config.get_icon_dir() + "/state_running.png", 18, 18)
-        self.PIXBUF_STATE_SHUTOFF = gtk.gdk.pixbuf_new_from_file_at_size(
-                self.config.get_icon_dir() + "/state_shutoff.png", 18, 18)
+        self.ICON_RUNNING = "state_running"
+        self.ICON_SHUTOFF = "state_shutoff"
 
         self.addnet = None
         self.addpool = None
@@ -527,13 +525,14 @@ class vmmHost(vmmGObjectUI):
 
         dev = active and net.get_bridge_device() or ""
         state = active and _("Active") or _("Inactive")
-        icon = (active and self.PIXBUF_STATE_RUNNING or
-                           self.PIXBUF_STATE_SHUTOFF)
+        icon = (active and self.ICON_RUNNING or
+                           self.ICON_SHUTOFF)
 
         self.window.get_widget("net-device").set_text(dev)
         self.window.get_widget("net-device").set_sensitive(active)
         self.window.get_widget("net-state").set_text(state)
-        self.window.get_widget("net-state-icon").set_from_pixbuf(icon)
+        self.window.get_widget("net-state-icon").set_from_icon_name(
+                                        icon, gtk.ICON_SIZE_MENU)
 
         self.window.get_widget("net-start").set_sensitive(not active)
         self.window.get_widget("net-stop").set_sensitive(active)
@@ -570,7 +569,8 @@ class vmmHost(vmmGObjectUI):
         self.window.get_widget("net-device").set_text("")
         self.window.get_widget("net-device").set_sensitive(False)
         self.window.get_widget("net-state").set_text(_("Inactive"))
-        self.window.get_widget("net-state-icon").set_from_pixbuf(self.PIXBUF_STATE_SHUTOFF)
+        self.window.get_widget("net-state-icon").set_from_icon_name(
+                                        self.ICON_SHUTOFF, gtk.ICON_SIZE_MENU)
         self.window.get_widget("net-start").set_sensitive(False)
         self.window.get_widget("net-stop").set_sensitive(False)
         self.window.get_widget("net-delete").set_sensitive(False)
@@ -773,14 +773,22 @@ class vmmHost(vmmGObjectUI):
 
         # Set pool details state
         self.window.get_widget("pool-details").set_sensitive(True)
-        self.window.get_widget("pool-name").set_markup("<b>%s:</b>" % \
+        self.window.get_widget("pool-name").set_markup("<b>%s:</b>" %
                                                        pool.get_name())
-        self.window.get_widget("pool-sizes").set_markup("""<span size="large">%s Free</span> / <i>%s In Use</i>""" % (pool.get_pretty_available(), pool.get_pretty_allocation()))
-        self.window.get_widget("pool-type").set_text(Storage.StoragePool.get_pool_type_desc(pool.get_type()))
-        self.window.get_widget("pool-location").set_text(pool.get_target_path())
-        self.window.get_widget("pool-state-icon").set_from_pixbuf((active and self.PIXBUF_STATE_RUNNING) or self.PIXBUF_STATE_SHUTOFF)
-        self.window.get_widget("pool-state").set_text((active and _("Active")) or _("Inactive"))
-        self.window.get_widget("pool-autostart").set_label((auto and _("On Boot")) or _("Never"))
+        self.window.get_widget("pool-sizes").set_markup(
+                """<span size="large">%s Free</span> / <i>%s In Use</i>""" %
+                (pool.get_pretty_available(), pool.get_pretty_allocation()))
+        self.window.get_widget("pool-type").set_text(
+                Storage.StoragePool.get_pool_type_desc(pool.get_type()))
+        self.window.get_widget("pool-location").set_text(
+                pool.get_target_path())
+        self.window.get_widget("pool-state-icon").set_from_icon_name(
+                ((active and self.ICON_RUNNING) or self.ICON_SHUTOFF),
+                gtk.ICON_SIZE_MENU)
+        self.window.get_widget("pool-state").set_text(
+                (active and _("Active")) or _("Inactive"))
+        self.window.get_widget("pool-autostart").set_label(
+                (auto and _("On Boot")) or _("Never"))
         self.window.get_widget("pool-autostart").set_active(auto)
 
         self.window.get_widget("vol-list").set_sensitive(active)
@@ -809,7 +817,8 @@ class vmmHost(vmmGObjectUI):
         self.window.get_widget("pool-sizes").set_markup("""<span size="large"> </span>""")
         self.window.get_widget("pool-type").set_text("")
         self.window.get_widget("pool-location").set_text("")
-        self.window.get_widget("pool-state-icon").set_from_pixbuf(self.PIXBUF_STATE_SHUTOFF)
+        self.window.get_widget("pool-state-icon").set_from_icon_name(
+                    self.ICON_SHUTOFF, gtk.ICON_SIZE_MENU)
         self.window.get_widget("pool-state").set_text(_("Inactive"))
         self.window.get_widget("vol-list").get_model().clear()
         self.window.get_widget("pool-autostart").set_label(_("Never"))
@@ -1016,8 +1025,9 @@ class vmmHost(vmmGObjectUI):
                                interface.get_name()))
         self.window.get_widget("interface-mac").set_text(mac or _("Unknown"))
 
-        self.window.get_widget("interface-state-icon").set_from_pixbuf(
-            (active and self.PIXBUF_STATE_RUNNING) or self.PIXBUF_STATE_SHUTOFF)
+        self.window.get_widget("interface-state-icon").set_from_icon_name(
+            ((active and self.ICON_RUNNING) or self.ICON_SHUTOFF),
+            gtk.ICON_SIZE_MENU)
         self.window.get_widget("interface-state").set_text(
                                     (active and _("Active")) or _("Inactive"))
 

@@ -43,7 +43,7 @@ endif
 @INTLTOOL_DESKTOP_RULE@
 
 %.desktop.in: $(srcdir)/%.desktop.in.in ${top_builddir}/config.status
-	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::ICONDIR::,$(pkgdatadir)/pixmaps," < $< > $@
+	sed -e "s,::PACKAGE::,$(PACKAGE)," < $< > $@
 
 %.service: $(srcdir)/%.service.in ${top_builddir}/config.status
 	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::PREFIX::,$(prefix)," < $< > $@

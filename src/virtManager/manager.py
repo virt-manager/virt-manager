@@ -361,9 +361,9 @@ class vmmManager(vmmGObjectUI):
         vmlist = self.window.get_widget("vm-list")
         self.window.get_widget("vm-notebook").set_show_tabs(False)
 
-        # Handle, name, markup, status, status icon, key/uuid, hint, is conn,
-        # is conn connected, is vm, is vm running, fg color
-        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, str,
+        # Handle, name, markup, status, status icon name, key/uuid, hint,
+        # is conn, is conn connected, is vm, is vm running, fg color
+        model = gtk.TreeStore(object, str, str, str, str, str, str,
                               bool, bool, bool, bool, gtk.gdk.Color)
         vmlist.set_model(model)
         util.tooltip_wrapper(vmlist, ROW_HINT, "set_tooltip_column")
@@ -380,8 +380,9 @@ class vmmManager(vmmGObjectUI):
         vmlist.append_column(nameCol)
 
         status_icon = gtk.CellRendererPixbuf()
+        status_icon.set_property("stock-size", gtk.ICON_SIZE_DND)
         statusCol.pack_start(status_icon, False)
-        statusCol.add_attribute(status_icon, 'pixbuf', ROW_STATUS_ICON)
+        statusCol.add_attribute(status_icon, 'icon-name', ROW_STATUS_ICON)
         statusCol.add_attribute(status_icon, 'visible', ROW_IS_VM)
 
         name_txt = gtk.CellRendererText()
@@ -733,7 +734,7 @@ class vmmManager(vmmGObjectUI):
         row.insert(ROW_NAME, vm.get_name())
         row.insert(ROW_MARKUP, "")
         row.insert(ROW_STATUS, vm.run_status())
-        row.insert(ROW_STATUS_ICON, vm.run_status_icon_large())
+        row.insert(ROW_STATUS_ICON, vm.run_status_icon_name())
         row.insert(ROW_KEY, vm.get_uuid())
         row.insert(ROW_HINT, None)
         row.insert(ROW_IS_CONN, False)
@@ -872,7 +873,7 @@ class vmmManager(vmmGObjectUI):
         row = self.rows[self.vm_row_key(vm)]
         row[ROW_NAME] = vm.get_name()
         row[ROW_STATUS] = vm.run_status()
-        row[ROW_STATUS_ICON] = vm.run_status_icon_large()
+        row[ROW_STATUS_ICON] = vm.run_status_icon_name()
         row[ROW_IS_VM_RUNNING] = vm.is_active()
         row[ROW_MARKUP] = self._build_vm_markup(vm, row)
         model.row_changed(row.path, row.iter)

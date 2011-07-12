@@ -56,8 +56,6 @@ Requires: libxml2-python >= 2.6.23
 Requires: python-virtinst >= %{virtinst_version}
 # Required for loading the glade UI
 Requires: pygtk2-libglade
-# Required for our graphics which are currently SVG format
-Requires: librsvg2
 # Earlier vte had broken python binding module
 Requires: vte >= 0.12.2
 # For online help
@@ -183,14 +181,8 @@ fi
 %{_datadir}/%{name}/*.glade
 %{_datadir}/%{name}/*.py*
 
-%dir %{_datadir}/%{name}/pixmaps/
-%{_datadir}/%{name}/pixmaps/*.png
-%{_datadir}/%{name}/pixmaps/*.svg
-
-%dir %{_datadir}/%{name}/pixmaps/hicolor/
-%dir %{_datadir}/%{name}/pixmaps/hicolor/*/
-%dir %{_datadir}/%{name}/pixmaps/hicolor/*/*/
-%{_datadir}/%{name}/pixmaps/hicolor/*/*/*.png
+%{_datadir}/%{name}/icons
+%{_datadir}/icons/hicolor/*/apps/*
 
 %dir %{_datadir}/%{name}/virtManager/
 %{_datadir}/%{name}/virtManager/*.py*

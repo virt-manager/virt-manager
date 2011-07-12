@@ -1146,8 +1146,8 @@ class vmmDetails(vmmGObjectUI):
 
         self.window.get_widget("overview-status-text").set_text(
                                                     self.vm.run_status())
-        self.window.get_widget("overview-status-icon").set_from_pixbuf(
-                                                    self.vm.run_status_icon())
+        self.window.get_widget("overview-status-icon").set_from_icon_name(
+                            self.vm.run_status_icon_name(), gtk.ICON_SIZE_MENU)
 
         details = self.window.get_widget("details-pages")
         self.page_refresh(details.get_current_page())

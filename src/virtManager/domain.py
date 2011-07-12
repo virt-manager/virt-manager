@@ -1336,10 +1336,18 @@ class vmmDomain(vmmLibvirtObject):
     def is_paused(self):
         return self.status() in [libvirt.VIR_DOMAIN_PAUSED]
 
-    def run_status_icon(self):
-        return self.config.get_vm_status_icon(self.status())
-    def run_status_icon_large(self):
-        return self.config.get_vm_status_icon_large(self.status())
+    def run_status_icon_name(self):
+        status_icons = {
+            libvirt.VIR_DOMAIN_BLOCKED: "state_running",
+            libvirt.VIR_DOMAIN_CRASHED: "state_shutoff",
+            libvirt.VIR_DOMAIN_PAUSED: "state_paused",
+            libvirt.VIR_DOMAIN_RUNNING: "state_running",
+            libvirt.VIR_DOMAIN_SHUTDOWN: "state_shutoff",
+            libvirt.VIR_DOMAIN_SHUTOFF: "state_shutoff",
+            libvirt.VIR_DOMAIN_NOSTATE: "state_running",
+        }
+
+        return status_icons[self.status()]
 
     def force_update_status(self):
         """
