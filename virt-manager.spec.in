@@ -139,34 +139,17 @@ make install  DESTDIR=$RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ "$1" -gt 1 ]; then
-    export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
-    gconftool-2 --makefile-uninstall-rule \
-      %{_sysconfdir}/gconf/schemas/%{name}.schemas > /dev/null || :
-fi
+%gconf_schema_prepare %{name}
 
 %post
-export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
-gconftool-2 --makefile-install-rule \
-  %{_sysconfdir}/gconf/schemas/%{name}.schemas > /dev/null || :
-
-update-desktop-database %{_datadir}/applications
-
-# Revive when we update help docs
-#if which scrollkeeper-update>/dev/null 2>&1; then scrollkeeper-update -q -o %{_datadir}/omf/%{name}; fi
+update-desktop-database -q %{_datadir}/applications
+%gconf_schema_upgrade virt-manager
 
 %postun
-update-desktop-database %{_datadir}/applications
-
-# Revive when we update help docs
-#if which scrollkeeper-update>/dev/null 2>&1; then scrollkeeper-update -q; fi
+update-desktop-database -q %{_datadir}/applications
 
 %preun
-if [ "$1" -eq 0 ]; then
-    export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
-    gconftool-2 --makefile-uninstall-rule \
-      %{_sysconfdir}/gconf/schemas/%{name}.schemas > /dev/null || :
-fi
+%gconf_schema_remove %{name}
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
@@ -186,10 +169,6 @@ fi
 
 %dir %{_datadir}/%{name}/virtManager/
 %{_datadir}/%{name}/virtManager/*.py*
-
-# Revive when we update help docs
-#%{_datadir}/omf/%{name}/
-#%{_datadir}/gnome/help/%{name}
 
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/dbus-1/services/%{name}.service
