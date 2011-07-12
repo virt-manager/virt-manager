@@ -354,7 +354,7 @@ class vmmManager(vmmGObjectUI):
         add_sep(self.connmenu, self.connmenu_items, "hsep1")
         add_conn_menu("delete", gtk.STOCK_DELETE, None, self.do_delete)
         add_sep(self.connmenu, self.connmenu_items, "hsep2")
-        add_conn_menu("details", _("_Details"), None, self.show_host)
+        add_conn_menu("details", _("D_etails"), None, self.show_host)
         self.connmenu.show()
 
     def init_vmlist(self):
