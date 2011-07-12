@@ -345,6 +345,8 @@ class vmmSerialConsole(vmmGObject):
         scrollbar = gtk.VScrollbar()
         scrollbar.set_adjustment(self.terminal.get_adjustment())
         self.error_label = gtk.Label()
+        self.error_label.set_width_chars(40)
+        self.error_label.set_line_wrap(True)
 
         align.add(self.terminal)
         evbox.add(align)
