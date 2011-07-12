@@ -17,9 +17,9 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 import snack
-import utils
+import newt_syrup.utils
 
-from configscreen import ConfigScreen
+from vmmconfigscreen import VmmTuiConfigScreen
 from poolconfig import PoolConfig
 from virtinst import Storage
 
@@ -27,9 +27,9 @@ POOL_NAME_PAGE    = 1
 POOL_DETAILS_PAGE = 2
 CONFIRM_PAGE      = 3
 
-class AddStoragePoolConfigScreen(ConfigScreen):
+class AddStoragePoolConfigScreen(VmmTuiConfigScreen):
     def __init__(self):
-        ConfigScreen.__init__(self, "Add A Storage Pool")
+        VmmTuiConfigScreen.__init__(self, "Add A Storage Pool")
         self.__config = PoolConfig(self.get_libvirt())
         self.__hostname = None
         self.__formats = None

@@ -19,7 +19,7 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 import snack
-from configscreen import DomainListConfigScreen
+from domainlistconfigscreen import DomainListConfigScreen
 
 class ListDomainsConfigScreen(DomainListConfigScreen):
     LIST_PAGE   = 1

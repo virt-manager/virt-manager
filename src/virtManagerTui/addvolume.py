@@ -19,9 +19,10 @@
 import snack
 
 from createmeter import CreateMeter
-from configscreen import StorageListConfigScreen
+from storagelistconfigscreen import StorageListConfigScreen
 from volumeconfig import StorageVolumeConfig
-import utils
+
+import newt_syrup.utils
 
 SELECT_POOL_PAGE   = 1
 VOLUME_NAME_PAGE   = 2

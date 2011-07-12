@@ -19,7 +19,7 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 import snack
-from configscreen import NetworkListConfigScreen
+from networklistconfigscreen import NetworkListConfigScreen
 
 LIST_PAGE = 1
 STOP_PAGE = 2

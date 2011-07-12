@@ -16,7 +16,8 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from menuscreen  import MenuScreen
+from newt_syrup.menuscreen  import MenuScreen
+
 from nodemenu    import NodeMenu
 from netmenu     import NetworkMenu
 from storagemenu import StoragePoolMenu

@@ -18,7 +18,7 @@
 
 import snack
 
-from configscreen import StorageListConfigScreen
+from storagelistconfigscreen import StorageListConfigScreen
 from volumeconfig import StorageVolumeConfig
 
 SELECT_POOL_PAGE   = 1

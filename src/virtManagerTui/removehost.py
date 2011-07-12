@@ -18,7 +18,7 @@
 
 import snack
 
-from configscreen import HostListConfigScreen
+from hostlistconfigscreen import HostListConfigScreen
 
 SELECT_HOST_PAGE    = 1
 CONFIRM_REMOVE_PAGE = 2

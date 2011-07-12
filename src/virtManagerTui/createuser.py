@@ -19,7 +19,7 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 import snack
-from configscreen import ConfigScreen
+from newt_syrup.configscreen import ConfigScreen
 from userworker import UserWorker
 
 import libuser

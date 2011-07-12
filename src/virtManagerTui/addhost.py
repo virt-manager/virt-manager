@@ -18,7 +18,7 @@
 
 import snack
 
-from configscreen import ConfigScreen
+from vmmconfigscreen import VmmTuiConfigScreen
 
 DETAILS_PAGE = 1
 CONFIRM_PAGE = 2
@@ -39,9 +39,9 @@ CONNECTIONS = {CONNECTION_LOCAL    : "Local",
                CONNECTION_SSL      : "Remote SSL/TLS with x509 certificate",
                CONNECTION_SSH      : "Remote tunnel over SSH"}
 
-class AddHostConfigScreen(ConfigScreen):
+class AddHostConfigScreen(VmmTuiConfigScreen):
     def __init__(self):
-        ConfigScreen.__init__(self, "Add A Remote Host")
+        VmmTuiConfigScreen.__init__(self, "Add A Remote Host")
         self.__configured = False
         self.__connection = None
         self.__hostname = None

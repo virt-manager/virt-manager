@@ -19,7 +19,7 @@
 import snack
 
 import logging
-from configscreen import HostListConfigScreen
+from hostlistconfigscreen import HostListConfigScreen
 
 CONNECTION_LIST_PAGE = 1
 CONNECTED_PAGE       = 2

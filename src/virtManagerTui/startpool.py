@@ -19,7 +19,7 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 import snack
-from configscreen import StorageListConfigScreen
+from storagelistconfigscreen import StorageListConfigScreen
 
 LIST_POOLS_PAGE    = 1
 FINAL_PAGE         = 2

@@ -21,7 +21,7 @@ from IPy import IP
 import logging
 import re
 
-from configscreen import ConfigScreen
+from newt_syrup.configscreen import ConfigScreen
 from networkconfig import NetworkConfig
 
 NETWORK_NAME_PAGE            = 1

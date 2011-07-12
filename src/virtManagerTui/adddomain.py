@@ -20,9 +20,11 @@
 
 import snack
 import os
+
+from vmmconfigscreen import VmmTuiConfigScreen
 from createmeter  import CreateMeter
 from domainconfig import DomainConfig
-from configscreen import ConfigScreen
+
 from virtinst import Guest
 
 VM_DETAILS_PAGE      =  1
@@ -49,9 +51,9 @@ OS_VARIANT = "os.variant"
 MEMORY = "memory"
 CPUS = "cpus"
 
-class DomainConfigScreen(ConfigScreen):
+class DomainConfigScreen(VmmTuiConfigScreen):
     def __init__(self):
-        ConfigScreen.__init__(self, "Create A New Virtual Machine")
+        VmmTuiConfigScreen.__init__(self, "Create A New Virtual Machine")
         self.__config = DomainConfig()
         self.__config.set_architecture(self.get_libvirt().get_default_architecture())
         self.__config.set_virt_type(self.get_libvirt().get_default_virt_type())
