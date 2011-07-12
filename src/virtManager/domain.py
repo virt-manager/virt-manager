@@ -1100,47 +1100,39 @@ class vmmDomain(vmmLibvirtObject):
     def _sample_mem_stats(self, info):
         currmem = info[2]
         maxmem = info[1]
+
         pcentCurrMem = info[2] * 100.0 / self.connection.host_memory_size()
         pcentMaxMem = info[1] * 100.0 / self.connection.host_memory_size()
-
-        if pcentCurrMem > 100:
-            pcentCurrMem = 100.0
-        if pcentMaxMem > 100:
-            pcentMaxMem = 100.0
+        pcentCurrMem = max(0.0, min(pcentCurrMem, 100.0))
+        pcentMaxMem = max(0.0, min(pcentMaxMem, 100.0))
 
         return pcentCurrMem, pcentMaxMem, currmem, maxmem
 
     def _sample_cpu_stats(self, info, now):
         prevCpuTime = 0
         prevTimestamp = 0
+        cpuTime = 0
+        cpuTimeAbs = 0
+        pcentHostCpu = 0
+
         if len(self.record) > 0:
             prevTimestamp = self.record[0]["timestamp"]
             prevCpuTime = self.record[0]["cpuTimeAbs"]
 
-        cpuTime = 0
-        cpuTimeAbs = 0
-        pcentCpuTime = 0
         if not (info[0] in [libvirt.VIR_DOMAIN_SHUTOFF,
                             libvirt.VIR_DOMAIN_CRASHED]):
             cpuTime = info[4] - prevCpuTime
             cpuTimeAbs = info[4]
+            hostcpus = self.connection.host_active_processor_count()
 
-            pcentCpuTime = (
-                (cpuTime) * 100.0 /
+            pcentHostCpu = (((cpuTime) * 100.0) /
                 (((now - prevTimestamp) * 1000.0 * 1000.0 * 1000.0) *
-                 self.connection.host_active_processor_count()))
+                hostcpus))
 
-            # Due to timing diffs between getting wall time & getting
-            # the domain's time, its possible to go a tiny bit over
-            # 100% utilization. This freaks out users of the data, so
-            # we hard limit it.
-            if pcentCpuTime > 100.0:
-                pcentCpuTime = 100.0
-            # Enforce >= 0 just in case
-            if pcentCpuTime < 0.0:
-                pcentCpuTime = 0.0
 
-        return cpuTime, cpuTimeAbs, pcentCpuTime
+        pcentHostCpu = max(0.0, min(100.0, pcentHostCpu))
+
+        return cpuTime, cpuTimeAbs, pcentHostCpu
 
     def _get_cur_rate(self, what):
         if len(self.record) > 1:
@@ -1186,11 +1178,11 @@ class vmmDomain(vmmLibvirtObject):
 
     def in_out_vector_limit(self, data, limit):
         l = len(data) / 2
-        end = [l, limit][l > limit]
+        end = min(l, limit)
         if l > limit:
             data = data[0:end] + data[l:l + end]
-        d = map(lambda x, y: (x + y) / 2, data[0:end], data[end:end * 2])
-        return d
+
+        return map(lambda x, y: (x + y) / 2, data[0:end], data[end:end * 2])
 
     def toggle_sample_network_traffic(self, ignore1=None, ignore2=None,
                                       ignore3=None, ignore4=None):
@@ -1229,8 +1221,8 @@ class vmmDomain(vmmLibvirtObject):
         return self._get_record_helper("maxMemPercent")
     def cpu_time(self):
         return self._get_record_helper("cpuTime")
-    def cpu_time_percentage(self):
-        return self._get_record_helper("cpuTimePercent")
+    def host_cpu_time_percentage(self):
+        return self._get_record_helper("cpuHostPercent")
     def network_rx_rate(self):
         return self._get_record_helper("netRxRate")
     def network_tx_rate(self):
@@ -1256,10 +1248,8 @@ class vmmDomain(vmmLibvirtObject):
     def disk_io_rate(self):
         return self.disk_read_rate() + self.disk_write_rate()
 
-    def cpu_time_vector(self):
-        return self._vector_helper("cpuTimePercent")
-    def cpu_time_moving_avg_vector(self):
-        return self._vector_helper("cpuTimeMovingAvgPercent")
+    def host_cpu_time_vector(self):
+        return self._vector_helper("cpuHostPercent")
     def stats_memory_vector(self):
         return self._vector_helper("currMemPercent")
     def network_traffic_vector(self):
@@ -1267,8 +1257,8 @@ class vmmDomain(vmmLibvirtObject):
     def disk_io_vector(self):
         return self._in_out_vector_helper("diskRdRate", "diskWrRate")
 
-    def cpu_time_vector_limit(self, limit):
-        cpudata = self.cpu_time_vector()
+    def host_cpu_time_vector_limit(self, limit):
+        cpudata = self.host_cpu_time_vector()
         if len(cpudata) > limit:
             cpudata = cpudata[0:limit]
         return cpudata
@@ -1492,7 +1482,7 @@ class vmmDomain(vmmLibvirtObject):
             self.is_management_domain()):
             info[1] = self.connection.host_memory_size()
 
-        cpuTime, cpuTimeAbs, pcentCpuTime = self._sample_cpu_stats(info, now)
+        cpuTime, cpuTimeAbs, pcentHostCpu = self._sample_cpu_stats(info, now)
         (pcentCurrMem, pcentMaxMem,
          curmem, maxmem) = self._sample_mem_stats(info)
         rdBytes, wrBytes = self._sample_disk_io()
@@ -1502,7 +1492,7 @@ class vmmDomain(vmmLibvirtObject):
             "timestamp": now,
             "cpuTime": cpuTime,
             "cpuTimeAbs": cpuTimeAbs,
-            "cpuTimePercent": pcentCpuTime,
+            "cpuHostPercent": pcentHostCpu,
             "curmem": curmem,
             "maxmem": maxmem,
             "currMemPercent": pcentCurrMem,
@@ -1512,25 +1502,6 @@ class vmmDomain(vmmLibvirtObject):
             "netRxKB": rxBytes / 1024,
             "netTxKB": txBytes / 1024,
         }
-
-        nSamples = 5
-        if nSamples > len(self.record):
-            nSamples = len(self.record)
-
-        if nSamples == 0:
-            avg = ["cpuTimeAbs"]
-            percent = 0
-        else:
-            startCpuTime = self.record[nSamples - 1]["cpuTimeAbs"]
-            startTimestamp = self.record[nSamples - 1]["timestamp"]
-
-            avg = ((newStats["cpuTimeAbs"] - startCpuTime) / nSamples)
-            percent = ((newStats["cpuTimeAbs"] - startCpuTime) * 100.0 /
-                       (((now - startTimestamp) * 1000.0 * 1000.0 * 1000.0) *
-                        self.connection.host_active_processor_count()))
-
-        newStats["cpuTimeMovingAvg"] = avg
-        newStats["cpuTimeMovingAvgPercent"] = percent
 
         for r in ["diskRd", "diskWr", "netRx", "netTx"]:
             newStats[r + "Rate"] = self._get_cur_rate(r + "KB")

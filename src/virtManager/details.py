@@ -2178,7 +2178,7 @@ class vmmDetails(vmmGObjectUI):
         dsk_txt = _("Disabled")
         net_txt = _("Disabled")
 
-        cpu_txt = "%d %%" % self.vm.cpu_time_percentage()
+        cpu_txt = "%d %%" % self.vm.host_cpu_time_percentage()
 
         vm_memory = self.vm.stats_memory()
         host_memory = self.vm.get_connection().host_memory_size()
@@ -2199,7 +2199,7 @@ class vmmDetails(vmmGObjectUI):
         self.window.get_widget("overview-disk-usage-text").set_markup(dsk_txt)
 
         self.cpu_usage_graph.set_property("data_array",
-                                          self.vm.cpu_time_vector())
+                                          self.vm.host_cpu_time_vector())
         self.memory_usage_graph.set_property("data_array",
                                              self.vm.stats_memory_vector())
         self.disk_io_graph.set_property("data_array",

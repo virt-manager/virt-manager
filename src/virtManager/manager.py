@@ -1025,13 +1025,23 @@ class vmmManager(vmmGObjectUI):
                    model.get_value(iter2, ROW_NAME))
 
     def vmlist_cpu_usage_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, ROW_HANDLE).cpu_time_percentage(), model.get_value(iter2, ROW_HANDLE).cpu_time_percentage())
+        obj1 = model.get_value(iter1, ROW_HANDLE)
+        obj2 = model.get_value(iter2, ROW_HANDLE)
+
+        return cmp(obj1.host_cpu_time_percentage(),
+                   obj2.host_cpu_time_percentage())
 
     def vmlist_disk_io_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, ROW_HANDLE).disk_io_rate(), model.get_value(iter2, ROW_HANDLE).disk_io_rate())
+        obj1 = model.get_value(iter1, ROW_HANDLE)
+        obj2 = model.get_value(iter2, ROW_HANDLE)
+
+        return cmp(obj1.disk_io_rate(), obj2.disk_io_rate())
 
     def vmlist_network_usage_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, ROW_HANDLE).network_traffic_rate(), model.get_value(iter2, ROW_HANDLE).network_traffic_rate())
+        obj1 = model.get_value(iter1, ROW_HANDLE)
+        obj2 = model.get_value(iter2, ROW_HANDLE)
+
+        return cmp(obj1.network_traffic_rate(), obj2.network_traffic_rate())
 
     def enable_polling(self, ignore1, ignore2, conf_entry, userdata):
         if userdata == self.config.STATS_DISK:
@@ -1081,21 +1091,27 @@ class vmmManager(vmmGObjectUI):
         set_stats[stats_id](visible)
 
     def cpu_usage_img(self, column_ignore, cell, model, _iter, data):
-        if model.get_value(_iter, ROW_HANDLE) is None:
+        obj = model.get_value(_iter, ROW_HANDLE)
+        if obj is None:
             return
-        data = model.get_value(_iter, ROW_HANDLE).cpu_time_vector_limit(40)
+
+        data = obj.host_cpu_time_vector_limit(40)
         cell.set_property('data_array', data)
 
     def disk_io_img(self, column_ignore, cell, model, _iter, data):
-        if model.get_value(_iter, ROW_HANDLE) is None:
+        obj = model.get_value(_iter, ROW_HANDLE)
+        if obj is None:
             return
-        data = model.get_value(_iter, ROW_HANDLE).disk_io_vector_limit(40)
+
+        data = obj.disk_io_vector_limit(40)
         cell.set_property('data_array', data)
 
     def network_traffic_img(self, column_ignore, cell, model, _iter, data):
-        if model.get_value(_iter, ROW_HANDLE) is None:
+        obj = model.get_value(_iter, ROW_HANDLE)
+        if obj is None:
             return
-        data = model.get_value(_iter, ROW_HANDLE).network_traffic_vector_limit(40)
+
+        data = obj.network_traffic_vector_limit(40)
         cell.set_property('data_array', data)
 
 vmmGObjectUI.type_register(vmmManager)

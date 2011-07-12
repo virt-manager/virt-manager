@@ -1548,35 +1548,27 @@ class vmmConnection(vmmGObject):
             rxRate += vm.network_rx_rate()
             txRate += vm.network_tx_rate()
 
-        pcentCpuTime = 0
+        pcentHostCpu = 0
+        pcentMem = mem * 100.0 / self.host_memory_size()
+
         if len(self.record) > 0:
             prevTimestamp = self.record[0]["timestamp"]
             host_cpus = self.host_active_processor_count()
 
-            pcentCpuTime = ((cpuTime) * 100.0 /
+            pcentHostCpu = ((cpuTime) * 100.0 /
                             ((now - prevTimestamp) *
                              1000.0 * 1000.0 * 1000.0 * host_cpus))
 
-            # Due to timing diffs between getting wall time & getting
-            # the domain's time, its possible to go a tiny bit over
-            # 100% utilization. This freaks out users of the data, so
-            # we hard limit it.
-            if pcentCpuTime > 100.0:
-                pcentCpuTime = 100.0
-            # Enforce >= 0 just in case
-            if pcentCpuTime < 0.0:
-                pcentCpuTime = 0.0
 
-        pcentMem = mem * 100.0 / self.host_memory_size()
-        if pcentMem > 100.0:
-            pcentMem = 100.0
+        pcentHostCpu = max(0.0, min(100.0, pcentHostCpu))
+        pcentMem = max(0.0, min(100.0, pcentMem))
 
         newStats = {
             "timestamp": now,
             "memory": mem,
             "memoryPercent": pcentMem,
             "cpuTime": cpuTime,
-            "cpuTimePercent": pcentCpuTime,
+            "cpuHostPercent": pcentHostCpu,
             "diskRdRate" : rdRate,
             "diskWrRate" : wrRate,
             "netRxRate" : rxRate,
@@ -1589,32 +1581,26 @@ class vmmConnection(vmmGObject):
     ########################
     # Stats getter methods #
     ########################
-    def cpu_time_vector(self):
+    def _vector_helper(self, record_name):
         vector = []
         stats = self.record
         for i in range(self.config.get_stats_history_length() + 1):
             if i < len(stats):
-                vector.append(stats[i]["cpuTimePercent"] / 100.0)
+                vector.append(stats[i][record_name] / 100.0)
             else:
                 vector.append(0)
         return vector
 
-    def cpu_time_vector_limit(self, limit):
-        cpudata = self.cpu_time_vector()
+    def host_cpu_time_vector(self):
+        return self._vector_helper("cpuHostPercent")
+    def stats_memory_vector(self):
+        return self._vector_helper("memoryPercent")
+
+    def host_cpu_time_vector_limit(self, limit):
+        cpudata = self.host_cpu_time_vector()
         if len(cpudata) > limit:
             cpudata = cpudata[0:limit]
         return cpudata
-
-    def stats_memory_vector(self):
-        vector = []
-        stats = self.record
-        for i in range(self.config.get_stats_history_length() + 1):
-            if i < len(stats):
-                vector.append(stats[i]["memoryPercent"] / 100.0)
-            else:
-                vector.append(0)
-        return vector
-
     def disk_io_vector_limit(self, dummy):
         #No point to accumulate unnormalized I/O for a conenction
         return [0.0]
@@ -1631,8 +1617,8 @@ class vmmConnection(vmmGObject):
         return self._get_record_helper("memory")
     def stats_memory_percentage(self):
         return self._get_record_helper("memoryPercent")
-    def cpu_time_percentage(self):
-        return self._get_record_helper("cpuTimePercent")
+    def host_cpu_time_percentage(self):
+        return self._get_record_helper("cpuHostPercent")
 
     def network_rx_rate(self):
         return self._get_record_helper("netRxRate")
