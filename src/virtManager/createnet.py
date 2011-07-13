@@ -333,25 +333,28 @@ class vmmCreateNetwork(vmmGObjectUI):
         end = self.get_config_dhcp_end()
         dev, mode = self.get_config_forwarding()
 
-        xml = "<network>" + \
-              "  <name>%s</name>\n" % name
+        xml = "<network>\n"
+        xml += "  <name>%s</name>\n" % name
+
         if mode:
             if dev is not None:
                 xml += "  <forward mode='%s' dev='%s'/>\n" % (mode, dev)
             else:
                 xml += "  <forward mode='%s'/>\n" % mode
 
-        xml += "  <ip address='%s' netmask='%s'>\n" % (str(ip[1]), str(ip.netmask()))
+        xml += "  <ip address='%s' netmask='%s'>\n" % (str(ip[1]),
+                                                       str(ip.netmask()))
 
         if self.get_config_dhcp_enable():
             xml += "    <dhcp>\n"
-            xml += "      <range start='%s' end='%s'/>\n" % (str(start), str(end))
+            xml += "      <range start='%s' end='%s'/>\n" % (str(start),
+                                                             str(end))
             xml += "    </dhcp>\n"
 
         xml += "  </ip>\n"
         xml += "</network>\n"
 
-        logging.debug("About to create network " + xml)
+        logging.debug("Generated network XML:\n" + xml)
 
         try:
             self.conn.create_network(xml)
