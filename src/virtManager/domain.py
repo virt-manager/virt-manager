@@ -436,15 +436,24 @@ class vmmDomain(vmmLibvirtObject):
 
             guest.cpu.model = model or None
 
-            # Sync feature lists
             origfeatures = guest.cpu.features
-            for f in origfeatures:
-                if f.name not in featurelist:
-                    guest.cpu.remove_feature(f)
-                else:
-                    featurelist.remove(f.name)
-            for f in featurelist:
-                guest.cpu.add_feature(f)
+            def set_feature(fname, fpol):
+                for f in origfeatures:
+                    if f.name != fname:
+                        continue
+                    if f.policy != fpol:
+                        if fpol == "default":
+                            guest.cpu.remove_feature(f)
+                        else:
+                            f.policy = fpol
+                    return
+
+                if fpol != "default":
+                    guest.cpu.add_feature(fname, fpol)
+
+            # Sync feature lists
+            for fname, fpol in featurelist:
+                set_feature(fname, fpol)
 
         return self._redefine_guest(change)
 

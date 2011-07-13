@@ -687,34 +687,44 @@ class vmmDetails(vmmGObjectUI):
         except:
             logging.exception("Error populating CPU model list")
 
-        # [ feature name, enabled? ]
+        # [ feature name, mode]
         feat_list = self.window.get_widget("cpu-features")
-        feat_model = gtk.ListStore(str, bool)
+        feat_model = gtk.ListStore(str, str)
         feat_list.set_model(feat_model)
 
         nameCol = gtk.TreeViewColumn()
-        chkCol = gtk.TreeViewColumn()
+        polCol = gtk.TreeViewColumn()
+        polCol.set_min_width(80)
 
         feat_list.append_column(nameCol)
-        feat_list.append_column(chkCol)
+        feat_list.append_column(polCol)
 
+        # Feature name col
         name_text = gtk.CellRendererText()
         nameCol.pack_start(name_text, True)
         nameCol.add_attribute(name_text, 'text', 0)
         nameCol.set_sort_column_id(0)
 
-        feat_toggle = gtk.CellRendererToggle()
-        chkCol.pack_start(feat_toggle, True)
-        chkCol.add_attribute(feat_toggle, 'active', 1)
-        chkCol.set_sort_column_id(1)
+        # Feature policy col
+        feat_combo = gtk.CellRendererCombo()
+        m = gtk.ListStore(str)
+        for p in virtinst.CPUFeature.POLICIES:
+            m.append([p])
+        m.append(["default"])
+        feat_combo.set_property("model", m)
+        feat_combo.set_property("text-column", 0)
+        feat_combo.set_property("editable", True)
+        polCol.pack_start(feat_combo, False)
+        polCol.add_attribute(feat_combo, 'text', 1)
+        polCol.set_sort_column_id(1)
 
-        def feature_changed(src, index, model):
-            model[index][1] = not src.get_active()
+        def feature_changed(src, index, treeiter, model):
+            model[index][1] = src.get_property("model")[treeiter][0]
             self.config_enable_apply()
 
-        feat_toggle.connect("toggled", feature_changed, feat_model)
+        feat_combo.connect("changed", feature_changed, feat_model)
         for name in all_features:
-            feat_model.append([name, False])
+            feat_model.append([name, "default"])
 
         # CPU model combo
         cpu_model = self.window.get_widget("cpu-model")
@@ -1392,8 +1402,9 @@ class vmmDetails(vmmGObjectUI):
         ret = []
 
         for row in feature_list.get_model():
-            if row[1]:
-                ret.append(row[0])
+            if row[1] in ["off", "model"]:
+                continue
+            ret.append(row)
 
         return ret
 
@@ -2289,6 +2300,17 @@ class vmmDetails(vmmGObjectUI):
     def _refresh_cpu_config(self, cpu):
         feature_ui = self.window.get_widget("cpu-features")
         model = cpu.model or ""
+        caps = self.vm.get_connection().get_capabilities()
+
+        capscpu = None
+        try:
+            cpu_values = caps.get_cpu_values(self.vm.get_arch())
+            for c in cpu_values.cpus:
+                if model and c.model == model:
+                    capscpu = c
+                    break
+        except:
+            pass
 
         show_top = bool(cpu.sockets or cpu.cores or cpu.threads)
         sockets = cpu.sockets or 1
@@ -2301,14 +2323,19 @@ class vmmDetails(vmmGObjectUI):
         self.window.get_widget("cpu-cores").set_value(cores)
         self.window.get_widget("cpu-threads").set_value(threads)
 
-        def has_feature(name):
+        def get_feature_policy(name):
             for f in cpu.features:
                 if f.name == name:
-                    return True
-            return False
+                    return f.policy
+
+            if capscpu:
+                for f in capscpu.features:
+                    if f == name:
+                        return "model"
+            return "off"
 
         for row in feature_ui.get_model():
-            row[1] = has_feature(row[0])
+            row[1] = get_feature_policy(row[0])
 
     def refresh_config_cpu(self):
         self._cpu_copy_host = False
