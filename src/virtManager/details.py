@@ -2251,13 +2251,15 @@ class vmmDetails(vmmGObjectUI):
         reason = ""
         if not self.vm.is_active():
             reason = _("VCPU info only available for running domain.")
-        elif not self.vm.getvcpus_supported:
-            reason = _("Virtual machine does not support runtime VPCU info.")
         else:
             try:
                 vcpu_info, vcpu_pinning = self.vm.vcpu_info()
             except Exception, e:
                 reason = _("Error getting VCPU info: %s") % str(e)
+
+            if not self.vm.getvcpus_supported:
+                reason = _("Virtual machine does not support runtime "
+                           "VPCU info.")
 
         vcpu_list.set_sensitive(not bool(reason))
         util.tooltip_wrapper(vcpu_list, reason or None)

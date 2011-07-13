@@ -148,9 +148,9 @@ class vmmDomain(vmmLibvirtObject):
 
         self.lastStatus = libvirt.VIR_DOMAIN_SHUTOFF
 
+        self.getvcpus_supported = None
         self.getjobinfo_supported = False
         self.managedsave_supported = False
-        self.getvcpus_supported = False
         self.remote_console_supported = False
 
         self._guest = None
@@ -176,8 +176,6 @@ class vmmDomain(vmmLibvirtObject):
         """
         self._reparse_xml()
 
-        self.getvcpus_supported = support.check_domain_support(self._backend,
-                                            support.SUPPORT_DOMAIN_GETVCPUS)
         self.managedsave_supported = self.connection.get_dom_managedsave_supported(self._backend)
         self.getjobinfo_supported = support.check_domain_support(self._backend,
                                             support.SUPPORT_DOMAIN_JOB_INFO)
@@ -735,8 +733,17 @@ class vmmDomain(vmmLibvirtObject):
     def pin_vcpu(self, vcpu_num, pinlist):
         self._backend.pinVcpu(vcpu_num, pinlist)
     def vcpu_info(self):
-        if self.is_active() and self.getvcpus_supported:
-            return self._backend.vcpus()
+        if self.is_active() and self.getvcpus_supported is not False:
+            try:
+                ret = self._backend.vcpus()
+                self.getvcpus_supported = True
+                return ret
+            except libvirt.libvirtError, err:
+                if support.is_error_nosupport(err):
+                    self.getvcpus_supported = False
+                else:
+                    raise
+
         return [[], []]
 
     def get_autostart(self):
