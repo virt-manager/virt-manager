@@ -492,13 +492,23 @@ class vmmDetails(vmmGObjectUI):
 
         # Add HW popup menu
         self.addhwmenu = gtk.Menu()
-        addHW = gtk.ImageMenuItem(_("Add Hardware"))
+
+        addHW = gtk.ImageMenuItem(_("_Add Hardware"))
         addHWImg = gtk.Image()
         addHWImg.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_MENU)
         addHW.set_image(addHWImg)
         addHW.show()
         addHW.connect("activate", self.add_hardware)
+
+        rmHW = gtk.ImageMenuItem(_("_Remove Hardware"))
+        rmHWImg = gtk.Image()
+        rmHWImg.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
+        rmHW.set_image(rmHWImg)
+        rmHW.show()
+        rmHW.connect("activate", self.remove_xml_dev)
+
         self.addhwmenu.add(addHW)
+        self.addhwmenu.add(rmHW)
 
         # Serial list menu
         smenu = gtk.Menu()
