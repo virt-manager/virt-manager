@@ -79,18 +79,14 @@ class vmmConfig(object):
     DEFAULT_VIRT_IMAGE_DIR = "/var/lib/libvirt/images"
     DEFAULT_VIRT_SAVE_DIR = "/var/lib/libvirt"
 
-    def __init__(self, appname, appversion, gconf_dir, glade_dir, icon_dir,
-                 data_dir):
+    def __init__(self, appname, appversion, glade_dir):
         self.appname = appname
         self.appversion = appversion
-        self.conf_dir = gconf_dir
-        self.conf = gconf.client_get_default()
-        self.conf.add_dir(gconf_dir,
-                          gconf.CLIENT_PRELOAD_NONE)
-
+        self.conf_dir = "/apps/" + appname
         self.glade_dir = glade_dir
-        self.icon_dir = icon_dir
-        self.data_dir = data_dir
+
+        self.conf = gconf.client_get_default()
+        self.conf.add_dir(self.conf_dir, gconf.CLIENT_PRELOAD_NONE)
 
         # We don't create it straight away, since we don't want
         # to block the app pending user authorizaation to access
@@ -120,21 +116,10 @@ class vmmConfig(object):
 
     def get_appname(self):
         return self.appname
-
     def get_appversion(self):
         return self.appversion
-
     def get_glade_dir(self):
         return self.glade_dir
-
-    def get_glade_file(self):
-        return self.glade_dir + "/" + self.appname + ".glade"
-
-    def get_icon_dir(self):
-        return self.icon_dir
-
-    def get_data_dir(self):
-        return self.data_dir
 
     def get_spice_error(self):
         if self._spice_error is None:

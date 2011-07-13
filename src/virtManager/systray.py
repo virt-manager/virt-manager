@@ -130,10 +130,9 @@ class vmmSystray(vmmGObject):
             self.systray_icon.set_menu(self.systray_menu)
 
         else:
-            iconfile = self.config.get_icon_dir() + "/virt-manager-icon.svg"
             self.systray_icon = gtk.StatusIcon()
             self.systray_icon.set_visible(True)
-            self.systray_icon.set_property("file", iconfile)
+            self.systray_icon.set_property("icon-name", "virt-manager")
             self.systray_icon.connect("activate", self.systray_activate)
             self.systray_icon.connect("popup-menu", self.systray_popup)
             self.systray_icon.set_tooltip(_("Virtual Machine Manager"))

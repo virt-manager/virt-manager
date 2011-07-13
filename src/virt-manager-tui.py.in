@@ -19,8 +19,6 @@
 
 from newt_syrup.dialogscreen import DialogScreen
 
-import gettext
-import locale
 import logging
 import os
 import sys
@@ -33,37 +31,14 @@ appversion = "::VERSION::"
 gettext_app = "virt-manager"
 gettext_dir = "::GETTEXTDIR::"
 virtinst_str = "::VIRTINST_VERSION::"
-virtinst_version = tuple([ int(num) for num in virtinst_str.split('.')])
-
-gconf_dir = "/apps/" + appname
-asset_dir = "::ASSETDIR::"
-glade_dir = asset_dir
-icon_dir = asset_dir + "/pixmaps"
 pylib_dir = "::PYLIBDIR::"
 pyarchlib_dir = "::PYARCHLIBDIR::"
-data_dir = "::DATADIR::"
-
-def setup_i18n():
-    locale.setlocale(locale.LC_ALL, '')
-    gettext.install(gettext_app, gettext_dir)
-    gettext.bindtextdomain(gettext_app, gettext_dir)
 
 def setup_pypath():
-    global glade_dir, icon_dir, data_dir
-    # Hacks for find assets in local dir for dev purposes
-    if os.path.exists(os.getcwd() + "/src/vmm-about.glade"):
-        glade_dir = os.getcwd() + "/src"
-    if os.path.exists(os.getcwd() + "/pixmaps/state_running.png"):
-        icon_dir = os.getcwd() + "/pixmaps"
-    if os.path.exists(os.getcwd() + "../gnome/help/virt-manager/C/virt-manager.xml"):
-        data_dir = os.getcwd() + "../"
-
-    # First 2 hacks are to point python to local dir for source files in dev,
-    # the third is the main path if you have  normal install
-    if os.path.exists(os.getcwd() + "/src/virt-manager.py"):
-        sys.path.insert(0, os.getcwd() + "/src/virtManagerTui/importblacklist")
-    elif os.path.exists(os.getcwd() + "/build/src/virt-manager.py"):
-        sys.path.insert(0, os.getcwd() + "/src")
+    # Hack to find assets in local dir for dev purposes
+    if os.path.exists(os.getcwd() + "/src/virt-manager.py.in"):
+        sys.path.insert(0, os.path.join(os.getcwd(),
+                                     "/src/virtManagerTui/importblacklist"))
     else:
         sys.path.insert(0, pylib_dir)
         sys.path.insert(0, pyarchlib_dir)
@@ -85,31 +60,20 @@ def _show_startup_error(message, details):
     errordlg.show()
 
 def main():
-    setup_i18n()
     setup_pypath()
 
+    import virtManager
     from virtManager import cli
+
+    cli.setup_i18n(gettext_app, gettext_dir)
 
     (options, ignore) = parse_commandline()
     cli.setup_logging(appname, options.debug)
 
-    # Make sure we have a sufficiently new virtinst version, since we are
-    # very closely tied to the lib
-    msg = ("virt-manager requires the python-virtinst library version " +
-            virtinst_str + " or greater. This can be downloaded at:"
-            "\n\nhttp://virt-manager.org/download.html")
-    try:
-        import virtinst
-        ignore = virtinst.__version__
-        ignore = virtinst.__version_info__
-    except Exception, e:
-        logging.exception("Error import virtinst")
-        raise RuntimeError(str(e) + "\n\n" + msg)
+    logging.debug("Launched as: %s" % " ".join(sys.argv[:]))
+    logging.debug("virtManager import: %s" % str(virtManager))
 
-    if virtinst.__version_info__ < virtinst_version:
-        raise RuntimeError("virtinst version %s is too old." %
-                            (virtinst.__version__) +
-                           "\n\n" + msg)
+    cli.check_virtinst_version(virtinst_str)
 
     import virtManager.guidiff
     virtManager.guidiff.is_gui(False)

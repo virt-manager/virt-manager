@@ -23,8 +23,6 @@ import os.path
 import sys
 
 import logging
-import locale
-import gettext
 import traceback
 import signal
 import optparse
@@ -45,15 +43,12 @@ appversion = "::VERSION::"
 gettext_app = "virt-manager"
 gettext_dir = "::GETTEXTDIR::"
 virtinst_str = "::VIRTINST_VERSION::"
-virtinst_version = tuple([int(num) for num in virtinst_str.split('.')])
 
-gconf_dir = "/apps/" + appname
 asset_dir = "::ASSETDIR::"
 glade_dir = asset_dir
 icon_dir = asset_dir + "/icons"
 pylib_dir = "::PYLIBDIR::"
 pyarchlib_dir = "::PYARCHLIBDIR::"
-data_dir = "::DATADIR::"
 
 default_qemu_user = "::DEFAULT_QEMU_USER::"
 rhel_enable_unsupported_opts = bool(int("::ENABLE_UNSUPPORTED_RHEL_OPTS::"))
@@ -74,31 +69,23 @@ def _show_startup_error(msg, details):
                  async=False,
                  debug=False)
 
-def setup_i18n():
-    locale.setlocale(locale.LC_ALL, '')
-    gettext.install(gettext_app, gettext_dir)
-    gettext.bindtextdomain(gettext_app, gettext_dir)
+def setup_pypath():
+    global glade_dir, icon_dir
+
+    # Hack to find assets in local dir for dev purposes
+    if os.path.exists(os.getcwd() + "/src/virt-manager.py.in"):
+        glade_dir = os.path.join(os.getcwd(), "src")
+        icon_dir = os.path.join(os.getcwd(), "icons")
+    else:
+        sys.path.insert(0, pylib_dir)
+        sys.path.insert(0, pyarchlib_dir)
+
+    print icon_dir
 
 def setup_glade_i18n():
     import gtk.glade
     gtk.glade.bindtextdomain(gettext_app, gettext_dir)
     gtk.glade.textdomain(gettext_app)
-
-def setup_pypath():
-    global glade_dir, icon_dir, data_dir
-
-    # Hacks for find assets in local dir for dev purposes
-    # First 2 hacks are to point python to local dir for source files in dev,
-    # the third is the main path if you have  normal install
-    if os.path.exists(os.getcwd() + "/src/virt-manager.py.in"):
-        glade_dir = os.path.join(os.getcwd(), "src")
-        icon_dir = os.path.join(os.getcwd(), "icons")
-        data_dir = os.path.join(os.getcwd(), "../")
-    elif os.path.exists(os.getcwd() + "/build/src/virt-manager.py"):
-        sys.path.insert(0, os.getcwd() + "/src")
-    else:
-        sys.path.insert(0, pylib_dir)
-        sys.path.insert(0, pyarchlib_dir)
 
 def drop_tty():
     # We fork and setsid so that we drop the controlling
@@ -254,11 +241,12 @@ def opt_show_cb(option, opt_str, value, parser):
 
 # Run me!
 def main():
-    setup_i18n()
     setup_pypath()
 
     import virtManager
     from virtManager import cli
+
+    cli.setup_i18n(gettext_app, gettext_dir)
 
     # Need to do this before GTK strips args like --sync
     gtk_error = None
@@ -306,23 +294,7 @@ def main():
     logging.debug("GTK version: %s" % str(gtk.gtk_version))
     logging.debug("virtManager import: %s" % str(virtManager))
 
-    # Make sure we have a sufficiently new virtinst version, since we are
-    # very closely tied to the lib
-    msg = ("virt-manager requires the python-virtinst library version " +
-            virtinst_str + " or greater. This can be downloaded at:"
-            "\n\nhttp://virt-manager.org/download.html")
-    try:
-        import virtinst
-        ignore = virtinst.__version__
-        ignore = virtinst.__version_info__
-    except Exception, e:
-        logging.exception("Error import virtinst")
-        raise RuntimeError(str(e) + "\n\n" + msg)
-
-    if virtinst.__version_info__ < virtinst_version:
-        raise RuntimeError("virtinst version %s is too old." %
-                            (virtinst.__version__) +
-                           "\n\n" + msg)
+    cli.check_virtinst_version(virtinst_str)
 
     # Add our icon dir to icon theme
     icon_theme = gtk.icon_theme_get_default()
@@ -341,9 +313,7 @@ def main():
     # display access
     import virtManager.config
     import virtManager.util
-    config = virtManager.config.vmmConfig(appname, appversion,
-                                          gconf_dir, glade_dir,
-                                          icon_dir, data_dir)
+    config = virtManager.config.vmmConfig(appname, appversion, glade_dir)
     virtManager.util.running_config = config
     config.default_qemu_user = default_qemu_user
     config.enable_unsupported_rhel_opts = rhel_enable_unsupported_opts
