@@ -338,6 +338,7 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_cache_combo_changed": self.config_enable_apply,
             "on_disk_bus_combo_changed": self.config_enable_apply,
             "on_disk_format_changed": self.config_enable_apply,
+            "on_disk_serial_changed": self.config_enable_apply,
 
             "on_network_source_combo_changed": self.config_enable_apply,
             "on_network_bridge_changed": self.config_enable_apply,
@@ -1845,17 +1846,20 @@ class vmmDetails(vmmGObjectUI):
         cache = self.get_combo_label_value("disk-cache")
         fmt = self.window.get_widget("disk-format").child.get_text()
         bus = self.get_combo_label_value("disk-bus")
+        serial = self.window.get_widget("disk-serial").get_text()
 
         return self._change_config_helper([self.vm.define_disk_readonly,
                                            self.vm.define_disk_shareable,
                                            self.vm.define_disk_cache,
                                            self.vm.define_disk_driver_type,
-                                           self.vm.define_disk_bus],
+                                           self.vm.define_disk_bus,
+                                           self.vm.define_disk_serial],
                                           [(dev_id_info, do_readonly),
                                            (dev_id_info, do_shareable),
                                            (dev_id_info, cache),
                                            (dev_id_info, fmt),
-                                           (dev_id_info, bus)])
+                                           (dev_id_info, bus),
+                                           (dev_id_info, serial)])
 
     # Audio options
     def config_sound_apply(self, dev_id_info):
@@ -2346,6 +2350,7 @@ class vmmDetails(vmmGObjectUI):
         idx = disk.disk_bus_index
         cache = disk.driver_cache
         driver_type = disk.driver_type or ""
+        serial = disk.serial
         show_format = (not self.is_customize_dialog or
                        disk.path_exists(disk.conn, disk.path))
 
@@ -2382,6 +2387,7 @@ class vmmDetails(vmmGObjectUI):
 
         self.populate_disk_bus_combo(devtype, no_default)
         self.set_combo_label("disk-bus", bus)
+        self.window.get_widget("disk-serial").set_text(serial or "")
 
         button = self.window.get_widget("config-cdrom-connect")
         if is_cdrom or is_floppy:

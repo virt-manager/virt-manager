@@ -544,6 +544,11 @@ class vmmDomain(vmmLibvirtObject):
 
             editdev.bus = newval
         return self._redefine_device(change, devobj)
+    def define_disk_serial(self, devobj, val):
+        def change(editdev):
+            if val != editdev.serial:
+                editdev.serial = val or None
+        return self._redefine_device(change, devobj)
 
     # Network define methods
 
