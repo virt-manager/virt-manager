@@ -1281,6 +1281,8 @@ class vmmDetails(vmmGObjectUI):
                   self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def control_vm_screenshot(self, src_ignore):
+        image = self.console.viewer.get_pixbuf()
+
         # If someone feels kind they could extend this code to allow
         # user to choose what image format they'd like to save in....
         path = util.browse_local(
@@ -1294,9 +1296,8 @@ class vmmDetails(vmmGObjectUI):
             return
 
         filename = path
-        if not(filename.endswith(".png")):
+        if not filename.endswith(".png"):
             filename += ".png"
-        image = self.console.viewer.get_pixbuf()
 
         # Save along with a little metadata about us & the domain
         image.save(filename, 'png',
