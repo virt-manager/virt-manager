@@ -17,7 +17,7 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 import snack
-import newt_syrup.utils
+from newt_syrup import utils
 
 from vmmconfigscreen import VmmTuiConfigScreen
 from poolconfig import PoolConfig

@@ -20,7 +20,7 @@ import snack
 
 from storagelistconfigscreen import StorageListConfigScreen
 
-import newt_syrup.utils
+from newt_syrup import utils
 
 LIST_PAGE    = 1
 DETAILS_PAGE = 2

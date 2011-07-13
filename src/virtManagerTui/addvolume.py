@@ -22,7 +22,7 @@ from createmeter import CreateMeter
 from storagelistconfigscreen import StorageListConfigScreen
 from volumeconfig import StorageVolumeConfig
 
-import newt_syrup.utils
+from newt_syrup import utils
 
 SELECT_POOL_PAGE   = 1
 VOLUME_NAME_PAGE   = 2
