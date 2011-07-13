@@ -714,9 +714,7 @@ class vmmManager(vmmGObjectUI):
 
     def _build_conn_color(self, conn):
         color = None
-        if conn.state != conn.STATE_DISCONNECTED:
-            color = gtk.gdk.Color(0, 0, 0)
-        else:
+        if conn.state == conn.STATE_DISCONNECTED:
             # Color code #5b5b5b
             color = gtk.gdk.Color(23296, 23296, 23296)
         return color
@@ -741,7 +739,7 @@ class vmmManager(vmmGObjectUI):
         row.insert(ROW_IS_CONN_CONNECTED, True)
         row.insert(ROW_IS_VM, True)
         row.insert(ROW_IS_VM_RUNNING, vm.is_active())
-        row.insert(ROW_COLOR, gtk.gdk.Color(0, 0, 0))
+        row.insert(ROW_COLOR, None)
 
         row[ROW_MARKUP] = self._build_vm_markup(vm, row)
 
