@@ -13,6 +13,7 @@
 %define default_graphics           ""
 
 %define with_spice                 0
+%define with_tui                   0
 
 # End local config
 
@@ -25,8 +26,9 @@
 Name: %{_package}
 Version: %{_version}
 Release: %{_release}%{_extra_release}
-Summary: Virtual Machine Manager
+%define verrel %{version}-%{release}
 
+Summary: Virtual Machine Manager
 Group: Applications/Emulators
 License: GPLv2+
 URL: http://virt-manager.org/
@@ -74,6 +76,13 @@ Requires: PolicyKit-gnome
 Requires: spice-gtk-python
 %endif
 
+%if %{with_tui} == 0
+Obsoletes: virt-manager-common <= %{verrel}
+Conflicts: virt-manager-common > %{verrel}
+%else
+Requires: virt-manager-common = %{verrel}
+%endif
+
 BuildRequires: gettext
 BuildRequires: scrollkeeper
 BuildRequires: intltool
@@ -90,6 +99,35 @@ machines for KVM, Xen, and QEmu. Start, stop, add or remove virtual devices,
 connect to a graphical or serial console, and see resource usage statistics
 for existing VMs on local or remote machines. Uses libvirt as the backend
 management API.
+
+# TUI package setup
+%if %{with_tui}
+%package tui
+Summary: Virtual Machine Manager text user interface
+Group: Applications/Emulators
+
+Requires: virt-manager-common = %{verrel}
+Requires: python-newt_syrup
+
+%description tui
+An interactive text user interface for Virtual Machine Manager.
+
+%package common
+Summary: Common files used by the different Virtual Machine Manager interfaces
+Group: Applications/Emulators
+
+# This version not strictly required: virt-manager should work with older,
+# however varying amounts of functionality will not be enabled.
+Requires: libvirt-python >= 0.7.0
+Requires: dbus-python
+# Minimum we've tested with
+Requires: libxml2-python >= 2.6.23
+# Absolutely require this version or later
+Requires: python-virtinst >= %{virtinst_version}
+
+%description common
+Common files used by the different Virtual Machine Manager interfaces.
+%endif
 
 %prep
 %setup -q
@@ -119,8 +157,13 @@ management API.
 %define _default_graphics --with-default-graphics=%{default_graphics}
 %endif
 
+%if %{with_tui}
+%define _tui_opt --with-tui
+%else
+%define _tui_opt --without-tui
+%endif
 
-%configure  --without-tui \
+%configure  %{?_tui_opt} \
             %{?_qemu_user} \
             %{?_kvm_packages} \
             %{?_libvirt_packages} \
@@ -151,7 +194,12 @@ update-desktop-database -q %{_datadir}/applications
 %preun
 %gconf_schema_remove %{name}
 
+
+%if %{with_tui}
+%files
+%else
 %files -f %{name}.lang
+%endif
 %defattr(-,root,root,-)
 %doc README COPYING COPYING-DOCS AUTHORS ChangeLog NEWS
 %{_sysconfdir}/gconf/schemas/%{name}.schemas
@@ -160,18 +208,37 @@ update-desktop-database -q %{_datadir}/applications
 
 %{_mandir}/man1/%{name}.1*
 
+%if %{with_tui} == 0
 %dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/virtManager/
+%{_datadir}/%{name}/virtManager/*.py*
+%endif
+
 %{_datadir}/%{name}/*.glade
-%{_datadir}/%{name}/*.py*
+%{_datadir}/%{name}/%{name}.py*
 
 %{_datadir}/%{name}/icons
 %{_datadir}/icons/hicolor/*/apps/*
 
-%dir %{_datadir}/%{name}/virtManager/
-%{_datadir}/%{name}/virtManager/*.py*
-
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/dbus-1/services/%{name}.service
+
+%if %{with_tui}
+%files common -f %{name}.lang
+%defattr(-,root,root,-)
+%dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/virtManager/
+
+%{_datadir}/%{name}/virtManager/*.py*
+
+%files tui
+%defattr(-,root,root,-)
+
+%{_bindir}/%{name}-tui
+%{_datadir}/%{name}/%{name}-tui.py*
+
+%{_datadir}/%{name}/virtManagerTui
+%endif
 
 %changelog
 * Thu Mar 24 2011 Cole Robinson <crobinso@redhat.com> - 0.8.7-1
