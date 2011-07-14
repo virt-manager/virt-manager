@@ -803,6 +803,14 @@ class vmmHost(vmmGObjectUI):
         self.widget("vol-add").set_sensitive(active)
         self.widget("vol-delete").set_sensitive(False)
 
+        if active:
+            try:
+                Storage.StoragePool.get_volume_for_pool(pool.get_type())
+            except Exception, e:
+                self.widget("vol-add").set_sensitive(False)
+                util.tooltip_wrapper(self.widget("vol-add"),
+                                     str(e))
+
     def refresh_storage_pool(self, src_ignore, uri_ignore, uuid):
         refresh_pool_in_list(self.widget("pool-list"), self.conn, uuid)
         curpool = self.current_pool()
