@@ -304,7 +304,7 @@ class vmmDetails(vmmGObjectUI):
             "on_overview_acpi_changed": self.config_acpi_changed,
             "on_overview_apic_changed": self.config_apic_changed,
             "on_overview_clock_changed": self.config_enable_apply,
-            "on_security_label_changed": self.security_label_changed,
+            "on_security_label_changed": self.config_enable_apply,
             "on_security_type_changed": self.security_type_changed,
 
             "on_config_vcpus_changed": self.config_vcpus_changed,
@@ -1461,13 +1461,9 @@ class vmmDetails(vmmGObjectUI):
         self.config_enable_apply()
 
     # Overview -> Security
-    def security_label_changed(self, label_ignore):
-        self.config_enable_apply()
-
     def security_type_changed(self, button):
         self.config_enable_apply()
-        self.widget("security-label").set_sensitive(
-                                                    not button.get_active())
+        self.widget("security-label").set_sensitive(not button.get_active())
 
     # Memory
     def config_get_maxmem(self):
