@@ -54,4 +54,3 @@ class NetworkListConfigScreen(VmmTuiConfigScreen):
 
     def has_selectable_networks(self):
         return self.__has_networks
-

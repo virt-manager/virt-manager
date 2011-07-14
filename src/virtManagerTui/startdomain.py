@@ -31,7 +31,7 @@ class StartDomainConfigScreen(DomainListConfigScreen):
 
     def get_elements_for_page(self, screen, page):
         if page is self.LIST_PAGE:
-            return self.get_domain_list_page(screen, created = False)
+            return self.get_domain_list_page(screen, created=False)
         elif page is self.START_PAGE:
             return self.get_start_domain_page(screen)
 

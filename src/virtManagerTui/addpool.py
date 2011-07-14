@@ -114,7 +114,7 @@ class AddStoragePoolConfigScreen(VmmTuiConfigScreen):
             if self.__config.needs_build_pool():
                 self.__config.set_build_pool(self.__build_pool.value())
         elif page is CONFIRM_PAGE:
-            self.get_libvirt().define_storage_pool(self.__config.get_name(), config = self.__config)
+            self.get_libvirt().define_storage_pool(self.__config.get_name(), config=self.__config)
             self.get_libvirt().create_storage_pool(self.__config.get_name())
             self.set_finished()
 
@@ -127,10 +127,10 @@ class AddStoragePoolConfigScreen(VmmTuiConfigScreen):
                               self.__config.get_type() is pooltype])
         self.__type = snack.RadioBar(screen, pooltypes)
         grid = snack.Grid(2, 2)
-        grid.setField(snack.Label("Name:"), 0, 0, anchorRight = 1)
-        grid.setField(self.__name, 1, 0, anchorLeft = 1)
-        grid.setField(snack.Label("Type:"), 0, 1, anchorRight = 1, anchorTop = 1)
-        grid.setField(self.__type, 1, 1, anchorLeft = 1)
+        grid.setField(snack.Label("Name:"), 0, 0, anchorRight=1)
+        grid.setField(self.__name, 1, 0, anchorLeft=1)
+        grid.setField(snack.Label("Type:"), 0, 1, anchorRight=1, anchorTop=1)
+        grid.setField(self.__type, 1, 1, anchorLeft=1)
         return [snack.Label("Add Storage Pool"),
                 grid]
 
@@ -159,24 +159,24 @@ class AddStoragePoolConfigScreen(VmmTuiConfigScreen):
         grid = snack.Grid(2, rows)
         currentrow = 0
         if self.__config.needs_target_path():
-            grid.setField(snack.Label("Target Path:"), 0, currentrow, anchorRight = 1)
-            grid.setField(self.__target_path, 1, currentrow, anchorLeft = 1)
+            grid.setField(snack.Label("Target Path:"), 0, currentrow, anchorRight=1)
+            grid.setField(self.__target_path, 1, currentrow, anchorLeft=1)
             currentrow += 1
         if self.__config.needs_format():
-            grid.setField(snack.Label("Format:"), 0, currentrow, anchorRight = 1, anchorTop = 1)
-            grid.setField(self.__formats, 1, currentrow, anchorLeft = 1)
+            grid.setField(snack.Label("Format:"), 0, currentrow, anchorRight=1, anchorTop=1)
+            grid.setField(self.__formats, 1, currentrow, anchorLeft=1)
             currentrow += 1
         if self.__config.needs_hostname():
-            grid.setField(snack.Label("Host Name:"), 0, currentrow, anchorRight = 1)
-            grid.setField(self.__hostname, 1, currentrow, anchorRight = 1)
+            grid.setField(snack.Label("Host Name:"), 0, currentrow, anchorRight=1)
+            grid.setField(self.__hostname, 1, currentrow, anchorRight=1)
             currentrow += 1
         if self.__config.needs_source_path():
-            grid.setField(snack.Label("Source Path:"), 0, currentrow, anchorRight = 1)
-            grid.setField(self.__source_path, 1, currentrow, anchorLeft = 1)
+            grid.setField(snack.Label("Source Path:"), 0, currentrow, anchorRight=1)
+            grid.setField(self.__source_path, 1, currentrow, anchorLeft=1)
             currentrow += 1
         if self.__config.needs_build_pool():
-            grid.setField(snack.Label(" "), 0, currentrow, anchorRight = 1)
-            grid.setField(self.__build_pool, 1, currentrow, anchorLeft = 1)
+            grid.setField(snack.Label(" "), 0, currentrow, anchorRight=1)
+            grid.setField(self.__build_pool, 1, currentrow, anchorLeft=1)
             currentrow += 1
         return [snack.Label("Specify a storage location to be later split into virtual machine storage"),
                 grid]
@@ -184,10 +184,10 @@ class AddStoragePoolConfigScreen(VmmTuiConfigScreen):
     def get_confirm_page(self, screen):
         ignore = screen
         grid = snack.Grid(2, 2)
-        grid.setField(snack.Label("Name:"), 0, 0, anchorRight = 1)
-        grid.setField(snack.Label(self.__config.get_name()), 1, 0, anchorLeft = 1)
-        grid.setField(snack.Label("Target Path:"), 0, 1, anchorRight = 1)
-        grid.setField(snack.Label(self.__config.get_target_path()), 1, 1, anchorLeft = 1)
+        grid.setField(snack.Label("Name:"), 0, 0, anchorRight=1)
+        grid.setField(snack.Label(self.__config.get_name()), 1, 0, anchorLeft=1)
+        grid.setField(snack.Label("Target Path:"), 0, 1, anchorRight=1)
+        grid.setField(snack.Label(self.__config.get_target_path()), 1, 1, anchorLeft=1)
         return [snack.Label("Confirm Pool Details"),
                 grid]
 

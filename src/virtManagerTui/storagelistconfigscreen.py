@@ -62,7 +62,7 @@ class StorageListConfigScreen(VmmTuiConfigScreen):
             self.__volumes_list = snack.Listbox(0)
             for volname in pool.listVolumes():
                 volume = pool.storageVolLookupByName(volname)
-                self.__volumes_list.append("%s (%0.2f GB)" % (volume.name(), volume.info()[2] / 1024**3), volume.name())
+                self.__volumes_list.append("%s (%0.2f GB)" % (volume.name(), volume.info()[2] / (1024 ** 3)), volume.name())
             result = self.__volumes_list
         else:
             self.__has_volumes = False
@@ -77,4 +77,3 @@ class StorageListConfigScreen(VmmTuiConfigScreen):
 
     def has_selectable_volumes(self):
         return self.__has_volumes
-

@@ -94,7 +94,7 @@ def setup_i18n(gettext_app, gettext_dir):
 def check_virtinst_version(virtinst_str):
     # Make sure we have a sufficiently new virtinst version, since we are
     # very closely tied to the lib
-    virtinst_version = tuple([ int(num) for num in virtinst_str.split('.')])
+    virtinst_version = tuple([int(num) for num in virtinst_str.split('.')])
 
     msg = ("virt-manager requires the python-virtinst library version " +
             virtinst_str + " or greater. This can be downloaded at:"

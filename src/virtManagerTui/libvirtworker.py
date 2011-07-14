@@ -75,7 +75,7 @@ class VirtManagerConfig:
 
 class LibvirtWorker:
     '''Provides utilities for interfacing with libvirt.'''
-    def __init__(self, url = None):
+    def __init__(self, url=None):
         if url is None:
             url = get_default_url()
         logging.info("Connecting to libvirt: %s" % url)
@@ -88,9 +88,9 @@ class LibvirtWorker:
         self.open_connection(url)
 
         self.__capabilities = self.__vmmconn.get_capabilities()
-        self.__net = virtinst.VirtualNetworkInterface(conn = self.__conn)
+        self.__net = virtinst.VirtualNetworkInterface(conn=self.__conn)
         self.__net.setup(self.__conn)
-        (self.__new_guest, self.__new_domain) = virtinst.CapabilitiesParser.guest_lookup(conn = self.__conn)
+        (self.__new_guest, self.__new_domain) = virtinst.CapabilitiesParser.guest_lookup(conn=self.__conn)
 
     def get_connection(self):
         '''Returns the underlying connection.'''
@@ -122,7 +122,7 @@ class LibvirtWorker:
         '''Returns the capabilities for this libvirt host.'''
         return self.__capabilities
 
-    def list_domains(self, defined = True, created = True):
+    def list_domains(self, defined=True, created=True):
         '''Lists all domains.'''
         self.__vmmconn.tick()
         uuids = self.__vmmconn.list_vm_uuids()
@@ -162,7 +162,7 @@ class LibvirtWorker:
         virtmachine = self.get_domain(name)
         virtmachine.migrate(target_conn, libvirt.VIR_MIGRATE_LIVE, None, None, 0)
 
-    def list_networks(self, defined = True, started = True):
+    def list_networks(self, defined=True, started=True):
         '''Lists all networks that meet the given criteria.
 
         Keyword arguments:
@@ -266,17 +266,17 @@ class LibvirtWorker:
 
     def create_storage_pool(self, name):
         '''Starts the named storage pool if it is not currently started.'''
-        if name not in self.list_storage_pools(defined = False):
+        if name not in self.list_storage_pools(defined=False):
             pool = self.get_storage_pool(name)
             pool.create(0)
 
     def destroy_storage_pool(self, name):
         '''Stops the specified storage pool.'''
-        if name in self.list_storage_pools(defined = False):
+        if name in self.list_storage_pools(defined=False):
             pool = self.get_storage_pool(name)
             pool.destroy()
 
-    def define_storage_pool(self, name, config = None, meter = None):
+    def define_storage_pool(self, name, config=None, meter=None):
         '''Defines a storage pool with the given name.'''
         if config is None:
             pool = virtinst.Storage.DirectoryPool(conn=self.__conn,
@@ -318,7 +318,7 @@ class LibvirtWorker:
         '''Defines a new storage volume.'''
         self.create_storage_pool(config.get_pool().name())
         volume = config.create_volume()
-        volume.install(meter = meter)
+        volume.install(meter=meter)
 
     def remove_storage_volume(self, poolname, volumename):
         '''Removes the specified storage volume.'''
@@ -445,9 +445,9 @@ class LibvirtWorker:
         elif config.get_install_type() == DomainConfig.PXE_INSTALL:
             iclass = virtinst.PXEInstaller
 
-        installer = iclass(conn = self.__conn,
-                           type = self.get_hypervisor(config.get_virt_type()),
-                           os_type = self.get_os_type(config.get_virt_type()))
+        installer = iclass(conn=self.__conn,
+                           type=self.get_hypervisor(config.get_virt_type()),
+                           os_type=self.get_os_type(config.get_virt_type()))
         self.__guest = installer.guest_from_installer()
         self.__guest.name = config.get_guest_name()
         self.__guest.vcpus = config.get_cpus()
@@ -472,22 +472,22 @@ class LibvirtWorker:
         if config.get_os_variant() != "generic":
             self.__guest.os_variant = config.get_os_variant()
 
-        self.__guest._graphics_dev = virtinst.VirtualGraphics(type = virtinst.VirtualGraphics.TYPE_VNC)
+        self.__guest._graphics_dev = virtinst.VirtualGraphics(type=virtinst.VirtualGraphics.TYPE_VNC)
         self.__guest.sound_devs = []
-        self.__guest.sound_devs.append(virtinst.VirtualAudio(model = "es1370"))
+        self.__guest.sound_devs.append(virtinst.VirtualAudio(model="es1370"))
 
         self._setup_nics(config)
         self._setup_disks(config)
 
         self.__guest.conn = self.__conn
-        self.__domain = self.__guest.start_install(False, meter = meter)
+        self.__domain = self.__guest.start_install(False, meter=meter)
 
     def _setup_nics(self, config):
         self.__guest.nics = []
-        nic = virtinst.VirtualNetworkInterface(type = virtinst.VirtualNetworkInterface.TYPE_VIRTUAL,
-                                               bridge = config.get_network_bridge(),
-                                               network = config.get_network_bridge(),
-                                               macaddr = config.get_mac_address())
+        nic = virtinst.VirtualNetworkInterface(type=virtinst.VirtualNetworkInterface.TYPE_VIRTUAL,
+                                               bridge=config.get_network_bridge(),
+                                               network=config.get_network_bridge(),
+                                               macaddr=config.get_mac_address())
         self.__guest.nics.append(nic)
         # ensure the network is running
         if config.get_network_bridge() not in self.__conn.listNetworks():
@@ -503,8 +503,8 @@ class LibvirtWorker:
                     self.define_storage_pool("default")
                 pool = self.__conn.storagePoolLookupByName("default")
                 path = virtinst.Storage.StorageVolume.find_free_name(config.get_guest_name(),
-                                                                     pool_object = pool,
-                                                                     suffix = ".img")
+                                                                     pool_object=pool,
+                                                                     suffix=".img")
                 path = os.path.join(DEFAULT_POOL_TARGET_PATH, path)
             else:
                 volume = self.get_storage_volume(config.get_storage_pool(),
@@ -512,8 +512,8 @@ class LibvirtWorker:
                 path = volume.path()
 
             if path is not None:
-                storage = virtinst.VirtualDisk(conn = self.__conn,
-                                               path = path,
-                                               size = config.get_storage_size())
+                storage = virtinst.VirtualDisk(conn=self.__conn,
+                                               path=path,
+                                               size=config.get_storage_size())
                 self.__guest.disks.append(storage)
         self.__guest.conn = self.__conn

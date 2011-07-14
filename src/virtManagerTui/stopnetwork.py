@@ -30,7 +30,7 @@ class StopNetworkConfigScreen(NetworkListConfigScreen):
 
     def get_elements_for_page(self, screen, page):
         if   page is LIST_PAGE:
-            return self.get_network_list_page(screen, defined = False)
+            return self.get_network_list_page(screen, defined=False)
         elif page is STOP_PAGE:
             return self.get_stop_network_page(screen)
 

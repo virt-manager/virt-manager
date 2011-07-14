@@ -83,18 +83,18 @@ class CreateUserConfigScreen(ConfigScreen):
 
         if self.__username is None:
             self.__username = snack.Entry(50, "")
-            self.__password = snack.Entry(50, "", password = 1)
-            self.__confirm  = snack.Entry(50, "", password = 1)
+            self.__password = snack.Entry(50, "", password=1)
+            self.__confirm  = snack.Entry(50, "", password=1)
             self.__adminuser = snack.Checkbox("This user is an administrator", False)
         grid = snack.Grid(2, 4)
-        grid.setField(snack.Label("Username:"), 0, 0, anchorRight = 1)
-        grid.setField(self.__username, 1, 0, anchorLeft = 1)
-        grid.setField(snack.Label("Password:"), 0, 1, anchorRight = 1)
-        grid.setField(self.__password, 1, 1, anchorLeft = 1)
-        grid.setField(snack.Label("Confirm password:"), 0, 2, anchorRight = 1)
-        grid.setField(self.__confirm, 1, 2, anchorLeft = 1)
+        grid.setField(snack.Label("Username:"), 0, 0, anchorRight=1)
+        grid.setField(self.__username, 1, 0, anchorLeft=1)
+        grid.setField(snack.Label("Password:"), 0, 1, anchorRight=1)
+        grid.setField(self.__password, 1, 1, anchorLeft=1)
+        grid.setField(snack.Label("Confirm password:"), 0, 2, anchorRight=1)
+        grid.setField(self.__confirm, 1, 2, anchorLeft=1)
         grid.setField(snack.Label(" "), 0, 3)
-        grid.setField(self.__adminuser, 1, 3, anchorLeft = 1)
+        grid.setField(self.__adminuser, 1, 3, anchorLeft=1)
         return [snack.Label("Enter The User Details"),
                 grid]
 

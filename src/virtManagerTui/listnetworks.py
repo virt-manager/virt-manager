@@ -70,8 +70,8 @@ class ListNetworksConfigScreen(NetworkListConfigScreen):
         row = 0
         for field in fields:
             if field[1] is not None:
-                grid.setField(snack.Label("%s :  "% field[0]), 0, row, anchorRight = 1)
-                grid.setField(snack.Label(field[1]), 1, row, anchorLeft = 1)
+                grid.setField(snack.Label("%s : " % field[0]), 0, row, anchorRight=1)
+                grid.setField(snack.Label(field[1]), 1, row, anchorLeft=1)
             else:
                 grid.setField(snack.Label(field[0]), 1, row)
             row += 1

@@ -30,7 +30,7 @@ class StartNetworkConfigScreen(NetworkListConfigScreen):
 
     def get_elements_for_page(self, screen, page):
         if   page is LIST_PAGE:
-            return self.get_network_list_page(screen, started = False)
+            return self.get_network_list_page(screen, started=False)
         elif page is START_PAGE:
             return self.get_start_network_page(screen)
 

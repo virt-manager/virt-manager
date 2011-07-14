@@ -147,7 +147,7 @@ skip_pep8 "E501"            # Line too long
 
 echo "Running pep8"
 pep8 -r --exclude=$IGNOREFILES --ignore $SKIP_PEP8 \
-    virt-manager.py.in virtManager/*.py
+    $PYLINT_FILES
 
 cd - > /dev/null
 rm src/_virt-manager

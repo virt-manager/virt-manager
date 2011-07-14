@@ -115,14 +115,14 @@ class AddHostConfigScreen(VmmTuiConfigScreen):
             self.__autoconnect = snack.Checkbox("Autoconnect on Startup")
             self.__configured = True
         grid = snack.Grid(2, 4)
-        grid.setField(snack.Label("Hypervisor:"), 0, 0, anchorRight = 1, anchorTop = 1)
-        grid.setField(self.__hypervisor, 1, 0, anchorLeft = 1)
-        grid.setField(snack.Label("Connection:"), 0, 1, anchorRight = 1, anchorTop = 1)
-        grid.setField(self.__connection, 1, 1, anchorLeft = 1)
-        grid.setField(snack.Label("Hostname:"), 0, 2, anchorRight = 1)
-        grid.setField(self.__hostname, 1, 2, anchorLeft = 1)
-        grid.setField(snack.Label(""), 0, 3, anchorRight = 1)
-        grid.setField(self.__autoconnect, 1, 3, anchorLeft = 1)
+        grid.setField(snack.Label("Hypervisor:"), 0, 0, anchorRight=1, anchorTop=1)
+        grid.setField(self.__hypervisor, 1, 0, anchorLeft=1)
+        grid.setField(snack.Label("Connection:"), 0, 1, anchorRight=1, anchorTop=1)
+        grid.setField(self.__connection, 1, 1, anchorLeft=1)
+        grid.setField(snack.Label("Hostname:"), 0, 2, anchorRight=1)
+        grid.setField(self.__hostname, 1, 2, anchorLeft=1)
+        grid.setField(snack.Label(""), 0, 3, anchorRight=1)
+        grid.setField(self.__autoconnect, 1, 3, anchorLeft=1)
         return [snack.Label("Add Connection"),
                 grid]
 
@@ -130,21 +130,21 @@ class AddHostConfigScreen(VmmTuiConfigScreen):
         ignore = screen
 
         grid = snack.Grid(2, 4)
-        grid.setField(snack.Label("Hypervisor:"), 0, 0, anchorRight = 1)
-        grid.setField(snack.Label(HYPERVISORS[self.__hypervisor.getSelection()]), 1, 0, anchorLeft = 1)
-        grid.setField(snack.Label("Connection:"), 0, 1, anchorRight = 1)
-        grid.setField(snack.Label(CONNECTIONS[self.__connection.getSelection()]), 1, 1, anchorLeft = 1)
+        grid.setField(snack.Label("Hypervisor:"), 0, 0, anchorRight=1)
+        grid.setField(snack.Label(HYPERVISORS[self.__hypervisor.getSelection()]), 1, 0, anchorLeft=1)
+        grid.setField(snack.Label("Connection:"), 0, 1, anchorRight=1)
+        grid.setField(snack.Label(CONNECTIONS[self.__connection.getSelection()]), 1, 1, anchorLeft=1)
         if self.__connection.getSelection() is not CONNECTION_LOCAL:
             hostname = self.__hostname.value()
         else:
             hostname = "local"
-        grid.setField(snack.Label("Hostname:"), 0, 2, anchorRight = 1)
-        grid.setField(snack.Label(hostname), 1, 2, anchorLeft = 1)
-        grid.setField(snack.Label("Autoconnect on Startup:"), 0, 3, anchorRight = 1)
+        grid.setField(snack.Label("Hostname:"), 0, 2, anchorRight=1)
+        grid.setField(snack.Label(hostname), 1, 2, anchorLeft=1)
+        grid.setField(snack.Label("Autoconnect on Startup:"), 0, 3, anchorRight=1)
         label = "Yes"
         if not self.__autoconnect.value():
             label = "No"
-        grid.setField(snack.Label(label), 1, 3, anchorLeft = 1)
+        grid.setField(snack.Label(label), 1, 3, anchorLeft=1)
         return [snack.Label("Confirm Connection"),
                 grid]
 

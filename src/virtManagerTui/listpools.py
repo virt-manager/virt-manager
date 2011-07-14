@@ -53,15 +53,15 @@ class ListStoragePoolsConfigScreen(StorageListConfigScreen):
             volume = pool.storageVolLookupByName(name)
             volumes.append("%s (%s)" % (name, utils.size_as_mb_or_gb(volume.info()[1])), name)
         grid = snack.Grid(2, 3)
-        grid.setField(snack.Label("Name:"), 0, 0, anchorRight = 1)
-        grid.setField(snack.Label(pool.name()), 1, 0, anchorLeft = 1)
-        grid.setField(snack.Label("Volumes:"), 0, 1, anchorRight = 1)
-        grid.setField(volumes, 1, 1, anchorLeft = 1)
-        grid.setField(snack.Label("Autostart:"), 0, 2, anchorRight = 1)
+        grid.setField(snack.Label("Name:"), 0, 0, anchorRight=1)
+        grid.setField(snack.Label(pool.name()), 1, 0, anchorLeft=1)
+        grid.setField(snack.Label("Volumes:"), 0, 1, anchorRight=1)
+        grid.setField(volumes, 1, 1, anchorLeft=1)
+        grid.setField(snack.Label("Autostart:"), 0, 2, anchorRight=1)
         label = "No"
         if pool.autostart():
             label = "Yes"
-        grid.setField(snack.Label(label), 1, 2, anchorLeft = 1)
+        grid.setField(snack.Label(label), 1, 2, anchorLeft=1)
         return [snack.Label("Details For Storage Pool: %s" % self.get_selected_pool()),
                 grid]
 

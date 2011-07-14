@@ -20,11 +20,11 @@ import urlgrabber.progress as progress
 import logging
 
 class CreateMeter(progress.BaseMeter):
-    def _do_start(self, now = None):
+    def _do_start(self, now=None):
         logging.info("Starting...")
 
-    def _do_end(self, amount_read, now = None):
+    def _do_end(self, amount_read, now=None):
         logging.info("Ending: read=%d" % amount_read)
 
-    def _do_update(self, amount_read, now = None):
+    def _do_update(self, amount_read, now=None):
         logging.info("Update: read=%d" % amount_read)

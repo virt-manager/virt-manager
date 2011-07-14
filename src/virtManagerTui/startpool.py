@@ -30,7 +30,7 @@ class StartStoragePoolConfigScreen(StorageListConfigScreen):
 
     def get_elements_for_page(self, screen, page):
         if   page is LIST_POOLS_PAGE:
-            return self.get_storage_pool_list_page(screen, created = False)
+            return self.get_storage_pool_list_page(screen, created=False)
         elif page is FINAL_PAGE:
             return self.get_final_page(screen)
 

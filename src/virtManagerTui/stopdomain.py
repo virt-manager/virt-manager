@@ -30,7 +30,7 @@ class StopDomainConfigScreen(DomainListConfigScreen):
 
     def get_elements_for_page(self, screen, page):
         if page is self.LIST_PAGE:
-            return self.get_domain_list_page(screen, defined = False)
+            return self.get_domain_list_page(screen, defined=False)
         elif page is self.STOP_PAGE:
             return self.get_stop_page(screen)
 

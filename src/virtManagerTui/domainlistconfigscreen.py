@@ -54,4 +54,3 @@ class DomainListConfigScreen(VmmTuiConfigScreen):
 
     def has_selectable_domains(self):
         return self.__has_domains
-

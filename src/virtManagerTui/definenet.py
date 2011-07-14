@@ -170,8 +170,8 @@ class DefineNetworkConfigScreen(VmmTuiConfigScreen):
         ignore = screen
         self.__ipv4_address = snack.Entry(18, self.__config.get_ipv4_address())
         grid = snack.Grid(2, 1)
-        grid.setField(snack.Label("Network:"), 0, 0, anchorRight = 1)
-        grid.setField(self.__ipv4_address, 1, 0, anchorLeft = 1)
+        grid.setField(snack.Label("Network:"), 0, 0, anchorRight=1)
+        grid.setField(self.__ipv4_address, 1, 0, anchorLeft=1)
         return [snack.Label("You will need to choose an IPv4 address space for the virtual network:"),
                 grid,
                 snack.Label("HINT: The network should be chosen from"),
@@ -181,26 +181,26 @@ class DefineNetworkConfigScreen(VmmTuiConfigScreen):
     def get_network_details_page(self, screen):
         ignore = screen
         grid = snack.Grid(2, 6)
-        grid.setField(snack.Label("Network:"), 0, 0, anchorRight = 1)
-        grid.setField(snack.Label(self.__config.get_ipv4_address()), 1, 0, anchorLeft = 1)
-        grid.setField(snack.Label("Netmask:"), 0, 1, anchorRight = 1)
-        grid.setField(snack.Label(self.__config.get_ipv4_netmask()), 1, 1, anchorLeft = 1)
-        grid.setField(snack.Label("Broadcast:"), 0, 2, anchorRight = 1)
-        grid.setField(snack.Label(self.__config.get_ipv4_broadcast()), 1, 2, anchorLeft = 1)
-        grid.setField(snack.Label("Gateway:"), 0, 3, anchorRight = 1)
-        grid.setField(snack.Label(self.__config.get_ipv4_gateway()), 1, 3, anchorLeft = 1)
-        grid.setField(snack.Label("Size:"), 0, 4, anchorRight = 1)
-        grid.setField(snack.Label("%d addresses" % self.__config.get_ipv4_max_addresses()), 1, 4, anchorLeft = 1)
-        grid.setField(snack.Label("Type:"), 0, 5, anchorRight = 1)
-        grid.setField(snack.Label(self.__config.get_ipv4_network_type()), 1, 5, anchorLeft = 1)
+        grid.setField(snack.Label("Network:"), 0, 0, anchorRight=1)
+        grid.setField(snack.Label(self.__config.get_ipv4_address()), 1, 0, anchorLeft=1)
+        grid.setField(snack.Label("Netmask:"), 0, 1, anchorRight=1)
+        grid.setField(snack.Label(self.__config.get_ipv4_netmask()), 1, 1, anchorLeft=1)
+        grid.setField(snack.Label("Broadcast:"), 0, 2, anchorRight=1)
+        grid.setField(snack.Label(self.__config.get_ipv4_broadcast()), 1, 2, anchorLeft=1)
+        grid.setField(snack.Label("Gateway:"), 0, 3, anchorRight=1)
+        grid.setField(snack.Label(self.__config.get_ipv4_gateway()), 1, 3, anchorLeft=1)
+        grid.setField(snack.Label("Size:"), 0, 4, anchorRight=1)
+        grid.setField(snack.Label("%d addresses" % self.__config.get_ipv4_max_addresses()), 1, 4, anchorLeft=1)
+        grid.setField(snack.Label("Type:"), 0, 5, anchorRight=1)
+        grid.setField(snack.Label(self.__config.get_ipv4_network_type()), 1, 5, anchorLeft=1)
         return [snack.Label("Network Details"),
                 grid]
 
     def get_public_network_alert_page(self, screen):
         ignore = screen
         grid = snack.Grid(1, 2)
-        grid.setField(snack.Label("The network should normally use a private IPv4 address."), 0, 0, anchorLeft = 1)
-        grid.setField(snack.Label("Use this non-private address anyway?"), 0, 1, anchorLeft = 1)
+        grid.setField(snack.Label("The network should normally use a private IPv4 address."), 0, 0, anchorLeft=1)
+        grid.setField(snack.Label("Use this non-private address anyway?"), 0, 1, anchorLeft=1)
         return [snack.Label("Check Network Address"),
                 grid]
 
@@ -209,10 +209,10 @@ class DefineNetworkConfigScreen(VmmTuiConfigScreen):
         self.__start_address = snack.Entry(15, self.__config.get_ipv4_start_address())
         self.__end_address   = snack.Entry(15, self.__config.get_ipv4_end_address())
         grid = snack.Grid(2, 2)
-        grid.setField(snack.Label("Start:"), 0, 0, anchorRight = 1)
-        grid.setField(self.__start_address, 1, 0, anchorLeft = 1)
-        grid.setField(snack.Label("End:"), 0, 1, anchorRight = 1)
-        grid.setField(self.__end_address, 1, 1, anchorLeft = 1)
+        grid.setField(snack.Label("Start:"), 0, 0, anchorRight=1)
+        grid.setField(self.__start_address, 1, 0, anchorLeft=1)
+        grid.setField(snack.Label("End:"), 0, 1, anchorRight=1)
+        grid.setField(self.__end_address, 1, 1, anchorLeft=1)
         return [snack.Label("Selecting The DHCP Range"),
                 grid,
                 snack.Label("TIP: Unless you wish to reserve some addresses to allow static network"),
@@ -224,8 +224,8 @@ class DefineNetworkConfigScreen(VmmTuiConfigScreen):
         self.__isolated_network = snack.Checkbox("Isolated virtual network",
                                            self.__config.is_isolated_network())
         grid = snack.Grid(1, 3)
-        grid.setField(snack.Label("Please indicate whether this virtual network should be"), 0, 0, anchorLeft = 1)
-        grid.setField(snack.Label("connected to the physical network."), 0, 1, anchorLeft = 1)
+        grid.setField(snack.Label("Please indicate whether this virtual network should be"), 0, 0, anchorLeft=1)
+        grid.setField(snack.Label("connected to the physical network."), 0, 1, anchorLeft=1)
         grid.setField(self.__isolated_network, 0, 2)
         return [snack.Label("Connecting To Physical Network"),
                 grid]
@@ -246,29 +246,29 @@ class DefineNetworkConfigScreen(VmmTuiConfigScreen):
     def get_summary_page(self, screen):
         ignore = screen
         grid1 = snack.Grid(2, 1)
-        grid1.setField(snack.Label("Network name:"), 0, 0, anchorRight = 1)
-        grid1.setField(snack.Label(self.__config.get_name()), 1, 0, anchorLeft = 1)
+        grid1.setField(snack.Label("Network name:"), 0, 0, anchorRight=1)
+        grid1.setField(snack.Label(self.__config.get_name()), 1, 0, anchorLeft=1)
 
         grid2 = snack.Grid(2, 3)
-        grid2.setField(snack.Label("Network:"), 0, 0, anchorRight = 1)
-        grid2.setField(snack.Label(self.__config.get_ipv4_address()), 1, 0, anchorLeft = 1)
-        grid2.setField(snack.Label("Gateway:"), 0, 1, anchorRight = 1)
-        grid2.setField(snack.Label(self.__config.get_ipv4_gateway()), 1, 1, anchorLeft = 1)
-        grid2.setField(snack.Label("Netmask:"), 0, 2, anchorRight = 1)
-        grid2.setField(snack.Label(self.__config.get_ipv4_netmask()), 1, 2, anchorLeft = 1)
+        grid2.setField(snack.Label("Network:"), 0, 0, anchorRight=1)
+        grid2.setField(snack.Label(self.__config.get_ipv4_address()), 1, 0, anchorLeft=1)
+        grid2.setField(snack.Label("Gateway:"), 0, 1, anchorRight=1)
+        grid2.setField(snack.Label(self.__config.get_ipv4_gateway()), 1, 1, anchorLeft=1)
+        grid2.setField(snack.Label("Netmask:"), 0, 2, anchorRight=1)
+        grid2.setField(snack.Label(self.__config.get_ipv4_netmask()), 1, 2, anchorLeft=1)
 
         grid3 = snack.Grid(2, 2)
-        grid3.setField(snack.Label("Start address:"), 0, 0, anchorRight = 1)
-        grid3.setField(snack.Label(self.__config.get_ipv4_start_address()), 1, 0, anchorLeft = 1)
-        grid3.setField(snack.Label("End address:"), 0, 1, anchorRight = 1)
-        grid3.setField(snack.Label(self.__config.get_ipv4_end_address()), 1, 1, anchorLeft = 1)
+        grid3.setField(snack.Label("Start address:"), 0, 0, anchorRight=1)
+        grid3.setField(snack.Label(self.__config.get_ipv4_start_address()), 1, 0, anchorLeft=1)
+        grid3.setField(snack.Label("End address:"), 0, 1, anchorRight=1)
+        grid3.setField(snack.Label(self.__config.get_ipv4_end_address()), 1, 1, anchorLeft=1)
 
         grid4 = snack.Grid(2, 1)
-        grid4.setField(snack.Label("Connectivity:"), 0, 0, anchorRight = 1)
+        grid4.setField(snack.Label("Connectivity:"), 0, 0, anchorRight=1)
         if self.__config.is_isolated_network():
-            grid4.setField(snack.Label("Isolated virtual network"), 1, 0, anchorLeft = 1)
+            grid4.setField(snack.Label("Isolated virtual network"), 1, 0, anchorLeft=1)
         else:
-            grid4.setField(snack.Label("NAT to %s" % self.__config.get_physical_device_text()), 1, 0, anchorLeft = 1)
+            grid4.setField(snack.Label("NAT to %s" % self.__config.get_physical_device_text()), 1, 0, anchorLeft=1)
 
         return [snack.Label("Ready To Create Network"),
                 snack.Label("Summary"),

@@ -40,10 +40,10 @@ class StorageVolumeConfig:
         return self.__pool
 
     def create_volume(self):
-        volume = self.__volume_class(name       = self.__name + ".img",
-                                     allocation = self.__allocation * 1024**2,
-                                     capacity   = self.__max_capacity * 1024**2,
-                                     pool       = self.__pool)
+        volume = self.__volume_class(name=self.__name + ".img",
+                                     allocation=self.__allocation * (1024 ** 2),
+                                     capacity=self.__max_capacity * (1024 ** 2),
+                                     pool=self.__pool)
         volume.pool = self.__pool
         if self.needs_format():
             volume.format = self.__format

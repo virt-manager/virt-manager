@@ -42,4 +42,3 @@ class VmmTuiConfigScreen(configscreen.ConfigScreen):
 
     def get_virt_manager_config(self):
         return self.__vm_config
-

@@ -89,8 +89,8 @@ class PoolConfig:
                 self.__build_pool  = True
             # create pool
             pool_class = Storage.StoragePool.get_pool_class(self.__type)
-            self.__pool = pool_class(name = self.__name,
-                                     conn = self.__libvirt.get_connection())
+            self.__pool = pool_class(name=self.__name,
+                                     conn=self.__libvirt.get_connection())
             if self.__needs_format:
                 self.__format = self.__pool.formats[0]
         else:

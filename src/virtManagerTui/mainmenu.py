@@ -23,10 +23,10 @@ from netmenu     import NetworkMenu
 from storagemenu import StoragePoolMenu
 from hostmenu    import HostMenu
 
-NODE_MENU    =  1
-NETWORK_MENU =  2
-STORAGE_MENU =  3
-HOST_MENU    =  4
+NODE_MENU    = 1
+NETWORK_MENU = 2
+STORAGE_MENU = 3
+HOST_MENU    = 4
 EXIT_CONSOLE = 99
 
 class MainMenuScreen(MenuScreen):

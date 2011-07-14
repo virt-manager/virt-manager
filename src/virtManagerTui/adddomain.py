@@ -27,15 +27,15 @@ from domainconfig import DomainConfig
 
 from virtinst import Guest
 
-VM_DETAILS_PAGE      =  1
-LOCAL_INSTALL_PAGE   =  2
-SELECT_CDROM_PAGE    =  3
-SELECT_ISO_PAGE      =  4
-NETWORK_INSTALL_PAGE =  5
-OS_TYPE_PAGE         =  6
-OS_VARIANT_PAGE      =  7
-RAM_CPU_PAGE         =  8
-ENABLE_STORAGE_PAGE  =  9
+VM_DETAILS_PAGE      = 1
+LOCAL_INSTALL_PAGE   = 2
+SELECT_CDROM_PAGE    = 3
+SELECT_ISO_PAGE      = 4
+NETWORK_INSTALL_PAGE = 5
+OS_TYPE_PAGE         = 6
+OS_VARIANT_PAGE      = 7
+RAM_CPU_PAGE         = 8
+ENABLE_STORAGE_PAGE  = 9
 LOCAL_STORAGE_PAGE   = 10
 SELECT_POOL_PAGE     = 11
 SELECT_VOLUME_PAGE   = 12
@@ -364,11 +364,10 @@ class DomainConfigScreen(VmmTuiConfigScreen):
                                                  DomainConfig.PXE_INSTALL,
                                                  self.__config.is_install_type(DomainConfig.PXE_INSTALL))))
         grid = snack.Grid(2, 3)
-        grid.setField(snack.Label("Name:"), 0, 0, anchorRight = 1)
-        grid.setField(self.__guest_name, 1, 0, anchorLeft = 1)
-        grid.setField(snack.Label("Choose how you would like to install the operating system"), 1, 1,
-                      anchorLeft = 1, anchorTop = 1)
-        grid.setField(self.__install_type, 1, 2, anchorLeft = 1)
+        grid.setField(snack.Label("Name:"), 0, 0, anchorRight=1)
+        grid.setField(self.__guest_name, 1, 0, anchorLeft=1)
+        grid.setField(snack.Label("Choose how you would like to install the operating system"), 1, 1, anchorLeft=1, anchorTop=1)
+        grid.setField(self.__install_type, 1, 2, anchorLeft=1)
         return [snack.Label("Enter your machine details"),
                 grid]
 
@@ -380,7 +379,7 @@ class DomainConfigScreen(VmmTuiConfigScreen):
                                                    DomainConfig.INSTALL_SOURCE_ISO,
                                                    self.__config.get_use_cdrom_source() is False)))
         grid = snack.Grid(1, 1)
-        grid.setField(self.__install_source, 0, 0, anchorLeft = 1)
+        grid.setField(self.__install_source, 0, 0, anchorLeft=1)
         return [snack.Label("Locate your install media"),
                 grid]
 
@@ -399,8 +398,8 @@ class DomainConfigScreen(VmmTuiConfigScreen):
         ignore = screen
         self.__iso_path = snack.Entry(50, self.__config.get_iso_path())
         grid = snack.Grid(1, 2)
-        grid.setField(snack.Label("Enter ISO path:"), 0, 0, anchorLeft = 1)
-        grid.setField(self.__iso_path, 0, 1, anchorLeft = 1)
+        grid.setField(snack.Label("Enter ISO path:"), 0, 0, anchorLeft=1)
+        grid.setField(self.__iso_path, 0, 1, anchorLeft=1)
         return [snack.Label("Enter the full path to an install ISO"),
                 grid]
 
@@ -410,12 +409,12 @@ class DomainConfigScreen(VmmTuiConfigScreen):
         self.__kickstart_url  = snack.Entry(50, self.__config.get_kickstart_url())
         self.__kernel_options = snack.Entry(50, self.__config.get_kernel_options())
         grid = snack.Grid(2, 3)
-        grid.setField(snack.Label("URL:"), 0, 0, anchorRight = 1)
-        grid.setField(self.__install_url, 1, 0, anchorLeft = 1)
-        grid.setField(snack.Label("Kickstart URL:"), 0, 1, anchorRight = 1)
-        grid.setField(self.__kickstart_url, 1, 1, anchorLeft = 1)
-        grid.setField(snack.Label("Kernel Options:"), 0, 2, anchorRight = 1)
-        grid.setField(self.__kernel_options, 1, 2, anchorLeft = 1)
+        grid.setField(snack.Label("URL:"), 0, 0, anchorRight=1)
+        grid.setField(self.__install_url, 1, 0, anchorLeft=1)
+        grid.setField(snack.Label("Kickstart URL:"), 0, 1, anchorRight=1)
+        grid.setField(self.__kickstart_url, 1, 1, anchorLeft=1)
+        grid.setField(snack.Label("Kernel Options:"), 0, 2, anchorRight=1)
+        grid.setField(self.__kernel_options, 1, 2, anchorLeft=1)
         return [snack.Label("Provide the operating system URL"),
                 grid]
 
@@ -425,7 +424,7 @@ class DomainConfigScreen(VmmTuiConfigScreen):
             types.append([Guest.get_os_type_label(typ), typ, self.__config.is_os_type(typ)])
         self.__os_types = snack.RadioBar(screen, types)
         grid = snack.Grid(1, 1)
-        grid.setField(self.__os_types, 0, 0, anchorLeft = 1)
+        grid.setField(self.__os_types, 0, 0, anchorLeft=1)
         return [snack.Label("Choose the operating system type"),
                 grid]
 
@@ -436,7 +435,7 @@ class DomainConfigScreen(VmmTuiConfigScreen):
             variants.append([Guest.get_os_variant_label(typ, variant), variant, self.__config.is_os_variant(variant)])
         self.__os_variants = snack.RadioBar(screen, variants)
         grid = snack.Grid(1, 1)
-        grid.setField(self.__os_variants, 0, 0, anchorLeft = 1)
+        grid.setField(self.__os_variants, 0, 0, anchorLeft=1)
         return [snack.Label("Choose the operating system version"),
                 grid]
 
@@ -445,24 +444,24 @@ class DomainConfigScreen(VmmTuiConfigScreen):
         self.__memory = snack.Entry(10, str(self.__config.get_memory()))
         self.__cpus   = snack.Entry(10, str(self.__config.get_cpus()))
         grid = snack.Grid(2, 2)
-        grid.setField(snack.Label("Memory (RAM):"), 0, 0, anchorRight = 1)
-        grid.setField(self.__memory, 1, 0, anchorLeft = 1)
-        grid.setField(snack.Label("CPUs:"), 0, 1, anchorRight = 1)
-        grid.setField(self.__cpus, 1, 1, anchorLeft = 1)
+        grid.setField(snack.Label("Memory (RAM):"), 0, 0, anchorRight=1)
+        grid.setField(self.__memory, 1, 0, anchorLeft=1)
+        grid.setField(snack.Label("CPUs:"), 0, 1, anchorRight=1)
+        grid.setField(self.__cpus, 1, 1, anchorLeft=1)
         return [snack.Label("Choose memory and CPU settings"),
                 grid]
 
     def get_enable_storage_page(self, screen):
         self.__enable_storage = snack.Checkbox("Enable storage for this virtual machine", self.__config.get_enable_storage())
-        self.__storage_type     = snack.RadioBar(screen,((["Create a disk image on the computer's hard disk",
+        self.__storage_type     = snack.RadioBar(screen, ((["Create a disk image on the computer's hard disk",
                                                      DomainConfig.NEW_STORAGE,
                                                      self.__config.get_use_local_storage()]),
                                                    (["Select managed or other existing storage",
                                                      DomainConfig.EXISTING_STORAGE,
                                                      self.__config.get_use_local_storage() is False])))
         grid = snack.Grid(1, 2)
-        grid.setField(self.__enable_storage, 0, 0, anchorLeft = 1)
-        grid.setField(self.__storage_type, 0, 1, anchorLeft = 1)
+        grid.setField(self.__enable_storage, 0, 0, anchorLeft=1)
+        grid.setField(self.__storage_type, 0, 1, anchorLeft=1)
         return [snack.Label("Configure storage"),
                 grid]
 
@@ -471,8 +470,8 @@ class DomainConfigScreen(VmmTuiConfigScreen):
         self.__storage_size     = snack.Entry(6, str(self.__config.get_storage_size()))
         self.__allocate_storage = snack.Checkbox("Allocate entire disk now", self.__config.get_allocate_storage())
         grid = snack.Grid(2, 2)
-        grid.setField(self.__allocate_storage, 0, 0, growx = 1, anchorLeft = 1)
-        grid.setField(snack.Label("Storage size (GB):"), 0, 1, anchorLeft = 1)
+        grid.setField(self.__allocate_storage, 0, 0, growx=1, anchorLeft=1)
+        grid.setField(snack.Label("Storage size (GB):"), 0, 1, anchorLeft=1)
         grid.setField(self.__storage_size, 1, 1)
         return [snack.Label("Configure local storage"),
                 grid]
@@ -484,7 +483,7 @@ class DomainConfigScreen(VmmTuiConfigScreen):
         if len(pools) > 0:
             self.__storage_pool = snack.RadioBar(screen, (pools))
             grid = snack.Grid(2, 1)
-            grid.setField(snack.Label("Storage pool:"), 0, 0, anchorTop = 1)
+            grid.setField(snack.Label("Storage pool:"), 0, 0, anchorTop=1)
             grid.setField(self.__storage_pool, 1, 0)
             self.__has_pools = True
         else:
@@ -500,7 +499,7 @@ class DomainConfigScreen(VmmTuiConfigScreen):
         if len(volumes) > 0:
             self.__storage_volume = snack.RadioBar(screen, (volumes))
             grid = snack.Grid(2, 1)
-            grid.setField(snack.Label("Storage volumes:"), 0, 0, anchorTop = 1)
+            grid.setField(snack.Label("Storage volumes:"), 0, 0, anchorTop=1)
             grid.setField(self.__storage_volume, 1, 0)
             self.__has_volumes = True
         else:
@@ -532,31 +531,31 @@ class DomainConfigScreen(VmmTuiConfigScreen):
             archs.append([arch, arch, self.__config.is_architecture(arch)])
         self.__architectures = snack.RadioBar(screen, (archs))
         grid = snack.Grid(2, 2)
-        grid.setField(snack.Label("Virt Type:"), 0, 0, anchorRight = 1, anchorTop = 1)
-        grid.setField(self.__virt_types, 1, 0, anchorLeft = 1)
-        grid.setField(snack.Label("Architecture:"), 0, 1, anchorRight = 1, anchorTop = 1)
-        grid.setField(self.__architectures, 1, 1, anchorLeft = 1)
+        grid.setField(snack.Label("Virt Type:"), 0, 0, anchorRight=1, anchorTop=1)
+        grid.setField(self.__virt_types, 1, 0, anchorLeft=1)
+        grid.setField(snack.Label("Architecture:"), 0, 1, anchorRight=1, anchorTop=1)
+        grid.setField(self.__architectures, 1, 1, anchorLeft=1)
         return [snack.Label("Configure virtualization details"),
                 grid]
 
     def get_confirm_page(self, screen):
         ignore = screen
         grid = snack.Grid(2, 6)
-        grid.setField(snack.Label("OS:"), 0, 0, anchorRight = 1)
+        grid.setField(snack.Label("OS:"), 0, 0, anchorRight=1)
         grid.setField(snack.Label(Guest.get_os_variant_label(self.__config.get_os_type(),
-                                                       self.__config.get_os_variant())), 1, 0, anchorLeft = 1)
-        grid.setField(snack.Label("Install:"), 0, 1, anchorRight = 1)
-        grid.setField(snack.Label(self.__config.get_install_type_text()), 1, 1, anchorLeft = 1)
-        grid.setField(snack.Label("Memory:"), 0, 2, anchorRight = 1)
-        grid.setField(snack.Label("%s MB" % self.__config.get_memory()), 1, 2, anchorLeft = 1)
-        grid.setField(snack.Label("CPUs:"), 0, 3, anchorRight = 1)
-        grid.setField(snack.Label("%d" % self.__config.get_cpus()), 1, 3, anchorLeft = 1)
-        grid.setField(snack.Label("Storage:"), 0, 4, anchorRight = 1)
+                                                       self.__config.get_os_variant())), 1, 0, anchorLeft=1)
+        grid.setField(snack.Label("Install:"), 0, 1, anchorRight=1)
+        grid.setField(snack.Label(self.__config.get_install_type_text()), 1, 1, anchorLeft=1)
+        grid.setField(snack.Label("Memory:"), 0, 2, anchorRight=1)
+        grid.setField(snack.Label("%s MB" % self.__config.get_memory()), 1, 2, anchorLeft=1)
+        grid.setField(snack.Label("CPUs:"), 0, 3, anchorRight=1)
+        grid.setField(snack.Label("%d" % self.__config.get_cpus()), 1, 3, anchorLeft=1)
+        grid.setField(snack.Label("Storage:"), 0, 4, anchorRight=1)
         grid.setField(snack.Label("%s (on %s)" % (self.__config.get_storage_volume(),
                                             self.__config.get_storage_pool())),
-                      1, 4, anchorLeft = 1)
-        grid.setField(snack.Label("Network:"), 0, 5, anchorRight = 1)
-        grid.setField(snack.Label(self.__config.get_network_bridge()), 1, 5, anchorLeft = 1)
+                      1, 4, anchorLeft=1)
+        grid.setField(snack.Label("Network:"), 0, 5, anchorRight=1)
+        grid.setField(snack.Label(self.__config.get_network_bridge()), 1, 5, anchorLeft=1)
         return [snack.Label("Ready to begin installation of %s" % self.__config.get_guest_name()),
                 grid]
 
