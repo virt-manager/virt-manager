@@ -1037,7 +1037,7 @@ class vmmAddHardware(vmmGObjectUI):
                 text2=(
                 _("This device could not be attached to the running machine. "
                   "Would you like to make the device available after the "
-                  "next VM shutdown?")),
+                  "next guest shutdown?")),
                 dialog_type=gtk.MESSAGE_WARNING,
                 buttons=gtk.BUTTONS_YES_NO,
                 async=False)

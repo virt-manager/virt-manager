@@ -2156,7 +2156,8 @@ class vmmDetails(vmmGObjectUI):
         self.err.show_err(
             _("Device could not be removed from the running machine"),
             details=(detach_err[0] + "\n\n" + detach_err[1]),
-            text2=_("This change will take effect after the next VM reboot."),
+            text2=_("This change will take effect after the next guest "
+                    "shutdown."),
             buttons=gtk.BUTTONS_OK,
             dialog_type=gtk.MESSAGE_INFO)
 
@@ -2219,11 +2220,11 @@ class vmmDetails(vmmGObjectUI):
         if (hotplug_err or
             (active and not len(hotplug_funcs) == len(define_funcs))):
             if len(define_funcs) > 1:
-                msg = _("Some changes may require a guest reboot "
+                msg = _("Some changes may require a guest shutdown "
                         "to take effect.")
             else:
                 msg = _("These changes will take effect after "
-                        "the next guest reboot.")
+                        "the next guest shutdown.")
 
             dtype = hotplug_err and gtk.MESSAGE_WARNING or gtk.MESSAGE_INFO
             hotplug_msg = ""
