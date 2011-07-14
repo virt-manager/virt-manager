@@ -1672,6 +1672,12 @@ class vmmDetails(vmmGObjectUI):
         if ret is not False:
             self.window.get_widget("config-apply").set_sensitive(False)
 
+    def get_text(self, widgetname, strip=True):
+        ret = self.window.get_widget(widgetname).get_text()
+        if strip:
+            ret = ret.strip()
+        return ret
+
     # Overview section
     def config_overview_apply(self):
         # Overview details
@@ -1684,23 +1690,19 @@ class vmmDetails(vmmGObjectUI):
         enable_apic = self.window.get_widget("overview-apic").get_active()
         if self.window.get_widget("overview-apic").get_inconsistent():
             enable_apic = None
-        clock_combo = self.window.get_widget("overview-clock-combo")
-        if clock_combo.get_property("visible"):
-            clock = clock_combo.get_model()[clock_combo.get_active()][0]
-        else:
-            clock = self.window.get_widget("overview-clock-label").get_text()
+        clock = self.get_combo_label_value("overview-clock")
 
         # Security
+        semodel = None
+        setype = "static"
+        selabel = self.get_text("security-label")
+
         if self.window.get_widget("security-dynamic").get_active():
             setype = "dynamic"
-        else:
-            setype = "static"
 
-        selabel = self.window.get_widget("security-label").get_text()
-        semodel = None
         if self.window.get_widget("security-type-box").get_property(
                                                                 "sensitive"):
-            semodel = self.window.get_widget("security-model").get_text()
+            semodel = self.get_text("security-model")
 
         # Description
         desc_widget = self.window.get_widget("overview-description")
@@ -1723,7 +1725,7 @@ class vmmDetails(vmmGObjectUI):
     def config_vcpus_apply(self):
         vcpus = self.config_get_vcpus()
         maxv = self.config_get_maxvcpus()
-        cpuset = self.window.get_widget("config-vcpupin").get_text()
+        cpuset = self.get_text("config-vcpupin")
 
         do_top = self.window.get_widget("cpu-topology-enable").get_active()
         sockets = self.window.get_widget("cpu-sockets").get_value()
@@ -1764,6 +1766,7 @@ class vmmDetails(vmmGObjectUI):
         conn = self.vm.get_connection()
 
         try:
+            new_text = new_text.strip()
             vcpu_num = int(row[0])
             pinlist = virtinst.Guest.cpuset_str_to_tuple(conn.vmm, new_text)
         except Exception, e:
@@ -1823,9 +1826,9 @@ class vmmDetails(vmmGObjectUI):
         bootdevs = self.get_config_boot_devs()
         bootmenu = self.window.get_widget("boot-menu").get_active()
 
-        kernel = self.window.get_widget("boot-kernel").get_text()
-        initrd = self.window.get_widget("boot-kernel-initrd").get_text()
-        args = self.window.get_widget("boot-kernel-args").get_text()
+        kernel = self.get_text("boot-kernel")
+        initrd = self.get_text("boot-kernel-initrd")
+        args = self.get_text("boot-kernel-args")
 
         funcs = [self.vm.set_boot_device,
                  self.vm.set_boot_menu,
@@ -1835,7 +1838,7 @@ class vmmDetails(vmmGObjectUI):
                 (kernel, initrd, args)]
 
         if self.window.get_widget("boot-init-align").get_property("visible"):
-            init = self.window.get_widget("boot-init-path").get_text()
+            init = self.get_text("boot-init-path")
             if not init:
                 return self.err.val_err(_("An init path must be specified"))
             funcs.append(self.vm.set_boot_init)
@@ -1855,9 +1858,9 @@ class vmmDetails(vmmGObjectUI):
         do_readonly = self.window.get_widget("disk-readonly").get_active()
         do_shareable = self.window.get_widget("disk-shareable").get_active()
         cache = self.get_combo_label_value("disk-cache")
-        fmt = self.window.get_widget("disk-format").child.get_text()
+        fmt = self.window.get_widget("disk-format").child.get_text().strip()
         bus = self.get_combo_label_value("disk-bus")
-        serial = self.window.get_widget("disk-serial").get_text()
+        serial = self.get_text("disk-serial")
 
         return self._change_config_helper([self.vm.define_disk_readonly,
                                            self.vm.define_disk_shareable,
@@ -1898,11 +1901,11 @@ class vmmDetails(vmmGObjectUI):
 
         model = self.get_combo_label_value("network-model")
 
-        vport_type = self.window.get_widget("vport-type").get_text()
-        vport_managerid = self.window.get_widget("vport-managerid").get_text()
-        vport_typeid = self.window.get_widget("vport-typeid").get_text()
-        vport_idver = self.window.get_widget("vport-typeidversion").get_text()
-        vport_instid = self.window.get_widget("vport-instanceid").get_text()
+        vport_type = self.get_text("vport-type")
+        vport_managerid = self.get_text("vport-managerid")
+        vport_typeid = self.get_text("vport-typeid")
+        vport_idver = self.get_text("vport-typeidversion")
+        vport_instid = self.get_text("vport-instanceid")
 
         return self._change_config_helper([self.vm.define_network_model,
                                           self.vm.define_virtualport,
@@ -1950,7 +1953,7 @@ class vmmDetails(vmmGObjectUI):
 
     def config_graphics_apply(self, dev_id_info):
         gtype = self.get_combo_label_value("gfx-type")
-        passwd = self.window.get_widget("gfx-password").get_text() or None
+        passwd = self.get_text("gfx-password", strip=False) or None
         keymap = self.get_combo_label_value("gfx-keymap")
 
         change_spicevmc = self._do_change_spicevmc(dev_id_info, gtype)
