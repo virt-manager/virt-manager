@@ -37,6 +37,54 @@ from virtManager import util as util
 
 import virtinst
 
+# Parameters that can be editted in the details window
+EDIT_TOTAL = 33
+(EDIT_NAME,
+EDIT_ACPI,
+EDIT_APIC,
+EDIT_CLOCK,
+EDIT_SECURITY,
+EDIT_DESC,
+
+EDIT_VCPUS,
+EDIT_CPUSET,
+EDIT_CPU,
+EDIT_TOPOLOGY,
+
+EDIT_MEM,
+
+EDIT_AUTOSTART,
+EDIT_BOOTORDER,
+EDIT_BOOTMENU,
+EDIT_KERNEL,
+EDIT_INIT,
+
+EDIT_DISK_RO,
+EDIT_DISK_SHARE,
+EDIT_DISK_CACHE,
+EDIT_DISK_BUS,
+EDIT_DISK_SERIAL,
+EDIT_DISK_FORMAT,
+
+EDIT_SOUND_MODEL,
+
+EDIT_SMARTCARD_MODE,
+
+EDIT_NET_MODEL,
+EDIT_NET_VPORT,
+EDIT_NET_SOURCE,
+
+EDIT_GFX_PASSWD,
+EDIT_GFX_TYPE,
+EDIT_GFX_KEYMAP,
+
+EDIT_VIDEO_MODEL,
+
+EDIT_WATCHDOG_MODEL,
+EDIT_WATCHDOG_ACTION,
+) = range(EDIT_TOTAL)
+
+
 # Columns in hw list model
 HW_LIST_COL_LABEL = 0
 HW_LIST_COL_ICON_NAME = 1
@@ -241,6 +289,8 @@ class vmmDetails(vmmGObjectUI):
             pages.set_current_page(PAGE_DETAILS)
 
 
+        self.active_edits = []
+
         self.serial_tabs = []
         self.last_console_page = PAGE_CONSOLE
         self.addhw = None
@@ -300,21 +350,21 @@ class vmmDetails(vmmGObjectUI):
 
             "on_details_pages_switch_page": self.switch_page,
 
-            "on_overview_name_changed": self.config_enable_apply,
+            "on_overview_name_changed": (self.enable_apply, EDIT_NAME),
             "on_overview_acpi_changed": self.config_acpi_changed,
             "on_overview_apic_changed": self.config_apic_changed,
-            "on_overview_clock_changed": self.config_enable_apply,
-            "on_security_label_changed": self.config_enable_apply,
+            "on_overview_clock_changed": (self.enable_apply, EDIT_CLOCK),
+            "on_security_label_changed": (self.enable_apply, EDIT_SECURITY),
             "on_security_type_changed": self.security_type_changed,
 
             "on_config_vcpus_changed": self.config_vcpus_changed,
             "on_config_maxvcpus_changed": self.config_maxvcpus_changed,
-            "on_config_vcpupin_changed": self.config_vcpus_changed,
+            "on_config_vcpupin_changed": (self.enable_apply, EDIT_CPUSET),
             "on_config_vcpupin_generate_clicked": self.config_vcpupin_generate,
-            "on_cpu_model_changed": self.config_enable_apply,
-            "on_cpu_cores_changed": self.config_enable_apply,
-            "on_cpu_sockets_changed": self.config_enable_apply,
-            "on_cpu_threads_changed": self.config_enable_apply,
+            "on_cpu_model_changed": (self.enable_apply, EDIT_CPU),
+            "on_cpu_cores_changed": (self.enable_apply, EDIT_TOPOLOGY),
+            "on_cpu_sockets_changed": (self.enable_apply, EDIT_TOPOLOGY),
+            "on_cpu_threads_changed": (self.enable_apply, EDIT_TOPOLOGY),
             "on_cpu_copy_host_clicked": self.config_cpu_copy_host,
             "on_cpu_topology_enable_toggled": self.config_cpu_topology_enable,
 
@@ -324,45 +374,60 @@ class vmmDetails(vmmGObjectUI):
             "on_config_boot_moveup_clicked" : (self.config_boot_move, True),
             "on_config_boot_movedown_clicked" : (self.config_boot_move,
                                                  False),
-            "on_config_autostart_changed": self.config_enable_apply,
-            "on_boot_menu_changed": self.config_enable_apply,
-            "on_boot_kernel_changed": self.config_enable_apply,
-            "on_boot_kernel_initrd_changed": self.config_enable_apply,
-            "on_boot_kernel_args_changed": self.config_enable_apply,
+            "on_config_autostart_changed": (self.enable_apply, EDIT_AUTOSTART),
+            "on_boot_menu_changed": (self.enable_apply, EDIT_BOOTMENU),
+            "on_boot_kernel_changed": (self.enable_apply, EDIT_KERNEL),
+            "on_boot_kernel_initrd_changed": (self.enable_apply, EDIT_KERNEL),
+            "on_boot_kernel_args_changed": (self.enable_apply, EDIT_KERNEL),
             "on_boot_kernel_browse_clicked": self.browse_kernel,
             "on_boot_kernel_initrd_browse_clicked": self.browse_initrd,
-            "on_boot_init_path_changed": self.config_enable_apply,
+            "on_boot_init_path_changed": (self.enable_apply, EDIT_INIT),
 
-            "on_disk_readonly_changed": self.config_enable_apply,
-            "on_disk_shareable_changed": self.config_enable_apply,
-            "on_disk_cache_combo_changed": self.config_enable_apply,
-            "on_disk_bus_combo_changed": self.config_enable_apply,
-            "on_disk_format_changed": self.config_enable_apply,
-            "on_disk_serial_changed": self.config_enable_apply,
+            "on_disk_readonly_changed": (self.enable_apply, EDIT_DISK_RO),
+            "on_disk_shareable_changed": (self.enable_apply, EDIT_DISK_SHARE),
+            "on_disk_cache_combo_changed": (self.enable_apply,
+                                            EDIT_DISK_CACHE),
+            "on_disk_bus_combo_changed": (self.enable_apply, EDIT_DISK_BUS),
+            "on_disk_format_changed": (self.enable_apply, EDIT_DISK_FORMAT),
+            "on_disk_serial_changed": (self.enable_apply, EDIT_DISK_SERIAL),
 
-            "on_network_source_combo_changed": self.config_enable_apply,
-            "on_network_bridge_changed": self.config_enable_apply,
-            "on_network-source-mode-combo_changed": self.config_enable_apply,
-            "on_network_model_combo_changed": self.config_enable_apply,
+            "on_network_source_combo_changed": (self.enable_apply,
+                                                EDIT_NET_SOURCE),
+            "on_network_bridge_changed": (self.enable_apply,
+                                          EDIT_NET_SOURCE),
+            "on_network-source-mode-combo_changed": (self.enable_apply,
+                                                     EDIT_NET_SOURCE),
+            "on_network_model_combo_changed": (self.enable_apply,
+                                               EDIT_NET_MODEL),
 
-            "on_vport_type_changed": self.config_enable_apply,
-            "on_vport_managerid_changed": self.config_enable_apply,
-            "on_vport_typeid_changed": self.config_enable_apply,
-            "on_vport_typeidversion_changed": self.config_enable_apply,
-            "on_vport_instanceid_changed": self.config_enable_apply,
+            "on_vport_type_changed": (self.enable_apply, EDIT_NET_VPORT),
+            "on_vport_managerid_changed": (self.enable_apply,
+                                           EDIT_NET_VPORT),
+            "on_vport_typeid_changed": (self.enable_apply,
+                                        EDIT_NET_VPORT),
+            "on_vport_typeidversion_changed": (self.enable_apply,
+                                               EDIT_NET_VPORT),
+            "on_vport_instanceid_changed": (self.enable_apply,
+                                            EDIT_NET_VPORT),
 
-            "on_gfx_type_combo_changed": self.config_enable_apply,
-            "on_vnc_keymap_combo_changed": self.config_enable_apply,
-            "on_vnc_password_changed": self.config_enable_apply,
+            "on_gfx_type_combo_changed": (self.enable_apply, EDIT_GFX_TYPE),
+            "on_vnc_keymap_combo_changed": (self.enable_apply,
+                                            EDIT_GFX_KEYMAP),
+            "on_vnc_password_changed": (self.enable_apply, EDIT_GFX_PASSWD),
 
-            "on_sound_model_combo_changed": self.config_enable_apply,
+            "on_sound_model_combo_changed": (self.enable_apply,
+                                             EDIT_SOUND_MODEL),
 
-            "on_video_model_combo_changed": self.config_enable_apply,
+            "on_video_model_combo_changed": (self.enable_apply,
+                                             EDIT_VIDEO_MODEL),
 
-            "on_watchdog_model_combo_changed": self.config_enable_apply,
-            "on_watchdog_action_combo_changed": self.config_enable_apply,
+            "on_watchdog_model_combo_changed": (self.enable_apply,
+                                                EDIT_WATCHDOG_MODEL),
+            "on_watchdog_action_combo_changed": (self.enable_apply,
+                                                 EDIT_WATCHDOG_ACTION),
 
-            "on_smartcard_mode_combo_changed": self.config_enable_apply,
+            "on_smartcard_mode_combo_changed": (self.enable_apply,
+                                                EDIT_SMARTCARD_MODE),
 
             "on_config_apply_clicked": self.config_apply,
 
@@ -584,7 +649,7 @@ class vmmDetails(vmmGObjectUI):
         # Description text view
         desc = self.widget("overview-description")
         buf = gtk.TextBuffer()
-        buf.connect("changed", self.config_enable_apply)
+        buf.connect("changed", self.enable_apply, EDIT_DESC)
         desc.set_buffer(buf)
 
         # Clock combo
@@ -718,7 +783,7 @@ class vmmDetails(vmmGObjectUI):
 
         def feature_changed(src, index, treeiter, model):
             model[index][1] = src.get_property("model")[treeiter][0]
-            self.config_enable_apply()
+            self.enable_apply(EDIT_CPU)
 
         feat_combo.connect("changed", feature_changed, feat_model)
         for name in all_features:
@@ -1060,7 +1125,7 @@ class vmmDetails(vmmGObjectUI):
 
         rem = pagetype in remove_pages
         if selected:
-            self.widget("config-apply").set_sensitive(False)
+            self.disable_apply()
         self.widget("config-remove").set_property("visible", rem)
 
         self.widget("hw-panel").set_current_page(pagetype)
@@ -1441,8 +1506,15 @@ class vmmDetails(vmmGObjectUI):
             self.widget("boot-kernel-initrd").set_text(path)
         self._browse_file(cb)
 
-    def config_enable_apply(self, ignore1=None, ignore2=None):
+    def disable_apply(self):
+        self.active_edits = []
+        self.widget("config-apply").set_sensitive(False)
+
+    def enable_apply(self, *arglist):
+        edittype = arglist[-1]
         self.widget("config-apply").set_sensitive(True)
+        if edittype not in self.active_edits:
+            self.active_edits.append(edittype)
 
     # Overview -> Machine settings
     def config_acpi_changed(self, ignore):
@@ -1451,18 +1523,18 @@ class vmmDetails(vmmGObjectUI):
         widget.set_inconsistent(False)
         if incon:
             widget.set_active(True)
-        self.config_enable_apply()
+        self.enable_apply(EDIT_ACPI)
     def config_apic_changed(self, ignore):
         widget = self.widget("overview-apic")
         incon = widget.get_inconsistent()
         widget.set_inconsistent(False)
         if incon:
             widget.set_active(True)
-        self.config_enable_apply()
+        self.enable_apply(EDIT_APIC)
 
     # Overview -> Security
     def security_type_changed(self, button):
-        self.config_enable_apply()
+        self.enable_apply(EDIT_SECURITY)
         self.widget("security-label").set_sensitive(not button.get_active())
 
     # Memory
@@ -1472,10 +1544,10 @@ class vmmDetails(vmmGObjectUI):
         return self._spin_get_helper("config-memory")
 
     def config_maxmem_changed(self, src_ignore):
-        self.config_enable_apply()
+        self.enable_apply(EDIT_MEM)
 
     def config_memory_changed(self, src_ignore):
-        self.config_enable_apply()
+        self.enable_apply(EDIT_MEM)
 
         maxadj = self.widget("config-maxmem").get_adjustment()
 
@@ -1505,7 +1577,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("config-vcpupin").set_text(pinstr)
 
     def config_vcpus_changed(self, ignore):
-        self.config_enable_apply()
+        self.enable_apply(EDIT_VCPUS)
 
         conn = self.vm.get_connection()
         host_active_count = conn.host_active_processor_count()
@@ -1522,7 +1594,7 @@ class vmmDetails(vmmGObjectUI):
         maxadj.lower = cur
 
     def config_maxvcpus_changed(self, ignore):
-        self.config_enable_apply()
+        self.enable_apply(EDIT_VCPUS)
 
     def config_cpu_copy_host(self, src_ignore):
         # Update UI with output copied from host
@@ -1539,7 +1611,7 @@ class vmmDetails(vmmGObjectUI):
     def config_cpu_topology_enable(self, src):
         do_enable = src.get_active()
         self.widget("cpu-topology-table").set_sensitive(do_enable)
-        self.config_enable_apply()
+        self.enable_apply(EDIT_TOPOLOGY)
 
     # Boot device / Autostart
     def config_bootdev_selected(self, ignore):
@@ -1566,7 +1638,7 @@ class vmmDetails(vmmGObjectUI):
 
         self.repopulate_boot_list(self.get_config_boot_devs(),
                                   boot_row[BOOT_DEV_TYPE])
-        self.config_enable_apply()
+        self.enable_apply(EDIT_BOOTORDER)
 
     def config_boot_move(self, src_ignore, move_up):
         boot_row = self.get_boot_selection()
@@ -1590,7 +1662,7 @@ class vmmDetails(vmmGObjectUI):
         boot_devs[boot_idx] = swap_dev
 
         self.repopulate_boot_list(boot_devs, boot_selection)
-        self.config_enable_apply()
+        self.enable_apply(EDIT_BOOTORDER)
 
     # CDROM Eject/Connect
     def toggle_storage_media(self, src_ignore):
@@ -1662,7 +1734,7 @@ class vmmDetails(vmmGObjectUI):
             self.err.show_err(_("Error apply changes: %s") % e)
 
         if ret is not False:
-            self.widget("config-apply").set_sensitive(False)
+            self.disable_apply()
 
     def get_text(self, widgetname, strip=True):
         ret = self.widget(widgetname).get_text()
@@ -1670,85 +1742,109 @@ class vmmDetails(vmmGObjectUI):
             ret = ret.strip()
         return ret
 
+    def editted(self, pagetype):
+        if pagetype not in range(EDIT_TOTAL):
+            raise RuntimeError("crap! %s" % pagetype)
+        return pagetype in self.active_edits
+
+    def make_apply_data(self):
+        definefuncs = []
+        defineargs = []
+        hotplugfuncs = []
+        hotplugargs = []
+
+        def add_define(func, *args):
+            definefuncs.append(func)
+            defineargs.append(args)
+        def add_hotplug(func, *args):
+            hotplugfuncs.append(func)
+            hotplugargs.append(args)
+
+        return (definefuncs, defineargs, add_define,
+                hotplugfuncs, hotplugargs, add_hotplug)
+
     # Overview section
     def config_overview_apply(self):
-        # Overview details
-        name = self.widget("overview-name").get_text()
+        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
+        ignore = add_hotplug
 
-        # Machine details
-        enable_acpi = self.widget("overview-acpi").get_active()
-        if self.widget("overview-acpi").get_inconsistent():
-            enable_acpi = None
-        enable_apic = self.widget("overview-apic").get_active()
-        if self.widget("overview-apic").get_inconsistent():
-            enable_apic = None
-        clock = self.get_combo_label_value("overview-clock")
+        if self.editted(EDIT_NAME):
+            name = self.widget("overview-name").get_text()
+            add_define(self.vm.define_name, name)
 
-        # Security
-        semodel = None
-        setype = "static"
-        selabel = self.get_text("security-label")
+        if self.editted(EDIT_ACPI):
+            enable_acpi = self.widget("overview-acpi").get_active()
+            if self.widget("overview-acpi").get_inconsistent():
+                enable_acpi = None
+            add_define(self.vm.define_acpi, enable_acpi)
 
-        if self.widget("security-dynamic").get_active():
-            setype = "dynamic"
+        if self.editted(EDIT_APIC):
+            enable_apic = self.widget("overview-apic").get_active()
+            if self.widget("overview-apic").get_inconsistent():
+                enable_apic = None
+            add_define(self.vm.define_apic, enable_apic)
 
-        if self.widget("security-type-box").get_property("sensitive"):
-            semodel = self.get_text("security-model")
+        if self.editted(EDIT_CLOCK):
+            clock = self.get_combo_label_value("overview-clock")
+            add_define(self.vm.define_clock, clock)
 
-        # Description
-        desc_widget = self.widget("overview-description")
-        desc = desc_widget.get_buffer().get_property("text") or ""
+        if self.editted(EDIT_SECURITY):
+            semodel = None
+            setype = "static"
+            selabel = self.get_text("security-label")
 
-        return self._change_config_helper([self.vm.define_name,
-                                           self.vm.define_acpi,
-                                           self.vm.define_apic,
-                                           self.vm.define_clock,
-                                           self.vm.define_seclabel,
-                                           self.vm.define_description],
-                                          [(name,),
-                                           (enable_acpi,),
-                                           (enable_apic,),
-                                           (clock,),
-                                           (semodel, setype, selabel),
-                                           (desc,)])
+            if self.widget("security-dynamic").get_active():
+                setype = "dynamic"
+            if self.widget("security-type-box").get_property("sensitive"):
+                semodel = self.get_text("security-model")
+
+            add_define(self.vm.define_seclabel, semodel, setype, selabel)
+
+        if self.editted(EDIT_DESC):
+            desc_widget = self.widget("overview-description")
+            desc = desc_widget.get_buffer().get_property("text") or ""
+            add_define(self.vm.define_description, desc)
+
+        return self._change_config_helper(df, da, hf, ha)
 
     # CPUs
     def config_vcpus_apply(self):
-        vcpus = self.config_get_vcpus()
-        maxv = self.config_get_maxvcpus()
-        cpuset = self.get_text("config-vcpupin")
+        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
 
-        do_top = self.widget("cpu-topology-enable").get_active()
-        sockets = self.widget("cpu-sockets").get_value()
-        cores = self.widget("cpu-cores").get_value()
-        threads = self.widget("cpu-threads").get_value()
-        model, vendor = self.get_config_cpu_model()
-        features = self.get_config_cpu_features()
+        if self.editted(EDIT_VCPUS):
+            vcpus = self.config_get_vcpus()
+            maxv = self.config_get_maxvcpus()
+            add_define(self.vm.define_vcpus, vcpus, maxv)
+            add_hotplug(self.vm.hotplug_vcpus, vcpus)
 
-        logging.info("Setting vcpus for %s to %s, cpuset is %s" %
-                     (self.vm.get_name(), str(vcpus), cpuset))
+        if self.editted(EDIT_CPUSET):
+            cpuset = self.get_text("config-vcpupin")
+            print cpuset
+            add_define(self.vm.define_cpuset, cpuset)
+            add_hotplug(self.config_vcpu_pin_cpuset, cpuset)
 
-        if not do_top:
-            sockets = None
-            cores = None
-            threads = None
+        if self.editted(EDIT_CPU):
+            model, vendor = self.get_config_cpu_model()
+            features = self.get_config_cpu_features()
+            add_define(self.vm.define_cpu,
+                       model, vendor, self._cpu_copy_host, features)
 
-        define_funcs = [self.vm.define_vcpus,
-                        self.vm.define_cpuset,
-                        self.vm.define_cpu,
-                        self.vm.define_cpu_topology]
-        define_args  = [(vcpus, maxv),
-                        (cpuset,),
-                        (model, vendor, self._cpu_copy_host, features),
-                        (sockets, cores, threads)]
+        if self.editted(EDIT_TOPOLOGY):
+            do_top = self.widget("cpu-topology-enable").get_active()
+            sockets = self.widget("cpu-sockets").get_value()
+            cores = self.widget("cpu-cores").get_value()
+            threads = self.widget("cpu-threads").get_value()
+            if not do_top:
+                sockets = None
+                cores = None
+                threads = None
 
-        ret = self._change_config_helper(define_funcs, define_args,
-                                         [self.vm.hotplug_vcpus,
-                                          self.config_vcpu_pin_cpuset],
-                                         [(vcpus,), (cpuset,)])
+            add_define(self.vm.define_cpu_topology, sockets, cores, threads)
 
+        ret = self._change_config_helper(df, da, hf, ha)
         if ret:
             self._cpu_copy_host = False
+        return ret
 
     def config_vcpu_pin(self, src_ignore, path, new_text):
         vcpu_list = self.widget("config-vcpu-list")
@@ -1787,55 +1883,59 @@ class vmmDetails(vmmGObjectUI):
 
     # Memory
     def config_memory_apply(self):
-        curmem = None
-        maxmem = self.config_get_maxmem()
-        if self.widget("config-memory").get_property("sensitive"):
-            curmem = self.config_get_memory()
+        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
 
-        if curmem:
-            curmem = int(curmem) * 1024
-        if maxmem:
-            maxmem = int(maxmem) * 1024
+        if self.editted(EDIT_MEM):
+            curmem = None
+            maxmem = self.config_get_maxmem()
+            if self.widget("config-memory").get_property("sensitive"):
+                curmem = self.config_get_memory()
 
-        return self._change_config_helper(self.vm.define_both_mem,
-                                          (curmem, maxmem),
-                                          self.vm.hotplug_both_mem,
-                                          (curmem, maxmem))
+            if curmem:
+                curmem = int(curmem) * 1024
+            if maxmem:
+                maxmem = int(maxmem) * 1024
+
+            add_define(self.vm.define_both_mem, curmem, maxmem)
+            add_hotplug(self.vm.hotplug_both_mem, curmem, maxmem)
+
+        return self._change_config_helper(df, da, hf, ha)
 
     # Boot device / Autostart
     def config_boot_options_apply(self):
-        auto = self.widget("config-autostart")
+        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
+        ignore = add_hotplug
 
-        if auto.get_property("sensitive"):
+        if self.editted(EDIT_AUTOSTART):
+            auto = self.widget("config-autostart")
             try:
                 self.vm.set_autostart(auto.get_active())
             except Exception, e:
-                self.err.show_err((_("Error changing autostart value: %s") %
-                                   str(e)))
+                self.err.show_err(
+                    (_("Error changing autostart value: %s") % str(e)))
                 return False
 
-        bootdevs = self.get_config_boot_devs()
-        bootmenu = self.widget("boot-menu").get_active()
+        if self.editted(EDIT_BOOTORDER):
+            bootdevs = self.get_config_boot_devs()
+            add_define(self.vm.set_boot_device, bootdevs)
 
-        kernel = self.get_text("boot-kernel")
-        initrd = self.get_text("boot-kernel-initrd")
-        args = self.get_text("boot-kernel-args")
+        if self.editted(EDIT_BOOTMENU):
+            bootmenu = self.widget("boot-menu").get_active()
+            add_define(self.vm.set_boot_menu, bootmenu)
 
-        funcs = [self.vm.set_boot_device,
-                 self.vm.set_boot_menu,
-                 self.vm.set_boot_kernel]
-        opts = [(bootdevs,),
-                (bootmenu,),
-                (kernel, initrd, args)]
+        if self.editted(EDIT_KERNEL):
+            kernel = self.get_text("boot-kernel")
+            initrd = self.get_text("boot-kernel-initrd")
+            args = self.get_text("boot-kernel-args")
+            add_define(self.vm.set_boot_kernel, kernel, initrd, args)
 
-        if self.widget("boot-init-align").get_property("visible"):
+        if self.editted(EDIT_INIT):
             init = self.get_text("boot-init-path")
             if not init:
                 return self.err.val_err(_("An init path must be specified"))
-            funcs.append(self.vm.set_boot_init)
-            opts.append((init,))
+            add_define(self.vm.set_boot_init, init)
 
-        return self._change_config_helper(funcs, opts)
+        return self._change_config_helper(df, da, hf, ha)
 
     # CDROM
     def change_storage_media(self, dev_id_info, newpath):
@@ -1846,68 +1946,94 @@ class vmmDetails(vmmGObjectUI):
 
     # Disk options
     def config_disk_apply(self, dev_id_info):
-        do_readonly = self.widget("disk-readonly").get_active()
-        do_shareable = self.widget("disk-shareable").get_active()
-        cache = self.get_combo_label_value("disk-cache")
-        fmt = self.widget("disk-format").child.get_text().strip()
-        bus = self.get_combo_label_value("disk-bus")
-        serial = self.get_text("disk-serial")
+        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
+        ignore = add_hotplug
 
-        return self._change_config_helper([self.vm.define_disk_readonly,
-                                           self.vm.define_disk_shareable,
-                                           self.vm.define_disk_cache,
-                                           self.vm.define_disk_driver_type,
-                                           self.vm.define_disk_bus,
-                                           self.vm.define_disk_serial],
-                                          [(dev_id_info, do_readonly),
-                                           (dev_id_info, do_shareable),
-                                           (dev_id_info, cache),
-                                           (dev_id_info, fmt),
-                                           (dev_id_info, bus),
-                                           (dev_id_info, serial)])
+        if self.editted(EDIT_DISK_RO):
+            do_readonly = self.widget("disk-readonly").get_active()
+            add_define(self.vm.define_disk_readonly, dev_id_info, do_readonly)
+
+        if self.editted(EDIT_DISK_SHARE):
+            do_shareable = self.widget("disk-shareable").get_active()
+            add_define(self.vm.define_disk_shareable,
+                       dev_id_info, do_shareable)
+
+        if self.editted(EDIT_DISK_CACHE):
+            cache = self.get_combo_label_value("disk-cache")
+            add_define(self.vm.define_disk_cache, dev_id_info, cache)
+
+        if self.editted(EDIT_DISK_FORMAT):
+            fmt = self.widget("disk-format").child.get_text().strip()
+            add_define(self.vm.define_disk_driver_type, dev_id_info, fmt)
+
+        if self.editted(EDIT_DISK_SERIAL):
+            serial = self.get_text("disk-serial")
+            add_define(self.vm.define_disk_serial, dev_id_info, serial)
+
+        # Do this last since it can change uniqueness info of the dev
+        if self.editted(EDIT_DISK_BUS):
+            bus = self.get_combo_label_value("disk-bus")
+            add_define(self.vm.define_disk_bus, dev_id_info, bus)
+
+        return self._change_config_helper(df, da, hf, ha)
 
     # Audio options
     def config_sound_apply(self, dev_id_info):
-        model = self.get_combo_label_value("sound-model")
-        if model:
-            return self._change_config_helper(self.vm.define_sound_model,
-                                              (dev_id_info, model))
+        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
+        ignore = add_hotplug
+
+        if self.editted(EDIT_SOUND_MODEL):
+            model = self.get_combo_label_value("sound-model")
+            if model:
+                add_define(self.vm.define_sound_model, dev_id_info, model)
+
+        return self._change_config_helper(df, da, hf, ha)
 
     # Smartcard options
     def config_smartcard_apply(self, dev_id_info):
-        model = self.get_combo_label_value("smartcard-mode")
-        if model:
-            return self._change_config_helper(self.vm.define_smartcard_mode,
-                                              (dev_id_info, model))
+        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
+        ignore = add_hotplug
+
+        if self.editted(EDIT_SMARTCARD_MODE):
+            model = self.get_combo_label_value("smartcard-mode")
+            if model:
+                add_define(self.vm.define_smartcard_mode, dev_id_info, model)
+
+        return self._change_config_helper(df, da, hf, ha)
 
     # Network options
     def config_network_apply(self, dev_id_info):
-        net_list = self.widget("network-source-combo")
-        net_bridge = self.widget("network-bridge")
-        nettype, source = uihelpers.get_network_selection(net_list, net_bridge)
+        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
+        ignore = add_hotplug
 
-        source_mode = None
-        if (nettype  == "direct"):
-            source_mode = self.get_combo_label_value("network-source-mode")
+        if self.editted(EDIT_NET_MODEL):
+            model = self.get_combo_label_value("network-model")
+            add_define(self.vm.define_network_model, dev_id_info, model)
 
-        model = self.get_combo_label_value("network-model")
+        if self.editted(EDIT_NET_SOURCE):
+            mode = None
+            net_list = self.widget("network-source-combo")
+            net_bridge = self.widget("network-bridge")
+            nettype, source = uihelpers.get_network_selection(net_list,
+                                                              net_bridge)
+            if nettype == "direct":
+                mode = self.get_combo_label_value("network-source-mode")
 
-        vport_type = self.get_text("vport-type")
-        vport_managerid = self.get_text("vport-managerid")
-        vport_typeid = self.get_text("vport-typeid")
-        vport_idver = self.get_text("vport-typeidversion")
-        vport_instid = self.get_text("vport-instanceid")
+            add_define(self.vm.define_network_source, dev_id_info,
+                       nettype, source, mode)
 
-        return self._change_config_helper([self.vm.define_network_model,
-                                          self.vm.define_virtualport,
-                                          self.vm.define_network_source],
-                                          [(dev_id_info, model),
-                                          (dev_id_info, vport_type,
-                                          vport_managerid,
-                                          vport_typeid,
-                                          vport_idver,
-                                          vport_instid),
-                                          (dev_id_info, nettype, source, source_mode)])
+        if self.editted(EDIT_NET_VPORT):
+            vport_type = self.get_text("vport-type")
+            vport_managerid = self.get_text("vport-managerid")
+            vport_typeid = self.get_text("vport-typeid")
+            vport_idver = self.get_text("vport-typeidversion")
+            vport_instid = self.get_text("vport-instanceid")
+
+            add_define(self.vm.define_virtualport, dev_id_info,
+                       vport_type, vport_managerid, vport_typeid,
+                       vport_idver, vport_instid)
+
+        return self._change_config_helper(df, da, hf, ha)
 
     # Graphics options
     def _do_change_spicevmc(self, gdev, newgtype):
@@ -1943,39 +2069,53 @@ class vmmDetails(vmmGObjectUI):
         return self.err.yes_no(msg)
 
     def config_graphics_apply(self, dev_id_info):
-        gtype = self.get_combo_label_value("gfx-type")
-        passwd = self.get_text("gfx-password", strip=False) or None
-        keymap = self.get_combo_label_value("gfx-keymap")
+        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
 
-        change_spicevmc = self._do_change_spicevmc(dev_id_info, gtype)
+        if self.editted(EDIT_GFX_PASSWD):
+            passwd = self.get_text("gfx-password", strip=False) or None
+            add_define(self.vm.define_graphics_password, dev_id_info, passwd)
+            add_hotplug(self.vm.hotplug_graphics_password, dev_id_info,
+                        passwd)
 
-        return self._change_config_helper([self.vm.define_graphics_password,
-                                           self.vm.define_graphics_keymap,
-                                           self.vm.define_graphics_type],
-                                          [(dev_id_info, passwd),
-                                           (dev_id_info, keymap),
-                                           (dev_id_info, gtype,
-                                            change_spicevmc)],
-                                          [self.vm.hotplug_graphics_password],
-                                          [(dev_id_info, passwd)])
+        if self.editted(EDIT_GFX_KEYMAP):
+            keymap = self.get_combo_label_value("gfx-keymap")
+            add_define(self.vm.define_graphics_keymap, dev_id_info, keymap)
 
+        # Do this last since it can change graphics unique ID
+        if self.editted(EDIT_GFX_TYPE):
+            gtype = self.get_combo_label_value("gfx-type")
+            change_spicevmc = self._do_change_spicevmc(dev_id_info, gtype)
+            add_define(self.vm.define_graphics_type, dev_id_info,
+                       gtype, change_spicevmc)
+
+        return self._change_config_helper(df, da, hf, ha)
 
     # Video options
     def config_video_apply(self, dev_id_info):
-        model = self.get_combo_label_value("video-model")
-        if model:
-            return self._change_config_helper(self.vm.define_video_model,
-                                              (dev_id_info, model))
+        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
+        ignore = add_hotplug
+
+        if self.editted(EDIT_VIDEO_MODEL):
+            model = self.get_combo_label_value("video-model")
+            if model:
+                add_define(self.vm.define_video_model, dev_id_info, model)
+
+        return self._change_config_helper(df, da, hf, ha)
 
     # Watchdog options
     def config_watchdog_apply(self, dev_id_info):
-        model = self.get_combo_label_value("watchdog-model")
-        action = self.get_combo_label_value("watchdog-action")
-        if model or action:
-            return self._change_config_helper([self.vm.define_watchdog_model,
-                                               self.vm.define_watchdog_action],
-                                               [(dev_id_info, model),
-                                                (dev_id_info, action)])
+        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
+        ignore = add_hotplug
+
+        if self.editted(EDIT_WATCHDOG_MODEL):
+            model = self.get_combo_label_value("watchdog-model")
+            add_define(self.vm.define_watchdog_model, dev_id_info, model)
+
+        if self.editted(EDIT_WATCHDOG_ACTION):
+            action = self.get_combo_label_value("watchdog-action")
+            add_define(self.vm.define_watchdog_action, dev_id_info, action)
+
+        return self._change_config_helper(df, da, hf, ha)
 
     # Device removal
     def remove_device(self, dev_type, dev_id_info):
