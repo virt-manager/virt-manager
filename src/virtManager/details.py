@@ -1927,6 +1927,14 @@ class vmmDetails(vmmGObjectUI):
             kernel = self.get_text("boot-kernel")
             initrd = self.get_text("boot-kernel-initrd")
             args = self.get_text("boot-kernel-args")
+
+            if initrd and not kernel:
+                return self.err.val_err(
+                    _("Cannot set initrd without specifying a kernel path"))
+            if args and not kernel:
+                return self.err.val_err(
+                    _("Cannot set kernel arguments without specifying a kernel path"))
+
             add_define(self.vm.set_boot_kernel, kernel, initrd, args)
 
         if self.editted(EDIT_INIT):
