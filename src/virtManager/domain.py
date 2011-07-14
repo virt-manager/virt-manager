@@ -1119,15 +1119,14 @@ class vmmDomain(vmmLibvirtObject):
     ###################
 
     def _sample_mem_stats(self, info):
-        currmem = info[2]
-        maxmem = info[1]
+        curmem = info[2]
+        if not self.is_active():
+            curmem = 0
 
-        pcentCurrMem = info[2] * 100.0 / self.connection.host_memory_size()
-        pcentMaxMem = info[1] * 100.0 / self.connection.host_memory_size()
+        pcentCurrMem = curmem * 100.0 / self.connection.host_memory_size()
         pcentCurrMem = max(0.0, min(pcentCurrMem, 100.0))
-        pcentMaxMem = max(0.0, min(pcentMaxMem, 100.0))
 
-        return pcentCurrMem, pcentMaxMem, currmem, maxmem
+        return pcentCurrMem, curmem
 
     def _sample_cpu_stats(self, info, now):
         prevCpuTime = 0
@@ -1239,10 +1238,6 @@ class vmmDomain(vmmLibvirtObject):
 
     def stats_memory(self):
         return self._get_record_helper("curmem")
-    def stats_memory_percentage(self):
-        return self._get_record_helper("currMemPercent")
-    def stats_maxmem_percentage(self):
-        return self._get_record_helper("maxMemPercent")
     def cpu_time(self):
         return self._get_record_helper("cpuTime")
     def host_cpu_time_percentage(self):
@@ -1258,10 +1253,6 @@ class vmmDomain(vmmLibvirtObject):
     def disk_write_rate(self):
         return self._get_record_helper("diskWrRate")
 
-    def stats_memory_pretty(self):
-        if not self.is_active():
-            return "0 MB"
-        return self.get_memory_pretty()
     def get_memory_pretty(self):
         return util.pretty_mem(self.get_memory())
     def maximum_memory_pretty(self):
@@ -1523,8 +1514,7 @@ class vmmDomain(vmmLibvirtObject):
 
         (cpuTime, cpuTimeAbs,
          pcentHostCpu, pcentGuestCpu) = self._sample_cpu_stats(info, now)
-        (pcentCurrMem, pcentMaxMem,
-         curmem, maxmem) = self._sample_mem_stats(info)
+        pcentCurrMem, curmem = self._sample_mem_stats(info)
         rdBytes, wrBytes = self._sample_disk_io()
         rxBytes, txBytes = self._sample_network_traffic()
 
@@ -1535,9 +1525,7 @@ class vmmDomain(vmmLibvirtObject):
             "cpuHostPercent": pcentHostCpu,
             "cpuGuestPercent": pcentGuestCpu,
             "curmem": curmem,
-            "maxmem": maxmem,
             "currMemPercent": pcentCurrMem,
-            "maxMemPercent": pcentMaxMem,
             "diskRdKB": rdBytes / 1024,
             "diskWrKB": wrBytes / 1024,
             "netRxKB": rxBytes / 1024,

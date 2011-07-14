@@ -1617,8 +1617,6 @@ class vmmConnection(vmmGObject):
 
     def stats_memory(self):
         return self._get_record_helper("memory")
-    def stats_memory_percentage(self):
-        return self._get_record_helper("memoryPercent")
     def host_cpu_time_percentage(self):
         return self._get_record_helper("cpuHostPercent")
     guest_cpu_time_percentage = host_cpu_time_percentage
