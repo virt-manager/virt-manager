@@ -734,7 +734,7 @@ class vmmManager(vmmGObjectUI):
         row.insert(ROW_STATUS, vm.run_status())
         row.insert(ROW_STATUS_ICON, vm.run_status_icon_name())
         row.insert(ROW_KEY, vm.get_uuid())
-        row.insert(ROW_HINT, None)
+        row.insert(ROW_HINT, vm.get_description())
         row.insert(ROW_IS_CONN, False)
         row.insert(ROW_IS_CONN_CONNECTED, True)
         row.insert(ROW_IS_VM, True)
@@ -874,6 +874,7 @@ class vmmManager(vmmGObjectUI):
         row[ROW_STATUS_ICON] = vm.run_status_icon_name()
         row[ROW_IS_VM_RUNNING] = vm.is_active()
         row[ROW_MARKUP] = self._build_vm_markup(vm, row)
+        row[ROW_HINT] = vm.get_description()
         model.row_changed(row.path, row.iter)
 
     def conn_state_changed(self, conn):
