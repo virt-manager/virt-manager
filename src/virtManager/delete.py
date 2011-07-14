@@ -58,13 +58,13 @@ class vmmDeleteDialog(vmmGObjectUI):
         image = gtk.image_new_from_icon_name("vm_delete_wizard",
                                              gtk.ICON_SIZE_DIALOG)
         image.show()
-        self.window.get_widget("icon-box").pack_end(image, False)
+        self.widget("icon-box").pack_end(image, False)
 
-        prepare_storage_list(self.window.get_widget("delete-storage-list"))
+        prepare_storage_list(self.widget("delete-storage-list"))
 
     def toggle_remove_storage(self, src):
         dodel = src.get_active()
-        self.window.get_widget("delete-storage-list").set_sensitive(dodel)
+        self.widget("delete-storage-list").set_sensitive(dodel)
 
 
     def show(self, vm, parent):
@@ -94,19 +94,19 @@ class vmmDeleteDialog(vmmGObjectUI):
         # Set VM name in title'
         title_str = ("<span size='x-large'>%s '%s'</span>" %
                      (_("Delete"), self.vm.get_name()))
-        self.window.get_widget("delete-main-label").set_markup(title_str)
+        self.widget("delete-main-label").set_markup(title_str)
 
-        self.window.get_widget("delete-cancel").grab_focus()
+        self.widget("delete-cancel").grab_focus()
 
         # Disable storage removal by default
-        self.window.get_widget("delete-remove-storage").set_active(False)
-        self.window.get_widget("delete-remove-storage").toggled()
+        self.widget("delete-remove-storage").set_active(False)
+        self.widget("delete-remove-storage").toggled()
 
-        populate_storage_list(self.window.get_widget("delete-storage-list"),
+        populate_storage_list(self.widget("delete-storage-list"),
                               self.vm, self.conn)
 
     def get_config_format(self):
-        format_combo = self.window.get_widget("vol-format")
+        format_combo = self.widget("vol-format")
         model = format_combo.get_model()
         if format_combo.get_active_iter() != None:
             model = format_combo.get_model()
@@ -114,11 +114,11 @@ class vmmDeleteDialog(vmmGObjectUI):
         return None
 
     def get_paths_to_delete(self):
-        del_list = self.window.get_widget("delete-storage-list")
+        del_list = self.widget("delete-storage-list")
         model = del_list.get_model()
 
         paths = []
-        if self.window.get_widget("delete-remove-storage").get_active():
+        if self.widget("delete-remove-storage").get_active():
             for row in model:
                 if (not row[STORAGE_ROW_CANT_DELETE] and
                     row[STORAGE_ROW_CONFIRM]):

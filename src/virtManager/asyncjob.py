@@ -109,17 +109,17 @@ class vmmAsyncJob(vmmGObjectUI):
         self.cancel_args = cancel_args or []
         self.cancel_args = [self] + self.cancel_args
         if self.cancel_job:
-            self.window.get_widget("cancel-async-job").show()
+            self.widget("cancel-async-job").show()
         else:
-            self.window.get_widget("cancel-async-job").hide()
+            self.widget("cancel-async-job").hide()
         self.job_canceled = False
 
         self._error_info = None
         self._data = None
 
-        self.stage = self.window.get_widget("pbar-stage")
-        self.pbar = self.window.get_widget("pbar")
-        self.window.get_widget("pbar-text").set_text(text)
+        self.stage = self.widget("pbar-stage")
+        self.pbar = self.widget("pbar")
+        self.widget("pbar-text").set_text(text)
         self.topwin.set_transient_for(parent)
 
         args = [self] + args
@@ -188,12 +188,12 @@ class vmmAsyncJob(vmmGObjectUI):
         self.stage.set_text(text)
 
     def hide_warning(self):
-        self.window.get_widget("warning-box").hide()
+        self.widget("warning-box").hide()
 
     def show_warning(self, summary):
         markup = "<small>%s</small>" % summary
-        self.window.get_widget("warning-box").show()
-        self.window.get_widget("warning-text").set_markup(markup)
+        self.widget("warning-box").show()
+        self.widget("warning-text").set_markup(markup)
 
     def can_cancel(self):
         return bool(self.cancel_job)

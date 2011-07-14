@@ -88,7 +88,7 @@ class vmmPreferences(vmmGObjectUI):
         self.bind_escape_key_close()
 
         # XXX: Help docs useless/out of date
-        self.window.get_widget("prefs-help").hide()
+        self.widget("prefs-help").hide()
 
     def close(self, ignore1=None, ignore2=None):
         self.topwin.hide()
@@ -105,39 +105,39 @@ class vmmPreferences(vmmGObjectUI):
     def refresh_view_system_tray(self, ignore1=None, ignore2=None,
                                  ignore3=None, ignore4=None):
         val = self.config.get_view_system_tray()
-        self.window.get_widget("prefs-system-tray").set_active(bool(val))
+        self.widget("prefs-system-tray").set_active(bool(val))
 
     def refresh_update_interval(self, ignore1=None, ignore2=None,
                                 ignore3=None, ignore4=None):
-        self.window.get_widget("prefs-stats-update-interval").set_value(
+        self.widget("prefs-stats-update-interval").set_value(
             self.config.get_stats_update_interval())
     def refresh_history_length(self, ignore1=None, ignore2=None,
                                ignore3=None, ignore4=None):
-        self.window.get_widget("prefs-stats-history-len").set_value(
+        self.widget("prefs-stats-history-len").set_value(
             self.config.get_stats_history_length())
 
     def refresh_console_accels(self, ignore1=None, ignore2=None,
                                 ignore3=None, ignore4=None):
-        self.window.get_widget("prefs-console-accels").set_active(
+        self.widget("prefs-console-accels").set_active(
             self.config.get_console_accels())
     def refresh_console_scaling(self, ignore1=None, ignore2=None,
                                 ignore3=None, ignore4=None):
         val = self.config.get_console_scaling()
         if val == None:
             val = 0
-        self.window.get_widget("prefs-console-scaling").set_active(val)
+        self.widget("prefs-console-scaling").set_active(val)
 
     def refresh_sound_local(self, ignore1=None, ignore2=None, ignore=None,
                             ignore4=None):
-        self.window.get_widget("prefs-sound-local").set_active(
+        self.widget("prefs-sound-local").set_active(
             self.config.get_local_sound())
     def refresh_sound_remote(self, ignore1=None, ignore2=None, ignore=None,
                              ignore4=None):
-        self.window.get_widget("prefs-sound-remote").set_active(
+        self.widget("prefs-sound-remote").set_active(
             self.config.get_remote_sound())
     def refresh_graphics_type(self, ignore1=None, ignore2=None, ignore=None,
                              ignore4=None):
-        combo = self.window.get_widget("prefs-graphics-type")
+        combo = self.widget("prefs-graphics-type")
         model = combo.get_model()
         gtype = self.config.get_graphics_type()
 
@@ -148,15 +148,15 @@ class vmmPreferences(vmmGObjectUI):
                 active = rowidx
                 break
 
-        self.window.get_widget("prefs-graphics-type").set_active(active)
+        self.widget("prefs-graphics-type").set_active(active)
 
     def refresh_disk_poll(self, ignore1=None, ignore2=None, ignore3=None,
                           ignore4=None):
-        self.window.get_widget("prefs-stats-enable-disk").set_active(
+        self.widget("prefs-stats-enable-disk").set_active(
             self.config.get_stats_enable_disk_poll())
     def refresh_net_poll(self, ignore1=None, ignore2=None, ignore3=None,
                          ignore4=None):
-        self.window.get_widget("prefs-stats-enable-net").set_active(
+        self.widget("prefs-stats-enable-net").set_active(
             self.config.get_stats_enable_net_poll())
 
     def refresh_grabkeys_combination(self, ignore1=None, ignore2=None,
@@ -165,8 +165,8 @@ class vmmPreferences(vmmGObjectUI):
         if val is None:
             val = "Control_L+Alt_L"
 
-        prefs_button = self.window.get_widget("prefs-keys-grab-changebtn")
-        self.window.get_widget("prefs-keys-grab-sequence").set_text(val)
+        prefs_button = self.widget("prefs-keys-grab-changebtn")
+        self.widget("prefs-keys-grab-sequence").set_text(val)
         if not self.config.vnc_grab_keys_supported():
             util.tooltip_wrapper(prefs_button,
                                  _("Installed version of GTK-VNC doesn't "
@@ -174,19 +174,24 @@ class vmmPreferences(vmmGObjectUI):
 
     def refresh_confirm_forcepoweroff(self, ignore1=None, ignore2=None,
                                       ignore3=None, ignore4=None):
-        self.window.get_widget("prefs-confirm-forcepoweroff").set_active(self.config.get_confirm_forcepoweroff())
+        self.widget("prefs-confirm-forcepoweroff").set_active(
+                                self.config.get_confirm_forcepoweroff())
     def refresh_confirm_poweroff(self, ignore1=None, ignore2=None,
                                       ignore3=None, ignore4=None):
-        self.window.get_widget("prefs-confirm-poweroff").set_active(self.config.get_confirm_poweroff())
+        self.widget("prefs-confirm-poweroff").set_active(
+                                self.config.get_confirm_poweroff())
     def refresh_confirm_pause(self, ignore1=None, ignore2=None,
                               ignore3=None, ignore4=None):
-        self.window.get_widget("prefs-confirm-pause").set_active(self.config.get_confirm_pause())
+        self.widget("prefs-confirm-pause").set_active(
+                                self.config.get_confirm_pause())
     def refresh_confirm_removedev(self, ignore1=None, ignore2=None,
                                   ignore3=None, ignore4=None):
-        self.window.get_widget("prefs-confirm-removedev").set_active(self.config.get_confirm_removedev())
+        self.widget("prefs-confirm-removedev").set_active(
+                                self.config.get_confirm_removedev())
     def refresh_confirm_interface(self, ignore1=None, ignore2=None,
                                   ignore3=None, ignore4=None):
-        self.window.get_widget("prefs-confirm-interface").set_active(self.config.get_confirm_interface())
+        self.widget("prefs-confirm-interface").set_active(
+                                self.config.get_confirm_interface())
 
     def grabkeys_get_string(self, keysyms):
         keystr = None

@@ -70,12 +70,12 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.bind_escape_key_close()
 
         blue = gtk.gdk.color_parse("#0072A8")
-        self.window.get_widget("migrate-header").modify_bg(gtk.STATE_NORMAL,
+        self.widget("migrate-header").modify_bg(gtk.STATE_NORMAL,
                                                            blue)
         image = gtk.image_new_from_icon_name("vm_clone_wizard",
                                              gtk.ICON_SIZE_DIALOG)
         image.show()
-        self.window.get_widget("migrate-vm-icon-box").pack_end(image, False)
+        self.widget("migrate-vm-icon-box").pack_end(image, False)
 
         self.init_state()
 
@@ -97,14 +97,14 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.destconn_rows = None
 
         # Not sure why we need to do this manually, but it matters
-        self.window.get_widget("migrate-dest").get_model().clear()
+        self.widget("migrate-dest").get_model().clear()
 
         vmmGObjectUI.cleanup(self)
 
     def init_state(self):
         # [hostname, conn, can_migrate, tooltip]
         dest_model = gtk.ListStore(str, object, bool, str)
-        dest_combo = self.window.get_widget("migrate-dest")
+        dest_combo = self.widget("migrate-dest")
         dest_combo.set_model(dest_model)
         text = gtk.CellRendererText()
         dest_combo.pack_start(text, True)
@@ -121,31 +121,31 @@ class vmmMigrateDialog(vmmGObjectUI):
     def reset_state(self):
         title_str = ("<span size='large' color='white'>%s '%s'</span>" %
                      (_("Migrate"), self.vm.get_name()))
-        self.window.get_widget("migrate-main-label").set_markup(title_str)
+        self.widget("migrate-main-label").set_markup(title_str)
 
-        self.window.get_widget("migrate-cancel").grab_focus()
+        self.widget("migrate-cancel").grab_focus()
 
         name = self.vm.get_name()
         srchost = self.conn.get_hostname()
 
-        self.window.get_widget("migrate-label-name").set_text(name)
-        self.window.get_widget("migrate-label-src").set_text(srchost)
+        self.widget("migrate-label-name").set_text(name)
+        self.widget("migrate-label-src").set_text(srchost)
 
-        self.window.get_widget("migrate-advanced-expander").set_expanded(False)
-        self.window.get_widget("migrate-set-interface").set_active(False)
-        self.window.get_widget("migrate-set-rate").set_active(False)
-        self.window.get_widget("migrate-set-port").set_active(False)
-        self.window.get_widget("migrate-set-maxdowntime").set_active(False)
-        self.window.get_widget("migrate-max-downtime").set_value(30)
+        self.widget("migrate-advanced-expander").set_expanded(False)
+        self.widget("migrate-set-interface").set_active(False)
+        self.widget("migrate-set-rate").set_active(False)
+        self.widget("migrate-set-port").set_active(False)
+        self.widget("migrate-set-maxdowntime").set_active(False)
+        self.widget("migrate-max-downtime").set_value(30)
 
         running = self.vm.is_active()
-        self.window.get_widget("migrate-offline").set_active(not running)
-        self.window.get_widget("migrate-offline").set_sensitive(running)
+        self.widget("migrate-offline").set_active(not running)
+        self.widget("migrate-offline").set_sensitive(running)
 
-        self.window.get_widget("migrate-rate").set_value(0)
-        self.window.get_widget("migrate-secure").set_active(False)
+        self.widget("migrate-rate").set_value(0)
+        self.widget("migrate-secure").set_active(False)
 
-        downtime_box = self.window.get_widget("migrate-maxdowntime-box")
+        downtime_box = self.widget("migrate-maxdowntime-box")
         support_downtime = self.vm.support_downtime()
         downtime_tooltip = ""
         if not support_downtime:
@@ -156,12 +156,12 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         if self.conn.is_xen():
             # Default xen port is 8002
-            self.window.get_widget("migrate-port").set_value(8002)
+            self.widget("migrate-port").set_value(8002)
         else:
             # QEMU migrate port range is 49152+64
-            self.window.get_widget("migrate-port").set_value(49152)
+            self.widget("migrate-port").set_value(49152)
 
-        secure_box = self.window.get_widget("migrate-secure-box")
+        secure_box = self.widget("migrate-secure-box")
         support_secure = hasattr(libvirt, "VIR_MIGRATE_TUNNELLED")
         secure_tooltip = ""
         if not support_secure:
@@ -184,31 +184,30 @@ class vmmMigrateDialog(vmmGObjectUI):
         if active == -1:
             tooltip = _("A valid destination connection must be selected.")
 
-        self.window.get_widget("migrate-finish").set_sensitive(active != -1)
-        util.tooltip_wrapper(self.window.get_widget("migrate-finish"), tooltip)
+        self.widget("migrate-finish").set_sensitive(active != -1)
+        util.tooltip_wrapper(self.widget("migrate-finish"), tooltip)
 
     def toggle_set_rate(self, src):
         enable = src.get_active()
-        self.window.get_widget("migrate-rate").set_sensitive(enable)
+        self.widget("migrate-rate").set_sensitive(enable)
 
     def toggle_set_interface(self, src):
         enable = src.get_active()
-        port_enable = self.window.get_widget("migrate-set-port").get_active()
-        self.window.get_widget("migrate-interface").set_sensitive(enable)
-        self.window.get_widget("migrate-set-port").set_sensitive(enable)
-        self.window.get_widget("migrate-port").set_sensitive(enable and
-                                                             port_enable)
+        port_enable = self.widget("migrate-set-port").get_active()
+        self.widget("migrate-interface").set_sensitive(enable)
+        self.widget("migrate-set-port").set_sensitive(enable)
+        self.widget("migrate-port").set_sensitive(enable and port_enable)
 
     def toggle_set_maxdowntime(self, src):
         enable = src.get_active()
-        self.window.get_widget("migrate-max-downtime").set_sensitive(enable)
+        self.widget("migrate-max-downtime").set_sensitive(enable)
 
     def toggle_set_port(self, src):
         enable = src.get_active()
-        self.window.get_widget("migrate-port").set_sensitive(enable)
+        self.widget("migrate-port").set_sensitive(enable)
 
     def get_config_destconn(self):
-        combo = self.window.get_widget("migrate-dest")
+        combo = self.widget("migrate-dest")
         model = combo.get_model()
 
         idx = combo.get_active()
@@ -222,39 +221,39 @@ class vmmMigrateDialog(vmmGObjectUI):
         return row[1]
 
     def get_config_offline(self):
-        return self.window.get_widget("migrate-offline").get_active()
+        return self.widget("migrate-offline").get_active()
 
     def get_config_max_downtime(self):
         if not self.get_config_max_downtime_enabled():
             return 0
-        return int(self.window.get_widget("migrate-max-downtime").get_value())
+        return int(self.widget("migrate-max-downtime").get_value())
 
     def get_config_secure(self):
-        return self.window.get_widget("migrate-secure").get_active()
+        return self.widget("migrate-secure").get_active()
 
     def get_config_max_downtime_enabled(self):
-        return self.window.get_widget("migrate-max-downtime").get_property("sensitive")
+        return self.widget("migrate-max-downtime").get_property("sensitive")
 
     def get_config_rate_enabled(self):
-        return self.window.get_widget("migrate-rate").get_property("sensitive")
+        return self.widget("migrate-rate").get_property("sensitive")
     def get_config_rate(self):
         if not self.get_config_rate_enabled():
             return 0
-        return int(self.window.get_widget("migrate-rate").get_value())
+        return int(self.widget("migrate-rate").get_value())
 
     def get_config_interface_enabled(self):
-        return self.window.get_widget("migrate-interface").get_property("sensitive")
+        return self.widget("migrate-interface").get_property("sensitive")
     def get_config_interface(self):
         if not self.get_config_interface_enabled():
             return None
-        return self.window.get_widget("migrate-interface").get_text()
+        return self.widget("migrate-interface").get_text()
 
     def get_config_port_enabled(self):
-        return self.window.get_widget("migrate-port").get_property("sensitive")
+        return self.widget("migrate-port").get_property("sensitive")
     def get_config_port(self):
         if not self.get_config_port_enabled():
             return 0
-        return int(self.window.get_widget("migrate-port").get_value())
+        return int(self.widget("migrate-port").get_value())
 
     def build_localhost_uri(self, destconn):
         desthost = destconn.get_qualified_hostname()
@@ -313,7 +312,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.populate_dest_combo()
 
     def populate_dest_combo(self):
-        combo = self.window.get_widget("migrate-dest")
+        combo = self.widget("migrate-dest")
         model = combo.get_model()
         idx = combo.get_active()
         idxconn = None
@@ -349,7 +348,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         combo.set_active(idx)
 
     def dest_add_connection(self, engine_ignore, conn):
-        combo = self.window.get_widget("migrate-dest")
+        combo = self.widget("migrate-dest")
         model = combo.get_model()
 
         newrow = self.build_dest_row(conn)

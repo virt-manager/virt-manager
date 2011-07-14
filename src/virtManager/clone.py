@@ -169,10 +169,10 @@ class vmmCloneVM(vmmGObjectUI):
         self.bind_escape_key_close()
 
         # XXX: Help docs useless/out of date
-        self.window.get_widget("clone-help").hide()
+        self.widget("clone-help").hide()
         finish_img = gtk.image_new_from_stock(gtk.STOCK_NEW,
                                               gtk.ICON_SIZE_BUTTON)
-        self.window.get_widget("clone-ok").set_image(finish_img)
+        self.widget("clone-ok").set_image(finish_img)
 
         self.set_initial_state()
 
@@ -226,10 +226,9 @@ class vmmCloneVM(vmmGObjectUI):
 
     def set_initial_state(self):
         blue = gtk.gdk.color_parse("#0072A8")
-        self.window.get_widget("clone-header").modify_bg(gtk.STATE_NORMAL,
-                                                         blue)
+        self.widget("clone-header").modify_bg(gtk.STATE_NORMAL, blue)
 
-        box = self.window.get_widget("clone-vm-icon-box")
+        box = self.widget("clone-vm-icon-box")
         image = gtk.image_new_from_icon_name("vm_clone_wizard",
                                              gtk.ICON_SIZE_DIALOG)
         image.show()
@@ -237,14 +236,14 @@ class vmmCloneVM(vmmGObjectUI):
 
     # Populate state
     def reset_state(self):
-        self.window.get_widget("clone-cancel").grab_focus()
+        self.widget("clone-cancel").grab_focus()
 
         # Populate default clone values
         self.setup_clone_info()
 
         cd = self.clone_design
-        self.window.get_widget("clone-orig-name").set_text(cd.original_guest)
-        self.window.get_widget("clone-new-name").set_text(cd.clone_name)
+        self.widget("clone-orig-name").set_text(cd.original_guest)
+        self.widget("clone-new-name").set_text(cd.clone_name)
 
         # We need to determine which disks fail (and why).
         self.storage_list, self.target_list = self.check_all_storage()
@@ -271,7 +270,7 @@ class vmmCloneVM(vmmGObjectUI):
         return cd
 
     def populate_network_list(self):
-        net_box = self.window.get_widget("clone-network-box")
+        net_box = self.widget("clone-network-box")
         for c in net_box.get_children():
             net_box.remove(c)
             c.destroy()
@@ -337,9 +336,8 @@ class vmmCloneVM(vmmGObjectUI):
             build_net_row(label, mac, newmac)
 
         no_net = bool(len(self.net_list.keys()) == 0)
-        self.window.get_widget("clone-network-box").set_property("visible",
-                                                                 not no_net)
-        self.window.get_widget("clone-no-net").set_property("visible", no_net)
+        self.widget("clone-network-box").set_property("visible", not no_net)
+        self.widget("clone-no-net").set_property("visible", no_net)
 
     def check_all_storage(self):
         """
@@ -447,7 +445,7 @@ class vmmCloneVM(vmmGObjectUI):
 
     def set_paths_from_clone_name(self):
         cd = self.clone_design
-        newname = self.window.get_widget("clone-new-name").get_text()
+        newname = self.widget("clone-new-name").get_text()
 
         if not newname:
             return
@@ -551,7 +549,7 @@ class vmmCloneVM(vmmGObjectUI):
         disk[STORAGE_INFO_COMBO] = option_combo
 
     def populate_storage_lists(self):
-        storage_box = self.window.get_widget("clone-storage-box")
+        storage_box = self.widget("clone-storage-box")
         for c in storage_box.get_children():
             storage_box.remove(c)
             c.destroy()
@@ -562,16 +560,15 @@ class vmmCloneVM(vmmGObjectUI):
 
         num_c = min(len(self.target_list), 3)
         if num_c:
-            scroll = self.window.get_widget("clone-storage-scroll")
+            scroll = self.widget("clone-storage-scroll")
             scroll.set_size_request(-1, 80 * num_c)
         storage_box.show_all()
 
         no_storage = not bool(len(self.target_list))
-        self.window.get_widget("clone-storage-box").set_property("visible",
-                                                            not no_storage)
-        self.window.get_widget("clone-no-storage-pass").set_property(
-                                                            "visible",
-                                                            no_storage)
+        self.widget("clone-storage-box").set_property("visible",
+                                                      not no_storage)
+        self.widget("clone-no-storage-pass").set_property("visible",
+                                                          no_storage)
 
         skip_targets = []
         new_disks = []
@@ -598,7 +595,7 @@ class vmmCloneVM(vmmGObjectUI):
                 tooltip = _("One or more disks cannot be cloned or shared.")
                 break
 
-        ok_button = self.window.get_widget("clone-ok")
+        ok_button = self.widget("clone-ok")
         ok_button.set_sensitive(clone)
         util.tooltip_wrapper(ok_button, tooltip)
 
@@ -742,7 +739,7 @@ class vmmCloneVM(vmmGObjectUI):
     # Listeners
     def validate(self):
         self.set_paths_from_clone_name()
-        name = self.window.get_widget("clone-new-name").get_text()
+        name = self.widget("clone-new-name").get_text()
 
         # Make another clone_design
         cd = self.build_new_clone_design(name)

@@ -137,11 +137,11 @@ class vmmManager(vmmGObjectUI):
         self.init_context_menus()
 
         # XXX: Help docs useless/out of date
-        self.window.get_widget("menu_help").hide()
+        self.widget("menu_help").hide()
 
         self.vm_selected()
-        self.window.get_widget("vm-list").get_selection().connect("changed",
-                                                            self.vm_selected)
+        self.widget("vm-list").get_selection().connect("changed",
+                                                       self.vm_selected)
 
         # Initialize stat polling columns based on global polling
         # preferences (we want signal handlers for this)
@@ -154,7 +154,7 @@ class vmmManager(vmmGObjectUI):
         self.engine.connect("connection-removed", self._remove_connection)
 
         # Select first list entry
-        vmlist = self.window.get_widget("vm-list")
+        vmlist = self.widget("vm-list")
         if len(vmlist.get_model()) != 0:
             vmlist.get_selection().select_iter(
                                         vmlist.get_model().get_iter_first())
@@ -225,8 +225,8 @@ class vmmManager(vmmGObjectUI):
         return bool(self.topwin.flags() & gtk.VISIBLE)
 
     def set_startup_error(self, msg):
-        self.window.get_widget("vm-notebook").set_current_page(1)
-        self.window.get_widget("startup-error-label").set_text(msg)
+        self.widget("vm-notebook").set_current_page(1)
+        self.widget("startup-error-label").set_text(msg)
 
     ################
     # Init methods #
@@ -256,26 +256,25 @@ class vmmManager(vmmGObjectUI):
                                                     COL_NETWORK))
 
 
-        self.window.get_widget("menu_view_stats_guest_cpu").set_active(
+        self.widget("menu_view_stats_guest_cpu").set_active(
                             self.config.is_vmlist_guest_cpu_usage_visible())
-        self.window.get_widget("menu_view_stats_host_cpu").set_active(
+        self.widget("menu_view_stats_host_cpu").set_active(
                             self.config.is_vmlist_host_cpu_usage_visible())
-        self.window.get_widget("menu_view_stats_disk").set_active(
+        self.widget("menu_view_stats_disk").set_active(
                             self.config.is_vmlist_disk_io_visible())
-        self.window.get_widget("menu_view_stats_network").set_active(
+        self.widget("menu_view_stats_network").set_active(
                             self.config.is_vmlist_network_traffic_visible())
 
     def init_toolbar(self):
-        self.window.get_widget("vm-new").set_icon_name("vm_new")
-        self.window.get_widget("vm-open").set_icon_name("icon_console")
-        uihelpers.build_shutdown_button_menu(
-                                   self.window.get_widget("vm-shutdown"),
-                                   self.poweroff_vm,
-                                   self.reboot_vm,
-                                   self.destroy_vm,
-                                   self.save_vm)
+        self.widget("vm-new").set_icon_name("vm_new")
+        self.widget("vm-open").set_icon_name("icon_console")
+        uihelpers.build_shutdown_button_menu(self.widget("vm-shutdown"),
+                                             self.poweroff_vm,
+                                             self.reboot_vm,
+                                             self.destroy_vm,
+                                             self.save_vm)
 
-        tool = self.window.get_widget("vm-toolbar")
+        tool = self.widget("vm-toolbar")
         util.safe_set_prop(tool, "icon-size", gtk.ICON_SIZE_LARGE_TOOLBAR)
         for c in tool.get_children():
             c.set_homogeneous(False)
@@ -358,8 +357,8 @@ class vmmManager(vmmGObjectUI):
         self.connmenu.show()
 
     def init_vmlist(self):
-        vmlist = self.window.get_widget("vm-list")
-        self.window.get_widget("vm-notebook").set_show_tabs(False)
+        vmlist = self.widget("vm-list")
+        self.widget("vm-notebook").set_show_tabs(False)
 
         # Handle, name, markup, status, status icon name, key/uuid, hint,
         # is conn, is conn connected, is vm, is vm running, fg color
@@ -438,7 +437,7 @@ class vmmManager(vmmGObjectUI):
     ##################
 
     def current_row(self):
-        vmlist = self.window.get_widget("vm-list")
+        vmlist = self.widget("vm-list")
         selection = vmlist.get_selection()
         active = selection.get_selected()
 
@@ -472,7 +471,7 @@ class vmmManager(vmmGObjectUI):
         return vm.get_uuid()
 
     def current_connection_uri(self, default_selection=False):
-        vmlist = self.window.get_widget("vm-list")
+        vmlist = self.widget("vm-list")
         model = vmlist.get_model()
 
         conn = self.current_connection()
@@ -564,7 +563,7 @@ class vmmManager(vmmGObjectUI):
         self.delete_dialog.show(vm, self.topwin)
 
     def set_pause_state(self, state):
-        src = self.window.get_widget("vm-pause")
+        src = self.widget("vm-pause")
         try:
             self.ignore_pause = True
             src.set_active(state)
@@ -678,13 +677,13 @@ class vmmManager(vmmGObjectUI):
         vm.connect("resources-sampled", self.vm_resources_sampled)
         vm.connect("config-changed", self.vm_resources_sampled)
 
-        vmlist = self.window.get_widget("vm-list")
+        vmlist = self.widget("vm-list")
         model = vmlist.get_model()
 
         self._append_vm(model, vm, connection)
 
     def vm_removed(self, connection, uri_ignore, vmuuid):
-        vmlist = self.window.get_widget("vm-list")
+        vmlist = self.widget("vm-list")
         model = vmlist.get_model()
 
         parent = self.rows[connection.get_uri()].iter
@@ -758,8 +757,7 @@ class vmmManager(vmmGObjectUI):
         self.rows[row_key] = model[path]
 
         # Expand a connection when adding a vm to it
-        self.window.get_widget("vm-list").expand_row(model.get_path(parent),
-                                                     False)
+        self.widget("vm-list").expand_row(model.get_path(parent), False)
 
     def _append_connection(self, model, conn):
         row = []
@@ -785,7 +783,7 @@ class vmmManager(vmmGObjectUI):
 
     def _add_connection(self, engine_ignore, conn):
         # Make sure error page isn't showing
-        self.window.get_widget("vm-notebook").set_current_page(0)
+        self.widget("vm-notebook").set_current_page(0)
 
         if conn.get_uri() in self.rows:
             return
@@ -797,7 +795,7 @@ class vmmManager(vmmGObjectUI):
         conn.connect("connect-error", self._connect_error)
 
         # add the connection to the treeModel
-        vmlist = self.window.get_widget("vm-list")
+        vmlist = self.widget("vm-list")
         row = self._append_connection(vmlist.get_model(), conn)
         vmlist.get_selection().select_iter(row)
 
@@ -820,7 +818,7 @@ class vmmManager(vmmGObjectUI):
             self.conn_refresh_resources(conn, newname)
 
     def _remove_connection(self, engine_ignore, uri):
-        model = self.window.get_widget("vm-list").get_model()
+        model = self.widget("vm-list").get_model()
         parent = self.rows[uri].iter
 
         if parent is None:
@@ -844,7 +842,7 @@ class vmmManager(vmmGObjectUI):
         ignore = newstatus
         ignore = oldstatus
         parent = self.rows[vm.get_connection().get_uri()].iter
-        vmlist = self.window.get_widget("vm-list")
+        vmlist = self.widget("vm-list")
         model = vmlist.get_model()
 
         missing = True
@@ -862,7 +860,7 @@ class vmmManager(vmmGObjectUI):
         self.vm_resources_sampled(vm)
 
     def vm_resources_sampled(self, vm):
-        vmlist = self.window.get_widget("vm-list")
+        vmlist = self.widget("vm-list")
         model = vmlist.get_model()
 
         if self.vm_row_key(vm) not in self.rows:
@@ -882,7 +880,7 @@ class vmmManager(vmmGObjectUI):
         self.vm_selected()
 
     def conn_refresh_resources(self, conn, newname=None):
-        vmlist = self.window.get_widget("vm-list")
+        vmlist = self.widget("vm-list")
         model = vmlist.get_model()
         row = self.rows[conn.get_uri()]
 
@@ -915,7 +913,7 @@ class vmmManager(vmmGObjectUI):
         strip_text = text.replace("_", "")
 
         self.vmmenu_items["run"].get_child().set_label(text)
-        self.window.get_widget("vm-run").set_label(strip_text)
+        self.widget("vm-run").set_label(strip_text)
 
     def vm_selected(self, ignore=None):
         conn = self.current_connection()
@@ -938,21 +936,21 @@ class vmmManager(vmmGObjectUI):
         if vm and vm.managedsave_supported:
             self.change_run_text(vm.hasSavedImage())
 
-        self.window.get_widget("vm-open").set_sensitive(show_open)
-        self.window.get_widget("vm-run").set_sensitive(show_run)
-        self.window.get_widget("vm-shutdown").set_sensitive(show_shutdown)
+        self.widget("vm-open").set_sensitive(show_open)
+        self.widget("vm-run").set_sensitive(show_run)
+        self.widget("vm-shutdown").set_sensitive(show_shutdown)
         self.set_pause_state(is_paused)
-        self.window.get_widget("vm-pause").set_sensitive(show_pause)
+        self.widget("vm-pause").set_sensitive(show_pause)
 
-        self.window.get_widget("menu_edit_details").set_sensitive(show_details)
-        self.window.get_widget("menu_host_details").set_sensitive(host_details)
-        self.window.get_widget("menu_edit_delete").set_sensitive(delete)
+        self.widget("menu_edit_details").set_sensitive(show_details)
+        self.widget("menu_host_details").set_sensitive(host_details)
+        self.widget("menu_edit_delete").set_sensitive(delete)
 
     def popup_vm_menu_key(self, widget_ignore, event):
         if gtk.gdk.keyval_name(event.keyval) != "Menu":
             return False
 
-        vmlist = self.window.get_widget("vm-list")
+        vmlist = self.widget("vm-list")
         treeselection = vmlist.get_selection()
         model, _iter = treeselection.get_selected()
         self.popup_vm_menu(model, _iter, event)
@@ -1052,7 +1050,7 @@ class vmmManager(vmmGObjectUI):
             widgn = "menu_view_stats_disk"
         elif userdata == COL_NETWORK:
             widgn = "menu_view_stats_network"
-        widget = self.window.get_widget(widgn)
+        widget = self.widget(widgn)
 
         tool_text = ""
 
@@ -1078,22 +1076,22 @@ class vmmManager(vmmGObjectUI):
     def toggle_network_traffic_visible_widget(self, *ignore):
         val = self.config.is_vmlist_network_traffic_visible()
         self.netcol.set_visible(val)
-        self.window.get_widget("menu_view_stats_network").set_active(val)
+        self.widget("menu_view_stats_network").set_active(val)
 
     def toggle_disk_io_visible_widget(self, *ignore):
         val = self.config.is_vmlist_disk_io_visible()
         self.diskcol.set_visible(val)
-        self.window.get_widget("menu_view_stats_disk").set_active(val)
+        self.widget("menu_view_stats_disk").set_active(val)
 
     def toggle_guest_cpu_usage_visible_widget(self, *ignore):
         val = self.config.is_vmlist_guest_cpu_usage_visible()
         self.guestcpucol.set_visible(val)
-        self.window.get_widget("menu_view_stats_guest_cpu").set_active(val)
+        self.widget("menu_view_stats_guest_cpu").set_active(val)
 
     def toggle_host_cpu_usage_visible_widget(self, *ignore):
         val = self.config.is_vmlist_host_cpu_usage_visible()
         self.hostcpucol.set_visible(val)
-        self.window.get_widget("menu_view_stats_host_cpu").set_active(val)
+        self.widget("menu_view_stats_host_cpu").set_active(val)
 
     def toggle_stats_visible(self, src, stats_id):
         visible = src.get_active()

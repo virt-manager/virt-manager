@@ -536,7 +536,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         self.windowname = "vmm-details"
         self.window = window
-        self.topwin = self.window.get_widget(self.windowname)
+        self.topwin = self.widget(self.windowname)
         self.err = vmmErrorDialog(self.topwin)
 
         self.pointer_is_grabbed = False
@@ -565,13 +565,12 @@ class vmmConsolePages(vmmGObjectUI):
 
         finish_img = gtk.image_new_from_stock(gtk.STOCK_YES,
                                               gtk.ICON_SIZE_BUTTON)
-        self.window.get_widget("console-auth-login").set_image(finish_img)
+        self.widget("console-auth-login").set_image(finish_img)
 
         # Make viewer widget background always be black
         black = gtk.gdk.Color(0, 0, 0)
-        self.window.get_widget("console-vnc-viewport").modify_bg(
-                                                        gtk.STATE_NORMAL,
-                                                        black)
+        self.widget("console-vnc-viewport").modify_bg(gtk.STATE_NORMAL,
+                                                      black)
 
         # Signals are added by vmmDetails. Don't use signal_autoconnect here
         # or it changes will be overwritten
@@ -579,7 +578,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.add_gconf_handle(
             self.vm.on_console_scaling_changed(self.refresh_scaling))
 
-        scroll = self.window.get_widget("console-vnc-scroll")
+        scroll = self.widget("console-vnc-scroll")
         scroll.connect("size-allocate", self.scroll_size_allocate)
         self.add_gconf_handle(
             self.config.on_console_accels_changed(self.set_enable_accel))
@@ -611,8 +610,8 @@ class vmmConsolePages(vmmGObjectUI):
     ##########################
 
     def init_fs_toolbar(self):
-        scroll = self.window.get_widget("console-vnc-scroll")
-        pages = self.window.get_widget("console-pages")
+        scroll = self.widget("console-vnc-scroll")
+        pages = self.widget("console-pages")
         pages.remove(scroll)
 
         self.fs_toolbar = gtk.Toolbar()
@@ -729,11 +728,11 @@ class vmmConsolePages(vmmGObjectUI):
     def refresh_scaling(self, ignore1=None, ignore2=None, ignore3=None,
                         ignore4=None):
         self.scale_type = self.vm.get_console_scaling()
-        self.window.get_widget("details-menu-view-scale-always").set_active(
+        self.widget("details-menu-view-scale-always").set_active(
             self.scale_type == self.config.CONSOLE_SCALE_ALWAYS)
-        self.window.get_widget("details-menu-view-scale-never").set_active(
+        self.widget("details-menu-view-scale-never").set_active(
             self.scale_type == self.config.CONSOLE_SCALE_NEVER)
-        self.window.get_widget("details-menu-view-scale-fullscreen").set_active(
+        self.widget("details-menu-view-scale-fullscreen").set_active(
             self.scale_type == self.config.CONSOLE_SCALE_FULLSCREEN)
 
         self.update_scaling()
@@ -742,11 +741,11 @@ class vmmConsolePages(vmmGObjectUI):
         if not src.get_active():
             return
 
-        if src == self.window.get_widget("details-menu-view-scale-always"):
+        if src == self.widget("details-menu-view-scale-always"):
             self.scale_type = self.config.CONSOLE_SCALE_ALWAYS
-        elif src == self.window.get_widget("details-menu-view-scale-fullscreen"):
+        elif src == self.widget("details-menu-view-scale-fullscreen"):
             self.scale_type = self.config.CONSOLE_SCALE_FULLSCREEN
-        elif src == self.window.get_widget("details-menu-view-scale-never"):
+        elif src == self.widget("details-menu-view-scale-never"):
             self.scale_type = self.config.CONSOLE_SCALE_NEVER
 
         self.vm.set_console_scaling(self.scale_type)
@@ -757,8 +756,8 @@ class vmmConsolePages(vmmGObjectUI):
             return
 
         curscale = self.viewer.get_scaling()
-        fs = self.window.get_widget("control-fullscreen").get_active()
-        vnc_scroll = self.window.get_widget("console-vnc-scroll")
+        fs = self.widget("control-fullscreen").get_active()
+        vnc_scroll = self.widget("console-vnc-scroll")
 
         if (self.scale_type == self.config.CONSOLE_SCALE_NEVER
             and curscale == True):
@@ -785,22 +784,22 @@ class vmmConsolePages(vmmGObjectUI):
         self._change_fullscreen(False)
 
     def _change_fullscreen(self, do_fullscreen):
-        self.window.get_widget("control-fullscreen").set_active(do_fullscreen)
+        self.widget("control-fullscreen").set_active(do_fullscreen)
 
         if do_fullscreen:
             self.topwin.fullscreen()
             self.fs_toolbar.show()
             self.fs_drawer.set_active(True)
-            self.window.get_widget("toolbar-box").hide()
-            self.window.get_widget("details-menubar").hide()
+            self.widget("toolbar-box").hide()
+            self.widget("details-menubar").hide()
         else:
             self.fs_toolbar.hide()
             self.fs_drawer.set_active(False)
             self.topwin.unfullscreen()
 
-            if self.window.get_widget("details-menu-view-toolbar").get_active():
-                self.window.get_widget("toolbar-box").show()
-            self.window.get_widget("details-menubar").show()
+            if self.widget("details-menu-view-toolbar").get_active():
+                self.widget("toolbar-box").show()
+            self.widget("details-menubar").show()
 
         self.update_scaling()
 
@@ -836,7 +835,7 @@ class vmmConsolePages(vmmGObjectUI):
                 self.activate_unavailable_page(_("Guest has crashed"))
 
     def close_viewer(self):
-        viewport = self.window.get_widget("console-vnc-viewport")
+        viewport = self.widget("console-vnc-viewport")
         if self.viewer is None:
             return
 
@@ -854,7 +853,7 @@ class vmmConsolePages(vmmGObjectUI):
 
     def update_widget_states(self, vm, status_ignore):
         runable = vm.is_runable()
-        pages   = self.window.get_widget("console-pages")
+        pages   = self.widget("console-pages")
         page    = pages.get_current_page()
 
         if runable:
@@ -884,49 +883,49 @@ class vmmConsolePages(vmmGObjectUI):
         with care
         """
         self.close_viewer()
-        self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
-        self.window.get_widget("details-menu-vm-screenshot").set_sensitive(False)
-        self.window.get_widget("console-unavailable").set_label("<b>" + msg + "</b>")
+        self.widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
+        self.widget("details-menu-vm-screenshot").set_sensitive(False)
+        self.widget("console-unavailable").set_label("<b>" + msg + "</b>")
 
     def activate_auth_page(self, withPassword=True, withUsername=False):
         (pw, username) = self.config.get_console_password(self.vm)
-        self.window.get_widget("details-menu-vm-screenshot").set_sensitive(False)
+        self.widget("details-menu-vm-screenshot").set_sensitive(False)
 
         if withPassword:
-            self.window.get_widget("console-auth-password").show()
-            self.window.get_widget("label-auth-password").show()
+            self.widget("console-auth-password").show()
+            self.widget("label-auth-password").show()
         else:
-            self.window.get_widget("console-auth-password").hide()
-            self.window.get_widget("label-auth-password").hide()
+            self.widget("console-auth-password").hide()
+            self.widget("label-auth-password").hide()
 
         if withUsername:
-            self.window.get_widget("console-auth-username").show()
-            self.window.get_widget("label-auth-username").show()
+            self.widget("console-auth-username").show()
+            self.widget("label-auth-username").show()
         else:
-            self.window.get_widget("console-auth-username").hide()
-            self.window.get_widget("label-auth-username").hide()
+            self.widget("console-auth-username").hide()
+            self.widget("label-auth-username").hide()
 
-        self.window.get_widget("console-auth-username").set_text(username)
-        self.window.get_widget("console-auth-password").set_text(pw)
+        self.widget("console-auth-username").set_text(username)
+        self.widget("console-auth-password").set_text(pw)
 
         if self.config.has_keyring():
-            self.window.get_widget("console-auth-remember").set_sensitive(True)
+            self.widget("console-auth-remember").set_sensitive(True)
             if pw != "" or username != "":
-                self.window.get_widget("console-auth-remember").set_active(True)
+                self.widget("console-auth-remember").set_active(True)
             else:
-                self.window.get_widget("console-auth-remember").set_active(False)
+                self.widget("console-auth-remember").set_active(False)
         else:
-            self.window.get_widget("console-auth-remember").set_sensitive(False)
-        self.window.get_widget("console-pages").set_current_page(PAGE_AUTHENTICATE)
+            self.widget("console-auth-remember").set_sensitive(False)
+        self.widget("console-pages").set_current_page(PAGE_AUTHENTICATE)
         if withUsername:
-            self.window.get_widget("console-auth-username").grab_focus()
+            self.widget("console-auth-username").grab_focus()
         else:
-            self.window.get_widget("console-auth-password").grab_focus()
+            self.widget("console-auth-password").grab_focus()
 
 
     def activate_viewer_page(self):
-        self.window.get_widget("console-pages").set_current_page(PAGE_VIEWER)
-        self.window.get_widget("details-menu-vm-screenshot").set_sensitive(True)
+        self.widget("console-pages").set_current_page(PAGE_VIEWER)
+        self.widget("details-menu-vm-screenshot").set_sensitive(True)
         if self.viewer and self.viewer.get_widget():
             self.viewer.get_widget().grab_focus()
 
@@ -934,15 +933,15 @@ class vmmConsolePages(vmmGObjectUI):
         self.set_allow_fullscreen()
 
     def set_allow_fullscreen(self):
-        cpage = self.window.get_widget("console-pages").get_current_page()
-        dpage = self.window.get_widget("details-pages").get_current_page()
+        cpage = self.widget("console-pages").get_current_page()
+        dpage = self.widget("details-pages").get_current_page()
 
         allow_fullscreen = (dpage == 0 and
                             cpage == PAGE_VIEWER and
                             self.viewer_connected)
 
-        self.window.get_widget("control-fullscreen").set_sensitive(allow_fullscreen)
-        self.window.get_widget("details-menu-view-fullscreen").set_sensitive(allow_fullscreen)
+        self.widget("control-fullscreen").set_sensitive(allow_fullscreen)
+        self.widget("details-menu-view-fullscreen").set_sensitive(allow_fullscreen)
 
     def disconnected(self):
         errout = ""
@@ -1073,7 +1072,7 @@ class vmmConsolePages(vmmGObjectUI):
         try:
             if protocol == "vnc":
                 self.viewer = VNCViewer(self)
-                self.window.get_widget("console-vnc-viewport").add(
+                self.widget("console-vnc-viewport").add(
                                                     self.viewer.get_widget())
                 self.viewer.init_widget()
             elif protocol == "spice":
@@ -1102,14 +1101,14 @@ class vmmConsolePages(vmmGObjectUI):
                     _("Error connecting to graphical console") + ":\n%s" % e)
 
     def set_credentials(self, src_ignore=None):
-        passwd = self.window.get_widget("console-auth-password")
+        passwd = self.widget("console-auth-password")
         if passwd.flags() & gtk.VISIBLE:
             self.viewer.set_credential_password(passwd.get_text())
-        username = self.window.get_widget("console-auth-username")
+        username = self.widget("console-auth-username")
         if username.flags() & gtk.VISIBLE:
             self.viewer.set_credential_username(username.get_text())
 
-        if self.window.get_widget("console-auth-remember").get_active():
+        if self.widget("console-auth-remember").get_active():
             self.config.set_console_password(self.vm, passwd.get_text(),
                                              username.get_text())
 
@@ -1119,7 +1118,7 @@ class vmmConsolePages(vmmGObjectUI):
         isn't a hard requirment so the user can still shrink the window
         again, as opposed to set_size_request
         """
-        widget = self.window.get_widget("console-vnc-scroll")
+        widget = self.widget("console-vnc-scroll")
         signal_holder = []
 
         def restore_scroll(src):
@@ -1163,7 +1162,7 @@ class vmmConsolePages(vmmGObjectUI):
         if not self.viewer or not self.viewer.get_desktop_resolution():
             return
 
-        scroll = self.window.get_widget("console-vnc-scroll")
+        scroll = self.widget("console-vnc-scroll")
         is_scale = self.viewer.get_scaling()
 
         dx = 0

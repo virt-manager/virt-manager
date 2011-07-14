@@ -204,10 +204,13 @@ class vmmGObjectUI(vmmGObject):
             self.window = gtk.glade.XML(self.gladefile,
                                         self.windowname,
                                         domain="virt-manager")
-            self.topwin = self.window.get_widget(self.windowname)
+            self.topwin = self.widget(self.windowname)
             self.topwin.hide()
 
             self.err = virtManager.error.vmmErrorDialog(self.topwin)
+
+    def widget(self, name):
+        return self.window.get_widget(name)
 
     def cleanup(self):
         vmmGObject.cleanup(self)

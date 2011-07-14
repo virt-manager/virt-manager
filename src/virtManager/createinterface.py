@@ -177,26 +177,26 @@ class vmmCreateInterface(vmmGObjectUI):
 
     def set_initial_state(self):
 
-        self.window.get_widget("pages").set_show_tabs(False)
+        self.widget("pages").set_show_tabs(False)
         self.bond_config_win.get_widget("bond-pages").set_show_tabs(False)
 
         # FIXME: Unhide this when we make some documentation
-        self.window.get_widget("help").hide()
+        self.widget("help").hide()
         finish_img = gtk.image_new_from_stock(gtk.STOCK_QUIT,
                                               gtk.ICON_SIZE_BUTTON)
-        self.window.get_widget("finish").set_image(finish_img)
+        self.widget("finish").set_image(finish_img)
 
         blue = gtk.gdk.color_parse("#0072A8")
-        self.window.get_widget("header").modify_bg(gtk.STATE_NORMAL, blue)
+        self.widget("header").modify_bg(gtk.STATE_NORMAL, blue)
 
-        box = self.window.get_widget("header-icon-box")
+        box = self.widget("header-icon-box")
         image = gtk.image_new_from_icon_name("network-idle",
                                              gtk.ICON_SIZE_DIALOG)
         image.show()
         box.pack_end(image, False)
 
         # Interface type
-        type_list = self.window.get_widget("interface-type")
+        type_list = self.widget("interface-type")
         type_model = gtk.ListStore(str, str)
         type_list.set_model(type_model)
         text = gtk.CellRendererText()
@@ -213,10 +213,10 @@ class vmmCreateInterface(vmmGObjectUI):
 
         # Start mode
         uihelpers.build_startmode_combo(
-            self.window.get_widget("interface-startmode"))
+            self.widget("interface-startmode"))
 
         # Parent/slave Interface list
-        slave_list = self.window.get_widget("interface-list")
+        slave_list = self.widget("interface-list")
         # [ vmmInterface, selected, selectabel, name, type, is defined,
         #   is active, in use by str, mac]
         slave_model = gtk.ListStore(object, bool, bool, str, str, bool, bool,
@@ -339,16 +339,16 @@ class vmmCreateInterface(vmmGObjectUI):
 
     def reset_state(self):
 
-        self.window.get_widget("pages").set_current_page(PAGE_TYPE)
+        self.widget("pages").set_current_page(PAGE_TYPE)
         self.page_changed(None, None, PAGE_TYPE)
 
-        self.window.get_widget("interface-type").set_active(0)
+        self.widget("interface-type").set_active(0)
 
         # General details
-        self.window.get_widget("interface-name-entry").set_text("")
-        self.window.get_widget("interface-name-label").set_text("")
-        self.window.get_widget("interface-startmode").set_active(0)
-        self.window.get_widget("interface-activate").set_active(False)
+        self.widget("interface-name-entry").set_text("")
+        self.widget("interface-name-label").set_text("")
+        self.widget("interface-startmode").set_active(0)
+        self.widget("interface-activate").set_active(False)
 
         # Bridge config
         self.bridge_config_win.get_widget("bridge-delay").set_value(0)
@@ -384,8 +384,8 @@ class vmmCreateInterface(vmmGObjectUI):
         itype = self.get_config_interface_type()
 
         # Set up default interface name
-        self.window.get_widget("interface-name-entry").hide()
-        self.window.get_widget("interface-name-label").hide()
+        self.widget("interface-name-entry").hide()
+        self.widget("interface-name-label").hide()
 
         if itype in [Interface.Interface.INTERFACE_TYPE_BRIDGE,
                      Interface.Interface.INTERFACE_TYPE_BOND]:
@@ -393,7 +393,7 @@ class vmmCreateInterface(vmmGObjectUI):
         else:
             widget = "interface-name-label"
 
-        self.window.get_widget(widget).show()
+        self.widget(widget).show()
         default_name = self.get_default_name()
         self.set_interface_name(default_name)
 
@@ -406,10 +406,8 @@ class vmmCreateInterface(vmmGObjectUI):
 
         for key, value in type_dict.items():
             do_show = (key == itype)
-            self.window.get_widget("%s-label" % value).set_property("visible",
-                                                                    do_show)
-            self.window.get_widget("%s-box" % value).set_property("visible",
-                                                                  do_show)
+            self.widget("%s-label" % value).set_property("visible", do_show)
+            self.widget("%s-box" % value).set_property("visible", do_show)
 
         if itype == Interface.Interface.INTERFACE_TYPE_BRIDGE:
             self.update_bridge_desc()
@@ -501,7 +499,7 @@ class vmmCreateInterface(vmmGObjectUI):
         self.update_ip_desc()
 
     def populate_interface_list(self, itype):
-        iface_list = self.window.get_widget("interface-list")
+        iface_list = self.widget("interface-list")
         model = iface_list.get_model()
         model.clear()
 
@@ -519,7 +517,7 @@ class vmmCreateInterface(vmmGObjectUI):
         elif itype == Interface.Interface.INTERFACE_TYPE_ETHERNET:
             msg = _("Choose an unconfigured interface:")
 
-        self.window.get_widget("interface-list-text").set_text(msg)
+        self.widget("interface-list-text").set_text(msg)
 
         iface_list = []
         row_dict = {}
@@ -583,7 +581,7 @@ class vmmCreateInterface(vmmGObjectUI):
                 iface = ifaces[0][INTERFACE_ROW_NAME]
 
                 if itype == Interface.Interface.INTERFACE_TYPE_VLAN:
-                    tag = self.window.get_widget("vlan-tag").get_value()
+                    tag = self.widget("vlan-tag").get_value()
                     name = "%s.%s" % (iface, int(tag))
 
                 elif itype == Interface.Interface.INTERFACE_TYPE_ETHERNET:
@@ -597,29 +595,29 @@ class vmmCreateInterface(vmmGObjectUI):
     #########################
 
     def get_config_interface_type(self):
-        type_list = self.window.get_widget("interface-type")
+        type_list = self.widget("interface-type")
         return type_list.get_model()[type_list.get_active()][0]
 
     def set_interface_name(self, name):
-        if self.window.get_widget("interface-name-entry").get_property("visible"):
+        if self.widget("interface-name-entry").get_property("visible"):
             widget = "interface-name-entry"
         else:
             widget = "interface-name-label"
 
-        self.window.get_widget(widget).set_text(name)
+        self.widget(widget).set_text(name)
 
     def get_config_interface_name(self):
-        if self.window.get_widget("interface-name-entry").get_property("visible"):
-            return self.window.get_widget("interface-name-entry").get_text()
+        if self.widget("interface-name-entry").get_property("visible"):
+            return self.widget("interface-name-entry").get_text()
         else:
-            return self.window.get_widget("interface-name-label").get_text()
+            return self.widget("interface-name-label").get_text()
 
     def get_config_interface_startmode(self):
-        start_list = self.window.get_widget("interface-startmode")
+        start_list = self.widget("interface-startmode")
         return start_list.get_model()[start_list.get_active()][0]
 
     def get_config_selected_interfaces(self):
-        iface_list = self.window.get_widget("interface-list")
+        iface_list = self.widget("interface-list")
         model = iface_list.get_model()
         ret = []
 
@@ -714,7 +712,7 @@ class vmmCreateInterface(vmmGObjectUI):
         txt  = "STP %s" % (stp and "on" or "off")
         txt += ", delay %d sec" % int(delay)
 
-        self.window.get_widget("bridge-config-label").set_text(txt)
+        self.widget("bridge-config-label").set_text(txt)
 
     def update_bond_desc(self):
         mode_list = self.bond_config_win.get_widget("bond-mode")
@@ -729,7 +727,7 @@ class vmmCreateInterface(vmmGObjectUI):
         if mon:
             txt += ", %s" % mon
 
-        self.window.get_widget("bond-config-label").set_text(txt)
+        self.widget("bond-config-label").set_text(txt)
 
     def update_ip_desc(self):
         is_manual, name, ipv4, ipv6, ignore = self.get_config_ip_info()
@@ -763,10 +761,10 @@ class vmmCreateInterface(vmmGObjectUI):
         if not label:
             label = "No configuration"
 
-        self.window.get_widget("ip-config-label").set_text(label)
+        self.widget("ip-config-label").set_text(label)
 
     def get_config_ip_info(self):
-        if not self.window.get_widget("ip-label").get_property("visible"):
+        if not self.widget("ip-label").get_property("visible"):
             return [True, None, None, None, None]
 
         if not self.validate_ip_info():
@@ -872,18 +870,18 @@ class vmmCreateInterface(vmmGObjectUI):
     #######################
 
     def back(self, src):
-        notebook = self.window.get_widget("pages")
+        notebook = self.widget("pages")
         curpage = notebook.get_current_page()
         notebook.set_current_page(curpage - 1)
 
     def forward(self, ignore):
-        notebook = self.window.get_widget("pages")
+        notebook = self.widget("pages")
         curpage = notebook.get_current_page()
 
         if self.validate(notebook.get_current_page()) != True:
             return
 
-        self.window.get_widget("forward").grab_focus()
+        self.widget("forward").grab_focus()
         notebook.set_current_page(curpage + 1)
 
     def page_changed(self, ignore1, ignore2, pagenum):
@@ -893,22 +891,22 @@ class vmmCreateInterface(vmmGObjectUI):
                     _("Step %(current_page)d of %(max_page)d") %
                     {'current_page': next_page, 'max_page': PAGE_DETAILS + 1})
 
-        self.window.get_widget("header-pagenum").set_markup(page_lbl)
+        self.widget("header-pagenum").set_markup(page_lbl)
 
         if pagenum == 0:
-            self.window.get_widget("back").set_sensitive(False)
+            self.widget("back").set_sensitive(False)
         else:
-            self.window.get_widget("back").set_sensitive(True)
+            self.widget("back").set_sensitive(True)
 
         if pagenum == PAGE_DETAILS:
             self.populate_details_page()
-            self.window.get_widget("forward").hide()
-            self.window.get_widget("finish").show()
-            self.window.get_widget("finish").grab_focus()
+            self.widget("forward").hide()
+            self.widget("finish").show()
+            self.widget("finish").grab_focus()
 
         else:
-            self.window.get_widget("forward").show()
-            self.window.get_widget("finish").hide()
+            self.widget("forward").show()
+            self.widget("finish").hide()
 
     def validate(self, pagenum):
         try:
@@ -1067,7 +1065,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
 
     def validate_vlan(self, iobj, ifaces):
-        idx = self.window.get_widget("vlan-tag").get_value()
+        idx = self.widget("vlan-tag").get_value()
 
         iobj.tag = int(idx)
         return True
@@ -1115,11 +1113,11 @@ class vmmCreateInterface(vmmGObjectUI):
     def finish(self, src):
 
         # Validate the final page
-        page = self.window.get_widget("pages").get_current_page()
+        page = self.widget("pages").get_current_page()
         if self.validate(page) != True:
             return False
 
-        activate = self.window.get_widget("interface-activate").get_active()
+        activate = self.widget("interface-activate").get_active()
 
         # Start the install
         self.topwin.set_sensitive(False)

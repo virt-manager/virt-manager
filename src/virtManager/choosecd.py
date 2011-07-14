@@ -44,7 +44,7 @@ class vmmChooseCD(vmmGObjectUI):
             "on_cancel_clicked": self.close,
         })
 
-        self.window.get_widget("iso-image").set_active(True)
+        self.widget("iso-image").set_active(True)
 
         self.initialize_opt_media()
         self.reset_state()
@@ -77,21 +77,21 @@ class vmmChooseCD(vmmGObjectUI):
         vmmGObjectUI.cleanup(self)
 
     def reset_state(self):
-        cd_path = self.window.get_widget("cd-path")
+        cd_path = self.widget("cd-path")
         use_cdrom = (cd_path.get_active() > -1)
 
         if use_cdrom:
-            self.window.get_widget("physical-media").set_active(True)
+            self.widget("physical-media").set_active(True)
         else:
-            self.window.get_widget("iso-image").set_active(True)
+            self.widget("iso-image").set_active(True)
 
     def ok(self, ignore1=None, ignore2=None):
         path = None
 
-        if self.window.get_widget("iso-image").get_active():
-            path = self.window.get_widget("iso-path").get_text()
+        if self.widget("iso-image").get_active():
+            path = self.widget("iso-path").get_text()
         else:
-            cd = self.window.get_widget("cd-path")
+            cd = self.widget("cd-path")
             idx = cd.get_active()
             model = cd.get_model()
             if idx != -1:
@@ -112,14 +112,14 @@ class vmmChooseCD(vmmGObjectUI):
         self.close()
 
     def media_toggled(self, ignore1=None, ignore2=None):
-        if self.window.get_widget("physical-media").get_active():
-            self.window.get_widget("cd-path").set_sensitive(True)
-            self.window.get_widget("iso-path").set_sensitive(False)
-            self.window.get_widget("iso-file-chooser").set_sensitive(False)
+        if self.widget("physical-media").get_active():
+            self.widget("cd-path").set_sensitive(True)
+            self.widget("iso-path").set_sensitive(False)
+            self.widget("iso-file-chooser").set_sensitive(False)
         else:
-            self.window.get_widget("cd-path").set_sensitive(False)
-            self.window.get_widget("iso-path").set_sensitive(True)
-            self.window.get_widget("iso-file-chooser").set_sensitive(True)
+            self.widget("cd-path").set_sensitive(False)
+            self.widget("iso-path").set_sensitive(True)
+            self.widget("iso-file-chooser").set_sensitive(True)
 
     def change_cd_path(self, ignore1=None, ignore2=None):
         pass
@@ -128,8 +128,8 @@ class vmmChooseCD(vmmGObjectUI):
         self._browse_file()
 
     def initialize_opt_media(self):
-        widget = self.window.get_widget("cd-path")
-        warn = self.window.get_widget("cd-path-warn")
+        widget = self.widget("cd-path")
+        warn = self.widget("cd-path-warn")
 
         error = self.conn.mediadev_error
         uihelpers.init_mediadev_combo(widget)
@@ -141,15 +141,14 @@ class vmmChooseCD(vmmGObjectUI):
         else:
             warn.hide()
 
-        self.window.get_widget("physical-media").set_sensitive(not bool(error))
+        self.widget("physical-media").set_sensitive(not bool(error))
 
         if self.media_type == MEDIA_FLOPPY:
-            self.window.get_widget("physical-media").set_label(
-                                                            _("Floppy D_rive"))
-            self.window.get_widget("iso-image").set_label(_("Floppy _Image"))
+            self.widget("physical-media").set_label(_("Floppy D_rive"))
+            self.widget("iso-image").set_label(_("Floppy _Image"))
 
     def set_storage_path(self, src_ignore, path):
-        self.window.get_widget("iso-path").set_text(path)
+        self.widget("iso-path").set_text(path)
 
     def _browse_file(self):
         if self.storage_browser == None:
