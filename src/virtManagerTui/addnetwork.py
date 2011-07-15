@@ -1,4 +1,4 @@
-# definenet.py - Copyright (C) 2009 Red Hat, Inc.
+# addnetwork.py - Copyright (C) 2009 Red Hat, Inc.
 # Written by Darryl L. Pierce <dpierce@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -37,7 +37,7 @@ NETWORK_TYPE_PAGE            = 6
 SELECT_PHYSICAL_NETWORK_PAGE = 7
 SUMMARY_PAGE                 = 8
 
-class DefineNetworkConfigScreen(VmmTuiConfigScreen):
+class AddNetworkConfigScreen(VmmTuiConfigScreen):
     def __init__(self):
         VmmTuiConfigScreen.__init__(self, "Create A Virtual Network Interface")
         self.__config = NetworkConfig()
@@ -256,6 +256,6 @@ class DefineNetworkConfigScreen(VmmTuiConfigScreen):
         return [Label("Ready To Create Network"),
                 self.create_grid_from_fields(fields)]
 
-def DefineNetwork():
-    screen = DefineNetworkConfigScreen()
+def AddNetwork():
+    screen = AddNetworkConfigScreen()
     screen.start()
