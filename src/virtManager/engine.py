@@ -345,13 +345,15 @@ class vmmEngine(vmmGObject):
             if conn.get_autoconnect():
                 self.connect_to_uri(uri)
 
-    def connect_to_uri(self, uri, readOnly=None, autoconnect=False,
-                       do_start=True):
+    def connect_to_uri(self, uri, autoconnect=None, do_start=True):
         try:
             conn = self._check_connection(uri)
             if not conn:
                 # Unknown connection, add it
-                conn = self.add_connection(uri, readOnly, autoconnect)
+                conn = self.add_connection(uri)
+
+            if autoconnect is not None:
+                conn.set_autoconnect(bool(autoconnect))
 
             self.show_manager()
             if do_start:
@@ -529,12 +531,12 @@ class vmmEngine(vmmGObject):
         logging.debug("Exiting app normally.")
         gtk.main_quit()
 
-    def add_connection(self, uri, readOnly=None, autoconnect=False):
+    def add_connection(self, uri):
         conn = self._check_connection(uri)
         if conn:
             return conn
 
-        conn = vmmConnection(uri, readOnly=readOnly)
+        conn = vmmConnection(uri)
         self.connections[uri] = {
             "connection": conn,
             "windowHost": None,
@@ -547,9 +549,6 @@ class vmmEngine(vmmGObject):
         conn.tick()
         self.emit("connection-added", conn)
         self.config.add_connection(conn.get_uri())
-
-        if autoconnect:
-            conn.set_autoconnect(True)
 
         return conn
 
@@ -663,8 +662,9 @@ class vmmEngine(vmmGObject):
         if self.windowConnect:
             return self.windowConnect
 
-        def connect_wrap(src_ignore, *args):
-            return self.connect_to_uri(*args)
+        def connect_wrap(src, uri, autoconnect):
+            ignore = src
+            return self.connect_to_uri(uri, autoconnect)
 
         obj = vmmConnect()
         obj.connect("completed", connect_wrap)

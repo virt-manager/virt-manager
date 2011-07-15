@@ -335,16 +335,14 @@ class vmmConnect(vmmGObjectUI):
         if not self.validate():
             return
 
-        readonly = False
         auto = False
         if self.widget("autoconnect").get_property("sensitive"):
             auto = self.widget("autoconnect").get_active()
         uri = self.generate_uri()
 
-        logging.debug("Generate URI=%s, auto=%s, readonly=%s" %
-                      (uri, auto, readonly))
+        logging.debug("Generate URI=%s, auto=%s" % (uri, auto))
         self.close()
-        self.emit("completed", uri, readonly, auto)
+        self.emit("completed", uri, auto)
 
     def sanitize_hostname(self, host):
         if host == "linux" or host == "localhost":
@@ -400,5 +398,5 @@ class vmmConnect(vmmGObjectUI):
 
 
 vmmGObjectUI.type_register(vmmConnect)
-vmmConnect.signal_new(vmmConnect, "completed", [str, object, object])
+vmmConnect.signal_new(vmmConnect, "completed", [str, str])
 vmmConnect.signal_new(vmmConnect, "cancelled", [])
