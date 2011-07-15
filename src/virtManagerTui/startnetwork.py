@@ -18,7 +18,7 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-import snack
+from snack import Label
 from networklistconfigscreen import NetworkListConfigScreen
 
 LIST_PAGE   = 1
@@ -53,7 +53,7 @@ class StartNetworkConfigScreen(NetworkListConfigScreen):
     def get_start_network_page(self, screen):
         ignore = screen
         network = self.get_selected_network()
-        return [snack.Label("%s was successfully started." % network.get_name())]
+        return [Label("%s was successfully started." % network.get_name())]
 
 def StartNetwork():
     screen = StartNetworkConfigScreen()
