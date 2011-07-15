@@ -675,7 +675,7 @@ class vmmManager(vmmGObjectUI):
         vm = connection.get_vm(vmuuid)
         vm.connect("status-changed", self.vm_status_changed)
         vm.connect("resources-sampled", self.vm_resources_sampled)
-        vm.connect("config-changed", self.vm_resources_sampled)
+        vm.connect("config-changed", self.vm_resources_sampled, True)
 
         vmlist = self.widget("vm-list")
         model = vmlist.get_model()
@@ -718,8 +718,7 @@ class vmmManager(vmmGObjectUI):
             color = gtk.gdk.Color(23296, 23296, 23296)
         return color
 
-    def _build_vm_markup(self, vm, row):
-        ignore = vm
+    def _build_vm_markup(self, row):
         domtext     = ("<span size='smaller' weight='bold'>%s</span>" %
                        row[ROW_NAME])
         statetext   = "<span size='smaller'>%s</span>" % row[ROW_STATUS]
@@ -740,7 +739,7 @@ class vmmManager(vmmGObjectUI):
         row.insert(ROW_IS_VM_RUNNING, vm.is_active())
         row.insert(ROW_COLOR, None)
 
-        row[ROW_MARKUP] = self._build_vm_markup(vm, row)
+        row[ROW_MARKUP] = self._build_vm_markup(row)
 
         return row
 
@@ -859,7 +858,7 @@ class vmmManager(vmmGObjectUI):
         self.vm_selected()
         self.vm_resources_sampled(vm)
 
-    def vm_resources_sampled(self, vm):
+    def vm_resources_sampled(self, vm, config_changed=False):
         vmlist = self.widget("vm-list")
         model = vmlist.get_model()
 
@@ -871,8 +870,11 @@ class vmmManager(vmmGObjectUI):
         row[ROW_STATUS] = vm.run_status()
         row[ROW_STATUS_ICON] = vm.run_status_icon_name()
         row[ROW_IS_VM_RUNNING] = vm.is_active()
-        row[ROW_MARKUP] = self._build_vm_markup(vm, row)
-        row[ROW_HINT] = vm.get_description()
+        row[ROW_MARKUP] = self._build_vm_markup(row)
+
+        if config_changed:
+            row[ROW_HINT] = vm.get_description()
+
         model.row_changed(row.path, row.iter)
 
     def conn_state_changed(self, conn):
@@ -890,8 +892,8 @@ class vmmManager(vmmGObjectUI):
         row[ROW_STATUS] = ("<span size='smaller'>%s</span>" %
                            conn.get_state_text())
         row[ROW_IS_CONN_CONNECTED] = conn.state != conn.STATE_DISCONNECTED
-        row[ROW_HINT] = self._build_conn_hint(conn)
         row[ROW_COLOR] = self._build_conn_color(conn)
+        row[ROW_HINT] = self._build_conn_hint(conn)
 
         if conn.get_state() in [vmmConnection.STATE_DISCONNECTED,
                                 vmmConnection.STATE_CONNECTING]:
