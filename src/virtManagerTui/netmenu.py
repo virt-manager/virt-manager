@@ -21,13 +21,13 @@ from newt_syrup.menuscreen import MenuScreen
 from addnetwork      import AddNetwork
 from startnetwork    import StartNetwork
 from stopnetwork     import StopNetwork
-from undefinenetwork import UndefineNetwork
+from removenetwork   import RemoveNetwork
 from listnetworks    import ListNetworks
 
 ADD_NETWORK      = 1
 START_NETWORK    = 2
 STOP_NETWORK     = 3
-UNDEFINE_NETWORK = 4
+REMOVE_NETWORK   = 4
 LIST_NETWORKS    = 5
 
 class NetworkMenuScreen(MenuScreen):
@@ -38,7 +38,7 @@ class NetworkMenuScreen(MenuScreen):
         return (("Add A Network",      ADD_NETWORK),
                 ("Start A Network",    START_NETWORK),
                 ("Stop A Network",     STOP_NETWORK),
-                ("Undefine A Network", UNDEFINE_NETWORK),
+                ("Remove A Network",   REMOVE_NETWORK),
                 ("List Networks",      LIST_NETWORKS))
 
     def handle_selection(self, item):
@@ -48,8 +48,8 @@ class NetworkMenuScreen(MenuScreen):
             StartNetwork()
         elif item is STOP_NETWORK:
             StopNetwork()
-        elif item is UNDEFINE_NETWORK:
-            UndefineNetwork()
+        elif item is REMOVE_NETWORK:
+            RemoveNetwork()
         elif item is LIST_NETWORKS:
             ListNetworks()
 

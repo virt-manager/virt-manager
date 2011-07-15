@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# undefinenetwork.py - Copyright (C) 2009 Red Hat, Inc.
+# removenetwork.py - Copyright (C) 2009 Red Hat, Inc.
 # Written by Darryl L. Pierce <dpierce@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -24,21 +24,21 @@ from networklistconfigscreen import NetworkListConfigScreen
 
 LIST_PAGE     = 1
 CONFIRM_PAGE  = 2
-UNDEFINE_PAGE = 3
+REMOVE_PAGE   = 3
 
-class UndefineNetworkConfigScreen(NetworkListConfigScreen):
+class RemoveNetworkConfigScreen(NetworkListConfigScreen):
     def __init__(self):
-        NetworkListConfigScreen.__init__(self, "Undefine A Network")
+        NetworkListConfigScreen.__init__(self, "Remove A Network")
         self.__deleted_network_name = None
-        self.__confirm_undefine = None
+        self.__confirm_remove = None
 
     def get_elements_for_page(self, screen, page):
         if   page is LIST_PAGE:
             return self.get_network_list_page(screen, started=False)
         elif page is CONFIRM_PAGE:
             return self.get_confirm_page(screen)
-        elif page is UNDEFINE_PAGE:
-            return self.get_undefine_network_page(screen)
+        elif page is REMOVE_PAGE:
+            return self.get_remove_network_page(screen)
 
     def page_has_next(self, page):
         if page is LIST_PAGE:
@@ -50,14 +50,14 @@ class UndefineNetworkConfigScreen(NetworkListConfigScreen):
     def page_has_back(self, page):
         if page is CONFIRM_PAGE:
             return True
-        if page is UNDEFINE_PAGE:
+        if page is REMOVE_PAGE:
             return True
         return False
 
     def get_back_page(self, page):
         if   page is CONFIRM_PAGE:
             return LIST_PAGE
-        elif page is UNDEFINE_PAGE:
+        elif page is REMOVE_PAGE:
             return LIST_PAGE
 
     def validate_input(self, page, errors):
@@ -65,29 +65,29 @@ class UndefineNetworkConfigScreen(NetworkListConfigScreen):
             return True
         elif page is CONFIRM_PAGE:
             network = self.get_selected_network()
-            if self.__confirm_undefine.value():
+            if self.__confirm_remove.value():
                 self.__deleted_network_name = network.get_name()
                 network.delete()
                 return True
             else:
                 errors.append("You must confirm undefining %s." % network.get_name())
-        elif page is UNDEFINE_PAGE:
+        elif page is REMOVE_PAGE:
             return True
         return False
 
     def get_confirm_page(self, screen):
         ignore = screen
         network = self.get_selected_network()
-        self.__confirm_undefine = Checkbox("Check here to confirm undefining %s." % network.get_name())
+        self.__confirm_remove = Checkbox("Check here to confirm undefining %s." % network.get_name())
         fields = []
-        fields.append((self.__confirm_undefine, None))
+        fields.append((self.__confirm_remove, None))
         return [self.create_grid_from_fields(fields)]
 
-    def get_undefine_network_page(self, screen):
+    def get_remove_network_page(self, screen):
         ignore = screen
         network_name = self.__deleted_network_name
-        return [Label("Network has been undefined: %s" % network_name)]
+        return [Label("Network has been removed: %s" % network_name)]
 
-def UndefineNetwork():
-    screen = UndefineNetworkConfigScreen()
+def RemoveNetwork():
+    screen = RemoveNetworkConfigScreen()
     screen.start()
