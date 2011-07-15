@@ -16,7 +16,7 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-import snack
+from snack import Label
 from networklistconfigscreen import NetworkListConfigScreen
 
 LIST_PAGE    = 1
@@ -66,17 +66,8 @@ class ListNetworksConfigScreen(NetworkListConfigScreen):
 
         fields.append(("Forwarding", network.pretty_forward_mode()))
 
-        grid = snack.Grid(2, len(fields))
-        row = 0
-        for field in fields:
-            if field[1] is not None:
-                grid.setField(snack.Label("%s : " % field[0]), 0, row, anchorRight=1)
-                grid.setField(snack.Label(field[1]), 1, row, anchorLeft=1)
-            else:
-                grid.setField(snack.Label(field[0]), 1, row)
-            row += 1
-
-        return [snack.Label("Network Interface Details"), grid]
+        return [Label("Network Interface Details"),
+                self.create_grid_from_fields(fields)]
 
 def ListNetworks():
     screen = ListNetworksConfigScreen()
