@@ -18,7 +18,8 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-import snack
+from snack import Checkbox
+from snack import Label
 from networklistconfigscreen import NetworkListConfigScreen
 
 LIST_PAGE     = 1
@@ -77,15 +78,15 @@ class UndefineNetworkConfigScreen(NetworkListConfigScreen):
     def get_confirm_page(self, screen):
         ignore = screen
         network = self.get_selected_network()
-        self.__confirm_undefine = snack.Checkbox("Check here to confirm undefining %s." % network.get_name())
-        grid = snack.Grid(1, 1)
-        grid.setField(self.__confirm_undefine, 0, 0)
-        return [grid]
+        self.__confirm_undefine = Checkbox("Check here to confirm undefining %s." % network.get_name())
+        fields = []
+        fields.append((self.__confirm_undefine, None))
+        return [self.create_grid_from_fields(fields)]
 
     def get_undefine_network_page(self, screen):
         ignore = screen
         network_name = self.__deleted_network_name
-        return [snack.Label("Network has been undefined: %s" % network_name)]
+        return [Label("Network has been undefined: %s" % network_name)]
 
 def UndefineNetwork():
     screen = UndefineNetworkConfigScreen()
