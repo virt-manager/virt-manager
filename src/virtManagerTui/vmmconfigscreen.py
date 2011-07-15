@@ -16,6 +16,11 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
+from snack import Grid
+from snack import Label
+
+from types import StringType
+
 from newt_syrup import configscreen
 from halworker import HALWorker
 from libvirtworker import LibvirtWorker, VirtManagerConfig
@@ -42,3 +47,36 @@ class VmmTuiConfigScreen(configscreen.ConfigScreen):
 
     def get_virt_manager_config(self):
         return self.__vm_config
+
+    def create_grid_from_fields(self, fields):
+        '''
+        Takes a series of fields names and values and returns a Grid composed
+        of Labels for that screen.
+
+        If the value element is specified, it can be either a String or else
+        one of the UI widgets.
+
+        Keyword arguments:
+        fields -- A two-dimensional array of label and value pairs.
+        '''
+        grid = Grid(2, len(fields))
+        row = 0
+        for field in fields:
+            if field[1] is not None:
+                grid.setField(Label("%s : " % field[0]), 0, row, anchorRight = 1)
+                # if the value is a String, then wrap it in a Label
+                # otherwise just add it
+                value = field[1]
+                if type(value) == StringType:
+                    value = Label(field[1])
+                grid.setField(value, 1, row, anchorLeft = 1)
+            else:
+                # here the label itself might be a string or a widget
+                value = field[0]
+                if type(value) == StringType:
+                    value = Label(field[0])
+                grid.setField(value, 0, row)
+            row += 1
+
+        return grid
+
