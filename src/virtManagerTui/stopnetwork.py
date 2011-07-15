@@ -18,8 +18,9 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-import snack
+from snack import Label
 from networklistconfigscreen import NetworkListConfigScreen
+import logging
 
 LIST_PAGE = 1
 STOP_PAGE = 2
@@ -47,14 +48,16 @@ class StopNetworkConfigScreen(NetworkListConfigScreen):
     def validate_input(self, page, errors):
         if page is LIST_PAGE:
             network = self.get_selected_network()
-            network.stop()
-            return True
-        return False
+            try:
+                network.stop()
+            except Exception as error:
+                logging.error(error)
+        return network.is_active() is not True
 
     def get_stop_network_page(self, screen):
         ignore = screen
         network = self.get_selected_network()
-        return [snack.Label("%s has been stopped." % network.get_name())]
+        return [Label("%s has been stopped." % network.get_name())]
 
 def StopNetwork():
     screen = StopNetworkConfigScreen()
