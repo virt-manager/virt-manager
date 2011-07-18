@@ -23,8 +23,6 @@ from threading import Thread
 
 from guestfs import GuestFS
 
-from inspectiondata import vmmInspectionData
-
 import logging
 
 class vmmInspection(Thread):
@@ -112,13 +110,23 @@ class vmmInspection(Thread):
                                   (self._name, vmuuid))
 
     def _process(self, conn_ignore, vm, vmuuid):
-        # Add the disks.  Note they *must* be added with readonly flag set.
         g = GuestFS()
+
+        disks = []
         for disk in vm.get_disk_devices():
+            if (disk.path and
+                (disk.type == "block" or disk.type == "file")):
+                disks.append(disk)
+
+        if not disks:
+            # Nothing to inspect!
+            return
+
+        # Add the disks.  Note they *must* be added with readonly flag set.
+        for disk in disks:
             path = disk.path
             driver_type = disk.driver_type
-            if (disk.type == "block" or disk.type == "file") and path != None:
-                g.add_drive_opts(path, readonly=1, format=driver_type)
+            g.add_drive_opts(path, readonly=1, format=driver_type)
 
         g.launch()
 
