@@ -23,6 +23,8 @@ from threading import Thread
 
 from guestfs import GuestFS
 
+from inspectiondata import vmmInspectionData
+
 import logging
 
 class vmmInspection(Thread):
@@ -192,6 +194,18 @@ class vmmInspection(Thread):
 
         # Force the libguestfs handle to close right now.
         del g
+
+        vm.inspection.type = typ
+        vm.inspection.distro = distro
+        vm.inspection.major_version = major_version
+        vm.inspection.minor_version = minor_version
+        vm.inspection.hostname = hostname
+        vm.inspection.product_name = product_name
+        vm.inspection.product_variant = product_variant
+        vm.inspection.icon = icon
+        vm.inspection.applications = apps
+
+        vm.inspection_data_updated()
 
         # Log what we found.
         logging.debug("%s: detected operating system: %s %s %d.%d (%s)",

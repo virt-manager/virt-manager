@@ -30,6 +30,8 @@ import virtinst.support as support
 from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 
+from inspectiondata import vmmInspectionData
+
 def compare_device(origdev, newdev, idx):
     devprops = {
         "disk"      : ["target", "bus"],
@@ -163,6 +165,8 @@ class vmmDomain(vmmLibvirtObject):
         self._enable_disk_poll = False
         self._stats_disk_supported = True
         self._stats_disk_skip = []
+
+        self.inspection = vmmInspectionData()
 
         if isinstance(self._backend, virtinst.Guest):
             return
@@ -1418,6 +1422,9 @@ class vmmDomain(vmmLibvirtObject):
         return self.config.get_pervm(self.connection.get_uri(), self.uuid,
                                      self.config.get_details_window_size)
 
+    def inspection_data_updated(self):
+        self.idle_emit("inspection-changed")
+
 
     ###################
     # Polling helpers #
@@ -1609,5 +1616,6 @@ class vmmDomainVirtinst(vmmDomain):
 vmmLibvirtObject.type_register(vmmDomain)
 vmmDomain.signal_new(vmmDomain, "status-changed", [int, int])
 vmmDomain.signal_new(vmmDomain, "resources-sampled", [])
+vmmDomain.signal_new(vmmDomain, "inspection-changed", [])
 
 vmmLibvirtObject.type_register(vmmDomainVirtinst)
