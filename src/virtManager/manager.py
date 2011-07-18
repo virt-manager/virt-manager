@@ -43,6 +43,7 @@ ROW_IS_CONN_CONNECTED = 8
 ROW_IS_VM = 9
 ROW_IS_VM_RUNNING = 10
 ROW_COLOR = 11
+ROW_INSPECTION_OS_ICON = 12
 
 # Columns in the tree view
 COL_NAME = 0
@@ -361,9 +362,11 @@ class vmmManager(vmmGObjectUI):
         self.widget("vm-notebook").set_show_tabs(False)
 
         # Handle, name, markup, status, status icon name, key/uuid, hint,
-        # is conn, is conn connected, is vm, is vm running, fg color
+        # is conn, is conn connected, is vm, is vm running, fg color,
+        # inspection icon
         model = gtk.TreeStore(object, str, str, str, str, str, str,
-                              bool, bool, bool, bool, gtk.gdk.Color)
+                              bool, bool, bool, bool, gtk.gdk.Color,
+                              gtk.gdk.Pixbuf)
         vmlist.set_model(model)
         util.tooltip_wrapper(vmlist, ROW_HINT, "set_tooltip_column")
 
@@ -383,6 +386,12 @@ class vmmManager(vmmGObjectUI):
         statusCol.pack_start(status_icon, False)
         statusCol.add_attribute(status_icon, 'icon-name', ROW_STATUS_ICON)
         statusCol.add_attribute(status_icon, 'visible', ROW_IS_VM)
+
+        inspection_os_icon = gtk.CellRendererPixbuf()
+        statusCol.pack_start(inspection_os_icon, False)
+        statusCol.add_attribute(inspection_os_icon, 'pixbuf',
+                                ROW_INSPECTION_OS_ICON)
+        statusCol.add_attribute(inspection_os_icon, 'visible', ROW_IS_VM)
 
         name_txt = gtk.CellRendererText()
         nameCol.pack_start(name_txt, True)
@@ -676,6 +685,7 @@ class vmmManager(vmmGObjectUI):
         vm.connect("status-changed", self.vm_status_changed)
         vm.connect("resources-sampled", self.vm_resources_sampled)
         vm.connect("config-changed", self.vm_resources_sampled, True)
+        vm.connect("inspection-changed", self.vm_inspection_changed)
 
         vmlist = self.widget("vm-list")
         model = vmlist.get_model()
@@ -741,6 +751,8 @@ class vmmManager(vmmGObjectUI):
         row.insert(ROW_IS_VM, True)
         row.insert(ROW_IS_VM_RUNNING, vm.is_active())
         row.insert(ROW_COLOR, None)
+        row.insert(ROW_INSPECTION_OS_ICON,
+                   self.get_inspection_icon_pixbuf(vm, 16, 16))
 
         row[ROW_MARKUP] = self._build_vm_markup(row)
 
@@ -777,6 +789,7 @@ class vmmManager(vmmGObjectUI):
         row.insert(ROW_IS_VM, False)
         row.insert(ROW_IS_VM_RUNNING, False)
         row.insert(ROW_COLOR, self._build_conn_color(conn))
+        row.insert(ROW_INSPECTION_OS_ICON, None)
 
         _iter = model.append(None, row)
         path = model.get_path(_iter)
@@ -879,6 +892,32 @@ class vmmManager(vmmGObjectUI):
             row[ROW_HINT] = vm.get_description()
 
         model.row_changed(row.path, row.iter)
+
+    def vm_inspection_changed(self, vm):
+        vmlist = self.window.get_widget("vm-list")
+        model = vmlist.get_model()
+
+        if self.vm_row_key(vm) not in self.rows:
+            return
+
+        row = self.rows[self.vm_row_key(vm)]
+        row[ROW_INSPECTION_OS_ICON] = \
+            self.get_inspection_icon_pixbuf(vm, 16, 16)
+        model.row_changed(row.path, row.iter)
+
+    def get_inspection_icon_pixbuf(self, vm, w, h):
+        # libguestfs gives us the PNG data as a string.
+        png_data = vm.inspection.icon
+        if png_data == None:
+            return None
+        try:
+            pb = gtk.gdk.PixbufLoader(image_type="png")
+            pb.set_size(w, h)
+            pb.write(png_data)
+            pb.close()
+            return pb.get_pixbuf()
+        except:
+            return None
 
     def conn_state_changed(self, conn):
         self.conn_refresh_resources(conn)
