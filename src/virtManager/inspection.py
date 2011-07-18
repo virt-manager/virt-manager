@@ -56,11 +56,11 @@ class vmmInspection(Thread):
         # inspection from being a burden for initial virt-manager
         # interactivity (although it shouldn't affect interactivity at
         # all).
-        logging.debug("%s: waiting" % self._name)
+        logging.debug("waiting")
         time.sleep(self._wait)
 
         while True:
-            logging.debug("%s: ready" % self._name)
+            logging.debug("ready")
             self._process_queue()
             self._process_vms()
 
@@ -96,21 +96,24 @@ class vmmInspection(Thread):
         for conn in self._conns.itervalues():
             for vmuuid in conn.list_vm_uuids():
                 if not (vmuuid in self._vmseen):
-                    logging.debug("%s: processing started on '%s'" %
-                                  (self._name, vmuuid))
+                    prettyvm = vmuuid
                     try:
                         vm = conn.get_vm(vmuuid)
+                        prettyvm = conn.get_uri() + ":" + vm.get_name()
+
+                        logging.debug("%s: processing started" % prettyvm)
                         # Whether success or failure, we've "seen" this VM now.
                         self._vmseen[vmuuid] = True
                         self._process(conn, vm, vmuuid)
                     except:
-                        logging.exception("%s: exception while processing '%s'" %
-                                          (self._name, vmuuid))
-                    logging.debug("%s: processing done on '%s'" %
-                                  (self._name, vmuuid))
+                        logging.exception("%s: exception while processing" %
+                                          prettyvm)
+                    logging.debug("%s: processing done" % prettyvm)
 
-    def _process(self, conn_ignore, vm, vmuuid):
+    def _process(self, conn, vm, vmuuid):
         g = GuestFS()
+        prettyvm = conn.get_uri() + ":" + vm.get_name()
+        ignore = vmuuid
 
         disks = []
         for disk in vm.get_disk_devices():
@@ -133,8 +136,7 @@ class vmmInspection(Thread):
         # Inspect the operating system.
         roots = g.inspect_os()
         if len(roots) == 0:
-            logging.debug("%s: %s: no operating systems found" %
-                          (self._name, vmuuid))
+            logging.debug("%s: no operating systems found", prettyvm)
             return
 
         # Arbitrarily pick the first root device.
@@ -177,15 +179,12 @@ class vmmInspection(Thread):
                 try:
                     g.mount_ro(mp_dev[1], mp_dev[0])
                 except:
-                    logging.exception("%s: exception mounting %s on %s "
-                                      "(ignored)" % (
-                            self._name,
-                            mp_dev[1], mp_dev[0]))
+                    logging.exception("exception mounting %s on %s "
+                                      "(ignored)" % (mp_dev[1], mp_dev[0]))
 
             filesystems_mounted = True
         except:
-            logging.exception("%s: exception while mounting disks (ignored)" %
-                              self._name)
+            logging.exception("exception while mounting disks (ignored)")
 
         icon = None
         apps = None
@@ -216,11 +215,10 @@ class vmmInspection(Thread):
         vm.inspection_data_updated()
 
         # Log what we found.
-        logging.debug("%s: detected operating system: %s %s %d.%d (%s)",
-                      self._name, typ, distro, major_version, minor_version,
-                      product_name)
-        logging.debug("%s: hostname: %s", self._name, hostname)
+        logging.debug("detected operating system: %s %s %d.%d (%s)",
+                      typ, distro, major_version, minor_version, product_name)
+        logging.debug("hostname: %s", hostname)
         if icon:
-            logging.debug("%s: icon: %d bytes", self._name, len(icon))
+            logging.debug("icon: %d bytes", len(icon))
         if apps:
-            logging.debug("%s: # apps: %d", self._name, len(apps))
+            logging.debug("# apps: %d", len(apps))
