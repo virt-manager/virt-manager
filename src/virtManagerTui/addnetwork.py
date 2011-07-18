@@ -192,11 +192,9 @@ class AddNetworkConfigScreen(VmmTuiConfigScreen):
 
     def get_public_network_alert_page(self, screen):
         ignore = screen
-        grid = Grid(1, 2)
-        grid.setField(Label("The network should normally use a private IPv4 address."), 0, 0, anchorLeft = 1)
-        grid.setField(Label("Use this non-private address anyway?"), 0, 1, anchorLeft = 1)
         return [Label("Check Network Address"),
-                grid]
+                Label("The network should normally use a private IPv4 address."),
+                Label("Use this non-private address anyway?")]
 
     def get_dhcp_range_page(self, screen):
         ignore = screen
