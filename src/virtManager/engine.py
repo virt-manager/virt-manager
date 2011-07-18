@@ -236,6 +236,9 @@ class vmmEngine(vmmGObject):
         if not self.config.support_threading:
             logging.debug("Libvirt doesn't support threading, skipping.")
 
+        self.inspection_thread = None
+        self._create_inspection_thread()
+
         # Counter keeping track of how many manager and details windows
         # are open. When it is decremented to 0, close the app or
         # keep running in system tray if enabled
@@ -530,6 +533,20 @@ class vmmEngine(vmmGObject):
 
         logging.debug("Exiting app normally.")
         gtk.main_quit()
+
+    def _create_inspection_thread(self):
+        if not self.config.support_inspection:
+            logging.debug("No inspection thread because "
+                          "libguestfs is too old, not available, "
+                          "or libvirt is not thread safe.")
+            return
+        from virtManager.inspection import vmmInspection
+        self.inspection_thread = vmmInspection()
+        self.inspection_thread.daemon = True
+        self.inspection_thread.start()
+        self.connect("connection-added", self.inspection_thread.conn_added)
+        self.connect("connection-removed", self.inspection_thread.conn_removed)
+        return
 
     def add_connection(self, uri):
         conn = self._check_connection(uri)

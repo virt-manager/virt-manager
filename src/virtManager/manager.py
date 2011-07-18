@@ -682,6 +682,9 @@ class vmmManager(vmmGObjectUI):
 
         self._append_vm(model, vm, connection)
 
+        if self.engine.inspection_thread:
+            self.engine.inspection_thread.vm_added()
+
     def vm_removed(self, connection, uri_ignore, vmuuid):
         vmlist = self.widget("vm-list")
         model = vmlist.get_model()
