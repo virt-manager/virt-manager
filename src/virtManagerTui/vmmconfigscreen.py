@@ -63,13 +63,13 @@ class VmmTuiConfigScreen(configscreen.ConfigScreen):
         row = 0
         for field in fields:
             if field[1] is not None:
-                grid.setField(Label("%s : " % field[0]), 0, row, anchorRight = 1)
+                grid.setField(Label("%s : " % field[0]), 0, row, anchorRight=1)
                 # if the value is a String, then wrap it in a Label
                 # otherwise just add it
                 value = field[1]
                 if type(value) == StringType:
                     value = Label(field[1])
-                grid.setField(value, 1, row, anchorLeft = 1)
+                grid.setField(value, 1, row, anchorLeft=1)
             else:
                 # here the label itself might be a string or a widget
                 value = field[0]
@@ -79,4 +79,3 @@ class VmmTuiConfigScreen(configscreen.ConfigScreen):
             row += 1
 
         return grid
-
