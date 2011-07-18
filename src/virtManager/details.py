@@ -652,6 +652,34 @@ class vmmDetails(vmmGObjectUI):
         buf.connect("changed", self.enable_apply, EDIT_DESC)
         desc.set_buffer(buf)
 
+        # List of applications.
+        apps_list = self.window.get_widget("inspection-apps")
+        apps_model = gtk.ListStore(str, str, str)
+        apps_list.set_model(apps_model)
+
+        name_col = gtk.TreeViewColumn(_("Name"))
+        version_col = gtk.TreeViewColumn(_("Version"))
+        summary_col = gtk.TreeViewColumn()
+
+        apps_list.append_column(name_col)
+        apps_list.append_column(version_col)
+        apps_list.append_column(summary_col)
+
+        name_text = gtk.CellRendererText()
+        name_col.pack_start(name_text, True)
+        name_col.add_attribute(name_text, 'text', 0)
+        name_col.set_sort_column_id(0)
+
+        version_text = gtk.CellRendererText()
+        version_col.pack_start(version_text, True)
+        version_col.add_attribute(version_text, 'text', 1)
+        version_col.set_sort_column_id(1)
+
+        summary_text = gtk.CellRendererText()
+        summary_col.pack_start(summary_text, True)
+        summary_col.add_attribute(summary_text, 'text', 2)
+        summary_col.set_sort_column_id(2)
+
         # Clock combo
         clock_combo = self.widget("overview-clock-combo")
         clock_model = gtk.ListStore(str)
@@ -2292,6 +2320,39 @@ class vmmDetails(vmmGObjectUI):
         emu = self.vm.get_emulator() or _("None")
         self.widget("overview-arch").set_text(arch)
         self.widget("overview-emulator").set_text(emu)
+
+        # Operating System (ie. inspection data)
+        hostname = self.vm.inspection.hostname
+        if not hostname:
+            hostname = _("unknown")
+        self.window.get_widget("inspection-hostname").set_text(hostname)
+        product_name = self.vm.inspection.product_name
+        if not product_name:
+            product_name = _("unknown")
+        self.window.get_widget("inspection-product-name").set_text(product_name)
+
+        # Applications (also inspection data)
+        apps = self.vm.inspection.applications or []
+
+        apps_list = self.window.get_widget("inspection-apps")
+        apps_model = apps_list.get_model()
+        apps_model.clear()
+        for app in apps:
+            name = ""
+            if app["app_name"]:
+                name = app["app_name"]
+            if app["app_display_name"]:
+                name = app["app_display_name"]
+            version = ""
+            if app["app_version"]:
+                version = app["app_version"]
+            if app["app_release"]:
+                version += "-" + app["app_release"]
+            summary = ""
+            if app["app_summary"]:
+                summary = app["app_summary"]
+
+            apps_model.append([name, version, summary])
 
         # Machine settings
         acpi = self.vm.get_acpi()
