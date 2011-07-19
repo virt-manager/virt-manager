@@ -431,6 +431,7 @@ class vmmDetails(vmmGObjectUI):
                                                 EDIT_SMARTCARD_MODE),
 
             "on_config_apply_clicked": self.config_apply,
+            "on_config_cancel_clicked": self.config_cancel,
 
             "on_details_help_activate": self.show_help,
 
@@ -1539,10 +1540,12 @@ class vmmDetails(vmmGObjectUI):
     def disable_apply(self):
         self.active_edits = []
         self.widget("config-apply").set_sensitive(False)
+        self.widget("config-cancel").set_sensitive(False)
 
     def enable_apply(self, *arglist):
         edittype = arglist[-1]
         self.widget("config-apply").set_sensitive(True)
+        self.widget("config-cancel").set_sensitive(True)
         if edittype not in self.active_edits:
             self.active_edits.append(edittype)
 
@@ -1728,6 +1731,10 @@ class vmmDetails(vmmGObjectUI):
     ##################################################
     # Details/Hardware config changes (apply button) #
     ##################################################
+
+    def config_cancel(self, ignore):
+        # Remove current changes and deactive 'apply' button
+        self.hw_selected()
 
     def config_apply(self, ignore):
         pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)

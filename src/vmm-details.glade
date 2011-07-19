@@ -5818,6 +5818,21 @@ I/O:</property>
                           </packing>
                         </child>
                         <child>
+                          <widget class="GtkButton" id="config-cancel">
+                            <property name="label">gtk-cancel</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_stock">True</property>
+                            <signal name="clicked" handler="on_config_cancel_clicked"/>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
                           <widget class="GtkButton" id="config-apply">
                             <property name="label">gtk-apply</property>
                             <property name="visible">True</property>
@@ -5831,7 +5846,7 @@ I/O:</property>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">1</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                       </widget>
