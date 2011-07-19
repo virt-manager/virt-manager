@@ -81,11 +81,15 @@ class vmmMigrateDialog(vmmGObjectUI):
 
     def show(self, parent):
         self.reset_state()
+        self.topwin.resize(1, 1)
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
         self.topwin.hide()
+        # If we only do this at show time, operation takes too long and
+        # user actually sees the expander close.
+        self.widget("migrate-advanced-expander").set_expanded(False)
         return 1
 
     def cleanup(self):
@@ -131,7 +135,6 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.widget("migrate-label-name").set_text(name)
         self.widget("migrate-label-src").set_text(srchost)
 
-        self.widget("migrate-advanced-expander").set_expanded(False)
         self.widget("migrate-set-interface").set_active(False)
         self.widget("migrate-set-rate").set_active(False)
         self.widget("migrate-set-port").set_active(False)
