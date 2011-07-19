@@ -90,7 +90,7 @@ class vmmCreate(vmmGObjectUI):
 
         # 'Configure before install' window
         self.config_window = None
-        self.config_window_signal = None
+        self.config_window_signals = []
 
         self.window.signal_autoconnect({
             "on_vmm_newcreate_delete_event" : self.close,
@@ -1205,6 +1205,15 @@ class vmmCreate(vmmGObjectUI):
 
         notebook.set_current_page(next_page)
 
+    def _get_next_pagenum(self, curpage):
+        next_page = curpage + 1
+
+        if next_page == PAGE_STORAGE and self.skip_disk_page():
+            # Skip storage page for import installs
+            next_page += 1
+
+        return next_page
+
     def forward(self, src_ignore=None):
         notebook = self.widget("create-pages")
         curpage = notebook.get_current_page()
@@ -1225,10 +1234,7 @@ class vmmCreate(vmmGObjectUI):
             # See if we need to alter our default HV based on install method
             self.guest_from_install_type()
 
-        next_page = curpage + 1
-        if next_page == PAGE_STORAGE and self.skip_disk_page():
-            # Skip storage page for import installs
-            next_page += 1
+        next_page = self._get_next_pagenum(curpage)
 
         self.widget("create-forward").grab_focus()
         notebook.set_current_page(next_page)
@@ -1337,16 +1343,16 @@ class vmmCreate(vmmGObjectUI):
 
         return guest
 
-    def validate(self, pagenum):
+    def validate(self, pagenum, revalidate=False):
         try:
             if pagenum == PAGE_NAME:
                 return self.validate_name_page()
             elif pagenum == PAGE_INSTALL:
-                return self.validate_install_page(revalidate=False)
+                return self.validate_install_page(revalidate=revalidate)
             elif pagenum == PAGE_MEM:
                 return self.validate_mem_page()
             elif pagenum == PAGE_STORAGE:
-                return self.validate_storage_page(revalidate=False)
+                return self.validate_storage_page(revalidate=revalidate)
             elif pagenum == PAGE_FINISH:
                 return self.validate_final_page()
 
@@ -1660,12 +1666,21 @@ class vmmCreate(vmmGObjectUI):
     def reset_guest_type(self):
         self.change_caps()
 
+    def rebuild_guest(self):
+        pagenum = 0
+        while True:
+            self.validate(pagenum, revalidate=False)
+            if pagenum >= PAGE_FINISH:
+                break
+            pagenum = self._get_next_pagenum(pagenum)
+
     def finish(self, src_ignore):
         # Validate the final page
         page = self.widget("create-pages").get_current_page()
         if self.validate(page) != True:
             return False
 
+        self.rebuild_guest()
         guest = self.guest
         disk = len(guest.disks) and guest.disks[0]
 
@@ -1697,14 +1712,15 @@ class vmmCreate(vmmGObjectUI):
 
         self._check_start_error(start_install)
 
+    def _undo_finish(self, ignore=None):
+        self.topwin.set_sensitive(True)
+        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
+
     def _check_start_error(self, cb, *args, **kwargs):
         try:
             cb(*args, **kwargs)
         except Exception, e:
-            self.topwin.set_sensitive(True)
-            self.topwin.window.set_cursor(
-                                    gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
-
+            self._undo_finish()
             self.err.show_err(_("Error starting installation: ") + str(e))
 
     def customize(self, guest):
@@ -1712,7 +1728,8 @@ class vmmCreate(vmmGObjectUI):
 
         def cleanup_config_window():
             if self.config_window:
-                self.config_window.disconnect(self.config_window_signal)
+                for s in self.config_window_signals:
+                    self.config_window.disconnect(s)
                 self.config_window.cleanup()
                 self.config_window = None
 
@@ -1722,14 +1739,20 @@ class vmmCreate(vmmGObjectUI):
                 return
             self._check_start_error(self.start_install, guest)
 
+        def details_closed(ignore):
+            self._undo_finish()
+            self.widget("summary-customize").set_active(False)
 
         cleanup_config_window()
-        self.config_window = vmmDetails(virtinst_guest,
-                                        self.topwin)
-        self.config_window_signal = self.config_window.connect(
-                                                        "details-closed",
+        self.config_window = vmmDetails(virtinst_guest, self.topwin)
+        self.config_window_signals = []
+        self.config_window_signals.append(self.config_window.connect(
+                                                        "customize-finished",
                                                         start_install_wrapper,
-                                                        guest)
+                                                        guest))
+        self.config_window_signals.append(self.config_window.connect(
+                                                        "details-closed",
+                                                         details_closed))
         self.config_window.show()
 
     def start_install(self, guest):

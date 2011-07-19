@@ -332,7 +332,8 @@ class vmmDetails(vmmGObjectUI):
             "on_control_pause_toggled": self.control_vm_pause,
             "on_control_fullscreen_toggled": self.control_fullscreen,
 
-            "on_details_customize_finish_clicked": self.close,
+            "on_details_customize_finish_clicked": self.customize_finish,
+            "on_details_cancel_customize_clicked": self.close,
 
             "on_details_menu_run_activate": self.control_vm_run,
             "on_details_menu_poweroff_activate": self.control_vm_shutdown,
@@ -511,7 +512,14 @@ class vmmDetails(vmmGObjectUI):
         self.emit("details-opened")
         self.refresh_vm_state()
 
+    def customize_finish(self, src):
+        ignore = src
+        return self._close(customize_finish=True)
+
     def close(self, ignore1=None, ignore2=None):
+        return self._close()
+
+    def _close(self, customize_finish=False):
         fs = self.widget("details-menu-view-fullscreen")
         if fs.get_active():
             fs.set_active(False)
@@ -520,14 +528,18 @@ class vmmDetails(vmmGObjectUI):
             return
 
         self.topwin.hide()
-        if (self.console.viewer and self.console.viewer.get_widget() and
-                self.console.viewer.get_widget().flags() & gtk.VISIBLE):
+        if (self.console.viewer and
+            self.console.viewer.get_widget() and
+            self.console.viewer.get_widget().flags() & gtk.VISIBLE):
             try:
                 self.console.close_viewer()
             except:
                 logging.error("Failure when disconnecting from desktop server")
 
-        self.emit("details-closed")
+        if customize_finish:
+            self.emit("customize-finished")
+        else:
+            self.emit("details-closed")
         return 1
 
     def is_visible(self):
@@ -3267,3 +3279,4 @@ vmmDetails.signal_new(vmmDetails, "action-migrate-domain", [str, str])
 vmmDetails.signal_new(vmmDetails, "action-clone-domain", [str, str])
 vmmDetails.signal_new(vmmDetails, "details-closed", [])
 vmmDetails.signal_new(vmmDetails, "details-opened", [])
+vmmDetails.signal_new(vmmDetails, "customize-finished", [])
