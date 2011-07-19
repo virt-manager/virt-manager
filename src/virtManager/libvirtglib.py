@@ -19,6 +19,7 @@
 #
 
 import threading
+import logging
 
 import gobject
 
@@ -234,6 +235,11 @@ def glib_event_timeout_remove(timer):
         state.lock.release()
 
 def register_event_impl():
+    if (hasattr(libvirt, "eventInvokeHandleCallback") and
+        not hasattr(libvirt, "_eventInvokeHandleCallback")):
+        logging.debug("Libvirt version is not new enough for our event loop "
+                      "impl. Skipping registration.")
+        return
     libvirt.virEventRegisterImpl(glib_event_handle_add,
                                  glib_event_handle_update,
                                  glib_event_handle_remove,
