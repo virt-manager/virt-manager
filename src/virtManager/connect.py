@@ -139,12 +139,10 @@ class vmmConnect(vmmGObjectUI):
 
     def set_default_hypervisor(self):
         default = virtinst.util.default_connection()
-        if default is None:
-            self.widget("hypervisor").set_active(-1)
+        if not default or default.startswith("qemu"):
+            self.widget("hypervisor").set_active(1)
         elif default.startswith("xen"):
             self.widget("hypervisor").set_active(0)
-        elif default.startswith("qemu"):
-            self.widget("hypervisor").set_active(1)
 
     def add_service(self, interface, protocol, name, type, domain, flags):
         ignore = flags
