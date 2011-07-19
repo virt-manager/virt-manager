@@ -273,6 +273,18 @@ class vmmMigrateDialog(vmmGObjectUI):
         desturi_tuple[2] = desthost
         return uri_join(desturi_tuple)
 
+    def edit_uri(self, uri, hostname, port):
+        split = list(virtinst.util.uri_split(uri))
+
+        hostname = hostname or split[2]
+        if port:
+            if hostname.count(":"):
+                hostname = hostname.split(":")[0]
+            hostname += ":%s" % port
+
+        split[2] = hostname
+        return uri_join(tuple(split))
+
     def build_migrate_uri(self, destconn):
         conn = self.conn
 
@@ -280,27 +292,36 @@ class vmmMigrateDialog(vmmGObjectUI):
         port = self.get_config_port()
         secure = self.get_config_secure()
 
-        if not interface:
-            if not secure:
-                return None
+        if not interface and not secure:
+            return None
+
+        if secure:
+            # P2P migration uri is a libvirt connection uri, e.g.
+            # qemu+ssh://root@foobar/system
 
             # For secure migration, we need to make sure we aren't migrating
             # to the local connection, because libvirt will pull try to use
             # 'qemu:///system' as the migrate URI which will deadlock
             if destconn.is_local():
-                return self.build_localhost_uri(destconn)
+                uri = self.build_localhost_uri(destconn)
+            else:
+                uri = destconn.get_uri()
 
-        uri = ""
-        if conn.is_xen():
-            uri = "xenmigr://%s" % interface
+            uri = self.edit_uri(uri, interface, port)
 
         else:
-            uri = "tcp:%s" % interface
+            # Regular migration URI is HV specific
+            uri = ""
+            if conn.is_xen():
+                uri = "xenmigr://%s" % interface
 
-        if port:
-            uri += ":%s" % port
+            else:
+                uri = "tcp:%s" % interface
 
-        return uri
+            if port:
+                uri += ":%s" % port
+
+        return uri or None
 
     def rebuild_dest_rows(self):
         newrows = []
