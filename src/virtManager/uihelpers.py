@@ -53,6 +53,16 @@ def cleanup():
     global err_dial
     err_dial = None
 
+def spin_get_helper(widget):
+    adj = widget.get_adjustment()
+    txt = widget.get_text()
+
+    try:
+        ret = int(txt)
+    except:
+        ret = adj.value
+    return ret
+
 ############################################################
 # Helpers for shared storage UI between create/addhardware #
 ############################################################

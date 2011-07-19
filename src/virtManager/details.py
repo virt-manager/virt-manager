@@ -1513,16 +1513,6 @@ class vmmDetails(vmmGObjectUI):
     ##############################
     # Details/Hardware listeners #
     ##############################
-    def _spin_get_helper(self, wname):
-        widget = self.widget(wname)
-        adj = widget.get_adjustment()
-        txt = widget.get_text()
-
-        try:
-            ret = int(txt)
-        except:
-            ret = adj.value
-        return ret
 
     def _browse_file(self, callback, is_media=False):
         if is_media:
@@ -1579,9 +1569,9 @@ class vmmDetails(vmmGObjectUI):
 
     # Memory
     def config_get_maxmem(self):
-        return self._spin_get_helper("config-maxmem")
+        return uihelpers.spin_get_helper(self.widget("config-maxmem"))
     def config_get_memory(self):
-        return self._spin_get_helper("config-memory")
+        return uihelpers.spin_get_helper(self.widget("config-memory"))
 
     def config_maxmem_changed(self, src_ignore):
         self.enable_apply(EDIT_MEM)
@@ -1602,9 +1592,9 @@ class vmmDetails(vmmGObjectUI):
 
     # VCPUS
     def config_get_vcpus(self):
-        return self._spin_get_helper("config-vcpus")
+        return uihelpers.spin_get_helper(self.widget("config-vcpus"))
     def config_get_maxvcpus(self):
-        return self._spin_get_helper("config-maxvcpus")
+        return uihelpers.spin_get_helper(self.widget("config-maxvcpus"))
 
     def config_vcpupin_generate(self, ignore):
         try:

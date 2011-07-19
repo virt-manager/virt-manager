@@ -931,7 +931,7 @@ class vmmCreate(vmmGObjectUI):
 
     def get_storage_info(self):
         path = None
-        size = self.widget("config-storage-size").get_value()
+        size = uihelpers.spin_get_helper(self.widget("config-storage-size"))
         sparse = not self.widget("config-storage-nosparse").get_active()
 
         if self.get_config_install_page() == INSTALL_PAGE_IMPORT:
