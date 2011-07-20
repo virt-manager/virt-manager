@@ -29,10 +29,10 @@ class GlobalState(object):
     def __init__(self):
         self.lock = threading.Lock()
 
-        self.nextwatch = 0
+        self.nextwatch = 1
         self.watches = []
 
-        self.nexttimer = 0
+        self.nexttimer = 1
         self.timers = []
 
 class EventWatch(object):
