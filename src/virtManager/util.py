@@ -361,7 +361,8 @@ def pretty_bytes(val):
 
 xpath = virtinst.util.get_xml_path
 
-def chkbox_helper(src, getcb, setcb, text1, text2=None):
+def chkbox_helper(src, getcb, setcb, text1, text2=None, alwaysrecord=False,
+                  chktext=_("Don't ask me again")):
     """
     Helper to prompt user about proceeding with an operation
     Returns True if operation should be cancelled
@@ -373,14 +374,13 @@ def chkbox_helper(src, getcb, setcb, text1, text2=None):
         return False
 
     res = src.err.warn_chkbox(text1=text1, text2=text2,
-                              chktext=_("Don't ask me again."),
+                              chktext=chktext,
                               buttons=gtk.BUTTONS_YES_NO)
     response, skip_prompt = res
-    if not response:
-        return True
+    if alwaysrecord or response:
+        setcb(not skip_prompt)
 
-    setcb(not skip_prompt)
-    return False
+    return not response
 
 def get_list_selection(widget):
     selection = widget.get_selection()

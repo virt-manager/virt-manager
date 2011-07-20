@@ -307,6 +307,7 @@ class vmmDetails(vmmGObjectUI):
         w, h = self.vm.get_details_window_size()
         self.topwin.set_default_size(w or 800, h or 600)
 
+        self.oldhwrow = None
         self.addhwmenu = None
         self.keycombo_menu = None
         self.init_menus()
@@ -458,7 +459,7 @@ class vmmDetails(vmmGObjectUI):
         self.vm.connect("config-changed", self.refresh_vm_state)
         self.vm.connect("resources-sampled", self.refresh_resources)
         self.widget("hw-list").get_selection().connect("changed",
-                                                       self.hw_selected)
+                                                       self.hw_changed)
         self.widget("config-boot-list").get_selection().connect(
                                             "changed",
                                             self.config_bootdev_selected)
@@ -477,6 +478,8 @@ class vmmDetails(vmmGObjectUI):
         self.close()
 
         try:
+            self.oldhwrow = None
+
             if self.addhw:
                 self.addhw.cleanup()
                 self.addhw = None
@@ -1084,26 +1087,29 @@ class vmmDetails(vmmGObjectUI):
         else:
             self.widget("toolbar-box").hide()
 
-    def get_boot_selection(self):
-        widget = self.widget("config-boot-list")
+    def get_selected_row(self, widget):
         selection = widget.get_selection()
         model, treepath = selection.get_selected()
         if treepath == None:
             return None
         return model[treepath]
 
+    def get_boot_selection(self):
+        return self.get_selected_row(self.widget("config-boot-list"))
+
     def set_hw_selection(self, page):
         hwlist = self.widget("hw-list")
         selection = hwlist.get_selection()
         selection.select_path(str(page))
 
+    def get_hw_row(self):
+        return self.get_selected_row(self.widget("hw-list"))
+
     def get_hw_selection(self, field):
-        vmlist = self.widget("hw-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-        if active[1] == None:
+        row = self.get_hw_row()
+        if not row:
             return None
-        return active[0].get_value(active[1], field)
+        return row[field]
 
     def force_get_hw_pagetype(self, page=None):
         if page:
@@ -1116,7 +1122,56 @@ class vmmDetails(vmmGObjectUI):
 
         return page
 
-    def hw_selected(self, ignore1=None, page=None, selected=True):
+    def compare_hw_rows(self, row1, row2):
+        if row1 == row2:
+            return True
+        if not row1 or not row2:
+            return False
+
+        for idx in range(len(row1)):
+            if row1[idx] != row2[idx]:
+                return False
+        return True
+
+    def has_unapplied_changes(self, row):
+        if not row:
+            return False
+
+        if not self.widget("config-apply").get_property("sensitive"):
+            return False
+
+        if util.chkbox_helper(self,
+            self.config.get_confirm_unapplied,
+            self.config.set_confirm_unapplied,
+            text1=(_("There are unapplied changes. Would you like to apply "
+                     "them now?")),
+            chktext=_("Don't warn me again."),
+            alwaysrecord=True):
+            return False
+
+        return not self.config_apply(row=row)
+
+    def hw_changed(self, ignore):
+        newrow = self.get_hw_row()
+        oldrow = self.oldhwrow
+        model = self.widget("hw-list").get_model()
+
+        if self.compare_hw_rows(newrow, oldrow):
+            return
+
+        if self.has_unapplied_changes(oldrow):
+            # Unapplied changes, and syncing them failed
+            pageidx = 0
+            for idx in range(len(model)):
+                if self.compare_hw_rows(model[idx], oldrow):
+                    pageidx = idx
+                    break
+            self.set_hw_selection(pageidx)
+        else:
+            self.oldhwrow = newrow
+            self.hw_selected()
+
+    def hw_selected(self, page=None):
         pagetype = self.force_get_hw_pagetype(page)
 
         self.widget("config-remove").set_sensitive(True)
@@ -1165,8 +1220,7 @@ class vmmDetails(vmmGObjectUI):
             return
 
         rem = pagetype in remove_pages
-        if selected:
-            self.disable_apply()
+        self.disable_apply()
         self.widget("config-remove").set_property("visible", rem)
 
         self.widget("hw-panel").set_current_page(pagetype)
@@ -1184,6 +1238,11 @@ class vmmDetails(vmmGObjectUI):
             is_details = True
 
         pages = self.widget("details-pages")
+        if pages.get_current_page() == PAGE_DETAILS:
+            if self.has_unapplied_changes(self.get_hw_row()):
+                self.sync_details_console_view(True)
+                return
+
         if is_details:
             pages.set_current_page(PAGE_DETAILS)
         else:
@@ -1732,13 +1791,20 @@ class vmmDetails(vmmGObjectUI):
     # Details/Hardware config changes (apply button) #
     ##################################################
 
-    def config_cancel(self, ignore):
+    def config_cancel(self, ignore=None):
         # Remove current changes and deactive 'apply' button
         self.hw_selected()
 
-    def config_apply(self, ignore):
-        pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
-        devobj = self.get_hw_selection(HW_LIST_COL_DEVICE)
+    def config_apply(self, ignore=None, row=None):
+        pagetype = None
+        devobj = None
+
+        if not row:
+            row = self.get_hw_row()
+        if row:
+            pagetype = row[HW_LIST_COL_TYPE]
+            devobj = row[HW_LIST_COL_DEVICE]
+
         key = devobj
         ret = False
 
@@ -1768,10 +1834,11 @@ class vmmDetails(vmmGObjectUI):
             else:
                 ret = False
         except Exception, e:
-            self.err.show_err(_("Error apply changes: %s") % e)
+            return self.err.show_err(_("Error apply changes: %s") % e)
 
         if ret is not False:
             self.disable_apply()
+        return True
 
     def get_text(self, widgetname, strip=True):
         ret = self.widget(widgetname).get_text()

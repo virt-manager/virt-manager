@@ -386,6 +386,8 @@ class vmmConfig(object):
         return self.conf.get_bool(self.conf_dir + "/confirm/removedev")
     def get_confirm_interface(self):
         return self.conf.get_bool(self.conf_dir + "/confirm/interface_power")
+    def get_confirm_unapplied(self):
+        return self.conf.get_bool(self.conf_dir + "/confirm/unapplied_dev")
 
 
     def set_confirm_forcepoweroff(self, val):
@@ -398,6 +400,8 @@ class vmmConfig(object):
         self.conf.set_bool(self.conf_dir + "/confirm/removedev", val)
     def set_confirm_interface(self, val):
         self.conf.set_bool(self.conf_dir + "/confirm/interface_power", val)
+    def set_confirm_unapplied(self, val):
+        self.conf.set_bool(self.conf_dir + "/confirm/unapplied_dev", val)
 
     def on_confirm_forcepoweroff_changed(self, cb):
         return self.conf.notify_add(self.conf_dir + "/confirm/forcepoweroff", cb)
@@ -409,6 +413,8 @@ class vmmConfig(object):
         return self.conf.notify_add(self.conf_dir + "/confirm/removedev", cb)
     def on_confirm_interface_changed(self, cb):
         return self.conf.notify_add(self.conf_dir + "/confirm/interface_power", cb)
+    def on_confirm_unapplied_changed(self, cb):
+        return self.conf.notify_add(self.conf_dir + "/confirm/unapplied_dev", cb)
 
 
     # System tray visibility

@@ -352,6 +352,19 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/::PACKAGE::/confirm/unapplied_dev</key>
+      <applyto>/apps/::PACKAGE::/confirm/unapplied_dev</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>bool</type>
+      <default>1</default>
+
+      <locale name="C">
+        <short>Confirm about unapplied device changes</short>
+        <long>Whether we ask the user to apply or discard unapplied device changes</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/::PACKAGE::/manager_window_height</key>
       <applyto>/apps/::PACKAGE::/manager_window_height</applyto>
       <owner>::PACKAGE::</owner>

@@ -46,6 +46,7 @@ class vmmPreferences(vmmGObjectUI):
         self.add_gconf_handle(self.config.on_confirm_pause_changed(self.refresh_confirm_pause))
         self.add_gconf_handle(self.config.on_confirm_removedev_changed(self.refresh_confirm_removedev))
         self.add_gconf_handle(self.config.on_confirm_interface_changed(self.refresh_confirm_interface))
+        self.add_gconf_handle(self.config.on_confirm_unapplied_changed(self.refresh_confirm_unapplied))
 
         self.refresh_view_system_tray()
         self.refresh_update_interval()
@@ -63,6 +64,7 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_confirm_pause()
         self.refresh_confirm_removedev()
         self.refresh_confirm_interface()
+        self.refresh_confirm_unapplied()
 
         self.window.signal_autoconnect({
             "on_prefs_system_tray_toggled" : self.change_view_system_tray,
@@ -82,6 +84,7 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_confirm_pause_toggled": self.change_confirm_pause,
             "on_prefs_confirm_removedev_toggled": self.change_confirm_removedev,
             "on_prefs_confirm_interface_toggled": self.change_confirm_interface,
+            "on_prefs_confirm_unapplied_toggled": self.change_confirm_unapplied,
             "on_prefs_btn_keys_define_clicked": self.change_grab_keys,
             "on_prefs_graphics_type_changed": self.change_graphics_type,
             })
@@ -192,6 +195,10 @@ class vmmPreferences(vmmGObjectUI):
                                   ignore3=None, ignore4=None):
         self.widget("prefs-confirm-interface").set_active(
                                 self.config.get_confirm_interface())
+    def refresh_confirm_unapplied(self, ignore1=None, ignore2=None,
+                                  ignore3=None, ignore4=None):
+        self.widget("prefs-confirm-unapplied").set_active(
+                                self.config.get_confirm_unapplied())
 
     def grabkeys_get_string(self, keysyms):
         keystr = None
@@ -286,6 +293,8 @@ class vmmPreferences(vmmGObjectUI):
         self.config.set_confirm_removedev(src.get_active())
     def change_confirm_interface(self, src):
         self.config.set_confirm_interface(src.get_active())
+    def change_confirm_unapplied(self, src):
+        self.config.set_confirm_unapplied(src.get_active())
 
     def change_graphics_type(self, src):
         gtype = 'vnc'
