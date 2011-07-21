@@ -141,9 +141,10 @@ class vmmConfig(object):
 
     def get_shutdown_icon_name(self):
         theme = gtk.icon_theme_get_default()
-        if theme.has_icon("system-shutdown"):
-            return "system-shutdown"
-        return "icon_shutdown"
+        iconname = "system-shutdown"
+        if theme.has_icon(iconname):
+            return iconname
+        return "media-playback-stop"
 
     def get_appname(self):
         return self.appname
