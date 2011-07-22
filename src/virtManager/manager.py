@@ -69,9 +69,8 @@ gtk.rc_parse_string(rcstring)
 
 
 class vmmManager(vmmGObjectUI):
-    def __init__(self, engine):
+    def __init__(self):
         vmmGObjectUI.__init__(self, "vmm-manager.glade", "vmm-manager")
-        self.engine = engine
 
         self.delete_dialog = None
         self.ignore_pause = False
@@ -151,9 +150,6 @@ class vmmManager(vmmGObjectUI):
             (COL_NETWORK, self.config.get_stats_enable_net_poll())]:
             self.enable_polling(None, None, init_val, typ)
 
-        self.engine.connect("connection-added", self._add_connection)
-        self.engine.connect("connection-removed", self._remove_connection)
-
         # Select first list entry
         vmlist = self.widget("vm-list")
         if len(vmlist.get_model()) != 0:
@@ -161,7 +157,7 @@ class vmmManager(vmmGObjectUI):
                                         vmlist.get_model().get_iter_first())
 
         # Queue up the default connection detector
-        self.safe_idle_add(self.engine.add_default_connection)
+        self.idle_emit("add-default-connection")
 
     ##################
     # Common methods #
@@ -194,7 +190,6 @@ class vmmManager(vmmGObjectUI):
         self.close()
 
         try:
-            self.engine = None
             self.rows = None
 
             self.diskcol = None
@@ -561,7 +556,8 @@ class vmmManager(vmmGObjectUI):
                                    "Are you sure?") % conn.get_uri())
         if not result:
             return
-        self.engine.remove_connection(conn.get_uri())
+
+        self.emit("remove-connection", conn.get_uri())
 
     def _do_delete_vm(self, vm):
         if vm.is_active():
@@ -692,9 +688,6 @@ class vmmManager(vmmGObjectUI):
 
         self._append_vm(model, vm, connection)
 
-        if self.engine.inspection_thread:
-            self.engine.inspection_thread.vm_added()
-
     def vm_removed(self, connection, uri_ignore, vmuuid):
         vmlist = self.widget("vm-list")
         model = vmlist.get_model()
@@ -796,7 +789,7 @@ class vmmManager(vmmGObjectUI):
         self.rows[conn.get_uri()] = model[path]
         return _iter
 
-    def _add_connection(self, engine_ignore, conn):
+    def add_connection(self, engine_ignore, conn):
         # Make sure error page isn't showing
         self.widget("vm-notebook").set_current_page(0)
 
@@ -832,7 +825,7 @@ class vmmManager(vmmGObjectUI):
             newname = conn.get_pretty_desc_inactive(False, True)
             self.conn_refresh_resources(conn, newname)
 
-    def _remove_connection(self, engine_ignore, uri):
+    def remove_connection(self, engine_ignore, uri):
         model = self.widget("vm-list").get_model()
         parent = self.rows[uri].iter
 
@@ -1200,3 +1193,5 @@ vmmManager.signal_new(vmmManager, "action-clone-domain", [str, str])
 vmmManager.signal_new(vmmManager, "action-exit-app", [])
 vmmManager.signal_new(vmmManager, "manager-closed", [])
 vmmManager.signal_new(vmmManager, "manager-opened", [])
+vmmManager.signal_new(vmmManager, "remove-connection", [str])
+vmmManager.signal_new(vmmManager, "add-default-connection", [])

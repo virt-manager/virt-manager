@@ -281,7 +281,7 @@ class vmmEngine(vmmGObject):
     # First run PackageKit #
     ########################
 
-    def add_default_connection(self):
+    def add_default_connection(self, manager):
         # Only add default if no connections are currently known
         if self.config.get_connections():
             return
@@ -294,7 +294,6 @@ class vmmEngine(vmmGObject):
                 "A hypervisor connection can be manually\n"
                 "added via File->Add Connection")
 
-        manager = self.get_manager()
         logging.debug("Determining default libvirt URI")
 
         ret = None
@@ -585,7 +584,8 @@ class vmmEngine(vmmGObject):
             logging.exception("Error cleaning up conn in engine")
 
 
-    def remove_connection(self, uri):
+    def remove_connection(self, src, uri):
+        ignore = src
         self.cleanup_connection(uri)
         del(self.connections[uri])
 
@@ -746,7 +746,7 @@ class vmmEngine(vmmGObject):
         if self.windowManager:
             return self.windowManager
 
-        obj = vmmManager(self)
+        obj = vmmManager()
         obj.connect("action-suspend-domain", self._do_suspend_domain)
         obj.connect("action-resume-domain", self._do_resume_domain)
         obj.connect("action-run-domain", self._do_run_domain)
@@ -767,6 +767,11 @@ class vmmEngine(vmmGObject):
         obj.connect("action-exit-app", self.exit_app)
         obj.connect("manager-opened", self.increment_window_counter)
         obj.connect("manager-closed", self.decrement_window_counter)
+        obj.connect("remove-connection", self.remove_connection)
+        obj.connect("add-default-connection", self.add_default_connection)
+
+        self.connect("connection-added", obj.add_connection)
+        self.connect("connection-removed", obj.remove_connection)
 
         self.windowManager = obj
         return self.windowManager

@@ -47,7 +47,10 @@ class vmmInspection(Thread):
         self._q.put(obj)
 
     # Called by the main thread whenever a VM is added to vmlist.
-    def vm_added(self):
+    def vm_added(self, conn, uri, uuid):
+        ignore = conn
+        ignore = uri
+        ignore = uuid
         obj = ("vm_added")
         self._q.put(obj)
 
@@ -84,6 +87,7 @@ class vmmInspection(Thread):
             if conn and not (conn.is_remote()):
                 uri = conn.get_uri()
                 self._conns[uri] = conn
+                conn.connect("vm-added", self.vm_added)
         elif obj[0] == "conn_removed":
             uri = obj[1]
             del self._conns[uri]
