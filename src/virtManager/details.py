@@ -1776,9 +1776,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Launch 'Choose CD' dialog
         if self.media_choosers[devtype] is None:
-            ret = vmmChooseCD(dev_id_info,
-                              self.vm.get_connection(),
-                              devtype)
+            ret = vmmChooseCD(self.vm, dev_id_info)
 
             ret.connect("cdrom-chosen", change_cdrom_wrapper)
             self.media_choosers[devtype] = ret

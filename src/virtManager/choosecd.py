@@ -27,13 +27,14 @@ from virtManager.mediadev import MEDIA_FLOPPY
 from virtManager.storagebrowse import vmmStorageBrowser
 
 class vmmChooseCD(vmmGObjectUI):
-    def __init__(self, dev_id_info, connection, media_type):
+    def __init__(self, vm, disk):
         vmmGObjectUI.__init__(self, "vmm-choose-cd.glade", "vmm-choose-cd")
 
-        self.dev_id_info = dev_id_info
-        self.conn = connection
+        self.vm = vm
+        self.conn = self.vm.get_connection()
+        self.disk = disk
         self.storage_browser = None
-        self.media_type = media_type
+        self.media_type = disk.device
 
         self.window.signal_autoconnect({
             "on_media_toggled": self.media_toggled,
@@ -65,8 +66,9 @@ class vmmChooseCD(vmmGObjectUI):
         self.close()
 
         try:
+            self.vm = None
             self.conn = None
-            self.dev_id_info = None
+            self.disk = None
 
             if self.storage_browser:
                 self.storage_browser.cleanup()
@@ -102,13 +104,13 @@ class vmmChooseCD(vmmGObjectUI):
                                     _("A media path must be specified."))
 
         try:
-            self.dev_id_info.path = path
+            self.disk.path = path
         except Exception, e:
             return self.err.val_err(_("Invalid Media Path"), str(e))
 
         uihelpers.check_path_search_for_qemu(self.topwin, self.conn, path)
 
-        self.emit("cdrom-chosen", self.dev_id_info, path)
+        self.emit("cdrom-chosen", self.disk, path)
         self.close()
 
     def media_toggled(self, ignore1=None, ignore2=None):
