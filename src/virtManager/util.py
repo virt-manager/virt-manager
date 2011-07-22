@@ -361,17 +361,22 @@ def pretty_bytes(val):
 
 xpath = virtinst.util.get_xml_path
 
-def chkbox_helper(src, getcb, setcb, text1, text2=None, alwaysrecord=False,
+def chkbox_helper(src, getcb, setcb, text1, text2=None,
+                  alwaysrecord=False,
+                  default=True,
                   chktext=_("Don't ask me again")):
     """
     Helper to prompt user about proceeding with an operation
-    Returns True if operation should be cancelled
+    Returns True if the 'yes' or 'ok' button was selected, False otherwise
+
+    @alwaysrecord: Don't require user to select 'yes' to record chkbox value
+    @default: What value to return if getcb tells us not to prompt
     """
     import gtk
 
     do_prompt = getcb()
     if not do_prompt:
-        return False
+        return default
 
     res = src.err.warn_chkbox(text1=text1, text2=text2,
                               chktext=chktext,
@@ -380,7 +385,7 @@ def chkbox_helper(src, getcb, setcb, text1, text2=None, alwaysrecord=False,
     if alwaysrecord or response:
         setcb(not skip_prompt)
 
-    return not response
+    return response
 
 def get_list_selection(widget):
     selection = widget.get_selection()

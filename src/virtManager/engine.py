@@ -876,7 +876,7 @@ class vmmEngine(vmmGObject):
                               "libvirt version or hypervisor."))
             return
 
-        if util.chkbox_helper(src, self.config.get_confirm_poweroff,
+        if not util.chkbox_helper(src, self.config.get_confirm_poweroff,
             self.config.set_confirm_poweroff,
             text1=_("Are you sure you want to save '%s'?" % vm.get_name())):
             return
@@ -959,7 +959,7 @@ class vmmEngine(vmmGObject):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
 
-        if util.chkbox_helper(src, self.config.get_confirm_forcepoweroff,
+        if not util.chkbox_helper(src, self.config.get_confirm_forcepoweroff,
             self.config.set_confirm_forcepoweroff,
             text1=_("Are you sure you want to force poweroff '%s'?" %
                     vm.get_name()),
@@ -975,7 +975,7 @@ class vmmEngine(vmmGObject):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
 
-        if util.chkbox_helper(src, self.config.get_confirm_pause,
+        if not util.chkbox_helper(src, self.config.get_confirm_pause,
             self.config.set_confirm_pause,
             text1=_("Are you sure you want to pause '%s'?" %
                     vm.get_name())):
@@ -1018,7 +1018,7 @@ class vmmEngine(vmmGObject):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
 
-        if util.chkbox_helper(src, self.config.get_confirm_poweroff,
+        if not util.chkbox_helper(src, self.config.get_confirm_poweroff,
             self.config.set_confirm_poweroff,
             text1=_("Are you sure you want to poweroff '%s'?" %
                     vm.get_name())):
@@ -1032,7 +1032,7 @@ class vmmEngine(vmmGObject):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
 
-        if util.chkbox_helper(src, self.config.get_confirm_poweroff,
+        if not util.chkbox_helper(src, self.config.get_confirm_poweroff,
             self.config.set_confirm_poweroff,
             text1=_("Are you sure you want to reboot '%s'?" %
                     vm.get_name())):

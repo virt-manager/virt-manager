@@ -903,7 +903,7 @@ class vmmHost(vmmGObjectUI):
         if interface is None:
             return
 
-        if util.chkbox_helper(self, self.config.get_confirm_interface,
+        if not util.chkbox_helper(self, self.config.get_confirm_interface,
             self.config.set_confirm_interface,
             text1=_("Are you sure you want to stop the interface "
                     "'%s'?" % interface.get_name())):
@@ -918,7 +918,7 @@ class vmmHost(vmmGObjectUI):
         if interface is None:
             return
 
-        if util.chkbox_helper(self, self.config.get_confirm_interface,
+        if not util.chkbox_helper(self, self.config.get_confirm_interface,
             self.config.set_confirm_interface,
             text1=_("Are you sure you want to start the interface "
                     "'%s'?" % interface.get_name())):

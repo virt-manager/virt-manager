@@ -1140,13 +1140,14 @@ class vmmDetails(vmmGObjectUI):
         if not self.widget("config-apply").get_property("sensitive"):
             return False
 
-        if util.chkbox_helper(self,
+        if not util.chkbox_helper(self,
             self.config.get_confirm_unapplied,
             self.config.set_confirm_unapplied,
             text1=(_("There are unapplied changes. Would you like to apply "
                      "them now?")),
             chktext=_("Don't warn me again."),
-            alwaysrecord=True):
+            alwaysrecord=True,
+            default=False):
             return False
 
         return not self.config_apply(row=row)
@@ -2231,7 +2232,7 @@ class vmmDetails(vmmGObjectUI):
     def remove_device(self, dev_type, dev_id_info):
         logging.debug("Removing device: %s %s" % (dev_type, dev_id_info))
 
-        if util.chkbox_helper(self, self.config.get_confirm_removedev,
+        if not util.chkbox_helper(self, self.config.get_confirm_removedev,
             self.config.set_confirm_removedev,
             text1=(_("Are you sure you want to remove this device?"))):
             return
