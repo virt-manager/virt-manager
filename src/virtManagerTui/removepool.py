@@ -64,10 +64,10 @@ class RemoveStoragePoolConfigScreen(StorageListConfigScreen):
         if page is CONFIRM_PAGE:
             self.get_libvirt().destroy_storage_pool(self.get_selected_pool())
             self.get_libvirt().undefine_storage_pool(self.get_selected_pool())
-            self.set_finished()
 
     def get_confirm_page(self, screen):
         ignore = screen
+        self.set_finished()
         self.__confirm = Checkbox("Check here to confirm deleting pool: %s" % self.get_selected_pool())
         fields = []
         fields.append((None, self.__confirm))
