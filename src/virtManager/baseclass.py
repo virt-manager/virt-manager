@@ -199,7 +199,7 @@ class vmmGObject(GObject):
         """
         Make sure timeout functions are run thread safe
         """
-        if not hasattr(gobject, "timout_add"):
+        if not hasattr(gobject, "timeout_add"):
             return
         return gobject.timeout_add(timeout, _safe_wrapper, func, *args)
 
