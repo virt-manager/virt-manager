@@ -44,15 +44,16 @@ class vmmGObject(GObject):
 
     @staticmethod
     def signal_new(klass, signal, args):
-        if not hasattr(gobject, "signal_new"):
-            return
-
-        gobject.signal_new(signal, klass,
-                           gobject.SIGNAL_RUN_FIRST,
-                           gobject.TYPE_NONE,
-                           args)
+        if hasattr(gobject, "signal_new"):
+            gobject.signal_new(signal, klass,
+                               gobject.SIGNAL_RUN_FIRST,
+                               gobject.TYPE_NONE,
+                               args)
+        else:
+            klass.fake_signal_listeners[signal] = []
 
     _leak_check = True
+    fake_signal_listeners = {}
 
     def __init__(self):
         GObject.__init__(self)
@@ -61,6 +62,9 @@ class vmmGObject(GObject):
         self._gobject_handles = []
         self._gobject_timeouts = []
         self._gconf_handles = []
+
+        self._signal_id_map = {}
+        self._next_signal_id = 1
 
         self.object_key = str(self)
 
@@ -81,18 +85,42 @@ class vmmGObject(GObject):
         except:
             logging.exception("Error cleaning up %s" % self)
 
+    # Custom signal implementations
+    # These functions duplicate gobject signal behavior since it's
+    # needed for some TUI functionality
+    def _get_signal_listeners(self, signal_name):
+        return self.fake_signal_listeners[signal_name]
+    def _add_signal_listener(self, signal_name, cb, *args):
+        sigid = self._next_signal_id
+        self._next_signal_id += 1
+        self._signal_id_map[sigid] = (signal_name, cb, args)
+        self.fake_signal_listeners[signal_name].append((cb, args))
+        return sigid
+    def _remove_signal_listener(self, sigid):
+        signame, cb, args = self._signal_id_map[sigid]
+        listener_data = (cb, args)
+        if listener_data not in self.fake_signal_listeners[signame]:
+            raise RuntimeError("Didn't find signal listener to remove: %d" %
+                               sigid)
+
+        self.fake_signal_listeners[signame].remove(listener_data)
+        del(self._signal_id_map[sigid])
+
     def connect(self, name, callback, *args):
-        if not hasattr(GObject, "connect"):
-            return
-        ret = GObject.connect(self, name, callback, *args)
-        self._gobject_handles.append(ret)
-        return ret
+        if hasattr(GObject, "connect"):
+            ret = GObject.connect(self, name, callback, *args)
+            self._gobject_handles.append(ret)
+            return ret
+        else:
+            return self._add_signal_listener(name, callback, *args)
+
     def disconnect(self, handle):
-        if not hasattr(GObject, "disconnect"):
-            return
-        ret = GObject.disconnect(self, handle)
-        self._gobject_handles.remove(handle)
-        return ret
+        if hasattr(GObject, "disconnect"):
+            ret = GObject.disconnect(self, handle)
+            self._gobject_handles.remove(handle)
+            return ret
+        else:
+            return self._remove_signal_listener(handle)
 
     def add_gconf_handle(self, handle):
         self._gconf_handles.append(handle)
@@ -171,12 +199,18 @@ class vmmGObject(GObject):
         """
         Make sure timeout functions are run thread safe
         """
+        if not hasattr(gobject, "timout_add"):
+            return
         return gobject.timeout_add(timeout, _safe_wrapper, func, *args)
 
-    def emit(self, *args, **kwargs):
-        if not hasattr(GObject, "emit"):
+    def emit(self, signal_name, *args):
+        if hasattr(GObject, "emit"):
+            return GObject.emit(self, signal_name, *args)
+        else:
+            for cb, customargs in self._get_signal_listeners(signal_name):
+                cbargs = (self,) + args + customargs
+                cb(*cbargs)
             return
-        return GObject.emit(self, *args, **kwargs)
 
     def __del__(self):
         if hasattr(GObject, "__del__"):
