@@ -18,7 +18,9 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-import snack
+from snack import Checkbox
+from snack import Label
+
 from storagelistconfigscreen import StorageListConfigScreen
 
 LIST_POOLS_PAGE    = 1
@@ -66,11 +68,11 @@ class RemoveStoragePoolConfigScreen(StorageListConfigScreen):
 
     def get_confirm_page(self, screen):
         ignore = screen
-        self.__confirm = snack.Checkbox("Check here to confirm deleting pool: %s" % self.get_selected_pool())
-        grid = snack.Grid(1, 1)
-        grid.setField(self.__confirm, 0, 0)
-        return [snack.Label("Remove Selected Storage Pool"),
-                grid]
+        self.__confirm = Checkbox("Check here to confirm deleting pool: %s" % self.get_selected_pool())
+        fields = []
+        fields.append((None, self.__confirm))
+        return [Label("Remove Selected Storage Pool"),
+                self.create_grid_from_fields(fields)]
 
 def RemoveStoragePool():
     screen = RemoveStoragePoolConfigScreen()
