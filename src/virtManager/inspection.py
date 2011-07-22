@@ -28,6 +28,9 @@ from guestfs import GuestFS
 from virtManager.baseclass import vmmGObject
 
 class vmmInspection(vmmGObject):
+    # Can't find a way to make Thread release our reference
+    _leak_check = False
+
     def __init__(self):
         vmmGObject.__init__(self)
 
