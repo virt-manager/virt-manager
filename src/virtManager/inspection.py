@@ -17,23 +17,38 @@
 # MA 02110-1301 USA.
 #
 
-import time
 from Queue import Queue, Empty
 from threading import Thread
+import logging
+
+import gobject
 
 from guestfs import GuestFS
 
-import logging
+from virtManager.baseclass import vmmGObject
 
-class vmmInspection(Thread):
-    _name = "inspection thread"
-    _wait = 15 # seconds
-
+class vmmInspection(vmmGObject):
     def __init__(self):
-        Thread.__init__(self, name=self._name)
+        vmmGObject.__init__(self)
+
+        self._thread = Thread(name="inspection thread", target=self._run)
+        self._thread.daemon = True
+        self._wait = 15 * 1000 # 15 seconds
+
         self._q = Queue()
         self._conns = dict()
         self._vmseen = dict()
+
+    def cleanup(self):
+        try:
+            vmmGObject.cleanup(self)
+
+            self._thread = None
+            self._q = Queue()
+            self._conns = {}
+            self._vmseen = {}
+        except:
+            pass
 
     # Called by the main thread whenever a connection is added or
     # removed.  We tell the inspection thread, so it can track
@@ -53,14 +68,19 @@ class vmmInspection(Thread):
         obj = ("vm_added")
         self._q.put(obj)
 
-    def run(self):
+    def start(self):
         # Wait a few seconds before we do anything.  This prevents
         # inspection from being a burden for initial virt-manager
         # interactivity (although it shouldn't affect interactivity at
         # all).
-        logging.debug("waiting")
-        time.sleep(self._wait)
+        def cb():
+            self._thread.start()
+            return 0
 
+        logging.debug("waiting")
+        self.add_gobject_timeout(gobject.timeout_add(self._wait, cb))
+
+    def _run(self):
         while True:
             logging.debug("ready")
             self._process_queue()
@@ -225,3 +245,5 @@ class vmmInspection(Thread):
             logging.debug("icon: %d bytes", len(icon))
         if apps:
             logging.debug("# apps: %d", len(apps))
+
+vmmGObject.type_register(vmmInspection)

@@ -236,7 +236,7 @@ class vmmEngine(vmmGObject):
         if not self.config.support_threading:
             logging.debug("Libvirt doesn't support threading, skipping.")
 
-        self.inspection_thread = None
+        self.inspection = None
         self._create_inspection_thread()
 
         # Counter keeping track of how many manager and details windows
@@ -470,6 +470,10 @@ class vmmEngine(vmmGObject):
             uihelpers.cleanup()
             self.err = None
 
+            if self.inspection:
+                self.inspection.cleanup()
+                self.inspection = None
+
             if self.timer != None:
                 gobject.source_remove(self.timer)
 
@@ -540,11 +544,10 @@ class vmmEngine(vmmGObject):
                           "or libvirt is not thread safe.")
             return
         from virtManager.inspection import vmmInspection
-        self.inspection_thread = vmmInspection()
-        self.inspection_thread.daemon = True
-        self.inspection_thread.start()
-        self.connect("connection-added", self.inspection_thread.conn_added)
-        self.connect("connection-removed", self.inspection_thread.conn_removed)
+        self.inspection = vmmInspection()
+        self.inspection.start()
+        self.connect("connection-added", self.inspection.conn_added)
+        self.connect("connection-removed", self.inspection.conn_removed)
         return
 
     def add_connection(self, uri):
