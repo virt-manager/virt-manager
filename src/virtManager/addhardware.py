@@ -571,8 +571,10 @@ class vmmAddHardware(vmmGObjectUI):
         sparse = not self.widget("config-storage-nosparse").get_active()
 
         if self.is_default_storage():
+            pathlist = map(lambda d: d.path, self.vm.get_disk_devices())
             path = util.get_default_path(self.conn,
-                                         self.vm.get_name())
+                                         self.vm.get_name(),
+                                         collidelist=pathlist)
             logging.debug("Default storage path is: %s" % path)
         else:
             path = self.widget("config-storage-entry").get_text()

@@ -96,10 +96,14 @@ def get_default_dir(conn):
     else:
         return running_config.get_default_image_dir(conn)
 
-def get_default_path(conn, name):
+def get_default_path(conn, name, collidelist=None):
+    collidelist = collidelist or []
     pool = get_default_pool(conn)
 
     default_dir = get_default_dir(conn)
+
+    def path_exists(p):
+        return os.path.exists(p) or p in collidelist
 
     if not pool:
         # Use old generating method
@@ -107,20 +111,27 @@ def get_default_path(conn, name):
         f = origf
 
         n = 1
-        while os.path.exists(f) and n < 100:
+        while path_exists(f) and n < 100:
             f = os.path.join(default_dir, name +
                              "-" + str(n) + ".img")
             n += 1
 
-        if os.path.exists(f):
+        if path_exists(f):
             f = origf
 
         path = f
     else:
         target, ignore, suffix = get_ideal_path_info(conn, name)
 
+        # Sanitize collidelist to work with the collision checker
+        for c in collidelist[:]:
+            collidelist.remove(c)
+            if os.path.dirname(c) == pool.get_target_path():
+                collidelist.append(os.path.basename(c))
+
         path = virtinst.Storage.StorageVolume.find_free_name(name,
-                        pool_object=pool.pool, suffix=suffix)
+                        pool_object=pool.pool, suffix=suffix,
+                        collidelist=collidelist)
 
         path = os.path.join(target, path)
 
