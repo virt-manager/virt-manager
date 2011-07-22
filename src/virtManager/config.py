@@ -96,7 +96,7 @@ class vmmConfig(object):
         self.default_qemu_user = "root"
 
         # Use this key to disable certain features not supported on RHEL
-        self.enable_unsupported_rhel_opts = True
+        self.rhel6_defaults = True
         self.preferred_distros = []
         self.hv_packages = []
         self.libvirt_packages = []

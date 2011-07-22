@@ -506,7 +506,7 @@ class vmmAddHardware(vmmGObjectUI):
             add_dev("ide", virtinst.VirtualDisk.DEVICE_CDROM, "IDE cdrom")
             add_dev("fdc", virtinst.VirtualDisk.DEVICE_FLOPPY, "Floppy disk")
 
-            if self.vm.enable_unsupported_rhel_opts():
+            if self.vm.rhel6_defaults():
                 add_dev("scsi", virtinst.VirtualDisk.DEVICE_DISK, "SCSI disk")
                 add_dev("usb", virtinst.VirtualDisk.DEVICE_DISK, "USB disk")
         if self.vm.get_hv_type() == "kvm":
@@ -1369,8 +1369,8 @@ class vmmAddHardware(vmmGObjectUI):
         if self.storage_browser == None:
             self.storage_browser = vmmStorageBrowser(conn)
 
-        rhel6 = self.vm.enable_unsupported_rhel_opts()
-        self.storage_browser.enable_unsupported_rhel_opts = rhel6
+        rhel6 = self.vm.rhel6_defaults()
+        self.storage_browser.rhel6_defaults = rhel6
 
         self.storage_browser.set_finish_cb(set_storage_cb)
         self.storage_browser.set_browse_reason(reason)

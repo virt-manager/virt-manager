@@ -48,7 +48,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
         # Arguments to pass to util.browse_local for local storage
         self.browse_reason = None
-        self.enable_unsupported_rhel_opts = True
+        self.rhel6_defaults = True
         self.local_args = {}
 
         self.window.signal_autoconnect({
@@ -340,7 +340,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
             if dironly and fmt != 'dir':
                 sensitive = False
-            elif not self.enable_unsupported_rhel_opts:
+            elif not self.rhel6_defaults:
                 if fmt == "vmdk":
                     sensitive = False
 

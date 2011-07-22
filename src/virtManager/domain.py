@@ -244,8 +244,8 @@ class vmmDomain(vmmLibvirtObject):
     def get_install_abort(self):
         return bool(self._install_abort)
 
-    def enable_unsupported_rhel_opts(self):
-        return self.connection.enable_unsupported_rhel_opts(self.get_emulator())
+    def rhel6_defaults(self):
+        return self.connection.rhel6_defaults(self.get_emulator())
 
     def is_read_only(self):
         if self.connection.is_read_only():

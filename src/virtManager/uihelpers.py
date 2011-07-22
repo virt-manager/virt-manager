@@ -152,7 +152,7 @@ def populate_video_combo(vm, video_dev, no_default=None):
     video_dev_model.clear()
     tmpdev = virtinst.VirtualVideoDevice(vm.get_connection().vmm)
     for m in tmpdev.model_types:
-        if not vm.enable_unsupported_rhel_opts():
+        if not vm.rhel6_defaults():
             if m == "qxl" and not has_spice and not has_qxl:
                 # Only list QXL video option when VM has SPICE video
                 continue
@@ -172,7 +172,7 @@ def build_sound_combo(vm, combo, no_default=False):
     combo.add_attribute(text, 'text', 0)
     dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
-    disable_rhel = not vm.enable_unsupported_rhel_opts()
+    disable_rhel = not vm.rhel6_defaults()
     rhel6_soundmodels = ["ich6", "ac97", "es1370"]
 
     for m in virtinst.VirtualAudio.MODELS:
@@ -359,7 +359,7 @@ def build_storage_format_combo(vm, combo):
     combo.set_text_column(0)
 
     formats = ["raw", "qcow2"]
-    if vm.enable_unsupported_rhel_opts():
+    if vm.rhel6_defaults():
         formats.append("vmdk")
 
     for m in formats:

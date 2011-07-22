@@ -315,7 +315,7 @@ def main():
     config = virtManager.config.vmmConfig(appname, appversion, glade_dir)
     virtManager.util.running_config = config
     config.default_qemu_user = default_qemu_user
-    config.enable_unsupported_rhel_opts = rhel_enable_unsupported_opts
+    config.rhel6_defaults = rhel_enable_unsupported_opts
     config.preferred_distros = preferred_distros
 
     config.hv_packages = hv_packages

@@ -1986,8 +1986,8 @@ class vmmCreate(vmmGObjectUI):
         elif self.capsdomain:
             emu = self.capsdomain.emulator
 
-        rhel6 = self.conn.enable_unsupported_rhel_opts(emu)
-        self.storage_browser.enable_unsupported_rhel_opts = rhel6
+        rhel6 = self.conn.rhel6_defaults(emu)
+        self.storage_browser.rhel6_defaults = rhel6
 
         self.storage_browser.set_vm_name(self.get_config_name())
         self.storage_browser.set_finish_cb(callback)
