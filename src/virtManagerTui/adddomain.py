@@ -149,7 +149,7 @@ class DomainConfigScreen(VmmTuiConfigScreen):
                 return True
         elif page is SELECT_CDROM_PAGE:
             if self.__install_media.getSelection() != None:
-                if len(self.get_hal().list_installable_volumes()) == 0:
+                if len(self.get_libvirt().list_installable_volumes()) == 0:
                     errors.append("No installable media is available.")
                 else:
                     return True
@@ -385,9 +385,11 @@ class DomainConfigScreen(VmmTuiConfigScreen):
 
     def get_select_cdrom_page(self, screen):
         drives = []
-        media = self.get_hal().list_installable_volumes()
-        for drive in media.keys():
-            drives.append([media[drive], drive, self.__config.is_install_media(drive)])
+        devs = self.get_libvirt().list_installable_volumes()
+        for dev in devs:
+            row = [dev.pretty_label(), dev.get_path(),
+                   self.__config.is_install_media(dev.get_path())]
+            drives.append(row)
         self.__install_media = snack.RadioBar(screen, (drives))
         grid = snack.Grid(1, 1)
         grid.setField(self.__install_media, 0, 0)

@@ -22,7 +22,6 @@ from snack import Label
 from types import StringType
 
 from newt_syrup import configscreen
-from halworker import HALWorker
 from libvirtworker import LibvirtWorker, VirtManagerConfig
 
 BACK_BUTTON   = "back"
@@ -35,12 +34,8 @@ class VmmTuiConfigScreen(configscreen.ConfigScreen):
 
     def __init__(self, title):
         configscreen.ConfigScreen.__init__(self, title)
-        self.__hal = HALWorker()
         self.__libvirt = LibvirtWorker()
         self.__vm_config = VirtManagerConfig()
-
-    def get_hal(self):
-        return self.__hal
 
     def get_libvirt(self):
         return self.__libvirt

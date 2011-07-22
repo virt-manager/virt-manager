@@ -122,6 +122,30 @@ class LibvirtWorker:
         '''Returns the capabilities for this libvirt host.'''
         return self.__capabilities
 
+    def list_installable_volumes(self):
+        '''
+        Return a list of host CDROM devices that have media in them
+        XXX: virt-manager code provides other info here: can list all
+             CDROM devices and whether them are empty, or report an error
+             if HAL missing and libvirt is too old
+        '''
+        devs = self.__vmmconn.mediadevs.values()
+        ret = []
+        for dev in devs:
+            if dev.has_media() and dev.media_type == "cdrom":
+                ret.append(dev)
+        return ret
+
+    def list_network_devices(self):
+        '''
+        Return a list of physical network devices on the host
+        '''
+        ret = []
+        for path in self.__vmmconn.list_net_device_paths():
+            net = self.__vmmconn.get_net_device(path)
+            ret.append(net.get_name())
+        return ret
+
     def list_domains(self, defined=True, created=True):
         '''Lists all domains.'''
         self.__vmmconn.tick()

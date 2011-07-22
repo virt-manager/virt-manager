@@ -225,7 +225,7 @@ class AddNetworkConfigScreen(VmmTuiConfigScreen):
         ignore = screen
         devices = []
         devices.append(["NAT to any physical device", "", self.__config.get_physical_device() == ""])
-        for device in self.get_hal().list_network_devices():
+        for device in self.get_libvirt().list_network_devices():
             devices.append(["NAT to physical device %s" % device, device, self.__config.get_physical_device() == device])
         self.__physical_devices = RadioBar(screen, (devices))
         fields = []
