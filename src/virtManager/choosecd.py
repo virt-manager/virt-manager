@@ -161,7 +161,12 @@ class vmmChooseCD(vmmGObjectUI):
         rhel6 = self.vm.rhel6_defaults()
         self.storage_browser.rhel6_defaults = rhel6
 
-        self.storage_browser.set_browse_reason(self.config.CONFIG_DIR_MEDIA)
+        if self.media_type == MEDIA_FLOPPY:
+            self.storage_browser.set_browse_reason(
+                                    self.config.CONFIG_DIR_FLOPPY_MEDIA)
+        else:
+            self.storage_browser.set_browse_reason(
+                                    self.config.CONFIG_DIR_ISO_MEDIA)
         self.storage_browser.show(self.topwin, self.conn)
 
 vmmGObjectUI.type_register(vmmChooseCD)

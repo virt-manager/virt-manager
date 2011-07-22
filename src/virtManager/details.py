@@ -1577,7 +1577,7 @@ class vmmDetails(vmmGObjectUI):
 
     def _browse_file(self, callback, is_media=False):
         if is_media:
-            reason = self.config.CONFIG_DIR_MEDIA
+            reason = self.config.CONFIG_DIR_ISO_MEDIA
         else:
             reason = self.config.CONFIG_DIR_IMAGE
 

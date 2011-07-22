@@ -32,7 +32,8 @@ class vmmConfig(object):
 
     # GConf directory names for saving last used paths
     CONFIG_DIR_IMAGE = "image"
-    CONFIG_DIR_MEDIA = "media"
+    CONFIG_DIR_ISO_MEDIA = "isomedia"
+    CONFIG_DIR_FLOPPY_MEDIA = "floppymedia"
     CONFIG_DIR_SAVE = "save"
     CONFIG_DIR_RESTORE = "restore"
     CONFIG_DIR_SCREENSHOT = "screenshot"
@@ -47,10 +48,16 @@ class vmmConfig(object):
             "local_title"   : _("Locate existing storage"),
         },
 
-        CONFIG_DIR_MEDIA : {
+        CONFIG_DIR_ISO_MEDIA : {
             "enable_create" : False,
             "storage_title" : _("Locate ISO media volume"),
             "local_title"   : _("Locate ISO media"),
+        },
+
+        CONFIG_DIR_FLOPPY_MEDIA : {
+            "enable_create" : False,
+            "storage_title" : _("Locate floppy media volume"),
+            "local_title"   : _("Locate floppy media"),
         },
 
         CONFIG_DIR_FS : {
@@ -655,20 +662,28 @@ class vmmConfig(object):
 
 
     # Default directory location dealings
+    def _get_default_dir_key(self, typ):
+        if (typ == self.CONFIG_DIR_ISO_MEDIA or
+            typ == self.CONFIG_DIR_FLOPPY_MEDIA):
+            return "media"
+        return typ
+
     def get_default_directory(self, conn, _type):
         if not _type:
-            logging.error("Unknown type for get_default_directory")
+            logging.error("Unknown type '%s' for get_default_directory" % _type)
             return
 
+        key = self._get_default_dir_key(_type)
         try:
-            path = self.conf.get_value(self.conf_dir + "/paths/default-%s-path"
-                                                                       % _type)
+            path = self.conf.get_value(self.conf_dir +
+                                       "/paths/default-%s-path" % key)
         except:
             path = None
 
         if not path:
             if (_type == self.CONFIG_DIR_IMAGE or
-                _type == self.CONFIG_DIR_MEDIA):
+                _type == self.CONFIG_DIR_ISO_MEDIA or
+                _type == self.CONFIG_DIR_FLOPPY_MEDIA):
                 path = self.get_default_image_dir(conn)
             if (_type == self.CONFIG_DIR_SAVE or
                 _type == self.CONFIG_DIR_RESTORE):
