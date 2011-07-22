@@ -37,10 +37,6 @@ class StartStoragePoolConfigScreen(StorageListConfigScreen):
     def page_has_next(self, page):
         return page is LIST_POOLS_PAGE and self.has_selectable_pools()
 
-    def page_has_back(self, page):
-        ignore = page
-        return False
-
     def page_has_finish(self, page):
         return page is FINAL_PAGE
 
@@ -55,10 +51,10 @@ class StartStoragePoolConfigScreen(StorageListConfigScreen):
     def process_input(self, page):
         if page is LIST_POOLS_PAGE:
             self.get_libvirt().create_storage_pool(self.get_selected_pool())
-            self.set_finished()
 
     def get_final_page(self, screen):
         ignore = screen
+        self.set_finished()
         return [Label("Storage pool started: %s" % self.get_selected_pool())]
 
 def StartStoragePool():
