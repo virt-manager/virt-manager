@@ -132,7 +132,7 @@ def check_default_pool_active(topwin, conn):
 #####################################################
 # Hardware model list building (for details, addhw) #
 #####################################################
-def build_video_combo(vm, video_dev, no_default=False):
+def build_video_combo(vm, video_dev, no_default=None):
     video_dev_model = gtk.ListStore(str)
     video_dev.set_model(video_dev_model)
     text = gtk.CellRendererText()
@@ -140,11 +140,27 @@ def build_video_combo(vm, video_dev, no_default=False):
     video_dev.add_attribute(text, 'text', 0)
     video_dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
+    populate_video_combo(vm, video_dev, no_default)
+
+def populate_video_combo(vm, video_dev, no_default=None):
+    video_dev_model = video_dev.get_model()
+    has_spice = any(map(lambda g: g.type == g.TYPE_SPICE,
+                        vm.get_graphics_devices()))
+    has_qxl = any(map(lambda v: v.model_type == "qxl",
+                      vm.get_video_devices()))
+
+    video_dev_model.clear()
     tmpdev = virtinst.VirtualVideoDevice(vm.get_connection().vmm)
     for m in tmpdev.model_types:
+        if not vm.enable_unsupported_rhel_opts():
+            if m == "qxl" and not has_spice and not has_qxl:
+                # Only list QXL video option when VM has SPICE video
+                continue
+
         if m == tmpdev.MODEL_DEFAULT and no_default:
             continue
         video_dev_model.append([m])
+
     if len(video_dev_model) > 0:
         video_dev.set_active(0)
 

@@ -2976,6 +2976,11 @@ class vmmDetails(vmmGObjectUI):
         if not vid:
             return
 
+        no_default = not self.is_customize_dialog
+        uihelpers.populate_video_combo(self.vm,
+                                self.window.get_widget("video-model-combo"),
+                                no_default=no_default)
+
         model = vid.model_type
         ram = vid.vram
         heads = vid.heads
