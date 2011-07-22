@@ -676,8 +676,8 @@ class vmmManager(vmmGObjectUI):
     def vm_row_key(self, vm):
         return vm.get_uuid() + ":" + vm.get_connection().get_uri()
 
-    def vm_added(self, connection, uri_ignore, vmuuid):
-        vm = connection.get_vm(vmuuid)
+    def vm_added(self, conn, vmuuid):
+        vm = conn.get_vm(vmuuid)
         vm.connect("status-changed", self.vm_status_changed)
         vm.connect("resources-sampled", self.vm_resources_sampled)
         vm.connect("config-changed", self.vm_resources_sampled, True)
@@ -686,13 +686,13 @@ class vmmManager(vmmGObjectUI):
         vmlist = self.widget("vm-list")
         model = vmlist.get_model()
 
-        self._append_vm(model, vm, connection)
+        self._append_vm(model, vm, conn)
 
-    def vm_removed(self, connection, uri_ignore, vmuuid):
+    def vm_removed(self, conn, vmuuid):
         vmlist = self.widget("vm-list")
         model = vmlist.get_model()
 
-        parent = self.rows[connection.get_uri()].iter
+        parent = self.rows[conn.get_uri()].iter
         for row in range(model.iter_n_children(parent)):
             vm = model.get_value(model.iter_nth_child(parent, row), ROW_HANDLE)
             if vm.get_uuid() == vmuuid:

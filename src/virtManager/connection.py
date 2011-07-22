@@ -268,13 +268,13 @@ class vmmConnection(vmmGObject):
 
         if name == "vm-added":
             for uuid in self.vms.keys():
-                self.emit("vm-added", self.get_uri(), uuid)
+                self.emit("vm-added", uuid)
         elif name == "mediadev-added":
             for dev in self.mediadevs.values():
                 self.emit("mediadev-added", dev)
         elif name == "nodedev-added":
             for key in self.nodedevs.keys():
-                self.emit("nodedev-added", self.get_uri(), key)
+                self.emit("nodedev-added", key)
 
         return handle_id
 
@@ -858,7 +858,7 @@ class vmmConnection(vmmGObject):
 
         self._add_mediadev(key, dev)
 
-    def _nodedev_mediadev_added(self, ignore1, ignore2, name):
+    def _nodedev_mediadev_added(self, ignore1, name):
         if name in self.mediadevs:
             return
 
@@ -869,7 +869,7 @@ class vmmConnection(vmmGObject):
 
         self._add_mediadev(name, mediadev)
 
-    def _nodedev_mediadev_removed(self, ignore1, ignore2, name):
+    def _nodedev_mediadev_removed(self, ignore1, name):
         if name not in self.mediadevs:
             return
 
@@ -1442,7 +1442,6 @@ class vmmConnection(vmmGObject):
             app with long tick operations.
             """
             # Connection closed out from under us
-            uri = self.get_uri()
             if not self.vmm:
                 return
 
@@ -1455,50 +1454,50 @@ class vmmConnection(vmmGObject):
 
             # Update VM states
             for uuid in oldVMs:
-                self.emit("vm-removed", uri, uuid)
+                self.emit("vm-removed", uuid)
                 oldVMs[uuid].cleanup()
             for uuid in newVMs:
-                self.emit("vm-added", uri, uuid)
+                self.emit("vm-added", uuid)
 
             # Update virtual network states
             for uuid in oldNets:
-                self.emit("net-removed", uri, uuid)
+                self.emit("net-removed", uuid)
                 oldNets[uuid].cleanup()
             for uuid in newNets:
-                self.emit("net-added", uri, uuid)
+                self.emit("net-added", uuid)
             for uuid in startNets:
-                self.emit("net-started", uri, uuid)
+                self.emit("net-started", uuid)
             for uuid in stopNets:
-                self.emit("net-stopped", uri, uuid)
+                self.emit("net-stopped", uuid)
 
             # Update storage pool states
             for uuid in oldPools:
-                self.emit("pool-removed", uri, uuid)
+                self.emit("pool-removed", uuid)
                 oldPools[uuid].cleanup()
             for uuid in newPools:
-                self.emit("pool-added", uri, uuid)
+                self.emit("pool-added", uuid)
             for uuid in startPools:
-                self.emit("pool-started", uri, uuid)
+                self.emit("pool-started", uuid)
             for uuid in stopPools:
-                self.emit("pool-stopped", uri, uuid)
+                self.emit("pool-stopped", uuid)
 
             # Update interface states
             for name in oldInterfaces:
-                self.emit("interface-removed", uri, name)
+                self.emit("interface-removed", name)
                 oldInterfaces[name].cleanup()
             for name in newInterfaces:
-                self.emit("interface-added", uri, name)
+                self.emit("interface-added", name)
             for name in startInterfaces:
-                self.emit("interface-started", uri, name)
+                self.emit("interface-started", name)
             for name in stopInterfaces:
-                self.emit("interface-stopped", uri, name)
+                self.emit("interface-stopped", name)
 
             # Update nodedev list
             for name in oldNodedevs:
-                self.emit("nodedev-removed", uri, name)
+                self.emit("nodedev-removed", name)
                 oldNodedevs[name].cleanup()
             for name in newNodedevs:
-                self.emit("nodedev-added", uri, name)
+                self.emit("nodedev-added", name)
 
         self.safe_idle_add(tick_send_signals)
 
@@ -1657,26 +1656,26 @@ class vmmConnection(vmmGObject):
                                        self.config.get_iso_paths)
 
 vmmGObject.type_register(vmmConnection)
-vmmGObject.signal_new(vmmConnection, "vm-added", [str, str])
-vmmGObject.signal_new(vmmConnection, "vm-removed", [str, str])
+vmmGObject.signal_new(vmmConnection, "vm-added", [str])
+vmmGObject.signal_new(vmmConnection, "vm-removed", [str])
 
-vmmGObject.signal_new(vmmConnection, "net-added", [str, str])
-vmmGObject.signal_new(vmmConnection, "net-removed", [str, str])
-vmmGObject.signal_new(vmmConnection, "net-started", [str, str])
-vmmGObject.signal_new(vmmConnection, "net-stopped", [str, str])
+vmmGObject.signal_new(vmmConnection, "net-added", [str])
+vmmGObject.signal_new(vmmConnection, "net-removed", [str])
+vmmGObject.signal_new(vmmConnection, "net-started", [str])
+vmmGObject.signal_new(vmmConnection, "net-stopped", [str])
 
-vmmGObject.signal_new(vmmConnection, "pool-added", [str, str])
-vmmGObject.signal_new(vmmConnection, "pool-removed", [str, str])
-vmmGObject.signal_new(vmmConnection, "pool-started", [str, str])
-vmmGObject.signal_new(vmmConnection, "pool-stopped", [str, str])
+vmmGObject.signal_new(vmmConnection, "pool-added", [str])
+vmmGObject.signal_new(vmmConnection, "pool-removed", [str])
+vmmGObject.signal_new(vmmConnection, "pool-started", [str])
+vmmGObject.signal_new(vmmConnection, "pool-stopped", [str])
 
-vmmGObject.signal_new(vmmConnection, "interface-added", [str, str])
-vmmGObject.signal_new(vmmConnection, "interface-removed", [str, str])
-vmmGObject.signal_new(vmmConnection, "interface-started", [str, str])
-vmmGObject.signal_new(vmmConnection, "interface-stopped", [str, str])
+vmmGObject.signal_new(vmmConnection, "interface-added", [str])
+vmmGObject.signal_new(vmmConnection, "interface-removed", [str])
+vmmGObject.signal_new(vmmConnection, "interface-started", [str])
+vmmGObject.signal_new(vmmConnection, "interface-stopped", [str])
 
-vmmGObject.signal_new(vmmConnection, "nodedev-added", [str, str])
-vmmGObject.signal_new(vmmConnection, "nodedev-removed", [str, str])
+vmmGObject.signal_new(vmmConnection, "nodedev-added", [str])
+vmmGObject.signal_new(vmmConnection, "nodedev-removed", [str])
 
 vmmGObject.signal_new(vmmConnection, "mediadev-added", [object])
 vmmGObject.signal_new(vmmConnection, "mediadev-removed", [str])

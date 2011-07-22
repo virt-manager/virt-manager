@@ -231,7 +231,7 @@ class vmmStorageBrowser(vmmGObjectUI):
             return
         return pool.get_volume(row[0])
 
-    def refresh_storage_pool(self, src_ignore, uri_ignore, uuid):
+    def refresh_storage_pool(self, src_ignore, uuid):
         pool_list = self.widget("pool-list")
         virtManager.host.refresh_pool_in_list(pool_list, self.conn, uuid)
         curpool = self.current_pool()
@@ -242,7 +242,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         # update vol list
         self.pool_selected(self.widget("pool-list").get_selection())
 
-    def repopulate_storage_pools(self, src_ignore, uri_ignore, uuid_ignore):
+    def repopulate_storage_pools(self, src_ignore, uuid_ignore):
         pool_list = self.widget("pool-list")
         virtManager.host.populate_storage_pools(pool_list, self.conn)
 
@@ -270,7 +270,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         if cp is None:
             return
         cp.refresh()
-        self.refresh_storage_pool(None, None, cp.get_uuid())
+        self.refresh_storage_pool(None, cp.get_uuid())
 
     def new_volume(self, src_ignore):
         pool = self.current_pool()

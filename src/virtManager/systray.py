@@ -348,7 +348,8 @@ class vmmSystray(vmmGObject):
                 vm_item = self.conn_vm_menuitems[uri][uuid]
                 vm_submenu.insert(vm_item, i)
 
-    def vm_added(self, conn, uri, uuid):
+    def vm_added(self, conn, uuid):
+        uri = conn.get_uri()
         vm = conn.get_vm(uuid)
         if not vm:
             return
@@ -372,7 +373,8 @@ class vmmSystray(vmmGObject):
         self.vm_state_changed(vm)
         menu_item.show()
 
-    def vm_removed(self, conn_ignore, uri, uuid):
+    def vm_removed(self, conn, uuid):
+        uri = conn.get_uri()
         vm_mappings = self.conn_vm_menuitems[uri]
         if not vm_mappings:
             return

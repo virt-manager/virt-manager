@@ -47,9 +47,8 @@ class vmmInspection(Thread):
         self._q.put(obj)
 
     # Called by the main thread whenever a VM is added to vmlist.
-    def vm_added(self, conn, uri, uuid):
+    def vm_added(self, conn, uuid):
         ignore = conn
-        ignore = uri
         ignore = uuid
         obj = ("vm_added")
         self._q.put(obj)

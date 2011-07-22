@@ -482,7 +482,7 @@ class vmmHost(vmmGObjectUI):
             return self.conn.get_net(curruuid)
         return None
 
-    def refresh_network(self, src_ignore, uri_ignore, uuid):
+    def refresh_network(self, src_ignore, uuid):
         uilist = self.widget("net-list")
         sel = uilist.get_selection()
         active = sel.get_selected()
@@ -586,7 +586,7 @@ class vmmHost(vmmGObjectUI):
                                     _("Isolated virtual network"))
         self.widget("net-apply").set_sensitive(False)
 
-    def repopulate_networks(self, src_ignore, uri_ignore, uuid_ignore):
+    def repopulate_networks(self, src_ignore, uuid_ignore):
         self.populate_networks(self.widget("net-list").get_model())
 
     def populate_networks(self, model):
@@ -704,7 +704,7 @@ class vmmHost(vmmGObjectUI):
         if cp is None:
             return
         cp.refresh()
-        self.refresh_storage_pool(None, None, cp.get_uuid())
+        self.refresh_storage_pool(None, cp.get_uuid())
 
     def current_pool(self):
         sel = self.widget("pool-list").get_selection()
@@ -811,7 +811,7 @@ class vmmHost(vmmGObjectUI):
                 util.tooltip_wrapper(self.widget("vol-add"),
                                      str(e))
 
-    def refresh_storage_pool(self, src_ignore, uri_ignore, uuid):
+    def refresh_storage_pool(self, src_ignore, uuid):
         refresh_pool_in_list(self.widget("pool-list"), self.conn, uuid)
         curpool = self.current_pool()
         if curpool.uuid != uuid:
@@ -867,7 +867,7 @@ class vmmHost(vmmGObjectUI):
             clipboard.set_text(target_path)
 
 
-    def repopulate_storage_pools(self, src_ignore, uri_ignore, uuid_ignore):
+    def repopulate_storage_pools(self, src_ignore, uuid_ignore):
         pool_list = self.widget("pool-list")
         populate_storage_pools(pool_list, self.conn)
 
@@ -958,7 +958,7 @@ class vmmHost(vmmGObjectUI):
         if cp is None:
             return
 
-        self.refresh_interface(None, None, cp.get_name())
+        self.refresh_interface(None, cp.get_name())
 
     def current_interface(self):
         sel = self.widget("interface-list").get_selection()
@@ -1098,7 +1098,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("interface-child-box").set_property("visible", show_child)
         self.populate_interface_children()
 
-    def refresh_interface(self, src_ignore, uri_ignore, name):
+    def refresh_interface(self, src_ignore, name):
         iface_list = self.widget("interface-list")
         sel = iface_list.get_selection()
         active = sel.get_selected()
@@ -1121,7 +1121,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("interface-start").set_sensitive(False)
         self.widget("interface-apply").set_sensitive(False)
 
-    def repopulate_interfaces(self, src_ignore, uri_ignore, name_ignore):
+    def repopulate_interfaces(self, src_ignore, name_ignore):
         interface_list = self.widget("interface-list")
         self.populate_interfaces(interface_list.get_model())
 

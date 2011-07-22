@@ -373,8 +373,8 @@ class vmmEngine(vmmGObject):
             self.exit_app(src)
 
 
-    def _do_vm_removed(self, connection, hvuri, vmuuid):
-        ignore = connection
+    def _do_vm_removed(self, conn, vmuuid):
+        hvuri = conn.get_uri()
         if vmuuid not in self.connections[hvuri]["windowDetails"]:
             return
 
