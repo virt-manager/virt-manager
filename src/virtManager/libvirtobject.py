@@ -35,9 +35,9 @@ def _sanitize_xml(xml):
     return xml
 
 class vmmLibvirtObject(vmmGObject):
-    def __init__(self, connection):
+    def __init__(self, conn):
         vmmGObject.__init__(self)
-        self.connection = connection
+        self._conn = conn
 
         self._xml = None
         self._is_xml_valid = False
@@ -46,8 +46,9 @@ class vmmLibvirtObject(vmmGObject):
         self._inactive_xml_flags = 0
         self._active_xml_flags = 0
 
-    def get_connection(self):
-        return self.connection
+    def _get_conn(self):
+        return self._conn
+    conn = property(_get_conn)
 
     #############################################################
     # Functions that should probably be overridden in sub class #

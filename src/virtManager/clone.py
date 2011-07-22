@@ -124,7 +124,7 @@ class vmmCloneVM(vmmGObjectUI):
         vmmGObjectUI.__init__(self, "vmm-clone.glade", "vmm-clone")
         self.orig_vm = orig_vm
 
-        self.conn = self.orig_vm.connection
+        self.conn = self.orig_vm.conn
         self.clone_design = None
 
         self.storage_list = {}
@@ -316,7 +316,7 @@ class vmmCloneVM(vmmGObjectUI):
                 label = _("Usermode")
 
             elif net_type == VirtualNetworkInterface.TYPE_VIRTUAL:
-                net = self.orig_vm.get_connection().get_net_by_name(net_dev)
+                net = self.orig_vm.conn.get_net_by_name(net_dev)
 
                 if net:
                     label = ""
@@ -672,7 +672,7 @@ class vmmCloneVM(vmmGObjectUI):
 
     def set_orig_vm(self, new_orig):
         self.orig_vm = new_orig
-        self.conn = self.orig_vm.connection
+        self.conn = self.orig_vm.conn
 
     def change_mac_finish(self, ignore):
         orig = self.change_mac_window.get_widget("change-mac-orig").get_text()

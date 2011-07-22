@@ -124,8 +124,8 @@ class vmmDomain(vmmLibvirtObject):
     Class wrapping virDomain libvirt objects. Is also extended to be
     backed by a virtinst.Guest object for new VM 'customize before install'
     """
-    def __init__(self, connection, backend, uuid):
-        vmmLibvirtObject.__init__(self, connection)
+    def __init__(self, conn, backend, uuid):
+        vmmLibvirtObject.__init__(self, conn)
 
         self._backend = backend
         self.uuid = uuid
@@ -181,7 +181,7 @@ class vmmDomain(vmmLibvirtObject):
         """
         self._reparse_xml()
 
-        self.managedsave_supported = self.connection.get_dom_managedsave_supported(self._backend)
+        self.managedsave_supported = self.conn.get_dom_managedsave_supported(self._backend)
         self.getjobinfo_supported = support.check_domain_support(self._backend,
                                             support.SUPPORT_DOMAIN_JOB_INFO)
 
@@ -192,7 +192,7 @@ class vmmDomain(vmmLibvirtObject):
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
         (self._inactive_xml_flags,
-         self._active_xml_flags) = self.connection.get_dom_flags(self._backend)
+         self._active_xml_flags) = self.conn.get_dom_flags(self._backend)
 
         self.toggle_sample_network_traffic()
         self.toggle_sample_disk_io()
@@ -245,10 +245,10 @@ class vmmDomain(vmmLibvirtObject):
         return bool(self._install_abort)
 
     def rhel6_defaults(self):
-        return self.connection.rhel6_defaults(self.get_emulator())
+        return self.conn.rhel6_defaults(self.get_emulator())
 
     def is_read_only(self):
-        if self.connection.is_read_only():
+        if self.conn.is_read_only():
             return True
         if self.is_management_domain():
             return True
@@ -332,9 +332,9 @@ class vmmDomain(vmmLibvirtObject):
         return self._guest
 
     def _build_guest(self, xml):
-        return virtinst.Guest(connection=self.connection.vmm,
+        return virtinst.Guest(conn=self.conn.vmm,
                               parsexml=xml,
-                              caps=self.connection.get_capabilities())
+                              caps=self.conn.get_capabilities())
 
     def _reparse_xml(self, ignore=None):
         self._guest = self._build_guest(self._get_domain_xml())
@@ -363,7 +363,7 @@ class vmmDomain(vmmLibvirtObject):
         newxml = guest.get_xml_config()
 
         try:
-            self.get_connection().rename_vm(self, origxml, newxml)
+            self.conn.rename_vm(self, origxml, newxml)
         finally:
             self._invalidate_xml()
 
@@ -739,7 +739,7 @@ class vmmDomain(vmmLibvirtObject):
     ########################
 
     def _define(self, newxml):
-        self.get_connection().define_domain(newxml)
+        self.conn.define_domain(newxml)
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
 
@@ -865,8 +865,8 @@ class vmmDomain(vmmLibvirtObject):
 
     def get_graphics_console(self):
         gdevs = self.get_graphics_devices()
-        connhost = self.connection.get_uri_hostname()
-        transport, connuser = self.connection.get_transport()
+        connhost = self.conn.get_uri_hostname()
+        transport, connuser = self.conn.get_transport()
 
         gdev = gdevs and gdevs[0] or None
         gtype = None
@@ -1122,7 +1122,7 @@ class vmmDomain(vmmLibvirtObject):
         if not self.is_active():
             curmem = 0
 
-        pcentCurrMem = curmem * 100.0 / self.connection.host_memory_size()
+        pcentCurrMem = curmem * 100.0 / self.conn.host_memory_size()
         pcentCurrMem = max(0.0, min(pcentCurrMem, 100.0))
 
         return pcentCurrMem, curmem
@@ -1143,7 +1143,7 @@ class vmmDomain(vmmLibvirtObject):
                             libvirt.VIR_DOMAIN_CRASHED]):
             cpuTime = info[4] - prevCpuTime
             cpuTimeAbs = info[4]
-            hostcpus = self.connection.host_active_processor_count()
+            hostcpus = self.conn.host_active_processor_count()
             guestcpus = self.vcpu_count()
 
             pcentbase = (((cpuTime) * 100.0) /
@@ -1400,21 +1400,21 @@ class vmmDomain(vmmLibvirtObject):
     #################
 
     def set_console_scaling(self, value):
-        self.config.set_pervm(self.connection.get_uri(), self.uuid,
+        self.config.set_pervm(self.conn.get_uri(), self.uuid,
                               self.config.set_console_scaling, value)
     def get_console_scaling(self):
-        return self.config.get_pervm(self.connection.get_uri(), self.uuid,
+        return self.config.get_pervm(self.conn.get_uri(), self.uuid,
                                      self.config.get_console_scaling)
     def on_console_scaling_changed(self, cb):
-        return self.config.listen_pervm(self.connection.get_uri(), self.uuid,
+        return self.config.listen_pervm(self.conn.get_uri(), self.uuid,
                                         self.config.on_console_scaling_changed,
                                         cb)
 
     def set_details_window_size(self, w, h):
-        self.config.set_pervm(self.connection.get_uri(), self.uuid,
+        self.config.set_pervm(self.conn.get_uri(), self.uuid,
                               self.config.set_details_window_size, (w, h))
     def get_details_window_size(self):
-        return self.config.get_pervm(self.connection.get_uri(), self.uuid,
+        return self.config.get_pervm(self.conn.get_uri(), self.uuid,
                                      self.config.get_details_window_size)
 
     def inspection_data_updated(self):
@@ -1494,7 +1494,7 @@ class vmmDomain(vmmLibvirtObject):
         return rd, wr
 
     def tick(self, now):
-        if self.connection.get_state() != self.connection.STATE_ACTIVE:
+        if self.conn.get_state() != self.conn.STATE_ACTIVE:
             return
 
         # Invalidate cached values
@@ -1510,9 +1510,9 @@ class vmmDomain(vmmLibvirtObject):
         # (ie MAX_LONG) so lets clamp it to the actual
         # physical RAM in machine which is the effective
         # real world limit
-        if (self.get_connection().is_xen() and
+        if (self.conn.is_xen() and
             self.is_management_domain()):
-            info[1] = self.connection.host_memory_size()
+            info[1] = self.conn.host_memory_size()
 
         (cpuTime, cpuTimeAbs,
          pcentHostCpu, pcentGuestCpu) = self._sample_cpu_stats(info, now)
@@ -1553,8 +1553,8 @@ class vmmDomainVirtinst(vmmDomain):
 
     Used for launching a details window for customizing a VM before install.
     """
-    def __init__(self, connection, backend, uuid):
-        vmmDomain.__init__(self, connection, backend, uuid)
+    def __init__(self, conn, backend, uuid):
+        vmmDomain.__init__(self, conn, backend, uuid)
 
         self._orig_xml = None
 

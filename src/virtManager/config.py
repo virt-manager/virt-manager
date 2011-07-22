@@ -592,7 +592,7 @@ class vmmConfig(object):
 
 
     # Manager view connection list
-    def add_connection(self, uri):
+    def add_conn(self, uri):
         uris = self.conf.get_list(self.conf_dir + "/connections/uris",
                                   gconf.VALUE_STRING)
         if uris == None:
@@ -602,7 +602,7 @@ class vmmConfig(object):
             uris.insert(len(uris) - 1, uri)
             self.conf.set_list(self.conf_dir + "/connections/uris",
                                gconf.VALUE_STRING, uris)
-    def remove_connection(self, uri):
+    def remove_conn(self, uri):
         uris = self.conf.get_list(self.conf_dir + "/connections/uris",
                                   gconf.VALUE_STRING)
         if uris == None:
@@ -621,7 +621,7 @@ class vmmConfig(object):
             self.conf.set_list(self.conf_dir + "/connections/autoconnect",
                                gconf.VALUE_STRING, uris)
 
-    def get_connections(self):
+    def get_conn_uris(self):
         return self.conf.get_list(self.conf_dir + "/connections/uris",
                                   gconf.VALUE_STRING)
 
@@ -686,11 +686,11 @@ class vmmConfig(object):
         self.conf.set_string(self.conf_dir + "/paths/default-%s-path" % _type,
                              folder)
 
-    def get_default_image_dir(self, connection):
-        if connection.is_xen():
+    def get_default_image_dir(self, conn):
+        if conn.is_xen():
             return self.DEFAULT_XEN_IMAGE_DIR
 
-        if (connection.is_qemu_session() or
+        if (conn.is_qemu_session() or
             not os.access(self.DEFAULT_VIRT_IMAGE_DIR, os.W_OK)):
             return os.getcwd()
 
@@ -698,8 +698,8 @@ class vmmConfig(object):
         # is a managed pool and the user will be able to install to it.
         return self.DEFAULT_VIRT_IMAGE_DIR
 
-    def get_default_save_dir(self, connection):
-        if connection.is_xen():
+    def get_default_save_dir(self, conn):
+        if conn.is_xen():
             return self.DEFAULT_XEN_SAVE_DIR
         elif os.access(self.DEFAULT_VIRT_SAVE_DIR, os.W_OK):
             return self.DEFAULT_VIRT_SAVE_DIR
@@ -742,7 +742,7 @@ class vmmConfig(object):
             if secret != None and secret.get_name() == self.get_secret_name(vm):
                 if not(secret.has_attribute("hvuri")):
                     return ("", "")
-                if secret.get_attribute("hvuri") != vm.get_connection().get_uri():
+                if secret.get_attribute("hvuri") != vm.conn.get_uri():
                     return ("", "")
                 if not(secret.has_attribute("uuid")):
                     return ("", "")
@@ -763,7 +763,7 @@ class vmmConfig(object):
 
         secret = vmmSecret(self.get_secret_name(vm), password,
                            {"uuid" : vm.get_uuid(),
-                            "hvuri": vm.get_connection().get_uri()})
+                            "hvuri": vm.conn.get_uri()})
         _id = self.keyring.add_secret(secret)
         if _id != None:
             self.conf.set_int(self.conf_dir + "/console/passwords/" + vm.get_uuid(), _id)

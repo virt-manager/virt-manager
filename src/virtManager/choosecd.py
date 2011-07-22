@@ -31,7 +31,7 @@ class vmmChooseCD(vmmGObjectUI):
         vmmGObjectUI.__init__(self, "vmm-choose-cd.glade", "vmm-choose-cd")
 
         self.vm = vm
-        self.conn = self.vm.get_connection()
+        self.conn = self.vm.conn
         self.disk = disk
         self.storage_browser = None
         self.media_type = disk.device

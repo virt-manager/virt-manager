@@ -65,7 +65,7 @@ class vmmAddHardware(vmmGObjectUI):
                               "vmm-add-hardware.glade", "vmm-add-hardware")
 
         self.vm = vm
-        self.conn = vm.get_connection()
+        self.conn = vm.conn
 
         self.storage_browser = None
 

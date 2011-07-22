@@ -272,7 +272,7 @@ class vmmDetails(vmmGObjectUI):
     def __init__(self, vm, parent=None):
         vmmGObjectUI.__init__(self, "vmm-details.glade", "vmm-details")
         self.vm = vm
-        self.conn = self.vm.get_connection()
+        self.conn = self.vm.conn
 
         self.is_customize_dialog = False
         if parent:
@@ -781,7 +781,7 @@ class vmmDetails(vmmGObjectUI):
         no_default = not self.is_customize_dialog
 
         # CPU features
-        caps = self.vm.get_connection().get_capabilities()
+        caps = self.vm.conn.get_capabilities()
         cpu_values = None
         cpu_names = []
         all_features = []
@@ -1419,41 +1419,41 @@ class vmmDetails(vmmGObjectUI):
 
         if not self.vm.is_paused():
             self.emit("action-suspend-domain",
-                      self.vm.get_connection().get_uri(),
+                      self.vm.conn.get_uri(),
                       self.vm.get_uuid())
         else:
             self.emit("action-resume-domain",
-                      self.vm.get_connection().get_uri(),
+                      self.vm.conn.get_uri(),
                       self.vm.get_uuid())
 
 
     def control_vm_run(self, src_ignore):
         self.emit("action-run-domain",
-                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_uuid())
 
     def control_vm_shutdown(self, src_ignore):
         self.emit("action-shutdown-domain",
-                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_uuid())
 
     def control_vm_reboot(self, src_ignore):
         self.emit("action-reboot-domain",
-                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_uuid())
 
     def control_vm_save(self, src_ignore):
         self.emit("action-save-domain",
-                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_uuid())
 
     def control_vm_destroy(self, src_ignore):
         self.emit("action-destroy-domain",
-                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_uuid())
 
     def control_vm_clone(self, src_ignore):
         self.emit("action-clone-domain",
-                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_uuid())
 
     def control_vm_migrate(self, src_ignore):
         self.emit("action-migrate-domain",
-                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_uuid())
 
     def control_vm_screenshot(self, src_ignore):
         image = self.console.viewer.get_pixbuf()
@@ -1463,7 +1463,7 @@ class vmmDetails(vmmGObjectUI):
         path = util.browse_local(
                         self.topwin,
                         _("Save Virtual Machine Screenshot"),
-                        self.vm.get_connection(),
+                        self.vm.conn,
                         _type=("png", "PNG files"),
                         dialog_type=gtk.FILE_CHOOSER_ACTION_SAVE,
                         browse_reason=self.config.CONFIG_DIR_SCREENSHOT)
@@ -1476,7 +1476,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Save along with a little metadata about us & the domain
         image.save(filename, 'png',
-                   {'tEXt::Hypervisor URI': self.vm.get_connection().get_uri(),
+                   {'tEXt::Hypervisor URI': self.vm.conn.get_uri(),
                     'tEXt::Domain Name': self.vm.get_name(),
                     'tEXt::Domain UUID': self.vm.get_uuid(),
                     'tEXt::Generator App': self.config.get_appname(),
@@ -1672,7 +1672,7 @@ class vmmDetails(vmmGObjectUI):
     def config_vcpus_changed(self, ignore):
         self.enable_apply(EDIT_VCPUS)
 
-        conn = self.vm.get_connection()
+        conn = self.vm.conn
         host_active_count = conn.host_active_processor_count()
         cur = self.config_get_vcpus()
 
@@ -1692,7 +1692,7 @@ class vmmDetails(vmmGObjectUI):
     def config_cpu_copy_host(self, src_ignore):
         # Update UI with output copied from host
         try:
-            CPU = virtinst.CPU(self.vm.get_connection().vmm)
+            CPU = virtinst.CPU(self.vm.conn.vmm)
             CPU.copy_host_cpu()
 
             self._refresh_cpu_config(CPU)
@@ -1953,7 +1953,7 @@ class vmmDetails(vmmGObjectUI):
         vcpu_list = self.widget("config-vcpu-list")
         vcpu_model = vcpu_list.get_model()
         row = vcpu_model[path]
-        conn = self.vm.get_connection()
+        conn = self.vm.conn
 
         try:
             new_text = new_text.strip()
@@ -1972,7 +1972,7 @@ class vmmDetails(vmmGObjectUI):
         self._refresh_runtime_pinning()
 
     def config_vcpu_pin_cpuset(self, cpuset):
-        conn = self.vm.get_connection()
+        conn = self.vm.conn
         vcpu_list = self.widget("config-vcpu-list")
         vcpu_model = vcpu_list.get_model()
 
@@ -2448,7 +2448,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Security details
         semodel, ignore, vmlabel = self.vm.get_seclabel()
-        caps = self.vm.get_connection().get_capabilities()
+        caps = self.vm.conn.get_capabilities()
 
         if caps.host.secmodel and caps.host.secmodel.model:
             semodel = caps.host.secmodel.model
@@ -2486,7 +2486,7 @@ class vmmDetails(vmmGObjectUI):
         cpu_txt = "%d %%" % self.vm.host_cpu_time_percentage()
 
         vm_memory = self.vm.stats_memory()
-        host_memory = self.vm.get_connection().host_memory_size()
+        host_memory = self.vm.conn.host_memory_size()
         mem_txt = "%d MB of %d MB" % (int(round(vm_memory / 1024.0)),
                                       int(round(host_memory / 1024.0)))
 
@@ -2513,7 +2513,7 @@ class vmmDetails(vmmGObjectUI):
                                                 self.vm.network_traffic_vector())
 
     def _refresh_cpu_count(self):
-        conn = self.vm.get_connection()
+        conn = self.vm.conn
         host_active_count = conn.host_active_processor_count()
         maxvcpus = self.vm.vcpu_max_count()
         curvcpus = self.vm.vcpu_count()
@@ -2534,7 +2534,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("config-vcpupin").set_text(vcpupin)
 
     def _refresh_runtime_pinning(self):
-        conn = self.vm.get_connection()
+        conn = self.vm.conn
         host_active_count = conn.host_active_processor_count()
 
         vcpu_list = self.widget("config-vcpu-list")
@@ -2577,7 +2577,7 @@ class vmmDetails(vmmGObjectUI):
     def _refresh_cpu_config(self, cpu):
         feature_ui = self.widget("cpu-features")
         model = cpu.model or ""
-        caps = self.vm.get_connection().get_capabilities()
+        caps = self.vm.conn.get_capabilities()
 
         capscpu = None
         try:
@@ -2625,7 +2625,7 @@ class vmmDetails(vmmGObjectUI):
 
     def refresh_config_memory(self):
         host_mem_widget = self.widget("state-host-memory")
-        host_mem = self.vm.get_connection().host_memory_size() / 1024
+        host_mem = self.vm.conn.host_memory_size() / 1024
         vm_cur_mem = self.vm.get_memory() / 1024.0
         vm_max_mem = self.vm.maximum_memory() / 1024.0
 
@@ -2961,7 +2961,7 @@ class vmmDetails(vmmGObjectUI):
 
         devtype = hostdev.type
         pretty_name = None
-        nodedev = lookup_nodedev(self.vm.get_connection(), hostdev)
+        nodedev = lookup_nodedev(self.vm.conn, hostdev)
         if nodedev:
             pretty_name = nodedev.pretty_name()
 
@@ -3087,7 +3087,7 @@ class vmmDetails(vmmGObjectUI):
                 buses.append(["usb", "USB"])
             if self.vm.get_hv_type() == "kvm":
                 buses.append(["virtio", "Virtio"])
-            if self.vm.get_connection().is_xen():
+            if self.vm.conn.is_xen():
                 buses.append(["xen", "Xen"])
 
         for row in buses:

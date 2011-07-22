@@ -69,7 +69,7 @@ class vmmDeleteDialog(vmmGObjectUI):
 
     def show(self, vm, parent):
         self.vm = vm
-        self.conn = vm.get_connection()
+        self.conn = vm.conn
 
         self.reset_state()
         self.topwin.set_transient_for(parent)

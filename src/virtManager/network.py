@@ -46,8 +46,8 @@ class vmmNetwork(vmmLibvirtObject):
 
         return desc
 
-    def __init__(self, connection, net, uuid, active):
-        vmmLibvirtObject.__init__(self, connection)
+    def __init__(self, conn, net, uuid, active):
+        vmmLibvirtObject.__init__(self, conn)
         self.net = net
         self.uuid = uuid
         self.active = active
@@ -58,7 +58,7 @@ class vmmNetwork(vmmLibvirtObject):
     def _XMLDesc(self, flags):
         return self.net.XMLDesc(flags)
     def _define(self, xml):
-        return self.get_connection().vmm.networkDefineXML(xml)
+        return self.conn.vmm.networkDefineXML(xml)
 
     def set_active(self, state):
         self.active = state

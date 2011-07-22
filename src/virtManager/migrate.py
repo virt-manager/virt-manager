@@ -50,7 +50,7 @@ class vmmMigrateDialog(vmmGObjectUI):
     def __init__(self, vm, engine):
         vmmGObjectUI.__init__(self, "vmm-migrate.glade", "vmm-migrate")
         self.vm = vm
-        self.conn = vm.connection
+        self.conn = vm.conn
         self.engine = engine
 
         self.destconn_rows = []
@@ -118,8 +118,8 @@ class vmmMigrateDialog(vmmGObjectUI):
         # XXX no way to set tooltips here, kind of annoying
 
         # Hook up signals to get connection listing
-        self.engine.connect("connection-added", self.dest_add_connection)
-        self.engine.connect("connection-removed", self.dest_remove_connection)
+        self.engine.connect("conn-added", self.dest_add_conn)
+        self.engine.connect("conn-removed", self.dest_remove_conn)
         self.destconn_changed(dest_combo)
 
     def reset_state(self):
@@ -178,7 +178,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
     def set_state(self, vm):
         self.vm = vm
-        self.conn = vm.connection
+        self.conn = vm.conn
         self.reset_state()
 
     def destconn_changed(self, src):
@@ -371,7 +371,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         combo.set_active(idx)
 
-    def dest_add_connection(self, engine_ignore, conn):
+    def dest_add_conn(self, engine_ignore, conn):
         combo = self.widget("migrate-dest")
         model = combo.get_model()
 
@@ -386,7 +386,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.destconn_rows.append(newrow)
         self.populate_dest_combo()
 
-    def dest_remove_connection(self, engine_ignore, uri):
+    def dest_remove_conn(self, engine_ignore, uri):
         # Make sure connection isn't already present
         for row in self.destconn_rows:
             if row[1] and row[1].get_uri() == uri:
@@ -452,7 +452,7 @@ class vmmMigrateDialog(vmmGObjectUI):
                 return
 
             destconn = self.get_config_destconn()
-            srchost = self.vm.get_connection().get_hostname()
+            srchost = self.vm.conn.get_hostname()
             dsthost = destconn.get_qualified_hostname()
             max_downtime = self.get_config_max_downtime()
             live = not self.get_config_offline()
@@ -537,7 +537,7 @@ class vmmMigrateDialog(vmmGObjectUI):
                        secure, max_downtime):
         meter = vmmCreateMeter(asyncjob)
 
-        srcconn = util.dup_conn(origvm.get_connection())
+        srcconn = util.dup_conn(origvm.conn)
         dstconn = util.dup_conn(origdconn)
 
         vminst = srcconn.vmm.lookupByName(origvm.get_name())

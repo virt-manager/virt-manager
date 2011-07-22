@@ -150,7 +150,7 @@ def populate_video_combo(vm, video_dev, no_default=None):
                       vm.get_video_devices()))
 
     video_dev_model.clear()
-    tmpdev = virtinst.VirtualVideoDevice(vm.get_connection().vmm)
+    tmpdev = virtinst.VirtualVideoDevice(vm.conn.vmm)
     for m in tmpdev.model_types:
         if not vm.rhel6_defaults():
             if m == "qxl" and not has_spice and not has_qxl:

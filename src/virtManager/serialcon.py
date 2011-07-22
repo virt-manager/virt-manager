@@ -39,7 +39,7 @@ class ConsoleConnection(vmmGObject):
         vmmGObject.__init__(self)
 
         self.vm = vm
-        self.conn = vm.get_connection()
+        self.conn = vm.conn
 
     def cleanup(self):
         vmmGObject.cleanup(self)
@@ -257,7 +257,7 @@ class vmmSerialConsole(vmmGObject):
 
         ctype = dev.char_type
         path = dev.source_path
-        is_remote = vm.get_connection().is_remote()
+        is_remote = vm.conn.is_remote()
         support_tunnel = vmmSerialConsole.support_remote_console(vm)
 
         err = ""

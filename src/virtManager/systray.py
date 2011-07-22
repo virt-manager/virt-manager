@@ -55,8 +55,8 @@ class vmmSystray(vmmGObject):
         self.systray_icon = None
         self.systray_indicator = False
 
-        engine.connect("connection-added", self.conn_added)
-        engine.connect("connection-removed", self.conn_removed)
+        engine.connect("conn-added", self.conn_added)
+        engine.connect("conn-removed", self.conn_removed)
 
         # Are we using Application Indicators?
         if appindicator is not None:
@@ -237,7 +237,7 @@ class vmmSystray(vmmGObject):
     # Helper functions
     def _get_vm_menu_item(self, vm):
         uuid = vm.get_uuid()
-        uri = vm.get_connection().get_uri()
+        uri = vm.conn.get_uri()
 
         if uri in self.conn_vm_menuitems:
             if uuid in self.conn_vm_menuitems[uri]:

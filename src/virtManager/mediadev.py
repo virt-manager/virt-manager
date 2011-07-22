@@ -146,7 +146,7 @@ class vmmMediaDevice(vmmGObject):
         if not self.nodedev_obj:
             return False
 
-        if not self.nodedev_obj.get_connection().is_active():
+        if not self.nodedev_obj.conn.is_active():
             return False
 
         try:

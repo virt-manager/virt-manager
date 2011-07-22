@@ -22,8 +22,8 @@ from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 
 class vmmStorageVolume(vmmLibvirtObject):
-    def __init__(self, connection, vol, name):
-        vmmLibvirtObject.__init__(self, connection)
+    def __init__(self, conn, vol, name):
+        vmmLibvirtObject.__init__(self, conn)
 
         self.vol = vol      # Libvirt storage volume object
         self.name = name
@@ -39,7 +39,7 @@ class vmmStorageVolume(vmmLibvirtObject):
 
     def get_pool(self):
         pobj = self.vol.storagePoolLookupByVolume()
-        return self.connection.get_pool_by_name(pobj.name())
+        return self.conn.get_pool_by_name(pobj.name())
 
     def delete(self):
         self.vol.delete(0)

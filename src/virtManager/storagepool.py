@@ -25,8 +25,8 @@ from virtManager.libvirtobject import vmmLibvirtObject
 from virtManager.storagevol import vmmStorageVolume
 
 class vmmStoragePool(vmmLibvirtObject):
-    def __init__(self, connection, pool, uuid, active):
-        vmmLibvirtObject.__init__(self, connection)
+    def __init__(self, conn, pool, uuid, active):
+        vmmLibvirtObject.__init__(self, conn)
 
         self.pool = pool            # Libvirt pool object
         self.uuid = uuid            # String UUID
@@ -43,7 +43,7 @@ class vmmStoragePool(vmmLibvirtObject):
     def _XMLDesc(self, flags):
         return self.pool.XMLDesc(flags)
     def _define(self, xml):
-        return self.get_connection().vmm.storagePoolDefineXML(xml, 0)
+        return self.conn.vmm.storagePoolDefineXML(xml, 0)
 
 
     def set_active(self, state):
@@ -129,7 +129,7 @@ class vmmStoragePool(vmmLibvirtObject):
             if volname in self._volumes:
                 new_vol_list[volname] = self._volumes[volname]
             else:
-                new_vol_list[volname] = vmmStorageVolume(self.connection,
+                new_vol_list[volname] = vmmStorageVolume(self.conn,
                                     self.pool.storageVolLookupByName(volname),
                                     volname)
         self._volumes = new_vol_list

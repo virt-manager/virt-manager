@@ -109,7 +109,7 @@ class vmmManager(vmmGObjectUI):
 
             "on_vm_manager_delete_event": self.close,
             "on_vmm_manager_configure_event": self.window_resized,
-            "on_menu_file_add_connection_activate": self.new_connection,
+            "on_menu_file_add_connection_activate": self.new_conn,
             "on_menu_file_quit_activate": self.exit_app,
             "on_menu_file_close_activate": self.close,
             "on_vmm_close_clicked": self.close,
@@ -157,7 +157,7 @@ class vmmManager(vmmGObjectUI):
                                         vmlist.get_model().get_iter_first())
 
         # Queue up the default connection detector
-        self.idle_emit("add-default-connection")
+        self.idle_emit("add-default-conn")
 
     ##################
     # Common methods #
@@ -343,9 +343,9 @@ class vmmManager(vmmGObjectUI):
 
         # Build connection context menu
         add_conn_menu("create", gtk.STOCK_NEW, None, self.new_vm)
-        add_conn_menu("connect", gtk.STOCK_CONNECT, None, self.open_connection)
+        add_conn_menu("connect", gtk.STOCK_CONNECT, None, self.open_conn)
         add_conn_menu("disconnect", gtk.STOCK_DISCONNECT, None,
-                      self.close_connection)
+                      self.close_conn)
         add_sep(self.connmenu, self.connmenu_items, "hsep1")
         add_conn_menu("delete", gtk.STOCK_DELETE, None, self.do_delete)
         add_sep(self.connmenu, self.connmenu_items, "hsep2")
@@ -457,7 +457,7 @@ class vmmManager(vmmGObjectUI):
 
         return row[ROW_HANDLE]
 
-    def current_connection(self):
+    def current_conn(self):
         row = self.current_row()
         if not row:
             return None
@@ -466,7 +466,7 @@ class vmmManager(vmmGObjectUI):
         if row[ROW_IS_CONN]:
             return handle
         else:
-            return handle.get_connection()
+            return handle.conn
 
     def current_vmuuid(self):
         vm = self.current_vm()
@@ -474,11 +474,11 @@ class vmmManager(vmmGObjectUI):
             return None
         return vm.get_uuid()
 
-    def current_connection_uri(self, default_selection=False):
+    def current_conn_uri(self, default_selection=False):
         vmlist = self.widget("vm-list")
         model = vmlist.get_model()
 
-        conn = self.current_connection()
+        conn = self.current_conn()
         if conn is None and default_selection:
             # Nothing selected, use first connection row
             for row in model:
@@ -504,11 +504,11 @@ class vmmManager(vmmGObjectUI):
     def exit_app(self, src_ignore=None, src2_ignore=None):
         self.emit("action-exit-app")
 
-    def new_connection(self, src_ignore=None):
+    def new_conn(self, src_ignore=None):
         self.emit("action-show-connect")
 
     def new_vm(self, src_ignore=None):
-        self.emit("action-show-create", self.current_connection_uri())
+        self.emit("action-show-create", self.current_conn_uri())
 
     def show_about(self, src_ignore):
         self.emit("action-show-about")
@@ -520,11 +520,11 @@ class vmmManager(vmmGObjectUI):
         self.emit("action-show-preferences")
 
     def show_host(self, src_ignore):
-        uri = self.current_connection_uri(default_selection=True)
+        uri = self.current_conn_uri(default_selection=True)
         self.emit("action-show-host", uri)
 
     def show_vm(self, ignore, ignore2=None, ignore3=None):
-        conn = self.current_connection()
+        conn = self.current_conn()
         vm = self.current_vm()
         if conn is None:
             return
@@ -532,23 +532,23 @@ class vmmManager(vmmGObjectUI):
         if vm:
             self.emit("action-show-vm", conn.get_uri(), vm.get_uuid())
         else:
-            if not self.open_connection():
+            if not self.open_conn():
                 self.emit("action-show-host", conn.get_uri())
 
     def open_clone_window(self, ignore1=None, ignore2=None, ignore3=None):
         if self.current_vmuuid():
-            self.emit("action-clone-domain", self.current_connection_uri(),
+            self.emit("action-clone-domain", self.current_conn_uri(),
                       self.current_vmuuid())
 
     def do_delete(self, ignore=None):
-        conn = self.current_connection()
+        conn = self.current_conn()
         vm = self.current_vm()
         if vm is None:
-            self._do_delete_connection(conn)
+            self._do_delete_conn(conn)
         else:
             self._do_delete_vm(vm)
 
-    def _do_delete_connection(self, conn):
+    def _do_delete_conn(self, conn):
         if conn is None:
             return
 
@@ -557,7 +557,7 @@ class vmmManager(vmmGObjectUI):
         if not result:
             return
 
-        self.emit("remove-connection", conn.get_uri())
+        self.emit("remove-conn", conn.get_uri())
 
     def _do_delete_vm(self, vm):
         if vm.is_active():
@@ -594,57 +594,57 @@ class vmmManager(vmmGObjectUI):
         vm = self.current_vm()
         if vm is not None:
             self.emit("action-run-domain",
-                      vm.get_connection().get_uri(), vm.get_uuid())
+                      vm.conn.get_uri(), vm.get_uuid())
 
     def reboot_vm(self, ignore):
         vm = self.current_vm()
         if vm is not None:
             self.emit("action-reboot-domain",
-                      vm.get_connection().get_uri(), vm.get_uuid())
+                      vm.conn.get_uri(), vm.get_uuid())
 
     def poweroff_vm(self, ignore):
         vm = self.current_vm()
         if vm is not None:
             self.emit("action-shutdown-domain",
-                      vm.get_connection().get_uri(), vm.get_uuid())
+                      vm.conn.get_uri(), vm.get_uuid())
 
     def destroy_vm(self, ignore):
         vm = self.current_vm()
         if vm is not None:
             self.emit("action-destroy-domain",
-                      vm.get_connection().get_uri(), vm.get_uuid())
+                      vm.conn.get_uri(), vm.get_uuid())
 
     def save_vm(self, ignore):
         vm = self.current_vm()
         if vm is not None:
             self.emit("action-save-domain",
-                      vm.get_connection().get_uri(), vm.get_uuid())
+                      vm.conn.get_uri(), vm.get_uuid())
 
     def pause_vm(self, ignore):
         vm = self.current_vm()
         if vm is not None:
             self.emit("action-suspend-domain",
-                      vm.get_connection().get_uri(), vm.get_uuid())
+                      vm.conn.get_uri(), vm.get_uuid())
 
     def resume_vm(self, ignore):
         vm = self.current_vm()
         if vm is not None:
             self.emit("action-resume-domain",
-                      vm.get_connection().get_uri(), vm.get_uuid())
+                      vm.conn.get_uri(), vm.get_uuid())
 
     def migrate_vm(self, ignore):
         vm = self.current_vm()
         if vm is not None:
             self.emit("action-migrate-domain",
-                      vm.get_connection().get_uri(), vm.get_uuid())
+                      vm.conn.get_uri(), vm.get_uuid())
 
-    def close_connection(self, ignore):
-        conn = self.current_connection()
+    def close_conn(self, ignore):
+        conn = self.current_conn()
         if conn.get_state() != vmmConnection.STATE_DISCONNECTED:
             conn.close()
 
-    def open_connection(self, ignore=None):
-        conn = self.current_connection()
+    def open_conn(self, ignore=None):
+        conn = self.current_conn()
         if conn.get_state() == vmmConnection.STATE_DISCONNECTED:
             conn.open()
             return True
@@ -674,7 +674,7 @@ class vmmManager(vmmGObjectUI):
     ####################################
 
     def vm_row_key(self, vm):
-        return vm.get_uuid() + ":" + vm.get_connection().get_uri()
+        return vm.get_uuid() + ":" + vm.conn.get_uri()
 
     def vm_added(self, conn, vmuuid):
         vm = conn.get_vm(vmuuid)
@@ -766,7 +766,7 @@ class vmmManager(vmmGObjectUI):
         # Expand a connection when adding a vm to it
         self.widget("vm-list").expand_row(model.get_path(parent), False)
 
-    def _append_connection(self, model, conn):
+    def _append_conn(self, model, conn):
         row = []
         row.insert(ROW_HANDLE, conn)
         row.insert(ROW_NAME, conn.get_pretty_desc_inactive(False))
@@ -789,7 +789,7 @@ class vmmManager(vmmGObjectUI):
         self.rows[conn.get_uri()] = model[path]
         return _iter
 
-    def add_connection(self, engine_ignore, conn):
+    def add_conn(self, engine_ignore, conn):
         # Make sure error page isn't showing
         self.widget("vm-notebook").set_current_page(0)
 
@@ -804,7 +804,7 @@ class vmmManager(vmmGObjectUI):
 
         # add the connection to the treeModel
         vmlist = self.widget("vm-list")
-        row = self._append_connection(vmlist.get_model(), conn)
+        row = self._append_conn(vmlist.get_model(), conn)
         vmlist.get_selection().select_iter(row)
 
         # Try to make sure that 2 row descriptions don't collide
@@ -825,7 +825,7 @@ class vmmManager(vmmGObjectUI):
             newname = conn.get_pretty_desc_inactive(False, True)
             self.conn_refresh_resources(conn, newname)
 
-    def remove_connection(self, engine_ignore, uri):
+    def remove_conn(self, engine_ignore, uri):
         model = self.widget("vm-list").get_model()
         parent = self.rows[uri].iter
 
@@ -849,7 +849,7 @@ class vmmManager(vmmGObjectUI):
     def vm_status_changed(self, vm, oldstatus, newstatus):
         ignore = newstatus
         ignore = oldstatus
-        parent = self.rows[vm.get_connection().get_uri()].iter
+        parent = self.rows[vm.conn.get_uri()].iter
         vmlist = self.widget("vm-list")
         model = vmlist.get_model()
 
@@ -861,7 +861,7 @@ class vmmManager(vmmGObjectUI):
                 break
 
         if missing:
-            self._append_vm(model, vm, vm.get_connection())
+            self._append_vm(model, vm, vm.conn)
 
         # Update run/shutdown/pause button states
         self.vm_selected()
@@ -953,7 +953,7 @@ class vmmManager(vmmGObjectUI):
         self.widget("vm-run").set_label(strip_text)
 
     def vm_selected(self, ignore=None):
-        conn = self.current_connection()
+        conn = self.current_conn()
         vm = self.current_vm()
 
         show_open = bool(vm)
@@ -1193,5 +1193,5 @@ vmmManager.signal_new(vmmManager, "action-clone-domain", [str, str])
 vmmManager.signal_new(vmmManager, "action-exit-app", [])
 vmmManager.signal_new(vmmManager, "manager-closed", [])
 vmmManager.signal_new(vmmManager, "manager-opened", [])
-vmmManager.signal_new(vmmManager, "remove-connection", [str])
-vmmManager.signal_new(vmmManager, "add-default-connection", [])
+vmmManager.signal_new(vmmManager, "remove-conn", [str])
+vmmManager.signal_new(vmmManager, "add-default-conn", [])

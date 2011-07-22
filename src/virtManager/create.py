@@ -681,8 +681,8 @@ class vmmCreate(vmmGObjectUI):
         model.clear()
 
         default = -1
-        for c in self.engine.connections.values():
-            connobj = c["connection"]
+        for c in self.engine.conns.values():
+            connobj = c["conn"]
             if not connobj.is_active():
                 continue
 
@@ -705,7 +705,7 @@ class vmmCreate(vmmGObjectUI):
         if not no_conns:
             conn_list.set_active(default)
             activeuri, activedesc = model[default]
-            activeconn = self.engine.connections[activeuri]["connection"]
+            activeconn = self.engine.conns[activeuri]["conn"]
 
         self.widget("create-conn-label").set_text(activedesc)
         if len(model) <= 1:
@@ -981,7 +981,7 @@ class vmmCreate(vmmGObjectUI):
             conn = None
         else:
             uri = model[idx][0]
-            conn = self.engine.connections[uri]["connection"]
+            conn = self.engine.conns[uri]["conn"]
 
         # If we aren't visible, let reset_state handle this for us, which
         # has a better chance of reporting error
@@ -1365,7 +1365,7 @@ class vmmCreate(vmmGObjectUI):
         name = self.get_config_name()
 
         try:
-            g = virtinst.Guest(connection=self.conn.vmm)
+            g = virtinst.Guest(conn=self.conn.vmm)
             g.name = name
         except Exception, e:
             return self.verr(_("Invalid System Name"), str(e))

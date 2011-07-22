@@ -56,13 +56,13 @@ class vmmConnect(vmmGObjectUI):
 
         self.window.signal_autoconnect({
             "on_hypervisor_changed": self.hypervisor_changed,
-            "on_connection_changed": self.connection_changed,
+            "on_connection_changed": self.conn_changed,
             "on_hostname_combo_changed": self.hostname_combo_changed,
             "on_connect_remote_toggled": self.connect_remote_toggled,
             "on_username_entry_changed": self.username_changed,
 
             "on_cancel_clicked": self.cancel,
-            "on_connect_clicked": self.open_connection,
+            "on_connect_clicked": self.open_conn,
             "on_vmm_open_connection_delete_event": self.cancel,
             })
 
@@ -268,7 +268,7 @@ class vmmConnect(vmmGObjectUI):
         self.populate_default_user()
         self.populate_uri()
 
-    def connection_changed(self, src_ignore):
+    def conn_changed(self, src_ignore):
         self.populate_default_user()
         self.populate_uri()
 
@@ -329,7 +329,7 @@ class vmmConnect(vmmGObjectUI):
 
         return True
 
-    def open_connection(self, ignore):
+    def open_conn(self, ignore):
         if not self.validate():
             return
 
