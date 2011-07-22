@@ -16,7 +16,11 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-import snack
+from snack import Checkbox
+from snack import Entry
+from snack import Label
+from snack import RadioBar
+
 from newt_syrup import utils
 
 from vmmconfigscreen import VmmTuiConfigScreen
@@ -26,6 +30,7 @@ from virtinst import Storage
 POOL_NAME_PAGE    = 1
 POOL_DETAILS_PAGE = 2
 CONFIRM_PAGE      = 3
+HELPER_TEXT       = "Specify a storage location to be later split in virtual machine storage"
 
 class AddStoragePoolConfigScreen(VmmTuiConfigScreen):
     def __init__(self):
@@ -90,7 +95,7 @@ class AddStoragePoolConfigScreen(VmmTuiConfigScreen):
                             errors.append("'%s' is not an absolute path." % self.__source_path.value())
                             result = False
                 else:
-                    errors.append("you  must enter a source path.")
+                    errors.append("You must enter a source path.")
                     result = False
             return result
         elif page is CONFIRM_PAGE:
@@ -119,77 +124,53 @@ class AddStoragePoolConfigScreen(VmmTuiConfigScreen):
             self.set_finished()
 
     def get_pool_name_page(self, screen):
-        self.__name = snack.Entry(50, self.__config.get_name())
+        self.__name = Entry(50, self.__config.get_name())
         pooltypes = []
         for pooltype in Storage.StoragePool.get_pool_types():
             pooltypes.append(["%s: %s" % (pooltype, Storage.StoragePool.get_pool_type_desc(pooltype)),
                               pooltype,
                               self.__config.get_type() is pooltype])
-        self.__type = snack.RadioBar(screen, pooltypes)
-        grid = snack.Grid(2, 2)
-        grid.setField(snack.Label("Name:"), 0, 0, anchorRight=1)
-        grid.setField(self.__name, 1, 0, anchorLeft=1)
-        grid.setField(snack.Label("Type:"), 0, 1, anchorRight=1, anchorTop=1)
-        grid.setField(self.__type, 1, 1, anchorLeft=1)
-        return [snack.Label("Add Storage Pool"),
-                grid]
+        self.__type = RadioBar(screen, pooltypes)
+        fields = []
+        fields.append(("Name", self.__name))
+        fields.append(("Type", self.__type))
+
+        return [Label("Add Storage Pool"),
+                Label(HELPER_TEXT),
+                self.create_grid_from_fields(fields)]
 
     def get_pool_details_page(self, screen):
-        rows = 0
+        fields = []
         if self.__config.needs_target_path():
-            self.__target_path = snack.Entry(50, self.__config.get_target_path())
-            rows += 1
+            self.__target_path = Entry(50, self.__config.get_target_path())
+            fields.append(("Target Path", self.__target_path))
         if self.__config.needs_format():
             formats = []
             for fmt in self.__config.get_formats():
                 formats.append([fmt, fmt, fmt is self.__config.get_format()])
-            self.__formats = snack.RadioBar(screen, formats)
-            rows += 1
+            self.__formats = RadioBar(screen, formats)
+            fields.append(("Format", self.__formats))
         if self.__config.needs_hostname():
-            self.__hostname = snack.Entry(50, self.__config.get_hostname())
-            rows += 1
+            self.__hostname = Entry(50, self.__config.get_hostname())
+            fields.append(("Host Name", self.__hostname))
         if self.__config.needs_source_path():
-            self.__source_path = snack.Entry(50, self.__config.get_source_path())
-            rows += 1
+            self.__source_path = Entry(50, self.__config.get_source_path())
+            fields.append(("Source Path", self.__source_path))
         if self.__config.needs_build_pool():
-            self.__build_pool = snack.Checkbox("Build Pool", self.__config.get_build_pool())
-            rows += 1
-            self.__build_pool = snack.Checkbox("Build Pool", self.__config.get_build_pool())
-            rows += 1
-        grid = snack.Grid(2, rows)
-        currentrow = 0
-        if self.__config.needs_target_path():
-            grid.setField(snack.Label("Target Path:"), 0, currentrow, anchorRight=1)
-            grid.setField(self.__target_path, 1, currentrow, anchorLeft=1)
-            currentrow += 1
-        if self.__config.needs_format():
-            grid.setField(snack.Label("Format:"), 0, currentrow, anchorRight=1, anchorTop=1)
-            grid.setField(self.__formats, 1, currentrow, anchorLeft=1)
-            currentrow += 1
-        if self.__config.needs_hostname():
-            grid.setField(snack.Label("Host Name:"), 0, currentrow, anchorRight=1)
-            grid.setField(self.__hostname, 1, currentrow, anchorRight=1)
-            currentrow += 1
-        if self.__config.needs_source_path():
-            grid.setField(snack.Label("Source Path:"), 0, currentrow, anchorRight=1)
-            grid.setField(self.__source_path, 1, currentrow, anchorLeft=1)
-            currentrow += 1
-        if self.__config.needs_build_pool():
-            grid.setField(snack.Label(" "), 0, currentrow, anchorRight=1)
-            grid.setField(self.__build_pool, 1, currentrow, anchorLeft=1)
-            currentrow += 1
-        return [snack.Label("Specify a storage location to be later split into virtual machine storage"),
-                grid]
+            self.__build_pool = Checkbox("Build Pool", self.__config.get_build_pool())
+            fields.append((None, self.__build_pool))
+        return [Label("Add Storage Pool"),
+                Label(HELPER_TEXT),
+                self.create_grid_from_fields(fields)]
 
     def get_confirm_page(self, screen):
         ignore = screen
-        grid = snack.Grid(2, 2)
-        grid.setField(snack.Label("Name:"), 0, 0, anchorRight=1)
-        grid.setField(snack.Label(self.__config.get_name()), 1, 0, anchorLeft=1)
-        grid.setField(snack.Label("Target Path:"), 0, 1, anchorRight=1)
-        grid.setField(snack.Label(self.__config.get_target_path()), 1, 1, anchorLeft=1)
-        return [snack.Label("Confirm Pool Details"),
-                grid]
+        fields = []
+        fields.append(("Name", self.__config.get_name()))
+        fields.append(("Target Path", self.__config.get_target_path()))
+        return [Label("Add Storage Pool"),
+                Label("Confirm Pool Details"),
+                self.create_grid_from_fields(fields)]
 
 def AddStoragePool():
     screen = AddStoragePoolConfigScreen()
