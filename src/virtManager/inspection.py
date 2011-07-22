@@ -20,6 +20,7 @@
 from Queue import Queue, Empty
 from threading import Thread
 import logging
+import os
 
 import gobject
 
@@ -155,6 +156,12 @@ class vmmInspection(vmmGObject):
         for disk in disks:
             path = disk.path
             driver_type = disk.driver_type
+
+            if not (os.path.exists(path) and os.access(path, os.R_OK)):
+                logging.debug("%s: cannot access '%s', skipping inspection",
+                              prettyvm, path)
+                return
+
             g.add_drive_opts(path, readonly=1, format=driver_type)
 
         g.launch()
