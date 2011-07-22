@@ -217,7 +217,7 @@ class vmmGObject(GObject):
             getattr(GObject, "__del__")(self)
 
         try:
-            if self.config:
+            if self.config and self._leak_check:
                 self.config.remove_object(self.object_key)
         except:
             logging.exception("Error removing %s" % self.object_key)
