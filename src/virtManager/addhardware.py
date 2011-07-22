@@ -1369,6 +1369,9 @@ class vmmAddHardware(vmmGObjectUI):
         if self.storage_browser == None:
             self.storage_browser = vmmStorageBrowser(conn)
 
+        rhel6 = self.vm.enable_unsupported_rhel_opts()
+        self.storage_browser.enable_unsupported_rhel_opts = rhel6
+
         self.storage_browser.set_finish_cb(set_storage_cb)
         self.storage_browser.set_browse_reason(reason)
 

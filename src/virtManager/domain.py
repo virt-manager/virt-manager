@@ -245,13 +245,7 @@ class vmmDomain(vmmLibvirtObject):
         return bool(self._install_abort)
 
     def enable_unsupported_rhel_opts(self):
-        if not self.is_libexec_qemu():
-            return True
-        return self.config.enable_unsupported_rhel_opts
-
-    def is_libexec_qemu(self):
-        return bool(self.connection.is_qemu_system() and
-                    str(self.get_emulator()).startswith("/usr/libexec"))
+        return self.connection.enable_unsupported_rhel_opts(self.get_emulator())
 
     def is_read_only(self):
         if self.connection.is_read_only():

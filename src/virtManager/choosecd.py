@@ -158,6 +158,9 @@ class vmmChooseCD(vmmGObjectUI):
             self.storage_browser.connect("storage-browse-finish",
                                          self.set_storage_path)
 
+        rhel6 = self.vm.enable_unsupported_rhel_opts()
+        self.storage_browser.enable_unsupported_rhel_opts = rhel6
+
         self.storage_browser.set_browse_reason(self.config.CONFIG_DIR_MEDIA)
         self.storage_browser.show(self.topwin, self.conn)
 

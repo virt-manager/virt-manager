@@ -375,6 +375,13 @@ class vmmConnection(vmmGObject):
         return path == "/session"
 
     # Connection capabilities debug helpers
+    def enable_unsupported_rhel_opts(self, emulator):
+        if not self.is_qemu_system():
+            return True
+        if not str(emulator).startswith("/usr/libexec"):
+            return True
+        return self.config.enable_unsupported_rhel_opts
+
     def is_kvm_supported(self):
         return self.get_capabilities().is_kvm_available()
 

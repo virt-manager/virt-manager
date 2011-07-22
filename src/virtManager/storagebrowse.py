@@ -48,6 +48,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
         # Arguments to pass to util.browse_local for local storage
         self.browse_reason = None
+        self.enable_unsupported_rhel_opts = True
         self.local_args = {}
 
         self.window.signal_autoconnect({
@@ -321,8 +322,9 @@ class vmmStorageBrowser(vmmGObjectUI):
         vols = pool.get_volumes()
         for key in vols.keys():
             vol = vols[key]
-            sensitive = (not dironly or vol.get_format() == 'dir')
+            sensitive = True
             path = vol.get_target_path()
+            fmt = vol.get_format() or ""
             namestr = None
 
             try:
@@ -336,9 +338,14 @@ class vmmStorageBrowser(vmmGObjectUI):
                 logging.exception("Failed to determine if storage volume in "
                                   "use.")
 
+            if dironly and fmt != 'dir':
+                sensitive = False
+            elif not self.enable_unsupported_rhel_opts:
+                if fmt == "vmdk":
+                    sensitive = False
 
             model.append([key, vol.get_name(), vol.get_pretty_capacity(),
-                          vol.get_format() or "", namestr, sensitive])
+                          fmt, namestr, sensitive])
 
     def show_err(self, info, details=None):
         self.err.show_err(info,

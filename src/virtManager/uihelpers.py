@@ -338,12 +338,15 @@ def build_vnc_keymap_combo(vm, combo, no_default=False):
 #####################################
 
 def build_storage_format_combo(vm, combo):
-    ignore = vm
     dev_model = gtk.ListStore(str)
     combo.set_model(dev_model)
     combo.set_text_column(0)
 
-    for m in ["raw", "qcow2", "vmdk"]:
+    formats = ["raw", "qcow2"]
+    if vm.enable_unsupported_rhel_opts():
+        formats.append("vmdk")
+
+    for m in formats:
         dev_model.append([m])
 
     combo.set_active(0)
