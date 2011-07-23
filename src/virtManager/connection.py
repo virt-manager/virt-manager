@@ -20,7 +20,6 @@
 
 import logging
 import os
-import sys
 import traceback
 import re
 import threading
@@ -885,9 +884,6 @@ class vmmConnection(vmmGObject):
         self.config.set_conn_autoconnect(self.get_uri(), val)
 
     def close(self):
-        if self.vmm == None:
-            return
-
         def cleanup(devs):
             for dev in devs.values():
                 dev.cleanup()
@@ -922,6 +918,7 @@ class vmmConnection(vmmGObject):
         # Do this first, so signals are unregistered before we change state
         vmmGObject.cleanup(self)
         self.close()
+        self.connectError = None
 
         hal_helper = self.get_hal_helper(init=False)
         if hal_helper:
@@ -1116,59 +1113,57 @@ class vmmConnection(vmmGObject):
         return ret
 
     def _try_open(self):
-        try:
-            flags = 0
+        flags = 0
 
-            tmp = self._open_dev_conn(self.get_uri())
-            if tmp:
-                self.vmm = tmp
-                return
+        vmm = self._open_dev_conn(self.get_uri())
+        if vmm:
+            return vmm
 
-            if self.readOnly:
-                logging.info("Caller requested read only connection")
-                flags = libvirt.VIR_CONNECT_RO
+        if self.readOnly:
+            logging.info("Caller requested read only connection")
+            flags = libvirt.VIR_CONNECT_RO
 
-            if virtinst.support.support_openauth():
-                self.vmm = libvirt.openAuth(self.get_uri(),
-                                            [[libvirt.VIR_CRED_AUTHNAME,
-                                              libvirt.VIR_CRED_PASSPHRASE,
-                                              libvirt.VIR_CRED_EXTERNAL],
-                                             self._do_creds,
-                                             None], flags)
+        if virtinst.support.support_openauth():
+            vmm = libvirt.openAuth(self.get_uri(),
+                                   [[libvirt.VIR_CRED_AUTHNAME,
+                                     libvirt.VIR_CRED_PASSPHRASE,
+                                     libvirt.VIR_CRED_EXTERNAL],
+                                    self._do_creds, None],
+                                   flags)
+        else:
+            if flags:
+                vmm = libvirt.openReadOnly(self.get_uri())
             else:
-                if flags:
-                    self.vmm = libvirt.openReadOnly(self.get_uri())
-                else:
-                    self.vmm = libvirt.open(self.get_uri())
-        except:
-            return sys.exc_info()
+                vmm = libvirt.open(self.get_uri())
+
+        return vmm
 
     def _open_thread(self):
         logging.debug("Background 'open connection' thread is running")
 
-        done = False
-        while not done:
-            open_error = self._try_open()
-            done = True
+        while True:
+            exc = None
+            tb = None
+            try:
+                self.vmm = self._try_open()
+            except Exception, exc:
+                tb = "".join(traceback.format_exc())
 
-            if not open_error:
+            if not exc:
                 self.state = self.STATE_ACTIVE
-                continue
+                break
 
             self.state = self.STATE_DISCONNECTED
-            (_type, value, stacktrace) = open_error
 
-            if (_type == libvirt.libvirtError and
-                value.get_error_code() == libvirt.VIR_ERR_AUTH_FAILED and
-                "GSSAPI Error" in value.get_error_message() and
-                "No credentials cache found" in value.get_error_message()):
+            if (type(exc) == libvirt.libvirtError and
+                exc.get_error_code() == libvirt.VIR_ERR_AUTH_FAILED and
+                "GSSAPI Error" in exc.get_error_message() and
+                "No credentials cache found" in exc.get_error_message()):
                 if self._acquire_tgt():
-                    done = False
                     continue
 
-            tb = "".join(traceback.format_exception(_type, value, stacktrace))
-
-            self.connectError = "%s\n\n%s" % (str(value), str(tb))
+            self.connectError = "%s\n\n%s" % (exc, tb)
+            break
 
         # We want to kill off this thread asap, so schedule an
         # idle event to inform the UI of result
