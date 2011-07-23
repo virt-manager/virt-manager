@@ -35,6 +35,12 @@ def get_hal_helper(init=True):
         _hal_helper = vmmHalHelper()
     return _hal_helper
 
+def cleanup():
+    global _hal_helper
+    if _hal_helper:
+        _hal_helper.cleanup()
+    _hal_helper = None
+
 def get_net_bridge_owner(name_ignore, sysfspath):
     # Now magic to determine if the device is part of a bridge
     brportpath = os.path.join(sysfspath, "brport")
@@ -80,19 +86,26 @@ def is_net_bonding_slave(name_ignore, sysfspath):
     return False
 
 class vmmHalHelper(vmmGObject):
-    # Can't find a way to properly cleanup dbus signals
-    _leak_check = False
-
     def __init__(self):
         vmmGObject.__init__(self)
 
         self.bus = None
         self.hal_iface = None
+        self.sigs = []
 
         # Error message we encountered when initializing
         self.startup_error = None
 
         self._dbus_connect()
+
+    def cleanup(self):
+        vmmGObject.cleanup(self)
+        self.bus = None
+        self.hal_iface = None
+
+        for sig in self.sigs:
+            sig.remove()
+        self.sigs = []
 
     def get_init_error(self):
         return self.startup_error
@@ -110,10 +123,12 @@ class vmmHalHelper(vmmGObject):
 
 
             # Track device add/removes so we can detect newly inserted CD media
-            self.hal_iface.connect_to_signal("DeviceAdded",
-                                             self._device_added)
-            self.hal_iface.connect_to_signal("DeviceRemoved",
-                                             self._device_removed)
+            self.sigs.append(
+                self.hal_iface.connect_to_signal("DeviceAdded",
+                                                 self._device_added))
+            self.sigs.append(
+                self.hal_iface.connect_to_signal("DeviceRemoved",
+                                                 self._device_removed))
         except Exception, e:
             logging.error("Unable to connect to HAL to list network "
                           "devices: " + str(e))

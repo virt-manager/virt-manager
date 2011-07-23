@@ -46,6 +46,7 @@ from virtManager.host import vmmHost
 from virtManager.error import vmmErrorDialog
 from virtManager.systray import vmmSystray
 import virtManager.uihelpers as uihelpers
+import virtManager.halhelper as halhelper
 import virtManager.util as util
 
 # Enable this to get a report of leaked objects on app shutdown
@@ -468,6 +469,7 @@ class vmmEngine(vmmGObject):
         try:
             vmmGObject.cleanup(self)
             uihelpers.cleanup()
+            halhelper.cleanup()
             self.err = None
 
             if self.inspection:
