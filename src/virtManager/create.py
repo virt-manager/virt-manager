@@ -1740,6 +1740,7 @@ class vmmCreate(vmmGObjectUI):
             self._check_start_error(self.start_install, guest)
 
         def details_closed(ignore):
+            cleanup_config_window()
             self._undo_finish()
             self.widget("summary-customize").set_active(False)
 
