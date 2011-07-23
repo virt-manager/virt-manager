@@ -67,6 +67,7 @@ class vmmConnect(vmmGObjectUI):
             })
 
         self.browser = None
+        self.browser_sigs = []
         self.can_browse = False
 
         # Set this if we can't resolve 'hostname.local': means avahi
@@ -150,13 +151,11 @@ class vmmConnect(vmmGObjectUI):
             # Async service resolving
             res = self.server.ServiceResolverNew(interface, protocol, name,
                                                  type, domain, -1, 0)
-            resint = dbus.Interface(self.bus.get_object("org.freedesktop.Avahi",
-                                                        res),
+            resint = dbus.Interface(self.bus.get_object(
+                                    "org.freedesktop.Avahi", res),
                                     "org.freedesktop.Avahi.ServiceResolver")
-            resint.connect_to_signal("Found", self.add_conn_to_list)
-            # Synchronous service resolving
-            #self.server.ResolveService(interface, protocol, name, type,
-            #                           domain, -1, 0)
+            self.browser_sigs.append(
+                resint.connect_to_signal("Found", self.add_conn_to_list))
         except Exception, e:
             logging.exception(e)
 
@@ -212,16 +211,20 @@ class vmmConnect(vmmGObjectUI):
                                               domain, flags)
 
         # Create browser interface for the new object
-        self.browser = dbus.Interface(self.bus.get_object("org.freedesktop.Avahi",
-                                                          bpath),
+        self.browser = dbus.Interface(self.bus.get_object(
+                                      "org.freedesktop.Avahi", bpath),
                                       "org.freedesktop.Avahi.ServiceBrowser")
 
-        self.browser.connect_to_signal("ItemNew", self.add_service)
-        self.browser.connect_to_signal("ItemRemove", self.remove_service)
+        self.browser_sigs.append(
+            self.browser.connect_to_signal("ItemNew", self.add_service))
+        self.browser_sigs.append(
+            self.browser.connect_to_signal("ItemRemove", self.remove_service))
 
     def stop_browse(self):
         if self.browser:
-            del(self.browser)
+            for sig in self.browser_sigs:
+                sig.remove()
+            self.browser_sigs = []
             self.browser = None
 
     def hostname_combo_changed(self, src):
