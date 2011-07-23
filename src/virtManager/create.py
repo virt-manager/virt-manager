@@ -1797,6 +1797,7 @@ class vmmCreate(vmmGObjectUI):
         # Make sure we pick up the domain object
         self.conn.tick(noStatsUpdate=True)
         vm = self.conn.get_vm(guest.uuid)
+        vm.tick()
 
         if vm.is_shutoff():
             # Domain is already shutdown, but no error was raised.
