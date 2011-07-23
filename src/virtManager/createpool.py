@@ -55,6 +55,7 @@ class vmmCreatePool(vmmGObjectUI):
 
             "on_pool_name_activate": self.forward,
             "on_pool_hostname_activate" : self.hostname_changed,
+            "on_pool_iqn_chk_toggled": self.iqn_toggled,
 
             "on_pool_name_focus_in_event": (self.update_doc, "name",
                                             "pool-info1"),
@@ -88,7 +89,10 @@ class vmmCreatePool(vmmGObjectUI):
 
             "on_pool_hostname_focus_in_event": (self.update_doc, "host",
                                                 "pool-info2"),
-            "on_pool_build_focus_in_event": (self.update_build_doc)
+            "on_pool_build_focus_in_event": (self.update_build_doc),
+
+            "on_pool_iqn_focus_in_event": (self.update_doc, "iqn",
+                                           "pool-info2"),
         })
         self.bind_escape_key_close()
 
@@ -173,6 +177,9 @@ class vmmCreatePool(vmmGObjectUI):
         self.widget("pool-target-path").child.set_text("")
         self.widget("pool-source-path").child.set_text("")
         self.widget("pool-hostname").set_text("")
+        self.widget("pool-iqn-chk").set_active(False)
+        self.widget("pool-iqn-chk").toggled()
+        self.widget("pool-iqn").set_text("")
         self.widget("pool-format").set_active(-1)
         self.widget("pool-build").set_sensitive(True)
         self.widget("pool-build").set_active(False)
@@ -181,6 +188,9 @@ class vmmCreatePool(vmmGObjectUI):
     def hostname_changed(self, ignore):
         # If a hostname was entered, try to lookup valid pool sources.
         self.populate_pool_sources()
+
+    def iqn_toggled(self, src):
+        self.widget("pool-iqn").set_sensitive(src.get_active())
 
     def populate_pool_type(self):
         model = self.widget("pool-type").get_model()
@@ -303,6 +313,7 @@ class vmmCreatePool(vmmGObjectUI):
         tgt_b   = tgt and not self.conn.is_remote()
         host    = hasattr(self._pool, "host")
         fmt     = hasattr(self._pool, "formats")
+        iqn     = hasattr(self._pool, "iqn")
         builddef, buildsens = self.get_build_default()
 
         # Source path broswing is meaningless for net pools
@@ -316,7 +327,9 @@ class vmmCreatePool(vmmGObjectUI):
         show_row("pool-hostname", host)
         show_row("pool-format", fmt)
         show_row("pool-build", buildsens)
+        show_row("pool-iqn", iqn)
 
+        self.widget("pool-target-path").child.set_text(self._pool.target_path)
         self.widget("pool-target-button").set_sensitive(tgt_b)
         self.widget("pool-source-button").set_sensitive(src_b)
         self.widget("pool-build").set_active(builddef)
@@ -376,6 +389,12 @@ class vmmCreatePool(vmmGObjectUI):
         if format_combo.get_active_iter() != None:
             model = format_combo.get_model()
             return model.get_value(format_combo.get_active_iter(), 0)
+        return None
+
+    def get_config_iqn(self):
+        iqn = self.widget("pool-iqn")
+        if iqn.get_sensitive() and iqn.get_property("visible"):
+            return iqn.get_text().strip()
         return None
 
     def get_build_default(self):
@@ -471,8 +490,6 @@ class vmmCreatePool(vmmGObjectUI):
             self.widget("pool-forward").show()
             self.widget("pool-forward").grab_focus()
         elif page_number == PAGE_FORMAT:
-            self.widget("pool-target-path").child.set_text(
-                                                    self._pool.target_path)
             self.widget("pool-back").set_sensitive(True)
             self.widget("pool-finish").show()
             self.widget("pool-finish").grab_focus()
@@ -512,10 +529,11 @@ class vmmCreatePool(vmmGObjectUI):
             return True
 
         elif page == PAGE_FORMAT:
-            target = self.get_config_target_path()
-            host   = self.get_config_host()
-            source = self.get_config_source_path()
-            fmt    = self.get_config_format()
+            target  = self.get_config_target_path()
+            host    = self.get_config_host()
+            source  = self.get_config_source_path()
+            fmt     = self.get_config_format()
+            iqn     = self.get_config_iqn()
 
             tmppool = self.get_pool_to_validate()
             try:
@@ -526,6 +544,8 @@ class vmmCreatePool(vmmGObjectUI):
                     tmppool.source_path = source
                 if fmt:
                     tmppool.format = fmt
+                if iqn:
+                    tmppool.iqn = iqn
 
                 tmppool.get_xml_config()
             except ValueError, e:
