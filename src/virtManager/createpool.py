@@ -221,6 +221,11 @@ class vmmCreatePool(vmmGObjectUI):
             use_list = target_list
             use_model = target_model
 
+        elif self._pool.type == Storage.StoragePool.TYPE_DISK:
+            entry_list = self.list_disk_devs()
+            use_list = source_list
+            use_model = source_model
+
         elif self._pool.type == Storage.StoragePool.TYPE_NETFS:
             host = self.get_config_host()
             if host:
@@ -249,6 +254,26 @@ class vmmCreatePool(vmmGObjectUI):
             entry = [name, name, tmppool]
 
             if name not in map(lambda l: l[0], clean_list):
+                clean_list.append(entry)
+
+        return clean_list
+
+    def list_disk_devs(self):
+        devs = self.conn.get_nodedevs("storage")
+        devlist = []
+        for dev in devs:
+            if dev.drive_type != "disk" or not dev.block:
+                continue
+            devlist.append(dev.block)
+
+        devlist.sort()
+        clean_list = []
+        for dev in devlist:
+            tmppool = copy.copy(self._pool)
+            tmppool.source_path = dev
+
+            entry = [dev, dev, tmppool]
+            if dev not in map(lambda l: l[0], clean_list):
                 clean_list.append(entry)
 
         return clean_list
