@@ -396,5 +396,5 @@ class vmmConnect(vmmGObjectUI):
 
 
 vmmGObjectUI.type_register(vmmConnect)
-vmmConnect.signal_new(vmmConnect, "completed", [str, str])
+vmmConnect.signal_new(vmmConnect, "completed", [str, bool])
 vmmConnect.signal_new(vmmConnect, "cancelled", [])
