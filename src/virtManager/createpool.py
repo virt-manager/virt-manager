@@ -268,12 +268,17 @@ class vmmCreatePool(vmmGObjectUI):
         return plist
 
     def show_options_by_pool(self):
+        def show_row(base, do_show):
+            self.widget(base + "-label").set_property("visible", do_show)
+            self.widget(base + "-box").set_property("visible", do_show)
+
         src     = hasattr(self._pool, "source_path")
         src_b   = src and not self.conn.is_remote()
         tgt     = hasattr(self._pool, "target_path")
         tgt_b   = tgt and not self.conn.is_remote()
         host    = hasattr(self._pool, "host")
         fmt     = hasattr(self._pool, "formats")
+        builddef, buildsens = self.get_build_default()
 
         # Source path broswing is meaningless for net pools
         if self._pool.type in [Storage.StoragePool.TYPE_NETFS,
@@ -281,13 +286,17 @@ class vmmCreatePool(vmmGObjectUI):
                                Storage.StoragePool.TYPE_SCSI]:
             src_b = False
 
+        show_row("pool-target", tgt)
+        show_row("pool-source", src)
+        show_row("pool-hostname", host)
+        show_row("pool-format", fmt)
+        show_row("pool-build", buildsens)
+
         self.widget("pool-target-button").set_sensitive(tgt_b)
         self.widget("pool-source-button").set_sensitive(src_b)
-        self.widget("pool-source-path").set_sensitive(src)
-        self.widget("pool-hostname").set_sensitive(host)
-        self.widget("pool-format").set_sensitive(fmt)
-        self.widget("pool-format").set_active(-1)
+        self.widget("pool-build").set_active(builddef)
 
+        self.widget("pool-format").set_active(-1)
         if fmt:
             self.populate_pool_format(getattr(self._pool, "formats"))
             self.widget("pool-format").set_active(0)
@@ -440,9 +449,6 @@ class vmmCreatePool(vmmGObjectUI):
             self.widget("pool-target-path").child.set_text(
                                                     self._pool.target_path)
             self.widget("pool-back").set_sensitive(True)
-            buildret = self.get_build_default()
-            self.widget("pool-build").set_sensitive(buildret[1])
-            self.widget("pool-build").set_active(buildret[0])
             self.widget("pool-finish").show()
             self.widget("pool-finish").grab_focus()
             self.widget("pool-forward").hide()
@@ -501,7 +507,8 @@ class vmmCreatePool(vmmGObjectUI):
                 return self.err.val_err(_("Pool Parameter Error"), str(e))
 
             buildval = self.widget("pool-build").get_active()
-            buildsen = self.widget("pool-build").get_property("sensitive")
+            buildsen = (self.widget("pool-build").get_property("sensitive") and
+                        self.widget("pool-build-box").get_property("visible"))
             if buildsen and buildval:
                 ret = self.err.yes_no(_("Building a pool of this type will "
                                         "format the source device. Are you "
