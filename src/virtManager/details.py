@@ -38,7 +38,7 @@ from virtManager import util as util
 import virtinst
 
 # Parameters that can be editted in the details window
-EDIT_TOTAL = 33
+EDIT_TOTAL = 34
 (EDIT_NAME,
 EDIT_ACPI,
 EDIT_APIC,
@@ -62,6 +62,7 @@ EDIT_INIT,
 EDIT_DISK_RO,
 EDIT_DISK_SHARE,
 EDIT_DISK_CACHE,
+EDIT_DISK_IO,
 EDIT_DISK_BUS,
 EDIT_DISK_SERIAL,
 EDIT_DISK_FORMAT,
@@ -389,6 +390,7 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_shareable_changed": (self.enable_apply, EDIT_DISK_SHARE),
             "on_disk_cache_combo_changed": (self.enable_apply,
                                             EDIT_DISK_CACHE),
+            "on_disk_io_combo_changed": (self.enable_apply, EDIT_DISK_IO),
             "on_disk_bus_combo_changed": (self.enable_apply, EDIT_DISK_BUS),
             "on_disk_format_changed": (self.enable_apply, EDIT_DISK_FORMAT),
             "on_disk_serial_changed": (self.enable_apply, EDIT_DISK_SERIAL),
@@ -846,6 +848,10 @@ class vmmDetails(vmmGObjectUI):
         # Disk cache combo
         disk_cache = self.widget("disk-cache-combo")
         uihelpers.build_cache_combo(self.vm, disk_cache)
+
+        # Disk io combo
+        disk_io = self.widget("disk-io-combo")
+        uihelpers.build_io_combo(self.vm, disk_io)
 
         # Disk format combo
         format_list = self.widget("disk-format")
@@ -2073,6 +2079,10 @@ class vmmDetails(vmmGObjectUI):
             cache = self.get_combo_label_value("disk-cache")
             add_define(self.vm.define_disk_cache, dev_id_info, cache)
 
+        if self.editted(EDIT_DISK_IO):
+            io = self.get_combo_label_value("disk-io")
+            add_define(self.vm.define_disk_io, dev_id_info, io)
+
         if self.editted(EDIT_DISK_FORMAT):
             fmt = self.widget("disk-format").child.get_text().strip()
             add_define(self.vm.define_disk_driver_type, dev_id_info, fmt)
@@ -2652,6 +2662,7 @@ class vmmDetails(vmmGObjectUI):
         bus = disk.bus
         idx = disk.disk_bus_index
         cache = disk.driver_cache
+        io = disk.driver_io
         driver_type = disk.driver_type or ""
         serial = disk.serial
         show_format = (not self.is_customize_dialog or
@@ -2682,6 +2693,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("disk-shareable").set_active(share)
         self.widget("disk-size").set_text(size)
         self.set_combo_label("disk-cache", cache)
+        self.set_combo_label("disk-io", io)
 
         self.widget("disk-format").set_sensitive(show_format)
         self.widget("disk-format").child.set_text(driver_type)
