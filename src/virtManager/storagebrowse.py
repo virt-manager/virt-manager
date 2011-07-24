@@ -81,19 +81,15 @@ class vmmStorageBrowser(vmmGObjectUI):
             self.addvol.close()
         return 1
 
-    def cleanup(self):
+    def _cleanup(self):
         self.close()
-        vmmGObjectUI.cleanup(self)
 
-        try:
-            self.remove_conn()
-            self.conn = None
+        self.remove_conn()
+        self.conn = None
 
-            if self.addvol:
-                self.addvol.cleanup()
-                self.addvol = None
-        except:
-            logging.exception("Error cleaning up storagebrowse")
+        if self.addvol:
+            self.addvol.cleanup()
+            self.addvol = None
 
     def remove_conn(self):
         if not self.conn:

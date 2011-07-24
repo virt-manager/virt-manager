@@ -157,7 +157,7 @@ class vmmCreate(vmmGObjectUI):
 
         return 1
 
-    def cleanup(self):
+    def _cleanup(self):
         self.close()
         self.remove_conn()
 
@@ -170,14 +170,9 @@ class vmmCreate(vmmGObjectUI):
         self.disk = None
         self.nic = None
 
-        try:
-            if self.storage_browser:
-                self.storage_browser.cleanup()
-                self.storage_browser = None
-        except:
-            logging.exception("Error cleaning up create")
-
-        vmmGObjectUI.cleanup(self)
+        if self.storage_browser:
+            self.storage_browser.cleanup()
+            self.storage_browser = None
 
     def remove_timers(self):
         try:

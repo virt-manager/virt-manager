@@ -113,13 +113,11 @@ class vmmCreatePool(vmmGObjectUI):
         self.topwin.hide()
         return 1
 
-    def cleanup(self):
+    def _cleanup(self):
         self.close()
 
         self.conn = None
         self._pool = None
-
-        vmmGObjectUI.cleanup(self)
 
     def set_initial_state(self):
         self.widget("pool-pages").set_show_tabs(False)

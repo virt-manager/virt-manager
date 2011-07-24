@@ -67,6 +67,9 @@ class vmmMediaDevice(vmmGObject):
         self.nodedev_obj = nodedev_obj
         self.poll_signal = None
 
+    def _cleanup(self):
+        pass
+
     def get_path(self):
         return self.path
 

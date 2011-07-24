@@ -51,4 +51,7 @@ class vmmAbout(vmmGObjectUI):
         self.topwin.hide()
         return 1
 
+    def _cleanup(self):
+        pass
+
 vmmGObjectUI.type_register(vmmAbout)

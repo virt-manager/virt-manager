@@ -305,40 +305,35 @@ class vmmHost(vmmGObjectUI):
 
         return 1
 
-    def cleanup(self):
+    def _cleanup(self):
         self.close()
 
-        try:
-            self.conn = None
+        self.conn = None
 
-            if self.addnet:
-                self.addnet.cleanup()
-                self.addnet = None
+        if self.addnet:
+            self.addnet.cleanup()
+            self.addnet = None
 
-            if self.addpool:
-                self.addpool.cleanup()
-                self.addpool = None
+        if self.addpool:
+            self.addpool.cleanup()
+            self.addpool = None
 
-            if self.addvol:
-                self.addvol.cleanup()
-                self.addvol = None
+        if self.addvol:
+            self.addvol.cleanup()
+            self.addvol = None
 
-            if self.addinterface:
-                self.addinterface.cleanup()
-                self.addinterface = None
+        if self.addinterface:
+            self.addinterface.cleanup()
+            self.addinterface = None
 
-            self.volmenu.destroy()
-            self.volmenu = None
+        self.volmenu.destroy()
+        self.volmenu = None
 
-            self.cpu_usage_graph.destroy()
-            self.cpu_usage_graph = None
+        self.cpu_usage_graph.destroy()
+        self.cpu_usage_graph = None
 
-            self.memory_usage_graph.destroy()
-            self.memory_usage_graph = None
-        except:
-            logging.exception("Error cleaning up host dialog")
-
-        vmmGObjectUI.cleanup(self)
+        self.memory_usage_graph.destroy()
+        self.memory_usage_graph = None
 
     def show_help(self, src_ignore):
         self.emit("action-show-help", "virt-manager-host-window")

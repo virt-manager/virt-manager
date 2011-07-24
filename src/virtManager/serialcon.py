@@ -41,8 +41,7 @@ class ConsoleConnection(vmmGObject):
         self.vm = vm
         self.conn = vm.conn
 
-    def cleanup(self):
-        vmmGObject.cleanup(self)
+    def _cleanup(self):
         self.close()
 
         self.vm = None
@@ -66,9 +65,6 @@ class LocalConsoleConnection(ConsoleConnection):
         self.fd = None
         self.source = None
         self.origtermios = None
-
-    def cleanup(self):
-        ConsoleConnection.cleanup(self)
 
     def open(self, dev, terminal):
         if self.fd != None:
@@ -137,10 +133,6 @@ class LibvirtConsoleConnection(ConsoleConnection):
 
         self.streamToTerminal = ""
         self.terminalToStream = ""
-
-    def cleanup(self):
-        ConsoleConnection.cleanup(self)
-        self.close()
 
     def _event_on_stream(self, stream, events, opaque):
         ignore = stream
@@ -357,9 +349,7 @@ class vmmSerialConsole(vmmGObject):
         self.box.append_page(self.error_label)
         self.box.show_all()
 
-    def cleanup(self):
-        vmmGObject.cleanup(self)
-
+    def _cleanup(self):
         self.console.cleanup()
         self.console = None
 

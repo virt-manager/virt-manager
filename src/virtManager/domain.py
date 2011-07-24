@@ -174,7 +174,6 @@ class vmmDomain(vmmLibvirtObject):
 
         self._libvirt_init()
 
-
     def _libvirt_init(self):
         """
         Initialization to do if backed by a libvirt virDomain

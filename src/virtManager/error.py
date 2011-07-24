@@ -55,6 +55,9 @@ class vmmErrorDialog(vmmGObject):
         self._parent = parent
         self._simple = None
 
+    def _cleanup(self):
+        pass
+
     def set_parent(self, parent):
         self._parent = parent
     def get_parent(self):

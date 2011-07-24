@@ -82,8 +82,13 @@ class vmmGObject(GObject):
                 self.disconnect(h)
             for h in self._gobject_timeouts[:]:
                 self.remove_gobject_timeout(h)
+
+            self._cleanup()
         except:
             logging.exception("Error cleaning up %s" % self)
+
+    def _cleanup(self):
+        raise NotImplementedError("_cleanup must be implemented in subclass")
 
     # Custom signal implementations
     # These functions duplicate gobject signal behavior since it's
@@ -253,6 +258,9 @@ class vmmGObjectUI(vmmGObject):
         self.topwin = None
         self.gladefile = None
         self.err = None
+
+    def _cleanup(self):
+        raise NotImplementedError("_cleanup must be implemented in subclass")
 
     def close(self, ignore1=None, ignore2=None):
         pass

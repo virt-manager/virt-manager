@@ -914,9 +914,7 @@ class vmmConnection(vmmGObject):
 
         self._change_state(self.STATE_DISCONNECTED)
 
-    def cleanup(self):
-        # Do this first, so signals are unregistered before we change state
-        vmmGObject.cleanup(self)
+    def _cleanup(self):
         self.close()
         self.connectError = None
 

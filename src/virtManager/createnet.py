@@ -80,11 +80,9 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.topwin.hide()
         return 1
 
-    def cleanup(self):
+    def _cleanup(self):
         self.close()
         self.conn = None
-
-        vmmGObjectUI.cleanup(self)
 
     def set_initial_state(self):
         notebook = self.widget("create-pages")

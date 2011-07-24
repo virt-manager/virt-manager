@@ -163,8 +163,7 @@ class vmmAsyncJob(vmmGObjectUI):
         self.cleanup()
         return self._get_error()
 
-    def cleanup(self):
-        vmmGObjectUI.cleanup(self)
+    def _cleanup(self):
         self.bg_thread = None
         self.cancel_job = None
         self.cancel_args = None

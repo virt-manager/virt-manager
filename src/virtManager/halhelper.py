@@ -98,8 +98,7 @@ class vmmHalHelper(vmmGObject):
 
         self._dbus_connect()
 
-    def cleanup(self):
-        vmmGObject.cleanup(self)
+    def _cleanup(self):
         self.bus = None
         self.hal_iface = None
 

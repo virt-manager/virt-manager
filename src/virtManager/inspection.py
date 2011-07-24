@@ -43,16 +43,11 @@ class vmmInspection(vmmGObject):
         self._conns = dict()
         self._vmseen = dict()
 
-    def cleanup(self):
-        try:
-            vmmGObject.cleanup(self)
-
-            self._thread = None
-            self._q = Queue()
-            self._conns = {}
-            self._vmseen = {}
-        except:
-            pass
+    def _cleanup(self):
+        self._thread = None
+        self._q = Queue()
+        self._conns = {}
+        self._vmseen = {}
 
     # Called by the main thread whenever a connection is added or
     # removed.  We tell the inspection thread, so it can track

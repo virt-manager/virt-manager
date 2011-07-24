@@ -465,56 +465,52 @@ class vmmEngine(vmmGObject):
             not self.systray.is_visible()):
             self.exit_app(src)
 
-    def cleanup(self):
-        try:
-            vmmGObject.cleanup(self)
-            uihelpers.cleanup()
-            halhelper.cleanup()
-            self.err = None
+    def _cleanup(self):
+        uihelpers.cleanup()
+        halhelper.cleanup()
+        self.err = None
 
-            if self.inspection:
-                self.inspection.cleanup()
-                self.inspection = None
+        if self.inspection:
+            self.inspection.cleanup()
+            self.inspection = None
 
-            if self.timer != None:
-                gobject.source_remove(self.timer)
+        if self.timer != None:
+            gobject.source_remove(self.timer)
 
-            if self.systray:
-                self.systray.cleanup()
-                self.systray = None
+        if self.systray:
+            self.systray.cleanup()
+            self.systray = None
 
-            self.get_manager()
-            if self.windowManager:
-                self.windowManager.cleanup()
-                self.windowManager = None
+        self.get_manager()
+        if self.windowManager:
+            self.windowManager.cleanup()
+            self.windowManager = None
 
-            if self.windowPreferences:
-                self.windowPreferences.cleanup()
-                self.windowPreferences = None
+        if self.windowPreferences:
+            self.windowPreferences.cleanup()
+            self.windowPreferences = None
 
-            if self.windowAbout:
-                self.windowAbout.cleanup()
-                self.windowAbout = None
+        if self.windowAbout:
+            self.windowAbout.cleanup()
+            self.windowAbout = None
 
-            if self.windowConnect:
-                self.windowConnect.cleanup()
-                self.windowConnect = None
+        if self.windowConnect:
+            self.windowConnect.cleanup()
+            self.windowConnect = None
 
-            if self.windowCreate:
-                self.windowCreate.cleanup()
-                self.windowCreate = None
+        if self.windowCreate:
+            self.windowCreate.cleanup()
+            self.windowCreate = None
 
-            if self.windowMigrate:
-                self.windowMigrate.cleanup()
-                self.windowMigrate = None
+        if self.windowMigrate:
+            self.windowMigrate.cleanup()
+            self.windowMigrate = None
 
-            # Do this last, so any manually 'disconnected' signals
-            # take precedence over cleanup signal removal
-            for uri in self.conns:
-                self.cleanup_conn(uri)
-            self.conns = {}
-        except:
-            logging.exception("Error cleaning up engine")
+        # Do this last, so any manually 'disconnected' signals
+        # take precedence over cleanup signal removal
+        for uri in self.conns:
+            self.cleanup_conn(uri)
+        self.conns = {}
 
     def exit_app(self, src):
         if self.err is None:

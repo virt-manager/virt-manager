@@ -18,8 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import logging
-
 import gtk
 
 import virtManager.uihelpers as uihelpers
@@ -186,36 +184,29 @@ class vmmManager(vmmGObjectUI):
         return 1
 
 
-    def cleanup(self):
+    def _cleanup(self):
         self.close()
 
-        try:
-            self.rows = None
+        self.rows = None
 
-            self.diskcol = None
-            self.guestcpucol = None
-            self.hostcpucol = None
-            self.netcol = None
+        self.diskcol = None
+        self.guestcpucol = None
+        self.hostcpucol = None
+        self.netcol = None
 
-            if self.delete_dialog:
-                self.delete_dialog.cleanup()
-                self.delete_dialog = None
+        if self.delete_dialog:
+            self.delete_dialog.cleanup()
+            self.delete_dialog = None
 
-            self.vmmenu.destroy()
-            self.vmmenu = None
-            self.vmmenu_items = None
-            self.vmmenushutdown.destroy()
-            self.vmmenushutdown = None
-            self.vmmenushutdown_items = None
-            self.connmenu.destroy()
-            self.connmenu = None
-            self.connmenu_items = None
-
-        except:
-            logging.exception("Error cleaning up manager")
-
-        vmmGObjectUI.cleanup(self)
-
+        self.vmmenu.destroy()
+        self.vmmenu = None
+        self.vmmenu_items = None
+        self.vmmenushutdown.destroy()
+        self.vmmenushutdown = None
+        self.vmmenushutdown_items = None
+        self.connmenu.destroy()
+        self.connmenu = None
+        self.connmenu_items = None
 
     def is_visible(self):
         return bool(self.topwin.flags() & gtk.VISIBLE)

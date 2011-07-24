@@ -154,20 +154,16 @@ class vmmAddHardware(vmmGObjectUI):
 
         return 1
 
-    def cleanup(self):
+    def _cleanup(self):
         self.close()
-        vmmGObjectUI.cleanup(self)
 
-        try:
-            self.vm = None
-            self.conn = None
-            self._dev = None
+        self.vm = None
+        self.conn = None
+        self._dev = None
 
-            if self.storage_browser:
-                self.storage_browser.cleanup()
-                self.storage_browser = None
-        except:
-            logging.exception("Error cleaning up addhw")
+        if self.storage_browser:
+            self.storage_browser.cleanup()
+            self.storage_browser = None
 
     def remove_timers(self):
         try:

@@ -476,38 +476,33 @@ class vmmDetails(vmmGObjectUI):
         self.hw_selected()
         self.refresh_vm_state()
 
-    def cleanup(self):
+    def _cleanup(self):
         self.close()
 
-        try:
-            self.oldhwrow = None
+        self.oldhwrow = None
 
-            if self.addhw:
-                self.addhw.cleanup()
-                self.addhw = None
+        if self.addhw:
+            self.addhw.cleanup()
+            self.addhw = None
 
-            if self.storage_browser:
-                self.storage_browser.cleanup()
-                self.storage_browser = None
+        if self.storage_browser:
+            self.storage_browser.cleanup()
+            self.storage_browser = None
 
-            for key in self.media_choosers:
-                if self.media_choosers[key]:
-                    self.media_choosers[key].cleanup()
-            self.media_choosers = {}
+        for key in self.media_choosers:
+            if self.media_choosers[key]:
+                self.media_choosers[key].cleanup()
+        self.media_choosers = {}
 
-            for serial in self.serial_tabs:
-                self._close_serial_tab(serial)
+        for serial in self.serial_tabs:
+            self._close_serial_tab(serial)
 
-            self.console.cleanup()
-            self.console = None
+        self.console.cleanup()
+        self.console = None
 
-            self.vm = None
-            self.conn = None
-            self.addhwmenu = None
-        except:
-            logging.exception("Error cleaning up details")
-
-        vmmGObjectUI.cleanup(self)
+        self.vm = None
+        self.conn = None
+        self.addhwmenu = None
 
     def show(self):
         vis = self.is_visible()

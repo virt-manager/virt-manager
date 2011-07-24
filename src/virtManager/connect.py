@@ -107,6 +107,9 @@ class vmmConnect(vmmGObjectUI):
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
+    def _cleanup(self):
+        pass
+
     def set_initial_state(self):
         stock_img = gtk.image_new_from_stock(gtk.STOCK_CONNECT,
                                              gtk.ICON_SIZE_BUTTON)

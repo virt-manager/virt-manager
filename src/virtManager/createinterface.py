@@ -151,25 +151,20 @@ class vmmCreateInterface(vmmGObjectUI):
 
         return 1
 
-    def cleanup(self):
+    def _cleanup(self):
         self.close()
 
-        try:
-            self.conn = None
-            self.interface = None
+        self.conn = None
+        self.interface = None
 
-            self.ip_config.destroy()
-            self.ip_config = None
+        self.ip_config.destroy()
+        self.ip_config = None
 
-            self.bridge_config.destroy()
-            self.bridge_config = None
+        self.bridge_config.destroy()
+        self.bridge_config = None
 
-            self.bond_config.destroy()
-            self.bond_config = None
-        except:
-            logging.exception("Error cleaning up addiface")
-
-        vmmGObjectUI.cleanup(self)
+        self.bond_config.destroy()
+        self.bond_config = None
 
     ###########################
     # Initialization routines #

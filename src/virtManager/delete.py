@@ -81,13 +81,11 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.conn = None
         return 1
 
-    def cleanup(self):
+    def _cleanup(self):
         self.close()
 
         self.vm = None
         self.conn = None
-
-        vmmGObjectUI.cleanup(self)
 
     def reset_state(self):
 

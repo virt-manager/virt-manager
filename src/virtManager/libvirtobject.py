@@ -46,6 +46,9 @@ class vmmLibvirtObject(vmmGObject):
         self._inactive_xml_flags = 0
         self._active_xml_flags = 0
 
+    def _cleanup(self):
+        pass
+
     def _get_conn(self):
         return self._conn
     conn = property(_get_conn)

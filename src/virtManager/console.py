@@ -210,10 +210,8 @@ class Viewer(vmmGObject):
     def close(self):
         raise NotImplementedError()
 
-    def cleanup(self):
+    def _cleanup(self):
         self.close()
-
-        vmmGObject.cleanup(self)
 
         if self.display:
             self.display.destroy()
@@ -590,8 +588,7 @@ class vmmConsolePages(vmmGObjectUI):
             return 1
         return 0
 
-    def cleanup(self):
-        vmmGObjectUI.cleanup(self)
+    def _cleanup(self):
         self.vm = None
 
         if self.viewer:

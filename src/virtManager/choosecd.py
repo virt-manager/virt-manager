@@ -18,8 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import logging
-
 import virtManager.uihelpers as uihelpers
 import virtManager.util as util
 from virtManager.baseclass import vmmGObjectUI
@@ -62,21 +60,16 @@ class vmmChooseCD(vmmGObjectUI):
         self.topwin.set_transient_for(parent)
         self.topwin.show()
 
-    def cleanup(self):
+    def _cleanup(self):
         self.close()
 
-        try:
-            self.vm = None
-            self.conn = None
-            self.disk = None
+        self.vm = None
+        self.conn = None
+        self.disk = None
 
-            if self.storage_browser:
-                self.storage_browser.cleanup()
-                self.storage_browser = None
-        except:
-            logging.exception("Error cleaning up choosecd")
-
-        vmmGObjectUI.cleanup(self)
+        if self.storage_browser:
+            self.storage_browser.cleanup()
+            self.storage_browser = None
 
     def reset_state(self):
         cd_path = self.widget("cd-path")

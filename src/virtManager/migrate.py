@@ -92,7 +92,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.widget("migrate-advanced-expander").set_expanded(False)
         return 1
 
-    def cleanup(self):
+    def _cleanup(self):
         self.close()
 
         self.vm = None
@@ -102,8 +102,6 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         # Not sure why we need to do this manually, but it matters
         self.widget("migrate-dest").get_model().clear()
-
-        vmmGObjectUI.cleanup(self)
 
     def init_state(self):
         # [hostname, conn, can_migrate, tooltip]

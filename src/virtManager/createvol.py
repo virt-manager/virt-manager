@@ -80,15 +80,11 @@ class vmmCreateVolume(vmmGObjectUI):
         self.set_modal(False)
         return 1
 
-    def cleanup(self):
+    def _cleanup(self):
         self.close()
-        vmmGObjectUI.cleanup(self)
 
-        try:
-            self.conn = None
-            self.parent_pool = None
-        except:
-            logging.exception("Error cleaning up addvol")
+        self.conn = None
+        self.parent_pool = None
 
     def set_name_hint(self, hint):
         self.name_hint = hint

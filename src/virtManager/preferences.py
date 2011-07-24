@@ -101,6 +101,9 @@ class vmmPreferences(vmmGObjectUI):
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
+    def _cleanup(self):
+        pass
+
     #########################
     # Config Change Options #
     #########################

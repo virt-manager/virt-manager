@@ -196,7 +196,7 @@ class vmmCloneVM(vmmGObjectUI):
 
         return 1
 
-    def cleanup(self):
+    def _cleanup(self):
         self.close()
 
         self.conn = None
@@ -210,8 +210,6 @@ class vmmCloneVM(vmmGObjectUI):
         if self.storage_browser:
             self.storage_browser.cleanup()
             self.storage_browser = None
-
-        vmmGObjectUI.cleanup(self)
 
     def change_mac_close(self, ignore1=None, ignore2=None):
         self.change_mac.hide()

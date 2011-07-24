@@ -18,8 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import logging
-
 import gtk
 
 from virtManager.baseclass import vmmGObject
@@ -78,19 +76,14 @@ class vmmSystray(vmmGObject):
                     self.systray_icon and
                     self.systray_icon.is_embedded())
 
-    def cleanup(self):
-        vmmGObject.cleanup(self)
+    def _cleanup(self):
+        self.err = None
 
-        try:
-            self.err = None
+        if self.systray_menu:
+            self.systray_menu.destroy()
+            self.systray_menu = None
 
-            if self.systray_menu:
-                self.systray_menu.destroy()
-                self.systray_menu = None
-
-            self.systray_icon = None
-        except:
-            logging.exception("Error cleaning up systray")
+        self.systray_icon = None
 
     # Initialization routines
 
