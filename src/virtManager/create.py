@@ -78,6 +78,7 @@ class vmmCreate(vmmGObjectUI):
         self.detectThreadEvent = threading.Event()
         self.detectThreadEvent.set()
         self.mediaDetected = False
+        self.show_all_os = False
 
         # 'Guest' class from the previous failed install
         self.failed_guest = None
@@ -117,6 +118,7 @@ class vmmCreate(vmmGObjectUI):
 
             "on_install_detect_os_toggled": self.toggle_detect_os,
             "on_install_os_type_changed": self.change_os_type,
+            "on_install_os_version_changed": self.change_os_version,
             "on_install_local_iso_toggled": self.toggle_local_iso,
             "on_install_detect_os_box_show": self.detect_visibility_changed,
             "on_install_detect_os_box_hide": self.detect_visibility_changed,
@@ -266,20 +268,28 @@ class vmmCreate(vmmGObjectUI):
         ks_url_list.set_model(ks_url_model)
         ks_url_list.set_text_column(0)
 
+        def sep_func(model, it, combo):
+            ignore = combo
+            return model[it][2]
+
         # Lists for distro type + variant
+        # [os value, os label, is seperator, is 'show all'
         os_type_list = self.widget("install-os-type")
-        os_type_model = gtk.ListStore(str, str)
+        os_type_model = gtk.ListStore(str, str, bool, bool)
         os_type_list.set_model(os_type_model)
         text = gtk.CellRendererText()
         os_type_list.pack_start(text, True)
         os_type_list.add_attribute(text, 'text', 1)
+        os_type_list.set_row_separator_func(sep_func, os_type_list)
 
         os_variant_list = self.widget("install-os-version")
-        os_variant_model = gtk.ListStore(str, str)
+        os_variant_model = gtk.ListStore(str, str, bool, bool)
         os_variant_list.set_model(os_variant_model)
         text = gtk.CellRendererText()
         os_variant_list.pack_start(text, True)
         os_variant_list.add_attribute(text, 'text', 1)
+        os_variant_list.set_row_separator_func(sep_func, os_variant_list)
+
 
         # Physical CD-ROM model
         cd_list = self.widget("install-local-cdrom-combo")
@@ -317,6 +327,7 @@ class vmmCreate(vmmGObjectUI):
         self.guest = None
         self.disk = None
         self.nic = None
+        self.show_all_os = False
 
         self.widget("create-pages").set_current_page(PAGE_NAME)
         self.page_changed(None, None, PAGE_NAME)
@@ -714,28 +725,60 @@ class vmmCreate(vmmGObjectUI):
 
         return activeconn
 
+    def _add_os_row(self, model, name="", label="", supported=False,
+                      sep=False, action=False):
+        visible = self.show_all_os or supported
+        if sep or action:
+            visible = not self.show_all_os
+
+        if not visible:
+            return
+
+        model.append([name, label, sep, action])
+
     def populate_os_type_model(self):
-        model = self.widget("install-os-type").get_model()
+        widget = self.widget("install-os-type")
+        model = widget.get_model()
         model.clear()
-        model.append([OS_GENERIC, _("Generic")])
         types = virtinst.FullVirtGuest.list_os_types()
+        supportl = virtinst.FullVirtGuest.list_os_types(supported=True)
+
+        self._add_os_row(model, OS_GENERIC, _("Generic"), True)
+
         for t in types:
-            model.append([t, virtinst.FullVirtGuest.get_os_type_label(t)])
+            label = virtinst.FullVirtGuest.get_os_type_label(t)
+            supported = (t in supportl)
+            self._add_os_row(model, t, label, supported)
+
+        # Add sep
+        self._add_os_row(model, sep=True)
+        # Add action option
+        self._add_os_row(model, label=_("Show all OS options"), action=True)
+        widget.set_active(0)
+
 
     def populate_os_variant_model(self, _type):
         model = self.widget("install-os-version").get_model()
         model.clear()
         if _type == OS_GENERIC:
-            model.append([OS_GENERIC, _("Generic")])
+            self._add_os_row(model, OS_GENERIC, _("Generic"), True)
             return
 
         preferred = self.config.preferred_distros
-        variants = virtinst.FullVirtGuest.list_os_variants(_type,
-                                                           preferred)
-        for variant in variants:
-            model.append([variant,
-                          virtinst.FullVirtGuest.get_os_variant_label(_type,
-                                                                      variant)])
+        variants = virtinst.FullVirtGuest.list_os_variants(_type, preferred)
+        supportl = virtinst.FullVirtGuest.list_os_variants(
+                                            _type, preferred, supported=True)
+
+        for v in variants:
+            label = virtinst.FullVirtGuest.get_os_variant_label(_type, v)
+            supported = v in supportl
+            self._add_os_row(model, v, label, supported)
+
+        # Add sep
+        self._add_os_row(model, sep=True)
+        # Add action option
+        self._add_os_row(model, label=_("Show all OS options"), action=True)
+
     def populate_media_model(self, model, urls):
         model.clear()
         for url in urls:
@@ -864,9 +907,13 @@ class vmmCreate(vmmGObjectUI):
         vlabel = None
 
         if d_idx >= 0:
-            distro, dlabel = d_list.get_model()[d_idx]
+            row = d_list.get_model()[d_idx]
+            distro = row[0]
+            dlabel = row[1]
         if v_idx >= 0:
-            variant, vlabel = v_list.get_model()[v_idx]
+            row = v_list.get_model()[v_idx]
+            variant = row[0]
+            vlabel = row[1]
 
         return (distro, variant, dlabel, vlabel)
 
@@ -1075,14 +1122,55 @@ class vmmCreate(vmmGObjectUI):
             self.widget("install-os-type").show()
             self.widget("install-os-version").show()
 
-    def change_os_type(self, box):
+    def _selected_os_row(self):
+        box = self.widget("install-os-type")
         model = box.get_model()
-        if box.get_active_iter() != None:
-            _type = model.get_value(box.get_active_iter(), 0)
-            self.populate_os_variant_model(_type)
+        idx = box.get_active()
+        if idx == -1:
+            return None
+
+        return model[idx]
+
+    def change_os_type(self, box):
+        ignore = box
+        row = self._selected_os_row()
+        if row:
+            _type = row[0]
+            if _type:
+                self.populate_os_variant_model(_type)
+            elif row[3]:
+                self.show_all_os = True
+                self.populate_os_type_model()
+                return
 
         variant = self.widget("install-os-version")
         variant.set_active(0)
+
+    def change_os_version(self, box):
+        model = box.get_model()
+        idx = box.get_active()
+        if idx == -1:
+            return
+
+        # Get previous
+        os_type_list = self.widget("install-os-type")
+        os_type_model = os_type_list.get_model()
+        type_row = self._selected_os_row()
+        if not type_row:
+            return
+        os_type = type_row[0]
+
+        show_all = model[idx][3]
+        if not show_all:
+            return
+
+        self.show_all_os = True
+        self.populate_os_type_model()
+
+        for idx in range(len(os_type_model)):
+            if os_type_model[idx][0] == os_type:
+                os_type_list.set_active(idx)
+                break
 
     def toggle_local_cdrom(self, src):
         combo = self.widget("install-local-cdrom-combo")
@@ -1876,22 +1964,35 @@ class vmmCreate(vmmGObjectUI):
         # Helper method to set the OS Type/Variant selections to the passed
         # values, or -1 if not present.
         model = os_widget.get_model()
-        idx = 0
 
-        for idx in range(0, len(model)):
-            row = model[idx]
-            if value and row[0] == value:
-                break
+        def set_val():
+            idx = 0
+            for idx in range(0, len(model)):
+                row = model[idx]
+                if value and row[0] == value:
+                    break
 
-            if idx == len(os_widget.get_model()) - 1:
-                idx = -1
+                if idx == len(os_widget.get_model()) - 1:
+                    idx = -1
 
-        os_widget.set_active(idx)
-        if idx == -1:
-            os_widget.set_active(0)
+            os_widget.set_active(idx)
+            if idx == -1:
+                os_widget.set_active(0)
 
-        if idx >= 0:
-            return row[1]
+            if idx >= 0:
+                return row[1]
+            if self.show_all_os:
+                return None
+
+        ret = set_val()
+        if ret:
+            return ret
+
+        # Trigger the last element in the list, which turns on show_all_os
+        os_widget.set_active(len(model) - 1)
+        ret = set_val()
+        if ret:
+            return ret
         return _("Unknown")
 
     def set_distro_selection(self, distro, ver):

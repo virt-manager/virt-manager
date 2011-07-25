@@ -1181,6 +1181,7 @@ is not yet supported.&lt;/small&gt;</property>
                                     <child>
                                       <widget class="GtkComboBox" id="install-os-version">
                                         <property name="visible">True</property>
+                                        <signal name="changed" handler="on_install_os_version_changed"/>
                                       </widget>
                                       <packing>
                                         <property name="left_attach">1</property>
