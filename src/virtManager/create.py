@@ -56,6 +56,11 @@ INSTALL_PAGE_IMPORT = 3
 INSTALL_PAGE_CONTAINER_APP = 4
 INSTALL_PAGE_CONTAINER_OS = 5
 
+RHEL6_OS_SUPPORT = [
+    "rhel3", "rhel4", "rhel5.4", "rhel6",
+    "win2k3", "winxp", "win2k8", "vista", "win7",
+]
+
 class vmmCreate(vmmGObjectUI):
     def __init__(self, engine):
         vmmGObjectUI.__init__(self, "vmm-create.glade", "vmm-create")
@@ -740,8 +745,12 @@ class vmmCreate(vmmGObjectUI):
         widget = self.widget("install-os-type")
         model = widget.get_model()
         model.clear()
+        filtervars = (not self._rhel6_defaults() and
+                      RHEL6_OS_SUPPORT or
+                      None)
         types = virtinst.FullVirtGuest.list_os_types()
-        supportl = virtinst.FullVirtGuest.list_os_types(supported=True)
+        supportl = virtinst.FullVirtGuest.list_os_types(supported=True,
+                                                        filtervars=filtervars)
 
         self._add_os_row(model, OS_GENERIC, _("Generic"), True)
 
@@ -764,10 +773,14 @@ class vmmCreate(vmmGObjectUI):
             self._add_os_row(model, OS_GENERIC, _("Generic"), True)
             return
 
+        filtervars = (not self._rhel6_defaults() and
+                      RHEL6_OS_SUPPORT or
+                      None)
         preferred = self.config.preferred_distros
         variants = virtinst.FullVirtGuest.list_os_variants(_type, preferred)
         supportl = virtinst.FullVirtGuest.list_os_variants(
-                                            _type, preferred, supported=True)
+                                            _type, preferred, supported=True,
+                                            filtervars=filtervars)
 
         for v in variants:
             label = virtinst.FullVirtGuest.get_os_variant_label(_type, v)
@@ -2069,6 +2082,16 @@ class vmmCreate(vmmGObjectUI):
             logging.exception("Error detecting distro.")
             self.detectedDistro = (None, None)
 
+    def _rhel6_defaults(self):
+        emu = None
+        if self.guest:
+            emu = self.guest.emulator
+        elif self.capsdomain:
+            emu = self.capsdomain.emulator
+
+        ret = self.conn.rhel6_defaults(emu)
+        return ret
+
     def _browse_file(self, callback, is_media=False, is_dir=False):
         if is_media:
             reason = self.config.CONFIG_DIR_ISO_MEDIA
@@ -2080,14 +2103,7 @@ class vmmCreate(vmmGObjectUI):
         if self.storage_browser == None:
             self.storage_browser = vmmStorageBrowser(self.conn)
 
-        emu = None
-        if self.guest:
-            emu = self.guest.emulator
-        elif self.capsdomain:
-            emu = self.capsdomain.emulator
-
-        rhel6 = self.conn.rhel6_defaults(emu)
-        self.storage_browser.rhel6_defaults = rhel6
+        self.storage_browser.rhel6_defaults = self._rhel6_defaults()
 
         self.storage_browser.set_vm_name(self.get_config_name())
         self.storage_browser.set_finish_cb(callback)
