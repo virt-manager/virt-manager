@@ -151,8 +151,8 @@ class vmmDomain(vmmLibvirtObject):
 
         self.lastStatus = libvirt.VIR_DOMAIN_SHUTOFF
 
-        self.getvcpus_supported = None
-        self.getjobinfo_supported = False
+        self._getvcpus_supported = None
+        self._getjobinfo_supported = None
         self.managedsave_supported = False
         self.remote_console_supported = False
 
@@ -174,6 +174,25 @@ class vmmDomain(vmmLibvirtObject):
 
         self._libvirt_init()
 
+    def _get_getvcpus_supported(self):
+        if self._getvcpus_supported is None:
+            self._getvcpus_supported = True
+            try:
+                self._backend.vcpus()
+            except libvirt.libvirtError, err:
+                if support.is_error_nosupport(err):
+                    self._getvcpus_supported = False
+        return self._getvcpus_supported
+    getvcpus_supported = property(_get_getvcpus_supported)
+
+    def _get_getjobinfo_supported(self):
+        if self._getjobinfo_supported is None:
+            self._getjobinfo_supported = support.check_domain_support(
+                                            self._backend,
+                                            support.SUPPORT_DOMAIN_JOB_INFO)
+        return self._getjobinfo_supported
+    getjobinfo_supported = property(_get_getjobinfo_supported)
+
     def _libvirt_init(self):
         """
         Initialization to do if backed by a libvirt virDomain
@@ -181,8 +200,6 @@ class vmmDomain(vmmLibvirtObject):
         self._reparse_xml()
 
         self.managedsave_supported = self.conn.get_dom_managedsave_supported(self._backend)
-        self.getjobinfo_supported = support.check_domain_support(self._backend,
-                                            support.SUPPORT_DOMAIN_JOB_INFO)
 
         self.remote_console_supported = support.check_domain_support(
                                         self._backend,
@@ -749,17 +766,8 @@ class vmmDomain(vmmLibvirtObject):
     def pin_vcpu(self, vcpu_num, pinlist):
         self._backend.pinVcpu(vcpu_num, pinlist)
     def vcpu_info(self):
-        if self.is_active() and self.getvcpus_supported is not False:
-            try:
-                ret = self._backend.vcpus()
-                self.getvcpus_supported = True
-                return ret
-            except libvirt.libvirtError, err:
-                if support.is_error_nosupport(err):
-                    self.getvcpus_supported = False
-                else:
-                    raise
-
+        if self.is_active() and self.getvcpus_supported:
+            return self._backend.vcpus()
         return [[], []]
 
     def get_autostart(self):
