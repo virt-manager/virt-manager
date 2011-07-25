@@ -1534,6 +1534,8 @@ class vmmConnection(vmmGObject):
         wrRate = 0
         rxRate = 0
         txRate = 0
+        diskMaxRate = self.disk_io_max_rate() or 10.0
+        netMaxRate = self.network_traffic_max_rate() or 10.0
 
         for uuid in vms:
             vm = vms[uuid]
@@ -1546,6 +1548,9 @@ class vmmConnection(vmmGObject):
             wrRate += vm.disk_write_rate()
             rxRate += vm.network_rx_rate()
             txRate += vm.network_tx_rate()
+
+            netMaxRate = max(netMaxRate, vm.network_traffic_max_rate())
+            diskMaxRate = max(diskMaxRate, vm.disk_io_max_rate())
 
         pcentHostCpu = 0
         pcentMem = mem * 100.0 / self.host_memory_size()
@@ -1572,6 +1577,8 @@ class vmmConnection(vmmGObject):
             "diskWrRate" : wrRate,
             "netRxRate" : rxRate,
             "netTxRate" : txRate,
+            "diskMaxRate" : diskMaxRate,
+            "netMaxRate" : netMaxRate,
         }
 
         self.record.insert(0, newStats)
@@ -1616,6 +1623,9 @@ class vmmConnection(vmmGObject):
 
     def stats_memory(self):
         return self._get_record_helper("memory")
+    def pretty_stats_memory(self):
+        return util.pretty_mem(self.stats_memory())
+
     def host_cpu_time_percentage(self):
         return self._get_record_helper("cpuHostPercent")
     guest_cpu_time_percentage = host_cpu_time_percentage
@@ -1626,9 +1636,8 @@ class vmmConnection(vmmGObject):
         return self._get_record_helper("netTxRate")
     def network_traffic_rate(self):
         return self.network_tx_rate() + self.network_rx_rate()
-
-    def pretty_stats_memory(self):
-        return util.pretty_mem(self.stats_memory())
+    def network_traffic_max_rate(self):
+        return self._get_record_helper("netMaxRate")
 
     def disk_read_rate(self):
         return self._get_record_helper("diskRdRate")
@@ -1636,7 +1645,8 @@ class vmmConnection(vmmGObject):
         return self._get_record_helper("diskWrRate")
     def disk_io_rate(self):
         return self.disk_read_rate() + self.disk_write_rate()
-
+    def disk_io_max_rate(self):
+        return self._get_record_helper("diskMaxRate")
 
     ####################################
     # Per-Connection gconf preferences #

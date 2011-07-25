@@ -141,6 +141,9 @@ class vmmManager(vmmGObjectUI):
         self.widget("vm-list").get_selection().connect("changed",
                                                        self.vm_selected)
 
+        self.max_disk_rate = 10.0
+        self.max_net_rate = 10.0
+
         # Initialize stat polling columns based on global polling
         # preferences (we want signal handlers for this)
         for typ, init_val in [
@@ -789,7 +792,7 @@ class vmmManager(vmmGObjectUI):
 
         conn.connect("vm-added", self.vm_added)
         conn.connect("vm-removed", self.vm_removed)
-        conn.connect("resources-sampled", self.conn_refresh_resources)
+        conn.connect("resources-sampled", self.conn_resources_sampled)
         conn.connect("state-changed", self.conn_state_changed)
         conn.connect("connect-error", self._connect_error)
 
@@ -814,7 +817,7 @@ class vmmManager(vmmGObjectUI):
                 continue
 
             newname = conn.get_pretty_desc_inactive(False, True)
-            self.conn_refresh_resources(conn, newname)
+            self.conn_resources_sampled(conn, newname)
 
     def remove_conn(self, engine_ignore, uri):
         model = self.widget("vm-list").get_model()
@@ -904,10 +907,10 @@ class vmmManager(vmmGObjectUI):
             return None
 
     def conn_state_changed(self, conn):
-        self.conn_refresh_resources(conn)
+        self.conn_resources_sampled(conn)
         self.vm_selected()
 
-    def conn_refresh_resources(self, conn, newname=None):
+    def conn_resources_sampled(self, conn, newname=None):
         vmlist = self.widget("vm-list")
         model = vmlist.get_model()
         row = self.rows[conn.get_uri()]
@@ -928,9 +931,15 @@ class vmmManager(vmmGObjectUI):
             if parent is not None:
                 child = model.iter_children(parent)
                 while child is not None:
-                    del self.rows[self.vm_row_key(model.get_value(child, ROW_HANDLE))]
+                    del self.rows[self.vm_row_key(model.get_value(child,
+                                                                  ROW_HANDLE))]
                     model.remove(child)
                     child = model.iter_children(parent)
+
+        self.max_disk_rate = max(self.max_disk_rate, conn.disk_io_max_rate())
+        self.max_net_rate = max(self.max_net_rate,
+                                conn.network_traffic_max_rate())
+
         model.row_changed(row.path, row.iter)
 
     def change_run_text(self, can_restore):
@@ -1152,7 +1161,10 @@ class vmmManager(vmmGObjectUI):
         if obj is None:
             return
 
-        data = obj.disk_io_vector_limit(40)
+        if not hasattr(obj, "conn"):
+            return
+
+        data = obj.disk_io_vector_limit(40, self.max_disk_rate)
         cell.set_property('data_array', data)
 
     def network_traffic_img(self, column_ignore, cell, model, _iter, data):
@@ -1160,7 +1172,10 @@ class vmmManager(vmmGObjectUI):
         if obj is None:
             return
 
-        data = obj.network_traffic_vector_limit(40)
+        if not hasattr(obj, "conn"):
+            return
+
+        data = obj.network_traffic_vector_limit(40, self.max_net_rate)
         cell.set_property('data_array', data)
 
 vmmGObjectUI.type_register(vmmManager)

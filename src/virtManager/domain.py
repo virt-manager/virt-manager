@@ -1180,6 +1180,8 @@ class vmmDomain(vmmLibvirtObject):
     def _set_max_rate(self, record, what):
         if record[what] > self.maxRecord[what]:
             self.maxRecord[what] = record[what]
+    def _get_max_rate(self, name1, name2):
+        return float(max(self.maxRecord[name1], self.maxRecord[name2]))
 
     def _get_record_helper(self, record_name):
         if len(self.record) == 0:
@@ -1196,11 +1198,13 @@ class vmmDomain(vmmLibvirtObject):
                 vector.append(0)
         return vector
 
-    def _in_out_vector_helper(self, name1, name2):
+    def _in_out_vector_helper(self, name1, name2, ceil):
         vector = []
         stats = self.record
-        ceil = float(max(self.maxRecord[name1], self.maxRecord[name2]))
+        if ceil is None:
+            ceil = self._get_max_rate(name1, name2)
         maxlen = self.config.get_stats_history_length()
+
         for n in [name1, name2]:
             for i in range(maxlen + 1):
                 if i < len(stats):
@@ -1270,8 +1274,12 @@ class vmmDomain(vmmLibvirtObject):
 
     def network_traffic_rate(self):
         return self.network_tx_rate() + self.network_rx_rate()
+    def network_traffic_max_rate(self):
+        return self._get_max_rate("netRxRate", "netTxRate")
     def disk_io_rate(self):
         return self.disk_read_rate() + self.disk_write_rate()
+    def disk_io_max_rate(self):
+        return self._get_max_rate("diskRdRate", "diskWrRate")
 
     def host_cpu_time_vector(self):
         return self._vector_helper("cpuHostPercent")
@@ -1279,10 +1287,10 @@ class vmmDomain(vmmLibvirtObject):
         return self._vector_helper("cpuGuestPercent")
     def stats_memory_vector(self):
         return self._vector_helper("currMemPercent")
-    def network_traffic_vector(self):
-        return self._in_out_vector_helper("netRxRate", "netTxRate")
-    def disk_io_vector(self):
-        return self._in_out_vector_helper("diskRdRate", "diskWrRate")
+    def network_traffic_vector(self, ceil=None):
+        return self._in_out_vector_helper("netRxRate", "netTxRate", ceil)
+    def disk_io_vector(self, ceil=None):
+        return self._in_out_vector_helper("diskRdRate", "diskWrRate", ceil)
 
     def host_cpu_time_vector_limit(self, limit):
         cpudata = self.host_cpu_time_vector()
@@ -1294,10 +1302,11 @@ class vmmDomain(vmmLibvirtObject):
         if len(cpudata) > limit:
             cpudata = cpudata[0:limit]
         return cpudata
-    def network_traffic_vector_limit(self, limit):
-        return self.in_out_vector_limit(self.network_traffic_vector(), limit)
-    def disk_io_vector_limit(self, limit):
-        return self.in_out_vector_limit(self.disk_io_vector(), limit)
+    def network_traffic_vector_limit(self, limit, ceil=None):
+        return self.in_out_vector_limit(self.network_traffic_vector(ceil),
+                                        limit)
+    def disk_io_vector_limit(self, limit, ceil=None):
+        return self.in_out_vector_limit(self.disk_io_vector(ceil), limit)
 
 
     ###################
