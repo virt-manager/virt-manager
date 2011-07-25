@@ -445,6 +445,8 @@ class vmmCreate(vmmGObjectUI):
         is_storage_capable = self.conn.is_storage_capable()
         is_pv = (self.capsguest.os_type == "xen")
         is_container = self.conn.is_container()
+        can_remote_url = virtinst.support.check_stream_support(self.conn.vmm,
+                            virtinst.support.SUPPORT_STREAM_UPLOAD)
 
         # Install Options
         method_tree = self.widget("method-tree")
@@ -452,7 +454,7 @@ class vmmCreate(vmmGObjectUI):
         method_local = self.widget("method-local")
         method_container_app = self.widget("method-container-app")
 
-        method_tree.set_sensitive(is_local)
+        method_tree.set_sensitive(is_local or can_remote_url)
         method_local.set_sensitive(not is_pv)
         method_pxe.set_sensitive(not is_pv)
 
@@ -465,7 +467,7 @@ class vmmCreate(vmmGObjectUI):
             pxe_tt = base % "PXE"
             local_tt = base % "CDROM/ISO"
         if not is_local:
-            tree_tt = _("URL installs not available for remote connections.")
+            tree_tt = _("Libvirt version does not support remote URL installs.")
             if not is_storage_capable and not local_tt:
                 local_tt = _("Connection does not support storage management.")
 
