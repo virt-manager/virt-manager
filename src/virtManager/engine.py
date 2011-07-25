@@ -69,6 +69,11 @@ DETAILS_PERF = 1
 DETAILS_CONFIG = 2
 DETAILS_CONSOLE = 3
 
+def _safe_getattr(obj, name):
+    if not hasattr(obj, name):
+        return None
+    return getattr(obj, name)
+
 #############################
 # PackageKit lookup helpers #
 #############################
@@ -436,14 +441,24 @@ class vmmEngine(vmmGObject):
             except KeyboardInterrupt:
                 raise
             except libvirt.libvirtError, e:
-                if (e.get_error_domain() == libvirt.VIR_FROM_REMOTE and
-                    e.get_error_code() == libvirt.VIR_ERR_SYSTEM_ERROR):
+                from_remote = _safe_getattr(libvirt, "VIR_FROM_REMOTE")
+                from_rpc = _safe_getattr(libvirt, "VIR_FROM_RPC")
+                sys_error = _safe_getattr(libvirt, "VIR_ERR_SYSTEM_ERROR")
+
+                dom = e.get_error_domain()
+                code = e.get_error_code()
+
+                if (dom in [from_remote, from_rpc] and
+                    code in [sys_error]):
                     logging.exception("Could not refresh connection %s." % uri)
                     logging.debug("Closing connection since libvirtd "
                                   "appears to have stopped.")
-                    self.safe_idle_add(conn.close)
                 else:
-                    raise
+                    self.err.show_err(_("Error polling connection '%s': %s") %
+                                      (conn.get_uri(), e))
+
+                self.safe_idle_add(conn.close)
+
         return 1
 
     def change_timer_interval(self, ignore1, ignore2, ignore3, ignore4):
