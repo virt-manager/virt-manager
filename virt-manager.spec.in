@@ -12,6 +12,7 @@
 %define disable_unsupported_rhel   0
 %define default_graphics           ""
 
+%define with_guestfs               0
 %define with_spice                 0
 %define with_tui                   0
 
@@ -74,6 +75,9 @@ Requires: PolicyKit-gnome
 %endif
 %if %{with_spice}
 Requires: spice-gtk-python
+%endif
+%if %{with_guestfs}
+Requires: python-libguestfs
 %endif
 
 %if %{with_tui} == 0
