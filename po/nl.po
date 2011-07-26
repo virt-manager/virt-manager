@@ -1,204 +1,218 @@
-# Translation of virt-manager to Dutch
-# Copyright (C) 2006-2009 The Free Software Foundation, Inc.
-# This file is distributed under the same license as the virt-manager package.
-# Peter van Egdom <p.van.egdom@gmail.com>, 2007-2009.
-# Geert Warrink <geert.warrink@onsnet.nu>, 2010, 2011.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Cole Robinson <crobinso@redhat.com>, 2011.
+# Geert Warrink <geert.warrink@onsnet.nu>, 2011.
+#. [xml value, label]
+#: ../src/virtManager/uihelpers.py:237
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-24 16:35-0400\n"
-"PO-Revision-Date: 2011-01-16 13:32+0200\n"
-"Last-Translator: Geert Warrink <geert.warrink@onsnet.nu>\n"
-"Language-Team: Fedora\n"
+"POT-Creation-Date: 2011-07-26 19:56-0400\n"
+"PO-Revision-Date: 2011-07-22 18:18+0000\n"
+"Last-Translator: warrink <geert.warrink@onsnet.nu>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.6.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: ../src/virt-manager.desktop.in.in.h:1
 msgid "Manage virtual machines"
 msgstr "Virtuele machines beheren"
 
-#: ../src/virt-manager.desktop.in.in.h:2 ../src/virtManager/systray.py:149
+#: ../src/virt-manager.desktop.in.in.h:2 ../src/virtManager/systray.py:131
 #: ../src/vmm-manager.glade.h:7
 msgid "Virtual Machine Manager"
 msgstr "Virtuele machine beheerder"
 
-#: ../src/virt-manager.py.in:74
+#: ../src/virt-manager.py.in:65
 msgid "Error starting Virtual Machine Manager"
 msgstr "Fout bij het starten van Virtuele machine beheerder"
 
-#: ../src/virt-manager.py.in:359
+#: ../src/virt-manager.py.in:285
 #, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "GTK initialiseren mislukt: %s"
 
 #: ../src/virt-manager.schemas.in.h:1
+msgid "Confirm about unapplied device changes"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:2
 msgid "Confirm device interface start and stop"
 msgstr "Bevestig apparaat interface starten en stoppen"
 
-#: ../src/virt-manager.schemas.in.h:2
+#: ../src/virt-manager.schemas.in.h:3
 msgid "Confirm device removal request"
 msgstr "Bevestig apparaat verwijderen verzoek"
 
-#: ../src/virt-manager.schemas.in.h:3
+#: ../src/virt-manager.schemas.in.h:4
 msgid "Confirm force poweroff request"
 msgstr "Bevestig uitschakelen forceren verzoek"
 
-#: ../src/virt-manager.schemas.in.h:4
+#: ../src/virt-manager.schemas.in.h:5
 msgid "Confirm pause request"
 msgstr "Bevestig pauzeren verzoek"
 
-#: ../src/virt-manager.schemas.in.h:5
+#: ../src/virt-manager.schemas.in.h:6
 msgid "Confirm poweroff request"
 msgstr "Bevestig uitschakelen verzoek"
 
-#: ../src/virt-manager.schemas.in.h:6
+#: ../src/virt-manager.schemas.in.h:7
 msgid "Default image path"
 msgstr "Standaard image pad"
 
-#: ../src/virt-manager.schemas.in.h:7
+#: ../src/virt-manager.schemas.in.h:8
 msgid "Default manager window height"
 msgstr "Standaard beheerder venster hoogte"
 
-#: ../src/virt-manager.schemas.in.h:8
+#: ../src/virt-manager.schemas.in.h:9
 msgid "Default manager window width"
 msgstr "Standaard beheerder venster breedte"
 
-#: ../src/virt-manager.schemas.in.h:9
+#: ../src/virt-manager.schemas.in.h:10
 msgid "Default media path"
 msgstr "Standaard media pad"
 
-#: ../src/virt-manager.schemas.in.h:10
+#: ../src/virt-manager.schemas.in.h:11
 msgid "Default path for choosing VM images"
 msgstr "Standaard pad voor het kiezen van VM images"
 
-#: ../src/virt-manager.schemas.in.h:11
+#: ../src/virt-manager.schemas.in.h:12
 msgid "Default path for choosing media"
 msgstr "Standaard pad voor het kiezen media"
 
-#: ../src/virt-manager.schemas.in.h:12
-msgid "Default path for saving VM snaphots"
+#: ../src/virt-manager.schemas.in.h:13
+#, fuzzy
+msgid "Default path for saving VM snapshots"
 msgstr "Standaard pad voor het opslaan van VM momentopnames"
 
-#: ../src/virt-manager.schemas.in.h:13
+#: ../src/virt-manager.schemas.in.h:14
 msgid "Default path for saving screenshots from VMs"
 msgstr "Standaard pad voor het opslaan van schermafdrukken van VM's"
 
-#: ../src/virt-manager.schemas.in.h:14
+#: ../src/virt-manager.schemas.in.h:15
 msgid "Default path for stored VM snapshots"
 msgstr "Standaard pad voor opgeslagen VM momentopnames"
 
-#: ../src/virt-manager.schemas.in.h:15
+#: ../src/virt-manager.schemas.in.h:16
 msgid "Default restore path"
 msgstr "Standaard herstel pad"
 
-#: ../src/virt-manager.schemas.in.h:16
+#: ../src/virt-manager.schemas.in.h:17
 msgid "Default save domain path"
 msgstr "Standaard domein opslaan pad"
 
-#: ../src/virt-manager.schemas.in.h:17
+#: ../src/virt-manager.schemas.in.h:18
 msgid "Default screenshot path"
 msgstr "Standaard schermafdruk pad"
 
-#: ../src/virt-manager.schemas.in.h:18
+#: ../src/virt-manager.schemas.in.h:19
 msgid "Enable menu accelerators in console window"
 msgstr "Zet menu versnellers in console venster aan"
 
-#: ../src/virt-manager.schemas.in.h:19
-#, fuzzy
-msgid "Install selected graphics type for new VM"
-msgstr "Installeer geluid apparaat voor VM op afstand "
-
 #: ../src/virt-manager.schemas.in.h:20
-msgid "Install selected graphics type for new VM. vnc or spice"
-msgstr ""
+msgid "Install selected graphics type for new VM"
+msgstr "Installeer geselecteerde grafische types voor nieuwe VM"
 
 #: ../src/virt-manager.schemas.in.h:21
+msgid "Install selected graphics type for new VM. vnc or spice"
+msgstr "Installeer geselecteerde grafische types voor nieuwe VM. vnc of spice"
+
+#: ../src/virt-manager.schemas.in.h:22
 msgid "Install sound device for local VM"
 msgstr "Installeer geluid apparaat voor locale VM "
 
-#: ../src/virt-manager.schemas.in.h:22
+#: ../src/virt-manager.schemas.in.h:23
 msgid "Install sound device for remote VM"
 msgstr "Installeer geluid apparaat voor VM op afstand "
 
-#: ../src/virt-manager.schemas.in.h:23
+#: ../src/virt-manager.schemas.in.h:24
 msgid "Poll disk i/o stats"
 msgstr "Ondervraag schijf i/o statistieken"
 
-#: ../src/virt-manager.schemas.in.h:24
+#: ../src/virt-manager.schemas.in.h:25
 msgid "Poll net i/o stats"
 msgstr "Ondervraag netwerk i/o statistieken"
-
-#: ../src/virt-manager.schemas.in.h:25
-msgid "Show cpu usage in summary"
-msgstr "Laat cpu gebruik zien in samenvatting"
 
 #: ../src/virt-manager.schemas.in.h:26
 msgid "Show disk I/O in summary"
 msgstr "Laat schijf I/O zien in samenvatting"
 
 #: ../src/virt-manager.schemas.in.h:27
+#, fuzzy
+msgid "Show guest cpu usage in summary"
+msgstr "Laat cpu gebruik zien in samenvatting"
+
+#: ../src/virt-manager.schemas.in.h:28
+#, fuzzy
+msgid "Show host cpu usage in summary"
+msgstr "Laat cpu gebruik zien in samenvatting"
+
+#: ../src/virt-manager.schemas.in.h:29
 msgid "Show network I/O in summary"
 msgstr "Laat netwerk I/O zien in samenvatting"
 
-#: ../src/virt-manager.schemas.in.h:28
+#: ../src/virt-manager.schemas.in.h:30
 msgid "Show system tray icon"
 msgstr "Laat systeem blad icoon zien"
 
-#: ../src/virt-manager.schemas.in.h:29
+#: ../src/virt-manager.schemas.in.h:31
 msgid "Show system tray icon while app is running"
 msgstr "Laar systeem blad icoon zien terwijl toepassing draait"
 
-#: ../src/virt-manager.schemas.in.h:30
-msgid "Show the cpu usage field in the domain list summary view"
-msgstr "Laat het cpu gebruik veld zien in het domein lijst samenvatting scherm"
-
-#: ../src/virt-manager.schemas.in.h:31
+#: ../src/virt-manager.schemas.in.h:32
 msgid "Show the disk I/O field in the domain list summary view"
 msgstr "Laat het schijf I/O veld zien in het domein lijst samenvatting scherm"
 
-#: ../src/virt-manager.schemas.in.h:32
+#: ../src/virt-manager.schemas.in.h:33
+#, fuzzy
+msgid "Show the guest cpu usage field in the domain list summary view"
+msgstr "Laat het cpu gebruik veld zien in het domein lijst samenvatting scherm"
+
+#: ../src/virt-manager.schemas.in.h:34
+#, fuzzy
+msgid "Show the host cpu usage field in the domain list summary view"
+msgstr "Laat het cpu gebruik veld zien in het domein lijst samenvatting scherm"
+
+#: ../src/virt-manager.schemas.in.h:35
 msgid "Show the network I/O field in the domain list summary view"
 msgstr "Laat het netwerk I/O veld zien in het domein lijst samenvatting scherm"
 
-#: ../src/virt-manager.schemas.in.h:33
+#: ../src/virt-manager.schemas.in.h:36
 msgid "The length of the list of URLs"
 msgstr "De lengte van de URL lijst"
 
-#: ../src/virt-manager.schemas.in.h:34
+#: ../src/virt-manager.schemas.in.h:37
 msgid "The number of samples to keep in the statistics history"
 msgstr "Het aantal steekproeven te bewaren in de statistiek geschiedenis"
 
-#: ../src/virt-manager.schemas.in.h:35
+#: ../src/virt-manager.schemas.in.h:38
 msgid ""
 "The number of urls to keep in the history for the install media address page."
 msgstr "Het aantal URL's te bewaren in de statistiek geschiedenis"
 
-#: ../src/virt-manager.schemas.in.h:36
+#: ../src/virt-manager.schemas.in.h:39
 msgid "The statistics history length"
 msgstr "De lengte van de statistieken geschiedenis"
 
-#: ../src/virt-manager.schemas.in.h:37
+#: ../src/virt-manager.schemas.in.h:40
 msgid "The statistics update interval"
 msgstr "Het statistieken vernieuwing interval"
 
-#: ../src/virt-manager.schemas.in.h:38
+#: ../src/virt-manager.schemas.in.h:41
 msgid "The statistics update interval in seconds"
 msgstr "Het statistieken vernieuwing interval in seconden"
 
-#: ../src/virt-manager.schemas.in.h:39
-msgid "When to pop up a console for a guest"
-msgstr "Wanneer een console voor een gast tonen"
-
-#: ../src/virt-manager.schemas.in.h:40
+#: ../src/virt-manager.schemas.in.h:42
 msgid "When to scale the VM graphical console"
 msgstr "Wanneer de VM grafische console schalen"
 
-#: ../src/virt-manager.schemas.in.h:41
+#: ../src/virt-manager.schemas.in.h:43
 msgid ""
 "When to scale the VM graphical console. 0 = never, 1 = only when in full "
 "screen mode, 2 = Always"
@@ -206,15 +220,15 @@ msgstr ""
 "Wanneer de VM grafische console schalen. 0 = nooit, 1 = alleen in volledig "
 "scherm mode, 2 = altijd"
 
-#: ../src/virt-manager.schemas.in.h:42
+#: ../src/virt-manager.schemas.in.h:44
 msgid "Whether or not the app will poll VM disk i/o statistics"
 msgstr "Moet de toepassing VM schijf i/o wel of niet ondervragen"
 
-#: ../src/virt-manager.schemas.in.h:43
+#: ../src/virt-manager.schemas.in.h:45
 msgid "Whether or not the app will poll VM network i/o statistics"
 msgstr "Moet de toepassing VM netwerk i/o wel of niet ondervragen"
 
-#: ../src/virt-manager.schemas.in.h:44
+#: ../src/virt-manager.schemas.in.h:46
 msgid ""
 "Whether to enable menu accelerators while connected to the guest graphical "
 "console."
@@ -222,38 +236,30 @@ msgstr ""
 "Moet menu versnellers wel of niet aanzetten bij verbinding met de gast "
 "grafische console."
 
-#: ../src/virt-manager.schemas.in.h:45
+#: ../src/virt-manager.schemas.in.h:47
 msgid "Whether to install a sound device for local VMs or not"
 msgstr "Moet een geluid apparaat voor locale VM's geïnstalleerd worden"
 
-#: ../src/virt-manager.schemas.in.h:46
+#: ../src/virt-manager.schemas.in.h:48
 msgid "Whether to install a sound device for remote VMs or not"
 msgstr "Moet een geluid apparaat voor VM's op afstand geïnstalleerd worden"
 
-#: ../src/virt-manager.schemas.in.h:47
-msgid ""
-"Whether to pop up a console for a guest. 0 = never, 1 = only on creation of "
-"a new guest, 2 = On creation of any guest"
-msgstr ""
-"Moet een console voor een gast getoond worden. 0 = nooit, 1 = alleen bij het "
-"aanmaken van een nieuwe gast, 2 = bij het aanmaken van elke gast"
-
-#: ../src/virt-manager.schemas.in.h:48
+#: ../src/virt-manager.schemas.in.h:49
 msgid "Whether to show VM button toolbar in Details display"
 msgstr "Moet de VM knoppen gereedschap balk in Details display getoond worden"
 
-#: ../src/virt-manager.schemas.in.h:49
+#: ../src/virt-manager.schemas.in.h:50
 msgid "Whether to show notification when grabbing mouse"
 msgstr "Moet een mededeling getoond worden bij het pakken van de muis"
 
-#: ../src/virt-manager.schemas.in.h:50
+#: ../src/virt-manager.schemas.in.h:51
 msgid ""
 "Whether to show the notification hint when grabbing the mouse in the console"
 msgstr ""
 "Moet de mededeling hint getoond worden bij het pakken van de muis in de "
 "console"
 
-#: ../src/virt-manager.schemas.in.h:51
+#: ../src/virt-manager.schemas.in.h:52
 msgid ""
 "Whether to show toolbar containing Virtual Machine action buttons (such as "
 "Run, Pause, Shutdown) in the details display"
@@ -261,147 +267,173 @@ msgstr ""
 "Moet de gereedschap balk getoond worden die VM actie knoppen bevat (zoals "
 "Draaien, Pauzeren, Afsluiten) in het details display"
 
-#: ../src/virt-manager.schemas.in.h:52
+#: ../src/virt-manager.schemas.in.h:53
+msgid "Whether we ask the user to apply or discard unapplied device changes"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:54
 msgid "Whether we require confirmation to forcepoweroff a VM"
 msgstr "Moeten we bevestigen vereisen om een VM geforceerd uit te schakelen"
 
-#: ../src/virt-manager.schemas.in.h:53
+#: ../src/virt-manager.schemas.in.h:55
 msgid "Whether we require confirmation to pause a VM"
 msgstr "Moeten we bevestigen vereisen om een VM te pauzeren"
 
-#: ../src/virt-manager.schemas.in.h:54
+#: ../src/virt-manager.schemas.in.h:56
 msgid "Whether we require confirmation to poweroff/reboot a VM"
 msgstr ""
 "Moeten we bevestigen vereisen om een VM uit te schakelen / op te starten"
 
-#: ../src/virt-manager.schemas.in.h:55
+#: ../src/virt-manager.schemas.in.h:57
 msgid "Whether we require confirmation to remove a virtual device"
 msgstr "Moeten we bevestiging vereisen om een virtueel apparaat te verwijderen"
 
-#: ../src/virt-manager.schemas.in.h:56
+#: ../src/virt-manager.schemas.in.h:58
 msgid ""
 "Whether we require confirmation to start or stop a libvirt virtual interface"
 msgstr ""
 "Moeten we bevestiging vereisen voor het starten of stoppen van een libvirt "
 "virtuele interface"
 
-#: ../src/virtManager/addhardware.py:331 ../src/virtManager/create.py:452
-#: ../src/virtManager/create.py:544
+#: ../src/virtManager/addhardware.py:339 ../src/virtManager/create.py:488
+#: ../src/virtManager/create.py:586
 msgid "Connection does not support storage management."
 msgstr "Verbinding ondersteunt geen geheugen beheer."
 
-#: ../src/virtManager/addhardware.py:345 ../src/virtManager/addhardware.py:350
-#: ../src/virtManager/addhardware.py:353 ../src/virtManager/addhardware.py:357
-#: ../src/virtManager/addhardware.py:374
+#: ../src/virtManager/addhardware.py:353 ../src/virtManager/addhardware.py:358
+#: ../src/virtManager/addhardware.py:361 ../src/virtManager/addhardware.py:365
+#: ../src/virtManager/addhardware.py:369 ../src/virtManager/addhardware.py:386
 msgid "Not supported for this guest type."
 msgstr "Wordt niet ondersteund voor dit type gast."
 
-#: ../src/virtManager/addhardware.py:361 ../src/virtManager/addhardware.py:365
+#: ../src/virtManager/addhardware.py:373 ../src/virtManager/addhardware.py:377
 msgid "Connection does not support host device enumeration"
 msgstr "Verbinding ondersteunt geen opsomming host apparaten"
 
-#: ../src/virtManager/addhardware.py:371
+#: ../src/virtManager/addhardware.py:383
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt versie ondersteunt geen video apparaten."
 
-#: ../src/virtManager/addhardware.py:487 ../src/virtManager/details.py:2388
+#: ../src/virtManager/addhardware.py:392
+#, fuzzy
+msgid "Not supported for this hypervisor/libvirt combination."
+msgstr "Wordt niet ondersteund voor dit type gast."
+
+#: ../src/virtManager/addhardware.py:515 ../src/virtManager/details.py:2786
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB grafisch tablet"
 
 #. XXX libvirt needs to support 'model' for input devices to distinguish
 #. wacom from evtouch tablets
 #. model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
-#: ../src/virtManager/addhardware.py:491 ../src/virtManager/details.py:2390
+#: ../src/virtManager/addhardware.py:519 ../src/virtManager/details.py:2788
 msgid "Generic USB Mouse"
 msgstr "Generieke USB muis"
 
-#: ../src/virtManager/addhardware.py:495
+#: ../src/virtManager/addhardware.py:523
 msgid "VNC server"
 msgstr "VNC server"
 
-#: ../src/virtManager/addhardware.py:496
-#, fuzzy
+#: ../src/virtManager/addhardware.py:524
 msgid "Spice server"
-msgstr "SPICE server"
+msgstr "Spice server"
 
-#: ../src/virtManager/addhardware.py:497
+#: ../src/virtManager/addhardware.py:525
 msgid "Local SDL window"
 msgstr "Lokaal SDL venster"
 
-#: ../src/virtManager/addhardware.py:519
+#: ../src/virtManager/addhardware.py:547
 msgid "No Devices Available"
 msgstr "Geen apparaten beschikbaar"
 
-#: ../src/virtManager/addhardware.py:726
+#: ../src/virtManager/addhardware.py:796
 #, python-format
 msgid "Uncaught error validating hardware input: %s"
 msgstr "Niet-afgevangen fout bij het valideren van hardware input: %s"
 
-#: ../src/virtManager/addhardware.py:739
+#: ../src/virtManager/addhardware.py:808
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "Kan apparaat niet toevoegen: %s"
 
-#: ../src/virtManager/addhardware.py:818
+#: ../src/virtManager/addhardware.py:896
 msgid "Error"
 msgstr "Fout"
 
-#: ../src/virtManager/addhardware.py:820 ../src/vmm-create.glade.h:40
+#: ../src/virtManager/addhardware.py:898 ../src/vmm-create.glade.h:47
 #: ../src/vmm-host.glade.h:53
 msgid "Storage"
 msgstr "Opslag"
 
-#: ../src/virtManager/addhardware.py:822
+#: ../src/virtManager/addhardware.py:900
 msgid "Network"
 msgstr "Netwerk"
 
-#: ../src/virtManager/addhardware.py:824 ../src/virtManager/details.py:2734
+#: ../src/virtManager/addhardware.py:902 ../src/virtManager/details.py:3204
 msgid "Input"
 msgstr "Input"
 
-#: ../src/virtManager/addhardware.py:826
+#: ../src/virtManager/addhardware.py:904
 msgid "Graphics"
 msgstr "Grafisch"
 
-#: ../src/virtManager/addhardware.py:828
+#: ../src/virtManager/addhardware.py:906
 msgid "Sound"
 msgstr "Geluid"
 
-#: ../src/virtManager/addhardware.py:830
+#: ../src/virtManager/addhardware.py:908
 msgid "Video Device"
 msgstr "Video apparaat"
 
-#: ../src/virtManager/addhardware.py:832
+#: ../src/virtManager/addhardware.py:910
 msgid "Watchdog Device"
 msgstr "Bewaker apparaat"
 
-#: ../src/virtManager/addhardware.py:892
+#: ../src/virtManager/addhardware.py:912
+msgid "Filesystem Passthrough"
+msgstr ""
+
+#: ../src/virtManager/addhardware.py:914 ../src/virtManager/details.py:3269
+msgid "Smartcard"
+msgstr ""
+
+#: ../src/virtManager/addhardware.py:972
+msgid "Te_mplate:"
+msgstr ""
+
+#: ../src/virtManager/addhardware.py:974
+#, fuzzy
+msgid "_Source path:"
+msgstr "Bron pad:"
+
+#: ../src/virtManager/addhardware.py:1006
 msgid "Creating Storage File"
 msgstr "Aanmaken van opslag bestand"
 
-#: ../src/virtManager/addhardware.py:893
+#: ../src/virtManager/addhardware.py:1007
 msgid "Allocation of disk storage may take a few minutes to complete."
 msgstr "Het toewijzen van schijf opslag kan een paar minuten duren."
 
-#: ../src/virtManager/addhardware.py:918
+#: ../src/virtManager/addhardware.py:1033
 msgid "Are you sure you want to add this device?"
 msgstr "Weet je zeker dat je dit apparaat wilt toevoegen?"
 
-#: ../src/virtManager/addhardware.py:921
+#: ../src/virtManager/addhardware.py:1036
+#, fuzzy
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
-"make the device available after the next VM shutdown?"
+"make the device available after the next guest shutdown?"
 msgstr ""
 "Dit apparaat kon niet gekoppeld worden aan de draaiende machine. Wil je het "
 "apparaat beschikbaar stellen nadat de VM afgesloten wordt?"
 
-#: ../src/virtManager/addhardware.py:934
+#: ../src/virtManager/addhardware.py:1050
 #, python-format
 msgid "Error adding device: %s"
 msgstr "Fout bij toevoegen van apparaat: %s"
 
-#: ../src/virtManager/addhardware.py:1006 ../src/virtManager/create.py:1430
-#, fuzzy, python-format
+#: ../src/virtManager/addhardware.py:1125 ../src/virtManager/create.py:1672
+#, python-format
 msgid ""
 "The following storage already exists, but is not\n"
 "in use by any virtual machine:\n"
@@ -410,160 +442,220 @@ msgid ""
 "\n"
 "Would you like to reuse this storage?"
 msgstr ""
-"Het volgende pad bestaat al, maar wordt door\n"
-"geen enkele virtuele machine gebruikt:\n"
+"De volgende opslag bestaat al, maar is niet\n"
+"in gebruik door een virtuele machine:\n"
 "\n"
 "%s\n"
 "\n"
-"Wil je dit pad gebruiken?"
+"Wil je deze opslag hergebruiken?"
 
-#: ../src/virtManager/addhardware.py:1014 ../src/virtManager/create.py:1438
+#: ../src/virtManager/addhardware.py:1133 ../src/virtManager/create.py:1680
 msgid "A storage path must be specified."
 msgstr "Een opslag pad moet opgegeven worden."
 
-#: ../src/virtManager/addhardware.py:1032 ../src/virtManager/create.py:1446
+#: ../src/virtManager/addhardware.py:1151 ../src/virtManager/create.py:1688
 msgid "Storage parameter error."
 msgstr "Opslag parameter fout."
 
 #. Fatal errors are reported when setting 'size'
-#: ../src/virtManager/addhardware.py:1046 ../src/virtManager/create.py:1451
+#: ../src/virtManager/addhardware.py:1165 ../src/virtManager/create.py:1693
 msgid "Not Enough Free Space"
 msgstr "Niet genoeg vrije ruimte"
 
-#: ../src/virtManager/addhardware.py:1052 ../src/virtManager/create.py:1457
+#: ../src/virtManager/addhardware.py:1171 ../src/virtManager/create.py:1699
 #, python-format
 msgid "Disk \"%s\" is already in use by another guest!"
 msgstr "Schijf \"%s\" wordt al gebruikt door een andere gast!"
 
-#: ../src/virtManager/addhardware.py:1054 ../src/virtManager/create.py:1459
+#: ../src/virtManager/addhardware.py:1173 ../src/virtManager/create.py:1701
 msgid "Do you really want to use the disk?"
 msgstr "Wil je de schijf echt gebruiken?"
 
-#: ../src/virtManager/addhardware.py:1071
+#: ../src/virtManager/addhardware.py:1190
 msgid "Network selection error."
 msgstr "Netwerk selectie fout."
 
-#: ../src/virtManager/addhardware.py:1072
+#: ../src/virtManager/addhardware.py:1191
 msgid "A network source must be selected."
 msgstr "Een netwerk bron moet geselecteerd worden."
 
-#: ../src/virtManager/addhardware.py:1075
+#: ../src/virtManager/addhardware.py:1194
 msgid "Invalid MAC address"
 msgstr "Ongeldig MAC adres"
 
-#: ../src/virtManager/addhardware.py:1076
+#: ../src/virtManager/addhardware.py:1195
 msgid "A MAC address must be entered."
 msgstr "Een MAC adres moet ingevuld worden."
 
-#: ../src/virtManager/addhardware.py:1108
+#: ../src/virtManager/addhardware.py:1227
 msgid "Graphics device parameter error"
 msgstr "Grafische apparaat parameter fout"
 
-#: ../src/virtManager/addhardware.py:1116
+#: ../src/virtManager/addhardware.py:1235
 msgid "Sound device parameter error"
 msgstr "Geluid apparaat parameter fout"
 
-#: ../src/virtManager/addhardware.py:1123
+#: ../src/virtManager/addhardware.py:1242
 msgid "Physical Device Required"
 msgstr "Fysiek apparaat vereist"
 
-#: ../src/virtManager/addhardware.py:1124
+#: ../src/virtManager/addhardware.py:1243
 msgid "A device must be selected."
 msgstr "Een apparaat moet geselecteerd worden."
 
-#: ../src/virtManager/addhardware.py:1131
+#: ../src/virtManager/addhardware.py:1250
 msgid "Host device parameter error"
 msgstr "Host apparaat parameter fout"
 
-#: ../src/virtManager/addhardware.py:1171
+#: ../src/virtManager/addhardware.py:1292
 #, python-format
 msgid "%s device parameter error"
 msgstr "%s apparaat parameter fout"
 
-#: ../src/virtManager/addhardware.py:1182
+#: ../src/virtManager/addhardware.py:1303
+#: ../src/virtManager/addhardware.py:1350
 msgid "Video device parameter error"
 msgstr "Video apparaat parameter fout"
 
-#: ../src/virtManager/addhardware.py:1195
+#: ../src/virtManager/addhardware.py:1316
 msgid "Watchdog parameter error"
 msgstr "Bewaker parameter fout"
 
-#: ../src/virtManager/asyncjob.py:145
+#: ../src/virtManager/addhardware.py:1327
+#, fuzzy
+msgid "A filesystem source must be specified"
+msgstr "Een interface moet gespecificeerd worden."
+
+#: ../src/virtManager/addhardware.py:1329
+#, fuzzy
+msgid "A filesystem target must be specified"
+msgstr "Een opslag pad moet opgegeven worden."
+
+#: ../src/virtManager/addhardware.py:1340
+#, fuzzy
+msgid "Filesystem parameter error"
+msgstr "Opslag parameter fout."
+
+#: ../src/virtManager/asyncjob.py:175
 msgid "Cancel the job before closing window?"
 msgstr "De taak afsluiten voor het sluiten van het venster?"
 
-#: ../src/virtManager/asyncjob.py:177
+#: ../src/virtManager/asyncjob.py:207
 msgid "Cancelling job..."
 msgstr "Taak afsluiten..."
 
-#: ../src/virtManager/asyncjob.py:184 ../src/virtManager/asyncjob.py:194
+#: ../src/virtManager/asyncjob.py:214 ../src/virtManager/asyncjob.py:224
 #: ../src/vmm-progress.glade.h:3
 msgid "Processing..."
 msgstr "Verwerken..."
 
-#: ../src/virtManager/asyncjob.py:211
+#: ../src/virtManager/asyncjob.py:241
 msgid "Completed"
 msgstr "Voltooid"
 
-#: ../src/virtManager/choosecd.py:88 ../src/virtManager/choosecd.py:94
+#: ../src/virtManager/choosecd.py:96 ../src/virtManager/choosecd.py:102
 msgid "Invalid Media Path"
 msgstr "Ongeldig media pad"
 
-#: ../src/virtManager/choosecd.py:89
+#: ../src/virtManager/choosecd.py:97
 msgid "A media path must be specified."
 msgstr "Een media pad moet opgegeven worden."
 
-#: ../src/virtManager/choosecd.py:135
+#: ../src/virtManager/choosecd.py:142
 msgid "Floppy D_rive"
 msgstr "Floppy D_rive"
 
-#: ../src/virtManager/choosecd.py:136
+#: ../src/virtManager/choosecd.py:143
 msgid "Floppy _Image"
 msgstr "Floppy _image"
 
-#: ../src/virtManager/clone.py:208 ../src/virtManager/clone.py:455
+#: ../src/virtManager/clone.py:70
+msgid "No storage to clone."
+msgstr "Geen opslag te klonen."
+
+#: ../src/virtManager/clone.py:76
+msgid "Connection does not support managed storage cloning."
+msgstr "Verbinding ondersteunt geen beheerd opslag klonen."
+
+#: ../src/virtManager/clone.py:80
+msgid "Cannot clone unmanaged remote storage."
+msgstr "Kan onbeheerde opslag op afstand niet klonen."
+
+#: ../src/virtManager/clone.py:83
+msgid ""
+"Block devices to clone must be libvirt\n"
+"managed storage volumes."
+msgstr ""
+"Te klonen blok apparaten moeten libvirt\n"
+"beheerde opslag volumes zijn. "
+
+#: ../src/virtManager/clone.py:86 ../src/virtManager/delete.py:334
+msgid "No write access to parent directory."
+msgstr "Geen toegang tot ouder map."
+
+#: ../src/virtManager/clone.py:88 ../src/virtManager/delete.py:332
+msgid "Path does not exist."
+msgstr "Pad bestaat niet."
+
+#: ../src/virtManager/clone.py:110
+msgid "Removable"
+msgstr "Verwijderbaar"
+
+#: ../src/virtManager/clone.py:113
+msgid "Read Only"
+msgstr "Alleen-lezen"
+
+#: ../src/virtManager/clone.py:115
+msgid "No write access"
+msgstr "Geen schrijf toegang"
+
+#: ../src/virtManager/clone.py:118
+msgid "Shareable"
+msgstr "Deelbaar"
+
+#: ../src/virtManager/clone.py:283 ../src/virtManager/clone.py:529
 msgid "Details..."
 msgstr "Details..."
 
-#: ../src/virtManager/clone.py:239
+#: ../src/virtManager/clone.py:314
 msgid "Usermode"
 msgstr "Gebruiker mode"
 
-#: ../src/virtManager/clone.py:251
+#: ../src/virtManager/clone.py:326
 msgid "Virtual Network"
 msgstr "Virtueel netwerk"
 
-#: ../src/virtManager/clone.py:324
+#: ../src/virtManager/clone.py:398
 msgid "Nothing to clone."
 msgstr "Niets te klonen."
 
-#: ../src/virtManager/clone.py:447
+#: ../src/virtManager/clone.py:521
 msgid "Clone this disk"
 msgstr "Deze schijf klonen"
 
-#: ../src/virtManager/clone.py:451
+#: ../src/virtManager/clone.py:525
 #, python-format
 msgid "Share disk with %s"
 msgstr "Deel schijf met %s"
 
-#: ../src/virtManager/clone.py:463
+#: ../src/virtManager/clone.py:537
 msgid "Storage cannot be shared or cloned."
 msgstr "Opslag kan niet gedeeld of gekloond worden."
 
-#: ../src/virtManager/clone.py:519
+#: ../src/virtManager/clone.py:593
 msgid "One or more disks cannot be cloned or shared."
 msgstr "Een of meer schijven kunnen niet gekloond of gedeeld worden."
 
-#: ../src/virtManager/clone.py:624
+#: ../src/virtManager/clone.py:686
 #, python-format
 msgid "Error changing MAC address: %s"
 msgstr "Fout bij veranderen van MAC adres: %s"
 
-#: ../src/virtManager/clone.py:652
+#: ../src/virtManager/clone.py:713
 msgid "Cloning will overwrite the existing file"
 msgstr "Klonen zal het bestaande bestand overschreven"
 
-#: ../src/virtManager/clone.py:654
+#: ../src/virtManager/clone.py:715
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
@@ -571,16 +663,16 @@ msgstr ""
 "Het gebruik van een bestaand image overschrijft het pad tijdens het kloon "
 "proces. Weet je zeker dat je dit pad wilt gebruiken?"
 
-#: ../src/virtManager/clone.py:666
+#: ../src/virtManager/clone.py:727
 #, python-format
 msgid "Error changing storage path: %s"
 msgstr "Fout bij veranderen van opslag pad: %s"
 
-#: ../src/virtManager/clone.py:718
+#: ../src/virtManager/clone.py:778
 msgid "Skipping disks may cause data to be overwritten."
 msgstr "Schijven overslaan kan het overschrijven van data veroorzaken."
 
-#: ../src/virtManager/clone.py:719
+#: ../src/virtManager/clone.py:779
 #, python-format
 msgid ""
 "The following disk devices will not be cloned:\n"
@@ -593,155 +685,126 @@ msgstr ""
 "%s\n"
 "Het draaien van de nieuwe gast kan data in deze schijf images overschrijven."
 
-#: ../src/virtManager/clone.py:737 ../src/virtManager/createpool.py:382
-#: ../src/virtManager/createvol.py:199 ../src/virtManager/migrate.py:433
+#: ../src/virtManager/clone.py:797 ../src/virtManager/createpool.py:441
+#: ../src/virtManager/createvol.py:204 ../src/virtManager/migrate.py:464
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "Niet-afgevangen fout bij het valideren van input: %s"
 
-#: ../src/virtManager/clone.py:744
+#: ../src/virtManager/clone.py:803
 #, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "Aanmaken van virtuele machine kloon '%s'"
 
-#: ../src/virtManager/clone.py:748 ../src/virtManager/delete.py:132
+#: ../src/virtManager/clone.py:807 ../src/virtManager/delete.py:135
 msgid " and selected storage (this may take a while)"
 msgstr " en geselecteerde opslag (dit kan even duren)"
 
-#: ../src/virtManager/clone.py:757
+#: ../src/virtManager/clone.py:816
 #, python-format
 msgid "Error creating virtual machine clone '%s': %s"
 msgstr "Fout bij aanmaken van virtuele machine kloon '%s': %s"
 
-#: ../src/virtManager/clone.py:808
-msgid "No storage to clone."
-msgstr "Geen opslag te klonen."
-
-#: ../src/virtManager/clone.py:814
-msgid "Connection does not support managed storage cloning."
-msgstr "Verbinding ondersteunt geen beheerd opslag klonen."
-
-#: ../src/virtManager/clone.py:818
-msgid "Cannot clone unmanaged remote storage."
-msgstr "Kan onbeheerde opslag op afstand niet klonen."
-
-#: ../src/virtManager/clone.py:821
-msgid ""
-"Block devices to clone must be libvirt\n"
-"managed storage volumes."
-msgstr ""
-"Te klonen blok apparaten moeten libvirt\n"
-"beheerde opslag volumes zijn. "
-
-#: ../src/virtManager/clone.py:824 ../src/virtManager/delete.py:330
-msgid "No write access to parent directory."
-msgstr "Geen toegang tot ouder map."
-
-#: ../src/virtManager/clone.py:826 ../src/virtManager/delete.py:328
-msgid "Path does not exist."
-msgstr "Pad bestaat niet."
-
-#: ../src/virtManager/clone.py:848
-msgid "Removable"
-msgstr "Verwijderbaar"
-
-#: ../src/virtManager/clone.py:851
-msgid "Read Only"
-msgstr "Alleen-lezen"
-
-#: ../src/virtManager/clone.py:853
-msgid "No write access"
-msgstr "Geen schrijf toegang"
-
-#: ../src/virtManager/clone.py:856
-msgid "Shareable"
-msgstr "Deelbaar"
-
-#: ../src/virtManager/config.py:73
+#: ../src/virtManager/config.py:47
 msgid "Locate or create storage volume"
 msgstr "Opslag volume lokaliseren of aanmaken"
 
-#: ../src/virtManager/config.py:74
+#: ../src/virtManager/config.py:48
 msgid "Locate existing storage"
 msgstr "Bestaande opslag zoeken"
 
-#: ../src/virtManager/config.py:79
+#: ../src/virtManager/config.py:53
 msgid "Locate ISO media volume"
 msgstr "ISO media volume lokaliseren"
 
-#: ../src/virtManager/config.py:80
+#: ../src/virtManager/config.py:54
 msgid "Locate ISO media"
 msgstr "ISO media lokaliseren"
 
-#: ../src/virtManager/connect.py:332
+#: ../src/virtManager/config.py:59
+#, fuzzy
+msgid "Locate floppy media volume"
+msgstr "ISO media volume lokaliseren"
+
+#: ../src/virtManager/config.py:60
+#, fuzzy
+msgid "Locate floppy media"
+msgstr "ISO media lokaliseren"
+
+#: ../src/virtManager/config.py:65 ../src/virtManager/config.py:66
+#, fuzzy
+msgid "Locate directory volume"
+msgstr "Opslag volume lokaliseren of aanmaken"
+
+#: ../src/virtManager/connect.py:333
 msgid "A hostname is required for remote connections."
 msgstr "Een host naam wordt vereist voor verbindingen op afstand."
 
-#: ../src/virtManager/connection.py:178
+#: ../src/virtManager/connection.py:132
 #, python-format
 msgid "Could not build physical interface list via libvirt: %s"
 msgstr "Kon fysieke interface lijst niet maken met libvirt: %s"
 
-#: ../src/virtManager/connection.py:184
+#: ../src/virtManager/connection.py:138
 msgid "Libvirt version does not support physical interface listing"
 msgstr "Libvirt versie ondersteunt geen fysieke interface lijst"
 
-#: ../src/virtManager/connection.py:194
+#: ../src/virtManager/connection.py:149
 #, python-format
 msgid "Could not initialize HAL for interface listing: %s"
 msgstr "Kon HAL niet initialiseren voor interface lijst: %s"
 
-#: ../src/virtManager/connection.py:197
+#: ../src/virtManager/connection.py:152
 msgid "Libvirt version does not support physical interface listing."
 msgstr "Libvirt versie ondersteunt geen fysieke interface lijst."
 
-#: ../src/virtManager/connection.py:216
+#: ../src/virtManager/connection.py:171
 #, python-format
 msgid "Could not build media list via libvirt: %s"
 msgstr "Kon media lijst niet maken met libvirt: %s"
 
-#: ../src/virtManager/connection.py:223 ../src/virtManager/connection.py:236
+#: ../src/virtManager/connection.py:178 ../src/virtManager/connection.py:192
 msgid "Libvirt version does not support media listing."
 msgstr "Libvirt versie ondersteunt geen media lijst."
 
-#: ../src/virtManager/connection.py:233
+#: ../src/virtManager/connection.py:189
 #, python-format
 msgid "Could not initialize HAL for media listing: %s"
 msgstr "Kon HAL niet initialiseren voor media lijst: %s"
 
-#: ../src/virtManager/connection.py:581
+#: ../src/virtManager/connection.py:606
 msgid "Disconnected"
 msgstr "Niet-verbonden"
 
-#: ../src/virtManager/connection.py:583
+#: ../src/virtManager/connection.py:608
 msgid "Connecting"
 msgstr "Bezig met verbinden"
 
-#: ../src/virtManager/connection.py:586
+#: ../src/virtManager/connection.py:611
 msgid "Active (RO)"
 msgstr "Actief (RO)"
 
-#: ../src/virtManager/connection.py:588 ../src/virtManager/host.py:508
-#: ../src/virtManager/host.py:777 ../src/virtManager/host.py:1044
+#: ../src/virtManager/connection.py:613 ../src/virtManager/host.py:524
+#: ../src/virtManager/host.py:787 ../src/virtManager/host.py:1035
 #: ../src/vmm-host.glade.h:11
 msgid "Active"
 msgstr "Actief"
 
-#: ../src/virtManager/connection.py:590 ../src/virtManager/host.py:508
-#: ../src/virtManager/host.py:551 ../src/virtManager/host.py:777
-#: ../src/virtManager/host.py:808 ../src/virtManager/host.py:1044
-#: ../src/virtManager/uihelpers.py:401
+#: ../src/virtManager/connection.py:615 ../src/virtManager/host.py:524
+#: ../src/virtManager/host.py:567 ../src/virtManager/host.py:787
+#: ../src/virtManager/host.py:827 ../src/virtManager/host.py:1035
+#: ../src/virtManager/uihelpers.py:507
 msgid "Inactive"
 msgstr "Inactief"
 
-#: ../src/virtManager/connection.py:592 ../src/virtManager/create.py:1747
-#: ../src/virtManager/details.py:2054 ../src/virtManager/details.py:2271
-#: ../src/virtManager/details.py:2469 ../src/virtManager/details.py:2470
-#: ../src/virtManager/host.py:1039
+#: ../src/virtManager/connection.py:617 ../src/virtManager/create.py:2016
+#: ../src/virtManager/details.py:2399 ../src/virtManager/details.py:2666
+#: ../src/virtManager/details.py:2867 ../src/virtManager/details.py:2868
+#: ../src/virtManager/host.py:1029
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: ../src/virtManager/connection.py:768
+#: ../src/virtManager/connection.py:793
 #, python-format
 msgid ""
 "Domain rename failed. Attempting to recover also failed.\n"
@@ -750,88 +813,103 @@ msgid ""
 "\n"
 "Recover error: %s"
 msgstr ""
+"Domein hernoemen faalde. Een poging om te herstellen faalde ook.\n"
+"\n"
+"Originele fout: %s\n"
+"\n"
+"Herstel fout: %s "
 
-#: ../src/virtManager/console.py:295
+#: ../src/virtManager/console.py:324
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr "Kan gevraagde legitimatie niet opgeven aan de VNC server"
 
-#: ../src/virtManager/console.py:296
+#: ../src/virtManager/console.py:326
 #, python-format
 msgid "The credential type %s is not supported"
 msgstr "Het legitimatie type %s wordt niet ondersteund."
 
-#: ../src/virtManager/console.py:297
+#: ../src/virtManager/console.py:328
 msgid "Unable to authenticate"
 msgstr "Kan geen authenticatie krijgen"
 
-#: ../src/virtManager/console.py:301
+#: ../src/virtManager/console.py:335
 msgid "Unsupported console authentication type"
 msgstr "Niet-ondersteunde console authenticatie type"
 
-#: ../src/virtManager/console.py:348
+#: ../src/virtManager/console.py:382
 #, python-format
 msgid "Error opening socket path '%s': %s"
 msgstr "Fout bij openen van socket pad '%s': %s"
 
-#: ../src/virtManager/console.py:353
+#: ../src/virtManager/console.py:387
 #, python-format
 msgid "Error opening socket path '%s'"
 msgstr "Fout bij openen van socket pad '%s'"
 
-#: ../src/virtManager/console.py:538 ../src/vmm-details.glade.h:117
+#: ../src/virtManager/console.py:621
+#, fuzzy
+msgid "Leave fullscreen"
+msgstr "_Volledig scherm"
+
+#: ../src/virtManager/console.py:641
+#, fuzzy
+msgid "Send key combination"
+msgstr "Configureer grijp toets combinatie"
+
+#: ../src/virtManager/console.py:659 ../src/vmm-details.glade.h:133
 msgid "Virtual Machine"
 msgstr "Virtuele machine"
 
-#: ../src/virtManager/console.py:542
+#: ../src/virtManager/console.py:663
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "Druk op %s om aanwijzer vrij te geven."
 
 #. Guest isn't running, schedule another try
-#: ../src/virtManager/console.py:725 ../src/virtManager/console.py:895
+#: ../src/virtManager/console.py:829 ../src/virtManager/console.py:1023
 msgid "Guest not running"
 msgstr "Gast draait niet"
 
-#: ../src/virtManager/console.py:728
+#: ../src/virtManager/console.py:832
 msgid "Guest has crashed"
 msgstr "Gast is gecrasht"
 
-#: ../src/virtManager/console.py:838
+#: ../src/virtManager/console.py:962
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
 msgstr ""
 "Fout: viewer verbinding met hypervisor host werd geweigerd of verbroken!"
 
-#: ../src/virtManager/console.py:912
+#: ../src/virtManager/console.py:1040
 msgid "Graphical console not configured for guest"
 msgstr "Grafische console is niet geconfigureerd voor gast"
 
-#: ../src/virtManager/console.py:919
+#: ../src/virtManager/console.py:1047
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Kan grafische console type '%s' net tonen"
 
-#: ../src/virtManager/console.py:929
+#: ../src/virtManager/console.py:1057
 msgid "Graphical console is not yet active for guest"
 msgstr "Grafische console is nog niet actief voor gast"
 
-#: ../src/virtManager/console.py:934
+#: ../src/virtManager/console.py:1062
 msgid "Connecting to graphical console for guest"
 msgstr "Verbinden met grafische console voor gast"
 
-#: ../src/virtManager/console.py:970
+#: ../src/virtManager/console.py:1098
 msgid "Error connecting to graphical console"
 msgstr "Fout bij verbinden met grafische console"
 
-#: ../src/virtManager/create.py:324
+#: ../src/virtManager/create.py:357
 msgid "No active connection to install on."
 msgstr "Geen actieve verbinding om op te installeren."
 
-#: ../src/virtManager/create.py:387
+#: ../src/virtManager/create.py:419
 msgid "Connection is read only."
 msgstr "Verbinding is alleen-lezen."
 
-#: ../src/virtManager/create.py:390
+#: ../src/virtManager/create.py:422
 msgid ""
 "No hypervisor options were found for this\n"
 "connection."
@@ -839,7 +917,7 @@ msgstr ""
 "Voor deze verbinding zijn geen hypervisor\n"
 "opties gevonden."
 
-#: ../src/virtManager/create.py:395
+#: ../src/virtManager/create.py:427
 msgid ""
 "This usually means that QEMU or KVM is not\n"
 "installed on your machine, or the KVM kernel modules are not loaded."
@@ -848,7 +926,7 @@ msgstr ""
 "geïnstalleerd is op jouw machine, of dat de KVM kernel modules niet geladen "
 "zijn."
 
-#: ../src/virtManager/create.py:410
+#: ../src/virtManager/create.py:442
 msgid ""
 "Host supports full virtualization, but\n"
 "no related install options are available.\n"
@@ -860,7 +938,7 @@ msgstr ""
 "beschikbaar. Dit kan betekenen dat ondersteuning\n"
 "uitgezet is in jouw systeem BIOS."
 
-#: ../src/virtManager/create.py:417
+#: ../src/virtManager/create.py:449
 msgid ""
 "Host does not appear to support hardware\n"
 "virtualization. Install options may be limited."
@@ -868,7 +946,7 @@ msgstr ""
 "Host lijkt geen hardware virtualisatie te\n"
 "ondersteunen. Installatie opties kunnen beperkt zijn."
 
-#: ../src/virtManager/create.py:423
+#: ../src/virtManager/create.py:455
 msgid ""
 "KVM is not available. This may mean the KVM\n"
 "package is not installed, or the KVM kernel modules \n"
@@ -878,142 +956,172 @@ msgstr ""
 "pakket niet geïnstalleerd is, of de KVM kernel modules\n"
 "zijn niet geladen. Jouw virtuele machines kunnen slecht presteren."
 
-#: ../src/virtManager/create.py:446
+#: ../src/virtManager/create.py:482
 #, python-format
 msgid "%s installs not available for paravirt guests."
 msgstr "%s installaties niet beschikbaar voor paravirt gasten."
 
-#: ../src/virtManager/create.py:450
-msgid "URL installs not available for remote connections."
-msgstr "URL installaties niet beschikbaar voor verbindingen op afstand."
+#: ../src/virtManager/create.py:486
+#, fuzzy
+msgid "Libvirt version does not support remote URL installs."
+msgstr "Libvirt versie ondersteunt geen media lijst."
 
-#: ../src/virtManager/create.py:464
+#: ../src/virtManager/create.py:500
 msgid "No install options available for this connection."
 msgstr "Geen installatie opties beschikbaar voor deze verbinding."
 
-#: ../src/virtManager/create.py:504
+#: ../src/virtManager/create.py:547
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "Maximaal %(maxmem)s beschikbaar op de host"
 
-#: ../src/virtManager/create.py:518
+#: ../src/virtManager/create.py:561
 #, python-format
 msgid "Hypervisor only supports %d virtual CPUs."
 msgstr "Hypervisor ondersteunt slechts %d virtuele CPU's."
 
-#: ../src/virtManager/create.py:528
+#: ../src/virtManager/create.py:570
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgstr "Maximaal %(numcpus)d beschikbaar"
 
-#: ../src/virtManager/create.py:610
+#: ../src/virtManager/create.py:659
 msgid "Only URL or import installs are supported for paravirt."
 msgstr ""
 "Alleen URL of geïmporteerde installaties worden ondersteund door paravirt."
 
-#: ../src/virtManager/create.py:687 ../src/virtManager/create.py:696
-#: ../src/virtManager/create.py:771 ../src/virtManager/create.py:773
+#: ../src/virtManager/create.py:755 ../src/virtManager/create.py:773
+#: ../src/virtManager/create.py:871 ../src/virtManager/create.py:873
 msgid "Generic"
 msgstr "Algemeen"
 
-#: ../src/virtManager/create.py:753
+#. Add action option
+#: ../src/virtManager/create.py:765 ../src/virtManager/create.py:793
+msgid "Show all OS options"
+msgstr ""
+
+#: ../src/virtManager/create.py:842
 msgid "Local CDROM/ISO"
 msgstr "Lokale CDROM/ISO"
 
-#: ../src/virtManager/create.py:755
+#: ../src/virtManager/create.py:844
 msgid "URL Install Tree"
 msgstr "URL installatie boom"
 
-#: ../src/virtManager/create.py:757
+#: ../src/virtManager/create.py:846
 msgid "PXE Install"
 msgstr "PXE installatie"
 
-#: ../src/virtManager/create.py:759
+#: ../src/virtManager/create.py:848
 msgid "Import existing OS image"
 msgstr "Bestaande OS image importeren"
 
-#: ../src/virtManager/create.py:762 ../src/virtManager/details.py:2055
-#: ../src/virtManager/details.py:2083
+#: ../src/virtManager/create.py:850 ../src/vmm-create.glade.h:12
+msgid "Application container"
+msgstr ""
+
+#: ../src/virtManager/create.py:852 ../src/vmm-create.glade.h:39
+#, fuzzy
+msgid "Operating system container"
+msgstr "Kies een besturingssysteem type en versie"
+
+#: ../src/virtManager/create.py:863
+msgid "Host filesystem"
+msgstr ""
+
+#: ../src/virtManager/create.py:865 ../src/virtManager/details.py:2400
+#: ../src/virtManager/details.py:2461
 msgid "None"
 msgstr "Geen"
 
-#: ../src/virtManager/create.py:954
+#: ../src/virtManager/create.py:869
+msgid "Linux"
+msgstr ""
+
+#: ../src/virtManager/create.py:1081
 msgid "Network selection does not support PXE"
 msgstr "Netwerk selectie ondersteunt PXE niet"
 
-#: ../src/virtManager/create.py:1149 ../src/virtManager/createinterface.py:876
+#: ../src/virtManager/create.py:1348 ../src/virtManager/createinterface.py:886
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "Stap %(current_page)d van %(max_page)d"
 
-#: ../src/virtManager/create.py:1196
+#: ../src/virtManager/create.py:1425
 #, python-format
 msgid "Error setting UUID: %s"
 msgstr "Fout bij instellen van UUID: %s"
 
-#: ../src/virtManager/create.py:1214
-msgid "Error setting up graphics device:"
-msgstr "Fout bij instellen van grafisch apparaat:"
-
-#: ../src/virtManager/create.py:1224
-msgid "Error setting up sound device:"
+#: ../src/virtManager/create.py:1439
+#, fuzzy
+msgid "Error setting up default devices:"
 msgstr "Fout bij instellen van geluid apparaat:"
 
-#: ../src/virtManager/create.py:1244 ../src/virtManager/createinterface.py:905
+#: ../src/virtManager/create.py:1458 ../src/virtManager/createinterface.py:915
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "Niet-afgevangen fout bij het valideren van installatie parameters: %s"
 
-#: ../src/virtManager/create.py:1256
+#: ../src/virtManager/create.py:1469
 msgid "Invalid System Name"
 msgstr "Ongeldige systeem naam"
 
-#: ../src/virtManager/create.py:1276
+#: ../src/virtManager/create.py:1490
 msgid "An install media selection is required."
 msgstr "Een installatie media keuze is vereist."
 
-#: ../src/virtManager/create.py:1286
+#: ../src/virtManager/create.py:1500
 msgid "An install tree is required."
 msgstr "Een installatie boom is vereist."
 
-#: ../src/virtManager/create.py:1299
+#: ../src/virtManager/create.py:1513
 msgid "A storage path to import is required."
 msgstr "Een opslag pad om te importeren is vereist."
 
-#: ../src/virtManager/create.py:1309
+#: ../src/virtManager/create.py:1520
+#, fuzzy
+msgid "An application path is required."
+msgstr "Een installatie media keuze is vereist."
+
+#: ../src/virtManager/create.py:1527
+#, fuzzy
+msgid "An OS directory path is required."
+msgstr "Een interface naam is vereist."
+
+#: ../src/virtManager/create.py:1537
 msgid "Error setting installer parameters."
 msgstr "Fout bij het instellen van installatie parameters."
 
-#: ../src/virtManager/create.py:1327
+#: ../src/virtManager/create.py:1565
 msgid "Error setting install media location."
 msgstr "Fout bij het instellen van media locatie."
 
-#: ../src/virtManager/create.py:1337
+#: ../src/virtManager/create.py:1575
 msgid "Error setting OS information."
 msgstr "Fout bij het instellen van OS informatie."
 
-#: ../src/virtManager/create.py:1374
+#: ../src/virtManager/create.py:1610
 msgid "Error setting CPUs."
 msgstr "Fout bij het instellen van CPU's."
 
-#: ../src/virtManager/create.py:1381
+#: ../src/virtManager/create.py:1617
 msgid "Error setting guest memory."
 msgstr "Fout bij het instellen van gast geheugen."
 
-#: ../src/virtManager/create.py:1490
+#: ../src/virtManager/create.py:1732
 #, python-format
 msgid "Network device required for %s install."
 msgstr "Netwerk apparaat vereist installatie van %s."
 
-#: ../src/virtManager/create.py:1575
+#: ../src/virtManager/create.py:1829
 msgid "Error starting installation: "
 msgstr "Fout bij opstarten van installatie:"
 
-#: ../src/virtManager/create.py:1603
+#: ../src/virtManager/create.py:1866
 msgid "Creating Virtual Machine"
 msgstr "Aanmaken van virtuele machine"
 
-#: ../src/virtManager/create.py:1604
+#: ../src/virtManager/create.py:1867
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -1021,85 +1129,86 @@ msgstr ""
 "De virtuele machine wordt nu aangemaakt. Toewijzing van schijf opslag en "
 "zoeken naar de installatie images zal enige minuten duren."
 
-#: ../src/virtManager/create.py:1615
+#: ../src/virtManager/create.py:1879
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "Niet in staat om de installatie te voltooien: '%s'"
 
-#: ../src/virtManager/create.py:1693
+#: ../src/virtManager/create.py:1950
 #, python-format
 msgid "Error continue install: %s"
 msgstr "Fout bij verder gaan met installeren: %s"
 
-#: ../src/virtManager/create.py:1789
+#: ../src/virtManager/create.py:2058
 msgid "Detecting"
 msgstr "Opsporen"
 
-#: ../src/virtManager/createinterface.py:189
-#: ../src/virtManager/uihelpers.py:302
+#: ../src/virtManager/createinterface.py:201
+#: ../src/virtManager/uihelpers.py:397
 msgid "Bridge"
 msgstr "Brug"
 
-#: ../src/virtManager/createinterface.py:191
+#: ../src/virtManager/createinterface.py:203
 msgid "Bond"
 msgstr "Binding"
 
-#: ../src/virtManager/createinterface.py:193
+#: ../src/virtManager/createinterface.py:205
 msgid "Ethernet"
 msgstr "Ethernet"
 
-#: ../src/virtManager/createinterface.py:195
+#: ../src/virtManager/createinterface.py:207
 msgid "VLAN"
 msgstr "VLAN"
 
-#: ../src/virtManager/createinterface.py:210 ../src/virtManager/manager.py:368
-#: ../src/virtManager/storagebrowse.py:114 ../src/vmm-create-net.glade.h:29
-#: ../src/vmm-create-pool.glade.h:9 ../src/vmm-create.glade.h:30
+#: ../src/virtManager/createinterface.py:222 ../src/virtManager/details.py:673
+#: ../src/virtManager/manager.py:366 ../src/virtManager/storagebrowse.py:125
+#: ../src/vmm-create-net.glade.h:29 ../src/vmm-create-pool.glade.h:9
+#: ../src/vmm-create.glade.h:34
 msgid "Name"
 msgstr "Naam"
 
-#: ../src/virtManager/createinterface.py:211
+#: ../src/virtManager/createinterface.py:223
 msgid "Type"
 msgstr "Type"
 
-#: ../src/virtManager/createinterface.py:212
+#: ../src/virtManager/createinterface.py:224
 msgid "In use by"
 msgstr "Gebruikt door"
 
-#: ../src/virtManager/createinterface.py:250
-#: ../src/virtManager/createinterface.py:260
+#: ../src/virtManager/createinterface.py:262
+#: ../src/virtManager/createinterface.py:272
 msgid "System default"
 msgstr "Systeem standaard"
 
-#: ../src/virtManager/createinterface.py:496
+#: ../src/virtManager/createinterface.py:506
 msgid "Choose interface(s) to bridge:"
 msgstr "Kies interface(s) voor de brug:"
 
-#: ../src/virtManager/createinterface.py:499
+#: ../src/virtManager/createinterface.py:509
 msgid "Choose parent interface:"
 msgstr "Kies ouder interface:"
 
-#: ../src/virtManager/createinterface.py:501
+#: ../src/virtManager/createinterface.py:511
 msgid "Choose interfaces to bond:"
 msgstr "Kies interfaces om te binden:"
 
-#: ../src/virtManager/createinterface.py:503
+#: ../src/virtManager/createinterface.py:513
 msgid "Choose an unconfigured interface:"
 msgstr "Kies een niet-geconfigureerde interface:"
 
-#: ../src/virtManager/createinterface.py:558
+#: ../src/virtManager/createinterface.py:568
 msgid "No interface selected"
 msgstr "Geen interface geselecteerd."
 
-#: ../src/virtManager/createinterface.py:918
+#: ../src/virtManager/createinterface.py:927
 msgid "An interface name is required."
 msgstr "Een interface naam is vereist."
 
-#: ../src/virtManager/createinterface.py:922
+#: ../src/virtManager/createinterface.py:931
 msgid "An interface must be selected"
 msgstr "Een interface moet geselecteerd worden."
 
-#: ../src/virtManager/createinterface.py:953
+#: ../src/virtManager/createinterface.py:962
 #, python-format
 msgid ""
 "The following interface(s) are already configured:\n"
@@ -1116,78 +1225,78 @@ msgstr ""
 "Deze te gebruiken kan hun bestaande configuratie overschrijven. Weet je "
 "zeker dat je de geselecteerde interface(s) wilt gebruiken?"
 
-#: ../src/virtManager/createinterface.py:991
+#: ../src/virtManager/createinterface.py:1000
 msgid "Error setting interface parameters."
 msgstr "Fout bij het instellen van interface parameters."
 
-#: ../src/virtManager/createinterface.py:1068
+#: ../src/virtManager/createinterface.py:1077
 #, python-format
 msgid "Error validating IP configuration: %s"
 msgstr "Fout bij het valideren IP configuratie: %s"
 
-#: ../src/virtManager/createinterface.py:1114
+#: ../src/virtManager/createinterface.py:1122
 msgid "Creating virtual interface"
 msgstr "Aanmaken van virtuele interface"
 
-#: ../src/virtManager/createinterface.py:1115
+#: ../src/virtManager/createinterface.py:1123
 msgid "The virtual interface is now being created."
 msgstr "De virtuele interface wordt nu aangemaakt."
 
-#: ../src/virtManager/createinterface.py:1123
+#: ../src/virtManager/createinterface.py:1131
 #, python-format
 msgid "Error creating interface: '%s'"
 msgstr "Fout bij het maken van interface: '%s'"
 
-#: ../src/virtManager/createnet.py:96
+#: ../src/virtManager/createnet.py:104
 msgid "Any physical device"
 msgstr "Elk fysiek apparaat"
 
-#: ../src/virtManager/createnet.py:99
+#: ../src/virtManager/createnet.py:107
 #, python-format
 msgid "Physical device %s"
 msgstr "Fysiek apparaat %s"
 
-#: ../src/virtManager/createnet.py:110 ../src/virtManager/network.py:34
+#: ../src/virtManager/createnet.py:118 ../src/virtManager/network.py:33
 msgid "NAT"
 msgstr "NAT"
 
-#: ../src/virtManager/createnet.py:111
+#: ../src/virtManager/createnet.py:119
 msgid "Routed"
 msgstr "Gerouteerd"
 
-#: ../src/virtManager/createnet.py:178
+#: ../src/virtManager/createnet.py:179
 #, python-format
 msgid "%d addresses"
 msgstr "%d adressen"
 
-#: ../src/virtManager/createnet.py:182
+#: ../src/virtManager/createnet.py:183
 msgid "Public"
 msgstr "Publiek"
 
-#: ../src/virtManager/createnet.py:184 ../src/vmm-create-net.glade.h:40
+#: ../src/virtManager/createnet.py:185 ../src/vmm-create-net.glade.h:40
 msgid "Private"
 msgstr "Privé"
 
-#: ../src/virtManager/createnet.py:186
+#: ../src/virtManager/createnet.py:187
 msgid "Reserved"
 msgstr "Gereserveerd"
 
-#: ../src/virtManager/createnet.py:188
+#: ../src/virtManager/createnet.py:189
 msgid "Other"
 msgstr "Andere"
 
-#: ../src/virtManager/createnet.py:292 ../src/vmm-create-net.glade.h:43
+#: ../src/virtManager/createnet.py:275 ../src/vmm-create-net.glade.h:43
 msgid "Start address:"
 msgstr "Start adres:"
 
-#: ../src/virtManager/createnet.py:299 ../src/vmm-details.glade.h:102
+#: ../src/virtManager/createnet.py:279 ../src/vmm-details.glade.h:115
 msgid "Status:"
 msgstr "Status:"
 
-#: ../src/virtManager/createnet.py:301 ../src/virtManager/details.py:2108
-#: ../src/virtManager/details.py:2109 ../src/virtManager/details.py:2110
-#: ../src/virtManager/details.py:2111 ../src/virtManager/host.py:530
-#: ../src/virtManager/host.py:531
+#: ../src/virtManager/createnet.py:280 ../src/virtManager/details.py:2486
+#: ../src/virtManager/details.py:2487 ../src/virtManager/details.py:2488
+#: ../src/virtManager/details.py:2489 ../src/virtManager/host.py:547
+#: ../src/virtManager/host.py:548
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
@@ -1196,15 +1305,15 @@ msgstr "Uitgeschakeld"
 msgid "Error creating virtual network: %s"
 msgstr "Fout bij het maken van virtueel netwerk: %s"
 
-#: ../src/virtManager/createnet.py:364 ../src/virtManager/createnet.py:367
+#: ../src/virtManager/createnet.py:362 ../src/virtManager/createnet.py:366
 msgid "Invalid Network Name"
 msgstr "Ongeldige netwerk naam"
 
-#: ../src/virtManager/createnet.py:365
+#: ../src/virtManager/createnet.py:363
 msgid "Network name must be non-blank and less than 50 characters"
 msgstr "Netwerk naam moet niet leeg zijn en minder dan 50 karakters bevatten"
 
-#: ../src/virtManager/createnet.py:368
+#: ../src/virtManager/createnet.py:367
 msgid "Network name may contain alphanumeric and '_' characters only"
 msgstr "Netwerk naam kan alleen alfanumerieke en '_' karakters bevatten"
 
@@ -1237,63 +1346,63 @@ msgstr ""
 "Het netwerk gebruikt normaal gesproken een privé IPv4 adres. Dit niet-privé "
 "adres toch gebruiken?"
 
-#: ../src/virtManager/createnet.py:397 ../src/virtManager/createnet.py:400
-#: ../src/virtManager/createnet.py:404 ../src/virtManager/createnet.py:407
+#: ../src/virtManager/createnet.py:401 ../src/virtManager/createnet.py:404
+#: ../src/virtManager/createnet.py:408 ../src/virtManager/createnet.py:412
 msgid "Invalid DHCP Address"
 msgstr "Ongeldig DHCP adres"
 
-#: ../src/virtManager/createnet.py:398
+#: ../src/virtManager/createnet.py:402
 msgid "The DHCP start address could not be understood"
 msgstr "Het DHCP start adres kan niet begrepen worden"
 
-#: ../src/virtManager/createnet.py:401
+#: ../src/virtManager/createnet.py:405
 msgid "The DHCP end address could not be understood"
 msgstr "Het DHCP eind adres kan niet begrepen worden"
 
-#: ../src/virtManager/createnet.py:405
+#: ../src/virtManager/createnet.py:409
 #, python-format
 msgid "The DHCP start address is not with the network %s"
 msgstr "Het DHCP start adres is niet in het netwerk %s"
 
-#: ../src/virtManager/createnet.py:408
+#: ../src/virtManager/createnet.py:413
 #, python-format
 msgid "The DHCP end address is not with the network %s"
 msgstr "Het DHCP eind adres is niet in het netwerk %s"
 
-#: ../src/virtManager/createnet.py:413
+#: ../src/virtManager/createnet.py:423
 msgid "Invalid forwarding mode"
 msgstr "Ongeldige doorsturen mode"
 
-#: ../src/virtManager/createnet.py:414
+#: ../src/virtManager/createnet.py:424
 msgid "Please select where the traffic should be forwarded"
 msgstr "Selecteer waar het verkeer naar doorgestuurd moet worden"
 
-#: ../src/virtManager/createpool.py:358
+#: ../src/virtManager/createpool.py:417
 msgid "Choose source path"
 msgstr "Kies bron pad"
 
-#: ../src/virtManager/createpool.py:364
+#: ../src/virtManager/createpool.py:423
 msgid "Choose target directory"
 msgstr "Kies doel map"
 
-#: ../src/virtManager/createpool.py:396
+#: ../src/virtManager/createpool.py:454
 msgid "Creating storage pool..."
 msgstr "Opslag pool aanmaken..."
 
-#: ../src/virtManager/createpool.py:397
+#: ../src/virtManager/createpool.py:455
 msgid "Creating the storage pool may take a while..."
 msgstr "Het aanmaken van de opslag poel kan een even duren..."
 
-#: ../src/virtManager/createpool.py:405
+#: ../src/virtManager/createpool.py:464
 #, python-format
 msgid "Error creating pool: %s"
 msgstr "Fout bij aanmaken pool: %s"
 
-#: ../src/virtManager/createpool.py:470 ../src/virtManager/createpool.py:492
+#: ../src/virtManager/createpool.py:525 ../src/virtManager/createpool.py:550
 msgid "Pool Parameter Error"
 msgstr "Pool parameter fout"
 
-#: ../src/virtManager/createpool.py:498
+#: ../src/virtManager/createpool.py:556
 msgid ""
 "Building a pool of this type will format the source device. Are you sure you "
 "want to 'build' this pool?"
@@ -1301,93 +1410,93 @@ msgstr ""
 "Het bouwen van een pool van dit type zal het het bron apparaat formatteren. "
 "Weet je zeker dat je deze pool wilt \"bouwen\"?"
 
-#: ../src/virtManager/createpool.py:515
+#: ../src/virtManager/createpool.py:573
 msgid "Format the source device."
 msgstr "Formatteer het bron apparaat. "
 
-#: ../src/virtManager/createpool.py:517
+#: ../src/virtManager/createpool.py:575
 msgid "Create a logical volume group from the source device."
 msgstr "Maak een logisch volume groep aan van het bron apparaat."
 
-#: ../src/virtManager/createvol.py:210
+#: ../src/virtManager/createvol.py:214
 msgid "Creating storage volume..."
 msgstr "Opslag volume aanmaken..."
 
-#: ../src/virtManager/createvol.py:211
+#: ../src/virtManager/createvol.py:215
 msgid "Creating the storage volume may take a while..."
 msgstr "Het opslag volume aanmaken kan even duren..."
 
-#: ../src/virtManager/createvol.py:219
+#: ../src/virtManager/createvol.py:224
 #, python-format
 msgid "Error creating vol: %s"
 msgstr "Fout bij aanmaken volume: %s"
 
-#: ../src/virtManager/createvol.py:252
+#: ../src/virtManager/createvol.py:258
 msgid "Volume Parameter Error"
 msgstr "Volume parameter fout"
 
-#: ../src/virtManager/delete.py:86
+#: ../src/virtManager/delete.py:94
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: ../src/virtManager/delete.py:129
+#: ../src/virtManager/delete.py:132
 #, python-format
 msgid "Deleting virtual machine '%s'"
 msgstr "Virtuele machine '%s' verwijderen"
 
-#: ../src/virtManager/delete.py:162
+#: ../src/virtManager/delete.py:166
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "Pad '%s' verwijderen"
 
-#: ../src/virtManager/delete.py:173
+#: ../src/virtManager/delete.py:177
 #, python-format
 msgid "Error deleting virtual machine '%s': %s"
 msgstr "Fout bij verwijderen van virtuele machine '%s': %s"
 
-#: ../src/virtManager/delete.py:189
+#: ../src/virtManager/delete.py:193
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
 "Daarnaast zijn er fouten bij het verwijderen van bepaalde opslag "
 "apparaten: \n"
 
-#: ../src/virtManager/delete.py:193
+#: ../src/virtManager/delete.py:197
 msgid "Errors encountered while removing certain storage devices."
 msgstr "Fouten opgetreden bij het verwijderen van bepaalde opslag apparaten."
 
-#: ../src/virtManager/delete.py:274
+#: ../src/virtManager/delete.py:278
 msgid "Storage Path"
 msgstr "Opslag pad"
 
-#: ../src/virtManager/delete.py:275
+#: ../src/virtManager/delete.py:279
 msgid "Target"
 msgstr "Doel"
 
-#: ../src/virtManager/delete.py:323
+#: ../src/virtManager/delete.py:327
 msgid "Cannot delete iscsi share."
 msgstr "Kan iscsi deel niet verwijderen."
 
-#: ../src/virtManager/delete.py:326
+#: ../src/virtManager/delete.py:330
 msgid "Cannot delete unmanaged remote storage."
 msgstr "Kan niet-beheerde opslag op afstand niet verwijderen."
 
-#: ../src/virtManager/delete.py:332
+#: ../src/virtManager/delete.py:336
 msgid "Cannot delete unmanaged block device."
 msgstr "Kan niet-beheerd blok apparaat niet verwijderen."
 
-#: ../src/virtManager/delete.py:352
+#: ../src/virtManager/delete.py:356
 msgid "Storage is read-only."
 msgstr "Opslag is alleen-lezen."
 
-#: ../src/virtManager/delete.py:354
+#: ../src/virtManager/delete.py:358
 msgid "No write access to path."
 msgstr "Geen schrijf toegang tot pad."
 
-#: ../src/virtManager/delete.py:357
+#: ../src/virtManager/delete.py:361
 msgid "Storage is marked as shareable."
 msgstr "Opslag is gemarkeerd als deelbaar."
 
-#: ../src/virtManager/delete.py:367
+#: ../src/virtManager/delete.py:371
 #, python-format
 msgid ""
 "Storage is in use by the following virtual machines:\n"
@@ -1396,15 +1505,22 @@ msgstr ""
 "Opslag is in gebruik door de volgende virtuele machines:\n"
 "- %s "
 
-#: ../src/virtManager/details.py:513
-msgid "Add Hardware"
+#: ../src/virtManager/details.py:573
+#, fuzzy
+msgid "_Add Hardware"
 msgstr "Hardware toevoegen"
 
-#: ../src/virtManager/details.py:549
-msgid "Close tab"
-msgstr "Tab sluiten"
+#: ../src/virtManager/details.py:580
+#, fuzzy
+msgid "_Remove Hardware"
+msgstr "Har_dware toevoegen"
 
-#: ../src/virtManager/details.py:624
+#: ../src/virtManager/details.py:674
+#, fuzzy
+msgid "Version"
+msgstr "_Versie:"
+
+#: ../src/virtManager/details.py:709
 msgid ""
 "Static SELinux security type tells libvirt to always start the guest process "
 "with the specified label. The administrator is responsible for making sure "
@@ -1414,7 +1530,7 @@ msgstr ""
 "te starten met het gespecificeerde label. De beheerder is verantwoordelijk "
 "om ervoor te zorgen dat de images op de schijf correct gelabeld worden."
 
-#: ../src/virtManager/details.py:626
+#: ../src/virtManager/details.py:711
 msgid ""
 "The dynamic SELinux security type tells libvirt to automatically pick a "
 "unique label for the guest process and guest image, ensuring total isolation "
@@ -1424,79 +1540,71 @@ msgstr ""
 "unieke label voor de gast proces en het gast image te kiezen, wat zorgt voor "
 "totale isolatie van de gast. (Standaard)"
 
-#: ../src/virtManager/details.py:635
+#: ../src/virtManager/details.py:720
 msgid "Libvirt did not detect NUMA capabilities."
 msgstr "Libvirt ontdekte geen NUMA mogelijkheden."
 
-#: ../src/virtManager/details.py:643
+#: ../src/virtManager/details.py:728
 msgid "VCPU"
 msgstr "VCPU"
 
-#: ../src/virtManager/details.py:644
+#: ../src/virtManager/details.py:729
 msgid "On CPU"
 msgstr "Op CPU"
 
-#: ../src/virtManager/details.py:645
+#: ../src/virtManager/details.py:730
 msgid "Pinning"
 msgstr "Vastzetten"
 
-#: ../src/virtManager/details.py:874
+#: ../src/virtManager/details.py:987
 msgid "No text console available"
 msgstr "Geen tekst console beschikbaar."
 
-#: ../src/virtManager/details.py:896
-msgid "Serial console not yet supported over remote connection."
-msgstr "Seriële console nog niet ondersteund via de verbinding op afstand."
-
-#: ../src/virtManager/details.py:899
-msgid "Serial console not available for inactive guest."
-msgstr "Seriële console niet beschikbaar voor niet-actieve gasten."
-
-#: ../src/virtManager/details.py:901
-#, python-format
-msgid "Console for device type '%s' not yet supported."
-msgstr "Console voor apparaat type '%s' nog niet ondersteund."
-
-#: ../src/virtManager/details.py:904
-#, python-format
-msgid "Can not access console path '%s'."
-msgstr "Kan geen toegang krijgen tot console pad '%s'."
-
-#: ../src/virtManager/details.py:922
+#: ../src/virtManager/details.py:1059
 msgid "No graphical console available"
 msgstr "Geen grafische console beschikbaar"
 
-#: ../src/virtManager/details.py:927
+#: ../src/virtManager/details.py:1064
 #, python-format
 msgid "Graphical Console %s"
 msgstr "Grafische console %s"
 
-#: ../src/virtManager/details.py:1027
+#: ../src/virtManager/details.py:1147
+#, fuzzy
+msgid "There are unapplied changes. Would you like to apply them now?"
+msgstr "Opslag pool '%s' is niet actief. Wil je de pool nu starten?"
+
+#: ../src/virtManager/details.py:1149
+#, fuzzy
+msgid "Don't warn me again."
+msgstr "Vraag me het niet nog een keer."
+
+#: ../src/virtManager/details.py:1221
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Fout bij verversen van hardware pagina: %s"
 
-#: ../src/virtManager/details.py:1082 ../src/virtManager/manager.py:944
+#: ../src/virtManager/details.py:1280 ../src/virtManager/manager.py:947
 msgid "_Restore"
 msgstr "_Herladen"
 
 #. Build VM context menu
-#: ../src/virtManager/details.py:1084 ../src/virtManager/manager.py:319
-#: ../src/virtManager/manager.py:946 ../src/virtManager/systray.py:184
-#: ../src/vmm-details.glade.h:141 ../src/vmm-manager.glade.h:19
+#: ../src/virtManager/details.py:1282 ../src/virtManager/manager.py:315
+#: ../src/virtManager/manager.py:949 ../src/virtManager/systray.py:166
+#: ../src/vmm-details.glade.h:160 ../src/vmm-manager.glade.h:20
 msgid "_Run"
 msgstr "_Uitvoeren"
 
-#: ../src/virtManager/details.py:1182
-#, fuzzy, python-format
+#: ../src/virtManager/details.py:1394
+#, python-format
 msgid "Error launching hardware dialog: %s"
-msgstr "Fout bij lanceren van migratie dialoog: %s"
+msgstr "Fout bij het opstarten van hardware dialoog: %s"
 
-#: ../src/virtManager/details.py:1243
+#: ../src/virtManager/details.py:1466
 msgid "Save Virtual Machine Screenshot"
 msgstr "Schermafdruk van virtuele machine opslaan"
 
-#: ../src/virtManager/details.py:1268
+#: ../src/virtManager/details.py:1490
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -1505,226 +1613,258 @@ msgstr ""
 "De schermafdruk is opgeslagen naar:\n"
 "%s"
 
-#: ../src/virtManager/details.py:1270
+#: ../src/virtManager/details.py:1492
 msgid "Screenshot saved"
 msgstr "Schermafdruk opgeslagen"
 
-#: ../src/virtManager/details.py:1469
+#: ../src/virtManager/details.py:1668
 #, python-format
 msgid "Error generating CPU configuration: %s"
 msgstr "Fout bij het valideren CPU configuratie: %s"
 
-#: ../src/virtManager/details.py:1504
+#: ../src/virtManager/details.py:1702
 #, python-format
 msgid "Error copying host CPU: %s"
 msgstr "Fout bij kopiëren van host CPU: %s"
 
-#: ../src/virtManager/details.py:1726
+#: ../src/virtManager/details.py:1837
+#, fuzzy, python-format
+msgid "Error apply changes: %s"
+msgstr "Fout bij lanceren van details: %s"
+
+#: ../src/virtManager/details.py:1964
 #, python-format
 msgid "Error building pin list: %s"
 msgstr "Fout bij het maken van vastleg lijst: %s"
 
-#: ../src/virtManager/details.py:1732
+#: ../src/virtManager/details.py:1970
 #, python-format
 msgid "Error pinning vcpus: %s"
 msgstr "Fout bij het vastleggen van vcpu's: %s"
 
-#: ../src/virtManager/details.py:1776
+#: ../src/virtManager/details.py:2019
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "Fout bij het veranderen van autostart waarde: %s"
 
-#: ../src/virtManager/details.py:1892
+#: ../src/virtManager/details.py:2037
+msgid "Cannot set initrd without specifying a kernel path"
+msgstr ""
+
+#: ../src/virtManager/details.py:2040
+msgid "Cannot set kernel arguments without specifying a kernel path"
+msgstr ""
+
+#: ../src/virtManager/details.py:2047
+#, fuzzy
+msgid "An init path must be specified"
+msgstr "Een media pad moet opgegeven worden."
+
+#: ../src/virtManager/details.py:2181
+#, python-format
+msgid ""
+"You are switching graphics type to %(gtype)s, would you like to %(action)s "
+"Spice agent channels?"
+msgstr ""
+
+#: ../src/virtManager/details.py:2242
 msgid "Are you sure you want to remove this device?"
 msgstr "Weet je zeker dat je dit apparaat wilt verwijderen?"
 
-#: ../src/virtManager/details.py:1893 ../src/virtManager/engine.py:801
-#: ../src/virtManager/engine.py:901 ../src/virtManager/engine.py:925
-#: ../src/virtManager/engine.py:984 ../src/virtManager/engine.py:1008
-msgid "Don't ask me again."
-msgstr "Vraag me het niet nog een keer."
-
-#: ../src/virtManager/details.py:1905
+#: ../src/virtManager/details.py:2249
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "Fout bij verwijderen van apparaat: %s"
 
-#: ../src/virtManager/details.py:1922
+#: ../src/virtManager/details.py:2265
 msgid "Device could not be removed from the running machine"
 msgstr "Apparaat kon niet verwijderd worden uit de draaiende machine"
 
-#: ../src/virtManager/details.py:1924
-msgid "This change will take effect after the next VM reboot."
-msgstr "Deze wijziging wordt van kracht na de volgende opstart van VM."
+#: ../src/virtManager/details.py:2267
+#, fuzzy
+msgid "This change will take effect after the next guest shutdown."
+msgstr "Deze wijzigingen hebben effect na de volgende herstart van de gast."
 
-#: ../src/virtManager/details.py:1977
+#: ../src/virtManager/details.py:2321
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Fout bij het veranderen van VM configuratie: %s"
 
-#: ../src/virtManager/details.py:1987
-msgid "Some changes may require a guest reboot to take effect."
+#: ../src/virtManager/details.py:2331
+#, fuzzy
+msgid "Some changes may require a guest shutdown to take effect."
 msgstr ""
 "Sommige veranderingen kunnen opnieuw opstarten van de gast vereisen om "
 "effect te hebben."
 
-#: ../src/virtManager/details.py:1990
-msgid "These changes will take effect after the next guest reboot."
+#: ../src/virtManager/details.py:2334
+#, fuzzy
+msgid "These changes will take effect after the next guest shutdown."
 msgstr "Deze wijzigingen hebben effect na de volgende herstart van de gast."
 
-#: ../src/virtManager/details.py:2073 ../src/vmm-add-hardware.glade.h:30
+#: ../src/virtManager/details.py:2407 ../src/virtManager/details.py:2411
+#, fuzzy
+msgid "unknown"
+msgstr "Onbekend"
+
+#: ../src/virtManager/details.py:2451 ../src/vmm-add-hardware.glade.h:35
 msgid "Same as host"
 msgstr "Hetzelfde als host"
 
-#: ../src/virtManager/details.py:2175
+#: ../src/virtManager/details.py:2551
 msgid "VCPU info only available for running domain."
 msgstr "VCPU info alleen beschikbaar voor een draaiend domein."
 
-#: ../src/virtManager/details.py:2177
-msgid "Virtual machine does not support runtime VPCU info."
-msgstr "Virtuele machine ondersteunt geen runtime VPCU info."
-
-#: ../src/virtManager/details.py:2182
+#: ../src/virtManager/details.py:2556
 #, python-format
 msgid "Error getting VCPU info: %s"
 msgstr "Fout bij het verkrijgen van VCPU info: %s"
 
-#: ../src/virtManager/details.py:2392
+#: ../src/virtManager/details.py:2559
+msgid "Virtual machine does not support runtime VPCU info."
+msgstr "Virtuele machine ondersteunt geen runtime VPCU info."
+
+#: ../src/virtManager/details.py:2790
 msgid "Xen Mouse"
 msgstr "Xen muis"
 
-#: ../src/virtManager/details.py:2394
+#: ../src/virtManager/details.py:2792
 msgid "PS/2 Mouse"
 msgstr "PS/2 muis"
 
-#: ../src/virtManager/details.py:2399
+#: ../src/virtManager/details.py:2797
 msgid "Absolute Movement"
 msgstr "Absolute verplaatsing"
 
-#: ../src/virtManager/details.py:2401
+#: ../src/virtManager/details.py:2799
 msgid "Relative Movement"
 msgstr "Relatieve verplaatsing"
 
-#: ../src/virtManager/details.py:2436
+#: ../src/virtManager/details.py:2834
 msgid "Automatically allocated"
 msgstr "Automatisch toegewezen"
 
-#: ../src/virtManager/details.py:2444
+#: ../src/virtManager/details.py:2842
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s server"
 
-#: ../src/virtManager/details.py:2467
+#: ../src/virtManager/details.py:2865
 msgid "Local SDL Window"
 msgstr "Lokaal SDL venster"
 
-#: ../src/virtManager/details.py:2502
+#: ../src/virtManager/details.py:2938
 msgid "Serial Device"
 msgstr "Serieel apparaat"
 
-#: ../src/virtManager/details.py:2504
+#: ../src/virtManager/details.py:2940
 msgid "Parallel Device"
 msgstr "Parallel apparaat"
 
-#: ../src/virtManager/details.py:2506
+#: ../src/virtManager/details.py:2942
 msgid "Console Device"
 msgstr "Console apparaat"
 
-#: ../src/virtManager/details.py:2508
+#: ../src/virtManager/details.py:2944
 msgid "Channel Device"
 msgstr "Kanaal apparaat"
 
-#: ../src/virtManager/details.py:2510
+#: ../src/virtManager/details.py:2946
 #, python-format
 msgid "%s Device"
 msgstr "%s apparaat"
 
-#: ../src/virtManager/details.py:2515
+#: ../src/virtManager/details.py:2951
 msgid "Primary Console"
 msgstr "Primaire console"
 
-#: ../src/virtManager/details.py:2729
+#: ../src/virtManager/details.py:3199
 msgid "Tablet"
 msgstr "Tablet"
 
-#: ../src/virtManager/details.py:2732
+#: ../src/virtManager/details.py:3202
 msgid "Mouse"
 msgstr "Muis"
 
-#: ../src/virtManager/details.py:2741
+#: ../src/virtManager/details.py:3211
 #, python-format
 msgid "Display %s"
 msgstr "Display %s"
 
-#: ../src/virtManager/details.py:2747
+#: ../src/virtManager/details.py:3217
 #, python-format
 msgid "Sound: %s"
 msgstr "Geluid: %s"
 
-#: ../src/virtManager/details.py:2775
+#: ../src/virtManager/details.py:3245
 msgid "Video"
 msgstr "Video"
 
-#: ../src/virtManager/details.py:2778
+#: ../src/virtManager/details.py:3249
 msgid "Watchdog"
 msgstr "Bewaker"
 
-#: ../src/virtManager/details.py:2784
+#: ../src/virtManager/details.py:3256
 #, python-format
 msgid "Controller %s"
 msgstr "Controller %s"
 
-#: ../src/virtManager/domain.py:252
+#: ../src/virtManager/details.py:3263
+#, python-format
+msgid "Filesystem %s"
+msgstr ""
+
+#: ../src/virtManager/domain.py:316
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "Kon gespecificeerde apparaat niet vinden in de inactieve VM configuratie: %s"
 
-#: ../src/virtManager/domain.py:916
-msgid "Running"
-msgstr "Draaiend"
-
-#: ../src/virtManager/domain.py:918
-msgid "Paused"
-msgstr "Gepauzeerd"
-
-#: ../src/virtManager/domain.py:920
-msgid "Shutting Down"
-msgstr "Bezig met afsluiten"
-
-#: ../src/virtManager/domain.py:922
-msgid "Shutoff"
-msgstr "Afgesloten"
-
-#: ../src/virtManager/domain.py:924
-msgid "Crashed"
-msgstr "Gecrasht"
-
-#: ../src/virtManager/domain.py:1046
+#: ../src/virtManager/domain.py:374
 msgid "Cannot rename an active guest"
-msgstr ""
+msgstr "Kan een actieve gast niet hernoemen"
 
-#: ../src/virtManager/domain.py:1112
+#: ../src/virtManager/domain.py:1048
 msgid "Cannot start guest while cloning operation in progress"
 msgstr "Kan gast niet starten zolang het kloon proces nog bezig is"
 
-#: ../src/virtManager/domain.py:1127
+#: ../src/virtManager/domain.py:1062
 msgid "Cannot resume guest while cloning operation in progress"
 msgstr "Kan gast niet hervatten zolang het kloon proces nog bezig is"
 
-#: ../src/virtManager/domain.py:1142
+#: ../src/virtManager/domain.py:1077
 msgid "Saving domain to disk"
 msgstr "Domein opslaan op schijf"
 
-#: ../src/virtManager/domain.py:1206
+#: ../src/virtManager/domain.py:1121
 msgid "Migrating domain"
 msgstr "Domein migreren"
 
-#: ../src/virtManager/engine.py:91 ../src/virtManager/engine.py:92
+#: ../src/virtManager/domain.py:1331
+msgid "Running"
+msgstr "Draaiend"
+
+#: ../src/virtManager/domain.py:1333
+msgid "Paused"
+msgstr "Gepauzeerd"
+
+#: ../src/virtManager/domain.py:1335
+msgid "Shutting Down"
+msgstr "Bezig met afsluiten"
+
+#: ../src/virtManager/domain.py:1337
+msgid "Shutoff"
+msgstr "Afgesloten"
+
+#: ../src/virtManager/domain.py:1339
+msgid "Crashed"
+msgstr "Gecrasht"
+
+#: ../src/virtManager/engine.py:105 ../src/virtManager/engine.py:106
 msgid "Searching for available hypervisors..."
 msgstr "Zoeken naar beschikbare hypervisors..."
 
-#: ../src/virtManager/engine.py:114
+#: ../src/virtManager/engine.py:128
 #, python-format
 msgid ""
 "The following packages are not installed:\n"
@@ -1739,17 +1879,17 @@ msgstr ""
 "Deze zijn vereis om lokaal KVM gasten aan te maken.\n"
 "Wil je ze nu installeren?"
 
-#: ../src/virtManager/engine.py:119
+#: ../src/virtManager/engine.py:133
 msgid "Packages required for KVM usage"
 msgstr "Pakketten vereist voor gebruik van KVM "
 
-#: ../src/virtManager/engine.py:128
+#: ../src/virtManager/engine.py:142
 #, python-format
 msgid "Error talking to PackageKit: %s"
 msgstr "Fout bij communicatie met PackageKit: %s"
 
 #. Manager fail message
-#: ../src/virtManager/engine.py:287
+#: ../src/virtManager/engine.py:296
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -1767,7 +1907,7 @@ msgstr ""
 "Een hypervisor verbinding kan be handmatig\n"
 "toegevoegd worden met Bestand->Verbinding toevoegen"
 
-#: ../src/virtManager/engine.py:321
+#: ../src/virtManager/engine.py:329
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started. This can be done with one \n"
@@ -1791,61 +1931,66 @@ msgstr ""
 "virt-manager zal verbinden met libvirt bij de volgende keer\n"
 "dat de toepassing opstart."
 
-#: ../src/virtManager/engine.py:329
+#: ../src/virtManager/engine.py:337
 msgid "Libvirt service must be started"
 msgstr "Libvirt service moet gestart worden."
 
-#: ../src/virtManager/engine.py:530
+#: ../src/virtManager/engine.py:457
+#, fuzzy, python-format
+msgid "Error polling connection '%s': %s"
+msgstr "Fout bij lanceren van verbinding dialoog: %s"
+
+#: ../src/virtManager/engine.py:630
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "Onbekende verbinding URI %s"
 
-#: ../src/virtManager/engine.py:543
+#: ../src/virtManager/engine.py:643
 #, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "Fout bij lanceren van 'Over' dialoog: %s "
 
-#: ../src/virtManager/engine.py:555
+#: ../src/virtManager/engine.py:654
 #, python-format
 msgid "Unable to display documentation: %s"
 msgstr "Kan documentatie niet tonen: %s"
 
-#: ../src/virtManager/engine.py:571
+#: ../src/virtManager/engine.py:669
 #, python-format
 msgid "Error launching preferences: %s"
 msgstr "Fout bij lanceren van voorkeuren: %s"
 
-#: ../src/virtManager/engine.py:591
+#: ../src/virtManager/engine.py:692
 #, python-format
 msgid "Error launching host dialog: %s"
 msgstr "Fout bij lanceren van host dialoog: %s"
 
-#: ../src/virtManager/engine.py:611
+#: ../src/virtManager/engine.py:712
 #, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "Fout bij lanceren van verbinding dialoog: %s"
 
-#: ../src/virtManager/engine.py:644
+#: ../src/virtManager/engine.py:756
 #, python-format
 msgid "Error launching details: %s"
 msgstr "Fout bij lanceren van details: %s"
 
-#: ../src/virtManager/engine.py:695 ../src/virtManager/engine.py:712
+#: ../src/virtManager/engine.py:809 ../src/virtManager/engine.py:825
 #, python-format
 msgid "Error launching manager: %s"
 msgstr "Fout bij lanceren van beheerder: %s"
 
-#: ../src/virtManager/engine.py:726
+#: ../src/virtManager/engine.py:838
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "Fout bij lanceren van migratie dialoog: %s"
 
-#: ../src/virtManager/engine.py:744
+#: ../src/virtManager/engine.py:855
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "Fout bij het instellen van kloon parameters: %s"
 
-#: ../src/virtManager/engine.py:792
+#: ../src/virtManager/engine.py:895
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
 "libvirt version or hypervisor."
@@ -1853,62 +1998,55 @@ msgstr ""
 "Opslaan van virtuele machines via verbindingen op afstand wordt niet "
 "ondersteund met deze libvirt versie of hypervisor."
 
-#: ../src/virtManager/engine.py:799
+#: ../src/virtManager/engine.py:902
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "Weet je zeker dat je '%s' wilt opslaan?"
 
-#: ../src/virtManager/engine.py:812
+#: ../src/virtManager/engine.py:908
 msgid "Save Virtual Machine"
 msgstr "Virtuele machine opslaan"
 
-#: ../src/virtManager/engine.py:827
+#: ../src/virtManager/engine.py:923
 msgid "Saving Virtual Machine"
 msgstr "Opslaan van virtuele machine"
 
-#: ../src/virtManager/engine.py:828
+#: ../src/virtManager/engine.py:924
 msgid "Saving virtual machine memory to disk "
 msgstr "Opslaan van virtuele machine naar schijf"
 
-#: ../src/virtManager/engine.py:834
+#: ../src/virtManager/engine.py:931
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "Fout bij opslaan van domein: %s"
 
-#: ../src/virtManager/engine.py:846
+#: ../src/virtManager/engine.py:944
 #, python-format
 msgid "Error cancelling save job: %s"
 msgstr "Fout bij afbreken opslag taak: %s"
 
-#: ../src/virtManager/engine.py:863
+#: ../src/virtManager/engine.py:960
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr ""
 "Virtuele machines herstellen via verbindingen op afstand wordt nog niet "
 "ondersteund"
 
-#: ../src/virtManager/engine.py:868
+#: ../src/virtManager/engine.py:965
 msgid "Restore Virtual Machine"
 msgstr "Virtuele machine herstellen"
 
-#: ../src/virtManager/engine.py:877 ../src/virtManager/engine.py:965
-msgid "Restoring Virtual Machine"
-msgstr "Virtuele machine herstellen"
+#. VM will be restored, which can take some time, so show a
+#. progress dialog.
+#: ../src/virtManager/engine.py:977 ../src/virtManager/engine.py:1026
+msgid "Error restoring domain"
+msgstr "Fout bij het herstellen van domein"
 
-#: ../src/virtManager/engine.py:878 ../src/virtManager/engine.py:966
-msgid "Restoring virtual machine memory from disk"
-msgstr "Virtuele machine geheugen herstellen van schijf"
-
-#: ../src/virtManager/engine.py:882
-#, python-format
-msgid "Error restoring domain: %s"
-msgstr "Fout bij het herstellen van domein: %s"
-
-#: ../src/virtManager/engine.py:897
+#: ../src/virtManager/engine.py:985
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "Weet je zeker dat je uitschakelen wilt forceren voor '%s'?"
 
-#: ../src/virtManager/engine.py:899
+#: ../src/virtManager/engine.py:987
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
@@ -1916,307 +2054,316 @@ msgstr ""
 "Dit zal de VM onmiddellijk uitschakelen zonder het OS af te sluiten en kan "
 "leiden tot data verlies."
 
-#: ../src/virtManager/engine.py:913 ../src/virtManager/engine.py:996
-#, python-format
-msgid "Error shutting down domain: %s"
+#: ../src/virtManager/engine.py:993 ../src/virtManager/engine.py:1050
+#, fuzzy
+msgid "Error shutting down domain"
 msgstr "Fout tijdens het afsluiten van domein: %s"
 
-#: ../src/virtManager/engine.py:923
+#: ../src/virtManager/engine.py:1001
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "Weet je zeker dat je '%s' wilt pauzeren?"
 
-#: ../src/virtManager/engine.py:937
-#, python-format
-msgid "Error pausing domain: %s"
+#: ../src/virtManager/engine.py:1007
+#, fuzzy
+msgid "Error pausing domain"
 msgstr "Fout bij het pauzeren van domein: %s"
 
-#: ../src/virtManager/engine.py:948
-#, python-format
-msgid "Error unpausing domain: %s"
+#: ../src/virtManager/engine.py:1015
+#, fuzzy
+msgid "Error unpausing domain"
 msgstr "Fout bij vervolgen van domein: %s"
 
-#. VM will be restored, which can take some time, so show a
-#. progress dialog.
-#: ../src/virtManager/engine.py:964
-msgid "Error restoring domain"
-msgstr "Fout bij het herstellen van domein"
+#: ../src/virtManager/engine.py:1027
+msgid "Restoring Virtual Machine"
+msgstr "Virtuele machine herstellen"
+
+#: ../src/virtManager/engine.py:1028
+msgid "Restoring virtual machine memory from disk"
+msgstr "Virtuele machine geheugen herstellen van schijf"
 
 #. Regular startup
-#: ../src/virtManager/engine.py:972
+#: ../src/virtManager/engine.py:1035
 msgid "Error starting domain"
 msgstr "Fout bij starten van domein"
 
-#: ../src/virtManager/engine.py:982
+#: ../src/virtManager/engine.py:1044
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "Weet je zeker dat je '%s' wilt uitschakelen?"
 
-#: ../src/virtManager/engine.py:1006
+#: ../src/virtManager/engine.py:1058
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "Weet je zeker dat je '%s' opnieuw op wilt starten?"
 
 #. Raise the original error message
-#: ../src/virtManager/engine.py:1024 ../src/virtManager/engine.py:1039
+#: ../src/virtManager/engine.py:1072 ../src/virtManager/engine.py:1086
 #, python-format
 msgid "Error rebooting domain: %s"
 msgstr "Fout bij het opstarten van domein: %s"
 
-#: ../src/virtManager/error.py:94
+#: ../src/virtManager/error.py:108
 msgid "Input Error"
 msgstr "Input fout"
 
-#: ../src/virtManager/error.py:179 ../src/vmm-details.glade.h:47
+#: ../src/virtManager/error.py:193 ../src/vmm-details.glade.h:53
 msgid "Details"
 msgstr "Details"
 
-#: ../src/virtManager/host.py:178
+#: ../src/virtManager/host.py:170
 msgid "Copy Volume Path"
 msgstr "Kopieer volume pad"
 
-#: ../src/virtManager/host.py:340
+#: ../src/virtManager/host.py:370
 #, python-format
 msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s van %(maxmem)s"
 
-#: ../src/virtManager/host.py:358 ../src/virtManager/host.py:359
-#: ../src/virtManager/host.py:360
+#: ../src/virtManager/host.py:384 ../src/virtManager/host.py:385
+#: ../src/virtManager/host.py:386
 msgid "Connection not active."
 msgstr "Verbinding is niet actief."
 
-#: ../src/virtManager/host.py:365
+#: ../src/virtManager/host.py:391
 msgid "Libvirt connection does not support virtual network management."
 msgstr "Libvirt verbinding ondersteunt geen virtueel netwerk beheer."
 
-#: ../src/virtManager/host.py:370
+#: ../src/virtManager/host.py:396
 msgid "Libvirt connection does not support storage management."
 msgstr "Libvirt verbinding ondersteunt geen opslag beheer."
 
-#: ../src/virtManager/host.py:374
+#: ../src/virtManager/host.py:400
 msgid "Libvirt connection does not support interface management."
 msgstr "Libvirt verbinding ondersteunt geen interface beheer."
 
-#: ../src/virtManager/host.py:389
+#: ../src/virtManager/host.py:415
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "Weet je zeker dat je het netwerk %s permanent wilt verwijderen?"
 
-#: ../src/virtManager/host.py:398
-#, python-format
-msgid "Error deleting network: %s"
+#: ../src/virtManager/host.py:422
+#, fuzzy, python-format
+msgid "Error deleting network '%s'"
 msgstr "Fout bij het verwijderen van netwerk: %s"
 
-#: ../src/virtManager/host.py:410
-#, python-format
-msgid "Error starting network: %s"
+#: ../src/virtManager/host.py:431
+#, fuzzy, python-format
+msgid "Error starting network '%s'"
 msgstr "Fout bij het starten van netwerk: %s"
 
-#: ../src/virtManager/host.py:422
-#, python-format
-msgid "Error stopping network: %s"
+#: ../src/virtManager/host.py:440
+#, fuzzy, python-format
+msgid "Error stopping network '%s'"
 msgstr "Fout bij het stoppen van netwerk: %s"
 
-#: ../src/virtManager/host.py:432
+#: ../src/virtManager/host.py:449
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr "Fout bij het lanceren van de netwerk assistent: %s"
 
-#: ../src/virtManager/host.py:444
+#: ../src/virtManager/host.py:461
 #, python-format
 msgid "Error setting net autostart: %s"
 msgstr "Fout bij het instellen van netwerk auto start: %s"
 
-#: ../src/virtManager/host.py:452 ../src/virtManager/host.py:522
-#: ../src/virtManager/host.py:737 ../src/virtManager/host.py:778
+#: ../src/virtManager/host.py:468 ../src/virtManager/host.py:539
+#: ../src/virtManager/host.py:740 ../src/virtManager/host.py:789
 msgid "On Boot"
 msgstr "Bij het opstarten"
 
-#: ../src/virtManager/host.py:453 ../src/virtManager/host.py:522
-#: ../src/virtManager/host.py:556 ../src/virtManager/host.py:738
-#: ../src/virtManager/host.py:778 ../src/virtManager/host.py:810
+#: ../src/virtManager/host.py:469 ../src/virtManager/host.py:539
+#: ../src/virtManager/host.py:573 ../src/virtManager/host.py:741
+#: ../src/virtManager/host.py:789 ../src/virtManager/host.py:829
 msgid "Never"
 msgstr "Nooit"
 
-#: ../src/virtManager/host.py:487
+#: ../src/virtManager/host.py:503
 msgid "No virtual network selected."
 msgstr "Geen virtueel netwerk geselecteerd."
 
-#: ../src/virtManager/host.py:497
+#: ../src/virtManager/host.py:513
 #, python-format
 msgid "Error selecting network: %s"
 msgstr "Fout bij het selecteren van netwerk: %s"
 
-#: ../src/virtManager/host.py:562
+#: ../src/virtManager/host.py:581
 msgid "Isolated virtual network"
 msgstr "Geïsoleerd virtueel netwerk"
 
-#: ../src/virtManager/host.py:597 ../src/virtManager/host.py:610
-#, python-format
-msgid "Error starting pool '%s': %s"
+#: ../src/virtManager/host.py:614
+#, fuzzy, python-format
+msgid "Error stopping pool '%s'"
 msgstr "Fout bij het starten van pool '%s': %s"
 
-#: ../src/virtManager/host.py:619
+#: ../src/virtManager/host.py:623
+#, fuzzy, python-format
+msgid "Error starting pool '%s'"
+msgstr "Fout bij het starten van pool '%s': %s"
+
+#: ../src/virtManager/host.py:630
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "Weet je zeker dat je de pool %s permanent wilt verwijderen?"
 
-#: ../src/virtManager/host.py:628
-#, python-format
-msgid "Error deleting pool: %s"
+#: ../src/virtManager/host.py:637
+#, fuzzy, python-format
+msgid "Error deleting pool '%s'"
 msgstr "Fout bij het verwijderen van pool: %s"
 
-#: ../src/virtManager/host.py:641
-#, python-format
-msgid "Error refreshing pool '%s': %s"
+#: ../src/virtManager/host.py:650
+#, fuzzy, python-format
+msgid "Error refreshing pool '%s'"
 msgstr "Fout bij het verversen van pool '%s': %s"
 
-#: ../src/virtManager/host.py:650
+#: ../src/virtManager/host.py:657
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "Weet je zeker dat je het volume %s permanent wilt verwijderen?"
 
-#: ../src/virtManager/host.py:660
-#, python-format
-msgid "Error deleting volume: %s"
-msgstr "Fout bij het verwijderen van volume: %s"
+#: ../src/virtManager/host.py:669
+#, fuzzy, python-format
+msgid "Error refreshing volume '%s'"
+msgstr "Fout bij het verversen van pool '%s': %s"
 
-#: ../src/virtManager/host.py:672
+#: ../src/virtManager/host.py:678
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "Fout bij het lanceren van de pool assistent: %s"
 
-#: ../src/virtManager/host.py:690 ../src/virtManager/storagebrowse.py:262
+#: ../src/virtManager/host.py:695 ../src/virtManager/storagebrowse.py:286
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "Fout bij het lanceren van de volume assistent: %s"
 
-#: ../src/virtManager/host.py:729
+#: ../src/virtManager/host.py:733
 #, python-format
 msgid "Error setting pool autostart: %s"
 msgstr "Fout bij het instellen van pool auto start: %s"
 
-#: ../src/virtManager/host.py:750
+#: ../src/virtManager/host.py:753
 msgid "No storage pool selected."
 msgstr "Geen opslag pool geselecteerd."
 
-#: ../src/virtManager/host.py:760
+#: ../src/virtManager/host.py:763
 #, python-format
 msgid "Error selecting pool: %s"
 msgstr "Fout bij het selecteren van pool: %s"
 
-#: ../src/virtManager/host.py:886
+#: ../src/virtManager/host.py:903
 #, python-format
 msgid "Are you sure you want to stop the interface '%s'?"
 msgstr "Weet je zeker dat je de interface '%s' wilt stoppen?"
 
-#: ../src/virtManager/host.py:888 ../src/virtManager/host.py:915
-msgid "Don't ask me again for interface start/stop."
-msgstr "Vraag me niet opnieuw naar het starten/stoppen van interface."
-
-#: ../src/virtManager/host.py:900
-#, python-format
-msgid "Error stopping interface '%s': %s"
+#: ../src/virtManager/host.py:909
+#, fuzzy, python-format
+msgid "Error stopping interface '%s'"
 msgstr "Fout bij het stoppen van interface '%s': %s"
 
-#: ../src/virtManager/host.py:913
+#: ../src/virtManager/host.py:918
 #, python-format
 msgid "Are you sure you want to start the interface '%s'?"
 msgstr "Weet je zeker dat je de interface '%s' wilt starten?"
 
-#: ../src/virtManager/host.py:927
-#, python-format
-msgid "Error starting interface '%s': %s"
+#: ../src/virtManager/host.py:924
+#, fuzzy, python-format
+msgid "Error starting interface '%s'"
 msgstr "Fout bij het starten van interface '%s': %s"
 
-#: ../src/virtManager/host.py:936
+#: ../src/virtManager/host.py:931
 #, python-format
 msgid "Are you sure you want to permanently delete the interface %s?"
 msgstr "Weet je zeker dat je het interface %s permanent wilt verwijderen?"
 
-#: ../src/virtManager/host.py:946
-#, python-format
-msgid "Error deleting interface: %s"
+#: ../src/virtManager/host.py:939
+#, fuzzy, python-format
+msgid "Error deleting interface '%s'"
 msgstr "Fout bij het verwijderen van interface: %s"
 
-#: ../src/virtManager/host.py:956
+#: ../src/virtManager/host.py:948
 #, python-format
 msgid "Error launching interface wizard: %s"
 msgstr "Fout bij het lanceren van interface assistent: %s"
 
-#: ../src/virtManager/host.py:989
+#: ../src/virtManager/host.py:981
 #, python-format
 msgid "Error setting interface startmode: %s"
 msgstr "Fout bij het instellen van interface start mode: %s"
 
-#: ../src/virtManager/host.py:1009
+#: ../src/virtManager/host.py:1000
 msgid "No interface selected."
 msgstr "Geen interface geselecteerd."
 
-#: ../src/virtManager/host.py:1020
+#: ../src/virtManager/host.py:1010
 #, python-format
 msgid "Error selecting interface: %s"
 msgstr "Fout bij het selecteren van interface: %s"
 
-#: ../src/virtManager/manager.py:320 ../src/virtManager/systray.py:171
-#: ../src/vmm-details.glade.h:138 ../src/vmm-manager.glade.h:18
+#: ../src/virtManager/manager.py:316 ../src/virtManager/systray.py:153
+#: ../src/vmm-details.glade.h:156 ../src/vmm-manager.glade.h:19
 msgid "_Pause"
 msgstr "_Pauzeren"
 
-#: ../src/virtManager/manager.py:321
+#: ../src/virtManager/manager.py:317
 msgid "R_esume"
 msgstr "V_ervolgen"
 
-#: ../src/virtManager/manager.py:323 ../src/virtManager/manager.py:326
-#: ../src/virtManager/systray.py:198 ../src/virtManager/systray.py:216
-#: ../src/virtManager/uihelpers.py:716
+#: ../src/virtManager/manager.py:319 ../src/virtManager/manager.py:322
+#: ../src/virtManager/systray.py:180 ../src/virtManager/systray.py:198
+#: ../src/virtManager/uihelpers.py:830
 msgid "_Shut Down"
 msgstr "A_fsluiten"
 
 #. Shutdown menu
-#: ../src/virtManager/manager.py:325 ../src/virtManager/systray.py:191
-#: ../src/virtManager/uihelpers.py:710 ../src/vmm-details.glade.h:139
+#: ../src/virtManager/manager.py:321 ../src/virtManager/systray.py:173
+#: ../src/virtManager/uihelpers.py:824 ../src/vmm-details.glade.h:158
 msgid "_Reboot"
 msgstr "_Herstarten"
 
-#: ../src/virtManager/manager.py:328 ../src/virtManager/systray.py:205
-#: ../src/virtManager/uihelpers.py:722 ../src/vmm-details.glade.h:127
+#: ../src/virtManager/manager.py:324 ../src/virtManager/systray.py:187
+#: ../src/virtManager/uihelpers.py:836 ../src/vmm-details.glade.h:144
 msgid "_Force Off"
 msgstr "Uitschakelen _forceren"
 
-#: ../src/virtManager/manager.py:331 ../src/virtManager/uihelpers.py:732
+#: ../src/virtManager/manager.py:327 ../src/virtManager/uihelpers.py:846
 msgid "Sa_ve"
 msgstr "_Opslaan"
 
-#: ../src/virtManager/manager.py:334
+#: ../src/virtManager/manager.py:330
 msgid "_Clone..."
 msgstr "_Kloon..."
 
-#: ../src/virtManager/manager.py:335 ../src/vmm-details.glade.h:133
+#: ../src/virtManager/manager.py:331 ../src/vmm-details.glade.h:151
 msgid "_Migrate..."
 msgstr "_Migreren..."
 
-#: ../src/virtManager/manager.py:336
+#: ../src/virtManager/manager.py:332
 msgid "_Delete"
 msgstr "_Verwijderen"
 
-#: ../src/virtManager/manager.py:350 ../src/vmm-details.glade.h:125
-msgid "_Details"
-msgstr "_Details"
+#: ../src/virtManager/manager.py:346
+#, fuzzy
+msgid "D_etails"
+msgstr "Details"
 
-#: ../src/virtManager/manager.py:371
+#: ../src/virtManager/manager.py:409
 msgid "CPU usage"
 msgstr "Processor gebruik"
 
-#: ../src/virtManager/manager.py:372
+#: ../src/virtManager/manager.py:413
+#, fuzzy
+msgid "Host CPU usage"
+msgstr "Processor gebruik"
+
+#: ../src/virtManager/manager.py:417
 msgid "Disk I/O"
 msgstr "Schijf I/O"
 
-#: ../src/virtManager/manager.py:373
+#: ../src/virtManager/manager.py:421
 msgid "Network I/O"
 msgstr "Netwerk I/O"
 
-#: ../src/virtManager/manager.py:570
+#: ../src/virtManager/manager.py:549
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -2231,7 +2378,7 @@ msgstr ""
 "\n"
 "Wil je dat?"
 
-#: ../src/virtManager/manager.py:672
+#: ../src/virtManager/manager.py:649
 msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
@@ -2239,11 +2386,11 @@ msgstr ""
 "Kan geen verbinding openen met de Xen hypervisor/daemon.\n"
 "\n"
 
-#: ../src/virtManager/manager.py:677 ../src/virtManager/manager.py:686
+#: ../src/virtManager/manager.py:654 ../src/virtManager/manager.py:663
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Virtuele machine beheerder verbinding mislukt"
 
-#: ../src/virtManager/manager.py:680
+#: ../src/virtManager/manager.py:657
 msgid ""
 "Unable to open a connection to the libvirt management daemon.\n"
 "\n"
@@ -2251,47 +2398,47 @@ msgstr ""
 "Kan geen verbinding openen met de libvirt beheer daemon.\n"
 "\n"
 
-#: ../src/virtManager/manager.py:737
+#: ../src/virtManager/manager.py:700
 msgid "Double click to connect"
 msgstr "Dubbel-klik om te verbinden"
 
-#: ../src/virtManager/manager.py:742
+#: ../src/virtManager/manager.py:705
 msgid "Not Connected"
 msgstr "Niet verbonden"
 
-#: ../src/virtManager/manager.py:744
+#: ../src/virtManager/manager.py:707
 msgid "Connecting..."
 msgstr "Verbinding maken..."
 
-#: ../src/virtManager/manager.py:1081
+#: ../src/virtManager/manager.py:1101
 msgid "Disabled in preferences dialog."
 msgstr "Uitgezet in de voorkeuren dialoog."
 
-#: ../src/virtManager/manager.py:1087
+#: ../src/virtManager/manager.py:1107
 msgid " (disabled)"
 msgstr " (uitgezet)"
 
-#: ../src/virtManager/mediadev.py:105
+#: ../src/virtManager/mediadev.py:100
 msgid "No media detected"
 msgstr "Geen media gevonden"
 
-#: ../src/virtManager/mediadev.py:107
+#: ../src/virtManager/mediadev.py:102
 msgid "Media Unknown"
 msgstr "Media onbekend"
 
-#: ../src/virtManager/migrate.py:113
+#: ../src/virtManager/migrate.py:125
 msgid "Migrate"
 msgstr "Migreren"
 
-#: ../src/virtManager/migrate.py:142
+#: ../src/virtManager/migrate.py:153
 msgid "Libvirt version does not support setting downtime."
 msgstr "Libvirt versie ondersteunt geen instelling uitvaltijd."
 
-#: ../src/virtManager/migrate.py:158
+#: ../src/virtManager/migrate.py:169
 msgid "Libvirt version does not support tunnelled migration."
 msgstr "Libvirt versie ondersteunt geen migratie via een tunnel."
 
-#: ../src/virtManager/migrate.py:175
+#: ../src/virtManager/migrate.py:186
 msgid "A valid destination connection must be selected."
 msgstr "Een geldige bestemming verbinding moet geselecteerd worden."
 
@@ -2300,93 +2447,89 @@ msgstr "Een geldige bestemming verbinding moet geselecteerd worden."
 #. /etc/hosts is likely borked and the only hostname it will
 #. give us is localhost. Remember, the dest machine can actually
 #. be our local machine so we may not already know its hostname
-#: ../src/virtManager/migrate.py:257
+#: ../src/virtManager/migrate.py:267
 msgid ""
 "Could not determine remotely accessible hostname for destination connection."
 msgstr ""
 "Kon geen op afstand bereikbare host naam bepalen voor de bestemming "
 "verbinding."
 
-#: ../src/virtManager/migrate.py:313
+#: ../src/virtManager/migrate.py:344
 msgid "No connections available."
 msgstr "Geen verbindingen beschikbaar."
 
-#: ../src/virtManager/migrate.py:382
+#: ../src/virtManager/migrate.py:413
 msgid "Connection hypervisors do not match."
 msgstr "Verbinding hypervisors komen niet overeen."
 
-#: ../src/virtManager/migrate.py:384
+#: ../src/virtManager/migrate.py:415
 msgid "Connection is disconnected."
 msgstr "Verbinding wordt verbroken."
 
-#: ../src/virtManager/migrate.py:403
+#: ../src/virtManager/migrate.py:434
 msgid "max downtime must be greater than 0."
 msgstr "max uitvaltijd moet groter dan 0 zijn."
 
-#: ../src/virtManager/migrate.py:406
+#: ../src/virtManager/migrate.py:437
 msgid "An interface must be specified."
 msgstr "Een interface moet gespecificeerd worden."
 
-#: ../src/virtManager/migrate.py:409
+#: ../src/virtManager/migrate.py:440
 msgid "Transfer rate must be greater than 0."
 msgstr "Overdracht snelheid moet groter dan 0 zijn."
 
-#: ../src/virtManager/migrate.py:412
+#: ../src/virtManager/migrate.py:443
 msgid "Port must be greater than 0."
 msgstr "Poort moet groter dan 0 zijn."
 
-#: ../src/virtManager/migrate.py:450
+#: ../src/virtManager/migrate.py:482
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr "Migreren van VM '%s'"
 
-#: ../src/virtManager/migrate.py:451
+#: ../src/virtManager/migrate.py:483
 #, python-format
 msgid "Migrating VM '%s' from %s to %s. This may take awhile."
 msgstr "VM '%s' migreren van %s naar %s. Dit kan even duren."
 
-#: ../src/virtManager/migrate.py:462
+#: ../src/virtManager/migrate.py:495
 #, python-format
 msgid "Unable to migrate guest: %s"
 msgstr "Kan gast niet migreren: %s"
 
-#: ../src/virtManager/migrate.py:493
+#: ../src/virtManager/migrate.py:527
 #, python-format
 msgid "Error cancelling migrate job: %s"
 msgstr "Fout bij afbreken van migratie taak: %s"
 
-#: ../src/virtManager/network.py:32
+#: ../src/virtManager/network.py:31
 #, python-format
 msgid "NAT to %s"
 msgstr "NAT naar %s"
 
-#: ../src/virtManager/network.py:37
+#: ../src/virtManager/network.py:36
 #, python-format
 msgid "Route to %s"
 msgstr "Route naar %s"
 
-#: ../src/virtManager/network.py:39
+#: ../src/virtManager/network.py:38
 msgid "Routed network"
 msgstr "Netwerk met routering"
 
-#: ../src/virtManager/network.py:46
+#: ../src/virtManager/network.py:45
 msgid "Isolated network"
 msgstr "Geïsoleerd netwerk"
 
-#: ../src/virtManager/preferences.py:183
+#: ../src/virtManager/preferences.py:178
 msgid "Installed version of GTK-VNC doesn't support configurable grab keys"
 msgstr ""
 "Geïnstalleerde versie van GTK-VNC ondersteunt instelbare grijp toetsen niet"
 
-#: ../src/virtManager/preferences.py:230
+#: ../src/virtManager/preferences.py:234
 msgid "Configure grab key combination"
 msgstr "Configureer grijp toets combinatie"
 
-#: ../src/virtManager/preferences.py:235
-msgid "Please press desired grab key combination"
-msgstr "Druk op de gewenste grijp toets combinatie"
-
-#: ../src/virtManager/preferences.py:238
+#: ../src/virtManager/preferences.py:243
 msgid ""
 "You can now define grab keys by pressing them.\n"
 "To confirm your selection please click OK button\n"
@@ -2396,31 +2539,60 @@ msgstr ""
 "Om jouw selectie te bevestigen klik je op de OK knop\n"
 "terwijl je de gewenste toetsen ingedrukt houdt."
 
-#: ../src/virtManager/storagebrowse.py:121
+#: ../src/virtManager/preferences.py:246
+msgid "Please press desired grab key combination"
+msgstr "Druk op de gewenste grijp toets combinatie"
+
+#: ../src/virtManager/serialcon.py:259
+#, fuzzy
+msgid "Serial console not yet supported over remote connection"
+msgstr "Seriële console nog niet ondersteund via de verbinding op afstand."
+
+#: ../src/virtManager/serialcon.py:262
+#, fuzzy
+msgid "Serial console not available for inactive guest"
+msgstr "Seriële console niet beschikbaar voor niet-actieve gasten."
+
+#: ../src/virtManager/serialcon.py:264
+#, fuzzy, python-format
+msgid "Console for device type '%s' not yet supported"
+msgstr "Console voor apparaat type '%s' nog niet ondersteund."
+
+#: ../src/virtManager/serialcon.py:269
+#, fuzzy, python-format
+msgid "Can not access console path '%s'"
+msgstr "Kan geen toegang krijgen tot console pad '%s'."
+
+#: ../src/virtManager/serialcon.py:371
+#, fuzzy, python-format
+msgid "Error connecting to text console: %s"
+msgstr "Fout bij verbinden met grafische console"
+
+#: ../src/virtManager/storagebrowse.py:133
 msgid "Size"
 msgstr "Grootte"
 
-#: ../src/virtManager/storagebrowse.py:128 ../src/vmm-create-pool.glade.h:7
+#: ../src/virtManager/storagebrowse.py:141 ../src/vmm-create-pool.glade.h:7
 msgid "Format"
 msgstr "Formaat"
 
-#: ../src/virtManager/storagebrowse.py:135
+#: ../src/virtManager/storagebrowse.py:149
 msgid "Used By"
 msgstr "Gebruikt door"
 
-#: ../src/virtManager/storagebrowse.py:175
+#: ../src/virtManager/storagebrowse.py:189
 msgid "Cannot use local storage on remote connection."
 msgstr "Kan lokale opslag niet gebruiken bij verbinding op afstand."
 
-#: ../src/virtManager/systray.py:177
+#: ../src/virtManager/systray.py:159
 msgid "_Resume"
 msgstr "_Vervolgen"
 
-#: ../src/virtManager/systray.py:348 ../src/virtManager/systray.py:397
+#: ../src/virtManager/systray.py:332 ../src/virtManager/systray.py:384
 msgid "No virtual machines"
 msgstr "Geen virtuele machines"
 
-#: ../src/virtManager/uihelpers.py:60
+#: ../src/virtManager/uihelpers.py:71
 msgid ""
 "Fully allocating storage may take longer now, but the OS install phase will "
 "be quicker. \n"
@@ -2435,117 +2607,128 @@ msgstr ""
 "machine als de maximale image grootte de beschikbare opslag ruimte "
 "overschrijdt."
 
-#: ../src/virtManager/uihelpers.py:107
+#: ../src/virtManager/uihelpers.py:115
 msgid "Default pool is not active."
 msgstr "De standaard pool is niet actief."
 
-#: ../src/virtManager/uihelpers.py:108
+#: ../src/virtManager/uihelpers.py:116
 #, python-format
 msgid "Storage pool '%s' is not active. Would you like to start the pool now?"
 msgstr "Opslag pool '%s' is niet actief. Wil je de pool nu starten?"
 
-#: ../src/virtManager/uihelpers.py:119
+#: ../src/virtManager/uihelpers.py:127
 #, python-format
 msgid "Could not start storage_pool '%s': %s"
 msgstr "Kon opslag pool '%s' niet starten: %s"
 
 #. [xml value, label]
-#: ../src/virtManager/uihelpers.py:214
+#: ../src/virtManager/uihelpers.py:289
 msgid "Hypervisor default"
 msgstr "Hypervisor standaard"
 
-#: ../src/virtManager/uihelpers.py:298
+#: ../src/virtManager/uihelpers.py:393
 msgid "Usermode networking"
 msgstr "Gebruiker mode netwerken"
 
-#: ../src/virtManager/uihelpers.py:304
+#: ../src/virtManager/uihelpers.py:399
 msgid "Virtual network"
 msgstr "Virtueel netwerk"
 
-#: ../src/virtManager/uihelpers.py:419
+#: ../src/virtManager/uihelpers.py:525
 msgid "No virtual networks available"
 msgstr "Geen virtuele netwerken beschikbaar"
 
-#: ../src/virtManager/uihelpers.py:441
+#: ../src/virtManager/uihelpers.py:547
 msgid "(Empty bridge)"
 msgstr "(Lege brug)"
 
-#: ../src/virtManager/uihelpers.py:444
+#: ../src/virtManager/uihelpers.py:554
+msgid "macvtap"
+msgstr ""
+
+#: ../src/virtManager/uihelpers.py:557
 msgid "Not bridged"
 msgstr "Niet overbrugd"
 
-#: ../src/virtManager/uihelpers.py:446
+#: ../src/virtManager/uihelpers.py:559
 #, python-format
 msgid "Host device %s %s"
 msgstr "Host apparaat %s %s"
 
-#: ../src/virtManager/uihelpers.py:483
-msgid "No networking."
+#: ../src/virtManager/uihelpers.py:597
+#, fuzzy
+msgid "No networking"
 msgstr "Geen netwerk."
 
 #. After all is said and done, add a manual bridge option
-#: ../src/virtManager/uihelpers.py:489
+#: ../src/virtManager/uihelpers.py:602
 msgid "Specify shared device name"
 msgstr "Specificeer gedeelde apparaat naam"
 
-#: ../src/virtManager/uihelpers.py:508
+#: ../src/virtManager/uihelpers.py:621
 msgid "Virtual Network is not active."
 msgstr "Virtueel netwerk is niet actief."
 
-#: ../src/virtManager/uihelpers.py:509
+#: ../src/virtManager/uihelpers.py:622
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr "Virtueel netwerk '%s' is niet actief. Wil je het netwerk nu starten?"
 
-#: ../src/virtManager/uihelpers.py:521
+#: ../src/virtManager/uihelpers.py:634
 #, python-format
 msgid "Could not start virtual network '%s': %s"
 msgstr "Kon virtueel netwerk '%s' niet starten: %s"
 
-#: ../src/virtManager/uihelpers.py:543
+#: ../src/virtManager/uihelpers.py:657
 msgid "Error with network parameters."
 msgstr "Fout met de netwerk parameters."
 
-#: ../src/virtManager/uihelpers.py:548 ../src/virtManager/uihelpers.py:550
+#: ../src/virtManager/uihelpers.py:662 ../src/virtManager/uihelpers.py:664
 msgid "Mac address collision."
 msgstr "Mac adres botsing."
 
-#: ../src/virtManager/uihelpers.py:551
+#: ../src/virtManager/uihelpers.py:665
 #, python-format
 msgid "%s Are you sure you want to use this address?"
 msgstr "%s Weet je zeker dat je dit adres wilt gebruiken?"
 
-#: ../src/virtManager/uihelpers.py:603
+#: ../src/virtManager/uihelpers.py:717
 msgid "No device present"
 msgstr "Geen apparaat aanwezig"
 
-#: ../src/virtManager/uihelpers.py:760
+#: ../src/virtManager/uihelpers.py:874
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
 msgstr "De emulator heeft misschien geen zoek rechten voor het pad '%s'."
 
-#: ../src/virtManager/uihelpers.py:762
+#: ../src/virtManager/uihelpers.py:876
 msgid "Do you want to correct this now?"
 msgstr "Wil je dit nu corrigeren?"
 
-#: ../src/virtManager/uihelpers.py:763 ../src/virtManager/uihelpers.py:787
+#: ../src/virtManager/uihelpers.py:877 ../src/virtManager/uihelpers.py:901
 msgid "Don't ask about these directories again."
 msgstr "Vraag niet opnieuw naar deze mappen."
 
-#: ../src/virtManager/uihelpers.py:776
+#: ../src/virtManager/uihelpers.py:890
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr ""
 "Fouten zijn opgetreden bij het wijzigen van rechten voor de volgende mappen:"
 
-#: ../src/virtManager/util.py:74
+#: ../src/virtManager/util.py:69
 #, python-format
 msgid "Couldn't create default storage pool '%s': %s"
 msgstr "Kon standaard opslag pool '%s' niet aanmaken: %s"
 
+#: ../src/virtManager/util.py:378
+#, fuzzy
+msgid "Don't ask me again"
+msgstr "Vraag me het niet nog een keer."
+
 #: ../src/vmm-about.glade.h:1
-msgid "Copyright (C) 2006-2010 Red Hat Inc."
+#, fuzzy
+msgid "Copyright (C) 2006-2011 Red Hat Inc."
 msgstr "Copyright (C) 2006-2010 Red Hat Inc."
 
 #: ../src/vmm-about.glade.h:2
@@ -2568,17 +2751,16 @@ msgid "<b>Device Parameters</b>"
 msgstr "<b>Apparaat parameters</b>"
 
 #: ../src/vmm-add-hardware.glade.h:3
-#, fuzzy
 msgid ""
 "<small><b>Tip:</b> VNC or Spice server is strongly recommended because it "
 "allows the virtual display to be embedded inside this application. It may "
 "also be used to allow access to the virtual display from a remote system.</"
 "small>"
 msgstr ""
-"<small><b>Tip:</b> VNC of SPICE server wordt sterk aanbevolen omdat hierdoor "
-"het virtuele display ingesloten wordt in deze toepassing. Het kan ook "
-"gebruikt worden om toegang te verlenen tot het virtuele display vanaf een "
-"systeem op afstand.</small>"
+"<small><b>Tip:</b> VNC of Spice server wordt sterk aanbevolen omdat deze "
+"toestaat dat de virtuele weergave ingebed wordt in deze toepassing. Het kan "
+"ook worden gebruikt om toegang mogelijk te maken tot de virtuele weergave "
+"van een systeem op afstand.</small>"
 
 #: ../src/vmm-add-hardware.glade.h:4
 msgid "A_utomatically allocated"
@@ -2589,14 +2771,15 @@ msgid "Ac_tion:"
 msgstr "Ac_tie:"
 
 #: ../src/vmm-add-hardware.glade.h:6
-msgid "Add new virtual hardware"
+#, fuzzy
+msgid "Add New Virtual Hardware"
 msgstr "Nieuwe virtuele hardware toevoegen"
 
-#: ../src/vmm-add-hardware.glade.h:7 ../src/vmm-create.glade.h:10
+#: ../src/vmm-add-hardware.glade.h:7 ../src/vmm-create.glade.h:13
 msgid "B_rowse..."
 msgstr "_Bladeren..."
 
-#: ../src/vmm-add-hardware.glade.h:8 ../src/vmm-create.glade.h:14
+#: ../src/vmm-add-hardware.glade.h:8 ../src/vmm-create.glade.h:17
 msgid "C_reate a disk image on the computer's hard drive"
 msgstr "C_reëer een schijf image op de vaste schijf van de computer"
 
@@ -2609,34 +2792,42 @@ msgid "D_evice model:"
 msgstr "_Apparaat model:"
 
 #: ../src/vmm-add-hardware.glade.h:11
+msgid "Default"
+msgstr ""
+
+#: ../src/vmm-add-hardware.glade.h:12
 msgid "Device Type Field"
 msgstr "Apparaat type veld"
 
-#: ../src/vmm-add-hardware.glade.h:12
+#: ../src/vmm-add-hardware.glade.h:13
 msgid "Device _Type:"
 msgstr "Apparaat _type:"
 
-#: ../src/vmm-add-hardware.glade.h:13
+#: ../src/vmm-add-hardware.glade.h:14
 msgid "H_ost:"
 msgstr "H_ost:"
 
-#: ../src/vmm-add-hardware.glade.h:14
+#: ../src/vmm-add-hardware.glade.h:15
 msgid "Host _Device:"
 msgstr "_Host apparaat:"
 
-#: ../src/vmm-add-hardware.glade.h:15
+#: ../src/vmm-add-hardware.glade.h:16
 msgid "Listen on all public network interfaces "
 msgstr "Luister op alle publieke netwerk interfaces"
 
-#: ../src/vmm-add-hardware.glade.h:16
+#: ../src/vmm-add-hardware.glade.h:17
 msgid "MAC Address Field"
 msgstr "MAC adres veld"
 
-#: ../src/vmm-add-hardware.glade.h:17
+#: ../src/vmm-add-hardware.glade.h:18 ../src/vmm-host.glade.h:37
+msgid "Name:"
+msgstr "Naam:"
+
+#: ../src/vmm-add-hardware.glade.h:19
 msgid "Pa_ssword:"
 msgstr "_Wachtwoord:"
 
-#: ../src/vmm-add-hardware.glade.h:18
+#: ../src/vmm-add-hardware.glade.h:20
 msgid ""
 "Please indicate how you would like to assign space on the host system for "
 "your virtual storage device."
@@ -2644,11 +2835,11 @@ msgstr ""
 "Geef aan hoe je ruimte wilt toekennen op het host systeem voor jouw virtuele "
 "opslag apparaat."
 
-#: ../src/vmm-add-hardware.glade.h:19
+#: ../src/vmm-add-hardware.glade.h:21
 msgid "Please indicate how you would like to view the virtual display."
 msgstr "Geef aan hoe je het virtuele display wilt bekijken."
 
-#: ../src/vmm-add-hardware.glade.h:20
+#: ../src/vmm-add-hardware.glade.h:22
 msgid ""
 "Please indicate how you'd like to connect your new virtual network device to "
 "the host network."
@@ -2656,7 +2847,7 @@ msgstr ""
 "Geeft aan hoe je jouw nieuwe virtuele netwerk apparaat wilt verbinden met "
 "het host netwerk."
 
-#: ../src/vmm-add-hardware.glade.h:21
+#: ../src/vmm-add-hardware.glade.h:23
 msgid ""
 "Please indicate what kind of pointer device to connect to the virtual "
 "machine."
@@ -2664,7 +2855,7 @@ msgstr ""
 "Geef aan welk type aanwijs apparaat je wilt verbinden met de virtuele "
 "machine."
 
-#: ../src/vmm-add-hardware.glade.h:22
+#: ../src/vmm-add-hardware.glade.h:24
 msgid ""
 "Please indicate what physical device\n"
 "to connect to the virtual machine."
@@ -2672,13 +2863,20 @@ msgstr ""
 "Geeft aan welk fysiek apparaat je wilt\n"
 "verbinden met de virtuele machine."
 
-#: ../src/vmm-add-hardware.glade.h:24
+#: ../src/vmm-add-hardware.glade.h:26
+#, fuzzy
+msgid ""
+"Please indicate what smartcard device mode to connect to the virtual machine."
+msgstr ""
+"Geeft aan welk geluid apparaat je wilt verbinden met de virtuele machine."
+
+#: ../src/vmm-add-hardware.glade.h:27
 msgid ""
 "Please indicate what sound device type to connect to the virtual machine."
 msgstr ""
 "Geeft aan welk geluid apparaat je wilt verbinden met de virtuele machine."
 
-#: ../src/vmm-add-hardware.glade.h:25
+#: ../src/vmm-add-hardware.glade.h:28
 msgid ""
 "Please indicate what video device type\n"
 "to connect to the virtual machine."
@@ -2686,7 +2884,7 @@ msgstr ""
 "Geeft aan welk video apparaat je wilt\n"
 "verbinden met de virtuele machine."
 
-#: ../src/vmm-add-hardware.glade.h:27
+#: ../src/vmm-add-hardware.glade.h:30
 msgid ""
 "Please indicate what watchdog device type\n"
 "and default action should be used."
@@ -2694,101 +2892,119 @@ msgstr ""
 "Geef aan welk bewaker apparaat type en\n"
 "standaard actie gebruikt moet worden."
 
-#: ../src/vmm-add-hardware.glade.h:29
+#: ../src/vmm-add-hardware.glade.h:32
+#, fuzzy
+msgid ""
+"Please indicate which host directory to\n"
+"access in the guest."
+msgstr ""
+"Geeft aan welk geluid apparaat je wilt verbinden met de virtuele machine."
+
+#: ../src/vmm-add-hardware.glade.h:34
 msgid "Po_rt:"
 msgstr "Poo_rt:"
 
-#: ../src/vmm-add-hardware.glade.h:31 ../src/vmm-create.glade.h:38
+#: ../src/vmm-add-hardware.glade.h:36 ../src/vmm-create.glade.h:45
 msgid "Select _managed or other existing storage"
 msgstr "Selecteer beheerd of andere bestaande opslag"
 
-#: ../src/vmm-add-hardware.glade.h:32
+#: ../src/vmm-add-hardware.glade.h:37
 msgid "Storage _format:"
 msgstr "Opslag _formaat:"
 
-#: ../src/vmm-add-hardware.glade.h:33
+#: ../src/vmm-add-hardware.glade.h:38
+#, fuzzy
+msgid "Ta_rget path:"
+msgstr "_Doel pad:"
+
+#: ../src/vmm-add-hardware.glade.h:39
 msgid "Use Te_lnet:"
 msgstr "Gebruik Te_lnet:"
 
-#: ../src/vmm-add-hardware.glade.h:34 ../src/vmm-create-interface.glade.h:34
+#: ../src/vmm-add-hardware.glade.h:40 ../src/vmm-create-interface.glade.h:34
 #: ../src/vmm-migrate.glade.h:10
 msgid "_Address:"
 msgstr "_Adres:"
 
-#: ../src/vmm-add-hardware.glade.h:35 ../src/vmm-create.glade.h:46
+#: ../src/vmm-add-hardware.glade.h:41 ../src/vmm-create.glade.h:53
 msgid "_Allocate entire disk now"
 msgstr "Gehele schijf nu _toewijzen"
 
-#: ../src/vmm-add-hardware.glade.h:36
+#: ../src/vmm-add-hardware.glade.h:42
 msgid "_Bind Host:"
 msgstr "_Bind host:"
 
-#: ../src/vmm-add-hardware.glade.h:37 ../src/vmm-create.glade.h:48
-#: ../src/vmm-details.glade.h:122
+#: ../src/vmm-add-hardware.glade.h:43 ../src/vmm-create.glade.h:55
+#: ../src/vmm-details.glade.h:138
 msgid "_Bridge name:"
 msgstr "_Brug naam:"
 
-#: ../src/vmm-add-hardware.glade.h:38
+#: ../src/vmm-add-hardware.glade.h:44 ../src/vmm-choose-cd.glade.h:4
+#: ../src/vmm-clone.glade.h:23
+msgid "_Browse..."
+msgstr "_Bladeren..."
+
+#: ../src/vmm-add-hardware.glade.h:45
 msgid "_Device type:"
 msgstr "_Apparaat type:"
 
-#: ../src/vmm-add-hardware.glade.h:39 ../src/vmm-create-interface.glade.h:37
+#: ../src/vmm-add-hardware.glade.h:46 ../src/vmm-create-interface.glade.h:37
 #: ../src/vmm-create-net.glade.h:52 ../src/vmm-create-pool.glade.h:13
-#: ../src/vmm-create-vol.glade.h:22 ../src/vmm-create.glade.h:50
+#: ../src/vmm-create-vol.glade.h:22 ../src/vmm-create.glade.h:57
 msgid "_Finish"
 msgstr "_Voltooien"
 
-#: ../src/vmm-add-hardware.glade.h:40 ../src/vmm-create.glade.h:51
+#: ../src/vmm-add-hardware.glade.h:47 ../src/vmm-create.glade.h:58
 msgid "_GB"
 msgstr "_GB"
 
-#: ../src/vmm-add-hardware.glade.h:41
+#: ../src/vmm-add-hardware.glade.h:48
 msgid "_Host device:"
 msgstr "_Host apparaat:"
 
-#: ../src/vmm-add-hardware.glade.h:42 ../src/vmm-details.glade.h:130
+#: ../src/vmm-add-hardware.glade.h:49 ../src/vmm-details.glade.h:148
 msgid "_Keymap:"
 msgstr "_Toetsenbord indeling:"
 
-#: ../src/vmm-add-hardware.glade.h:43
+#: ../src/vmm-add-hardware.glade.h:50
 msgid "_MAC address:"
 msgstr "_MAC adres:"
 
-#: ../src/vmm-add-hardware.glade.h:44 ../src/vmm-create-interface.glade.h:40
+#: ../src/vmm-add-hardware.glade.h:51 ../src/vmm-create-interface.glade.h:40
 #: ../src/vmm-create-net.glade.h:54
 msgid "_Mode:"
 msgstr "_Mode:"
 
-#: ../src/vmm-add-hardware.glade.h:45
+#: ../src/vmm-add-hardware.glade.h:52
 msgid "_Model:"
 msgstr "_Model:"
 
-#: ../src/vmm-add-hardware.glade.h:46
+#: ../src/vmm-add-hardware.glade.h:53
 msgid "_Other:"
 msgstr "_Andere:"
 
-#: ../src/vmm-add-hardware.glade.h:47
+#: ../src/vmm-add-hardware.glade.h:54
 msgid "_Path:"
 msgstr "_Pad:"
 
-#: ../src/vmm-add-hardware.glade.h:48 ../src/vmm-migrate.glade.h:13
+#: ../src/vmm-add-hardware.glade.h:55 ../src/vmm-migrate.glade.h:13
 msgid "_Port:"
 msgstr "_Poort:"
 
-#: ../src/vmm-add-hardware.glade.h:49
+#: ../src/vmm-add-hardware.glade.h:56
 msgid "_TLS port:"
 msgstr "_TLS_poort:"
 
-#: ../src/vmm-add-hardware.glade.h:50 ../src/vmm-create-pool.glade.h:17
+#: ../src/vmm-add-hardware.glade.h:57 ../src/vmm-create-pool.glade.h:18
 msgid "_Type:"
 msgstr "_Type:"
 
-#: ../src/vmm-add-hardware.glade.h:51
+#: ../src/vmm-add-hardware.glade.h:58
 msgid "aa:bb:cc:dd:ee:ff"
 msgstr "aa:bb:cc:dd:ee:ff"
 
-#: ../src/vmm-add-hardware.glade.h:52 ../src/vmm-create-pool.glade.h:18
-#: ../src/vmm-details.glade.h:150
+#: ../src/vmm-add-hardware.glade.h:59 ../src/vmm-create-pool.glade.h:19
+#: ../src/vmm-details.glade.h:169
 msgid "label"
 msgstr "label"
 
@@ -2803,10 +3019,6 @@ msgstr "CD-_ROM of DVD"
 #: ../src/vmm-choose-cd.glade.h:3
 msgid "Choose Media"
 msgstr "Kies media"
-
-#: ../src/vmm-choose-cd.glade.h:4 ../src/vmm-clone.glade.h:23
-msgid "_Browse..."
-msgstr "_Bladeren..."
 
 #: ../src/vmm-choose-cd.glade.h:5
 msgid "_Device Media:"
@@ -2840,7 +3052,7 @@ msgstr "<span color='#484848'>Pad:</span>"
 msgid "<span color='#484848'>Size:</span>"
 msgstr "<span color='#484848'>Grootte:</span>"
 
-#: ../src/vmm-clone.glade.h:6 ../src/vmm-create.glade.h:6
+#: ../src/vmm-clone.glade.h:6 ../src/vmm-create.glade.h:8
 msgid "<span color='#484848'>Storage:</span>"
 msgstr "<span color='#484848'>Opslag</span>"
 
@@ -3060,9 +3272,9 @@ msgstr "_Gateway:"
 msgid "_Interface type:"
 msgstr "_Interface type:"
 
-#: ../src/vmm-create-interface.glade.h:41 ../src/vmm-create-pool.glade.h:14
-#: ../src/vmm-create-vol.glade.h:24 ../src/vmm-create.glade.h:54
-#: ../src/vmm-details.glade.h:134
+#: ../src/vmm-create-interface.glade.h:41 ../src/vmm-create-pool.glade.h:15
+#: ../src/vmm-create-vol.glade.h:24 ../src/vmm-create.glade.h:61
+#: ../src/vmm-details.glade.h:152
 msgid "_Name:"
 msgstr "_Naam:"
 
@@ -3074,7 +3286,7 @@ msgstr "_Start mode:"
 msgid "_VLAN tag:"
 msgstr "_VLAN tag:"
 
-#: ../src/vmm-create-interface.glade.h:44 ../src/vmm-preferences.glade.h:40
+#: ../src/vmm-create-interface.glade.h:44 ../src/vmm-preferences.glade.h:37
 msgid "seconds"
 msgstr "seconden"
 
@@ -3297,7 +3509,7 @@ msgstr ""
 "Je wordt gevraagd naar gegevens over het virtuele netwerk dat je wilt maken, "
 "zoals:"
 
-#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:111
+#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:127
 msgid "Type:"
 msgstr "Type:"
 
@@ -3372,11 +3584,15 @@ msgstr "Stap 1 van 2"
 msgid "Step 2 of 2"
 msgstr "Stap 2 van 2"
 
-#: ../src/vmm-create-pool.glade.h:15
+#: ../src/vmm-create-pool.glade.h:14
+msgid "_IQN:"
+msgstr ""
+
+#: ../src/vmm-create-pool.glade.h:16
 msgid "_Source Path:"
 msgstr "_Bron pad:"
 
-#: ../src/vmm-create-pool.glade.h:16
+#: ../src/vmm-create-pool.glade.h:17
 msgid "_Target Path:"
 msgstr "_Doel pad:"
 
@@ -3430,8 +3646,8 @@ msgstr ""
 "Maak een opslag unit aan die direct gebruikt kan worden door een virtuele "
 "machine."
 
-#: ../src/vmm-create-vol.glade.h:19 ../src/vmm-create.glade.h:28
-#: ../src/vmm-details.glade.h:67
+#: ../src/vmm-create-vol.glade.h:19 ../src/vmm-create.glade.h:32
+#: ../src/vmm-details.glade.h:75
 msgid "MB"
 msgstr "MB"
 
@@ -3456,177 +3672,199 @@ msgid "(Insert host mem)"
 msgstr "(Voeg host geheugen in)"
 
 #: ../src/vmm-create.glade.h:2
+msgid ""
+"<small>The OS directory tree must already exist. Creating an OS directory "
+"tree\n"
+"is not yet supported.</small>"
+msgstr ""
+
+#: ../src/vmm-create.glade.h:4
 msgid "<span color='#484848'>CPUs:</span>"
 msgstr "<span color='#484848'>CPU's:</span>"
 
-#: ../src/vmm-create.glade.h:3
+#: ../src/vmm-create.glade.h:5
 msgid "<span color='#484848'>Install:</span>"
 msgstr "<span color='#484848'>Installeer:</span>"
 
-#: ../src/vmm-create.glade.h:4
+#: ../src/vmm-create.glade.h:6
 msgid "<span color='#484848'>Memory:</span>"
 msgstr "<span color='#484848'>Geheugen:</span>"
 
-#: ../src/vmm-create.glade.h:5
+#: ../src/vmm-create.glade.h:7
 msgid "<span color='#484848'>OS:</span>"
 msgstr "<span color='#484848'>OS:</span>"
 
-#: ../src/vmm-create.glade.h:7
+#: ../src/vmm-create.glade.h:9
 msgid "<span size='large' color='white'>Create a new virtual machine</span>"
 msgstr ""
 "<span size='large' color='white'>Maak een nieuwe virtuele machine</span>"
 
-#: ../src/vmm-create.glade.h:8
+#: ../src/vmm-create.glade.h:10
 msgid "A_utomatically detect operating system based on install media"
 msgstr ""
 "Detecteert a_utomatically het besturingssysteem gebaseerd op installatie "
 "media"
 
-#: ../src/vmm-create.glade.h:9 ../src/vmm-migrate.glade.h:6
+#: ../src/vmm-create.glade.h:11 ../src/vmm-migrate.glade.h:6
 msgid "Advanced options"
 msgstr "Geavanceerde opties"
 
-#: ../src/vmm-create.glade.h:11
+#: ../src/vmm-create.glade.h:14
 msgid "Bro_wse..."
 msgstr "_Bladeren..."
 
-#: ../src/vmm-create.glade.h:12
+#: ../src/vmm-create.glade.h:15
 msgid "C_PUs:"
 msgstr "C_PU's:"
 
-#: ../src/vmm-create.glade.h:13
+#: ../src/vmm-create.glade.h:16
 msgid "C_onnection:"
 msgstr "_Verbinding:"
 
-#: ../src/vmm-create.glade.h:15
+#: ../src/vmm-create.glade.h:18
 msgid "C_ustomize configuration before install"
 msgstr "Pas config_uratie aan voor installatie"
 
-#: ../src/vmm-create.glade.h:16
+#: ../src/vmm-create.glade.h:19
 msgid "Choose Memory and CPU settings"
 msgstr "Geheugen en CPU instellingen kiezen"
 
-#: ../src/vmm-create.glade.h:17
+#: ../src/vmm-create.glade.h:20
 msgid "Choose an operating system type and version"
 msgstr "Kies een besturingssysteem type en versie"
 
-#: ../src/vmm-create.glade.h:18
+#: ../src/vmm-create.glade.h:21
 msgid "Choose how you would like to install the operating system"
 msgstr "Kies hoe je het besturingssysteem wilt installeren"
 
-#: ../src/vmm-create.glade.h:19
+#: ../src/vmm-create.glade.h:22
+#, fuzzy
+msgid "Choose the container type"
+msgstr "Kies ouder interface:"
+
+#: ../src/vmm-create.glade.h:23
 msgid "Enter your virtual machine details"
 msgstr "Vul jouw virtuele machine details in"
 
-#: ../src/vmm-create.glade.h:20
+#: ../src/vmm-create.glade.h:24
 msgid "Error message"
 msgstr "Fout boodschap"
 
-#: ../src/vmm-create.glade.h:21
+#: ../src/vmm-create.glade.h:25
 msgid "Finish"
 msgstr "Voltooien"
 
-#: ../src/vmm-create.glade.h:22
+#: ../src/vmm-create.glade.h:26
 msgid "ISO"
 msgstr "ISO"
 
-#: ../src/vmm-create.glade.h:23
+#: ../src/vmm-create.glade.h:27
 msgid "Import _existing disk image"
 msgstr "Importe_er bestaand disk image"
 
-#: ../src/vmm-create.glade.h:24
+#: ../src/vmm-create.glade.h:28
 msgid "Install"
 msgstr "Installeren"
 
-#: ../src/vmm-create.glade.h:25
+#: ../src/vmm-create.glade.h:29
 msgid "Kernel options:"
 msgstr "Kernel opties:"
 
-#: ../src/vmm-create.glade.h:26
+#: ../src/vmm-create.glade.h:30
 msgid "Kickstart URL:"
 msgstr "Kickstart URL:"
 
-#: ../src/vmm-create.glade.h:27
+#: ../src/vmm-create.glade.h:31
 msgid "Locate your install media"
 msgstr "Lokaliseer jouw installatie media:"
 
-#: ../src/vmm-create.glade.h:29
+#: ../src/vmm-create.glade.h:33
 msgid "Memory"
 msgstr "Geheugen"
 
-#: ../src/vmm-create.glade.h:31
+#: ../src/vmm-create.glade.h:35
 msgid "Network _Boot (PXE)"
 msgstr "Netwerk _opstart (PXE)"
 
-#: ../src/vmm-create.glade.h:32
+#: ../src/vmm-create.glade.h:36
 msgid "Network _Install (HTTP, FTP, or NFS)"
 msgstr "Netwerk _installatie (HTTP, FTP of NFS)"
 
-#: ../src/vmm-create.glade.h:33
+#: ../src/vmm-create.glade.h:37
 msgid "New VM"
 msgstr "Nieuwe virtuele machine"
 
-#: ../src/vmm-create.glade.h:34
+#: ../src/vmm-create.glade.h:38
 msgid "OS _type:"
 msgstr "OS _type:"
 
-#: ../src/vmm-create.glade.h:35
+#: ../src/vmm-create.glade.h:40
 msgid "PXE"
 msgstr "PXE"
 
-#: ../src/vmm-create.glade.h:36
+#: ../src/vmm-create.glade.h:41
+#, fuzzy
+msgid "Provide the _application path:"
+msgstr "Geef het bestaande opslag pad op:"
+
+#: ../src/vmm-create.glade.h:42
+#, fuzzy
+msgid "Provide the existing OS root _directory:"
+msgstr "Geef het bestaande opslag pad op:"
+
+#: ../src/vmm-create.glade.h:43
 msgid "Provide the existing storage path:"
 msgstr "Geef het bestaande opslag pad op:"
 
-#: ../src/vmm-create.glade.h:37
+#: ../src/vmm-create.glade.h:44
 msgid "Provide the operating system install URL"
 msgstr "Geef de besturingssysteem installatie URL op:"
 
-#: ../src/vmm-create.glade.h:39
+#: ../src/vmm-create.glade.h:46
 msgid "Set a fixed _MAC address"
 msgstr "Een vast _MAC adres instellen"
 
-#: ../src/vmm-create.glade.h:41
+#: ../src/vmm-create.glade.h:48
 msgid "URL"
 msgstr "URL"
 
-#: ../src/vmm-create.glade.h:42
+#: ../src/vmm-create.glade.h:49
 msgid "URL Options"
 msgstr "URL opties"
 
-#: ../src/vmm-create.glade.h:43
+#: ../src/vmm-create.glade.h:50
 msgid "URL:"
 msgstr "URL:"
 
-#: ../src/vmm-create.glade.h:44
+#: ../src/vmm-create.glade.h:51
 msgid "Use CD_ROM or DVD"
 msgstr "Gebruik CD_ROM of DVD"
 
-#: ../src/vmm-create.glade.h:45
+#: ../src/vmm-create.glade.h:52
 msgid "Use _ISO image:"
 msgstr "Gebruik _ISO image:"
 
-#: ../src/vmm-create.glade.h:47
+#: ../src/vmm-create.glade.h:54
 msgid "_Architecture:"
 msgstr "_Architectuur:"
 
-#: ../src/vmm-create.glade.h:49
+#: ../src/vmm-create.glade.h:56
 msgid "_Enable storage for this virtual machine"
 msgstr "_Zet opslag aan voor deze virtuele machine"
 
-#: ../src/vmm-create.glade.h:52
+#: ../src/vmm-create.glade.h:59
 msgid "_Local install media (ISO image or CDROM)"
 msgstr "_Locale installatie media (ISO image of CDROM)"
 
-#: ../src/vmm-create.glade.h:53
+#: ../src/vmm-create.glade.h:60
 msgid "_Memory (RAM):"
 msgstr "_Geheugen (RAM):"
 
-#: ../src/vmm-create.glade.h:55
+#: ../src/vmm-create.glade.h:62
 msgid "_Version:"
 msgstr "_Versie:"
 
-#: ../src/vmm-create.glade.h:56
+#: ../src/vmm-create.glade.h:63
 msgid "_Virt Type:"
 msgstr "_Virtualisatie type:"
 
@@ -3647,71 +3885,95 @@ msgstr ""
 "0KBytes/s"
 
 #: ../src/vmm-details.glade.h:3
+#, fuzzy
+msgid "<b>Applications</b>"
+msgstr "<b>Bevestigingen</b>"
+
+#: ../src/vmm-details.glade.h:4
 msgid "<b>Autostart</b>"
 msgstr "<b>Automatisch starten</b>"
 
-#: ../src/vmm-details.glade.h:4
+#: ../src/vmm-details.glade.h:5
 msgid "<b>Basic Details</b>"
 msgstr "<b>Basis details</b>"
 
-#: ../src/vmm-details.glade.h:5
+#: ../src/vmm-details.glade.h:6
 msgid "<b>Boot device order</b>"
 msgstr "<b>Opstart apparaat volgorde</b>"
 
-#: ../src/vmm-details.glade.h:6
-#, fuzzy
-msgid "<b>CPU Features</b>"
-msgstr "<b>CPU's</b>"
-
 #: ../src/vmm-details.glade.h:7
+msgid "<b>CPU Features</b>"
+msgstr "<b>CPU eigenschappen</b>"
+
+#: ../src/vmm-details.glade.h:8
 msgid "<b>CPUs</b>"
 msgstr "<b>CPU's</b>"
 
-#: ../src/vmm-details.glade.h:8
+#: ../src/vmm-details.glade.h:9
 msgid "<b>Configuration</b>"
 msgstr "<b>Configuratie</b>"
 
-#: ../src/vmm-details.glade.h:9
+#: ../src/vmm-details.glade.h:10
+#, fuzzy
+msgid "<b>Container init</b>"
+msgstr "<b>Connectiviteit</b>"
+
+#: ../src/vmm-details.glade.h:11
 msgid "<b>Controller</b>"
 msgstr "<b>Controller</b>"
 
-#: ../src/vmm-details.glade.h:10
+#: ../src/vmm-details.glade.h:12
 msgid "<b>Direct kernel boot</b>"
 msgstr "<b>Direct kernel opstarten</b>"
 
-#: ../src/vmm-details.glade.h:11
+#: ../src/vmm-details.glade.h:13
+#, fuzzy
+msgid "<b>Filesystem</b>"
+msgstr "<b>Volumes</b>"
+
+#: ../src/vmm-details.glade.h:14
 msgid "<b>Hypervisor Details</b>"
 msgstr "<b>Hypervisor details</b>"
 
-#: ../src/vmm-details.glade.h:12
+#: ../src/vmm-details.glade.h:15
 msgid "<b>Machine Settings</b>"
 msgstr "<b>Machine instellingen</b>"
 
-#: ../src/vmm-details.glade.h:13
+#: ../src/vmm-details.glade.h:16
 msgid "<b>Memory</b>"
 msgstr "<b>Geheugen</b>"
 
-#: ../src/vmm-details.glade.h:14 ../src/vmm-host.glade.h:6
+#: ../src/vmm-details.glade.h:17
+#, fuzzy
+msgid "<b>Operating System</b>"
+msgstr "<b>type invoegen</b>"
+
+#: ../src/vmm-details.glade.h:18 ../src/vmm-host.glade.h:6
 msgid "<b>Performance</b>"
 msgstr "<b>Performance</b>"
 
-#: ../src/vmm-details.glade.h:15
+#: ../src/vmm-details.glade.h:19
 msgid "<b>Pinning</b>"
 msgstr "<b>Vastzetten</b>"
 
-#: ../src/vmm-details.glade.h:16
+#: ../src/vmm-details.glade.h:20
 msgid "<b>Security</b>"
 msgstr "<b>Beveiliging</b>"
 
-#: ../src/vmm-details.glade.h:17
+#: ../src/vmm-details.glade.h:21
+#, fuzzy
+msgid "<b>Smartcard Device</b>"
+msgstr "<b>Karakter apparaat</b>"
+
+#: ../src/vmm-details.glade.h:22
 msgid "<b>Sound Device</b>"
 msgstr "<b>Geluid apparaat</b>"
 
-#: ../src/vmm-details.glade.h:18
+#: ../src/vmm-details.glade.h:23
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>De console is momenteel niet beschikbaar</b>"
 
-#: ../src/vmm-details.glade.h:19
+#: ../src/vmm-details.glade.h:24
 msgid ""
 "<b>Tip:</b> 'source' refers to information seen from the host OS, while "
 "'target' refers to information seen from the guest OS"
@@ -3719,7 +3981,7 @@ msgstr ""
 "<b>Tip:</b> 'bron' verwijst naar de informatie gezien vanuit de gast OS, "
 "terwijl 'doel' refereert naar de informatie vanuit het gast besturingssysteem"
 
-#: ../src/vmm-details.glade.h:20
+#: ../src/vmm-details.glade.h:25
 msgid ""
 "<b>Tip:</b> A graphics tablet configured as the default pointer in the guest "
 "OS will ensure that the virtual cursor moves in sync with the local desktop "
@@ -3729,63 +3991,68 @@ msgstr ""
 "het gast besturingssysteem zal ervoor zorgen dat de virtuele cursor "
 "synchroon beweegt met de lokale bureaublad cursor."
 
-#: ../src/vmm-details.glade.h:21
+#: ../src/vmm-details.glade.h:26
 msgid "<b>Topology</b>"
 msgstr "<b>Topologie</b>"
 
-#: ../src/vmm-details.glade.h:22
+#: ../src/vmm-details.glade.h:27
 msgid "<b>Video</b>"
 msgstr "<b>Video</b>"
 
-#: ../src/vmm-details.glade.h:23
+#: ../src/vmm-details.glade.h:28
 msgid "<b>Virtual Disk</b>"
 msgstr "<b>Virtuele schijf</b>"
 
-#: ../src/vmm-details.glade.h:24
+#: ../src/vmm-details.glade.h:29
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>Virtuele netwerk interface</b>"
 
-#: ../src/vmm-details.glade.h:25
+#: ../src/vmm-details.glade.h:30
 msgid "<b>Virtual Pointer</b>"
 msgstr "<b>Virtuele aanwijzer</b>"
 
-#: ../src/vmm-details.glade.h:26
+#: ../src/vmm-details.glade.h:31
 msgid "<b>insert type</b>"
 msgstr "<b>type invoegen</b>"
 
-#: ../src/vmm-details.glade.h:27
+#: ../src/vmm-details.glade.h:32
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
 msgstr "<small>Overcommit van vCPUs kan de performance verlagen</small>"
 
-#: ../src/vmm-details.glade.h:28
+#: ../src/vmm-details.glade.h:33
 msgid "A_ction:"
 msgstr "A_ctie:"
 
-#: ../src/vmm-details.glade.h:29
+#: ../src/vmm-details.glade.h:34
 msgid "A_dd Hardware"
 msgstr "Har_dware toevoegen"
 
-#: ../src/vmm-details.glade.h:30 ../src/vmm-host.glade.h:15
+#: ../src/vmm-details.glade.h:35 ../src/vmm-host.glade.h:15
 msgid "Address:"
 msgstr "Adres:"
 
-#: ../src/vmm-details.glade.h:31
+#: ../src/vmm-details.glade.h:36
 msgid "Advanced _options"
 msgstr "Geavanceerde _opties"
 
-#: ../src/vmm-details.glade.h:32 ../src/vmm-host.glade.h:16
+#: ../src/vmm-details.glade.h:37 ../src/vmm-host.glade.h:16
 msgid "Architecture:"
 msgstr "Architectuur:"
 
-#: ../src/vmm-details.glade.h:33
+#: ../src/vmm-details.glade.h:38
 msgid "Begin Installation"
 msgstr "Begin met installatie"
 
-#: ../src/vmm-details.glade.h:34
+#: ../src/vmm-details.glade.h:39
+#, fuzzy
+msgid "Bind host:"
+msgstr "_Bind host:"
+
+#: ../src/vmm-details.glade.h:40
 msgid "Browse"
 msgstr "Bladeren"
 
-#: ../src/vmm-details.glade.h:35
+#: ../src/vmm-details.glade.h:41
 msgid ""
 "CPU\n"
 "usage:"
@@ -3793,59 +4060,60 @@ msgstr ""
 "CPU\n"
 "gebruik:"
 
-#: ../src/vmm-details.glade.h:37
+#: ../src/vmm-details.glade.h:43
 msgid "C_lock Offset:"
 msgstr "K_lok Offset:"
 
-#: ../src/vmm-details.glade.h:38
+#: ../src/vmm-details.glade.h:44
 msgid "Cac_he mode:"
 msgstr "Cac_he mode:"
 
-#: ../src/vmm-details.glade.h:39
+#: ../src/vmm-details.glade.h:45
 msgid "Connect or disconnect media"
 msgstr "Verbinding maken of verbreken met media"
 
-#: ../src/vmm-details.glade.h:40
+#: ../src/vmm-details.glade.h:46
 msgid "Console"
 msgstr "Console"
 
-#: ../src/vmm-details.glade.h:41
+#: ../src/vmm-details.glade.h:47
 msgid "Copy host CPU configuration"
 msgstr "Kopiëren van host CPU configuratie"
 
-#: ../src/vmm-details.glade.h:42
+#: ../src/vmm-details.glade.h:48
 msgid "Cores:"
 msgstr "Kernen:"
 
-#: ../src/vmm-details.glade.h:43
+#: ../src/vmm-details.glade.h:49
 msgid "Current a_llocation:"
 msgstr "Huidige t_oewijzing:"
 
-#: ../src/vmm-details.glade.h:44
+#: ../src/vmm-details.glade.h:50
 msgid "D_ynamic"
 msgstr "D_ynamisch"
 
-#: ../src/vmm-details.glade.h:45
+#: ../src/vmm-details.glade.h:51
 msgid "Default _pinning:"
 msgstr "Standaard _vastzetten:"
 
-#: ../src/vmm-details.glade.h:46
+#: ../src/vmm-details.glade.h:52
 msgid "Description:"
 msgstr "Beschrijving:"
 
-#: ../src/vmm-details.glade.h:48
-msgid "Device Type:"
-msgstr "Apparaat type:"
-
-#: ../src/vmm-details.glade.h:49
+#: ../src/vmm-details.glade.h:54
 msgid "Device m_odel:"
 msgstr "Apparaat m_odel:"
 
-#: ../src/vmm-details.glade.h:50 ../src/vmm-host.glade.h:24
+#: ../src/vmm-details.glade.h:55
+#, fuzzy
+msgid "Device type:"
+msgstr "_Apparaat type:"
+
+#: ../src/vmm-details.glade.h:56 ../src/vmm-host.glade.h:25
 msgid "Device:"
 msgstr "Apparaat:"
 
-#: ../src/vmm-details.glade.h:51
+#: ../src/vmm-details.glade.h:57
 msgid ""
 "Disk\n"
 "I/O:"
@@ -3853,88 +4121,102 @@ msgstr ""
 "Schijf\n"
 "I/O:"
 
-#: ../src/vmm-details.glade.h:53
-msgid "Disk B_us:"
+#: ../src/vmm-details.glade.h:59
+#, fuzzy
+msgid "Disk b_us:"
 msgstr "Schijf b_us:"
 
-#: ../src/vmm-details.glade.h:54
+#: ../src/vmm-details.glade.h:60
 msgid "Emulator:"
 msgstr "Emulator:"
 
-#: ../src/vmm-details.glade.h:55
+#: ../src/vmm-details.glade.h:61
 msgid "Enable A_CPI:"
 msgstr "A_CPI inschakelen:"
 
-#: ../src/vmm-details.glade.h:56
+#: ../src/vmm-details.glade.h:62
 msgid "Enable A_PIC:"
 msgstr "A_CPI inschakelen:"
 
-#: ../src/vmm-details.glade.h:57
+#: ../src/vmm-details.glade.h:63
 msgid "Enable boot me_nu"
 msgstr "Opstart me_nu aanzetten"
 
-#: ../src/vmm-details.glade.h:58
+#: ../src/vmm-details.glade.h:64
 msgid "Generate from host _NUMA configuration"
 msgstr "Genereren van _NUMA host configuratie"
 
-#: ../src/vmm-details.glade.h:59
+#: ../src/vmm-details.glade.h:65
 msgid "Heads:"
 msgstr "Hoofden:"
 
-#: ../src/vmm-details.glade.h:60 ../src/vmm-host.glade.h:28
+#: ../src/vmm-details.glade.h:66 ../src/vmm-host.glade.h:27
+msgid "Hostname:"
+msgstr "Host naam:"
+
+#: ../src/vmm-details.glade.h:67 ../src/vmm-host.glade.h:28
 msgid "Hypervisor:"
 msgstr "Hypervisor:"
 
-#: ../src/vmm-details.glade.h:61
+#: ../src/vmm-details.glade.h:68
+#, fuzzy
+msgid "Init path:"
+msgstr "Initrd pad:"
+
+#: ../src/vmm-details.glade.h:69
 msgid "Initrd path:"
 msgstr "Initrd pad:"
 
-#: ../src/vmm-details.glade.h:62
+#: ../src/vmm-details.glade.h:70
 msgid "Instance id:"
-msgstr ""
+msgstr "Aanhaling id:"
 
-#: ../src/vmm-details.glade.h:63
+#: ../src/vmm-details.glade.h:71
 msgid "Kernel arguments:"
 msgstr "Kernel argumenten:"
 
-#: ../src/vmm-details.glade.h:64
+#: ../src/vmm-details.glade.h:72
 msgid "Kernel path:"
 msgstr "Kernel pad:"
 
-#: ../src/vmm-details.glade.h:65
+#: ../src/vmm-details.glade.h:73
 msgid "Logical host CPUs:"
 msgstr "Logische host CPU's:"
 
-#: ../src/vmm-details.glade.h:66
+#: ../src/vmm-details.glade.h:74
 msgid "MAC address:"
 msgstr "MAC adres:"
 
-#: ../src/vmm-details.glade.h:68
+#: ../src/vmm-details.glade.h:76
+#, fuzzy
+msgid "M_ode:"
+msgstr "M_odel:"
+
+#: ../src/vmm-details.glade.h:77
 msgid "M_odel:"
 msgstr "M_odel:"
 
-#: ../src/vmm-details.glade.h:69
+#: ../src/vmm-details.glade.h:78
 msgid "Ma_ximum allocation:"
 msgstr "Ma_ximale toewijzing:"
 
-#: ../src/vmm-details.glade.h:70
-#, fuzzy
+#: ../src/vmm-details.glade.h:79
 msgid "Managerid:"
-msgstr "Geef _beheerder weer"
+msgstr "Beheers id:"
 
-#: ../src/vmm-details.glade.h:71
+#: ../src/vmm-details.glade.h:80
 msgid "Manually set CPU topology"
 msgstr "Stel CPU topologie handmatig in"
 
-#: ../src/vmm-details.glade.h:72
+#: ../src/vmm-details.glade.h:81
 msgid "Max Memory Select"
 msgstr "Maximale hoeveelheid geheugen selecteren"
 
-#: ../src/vmm-details.glade.h:73
+#: ../src/vmm-details.glade.h:82
 msgid "Maximum allocation:"
 msgstr "Maximale toewijzing:"
 
-#: ../src/vmm-details.glade.h:74
+#: ../src/vmm-details.glade.h:83
 msgid ""
 "Memory\n"
 "usage:"
@@ -3942,19 +4224,19 @@ msgstr ""
 "Geheugen\n"
 "gebruik:"
 
-#: ../src/vmm-details.glade.h:76
+#: ../src/vmm-details.glade.h:85
 msgid "Memory Select"
 msgstr "Geheugen selecteren"
 
-#: ../src/vmm-details.glade.h:77 ../src/vmm-host.glade.h:35
+#: ../src/vmm-details.glade.h:86 ../src/vmm-host.glade.h:35
 msgid "Mode:"
 msgstr "Mode:"
 
-#: ../src/vmm-details.glade.h:78
+#: ../src/vmm-details.glade.h:87
 msgid "Model:"
 msgstr "Model:"
 
-#: ../src/vmm-details.glade.h:79
+#: ../src/vmm-details.glade.h:88
 msgid ""
 "Network\n"
 "I/O:"
@@ -3962,235 +4244,286 @@ msgstr ""
 "Netwerk\n"
 "I/O:"
 
-#: ../src/vmm-details.glade.h:81
+#: ../src/vmm-details.glade.h:90
 msgid "Pause"
 msgstr "Pauzeren"
 
-#: ../src/vmm-details.glade.h:82 ../src/vmm-manager.glade.h:3
+#: ../src/vmm-details.glade.h:91 ../src/vmm-manager.glade.h:3
 msgid "Pause the virtual machine"
 msgstr "Pauzeer de virtuele machine"
 
-#: ../src/vmm-details.glade.h:83
+#: ../src/vmm-details.glade.h:92
 msgid "Port:"
 msgstr "Poort:"
 
-#: ../src/vmm-details.glade.h:84 ../src/vmm-manager.glade.h:4
+#: ../src/vmm-details.glade.h:93 ../src/vmm-manager.glade.h:4
 msgid "Power on the virtual machine"
 msgstr "Zet de virtuele machine aan"
 
-#: ../src/vmm-details.glade.h:85
+#: ../src/vmm-details.glade.h:94
+#, fuzzy
+msgid "Product name:"
+msgstr "Host naam:"
+
+#: ../src/vmm-details.glade.h:95
 msgid "RAM:"
 msgstr "RAM:"
 
-#: ../src/vmm-details.glade.h:86
+#: ../src/vmm-details.glade.h:96
 msgid "R_eadonly:"
 msgstr "All_een-lezen"
 
-#: ../src/vmm-details.glade.h:87
+#: ../src/vmm-details.glade.h:97
 msgid "R_untime pinning:"
 msgstr "R_un-time vastzetten:"
 
-#: ../src/vmm-details.glade.h:88
+#: ../src/vmm-details.glade.h:98
 msgid "Run"
 msgstr "Draaien"
 
-#: ../src/vmm-details.glade.h:89
+#: ../src/vmm-details.glade.h:99
 msgid "S_hut Down"
 msgstr "A_fsluiten"
 
-#: ../src/vmm-details.glade.h:90
+#: ../src/vmm-details.glade.h:100
 msgid "Send _Key"
 msgstr "Verst_uur sleutel"
 
-#: ../src/vmm-details.glade.h:91
+#: ../src/vmm-details.glade.h:101
+msgid "Serial num_ber:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:102
 msgid "Sharea_ble:"
 msgstr "Deel_baar"
 
-#: ../src/vmm-details.glade.h:92
+#: ../src/vmm-details.glade.h:103
 msgid "Show the graphical console"
 msgstr "Toon de grafische console"
 
-#: ../src/vmm-details.glade.h:93
+#: ../src/vmm-details.glade.h:104
 msgid "Show virtual hardware details"
 msgstr "Toon virtuele hardware details"
 
-#: ../src/vmm-details.glade.h:94
+#: ../src/vmm-details.glade.h:105
 msgid "Shut Down"
 msgstr "Afsluiten"
 
-#: ../src/vmm-details.glade.h:95
+#: ../src/vmm-details.glade.h:106
 msgid "Shut down"
 msgstr "Afsluiten"
 
-#: ../src/vmm-details.glade.h:96 ../src/vmm-manager.glade.h:6
+#: ../src/vmm-details.glade.h:107 ../src/vmm-manager.glade.h:6
 msgid "Shutdown the virtual machine"
 msgstr "De virtuele machine afsluiten"
 
-#: ../src/vmm-details.glade.h:97
+#: ../src/vmm-details.glade.h:108
 msgid "Sockets:"
 msgstr "Sockets:"
 
-#: ../src/vmm-details.glade.h:98
-msgid "Source Path:"
-msgstr "Bron pad:"
-
-#: ../src/vmm-details.glade.h:99
+#: ../src/vmm-details.glade.h:109
 msgid "Source device:"
 msgstr "Bron apparaat:"
 
-#: ../src/vmm-details.glade.h:100
+#: ../src/vmm-details.glade.h:110
+#, fuzzy
+msgid "Source host:"
+msgstr "Bron pad:"
+
+#: ../src/vmm-details.glade.h:111
+#, fuzzy
+msgid "Source mode:"
+msgstr "Bron apparaat:"
+
+#: ../src/vmm-details.glade.h:112
 msgid "Source path:"
 msgstr "Bron pad:"
 
-#: ../src/vmm-details.glade.h:101
+#: ../src/vmm-details.glade.h:113
+#, fuzzy
+msgid "Source:"
+msgstr "Bron pad:"
+
+#: ../src/vmm-details.glade.h:114
 msgid "Start virt_ual machine on host boot up"
 msgstr "Start virtuele machine bij opstarten van host"
 
-#: ../src/vmm-details.glade.h:103
+#: ../src/vmm-details.glade.h:116
 msgid "Storage forma_t:"
 msgstr "Opslag formaa_t:"
 
-#: ../src/vmm-details.glade.h:104
+#: ../src/vmm-details.glade.h:117
 msgid "Storage size:"
 msgstr "Opslag grootte:"
 
-#: ../src/vmm-details.glade.h:105
+#: ../src/vmm-details.glade.h:118
 msgid "Switch to fullscreen view"
 msgstr "Omschakelen naar volledig scherm weergave"
 
-#: ../src/vmm-details.glade.h:106
+#: ../src/vmm-details.glade.h:119
 msgid "TLS Port:"
 msgstr "TLS poort:"
 
-#: ../src/vmm-details.glade.h:107
+#: ../src/vmm-details.glade.h:120
 msgid "T_oolbar"
 msgstr "Gereedschap _balk"
 
-#: ../src/vmm-details.glade.h:108
+#: ../src/vmm-details.glade.h:121
 msgid "Target device:"
 msgstr "Doel apparaat:"
 
-#: ../src/vmm-details.glade.h:109
+#: ../src/vmm-details.glade.h:122
+#, fuzzy
+msgid "Target name:"
+msgstr "Doel adres:"
+
+#: ../src/vmm-details.glade.h:123
+#, fuzzy
+msgid "Target type:"
+msgstr "_Doel pad:"
+
+#: ../src/vmm-details.glade.h:124
+#, fuzzy
+msgid "Target:"
+msgstr "Doel"
+
+#: ../src/vmm-details.glade.h:125
 msgid "Threads:"
 msgstr "Threads:"
 
-#: ../src/vmm-details.glade.h:110
+#: ../src/vmm-details.glade.h:126
 msgid "Total host memory:"
 msgstr "Totaal host geheugen:"
 
-#: ../src/vmm-details.glade.h:112
+#: ../src/vmm-details.glade.h:128
 msgid "Typeid version:"
-msgstr ""
+msgstr "Type id versie:"
 
-#: ../src/vmm-details.glade.h:113
-#, fuzzy
+#: ../src/vmm-details.glade.h:129
 msgid "Typeid:"
-msgstr "Type:"
+msgstr "Type id:"
 
-#: ../src/vmm-details.glade.h:114
+#: ../src/vmm-details.glade.h:130
 msgid "UUID:"
 msgstr "UUID:"
 
-#: ../src/vmm-details.glade.h:115
+#: ../src/vmm-details.glade.h:131
 msgid "Virtual CPU Affinity Select"
 msgstr "Virtuele CPU affiniteit selecteren"
 
-#: ../src/vmm-details.glade.h:116
+#: ../src/vmm-details.glade.h:132
 msgid "Virtual CPU Select"
 msgstr "Virtuele CPU selecteren"
 
-#: ../src/vmm-details.glade.h:118
+#: ../src/vmm-details.glade.h:134
 msgid "Virtual _Machine"
 msgstr "Virtuele _machine"
 
-#: ../src/vmm-details.glade.h:119
-#, fuzzy
+#: ../src/vmm-details.glade.h:135
 msgid "Virtual port"
-msgstr "Virtueel netwerk"
+msgstr "Virtuele poort"
 
-#: ../src/vmm-details.glade.h:120
+#: ../src/vmm-details.glade.h:136
 msgid "_Always"
 msgstr "_Altijd"
 
-#: ../src/vmm-details.glade.h:121
+#: ../src/vmm-details.glade.h:137
 msgid "_Begin Installation"
 msgstr "Be_gin met installatie"
 
-#: ../src/vmm-details.glade.h:123
+#: ../src/vmm-details.glade.h:139
+msgid "_Cancel"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:140
 msgid "_Clone"
 msgstr "_Kloon"
 
-#: ../src/vmm-details.glade.h:124
+#: ../src/vmm-details.glade.h:141
 msgid "_Console"
 msgstr "_Console"
 
-#: ../src/vmm-details.glade.h:126 ../src/vmm-host.glade.h:56
-#: ../src/vmm-manager.glade.h:13
+#: ../src/vmm-details.glade.h:142
+msgid "_Details"
+msgstr "_Details"
+
+#: ../src/vmm-details.glade.h:143 ../src/vmm-host.glade.h:56
+#: ../src/vmm-manager.glade.h:12
 msgid "_File"
 msgstr "_Bestand"
 
-#: ../src/vmm-details.glade.h:128
+#: ../src/vmm-details.glade.h:145
 msgid "_Fullscreen"
 msgstr "_Volledig scherm"
 
-#: ../src/vmm-details.glade.h:129 ../src/vmm-host.glade.h:57
+#: ../src/vmm-details.glade.h:146 ../src/vmm-host.glade.h:57
 #: ../src/vmm-manager.glade.h:15
 msgid "_Help"
 msgstr "_Hulp"
 
-#: ../src/vmm-details.glade.h:131
+#: ../src/vmm-details.glade.h:147
+#, fuzzy
+msgid "_IO mode:"
+msgstr "_Start mode:"
+
+#: ../src/vmm-details.glade.h:149
 msgid "_Label:"
 msgstr "_Label:"
 
-#: ../src/vmm-details.glade.h:132
+#: ../src/vmm-details.glade.h:150
 msgid "_Login"
 msgstr "_Inlog:"
 
-#: ../src/vmm-details.glade.h:135
+#: ../src/vmm-details.glade.h:153
 msgid "_Never"
 msgstr "_Nooit"
 
-#: ../src/vmm-details.glade.h:136
+#: ../src/vmm-details.glade.h:154
 msgid "_Only when Fullscreen"
 msgstr "Alleen bij v_olledig scherm"
 
-#: ../src/vmm-details.glade.h:137
+#: ../src/vmm-details.glade.h:155
 msgid "_Password:"
 msgstr "_Wachtwoord:"
 
-#: ../src/vmm-details.glade.h:140
+#: ../src/vmm-details.glade.h:157
+#, fuzzy
+msgid "_Performance options"
+msgstr "Kernel opties:"
+
+#: ../src/vmm-details.glade.h:159
 msgid "_Resize to VM"
 msgstr "_Grootte instellen voor VM"
 
-#: ../src/vmm-details.glade.h:142
+#: ../src/vmm-details.glade.h:161
 msgid "_Save this password in your keyring"
 msgstr "_Sla dit wachtwoord op in jouw sleutelbos"
 
-#: ../src/vmm-details.glade.h:143
+#: ../src/vmm-details.glade.h:162
 msgid "_Scale Display"
 msgstr "_Schaal display"
 
-#: ../src/vmm-details.glade.h:144
+#: ../src/vmm-details.glade.h:163
 msgid "_Static"
 msgstr "_Statisch"
 
-#: ../src/vmm-details.glade.h:145
+#: ../src/vmm-details.glade.h:164
 msgid "_Take Screenshot"
 msgstr "Schermafdruk _maken"
 
-#: ../src/vmm-details.glade.h:146
+#: ../src/vmm-details.glade.h:165
 msgid "_Text Consoles"
 msgstr "_Tekst consoles"
 
-#: ../src/vmm-details.glade.h:147 ../src/vmm-open-connection.glade.h:16
+#: ../src/vmm-details.glade.h:166 ../src/vmm-open-connection.glade.h:17
 msgid "_Username:"
 msgstr "_Gebruikersnaam:"
 
-#: ../src/vmm-details.glade.h:148 ../src/vmm-manager.glade.h:21
+#: ../src/vmm-details.glade.h:167 ../src/vmm-manager.glade.h:22
 msgid "_View"
 msgstr "_Weergave"
 
-#: ../src/vmm-details.glade.h:149 ../src/vmm-host.glade.h:59
+#: ../src/vmm-details.glade.h:168 ../src/vmm-host.glade.h:59
 msgid "_View Manager"
 msgstr "Geef _beheerder weer"
 
@@ -4247,40 +4580,37 @@ msgid "CPU usage:"
 msgstr "CPU gebruik:"
 
 #: ../src/vmm-host.glade.h:18
+#, fuzzy
+msgid "Connection Details"
+msgstr "Verbinding _details"
+
+#: ../src/vmm-host.glade.h:19
 msgid "Connection:"
 msgstr "Verbinding:"
 
-#: ../src/vmm-host.glade.h:19
+#: ../src/vmm-host.glade.h:20
 msgid "DHCP end:"
 msgstr "DHCP einde:"
 
-#: ../src/vmm-host.glade.h:20
+#: ../src/vmm-host.glade.h:21
 msgid "DHCP start:"
 msgstr "DHCP begin:"
 
-#: ../src/vmm-host.glade.h:21
+#: ../src/vmm-host.glade.h:22
 msgid "Delete Interface"
 msgstr "Interface verwijderen"
 
-#: ../src/vmm-host.glade.h:22
+#: ../src/vmm-host.glade.h:23
 msgid "Delete Network"
 msgstr "Netwerk verwijderen"
 
-#: ../src/vmm-host.glade.h:23
+#: ../src/vmm-host.glade.h:24
 msgid "Delete Pool"
 msgstr "Pool verwijderen"
 
-#: ../src/vmm-host.glade.h:25
+#: ../src/vmm-host.glade.h:26
 msgid "Forwarding:"
 msgstr "Doorsturen:"
-
-#: ../src/vmm-host.glade.h:26
-msgid "Host Details"
-msgstr "Host details"
-
-#: ../src/vmm-host.glade.h:27
-msgid "Hostname:"
-msgstr "Host naam:"
 
 #: ../src/vmm-host.glade.h:29
 msgid "In use by:"
@@ -4305,10 +4635,6 @@ msgstr "Geheugen gebruik:"
 #: ../src/vmm-host.glade.h:34
 msgid "Memory:"
 msgstr "Geheugen:"
-
-#: ../src/vmm-host.glade.h:37
-msgid "Name:"
-msgstr "Naam:"
 
 #: ../src/vmm-host.glade.h:38
 msgid "Network Interfaces"
@@ -4395,38 +4721,44 @@ msgid "_Add Connection..."
 msgstr "_Verbinding toevoegen..."
 
 #: ../src/vmm-manager.glade.h:9
-msgid "_CPU Usage"
-msgstr "_CPU gebruik"
-
-#: ../src/vmm-manager.glade.h:10
 msgid "_Connection Details"
 msgstr "Verbinding _details"
 
-#: ../src/vmm-manager.glade.h:11 ../src/vmm-preferences.glade.h:31
+#: ../src/vmm-manager.glade.h:10 ../src/vmm-preferences.glade.h:28
 msgid "_Disk I/O"
 msgstr "_Schijf I/O"
 
-#: ../src/vmm-manager.glade.h:12
+#: ../src/vmm-manager.glade.h:11
 msgid "_Edit"
 msgstr "_Bewerken"
 
-#: ../src/vmm-manager.glade.h:14
+#: ../src/vmm-manager.glade.h:13
 msgid "_Graph"
 msgstr "_Grafisch"
 
-#: ../src/vmm-manager.glade.h:16 ../src/vmm-preferences.glade.h:35
+#: ../src/vmm-manager.glade.h:14
+#, fuzzy
+msgid "_Guest CPU Usage"
+msgstr "_CPU gebruik"
+
+#: ../src/vmm-manager.glade.h:16
+#, fuzzy
+msgid "_Host CPU Usage"
+msgstr "_CPU gebruik"
+
+#: ../src/vmm-manager.glade.h:17 ../src/vmm-preferences.glade.h:32
 msgid "_Network I/O"
 msgstr "_Netwerk I/O"
 
-#: ../src/vmm-manager.glade.h:17
+#: ../src/vmm-manager.glade.h:18
 msgid "_Open"
 msgstr "_Openen"
 
-#: ../src/vmm-manager.glade.h:20
+#: ../src/vmm-manager.glade.h:21
 msgid "_Shutdown"
 msgstr "_Afsluiten"
 
-#: ../src/vmm-manager.glade.h:22
+#: ../src/vmm-manager.glade.h:23
 msgid "_Virtual Machine Details"
 msgstr "_Virtuele machine details"
 
@@ -4523,16 +4855,15 @@ msgstr ""
 #: ../src/vmm-open-connection.glade.h:12
 msgid ""
 "Xen\n"
-"QEMU/KVM"
+"QEMU/KVM\n"
+"LXC (Linux Containers)"
 msgstr ""
-"Xen\n"
-"QEMU/KVM"
 
-#: ../src/vmm-open-connection.glade.h:14
+#: ../src/vmm-open-connection.glade.h:15
 msgid "_Autoconnect:"
 msgstr "_Automatisch verbinden:"
 
-#: ../src/vmm-open-connection.glade.h:15
+#: ../src/vmm-open-connection.glade.h:16
 msgid "_Hypervisor:"
 msgstr "_Hypervisor:"
 
@@ -4561,30 +4892,26 @@ msgid "<b>Stats Options</b>"
 msgstr "<b>Statistiek opties</b>"
 
 #: ../src/vmm-preferences.glade.h:7
-msgid "Automatically _open consoles:"
-msgstr "Automatisch consoles _openen:"
-
-#: ../src/vmm-preferences.glade.h:8
 msgid "Change..."
 msgstr "Veranderen..."
 
-#: ../src/vmm-preferences.glade.h:9
+#: ../src/vmm-preferences.glade.h:8
 msgid "Device re_moval:"
 msgstr "Apparaat _verwijderen:"
 
-#: ../src/vmm-preferences.glade.h:10
+#: ../src/vmm-preferences.glade.h:9
 msgid "Enable _system tray icon"
 msgstr "_Systeem blad icoon aanzetten"
 
-#: ../src/vmm-preferences.glade.h:11
+#: ../src/vmm-preferences.glade.h:10
 msgid "Feedback"
 msgstr "Terugkoppeling"
 
-#: ../src/vmm-preferences.glade.h:12
+#: ../src/vmm-preferences.glade.h:11
 msgid "Force console keyboard shortcuts:"
 msgstr "Forceer console sneltoetsen:"
 
-#: ../src/vmm-preferences.glade.h:13
+#: ../src/vmm-preferences.glade.h:12
 msgid ""
 "Force console menu accelerators while the console is active. Enabling this "
 "may overwrite keyboard interaction with the guest."
@@ -4592,42 +4919,31 @@ msgstr ""
 "Forceer console menu versnellers als de console actief is. Dit aanzetten kan "
 "toetsenbord interactie met de gast overschrijven."
 
-#: ../src/vmm-preferences.glade.h:14
+#: ../src/vmm-preferences.glade.h:13
 msgid "General"
 msgstr "Algemeen"
 
-#: ../src/vmm-preferences.glade.h:15
+#: ../src/vmm-preferences.glade.h:14
 msgid "Grab keys:"
 msgstr "Grijp toetsen:"
 
-#: ../src/vmm-preferences.glade.h:16
+#: ../src/vmm-preferences.glade.h:15
 msgid "Graphical console _scaling:"
 msgstr "Grafische console _schaling:"
 
-#: ../src/vmm-preferences.glade.h:17
+#: ../src/vmm-preferences.glade.h:16
 msgid "Install Audio Device:"
 msgstr "Installeer geluid apparaat:"
 
-#: ../src/vmm-preferences.glade.h:18
-#, fuzzy
+#: ../src/vmm-preferences.glade.h:17
 msgid "Install Graphics:"
-msgstr "Grafisch"
+msgstr "Installeer grafisch:"
 
-#: ../src/vmm-preferences.glade.h:19
+#: ../src/vmm-preferences.glade.h:18
 msgid "Maintain h_istory of"
 msgstr "Geschiedenis _handhaven van"
 
-#: ../src/vmm-preferences.glade.h:20
-msgid ""
-"Never\n"
-"For all new domains\n"
-"For all domains"
-msgstr ""
-"Nooit\n"
-"Voor alle nieuwe domeinen\n"
-"Voor alle domeinen"
-
-#: ../src/vmm-preferences.glade.h:23
+#: ../src/vmm-preferences.glade.h:19
 msgid ""
 "Never\n"
 "Fullscreen only\n"
@@ -4637,51 +4953,55 @@ msgstr ""
 "Alleen volledig scherm\n"
 "Altijd"
 
-#: ../src/vmm-preferences.glade.h:26
+#: ../src/vmm-preferences.glade.h:22
 msgid "Not supported"
 msgstr "Niet ondersteund"
 
-#: ../src/vmm-preferences.glade.h:27
+#: ../src/vmm-preferences.glade.h:23
 msgid "Poweroff/_Reboot/Save:"
 msgstr "Afsluiten/Opnieuw opsta_rten/Opslaan"
 
-#: ../src/vmm-preferences.glade.h:28
+#: ../src/vmm-preferences.glade.h:24
 msgid "Preferences"
 msgstr "Voorkeuren"
 
-#: ../src/vmm-preferences.glade.h:29
+#: ../src/vmm-preferences.glade.h:25
 msgid "Stats"
 msgstr "Statistieken"
 
-#: ../src/vmm-preferences.glade.h:30
+#: ../src/vmm-preferences.glade.h:26
+msgid "Unapplied changes:"
+msgstr ""
+
+#: ../src/vmm-preferences.glade.h:27
 msgid "VM Details"
 msgstr "VM details"
 
-#: ../src/vmm-preferences.glade.h:32
+#: ../src/vmm-preferences.glade.h:29
 msgid "_Force Poweroff:"
 msgstr "_Forceer afsluiten"
 
-#: ../src/vmm-preferences.glade.h:33
+#: ../src/vmm-preferences.glade.h:30
 msgid "_Interface start/stop:"
 msgstr "_Interface starten/stoppen:"
 
-#: ../src/vmm-preferences.glade.h:34
+#: ../src/vmm-preferences.glade.h:31
 msgid "_Local virtual machine"
 msgstr "_Locale virtuele machine"
 
-#: ../src/vmm-preferences.glade.h:36
+#: ../src/vmm-preferences.glade.h:33
 msgid "_Pause:"
 msgstr "_Pauze:"
 
-#: ../src/vmm-preferences.glade.h:37
+#: ../src/vmm-preferences.glade.h:34
 msgid "_Remote virtual machine"
 msgstr "Vi_rtuele machine op afstand"
 
-#: ../src/vmm-preferences.glade.h:38
+#: ../src/vmm-preferences.glade.h:35
 msgid "_Update status every"
 msgstr "_Vernieuw status iedere"
 
-#: ../src/vmm-preferences.glade.h:39
+#: ../src/vmm-preferences.glade.h:36
 msgid "samples"
 msgstr "monsters"
 
@@ -4705,975 +5025,58 @@ msgstr "_Volume kiezen"
 msgid "_Browse Local"
 msgstr "_Blader lokaal"
 
-#~ msgid "Auth"
-#~ msgstr "Authenticatie"
-
-#~ msgid "Unavailable"
-#~ msgstr "Niet beschikbaar"
-
-#~ msgid "VNC"
-#~ msgstr "VNC"
-
-#~ msgid "boot"
-#~ msgstr "opstarten"
-
-#~ msgid "chr"
-#~ msgstr "chr"
-
-#~ msgid "cntrl"
-#~ msgstr "cntrl"
-
-#~ msgid "cpu"
-#~ msgstr "cpu"
-
-#~ msgid "dsk"
-#~ msgstr "dsk\t"
-
-#~ msgid "inp"
-#~ msgstr "inp"
-
-#~ msgid "mem"
-#~ msgstr "mem"
-
-#~ msgid "net"
-#~ msgstr "net"
-
-#~ msgid "over"
-#~ msgstr "over"
-
-#~ msgid "snd"
-#~ msgstr "snd"
-
-#~ msgid "stat"
-#~ msgstr "stat"
-
-#~ msgid "vid"
-#~ msgstr "vid"
-
-#~ msgid "When to grab keyboard input for the console"
-#~ msgstr "Wanneer toetsenbord input voor console pakken"
+#~ msgid "When to pop up a console for a guest"
+#~ msgstr "Wanneer een console voor een gast tonen"
 
 #~ msgid ""
-#~ "Whether to grab keyboard input for a guest console. 0 = never, 1 = only "
-#~ "when in full screen mode, 2 = when mouse is over console"
+#~ "Whether to pop up a console for a guest. 0 = never, 1 = only on creation "
+#~ "of a new guest, 2 = On creation of any guest"
 #~ msgstr ""
-#~ "Moet toetsenbord input voor gast console gepakt worden. 0 = nooit, 1 = "
-#~ "alleen in volledig scherm mode, 2 = als de muis boven de console is"
+#~ "Moet een console voor een gast getoond worden. 0 = nooit, 1 = alleen bij "
+#~ "het aanmaken van een nieuwe gast, 2 = bij het aanmaken van elke gast"
 
-#~ msgid "Unexpected Error"
-#~ msgstr "Onverwachte fout"
+#~ msgid "URL installs not available for remote connections."
+#~ msgstr "URL installaties niet beschikbaar voor verbindingen op afstand."
 
-#~ msgid "An unexpected error occurred"
-#~ msgstr "Er is een onverwachte fout opgetreden"
+#~ msgid "Error setting up graphics device:"
+#~ msgstr "Fout bij instellen van grafisch apparaat:"
 
-#~ msgid "Disk image:"
-#~ msgstr "Schijf image:"
+#~ msgid "Close tab"
+#~ msgstr "Tab sluiten"
 
-#~ msgid "Disk size:"
-#~ msgstr "Schijf grootte:"
+#~ msgid "This change will take effect after the next VM reboot."
+#~ msgstr "Deze wijziging wordt van kracht na de volgende opstart van VM."
 
-#~ msgid "Device type:"
+#~ msgid "Error restoring domain: %s"
+#~ msgstr "Fout bij het herstellen van domein: %s"
+
+#~ msgid "Error deleting volume: %s"
+#~ msgstr "Fout bij het verwijderen van volume: %s"
+
+#~ msgid "Don't ask me again for interface start/stop."
+#~ msgstr "Vraag me niet opnieuw naar het starten/stoppen van interface."
+
+#~ msgid "Device Type:"
 #~ msgstr "Apparaat type:"
 
-#~ msgid "Bus type:"
-#~ msgstr "Bus type:"
-
-#~ msgid "Cache mode:"
-#~ msgstr "Cache model:"
-
-#~ msgid "Network type:"
-#~ msgstr "Netwerk type:"
-
-#~ msgid "Target:"
-#~ msgstr "Doel:"
-
-#~ msgid "Absolute movement"
-#~ msgstr "Absolute verplaatsing"
-
-#~ msgid "Relative movement"
-#~ msgstr "Relatieve verplaatsing"
-
-#~ msgid "Pointer"
-#~ msgstr "Aanwijzer"
-
-#~ msgid "N/A"
-#~ msgstr "Niet beschikbaar"
-
-#~ msgid "Yes"
-#~ msgstr "Ja"
-
-#~ msgid "No"
-#~ msgstr "Nee"
-
-#~ msgid "Password:"
-#~ msgstr "Wachtwoord:"
-
-#~ msgid "Keymap:"
-#~ msgstr "Toetsenbord indeling:"
-
-#~ msgid "Protocol:"
-#~ msgstr "Protocol:"
-
-#~ msgid "Physical Host Device"
-#~ msgstr "Fysieke host apparaat"
-
-#~ msgid "Action:"
-#~ msgstr "Actie:"
-
-#~ msgid "Hardware Type Required"
-#~ msgstr "Hardware type vereist"
-
-#~ msgid "You must specify what type of hardware to add."
-#~ msgstr "Je moet opgeven welk type hardware toegevoegd wordt."
-
-#~ msgid "Pointer grabbed"
-#~ msgstr "Aanwijzer gepakt"
+#~ msgid "Host Details"
+#~ msgstr "Host details"
 
 #~ msgid ""
-#~ "The mouse pointer has been restricted to the virtual console window. To "
-#~ "release the pointer, press the key pair"
+#~ "Xen\n"
+#~ "QEMU/KVM"
 #~ msgstr ""
-#~ "De muisaanwijzer is beperkt tot het virtuele console venster. Om de "
-#~ "aanwijzer vrij te geven druk je op het toetsen paar"
+#~ "Xen\n"
+#~ "QEMU/KVM"
 
-#~ msgid "Do not show this notification in the future."
-#~ msgstr "Laat deze mededeling in de toekomst niet meer zien."
-
-#~ msgid "Graphical console not supported for guest"
-#~ msgstr "Grafische console niet ondersteund voor gast"
-
-#~ msgid "Guest installation failed to complete"
-#~ msgstr "Gast installatie mislukte"
-
-#~ msgid "No graphics console found."
-#~ msgstr "Geen grafische console gevonden."
-
-#~ msgid "Unknown device type '%s'"
-#~ msgstr "Onbekend apparaat type '%s'"
-
-#~ msgid "Couldn't build xpath for device %s:%s"
-#~ msgstr "Kon xpath niet bouwen voor apparaat %s:%s"
-
-#~ msgid "Could not find device %s"
-#~ msgstr "Kon apparaat %s niet vinden"
-
-#~ msgid "Did not find selected device."
-#~ msgstr "Kon geselecteerde apparaat niet vinden."
-
-#~ msgid "Error bringing up domain details: %s"
-#~ msgstr "Fout bij het naar boven brengen van domein details: %s"
-
-#~ msgid "Error restoring domain '%s': %s"
-#~ msgstr "Fout bij het herstellen van domein '%s': %s"
-
-#~ msgid ""
-#~ "<small><b>Tip:</b> Automatically allocating the port ensures that every "
-#~ "virtual machine uses a unique port. If two machines try to use the same "
-#~ "port, one of them will fail to start.</small>"
-#~ msgstr ""
-#~ "<small><b>Tip:</b> Automatisch toewijzing van de poort zorgt ervoor dat "
-#~ "elke virtuele machine een unieke poort gebruikt. Als beide machines "
-#~ "dezelfde poort proberen te gebruiken, zal een van hen niet opgestart "
-#~ "worden.</small>"
-
-#~ msgid ""
-#~ "<small><b>Tip:</b>Adding a graphics tablet (and configuring it as the "
-#~ "default pointer in the virtual machine) will ensure the virtual cursor "
-#~ "moves in sync with the local desktop cursor.</small>"
-#~ msgstr ""
-#~ "<small><b>Tip:</b> Het toevoegen van een grafisch tablet (en het "
-#~ "configureren als de standaard aanwijzer in de virtuele machine) zorgt "
-#~ "ervoor dat de virtuele cursor synchroon de lokale bureaublad cursor "
-#~ "beweegt.</small>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Adding "
-#~ "Virtual Hardware</span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Virtuele "
-#~ "hardware toevoegen</span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Finish "
-#~ "Adding Virtual Hardware</span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Virtuele "
-#~ "hardware toevoegen beëindigen</span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Graphics</"
-#~ "span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Grafisch</"
-#~ "span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Host Device</"
-#~ "span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Host "
-#~ "apparaat</span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Input</span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Input</span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Network</"
-#~ "span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Netwerk</"
-#~ "span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Sound</span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Geluid</span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Storage</"
-#~ "span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Opslag</span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Video "
-#~ "Device</span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Video "
-#~ "apparaat</span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Watchdog "
-#~ "Device</span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Bewaker "
-#~ "apparaat</span>"
-
-#~ msgid "Ha_rdware type:"
-#~ msgstr "Ha_rdware type:"
-
-#~ msgid "Hardware Type Select"
-#~ msgstr "Hardware type selecteren"
-
-#~ msgid ""
-#~ "This assistant will guide you through adding a new piece of virtual "
-#~ "hardware. First select what type of hardware you wish to add:"
-#~ msgstr ""
-#~ "Deze assistent begeleidt je bij het toevoegen van een nieuw stuk virtuele "
-#~ "hardware. Selecteer eerst het type hardware dat je wilt toevoegen:"
-
-#~ msgid "_Device:"
-#~ msgstr "_Apparaat:"
-
-#~ msgid "<b>Virtual Display</b>"
-#~ msgstr "<b>Virtueel display</b>"
-
-#~ msgid "Boot"
-#~ msgstr "Opstarten"
-
-#~ msgid "Change a_llocation:"
-#~ msgstr "_Toewijzing veranderen:"
-
-#~ msgid "Char"
-#~ msgstr "Char"
-
-#~ msgid "Disk"
-#~ msgstr "Schijf"
-
-#~ msgid "Over"
-#~ msgstr "Over"
-
-#~ msgid "Proc"
-#~ msgstr "Processor"
-
-#~ msgid "Grab _keyboard accelerators:"
-#~ msgstr "Grijp _toetsenbord sneltoetsen:"
+#~ msgid "Automatically _open consoles:"
+#~ msgstr "Automatisch consoles _openen:"
 
 #~ msgid ""
 #~ "Never\n"
-#~ "When fullscreen\n"
-#~ "On mouse over"
+#~ "For all new domains\n"
+#~ "For all domains"
 #~ msgstr ""
 #~ "Nooit\n"
-#~ "Bij volledig scherm\n"
-#~ "Bij muis boven"
-
-#~ msgid "ip desc"
-#~ msgstr "ip beschrijving"
-
-#~ msgid "No VMs available"
-#~ msgstr "Geen VM's beschikbaar"
-
-#~ msgid "Finish Install"
-#~ msgstr "Installatie voltooien"
-
-#~ msgid "Host CPUs:"
-#~ msgstr "Host CPU's:"
-
-#~ msgid "_Host Details"
-#~ msgstr "_Host details"
-
-#~ msgid "Connec_tion:"
-#~ msgstr "_Verbinding:"
-
-#~ msgid "Hostname Field"
-#~ msgstr "Host naam veld"
-
-#~ msgid ""
-#~ "Local\n"
-#~ "Remote Password or Kerberos\n"
-#~ "Remote SSL/TLS with x509 certificate\n"
-#~ "Remote tunnel over SSH"
-#~ msgstr ""
-#~ "Lokaal\n"
-#~ "Op afstand - wachtwoord of Kerberos\n"
-#~ "Op afstand - SSL/TLS met x509 certificaat\n"
-#~ "Op afstand - tunnel via SSH"
-
-#~ msgid "Storage Path Required"
-#~ msgstr "Opslagpad vereist"
-
-#~ msgid "You must specify a partition or a file for disk storage."
-#~ msgstr "U moet een partitie of een bestand opgeven voor schijfopslag."
-
-#~ msgid "Target Device Required"
-#~ msgstr "Doelapparaat vereist"
-
-#~ msgid "Invalid Storage Parameters"
-#~ msgstr "Ongeldige opslagparameters"
-
-#, fuzzy
-#~ msgid "Startup Error"
-#~ msgstr "Fout in kickstart-URL"
-
-#~ msgid "<b>Source:</b>"
-#~ msgstr "<b>Bron:</b>"
-
-#~ msgid "<b>Target:</b>"
-#~ msgstr "<b>Doel:</b>"
-
-#~ msgid "<b>Virtual display</b>"
-#~ msgstr "<b>Virtueel beeldscherm</b>"
-
-#~ msgid "<b>Virtual pointer</b>"
-#~ msgstr "<b>Virtuele aanwijzer</b>"
-
-#~ msgid "<small><b>Example:</b> /dev/hdc2</small>"
-#~ msgstr "<small><b>Voorbeeld:</b> /dev/hdc2</small>"
-
-#~ msgid "Allocate entire virtual disk now"
-#~ msgstr "Gehele virtuele schijf nu toewijzen"
-
-#~ msgid "Browse..."
-#~ msgstr "Bladeren..."
-
-#~ msgid "_Size:"
-#~ msgstr "_Grootte:"
-
-#~ msgid "Device Model:"
-#~ msgstr "Apparaatmodel:"
-
-#~ msgid "Unknown status code"
-#~ msgstr "Onbekende statuscode"
-
-#, fuzzy
-#~ msgid "insert type"
-#~ msgstr "Type:"
-
-#~ msgid "ISO _Location:"
-#~ msgstr "ISO l_ocatie:"
-
-#~ msgid "Locate Storage Partition"
-#~ msgstr "Opslagpartitie localiseren"
-
-#~ msgid "Virtual Network Required"
-#~ msgstr "Virtueel netwerk vereist"
-
-#~ msgid "Invalid Network Parameter"
-#~ msgstr "Ongeldige netwerkparameter"
-
-#~ msgid "paused"
-#~ msgstr "gepauzeerd"
-
-#, fuzzy
-#~ msgid "Error Setting Security data: %s"
-#~ msgstr "Fout bij het maken van virtueel netwerk: %s"
-
-#~ msgid "Are you sure you want to migrate %s from %s to %s?"
-#~ msgstr "Weet u zeker dat u %s wilt migreren van %s naar %s?"
-
-#~ msgid "_Virtual network"
-#~ msgstr "_Virtueel netwerk"
-
-#, fuzzy
-#~ msgid "C_lone Virtual Machine"
-#~ msgstr "Virtuele machine verwijderen"
-
-#~ msgid ""
-#~ "<b>Tip:</b> For best performance, the number of virtual CPUs should be "
-#~ "less than (or equal to) the number of physical CPUs on the host system."
-#~ msgstr ""
-#~ "<b>Tip:</b> Voor optimale prestaties moet het aantal virtuele processors "
-#~ "kleiner zijn dan (of gelijk zijn aan) het aantal werkelijke processors op "
-#~ "het host-systeem."
-
-#~ msgid "Permissions:"
-#~ msgstr "Toegangsrechten:"
-
-#~ msgid "Screenshot"
-#~ msgstr "Schermafdruk"
-
-#~ msgid "Total memory on host machine:"
-#~ msgstr "Totale hoeveelheid geheugen op host-machine:"
-
-#~ msgid "Apply"
-#~ msgstr "Toepassen"
-
-#~ msgid "gtk-cancel"
-#~ msgstr "gtk-cancel"
-
-#~ msgid "gtk-help"
-#~ msgstr "gtk-help"
-
-#~ msgid "gtk-ok"
-#~ msgstr "gtk-ok"
-
-#~ msgid "gtk-delete"
-#~ msgstr "gtk-delete"
-
-#~ msgid "_Contents"
-#~ msgstr "_Inhoud"
-
-#~ msgid "Delete Virtual Machine"
-#~ msgstr "Virtuele machine verwijderen"
-
-#, fuzzy
-#~ msgid "Performance"
-#~ msgstr "<b>Prestaties</b>"
-
-#, fuzzy
-#~ msgid "Processor"
-#~ msgstr "Bezig met verwerken..."
-
-#~ msgid "ID"
-#~ msgstr "ID"
-
-#~ msgid "Memory usage"
-#~ msgstr "Geheugengebruik"
-
-#~ msgid "<b>Network</b>"
-#~ msgstr "<b>Netwerk</b>"
-
-#~ msgid "<b>Sound</b>"
-#~ msgstr "<b>Geluid</b>"
-
-#~ msgid "<b>Storage</b>"
-#~ msgstr "<b>Opslag</b>"
-
-#~ msgid "Absolute"
-#~ msgstr "Absoluut"
-
-#~ msgid "EvTouch Tablet"
-#~ msgstr "EvTouch Tablet"
-
-#~ msgid "_Path to install media:"
-#~ msgstr "_Pad naar installatiemedia:"
-
-#~ msgid "Total CPUs on host machine:"
-#~ msgstr "Totale hoeveelheid processors op host-machine:"
-
-#~ msgid ""
-#~ "All virtual machines\n"
-#~ "Active virtual machines\n"
-#~ "Inactive virtual machines"
-#~ msgstr ""
-#~ "Alle virtuele machines\n"
-#~ "Actieve virtuele machines\n"
-#~ "Inactieve virtuele machines"
-
-#~ msgid "Domain ID"
-#~ msgstr "Domein-ID"
-
-#~ msgid "Memory Usage"
-#~ msgstr "Geheugengebruik"
-
-#~ msgid "_View:"
-#~ msgstr "_Weergave:"
-
-#~ msgid "Unable to complete install: "
-#~ msgstr "Niet in staat om de installatie te voltooien: "
-
-#~ msgid "Paravirtualized"
-#~ msgstr "Geparavirtualiseerd"
-
-#~ msgid "Fully virtualized"
-#~ msgstr "Volledig gevirtualiseerd"
-
-#~ msgid "UUID Error"
-#~ msgstr "UUID-fout"
-
-#~ msgid "Invalid FV OS Type"
-#~ msgstr "Ongeldige soort FV-besturingssysteem"
-
-#~ msgid "Invalid FV OS Variant"
-#~ msgstr "Ongeldige variant FV-besturingssysteem"
-
-#~ msgid "ISO Path Not Found"
-#~ msgstr "ISO pad niet gevonden"
-
-#~ msgid "CD-ROM Path Error"
-#~ msgstr "Fout in CD-ROM pad"
-
-#~ msgid "Invalid Install URL"
-#~ msgstr "Ongeldige installatie-URL"
-
-#~ msgid "Storage Address Required"
-#~ msgstr "Opslagadres vereist"
-
-#~ msgid "Invalid Storage Address"
-#~ msgstr "Ongeldig opslagadres"
-
-#~ msgid "VCPU Count Error"
-#~ msgstr "Fout in aantal VCPU's"
-
-#~ msgid "Memory Amount Error"
-#~ msgstr "Fout in hoeveelheid geheugen"
-
-#~ msgid "Max Memory Amount Error"
-#~ msgstr "Fout in maximale hoeveelheid geheugen"
-
-#~ msgid "<b>CPUs:</b>"
-#~ msgstr "<b>Processors:</b>"
-
-#~ msgid "<b>Example:</b> system1"
-#~ msgstr "<b>Voorbeeld:</b> systeem1"
-
-#~ msgid "<b>Install media</b>"
-#~ msgstr "<b>Installatiemedia</b>"
-
-#~ msgid "<b>Memory:</b>"
-#~ msgstr "<b>Geheugen:</b>"
-
-#~ msgid "<b>Memory</b> and <b>CPU</b> allocation"
-#~ msgstr "<b>Geheugen</b> en <b>processor</b> toewijzing"
-
-#~ msgid "<small><b>Example:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
-#~ msgstr ""
-#~ "<small><b>Voorbeeld:</b> ftp://hostnaam.voorbeeld.com/ks/ks.cfg</small>"
-
-#~ msgid ""
-#~ "<small><b>Example:</b> http://servername.example.com/distro/i386/tree</"
-#~ "small>"
-#~ msgstr ""
-#~ "<small><b>Voorbeeld:</b> http://servernaam.voorbeeld.com/distro/i386/"
-#~ "tree</small>"
-
-#~ msgid ""
-#~ "<small><b>Example:</b> updates=http://hostname.example.com/updates.img</"
-#~ "small>"
-#~ msgstr ""
-#~ "<small><b>Voorbeeld:</b> updates=http://hostnaam.voorbeeld.com/updates."
-#~ "img</small>"
-
-#~ msgid ""
-#~ "<small><b>Tip:</b> For best performance, the number of virtual CPUs "
-#~ "should be less than (or equal to) the number of physical CPUs on the host "
-#~ "system.</small>"
-#~ msgstr ""
-#~ "<small><b>Tip:</b> Voor optimale prestaties moet het aantal virtuele "
-#~ "processors kleiner zijn dan (of gelijk zijn aan) het aantal werkelijke "
-#~ "processors op het host-systeem</small>"
-
-#~ msgid "A <b>name</b> for your new virtual machine"
-#~ msgstr "Een <b>naam</b> voor uw nieuwe virtuele machine"
-
-#~ msgid "CPU architecture:"
-#~ msgstr "Processorarchitectuur:"
-
-#~ msgid "F_ully virtualized:"
-#~ msgstr "V_olledig gevirtualiseerd:"
-
-#~ msgid "File Size Select"
-#~ msgstr "Bestandsgrootte selecteren"
-
-#~ msgid "ISO Location Field"
-#~ msgstr "ISO locatieveld"
-
-#~ msgid "ISO _location:"
-#~ msgstr "ISO l_ocatie:"
-
-#~ msgid "Installation media _URL:"
-#~ msgstr "Installatiemedia _URL:"
-
-#~ msgid "Kickstart Field"
-#~ msgstr "Kickstart-veld"
-
-#~ msgid "Kickstart source:"
-#~ msgstr "Kickstart-bron:"
-
-#~ msgid "Max Mem Select"
-#~ msgstr "Maximale hoeveelheid geheugen selecteren"
-
-#~ msgid "Maximum memory:"
-#~ msgstr "Maximale hoeveelheid geheugen:"
-
-#~ msgid "Partition Field"
-#~ msgstr "Partitieveld"
-
-#~ msgid "Please choose a name for your virtual machine:"
-#~ msgstr "Kies een naam voor uw virtuele machine:"
-
-#~ msgid "Startup Mem Select"
-#~ msgstr "Initiële hoeveelheid geheugen selecteren"
-
-#~ msgid "Virtual CPUs:"
-#~ msgstr "Virtuele processors:"
-
-#~ msgid "_ISO image location:"
-#~ msgstr "_ISO-bestand locatie:"
-
-#~ msgid "_Paravirtualized:"
-#~ msgstr "_Geparavirtualiseerd:"
-
-#~ msgid "_Virtual CPUs:"
-#~ msgstr "_Virtuele processors:"
-
-#~ msgid "20 bits/sec"
-#~ msgstr "20 bits/sec"
-
-#~ msgid "Ctrl+Alt+Backspace"
-#~ msgstr "Ctrl+Alt+Backspace"
-
-#~ msgid "Ctrl+Alt+Delete"
-#~ msgstr "Ctrl+Alt+Delete"
-
-#~ msgid "Ctrl+Alt+F1"
-#~ msgstr "Ctrl+Alt+F1"
-
-#~ msgid "Ctrl+Alt+F10"
-#~ msgstr "Ctrl+Alt+F10"
-
-#~ msgid "Ctrl+Alt+F11"
-#~ msgstr "Ctrl+Alt+F11"
-
-#~ msgid "Ctrl+Alt+F12"
-#~ msgstr "Ctrl+Alt+F12"
-
-#~ msgid "Ctrl+Alt+F2"
-#~ msgstr "Ctrl+Alt+F2"
-
-#~ msgid "Ctrl+Alt+F3"
-#~ msgstr "Ctrl+Alt+F3"
-
-#~ msgid "Ctrl+Alt+F4"
-#~ msgstr "Ctrl+Alt+F4"
-
-#~ msgid "Ctrl+Alt+F5"
-#~ msgstr "Ctrl+Alt+F5"
-
-#~ msgid "Ctrl+Alt+F6"
-#~ msgstr "Ctrl+Alt+F6"
-
-#~ msgid "Ctrl+Alt+F7"
-#~ msgstr "Ctrl+Alt+F7"
-
-#~ msgid "Ctrl+Alt+F8"
-#~ msgstr "Ctrl+Alt+F8"
-
-#~ msgid "Ctrl+Alt+F9"
-#~ msgstr "Ctrl+Alt+F9"
-
-#~ msgid "Network usage:"
-#~ msgstr "Netwerkgebruik:"
-
-#~ msgid "PrintScreen"
-#~ msgstr "PrintScreen"
-
-#~ msgid "Shutdown"
-#~ msgstr "Afsluiten"
-
-#~ msgid "UUID Field"
-#~ msgstr "UUID-veld"
-
-#~ msgid "VCPU Select"
-#~ msgstr "VCPU selecteren"
-
-#~ msgid "File _Location:"
-#~ msgstr "Bestands_locatie:"
-
-#~ msgid "File _Size:"
-#~ msgstr "Bestands_grootte:"
-
-#~ msgid "P_artition:"
-#~ msgstr "P_artitie:"
-
-#~ msgid "Simple F_ile:"
-#~ msgstr "Eenvoudig b_estand:"
-
-#~ msgid "Xen"
-#~ msgstr "Xen"
-
-#~ msgid "Disk usage"
-#~ msgstr "Schijfgebruik"
-
-#~ msgid "Virtual CPUs"
-#~ msgstr "Virtuele processors"
-
-#~ msgid "32"
-#~ msgstr "32"
-
-#~ msgid "A <b>name</b> for your new virtual system"
-#~ msgstr "Een <b>naam</b> voor uw nieuw virtueel systeem"
-
-#~ msgid "CPU/memory"
-#~ msgstr "Processor/geheugen"
-
-#~ msgid "Create a new virtual system"
-#~ msgstr "Nieuw virtueel systeem aanmaken"
-
-#~ msgid "Please choose a name for your virtual system:"
-#~ msgstr "Kies een naam voor uw virtueel systeem:"
-
-#~ msgid "System _Name:"
-#~ msgstr "Systeem_naam:"
-
-#~ msgid "VMS"
-#~ msgstr "VMS"
-
-#~ msgid "_VCPUs:"
-#~ msgstr "_VCPU's:"
-
-#~ msgid "to complete."
-#~ msgstr "duren."
-
-#~ msgid "Allocation of disk storage and retrieval of "
-#~ msgstr "Het toewijzen van schijfopslag en het ophalen "
-
-#~ msgid "the installation images may take a few minutes "
-#~ msgstr "van de installatiebestanden kan enige tijd "
-
-#~ msgid "Verify that:\n"
-#~ msgstr "Controleer dat:\n"
-
-#~ msgid " - A Xen host kernel was booted\n"
-#~ msgstr " - Er was een Xen host-kernel opgestart\n"
-
-#~ msgid "http://virt-manager.et.redhat.com/"
-#~ msgstr "http://virt-manager.et.redhat.com/"
-
-#~ msgid "Password Field"
-#~ msgstr "Wachtwoordveld"
-
-#~ msgid "Virtual Machine Console"
-#~ msgstr "Virtuele machine console"
-
-#~ msgid "\t"
-#~ msgstr "\t"
-
-#~ msgid "/xen/demo.img"
-#~ msgstr "/xen/demo.img"
-
-#~ msgid "192.168.1.1"
-#~ msgstr "192.168.1.1"
-
-#~ msgid "192.168.1.255"
-#~ msgstr "192.168.1.255"
-
-#~ msgid "192.168.10.0/24"
-#~ msgstr "192.168.10.0/24"
-
-#~ msgid "192.168.10.254"
-#~ msgstr "192.168.10.254"
-
-#~ msgid "255.255.255.0"
-#~ msgstr "255.255.255.0"
-
-#~ msgid "256"
-#~ msgstr "256"
-
-#~ msgid "1.59 GB of 2.2 GB"
-#~ msgstr "1.59 GB van 2.2 GB"
-
-#~ msgid "2000 MB"
-#~ msgstr "2000 MB"
-
-#~ msgid "4"
-#~ msgstr "4"
-
-#~ msgid "60%"
-#~ msgstr "60%"
-
-#~ msgid "example.com"
-#~ msgstr "voorbeeld.com"
-
-#~ msgid "x86_64"
-#~ msgstr "x86_64"
-
-#~ msgid " free"
-#~ msgstr " vrij"
-
-#~ msgid " of "
-#~ msgstr " van "
-
-#~ msgid "/tmp"
-#~ msgstr "/tmp"
-
-#~ msgid "10 TB"
-#~ msgstr "10 TB"
-
-#~ msgid ""
-#~ "MB\n"
-#~ "GB\n"
-#~ "TB"
-#~ msgstr ""
-#~ "MB\n"
-#~ "GB\n"
-#~ "TB"
-
-#~ msgid "-"
-#~ msgstr "-"
-
-#~ msgid "127.0.0.1"
-#~ msgstr "127.0.0.1"
-
-#~ msgid " "
-#~ msgstr " "
-
-#~ msgid "2 GB"
-#~ msgstr "2 GB"
-
-#~ msgid "256\t"
-#~ msgstr "256\t"
-
-#~ msgid "400 MB"
-#~ msgstr "400 MB"
-
-#~ msgid "5\t"
-#~ msgstr "5\t"
-
-#~ msgid "512 MB"
-#~ msgstr "512 MB"
-
-#~ msgid "Architecture Select"
-#~ msgstr "Architectuur selecteren"
-
-#~ msgid "Enable kernel / hardware acceleration"
-#~ msgstr "Kernel / hardware-acceleratie aanzetten"
-
-#~ msgid "http://"
-#~ msgstr "http://"
-
-#~ msgid ""
-#~ "i686\n"
-#~ "x86_64\n"
-#~ "ppc\n"
-#~ "sparc\n"
-#~ "mips\n"
-#~ "mipsel"
-#~ msgstr ""
-#~ "i686\n"
-#~ "x86_64\n"
-#~ "ppc\n"
-#~ "sparc\n"
-#~ "mips\n"
-#~ "mipsel"
-
-#~ msgid "ip=192.168.1.1"
-#~ msgstr "ip=192.168.1.1"
-
-#~ msgid "para"
-#~ msgstr "para"
-
-#~ msgid "18%"
-#~ msgstr "18%"
-
-#~ msgid "200 MB"
-#~ msgstr "200 MB"
-
-#~ msgid "30 MB of 128 MB"
-#~ msgstr "30 MB van 128 MB"
-
-#~ msgid "8"
-#~ msgstr "8"
-
-#~ msgid "80 MB of 1 GB"
-#~ msgstr "80 MB van 1 GB"
-
-#~ msgid "De_tails"
-#~ msgstr "De_tails"
-
-#~ msgid "Too many virtual disks"
-#~ msgstr "Te veel virtuele schijven"
-
-#~ msgid "Storage Address Is Directory"
-#~ msgstr "Opslagadres is een map"
-
-#~ msgid "New machine..."
-#~ msgstr "Nieuwe machine..."
-
-#~ msgid "Invalid PV media address"
-#~ msgstr "Ongeldig PV media-adres"
-
-#~ msgid "Invalid system name"
-#~ msgstr "Ongeldige systeemnaam"
-
-#~ msgid "Invalid memory setting"
-#~ msgstr "Ongeldige geheugeninstelling"
-
-#~ msgid "Hardware Support Required"
-#~ msgstr "Hardware-ondersteuning vereist"
-
-#~ msgid ""
-#~ "Your hardware does not appear to support full virtualization. Only "
-#~ "paravirtualized guests will be available on this hardware."
-#~ msgstr ""
-#~ "Het ziet er naar uit dat uw hardware geen volledige virtualisatie "
-#~ "ondersteunt. Op deze hardware zullen alleen geparavirtualiseerde guests "
-#~ "beschikbaar zijn."
-
-#~ msgid "You must specify an ISO location for the guest installation"
-#~ msgstr "U moet een ISO locatie opgeven voor de guest-installatie"
-
-#~ msgid ""
-#~ "You must specify a valid path to the ISO image for guest installation"
-#~ msgstr ""
-#~ "U moet een geldig pad naar het ISO-bestand opgeven voor de guest-"
-#~ "installatie"
-
-#~ msgid "You must select the CDROM install media for guest installation"
-#~ msgstr ""
-#~ "U moet de CDROM-installatiemedia selecteren voor de guest-installatie"
-
-#~ msgid "URL Required"
-#~ msgstr "URL vereist"
-
-#~ msgid "You must specify a URL for the install image for the guest install"
-#~ msgstr ""
-#~ "U moet een URL voor het installatiebestand opgeven voor de guest-"
-#~ "installatie"
-
-#~ msgid "00:16:3e:"
-#~ msgstr "00:16:3e:"
-
-#~ msgid ":"
-#~ msgstr ":"
-
-#~ msgid "Add Virtual NIC"
-#~ msgstr "Virtuele NIC toevoegen"
-
-#~ msgid "Add virtual NIC with:"
-#~ msgstr "Virtuele NIC toevoegen met:"
-
-#~ msgid "mac-addr-random"
-#~ msgstr "mac-addr-random"
-
-#~ msgid "<b>Disk size:</b>"
-#~ msgstr "<b>Schijfgrootte:</b>"
-
-#~ msgid "Alert"
-#~ msgstr "Waarschuwing"
-
-#~ msgid "Virtual Machine Manager Preferences"
-#~ msgstr "Virtuele machine manager voorkeuren"
+#~ "Voor alle nieuwe domeinen\n"
+#~ "Voor alle domeinen"
