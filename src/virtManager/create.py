@@ -1441,16 +1441,16 @@ class vmmCreate(vmmGObjectUI):
 
         return guest
 
-    def validate(self, pagenum, revalidate=False):
+    def validate(self, pagenum, oldguest=None):
         try:
             if pagenum == PAGE_NAME:
                 return self.validate_name_page()
             elif pagenum == PAGE_INSTALL:
-                return self.validate_install_page(revalidate=revalidate)
+                return self.validate_install_page(oldguest=oldguest)
             elif pagenum == PAGE_MEM:
                 return self.validate_mem_page()
             elif pagenum == PAGE_STORAGE:
-                return self.validate_storage_page(revalidate=revalidate)
+                return self.validate_storage_page(oldguest=oldguest)
             elif pagenum == PAGE_FINISH:
                 return self.validate_final_page()
 
@@ -1470,7 +1470,7 @@ class vmmCreate(vmmGObjectUI):
 
         return True
 
-    def validate_install_page(self, revalidate=True):
+    def validate_install_page(self, oldguest=None):
         instmethod = self.get_config_install_page()
         installer = None
         location = None
@@ -1578,10 +1578,10 @@ class vmmCreate(vmmGObjectUI):
         # Kind of wonky, run storage validation now, which will assign
         # the import path. Import installer skips the storage page.
         if is_import:
-            if not self.validate_storage_page(revalidate):
+            if not self.validate_storage_page(oldguest=oldguest):
                 return False
 
-        if not revalidate:
+        if not oldguest:
             if self.guest.installer.scratchdir_required():
                 path = self.guest.installer.scratchdir
             elif instmethod == INSTALL_PAGE_ISO:
@@ -1618,13 +1618,17 @@ class vmmCreate(vmmGObjectUI):
 
         return True
 
-    def validate_storage_page(self, revalidate=True):
+    def validate_storage_page(self, oldguest=None):
         use_storage = self.widget("enable-storage").get_active()
         instcd = self.get_config_install_page() == INSTALL_PAGE_ISO
 
         # CD/ISO install and no disks implies LiveCD
         if instcd:
             self.guest.installer.livecd = not use_storage
+
+        usepath = None
+        if oldguest and self.disk:
+            usepath = self.disk.path
 
         if self.disk and self.disk in self.guest.get_devices("disk"):
             self.guest.remove_device(self.disk)
@@ -1644,7 +1648,9 @@ class vmmCreate(vmmGObjectUI):
             # This can error out
             diskpath, disksize, sparse = self.get_storage_info()
 
-            if self.is_default_storage() and not revalidate:
+            if usepath:
+                diskpath = usepath
+            elif self.is_default_storage() and not oldguest:
                 # See if the ideal disk path (/default/pool/vmname.img)
                 # exists, and if unused, prompt the use for using it
                 ideal = util.get_ideal_path(self.conn,
@@ -1682,21 +1688,21 @@ class vmmCreate(vmmGObjectUI):
             return self.verr(_("Storage parameter error."), str(e))
 
         isfatal, errmsg = disk.is_size_conflict()
-        if not revalidate and not isfatal and errmsg:
+        if not oldguest and not isfatal and errmsg:
             # Fatal errors are reported when setting 'size'
             res = self.err.ok_cancel(_("Not Enough Free Space"), errmsg)
             if not res:
                 return False
 
         # Disk collision
-        if not revalidate and disk.is_conflict_disk(self.guest.conn):
+        if not oldguest and disk.is_conflict_disk(self.guest.conn):
             res = self.err.yes_no(_('Disk "%s" is already in use by another '
                                     'guest!' % disk.path),
                                   _("Do you really want to use the disk?"))
             if not res:
                 return False
 
-        if not revalidate:
+        if not oldguest:
             uihelpers.check_path_search_for_qemu(self.topwin,
                                                  self.conn, disk.path)
 
@@ -1766,8 +1772,9 @@ class vmmCreate(vmmGObjectUI):
 
     def rebuild_guest(self):
         pagenum = 0
+        guest = self.guest
         while True:
-            self.validate(pagenum, revalidate=False)
+            self.validate(pagenum, oldguest=guest)
             if pagenum >= PAGE_FINISH:
                 break
             pagenum = self._get_next_pagenum(pagenum)
