@@ -1448,7 +1448,7 @@ class vmmDomain(vmmLibvirtObject):
     def _sample_network_traffic(self):
         rx = 0
         tx = 0
-        if (not self._stats_net_supported or not
+        if (not self._stats_net_supported or
             not self._enable_net_poll or
             not self.is_active()):
             return rx, tx
