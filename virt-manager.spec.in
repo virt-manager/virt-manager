@@ -10,7 +10,6 @@
 %define kvm_packages               ""
 %define libvirt_packages           ""
 %define disable_unsupported_rhel   0
-%define default_graphics           ""
 
 %define with_guestfs               0
 %define with_spice                 0
@@ -90,12 +89,17 @@ Requires: virt-manager-common = %{verrel}
 BuildRequires: gettext
 BuildRequires: scrollkeeper
 BuildRequires: intltool
+BuildRequires: GConf2
 
 Requires(pre): GConf2
 Requires(post): GConf2
 Requires(preun): GConf2
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
+
+%if %{with_spice}
+%define default_graphics "spice"
+%endif
 
 %description
 Virtual Machine Manager provides a graphical tool for administering virtual
