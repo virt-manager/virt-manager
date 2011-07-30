@@ -1334,7 +1334,10 @@ class vmmDomain(vmmLibvirtObject):
         elif self.status() == libvirt.VIR_DOMAIN_SHUTDOWN:
             return _("Shutting Down")
         elif self.status() == libvirt.VIR_DOMAIN_SHUTOFF:
-            return _("Shutoff")
+            if self.hasSavedImage():
+                return _("Saved")
+            else:
+                return _("Shutoff")
         elif self.status() == libvirt.VIR_DOMAIN_CRASHED:
             return _("Crashed")
 
