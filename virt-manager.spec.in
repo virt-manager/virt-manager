@@ -15,6 +15,35 @@
 %define with_spice                 0
 %define with_tui                   0
 
+
+# Compat for use of spec in multiple distros
+
+%if 0%{?gconf_schema_prepare} == 0
+%define gconf_schema_prepare() \
+if [ "$1" -gt 1 ]; then \
+    export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source` \
+    gconftool-2 --makefile-uninstall-rule %{_sysconfdir}/gconf/schemas/%1.schemas > /dev/null || : \
+fi \
+%{nil}
+%endif
+
+%if 0%{?gconf_schema_upgrade} == 0
+%define gconf_schema_upgrade() \
+export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source` \
+gconftool-2 --makefile-install-rule %{_sysconfdir}/gconf/schemas/%1.schemas > /dev/null || : \
+%{nil}
+%endif
+
+%if 0%{?gconf_schema_remove} == 0
+%define gconf_schema_remove() \
+if [ "$1" -eq 0 ]; then \
+    export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source` \
+    gconftool-2 --makefile-uninstall-rule %{_sysconfdir}/gconf/schemas/%1.schemas > /dev/null || : \
+fi \
+%{nil}
+%endif
+
+
 # End local config
 
 # This macro is used for the continuous automated builds. It just
@@ -196,7 +225,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 update-desktop-database -q %{_datadir}/applications
-%gconf_schema_upgrade virt-manager
+%gconf_schema_upgrade %{name}
 
 %postun
 update-desktop-database -q %{_datadir}/applications
