@@ -419,12 +419,12 @@ class vmmCreate(vmmGObjectUI):
             return self.startup_error(_("Connection is read only."))
 
         if self.conn.no_install_options():
-            error = _("No hypervisor options were found for this\n"
+            error = _("No hypervisor options were found for this "
                       "connection.")
 
             if self.conn.is_qemu():
                 error += "\n\n"
-                error += _("This usually means that QEMU or KVM is not\n"
+                error += _("This usually means that QEMU or KVM is not "
                            "installed on your machine, or the KVM kernel "
                            "modules are not loaded.")
             return self.startup_error(error)
@@ -439,21 +439,21 @@ class vmmCreate(vmmGObjectUI):
         if self.conn.is_xen():
             if self.conn.hw_virt_supported():
                 if self.conn.is_bios_virt_disabled():
-                    error = _("Host supports full virtualization, but\n"
-                              "no related install options are available.\n"
-                              "This may mean support is disabled in your\n"
+                    error = _("Host supports full virtualization, but "
+                              "no related install options are available. "
+                              "This may mean support is disabled in your "
                               "system BIOS.")
                     self.startup_warning(error)
 
             else:
-                error = _("Host does not appear to support hardware\n"
+                error = _("Host does not appear to support hardware "
                           "virtualization. Install options may be limited.")
                 self.startup_warning(error)
 
         elif self.conn.is_qemu():
             if not self.conn.is_kvm_supported():
-                error = _("KVM is not available. This may mean the KVM\n"
-                 "package is not installed, or the KVM kernel modules \n"
+                error = _("KVM is not available. This may mean the KVM "
+                 "package is not installed, or the KVM kernel modules "
                  "are not loaded. Your virtual machines may perform poorly.")
                 self.startup_warning(error)
 
