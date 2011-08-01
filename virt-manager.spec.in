@@ -192,7 +192,7 @@ Common files used by the different Virtual Machine Manager interfaces.
 %define _disable_unsupported_rhel --disable-unsupported-rhel-options
 %endif
 
-%if %{default_graphics}
+%if 0%{?default_graphics}
 %define _default_graphics --with-default-graphics=%{default_graphics}
 %endif
 
