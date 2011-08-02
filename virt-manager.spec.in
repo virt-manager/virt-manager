@@ -224,15 +224,22 @@ rm -rf $RPM_BUILD_ROOT
 %gconf_schema_prepare %{name}
 
 %post
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 update-desktop-database -q %{_datadir}/applications
 %gconf_schema_upgrade %{name}
 
 %postun
+if [ $1 -eq 0 ] ; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+fi
 update-desktop-database -q %{_datadir}/applications
 
 %preun
 %gconf_schema_remove %{name}
 
+%posttrans
+/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %if %{with_tui}
 %files
