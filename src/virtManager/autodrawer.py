@@ -27,6 +27,21 @@ import gtk
 
 parentclass = gtk.VBox
 
+def _set_has_window(widget, val):
+    if hasattr(widget, "set_has_window"):
+        # Only available on gtk 2.18 or later
+        widget.set_has_window(val)
+    elif val:
+        widget.set_flags(widget.flags() & ~gtk.NO_WINDOW)
+    else:
+        widget.set_flags(widget.flags() | gtk.NO_WINDOW)
+
+def _is_toplevel(widget):
+    if hasattr(widget, "is_toplevel"):
+        # Only available on gtk 2.18 or later
+        return widget.is_toplevel()
+    return bool(widget.flags() & gtk.TOPLEVEL)
+
 class OverBox(parentclass):
     """
     Implementation of an overlapping box
@@ -44,7 +59,7 @@ class OverBox(parentclass):
         self._fraction = 0
         self.verticalOffset = 0
 
-        self.set_has_window(True)
+        _set_has_window(self, True)
 
     ####################
     # Internal helpers #
@@ -418,7 +433,7 @@ class AutoDrawer(Drawer):
 
     def _update(self, do_immediate):
         toplevel = self.get_toplevel()
-        if not toplevel or not toplevel.is_toplevel():
+        if not toplevel or not _is_toplevel(toplevel):
             # The autoDrawer cannot function properly without a toplevel.
             return
 
@@ -535,10 +550,10 @@ class AutoDrawer(Drawer):
     def _on_hierarchy_changed(self, oldTopLevel, ignore):
         newTopLevel = self.get_toplevel()
 
-        if oldTopLevel and oldTopLevel.is_toplevel():
+        if oldTopLevel and _is_toplevel(oldTopLevel):
             oldTopLevel.disconnect_by_func(self._set_focus)
 
-        if newTopLevel and newTopLevel.is_toplevel():
+        if newTopLevel and _is_toplevel(newTopLevel):
             newTopLevel.connect_after("set_focus", self._set_focus)
 
         self._update(True)
@@ -589,7 +604,7 @@ class AutoDrawer(Drawer):
 
     def drawer_close(self):
         toplevel = self.get_toplevel()
-        if not toplevel or not toplevel.is_toplevel():
+        if not toplevel or not _is_toplevel(toplevel):
             # The autoDrawer cannot function properly without a toplevel.
             return
 
