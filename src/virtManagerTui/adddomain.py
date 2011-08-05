@@ -150,7 +150,7 @@ class DomainConfigScreen(VmmTuiConfigScreen):
         elif page is SELECT_CDROM_PAGE:
             if self.__install_media.getSelection() != None:
                 if len(self.get_libvirt().list_installable_volumes()) == 0:
-                    errors.append("No installable media is available.")
+                    errors.append("No installable media detected.")
                 else:
                     return True
             else:
@@ -349,6 +349,8 @@ class DomainConfigScreen(VmmTuiConfigScreen):
             return self.__has_pools
         elif page is SELECT_VOLUME_PAGE:
             return self.__has_volumes
+        elif page is SELECT_CDROM_PAGE:
+            return self.__has_install_media
         elif page < CONFIRM_PAGE:
             return True
 
@@ -384,17 +386,23 @@ class DomainConfigScreen(VmmTuiConfigScreen):
                 grid]
 
     def get_select_cdrom_page(self, screen):
-        drives = []
+        fields = []
+        self.__has_install_media = False
         devs = self.get_libvirt().list_installable_volumes()
-        for dev in devs:
-            row = [dev.pretty_label(), dev.get_path(),
-                   self.__config.is_install_media(dev.get_path())]
-            drives.append(row)
-        self.__install_media = snack.RadioBar(screen, (drives))
-        grid = snack.Grid(1, 1)
-        grid.setField(self.__install_media, 0, 0)
+        if len(devs) > 0:
+            drives = []
+            for dev in devs:
+                row = [dev.pretty_label(), dev.get_path(),
+                       self.__config.is_install_media(dev.get_path())]
+                drives.append(row)
+            if len(drives) > 0:
+                self.__has_install_media = True
+                self.__install_media = snack.RadioBar(screen, (drives))
+                fields.append((self.__install_media, None))
+        if self.__has_install_media == False:
+            fields.append(("No media detected.", None))
         return [snack.Label("Select the install media"),
-                grid]
+                self.create_grid_from_fields(fields)]
 
     def get_select_iso_page(self, screen):
         ignore = screen
