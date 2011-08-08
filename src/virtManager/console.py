@@ -93,7 +93,7 @@ class Tunnel(object):
             nc_params = "%s %s" % (gaddr, gport)
 
         nc_cmd = (
-            """nc -q 2>&1 | grep -q "requires an argument";"""
+            """nc -q 2>&1 | grep "requires an argument" >/dev/null;"""
             """if [ $? -eq 0 ] ; then"""
             """   CMD="nc -q 0 %(nc_params)s";"""
             """else"""
