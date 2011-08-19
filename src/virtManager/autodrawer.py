@@ -271,10 +271,10 @@ class OverBox(parentclass):
         self.underWin = None
 
     def do_size_request(self, req):
-        height, width = self._size_request()
+        width, height = self._size_request()
 
-        req.height = height
         req.width = width
+        req.height = height
 
     def do_size_allocate(self, newalloc):
         self.allocation = newalloc
