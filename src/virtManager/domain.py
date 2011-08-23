@@ -1152,10 +1152,10 @@ class vmmDomain(vmmLibvirtObject):
 
         if not (info[0] in [libvirt.VIR_DOMAIN_SHUTOFF,
                             libvirt.VIR_DOMAIN_CRASHED]):
+            guestcpus = info[3]
             cpuTime = info[4] - prevCpuTime
             cpuTimeAbs = info[4]
             hostcpus = self.conn.host_active_processor_count()
-            guestcpus = self.vcpu_count()
 
             pcentbase = (((cpuTime) * 100.0) /
                          ((now - prevTimestamp) * 1000.0 * 1000.0 * 1000.0))
