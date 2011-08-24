@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #
 # pausedomain.py - Copyright (C) 2011 Red Hat, Inc.
 # Written by Darryl L. Pierce <dpierce@redhat.com>

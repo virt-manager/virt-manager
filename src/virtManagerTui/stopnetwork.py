@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #
 # stopnetwork.py - Copyright (C) 2009 Red Hat, Inc.
 # Written by Darryl L. Pierce <dpierce@redhat.com>
