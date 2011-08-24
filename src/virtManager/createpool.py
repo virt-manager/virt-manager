@@ -391,7 +391,7 @@ class vmmCreatePool(vmmGObjectUI):
 
     def get_config_iqn(self):
         iqn = self.widget("pool-iqn")
-        if iqn.get_sensitive() and iqn.get_property("visible"):
+        if iqn.get_property("sensitive") and iqn.get_property("visible"):
             return iqn.get_text().strip()
         return None
 
