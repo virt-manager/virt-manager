@@ -122,7 +122,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
     def reset_state(self):
         title_str = ("<span size='large' color='white'>%s '%s'</span>" %
-                     (_("Migrate"), self.vm.get_name()))
+                     (_("Migrate"), util.xml_escape(self.vm.get_name())))
         self.widget("migrate-main-label").set_markup(title_str)
 
         self.widget("migrate-cancel").grab_focus()

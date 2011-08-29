@@ -91,7 +91,7 @@ class vmmDeleteDialog(vmmGObjectUI):
 
         # Set VM name in title'
         title_str = ("<span size='x-large'>%s '%s'</span>" %
-                     (_("Delete"), self.vm.get_name()))
+                     (_("Delete"), util.xml_escape(self.vm.get_name())))
         self.widget("delete-main-label").set_markup(title_str)
 
         self.widget("delete-cancel").grab_focus()

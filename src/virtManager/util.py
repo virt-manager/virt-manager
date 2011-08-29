@@ -29,6 +29,8 @@ import virtinst
 
 running_config = None
 
+xml_escape = virtinst.util.xml_escape
+
 # FIXME: selinux policy also has a ~/VirtualMachines/isos dir
 def get_default_pool_path(conn):
     if conn.is_session_uri():

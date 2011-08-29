@@ -701,12 +701,12 @@ class vmmManager(vmmGObjectUI):
         return hint
 
     def _build_conn_markup(self, conn, row):
+        name = util.xml_escape(row[ROW_NAME])
+        text = name
         if conn.state == conn.STATE_DISCONNECTED:
-            text = str(row[ROW_NAME]) + " - " + _("Not Connected")
+            text += " - " + _("Not Connected")
         elif conn.state == conn.STATE_CONNECTING:
-            text = str(row[ROW_NAME]) + " - " + _("Connecting...")
-        else:
-            text = str(row[ROW_NAME])
+            text += " - " + _("Connecting...")
 
         markup = "<span size='smaller'>%s</span>" % text
         return markup
@@ -720,7 +720,7 @@ class vmmManager(vmmGObjectUI):
 
     def _build_vm_markup(self, row):
         domtext     = ("<span size='smaller' weight='bold'>%s</span>" %
-                       row[ROW_NAME])
+                       util.xml_escape(row[ROW_NAME]))
         statetext   = "<span size='smaller'>%s</span>" % row[ROW_STATUS]
         return domtext + "\n" + statetext
 
