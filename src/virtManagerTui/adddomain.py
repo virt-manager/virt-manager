@@ -81,6 +81,7 @@ class DomainConfigScreen(VmmTuiConfigScreen):
         self.__architectures = None
         self.__iso_path = None
         self.__install_source = None
+        self.__has_install_media = None
 
     def get_elements_for_page(self, screen, page):
         if page is VM_DETAILS_PAGE:

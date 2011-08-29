@@ -53,9 +53,6 @@ class RemoveStoragePoolConfigScreen(StorageListConfigScreen):
         ignore = page
         return False
 
-    def page_has_finish(self, page):
-        return page is FINISHED_REMOVING
-
     def validate_input(self, page, errors):
         if page is LIST_POOLS_PAGE:
             if self.get_selected_pool() is not None:
@@ -74,7 +71,7 @@ class RemoveStoragePoolConfigScreen(StorageListConfigScreen):
             try:
                 self.get_libvirt().destroy_storage_pool(self.get_selected_pool())
                 self.get_libvirt().undefine_storage_pool(self.get_selected_pool())
-            except Exception, error:
+            except Exception:
                 pass
 
     def get_confirm_page(self, screen):
@@ -86,6 +83,7 @@ class RemoveStoragePoolConfigScreen(StorageListConfigScreen):
                 self.create_grid_from_fields(fields)]
 
     def get_finished_removing_page(self, page):
+        ignore = page
         self.set_finished()
         pool = self.get_selected_pool()
         state = ""
