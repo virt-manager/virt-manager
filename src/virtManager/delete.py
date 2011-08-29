@@ -183,7 +183,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         for errinfo in storage_errors:
             storage_errstr += "%s\n%s\n" % (errinfo[0], errinfo[1])
 
-        if not storage_errstr:
+        if not storage_errstr and not details:
             return
 
         # We had extra storage errors. If there was another error message,
