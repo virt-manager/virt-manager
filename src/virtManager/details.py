@@ -1098,7 +1098,10 @@ class vmmDetails(vmmGObjectUI):
     def get_boot_selection(self):
         return self.get_selected_row(self.widget("config-boot-list"))
 
-    def set_hw_selection(self, page):
+    def set_hw_selection(self, page, disable_apply=True):
+        if disable_apply:
+            self.widget("config-apply").set_sensitive(False)
+
         hwlist = self.widget("hw-list")
         selection = hwlist.get_selection()
         selection.select_path(str(page))
@@ -1119,7 +1122,7 @@ class vmmDetails(vmmGObjectUI):
         page = self.get_hw_selection(HW_LIST_COL_TYPE)
         if page is None:
             page = HW_LIST_TYPE_GENERAL
-            self.widget("hw-list").get_selection().select_path(0)
+            self.set_hw_selection(0)
 
         return page
 
@@ -1168,7 +1171,7 @@ class vmmDetails(vmmGObjectUI):
                 if self.compare_hw_rows(model[idx], oldrow):
                     pageidx = idx
                     break
-            self.set_hw_selection(pageidx)
+            self.set_hw_selection(pageidx, disable_apply=False)
         else:
             self.oldhwrow = newrow
             self.hw_selected()
@@ -2259,6 +2262,7 @@ class vmmDetails(vmmGObjectUI):
             detach_err = (str(e), "".join(traceback.format_exc()))
 
         if not detach_err:
+            self.widget("config-apply").set_sensitive(False)
             return
 
         self.err.show_err(
