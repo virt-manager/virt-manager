@@ -3086,12 +3086,14 @@ class vmmDetails(vmmGObjectUI):
             buses.append(["fdc", "Floppy"])
         elif devtype == virtinst.VirtualDisk.DEVICE_CDROM:
             buses.append(["ide", "IDE"])
-            buses.append(["scsi", "SCSI"])
+            if self.vm.rhel6_defaults():
+                buses.append(["scsi", "SCSI"])
         else:
             if self.vm.is_hvm():
                 buses.append(["ide", "IDE"])
-                buses.append(["scsi", "SCSI"])
-                buses.append(["usb", "USB"])
+                if self.vm.rhel6_defaults():
+                    buses.append(["scsi", "SCSI"])
+                    buses.append(["usb", "USB"])
             if self.vm.get_hv_type() == "kvm":
                 buses.append(["virtio", "Virtio"])
             if self.vm.conn.is_xen():
