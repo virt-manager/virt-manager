@@ -1140,12 +1140,18 @@ class vmmConnection(vmmGObject):
         logging.debug("Background 'open connection' thread is running")
 
         while True:
+            libexc = None
             exc = None
             tb = None
             try:
                 self.vmm = self._try_open()
+            except libvirt.libvirtError, libexc:
+                tb = "".join(traceback.format_exc())
             except Exception, exc:
                 tb = "".join(traceback.format_exc())
+
+            if libexc:
+                exc = libexc
 
             if not exc:
                 self.state = self.STATE_ACTIVE
@@ -1153,10 +1159,10 @@ class vmmConnection(vmmGObject):
 
             self.state = self.STATE_DISCONNECTED
 
-            if (type(exc) == libvirt.libvirtError and
-                exc.get_error_code() == libvirt.VIR_ERR_AUTH_FAILED and
-                "GSSAPI Error" in exc.get_error_message() and
-                "No credentials cache found" in exc.get_error_message()):
+            if (libexc and
+                libexc.get_error_code() == libvirt.VIR_ERR_AUTH_FAILED and
+                "GSSAPI Error" in libexc.get_error_message() and
+                "No credentials cache found" in libexc.get_error_message()):
                 if self._acquire_tgt():
                     continue
 
