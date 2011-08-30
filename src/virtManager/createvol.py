@@ -255,7 +255,7 @@ class vmmCreateVolume(vmmGObjectUI):
             if fmt:
                 self.vol.format = fmt
         except ValueError, e:
-            return self.val_err(_("Volume Parameter Error"), str(e))
+            return self.val_err(_("Volume Parameter Error"), e)
         return True
 
     def show_err(self, info, details=None):

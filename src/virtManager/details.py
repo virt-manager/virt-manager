@@ -1669,7 +1669,7 @@ class vmmDetails(vmmGObjectUI):
             pinstr = self.generate_cpuset()
         except Exception, e:
             return self.err.val_err(
-                _("Error generating CPU configuration: %s") % str(e))
+                _("Error generating CPU configuration"), e)
 
         self.widget("config-vcpupin").set_text("")
         self.widget("config-vcpupin").set_text(pinstr)
@@ -1975,13 +1975,13 @@ class vmmDetails(vmmGObjectUI):
             vcpu_num = int(row[0])
             pinlist = virtinst.Guest.cpuset_str_to_tuple(conn.vmm, new_text)
         except Exception, e:
-            self.err.val_err(_("Error building pin list: %s") % str(e))
+            self.err.val_err(_("Error building pin list"), e)
             return
 
         try:
             self.vm.pin_vcpu(vcpu_num, pinlist)
         except Exception, e:
-            self.err.show_err(_("Error pinning vcpus: %s") % str(e))
+            self.err.show_err(_("Error pinning vcpus"), e)
             return
 
         self._refresh_runtime_pinning()

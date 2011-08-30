@@ -1466,7 +1466,7 @@ class vmmCreate(vmmGObjectUI):
             g = virtinst.Guest(conn=self.conn.vmm)
             g.name = name
         except Exception, e:
-            return self.verr(_("Invalid System Name"), str(e))
+            return self.err.val_err(_("Invalid System Name"), e)
 
         return True
 
@@ -1487,7 +1487,8 @@ class vmmCreate(vmmGObjectUI):
             media = self.get_config_local_media()
 
             if not media:
-                return self.verr(_("An install media selection is required."))
+                return self.err.val_err(
+                                _("An install media selection is required."))
 
             location = media
             cdrom = True
@@ -1497,7 +1498,7 @@ class vmmCreate(vmmGObjectUI):
             media, extra, ks = self.get_config_url_info()
 
             if not media:
-                return self.verr(_("An install tree is required."))
+                return self.err.val_err(_("An install tree is required."))
 
             location = media
 
@@ -1510,21 +1511,22 @@ class vmmCreate(vmmGObjectUI):
 
             import_path = self.get_config_import_path()
             if not import_path:
-                return self.verr(_("A storage path to import is required."))
+                return self.err.val_err(
+                                _("A storage path to import is required."))
 
         elif instmethod == INSTALL_PAGE_CONTAINER_APP:
             instclass = virtinst.ContainerInstaller
 
             init = self.get_config_container_app_path()
             if not init:
-                return self.verr(_("An application path is required."))
+                return self.err.val_err(_("An application path is required."))
 
         elif instmethod == INSTALL_PAGE_CONTAINER_OS:
             instclass = virtinst.ContainerInstaller
 
             fs = self.get_config_container_fs_path()
             if not fs:
-                return self.verr(_("An OS directory path is required."))
+                return self.err.val_err(_("An OS directory path is required."))
 
         # Build the installer and Guest instance
         try:
@@ -1534,7 +1536,8 @@ class vmmCreate(vmmGObjectUI):
             if not self.guest:
                 return False
         except Exception, e:
-            return self.verr(_("Error setting installer parameters."), str(e))
+            return self.err.val_err(
+                        _("Error setting installer parameters."), e)
 
         # Validate media location
         try:
@@ -1562,8 +1565,8 @@ class vmmCreate(vmmGObjectUI):
                 self.guest.add_device(fsdev)
 
         except Exception, e:
-            return self.verr(_("Error setting install media location."),
-                             str(e))
+            return self.err.val_err(
+                                _("Error setting install media location."), e)
 
         # OS distro/variant validation
         try:
@@ -1572,8 +1575,7 @@ class vmmCreate(vmmGObjectUI):
             if variant and variant != OS_GENERIC:
                 self.guest.os_variant = variant
         except ValueError, e:
-            return self.err.val_err(_("Error setting OS information."),
-                                    str(e))
+            return self.err.val_err(_("Error setting OS information."), e)
 
         # Kind of wonky, run storage validation now, which will assign
         # the import path. Import installer skips the storage page.
@@ -1607,14 +1609,14 @@ class vmmCreate(vmmGObjectUI):
         try:
             self.guest.vcpus = int(cpus)
         except Exception, e:
-            return self.verr(_("Error setting CPUs."), str(e))
+            return self.err.val_err(_("Error setting CPUs."), e)
 
         # Memory
         try:
             self.guest.memory = int(mem)
             self.guest.maxmemory = int(mem)
         except Exception, e:
-            return self.verr(_("Error setting guest memory."), str(e))
+            return self.err.val_err(_("Error setting guest memory."), e)
 
         return True
 
@@ -1677,7 +1679,7 @@ class vmmCreate(vmmGObjectUI):
                         diskpath = ideal
 
             if not diskpath:
-                return self.verr(_("A storage path must be specified."))
+                return self.err.val_err(_("A storage path must be specified."))
 
             disk = virtinst.VirtualDisk(conn=self.conn.vmm,
                                         path=diskpath,
@@ -1685,7 +1687,7 @@ class vmmCreate(vmmGObjectUI):
                                         sparse=sparse)
 
         except Exception, e:
-            return self.verr(_("Storage parameter error."), str(e))
+            return self.err.val_err(_("Storage parameter error."), e)
 
         isfatal, errmsg = disk.is_size_conflict()
         if not oldguest and not isfatal and errmsg:
@@ -1729,8 +1731,9 @@ class vmmCreate(vmmGObjectUI):
                 methname = "URL"
 
             if methname:
-                return self.verr(_("Network device required for %s install.") %
-                                 methname)
+                return self.err.val_err(
+                            _("Network device required for %s install.") %
+                            methname)
 
         nic = uihelpers.validate_network(self.topwin,
                                          self.conn, nettype, devname, macaddr)
@@ -2120,9 +2123,6 @@ class vmmCreate(vmmGObjectUI):
     def show_help(self, ignore):
         # No help available yet.
         pass
-
-    def verr(self, msg, extra=None):
-        return self.err.val_err(msg, extra)
 
 vmmGObjectUI.type_register(vmmCreate)
 vmmCreate.signal_new(vmmCreate, "action-show-vm", [str, str])

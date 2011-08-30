@@ -654,7 +654,7 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
                                       macaddr=macaddr,
                                       model=model)
     except Exception, e:
-        return err_dial.val_err(_("Error with network parameters."), str(e))
+        return err_dial.val_err(_("Error with network parameters."), e)
 
     # Make sure there is no mac address collision
     isfatal, errmsg = net.is_conflict_net(conn.vmm)

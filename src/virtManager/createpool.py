@@ -522,7 +522,7 @@ class vmmCreatePool(vmmGObjectUI):
                 self._pool_class = Storage.StoragePool.get_pool_class(typ)
                 self._pool = self._pool_class(name=name, conn=conn)
             except ValueError, e:
-                return self.err.val_err(_("Pool Parameter Error"), str(e))
+                return self.err.val_err(_("Pool Parameter Error"), e)
 
             return True
 
@@ -547,7 +547,7 @@ class vmmCreatePool(vmmGObjectUI):
 
                 tmppool.get_xml_config()
             except ValueError, e:
-                return self.err.val_err(_("Pool Parameter Error"), str(e))
+                return self.err.val_err(_("Pool Parameter Error"), e)
 
             buildval = self.widget("pool-build").get_active()
             buildsen = (self.widget("pool-build").get_property("sensitive") and

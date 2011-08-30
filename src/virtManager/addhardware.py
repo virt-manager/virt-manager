@@ -1148,7 +1148,7 @@ class vmmAddHardware(vmmGObjectUI):
                 disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
 
         except Exception, e:
-            return self.err.val_err(_("Storage parameter error."), str(e))
+            return self.err.val_err(_("Storage parameter error."), e)
 
         # Generate target
         used = []
@@ -1224,7 +1224,7 @@ class vmmAddHardware(vmmGObjectUI):
             self._dev.listen = self.get_config_graphics_address()
             self._dev.keymap = self.get_config_keymap()
         except ValueError, e:
-            self.err.val_err(_("Graphics device parameter error"), str(e))
+            self.err.val_err(_("Graphics device parameter error"), e)
 
     def validate_page_sound(self):
         smodel = self.get_config_sound_model()
@@ -1232,7 +1232,7 @@ class vmmAddHardware(vmmGObjectUI):
             self._dev = virtinst.VirtualAudio(conn=self.conn.vmm,
                                               model=smodel)
         except Exception, e:
-            return self.err.val_err(_("Sound device parameter error"), str(e))
+            return self.err.val_err(_("Sound device parameter error"), e)
 
     def validate_page_hostdev(self):
         ret = self.get_config_host_device_info()
@@ -1247,7 +1247,7 @@ class vmmAddHardware(vmmGObjectUI):
                             conn=self.conn.vmm,
                             name=nodedev_name)
         except Exception, e:
-            return self.err.val_err(_("Host device parameter error"), str(e))
+            return self.err.val_err(_("Host device parameter error"), e)
 
     def validate_page_char(self):
         chartype = self.get_char_type()
@@ -1290,7 +1290,7 @@ class vmmAddHardware(vmmGObjectUI):
             self._dev.get_xml_config()
         except Exception, e:
             return self.err.val_err(_("%s device parameter error") %
-                                    chartype.capitalize(), str(e))
+                                    chartype.capitalize(), e)
 
     def validate_page_video(self):
         conn = self.conn.vmm
@@ -1300,8 +1300,7 @@ class vmmAddHardware(vmmGObjectUI):
             self._dev = VirtualVideoDevice(conn=conn)
             self._dev.model_type = model
         except Exception, e:
-            return self.err.val_err(_("Video device parameter error"),
-                                    str(e))
+            return self.err.val_err(_("Video device parameter error"), e)
 
     def validate_page_watchdog(self):
         conn = self.conn.vmm
@@ -1313,8 +1312,7 @@ class vmmAddHardware(vmmGObjectUI):
             self._dev.model = model
             self._dev.action = action
         except Exception, e:
-            return self.err.val_err(_("Watchdog parameter error"),
-                                    str(e))
+            return self.err.val_err(_("Watchdog parameter error"), e)
 
     def validate_page_filesystem(self):
         conn = self.conn.vmm
@@ -1337,8 +1335,7 @@ class vmmAddHardware(vmmGObjectUI):
             if fstype:
                 self._dev.type = fstype
         except Exception, e:
-            return self.err.val_err(_("Filesystem parameter error"),
-                                    str(e))
+            return self.err.val_err(_("Filesystem parameter error"), e)
 
     def validate_page_smartcard(self):
         conn = self.conn.vmm
@@ -1347,8 +1344,7 @@ class vmmAddHardware(vmmGObjectUI):
         try:
             self._dev = VirtualSmartCardDevice(conn, mode)
         except Exception, e:
-            return self.err.val_err(_("Video device parameter error"),
-                                    str(e))
+            return self.err.val_err(_("Video device parameter error"), e)
 
 
     ####################

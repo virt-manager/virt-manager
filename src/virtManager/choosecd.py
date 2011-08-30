@@ -99,7 +99,7 @@ class vmmChooseCD(vmmGObjectUI):
         try:
             self.disk.path = path
         except Exception, e:
-            return self.err.val_err(_("Invalid Media Path"), str(e))
+            return self.err.val_err(_("Invalid Media Path"), e)
 
         uihelpers.check_path_search_for_qemu(self.topwin, self.conn, path)
 

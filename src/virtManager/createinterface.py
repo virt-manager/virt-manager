@@ -997,8 +997,8 @@ class vmmCreateInterface(vmmGObjectUI):
 
             self.interface = iobj
         except Exception, e:
-            return self.err.val_err(_("Error setting interface parameters."),
-                                    str(e))
+            return self.err.val_err(
+                            _("Error setting interface parameters."), e)
 
         return True
 
