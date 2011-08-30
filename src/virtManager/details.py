@@ -1392,6 +1392,7 @@ class vmmDetails(vmmGObjectUI):
             if self.addhw is None:
                 self.addhw = vmmAddHardware(self.vm)
 
+            logging.debug("Launching addhw for vm '%s'", self.vm.get_name())
             self.addhw.show(self.topwin)
         except Exception, e:
             self.err.show_err((_("Error launching hardware dialog: %s") %
@@ -1771,24 +1772,34 @@ class vmmDetails(vmmGObjectUI):
         curpath = disk.path
         devtype = disk.device
 
-        if curpath:
-            # Disconnect cdrom
-            self.change_storage_media(dev_id_info, None)
+        try:
+            if curpath:
+                # Disconnect cdrom
+                self.change_storage_media(dev_id_info, None)
+                return
+        except Exception, e:
+            self.err.show_err((_("Error disconnecting media: %s") % e))
             return
 
-        def change_cdrom_wrapper(src_ignore, dev_id_info, newpath):
-            return self.change_storage_media(dev_id_info, newpath)
+        try:
+            def change_cdrom_wrapper(src_ignore, dev_id_info, newpath):
+                return self.change_storage_media(dev_id_info, newpath)
 
-        # Launch 'Choose CD' dialog
-        if self.media_choosers[devtype] is None:
-            ret = vmmChooseCD(self.vm, dev_id_info)
+            # Launch 'Choose CD' dialog
+            if self.media_choosers[devtype] is None:
+                ret = vmmChooseCD(self.vm, dev_id_info)
 
-            ret.connect("cdrom-chosen", change_cdrom_wrapper)
-            self.media_choosers[devtype] = ret
+                ret.connect("cdrom-chosen", change_cdrom_wrapper)
+                self.media_choosers[devtype] = ret
 
-        dialog = self.media_choosers[devtype]
-        dialog.dev_id_info = dev_id_info
-        dialog.show(self.topwin)
+            dialog = self.media_choosers[devtype]
+            dialog.dev_id_info = dev_id_info
+
+            logging.debug("Launching choosecd for vm '%s'", self.vm.get_name())
+            dialog.show(self.topwin)
+        except Exception, e:
+            self.err.show_err((_("Error launching media dialog: %s") % e))
+            return
 
     ##################################################
     # Details/Hardware config changes (apply button) #
