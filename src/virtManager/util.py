@@ -126,14 +126,14 @@ def get_default_path(conn, name, collidelist=None):
         target, ignore, suffix = get_ideal_path_info(conn, name)
 
         # Sanitize collidelist to work with the collision checker
-        for c in collidelist[:]:
-            collidelist.remove(c)
-            if os.path.dirname(c) == pool.get_target_path():
-                collidelist.append(os.path.basename(c))
+        newcollidelist = []
+        for c in collidelist:
+            if c and os.path.dirname(c) == pool.get_target_path():
+                newcollidelist.append(os.path.basename(c))
 
         path = virtinst.Storage.StorageVolume.find_free_name(name,
                         pool_object=pool.pool, suffix=suffix,
-                        collidelist=collidelist)
+                        collidelist=newcollidelist)
 
         path = os.path.join(target, path)
 
