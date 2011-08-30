@@ -1251,6 +1251,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def validate_page_char(self):
         chartype = self.get_char_type()
+        modebox = self.widget("char-mode")
         devbox = self.widget("char-device-type")
         devtype = devbox.get_model()[devbox.get_active()][0]
         conn = self.conn.vmm
@@ -1258,6 +1259,7 @@ class vmmAddHardware(vmmGObjectUI):
         devclass = VirtualCharDevice.get_dev_instance(conn, chartype, devtype)
 
         source_path = self.widget("char-path").get_text()
+        source_mode = modebox.get_model()[modebox.get_active()][0]
         source_host = self.widget("char-host").get_text()
         bind_host = self.widget("char-bind-host").get_text()
         source_port = self.widget("char-port").get_adjustment().value
@@ -1271,6 +1273,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         value_mappings = {
             "source_path" : source_path,
+            "source_mode" : source_mode,
             "source_host" : source_host,
             "source_port" : source_port,
             "bind_port": bind_port,
