@@ -26,7 +26,8 @@ import gtk
 import virtinst
 from virtinst import (VirtualCharDevice, VirtualDevice,
                       VirtualVideoDevice, VirtualWatchdog,
-                      VirtualFilesystem, VirtualSmartCardDevice)
+                      VirtualFilesystem, VirtualSmartCardDevice,
+                      VirtualRedirDevice)
 
 import virtManager.util as util
 import virtManager.uihelpers as uihelpers
@@ -47,6 +48,7 @@ PAGE_VIDEO = 8
 PAGE_WATCHDOG = 9
 PAGE_FILESYSTEM = 10
 PAGE_SMARTCARD = 11
+PAGE_USBREDIR = 12
 
 char_widget_mappings = {
     "source_path" : "char-path",
@@ -93,6 +95,8 @@ class vmmAddHardware(vmmGObjectUI):
 
             "on_fs_type_combo_changed": self.change_fs_type,
             "on_fs_source_browse_clicked": self.browse_fs_source,
+
+            "on_usbredir_type_changed": self.change_usbredir_type,
 
             # Char dev info signals
             "char_device_type_focus": (self.update_doc, "char_type"),
@@ -329,6 +333,10 @@ class vmmAddHardware(vmmGObjectUI):
         combo = self.widget("smartcard-mode")
         uihelpers.build_smartcard_mode_combo(self.vm, combo)
 
+        # Usbredir widgets
+        combo = self.widget("usbredir-list")
+        uihelpers.build_redir_type_combo(self.vm, combo)
+
         # Available HW options
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
@@ -392,6 +400,8 @@ class vmmAddHardware(vmmGObjectUI):
                       _("Not supported for this hypervisor/libvirt "
                         "combination."))
         add_hw_option("Smartcard", "device_serial", PAGE_SMARTCARD,
+                      True, None)
+        add_hw_option("USB Redirection", "device_usb", PAGE_USBREDIR,
                       True, None)
 
     def reset_state(self):
@@ -727,6 +737,26 @@ class vmmAddHardware(vmmGObjectUI):
         modestr = mode.get_model().get_value(mode.get_active_iter(), 0)
         return modestr
 
+    # USB redir getters
+    def get_config_usbredir_host(self):
+        host = self.widget("usbredir-host")
+        if not host.is_sensitive():
+            return None
+
+        hoststr = host.get_text()
+        return hoststr
+
+    def get_config_usbredir_service(self):
+        service = self.widget("usbredir-service")
+        if not service.is_sensitive():
+            return None
+
+        return int(service.get_value())
+
+    def get_config_usbredir_type(self):
+        typebox = self.widget("usbredir-list")
+        return typebox.get_model()[typebox.get_active()][0]
+
     ################
     # UI listeners #
     ################
@@ -912,6 +942,8 @@ class vmmAddHardware(vmmGObjectUI):
             return _("Filesystem Passthrough")
         if page == PAGE_SMARTCARD:
             return _("Smartcard")
+        if page == PAGE_USBREDIR:
+            return _("USB Redirection")
 
         if page == PAGE_CHAR:
             return self.get_char_type().capitalize() + " Device"
@@ -955,6 +987,16 @@ class vmmAddHardware(vmmGObjectUI):
         has_mode = self._dev.supports_property("source_mode")
         if has_mode and self.widget("char-mode").get_active() == -1:
             self.widget("char-mode").set_active(0)
+
+    def change_usbredir_type(self, src):
+        idx = src.get_active()
+        if idx < 0:
+            return
+
+        devtype = src.get_model()[src.get_active()][0]
+        hostdetails = src.get_model()[src.get_active()][2]
+        self.widget("usbredir-host").set_sensitive(hostdetails)
+        self.widget("usbredir-service").set_sensitive(hostdetails)
 
     # FS listeners
     def browse_fs_source(self, ignore1):
@@ -1083,6 +1125,8 @@ class vmmAddHardware(vmmGObjectUI):
             return self.validate_page_filesystem()
         elif page_num == PAGE_SMARTCARD:
             return self.validate_page_smartcard()
+        elif page_num == PAGE_USBREDIR:
+            return self.validate_page_usbredir()
 
     def validate_page_storage(self):
         bus, device = self.get_config_disk_target()
@@ -1347,7 +1391,23 @@ class vmmAddHardware(vmmGObjectUI):
         try:
             self._dev = VirtualSmartCardDevice(conn, mode)
         except Exception, e:
-            return self.err.val_err(_("Video device parameter error"), e)
+            return self.err.val_err(_("Smartcard device parameter error"), e)
+
+    def validate_page_usbredir(self):
+        conn = self.conn.vmm
+        stype = self.get_config_usbredir_type()
+        host = self.get_config_usbredir_host()
+        service = self.get_config_usbredir_service()
+
+        try:
+            self._dev = VirtualRedirDevice(conn=conn, bus="usb", stype=stype)
+            if host:
+                self._dev.host = host
+            if service:
+                self._dev.service = service
+        except Exception, e:
+            return self.err.val_err(_("USB redirected device parameter error"),
+                                    str(e))
 
 
     ####################
