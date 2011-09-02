@@ -3034,7 +3034,12 @@ class vmmDetails(vmmGObjectUI):
             return
 
         type_label = virtinst.VirtualController.pretty_type(dev.type)
+        model_label = dev.model
+        if not model_label:
+            model_label =  _("Default")
+
         self.widget("controller-type").set_text(type_label)
+        self.widget("controller-model").set_text(model_label)
 
     def refresh_filesystem_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
