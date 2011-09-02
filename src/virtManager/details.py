@@ -111,12 +111,14 @@ HW_LIST_TYPE_WATCHDOG = 13
 HW_LIST_TYPE_CONTROLLER = 14
 HW_LIST_TYPE_FILESYSTEM = 15
 HW_LIST_TYPE_SMARTCARD = 16
+HW_LIST_TYPE_REDIRDEV = 17
 
 remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                 HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
                 HW_LIST_TYPE_HOSTDEV, HW_LIST_TYPE_DISK, HW_LIST_TYPE_VIDEO,
                 HW_LIST_TYPE_WATCHDOG, HW_LIST_TYPE_CONTROLLER,
-                HW_LIST_TYPE_FILESYSTEM, HW_LIST_TYPE_SMARTCARD]
+                HW_LIST_TYPE_FILESYSTEM, HW_LIST_TYPE_SMARTCARD,
+                HW_LIST_TYPE_REDIRDEV]
 
 # Boot device columns
 BOOT_DEV_TYPE = 0
@@ -171,6 +173,24 @@ def prettyify_bytes(val):
         return "%2.2f GB" % (val / (1024.0 * 1024.0 * 1024.0))
     else:
         return "%2.2f MB" % (val / (1024.0 * 1024.0))
+
+def build_redir_label(redirdev):
+    # String shown in the devices details section
+    addrlabel = ""
+    # String shown in the VMs hardware list
+    hwlabel = ""
+
+    if redirdev.type == 'spicevmc':
+        addrlabel = None
+    elif redirdev.type == 'tcp':
+        addrlabel += _("%s:%s") % (redirdev.host, redirdev.service)
+    else:
+        raise RuntimeError("unhandled redirection kind: %s" % redirdev.type)
+
+    hwlabel = _("Redirected %s") % redirdev.bus.upper()
+
+    return addrlabel, hwlabel
+
 
 def build_hostdev_label(hostdev):
     # String shown in the devices details section
@@ -913,6 +933,10 @@ class vmmDetails(vmmGObjectUI):
         sc_mode = self.widget("smartcard-mode-combo")
         uihelpers.build_smartcard_mode_combo(self.vm, sc_mode)
 
+        # Redirection type
+        combo = self.widget("redir-type-combo")
+        uihelpers.build_redir_type_combo(self.vm, combo)
+
     # Helper function to handle the combo/label pattern used for
     # video model, sound model, network model, etc.
     def set_combo_label(self, prefix, value, model_idx=0, label="",
@@ -1218,6 +1242,8 @@ class vmmDetails(vmmGObjectUI):
                 self.refresh_filesystem_page()
             elif pagetype == HW_LIST_TYPE_SMARTCARD:
                 self.refresh_smartcard_page()
+            elif pagetype == HW_LIST_TYPE_REDIRDEV:
+                self.refresh_redir_page()
             else:
                 pagetype = -1
         except Exception, e:
@@ -2906,6 +2932,20 @@ class vmmDetails(vmmGObjectUI):
 
         self.set_combo_label("smartcard-mode", sc.mode)
 
+    def refresh_redir_page(self):
+        rd = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not rd:
+            return
+
+        address = build_redir_label(rd)[0] or "-"
+
+        devlabel = "<b>Redirected %s Device</b>" % rd.bus.upper()
+        self.widget("redir-title").set_markup(devlabel)
+        self.widget("redir-address").set_text(address)
+
+        self.widget("redir-type-label").set_text(rd.type)
+        self.widget("redir-type-combo").hide()
+
     def refresh_char_page(self):
         chardev = self.get_hw_selection(HW_LIST_COL_DEVICE)
         if not chardev:
@@ -3261,6 +3301,17 @@ class vmmDetails(vmmGObjectUI):
             else:
                 icon = "device_pci"
             update_hwlist(HW_LIST_TYPE_HOSTDEV, hostdev, label, icon)
+
+        # Populate redir devices
+        for redirdev in self.vm.get_redirdev_devices():
+            bus = redirdev.bus
+            label = build_redir_label(redirdev)[1]
+
+            if bus == "usb":
+                icon = "device_usb"
+            else:
+                icon = "device_pci"
+            update_hwlist(HW_LIST_TYPE_REDIRDEV, redirdev, label, icon)
 
         # Populate video devices
         for vid in self.vm.get_video_devices():

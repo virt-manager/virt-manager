@@ -270,6 +270,25 @@ def populate_smartcard_mode_combo(vm, combo):
 # TODO
 #    model.append(["host-certificates", "Host Certificates"])
 
+def build_redir_type_combo(vm, combo):
+    source_mode = gtk.ListStore(str, str, bool)
+    combo.set_model(source_mode)
+    text = gtk.CellRendererText()
+    combo.pack_start(text, True)
+    combo.add_attribute(text, 'text', 1)
+
+    populate_redir_type_combo(vm, combo)
+    combo.set_active(0)
+
+def populate_redir_type_combo(vm, combo):
+    ignore = vm
+    model = combo.get_model()
+    model.clear()
+
+    # [xml value, label, conn details]
+    model.append(["spicevmc", "Spice channel", False])
+    model.append(["tcp", "TCP", True])
+
 def build_netmodel_combo(vm, combo):
     dev_model = gtk.ListStore(str, str)
     combo.set_model(dev_model)
