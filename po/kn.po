@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager.tip.kn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-26 19:56-0400\n"
+"POT-Creation-Date: 2011-09-19 10:53-0400\n"
 "PO-Revision-Date: 2010-03-31 15:37+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: kn-IN <>\n"
@@ -293,133 +293,137 @@ msgstr ""
 "libvirt ವರ್ಚುವಲ್ ಸಂಪರ್ಕಸಾಧನವನ್ನು ಆರಂಭಿಸಲು ಅಥವ ನಿಲ್ಲಿಸಲು ನಮಗೆ ಖಚಿತ ಪಡಿಸುವ "
 "ಅಗತ್ಯವಿರುತ್ತದೆಯೆ"
 
-#: ../src/virtManager/addhardware.py:339 ../src/virtManager/create.py:488
+#: ../src/virtManager/addhardware.py:347 ../src/virtManager/create.py:488
 #: ../src/virtManager/create.py:586
 msgid "Connection does not support storage management."
 msgstr "ಸಂಪರ್ಕವು ಶೇಖರಣೆಯ ವ್ಯವಸ್ಥಾಪನೆಯನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ."
 
-#: ../src/virtManager/addhardware.py:353 ../src/virtManager/addhardware.py:358
-#: ../src/virtManager/addhardware.py:361 ../src/virtManager/addhardware.py:365
-#: ../src/virtManager/addhardware.py:369 ../src/virtManager/addhardware.py:386
+#: ../src/virtManager/addhardware.py:361 ../src/virtManager/addhardware.py:366
+#: ../src/virtManager/addhardware.py:369 ../src/virtManager/addhardware.py:373
+#: ../src/virtManager/addhardware.py:377 ../src/virtManager/addhardware.py:394
 msgid "Not supported for this guest type."
 msgstr "ಈ ಬಗೆಯ ಅತಿಥಿಗೆ ಬೆಂಬಲವಿಲ್ಲ."
 
-#: ../src/virtManager/addhardware.py:373 ../src/virtManager/addhardware.py:377
+#: ../src/virtManager/addhardware.py:381 ../src/virtManager/addhardware.py:385
 msgid "Connection does not support host device enumeration"
 msgstr "ಸಂಪರ್ಕವು ಆತಿಥೇಯ ಸಾಧನದ ಎಣಿಕೆಯನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ"
 
-#: ../src/virtManager/addhardware.py:383
+#: ../src/virtManager/addhardware.py:391
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt ಆವೃತ್ತಿಯು ವೀಡಿಯೊ ಸಾಧನಗಳನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ."
 
-#: ../src/virtManager/addhardware.py:392
+#: ../src/virtManager/addhardware.py:400
 #, fuzzy
 msgid "Not supported for this hypervisor/libvirt combination."
 msgstr "ಈ ಬಗೆಯ ಅತಿಥಿಗೆ ಬೆಂಬಲವಿಲ್ಲ."
 
-#: ../src/virtManager/addhardware.py:515 ../src/virtManager/details.py:2786
+#: ../src/virtManager/addhardware.py:525 ../src/virtManager/details.py:2827
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB ಗ್ರಾಫಿಕ್ ಟ್ಯಾಬ್ಲೆಟ್"
 
 #. XXX libvirt needs to support 'model' for input devices to distinguish
 #. wacom from evtouch tablets
 #. model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
-#: ../src/virtManager/addhardware.py:519 ../src/virtManager/details.py:2788
+#: ../src/virtManager/addhardware.py:529 ../src/virtManager/details.py:2829
 msgid "Generic USB Mouse"
 msgstr "ಸಾಮಾನ್ಯ USB ಮೌಸ್"
 
-#: ../src/virtManager/addhardware.py:523
+#: ../src/virtManager/addhardware.py:533
 msgid "VNC server"
 msgstr "VNC ಪರಿಚಾರಕ"
 
-#: ../src/virtManager/addhardware.py:524
+#: ../src/virtManager/addhardware.py:534
 #, fuzzy
 msgid "Spice server"
 msgstr "VNC ಪರಿಚಾರಕ"
 
-#: ../src/virtManager/addhardware.py:525
+#: ../src/virtManager/addhardware.py:535
 msgid "Local SDL window"
 msgstr "ಸ್ಥಳೀಯ SDL ವಿಂಡೋ"
 
-#: ../src/virtManager/addhardware.py:547
+#: ../src/virtManager/addhardware.py:557
 msgid "No Devices Available"
 msgstr "ಯಾವುದೆ ಸಾಧನಗಳು ಲಭ್ಯವಿಲ್ಲ"
 
-#: ../src/virtManager/addhardware.py:796
+#: ../src/virtManager/addhardware.py:826
 #, python-format
 msgid "Uncaught error validating hardware input: %s"
 msgstr "ಆದಾನವನ್ನು ಮಾನ್ಯಗೊಳಿಸುವಾಗ ದೋಷವು ದೊರೆತಿಲ್ಲ: %s"
 
-#: ../src/virtManager/addhardware.py:808
+#: ../src/virtManager/addhardware.py:838
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "ಸಾಧನವನ್ನು ಸೇರಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ: %s"
 
-#: ../src/virtManager/addhardware.py:896
+#: ../src/virtManager/addhardware.py:926
 msgid "Error"
 msgstr "ದೋಷ"
 
-#: ../src/virtManager/addhardware.py:898 ../src/vmm-create.glade.h:47
+#: ../src/virtManager/addhardware.py:928 ../src/vmm-create.glade.h:47
 #: ../src/vmm-host.glade.h:53
 msgid "Storage"
 msgstr "ಶೇಖರಣೆ"
 
-#: ../src/virtManager/addhardware.py:900
+#: ../src/virtManager/addhardware.py:930
 msgid "Network"
 msgstr "ಜಾಲಬಂಧ"
 
-#: ../src/virtManager/addhardware.py:902 ../src/virtManager/details.py:3204
+#: ../src/virtManager/addhardware.py:932 ../src/virtManager/details.py:3266
 msgid "Input"
 msgstr "ಆದಾನ"
 
-#: ../src/virtManager/addhardware.py:904
+#: ../src/virtManager/addhardware.py:934
 msgid "Graphics"
 msgstr "ಗ್ರಾಫಿಕ್ಸ್"
 
-#: ../src/virtManager/addhardware.py:906
+#: ../src/virtManager/addhardware.py:936
 msgid "Sound"
 msgstr "ಧ್ವನಿ"
 
-#: ../src/virtManager/addhardware.py:908
+#: ../src/virtManager/addhardware.py:938
 #, fuzzy
 msgid "Video Device"
 msgstr "<b>ವೀಡಿಯೊ ಸಾಧನ</b>"
 
-#: ../src/virtManager/addhardware.py:910
+#: ../src/virtManager/addhardware.py:940
 #, fuzzy
 msgid "Watchdog Device"
 msgstr "ವಾಚ್‌ಡಾಗ್"
 
-#: ../src/virtManager/addhardware.py:912
+#: ../src/virtManager/addhardware.py:942
 msgid "Filesystem Passthrough"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:914 ../src/virtManager/details.py:3269
+#: ../src/virtManager/addhardware.py:944 ../src/virtManager/details.py:3342
 msgid "Smartcard"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:972
+#: ../src/virtManager/addhardware.py:946
+msgid "USB Redirection"
+msgstr ""
+
+#: ../src/virtManager/addhardware.py:1014
 msgid "Te_mplate:"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:974
+#: ../src/virtManager/addhardware.py:1016
 #, fuzzy
 msgid "_Source path:"
 msgstr "ಆಕರ ಮಾರ್ಗ:"
 
-#: ../src/virtManager/addhardware.py:1006
+#: ../src/virtManager/addhardware.py:1048
 msgid "Creating Storage File"
 msgstr "ಶೇಖರಣಾ ಕಡತವನ್ನು ರಚಿಸಲಾಗುತ್ತಿದೆ"
 
-#: ../src/virtManager/addhardware.py:1007
+#: ../src/virtManager/addhardware.py:1049
 msgid "Allocation of disk storage may take a few minutes to complete."
 msgstr "ಡಿಸ್ಕಿನ ಶೇಖರಣಾ ನಿಯೋಜನೆಯು ಪೂರ್ಣಗೊಳ್ಳಲು ಕೆಲವು ನಿಮಿಷ ಹಿಡಿಯಬಹುದು."
 
-#: ../src/virtManager/addhardware.py:1033
+#: ../src/virtManager/addhardware.py:1075
 msgid "Are you sure you want to add this device?"
 msgstr "ನೀವು ಈ ಸಾಧನವನ್ನು ಸೇರಿಸಲು ಖಚಿತವೆ?"
 
-#: ../src/virtManager/addhardware.py:1036
+#: ../src/virtManager/addhardware.py:1078
 #, fuzzy
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
@@ -428,12 +432,12 @@ msgstr ""
 "ಈ ಸಾಧನವನ್ನು ಚಾಲನೆಯಲ್ಲಿರುವ ಗಣಕಕ್ಕೆ ಹೊಂದಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ. ಮುಂದಿನ ಬಾರಿ VM ಅನ್ನು "
 "ಸ್ಥಗಿತಗೊಳಿಸಿದ ನಂತರ ಈ ಸಾಧನವು ನಿಮಗೆ ಲಭ್ಯವಾಗಿರಲು ಬಯಸುತ್ತೀರೆ?"
 
-#: ../src/virtManager/addhardware.py:1050
+#: ../src/virtManager/addhardware.py:1092
 #, python-format
 msgid "Error adding device: %s"
 msgstr "ಸಾಧನವನ್ನು ಸೇರಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: ../src/virtManager/addhardware.py:1125 ../src/virtManager/create.py:1672
+#: ../src/virtManager/addhardware.py:1169 ../src/virtManager/create.py:1674
 #, fuzzy, python-format
 msgid ""
 "The following storage already exists, but is not\n"
@@ -450,92 +454,101 @@ msgstr ""
 "\n"
 "ನೀವು ಈ ಮಾರ್ಗವನ್ನು ಬಳಸಲು ಬಯಸುತ್ತೀರೆ?"
 
-#: ../src/virtManager/addhardware.py:1133 ../src/virtManager/create.py:1680
+#: ../src/virtManager/addhardware.py:1177 ../src/virtManager/create.py:1682
 msgid "A storage path must be specified."
 msgstr "ಶೇಖರಣಾ ಮಾರ್ಗವನ್ನು ಸೂಚಿಸುವ ಅಗತ್ಯವಿದೆ."
 
-#: ../src/virtManager/addhardware.py:1151 ../src/virtManager/create.py:1688
+#: ../src/virtManager/addhardware.py:1195 ../src/virtManager/create.py:1690
 msgid "Storage parameter error."
 msgstr "ಶೇಖರಣಾ ನಿಯತಾಂಕದಲ್ಲಿ ದೋಷ."
 
 #. Fatal errors are reported when setting 'size'
-#: ../src/virtManager/addhardware.py:1165 ../src/virtManager/create.py:1693
+#: ../src/virtManager/addhardware.py:1209 ../src/virtManager/create.py:1695
 msgid "Not Enough Free Space"
 msgstr "ಸಾಕಷ್ಟು ಸ್ಥಳಾವಕಾಶವಿಲ್ಲ"
 
-#: ../src/virtManager/addhardware.py:1171 ../src/virtManager/create.py:1699
+#: ../src/virtManager/addhardware.py:1215 ../src/virtManager/create.py:1701
 #, python-format
 msgid "Disk \"%s\" is already in use by another guest!"
 msgstr "ಡಿಸ್ಕ್‍ \"%s\" ಈಗಾಗಲೆ ಬೇರೊಂದು ಅತಿಥಿಯಿಂದ ಬಳಸಲ್ಪಡುತ್ತಿದೆ!"
 
-#: ../src/virtManager/addhardware.py:1173 ../src/virtManager/create.py:1701
+#: ../src/virtManager/addhardware.py:1217 ../src/virtManager/create.py:1703
 msgid "Do you really want to use the disk?"
 msgstr "ನೀವು ಈ ಡಿಸ್ಕನ್ನು ನಿಜವಾಗಲೂ ಬಳಸಲು ಬಯಸುತ್ತೀರೆ?"
 
-#: ../src/virtManager/addhardware.py:1190
+#: ../src/virtManager/addhardware.py:1234
 msgid "Network selection error."
 msgstr "ಜಾಲಬಂಧ ಆಯ್ಕೆ ದೋಷ."
 
-#: ../src/virtManager/addhardware.py:1191
+#: ../src/virtManager/addhardware.py:1235
 msgid "A network source must be selected."
 msgstr "ಒಂದು ಜಾಲಬಂಧ ಆಕರವನ್ನು ಆರಿಸಬೇಕಿದೆ."
 
-#: ../src/virtManager/addhardware.py:1194
+#: ../src/virtManager/addhardware.py:1238
 msgid "Invalid MAC address"
 msgstr "ಅಮಾನ್ಯವಾದ MAC ವಿಳಾಸ"
 
-#: ../src/virtManager/addhardware.py:1195
+#: ../src/virtManager/addhardware.py:1239
 msgid "A MAC address must be entered."
 msgstr "ಒಂದು MAC ವಿಳಾಸವನ್ನು ನಮೂದಿಸಬೇಕಿದೆ."
 
-#: ../src/virtManager/addhardware.py:1227
+#: ../src/virtManager/addhardware.py:1271
 msgid "Graphics device parameter error"
 msgstr "ಗ್ರಾಫಿಕ್ಸ್‍ ಸಾಧನ ನಿಯತಾಂಕ ದೋಷ"
 
-#: ../src/virtManager/addhardware.py:1235
+#: ../src/virtManager/addhardware.py:1279
 msgid "Sound device parameter error"
 msgstr "ಧ್ವನಿ ಸಾಧನದಲ್ಲಿನ ನಿಯತಾಂಕ ದೋಷ"
 
-#: ../src/virtManager/addhardware.py:1242
+#: ../src/virtManager/addhardware.py:1286
 msgid "Physical Device Required"
 msgstr "ಭೌತಿಕ ಸಾಧನದ ಅಗತ್ಯವಿದೆ"
 
-#: ../src/virtManager/addhardware.py:1243
+#: ../src/virtManager/addhardware.py:1287
 msgid "A device must be selected."
 msgstr "ಒಂದು ಮಾಧ್ಯಮವನ್ನು ಆರಿಸಬೇಕಿದೆ."
 
-#: ../src/virtManager/addhardware.py:1250
+#: ../src/virtManager/addhardware.py:1294
 msgid "Host device parameter error"
 msgstr "ಆತಿಥೇಯ ಸಾಧನದಲ್ಲಿನ ನಿಯತಾಂಕ ದೋಷ"
 
-#: ../src/virtManager/addhardware.py:1292
+#: ../src/virtManager/addhardware.py:1339
 #, python-format
 msgid "%s device parameter error"
 msgstr "%s ಸಾಧನ ನಿಯತಾಂಕದಲ್ಲಿ ದೋಷ"
 
-#: ../src/virtManager/addhardware.py:1303
 #: ../src/virtManager/addhardware.py:1350
 msgid "Video device parameter error"
 msgstr "ವೀಡಿಯೊ ಸಾಧನದಲ್ಲಿನ ನಿಯತಾಂಕ ದೋಷ"
 
-#: ../src/virtManager/addhardware.py:1316
+#: ../src/virtManager/addhardware.py:1362
 msgid "Watchdog parameter error"
 msgstr "ಶೇಖರಣಾ ನಿಯತಾಂಕದಲ್ಲಿ ದೋಷ"
 
-#: ../src/virtManager/addhardware.py:1327
+#: ../src/virtManager/addhardware.py:1372
 #, fuzzy
 msgid "A filesystem source must be specified"
 msgstr "ಒಂದು ಸಂಪರ್ಕಸಾಧನವನ್ನು ಸೂಚಿಸುವ ಅಗತ್ಯವಿದೆ."
 
-#: ../src/virtManager/addhardware.py:1329
+#: ../src/virtManager/addhardware.py:1374
 #, fuzzy
 msgid "A filesystem target must be specified"
 msgstr "ಶೇಖರಣಾ ಮಾರ್ಗವನ್ನು ಸೂಚಿಸುವ ಅಗತ್ಯವಿದೆ."
 
-#: ../src/virtManager/addhardware.py:1340
+#: ../src/virtManager/addhardware.py:1385
 #, fuzzy
 msgid "Filesystem parameter error"
 msgstr "ಶೇಖರಣಾ ನಿಯತಾಂಕದಲ್ಲಿ ದೋಷ."
+
+#: ../src/virtManager/addhardware.py:1394
+#, fuzzy
+msgid "Smartcard device parameter error"
+msgstr "ಧ್ವನಿ ಸಾಧನದಲ್ಲಿನ ನಿಯತಾಂಕ ದೋಷ"
+
+#: ../src/virtManager/addhardware.py:1409
+#, fuzzy
+msgid "USB redirected device parameter error"
+msgstr "ಧ್ವನಿ ಸಾಧನದಲ್ಲಿನ ನಿಯತಾಂಕ ದೋಷ"
 
 #: ../src/virtManager/asyncjob.py:175
 msgid "Cancel the job before closing window?"
@@ -797,13 +810,13 @@ msgstr "ಸಕ್ರಿಯ"
 #: ../src/virtManager/connection.py:615 ../src/virtManager/host.py:524
 #: ../src/virtManager/host.py:567 ../src/virtManager/host.py:787
 #: ../src/virtManager/host.py:827 ../src/virtManager/host.py:1035
-#: ../src/virtManager/uihelpers.py:507
+#: ../src/virtManager/uihelpers.py:526
 msgid "Inactive"
 msgstr "ನಿಷ್ಕ್ರಿಯ"
 
-#: ../src/virtManager/connection.py:617 ../src/virtManager/create.py:2016
-#: ../src/virtManager/details.py:2399 ../src/virtManager/details.py:2666
-#: ../src/virtManager/details.py:2867 ../src/virtManager/details.py:2868
+#: ../src/virtManager/connection.py:617 ../src/virtManager/create.py:2019
+#: ../src/virtManager/details.py:2440 ../src/virtManager/details.py:2707
+#: ../src/virtManager/details.py:2908 ../src/virtManager/details.py:2909
 #: ../src/virtManager/host.py:1029
 msgid "Unknown"
 msgstr "ಅಜ್ಞಾತ"
@@ -855,7 +868,7 @@ msgstr "ಪೂರ್ಣಪರದೆ(_F)"
 msgid "Send key combination"
 msgstr "IP ಸಂರಚನೆ"
 
-#: ../src/virtManager/console.py:659 ../src/vmm-details.glade.h:133
+#: ../src/virtManager/console.py:659 ../src/vmm-details.glade.h:135
 msgid "Virtual Machine"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕ"
 
@@ -911,9 +924,8 @@ msgid "Connection is read only."
 msgstr "ಸಂಪರ್ಕವನ್ನು ಓದಲು ಮಾತ್ರವಾಗಿದೆ."
 
 #: ../src/virtManager/create.py:422
-msgid ""
-"No hypervisor options were found for this\n"
-"connection."
+#, fuzzy
+msgid "No hypervisor options were found for this connection."
 msgstr ""
 "ಈ ಸಂಪರ್ಕಕ್ಕಾಗಿ ಯಾವುದೆ ಹೈಪರ್ವೈಸರ್ ಆಯ್ಕೆಗಳು\n"
 "ಕಂಡು ಬಂದಿಲ್ಲ."
@@ -921,19 +933,18 @@ msgstr ""
 #: ../src/virtManager/create.py:427
 #, fuzzy
 msgid ""
-"This usually means that QEMU or KVM is not\n"
-"installed on your machine, or the KVM kernel modules are not loaded."
+"This usually means that QEMU or KVM is not installed on your machine, or the "
+"KVM kernel modules are not loaded."
 msgstr ""
 "ಇದರರ್ಥ qemu ಅಥವ kvm ಅನ್ನು ನಿಮ್ಮ ಗಣಕದಲ್ಲಿ ಅನುಸ್ಥಾಪಿಸಲಾಗಿಲ್ಲ\n"
 "ಎಂದರ್ಥ. ದಯವಿಟ್ಟು ಅವುಗಳನ್ನು ಉದ್ಧೇಶಿಸಿಲಾದಂತೆ\n"
 "ಅನುಸ್ಥಾಪಿಸಲಾಗಿದೆಯೆ ಎಂದು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ."
 
 #: ../src/virtManager/create.py:442
+#, fuzzy
 msgid ""
-"Host supports full virtualization, but\n"
-"no related install options are available.\n"
-"This may mean support is disabled in your\n"
-"system BIOS."
+"Host supports full virtualization, but no related install options are "
+"available. This may mean support is disabled in your system BIOS."
 msgstr ""
 "ಆತಿಥೇಯವು ಸಂಪೂರ್ಣ ವರ್ಚುವಲೈಸೇಶನ್ ಅನ್ನು ಬೆಂಬಲಿಸುತ್ತದೆ,\n"
 "ಆದರೆ ಸಂಬಂಧಿಸಿದ ಯಾವುದೆ ಆಯ್ಕೆಗಳು ಲಭ್ಯವಿಲ್ಲ. ಇದರರ್ಥ \n"
@@ -941,18 +952,19 @@ msgstr ""
 "ಎಂದಾಗಿರುತ್ತದೆ."
 
 #: ../src/virtManager/create.py:449
+#, fuzzy
 msgid ""
-"Host does not appear to support hardware\n"
-"virtualization. Install options may be limited."
+"Host does not appear to support hardware virtualization. Install options may "
+"be limited."
 msgstr ""
 "ಆತಿಥೇಯವು ಯಂತ್ರಾಂಶ ವರ್ಚುವಲೈಸೇನ್‌ ಅನ್ನು ಬೆಂಬಲಿಸುವಂತೆ\n"
 "ತೋರುತ್ತಿಲ್ಲ. ಅನುಸ್ಥಾಪನಾ ಆಯ್ಕೆಗಳ ಮಿತಿಯುಂಟಾಬಹುದು."
 
 #: ../src/virtManager/create.py:455
+#, fuzzy
 msgid ""
-"KVM is not available. This may mean the KVM\n"
-"package is not installed, or the KVM kernel modules \n"
-"are not loaded. Your virtual machines may perform poorly."
+"KVM is not available. This may mean the KVM package is not installed, or the "
+"KVM kernel modules are not loaded. Your virtual machines may perform poorly."
 msgstr ""
 "KVM ಲಭ್ಯವಿಲ್ಲ. ಇದರರ್ಥ KVM ಪ್ಯಾಕೇಜನ್ನು ಅನುಸ್ಥಾಪಿಸಲಾಗಿಲ್ಲ ಅಥವ KVM\n"
 "ಕರ್ನಲ್ ಘಟಕಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗಿಲ್ಲ ಎಂದಾಗಿರುತ್ತದೆ. ನಿಮ್ಮ ವರ್ಚುವಲ್\n"
@@ -1030,8 +1042,8 @@ msgstr "ಒಂದು ಕಾರ್ಯವ್ಯವಸ್ಥೆಯನ್ನು ಹ�
 msgid "Host filesystem"
 msgstr ""
 
-#: ../src/virtManager/create.py:865 ../src/virtManager/details.py:2400
-#: ../src/virtManager/details.py:2461
+#: ../src/virtManager/create.py:865 ../src/virtManager/details.py:2441
+#: ../src/virtManager/details.py:2502
 msgid "None"
 msgstr "ಯಾವುದೂ ಇಲ್ಲ"
 
@@ -1068,63 +1080,63 @@ msgstr "ಅನುಸ್ಥಾಪನಾ ನಿಯತಾಂಕಗಳನ್ನು �
 msgid "Invalid System Name"
 msgstr "ಅಮಾನ್ಯವಾದ ಗಣಕದ ಹೆಸರು"
 
-#: ../src/virtManager/create.py:1490
+#: ../src/virtManager/create.py:1491
 msgid "An install media selection is required."
 msgstr "ಒಂದು ಅನುಸ್ಥಾಪನಾ ಮಾಧ್ಯಮವನ್ನು ಆಯ್ಕೆ ಮಾಡುವ ಅಗತ್ಯವಿದೆ."
 
-#: ../src/virtManager/create.py:1500
+#: ../src/virtManager/create.py:1501
 msgid "An install tree is required."
 msgstr "ಒಂದು ಅನುಸ್ಥಾಪನಾ ವೃಕ್ಷದ ಅಗತ್ಯವಿದೆ."
 
-#: ../src/virtManager/create.py:1513
+#: ../src/virtManager/create.py:1515
 msgid "A storage path to import is required."
 msgstr "ಆಮದಿಗಾಗಿನ ಶೇಖರಣಾ ಮಾರ್ಗವನ್ನು ಸೂಚಿಸುವ ಅಗತ್ಯವಿದೆ."
 
-#: ../src/virtManager/create.py:1520
+#: ../src/virtManager/create.py:1522
 #, fuzzy
 msgid "An application path is required."
 msgstr "ಒಂದು ಅನುಸ್ಥಾಪನಾ ಮಾಧ್ಯಮವನ್ನು ಆಯ್ಕೆ ಮಾಡುವ ಅಗತ್ಯವಿದೆ."
 
-#: ../src/virtManager/create.py:1527
+#: ../src/virtManager/create.py:1529
 #, fuzzy
 msgid "An OS directory path is required."
 msgstr "ಒಂದು ಸಂಪರ್ಕಸಾಧನದ ಹೆಸರಿನ ಅಗತ್ಯವಿದೆ."
 
-#: ../src/virtManager/create.py:1537
+#: ../src/virtManager/create.py:1540
 msgid "Error setting installer parameters."
 msgstr "ಅನುಸ್ಥಾಪನಾ ನಿಯತಾಂಕಗಳನ್ನು ಸಜ್ಜುಗೊಳಿಸುವಲ್ಲಿ ದೋಷ."
 
-#: ../src/virtManager/create.py:1565
+#: ../src/virtManager/create.py:1569
 msgid "Error setting install media location."
 msgstr "ಅನುಸ್ಥಾಪನಾ ಮಾಧ್ಯಮವನ್ನು ಸಜ್ಜುಗೊಳಿಸುವಲ್ಲಿ ದೋಷ."
 
-#: ../src/virtManager/create.py:1575
+#: ../src/virtManager/create.py:1578
 msgid "Error setting OS information."
 msgstr "OS ಮಾಹಿತಿಯನ್ನು ಸಜ್ಜುಗೊಳಿಸುವಲ್ಲಿ ದೋಷ."
 
-#: ../src/virtManager/create.py:1610
+#: ../src/virtManager/create.py:1612
 msgid "Error setting CPUs."
 msgstr "CPUಗಳನ್ನು ಸಜ್ಜುಗೊಳಿಸುವಲ್ಲಿ ದೋಷ."
 
-#: ../src/virtManager/create.py:1617
+#: ../src/virtManager/create.py:1619
 msgid "Error setting guest memory."
 msgstr "ಆತಿಥೇಯ ಮೆಮೊರಿಯನ್ನು ಸಜ್ಜುಗೊಳಿಸುವಲ್ಲಿ ದೋಷ."
 
-#: ../src/virtManager/create.py:1732
+#: ../src/virtManager/create.py:1735
 #, python-format
 msgid "Network device required for %s install."
 msgstr "%s ಅನುಸ್ಥಾಪನೆಗಾಗಿ ಜಾಲಬಂಧ ಸಾಧನದ ಅಗತ್ಯವಿದೆ."
 
-#: ../src/virtManager/create.py:1829
+#: ../src/virtManager/create.py:1832
 #, fuzzy
 msgid "Error starting installation: "
 msgstr "ಅನುಸ್ಥಾಪನಾ ಮಾಧ್ಯಮವನ್ನು ಸಜ್ಜುಗೊಳಿಸುವಲ್ಲಿ ದೋಷ."
 
-#: ../src/virtManager/create.py:1866
+#: ../src/virtManager/create.py:1869
 msgid "Creating Virtual Machine"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕವನ್ನು ರಚಿಸಲಾಗುತ್ತಿದೆ"
 
-#: ../src/virtManager/create.py:1867
+#: ../src/virtManager/create.py:1870
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -1132,22 +1144,22 @@ msgstr ""
 "ವರ್ಚುವಲ್ ಗಣಕವನ್ನು ಈಗ ರಚಿಸಲಾಗುತ್ತಿದೆ. ಡಿಸ್ಕಿನ ಶೇಖರಣೆಯನ್ನು ನಿಯೋಜಿಸುವುದನ್ನು ಹಾಗು "
 "ಅನುಸ್ಥಾಪನಾ ಚಿತ್ರಿಕೆಯನ್ನು ಮರಳಿ ಪಡೆಯುವುದನ್ನು ಪೂರ್ಣಗೊಳಿಸುವಲ್ಲಿ ಒಂದಿಷ್ಟು ಸಮಯ ಹಿಡಿಯುತ್ತದೆ."
 
-#: ../src/virtManager/create.py:1879
+#: ../src/virtManager/create.py:1882
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "ಅನುಸ್ಥಾಪನೆಯನ್ನು ಪೂರ್ಣಗೊಳಿಸಲು ಸಾಧ್ಯವಾಗಿಲಿಲ್ಲ: '%s'"
 
-#: ../src/virtManager/create.py:1950
+#: ../src/virtManager/create.py:1953
 #, python-format
 msgid "Error continue install: %s"
 msgstr "ಅನುಸ್ಥಾಪನೆಯನ್ನು ಮುಂದುವರೆಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: ../src/virtManager/create.py:2058
+#: ../src/virtManager/create.py:2061
 msgid "Detecting"
 msgstr "ಪತ್ತೆಹಚ್ಚಲಾಗುತ್ತಿದೆ"
 
 #: ../src/virtManager/createinterface.py:201
-#: ../src/virtManager/uihelpers.py:397
+#: ../src/virtManager/uihelpers.py:416
 msgid "Bridge"
 msgstr "ಬ್ರಿಡ್ಜ್‍"
 
@@ -1163,7 +1175,7 @@ msgstr "ಎಥರ್ನೆಟ್"
 msgid "VLAN"
 msgstr "VLAN"
 
-#: ../src/virtManager/createinterface.py:222 ../src/virtManager/details.py:673
+#: ../src/virtManager/createinterface.py:222 ../src/virtManager/details.py:693
 #: ../src/virtManager/manager.py:366 ../src/virtManager/storagebrowse.py:125
 #: ../src/vmm-create-net.glade.h:29 ../src/vmm-create-pool.glade.h:9
 #: ../src/vmm-create.glade.h:34
@@ -1228,7 +1240,7 @@ msgstr ""
 "ಇವನ್ನು ಬಳಸುವುದರಿಂದ ಅವುಗಳ ಈಗಿನ ಸಂರಚನೆಯು ತಿದ್ದಿ ಬರೆಯಲ್ಪಡುತ್ತದೆ. ಆರಿಸಲಾದ "
 "ಸಂಪರ್ಕಸಾಧನವನ್ನು(ಗಳನ್ನು) ಖಚಿತವಾಗಿಯೂ ಬಳಸಲು ಬಯಸುತ್ತೀರೆ?"
 
-#: ../src/virtManager/createinterface.py:1000
+#: ../src/virtManager/createinterface.py:1001
 msgid "Error setting interface parameters."
 msgstr "ಅನುಸ್ಥಾಪನಾ ನಿಯತಾಂಕಗಳನ್ನು ಸಜ್ಜುಗೊಳಿಸುವಲ್ಲಿ ದೋಷ."
 
@@ -1292,13 +1304,13 @@ msgstr "ಇತರೆ"
 msgid "Start address:"
 msgstr "ಆರಂಭದ ವಿಳಾಸ:"
 
-#: ../src/virtManager/createnet.py:279 ../src/vmm-details.glade.h:115
+#: ../src/virtManager/createnet.py:279 ../src/vmm-details.glade.h:116
 msgid "Status:"
 msgstr "ಪರಿಸ್ಥಿತಿ:"
 
-#: ../src/virtManager/createnet.py:280 ../src/virtManager/details.py:2486
-#: ../src/virtManager/details.py:2487 ../src/virtManager/details.py:2488
-#: ../src/virtManager/details.py:2489 ../src/virtManager/host.py:547
+#: ../src/virtManager/createnet.py:280 ../src/virtManager/details.py:2527
+#: ../src/virtManager/details.py:2528 ../src/virtManager/details.py:2529
+#: ../src/virtManager/details.py:2530 ../src/virtManager/host.py:547
 #: ../src/virtManager/host.py:548
 msgid "Disabled"
 msgstr "ಅಶಕ್ತಗೊಂಡ"
@@ -1507,22 +1519,32 @@ msgstr ""
 "ಶೇಖರಣೆಯನ್ನು ಈ ಕೆಳಗಿನ ವರ್ಚುವಲ್ ಗಣಕಗಳಿಂದ ಬಳಸಲಾಗುತ್ತಿದೆ:\n"
 "- %s "
 
-#: ../src/virtManager/details.py:573
+#: ../src/virtManager/details.py:186
+#, python-format
+msgid "%s:%s"
+msgstr ""
+
+#: ../src/virtManager/details.py:190
+#, python-format
+msgid "Redirected %s"
+msgstr ""
+
+#: ../src/virtManager/details.py:593
 #, fuzzy
 msgid "_Add Hardware"
 msgstr "ಯಂತ್ರಾಂಶವನ್ನು ಸೇರಿಸಿ"
 
-#: ../src/virtManager/details.py:580
+#: ../src/virtManager/details.py:600
 #, fuzzy
 msgid "_Remove Hardware"
 msgstr "ಯಂತ್ರಾಂಶವನ್ನು ಸೇರಿಸು(_d)"
 
-#: ../src/virtManager/details.py:674
+#: ../src/virtManager/details.py:694
 #, fuzzy
 msgid "Version"
 msgstr "ಆವೃತ್ತಿ(_V):"
 
-#: ../src/virtManager/details.py:709
+#: ../src/virtManager/details.py:729
 #, fuzzy
 msgid ""
 "Static SELinux security type tells libvirt to always start the guest process "
@@ -1533,7 +1555,7 @@ msgstr ""
 "ಆರಂಭಿಸುವಂತೆ libvirt ಗೆ ಸೂಚಿಸುತ್ತದೆ. ಲೇಬಲ್‌ಗಳು ಡಿಸ್ಕಿನಲ್ಲಿ ಸಮರ್ಪಕವಾಗಿ ಲೇಬಲ್ "
 "ಮಾಡಲ್ಪಟ್ಟಿವೆ ಎಂದು ಖಾತ್ರಿ ಮಾಡುವುದು ವ್ಯವಸ್ಥಾಪಕನ ಜವಾಬ್ದಾರಿಯಾಗಿರುತ್ತದೆ."
 
-#: ../src/virtManager/details.py:711
+#: ../src/virtManager/details.py:731
 msgid ""
 "The dynamic SELinux security type tells libvirt to automatically pick a "
 "unique label for the guest process and guest image, ensuring total isolation "
@@ -1543,74 +1565,74 @@ msgstr ""
 "ವಿಶಿಷ್ಟವಾದ ಲೇಬಲ್ ಅನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಆರಿಸಿಕೊಳ್ಳುವಂತೆ libvirt ಗೆ ಸೂಚಿಸುತ್ತದೆ, "
 "ಇದರಿಂದಾಗಿ ಅತಿಥಿಯು ಸಂಪೂರ್ಣವಾಗಿ ಪ್ರತ್ಯೇಕಿಸಲ್ಪಟ್ಟಂತಾಗುತ್ತದೆ. (ಪೂರ್ವನಿಯೋಜಿತ)"
 
-#: ../src/virtManager/details.py:720
+#: ../src/virtManager/details.py:740
 msgid "Libvirt did not detect NUMA capabilities."
 msgstr ""
 
-#: ../src/virtManager/details.py:728
+#: ../src/virtManager/details.py:748
 msgid "VCPU"
 msgstr "VCPU"
 
-#: ../src/virtManager/details.py:729
+#: ../src/virtManager/details.py:749
 msgid "On CPU"
 msgstr "CPU ನಲ್ಲಿ"
 
-#: ../src/virtManager/details.py:730
+#: ../src/virtManager/details.py:750
 msgid "Pinning"
 msgstr "ಪಿನ್‌ ಮಾಡಲಾಗುತ್ತಿದೆ"
 
-#: ../src/virtManager/details.py:987
+#: ../src/virtManager/details.py:1011
 #, fuzzy
 msgid "No text console available"
 msgstr "ಯಾವುದೆ ಸಂಪರ್ಕಗಳ ಲಭ್ಯವಿಲ್ಲ."
 
-#: ../src/virtManager/details.py:1059
+#: ../src/virtManager/details.py:1083
 #, fuzzy
 msgid "No graphical console available"
 msgstr "ಚಿತ್ರಾತ್ಮಕ ಕನ್ಸೋಲನ್ನು ತೋರಿಸು"
 
-#: ../src/virtManager/details.py:1064
+#: ../src/virtManager/details.py:1088
 #, python-format
 msgid "Graphical Console %s"
 msgstr "ಗ್ರಾಫಿಕಲ್ ಕನ್ಸೋಲ್ %s"
 
-#: ../src/virtManager/details.py:1147
+#: ../src/virtManager/details.py:1174
 #, fuzzy
 msgid "There are unapplied changes. Would you like to apply them now?"
 msgstr "ವರ್ಚುವಲ್ ಜಾಲಬಂಧ '%s' ವು ಸಕ್ರಿಯಾಗಿಲ್ಲ. ನೀವು ಜಾಲಬಂಧವನ್ನು ಆರಂಭಿಸಲು ಬಯಸುತ್ತೀರೆ?"
 
-#: ../src/virtManager/details.py:1149
+#: ../src/virtManager/details.py:1176
 #, fuzzy
 msgid "Don't warn me again."
 msgstr "ನನ್ನನ್ನು ಇನ್ನೊಮ್ಮೆ ಕೇಳಬೇಡ."
 
-#: ../src/virtManager/details.py:1221
+#: ../src/virtManager/details.py:1250
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "ಯಂತ್ರಾಂಶ ಪುಟವನ್ನು ಪುನಶ್ಚೇತನಗೊಳಿಸುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ: %s"
 
-#: ../src/virtManager/details.py:1280 ../src/virtManager/manager.py:947
+#: ../src/virtManager/details.py:1309 ../src/virtManager/manager.py:947
 #, fuzzy
 msgid "_Restore"
 msgstr "ಪುನಃ ಆರಂಭಿಸು(_R)"
 
 #. Build VM context menu
-#: ../src/virtManager/details.py:1282 ../src/virtManager/manager.py:315
+#: ../src/virtManager/details.py:1311 ../src/virtManager/manager.py:315
 #: ../src/virtManager/manager.py:949 ../src/virtManager/systray.py:166
-#: ../src/vmm-details.glade.h:160 ../src/vmm-manager.glade.h:20
+#: ../src/vmm-details.glade.h:162 ../src/vmm-manager.glade.h:20
 msgid "_Run"
 msgstr "ಚಲಾಯಿಸು (_R)"
 
-#: ../src/virtManager/details.py:1394
+#: ../src/virtManager/details.py:1424
 #, fuzzy, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "ಇಚ್ಛೆಗೆ ಅನುಸಾರವಾಗಿ ಬದಲಾಯಿಸಲಾದ ಸಂವಾದ ಚೌಕವನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ವಿಫಲತೆ: "
 
-#: ../src/virtManager/details.py:1466
+#: ../src/virtManager/details.py:1496
 msgid "Save Virtual Machine Screenshot"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕದ ತೆರೆಚಿತ್ರವನ್ನು ಉಳಿಸು"
 
-#: ../src/virtManager/details.py:1490
+#: ../src/virtManager/details.py:1520
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -1619,258 +1641,276 @@ msgstr ""
 "ತೆರೆಚಿತ್ರವನ್ನು ಕೆಳಗಿನಂತೆ ಉಳಿಸಲಾಗಿದೆ:\n"
 "%s"
 
-#: ../src/virtManager/details.py:1492
+#: ../src/virtManager/details.py:1522
 msgid "Screenshot saved"
 msgstr "ತೆರೆಚಿತ್ರವನ್ನು ಉಳಿಸಲಾಗಿದೆ"
 
-#: ../src/virtManager/details.py:1668
-#, fuzzy, python-format
-msgid "Error generating CPU configuration: %s"
+#: ../src/virtManager/details.py:1698
+#, fuzzy
+msgid "Error generating CPU configuration"
 msgstr "IP ಸಂರಚನೆಯನ್ನು ಮಾನ್ಯಗೊಳಿಸುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ: %s"
 
-#: ../src/virtManager/details.py:1702
+#: ../src/virtManager/details.py:1732
 #, fuzzy, python-format
 msgid "Error copying host CPU: %s"
 msgstr "ಪರಿಮಾಣವನ್ನು ನಿರ್ಮಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: ../src/virtManager/details.py:1837
+#: ../src/virtManager/details.py:1807
+#, fuzzy, python-format
+msgid "Error disconnecting media: %s"
+msgstr "CDROMನೊಂದಿಗೆ ಸಂಪರ್ಕಸಾಧಿಸುವಲ್ಲಿ ದೋಷ: %s"
+
+#: ../src/virtManager/details.py:1827
+#, fuzzy, python-format
+msgid "Error launching media dialog: %s"
+msgstr "ಇಚ್ಛೆಗೆ ಅನುಸಾರವಾಗಿ ಬದಲಾಯಿಸಲಾದ ಸಂವಾದ ಚೌಕವನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ವಿಫಲತೆ: "
+
+#: ../src/virtManager/details.py:1877
 #, fuzzy, python-format
 msgid "Error apply changes: %s"
 msgstr "ಜಾಲಬಂಧ ಗಾರುಡಿ (ವಿಝಾರ್ಡ್) ಅನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: ../src/virtManager/details.py:1964
-#, python-format
-msgid "Error building pin list: %s"
+#: ../src/virtManager/details.py:2004
+#, fuzzy
+msgid "Error building pin list"
 msgstr "ಪಿನ್ ಪಟ್ಟಿಯನ್ನು ನಿರ್ಮಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: ../src/virtManager/details.py:1970
-#, python-format
-msgid "Error pinning vcpus: %s"
+#: ../src/virtManager/details.py:2010
+#, fuzzy
+msgid "Error pinning vcpus"
 msgstr "vcpus ಅನ್ನು ಪಿನ್ ಮಾಡುವಲ್ಲಿ ದೋಷ: %s"
 
-#: ../src/virtManager/details.py:2019
+#: ../src/virtManager/details.py:2059
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "ಸ್ವಯಂ ಆರಂಭದ ಮೌಲ್ಯವನ್ನು ಬದಲಾಯಿಸುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ: %s"
 
-#: ../src/virtManager/details.py:2037
+#: ../src/virtManager/details.py:2077
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr ""
 
-#: ../src/virtManager/details.py:2040
+#: ../src/virtManager/details.py:2080
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr ""
 
-#: ../src/virtManager/details.py:2047
+#: ../src/virtManager/details.py:2087
 #, fuzzy
 msgid "An init path must be specified"
 msgstr "ಒಂದು ಮಾಧ್ಯಮದ ಮಾರ್ಗದ ಅಗತ್ಯವಿದೆ."
 
-#: ../src/virtManager/details.py:2181
+#: ../src/virtManager/details.py:2221
 #, python-format
 msgid ""
 "You are switching graphics type to %(gtype)s, would you like to %(action)s "
 "Spice agent channels?"
 msgstr ""
 
-#: ../src/virtManager/details.py:2242
+#: ../src/virtManager/details.py:2282
 msgid "Are you sure you want to remove this device?"
 msgstr "ನೀವು ಈ ಕಡತವನ್ನು ತೆಗೆದು ಹಾಕಲು ಖಚಿತವೆ?"
 
-#: ../src/virtManager/details.py:2249
+#: ../src/virtManager/details.py:2289
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "ಸಾಧನವನ್ನು ತೆಗೆದು ಹಾಕುವಲ್ಲಿ ದೋಷ: %s"
 
-#: ../src/virtManager/details.py:2265
+#: ../src/virtManager/details.py:2306
 #, fuzzy
 msgid "Device could not be removed from the running machine"
 msgstr "ಚಾಲನೆಯಲ್ಲಿರುವ ಗಣಕದಿಂದ ಸಾಧನವನ್ನು ತೆಗೆದು ಹಾಕಲು ಸಾಧ್ಯವಿರುವುದಿಲ್ಲ."
 
-#: ../src/virtManager/details.py:2267
+#: ../src/virtManager/details.py:2308
 #, fuzzy
 msgid "This change will take effect after the next guest shutdown."
 msgstr ""
 "ಮುಂದಿನ ಬಾರಿ ಅತಿಥಿಯನ್ನು ಮರಳಿ ಬೂಟ್‌ ಮಾಡಿದ ನಂತರ ಈ ಬದಲಾವಣೆಗಳು ಕಾರ್ಯರೂಪಕ್ಕೆ ಬರುತ್ತವೆ. "
 
-#: ../src/virtManager/details.py:2321
+#: ../src/virtManager/details.py:2362
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "VM ಸಂರಚನೆಯನ್ನು ಬದಲಾಯಿಸುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ: %s"
 
-#: ../src/virtManager/details.py:2331
+#: ../src/virtManager/details.py:2372
 #, fuzzy
 msgid "Some changes may require a guest shutdown to take effect."
 msgstr ""
 "ಕೆಲವು ಬದಲಾವಣೆಗಳು ಕಾರ್ಯರೂಪಕ್ಕೆ ಬರಲು ಅತಿಥಿಯವನ್ನು ಮರು ಬೂಟ್ ಮಾಡುವ ಅಗತ್ಯವಿರುತ್ತದೆ."
 
-#: ../src/virtManager/details.py:2334
+#: ../src/virtManager/details.py:2375
 #, fuzzy
 msgid "These changes will take effect after the next guest shutdown."
 msgstr ""
 "ಮುಂದಿನ ಬಾರಿ ಅತಿಥಿಯನ್ನು ಮರಳಿ ಬೂಟ್‌ ಮಾಡಿದ ನಂತರ ಈ ಬದಲಾವಣೆಗಳು ಕಾರ್ಯರೂಪಕ್ಕೆ ಬರುತ್ತವೆ. "
 
-#: ../src/virtManager/details.py:2407 ../src/virtManager/details.py:2411
+#: ../src/virtManager/details.py:2448 ../src/virtManager/details.py:2452
 #, fuzzy
 msgid "unknown"
 msgstr "ಅಜ್ಞಾತ"
 
-#: ../src/virtManager/details.py:2451 ../src/vmm-add-hardware.glade.h:35
+#: ../src/virtManager/details.py:2492 ../src/vmm-add-hardware.glade.h:36
 msgid "Same as host"
 msgstr "ಆತಿಥೇಯದಂತೆ"
 
-#: ../src/virtManager/details.py:2551
+#: ../src/virtManager/details.py:2592
 msgid "VCPU info only available for running domain."
 msgstr "VCPU ಮಾಹಿತಿಯು ಕೇವಲ ಚಾಲನೆಯಲ್ಲಿರುವ ಡೊಮೈನಿನಲ್ಲಿ ಮಾತ್ರ ಲಭ್ಯವಿರುತ್ತದೆ."
 
-#: ../src/virtManager/details.py:2556
+#: ../src/virtManager/details.py:2597
 #, python-format
 msgid "Error getting VCPU info: %s"
 msgstr "VCPU ಮಾಹಿತಿಯನ್ನು ಪಡೆಯುವಲ್ಲಿ ದೋಷ: %s"
 
-#: ../src/virtManager/details.py:2559
+#: ../src/virtManager/details.py:2600
 msgid "Virtual machine does not support runtime VPCU info."
 msgstr "ವರ್ಚುವಲ್ ಗಣಕವು ರನ್‌ಟೈಮ್ VPCU ಮಾಹಿತಿಯನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ."
 
-#: ../src/virtManager/details.py:2790
+#: ../src/virtManager/details.py:2831
 msgid "Xen Mouse"
 msgstr "Xen ಮೌಸ್"
 
-#: ../src/virtManager/details.py:2792
+#: ../src/virtManager/details.py:2833
 msgid "PS/2 Mouse"
 msgstr "PS/2 ಮೌಸ್"
 
-#: ../src/virtManager/details.py:2797
+#: ../src/virtManager/details.py:2838
 msgid "Absolute Movement"
 msgstr "ಸಂಪೂರ್ಣವಾದ ಚಲನೆ"
 
-#: ../src/virtManager/details.py:2799
+#: ../src/virtManager/details.py:2840
 msgid "Relative Movement"
 msgstr "ಅನುಗುಣವಾದ ಚಲನೆ"
 
-#: ../src/virtManager/details.py:2834
+#: ../src/virtManager/details.py:2875
 msgid "Automatically allocated"
 msgstr "ಸ್ವಯಂಚಾಲಿತ ನಿಯೋಜಿಸಲಾದ"
 
-#: ../src/virtManager/details.py:2842
+#: ../src/virtManager/details.py:2883
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr ""
 
-#: ../src/virtManager/details.py:2865
+#: ../src/virtManager/details.py:2906
 #, fuzzy
 msgid "Local SDL Window"
 msgstr "ಸ್ಥಳೀಯ SDL ವಿಂಡೋ"
 
-#: ../src/virtManager/details.py:2938
+#: ../src/virtManager/details.py:2993
 #, fuzzy
 msgid "Serial Device"
 msgstr "ಆಕರ ಸಾಧನ:"
 
-#: ../src/virtManager/details.py:2940
+#: ../src/virtManager/details.py:2995
 #, fuzzy
 msgid "Parallel Device"
 msgstr "ಆಕರ ಸಾಧನ:"
 
-#: ../src/virtManager/details.py:2942
+#: ../src/virtManager/details.py:2997
 #, fuzzy
 msgid "Console Device"
 msgstr "ಕನ್ಸೋಲ್"
 
-#: ../src/virtManager/details.py:2944
+#: ../src/virtManager/details.py:2999
 msgid "Channel Device"
 msgstr ""
 
-#: ../src/virtManager/details.py:2946
+#: ../src/virtManager/details.py:3001
 #, fuzzy, python-format
 msgid "%s Device"
 msgstr "ಸಾಧನ:"
 
-#: ../src/virtManager/details.py:2951
+#: ../src/virtManager/details.py:3006
 msgid "Primary Console"
 msgstr "ಪ್ರಾಥಮಿಕ ಕನ್ಸೋಲ್"
 
-#: ../src/virtManager/details.py:3199
+#: ../src/virtManager/details.py:3079 ../src/vmm-add-hardware.glade.h:11
+msgid "Default"
+msgstr ""
+
+#: ../src/virtManager/details.py:3261
 msgid "Tablet"
 msgstr "ಟ್ಯಾಬ್ಲೆಟ್"
 
-#: ../src/virtManager/details.py:3202
+#: ../src/virtManager/details.py:3264
 msgid "Mouse"
 msgstr "ಮೌಸ್"
 
-#: ../src/virtManager/details.py:3211
+#: ../src/virtManager/details.py:3273
 #, python-format
 msgid "Display %s"
 msgstr "ಪ್ರದರ್ಶಕ %s"
 
-#: ../src/virtManager/details.py:3217
+#: ../src/virtManager/details.py:3279
 #, python-format
 msgid "Sound: %s"
 msgstr "ಧ್ವನಿ: %s"
 
-#: ../src/virtManager/details.py:3245
+#: ../src/virtManager/details.py:3318
 msgid "Video"
 msgstr "ವೀಡಿಯೋ"
 
-#: ../src/virtManager/details.py:3249
+#: ../src/virtManager/details.py:3322
 msgid "Watchdog"
 msgstr "ವಾಚ್‌ಡಾಗ್"
 
-#: ../src/virtManager/details.py:3256
+#: ../src/virtManager/details.py:3329
 #, python-format
 msgid "Controller %s"
 msgstr ""
 
-#: ../src/virtManager/details.py:3263
+#: ../src/virtManager/details.py:3336
 #, python-format
 msgid "Filesystem %s"
 msgstr ""
 
-#: ../src/virtManager/domain.py:316
+#: ../src/virtManager/domain.py:317
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 
-#: ../src/virtManager/domain.py:374
+#: ../src/virtManager/domain.py:375
 msgid "Cannot rename an active guest"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1048
+#: ../src/virtManager/domain.py:1051
 msgid "Cannot start guest while cloning operation in progress"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1062
+#: ../src/virtManager/domain.py:1070
 msgid "Cannot resume guest while cloning operation in progress"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1077
+#: ../src/virtManager/domain.py:1085
 #, fuzzy
 msgid "Saving domain to disk"
 msgstr "ಡೊಮೈನ್ ಅನ್ನು ಉಳಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: ../src/virtManager/domain.py:1121
+#: ../src/virtManager/domain.py:1129
 #, fuzzy
 msgid "Migrating domain"
 msgstr "ಡೊಮೈನ್ ಅನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: ../src/virtManager/domain.py:1331
+#: ../src/virtManager/domain.py:1339
 msgid "Running"
 msgstr "ಚಲಾಯಿಸಲಾಗುತ್ತಿದೆ"
 
-#: ../src/virtManager/domain.py:1333
+#: ../src/virtManager/domain.py:1341
 msgid "Paused"
 msgstr "ತಾತ್ಕಾಲಿಕ ತಡೆಯಾಗಿದೆ"
 
-#: ../src/virtManager/domain.py:1335
+#: ../src/virtManager/domain.py:1343
 #, fuzzy
 msgid "Shutting Down"
 msgstr "ಮುಚ್ಚಲಾಗುತ್ತಿದೆ"
 
-#: ../src/virtManager/domain.py:1337
+#: ../src/virtManager/domain.py:1346
+msgid "Saved"
+msgstr ""
+
+#: ../src/virtManager/domain.py:1348
 msgid "Shutoff"
 msgstr "ಮುಚ್ಚಿಹಾಕು"
 
-#: ../src/virtManager/domain.py:1339
+#: ../src/virtManager/domain.py:1350
 msgid "Crashed"
 msgstr "ಕುಸಿತಗೊಂಡ"
 
@@ -2122,7 +2162,7 @@ msgstr "ಡೊಮೈನ್ ಅನ್ನು  ಮರಳಿ ಆರಂಭಿಸು�
 msgid "Input Error"
 msgstr "ಆದಾನ ದೋಷ"
 
-#: ../src/virtManager/error.py:193 ../src/vmm-details.glade.h:53
+#: ../src/virtManager/error.py:202 ../src/vmm-details.glade.h:54
 msgid "Details"
 msgstr "ವಿವರಣೆಗಳು"
 
@@ -2315,7 +2355,7 @@ msgid "Error selecting interface: %s"
 msgstr "ಸಂಪರ್ಕಸಾಧನವನ್ನು ಆರಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
 #: ../src/virtManager/manager.py:316 ../src/virtManager/systray.py:153
-#: ../src/vmm-details.glade.h:156 ../src/vmm-manager.glade.h:19
+#: ../src/vmm-details.glade.h:158 ../src/vmm-manager.glade.h:19
 msgid "_Pause"
 msgstr "ತಾತ್ಕಾಲಿಕ ತಡೆ (_P)"
 
@@ -2325,22 +2365,22 @@ msgstr "ಮರಳಿ ಆರಂಭಿಸು(_e)"
 
 #: ../src/virtManager/manager.py:319 ../src/virtManager/manager.py:322
 #: ../src/virtManager/systray.py:180 ../src/virtManager/systray.py:198
-#: ../src/virtManager/uihelpers.py:830
+#: ../src/virtManager/uihelpers.py:849
 msgid "_Shut Down"
 msgstr "ಮುಚ್ಚು(_S)"
 
 #. Shutdown menu
 #: ../src/virtManager/manager.py:321 ../src/virtManager/systray.py:173
-#: ../src/virtManager/uihelpers.py:824 ../src/vmm-details.glade.h:158
+#: ../src/virtManager/uihelpers.py:843 ../src/vmm-details.glade.h:160
 msgid "_Reboot"
 msgstr "ಮರಳಿ ಬೂಟ್ ಮಾಡು (_R)"
 
 #: ../src/virtManager/manager.py:324 ../src/virtManager/systray.py:187
-#: ../src/virtManager/uihelpers.py:836 ../src/vmm-details.glade.h:144
+#: ../src/virtManager/uihelpers.py:855 ../src/vmm-details.glade.h:146
 msgid "_Force Off"
 msgstr "ಒತ್ತಾಯಪೂರ್ವಕವಾಗಿ ಮುಚ್ಚು(_F)"
 
-#: ../src/virtManager/manager.py:327 ../src/virtManager/uihelpers.py:846
+#: ../src/virtManager/manager.py:327 ../src/virtManager/uihelpers.py:865
 #, fuzzy
 msgid "Sa_ve"
 msgstr "ಉಳಿಸು (_S)"
@@ -2350,7 +2390,7 @@ msgstr "ಉಳಿಸು (_S)"
 msgid "_Clone..."
 msgstr "ತದ್ರೂಪ(_C)"
 
-#: ../src/virtManager/manager.py:331 ../src/vmm-details.glade.h:151
+#: ../src/virtManager/manager.py:331 ../src/vmm-details.glade.h:153
 msgid "_Migrate..."
 msgstr "ವರ್ಗಾಯಿಸು(_M)..."
 
@@ -2419,12 +2459,12 @@ msgstr ""
 msgid "Double click to connect"
 msgstr "ಸಂಪರ್ಕ ಹೊಂದಲು ಎರಡು ಬಾರಿ ಕ್ಲಿಕ್ಕಿಸಿ"
 
-#: ../src/virtManager/manager.py:705
+#: ../src/virtManager/manager.py:707
 #, fuzzy
 msgid "Not Connected"
 msgstr "ಸಂಪರ್ಕಿಸು (_n)"
 
-#: ../src/virtManager/manager.py:707
+#: ../src/virtManager/manager.py:709
 #, fuzzy
 msgid "Connecting..."
 msgstr "ಸಂಪರ್ಕ ಕಲ್ಪಿಸಲಾಗುತ್ತಿದೆ"
@@ -2643,105 +2683,105 @@ msgid "Could not start storage_pool '%s': %s"
 msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಶೇಖರಣಾ ಪೂಲ್ '%s' ಅನ್ನು ನಿರ್ಮಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ: %s"
 
 #. [xml value, label]
-#: ../src/virtManager/uihelpers.py:289
+#: ../src/virtManager/uihelpers.py:308
 msgid "Hypervisor default"
 msgstr "ಹೈಪರ್ವೈಸರ್ ಪೂರ್ವನಿಯೋಜಿತ"
 
-#: ../src/virtManager/uihelpers.py:393
+#: ../src/virtManager/uihelpers.py:412
 msgid "Usermode networking"
 msgstr "ಬಳಕೆದಾರಕ್ರಮ ಜಾಲಬಂಧ"
 
-#: ../src/virtManager/uihelpers.py:399
+#: ../src/virtManager/uihelpers.py:418
 msgid "Virtual network"
 msgstr "ವರ್ಚುವಲ್‌ ಜಾಲಬಂಧ"
 
-#: ../src/virtManager/uihelpers.py:525
+#: ../src/virtManager/uihelpers.py:544
 msgid "No virtual networks available"
 msgstr "ಯಾವುದೆ ವರ್ಚುವಲ್ ಜಾಲಬಂಧಗಳು ಲಭ್ಯವಿಲ್ಲ"
 
-#: ../src/virtManager/uihelpers.py:547
+#: ../src/virtManager/uihelpers.py:566
 msgid "(Empty bridge)"
 msgstr "(ಖಾಲಿ ಬ್ರಿಡ್ಜ್‍)"
 
-#: ../src/virtManager/uihelpers.py:554
+#: ../src/virtManager/uihelpers.py:573
 msgid "macvtap"
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:557
+#: ../src/virtManager/uihelpers.py:576
 msgid "Not bridged"
 msgstr "ಬ್ರಿಡ್ಜ್‍ ಆಗದ"
 
-#: ../src/virtManager/uihelpers.py:559
+#: ../src/virtManager/uihelpers.py:578
 #, python-format
 msgid "Host device %s %s"
 msgstr "ಆತಿಥೇಯ ಸಾಧನ %s %s"
 
-#: ../src/virtManager/uihelpers.py:597
+#: ../src/virtManager/uihelpers.py:616
 #, fuzzy
 msgid "No networking"
 msgstr "ಜಾಲಬಂಧ ಇಲ್ಲ."
 
 #. After all is said and done, add a manual bridge option
-#: ../src/virtManager/uihelpers.py:602
+#: ../src/virtManager/uihelpers.py:621
 msgid "Specify shared device name"
 msgstr "ಹಂಚಲಾದ ಸಾಧನದ ಹೆಸರನ್ನು ಸೂಚಿಸಿ"
 
-#: ../src/virtManager/uihelpers.py:621
+#: ../src/virtManager/uihelpers.py:640
 msgid "Virtual Network is not active."
 msgstr "ವರ್ಚುವಲ್‌ ಜಾಲಬಂಧವು ಸಕ್ರಿಯವಾಗಿಲ್ಲ."
 
-#: ../src/virtManager/uihelpers.py:622
+#: ../src/virtManager/uihelpers.py:641
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr "ವರ್ಚುವಲ್ ಜಾಲಬಂಧ '%s' ವು ಸಕ್ರಿಯಾಗಿಲ್ಲ. ನೀವು ಜಾಲಬಂಧವನ್ನು ಆರಂಭಿಸಲು ಬಯಸುತ್ತೀರೆ?"
 
-#: ../src/virtManager/uihelpers.py:634
+#: ../src/virtManager/uihelpers.py:653
 #, python-format
 msgid "Could not start virtual network '%s': %s"
 msgstr "ವರ್ಚುವಲ್‌ ಜಾಲಬಂಧ '%s' ಅನ್ನು ಆರಂಭಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ: %s"
 
-#: ../src/virtManager/uihelpers.py:657
+#: ../src/virtManager/uihelpers.py:676
 msgid "Error with network parameters."
 msgstr "ಜಾಲಬಂಧ ನಿಯತಾಂಕಗಳಲ್ಲಿ ದೋಷ."
 
-#: ../src/virtManager/uihelpers.py:662 ../src/virtManager/uihelpers.py:664
+#: ../src/virtManager/uihelpers.py:681 ../src/virtManager/uihelpers.py:683
 msgid "Mac address collision."
 msgstr "ಮ್ಯಾಕ್ ವಿಳಾಸದಲ್ಲಿ ಘರ್ಷಣೆ."
 
-#: ../src/virtManager/uihelpers.py:665
+#: ../src/virtManager/uihelpers.py:684
 #, python-format
 msgid "%s Are you sure you want to use this address?"
 msgstr "%s ನೀವು ಈ ವಿಳಾಸವನ್ನು ಬಳಸಲು ಖಚಿತವೆ?"
 
-#: ../src/virtManager/uihelpers.py:717
+#: ../src/virtManager/uihelpers.py:736
 msgid "No device present"
 msgstr "ಯಾವುದೆ ಸಾಧನವಿಲ್ಲ"
 
-#: ../src/virtManager/uihelpers.py:874
+#: ../src/virtManager/uihelpers.py:893
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
 msgstr "ಎಮ್ಯುಲೇಟರ್ '%s' ಮಾರ್ಗಕ್ಕಾಗಿ ಹುಡುಕು ಅನುಮತಿಗಳನ್ನು ಹೊಂದಿದರದೆ ಇರಬಹುದು."
 
-#: ../src/virtManager/uihelpers.py:876
+#: ../src/virtManager/uihelpers.py:895
 msgid "Do you want to correct this now?"
 msgstr "ನೀವು ಇದನ್ನು ಸರಿಪಡಿಸಲು ಬಯಸುತ್ತೀರೆ?"
 
-#: ../src/virtManager/uihelpers.py:877 ../src/virtManager/uihelpers.py:901
+#: ../src/virtManager/uihelpers.py:896 ../src/virtManager/uihelpers.py:920
 msgid "Don't ask about these directories again."
 msgstr "ಈ ಕೋಶಗಳ ಬಗೆಗೆ ಇನ್ನೊಮ್ಮೆ ಕೇಳಬೇಡ."
 
-#: ../src/virtManager/uihelpers.py:890
+#: ../src/virtManager/uihelpers.py:909
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr "ಈ ಕೆಳಗಿನ ಕೋಶಗಳ ಅನುಮತಿಗಳನ್ನು ಬದಲಾಯಿಸುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ:"
 
-#: ../src/virtManager/util.py:69
+#: ../src/virtManager/util.py:71
 #, python-format
 msgid "Couldn't create default storage pool '%s': %s"
 msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಶೇಖರಣಾ ಪೂಲ್ '%s' ಅನ್ನು ನಿರ್ಮಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ: %s"
 
-#: ../src/virtManager/util.py:378
+#: ../src/virtManager/util.py:380
 #, fuzzy
 msgid "Don't ask me again"
 msgstr "ನನ್ನನ್ನು ಇನ್ನೊಮ್ಮೆ ಕೇಳಬೇಡ."
@@ -2810,10 +2850,6 @@ msgstr "ಸಾಧನದ ಮಾದರಿ(_e):"
 msgid "D_evice model:"
 msgstr "ಸಾಧನದ ಮಾದರಿ(_e):"
 
-#: ../src/vmm-add-hardware.glade.h:11
-msgid "Default"
-msgstr ""
-
 #: ../src/vmm-add-hardware.glade.h:12
 msgid "Device Type Field"
 msgstr "ಸಾಧನದ ಬಗೆಯ ಸ್ಥಳ"
@@ -2869,13 +2905,17 @@ msgstr ""
 "ಕಲ್ಪಿಸುತ್ತೀರಿ ಎಂದು ದಯವಿಟ್ಟು ಸೂಚಿಸಿ."
 
 #: ../src/vmm-add-hardware.glade.h:23
+msgid "Please indicate the parameters of the redirected device."
+msgstr ""
+
+#: ../src/vmm-add-hardware.glade.h:24
 msgid ""
 "Please indicate what kind of pointer device to connect to the virtual "
 "machine."
 msgstr ""
 "ವರ್ಚುವಲ್ ಗಣಕದೊಂದಿಗೆ ಸಂಪರ್ಕ ಹೊಂದಲು ಯಾವ ಬಗೆಯ ಸೂಚಕದ ಅಗತ್ಯವಿದೆ ಎಂದು ದಯವಿಟ್ಟು ಸೂಚಿಸಿ."
 
-#: ../src/vmm-add-hardware.glade.h:24
+#: ../src/vmm-add-hardware.glade.h:25
 msgid ""
 "Please indicate what physical device\n"
 "to connect to the virtual machine."
@@ -2883,7 +2923,7 @@ msgstr ""
 "ವರ್ಚುವಲ್ ಗಣಕದೊಂದಿಗೆ ಸಂಪರ್ಕ ಹೊಂದಲು ಯಾವ ಬಗೆಯ ಧ್ವನಿ \n"
 "ಸಾಧನವು ಅಗತ್ಯವಿದೆ ಎಂದು ದಯವಿಟ್ಟು ಸೂಚಿಸಿ."
 
-#: ../src/vmm-add-hardware.glade.h:26
+#: ../src/vmm-add-hardware.glade.h:27
 #, fuzzy
 msgid ""
 "Please indicate what smartcard device mode to connect to the virtual machine."
@@ -2891,14 +2931,14 @@ msgstr ""
 "ವರ್ಚುವಲ್ ಗಣಕದೊಂದಿಗೆ ಸಂಪರ್ಕ ಹೊಂದಲು ಯಾವ ಬಗೆಯ ಧ್ವನಿ ಸಾಧನವು ಅಗತ್ಯವಿದೆ ಎಂದು ದಯವಿಟ್ಟು "
 "ಸೂಚಿಸಿ."
 
-#: ../src/vmm-add-hardware.glade.h:27
+#: ../src/vmm-add-hardware.glade.h:28
 msgid ""
 "Please indicate what sound device type to connect to the virtual machine."
 msgstr ""
 "ವರ್ಚುವಲ್ ಗಣಕದೊಂದಿಗೆ ಸಂಪರ್ಕ ಹೊಂದಲು ಯಾವ ಬಗೆಯ ಧ್ವನಿ ಸಾಧನವು ಅಗತ್ಯವಿದೆ ಎಂದು ದಯವಿಟ್ಟು "
 "ಸೂಚಿಸಿ."
 
-#: ../src/vmm-add-hardware.glade.h:28
+#: ../src/vmm-add-hardware.glade.h:29
 msgid ""
 "Please indicate what video device type\n"
 "to connect to the virtual machine."
@@ -2906,7 +2946,7 @@ msgstr ""
 "ವರ್ಚುವಲ್ ಗಣಕದೊಂದಿಗೆ ಸಂಪರ್ಕ ಹೊಂದಲು ಯಾವ ಬಗೆಯ \n"
 "ವೀಡಿಯೊ ಸಾಧನವು ಅಗತ್ಯವಿದೆ ಎಂದು ದಯವಿಟ್ಟು ಸೂಚಿಸಿ."
 
-#: ../src/vmm-add-hardware.glade.h:30
+#: ../src/vmm-add-hardware.glade.h:31
 msgid ""
 "Please indicate what watchdog device type\n"
 "and default action should be used."
@@ -2914,7 +2954,7 @@ msgstr ""
 "ಯಾವ ಬಗೆಯ ವಾಚ್‌ಡಾಗ್ ಅನ್ನು ಹಾಗು ಪೂರ್ವನಿಯೋಜಿತ\n"
 "ಕ್ರಿಯೆಯನ್ನು ಬಳಸಬೇಕು ಎಂದು ದಯವಿಟ್ಟು ಸೂಚಿಸಿ."
 
-#: ../src/vmm-add-hardware.glade.h:32
+#: ../src/vmm-add-hardware.glade.h:33
 #, fuzzy
 msgid ""
 "Please indicate which host directory to\n"
@@ -2923,113 +2963,118 @@ msgstr ""
 "ವರ್ಚುವಲ್ ಗಣಕದೊಂದಿಗೆ ಸಂಪರ್ಕ ಹೊಂದಲು ಯಾವ ಬಗೆಯ ಧ್ವನಿ ಸಾಧನವು ಅಗತ್ಯವಿದೆ ಎಂದು ದಯವಿಟ್ಟು "
 "ಸೂಚಿಸಿ."
 
-#: ../src/vmm-add-hardware.glade.h:34
+#: ../src/vmm-add-hardware.glade.h:35
 msgid "Po_rt:"
 msgstr "ಸಂಪರ್ಕ ಸ್ಥಾನ(_r):"
 
-#: ../src/vmm-add-hardware.glade.h:36 ../src/vmm-create.glade.h:45
+#: ../src/vmm-add-hardware.glade.h:37 ../src/vmm-create.glade.h:45
 msgid "Select _managed or other existing storage"
 msgstr "ನಿರ್ವಹಿಸಲಾದ ಅಥವ ಈಗಿರುವ ಇತರೆ ಶೇಖರಣೆಯನ್ನು ಆರಿಸು(_m)"
 
-#: ../src/vmm-add-hardware.glade.h:37
+#: ../src/vmm-add-hardware.glade.h:38
 #, fuzzy
 msgid "Storage _format:"
 msgstr "ಶೇಖರಣಾ ಮಾರ್ಗ"
 
-#: ../src/vmm-add-hardware.glade.h:38
+#: ../src/vmm-add-hardware.glade.h:39
 #, fuzzy
 msgid "Ta_rget path:"
 msgstr "ಗುರಿಯ ಮಾರ್ಗ(_T):"
 
-#: ../src/vmm-add-hardware.glade.h:39
+#: ../src/vmm-add-hardware.glade.h:40
 msgid "Use Te_lnet:"
 msgstr "ಟೆಲ್‌ನೆಟ್‌ ಅನ್ನು ಬಳಸು(_l):"
 
-#: ../src/vmm-add-hardware.glade.h:40 ../src/vmm-create-interface.glade.h:34
+#: ../src/vmm-add-hardware.glade.h:41 ../src/vmm-create-interface.glade.h:34
 #: ../src/vmm-migrate.glade.h:10
 msgid "_Address:"
 msgstr "ವಿಳಾಸ(_A):"
 
-#: ../src/vmm-add-hardware.glade.h:41 ../src/vmm-create.glade.h:53
+#: ../src/vmm-add-hardware.glade.h:42 ../src/vmm-create.glade.h:53
 msgid "_Allocate entire disk now"
 msgstr "ಈಗ ಸಂಪೂರ್ಣ ಡಿಸ್ಕನ್ನು ನಿಯೋಜಿಸು(_A)"
 
-#: ../src/vmm-add-hardware.glade.h:42
+#: ../src/vmm-add-hardware.glade.h:43
 msgid "_Bind Host:"
 msgstr "ಆತಿಥೇಯವನ್ನು ಬೈಂಡ್ ಮಾಡು(_B):"
 
-#: ../src/vmm-add-hardware.glade.h:43 ../src/vmm-create.glade.h:55
-#: ../src/vmm-details.glade.h:138
+#: ../src/vmm-add-hardware.glade.h:44 ../src/vmm-create.glade.h:55
+#: ../src/vmm-details.glade.h:140
 msgid "_Bridge name:"
 msgstr "ಬ್ರಿಡ್ಜ್‍ ಹೆಸರು(_B):"
 
-#: ../src/vmm-add-hardware.glade.h:44 ../src/vmm-choose-cd.glade.h:4
+#: ../src/vmm-add-hardware.glade.h:45 ../src/vmm-choose-cd.glade.h:4
 #: ../src/vmm-clone.glade.h:23
 msgid "_Browse..."
 msgstr "ವೀಕ್ಷಿಸು(_B)..."
 
-#: ../src/vmm-add-hardware.glade.h:45
+#: ../src/vmm-add-hardware.glade.h:46
 msgid "_Device type:"
 msgstr "ಸಾಧನದ ಬಗೆ(_D):"
 
-#: ../src/vmm-add-hardware.glade.h:46 ../src/vmm-create-interface.glade.h:37
+#: ../src/vmm-add-hardware.glade.h:47 ../src/vmm-create-interface.glade.h:37
 #: ../src/vmm-create-net.glade.h:52 ../src/vmm-create-pool.glade.h:13
 #: ../src/vmm-create-vol.glade.h:22 ../src/vmm-create.glade.h:57
 msgid "_Finish"
 msgstr "ಮುಗಿಸು (_F)"
 
-#: ../src/vmm-add-hardware.glade.h:47 ../src/vmm-create.glade.h:58
+#: ../src/vmm-add-hardware.glade.h:48 ../src/vmm-create.glade.h:58
 msgid "_GB"
 msgstr "_GB"
 
-#: ../src/vmm-add-hardware.glade.h:48
+#: ../src/vmm-add-hardware.glade.h:49
 msgid "_Host device:"
 msgstr "ಆತಿಥೇಯ ಸಾಧನ(_H):"
 
-#: ../src/vmm-add-hardware.glade.h:49 ../src/vmm-details.glade.h:148
+#: ../src/vmm-add-hardware.glade.h:50
+#, fuzzy
+msgid "_Host:"
+msgstr "ಆತಿಥೇಯ(_o):"
+
+#: ../src/vmm-add-hardware.glade.h:51 ../src/vmm-details.glade.h:150
 msgid "_Keymap:"
 msgstr "ಕೀಲಿನಕ್ಷೆ(_K):"
 
-#: ../src/vmm-add-hardware.glade.h:50
+#: ../src/vmm-add-hardware.glade.h:52
 msgid "_MAC address:"
 msgstr "MAC ವಿಳಾಸ(_M):"
 
-#: ../src/vmm-add-hardware.glade.h:51 ../src/vmm-create-interface.glade.h:40
+#: ../src/vmm-add-hardware.glade.h:53 ../src/vmm-create-interface.glade.h:40
 #: ../src/vmm-create-net.glade.h:54
 msgid "_Mode:"
 msgstr "ಕ್ರಮ(_M):"
 
-#: ../src/vmm-add-hardware.glade.h:52
+#: ../src/vmm-add-hardware.glade.h:54
 msgid "_Model:"
 msgstr "ಮಾದರಿ(_M):"
 
-#: ../src/vmm-add-hardware.glade.h:53
+#: ../src/vmm-add-hardware.glade.h:55
 msgid "_Other:"
 msgstr "ಇತರೆ(_O):"
 
-#: ../src/vmm-add-hardware.glade.h:54
+#: ../src/vmm-add-hardware.glade.h:56
 msgid "_Path:"
 msgstr "ಮಾರ್ಗ(_P):"
 
-#: ../src/vmm-add-hardware.glade.h:55 ../src/vmm-migrate.glade.h:13
+#: ../src/vmm-add-hardware.glade.h:57 ../src/vmm-migrate.glade.h:13
 msgid "_Port:"
 msgstr "ಸಂಪರ್ಕಸ್ಥಾನ(_P):"
 
-#: ../src/vmm-add-hardware.glade.h:56
+#: ../src/vmm-add-hardware.glade.h:58
 #, fuzzy
 msgid "_TLS port:"
 msgstr "ಸಂಪರ್ಕಸ್ಥಾನ(_P):"
 
-#: ../src/vmm-add-hardware.glade.h:57 ../src/vmm-create-pool.glade.h:18
+#: ../src/vmm-add-hardware.glade.h:59 ../src/vmm-create-pool.glade.h:18
 msgid "_Type:"
 msgstr "ಬಗೆ(_T):"
 
-#: ../src/vmm-add-hardware.glade.h:58
+#: ../src/vmm-add-hardware.glade.h:60
 msgid "aa:bb:cc:dd:ee:ff"
 msgstr "aa:bb:cc:dd:ee:ff"
 
-#: ../src/vmm-add-hardware.glade.h:59 ../src/vmm-create-pool.glade.h:19
-#: ../src/vmm-details.glade.h:169
+#: ../src/vmm-add-hardware.glade.h:61 ../src/vmm-create-pool.glade.h:19
+#: ../src/vmm-details.glade.h:172
 msgid "label"
 msgstr "ಲೇಬಲ್"
 
@@ -3299,7 +3344,7 @@ msgstr "ಸಾಧನದ ಬಗೆ(_I):"
 
 #: ../src/vmm-create-interface.glade.h:41 ../src/vmm-create-pool.glade.h:15
 #: ../src/vmm-create-vol.glade.h:24 ../src/vmm-create.glade.h:61
-#: ../src/vmm-details.glade.h:152
+#: ../src/vmm-details.glade.h:154
 msgid "_Name:"
 msgstr "ಹೆಸರು(_N):"
 
@@ -3532,7 +3577,7 @@ msgstr ""
 "ಈ ಸಹಾಯಕವು ನಿಮಗೆ ಹೊಸ ವರ್ಚುವಲ್‌ ಗಣಕವನ್ನು ರಚಿಸಲು ನೆರವಾಗುತ್ತದೆ. ವರ್ಚುವಲ್‌ ಗಣಕದ ಬಗ್ಗೆ "
 "ಕೆಲವೊಂದು ಮಾಹಿತಿಗಳನ್ನು ನಿಮ್ಮಿಂದ ಅಪೇಕ್ಷಿಸ ಬಹುದು, ಉದಾ:"
 
-#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:127
+#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:129
 msgid "Type:"
 msgstr "ಬಗೆ:"
 
@@ -3668,7 +3713,7 @@ msgid "Create a storage unit that can be used directly by a virtual machine."
 msgstr "ಒಂದು ವರ್ಚುವಲ್ ಗಣಕದೊಂದಿಗೆ ನೇರವಾಗಿ ಬಳಸಬಹುದಾದ ಒಂದು ಶೇಖರಣಾ ಘಟಕವನ್ನು ರಚಿಸು."
 
 #: ../src/vmm-create-vol.glade.h:19 ../src/vmm-create.glade.h:32
-#: ../src/vmm-details.glade.h:75
+#: ../src/vmm-details.glade.h:76
 msgid "MB"
 msgstr "ಎಂಬಿ"
 
@@ -3980,23 +4025,28 @@ msgid "<b>Pinning</b>"
 msgstr "<b>CPU ಪಿನ್ನಿಂಗ್</b>"
 
 #: ../src/vmm-details.glade.h:20
+#, fuzzy
+msgid "<b>Redirected device</b>"
+msgstr "<b>ಕ್ಯಾರಕ್ಟರದ ಸಾಧನ</b>"
+
+#: ../src/vmm-details.glade.h:21
 msgid "<b>Security</b>"
 msgstr "<b>ಸುರಕ್ಷತೆ</b>"
 
-#: ../src/vmm-details.glade.h:21
+#: ../src/vmm-details.glade.h:22
 #, fuzzy
 msgid "<b>Smartcard Device</b>"
 msgstr "<b>ಕ್ಯಾರಕ್ಟರದ ಸಾಧನ</b>"
 
-#: ../src/vmm-details.glade.h:22
+#: ../src/vmm-details.glade.h:23
 msgid "<b>Sound Device</b>"
 msgstr "<b>ಧ್ವನಿ ಸಾಧನ</b>"
 
-#: ../src/vmm-details.glade.h:23
+#: ../src/vmm-details.glade.h:24
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>ಕನ್ಸೋಲು ಸದ್ಯಕ್ಕೆ ದೊರಕುತ್ತಿಲ್ಲ</b>"
 
-#: ../src/vmm-details.glade.h:24
+#: ../src/vmm-details.glade.h:25
 msgid ""
 "<b>Tip:</b> 'source' refers to information seen from the host OS, while "
 "'target' refers to information seen from the guest OS"
@@ -4004,7 +4054,7 @@ msgstr ""
 "<b>ಸೂಚನೆ:</b> 'ಆಕರ' ವು ಆತಿಥೇಯ ಓಎಸ್‌ನಿಂದ ಕಾಣಿಸಕೊಳ್ಳುವ ಮಾಹಿತಿಯನ್ನು ಸೂಚಿಸುತ್ತದೆ, "
 "ಹಾಗು'ಗುರಿ' ಅತಿಥಿ ಓಎಸ್‌ನಿಂದ ಕಾಣಿಸಕೊಳ್ಳುವ ಮಾಹಿತಿಯನ್ನು ಸೂಚಿಸುತ್ತದೆ"
 
-#: ../src/vmm-details.glade.h:25
+#: ../src/vmm-details.glade.h:26
 msgid ""
 "<b>Tip:</b> A graphics tablet configured as the default pointer in the guest "
 "OS will ensure that the virtual cursor moves in sync with the local desktop "
@@ -4014,73 +4064,73 @@ msgstr ""
 "ಚಲಿಸುವಂತೆ ಅತಿಥಿ ಓಎಸ್‌ನಲ್ಲಿ ಪೂರ್ವನಿಯೋಜಿತ ಸೂಚಕವಾಗಿ ಸಂರಚಿತಗೊಂಡಿರುವ ಒಂದು ಗ್ರಾಫಿಕ್ "
 "ಟ್ಯಾಬ್ಲೆಟ್ ಮಾಡುತ್ತದೆ."
 
-#: ../src/vmm-details.glade.h:26
+#: ../src/vmm-details.glade.h:27
 #, fuzzy
 msgid "<b>Topology</b>"
 msgstr "<b>ಕನ್ಸೋಲುಗಳು</b>"
 
-#: ../src/vmm-details.glade.h:27
+#: ../src/vmm-details.glade.h:28
 #, fuzzy
 msgid "<b>Video</b>"
 msgstr "<b>ವೀಡಿಯೊ ಸಾಧನ</b>"
 
-#: ../src/vmm-details.glade.h:28
+#: ../src/vmm-details.glade.h:29
 msgid "<b>Virtual Disk</b>"
 msgstr "<b>ವರ್ಚುವಲ್‌ ಡಿಸ್ಕ್‍:</b>"
 
-#: ../src/vmm-details.glade.h:29
+#: ../src/vmm-details.glade.h:30
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>ವರ್ಚುವಲ್‌ ಜಾಲಬಂಧ ಸಂಪರ್ಕಸಾಧನ</b>"
 
-#: ../src/vmm-details.glade.h:30
+#: ../src/vmm-details.glade.h:31
 msgid "<b>Virtual Pointer</b>"
 msgstr "<b>ವರ್ಚುವಲ್‌ ಸೂಚಕ</b>"
 
-#: ../src/vmm-details.glade.h:31
+#: ../src/vmm-details.glade.h:32
 msgid "<b>insert type</b>"
 msgstr "<b>ಸೇರಿಸುವ ಬಗೆ</b>"
 
-#: ../src/vmm-details.glade.h:32
+#: ../src/vmm-details.glade.h:33
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:33
+#: ../src/vmm-details.glade.h:34
 msgid "A_ction:"
 msgstr "ಕ್ರಿಯೆ(_c):"
 
-#: ../src/vmm-details.glade.h:34
+#: ../src/vmm-details.glade.h:35
 msgid "A_dd Hardware"
 msgstr "ಯಂತ್ರಾಂಶವನ್ನು ಸೇರಿಸು(_d)"
 
-#: ../src/vmm-details.glade.h:35 ../src/vmm-host.glade.h:15
+#: ../src/vmm-details.glade.h:36 ../src/vmm-host.glade.h:15
 msgid "Address:"
 msgstr "ವಿಳಾಸ:"
 
-#: ../src/vmm-details.glade.h:36
+#: ../src/vmm-details.glade.h:37
 #, fuzzy
 msgid "Advanced _options"
 msgstr "ಸುಧಾರಿತ ಆಯ್ಕೆಗಳು"
 
-#: ../src/vmm-details.glade.h:37 ../src/vmm-host.glade.h:16
+#: ../src/vmm-details.glade.h:38 ../src/vmm-host.glade.h:16
 msgid "Architecture:"
 msgstr "ಆರ್ಕಿಟೆಕ್ಚರ್:"
 
-#: ../src/vmm-details.glade.h:38
+#: ../src/vmm-details.glade.h:39
 #, fuzzy
 msgid "Begin Installation"
 msgstr "ಅನುಸ್ಥಾಪನೆಯನ್ನು ಮುಗಿಸು"
 
-#: ../src/vmm-details.glade.h:39
+#: ../src/vmm-details.glade.h:40
 #, fuzzy
 msgid "Bind host:"
 msgstr "ಆತಿಥೇಯವನ್ನು ಬೈಂಡ್ ಮಾಡು(_B):"
 
-#: ../src/vmm-details.glade.h:40
+#: ../src/vmm-details.glade.h:41
 #, fuzzy
 msgid "Browse"
 msgstr "ವೀಕ್ಷಿಸು(_r)"
 
-#: ../src/vmm-details.glade.h:41
+#: ../src/vmm-details.glade.h:42
 msgid ""
 "CPU\n"
 "usage:"
@@ -4088,63 +4138,63 @@ msgstr ""
 "CPU\n"
 "ಬಳಕೆ :"
 
-#: ../src/vmm-details.glade.h:43
+#: ../src/vmm-details.glade.h:44
 msgid "C_lock Offset:"
 msgstr "ಗಡಿಯಾರದ ಆಫ್‌ಸೆಟ್‌(_l):"
 
-#: ../src/vmm-details.glade.h:44
+#: ../src/vmm-details.glade.h:45
 #, fuzzy
 msgid "Cac_he mode:"
 msgstr "ಸಾಧನದ ಮಾದರಿ(_e):"
 
-#: ../src/vmm-details.glade.h:45
+#: ../src/vmm-details.glade.h:46
 msgid "Connect or disconnect media"
 msgstr "ಮಾಧ್ಯಮದಿಂದ ಸಂಪರ್ಕವನ್ನು ಜೋಡಿಸು ಅಥವ ಕಡಿದುಹಾಕು"
 
-#: ../src/vmm-details.glade.h:46
+#: ../src/vmm-details.glade.h:47
 msgid "Console"
 msgstr "ಕನ್ಸೋಲ್"
 
-#: ../src/vmm-details.glade.h:47
+#: ../src/vmm-details.glade.h:48
 #, fuzzy
 msgid "Copy host CPU configuration"
 msgstr "IP ಸಂರಚನೆ"
 
-#: ../src/vmm-details.glade.h:48
+#: ../src/vmm-details.glade.h:49
 msgid "Cores:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:49
+#: ../src/vmm-details.glade.h:50
 #, fuzzy
 msgid "Current a_llocation:"
 msgstr "ಪ್ರಸ್ತುತ ನಿಯೋಜನೆ:"
 
-#: ../src/vmm-details.glade.h:50
+#: ../src/vmm-details.glade.h:51
 msgid "D_ynamic"
 msgstr "ಕ್ರಿಯಾಶೀಲ(_y)"
 
-#: ../src/vmm-details.glade.h:51
+#: ../src/vmm-details.glade.h:52
 #, fuzzy
 msgid "Default _pinning:"
 msgstr "ಆರಂಭಿಕ ಪಿನ್ನಿಂಗ್(_p):"
 
-#: ../src/vmm-details.glade.h:52
+#: ../src/vmm-details.glade.h:53
 msgid "Description:"
 msgstr "ವಿವರಣೆ:"
 
-#: ../src/vmm-details.glade.h:54
+#: ../src/vmm-details.glade.h:55
 msgid "Device m_odel:"
 msgstr "ಸಾಧನದ ಮಾದರಿ(_o):"
 
-#: ../src/vmm-details.glade.h:55
+#: ../src/vmm-details.glade.h:56
 msgid "Device type:"
 msgstr "ಸಾಧನದ ಬಗೆ:"
 
-#: ../src/vmm-details.glade.h:56 ../src/vmm-host.glade.h:25
+#: ../src/vmm-details.glade.h:57 ../src/vmm-host.glade.h:25
 msgid "Device:"
 msgstr "ಸಾಧನ:"
 
-#: ../src/vmm-details.glade.h:57
+#: ../src/vmm-details.glade.h:58
 msgid ""
 "Disk\n"
 "I/O:"
@@ -4152,106 +4202,106 @@ msgstr ""
 "ಡಿಸ್ಕ್‌\n"
 "I/O:"
 
-#: ../src/vmm-details.glade.h:59
+#: ../src/vmm-details.glade.h:60
 #, fuzzy
 msgid "Disk b_us:"
 msgstr "ಡಿಸ್ಕ್‍ ಗಾತ್ರ:"
 
-#: ../src/vmm-details.glade.h:60
+#: ../src/vmm-details.glade.h:61
 msgid "Emulator:"
 msgstr "ಎಮುಲೇಟರ್:"
 
-#: ../src/vmm-details.glade.h:61
+#: ../src/vmm-details.glade.h:62
 msgid "Enable A_CPI:"
 msgstr "A_CPI ಅನ್ನು ಶಕ್ತಗೊಳಿಸು:"
 
-#: ../src/vmm-details.glade.h:62
+#: ../src/vmm-details.glade.h:63
 msgid "Enable A_PIC:"
 msgstr "A_PIC ಅನ್ನು ಶಕ್ತಗೊಳಿಸು:"
 
-#: ../src/vmm-details.glade.h:63
+#: ../src/vmm-details.glade.h:64
 msgid "Enable boot me_nu"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:64
+#: ../src/vmm-details.glade.h:65
 msgid "Generate from host _NUMA configuration"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:65
+#: ../src/vmm-details.glade.h:66
 msgid "Heads:"
 msgstr "ಹೆಡ್‌ಗಳು:"
 
-#: ../src/vmm-details.glade.h:66 ../src/vmm-host.glade.h:27
+#: ../src/vmm-details.glade.h:67 ../src/vmm-host.glade.h:27
 msgid "Hostname:"
 msgstr "ಆತಿಥೇಯದ ಹೆಸರು:"
 
-#: ../src/vmm-details.glade.h:67 ../src/vmm-host.glade.h:28
+#: ../src/vmm-details.glade.h:68 ../src/vmm-host.glade.h:28
 msgid "Hypervisor:"
 msgstr "ಹೈಪರ್ವೈಸರ್:"
 
-#: ../src/vmm-details.glade.h:68
+#: ../src/vmm-details.glade.h:69
 #, fuzzy
 msgid "Init path:"
 msgstr "ಕರ್ನಲ್ ಆಯ್ಕೆಗಳು:"
 
-#: ../src/vmm-details.glade.h:69
+#: ../src/vmm-details.glade.h:70
 msgid "Initrd path:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:70
+#: ../src/vmm-details.glade.h:71
 msgid "Instance id:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:71
+#: ../src/vmm-details.glade.h:72
 #, fuzzy
 msgid "Kernel arguments:"
 msgstr "ಕರ್ನಲ್ ಆಯ್ಕೆಗಳು:"
 
-#: ../src/vmm-details.glade.h:72
+#: ../src/vmm-details.glade.h:73
 #, fuzzy
 msgid "Kernel path:"
 msgstr "ಕರ್ನಲ್ ಆಯ್ಕೆಗಳು:"
 
-#: ../src/vmm-details.glade.h:73
+#: ../src/vmm-details.glade.h:74
 #, fuzzy
 msgid "Logical host CPUs:"
 msgstr "ತಾರ್ಕಿಕ CPUಗಳು:"
 
-#: ../src/vmm-details.glade.h:74
+#: ../src/vmm-details.glade.h:75
 msgid "MAC address:"
 msgstr "MAC ವಿಳಾಸ:"
 
-#: ../src/vmm-details.glade.h:76
+#: ../src/vmm-details.glade.h:77
 #, fuzzy
 msgid "M_ode:"
 msgstr "ಮಾದರಿ(_o):"
 
-#: ../src/vmm-details.glade.h:77
+#: ../src/vmm-details.glade.h:78
 msgid "M_odel:"
 msgstr "ಮಾದರಿ(_o):"
 
-#: ../src/vmm-details.glade.h:78
+#: ../src/vmm-details.glade.h:79
 msgid "Ma_ximum allocation:"
 msgstr "ಗರಿಷ್ಠ ನಿಯೋಜನೆ(_x):"
 
-#: ../src/vmm-details.glade.h:79
+#: ../src/vmm-details.glade.h:80
 #, fuzzy
 msgid "Managerid:"
 msgstr "ನೋಟ ವ್ಯವಸ್ಥಾಪಕ(_V)"
 
-#: ../src/vmm-details.glade.h:80
+#: ../src/vmm-details.glade.h:81
 msgid "Manually set CPU topology"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:81
+#: ../src/vmm-details.glade.h:82
 msgid "Max Memory Select"
 msgstr "ಗರಿಷ್ಟ ಮೆಮೊರಿ ಆಯ್ಕೆ"
 
-#: ../src/vmm-details.glade.h:82
+#: ../src/vmm-details.glade.h:83
 msgid "Maximum allocation:"
 msgstr "ಗರಿಷ್ಠ ನಿಯೋಜನೆ:"
 
-#: ../src/vmm-details.glade.h:83
+#: ../src/vmm-details.glade.h:84
 msgid ""
 "Memory\n"
 "usage:"
@@ -4259,19 +4309,19 @@ msgstr ""
 "ಮೆಮೊರಿಯ\n"
 "ಬಳಕೆ:"
 
-#: ../src/vmm-details.glade.h:85
+#: ../src/vmm-details.glade.h:86
 msgid "Memory Select"
 msgstr "ಮೆಮೊರಿಯ ಆಯ್ಕೆ"
 
-#: ../src/vmm-details.glade.h:86 ../src/vmm-host.glade.h:35
+#: ../src/vmm-details.glade.h:87 ../src/vmm-host.glade.h:35
 msgid "Mode:"
 msgstr "ಕ್ರಮ:"
 
-#: ../src/vmm-details.glade.h:87
+#: ../src/vmm-details.glade.h:88
 msgid "Model:"
 msgstr "ಮಾದರಿ:"
 
-#: ../src/vmm-details.glade.h:88
+#: ../src/vmm-details.glade.h:89
 msgid ""
 "Network\n"
 "I/O:"
@@ -4279,294 +4329,303 @@ msgstr ""
 "ಜಾಲಬಂಧ\n"
 "I/O:"
 
-#: ../src/vmm-details.glade.h:90
+#: ../src/vmm-details.glade.h:91
 msgid "Pause"
 msgstr "ತಾತ್ಕಲಿಕ ತಡೆ"
 
-#: ../src/vmm-details.glade.h:91 ../src/vmm-manager.glade.h:3
+#: ../src/vmm-details.glade.h:92 ../src/vmm-manager.glade.h:3
 msgid "Pause the virtual machine"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕವನ್ನು ವಿರಮಿಸಿ"
 
-#: ../src/vmm-details.glade.h:92
+#: ../src/vmm-details.glade.h:93
 msgid "Port:"
 msgstr "ಸಂಪರ್ಕ ಸ್ಥಾನ:"
 
-#: ../src/vmm-details.glade.h:93 ../src/vmm-manager.glade.h:4
+#: ../src/vmm-details.glade.h:94 ../src/vmm-manager.glade.h:4
 msgid "Power on the virtual machine"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕವನ್ನು ಪವರ್ ಆನ್ ಮಾಡು"
 
-#: ../src/vmm-details.glade.h:94
+#: ../src/vmm-details.glade.h:95
 #, fuzzy
 msgid "Product name:"
 msgstr "ಆತಿಥೇಯದ ಹೆಸರು:"
 
-#: ../src/vmm-details.glade.h:95
+#: ../src/vmm-details.glade.h:96
 msgid "RAM:"
 msgstr "RAM:"
 
-#: ../src/vmm-details.glade.h:96
+#: ../src/vmm-details.glade.h:97
 msgid "R_eadonly:"
 msgstr "ಓದಲು ಮಾತ್ರ(_e):"
 
-#: ../src/vmm-details.glade.h:97
+#: ../src/vmm-details.glade.h:98
 #, fuzzy
 msgid "R_untime pinning:"
 msgstr "ಆರಂಭಿಕ ಪಿನ್ನಿಂಗ್(_p):"
 
-#: ../src/vmm-details.glade.h:98
+#: ../src/vmm-details.glade.h:99
 msgid "Run"
 msgstr "ಚಲಾಯಿಸು"
 
-#: ../src/vmm-details.glade.h:99
+#: ../src/vmm-details.glade.h:100
 msgid "S_hut Down"
 msgstr "ಸ್ಥಗಿತಗೊಳಿಸು(_h)"
 
-#: ../src/vmm-details.glade.h:100
+#: ../src/vmm-details.glade.h:101
 msgid "Send _Key"
 msgstr "ಕೀಲಿಯನ್ನು ಕಳುಹಿಸು(_K)"
 
-#: ../src/vmm-details.glade.h:101
+#: ../src/vmm-details.glade.h:102
 msgid "Serial num_ber:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:102
+#: ../src/vmm-details.glade.h:103
 msgid "Sharea_ble:"
 msgstr "ಹಂಚಬಹುದಾದ(_b):"
 
-#: ../src/vmm-details.glade.h:103
+#: ../src/vmm-details.glade.h:104
 msgid "Show the graphical console"
 msgstr "ಚಿತ್ರಾತ್ಮಕ ಕನ್ಸೋಲನ್ನು ತೋರಿಸು"
 
-#: ../src/vmm-details.glade.h:104
+#: ../src/vmm-details.glade.h:105
 msgid "Show virtual hardware details"
 msgstr "ವರ್ಚುವಲ್ ಯಂತ್ರಾಂಶದ ವಿವರವನ್ನು ತೋರಿಸು"
 
-#: ../src/vmm-details.glade.h:105
+#: ../src/vmm-details.glade.h:106
 msgid "Shut Down"
 msgstr "ಸ್ಥಗಿತಗೊಳಿಸು"
 
-#: ../src/vmm-details.glade.h:106
+#: ../src/vmm-details.glade.h:107
 msgid "Shut down"
 msgstr "ಮುಚ್ಚಿ ಬಿಡು"
 
-#: ../src/vmm-details.glade.h:107 ../src/vmm-manager.glade.h:6
+#: ../src/vmm-details.glade.h:108 ../src/vmm-manager.glade.h:6
 msgid "Shutdown the virtual machine"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕವನ್ನು ಸ್ಥಗಿತಗೊಳಿಸು"
 
-#: ../src/vmm-details.glade.h:108
+#: ../src/vmm-details.glade.h:109
 msgid "Sockets:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:109
+#: ../src/vmm-details.glade.h:110
 msgid "Source device:"
 msgstr "ಆಕರ ಸಾಧನ:"
 
-#: ../src/vmm-details.glade.h:110
+#: ../src/vmm-details.glade.h:111
 #, fuzzy
 msgid "Source host:"
 msgstr "ಆಕರದ ಮಾರ್ಗ:"
 
-#: ../src/vmm-details.glade.h:111
+#: ../src/vmm-details.glade.h:112
 #, fuzzy
 msgid "Source mode:"
 msgstr "ಆಕರ ಸಾಧನ:"
 
-#: ../src/vmm-details.glade.h:112
+#: ../src/vmm-details.glade.h:113
 msgid "Source path:"
 msgstr "ಆಕರ ಮಾರ್ಗ:"
 
-#: ../src/vmm-details.glade.h:113
+#: ../src/vmm-details.glade.h:114
 #, fuzzy
 msgid "Source:"
 msgstr "ಆಕರದ ಮಾರ್ಗ:"
 
-#: ../src/vmm-details.glade.h:114
+#: ../src/vmm-details.glade.h:115
 msgid "Start virt_ual machine on host boot up"
 msgstr "ಆತಿಥೇಯವು ಬೂಟ್ ಆದಾಗ ವರ್ಚುವಲ್‌ ಗಣಕವನ್ನು ಆರಂಭಿಸು(_u)"
 
-#: ../src/vmm-details.glade.h:116
+#: ../src/vmm-details.glade.h:117
 #, fuzzy
 msgid "Storage forma_t:"
 msgstr "ಶೇಖರಣಾ ಮಾರ್ಗ"
 
-#: ../src/vmm-details.glade.h:117
+#: ../src/vmm-details.glade.h:118
 msgid "Storage size:"
 msgstr "ಶೇಖರಣೆಯ ಗಾತ್ರ:"
 
-#: ../src/vmm-details.glade.h:118
+#: ../src/vmm-details.glade.h:119
 msgid "Switch to fullscreen view"
 msgstr "ಪೂರ್ಣತೆರೆ ನೋಟಕ್ಕೆ ಬದಲಾಯಿಸು"
 
-#: ../src/vmm-details.glade.h:119
+#: ../src/vmm-details.glade.h:120
 #, fuzzy
 msgid "TLS Port:"
 msgstr "ಸಂಪರ್ಕ ಸ್ಥಾನ:"
 
-#: ../src/vmm-details.glade.h:120
+#: ../src/vmm-details.glade.h:121
 msgid "T_oolbar"
 msgstr "ಉಪಕರಣ ಪಟ್ಟಿ(_o)"
 
-#: ../src/vmm-details.glade.h:121
+#: ../src/vmm-details.glade.h:122
+#, fuzzy
+msgid "T_ype:"
+msgstr "ಬಗೆ:"
+
+#: ../src/vmm-details.glade.h:123
 msgid "Target device:"
 msgstr "ಗುರಿ ಸಾಧನ:"
 
-#: ../src/vmm-details.glade.h:122
+#: ../src/vmm-details.glade.h:124
 #, fuzzy
 msgid "Target name:"
 msgstr "ಉದ್ದಿಷ್ಟ ವಿಳಾಸ:"
 
-#: ../src/vmm-details.glade.h:123
+#: ../src/vmm-details.glade.h:125
 #, fuzzy
 msgid "Target type:"
 msgstr "ಗುರಿಯ ಸಂಪರ್ಕಸ್ಥಾನ:"
 
-#: ../src/vmm-details.glade.h:124
+#: ../src/vmm-details.glade.h:126
 msgid "Target:"
 msgstr "ಗುರಿ:"
 
-#: ../src/vmm-details.glade.h:125
+#: ../src/vmm-details.glade.h:127
 #, fuzzy
 msgid "Threads:"
 msgstr "ಹೆಡ್‌ಗಳು:"
 
-#: ../src/vmm-details.glade.h:126
+#: ../src/vmm-details.glade.h:128
 msgid "Total host memory:"
 msgstr "ಒಟ್ಟು ಆತಿಥೇಯದ ಮೆಮೊರಿ:"
 
-#: ../src/vmm-details.glade.h:128
+#: ../src/vmm-details.glade.h:130
 msgid "Typeid version:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:129
+#: ../src/vmm-details.glade.h:131
 #, fuzzy
 msgid "Typeid:"
 msgstr "ಬಗೆ:"
 
-#: ../src/vmm-details.glade.h:130
+#: ../src/vmm-details.glade.h:132
 msgid "UUID:"
 msgstr "UUID:"
 
-#: ../src/vmm-details.glade.h:131
+#: ../src/vmm-details.glade.h:133
 msgid "Virtual CPU Affinity Select"
 msgstr "ವರ್ಚುವಲ್ CPU ಒಲವನ್ನು(ಅಫಿನಿಟಿ) ಆಯ್ಕೆ ಮಾಡಿ"
 
-#: ../src/vmm-details.glade.h:132
+#: ../src/vmm-details.glade.h:134
 msgid "Virtual CPU Select"
 msgstr "ವರ್ಚುವಲ್ CPU ಆಯ್ಕೆ"
 
-#: ../src/vmm-details.glade.h:134
+#: ../src/vmm-details.glade.h:136
 msgid "Virtual _Machine"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕ (_M)"
 
-#: ../src/vmm-details.glade.h:135
+#: ../src/vmm-details.glade.h:137
 #, fuzzy
 msgid "Virtual port"
 msgstr "ವರ್ಚುವಲ್‌ ಜಾಲಬಂಧ"
 
-#: ../src/vmm-details.glade.h:136
+#: ../src/vmm-details.glade.h:138
 msgid "_Always"
 msgstr "ಯಾವಾಗಲೂ(_A)"
 
-#: ../src/vmm-details.glade.h:137
+#: ../src/vmm-details.glade.h:139
 #, fuzzy
 msgid "_Begin Installation"
 msgstr "ಅನುಸ್ಥಾಪನೆಯನ್ನು ಮುಗಿಸು"
 
-#: ../src/vmm-details.glade.h:139
+#: ../src/vmm-details.glade.h:141
 msgid "_Cancel"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:140
+#: ../src/vmm-details.glade.h:142
 msgid "_Clone"
 msgstr "ತದ್ರೂಪ(_C)"
 
-#: ../src/vmm-details.glade.h:141
+#: ../src/vmm-details.glade.h:143
 msgid "_Console"
 msgstr "ಕನ್ಸೋಲ್(_C)"
 
-#: ../src/vmm-details.glade.h:142
+#: ../src/vmm-details.glade.h:144
 msgid "_Details"
 msgstr "ವಿವರಗಳು(_D)"
 
-#: ../src/vmm-details.glade.h:143 ../src/vmm-host.glade.h:56
+#: ../src/vmm-details.glade.h:145 ../src/vmm-host.glade.h:56
 #: ../src/vmm-manager.glade.h:12
 msgid "_File"
 msgstr "ಕಡತ (_F)"
 
-#: ../src/vmm-details.glade.h:145
+#: ../src/vmm-details.glade.h:147
 msgid "_Fullscreen"
 msgstr "ಪೂರ್ಣಪರದೆ(_F)"
 
-#: ../src/vmm-details.glade.h:146 ../src/vmm-host.glade.h:57
+#: ../src/vmm-details.glade.h:148 ../src/vmm-host.glade.h:57
 #: ../src/vmm-manager.glade.h:15
 msgid "_Help"
 msgstr "ಸಹಾಯ (_H)"
 
-#: ../src/vmm-details.glade.h:147
+#: ../src/vmm-details.glade.h:149
 #, fuzzy
 msgid "_IO mode:"
 msgstr "ಆರಂಭದ ಕ್ರಮ(_S):"
 
-#: ../src/vmm-details.glade.h:149
+#: ../src/vmm-details.glade.h:151
 msgid "_Label:"
 msgstr "ಲೇಬಲ್(_L):"
 
-#: ../src/vmm-details.glade.h:150
+#: ../src/vmm-details.glade.h:152
 msgid "_Login"
 msgstr "ಪ್ರವೇಶ(_L)"
 
-#: ../src/vmm-details.glade.h:153
+#: ../src/vmm-details.glade.h:155
 msgid "_Never"
 msgstr "ಎಂದಿಗೂ ಬೇಡ(_N)"
 
-#: ../src/vmm-details.glade.h:154
+#: ../src/vmm-details.glade.h:156
 msgid "_Only when Fullscreen"
 msgstr "ಕೇವಲ ಪೂರ್ಣ ಪರದೆಯಲ್ಲಿದ್ದಾಗ ಮಾತ್ರ(_O)"
 
-#: ../src/vmm-details.glade.h:155
+#: ../src/vmm-details.glade.h:157
 msgid "_Password:"
 msgstr "ಗುಪ್ತಪದ(_P):"
 
-#: ../src/vmm-details.glade.h:157
+#: ../src/vmm-details.glade.h:159
 #, fuzzy
 msgid "_Performance options"
 msgstr "ಕರ್ನಲ್ ಆಯ್ಕೆಗಳು:"
 
-#: ../src/vmm-details.glade.h:159
+#: ../src/vmm-details.glade.h:161
 msgid "_Resize to VM"
 msgstr "VM ಗೆ ಗಾತ್ರ ಬದಲಾಯಿಸು(_R)"
 
-#: ../src/vmm-details.glade.h:161
+#: ../src/vmm-details.glade.h:163
 msgid "_Save this password in your keyring"
 msgstr "ನಿಮ್ಮ ಕೀರಿಂಗ್‌ನಲ್ಲಿ ಈ ಗುಪ್ತಪದವನ್ನು ಉಳಿಸು(_S)"
 
-#: ../src/vmm-details.glade.h:162
+#: ../src/vmm-details.glade.h:164
 msgid "_Scale Display"
 msgstr "ಪ್ರದರ್ಶಕದ ಅಳತೆ ಕಡಿಮೆ ಮಾಡು(_S)"
 
-#: ../src/vmm-details.glade.h:163
+#: ../src/vmm-details.glade.h:165
 msgid "_Static"
 msgstr "ಸ್ಥಾಯಿ(_S)"
 
-#: ../src/vmm-details.glade.h:164
+#: ../src/vmm-details.glade.h:166
 msgid "_Take Screenshot"
 msgstr "ತೆರೆಚಿತ್ರವನ್ನು ತೆಗೆದುಕೊ (_T)"
 
-#: ../src/vmm-details.glade.h:165
+#: ../src/vmm-details.glade.h:167
 msgid "_Text Consoles"
 msgstr "ಪಠ್ಯ ಕನ್ಸೋಲುಗಳು(_T)"
 
-#: ../src/vmm-details.glade.h:166 ../src/vmm-open-connection.glade.h:17
+#: ../src/vmm-details.glade.h:168 ../src/vmm-open-connection.glade.h:17
 msgid "_Username:"
 msgstr "ಬಳಕೆದಾರಹೆಸರು(_U):"
 
-#: ../src/vmm-details.glade.h:167 ../src/vmm-manager.glade.h:22
+#: ../src/vmm-details.glade.h:169 ../src/vmm-manager.glade.h:22
 msgid "_View"
 msgstr "ನೋಟ (_V)"
 
-#: ../src/vmm-details.glade.h:168 ../src/vmm-host.glade.h:59
+#: ../src/vmm-details.glade.h:170 ../src/vmm-host.glade.h:59
 msgid "_View Manager"
 msgstr "ನೋಟ ವ್ಯವಸ್ಥಾಪಕ(_V)"
+
+#: ../src/vmm-details.glade.h:171
+msgid "foo:12"
+msgstr ""
 
 #: ../src/vmm-host.glade.h:1
 msgid "<b>Basic details</b>"
@@ -5581,9 +5640,6 @@ msgstr "ಸ್ಥಳೀಯವಾದುದಕ್ಕಾಗಿ ನೋಡು(_B)"
 
 #~ msgid "Error Removing CDROM: %s"
 #~ msgstr "CDROM ಅನ್ನು ತೆಗೆದುಹಾಕುವಲ್ಲಿ ದೋಷ: %s"
-
-#~ msgid "Error Connecting CDROM: %s"
-#~ msgstr "CDROMನೊಂದಿಗೆ ಸಂಪರ್ಕಸಾಧಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
 #~ msgid ""
 #~ "This device could not be removed from the running machine. Would you like "

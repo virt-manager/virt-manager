@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: te\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-26 19:56-0400\n"
+"POT-Creation-Date: 2011-09-19 10:53-0400\n"
 "PO-Revision-Date: 2010-04-09 17:54+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
@@ -296,133 +296,137 @@ msgid ""
 "Whether we require confirmation to start or stop a libvirt virtual interface"
 msgstr "libvirt virtual interfaceను ప్రారంభించుటకు లేదా అపుటకు మనకు నిర్ధారణ అవసరమా"
 
-#: ../src/virtManager/addhardware.py:339 ../src/virtManager/create.py:488
+#: ../src/virtManager/addhardware.py:347 ../src/virtManager/create.py:488
 #: ../src/virtManager/create.py:586
 msgid "Connection does not support storage management."
 msgstr "అనుసంధానము నిల్వ నిర్వహణను మద్దతీయదు."
 
-#: ../src/virtManager/addhardware.py:353 ../src/virtManager/addhardware.py:358
-#: ../src/virtManager/addhardware.py:361 ../src/virtManager/addhardware.py:365
-#: ../src/virtManager/addhardware.py:369 ../src/virtManager/addhardware.py:386
+#: ../src/virtManager/addhardware.py:361 ../src/virtManager/addhardware.py:366
+#: ../src/virtManager/addhardware.py:369 ../src/virtManager/addhardware.py:373
+#: ../src/virtManager/addhardware.py:377 ../src/virtManager/addhardware.py:394
 msgid "Not supported for this guest type."
 msgstr "ఈ గెస్టు రకమునకు మద్దతీయునది కాదు."
 
-#: ../src/virtManager/addhardware.py:373 ../src/virtManager/addhardware.py:377
+#: ../src/virtManager/addhardware.py:381 ../src/virtManager/addhardware.py:385
 msgid "Connection does not support host device enumeration"
 msgstr "అనుసంధానము హోస్టు పరికర యెన్యూమరేషన్‌ను మద్దతించదు"
 
-#: ../src/virtManager/addhardware.py:383
+#: ../src/virtManager/addhardware.py:391
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt వర్షన్ వీడియో పరికరాలను మద్దతించదు."
 
-#: ../src/virtManager/addhardware.py:392
+#: ../src/virtManager/addhardware.py:400
 #, fuzzy
 msgid "Not supported for this hypervisor/libvirt combination."
 msgstr "ఈ గెస్టు రకమునకు మద్దతీయునది కాదు."
 
-#: ../src/virtManager/addhardware.py:515 ../src/virtManager/details.py:2786
+#: ../src/virtManager/addhardware.py:525 ../src/virtManager/details.py:2827
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB గ్రాఫిక్స్‍ టాబ్లెట్"
 
 #. XXX libvirt needs to support 'model' for input devices to distinguish
 #. wacom from evtouch tablets
 #. model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
-#: ../src/virtManager/addhardware.py:519 ../src/virtManager/details.py:2788
+#: ../src/virtManager/addhardware.py:529 ../src/virtManager/details.py:2829
 msgid "Generic USB Mouse"
 msgstr "సాదారణ USB మౌస్"
 
-#: ../src/virtManager/addhardware.py:523
+#: ../src/virtManager/addhardware.py:533
 msgid "VNC server"
 msgstr "VNC సేవిక"
 
-#: ../src/virtManager/addhardware.py:524
+#: ../src/virtManager/addhardware.py:534
 #, fuzzy
 msgid "Spice server"
 msgstr "VNC సేవిక"
 
-#: ../src/virtManager/addhardware.py:525
+#: ../src/virtManager/addhardware.py:535
 msgid "Local SDL window"
 msgstr "స్థానిక SDL విండో"
 
-#: ../src/virtManager/addhardware.py:547
+#: ../src/virtManager/addhardware.py:557
 msgid "No Devices Available"
 msgstr "ఎటువంటి పరికరములు అందుబాటులో లేవు"
 
-#: ../src/virtManager/addhardware.py:796
+#: ../src/virtManager/addhardware.py:826
 #, python-format
 msgid "Uncaught error validating hardware input: %s"
 msgstr "హార్డువేర్ ఇన్‌పుట్‌ను విలువీకరించుటలో దొరకని దోషము: %s"
 
-#: ../src/virtManager/addhardware.py:808
+#: ../src/virtManager/addhardware.py:838
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "పరికరమును జతచేయలేక పోయింది: %s"
 
-#: ../src/virtManager/addhardware.py:896
+#: ../src/virtManager/addhardware.py:926
 msgid "Error"
 msgstr "దోషము"
 
-#: ../src/virtManager/addhardware.py:898 ../src/vmm-create.glade.h:47
+#: ../src/virtManager/addhardware.py:928 ../src/vmm-create.glade.h:47
 #: ../src/vmm-host.glade.h:53
 msgid "Storage"
 msgstr "నిల్వ"
 
-#: ../src/virtManager/addhardware.py:900
+#: ../src/virtManager/addhardware.py:930
 msgid "Network"
 msgstr "నెట్వర్కు"
 
-#: ../src/virtManager/addhardware.py:902 ../src/virtManager/details.py:3204
+#: ../src/virtManager/addhardware.py:932 ../src/virtManager/details.py:3266
 msgid "Input"
 msgstr "ఇన్‌పుట్"
 
-#: ../src/virtManager/addhardware.py:904
+#: ../src/virtManager/addhardware.py:934
 msgid "Graphics"
 msgstr "గ్రాఫిక్స్"
 
-#: ../src/virtManager/addhardware.py:906
+#: ../src/virtManager/addhardware.py:936
 msgid "Sound"
 msgstr "ధ్వని"
 
-#: ../src/virtManager/addhardware.py:908
+#: ../src/virtManager/addhardware.py:938
 #, fuzzy
 msgid "Video Device"
 msgstr "పరికరము:"
 
-#: ../src/virtManager/addhardware.py:910
+#: ../src/virtManager/addhardware.py:940
 #, fuzzy
 msgid "Watchdog Device"
 msgstr "వాచ్‌డాగ్"
 
-#: ../src/virtManager/addhardware.py:912
+#: ../src/virtManager/addhardware.py:942
 msgid "Filesystem Passthrough"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:914 ../src/virtManager/details.py:3269
+#: ../src/virtManager/addhardware.py:944 ../src/virtManager/details.py:3342
 msgid "Smartcard"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:972
+#: ../src/virtManager/addhardware.py:946
+msgid "USB Redirection"
+msgstr ""
+
+#: ../src/virtManager/addhardware.py:1014
 msgid "Te_mplate:"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:974
+#: ../src/virtManager/addhardware.py:1016
 #, fuzzy
 msgid "_Source path:"
 msgstr "మూలము పాత్:"
 
-#: ../src/virtManager/addhardware.py:1006
+#: ../src/virtManager/addhardware.py:1048
 msgid "Creating Storage File"
 msgstr "నిల్వ ఫైలును సృష్టిస్తున్నది"
 
-#: ../src/virtManager/addhardware.py:1007
+#: ../src/virtManager/addhardware.py:1049
 msgid "Allocation of disk storage may take a few minutes to complete."
 msgstr "డిస్కు నిల్వ కేటాయింపు కొన్ని నిముషములు తీసుకొనవచ్చు"
 
-#: ../src/virtManager/addhardware.py:1033
+#: ../src/virtManager/addhardware.py:1075
 msgid "Are you sure you want to add this device?"
 msgstr "మీరు ఖచ్చితముగా ఈ పరికరమును జతచేయాలని అనుకొనుచున్నారా?"
 
-#: ../src/virtManager/addhardware.py:1036
+#: ../src/virtManager/addhardware.py:1078
 #, fuzzy
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
@@ -431,12 +435,12 @@ msgstr ""
 "ఈ పరికరము నడుచుచున్న మిషన్‌కు అనుభందించబడలేక పోయింది. VM మూసివేత అనంతరం ఈ పరికరపు "
 "అందుబాటును మీరు ఇష్టపడతారా?"
 
-#: ../src/virtManager/addhardware.py:1050
+#: ../src/virtManager/addhardware.py:1092
 #, python-format
 msgid "Error adding device: %s"
 msgstr "పరికరము జతచేయుటలో దోషము: %s"
 
-#: ../src/virtManager/addhardware.py:1125 ../src/virtManager/create.py:1672
+#: ../src/virtManager/addhardware.py:1169 ../src/virtManager/create.py:1674
 #, fuzzy, python-format
 msgid ""
 "The following storage already exists, but is not\n"
@@ -453,93 +457,102 @@ msgstr ""
 "\n"
 "మీరు ఈ పాత్‌ను వుపయోగించుటకు యిష్టపడతారా?"
 
-#: ../src/virtManager/addhardware.py:1133 ../src/virtManager/create.py:1680
+#: ../src/virtManager/addhardware.py:1177 ../src/virtManager/create.py:1682
 msgid "A storage path must be specified."
 msgstr "నిల్వ పాత్ తప్పక తెలుపవలెను."
 
-#: ../src/virtManager/addhardware.py:1151 ../src/virtManager/create.py:1688
+#: ../src/virtManager/addhardware.py:1195 ../src/virtManager/create.py:1690
 msgid "Storage parameter error."
 msgstr "నిల్వ పారామితి దోషము."
 
 #. Fatal errors are reported when setting 'size'
-#: ../src/virtManager/addhardware.py:1165 ../src/virtManager/create.py:1693
+#: ../src/virtManager/addhardware.py:1209 ../src/virtManager/create.py:1695
 msgid "Not Enough Free Space"
 msgstr "సరిపోని ఖాళీ"
 
-#: ../src/virtManager/addhardware.py:1171 ../src/virtManager/create.py:1699
+#: ../src/virtManager/addhardware.py:1215 ../src/virtManager/create.py:1701
 #, python-format
 msgid "Disk \"%s\" is already in use by another guest!"
 msgstr "డిస్కు \"%s\" యిప్పటికే వేరొక గెస్టుచేత వుపయోగంలోవుంది!"
 
-#: ../src/virtManager/addhardware.py:1173 ../src/virtManager/create.py:1701
+#: ../src/virtManager/addhardware.py:1217 ../src/virtManager/create.py:1703
 msgid "Do you really want to use the disk?"
 msgstr "మీరు నింజంగా డిస్కును వుపయోగిద్దామని అనుకొనుచున్నారా?"
 
-#: ../src/virtManager/addhardware.py:1190
+#: ../src/virtManager/addhardware.py:1234
 msgid "Network selection error."
 msgstr "నెట్వర్కు యెంపిక దోషము."
 
-#: ../src/virtManager/addhardware.py:1191
+#: ../src/virtManager/addhardware.py:1235
 msgid "A network source must be selected."
 msgstr "నెట్వర్కు మూలము తప్పక యెంపికకావలెను."
 
-#: ../src/virtManager/addhardware.py:1194
+#: ../src/virtManager/addhardware.py:1238
 msgid "Invalid MAC address"
 msgstr "సరికాని MAC చిరునామా"
 
-#: ../src/virtManager/addhardware.py:1195
+#: ../src/virtManager/addhardware.py:1239
 msgid "A MAC address must be entered."
 msgstr "MAC చిరునామా తప్పక ప్రవేశపెట్టవలెను."
 
-#: ../src/virtManager/addhardware.py:1227
+#: ../src/virtManager/addhardware.py:1271
 msgid "Graphics device parameter error"
 msgstr "గ్రాఫిక్స్‍ పరికరము పారామితి దోషము"
 
-#: ../src/virtManager/addhardware.py:1235
+#: ../src/virtManager/addhardware.py:1279
 msgid "Sound device parameter error"
 msgstr "శబ్దపు పరికరము పారామితి దోషము"
 
-#: ../src/virtManager/addhardware.py:1242
+#: ../src/virtManager/addhardware.py:1286
 #, fuzzy
 msgid "Physical Device Required"
 msgstr "భౌతిక పరికరము అవసరమైనది"
 
-#: ../src/virtManager/addhardware.py:1243
+#: ../src/virtManager/addhardware.py:1287
 msgid "A device must be selected."
 msgstr "పరికరము తప్పక యెంపికచేయవలెను."
 
-#: ../src/virtManager/addhardware.py:1250
+#: ../src/virtManager/addhardware.py:1294
 msgid "Host device parameter error"
 msgstr "హోస్ట్ పరికరము పారామితి దోషము"
 
-#: ../src/virtManager/addhardware.py:1292
+#: ../src/virtManager/addhardware.py:1339
 #, python-format
 msgid "%s device parameter error"
 msgstr "%s పరికర పారామితి దోషము"
 
-#: ../src/virtManager/addhardware.py:1303
 #: ../src/virtManager/addhardware.py:1350
 msgid "Video device parameter error"
 msgstr "వీడియో పరికర పారామితి దోషము"
 
-#: ../src/virtManager/addhardware.py:1316
+#: ../src/virtManager/addhardware.py:1362
 msgid "Watchdog parameter error"
 msgstr "వాచ్‌డాగ్ పారామితి దోషము"
 
-#: ../src/virtManager/addhardware.py:1327
+#: ../src/virtManager/addhardware.py:1372
 #, fuzzy
 msgid "A filesystem source must be specified"
 msgstr "ఒక యింటర్ఫేస్ తప్పక తెలుపవలెను."
 
-#: ../src/virtManager/addhardware.py:1329
+#: ../src/virtManager/addhardware.py:1374
 #, fuzzy
 msgid "A filesystem target must be specified"
 msgstr "నిల్వ పాత్ తప్పక తెలుపవలెను."
 
-#: ../src/virtManager/addhardware.py:1340
+#: ../src/virtManager/addhardware.py:1385
 #, fuzzy
 msgid "Filesystem parameter error"
 msgstr "నిల్వ పారామితి దోషము."
+
+#: ../src/virtManager/addhardware.py:1394
+#, fuzzy
+msgid "Smartcard device parameter error"
+msgstr "శబ్దపు పరికరము పారామితి దోషము"
+
+#: ../src/virtManager/addhardware.py:1409
+#, fuzzy
+msgid "USB redirected device parameter error"
+msgstr "శబ్దపు పరికరము పారామితి దోషము"
 
 #: ../src/virtManager/asyncjob.py:175
 msgid "Cancel the job before closing window?"
@@ -800,13 +813,13 @@ msgstr "క్రియాశీల"
 #: ../src/virtManager/connection.py:615 ../src/virtManager/host.py:524
 #: ../src/virtManager/host.py:567 ../src/virtManager/host.py:787
 #: ../src/virtManager/host.py:827 ../src/virtManager/host.py:1035
-#: ../src/virtManager/uihelpers.py:507
+#: ../src/virtManager/uihelpers.py:526
 msgid "Inactive"
 msgstr "క్రియాహీన"
 
-#: ../src/virtManager/connection.py:617 ../src/virtManager/create.py:2016
-#: ../src/virtManager/details.py:2399 ../src/virtManager/details.py:2666
-#: ../src/virtManager/details.py:2867 ../src/virtManager/details.py:2868
+#: ../src/virtManager/connection.py:617 ../src/virtManager/create.py:2019
+#: ../src/virtManager/details.py:2440 ../src/virtManager/details.py:2707
+#: ../src/virtManager/details.py:2908 ../src/virtManager/details.py:2909
 #: ../src/virtManager/host.py:1029
 msgid "Unknown"
 msgstr "తెలియని"
@@ -858,7 +871,7 @@ msgstr "పూర్తితెర (_F)"
 msgid "Send key combination"
 msgstr "IP ఆకృతీకరణ"
 
-#: ../src/virtManager/console.py:659 ../src/vmm-details.glade.h:133
+#: ../src/virtManager/console.py:659 ../src/vmm-details.glade.h:135
 msgid "Virtual Machine"
 msgstr "వర్చ్యువల్ మిషన్"
 
@@ -913,9 +926,8 @@ msgid "Connection is read only."
 msgstr "అనుసంధానము చదువుటకు మాత్రమే."
 
 #: ../src/virtManager/create.py:422
-msgid ""
-"No hypervisor options were found for this\n"
-"connection."
+#, fuzzy
+msgid "No hypervisor options were found for this connection."
 msgstr ""
 "ఈ అనుసంధానము కొరకు యెటువంటి\n"
 "హైపర్విజర్ ఐచ్చికములు కనుగొనబడలేదు."
@@ -923,37 +935,37 @@ msgstr ""
 #: ../src/virtManager/create.py:427
 #, fuzzy
 msgid ""
-"This usually means that QEMU or KVM is not\n"
-"installed on your machine, or the KVM kernel modules are not loaded."
+"This usually means that QEMU or KVM is not installed on your machine, or the "
+"KVM kernel modules are not loaded."
 msgstr ""
 "సాధారణంగా దీనర్ధం qemu లేదా kvm మీ మిషన్‌పైన\n"
 "సంస్థాపించబడలేదు. దయచేసి అవి కావలిసినవిగా\n"
 "సంస్థాపించబడునట్లు చూచుకొనుము."
 
 #: ../src/virtManager/create.py:442
+#, fuzzy
 msgid ""
-"Host supports full virtualization, but\n"
-"no related install options are available.\n"
-"This may mean support is disabled in your\n"
-"system BIOS."
+"Host supports full virtualization, but no related install options are "
+"available. This may mean support is disabled in your system BIOS."
 msgstr ""
 "హోస్ట్ పూర్తి వర్చ్యులైజేషన్‌ను మద్దతించును, అయితే\n"
 "యెటువంటి సంభందిత సంస్థాపనా ఐచ్చికములు అందుబాటులో లేవు.\n"
 "దీనర్ధం మీ సిస్టమ్ BIOS నందు మద్దతు అచేతనమైంది."
 
 #: ../src/virtManager/create.py:449
+#, fuzzy
 msgid ""
-"Host does not appear to support hardware\n"
-"virtualization. Install options may be limited."
+"Host does not appear to support hardware virtualization. Install options may "
+"be limited."
 msgstr ""
 "హోస్టు హార్డువేరు వర్చ్యులైజేషన్‌ను మద్దతిస్తున్నట్లు కనిపించుటలేదు.\n"
 "సంస్థాపనా ఐచ్చికములు బహుశా పరిమితమైనవి అయివుండవచ్చు."
 
 #: ../src/virtManager/create.py:455
+#, fuzzy
 msgid ""
-"KVM is not available. This may mean the KVM\n"
-"package is not installed, or the KVM kernel modules \n"
-"are not loaded. Your virtual machines may perform poorly."
+"KVM is not available. This may mean the KVM package is not installed, or the "
+"KVM kernel modules are not loaded. Your virtual machines may perform poorly."
 msgstr ""
 "KVM అందుబాటులో లేదు. దీనర్ధం KVM ప్యాకేజీ సంస్థాపించబడిలేదు,\n"
 "లేదా KVM కెర్నల్ మాడ్యూళ్ళు లోడవలేదు అని. మీ వర్చ్యువల్ మిషన్లు\n"
@@ -1031,8 +1043,8 @@ msgstr "ఆపరేటింగ్ సిస్టమ్ రకము మరి
 msgid "Host filesystem"
 msgstr ""
 
-#: ../src/virtManager/create.py:865 ../src/virtManager/details.py:2400
-#: ../src/virtManager/details.py:2461
+#: ../src/virtManager/create.py:865 ../src/virtManager/details.py:2441
+#: ../src/virtManager/details.py:2502
 msgid "None"
 msgstr "ఏదీకాదు"
 
@@ -1069,63 +1081,63 @@ msgstr "సంస్థాపనా పారామితులను దొర�
 msgid "Invalid System Name"
 msgstr "చెల్లని కంప్యూటరు పేరు"
 
-#: ../src/virtManager/create.py:1490
+#: ../src/virtManager/create.py:1491
 msgid "An install media selection is required."
 msgstr "ఒక సంస్థాపనా మాధ్యమం యెంపిక అవసరమైంది."
 
-#: ../src/virtManager/create.py:1500
+#: ../src/virtManager/create.py:1501
 msgid "An install tree is required."
 msgstr "ఒక సంస్థాపనా ట్రీ అవసరమైంది."
 
-#: ../src/virtManager/create.py:1513
+#: ../src/virtManager/create.py:1515
 msgid "A storage path to import is required."
 msgstr "దిగుమతి చేయుటకు వొక నిల్వ పాత్ అవసరమైంది."
 
-#: ../src/virtManager/create.py:1520
+#: ../src/virtManager/create.py:1522
 #, fuzzy
 msgid "An application path is required."
 msgstr "ఒక సంస్థాపనా మాధ్యమం యెంపిక అవసరమైంది."
 
-#: ../src/virtManager/create.py:1527
+#: ../src/virtManager/create.py:1529
 #, fuzzy
 msgid "An OS directory path is required."
 msgstr "ఒక యింటర్ఫేస్ నామము అవసరమైంది."
 
-#: ../src/virtManager/create.py:1537
+#: ../src/virtManager/create.py:1540
 msgid "Error setting installer parameters."
 msgstr "సంస్థాపిక పారామితులను అమర్చుటలో దోషము."
 
-#: ../src/virtManager/create.py:1565
+#: ../src/virtManager/create.py:1569
 msgid "Error setting install media location."
 msgstr "సంస్థాపనా మాధ్యమం స్థానమును అమర్చుటలో దోషము."
 
-#: ../src/virtManager/create.py:1575
+#: ../src/virtManager/create.py:1578
 msgid "Error setting OS information."
 msgstr "OS సమాచారమును అమర్చుటలో దోషము."
 
-#: ../src/virtManager/create.py:1610
+#: ../src/virtManager/create.py:1612
 msgid "Error setting CPUs."
 msgstr "CPUలను అమర్చుటలో దోషము."
 
-#: ../src/virtManager/create.py:1617
+#: ../src/virtManager/create.py:1619
 msgid "Error setting guest memory."
 msgstr "గెస్టు మెమొరీను అమర్చుటలో దోషము."
 
-#: ../src/virtManager/create.py:1732
+#: ../src/virtManager/create.py:1735
 #, python-format
 msgid "Network device required for %s install."
 msgstr "%s సంస్థాపనకు నెట్వర్కు పరికరము అవసరము."
 
-#: ../src/virtManager/create.py:1829
+#: ../src/virtManager/create.py:1832
 #, fuzzy
 msgid "Error starting installation: "
 msgstr "సంస్థాపనా మాధ్యమం స్థానమును అమర్చుటలో దోషము."
 
-#: ../src/virtManager/create.py:1866
+#: ../src/virtManager/create.py:1869
 msgid "Creating Virtual Machine"
 msgstr "Virtual Machineకంప్యూటరును సృష్టిస్తోంది"
 
-#: ../src/virtManager/create.py:1867
+#: ../src/virtManager/create.py:1870
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -1133,22 +1145,22 @@ msgstr ""
 "వర్చువల్ మిషన్ యిప్పుడు సృష్టించబడుచున్నది. డిస్కు నిల్వ కేటాయింపు మరియు సంస్థాపనా ప్రతిబింబముల "
 "స్వీకరణ ముగియుటకు కొంత సమయం పడుతుంది."
 
-#: ../src/virtManager/create.py:1879
+#: ../src/virtManager/create.py:1882
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "సంస్థాపనను పూర్తిచేయలేక పోయింది: '%s'"
 
-#: ../src/virtManager/create.py:1950
+#: ../src/virtManager/create.py:1953
 #, python-format
 msgid "Error continue install: %s"
 msgstr "సంస్థాపనను కొనసాగించుటలో దోషము: %s"
 
-#: ../src/virtManager/create.py:2058
+#: ../src/virtManager/create.py:2061
 msgid "Detecting"
 msgstr "గుర్తించుచున్నది"
 
 #: ../src/virtManager/createinterface.py:201
-#: ../src/virtManager/uihelpers.py:397
+#: ../src/virtManager/uihelpers.py:416
 msgid "Bridge"
 msgstr "బ్రిడ్జి"
 
@@ -1164,7 +1176,7 @@ msgstr "ఈథర్నెట్"
 msgid "VLAN"
 msgstr "VLAN"
 
-#: ../src/virtManager/createinterface.py:222 ../src/virtManager/details.py:673
+#: ../src/virtManager/createinterface.py:222 ../src/virtManager/details.py:693
 #: ../src/virtManager/manager.py:366 ../src/virtManager/storagebrowse.py:125
 #: ../src/vmm-create-net.glade.h:29 ../src/vmm-create-pool.glade.h:9
 #: ../src/vmm-create.glade.h:34
@@ -1229,7 +1241,7 @@ msgstr ""
 "వీటిని వుపయోగించుట వలన యిప్పటికే వాటియందున్న ఆకృతీకరణ పైనే మరలారాయును. మీరు ఖచ్చితంగా యెంపికకాబడిన "
 "యింటర్ఫేస్‌(ల)ను వుపయోగించాలని అనుకొనుచున్నారా?"
 
-#: ../src/virtManager/createinterface.py:1000
+#: ../src/virtManager/createinterface.py:1001
 msgid "Error setting interface parameters."
 msgstr "ఇంటర్ఫేస్ పారామితులను అమర్చుటలో ధోషము."
 
@@ -1293,13 +1305,13 @@ msgstr "ఇతర"
 msgid "Start address:"
 msgstr "ప్రారంభ చిరునామా:"
 
-#: ../src/virtManager/createnet.py:279 ../src/vmm-details.glade.h:115
+#: ../src/virtManager/createnet.py:279 ../src/vmm-details.glade.h:116
 msgid "Status:"
 msgstr "స్థితి:"
 
-#: ../src/virtManager/createnet.py:280 ../src/virtManager/details.py:2486
-#: ../src/virtManager/details.py:2487 ../src/virtManager/details.py:2488
-#: ../src/virtManager/details.py:2489 ../src/virtManager/host.py:547
+#: ../src/virtManager/createnet.py:280 ../src/virtManager/details.py:2527
+#: ../src/virtManager/details.py:2528 ../src/virtManager/details.py:2529
+#: ../src/virtManager/details.py:2530 ../src/virtManager/host.py:547
 #: ../src/virtManager/host.py:548
 msgid "Disabled"
 msgstr "అచేతనమైంది"
@@ -1507,22 +1519,32 @@ msgstr ""
 "ఈ క్రింది వర్చ్యువల్ మిషన్ల ద్వారా నిల్వ వినియోగంలో వుంది:\n"
 "- %s"
 
-#: ../src/virtManager/details.py:573
+#: ../src/virtManager/details.py:186
+#, python-format
+msgid "%s:%s"
+msgstr ""
+
+#: ../src/virtManager/details.py:190
+#, python-format
+msgid "Redirected %s"
+msgstr ""
+
+#: ../src/virtManager/details.py:593
 #, fuzzy
 msgid "_Add Hardware"
 msgstr "హార్డువేరును జతచేయి"
 
-#: ../src/virtManager/details.py:580
+#: ../src/virtManager/details.py:600
 #, fuzzy
 msgid "_Remove Hardware"
 msgstr "హార్డువేరును జతచేయి (_d)"
 
-#: ../src/virtManager/details.py:674
+#: ../src/virtManager/details.py:694
 #, fuzzy
 msgid "Version"
 msgstr "వర్షన్ (_V):"
 
-#: ../src/virtManager/details.py:709
+#: ../src/virtManager/details.py:729
 #, fuzzy
 msgid ""
 "Static SELinux security type tells libvirt to always start the guest process "
@@ -1533,7 +1555,7 @@ msgstr ""
 "ప్రారంభించమని చెబుతుంది. ప్రతిబింబములు డిస్కునందు సరిగా లేబుల్ చేయబడునట్లు నిర్వహాకుడు "
 "చూచుకొనవలెను."
 
-#: ../src/virtManager/details.py:711
+#: ../src/virtManager/details.py:731
 msgid ""
 "The dynamic SELinux security type tells libvirt to automatically pick a "
 "unique label for the guest process and guest image, ensuring total isolation "
@@ -1542,75 +1564,75 @@ msgstr ""
 "గతిక SELinux రక్షణ రకము libvirtనకు స్వయంచాలకంగా యునిక్ లేబుల్‌ను గెస్టు ప్రక్రియ కొరకు మరియు "
 "గెస్టు ప్రతిబింబము కొరకు తీసుకొమ్మని చెబుతుంది, మొత్తం గెస్టు isolation  పొందుటకు. (అప్రమేయ)"
 
-#: ../src/virtManager/details.py:720
+#: ../src/virtManager/details.py:740
 msgid "Libvirt did not detect NUMA capabilities."
 msgstr ""
 
-#: ../src/virtManager/details.py:728
+#: ../src/virtManager/details.py:748
 msgid "VCPU"
 msgstr "VCPU"
 
-#: ../src/virtManager/details.py:729
+#: ../src/virtManager/details.py:749
 msgid "On CPU"
 msgstr "CPU పైన"
 
-#: ../src/virtManager/details.py:730
+#: ../src/virtManager/details.py:750
 msgid "Pinning"
 msgstr "పిన్నింగ్"
 
-#: ../src/virtManager/details.py:987
+#: ../src/virtManager/details.py:1011
 #, fuzzy
 msgid "No text console available"
 msgstr "ఎటువంటి అనుసంధానములు అందుబాటులో లేవు."
 
-#: ../src/virtManager/details.py:1059
+#: ../src/virtManager/details.py:1083
 #, fuzzy
 msgid "No graphical console available"
 msgstr "గ్రాఫికల్ కన్సోలును చూపుము"
 
-#: ../src/virtManager/details.py:1064
+#: ../src/virtManager/details.py:1088
 #, python-format
 msgid "Graphical Console %s"
 msgstr "గ్రాఫికల్ కన్సోల్ %s"
 
-#: ../src/virtManager/details.py:1147
+#: ../src/virtManager/details.py:1174
 #, fuzzy
 msgid "There are unapplied changes. Would you like to apply them now?"
 msgstr ""
 "వర్చ్యువల్ నెట్వర్కు '%s' క్రియాహీనము కాదు. మీరు నెట్వర్కును యిప్పుడు ప్రారంభించుటకు యిష్టపడతారా?"
 
-#: ../src/virtManager/details.py:1149
+#: ../src/virtManager/details.py:1176
 #, fuzzy
 msgid "Don't warn me again."
 msgstr "నన్ను మళ్ళీ అడగవద్దు"
 
-#: ../src/virtManager/details.py:1221
+#: ../src/virtManager/details.py:1250
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "హార్డువేర్ పేజీను తాజాపరచుటలో దోషము: %s"
 
-#: ../src/virtManager/details.py:1280 ../src/virtManager/manager.py:947
+#: ../src/virtManager/details.py:1309 ../src/virtManager/manager.py:947
 #, fuzzy
 msgid "_Restore"
 msgstr "తిరిగికొనసాగించు (_R)"
 
 #. Build VM context menu
-#: ../src/virtManager/details.py:1282 ../src/virtManager/manager.py:315
+#: ../src/virtManager/details.py:1311 ../src/virtManager/manager.py:315
 #: ../src/virtManager/manager.py:949 ../src/virtManager/systray.py:166
-#: ../src/vmm-details.glade.h:160 ../src/vmm-manager.glade.h:20
+#: ../src/vmm-details.glade.h:162 ../src/vmm-manager.glade.h:20
 msgid "_Run"
 msgstr "ఉపయోగించు (_R)"
 
-#: ../src/virtManager/details.py:1394
+#: ../src/virtManager/details.py:1424
 #, fuzzy, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "మలచుకొనిన డైలాగ్‌ను ఆరంభించుటలో దోషము: "
 
-#: ../src/virtManager/details.py:1466
+#: ../src/virtManager/details.py:1496
 msgid "Save Virtual Machine Screenshot"
 msgstr "వర్చ్యువల్ కంప్యూటరు Screenshotని భద్రపరువు"
 
-#: ../src/virtManager/details.py:1490
+#: ../src/virtManager/details.py:1520
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -1619,255 +1641,273 @@ msgstr ""
 "ఈ screenshot కింది దానికి భద్రపరచబడింది:\n"
 "%s"
 
-#: ../src/virtManager/details.py:1492
+#: ../src/virtManager/details.py:1522
 msgid "Screenshot saved"
 msgstr "Screenshot భద్రపరచబడింది"
 
-#: ../src/virtManager/details.py:1668
-#, fuzzy, python-format
-msgid "Error generating CPU configuration: %s"
+#: ../src/virtManager/details.py:1698
+#, fuzzy
+msgid "Error generating CPU configuration"
 msgstr "IP ఆకృతీకరణను నిర్ధారించుటలో దోషము: %s"
 
-#: ../src/virtManager/details.py:1702
+#: ../src/virtManager/details.py:1732
 #, fuzzy, python-format
 msgid "Error copying host CPU: %s"
 msgstr "vol సృష్టించుటలో దోషము: %s"
 
-#: ../src/virtManager/details.py:1837
+#: ../src/virtManager/details.py:1807
+#, fuzzy, python-format
+msgid "Error disconnecting media: %s"
+msgstr "వాల్యూమ్ తొలగించుటలో దోషము: %s"
+
+#: ../src/virtManager/details.py:1827
+#, fuzzy, python-format
+msgid "Error launching media dialog: %s"
+msgstr "మలచుకొనిన డైలాగ్‌ను ఆరంభించుటలో దోషము: "
+
+#: ../src/virtManager/details.py:1877
 #, fuzzy, python-format
 msgid "Error apply changes: %s"
 msgstr "నెట్వర్కు విజార్డు ఆరంభించుటలో దోషము: %s"
 
-#: ../src/virtManager/details.py:1964
-#, python-format
-msgid "Error building pin list: %s"
+#: ../src/virtManager/details.py:2004
+#, fuzzy
+msgid "Error building pin list"
 msgstr "పిన్ జాబితాను నిర్మించుటలో దోషము: %s"
 
-#: ../src/virtManager/details.py:1970
-#, python-format
-msgid "Error pinning vcpus: %s"
+#: ../src/virtManager/details.py:2010
+#, fuzzy
+msgid "Error pinning vcpus"
 msgstr "vcpus పిన్నింగ్ దోషము: %s"
 
-#: ../src/virtManager/details.py:2019
+#: ../src/virtManager/details.py:2059
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "స్వయంచాలకప్రారంభం విలువ మార్చుటలో దోషము: %s"
 
-#: ../src/virtManager/details.py:2037
+#: ../src/virtManager/details.py:2077
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr ""
 
-#: ../src/virtManager/details.py:2040
+#: ../src/virtManager/details.py:2080
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr ""
 
-#: ../src/virtManager/details.py:2047
+#: ../src/virtManager/details.py:2087
 #, fuzzy
 msgid "An init path must be specified"
 msgstr "మాధ్యమం పాత్ తప్పక తెలుపవలెను."
 
-#: ../src/virtManager/details.py:2181
+#: ../src/virtManager/details.py:2221
 #, python-format
 msgid ""
 "You are switching graphics type to %(gtype)s, would you like to %(action)s "
 "Spice agent channels?"
 msgstr ""
 
-#: ../src/virtManager/details.py:2242
+#: ../src/virtManager/details.py:2282
 msgid "Are you sure you want to remove this device?"
 msgstr "మీరు ఖచ్చితంగా ఈ పరికరమును తొలగించుదామని అనుకుంటున్నారా?"
 
-#: ../src/virtManager/details.py:2249
+#: ../src/virtManager/details.py:2289
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "పరికరాన్ని తొలగించుటలో దోషము: %s"
 
-#: ../src/virtManager/details.py:2265
+#: ../src/virtManager/details.py:2306
 #, fuzzy
 msgid "Device could not be removed from the running machine"
 msgstr "నడుస్తున్న మిషన్‌నుండి పరికరము తీసివేయబడలేదు."
 
-#: ../src/virtManager/details.py:2267
+#: ../src/virtManager/details.py:2308
 #, fuzzy
 msgid "This change will take effect after the next guest shutdown."
 msgstr "తరువాతి గెస్టు పునఃప్రారంభమునందు ఈ మార్పులు ప్రభావితం అవుతాయి."
 
-#: ../src/virtManager/details.py:2321
+#: ../src/virtManager/details.py:2362
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "VM ఆకృతీకరణ మార్చుటలో దోషము: %s"
 
-#: ../src/virtManager/details.py:2331
+#: ../src/virtManager/details.py:2372
 #, fuzzy
 msgid "Some changes may require a guest shutdown to take effect."
 msgstr "కొన్ని మార్పులు ప్రభావితం కావుటకు గెస్టును పునఃప్రారంభించవలసి రావచ్చును."
 
-#: ../src/virtManager/details.py:2334
+#: ../src/virtManager/details.py:2375
 #, fuzzy
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "తరువాతి గెస్టు పునఃప్రారంభమునందు ఈ మార్పులు ప్రభావితం అవుతాయి."
 
-#: ../src/virtManager/details.py:2407 ../src/virtManager/details.py:2411
+#: ../src/virtManager/details.py:2448 ../src/virtManager/details.py:2452
 #, fuzzy
 msgid "unknown"
 msgstr "తెలియని"
 
-#: ../src/virtManager/details.py:2451 ../src/vmm-add-hardware.glade.h:35
+#: ../src/virtManager/details.py:2492 ../src/vmm-add-hardware.glade.h:36
 msgid "Same as host"
 msgstr "అచ్చు హోస్టు వలె"
 
-#: ../src/virtManager/details.py:2551
+#: ../src/virtManager/details.py:2592
 msgid "VCPU info only available for running domain."
 msgstr "నడుస్తున్న డొమైన్ కొరకు మాత్రమే VCPU సమాచారము అందుబాటులో వుంటుంది."
 
-#: ../src/virtManager/details.py:2556
+#: ../src/virtManager/details.py:2597
 #, python-format
 msgid "Error getting VCPU info: %s"
 msgstr "VCPU సమాచారమును పొందుటలో దోషము: %s"
 
-#: ../src/virtManager/details.py:2559
+#: ../src/virtManager/details.py:2600
 msgid "Virtual machine does not support runtime VPCU info."
 msgstr "వర్చ్యువల్ మిషన్ రన్‌టైమ్ VPCU సమాచారమును మద్దతించదు."
 
-#: ../src/virtManager/details.py:2790
+#: ../src/virtManager/details.py:2831
 msgid "Xen Mouse"
 msgstr "Xen మౌస్"
 
-#: ../src/virtManager/details.py:2792
+#: ../src/virtManager/details.py:2833
 msgid "PS/2 Mouse"
 msgstr "PS/2 మౌస్"
 
-#: ../src/virtManager/details.py:2797
+#: ../src/virtManager/details.py:2838
 msgid "Absolute Movement"
 msgstr "ఖచ్చితమైన కదలిక"
 
-#: ../src/virtManager/details.py:2799
+#: ../src/virtManager/details.py:2840
 msgid "Relative Movement"
 msgstr "సారూప్య కదలిక"
 
-#: ../src/virtManager/details.py:2834
+#: ../src/virtManager/details.py:2875
 msgid "Automatically allocated"
 msgstr "స్వయంచాలకంగా కేటాయించిన"
 
-#: ../src/virtManager/details.py:2842
+#: ../src/virtManager/details.py:2883
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr ""
 
-#: ../src/virtManager/details.py:2865
+#: ../src/virtManager/details.py:2906
 #, fuzzy
 msgid "Local SDL Window"
 msgstr "స్థానిక SDL విండో"
 
-#: ../src/virtManager/details.py:2938
+#: ../src/virtManager/details.py:2993
 #, fuzzy
 msgid "Serial Device"
 msgstr "ఏ వరుస పరికరములు కనుగొనబడలేదు"
 
-#: ../src/virtManager/details.py:2940
+#: ../src/virtManager/details.py:2995
 #, fuzzy
 msgid "Parallel Device"
 msgstr "లక్ష్యపు పరికరము:"
 
-#: ../src/virtManager/details.py:2942
+#: ../src/virtManager/details.py:2997
 #, fuzzy
 msgid "Console Device"
 msgstr "తెర"
 
-#: ../src/virtManager/details.py:2944
+#: ../src/virtManager/details.py:2999
 msgid "Channel Device"
 msgstr ""
 
-#: ../src/virtManager/details.py:2946
+#: ../src/virtManager/details.py:3001
 #, fuzzy, python-format
 msgid "%s Device"
 msgstr "పరికరము:"
 
-#: ../src/virtManager/details.py:2951
+#: ../src/virtManager/details.py:3006
 msgid "Primary Console"
 msgstr "ప్రాధమిక తెర"
 
-#: ../src/virtManager/details.py:3199
+#: ../src/virtManager/details.py:3079 ../src/vmm-add-hardware.glade.h:11
+msgid "Default"
+msgstr ""
+
+#: ../src/virtManager/details.py:3261
 msgid "Tablet"
 msgstr "టాబ్లెట్"
 
-#: ../src/virtManager/details.py:3202
+#: ../src/virtManager/details.py:3264
 msgid "Mouse"
 msgstr "మౌస్"
 
-#: ../src/virtManager/details.py:3211
+#: ../src/virtManager/details.py:3273
 #, python-format
 msgid "Display %s"
 msgstr "%s ప్రదర్శించుము"
 
-#: ../src/virtManager/details.py:3217
+#: ../src/virtManager/details.py:3279
 #, python-format
 msgid "Sound: %s"
 msgstr "ధ్వని: %s"
 
-#: ../src/virtManager/details.py:3245
+#: ../src/virtManager/details.py:3318
 msgid "Video"
 msgstr "వీడియో"
 
-#: ../src/virtManager/details.py:3249
+#: ../src/virtManager/details.py:3322
 msgid "Watchdog"
 msgstr "వాచ్‌డాగ్"
 
-#: ../src/virtManager/details.py:3256
+#: ../src/virtManager/details.py:3329
 #, python-format
 msgid "Controller %s"
 msgstr ""
 
-#: ../src/virtManager/details.py:3263
+#: ../src/virtManager/details.py:3336
 #, python-format
 msgid "Filesystem %s"
 msgstr ""
 
-#: ../src/virtManager/domain.py:316
+#: ../src/virtManager/domain.py:317
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 
-#: ../src/virtManager/domain.py:374
+#: ../src/virtManager/domain.py:375
 msgid "Cannot rename an active guest"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1048
+#: ../src/virtManager/domain.py:1051
 msgid "Cannot start guest while cloning operation in progress"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1062
+#: ../src/virtManager/domain.py:1070
 msgid "Cannot resume guest while cloning operation in progress"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1077
+#: ../src/virtManager/domain.py:1085
 #, fuzzy
 msgid "Saving domain to disk"
 msgstr "డొమైన్ భద్రపరచుటలో దోషము: %s"
 
-#: ../src/virtManager/domain.py:1121
+#: ../src/virtManager/domain.py:1129
 #, fuzzy
 msgid "Migrating domain"
 msgstr "డొమైన్ ప్రారంభించుటలో దోషము: %s"
 
-#: ../src/virtManager/domain.py:1331
+#: ../src/virtManager/domain.py:1339
 msgid "Running"
 msgstr "నడుస్తోంది"
 
-#: ../src/virtManager/domain.py:1333
+#: ../src/virtManager/domain.py:1341
 msgid "Paused"
 msgstr "Paused"
 
-#: ../src/virtManager/domain.py:1335
+#: ../src/virtManager/domain.py:1343
 #, fuzzy
 msgid "Shutting Down"
 msgstr "మూసివేయుచున్నది"
 
-#: ../src/virtManager/domain.py:1337
+#: ../src/virtManager/domain.py:1346
+msgid "Saved"
+msgstr ""
+
+#: ../src/virtManager/domain.py:1348
 msgid "Shutoff"
 msgstr "మూయి"
 
-#: ../src/virtManager/domain.py:1339
+#: ../src/virtManager/domain.py:1350
 msgid "Crashed"
 msgstr "క్రాషయ్యింది"
 
@@ -2115,7 +2155,7 @@ msgstr "డొమైన్ పునఃప్రారంభించుటల�
 msgid "Input Error"
 msgstr "ఇన్‌పుట్ దోషము"
 
-#: ../src/virtManager/error.py:193 ../src/vmm-details.glade.h:53
+#: ../src/virtManager/error.py:202 ../src/vmm-details.glade.h:54
 msgid "Details"
 msgstr "వివరాలు"
 
@@ -2308,7 +2348,7 @@ msgid "Error selecting interface: %s"
 msgstr "ఇంటర్ఫేస్ యెంపికచేయుటలో దోషము: %s"
 
 #: ../src/virtManager/manager.py:316 ../src/virtManager/systray.py:153
-#: ../src/vmm-details.glade.h:156 ../src/vmm-manager.glade.h:19
+#: ../src/vmm-details.glade.h:158 ../src/vmm-manager.glade.h:19
 msgid "_Pause"
 msgstr "ఖాళీ (_P)"
 
@@ -2318,22 +2358,22 @@ msgstr "తిరిగికొనసాగించు (_e)"
 
 #: ../src/virtManager/manager.py:319 ../src/virtManager/manager.py:322
 #: ../src/virtManager/systray.py:180 ../src/virtManager/systray.py:198
-#: ../src/virtManager/uihelpers.py:830
+#: ../src/virtManager/uihelpers.py:849
 msgid "_Shut Down"
 msgstr "మూసివేయి (_S)"
 
 #. Shutdown menu
 #: ../src/virtManager/manager.py:321 ../src/virtManager/systray.py:173
-#: ../src/virtManager/uihelpers.py:824 ../src/vmm-details.glade.h:158
+#: ../src/virtManager/uihelpers.py:843 ../src/vmm-details.glade.h:160
 msgid "_Reboot"
 msgstr "పునఃప్రారంభము (_R)"
 
 #: ../src/virtManager/manager.py:324 ../src/virtManager/systray.py:187
-#: ../src/virtManager/uihelpers.py:836 ../src/vmm-details.glade.h:144
+#: ../src/virtManager/uihelpers.py:855 ../src/vmm-details.glade.h:146
 msgid "_Force Off"
 msgstr "బలవంతంగా ఆఫ్ (_F)"
 
-#: ../src/virtManager/manager.py:327 ../src/virtManager/uihelpers.py:846
+#: ../src/virtManager/manager.py:327 ../src/virtManager/uihelpers.py:865
 #, fuzzy
 msgid "Sa_ve"
 msgstr "భద్రపరువు (_S)"
@@ -2343,7 +2383,7 @@ msgstr "భద్రపరువు (_S)"
 msgid "_Clone..."
 msgstr "క్లోన్ (_C)"
 
-#: ../src/virtManager/manager.py:331 ../src/vmm-details.glade.h:151
+#: ../src/virtManager/manager.py:331 ../src/vmm-details.glade.h:153
 msgid "_Migrate..."
 msgstr "వలసపంపు... (_M)"
 
@@ -2412,12 +2452,12 @@ msgstr ""
 msgid "Double click to connect"
 msgstr "అనుసంధానించుటకు రెండుసార్లు నొక్కుము"
 
-#: ../src/virtManager/manager.py:705
+#: ../src/virtManager/manager.py:707
 #, fuzzy
 msgid "Not Connected"
 msgstr "అనుసంధించు (_n)"
 
-#: ../src/virtManager/manager.py:707
+#: ../src/virtManager/manager.py:709
 #, fuzzy
 msgid "Connecting..."
 msgstr "అనుసంధానిస్తోంది"
@@ -2634,106 +2674,106 @@ msgid "Could not start storage_pool '%s': %s"
 msgstr "అప్రమేయ నిల్వ పూల్‌ '%s'ను సృష్టించలేకపోయింది: %s"
 
 #. [xml value, label]
-#: ../src/virtManager/uihelpers.py:289
+#: ../src/virtManager/uihelpers.py:308
 msgid "Hypervisor default"
 msgstr "హెపర్విజర్ అప్రమేయము"
 
-#: ../src/virtManager/uihelpers.py:393
+#: ../src/virtManager/uihelpers.py:412
 msgid "Usermode networking"
 msgstr "వినియోగదారిరీతి నెట్వర్కింగ్"
 
-#: ../src/virtManager/uihelpers.py:399
+#: ../src/virtManager/uihelpers.py:418
 msgid "Virtual network"
 msgstr "వర్చ్యువల్ నెట్వర్కు"
 
-#: ../src/virtManager/uihelpers.py:525
+#: ../src/virtManager/uihelpers.py:544
 msgid "No virtual networks available"
 msgstr "ఎటువంటి వర్చ్యువల్ నెట్వర్కులు అందుబాటులో లేవు"
 
-#: ../src/virtManager/uihelpers.py:547
+#: ../src/virtManager/uihelpers.py:566
 msgid "(Empty bridge)"
 msgstr "(ఖాళీ బ్రిడ్జ్)"
 
-#: ../src/virtManager/uihelpers.py:554
+#: ../src/virtManager/uihelpers.py:573
 msgid "macvtap"
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:557
+#: ../src/virtManager/uihelpers.py:576
 msgid "Not bridged"
 msgstr "బ్రిడ్జడ్ కాదు"
 
-#: ../src/virtManager/uihelpers.py:559
+#: ../src/virtManager/uihelpers.py:578
 #, python-format
 msgid "Host device %s %s"
 msgstr "హోస్టు పరికరము %s %s"
 
-#: ../src/virtManager/uihelpers.py:597
+#: ../src/virtManager/uihelpers.py:616
 #, fuzzy
 msgid "No networking"
 msgstr "నెట్వర్కింగ్ లేదు."
 
 #. After all is said and done, add a manual bridge option
-#: ../src/virtManager/uihelpers.py:602
+#: ../src/virtManager/uihelpers.py:621
 msgid "Specify shared device name"
 msgstr "భాగస్వామ్య పరికర నామమును తెలుపుము"
 
-#: ../src/virtManager/uihelpers.py:621
+#: ../src/virtManager/uihelpers.py:640
 msgid "Virtual Network is not active."
 msgstr "వర్చ్యువల్ నెట్వర్కు క్రియాశీలముగా లేదు."
 
-#: ../src/virtManager/uihelpers.py:622
+#: ../src/virtManager/uihelpers.py:641
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr ""
 "వర్చ్యువల్ నెట్వర్కు '%s' క్రియాహీనము కాదు. మీరు నెట్వర్కును యిప్పుడు ప్రారంభించుటకు యిష్టపడతారా?"
 
-#: ../src/virtManager/uihelpers.py:634
+#: ../src/virtManager/uihelpers.py:653
 #, python-format
 msgid "Could not start virtual network '%s': %s"
 msgstr "వర్చ్యువల్ నెట్వర్కు '%s'ను ప్రారంభించలేక పోయింది: %s"
 
-#: ../src/virtManager/uihelpers.py:657
+#: ../src/virtManager/uihelpers.py:676
 msgid "Error with network parameters."
 msgstr "నెట్వర్కు పారామితులతో దోషము."
 
-#: ../src/virtManager/uihelpers.py:662 ../src/virtManager/uihelpers.py:664
+#: ../src/virtManager/uihelpers.py:681 ../src/virtManager/uihelpers.py:683
 msgid "Mac address collision."
 msgstr "Mac చిరునామా సంఘట్టనము"
 
-#: ../src/virtManager/uihelpers.py:665
+#: ../src/virtManager/uihelpers.py:684
 #, python-format
 msgid "%s Are you sure you want to use this address?"
 msgstr "%s మీరు ఖచ్చితముగా ఈ చిరునామాను వుపయోగిద్దామని అనుకొనుచున్నారా?"
 
-#: ../src/virtManager/uihelpers.py:717
+#: ../src/virtManager/uihelpers.py:736
 msgid "No device present"
 msgstr "ఏ పరికరము లేదు"
 
-#: ../src/virtManager/uihelpers.py:874
+#: ../src/virtManager/uihelpers.py:893
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
 msgstr "పాత్ '%s' కొరకు యెమ్యులేటర్ శోధన అనుమతులను కలిగివుండక పోవచ్చును."
 
-#: ../src/virtManager/uihelpers.py:876
+#: ../src/virtManager/uihelpers.py:895
 msgid "Do you want to correct this now?"
 msgstr "మీరు దీనిని యిప్పుడు సరిదిద్దుదామని అనుకొనుచున్నారా?"
 
-#: ../src/virtManager/uihelpers.py:877 ../src/virtManager/uihelpers.py:901
+#: ../src/virtManager/uihelpers.py:896 ../src/virtManager/uihelpers.py:920
 msgid "Don't ask about these directories again."
 msgstr "ఈ డైరెక్టరీల గురించి మరలా అడుగవద్దు."
 
-#: ../src/virtManager/uihelpers.py:890
+#: ../src/virtManager/uihelpers.py:909
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr "క్రింది డైరెక్టరీల కొరకు అనుమతులను మార్చుటలో దోషములు యెదురైనవి:"
 
-#: ../src/virtManager/util.py:69
+#: ../src/virtManager/util.py:71
 #, python-format
 msgid "Couldn't create default storage pool '%s': %s"
 msgstr "అప్రమేయ నిల్వ పూల్‌ '%s'ను సృష్టించలేకపోయింది: %s"
 
-#: ../src/virtManager/util.py:378
+#: ../src/virtManager/util.py:380
 #, fuzzy
 msgid "Don't ask me again"
 msgstr "నన్ను మళ్ళీ అడగవద్దు"
@@ -2802,10 +2842,6 @@ msgstr "పరికరము రీతి (_e):"
 msgid "D_evice model:"
 msgstr "పరికరము రీతి (_e):"
 
-#: ../src/vmm-add-hardware.glade.h:11
-msgid "Default"
-msgstr ""
-
 #: ../src/vmm-add-hardware.glade.h:12
 msgid "Device Type Field"
 msgstr "పరికరము రకపు క్షేత్రము"
@@ -2861,12 +2897,16 @@ msgstr ""
 "సూచించండి."
 
 #: ../src/vmm-add-hardware.glade.h:23
+msgid "Please indicate the parameters of the redirected device."
+msgstr ""
+
+#: ../src/vmm-add-hardware.glade.h:24
 msgid ""
 "Please indicate what kind of pointer device to connect to the virtual "
 "machine."
 msgstr "వర్చ్యువల్ మిషన్‌కు ఏ రకమైన సూచకి పరికరము అనుసంధానించబడాలో దయచేసి సూచించండి."
 
-#: ../src/vmm-add-hardware.glade.h:24
+#: ../src/vmm-add-hardware.glade.h:25
 msgid ""
 "Please indicate what physical device\n"
 "to connect to the virtual machine."
@@ -2874,18 +2914,18 @@ msgstr ""
 "వర్చ్యువల్ మిషన్‌కు యెటువంటి భౌతిక పరికరము\n"
 "అనుసంధానించబడాలో దయచేసి సూచించండి."
 
-#: ../src/vmm-add-hardware.glade.h:26
+#: ../src/vmm-add-hardware.glade.h:27
 #, fuzzy
 msgid ""
 "Please indicate what smartcard device mode to connect to the virtual machine."
 msgstr "వర్చ్యువల్ మిషన్‌కు యెటువంటి శబ్ధపు పరికరము రకము అనుసంధానించబడాలో దయచేసి సూచించండి."
 
-#: ../src/vmm-add-hardware.glade.h:27
+#: ../src/vmm-add-hardware.glade.h:28
 msgid ""
 "Please indicate what sound device type to connect to the virtual machine."
 msgstr "వర్చ్యువల్ మిషన్‌కు యెటువంటి శబ్ధపు పరికరము రకము అనుసంధానించబడాలో దయచేసి సూచించండి."
 
-#: ../src/vmm-add-hardware.glade.h:28
+#: ../src/vmm-add-hardware.glade.h:29
 msgid ""
 "Please indicate what video device type\n"
 "to connect to the virtual machine."
@@ -2893,7 +2933,7 @@ msgstr ""
 "వర్చ్యువల్ మిషన్‌కు యెటువంటి వీడియో పరికరము రకము\n"
 "అనుసంధానించాలో దయచేసి సూచించుము."
 
-#: ../src/vmm-add-hardware.glade.h:30
+#: ../src/vmm-add-hardware.glade.h:31
 msgid ""
 "Please indicate what watchdog device type\n"
 "and default action should be used."
@@ -2901,120 +2941,125 @@ msgstr ""
 "వాచ్‌డాగ్ యేమి టైపు చేయాలో మరియు అప్రమేయ చర్యగా యేది వుపయోగించాలో\n"
 "దయచేసి సూచించండి."
 
-#: ../src/vmm-add-hardware.glade.h:32
+#: ../src/vmm-add-hardware.glade.h:33
 #, fuzzy
 msgid ""
 "Please indicate which host directory to\n"
 "access in the guest."
 msgstr "వర్చ్యువల్ మిషన్‌కు యెటువంటి శబ్ధపు పరికరము రకము అనుసంధానించబడాలో దయచేసి సూచించండి."
 
-#: ../src/vmm-add-hardware.glade.h:34
+#: ../src/vmm-add-hardware.glade.h:35
 msgid "Po_rt:"
 msgstr "పోర్టు (_r):"
 
-#: ../src/vmm-add-hardware.glade.h:36 ../src/vmm-create.glade.h:45
+#: ../src/vmm-add-hardware.glade.h:37 ../src/vmm-create.glade.h:45
 msgid "Select _managed or other existing storage"
 msgstr "నిర్వహించిన లేదా యితర కలిగివున్న నిల్వను యెంపికచేయుము (_m)"
 
-#: ../src/vmm-add-hardware.glade.h:37
+#: ../src/vmm-add-hardware.glade.h:38
 #, fuzzy
 msgid "Storage _format:"
 msgstr "నిల్వ పాత్"
 
-#: ../src/vmm-add-hardware.glade.h:38
+#: ../src/vmm-add-hardware.glade.h:39
 #, fuzzy
 msgid "Ta_rget path:"
 msgstr "లక్ష్యపు పాత్ (_T):"
 
-#: ../src/vmm-add-hardware.glade.h:39
+#: ../src/vmm-add-hardware.glade.h:40
 msgid "Use Te_lnet:"
 msgstr "Te_lnet వుపయోగించుము:"
 
-#: ../src/vmm-add-hardware.glade.h:40 ../src/vmm-create-interface.glade.h:34
+#: ../src/vmm-add-hardware.glade.h:41 ../src/vmm-create-interface.glade.h:34
 #: ../src/vmm-migrate.glade.h:10
 msgid "_Address:"
 msgstr "చిరునామా (_A):"
 
-#: ../src/vmm-add-hardware.glade.h:41 ../src/vmm-create.glade.h:53
+#: ../src/vmm-add-hardware.glade.h:42 ../src/vmm-create.glade.h:53
 msgid "_Allocate entire disk now"
 msgstr "మొత్తము డిస్కును యిప్పుడు కేటాయించుము (_A)"
 
-#: ../src/vmm-add-hardware.glade.h:42
+#: ../src/vmm-add-hardware.glade.h:43
 msgid "_Bind Host:"
 msgstr "బందన హోస్టు (_B):"
 
-#: ../src/vmm-add-hardware.glade.h:43 ../src/vmm-create.glade.h:55
-#: ../src/vmm-details.glade.h:138
+#: ../src/vmm-add-hardware.glade.h:44 ../src/vmm-create.glade.h:55
+#: ../src/vmm-details.glade.h:140
 msgid "_Bridge name:"
 msgstr "బ్రిడ్జి నామము (_B):"
 
-#: ../src/vmm-add-hardware.glade.h:44 ../src/vmm-choose-cd.glade.h:4
+#: ../src/vmm-add-hardware.glade.h:45 ../src/vmm-choose-cd.glade.h:4
 #: ../src/vmm-clone.glade.h:23
 msgid "_Browse..."
 msgstr "బ్రౌజు... (_B)"
 
-#: ../src/vmm-add-hardware.glade.h:45
+#: ../src/vmm-add-hardware.glade.h:46
 msgid "_Device type:"
 msgstr "పరికరము రకము (_D):"
 
-#: ../src/vmm-add-hardware.glade.h:46 ../src/vmm-create-interface.glade.h:37
+#: ../src/vmm-add-hardware.glade.h:47 ../src/vmm-create-interface.glade.h:37
 #: ../src/vmm-create-net.glade.h:52 ../src/vmm-create-pool.glade.h:13
 #: ../src/vmm-create-vol.glade.h:22 ../src/vmm-create.glade.h:57
 msgid "_Finish"
 msgstr "ముగించు (_F)"
 
-#: ../src/vmm-add-hardware.glade.h:47 ../src/vmm-create.glade.h:58
+#: ../src/vmm-add-hardware.glade.h:48 ../src/vmm-create.glade.h:58
 msgid "_GB"
 msgstr "_GB"
 
-#: ../src/vmm-add-hardware.glade.h:48
+#: ../src/vmm-add-hardware.glade.h:49
 msgid "_Host device:"
 msgstr "హోస్టు పరికరము (_H):"
 
-#: ../src/vmm-add-hardware.glade.h:49 ../src/vmm-details.glade.h:148
+#: ../src/vmm-add-hardware.glade.h:50
+#, fuzzy
+msgid "_Host:"
+msgstr "హోస్ట్ (_o):"
+
+#: ../src/vmm-add-hardware.glade.h:51 ../src/vmm-details.glade.h:150
 msgid "_Keymap:"
 msgstr "కీమాప్ (_K):"
 
-#: ../src/vmm-add-hardware.glade.h:50
+#: ../src/vmm-add-hardware.glade.h:52
 msgid "_MAC address:"
 msgstr "_MAC చిరునామా:"
 
-#: ../src/vmm-add-hardware.glade.h:51 ../src/vmm-create-interface.glade.h:40
+#: ../src/vmm-add-hardware.glade.h:53 ../src/vmm-create-interface.glade.h:40
 #: ../src/vmm-create-net.glade.h:54
 msgid "_Mode:"
 msgstr "తీరు (_M):"
 
-#: ../src/vmm-add-hardware.glade.h:52
+#: ../src/vmm-add-hardware.glade.h:54
 msgid "_Model:"
 msgstr "రీతి (_M):"
 
-#: ../src/vmm-add-hardware.glade.h:53
+#: ../src/vmm-add-hardware.glade.h:55
 msgid "_Other:"
 msgstr "ఇతర (_O):"
 
-#: ../src/vmm-add-hardware.glade.h:54
+#: ../src/vmm-add-hardware.glade.h:56
 msgid "_Path:"
 msgstr "పాత్ (_P):"
 
-#: ../src/vmm-add-hardware.glade.h:55 ../src/vmm-migrate.glade.h:13
+#: ../src/vmm-add-hardware.glade.h:57 ../src/vmm-migrate.glade.h:13
 msgid "_Port:"
 msgstr "పోర్టు (_P):"
 
-#: ../src/vmm-add-hardware.glade.h:56
+#: ../src/vmm-add-hardware.glade.h:58
 #, fuzzy
 msgid "_TLS port:"
 msgstr "పోర్టు (_P):"
 
-#: ../src/vmm-add-hardware.glade.h:57 ../src/vmm-create-pool.glade.h:18
+#: ../src/vmm-add-hardware.glade.h:59 ../src/vmm-create-pool.glade.h:18
 msgid "_Type:"
 msgstr "రకము (_T):"
 
-#: ../src/vmm-add-hardware.glade.h:58
+#: ../src/vmm-add-hardware.glade.h:60
 msgid "aa:bb:cc:dd:ee:ff"
 msgstr "aa:bb:cc:dd:ee:ff"
 
-#: ../src/vmm-add-hardware.glade.h:59 ../src/vmm-create-pool.glade.h:19
-#: ../src/vmm-details.glade.h:169
+#: ../src/vmm-add-hardware.glade.h:61 ../src/vmm-create-pool.glade.h:19
+#: ../src/vmm-details.glade.h:172
 msgid "label"
 msgstr "లేబుల్"
 
@@ -3283,7 +3328,7 @@ msgstr "ఇంటర్ఫేస్ రకము (_I):"
 
 #: ../src/vmm-create-interface.glade.h:41 ../src/vmm-create-pool.glade.h:15
 #: ../src/vmm-create-vol.glade.h:24 ../src/vmm-create.glade.h:61
-#: ../src/vmm-details.glade.h:152
+#: ../src/vmm-details.glade.h:154
 msgid "_Name:"
 msgstr "పేరు (_N):"
 
@@ -3515,7 +3560,7 @@ msgstr ""
 "will be asked for some information about the virtual network you'd like to "
 "create, such as:"
 
-#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:127
+#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:129
 msgid "Type:"
 msgstr "రకము:"
 
@@ -3649,7 +3694,7 @@ msgid "Create a storage unit that can be used directly by a virtual machine."
 msgstr "వర్చ్యువల్ మిషన్ ద్వారా నేరుగా వుపయోగించగల నిల్వ యూనిట్‌ను సృష్టించుము."
 
 #: ../src/vmm-create-vol.glade.h:19 ../src/vmm-create.glade.h:32
-#: ../src/vmm-details.glade.h:75
+#: ../src/vmm-details.glade.h:76
 msgid "MB"
 msgstr "MB"
 
@@ -3961,23 +4006,28 @@ msgid "<b>Pinning</b>"
 msgstr "<b>CPU పిన్నింగ్</b>"
 
 #: ../src/vmm-details.glade.h:20
+#, fuzzy
+msgid "<b>Redirected device</b>"
+msgstr "<b>కారెక్టర్ పరికరము</b>"
+
+#: ../src/vmm-details.glade.h:21
 msgid "<b>Security</b>"
 msgstr "<b>రక్షణ</b>"
 
-#: ../src/vmm-details.glade.h:21
+#: ../src/vmm-details.glade.h:22
 #, fuzzy
 msgid "<b>Smartcard Device</b>"
 msgstr "<b>కారెక్టర్ పరికరము</b>"
 
-#: ../src/vmm-details.glade.h:22
+#: ../src/vmm-details.glade.h:23
 msgid "<b>Sound Device</b>"
 msgstr "<b>ధ్వని పరికరము</b>"
 
-#: ../src/vmm-details.glade.h:23
+#: ../src/vmm-details.glade.h:24
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>ఈ కన్సోలు ప్రస్తుతం అందుబాటులో లేదు</b>"
 
-#: ../src/vmm-details.glade.h:24
+#: ../src/vmm-details.glade.h:25
 msgid ""
 "<b>Tip:</b> 'source' refers to information seen from the host OS, while "
 "'target' refers to information seen from the guest OS"
@@ -3985,7 +4035,7 @@ msgstr ""
 "<b>చిట్కా:</b> 'లక్ష్యపు' గెస్టు OSనందు చూసిన సమాచారముకొరకు తరిచిచూస్తున్నప్పుడు, 'మూలం' "
 "హోస్టు OSనుండి చూసిన సమాచారముకొరకు తరిచిచూస్తుంది"
 
-#: ../src/vmm-details.glade.h:25
+#: ../src/vmm-details.glade.h:26
 msgid ""
 "<b>Tip:</b> A graphics tablet configured as the default pointer in the guest "
 "OS will ensure that the virtual cursor moves in sync with the local desktop "
@@ -3994,73 +4044,73 @@ msgstr ""
 "<b>చిట్కా:</b>గెస్టు OSనందు అప్రమేయ సూచకిగా(పాయింటర్) ఆకృతీకరించిన గ్రాఫిక్స్‍ టాబ్లెట్ అనునది వర్చ్యువల్ "
 "కర్సర్ స్థానిక డెస్కుటాప్ కర్సర్‌తో కలిసి కదులునట్లు చూసుకుంటుంది."
 
-#: ../src/vmm-details.glade.h:26
+#: ../src/vmm-details.glade.h:27
 #, fuzzy
 msgid "<b>Topology</b>"
 msgstr "<b>కన్సోళ్ళు</b>"
 
-#: ../src/vmm-details.glade.h:27
+#: ../src/vmm-details.glade.h:28
 #, fuzzy
 msgid "<b>Video</b>"
 msgstr "<b>మెమోరీ</b>"
 
-#: ../src/vmm-details.glade.h:28
+#: ../src/vmm-details.glade.h:29
 msgid "<b>Virtual Disk</b>"
 msgstr "<b>వర్చ్యువల్ డిస్కు</b>"
 
-#: ../src/vmm-details.glade.h:29
+#: ../src/vmm-details.glade.h:30
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>వర్చ్యువల్ నెట్వర్కు ఇంటర్‌ఫేస్</b>"
 
-#: ../src/vmm-details.glade.h:30
+#: ../src/vmm-details.glade.h:31
 msgid "<b>Virtual Pointer</b>"
 msgstr "<b>వర్చ్యువల్ సూచకి</b>"
 
-#: ../src/vmm-details.glade.h:31
+#: ../src/vmm-details.glade.h:32
 msgid "<b>insert type</b>"
 msgstr "<b>చేర్చు పద్దతి</b>"
 
-#: ../src/vmm-details.glade.h:32
+#: ../src/vmm-details.glade.h:33
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:33
+#: ../src/vmm-details.glade.h:34
 msgid "A_ction:"
 msgstr "చర్య (_c):"
 
-#: ../src/vmm-details.glade.h:34
+#: ../src/vmm-details.glade.h:35
 msgid "A_dd Hardware"
 msgstr "హార్డువేరును జతచేయి (_d)"
 
-#: ../src/vmm-details.glade.h:35 ../src/vmm-host.glade.h:15
+#: ../src/vmm-details.glade.h:36 ../src/vmm-host.glade.h:15
 msgid "Address:"
 msgstr "చిరునామా:"
 
-#: ../src/vmm-details.glade.h:36
+#: ../src/vmm-details.glade.h:37
 #, fuzzy
 msgid "Advanced _options"
 msgstr "ఆధునిక ఐచ్చికములు"
 
-#: ../src/vmm-details.glade.h:37 ../src/vmm-host.glade.h:16
+#: ../src/vmm-details.glade.h:38 ../src/vmm-host.glade.h:16
 msgid "Architecture:"
 msgstr "నిర్మాణము:"
 
-#: ../src/vmm-details.glade.h:38
+#: ../src/vmm-details.glade.h:39
 #, fuzzy
 msgid "Begin Installation"
 msgstr "సంస్థాపనను పూర్తిచేయుము"
 
-#: ../src/vmm-details.glade.h:39
+#: ../src/vmm-details.glade.h:40
 #, fuzzy
 msgid "Bind host:"
 msgstr "బందన హోస్టు (_B):"
 
-#: ../src/vmm-details.glade.h:40
+#: ../src/vmm-details.glade.h:41
 #, fuzzy
 msgid "Browse"
 msgstr "అన్వేషించుము (_r)"
 
-#: ../src/vmm-details.glade.h:41
+#: ../src/vmm-details.glade.h:42
 msgid ""
 "CPU\n"
 "usage:"
@@ -4068,63 +4118,63 @@ msgstr ""
 "CPU\n"
 "వాడుక:"
 
-#: ../src/vmm-details.glade.h:43
+#: ../src/vmm-details.glade.h:44
 msgid "C_lock Offset:"
 msgstr "గడియారము ఆఫ్‌సెట్ (_l):"
 
-#: ../src/vmm-details.glade.h:44
+#: ../src/vmm-details.glade.h:45
 #, fuzzy
 msgid "Cac_he mode:"
 msgstr "పరికరము రీతి (_e):"
 
-#: ../src/vmm-details.glade.h:45
+#: ../src/vmm-details.glade.h:46
 msgid "Connect or disconnect media"
 msgstr "మాధ్యమాన్ని అనుసంధానించుము లేదా అననుసంధానించుము"
 
-#: ../src/vmm-details.glade.h:46
+#: ../src/vmm-details.glade.h:47
 msgid "Console"
 msgstr "తెర"
 
-#: ../src/vmm-details.glade.h:47
+#: ../src/vmm-details.glade.h:48
 #, fuzzy
 msgid "Copy host CPU configuration"
 msgstr "IP ఆకృతీకరణ"
 
-#: ../src/vmm-details.glade.h:48
+#: ../src/vmm-details.glade.h:49
 msgid "Cores:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:49
+#: ../src/vmm-details.glade.h:50
 #, fuzzy
 msgid "Current a_llocation:"
 msgstr "ప్రస్తుత కేటాయింపు:"
 
-#: ../src/vmm-details.glade.h:50
+#: ../src/vmm-details.glade.h:51
 msgid "D_ynamic"
 msgstr "గతిక (_y)"
 
-#: ../src/vmm-details.glade.h:51
+#: ../src/vmm-details.glade.h:52
 #, fuzzy
 msgid "Default _pinning:"
 msgstr "ప్రారంభ పిన్నింగ్ (_p):"
 
-#: ../src/vmm-details.glade.h:52
+#: ../src/vmm-details.glade.h:53
 msgid "Description:"
 msgstr "వివరణ:"
 
-#: ../src/vmm-details.glade.h:54
+#: ../src/vmm-details.glade.h:55
 msgid "Device m_odel:"
 msgstr "పరికరము రీతి (_o):"
 
-#: ../src/vmm-details.glade.h:55
+#: ../src/vmm-details.glade.h:56
 msgid "Device type:"
 msgstr "పరికరము రకము:"
 
-#: ../src/vmm-details.glade.h:56 ../src/vmm-host.glade.h:25
+#: ../src/vmm-details.glade.h:57 ../src/vmm-host.glade.h:25
 msgid "Device:"
 msgstr "పరికరము:"
 
-#: ../src/vmm-details.glade.h:57
+#: ../src/vmm-details.glade.h:58
 msgid ""
 "Disk\n"
 "I/O:"
@@ -4132,106 +4182,106 @@ msgstr ""
 "డిస్కు\n"
 "I/O:"
 
-#: ../src/vmm-details.glade.h:59
+#: ../src/vmm-details.glade.h:60
 #, fuzzy
 msgid "Disk b_us:"
 msgstr "డిస్కు పరిమాణము:"
 
-#: ../src/vmm-details.glade.h:60
+#: ../src/vmm-details.glade.h:61
 msgid "Emulator:"
 msgstr "ఎమ్యులేటర్:"
 
-#: ../src/vmm-details.glade.h:61
+#: ../src/vmm-details.glade.h:62
 msgid "Enable A_CPI:"
 msgstr "A_CPI చేతనముచేయి:"
 
-#: ../src/vmm-details.glade.h:62
+#: ../src/vmm-details.glade.h:63
 msgid "Enable A_PIC:"
 msgstr "A_PIC చేతనముచేయి:"
 
-#: ../src/vmm-details.glade.h:63
+#: ../src/vmm-details.glade.h:64
 msgid "Enable boot me_nu"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:64
+#: ../src/vmm-details.glade.h:65
 msgid "Generate from host _NUMA configuration"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:65
+#: ../src/vmm-details.glade.h:66
 msgid "Heads:"
 msgstr "హెడ్లు:"
 
-#: ../src/vmm-details.glade.h:66 ../src/vmm-host.glade.h:27
+#: ../src/vmm-details.glade.h:67 ../src/vmm-host.glade.h:27
 msgid "Hostname:"
 msgstr "హోస్టునామము:"
 
-#: ../src/vmm-details.glade.h:67 ../src/vmm-host.glade.h:28
+#: ../src/vmm-details.glade.h:68 ../src/vmm-host.glade.h:28
 msgid "Hypervisor:"
 msgstr "హైపర్విజర్:"
 
-#: ../src/vmm-details.glade.h:68
+#: ../src/vmm-details.glade.h:69
 #, fuzzy
 msgid "Init path:"
 msgstr "కెర్నల్ ఐచ్చికాలు:"
 
-#: ../src/vmm-details.glade.h:69
+#: ../src/vmm-details.glade.h:70
 msgid "Initrd path:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:70
+#: ../src/vmm-details.glade.h:71
 msgid "Instance id:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:71
+#: ../src/vmm-details.glade.h:72
 #, fuzzy
 msgid "Kernel arguments:"
 msgstr "కెర్నల్ ఐచ్చికాలు:"
 
-#: ../src/vmm-details.glade.h:72
+#: ../src/vmm-details.glade.h:73
 #, fuzzy
 msgid "Kernel path:"
 msgstr "కెర్నల్ ఐచ్చికాలు:"
 
-#: ../src/vmm-details.glade.h:73
+#: ../src/vmm-details.glade.h:74
 #, fuzzy
 msgid "Logical host CPUs:"
 msgstr "తార్కిక CPUs:"
 
-#: ../src/vmm-details.glade.h:74
+#: ../src/vmm-details.glade.h:75
 msgid "MAC address:"
 msgstr "MAC చిరునామా:"
 
-#: ../src/vmm-details.glade.h:76
+#: ../src/vmm-details.glade.h:77
 #, fuzzy
 msgid "M_ode:"
 msgstr "రీతి (_o):"
 
-#: ../src/vmm-details.glade.h:77
+#: ../src/vmm-details.glade.h:78
 msgid "M_odel:"
 msgstr "రీతి (_o):"
 
-#: ../src/vmm-details.glade.h:78
+#: ../src/vmm-details.glade.h:79
 msgid "Ma_ximum allocation:"
 msgstr "గరిష్ట కేటాయింపు (_x):"
 
-#: ../src/vmm-details.glade.h:79
+#: ../src/vmm-details.glade.h:80
 #, fuzzy
 msgid "Managerid:"
 msgstr "నిర్వాహికను దర్శించుము (_V)"
 
-#: ../src/vmm-details.glade.h:80
+#: ../src/vmm-details.glade.h:81
 msgid "Manually set CPU topology"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:81
+#: ../src/vmm-details.glade.h:82
 msgid "Max Memory Select"
 msgstr "గరిష్ఠ మెమొరి యెంపిక"
 
-#: ../src/vmm-details.glade.h:82
+#: ../src/vmm-details.glade.h:83
 msgid "Maximum allocation:"
 msgstr "గరిష్ట కేటాయింపులు:"
 
-#: ../src/vmm-details.glade.h:83
+#: ../src/vmm-details.glade.h:84
 msgid ""
 "Memory\n"
 "usage:"
@@ -4239,19 +4289,19 @@ msgstr ""
 "మెమొరి\n"
 "వాడుక:"
 
-#: ../src/vmm-details.glade.h:85
+#: ../src/vmm-details.glade.h:86
 msgid "Memory Select"
 msgstr "మెమొరి యెంపిక"
 
-#: ../src/vmm-details.glade.h:86 ../src/vmm-host.glade.h:35
+#: ../src/vmm-details.glade.h:87 ../src/vmm-host.glade.h:35
 msgid "Mode:"
 msgstr "తీరు:"
 
-#: ../src/vmm-details.glade.h:87
+#: ../src/vmm-details.glade.h:88
 msgid "Model:"
 msgstr "రీతి:"
 
-#: ../src/vmm-details.glade.h:88
+#: ../src/vmm-details.glade.h:89
 msgid ""
 "Network\n"
 "I/O:"
@@ -4259,294 +4309,303 @@ msgstr ""
 "నెట్వర్కు\n"
 "I/O:"
 
-#: ../src/vmm-details.glade.h:90
+#: ../src/vmm-details.glade.h:91
 msgid "Pause"
 msgstr "నిలిపివుంచు"
 
-#: ../src/vmm-details.glade.h:91 ../src/vmm-manager.glade.h:3
+#: ../src/vmm-details.glade.h:92 ../src/vmm-manager.glade.h:3
 msgid "Pause the virtual machine"
 msgstr "వర్చ్యువల్ మిషన్‌ను నిలిపివుంచుము"
 
-#: ../src/vmm-details.glade.h:92
+#: ../src/vmm-details.glade.h:93
 msgid "Port:"
 msgstr "పోర్టు:"
 
-#: ../src/vmm-details.glade.h:93 ../src/vmm-manager.glade.h:4
+#: ../src/vmm-details.glade.h:94 ../src/vmm-manager.glade.h:4
 msgid "Power on the virtual machine"
 msgstr "వర్చ్యువల్ మిషన్ పవర్ ఆన్ చేయుము"
 
-#: ../src/vmm-details.glade.h:94
+#: ../src/vmm-details.glade.h:95
 #, fuzzy
 msgid "Product name:"
 msgstr "హోస్టునామము:"
 
-#: ../src/vmm-details.glade.h:95
+#: ../src/vmm-details.glade.h:96
 msgid "RAM:"
 msgstr "RAM:"
 
-#: ../src/vmm-details.glade.h:96
+#: ../src/vmm-details.glade.h:97
 msgid "R_eadonly:"
 msgstr "చదువుటమాత్రమే (_e):"
 
-#: ../src/vmm-details.glade.h:97
+#: ../src/vmm-details.glade.h:98
 #, fuzzy
 msgid "R_untime pinning:"
 msgstr "ప్రారంభ పిన్నింగ్ (_p):"
 
-#: ../src/vmm-details.glade.h:98
+#: ../src/vmm-details.glade.h:99
 msgid "Run"
 msgstr "ఉపయోగించు"
 
-#: ../src/vmm-details.glade.h:99
+#: ../src/vmm-details.glade.h:100
 msgid "S_hut Down"
 msgstr "మూసివేయి (_h)"
 
-#: ../src/vmm-details.glade.h:100
+#: ../src/vmm-details.glade.h:101
 msgid "Send _Key"
 msgstr "పంపు కీ (_K)"
 
-#: ../src/vmm-details.glade.h:101
+#: ../src/vmm-details.glade.h:102
 msgid "Serial num_ber:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:102
+#: ../src/vmm-details.glade.h:103
 msgid "Sharea_ble:"
 msgstr "పంచుకొనదగిన (_b):"
 
-#: ../src/vmm-details.glade.h:103
+#: ../src/vmm-details.glade.h:104
 msgid "Show the graphical console"
 msgstr "గ్రాఫికల్ కన్సోలును చూపుము"
 
-#: ../src/vmm-details.glade.h:104
+#: ../src/vmm-details.glade.h:105
 msgid "Show virtual hardware details"
 msgstr "వర్చ్యువల్ హార్డువేరు వివరములను చూపుము"
 
-#: ../src/vmm-details.glade.h:105
+#: ../src/vmm-details.glade.h:106
 msgid "Shut Down"
 msgstr "మూసివేయి"
 
-#: ../src/vmm-details.glade.h:106
+#: ../src/vmm-details.glade.h:107
 msgid "Shut down"
 msgstr "ముయ్యి"
 
-#: ../src/vmm-details.glade.h:107 ../src/vmm-manager.glade.h:6
+#: ../src/vmm-details.glade.h:108 ../src/vmm-manager.glade.h:6
 msgid "Shutdown the virtual machine"
 msgstr "వర్చ్యువల్ మిషన్ మూసివేయుము"
 
-#: ../src/vmm-details.glade.h:108
+#: ../src/vmm-details.glade.h:109
 msgid "Sockets:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:109
+#: ../src/vmm-details.glade.h:110
 msgid "Source device:"
 msgstr "మూలము పరికరము:"
 
-#: ../src/vmm-details.glade.h:110
+#: ../src/vmm-details.glade.h:111
 #, fuzzy
 msgid "Source host:"
 msgstr "మూలము పాత్:"
 
-#: ../src/vmm-details.glade.h:111
+#: ../src/vmm-details.glade.h:112
 #, fuzzy
 msgid "Source mode:"
 msgstr "మూలము పరికరము:"
 
-#: ../src/vmm-details.glade.h:112
+#: ../src/vmm-details.glade.h:113
 msgid "Source path:"
 msgstr "మూలము పాత్:"
 
-#: ../src/vmm-details.glade.h:113
+#: ../src/vmm-details.glade.h:114
 #, fuzzy
 msgid "Source:"
 msgstr "మూలము పాత్:"
 
-#: ../src/vmm-details.glade.h:114
+#: ../src/vmm-details.glade.h:115
 msgid "Start virt_ual machine on host boot up"
 msgstr "హోస్టు బూట్‌పై వర్చ్యువల్ మిషన్‌ను ప్రారంభించుము (_u)"
 
-#: ../src/vmm-details.glade.h:116
+#: ../src/vmm-details.glade.h:117
 #, fuzzy
 msgid "Storage forma_t:"
 msgstr "నిల్వ పాత్"
 
-#: ../src/vmm-details.glade.h:117
+#: ../src/vmm-details.glade.h:118
 msgid "Storage size:"
 msgstr "నిల్వ పరిమాణము:"
 
-#: ../src/vmm-details.glade.h:118
+#: ../src/vmm-details.glade.h:119
 msgid "Switch to fullscreen view"
 msgstr "పూర్తితెర దర్శనమునకు మారుము"
 
-#: ../src/vmm-details.glade.h:119
+#: ../src/vmm-details.glade.h:120
 #, fuzzy
 msgid "TLS Port:"
 msgstr "పోర్టు:"
 
-#: ../src/vmm-details.glade.h:120
+#: ../src/vmm-details.glade.h:121
 msgid "T_oolbar"
 msgstr "సాధనపట్టీ (_o)"
 
-#: ../src/vmm-details.glade.h:121
+#: ../src/vmm-details.glade.h:122
+#, fuzzy
+msgid "T_ype:"
+msgstr "రకము:"
+
+#: ../src/vmm-details.glade.h:123
 msgid "Target device:"
 msgstr "లక్ష్యపు పరికరము:"
 
-#: ../src/vmm-details.glade.h:122
+#: ../src/vmm-details.glade.h:124
 #, fuzzy
 msgid "Target name:"
 msgstr "లక్ష్యపు చిరునామా:"
 
-#: ../src/vmm-details.glade.h:123
+#: ../src/vmm-details.glade.h:125
 #, fuzzy
 msgid "Target type:"
 msgstr "లక్ష్యము:"
 
-#: ../src/vmm-details.glade.h:124
+#: ../src/vmm-details.glade.h:126
 msgid "Target:"
 msgstr "లక్ష్యము:"
 
-#: ../src/vmm-details.glade.h:125
+#: ../src/vmm-details.glade.h:127
 #, fuzzy
 msgid "Threads:"
 msgstr "హెడ్లు:"
 
-#: ../src/vmm-details.glade.h:126
+#: ../src/vmm-details.glade.h:128
 msgid "Total host memory:"
 msgstr "మొత్తము హోస్టు మెమొరీ:"
 
-#: ../src/vmm-details.glade.h:128
+#: ../src/vmm-details.glade.h:130
 msgid "Typeid version:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:129
+#: ../src/vmm-details.glade.h:131
 #, fuzzy
 msgid "Typeid:"
 msgstr "రకము:"
 
-#: ../src/vmm-details.glade.h:130
+#: ../src/vmm-details.glade.h:132
 msgid "UUID:"
 msgstr "UUID:"
 
-#: ../src/vmm-details.glade.h:131
+#: ../src/vmm-details.glade.h:133
 msgid "Virtual CPU Affinity Select"
 msgstr "వర్చ్యువల్ CPU ఎఫినిటి యెంపిక"
 
-#: ../src/vmm-details.glade.h:132
+#: ../src/vmm-details.glade.h:134
 msgid "Virtual CPU Select"
 msgstr "వర్చ్యువల్ CPU యెంపిక"
 
-#: ../src/vmm-details.glade.h:134
+#: ../src/vmm-details.glade.h:136
 msgid "Virtual _Machine"
 msgstr "వర్చ్యువల్ మిషన్ (_M)"
 
-#: ../src/vmm-details.glade.h:135
+#: ../src/vmm-details.glade.h:137
 #, fuzzy
 msgid "Virtual port"
 msgstr "వర్చ్యువల్ నెట్వర్కు"
 
-#: ../src/vmm-details.glade.h:136
+#: ../src/vmm-details.glade.h:138
 msgid "_Always"
 msgstr "ఎల్లప్పుడు (_A)"
 
-#: ../src/vmm-details.glade.h:137
+#: ../src/vmm-details.glade.h:139
 #, fuzzy
 msgid "_Begin Installation"
 msgstr "సంస్థాపనను పూర్తిచేయుము"
 
-#: ../src/vmm-details.glade.h:139
+#: ../src/vmm-details.glade.h:141
 msgid "_Cancel"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:140
+#: ../src/vmm-details.glade.h:142
 msgid "_Clone"
 msgstr "క్లోన్ (_C)"
 
-#: ../src/vmm-details.glade.h:141
+#: ../src/vmm-details.glade.h:143
 msgid "_Console"
 msgstr "కన్సోల్ (_C)"
 
-#: ../src/vmm-details.glade.h:142
+#: ../src/vmm-details.glade.h:144
 msgid "_Details"
 msgstr "వివరాలు (_D)"
 
-#: ../src/vmm-details.glade.h:143 ../src/vmm-host.glade.h:56
+#: ../src/vmm-details.glade.h:145 ../src/vmm-host.glade.h:56
 #: ../src/vmm-manager.glade.h:12
 msgid "_File"
 msgstr "ఫైలు (_F)"
 
-#: ../src/vmm-details.glade.h:145
+#: ../src/vmm-details.glade.h:147
 msgid "_Fullscreen"
 msgstr "పూర్తితెర (_F)"
 
-#: ../src/vmm-details.glade.h:146 ../src/vmm-host.glade.h:57
+#: ../src/vmm-details.glade.h:148 ../src/vmm-host.glade.h:57
 #: ../src/vmm-manager.glade.h:15
 msgid "_Help"
 msgstr "సహాయం (_H)"
 
-#: ../src/vmm-details.glade.h:147
+#: ../src/vmm-details.glade.h:149
 #, fuzzy
 msgid "_IO mode:"
 msgstr "ప్రారంభ రీతి (_S):"
 
-#: ../src/vmm-details.glade.h:149
+#: ../src/vmm-details.glade.h:151
 msgid "_Label:"
 msgstr "లేబుల్ (_L):"
 
-#: ../src/vmm-details.glade.h:150
+#: ../src/vmm-details.glade.h:152
 msgid "_Login"
 msgstr "లాగిన్ (_L)"
 
-#: ../src/vmm-details.glade.h:153
+#: ../src/vmm-details.glade.h:155
 msgid "_Never"
 msgstr "ఎప్పటికికాదు (_N)"
 
-#: ../src/vmm-details.glade.h:154
+#: ../src/vmm-details.glade.h:156
 msgid "_Only when Fullscreen"
 msgstr "పూర్తితెరగా వున్నప్పుడు మాత్రమే (_O)"
 
-#: ../src/vmm-details.glade.h:155
+#: ../src/vmm-details.glade.h:157
 msgid "_Password:"
 msgstr "సంకేతపదం (_P):"
 
-#: ../src/vmm-details.glade.h:157
+#: ../src/vmm-details.glade.h:159
 #, fuzzy
 msgid "_Performance options"
 msgstr "కెర్నల్ ఐచ్చికాలు:"
 
-#: ../src/vmm-details.glade.h:159
+#: ../src/vmm-details.glade.h:161
 msgid "_Resize to VM"
 msgstr "VMకు పునఃపరిమాణముచేయి (_R)"
 
-#: ../src/vmm-details.glade.h:161
+#: ../src/vmm-details.glade.h:163
 msgid "_Save this password in your keyring"
 msgstr "మీ కీరింగులో ఈ సంకేతపదము భద్రపరవండి (_S)"
 
-#: ../src/vmm-details.glade.h:162
+#: ../src/vmm-details.glade.h:164
 msgid "_Scale Display"
 msgstr "స్కేలుచేసిన ప్రదర్శన (_S)"
 
-#: ../src/vmm-details.glade.h:163
+#: ../src/vmm-details.glade.h:165
 msgid "_Static"
 msgstr "స్టాటిక్ (_S)"
 
-#: ../src/vmm-details.glade.h:164
+#: ../src/vmm-details.glade.h:166
 msgid "_Take Screenshot"
 msgstr "స్క్రీన్ షాటును తీసుకో (_T)"
 
-#: ../src/vmm-details.glade.h:165
+#: ../src/vmm-details.glade.h:167
 msgid "_Text Consoles"
 msgstr "పాఠ్యపు కన్సోల్సు (_T)"
 
-#: ../src/vmm-details.glade.h:166 ../src/vmm-open-connection.glade.h:17
+#: ../src/vmm-details.glade.h:168 ../src/vmm-open-connection.glade.h:17
 msgid "_Username:"
 msgstr "వినియోగదారినామము (_U):"
 
-#: ../src/vmm-details.glade.h:167 ../src/vmm-manager.glade.h:22
+#: ../src/vmm-details.glade.h:169 ../src/vmm-manager.glade.h:22
 msgid "_View"
 msgstr "దృశ్యం (_V)"
 
-#: ../src/vmm-details.glade.h:168 ../src/vmm-host.glade.h:59
+#: ../src/vmm-details.glade.h:170 ../src/vmm-host.glade.h:59
 msgid "_View Manager"
 msgstr "నిర్వాహికను దర్శించుము (_V)"
+
+#: ../src/vmm-details.glade.h:171
+msgid "foo:12"
+msgstr ""
 
 #: ../src/vmm-host.glade.h:1
 msgid "<b>Basic details</b>"
@@ -5074,9 +5133,6 @@ msgstr "స్థానికంగా అన్వేషించుము (_B)
 #, fuzzy
 #~ msgid "Error restoring domain: %s"
 #~ msgstr "డొమైన్ తిరిగివుంచుటలో దోషము"
-
-#~ msgid "Error deleting volume: %s"
-#~ msgstr "వాల్యూమ్ తొలగించుటలో దోషము: %s"
 
 #~ msgid "Don't ask me again for interface start/stop."
 #~ msgstr "ఇంటర్ఫేస్ ప్రారంభముకు/ఆపుటకు నన్ను మరలా అడుగవద్దు."
