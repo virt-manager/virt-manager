@@ -5570,6 +5570,7 @@ I/O:</property>
                                           <widget class="GtkLabel" id="controller-type">
                                             <property name="visible">True</property>
                                             <property name="label">foo</property>
+                                            <property name="xalign">0</property>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -5593,9 +5594,30 @@ I/O:</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <widget class="GtkLabel" id="controller-model">
+
+                                          <widget class="GtkHBox" id="controller-model-box">
                                             <property name="visible">True</property>
-                                            <property name="label">foo</property>
+                                            <child>
+                                              <widget class="GtkComboBox" id="controller-model-combo">
+                                                <property name="visible">True</property>
+                                                <signal name="changed" handler="on_controller_model_combo_changed"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="controller-model-label">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="label">label</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>

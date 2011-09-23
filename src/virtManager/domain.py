@@ -683,6 +683,26 @@ class vmmDomain(vmmLibvirtObject):
             editdev.mode = newmodel
         return self._redefine_device(change, devobj)
 
+    # Controller define methods
+
+    def define_controller_model(self, devobj, newmodel):
+        def change(editdev):
+            guest = self._get_guest_to_define()
+            ctrls = guest.get_devices("controller")
+            ctrls = filter(lambda x:
+                               (x.type ==
+                                virtinst.VirtualController.CONTROLLER_TYPE_USB),
+                           ctrls)
+            for dev in ctrls:
+                guest.remove_device(dev)
+
+            if newmodel == "ich9-ehci1":
+                print guest
+                guest.add_usb_ich9_controllers()
+
+        return self._redefine_device(change, devobj)
+
+
 
     ####################
     # Hotplug routines #

@@ -38,7 +38,7 @@ from virtManager import util as util
 import virtinst
 
 # Parameters that can be editted in the details window
-EDIT_TOTAL = 34
+EDIT_TOTAL = 35
 (EDIT_NAME,
 EDIT_ACPI,
 EDIT_APIC,
@@ -83,6 +83,8 @@ EDIT_VIDEO_MODEL,
 
 EDIT_WATCHDOG_MODEL,
 EDIT_WATCHDOG_ACTION,
+
+EDIT_CONTROLLER_MODEL
 ) = range(EDIT_TOTAL)
 
 
@@ -474,6 +476,8 @@ class vmmDetails(vmmGObjectUI):
             "on_console_pages_switch_page": self.console.page_changed,
             "on_console_auth_password_activate": self.console.auth_login,
             "on_console_auth_login_clicked": self.console.auth_login,
+            "on_controller_model_combo_changed": (self.enable_apply,
+                                                  EDIT_CONTROLLER_MODEL),
         })
 
         # Deliberately keep all this after signal connection
@@ -939,6 +943,16 @@ class vmmDetails(vmmGObjectUI):
         # Redirection type
         combo = self.widget("redir-type-combo")
         uihelpers.build_redir_type_combo(self.vm, combo)
+
+        # Controller model
+        combo = self.widget("controller-model-combo")
+        model = gtk.ListStore(str, str)
+        combo.set_model(model)
+        text = gtk.CellRendererText()
+        combo.pack_start(text, True)
+        combo.add_attribute(text, 'text', 1)
+        combo.set_active(-1)
+
 
     # Helper function to handle the combo/label pattern used for
     # video model, sound model, network model, etc.
@@ -1874,6 +1888,8 @@ class vmmDetails(vmmGObjectUI):
                 ret = self.config_watchdog_apply(key)
             elif pagetype is HW_LIST_TYPE_SMARTCARD:
                 ret = self.config_smartcard_apply(key)
+            elif pagetype is HW_LIST_TYPE_CONTROLLER:
+                ret = self.config_controller_apply(key)
             else:
                 ret = False
         except Exception, e:
@@ -2258,6 +2274,18 @@ class vmmDetails(vmmGObjectUI):
             model = self.get_combo_label_value("video-model")
             if model:
                 add_define(self.vm.define_video_model, dev_id_info, model)
+
+        return self._change_config_helper(df, da, hf, ha)
+
+    # Controller options
+    def config_controller_apply(self, dev_id_info):
+        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
+        ignore = add_hotplug
+
+        if self.editted(EDIT_CONTROLLER_MODEL):
+            model = self.get_combo_label_value("controller-model")
+            if model:
+                add_define(self.vm.define_controller_model, dev_id_info, model)
 
         return self._change_config_helper(df, da, hf, ha)
 
@@ -3079,10 +3107,21 @@ class vmmDetails(vmmGObjectUI):
         type_label = virtinst.VirtualController.pretty_type(dev.type)
         model_label = dev.model
         if not model_label:
-            model_label =  _("Default")
+            model_label = _("Default")
 
         self.widget("controller-type").set_text(type_label)
-        self.widget("controller-model").set_text(model_label)
+
+        combo = self.widget("controller-model-combo")
+        model = combo.get_model()
+        model.clear()
+        if dev.type == virtinst.VirtualController.CONTROLLER_TYPE_USB:
+            model.append(["Default", "Default"])
+            model.append(["ich9-ehci1", "USB 2"])
+            self.widget("config-remove").set_sensitive(False)
+        else:
+            self.widget("config-remove").set_sensitive(True)
+
+        self.set_combo_label("controller-model", model_label)
 
     def refresh_filesystem_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -3327,6 +3366,10 @@ class vmmDetails(vmmGObjectUI):
 
         # Populate controller devices
         for cont in self.vm.get_controller_devices():
+            # skip USB2 ICH9 companion controllers
+            if cont.model in ["ich9-uhci1", "ich9-uhci2", "ich9-uhci3"]:
+                continue
+
             pretty_type = virtinst.VirtualController.pretty_type(cont.type)
             update_hwlist(HW_LIST_TYPE_CONTROLLER, cont,
                           _("Controller %s") % pretty_type,
