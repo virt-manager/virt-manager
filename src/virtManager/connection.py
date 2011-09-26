@@ -381,6 +381,14 @@ class vmmConnection(vmmGObject):
             return True
         return self.config.rhel6_defaults
 
+    def rhel6_defaults_caps(self):
+        caps = self.get_capabilities()
+        for guest in caps.guests:
+            for dom in guest.domains:
+                if dom.emulator.startswith("/usr/libexec"):
+                    return self.config.rhel6_defaults
+        return True
+
     def is_kvm_supported(self):
         return self.get_capabilities().is_kvm_available()
 

@@ -158,12 +158,21 @@ class vmmCreateVolume(vmmGObjectUI):
         return None
 
     def populate_vol_format(self):
+        rhel6_file_whitelist = ["raw", "qcow2", "qed"]
         model = self.widget("vol-format").get_model()
         model.clear()
 
         formats = self.vol_class.formats
         if hasattr(self.vol_class, "create_formats"):
             formats = getattr(self.vol_class, "create_formats")
+
+        if (self.vol_class == Storage.FileVolume and
+            not self.conn.rhel6_defaults_caps()):
+            newfmts = []
+            for f in rhel6_file_whitelist:
+                if f in formats:
+                    newfmts.append(f)
+            formats = newfmts
 
         for f in formats:
             model.append([f, f])
