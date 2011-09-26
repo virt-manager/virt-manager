@@ -79,10 +79,8 @@ def setup_logging(appname, debug_stdout):
 
     # Log uncaught exceptions
     def exception_log(typ, val, tb):
-        if not traceback:
-            return
         s = traceback.format_exception(typ, val, tb)
-        logging.exception("".join(s))
+        logging.debug("Uncaught exception:\n" + "".join(s))
         sys.__excepthook__(typ, val, tb)
     sys.excepthook = exception_log
 
