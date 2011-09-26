@@ -768,6 +768,8 @@ class vmmAddHardware(vmmGObjectUI):
         return util.get_list_selection(self.widget("hardware-list"))
 
     def update_char_device_type_model(self):
+        rhel6_blacklist = ["pipe", "udp"]
+
         # Char device type
         char_devtype = self.widget("char-device-type")
         dev_type = self.get_char_type()
@@ -778,7 +780,12 @@ class vmmAddHardware(vmmGObjectUI):
         text = gtk.CellRendererText()
         char_devtype.pack_start(text, True)
         char_devtype.add_attribute(text, 'text', 1)
+
         for t in VirtualCharDevice.char_types_for_dev_type[dev_type]:
+            if (t in rhel6_blacklist and
+                not self.vm.rhel6_defaults()):
+                continue
+
             desc = VirtualCharDevice.get_char_type_desc(t)
             row = [t, desc + " (%s)" % t]
             char_devtype_model.append(row)
