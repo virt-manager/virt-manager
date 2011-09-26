@@ -1394,10 +1394,14 @@ class vmmCreate(vmmGObjectUI):
         if guest.installer.is_container():
             return
 
+        support_spice = virtinst.support.check_conn_support(guest.conn,
+                            virtinst.support.SUPPORT_CONN_HV_GRAPHICS_SPICE)
+        if not self._rhel6_defaults():
+            support_spice = True
+
         gtype = self.get_config_graphics_type()
-        if (gtype == virtinst.VirtualGraphics.TYPE_SPICE and not
-            virtinst.support.check_conn_support(guest.conn,
-                            virtinst.support.SUPPORT_CONN_HV_GRAPHICS_SPICE)):
+        if (gtype == virtinst.VirtualGraphics.TYPE_SPICE and
+            not support_spice):
             logging.debug("Spice requested but HV doesn't support it. "
                           "Using VNC graphics.")
             gtype = virtinst.VirtualGraphics.TYPE_VNC
