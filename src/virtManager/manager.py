@@ -726,13 +726,17 @@ class vmmManager(vmmGObjectUI):
 
     def _build_vm_row(self, vm):
         row = []
+        desc = None
+        if vm.get_description() is not None:
+            desc = util.xml_escape(vm.get_description())
+
         row.insert(ROW_HANDLE, vm)
         row.insert(ROW_NAME, vm.get_name())
         row.insert(ROW_MARKUP, "")
         row.insert(ROW_STATUS, vm.run_status())
         row.insert(ROW_STATUS_ICON, vm.run_status_icon_name())
         row.insert(ROW_KEY, vm.get_uuid())
-        row.insert(ROW_HINT, vm.get_description())
+        row.insert(ROW_HINT, desc)
         row.insert(ROW_IS_CONN, False)
         row.insert(ROW_IS_CONN_CONNECTED, True)
         row.insert(ROW_IS_VM, True)
@@ -868,6 +872,10 @@ class vmmManager(vmmGObjectUI):
         if self.vm_row_key(vm) not in self.rows:
             return
 
+        desc = None
+        if vm.get_description() is not None:
+            desc = util.xml_escape(vm.get_description())
+
         row = self.rows[self.vm_row_key(vm)]
         row[ROW_NAME] = vm.get_name()
         row[ROW_STATUS] = vm.run_status()
@@ -876,7 +884,7 @@ class vmmManager(vmmGObjectUI):
         row[ROW_MARKUP] = self._build_vm_markup(row)
 
         if config_changed:
-            row[ROW_HINT] = vm.get_description()
+            row[ROW_HINT] = desc
 
         model.row_changed(row.path, row.iter)
 
