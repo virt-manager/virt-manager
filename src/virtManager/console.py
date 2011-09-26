@@ -424,6 +424,12 @@ class SpiceViewer(Viewer):
         self.display.realize()
         self.display.connect("mouse-grab", lambda src, g: g and self.console.pointer_grabbed(src))
         self.display.connect("mouse-grab", lambda src, g: g or self.console.pointer_ungrabbed(src))
+
+        self.display.connect("focus-in-event",
+                             self.console.viewer_focus_changed)
+        self.display.connect("focus-out-event",
+                             self.console.viewer_focus_changed)
+
         self.display.show()
 
     def close(self):
