@@ -1620,7 +1620,7 @@ class vmmDomainVirtinst(vmmDomain):
     def _define(self, newxml):
         ignore = newxml
         self._orig_xml = None
-        self.idle_emit("config-changed")
+        self.emit("config-changed")
 
     def _redefine_xml(self, newxml):
         # We need to cache origxml in order to have something to diff against
@@ -1635,7 +1635,7 @@ class vmmDomainVirtinst(vmmDomain):
         return self._backend.autostart
     def set_autostart(self, val):
         self._backend.autostart = bool(val)
-        self.idle_emit("config-changed")
+        self.emit("config-changed")
 
     def define_name(self, newname):
         def change(guest):

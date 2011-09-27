@@ -535,6 +535,9 @@ class vmmDetails(vmmGObjectUI):
 
     def customize_finish(self, src):
         ignore = src
+        if self.has_unapplied_changes(self.get_hw_row()):
+            return
+
         return self._close(customize_finish=True)
 
     def close(self, ignore1=None, ignore2=None):
