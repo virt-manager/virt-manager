@@ -199,6 +199,7 @@ class vmmStorageBrowser(vmmGObjectUI):
             self.topwin.set_title(data["storage_title"])
             self.local_args["dialog_name"] = data["local_title"]
             self.local_args["dialog_type"] = data.get("dialog_type")
+            self.local_args["choose_button"] = data.get("choose_button")
 
 
     # Convenience helpers

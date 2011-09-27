@@ -46,6 +46,8 @@ class vmmConfig(object):
             "enable_create" : True,
             "storage_title" : _("Locate or create storage volume"),
             "local_title"   : _("Locate existing storage"),
+            "dialog_type"   : gtk.FILE_CHOOSER_ACTION_SAVE,
+            "choose_button" : gtk.STOCK_OPEN,
         },
 
         CONFIG_DIR_ISO_MEDIA : {

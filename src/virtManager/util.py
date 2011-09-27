@@ -176,7 +176,8 @@ def xml_parse_wrapper(xml, parse_func, *args, **kwargs):
 
 def browse_local(parent, dialog_name, conn, start_folder=None,
                  _type=None, dialog_type=None,
-                 confirm_func=None, browse_reason=None):
+                 confirm_func=None, browse_reason=None,
+                 choose_button=None):
     """
     Helper function for launching a filechooser
 
@@ -196,13 +197,16 @@ def browse_local(parent, dialog_name, conn, start_folder=None,
 
     # Initial setup
     overwrite_confirm = False
-    choose_button = gtk.STOCK_OPEN
 
     if dialog_type is None:
         dialog_type = gtk.FILE_CHOOSER_ACTION_OPEN
     if dialog_type == gtk.FILE_CHOOSER_ACTION_SAVE:
-        choose_button = gtk.STOCK_SAVE
-        overwrite_confirm = True
+        if choose_button is None:
+            choose_button = gtk.STOCK_SAVE
+            overwrite_confirm = True
+
+    if choose_button is None:
+        choose_button = gtk.STOCK_OPEN
 
     fcdialog = gtk.FileChooserDialog(dialog_name, parent,
                                      dialog_type,
