@@ -1000,7 +1000,6 @@ class vmmAddHardware(vmmGObjectUI):
         if idx < 0:
             return
 
-        devtype = src.get_model()[src.get_active()][0]
         hostdetails = src.get_model()[src.get_active()][2]
         self.widget("usbredir-host").set_sensitive(hostdetails)
         self.widget("usbredir-service").set_sensitive(hostdetails)
