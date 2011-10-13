@@ -1278,7 +1278,7 @@ class vmmConnection(vmmGObject):
         return (stop, start, origlist, new, current)
 
     def _update_nets(self):
-        orig = self.nets
+        orig = self.nets.copy()
         name = "network"
         active_list = self.vmm.listNetworks
         inactive_list = self.vmm.listDefinedNetworks
@@ -1291,7 +1291,7 @@ class vmmConnection(vmmGObject):
                                  lookup_func, build_class)
 
     def _update_pools(self):
-        orig = self.pools
+        orig = self.pools.copy()
         name = "pool"
         active_list = self.vmm.listStoragePools
         inactive_list = self.vmm.listDefinedStoragePools
@@ -1304,7 +1304,7 @@ class vmmConnection(vmmGObject):
                                  lookup_func, build_class)
 
     def _update_interfaces(self):
-        orig = self.interfaces
+        orig = self.interfaces.copy()
         name = "interface"
         active_list = self.vmm.listInterfaces
         inactive_list = self.vmm.listDefinedInterfaces
@@ -1318,7 +1318,7 @@ class vmmConnection(vmmGObject):
 
 
     def _update_nodedevs(self):
-        orig = self.nodedevs
+        orig = self.nodedevs.copy()
         name = "nodedev"
         active_list = lambda: self.vmm.listDevices(None, 0)
         inactive_list = lambda: []
@@ -1340,7 +1340,7 @@ class vmmConnection(vmmGObject):
         oldActiveIDs = {}
         oldInactiveNames = {}
 
-        origlist = self.vms
+        origlist = self.vms.copy()
         current = {}
         new = []
 
