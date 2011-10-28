@@ -603,10 +603,10 @@ class vmmConsolePages(vmmGObjectUI):
 
         self.keycombo_menu.destroy()
         self.keycombo_menu = None
-        self.fs_toolbar.destroy()
-        self.fs_toolbar = None
         self.fs_drawer.destroy()
         self.fs_drawer = None
+        self.fs_toolbar.destroy()
+        self.fs_toolbar = None
 
     ##########################
     # Initialization helpers #
