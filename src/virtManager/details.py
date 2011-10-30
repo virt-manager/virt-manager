@@ -299,12 +299,13 @@ class vmmDetails(vmmGObjectUI):
 
         self.is_customize_dialog = False
         if parent:
-            self.is_customize_dialog = True
             # Details window is being abused as a 'configure before install'
             # dialog, set things as appropriate
+            self.is_customize_dialog = True
             self.topwin.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
             self.topwin.set_transient_for(parent)
 
+            self.widget("toolbar-box").show()
             self.widget("customize-toolbar").show()
             self.widget("details-toolbar").hide()
             self.widget("details-menubar").hide()
@@ -1121,8 +1122,12 @@ class vmmDetails(vmmGObjectUI):
             menu.set_active(src.get_active())
 
     def toggle_toolbar(self, src):
+        if self.is_customize_dialog:
+            return
+
         active = src.get_active()
         self.config.set_details_show_toolbar(active)
+
         if (active and not
             self.widget("details-menu-view-fullscreen").get_active()):
             self.widget("toolbar-box").show()
