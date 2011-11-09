@@ -140,7 +140,8 @@ class vmmInspection(vmmGObject):
         disks = []
         for disk in vm.get_disk_devices():
             if (disk.path and
-                (disk.type == "block" or disk.type == "file")):
+                (disk.type == "block" or disk.type == "file") and
+                not disk.device == "cdrom"):
                 disks.append(disk)
 
         if not disks:
