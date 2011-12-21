@@ -1380,6 +1380,10 @@ class vmmAddHardware(vmmGObjectUI):
         if not target:
             return self.err.val_err(_("A filesystem target must be specified"))
 
+        if self.conn.is_qemu() and self.filesystem_target_present(target):
+            return self.err.val_err(_('Invalid target path. A filesystem with'
+                                       ' that target already exists'))
+
         try:
             self._dev = virtinst.VirtualFilesystem(conn=conn)
             self._dev.source = source
@@ -1390,6 +1394,15 @@ class vmmAddHardware(vmmGObjectUI):
                 self._dev.type = fstype
         except Exception, e:
             return self.err.val_err(_("Filesystem parameter error"), e)
+
+    def filesystem_target_present(self, target):
+        fsdevs = self.vm.get_filesystem_devices()
+
+        for fs in fsdevs:
+            if (fs.target == target):
+                return True
+
+        return False
 
     def validate_page_smartcard(self):
         conn = self.conn.vmm
