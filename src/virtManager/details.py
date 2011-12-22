@@ -3137,6 +3137,10 @@ class vmmDetails(vmmGObjectUI):
         self.widget("fs-mode").set_text(dev.mode)
         self.widget("fs-source").set_text(dev.source)
         self.widget("fs-target").set_text(dev.target)
+        if dev.readonly:
+            self.widget("fs-readonly").set_text("Yes")
+        else:
+            self.widget("fs-readonly").set_text("No")
 
     def refresh_boot_page(self):
         # Refresh autostart

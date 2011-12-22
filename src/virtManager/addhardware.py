@@ -328,6 +328,7 @@ class vmmAddHardware(vmmGObjectUI):
                           VirtualFilesystem.TYPE_TEMPLATE])
         simple_store_set("fs-mode-combo", VirtualFilesystem.MOUNT_MODES)
         self.show_pair_combo("fs-type", self.conn.is_openvz())
+        self.show_check_button("fs-readonly", self.conn.is_qemu())
 
         # Smartcard widgets
         combo = self.widget("smartcard-mode")
@@ -481,6 +482,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("fs-mode-combo").set_active(0)
         self.widget("fs-source").set_text("")
         self.widget("fs-target").set_text("")
+        self.widget("fs-readonly").set_active(False)
 
         # Hide all notebook pages, so the wizard isn't as big as the largest
         # page
@@ -732,6 +734,14 @@ class vmmAddHardware(vmmGObjectUI):
 
         return combo.get_model()[combo.get_active()][0]
 
+    def get_config_fs_readonly(self):
+        name = "fs-readonly"
+        check = self.widget(name)
+        if not check.get_property("visible"):
+            return None
+
+        return check.get_active()
+
     # Smartcard getters
     def get_config_smartcard_mode(self):
         mode = self.widget("smartcard-mode")
@@ -862,6 +872,10 @@ class vmmAddHardware(vmmGObjectUI):
 
         combo.set_property("visible", show_combo)
         label.set_property("visible", not show_combo)
+
+    def show_check_button(self, basename, show):
+        check = self.widget(basename)
+        check.set_property("visible", show)
 
     # Storage listeners
     def browse_storage(self, ignore1):
@@ -1374,6 +1388,7 @@ class vmmAddHardware(vmmGObjectUI):
         target = self.widget("fs-target").get_text()
         mode = self.get_config_fs_mode()
         fstype = self.get_config_fs_type()
+        readonly = self.get_config_fs_readonly()
 
         if not source:
             return self.err.val_err(_("A filesystem source must be specified"))
@@ -1392,6 +1407,8 @@ class vmmAddHardware(vmmGObjectUI):
                 self._dev.mode = mode
             if fstype:
                 self._dev.type = fstype
+            if readonly:
+                self._dev.readonly = readonly
         except Exception, e:
             return self.err.val_err(_("Filesystem parameter error"), e)
 

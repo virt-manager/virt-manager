@@ -2161,6 +2161,22 @@ access in the guest.</property>
                                       </packing>
                                     </child>
                                     <child>
+                                      <widget class="GtkCheckButton" id="fs-readonly">
+                                        <property name="label" translatable="yes">E_xport filesystem as readonly mount</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="draw_indicator">True</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">4</property>
+                                        <property name="bottom_attach">5</property>
+                                      </packing>
+                                    </child>
+                                    <child>
                                       <widget class="GtkHBox" id="hbox13">
                                         <property name="visible">True</property>
                                         <property name="spacing">6</property>
