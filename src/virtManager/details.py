@@ -134,7 +134,7 @@ PAGE_DETAILS = 1
 PAGE_DYNAMIC_OFFSET = 2
 
 def prettyify_disk_bus(bus):
-    if bus in ["ide", "scsi", "usb"]:
+    if bus in ["ide", "sata", "scsi", "usb"]:
         return bus.upper()
 
     if bus in ["xen"]:
@@ -3202,6 +3202,7 @@ class vmmDetails(vmmGObjectUI):
                     buses.append(["scsi", "SCSI"])
                     buses.append(["usb", "USB"])
             if self.vm.get_hv_type() == "kvm":
+                buses.append(["sata", "SATA"])
                 buses.append(["virtio", "Virtio"])
             if self.vm.conn.is_xen():
                 buses.append(["xen", "Xen"])

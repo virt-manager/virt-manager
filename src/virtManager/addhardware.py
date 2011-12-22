@@ -516,7 +516,8 @@ class vmmAddHardware(vmmGObjectUI):
                 add_dev("scsi", virtinst.VirtualDisk.DEVICE_DISK, "SCSI disk")
                 add_dev("usb", virtinst.VirtualDisk.DEVICE_DISK, "USB disk")
         if self.vm.get_hv_type() == "kvm":
-            add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK, "Virtio Disk")
+            add_dev("sata", virtinst.VirtualDisk.DEVICE_DISK, "SATA disk")
+            add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK, "Virtio disk")
         if self.conn.is_xen():
             add_dev("xen", virtinst.VirtualDisk.DEVICE_DISK, "Virtual disk")
 
