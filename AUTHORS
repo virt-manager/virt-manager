@@ -3,79 +3,79 @@
 
 Virtual Machine Manager code is developed by:
 
-   Daniel Berrange <berrange-at-redhat-dot-com>
-   Hugh O. Brock <hbrock-at-redhat-dot-com>
-   Jeremy Katz <katzj-at-redhat-dot-com>
-   Cole Robinson <crobinso-at-redhat-dot-com>
+    Daniel Berrange <berrange-at-redhat-dot-com>
+    Hugh O. Brock <hbrock-at-redhat-dot-com>
+    Jeremy Katz <katzj-at-redhat-dot-com>
+    Cole Robinson <crobinso-at-redhat-dot-com>
 
 The user interaction / interface design and artwork is
 done by:
 
-   Máirín Duffy <duffy-at-redhat-dot-com>
-   Jeremy Perry <jeperry-at-redhat-dot-com>
+    Máirín Duffy <duffy-at-redhat-dot-com>
+    Jeremy Perry <jeperry-at-redhat-dot-com>
 
 Further patches have been submitted by:
 
-  William Sheehan <william-dot-sheehan-at-openinterface-dot-com>
-  Thorsten Leemhuis <fedora-at-leemhuis-dot-info>
-  Karel Zak <kzak-at-redhat-dot-com>
-  Damien Durand <splinux25-at-gmail-dot-com>
-  Charles Coffing <ccoffing-at-novell-dot-com>
-  Mark Cave-Ayland <mark.cave-ayland-at-ilande-dot-co-dot-uk>
-  Richard W.M. Jones <rjones-at-redhat-dot-com>
-  Takahashi Tomohiro <takatom-at-jp-dot-fujitsu-dot-com>
-  Nobuhiro Itou <fj0873gn-at-aa-dot-jp-dot-fujitsu-dot-com>
-  Takao Fujiwara <takao-dot-fujiwara-at-sun-dot-com>
-  Masayuki Sunou <fj1826dm-at-aa-dot-jp-dot-fujitsu-dot-com>
-  David Robinson <drobinso-at-redhat-dot-com>
-  Ville Skytta <ville-dot-skytta-at-iki-dot-fi>
-  Mark Johnson <johnson-dot-nh-at-gmail-dot-com>
-  Alexander Todorov <atodorov-at-redhat-dot-com>
-  Atsushi Sakai <sakaia-at-jp-dot-fujitsu-dot-com>
-  Bernhard Kaindl <bk-at-suse-dot-de>
-  Eduardo Habkost <ehabkost-at-redhat-dot-com>
-  Andy Grover <andy-dot-grover-at-oracle-dot-com>
-  Dan Hork <dan-at-danny-dot-cz>
-  Henry Zhang <hua-dot-zhang-at-sun-dot-com>
-  Soren Hansen <soren-at-ubuntu-dot-com>
-  Shigeki Sagamoto <fj0588di-at-aa-dot-jp-dot-fujitsu-dot-com>
-  Saori Fukuta <fukuta-dot-saori-at-jp-dot-fujitsu-dot-com>
-  Adam Stokes <astokes-at-redhat-dot-com>
-  Jim Meyering <jim-at-meyering-dot-net>
-  Hiroyuki Kaguchi <fj7025cf-at-aa-dot-jp-dot-fujitsu-dot-com>
-  Paul Batkowski <pbatkowski-at-redhat-dot-com>
-  S. Çağlar Onur <caglar-at-pardus-dot-org-dot-tr>
-  Claes Strom <cs-at-clabbe-dot-com>
-  Mike MacCana <mmaccana-at-au1-dot-ibm-dot-com>
-  Guido Günther <agx-at-sigxcpu-dot-org>
-  Andrew Gillies <anaru-at-main-dot-com>
-  Richard Laager <rlaager-at-wiktel-dot-com>
-  James Ralston <ralston-at-pobox-dot-com>
-  Radek Hladik <radek-at-eadresa-dot-cz>
-  Michael Marineau (marineam-at-gentoo-dot-org)
-  Vitaly Mayatskikh <vmayatsk-at-redhat-dot-com>
-  Gerrit Slomma <roadrunner_gs-at-web-dot-de>
-  Dan Walsh <dwalsh-at-redhat-dot-com>
-  Emmanuel Lacour <elacour-at-home-dn-dot-net>
-  Laurent Léonard <laurent-at-open-minds-dot-org>
-  Michal Novotny <minovotn-at-redhat-dot-com>
-  Paul W. Frields <stickster-at-gmail-dot-com>
-  Fred Leeflang <fredl-at-dutchie-dot-org>
-  Jon Nordby <jononor-at-gmail-dot-com>
-  Ales Zelinka <azelinka-at-redhat.com>
-  Jan ONDREJ <ondrejj-at-salstar-dot-sk>
-  Marc Deslauriers <marc.deslauriers-at-ubuntu-dot-com>
-  Matthias Fulz <olz1983-at-googlemail-dot-com>
-  Niels de Vos <ndevos-at-redhat-dot-com>
-  Wen Congyang <wency-at-cn-dot-fujitsu-dot-com>
-  Gerhard Stenzel <gerhard-dot-stenzel-at-de-dot-ibm-dot-com>
-  Yuri Chornoivan <yurchor-at-ukr-dot-net>
-  Miklos Vajna <vmiklos-at-frugalware-dot-org>
-  Lars Sjostrom <lars-at-radicore-dot-se>
-  Jim Fehlig <jfehlig-at-suse-dot-com>
+    William Sheehan <william-dot-sheehan-at-openinterface-dot-com>
+    Thorsten Leemhuis <fedora-at-leemhuis-dot-info>
+    Karel Zak <kzak-at-redhat-dot-com>
+    Damien Durand <splinux25-at-gmail-dot-com>
+    Charles Coffing <ccoffing-at-novell-dot-com>
+    Mark Cave-Ayland <mark.cave-ayland-at-ilande-dot-co-dot-uk>
+    Richard W.M. Jones <rjones-at-redhat-dot-com>
+    Takahashi Tomohiro <takatom-at-jp-dot-fujitsu-dot-com>
+    Nobuhiro Itou <fj0873gn-at-aa-dot-jp-dot-fujitsu-dot-com>
+    Takao Fujiwara <takao-dot-fujiwara-at-sun-dot-com>
+    Masayuki Sunou <fj1826dm-at-aa-dot-jp-dot-fujitsu-dot-com>
+    David Robinson <drobinso-at-redhat-dot-com>
+    Ville Skytta <ville-dot-skytta-at-iki-dot-fi>
+    Mark Johnson <johnson-dot-nh-at-gmail-dot-com>
+    Alexander Todorov <atodorov-at-redhat-dot-com>
+    Atsushi Sakai <sakaia-at-jp-dot-fujitsu-dot-com>
+    Bernhard Kaindl <bk-at-suse-dot-de>
+    Eduardo Habkost <ehabkost-at-redhat-dot-com>
+    Andy Grover <andy-dot-grover-at-oracle-dot-com>
+    Dan Hork <dan-at-danny-dot-cz>
+    Henry Zhang <hua-dot-zhang-at-sun-dot-com>
+    Soren Hansen <soren-at-ubuntu-dot-com>
+    Shigeki Sagamoto <fj0588di-at-aa-dot-jp-dot-fujitsu-dot-com>
+    Saori Fukuta <fukuta-dot-saori-at-jp-dot-fujitsu-dot-com>
+    Adam Stokes <astokes-at-redhat-dot-com>
+    Jim Meyering <jim-at-meyering-dot-net>
+    Hiroyuki Kaguchi <fj7025cf-at-aa-dot-jp-dot-fujitsu-dot-com>
+    Paul Batkowski <pbatkowski-at-redhat-dot-com>
+    S. Çağlar Onur <caglar-at-pardus-dot-org-dot-tr>
+    Claes Strom <cs-at-clabbe-dot-com>
+    Mike MacCana <mmaccana-at-au1-dot-ibm-dot-com>
+    Guido Günther <agx-at-sigxcpu-dot-org>
+    Andrew Gillies <anaru-at-main-dot-com>
+    Richard Laager <rlaager-at-wiktel-dot-com>
+    James Ralston <ralston-at-pobox-dot-com>
+    Radek Hladik <radek-at-eadresa-dot-cz>
+    Michael Marineau (marineam-at-gentoo-dot-org)
+    Vitaly Mayatskikh <vmayatsk-at-redhat-dot-com>
+    Gerrit Slomma <roadrunner_gs-at-web-dot-de>
+    Dan Walsh <dwalsh-at-redhat-dot-com>
+    Emmanuel Lacour <elacour-at-home-dn-dot-net>
+    Laurent Léonard <laurent-at-open-minds-dot-org>
+    Michal Novotny <minovotn-at-redhat-dot-com>
+    Paul W. Frields <stickster-at-gmail-dot-com>
+    Fred Leeflang <fredl-at-dutchie-dot-org>
+    Jon Nordby <jononor-at-gmail-dot-com>
+    Ales Zelinka <azelinka-at-redhat.com>
+    Jan ONDREJ <ondrejj-at-salstar-dot-sk>
+    Marc Deslauriers <marc.deslauriers-at-ubuntu-dot-com>
+    Matthias Fulz <olz1983-at-googlemail-dot-com>
+    Niels de Vos <ndevos-at-redhat-dot-com>
+    Wen Congyang <wency-at-cn-dot-fujitsu-dot-com>
+    Gerhard Stenzel <gerhard-dot-stenzel-at-de-dot-ibm-dot-com>
+    Yuri Chornoivan <yurchor-at-ukr-dot-net>
+    Miklos Vajna <vmiklos-at-frugalware-dot-org>
+    Lars Sjostrom <lars-at-radicore-dot-se>
+    Jim Fehlig <jfehlig-at-suse-dot-com>
 
-  <...send a patch & get your name here...>
+    <...send a patch & get your name here...>
 
-Also lots of translations from the Fedora translation team. See
+Also lots of translations from the Transifex translation team. See
 the individual .po files for the translators.
 
