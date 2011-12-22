@@ -850,7 +850,6 @@ class vmmConsolePages(vmmGObjectUI):
             viewport.remove(w)
 
         v.close()
-        v.cleanup()
         self.viewer_connected = False
         self.leave_fullscreen()
 
