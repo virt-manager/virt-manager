@@ -512,6 +512,11 @@ class vmmDomain(vmmLibvirtObject):
             guest.clock.offset = newvalue
         return self._redefine_guest(change)
 
+    def define_machtype(self, newvalue):
+        def change(guest):
+            guest.installer.machine = newvalue
+        return self._redefine_guest(change)
+
     def define_description(self, newvalue):
         def change(guest):
             guest.description = newvalue or None
@@ -837,6 +842,8 @@ class vmmDomain(vmmLibvirtObject):
         return self._get_guest().features["apic"]
     def get_clock(self):
         return self._get_guest().clock.offset
+    def get_machtype(self):
+        return self._get_guest().installer.machine
 
     def get_description(self):
         # Always show the inactive <description>, let's us fake hotplug

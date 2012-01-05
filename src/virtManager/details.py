@@ -38,11 +38,12 @@ from virtManager import util as util
 import virtinst
 
 # Parameters that can be editted in the details window
-EDIT_TOTAL = 35
+EDIT_TOTAL = 36
 (EDIT_NAME,
 EDIT_ACPI,
 EDIT_APIC,
 EDIT_CLOCK,
+EDIT_MACHTYPE,
 EDIT_SECURITY,
 EDIT_DESC,
 
@@ -380,6 +381,7 @@ class vmmDetails(vmmGObjectUI):
             "on_overview_acpi_changed": self.config_acpi_changed,
             "on_overview_apic_changed": self.config_apic_changed,
             "on_overview_clock_changed": (self.enable_apply, EDIT_CLOCK),
+            "on_machine_type_changed": (self.enable_apply, EDIT_MACHTYPE),
             "on_security_label_changed": (self.enable_apply, EDIT_SECURITY),
             "on_security_type_changed": self.security_type_changed,
 
@@ -731,6 +733,34 @@ class vmmDetails(vmmGObjectUI):
         clock_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
         for offset in ["localtime", "utc"]:
             clock_model.append([offset])
+
+        arch = self.vm.get_arch()
+        caps = self.vm.conn.get_capabilities()
+        machines = []
+
+        if len(caps.guests) > 0:
+            for guest in caps.guests:
+                if len(guest.domains) > 0:
+                    for domain in guest.domains:
+                        machines = list(set(machines + domain.machines))
+
+        if arch in ["i686", "x86_64"]:
+            machtype_label = self.widget("label81")
+            machtype_label.set_visible(False)
+            machtype_hbox = self.widget("hbox30")
+            machtype_hbox.set_visible(False)
+        else:
+            machtype_combo = self.widget("machine-type-combo")
+            machtype_model = gtk.ListStore(str)
+            machtype_combo.set_model(machtype_model)
+            text = gtk.CellRendererText()
+            machtype_combo.pack_start(text, True)
+            machtype_combo.add_attribute(text, 'text', 0)
+            machtype_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+
+            if len(machines) > 0:
+                for machine in machines:
+                    machtype_model.append([machine])
 
         # Security info tooltips
         util.tooltip_wrapper(self.widget("security-static-info"),
@@ -1956,6 +1986,10 @@ class vmmDetails(vmmGObjectUI):
             clock = self.get_combo_label_value("overview-clock")
             add_define(self.vm.define_clock, clock)
 
+        if self.editted(EDIT_MACHTYPE):
+            machtype = self.get_combo_label_value("machine-type")
+            add_define(self.vm.define_machtype, machtype)
+
         if self.editted(EDIT_SECURITY):
             semodel = None
             setype = "static"
@@ -2515,6 +2549,7 @@ class vmmDetails(vmmGObjectUI):
         acpi = self.vm.get_acpi()
         apic = self.vm.get_apic()
         clock = self.vm.get_clock()
+        machtype = self.vm.get_machtype()
 
         # Hack in a way to represent 'default' acpi/apic for customize dialog
         self.widget("overview-acpi").set_active(bool(acpi))
@@ -2527,6 +2562,10 @@ class vmmDetails(vmmGObjectUI):
         if not clock:
             clock = _("Same as host")
         self.set_combo_label("overview-clock", clock)
+
+        if not arch in ["i686", "x86_64"]:
+            if machtype is not None:
+                self.set_combo_label("machine-type", machtype)
 
         # Security details
         semodel, ignore, vmlabel = self.vm.get_seclabel()
