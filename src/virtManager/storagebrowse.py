@@ -320,8 +320,13 @@ class vmmStorageBrowser(vmmGObjectUI):
         for key in vols.keys():
             vol = vols[key]
             sensitive = True
-            path = vol.get_target_path()
-            fmt = vol.get_format() or ""
+            try:
+                path = vol.get_target_path()
+                fmt = vol.get_format() or ""
+            except Exception:
+                logging.exception("Failed to determine volume parameters, "
+                                  "skipping volume %s" % key)
+		continue
             namestr = None
 
             try:
