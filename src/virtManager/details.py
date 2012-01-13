@@ -3134,7 +3134,16 @@ class vmmDetails(vmmGObjectUI):
             return
 
         self.widget("fs-type").set_text(dev.type)
-        self.widget("fs-mode").set_text(dev.mode)
+
+        # mode can be irrelevant depending on the fs driver type
+        # selected.
+        if dev.mode:
+            self.show_pair("fs-mode", True)
+            self.widget("fs-mode").set_text(dev.mode)
+        else:
+            self.show_pair("fs-mode", False)
+
+        self.widget("fs-driver").set_text(dev.driver or _("Default"))
         self.widget("fs-source").set_text(dev.source)
         self.widget("fs-target").set_text(dev.target)
         if dev.readonly:
@@ -3467,6 +3476,12 @@ class vmmDetails(vmmGObjectUI):
             # Set a default selection
             selection.select_path("0")
 
+    def show_pair(self, basename, show):
+        combo = self.widget(basename)
+        label = self.widget(basename + "-title")
+
+        combo.set_property("visible", show)
+        label.set_property("visible", show)
 
 vmmGObjectUI.type_register(vmmDetails)
 vmmDetails.signal_new(vmmDetails, "action-save-domain", [str, str])

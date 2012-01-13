@@ -94,6 +94,7 @@ class vmmAddHardware(vmmGObjectUI):
             "on_char_device_type_changed": self.change_char_device_type,
 
             "on_fs_type_combo_changed": self.change_fs_type,
+            "on_fs_driver_combo_changed": self.change_fs_driver,
             "on_fs_source_browse_clicked": self.browse_fs_source,
 
             "on_usbredir_type_changed": self.change_usbredir_type,
@@ -327,6 +328,7 @@ class vmmAddHardware(vmmGObjectUI):
                          [VirtualFilesystem.TYPE_MOUNT,
                           VirtualFilesystem.TYPE_TEMPLATE])
         simple_store_set("fs-mode-combo", VirtualFilesystem.MOUNT_MODES)
+        simple_store_set("fs-driver-combo", VirtualFilesystem.DRIVER_TYPES)
         self.show_pair_combo("fs-type", self.conn.is_openvz())
         self.show_check_button("fs-readonly", self.conn.is_qemu())
 
@@ -480,6 +482,7 @@ class vmmAddHardware(vmmGObjectUI):
         # FS params
         self.widget("fs-type-combo").set_active(0)
         self.widget("fs-mode-combo").set_active(0)
+        self.widget("fs-driver-combo").set_active(0)
         self.widget("fs-source").set_text("")
         self.widget("fs-target").set_text("")
         self.widget("fs-readonly").set_active(False)
@@ -741,6 +744,14 @@ class vmmAddHardware(vmmGObjectUI):
             return None
 
         return check.get_active()
+
+    def get_config_fs_driver(self):
+        name = "fs-driver-combo"
+        combo = self.widget(name)
+        if not combo.get_property("visible"):
+            return None
+
+        return combo.get_model()[combo.get_active()][0]
 
     # Smartcard getters
     def get_config_smartcard_mode(self):
@@ -1027,6 +1038,7 @@ class vmmAddHardware(vmmGObjectUI):
         idx = src.get_active()
         fstype = None
         show_mode_combo = False
+        show_driver_combo = False
 
         if idx >= 0 and src.get_property("visible"):
             fstype = src.get_model()[idx][0]
@@ -1036,10 +1048,31 @@ class vmmAddHardware(vmmGObjectUI):
         else:
             source_text = _("_Source path:")
             show_mode_combo = self.conn.is_qemu()
+            show_driver_combo = self.conn.is_qemu()
 
         self.widget("fs-source-title").set_text(source_text)
         self.widget("fs-source-title").set_use_underline(True)
         self.show_pair_combo("fs-mode", show_mode_combo)
+        self.show_pair_combo("fs-driver", show_driver_combo)
+
+    def change_fs_driver(self, src):
+        idx = src.get_active()
+        fsdriver = None
+        combo = self.widget("fs-mode-combo")
+        label1 = self.widget("fs-mode-title")
+
+        if idx >= 0 and src.get_property("visible"):
+            fsdriver = src.get_model()[idx][0]
+
+        if (fsdriver == virtinst.VirtualFilesystem.DRIVER_PATH or
+            fsdriver == virtinst.VirtualFilesystem.DRIVER_DEFAULT):
+            combo.set_property("visible", True)
+            label1.set_property("visible", True)
+        else:
+            combo.set_property("visible", False)
+            label1.set_property("visible", False)
+
+
 
 
     ######################
@@ -1389,6 +1422,7 @@ class vmmAddHardware(vmmGObjectUI):
         mode = self.get_config_fs_mode()
         fstype = self.get_config_fs_type()
         readonly = self.get_config_fs_readonly()
+        driver = self.get_config_fs_driver()
 
         if not source:
             return self.err.val_err(_("A filesystem source must be specified"))
@@ -1409,6 +1443,8 @@ class vmmAddHardware(vmmGObjectUI):
                 self._dev.type = fstype
             if readonly:
                 self._dev.readonly = readonly
+            if driver:
+                self._dev.driver = driver
         except Exception, e:
             return self.err.val_err(_("Filesystem parameter error"), e)
 
