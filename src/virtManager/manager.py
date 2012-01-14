@@ -18,6 +18,7 @@
 # MA 02110-1301 USA.
 #
 
+import re
 import gtk
 
 import virtManager.uihelpers as uihelpers
@@ -653,12 +654,15 @@ class vmmManager(vmmGObjectUI):
               details=details,
               title=_("Virtual Machine Manager Connection Failure"))
         else:
+            hint = ''
+            if re.search(r"nc: .* -- 'U'", details):
+                hint = _("\n - The remote netcat understands the '-U' option")
             self.err.show_err(
             _("Unable to open a connection to the libvirt "
               "management daemon.\n\n" +
               "Libvirt URI is: %s\n\n" % conn.get_uri() +
               "Verify that:\n" +
-              " - The 'libvirtd' daemon has been started\n"),
+              " - The 'libvirtd' daemon has been started") + hint,
               details=details,
               title=_("Virtual Machine Manager Connection Failure"))
 
