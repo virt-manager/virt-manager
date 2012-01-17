@@ -498,7 +498,7 @@ class vmmConnection(vmmGObject):
                 try:
                     util.build_default_pool(self)
                 except Exception, e:
-                    logging.debug("Building default pool failed: %s" % str(e))
+                    logging.debug("Building default pool failed: %s", str(e))
 
         return self._storage_capable
 
@@ -575,7 +575,7 @@ class vmmConnection(vmmGObject):
         key = virtinst.support.SUPPORT_DOMAIN_MANAGED_SAVE
         if key not in self._support_dict:
             val = virtinst.support.check_domain_support(vm, key)
-            logging.debug("Connection managed save support: %s" % val)
+            logging.debug("Connection managed save support: %s", val)
             self._support_dict[key] = val
 
         return self._support_dict[key]
@@ -822,7 +822,7 @@ class vmmConnection(vmmGObject):
             #        to the user.
             os.remove(frm)
         except:
-            logging.debug("Couldn't remove save file '%s' used for restore." %
+            logging.debug("Couldn't remove save file '%s' used for restore",
                           frm)
 
     ####################
@@ -954,7 +954,7 @@ class vmmConnection(vmmGObject):
         self._change_state(self.STATE_CONNECTING)
 
         if sync:
-            logging.debug("Opening connection synchronously: %s" %
+            logging.debug("Opening connection synchronously: %s",
                           self.get_uri())
             self._open_thread()
         else:
@@ -973,7 +973,7 @@ class vmmConnection(vmmGObject):
             logging.debug("Skipping policykit check as root")
             return 0
 
-        logging.debug("Doing policykit for %s" % action)
+        logging.debug("Doing policykit for %s", action)
 
         try:
             # First try to use org.freedesktop.PolicyKit.AuthenticationAgent
@@ -1190,8 +1190,8 @@ class vmmConnection(vmmGObject):
 
         if self.state == self.STATE_ACTIVE:
             caps = self.get_capabilities_xml()
-            logging.debug("%s capabilities:\n%s" %
-                          (self.get_uri(), caps))
+            logging.debug("%s capabilities:\n%s",
+                          self.get_uri(), caps)
 
             self.tick()
             # If VMs disappeared since the last time we connected to
@@ -1226,19 +1226,19 @@ class vmmConnection(vmmGObject):
         try:
             newActiveNames = active_list()
         except Exception, e:
-            logging.debug("Unable to list active %ss: %s" % (typename, e))
+            logging.debug("Unable to list active %ss: %s", typename, e)
         try:
             newInactiveNames = inactive_list()
         except Exception, e:
-            logging.debug("Unable to list inactive %ss: %s" % (typename, e))
+            logging.debug("Unable to list inactive %ss: %s", typename, e)
 
         def check_obj(key, is_active):
             if key not in origlist:
                 try:
                     obj = lookup_func(key)
                 except Exception, e:
-                    logging.debug("Could not fetch %s '%s': %s" %
-                                  (typename, key, e))
+                    logging.debug("Could not fetch %s '%s': %s",
+                                  typename, key, e)
                     return
 
                 # Object is brand new this tick period
@@ -1266,14 +1266,14 @@ class vmmConnection(vmmGObject):
                 check_obj(name, True)
             except:
                 logging.exception("Couldn't fetch active "
-                                  "%s '%s'" % (typename, name))
+                                  "%s '%s'", typename, name)
 
         for name in newInactiveNames:
             try:
                 check_obj(name, False)
             except:
                 logging.exception("Couldn't fetch inactive "
-                                  "%s '%s'" % (typename, name))
+                                  "%s '%s'", typename, name)
 
         return (stop, start, origlist, new, current)
 
@@ -1355,12 +1355,12 @@ class vmmConnection(vmmGObject):
         try:
             newActiveIDs = self.vmm.listDomainsID()
         except Exception, e:
-            logging.debug("Unable to list active domains: %s" % e)
+            logging.debug("Unable to list active domains: %s", e)
 
         try:
             newInactiveNames = self.vmm.listDefinedDomains()
         except Exception, e:
-            logging.exception("Unable to list inactive domains: %s" % e)
+            logging.exception("Unable to list inactive domains: %s", e)
 
         # NB in these first 2 loops, we go to great pains to
         # avoid actually instantiating a new VM object so that
@@ -1396,7 +1396,7 @@ class vmmConnection(vmmGObject):
 
                     check_new(vm, uuid)
                 except:
-                    logging.exception("Couldn't fetch domain id '%s'" % _id)
+                    logging.exception("Couldn't fetch domain id '%s'", _id)
 
 
         for name in newInactiveNames:
@@ -1412,7 +1412,7 @@ class vmmConnection(vmmGObject):
 
                     check_new(vm, uuid)
                 except:
-                    logging.exception("Couldn't fetch domain '%s'" % name)
+                    logging.exception("Couldn't fetch domain '%s'", name)
 
         return (new, origlist, current)
 
@@ -1522,9 +1522,9 @@ class vmmConnection(vmmGObject):
             except libvirt.libvirtError, e:
                 if e.get_error_code() == libvirt.VIR_ERR_SYSTEM_ERROR:
                     raise
-                logging.exception("Tick for VM '%s' failed" % vm.get_name())
+                logging.exception("Tick for VM '%s' failed", vm.get_name())
             except Exception, e:
-                logging.exception("Tick for VM '%s' failed" % vm.get_name())
+                logging.exception("Tick for VM '%s' failed", vm.get_name())
 
         if not noStatsUpdate:
             self._recalculate_stats(now, updateVMs)

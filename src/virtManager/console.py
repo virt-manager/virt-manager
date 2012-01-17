@@ -106,7 +106,7 @@ class Tunnel(object):
         argv.append("'%s'" % nc_cmd)
 
         argv_str = reduce(lambda x, y: x + " " + y, argv[1:])
-        logging.debug("Creating SSH tunnel: %s" % argv_str)
+        logging.debug("Creating SSH tunnel: %s", argv_str)
 
         fds      = socket.socketpair()
         errorfds = socket.socketpair()
@@ -128,8 +128,8 @@ class Tunnel(object):
             fds[1].close()
             errorfds[1].close()
 
-        logging.debug("Tunnel PID=%d OUTFD=%d ERRFD=%d" %
-                      (pid, fds[0].fileno(), errorfds[0].fileno()))
+        logging.debug("Tunnel PID=%d OUTFD=%d ERRFD=%d",
+                      pid, fds[0].fileno(), errorfds[0].fileno())
         errorfds[0].setblocking(0)
 
         self.outfd = fds[0]
@@ -145,9 +145,9 @@ class Tunnel(object):
         if self.outfd is None:
             return
 
-        logging.debug("Shutting down tunnel PID=%d OUTFD=%d ERRFD=%d" %
-                      (self.pid, self.outfd.fileno(),
-                       self.errfd.fileno()))
+        logging.debug("Shutting down tunnel PID=%d OUTFD=%d ERRFD=%d",
+                      self.pid, self.outfd.fileno(),
+                      self.errfd.fileno())
         self.outfd.close()
         self.outfd = None
         self.errfd.close()
@@ -260,7 +260,7 @@ class Viewer(vmmGObject):
             if keys:
                 self.display.set_grab_keys(keys)
         except Exception, e:
-            logging.debug("Error when getting the grab keys combination: %s" %
+            logging.debug("Error when getting the grab keys combination: %s",
                           str(e))
 
     def open_host(self, host, user, port, socketpath, password=None):
@@ -338,7 +338,7 @@ class VNCViewer(Viewer):
         withUsername = False
         withPassword = False
         for cred in credList:
-            logging.debug("Got credential request %s" % cred)
+            logging.debug("Got credential request %s", cred)
             if cred == gtkvnc.CREDENTIAL_PASSWORD:
                 withPassword = True
             elif cred == gtkvnc.CREDENTIAL_USERNAME:
@@ -499,7 +499,7 @@ class SpiceViewer(Viewer):
         uri = "spice://"
         uri += (user and str(user) or "")
         uri += str(host) + "?port=" + str(port)
-        logging.debug("spice uri: %s" % uri)
+        logging.debug("spice uri: %s", uri)
 
         self.spice_session = spice.Session()
         self.spice_session.set_property("uri", uri)
@@ -967,7 +967,7 @@ class vmmConsolePages(vmmGObjectUI):
         error = _("Error: viewer connection to hypervisor host got refused "
                   "or disconnected!")
         if errout:
-            logging.debug("Error output from closed console: %s" % errout)
+            logging.debug("Error output from closed console: %s", errout)
             error += "\n\nError: %s" % errout
 
         self.activate_unavailable_page(error)
@@ -1036,7 +1036,7 @@ class vmmConsolePages(vmmGObjectUI):
         except Exception, e:
             # We can fail here if VM is destroyed: xen is a bit racy
             # and can't handle domain lookups that soon after
-            logging.exception("Getting graphics console failed: %s" % str(e))
+            logging.exception("Getting graphics console failed: %s", str(e))
             return
 
         if protocol is None:
@@ -1047,7 +1047,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         if protocol not in self.config.embeddable_graphics():
             logging.debug("Don't know how to show graphics type '%s' "
-                          "disabling console page" % protocol)
+                          "disabling console page", protocol)
 
             msg = (_("Cannot display graphical console type '%s'")
                      % protocol)
@@ -1068,9 +1068,9 @@ class vmmConsolePages(vmmGObjectUI):
 
         logging.debug("Starting connect process for "
                       "proto=%s trans=%s connhost=%s connuser=%s "
-                      "connport=%s gaddr=%s gport=%s gsocket=%s" %
-                      (protocol, transport, connhost, connuser, connport,
-                       gaddr, gport, gsocket))
+                      "connport=%s gaddr=%s gport=%s gsocket=%s",
+                      protocol, transport, connhost, connuser, connport,
+                      gaddr, gport, gsocket)
         try:
             if protocol == "vnc":
                 self.viewer = VNCViewer(self)

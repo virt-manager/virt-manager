@@ -587,7 +587,7 @@ class vmmAddHardware(vmmGObjectUI):
             path = util.get_default_path(self.conn,
                                          self.vm.get_name(),
                                          collidelist=pathlist)
-            logging.debug("Default storage path is: %s" % path)
+            logging.debug("Default storage path is: %s", path)
         else:
             path = self.widget("config-storage-entry").get_text()
 
@@ -1121,7 +1121,7 @@ class vmmAddHardware(vmmGObjectUI):
         try:
             self.vm.attach_device(self._dev)
         except Exception, e:
-            logging.debug("Device could not be hotplugged: %s" % str(e))
+            logging.debug("Device could not be hotplugged: %s", str(e))
             attach_err = (str(e), "".join(traceback.format_exc()))
 
         if attach_err:

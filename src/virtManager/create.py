@@ -827,9 +827,10 @@ class vmmCreate(vmmGObjectUI):
 
         self.capsguest = newg
         self.capsdomain = newdom
-        logging.debug("Guest type set to os_type=%s, arch=%s, dom_type=%s" %
-                      (self.capsguest.os_type, self.capsguest.arch,
-                       self.capsdomain.hypervisor_type))
+        logging.debug("Guest type set to os_type=%s, arch=%s, dom_type=%s",
+                      self.capsguest.os_type,
+                      self.capsguest.arch,
+                      self.capsdomain.hypervisor_type)
 
     def populate_summary(self):
         ignore, ignore, dlabel, vlabel = self.get_config_os_info()
@@ -998,7 +999,7 @@ class vmmCreate(vmmGObjectUI):
 
         elif self.is_default_storage():
             path = self.get_default_path(self.guest.name)
-            logging.debug("Default storage path is: %s" % path)
+            logging.debug("Default storage path is: %s", path)
         else:
             path = self.widget("config-storage-entry").get_text()
 
@@ -2053,7 +2054,7 @@ class vmmCreate(vmmGObjectUI):
 
             self.detectedDistro = None
 
-            logging.debug("Starting OS detection thread for media=%s" % media)
+            logging.debug("Starting OS detection thread for media=%s", media)
             self._safe_wrapper(self._set_forward_sensitive, (False,))
 
             detectThread = threading.Thread(target=self.actually_detect,

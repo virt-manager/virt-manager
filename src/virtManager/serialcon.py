@@ -71,7 +71,7 @@ class LocalConsoleConnection(ConsoleConnection):
             self.close()
 
         ipty = dev and dev.source_path or None
-        logging.debug("Opening serial tty path: %s" % ipty)
+        logging.debug("Opening serial tty path: %s", ipty)
         if ipty == None:
             return
 
@@ -186,8 +186,8 @@ class LibvirtConsoleConnection(ConsoleConnection):
         self.stream = self.conn.vmm.newStream(libvirt.VIR_STREAM_NONBLOCK)
 
         name = dev and dev.alias.name or None
-        logging.debug("Opening console stream for dev=%s alias=%s" %
-                      (dev, name))
+        logging.debug("Opening console stream for dev=%s alias=%s",
+                      dev, name)
         self.vm.open_console(name, self.stream)
 
         self.stream.eventAddCallback((libvirt.VIR_STREAM_EVENT_READABLE |
@@ -390,12 +390,12 @@ class vmmSerialConsole(vmmGObject):
 
             if port == self.target_port:
                 if path != self.lastpath:
-                    logging.debug("Serial console '%s' path changed to %s."
-                                  % (self.target_port, path))
+                    logging.debug("Serial console '%s' path changed to %s",
+                                  self.target_port, path)
                 self.lastpath = path
                 return dev
 
-        logging.debug("No devices found for serial target port '%s'." %
+        logging.debug("No devices found for serial target port '%s'",
                       self.target_port)
         self.lastpath = None
         return None

@@ -77,7 +77,7 @@ class vmmErrorDialog(vmmGObject):
             details = summary + "\n\n" + details
 
         if debug:
-            logging.debug("dialog message: %s : %s" % (summary, details))
+            logging.debug("dialog message: %s : %s", summary, details)
 
         dialog = _errorDialog(parent=self.get_parent(),
                               type=dialog_type, buttons=buttons)

@@ -39,7 +39,8 @@ class ChangeHostConfigScreen(HostListConfigScreen):
 
     def process_input(self, page):
         if   page is CONNECTION_LIST_PAGE:
-            logging.info("Changing libvirt connection to %s" % self.get_selected_connection())
+            logging.info("Changing libvirt connection to %s",
+                         self.get_selected_connection())
             self.get_libvirt().open_connection(self.get_selected_connection())
         elif page is CONNECTED_PAGE:
             self.set_finished()

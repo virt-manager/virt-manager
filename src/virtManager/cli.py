@@ -68,13 +68,13 @@ def setup_logging(appname, debug_stdout):
                         "%(asctime)s (%(module)s:%(lineno)d): %(message)s"))
         rootLogger.addHandler(streamHandler)
 
-    logging.info("%s startup" % appname)
+    logging.info("%s startup", appname)
 
     # Register libvirt handler
     def libvirt_callback(ctx_ignore, err):
         if err[3] != libvirt.VIR_ERR_ERROR:
             # Don't log libvirt errors: global error handler will do that
-            logging.warn("Non-error from libvirt: '%s'" % err[2])
+            logging.warn("Non-error from libvirt: '%s'", err[2])
     libvirt.registerErrorHandler(f=libvirt_callback, ctx=None)
 
     # Log uncaught exceptions

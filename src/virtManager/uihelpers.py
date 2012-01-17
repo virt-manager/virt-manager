@@ -122,7 +122,7 @@ def check_default_pool_active(topwin, conn):
         # Try to start the pool
         try:
             default_pool.start()
-            logging.info("Started pool '%s'." % default_pool.get_name())
+            logging.info("Started pool '%s'", default_pool.get_name())
         except Exception, e:
             return topwin.err.show_err(_("Could not start storage_pool "
                                          "'%s': %s") %
@@ -648,7 +648,7 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
         try:
             virnet = conn.vmm.networkLookupByName(devname)
             virnet.create()
-            logging.info("Started network '%s'." % devname)
+            logging.info("Started network '%s'", devname)
         except Exception, e:
             return err_dial.show_err(_("Could not start virtual network "
                                        "'%s': %s") % (devname, str(e)))
@@ -888,7 +888,7 @@ def check_path_search_for_qemu(parent, conn, path):
     if not broken_paths:
         return
 
-    logging.debug("No search access for dirs: %s" % broken_paths)
+    logging.debug("No search access for dirs: %s", broken_paths)
     resp, chkres = err_dial.warn_chkbox(
                     _("The emulator may not have search permissions "
                       "for the path '%s'.") % path,
@@ -914,7 +914,7 @@ def check_path_search_for_qemu(parent, conn, path):
             continue
         details += "%s : %s\n" % (path, error)
 
-    logging.debug("Permission errors:\n%s" % details)
+    logging.debug("Permission errors:\n%s", details)
 
     ignore, chkres = err_dial.err_chkbox(errmsg, details,
                          _("Don't ask about these directories again."))

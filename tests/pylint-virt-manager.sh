@@ -27,8 +27,10 @@ UNABLE_IMPORT="Unable to import '(appindicator)"
 # os._exit is needed for forked processes.
 OS_EXIT="protected member _exit of a client class"
 
-# False positive
+# False positives
 MAIN_NONETYPE="main:.*Raising NoneType while.*"
+STYLE_ATTACH="Class 'style' has no 'attach' member"
+VBOX_PACK="Class 'vbox' has no 'pack_start' member"
 
 # Avahi API may have requirements on callback argument names, so ignore these
 # warnings
@@ -98,7 +100,9 @@ pylint --ignore=$IGNOREFILES $PYLINT_FILES \
         -ve "$INFER_ERRORS" \
         -ve "$MAIN_NONETYPE" \
         -ve "$TEST_HACKS" \
-        -ve "$UNABLE_IMPORT" | \
+        -ve "$UNABLE_IMPORT" \
+        -ve "$STYLE_ATTACH" \
+        -ve "$VBOX_ATTACH" | \
 $AWK '\
 # Strip out any "*** Module name" lines if we dont list any errors for them
 BEGIN { found=0; cur_line="" }

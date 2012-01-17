@@ -247,13 +247,13 @@ class vmmHalHelper(vmmGObject):
         # something else. ethN -> pethN
         psysfspath = sysfspath[0:len(sysfspath) - len(name)] + "p" + name
         if os.path.exists(psysfspath):
-            logging.debug("Device %s named to p%s" % (name, name))
+            logging.debug("Device %s named to p%s", name, name)
             name = "p" + name
             sysfspath = psysfspath
 
         # Ignore devices that are slaves of a bond
         if is_net_bonding_slave(name, sysfspath):
-            logging.debug("Skipping device %s in bonding slave" % name)
+            logging.debug("Skipping device %s in bonding slave", name)
             return
 
         # Add the main NIC
@@ -265,7 +265,7 @@ class vmmHalHelper(vmmGObject):
     def _net_tag_device_added(self, name, sysfspath):
         for vlanpath in glob.glob(sysfspath + ".*"):
             if os.path.exists(vlanpath):
-                logging.debug("Process VLAN %s" % vlanpath)
+                logging.debug("Process VLAN %s", vlanpath)
                 vlanmac = get_net_mac_address(name, vlanpath)
                 if vlanmac:
                     (ignore, vlanname) = os.path.split(vlanpath)
@@ -276,8 +276,8 @@ class vmmHalHelper(vmmGObject):
                     pvlanpath = (vlanpath[0:len(vlanpath) - len(vlanname)] +
                                  "p" + vlanname)
                     if os.path.exists(pvlanpath):
-                        logging.debug("Device %s named to p%s" % (vlanname,
-                                                                  vlanname))
+                        logging.debug("Device %s named to p%s",
+                                      vlanname, vlanname)
                         vlanname = "p" + vlanname
                         vlanpath = pvlanpath
                     self._net_device_added(vlanname, vlanmac, vlanpath)

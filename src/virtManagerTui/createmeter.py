@@ -24,7 +24,7 @@ class CreateMeter(progress.BaseMeter):
         logging.info("Starting...")
 
     def _do_end(self, amount_read, now=None):
-        logging.info("Ending: read=%d" % amount_read)
+        logging.info("Ending: read=%d", amount_read)
 
     def _do_update(self, amount_read, now=None):
-        logging.info("Update: read=%d" % amount_read)
+        logging.info("Update: read=%d", amount_read)

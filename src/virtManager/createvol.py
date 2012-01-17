@@ -213,7 +213,7 @@ class vmmCreateVolume(vmmGObjectUI):
             self.show_err(_("Uncaught error validating input: %s") % str(e))
             return
 
-        logging.debug("Creating volume with xml:\n%s" %
+        logging.debug("Creating volume with xml:\n%s",
                       self.vol.get_xml_config())
 
         self.topwin.set_sensitive(False)

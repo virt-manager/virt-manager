@@ -123,14 +123,14 @@ class vmmInspection(vmmGObject):
                         vm = conn.get_vm(vmuuid)
                         prettyvm = conn.get_uri() + ":" + vm.get_name()
 
-                        logging.debug("%s: processing started" % prettyvm)
+                        logging.debug("%s: processing started", prettyvm)
                         # Whether success or failure, we've "seen" this VM now.
                         self._vmseen[vmuuid] = True
                         self._process(conn, vm, vmuuid)
                     except:
-                        logging.exception("%s: exception while processing" %
+                        logging.exception("%s: exception while processing",
                                           prettyvm)
-                    logging.debug("%s: processing done" % prettyvm)
+                    logging.debug("%s: processing done", prettyvm)
 
     def _process(self, conn, vm, vmuuid):
         g = GuestFS()
@@ -209,7 +209,7 @@ class vmmInspection(vmmGObject):
                     g.mount_ro(mp_dev[1], mp_dev[0])
                 except:
                     logging.exception("exception mounting %s on %s "
-                                      "(ignored)" % (mp_dev[1], mp_dev[0]))
+                                      "(ignored)", mp_dev[1], mp_dev[0])
 
             filesystems_mounted = True
         except:

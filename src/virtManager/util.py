@@ -60,7 +60,7 @@ def build_default_pool(vmmconn):
         return
 
     try:
-        logging.debug("Attempting to build default pool with target '%s'" %
+        logging.debug("Attempting to build default pool with target '%s'",
                       path)
         defpool = virtinst.Storage.DirectoryPool(conn=conn,
                                                  name=name,

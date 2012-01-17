@@ -374,7 +374,7 @@ class vmmDomain(vmmLibvirtObject):
         if self.is_active():
             raise RuntimeError(_("Cannot rename an active guest"))
 
-        logging.debug("Changing guest name to '%s'" % newname)
+        logging.debug("Changing guest name to '%s'", newname)
         origxml = guest.get_xml_config()
         guest.name = newname
         newxml = guest.get_xml_config()
@@ -692,17 +692,17 @@ class vmmDomain(vmmLibvirtObject):
 
     def define_controller_model(self, devobj, newmodel):
         def change(editdev):
+            ignore = editdev
+
             guest = self._get_guest_to_define()
             ctrls = guest.get_devices("controller")
-            ctrls = filter(lambda x:
-                               (x.type ==
-                                virtinst.VirtualController.CONTROLLER_TYPE_USB),
+            ctrls = filter(lambda x: (x.type ==
+                           virtinst.VirtualController.CONTROLLER_TYPE_USB),
                            ctrls)
             for dev in ctrls:
                 guest.remove_device(dev)
 
             if newmodel == "ich9-ehci1":
-                print guest
                 guest.add_usb_ich9_controllers()
 
         return self._redefine_device(change, devobj)
@@ -755,8 +755,8 @@ class vmmDomain(vmmLibvirtObject):
             self._backend.setMaxMemory(maxmem)
 
     def hotplug_both_mem(self, memory, maxmem):
-        logging.info("Hotplugging curmem=%s maxmem=%s for VM '%s'" %
-                     (memory, maxmem, self.get_name()))
+        logging.info("Hotplugging curmem=%s maxmem=%s for VM '%s'",
+                     memory, maxmem, self.get_name())
 
         if self.is_active():
             actual_cur = self.get_memory()
@@ -1149,8 +1149,8 @@ class vmmDomain(vmmLibvirtObject):
 
         newxml = self.get_xml(inactive=True)
 
-        logging.debug("Migrating: conn=%s flags=%s dname=%s uri=%s rate=%s" %
-                      (destconn.vmm, flags, newname, interface, rate))
+        logging.debug("Migrating: conn=%s flags=%s dname=%s uri=%s rate=%s",
+                      destconn.vmm, flags, newname, interface, rate)
 
         if meter:
             start_job_progress_thread(self, meter, _("Migrating domain"))
@@ -1506,13 +1506,13 @@ class vmmDomain(vmmLibvirtObject):
                     tx += io[4]
             except libvirt.libvirtError, err:
                 if support.is_error_nosupport(err):
-                    logging.debug("Net stats not supported: %s" % err)
+                    logging.debug("Net stats not supported: %s", err)
                     self._stats_net_supported = False
                 else:
                     logging.error("Error reading net stats for "
-                                  "'%s' dev '%s': %s" %
-                                  (self.get_name(), dev, err))
-                    logging.debug("Adding %s to skip list." % dev)
+                                  "'%s' dev '%s': %s",
+                                  self.get_name(), dev, err)
+                    logging.debug("Adding %s to skip list", dev)
                     self._stats_net_skip.append(dev)
 
         return rx, tx
@@ -1540,13 +1540,13 @@ class vmmDomain(vmmLibvirtObject):
                     wr += io[3]
             except libvirt.libvirtError, err:
                 if support.is_error_nosupport(err):
-                    logging.debug("Disk stats not supported: %s" % err)
+                    logging.debug("Disk stats not supported: %s", err)
                     self._stats_disk_supported = False
                 else:
                     logging.error("Error reading disk stats for "
-                                  "'%s' dev '%s': %s" %
-                                  (self.get_name(), dev, err))
-                    logging.debug("Adding %s to skip list." % dev)
+                                  "'%s' dev '%s': %s",
+                                  self.get_name(), dev, err)
+                    logging.debug("Adding %s to skip list", dev)
                     self._stats_disk_skip.append(dev)
 
         return rd, wr

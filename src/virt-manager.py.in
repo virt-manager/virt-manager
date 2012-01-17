@@ -151,7 +151,7 @@ def launch_specific_window(engine, show, uri, uuid):
     if not show:
         return
 
-    logging.debug("Launching requested window '%s'" % show)
+    logging.debug("Launching requested window '%s'", show)
     if show == 'creator':
         engine.show_domain_creator(uri)
     elif show == 'editor':
@@ -289,9 +289,9 @@ def main():
     global logging_setup
     logging_setup = True
 
-    logging.debug("Launched as: %s" % origargs)
-    logging.debug("GTK version: %s" % str(gtk.gtk_version))
-    logging.debug("virtManager import: %s" % str(virtManager))
+    logging.debug("Launched as: %s", origargs)
+    logging.debug("GTK version: %s", str(gtk.gtk_version))
+    logging.debug("virtManager import: %s", str(virtManager))
 
     cli.check_virtinst_version(virtinst_str)
 

@@ -32,13 +32,13 @@ DEFAULT_URL = "qemu:///system"
 default_url = DEFAULT_URL
 
 def set_default_url(url):
-    logging.info("Changing DEFAULT_URL to %s" % url)
+    logging.info("Changing DEFAULT_URL to %s", url)
     global default_url
 
     default_url = url
 
 def get_default_url():
-    logging.info("Returning default URL of %s" % default_url)
+    logging.info("Returning default URL of %s", default_url)
     return default_url
 
 class VirtManagerConfig:
@@ -78,7 +78,7 @@ class LibvirtWorker:
     def __init__(self, url=None):
         if url is None:
             url = get_default_url()
-        logging.info("Connecting to libvirt: %s" % url)
+        logging.info("Connecting to libvirt: %s", url)
         self.__url  = None
         self.__conn = None
         self.__vmmconn = None

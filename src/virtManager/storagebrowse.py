@@ -325,8 +325,9 @@ class vmmStorageBrowser(vmmGObjectUI):
                 fmt = vol.get_format() or ""
             except Exception:
                 logging.exception("Failed to determine volume parameters, "
-                                  "skipping volume %s" % key)
-		continue
+                                  "skipping volume %s", key)
+                continue
+
             namestr = None
 
             try:

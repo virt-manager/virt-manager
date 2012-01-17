@@ -89,7 +89,7 @@ class vmmConnect(vmmGObjectUI):
                             "org.freedesktop.Avahi.Server")
             self.can_browse = True
         except Exception, e:
-            logging.debug("Couldn't contact avahi: %s" % str(e))
+            logging.debug("Couldn't contact avahi: %s", str(e))
 
         self.reset_state()
 
@@ -344,7 +344,7 @@ class vmmConnect(vmmGObjectUI):
             auto = self.widget("autoconnect").get_active()
         uri = self.generate_uri()
 
-        logging.debug("Generate URI=%s, auto=%s" % (uri, auto))
+        logging.debug("Generate URI=%s, auto=%s", uri, auto)
         self.close()
         self.emit("completed", uri, auto)
 
@@ -378,7 +378,7 @@ class vmmConnect(vmmGObjectUI):
                     socket.getaddrinfo(host, None)
                 except:
                     logging.debug("Couldn't resolve host '%s'. Stripping "
-                                  "'.local' and retrying." % host)
+                                  "'.local' and retrying.", host)
                     self.can_resolve_local = False
                     host = self.check_resolve_host(host[:-6])
                 else:
@@ -392,7 +392,7 @@ class vmmConnect(vmmGObjectUI):
                     socket.getaddrinfo(host, None)
                 except:
                     logging.debug("Couldn't resolve host '%s'. Disabling "
-                                  "host name resolution, only using IP addr" %
+                                  "host name resolution, only using IP addr",
                                   host)
                     self.can_resolve_hostname = False
                 else:

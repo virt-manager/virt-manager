@@ -2345,7 +2345,7 @@ class vmmDetails(vmmGObjectUI):
 
     # Device removal
     def remove_device(self, dev_type, dev_id_info):
-        logging.debug("Removing device: %s %s" % (dev_type, dev_id_info))
+        logging.debug("Removing device: %s %s", dev_type, dev_id_info)
 
         if not util.chkbox_helper(self, self.config.get_confirm_removedev,
             self.config.set_confirm_removedev,
@@ -2365,7 +2365,7 @@ class vmmDetails(vmmGObjectUI):
             if self.vm.is_active():
                 self.vm.detach_device(dev_id_info)
         except Exception, e:
-            logging.debug("Device could not be hotUNplugged: %s" % str(e))
+            logging.debug("Device could not be hotUNplugged: %s", str(e))
             detach_err = (str(e), "".join(traceback.format_exc()))
 
         if not detach_err:
@@ -2415,8 +2415,8 @@ class vmmDetails(vmmGObjectUI):
                 try:
                     func(*args)
                 except Exception, e:
-                    logging.debug("Hotplug failed: func=%s: %s" % (func,
-                                                                   str(e)))
+                    logging.debug("Hotplug failed: func=%s: %s",
+                                  func, str(e))
                     hotplug_err.append((str(e),
                                         "".join(traceback.format_exc())))
 

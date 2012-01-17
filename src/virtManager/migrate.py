@@ -511,7 +511,7 @@ class vmmMigrateDialog(vmmGObjectUI):
                 # migration has not been started, wait 100 milliseconds
                 return True
 
-            logging.warning("Error setting migrate downtime: %s" % e)
+            logging.warning("Error setting migrate downtime: %s", e)
             return False
 
     def cancel_migration(self, asyncjob, vm):

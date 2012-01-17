@@ -162,7 +162,7 @@ class vmmDeleteDialog(vmmGObjectUI):
 
             for path in paths:
                 try:
-                    logging.debug("Deleting path: %s" % path)
+                    logging.debug("Deleting path: %s", path)
                     meter.start(text=_("Deleting path '%s'") % path)
                     self._async_delete_path(newconn, path, meter)
                 except Exception, e:
@@ -170,7 +170,7 @@ class vmmDeleteDialog(vmmGObjectUI):
                                           "".join(traceback.format_exc())))
                 meter.end(0)
 
-            logging.debug("Removing VM '%s'" % self.vm.get_name())
+            logging.debug("Removing VM '%s'", self.vm.get_name())
             self.vm.delete()
 
         except Exception, e:
@@ -207,7 +207,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         try:
             vol = conn.storageVolLookupByPath(path)
         except:
-            logging.debug("Path '%s' is not managed. Deleting locally." % path)
+            logging.debug("Path '%s' is not managed. Deleting locally", path)
 
         if vol:
             vol.delete(0)
@@ -371,7 +371,7 @@ def do_we_default(conn, vm_name, vol, path, ro, shared):
             info = append_str(info, _("Storage is in use by the following "
                                       "virtual machines:\n- %s " % namestr))
     except Exception, e:
-        logging.exception("Failed checking disk conflict: %s" % str(e))
+        logging.exception("Failed checking disk conflict: %s", str(e))
 
     return (not info, info)
 

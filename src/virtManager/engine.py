@@ -112,7 +112,7 @@ def check_packagekit(errbox, packages, libvirt_packages):
     found = progWin.get_data()
 
     not_found = filter(lambda x: x not in found, packages)
-    logging.debug("Missing packages: %s" % not_found)
+    logging.debug("Missing packages: %s", not_found)
 
     do_install = not_found
     if not do_install:
@@ -173,7 +173,7 @@ def packagekit_install(package_list):
 
     # Set 2 hour timeout
     timeout = 60 * 60 * 2
-    logging.debug("Installing packages: %s" % package_list)
+    logging.debug("Installing packages: %s", package_list)
     pk_control.InstallPackageNames(0, package_list, "hide-confirm-search",
                                    timeout=timeout)
 
@@ -343,7 +343,7 @@ class vmmEngine(vmmGObject):
     def load_stored_uris(self):
         uris = self.config.get_conn_uris()
         if uris != None:
-            logging.debug("About to connect to uris %s" % uris)
+            logging.debug("About to connect to uris %s", uris)
             for uri in uris:
                 self.add_conn(uri)
 
@@ -368,7 +368,7 @@ class vmmEngine(vmmGObject):
                 conn.open()
             return conn
         except Exception:
-            logging.exception("Error connecting to %s" % uri)
+            logging.exception("Error connecting to %s", uri)
             return None
 
     def _do_connect(self, src_ignore, uri):
@@ -450,9 +450,9 @@ class vmmEngine(vmmGObject):
 
                 if (dom in [from_remote, from_rpc] and
                     code in [sys_error]):
-                    logging.exception("Could not refresh connection %s." % uri)
+                    logging.exception("Could not refresh connection %s", uri)
                     logging.debug("Closing connection since libvirtd "
-                                  "appears to have stopped.")
+                                  "appears to have stopped")
                 else:
                     self.err.show_err(_("Error polling connection '%s': %s") %
                                       (conn.get_uri(), e))
@@ -468,11 +468,11 @@ class vmmEngine(vmmGObject):
     def increment_window_counter(self, src):
         ignore = src
         self.windows += 1
-        logging.debug("window counter incremented to %s" % self.windows)
+        logging.debug("window counter incremented to %s", self.windows)
 
     def decrement_window_counter(self, src):
         self.windows -= 1
-        logging.debug("window counter decremented to %s" % self.windows)
+        logging.debug("window counter decremented to %s", self.windows)
 
         # Don't exit if system tray is enabled
         if (self.windows <= 0 and
@@ -545,7 +545,7 @@ class vmmEngine(vmmGObject):
                 objs.remove(src.object_key)
 
             for name in objs:
-                logging.debug("Leaked %s" % name)
+                logging.debug("Leaked %s", name)
 
         logging.debug("Exiting app normally.")
         gtk.main_quit()
@@ -648,7 +648,7 @@ class vmmEngine(vmmGObject):
             if index:
                 uri += "#%s" % index
 
-            logging.debug("Showing help for %s" % uri)
+            logging.debug("Showing help for %s", uri)
             gtk.show_uri(None, uri, gtk.get_current_event_time())
         except Exception, e:
             src.err.show_err(_("Unable to display documentation: %s") % e)
@@ -988,7 +988,7 @@ class vmmEngine(vmmGObject):
                     "shutting down the OS and may cause data loss.")):
             return
 
-        logging.debug("Destroying vm '%s'." % vm.get_name())
+        logging.debug("Destroying vm '%s'", vm.get_name())
         vmmAsyncJob.simple_async_noshow(vm.destroy, [], src,
                                         _("Error shutting down domain"))
 
@@ -1002,7 +1002,7 @@ class vmmEngine(vmmGObject):
                     vm.get_name())):
             return
 
-        logging.debug("Pausing vm '%s'." % vm.get_name())
+        logging.debug("Pausing vm '%s'", vm.get_name())
         vmmAsyncJob.simple_async_noshow(vm.suspend, [], src,
                                         _("Error pausing domain"))
 
@@ -1010,7 +1010,7 @@ class vmmEngine(vmmGObject):
         conn = self._lookup_conn(uri)
         vm = conn.get_vm(uuid)
 
-        logging.debug("Unpausing vm '%s'." % vm.get_name())
+        logging.debug("Unpausing vm '%s'", vm.get_name())
         vmmAsyncJob.simple_async_noshow(vm.resume, [], src,
                                         _("Error unpausing domain"))
 
@@ -1018,7 +1018,7 @@ class vmmEngine(vmmGObject):
         conn = self._lookup_conn(uri)
         vm = conn.get_vm(uuid)
 
-        logging.debug("Starting vm '%s'." % vm.get_name())
+        logging.debug("Starting vm '%s'", vm.get_name())
 
         if vm.hasSavedImage():
             # VM will be restored, which can take some time, so show a
@@ -1045,7 +1045,7 @@ class vmmEngine(vmmGObject):
                     vm.get_name())):
             return
 
-        logging.debug("Shutting down vm '%s'." % vm.get_name())
+        logging.debug("Shutting down vm '%s'", vm.get_name())
         vmmAsyncJob.simple_async_noshow(vm.shutdown, [], src,
                                         _("Error shutting down domain"))
 
@@ -1059,7 +1059,7 @@ class vmmEngine(vmmGObject):
                     vm.get_name())):
             return
 
-        logging.debug("Rebooting vm '%s'." % vm.get_name())
+        logging.debug("Rebooting vm '%s'", vm.get_name())
 
         def reboot_cb():
             no_support = False

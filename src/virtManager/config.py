@@ -169,7 +169,7 @@ class vmmConfig(object):
                 ignore = SpiceClientGtk
                 self._spice_error = False
             except Exception, self._spice_error:
-                logging.debug("Error importing spice: %s" % self._spice_error)
+                logging.debug("Error importing spice: %s", self._spice_error)
 
         return self._spice_error and str(self._spice_error) or None
 
@@ -672,7 +672,7 @@ class vmmConfig(object):
 
     def get_default_directory(self, conn, _type):
         if not _type:
-            logging.error("Unknown type '%s' for get_default_directory" % _type)
+            logging.error("Unknown type '%s' for get_default_directory", _type)
             return
 
         key = self._get_default_dir_key(_type)
@@ -691,7 +691,7 @@ class vmmConfig(object):
                 _type == self.CONFIG_DIR_RESTORE):
                 path = self.get_default_save_dir(conn)
 
-        logging.debug("get_default_directory(%s): returning %s" % (_type, path))
+        logging.debug("get_default_directory(%s): returning %s", _type, path)
         return path
 
     def set_default_directory(self, folder, _type):
@@ -699,7 +699,7 @@ class vmmConfig(object):
             logging.error("Unknown type for set_default_directory")
             return
 
-        logging.debug("set_default_directory(%s): saving %s" % (_type, folder))
+        logging.debug("set_default_directory(%s): saving %s", _type, folder)
         self.conf.set_string(self.conf_dir + "/paths/default-%s-path" % _type,
                              folder)
 

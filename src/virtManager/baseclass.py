@@ -85,7 +85,7 @@ class vmmGObject(GObject):
 
             self._cleanup()
         except:
-            logging.exception("Error cleaning up %s" % self)
+            logging.exception("Error cleaning up %s", self)
 
     def _cleanup(self):
         raise NotImplementedError("_cleanup must be implemented in subclass")
@@ -143,9 +143,9 @@ class vmmGObject(GObject):
 
     def _logtrace(self, msg):
         import traceback
-        logging.debug("%s (%s %s)\n:%s" %
-                      (msg, self.object_key, self.refcount(),
-                       "".join(traceback.format_stack())))
+        logging.debug("%s (%s %s)\n:%s",
+                      msg, self.object_key, self.refcount(),
+                       "".join(traceback.format_stack()))
 
     def refcount(self):
         # Function generates 2 temporary refs, so adjust total accordingly
@@ -225,7 +225,7 @@ class vmmGObject(GObject):
             if self.config and self._leak_check:
                 self.config.remove_object(self.object_key)
         except:
-            logging.exception("Error removing %s" % self.object_key)
+            logging.exception("Error removing %s", self.object_key)
 
 class vmmGObjectUI(vmmGObject):
     def __init__(self, filename, windowname):
