@@ -117,7 +117,9 @@ class vmmErrorDialog(vmmGObject):
 
         dtype = gtk.MESSAGE_ERROR
         buttons = gtk.BUTTONS_OK
-        self._simple_dialog(dtype, buttons, str(text1), str(text2),
+        self._simple_dialog(dtype, buttons,
+                            str(text1),
+                            text2 and str(text2) or "",
                             str(title), async)
         return False
 
