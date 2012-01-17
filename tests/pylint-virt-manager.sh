@@ -43,44 +43,40 @@ INFER_ERRORS="Instance of '${INFER_LIST}.*not be inferred"
 TEST_HACKS="protected member (_is_virtinst_test_uri|_open_test_uri)"
 
 DMSG=""
-addmsg() {
+skipmsg() {
     DMSG="${DMSG},$1"
 }
 
-addchecker() {
+skipchecker() {
     DCHECKERS="${DCHECKERS},$1"
 }
 
-addmsg_support() {
+skipmsg_checksupport() {
     out=`pylint --list-msgs 2>&1`
     if `echo $out | grep -q $1` ; then
-        addmsg "$1"
+        skipmsg "$1"
     fi
 }
 
 # Disabled unwanted messages
-addmsg "C0103"      # C0103: Name doesn't match some style regex
-addmsg "C0111"      # C0111: No docstring
-addmsg "C0301"      # C0301: Line too long
-addmsg "C0302"      # C0302: Too many lines in module
-addmsg "R0201"      # R0201: Method could be a function
-addmsg "W0141"      # W0141: Complaining about 'map' and 'filter'
-addmsg "W0142"      # W0142: *Used * or ** magic*
-addmsg "W0403"      # W0403: Relative imports
-addmsg "W0603"      # W0603: Using the global statement
-addmsg "W0702"      # W0703: No exception type specified
-addmsg "W0703"      # W0703: Catch 'Exception'
-addmsg "W0704"      # W0704: Exception doesn't do anything
+skipmsg "C0103"      # C0103: Name doesn't match some style regex
+skipmsg "C0111"      # C0111: No docstring
+skipmsg "C0301"      # C0301: Line too long
+skipmsg "C0302"      # C0302: Too many lines in module
+skipmsg "R0201"      # R0201: Method could be a function
+skipmsg "W0141"      # W0141: Complaining about 'map' and 'filter'
+skipmsg "W0142"      # W0142: *Used * or ** magic*
+skipmsg "W0403"      # W0403: Relative imports
+skipmsg "W0603"      # W0603: Using the global statement
+skipmsg "W0702"      # W0703: No exception type specified
+skipmsg "W0703"      # W0703: Catch 'Exception'
+skipmsg "W0704"      # W0704: Exception doesn't do anything
+skipchecker "Design" # Things like "Too many func arguments",
+                     #             "Too man public methods"
 
 # Potentially useful messages, disabled for now
-addmsg "W0511"      # W0511: FIXME and XXX: messages
-addmsg_support "W6501"      # W6501: Using string formatters in logging message
-                            #        (see help message for info)
-
-# Disabled Checkers:
-addchecker "Design"         # Things like "Too many func arguments",
-                            #             "Too man public methods"
-addchecker "Similarities"   # Finds duplicate code (enable this later?)
+skipmsg "W0511"      # W0511: FIXME and XXX: messages
+skipchecker "Similarities"   # Finds duplicate code
 
 # May want to enable this in the future
 SHOW_REPORT="n"
