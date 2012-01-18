@@ -3183,6 +3183,9 @@ class vmmDetails(vmmGObjectUI):
             self.show_pair("fs-mode", False)
 
         self.widget("fs-driver").set_text(dev.driver or _("Default"))
+
+        self.widget("fs-wrpolicy").set_text(dev.wrpolicy or _("Default"))
+
         self.widget("fs-source").set_text(dev.source)
         self.widget("fs-target").set_text(dev.target)
         if dev.readonly:

@@ -5753,10 +5753,10 @@ I/O:</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <widget class="GtkLabel" id="label65">
+                                          <widget class="GtkLabel" id="fs-wrpolicy-title">
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">Source:</property>
+                                            <property name="label" translatable="yes">Write Policy:</property>
                                           </widget>
                                           <packing>
                                             <property name="top_attach">3</property>
@@ -5766,14 +5766,14 @@ I/O:</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <widget class="GtkLabel" id="fs-readonly-title">
+                                          <widget class="GtkLabel" id="label65">
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">Readonly:</property>
+                                            <property name="label" translatable="yes">Source:</property>
                                           </widget>
                                           <packing>
-                                            <property name="top_attach">5</property>
-                                            <property name="bottom_attach">6</property>
+                                            <property name="top_attach">4</property>
+                                            <property name="bottom_attach">5</property>
                                             <property name="x_options">GTK_FILL</property>
                                             <property name="y_options">GTK_FILL</property>
                                           </packing>
@@ -5785,8 +5785,21 @@ I/O:</property>
                                             <property name="label" translatable="yes">Target:</property>
                                           </widget>
                                           <packing>
-                                            <property name="top_attach">4</property>
-                                            <property name="bottom_attach">5</property>
+                                            <property name="top_attach">5</property>
+                                            <property name="bottom_attach">6</property>
+                                            <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="fs-readonly-title">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">0</property>
+                                            <property name="label" translatable="yes">Readonly Filesystem:</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="top_attach">6</property>
+                                            <property name="bottom_attach">7</property>
                                             <property name="x_options">GTK_FILL</property>
                                             <property name="y_options">GTK_FILL</property>
                                           </packing>
@@ -5820,11 +5833,10 @@ I/O:</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <widget class="GtkLabel" id="fs-source">
+                                          <widget class="GtkLabel" id="fs-wrpolicy">
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="label">label</property>
-                                            <property name="ellipsize">end</property>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -5835,7 +5847,22 @@ I/O:</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <widget class="GtkLabel" id="fs-readonly">
+                                          <widget class="GtkLabel" id="fs-source">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">0</property>
+                                            <property name="label">label</property>
+                                            <property name="ellipsize">end</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">4</property>
+                                            <property name="bottom_attach">5</property>
+                                            <property name="y_options">GTK_FILL</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="fs-target">
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="label">label</property>
@@ -5850,7 +5877,7 @@ I/O:</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <widget class="GtkLabel" id="fs-target">
+                                          <widget class="GtkLabel" id="fs-readonly">
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="label">label</property>
@@ -5859,8 +5886,8 @@ I/O:</property>
                                           <packing>
                                             <property name="left_attach">1</property>
                                             <property name="right_attach">2</property>
-                                            <property name="top_attach">4</property>
-                                            <property name="bottom_attach">5</property>
+                                            <property name="top_attach">6</property>
+                                            <property name="bottom_attach">7</property>
                                             <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
