@@ -27,6 +27,7 @@ import gobject
 from guestfs import GuestFS
 
 from virtManager.baseclass import vmmGObject
+from virtManager.domain import vmmInspectionData
 
 class vmmInspection(vmmGObject):
     # Can't find a way to make Thread release our reference
@@ -40,14 +41,16 @@ class vmmInspection(vmmGObject):
         self._wait = 15 * 1000 # 15 seconds
 
         self._q = Queue()
-        self._conns = dict()
-        self._vmseen = dict()
+        self._conns = {}
+        self._vmseen = {}
+        self._cached_data = {}
 
     def _cleanup(self):
         self._thread = None
         self._q = Queue()
         self._conns = {}
         self._vmseen = {}
+        self._cached_data = {}
 
     # Called by the main thread whenever a connection is added or
     # removed.  We tell the inspection thread, so it can track
@@ -81,7 +84,6 @@ class vmmInspection(vmmGObject):
 
     def _run(self):
         while True:
-            logging.debug("ready")
             self._process_queue()
             self._process_vms()
 
@@ -117,20 +119,26 @@ class vmmInspection(vmmGObject):
     def _process_vms(self):
         for conn in self._conns.itervalues():
             for vmuuid in conn.list_vm_uuids():
-                if not (vmuuid in self._vmseen):
-                    prettyvm = vmuuid
-                    try:
-                        vm = conn.get_vm(vmuuid)
-                        prettyvm = conn.get_uri() + ":" + vm.get_name()
+                prettyvm = vmuuid
+                try:
+                    vm = conn.get_vm(vmuuid)
+                    prettyvm = conn.get_uri() + ":" + vm.get_name()
 
-                        logging.debug("%s: processing started", prettyvm)
-                        # Whether success or failure, we've "seen" this VM now.
-                        self._vmseen[vmuuid] = True
-                        self._process(conn, vm, vmuuid)
-                    except:
-                        logging.exception("%s: exception while processing",
-                                          prettyvm)
-                    logging.debug("%s: processing done", prettyvm)
+                    if vmuuid in self._vmseen:
+                        data = self._cached_data.get(vmuuid)
+                        if not data:
+                            continue
+
+                        logging.debug("Found cached data for %s", prettyvm)
+                        self._set_vm_inspection_data(vm, data)
+                        continue
+
+                    # Whether success or failure, we've "seen" this VM now.
+                    self._vmseen[vmuuid] = True
+                    self._process(conn, vm, vmuuid)
+                except:
+                    logging.exception("%s: exception while processing",
+                                      prettyvm)
 
     def _process(self, conn, vm, vmuuid):
         g = GuestFS()
@@ -145,7 +153,7 @@ class vmmInspection(vmmGObject):
                 disks.append(disk)
 
         if not disks:
-            # Nothing to inspect!
+            logging.debug("%s: nothing to inspect", prettyvm)
             return
 
         # Add the disks.  Note they *must* be added with readonly flag set.
@@ -208,12 +216,14 @@ class vmmInspection(vmmGObject):
                 try:
                     g.mount_ro(mp_dev[1], mp_dev[0])
                 except:
-                    logging.exception("exception mounting %s on %s "
-                                      "(ignored)", mp_dev[1], mp_dev[0])
+                    logging.exception("%s: exception mounting %s on %s "
+                                      "(ignored)",
+                                      prettyvm, mp_dev[1], mp_dev[0])
 
             filesystems_mounted = True
         except:
-            logging.exception("exception while mounting disks (ignored)")
+            logging.exception("%s: exception while mounting disks (ignored)",
+                              prettyvm)
 
         icon = None
         apps = None
@@ -231,25 +241,33 @@ class vmmInspection(vmmGObject):
         # Force the libguestfs handle to close right now.
         del g
 
-        vm.inspection.type = typ
-        vm.inspection.distro = distro
-        vm.inspection.major_version = major_version
-        vm.inspection.minor_version = minor_version
-        vm.inspection.hostname = hostname
-        vm.inspection.product_name = product_name
-        vm.inspection.product_variant = product_variant
-        vm.inspection.icon = icon
-        vm.inspection.applications = apps
-
-        vm.inspection_data_updated()
-
         # Log what we found.
-        logging.debug("detected operating system: %s %s %d.%d (%s)",
-                      typ, distro, major_version, minor_version, product_name)
+        logging.debug("%s: detected operating system: %s %s %d.%d (%s)",
+                      prettyvm, typ, distro, major_version, minor_version,
+                      product_name)
         logging.debug("hostname: %s", hostname)
         if icon:
             logging.debug("icon: %d bytes", len(icon))
         if apps:
             logging.debug("# apps: %d", len(apps))
+
+        data = vmmInspectionData()
+        data.type = str(type)
+        data.distro = str(distro)
+        data.major_version = int(major_version)
+        data.minor_version = int(minor_version)
+        data.hostname = str(hostname)
+        data.product_name = str(product_name)
+        data.product_variant = str(product_variant)
+        data.icon = str(icon)
+        data.applications = list(apps)
+
+        self._set_vm_inspection_data(vm, data)
+
+    def _set_vm_inspection_data(self, vm, data):
+        vm.inspection = data
+        vm.inspection_data_updated()
+        self._cached_data[vm.get_uuid()] = data
+
 
 vmmGObject.type_register(vmmInspection)

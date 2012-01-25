@@ -30,8 +30,6 @@ import virtinst.support as support
 from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 
-from inspectiondata import vmmInspectionData
-
 def compare_device(origdev, newdev, idx):
     devprops = {
         "disk"      : ["target", "bus"],
@@ -119,6 +117,18 @@ def start_job_progress_thread(vm, meter, progtext):
                              args=())
         t.daemon = True
         t.start()
+
+class vmmInspectionData(object):
+    def __init__(self):
+        self.type = None
+        self.distro = None
+        self.major_version = None
+        self.minor_version = None
+        self.hostname = None
+        self.product_name = None
+        self.product_variant = None
+        self.icon = None
+        self.applications = None
 
 class vmmDomain(vmmLibvirtObject):
     """
