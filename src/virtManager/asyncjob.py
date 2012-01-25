@@ -140,7 +140,7 @@ class vmmAsyncJob(vmmGObjectUI):
         if self.show_progress:
             self.topwin.present()
 
-        if not self.cancel_job:
+        if not self.cancel_job and self.topwin.window:
             self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
         if self.run_main:

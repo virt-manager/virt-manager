@@ -58,7 +58,7 @@ class vmmChooseCD(vmmGObjectUI):
     def show(self, parent):
         self.reset_state()
         self.topwin.set_transient_for(parent)
-        self.topwin.show()
+        self.topwin.present()
 
     def _cleanup(self):
         self.close()
