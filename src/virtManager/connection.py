@@ -20,11 +20,11 @@
 
 import logging
 import os
-import traceback
 import re
+import socket
 import threading
 import time
-import socket
+import traceback
 
 import dbus
 import libvirt
@@ -47,6 +47,34 @@ def _is_virtinst_test_uri(uri):
         return bool(cli._is_virtinst_test_uri(uri))
     except:
         return False
+
+def _do_we_have_session():
+    pid = os.getpid()
+
+    try:
+        bus = dbus.SystemBus()
+    except:
+        logging.exception("Error getting system bus handle")
+        return False
+
+    # Check ConsoleKit
+    try:
+        manager = dbus.Interface(bus.get_object(
+                                 "org.freedesktop.ConsoleKit",
+                                 "/org/freedesktop/ConsoleKit/Manager"),
+                                 "org.freedesktop.ConsoleKit.Manager")
+    except:
+        logging.exception("Couldn't connect to ConsoleKit")
+        return False
+
+    try:
+        ret = manager.GetSessionForUnixProcess(pid)
+        logging.debug("Found ConsoleKit session=%s" % ret)
+    except:
+        logging.exception("Failed to lookup pid session")
+        return False
+
+    return True
 
 class vmmConnection(vmmGObject):
 
@@ -1151,6 +1179,7 @@ class vmmConnection(vmmGObject):
             libexc = None
             exc = None
             tb = None
+            warnconsole = False
             try:
                 self.vmm = self._try_open()
             except libvirt.libvirtError, libexc:
@@ -1175,12 +1204,21 @@ class vmmConnection(vmmGObject):
 
             if (libexc and
                 libexc.get_error_code() == libvirt.VIR_ERR_AUTH_FAILED and
+                "not authorized" in libexc.get_error_message().lower()):
+                logging.debug("Looks like we might have failed policykit "
+                              "auth. Checking to see if we have a valid "
+                              "console session")
+                if not self.is_remote() and not _do_we_have_session():
+                    warnconsole = True
+
+            if (libexc and
+                libexc.get_error_code() == libvirt.VIR_ERR_AUTH_FAILED and
                 "GSSAPI Error" in libexc.get_error_message() and
                 "No credentials cache found" in libexc.get_error_message()):
                 if self._acquire_tgt():
                     continue
 
-            self.connectError = "%s\n\n%s" % (exc, tb)
+            self.connectError = (str(exc), tb, warnconsole)
             break
 
         # We want to kill off this thread asap, so schedule an
@@ -1208,7 +1246,7 @@ class vmmConnection(vmmGObject):
 
         if self.state == self.STATE_DISCONNECTED:
             if self.connectError:
-                self.idle_emit("connect-error", self.connectError)
+                self.idle_emit("connect-error", *self.connectError)
             self.connectError = None
 
 
@@ -1706,4 +1744,4 @@ vmmGObject.signal_new(vmmConnection, "mediadev-removed", [str])
 
 vmmGObject.signal_new(vmmConnection, "resources-sampled", [])
 vmmGObject.signal_new(vmmConnection, "state-changed", [])
-vmmGObject.signal_new(vmmConnection, "connect-error", [str])
+vmmGObject.signal_new(vmmConnection, "connect-error", [str, str, bool])

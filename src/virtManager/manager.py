@@ -644,27 +644,42 @@ class vmmManager(vmmGObjectUI):
             conn.open()
             return True
 
-    def _connect_error(self, conn, details):
-        if conn.get_driver() == "xen" and not conn.is_remote():
-            self.err.show_err(
-            _("Unable to open a connection to the Xen hypervisor/daemon.\n\n" +
-              "Verify that:\n" +
-              " - A Xen host kernel was booted\n" +
-              " - The Xen service has been started\n"),
-              details=details,
-              title=_("Virtual Machine Manager Connection Failure"))
+    def _connect_error(self, conn, shortmsg, tb, warnconsole):
+        shortmsg = shortmsg.strip(" \n")
+        tb = tb.strip(" \n")
+        msg = _("Unable to connect to libvirt:\n\n%s\n\n") % shortmsg
+
+        if conn.is_xen() and not conn.is_remote():
+            msg += _("Verify that:\n"
+                     " - A Xen host kernel was booted\n"
+                     " - The Xen service has been started\n")
+            msg = msg.strip("\n")
+            details = "%s\n\n%s" % (msg, tb)
+
         else:
-            hint = ''
-            if re.search(r"nc: .* -- 'U'", details):
-                hint = _("\n - The remote netcat understands the '-U' option")
-            self.err.show_err(
-            _("Unable to open a connection to the libvirt "
-              "management daemon.\n\n" +
-              "Libvirt URI is: %s\n\n" % conn.get_uri() +
-              "Verify that:\n" +
-              " - The 'libvirtd' daemon has been started") + hint,
-              details=details,
-              title=_("Virtual Machine Manager Connection Failure"))
+            hints = []
+            if conn.is_remote() and re.search(r"nc: .* -- 'U'", details):
+                hints.append(
+                    _("\n - The remote netcat understands the '-U' option"))
+
+            if warnconsole:
+                msg += _("Could not detect a local session: if you are \n"
+                         "running virt-manager over ssh -X or VNC, you \n"
+                         "may not be able to connect to libvirt as a \n"
+                         "regular user. Try running as root.\n\n")
+            else:
+                msg += _("Verify that:\n" +
+                         " - The 'libvirtd' daemon has been started")
+                for hint in hints:
+                    msg += hint
+
+            msg = msg.strip("\n")
+            details = (("%s\n\n" % msg) +
+                       (_("Libvirt URI is: %s\n\n") % conn.get_uri()) +
+                       tb)
+
+        self.err.show_err(msg, details,
+                    title=_("Virtual Machine Manager Connection Failure"))
 
 
     ####################################
