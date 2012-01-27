@@ -1168,6 +1168,12 @@ class vmmConnection(vmmGObject):
             self.state = self.STATE_DISCONNECTED
 
             if (libexc and
+                (libexc.get_error_code() ==
+                 getattr(libvirt, "VIR_ERR_AUTH_CANCELLED", None))):
+                logging.debug("User cancelled auth, not raising any error.")
+                break
+
+            if (libexc and
                 libexc.get_error_code() == libvirt.VIR_ERR_AUTH_FAILED and
                 "GSSAPI Error" in libexc.get_error_message() and
                 "No credentials cache found" in libexc.get_error_message()):
@@ -1201,7 +1207,8 @@ class vmmConnection(vmmGObject):
                                              self.vms.keys())
 
         if self.state == self.STATE_DISCONNECTED:
-            self.idle_emit("connect-error", self.connectError)
+            if self.connectError:
+                self.idle_emit("connect-error", self.connectError)
             self.connectError = None
 
 
