@@ -104,7 +104,7 @@ def check_packagekit(errbox, packages, libvirt_packages):
                           [session, pk_control, packages],
                           _("Searching for available hypervisors..."),
                           _("Searching for available hypervisors..."),
-                          None, run_main=False)
+                          None, async=False)
     error, ignore = progWin.run()
     if error:
         return

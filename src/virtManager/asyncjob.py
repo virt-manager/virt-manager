@@ -67,7 +67,7 @@ def _simple_async(callback, args, title, text, parent, errorintro,
 
     asyncjob = vmmAsyncJob(docb, args, title, text, parent.topwin,
                            show_progress=show_progress,
-                           run_main=parent.config.support_threading)
+                           async=parent.config.support_threading)
     error, details = asyncjob.run()
     if error is None:
         return
@@ -92,10 +92,10 @@ class vmmAsyncJob(vmmGObjectUI):
 
 
     def __init__(self, callback, args, title, text, parent,
-                 run_main=True, show_progress=True,
+                 async=True, show_progress=True,
                  cancel_back=None, cancel_args=None):
         """
-        @run_main: If False, run synchronously without a separate thread
+        @async: If False, run synchronously without a separate thread
         @show_progress: If False, don't actually show a progress dialog
         @cancel_back: If operation supports cancelling, call this function
                       when cancel button is clicked
@@ -103,7 +103,7 @@ class vmmAsyncJob(vmmGObjectUI):
         """
         vmmGObjectUI.__init__(self, "vmm-progress.glade", "vmm-progress")
 
-        self.run_main = bool(run_main)
+        self.async = bool(async)
         self.show_progress = bool(show_progress)
         self.cancel_job = cancel_back
         self.cancel_args = cancel_args or []
@@ -143,7 +143,7 @@ class vmmAsyncJob(vmmGObjectUI):
         if not self.cancel_job and self.topwin.window:
             self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
-        if self.run_main:
+        if self.async:
             self.bg_thread.start()
             gtk.main()
         else:
@@ -169,7 +169,7 @@ class vmmAsyncJob(vmmGObjectUI):
         self.cancel_args = None
 
     def delete(self, ignore1=None, ignore2=None):
-        thread_active = (self.bg_thread.isAlive() or not self.run_main)
+        thread_active = (self.bg_thread.isAlive() or not self.async)
         if self.cancel_job and thread_active:
             res = self.err.warn_chkbox(
                     text1=_("Cancel the job before closing window?"),
@@ -177,7 +177,7 @@ class vmmAsyncJob(vmmGObjectUI):
             if res:
                 # The job may end after we click 'Yes', so check whether the
                 # thread is active again
-                thread_active = (self.bg_thread.isAlive() or not self.run_main)
+                thread_active = (self.bg_thread.isAlive() or not self.async)
                 if thread_active:
                     self.cancel()
 
@@ -258,7 +258,7 @@ class vmmAsyncJob(vmmGObjectUI):
         return self._data
 
     def exit_if_necessary(self, force_exit=False):
-        thread_active = (self.bg_thread.isAlive() or not self.run_main)
+        thread_active = (self.bg_thread.isAlive() or not self.async)
 
         if thread_active and not force_exit:
             if (self.is_pulsing):
@@ -266,6 +266,6 @@ class vmmAsyncJob(vmmGObjectUI):
                 self.pbar.pulse()
             return True
         else:
-            if self.run_main:
+            if self.async:
                 gtk.main_quit()
             return False
