@@ -526,10 +526,15 @@ class SpiceViewer(Viewer):
             self.spice_session.connect()
 
     def get_scaling(self):
-        return self.display.get_property("resize-guest")
+        if not has_property(self.display, "scaling"):
+            return False
+        return self.display.get_property("scaling")
 
     def set_scaling(self, scaling):
-        self.display.set_property("resize-guest", scaling)
+        if not has_property(self.display, "scaling"):
+            logging.debug("Spice version doesn't support scaling.")
+            return
+        self.display.set_property("scaling", scaling)
 
 
 class vmmConsolePages(vmmGObjectUI):
