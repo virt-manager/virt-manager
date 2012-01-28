@@ -134,11 +134,72 @@ class vmmAsyncJob(vmmGObjectUI):
 
         self.topwin.set_title(title)
 
+
+    #############
+    # Accessors #
+    #############
+
+    def set_error(self, error, details):
+        self._error_info = (error, details)
+
+    def _get_error(self):
+        if not self._error_info:
+            return (None, None)
+        return self._error_info
+
+    def set_data(self, data):
+        self._data = data
+    def get_data(self):
+        return self._data
+
+    def can_cancel(self):
+        return bool(self.cancel_job)
+
+    def _cleanup(self):
+        self.bg_thread = None
+        self.cancel_job = None
+        self.cancel_args = None
+
+
+    ####################
+    # Internal helpers #
+    ####################
+
+    def set_stage_text(self, text, canceling=False):
+        if self.job_canceled and not canceling:
+            return
+        self.stage.set_text(text)
+
+    def hide_warning(self):
+        self.widget("warning-box").hide()
+
+    def show_warning(self, summary):
+        markup = "<small>%s</small>" % summary
+        self.widget("warning-box").show()
+        self.widget("warning-text").set_markup(markup)
+
+    def exit_if_necessary(self, force_exit=False):
+        thread_active = (self.bg_thread.isAlive() or not self.async)
+
+        if thread_active and not force_exit:
+            if self.is_pulsing and self.show_progress:
+                # Don't call pulse_pbar: this function is thread wrapped
+                self.pbar.pulse()
+            return True
+        else:
+            if self.async:
+                gtk.main_quit()
+            return False
+
+
+    ###########
+    # Actions #
+    ###########
+
     def run(self):
-        timer = None
+        timer = self.safe_timeout_add(100, self.exit_if_necessary)
 
         if self.show_progress:
-            timer = self.safe_timeout_add(100, self.exit_if_necessary)
             self.topwin.present()
 
         if not self.cancel_job and self.show_progress:
@@ -150,8 +211,7 @@ class vmmAsyncJob(vmmGObjectUI):
         else:
             self.bg_thread.run()
 
-        if timer is not None:
-            gobject.source_remove(timer)
+        gobject.source_remove(timer)
 
         if self.bg_thread.isAlive():
             # This can happen if the user closes the whole app while the
@@ -163,11 +223,6 @@ class vmmAsyncJob(vmmGObjectUI):
         self.topwin.destroy()
         self.cleanup()
         return self._get_error()
-
-    def _cleanup(self):
-        self.bg_thread = None
-        self.cancel_job = None
-        self.cancel_args = None
 
     def delete(self, ignore1=None, ignore2=None):
         thread_active = (self.bg_thread.isAlive() or not self.async)
@@ -186,21 +241,6 @@ class vmmAsyncJob(vmmGObjectUI):
         if thread_active:
             self.cancel()
 
-    def set_stage_text(self, text, canceling=False):
-        if self.job_canceled and not canceling:
-            return
-        self.stage.set_text(text)
-
-    def hide_warning(self):
-        self.widget("warning-box").hide()
-
-    def show_warning(self, summary):
-        markup = "<small>%s</small>" % summary
-        self.widget("warning-box").show()
-        self.widget("warning-text").set_markup(markup)
-
-    def can_cancel(self):
-        return bool(self.cancel_job)
 
     def cancel(self, ignore1=None, ignore2=None):
         if not self.cancel_job:
@@ -211,6 +251,10 @@ class vmmAsyncJob(vmmGObjectUI):
             self.hide_warning()
             self.set_stage_text(_("Cancelling job..."), canceling=True)
 
+
+    # All functions after this point are called from the timer loop
+    # which means we need to be careful and lock threads before doing
+    # any UI bits
     def pulse_pbar(self, progress="", stage=None):
         gtk.gdk.threads_enter()
         try:
@@ -222,7 +266,6 @@ class vmmAsyncJob(vmmGObjectUI):
 
 
     def set_pbar_fraction(self, frac, progress, stage=None):
-        # callback for progress meter when file size is known
         gtk.gdk.threads_enter()
         try:
             self.is_pulsing = False
@@ -239,7 +282,6 @@ class vmmAsyncJob(vmmGObjectUI):
 
 
     def set_pbar_done(self, progress, stage=None):
-        #callback for progress meter when progress is done
         gtk.gdk.threads_enter()
         try:
             self.is_pulsing = False
@@ -248,29 +290,3 @@ class vmmAsyncJob(vmmGObjectUI):
             self.pbar.set_fraction(1)
         finally:
             gtk.gdk.threads_leave()
-
-    def set_error(self, error, details):
-        self._error_info = (error, details)
-
-    def _get_error(self):
-        if not self._error_info:
-            return (None, None)
-        return self._error_info
-
-    def set_data(self, data):
-        self._data = data
-    def get_data(self):
-        return self._data
-
-    def exit_if_necessary(self, force_exit=False):
-        thread_active = (self.bg_thread.isAlive() or not self.async)
-
-        if thread_active and not force_exit:
-            if (self.is_pulsing):
-                # Don't call pulse_pbar: this function is thread wrapped
-                self.pbar.pulse()
-            return True
-        else:
-            if self.async:
-                gtk.main_quit()
-            return False
