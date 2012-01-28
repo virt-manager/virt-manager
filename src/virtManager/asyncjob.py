@@ -35,6 +35,7 @@ class asyncJobWorker(threading.Thread):
     def __init__(self, callback, args):
         args = [callback] + args
         threading.Thread.__init__(self, target=cb_wrapper, args=args)
+        self.setDaemon(True)
 
     def run(self):
         threading.Thread.run(self)
@@ -102,16 +103,13 @@ class vmmAsyncJob(vmmGObjectUI):
         @cancel_args: Arguments for optional cancel_back
         """
         vmmGObjectUI.__init__(self, "vmm-progress.glade", "vmm-progress")
+        self.topwin.set_transient_for(parent)
 
         self.async = bool(async)
         self.show_progress = bool(show_progress)
         self.cancel_job = cancel_back
         self.cancel_args = cancel_args or []
         self.cancel_args = [self] + self.cancel_args
-        if self.cancel_job:
-            self.widget("cancel-async-job").show()
-        else:
-            self.widget("cancel-async-job").hide()
         self.job_canceled = False
 
         self._error_info = None
@@ -119,20 +117,23 @@ class vmmAsyncJob(vmmGObjectUI):
 
         self.stage = self.widget("pbar-stage")
         self.pbar = self.widget("pbar")
-        self.widget("pbar-text").set_text(text)
-        self.topwin.set_transient_for(parent)
+        self.is_pulsing = True
 
         args = [self] + args
         self.bg_thread = asyncJobWorker(callback, args)
-        self.bg_thread.setDaemon(True)
-        self.is_pulsing = True
 
         self.window.signal_autoconnect({
             "on_async_job_delete_event" : self.delete,
             "on_async_job_cancel_clicked" : self.cancel,
         })
 
+        # UI state
         self.topwin.set_title(title)
+        self.widget("pbar-text").set_text(text)
+        if self.cancel_job:
+            self.widget("cancel-async-job").show()
+        else:
+            self.widget("cancel-async-job").hide()
 
 
     #############
@@ -181,15 +182,21 @@ class vmmAsyncJob(vmmGObjectUI):
     def exit_if_necessary(self, force_exit=False):
         thread_active = (self.bg_thread.isAlive() or not self.async)
 
-        if thread_active and not force_exit:
-            if self.is_pulsing and self.show_progress:
-                # Don't call pulse_pbar: this function is thread wrapped
-                self.pbar.pulse()
-            return True
-        else:
+        if not thread_active or force_exit:
             if self.async:
                 gtk.main_quit()
             return False
+
+        if not self.is_pulsing or not self.show_progress:
+            return True
+
+        gtk.gdk.threads_enter()
+        try:
+            self.pbar.pulse()
+        finally:
+            gtk.gdk.threads_leave()
+
+        return True
 
 
     ###########
@@ -197,7 +204,9 @@ class vmmAsyncJob(vmmGObjectUI):
     ###########
 
     def run(self):
-        timer = self.safe_timeout_add(100, self.exit_if_necessary)
+        # Don't use safe_timeout_add, since it's mostly needless locking
+        # since a lot of these windows don't touch any UI
+        timer = gobject.timeout_add(100, self.exit_if_necessary)
 
         if self.show_progress:
             self.topwin.present()
