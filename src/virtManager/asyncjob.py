@@ -135,12 +135,13 @@ class vmmAsyncJob(vmmGObjectUI):
         self.topwin.set_title(title)
 
     def run(self):
-        timer = self.safe_timeout_add(100, self.exit_if_necessary)
+        timer = None
 
         if self.show_progress:
+            timer = self.safe_timeout_add(100, self.exit_if_necessary)
             self.topwin.present()
 
-        if not self.cancel_job and self.topwin.window:
+        if not self.cancel_job and self.show_progress:
             self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
         if self.async:
@@ -149,8 +150,8 @@ class vmmAsyncJob(vmmGObjectUI):
         else:
             self.bg_thread.run()
 
-        gobject.source_remove(timer)
-        timer = 0
+        if timer is not None:
+            gobject.source_remove(timer)
 
         if self.bg_thread.isAlive():
             # This can happen if the user closes the whole app while the
@@ -170,16 +171,20 @@ class vmmAsyncJob(vmmGObjectUI):
 
     def delete(self, ignore1=None, ignore2=None):
         thread_active = (self.bg_thread.isAlive() or not self.async)
-        if self.cancel_job and thread_active:
-            res = self.err.warn_chkbox(
-                    text1=_("Cancel the job before closing window?"),
-                    buttons=gtk.BUTTONS_YES_NO)
-            if res:
-                # The job may end after we click 'Yes', so check whether the
-                # thread is active again
-                thread_active = (self.bg_thread.isAlive() or not self.async)
-                if thread_active:
-                    self.cancel()
+        if not self.cancel_job or not thread_active:
+            return
+
+        res = self.err.warn_chkbox(
+                text1=_("Cancel the job before closing window?"),
+                buttons=gtk.BUTTONS_YES_NO)
+        if not res:
+            return
+
+        # The job may end after we click 'Yes', so check whether the
+        # thread is active again
+        thread_active = (self.bg_thread.isAlive() or not self.async)
+        if thread_active:
+            self.cancel()
 
     def set_stage_text(self, text, canceling=False):
         if self.job_canceled and not canceling:
