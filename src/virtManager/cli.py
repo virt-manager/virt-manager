@@ -85,7 +85,12 @@ def setup_logging(appname, debug_stdout):
     sys.excepthook = exception_log
 
 def setup_i18n(gettext_app, gettext_dir):
-    locale.setlocale(locale.LC_ALL, '')
+    try:
+        locale.setlocale(locale.LC_ALL, '')
+    except:
+        # Can happen if user passed a bogus LANG
+        pass
+
     gettext.install(gettext_app, gettext_dir)
     gettext.bindtextdomain(gettext_app, gettext_dir)
 
