@@ -1564,12 +1564,15 @@ class vmmConnection(vmmGObject):
             vm = self.vms[uuid]
             try:
                 vm.tick(now)
-            except libvirt.libvirtError, e:
-                if e.get_error_code() == libvirt.VIR_ERR_SYSTEM_ERROR:
-                    raise
-                logging.exception("Tick for VM '%s' failed", vm.get_name())
             except Exception, e:
                 logging.exception("Tick for VM '%s' failed", vm.get_name())
+                if (isinstance(e, libvirt.libvirtError) and
+                    e.get_error_code() == libvirt.VIR_ERR_SYSTEM_ERROR):
+                    # Try a simple getInfo call to see if conn was dropped
+                    self.vmm.getInfo()
+                    logging.debug("vm tick raised system error but "
+                                  "connection doesn't seem to have dropped. "
+                                  "Ignoring.")
 
         if not noStatsUpdate:
             self._recalculate_stats(now, updateVMs)
