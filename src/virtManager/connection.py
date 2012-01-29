@@ -94,6 +94,7 @@ class vmmConnection(vmmGObject):
         self.state = self.STATE_DISCONNECTED
         self.connectThread = None
         self.connectError = None
+        self._ticklock = threading.Lock()
         self.vmm = None
 
         self._caps = None
@@ -1462,6 +1463,13 @@ class vmmConnection(vmmGObject):
         return (new, origlist, current)
 
     def tick(self, noStatsUpdate=False):
+        try:
+            self._ticklock.acquire()
+            self._tick(noStatsUpdate)
+        finally:
+            self._ticklock.release()
+
+    def _tick(self, noStatsUpdate=False):
         """ main update function: polls for new objects, updates stats, ..."""
         if self.state != self.STATE_ACTIVE:
             return
