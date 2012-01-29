@@ -119,6 +119,9 @@ class vmmInspection(vmmGObject):
     def _process_vms(self):
         for conn in self._conns.itervalues():
             for vmuuid in conn.list_vm_uuids():
+                if not conn.is_active():
+                    break
+
                 prettyvm = vmuuid
                 try:
                     vm = conn.get_vm(vmuuid)
@@ -129,8 +132,9 @@ class vmmInspection(vmmGObject):
                         if not data:
                             continue
 
-                        logging.debug("Found cached data for %s", prettyvm)
-                        self._set_vm_inspection_data(vm, data)
+                        if vm.inspection != data:
+                            logging.debug("Found cached data for %s", prettyvm)
+                            self._set_vm_inspection_data(vm, data)
                         continue
 
                     # Whether success or failure, we've "seen" this VM now.
