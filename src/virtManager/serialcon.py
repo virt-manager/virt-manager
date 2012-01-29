@@ -183,11 +183,14 @@ class LibvirtConsoleConnection(ConsoleConnection):
         if self.stream:
             self.close()
 
-        self.stream = self.conn.vmm.newStream(libvirt.VIR_STREAM_NONBLOCK)
-
         name = dev and dev.alias.name or None
         logging.debug("Opening console stream for dev=%s alias=%s",
                       dev, name)
+        if not name:
+            raise RuntimeError(_("Cannot open a device with no alias name"))
+
+        self.stream = self.conn.vmm.newStream(libvirt.VIR_STREAM_NONBLOCK)
+
         self.vm.open_console(name, self.stream)
 
         self.stream.eventAddCallback((libvirt.VIR_STREAM_EVENT_READABLE |
