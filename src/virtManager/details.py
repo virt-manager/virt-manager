@@ -2702,11 +2702,13 @@ class vmmDetails(vmmGObjectUI):
 
         capscpu = None
         try:
-            cpu_values = caps.get_cpu_values(self.vm.get_arch())
-            for c in cpu_values.cpus:
-                if model and c.model == model:
-                    capscpu = c
-                    break
+            arch = self.vm.get_arch()
+            if arch:
+                cpu_values = caps.get_cpu_values(arch)
+                for c in cpu_values.cpus:
+                    if model and c.model == model:
+                        capscpu = c
+                        break
         except:
             pass
 
