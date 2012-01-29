@@ -581,12 +581,25 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine_device(change, devobj)
     def define_disk_bus(self, devobj, newval):
         def change(editdev):
-            if editdev.bus != newval:
-                # Old <address> probably isn't applicable for new bus value
-                editdev.address.clear()
-                # XXX: Need to change target value as well?
-
+            diffbus = (editdev.bus != newval)
             editdev.bus = newval
+
+            if not diffbus:
+                return
+
+            editdev.address.clear()
+
+            used = []
+            disks = (self.get_disk_devices() +
+                     self.get_disk_devices(inactive=True))
+            for d in disks:
+                used.append(d.target)
+
+            if editdev.target:
+                used.remove(editdev.target)
+
+            editdev.target = None
+            editdev.generate_target(used)
         return self._redefine_device(change, devobj)
     def define_disk_serial(self, devobj, val):
         def change(editdev):
