@@ -581,13 +581,17 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine_device(change, devobj)
     def define_disk_bus(self, devobj, newval):
         def change(editdev):
-            diffbus = (editdev.bus != newval)
+            oldprefix = editdev.get_target_prefix()[0]
+            oldbus = editdev.bus
             editdev.bus = newval
 
-            if not diffbus:
+            if oldbus == newval:
                 return
 
             editdev.address.clear()
+
+            if oldprefix == editdev.get_target_prefix()[0]:
+                return
 
             used = []
             disks = (self.get_disk_devices() +
