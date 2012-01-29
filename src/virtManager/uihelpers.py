@@ -234,7 +234,7 @@ def populate_source_mode_combo(vm, combo):
     model.clear()
 
     # [xml value, label]
-    model.append([None, _("")])
+    model.append([None, "Default"])
     model.append(["vepa", "VEPA"])
     model.append(["bridge", "Bridge"])
     model.append(["private", "Private"])
