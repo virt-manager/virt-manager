@@ -3258,10 +3258,10 @@ class vmmDetails(vmmGObjectUI):
                 if self.vm.rhel6_defaults():
                     buses.append(["scsi", "SCSI"])
                     buses.append(["usb", "USB"])
-            if self.vm.get_hv_type() == "kvm":
+            if self.vm.get_hv_type() in ["kvm", "test"]:
                 buses.append(["sata", "SATA"])
                 buses.append(["virtio", "Virtio"])
-            if self.vm.conn.is_xen():
+            if self.vm.conn.is_xen() or self.vm.get_hv_type() == "test":
                 buses.append(["xen", "Xen"])
 
         for row in buses:
