@@ -625,6 +625,8 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine_device(change, devobj)
     def define_network_model(self, devobj, newmodel):
         def change(editdev):
+            if editdev.model != newmodel:
+                editdev.address.clear()
             editdev.model = newmodel
         return self._redefine_device(change, devobj)
 
@@ -677,6 +679,8 @@ class vmmDomain(vmmLibvirtObject):
 
     def define_sound_model(self, devobj, newmodel):
         def change(editdev):
+            if editdev.model != newmodel:
+                editdev.address.clear()
             editdev.model = newmodel
         return self._redefine_device(change, devobj)
 
@@ -688,6 +692,7 @@ class vmmDomain(vmmLibvirtObject):
                 return
 
             editdev.model_type = newmodel
+            editdev.address.clear()
 
             # Clear out heads/ram values so they reset to default. If
             # we ever allow editing these values in the UI we should
@@ -701,6 +706,8 @@ class vmmDomain(vmmLibvirtObject):
 
     def define_watchdog_model(self, devobj, newval):
         def change(editdev):
+            if editdev.model != newval:
+                editdev.address.clear()
             editdev.model = newval
         return self._redefine_device(change, devobj)
     def define_watchdog_action(self, devobj, newval):
