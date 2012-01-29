@@ -145,7 +145,7 @@ class LibvirtConsoleConnection(ConsoleConnection):
 
         if events & libvirt.VIR_EVENT_HANDLE_READABLE:
             try:
-                got = self.stream.recv(1024)
+                got = self.stream.recv(1024 * 100)
             except:
                 logging.exception("Error receiving stream data")
                 self.close()
@@ -154,8 +154,9 @@ class LibvirtConsoleConnection(ConsoleConnection):
             if got == -2:
                 return
 
+            queued_text = bool(self.streamToTerminal)
             self.streamToTerminal += got
-            if self.streamToTerminal:
+            if not queued_text:
                 self.safe_idle_add(self.display_data, terminal)
 
         if (events & libvirt.VIR_EVENT_HANDLE_WRITABLE and

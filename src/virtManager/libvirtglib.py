@@ -179,6 +179,8 @@ def glib_event_timeout_dispatch(opaque):
     data = opaque
     data.cb(data.timer, data.opaque)
 
+    return True
+
 def glib_event_timeout_add(interval, cb, opaque):
     data = EventTimer()
 
