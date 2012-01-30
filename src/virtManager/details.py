@@ -1403,6 +1403,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("config-maxmem").set_sensitive(not ro)
 
         # Disable send key menu entries for offline VM
+        self.console.send_key_button.set_sensitive(not (run or paused))
         send_key = self.widget("details-menu-send-key")
         for c in send_key.get_submenu().get_children():
             c.set_sensitive(not (run or paused))

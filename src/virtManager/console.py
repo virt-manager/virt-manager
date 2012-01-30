@@ -561,6 +561,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.scale_type = self.vm.get_console_scaling()
 
         # Fullscreen toolbar
+        self.send_key_button = None
         self.fs_toolbar = None
         self.fs_drawer = None
         self.keycombo_menu = uihelpers.build_keycombo_menu(self.send_key)
@@ -643,12 +644,13 @@ class vmmConsolePages(vmmGObjectUI):
                                      gtk.get_current_event_time(),
                                      self.fs_toolbar)
 
-        item = gtk.ToolButton()
-        item.set_icon_name("preferences-desktop-keyboard-shortcuts")
-        util.tooltip_wrapper(item, _("Send key combination"))
-        item.show_all()
-        item.connect("clicked", keycombo_menu_clicked)
-        self.fs_toolbar.add(item)
+        self.send_key_button = gtk.ToolButton()
+        self.send_key_button.set_icon_name(
+                                "preferences-desktop-keyboard-shortcuts")
+        util.tooltip_wrapper(self.send_key_button, _("Send key combination"))
+        self.send_key_button.show_all()
+        self.send_key_button.connect("clicked", keycombo_menu_clicked)
+        self.fs_toolbar.add(self.send_key_button)
 
         self.fs_drawer = AutoDrawer()
         self.fs_drawer.set_active(False)
