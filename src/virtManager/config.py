@@ -345,45 +345,19 @@ class vmmConfig(object):
         return self.conf.notify_add(
                         self.conf_dir + "/vmlist-fields/network_traffic", cb)
 
-    # Check whether we have GTK-VNC that supports configurable grab keys
-    # installed on the system
-    def vnc_grab_keys_supported(self):
-        try:
-            import gtkvnc
-            return hasattr(gtkvnc.Display, "set_grab_keys")
-        except:
-            return False
-
     # Keys preferences
-    def get_keys_combination(self, syms=False):
-        val = self.conf.get_string(self.conf_dir + "/keys/grab-keys")
-        if syms == True:
-            return val
-
-        # If val is None we return it
-        if val is None:
-            return None
-
-        # We convert keysyms to names
-        keystr = None
-        for k in val.split(','):
-            try:
-                key = int(k)
-            except:
-                key = None
-
-            if key is not None:
-                if keystr is None:
-                    keystr = gtk.gdk.keyval_name(key)
-                else:
-                    keystr = keystr + "+" + gtk.gdk.keyval_name(key)
-
-        return keystr
-
+    def get_keys_combination(self):
+        ret = self.conf.get_string(self.conf_dir + "/keys/grab-keys")
+        if not ret:
+            # Left Control + Left Alt
+            return "65507,65513"
+        return ret
     def set_keys_combination(self, val):
         # Val have to be a list of integers
         val = ','.join(map(str, val))
         self.conf.set_string(self.conf_dir + "/keys/grab-keys", val)
+    def on_keys_combination_changed(self, cb):
+        return self.conf.notify_add(self.conf_dir + "/keys/grab-keys", cb)
 
     # Confirmation preferences
     def get_confirm_forcepoweroff(self):

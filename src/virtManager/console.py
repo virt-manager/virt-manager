@@ -224,19 +224,6 @@ class Viewer(vmmGObject):
     def get_pixbuf(self):
         return self.display.get_pixbuf()
 
-    def get_grab_keys_from_config(self):
-        keys = []
-        grab_keys = self.config.get_keys_combination(True)
-        if grab_keys is not None:
-            # If somebody edited this in GConf it would fail so
-            # we encapsulate this into try/except block
-            try:
-                keys = map(int, grab_keys.split(','))
-            except:
-                logging.debug("Error in grab_keys configuration in GConf")
-
-        return keys
-
     def get_grab_keys(self):
         keystr = None
         try:
@@ -256,9 +243,23 @@ class Viewer(vmmGObject):
 
     def set_grab_keys(self):
         try:
-            keys = self.get_grab_keys_from_config()
-            if keys:
-                self.display.set_grab_keys(keys)
+            keys = self.config.get_keys_combination()
+            if not keys:
+                return
+
+            if not hasattr(self.display, "set_grab_keys"):
+                logging.debug("Display class doesn't support custom grab "
+                              "combination.")
+                return
+
+            try:
+                keys = map(int, keys.split(','))
+            except:
+                logging.debug("Error in grab_keys configuration in GConf",
+                              exc_info=True)
+                return
+
+            self.display.set_grab_keys(keys)
         except Exception, e:
             logging.debug("Error when getting the grab keys combination: %s",
                           str(e))
@@ -279,9 +280,7 @@ class VNCViewer(Viewer):
         self.desktop_resolution = None
 
     def init_widget(self):
-        # Set default grab key combination if found and supported
-        if self.config.vnc_grab_keys_supported():
-            self.set_grab_keys()
+        self.set_grab_keys()
 
         self.display.realize()
 
@@ -392,13 +391,8 @@ class VNCViewer(Viewer):
         self.display.open_fd(fd)
 
     def get_grab_keys(self):
-        keystr = None
-        if self.config.vnc_grab_keys_supported():
-            keystr = super(VNCViewer, self).get_grab_keys()
-
-        # If grab keys are set to None then preserve old behaviour since
-        # the GTK-VNC - we're using older version of GTK-VNC
-        if keystr is None:
+        keystr = self.get_grab_keys()
+        if not keystr:
             keystr = "Control_L+Alt_L"
         return keystr
 
@@ -591,6 +585,8 @@ class vmmConsolePages(vmmGObjectUI):
         scroll.connect("size-allocate", self.scroll_size_allocate)
         self.add_gconf_handle(
             self.config.on_console_accels_changed(self.set_enable_accel))
+        self.add_gconf_handle(
+            self.config.on_keys_combination_changed(self.grab_keys_changed))
 
         self.page_changed()
 
@@ -727,6 +723,11 @@ class vmmConsolePages(vmmGObjectUI):
 
         for g in self.accel_groups:
             self.topwin.add_accel_group(g)
+
+    def grab_keys_changed(self,
+                          ignore1=None, ignore2=None,
+                          ignore3=None, ignore4=None):
+        self.viewer.set_grab_keys()
 
     def set_enable_accel(self, ignore=None, ignore1=None,
                          ignore2=None, ignore3=None):

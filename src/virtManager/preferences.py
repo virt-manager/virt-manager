@@ -168,15 +168,28 @@ class vmmPreferences(vmmGObjectUI):
     def refresh_grabkeys_combination(self, ignore1=None, ignore2=None,
                            ignore3=None, ignore4=None):
         val = self.config.get_keys_combination()
-        if val is None:
-            val = "Control_L+Alt_L"
+
+        # We convert keysyms to names
+        print val
+        if not val:
+            keystr = "Control_L+Alt_L"
+        else:
+            keystr = None
+            for k in val.split(','):
+                try:
+                    key = int(k)
+                except:
+                    key = None
+
+                if key is not None:
+                    if keystr is None:
+                        keystr = gtk.gdk.keyval_name(key)
+                    else:
+                        keystr = keystr + "+" + gtk.gdk.keyval_name(key)
+
 
         prefs_button = self.widget("prefs-keys-grab-changebtn")
-        self.widget("prefs-keys-grab-sequence").set_text(val)
-        if not self.config.vnc_grab_keys_supported():
-            util.tooltip_wrapper(prefs_button,
-                                 _("Installed version of GTK-VNC doesn't "
-                                   "support configurable grab keys"))
+        self.widget("prefs-keys-grab-sequence").set_text(keystr)
 
     def refresh_confirm_forcepoweroff(self, ignore1=None, ignore2=None,
                                       ignore3=None, ignore4=None):
