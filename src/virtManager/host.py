@@ -874,7 +874,16 @@ class vmmHost(vmmGObjectUI):
         for key in vols.keys():
             vol = vols[key]
 
-            path = vol.get_target_path()
+            try:
+                path = vol.get_target_path()
+                name = vol.get_name()
+                cap = vol.get_pretty_capacity()
+                fmt = vol.get_format() or ""
+            except:
+                logging.debug("Error getting volume info for '%s', "
+                              "hiding it", key, exc_info=True)
+                continue
+
             namestr = None
             try:
                 if path:
@@ -885,8 +894,8 @@ class vmmHost(vmmGObjectUI):
             except:
                 logging.exception("Failed to determine if storage volume in "
                                   "use.")
-            model.append([key, vol.get_name(), vol.get_pretty_capacity(),
-                          vol.get_format() or "", namestr])
+
+            model.append([key, name, cap, fmt, namestr])
 
 
     #############################
