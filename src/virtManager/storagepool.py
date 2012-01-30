@@ -114,10 +114,10 @@ class vmmStoragePool(vmmLibvirtObject):
 
         self.pool.refresh(0)
         self.refresh_xml()
-        self.update_volumes()
+        self.update_volumes(refresh=True)
         self.emit("refreshed")
 
-    def update_volumes(self):
+    def update_volumes(self, refresh=False):
         if not self.is_active():
             self._volumes = {}
             return
@@ -128,6 +128,8 @@ class vmmStoragePool(vmmLibvirtObject):
         for volname in vols:
             if volname in self._volumes:
                 new_vol_list[volname] = self._volumes[volname]
+                if refresh:
+                    new_vol_list[volname].refresh_xml()
             else:
                 new_vol_list[volname] = vmmStorageVolume(self.conn,
                                     self.pool.storageVolLookupByName(volname),
