@@ -29,7 +29,7 @@ import gtk
 import gobject
 
 try:
-    import vteee
+    import vte
 except ImportError:
     logging.debug("Could not import vte, no serial console support")
     vte = None
