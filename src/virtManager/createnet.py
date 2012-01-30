@@ -165,7 +165,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             return
 
         # We've got a valid IP
-        if ip.len() < 16 or ip.iptype() != "PRIVATE":
+        if ip.len() < 4 or ip.iptype() != "PRIVATE":
             src.modify_base(gtk.STATE_NORMAL, red)
         else:
             src.modify_base(gtk.STATE_NORMAL, green)
@@ -378,7 +378,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             return self.err.val_err(_("Invalid Network Address"),
                     _("The network must be an IPv4 address"))
 
-        if ip.len() < 16:
+        if ip.len() < 4:
             return self.err.val_err(_("Invalid Network Address"),
                     _("The network prefix must be at least /4 (16 addresses)"))
 
