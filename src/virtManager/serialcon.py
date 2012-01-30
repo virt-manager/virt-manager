@@ -28,7 +28,11 @@ import logging
 import gtk
 import gobject
 
-import vte
+try:
+    import vteee
+except ImportError:
+    logging.debug("Could not import vte, no serial console support")
+    vte = None
 
 import libvirt
 
@@ -305,6 +309,9 @@ class vmmSerialConsole(vmmGObject):
         self.vm.connect("status-changed", self.vm_status_changed)
 
     def init_terminal(self):
+        if not vte:
+            return
+
         self.terminal = vte.Terminal()
         self.terminal.set_cursor_blinks(True)
         self.terminal.set_emulation("xterm")
@@ -339,12 +346,14 @@ class vmmSerialConsole(vmmGObject):
         evbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(0, 0, 0))
         terminalbox = gtk.HBox()
         scrollbar = gtk.VScrollbar()
-        scrollbar.set_adjustment(self.terminal.get_adjustment())
         self.error_label = gtk.Label()
         self.error_label.set_width_chars(40)
         self.error_label.set_line_wrap(True)
 
-        align.add(self.terminal)
+        if self.terminal:
+            scrollbar.set_adjustment(self.terminal.get_adjustment())
+            align.add(self.terminal)
+
         evbox.add(align)
         terminalbox.pack_start(evbox)
         terminalbox.pack_start(scrollbar, expand=False, fill=False)
@@ -367,6 +376,10 @@ class vmmSerialConsole(vmmGObject):
 
     def open_console(self):
         try:
+            if not vte:
+                raise RuntimeError(
+                        _("vte2 is required for text console support"))
+
             self.console.open(self.lookup_dev(), self.terminal)
             self.box.set_current_page(0)
             return True
