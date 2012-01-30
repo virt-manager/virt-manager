@@ -1960,7 +1960,7 @@ class vmmCreate(vmmGObjectUI):
         return True
 
     def pretty_storage(self, size):
-        return "%.1f Gb" % float(size)
+        return "%.1f GB" % float(size)
 
     def pretty_memory(self, mem):
         return "%d MB" % (mem / 1024.0)
