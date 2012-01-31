@@ -129,21 +129,26 @@ class vmmCreateInterface(vmmGObjectUI):
         self.set_initial_state()
 
     def show(self, parent):
+        logging.debug("Showing new interface wizard")
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def show_bond_config(self, src):
+        logging.debug("Showing new interface bond config")
         self.bond_config.show_all()
 
     def show_bridge_config(self, src):
+        logging.debug("Showing new interface bridge config")
         self.bridge_config.show_all()
 
     def show_ip_config(self, src):
+        logging.debug("Showing new interface ip config")
         self.ip_manually_changed = True
         self.ip_config.show_all()
 
     def close(self, ignore1=None, ignore2=None):
+        logging.debug("Closing new interface wizard")
         self.ip_config.hide()
         self.bridge_config.hide()
         self.bond_config.hide()

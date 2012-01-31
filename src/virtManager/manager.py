@@ -18,7 +18,9 @@
 # MA 02110-1301 USA.
 #
 
+import logging
 import re
+
 import gtk
 
 import virtManager.uihelpers as uihelpers
@@ -166,6 +168,7 @@ class vmmManager(vmmGObjectUI):
     ##################
 
     def show(self):
+        logging.debug("Showing manager")
         vis = self.is_visible()
         self.topwin.present()
         if vis:
@@ -178,6 +181,7 @@ class vmmManager(vmmGObjectUI):
         self.emit("manager-opened")
 
     def close(self, src_ignore=None, src2_ignore=None):
+        logging.debug("Closing manager")
         if not self.is_visible():
             return
 

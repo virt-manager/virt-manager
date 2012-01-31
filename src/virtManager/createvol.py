@@ -71,11 +71,13 @@ class vmmCreateVolume(vmmGObjectUI):
 
 
     def show(self, parent):
+        logging.debug("Showing new volume wizard")
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
+        logging.debug("Closing new volume wizard")
         self.topwin.hide()
         self.set_modal(False)
         return 1

@@ -286,6 +286,7 @@ class vmmHost(vmmGObjectUI):
 
 
     def show(self):
+        logging.debug("Showing host details: %s", self.conn)
         vis = self.is_visible()
         self.topwin.present()
         if vis:
@@ -297,6 +298,7 @@ class vmmHost(vmmGObjectUI):
         return bool(self.topwin.flags() & gtk.VISIBLE)
 
     def close(self, ignore1=None, ignore2=None):
+        logging.debug("Closing host details: %s", self.conn)
         if not self.is_visible():
             return
 

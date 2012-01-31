@@ -18,6 +18,8 @@
 # MA 02110-1301 USA.
 #
 
+import logging
+
 import gtk
 
 from virtManager.baseclass import vmmGObject
@@ -133,6 +135,7 @@ class vmmSystray(vmmGObject):
     def show_systray(self, ignore1=None, ignore2=None, ignore3=None,
                      ignore4=None):
         do_show = self.config.get_view_system_tray()
+        logging.debug("Showing systray: %s", do_show)
 
         if not self.systray_icon:
             if do_show:

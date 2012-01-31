@@ -532,6 +532,7 @@ class vmmDetails(vmmGObjectUI):
         self.addhwmenu = None
 
     def show(self):
+        logging.debug("Showing VM details: %s", self.vm)
         vis = self.is_visible()
         self.topwin.present()
         if vis:
@@ -548,6 +549,7 @@ class vmmDetails(vmmGObjectUI):
         return self._close(customize_finish=True)
 
     def close(self, ignore1=None, ignore2=None):
+        logging.debug("Closing VM details: %s", self.vm)
         return self._close()
 
     def _close(self, customize_finish=False):
@@ -1471,7 +1473,6 @@ class vmmDetails(vmmGObjectUI):
             if self.addhw is None:
                 self.addhw = vmmAddHardware(self.vm)
 
-            logging.debug("Launching addhw for vm '%s'", self.vm.get_name())
             self.addhw.show(self.topwin)
         except Exception, e:
             self.err.show_err((_("Error launching hardware dialog: %s") %
@@ -1874,7 +1875,6 @@ class vmmDetails(vmmGObjectUI):
             dialog = self.media_choosers[devtype]
             dialog.dev_id_info = dev_id_info
 
-            logging.debug("Launching choosecd for vm '%s'", self.vm.get_name())
             dialog.show(self.topwin)
         except Exception, e:
             self.err.show_err((_("Error launching media dialog: %s") % e))

@@ -105,11 +105,13 @@ class vmmCreatePool(vmmGObjectUI):
         self.set_initial_state()
 
     def show(self, parent):
+        logging.debug("Showing new pool wizard")
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
+        logging.debug("Closing new pool wizard")
         self.topwin.hide()
         return 1
 

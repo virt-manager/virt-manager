@@ -68,6 +68,7 @@ class vmmDeleteDialog(vmmGObjectUI):
 
 
     def show(self, vm, parent):
+        logging.debug("Showing delete wizard")
         self.vm = vm
         self.conn = vm.conn
 
@@ -76,6 +77,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
+        logging.debug("Closing delete wizard")
         self.topwin.hide()
         self.vm = None
         self.conn = None

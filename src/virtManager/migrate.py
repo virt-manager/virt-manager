@@ -80,12 +80,14 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.init_state()
 
     def show(self, parent):
+        logging.debug("Showing migrate wizard")
         self.reset_state()
         self.topwin.resize(1, 1)
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
+        logging.debug("Closing migrate wizard")
         self.topwin.hide()
         # If we only do this at show time, operation takes too long and
         # user actually sees the expander close.

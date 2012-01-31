@@ -67,6 +67,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.set_initial_state()
 
     def show(self, parent):
+        logging.debug("Showing new network wizard")
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
@@ -77,6 +78,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         return 0
 
     def close(self, ignore1=None, ignore2=None):
+        logging.debug("Closing new network wizard")
         self.topwin.hide()
         return 1
 

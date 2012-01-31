@@ -18,6 +18,8 @@
 # MA 02110-1301 USA.
 #
 
+import logging
+
 import gtk
 
 import virtManager.util as util
@@ -94,10 +96,12 @@ class vmmPreferences(vmmGObjectUI):
         self.widget("prefs-help").hide()
 
     def close(self, ignore1=None, ignore2=None):
+        logging.debug("Closing preferences")
         self.topwin.hide()
         return 1
 
     def show(self, parent):
+        logging.debug("Showing preferences")
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 

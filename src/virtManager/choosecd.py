@@ -49,6 +49,7 @@ class vmmChooseCD(vmmGObjectUI):
         self.reset_state()
 
     def close(self, ignore1=None, ignore2=None):
+        logging.debug("Closing media chooser")
         self.topwin.hide()
         if self.storage_browser:
             self.storage_browser.close()
@@ -56,6 +57,7 @@ class vmmChooseCD(vmmGObjectUI):
         return 1
 
     def show(self, parent):
+        logging.debug("Showing media chooser")
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()

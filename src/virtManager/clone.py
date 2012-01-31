@@ -177,12 +177,14 @@ class vmmCloneVM(vmmGObjectUI):
         self.set_initial_state()
 
     def show(self, parent):
+        logging.debug("Showing clone wizard")
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.resize(1, 1)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
+        logging.debug("Closing clone wizard")
         self.change_mac_close()
         self.change_storage_close()
         self.topwin.hide()

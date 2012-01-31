@@ -94,15 +94,18 @@ class vmmConnect(vmmGObjectUI):
         self.reset_state()
 
     def cancel(self, ignore1=None, ignore2=None):
+        logging.debug("Cancelling open connection")
         self.close()
         self.emit("cancelled")
         return 1
 
     def close(self, ignore1=None, ignore2=None):
+        logging.debug("Closing open connection")
         self.topwin.hide()
         self.stop_browse()
 
     def show(self, parent):
+        logging.debug("Showing open connection")
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
