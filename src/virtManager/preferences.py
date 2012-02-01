@@ -22,7 +22,6 @@ import logging
 
 import gtk
 
-import virtManager.util as util
 from virtManager.baseclass import vmmGObjectUI
 
 PREFS_PAGE_STATS    = 0
@@ -174,7 +173,6 @@ class vmmPreferences(vmmGObjectUI):
         val = self.config.get_keys_combination()
 
         # We convert keysyms to names
-        print val
         if not val:
             keystr = "Control_L+Alt_L"
         else:
@@ -192,7 +190,6 @@ class vmmPreferences(vmmGObjectUI):
                         keystr = keystr + "+" + gtk.gdk.keyval_name(key)
 
 
-        prefs_button = self.widget("prefs-keys-grab-changebtn")
         self.widget("prefs-keys-grab-sequence").set_text(keystr)
 
     def refresh_confirm_forcepoweroff(self, ignore1=None, ignore2=None,

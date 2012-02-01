@@ -18,9 +18,6 @@ PYLINT_FILES="virtManager/ _virt-manager virtManagerTui/ _virt-manager-tui"
 # Don't print pylint config warning
 NO_PYL_CONFIG=".*No config file found.*"
 
-# The gettext function is installed in the builtin namespace
-GETTEXT_VAR="Undefined variable '_'"
-
 # Optional modules that may not be available
 UNABLE_IMPORT="Unable to import '(appindicator)"
 
@@ -43,6 +40,10 @@ INFER_ERRORS="Instance of '${INFER_LIST}.*not be inferred"
 
 # Hacks for testing
 TEST_HACKS="protected member (_is_virtinst_test_uri|_open_test_uri)"
+
+# cli/gui diff causes confusion
+STUBCLASS="Instance of 'stubclass'"
+DBUSINTERFACE="Instance of 'Interface'"
 
 DMSG=""
 skipmsg() {
@@ -86,23 +87,26 @@ SHOW_REPORT="n"
 AWK=awk
 [ `uname -s` = 'SunOS' ] && AWK=nawk
 
+
 echo "Running pylint"
 pylint --ignore=$IGNOREFILES $PYLINT_FILES \
+  --additional-builtins=_ \
   --reports=$SHOW_REPORT \
   --output-format=colorized \
   --dummy-variables-rgx="dummy|ignore.*|.*_ignore" \
   --disable=${DMSG}\
   --disable=${DCHECKERS} 2>&1 | \
-  egrep -ve "$NO_PYL_CONFIG" \
-        -ve "$GETTEXT_VAR" \
-        -ve "$OS_EXIT" \
-        -ve "$BUILTIN_TYPE" \
-        -ve "$INFER_ERRORS" \
-        -ve "$MAIN_NONETYPE" \
-        -ve "$TEST_HACKS" \
-        -ve "$UNABLE_IMPORT" \
-        -ve "$STYLE_ATTACH" \
-        -ve "$VBOX_ATTACH" | \
+egrep -ve "$NO_PYL_CONFIG" \
+      -ve "$OS_EXIT" \
+      -ve "$BUILTIN_TYPE" \
+      -ve "$STUBCLASS" \
+      -ve "$DBUSINTERFACE" \
+      -ve "$MAIN_NONETYPE" \
+      -ve "$TEST_HACKS" \
+      -ve "$UNABLE_IMPORT" \
+      -ve "$STYLE_ATTACH" \
+      -ve "$VBOX_PACK" \
+      -ve "$INFER_ERRORS" | \
 $AWK '\
 # Strip out any "*** Module name" lines if we dont list any errors for them
 BEGIN { found=0; cur_line="" }

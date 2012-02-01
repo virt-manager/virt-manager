@@ -69,7 +69,7 @@ def _do_we_have_session():
 
     try:
         ret = manager.GetSessionForUnixProcess(pid)
-        logging.debug("Found ConsoleKit session=%s" % ret)
+        logging.debug("Found ConsoleKit session=%s", ret)
     except:
         logging.exception("Failed to lookup pid session")
         return False
@@ -1575,7 +1575,8 @@ class vmmConnection(vmmGObject):
             except Exception, e:
                 logging.exception("Tick for VM '%s' failed", vm.get_name())
                 if (isinstance(e, libvirt.libvirtError) and
-                    e.get_error_code() == libvirt.VIR_ERR_SYSTEM_ERROR):
+                    (getattr(e, "get_error_code")() ==
+                     libvirt.VIR_ERR_SYSTEM_ERROR)):
                     # Try a simple getInfo call to see if conn was dropped
                     self.vmm.getInfo()
                     logging.debug("vm tick raised system error but "

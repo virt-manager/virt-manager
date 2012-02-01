@@ -18,6 +18,8 @@
 # MA 02110-1301 USA.
 #
 
+import logging
+
 import gtk
 
 from virtManager.baseclass import vmmGObjectUI

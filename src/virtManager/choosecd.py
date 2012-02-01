@@ -18,6 +18,8 @@
 # MA 02110-1301 USA.
 #
 
+import logging
+
 import virtManager.uihelpers as uihelpers
 import virtManager.util as util
 from virtManager.baseclass import vmmGObjectUI
