@@ -42,7 +42,7 @@ INTERFACE_PAGE_ERROR = 1
 
 class vmmHost(vmmGObjectUI):
     def __init__(self, conn):
-        vmmGObjectUI.__init__(self, "vmm-host.glade", "vmm-host")
+        vmmGObjectUI.__init__(self, "vmm-host.ui", "vmm-host")
         self.conn = conn
 
         self.title = conn.get_short_hostname() + " " + self.topwin.get_title()
@@ -91,7 +91,7 @@ class vmmHost(vmmGObjectUI):
 
         self.conn.connect("state-changed", self.conn_state_changed)
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_menu_file_view_manager_activate" : self.view_manager,
             "on_menu_file_quit_activate" : self.exit_app,
             "on_menu_file_close_activate": self.close,

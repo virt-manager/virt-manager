@@ -45,7 +45,7 @@ gettext_dir = "::GETTEXTDIR::"
 virtinst_str = "::VIRTINST_VERSION::"
 
 asset_dir = "::ASSETDIR::"
-glade_dir = asset_dir
+ui_dir = asset_dir
 icon_dir = asset_dir + "/icons"
 pylib_dir = "::PYLIBDIR::"
 pyarchlib_dir = "::PYARCHLIBDIR::"
@@ -70,21 +70,16 @@ def _show_startup_error(msg, details):
                  debug=False)
 
 def setup_pypath():
-    global glade_dir, icon_dir
+    global ui_dir, icon_dir
 
     # Hack to find assets in local dir for dev purposes
     if os.path.exists(os.getcwd() + "/src/virt-manager.py.in"):
-        glade_dir = os.path.join(os.getcwd(), "src")
+        ui_dir = os.path.join(os.getcwd(), "src")
         icon_dir = os.path.join(os.getcwd(), "icons")
     else:
         sys.path.insert(0, pylib_dir)
         sys.path.insert(0, pyarchlib_dir)
 
-
-def setup_glade_i18n():
-    import gtk.glade
-    gtk.glade.bindtextdomain(gettext_app, gettext_dir)
-    gtk.glade.textdomain(gettext_app)
 
 def drop_tty():
     # We fork and setsid so that we drop the controlling
@@ -300,7 +295,6 @@ def main():
     icon_theme.prepend_search_path(icon_dir)
 
     gtk.gdk.threads_init()
-    setup_glade_i18n()
 
     import dbus
     import dbus.glib
@@ -312,7 +306,7 @@ def main():
     # display access
     import virtManager.config
     import virtManager.util
-    config = virtManager.config.vmmConfig(appname, appversion, glade_dir)
+    config = virtManager.config.vmmConfig(appname, appversion, ui_dir)
     virtManager.util.running_config = config
     config.default_qemu_user = default_qemu_user
     config.rhel6_defaults = rhel_enable_unsupported_opts

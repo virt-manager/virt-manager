@@ -32,7 +32,7 @@ from virtManager.baseclass import vmmGObjectUI
 class vmmStorageBrowser(vmmGObjectUI):
     def __init__(self, conn):
         vmmGObjectUI.__init__(self,
-                            "vmm-storage-browse.glade",
+                            "vmm-storage-browse.ui",
                             "vmm-storage-browse")
         self.conn = conn
 
@@ -51,7 +51,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         self.rhel6_defaults = True
         self.local_args = {}
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_vmm_storage_browse_delete_event" : self.close,
             "on_browse_cancel_clicked" : self.close,
             "on_browse_local_clicked" : self.browse_local,

@@ -48,14 +48,14 @@ def uri_join(uri_tuple):
 
 class vmmMigrateDialog(vmmGObjectUI):
     def __init__(self, vm, engine):
-        vmmGObjectUI.__init__(self, "vmm-migrate.glade", "vmm-migrate")
+        vmmGObjectUI.__init__(self, "vmm-migrate.ui", "vmm-migrate")
         self.vm = vm
         self.conn = vm.conn
         self.engine = engine
 
         self.destconn_rows = []
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_vmm_migrate_delete_event" : self.close,
 
             "on_migrate_cancel_clicked" : self.close,

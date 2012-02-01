@@ -51,10 +51,10 @@ def default_conn_user(conn):
 class vmmConnect(vmmGObjectUI):
     def __init__(self):
         vmmGObjectUI.__init__(self,
-                              "vmm-open-connection.glade",
+                              "vmm-open-connection.ui",
                               "vmm-open-connection")
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_hypervisor_changed": self.hypervisor_changed,
             "on_connection_changed": self.conn_changed,
             "on_hostname_combo_changed": self.hostname_combo_changed,

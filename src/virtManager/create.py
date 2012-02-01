@@ -63,7 +63,7 @@ RHEL6_OS_SUPPORT = [
 
 class vmmCreate(vmmGObjectUI):
     def __init__(self, engine):
-        vmmGObjectUI.__init__(self, "vmm-create.glade", "vmm-create")
+        vmmGObjectUI.__init__(self, "vmm-create.ui", "vmm-create")
         self.engine = engine
 
         self.conn = None
@@ -98,7 +98,7 @@ class vmmCreate(vmmGObjectUI):
         self.config_window = None
         self.config_window_signals = []
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_vmm_newcreate_delete_event" : self.close,
 
             "on_create_cancel_clicked": self.close,

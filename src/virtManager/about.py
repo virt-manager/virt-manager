@@ -38,9 +38,9 @@ gtk.about_dialog_set_url_hook(on_url)
 
 class vmmAbout(vmmGObjectUI):
     def __init__(self):
-        vmmGObjectUI.__init__(self, "vmm-about.glade", "vmm-about")
+        vmmGObjectUI.__init__(self, "vmm-about.ui", "vmm-about")
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_vmm_about_delete_event": self.close,
             "on_vmm_about_response": self.close,
             })

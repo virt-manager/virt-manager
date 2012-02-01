@@ -1,92 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<glade-interface>
-  <!-- interface-requires gtk+ 2.16 -->
-  <!-- interface-naming-policy project-wide -->
-  <widget class="GtkWindow" id="vmm-migrate">
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">70000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment2">
+    <property name="upper">10000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="upper">1000000</property>
+    <property name="value">30</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">1000</property>
+  </object>
+  <object class="GtkWindow" id="vmm-migrate">
+    <property name="can_focus">False</property>
     <property name="title" translatable="yes">Migrate the virtual machine</property>
     <property name="default_width">400</property>
     <property name="default_height">300</property>
     <property name="type_hint">dialog</property>
-    <signal name="delete_event" handler="on_vmm_migrate_delete_event"/>
+    <signal name="delete-event" handler="on_vmm_migrate_delete_event" swapped="no"/>
     <child>
-      <widget class="GtkVBox" id="vbox1">
+      <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <property name="spacing">6</property>
         <child>
-          <widget class="GtkViewport" id="migrate-header">
+          <object class="GtkViewport" id="migrate-header">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="resize_mode">queue</property>
             <child>
-              <widget class="GtkHBox" id="hbox77">
+              <object class="GtkHBox" id="hbox77">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="border_width">6</property>
                 <property name="spacing">10</property>
                 <child>
-                  <widget class="GtkHBox" id="migrate-vm-icon-box">
+                  <object class="GtkHBox" id="migrate-vm-icon-box">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <placeholder/>
                     </child>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="migrate-main-label">
+                  <object class="GtkLabel" id="migrate-main-label">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label">&lt;span size='large' color='white'&gt;Placeholder&lt;/span&gt;</property>
                     <property name="use_markup">True</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkVBox" id="vbox2">
+          <object class="GtkVBox" id="vbox2">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="border_width">12</property>
             <property name="spacing">18</property>
             <child>
-              <widget class="GtkVBox" id="vbox3">
+              <object class="GtkVBox" id="vbox3">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="spacing">18</property>
                 <child>
-                  <widget class="GtkTable" id="table2">
+                  <object class="GtkTable" id="table2">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="n_rows">4</property>
                     <property name="n_columns">2</property>
                     <property name="column_spacing">6</property>
                     <property name="row_spacing">6</property>
                     <child>
-                      <widget class="GtkLabel" id="label7">
+                      <object class="GtkLabel" id="label7">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">&lt;span color='#484848'&gt;Name:&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="x_options">GTK_FILL</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label8">
+                      <object class="GtkLabel" id="label8">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">&lt;span color='#484848'&gt;Original host:&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
@@ -94,12 +123,13 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label9">
+                      <object class="GtkLabel" id="label9">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">&lt;span color='#484848'&gt;New host:&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
@@ -107,11 +137,12 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="migrate-label-name">
+                      <object class="GtkLabel" id="migrate-label-name">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label">label</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
@@ -119,11 +150,12 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="migrate-label-src">
+                      <object class="GtkLabel" id="migrate-label-src">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label">label</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
@@ -133,14 +165,15 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label10">
+                      <object class="GtkLabel" id="label10">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">&lt;span color='#484848'&gt;Migrate _offline:&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">migrate-offline</property>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="top_attach">3</property>
                         <property name="bottom_attach">4</property>
@@ -148,30 +181,36 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkHBox" id="hbox3">
+                      <object class="GtkHBox" id="hbox3">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <child>
-                          <widget class="GtkCheckButton" id="migrate-offline">
+                          <object class="GtkCheckButton" id="migrate-offline">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="xalign">1</property>
                             <property name="draw_indicator">True</property>
-                          </widget>
+                          </object>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="label13">
+                          <object class="GtkLabel" id="label13">
                             <property name="visible">True</property>
-                          </widget>
+                            <property name="can_focus">False</property>
+                          </object>
                           <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
-                      </widget>
+                      </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
@@ -180,10 +219,11 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkComboBox" id="migrate-dest">
+                      <object class="GtkComboBox" id="migrate-dest">
                         <property name="visible">True</property>
-                        <signal name="changed" handler="on_migrate_dest_changed"/>
-                      </widget>
+                        <property name="can_focus">False</property>
+                        <signal name="changed" handler="on_migrate_dest_changed" swapped="no"/>
+                      </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
@@ -191,78 +231,91 @@
                         <property name="bottom_attach">3</property>
                       </packing>
                     </child>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkExpander" id="migrate-advanced-expander">
+                  <object class="GtkExpander" id="migrate-advanced-expander">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="spacing">6</property>
                     <child>
-                      <widget class="GtkVBox" id="vbox4">
+                      <object class="GtkVBox" id="vbox4">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="spacing">6</property>
                         <child>
-                          <widget class="GtkAlignment" id="alignment2">
+                          <object class="GtkAlignment" id="alignment2">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="left_padding">6</property>
                             <child>
-                              <widget class="GtkHBox" id="migrate-secure-box">
+                              <object class="GtkHBox" id="migrate-secure-box">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="spacing">6</property>
                                 <child>
-                                  <widget class="GtkLabel" id="label11">
+                                  <object class="GtkLabel" id="label11">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">_Tunnel migration through libvirt's daemon:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">migrate-secure</property>
-                                  </widget>
+                                  </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkCheckButton" id="migrate-secure">
+                                  <object class="GtkCheckButton" id="migrate-secure">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="use_action_appearance">False</property>
                                     <property name="draw_indicator">True</property>
-                                  </widget>
+                                  </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="fill">True</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
-                              </widget>
+                              </object>
                             </child>
-                          </widget>
+                          </object>
                           <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkHBox" id="migrate-maxdowntime-box">
+                          <object class="GtkHBox" id="migrate-maxdowntime-box">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="spacing">3</property>
                             <child>
-                              <widget class="GtkAlignment" id="alignment4">
+                              <object class="GtkAlignment" id="alignment4">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="left_padding">6</property>
                                 <child>
-                                  <widget class="GtkLabel" id="label15">
+                                  <object class="GtkLabel" id="label15">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="xalign">1</property>
                                     <property name="label" translatable="yes">Max downtime:</property>
                                     <property name="use_markup">True</property>
                                     <property name="use_underline">True</property>
-                                  </widget>
+                                  </object>
                                 </child>
-                              </widget>
+                              </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
@@ -270,13 +323,14 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkCheckButton" id="migrate-set-maxdowntime">
+                              <object class="GtkCheckButton" id="migrate-set-maxdowntime">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="on_migrate_set_maxdowntime_toggled"/>
-                              </widget>
+                                <signal name="toggled" handler="on_migrate_set_maxdowntime_toggled" swapped="no"/>
+                              </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
@@ -284,129 +338,154 @@
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox8">
+                              <object class="GtkHBox" id="hbox8">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="spacing">6</property>
                                 <child>
-                                  <widget class="GtkHBox" id="hbox9">
+                                  <object class="GtkHBox" id="hbox9">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="spacing">6</property>
                                     <child>
-                                      <widget class="GtkSpinButton" id="migrate-max-downtime">
+                                      <object class="GtkSpinButton" id="migrate-max-downtime">
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
                                         <property name="invisible_char">●</property>
-                                        <property name="adjustment">30 0 1000000 1 1000 0</property>
+                                        <property name="adjustment">adjustment3</property>
                                         <property name="snap_to_ticks">True</property>
                                         <property name="numeric">True</property>
-                                      </widget>
+                                      </object>
                                       <packing>
                                         <property name="expand">False</property>
+                                        <property name="fill">True</property>
                                         <property name="position">0</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkLabel" id="label16">
+                                      <object class="GtkLabel" id="label16">
                                         <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="xalign">0</property>
                                         <property name="label" translatable="yes">ms</property>
-                                      </widget>
+                                      </object>
                                       <packing>
+                                        <property name="expand">True</property>
+                                        <property name="fill">True</property>
                                         <property name="position">1</property>
                                       </packing>
                                     </child>
-                                  </widget>
+                                  </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkAlignment" id="alignment6">
+                                  <object class="GtkAlignment" id="alignment6">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <child>
                                       <placeholder/>
                                     </child>
-                                  </widget>
+                                  </object>
                                   <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
-                              </widget>
+                              </object>
                               <packing>
                                 <property name="expand">False</property>
+                                <property name="fill">True</property>
                                 <property name="position">2</property>
                               </packing>
                             </child>
-                          </widget>
+                          </object>
                           <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkFrame" id="frame1">
+                          <object class="GtkFrame" id="frame1">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="label_xalign">0</property>
                             <property name="shadow_type">none</property>
                             <child>
-                              <widget class="GtkAlignment" id="alignment1">
+                              <object class="GtkAlignment" id="alignment1">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="left_padding">22</property>
                                 <child>
-                                  <widget class="GtkTable" id="table1">
+                                  <object class="GtkTable" id="table1">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="n_rows">3</property>
                                     <property name="n_columns">3</property>
                                     <property name="column_spacing">6</property>
                                     <property name="row_spacing">6</property>
                                     <child>
-                                      <widget class="GtkHBox" id="hbox2">
+                                      <object class="GtkHBox" id="hbox2">
                                         <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="spacing">6</property>
                                         <child>
-                                          <widget class="GtkHBox" id="hbox1">
+                                          <object class="GtkHBox" id="hbox1">
                                             <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
                                             <property name="spacing">6</property>
                                             <child>
-                                              <widget class="GtkSpinButton" id="migrate-rate">
+                                              <object class="GtkSpinButton" id="migrate-rate">
                                                 <property name="visible">True</property>
                                                 <property name="sensitive">False</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="invisible_char">•</property>
-                                                <property name="adjustment">0 0 10000 1 10 0</property>
-                                              </widget>
+                                                <property name="adjustment">adjustment2</property>
+                                              </object>
                                               <packing>
                                                 <property name="expand">False</property>
+                                                <property name="fill">True</property>
                                                 <property name="position">0</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkLabel" id="label4">
+                                              <object class="GtkLabel" id="label4">
                                                 <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
                                                 <property name="xalign">0</property>
                                                 <property name="label" translatable="yes">Mbps</property>
-                                              </widget>
+                                              </object>
                                               <packing>
+                                                <property name="expand">True</property>
+                                                <property name="fill">True</property>
                                                 <property name="position">1</property>
                                               </packing>
                                             </child>
-                                          </widget>
+                                          </object>
                                           <packing>
                                             <property name="expand">False</property>
+                                            <property name="fill">True</property>
                                             <property name="position">0</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <widget class="GtkLabel" id="label6">
+                                          <object class="GtkLabel" id="label6">
                                             <property name="visible">True</property>
-                                          </widget>
+                                            <property name="can_focus">False</property>
+                                          </object>
                                           <packing>
                                             <property name="expand">False</property>
+                                            <property name="fill">True</property>
                                             <property name="position">1</property>
                                           </packing>
                                         </child>
-                                      </widget>
+                                      </object>
                                       <packing>
                                         <property name="left_attach">2</property>
                                         <property name="right_attach">3</property>
@@ -416,25 +495,27 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkLabel" id="label2">
+                                      <object class="GtkLabel" id="label2">
                                         <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="xalign">1</property>
                                         <property name="label" translatable="yes">_Address:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">migrate-set-interface</property>
-                                      </widget>
+                                      </object>
                                       <packing>
                                         <property name="x_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkLabel" id="label5">
+                                      <object class="GtkLabel" id="label5">
                                         <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="xalign">1</property>
                                         <property name="label" translatable="yes">_Port:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">migrate-set-port</property>
-                                      </widget>
+                                      </object>
                                       <packing>
                                         <property name="top_attach">1</property>
                                         <property name="bottom_attach">2</property>
@@ -442,13 +523,14 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkLabel" id="label3">
+                                      <object class="GtkLabel" id="label3">
                                         <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
                                         <property name="xalign">1</property>
                                         <property name="label" translatable="yes">_Bandwidth:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">migrate-set-rate</property>
-                                      </widget>
+                                      </object>
                                       <packing>
                                         <property name="top_attach">2</property>
                                         <property name="bottom_attach">3</property>
@@ -456,13 +538,14 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkCheckButton" id="migrate-set-interface">
+                                      <object class="GtkCheckButton" id="migrate-set-interface">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
+                                        <property name="use_action_appearance">False</property>
                                         <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="on_migrate_set_interface_toggled"/>
-                                      </widget>
+                                        <signal name="toggled" handler="on_migrate_set_interface_toggled" swapped="no"/>
+                                      </object>
                                       <packing>
                                         <property name="left_attach">1</property>
                                         <property name="right_attach">2</property>
@@ -471,13 +554,14 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkCheckButton" id="migrate-set-port">
+                                      <object class="GtkCheckButton" id="migrate-set-port">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
+                                        <property name="use_action_appearance">False</property>
                                         <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="on_migrate_set_port_toggled"/>
-                                      </widget>
+                                        <signal name="toggled" handler="on_migrate_set_port_toggled" swapped="no"/>
+                                      </object>
                                       <packing>
                                         <property name="left_attach">1</property>
                                         <property name="right_attach">2</property>
@@ -488,13 +572,14 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkCheckButton" id="migrate-set-rate">
+                                      <object class="GtkCheckButton" id="migrate-set-rate">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
+                                        <property name="use_action_appearance">False</property>
                                         <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="on_migrate_set_rate_toggled"/>
-                                      </widget>
+                                        <signal name="toggled" handler="on_migrate_set_rate_toggled" swapped="no"/>
+                                      </object>
                                       <packing>
                                         <property name="left_attach">1</property>
                                         <property name="right_attach">2</property>
@@ -505,12 +590,12 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkEntry" id="migrate-interface">
+                                      <object class="GtkEntry" id="migrate-interface">
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
                                         <property name="invisible_char">•</property>
-                                      </widget>
+                                      </object>
                                       <packing>
                                         <property name="left_attach">2</property>
                                         <property name="right_attach">3</property>
@@ -518,33 +603,38 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkHBox" id="hbox4">
+                                      <object class="GtkHBox" id="hbox4">
                                         <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
                                         <child>
-                                          <widget class="GtkSpinButton" id="migrate-port">
+                                          <object class="GtkSpinButton" id="migrate-port">
                                             <property name="visible">True</property>
                                             <property name="sensitive">False</property>
                                             <property name="can_focus">True</property>
                                             <property name="invisible_char">•</property>
-                                            <property name="adjustment">0 0 70000 1 10 0</property>
-                                          </widget>
+                                            <property name="adjustment">adjustment1</property>
+                                          </object>
                                           <packing>
                                             <property name="expand">False</property>
+                                            <property name="fill">True</property>
                                             <property name="position">0</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <widget class="GtkAlignment" id="alignment3">
+                                          <object class="GtkAlignment" id="alignment3">
                                             <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
                                             <child>
                                               <placeholder/>
                                             </child>
-                                          </widget>
+                                          </object>
                                           <packing>
+                                            <property name="expand">True</property>
+                                            <property name="fill">True</property>
                                             <property name="position">1</property>
                                           </packing>
                                         </child>
-                                      </widget>
+                                      </object>
                                       <packing>
                                         <property name="left_attach">2</property>
                                         <property name="right_attach">3</property>
@@ -553,61 +643,63 @@
                                         <property name="x_options">GTK_FILL</property>
                                       </packing>
                                     </child>
-                                  </widget>
+                                  </object>
                                 </child>
-                              </widget>
+                              </object>
                             </child>
-                            <child>
-                              <widget class="GtkLabel" id="label12">
+                            <child type="label">
+                              <object class="GtkLabel" id="label12">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">&lt;b&gt;Connectivity&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
-                              </widget>
-                              <packing>
-                                <property name="type">label_item</property>
-                              </packing>
+                              </object>
                             </child>
-                          </widget>
+                          </object>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">2</property>
                           </packing>
                         </child>
-                      </widget>
+                      </object>
                     </child>
-                    <child>
-                      <widget class="GtkLabel" id="label123">
+                    <child type="label">
+                      <object class="GtkLabel" id="label123">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="is_focus">True</property>
                         <property name="label" translatable="yes">Advanced options</property>
-                      </widget>
-                      <packing>
-                        <property name="type">label_item</property>
-                      </packing>
+                      </object>
                     </child>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkHButtonBox" id="hbuttonbox1">
+              <object class="GtkHButtonBox" id="hbuttonbox1">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="spacing">12</property>
                 <property name="layout_style">end</property>
                 <child>
-                  <widget class="GtkButton" id="migrate-help">
+                  <object class="GtkButton" id="migrate-help">
                     <property name="label">gtk-help</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="use_stock">True</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
@@ -616,14 +708,15 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkButton" id="migrate-cancel">
+                  <object class="GtkButton" id="migrate-cancel">
                     <property name="label">gtk-cancel</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_migrate_cancel_clicked"/>
-                  </widget>
+                    <signal name="clicked" handler="on_migrate_cancel_clicked" swapped="no"/>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
@@ -631,32 +724,36 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkButton" id="migrate-finish">
+                  <object class="GtkButton" id="migrate-finish">
                     <property name="label" translatable="yes">_Migrate</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
-                    <signal name="clicked" handler="on_migrate_finish_clicked"/>
-                  </widget>
+                    <signal name="clicked" handler="on_migrate_finish_clicked" swapped="no"/>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
+                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+  </object>
+</interface>

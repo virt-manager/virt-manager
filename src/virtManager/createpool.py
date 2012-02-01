@@ -36,14 +36,14 @@ PAGE_FORMAT = 1
 class vmmCreatePool(vmmGObjectUI):
     def __init__(self, conn):
         vmmGObjectUI.__init__(self,
-                              "vmm-create-pool.glade",
+                              "vmm-create-pool.ui",
                               "vmm-create-pool")
         self.conn = conn
 
         self._pool = None
         self._pool_class = Storage.StoragePool
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_pool_forward_clicked" : self.forward,
             "on_pool_back_clicked"    : self.back,
             "on_pool_cancel_clicked"  : self.close,

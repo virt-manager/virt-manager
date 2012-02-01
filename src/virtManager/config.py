@@ -88,11 +88,11 @@ class vmmConfig(object):
     DEFAULT_VIRT_IMAGE_DIR = "/var/lib/libvirt/images"
     DEFAULT_VIRT_SAVE_DIR = "/var/lib/libvirt"
 
-    def __init__(self, appname, appversion, glade_dir):
+    def __init__(self, appname, appversion, ui_dir):
         self.appname = appname
         self.appversion = appversion
         self.conf_dir = "/apps/" + appname
-        self.glade_dir = glade_dir
+        self.ui_dir = ui_dir
 
         self.conf = gconf.client_get_default()
         self.conf.add_dir(self.conf_dir, gconf.CLIENT_PRELOAD_NONE)
@@ -159,8 +159,8 @@ class vmmConfig(object):
         return self.appname
     def get_appversion(self):
         return self.appversion
-    def get_glade_dir(self):
-        return self.glade_dir
+    def get_ui_dir(self):
+        return self.ui_dir
 
     def get_spice_error(self):
         if self._spice_error is None:

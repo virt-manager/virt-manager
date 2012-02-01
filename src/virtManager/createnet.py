@@ -37,10 +37,10 @@ PAGE_SUMMARY = 5
 
 class vmmCreateNetwork(vmmGObjectUI):
     def __init__(self, conn):
-        vmmGObjectUI.__init__(self, "vmm-create-net.glade", "vmm-create-net")
+        vmmGObjectUI.__init__(self, "vmm-create-net.ui", "vmm-create-net")
         self.conn = conn
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_create_pages_switch_page" : self.page_changed,
             "on_create_cancel_clicked" : self.close,
             "on_vmm_create_delete_event" : self.close,

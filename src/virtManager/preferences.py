@@ -29,7 +29,7 @@ PREFS_PAGE_VM_PREFS = 1
 
 class vmmPreferences(vmmGObjectUI):
     def __init__(self):
-        vmmGObjectUI.__init__(self, "vmm-preferences.glade", "vmm-preferences")
+        vmmGObjectUI.__init__(self, "vmm-preferences.ui", "vmm-preferences")
 
         self.add_gconf_handle(self.config.on_view_system_tray_changed(self.refresh_view_system_tray))
         self.add_gconf_handle(self.config.on_console_accels_changed(self.refresh_console_accels))
@@ -67,7 +67,7 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_confirm_interface()
         self.refresh_confirm_unapplied()
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_prefs_system_tray_toggled" : self.change_view_system_tray,
             "on_prefs_stats_update_interval_changed": self.change_update_interval,
             "on_prefs_stats_history_length_changed": self.change_history_length,

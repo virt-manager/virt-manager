@@ -64,7 +64,7 @@ char_widget_mappings = {
 class vmmAddHardware(vmmGObjectUI):
     def __init__(self, vm):
         vmmGObjectUI.__init__(self,
-                              "vmm-add-hardware.glade", "vmm-add-hardware")
+                              "vmm-add-hardware.ui", "vmm-add-hardware")
 
         self.vm = vm
         self.conn = vm.conn
@@ -76,7 +76,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         self._dev = None
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_create_cancel_clicked" : self.close,
             "on_vmm_create_delete_event" : self.close,
             "on_create_finish_clicked" : self.finish,

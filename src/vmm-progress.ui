@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<glade-interface>
-  <!-- interface-requires gtk+ 2.6 -->
-  <!-- interface-naming-policy toplevel-contextual -->
-  <widget class="GtkWindow" id="vmm-progress">
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <object class="GtkWindow" id="vmm-progress">
+    <property name="can_focus">False</property>
     <property name="border_width">12</property>
     <property name="title" translatable="yes">Operation in progress</property>
     <property name="window_position">center-on-parent</property>
@@ -11,26 +11,30 @@
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="urgency_hint">True</property>
-    <signal name="delete_event" handler="on_async_job_delete_event"/>
+    <signal name="delete-event" handler="on_async_job_delete_event" swapped="no"/>
     <child>
-      <widget class="GtkAlignment" id="alignment134">
+      <object class="GtkAlignment" id="alignment134">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <child>
-          <widget class="GtkVBox" id="vbox13">
+          <object class="GtkVBox" id="vbox13">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="spacing">5</property>
             <child>
-              <widget class="GtkHBox" id="hbox50">
+              <object class="GtkHBox" id="hbox50">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <child>
-                  <widget class="GtkImage" id="image99">
+                  <object class="GtkImage" id="image99">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="yalign">0</property>
                     <property name="xpad">3</property>
                     <property name="ypad">10</property>
                     <property name="stock">gtk-dialog-info</property>
                     <property name="icon-size">6</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
@@ -38,63 +42,76 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="pbar-text">
+                  <object class="GtkLabel" id="pbar-text">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
                     <property name="label" translatable="yes">Please wait a few moments...</property>
                     <property name="wrap">True</property>
-                  </widget>
+                  </object>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="warning-box">
+              <object class="GtkHBox" id="warning-box">
+                <property name="can_focus">False</property>
                 <property name="spacing">6</property>
                 <child>
-                  <widget class="GtkImage" id="warning-icon">
+                  <object class="GtkImage" id="warning-icon">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xpad">3</property>
                     <property name="stock">gtk-dialog-warning</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="warning-text">
+                  <object class="GtkLabel" id="warning-text">
                     <property name="width_request">400</property>
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label">some warning</property>
                     <property name="wrap">True</property>
-                  </widget>
+                  </object>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
+                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkLabel" id="pbar-stage">
+              <object class="GtkLabel" id="pbar-stage">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
                 <property name="xpad">3</property>
                 <property name="ypad">3</property>
                 <property name="label" translatable="yes">Processing...</property>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -102,10 +119,11 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkProgressBar" id="pbar">
+              <object class="GtkProgressBar" id="pbar">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="pulse_step">0.10000000149</property>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
@@ -113,42 +131,47 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="hbox1">
+              <object class="GtkHBox" id="hbox1">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="spacing">12</property>
                 <child>
-                  <widget class="GtkLabel" id="label1">
+                  <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
-                  </widget>
+                    <property name="can_focus">False</property>
+                  </object>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkButton" id="cancel-async-job">
+                  <object class="GtkButton" id="cancel-async-job">
                     <property name="label">gtk-cancel</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_async_job_cancel_clicked"/>
-                  </widget>
+                    <signal name="clicked" handler="on_async_job_cancel_clicked" swapped="no"/>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="position">4</property>
               </packing>
             </child>
-          </widget>
+          </object>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+  </object>
+</interface>

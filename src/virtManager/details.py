@@ -294,7 +294,7 @@ def lookup_nodedev(vmmconn, hostdev):
 
 class vmmDetails(vmmGObjectUI):
     def __init__(self, vm, parent=None):
-        vmmGObjectUI.__init__(self, "vmm-details.glade", "vmm-details")
+        vmmGObjectUI.__init__(self, "vmm-details.ui", "vmm-details")
         self.vm = vm
         self.conn = self.vm.conn
 
@@ -344,7 +344,7 @@ class vmmDetails(vmmGObjectUI):
         self.network_traffic_graph = None
         self.init_graphs()
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_close_details_clicked": self.close,
             "on_details_menu_close_activate": self.close,
             "on_vmm_details_delete_event": self.close,
@@ -562,8 +562,8 @@ class vmmDetails(vmmGObjectUI):
 
         self.topwin.hide()
         if (self.console.viewer and
-            self.console.viewer.get_widget() and
-            self.console.viewer.get_widget().flags() & gtk.VISIBLE):
+            self.console.viewer.display and
+            self.console.viewer.display.flags() & gtk.VISIBLE):
             try:
                 self.console.close_viewer()
             except:
@@ -698,7 +698,7 @@ class vmmDetails(vmmGObjectUI):
         desc.set_buffer(buf)
 
         # List of applications.
-        apps_list = self.window.get_widget("inspection-apps")
+        apps_list = self.widget("inspection-apps")
         apps_model = gtk.ListStore(str, str, str)
         apps_list.set_model(apps_model)
 
@@ -2515,16 +2515,16 @@ class vmmDetails(vmmGObjectUI):
         hostname = self.vm.inspection.hostname
         if not hostname:
             hostname = _("unknown")
-        self.window.get_widget("inspection-hostname").set_text(hostname)
+        self.widget("inspection-hostname").set_text(hostname)
         product_name = self.vm.inspection.product_name
         if not product_name:
             product_name = _("unknown")
-        self.window.get_widget("inspection-product-name").set_text(product_name)
+        self.widget("inspection-product-name").set_text(product_name)
 
         # Applications (also inspection data)
         apps = self.vm.inspection.applications or []
 
-        apps_list = self.window.get_widget("inspection-apps")
+        apps_list = self.widget("inspection-apps")
         apps_model = apps_list.get_model()
         apps_model.clear()
         for app in apps:
@@ -3117,7 +3117,7 @@ class vmmDetails(vmmGObjectUI):
 
         no_default = not self.is_customize_dialog
         uihelpers.populate_video_combo(self.vm,
-                                self.window.get_widget("video-model-combo"),
+                                self.widget("video-model-combo"),
                                 no_default=no_default)
 
         model = vid.model_type

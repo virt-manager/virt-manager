@@ -59,57 +59,23 @@ IP_NONE = 2
 class vmmCreateInterface(vmmGObjectUI):
     def __init__(self, conn):
         vmmGObjectUI.__init__(self,
-                              "vmm-create-interface.glade",
+                              "vmm-create-interface.ui",
                               "vmm-create-interface")
         self.conn = conn
         self.interface = None
 
-        # Bridge configuration dialog
-        self.bridge_config_win = gtk.glade.XML(self.gladefile,
-                                               "bridge-config",
-                                               domain="virt-manager")
-        self.bridge_config = self.bridge_config_win.get_widget(
-                                                        "bridge-config")
-        self.bridge_config_win.signal_autoconnect({
-            "on_bridge_config_delete_event": self.bridge_config_finish,
-            "on_bridge_ok_clicked" : self.bridge_config_finish,
-        })
+        self.bridge_config = self.widget("bridge-config")
         self.bridge_config.set_transient_for(self.topwin)
 
-        # Bond configuration dialog
-        self.bond_config_win = gtk.glade.XML(self.gladefile,
-                                             "bond-config",
-                                             domain="virt-manager")
-        self.bond_config = self.bond_config_win.get_widget("bond-config")
-        self.bond_config_win.signal_autoconnect({
-            "on_bond_config_delete_event": self.bond_config_finish,
-            "on_bond_ok_clicked" : self.bond_config_finish,
-
-            "on_bond_monitor_mode_changed": self.bond_monitor_mode_changed,
-        })
+        self.bond_config = self.widget("bond-config")
         self.bond_config.set_transient_for(self.topwin)
 
-        self.ip_config_win = gtk.glade.XML(self.gladefile,
-                                           "ip-config",
-                                           domain="virt-manager")
-        self.ip_config = self.ip_config_win.get_widget("ip-config")
-        self.ip_config_win.signal_autoconnect({
-            "on_ip_config_delete_event": self.ip_config_finish,
-            "on_ip_ok_clicked": self.ip_config_finish,
-
-            "on_ip_copy_interface_toggled": self.ip_copy_interface_toggled,
-
-            "on_ipv4_mode_changed": self.ipv4_mode_changed,
-            "on_ipv6_mode_changed": self.ipv6_mode_changed,
-
-            "on_ipv6_address_add_clicked": self.ipv6_address_add,
-            "on_ipv6_address_remove_clicked": self.ipv6_address_remove,
-        })
+        self.ip_config = self.widget("ip-config")
         self.ip_config.set_transient_for(self.topwin)
 
         self.ip_manually_changed = False
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_vmm_create_interface_delete_event" : self.close,
 
             "on_cancel_clicked": self.close,
@@ -123,6 +89,28 @@ class vmmCreateInterface(vmmGObjectUI):
             "on_bond_config_button_clicked": self.show_bond_config,
             "on_ip_config_button_clicked": self.show_ip_config,
             "on_vlan_tag_changed": self.update_interface_name,
+
+            # Bridge config dialog
+            "on_bridge_config_delete_event": self.bridge_config_finish,
+            "on_bridge_ok_clicked" : self.bridge_config_finish,
+
+            # IP config dialog
+            "on_ip_config_delete_event": self.ip_config_finish,
+            "on_ip_ok_clicked": self.ip_config_finish,
+
+            "on_ip_copy_interface_toggled": self.ip_copy_interface_toggled,
+
+            "on_ipv4_mode_changed": self.ipv4_mode_changed,
+            "on_ipv6_mode_changed": self.ipv6_mode_changed,
+
+            "on_ipv6_address_add_clicked": self.ipv6_address_add,
+            "on_ipv6_address_remove_clicked": self.ipv6_address_remove,
+
+            # Bond config dialog
+            "on_bond_config_delete_event": self.bond_config_finish,
+            "on_bond_ok_clicked" : self.bond_config_finish,
+
+            "on_bond_monitor_mode_changed": self.bond_monitor_mode_changed,
         })
         self.bind_escape_key_close()
 
@@ -178,7 +166,7 @@ class vmmCreateInterface(vmmGObjectUI):
     def set_initial_state(self):
 
         self.widget("pages").set_show_tabs(False)
-        self.bond_config_win.get_widget("bond-pages").set_show_tabs(False)
+        self.widget("bond-pages").set_show_tabs(False)
 
         # FIXME: Unhide this when we make some documentation
         self.widget("help").hide()
@@ -258,7 +246,7 @@ class vmmCreateInterface(vmmGObjectUI):
         useCol.set_sort_column_id(INTERFACE_ROW_IN_USE_BY)
 
         # Bond config
-        mode_list = self.bond_config_win.get_widget("bond-mode")
+        mode_list = self.widget("bond-mode")
         mode_model = gtk.ListStore(str, str)
         mode_list.set_model(mode_model)
         txt = gtk.CellRendererText()
@@ -268,7 +256,7 @@ class vmmCreateInterface(vmmGObjectUI):
         for m in Interface.InterfaceBond.INTERFACE_BOND_MODES:
             mode_model.append([m, m])
 
-        mon_list = self.bond_config_win.get_widget("bond-monitor-mode")
+        mon_list = self.widget("bond-monitor-mode")
         mon_model = gtk.ListStore(str, str)
         mon_list.set_model(mon_model)
         txt = gtk.CellRendererText()
@@ -278,7 +266,7 @@ class vmmCreateInterface(vmmGObjectUI):
         for m in Interface.InterfaceBond.INTERFACE_BOND_MONITOR_MODES:
             mon_model.append([m, m])
 
-        validate_list = self.bond_config_win.get_widget("arp-validate")
+        validate_list = self.widget("arp-validate")
         validate_model = gtk.ListStore(str)
         validate_list.set_model(validate_model)
         txt = gtk.CellRendererText()
@@ -287,7 +275,7 @@ class vmmCreateInterface(vmmGObjectUI):
         for m in Interface.InterfaceBond.INTERFACE_BOND_MONITOR_MODE_ARP_VALIDATE_MODES:
             validate_model.append([m])
 
-        carrier_list = self.bond_config_win.get_widget("mii-carrier")
+        carrier_list = self.widget("mii-carrier")
         carrier_model = gtk.ListStore(str)
         carrier_list.set_model(carrier_model)
         txt = gtk.CellRendererText()
@@ -297,7 +285,7 @@ class vmmCreateInterface(vmmGObjectUI):
             carrier_model.append([m])
 
         # IP config
-        copy_iface = self.ip_config_win.get_widget("ip-copy-interface-combo")
+        copy_iface = self.widget("ip-copy-interface-combo")
         copy_model = gtk.ListStore(str, object, bool)
         copy_iface.set_model(copy_model)
         txt = gtk.CellRendererText()
@@ -305,7 +293,7 @@ class vmmCreateInterface(vmmGObjectUI):
         copy_iface.add_attribute(txt, "text", 0)
         copy_iface.add_attribute(txt, "sensitive", 2)
 
-        ip_mode = self.ip_config_win.get_widget("ipv4-mode")
+        ip_mode = self.widget("ipv4-mode")
         ip_model = gtk.ListStore(str)
         ip_mode.set_model(ip_model)
         txt = gtk.CellRendererText()
@@ -315,7 +303,7 @@ class vmmCreateInterface(vmmGObjectUI):
         ip_model.insert(IP_STATIC, ["Static"])
         ip_model.insert(IP_NONE, ["No configuration"])
 
-        ip_mode = self.ip_config_win.get_widget("ipv6-mode")
+        ip_mode = self.widget("ipv6-mode")
         ip_model = gtk.ListStore(str)
         ip_mode.set_model(ip_model)
         txt = gtk.CellRendererText()
@@ -325,7 +313,7 @@ class vmmCreateInterface(vmmGObjectUI):
         ip_model.insert(IP_STATIC, ["Static"])
         ip_model.insert(IP_NONE, ["No configuration"])
 
-        v6_addr = self.ip_config_win.get_widget("ipv6-address-list")
+        v6_addr = self.widget("ipv6-address-list")
         addr_model = gtk.ListStore(str)
         v6_addr.set_model(addr_model)
         txt_col = gtk.TreeViewColumn("")
@@ -351,33 +339,33 @@ class vmmCreateInterface(vmmGObjectUI):
         self.widget("interface-activate").set_active(False)
 
         # Bridge config
-        self.bridge_config_win.get_widget("bridge-delay").set_value(0)
-        self.bridge_config_win.get_widget("bridge-stp").set_active(True)
+        self.widget("bridge-delay").set_value(0)
+        self.widget("bridge-stp").set_active(True)
 
         # Bond config
-        self.bond_config_win.get_widget("bond-mode").set_active(0)
-        self.bond_config_win.get_widget("bond-monitor-mode").set_active(0)
+        self.widget("bond-mode").set_active(0)
+        self.widget("bond-monitor-mode").set_active(0)
 
-        self.bond_config_win.get_widget("arp-interval").set_value(0)
-        self.bond_config_win.get_widget("arp-target").set_text("")
-        self.bond_config_win.get_widget("arp-validate").set_active(0)
+        self.widget("arp-interval").set_value(0)
+        self.widget("arp-target").set_text("")
+        self.widget("arp-validate").set_active(0)
 
-        self.bond_config_win.get_widget("mii-frequency").set_value(0)
-        self.bond_config_win.get_widget("mii-updelay").set_value(0)
-        self.bond_config_win.get_widget("mii-downdelay").set_value(0)
-        self.bond_config_win.get_widget("mii-carrier").set_active(0)
+        self.widget("mii-frequency").set_value(0)
+        self.widget("mii-updelay").set_value(0)
+        self.widget("mii-downdelay").set_value(0)
+        self.widget("mii-carrier").set_active(0)
 
         # IP config
         self.ip_manually_changed = False
-        self.ip_config_win.get_widget("ip-do-manual").set_active(True)
-        self.ip_config_win.get_widget("ip-do-manual-box").set_current_page(0)
+        self.widget("ip-do-manual").set_active(True)
+        self.widget("ip-do-manual-box").set_current_page(0)
 
-        self.ip_config_win.get_widget("ipv4-mode").set_active(IP_DHCP)
-        self.ip_config_win.get_widget("ipv4-address").set_text("")
-        self.ip_config_win.get_widget("ipv4-gateway").set_text("")
+        self.widget("ipv4-mode").set_active(IP_DHCP)
+        self.widget("ipv4-address").set_text("")
+        self.widget("ipv4-gateway").set_text("")
 
-        self.ip_config_win.get_widget("ipv6-mode").set_active(IP_NONE)
-        self.ip_config_win.get_widget("ipv6-autoconf").set_active(False)
+        self.widget("ipv6-mode").set_active(IP_NONE)
+        self.widget("ipv6-autoconf").set_active(False)
         self.ipv6_address_selected()
 
     def populate_details_page(self):
@@ -426,8 +414,8 @@ class vmmCreateInterface(vmmGObjectUI):
         itype = self.get_config_interface_type()
         ifaces = self.get_config_selected_interfaces()
 
-        copy_radio = self.ip_config_win.get_widget("ip-copy-interface")
-        copy_combo = self.ip_config_win.get_widget("ip-copy-interface-combo")
+        copy_radio = self.widget("ip-copy-interface")
+        copy_combo = self.widget("ip-copy-interface-combo")
         copy_model = copy_combo.get_model()
 
         # Only select 'copy from' option if using bridge/bond/vlan
@@ -494,7 +482,7 @@ class vmmCreateInterface(vmmGObjectUI):
             if (enable_copy and have_valid_copy):
                 copy_radio.set_active(True)
             else:
-                self.ip_config_win.get_widget("ip-do-manual").set_active(True)
+                self.widget("ip-do-manual").set_active(True)
 
         self.update_ip_desc()
 
@@ -631,18 +619,18 @@ class vmmCreateInterface(vmmGObjectUI):
         return ret
 
     def get_config_bridge_params(self):
-        delay = self.bridge_config_win.get_widget("bridge-delay").get_value()
-        stp = self.bridge_config_win.get_widget("bridge-stp").get_active()
+        delay = self.widget("bridge-delay").get_value()
+        stp = self.widget("bridge-stp").get_active()
         return [delay, stp]
 
     def get_config_ipv6_address_selection(self):
-        src = self.ip_config_win.get_widget("ipv6-address-list")
+        src = self.widget("ipv6-address-list")
         selection = src.get_selection()
         ignore, treepath = selection.get_selected()
         return treepath
 
     def get_config_ipv6_addresses(self):
-        src = self.ip_config_win.get_widget("ipv6-address-list")
+        src = self.widget("ipv6-address-list")
         model = src.get_model()
         return map(lambda x: x[0], model)
 
@@ -682,7 +670,7 @@ class vmmCreateInterface(vmmGObjectUI):
     def bond_monitor_mode_changed(self, src):
         model = src.get_model()
         value = model[src.get_active()][1]
-        bond_pages = self.bond_config_win.get_widget("bond-pages")
+        bond_pages = self.widget("bond-pages")
 
         if value == "arpmon":
             page = BOND_PAGE_ARP
@@ -696,16 +684,16 @@ class vmmCreateInterface(vmmGObjectUI):
     def ip_copy_interface_toggled(self, src):
         active = src.get_active()
 
-        self.ip_config_win.get_widget("ip-copy-interface-box").set_sensitive(active)
-        self.ip_config_win.get_widget("ip-do-manual-box").set_sensitive(not active)
+        self.widget("ip-copy-interface-box").set_sensitive(active)
+        self.widget("ip-do-manual-box").set_sensitive(not active)
 
     def ipv4_mode_changed(self, src):
         static = (src.get_active() == IP_STATIC)
-        self.ip_config_win.get_widget("ipv4-static-box").set_sensitive(static)
+        self.widget("ipv4-static-box").set_sensitive(static)
 
     def ipv6_mode_changed(self, src):
         static = (src.get_active() == IP_STATIC)
-        self.ip_config_win.get_widget("ipv6-static-box").set_sensitive(static)
+        self.widget("ipv6-static-box").set_sensitive(static)
 
     def update_bridge_desc(self):
         delay, stp = self.get_config_bridge_params()
@@ -715,11 +703,11 @@ class vmmCreateInterface(vmmGObjectUI):
         self.widget("bridge-config-label").set_text(txt)
 
     def update_bond_desc(self):
-        mode_list = self.bond_config_win.get_widget("bond-mode")
+        mode_list = self.widget("bond-mode")
         model = mode_list.get_model()
         mode = model[mode_list.get_active()][0]
 
-        mon_list = self.bond_config_win.get_widget("bond-monitor-mode")
+        mon_list = self.widget("bond-monitor-mode")
         model = mon_list.get_model()
         mon = model[mon_list.get_active()][1]
 
@@ -791,17 +779,17 @@ class vmmCreateInterface(vmmGObjectUI):
 
             return ip
 
-        is_manual = self.ip_config_win.get_widget("ip-do-manual").get_active()
+        is_manual = self.widget("ip-do-manual").get_active()
 
-        copy_row = get_row(self.ip_config_win.get_widget("ip-copy-interface-combo"))
+        copy_row = get_row(self.widget("ip-copy-interface-combo"))
 
-        v4_mode = self.ip_config_win.get_widget("ipv4-mode").get_active()
-        v4_addr = self.ip_config_win.get_widget("ipv4-address").get_text()
-        v4_gate = self.ip_config_win.get_widget("ipv4-gateway").get_text()
+        v4_mode = self.widget("ipv4-mode").get_active()
+        v4_addr = self.widget("ipv4-address").get_text()
+        v4_gate = self.widget("ipv4-gateway").get_text()
 
-        v6_mode = self.ip_config_win.get_widget("ipv6-mode").get_active()
-        v6_auto = self.ip_config_win.get_widget("ipv6-autoconf").get_active()
-        v6_gate = self.ip_config_win.get_widget("ipv6-gateway").get_text()
+        v6_mode = self.widget("ipv6-mode").get_active()
+        v6_auto = self.widget("ipv6-autoconf").get_active()
+        v6_gate = self.widget("ipv6-gateway").get_text()
         v6_addrlist = self.get_config_ipv6_addresses()
 
         copy_name = None
@@ -840,19 +828,19 @@ class vmmCreateInterface(vmmGObjectUI):
         return [is_manual, copy_name, ipv4, ipv6, proto_xml]
 
     def ipv6_address_add(self, src):
-        src = self.ip_config_win.get_widget("ipv6-address-list")
+        src = self.widget("ipv6-address-list")
         model = src.get_model()
         model.append(["Insert address/prefix"])
 
     def ipv6_address_remove(self, src):
         treepath = self.get_config_ipv6_address_selection()
-        src = self.ip_config_win.get_widget("ipv6-address-list")
+        src = self.widget("ipv6-address-list")
         model = src.get_model()
         if treepath != None:
             del(model[treepath])
 
     def ipv6_address_editted(self, src, path, new_text):
-        src = self.ip_config_win.get_widget("ipv6-address-list")
+        src = self.widget("ipv6-address-list")
         model = src.get_model()
         row = model[path]
         row[0] = new_text
@@ -861,8 +849,7 @@ class vmmCreateInterface(vmmGObjectUI):
         treepath = self.get_config_ipv6_address_selection()
         has_selection = (treepath != None)
 
-        self.ip_config_win.get_widget("ipv6-address-remove").set_sensitive(
-                                                                has_selection)
+        self.widget("ipv6-address-remove").set_sensitive(has_selection)
 
 
     #######################
@@ -1008,8 +995,8 @@ class vmmCreateInterface(vmmGObjectUI):
         return True
 
     def validate_bridge(self, iobj, ifaces):
-        delay = self.bridge_config_win.get_widget("bridge-delay").get_value()
-        stp = self.bridge_config_win.get_widget("bridge-stp").get_active()
+        delay = self.widget("bridge-delay").get_value()
+        stp = self.widget("bridge-stp").get_active()
 
         iobj.stp = stp
         iobj.delay = int(delay)
@@ -1018,30 +1005,30 @@ class vmmCreateInterface(vmmGObjectUI):
 
 
     def validate_bond(self, iobj, ifaces):
-        mode_list = self.bond_config_win.get_widget("bond-mode")
+        mode_list = self.widget("bond-mode")
         model = mode_list.get_model()
         mode = model[mode_list.get_active()][1]
 
-        mon_list = self.bond_config_win.get_widget("bond-monitor-mode")
+        mon_list = self.widget("bond-monitor-mode")
         model = mon_list.get_model()
         mon = model[mon_list.get_active()][1]
 
-        val_list = self.bond_config_win.get_widget("arp-validate")
+        val_list = self.widget("arp-validate")
         val_model = val_list.get_model()
         arp_val = val_model[val_list.get_active()][0]
 
-        car_list = self.bond_config_win.get_widget("mii-carrier")
+        car_list = self.widget("mii-carrier")
         car_model = car_list.get_model()
         mii_car = car_model[car_list.get_active()][0]
 
         # ARP params
-        arp_int = self.bond_config_win.get_widget("arp-interval").get_value()
-        arp_tar = self.bond_config_win.get_widget("arp-target").get_text()
+        arp_int = self.widget("arp-interval").get_value()
+        arp_tar = self.widget("arp-target").get_text()
 
         # MII params
-        mii_freq = self.bond_config_win.get_widget("mii-frequency").get_value()
-        mii_up = self.bond_config_win.get_widget("mii-updelay").get_value()
-        mii_down = self.bond_config_win.get_widget("mii-downdelay").get_value()
+        mii_freq = self.widget("mii-frequency").get_value()
+        mii_up = self.widget("mii-updelay").get_value()
+        mii_down = self.widget("mii-downdelay").get_value()
 
         iobj.bond_mode = mode
         iobj.monitor_mode = mon

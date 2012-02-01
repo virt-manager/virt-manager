@@ -71,7 +71,7 @@ gtk.rc_parse_string(rcstring)
 
 class vmmManager(vmmGObjectUI):
     def __init__(self):
-        vmmGObjectUI.__init__(self, "vmm-manager.glade", "vmm-manager")
+        vmmGObjectUI.__init__(self, "vmm-manager.ui", "vmm-manager")
 
         self.delete_dialog = None
         self.ignore_pause = False
@@ -98,7 +98,7 @@ class vmmManager(vmmGObjectUI):
         self.guestcpucol = None
         self.hostcpucol = None
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_menu_view_guest_cpu_usage_activate":
                     (self.toggle_stats_visible, COL_GUEST_CPU),
             "on_menu_view_host_cpu_usage_activate":
@@ -362,11 +362,9 @@ class vmmManager(vmmGObjectUI):
                               bool, bool, bool, bool, gtk.gdk.Color,
                               gtk.gdk.Pixbuf)
         vmlist.set_model(model)
-        util.tooltip_wrapper(vmlist, ROW_HINT, "set_tooltip_column")
-
+        vmlist.set_tooltip_column(ROW_HINT)
         vmlist.set_headers_visible(True)
-        if hasattr(vmlist, "set_level_indentation"):
-            vmlist.set_level_indentation(-15)
+        vmlist.set_level_indentation(-15)
 
         nameCol = gtk.TreeViewColumn(_("Name"))
         nameCol.set_expand(True)
@@ -905,7 +903,7 @@ class vmmManager(vmmGObjectUI):
         model.row_changed(row.path, row.iter)
 
     def vm_inspection_changed(self, vm):
-        vmlist = self.window.get_widget("vm-list")
+        vmlist = self.widget("vm-list")
         model = vmlist.get_model()
 
         if self.vm_row_key(vm) not in self.rows:
@@ -1124,15 +1122,13 @@ class vmmManager(vmmGObjectUI):
             widget.set_sensitive(False)
             tool_text = _("Disabled in preferences dialog.")
 
-        util.tooltip_wrapper(widget, tool_text)
+        widget.set_tooltip_text(tool_text)
 
-        # RHEL5 GTK doesn't support get_label for a checkmenuitem
-        if hasattr(widget, "get_label"):
-            disabled_text = _(" (disabled)")
-            current_text = widget.get_label().strip(disabled_text)
-            if tool_text:
-                current_text = current_text + disabled_text
-            widget.set_label(current_text)
+        disabled_text = _(" (disabled)")
+        current_text = widget.get_label().strip(disabled_text)
+        if tool_text:
+            current_text = current_text + disabled_text
+        widget.set_label(current_text)
 
     def toggle_network_traffic_visible_widget(self, *ignore):
         val = self.config.is_vmlist_network_traffic_visible()

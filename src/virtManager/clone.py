@@ -121,7 +121,7 @@ def do_we_default(conn, vol, path, ro, shared, devtype):
 
 class vmmCloneVM(vmmGObjectUI):
     def __init__(self, orig_vm):
-        vmmGObjectUI.__init__(self, "vmm-clone.glade", "vmm-clone")
+        vmmGObjectUI.__init__(self, "vmm-clone.ui", "vmm-clone")
         self.orig_vm = orig_vm
 
         self.conn = self.orig_vm.conn
@@ -135,36 +135,30 @@ class vmmCloneVM(vmmGObjectUI):
 
         self.storage_browser = None
 
-        self.change_mac_window = gtk.glade.XML(self.gladefile,
-                                               "vmm-change-mac",
-                                               domain="virt-manager")
-        self.change_mac = self.change_mac_window.get_widget("vmm-change-mac")
-        self.change_mac_window.signal_autoconnect({
+        self.change_mac = self.widget("vmm-change-mac")
+        self.change_mac.set_transient_for(self.topwin)
+
+        self.change_storage = self.widget("vmm-change-storage")
+        self.change_storage.set_transient_for(self.topwin)
+
+        self.window.connect_signals({
+            "on_clone_delete_event" : self.close,
+            "on_clone_cancel_clicked" : self.close,
+            "on_clone_ok_clicked" : self.finish,
+            "on_clone_help_clicked" : self.show_help,
+
+            # Change mac dialog
             "on_vmm_change_mac_delete_event": self.change_mac_close,
             "on_change_mac_cancel_clicked" : self.change_mac_close,
             "on_change_mac_ok_clicked" : self.change_mac_finish,
-        })
-        self.change_mac.set_transient_for(self.topwin)
 
-        self.change_storage_window = gtk.glade.XML(self.gladefile,
-                                                   "vmm-change-storage",
-                                                   domain="virt-manager")
-        self.change_storage = self.change_storage_window.get_widget("vmm-change-storage")
-        self.change_storage_window.signal_autoconnect({
+            # Change storage dialog
             "on_vmm_change_storage_delete_event": self.change_storage_close,
             "on_change_storage_cancel_clicked" : self.change_storage_close,
             "on_change_storage_ok_clicked" : self.change_storage_finish,
             "on_change_storage_doclone_toggled" : self.change_storage_doclone_toggled,
 
             "on_change_storage_browse_clicked" : self.change_storage_browse,
-        })
-        self.change_storage.set_transient_for(self.topwin)
-
-        self.window.signal_autoconnect({
-            "on_clone_delete_event" : self.close,
-            "on_clone_cancel_clicked" : self.close,
-            "on_clone_ok_clicked" : self.finish,
-            "on_clone_help_clicked" : self.show_help,
         })
         self.bind_escape_key_close()
 
@@ -605,9 +599,9 @@ class vmmCloneVM(vmmGObjectUI):
         new_mac  = row[NETWORK_INFO_NEW_MAC]
         typ = row[NETWORK_INFO_LABEL]
 
-        self.change_mac_window.get_widget("change-mac-orig").set_text(orig_mac)
-        self.change_mac_window.get_widget("change-mac-type").set_text(typ)
-        self.change_mac_window.get_widget("change-mac-new").set_text(new_mac)
+        self.widget("change-mac-orig").set_text(orig_mac)
+        self.widget("change-mac-type").set_text(typ)
+        self.widget("change-mac-new").set_text(new_mac)
 
         self.change_mac.show_all()
 
@@ -636,9 +630,8 @@ class vmmCloneVM(vmmGObjectUI):
     def change_storage_doclone_toggled(self, src):
         do_clone = src.get_active()
 
-        cs = self.change_storage_window
-        cs.get_widget("change-storage-new").set_sensitive(do_clone)
-        cs.get_widget("change-storage-browse").set_sensitive(do_clone)
+        self.widget("change-storage-new").set_sensitive(do_clone)
+        self.widget("change-storage-browse").set_sensitive(do_clone)
 
     def storage_change_path(self, row):
         # If storage paths are dependent on manually entered clone name,
@@ -653,30 +646,29 @@ class vmmCloneVM(vmmGObjectUI):
         can_share = row[STORAGE_INFO_CAN_SHARE]
         do_clone = row[STORAGE_INFO_DO_CLONE]
 
-        cs = self.change_storage_window
-        cs.get_widget("change-storage-doclone").set_active(True)
-        cs.get_widget("change-storage-doclone").toggled()
-        cs.get_widget("change-storage-orig").set_text(orig)
-        cs.get_widget("change-storage-target").set_text(tgt)
-        cs.get_widget("change-storage-size").set_text(size or "-")
-        cs.get_widget("change-storage-doclone").set_active(do_clone)
+        self.widget("change-storage-doclone").set_active(True)
+        self.widget("change-storage-doclone").toggled()
+        self.widget("change-storage-orig").set_text(orig)
+        self.widget("change-storage-target").set_text(tgt)
+        self.widget("change-storage-size").set_text(size or "-")
+        self.widget("change-storage-doclone").set_active(do_clone)
 
         if can_clone:
-            cs.get_widget("change-storage-new").set_text(new or "")
+            self.widget("change-storage-new").set_text(new or "")
         else:
-            cs.get_widget("change-storage-new").set_text("")
-        cs.get_widget("change-storage-doclone").set_sensitive(can_clone and
-                                                              can_share)
+            self.widget("change-storage-new").set_text("")
+        self.widget("change-storage-doclone").set_sensitive(can_clone and
+                                                            can_share)
 
-        cs.get_widget("vmm-change-storage").show_all()
+        self.widget("vmm-change-storage").show_all()
 
     def set_orig_vm(self, new_orig):
         self.orig_vm = new_orig
         self.conn = self.orig_vm.conn
 
     def change_mac_finish(self, ignore):
-        orig = self.change_mac_window.get_widget("change-mac-orig").get_text()
-        new = self.change_mac_window.get_widget("change-mac-new").get_text()
+        orig = self.widget("change-mac-orig").get_text()
+        new = self.widget("change-mac-new").get_text()
         row = self.net_list[orig]
 
         try:
@@ -691,13 +683,12 @@ class vmmCloneVM(vmmGObjectUI):
         self.change_mac_close()
 
     def change_storage_finish(self, ignore):
-        cs = self.change_storage_window
-        target = cs.get_widget("change-storage-target").get_text()
+        target = self.widget("change-storage-target").get_text()
         row = self.storage_list[target]
 
         # Sync 'do clone' checkbox, and main dialog combo
         combo = row[STORAGE_INFO_COMBO]
-        do_clone = cs.get_widget("change-storage-doclone").get_active()
+        do_clone = self.widget("change-storage-doclone").get_active()
         if do_clone:
             combo.set_active(STORAGE_COMBO_CLONE)
         else:
@@ -708,7 +699,7 @@ class vmmCloneVM(vmmGObjectUI):
             self.change_storage_close()
             return
 
-        new_path = cs.get_widget("change-storage-new").get_text()
+        new_path = self.widget("change-storage-new").get_text()
 
         if virtinst.VirtualDisk.path_exists(self.clone_design.original_conn,
                                             new_path):
@@ -844,10 +835,8 @@ class vmmCloneVM(vmmGObjectUI):
             self.orig_vm.set_cloning(False)
 
     def change_storage_browse(self, ignore):
-
-        cs = self.change_storage_window
         def callback(src_ignore, txt):
-            cs.get_widget("change-storage-new").set_text(txt)
+            self.widget("change-storage-new").set_text(txt)
 
         if self.storage_browser == None:
             self.storage_browser = vmmStorageBrowser(self.conn)

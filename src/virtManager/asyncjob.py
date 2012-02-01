@@ -102,7 +102,7 @@ class vmmAsyncJob(vmmGObjectUI):
                       when cancel button is clicked
         @cancel_args: Arguments for optional cancel_back
         """
-        vmmGObjectUI.__init__(self, "vmm-progress.glade", "vmm-progress")
+        vmmGObjectUI.__init__(self, "vmm-progress.ui", "vmm-progress")
         self.topwin.set_transient_for(parent)
 
         self.async = bool(async)
@@ -123,7 +123,7 @@ class vmmAsyncJob(vmmGObjectUI):
         self.bg_thread = asyncJobWorker(callback, args)
         logging.debug("Creating async job for function cb=%s", callback)
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_async_job_delete_event" : self.delete,
             "on_async_job_cancel_clicked" : self.cancel,
         })

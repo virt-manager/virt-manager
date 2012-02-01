@@ -43,11 +43,11 @@ STORAGE_ROW_TOOLTIP = 7
 
 class vmmDeleteDialog(vmmGObjectUI):
     def __init__(self):
-        vmmGObjectUI.__init__(self, "vmm-delete.glade", "vmm-delete")
+        vmmGObjectUI.__init__(self, "vmm-delete.ui", "vmm-delete")
         self.vm = None
         self.conn = None
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_vmm_delete_delete_event" : self.close,
             "on_delete_cancel_clicked" : self.close,
             "on_delete_ok_clicked" : self.finish,

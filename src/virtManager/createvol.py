@@ -34,7 +34,7 @@ DEFAULT_CAP   = 1000
 
 class vmmCreateVolume(vmmGObjectUI):
     def __init__(self, conn, parent_pool):
-        vmmGObjectUI.__init__(self, "vmm-create-vol.glade", "vmm-create-vol")
+        vmmGObjectUI.__init__(self, "vmm-create-vol.ui", "vmm-create-vol")
         self.conn = conn
         self.parent_pool = parent_pool
 
@@ -42,7 +42,7 @@ class vmmCreateVolume(vmmGObjectUI):
         self.vol = None
         self.vol_class = Storage.StoragePool.get_volume_for_pool(parent_pool.get_type())
 
-        self.window.signal_autoconnect({
+        self.window.connect_signals({
             "on_vmm_create_vol_delete_event" : self.close,
             "on_vol_cancel_clicked"  : self.close,
             "on_vol_create_clicked"  : self.finish,

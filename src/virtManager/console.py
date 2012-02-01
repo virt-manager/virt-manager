@@ -218,9 +218,6 @@ class Viewer(vmmGObject):
         self.display = None
         self.console = None
 
-    def get_widget(self):
-        return self.display
-
     def get_pixbuf(self):
         return self.display.get_pixbuf()
 
@@ -307,7 +304,7 @@ class VNCViewer(Viewer):
 
     def _desktop_resize(self, src_ignore, w, h):
         self.desktop_resolution = (w, h)
-        self.console.window.get_widget("console-vnc-scroll").queue_resize()
+        self.console.window.get_object("console-vnc-scroll").queue_resize()
 
     def get_desktop_resolution(self):
         return self.desktop_resolution
@@ -471,7 +468,7 @@ class SpiceViewer(Viewer):
 
             self.display_channel = channel
             self.display = spice.Display(self.spice_session, channel_id)
-            self.console.window.get_widget("console-vnc-viewport").add(self.display)
+            self.console.window.get_object("console-vnc-viewport").add(self.display)
             self._init_widget()
             self.console.connected()
             return
@@ -576,7 +573,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.widget("console-vnc-viewport").modify_bg(gtk.STATE_NORMAL,
                                                       black)
 
-        # Signals are added by vmmDetails. Don't use signal_autoconnect here
+        # Signals are added by vmmDetails. Don't use connect_signals here
         # or it changes will be overwritten
         # Set console scaling
         self.add_gconf_handle(
@@ -676,8 +673,9 @@ class vmmConsolePages(vmmGObjectUI):
         self.topwin.set_title(title)
 
     def viewer_focus_changed(self, ignore1=None, ignore2=None):
-        has_focus = self.viewer and self.viewer.get_widget() and \
-            self.viewer.get_widget().get_property("has-focus")
+        has_focus = (self.viewer and
+                     self.viewer.display and
+                     self.viewer.display.get_property("has-focus"))
         force_accel = self.config.get_console_accels()
 
         if force_accel:
@@ -852,7 +850,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         v = self.viewer # close_viewer() can be reentered
         self.viewer = None
-        w = v.get_widget()
+        w = v.display
 
         if w and w in viewport.get_children():
             viewport.remove(w)
@@ -936,8 +934,8 @@ class vmmConsolePages(vmmGObjectUI):
     def activate_viewer_page(self):
         self.widget("console-pages").set_current_page(PAGE_VIEWER)
         self.widget("details-menu-vm-screenshot").set_sensitive(True)
-        if self.viewer and self.viewer.get_widget():
-            self.viewer.get_widget().grab_focus()
+        if self.viewer and self.viewer.display:
+            self.viewer.display.grab_focus()
 
     def page_changed(self, ignore1=None, ignore2=None, ignore3=None):
         self.set_allow_fullscreen()
@@ -1082,8 +1080,7 @@ class vmmConsolePages(vmmGObjectUI):
         try:
             if protocol == "vnc":
                 self.viewer = VNCViewer(self)
-                self.widget("console-vnc-viewport").add(
-                                                    self.viewer.get_widget())
+                self.widget("console-vnc-viewport").add(self.viewer.display)
                 self.viewer.init_widget()
             elif protocol == "spice":
                 self.viewer = SpiceViewer(self)
@@ -1188,14 +1185,14 @@ class vmmConsolePages(vmmGObjectUI):
             # Scaling disabled is easy, just force the VNC widget size. Since
             # we are inside a scrollwindow, it shouldn't cause issues.
             scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-            self.viewer.get_widget().set_size_request(desktop_w, desktop_h)
+            self.viewer.display.set_size_request(desktop_w, desktop_h)
             return
 
         # Make sure we never show scrollbars when scaling
         scroll.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
 
         # Make sure there is no hard size requirement so we can scale down
-        self.viewer.get_widget().set_size_request(-1, -1)
+        self.viewer.display.set_size_request(-1, -1)
 
         # Make sure desktop aspect ratio is maintained
         if align_ratio > desktop_ratio:
@@ -1213,6 +1210,6 @@ class vmmConsolePages(vmmGObjectUI):
                                          width=desktop_w,
                                          height=desktop_h)
 
-        self.viewer.get_widget().size_allocate(viewer_alloc)
+        self.viewer.display.size_allocate(viewer_alloc)
 
 vmmGObjectUI.type_register(vmmConsolePages)

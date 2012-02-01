@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<glade-interface>
-  <!-- interface-requires gtk+ 2.12 -->
-  <!-- interface-naming-policy toplevel-contextual -->
-  <widget class="GtkAboutDialog" id="vmm-about">
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <object class="GtkAboutDialog" id="vmm-about">
+    <property name="can_focus">False</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="program_name">Virtual Machine Manager</property>
@@ -35,19 +35,24 @@ Jeremy Perry &lt;jeperry@redhat.com&gt;
 Jakub Steiner &lt;jsteiner@redhat.com&gt;
 </property>
     <property name="logo_icon_name">virt-manager</property>
-    <signal name="response" handler="on_vmm_about_response"/>
-    <signal name="delete_event" handler="on_vmm_about_delete_event"/>
+    <signal name="delete-event" handler="on_vmm_about_delete_event" swapped="no"/>
+    <signal name="response" handler="on_vmm_about_response" swapped="no"/>
     <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox1">
+      <object class="GtkBox" id="dialog-vbox1">
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area1"/>
+          <object class="GtkButtonBox" id="dialog-action_area1">
+            <property name="can_focus">False</property>
+          </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+  </object>
+</interface>
