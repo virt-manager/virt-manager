@@ -287,6 +287,13 @@ update-desktop-database -q %{_datadir}/applications
 %endif
 
 %changelog
+* Tue Jan 31 2012 Cole Robinson <crobinso@redhat.com> - 0.9.1-1
+- Support for adding usb redirection devices (Marc-André Lureau)
+- Option to switch usb controller to support usb2.0 (Marc-André Lureau)
+- Option to specify machine type for non-x86 guests (Li Zhang)
+- Support for filesystem device type and write policy (Deepak C Shetty)
+- Many bug fixes!
+
 * Tue Jul 26 2011 Cole Robinson <crobinso@redhat.com> - 0.9.0-1
 - Use a hiding toolbar for fullscreen mode
 - Use libguestfs to show guest packagelist and more (Richard W.M. Jones)
