@@ -747,10 +747,8 @@ class vmmDetails(vmmGObjectUI):
                         machines = list(set(machines + domain.machines))
 
         if arch in ["i686", "x86_64"]:
-            machtype_label = self.widget("label81")
-            machtype_label.set_visible(False)
-            machtype_hbox = self.widget("hbox30")
-            machtype_hbox.set_visible(False)
+            self.widget("label81").hide()
+            self.widget("hbox30").hide()
         else:
             machtype_combo = self.widget("machine-type-combo")
             machtype_model = gtk.ListStore(str)
