@@ -37,6 +37,19 @@ from virtManager import util as util
 
 import virtinst
 
+_comboentry_xml = """
+<interface>
+    <object class="GtkComboBoxEntry" id="cpu-model">
+        <property name="visible">True</property>
+        <signal name="changed" handler="on_cpu_model_changed"/>
+    </object>
+    <object class="GtkComboBoxEntry" id="disk-format">
+        <property name="visible">True</property>
+        <signal name="changed" handler="on_disk_format_changed"/>
+    </object>
+</interface>
+"""
+
 # Parameters that can be editted in the details window
 EDIT_TOTAL = 36
 (EDIT_NAME,
@@ -325,6 +338,12 @@ class vmmDetails(vmmGObjectUI):
         self.ignorePause = False
         self.ignoreDetails = False
         self._cpu_copy_host = False
+
+        self.window.add_from_string(_comboentry_xml)
+        self.widget("hbox17").pack_start(self.widget("disk-format"),
+                                         False, True, 0)
+        self.widget("hbox21").pack_start(self.widget("cpu-model"),
+                                         False, True, 0)
 
         self.console = vmmConsolePages(self.vm, self.window)
 

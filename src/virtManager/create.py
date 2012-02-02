@@ -61,6 +61,22 @@ RHEL6_OS_SUPPORT = [
     "win2k3", "winxp", "win2k8", "vista", "win7",
 ]
 
+_comboentry_xml = """
+<interface>
+    <object class="GtkComboBoxEntry" id="install-local-box">
+        <property name="visible">True</property>
+        <signal name="changed" handler="on_install_local_box_changed"/>
+    </object>
+    <object class="GtkComboBoxEntry" id="install-url-box">
+        <property name="visible">True</property>
+        <signal name="changed" handler="on_install_url_box_changed"/>
+    </object>
+    <object class="GtkComboBoxEntry" id="install-ks-box">
+        <property name="visible">True</property>
+    </object>
+</interface>
+"""
+
 class vmmCreate(vmmGObjectUI):
     def __init__(self, engine):
         vmmGObjectUI.__init__(self, "vmm-create.ui", "vmm-create")
@@ -97,6 +113,13 @@ class vmmCreate(vmmGObjectUI):
         # 'Configure before install' window
         self.config_window = None
         self.config_window_signals = []
+
+        self.window.add_from_string(_comboentry_xml)
+        self.widget("table2").attach(self.widget("install-url-box"),
+                                     1, 2, 0, 1)
+        self.widget("table7").attach(self.widget("install-ks-box"),
+                                     1, 2, 0, 1)
+        self.widget("alignment8").add(self.widget("install-local-box"))
 
         self.window.connect_signals({
             "on_vmm_newcreate_delete_event" : self.close,

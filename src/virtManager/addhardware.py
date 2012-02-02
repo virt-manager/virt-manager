@@ -61,6 +61,14 @@ char_widget_mappings = {
     "target_name" : "char-target-name",
 }
 
+_comboentry_xml = """
+<interface>
+    <object class="GtkComboBoxEntry" id="config-storage-format">
+      <property name="visible">True</property>
+    </object>
+</interface>
+"""
+
 class vmmAddHardware(vmmGObjectUI):
     def __init__(self, vm):
         vmmGObjectUI.__init__(self,
@@ -75,6 +83,10 @@ class vmmAddHardware(vmmGObjectUI):
         self.host_storage_timer = None
 
         self._dev = None
+
+        self.window.add_from_string(_comboentry_xml)
+        self.widget("table7").attach(self.widget("config-storage-format"),
+                                     1, 2, 2, 3, xoptions=gtk.FILL)
 
         self.window.connect_signals({
             "on_create_cancel_clicked" : self.close,
