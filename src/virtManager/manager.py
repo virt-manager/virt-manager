@@ -646,42 +646,55 @@ class vmmManager(vmmGObjectUI):
             conn.open()
             return True
 
-    def _connect_error(self, conn, shortmsg, tb, warnconsole):
-        shortmsg = shortmsg.strip(" \n")
+    def _connect_error(self, conn, errmsg, tb, warnconsole):
+        errmsg = errmsg.strip(" \n")
         tb = tb.strip(" \n")
-        msg = _("Unable to connect to libvirt:\n\n%s\n\n") % shortmsg
+        hint = ""
+        show_errmsg = True
 
-        if conn.is_xen() and not conn.is_remote():
-            msg += _("Verify that:\n"
-                     " - A Xen host kernel was booted\n"
-                     " - The Xen service has been started\n")
-            msg = msg.strip("\n")
-            details = "%s\n\n%s" % (msg, tb)
+        if conn.is_remote():
+            logging.debug(conn.get_transport())
+            if re.search(r"nc: .* -- 'U'", tb):
+                hint += _("The remote host requires a version of netcat/nc\n"
+                          "which supports the -U option.")
+                show_errmsg = False
+            elif conn.get_transport()[0] == "ssh" and re.search(r"ssh-askpass", tb):
+                hint += _("You need to install openssh-askpass or similar\n"
+                          "to connect to this host.")
+                show_errmsg = False
+            else:
+                hint += _("Verify that the 'libvirtd' daemon is running\n"
+                          "on the remote host.")
+
+        elif conn.is_xen():
+            hint += _("Verify that:\n"
+                      " - A Xen host kernel was booted\n"
+                      " - The Xen service has been started")
 
         else:
-            hints = []
-            if conn.is_remote() and re.search(r"nc: .* -- 'U'", details):
-                hints.append(
-                    _("\n - The remote netcat understands the '-U' option"))
-
             if warnconsole:
-                msg += _("Could not detect a local session: if you are \n"
-                         "running virt-manager over ssh -X or VNC, you \n"
-                         "may not be able to connect to libvirt as a \n"
-                         "regular user. Try running as root.\n\n")
-            else:
-                msg += _("Verify that:\n" +
-                         " - The 'libvirtd' daemon has been started")
-                for hint in hints:
-                    msg += hint
+                hint += _("Could not detect a local session: if you are \n"
+                          "running virt-manager over ssh -X or VNC, you \n"
+                          "may not be able to connect to libvirt as a \n"
+                          "regular user. Try running as root.")
+                show_errmsg = False
+            elif re.search(r"libvirt-sock", tb):
+                hint += _("Verify that the 'libvirtd' daemon is running.")
+                show_errmsg = False
 
-            msg = msg.strip("\n")
-            details = (("%s\n\n" % msg) +
-                       (_("Libvirt URI is: %s\n\n") % conn.get_uri()) +
-                       tb)
+        msg = _("Unable to connect to libvirt.")
+        if show_errmsg:
+            msg += "\n\n%s" % errmsg
+        if hint:
+            msg += "\n\n%s" % hint
 
-        self.err.show_err(msg, details,
-                    title=_("Virtual Machine Manager Connection Failure"))
+        msg = msg.strip("\n")
+        details = msg
+        details += "\n\n"
+        details += "Libvirt URI is: %s\n\n" % conn.get_uri()
+        details += tb
+
+        self.err.show_err(msg, details, title=_("Virtual Machine Manager Connection Failure"))
 
 
     ####################################
