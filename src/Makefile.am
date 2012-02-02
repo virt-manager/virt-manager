@@ -12,7 +12,7 @@ libexec_DATA_IN = $(PACKAGE)-launch.in
 libexec_SCRIPTS = $(PACKAGE)-launch
 
 gladedir = $(pkgdatadir)
-glade_DATA = $(wildcard $(srcdir)/*.glade)
+glade_DATA = $(wildcard $(srcdir)/*.ui)
 
 desktopdir = $(datadir)/applications
 desktop_DATA_IN = $(PACKAGE).desktop.in.in
