@@ -875,6 +875,8 @@
                 <child>
                   <object class="GtkScrolledWindow" id="console-vnc-scroll">
                     <property name="visible">True</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
                     <property name="can_focus">True</property>
                     <child>
                       <object class="GtkViewport" id="console-vnc-viewport">
@@ -931,6 +933,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hscrollbar_policy">never</property>
+                        <property name="vscrollbar_policy">automatic</property>
                         <property name="shadow_type">in</property>
                         <child>
                           <object class="GtkTreeView" id="hw-list">
@@ -1137,6 +1140,8 @@
                                                   <object class="GtkScrolledWindow" id="scrolledwindow2">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
+                                                    <property name="hscrollbar_policy">automatic</property>
+                                                    <property name="vscrollbar_policy">automatic</property>
                                                     <property name="shadow_type">in</property>
                                                     <child>
                                                       <object class="GtkTextView" id="overview-description">
@@ -1441,6 +1446,8 @@
                                             <property name="height_request">150</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
+                                            <property name="hscrollbar_policy">automatic</property>
+                                            <property name="vscrollbar_policy">automatic</property>
                                             <property name="shadow_type">etched-in</property>
                                             <child>
                                               <object class="GtkTreeView" id="inspection-apps">
@@ -2481,6 +2488,7 @@ I/O:</property>
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">True</property>
                                                             <property name="hscrollbar_policy">never</property>
+                                                            <property name="vscrollbar_policy">automatic</property>
                                                             <property name="shadow_type">etched-in</property>
                                                             <child>
                                                             <object class="GtkTreeView" id="cpu-features">
@@ -2957,6 +2965,8 @@ I/O:</property>
                                                     <property name="height_request">100</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
+                                                    <property name="hscrollbar_policy">automatic</property>
+                                                    <property name="vscrollbar_policy">automatic</property>
                                                     <property name="shadow_type">in</property>
                                                     <child>
                                                       <object class="GtkTreeView" id="config-vcpu-list">
