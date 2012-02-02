@@ -19,7 +19,6 @@
 #
 
 import libvirt
-import libxml2
 
 import logging
 import os.path
@@ -158,6 +157,7 @@ def xml_parse_wrapper(xml, parse_func, *args, **kwargs):
     Parse the passed xml string into an xpath context, which is passed
     to parse_func, along with any extra arguments.
     """
+    import libxml2
 
     doc = None
     ctx = None
@@ -420,3 +420,44 @@ def set_list_selection(widget, rownum):
     selection.unselect_all()
     widget.set_cursor(path)
     selection.select_path(path)
+
+def sanitize_gtkbuilder(filename):
+    """
+    GTKBuilder XML made by glade on f16 doesn't work on RHEL6. If on an old
+    GTK version, strip out the bits that cause problems
+    """
+    import gtk
+    ver = gtk.gtk_version
+    xml = file(filename).read()
+
+    if (ver[0] > 2 or
+        (ver[0] == 2 and ver[1] > 18)):
+        # Skip altering for gtk > 2.18
+        return xml
+
+    import libxml2
+
+    doc = None
+    ctx = None
+    ret = xml
+    try:
+        doc = libxml2.parseDoc(xml)
+        ctx = doc.xpathNewContext()
+
+        nodes = ctx.xpathEval("//child[@internal-child='selection']")
+        if nodes:
+            logging.debug("%s: Altering gtkbuilder XML for old gtk compat",
+                          os.path.basename(filename))
+
+        for node in nodes:
+            node.unlinkNode()
+            node.freeNode()
+
+        ret = doc.serialize()
+    finally:
+        if doc:
+            doc.freeDoc()
+        if ctx:
+            ctx.xpathFreeContext()
+
+    return ret

@@ -24,6 +24,7 @@ import logging
 
 import virtManager
 import virtManager.guidiff
+from virtManager import util
 
 running_config, gobject, GObject, gtk = virtManager.guidiff.get_imports()
 
@@ -242,7 +243,8 @@ class vmmGObjectUI(vmmGObject):
 
             self.window = gtk.Builder()
             self.window.set_translation_domain("virt-manager")
-            self.window.add_from_file(self.uifile)
+            self.window.add_from_string(
+                util.sanitize_gtkbuilder(self.uifile))
 
             self.topwin = self.widget(self.windowname)
             self.topwin.hide()
