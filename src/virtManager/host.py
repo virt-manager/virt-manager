@@ -1097,6 +1097,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("interface-delete").set_sensitive(not active)
         self.widget("interface-stop").set_sensitive(active)
         self.widget("interface-start").set_sensitive(not active)
+        self.widget("interface-add").set_sensitive(bool(self.conn.interface_capable))
 
         show_child = (children or
                       itype in [Interface.Interface.INTERFACE_TYPE_BRIDGE,
@@ -1120,8 +1121,7 @@ class vmmHost(vmmGObjectUI):
 
 
     def reset_interface_state(self):
-        if not self.conn.interface_capable:
-            self.widget("interface-add").set_sensitive(False)
+        self.widget("interface-add").set_sensitive(bool(self.conn.interface_capable))
         self.widget("interface-delete").set_sensitive(False)
         self.widget("interface-stop").set_sensitive(False)
         self.widget("interface-start").set_sensitive(False)
