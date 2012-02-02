@@ -280,6 +280,10 @@ def main():
             raise RuntimeError(_("Unable to initialize GTK: %s") % gtk_error)
         raise gtk_error
 
+    if not hasattr(gtk, "Builder"):
+        raise RuntimeError("virt-manager requires GtkBuilder support. "
+                           "Your gtk version appears to be too old.")
+
     cli.setup_logging(appname, options.debug)
     global logging_setup
     logging_setup = True
