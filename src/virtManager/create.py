@@ -824,7 +824,7 @@ class vmmCreate(vmmGObjectUI):
 
 
     def change_caps(self, gtype=None, dtype=None, arch=None):
-
+        print "start", gtype, dtype, arch
         if gtype == None:
             # If none specified, prefer HVM. This way, the default install
             # options won't be limited because we default to PV. If hvm not
@@ -834,8 +834,9 @@ class vmmCreate(vmmGObjectUI):
                     gtype = "hvm"
                     break
 
-        (newg,
-         newdom) = virtinst.CapabilitiesParser.guest_lookup(
+        print "after", gtype, dtype, arch
+
+        (newg, newdom) = virtinst.CapabilitiesParser.guest_lookup(
                                                         conn=self.conn.vmm,
                                                         caps=self.caps,
                                                         os_type=gtype,
@@ -1795,10 +1796,8 @@ class vmmCreate(vmmGObjectUI):
             return
 
         # FIXME: some things are dependent on domain type (vcpu max)
-        if instmeth == INSTALL_PAGE_URL:
+        if instmeth in [INSTALL_PAGE_URL, INSTALL_PAGE_IMPORT]:
             self.change_caps(gtype="xen")
-        else:
-            self.change_caps(gtype="hvm")
 
     def reset_guest_type(self):
         self.change_caps()
