@@ -114,3 +114,6 @@ def check_virtinst_version(virtinst_str):
         raise RuntimeError("virtinst version %s is too old." %
                             (virtinst.__version__) +
                            "\n\n" + msg)
+
+    logging.debug("virtinst version: %s", str(virtinst_str))
+    logging.debug("virtinst import: %s", str(virtinst))

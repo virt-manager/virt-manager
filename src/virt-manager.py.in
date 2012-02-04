@@ -290,6 +290,7 @@ def main():
 
     logging.debug("Launched as: %s", origargs)
     logging.debug("GTK version: %s", str(gtk.gtk_version))
+    logging.debug("virt-manager version: %s", appversion)
     logging.debug("virtManager import: %s", str(virtManager))
 
     cli.check_virtinst_version(virtinst_str)
