@@ -387,12 +387,6 @@ class VNCViewer(Viewer):
     def open_fd(self, fd):
         self.display.open_fd(fd)
 
-    def get_grab_keys(self):
-        keystr = self.get_grab_keys()
-        if not keystr:
-            keystr = "Control_L+Alt_L"
-        return keystr
-
     def set_credential_username(self, cred):
         self.display.set_credential(gtkvnc.CREDENTIAL_USERNAME, cred)
 
