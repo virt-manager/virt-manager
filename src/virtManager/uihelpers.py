@@ -397,6 +397,7 @@ def build_storage_format_combo(vm, combo):
     formats = ["raw", "qcow2"]
     if vm.rhel6_defaults():
         formats.append("vmdk")
+        formats.append("vdi")
 
     for m in formats:
         dev_model.append([m])
