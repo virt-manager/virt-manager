@@ -607,7 +607,7 @@ class vmmAddHardware(vmmGObjectUI):
         else:
             path = self.widget("config-storage-entry").get_text()
 
-        return (path, size, sparse)
+        return (path or None, size, sparse)
 
     def get_config_disk_target(self):
         target = self.widget("config-storage-devtype")
@@ -1261,9 +1261,6 @@ class vmmAddHardware(vmmGObjectUI):
 
                     if do_use:
                         diskpath = ideal
-
-            if not diskpath:
-                return self.err.val_err(_("A storage path must be specified."))
 
             disk = virtinst.VirtualDisk(conn=self.conn.vmm,
                                         path=diskpath,
