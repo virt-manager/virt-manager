@@ -217,32 +217,25 @@ class vmmPreferences(vmmGObjectUI):
         self.widget("prefs-confirm-unapplied").set_active(
                                 self.config.get_confirm_unapplied())
 
-    def grabkeys_get_string(self, keysyms):
-        keystr = None
-        for k in keysyms:
-            if keystr is None:
-                keystr = gtk.gdk.keyval_name(k)
-            else:
-                keystr = keystr + "+" + gtk.gdk.keyval_name(k)
-        # Disallow none
-        if keystr is None:
-            keystr = ""
+    def grabkeys_get_string(self, events):
+        keystr = ""
+        for ignore, keyval in events:
+            if keystr:
+                keystr += "+"
+            keystr +=  gtk.gdk.keyval_name(keyval)
         return keystr
 
-    def grabkeys_dlg_press(self, src_ignore, ev, defs):
-        label = defs['label']
-        # Try to get the index, it fails when not found
-        try:
-            defs['keysyms'].index(ev.keyval)
-        except:
-            defs['keysyms'].append(ev.keyval)
+    def grabkeys_dlg_press(self, src_ignore, event, label, events):
+        if not filter(lambda e: e[0] == event.hardware_keycode, events):
+            events.append((event.hardware_keycode, event.keyval))
 
-        label.set_text(self.grabkeys_get_string(defs['keysyms']))
+        label.set_text(self.grabkeys_get_string(events))
 
-    def grabkeys_dlg_release(self, src_ignore, ev, defs):
-        label = defs['label']
-        defs['keysyms'].remove(ev.keyval)
-        label.set_text(self.grabkeys_get_string(defs['keysyms']))
+    def grabkeys_dlg_release(self, src_ignore, event, label, events):
+        for e in filter(lambda e: e[0] == event.hardware_keycode, events):
+            events.remove(e)
+
+        label.set_text(self.grabkeys_get_string(events))
 
     def change_grab_keys(self, src_ignore):
         dialog = gtk.Dialog(_("Configure grab key combination"),
@@ -265,14 +258,16 @@ class vmmPreferences(vmmGObjectUI):
         vbox.pack_start(keylabel, False, False)
         dialog.get_content_area().add(vbox)
 
-        defs = {'label': keylabel, 'keysyms': []}
-        dialog.connect("key-press-event", self.grabkeys_dlg_press, defs)
-        dialog.connect("key-release-event", self.grabkeys_dlg_release, defs)
+        events = []
+        dialog.connect("key-press-event", self.grabkeys_dlg_press,
+                       keylabel, events)
+        dialog.connect("key-release-event", self.grabkeys_dlg_release,
+                       keylabel, events)
         dialog.show_all()
         result = dialog.run()
 
         if result == gtk.RESPONSE_ACCEPT:
-            self.config.set_keys_combination(defs['keysyms'])
+            self.config.set_keys_combination(map(lambda e: e[1], events))
 
         self.refresh_grabkeys_combination()
         dialog.destroy()
