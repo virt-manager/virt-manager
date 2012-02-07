@@ -443,28 +443,6 @@ class vmmCreate(vmmGObjectUI):
         if self.conn.is_read_only():
             return self.startup_error(_("Connection is read only."))
 
-        def no_install_options(c):
-            for g in c.guests:
-                print "guest", g
-                print "doms", g.domains
-                if len(g.domains) > 0:
-                    return False
-
-            return True
-
-
-        caps = self.conn.get_capabilities()
-        print "caps", caps
-        print "conn no install options", self.conn.no_install_options()
-        print "caps no install options", caps.no_install_options()
-        print "my no install options:", no_install_options(caps)
-
-        import virtinst
-        print "reparsing capabilities"
-        caps = virtinst.CapabilitiesParser.parse(
-                                    self.conn.vmm.getCapabilities())
-        print "now my no install options:", no_install_options(caps)
-
         if self.conn.no_install_options():
             error = _("No hypervisor options were found for this "
                       "connection.")
