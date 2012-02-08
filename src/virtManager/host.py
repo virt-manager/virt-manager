@@ -56,6 +56,7 @@ class vmmHost(vmmGObjectUI):
         self.addvol = None
         self.addinterface = None
         self.volmenu = None
+        self._in_refresh = False
 
         self.cpu_usage_graph = None
         self.memory_usage_graph = None
@@ -639,13 +640,22 @@ class vmmHost(vmmGObjectUI):
                             _("Error deleting pool '%s'") % pool.get_name())
 
     def pool_refresh(self, src_ignore):
+        if self._in_refresh:
+            logging.debug("Already refreshing the pool, skipping")
+            return
+
         pool = self.current_pool()
         if pool is None:
             return
 
+        self._in_refresh = True
+
         def cb():
-            pool.refresh()
-            self.refresh_current_pool()
+            try:
+                pool.refresh()
+                self.refresh_current_pool()
+            finally:
+                self._in_refresh = False
 
         logging.debug("Refresh pool '%s'", pool.get_name())
         vmmAsyncJob.simple_async_noshow(cb, [], self,
