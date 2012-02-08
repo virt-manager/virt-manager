@@ -503,6 +503,9 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("fs-target").set_text("")
         self.widget("fs-readonly").set_active(False)
 
+        # Video params
+        uihelpers.populate_video_combo(self.vm, self.widget("video-model"))
+
         # Hide all notebook pages, so the wizard isn't as big as the largest
         # page
         notebook = self.widget("create-pages")
