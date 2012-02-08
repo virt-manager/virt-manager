@@ -1072,7 +1072,12 @@ class vmmHost(vmmGObjectUI):
                 break
             idx += 1
 
-        used_by = util.iface_in_use_by(self.conn, name)
+        # This can fail if other interfaces are busted, so ignore errors
+        used_by = None
+        try:
+            used_by = util.iface_in_use_by(self.conn, name)
+        except Exception, e:
+            logging.debug("Error looking up iface usage: %s", e)
         self.widget("interface-inuseby").set_text(used_by or "-")
 
         # IP info
