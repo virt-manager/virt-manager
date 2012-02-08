@@ -19,6 +19,7 @@
 #
 
 import logging
+import time
 
 import virtinst
 
@@ -49,7 +50,7 @@ class vmmMediaDevice(vmmGObject):
 
         obj = vmmMediaDevice(path, key, has_media, media_label, media_key,
                              dev, drvtype)
-        obj.enable_poll_for_media()
+        obj.do_poll = True
 
         return obj
 
@@ -65,7 +66,8 @@ class vmmMediaDevice(vmmGObject):
         self.media_type = media_type
 
         self.nodedev_obj = nodedev_obj
-        self.poll_signal = None
+        self.do_poll = False
+        self.last_tick = 0
 
     def _cleanup(self):
         pass
@@ -130,50 +132,38 @@ class vmmMediaDevice(vmmGObject):
     #########################################
     # Nodedev API polling for media updates #
     #########################################
-    def enable_poll_for_media(self):
-        if self.poll_signal:
+
+    def tick(self):
+        if not self.nodedev_obj:
             return
 
-        self.poll_signal = self.safe_timeout_add(MEDIA_TIMEOUT * 1000,
-                                                 self._poll_for_media)
-        self.add_gobject_timeout(self.poll_signal)
-
-    def disable_poll_for_media(self):
-        self.remove_gobject_timeout(self.poll_signal)
-        self.poll_signal = None
-
-    def _poll_for_media(self):
-        if not self.poll_signal:
-            return False
-
-        if not self.nodedev_obj:
-            return False
-
         if not self.nodedev_obj.conn.is_active():
-            return False
+            return
+
+        if (time.time() - self.last_tick) < MEDIA_TIMEOUT:
+            return
+        self.last_tick = time.time()
 
         try:
             self.nodedev_obj.refresh_xml()
             xml = self.nodedev_obj.get_xml()
         except:
             # Assume the device was removed
-            return False
+            return
 
         try:
             vobj = virtinst.NodeDeviceParser.parse(xml)
             has_media = vobj.media_available
         except:
             logging.exception("Node device CDROM polling failed")
-            return False
+            return
 
-        if has_media != self.has_media():
-            self.set_media(has_media, None, None)
-            if has_media:
-                self.emit("media-added")
-            else:
-                self.emit("media-removed")
+        if has_media == self.has_media():
+            return
 
-        return True
+        self.set_media(has_media, None, None)
+        self.idle_emit(has_media and "media-added" or "media-removed")
+
 
 vmmGObject.type_register(vmmMediaDevice)
 vmmMediaDevice.signal_new(vmmMediaDevice, "media-added", [])

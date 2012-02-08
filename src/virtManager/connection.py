@@ -1583,6 +1583,9 @@ class vmmConnection(vmmGObject):
                                   "connection doesn't seem to have dropped. "
                                   "Ignoring.")
 
+        for dev in self.mediadevs.values():
+            dev.tick()
+
         if not noStatsUpdate:
             self._recalculate_stats(now, updateVMs)
 
