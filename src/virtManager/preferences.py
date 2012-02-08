@@ -222,7 +222,7 @@ class vmmPreferences(vmmGObjectUI):
         for ignore, keyval in events:
             if keystr:
                 keystr += "+"
-            keystr +=  gtk.gdk.keyval_name(keyval)
+            keystr += gtk.gdk.keyval_name(keyval)
         return keystr
 
     def grabkeys_dlg_press(self, src_ignore, event, label, events):
