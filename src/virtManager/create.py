@@ -483,8 +483,10 @@ class vmmCreate(vmmGObjectUI):
                  "are not loaded. Your virtual machines may perform poorly.")
                 self.startup_warning(error)
 
+        # Helper state
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
+        can_storage = (is_local or is_storage_capable)
         is_pv = (self.capsguest.os_type == "xen")
         is_container = self.conn.is_container()
         can_remote_url = virtinst.support.check_stream_support(self.conn.vmm,
@@ -494,41 +496,48 @@ class vmmCreate(vmmGObjectUI):
         method_tree = self.widget("method-tree")
         method_pxe = self.widget("method-pxe")
         method_local = self.widget("method-local")
+        method_import = self.widget("method-import")
         method_container_app = self.widget("method-container-app")
 
         method_tree.set_sensitive(is_local or can_remote_url)
-        method_local.set_sensitive(not is_pv)
+        method_local.set_sensitive(not is_pv and can_storage)
         method_pxe.set_sensitive(not is_pv)
+        method_import.set_sensitive(can_storage)
+        virt_methods = [method_local, method_tree, method_pxe, method_import]
 
         pxe_tt = None
         local_tt = None
         tree_tt = None
+        import_tt = None
+
+        if not is_local:
+            if not can_remote_url:
+                tree_tt = _("Libvirt version does not "
+                            "support remote URL installs.")
+            if not is_storage_capable:
+                local_tt = _("Connection does not support storage management.")
+                import_tt = local_tt
 
         if is_pv:
             base = _("%s installs not available for paravirt guests.")
             pxe_tt = base % "PXE"
             local_tt = base % "CDROM/ISO"
-        if not is_local:
-            tree_tt = _("Libvirt version does not support remote URL installs.")
-            if not is_storage_capable and not local_tt:
-                local_tt = _("Connection does not support storage management.")
 
-        if not is_local and not is_storage_capable:
-            method_local.set_sensitive(False)
-        if method_tree.get_active() and not is_local:
-            method_local.set_active(True)
-        elif is_pv:
-            method_tree.set_active(True)
+        for w in virt_methods:
+            if w.get_property("sensitive"):
+                w.set_active(True)
+                break
 
-        if not (method_tree.get_property("sensitive") or
-                method_local.get_property("sensitive") or
-                method_pxe.get_property("sensitive")):
-            self.startup_error(_("No install methods available for this "
-                                 "connection."), hideinstall=False)
+        if not (is_container or
+                filter(lambda w: w.get_property("sensitive"), virt_methods)):
+            return self.startup_error(
+                    _("No install methods available for this connection."),
+                    hideinstall=False)
 
         util.tooltip_wrapper(method_tree, tree_tt)
         util.tooltip_wrapper(method_local, local_tt)
         util.tooltip_wrapper(method_pxe, pxe_tt)
+        util.tooltip_wrapper(method_import, import_tt)
 
         # Container install options
         method_container_app.set_active(True)
@@ -601,14 +610,13 @@ class vmmCreate(vmmGObjectUI):
         self.widget("phys-cpu-label").set_markup(cpu_label)
 
         # Storage
-        have_storage = (is_local or is_storage_capable)
         storage_tooltip = None
 
         use_storage = self.widget("config-storage-select")
         storage_area = self.widget("config-storage-area")
 
-        storage_area.set_sensitive(have_storage)
-        if not have_storage:
+        storage_area.set_sensitive(can_storage)
+        if not can_storage:
             storage_tooltip = _("Connection does not support storage"
                                 " management.")
             use_storage.set_sensitive(True)
