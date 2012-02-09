@@ -234,11 +234,12 @@ class vmmCreate(vmmGObjectUI):
 
 
     # State init methods
-    def startup_error(self, error):
+    def startup_error(self, error, hideinstall=True):
         self.have_startup_error = True
         self.widget("startup-error-box").show()
-        self.widget("install-box").hide()
         self.widget("create-forward").set_sensitive(False)
+        if hideinstall:
+            self.widget("install-box").hide()
 
         self.widget("startup-error").set_text("Error: %s" % error)
         return False
@@ -522,8 +523,8 @@ class vmmCreate(vmmGObjectUI):
         if not (method_tree.get_property("sensitive") or
                 method_local.get_property("sensitive") or
                 method_pxe.get_property("sensitive")):
-            self.startup_error(_("No install options available for this "
-                                 "connection."))
+            self.startup_error(_("No install methods available for this "
+                                 "connection."), hideinstall=False)
 
         util.tooltip_wrapper(method_tree, tree_tt)
         util.tooltip_wrapper(method_local, local_tt)
