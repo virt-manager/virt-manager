@@ -417,7 +417,7 @@ class vmmCreate(vmmGObjectUI):
         label_widget = self.widget("phys-hd-label")
         label_widget.set_markup("")
         if not self.host_storage_timer:
-            self.host_storage_timer = self.safe_timeout_add(3 * 1000,
+            self.host_storage_timer = self.timeout_add(3 * 1000,
                                                     uihelpers.host_space_tick,
                                                     self.conn,
                                                     label_widget)
@@ -1947,8 +1947,8 @@ class vmmCreate(vmmGObjectUI):
         else:
             # Register a status listener, which will restart the
             # guest after the install has finished
-            vm.connect_opt_out("status-changed",
-                               self.check_install_status, guest)
+            self.idle_add(vm.connect_opt_out, "status-changed",
+                          self.check_install_status, guest)
 
 
     def check_install_status(self, vm, ignore1, ignore2, virtinst_guest=None):
@@ -2057,7 +2057,7 @@ class vmmCreate(vmmGObjectUI):
                 detect_str = base + ("." * ((idx % 3) + 1))
                 self.set_distro_labels(detect_str, detect_str)
 
-                self.safe_timeout_add(500, self.check_detection,
+                self.timeout_add(500, self.check_detection,
                                       idx + 1, forward)
                 return
 
@@ -2072,7 +2072,7 @@ class vmmCreate(vmmGObjectUI):
         logging.debug("Finished OS detection.")
         self.set_distro_selection(*results)
         if forward:
-            self.safe_idle_add(self.forward, ())
+            self.idle_add(self.forward, ())
 
     def start_detection(self, forward):
         if self.detecting:

@@ -20,6 +20,7 @@
 
 import logging
 import os
+import time
 
 import dbus
 import libvirt
@@ -92,13 +93,24 @@ def creds_dialog(creds):
     """
     Thread safe wrapper for libvirt openAuth user/pass callback
     """
-    try:
-        import gtk
+    import gobject
 
-        gtk.gdk.threads_enter()
-        return creds_dialog_main(creds)
-    finally:
-        gtk.gdk.threads_leave()
+    retipc = []
+
+    def wrapper(fn, creds):
+        try:
+            ret = fn(creds)
+        except:
+            logging.exception("Error from creds dialog")
+            ret = -1
+        retipc.append(ret)
+
+    gobject.idle_add(wrapper, creds_dialog_main, creds)
+
+    while not retipc:
+        time.sleep(.1)
+
+    return retipc[0]
 
 
 def creds_dialog_main(creds):
@@ -163,11 +175,12 @@ def creds_dialog_main(creds):
         for cred in creds:
             cred[4] = entry[row].get_text()
             row = row + 1
-        dialog.destroy()
-        return 0
+        ret = 0
     else:
-        dialog.destroy()
-        return -1
+        ret = -1
+
+    dialog.destroy()
+    return ret
 
 
 def acquire_tgt():

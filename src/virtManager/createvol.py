@@ -248,6 +248,7 @@ class vmmCreateVolume(vmmGObjectUI):
         meter = asyncjob.get_meter()
         logging.debug("Starting backround vol creation.")
         self.vol.install(meter=meter)
+        logging.debug("vol creation complete.")
 
     def validate(self):
         name = self.widget("vol-name").get_text()

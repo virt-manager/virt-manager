@@ -1013,7 +1013,7 @@ class vmmConsolePages(vmmGObjectUI):
             logging.error("Too many connection failures, not retrying again")
             return
 
-        self.safe_timeout_add(self.viewerRetryDelay, self.try_login)
+        self.timeout_add(self.viewerRetryDelay, self.try_login)
 
         if self.viewerRetryDelay < 2000:
             self.viewerRetryDelay = self.viewerRetryDelay * 2
@@ -1154,7 +1154,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         def unset_cb(src):
             src.queue_resize_no_redraw()
-            self.safe_idle_add(restore_scroll, src)
+            self.idle_add(restore_scroll, src)
             return False
 
         def request_cb(src, req):
@@ -1164,7 +1164,7 @@ class vmmConsolePages(vmmGObjectUI):
 
             src.disconnect(signal_id)
 
-            self.safe_idle_add(unset_cb, widget)
+            self.idle_add(unset_cb, widget)
             return False
 
         # Disable scroll bars while we resize, since resizing to the VM's

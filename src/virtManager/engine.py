@@ -412,7 +412,7 @@ class vmmEngine(vmmGObject):
             gobject.source_remove(self.timer)
             self.timer = None
 
-        # No need to use 'safe_timeout_add', the tick should be
+        # No need to use 'timeout_add', the tick should be
         # manually made thread safe
         self.timer = gobject.timeout_add(interval, self.tick)
 
@@ -456,7 +456,7 @@ class vmmEngine(vmmGObject):
                     self.err.show_err(_("Error polling connection '%s': %s") %
                                       (conn.get_uri(), e))
 
-                self.safe_idle_add(conn.close)
+                self.idle_add(conn.close)
 
         return 1
 
@@ -928,8 +928,7 @@ class vmmEngine(vmmGObject):
 
         if error is not None:
             error = _("Error saving domain: %s") % error
-            src.err.show_err(error,
-                             details=details)
+            src.err.show_err(error, details=details)
 
     def _save_cancel(self, asyncjob, vm):
         logging.debug("Cancelling save job")
@@ -1068,8 +1067,8 @@ class vmmEngine(vmmGObject):
             except Exception, reboot_err:
                 no_support = virtinst.support.is_error_nosupport(reboot_err)
                 if not no_support:
-                    src.err.show_err(_("Error rebooting domain: %s" %
-                                     str(reboot_err)))
+                    raise RuntimeError(_("Error rebooting domain: %s" %
+                                       str(reboot_err)))
 
             if not no_support:
                 return
@@ -1082,8 +1081,8 @@ class vmmEngine(vmmGObject):
                 logging.exception("Could not fake a reboot")
 
                 # Raise the original error message
-                src.err.show_err(_("Error rebooting domain: %s" %
-                                 str(reboot_err)))
+                raise RuntimeError(_("Error rebooting domain: %s" %
+                                   str(reboot_err)))
 
         vmmAsyncJob.simple_async_noshow(reboot_cb, [], src, "")
 

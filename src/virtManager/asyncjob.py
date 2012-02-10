@@ -130,7 +130,7 @@ def _simple_async(callback, args, title, text, parent, errorintro,
 
 def idle_wrapper(fn):
     def wrapped(self, *args, **kwargs):
-        return self.safe_idle_add(fn, self, *args, **kwargs)
+        return self.idle_add(fn, self, *args, **kwargs)
     return wrapped
 
 # Displays a progress bar while executing the "callback" method.
@@ -317,7 +317,7 @@ class vmmAsyncJob(vmmGObjectUI):
         if not self.is_pulsing or not self.show_progress:
             return True
 
-        self.safe_idle_add(self.pbar.pulse)
+        self.idle_add(self.pbar.pulse)
         return True
 
     @idle_wrapper

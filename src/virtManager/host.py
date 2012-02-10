@@ -653,7 +653,7 @@ class vmmHost(vmmGObjectUI):
         def cb():
             try:
                 pool.refresh()
-                self.refresh_current_pool()
+                self.idle_add(self.refresh_current_pool)
             finally:
                 self._in_refresh = False
 
@@ -673,8 +673,10 @@ class vmmHost(vmmGObjectUI):
 
         def cb():
             vol.delete()
-            self.refresh_current_pool()
-            self.populate_storage_volumes()
+            def idlecb():
+                self.refresh_current_pool()
+                self.populate_storage_volumes()
+            self.idle_add(idlecb)
 
         logging.debug("Deleting volume '%s'", vol.get_name())
         vmmAsyncJob.simple_async_noshow(cb, [], self,

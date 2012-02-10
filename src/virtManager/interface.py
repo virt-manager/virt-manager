@@ -73,11 +73,11 @@ class vmmInterface(vmmLibvirtObject):
 
     def start(self):
         self.interface.create(0)
-        self.refresh_xml()
+        self.idle_add(self.refresh_xml)
 
     def stop(self):
         self.interface.destroy(0)
-        self.refresh_xml()
+        self.idle_add(self.refresh_xml)
 
     def delete(self):
         self.interface.undefine()

@@ -28,13 +28,6 @@ from virtManager import util
 
 running_config, gobject, GObject, gtk = virtManager.guidiff.get_imports()
 
-def _safe_wrapper(func, *args):
-    gtk.gdk.threads_enter()
-    try:
-        return func(*args)
-    finally:
-        gtk.gdk.threads_leave()
-
 class vmmGObject(GObject):
 
     @staticmethod
@@ -191,23 +184,23 @@ class vmmGObject(GObject):
             self.emit(_s, *_a)
             return False
 
-        self.safe_idle_add(emitwrap, signal, *args)
+        self.idle_add(emitwrap, signal, *args)
 
-    def safe_idle_add(self, func, *args):
+    def idle_add(self, func, *args):
         """
         Make sure idle functions are run thread safe
         """
         if not hasattr(gobject, "idle_add"):
             return func(*args)
-        return gobject.idle_add(_safe_wrapper, func, *args)
+        return gobject.idle_add(func, *args)
 
-    def safe_timeout_add(self, timeout, func, *args):
+    def timeout_add(self, timeout, func, *args):
         """
         Make sure timeout functions are run thread safe
         """
         if not hasattr(gobject, "timeout_add"):
             return
-        return gobject.timeout_add(timeout, _safe_wrapper, func, *args)
+        return gobject.timeout_add(timeout, func, *args)
 
     def emit(self, signal_name, *args):
         if hasattr(GObject, "emit"):

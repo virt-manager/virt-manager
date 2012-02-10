@@ -426,7 +426,7 @@ class vmmAddHardware(vmmGObjectUI):
         label_widget = self.widget("phys-hd-label")
         label_widget.set_markup("")
         if not self.host_storage_timer:
-            self.host_storage_timer = self.safe_timeout_add(3 * 1000,
+            self.host_storage_timer = self.timeout_add(3 * 1000,
                                                 uihelpers.host_space_tick,
                                                 self.conn,
                                                 label_widget)

@@ -1068,7 +1068,7 @@ class vmmConnection(vmmGObject):
         # We want to kill off this thread asap, so schedule an
         # idle event to inform the UI of result
         logging.debug("Background open thread complete, scheduling notify")
-        self.safe_idle_add(self._open_notify)
+        self.idle_add(self._open_notify)
         self.connectThread = None
 
     def _open_notify(self):
@@ -1402,7 +1402,7 @@ class vmmConnection(vmmGObject):
             for name in newNodedevs:
                 self.emit("nodedev-added", name)
 
-        self.safe_idle_add(tick_send_signals)
+        self.idle_add(tick_send_signals)
 
         # Finally, we sample each domain
         now = time.time()

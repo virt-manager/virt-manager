@@ -299,7 +299,7 @@ def main():
     icon_theme = gtk.icon_theme_get_default()
     icon_theme.prepend_search_path(icon_dir)
 
-    gtk.gdk.threads_init()
+    gobject.threads_init()
 
     import dbus
     import dbus.glib
@@ -363,19 +363,15 @@ def main():
     # or the dbus comms to existing instance has failed
 
     # Finally start the app for real
-    gtk.gdk.threads_enter()
-    try:
-        show_engine(engine, options.show, options.uri, options.uuid,
-                    options.no_conn_auto)
-        if options.profile != None:
-            import hotshot
-            prof = hotshot.Profile(options.profile)
-            prof.runcall(gtk.main)
-            prof.close()
-        else:
-            gtk.main()
-    finally:
-        gtk.gdk.threads_leave()
+    show_engine(engine, options.show, options.uri, options.uuid,
+                options.no_conn_auto)
+    if options.profile != None:
+        import hotshot
+        prof = hotshot.Profile(options.profile)
+        prof.runcall(gtk.main)
+        prof.close()
+    else:
+        gtk.main()
 
 if __name__ == "__main__":
     try:

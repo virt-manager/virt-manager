@@ -161,7 +161,7 @@ class LibvirtConsoleConnection(ConsoleConnection):
             queued_text = bool(self.streamToTerminal)
             self.streamToTerminal += got
             if not queued_text:
-                self.safe_idle_add(self.display_data, terminal)
+                self.idle_add(self.display_data, terminal)
 
         if (events & libvirt.VIR_EVENT_HANDLE_WRITABLE and
             self.terminalToStream):

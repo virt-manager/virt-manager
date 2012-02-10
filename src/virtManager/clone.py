@@ -807,8 +807,7 @@ class vmmCloneVM(vmmGObjectUI):
         if error is not None:
             error = (_("Error creating virtual machine clone '%s': %s") %
                       (self.clone_design.clone_name, error))
-            self.err.show_err(error,
-                              details=details)
+            self.err.show_err(error, details=details)
         else:
             self.close()
             self.conn.tick(noStatsUpdate=True)

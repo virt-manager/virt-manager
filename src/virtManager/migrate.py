@@ -549,13 +549,11 @@ class vmmMigrateDialog(vmmGObjectUI):
             # 0 means that the spin box migrate-max-downtime does not
             # be enabled.
             current_thread = threading.currentThread()
-            timer = self.safe_timeout_add(100,
-                                          self._async_set_max_downtime,
-                                          vm, max_downtime,
-                                          current_thread)
+            timer = self.timeout_add(100, self._async_set_max_downtime,
+                                     vm, max_downtime, current_thread)
 
         vm.migrate(dstconn, migrate_uri, rate, live, secure, meter=meter)
         if timer:
-            gobject.source_remove(timer)
+            self.idle_add(gobject.source_remove, timer)
 
 vmmGObjectUI.type_register(vmmMigrateDialog)

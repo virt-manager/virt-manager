@@ -266,8 +266,6 @@ class vmmDomain(vmmLibvirtObject):
 
     # If manual shutdown or destroy specified, make sure we don't continue
     # install process
-    def set_install_abort(self, val):
-        self._install_abort = bool(val)
     def get_install_abort(self):
         return bool(self._install_abort)
 
@@ -1054,12 +1052,16 @@ class vmmDomain(vmmLibvirtObject):
     # Domain lifecycle methods #
     ############################
 
+    # All these methods are usually run asynchronously from threads, so
+    # let's be extra careful and have anything which might touch UI
+    # or gobject props invoked in an idle callback
+
     def _unregister_reboot_listener(self):
         if self.reboot_listener == None:
             return
 
         try:
-            self.disconnect(self.reboot_listener)
+            self.idle_add(self.disconnect, self.reboot_listener)
             self.reboot_listener = None
         except:
             pass
@@ -1093,30 +1095,38 @@ class vmmDomain(vmmLibvirtObject):
         # Request a shutdown
         self.shutdown()
 
-        self.reboot_listener = self.connect_opt_out("status-changed",
+        def add_reboot():
+            self.reboot_listener = self.connect_opt_out("status-changed",
                                                     reboot_listener, self)
+        self.idle_add(add_reboot)
 
     def shutdown(self):
-        self.set_install_abort(True)
+        self._install_abort = True
         self._unregister_reboot_listener()
         self._backend.shutdown()
-        self.force_update_status()
+        self.idle_add(self.force_update_status)
 
     def reboot(self):
-        self.set_install_abort(True)
+        self._install_abort = True
         self._backend.reboot(0)
-        self.force_update_status()
+        self.idle_add(self.force_update_status)
+
+    def destroy(self):
+        self._install_abort = True
+        self._unregister_reboot_listener()
+        self._backend.destroy()
+        self.idle_add(self.force_update_status)
 
     def startup(self):
         if self.get_cloning():
             raise RuntimeError(_("Cannot start guest while cloning "
                                  "operation in progress"))
         self._backend.create()
-        self.force_update_status()
+        self.idle_add(self.force_update_status)
 
     def suspend(self):
         self._backend.suspend()
-        self.force_update_status()
+        self.idle_add(self.force_update_status)
 
     def delete(self):
         if self.hasSavedImage():
@@ -1132,7 +1142,7 @@ class vmmDomain(vmmLibvirtObject):
                                  "operation in progress"))
 
         self._backend.resume()
-        self.force_update_status()
+        self.idle_add(self.force_update_status)
 
     def hasSavedImage(self):
         if not self.managedsave_supported:
@@ -1140,7 +1150,7 @@ class vmmDomain(vmmLibvirtObject):
         return self._backend.hasManagedSaveImage(0)
 
     def save(self, filename=None, meter=None):
-        self.set_install_abort(True)
+        self._install_abort = True
 
         if meter:
             start_job_progress_thread(self, meter, _("Saving domain to disk"))
@@ -1150,15 +1160,8 @@ class vmmDomain(vmmLibvirtObject):
         else:
             self._backend.managedSave(0)
 
-        self.force_update_status()
+        self.idle_add(self.force_update_status)
 
-    def destroy(self):
-        self.set_install_abort(True)
-        self._unregister_reboot_listener()
-        self._backend.destroy()
-        self.force_update_status()
-
-    # Migrate methods
 
     def support_downtime(self):
         return support.check_domain_support(self._backend,
@@ -1169,7 +1172,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def migrate(self, destconn, interface=None, rate=0,
                 live=False, secure=False, meter=None):
-        self.set_install_abort(True)
+        self._install_abort = True
 
         newname = None
 
@@ -1181,8 +1184,6 @@ class vmmDomain(vmmLibvirtObject):
             flags |= libvirt.VIR_MIGRATE_PEER2PEER
             flags |= libvirt.VIR_MIGRATE_TUNNELLED
 
-        newxml = self.get_xml(inactive=True)
-
         logging.debug("Migrating: conn=%s flags=%s dname=%s uri=%s rate=%s",
                       destconn.vmm, flags, newname, interface, rate)
 
@@ -1190,7 +1191,11 @@ class vmmDomain(vmmLibvirtObject):
             start_job_progress_thread(self, meter, _("Migrating domain"))
 
         self._backend.migrate(destconn.vmm, flags, newname, interface, rate)
-        destconn.define_domain(newxml)
+
+        def define_cb():
+            newxml = self.get_xml(inactive=True)
+            destconn.define_domain(newxml)
+        self.idle_add(define_cb)
 
 
     ###################

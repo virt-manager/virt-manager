@@ -62,11 +62,11 @@ class vmmStoragePool(vmmLibvirtObject):
 
     def start(self):
         self.pool.create(0)
-        self.refresh_xml()
+        self.idle_add(self.refresh_xml)
 
     def stop(self):
         self.pool.destroy()
-        self.refresh_xml()
+        self.idle_add(self.refresh_xml)
 
     def delete(self, nodelete=True):
         if nodelete:
@@ -112,10 +112,13 @@ class vmmStoragePool(vmmLibvirtObject):
         if not self.active:
             return
 
+        def cb():
+            self.refresh_xml()
+            self.update_volumes(refresh=True)
+            self.emit("refreshed")
+
         self.pool.refresh(0)
-        self.refresh_xml()
-        self.update_volumes(refresh=True)
-        self.emit("refreshed")
+        self.idle_add(cb)
 
     def update_volumes(self, refresh=False):
         if not self.is_active():

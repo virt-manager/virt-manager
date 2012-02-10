@@ -471,8 +471,9 @@ class vmmCreatePool(vmmGObjectUI):
     def finish(self):
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+        build = self.widget("pool-build").get_active()
 
-        progWin = vmmAsyncJob(self._async_pool_create, [],
+        progWin = vmmAsyncJob(self._async_pool_create, [build],
                               _("Creating storage pool..."),
                               _("Creating the storage pool may take a "
                                 "while..."),
@@ -489,7 +490,7 @@ class vmmCreatePool(vmmGObjectUI):
         else:
             self.close()
 
-    def _async_pool_create(self, asyncjob):
+    def _async_pool_create(self, asyncjob, build):
         newconn = None
 
         # Open a seperate connection to install on since this is async
@@ -498,7 +499,6 @@ class vmmCreatePool(vmmGObjectUI):
         self._pool.conn = newconn
 
         logging.debug("Starting backround pool creation.")
-        build = self.widget("pool-build").get_active()
         poolobj = self._pool.install(create=True, meter=meter, build=build)
         poolobj.setAutostart(True)
         logging.debug("Pool creation succeeded")
