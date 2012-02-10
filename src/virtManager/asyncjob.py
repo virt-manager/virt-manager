@@ -128,6 +128,11 @@ def _simple_async(callback, args, title, text, parent, errorintro,
     parent.err.show_err(error,
                         details=details)
 
+def idle_wrapper(fn):
+    def wrapped(self, *args, **kwargs):
+        return self.safe_idle_add(fn, self, *args, **kwargs)
+    return wrapped
+
 # Displays a progress bar while executing the "callback" method.
 class vmmAsyncJob(vmmGObjectUI):
 
@@ -237,33 +242,12 @@ class vmmAsyncJob(vmmGObjectUI):
         self.widget("warning-box").show()
         self.widget("warning-text").set_markup(markup)
 
-    def exit_if_necessary(self, force_exit=False):
-        thread_active = (self.bg_thread.isAlive() or not self.async)
-
-        if not thread_active or force_exit:
-            if self.async:
-                gtk.main_quit()
-            return False
-
-        if not self.is_pulsing or not self.show_progress:
-            return True
-
-        gtk.gdk.threads_enter()
-        try:
-            self.pbar.pulse()
-        finally:
-            gtk.gdk.threads_leave()
-
-        return True
-
 
     ###########
     # Actions #
     ###########
 
     def run(self):
-        # Don't use safe_timeout_add, since it's mostly needless locking
-        # since a lot of these windows don't touch any UI
         timer = gobject.timeout_add(100, self.exit_if_necessary)
 
         if self.show_progress:
@@ -322,38 +306,41 @@ class vmmAsyncJob(vmmGObjectUI):
     # All functions after this point are called from the timer loop
     # which means we need to be careful and lock threads before doing
     # any UI bits
+    def exit_if_necessary(self, force_exit=False):
+        thread_active = (self.bg_thread.isAlive() or not self.async)
+
+        if not thread_active or force_exit:
+            if self.async:
+                gtk.main_quit()
+            return False
+
+        if not self.is_pulsing or not self.show_progress:
+            return True
+
+        self.safe_idle_add(self.pbar.pulse)
+        return True
+
+    @idle_wrapper
     def pulse_pbar(self, progress="", stage=None):
-        gtk.gdk.threads_enter()
-        try:
-            self.is_pulsing = True
-            self.pbar.set_text(progress)
-            self.set_stage_text(stage or _("Processing..."))
-        finally:
-            gtk.gdk.threads_leave()
+        self.is_pulsing = True
+        self.pbar.set_text(progress)
+        self.set_stage_text(stage or _("Processing..."))
 
-
+    @idle_wrapper
     def set_pbar_fraction(self, frac, progress, stage=None):
-        gtk.gdk.threads_enter()
-        try:
-            self.is_pulsing = False
-            self.set_stage_text(stage or _("Processing..."))
-            self.pbar.set_text(progress)
+        self.is_pulsing = False
+        self.set_stage_text(stage or _("Processing..."))
+        self.pbar.set_text(progress)
 
-            if frac > 1:
-                frac = 1.0
-            if frac < 0:
-                frac = 0
-            self.pbar.set_fraction(frac)
-        finally:
-            gtk.gdk.threads_leave()
+        if frac > 1:
+            frac = 1.0
+        if frac < 0:
+            frac = 0
+        self.pbar.set_fraction(frac)
 
-
+    @idle_wrapper
     def set_pbar_done(self, progress, stage=None):
-        gtk.gdk.threads_enter()
-        try:
-            self.is_pulsing = False
-            self.set_stage_text(stage or _("Completed"))
-            self.pbar.set_text(progress)
-            self.pbar.set_fraction(1)
-        finally:
-            gtk.gdk.threads_leave()
+        self.is_pulsing = False
+        self.set_stage_text(stage or _("Completed"))
+        self.pbar.set_text(progress)
+        self.pbar.set_fraction(1)
