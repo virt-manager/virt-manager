@@ -25,7 +25,6 @@ import gtk
 from virtManager import util
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
-from virtManager.createmeter import vmmCreateMeter
 
 from virtinst import Storage
 
@@ -246,7 +245,7 @@ class vmmCreateVolume(vmmGObjectUI):
         newpool = newconn.storagePoolLookupByName(self.parent_pool.get_name())
         self.vol.pool = newpool
 
-        meter = vmmCreateMeter(asyncjob)
+        meter = asyncjob.get_meter()
         logging.debug("Starting backround vol creation.")
         self.vol.install(meter=meter)
 

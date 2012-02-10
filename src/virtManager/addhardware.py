@@ -32,7 +32,6 @@ from virtinst import (VirtualCharDevice, VirtualDevice,
 import virtManager.util as util
 import virtManager.uihelpers as uihelpers
 from virtManager.asyncjob import vmmAsyncJob
-from virtManager.createmeter import vmmCreateMeter
 from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.baseclass import vmmGObjectUI
 
@@ -1124,7 +1123,7 @@ class vmmAddHardware(vmmGObjectUI):
             return
 
         def do_file_allocate(asyncjob, disk):
-            meter = vmmCreateMeter(asyncjob)
+            meter = asyncjob.get_meter()
 
             # If creating disk via storage API, we need to thread
             # off a new connection

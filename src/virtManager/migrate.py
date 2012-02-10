@@ -31,7 +31,6 @@ import libvirt
 from virtManager import util
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
-from virtManager.createmeter import vmmCreateMeter
 from virtManager.domain import vmmDomain
 
 def uri_join(uri_tuple):
@@ -534,7 +533,7 @@ class vmmMigrateDialog(vmmGObjectUI):
     def _async_migrate(self, asyncjob,
                        origvm, origdconn, migrate_uri, rate, live,
                        secure, max_downtime):
-        meter = vmmCreateMeter(asyncjob)
+        meter = asyncjob.get_meter()
 
         srcconn = util.dup_conn(origvm.conn)
         dstconn = util.dup_conn(origdconn)

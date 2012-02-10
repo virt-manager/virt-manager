@@ -30,7 +30,6 @@ from virtManager import util
 from virtManager.mediadev import MEDIA_CDROM
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
-from virtManager.createmeter import vmmCreateMeter
 from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.details import vmmDetails
 from virtManager.domain import vmmDomainVirtinst
@@ -1924,7 +1923,7 @@ class vmmCreate(vmmGObjectUI):
         self.emit("action-show-vm", self.conn.get_uri(), guest.uuid)
 
     def do_install(self, asyncjob, guest):
-        meter = vmmCreateMeter(asyncjob)
+        meter = asyncjob.get_meter()
 
         logging.debug("Starting background install process")
 

@@ -26,7 +26,6 @@ import logging
 from virtManager import util
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
-from virtManager.createmeter import vmmCreateMeter
 
 from virtinst import Storage
 
@@ -495,7 +494,7 @@ class vmmCreatePool(vmmGObjectUI):
 
         # Open a seperate connection to install on since this is async
         newconn = util.dup_lib_conn(self._pool.conn)
-        meter = vmmCreateMeter(asyncjob)
+        meter = asyncjob.get_meter()
         self._pool.conn = newconn
 
         logging.debug("Starting backround pool creation.")

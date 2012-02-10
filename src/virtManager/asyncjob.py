@@ -26,8 +26,59 @@ import gtk
 import gobject
 
 import libvirt
+import urlgrabber
 
 from virtManager.baseclass import vmmGObjectUI
+
+class vmmCreateMeter(urlgrabber.progress.BaseMeter):
+    def __init__(self, asyncjob):
+        # progress meter has to run asynchronously, so pass in the
+        # async job to call back to with progress info
+        urlgrabber.progress.BaseMeter.__init__(self)
+        self.asyncjob = asyncjob
+        self.started = False
+
+    def _do_start(self, now=None):
+        if self.text is not None:
+            text = self.text
+        else:
+            text = self.basename
+        if self.size is None:
+            out = "    %5sB" % (0)
+            self.asyncjob.pulse_pbar(out, text)
+        else:
+            out = "%3i%% %5sB" % (0, 0)
+            self.asyncjob.set_pbar_fraction(0, out, text)
+        self.started = True
+
+    def _do_update(self, amount_read, now=None):
+        if self.text is not None:
+            text = self.text
+        else:
+            text = self.basename
+        fread = urlgrabber.progress.format_number(amount_read)
+        if self.size is None:
+            out = "    %5sB" % (fread)
+            self.asyncjob.pulse_pbar(out, text)
+        else:
+            frac = self.re.fraction_read()
+            out = "%3i%% %5sB" % (frac * 100, fread)
+            self.asyncjob.set_pbar_fraction(frac, out, text)
+
+    def _do_end(self, amount_read, now=None):
+        if self.text is not None:
+            text = self.text
+        else:
+            text = self.basename
+        fread = urlgrabber.progress.format_number(amount_read)
+        if self.size is None:
+            out = "    %5sB" % (fread)
+            self.asyncjob.pulse_pbar(out, text)
+        else:
+            out = "%3i%% %5sB" % (100, fread)
+            self.asyncjob.set_pbar_done(out, text)
+        self.started = False
+
 
 # This thin wrapper only exists so we can put debugging
 # code in the run() method every now & then
@@ -118,6 +169,7 @@ class vmmAsyncJob(vmmGObjectUI):
         self.stage = self.widget("pbar-stage")
         self.pbar = self.widget("pbar")
         self.is_pulsing = True
+        self._meter = None
 
         args = [self] + args
         self.bg_thread = asyncJobWorker(callback, args)
@@ -154,6 +206,11 @@ class vmmAsyncJob(vmmGObjectUI):
     def get_data(self):
         return self._data
 
+    def get_meter(self):
+        if not self._meter:
+            self._meter = vmmCreateMeter(self)
+        return self._meter
+
     def can_cancel(self):
         return bool(self.cancel_job)
 
@@ -161,7 +218,7 @@ class vmmAsyncJob(vmmGObjectUI):
         self.bg_thread = None
         self.cancel_job = None
         self.cancel_args = None
-
+        self._meter = None
 
     ####################
     # Internal helpers #

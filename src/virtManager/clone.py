@@ -25,7 +25,6 @@ import gtk
 
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
-from virtManager.createmeter import vmmCreateMeter
 from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager import util
 
@@ -823,7 +822,7 @@ class vmmCloneVM(vmmGObjectUI):
             # Open a seperate connection to install on since this is async
             logging.debug("Threading off connection to clone VM.")
             newconn = util.dup_conn(self.conn).vmm
-            meter = vmmCreateMeter(asyncjob)
+            meter = asyncjob.get_meter()
 
             self.clone_design.orig_connection = newconn
             for d in self.clone_design.clone_virtual_disks:

@@ -30,7 +30,6 @@ import virtinst
 from virtManager import util
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
-from virtManager.createmeter import vmmCreateMeter
 
 STORAGE_ROW_CONFIRM = 0
 STORAGE_ROW_CANT_DELETE = 1
@@ -160,7 +159,7 @@ class vmmDeleteDialog(vmmGObjectUI):
             # Open a seperate connection to install on since this is async
             logging.debug("Threading off connection to delete vol.")
             newconn = util.dup_conn(self.conn).vmm
-            meter = vmmCreateMeter(asyncjob)
+            meter = asyncjob.get_meter()
 
             for path in paths:
                 try:

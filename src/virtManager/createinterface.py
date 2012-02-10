@@ -28,7 +28,6 @@ from virtManager import util
 from virtManager import uihelpers
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
-from virtManager.createmeter import vmmCreateMeter
 
 PAGE_TYPE = 0
 PAGE_DETAILS = 1
@@ -1129,7 +1128,7 @@ class vmmCreateInterface(vmmGObjectUI):
             self.close()
 
     def do_install(self, asyncjob, activate):
-        meter = vmmCreateMeter(asyncjob)
+        meter = asyncjob.get_meter()
         error = None
         details = None
 
