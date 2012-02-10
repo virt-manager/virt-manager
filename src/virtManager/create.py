@@ -18,7 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import time
 import threading
 import logging
 
@@ -96,8 +95,7 @@ class vmmCreate(vmmGObjectUI):
 
         # Distro detection state variables
         self.detectedDistro = None
-        self.detectThreadEvent = threading.Event()
-        self.detectThreadEvent.set()
+        self.detecting = False
         self.mediaDetected = False
         self.show_all_os = False
 
@@ -1150,7 +1148,7 @@ class vmmCreate(vmmGObjectUI):
             return
         if not self.is_install_page():
             return
-        self.start_detect_thread(forward=forward)
+        self.start_detection(forward=forward)
 
     def toggle_detect_os(self, src):
         dodetect = src.get_active()
@@ -1995,20 +1993,8 @@ class vmmCreate(vmmGObjectUI):
     def pretty_memory(self, mem):
         return "%d MB" % (mem / 1024.0)
 
+
     # Distro detection methods
-
-    # Create and launch a detection thread (if no detection already running)
-    def start_detect_thread(self, forward):
-        if not self.detectThreadEvent.isSet():
-            # We are already checking (some) media, so let that continue
-            return
-
-        self.detectThreadEvent.clear()
-        detectThread = threading.Thread(target=self.do_detect,
-                                        args=(forward,),
-                                        name="Detect OS")
-        detectThread.setDaemon(True)
-        detectThread.start()
 
     def set_distro_labels(self, distro, ver):
         # Helper to set auto detect result labels
@@ -2059,63 +2045,56 @@ class vmmCreate(vmmGObjectUI):
         if not self.is_detect_active():
             return
 
-        dl = self.set_os_val(self.widget("install-os-type"),
-                             distro)
-        vl = self.set_os_val(self.widget("install-os-version"),
-                             ver)
+        dl = self.set_os_val(self.widget("install-os-type"), distro)
+        vl = self.set_os_val(self.widget("install-os-version"), ver)
         self.set_distro_labels(dl, vl)
 
-    def _safe_wrapper(self, func, args):
-        gtk.gdk.threads_enter()
+    def check_detection(self, idx, forward):
+        results = None
         try:
-            return func(*args)
-        finally:
-            gtk.gdk.threads_leave()
+            base = _("Detecting")
 
-    def _set_forward_sensitive(self, val):
-        self.widget("create-forward").set_sensitive(val)
+            if not self.detectedDistro or (idx >= (DETECT_TIMEOUT * 2)):
+                detect_str = base + ("." * ((idx % 3) + 1))
+                self.set_distro_labels(detect_str, detect_str)
 
-    # The actual detection routine
-    def do_detect(self, forward):
-        try:
-            media = self._safe_wrapper(self.get_config_detectable_media, ())
-            if not media:
+                self.safe_timeout_add(500, self.check_detection,
+                                      idx + 1, forward)
                 return
 
-            self.detectedDistro = None
-
-            logging.debug("Starting OS detection thread for media=%s", media)
-            self._safe_wrapper(self._set_forward_sensitive, (False,))
-
-            detectThread = threading.Thread(target=self.actually_detect,
-                                            name="Actual media detection",
-                                            args=(media,))
-            detectThread.setDaemon(True)
-            detectThread.start()
-
-            base = _("Detecting")
-            for i in range(1, DETECT_TIMEOUT * 2):
-                if self.detectedDistro != None:
-                    break
-                detect_str = base + ("." * (((i + 2) % 3) + 1))
-                self._safe_wrapper(self.set_distro_labels,
-                                   (detect_str, detect_str))
-                time.sleep(.5)
-
             results = self.detectedDistro
-            if results == None:
-                results = (None, None)
+        except:
+            logging.exception("Error in distro detect timeout")
 
-            self._safe_wrapper(self.set_distro_selection, results)
-        finally:
-            self._safe_wrapper(self._set_forward_sensitive, (True,))
-            self.detectThreadEvent.set()
-            self.mediaDetected = True
-            logging.debug("Leaving OS detection thread.")
-            if forward:
-                self.safe_idle_add(self.forward, ())
+        results = results or (None, None)
+        self.widget("create-forward").set_sensitive(True)
+        self.mediaDetected = True
+        self.detecting = False
+        logging.debug("Finished OS detection.")
+        self.set_distro_selection(*results)
+        if forward:
+            self.safe_idle_add(self.forward, ())
 
-        return
+    def start_detection(self, forward):
+        if self.detecting:
+            return
+
+        media = self.get_config_detectable_media()
+        if not media:
+            return
+
+        self.detectedDistro = None
+
+        logging.debug("Starting OS detection thread for media=%s", media)
+        self.widget("create-forward").set_sensitive(False)
+
+        detectThread = threading.Thread(target=self.actually_detect,
+                                        name="Actual media detection",
+                                        args=(media,))
+        detectThread.setDaemon(True)
+        detectThread.start()
+
+        self.check_detection(0, forward)
 
     def actually_detect(self, media):
         try:
