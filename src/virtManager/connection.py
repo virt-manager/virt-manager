@@ -26,20 +26,19 @@ import threading
 import time
 import traceback
 
-import dbus
 import libvirt
 import virtinst
 
 from virtManager import util
+from virtManager import connectauth
 from virtManager.baseclass import vmmGObject
-
 from virtManager.domain import vmmDomain
-from virtManager.network import vmmNetwork
-from virtManager.storagepool import vmmStoragePool
 from virtManager.interface import vmmInterface
-from virtManager.netdev import vmmNetDevice
 from virtManager.mediadev import vmmMediaDevice
+from virtManager.netdev import vmmNetDevice
+from virtManager.network import vmmNetwork
 from virtManager.nodedev import vmmNodeDevice
+from virtManager.storagepool import vmmStoragePool
 
 def _is_virtinst_test_uri(uri):
     try:
@@ -48,33 +47,6 @@ def _is_virtinst_test_uri(uri):
     except:
         return False
 
-def _do_we_have_session():
-    pid = os.getpid()
-
-    try:
-        bus = dbus.SystemBus()
-    except:
-        logging.exception("Error getting system bus handle")
-        return False
-
-    # Check ConsoleKit
-    try:
-        manager = dbus.Interface(bus.get_object(
-                                 "org.freedesktop.ConsoleKit",
-                                 "/org/freedesktop/ConsoleKit/Manager"),
-                                 "org.freedesktop.ConsoleKit.Manager")
-    except:
-        logging.exception("Couldn't connect to ConsoleKit")
-        return False
-
-    try:
-        ret = manager.GetSessionForUnixProcess(pid)
-        logging.debug("Found ConsoleKit session=%s", ret)
-    except:
-        logging.exception("Failed to lookup pid session")
-        return False
-
-    return True
 
 class vmmConnection(vmmGObject):
 
@@ -994,121 +966,6 @@ class vmmConnection(vmmGObject):
             self.connectThread.setDaemon(True)
             self.connectThread.start()
 
-    def _do_creds_polkit(self, action):
-        """
-        Libvirt openAuth callback for PolicyKit < 1.0
-        """
-        if os.getuid() == 0:
-            logging.debug("Skipping policykit check as root")
-            return 0
-
-        logging.debug("Doing policykit for %s", action)
-
-        try:
-            # First try to use org.freedesktop.PolicyKit.AuthenticationAgent
-            # which is introduced with PolicyKit-0.7
-            bus = dbus.SessionBus()
-
-            obj = bus.get_object(
-                        "org.freedesktop.PolicyKit.AuthenticationAgent", "/")
-            pkit = dbus.Interface(obj,
-                        "org.freedesktop.PolicyKit.AuthenticationAgent")
-
-            pkit.ObtainAuthorization(action, 0, os.getpid())
-        except dbus.exceptions.DBusException, e:
-            if (e.get_dbus_name() !=
-                "org.freedesktop.DBus.Error.ServiceUnknown"):
-                raise
-
-            logging.debug("Falling back to org.gnome.PolicyKit")
-            # If PolicyKit < 0.7, fallback to org.gnome.PolicyKit
-            obj = bus.get_object("org.gnome.PolicyKit",
-                                 "/org/gnome/PolicyKit/Manager")
-            pkit = dbus.Interface(obj, "org.gnome.PolicyKit.Manager")
-            pkit.ShowDialog(action, 0)
-
-        return 0
-
-    def _do_creds_dialog(self, creds):
-        """
-        Thread safe wrapper for libvirt openAuth user/pass callback
-        """
-        try:
-            import gtk
-
-            gtk.gdk.threads_enter()
-            return self._do_creds_dialog_main(creds)
-        finally:
-            gtk.gdk.threads_leave()
-
-    def _do_creds_dialog_main(self, creds):
-        """
-        Libvirt openAuth callback for username/password credentials
-        """
-        import gtk
-
-        dialog = gtk.Dialog("Authentication required", None, 0,
-                            (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                             gtk.STOCK_OK, gtk.RESPONSE_OK))
-        label = []
-        entry = []
-
-        box = gtk.Table(2, len(creds))
-        box.set_border_width(6)
-        box.set_row_spacings(6)
-        box.set_col_spacings(12)
-
-        def _on_ent_activate(ent):
-            idx = entry.index(ent)
-
-            if idx < len(entry) - 1:
-                entry[idx + 1].grab_focus()
-            else:
-                dialog.response(gtk.RESPONSE_OK)
-
-        row = 0
-        for cred in creds:
-            if (cred[0] == libvirt.VIR_CRED_AUTHNAME or
-                cred[0] == libvirt.VIR_CRED_PASSPHRASE):
-                prompt = cred[1]
-                if not prompt.endswith(":"):
-                    prompt += ":"
-
-                text_label = gtk.Label(prompt)
-                text_label.set_alignment(0.0, 0.5)
-
-                label.append(text_label)
-            else:
-                return -1
-
-            ent = gtk.Entry()
-            if cred[0] == libvirt.VIR_CRED_PASSPHRASE:
-                ent.set_visibility(False)
-            ent.connect("activate", _on_ent_activate)
-            entry.append(ent)
-
-            box.attach(label[row], 0, 1, row, row + 1, gtk.FILL, 0, 0, 0)
-            box.attach(entry[row], 1, 2, row, row + 1, gtk.FILL, 0, 0, 0)
-            row = row + 1
-
-        vbox = dialog.get_child()
-        vbox.add(box)
-
-        dialog.show_all()
-        res = dialog.run()
-        dialog.hide()
-
-        if res == gtk.RESPONSE_OK:
-            row = 0
-            for cred in creds:
-                cred[4] = entry[row].get_text()
-                row = row + 1
-            dialog.destroy()
-            return 0
-        else:
-            dialog.destroy()
-            return -1
-
     def _do_creds(self, creds, cbdata):
         """
         Generic libvirt openAuth callback
@@ -1118,34 +975,19 @@ class vmmConnection(vmmGObject):
             if (len(creds) == 1 and
                 creds[0][0] == libvirt.VIR_CRED_EXTERNAL and
                 creds[0][2] == "PolicyKit"):
-                return self._do_creds_polkit(creds[0][1])
+                return connectauth.creds_polkit(creds[0][1])
 
             for cred in creds:
                 if cred[0] == libvirt.VIR_CRED_EXTERNAL:
                     return -1
 
-            return self._do_creds_dialog(creds)
+            return connectauth.creds_dialog(creds)
         except Exception, e:
             # Detailed error message, in English so it can be Googled.
             self.connectError = (
                 "Failed to get credentials for '%s':\n%s\n%s" %
                 (self.get_uri(), str(e), "".join(traceback.format_exc())))
             return -1
-
-    def _acquire_tgt(self):
-        """
-        Try to get kerberos ticket if openAuth seems to require it
-        """
-        logging.debug("In acquire tgt.")
-        try:
-            bus = dbus.SessionBus()
-            ka = bus.get_object('org.gnome.KrbAuthDialog',
-                                '/org/gnome/KrbAuthDialog')
-            ret = ka.acquireTgt("", dbus_interface='org.gnome.KrbAuthDialog')
-        except Exception, e:
-            logging.info("Cannot acquire tgt" + str(e))
-            ret = False
-        return ret
 
     def _try_open(self):
         flags = 0
@@ -1209,14 +1051,15 @@ class vmmConnection(vmmGObject):
                 logging.debug("Looks like we might have failed policykit "
                               "auth. Checking to see if we have a valid "
                               "console session")
-                if not self.is_remote() and not _do_we_have_session():
+                if (not self.is_remote() and
+                    not connectauth.do_we_have_session()):
                     warnconsole = True
 
             if (libexc and
                 libexc.get_error_code() == libvirt.VIR_ERR_AUTH_FAILED and
                 "GSSAPI Error" in libexc.get_error_message() and
                 "No credentials cache found" in libexc.get_error_message()):
-                if self._acquire_tgt():
+                if connectauth.acquire_tgt():
                     continue
 
             self.connectError = (str(exc), tb, warnconsole)
