@@ -1951,7 +1951,7 @@ class vmmCreate(vmmGObjectUI):
             # Probably means guest had no 'install' phase, as in
             # for live cds. Try to restart the domain.
             vm.startup()
-        else:
+        elif guest.installer.has_install_phase():
             # Register a status listener, which will restart the
             # guest after the install has finished
             def cb():
