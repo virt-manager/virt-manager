@@ -1954,8 +1954,11 @@ class vmmCreate(vmmGObjectUI):
         else:
             # Register a status listener, which will restart the
             # guest after the install has finished
-            self.idle_add(vm.connect_opt_out, "status-changed",
-                          self.check_install_status, guest)
+            def cb():
+                vm.connect_opt_out("status-changed",
+                                   self.check_install_status, guest)
+                return False
+            self.idle_add(cb)
 
 
     def check_install_status(self, vm, ignore1, ignore2, virtinst_guest=None):
