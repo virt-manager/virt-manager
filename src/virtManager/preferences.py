@@ -39,6 +39,7 @@ class vmmPreferences(vmmGObjectUI):
         self.add_gconf_handle(self.config.on_sound_local_changed(self.refresh_sound_local))
         self.add_gconf_handle(self.config.on_sound_remote_changed(self.refresh_sound_remote))
         self.add_gconf_handle(self.config.on_graphics_type_changed(self.refresh_graphics_type))
+        self.add_gconf_handle(self.config.on_storage_format_changed(self.refresh_storage_format))
         self.add_gconf_handle(self.config.on_stats_enable_disk_poll_changed(self.refresh_disk_poll))
         self.add_gconf_handle(self.config.on_stats_enable_net_poll_changed(self.refresh_net_poll))
 
@@ -57,6 +58,7 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_sound_local()
         self.refresh_sound_remote()
         self.refresh_graphics_type()
+        self.refresh_storage_format()
         self.refresh_disk_poll()
         self.refresh_net_poll()
         self.refresh_grabkeys_combination()
@@ -88,6 +90,7 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_confirm_unapplied_toggled": self.change_confirm_unapplied,
             "on_prefs_btn_keys_define_clicked": self.change_grab_keys,
             "on_prefs_graphics_type_changed": self.change_graphics_type,
+            "on_prefs_storage_format_changed": self.change_storage_format,
             })
         self.bind_escape_key_close()
 
@@ -158,6 +161,20 @@ class vmmPreferences(vmmGObjectUI):
                 break
 
         self.widget("prefs-graphics-type").set_active(active)
+    def refresh_storage_format(self, ignore1=None, ignore2=None, ignore=None,
+                               ignore4=None):
+        combo = self.widget("prefs-storage-format")
+        model = combo.get_model()
+        gtype = self.config.get_storage_format()
+
+        # Default to row 0 == raw
+        active = 0
+        for rowidx in range(len(model)):
+            if model[rowidx][0].lower() == gtype:
+                active = rowidx
+                break
+
+        self.widget("prefs-storage-format").set_active(active)
 
     def refresh_disk_poll(self, ignore1=None, ignore2=None, ignore3=None,
                           ignore4=None):
@@ -314,6 +331,12 @@ class vmmPreferences(vmmGObjectUI):
         if idx >= 0:
             gtype = src.get_model()[idx][0]
         self.config.set_graphics_type(gtype.lower())
+    def change_storage_format(self, src):
+        typ = 'default'
+        idx = src.get_active()
+        if idx >= 0:
+            typ = src.get_model()[idx][0]
+        self.config.set_storage_format(typ.lower())
 
     def show_help(self, src_ignore):
         # From the Preferences window, show the help document from

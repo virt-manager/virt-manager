@@ -1720,6 +1720,13 @@ class vmmCreate(vmmGObjectUI):
                                         size=disksize,
                                         sparse=sparse)
 
+            fmt = self.config.get_storage_format()
+            if (self.is_default_storage() and
+                disk.vol_install and
+                fmt in disk.vol_install.formats):
+                logging.debug("Setting disk format from prefs: %s", fmt)
+                disk.vol_install.format = fmt
+
         except Exception, e:
             return self.err.val_err(_("Storage parameter error."), e)
 

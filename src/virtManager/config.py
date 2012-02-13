@@ -519,6 +519,18 @@ class vmmConfig(object):
         return self.conf.notify_add(self.conf_dir + "/new-vm/graphics_type",
                                     cb, data)
 
+    def get_storage_format(self):
+        ret = self.conf.get_string(self.conf_dir + "/new-vm/storage-format")
+        if ret not in ["default", "raw", "qcow2"]:
+            return "default"
+        return ret
+    def set_storage_format(self, typ):
+        self.conf.set_string(self.conf_dir + "/new-vm/storage-format",
+                             typ.lower())
+    def on_storage_format_changed(self, cb, data=None):
+        return self.conf.notify_add(self.conf_dir + "/new-vm/storage-format",
+                                    cb, data)
+
 
     # URL/Media path history
     def _url_add_helper(self, gconf_path, url):
