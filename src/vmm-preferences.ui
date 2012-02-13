@@ -495,8 +495,8 @@
                                   <object class="GtkLabel" id="label15">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="tooltip_text" translatable="yes">Force console menu accelerators while the console is active. Enabling this may override keyboard interaction with the guest.</property>
-                                    <property name="label" translatable="yes">Force console keyboard shortcuts:</property>
+                                    <property name="tooltip_text" translatable="yes">When the guest graphical console has keyboard focus, do not disable shortcuts for console window menus (Alt+F -&gt; File, etc.) Normally these are disabled to ensure that typing in the guest does not accidentally perform an operation in virt-manager's console window.</property>
+                                    <property name="label" translatable="yes">Don't disable console shortcuts:</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -509,6 +509,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="tooltip_text" translatable="yes">When the guest graphical console has keyboard focus, do not disable shortcuts for console window menus (Alt+F -&gt; File, etc.) Normally these are disabled to ensure that typing in the guest does not accidentally perform an operation in virt-manager's console window.</property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="on_prefs_console_accels_toggled" swapped="no"/>
