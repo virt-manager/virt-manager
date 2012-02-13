@@ -1274,6 +1274,14 @@ class vmmAddHardware(vmmGObjectUI):
                                         driverCache=cache,
                                         format=fmt)
 
+            if not fmt:
+                fmt = self.config.get_storage_format()
+                if (self.is_default_storage() and
+                    disk.vol_install and
+                    fmt in disk.vol_install.formats):
+                    logging.debug("Setting disk format from prefs: %s", fmt)
+                    disk.vol_install.format = fmt
+
             if (disk.type == virtinst.VirtualDisk.TYPE_FILE and
                 not self.vm.is_hvm() and
                 virtinst.util.is_blktap_capable()):
