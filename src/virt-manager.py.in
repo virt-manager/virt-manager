@@ -302,8 +302,9 @@ def main():
     gobject.threads_init()
 
     import dbus
-    import dbus.glib
-    dbus.glib.threads_init()
+    import dbus.mainloop.glib
+    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+    dbus.mainloop.glib.threads_init()
     import dbus.service
 
     # Specifically init config/gconf before the fork, so that pam
