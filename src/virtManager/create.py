@@ -169,9 +169,11 @@ class vmmCreate(vmmGObjectUI):
 
     def show(self, parent, uri=None):
         logging.debug("Showing new vm wizard")
-        self.reset_state(uri)
 
-        self.topwin.set_transient_for(parent)
+        if not self.is_visible():
+            self.reset_state(uri)
+            self.topwin.set_transient_for(parent)
+
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
