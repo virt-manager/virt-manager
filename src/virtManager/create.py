@@ -34,8 +34,6 @@ from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.details import vmmDetails
 from virtManager.domain import vmmDomainVirtinst
 
-OS_GENERIC = "generic"
-
 # Number of seconds to wait for media detection
 DETECT_TIMEOUT = 20
 
@@ -785,7 +783,7 @@ class vmmCreate(vmmGObjectUI):
         supportl = virtinst.FullVirtGuest.list_os_types(supported=True,
                                                         filtervars=filtervars)
 
-        self._add_os_row(model, OS_GENERIC, _("Generic"), True)
+        self._add_os_row(model, None, _("Generic"), True)
 
         for t in types:
             label = virtinst.FullVirtGuest.get_os_type_label(t)
@@ -802,8 +800,8 @@ class vmmCreate(vmmGObjectUI):
     def populate_os_variant_model(self, _type):
         model = self.widget("install-os-version").get_model()
         model.clear()
-        if _type == OS_GENERIC:
-            self._add_os_row(model, OS_GENERIC, _("Generic"), True)
+        if _type == None:
+            self._add_os_row(model, None, _("Generic"), True)
             return
 
         filtervars = (not self._rhel6_defaults() and
@@ -864,7 +862,7 @@ class vmmCreate(vmmGObjectUI):
                       self.capsdomain.hypervisor_type)
 
     def populate_summary(self):
-        ignore, ignore, dlabel, vlabel = self.get_config_os_info()
+        distro, version, dlabel, vlabel = self.get_config_os_info()
         mem = self.pretty_memory(int(self.guest.memory) * 1024)
         cpu = str(int(self.guest.vcpus))
 
@@ -897,17 +895,21 @@ class vmmCreate(vmmGObjectUI):
             storage = _("None")
 
         osstr = ""
+        have_os = True
         if self.guest.installer.is_container():
             osstr = _("Linux")
-        elif not dlabel:
+        elif not distro:
             osstr = _("Generic")
-        elif not vlabel:
+            have_os = False
+        elif not version:
             osstr = _("Generic") + " " + dlabel
+            have_os = False
         else:
             osstr = vlabel
 
         title = "Ready to begin installation of <b>%s</b>" % self.guest.name
 
+        self.widget("finish-warn-os").set_property("visible", not have_os)
         self.widget("summary-title").set_markup(title)
         self.widget("summary-os").set_text(osstr)
         self.widget("summary-install").set_text(install)
@@ -1181,9 +1183,8 @@ class vmmCreate(vmmGObjectUI):
         row = self._selected_os_row()
         if row:
             _type = row[0]
-            if _type:
-                self.populate_os_variant_model(_type)
-            elif row[3]:
+            self.populate_os_variant_model(_type)
+            if row[3]:
                 self.show_all_os = True
                 self.populate_os_type_model()
                 return
@@ -1606,9 +1607,9 @@ class vmmCreate(vmmGObjectUI):
 
         # OS distro/variant validation
         try:
-            if distro and distro != OS_GENERIC:
+            if distro:
                 self.guest.os_type = distro
-            if variant and variant != OS_GENERIC:
+            if variant:
                 self.guest.os_variant = variant
         except ValueError, e:
             return self.err.val_err(_("Error setting OS information."), e)
