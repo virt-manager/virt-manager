@@ -50,7 +50,7 @@ fi \
 # allows an extra fragment based on the timestamp to be appended
 # to the release. This distinguishes automated builds, from formal
 # Fedora RPM builds
-%define _extra_release %{?dist:%{dist}}%{!?dist:%{?extra_release:%{extra_release}}}
+%define _extra_release %{?dist:%{dist}}%{?extra_release:%{extra_release}}
 
 Name: %{_package}
 Version: %{_version}
