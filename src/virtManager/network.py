@@ -97,6 +97,8 @@ class vmmNetwork(vmmLibvirtObject):
 
     def get_ipv4_network(self):
         xml = self.get_xml()
+        if util.xpath(xml, "/network/ip") is None:
+            return None
         addrStr = util.xpath(xml, "/network/ip/@address")
         netmaskStr = util.xpath(xml, "/network/ip/@netmask")
 
