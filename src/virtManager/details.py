@@ -157,6 +157,9 @@ def prettyify_disk_bus(bus):
     if bus == "virtio":
         return "VirtIO"
 
+    if bus == "spapr-vscsi":
+        return "vSCSI"
+
     return bus
 
 def prettyify_disk(devtype, bus, idx):
@@ -2210,7 +2213,11 @@ class vmmDetails(vmmGObjectUI):
         # Do this last since it can change uniqueness info of the dev
         if self.editted(EDIT_DISK_BUS):
             bus = self.get_combo_label_value("disk-bus")
-            add_define(self.vm.define_disk_bus, dev_id_info, bus)
+            addr = None
+            if bus == "spapr-vscsi":
+                bus = "scsi"
+                addr = "spapr-vio"
+            add_define(self.vm.define_disk_bus, dev_id_info, bus, addr)
 
         return self._change_config_helper(df, da, hf, ha)
 
@@ -2796,6 +2803,7 @@ class vmmDetails(vmmGObjectUI):
         ro = disk.read_only
         share = disk.shareable
         bus = disk.bus
+        addr = disk.address.type
         idx = disk.disk_bus_index
         cache = disk.driver_cache
         io = disk.driver_io
@@ -2818,6 +2826,9 @@ class vmmDetails(vmmGObjectUI):
 
         is_cdrom = (devtype == virtinst.VirtualDisk.DEVICE_CDROM)
         is_floppy = (devtype == virtinst.VirtualDisk.DEVICE_FLOPPY)
+
+        if addr == "spapr-vio":
+            bus = "spapr-vscsi"
 
         pretty_name = prettyify_disk(devtype, bus, idx)
 
@@ -3284,6 +3295,9 @@ class vmmDetails(vmmGObjectUI):
             if self.vm.get_hv_type() in ["kvm", "test"]:
                 buses.append(["sata", "SATA"])
                 buses.append(["virtio", "Virtio"])
+            if (self.vm.get_hv_type() == "kvm" and
+                    self.vm.get_machtype() == "pseries"):
+                buses.append(["spapr-vscsi", "sPAPR-vSCSI"])
             if self.vm.conn.is_xen() or self.vm.get_hv_type() == "test":
                 buses.append(["xen", "Xen"])
 
@@ -3368,6 +3382,9 @@ class vmmDetails(vmmGObjectUI):
                 icon = "media-optical"
             elif devtype == "floppy":
                 icon = "media-floppy"
+
+            if disk.address.type == "spapr-vio":
+                bus = "spapr-vscsi"
 
             label = prettyify_disk(devtype, bus, idx)
 

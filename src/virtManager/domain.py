@@ -577,7 +577,7 @@ class vmmDomain(vmmLibvirtObject):
         def change(editdev):
             editdev.driver_type = new_driver_type or None
         return self._redefine_device(change, devobj)
-    def define_disk_bus(self, devobj, newval):
+    def define_disk_bus(self, devobj, newval, addr):
         def change(editdev):
             oldprefix = editdev.get_target_prefix()[0]
             oldbus = editdev.bus
@@ -587,6 +587,7 @@ class vmmDomain(vmmLibvirtObject):
                 return
 
             editdev.address.clear()
+            editdev.set_address(addr)
 
             if oldprefix == editdev.get_target_prefix()[0]:
                 return
