@@ -568,7 +568,7 @@ class vmmCreateInterface(vmmGObjectUI):
                 iface = ifaces[0][INTERFACE_ROW_NAME]
 
                 if itype == Interface.Interface.INTERFACE_TYPE_VLAN:
-                    tag = self.widget("vlan-tag").get_value()
+                    tag = uihelpers.spin_get_helper(self.widget("vlan-tag"))
                     name = "%s.%s" % (iface, int(tag))
 
                 elif itype == Interface.Interface.INTERFACE_TYPE_ETHERNET:
@@ -1051,7 +1051,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
 
     def validate_vlan(self, iobj, ifaces):
-        idx = self.widget("vlan-tag").get_value()
+        idx = uihelpers.spin_get_helper(self.widget("vlan-tag"))
 
         iobj.tag = int(idx)
         return True
