@@ -1460,6 +1460,11 @@ class vmmDetails(vmmGObjectUI):
         if self.vm.get_graphics_devices() or not self.vm.get_serial_devs():
             return
 
+        # Only show serial page if we are already on console view
+        pages = self.widget("details-pages")
+        if pages.get_current_page() != PAGE_CONSOLE:
+            return
+
         # Show serial console
         devs = self.build_serial_list()
         for name, ignore, sensitive, ignore, cb, serialidx in devs:
