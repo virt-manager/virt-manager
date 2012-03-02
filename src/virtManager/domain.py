@@ -1551,8 +1551,11 @@ class vmmDomain(vmmLibvirtObject):
                     logging.error("Error reading net stats for "
                                   "'%s' dev '%s': %s",
                                   self.get_name(), dev, err)
-                    logging.debug("Adding %s to skip list", dev)
-                    self._stats_net_skip.append(dev)
+                    if self.is_active():
+                        logging.debug("Adding %s to skip list", dev)
+                        self._stats_net_skip.append(dev)
+                    else:
+                        logging.debug("Aren't running, don't add to skiplist")
 
         return rx, tx
 
@@ -1585,8 +1588,11 @@ class vmmDomain(vmmLibvirtObject):
                     logging.error("Error reading disk stats for "
                                   "'%s' dev '%s': %s",
                                   self.get_name(), dev, err)
-                    logging.debug("Adding %s to skip list", dev)
-                    self._stats_disk_skip.append(dev)
+                    if self.is_active():
+                        logging.debug("Adding %s to skip list", dev)
+                        self._stats_disk_skip.append(dev)
+                    else:
+                        logging.debug("Aren't running, don't add to skiplist")
 
         return rd, wr
 
