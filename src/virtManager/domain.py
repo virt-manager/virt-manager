@@ -622,10 +622,11 @@ class vmmDomain(vmmLibvirtObject):
             editdev.source = newsource
             editdev.source_mode = newmode or None
         return self._redefine_device(change, devobj)
-    def define_network_model(self, devobj, newmodel):
+    def define_network_model(self, devobj, newmodel, addr):
         def change(editdev):
             if editdev.model != newmodel:
                 editdev.address.clear()
+                editdev.set_address(addr)
             editdev.model = newmodel
         return self._redefine_device(change, devobj)
 

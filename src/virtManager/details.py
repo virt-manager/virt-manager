@@ -2252,7 +2252,10 @@ class vmmDetails(vmmGObjectUI):
 
         if self.editted(EDIT_NET_MODEL):
             model = self.get_combo_label_value("network-model")
-            add_define(self.vm.define_network_model, dev_id_info, model)
+            addr = None
+            if model == "spapr-vlan":
+                addr = "spapr-vio"
+            add_define(self.vm.define_network_model, dev_id_info, model, addr)
 
         if self.editted(EDIT_NET_SOURCE):
             mode = None

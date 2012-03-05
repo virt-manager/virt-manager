@@ -310,6 +310,9 @@ def populate_netmodel_combo(vm, combo):
         mod_list = ["rtl8139", "ne2k_pci", "pcnet", "e1000"]
         if vm.get_hv_type() in ["kvm", "qemu", "test"]:
             mod_list.append("virtio")
+        if (vm.get_hv_type() == "kvm" and
+              vm.get_machtype() == "pseries"):
+            mod_list.append("spapr-vlan")
         if vm.get_hv_type() in ["xen", "test"]:
             mod_list.append("netfront")
         mod_list.sort()
@@ -630,6 +633,7 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
     set_error_parent(parent)
 
     net = None
+    addr = None
 
     if nettype is None:
         return None
@@ -673,6 +677,11 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
                                       network=netname,
                                       macaddr=macaddr,
                                       model=model)
+        if net.model == "spapr-vlan":
+            addr = "spapr-vio"
+
+        net.set_address(addr)
+
     except Exception, e:
         return err_dial.val_err(_("Error with network parameters."), e)
 
