@@ -936,48 +936,6 @@ class vmmDomain(vmmLibvirtObject):
         devlist += filter(lambda x: x.virtual_device_type == "console", devs)
         return devlist
 
-    def get_graphics_console(self):
-        gdevs = self.get_graphics_devices()
-        connhost = self.conn.get_uri_hostname()
-        transport, connuser = self.conn.get_transport()
-
-        gdev = gdevs and gdevs[0] or None
-        gtype = None
-        gport = None
-        gaddr = None
-        gsocket = None
-
-        if gdev:
-            gport = gdev.port
-            if gport != None:
-                gport = int(gport)
-            gtype = gdev.type
-            gaddr = "127.0.0.1"
-            if gdev.listen != None:
-                gaddr = gdev.listen
-                connhost = gaddr
-                if gport != None:
-                    connhost += ":"
-                    connhost += str(gport)
-            gsocket = gdev.socket
-
-        if connhost == None:
-            # Force use of 127.0.0.1, because some (broken) systems don't
-            # reliably resolve 'localhost' into 127.0.0.1, either returning
-            # the public IP, or an IPv6 addr. Neither work since QEMU only
-            # listens on 127.0.0.1 for VNC.
-            connhost = "127.0.0.1"
-
-        # Parse URI port
-        connport = None
-        if connhost.count(":"):
-            connhost, connport = connhost.split(":", 1)
-
-        return [gtype, transport,
-                connhost, connuser, connport,
-                gaddr, gport, gsocket]
-
-
     def _build_device_list(self, device_type,
                            refresh_if_necc=True, inactive=False):
         guest = self._get_guest(refresh_if_necc=refresh_if_necc,

@@ -55,6 +55,51 @@ def has_property(obj, setting):
         return False
     return True
 
+class ConnectionInfo(object):
+    """
+    Holds all the bits needed to make a connection to a graphical console
+    """
+    def __init__(self, conn, gdev):
+        self.gtype      = gdev.type
+        self.gport      = gdev.port and str(gdev.port) or None
+        self.gsocket    = gdev.socket
+        self.gaddr      = gdev.listen or "127.0.0.1"
+
+        self.transport, self.connuser = conn.get_transport()
+        self._connhost = conn.get_uri_hostname() or "127.0.0.1"
+
+        self._connport = None
+        if self._connhost.count(":"):
+            self._connhost, self._connport = self._connhost.split(":", 1)
+
+    def need_tunnel(self):
+        if self.gaddr is not "127.0.0.1":
+            return False
+
+        return self.transport in ["ssh", "ext"]
+
+    def get_conn_host(self):
+        host = self._connhost
+        port = self._connport
+
+        if not self.need_tunnel():
+            port = self.gport
+            if self.gaddr != "0.0.0.0":
+                host = self.gaddr
+
+        return host, port
+
+    def logstring(self):
+        return ("proto=%s trans=%s connhost=%s connuser=%s "
+                "connport=%s gaddr=%s gport=%s gsocket=%s" %
+                (self.gtype, self.transport, self._connhost, self.connuser,
+                 self._connport, self.gaddr, self.gport, self.gsocket))
+    def console_active(self):
+        if self.gsocket:
+            return True
+        if not self.gport:
+            return False
+        return int(self.gport) == -1
 
 class Tunnel(object):
     def __init__(self):
@@ -62,19 +107,21 @@ class Tunnel(object):
         self.errfd = None
         self.pid = None
 
-    def open(self, connhost, connuser, connport, gaddr, gport, gsocket):
+    def open(self, ginfo):
         if self.outfd is not None:
             return -1
 
+        host, port = ginfo.get_conn_host()
+
         # Build SSH cmd
         argv = ["ssh", "ssh"]
-        if connport:
-            argv += ["-p", str(connport)]
+        if port:
+            argv += ["-p", str(port)]
 
-        if connuser:
-            argv += ['-l', connuser]
+        if ginfo.connuser:
+            argv += ['-l', ginfo.connuser]
 
-        argv += [connhost]
+        argv += [host]
 
         # Build 'nc' command run on the remote host
         #
@@ -87,10 +134,10 @@ class Tunnel(object):
         # Fedora's 'nc' doesn't have this option, and apparently defaults
         # to the desired behavior.
         #
-        if gsocket:
-            nc_params = "-U %s" % gsocket
+        if ginfo.gsocket:
+            nc_params = "-U %s" % ginfo.gsocket
         else:
-            nc_params = "%s %s" % (gaddr, gport)
+            nc_params = "%s %s" % (ginfo.gaddr, ginfo.gport)
 
         nc_cmd = (
             """nc -q 2>&1 | grep "requires an argument" >/dev/null;"""
@@ -171,22 +218,14 @@ class Tunnel(object):
 
         return errout
 
-
 class Tunnels(object):
-    def __init__(self, connhost, connuser, connport, gaddr, gport, gsocket):
-        self.connhost = connhost
-        self.connuser = connuser
-        self.connport = connport
-
-        self.gaddr = gaddr
-        self.gport = gport
-        self.gsocket = gsocket
+    def __init__(self, ginfo):
+        self.ginfo = ginfo
         self._tunnels = []
 
     def open_new(self):
         t = Tunnel()
-        fd = t.open(self.connhost, self.connuser, self.connport,
-                    self.gaddr, self.gport, self.gsocket)
+        fd = t.open(self.ginfo)
         self._tunnels.append(t)
         return fd
 
@@ -262,7 +301,10 @@ class Viewer(vmmGObject):
             logging.debug("Error when getting the grab keys combination: %s",
                           str(e))
 
-    def open_host(self, host, user, port, socketpath, password=None):
+    def open_host(self, ginfo, password=None):
+        raise NotImplementedError()
+
+    def open_fd(self, fd, password=None):
         raise NotImplementedError()
 
     def get_desktop_resolution(self):
@@ -366,29 +408,31 @@ class VNCViewer(Viewer):
     def is_open(self):
         return self.display.is_open()
 
-    def open_host(self, host, user, port, socketpath, password=None):
-        ignore = password
-        ignore = user
+    def open_host(self, ginfo, password=None):
+        host, port = ginfo.get_conn_host()
 
-        if not socketpath:
+        if not ginfo.gsocket:
+            logging.debug("VNC connection to %s:%s", host, port)
             self.display.open_host(host, port)
             return
 
+        logging.debug("VNC connecting to socket=%s", ginfo.gsocket)
         try:
             sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-            sock.connect(socketpath)
+            sock.connect(ginfo.gsocket)
             self.sockfd = sock
         except Exception, e:
             raise RuntimeError(_("Error opening socket path '%s': %s") %
-                               (socketpath, e))
+                               (ginfo.gsocket, e))
 
         fd = self.sockfd.fileno()
         if fd < 0:
             raise RuntimeError((_("Error opening socket path '%s'") %
-                                socketpath) + " fd=%s" % fd)
+                                ginfo.gsocket) + " fd=%s" % fd)
         self.open_fd(fd)
 
-    def open_fd(self, fd):
+    def open_fd(self, fd, password=None):
+        ignore = password
         self.display.open_fd(fd)
 
     def set_credential_username(self, cred):
@@ -482,8 +526,9 @@ class SpiceViewer(Viewer):
             return None
         return self.display_channel.get_properties("width", "height")
 
-    def open_host(self, host, user, port, socketpath, password=None):
-        ignore = socketpath
+    def open_host(self, ginfo, password=None):
+        host, port = ginfo.get_conn_host()
+        user = ginfo.connuser
 
         uri = "spice://"
         uri += (user and str(user) or "")
@@ -1046,35 +1091,37 @@ class vmmConsolePages(vmmGObjectUI):
             self.schedule_retry()
             return
 
+        ginfo = None
         try:
-            (protocol, transport,
-             connhost, connuser, connport,
-             gaddr, gport, gsocket) = self.vm.get_graphics_console()
+            gdevs = self.vm.get_graphics_devices()
+            gdev = gdevs and gdevs[0] or None
+            if gdev:
+                ginfo = ConnectionInfo(self.vm.conn, gdev)
         except Exception, e:
             # We can fail here if VM is destroyed: xen is a bit racy
             # and can't handle domain lookups that soon after
             logging.exception("Getting graphics console failed: %s", str(e))
             return
 
-        if protocol is None:
+        if ginfo is None:
             logging.debug("No graphics configured for guest")
             self.activate_unavailable_page(
                             _("Graphical console not configured for guest"))
             return
 
-        if protocol not in self.config.embeddable_graphics():
+        if ginfo.gtype not in self.config.embeddable_graphics():
             logging.debug("Don't know how to show graphics type '%s' "
-                          "disabling console page", protocol)
+                          "disabling console page", ginfo.gtype)
 
             msg = (_("Cannot display graphical console type '%s'")
-                     % protocol)
-            if protocol == "spice":
+                     % ginfo.gtype)
+            if ginfo.gtype == "spice":
                 msg += ":\n %s" % self.config.get_spice_error()
 
             self.activate_unavailable_page(msg)
             return
 
-        if (gport == -1 and not gsocket):
+        if ginfo.console_active():
             self.activate_unavailable_page(
                             _("Graphical console is not yet active for guest"))
             self.schedule_retry()
@@ -1083,35 +1130,26 @@ class vmmConsolePages(vmmGObjectUI):
         self.activate_unavailable_page(
                 _("Connecting to graphical console for guest"))
 
-        logging.debug("Starting connect process for "
-                      "proto=%s trans=%s connhost=%s connuser=%s "
-                      "connport=%s gaddr=%s gport=%s gsocket=%s",
-                      protocol, transport, connhost, connuser, connport,
-                      gaddr, gport, gsocket)
+        logging.debug("Starting connect process for %s", ginfo.logstring())
         try:
-            if protocol == "vnc":
+            if ginfo.gtype == "vnc":
                 self.viewer = VNCViewer(self)
                 self.widget("console-vnc-viewport").add(self.viewer.display)
                 self.viewer.init_widget()
-            elif protocol == "spice":
+            elif ginfo.gtype == "spice":
                 self.viewer = SpiceViewer(self)
 
             self.set_enable_accel()
 
-            if transport in ("ssh", "ext"):
+            if ginfo.need_tunnel():
                 if self.tunnels:
                     # Tunnel already open, no need to continue
                     return
 
-                self.tunnels = Tunnels(connhost, connuser, connport,
-                                       gaddr, gport, gsocket)
-                fd = self.tunnels.open_new()
-                if fd >= 0:
-                    self.viewer.open_fd(fd)
-
+                self.tunnels = Tunnels(ginfo)
+                self.viewer.open_fd(self.tunnels.open_new())
             else:
-                self.viewer.open_host(connhost, connuser,
-                                      str(gport), gsocket)
+                self.viewer.open_host(ginfo)
 
         except Exception, e:
             logging.exception("Error connection to graphical console")
