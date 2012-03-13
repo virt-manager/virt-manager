@@ -953,6 +953,12 @@ class vmmDomain(vmmLibvirtObject):
                 gport = int(gport)
             gtype = gdev.type
             gaddr = "127.0.0.1"
+            if gdev.listen != None:
+                gaddr = gdev.listen
+                connhost = gaddr
+                if gport != None:
+                    connhost += ":"
+                    connhost += str(gport)
             gsocket = gdev.socket
 
         if connhost == None:
