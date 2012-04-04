@@ -73,7 +73,7 @@ class ConnectionInfo(object):
             self._connhost, self._connport = self._connhost.split(":", 1)
 
     def need_tunnel(self):
-        if self.gaddr is not "127.0.0.1":
+        if self.gaddr != "127.0.0.1":
             return False
 
         return self.transport in ["ssh", "ext"]
