@@ -490,6 +490,7 @@ class SpiceViewer(Viewer):
         if not self.console.tunnels:
             raise SystemError("Got fd request with no configured tunnel!")
 
+        logging.debug("Opening tunnel for channel: %s", channel)
         fd = self.console.tunnels.open_new()
         channel.open_fd(fd)
 
