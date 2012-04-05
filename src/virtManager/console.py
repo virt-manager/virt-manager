@@ -528,10 +528,8 @@ class SpiceViewer(Viewer):
 
     def open_host(self, ginfo, password=None):
         host, port = ginfo.get_conn_host()
-        user = ginfo.connuser
 
         uri = "spice://"
-        uri += (user and str(user) or "")
         uri += str(host) + "?port=" + str(port)
         logging.debug("spice uri: %s", uri)
 
