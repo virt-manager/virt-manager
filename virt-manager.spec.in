@@ -12,9 +12,13 @@
 %define disable_unsupported_rhel   0
 
 %define with_guestfs               0
-%define with_spice                 0
 %define with_tui                   0
 
+%ifarch %{ix86} x86_64
+%define with_spice                 0
+%else
+%define with_spice                 0
+%endif
 
 # Compat for use of spec in multiple distros
 
@@ -74,8 +78,12 @@ Requires: libvirt-python >= 0.7.0
 # Definitely does not work with earlier due to python API changes
 Requires: dbus-python >= 0.61
 Requires: dbus-x11
+%if !0%{?rhel} || 0%{?rhel} > 6
 # Might work with earlier, but this is what we've tested
 Requires: gnome-keyring >= 0.4.9
+%else
+Requires: libgnome-keyring
+%endif
 # Minimum we've tested with
 # Although if you don't have this, comment it out and the app
 # will work just fine - keyring functionality will simply be
@@ -91,14 +99,6 @@ Requires: vte >= 0.12.2
 Requires: scrollkeeper
 # For console widget
 Requires: gtk-vnc-python >= 0.3.8
-# For local authentication against PolicyKit
-# Fedora 12 has no need for a client agent
-%if 0%{?fedora} == 11
-Requires: PolicyKit-authentication-agent
-%endif
-%if 0%{?fedora} >= 9 && 0%{?fedora} < 11
-Requires: PolicyKit-gnome
-%endif
 %if %{with_spice}
 Requires: spice-gtk-python
 %endif
