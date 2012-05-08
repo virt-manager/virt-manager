@@ -287,9 +287,11 @@ def lookup_nodedev(vmmconn, hostdev):
 
     devs = vmmconn.get_nodedevs(devtype, None)
     for dev in devs:
-        # Try to get info from {product|vendor}_id
+        # Try to match with product_id|vendor_id|bus|device
         if (attrVal(dev, "product_id") == product_id and
-            attrVal(dev, "vendor_id") == vendor_id):
+            attrVal(dev, "vendor_id") == vendor_id and
+            attrVal(dev, "bus") == bus and
+            attrVal(dev, "device") == device):
             found_dev = dev
             break
         else:
