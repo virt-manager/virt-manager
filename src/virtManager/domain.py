@@ -18,6 +18,8 @@
 # MA 02110-1301 USA.
 #
 
+from gi.repository import GObject
+
 import logging
 import time
 import threading
@@ -131,6 +133,12 @@ class vmmInspectionData(object):
         self.applications = None
 
 class vmmDomain(vmmLibvirtObject):
+    __gsignals__ = {
+        "status-changed": (GObject.SignalFlags.RUN_FIRST, None, [int, int]),
+        "resources-sampled": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "inspection-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
+    }
+
     """
     Class wrapping virDomain libvirt objects. Is also extended to be
     backed by a virtinst.Guest object for new VM 'customize before install'
@@ -1085,7 +1093,7 @@ class vmmDomain(vmmLibvirtObject):
 
     # All these methods are usually run asynchronously from threads, so
     # let's be extra careful and have anything which might touch UI
-    # or gobject props invoked in an idle callback
+    # or GObject.props invoked in an idle callback
 
     def _unregister_reboot_listener(self):
         if self.reboot_listener == None:
@@ -1768,10 +1776,3 @@ class vmmDomainVirtinst(vmmDomain):
         def change(guest):
             guest.name = str(newname)
         return self._redefine_guest(change)
-
-vmmLibvirtObject.type_register(vmmDomain)
-vmmDomain.signal_new(vmmDomain, "status-changed", [int, int])
-vmmDomain.signal_new(vmmDomain, "resources-sampled", [])
-vmmDomain.signal_new(vmmDomain, "inspection-changed", [])
-
-vmmLibvirtObject.type_register(vmmDomainVirtinst)

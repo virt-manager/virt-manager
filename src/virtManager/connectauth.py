@@ -18,6 +18,8 @@
 # MA 02110-1301 USA.
 #
 
+from gi.repository import GObject
+
 import logging
 import os
 import time
@@ -99,7 +101,6 @@ def creds_dialog(creds):
     """
     Thread safe wrapper for libvirt openAuth user/pass callback
     """
-    import gobject
 
     retipc = []
 
@@ -111,7 +112,7 @@ def creds_dialog(creds):
             ret = -1
         retipc.append(ret)
 
-    gobject.idle_add(wrapper, creds_dialog_main, creds)
+    GObject.idle_add(wrapper, creds_dialog_main, creds)
 
     while not retipc:
         time.sleep(.1)
@@ -123,15 +124,15 @@ def creds_dialog_main(creds):
     """
     Libvirt openAuth callback for username/password credentials
     """
-    import gtk
+    from gi.repository import Gtk
 
-    dialog = gtk.Dialog("Authentication required", None, 0,
-                        (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                         gtk.STOCK_OK, gtk.RESPONSE_OK))
+    dialog = Gtk.Dialog("Authentication required", None, 0,
+                        (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                         Gtk.STOCK_OK, Gtk.ResponseType.OK))
     label = []
     entry = []
 
-    box = gtk.Table(2, len(creds))
+    box = Gtk.Table(2, len(creds))
     box.set_border_width(6)
     box.set_row_spacings(6)
     box.set_col_spacings(12)
@@ -142,7 +143,7 @@ def creds_dialog_main(creds):
         if idx < len(entry) - 1:
             entry[idx + 1].grab_focus()
         else:
-            dialog.response(gtk.RESPONSE_OK)
+            dialog.response(Gtk.ResponseType.OK)
 
     row = 0
     for cred in creds:
@@ -152,21 +153,21 @@ def creds_dialog_main(creds):
             if not prompt.endswith(":"):
                 prompt += ":"
 
-            text_label = gtk.Label(prompt)
+            text_label = Gtk.Label(label=prompt)
             text_label.set_alignment(0.0, 0.5)
 
             label.append(text_label)
         else:
             return -1
 
-        ent = gtk.Entry()
+        ent = Gtk.Entry()
         if cred[0] == libvirt.VIR_CRED_PASSPHRASE:
             ent.set_visibility(False)
         ent.connect("activate", _on_ent_activate)
         entry.append(ent)
 
-        box.attach(label[row], 0, 1, row, row + 1, gtk.FILL, 0, 0, 0)
-        box.attach(entry[row], 1, 2, row, row + 1, gtk.FILL, 0, 0, 0)
+        box.attach(label[row], 0, 1, row, row + 1, Gtk.AttachOptions.FILL, 0, 0, 0)
+        box.attach(entry[row], 1, 2, row, row + 1, Gtk.AttachOptions.FILL, 0, 0, 0)
         row = row + 1
 
     vbox = dialog.get_child()
@@ -176,7 +177,7 @@ def creds_dialog_main(creds):
     res = dialog.run()
     dialog.hide()
 
-    if res == gtk.RESPONSE_OK:
+    if res == Gtk.ResponseType.OK:
         row = 0
         for cred in creds:
             cred[4] = entry[row].get_text()

@@ -18,7 +18,8 @@
 # MA 02110-1301 USA.
 #
 
-import gtk
+from gi.repository import Gtk
+from gi.repository import Gdk
 
 import copy
 import logging
@@ -57,13 +58,13 @@ class vmmCreatePool(vmmGObjectUI):
         self._pool = None
         self._pool_class = Storage.StoragePool
 
-        self.window.add_from_string(_comboentry_xml)
+        self.get_window().add_from_string(_comboentry_xml)
         self.widget("pool-source-box").pack_start(
-            self.widget("pool-source-path"))
+            self.widget("pool-source-path"), True, True, 0)
         self.widget("pool-target-box").pack_start(
-            self.widget("pool-target-path"))
+            self.widget("pool-target-path"), True, True, 0)
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_pool_forward_clicked" : self.forward,
             "on_pool_back_clicked"    : self.back,
             "on_pool_cancel_clicked"  : self.close,
@@ -118,8 +119,8 @@ class vmmCreatePool(vmmGObjectUI):
 
         # XXX: Help docs useless/out of date
         self.widget("pool-help").hide()
-        finish_img = gtk.image_new_from_stock(gtk.STOCK_QUIT,
-                                              gtk.ICON_SIZE_BUTTON)
+        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
+                                              Gtk.IconSize.BUTTON)
         self.widget("pool-finish").set_image(finish_img)
 
         self.set_initial_state()
@@ -143,45 +144,45 @@ class vmmCreatePool(vmmGObjectUI):
         self.widget("pool-pages").set_show_tabs(False)
 
         type_list = self.widget("pool-type")
-        type_model = gtk.ListStore(str, str)
+        type_model = Gtk.ListStore(str, str)
         type_list.set_model(type_model)
-        text1 = gtk.CellRendererText()
+        text1 = Gtk.CellRendererText()
         type_list.pack_start(text1, True)
         type_list.add_attribute(text1, 'text', 1)
 
         format_list = self.widget("pool-format")
-        format_model = gtk.ListStore(str, str)
+        format_model = Gtk.ListStore(str, str)
         format_list.set_model(format_model)
-        text2 = gtk.CellRendererText()
+        text2 = Gtk.CellRendererText()
         format_list.pack_start(text2, False)
         format_list.add_attribute(text2, 'text', 1)
 
         # Target path combo box entry
         target_list = self.widget("pool-target-path")
         # target_path, Label, pool class instance
-        target_model = gtk.ListStore(str, str, object)
-        target_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        target_model = Gtk.ListStore(str, str, object)
+        target_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         target_list.set_model(target_model)
         target_list.set_text_column(0)
-        target_list.child.connect("focus-in-event", self.update_doc,
+        target_list.get_child().connect("focus-in-event", self.update_doc,
                                   "target_path", "pool-info2")
 
         # Source path combo box entry
         source_list = self.widget("pool-source-path")
         # source_path, Label, pool class instance
-        source_model = gtk.ListStore(str, str, object)
-        source_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        source_model = Gtk.ListStore(str, str, object)
+        source_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         source_list.set_model(source_model)
         source_list.set_text_column(0)
-        source_list.child.connect("focus-in-event", self.update_doc,
+        source_list.get_child().connect("focus-in-event", self.update_doc,
                                   "source_path", "pool-info2")
 
         self.populate_pool_type()
 
-        self.widget("pool-info-box1").modify_bg(gtk.STATE_NORMAL,
-                                                gtk.gdk.color_parse("grey"))
-        self.widget("pool-info-box2").modify_bg(gtk.STATE_NORMAL,
-                                                gtk.gdk.color_parse("grey"))
+        self.widget("pool-info-box1").modify_bg(Gtk.StateType.NORMAL,
+                                                Gdk.Color.parse("grey")[1])
+        self.widget("pool-info-box2").modify_bg(Gtk.StateType.NORMAL,
+                                                Gdk.Color.parse("grey")[1])
 
     def reset_state(self):
         self.widget("pool-pages").set_current_page(0)
@@ -192,8 +193,8 @@ class vmmCreatePool(vmmGObjectUI):
         self.widget("pool-name").set_text("")
         self.widget("pool-name").grab_focus()
         self.widget("pool-type").set_active(0)
-        self.widget("pool-target-path").child.set_text("")
-        self.widget("pool-source-path").child.set_text("")
+        self.widget("pool-target-path").get_child().set_text("")
+        self.widget("pool-source-path").get_child().set_text("")
         self.widget("pool-hostname").set_text("")
         self.widget("pool-iqn-chk").set_active(False)
         self.widget("pool-iqn-chk").toggled()
@@ -347,7 +348,7 @@ class vmmCreatePool(vmmGObjectUI):
         show_row("pool-build", buildsens)
         show_row("pool-iqn", iqn)
 
-        self.widget("pool-target-path").child.set_text(self._pool.target_path)
+        self.widget("pool-target-path").get_child().set_text(self._pool.target_path)
         self.widget("pool-target-button").set_sensitive(tgt_b)
         self.widget("pool-source-button").set_sensitive(src_b)
         self.widget("pool-build").set_active(builddef)
@@ -380,7 +381,7 @@ class vmmCreatePool(vmmGObjectUI):
         if selection != -1:
             return model[selection][1]
 
-        return src.child.get_text()
+        return src.get_child().get_text()
 
     def get_config_source_path(self):
         src = self.widget("pool-source-path")
@@ -393,7 +394,7 @@ class vmmCreatePool(vmmGObjectUI):
         if selection != -1:
             return model[selection][1]
 
-        return src.child.get_text().strip()
+        return src.get_child().get_text().strip()
 
     def get_config_host(self):
         host = self.widget("pool-hostname")
@@ -437,14 +438,14 @@ class vmmCreatePool(vmmGObjectUI):
         source = self._browse_file(_("Choose source path"),
                                    startfolder="/dev", foldermode=False)
         if source:
-            self.widget("pool-source-path").child.set_text(source)
+            self.widget("pool-source-path").get_child().set_text(source)
 
     def browse_target_path(self, ignore1=None):
         target = self._browse_file(_("Choose target directory"),
                                    startfolder="/var/lib/libvirt",
                                    foldermode=True)
         if target:
-            self.widget("pool-target-path").child.set_text(target)
+            self.widget("pool-target-path").get_child().set_text(target)
 
 
     def forward(self, ignore=None):
@@ -468,7 +469,7 @@ class vmmCreatePool(vmmGObjectUI):
 
     def finish(self):
         self.topwin.set_sensitive(False)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
         build = self.widget("pool-build").get_active()
 
         progWin = vmmAsyncJob(self._async_pool_create, [build],
@@ -479,7 +480,7 @@ class vmmCreatePool(vmmGObjectUI):
         error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
 
         if error:
             error = _("Error creating pool: %s") % error
@@ -616,12 +617,10 @@ class vmmCreatePool(vmmGObjectUI):
         return doc
 
     def _browse_file(self, dialog_name, startfolder=None, foldermode=False):
-        mode = gtk.FILE_CHOOSER_ACTION_OPEN
+        mode = Gtk.FileChooserAction.OPEN
         if foldermode:
-            mode = gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER
+            mode = Gtk.FileChooserAction.SELECT_FOLDER
 
         return util.browse_local(self.topwin, dialog_name, self.conn,
                                  dialog_type=mode,
                                  start_folder=startfolder)
-
-vmmGObjectUI.type_register(vmmCreatePool)

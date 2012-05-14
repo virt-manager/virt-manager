@@ -20,27 +20,13 @@
 
 import logging
 
-import gtk
-
 from virtManager.baseclass import vmmGObjectUI
-
-def on_email(about, mail):
-    ignore = about
-    if hasattr(gtk, "show_uri"):
-        gtk.show_uri(None, "mailto:%s" % mail, gtk.get_current_event_time())
-gtk.about_dialog_set_email_hook(on_email)
-
-def on_url(about, link):
-    ignore = about
-    if hasattr(gtk, "show_uri"):
-        gtk.show_uri(None, link, gtk.get_current_event_time())
-gtk.about_dialog_set_url_hook(on_url)
 
 class vmmAbout(vmmGObjectUI):
     def __init__(self):
         vmmGObjectUI.__init__(self, "vmm-about.ui", "vmm-about")
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_vmm_about_delete_event": self.close,
             "on_vmm_about_response": self.close,
             })
@@ -57,5 +43,3 @@ class vmmAbout(vmmGObjectUI):
 
     def _cleanup(self):
         pass
-
-vmmGObjectUI.type_register(vmmAbout)

@@ -17,6 +17,8 @@
 # MA 02110-1301 USA.
 #
 
+from gi.repository import GObject
+
 import logging
 import os
 import glob
@@ -86,6 +88,13 @@ def is_net_bonding_slave(name_ignore, sysfspath):
     return False
 
 class vmmHalHelper(vmmGObject):
+    __gsignals__ = {
+        "netdev-added": (GObject.SignalFlags.RUN_FIRST, None, [object]),
+        "optical-added": (GObject.SignalFlags.RUN_FIRST, None, [object]),
+        "optical-media-added": (GObject.SignalFlags.RUN_FIRST, None, [str, str, str]),
+        "device-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+    }
+
     def __init__(self):
         vmmGObject.__init__(self)
 
@@ -332,9 +341,3 @@ class vmmHalHelper(vmmGObject):
                 return (label, path)
 
         return None, None
-
-vmmHalHelper.type_register(vmmHalHelper)
-vmmHalHelper.signal_new(vmmHalHelper, "netdev-added", [object])
-vmmHalHelper.signal_new(vmmHalHelper, "optical-added", [object])
-vmmHalHelper.signal_new(vmmHalHelper, "optical-media-added", [str, str, str])
-vmmHalHelper.signal_new(vmmHalHelper, "device-removed", [str])

@@ -18,6 +18,8 @@
 # MA 02110-1301 USA.
 #
 
+from gi.repository import GObject
+
 import logging
 import os
 import re
@@ -49,6 +51,29 @@ def _is_virtinst_test_uri(uri):
 
 
 class vmmConnection(vmmGObject):
+    __gsignals__ = {
+        "vm-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "vm-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "net-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "net-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "net-started": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "net-stopped": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "pool-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "pool-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "pool-started": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "pool-stopped": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "interface-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "interface-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "interface-started": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "interface-stopped": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "nodedev-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "nodedev-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "mediadev-added": (GObject.SignalFlags.RUN_FIRST, None, [object]),
+        "mediadev-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "resources-sampled": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "state-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "connect-error": (GObject.SignalFlags.RUN_FIRST, None, [str, str, bool]),
+    }
 
     STATE_DISCONNECTED = 0
     STATE_CONNECTING = 1
@@ -1504,6 +1529,7 @@ class vmmConnection(vmmGObject):
     ########################
     # Stats getter methods #
     ########################
+
     def _vector_helper(self, record_name):
         vector = []
         stats = self.record
@@ -1527,10 +1553,10 @@ class vmmConnection(vmmGObject):
         return cpudata
     guest_cpu_time_vector_limit = host_cpu_time_vector_limit
     def disk_io_vector_limit(self, dummy):
-        #No point to accumulate unnormalized I/O for a conenction
+        # No point to accumulate unnormalized I/O for a conenction
         return [0.0]
     def network_traffic_vector_limit(self, dummy):
-        #No point to accumulate unnormalized Rx/Tx for a connection
+        # No point to accumulate unnormalized Rx/Tx for a connection
         return [0.0]
 
     def _get_record_helper(self, record_name):
@@ -1565,6 +1591,7 @@ class vmmConnection(vmmGObject):
     def disk_io_max_rate(self):
         return self._get_record_helper("diskMaxRate")
 
+
     ####################################
     # Per-Connection gconf preferences #
     ####################################
@@ -1574,32 +1601,3 @@ class vmmConnection(vmmGObject):
     def config_get_iso_paths(self):
         return self.config.get_perhost(self.get_uri(),
                                        self.config.get_iso_paths)
-
-vmmGObject.type_register(vmmConnection)
-vmmGObject.signal_new(vmmConnection, "vm-added", [str])
-vmmGObject.signal_new(vmmConnection, "vm-removed", [str])
-
-vmmGObject.signal_new(vmmConnection, "net-added", [str])
-vmmGObject.signal_new(vmmConnection, "net-removed", [str])
-vmmGObject.signal_new(vmmConnection, "net-started", [str])
-vmmGObject.signal_new(vmmConnection, "net-stopped", [str])
-
-vmmGObject.signal_new(vmmConnection, "pool-added", [str])
-vmmGObject.signal_new(vmmConnection, "pool-removed", [str])
-vmmGObject.signal_new(vmmConnection, "pool-started", [str])
-vmmGObject.signal_new(vmmConnection, "pool-stopped", [str])
-
-vmmGObject.signal_new(vmmConnection, "interface-added", [str])
-vmmGObject.signal_new(vmmConnection, "interface-removed", [str])
-vmmGObject.signal_new(vmmConnection, "interface-started", [str])
-vmmGObject.signal_new(vmmConnection, "interface-stopped", [str])
-
-vmmGObject.signal_new(vmmConnection, "nodedev-added", [str])
-vmmGObject.signal_new(vmmConnection, "nodedev-removed", [str])
-
-vmmGObject.signal_new(vmmConnection, "mediadev-added", [object])
-vmmGObject.signal_new(vmmConnection, "mediadev-removed", [str])
-
-vmmGObject.signal_new(vmmConnection, "resources-sampled", [])
-vmmGObject.signal_new(vmmConnection, "state-changed", [])
-vmmGObject.signal_new(vmmConnection, "connect-error", [str, str, bool])

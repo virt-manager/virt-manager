@@ -20,7 +20,9 @@
 
 import logging
 
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Gdk
 
 from virtManager import util
 from virtManager.baseclass import vmmGObjectUI
@@ -32,6 +34,10 @@ DEFAULT_ALLOC = 0
 DEFAULT_CAP   = 8192
 
 class vmmCreateVolume(vmmGObjectUI):
+    __gsignals__ = {
+        "vol-created": (GObject.SignalFlags.RUN_FIRST, None, []),
+    }
+
     def __init__(self, conn, parent_pool):
         vmmGObjectUI.__init__(self, "vmm-create-vol.ui", "vmm-create-vol")
         self.conn = conn
@@ -41,7 +47,7 @@ class vmmCreateVolume(vmmGObjectUI):
         self.vol = None
         self.vol_class = Storage.StoragePool.get_volume_for_pool(parent_pool.get_type())
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_vmm_create_vol_delete_event" : self.close,
             "on_vol_cancel_clicked"  : self.close,
             "on_vol_create_clicked"  : self.finish,
@@ -52,18 +58,19 @@ class vmmCreateVolume(vmmGObjectUI):
         self.bind_escape_key_close()
 
         format_list = self.widget("vol-format")
-        format_model = gtk.ListStore(str, str)
+        format_model = Gtk.ListStore(str, str)
         format_list.set_model(format_model)
-        text2 = gtk.CellRendererText()
+        text2 = Gtk.CellRendererText()
         format_list.pack_start(text2, False)
         format_list.add_attribute(text2, 'text', 1)
-        self.widget("vol-info-view").modify_bg(gtk.STATE_NORMAL,
-                                               gtk.gdk.color_parse("grey"))
+
+        self.widget("vol-info-view").modify_bg(Gtk.StateType.NORMAL,
+                                               Gdk.Color.parse("grey")[1])
 
         # XXX: Help docs useless/out of date
         self.widget("pool-help").hide()
-        finish_img = gtk.image_new_from_stock(gtk.STOCK_QUIT,
-                                              gtk.ICON_SIZE_BUTTON)
+        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
+                                              Gtk.IconSize.BUTTON)
         self.widget("vol-create").set_image(finish_img)
 
         self.reset_state()
@@ -221,7 +228,7 @@ class vmmCreateVolume(vmmGObjectUI):
                       self.vol.get_xml_config())
 
         self.topwin.set_sensitive(False)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         progWin = vmmAsyncJob(self._async_vol_create, [],
                               _("Creating storage volume..."),
@@ -231,7 +238,7 @@ class vmmCreateVolume(vmmGObjectUI):
         error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
 
         if error:
             error = _("Error creating vol: %s") % error
@@ -286,6 +293,3 @@ class vmmCreateVolume(vmmGObjectUI):
             self.topwin.set_modal(modal)
 
         return ret
-
-vmmGObjectUI.type_register(vmmCreateVolume)
-vmmCreateVolume.signal_new(vmmCreateVolume, "vol-created", [])

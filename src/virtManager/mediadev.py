@@ -18,6 +18,8 @@
 # MA 02110-1301 USA.
 #
 
+from gi.repository import GObject
+
 import logging
 import time
 
@@ -31,6 +33,11 @@ MEDIA_CDROM = "cdrom"
 MEDIA_TIMEOUT = 3
 
 class vmmMediaDevice(vmmGObject):
+    __gsignals__ = {
+        "media-added": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "media-removed": (GObject.SignalFlags.RUN_FIRST, None, []),
+    }
+
     @staticmethod
     def mediadev_from_nodedev(dev):
         nodedev = dev.get_virtinst_obj()
@@ -163,8 +170,3 @@ class vmmMediaDevice(vmmGObject):
 
         self.set_media(has_media, None, None)
         self.idle_emit(has_media and "media-added" or "media-removed")
-
-
-vmmGObject.type_register(vmmMediaDevice)
-vmmMediaDevice.signal_new(vmmMediaDevice, "media-added", [])
-vmmMediaDevice.signal_new(vmmMediaDevice, "media-removed", [])

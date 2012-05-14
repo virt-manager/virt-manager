@@ -18,6 +18,8 @@
 # MA 02110-1301 USA.
 #
 
+from gi.repository import GObject
+
 import difflib
 import logging
 
@@ -35,6 +37,10 @@ def _sanitize_xml(xml):
     return xml
 
 class vmmLibvirtObject(vmmGObject):
+    __gsignals__ = {
+        "config-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
+    }
+
     def __init__(self, conn):
         vmmGObject.__init__(self)
         self._conn = conn
@@ -145,8 +151,3 @@ class vmmLibvirtObject(vmmGObject):
     def _redefine_xml(self, newxml):
         origxml = self._xml_to_redefine()
         return self._redefine_helper(origxml, newxml)
-
-
-vmmGObject.signal_new(vmmLibvirtObject, "config-changed", [])
-
-vmmGObject.type_register(vmmLibvirtObject)

@@ -18,8 +18,8 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 
 import logging
 import threading
@@ -74,6 +74,11 @@ def _safe_getattr(obj, name):
 
 
 class vmmEngine(vmmGObject):
+    __gsignals__ = {
+        "conn-added": (GObject.SignalFlags.RUN_FIRST, None, [object]),
+        "conn-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+    }
+
     def __init__(self):
         vmmGObject.__init__(self)
 
@@ -266,12 +271,12 @@ class vmmEngine(vmmGObject):
         interval = self.config.get_stats_update_interval() * 1000
 
         if self.timer != None:
-            gobject.source_remove(self.timer)
+            GObject.source_remove(self.timer)
             self.timer = None
 
         # No need to use 'timeout_add', the tick should be
         # manually made thread safe
-        self.timer = gobject.timeout_add(interval, self.tick)
+        self.timer = GObject.timeout_add(interval, self.tick)
 
     def tick(self):
         if not self.config.support_threading:
@@ -318,7 +323,7 @@ class vmmEngine(vmmGObject):
         return 1
 
     def change_timer_interval(self, ignore1, ignore2, ignore3, ignore4):
-        gobject.source_remove(self.timer)
+        GObject.source_remove(self.timer)
         self.schedule_timer()
 
     def increment_window_counter(self, src):
@@ -346,7 +351,7 @@ class vmmEngine(vmmGObject):
             self.inspection = None
 
         if self.timer != None:
-            gobject.source_remove(self.timer)
+            GObject.source_remove(self.timer)
 
         if self.systray:
             self.systray.cleanup()
@@ -404,7 +409,7 @@ class vmmEngine(vmmGObject):
                 logging.debug("Leaked %s", name)
 
         logging.debug("Exiting app normally.")
-        gtk.main_quit()
+        Gtk.main_quit()
 
     def _create_inspection_thread(self):
         if not self.config.support_inspection:
@@ -505,7 +510,7 @@ class vmmEngine(vmmGObject):
                 uri += "#%s" % index
 
             logging.debug("Showing help for %s", uri)
-            gtk.show_uri(None, uri, gtk.get_current_event_time())
+            Gtk.show_uri(None, uri, Gtk.get_current_event_time())
         except Exception, e:
             src.err.show_err(_("Unable to display documentation: %s") % e)
 
@@ -765,7 +770,7 @@ class vmmEngine(vmmGObject):
             path = util.browse_local(src.topwin,
                                      _("Save Virtual Machine"),
                                      conn,
-                                     dialog_type=gtk.FILE_CHOOSER_ACTION_SAVE,
+                                     dialog_type=Gtk.FileChooserAction.SAVE,
                                      browse_reason=self.config.CONFIG_DIR_SAVE)
             if not path:
                 return
@@ -980,7 +985,3 @@ class vmmEngine(vmmGObject):
         logging.debug("Resetting vm '%s'", vm.get_name())
         vmmAsyncJob.simple_async_noshow(vm.reset, [], src,
                                         _("Error resetting domain"))
-
-vmmGObject.type_register(vmmEngine)
-vmmEngine.signal_new(vmmEngine, "conn-added", [object])
-vmmEngine.signal_new(vmmEngine, "conn-removed", [str])

@@ -25,14 +25,10 @@ import pty
 import fcntl
 import logging
 
-import gtk
-import gobject
-
-try:
-    import vte
-except ImportError:
-    logging.debug("Could not import vte, no serial console support")
-    vte = None
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import Vte
 
 import libvirt
 
@@ -81,8 +77,8 @@ class LocalConsoleConnection(ConsoleConnection):
 
         self.fd = pty.slave_open(ipty)
         fcntl.fcntl(self.fd, fcntl.F_SETFL, os.O_NONBLOCK)
-        self.source = gobject.io_add_watch(self.fd,
-                            gobject.IO_IN | gobject.IO_ERR | gobject.IO_HUP,
+        self.source = GObject.io_add_watch(self.fd,
+                            GObject.IO_IN | GObject.IO_ERR | GObject.IO_HUP,
                             self.display_data, terminal)
 
         # Save term settings & set to raw mode
@@ -104,7 +100,7 @@ class LocalConsoleConnection(ConsoleConnection):
         os.close(self.fd)
         self.fd = None
 
-        gobject.source_remove(self.source)
+        GObject.source_remove(self.source)
         self.source = None
         self.origtermios = None
 
@@ -121,7 +117,7 @@ class LocalConsoleConnection(ConsoleConnection):
     def display_data(self, src, cond, terminal):
         ignore = src
 
-        if cond != gobject.IO_IN:
+        if cond != GObject.IO_IN:
             self.close()
             return False
 
@@ -309,17 +305,14 @@ class vmmSerialConsole(vmmGObject):
         self.vm.connect("status-changed", self.vm_status_changed)
 
     def init_terminal(self):
-        if not vte:
-            return
-
-        self.terminal = vte.Terminal()
+        self.terminal = Vte.Terminal()
         self.terminal.set_cursor_blinks(True)
         self.terminal.set_emulation("xterm")
         self.terminal.set_scrollback_lines(1000)
         self.terminal.set_audible_bell(False)
         self.terminal.set_visible_bell(True)
         # XXX python VTE binding has bug failing to register constants
-        #self.terminal.set_backspace_binding(vte.ERASE_ASCII_BACKSPACE)
+        #self.terminal.set_backspace_binding(Vte.ERASE_ASCII_BACKSPACE)
         self.terminal.set_backspace_binding(1)
 
         self.terminal.connect("button-press-event", self.show_serial_rcpopup)
@@ -327,26 +320,26 @@ class vmmSerialConsole(vmmGObject):
         self.terminal.show()
 
     def init_popup(self):
-        self.serial_popup = gtk.Menu()
+        self.serial_popup = Gtk.Menu()
 
-        self.serial_copy = gtk.ImageMenuItem(gtk.STOCK_COPY)
+        self.serial_copy = Gtk.ImageMenuItem(Gtk.STOCK_COPY)
         self.serial_popup.add(self.serial_copy)
 
-        self.serial_paste = gtk.ImageMenuItem(gtk.STOCK_PASTE)
+        self.serial_paste = Gtk.ImageMenuItem(Gtk.STOCK_PASTE)
         self.serial_popup.add(self.serial_paste)
 
     def init_ui(self):
-        self.box = gtk.Notebook()
+        self.box = Gtk.Notebook()
         self.box.set_show_tabs(False)
         self.box.set_show_border(False)
 
-        align = gtk.Alignment()
+        align = Gtk.Alignment.new()
         align.set_padding(2, 2, 2, 2)
-        evbox = gtk.EventBox()
-        evbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(0, 0, 0))
-        terminalbox = gtk.HBox()
-        scrollbar = gtk.VScrollbar()
-        self.error_label = gtk.Label()
+        evbox = Gtk.EventBox()
+        evbox.modify_bg(Gtk.StateType.NORMAL, Gdk.Color(0, 0, 0))
+        terminalbox = Gtk.HBox()
+        scrollbar = Gtk.VScrollbar()
+        self.error_label = Gtk.Label()
         self.error_label.set_width_chars(40)
         self.error_label.set_line_wrap(True)
 
@@ -355,7 +348,7 @@ class vmmSerialConsole(vmmGObject):
             align.add(self.terminal)
 
         evbox.add(align)
-        terminalbox.pack_start(evbox)
+        terminalbox.pack_start(evbox, True, True, 0)
         terminalbox.pack_start(scrollbar, expand=False, fill=False)
 
         self.box.append_page(terminalbox)
@@ -376,10 +369,6 @@ class vmmSerialConsole(vmmGObject):
 
     def open_console(self):
         try:
-            if not vte:
-                raise RuntimeError(
-                        _("vte2 is required for text console support"))
-
             self.console.open(self.lookup_dev(), self.terminal)
             self.box.set_current_page(0)
             return True

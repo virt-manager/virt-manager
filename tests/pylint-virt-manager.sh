@@ -24,6 +24,8 @@ UNABLE_IMPORT="Unable to import '(appindicator)"
 # os._exit is needed for forked processes.
 OS_EXIT="protected member _exit of a client class"
 
+GI_IMPORT="in module 'gi.repository'"
+
 # False positives
 MAIN_NONETYPE="main:.*Raising NoneType while.*"
 STYLE_ATTACH="Class 'style' has no 'attach' member"
@@ -106,6 +108,7 @@ egrep -ve "$NO_PYL_CONFIG" \
       -ve "$UNABLE_IMPORT" \
       -ve "$STYLE_ATTACH" \
       -ve "$VBOX_PACK" \
+      -ve "$GI_IMPORT" \
       -ve "$INFER_ERRORS" | \
 $AWK '\
 # Strip out any "*** Module name" lines if we dont list any errors for them

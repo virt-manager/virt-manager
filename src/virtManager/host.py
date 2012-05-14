@@ -20,7 +20,8 @@
 
 import logging
 
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 
 from virtinst import VirtualDisk
 from virtinst import Storage
@@ -41,6 +42,15 @@ INTERFACE_PAGE_INFO = 0
 INTERFACE_PAGE_ERROR = 1
 
 class vmmHost(vmmGObjectUI):
+    __gsignals__ = {
+        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "action-restore-domain": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "host-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "host-opened": (GObject.SignalFlags.RUN_FIRST, None, []),
+    }
+
     def __init__(self, conn):
         vmmGObjectUI.__init__(self, "vmm-host.ui", "vmm-host")
         self.conn = conn
@@ -92,7 +102,7 @@ class vmmHost(vmmGObjectUI):
 
         self.conn.connect("state-changed", self.conn_state_changed)
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_menu_file_view_manager_activate" : self.view_manager,
             "on_menu_file_quit_activate" : self.exit_app,
             "on_menu_file_close_activate": self.close,
@@ -131,11 +141,11 @@ class vmmHost(vmmGObjectUI):
 
         # XXX: Help docs useless/out of date
         self.widget("help_menuitem").hide()
-        finish_img = gtk.image_new_from_stock(gtk.STOCK_DELETE,
-                                              gtk.ICON_SIZE_BUTTON)
+        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_DELETE,
+                                              Gtk.IconSize.BUTTON)
         self.widget("vol-delete").set_image(finish_img)
-        finish_img = gtk.image_new_from_stock(gtk.STOCK_NEW,
-                                              gtk.ICON_SIZE_BUTTON)
+        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_NEW,
+                                              Gtk.IconSize.BUTTON)
         self.widget("vol-add").set_image(finish_img)
 
         self.conn.connect("resources-sampled", self.refresh_resources)
@@ -146,13 +156,13 @@ class vmmHost(vmmGObjectUI):
         self.widget("network-pages").set_show_tabs(False)
 
         # [ unique, label, icon name, icon size, is_active ]
-        netListModel = gtk.ListStore(str, str, str, int, bool)
+        netListModel = Gtk.ListStore(str, str, str, int, bool)
         self.widget("net-list").set_model(netListModel)
 
-        netCol = gtk.TreeViewColumn("Networks")
+        netCol = Gtk.TreeViewColumn("Networks")
         netCol.set_spacing(6)
-        net_txt = gtk.CellRendererText()
-        net_img = gtk.CellRendererPixbuf()
+        net_txt = Gtk.CellRendererText()
+        net_img = Gtk.CellRendererPixbuf()
         netCol.pack_start(net_img, False)
         netCol.pack_start(net_txt, True)
         netCol.add_attribute(net_txt, 'text', 1)
@@ -160,54 +170,54 @@ class vmmHost(vmmGObjectUI):
         netCol.add_attribute(net_img, 'icon-name', 2)
         netCol.add_attribute(net_img, 'stock-size', 3)
         self.widget("net-list").append_column(netCol)
-        netListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        netListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         self.populate_networks(netListModel)
 
     def init_storage_state(self):
         self.widget("storage-pages").set_show_tabs(False)
 
-        self.volmenu = gtk.Menu()
-        volCopyPath = gtk.ImageMenuItem(_("Copy Volume Path"))
-        volCopyImage = gtk.Image()
-        volCopyImage.set_from_stock(gtk.STOCK_COPY, gtk.ICON_SIZE_MENU)
+        self.volmenu = Gtk.Menu()
+        volCopyPath = Gtk.ImageMenuItem(_("Copy Volume Path"))
+        volCopyImage = Gtk.Image()
+        volCopyImage.set_from_stock(Gtk.STOCK_COPY, Gtk.IconSize.MENU)
         volCopyPath.set_image(volCopyImage)
         volCopyPath.show()
         volCopyPath.connect("activate", self.copy_vol_path)
         self.volmenu.add(volCopyPath)
 
-        volListModel = gtk.ListStore(str, str, str, str, str)
+        volListModel = Gtk.ListStore(str, str, str, str, str)
         self.widget("vol-list").set_model(volListModel)
 
-        volCol = gtk.TreeViewColumn("Volumes")
-        vol_txt1 = gtk.CellRendererText()
+        volCol = Gtk.TreeViewColumn("Volumes")
+        vol_txt1 = Gtk.CellRendererText()
         volCol.pack_start(vol_txt1, True)
         volCol.add_attribute(vol_txt1, 'text', 1)
         volCol.set_sort_column_id(1)
         self.widget("vol-list").append_column(volCol)
 
-        volSizeCol = gtk.TreeViewColumn("Size")
-        vol_txt2 = gtk.CellRendererText()
+        volSizeCol = Gtk.TreeViewColumn("Size")
+        vol_txt2 = Gtk.CellRendererText()
         volSizeCol.pack_start(vol_txt2, False)
         volSizeCol.add_attribute(vol_txt2, 'text', 2)
         volSizeCol.set_sort_column_id(2)
         self.widget("vol-list").append_column(volSizeCol)
 
-        volFormatCol = gtk.TreeViewColumn("Format")
-        vol_txt3 = gtk.CellRendererText()
+        volFormatCol = Gtk.TreeViewColumn("Format")
+        vol_txt3 = Gtk.CellRendererText()
         volFormatCol.pack_start(vol_txt3, False)
         volFormatCol.add_attribute(vol_txt3, 'text', 3)
         volFormatCol.set_sort_column_id(3)
         self.widget("vol-list").append_column(volFormatCol)
 
-        volUseCol = gtk.TreeViewColumn("Used By")
-        vol_txt4 = gtk.CellRendererText()
+        volUseCol = Gtk.TreeViewColumn("Used By")
+        vol_txt4 = Gtk.CellRendererText()
         volUseCol.pack_start(vol_txt4, False)
         volUseCol.add_attribute(vol_txt4, 'text', 4)
         volUseCol.set_sort_column_id(4)
         self.widget("vol-list").append_column(volUseCol)
 
-        volListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        volListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         init_pool_list(self.widget("pool-list"),
                        self.pool_selected)
@@ -218,13 +228,13 @@ class vmmHost(vmmGObjectUI):
         self.widget("interface-pages").set_show_tabs(False)
 
         # [ unique, label, icon name, icon size, is_active ]
-        interfaceListModel = gtk.ListStore(str, str, str, int, bool)
+        interfaceListModel = Gtk.ListStore(str, str, str, int, bool)
         self.widget("interface-list").set_model(interfaceListModel)
 
-        interfaceCol = gtk.TreeViewColumn("Interfaces")
+        interfaceCol = Gtk.TreeViewColumn("Interfaces")
         interfaceCol.set_spacing(6)
-        interface_txt = gtk.CellRendererText()
-        interface_img = gtk.CellRendererPixbuf()
+        interface_txt = Gtk.CellRendererText()
+        interface_img = Gtk.CellRendererPixbuf()
         interfaceCol.pack_start(interface_img, False)
         interfaceCol.pack_start(interface_txt, True)
         interfaceCol.add_attribute(interface_txt, 'text', 1)
@@ -232,30 +242,30 @@ class vmmHost(vmmGObjectUI):
         interfaceCol.add_attribute(interface_img, 'icon-name', 2)
         interfaceCol.add_attribute(interface_img, 'stock-size', 3)
         self.widget("interface-list").append_column(interfaceCol)
-        interfaceListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        interfaceListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         # Starmode combo
         uihelpers.build_startmode_combo(self.widget("interface-startmode"))
 
         # [ name, type ]
-        childListModel = gtk.ListStore(str, str)
+        childListModel = Gtk.ListStore(str, str)
         childList = self.widget("interface-child-list")
         childList.set_model(childListModel)
 
-        childNameCol = gtk.TreeViewColumn("Name")
-        child_txt1 = gtk.CellRendererText()
+        childNameCol = Gtk.TreeViewColumn("Name")
+        child_txt1 = Gtk.CellRendererText()
         childNameCol.pack_start(child_txt1, True)
         childNameCol.add_attribute(child_txt1, 'text', 0)
         childNameCol.set_sort_column_id(0)
         childList.append_column(childNameCol)
 
-        childTypeCol = gtk.TreeViewColumn("Interface Type")
-        child_txt2 = gtk.CellRendererText()
+        childTypeCol = Gtk.TreeViewColumn("Interface Type")
+        child_txt2 = Gtk.CellRendererText()
         childTypeCol.pack_start(child_txt2, True)
         childTypeCol.add_attribute(child_txt2, 'text', 1)
         childTypeCol.set_sort_column_id(1)
         childList.append_column(childTypeCol)
-        childListModel.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        childListModel.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         self.populate_interfaces(interfaceListModel)
 
@@ -296,7 +306,7 @@ class vmmHost(vmmGObjectUI):
         self.emit("host-opened")
 
     def is_visible(self):
-        return bool(self.topwin.flags() & gtk.VISIBLE)
+        return self.topwin.get_visible()
 
     def close(self, ignore1=None, ignore2=None):
         logging.debug("Closing host details: %s", self.conn)
@@ -530,7 +540,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-device").set_sensitive(active)
         self.widget("net-state").set_text(state)
         self.widget("net-state-icon").set_from_icon_name(icon,
-                                                         gtk.ICON_SIZE_MENU)
+                                                         Gtk.IconSize.MENU)
 
         self.widget("net-start").set_sensitive(not active)
         self.widget("net-stop").set_sensitive(active)
@@ -551,8 +561,8 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-ip4-dhcp-end").set_text(end)
 
         forward, ignore = net.get_ipv4_forward()
-        iconsize = gtk.ICON_SIZE_MENU
-        icon = forward and gtk.STOCK_CONNECT or gtk.STOCK_DISCONNECT
+        iconsize = Gtk.IconSize.MENU
+        icon = forward and Gtk.STOCK_CONNECT or Gtk.STOCK_DISCONNECT
 
         self.widget("net-ip4-forwarding-icon").set_from_stock(icon, iconsize)
 
@@ -567,7 +577,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-device").set_sensitive(False)
         self.widget("net-state").set_text(_("Inactive"))
         self.widget("net-state-icon").set_from_icon_name(self.ICON_SHUTOFF,
-                                                         gtk.ICON_SIZE_MENU)
+                                                         Gtk.IconSize.MENU)
         self.widget("net-start").set_sensitive(False)
         self.widget("net-stop").set_sensitive(False)
         self.widget("net-delete").set_sensitive(False)
@@ -577,7 +587,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-ip4-dhcp-start").set_text("")
         self.widget("net-ip4-dhcp-end").set_text("")
         self.widget("net-ip4-forwarding-icon").set_from_stock(
-                                    gtk.STOCK_DISCONNECT, gtk.ICON_SIZE_MENU)
+                                    Gtk.STOCK_DISCONNECT, Gtk.IconSize.MENU)
         self.widget("net-ip4-forwarding").set_text(
                                     _("Isolated virtual network"))
         self.widget("net-apply").set_sensitive(False)
@@ -591,7 +601,7 @@ class vmmHost(vmmGObjectUI):
         for uuid in self.conn.list_net_uuids():
             net = self.conn.get_net(uuid)
             model.append([uuid, net.get_name(), "network-idle",
-                          gtk.ICON_SIZE_LARGE_TOOLBAR,
+                          Gtk.IconSize.LARGE_TOOLBAR,
                           bool(net.is_active())])
 
         _iter = model.get_iter_first()
@@ -794,7 +804,7 @@ class vmmHost(vmmGObjectUI):
                 pool.get_target_path())
         self.widget("pool-state-icon").set_from_icon_name(
                 ((active and self.ICON_RUNNING) or self.ICON_SHUTOFF),
-                gtk.ICON_SIZE_MENU)
+                Gtk.IconSize.MENU)
         self.widget("pool-state").set_text(
                 (active and _("Active")) or _("Inactive"))
         self.widget("pool-autostart").set_label(
@@ -815,8 +825,7 @@ class vmmHost(vmmGObjectUI):
                 Storage.StoragePool.get_volume_for_pool(pool.get_type())
             except Exception, e:
                 self.widget("vol-add").set_sensitive(False)
-                util.tooltip_wrapper(self.widget("vol-add"),
-                                     str(e))
+                self.widget("vol-add").set_tooltip_text(str(e))
 
     def refresh_storage_pool(self, src_ignore, uuid):
         refresh_pool_in_list(self.widget("pool-list"), self.conn, uuid)
@@ -835,7 +844,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("pool-type").set_text("")
         self.widget("pool-location").set_text("")
         self.widget("pool-state-icon").set_from_icon_name(self.ICON_SHUTOFF,
-                                                          gtk.ICON_SIZE_MENU)
+                                                          Gtk.IconSize.MENU)
         self.widget("pool-state").set_text(_("Inactive"))
         self.widget("vol-list").get_model().clear()
         self.widget("pool-autostart").set_label(_("Never"))
@@ -868,7 +877,7 @@ class vmmHost(vmmGObjectUI):
         vol = self.current_vol()
         if not vol:
             return
-        clipboard = gtk.Clipboard()
+        clipboard = Gtk.Clipboard()
         target_path = vol.get_target_path()
         if target_path:
             clipboard.set_text(target_path)
@@ -1051,7 +1060,7 @@ class vmmHost(vmmGObjectUI):
 
         self.widget("interface-state-icon").set_from_icon_name(
             ((active and self.ICON_RUNNING) or self.ICON_SHUTOFF),
-            gtk.ICON_SIZE_MENU)
+            Gtk.IconSize.MENU)
         self.widget("interface-state").set_text(
                                     (active and _("Active")) or _("Inactive"))
 
@@ -1152,7 +1161,7 @@ class vmmHost(vmmGObjectUI):
         for name in self.conn.list_interface_names():
             iface = self.conn.get_interface(name)
             model.append([name, iface.get_name(), "network-idle",
-                          gtk.ICON_SIZE_LARGE_TOOLBAR,
+                          Gtk.IconSize.LARGE_TOOLBAR,
                           bool(iface.is_active())])
 
         _iter = model.get_iter_first()
@@ -1178,21 +1187,21 @@ class vmmHost(vmmGObjectUI):
 # dialog.
 
 def init_pool_list(pool_list, changed_func):
-    poolListModel = gtk.ListStore(str, str, bool, str)
+    poolListModel = Gtk.ListStore(str, str, bool, str)
     pool_list.set_model(poolListModel)
 
     pool_list.get_selection().connect("changed", changed_func)
 
-    poolCol = gtk.TreeViewColumn("Storage Pools")
-    pool_txt = gtk.CellRendererText()
-    pool_per = gtk.CellRendererText()
+    poolCol = Gtk.TreeViewColumn("Storage Pools")
+    pool_txt = Gtk.CellRendererText()
+    pool_per = Gtk.CellRendererText()
     poolCol.pack_start(pool_per, False)
     poolCol.pack_start(pool_txt, True)
     poolCol.add_attribute(pool_txt, 'markup', 1)
     poolCol.add_attribute(pool_txt, 'sensitive', 2)
     poolCol.add_attribute(pool_per, 'markup', 3)
     pool_list.append_column(poolCol)
-    poolListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
+    poolListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
 def refresh_pool_in_list(pool_list, conn, uuid):
     for row in pool_list.get_model():
@@ -1229,11 +1238,3 @@ def get_pool_size_percent(conn, uuid):
     else:
         per = int(((float(alloc) / float(cap)) * 100))
     return "<span size='small' color='#484848'>%s%%</span>" % int(per)
-
-vmmGObjectUI.type_register(vmmHost)
-vmmHost.signal_new(vmmHost, "action-show-help", [str])
-vmmHost.signal_new(vmmHost, "action-exit-app", [])
-vmmHost.signal_new(vmmHost, "action-view-manager", [])
-vmmHost.signal_new(vmmHost, "action-restore-domain", [str])
-vmmHost.signal_new(vmmHost, "host-closed", [])
-vmmHost.signal_new(vmmHost, "host-opened", [])

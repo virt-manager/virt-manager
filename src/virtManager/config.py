@@ -20,8 +20,8 @@
 import os
 import logging
 
-import gtk
-import gconf
+from gi.repository import Gtk
+from gi.repository import GConf
 
 import virtinst
 
@@ -46,8 +46,8 @@ class vmmConfig(object):
             "enable_create" : True,
             "storage_title" : _("Locate or create storage volume"),
             "local_title"   : _("Locate existing storage"),
-            "dialog_type"   : gtk.FILE_CHOOSER_ACTION_SAVE,
-            "choose_button" : gtk.STOCK_OPEN,
+            "dialog_type"   : Gtk.FileChooserAction.SAVE,
+            "choose_button" : Gtk.STOCK_OPEN,
         },
 
         CONFIG_DIR_ISO_MEDIA : {
@@ -66,7 +66,7 @@ class vmmConfig(object):
             "enable_create" : False,
             "storage_title" : _("Locate directory volume"),
             "local_title"   : _("Locate directory volume"),
-            "dialog_type"   : gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
+            "dialog_type"   : Gtk.FileChooserAction.SELECT_FOLDER,
         },
     }
 
@@ -95,8 +95,8 @@ class vmmConfig(object):
         self.ui_dir = ui_dir
         self.test_first_run = bool(test_first_run)
 
-        self.conf = gconf.client_get_default()
-        self.conf.add_dir(self.conf_dir, gconf.CLIENT_PRELOAD_NONE)
+        self.conf = GConf.Client.get_default()
+        self.conf.add_dir(self.conf_dir, GConf.ClientPreloadType.PRELOAD_NONE)
 
         # We don't create it straight away, since we don't want
         # to block the app pending user authorizaation to access
@@ -119,6 +119,27 @@ class vmmConfig(object):
         self.support_inspection = self.check_inspection(self.support_threading)
 
         self._spice_error = None
+
+    def get_string_list(self, path):
+        val = self.conf.get(path)
+        if val is None:
+            return None
+        values = []
+        for v in val.get_list():
+            values.append(v.get_string())
+        return values
+
+    def set_string_list(self, path, values):
+        newValues = []
+        for v in values:
+            nv = GConf.Value.new(GConf.ValueType.STRING)
+            nv.set_string(v)
+            newValues.append(nv)
+        ignore = path
+        #XXX: set_list is not available with introspection
+        # val = GConf.Value()
+        #val.set_list(newValues)
+        #self.conf.set(path, val)
 
     def check_inspection(self, support_threading):
         if not support_threading:
@@ -151,7 +172,7 @@ class vmmConfig(object):
     # General app wide helpers (gconf agnostic)
 
     def get_shutdown_icon_name(self):
-        theme = gtk.icon_theme_get_default()
+        theme = Gtk.IconTheme.get_default()
         iconname = "system-shutdown"
         if theme.has_icon(iconname):
             return iconname
@@ -164,22 +185,8 @@ class vmmConfig(object):
     def get_ui_dir(self):
         return self.ui_dir
 
-    def get_spice_error(self):
-        if self._spice_error is None:
-            try:
-                import SpiceClientGtk
-                ignore = SpiceClientGtk
-                self._spice_error = False
-            except Exception, e:
-                self._spice_error = e
-                logging.debug("Error importing spice: %s", self._spice_error)
-
-        return self._spice_error and str(self._spice_error) or None
-
     def embeddable_graphics(self):
-        ret = ["vnc"]
-        if not bool(self.get_spice_error()):
-            ret.append("spice")
+        ret = ["vnc", "spice"]
         return ret
 
     def remove_notifier(self, h):
@@ -196,7 +203,7 @@ class vmmConfig(object):
 
     # Per-VM/Connection/Connection Host Option dealings
     def _perconn_helper(self, uri, pref_func, func_type, value=None):
-        suffix = "connection_prefs/%s" % gconf.escape_key(uri, len(uri))
+        suffix = "connection_prefs/%s" % GConf.escape_key(uri, len(uri))
         return self._perobj_helper(suffix, pref_func, func_type, value)
     def _perhost_helper(self, uri, pref_func, func_type, value=None):
         host = virtinst.util.get_uri_hostname(uri)
@@ -206,7 +213,7 @@ class vmmConfig(object):
         return self._perobj_helper(suffix, pref_func, func_type, value)
     def _pervm_helper(self, uri, uuid, pref_func, func_type, value=None):
         suffix = ("connection_prefs/%s/vms/%s" %
-                  (gconf.escape_key(uri, len(uri)), uuid))
+                  (GConf.escape_key(uri, len(uri)), uuid))
         return self._perobj_helper(suffix, pref_func, func_type, value)
 
     def _perobj_helper(self, suffix, pref_func, func_type, value=None):
@@ -291,7 +298,7 @@ class vmmConfig(object):
         """
         Remove any old VM preference entries for the passed URI
         """
-        uri = gconf.escape_key(uri, len(uri))
+        uri = GConf.escape_key(uri, len(uri))
         key = self.conf_dir + "/connection_prefs/%s/vms" % uri
         kill_vms = []
         gconf_vms = map(lambda inp: inp.split("/")[-1],
@@ -335,18 +342,18 @@ class vmmConfig(object):
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/network_traffic",
                            state)
 
-    def on_vmlist_guest_cpu_usage_visible_changed(self, cb):
+    def on_vmlist_guest_cpu_usage_visible_changed(self, cb, userdata=None):
         return self.conf.notify_add(self.conf_dir + "/vmlist-fields/cpu_usage",
-                                    cb)
-    def on_vmlist_host_cpu_usage_visible_changed(self, cb):
+                                    cb, userdata)
+    def on_vmlist_host_cpu_usage_visible_changed(self, cb, userdata=None):
         return self.conf.notify_add(self.conf_dir +
-                                    "/vmlist-fields/host_cpu_usage", cb)
-    def on_vmlist_disk_io_visible_changed(self, cb):
+                                    "/vmlist-fields/host_cpu_usage", cb, userdata)
+    def on_vmlist_disk_io_visible_changed(self, cb, userdata=None):
         return self.conf.notify_add(self.conf_dir + "/vmlist-fields/disk_usage",
-                                    cb)
-    def on_vmlist_network_traffic_visible_changed(self, cb):
+                                    cb, userdata)
+    def on_vmlist_network_traffic_visible_changed(self, cb, userdata=None):
         return self.conf.notify_add(
-                        self.conf_dir + "/vmlist-fields/network_traffic", cb)
+                        self.conf_dir + "/vmlist-fields/network_traffic", cb, userdata)
 
     # Keys preferences
     def get_keys_combination(self):
@@ -359,8 +366,8 @@ class vmmConfig(object):
         # Val have to be a list of integers
         val = ','.join(map(str, val))
         self.conf.set_string(self.conf_dir + "/keys/grab-keys", val)
-    def on_keys_combination_changed(self, cb):
-        return self.conf.notify_add(self.conf_dir + "/keys/grab-keys", cb)
+    def on_keys_combination_changed(self, cb, userdata=None):
+        return self.conf.notify_add(self.conf_dir + "/keys/grab-keys", cb, userdata)
 
     # Confirmation preferences
     def get_confirm_forcepoweroff(self):
@@ -399,25 +406,25 @@ class vmmConfig(object):
     def set_confirm_delstorage(self, val):
         self.conf.set_bool(self.conf_dir + "/confirm/delete_storage", val)
 
-    def on_confirm_forcepoweroff_changed(self, cb):
-        return self.conf.notify_add(self.conf_dir + "/confirm/forcepoweroff", cb)
-    def on_confirm_poweroff_changed(self, cb):
-        return self.conf.notify_add(self.conf_dir + "/confirm/poweroff", cb)
-    def on_confirm_pause_changed(self, cb):
-        return self.conf.notify_add(self.conf_dir + "/confirm/pause", cb)
-    def on_confirm_removedev_changed(self, cb):
-        return self.conf.notify_add(self.conf_dir + "/confirm/removedev", cb)
-    def on_confirm_interface_changed(self, cb):
-        return self.conf.notify_add(self.conf_dir + "/confirm/interface_power", cb)
-    def on_confirm_unapplied_changed(self, cb):
-        return self.conf.notify_add(self.conf_dir + "/confirm/unapplied_dev", cb)
-    def on_confirm_delstorage_changed(self, cb):
-        return self.conf.notify_add(self.conf_dir + "/confirm/delete_storage", cb)
+    def on_confirm_forcepoweroff_changed(self, cb, userdata=None):
+        return self.conf.notify_add(self.conf_dir + "/confirm/forcepoweroff", cb, userdata)
+    def on_confirm_poweroff_changed(self, cb, userdata=None):
+        return self.conf.notify_add(self.conf_dir + "/confirm/poweroff", cb, userdata)
+    def on_confirm_pause_changed(self, cb, userdata=None):
+        return self.conf.notify_add(self.conf_dir + "/confirm/pause", cb, userdata)
+    def on_confirm_removedev_changed(self, cb, userdata=None):
+        return self.conf.notify_add(self.conf_dir + "/confirm/removedev", cb, userdata)
+    def on_confirm_interface_changed(self, cb, userdata=None):
+        return self.conf.notify_add(self.conf_dir + "/confirm/interface_power", cb, userdata)
+    def on_confirm_unapplied_changed(self, cb, userdata=None):
+        return self.conf.notify_add(self.conf_dir + "/confirm/unapplied_dev", cb, userdata)
+    def on_confirm_delstorage_changed(self, cb, userdata=None):
+        return self.conf.notify_add(self.conf_dir + "/confirm/delete_storage", cb, userdata)
 
 
     # System tray visibility
-    def on_view_system_tray_changed(self, callback):
-        return self.conf.notify_add(self.conf_dir + "/system-tray", callback)
+    def on_view_system_tray_changed(self, cb, userdata=None):
+        return self.conf.notify_add(self.conf_dir + "/system-tray", cb, userdata)
     def get_view_system_tray(self):
         return self.conf.get_bool(self.conf_dir + "/system-tray")
     def set_view_system_tray(self, val):
@@ -441,10 +448,10 @@ class vmmConfig(object):
     def set_stats_history_length(self, length):
         self.conf.set_int(self.conf_dir + "/stats/history-length", length)
 
-    def on_stats_update_interval_changed(self, callback):
-        return self.conf.notify_add(self.conf_dir + "/stats/update-interval", callback)
-    def on_stats_history_length_changed(self, callback):
-        return self.conf.notify_add(self.conf_dir + "/stats/history-length", callback)
+    def on_stats_update_interval_changed(self, cb, userdata=None):
+        return self.conf.notify_add(self.conf_dir + "/stats/update-interval", cb, userdata)
+    def on_stats_history_length_changed(self, cb, userdata=None):
+        return self.conf.notify_add(self.conf_dir + "/stats/history-length", cb, userdata)
 
 
     # Disable/Enable different stats polling
@@ -466,8 +473,8 @@ class vmmConfig(object):
                                     cb, userdata)
 
     # VM Console preferences
-    def on_console_accels_changed(self, callback):
-        return self.conf.notify_add(self.conf_dir + "/console/enable-accels", callback)
+    def on_console_accels_changed(self, cb, userdata=None):
+        return self.conf.notify_add(self.conf_dir + "/console/enable-accels", cb, userdata)
     def get_console_accels(self):
         console_pref = self.conf.get_bool(self.conf_dir +
                                           "/console/enable-accels")
@@ -477,8 +484,8 @@ class vmmConfig(object):
     def set_console_accels(self, pref):
         self.conf.set_bool(self.conf_dir + "/console/enable-accels", pref)
 
-    def on_console_scaling_changed(self, callback):
-        return self.conf.notify_add(self.conf_dir + "/console/scaling", callback)
+    def on_console_scaling_changed(self, cb, userdata=None):
+        return self.conf.notify_add(self.conf_dir + "/console/scaling", cb, userdata)
     def get_console_scaling(self):
         ret = self.conf.get(self.conf_dir + "/console/scaling")
         if ret != None:
@@ -548,7 +555,7 @@ class vmmConfig(object):
 
     # URL/Media path history
     def _url_add_helper(self, gconf_path, url):
-        urls = self.conf.get_list(gconf_path, gconf.VALUE_STRING)
+        urls = self.get_string_list(gconf_path)
         if urls == None:
             urls = []
 
@@ -558,7 +565,7 @@ class vmmConfig(object):
             length = self.get_url_list_length()
             if len(urls) > length:
                 del urls[len(urls) - 1]
-            self.conf.set_list(gconf_path, gconf.VALUE_STRING, urls)
+            self.set_string_list(gconf_path, urls)
 
     def add_media_url(self, url):
         self._url_add_helper(self.conf_dir + "/urls/media", url)
@@ -568,14 +575,13 @@ class vmmConfig(object):
         self._url_add_helper(self.conf_dir + "/urls/local_media", path)
 
     def get_media_urls(self):
-        return self.conf.get_list(self.conf_dir + "/urls/media",
-                                  gconf.VALUE_STRING)
+        return self.get_string_list(self.conf_dir + "/urls/media")
+
     def get_kickstart_urls(self):
-        return self.conf.get_list(self.conf_dir + "/urls/kickstart",
-                                  gconf.VALUE_STRING)
+        return self.get_string_list(self.conf_dir + "/urls/kickstart")
+
     def get_iso_paths(self):
-        return self.conf.get_list(self.conf_dir + "/urls/local_media",
-                                 gconf.VALUE_STRING)
+        return self.get_string_list(self.conf_dir + "/urls/local_media")
 
     def get_url_list_length(self):
         length = self.conf.get_int(self.conf_dir + "/urls/url-list-length")
@@ -592,12 +598,10 @@ class vmmConfig(object):
             if path in current_list:
                 continue
             current_list.append(path)
-        self.conf.set_list(self.conf_dir + "/paths/perms_fix_ignore",
-                           gconf.VALUE_STRING,
-                           current_list)
+        self.set_string_list(self.conf_dir + "/paths/perms_fix_ignore",
+                             current_list)
     def get_perms_fix_ignore(self):
-        return self.conf.get_list(self.conf_dir + "/paths/perms_fix_ignore",
-                                  gconf.VALUE_STRING)
+        return self.get_string_list(self.conf_dir + "/paths/perms_fix_ignore")
 
 
     # Manager view connection list
@@ -605,39 +609,34 @@ class vmmConfig(object):
         if self.test_first_run:
             return
 
-        uris = self.conf.get_list(self.conf_dir + "/connections/uris",
-                                  gconf.VALUE_STRING)
+        uris = self.get_string_list(self.conf_dir + "/connections/uris")
         if uris == None:
             uris = []
 
         if uris.count(uri) == 0:
             uris.insert(len(uris) - 1, uri)
-            self.conf.set_list(self.conf_dir + "/connections/uris",
-                               gconf.VALUE_STRING, uris)
+            self.set_string_list(self.conf_dir + "/connections/uris", uris)
     def remove_conn(self, uri):
-        uris = self.conf.get_list(self.conf_dir + "/connections/uris",
-                                  gconf.VALUE_STRING)
+        uris = self.get_string_list(self.conf_dir + "/connections/uris")
+
         if uris == None:
             return
 
         if uris.count(uri) != 0:
             uris.remove(uri)
-            self.conf.set_list(self.conf_dir + "/connections/uris",
-                               gconf.VALUE_STRING, uris)
+            self.set_string_list(self.conf_dir + "/connections/uris", uris)
 
         if self.get_conn_autoconnect(uri):
-            uris = self.conf.get_list(self.conf_dir +
-                                      "/connections/autoconnect",
-                                      gconf.VALUE_STRING)
+            uris = self.get_string_list(self.conf_dir +
+                                             "/connections/autoconnect")
             uris.remove(uri)
-            self.conf.set_list(self.conf_dir + "/connections/autoconnect",
-                               gconf.VALUE_STRING, uris)
+            self.set_string_list(self.conf_dir + "/connections/autoconnect",
+                                 uris)
 
     def get_conn_uris(self):
         if self.test_first_run:
             return []
-        return self.conf.get_list(self.conf_dir + "/connections/uris",
-                                  gconf.VALUE_STRING)
+        return self.get_string_list(self.conf_dir + "/connections/uris")
 
     # Manager default window size
     def get_manager_window_size(self):
@@ -650,16 +649,14 @@ class vmmConfig(object):
 
     # URI autoconnect
     def get_conn_autoconnect(self, uri):
-        uris = self.conf.get_list(self.conf_dir + "/connections/autoconnect",
-                                  gconf.VALUE_STRING)
+        uris = self.get_string_list(self.conf_dir + "/connections/autoconnect")
         return ((uris is not None) and (uri in uris))
 
     def set_conn_autoconnect(self, uri, val):
         if self.test_first_run:
             return
 
-        uris = self.conf.get_list(self.conf_dir + "/connections/autoconnect",
-                                  gconf.VALUE_STRING)
+        uris = self.get_string_list(self.conf_dir + "/connections/autoconnect")
         if uris is None:
             uris = []
         if not val and uri in uris:
@@ -667,8 +664,8 @@ class vmmConfig(object):
         elif val and uri not in uris:
             uris.append(uri)
 
-        self.conf.set_list(self.conf_dir + "/connections/autoconnect",
-                           gconf.VALUE_STRING, uris)
+        self.set_string_list(self.conf_dir + "/connections/autoconnect",
+                             uris)
 
 
     # Default directory location dealings

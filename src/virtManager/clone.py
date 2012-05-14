@@ -21,7 +21,9 @@
 import logging
 import os
 
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Gdk
 
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
@@ -119,6 +121,10 @@ def do_we_default(conn, vol, path, ro, shared, devtype):
     return (not info, info)
 
 class vmmCloneVM(vmmGObjectUI):
+    __gsignals__ = {
+        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+    }
+
     def __init__(self, orig_vm):
         vmmGObjectUI.__init__(self, "vmm-clone.ui", "vmm-clone")
         self.orig_vm = orig_vm
@@ -140,7 +146,7 @@ class vmmCloneVM(vmmGObjectUI):
         self.change_storage = self.widget("vmm-change-storage")
         self.change_storage.set_transient_for(self.topwin)
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_clone_delete_event" : self.close,
             "on_clone_cancel_clicked" : self.close,
             "on_clone_ok_clicked" : self.finish,
@@ -163,8 +169,8 @@ class vmmCloneVM(vmmGObjectUI):
 
         # XXX: Help docs useless/out of date
         self.widget("clone-help").hide()
-        finish_img = gtk.image_new_from_stock(gtk.STOCK_NEW,
-                                              gtk.ICON_SIZE_BUTTON)
+        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_NEW,
+                                              Gtk.IconSize.BUTTON)
         self.widget("clone-ok").set_image(finish_img)
 
         self.set_initial_state()
@@ -216,14 +222,14 @@ class vmmCloneVM(vmmGObjectUI):
     # First time setup
 
     def set_initial_state(self):
-        blue = gtk.gdk.color_parse("#0072A8")
-        self.widget("clone-header").modify_bg(gtk.STATE_NORMAL, blue)
+        blue = Gdk.Color.parse("#0072A8")[1]
+        self.widget("clone-header").modify_bg(Gtk.StateType.NORMAL, blue)
 
         box = self.widget("clone-vm-icon-box")
-        image = gtk.image_new_from_icon_name("vm_clone_wizard",
-                                             gtk.ICON_SIZE_DIALOG)
+        image = Gtk.Image.new_from_icon_name("vm_clone_wizard",
+                                             Gtk.IconSize.DIALOG)
         image.show()
-        box.pack_end(image, False)
+        box.pack_end(image, False, False, False)
 
     # Populate state
     def reset_state(self):
@@ -271,15 +277,15 @@ class vmmCloneVM(vmmGObjectUI):
 
         def build_net_row(labelstr, origmac, newmac):
 
-            label = gtk.Label(labelstr + " (%s)" % origmac)
+            label = Gtk.Label(label=labelstr + " (%s)" % origmac)
             label.set_alignment(0, .5)
-            button = gtk.Button(_("Details..."))
+            button = Gtk.Button(_("Details..."))
             button.connect("clicked", self.net_change_mac, origmac)
 
-            hbox = gtk.HBox()
+            hbox = Gtk.HBox()
             hbox.set_spacing(12)
-            hbox.pack_start(label)
-            hbox.pack_end(button, False, False)
+            hbox.pack_start(label, True, True, 0)
+            hbox.pack_end(button, False, False, False)
             hbox.show_all()
             net_box.pack_start(hbox, False, False)
 
@@ -473,24 +479,24 @@ class vmmCloneVM(vmmGObjectUI):
         disk_label = os.path.basename(origpath)
         info_label = None
         if not can_clone:
-            info_label = gtk.Label()
+            info_label = Gtk.Label()
             info_label.set_alignment(0, .5)
             info_label.set_markup("<span size='small'>%s</span>" % failinfo)
         if not is_default:
             disk_label += (definfo and " (%s)" % definfo or "")
 
         # Build icon
-        icon = gtk.Image()
+        icon = Gtk.Image()
         if devtype == virtinst.VirtualDisk.DEVICE_FLOPPY:
             iconname = "media-floppy"
         elif devtype == virtinst.VirtualDisk.DEVICE_CDROM:
             iconname = "media-optical"
         else:
             iconname = "drive-harddisk"
-        icon.set_from_icon_name(iconname, gtk.ICON_SIZE_MENU)
-        disk_name_label = gtk.Label(disk_label)
+        icon.set_from_icon_name(iconname, Gtk.IconSize.MENU)
+        disk_name_label = Gtk.Label(label=disk_label)
         disk_name_label.set_alignment(0, .5)
-        disk_name_box = gtk.HBox(spacing=9)
+        disk_name_box = Gtk.HBox(spacing=9)
         disk_name_box.pack_start(icon, False)
         disk_name_box.pack_start(disk_name_label, True)
 
@@ -499,16 +505,16 @@ class vmmCloneVM(vmmGObjectUI):
             return model[it][2]
 
         # [String, sensitive, is sep]
-        model = gtk.ListStore(str, bool, bool)
-        option_combo = gtk.ComboBox(model)
-        text = gtk.CellRendererText()
-        option_combo.pack_start(text)
+        model = Gtk.ListStore(str, bool, bool)
+        option_combo = Gtk.ComboBox(model)
+        text = Gtk.CellRendererText()
+        option_combo.pack_start(text, True, True, 0)
         option_combo.add_attribute(text, "text", 0)
         option_combo.add_attribute(text, "sensitive", 1)
         option_combo.set_row_separator_func(sep_func, option_combo)
         option_combo.connect("changed", self.storage_combo_changed, target)
 
-        vbox = gtk.VBox(spacing=1)
+        vbox = Gtk.VBox(spacing=1)
         if can_clone or can_share:
             model.insert(STORAGE_COMBO_CLONE,
                          [(_("Clone this disk") +
@@ -588,7 +594,7 @@ class vmmCloneVM(vmmGObjectUI):
 
         ok_button = self.widget("clone-ok")
         ok_button.set_sensitive(clone)
-        util.tooltip_wrapper(ok_button, tooltip)
+        ok_button.set_tooltip_text(tooltip)
 
     def net_change_mac(self, ignore, origmac):
         row      = self.net_list[origmac]
@@ -788,7 +794,7 @@ class vmmCloneVM(vmmGObjectUI):
             return
 
         self.topwin.set_sensitive(False)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         title = (_("Creating virtual machine clone '%s'") %
                  self.clone_design.clone_name)
@@ -800,7 +806,7 @@ class vmmCloneVM(vmmGObjectUI):
         error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
 
         if error is not None:
             error = (_("Error creating virtual machine clone '%s': %s") %
@@ -843,6 +849,3 @@ class vmmCloneVM(vmmGObjectUI):
     def show_help(self, ignore1=None):
         # Nothing yet
         return
-
-vmmGObjectUI.type_register(vmmCloneVM)
-vmmCloneVM.signal_new(vmmCloneVM, "action-show-help", [str])

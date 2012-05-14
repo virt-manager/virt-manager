@@ -48,5 +48,3 @@ class vmmNetDevice(vmmGObject):
 
     def get_hal_path(self):
         return self.hal_path
-
-vmmGObject.type_register(vmmNetDevice)

@@ -18,7 +18,7 @@
 # MA 02110-1301 USA.
 #
 
-import gtk
+from gi.repository import Gtk
 
 import dbus
 
@@ -163,7 +163,7 @@ def packagekit_search(session, pk_control, package_name, packages):
                             (code, details))
 
     def finished(ignore, runtime_ignore):
-        gtk.main_quit()
+        Gtk.main_quit()
 
     pk_trans.connect_to_signal('Finished', finished)
     pk_trans.connect_to_signal('ErrorCode', error)
@@ -181,7 +181,7 @@ def packagekit_search(session, pk_control, package_name, packages):
         pk_trans.SearchName("installed", package_name)
 
     # Call main() so this function is synchronous
-    gtk.main()
+    Gtk.main()
 
     return found
 

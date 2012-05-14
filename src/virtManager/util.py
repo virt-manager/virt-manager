@@ -139,19 +139,6 @@ def get_default_path(conn, name, collidelist=None):
     return path
 
 
-def tooltip_wrapper(obj, txt, func="set_tooltip_text"):
-    # Catch & ignore errors - set_tooltip_* is in gtk >= 2.12
-    # and we can easily work with lower versions
-    import gtk
-
-    try:
-        funcptr = getattr(obj, func)
-        funcptr(txt)
-    except:
-        ver = gtk.gtk_version
-        if ver[0] >= 2 and ver[1] >= 12:
-            logging.exception("Couldn't set tooltip.")
-
 def xml_parse_wrapper(xml, parse_func, *args, **kwargs):
     """
     Parse the passed xml string into an xpath context, which is passed
@@ -193,27 +180,29 @@ def browse_local(parent, dialog_name, conn, start_folder=None,
         value, and store the user chosen path.
 
     """
-    import gtk
+    from gi.repository import Gtk
 
     # Initial setup
     overwrite_confirm = False
 
     if dialog_type is None:
-        dialog_type = gtk.FILE_CHOOSER_ACTION_OPEN
-    if dialog_type == gtk.FILE_CHOOSER_ACTION_SAVE:
+        dialog_type = Gtk.FileChooserAction.OPEN
+    if dialog_type == Gtk.FileChooserAction.SAVE:
         if choose_button is None:
-            choose_button = gtk.STOCK_SAVE
+            choose_button = Gtk.STOCK_SAVE
             overwrite_confirm = True
 
     if choose_button is None:
-        choose_button = gtk.STOCK_OPEN
+        choose_button = Gtk.STOCK_OPEN
 
-    fcdialog = gtk.FileChooserDialog(title=dialog_name,
+    fcdialog = Gtk.FileChooserDialog(title=dialog_name,
                                 parent=parent,
                                 action=dialog_type,
-                                buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                                         choose_button, gtk.RESPONSE_ACCEPT))
-    fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
+                                buttons=(Gtk.STOCK_CANCEL,
+                                         Gtk.ResponseType.CANCEL,
+                                         choose_button,
+                                         Gtk.ResponseType.ACCEPT))
+    fcdialog.set_default_response(Gtk.ResponseType.ACCEPT)
 
     # If confirm is set, warn about a file overwrite
     if confirm_func:
@@ -229,7 +218,7 @@ def browse_local(parent, dialog_name, conn, start_folder=None,
             pattern = _type[0]
             name = _type[1]
 
-        f = gtk.FileFilter()
+        f = Gtk.FileFilter()
         f.add_pattern("*." + pattern)
         if name:
             f.set_name(name)
@@ -246,7 +235,7 @@ def browse_local(parent, dialog_name, conn, start_folder=None,
 
     # Run the dialog and parse the response
     ret = None
-    if fcdialog.run() == gtk.RESPONSE_ACCEPT:
+    if fcdialog.run() == Gtk.ResponseType.ACCEPT:
         ret = fcdialog.get_filename()
     fcdialog.destroy()
 
@@ -332,20 +321,6 @@ def uuidstr(rawuuid):
             uuid.append('-')
     return "".join(uuid)
 
-def safe_set_prop(self, prop, value):
-    """
-    Make sure a gtk property is supported, and set to value
-
-    Return True if property was sucessfully set, False otherwise
-    """
-
-    try:
-        self.get_property(prop)
-        self.set_property(prop, value)
-        return True
-    except TypeError:
-        return False
-
 def iface_in_use_by(conn, name):
     use_str = ""
     for i in conn.list_interface_names():
@@ -384,7 +359,7 @@ def chkbox_helper(src, getcb, setcb, text1, text2=None,
     @alwaysrecord: Don't require user to select 'yes' to record chkbox value
     @default: What value to return if getcb tells us not to prompt
     """
-    import gtk
+    from gi.repository import Gtk
 
     do_prompt = getcb()
     if not do_prompt:
@@ -392,7 +367,7 @@ def chkbox_helper(src, getcb, setcb, text1, text2=None,
 
     res = src.err.warn_chkbox(text1=text1, text2=text2,
                               chktext=chktext,
-                              buttons=gtk.BUTTONS_YES_NO)
+                              buttons=Gtk.ButtonsType.YES_NO)
     response, skip_prompt = res
     if alwaysrecord or response:
         setcb(not skip_prompt)
@@ -415,44 +390,3 @@ def set_list_selection(widget, rownum):
     selection.unselect_all()
     widget.set_cursor(path)
     selection.select_path(path)
-
-def sanitize_gtkbuilder(filename):
-    """
-    GTKBuilder XML made by glade on f16 doesn't work on RHEL6. If on an old
-    GTK version, strip out the bits that cause problems
-    """
-    import gtk
-    ver = gtk.gtk_version
-    xml = file(filename).read()
-
-    if (ver[0] > 2 or
-        (ver[0] == 2 and ver[1] > 20)):
-        # Skip altering for gtk > 2.18
-        return xml
-
-    import libxml2
-
-    doc = None
-    ctx = None
-    ret = xml
-    try:
-        doc = libxml2.parseDoc(xml)
-        ctx = doc.xpathNewContext()
-
-        nodes = ctx.xpathEval("//child[@internal-child='selection']")
-        if nodes:
-            logging.debug("%s: Altering gtkbuilder XML for old gtk compat",
-                          os.path.basename(filename))
-
-        for node in nodes:
-            node.unlinkNode()
-            node.freeNode()
-
-        ret = doc.serialize()
-    finally:
-        if doc:
-            doc.freeDoc()
-        if ctx:
-            ctx.xpathFreeContext()
-
-    return ret

@@ -15,8 +15,8 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 import cairo
 
 # For debugging
@@ -25,11 +25,11 @@ def rect_print(name, rect):
            (name, rect.height, rect.width, rect.x, rect.y))
 
 # For gproperties info, see:
-# http://www.pygtk.org/docs/pygtk/class-gtkcontainer.html#function-gtk--container-class-install-child-property
+# http://www.pyGtk.org/docs/pyGtk.class-Gtk.ontainer.html#function-Gtk.-container-class-install-child-property
 
-def _line_helper(cairo_ct, cell_area, points, for_fill=False):
+def _line_helper(cairo_ct, x, y, w, h, points, for_fill=False):
 
-    bottom_baseline = cell_area.y + cell_area.height
+    bottom_baseline = y + h
     last_was_zero = False
     last_point = None
 
@@ -40,8 +40,8 @@ def _line_helper(cairo_ct, cell_area, points, for_fill=False):
         is_zero = bool(y == bottom_baseline)
 
         # If the line is for filling, alter the coords so that fill covers
-        # the same area as the parent sparkline: by default, fill is one pixel
-        # short
+        # the same area as the parent sparkline: fill is one pixel short
+        # to not overwrite the spark line
         if for_fill:
             if index == 0:
                 x -= 1
@@ -62,11 +62,11 @@ def _line_helper(cairo_ct, cell_area, points, for_fill=False):
 
     return last_point
 
-def draw_line(cairo_ct, cell_area, points):
+def draw_line(cairo_ct, x, y, w, h, points):
     if not len(points):
         return
 
-    last_point = _line_helper(cairo_ct, cell_area, points)
+    last_point = _line_helper(cairo_ct, x, y, w, h, points)
     if not last_point:
         # Nothing to draw
         return
@@ -74,46 +74,46 @@ def draw_line(cairo_ct, cell_area, points):
     # Paint the line
     cairo_ct.stroke()
 
-def draw_fill(cairo_ct, cell_area, points, taper=False):
+def draw_fill(cairo_ct, x, y, w, h, points, taper=False):
     if not len(points):
         return
 
-    last_point = _line_helper(cairo_ct, cell_area, points, for_fill=True)
+    last_point = _line_helper(cairo_ct, x, y, w, h, points, for_fill=True)
     if not last_point:
         # Nothing to draw
         #return
         pass
 
-    baseline_y = cell_area.height + cell_area.y + 1
+    baseline_y = h + y + 1
     if taper:
-        x = cell_area.width + cell_area.x
+        start_x = w + x
     else:
-        x = points[-1][0]
+        start_x = points[-1][0]
 
     # Box out the area to fill
-    cairo_ct.line_to(x + 1, baseline_y)
-    cairo_ct.line_to(cell_area.x - 1, baseline_y)
+    cairo_ct.line_to(start_x + 1, baseline_y)
+    cairo_ct.line_to(x - 1, baseline_y)
 
     # Paint the fill
     cairo_ct.fill()
 
 
-class CellRendererSparkline(gtk.CellRenderer):
+class CellRendererSparkline(Gtk.CellRenderer):
     __gproperties__ = {
-        # 'name' : (gobject.TYPE_*,
+        # 'name' : (GObject.TYPE_*,
         #           nickname, long desc, (type related args), mode)
         # Type related args can be min, max for int (etc.), or default value
         # for strings and bool
-        'data_array' : (gobject.TYPE_PYOBJECT, "Data Array",
+        'data_array' : (GObject.TYPE_PYOBJECT, "Data Array",
                         "Array of data points for the graph",
-                        gobject.PARAM_READWRITE),
-        'reversed': (gobject.TYPE_BOOLEAN, "Reverse data",
+                        GObject.PARAM_READWRITE),
+        'reversed': (GObject.TYPE_BOOLEAN, "Reverse data",
                      "Process data from back to front.",
-                     0, gobject.PARAM_READWRITE),
+                     0, GObject.PARAM_READWRITE),
     }
 
     def __init__(self):
-        gtk.CellRenderer.__init__(self)
+        Gtk.CellRenderer.__init__(self)
 
         self.data_array = []
         self.num_sets = 0
@@ -121,18 +121,16 @@ class CellRendererSparkline(gtk.CellRenderer):
         self.reversed = False
         self.rgb = None
 
-    def do_render(self, window, widget, background_area, cell_area,
-                  expose_area, flags):
-        # window            : gtk.gdk.Window (not plain window)
-        # widget            : Parent widget (manager treeview)
+    def do_render(self, cr, widget, background_area, cell_area,
+                  flags):
+        # cr                : Cairo context
+        # widget            : GtkWidget instance
         # background_area   : GdkRectangle: entire cell area
         # cell_area         : GdkRectangle: area normally rendered by cell
-        # expose_area       : GdkRectangle: area that needs updating
         # flags             : flags that affect rendering
-        # flags = gtk.CELL_RENDERER_SELECTED, gtk.CELL_RENDERER_PRELIT,
-        #         gtk.CELL_RENDERER_INSENSITIVE or gtk.CELL_RENDERER_SORTED
+        # flags = Gtk.CELL_RENDERER_SELECTED, Gtk.CELL_RENDERER_PRELIT,
+        #         Gtk.CELL_RENDERER_INSENSITIVE or Gtk.CELL_RENDERER_SORTED
         ignore = widget
-        ignore = expose_area
         ignore = background_area
         ignore = flags
 
@@ -143,7 +141,7 @@ class CellRendererSparkline(gtk.CellRenderer):
         GRAPH_PAD = (BORDER_PADDING + GRAPH_INDENT)
 
         # We don't use yalign, since we expand to the entire height
-        #yalign = self.get_property("yalign")
+        ignore = self.get_property("yalign")
         xalign = self.get_property("xalign")
 
         # Set up graphing bounds
@@ -152,8 +150,6 @@ class CellRendererSparkline(gtk.CellRenderer):
         graph_width  = (cell_area.width - (GRAPH_PAD * 2))
         graph_height = (cell_area.height - (GRAPH_PAD * 2))
 
-        # XXX: This needs to be smarter, we need to either center the graph
-        #      or have some way of making it variable sized
         pixels_per_point = (graph_width / ((len(self.data_array) or 1) - 1))
 
         # Graph width needs to be some multiple of the amount of data points
@@ -161,7 +157,6 @@ class CellRendererSparkline(gtk.CellRenderer):
         graph_width = (pixels_per_point * ((len(self.data_array) or 1) - 1))
 
         # Recalculate border width based on the amount we are graphing
-        #border_width = graph_width + GRAPH_PAD
         border_width = graph_width + (GRAPH_INDENT * 2)
 
         # Align the widget
@@ -171,25 +166,24 @@ class CellRendererSparkline(gtk.CellRenderer):
             cell_area.x += xalign_space
             graph_x += xalign_space
 
-        cairo_ct = window.cairo_create()
-        cairo_ct.set_line_width(3)
-        cairo_ct.set_line_cap(cairo.LINE_CAP_ROUND)
+        cr.set_line_width(3)
+        cr.set_line_cap(cairo.LINE_CAP_ROUND)
 
         # Draw gray graph border
-        cairo_ct.set_source_rgb(0.8828125, 0.8671875, 0.8671875)
-        cairo_ct.rectangle(cell_area.x + BORDER_PADDING,
-                           cell_area.y + BORDER_PADDING,
-                           border_width,
-                           cell_area.height - (BORDER_PADDING * 2))
-        cairo_ct.stroke()
+        cr.set_source_rgb(0.8828125, 0.8671875, 0.8671875)
+        cr.rectangle(cell_area.x + BORDER_PADDING,
+                     cell_area.y + BORDER_PADDING,
+                     border_width,
+                     cell_area.height - (BORDER_PADDING * 2))
+        cr.stroke()
 
         # Fill in white box inside graph outline
-        cairo_ct.set_source_rgb(1, 1, 1)
-        cairo_ct.rectangle(cell_area.x + BORDER_PADDING,
-                           cell_area.y + BORDER_PADDING,
-                           border_width,
-                           cell_area.height - (BORDER_PADDING * 2))
-        cairo_ct.fill()
+        cr.set_source_rgb(1, 1, 1)
+        cr.rectangle(cell_area.x + BORDER_PADDING,
+                     cell_area.y + BORDER_PADDING,
+                     border_width,
+                     cell_area.height - (BORDER_PADDING * 2))
+        cr.fill()
 
         def get_y(index):
             baseline_y = graph_y + graph_height
@@ -220,19 +214,19 @@ class CellRendererSparkline(gtk.CellRenderer):
         cell_area.height = graph_height
 
         # Set color to dark blue for the actual sparkline
-        cairo_ct.set_line_width(2)
-        cairo_ct.set_source_rgb(0.421875, 0.640625, 0.73046875)
-        draw_line(cairo_ct, cell_area, points)
+        cr.set_line_width(2)
+        cr.set_source_rgb(0.421875, 0.640625, 0.73046875)
+        draw_line(cr,
+                  cell_area.x, cell_area.y,
+                  cell_area.width, cell_area.height,
+                  points)
 
         # Set color to light blue for the fill
-        cairo_ct.set_source_rgba(0.71484375, 0.84765625, 0.89453125, .5)
-        draw_fill(cairo_ct, cell_area, points)
-
-        # Stop clipping
-        cairo_ct.clip()
-        cairo_ct.save()
-        cairo_ct.restore()
-        del(cairo_ct)
+        cr.set_source_rgba(0.71484375, 0.84765625, 0.89453125, .5)
+        draw_fill(cr,
+                  cell_area.x, cell_area.y,
+                  cell_area.width, cell_area.height,
+                  points)
         return
 
     def do_get_size(self, widget, cell_area=None):
@@ -244,7 +238,7 @@ class CellRendererSparkline(gtk.CellRenderer):
         ypad = self.get_property("ypad")
 
         if cell_area:
-            # XXX: What to do here?
+            # What to do here? haven't encountered this in practice
             xoffset = 0
             yoffset = 0
         else:
@@ -256,42 +250,42 @@ class CellRendererSparkline(gtk.CellRenderer):
 
         return (xoffset, yoffset, width, height)
 
+    # Properties are passed to use with "-" in the name, but python
+    # variables can't be named like that
     def _sanitize_param_spec_name(self, name):
-        # Why this is made necessary, I have no idea
         return name.replace("-", "_")
-
     def do_get_property(self, param_spec):
         name = self._sanitize_param_spec_name(param_spec.name)
         return getattr(self, name)
-
     def do_set_property(self, param_spec, value):
         name = self._sanitize_param_spec_name(param_spec.name)
         setattr(self, name, value)
 
-class Sparkline(gtk.DrawingArea):
+
+class Sparkline(Gtk.DrawingArea):
     __gproperties__ = {
-        # 'name' : (gobject.TYPE_*,
+        # 'name' : (GObject.TYPE_*,
         #           nickname, long desc, (type related args), mode)
         # Type related args can be min, max for int (etc.), or default value
         # for strings and bool
-        'data_array' : (gobject.TYPE_PYOBJECT, "Data Array",
+        'data_array' : (GObject.TYPE_PYOBJECT, "Data Array",
                         "Array of data points for the graph",
-                        gobject.PARAM_READWRITE),
-        'filled': (gobject.TYPE_BOOLEAN, 'Filled', 'the foo of the object',
+                        GObject.PARAM_READWRITE),
+        'filled': (GObject.TYPE_BOOLEAN, 'Filled', 'the foo of the object',
                    1,
-                   gobject.PARAM_READWRITE),
-        'num_sets': (gobject.TYPE_INT, "Number of sets",
+                   GObject.PARAM_READWRITE),
+        'num_sets': (GObject.TYPE_INT, "Number of sets",
                      "Number of data sets to graph",
-                     1, 2, 1, gobject.PARAM_READWRITE),
-        'reversed': (gobject.TYPE_BOOLEAN, "Reverse data",
+                     1, 2, 1, GObject.PARAM_READWRITE),
+        'reversed': (GObject.TYPE_BOOLEAN, "Reverse data",
                      "Process data from back to front.",
-                     0, gobject.PARAM_READWRITE),
-        'rgb': (gobject.TYPE_PYOBJECT, "rgb array", "List of rgb values",
-                gobject.PARAM_READWRITE),
+                     0, GObject.PARAM_READWRITE),
+        'rgb': (GObject.TYPE_PYOBJECT, "rgb array", "List of rgb values",
+                GObject.PARAM_READWRITE),
     }
 
     def __init__(self):
-        gtk.DrawingArea.__init__(self)
+        Gtk.DrawingArea.__init__(self)
 
         self._data_array = []
         self.num_sets = 1
@@ -299,7 +293,8 @@ class Sparkline(gtk.DrawingArea):
         self.reversed = False
         self.rgb = []
 
-        self.connect("expose-event", self.do_expose)
+        ctxt = self.get_style_context()
+        ctxt.add_class(Gtk.STYLE_CLASS_ENTRY)
 
     def set_data_array(self, val):
         self._data_array = val
@@ -309,49 +304,38 @@ class Sparkline(gtk.DrawingArea):
     data_array = property(get_data_array, set_data_array)
 
 
-    def do_expose(self, widget, event):
-        # widget    : This widget
-        # event     : GdkEvent
-        # cell_area : GdkRectangle: area normally rendered by cell
-        # window            : gtk.gdk.Window (not plain window)
-        ignore = event
+    def do_draw(self, cr):
+        cr.save()
 
-        # cell_area : GdkRectangle: area normally rendered by cell
-        cell_area = widget.allocation
-
-        # window            : gtk.gdk.Window (not plain window)
-        window = widget.window
+        window = self.get_window()
+        w = window.get_width()
+        h = window.get_height()
 
         points_per_set = (len(self.data_array) / self.num_sets)
-        pixels_per_point = (float(cell_area.width) /
+        pixels_per_point = (float(w) /
                             (float((points_per_set - 1) or 1)))
 
-        # Mid-color graphics context (gtk.GC)
+        widget = self
+        ctx = widget.get_style_context()
+
         # This draws the light gray backing rectangle
-        mid_gc = widget.style.mid_gc[widget.state]
-        window.draw_rectangle(mid_gc, True, 0, 0,
-                              cell_area.width - 1,
-                              cell_area.height - 1)
+        Gtk.render_background(ctx, cr, 0, 0, w - 1, h - 1)
 
         # This draws the marker ticks
         max_ticks = 4
-        dark_gc = widget.style.dark_gc[widget.state]
-        for index in range(0, max_ticks):
-            window.draw_line(dark_gc, 1,
-                             (cell_area.height / max_ticks) * index,
-                             cell_area.width - 2,
-                             (cell_area.height / max_ticks) * index)
+        for index in range(1, max_ticks):
+            Gtk.render_line(ctx, cr, 1,
+                            (h / max_ticks) * index,
+                            w - 2,
+                            (h / max_ticks) * index)
 
         # Foreground-color graphics context
         # This draws the black border
-        fg_gc = widget.style.fg_gc[widget.state]
-        window.draw_rectangle(fg_gc, False, 0, 0,
-                              cell_area.width - 1,
-                              cell_area.height - 1)
+        Gtk.render_frame(ctx, cr, 0, 0, w - 1, h - 1)
 
         # Draw the actual sparkline
         def get_y(dataset, index):
-            baseline_y = cell_area.height
+            baseline_y = h
 
             n = dataset * points_per_set
             if self.reversed:
@@ -360,17 +344,13 @@ class Sparkline(gtk.DrawingArea):
                 n += index
 
             val = self.data_array[n]
-            return baseline_y - ((cell_area.height - 1) * val)
+            return baseline_y - ((h - 1) * val)
 
-        cairo_ct = window.cairo_create()
-        cairo_ct.save()
-        cairo_ct.rectangle(0, 0, cell_area.width, cell_area.height)
-        cairo_ct.clip()
-        cairo_ct.set_line_width(2)
+        cr.set_line_width(2)
 
         for dataset in range(0, self.num_sets):
             if len(self.rgb) == (self.num_sets * 3):
-                cairo_ct.set_source_rgb(self.rgb[(dataset * 3)],
+                cr.set_source_rgb(self.rgb[(dataset * 3)],
                                         self.rgb[(dataset * 3) + 1],
                                         self.rgb[(dataset * 1) + 2])
             points = []
@@ -384,38 +364,33 @@ class Sparkline(gtk.DrawingArea):
             if self.num_sets == 1:
                 pass
 
-            draw_line(cairo_ct, cell_area, points)
+            draw_line(cr, 0, 0, w, h, points)
             if self.filled:
                 # XXX: Fixes a fully filled graph from having an oddly
                 #      tapered in end (bug 560913). Need to figure out
                 #      what's really going on.
-                points = [(0, cell_area.height)] + points
-                draw_fill(cairo_ct, cell_area, points, taper=True)
+                points = [(0, h)] + points
+                draw_fill(cr, 0, 0, w, h, points, taper=True)
 
-        # Stop clipping
-        cairo_ct.restore()
-        del(cairo_ct)
+        cr.restore()
+
         return 0
 
     def do_size_request(self, requisition):
-        # Requisition: a GtkRequisition instance
         width = len(self.data_array) / self.num_sets
         height = 20
 
         requisition.width = width
         requisition.height = height
 
+    # Properties are passed to use with "-" in the name, but python
+    # variables can't be named like that
     def _sanitize_param_spec_name(self, name):
-        # Why this is made necessary, I have no idea
         return name.replace("-", "_")
-
     def do_get_property(self, param_spec):
         name = self._sanitize_param_spec_name(param_spec.name)
         return getattr(self, name)
-
     def do_set_property(self, param_spec, value):
         name = self._sanitize_param_spec_name(param_spec.name)
         setattr(self, name, value)
 
-gobject.type_register(Sparkline)
-gobject.type_register(CellRendererSparkline)

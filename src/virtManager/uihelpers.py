@@ -22,7 +22,7 @@ import logging
 import os
 import statvfs
 
-import gtk
+from gi.repository import Gtk
 
 import virtinst
 from virtinst import VirtualNetworkInterface
@@ -60,7 +60,7 @@ def spin_get_helper(widget):
     try:
         ret = int(txt)
     except:
-        ret = adj.value
+        ret = adj.get_value()
     return ret
 
 ############################################################
@@ -75,7 +75,7 @@ def set_sparse_tooltip(widget):
                    "available storage space. \n\n"
                    "Tip: Storage format qcow2 and qed "
                    "do not support full allocation.")
-    util.tooltip_wrapper(widget, sparse_str)
+    widget.set_tooltip_text(sparse_str)
 
 def host_disk_space(conn):
     pool = util.get_default_pool(conn)
@@ -135,12 +135,12 @@ def check_default_pool_active(topwin, conn):
 # Hardware model list building (for details, addhw) #
 #####################################################
 def build_video_combo(vm, video_dev, no_default=None):
-    video_dev_model = gtk.ListStore(str, str)
+    video_dev_model = Gtk.ListStore(str, str)
     video_dev.set_model(video_dev_model)
-    text = gtk.CellRendererText()
+    text = Gtk.CellRendererText()
     video_dev.pack_start(text, True)
     video_dev.add_attribute(text, 'text', 1)
-    video_dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+    video_dev_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
     populate_video_combo(vm, video_dev, no_default)
 
@@ -167,12 +167,12 @@ def populate_video_combo(vm, video_dev, no_default=None):
         video_dev.set_active(0)
 
 def build_sound_combo(vm, combo, no_default=False):
-    dev_model = gtk.ListStore(str)
+    dev_model = Gtk.ListStore(str)
     combo.set_model(dev_model)
-    text = gtk.CellRendererText()
+    text = Gtk.CellRendererText()
     combo.pack_start(text, True)
     combo.add_attribute(text, 'text', 0)
-    dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     disable_rhel = not vm.rhel6_defaults()
     rhel6_soundmodels = ["ich6", "ac97", "es1370"]
@@ -190,12 +190,12 @@ def build_sound_combo(vm, combo, no_default=False):
 
 def build_watchdogmodel_combo(vm, combo, no_default=False):
     ignore = vm
-    dev_model = gtk.ListStore(str)
+    dev_model = Gtk.ListStore(str)
     combo.set_model(dev_model)
-    text = gtk.CellRendererText()
+    text = Gtk.CellRendererText()
     combo.pack_start(text, True)
     combo.add_attribute(text, 'text', 0)
-    dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     for m in virtinst.VirtualWatchdog.MODELS:
         if m == virtinst.VirtualAudio.MODEL_DEFAULT and no_default:
@@ -206,12 +206,12 @@ def build_watchdogmodel_combo(vm, combo, no_default=False):
 
 def build_watchdogaction_combo(vm, combo, no_default=False):
     ignore = vm
-    dev_model = gtk.ListStore(str, str)
+    dev_model = Gtk.ListStore(str, str)
     combo.set_model(dev_model)
-    text = gtk.CellRendererText()
+    text = Gtk.CellRendererText()
     combo.pack_start(text, True)
     combo.add_attribute(text, 'text', 1)
-    dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     for m in virtinst.VirtualWatchdog.ACTIONS:
         if m == virtinst.VirtualWatchdog.ACTION_DEFAULT and no_default:
@@ -221,9 +221,9 @@ def build_watchdogaction_combo(vm, combo, no_default=False):
         combo.set_active(0)
 
 def build_source_mode_combo(vm, combo):
-    source_mode = gtk.ListStore(str, str)
+    source_mode = Gtk.ListStore(str, str)
     combo.set_model(source_mode)
-    text = gtk.CellRendererText()
+    text = Gtk.CellRendererText()
     combo.pack_start(text, True)
     combo.add_attribute(text, 'text', 1)
 
@@ -243,12 +243,12 @@ def populate_source_mode_combo(vm, combo):
     model.append(["passthrough", "Passthrough"])
 
 def build_smartcard_mode_combo(vm, combo):
-    dev_model = gtk.ListStore(str, str)
+    dev_model = Gtk.ListStore(str, str)
     combo.set_model(dev_model)
-    text = gtk.CellRendererText()
+    text = Gtk.CellRendererText()
     combo.pack_start(text, True)
     combo.add_attribute(text, 'text', 1)
-    dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     populate_smartcard_mode_combo(vm, combo)
 
@@ -273,9 +273,9 @@ def populate_smartcard_mode_combo(vm, combo):
 #    model.append(["host-certificates", "Host Certificates"])
 
 def build_redir_type_combo(vm, combo):
-    source_mode = gtk.ListStore(str, str, bool)
+    source_mode = Gtk.ListStore(str, str, bool)
     combo.set_model(source_mode)
-    text = gtk.CellRendererText()
+    text = Gtk.CellRendererText()
     combo.pack_start(text, True)
     combo.add_attribute(text, 'text', 1)
 
@@ -292,12 +292,12 @@ def populate_redir_type_combo(vm, combo):
     model.append(["tcp", "TCP", True])
 
 def build_netmodel_combo(vm, combo):
-    dev_model = gtk.ListStore(str, str)
+    dev_model = Gtk.ListStore(str, str)
     combo.set_model(dev_model)
-    text = gtk.CellRendererText()
+    text = Gtk.CellRendererText()
     combo.pack_start(text, True)
     combo.add_attribute(text, 'text', 1)
-    dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     populate_netmodel_combo(vm, combo)
     combo.set_active(0)
@@ -324,12 +324,12 @@ def populate_netmodel_combo(vm, combo):
 
 def build_cache_combo(vm, combo, no_default=False):
     ignore = vm
-    dev_model = gtk.ListStore(str, str)
+    dev_model = Gtk.ListStore(str, str)
     combo.set_model(dev_model)
-    text = gtk.CellRendererText()
+    text = Gtk.CellRendererText()
     combo.pack_start(text, True)
     combo.add_attribute(text, 'text', 1)
-    dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     combo.set_active(-1)
     for m in virtinst.VirtualDisk.cache_types:
@@ -341,12 +341,12 @@ def build_cache_combo(vm, combo, no_default=False):
 
 def build_io_combo(vm, combo, no_default=False):
     ignore = vm
-    dev_model = gtk.ListStore(str, str)
+    dev_model = Gtk.ListStore(str, str)
     combo.set_model(dev_model)
-    text = gtk.CellRendererText()
+    text = Gtk.CellRendererText()
     combo.pack_start(text, True)
     combo.add_attribute(text, 'text', 1)
-    dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     combo.set_active(-1)
     for m in virtinst.VirtualDisk.io_modes:
@@ -358,12 +358,12 @@ def build_io_combo(vm, combo, no_default=False):
 
 def build_disk_bus_combo(vm, combo, no_default=False):
     ignore = vm
-    dev_model = gtk.ListStore(str, str)
+    dev_model = Gtk.ListStore(str, str)
     combo.set_model(dev_model)
-    text = gtk.CellRendererText()
+    text = Gtk.CellRendererText()
     combo.pack_start(text, True)
     combo.add_attribute(text, 'text', 1)
-    dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     if not no_default:
         dev_model.append([None, "default"])
@@ -372,9 +372,9 @@ def build_disk_bus_combo(vm, combo, no_default=False):
 def build_vnc_keymap_combo(vm, combo, no_default=False):
     ignore = vm
 
-    model = gtk.ListStore(str, str)
+    model = Gtk.ListStore(str, str)
     combo.set_model(model)
-    text = gtk.CellRendererText()
+    text = Gtk.CellRendererText()
     combo.pack_start(text, True)
     combo.add_attribute(text, 'text', 1)
 
@@ -395,9 +395,9 @@ def build_vnc_keymap_combo(vm, combo, no_default=False):
 #####################################
 
 def build_storage_format_combo(vm, combo):
-    dev_model = gtk.ListStore(str)
+    dev_model = Gtk.ListStore(str)
     combo.set_model(dev_model)
-    combo.set_text_column(0)
+    combo.set_entry_text_column(0)
 
     formats = ["raw", "qcow2", "qed"]
     if vm.rhel6_defaults():
@@ -439,13 +439,13 @@ def init_network_list(net_list, bridge_box,
                       vport_expander=None):
     # [ network type, source name, label, sensitive?, net is active,
     #   manual bridge, net instance]
-    net_model = gtk.ListStore(str, str, str, bool, bool, bool, object)
+    net_model = Gtk.ListStore(str, str, str, bool, bool, bool, object)
     net_list.set_model(net_model)
 
     net_list.connect("changed", net_list_changed, bridge_box, source_mode_box,
                      source_mode_label, vport_expander)
 
-    text = gtk.CellRendererText()
+    text = Gtk.CellRendererText()
     net_list.pack_start(text, True)
     net_list.add_attribute(text, 'text', 2)
     net_list.add_attribute(text, 'sensitive', 3)
@@ -719,11 +719,11 @@ def generate_macaddr(conn):
 def init_mediadev_combo(widget):
     # [Device path, pretty label, has_media?, device key, media key,
     #  vmmMediaDevice, is valid device]
-    model = gtk.ListStore(str, str, bool, str, str, bool)
+    model = Gtk.ListStore(str, str, bool, str, str, bool)
     widget.set_model(model)
     model.clear()
 
-    text = gtk.CellRendererText()
+    text = Gtk.CellRendererText()
     widget.pack_start(text, True)
     widget.add_attribute(text, 'text', OPTICAL_LABEL)
     widget.add_attribute(text, 'sensitive', OPTICAL_IS_VALID)
@@ -844,44 +844,44 @@ def build_shutdown_button_menu(widget, shutdown_cb, reboot_cb, reset_cb,
                                destroy_cb, save_cb):
     icon_name = util.running_config.get_shutdown_icon_name()
     widget.set_icon_name(icon_name)
-    menu = gtk.Menu()
+    menu = Gtk.Menu()
     widget.set_menu(menu)
 
-    rebootimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
-    shutdownimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
-    resetimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
-    destroyimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
-    saveimg = gtk.image_new_from_icon_name(gtk.STOCK_SAVE, gtk.ICON_SIZE_MENU)
+    rebootimg = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
+    shutdownimg = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
+    resetimg = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
+    destroyimg = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
+    saveimg = Gtk.Image.new_from_icon_name(Gtk.STOCK_SAVE, Gtk.IconSize.MENU)
 
-    reboot = gtk.ImageMenuItem(_("_Reboot"))
+    reboot = Gtk.ImageMenuItem.new_with_mnemonic(_("_Reboot"))
     reboot.set_image(rebootimg)
     reboot.show()
     reboot.connect("activate", reboot_cb)
     menu.add(reboot)
 
-    shutdown = gtk.ImageMenuItem(_("_Shut Down"))
+    shutdown = Gtk.ImageMenuItem.new_with_mnemonic(_("_Shut Down"))
     shutdown.set_image(shutdownimg)
     shutdown.show()
     shutdown.connect("activate", shutdown_cb)
     menu.add(shutdown)
 
-    reset = gtk.ImageMenuItem(_("_Force Reset"))
+    reset = Gtk.ImageMenuItem.new_with_mnemonic(_("_Force Reset"))
     reset.set_image(resetimg)
     reset.show()
     reset.connect("activate", reset_cb)
     menu.add(reset)
 
-    destroy = gtk.ImageMenuItem(_("_Force Off"))
+    destroy = Gtk.ImageMenuItem.new_with_mnemonic(_("_Force Off"))
     destroy.set_image(destroyimg)
     destroy.show()
     destroy.connect("activate", destroy_cb)
     menu.add(destroy)
 
-    sep = gtk.SeparatorMenuItem()
+    sep = Gtk.SeparatorMenuItem()
     sep.show()
     menu.add(sep)
 
-    save = gtk.ImageMenuItem(_("Sa_ve"))
+    save = Gtk.ImageMenuItem.new_with_mnemonic(_("Sa_ve"))
     save.set_image(saveimg)
     save.show()
     save.connect("activate", save_cb)
@@ -913,7 +913,7 @@ def check_path_search_for_qemu(parent, conn, path):
                       "for the path '%s'.") % path,
                     _("Do you want to correct this now?"),
                     _("Don't ask about these directories again."),
-                    buttons=gtk.BUTTONS_YES_NO)
+                    buttons=Gtk.ButtonsType.YES_NO)
 
     if chkres:
         util.running_config.add_perms_fix_ignore(broken_paths)
@@ -946,9 +946,9 @@ def check_path_search_for_qemu(parent, conn, path):
 ######################################
 
 def build_startmode_combo(start_list):
-    start_model = gtk.ListStore(str)
+    start_model = Gtk.ListStore(str)
     start_list.set_model(start_model)
-    text = gtk.CellRendererText()
+    text = Gtk.CellRendererText()
     start_list.pack_start(text, True)
     start_list.add_attribute(text, 'text', 0)
     start_model.append(["none"])
@@ -961,21 +961,21 @@ def build_startmode_combo(start_list):
 #########################
 
 def build_keycombo_menu(cb):
-    menu = gtk.Menu()
+    menu = Gtk.Menu()
 
     def make_item(name, combo):
-        item = gtk.MenuItem(name, use_underline=True)
+        item = Gtk.MenuItem.new_with_mnemonic(name)
         item.connect("activate", cb, combo)
 
         menu.add(item)
 
     make_item("Ctrl+Alt+_Backspace", ["Control_L", "Alt_L", "BackSpace"])
     make_item("Ctrl+Alt+_Delete", ["Control_L", "Alt_L", "Delete"])
-    menu.add(gtk.SeparatorMenuItem())
+    menu.add(Gtk.SeparatorMenuItem())
 
     for i in range(1, 13):
         make_item("Ctrl+Alt+F_%d" % i, ["Control_L", "Alt_L", "F%d" % i])
-    menu.add(gtk.SeparatorMenuItem())
+    menu.add(Gtk.SeparatorMenuItem())
 
     make_item("_Printscreen", ["Print"])
 

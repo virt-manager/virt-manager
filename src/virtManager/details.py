@@ -21,7 +21,9 @@
 import logging
 import traceback
 
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Gdk
 
 import libvirt
 
@@ -39,12 +41,14 @@ import virtinst
 
 _comboentry_xml = """
 <interface>
-    <object class="GtkComboBoxEntry" id="cpu-model">
+    <object class="GtkComboBoxText" id="cpu-model">
         <property name="visible">True</property>
+        <property name="has_entry">True</property>
         <signal name="changed" handler="on_cpu_model_changed"/>
     </object>
-    <object class="GtkComboBoxEntry" id="disk-format">
+    <object class="GtkComboBoxText" id="disk-format">
         <property name="visible">True</property>
+        <property name="has_entry">True</property>
         <signal name="changed" handler="on_disk_format_changed"/>
     </object>
 </interface>
@@ -312,6 +316,25 @@ def lookup_nodedev(vmmconn, hostdev):
     return found_dev
 
 class vmmDetails(vmmGObjectUI):
+    __gsignals__ = {
+        "action-save-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-destroy-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-suspend-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-resume-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-run-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-shutdown-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-reset-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-reboot-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "action-migrate-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-clone-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "details-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "details-opened": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "customize-finished": (GObject.SignalFlags.RUN_FIRST, None, []),
+    }
+
     def __init__(self, vm, parent=None):
         vmmGObjectUI.__init__(self, "vmm-details.ui", "vmm-details")
         self.vm = vm
@@ -322,7 +345,7 @@ class vmmDetails(vmmGObjectUI):
             # Details window is being abused as a 'configure before install'
             # dialog, set things as appropriate
             self.is_customize_dialog = True
-            self.topwin.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+            self.topwin.set_type_hint(Gdk.WindowTypeHint.DIALOG)
             self.topwin.set_transient_for(parent)
 
             self.widget("toolbar-box").show()
@@ -345,13 +368,13 @@ class vmmDetails(vmmGObjectUI):
         self.ignoreDetails = False
         self._cpu_copy_host = False
 
-        self.window.add_from_string(_comboentry_xml)
+        self.get_window().add_from_string(_comboentry_xml)
         self.widget("hbox17").pack_start(self.widget("disk-format"),
                                          False, True, 0)
         self.widget("hbox21").pack_start(self.widget("cpu-model"),
                                          False, True, 0)
 
-        self.console = vmmConsolePages(self.vm, self.window)
+        self.console = vmmConsolePages(self.vm, self.window, self.topwin)
 
         # Set default window size
         w, h = self.vm.get_details_window_size()
@@ -369,7 +392,7 @@ class vmmDetails(vmmGObjectUI):
         self.network_traffic_graph = None
         self.init_graphs()
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_close_details_clicked": self.close,
             "on_details_menu_close_activate": self.close,
             "on_vmm_details_delete_event": self.close,
@@ -403,88 +426,81 @@ class vmmDetails(vmmGObjectUI):
 
             "on_details_pages_switch_page": self.switch_page,
 
-            "on_overview_name_changed": (self.enable_apply, EDIT_NAME),
+            "on_overview_name_changed": lambda *x: self.enable_apply(x, EDIT_NAME),
             "on_overview_acpi_changed": self.config_acpi_changed,
             "on_overview_apic_changed": self.config_apic_changed,
-            "on_overview_clock_changed": (self.enable_apply, EDIT_CLOCK),
-            "on_machine_type_changed": (self.enable_apply, EDIT_MACHTYPE),
-            "on_security_label_changed": (self.enable_apply, EDIT_SECURITY),
-            "on_security_relabel_changed": (self.enable_apply, EDIT_SECURITY),
+            "on_overview_clock_changed": lambda *x: self.enable_apply(x, EDIT_CLOCK),
+            "on_machine_type_changed": lambda *x: self.enable_apply(x, EDIT_MACHTYPE),
+            "on_security_label_changed": lambda *x: self.enable_apply(x, EDIT_SECURITY),
+            "on_security_relabel_changed": lambda *x: self.enable_apply(x, EDIT_SECURITY),
             "on_security_type_changed": self.security_type_changed,
 
             "on_config_vcpus_changed": self.config_vcpus_changed,
             "on_config_maxvcpus_changed": self.config_maxvcpus_changed,
-            "on_config_vcpupin_changed": (self.enable_apply, EDIT_CPUSET),
+            "on_config_vcpupin_changed": lambda *x: self.enable_apply(x, EDIT_CPUSET),
             "on_config_vcpupin_generate_clicked": self.config_vcpupin_generate,
-            "on_cpu_model_changed": (self.enable_apply, EDIT_CPU),
-            "on_cpu_cores_changed": (self.enable_apply, EDIT_TOPOLOGY),
-            "on_cpu_sockets_changed": (self.enable_apply, EDIT_TOPOLOGY),
-            "on_cpu_threads_changed": (self.enable_apply, EDIT_TOPOLOGY),
+            "on_cpu_model_changed": lambda *x: self.enable_apply(x, EDIT_CPU),
+            "on_cpu_cores_changed": lambda *x: self.enable_apply(x, EDIT_TOPOLOGY),
+            "on_cpu_sockets_changed": lambda *x: self.enable_apply(x, EDIT_TOPOLOGY),
+            "on_cpu_threads_changed": lambda *x: self.enable_apply(x, EDIT_TOPOLOGY),
             "on_cpu_copy_host_clicked": self.config_cpu_copy_host,
             "on_cpu_topology_enable_toggled": self.config_cpu_topology_enable,
 
             "on_config_memory_changed": self.config_memory_changed,
             "on_config_maxmem_changed": self.config_maxmem_changed,
 
-            "on_config_boot_moveup_clicked" : (self.config_boot_move, True),
-            "on_config_boot_movedown_clicked" : (self.config_boot_move,
-                                                 False),
-            "on_config_autostart_changed": (self.enable_apply, EDIT_AUTOSTART),
-            "on_boot_menu_changed": (self.enable_apply, EDIT_BOOTMENU),
-            "on_boot_kernel_changed": (self.enable_apply, EDIT_KERNEL),
-            "on_boot_kernel_initrd_changed": (self.enable_apply, EDIT_KERNEL),
-            "on_boot_kernel_args_changed": (self.enable_apply, EDIT_KERNEL),
+            "on_config_boot_moveup_clicked" : lambda *x: self.config_boot_move(True),
+            "on_config_boot_movedown_clicked" : lambda *x: self.config_boot_move(False),
+            "on_config_autostart_changed": lambda *x: self.enable_apply(x, x, EDIT_AUTOSTART),
+            "on_boot_menu_changed": lambda *x: self.enable_apply(x, EDIT_BOOTMENU),
+            "on_boot_kernel_changed": lambda *x: self.enable_apply(x, EDIT_KERNEL),
+            "on_boot_kernel_initrd_changed": lambda *x: self.enable_apply(x, EDIT_KERNEL),
+            "on_boot_kernel_args_changed": lambda *x: self.enable_apply(x, EDIT_KERNEL),
             "on_boot_kernel_browse_clicked": self.browse_kernel,
             "on_boot_kernel_initrd_browse_clicked": self.browse_initrd,
-            "on_boot_init_path_changed": (self.enable_apply, EDIT_INIT),
+            "on_boot_init_path_changed": lambda *x: self.enable_apply(x, EDIT_INIT),
 
-            "on_disk_readonly_changed": (self.enable_apply, EDIT_DISK_RO),
-            "on_disk_shareable_changed": (self.enable_apply, EDIT_DISK_SHARE),
-            "on_disk_cache_combo_changed": (self.enable_apply,
-                                            EDIT_DISK_CACHE),
-            "on_disk_io_combo_changed": (self.enable_apply, EDIT_DISK_IO),
-            "on_disk_bus_combo_changed": (self.enable_apply, EDIT_DISK_BUS),
-            "on_disk_format_changed": (self.enable_apply, EDIT_DISK_FORMAT),
-            "on_disk_serial_changed": (self.enable_apply, EDIT_DISK_SERIAL),
-
+            "on_disk_readonly_changed": lambda *x: self.enable_apply(x, EDIT_DISK_RO),
+            "on_disk_shareable_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SHARE),
+            "on_disk_cache_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_CACHE),
+            "on_disk_io_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_IO),
+            "on_disk_bus_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_BUS),
+            "on_disk_format_changed": lambda *x: self.enable_apply(x, EDIT_DISK_FORMAT),
+            "on_disk_serial_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SERIAL),
             "on_disk_iotune_changed": self.iotune_changed,
 
-            "on_network_source_combo_changed": (self.enable_apply,
-                                                EDIT_NET_SOURCE),
-            "on_network_bridge_changed": (self.enable_apply,
-                                          EDIT_NET_SOURCE),
-            "on_network-source-mode-combo_changed": (self.enable_apply,
-                                                     EDIT_NET_SOURCE),
-            "on_network_model_combo_changed": (self.enable_apply,
-                                               EDIT_NET_MODEL),
+            "on_network_source_combo_changed": lambda *x: self.enable_apply(x, EDIT_NET_SOURCE),
+            "on_network_bridge_changed": lambda *x: self.enable_apply(x, EDIT_NET_SOURCE),
+            "on_network-source-mode-combo_changed": lambda *x: self.enable_apply(x, EDIT_NET_SOURCE),
+            "on_network_model_combo_changed": lambda *x: self.enable_apply(x, EDIT_NET_MODEL),
 
-            "on_vport_type_changed": (self.enable_apply, EDIT_NET_VPORT),
-            "on_vport_managerid_changed": (self.enable_apply,
+            "on_vport_type_changed": lambda *x: self.enable_apply(x, EDIT_NET_VPORT),
+            "on_vport_managerid_changed": lambda *x: self.enable_apply(x,
                                            EDIT_NET_VPORT),
-            "on_vport_typeid_changed": (self.enable_apply,
+            "on_vport_typeid_changed": lambda *x: self.enable_apply(x,
                                         EDIT_NET_VPORT),
-            "on_vport_typeidversion_changed": (self.enable_apply,
+            "on_vport_typeidversion_changed": lambda *x: self.enable_apply(x,
                                                EDIT_NET_VPORT),
-            "on_vport_instanceid_changed": (self.enable_apply,
+            "on_vport_instanceid_changed": lambda *x: self.enable_apply(x,
                                             EDIT_NET_VPORT),
 
-            "on_gfx_type_combo_changed": (self.enable_apply, EDIT_GFX_TYPE),
-            "on_vnc_keymap_combo_changed": (self.enable_apply,
+            "on_gfx_type_combo_changed": lambda *x: self.enable_apply(x, EDIT_GFX_TYPE),
+            "on_vnc_keymap_combo_changed": lambda *x: self.enable_apply(x,
                                             EDIT_GFX_KEYMAP),
-            "on_vnc_password_changed": (self.enable_apply, EDIT_GFX_PASSWD),
+            "on_vnc_password_changed": lambda *x: self.enable_apply(x, EDIT_GFX_PASSWD),
 
-            "on_sound_model_combo_changed": (self.enable_apply,
+            "on_sound_model_combo_changed": lambda *x: self.enable_apply(x,
                                              EDIT_SOUND_MODEL),
 
-            "on_video_model_combo_changed": (self.enable_apply,
+            "on_video_model_combo_changed": lambda *x: self.enable_apply(x,
                                              EDIT_VIDEO_MODEL),
 
-            "on_watchdog_model_combo_changed": (self.enable_apply,
+            "on_watchdog_model_combo_changed": lambda *x: self.enable_apply(x,
                                                 EDIT_WATCHDOG_MODEL),
-            "on_watchdog_action_combo_changed": (self.enable_apply,
+            "on_watchdog_action_combo_changed": lambda *x: self.enable_apply(x,
                                                  EDIT_WATCHDOG_ACTION),
 
-            "on_smartcard_mode_combo_changed": (self.enable_apply,
+            "on_smartcard_mode_combo_changed": lambda *x: self.enable_apply(x,
                                                 EDIT_SMARTCARD_MODE),
 
             "on_config_apply_clicked": self.config_apply,
@@ -508,7 +524,7 @@ class vmmDetails(vmmGObjectUI):
             "on_console_pages_switch_page": self.console.page_changed,
             "on_console_auth_password_activate": self.console.auth_login,
             "on_console_auth_login_clicked": self.console.auth_login,
-            "on_controller_model_combo_changed": (self.enable_apply,
+            "on_controller_model_combo_changed": lambda *x: self.enable_apply(x,
                                                   EDIT_CONTROLLER_MODEL),
         })
 
@@ -522,8 +538,8 @@ class vmmDetails(vmmGObjectUI):
                                             "changed",
                                             self.config_bootdev_selected)
 
-        finish_img = gtk.image_new_from_stock(gtk.STOCK_ADD,
-                                              gtk.ICON_SIZE_BUTTON)
+        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_ADD,
+                                              Gtk.IconSize.BUTTON)
         self.widget("add-hardware-button").set_image(finish_img)
 
         self.populate_hw_list()
@@ -590,7 +606,7 @@ class vmmDetails(vmmGObjectUI):
         self.topwin.hide()
         if (self.console.viewer and
             self.console.viewer.display and
-            self.console.viewer.display.flags() & gtk.VISIBLE):
+            self.console.viewer.display.get_visible()):
             try:
                 self.console.close_viewer()
             except:
@@ -603,7 +619,7 @@ class vmmDetails(vmmGObjectUI):
         return 1
 
     def is_visible(self):
-        return bool(self.topwin.flags() & gtk.VISIBLE)
+        return bool(self.topwin.get_visible())
 
 
     ##########################
@@ -625,22 +641,22 @@ class vmmDetails(vmmGObjectUI):
                      "details-menu-reset",
                      "details-menu-poweroff",
                      "details-menu-destroy"]:
-            image = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
+            image = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
             self.widget(name).set_image(image)
 
         # Add HW popup menu
-        self.addhwmenu = gtk.Menu()
+        self.addhwmenu = Gtk.Menu()
 
-        addHW = gtk.ImageMenuItem(_("_Add Hardware"))
-        addHWImg = gtk.Image()
-        addHWImg.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_MENU)
+        addHW = Gtk.ImageMenuItem(_("_Add Hardware"))
+        addHWImg = Gtk.Image()
+        addHWImg.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.MENU)
         addHW.set_image(addHWImg)
         addHW.show()
         addHW.connect("activate", self.add_hardware)
 
-        rmHW = gtk.ImageMenuItem(_("_Remove Hardware"))
-        rmHWImg = gtk.Image()
-        rmHWImg.set_from_stock(gtk.STOCK_REMOVE, gtk.ICON_SIZE_MENU)
+        rmHW = Gtk.ImageMenuItem(_("_Remove Hardware"))
+        rmHWImg = Gtk.Image()
+        rmHWImg.set_from_stock(Gtk.STOCK_REMOVE, Gtk.IconSize.MENU)
         rmHW.set_image(rmHWImg)
         rmHW.show()
         rmHW.connect("activate", self.remove_xml_dev)
@@ -649,7 +665,7 @@ class vmmDetails(vmmGObjectUI):
         self.addhwmenu.add(rmHW)
 
         # Serial list menu
-        smenu = gtk.Menu()
+        smenu = Gtk.Menu()
         smenu.connect("show", self.populate_serial_menu)
         self.widget("details-menu-view-serial-list").set_submenu(smenu)
 
@@ -705,14 +721,14 @@ class vmmDetails(vmmGObjectUI):
     def init_details(self):
         # Hardware list
         # [ label, icon name, icon size, hw type, hw data/class]
-        hw_list_model = gtk.ListStore(str, str, int, int, object)
+        hw_list_model = Gtk.ListStore(str, str, int, int, object)
         self.widget("hw-list").set_model(hw_list_model)
 
-        hwCol = gtk.TreeViewColumn("Hardware")
+        hwCol = Gtk.TreeViewColumn("Hardware")
         hwCol.set_spacing(6)
         hwCol.set_min_width(165)
-        hw_txt = gtk.CellRendererText()
-        hw_img = gtk.CellRendererPixbuf()
+        hw_txt = Gtk.CellRendererText()
+        hw_img = Gtk.CellRendererPixbuf()
         hwCol.pack_start(hw_img, False)
         hwCol.pack_start(hw_txt, True)
         hwCol.add_attribute(hw_txt, 'text', HW_LIST_COL_LABEL)
@@ -722,46 +738,46 @@ class vmmDetails(vmmGObjectUI):
 
         # Description text view
         desc = self.widget("overview-description")
-        buf = gtk.TextBuffer()
+        buf = Gtk.TextBuffer()
         buf.connect("changed", self.enable_apply, EDIT_DESC)
         desc.set_buffer(buf)
 
         # List of applications.
         apps_list = self.widget("inspection-apps")
-        apps_model = gtk.ListStore(str, str, str)
+        apps_model = Gtk.ListStore(str, str, str)
         apps_list.set_model(apps_model)
 
-        name_col = gtk.TreeViewColumn(_("Name"))
-        version_col = gtk.TreeViewColumn(_("Version"))
-        summary_col = gtk.TreeViewColumn()
+        name_col = Gtk.TreeViewColumn(_("Name"))
+        version_col = Gtk.TreeViewColumn(_("Version"))
+        summary_col = Gtk.TreeViewColumn()
 
         apps_list.append_column(name_col)
         apps_list.append_column(version_col)
         apps_list.append_column(summary_col)
 
-        name_text = gtk.CellRendererText()
+        name_text = Gtk.CellRendererText()
         name_col.pack_start(name_text, True)
         name_col.add_attribute(name_text, 'text', 0)
         name_col.set_sort_column_id(0)
 
-        version_text = gtk.CellRendererText()
+        version_text = Gtk.CellRendererText()
         version_col.pack_start(version_text, True)
         version_col.add_attribute(version_text, 'text', 1)
         version_col.set_sort_column_id(1)
 
-        summary_text = gtk.CellRendererText()
+        summary_text = Gtk.CellRendererText()
         summary_col.pack_start(summary_text, True)
         summary_col.add_attribute(summary_text, 'text', 2)
         summary_col.set_sort_column_id(2)
 
         # Clock combo
         clock_combo = self.widget("overview-clock-combo")
-        clock_model = gtk.ListStore(str)
+        clock_model = Gtk.ListStore(str)
         clock_combo.set_model(clock_model)
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         clock_combo.pack_start(text, True)
         clock_combo.add_attribute(text, 'text', 0)
-        clock_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        clock_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         for offset in ["localtime", "utc"]:
             clock_model.append([offset])
 
@@ -780,21 +796,21 @@ class vmmDetails(vmmGObjectUI):
             self.widget("hbox30").hide()
         else:
             machtype_combo = self.widget("machine-type-combo")
-            machtype_model = gtk.ListStore(str)
+            machtype_model = Gtk.ListStore(str)
             machtype_combo.set_model(machtype_model)
-            text = gtk.CellRendererText()
+            text = Gtk.CellRendererText()
             machtype_combo.pack_start(text, True)
             machtype_combo.add_attribute(text, 'text', 0)
-            machtype_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+            machtype_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
             if len(machines) > 0:
                 for machine in machines:
                     machtype_model.append([machine])
 
         # Security info tooltips
-        util.tooltip_wrapper(self.widget("security-static-info"),
+        self.widget("security-static-info").set_tooltip_text(
             _("Static SELinux security type tells libvirt to always start the guest process with the specified label. Unless 'relabel' is set, the administrator is responsible for making sure the images are labeled correctly on disk."))
-        util.tooltip_wrapper(self.widget("security-dynamic-info"),
+        self.widget("security-dynamic-info").set_tooltip_text(
             _("The dynamic SELinux security type tells libvirt to automatically pick a unique label for the guest process and guest image, ensuring total isolation of the guest. (Default)"))
 
         # VCPU Pinning list
@@ -803,34 +819,33 @@ class vmmDetails(vmmGObjectUI):
         if not self.conn.get_capabilities().host.topology:
             generate_cpuset.set_sensitive(False)
             generate_warn.show()
-            util.tooltip_wrapper(generate_warn,
-                                 _("Libvirt did not detect NUMA capabilities."))
+            generate_warn.set_tooltip_text(_("Libvirt did not detect NUMA capabilities."))
 
 
         # [ VCPU #, Currently running on Phys CPU #, CPU Pinning list ]
         vcpu_list = self.widget("config-vcpu-list")
-        vcpu_model = gtk.ListStore(str, str, str)
+        vcpu_model = Gtk.ListStore(str, str, str)
         vcpu_list.set_model(vcpu_model)
 
-        vcpuCol = gtk.TreeViewColumn(_("VCPU"))
-        physCol = gtk.TreeViewColumn(_("On CPU"))
-        pinCol  = gtk.TreeViewColumn(_("Pinning"))
+        vcpuCol = Gtk.TreeViewColumn(_("VCPU"))
+        physCol = Gtk.TreeViewColumn(_("On CPU"))
+        pinCol  = Gtk.TreeViewColumn(_("Pinning"))
 
         vcpu_list.append_column(vcpuCol)
         vcpu_list.append_column(physCol)
         vcpu_list.append_column(pinCol)
 
-        vcpu_text = gtk.CellRendererText()
+        vcpu_text = Gtk.CellRendererText()
         vcpuCol.pack_start(vcpu_text, True)
         vcpuCol.add_attribute(vcpu_text, 'text', 0)
         vcpuCol.set_sort_column_id(0)
 
-        phys_text = gtk.CellRendererText()
+        phys_text = Gtk.CellRendererText()
         physCol.pack_start(phys_text, True)
         physCol.add_attribute(phys_text, 'text', 1)
         physCol.set_sort_column_id(1)
 
-        pin_text = gtk.CellRendererText()
+        pin_text = Gtk.CellRendererText()
         pin_text.set_property("editable", True)
         pin_text.connect("edited", self.config_vcpu_pin)
         pinCol.pack_start(pin_text, True)
@@ -839,25 +854,25 @@ class vmmDetails(vmmGObjectUI):
         # Boot device list
         boot_list = self.widget("config-boot-list")
         # model = [ XML boot type, display name, icon name, enabled ]
-        boot_list_model = gtk.ListStore(str, str, str, bool)
+        boot_list_model = Gtk.ListStore(str, str, str, bool)
         boot_list.set_model(boot_list_model)
 
-        chkCol = gtk.TreeViewColumn()
-        txtCol = gtk.TreeViewColumn()
+        chkCol = Gtk.TreeViewColumn()
+        txtCol = Gtk.TreeViewColumn()
 
         boot_list.append_column(chkCol)
         boot_list.append_column(txtCol)
 
-        chk = gtk.CellRendererToggle()
+        chk = Gtk.CellRendererToggle()
         chk.connect("toggled", self.config_boot_toggled)
         chkCol.pack_start(chk, False)
         chkCol.add_attribute(chk, 'active', BOOT_ACTIVE)
 
-        icon = gtk.CellRendererPixbuf()
+        icon = Gtk.CellRendererPixbuf()
         txtCol.pack_start(icon, False)
         txtCol.add_attribute(icon, 'icon-name', BOOT_ICON)
 
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         txtCol.pack_start(text, True)
         txtCol.add_attribute(text, 'text', BOOT_LABEL)
         txtCol.add_attribute(text, 'sensitive', BOOT_ACTIVE)
@@ -880,25 +895,25 @@ class vmmDetails(vmmGObjectUI):
 
         # [ feature name, mode]
         feat_list = self.widget("cpu-features")
-        feat_model = gtk.ListStore(str, str)
+        feat_model = Gtk.ListStore(str, str)
         feat_list.set_model(feat_model)
 
-        nameCol = gtk.TreeViewColumn()
-        polCol = gtk.TreeViewColumn()
+        nameCol = Gtk.TreeViewColumn()
+        polCol = Gtk.TreeViewColumn()
         polCol.set_min_width(80)
 
         feat_list.append_column(nameCol)
         feat_list.append_column(polCol)
 
         # Feature name col
-        name_text = gtk.CellRendererText()
+        name_text = Gtk.CellRendererText()
         nameCol.pack_start(name_text, True)
         nameCol.add_attribute(name_text, 'text', 0)
         nameCol.set_sort_column_id(0)
 
         # Feature policy col
-        feat_combo = gtk.CellRendererCombo()
-        m = gtk.ListStore(str)
+        feat_combo = Gtk.CellRendererCombo()
+        m = Gtk.ListStore(str)
         for p in virtinst.CPUFeature.POLICIES:
             m.append([p])
         m.append(["default"])
@@ -920,10 +935,10 @@ class vmmDetails(vmmGObjectUI):
         # CPU model combo
         cpu_model = self.widget("cpu-model")
 
-        model = gtk.ListStore(str, object)
+        model = Gtk.ListStore(str, object)
         cpu_model.set_model(model)
-        cpu_model.set_text_column(0)
-        model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        cpu_model.set_entry_text_column(0)
+        model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         for name in cpu_names:
             model.append([name, cpu_values.get_cpu(name)])
 
@@ -966,9 +981,9 @@ class vmmDetails(vmmGObjectUI):
 
         # Graphics type
         gfx_type = self.widget("gfx-type-combo")
-        model = gtk.ListStore(str, str)
+        model = Gtk.ListStore(str, str)
         gfx_type.set_model(model)
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         gfx_type.pack_start(text, True)
         gfx_type.add_attribute(text, 'text', 1)
         model.append([virtinst.VirtualGraphics.TYPE_VNC,
@@ -1010,9 +1025,9 @@ class vmmDetails(vmmGObjectUI):
 
         # Controller model
         combo = self.widget("controller-model-combo")
-        model = gtk.ListStore(str, str)
+        model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         combo.pack_start(text, True)
         combo.add_attribute(text, 'text', 1)
         combo.set_active(-1)
@@ -1134,16 +1149,16 @@ class vmmDetails(vmmGObjectUI):
         itemlist = self.build_serial_list()
         for msg, err, sensitive, do_radio, cb, ignore in itemlist:
             if do_radio:
-                item = gtk.RadioMenuItem(group, msg)
+                item = Gtk.RadioMenuItem(group, msg)
                 if group is None:
                     group = item
             else:
-                item = gtk.MenuItem(msg)
+                item = Gtk.MenuItem(msg)
 
             item.set_sensitive(sensitive)
 
             if err and not sensitive:
-                util.tooltip_wrapper(item, err)
+                item.set_tooltip_text(err)
 
             if cb:
                 item.connect("toggled", cb)
@@ -1156,17 +1171,17 @@ class vmmDetails(vmmGObjectUI):
 
             src.add(item)
 
-        src.add(gtk.SeparatorMenuItem())
+        src.add(Gtk.SeparatorMenuItem())
 
         # Populate graphical devices
         devs = self.vm.get_graphics_devices()
         if len(devs) == 0:
-            item = gtk.MenuItem(_("No graphical console available"))
+            item = Gtk.MenuItem(_("No graphical console available"))
             item.set_sensitive(False)
             src.add(item)
         else:
             dev = devs[0]
-            item = gtk.RadioMenuItem(group, _("Graphical Console %s") %
+            item = Gtk.RadioMenuItem(group, _("Graphical Console %s") %
                                      dev.pretty_type_simple(dev.type))
             if group == None:
                 group = item
@@ -1241,7 +1256,7 @@ class vmmDetails(vmmGObjectUI):
         if not row1 or not row2:
             return False
 
-        for idx in range(len(row1)):
+        for idx in range(row1.model.get_n_columns()):
             if row1[idx] != row2[idx]:
                 return False
         return True
@@ -1449,7 +1464,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("overview-status-text").set_text(
                                                     self.vm.run_status())
         self.widget("overview-status-icon").set_from_icon_name(
-                            self.vm.run_status_icon_name(), gtk.ICON_SIZE_MENU)
+                            self.vm.run_status_icon_name(), Gtk.IconSize.MENU)
 
         details = self.widget("details-pages")
         self.page_refresh(details.get_current_page())
@@ -1591,7 +1606,7 @@ class vmmDetails(vmmGObjectUI):
                         _("Save Virtual Machine Screenshot"),
                         self.vm.conn,
                         _type=("png", "PNG files"),
-                        dialog_type=gtk.FILE_CHOOSER_ACTION_SAVE,
+                        dialog_type=Gtk.FileChooserAction.SAVE,
                         browse_reason=self.config.CONFIG_DIR_SCREENSHOT)
         if not path:
             return
@@ -1608,10 +1623,10 @@ class vmmDetails(vmmGObjectUI):
                     'tEXt::Generator App': self.config.get_appname(),
                     'tEXt::Generator Version': self.config.get_appversion()})
 
-        msg = gtk.MessageDialog(self.topwin,
-                                gtk.DIALOG_MODAL,
-                                gtk.MESSAGE_INFO,
-                                gtk.BUTTONS_OK,
+        msg = Gtk.MessageDialog(self.topwin,
+                                Gtk.DialogFlags.MODAL,
+                                Gtk.MessageType.INFO,
+                                Gtk.ButtonsType.OK,
                                 (_("The screenshot has been saved to:\n%s") %
                                  filename))
         msg.set_title(_("Screenshot saved"))
@@ -1643,7 +1658,7 @@ class vmmDetails(vmmGObjectUI):
         if not serial:
             serial = vmmSerialConsole(self.vm, target_port, name)
 
-            title = gtk.Label(name)
+            title = Gtk.Label(label=name)
             self.widget("details-pages").append_page(serial.box, title)
             self.serial_tabs.append(serial)
             serial.open_console()
@@ -1678,7 +1693,7 @@ class vmmDetails(vmmGObjectUI):
 
     def get_config_cpu_model(self):
         cpu_list = self.widget("cpu-model")
-        model = cpu_list.child.get_text()
+        model = cpu_list.get_child().get_text()
 
         for row in cpu_list.get_model():
             if model == row[0]:
@@ -2269,7 +2284,7 @@ class vmmDetails(vmmGObjectUI):
             add_define(self.vm.define_disk_io, dev_id_info, io)
 
         if self.editted(EDIT_DISK_FORMAT):
-            fmt = self.widget("disk-format").child.get_text().strip()
+            fmt = self.widget("disk-format").get_child().get_text().strip()
             add_define(self.vm.define_disk_driver_type, dev_id_info, fmt)
 
         if self.editted(EDIT_DISK_SERIAL):
@@ -2491,8 +2506,8 @@ class vmmDetails(vmmGObjectUI):
             details=(detach_err[0] + "\n\n" + detach_err[1]),
             text2=_("This change will take effect after the next guest "
                     "shutdown."),
-            buttons=gtk.BUTTONS_OK,
-            dialog_type=gtk.MESSAGE_INFO)
+            buttons=Gtk.ButtonsType.OK,
+            dialog_type=Gtk.MessageType.INFO)
 
     # Generic config change helpers
     def _change_config_helper(self,
@@ -2559,14 +2574,14 @@ class vmmDetails(vmmGObjectUI):
                 msg = _("These changes will take effect after "
                         "the next guest shutdown.")
 
-            dtype = hotplug_err and gtk.MESSAGE_WARNING or gtk.MESSAGE_INFO
+            dtype = hotplug_err and Gtk.MessageType.WARNING or Gtk.MessageType.INFO
             hotplug_msg = ""
             for err1, tb in hotplug_err:
                 hotplug_msg += (err1 + "\n\n" + tb + "\n")
 
             self.err.show_err(msg,
                               details=hotplug_msg,
-                              buttons=gtk.BUTTONS_OK,
+                              buttons=Gtk.ButtonsType.OK,
                               dialog_type=dtype)
 
         return True
@@ -2798,7 +2813,7 @@ class vmmDetails(vmmGObjectUI):
                            "VPCU info.")
 
         vcpu_list.set_sensitive(not bool(reason))
-        util.tooltip_wrapper(vcpu_list, reason or None)
+        vcpu_list.set_tooltip_text(reason or "")
         if reason:
             return
 
@@ -2840,7 +2855,7 @@ class vmmDetails(vmmGObjectUI):
         threads = cpu.threads or 1
 
         self.widget("cpu-topology-enable").set_active(show_top)
-        self.widget("cpu-model").child.set_text(model)
+        self.widget("cpu-model").get_child().set_text(model)
         self.widget("cpu-sockets").set_value(sockets)
         self.widget("cpu-cores").set_value(cores)
         self.widget("cpu-threads").set_value(threads)
@@ -2943,7 +2958,7 @@ class vmmDetails(vmmGObjectUI):
         self.set_combo_label("disk-io", io)
 
         self.widget("disk-format").set_sensitive(show_format)
-        self.widget("disk-format").child.set_text(driver_type)
+        self.widget("disk-format").get_child().set_text(driver_type)
 
         no_default = not self.is_customize_dialog
 
@@ -2962,9 +2977,9 @@ class vmmDetails(vmmGObjectUI):
         if is_cdrom or is_floppy:
             if not path:
                 # source device not connected
-                button.set_label(gtk.STOCK_CONNECT)
+                button.set_label(Gtk.STOCK_CONNECT)
             else:
-                button.set_label(gtk.STOCK_DISCONNECT)
+                button.set_label(Gtk.STOCK_DISCONNECT)
             button.show()
         else:
             button.hide()
@@ -3420,7 +3435,7 @@ class vmmDetails(vmmGObjectUI):
 
         def add_hw_list_option(title, page_id, data, icon_name):
             hw_list_model.append([title, icon_name,
-                                  gtk.ICON_SIZE_LARGE_TOOLBAR,
+                                  Gtk.IconSize.LARGE_TOOLBAR,
                                   page_id, data])
 
         add_hw_list_option("Overview", HW_LIST_TYPE_GENERAL, [], "computer")
@@ -3453,7 +3468,7 @@ class vmmDetails(vmmGObjectUI):
 
         def add_hw_list_option(idx, name, page_id, info, icon_name):
             hw_list_model.insert(idx, [name, icon_name,
-                                       gtk.ICON_SIZE_LARGE_TOOLBAR,
+                                       Gtk.IconSize.LARGE_TOOLBAR,
                                        page_id, info])
 
         def update_hwlist(hwtype, info, name, icon_name):
@@ -3593,7 +3608,7 @@ class vmmDetails(vmmGObjectUI):
             target = fs.target[:8]
             update_hwlist(HW_LIST_TYPE_FILESYSTEM, fs,
                           _("Filesystem %s") % target,
-                          gtk.STOCK_DIRECTORY)
+                          Gtk.STOCK_DIRECTORY)
 
         # Populate list of smartcard devices
         for sc in self.vm.get_smartcard_devices():
@@ -3676,21 +3691,3 @@ class vmmDetails(vmmGObjectUI):
 
         combo.set_property("visible", show)
         label.set_property("visible", show)
-
-vmmGObjectUI.type_register(vmmDetails)
-vmmDetails.signal_new(vmmDetails, "action-save-domain", [str, str])
-vmmDetails.signal_new(vmmDetails, "action-destroy-domain", [str, str])
-vmmDetails.signal_new(vmmDetails, "action-reset-domain", [str, str])
-vmmDetails.signal_new(vmmDetails, "action-suspend-domain", [str, str])
-vmmDetails.signal_new(vmmDetails, "action-resume-domain", [str, str])
-vmmDetails.signal_new(vmmDetails, "action-run-domain", [str, str])
-vmmDetails.signal_new(vmmDetails, "action-shutdown-domain", [str, str])
-vmmDetails.signal_new(vmmDetails, "action-reboot-domain", [str, str])
-vmmDetails.signal_new(vmmDetails, "action-show-help", [str])
-vmmDetails.signal_new(vmmDetails, "action-exit-app", [])
-vmmDetails.signal_new(vmmDetails, "action-view-manager", [])
-vmmDetails.signal_new(vmmDetails, "action-migrate-domain", [str, str])
-vmmDetails.signal_new(vmmDetails, "action-clone-domain", [str, str])
-vmmDetails.signal_new(vmmDetails, "details-closed", [])
-vmmDetails.signal_new(vmmDetails, "details-opened", [])
-vmmDetails.signal_new(vmmDetails, "customize-finished", [])

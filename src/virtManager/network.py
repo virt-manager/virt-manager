@@ -18,6 +18,8 @@
 # MA 02110-1301 USA.
 #
 
+from gi.repository import GObject
+
 from virtManager import util
 from virtManager.IPy import IP
 from virtManager.libvirtobject import vmmLibvirtObject
@@ -143,5 +145,3 @@ class vmmNetwork(vmmLibvirtObject):
         if forward and forward != "nat":
             return True
         return bool(util.xpath(xml, "/network/ip/dhcp/bootp/@file"))
-
-vmmLibvirtObject.type_register(vmmNetwork)

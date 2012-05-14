@@ -20,11 +20,17 @@
 
 import virtinst
 
+from gi.repository import GObject
+
 from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 from virtManager.storagevol import vmmStorageVolume
 
 class vmmStoragePool(vmmLibvirtObject):
+    __gsignals__ = {
+        "refreshed": (GObject.SignalFlags.RUN_FIRST, None, [])
+    }
+
     def __init__(self, conn, pool, uuid, active):
         vmmLibvirtObject.__init__(self, conn)
 
@@ -138,6 +144,3 @@ class vmmStoragePool(vmmLibvirtObject):
                                     self.pool.storageVolLookupByName(volname),
                                     volname)
         self._volumes = new_vol_list
-
-vmmLibvirtObject.type_register(vmmStoragePool)
-vmmStoragePool.signal_new(vmmStoragePool, "refreshed", [])

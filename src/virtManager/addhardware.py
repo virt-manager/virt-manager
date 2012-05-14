@@ -21,7 +21,9 @@
 import logging
 import traceback
 
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Gdk
 
 import virtinst
 from virtinst import (VirtualCharDevice, VirtualDevice,
@@ -70,6 +72,10 @@ _comboentry_xml = """
 """
 
 class vmmAddHardware(vmmGObjectUI):
+    __gsignals__ = {
+        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+    }
+
     def __init__(self, vm):
         vmmGObjectUI.__init__(self,
                               "vmm-add-hardware.ui", "vmm-add-hardware")
@@ -84,11 +90,11 @@ class vmmAddHardware(vmmGObjectUI):
 
         self._dev = None
 
-        self.window.add_from_string(_comboentry_xml)
+        self.get_window().add_from_string(_comboentry_xml)
         self.widget("table7").attach(self.widget("config-storage-format"),
-                                     1, 2, 2, 3, xoptions=gtk.FILL)
+                                     1, 2, 2, 3, xoptions=Gtk.AttachOptions.FILL)
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_create_cancel_clicked" : self.close,
             "on_vmm_create_delete_event" : self.close,
             "on_create_finish_clicked" : self.finish,
@@ -127,8 +133,8 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("create-help").hide()
 
 
-        finish_img = gtk.image_new_from_stock(gtk.STOCK_QUIT,
-                                              gtk.ICON_SIZE_BUTTON)
+        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
+                                              Gtk.IconSize.BUTTON)
         self.widget("create-finish").set_image(finish_img)
 
         self.set_initial_state()
@@ -185,15 +191,13 @@ class vmmAddHardware(vmmGObjectUI):
     def remove_timers(self):
         try:
             if self.host_storage_timer:
-                self.remove_gobject_timeout(self.host_storage_timer)
+                self.remove_timeout(self.host_storage_timer)
                 self.host_storage_timer = None
         except:
             pass
 
     def is_visible(self):
-        if self.topwin.flags() & gtk.VISIBLE:
-            return 1
-        return 0
+        return self.topwin.get_visible()
 
 
     ##########################
@@ -204,22 +208,22 @@ class vmmAddHardware(vmmGObjectUI):
         notebook = self.widget("create-pages")
         notebook.set_show_tabs(False)
 
-        black = gtk.gdk.color_parse("#000")
-        self.widget("page-title-box").modify_bg(gtk.STATE_NORMAL, black)
+        black = Gdk.Color.parse("#000")[1]
+        self.widget("page-title-box").modify_bg(Gtk.StateType.NORMAL, black)
 
         # Name, icon name, page number, is sensitive, tooltip, icon size,
         # device type (serial/parallel)...
-        model = gtk.ListStore(str, str, int, bool, str, str)
+        model = Gtk.ListStore(str, str, int, bool, str, str)
         hw_list = self.widget("hardware-list")
         hw_list.set_model(model)
 
-        hw_col = gtk.TreeViewColumn("Hardware")
+        hw_col = Gtk.TreeViewColumn("Hardware")
         hw_col.set_spacing(6)
         hw_col.set_min_width(165)
 
-        icon = gtk.CellRendererPixbuf()
-        icon.set_property("stock-size", gtk.ICON_SIZE_BUTTON)
-        text = gtk.CellRendererText()
+        icon = Gtk.CellRendererPixbuf()
+        icon.set_property("stock-size", Gtk.IconSize.BUTTON)
+        text = Gtk.CellRendererText()
         text.set_property("xpad", 6)
 
         hw_col.pack_start(icon, False)
@@ -240,13 +244,13 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Disk device type / bus
         target_list = self.widget("config-storage-devtype")
-        target_model = gtk.ListStore(str, str, str, str, int)
+        target_model = Gtk.ListStore(str, str, str, str, int)
         target_list.set_model(target_model)
-        icon = gtk.CellRendererPixbuf()
-        icon.set_property("stock-size", gtk.ICON_SIZE_BUTTON)
+        icon = Gtk.CellRendererPixbuf()
+        icon.set_property("stock-size", Gtk.IconSize.BUTTON)
         target_list.pack_start(icon, False)
         target_list.add_attribute(icon, 'icon-name', 2)
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         text.set_property("xpad", 6)
         target_list.pack_start(text, True)
         target_list.add_attribute(text, 'text', 3)
@@ -265,17 +269,17 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Input device type
         input_list = self.widget("input-type")
-        input_model = gtk.ListStore(str, str, str)
+        input_model = Gtk.ListStore(str, str, str)
         input_list.set_model(input_model)
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         input_list.pack_start(text, True)
         input_list.add_attribute(text, 'text', 0)
 
         # Graphics type
         graphics_list = self.widget("graphics-type")
-        graphics_model = gtk.ListStore(str, str)
+        graphics_model = Gtk.ListStore(str, str)
         graphics_list.set_model(graphics_model)
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         graphics_list.pack_start(text, True)
         graphics_list.add_attribute(text, 'text', 0)
 
@@ -286,14 +290,14 @@ class vmmAddHardware(vmmGObjectUI):
         # Host device list
         # model = [ Description, nodedev name ]
         host_dev = self.widget("host-device")
-        host_dev_model = gtk.ListStore(str, str)
+        host_dev_model = Gtk.ListStore(str, str)
         host_dev.set_model(host_dev_model)
 
-        host_col = gtk.TreeViewColumn()
-        text = gtk.CellRendererText()
+        host_col = Gtk.TreeViewColumn()
+        text = Gtk.CellRendererText()
         host_col.pack_start(text, True)
         host_col.add_attribute(text, 'text', 0)
-        host_dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        host_dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         host_dev.append_column(host_col)
 
         # Video device
@@ -303,18 +307,18 @@ class vmmAddHardware(vmmGObjectUI):
         # Character dev mode
         char_mode = self.widget("char-mode")
         # Mode name, desc
-        char_mode_model = gtk.ListStore(str, str)
+        char_mode_model = Gtk.ListStore(str, str)
         char_mode.set_model(char_mode_model)
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         char_mode.pack_start(text, True)
         char_mode.add_attribute(text, 'text', 1)
-        char_mode_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        char_mode_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         for t in VirtualCharDevice.char_modes:
             desc = VirtualCharDevice.get_char_mode_desc(t)
             char_mode_model.append([t, desc + " (%s)" % t])
 
-        self.widget("char-info-box").modify_bg(gtk.STATE_NORMAL,
-                                               gtk.gdk.color_parse("grey"))
+        self.widget("char-info-box").modify_bg(Gtk.StateType.NORMAL,
+                                               Gdk.Color.parse("grey")[1])
 
         # Watchdog widgets
         combo = self.widget("watchdog-model")
@@ -325,12 +329,12 @@ class vmmAddHardware(vmmGObjectUI):
 
         def simple_store_set(comboname, values):
             combo = self.widget(comboname)
-            model = gtk.ListStore(str, str)
+            model = Gtk.ListStore(str, str)
             combo.set_model(model)
-            text = gtk.CellRendererText()
+            text = Gtk.CellRendererText()
             combo.pack_start(text, True)
             combo.add_attribute(text, 'text', 1)
-            model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+            model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
             for val in values:
                 model.append([val, val.capitalize()])
 
@@ -379,15 +383,15 @@ class vmmAddHardware(vmmGObjectUI):
         add_hw_option("Sound", "audio-card", PAGE_SOUND,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."))
-        add_hw_option("Serial", gtk.STOCK_CONNECT, PAGE_CHAR,
+        add_hw_option("Serial", Gtk.STOCK_CONNECT, PAGE_CHAR,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."),
                       "serial")
-        add_hw_option("Parallel", gtk.STOCK_CONNECT, PAGE_CHAR,
+        add_hw_option("Parallel", Gtk.STOCK_CONNECT, PAGE_CHAR,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."),
                       "parallel")
-        add_hw_option("Channel", gtk.STOCK_CONNECT, PAGE_CHAR,
+        add_hw_option("Channel", Gtk.STOCK_CONNECT, PAGE_CHAR,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."),
                       "channel")
@@ -407,7 +411,7 @@ class vmmAddHardware(vmmGObjectUI):
         add_hw_option("Watchdog", "device_pci", PAGE_WATCHDOG,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."))
-        add_hw_option("Filesystem", gtk.STOCK_DIRECTORY, PAGE_FILESYSTEM,
+        add_hw_option("Filesystem", Gtk.STOCK_DIRECTORY, PAGE_FILESYSTEM,
                       virtinst.support.check_conn_hv_support(
                         self.conn.vmm,
                         virtinst.support.SUPPORT_CONN_HV_FILESYSTEM,
@@ -434,7 +438,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("config-storage-nosparse").set_active(True)
         # Don't specify by default, so we don't overwrite possibly working
         # libvirt detection
-        self.widget("config-storage-format").child.set_text("")
+        self.widget("config-storage-format").get_child().set_text("")
         target_list = self.widget("config-storage-devtype")
         self.populate_target_device_model(target_list.get_model())
         if len(target_list.get_model()) > 0:
@@ -453,7 +457,7 @@ class vmmAddHardware(vmmGObjectUI):
         error = self.conn.netdev_error
         if error:
             net_warn.show()
-            util.tooltip_wrapper(net_warn, error)
+            net_warn.set_tooltip_text(error)
         else:
             net_warn.hide()
 
@@ -526,7 +530,7 @@ class vmmAddHardware(vmmGObjectUI):
                 icon = "media-optical"
             else:
                 icon = "drive-harddisk"
-            model.append([bus, device, icon, desc, gtk.ICON_SIZE_BUTTON])
+            model.append([bus, device, icon, desc, Gtk.IconSize.BUTTON])
 
         if self.vm.is_hvm():
             add_dev("ide", virtinst.VirtualDisk.DEVICE_DISK, _("IDE disk"))
@@ -638,7 +642,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def get_config_disk_format(self):
         fmt = self.widget("config-storage-format")
-        return fmt.child.get_text()
+        return fmt.get_child().get_text()
 
     # Input getters
     def get_config_input(self):
@@ -830,10 +834,10 @@ class vmmAddHardware(vmmGObjectUI):
         char_devtype = self.widget("char-device-type")
         dev_type = self.get_char_type()
         # Type name, desc
-        char_devtype_model = gtk.ListStore(str, str)
+        char_devtype_model = Gtk.ListStore(str, str)
         char_devtype.clear()
         char_devtype.set_model(char_devtype_model)
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         char_devtype.pack_start(text, True)
         char_devtype.add_attribute(text, 'text', 1)
 
@@ -891,7 +895,7 @@ class vmmAddHardware(vmmGObjectUI):
             return
 
         self.topwin.set_sensitive(False)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         try:
             failure, errinfo = self.add_device()
@@ -905,7 +909,7 @@ class vmmAddHardware(vmmGObjectUI):
             self.err.show_err(error, details=details)
 
         self.topwin.set_sensitive(True)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
 
         self._dev = None
         if not failure:
@@ -1183,8 +1187,8 @@ class vmmAddHardware(vmmGObjectUI):
                 _("This device could not be attached to the running machine. "
                   "Would you like to make the device available after the "
                   "next guest shutdown?")),
-                dialog_type=gtk.MESSAGE_WARNING,
-                buttons=gtk.BUTTONS_YES_NO,
+                dialog_type=Gtk.MessageType.WARNING,
+                buttons=Gtk.ButtonsType.YES_NO,
                 async=False)
 
             if not res:
@@ -1592,6 +1596,3 @@ class vmmAddHardware(vmmGObjectUI):
             self.emit("action-show-help", "virt-manager-storage-space")
         elif page == PAGE_NETWORK:
             self.emit("action-show-help", "virt-manager-network")
-
-vmmAddHardware.type_register(vmmAddHardware)
-vmmAddHardware.signal_new(vmmAddHardware, "action-show-help", [str])

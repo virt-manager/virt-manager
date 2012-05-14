@@ -22,8 +22,9 @@ import traceback
 import logging
 import threading
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Gdk
 
 import virtinst
 import libvirt
@@ -54,7 +55,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         self.destconn_rows = []
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_vmm_migrate_delete_event" : self.close,
 
             "on_migrate_cancel_clicked" : self.close,
@@ -68,13 +69,13 @@ class vmmMigrateDialog(vmmGObjectUI):
         })
         self.bind_escape_key_close()
 
-        blue = gtk.gdk.color_parse("#0072A8")
-        self.widget("migrate-header").modify_bg(gtk.STATE_NORMAL,
+        blue = Gdk.color_parse("#0072A8")
+        self.widget("migrate-header").modify_bg(Gtk.StateType.NORMAL,
                                                            blue)
-        image = gtk.image_new_from_icon_name("vm_clone_wizard",
-                                             gtk.ICON_SIZE_DIALOG)
+        image = Gtk.Image.new_from_icon_name("vm_clone_wizard",
+                                             Gtk.IconSize.DIALOG)
         image.show()
-        self.widget("migrate-vm-icon-box").pack_end(image, False)
+        self.widget("migrate-vm-icon-box").pack_end(image, False, False, False)
 
         self.init_state()
 
@@ -104,14 +105,14 @@ class vmmMigrateDialog(vmmGObjectUI):
 
     def init_state(self):
         # [hostname, conn, can_migrate, tooltip]
-        dest_model = gtk.ListStore(str, object, bool, str)
+        dest_model = Gtk.ListStore(str, object, bool, str)
         dest_combo = self.widget("migrate-dest")
         dest_combo.set_model(dest_model)
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         dest_combo.pack_start(text, True)
         dest_combo.add_attribute(text, 'text', 0)
         dest_combo.add_attribute(text, 'sensitive', 2)
-        dest_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        dest_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         # XXX no way to set tooltips here, kind of annoying
 
         # Hook up signals to get connection listing
@@ -152,7 +153,7 @@ class vmmMigrateDialog(vmmGObjectUI):
             downtime_tooltip = _("Libvirt version does not support setting "
                                  "downtime.")
         downtime_box.set_sensitive(support_downtime)
-        util.tooltip_wrapper(downtime_box, downtime_tooltip)
+        downtime_box.set_tooltip_text(downtime_tooltip)
 
         if self.conn.is_xen():
             # Default xen port is 8002
@@ -169,7 +170,7 @@ class vmmMigrateDialog(vmmGObjectUI):
                                "migration.")
 
         secure_box.set_sensitive(support_secure)
-        util.tooltip_wrapper(secure_box, secure_tooltip)
+        secure_box.set_tooltip_text(secure_tooltip)
 
         self.rebuild_dest_rows()
 
@@ -185,7 +186,7 @@ class vmmMigrateDialog(vmmGObjectUI):
             tooltip = _("A valid destination connection must be selected.")
 
         self.widget("migrate-finish").set_sensitive(active != -1)
-        util.tooltip_wrapper(self.widget("migrate-finish"), tooltip)
+        self.widget("migrate-finish").set_tooltip_text(tooltip)
 
     def toggle_set_rate(self, src):
         enable = src.get_active()
@@ -465,7 +466,7 @@ class vmmMigrateDialog(vmmGObjectUI):
             return
 
         self.topwin.set_sensitive(False)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         if self.vm.getjobinfo_supported:
             _cancel_back = self.cancel_migration
@@ -487,7 +488,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
 
         if error:
             error = _("Unable to migrate guest: %s") % error
@@ -552,6 +553,4 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         vm.migrate(dstconn, migrate_uri, rate, live, secure, meter=meter)
         if timer:
-            self.idle_add(gobject.source_remove, timer)
-
-vmmGObjectUI.type_register(vmmMigrateDialog)
+            self.idle_add(GObject.source_remove, timer)

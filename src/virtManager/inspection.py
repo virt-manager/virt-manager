@@ -22,8 +22,6 @@ from threading import Thread
 import logging
 import os
 
-import gobject
-
 from guestfs import GuestFS
 
 from virtManager.baseclass import vmmGObject
@@ -80,7 +78,7 @@ class vmmInspection(vmmGObject):
             return 0
 
         logging.debug("waiting")
-        self.add_gobject_timeout(gobject.timeout_add(self._wait, cb))
+        #self.add_gobject_timeout(GObject.timeout_add(self._wait, cb))
 
     def _run(self):
         while True:
@@ -272,6 +270,3 @@ class vmmInspection(vmmGObject):
         vm.inspection = data
         vm.inspection_data_updated()
         self._cached_data[vm.get_uuid()] = data
-
-
-vmmGObject.type_register(vmmInspection)

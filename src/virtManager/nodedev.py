@@ -47,5 +47,3 @@ class vmmNodeDevice(vmmLibvirtObject):
             self._virtinst_obj = virtinst.NodeDeviceParser.parse(
                 self._backend.XMLDesc(0))
         return self._virtinst_obj
-
-vmmLibvirtObject.type_register(vmmNodeDevice)

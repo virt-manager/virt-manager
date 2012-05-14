@@ -18,7 +18,9 @@
 # MA 02110-1301 USA.
 #
 
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Gdk
 
 import logging
 
@@ -56,6 +58,10 @@ IP_STATIC = 1
 IP_NONE = 2
 
 class vmmCreateInterface(vmmGObjectUI):
+    __gsignals__ = {
+        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str])
+    }
+
     def __init__(self, conn):
         vmmGObjectUI.__init__(self,
                               "vmm-create-interface.ui",
@@ -74,7 +80,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
         self.ip_manually_changed = False
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_vmm_create_interface_delete_event" : self.close,
 
             "on_cancel_clicked": self.close,
@@ -167,24 +173,24 @@ class vmmCreateInterface(vmmGObjectUI):
 
         # FIXME: Unhide this when we make some documentation
         self.widget("help").hide()
-        finish_img = gtk.image_new_from_stock(gtk.STOCK_QUIT,
-                                              gtk.ICON_SIZE_BUTTON)
+        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
+                                              Gtk.IconSize.BUTTON)
         self.widget("finish").set_image(finish_img)
 
-        blue = gtk.gdk.color_parse("#0072A8")
-        self.widget("header").modify_bg(gtk.STATE_NORMAL, blue)
+        blue = Gdk.Color.parse("#0072A8")[1]
+        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
 
         box = self.widget("header-icon-box")
-        image = gtk.image_new_from_icon_name("network-idle",
-                                             gtk.ICON_SIZE_DIALOG)
+        image = Gtk.Image.new_from_icon_name("network-idle",
+                                             Gtk.IconSize.DIALOG)
         image.show()
         box.pack_end(image, False)
 
         # Interface type
         type_list = self.widget("interface-type")
-        type_model = gtk.ListStore(str, str)
+        type_model = Gtk.ListStore(str, str)
         type_list.set_model(type_model)
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         type_list.pack_start(text, True)
         type_list.add_attribute(text, 'text', 1)
         type_model.append([Interface.Interface.INTERFACE_TYPE_BRIDGE,
@@ -204,49 +210,49 @@ class vmmCreateInterface(vmmGObjectUI):
         slave_list = self.widget("interface-list")
         # [ vmmInterface, selected, selectabel, name, type, is defined,
         #   is active, in use by str, mac]
-        slave_model = gtk.ListStore(object, bool, bool, str, str, bool, bool,
+        slave_model = Gtk.ListStore(object, bool, bool, str, str, bool, bool,
                                     str, str)
         slave_list.set_model(slave_model)
 
-        selectCol = gtk.TreeViewColumn()
-        nameCol = gtk.TreeViewColumn(_("Name"))
-        typeCol = gtk.TreeViewColumn(_("Type"))
-        useCol = gtk.TreeViewColumn(_("In use by"))
+        selectCol = Gtk.TreeViewColumn()
+        nameCol = Gtk.TreeViewColumn(_("Name"))
+        typeCol = Gtk.TreeViewColumn(_("Type"))
+        useCol = Gtk.TreeViewColumn(_("In use by"))
 
         slave_list.append_column(selectCol)
         slave_list.append_column(nameCol)
         slave_list.append_column(typeCol)
         slave_list.append_column(useCol)
 
-        chk = gtk.CellRendererToggle()
+        chk = Gtk.CellRendererToggle()
         chk.connect("toggled", self.interface_item_toggled, slave_list)
         selectCol.pack_start(chk, False)
         selectCol.add_attribute(chk, "active", INTERFACE_ROW_SELECT)
         selectCol.add_attribute(chk, "inconsistent", INTERFACE_ROW_CANT_SELECT)
         selectCol.set_sort_column_id(INTERFACE_ROW_CANT_SELECT)
 
-        txt = gtk.CellRendererText()
+        txt = Gtk.CellRendererText()
         nameCol.pack_start(txt, True)
         nameCol.add_attribute(txt, "text", INTERFACE_ROW_NAME)
         nameCol.set_sort_column_id(INTERFACE_ROW_NAME)
 
-        txt = gtk.CellRendererText()
+        txt = Gtk.CellRendererText()
         typeCol.pack_start(txt, True)
         typeCol.add_attribute(txt, "text", INTERFACE_ROW_TYPE)
         typeCol.set_sort_column_id(INTERFACE_ROW_TYPE)
         slave_model.set_sort_column_id(INTERFACE_ROW_CANT_SELECT,
-                                       gtk.SORT_ASCENDING)
+                                       Gtk.SortType.ASCENDING)
 
-        txt = gtk.CellRendererText()
+        txt = Gtk.CellRendererText()
         useCol.pack_start(txt, True)
         useCol.add_attribute(txt, "text", INTERFACE_ROW_IN_USE_BY)
         useCol.set_sort_column_id(INTERFACE_ROW_IN_USE_BY)
 
         # Bond config
         mode_list = self.widget("bond-mode")
-        mode_model = gtk.ListStore(str, str)
+        mode_model = Gtk.ListStore(str, str)
         mode_list.set_model(mode_model)
-        txt = gtk.CellRendererText()
+        txt = Gtk.CellRendererText()
         mode_list.pack_start(txt, True)
         mode_list.add_attribute(txt, "text", 0)
         mode_model.append([_("System default"), None])
@@ -254,9 +260,9 @@ class vmmCreateInterface(vmmGObjectUI):
             mode_model.append([m, m])
 
         mon_list = self.widget("bond-monitor-mode")
-        mon_model = gtk.ListStore(str, str)
+        mon_model = Gtk.ListStore(str, str)
         mon_list.set_model(mon_model)
-        txt = gtk.CellRendererText()
+        txt = Gtk.CellRendererText()
         mon_list.pack_start(txt, True)
         mon_list.add_attribute(txt, "text", 0)
         mon_model.append([_("System default"), None])
@@ -264,18 +270,18 @@ class vmmCreateInterface(vmmGObjectUI):
             mon_model.append([m, m])
 
         validate_list = self.widget("arp-validate")
-        validate_model = gtk.ListStore(str)
+        validate_model = Gtk.ListStore(str)
         validate_list.set_model(validate_model)
-        txt = gtk.CellRendererText()
+        txt = Gtk.CellRendererText()
         validate_list.pack_start(txt, True)
         validate_list.add_attribute(txt, "text", 0)
         for m in Interface.InterfaceBond.INTERFACE_BOND_MONITOR_MODE_ARP_VALIDATE_MODES:
             validate_model.append([m])
 
         carrier_list = self.widget("mii-carrier")
-        carrier_model = gtk.ListStore(str)
+        carrier_model = Gtk.ListStore(str)
         carrier_list.set_model(carrier_model)
-        txt = gtk.CellRendererText()
+        txt = Gtk.CellRendererText()
         carrier_list.pack_start(txt, True)
         carrier_list.add_attribute(txt, "text", 0)
         for m in Interface.InterfaceBond.INTERFACE_BOND_MONITOR_MODE_MII_CARRIER_TYPES:
@@ -283,17 +289,17 @@ class vmmCreateInterface(vmmGObjectUI):
 
         # IP config
         copy_iface = self.widget("ip-copy-interface-combo")
-        copy_model = gtk.ListStore(str, object, bool)
+        copy_model = Gtk.ListStore(str, object, bool)
         copy_iface.set_model(copy_model)
-        txt = gtk.CellRendererText()
+        txt = Gtk.CellRendererText()
         copy_iface.pack_start(txt, True)
         copy_iface.add_attribute(txt, "text", 0)
         copy_iface.add_attribute(txt, "sensitive", 2)
 
         ip_mode = self.widget("ipv4-mode")
-        ip_model = gtk.ListStore(str)
+        ip_model = Gtk.ListStore(str)
         ip_mode.set_model(ip_model)
-        txt = gtk.CellRendererText()
+        txt = Gtk.CellRendererText()
         ip_mode.pack_start(txt, True)
         ip_mode.add_attribute(txt, "text", 0)
         ip_model.insert(IP_DHCP, ["DHCP"])
@@ -301,9 +307,9 @@ class vmmCreateInterface(vmmGObjectUI):
         ip_model.insert(IP_NONE, ["No configuration"])
 
         ip_mode = self.widget("ipv6-mode")
-        ip_model = gtk.ListStore(str)
+        ip_model = Gtk.ListStore(str)
         ip_mode.set_model(ip_model)
-        txt = gtk.CellRendererText()
+        txt = Gtk.CellRendererText()
         ip_mode.pack_start(txt, True)
         ip_mode.add_attribute(txt, "text", 0)
         ip_model.insert(IP_DHCP, ["DHCP"])
@@ -311,11 +317,11 @@ class vmmCreateInterface(vmmGObjectUI):
         ip_model.insert(IP_NONE, ["No configuration"])
 
         v6_addr = self.widget("ipv6-address-list")
-        addr_model = gtk.ListStore(str)
+        addr_model = Gtk.ListStore(str)
         v6_addr.set_model(addr_model)
-        txt_col = gtk.TreeViewColumn("")
+        txt_col = Gtk.TreeViewColumn("")
         v6_addr.append_column(txt_col)
-        txt = gtk.CellRendererText()
+        txt = Gtk.CellRendererText()
         txt.set_property("editable", True)
         txt.connect("edited", self.ipv6_address_editted)
         txt_col.pack_start(txt, True)
@@ -608,7 +614,6 @@ class vmmCreateInterface(vmmGObjectUI):
 
         for row in model:
             active = row[INTERFACE_ROW_SELECT]
-            iobj = row[INTERFACE_ROW_KEY]
 
             if active:
                 ret.append(row)
@@ -1105,7 +1110,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
         # Start the install
         self.topwin.set_sensitive(False)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         progWin = vmmAsyncJob(self.do_install, [activate],
                               _("Creating virtual interface"),
@@ -1114,7 +1119,7 @@ class vmmCreateInterface(vmmGObjectUI):
         error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
 
         if error:
             error = _("Error creating interface: '%s'") % error
@@ -1127,8 +1132,6 @@ class vmmCreateInterface(vmmGObjectUI):
 
     def do_install(self, asyncjob, activate):
         meter = asyncjob.get_meter()
-        error = None
-        details = None
 
         self.interface.conn = util.dup_conn(self.conn).vmm
 
@@ -1138,6 +1141,3 @@ class vmmCreateInterface(vmmGObjectUI):
     def show_help(self, ignore):
         # No help available yet.
         pass
-
-vmmGObjectUI.type_register(vmmCreateInterface)
-vmmCreateInterface.signal_new(vmmCreateInterface, "action-show-help", [str])

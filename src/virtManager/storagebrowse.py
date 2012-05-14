@@ -20,7 +20,8 @@
 
 import logging
 
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 
 import virtinst
 
@@ -30,6 +31,10 @@ from virtManager.createvol import vmmCreateVolume
 from virtManager.baseclass import vmmGObjectUI
 
 class vmmStorageBrowser(vmmGObjectUI):
+    __gsignals__ = {
+        "storage-browse-finish": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+    }
+
     def __init__(self, conn):
         vmmGObjectUI.__init__(self,
                             "vmm-storage-browse.ui",
@@ -51,7 +56,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         self.rhel6_defaults = True
         self.local_args = {}
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_vmm_storage_browse_delete_event" : self.close,
             "on_browse_cancel_clicked" : self.close,
             "on_browse_local_clicked" : self.browse_local,
@@ -61,11 +66,11 @@ class vmmStorageBrowser(vmmGObjectUI):
         })
         self.bind_escape_key_close()
 
-        finish_img = gtk.image_new_from_stock(gtk.STOCK_NEW,
-                                              gtk.ICON_SIZE_BUTTON)
+        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_NEW,
+                                              Gtk.IconSize.BUTTON)
         self.widget("new-volume").set_image(finish_img)
-        finish_img = gtk.image_new_from_stock(gtk.STOCK_OPEN,
-                                              gtk.ICON_SIZE_BUTTON)
+        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_OPEN,
+                                              Gtk.IconSize.BUTTON)
         self.widget("choose-volume").set_image(finish_img)
 
         self.set_initial_state()
@@ -118,43 +123,43 @@ class vmmStorageBrowser(vmmGObjectUI):
 
         # (Key, Name, Cap, Format, Used By, sensitive)
         vol_list = self.widget("vol-list")
-        volListModel = gtk.ListStore(str, str, str, str, str, bool)
+        volListModel = Gtk.ListStore(str, str, str, str, str, bool)
         vol_list.set_model(volListModel)
 
         vol_list.get_selection().connect("changed", self.vol_selected)
-        volCol = gtk.TreeViewColumn(_("Name"))
-        vol_txt1 = gtk.CellRendererText()
+        volCol = Gtk.TreeViewColumn(_("Name"))
+        vol_txt1 = Gtk.CellRendererText()
         volCol.pack_start(vol_txt1, True)
         volCol.add_attribute(vol_txt1, 'text', 1)
         volCol.add_attribute(vol_txt1, 'sensitive', 5)
         volCol.set_sort_column_id(1)
         vol_list.append_column(volCol)
 
-        volSizeCol = gtk.TreeViewColumn(_("Size"))
-        vol_txt2 = gtk.CellRendererText()
+        volSizeCol = Gtk.TreeViewColumn(_("Size"))
+        vol_txt2 = Gtk.CellRendererText()
         volSizeCol.pack_start(vol_txt2, False)
         volSizeCol.add_attribute(vol_txt2, 'text', 2)
         volSizeCol.add_attribute(vol_txt2, 'sensitive', 5)
         volSizeCol.set_sort_column_id(2)
         vol_list.append_column(volSizeCol)
 
-        volPathCol = gtk.TreeViewColumn(_("Format"))
-        vol_txt4 = gtk.CellRendererText()
+        volPathCol = Gtk.TreeViewColumn(_("Format"))
+        vol_txt4 = Gtk.CellRendererText()
         volPathCol.pack_start(vol_txt4, False)
         volPathCol.add_attribute(vol_txt4, 'text', 3)
         volPathCol.add_attribute(vol_txt4, 'sensitive', 5)
         volPathCol.set_sort_column_id(3)
         vol_list.append_column(volPathCol)
 
-        volUseCol = gtk.TreeViewColumn(_("Used By"))
-        vol_txt5 = gtk.CellRendererText()
+        volUseCol = Gtk.TreeViewColumn(_("Used By"))
+        vol_txt5 = Gtk.CellRendererText()
         volUseCol.pack_start(vol_txt5, False)
         volUseCol.add_attribute(vol_txt5, 'text', 4)
         volUseCol.add_attribute(vol_txt5, 'sensitive', 5)
         volUseCol.set_sort_column_id(4)
         vol_list.append_column(volUseCol)
 
-        volListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        volListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
     def reset_state(self, conn=None):
         if conn and conn != self.conn:
@@ -182,13 +187,12 @@ class vmmStorageBrowser(vmmGObjectUI):
         self.vol_selected()
         self.pool_selected()
 
-        tooltip = None
+        tooltip = ""
         is_remote = self.conn.is_remote()
         self.widget("browse-local").set_sensitive(not is_remote)
         if is_remote:
             tooltip = _("Cannot use local storage on remote connection.")
-        util.tooltip_wrapper(self.widget("browse-local"),
-                             tooltip)
+        self.widget("browse-local").set_tooltip_text(tooltip)
 
         # Set data based on browse type
         self.local_args["dialog_type"] = None
@@ -355,5 +359,3 @@ class vmmStorageBrowser(vmmGObjectUI):
                           details=details,
                           async=False)
 
-vmmGObjectUI.type_register(vmmStorageBrowser)
-vmmStorageBrowser.signal_new(vmmStorageBrowser, "storage-browse-finish", [str])

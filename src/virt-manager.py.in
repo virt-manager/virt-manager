@@ -27,6 +27,11 @@ import traceback
 import signal
 import optparse
 
+from gi.repository import GObject
+from gi.repository import LibvirtGLib
+
+GObject.threads_init()
+
 try:
     # Make sure we have a default '_' implementation, in case something
     # fails before gettext is set up
@@ -235,6 +240,7 @@ def dbus_config(engine):
 
     else:
         # Grab the service to allow others to talk to us later
+        import dbus.service
         name = dbus.service.BusName("com.redhat.virt.manager", bus=bus)
         vmmRemote(engine, name)
 
@@ -258,53 +264,22 @@ def main():
     cli.setup_i18n(gettext_app, gettext_dir)
 
     # Need to do this before GTK strips args like --sync
-    gtk_error = None
     origargs = " ".join(sys.argv[:])
 
-    # Urgh, pygtk merely logs a warning when failing to open
-    # the X11 display connection, and lets everything carry
-    # on as if all were fine. Ultimately bad stuff happens,
-    # so lets catch it here & get the hell out...
-    import warnings
-    warnings.filterwarnings('error', module='gtk', append=True)
-    try:
-        import gobject
-
-        # Set program name for gnome shell (before importing gtk, which
-        # seems to call set_prgname on its own)
-        if hasattr(gobject, "set_prgname"):
-            gobject.set_prgname(appname)
-
-        import gtk
-        globals()["gtk"] = gtk
-    except Warning, e:
-        # ...the risk is we catch too much though
-        # Damned if we do, damned if we dont :-)(
-        gtk_error = str(e)
-    except Exception, e:
-        gtk_error = e
-    warnings.resetwarnings()
+    from gi.repository import Gtk
 
     # Need to parse CLI after import gtk, since gtk strips --sync
     (options, ignore) = parse_commandline()
-
-    # Only raise this error after parsing the CLI, so users at least
-    # get --help output and CLI validation
-    if gtk_error:
-        if type(gtk_error) is str:
-            raise RuntimeError(_("Unable to initialize GTK: %s") % gtk_error)
-        raise gtk_error
-
-    if not hasattr(gtk, "Builder"):
-        raise RuntimeError("virt-manager requires GtkBuilder support. "
-                           "Your gtk version appears to be too old.")
 
     cli.setup_logging(appname, options.debug)
     global logging_setup
     logging_setup = True
 
     logging.debug("Launched as: %s", origargs)
-    logging.debug("GTK version: %s", str(gtk.gtk_version))
+    logging.debug("GTK version: %d.%d.%d",
+                  Gtk.get_major_version(),
+                  Gtk.get_minor_version(),
+                  Gtk.get_micro_version())
     logging.debug("virt-manager version: %s", appversion)
     logging.debug("virtManager import: %s", str(virtManager))
 
@@ -316,13 +291,10 @@ def main():
         import libvirt
         libvirt = virtManager.module_trace.wrap_module(libvirt)
 
-    gobject.threads_init()
-
     import dbus
     import dbus.mainloop.glib
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     dbus.mainloop.glib.threads_init()
-    import dbus.service
 
     # Specifically init config/gconf before the fork, so that pam
     # doesn't think we closed the app, therefor robbing us of
@@ -357,7 +329,7 @@ def main():
 
     from virtManager.engine import vmmEngine
 
-    gtk.window_set_default_icon_name(appname)
+    Gtk.Window.set_default_icon_name(appname)
 
     if options.show and options.uri == None:
         raise optparse.OptionValueError("can't use --show-* options "
@@ -380,8 +352,8 @@ def main():
                               "disabling DBus service")
 
     # Hook libvirt events into glib main loop
-    import virtManager.libvirtglib
-    virtManager.libvirtglib.register_event_impl()
+    LibvirtGLib.init(None)
+    LibvirtGLib.event_register()
 
     # At this point we're either starting a brand new controlling instance,
     # or the dbus comms to existing instance has failed
@@ -392,10 +364,10 @@ def main():
     if options.profile != None:
         import hotshot
         prof = hotshot.Profile(options.profile)
-        prof.runcall(gtk.main)
+        prof.runcall(Gtk.main)
         prof.close()
     else:
-        gtk.main()
+        Gtk.main()
 
 if __name__ == "__main__":
     try:
@@ -407,6 +379,6 @@ if __name__ == "__main__":
     except Exception, run_e:
         if logging_setup:
             logging.exception(run_e)
-        if "gtk" not in globals():
+        if "Gtk" not in globals():
             raise
         _show_startup_error(str(run_e), "".join(traceback.format_exc()))

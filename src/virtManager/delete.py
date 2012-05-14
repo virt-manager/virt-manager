@@ -18,7 +18,8 @@
 # MA 02110-1301 USA.
 #
 
-import gtk
+from gi.repository import Gtk
+from gi.repository import Gdk
 
 import os
 import stat
@@ -46,7 +47,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.vm = None
         self.conn = None
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_vmm_delete_delete_event" : self.close,
             "on_delete_cancel_clicked" : self.close,
             "on_delete_ok_clicked" : self.finish,
@@ -54,8 +55,8 @@ class vmmDeleteDialog(vmmGObjectUI):
         })
         self.bind_escape_key_close()
 
-        image = gtk.image_new_from_icon_name("vm_delete_wizard",
-                                             gtk.ICON_SIZE_DIALOG)
+        image = Gtk.Image.new_from_icon_name("vm_delete_wizard",
+                                             Gtk.IconSize.DIALOG)
         image.show()
         self.widget("icon-box").pack_end(image, False)
 
@@ -137,7 +138,7 @@ class vmmDeleteDialog(vmmGObjectUI):
                 return
 
         self.topwin.set_sensitive(False)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         title = _("Deleting virtual machine '%s'") % self.vm.get_name()
         text = title
@@ -149,7 +150,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
         conn = self.conn
 
         if error is not None:
@@ -265,8 +266,8 @@ def populate_storage_list(storage_list, vm, conn):
         elif not default:
             info = definfo
 
-        icon = gtk.STOCK_DIALOG_WARNING
-        icon_size = gtk.ICON_SIZE_LARGE_TOOLBAR
+        icon = Gtk.STOCK_DIALOG_WARNING
+        icon_size = Gtk.IconSize.LARGE_TOOLBAR
 
         row = [default, not can_del, path, target,
                bool(info), icon, icon_size, info]
@@ -276,7 +277,7 @@ def populate_storage_list(storage_list, vm, conn):
 def prepare_storage_list(storage_list):
     # Checkbox, deleteable?, storage path, target (hda), icon stock,
     # icon size, tooltip
-    model = gtk.ListStore(bool, bool, str, str, bool, str, int, str)
+    model = Gtk.ListStore(bool, bool, str, str, bool, str, int, str)
     storage_list.set_model(model)
     try:
         storage_list.set_tooltip_column(STORAGE_ROW_TOOLTIP)
@@ -284,17 +285,17 @@ def prepare_storage_list(storage_list):
         # FIXME: use tooltip wrapper for this
         pass
 
-    confirmCol = gtk.TreeViewColumn()
-    pathCol = gtk.TreeViewColumn(_("Storage Path"))
-    targetCol = gtk.TreeViewColumn(_("Target"))
-    infoCol = gtk.TreeViewColumn()
+    confirmCol = Gtk.TreeViewColumn()
+    pathCol = Gtk.TreeViewColumn(_("Storage Path"))
+    targetCol = Gtk.TreeViewColumn(_("Target"))
+    infoCol = Gtk.TreeViewColumn()
 
     storage_list.append_column(confirmCol)
     storage_list.append_column(pathCol)
     storage_list.append_column(targetCol)
     storage_list.append_column(infoCol)
 
-    chkbox = gtk.CellRendererToggle()
+    chkbox = Gtk.CellRendererToggle()
     chkbox.connect('toggled', storage_item_toggled, storage_list)
     confirmCol.pack_start(chkbox, False)
     confirmCol.add_attribute(chkbox, 'active', STORAGE_ROW_CONFIRM)
@@ -302,17 +303,17 @@ def prepare_storage_list(storage_list):
                              STORAGE_ROW_CANT_DELETE)
     confirmCol.set_sort_column_id(STORAGE_ROW_CANT_DELETE)
 
-    path_txt = gtk.CellRendererText()
+    path_txt = Gtk.CellRendererText()
     pathCol.pack_start(path_txt, True)
     pathCol.add_attribute(path_txt, 'text', STORAGE_ROW_PATH)
     pathCol.set_sort_column_id(STORAGE_ROW_PATH)
 
-    target_txt = gtk.CellRendererText()
+    target_txt = Gtk.CellRendererText()
     targetCol.pack_start(target_txt, False)
     targetCol.add_attribute(target_txt, 'text', STORAGE_ROW_TARGET)
     targetCol.set_sort_column_id(STORAGE_ROW_TARGET)
 
-    info_img = gtk.CellRendererPixbuf()
+    info_img = Gtk.CellRendererPixbuf()
     infoCol.pack_start(info_img, False)
     infoCol.add_attribute(info_img, 'visible', STORAGE_ROW_ICON_SHOW)
     infoCol.add_attribute(info_img, 'stock-id', STORAGE_ROW_ICON)
@@ -384,5 +385,3 @@ def do_we_default(conn, vm_name, vol, path, ro, shared):
         logging.exception("Failed checking disk conflict: %s", str(e))
 
     return (not info, info)
-
-vmmGObjectUI.type_register(vmmDeleteDialog)

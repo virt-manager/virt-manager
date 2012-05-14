@@ -222,5 +222,3 @@ class vmmInterface(vmmLibvirtObject):
 
         newxml = xml_func(origxml, *args)
         self._redefine_xml(newxml)
-
-vmmLibvirtObject.type_register(vmmInterface)

@@ -20,7 +20,8 @@
 
 import logging
 
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 
 from virtManager.baseclass import vmmGObject
 from virtManager.error import vmmErrorDialog
@@ -31,17 +32,32 @@ except:
     appindicator = None
 
 def build_image_menu_item(label):
-    hasfunc = hasattr(gtk.ImageMenuItem, "set_use_underline")
+    hasfunc = hasattr(Gtk.ImageMenuItem, "set_use_underline")
     if hasfunc:
         label.replace("_", "__")
 
-    menu_item = gtk.ImageMenuItem(label)
+    menu_item = Gtk.ImageMenuItem(label)
     if hasfunc:
         menu_item.set_use_underline(False)
 
     return menu_item
 
 class vmmSystray(vmmGObject):
+    __gsignals__ = {
+        "action-toggle-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "action-suspend-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-resume-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-run-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-shutdown-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-reset-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-reboot-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-destroy-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-show-host": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+        "action-show-vm": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
+    }
+
     def __init__(self, engine):
         vmmGObject.__init__(self)
 
@@ -98,16 +114,16 @@ class vmmSystray(vmmGObject):
             Have one of those 'minimize to tray' notifications?
 
         """
-        self.systray_menu = gtk.Menu()
+        self.systray_menu = Gtk.Menu()
 
-        self.systray_menu.add(gtk.SeparatorMenuItem())
+        self.systray_menu.add(Gtk.SeparatorMenuItem())
 
         if self.systray_indicator:
-            hide_item = gtk.MenuItem("_Show Virtual Machine Manager")
+            hide_item = Gtk.MenuItem("_Show Virtual Machine Manager")
             hide_item.connect("activate", self.systray_activate)
             self.systray_menu.add(hide_item)
 
-        exit_item = gtk.ImageMenuItem(gtk.STOCK_QUIT)
+        exit_item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_QUIT, None)
         exit_item.connect("activate", self.exit_app)
         self.systray_menu.add(exit_item)
         self.systray_menu.show_all()
@@ -125,12 +141,12 @@ class vmmSystray(vmmGObject):
             self.systray_icon.set_menu(self.systray_menu)
 
         else:
-            self.systray_icon = gtk.StatusIcon()
+            self.systray_icon = Gtk.StatusIcon()
             self.systray_icon.set_visible(True)
             self.systray_icon.set_property("icon-name", "virt-manager")
             self.systray_icon.connect("activate", self.systray_activate)
             self.systray_icon.connect("popup-menu", self.systray_popup)
-            self.systray_icon.set_tooltip(_("Virtual Machine Manager"))
+            self.systray_icon.set_tooltip_text(_("Virtual Machine Manager"))
 
     def show_systray(self, ignore1=None, ignore2=None, ignore3=None,
                      ignore4=None):
@@ -150,70 +166,70 @@ class vmmSystray(vmmGObject):
                 self.systray_icon.set_visible(do_show)
 
     def build_vm_menu(self, vm):
-        icon_size = gtk.ICON_SIZE_MENU
+        icon_size = Gtk.IconSize.MENU
         stop_icon = self.config.get_shutdown_icon_name()
 
-        pause_item = gtk.ImageMenuItem(_("_Pause"))
-        pause_img  = gtk.image_new_from_stock(gtk.STOCK_MEDIA_PAUSE, icon_size)
+        pause_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Pause"))
+        pause_img  = Gtk.Image.new_from_stock(Gtk.STOCK_MEDIA_PAUSE, icon_size)
         pause_item.set_image(pause_img)
         pause_item.connect("activate", self.run_vm_action,
                            "action-suspend-domain", vm.get_uuid())
 
-        resume_item = gtk.ImageMenuItem(_("_Resume"))
-        resume_img  = gtk.image_new_from_stock(gtk.STOCK_MEDIA_PAUSE,
+        resume_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Resume"))
+        resume_img  = Gtk.Image.new_from_stock(Gtk.STOCK_MEDIA_PAUSE,
                                                icon_size)
         resume_item.set_image(resume_img)
         resume_item.connect("activate", self.run_vm_action,
                             "action-resume-domain", vm.get_uuid())
 
-        run_item = gtk.ImageMenuItem(_("_Run"))
-        run_img  = gtk.image_new_from_stock(gtk.STOCK_MEDIA_PLAY, icon_size)
+        run_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Run"))
+        run_img  = Gtk.Image.new_from_stock(Gtk.STOCK_MEDIA_PLAY, icon_size)
         run_item.set_image(run_img)
         run_item.connect("activate", self.run_vm_action,
                          "action-run-domain", vm.get_uuid())
 
         # Shutdown menu
-        reboot_item = gtk.ImageMenuItem(_("_Reboot"))
-        reboot_img = gtk.image_new_from_icon_name(stop_icon, icon_size)
+        reboot_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Reboot"))
+        reboot_img = Gtk.Image.new_from_icon_name(stop_icon, icon_size)
         reboot_item.set_image(reboot_img)
         reboot_item.connect("activate", self.run_vm_action,
                             "action-reboot-domain", vm.get_uuid())
         reboot_item.show()
 
-        shutdown_item = gtk.ImageMenuItem(_("_Shut Down"))
-        shutdown_img = gtk.image_new_from_icon_name(stop_icon, icon_size)
+        shutdown_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Shut Down"))
+        shutdown_img = Gtk.Image.new_from_icon_name(stop_icon, icon_size)
         shutdown_item.set_image(shutdown_img)
         shutdown_item.connect("activate", self.run_vm_action,
                               "action-shutdown-domain", vm.get_uuid())
         shutdown_item.show()
 
-        reset_item = gtk.ImageMenuItem(_("_Force Reset"))
-        reset_img = gtk.image_new_from_icon_name(stop_icon, icon_size)
+        reset_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Force Reset"))
+        reset_img = Gtk.Image.new_from_icon_name(stop_icon, icon_size)
         reset_item.set_image(reset_img)
         reset_item.show()
         reset_item.connect("activate", self.run_vm_action,
-                             "action-reset-domain", vm.get_uuid())
+                           "action-reset-domain", vm.get_uuid())
 
-        destroy_item = gtk.ImageMenuItem(_("_Force Off"))
-        destroy_img = gtk.image_new_from_icon_name(stop_icon, icon_size)
+        destroy_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Force Off"))
+        destroy_img = Gtk.Image.new_from_icon_name(stop_icon, icon_size)
         destroy_item.set_image(destroy_img)
         destroy_item.show()
         destroy_item.connect("activate", self.run_vm_action,
                              "action-destroy-domain", vm.get_uuid())
 
-        shutdown_menu = gtk.Menu()
+        shutdown_menu = Gtk.Menu()
         shutdown_menu.add(reboot_item)
         shutdown_menu.add(shutdown_item)
         shutdown_menu.add(reset_item)
         shutdown_menu.add(destroy_item)
-        shutdown_menu_item = gtk.ImageMenuItem(_("_Shut Down"))
-        shutdown_menu_img = gtk.image_new_from_icon_name(stop_icon, icon_size)
+        shutdown_menu_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Shut Down"))
+        shutdown_menu_img = Gtk.Image.new_from_icon_name(stop_icon, icon_size)
         shutdown_menu_item.set_image(shutdown_menu_img)
         shutdown_menu_item.set_submenu(shutdown_menu)
 
-        sep = gtk.SeparatorMenuItem()
+        sep = Gtk.SeparatorMenuItem()
 
-        open_item = gtk.ImageMenuItem("gtk-open")
+        open_item = Gtk.ImageMenuItem.new_from_stock("gtk-open", None)
         open_item.show()
         open_item.connect("activate", self.run_vm_action,
                           "action-show-vm", vm.get_uuid())
@@ -230,7 +246,7 @@ class vmmSystray(vmmGObject):
         vm_action_dict["sep"] = sep
         vm_action_dict["open"] = open_item
 
-        menu = gtk.Menu()
+        menu = Gtk.Menu()
 
         for key in ["run", "pause", "resume", "shutdown_menu", "sep", "open"]:
             item = vm_action_dict[key]
@@ -250,9 +266,9 @@ class vmmSystray(vmmGObject):
         return None
 
     def _set_vm_status_icon(self, vm, menu_item):
-        image = gtk.Image()
+        image = Gtk.Image()
         image.set_from_icon_name(vm.run_status_icon_name(),
-                                 gtk.ICON_SIZE_MENU)
+                                 Gtk.IconSize.MENU)
         image.set_sensitive(vm.is_active())
         menu_item.set_image(image)
 
@@ -265,8 +281,8 @@ class vmmSystray(vmmGObject):
         if button != 3:
             return
 
-        self.systray_menu.popup(None, None, gtk.status_icon_position_menu,
-                                0, event_time, self.systray_icon)
+        self.systray_menu.popup(None, None, Gtk.StatusIcon.position_menu,
+                                self.systray_icon, 0, event_time)
 
     def repopulate_menu_list(self):
         # Build sorted connection list
@@ -292,9 +308,9 @@ class vmmSystray(vmmGObject):
         if conn.get_uri() in self.conn_menuitems:
             return
 
-        menu_item = gtk.MenuItem(conn.get_pretty_desc_inactive(), False)
+        menu_item = Gtk.MenuItem.new_with_label(conn.get_pretty_desc_inactive())
         menu_item.show()
-        vm_submenu = gtk.Menu()
+        vm_submenu = Gtk.Menu()
         vm_submenu.show()
         menu_item.set_submenu(vm_submenu)
 
@@ -341,7 +357,7 @@ class vmmSystray(vmmGObject):
         vm_names.sort()
 
         if len(vm_names) == 0:
-            menu_item = gtk.MenuItem(_("No virtual machines"))
+            menu_item = Gtk.MenuItem(_("No virtual machines"))
             menu_item.set_sensitive(False)
             vm_submenu.insert(menu_item, 0)
             return
@@ -393,7 +409,7 @@ class vmmSystray(vmmGObject):
             del(vm_mappings[uuid])
 
             if len(vm_menu.get_children()) == 0:
-                placeholder = gtk.MenuItem(_("No virtual machines"))
+                placeholder = Gtk.MenuItem(_("No virtual machines"))
                 placeholder.show()
                 placeholder.set_sensitive(False)
                 vm_menu.add(placeholder)
@@ -435,17 +451,3 @@ class vmmSystray(vmmGObject):
 
     def exit_app(self, ignore):
         self.emit("action-exit-app")
-
-vmmGObject.type_register(vmmSystray)
-vmmSystray.signal_new(vmmSystray, "action-toggle-manager", [])
-vmmSystray.signal_new(vmmSystray, "action-view-manager", [])
-vmmSystray.signal_new(vmmSystray, "action-suspend-domain", [str, str])
-vmmSystray.signal_new(vmmSystray, "action-resume-domain", [str, str])
-vmmSystray.signal_new(vmmSystray, "action-run-domain", [str, str])
-vmmSystray.signal_new(vmmSystray, "action-shutdown-domain", [str, str])
-vmmSystray.signal_new(vmmSystray, "action-reboot-domain", [str, str])
-vmmSystray.signal_new(vmmSystray, "action-reset-domain", [str, str])
-vmmSystray.signal_new(vmmSystray, "action-destroy-domain", [str, str])
-vmmSystray.signal_new(vmmSystray, "action-show-host", [str])
-vmmSystray.signal_new(vmmSystray, "action-show-vm", [str, str])
-vmmSystray.signal_new(vmmSystray, "action-exit-app", [])

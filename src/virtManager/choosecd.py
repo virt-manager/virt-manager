@@ -18,15 +18,20 @@
 # MA 02110-1301 USA.
 #
 
+from gi.repository import GObject
+
 import logging
 
 import virtManager.uihelpers as uihelpers
-import virtManager.util as util
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.mediadev import MEDIA_FLOPPY
 from virtManager.storagebrowse import vmmStorageBrowser
 
 class vmmChooseCD(vmmGObjectUI):
+    __gsignals__ = {
+        "cdrom-chosen": (GObject.SignalFlags.RUN_FIRST, None, [object, str])
+    }
+
     def __init__(self, vm, disk):
         vmmGObjectUI.__init__(self, "vmm-choose-cd.ui", "vmm-choose-cd")
 
@@ -36,7 +41,7 @@ class vmmChooseCD(vmmGObjectUI):
         self.storage_browser = None
         self.media_type = disk.device
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_media_toggled": self.media_toggled,
             "on_fv_iso_location_browse_clicked": self.browse_fv_iso_location,
             "on_cd_path_changed": self.change_cd_path,
@@ -134,7 +139,7 @@ class vmmChooseCD(vmmGObjectUI):
 
         if error:
             warn.show()
-            util.tooltip_wrapper(warn, error)
+            warn.set_tooltip_text(error)
         else:
             warn.hide()
 
@@ -163,6 +168,3 @@ class vmmChooseCD(vmmGObjectUI):
             self.storage_browser.set_browse_reason(
                                     self.config.CONFIG_DIR_ISO_MEDIA)
         self.storage_browser.show(self.topwin, self.conn)
-
-vmmGObjectUI.type_register(vmmChooseCD)
-vmmChooseCD.signal_new(vmmChooseCD, "cdrom-chosen", [object, str])

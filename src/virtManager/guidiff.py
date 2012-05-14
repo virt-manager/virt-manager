@@ -35,19 +35,15 @@ class stubclass(object):
         ignore = attr
         ignore = val
 
-def is_gui(isgui):
+def is_gui(isgui=None):
     global _is_gui
-    _is_gui = isgui
+    if isgui is not None:
+        _is_gui = isgui
+    return _is_gui
 
-def get_imports():
+def get_running_config():
     if _is_gui:
-        import gobject
-        import gtk
         import virtManager.util
-
-        return (virtManager.util.running_config,
-                gobject,
-                gobject.GObject,
-                gtk)
+        return virtManager.util.running_config
     else:
-        return (stubclass(), None, object, None)
+        return stubclass()

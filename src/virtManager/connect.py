@@ -21,7 +21,8 @@
 import logging
 import socket
 
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 
 import virtinst
 import dbus
@@ -50,20 +51,26 @@ def default_conn_user(conn):
 
 _hostname_xml = """
 <interface>
-               <object class="GtkComboBoxEntry" id="hostname">
+               <object class="GtkComboBoxText" id="hostname">
                  <property name="visible">True</property>
+                 <property name="has_entry">True</property>
                  <signal name="changed" handler="on_hostname_combo_changed"/>
                </object>
 </interface>
 """
 
 class vmmConnect(vmmGObjectUI):
+    __gsignals__ = {
+        "completed": (GObject.SignalFlags.RUN_FIRST, None, [str, bool]),
+        "cancelled": (GObject.SignalFlags.RUN_FIRST, None, []),
+    }
+
     def __init__(self):
         vmmGObjectUI.__init__(self,
                               "vmm-open-connection.ui",
                               "vmm-open-connection")
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_hypervisor_changed": self.hypervisor_changed,
             "on_connection_changed": self.conn_changed,
             "on_hostname_combo_changed": self.hostname_combo_changed,
@@ -79,9 +86,9 @@ class vmmConnect(vmmGObjectUI):
         self.browser_sigs = []
         self.can_browse = False
 
-        self.window.add_from_string(_hostname_xml)
+        self.get_window().add_from_string(_hostname_xml)
         self.widget("table1").attach(self.widget("hostname"),
-                                     1, 2, 4, 5, yoptions=gtk.FILL)
+                                     1, 2, 4, 5, yoptions=Gtk.AttachOptions.FILL)
 
         # Set this if we can't resolve 'hostname.local': means avahi
         # prob isn't configured correctly, and we should strip .local
@@ -127,18 +134,18 @@ class vmmConnect(vmmGObjectUI):
         pass
 
     def set_initial_state(self):
-        stock_img = gtk.image_new_from_stock(gtk.STOCK_CONNECT,
-                                             gtk.ICON_SIZE_BUTTON)
+        stock_img = Gtk.Image.new_from_stock(Gtk.STOCK_CONNECT,
+                                             Gtk.IconSize.BUTTON)
         self.widget("connect").set_image(stock_img)
         self.widget("connect").grab_default()
 
         # Hostname combo box entry
-        hostListModel = gtk.ListStore(str, str, str)
+        hostListModel = Gtk.ListStore(str, str, str)
         host = self.widget("hostname")
         host.set_model(hostListModel)
-        host.set_text_column(2)
-        hostListModel.set_sort_column_id(2, gtk.SORT_ASCENDING)
-        self.widget("hostname").child.connect("changed", self.hostname_changed)
+        host.set_entry_text_column(2)
+        hostListModel.set_sort_column_id(2, Gtk.SortType.ASCENDING)
+        self.widget("hostname").get_child().connect("changed", self.hostname_changed)
 
     def reset_state(self):
         self.set_default_hypervisor()
@@ -146,7 +153,7 @@ class vmmConnect(vmmGObjectUI):
         self.widget("autoconnect").set_sensitive(True)
         self.widget("autoconnect").set_active(True)
         self.widget("hostname").get_model().clear()
-        self.widget("hostname").child.set_text("")
+        self.widget("hostname").get_child().set_text("")
         self.widget("connect-remote").set_active(False)
         self.widget("username-entry").set_text("")
         self.stop_browse()
@@ -248,7 +255,7 @@ class vmmConnect(vmmGObjectUI):
 
     def hostname_combo_changed(self, src):
         model = src.get_model()
-        txt = src.child.get_text()
+        txt = src.get_child().get_text()
         row = None
 
         for currow in model:
@@ -265,7 +272,7 @@ class vmmConnect(vmmGObjectUI):
         if not entry:
             entry = ip
 
-        self.widget("hostname").child.set_text(entry)
+        self.widget("hostname").get_child().set_text(entry)
 
     def hostname_changed(self, src_ignore):
         self.populate_uri()
@@ -306,7 +313,7 @@ class vmmConnect(vmmGObjectUI):
     def generate_uri(self):
         hv = self.widget("hypervisor").get_active()
         conn = self.widget("connection").get_active()
-        host = self.widget("hostname").child.get_text().strip()
+        host = self.widget("hostname").get_child().get_text().strip()
         user = self.widget("username-entry").get_text()
         is_remote = self.is_remote()
 
@@ -343,7 +350,7 @@ class vmmConnect(vmmGObjectUI):
 
     def validate(self):
         is_remote = self.is_remote()
-        host = self.widget("hostname").child.get_text()
+        host = self.widget("hostname").get_child().get_text()
 
         if is_remote and not host:
             return self.err.val_err(_("A hostname is required for "
@@ -415,8 +422,3 @@ class vmmConnect(vmmGObjectUI):
                     self.can_resolve_hostname = True
 
         return host
-
-
-vmmGObjectUI.type_register(vmmConnect)
-vmmConnect.signal_new(vmmConnect, "completed", [str, bool])
-vmmConnect.signal_new(vmmConnect, "cancelled", [])

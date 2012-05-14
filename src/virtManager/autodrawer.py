@@ -22,32 +22,17 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import cairo
 
-parentclass = gtk.VBox
-
-def _set_has_window(widget, val):
-    if hasattr(widget, "set_has_window"):
-        # Only available on gtk 2.18 or later
-        widget.set_has_window(val)
-    elif val:
-        widget.set_flags(widget.flags() & ~gtk.NO_WINDOW)
-    else:
-        widget.set_flags(widget.flags() | gtk.NO_WINDOW)
-
-def _is_toplevel(widget):
-    if hasattr(widget, "is_toplevel"):
-        # Only available on gtk 2.18 or later
-        return widget.is_toplevel()
-    return bool(widget.flags() & gtk.TOPLEVEL)
-
-class OverBox(parentclass):
+class OverBox(Gtk.Box):
     """
     Implementation of an overlapping box
     """
     def __init__(self):
-        parentclass.__init__(self)
+        Gtk.Box.__init__(self)
 
         self.underWin = None
         self.underWidget = None
@@ -59,17 +44,11 @@ class OverBox(parentclass):
         self._fraction = 0
         self.verticalOffset = 0
 
-        _set_has_window(self, True)
+        self.set_has_window(True)
 
     ####################
     # Internal helpers #
     ####################
-
-    def is_realized(self):
-        return bool(self.flags() & gtk.REALIZED)
-    def set_realized(self):
-        flags = self.flags() | gtk.REALIZED
-        self.set_flags(flags)
 
     def _get_actual_min(self):
         """
@@ -80,7 +59,7 @@ class OverBox(parentclass):
         return ret
 
     def _get_under_window_geometry(self):
-        geo = gtk.gdk.Rectangle()
+        geo = cairo.RectangleInt()
         actual_min = self._get_actual_min()
 
         geo.x = 0
@@ -91,7 +70,7 @@ class OverBox(parentclass):
         return geo
 
     def _get_over_window_geometry(self):
-        geo = gtk.gdk.Rectangle()
+        geo = cairo.RectangleInt()
         boxwidth = self.allocation.width
         expand = True
         fill = True
@@ -99,9 +78,11 @@ class OverBox(parentclass):
         actual_min = self._get_actual_min()
 
         if self.overWidget:
-            expand = self.child_get(self.overWidget, "expand")[0]
-            fill = self.child_get(self.overWidget, "fill")[0]
-            padding = self.child_get(self.overWidget, "padding")[0]
+            # XXX
+            expand = self.child_get_property(self.overWidget, "expand", "")
+            fill = self.child_get_property(self.overWidget, "fill", "")
+            padding = self.child_get_property(self.overWidget, "padding", "")
+            padding = 0
 
         if not expand:
             width = min(self.overWidth, boxwidth - padding)
@@ -137,29 +118,31 @@ class OverBox(parentclass):
             self.overWin.show()
 
     def _set_background(self):
-        style = self.get_style()
-        style.set_background(self.window, gtk.STATE_NORMAL)
-        style.set_background(self.underWin, gtk.STATE_NORMAL)
-        style.set_background(self.overWin, gtk.STATE_NORMAL)
+        ctx = self.get_style_context()
+        ctx.set_background(self.window)
+        ctx.set_background(self.underWin)
+        ctx.set_background(self.overWin)
 
     def _size_request(self):
-        underw, underh = self.underWidget.size_request()
-        overw, overh = self.overWidget.size_request()
+        under = self.underWidget.size_request()
+        over = self.overWidget.size_request()
 
-        self.overWidth = overw
-        self.overHeight = overh
+        self.overWidth = over.width
+        self.overHeight = over.height
 
-        expand = self.child_get(self.overWidget, "expand")
-        fill = self.child_get(self.overWidget, "fill")
-        padding = self.child_get(self.overWidget, "padding")
+        # XXXX
+        expand = self.child_get_property(self.overWidget, "expand", "")
+        fill = self.child_get_property(self.overWidget, "fill", "")
+        padding = self.child_get_property(self.overWidget, "padding", "")
+        padding = 0
 
         if expand or fill:
             wpad = 0
         else:
             wpad = padding
 
-        width = max(underw, overw + wpad)
-        height = max(underh + self._get_actual_min(), overh)
+        width = max(under.width, over.width + wpad)
+        height = max(under.height + self._get_actual_min(), over.height)
 
         return width, height
 
@@ -174,7 +157,8 @@ class OverBox(parentclass):
         if self.overWidget:
             self.remove(self.overWidget)
 
-        widget.set_parent_window(self.overWin)
+        if self.overWin:
+            widget.set_parent_window(self.overWin)
         self.add(widget)
         self.overWidget = widget
 
@@ -182,7 +166,8 @@ class OverBox(parentclass):
         if self.underWidget:
             self.remove(self.underWidget)
 
-        widget.set_parent_window(self.underWin)
+        if self.underWin:
+            widget.set_parent_window(self.underWin)
         self.add(widget)
         self.underWidget = widget
         self.underWidget.show_all()
@@ -194,7 +179,7 @@ class OverBox(parentclass):
     def set_fraction(self, newfraction):
         self._fraction = newfraction
 
-        if self.is_realized():
+        if self.get_realized():
             overgeo = self._get_over_window_geometry()
             self.overWin.move(overgeo.x, overgeo.y)
     def get_fraction(self):
@@ -204,7 +189,7 @@ class OverBox(parentclass):
     def set_vertical_offset(self, newoff):
         self.verticalOffset = newoff
 
-        if self.is_realized():
+        if self.get_realized():
             overgeo = self._get_over_window_geometry()
             self.overWin.move(overgeo.x, overgeo.y)
 
@@ -214,61 +199,64 @@ class OverBox(parentclass):
 
     def do_map(self):
         self.get_window().show()
-        parentclass.do_map(self)
+        Gtk.Box.do_map(self)
 
     def do_unmap(self):
         self.get_window().hide()
-        parentclass.do_unmap(self)
+        Gtk.Box.do_unmap(self)
 
     def do_realize(self):
-        event_mask = self.get_events() | gtk.gdk.EXPOSURE_MASK
-        colormap = self.get_colormap()
-        visual = self.get_visual()
+        self.set_realized(True)
 
-        self.set_realized()
+        attr = Gdk.WindowAttr()
+        attr.window_type = Gdk.WindowType.CHILD
+        attr.wclass = Gdk.WindowWindowClass.INPUT_OUTPUT
+        attr.event_mask = self.get_events() | Gdk.EventMask.EXPOSURE_MASK
+        attr.visual = self.get_visual()
+        attr.x = self.allocation.x
+        attr.y = self.allocation.y
+        attr.width = self.allocation.width
+        attr.height = self.allocation.height
 
-        def make_window(parent, rect):
-            return gtk.gdk.Window(parent,
-                                  rect.width,
-                                  rect.height,
-                                  gtk.gdk.WINDOW_CHILD,
-                                  event_mask,
-                                  gtk.gdk.INPUT_OUTPUT,
-                                  x=rect.x,
-                                  y=rect.y,
-                                  colormap=colormap,
-                                  visual=visual)
+        mask = Gdk.WindowAttributesType.VISUAL | \
+          Gdk.WindowAttributesType.X | \
+          Gdk.WindowAttributesType.Y
 
-        window = make_window(self.get_parent_window(), self.allocation)
+        window = Gdk.Window.new(self.get_parent_window(), attr, mask)
         self.window = window
-        self.window.set_user_data(self)
-        self.style.attach(window)
+        self.set_window(window)
 
-        self.underWin = make_window(window,
-                                    self._get_under_window_geometry())
-        self.underWin.set_user_data(self)
+        geo = self._get_under_window_geometry()
+        attr.x = geo.x
+        attr.y = geo.y
+        attr.width = geo.width
+        attr.height = geo.height
+        self.underWin = Gdk.Window.new(window, attr, mask)
         if self.underWidget:
             self.underWidget.set_parent_window(self.underWin)
         self.underWin.show()
 
-        overalloc = self._get_over_window_geometry()
-        self.overWin = make_window(window,
-                                   self._get_over_window_geometry())
-        self.overWin.set_user_data(self)
+        geo = self._get_over_window_geometry()
+        attr.x = geo.x
+        attr.y = geo.y
+        attr.width = geo.width
+        attr.height = geo.height
+        self.overWin = Gdk.Window.new(window, attr, mask)
         if self.overWidget:
             self.overWidget.set_parent_window(self.overWin)
-        self._set_overwin_size(overalloc)
+        self._set_overwin_size(geo)
 
         self._set_background()
 
     def do_unrealize(self):
-        parentclass.do_unrealize(self)
+        Gtk.Box.do_unrealize(self)
 
         self.overWin.destroy()
         self.overWin = None
 
         self.underWin.destroy()
         self.underWin = None
+        self.set_realized(False)
 
     def do_size_request(self, req):
         width, height = self._size_request()
@@ -276,14 +264,24 @@ class OverBox(parentclass):
         req.width = width
         req.height = height
 
+    def do_get_preferred_width(self):
+        req = Gtk.Requisition()
+        self.do_size_request(req)
+        return (req.width, req.width)
+
+    def do_get_preferred_heigh(self):
+        req = Gtk.Requisition()
+        self.do_size_request(req)
+        return (req.height, req.height)
+
     def do_size_allocate(self, newalloc):
         self.allocation = newalloc
 
         over = self._get_over_window_geometry()
         under = self._get_under_window_geometry()
 
-        if self.is_realized():
-            self.window.move_resize(newalloc.x, newalloc.y,
+        if self.get_realized():
+            self.get_window().move_resize(newalloc.x, newalloc.y,
                                     newalloc.width, newalloc.height)
             self.underWin.move_resize(under.x, under.y,
                                       under.width, under.height)
@@ -295,12 +293,6 @@ class OverBox(parentclass):
         over.x = 0
         over.y = 0
         self.overWidget.size_allocate(over)
-
-    def do_style_set(self, style):
-        if self.is_realized():
-            self._set_background()
-
-        parentclass.do_style_set(self, style)
 
 
 class Drawer(OverBox):
@@ -346,8 +338,8 @@ class Drawer(OverBox):
         self.period = period
 
         if self.timer_pending:
-            gobject.source_remove(self.timer_id)
-            self.timer_id = gobject.timeout_add(self.period, self._on_timer)
+            GObject.source_remove(self.timer_id)
+            self.timer_id = GObject.timeout_add(self.period, self._on_timer)
 
         self.step = step
 
@@ -355,7 +347,7 @@ class Drawer(OverBox):
         self.goal = goal
 
         if not self.timer_pending:
-            self.timer_id = gobject.timeout_add(self.period, self._on_timer)
+            self.timer_id = GObject.timeout_add(self.period, self._on_timer)
             self.timer_pending = True
 
     def get_close_time(self):
@@ -387,7 +379,7 @@ class AutoDrawer(Drawer):
         self.overAllocID = None
 
         self.over = None
-        self.eventBox = gtk.EventBox()
+        self.eventBox = Gtk.EventBox()
         self.eventBox.show()
         OverBox.set_over(self, self.eventBox)
 
@@ -433,7 +425,7 @@ class AutoDrawer(Drawer):
 
     def _update(self, do_immediate):
         toplevel = self.get_toplevel()
-        if not toplevel or not _is_toplevel(toplevel):
+        if not toplevel or not toplevel.is_toplevel():
             # The autoDrawer cannot function properly without a toplevel.
             return
 
@@ -462,13 +454,13 @@ class AutoDrawer(Drawer):
             grabbed = None
 
             if toplevel.get_group():
-                # XXX: Not in pygtk?
+                # XXX: Not in pyGtk.
                 #grabbed = toplevel.get_group().get_current_grab()
                 pass
             if not grabbed:
-                grabbed = gtk.grab_get_current()
+                grabbed = Gtk.grab_get_current()
 
-            if grabbed and isinstance(grabbed, gtk.Menu):
+            if grabbed and isinstance(grabbed, Gtk.Menu):
 
                 while True:
                     menuAttach = grabbed.get_attach_widget()
@@ -476,11 +468,11 @@ class AutoDrawer(Drawer):
                         break
 
                     grabbed = menuAttach
-                    if not isinstance(grabbed, gtk.MenuItem):
+                    if not isinstance(grabbed, Gtk.MenuItem):
                         break
 
                     menuItemParent = grabbed.get_parent()
-                    if not isinstance(menuItemParent, gtk.Menu):
+                    if not isinstance(menuItemParent, Gtk.Menu):
                         break
 
                     grabbed = menuItemParent
@@ -490,7 +482,7 @@ class AutoDrawer(Drawer):
                 self.opened = True
 
         if self.delayConnection:
-            gobject.source_remove(self.delayConnection)
+            GObject.source_remove(self.delayConnection)
 
 
         if self.forceClosing:
@@ -498,7 +490,7 @@ class AutoDrawer(Drawer):
         elif do_immediate:
             self._enforce(False)
         else:
-            self.delayConnection = gobject.timeout_add(self.delayValue,
+            self.delayConnection = GObject.timeout_add(self.delayValue,
                                                        self._on_enforce_delay)
 
 
@@ -511,7 +503,7 @@ class AutoDrawer(Drawer):
             padding = self.offset
 
         self.set_child_packing(self.eventBox, expand, self.fill, padding,
-                               gtk.PACK_START)
+                               Gtk.PackType.START)
 
     def _enforce(self, do_animate):
         if not self.active:
@@ -550,10 +542,10 @@ class AutoDrawer(Drawer):
     def _on_hierarchy_changed(self, oldTopLevel, ignore):
         newTopLevel = self.get_toplevel()
 
-        if oldTopLevel and _is_toplevel(oldTopLevel):
+        if oldTopLevel and oldTopLevel.is_toplevel():
             oldTopLevel.disconnect_by_func(self._set_focus)
 
-        if newTopLevel and _is_toplevel(newTopLevel):
+        if newTopLevel and newTopLevel.is_toplevel():
             newTopLevel.connect_after("set_focus", self._set_focus)
 
         self._update(True)
@@ -604,7 +596,7 @@ class AutoDrawer(Drawer):
 
     def drawer_close(self):
         toplevel = self.get_toplevel()
-        if not toplevel or not _is_toplevel(toplevel):
+        if not toplevel or not toplevel.is_toplevel():
             # The autoDrawer cannot function properly without a toplevel.
             return
 
@@ -613,12 +605,8 @@ class AutoDrawer(Drawer):
             toplevel.set_focus(None)
 
         self.forceClosing = True
-        self.closeConnection = gobject.timeout_add(
+        self.closeConnection = GObject.timeout_add(
                                 self.get_close_time() + self.delayValue,
                                 self._on_close_delay)
 
         self._update(True)
-
-gobject.type_register(OverBox)
-gobject.type_register(Drawer)
-gobject.type_register(AutoDrawer)

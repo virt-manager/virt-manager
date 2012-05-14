@@ -18,7 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-
 class vmmSecret(object):
     def __init__(self, name, secret=None, attributes=None):
 

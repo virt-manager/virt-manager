@@ -20,24 +20,20 @@
 # MA 02110-1301 USA.
 #
 
-import gtk
-import gobject
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GtkVnc
+from gi.repository import SpiceClientGtk
+from gi.repository import SpiceClientGLib
 
 import libvirt
-
-import gtkvnc
-
-try:
-    import SpiceClientGtk as spice
-except:
-    spice = None
 
 import os
 import signal
 import socket
 import logging
 
-import virtManager.util as util
 import virtManager.uihelpers as uihelpers
 from virtManager.autodrawer import AutoDrawer
 from virtManager.baseclass import vmmGObjectUI, vmmGObject
@@ -262,44 +258,13 @@ class Viewer(vmmGObject):
         return self.display.get_pixbuf()
 
     def get_grab_keys(self):
-        keystr = None
-        try:
-            keys = self.display.get_grab_keys()
-            for k in keys:
-                if keystr is None:
-                    keystr = gtk.gdk.keyval_name(k)
-                else:
-                    keystr = keystr + "+" + gtk.gdk.keyval_name(k)
-        except:
-            pass
+        raise NotImplementedError()
 
-        return keystr
+    def set_grab_keys(self):
+        raise NotImplementedError()
 
     def send_keys(self, keys):
         return self.display.send_keys(keys)
-
-    def set_grab_keys(self):
-        try:
-            keys = self.config.get_keys_combination()
-            if not keys:
-                return
-
-            if not hasattr(self.display, "set_grab_keys"):
-                logging.debug("Display class doesn't support custom grab "
-                              "combination.")
-                return
-
-            try:
-                keys = map(int, keys.split(','))
-            except:
-                logging.debug("Error in grab_keys configuration in GConf",
-                              exc_info=True)
-                return
-
-            self.display.set_grab_keys(keys)
-        except Exception, e:
-            logging.debug("Error when getting the grab keys combination: %s",
-                          str(e))
 
     def open_host(self, ginfo, password=None):
         raise NotImplementedError()
@@ -313,7 +278,7 @@ class Viewer(vmmGObject):
 class VNCViewer(Viewer):
     def __init__(self, console):
         Viewer.__init__(self, console)
-        self.display = gtkvnc.Display()
+        self.display = GtkVnc.Display.new()
         self.sockfd = None
 
         # Last noticed desktop resolution
@@ -345,18 +310,40 @@ class VNCViewer(Viewer):
 
         self.display.show()
 
+    def get_grab_keys(self):
+        return self.display.get_grab_keys().as_string()
+
+    def set_grab_keys(self):
+        try:
+            keys = self.config.get_keys_combination()
+            if not keys:
+                return
+
+            try:
+                keys = map(int, keys.split(','))
+            except:
+                logging.debug("Error in grab_keys configuration in GConf",
+                              exc_info=True)
+                return
+
+            seq = GtkVnc.GrabSequence.new(keys)
+            self.display.set_grab_keys(seq)
+        except Exception, e:
+            logging.debug("Error when getting the grab keys combination: %s",
+                          str(e))
+
     def _desktop_resize(self, src_ignore, w, h):
         self.desktop_resolution = (w, h)
-        self.console.window.get_object("console-vnc-scroll").queue_resize()
+        self.console.get_window().get_object("console-vnc-scroll").queue_resize()
 
     def get_desktop_resolution(self):
         return self.desktop_resolution
 
     def _auth_credential(self, src_ignore, credList):
         for cred in credList:
-            if cred in [gtkvnc.CREDENTIAL_PASSWORD,
-                        gtkvnc.CREDENTIAL_USERNAME,
-                        gtkvnc.CREDENTIAL_CLIENTNAME]:
+            if cred in [GtkVnc.DisplayCredential.PASSWORD,
+                        GtkVnc.DisplayCredential.USERNAME,
+                        GtkVnc.DisplayCredential.CLIENTNAME]:
                 continue
 
             self.console.err.show_err(
@@ -378,11 +365,11 @@ class VNCViewer(Viewer):
         withPassword = False
         for cred in credList:
             logging.debug("Got credential request %s", cred)
-            if cred == gtkvnc.CREDENTIAL_PASSWORD:
+            if cred == GtkVnc.DisplayCredential.PASSWORD:
                 withPassword = True
-            elif cred == gtkvnc.CREDENTIAL_USERNAME:
+            elif cred == GtkVnc.DisplayCredential.USERNAME:
                 withUsername = True
-            elif cred == gtkvnc.CREDENTIAL_CLIENTNAME:
+            elif cred == GtkVnc.DisplayCredential.CLIENTNAME:
                 self.display.set_credential(cred, "libvirt-vnc")
 
         if withUsername or withPassword:
@@ -433,10 +420,10 @@ class VNCViewer(Viewer):
         self.display.open_fd(fd)
 
     def set_credential_username(self, cred):
-        self.display.set_credential(gtkvnc.CREDENTIAL_USERNAME, cred)
+        self.display.set_credential(GtkVnc.DisplayCredential.USERNAME, cred)
 
     def set_credential_password(self, cred):
-        self.display.set_credential(gtkvnc.CREDENTIAL_PASSWORD, cred)
+        self.display.set_credential(GtkVnc.DisplayCredential.PASSWORD, cred)
 
 
 class SpiceViewer(Viewer):
@@ -462,6 +449,28 @@ class SpiceViewer(Viewer):
 
         self.display.show()
 
+    def get_grab_keys(self):
+        return self.display.get_grab_keys().as_string()
+
+    def set_grab_keys(self):
+        try:
+            keys = self.config.get_keys_combination()
+            if not keys:
+                return
+
+            try:
+                keys = map(int, keys.split(','))
+            except:
+                logging.debug("Error in grab_keys configuration in GConf",
+                              exc_info=True)
+                return
+
+            seq = SpiceClientGtk.GrabSequence.new(keys)
+            self.display.set_grab_keys(seq)
+        except Exception, e:
+            logging.debug("Error when getting the grab keys combination: %s",
+                          str(e))
+
     def close(self):
         if self.spice_session is not None:
             self.spice_session.disconnect()
@@ -476,10 +485,10 @@ class SpiceViewer(Viewer):
         return self.spice_session != None
 
     def _main_channel_event_cb(self, channel, event):
-        if event == spice.CHANNEL_CLOSED:
+        if event == SpiceClientGLib.ChannelEvent.CLOSED:
             if self.console:
                 self.console.disconnected()
-        elif event == spice.CHANNEL_ERROR_AUTH:
+        elif event == SpiceClientGLib.ChannelEvent.ERROR_AUTH:
             if self.console:
                 self.console.activate_auth_page()
 
@@ -492,14 +501,14 @@ class SpiceViewer(Viewer):
         channel.open_fd(fd)
 
     def _channel_new_cb(self, session, channel):
-        gobject.GObject.connect(channel, "open-fd",
+        GObject.GObject.connect(channel, "open-fd",
                                 self._channel_open_fd_request)
 
-        if type(channel) == spice.MainChannel:
+        if type(channel) == SpiceClientGLib.MainChannel:
             channel.connect_after("channel-event", self._main_channel_event_cb)
             return
 
-        if type(channel) == spice.DisplayChannel:
+        if type(channel) == SpiceClientGLib.DisplayChannel:
             channel_id = channel.get_property("channel-id")
 
             if channel_id != 0:
@@ -507,15 +516,15 @@ class SpiceViewer(Viewer):
                 return
 
             self.display_channel = channel
-            self.display = spice.Display(self.spice_session, channel_id)
-            self.console.window.get_object("console-vnc-viewport").add(self.display)
+            self.display = SpiceClientGtk.Display.new(self.spice_session, channel_id)
+            self.console.get_window().get_object("console-vnc-viewport").add(self.display)
             self._init_widget()
             self.console.connected()
             return
 
-        if (type(channel) in [spice.PlaybackChannel, spice.RecordChannel] and
+        if (type(channel) in [SpiceClientGLib.PlaybackChannel, SpiceClientGLib.RecordChannel] and
             not self.audio):
-            self.audio = spice.Audio(self.spice_session)
+            self.audio = SpiceClientGLib.Audio(self.spice_session)
             return
 
     def get_desktop_resolution(self):
@@ -531,19 +540,19 @@ class SpiceViewer(Viewer):
         uri += str(host) + "?port=" + str(port)
         logging.debug("spice uri: %s", uri)
 
-        self.spice_session = spice.Session()
+        self.spice_session = SpiceClientGLib.Session()
         self.spice_session.set_property("uri", uri)
         if password:
             self.spice_session.set_property("password", password)
-        gobject.GObject.connect(self.spice_session, "channel-new",
+        GObject.GObject.connect(self.spice_session, "channel-new",
                                 self._channel_new_cb)
         self.spice_session.connect()
 
     def open_fd(self, fd, password=None):
-        self.spice_session = spice.Session()
+        self.spice_session = SpiceClientGLib.Session()
         if password:
             self.spice_session.set_property("password", password)
-        gobject.GObject.connect(self.spice_session, "channel-new",
+        GObject.GObject.connect(self.spice_session, "channel-new",
                                 self._channel_new_cb)
         self.spice_session.open_fd(fd)
 
@@ -568,14 +577,14 @@ class SpiceViewer(Viewer):
 
 
 class vmmConsolePages(vmmGObjectUI):
-    def __init__(self, vm, window):
+    def __init__(self, vm, window, topwin):
         vmmGObjectUI.__init__(self, None, None)
 
         self.vm = vm
 
         self.windowname = "vmm-details"
         self.window = window
-        self.topwin = self.widget(self.windowname)
+        self.topwin = topwin
         self.err = vmmErrorDialog(self.topwin)
 
         self.pointer_is_grabbed = False
@@ -583,7 +592,9 @@ class vmmConsolePages(vmmGObjectUI):
         self.vm.connect("config-changed", self.change_title)
 
         # State for disabling modifiers when keyboard is grabbed
-        self.accel_groups = gtk.accel_groups_from_object(self.topwin)
+        # XXX
+        #self.accel_groups = Gtk.accel_groups_from_object(self.topwin)
+        self.accel_groups = []
         self.gtk_settings_accel = None
         self.gtk_settings_mnemonic = None
 
@@ -603,13 +614,13 @@ class vmmConsolePages(vmmGObjectUI):
         self.keycombo_menu = uihelpers.build_keycombo_menu(self.send_key)
         self.init_fs_toolbar()
 
-        finish_img = gtk.image_new_from_stock(gtk.STOCK_YES,
-                                              gtk.ICON_SIZE_BUTTON)
+        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_YES,
+                                              Gtk.IconSize.BUTTON)
         self.widget("console-auth-login").set_image(finish_img)
 
         # Make viewer widget background always be black
-        black = gtk.gdk.Color(0, 0, 0)
-        self.widget("console-vnc-viewport").modify_bg(gtk.STATE_NORMAL,
+        black = Gdk.Color(0, 0, 0)
+        self.widget("console-vnc-viewport").modify_bg(Gtk.StateType.NORMAL,
                                                       black)
 
         # Signals are added by vmmDetails. Don't use connect_signals here
@@ -628,9 +639,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.page_changed()
 
     def is_visible(self):
-        if self.topwin.flags() & gtk.VISIBLE:
-            return 1
-        return 0
+        return self.topwin.get_visible()
 
     def _cleanup(self):
         self.vm = None
@@ -655,14 +664,14 @@ class vmmConsolePages(vmmGObjectUI):
         pages = self.widget("console-pages")
         pages.remove(scroll)
 
-        self.fs_toolbar = gtk.Toolbar()
+        self.fs_toolbar = Gtk.Toolbar()
         self.fs_toolbar.set_show_arrow(False)
         self.fs_toolbar.set_no_show_all(True)
-        self.fs_toolbar.set_style(gtk.TOOLBAR_BOTH_HORIZ)
+        self.fs_toolbar.set_style(Gtk.ToolbarStyle.BOTH_HORIZ)
 
         # Exit fullscreen button
-        button = gtk.ToolButton(gtk.STOCK_LEAVE_FULLSCREEN)
-        util.tooltip_wrapper(button, _("Leave fullscreen"))
+        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_LEAVE_FULLSCREEN)
+        button.set_tooltip_text(_("Leave fullscreen"))
         button.show()
         self.fs_toolbar.add(button)
         button.connect("clicked", self.leave_fullscreen)
@@ -671,19 +680,19 @@ class vmmConsolePages(vmmGObjectUI):
             ignore = src
             def menu_location(menu, toolbar):
                 ignore = menu
-                x, y = toolbar.window.get_origin()
-                ignore, height = toolbar.window.get_size()
+                x, y = toolbar.get_window().get_origin()
+                ignore, height = toolbar.get_window().get_size()
 
                 return x, y + height, True
 
             self.keycombo_menu.popup(None, None, menu_location, 0,
-                                     gtk.get_current_event_time(),
+                                     Gtk.get_current_event_time(),
                                      self.fs_toolbar)
 
-        self.send_key_button = gtk.ToolButton()
+        self.send_key_button = Gtk.ToolButton()
         self.send_key_button.set_icon_name(
                                 "preferences-desktop-keyboard-shortcuts")
-        util.tooltip_wrapper(self.send_key_button, _("Send key combination"))
+        self.send_key_button.set_tooltip_text(_("Send key combination"))
         self.send_key_button.show_all()
         self.send_key_button.connect("clicked", keycombo_menu_clicked)
         self.fs_toolbar.add(self.send_key_button)
@@ -739,7 +748,7 @@ class vmmConsolePages(vmmGObjectUI):
         for g in self.accel_groups:
             self.topwin.remove_accel_group(g)
 
-        settings = gtk.settings_get_default()
+        settings = Gtk.Settings.get_default()
         self.gtk_settings_accel = settings.get_property('gtk-menu-bar-accel')
         settings.set_property('gtk-menu-bar-accel', None)
 
@@ -752,7 +761,7 @@ class vmmConsolePages(vmmGObjectUI):
         if self.gtk_settings_accel is None:
             return
 
-        settings = gtk.settings_get_default()
+        settings = Gtk.Settings.get_default()
         settings.set_property('gtk-menu-bar-accel', self.gtk_settings_accel)
         self.gtk_settings_accel = None
 
@@ -1141,10 +1150,10 @@ class vmmConsolePages(vmmGObjectUI):
 
     def set_credentials(self, src_ignore=None):
         passwd = self.widget("console-auth-password")
-        if passwd.flags() & gtk.VISIBLE:
+        if passwd.get_visible():
             self.viewer.set_credential_password(passwd.get_text())
         username = self.widget("console-auth-username")
-        if username.flags() & gtk.VISIBLE:
+        if username.get_visible():
             self.viewer.set_credential_username(username.get_text())
 
         if self.widget("console-auth-remember").get_active():
@@ -1164,11 +1173,11 @@ class vmmConsolePages(vmmGObjectUI):
             is_scale = self.viewer.get_scaling()
 
             if is_scale:
-                w_policy = gtk.POLICY_NEVER
-                h_policy = gtk.POLICY_NEVER
+                w_policy = Gtk.PolicyType.NEVER
+                h_policy = Gtk.PolicyType.NEVER
             else:
-                w_policy = gtk.POLICY_AUTOMATIC
-                h_policy = gtk.POLICY_AUTOMATIC
+                w_policy = Gtk.PolicyType.AUTOMATIC
+                h_policy = Gtk.PolicyType.AUTOMATIC
 
             src.set_policy(w_policy, h_policy)
             return False
@@ -1190,7 +1199,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         # Disable scroll bars while we resize, since resizing to the VM's
         # dimensions can erroneously show scroll bars when they aren't needed
-        widget.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+        widget.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
 
         signal_id = widget.connect("size-request", request_cb)
         signal_holder.append(signal_id)
@@ -1216,12 +1225,12 @@ class vmmConsolePages(vmmGObjectUI):
         if not is_scale:
             # Scaling disabled is easy, just force the VNC widget size. Since
             # we are inside a scrollwindow, it shouldn't cause issues.
-            scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+            scroll.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
             self.viewer.display.set_size_request(desktop_w, desktop_h)
             return
 
         # Make sure we never show scrollbars when scaling
-        scroll.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+        scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
 
         # Make sure there is no hard size requirement so we can scale down
         self.viewer.display.set_size_request(-1, -1)
@@ -1237,11 +1246,10 @@ class vmmConsolePages(vmmGObjectUI):
             desktop_h = int(req.width / desktop_ratio)
             dy = (req.height - desktop_h) / 2
 
-        viewer_alloc = gtk.gdk.Rectangle(x=dx,
-                                         y=dy,
-                                         width=desktop_w,
-                                         height=desktop_h)
+        # XXX
+        #@    viewer_alloc = (x=dx,
+        #                             y=dy,
+        #                             width=desktop_w,
+        #                             height=desktop_h)
 
-        self.viewer.display.size_allocate(viewer_alloc)
-
-vmmGObjectUI.type_register(vmmConsolePages)
+        #self.viewer.display.size_allocate(viewer_alloc)

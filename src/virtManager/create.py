@@ -21,7 +21,9 @@
 import threading
 import logging
 
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Gdk
 
 import virtinst
 
@@ -59,21 +61,29 @@ RHEL6_OS_SUPPORT = [
 
 _comboentry_xml = """
 <interface>
-    <object class="GtkComboBoxEntry" id="install-local-box">
+    <object class="GtkComboBoxText" id="install-local-box">
         <property name="visible">True</property>
+        <property name="has_entry">True</property>
         <signal name="changed" handler="on_install_local_box_changed"/>
     </object>
-    <object class="GtkComboBoxEntry" id="install-url-box">
+    <object class="GtkComboBoxText" id="install-url-box">
         <property name="visible">True</property>
+        <property name="has_entry">True</property>
         <signal name="changed" handler="on_install_url_box_changed"/>
     </object>
-    <object class="GtkComboBoxEntry" id="install-ks-box">
+    <object class="GtkComboBoxText" id="install-ks-box">
         <property name="visible">True</property>
+        <property name="has_entry">True</property>
     </object>
 </interface>
 """
 
 class vmmCreate(vmmGObjectUI):
+    __gsignals__ = {
+        "action-show-vm": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+    }
+
     def __init__(self, engine):
         vmmGObjectUI.__init__(self, "vmm-create.ui", "vmm-create")
         self.engine = engine
@@ -109,14 +119,14 @@ class vmmCreate(vmmGObjectUI):
         self.config_window = None
         self.config_window_signals = []
 
-        self.window.add_from_string(_comboentry_xml)
+        self.get_window().add_from_string(_comboentry_xml)
         self.widget("table2").attach(self.widget("install-url-box"),
                                      1, 2, 0, 1)
         self.widget("table7").attach(self.widget("install-ks-box"),
                                      1, 2, 0, 1)
         self.widget("alignment8").add(self.widget("install-local-box"))
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_vmm_newcreate_delete_event" : self.close,
 
             "on_create_cancel_clicked": self.close,
@@ -161,9 +171,7 @@ class vmmCreate(vmmGObjectUI):
         self.set_initial_state()
 
     def is_visible(self):
-        if self.topwin.flags() & gtk.VISIBLE:
-            return True
-        return False
+        return self.topwin.get_visible()
 
     def show(self, parent, uri=None):
         logging.debug("Showing new vm wizard")
@@ -205,7 +213,7 @@ class vmmCreate(vmmGObjectUI):
     def remove_timers(self):
         try:
             if self.host_storage_timer:
-                self.remove_gobject_timeout(self.host_storage_timer)
+                self.remove_timeout(self.host_storage_timer)
                 self.host_storage_timer = None
         except:
             pass
@@ -250,50 +258,50 @@ class vmmCreate(vmmGObjectUI):
 
         # FIXME: Unhide this when we make some documentation
         self.widget("create-help").hide()
-        finish_img = gtk.image_new_from_stock(gtk.STOCK_QUIT,
-                                              gtk.ICON_SIZE_BUTTON)
+        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
+                                              Gtk.IconSize.BUTTON)
         self.widget("create-finish").set_image(finish_img)
 
-        blue = gtk.gdk.color_parse("#0072A8")
-        self.widget("create-header").modify_bg(gtk.STATE_NORMAL,
+        blue = Gdk.Color.parse("#0072A8")[1]
+        self.widget("create-header").modify_bg(Gtk.StateType.NORMAL,
                                                           blue)
 
         box = self.widget("create-vm-icon-box")
-        image = gtk.image_new_from_icon_name("vm_new_wizard",
-                                             gtk.ICON_SIZE_DIALOG)
+        image = Gtk.Image.new_from_icon_name("vm_new_wizard",
+                                             Gtk.IconSize.DIALOG)
         image.show()
-        box.pack_end(image, False)
+        box.pack_end(image, False, False, False)
 
         # Connection list
         self.widget("create-conn-label").set_text("")
         self.widget("startup-error").set_text("")
         conn_list = self.widget("create-conn")
-        conn_model = gtk.ListStore(str, str)
+        conn_model = Gtk.ListStore(str, str)
         conn_list.set_model(conn_model)
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         conn_list.pack_start(text, True)
         conn_list.add_attribute(text, 'text', 1)
 
         # ISO media list
         iso_list = self.widget("install-local-box")
-        iso_model = gtk.ListStore(str)
+        iso_model = Gtk.ListStore(str)
         iso_list.set_model(iso_model)
-        iso_list.set_text_column(0)
-        self.widget("install-local-box").child.connect("activate",
+        iso_list.set_entry_text_column(0)
+        self.widget("install-local-box").get_child().connect("activate",
                                                     self.detect_media_os)
 
         # Lists for the install urls
         media_url_list = self.widget("install-url-box")
-        media_url_model = gtk.ListStore(str)
+        media_url_model = Gtk.ListStore(str)
         media_url_list.set_model(media_url_model)
-        media_url_list.set_text_column(0)
-        self.widget("install-url-box").child.connect("activate",
+        media_url_list.set_entry_text_column(0)
+        self.widget("install-url-box").get_child().connect("activate",
                                                     self.detect_media_os)
 
         ks_url_list = self.widget("install-ks-box")
-        ks_url_model = gtk.ListStore(str)
+        ks_url_model = Gtk.ListStore(str)
         ks_url_list.set_model(ks_url_model)
-        ks_url_list.set_text_column(0)
+        ks_url_list.set_entry_text_column(0)
 
         def sep_func(model, it, combo):
             ignore = combo
@@ -302,17 +310,17 @@ class vmmCreate(vmmGObjectUI):
         # Lists for distro type + variant
         # [os value, os label, is seperator, is 'show all'
         os_type_list = self.widget("install-os-type")
-        os_type_model = gtk.ListStore(str, str, bool, bool)
+        os_type_model = Gtk.ListStore(str, str, bool, bool)
         os_type_list.set_model(os_type_model)
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         os_type_list.pack_start(text, True)
         os_type_list.add_attribute(text, 'text', 1)
         os_type_list.set_row_separator_func(sep_func, os_type_list)
 
         os_variant_list = self.widget("install-os-version")
-        os_variant_model = gtk.ListStore(str, str, bool, bool)
+        os_variant_model = Gtk.ListStore(str, str, bool, bool)
         os_variant_list.set_model(os_variant_model)
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         os_variant_list.pack_start(text, True)
         os_variant_list.add_attribute(text, 'text', 1)
         os_variant_list.set_row_separator_func(sep_func, os_variant_list)
@@ -329,16 +337,16 @@ class vmmCreate(vmmGObjectUI):
         uihelpers.init_network_list(net_list, bridge_box)
 
         # Archtecture
-        archModel = gtk.ListStore(str)
+        archModel = Gtk.ListStore(str)
         archList = self.widget("config-arch")
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         archList.pack_start(text, True)
         archList.add_attribute(text, 'text', 0)
         archList.set_model(archModel)
 
-        hyperModel = gtk.ListStore(str, str, str, bool)
+        hyperModel = Gtk.ListStore(str, str, str, bool)
         hyperList = self.widget("config-hv")
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         hyperList.pack_start(text, True)
         hyperList.add_attribute(text, 'text', 0)
         hyperList.add_attribute(text, 'sensitive', 3)
@@ -385,14 +393,14 @@ class vmmCreate(vmmGObjectUI):
         self.populate_os_type_model()
         self.widget("install-os-type").set_active(0)
 
-        self.widget("install-local-box").child.set_text("")
+        self.widget("install-local-box").get_child().set_text("")
         iso_model = self.widget("install-local-box").get_model()
         self.populate_media_model(iso_model, self.conn.config_get_iso_paths())
 
         # Install URL
         self.widget("install-urlopts-entry").set_text("")
-        self.widget("install-ks-box").child.set_text("")
-        self.widget("install-url-box").child.set_text("")
+        self.widget("install-ks-box").get_child().set_text("")
+        self.widget("install-url-box").get_child().set_text("")
         self.widget("install-url-options").set_expanded(False)
         urlmodel = self.widget("install-url-box").get_model()
         ksmodel  = self.widget("install-ks-box").get_model()
@@ -530,10 +538,10 @@ class vmmCreate(vmmGObjectUI):
                     _("No install methods available for this connection."),
                     hideinstall=False)
 
-        util.tooltip_wrapper(method_tree, tree_tt)
-        util.tooltip_wrapper(method_local, local_tt)
-        util.tooltip_wrapper(method_pxe, pxe_tt)
-        util.tooltip_wrapper(method_import, import_tt)
+        method_tree.set_tooltip_text(tree_tt or "")
+        method_local.set_tooltip_text(local_tt or "")
+        method_pxe.set_tooltip_text(pxe_tt or "")
+        method_import.set_tooltip_text(import_tt or "")
 
         # Container install options
         method_container_app.set_active(True)
@@ -555,7 +563,7 @@ class vmmCreate(vmmGObjectUI):
         if self.conn.mediadev_error:
             cdrom_warn.show()
             cdrom_option.set_sensitive(False)
-            util.tooltip_wrapper(cdrom_warn, self.conn.mediadev_error)
+            cdrom_warn.set_tooltip_text(self.conn.mediadev_error)
         else:
             cdrom_warn.hide()
 
@@ -593,7 +601,7 @@ class vmmCreate(vmmGObjectUI):
                            max_v)
         else:
             cpu_tooltip = None
-        util.tooltip_wrapper(self.widget("config-cpus"), cpu_tooltip)
+        self.widget("config-cpus").set_tooltip_text(cpu_tooltip or "")
 
         cmax = int(cmax)
         if cmax <= 0:
@@ -616,7 +624,7 @@ class vmmCreate(vmmGObjectUI):
             storage_tooltip = _("Connection does not support storage"
                                 " management.")
             use_storage.set_sensitive(True)
-        util.tooltip_wrapper(storage_area, storage_tooltip)
+        storage_area.set_tooltip_text(storage_tooltip or "")
 
         # Networking
         net_list        = self.widget("config-netdev")
@@ -648,7 +656,7 @@ class vmmCreate(vmmGObjectUI):
         if do_tooltip:
             net_warn_icon.set_property("visible", show_warn)
             if msg:
-                util.tooltip_wrapper(net_warn_icon, show_warn and msg or "")
+                net_warn_icon.set_tooltip_text(show_warn and msg or "")
         else:
             net_warn_box.set_property("visible", show_warn)
             markup = show_warn and ("<small>%s</small>" % msg) or ""
@@ -694,7 +702,7 @@ class vmmCreate(vmmGObjectUI):
         hv_info = self.widget("config-hv-info")
         if tooltip:
             hv_info.show()
-            util.tooltip_wrapper(hv_info, tooltip)
+            hv_info.set_tooltip_text(tooltip)
         else:
             hv_info.hide()
 
@@ -830,8 +838,9 @@ class vmmCreate(vmmGObjectUI):
 
     def populate_media_model(self, model, urls):
         model.clear()
-        for url in urls:
-            model.append([url])
+        if urls is not None:
+            for url in urls:
+                model.append([url])
 
 
     def change_caps(self, gtype=None, dtype=None, arch=None):
@@ -967,13 +976,14 @@ class vmmCreate(vmmGObjectUI):
             variant = row[0]
             vlabel = row[1]
 
-        return (distro, variant, dlabel, vlabel)
+        print str((distro, variant, dlabel, vlabel))
+        return (str(distro), str(variant), str(dlabel), str(vlabel))
 
     def get_config_local_media(self, store_media=False):
         if self.widget("install-local-cdrom").get_active():
             return self.widget("install-local-cdrom-combo").get_active_text()
         else:
-            ret = self.widget("install-local-box").child.get_text()
+            ret = self.widget("install-local-box").get_child().get_text()
             if ret and store_media:
                 self.conn.config_add_iso_path(ret)
             return ret
@@ -1143,8 +1153,8 @@ class vmmCreate(vmmGObjectUI):
         # If the url_entry has focus, don't fire detect_media_os, it means
         # the user is probably typing
         self.mediaDetected = False
-        if (self.widget("install-url-box").child.flags() &
-            gtk.HAS_FOCUS):
+        if (self.widget("install-url-box").get_child().flags() &
+            Gtk.HAS_FOCUS):
             return
         self.detect_media_os()
 
@@ -1268,7 +1278,7 @@ class vmmCreate(vmmGObjectUI):
 
     def browse_iso(self, ignore1=None, ignore2=None):
         def set_path(ignore, path):
-            self.widget("install-local-box").child.set_text(path)
+            self.widget("install-local-box").get_child().set_text(path)
         self._browse_file(set_path, is_media=True)
         self.widget("install-local-box").activate()
 
@@ -1856,7 +1866,7 @@ class vmmCreate(vmmGObjectUI):
         # Start the install
         self.failed_guest = None
         self.topwin.set_sensitive(False)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         def start_install():
             if not self.get_config_customize():
@@ -1869,7 +1879,7 @@ class vmmCreate(vmmGObjectUI):
 
     def _undo_finish(self, ignore=None):
         self.topwin.set_sensitive(True)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
 
     def _check_start_error(self, cb, *args, **kwargs):
         try:
@@ -1923,7 +1933,7 @@ class vmmCreate(vmmGObjectUI):
         error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
+        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
 
         if error:
             error = (_("Unable to complete install: '%s'") % error)
@@ -2154,7 +2164,3 @@ class vmmCreate(vmmGObjectUI):
     def show_help(self, ignore):
         # No help available yet.
         pass
-
-vmmGObjectUI.type_register(vmmCreate)
-vmmCreate.signal_new(vmmCreate, "action-show-vm", [str, str])
-vmmCreate.signal_new(vmmCreate, "action-show-help", [str])

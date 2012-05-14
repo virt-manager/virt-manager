@@ -22,8 +22,9 @@ import logging
 import threading
 import traceback
 
-import gtk
-import gobject
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Gdk
 
 import libvirt
 import urlgrabber
@@ -183,7 +184,7 @@ class vmmAsyncJob(vmmGObjectUI):
         self.bg_thread = asyncJobWorker(callback, args)
         logging.debug("Creating async job for function cb=%s", callback)
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_async_job_delete_event" : self.delete,
             "on_async_job_cancel_clicked" : self.cancel,
         })
@@ -251,21 +252,21 @@ class vmmAsyncJob(vmmGObjectUI):
     ###########
 
     def run(self):
-        timer = gobject.timeout_add(100, self.exit_if_necessary)
+        timer = GObject.timeout_add(100, self.exit_if_necessary)
 
         if self.show_progress:
             self.topwin.present()
 
         if not self.cancel_job and self.show_progress:
-            self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+            self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         if self.async:
             self.bg_thread.start()
-            gtk.main()
+            Gtk.main()
         else:
             self.bg_thread.run()
 
-        gobject.source_remove(timer)
+        GObject.source_remove(timer)
 
         if self.bg_thread.isAlive():
             # This can happen if the user closes the whole app while the
@@ -285,7 +286,7 @@ class vmmAsyncJob(vmmGObjectUI):
 
         res = self.err.warn_chkbox(
                 text1=_("Cancel the job before closing window?"),
-                buttons=gtk.BUTTONS_YES_NO)
+                buttons=Gtk.ButtonsType.YES_NO)
         if not res:
             return
 
@@ -314,7 +315,7 @@ class vmmAsyncJob(vmmGObjectUI):
 
         if not thread_active or force_exit:
             if self.async:
-                gtk.main_quit()
+                Gtk.main_quit()
             return False
 
         if not self.is_pulsing or not self.show_progress:

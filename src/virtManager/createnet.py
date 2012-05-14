@@ -21,7 +21,9 @@
 import logging
 import re
 
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Gdk
 
 from virtManager.IPy import IP
 from virtManager.network import vmmNetwork
@@ -36,11 +38,15 @@ PAGE_SUMMARY = 5
 
 
 class vmmCreateNetwork(vmmGObjectUI):
+    __gsignals__ = {
+        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+    }
+
     def __init__(self, conn):
         vmmGObjectUI.__init__(self, "vmm-create-net.ui", "vmm-create-net")
         self.conn = conn
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_create_pages_switch_page" : self.page_changed,
             "on_create_cancel_clicked" : self.close,
             "on_vmm_create_delete_event" : self.close,
@@ -60,8 +66,8 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         # XXX: Help docs useless/out of date
         self.widget("create-help").hide()
-        finish_img = gtk.image_new_from_stock(gtk.STOCK_QUIT,
-                                              gtk.ICON_SIZE_BUTTON)
+        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
+                                              Gtk.IconSize.BUTTON)
         self.widget("create-finish").set_image(finish_img)
 
         self.set_initial_state()
@@ -73,9 +79,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.topwin.present()
 
     def is_visible(self):
-        if self.topwin.flags() & gtk.VISIBLE:
-            return 1
-        return 0
+        return self.topwin.get_visible()
 
     def close(self, ignore1=None, ignore2=None):
         logging.debug("Closing new network wizard")
@@ -89,16 +93,16 @@ class vmmCreateNetwork(vmmGObjectUI):
         notebook = self.widget("create-pages")
         notebook.set_show_tabs(False)
 
-        black = gtk.gdk.color_parse("#000")
+        black = Gdk.Color.parse("#000")[1]
         for num in range(PAGE_SUMMARY + 1):
             name = "page" + str(num) + "-title"
-            self.widget(name).modify_bg(gtk.STATE_NORMAL, black)
+            self.widget(name).modify_bg(Gtk.StateType.NORMAL, black)
 
         fw_list = self.widget("net-forward")
         # [ label, dev name ]
-        fw_model = gtk.ListStore(str, str)
+        fw_model = Gtk.ListStore(str, str)
         fw_list.set_model(fw_model)
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         fw_list.pack_start(text, True)
         fw_list.add_attribute(text, 'text', 0)
 
@@ -110,9 +114,9 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         mode_list = self.widget("net-forward-mode")
         # [ label, mode ]
-        mode_model = gtk.ListStore(str, str)
+        mode_model = Gtk.ListStore(str, str)
         mode_list.set_model(mode_model)
-        text = gtk.CellRendererText()
+        text = Gtk.CellRendererText()
         mode_list.pack_start(text, True)
         mode_list.add_attribute(text, 'text', 0)
 
@@ -150,14 +154,14 @@ class vmmCreateNetwork(vmmGObjectUI):
 
     def change_network(self, src):
         ip = self.get_config_ip4()
-        green = gtk.gdk.color_parse("#c0ffc0")
-        red = gtk.gdk.color_parse("#ffc0c0")
-        black = gtk.gdk.color_parse("#000000")
-        src.modify_text(gtk.STATE_NORMAL, black)
+        green = Gdk.Color.parse("#c0ffc0")[1]
+        red = Gdk.Color.parse("#ffc0c0")[1]
+        black = Gdk.Color.parse("#000000")[1]
+        src.modify_text(Gtk.StateType.NORMAL, black)
 
         # No IP specified or invalid IP
         if ip is None or ip.version() != 4:
-            src.modify_base(gtk.STATE_NORMAL, red)
+            src.modify_base(Gtk.StateType.NORMAL, red)
             self.widget("net-info-netmask").set_text("")
             self.widget("net-info-broadcast").set_text("")
             self.widget("net-info-gateway").set_text("")
@@ -167,9 +171,9 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         # We've got a valid IP
         if ip.len() < 4 or ip.iptype() != "PRIVATE":
-            src.modify_base(gtk.STATE_NORMAL, red)
+            src.modify_base(Gtk.StateType.NORMAL, red)
         else:
-            src.modify_base(gtk.STATE_NORMAL, green)
+            src.modify_base(Gtk.StateType.NORMAL, green)
         self.widget("net-info-netmask").set_text(str(ip.netmask()))
         self.widget("net-info-broadcast").set_text(str(ip.broadcast()))
 
@@ -204,15 +208,15 @@ class vmmCreateNetwork(vmmGObjectUI):
 
     def change_dhcp(self, src, addr):
         ip = self.get_config_ip4()
-        black = gtk.gdk.color_parse("#000000")
-        src.modify_text(gtk.STATE_NORMAL, black)
+        black = Gdk.Color.parse("#000000")[1]
+        src.modify_text(Gtk.StateType.NORMAL, black)
 
         if addr is None or not ip.overlaps(addr):
-            red = gtk.gdk.color_parse("#ffc0c0")
-            src.modify_base(gtk.STATE_NORMAL, red)
+            red = Gdk.Color.parse("#ffc0c0")[1]
+            src.modify_base(Gtk.StateType.NORMAL, red)
         else:
-            green = gtk.gdk.color_parse("#c0ffc0")
-            src.modify_base(gtk.STATE_NORMAL, green)
+            green = Gdk.Color.parse("#c0ffc0")[1]
+            src.modify_base(Gtk.StateType.NORMAL, green)
 
     def change_forward_type(self, src_ignore):
         skip_fwd = self.widget("net-forward-none").get_active()
@@ -451,6 +455,3 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.emit("action-show-help", "virt-manager-create-net-forwarding")
         elif page == PAGE_SUMMARY:
             self.emit("action-show-help", "virt-manager-create-net-sumary")
-
-vmmGObjectUI.type_register(vmmCreateNetwork)
-vmmCreateNetwork.signal_new(vmmCreateNetwork, "action-show-help", [str])

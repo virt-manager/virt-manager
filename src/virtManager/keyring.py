@@ -17,15 +17,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 #
+
 from virtManager.secret import vmmSecret
 
 import logging
 
+
 haveKeyring = False
 
 try:
-    import gnomekeyring
-    haveKeyring = True
+    # XXX
+    #import gnomekeyring
+    #haveKeyring = True
+    pass
 except:
     logging.warning("gnomekeyring bindings not installed, no keyring support")
 

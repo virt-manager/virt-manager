@@ -20,7 +20,9 @@
 
 import logging
 
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Gdk
 
 from virtManager.baseclass import vmmGObjectUI
 
@@ -28,6 +30,10 @@ PREFS_PAGE_STATS    = 0
 PREFS_PAGE_VM_PREFS = 1
 
 class vmmPreferences(vmmGObjectUI):
+    __gsignals__ = {
+        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
+    }
+
     def __init__(self):
         vmmGObjectUI.__init__(self, "vmm-preferences.ui", "vmm-preferences")
 
@@ -71,7 +77,7 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_confirm_unapplied()
         self.refresh_confirm_delstorage()
 
-        self.window.connect_signals({
+        self.get_window().connect_signals({
             "on_prefs_system_tray_toggled" : self.change_view_system_tray,
             "on_prefs_stats_update_interval_changed": self.change_update_interval,
             "on_prefs_stats_history_length_changed": self.change_history_length,
@@ -205,9 +211,9 @@ class vmmPreferences(vmmGObjectUI):
 
                 if key is not None:
                     if keystr is None:
-                        keystr = gtk.gdk.keyval_name(key)
+                        keystr = Gdk.keyval_name(key)
                     else:
-                        keystr = keystr + "+" + gtk.gdk.keyval_name(key)
+                        keystr = keystr + "+" + Gdk.keyval_name(key)
 
 
         self.widget("prefs-keys-grab-sequence").set_text(keystr)
@@ -246,7 +252,7 @@ class vmmPreferences(vmmGObjectUI):
         for ignore, keyval in events:
             if keystr:
                 keystr += "+"
-            keystr += gtk.gdk.keyval_name(keyval)
+            keystr += Gdk.keyval_name(keyval)
         return keystr
 
     def grabkeys_dlg_press(self, src_ignore, event, label, events):
@@ -262,21 +268,21 @@ class vmmPreferences(vmmGObjectUI):
         label.set_text(self.grabkeys_get_string(events))
 
     def change_grab_keys(self, src_ignore):
-        dialog = gtk.Dialog(_("Configure grab key combination"),
+        dialog = Gtk.Dialog(_("Configure grab key combination"),
                             self.topwin,
-                            gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-                            (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
-                             gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+                            Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                            (Gtk.STOCK_CANCEL, Gtk.ResponseType.REJECT,
+                             Gtk.STOCK_OK, Gtk.ResponseType.ACCEPT))
         dialog.set_default_size(325, 160)
         dialog.set_border_width(6)
 
-        infolabel = gtk.Label(
+        infolabel = Gtk.Label(label=
                     _("You can now define grab keys by pressing them.\n"
                       "To confirm your selection please click OK button\n"
                       "while you have desired keys pressed."))
-        keylabel = gtk.Label(_("Please press desired grab key combination"))
+        keylabel = Gtk.Label(label=_("Please press desired grab key combination"))
 
-        vbox = gtk.VBox()
+        vbox = Gtk.VBox()
         vbox.set_spacing(12)
         vbox.pack_start(infolabel, False, False)
         vbox.pack_start(keylabel, False, False)
@@ -290,7 +296,7 @@ class vmmPreferences(vmmGObjectUI):
         dialog.show_all()
         result = dialog.run()
 
-        if result == gtk.RESPONSE_ACCEPT:
+        if result == Gtk.ResponseType.ACCEPT:
             self.config.set_keys_combination(map(lambda e: e[1], events))
 
         self.refresh_grabkeys_combination()
@@ -352,5 +358,3 @@ class vmmPreferences(vmmGObjectUI):
         # the Preferences page
         self.emit("action-show-help", "virt-manager-preferences-window")
 
-vmmPreferences.type_register(vmmPreferences)
-vmmPreferences.signal_new(vmmPreferences, "action-show-help", [str])

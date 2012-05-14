@@ -17,29 +17,23 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import gtk
+from gi.repository import Gtk
 
 import logging
 import traceback
 
 from virtManager.baseclass import vmmGObject
-import virtManager.util as util
-
-def safe_set_text(self, text):
-    # pygtk < 2.10 doesn't support text property
-    if not util.safe_set_prop(self, "text", text):
-        self.set_markup(text)
 
 def _launch_dialog(dialog, primary_text, secondary_text, title,
                    sync=True):
-    safe_set_text(dialog, primary_text)
+    dialog.set_property("text", primary_text)
     dialog.format_secondary_text(secondary_text or None)
     dialog.set_title(title)
 
     res = False
     if sync:
         res = dialog.run()
-        res = bool(res in [gtk.RESPONSE_YES, gtk.RESPONSE_OK])
+        res = bool(res in [Gtk.ResponseType.YES, Gtk.ResponseType.OK])
         dialog.destroy()
     else:
         def response_destroy(src, ignore):
@@ -65,14 +59,14 @@ class vmmErrorDialog(vmmGObject):
 
     def show_err(self, summary, details=None, title="",
                  async=True, debug=True,
-                 dialog_type=gtk.MESSAGE_ERROR,
-                 buttons=gtk.BUTTONS_CLOSE,
+                 dialog_type=Gtk.MessageType.ERROR,
+                 buttons=Gtk.ButtonsType.CLOSE,
                  text2=None):
         if details is None:
             details = summary + "\n\n" + "".join(traceback.format_exc())
 
         # Make sure we have consistent details for error dialogs
-        if (dialog_type == gtk.MESSAGE_ERROR and not
+        if (dialog_type == Gtk.MessageType.ERROR and not
             details.count(summary)):
             details = summary + "\n\n" + details
 
@@ -80,7 +74,9 @@ class vmmErrorDialog(vmmGObject):
             logging.debug("dialog message: %s : %s", summary, details)
 
         dialog = _errorDialog(parent=self.get_parent(),
-                              type=dialog_type, buttons=buttons)
+                              flags=0,
+                              message_type=dialog_type,
+                              buttons=buttons)
 
         return dialog.show_dialog(primary_text=summary,
                                   secondary_text=text2,
@@ -94,9 +90,10 @@ class vmmErrorDialog(vmmGObject):
     def _simple_dialog(self, dialog_type, buttons, text1,
                        text2, title, async=False):
 
-        dialog = gtk.MessageDialog(self.get_parent(),
-                                   gtk.DIALOG_DESTROY_WITH_PARENT,
-                                   type=dialog_type, buttons=buttons)
+        dialog = Gtk.MessageDialog(self.get_parent(),
+                                   flags=Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                                   message_type=dialog_type,
+                                   buttons=buttons)
         if self._simple:
             self._simple.destroy()
         self._simple = dialog
@@ -115,8 +112,8 @@ class vmmErrorDialog(vmmGObject):
         else:
             self._logtrace(logtext)
 
-        dtype = gtk.MESSAGE_ERROR
-        buttons = gtk.BUTTONS_OK
+        dtype = Gtk.MessageType.ERROR
+        buttons = Gtk.ButtonsType.OK
         self._simple_dialog(dtype, buttons,
                             str(text1),
                             text2 and str(text2) or "",
@@ -124,24 +121,24 @@ class vmmErrorDialog(vmmGObject):
         return False
 
     def show_info(self, text1, text2=None, title="", async=True):
-        dtype = gtk.MESSAGE_INFO
-        buttons = gtk.BUTTONS_OK
+        dtype = Gtk.MessageType.INFO
+        buttons = Gtk.ButtonsType.OK
         self._simple_dialog(dtype, buttons, text1, text2, title, async)
         return False
 
     def yes_no(self, text1, text2=None, title=None):
-        dtype = gtk.MESSAGE_WARNING
-        buttons = gtk.BUTTONS_YES_NO
+        dtype = Gtk.MessageType.WARNING
+        buttons = Gtk.ButtonsType.YES_NO
         return self._simple_dialog(dtype, buttons, text1, text2, title)
 
     def ok_cancel(self, text1, text2=None, title=None):
-        dtype = gtk.MESSAGE_WARNING
-        buttons = gtk.BUTTONS_OK_CANCEL
+        dtype = Gtk.MessageType.WARNING
+        buttons = Gtk.ButtonsType.OK_CANCEL
         return self._simple_dialog(dtype, buttons, text1, text2, title)
 
     def ok(self, text1, text2=None, title=None):
-        dtype = gtk.MESSAGE_WARNING
-        buttons = gtk.BUTTONS_OK
+        dtype = Gtk.MessageType.WARNING
+        buttons = Gtk.ButtonsType.OK
         return self._simple_dialog(dtype, buttons, text1, text2, title)
 
 
@@ -150,32 +147,34 @@ class vmmErrorDialog(vmmGObject):
     ##########################################
 
     def warn_chkbox(self, text1, text2=None, chktext=None, buttons=None):
-        dtype = gtk.MESSAGE_WARNING
-        buttons = buttons or gtk.BUTTONS_OK_CANCEL
+        dtype = Gtk.MessageType.WARNING
+        buttons = buttons or Gtk.ButtonsType.OK_CANCEL
         chkbox = _errorDialog(parent=self.get_parent(),
-                              type=dtype,
+                              flags=0,
+                              message_type=dtype,
                               buttons=buttons)
         return chkbox.show_dialog(primary_text=text1,
                                   secondary_text=text2,
                                   chktext=chktext)
 
     def err_chkbox(self, text1, text2=None, chktext=None, buttons=None):
-        dtype = gtk.MESSAGE_ERROR
-        buttons = buttons or gtk.BUTTONS_OK
+        dtype = Gtk.MessageType.ERROR
+        buttons = buttons or Gtk.ButtonsType.OK
         chkbox = _errorDialog(parent=self.get_parent(),
-                              type=dtype,
+                              flags=0,
+                              message_type=dtype,
                               buttons=buttons)
         return chkbox.show_dialog(primary_text=text1,
                                   secondary_text=text2,
                                   chktext=chktext)
 
 
-class _errorDialog (gtk.MessageDialog):
+class _errorDialog (Gtk.MessageDialog):
     """
     Custom error dialog with optional check boxes or details drop down
     """
     def __init__(self, *args, **kwargs):
-        gtk.MessageDialog.__init__(self, *args, **kwargs)
+        Gtk.MessageDialog.__init__(self, *args, **kwargs)
         self.set_title("")
 
         self.chk_vbox = None
@@ -188,32 +187,32 @@ class _errorDialog (gtk.MessageDialog):
 
     def init_chkbox(self):
         # Init check items
-        self.chk_vbox = gtk.VBox(False, False)
+        self.chk_vbox = Gtk.VBox(False, False)
         self.chk_vbox.set_spacing(0)
 
-        self.chk_align = gtk.Alignment()
+        self.chk_align = Gtk.Alignment()
         self.chk_align.set_padding(0, 0, 62, 0)
         self.chk_align.add(self.chk_vbox)
 
         self.chk_align.show_all()
-        self.vbox.pack_start(self.chk_align)
+        self.vbox.pack_start(self.chk_align, False, False, 0)
 
     def init_details(self):
         # Init details buffer
-        self.buffer = gtk.TextBuffer()
-        self.buf_expander = gtk.Expander(_("Details"))
-        sw = gtk.ScrolledWindow()
-        sw.set_shadow_type(gtk.SHADOW_IN)
+        self.buffer = Gtk.TextBuffer()
+        self.buf_expander = Gtk.Expander.new(_("Details"))
+        sw = Gtk.ScrolledWindow()
+        sw.set_shadow_type(Gtk.ShadowType.IN)
         sw.set_size_request(400, 240)
-        sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        details = gtk.TextView(self.buffer)
+        sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        details = Gtk.TextView.new_with_buffer(self.buffer)
         details.set_editable(False)
         details.set_overwrite(False)
         details.set_cursor_visible(False)
-        details.set_wrap_mode(gtk.WRAP_WORD)
+        details.set_wrap_mode(Gtk.WrapMode.WORD)
         sw.add(details)
         self.buf_expander.add(sw)
-        self.vbox.pack_start(self.buf_expander)
+        self.vbox.pack_start(self.buf_expander, False, False, 0)
         self.buf_expander.show_all()
 
     def show_dialog(self, primary_text, secondary_text="",
@@ -234,7 +233,7 @@ class _errorDialog (gtk.MessageDialog):
             self.buf_expander.show()
 
         if chktext:
-            chkbox = gtk.CheckButton(chktext)
+            chkbox = Gtk.CheckButton(chktext)
             self.chk_vbox.add(chkbox)
             chkbox.show()
 
@@ -247,5 +246,3 @@ class _errorDialog (gtk.MessageDialog):
             res = [res, chkbox.get_active()]
 
         return res
-
-vmmGObject.type_register(vmmErrorDialog)

@@ -63,5 +63,3 @@ class vmmStorageVolume(vmmLibvirtObject):
 
     def get_type(self):
         return util.xpath(self.get_xml(), "/volume/format/@type")
-
-vmmLibvirtObject.type_register(vmmStorageVolume)
