@@ -789,7 +789,7 @@ class vmmAddHardware(vmmGObjectUI):
     # USB redir getters
     def get_config_usbredir_host(self):
         host = self.widget("usbredir-host")
-        if not host.is_sensitive():
+        if not host.props.sensitive:
             return None
 
         hoststr = host.get_text()
@@ -797,7 +797,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def get_config_usbredir_service(self):
         service = self.widget("usbredir-service")
-        if not service.is_sensitive():
+        if not service.props.sensitive:
             return None
 
         return int(service.get_value())
