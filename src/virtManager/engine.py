@@ -25,6 +25,7 @@ import logging
 import traceback
 import threading
 import os
+import time
 
 import libvirt
 import virtinst
@@ -216,6 +217,53 @@ def packagekit_search(session, pk_control, package_name, packages):
     return found
 
 
+def start_libvirtd():
+    """
+    Connect to systemd and start libvirtd if required
+    """
+    logging.debug("Trying to start libvirtd through systemd")
+    unitname = "libvirtd.service"
+
+    try:
+        bus = dbus.SystemBus()
+    except:
+        logging.exception("Error getting system bus handle")
+        return
+
+    try:
+        systemd = dbus.Interface(bus.get_object(
+                                 "org.freedesktop.systemd1",
+                                 "/org/freedesktop/systemd1"),
+                                 "org.freedesktop.systemd1.Manager")
+    except:
+        logging.exception("Couldn't connect to systemd")
+        return
+
+    try:
+        unitpath = systemd.GetUnit(unitname)
+        proxy = bus.get_object("org.freedesktop.systemd1", unitpath)
+        props = dbus.Interface(proxy, "org.freedesktop.DBus.Properties")
+        state = props.Get("org.freedesktop.systemd1.Unit", "ActiveState")
+
+        logging.debug("libvirtd state=%s", state)
+        if state == "Active":
+            logging.debug("libvirtd already active, not starting")
+            return True
+    except:
+        logging.exception("Failed to lookup libvirtd status")
+        return
+
+    # Connect to system-config-services and offer to start
+    try:
+        scs = dbus.Interface(bus.get_object(
+                             "org.fedoraproject.Config.Services",
+                             "/org/fedoraproject/Config/Services/systemd1"),
+                             "org.freedesktop.systemd1.Manager")
+        scs.StartUnit(unitname, "replace")
+        time.sleep(2)
+        return True
+    except:
+        logging.exception("Failed to talk to system-config-services")
 
 class vmmEngine(vmmGObject):
     def __init__(self):
@@ -324,16 +372,15 @@ class vmmEngine(vmmGObject):
             return
 
         if did_install_libvirt:
+            didstart = start_libvirtd()
             warnmsg = _(
                 "Libvirt was just installed, so the 'libvirtd' service will\n"
-                "will need to be started. This can be done with one \n"
-                "of the following:\n\n"
-                "- From GNOME menus: System->Administration->Services\n"
-                "- From the terminal: su -c 'service libvirtd restart'\n"
-                "- Restart your computer\n\n"
+                "will need to be started.\n"
                 "virt-manager will connect to libvirt on the next application\n"
                 "start up.")
-            self.err.ok(_("Libvirt service must be started"), warnmsg)
+
+            if not didstart:
+                self.err.ok(_("Libvirt service must be started"), warnmsg)
 
         self.connect_to_uri(tryuri, autoconnect=True,
                             do_start=not did_install_libvirt)
