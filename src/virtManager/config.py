@@ -168,7 +168,8 @@ class vmmConfig(object):
                 import SpiceClientGtk
                 ignore = SpiceClientGtk
                 self._spice_error = False
-            except Exception, self._spice_error:
+            except Exception, e:
+                self._spice_error = e
                 logging.debug("Error importing spice: %s", self._spice_error)
 
         return self._spice_error and str(self._spice_error) or None
