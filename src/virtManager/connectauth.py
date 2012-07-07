@@ -27,12 +27,23 @@ import libvirt
 
 def do_we_have_session():
     pid = os.getpid()
-
     try:
         bus = dbus.SystemBus()
     except:
         logging.exception("Error getting system bus handle")
-        return False
+        return
+
+    # Check systemd
+    try:
+        manager = dbus.Interface(bus.get_object(
+                                 "org.freedesktop.login1",
+                                 "/org/freedesktop/login1"),
+                                 "org.freedesktop.login1.Manager")
+        ret = manager.GetSessionByPID(pid)
+        logging.debug("Found login1 session=%s", ret)
+        return True
+    except:
+        logging.exception("Couldn't connect to logind")
 
     # Check ConsoleKit
     try:
@@ -40,18 +51,13 @@ def do_we_have_session():
                                  "org.freedesktop.ConsoleKit",
                                  "/org/freedesktop/ConsoleKit/Manager"),
                                  "org.freedesktop.ConsoleKit.Manager")
-    except:
-        logging.exception("Couldn't connect to ConsoleKit")
-        return False
-
-    try:
         ret = manager.GetSessionForUnixProcess(pid)
         logging.debug("Found ConsoleKit session=%s", ret)
+        return True
     except:
-        logging.exception("Failed to lookup pid session")
-        return False
+        logging.exception("Couldn't connect to ConsoleKit")
 
-    return True
+    return False
 
 
 def creds_polkit(action):
