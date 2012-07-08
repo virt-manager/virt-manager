@@ -1095,11 +1095,10 @@ class vmmDomain(vmmLibvirtObject):
         self.idle_add(self.force_update_status)
 
     def delete(self):
-        if self.hasSavedImage():
-            try:
-                self._backend.managedSaveRemove(0)
-            except:
-                logging.exception("Failed to remove managed save state")
+        try:
+            self.removeSavedImage()
+        except:
+            logging.exception("Failed to remove managed save state")
         self._backend.undefine()
 
     def resume(self):
@@ -1114,6 +1113,11 @@ class vmmDomain(vmmLibvirtObject):
         if not self.managedsave_supported:
             return False
         return self._backend.hasManagedSaveImage(0)
+
+    def removeSavedImage(self):
+        if not self.hasSavedImage():
+            return
+        self._backend.managedSaveRemove(0)
 
     def save(self, filename=None, meter=None):
         self._install_abort = True

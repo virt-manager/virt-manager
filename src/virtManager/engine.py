@@ -873,14 +873,34 @@ class vmmEngine(vmmGObject):
         logging.debug("Starting vm '%s'", vm.get_name())
 
         if vm.hasSavedImage():
-            # VM will be restored, which can take some time, so show a
-            # progress dialog.
-            errorintro  = _("Error restoring domain")
+            def errorcb(error, details):
+                # This is run from the main thread
+                res = src.err.show_err(
+                    _("Error restoring domain") + ": " + error,
+                    details=details,
+                    text2=_(
+                        "The domain could not be restored. Would you like\n"
+                        "to remove the saved state and perform a regular\n"
+                        "start up?"),
+                    dialog_type=gtk.MESSAGE_WARNING,
+                    buttons=gtk.BUTTONS_YES_NO,
+                    async=False)
+
+                if not res:
+                    return
+
+                try:
+                    vm.removeSavedImage()
+                    self._do_run_domain(src, uri, uuid)
+                except Exception, e:
+                    src.err.show_err(_("Error removing domain state: %s")
+                                     % str(e))
+
+            # VM will be restored, which can take some time, so show progress
             title = _("Restoring Virtual Machine")
             text = _("Restoring virtual machine memory from disk")
             vmmAsyncJob.simple_async(vm.startup,
-                                     [], title, text, src,
-                                     errorintro)
+                                     [], title, text, src, "", errorcb=errorcb)
 
         else:
             # Regular startup

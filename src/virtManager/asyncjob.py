@@ -104,7 +104,7 @@ def cb_wrapper(callback, asyncjob, *args, **kwargs):
         asyncjob.set_error(str(e), "".join(traceback.format_exc()))
 
 def _simple_async(callback, args, title, text, parent, errorintro,
-                  show_progress, simplecb):
+                  show_progress, simplecb, errorcb):
     """
     @show_progress: Whether to actually show a progress dialog
     @simplecb: If true, build a callback wrapper that ignores the asyncjob
@@ -124,9 +124,12 @@ def _simple_async(callback, args, title, text, parent, errorintro,
     if error is None:
         return
 
-    error = errorintro + ": " + error
-    parent.err.show_err(error,
-                        details=details)
+    if errorcb:
+        errorcb(error, details)
+    else:
+        error = errorintro + ": " + error
+        parent.err.show_err(error,
+                            details=details)
 
 def idle_wrapper(fn):
     def wrapped(self, *args, **kwargs):
@@ -138,14 +141,15 @@ class vmmAsyncJob(vmmGObjectUI):
 
     @staticmethod
     def simple_async(callback, args, title, text, parent, errorintro,
-                     simplecb=True):
+                     simplecb=True, errorcb=None):
         _simple_async(callback, args, title, text, parent, errorintro, True,
-                      simplecb)
+                      simplecb, errorcb)
 
     @staticmethod
-    def simple_async_noshow(callback, args, parent, errorintro, simplecb=True):
+    def simple_async_noshow(callback, args, parent, errorintro,
+                            simplecb=True, errorcb=None):
         _simple_async(callback, args, "", "", parent, errorintro, False,
-                      simplecb)
+                      simplecb, errorcb)
 
 
     def __init__(self, callback, args, title, text, parent,
@@ -164,8 +168,7 @@ class vmmAsyncJob(vmmGObjectUI):
         self.async = bool(async)
         self.show_progress = bool(show_progress)
         self.cancel_job = cancel_back
-        self.cancel_args = cancel_args or []
-        self.cancel_args = [self] + self.cancel_args
+        self.cancel_args = [self] + (cancel_args or [])
         self.job_canceled = False
 
         self._error_info = None
