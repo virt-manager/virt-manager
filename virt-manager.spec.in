@@ -9,6 +9,7 @@
 %define preferred_distros          ""
 %define kvm_packages               ""
 %define libvirt_packages           ""
+%define askpass_package            ""
 %define disable_unsupported_rhel   0
 
 %define with_guestfs               0
@@ -186,6 +187,10 @@ Common files used by the different Virtual Machine Manager interfaces.
 %define _libvirt_packages --with-libvirt-package-names=%{libvirt_packages}
 %endif
 
+%if %{askpass_package}
+%define _askpass_package --with-askpass-package=%{askpass_package}
+%endif
+
 %if %{disable_unsupported_rhel}
 %define _disable_unsupported_rhel --disable-unsupported-rhel-options
 %endif
@@ -204,6 +209,7 @@ Common files used by the different Virtual Machine Manager interfaces.
             %{?_qemu_user} \
             %{?_kvm_packages} \
             %{?_libvirt_packages} \
+            %{?_askpass_package} \
             %{?_preferred_distros} \
             %{?_disable_unsupported_rhel} \
             %{?_default_graphics}
