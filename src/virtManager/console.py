@@ -201,6 +201,7 @@ class Tunnel(object):
         self.errfd = None
 
         os.kill(self.pid, signal.SIGKILL)
+        os.waitpid(self.pid, 0)
         self.pid = None
 
     def get_err_output(self):
