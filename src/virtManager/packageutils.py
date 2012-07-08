@@ -32,7 +32,7 @@ from virtManager.asyncjob import vmmAsyncJob
 # PackageKit lookup helpers #
 #############################
 
-def check_packagekit(errbox, packages, libvirt_packages):
+def check_packagekit(errbox, packages, ishv):
     """
     Returns None when we determine nothing useful.
     Returns (success, did we just install libvirt) otherwise.
@@ -53,11 +53,14 @@ def check_packagekit(errbox, packages, libvirt_packages):
         logging.exception("Couldn't connect to packagekit")
         return
 
+    if ishv:
+        msg = _("Searching for available hypervisors...")
+    else:
+        msg = _("Checking for installed package '%s'") % packages[0]
+
     found = []
     progWin = vmmAsyncJob(_do_async_search,
-                          [session, pk_control, packages],
-                          _("Searching for available hypervisors..."),
-                          _("Searching for available hypervisors..."),
+                          [session, pk_control, packages], msg, msg,
                           None, async=False)
     error, ignore = progWin.run()
     if error:
@@ -73,18 +76,24 @@ def check_packagekit(errbox, packages, libvirt_packages):
         if not not_found:
             # Got everything we wanted, try to connect
             logging.debug("All packages found locally.")
-            return (True, False)
+            return []
 
         else:
             logging.debug("No packages are available for install.")
             return
 
-    msg = (_("The following packages are not installed:\n%s\n\n"
-             "These are required to create KVM guests locally.\n"
-             "Would you like to install them now?") %
-            reduce(lambda x, y: x + "\n" + y, do_install, ""))
+    missing = reduce(lambda x, y: x + "\n" + y, do_install, "")
+    if ishv:
+        msg = (_("The following packages are not installed:\n%s\n\n"
+                 "These are required to create KVM guests locally.\n"
+                 "Would you like to install them now?") % missing)
+        title = _("Packages required for KVM usage")
+    else:
+        msg = _("The following packages are not installed:\n%s\n\n"
+                "Would you like to install them now?" % missing)
+        title = _("Recommended package installs")
 
-    ret = errbox.yes_no(_("Packages required for KVM usage"), msg)
+    ret = errbox.yes_no(title, msg)
 
     if not ret:
         logging.debug("Package install declined.")
@@ -96,13 +105,7 @@ def check_packagekit(errbox, packages, libvirt_packages):
         errbox.show_err(_("Error talking to PackageKit: %s") % str(e))
         return
 
-    need_libvirt = False
-    for p in libvirt_packages:
-        if p in do_install:
-            need_libvirt = True
-            break
-
-    return (True, need_libvirt)
+    return do_install
 
 def _do_async_search(asyncjob, session, pk_control, packages):
     found = []

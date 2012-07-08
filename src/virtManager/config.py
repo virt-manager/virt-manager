@@ -109,6 +109,7 @@ class vmmConfig(object):
         self.preferred_distros = []
         self.hv_packages = []
         self.libvirt_packages = []
+        self.askpass_package = []
 
         self._objects = []
 

@@ -138,10 +138,6 @@ class vmmEngine(vmmGObject):
             # Show the manager so that the user can control the application
             self.show_manager()
 
-    ########################
-    # First run PackageKit #
-    ########################
-
     def add_default_conn(self, manager):
         # Only add default if no connections are currently known
         if self.config.get_conn_uris():
@@ -163,16 +159,18 @@ class vmmEngine(vmmGObject):
             libvirt_packages = self.config.libvirt_packages
             packages = self.config.hv_packages + libvirt_packages
 
-            ret = packageutils.check_packagekit(self.err, packages,
-                                                libvirt_packages)
+            ret = packageutils.check_packagekit(self.err, packages, True)
         except:
             logging.exception("Error talking to PackageKit")
 
-        if ret:
-            # We found the default packages via packagekit: use default URI
-            ignore, did_install_libvirt = ret
-            tryuri = "qemu:///system"
+        if ret is not None:
+            did_install_libvirt = False
+            for p in libvirt_packages:
+                if p in ret:
+                    did_install_libvirt = True
+                    break
 
+            tryuri = "qemu:///system"
         else:
             tryuri = default_uri()
 

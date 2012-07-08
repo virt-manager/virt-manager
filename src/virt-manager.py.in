@@ -54,7 +54,8 @@ default_qemu_user = "::DEFAULT_QEMU_USER::"
 rhel_enable_unsupported_opts = bool(int("::ENABLE_UNSUPPORTED_RHEL_OPTS::"))
 preferred_distros = split_list("::PREFERRED_DISTROS::")
 
-hv_packages = split_list("::HV_PACKAGES::")
+hv_packages = split_list("::KVM_PACKAGES::")
+askpass_package = split_list("::ASKPASS_PACKAGE::")
 libvirt_packages = split_list("::LIBVIRT_PACKAGES::")
 
 logging_setup = False
@@ -325,6 +326,7 @@ def main():
 
     config.hv_packages = hv_packages
     config.libvirt_packages = libvirt_packages
+    config.askpass_package = askpass_package
 
     import virtManager.guidiff
     virtManager.guidiff.is_gui(True)

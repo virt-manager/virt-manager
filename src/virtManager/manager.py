@@ -23,7 +23,8 @@ import re
 
 import gtk
 
-import virtManager.uihelpers as uihelpers
+from virtManager import packageutils
+from virtManager import uihelpers
 from virtManager.connection import vmmConnection
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.delete import vmmDeleteDialog
@@ -658,9 +659,20 @@ class vmmManager(vmmGObjectUI):
                 hint += _("The remote host requires a version of netcat/nc\n"
                           "which supports the -U option.")
                 show_errmsg = False
-            elif conn.get_transport()[0] == "ssh" and re.search(r"ssh-askpass", tb):
-                hint += _("You need to install openssh-askpass or similar\n"
-                          "to connect to this host.")
+            elif (conn.get_transport()[0] == "ssh" and
+                  re.search(r"ssh-askpass", tb)):
+
+                if self.config.askpass_package:
+                    ret = packageutils.check_packagekit(
+                                            self.err,
+                                            self.config.askpass_package,
+                                            False)
+                    if ret:
+                        conn.open()
+                        return
+
+                hint += _("You need to install openssh-askpass or "
+                          "similar\nto connect to this host.")
                 show_errmsg = False
             else:
                 hint += _("Verify that the 'libvirtd' daemon is running\n"

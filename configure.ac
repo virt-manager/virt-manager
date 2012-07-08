@@ -64,6 +64,14 @@ AC_ARG_WITH([kvm-packages],
     [KVM_PACKAGES=$withval],
     [KVM_PACKAGES=""])
 
+dnl askpass package name
+AC_ARG_WITH([askpass-package],
+    AC_HELP_STRING(
+        [--with-askpass-package],
+        [name of your distros openssh askpass package@<:@default=none@:>@]),
+    [ASKPASS_PACKAGE=$withval],
+    [ASKPASS_PACKAGE=""])
+
 dnl Don't list options that rhel doesn't support
 AC_ARG_ENABLE([unsupported-rhel-options],
   AC_HELP_STRING(
@@ -99,6 +107,7 @@ AC_SUBST([ENABLE_UNSUPPORTED_RHEL_OPTS])
 AC_SUBST([PREFERRED_DISTROS])
 AC_SUBST([LIBVIRT_PACKAGES])
 AC_SUBST([KVM_PACKAGES])
+AC_SUBST([ASKPASS_PACKAGE])
 AC_SUBST([DEFAULT_GRAPHICS])
 AM_CONDITIONAL([INSTALL_TUI], [test "x$with_tui" = "xyes"])
 
@@ -153,6 +162,11 @@ if test "x$KVM_PACKAGES" = "x" ; then
 AC_MSG_NOTICE([KVM packages:                    none])
 else
 AC_MSG_NOTICE([KVM packages:                    $KVM_PACKAGES])
+fi
+if test "x$ASKPASS_PACKAGE" = "x" ; then
+AC_MSG_NOTICE([askpass package:                 none])
+else
+AC_MSG_NOTICE([askpass package:                 $ASKPASS_PACKAGE])
 fi
 AC_MSG_NOTICE([Default graphics:                $DEFAULT_GRAPHICS])
 
