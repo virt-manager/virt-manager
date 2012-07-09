@@ -13,6 +13,11 @@ IT_PROG_INTLTOOL([0.35.0], [no-xml])
 AM_GNU_GETTEXT_VERSION([0.14.1])
 AM_GNU_GETTEXT([external])
 
+GETTEXT_PACKAGE=virt-manager
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],"$GETTEXT_PACKAGE",
+                   [GETTEXT package name])
+
 dnl ====================================
 dnl = Begin tests for scrollkeeper
 dnl ====================================

@@ -18,6 +18,34 @@ In prose this app should be referred to as 'Virtual Machine Manager'.
 For source / RPM packaging, & the command name, it is called by the
 shortened form 'virt-manager'
 
+Basic Install
+-------------
+
+To build virt-manager, run the command:
+
+    ./autogen.sh && ./configure && make
+
+You can then run virt-manager in the source directory with
+
+    python src/virt-manager.py
+
+To install the software into /usr/local (usually), you can then run:
+
+    make install
+
+To build an RPM, you can run:
+
+    make rpm
+
+virt-manager generally requires the latest upstream version of
+python-virtinst, which checked out with
+
+git clone git://git.fedorahosted.org/git/python-virtinst.git
+
+If you want to replace your system installed virt-manager version,
+add --prefix=/usr to ./configure. Please see the INSTALL file
+for much more information about autotools install options.
+
 Pre-requisite software
 ----------------------
 
