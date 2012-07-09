@@ -17,6 +17,14 @@
 
 %define with_spice                 0
 
+# End local config
+# Default option handling
+
+%if %{with_spice}
+%define default_graphics "spice"
+%endif
+
+
 # Compat for use of spec in multiple distros
 
 %if 0%{?gconf_schema_prepare} == 0
@@ -44,8 +52,6 @@ fi \
 %{nil}
 %endif
 
-
-# End local config
 
 # This macro is used for the continuous automated builds. It just
 # allows an extra fragment based on the timestamp to be appended
@@ -120,10 +126,6 @@ Requires(post): GConf2
 Requires(preun): GConf2
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
-
-%if %{with_spice}
-%define default_graphics "spice"
-%endif
 
 %description
 Virtual Machine Manager provides a graphical tool for administering virtual
