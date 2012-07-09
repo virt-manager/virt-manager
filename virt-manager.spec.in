@@ -15,11 +15,7 @@
 %define with_guestfs               0
 %define with_tui                   0
 
-%ifarch %{ix86} x86_64
 %define with_spice                 0
-%else
-%define with_spice                 0
-%endif
 
 # Compat for use of spec in multiple distros
 
@@ -195,7 +191,7 @@ Common files used by the different Virtual Machine Manager interfaces.
 %define _disable_unsupported_rhel --disable-unsupported-rhel-options
 %endif
 
-%if 0%{?default_graphics}
+%if 0%{?default_graphics:1}
 %define _default_graphics --with-default-graphics=%{default_graphics}
 %endif
 
