@@ -528,8 +528,6 @@ class vmmDetails(vmmGObjectUI):
         self.refresh_vm_state()
 
     def _cleanup(self):
-        self.close()
-
         self.oldhwrow = None
 
         if self.addhw:

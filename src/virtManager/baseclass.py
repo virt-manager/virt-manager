@@ -248,6 +248,7 @@ class vmmGObjectUI(vmmGObject):
         return self.window.get_object(name)
 
     def cleanup(self):
+        self.close()
         vmmGObject.cleanup(self)
         self.window = None
         self.topwin.destroy()

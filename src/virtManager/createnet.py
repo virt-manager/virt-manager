@@ -83,7 +83,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         return 1
 
     def _cleanup(self):
-        self.close()
         self.conn = None
 
     def set_initial_state(self):

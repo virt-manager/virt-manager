@@ -144,8 +144,6 @@ class vmmCreateInterface(vmmGObjectUI):
         return 1
 
     def _cleanup(self):
-        self.close()
-
         self.conn = None
         self.interface = None
 

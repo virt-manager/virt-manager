@@ -194,8 +194,6 @@ class vmmManager(vmmGObjectUI):
 
 
     def _cleanup(self):
-        self.close()
-
         self.rows = None
 
         self.diskcol = None

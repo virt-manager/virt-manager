@@ -65,8 +65,6 @@ class vmmChooseCD(vmmGObjectUI):
         self.topwin.present()
 
     def _cleanup(self):
-        self.close()
-
         self.vm = None
         self.conn = None
         self.disk = None

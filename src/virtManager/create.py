@@ -187,7 +187,6 @@ class vmmCreate(vmmGObjectUI):
         return 1
 
     def _cleanup(self):
-        self.close()
         self.remove_conn()
 
         self.conn = None

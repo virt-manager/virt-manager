@@ -192,8 +192,6 @@ class vmmCloneVM(vmmGObjectUI):
         return 1
 
     def _cleanup(self):
-        self.close()
-
         self.conn = None
 
         self.change_mac.destroy()

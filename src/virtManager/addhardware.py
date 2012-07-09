@@ -173,8 +173,6 @@ class vmmAddHardware(vmmGObjectUI):
         return 1
 
     def _cleanup(self):
-        self.close()
-
         self.vm = None
         self.conn = None
         self._dev = None

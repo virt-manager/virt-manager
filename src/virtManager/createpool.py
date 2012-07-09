@@ -136,8 +136,6 @@ class vmmCreatePool(vmmGObjectUI):
         return 1
 
     def _cleanup(self):
-        self.close()
-
         self.conn = None
         self._pool = None
 
