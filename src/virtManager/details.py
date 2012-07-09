@@ -3071,7 +3071,7 @@ class vmmDetails(vmmGObjectUI):
         def show_ui(param, val=None):
             widgetname = "char-" + param.replace("_", "-")
             labelname = widgetname + "-label"
-            doshow = chardev.supports_property(param)
+            doshow = chardev.supports_property(param, ro=True)
 
             # Exception: don't show target type for serial/parallel
             if (param == "target_type" and not show_target_type):
