@@ -1,5 +1,5 @@
 
-AC_INIT(virt-manager, 0.9.2)
+AC_INIT(virt-manager, 0.9.3)
 # Latest virtinst version required to run
 VIRTINST_VERSION="0.600.2"
 
