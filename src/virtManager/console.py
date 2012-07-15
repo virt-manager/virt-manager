@@ -329,7 +329,7 @@ class VNCViewer(Viewer):
 
         self.console.refresh_scaling()
 
-        self.display.set_keyboard_grab(False)
+        self.display.set_keyboard_grab(True)
         self.display.set_pointer_grab(True)
 
         self.display.connect("vnc-pointer-grab", self.console.pointer_grabbed)
