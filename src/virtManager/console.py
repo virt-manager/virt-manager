@@ -246,7 +246,6 @@ class Viewer(vmmGObject):
         vmmGObject.__init__(self)
         self.console = console
         self.display = None
-        self.need_keygrab = False
 
     def close(self):
         raise NotImplementedError()
@@ -319,9 +318,6 @@ class VNCViewer(Viewer):
 
         # Last noticed desktop resolution
         self.desktop_resolution = None
-
-        # VNC viewer needs a bit of help grabbing keyboard in a friendly way
-        self.need_keygrab = True
 
     def init_widget(self):
         self.set_grab_keys()
@@ -715,17 +711,6 @@ class vmmConsolePages(vmmGObjectUI):
 
         self.topwin.set_title(title)
 
-    def grab_keyboard(self, do_grab):
-        if self.viewer and not self.viewer.need_keygrab:
-            return
-
-        if (not do_grab or
-            not self.viewer or
-            not self.viewer.display):
-            gtk.gdk.keyboard_ungrab()
-        else:
-            gtk.gdk.keyboard_grab(self.viewer.display.window)
-
     def viewer_focus_changed(self, ignore1=None, ignore2=None):
         has_focus = (self.viewer and
                      self.viewer.display and
@@ -738,8 +723,6 @@ class vmmConsolePages(vmmGObjectUI):
             self._disable_modifiers()
         else:
             self._enable_modifiers()
-
-        self.grab_keyboard(has_focus)
 
     def pointer_grabbed(self, src_ignore):
         self.pointer_is_grabbed = True
