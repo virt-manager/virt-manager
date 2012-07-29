@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-09 08:04-0400\n"
-"PO-Revision-Date: 2012-04-16 17:11+0000\n"
+"PO-Revision-Date: 2012-07-10 08:22+0000\n"
 "Last-Translator: Jérôme Fenal <jfenal@gmail.com>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/virt-manager/"
 "language/fr/)\n"
@@ -209,9 +209,8 @@ msgstr ""
 "Installer le type d'affichage sélectionné pour les nouvelles VM. VNC ou Spice"
 
 #: ../src/virt-manager.schemas.in.h:33
-#, fuzzy
 msgid "Use selected format for new VM storage"
-msgstr "Installer le type d'affichage sélectionné pour les nouvelles VM"
+msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:34
 msgid "Use selected format when creating new disk images in new VM wizard"
@@ -1007,9 +1006,8 @@ msgstr ""
 "Installation de « %s » non disponible pour les invités paravirtualisés."
 
 #: ../src/virtManager/create.py:530
-#, fuzzy
 msgid "No install methods available for this connection."
-msgstr "Aucune option d'installation disponible pour cette connexion."
+msgstr ""
 
 #: ../src/virtManager/create.py:578
 #, python-format
@@ -1969,23 +1967,12 @@ msgstr ""
 "manuellement via Fichier -> Ajouter une Connexion"
 
 #: ../src/virtManager/engine.py:184
-#, fuzzy
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started.\n"
 "virt-manager will connect to libvirt on the next application\n"
 "start up."
 msgstr ""
-"Libvirt vient d'être installé, le service « libvirtd » nécessitera\n"
-"d'être démarré. Cela peut être fait d'une\n"
-"des manières suivantes :\n"
-"\n"
-"- Depuis les menus GNOME : Système -> Administration -> Services\n"
-"- Depuis le terminal : su -s 'service libvirtd restart'\n"
-"- Redémarrer votre ordinateur\n"
-"\n"
-"Virt-manager se connectera à libvirt au prochain démarrage\n"
-"de l'application."
 
 #: ../src/virtManager/engine.py:190
 msgid "Libvirt service must be started"
@@ -2133,9 +2120,9 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/engine.py:896
-#, fuzzy, python-format
+#, python-format
 msgid "Error removing domain state: %s"
-msgstr "Erreur lors du redémarrage du domaine : %s"
+msgstr ""
 
 #. VM will be restored, which can take some time, so show progress
 #: ../src/virtManager/engine.py:900
@@ -2661,18 +2648,13 @@ msgid "Packages required for KVM usage"
 msgstr "Paquets requis pour l'utilisation de KVM"
 
 #: ../src/virtManager/packageutils.py:92
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The following packages are not installed:\n"
 "%s\n"
 "\n"
 "Would you like to install them now?"
 msgstr ""
-"Les paquets suivants ne sont pas installés :\n"
-"%s\n"
-"\n"
-"Ceux-ci sont requis afin de créer localement des invités KVM.\n"
-"Souhaitez-vous les installer maintenant ?"
 
 #: ../src/virtManager/packageutils.py:94
 msgid "Recommended package installs"
@@ -4041,13 +4023,10 @@ msgid "C_ustomize configuration before install"
 msgstr "Personnaliser la config_uration avant l'installation"
 
 #: ../src/vmm-create.ui.h:57
-#, fuzzy
 msgid ""
 "<small>Specifying an operating system is required for best performance</"
 "small>"
 msgstr ""
-"<small>L'utilisation d'un nombre trop important de VCPU peut affecter la "
-"performance</small>"
 
 #: ../src/vmm-create.ui.h:59
 msgid "Set a fixed _MAC address"
@@ -5166,9 +5145,8 @@ msgid ""
 msgstr ""
 
 #: ../src/vmm-preferences.ui.h:24
-#, fuzzy
 msgid "Don't disable console shortcuts:"
-msgstr "Forcer les raccourcis clavier de la console :"
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:25
 msgid "<b>Graphical Consoles</b>"
@@ -5191,14 +5169,12 @@ msgid "Install Graphics:"
 msgstr "Installer l'affichage :"
 
 #: ../src/vmm-preferences.ui.h:30
-#, fuzzy
 msgid "Default storage format for new disk images."
-msgstr "Chemin par défaut pour le choix des images des VM"
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:31
-#, fuzzy
 msgid "Default storage format:"
-msgstr "Chemin de restauration par défaut"
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:32
 msgid "<b>New VM</b>"
@@ -5259,11 +5235,3 @@ msgstr "_Parcourir en local"
 #: ../src/vmm-storage-browse.ui.h:4
 msgid "Choose _Volume"
 msgstr "Choisir le _volume"
-
-#~ msgid ""
-#~ "Force console menu accelerators while the console is active. Enabling "
-#~ "this may overwrite keyboard interaction with the guest."
-#~ msgstr ""
-#~ "Force les accélérateurs du menu de la console lorsque celle-ci est "
-#~ "active. Activer ceci peut remplacer l'interaction du clavier avec "
-#~ "l'invité."

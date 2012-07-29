@@ -5,6 +5,7 @@
 # Translators:
 # Diego Búrigo Zacarão <diegobz@gmail.com>, 2006.
 # Igor Pires Soares <igor@projetofedora.org>, 2006, 2007, 2008.
+# Jorge Lopes <jlrmoc@gmail.com>, 2012.
 # Rafael Ferreira <rafael.f.f1@gmail.com>, 2012.
 # Taylon Silmer <taylonsilva@gmail.com>, 2008.
 # Valnir Ferreira Jr. <vferreir@redhat.com>, 2006.
@@ -13,8 +14,8 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-09 08:04-0400\n"
-"PO-Revision-Date: 2012-04-24 04:08+0000\n"
-"Last-Translator: Rafael Ferreira <rafael.f.f1@gmail.com>\n"
+"PO-Revision-Date: 2012-07-27 23:20+0000\n"
+"Last-Translator: Jorge Lopes <jlrmoc@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -195,13 +196,14 @@ msgid "Install selected graphics type for new VM. vnc or spice"
 msgstr "Instalar tipo de gráfico selecionado para nova MV. vnc ou spice"
 
 #: ../src/virt-manager.schemas.in.h:33
-#, fuzzy
 msgid "Use selected format for new VM storage"
-msgstr "Instalar tipo de gráfico selecionado para nova VM"
+msgstr ""
+"Use o formato selecionado para um novo amarmazenamento de Máquina Virtual"
 
 #: ../src/virt-manager.schemas.in.h:34
 msgid "Use selected format when creating new disk images in new VM wizard"
 msgstr ""
+"Use o formato selecionado quando criar novas imagens de disco num novo "
 
 #: ../src/virt-manager.schemas.in.h:35
 msgid "Show system tray icon"
@@ -409,7 +411,7 @@ msgstr "Dispositivo de Watchdog"
 
 #: ../src/virtManager/addhardware.py:1000
 msgid "Filesystem Passthrough"
-msgstr ""
+msgstr "Passtrough do sistema de arquivos"
 
 #: ../src/virtManager/addhardware.py:1002 ../src/virtManager/details.py:3494
 msgid "Smartcard"
@@ -425,7 +427,7 @@ msgstr "_Modelo:"
 
 #: ../src/virtManager/addhardware.py:1075
 msgid "_Source path:"
-msgstr ""
+msgstr "_Source path:"
 
 #: ../src/virtManager/addhardware.py:1137
 msgid "Creating Storage File"
@@ -550,6 +552,7 @@ msgstr "Um alvo de sistema de arquivos deve ser selecionado"
 #: ../src/virtManager/addhardware.py:1474
 msgid "Invalid target path. A filesystem with that target already exists"
 msgstr ""
+"Caminho destino inválido. Um sistema de arquivos com esse destino já existe"
 
 #: ../src/virtManager/addhardware.py:1492
 msgid "Filesystem parameter error"
@@ -698,7 +701,7 @@ msgstr "Erro na alteração do caminho do armazenamento: %s"
 
 #: ../src/virtManager/clone.py:768
 msgid "Skipping disks may cause data to be overwritten."
-msgstr ""
+msgstr "Pular os discos pode sobrescrever dados."
 
 #: ../src/virtManager/clone.py:769
 #, python-format
@@ -791,12 +794,12 @@ msgstr "Não foi possível criar uma listagem de mídias via libvirt: %s"
 
 #: ../src/virtManager/connection.py:179 ../src/virtManager/connection.py:193
 msgid "Libvirt version does not support media listing."
-msgstr ""
+msgstr "A sessão do Libvirt não suporta listagem de midia."
 
 #: ../src/virtManager/connection.py:190
 #, python-format
 msgid "Could not initialize HAL for media listing: %s"
-msgstr ""
+msgstr "Não é possível inicializar o HAL para listagem de midia: %s"
 
 #: ../src/virtManager/connection.py:615
 msgid "Disconnected"
@@ -839,19 +842,24 @@ msgid ""
 "\n"
 "Recover error: %s"
 msgstr ""
+"Falhou ao renomear o Domínio. Tentativa de recuperar também falhou.\n"
+"\n"
+"Erro original: %s\n"
+"\n"
+"Erro da recuperação: %s"
 
 #: ../src/virtManager/console.py:367
 msgid "Unable to provide requested credentials to the VNC server"
-msgstr ""
+msgstr "Não foi possível requisitar credeciais para o servidor VNC"
 
 #: ../src/virtManager/console.py:369
 #, python-format
 msgid "The credential type %s is not supported"
-msgstr ""
+msgstr "O tipo de credencial %s não é suportado"
 
 #: ../src/virtManager/console.py:371
 msgid "Unable to authenticate"
-msgstr ""
+msgstr "Não foi possível autenticar"
 
 #: ../src/virtManager/console.py:378
 msgid "Unsupported console authentication type"
@@ -860,20 +868,20 @@ msgstr "Tipo de autenticação no console não suportado"
 #: ../src/virtManager/console.py:426
 #, python-format
 msgid "Error opening socket path '%s': %s"
-msgstr ""
+msgstr "Erro ao abrir o caminho do socket '%s': %s"
 
 #: ../src/virtManager/console.py:431
 #, python-format
 msgid "Error opening socket path '%s'"
-msgstr ""
+msgstr "Erro ao abrir o caminho do socket '%s'"
 
 #: ../src/virtManager/console.py:669
 msgid "Leave fullscreen"
-msgstr ""
+msgstr "Sair do Fullscreen"
 
 #: ../src/virtManager/console.py:690
 msgid "Send key combination"
-msgstr ""
+msgstr "Enviar a combinação de teclas"
 
 #: ../src/virtManager/console.py:708 ../src/vmm-details.ui.h:1
 msgid "Virtual Machine"
@@ -882,7 +890,7 @@ msgstr "Máquina virtual"
 #: ../src/virtManager/console.py:712
 #, python-format
 msgid "Press %s to release pointer."
-msgstr ""
+msgstr "Pressione %s para liberar o ponteiro"
 
 #. Guest isn't running, schedule another try
 #: ../src/virtManager/console.py:897 ../src/virtManager/console.py:1090
@@ -897,165 +905,177 @@ msgstr "O Convidado falhou"
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
 msgstr ""
+"Erro: A conexão do viewer com o host hypervisor foi recusado ou "
+"descontinuada!"
 
 #: ../src/virtManager/console.py:1109
 msgid "Graphical console not configured for guest"
-msgstr ""
+msgstr "O console gráfico não está configurado para o convidado"
 
 #: ../src/virtManager/console.py:1116
 #, python-format
 msgid "Cannot display graphical console type '%s'"
-msgstr ""
+msgstr "Não foi possível exibir o tipo de display gráfico '%s'"
 
 #: ../src/virtManager/console.py:1126
 msgid "Graphical console is not yet active for guest"
-msgstr ""
+msgstr "Console gráfico não está ativo ainda para o convidado"
 
 #: ../src/virtManager/console.py:1131
 msgid "Connecting to graphical console for guest"
-msgstr ""
+msgstr "Conectando ao console gráfico para o convidado"
 
 #: ../src/virtManager/console.py:1157
 msgid "Error connecting to graphical console"
-msgstr ""
+msgstr "Erro ao conectar ao console gráfico"
 
 #: ../src/virtManager/create.py:379
 msgid "No active connection to install on."
-msgstr ""
+msgstr "Nenhuma conexão ativa para instalar"
 
 #: ../src/virtManager/create.py:441
 msgid "Connection is read only."
-msgstr ""
+msgstr "Conexão está ativa apenas para leitura"
 
 #: ../src/virtManager/create.py:444
 msgid "No hypervisor options were found for this connection."
-msgstr ""
+msgstr "Não foram encontradas opções para o hypervisor."
 
 #: ../src/virtManager/create.py:449
 msgid ""
 "This usually means that QEMU or KVM is not installed on your machine, or the "
 "KVM kernel modules are not loaded."
 msgstr ""
+"Isso usualmente significa que o QEMU ou o KVM não estão instalados na sua "
+"máquina ou os módulos do Kernel não estão carregados"
 
 #: ../src/virtManager/create.py:464
 msgid ""
 "Host supports full virtualization, but no related install options are "
 "available. This may mean support is disabled in your system BIOS."
 msgstr ""
+"O host suporta virtualização total, mas nenhuma instalação relacionada está "
+"disponível. Isso deve significar que o suporte está desabilitado na BIOS do "
+"seu systema"
 
 #: ../src/virtManager/create.py:471
 msgid ""
 "Host does not appear to support hardware virtualization. Install options may "
 "be limited."
 msgstr ""
+"O Host parece não suportar a virtualização via hardware. As opções de "
+"instalação devem estar limitadas."
 
 #: ../src/virtManager/create.py:477
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
 msgstr ""
+"KVM não está disponível. Isso deve significar que o pacote KVM não está "
+"instalado, ou os modulos KVM do Kernel não estão carregados. Suas máquinas "
+"virtuais devem executar em baixo desempenho."
 
 #: ../src/virtManager/create.py:511
 msgid "Libvirt version does not support remote URL installs."
-msgstr ""
+msgstr "A versão do Libvirt não suporta instalação de URLs remotas"
 
 #: ../src/virtManager/create.py:518
 #, python-format
 msgid "%s installs not available for paravirt guests."
-msgstr ""
+msgstr "As iniciais %s não estão disponíveis para os convidados paravirt."
 
 #: ../src/virtManager/create.py:530
 msgid "No install methods available for this connection."
-msgstr ""
+msgstr "Não existem métodos de instalação disponíveis para essa conexão."
 
 #: ../src/virtManager/create.py:578
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
-msgstr ""
+msgstr "Mais de %(maxmem)s disponíveis no host"
 
 #: ../src/virtManager/create.py:592
 #, python-format
 msgid "Hypervisor only supports %d virtual CPUs."
-msgstr ""
+msgstr "O hypervisor suporta apenas %d CPUs virtuais."
 
 #: ../src/virtManager/create.py:601
 #, python-format
 msgid "Up to %(numcpus)d available"
-msgstr ""
+msgstr "Mais do que %(numcpus)d available"
 
 #: ../src/virtManager/create.py:689
 msgid "Only URL or import installs are supported for paravirt."
-msgstr ""
+msgstr "São suportados apenas URL ou instalações importadas para o paravirt"
 
 #: ../src/virtManager/create.py:785 ../src/virtManager/create.py:803
 #: ../src/virtManager/create.py:901 ../src/virtManager/create.py:904
 msgid "Generic"
-msgstr ""
+msgstr "Generico"
 
 #. Add action option
 #: ../src/virtManager/create.py:795 ../src/virtManager/create.py:823
 msgid "Show all OS options"
-msgstr ""
+msgstr "Exibiro todas as opções de SO"
 
 #: ../src/virtManager/create.py:871
 msgid "Local CDROM/ISO"
-msgstr ""
+msgstr "CDROM/ISO local"
 
 #: ../src/virtManager/create.py:873
 msgid "URL Install Tree"
-msgstr ""
+msgstr "Árvore de instalação via URL"
 
 #: ../src/virtManager/create.py:875
 msgid "PXE Install"
-msgstr ""
+msgstr "Instalação PXE"
 
 #: ../src/virtManager/create.py:877
 msgid "Import existing OS image"
-msgstr ""
+msgstr "Importar a imagem do sistema operacional existente"
 
 #: ../src/virtManager/create.py:879 ../src/vmm-create.ui.h:13
 msgid "Application container"
-msgstr ""
+msgstr "Container de aplicação"
 
 #: ../src/virtManager/create.py:881 ../src/vmm-create.ui.h:14
 msgid "Operating system container"
-msgstr ""
+msgstr "Container de Sistema operacional"
 
 #: ../src/virtManager/create.py:892
 msgid "Host filesystem"
-msgstr ""
+msgstr "Sistema de arquivos do Host"
 
 #: ../src/virtManager/create.py:894 ../src/virtManager/details.py:2544
 #: ../src/virtManager/details.py:2610
 msgid "None"
-msgstr ""
+msgstr "None"
 
 #: ../src/virtManager/create.py:899
 msgid "Linux"
-msgstr ""
+msgstr "Linux"
 
 #: ../src/virtManager/create.py:1114
 msgid "Network selection does not support PXE"
-msgstr ""
+msgstr "Seleção de rede não suporta PXE"
 
 #: ../src/virtManager/create.py:1380 ../src/virtManager/createinterface.py:875
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
-msgstr ""
+msgstr "Passo %(current_page)d de %(max_page)d"
 
 #: ../src/virtManager/create.py:1461
 #, python-format
 msgid "Error setting UUID: %s"
-msgstr ""
+msgstr "Erro ao configurar o UUID: %s"
 
 #: ../src/virtManager/create.py:1475
 msgid "Error setting up default devices:"
-msgstr ""
+msgstr "Erro ao configurar os serviços padrões"
 
 #: ../src/virtManager/create.py:1494 ../src/virtManager/createinterface.py:904
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
-msgstr ""
+msgstr "Erro não reconhecido ao validar os parâmetros de instalação: %s"
 
 #: ../src/virtManager/create.py:1505
 msgid "Invalid System Name"
@@ -1063,43 +1083,43 @@ msgstr "Nome de sistema inválido"
 
 #: ../src/virtManager/create.py:1527
 msgid "An install media selection is required."
-msgstr ""
+msgstr "É necessário que seja selecionada uma mídia de instalação."
 
 #: ../src/virtManager/create.py:1537
 msgid "An install tree is required."
-msgstr ""
+msgstr "Uma árvore de instalação é requerida."
 
 #: ../src/virtManager/create.py:1551
 msgid "A storage path to import is required."
-msgstr ""
+msgstr "Um caminho para armazenamento é requerido."
 
 #: ../src/virtManager/create.py:1558
 msgid "An application path is required."
-msgstr ""
+msgstr "Um caminho para aplicação é requerido"
 
 #: ../src/virtManager/create.py:1565
 msgid "An OS directory path is required."
-msgstr ""
+msgstr "Um diretório de sistema operacional é requerido."
 
 #: ../src/virtManager/create.py:1576
 msgid "Error setting installer parameters."
-msgstr ""
+msgstr "Erro ao configurar os parâmetros de instalação."
 
 #: ../src/virtManager/create.py:1605
 msgid "Error setting install media location."
-msgstr ""
+msgstr "Erro ao configurar o local da mídia."
 
 #: ../src/virtManager/create.py:1614
 msgid "Error setting OS information."
-msgstr ""
+msgstr "Erro ai configurar as informações do Sistema Operacional"
 
 #: ../src/virtManager/create.py:1648
 msgid "Error setting CPUs."
-msgstr ""
+msgstr "Erro ao configurar as CPUs"
 
 #: ../src/virtManager/create.py:1655
 msgid "Error setting guest memory."
-msgstr ""
+msgstr "Erro ao configurar a memória do convidado"
 
 #: ../src/virtManager/create.py:1718
 msgid "A storage path must be specified."
@@ -1108,11 +1128,11 @@ msgstr "O caminho para um armazenamento deve ser especificado."
 #: ../src/virtManager/create.py:1778
 #, python-format
 msgid "Network device required for %s install."
-msgstr ""
+msgstr "Dispositivo de rede requerido para a instalação %s."
 
 #: ../src/virtManager/create.py:1873
 msgid "Error starting installation: "
-msgstr ""
+msgstr "Erro ao iniciar a instalação:"
 
 #: ../src/virtManager/create.py:1910
 msgid "Creating Virtual Machine"
@@ -1123,6 +1143,9 @@ msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 msgstr ""
+"A máquina virtual está sendo criada agora. A alocação de armazenamento de "
+"disco e recuperação das imagens de instalação devem levar alguns minutos "
+"para serem completas."
 
 #: ../src/virtManager/create.py:1923
 #, python-format
@@ -1132,11 +1155,11 @@ msgstr "Não foi possível completar a instalação: \"%s\""
 #: ../src/virtManager/create.py:1997
 #, python-format
 msgid "Error continue install: %s"
-msgstr ""
+msgstr "Erro ao continuar a instalação: %s"
 
 #: ../src/virtManager/create.py:2066
 msgid "Detecting"
-msgstr ""
+msgstr "Detectando"
 
 #: ../src/virtManager/createinterface.py:191
 #: ../src/virtManager/uihelpers.py:420
@@ -1145,15 +1168,15 @@ msgstr "Ponte"
 
 #: ../src/virtManager/createinterface.py:193
 msgid "Bond"
-msgstr ""
+msgstr "Vínculo"
 
 #: ../src/virtManager/createinterface.py:195
 msgid "Ethernet"
-msgstr ""
+msgstr "Ethernet"
 
 #: ../src/virtManager/createinterface.py:197
 msgid "VLAN"
-msgstr ""
+msgstr "VLAN"
 
 #: ../src/virtManager/createinterface.py:212 ../src/virtManager/details.py:727
 #: ../src/virtManager/manager.py:368 ../src/virtManager/storagebrowse.py:125
@@ -1168,40 +1191,40 @@ msgstr "Tipo"
 
 #: ../src/virtManager/createinterface.py:214
 msgid "In use by"
-msgstr ""
+msgstr "Em uso por"
 
 #: ../src/virtManager/createinterface.py:252
 #: ../src/virtManager/createinterface.py:262
 msgid "System default"
-msgstr ""
+msgstr "Padrão do sistema"
 
 #: ../src/virtManager/createinterface.py:496
 msgid "Choose interface(s) to bridge:"
-msgstr ""
+msgstr "Escolha as interfaces para realizar o bridge:"
 
 #: ../src/virtManager/createinterface.py:499
 msgid "Choose parent interface:"
-msgstr ""
+msgstr "Escolha interface pai"
 
 #: ../src/virtManager/createinterface.py:501
 msgid "Choose interfaces to bond:"
-msgstr ""
+msgstr "Escolha interface para vincular"
 
 #: ../src/virtManager/createinterface.py:503
 msgid "Choose an unconfigured interface:"
-msgstr ""
+msgstr "Escolha uma interface não configurada"
 
 #: ../src/virtManager/createinterface.py:558
 msgid "No interface selected"
-msgstr ""
+msgstr "Nenhuma interface selecionada"
 
 #: ../src/virtManager/createinterface.py:916
 msgid "An interface name is required."
-msgstr ""
+msgstr "Um nome para interface é requerido."
 
 #: ../src/virtManager/createinterface.py:920
 msgid "An interface must be selected"
-msgstr ""
+msgstr "Uma interface deve ser selecionada"
 
 #: ../src/virtManager/createinterface.py:951
 #, python-format
@@ -1213,45 +1236,51 @@ msgid ""
 "Using these may overwrite their existing configuration. Are you sure you "
 "want to use the selected interface(s)?"
 msgstr ""
+"As seguintes interfaces já estão configuradas:\n"
+"\n"
+"%s\n"
+"\n"
+"Dessa forma as configurações serão sobreescritas. Você tem certeza que quer "
+"usar a interface selecionada?"
 
 #: ../src/virtManager/createinterface.py:990
 msgid "Error setting interface parameters."
-msgstr ""
+msgstr "Erro ao configurar os parâmetros de interface"
 
 #: ../src/virtManager/createinterface.py:1066
 #, python-format
 msgid "Error validating IP configuration: %s"
-msgstr ""
+msgstr "Erro ao validar a configuração de IP: %s"
 
 #: ../src/virtManager/createinterface.py:1111
 msgid "Creating virtual interface"
-msgstr ""
+msgstr "Criando interface virtual"
 
 #: ../src/virtManager/createinterface.py:1112
 msgid "The virtual interface is now being created."
-msgstr ""
+msgstr "A interface virtual está sendo criada agora."
 
 #: ../src/virtManager/createinterface.py:1120
 #, python-format
 msgid "Error creating interface: '%s'"
-msgstr ""
+msgstr "Erro ao criar a interface: '%s'"
 
 #: ../src/virtManager/createnet.py:105
 msgid "Any physical device"
-msgstr ""
+msgstr "Qualquer dispositivo físico"
 
 #: ../src/virtManager/createnet.py:108
 #, python-format
 msgid "Physical device %s"
-msgstr ""
+msgstr "Dispostivo físico %s"
 
 #: ../src/virtManager/createnet.py:119 ../src/virtManager/network.py:33
 msgid "NAT"
-msgstr ""
+msgstr "NAT"
 
 #: ../src/virtManager/createnet.py:120
 msgid "Routed"
-msgstr ""
+msgstr "Roteado"
 
 #: ../src/virtManager/createnet.py:180
 #, python-format
@@ -1287,7 +1316,7 @@ msgstr "Status:"
 #: ../src/virtManager/details.py:2638 ../src/virtManager/host.py:548
 #: ../src/virtManager/host.py:549
 msgid "Disabled"
-msgstr ""
+msgstr "Desabilitado"
 
 #: ../src/virtManager/createnet.py:354
 #, python-format
@@ -1401,11 +1430,11 @@ msgstr ""
 
 #: ../src/virtManager/createpool.py:593
 msgid "Format the source device."
-msgstr ""
+msgstr "Formate o dispositivo fonte"
 
 #: ../src/virtManager/createpool.py:595
 msgid "Create a logical volume group from the source device."
-msgstr ""
+msgstr "Crie um grupo de volumes lógicos a partir do dispositivo fonte."
 
 #: ../src/virtManager/createvol.py:222
 msgid "Creating storage volume..."
@@ -1426,62 +1455,64 @@ msgstr "Erro no parâmetro do volume"
 
 #: ../src/virtManager/delete.py:93
 msgid "Delete"
-msgstr ""
+msgstr "Delete"
 
 #: ../src/virtManager/delete.py:131
 #, python-format
 msgid "Deleting virtual machine '%s'"
-msgstr ""
+msgstr "Deletando a máquina virtual '%s'"
 
 #: ../src/virtManager/delete.py:165
 #, python-format
 msgid "Deleting path '%s'"
-msgstr ""
+msgstr "Deletando o caminho '%s'"
 
 #: ../src/virtManager/delete.py:176
 #, python-format
 msgid "Error deleting virtual machine '%s': %s"
-msgstr ""
+msgstr "Erro ao deletar a máquina virtual '%s':%s"
 
 #: ../src/virtManager/delete.py:192
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
+"Adicionalmente, existem erros ao remover certos dispositivos de "
+"armazenamento: \n"
 
 #: ../src/virtManager/delete.py:196
 msgid "Errors encountered while removing certain storage devices."
-msgstr ""
+msgstr "Erros encontrados ao remover alguns dispositivos de armazenamento."
 
 #: ../src/virtManager/delete.py:277
 msgid "Storage Path"
-msgstr ""
+msgstr "Caminho do armazenamento"
 
 #: ../src/virtManager/delete.py:278
 msgid "Target"
-msgstr ""
+msgstr "Destino"
 
 #: ../src/virtManager/delete.py:326
 msgid "Cannot delete iscsi share."
-msgstr ""
+msgstr "Não foi possível deletar o compartilhamento iscsi."
 
 #: ../src/virtManager/delete.py:329
 msgid "Cannot delete unmanaged remote storage."
-msgstr ""
+msgstr "Não foi possível deletar o armazenamento remoto não gerenciado."
 
 #: ../src/virtManager/delete.py:335
 msgid "Cannot delete unmanaged block device."
-msgstr ""
+msgstr "Não foi possível deletar o dispositivo de bloco não gerenciado."
 
 #: ../src/virtManager/delete.py:355
 msgid "Storage is read-only."
-msgstr ""
+msgstr "Armazenamento é somente leitura."
 
 #: ../src/virtManager/delete.py:357
 msgid "No write access to path."
-msgstr ""
+msgstr "Sem acesso de escrita ao caminho."
 
 #: ../src/virtManager/delete.py:360
 msgid "Storage is marked as shareable."
-msgstr ""
+msgstr "O armazenamento está marcado como compartilhavel."
 
 #: ../src/virtManager/delete.py:370
 #, python-format
@@ -1489,28 +1520,30 @@ msgid ""
 "Storage is in use by the following virtual machines:\n"
 "- %s "
 msgstr ""
+"O armazenamento está em uso pelas seguintes máquinas virtuais:\n"
+"- %s "
 
 #: ../src/virtManager/details.py:205
 #, python-format
 msgid "%s:%s"
-msgstr ""
+msgstr "%s:%s"
 
 #: ../src/virtManager/details.py:209
 #, python-format
 msgid "Redirected %s"
-msgstr ""
+msgstr "Redirecionado %s"
 
 #: ../src/virtManager/details.py:627
 msgid "_Add Hardware"
-msgstr ""
+msgstr "_Adicionar Hardware"
 
 #: ../src/virtManager/details.py:634
 msgid "_Remove Hardware"
-msgstr ""
+msgstr "_Remover Hardware"
 
 #: ../src/virtManager/details.py:728
 msgid "Version"
-msgstr ""
+msgstr "Versão"
 
 #: ../src/virtManager/details.py:789
 msgid ""
@@ -1518,6 +1551,10 @@ msgid ""
 "with the specified label. The administrator is responsible for making sure "
 "the images are labeled correctly on disk."
 msgstr ""
+"O tipo de segurança estática do SELinux diz ao libvirt para sempre iniciar o "
+"processo convidado com uma identificação especificada. O administrador é "
+"responsável por assegurar que as imagens estão identifcadas corretamente no "
+"disco"
 
 #: ../src/virtManager/details.py:791
 msgid ""
@@ -1525,52 +1562,55 @@ msgid ""
 "unique label for the guest process and guest image, ensuring total isolation "
 "of the guest. (Default)"
 msgstr ""
+"O tipo de segurança dinâmica do SELinux diz ao libvirt para escolher "
+"automaticamente uma identificação única para o processo convidado e a imagem "
+"convidada, garantindo total isolação para o convidado. (Default)"
 
 #: ../src/virtManager/details.py:800
 msgid "Libvirt did not detect NUMA capabilities."
-msgstr ""
+msgstr "O libvirt não detectou capacidades NUMA"
 
 #: ../src/virtManager/details.py:808
 msgid "VCPU"
-msgstr ""
+msgstr "VCPU"
 
 #: ../src/virtManager/details.py:809
 msgid "On CPU"
-msgstr ""
+msgstr "CPU ligada"
 
 #: ../src/virtManager/details.py:810
 msgid "Pinning"
-msgstr ""
+msgstr "Pinning"
 
 #: ../src/virtManager/details.py:1081
 msgid "No text console available"
-msgstr ""
+msgstr "Nenhum console de texto disponível"
 
 #: ../src/virtManager/details.py:1153
 msgid "No graphical console available"
-msgstr ""
+msgstr "Nenhum console gráfico disponível"
 
 #: ../src/virtManager/details.py:1158
 #, python-format
 msgid "Graphical Console %s"
-msgstr ""
+msgstr "Console gráfico %s"
 
 #: ../src/virtManager/details.py:1248
 msgid "There are unapplied changes. Would you like to apply them now?"
-msgstr ""
+msgstr "Existem mudanças não aplicadas. Você gostaria de aplicá-las agora?"
 
 #: ../src/virtManager/details.py:1250
 msgid "Don't warn me again."
-msgstr ""
+msgstr "Não me alertar novamente."
 
 #: ../src/virtManager/details.py:1324
 #, python-format
 msgid "Error refreshing hardware page: %s"
-msgstr ""
+msgstr "Erro ao atualizar a página de hardware: %s"
 
 #: ../src/virtManager/details.py:1383 ../src/virtManager/manager.py:992
 msgid "_Restore"
-msgstr ""
+msgstr "_Restaurar"
 
 #. Build VM context menu
 #: ../src/virtManager/details.py:1385 ../src/virtManager/manager.py:319
@@ -1582,7 +1622,7 @@ msgstr "_Executar"
 #: ../src/virtManager/details.py:1503
 #, python-format
 msgid "Error launching hardware dialog: %s"
-msgstr ""
+msgstr "Erro ao lançar o diálogo de hardware: %s"
 
 #: ../src/virtManager/details.py:1575
 msgid "Save Virtual Machine Screenshot"
@@ -1603,35 +1643,35 @@ msgstr "Captura de tela salva"
 
 #: ../src/virtManager/details.py:1777
 msgid "Error generating CPU configuration"
-msgstr ""
+msgstr "Erro ao gerar a configuração de CPU"
 
 #: ../src/virtManager/details.py:1811
 #, python-format
 msgid "Error copying host CPU: %s"
-msgstr ""
+msgstr "Erroao copiar a CPU Host: %s"
 
 #: ../src/virtManager/details.py:1886
 #, python-format
 msgid "Error disconnecting media: %s"
-msgstr ""
+msgstr "Erro ao desconectar a mídia: %s"
 
 #: ../src/virtManager/details.py:1905
 #, python-format
 msgid "Error launching media dialog: %s"
-msgstr ""
+msgstr "Erro ao lançar a mídia de diálogo: %s"
 
 #: ../src/virtManager/details.py:1957
 #, python-format
 msgid "Error apply changes: %s"
-msgstr ""
+msgstr "Erro ao aplicar as mudanças: %s"
 
 #: ../src/virtManager/details.py:2088
 msgid "Error building pin list"
-msgstr ""
+msgstr "Erro ao construir a lista do pin"
 
 #: ../src/virtManager/details.py:2094
 msgid "Error pinning vcpus"
-msgstr ""
+msgstr "Erro ao fixar vcups"
 
 #: ../src/virtManager/details.py:2143
 #, python-format
@@ -1640,15 +1680,17 @@ msgstr "Erro ao alterar o valor de inicialização automática: %s"
 
 #: ../src/virtManager/details.py:2161
 msgid "Cannot set initrd without specifying a kernel path"
-msgstr ""
+msgstr "Não é possível setar o initrd sem especificar o caminho do kernel"
 
 #: ../src/virtManager/details.py:2164
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr ""
+"Não é possível configurar os argumentos do Kernel sem especificar o caminho "
+"do mesmo"
 
 #: ../src/virtManager/details.py:2171
 msgid "An init path must be specified"
-msgstr ""
+msgstr "Um caminho de inicialização deve ser especificado"
 
 #: ../src/virtManager/details.py:2312
 #, python-format
@@ -1668,28 +1710,31 @@ msgstr "Erro ao remover o dispositivo: %s"
 
 #: ../src/virtManager/details.py:2409
 msgid "Device could not be removed from the running machine"
-msgstr ""
+msgstr "Dispositivo não pode ser removido da máquina em execução"
 
 #: ../src/virtManager/details.py:2411
 msgid "This change will take effect after the next guest shutdown."
-msgstr ""
+msgstr "Essa mudança terá efeito após o próximo desligamento do convidado"
 
 #: ../src/virtManager/details.py:2465
 #, python-format
 msgid "Error changing VM configuration: %s"
-msgstr ""
+msgstr "Erro ao modificar a configuração da Máquina Virtual: %s"
 
 #: ../src/virtManager/details.py:2475
 msgid "Some changes may require a guest shutdown to take effect."
 msgstr ""
+"Algumas mudanças podem requerer uma reinicialização do convidado para serem "
+"concluídas."
 
 #: ../src/virtManager/details.py:2478
 msgid "These changes will take effect after the next guest shutdown."
 msgstr ""
+"Essas mudanças farão efeito após a próxima reinicialização do convidado."
 
 #: ../src/virtManager/details.py:2551 ../src/virtManager/details.py:2555
 msgid "unknown"
-msgstr ""
+msgstr "Desconhecido"
 
 #: ../src/virtManager/details.py:2596 ../src/vmm-add-hardware.ui.h:28
 msgid "Same as host"
@@ -1697,16 +1742,17 @@ msgstr "Igual ao hospedeiro"
 
 #: ../src/virtManager/details.py:2700
 msgid "VCPU info only available for running domain."
-msgstr ""
+msgstr "Informação de VCPU disponível apenas para domínios em execução."
 
 #: ../src/virtManager/details.py:2705
 #, python-format
 msgid "Error getting VCPU info: %s"
-msgstr ""
+msgstr "Erro ao tentar conseguir as informações da VCPU: %s"
 
 #: ../src/virtManager/details.py:2708
 msgid "Virtual machine does not support runtime VPCU info."
 msgstr ""
+"A máquina virtual não suporta informações de tempo de execução da VCPU."
 
 #: ../src/virtManager/details.py:2945
 msgid "Xen Mouse"
@@ -1731,41 +1777,41 @@ msgstr "Alocado automaticamente"
 #: ../src/virtManager/details.py:2997
 #, python-format
 msgid "%(graphicstype)s Server"
-msgstr ""
+msgstr "Servidor %(graphicstype)s"
 
 #: ../src/virtManager/details.py:3020
 msgid "Local SDL Window"
-msgstr ""
+msgstr "Janela SDL local"
 
 #: ../src/virtManager/details.py:3107
 msgid "Serial Device"
-msgstr ""
+msgstr "Dispositivo serial"
 
 #: ../src/virtManager/details.py:3109
 msgid "Parallel Device"
-msgstr ""
+msgstr "Dispositivo paralelo"
 
 #: ../src/virtManager/details.py:3111
 msgid "Console Device"
-msgstr ""
+msgstr "Dispositivo console"
 
 #: ../src/virtManager/details.py:3113
 msgid "Channel Device"
-msgstr ""
+msgstr "Dispositivo de canal"
 
 #: ../src/virtManager/details.py:3115
 #, python-format
 msgid "%s Device"
-msgstr ""
+msgstr "%s Dispositivo"
 
 #: ../src/virtManager/details.py:3120
 msgid "Primary Console"
-msgstr ""
+msgstr "Console primário"
 
 #: ../src/virtManager/details.py:3193 ../src/virtManager/details.py:3224
 #: ../src/virtManager/details.py:3226 ../src/vmm-add-hardware.ui.h:55
 msgid "Default"
-msgstr ""
+msgstr "Padrão"
 
 #: ../src/virtManager/details.py:3409
 msgid "Tablet"
@@ -1778,7 +1824,7 @@ msgstr "Mouse"
 #: ../src/virtManager/details.py:3421
 #, python-format
 msgid "Display %s"
-msgstr ""
+msgstr "Dispositivo %s"
 
 #: ../src/virtManager/details.py:3427
 #, python-format
@@ -1787,46 +1833,52 @@ msgstr "Som: %s"
 
 #: ../src/virtManager/details.py:3466
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: ../src/virtManager/details.py:3470
 msgid "Watchdog"
-msgstr ""
+msgstr "Watchdog"
 
 #: ../src/virtManager/details.py:3481
 #, python-format
 msgid "Controller %s"
-msgstr ""
+msgstr "Controladora %s"
 
 #: ../src/virtManager/details.py:3488
 #, python-format
 msgid "Filesystem %s"
-msgstr ""
+msgstr "Sistema de arquivos %s"
 
 #: ../src/virtManager/domain.py:325
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
+"Não foi possível especificar o dispositivo na configuração da máquina "
+"virtual inativa: %s"
 
 #: ../src/virtManager/domain.py:383
 msgid "Cannot rename an active guest"
-msgstr ""
+msgstr "Não foi possível renomear um convidado ativo"
 
 #: ../src/virtManager/domain.py:1088
 msgid "Cannot start guest while cloning operation in progress"
 msgstr ""
+"Não é possível iniciar o convidado enquanto a operação de clonagem estiver "
+"em progresso."
 
 #: ../src/virtManager/domain.py:1106
 msgid "Cannot resume guest while cloning operation in progress"
 msgstr ""
+"Não é possível continuar o convidado enquanto a operação de clonagem estiver "
+"em progresso"
 
 #: ../src/virtManager/domain.py:1126
 msgid "Saving domain to disk"
-msgstr ""
+msgstr "Salvando domínio no disco"
 
 #: ../src/virtManager/domain.py:1161
 msgid "Migrating domain"
-msgstr ""
+msgstr "Migrando domínio"
 
 #: ../src/virtManager/domain.py:1375
 msgid "Running"
@@ -1838,11 +1890,11 @@ msgstr "Pausado"
 
 #: ../src/virtManager/domain.py:1379
 msgid "Shutting Down"
-msgstr ""
+msgstr "Desligando"
 
 #: ../src/virtManager/domain.py:1382
 msgid "Saved"
-msgstr ""
+msgstr "Salvo"
 
 #: ../src/virtManager/domain.py:1384
 msgid "Shutoff"
@@ -1863,6 +1915,13 @@ msgid ""
 "A hypervisor connection can be manually\n"
 "added via File->Add Connection"
 msgstr ""
+"Não foi possível detectar o hypervisor padrão. Assegure\n"
+"que os pacotes de virtualização apropriados\n"
+" estão instalados (kvm, qemu, libvirt, etc.), e\n"
+"o libvirtd está sendo executado.\n"
+"\n"
+"Uma conexão de hypervisor pode ser manualmente\n"
+"adicionada via File>Add Connection"
 
 #: ../src/virtManager/engine.py:184
 msgid ""
@@ -1871,76 +1930,82 @@ msgid ""
 "virt-manager will connect to libvirt on the next application\n"
 "start up."
 msgstr ""
+"Libvird acabou de ser instalado, então o serviço 'libvirtd' terá\n"
+"de ser reiniciado.\n"
+"virt-manager irá conectar-se ao libvirt na próxima aplicação\n"
+"inicialização."
 
 #: ../src/virtManager/engine.py:190
 msgid "Libvirt service must be started"
-msgstr ""
+msgstr "O serviço Libvirt deve ser iniciado"
 
 #: ../src/virtManager/engine.py:310
 #, python-format
 msgid "Error polling connection '%s': %s"
-msgstr ""
+msgstr "Erro ao conectar à votação '%s': %s"
 
 #: ../src/virtManager/engine.py:483
 #, python-format
 msgid "Unknown connection URI %s"
-msgstr ""
+msgstr "Correção de URI desconhecida %s"
 
 #: ../src/virtManager/engine.py:496
 #, python-format
 msgid "Error launching 'About' dialog: %s"
-msgstr ""
+msgstr "Erro ao lançar o diálogo 'Sobre': %s"
 
 #: ../src/virtManager/engine.py:507
 #, python-format
 msgid "Unable to display documentation: %s"
-msgstr ""
+msgstr "Não foi possível exibir a documentação: %s"
 
 #: ../src/virtManager/engine.py:522
 #, python-format
 msgid "Error launching preferences: %s"
-msgstr ""
+msgstr "Erro ao lançar preferências: %s"
 
 #: ../src/virtManager/engine.py:545
 #, python-format
 msgid "Error launching host dialog: %s"
-msgstr ""
+msgstr "Erro ao lançar o diálogo do host: %s"
 
 #: ../src/virtManager/engine.py:565
 #, python-format
 msgid "Error launching connect dialog: %s"
-msgstr ""
+msgstr "Erro ao lançar o diálogo de conexão: %s"
 
 #: ../src/virtManager/engine.py:609
 #, python-format
 msgid "Error launching details: %s"
-msgstr ""
+msgstr "Erro ao lançar detalhes: %s"
 
 #: ../src/virtManager/engine.py:662 ../src/virtManager/engine.py:678
 #, python-format
 msgid "Error launching manager: %s"
-msgstr ""
+msgstr "Erro ao lançar gerenciador: %s"
 
 #: ../src/virtManager/engine.py:691
 #, python-format
 msgid "Error launching migrate dialog: %s"
-msgstr ""
+msgstr "Erro ao lançar o diálogo de migração: %s"
 
 #: ../src/virtManager/engine.py:708
 #, python-format
 msgid "Error setting clone parameters: %s"
-msgstr ""
+msgstr "Erro ao configurar os parâmetros de clonagem: %s"
 
 #: ../src/virtManager/engine.py:748
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
 "libvirt version or hypervisor."
 msgstr ""
+"Salvamento das máquinas virtuais sobre as conexões remotas não é suportada "
+"com a versão da libvirt ou hypervisor."
 
 #: ../src/virtManager/engine.py:755
 #, python-format
 msgid "Are you sure you want to save '%s'?"
-msgstr ""
+msgstr "Você tem certeza que quer salvar '%s'?"
 
 #: ../src/virtManager/engine.py:761
 msgid "Save Virtual Machine"
@@ -1952,7 +2017,7 @@ msgstr "Salvando máquina virtual"
 
 #: ../src/virtManager/engine.py:777
 msgid "Saving virtual machine memory to disk "
-msgstr ""
+msgstr "salvando a memória da máquina virtual no disco "
 
 #: ../src/virtManager/engine.py:784
 #, python-format
@@ -1962,7 +2027,7 @@ msgstr "Erro ao salvar o domínio: %s"
 #: ../src/virtManager/engine.py:796
 #, python-format
 msgid "Error cancelling save job: %s"
-msgstr ""
+msgstr "Erro ao cancelar o salvamento: %s"
 
 #: ../src/virtManager/engine.py:812
 msgid "Restoring virtual machines over remote connections is not yet supported"
@@ -1975,35 +2040,37 @@ msgstr "Restaurar máquina virtual"
 
 #: ../src/virtManager/engine.py:829 ../src/virtManager/engine.py:879
 msgid "Error restoring domain"
-msgstr ""
+msgstr "Erro a restaurar o domínio"
 
 #: ../src/virtManager/engine.py:837
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
-msgstr ""
+msgstr "Você tem certeza que deseja forçar o desligamento '%s'?"
 
 #: ../src/virtManager/engine.py:839
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
+"Isso irá desligar imediatamente a máquina virtual sem desligar o sistema "
+"operacional e pode ocasionalmente causar perda de dados"
 
 #: ../src/virtManager/engine.py:845 ../src/virtManager/engine.py:922
 msgid "Error shutting down domain"
-msgstr ""
+msgstr "Erro ao desligar o domínio"
 
 #: ../src/virtManager/engine.py:853
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
-msgstr ""
+msgstr "Você tem certeza que quer pausar '%s'?"
 
 #: ../src/virtManager/engine.py:859
 msgid "Error pausing domain"
-msgstr ""
+msgstr "Erro ao pausar o domínio"
 
 #: ../src/virtManager/engine.py:867
 msgid "Error unpausing domain"
-msgstr ""
+msgstr "Erro ao liberar o dominio"
 
 #: ../src/virtManager/engine.py:882
 msgid ""
@@ -2011,11 +2078,14 @@ msgid ""
 "to remove the saved state and perform a regular\n"
 "start up?"
 msgstr ""
+"O domínio não pôde ser restaurado. Você gostaria\n"
+"de remover o status salvo e executar o uma\n"
+"inicialização regular"
 
 #: ../src/virtManager/engine.py:896
-#, fuzzy, python-format
+#, python-format
 msgid "Error removing domain state: %s"
-msgstr "Erro ao salvar o domínio: %s"
+msgstr "Erro ao remover o status do domínio: %s"
 
 #. VM will be restored, which can take some time, so show progress
 #: ../src/virtManager/engine.py:900
@@ -2024,28 +2094,28 @@ msgstr "Restaurando máquina virtual"
 
 #: ../src/virtManager/engine.py:901
 msgid "Restoring virtual machine memory from disk"
-msgstr ""
+msgstr "Restaurando a máquina virtual a partir do disco"
 
 #. Regular startup
 #: ../src/virtManager/engine.py:907
 msgid "Error starting domain"
-msgstr ""
+msgstr "Erro ao iniciar o dominio"
 
 #: ../src/virtManager/engine.py:916
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
-msgstr ""
+msgstr "Vocẽ tem certeza que quer desligar '%s'?"
 
 #: ../src/virtManager/engine.py:930
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
-msgstr ""
+msgstr "Você tem certeza que quer reiniciar '%s'?"
 
 #. Raise the original error message
 #: ../src/virtManager/engine.py:944 ../src/virtManager/engine.py:958
 #, python-format
 msgid "Error rebooting domain: %s"
-msgstr ""
+msgstr "Erro ao reiniciar o domínio %s"
 
 #: ../src/virtManager/error.py:108
 msgid "Input Error"
@@ -2062,44 +2132,44 @@ msgstr "Copiar caminho do volume"
 #: ../src/virtManager/host.py:371
 #, python-format
 msgid "%(currentmem)s of %(maxmem)s"
-msgstr ""
+msgstr "%(currentmem)s de %(maxmem)s"
 
 #: ../src/virtManager/host.py:385 ../src/virtManager/host.py:386
 #: ../src/virtManager/host.py:387
 msgid "Connection not active."
-msgstr ""
+msgstr "Conexão não está ativa"
 
 #: ../src/virtManager/host.py:392
 msgid "Libvirt connection does not support virtual network management."
-msgstr ""
+msgstr "Conexão Libvirt não suporta gerencialmente virtual de rede."
 
 #: ../src/virtManager/host.py:397
 msgid "Libvirt connection does not support storage management."
-msgstr ""
+msgstr "A conexão do Libvirt não suporta o gerenciamento de armazenamento."
 
 #: ../src/virtManager/host.py:401
 msgid "Libvirt connection does not support interface management."
-msgstr ""
+msgstr "A conexão do Libvirt não suporta gerenciamento de interface."
 
 #: ../src/virtManager/host.py:416
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
-msgstr ""
+msgstr "Você tem certeza que quer deletar permanentemente essa rede %s?"
 
 #: ../src/virtManager/host.py:423
 #, python-format
 msgid "Error deleting network '%s'"
-msgstr ""
+msgstr "Erro ao deletar a rede '%s'"
 
 #: ../src/virtManager/host.py:432
 #, python-format
 msgid "Error starting network '%s'"
-msgstr ""
+msgstr "Erro ao iniciar a rede '%s'"
 
 #: ../src/virtManager/host.py:441
 #, python-format
 msgid "Error stopping network '%s'"
-msgstr ""
+msgstr "Erro ao interromper a rede '%s'"
 
 #: ../src/virtManager/host.py:450
 #, python-format
@@ -2125,12 +2195,12 @@ msgstr "Nunca"
 
 #: ../src/virtManager/host.py:504
 msgid "No virtual network selected."
-msgstr ""
+msgstr "Nenhuma rede virtual selecionada."
 
 #: ../src/virtManager/host.py:514
 #, python-format
 msgid "Error selecting network: %s"
-msgstr ""
+msgstr "Erro ao selecionar a rede: %s"
 
 #: ../src/virtManager/host.py:582
 msgid "Isolated virtual network"
@@ -2139,37 +2209,37 @@ msgstr "Rede virtual isolada"
 #: ../src/virtManager/host.py:615
 #, python-format
 msgid "Error stopping pool '%s'"
-msgstr ""
+msgstr "Erro ao pausar o pool '%s'"
 
 #: ../src/virtManager/host.py:624
 #, python-format
 msgid "Error starting pool '%s'"
-msgstr ""
+msgstr "Erro iniciar o pool '%s'"
 
 #: ../src/virtManager/host.py:631
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
-msgstr ""
+msgstr "Você tem certeza que quer permanentemente deletar a pesquisa %s?"
 
 #: ../src/virtManager/host.py:638
 #, python-format
 msgid "Error deleting pool '%s'"
-msgstr ""
+msgstr "Erro ao deletar o pool '%s'"
 
 #: ../src/virtManager/host.py:660
 #, python-format
 msgid "Error refreshing pool '%s'"
-msgstr ""
+msgstr "Erro ao atualizar o pool '%s'"
 
 #: ../src/virtManager/host.py:667
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
-msgstr ""
+msgstr "Você tem certeza que quer deletar permanentemente o volume %s?"
 
 #: ../src/virtManager/host.py:681
 #, python-format
 msgid "Error refreshing volume '%s'"
-msgstr ""
+msgstr "Erro ao atualizar o volume '%s'"
 
 #: ../src/virtManager/host.py:690
 #, python-format
@@ -2505,19 +2575,13 @@ msgid "Packages required for KVM usage"
 msgstr ""
 
 #: ../src/virtManager/packageutils.py:92
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The following packages are not installed:\n"
 "%s\n"
 "\n"
 "Would you like to install them now?"
 msgstr ""
-"O seguinte armazenamento já existe, mas não é\n"
-"usado por nenhuma máquina virtual:\n"
-"\n"
-"%s\n"
-"\n"
-"Você deseja reutilizar este armazenamento?"
 
 #: ../src/virtManager/packageutils.py:94
 msgid "Recommended package installs"
@@ -4955,14 +5019,12 @@ msgid "Install Graphics:"
 msgstr ""
 
 #: ../src/vmm-preferences.ui.h:30
-#, fuzzy
 msgid "Default storage format for new disk images."
-msgstr "Caminho padrão para escolha de imagens de VM"
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:31
-#, fuzzy
 msgid "Default storage format:"
-msgstr "Caminho padrão para restauração"
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:32
 msgid "<b>New VM</b>"

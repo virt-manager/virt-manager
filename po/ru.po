@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-09 08:04-0400\n"
-"PO-Revision-Date: 2012-03-09 06:17+0000\n"
+"PO-Revision-Date: 2012-07-10 08:23+0000\n"
 "Last-Translator: Yulia <yulia.poyarkova@redhat.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ru\n"
@@ -191,9 +191,8 @@ msgid "Install selected graphics type for new VM. vnc or spice"
 msgstr "Установить выбранный тип графики для новой ВМ: vnc или spice"
 
 #: ../src/virt-manager.schemas.in.h:33
-#, fuzzy
 msgid "Use selected format for new VM storage"
-msgstr "Установить выбранную графику для новой ВМ"
+msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:34
 msgid "Use selected format when creating new disk images in new VM wizard"
@@ -957,9 +956,8 @@ msgid "%s installs not available for paravirt guests."
 msgstr "%s установки недоступны для паравиртуализированных гостей."
 
 #: ../src/virtManager/create.py:530
-#, fuzzy
 msgid "No install methods available for this connection."
-msgstr "Нет доступных настроек установки для этого подключения."
+msgstr ""
 
 #: ../src/virtManager/create.py:578
 #, python-format
@@ -1891,23 +1889,12 @@ msgstr ""
 "в меню \"Файл\" -> \"Добавить соединение\"."
 
 #: ../src/virtManager/engine.py:184
-#, fuzzy
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started.\n"
 "virt-manager will connect to libvirt on the next application\n"
 "start up."
 msgstr ""
-"Libvirt был только что установлен, поэтому должна быть\n"
-"запущена служба «libvirtd». Это можно сделать одним из\n"
-"следующих способов:\n"
-"\n"
-"- Из меню GNOME: Система->Администрирование->Службы\n"
-"- Из терминала: su -c 'service libvirtd restart'\n"
-"- Перезагрузить компьютер\n"
-"\n"
-"virt-manager подключится к libvirt при следующем\n"
-"запуске приложения."
 
 #: ../src/virtManager/engine.py:190
 msgid "Libvirt service must be started"
@@ -2055,9 +2042,9 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/engine.py:896
-#, fuzzy, python-format
+#, python-format
 msgid "Error removing domain state: %s"
-msgstr "Ошибка перезапуска домена: %s"
+msgstr ""
 
 #. VM will be restored, which can take some time, so show progress
 #: ../src/virtManager/engine.py:900
@@ -2561,18 +2548,13 @@ msgid "Packages required for KVM usage"
 msgstr "Необходимые для KVM пакеты"
 
 #: ../src/virtManager/packageutils.py:92
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The following packages are not installed:\n"
 "%s\n"
 "\n"
 "Would you like to install them now?"
 msgstr ""
-"Отсутствуют пакеты:\n"
-"%s\n"
-"\n"
-"Эти пакеты необходимы для локальной установки гостей KVM.\n"
-"Установить их сейчас?"
 
 #: ../src/virtManager/packageutils.py:94
 msgid "Recommended package installs"
@@ -5014,9 +4996,8 @@ msgid ""
 msgstr ""
 
 #: ../src/vmm-preferences.ui.h:24
-#, fuzzy
 msgid "Don't disable console shortcuts:"
-msgstr "Использовать комбинации клавиш консоли:"
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:25
 msgid "<b>Graphical Consoles</b>"
@@ -5039,14 +5020,12 @@ msgid "Install Graphics:"
 msgstr "Установленная графика:"
 
 #: ../src/vmm-preferences.ui.h:30
-#, fuzzy
 msgid "Default storage format for new disk images."
-msgstr "Путь по умолчанию для выбора образов виртуальных машин"
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:31
-#, fuzzy
 msgid "Default storage format:"
-msgstr "Путь восстановления по умолчанию"
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:32
 msgid "<b>New VM</b>"
@@ -5107,11 +5086,3 @@ msgstr "_Локальный обзор"
 #: ../src/vmm-storage-browse.ui.h:4
 msgid "Choose _Volume"
 msgstr "Выбор _тома"
-
-#~ msgid ""
-#~ "Force console menu accelerators while the console is active. Enabling "
-#~ "this may overwrite keyboard interaction with the guest."
-#~ msgstr ""
-#~ "Принудительно включить горячие клавиши меню при активной консоли. "
-#~ "Включение этого параметра может повлиять на клавиатурное взаимодействие с "
-#~ "гостевой системой."

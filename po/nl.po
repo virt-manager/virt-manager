@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-09 08:04-0400\n"
-"PO-Revision-Date: 2012-02-14 08:49+0000\n"
+"PO-Revision-Date: 2012-07-10 08:23+0000\n"
 "Last-Translator: Richard E. van der Luit <nippur@fedoraproject.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: nl\n"
@@ -185,9 +185,8 @@ msgid "Install selected graphics type for new VM. vnc or spice"
 msgstr "Installeer geselecteerde grafische types voor nieuwe VM. vnc of spice"
 
 #: ../src/virt-manager.schemas.in.h:33
-#, fuzzy
 msgid "Use selected format for new VM storage"
-msgstr "Installeer geselecteerde grafische types voor nieuwe VM"
+msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:34
 msgid "Use selected format when creating new disk images in new VM wizard"
@@ -969,9 +968,8 @@ msgid "%s installs not available for paravirt guests."
 msgstr "%s installaties niet beschikbaar voor paravirt guests."
 
 #: ../src/virtManager/create.py:530
-#, fuzzy
 msgid "No install methods available for this connection."
-msgstr "Geen installatie opties beschikbaar voor deze verbinding."
+msgstr ""
 
 #: ../src/virtManager/create.py:578
 #, python-format
@@ -1902,23 +1900,12 @@ msgstr ""
 "toegevoegd worden met Bestand->Verbinding toevoegen"
 
 #: ../src/virtManager/engine.py:184
-#, fuzzy
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started.\n"
 "virt-manager will connect to libvirt on the next application\n"
 "start up."
 msgstr ""
-"Libvirt was zojuist geïnstalleerd, dus de 'libvirtd' service zal\n"
-"gestart moeten worden. Dis kan gedaan worden met\n"
-"een van de volgende:\n"
-"\n"
-"- In GNOME menu's: Systeem->Beheer->Services\n"
-"- In de terminal: su -c 'service libvirtd restart'\n"
-"- Start jouw computer opnieuw op\n"
-"\n"
-"virt-manager zal verbinden met libvirt bij de volgende keer\n"
-"dat de toepassing opstart."
 
 #: ../src/virtManager/engine.py:190
 msgid "Libvirt service must be started"
@@ -2066,9 +2053,9 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/engine.py:896
-#, fuzzy, python-format
+#, python-format
 msgid "Error removing domain state: %s"
-msgstr "Fout bij het opstarten van domein: %s"
+msgstr ""
 
 #. VM will be restored, which can take some time, so show progress
 #: ../src/virtManager/engine.py:900
@@ -2570,18 +2557,13 @@ msgid "Packages required for KVM usage"
 msgstr "Pakketten vereist voor gebruik van KVM "
 
 #: ../src/virtManager/packageutils.py:92
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The following packages are not installed:\n"
 "%s\n"
 "\n"
 "Would you like to install them now?"
 msgstr ""
-"De volgende pakketten zijn niet geïnstalleerd:\n"
-"%s\n"
-"\n"
-"Deze zijn vereis om lokaal KVM guests aan te maken.\n"
-"Wil je ze nu installeren?"
 
 #: ../src/virtManager/packageutils.py:94
 msgid "Recommended package installs"
@@ -3928,11 +3910,10 @@ msgid "C_ustomize configuration before install"
 msgstr "Pas config_uratie aan voor installatie"
 
 #: ../src/vmm-create.ui.h:57
-#, fuzzy
 msgid ""
 "<small>Specifying an operating system is required for best performance</"
 "small>"
-msgstr "<small>Overcommit van vCPUs kan de performance verlagen</small>"
+msgstr ""
 
 #: ../src/vmm-create.ui.h:59
 msgid "Set a fixed _MAC address"
@@ -5047,9 +5028,8 @@ msgid ""
 msgstr ""
 
 #: ../src/vmm-preferences.ui.h:24
-#, fuzzy
 msgid "Don't disable console shortcuts:"
-msgstr "Forceer console sneltoetsen:"
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:25
 msgid "<b>Graphical Consoles</b>"
@@ -5072,14 +5052,12 @@ msgid "Install Graphics:"
 msgstr "Installeer grafisch:"
 
 #: ../src/vmm-preferences.ui.h:30
-#, fuzzy
 msgid "Default storage format for new disk images."
-msgstr "Standaard pad voor het kiezen van VM images"
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:31
-#, fuzzy
 msgid "Default storage format:"
-msgstr "Standaard herstel pad"
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:32
 msgid "<b>New VM</b>"
@@ -5140,10 +5118,3 @@ msgstr "_Blader lokaal"
 #: ../src/vmm-storage-browse.ui.h:4
 msgid "Choose _Volume"
 msgstr "_Volume kiezen"
-
-#~ msgid ""
-#~ "Force console menu accelerators while the console is active. Enabling "
-#~ "this may overwrite keyboard interaction with the guest."
-#~ msgstr ""
-#~ "Forceer console menu versnellers als de console actief is. Dit aanzetten "
-#~ "kan toetsenbord interactie met de guest overschrijven."

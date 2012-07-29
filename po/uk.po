@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-09 08:04-0400\n"
-"PO-Revision-Date: 2012-02-14 08:49+0000\n"
+"PO-Revision-Date: 2012-07-11 05:23+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -195,13 +195,14 @@ msgid "Install selected graphics type for new VM. vnc or spice"
 msgstr "Встановити вибраний тип графіки для нової ВМ. VNC або SPICE."
 
 #: ../src/virt-manager.schemas.in.h:33
-#, fuzzy
 msgid "Use selected format for new VM storage"
-msgstr "Встановити вибраний тип графіки для нової ВМ"
+msgstr "Використовувати вибраний формат для нових сховищ ВМ"
 
 #: ../src/virt-manager.schemas.in.h:34
 msgid "Use selected format when creating new disk images in new VM wizard"
 msgstr ""
+"Використовувати вибраний формат для створення нових образів дисків у новому "
+"майстрі ВМ"
 
 #: ../src/virt-manager.schemas.in.h:35
 msgid "Show system tray icon"
@@ -986,9 +987,8 @@ msgid "%s installs not available for paravirt guests."
 msgstr "Варіант встановлення %s недоступний для гостьової паравіртуалізації."
 
 #: ../src/virtManager/create.py:530
-#, fuzzy
 msgid "No install methods available for this connection."
-msgstr "Для цього з’єднання недоступні жодні варіанти встановлення."
+msgstr "Немає доступних способів встановлення для цього з'єднання."
 
 #: ../src/virtManager/create.py:578
 #, python-format
@@ -1923,7 +1923,6 @@ msgstr ""
 "за допомогою пункту меню Файл->Додати з’єднання."
 
 #: ../src/virtManager/engine.py:184
-#, fuzzy
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started.\n"
@@ -1931,13 +1930,7 @@ msgid ""
 "start up."
 msgstr ""
 "Libvirt було щойно встановлено, тому треба запустити\n"
-"службу «libvirtd». Це можна зробити у один з таких\n"
-"способів:\n"
-"\n"
-"- з меню GNOME: Система->Адміністрування->Служби\n"
-"- з термінала: su -c 'service libvirtd restart'\n"
-"- перезавантажити комп'ютер\n"
-"\n"
+"службу «libvirtd».\n"
 "virt-manager з'єднається з libvirt під час наступного\n"
 "запуску програми."
 
@@ -2085,11 +2078,14 @@ msgid ""
 "to remove the saved state and perform a regular\n"
 "start up?"
 msgstr ""
+"Домен не вдалося відновити. Бажаєте вилучити\n"
+"збережений стан і виконати звичайний\n"
+"запуск?"
 
 #: ../src/virtManager/engine.py:896
-#, fuzzy, python-format
+#, python-format
 msgid "Error removing domain state: %s"
-msgstr "Помилка під час перезавантаження домену: %s"
+msgstr "Помилка під час вилучення стану домену: %s"
 
 #. VM will be restored, which can take some time, so show progress
 #: ../src/virtManager/engine.py:900
@@ -2584,7 +2580,7 @@ msgstr "Пошук доступних гіпервізорів…"
 #: ../src/virtManager/packageutils.py:59
 #, python-format
 msgid "Checking for installed package '%s'"
-msgstr ""
+msgstr "Перевіряємо, чи встановлено пакунок «%s»"
 
 #: ../src/virtManager/packageutils.py:87
 #, python-format
@@ -2606,7 +2602,7 @@ msgid "Packages required for KVM usage"
 msgstr "Пакунки, потрібні для використання KVM"
 
 #: ../src/virtManager/packageutils.py:92
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The following packages are not installed:\n"
 "%s\n"
@@ -2616,12 +2612,11 @@ msgstr ""
 "Пакунки з наведеного нижче списку не встановлено:\n"
 "%s\n"
 "\n"
-"Ці пакунки потрібні для локального створення гостьових систем KVM.\n"
 "Бажаєте встановити ці пакунки зараз?"
 
 #: ../src/virtManager/packageutils.py:94
 msgid "Recommended package installs"
-msgstr ""
+msgstr "Рекомендації зі встановлення пакунків"
 
 #: ../src/virtManager/packageutils.py:105
 #, python-format
@@ -3973,13 +3968,11 @@ msgid "C_ustomize configuration before install"
 msgstr "З_мінити налаштування перед встановленням"
 
 #: ../src/vmm-create.ui.h:57
-#, fuzzy
 msgid ""
 "<small>Specifying an operating system is required for best performance</"
 "small>"
 msgstr ""
-"<small>Надмірне використання віртуальних процесорів може знизити швидкодію</"
-"small>"
+"<small>Кращої швидкодії можна досягти визначенням операційної системи</small>"
 
 #: ../src/vmm-create.ui.h:59
 msgid "Set a fixed _MAC address"
@@ -5094,11 +5087,15 @@ msgid ""
 "disabled to ensure that typing in the guest does not accidentally perform an "
 "operation in virt-manager's console window."
 msgstr ""
+"Не вимикати клавіатурні скорочення для меню вікна консолі (Alt+F -> Файл "
+"тощо), коли клавіатурний фокус перебуває у графічній консолі гостьової "
+"системи. Зазвичай, такі клавіатурні скорочення вимикаються з метою "
+"убезпечення від виконання дій з вікном virt-manager під час введення даних "
+"до вікна гостьової системи."
 
 #: ../src/vmm-preferences.ui.h:24
-#, fuzzy
 msgid "Don't disable console shortcuts:"
-msgstr "Використання комбінацій клавіш консолі:"
+msgstr "Не вимикати скорочення консолі:"
 
 #: ../src/vmm-preferences.ui.h:25
 msgid "<b>Graphical Consoles</b>"
@@ -5121,14 +5118,12 @@ msgid "Install Graphics:"
 msgstr "Графіка встановлення:"
 
 #: ../src/vmm-preferences.ui.h:30
-#, fuzzy
 msgid "Default storage format for new disk images."
-msgstr "Типовий шлях для вибору образів ВМ"
+msgstr "Типовий формат зберігання для нових образів дисків."
 
 #: ../src/vmm-preferences.ui.h:31
-#, fuzzy
 msgid "Default storage format:"
-msgstr "Типовий шлях відновлення"
+msgstr "Типовий формат зберігання:"
 
 #: ../src/vmm-preferences.ui.h:32
 msgid "<b>New VM</b>"
@@ -5189,11 +5184,3 @@ msgstr "_Локальний огляд"
 #: ../src/vmm-storage-browse.ui.h:4
 msgid "Choose _Volume"
 msgstr "Вибрати _том"
-
-#~ msgid ""
-#~ "Force console menu accelerators while the console is active. Enabling "
-#~ "this may overwrite keyboard interaction with the guest."
-#~ msgstr ""
-#~ "Примусово використовувати комбінації клавіш меню консолі під час роботи у "
-#~ "консолі. Позначення цього пункту може призвести до перевизначення "
-#~ "клавіатурних скорочень гостьової системи."

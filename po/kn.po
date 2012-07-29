@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-09 08:04-0400\n"
-"PO-Revision-Date: 2012-02-14 08:49+0000\n"
+"PO-Revision-Date: 2012-07-10 08:23+0000\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: kn\n"
@@ -929,9 +929,8 @@ msgid "%s installs not available for paravirt guests."
 msgstr "paravirt ಅತಿಥಿಗಳಿಗೆ %s ಅನುಸ್ಥಾಪನೆಯು ಲಭ್ಯವಿರುವುದಿಲ್ಲ."
 
 #: ../src/virtManager/create.py:530
-#, fuzzy
 msgid "No install methods available for this connection."
-msgstr "ಈ ಸಂಪರ್ಕಕ್ಕಾಗಿ ಯಾವುದೆ ಅನುಸ್ಥಾಪನೆ ಆಯ್ಕೆಗಳು ಲಭ್ಯವಿರುವುದಿಲ್ಲ."
+msgstr ""
 
 #: ../src/virtManager/create.py:578
 #, python-format
@@ -1851,23 +1850,12 @@ msgstr ""
 "ಸಂಪರ್ಕವನ್ನು ಕೈಯಾರೆ ಸೇರಿಸಬಹುದಾಗಿದೆ"
 
 #: ../src/virtManager/engine.py:184
-#, fuzzy
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started.\n"
 "virt-manager will connect to libvirt on the next application\n"
 "start up."
 msgstr ""
-"Libvirt ಅನ್ನು ಈಗತಾನೆ ಅನುಸ್ಥಾಪಿಸಲಾಯಿತು, ಆದ್ದರಿಂದ 'libvirtd' ಸೇವೆಯನ್ನು\n"
-"ಮರಳಿ ಆರಂಭಿಸಬೇಕು. ಇದನ್ನು ಈ ಕೆಳಗಿನ ವಿಧಾನಗಳಲ್ಲಿ ಒಂದನ್ನು ಬಳಸಿಕೊಂಡು \n"
-"ಮಾಡಬಹುದಾಗಿದೆ:\n"
-"\n"
-"- GNOME ಮೆನಿವಿನಿಂದ: ವ್ಯವಸ್ಥೆ->ನಿರ್ವಹಣೆ->ಸೇವೆಗಳು\n"
-"- ಟರ್ಮಿನಲ್‌ನ ಮೂಲಕ: su -c 'service libvirtd restart'\n"
-"- ನಿಮ್ಮ ಗಣಕವನ್ನು ಮರಳ ಆರಂಭಿಸುವ ಮೂಲಕ\n"
-"\n"
-"ಅನ್ವಯವು ಮುಂದಿನ ಬಾರಿ ಆರಂಭಗೊಂಡಾಗ libvirt ನೊಂದಿಗೆ virt-manager\n"
-"ಸಂಪರ್ಕಸಾಧಿಸುತ್ತದೆ."
 
 #: ../src/virtManager/engine.py:190
 msgid "Libvirt service must be started"
@@ -2012,9 +2000,9 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/engine.py:896
-#, fuzzy, python-format
+#, python-format
 msgid "Error removing domain state: %s"
-msgstr "ಡೊಮೈನ್ ಅನ್ನು  ಮರಳಿ ಆರಂಭಿಸುವಲ್ಲಿ ದೋಷ: %s"
+msgstr ""
 
 #. VM will be restored, which can take some time, so show progress
 #: ../src/virtManager/engine.py:900
@@ -2517,18 +2505,13 @@ msgid "Packages required for KVM usage"
 msgstr "KVM ಬಳಕೆಗೆ ಅಗತ್ಯವಿರುವ ಪ್ಯಾಕೇಜುಗಳು"
 
 #: ../src/virtManager/packageutils.py:92
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The following packages are not installed:\n"
 "%s\n"
 "\n"
 "Would you like to install them now?"
 msgstr ""
-"ಈ ಕೆಳಗಿನ ಪ್ಯಾಕೇಜುಗಳನ್ನು ಅನುಸ್ಥಾಪಿಸಲಾಗಿಲ್ಲ:\n"
-"%s\n"
-"\n"
-"ಸ್ಥಳೀಯವಾಗಿ KVM ಅತಿಥಿಗಳನ್ನು ನಿರ್ಮಿಸಲು ಇವುಗಳ ಅಗತ್ಯವಿರುತ್ತದೆ.\n"
-"ಅವುಗಳನ್ನು ಈಗ ಅನುಸ್ಥಾಪಿಸಲು ಬಯಸುತ್ತೀರೆ?"
 
 #: ../src/virtManager/packageutils.py:94
 msgid "Recommended package installs"
@@ -4985,14 +4968,12 @@ msgid "Install Graphics:"
 msgstr ""
 
 #: ../src/vmm-preferences.ui.h:30
-#, fuzzy
 msgid "Default storage format for new disk images."
-msgstr "VM ಚಿತ್ರಿಕೆಗಳನ್ನು ಆಯ್ಕೆ ಮಾಡಲು ಪೂರ್ವನಿಯೋಜಿತ ಮಾರ್ಗ"
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:31
-#, fuzzy
 msgid "Default storage format:"
-msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಮರುಸ್ಥಾಪಿಸುವ ಮಾರ್ಗ"
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:32
 msgid "<b>New VM</b>"

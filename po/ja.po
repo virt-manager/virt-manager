@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-09 08:04-0400\n"
-"PO-Revision-Date: 2012-02-14 08:49+0000\n"
-"Last-Translator: Hajime Taira <htaira@redhat.com>\n"
+"PO-Revision-Date: 2012-07-18 00:58+0000\n"
+"Last-Translator: Tomoyuki KATO <tomo@dream.daynight.jp>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/virt-manager/"
 "language/ja/)\n"
 "Language: ja\n"
@@ -187,9 +187,8 @@ msgstr ""
 "spice"
 
 #: ../src/virt-manager.schemas.in.h:33
-#, fuzzy
 msgid "Use selected format for new VM storage"
-msgstr "新しい仮想マシンに選択した種類のグラフィックスを使用します。"
+msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:34
 msgid "Use selected format when creating new disk images in new VM wizard"
@@ -968,9 +967,8 @@ msgid "%s installs not available for paravirt guests."
 msgstr "準仮想化ゲストでは %s インストールは利用できません。"
 
 #: ../src/virtManager/create.py:530
-#, fuzzy
 msgid "No install methods available for this connection."
-msgstr "この接続ではインストールオプションが使用できません。"
+msgstr ""
 
 #: ../src/virtManager/create.py:578
 #, python-format
@@ -1898,23 +1896,12 @@ msgstr ""
 "手動で追加できます。"
 
 #: ../src/virtManager/engine.py:184
-#, fuzzy
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started.\n"
 "virt-manager will connect to libvirt on the next application\n"
 "start up."
 msgstr ""
-"Libvirt をインストールしたばかりなので、'libvirtd' サービスを\n"
-"開始する必要があります。これは、以下のうちのいずれかの方法で\n"
-"実行することができます:\n"
-"\n"
-"- GNOME メニュー: システム -> 管理 -> サービス を開きます。\n"
-"- ターミナル: su -c 'service libvirtd restart' と入力します。\n"
-"- コンピュータを再起動します。\n"
-"\n"
-"virt-manager は次回のアプリケーション開始時に libvirt に\n"
-"接続します。"
 
 #: ../src/virtManager/engine.py:190
 msgid "Libvirt service must be started"
@@ -2062,9 +2049,9 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/engine.py:896
-#, fuzzy, python-format
+#, python-format
 msgid "Error removing domain state: %s"
-msgstr "仮想マシンの再起動中にエラーが発生しました: %s"
+msgstr ""
 
 #. VM will be restored, which can take some time, so show progress
 #: ../src/virtManager/engine.py:900
@@ -2561,7 +2548,7 @@ msgstr "利用可能なハイパーバイザーを探索中..."
 #: ../src/virtManager/packageutils.py:59
 #, python-format
 msgid "Checking for installed package '%s'"
-msgstr ""
+msgstr "インストール済みパッケージ '%s' をチェックしています"
 
 #: ../src/virtManager/packageutils.py:87
 #, python-format
@@ -2583,18 +2570,13 @@ msgid "Packages required for KVM usage"
 msgstr "KVM を利用するには以下のパッケージが必要です。"
 
 #: ../src/virtManager/packageutils.py:92
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The following packages are not installed:\n"
 "%s\n"
 "\n"
 "Would you like to install them now?"
 msgstr ""
-"以下のパッケージがインストールされていません:\n"
-"%s\n"
-"\n"
-"これらのパッケージは KVM ゲストをローカルで作成するために必要です。\n"
-"今すぐインストールしますか？"
 
 #: ../src/virtManager/packageutils.py:94
 msgid "Recommended package installs"
@@ -3934,12 +3916,12 @@ msgid "C_ustomize configuration before install"
 msgstr "インストールの前に設定をカスタマイズする(_U)"
 
 #: ../src/vmm-create.ui.h:57
-#, fuzzy
 msgid ""
 "<small>Specifying an operating system is required for best performance</"
 "small>"
 msgstr ""
-"<small>仮想 CPU を能力以上に割り当てるとパフォーマンスが劣化します</small>"
+"<small>最適なパフォーマンスを得るために、オペレーティングシステムと指定する必"
+"要があります。</small>"
 
 #: ../src/vmm-create.ui.h:59
 msgid "Set a fixed _MAC address"
@@ -4039,7 +4021,7 @@ msgstr "ツールバー(_O)"
 
 #: ../src/vmm-details.ui.h:24
 msgid "Send _Key"
-msgstr "キーを送信(_K)"
+msgstr "キーの送信(_K)"
 
 #: ../src/vmm-details.ui.h:25 ../src/vmm-host.ui.h:6
 #: ../src/vmm-manager.ui.h:13
@@ -5053,9 +5035,8 @@ msgid ""
 msgstr ""
 
 #: ../src/vmm-preferences.ui.h:24
-#, fuzzy
 msgid "Don't disable console shortcuts:"
-msgstr "コンソールのキーボードショートカットを強制する"
+msgstr "コンソールのショートカットを無効化しない:"
 
 #: ../src/vmm-preferences.ui.h:25
 msgid "<b>Graphical Consoles</b>"
@@ -5078,14 +5059,12 @@ msgid "Install Graphics:"
 msgstr "グラフィックスのインストール:"
 
 #: ../src/vmm-preferences.ui.h:30
-#, fuzzy
 msgid "Default storage format for new disk images."
-msgstr "仮想マシンディスクイメージを格納するデフォルトパス"
+msgstr "新規ディスクイメージに対するデフォルトのストレージ形式:"
 
 #: ../src/vmm-preferences.ui.h:31
-#, fuzzy
 msgid "Default storage format:"
-msgstr "デフォルトの復元用パス"
+msgstr "デフォルトのストレージ形式:"
 
 #: ../src/vmm-preferences.ui.h:32
 msgid "<b>New VM</b>"
@@ -5146,11 +5125,3 @@ msgstr "ローカルを参照(_B)"
 #: ../src/vmm-storage-browse.ui.h:4
 msgid "Choose _Volume"
 msgstr "ボリュームを選択(_V)"
-
-#~ msgid ""
-#~ "Force console menu accelerators while the console is active. Enabling "
-#~ "this may overwrite keyboard interaction with the guest."
-#~ msgstr ""
-#~ "コンソールのフォーカスがアクティブな時、コンソールのメニューのアクセラレー"
-#~ "ターを強制します。この設定を有効にするとゲストOS内のキーボード操作を上書き"
-#~ "する場合があります。"

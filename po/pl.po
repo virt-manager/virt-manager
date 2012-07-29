@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-09 08:04-0400\n"
-"PO-Revision-Date: 2012-02-18 21:01+0000\n"
+"PO-Revision-Date: 2012-07-27 16:14+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/virt-manager/"
 "language/pl/)\n"
@@ -191,13 +191,15 @@ msgstr ""
 "Instalacja wybranego typu grafiki dla nowej maszyny wirtualnej. vnc lub spice"
 
 #: ../src/virt-manager.schemas.in.h:33
-#, fuzzy
 msgid "Use selected format for new VM storage"
-msgstr "Instalacja wybranego typu grafiki dla nowej maszyny wirtualnej"
+msgstr ""
+"Użycie wybranego formatu dla nowych pamięci masowych maszyn wirtualnych"
 
 #: ../src/virt-manager.schemas.in.h:34
 msgid "Use selected format when creating new disk images in new VM wizard"
 msgstr ""
+"Użycie wybranego formatu podczas tworzenia nowych obrazów dysków w kreatorze "
+"nowej maszyny wirtualnej"
 
 #: ../src/virt-manager.schemas.in.h:35
 msgid "Show system tray icon"
@@ -984,9 +986,8 @@ msgid "%s installs not available for paravirt guests."
 msgstr "Instalacje %s nie są dostępne dla parawirtualizowanych gości."
 
 #: ../src/virtManager/create.py:530
-#, fuzzy
 msgid "No install methods available for this connection."
-msgstr "Brak opcji instalacji dostępnych dla tego połączenia."
+msgstr "Brak metod instalacji dostępnych dla tego połączenia."
 
 #: ../src/virtManager/create.py:578
 #, python-format
@@ -1920,22 +1921,16 @@ msgstr ""
 "Plik->Dodaj połączenie"
 
 #: ../src/virtManager/engine.py:184
-#, fuzzy
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started.\n"
 "virt-manager will connect to libvirt on the next application\n"
 "start up."
 msgstr ""
-"Pakiet libvirt został właśnie zainstalowany, więc należy\n"
-"uruchomić usługę \"libvirtd\". Można to wykonać za pomocą:\n"
-"\n"
-"- Z menu GNOME: System->Administracja->Usługi\n"
-"- Z terminala: su -c 'service libvirtd restart'\n"
-"- Ponownego uruchomienia kompytera\n"
-"\n"
-"Program virt-manager połączy się z usługą libvirt podczas\n"
-"następnego uruchomienia."
+"Pakiet libvirt został dopiero zainstalowany, więc należy\n"
+"uruchomić usługę \"libvirtd\".\n"
+"Program virt-manager połączy się z biblioteką libvirt podczas\n"
+"następnego uruchomienia aplikacji."
 
 #: ../src/virtManager/engine.py:190
 msgid "Libvirt service must be started"
@@ -2081,11 +2076,13 @@ msgid ""
 "to remove the saved state and perform a regular\n"
 "start up?"
 msgstr ""
+"Nie można przywrócić domeny. Usunąć zapisany stan\n"
+"i wykonać zwykłe uruchomienie?"
 
 #: ../src/virtManager/engine.py:896
-#, fuzzy, python-format
+#, python-format
 msgid "Error removing domain state: %s"
-msgstr "Błąd podczas ponownego uruchamiania domeny: %s"
+msgstr "Błąd podczas usuwania stanu domeny: %s"
 
 #. VM will be restored, which can take some time, so show progress
 #: ../src/virtManager/engine.py:900
@@ -2580,7 +2577,7 @@ msgstr "Wyszukiwanie dostępnych nadzorców..."
 #: ../src/virtManager/packageutils.py:59
 #, python-format
 msgid "Checking for installed package '%s'"
-msgstr ""
+msgstr "Sprawdzanie zainstalowanego pakietu \"%s\""
 
 #: ../src/virtManager/packageutils.py:87
 #, python-format
@@ -2602,22 +2599,21 @@ msgid "Packages required for KVM usage"
 msgstr "Pakiety wymagane do użycia KVM"
 
 #: ../src/virtManager/packageutils.py:92
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The following packages are not installed:\n"
 "%s\n"
 "\n"
 "Would you like to install them now?"
 msgstr ""
-"Następujące pakiety nie są zainstalowane:\n"
+"Poniższe pakiety nie są zainstalowane:\n"
 "%s\n"
 "\n"
-"Są one wymagane, aby utworzyć lokalnych gości\n"
-"KVM. Zainstalować je teraz?"
+"Zainstalować je teraz?"
 
 #: ../src/virtManager/packageutils.py:94
 msgid "Recommended package installs"
-msgstr ""
+msgstr "Zalecane instalacje pakietów"
 
 #: ../src/virtManager/packageutils.py:105
 #, python-format
@@ -3959,12 +3955,11 @@ msgid "C_ustomize configuration before install"
 msgstr "Dostosowanie konfig_uracji przed instalacją"
 
 #: ../src/vmm-create.ui.h:57
-#, fuzzy
 msgid ""
 "<small>Specifying an operating system is required for best performance</"
 "small>"
 msgstr ""
-"<small>Wpisanie za dużej ilości wirtualnych procesorów może zmniejszyć "
+"<small>Podanie systemu operacyjnego jest wymagane, aby uzyskać najlepszą "
 "wydajność</small>"
 
 #: ../src/vmm-create.ui.h:59
@@ -5079,11 +5074,14 @@ msgid ""
 "disabled to ensure that typing in the guest does not accidentally perform an "
 "operation in virt-manager's console window."
 msgstr ""
+"Bez wyłączania skrótów dla menu okna konsoli (Alt+F -> Plik itp.), kiedy "
+"konsola graficzna gościa używa klawiatury. Zwykle są wyłączone, aby upewnić "
+"się, że pisanie w goście nie spowoduje przypadkowo żadnego działania w oknie "
+"konsoli programu virt-manager."
 
 #: ../src/vmm-preferences.ui.h:24
-#, fuzzy
 msgid "Don't disable console shortcuts:"
-msgstr "Wymuszenie skrótów klawiatury konsoli:"
+msgstr "Bez wyłączania skrótów konsoli:"
 
 #: ../src/vmm-preferences.ui.h:25
 msgid "<b>Graphical Consoles</b>"
@@ -5106,14 +5104,12 @@ msgid "Install Graphics:"
 msgstr "Grafika instalacji:"
 
 #: ../src/vmm-preferences.ui.h:30
-#, fuzzy
 msgid "Default storage format for new disk images."
-msgstr "Domyślna ścieżka do wybierania obrazów maszyn wirtualnych"
+msgstr "Domyślny format pamięci masowych dla nowych obrazów dysków."
 
 #: ../src/vmm-preferences.ui.h:31
-#, fuzzy
 msgid "Default storage format:"
-msgstr "Domyślna ścieżka przywracania"
+msgstr "Domyślny format pamięci masowych:"
 
 #: ../src/vmm-preferences.ui.h:32
 msgid "<b>New VM</b>"
@@ -5174,10 +5170,3 @@ msgstr "_Przeglądaj lokalne"
 #: ../src/vmm-storage-browse.ui.h:4
 msgid "Choose _Volume"
 msgstr "Wybierz _wolumin"
-
-#~ msgid ""
-#~ "Force console menu accelerators while the console is active. Enabling "
-#~ "this may overwrite keyboard interaction with the guest."
-#~ msgstr ""
-#~ "Wymusza skróty menu konsoli podczas gdy konsola jest aktywna. Włączenie "
-#~ "tego może nadpisać współdziałanie klawiatury z gościem."

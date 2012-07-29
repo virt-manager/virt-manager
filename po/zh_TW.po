@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-09 08:04-0400\n"
-"PO-Revision-Date: 2012-03-10 13:03+0000\n"
+"PO-Revision-Date: 2012-07-10 08:22+0000\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: zh_TW\n"
@@ -932,9 +932,8 @@ msgid "%s installs not available for paravirt guests."
 msgstr "%s 安裝尚無法提供副虛擬客端。"
 
 #: ../src/virtManager/create.py:530
-#, fuzzy
 msgid "No install methods available for this connection."
-msgstr "此連線沒有可用的安裝選項。"
+msgstr ""
 
 #: ../src/virtManager/create.py:578
 #, python-format
@@ -1987,9 +1986,9 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/engine.py:896
-#, fuzzy, python-format
+#, python-format
 msgid "Error removing domain state: %s"
-msgstr "網路重新開機時發生錯誤：%s"
+msgstr ""
 
 #. VM will be restored, which can take some time, so show progress
 #: ../src/virtManager/engine.py:900
@@ -2491,18 +2490,13 @@ msgid "Packages required for KVM usage"
 msgstr "KVM 使用上需要的套件"
 
 #: ../src/virtManager/packageutils.py:92
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The following packages are not installed:\n"
 "%s\n"
 "\n"
 "Would you like to install them now?"
 msgstr ""
-"下列套件尚未安裝：\n"
-"%s\n"
-"\n"
-"需要這些套件以建立本地的 KVM 客端。\n"
-"您想要現在安裝嗎？"
 
 #: ../src/virtManager/packageutils.py:94
 msgid "Recommended package installs"
@@ -4919,9 +4913,8 @@ msgid ""
 msgstr ""
 
 #: ../src/vmm-preferences.ui.h:24
-#, fuzzy
 msgid "Don't disable console shortcuts:"
-msgstr "強制主控臺按鍵捷徑："
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:25
 msgid "<b>Graphical Consoles</b>"
@@ -4944,14 +4937,12 @@ msgid "Install Graphics:"
 msgstr ""
 
 #: ../src/vmm-preferences.ui.h:30
-#, fuzzy
 msgid "Default storage format for new disk images."
-msgstr "選擇 VM 映像的預設路徑"
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:31
-#, fuzzy
 msgid "Default storage format:"
-msgstr "預設還原路徑"
+msgstr ""
 
 #: ../src/vmm-preferences.ui.h:32
 msgid "<b>New VM</b>"
@@ -5012,10 +5003,3 @@ msgstr "瀏覽本地端(_B)"
 #: ../src/vmm-storage-browse.ui.h:4
 msgid "Choose _Volume"
 msgstr "選擇儲區(_V)"
-
-#~ msgid ""
-#~ "Force console menu accelerators while the console is active. Enabling "
-#~ "this may overwrite keyboard interaction with the guest."
-#~ msgstr ""
-#~ "當主控臺使用中時，強制採用主控臺選單快速鍵。啟用這個功能可能會覆寫客端的鍵"
-#~ "盤互動。"
