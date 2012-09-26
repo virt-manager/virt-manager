@@ -1,7 +1,7 @@
 Installation Instructions
 *************************
 
-Copyright (C) 1994-1996, 1999-2002, 2004-2011 Free Software Foundation,
+Copyright (C) 1994-1996, 1999-2002, 2004-2012 Free Software Foundation,
 Inc.
 
    Copying and distribution of this file, with or without modification,
@@ -309,9 +309,10 @@ causes the specified `gcc' to be used as the C compiler (unless it is
 overridden in the site shell script).
 
 Unfortunately, this technique does not work for `CONFIG_SHELL' due to
-an Autoconf bug.  Until the bug is fixed you can use this workaround:
+an Autoconf limitation.  Until the limitation is lifted, you can use
+this workaround:
 
-     CONFIG_SHELL=/bin/bash /bin/bash ./configure CONFIG_SHELL=/bin/bash
+     CONFIG_SHELL=/bin/bash ./configure CONFIG_SHELL=/bin/bash
 
 `configure' Invocation
 ======================
@@ -367,4 +368,3 @@ operates.
 
 `configure' also accepts some other, not widely useful, options.  Run
 `configure --help' for more details.
-
