@@ -1198,7 +1198,7 @@ class vmmDetails(vmmGObjectUI):
 
     def set_hw_selection(self, page, disable_apply=True):
         if disable_apply:
-            self.widget("config-apply").set_sensitive(False)
+            self.disable_apply()
 
         hwlist = self.widget("hw-list")
         selection = hwlist.get_selection()
@@ -1347,6 +1347,7 @@ class vmmDetails(vmmGObjectUI):
             if self.has_unapplied_changes(self.get_hw_row()):
                 self.sync_details_console_view(True)
                 return
+            self.disable_apply()
 
         if is_details:
             pages.set_current_page(PAGE_DETAILS)
@@ -2402,7 +2403,7 @@ class vmmDetails(vmmGObjectUI):
             detach_err = (str(e), "".join(traceback.format_exc()))
 
         if not detach_err:
-            self.widget("config-apply").set_sensitive(False)
+            self.disable_apply()
             return
 
         self.err.show_err(
