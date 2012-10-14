@@ -1371,19 +1371,25 @@ class vmmDomain(vmmLibvirtObject):
         self.vcpu_max_count()
 
     def run_status(self):
-        if self.status() == libvirt.VIR_DOMAIN_RUNNING:
+        status = self.status()
+
+        if status == libvirt.VIR_DOMAIN_RUNNING:
             return _("Running")
-        elif self.status() == libvirt.VIR_DOMAIN_PAUSED:
+        elif status == libvirt.VIR_DOMAIN_PAUSED:
             return _("Paused")
-        elif self.status() == libvirt.VIR_DOMAIN_SHUTDOWN:
+        elif status == libvirt.VIR_DOMAIN_SHUTDOWN:
             return _("Shutting Down")
-        elif self.status() == libvirt.VIR_DOMAIN_SHUTOFF:
+        elif status == libvirt.VIR_DOMAIN_SHUTOFF:
             if self.hasSavedImage():
                 return _("Saved")
             else:
                 return _("Shutoff")
-        elif self.status() == libvirt.VIR_DOMAIN_CRASHED:
+        elif status == libvirt.VIR_DOMAIN_CRASHED:
             return _("Crashed")
+        elif (hasattr(libvirt, "VIR_DOMAIN_PMSUSPENDED") and
+              status == libvirt.VIR_DOMAIN_PMSUSPENDED):
+            return _("Suspended")
+        return _("Unknown")
 
     def _normalize_status(self, status):
         if status == libvirt.VIR_DOMAIN_NOSTATE:
