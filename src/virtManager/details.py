@@ -2033,16 +2033,7 @@ class vmmDetails(vmmGObjectUI):
             desc_widget = self.widget("overview-description")
             desc = desc_widget.get_buffer().get_property("text") or ""
             add_define(self.vm.define_description, desc)
-
-            # Hack so that we don't get a warning that
-            # 'changes take effect after reboot'
-            # We already fake hotplug like behavior, by reading the
-            # description from the inactive XML from a running VM
-            #
-            # libvirt since 0.9.10 provides a SetMetadata API that provides
-            # actual <description> 'hotplug', but using that means checking
-            # for support, version, etc, so let's stick with the easy way
-            add_hotplug(lambda d: d, desc)
+            add_hotplug(self.vm.hotplug_description, desc)
 
         return self._change_config_helper(df, da, hf, ha)
 

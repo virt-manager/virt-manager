@@ -813,6 +813,23 @@ class vmmDomain(vmmLibvirtObject):
         devobj.passwd = newval or None
         self.update_device(devobj)
 
+    def hotplug_description(self, desc):
+        # We already fake hotplug like behavior, by reading the
+        # description from the inactive XML from a running VM
+        #
+        # libvirt since 0.9.10 provides a SetMetadata API that provides
+        # actual <description> 'hotplug', and using that means checkig
+        # for support, version, etc.
+        if not virtinst.support.check_domain_support(self._backend,
+                virtinst.support.SUPPORT_DOMAIN_SET_METADATA):
+            return
+
+        flags = (libvirt.VIR_DOMAIN_AFFECT_LIVE |
+                libvirt.VIR_DOMAIN_AFFECT_CONFIG)
+        self._backend.setMetadata(
+                libvirt.VIR_DOMAIN_METADATA_DESCRIPTION,
+                desc, None, None, flags)
+
 
     ########################
     # Libvirt API wrappers #
