@@ -100,8 +100,6 @@ Requires: libxml2-python >= 2.6.23
 Requires: python-virtinst >= %{virtinst_version}
 # Earlier vte had broken python binding module
 Requires: vte >= 0.12.2
-# For online help
-Requires: scrollkeeper
 # For console widget
 Requires: gtk-vnc2
 %if %{with_spice}
@@ -119,7 +117,6 @@ Requires: virt-manager-common = %{verrel}
 %endif
 
 BuildRequires: gettext
-BuildRequires: scrollkeeper
 BuildRequires: intltool
 BuildRequires: GConf2
 BuildRequires: /usr/bin/pod2man
@@ -252,7 +249,7 @@ update-desktop-database -q %{_datadir}/applications
 %files -f %{name}.lang
 %endif
 %defattr(-,root,root,-)
-%doc README COPYING COPYING-DOCS AUTHORS ChangeLog NEWS
+%doc README COPYING AUTHORS ChangeLog NEWS
 %{_sysconfdir}/gconf/schemas/%{name}.schemas
 %{_bindir}/%{name}
 %{_libexecdir}/%{name}-launch
