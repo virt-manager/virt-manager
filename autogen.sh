@@ -6,8 +6,7 @@ set -x
 rm -f config.status
 
 # Make makefiles.
-autoreconf --install --force
-intltoolize --automake --copy --force
-autoreconf
+autoreconf --force --install --verbose
+intltoolize --force --copy --automake
 
 ./configure $@
