@@ -81,7 +81,7 @@ Requires: libvirt-python >= 0.7.0
 # Definitely does not work with earlier due to python API changes
 Requires: dbus-python >= 0.61
 Requires: dbus-x11
-%if !0%{?rhel} || 0%{?rhel} > 6
+%if 0%{?rhel} > 6
 # Might work with earlier, but this is what we've tested
 Requires: gnome-keyring >= 0.4.9
 %else
