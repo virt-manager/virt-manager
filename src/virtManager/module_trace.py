@@ -31,21 +31,18 @@ from types import FunctionType
 from types import ClassType
 from types import MethodType
 
-_debug = False
-
-def generate_wrapper(origfunc, name, tb):
+def generate_wrapper(origfunc, name, do_tb):
     def newfunc(*args, **kwargs):
-        logging.debug("TRACE %s: %s %s %s" % (time.time(), name, args, kwargs))
-        if tb:
-            logging.debug("BACKTRACE '%s'" % "".join(traceback.format_stack()))
+        tb = do_tb and ("\n%s" % "".join(traceback.format_stack())) or ""
+        logging.debug("TRACE %s: %s %s %s%s",
+                      time.time(), name, args, kwargs, tb)
         return origfunc(*args, **kwargs)
 
     return newfunc
 
 def wrap_func(module, funcobj, tb):
     name = funcobj.__name__
-    if _debug:
-        logging.debug("wrapfunc %s %s" % (funcobj, name))
+    logging.debug("wrapfunc %s %s", funcobj, name)
 
     newfunc = generate_wrapper(funcobj, name, tb)
     setattr(module, name, newfunc)
@@ -53,15 +50,13 @@ def wrap_func(module, funcobj, tb):
 def wrap_method(classobj, methodobj, tb):
     name = methodobj.__name__
     fullname = classobj.__name__ + "." + name
-    if _debug:
-        logging.debug("wrapmeth %s" % (fullname))
+    logging.debug("wrapmeth %s", fullname)
 
     newfunc = generate_wrapper(methodobj, fullname, tb)
     setattr(classobj, name, newfunc)
 
 def wrap_class(classobj, tb):
-    if _debug:
-        logging.debug("wrapclas %s %s" % (classobj, classobj.__name__))
+    logging.debug("wrapclas %s %s", classobj, classobj.__name__)
 
     for name in dir(classobj):
         obj = getattr(classobj, name)
