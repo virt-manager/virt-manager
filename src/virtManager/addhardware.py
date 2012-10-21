@@ -1114,12 +1114,7 @@ class vmmAddHardware(vmmGObjectUI):
     # Add device methods #
     ######################
 
-    def setup_device(self):
-        if (self._dev.virtual_device_type !=
-            virtinst.VirtualDevice.VIRTUAL_DEV_DISK):
-            self._dev.setup_dev(self.conn.vmm)
-            return
-
+    def _storage_progress(self):
         def do_file_allocate(asyncjob, disk):
             meter = asyncjob.get_meter()
 
@@ -1141,6 +1136,12 @@ class vmmAddHardware(vmmGObjectUI):
 
         return progWin.run()
 
+    def setup_device(self):
+        if (self._dev.virtual_device_type == self._dev.VIRTUAL_DEV_DISK and
+            self._dev.creating_storage()):
+            return self._storage_progress()
+
+        return self._dev.setup_dev(self.conn.vmm)
 
     def add_device(self):
         ret = self.setup_device()
