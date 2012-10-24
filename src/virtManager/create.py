@@ -778,7 +778,9 @@ class vmmCreate(vmmGObjectUI):
         filtervars = (not self._rhel6_defaults() and
                       RHEL6_OS_SUPPORT or
                       None)
+
         types = virtinst.FullVirtGuest.list_os_types()
+        types.sort()
         supportl = virtinst.FullVirtGuest.list_os_types(supported=True,
                                                         filtervars=filtervars)
 
