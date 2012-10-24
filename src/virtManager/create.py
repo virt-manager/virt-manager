@@ -783,6 +783,10 @@ class vmmCreate(vmmGObjectUI):
         types.sort()
         supportl = virtinst.FullVirtGuest.list_os_types(supported=True,
                                                         filtervars=filtervars)
+        if not filtervars:
+            # Kind of a hack, just show linux + windows by default since
+            # that's all 98% of people care about
+            supportl = ["linux", "windows"]
 
         self._add_os_row(model, None, _("Generic"), True)
 
