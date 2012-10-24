@@ -801,7 +801,7 @@ class vmmCreate(vmmGObjectUI):
     def populate_os_variant_model(self, _type):
         model = self.widget("install-os-version").get_model()
         model.clear()
-        if _type == None:
+        if not _type:
             self._add_os_row(model, None, _("Generic"), True)
             return
 
