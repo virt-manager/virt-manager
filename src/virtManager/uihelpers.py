@@ -133,11 +133,11 @@ def check_default_pool_active(topwin, conn):
 # Hardware model list building (for details, addhw) #
 #####################################################
 def build_video_combo(vm, video_dev, no_default=None):
-    video_dev_model = gtk.ListStore(str)
+    video_dev_model = gtk.ListStore(str, str)
     video_dev.set_model(video_dev_model)
     text = gtk.CellRendererText()
     video_dev.pack_start(text, True)
-    video_dev.add_attribute(text, 'text', 0)
+    video_dev.add_attribute(text, 'text', 1)
     video_dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
     populate_video_combo(vm, video_dev, no_default)
@@ -159,7 +159,7 @@ def populate_video_combo(vm, video_dev, no_default=None):
 
         if m == tmpdev.MODEL_DEFAULT and no_default:
             continue
-        video_dev_model.append([m])
+        video_dev_model.append([m, tmpdev.pretty_model(m)])
 
     if len(video_dev_model) > 0:
         video_dev.set_active(0)

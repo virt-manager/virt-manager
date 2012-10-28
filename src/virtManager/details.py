@@ -3171,7 +3171,8 @@ class vmmDetails(vmmGObjectUI):
         self.widget("video-ram").set_text(ramlabel)
         self.widget("video-heads").set_text(heads and heads or "-")
 
-        self.set_combo_label("video-model", model)
+        self.set_combo_label("video-model", model,
+                             label=vid.pretty_model(model))
 
     def refresh_watchdog_page(self):
         watch = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -3465,7 +3466,9 @@ class vmmDetails(vmmGObjectUI):
 
         # Populate video devices
         for vid in self.vm.get_video_devices():
-            update_hwlist(HW_LIST_TYPE_VIDEO, vid, _("Video"), "video-display")
+            update_hwlist(HW_LIST_TYPE_VIDEO, vid,
+                          _("Video %s") % vid.pretty_model(vid.model_type),
+                          "video-display")
 
         # Populate watchdog devices
         for watch in self.vm.get_watchdog_devices():
