@@ -88,11 +88,12 @@ class vmmConfig(object):
     DEFAULT_VIRT_IMAGE_DIR = "/var/lib/libvirt/images"
     DEFAULT_VIRT_SAVE_DIR = "/var/lib/libvirt"
 
-    def __init__(self, appname, appversion, ui_dir):
+    def __init__(self, appname, appversion, ui_dir, test_first_run=False):
         self.appname = appname
         self.appversion = appversion
         self.conf_dir = "/apps/" + appname
         self.ui_dir = ui_dir
+        self.test_first_run = bool(test_first_run)
 
         self.conf = gconf.client_get_default()
         self.conf.add_dir(self.conf_dir, gconf.CLIENT_PRELOAD_NONE)
@@ -590,6 +591,9 @@ class vmmConfig(object):
 
     # Manager view connection list
     def add_conn(self, uri):
+        if self.test_first_run:
+            return
+
         uris = self.conf.get_list(self.conf_dir + "/connections/uris",
                                   gconf.VALUE_STRING)
         if uris == None:
@@ -619,6 +623,8 @@ class vmmConfig(object):
                                gconf.VALUE_STRING, uris)
 
     def get_conn_uris(self):
+        if self.test_first_run:
+            return []
         return self.conf.get_list(self.conf_dir + "/connections/uris",
                                   gconf.VALUE_STRING)
 
@@ -638,6 +644,9 @@ class vmmConfig(object):
         return ((uris is not None) and (uri in uris))
 
     def set_conn_autoconnect(self, uri, val):
+        if self.test_first_run:
+            return
+
         uris = self.conf.get_list(self.conf_dir + "/connections/autoconnect",
                                   gconf.VALUE_STRING)
         if uris is None:
