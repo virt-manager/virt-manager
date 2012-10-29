@@ -217,7 +217,7 @@ def start_libvirtd():
         state = props.Get("org.freedesktop.systemd1.Unit", "ActiveState")
 
         logging.debug("libvirtd state=%s", state)
-        if state == "Active":
+        if str(state).lower() == "active":
             logging.debug("libvirtd already active, not starting")
             return True
     except:
@@ -226,12 +226,15 @@ def start_libvirtd():
 
     # Connect to system-config-services and offer to start
     try:
+        logging.debug("libvirtd not running, asking system-config-services "
+                      "to start it")
         scs = dbus.Interface(bus.get_object(
                              "org.fedoraproject.Config.Services",
                              "/org/fedoraproject/Config/Services/systemd1"),
                              "org.freedesktop.systemd1.Manager")
         scs.StartUnit(unitname, "replace")
         time.sleep(2)
+        logging.debug("Starting libvirtd appeared to succeed")
         return True
     except:
         logging.exception("Failed to talk to system-config-services")

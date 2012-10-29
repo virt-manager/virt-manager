@@ -178,8 +178,11 @@ class vmmEngine(vmmGObject):
             manager.set_startup_error(msg)
             return
 
+        do_start = not did_install_libvirt
         if did_install_libvirt:
             didstart = packageutils.start_libvirtd()
+            do_start = didstart
+
             warnmsg = _(
                 "Libvirt was just installed, so the 'libvirtd' service will\n"
                 "will need to be started.\n"
@@ -189,8 +192,7 @@ class vmmEngine(vmmGObject):
             if not didstart:
                 self.err.ok(_("Libvirt service must be started"), warnmsg)
 
-        self.connect_to_uri(tryuri, autoconnect=True,
-                            do_start=not did_install_libvirt)
+        self.connect_to_uri(tryuri, autoconnect=True, do_start=do_start)
 
 
     def load_stored_uris(self):
