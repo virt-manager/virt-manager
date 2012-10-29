@@ -1406,6 +1406,8 @@ class vmmDomain(vmmLibvirtObject):
         elif (hasattr(libvirt, "VIR_DOMAIN_PMSUSPENDED") and
               status == libvirt.VIR_DOMAIN_PMSUSPENDED):
             return _("Suspended")
+
+        logging.debug("Unknown status %d, returning 'Unknown'")
         return _("Unknown")
 
     def _normalize_status(self, status):
@@ -1446,9 +1448,16 @@ class vmmDomain(vmmLibvirtObject):
             libvirt.VIR_DOMAIN_SHUTDOWN: "state_shutoff",
             libvirt.VIR_DOMAIN_SHUTOFF: "state_shutoff",
             libvirt.VIR_DOMAIN_NOSTATE: "state_running",
+            # VIR_DOMAIN_PMSUSPENDED
+            7: "state_paused",
         }
 
-        return status_icons[self.status()]
+        status = self.status()
+        if status not in status_icons:
+            logging.debug("Unknown status %d, using NOSTATE")
+            status = libvirt.VIR_DOMAIN_NOSTATE
+
+        return status_icons[status]
 
     def force_update_status(self):
         """
