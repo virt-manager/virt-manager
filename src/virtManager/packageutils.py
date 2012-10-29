@@ -61,7 +61,7 @@ def check_packagekit(errbox, packages, ishv):
     found = []
     progWin = vmmAsyncJob(_do_async_search,
                           [session, pk_control, packages], msg, msg,
-                          None, async=False)
+                          errbox.get_parent(), async=False)
     error, ignore = progWin.run()
     if error:
         return

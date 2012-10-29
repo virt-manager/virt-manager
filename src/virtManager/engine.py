@@ -159,7 +159,7 @@ class vmmEngine(vmmGObject):
             libvirt_packages = self.config.libvirt_packages
             packages = self.config.hv_packages + libvirt_packages
 
-            ret = packageutils.check_packagekit(self.err, packages, True)
+            ret = packageutils.check_packagekit(manager.err, packages, True)
         except:
             logging.exception("Error talking to PackageKit")
 
@@ -190,7 +190,7 @@ class vmmEngine(vmmGObject):
                 "start up.")
 
             if not didstart:
-                self.err.ok(_("Libvirt service must be started"), warnmsg)
+                manager.err.ok(_("Libvirt service must be started"), warnmsg)
 
         self.connect_to_uri(tryuri, autoconnect=True, do_start=do_start)
 
