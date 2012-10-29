@@ -135,7 +135,15 @@ def packagekit_install(package_list):
                                    timeout=timeout)
 
 def packagekit_search(session, pk_control, package_name, packages):
-    tid = pk_control.GetTid()
+    newstyle = False
+    try:
+        tid = pk_control.GetTid()
+    except dbus.exceptions.DBusException, e:
+        if e.get_dbus_name() != "org.freedesktop.DBus.Error.UnknownMethod":
+            raise
+        newstyle = True
+        tid = pk_control.CreateTransaction()
+
     pk_trans = dbus.Interface(
                     session.get_object("org.freedesktop.PackageKit", tid),
                     "org.freedesktop.PackageKit.Transaction")
@@ -160,7 +168,10 @@ def packagekit_search(session, pk_control, package_name, packages):
     pk_trans.connect_to_signal('ErrorCode', error)
     pk_trans.connect_to_signal('Package', package)
     try:
-        pk_trans.SearchNames("installed", [package_name])
+        searchtype = "installed"
+        if newstyle:
+            searchtype = 2 ** 2
+        pk_trans.SearchNames(searchtype, [package_name])
     except dbus.exceptions.DBusException, e:
         if e.get_dbus_name() != "org.freedesktop.DBus.Error.UnknownMethod":
             raise
