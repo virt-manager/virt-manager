@@ -334,7 +334,7 @@ def main():
     import virtManager.config
     import virtManager.util
     config = virtManager.config.vmmConfig(appname, appversion, ui_dir,
-                                          options.test_first_run)
+                                          options.testfirstrun)
     virtManager.util.running_config = config
     config.default_qemu_user = default_qemu_user
     config.rhel6_defaults = rhel_enable_unsupported_opts
