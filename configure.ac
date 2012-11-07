@@ -4,19 +4,19 @@ AC_INIT(virt-manager, 0.9.5)
 VIRTINST_VERSION="0.600.4"
 
 AC_CONFIG_SRCDIR(src/virt-manager.py.in)
-dnl Make automake keep quiet about wildcards & other GNUmake-isms
 AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_MACRO_DIR([build-aux/m4])
 AM_INIT_AUTOMAKE([foreign])
 AM_MAINTAINER_MODE([enable])
 
 ALL_LINGUAS="as bg bn_IN bs ca cs da de es fi fr gu hi hr hu is it ja kn ko ml mr ms nb nl or pa pl pt_BR pt ro ru sr@latin sr sv ta te tr uk zh_CN zh_TW"
 IT_PROG_INTLTOOL([0.35.0], [no-xml])
-AM_GNU_GETTEXT_VERSION([0.14.1])
 AM_GNU_GETTEXT([external])
 
 GETTEXT_PACKAGE=virt-manager
 AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],"$GETTEXT_PACKAGE",
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],
+                   "$GETTEXT_PACKAGE",
                    [GETTEXT package name])
 
 dnl ---------------

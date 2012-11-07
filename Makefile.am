@@ -1,5 +1,3 @@
-ACLOCAL_AMFLAGS = -I m4/
-
 SUBDIRS = src icons man po tests
 
 EXTRA_DIST = @PACKAGE@.spec HACKING \
