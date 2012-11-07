@@ -6,7 +6,7 @@ cp src/virt-manager-tui.py.in src/_virt-manager-tui
 
 cd src || exit 1
 
-IGNOREFILES="IPy.py"
+IGNOREFILES=""
 
 ##################
 # pylint Section #

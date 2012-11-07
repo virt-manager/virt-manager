@@ -18,10 +18,11 @@
 # MA 02110-1301 USA.
 #
 
+from IPy import IP
+
 from gi.repository import GObject
 
 from virtManager import util
-from virtManager.IPy import IP
 from virtManager.libvirtobject import vmmLibvirtObject
 
 class vmmNetwork(vmmLibvirtObject):

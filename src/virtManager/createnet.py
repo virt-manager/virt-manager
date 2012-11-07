@@ -21,11 +21,12 @@
 import logging
 import re
 
+from IPy import IP
+
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
 
-from virtManager.IPy import IP
 from virtManager.network import vmmNetwork
 from virtManager.baseclass import vmmGObjectUI
 

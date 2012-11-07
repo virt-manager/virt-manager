@@ -108,6 +108,7 @@ Requires: spice-gtk3
 %if %{with_guestfs}
 Requires: python-libguestfs
 %endif
+Requires: python-IPy
 
 %if %{with_tui} == 0
 Obsoletes: virt-manager-common <= %{verrel}
@@ -143,7 +144,6 @@ Group: Applications/Emulators
 Requires: virt-manager-common = %{verrel}
 Requires: python-newt_syrup >= 0.1.2
 Requires: libuser-python
-Requires: python-IPy
 
 %description tui
 An interactive text user interface for Virtual Machine Manager.
@@ -160,6 +160,7 @@ Requires: dbus-python
 Requires: libxml2-python >= 2.6.23
 # Absolutely require this version or later
 Requires: python-virtinst >= %{virtinst_version}
+Requires: python-IPy
 
 %description common
 Common files used by the different Virtual Machine Manager interfaces.
