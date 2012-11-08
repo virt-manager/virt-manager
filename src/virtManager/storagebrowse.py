@@ -358,4 +358,3 @@ class vmmStorageBrowser(vmmGObjectUI):
         self.err.show_err(info,
                           details=details,
                           async=False)
-

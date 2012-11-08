@@ -100,7 +100,7 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_btn_keys_define_clicked": self.change_grab_keys,
             "on_prefs_graphics_type_changed": self.change_graphics_type,
             "on_prefs_storage_format_changed": self.change_storage_format,
-            })
+        })
         self.bind_escape_key_close()
 
         # XXX: Help docs useless/out of date
@@ -144,7 +144,7 @@ class vmmPreferences(vmmGObjectUI):
     def refresh_console_scaling(self, ignore1=None, ignore2=None,
                                 ignore3=None, ignore4=None):
         val = self.config.get_console_scaling()
-        if val == None:
+        if val is None:
             val = 0
         self.widget("prefs-console-scaling").set_active(val)
 
@@ -357,4 +357,3 @@ class vmmPreferences(vmmGObjectUI):
         # From the Preferences window, show the help document from
         # the Preferences page
         self.emit("action-show-help", "virt-manager-preferences-window")
-

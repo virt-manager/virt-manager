@@ -47,6 +47,10 @@ TEST_HACKS="protected member (_is_virtinst_test_uri|_open_test_uri)"
 STUBCLASS="Instance of 'stubclass'"
 DBUSINTERFACE="Instance of 'Interface'"
 
+# Pylint can't tell sparkline has GtkWidget bits
+SPARKLINEWIDGET="Instance of '(CellRendererSparkline|Sparkline|AutoDrawer|OverBox|_errorDialog)' has no '(show|destroy|set_property|get_property|get_style_context|queue_draw|get_window|get_toplevel|set_child_packing|connect|get_realized|set_window|set_realized|get_parent_window|remove|add|queue_resize|get_events|get_visual|child_get_property|set_has_window|destroy|show_all|set_title|vbox|hide)'"
+
+
 DMSG=""
 skipmsg() {
     DMSG="${DMSG},$1"
@@ -69,6 +73,8 @@ skipmsg "C0111"      # C0111: No docstring
 skipmsg "C0301"      # C0301: Line too long
 skipmsg "C0302"      # C0302: Too many lines in module
 skipmsg "R0201"      # R0201: Method could be a function
+skipmsg "W1001"      # W1001: Pylint can't tell that extending Gtk
+                     #        classes allows use of 'property'
 skipmsg "W0141"      # W0141: Complaining about 'map' and 'filter'
 skipmsg "W0142"      # W0142: *Used * or ** magic*
 skipmsg "W0403"      # W0403: Relative imports
@@ -89,12 +95,14 @@ SHOW_REPORT="n"
 AWK=awk
 [ `uname -s` = 'SunOS' ] && AWK=nawk
 
+format="colorized"
+[ ! -t 1 ] && format="text"
 
 echo "Running pylint"
 pylint --ignore=$IGNOREFILES $PYLINT_FILES \
   --additional-builtins=_ \
   --reports=$SHOW_REPORT \
-  --output-format=colorized \
+  --output-format=$format \
   --dummy-variables-rgx="dummy|ignore.*|.*_ignore" \
   --disable=${DMSG}\
   --disable=${DCHECKERS} 2>&1 | \
@@ -109,6 +117,7 @@ egrep -ve "$NO_PYL_CONFIG" \
       -ve "$STYLE_ATTACH" \
       -ve "$VBOX_PACK" \
       -ve "$GI_IMPORT" \
+      -ve "$SPARKLINEWIDGET" \
       -ve "$INFER_ERRORS" | \
 $AWK '\
 # Strip out any "*** Module name" lines if we dont list any errors for them
@@ -144,11 +153,10 @@ skip_pep8() {
 
 skip_pep8 "E121"
 skip_pep8 "E122"
-skip_pep8 "E123"
 skip_pep8 "E124"
-skip_pep8 "E125"            # Continuation line indents
-skip_pep8 "E126"
-skip_pep8 "E127"
+skip_pep8 "E125"
+skip_pep8 "E126"            # Continuation line indentation bits.
+skip_pep8 "E127"            # doesn't work for function calls as parameters
 skip_pep8 "E128"
 
 skip_pep8 "E203"            # Space before : in dictionary defs
@@ -157,8 +165,7 @@ skip_pep8 "E221"            # Multiple spaces before operator (warns
 skip_pep8 "E241"            # Space after , column alignment nono
 skip_pep8 "E251"            # No space around keyword
 skip_pep8 "E261"            # 2 spaces before inline comment?
-skip_pep8 "E271"            # Multiple spaces before keyword
-skip_pep8 "E272"            # Multiple spaces before keyword
+skip_pep8 "E272"            # Lining up 'from X   import Y" statements
 
 skip_pep8 "E301"            # 1 blank line between methods
 skip_pep8 "E302"            # 2 blank lines between function defs

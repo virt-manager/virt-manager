@@ -461,7 +461,7 @@ def net_list_changed(net_list, bridge_box,
 
     row = net_list.get_model()[active]
 
-    if source_mode_box != None:
+    if source_mode_box is not None:
         show_source_mode = (row[0] == VirtualNetworkInterface.TYPE_DIRECT)
         source_mode_box.set_property("visible", show_source_mode)
         source_mode_label.set_property("visible", show_source_mode)
@@ -613,7 +613,7 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
                 return_warn = is_inactive
                 break
         else:
-            if row[3] == True:
+            if row[3] is True:
                 default = idx
                 return_warn = is_inactive
                 break
@@ -781,7 +781,7 @@ def mediadev_added(ignore_helper, newobj, widget, devtype):
     if newobj.get_media_type() != devtype:
         return
 
-    if len(model) == 1 and model[0][OPTICAL_IS_VALID] == False:
+    if len(model) == 1 and model[0][OPTICAL_IS_VALID] is False:
         # Only entry is the 'No device' entry
         model.clear()
 
@@ -828,7 +828,7 @@ def mediadev_set_default_selection(widget):
         return
 
     for row in model:
-        if row[OPTICAL_IS_MEDIA_PRESENT] == True:
+        if row[OPTICAL_IS_MEDIA_PRESENT] is True:
             widget.set_active(idx)
             return
         idx += 1

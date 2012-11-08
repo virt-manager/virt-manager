@@ -29,7 +29,7 @@ class vmmAbout(vmmGObjectUI):
         self.get_window().connect_signals({
             "on_vmm_about_delete_event": self.close,
             "on_vmm_about_response": self.close,
-            })
+        })
 
     def show(self):
         logging.debug("Showing about")

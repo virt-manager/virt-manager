@@ -19,7 +19,7 @@
 from newt_syrup.menuscreen import MenuScreen
 
 from changehost import ChangeHost
-from addhost    import AddHost
+from addhost import AddHost
 from removehost import RemoveHost
 
 SELECT_HOST = 1

@@ -154,9 +154,9 @@ def xml_parse_wrapper(xml, parse_func, *args, **kwargs):
         ctx = doc.xpathNewContext()
         ret = parse_func(doc, ctx, *args, **kwargs)
     finally:
-        if ctx != None:
+        if ctx is not None:
             ctx.xpathFreeContext()
-        if doc != None:
+        if doc is not None:
             doc.freeDoc()
     return ret
 
@@ -211,7 +211,7 @@ def browse_local(parent, dialog_name, conn, start_folder=None,
     fcdialog.set_do_overwrite_confirmation(overwrite_confirm)
 
     # Set file match pattern (ex. *.png)
-    if _type != None:
+    if _type is not None:
         pattern = _type
         name = None
         if type(_type) is tuple:
@@ -229,7 +229,7 @@ def browse_local(parent, dialog_name, conn, start_folder=None,
         start_folder = running_config.get_default_directory(conn,
                                                             browse_reason)
 
-    if start_folder != None:
+    if start_folder is not None:
         if os.access(start_folder, os.R_OK):
             fcdialog.set_current_folder(start_folder)
 
@@ -379,7 +379,7 @@ def get_list_selection(widget):
     active = selection.get_selected()
 
     treestore, treeiter = active
-    if treeiter != None:
+    if treeiter is not None:
         return treestore[treeiter]
     return None
 

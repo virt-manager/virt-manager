@@ -44,6 +44,9 @@ class OverBox(Gtk.Box):
         self._fraction = 0
         self.verticalOffset = 0
 
+        self.window = None
+        self.allocation = None
+
         self.set_has_window(True)
 
     ####################
@@ -218,9 +221,9 @@ class OverBox(Gtk.Box):
         attr.width = self.allocation.width
         attr.height = self.allocation.height
 
-        mask = Gdk.WindowAttributesType.VISUAL | \
-          Gdk.WindowAttributesType.X | \
-          Gdk.WindowAttributesType.Y
+        mask = (Gdk.WindowAttributesType.VISUAL |
+                Gdk.WindowAttributesType.X |
+                Gdk.WindowAttributesType.Y)
 
         window = Gdk.Window.new(self.get_parent_window(), attr, mask)
         self.window = window

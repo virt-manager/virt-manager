@@ -78,7 +78,7 @@ class vmmInspection(vmmGObject):
             return 0
 
         logging.debug("waiting")
-        #self.add_gobject_timeout(GObject.timeout_add(self._wait, cb))
+        self.timeout_add(self._wait, cb)
 
     def _run(self):
         while True:

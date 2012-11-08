@@ -838,7 +838,7 @@ class vmmCreateInterface(vmmGObjectUI):
         treepath = self.get_config_ipv6_address_selection()
         src = self.widget("ipv6-address-list")
         model = src.get_model()
-        if treepath != None:
+        if treepath is not None:
             del(model[treepath])
 
     def ipv6_address_editted(self, src, path, new_text):
@@ -849,7 +849,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
     def ipv6_address_selected(self, src=None):
         treepath = self.get_config_ipv6_address_selection()
-        has_selection = (treepath != None)
+        has_selection = (treepath is not None)
 
         self.widget("ipv6-address-remove").set_sensitive(has_selection)
 
@@ -867,7 +867,7 @@ class vmmCreateInterface(vmmGObjectUI):
         notebook = self.widget("pages")
         curpage = notebook.get_current_page()
 
-        if self.validate(notebook.get_current_page()) != True:
+        if self.validate(notebook.get_current_page()) is not True:
             return
 
         self.widget("forward").grab_focus()
@@ -1103,7 +1103,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
         # Validate the final page
         page = self.widget("pages").get_current_page()
-        if self.validate(page) != True:
+        if self.validate(page) is not True:
             return False
 
         activate = self.widget("interface-activate").get_active()

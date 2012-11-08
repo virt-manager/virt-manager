@@ -143,7 +143,7 @@ class vmmCreateNetwork(vmmGObjectUI):
 
     def forward(self, ignore=None):
         notebook = self.widget("create-pages")
-        if self.validate(notebook.get_current_page()) != True:
+        if self.validate(notebook.get_current_page()) is not True:
             return
 
         self.widget("create-forward").grab_focus()
@@ -368,7 +368,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             return self.err.val_err(_("Invalid Network Name"),
                         _("Network name must be non-blank and less than "
                           "50 characters"))
-        if re.match("^[a-zA-Z0-9_]*$", name) == None:
+        if re.match("^[a-zA-Z0-9_]*$", name) is None:
             return self.err.val_err(_("Invalid Network Name"),
                         _("Network name may contain alphanumeric and '_' "
                           "characters only"))

@@ -99,7 +99,7 @@ class vmmChooseCD(vmmGObjectUI):
             if idx != -1:
                 path = model[idx][uihelpers.OPTICAL_DEV_PATH]
 
-        if path == "" or path == None:
+        if path == "" or path is None:
             return self.err.val_err(_("Invalid Media Path"),
                                     _("A media path must be specified."))
 
@@ -153,7 +153,7 @@ class vmmChooseCD(vmmGObjectUI):
         self.widget("iso-path").set_text(path)
 
     def _browse_file(self):
-        if self.storage_browser == None:
+        if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(self.conn)
             self.storage_browser.connect("storage-browse-finish",
                                          self.set_storage_path)

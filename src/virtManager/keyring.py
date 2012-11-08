@@ -22,16 +22,13 @@ from virtManager.secret import vmmSecret
 
 import logging
 
-
 haveKeyring = False
-
 try:
-    # XXX
-    #import gnomekeyring
-    #haveKeyring = True
-    pass
+    import gnomekeyring
+    haveKeyring = True
 except:
     logging.warning("gnomekeyring bindings not installed, no keyring support")
+
 
 class vmmKeyring(object):
     def __init__(self):
@@ -41,7 +38,7 @@ class vmmKeyring(object):
 
         try:
             self.keyring = gnomekeyring.get_default_keyring_sync()
-            if self.keyring == None:
+            if self.keyring is None:
                 # Code borrowed from
                 # http://trac.gajim.org/browser/src/common/passwords.py
                 self.keyring = 'default'
@@ -54,7 +51,7 @@ class vmmKeyring(object):
             self.keyring = None
 
     def is_available(self):
-        return not (self.keyring == None)
+        return not (self.keyring is None)
 
     def add_secret(self, secret):
         _id = None

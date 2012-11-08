@@ -480,7 +480,7 @@ class vmmManager(vmmGObjectUI):
         active = selection.get_selected()
 
         treestore, treeiter = active
-        if treeiter != None:
+        if treeiter is not None:
             return treestore[treeiter]
         return None
 
@@ -986,7 +986,7 @@ class vmmManager(vmmGObjectUI):
     def get_inspection_icon_pixbuf(self, vm, w, h):
         # libguestfs gives us the PNG data as a string.
         png_data = vm.inspection.icon
-        if png_data == None:
+        if png_data is None:
             return None
         try:
             pb = GdkPixbuf.PixbufLoader(image_type="png")
@@ -1089,7 +1089,7 @@ class vmmManager(vmmGObjectUI):
             return False
 
         tup = widget.get_path_at_pos(int(event.x), int(event.y))
-        if tup == None:
+        if tup is None:
             return False
         path = tup[0]
         model = widget.get_model()
@@ -1099,7 +1099,7 @@ class vmmManager(vmmGObjectUI):
         return False
 
     def popup_vm_menu(self, model, _iter, event):
-        if model.iter_parent(_iter) != None:
+        if model.iter_parent(_iter) is not None:
             # Popup the vm menu
             vm = model.get_value(_iter, ROW_HANDLE)
 
@@ -1182,7 +1182,7 @@ class vmmManager(vmmGObjectUI):
 
         tool_text = ""
 
-        if conf_entry and (conf_entry == True or
+        if conf_entry and (conf_entry is True or
                            conf_entry.get_value().get_bool()):
             widget.set_sensitive(True)
         else:

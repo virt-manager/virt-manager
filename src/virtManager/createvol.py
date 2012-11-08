@@ -163,7 +163,7 @@ class vmmCreateVolume(vmmGObjectUI):
     def get_config_format(self):
         format_combo = self.widget("vol-format")
         model = format_combo.get_model()
-        if format_combo.get_active_iter() != None:
+        if format_combo.get_active_iter() is not None:
             model = format_combo.get_model()
             return model.get_value(format_combo.get_active_iter(), 0)
         return None

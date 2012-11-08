@@ -449,8 +449,8 @@ class vmmDetails(vmmGObjectUI):
             "on_config_memory_changed": self.config_memory_changed,
             "on_config_maxmem_changed": self.config_maxmem_changed,
 
-            "on_config_boot_moveup_clicked" : lambda *x: self.config_boot_move(True),
-            "on_config_boot_movedown_clicked" : lambda *x: self.config_boot_move(False),
+            "on_config_boot_moveup_clicked" : lambda *x: self.config_boot_move(x, True),
+            "on_config_boot_movedown_clicked" : lambda *x: self.config_boot_move(x, False),
             "on_config_autostart_changed": lambda *x: self.enable_apply(x, x, EDIT_AUTOSTART),
             "on_boot_menu_changed": lambda *x: self.enable_apply(x, EDIT_BOOTMENU),
             "on_boot_kernel_changed": lambda *x: self.enable_apply(x, EDIT_KERNEL),
@@ -1183,7 +1183,7 @@ class vmmDetails(vmmGObjectUI):
             dev = devs[0]
             item = Gtk.RadioMenuItem(group, _("Graphical Console %s") %
                                      dev.pretty_type_simple(dev.type))
-            if group == None:
+            if group is None:
                 group = item
 
             if showing_graphics:
@@ -1215,7 +1215,7 @@ class vmmDetails(vmmGObjectUI):
     def get_selected_row(self, widget):
         selection = widget.get_selection()
         model, treepath = selection.get_selected()
-        if treepath == None:
+        if treepath is None:
             return None
         return model[treepath]
 
@@ -1722,7 +1722,7 @@ class vmmDetails(vmmGObjectUI):
         else:
             reason = self.config.CONFIG_DIR_IMAGE
 
-        if self.storage_browser == None:
+        if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(self.conn)
 
         self.storage_browser.set_finish_cb(callback)
@@ -1875,7 +1875,8 @@ class vmmDetails(vmmGObjectUI):
                                   boot_row[BOOT_DEV_TYPE])
         self.enable_apply(EDIT_BOOTORDER)
 
-    def config_boot_move(self, src_ignore, move_up):
+    def config_boot_move(self, src, move_up):
+        ignore = src
         boot_row = self.get_boot_selection()
         if not boot_row:
             return
@@ -3633,7 +3634,7 @@ class vmmDetails(vmmGObjectUI):
         old_order = map(lambda x: x[BOOT_DEV_TYPE], boot_model)
         boot_model.clear()
 
-        if bootdevs == None:
+        if bootdevs is None:
             bootdevs = self.vm.get_boot_device()
 
         boot_rows = {

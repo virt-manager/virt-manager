@@ -19,16 +19,14 @@ from gi.repository import GObject
 from gi.repository import Gtk
 import cairo
 
-# For debugging
 def rect_print(name, rect):
+    # For debugging
     print ("%s: height=%d, width=%d, x=%d, y=%d" %
            (name, rect.height, rect.width, rect.x, rect.y))
 
-# For gproperties info, see:
-# http://www.pyGtk.org/docs/pyGtk.class-Gtk.ontainer.html#function-Gtk.-container-class-install-child-property
 
 def _line_helper(cairo_ct, x, y, w, h, points, for_fill=False):
-
+    ignore = w
     bottom_baseline = y + h
     last_was_zero = False
     last_point = None
@@ -62,6 +60,7 @@ def _line_helper(cairo_ct, x, y, w, h, points, for_fill=False):
 
     return last_point
 
+
 def draw_line(cairo_ct, x, y, w, h, points):
     if not len(points):
         return
@@ -74,15 +73,12 @@ def draw_line(cairo_ct, x, y, w, h, points):
     # Paint the line
     cairo_ct.stroke()
 
+
 def draw_fill(cairo_ct, x, y, w, h, points, taper=False):
     if not len(points):
         return
 
-    last_point = _line_helper(cairo_ct, x, y, w, h, points, for_fill=True)
-    if not last_point:
-        # Nothing to draw
-        #return
-        pass
+    _line_helper(cairo_ct, x, y, w, h, points, for_fill=True)
 
     baseline_y = h + y + 1
     if taper:
@@ -393,4 +389,3 @@ class Sparkline(Gtk.DrawingArea):
     def do_set_property(self, param_spec, value):
         name = self._sanitize_param_spec_name(param_spec.name)
         setattr(self, name, value)
-

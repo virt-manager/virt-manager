@@ -213,7 +213,7 @@ class vmmCreate(vmmGObjectUI):
     def remove_timers(self):
         try:
             if self.host_storage_timer:
-                self.remove_timeout(self.host_storage_timer)
+                self.remove_gobject_timeout(self.host_storage_timer)
                 self.host_storage_timer = None
         except:
             pass
@@ -682,7 +682,7 @@ class vmmCreate(vmmGObjectUI):
                     if m[0] == label:
                         label = None
                         break
-                if label == None:
+                if label is None:
                     continue
 
                 # Determine if this is the default given by guest_lookup
@@ -844,7 +844,7 @@ class vmmCreate(vmmGObjectUI):
 
 
     def change_caps(self, gtype=None, dtype=None, arch=None):
-        if gtype == None:
+        if gtype is None:
             # If none specified, prefer HVM. This way, the default install
             # options won't be limited because we default to PV. If hvm not
             # supported, differ to guest_lookup
@@ -1114,7 +1114,7 @@ class vmmCreate(vmmGObjectUI):
             ntype = row[0]
             key = row[6]
 
-            if (ntype == None or
+            if (ntype is None or
                 ntype == virtinst.VirtualNetworkInterface.TYPE_USER):
                 show_pxe_warn = True
             elif ntype != virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
@@ -1372,7 +1372,7 @@ class vmmCreate(vmmGObjectUI):
             self.detect_media_os(forward=True)
             return
 
-        if self.validate(notebook.get_current_page()) != True:
+        if self.validate(notebook.get_current_page()) is not True:
             return
 
         if curpage == PAGE_NAME:
@@ -1796,7 +1796,7 @@ class vmmCreate(vmmGObjectUI):
 
         nic = uihelpers.validate_network(self.topwin,
                                          self.conn, nettype, devname, macaddr)
-        if nic == False:
+        if nic is False:
             return False
 
         if self.nic and self.nic in self.guest.get_devices("interface"):
@@ -1842,7 +1842,7 @@ class vmmCreate(vmmGObjectUI):
     def finish(self, src_ignore):
         # Validate the final page
         page = self.widget("create-pages").get_current_page()
-        if self.validate(page) != True:
+        if self.validate(page) is not True:
             return False
 
         self.rebuild_guest()
@@ -2151,7 +2151,7 @@ class vmmCreate(vmmGObjectUI):
         else:
             reason = self.config.CONFIG_DIR_IMAGE
 
-        if self.storage_browser == None:
+        if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(self.conn)
 
         self.storage_browser.rhel6_defaults = self._rhel6_defaults()

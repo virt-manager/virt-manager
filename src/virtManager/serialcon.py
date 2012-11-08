@@ -67,12 +67,12 @@ class LocalConsoleConnection(ConsoleConnection):
         self.origtermios = None
 
     def open(self, dev, terminal):
-        if self.fd != None:
+        if self.fd is not None:
             self.close()
 
         ipty = dev and dev.source_path or None
         logging.debug("Opening serial tty path: %s", ipty)
-        if ipty == None:
+        if ipty is None:
             return
 
         self.fd = pty.slave_open(ipty)
@@ -86,7 +86,7 @@ class LocalConsoleConnection(ConsoleConnection):
         tty.setraw(self.fd, termios.TCSANOW)
 
     def close(self):
-        if self.fd == None:
+        if self.fd is None:
             return
 
         # Restore term settings

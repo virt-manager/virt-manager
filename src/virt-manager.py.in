@@ -289,7 +289,7 @@ def main():
         logging.debug("Libvirt tracing requested")
         import virtManager.module_trace
         import libvirt
-        libvirt = virtManager.module_trace.wrap_module(libvirt)
+        virtManager.module_trace.wrap_module(libvirt)
 
     import dbus
     import dbus.mainloop.glib
@@ -324,14 +324,14 @@ def main():
         signal.signal(signal.SIGHUP, signal.SIG_IGN)
 
     # Add our icon dir to icon theme
-    icon_theme = gtk.icon_theme_get_default()
+    icon_theme = Gtk.IconTheme.get_default()
     icon_theme.prepend_search_path(icon_dir)
 
     from virtManager.engine import vmmEngine
 
     Gtk.Window.set_default_icon_name(appname)
 
-    if options.show and options.uri == None:
+    if options.show and options.uri is None:
         raise optparse.OptionValueError("can't use --show-* options "
                                         "without --connect")
 
@@ -361,7 +361,7 @@ def main():
     # Finally start the app for real
     show_engine(engine, options.show, options.uri, options.uuid,
                 options.no_conn_auto)
-    if options.profile != None:
+    if options.profile is not None:
         import hotshot
         prof = hotshot.Profile(options.profile)
         prof.runcall(Gtk.main)

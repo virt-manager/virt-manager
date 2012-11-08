@@ -133,16 +133,17 @@ class vmmInspectionData(object):
         self.applications = None
 
 class vmmDomain(vmmLibvirtObject):
+    """
+    Class wrapping virDomain libvirt objects. Is also extended to be
+    backed by a virtinst.Guest object for new VM 'customize before install'
+    """
+
     __gsignals__ = {
         "status-changed": (GObject.SignalFlags.RUN_FIRST, None, [int, int]),
         "resources-sampled": (GObject.SignalFlags.RUN_FIRST, None, []),
         "inspection-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
-    """
-    Class wrapping virDomain libvirt objects. Is also extended to be
-    backed by a virtinst.Guest object for new VM 'customize before install'
-    """
     def __init__(self, conn, backend, uuid):
         vmmLibvirtObject.__init__(self, conn)
 
@@ -251,12 +252,12 @@ class vmmDomain(vmmLibvirtObject):
     ###########################
 
     def get_name(self):
-        if self._name == None:
+        if self._name is None:
             self._name = self._backend.name()
         return self._name
 
     def get_id(self):
-        if self._id == None:
+        if self._id is None:
             self._id = self._backend.ID()
         return self._id
 
@@ -288,7 +289,7 @@ class vmmDomain(vmmLibvirtObject):
         return False
 
     def is_management_domain(self):
-        if self._is_management_domain == None:
+        if self._is_management_domain is None:
             self._is_management_domain = (self.get_id() == 0)
         return self._is_management_domain
 
@@ -962,7 +963,7 @@ class vmmDomain(vmmLibvirtObject):
         if has_xml_max or not self.is_active():
             return guest.maxvcpus
 
-        if self._startup_vcpus == None:
+        if self._startup_vcpus is None:
             self._startup_vcpus = int(self.vcpu_count())
         return int(self._startup_vcpus)
 
@@ -1096,7 +1097,7 @@ class vmmDomain(vmmLibvirtObject):
     # or GObject.props invoked in an idle callback
 
     def _unregister_reboot_listener(self):
-        if self.reboot_listener == None:
+        if self.reboot_listener is None:
             return
 
         try:

@@ -496,7 +496,8 @@ class LibvirtWorker:
         if config.get_os_variant() != "generic":
             self.__guest.os_variant = config.get_os_variant()
 
-        self.__guest._graphics_dev = virtinst.VirtualGraphics(type=virtinst.VirtualGraphics.TYPE_VNC)
+        self.__guest.add_device(
+            virtinst.VirtualGraphics(type=virtinst.VirtualGraphics.TYPE_VNC))
         self.__guest.sound_devs = []
         self.__guest.sound_devs.append(virtinst.VirtualAudio(model="es1370"))
 

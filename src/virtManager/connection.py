@@ -514,7 +514,7 @@ class vmmConnection(vmmGObject):
     #######################
 
     def is_storage_capable(self):
-        if self._storage_capable == None:
+        if self._storage_capable is None:
             self._storage_capable = virtinst.util.is_storage_capable(self.vmm)
             if self._storage_capable is False:
                 logging.debug("Connection doesn't seem to support storage "
@@ -529,7 +529,7 @@ class vmmConnection(vmmGObject):
         return self._storage_capable
 
     def is_network_capable(self):
-        if self.network_capable == None:
+        if self.network_capable is None:
             self.network_capable = virtinst.support.check_conn_support(
                                        self.vmm,
                                        virtinst.support.SUPPORT_CONN_NETWORK)
@@ -540,7 +540,7 @@ class vmmConnection(vmmGObject):
         return self.network_capable
 
     def is_interface_capable(self):
-        if self.interface_capable == None:
+        if self.interface_capable is None:
             self.interface_capable = virtinst.support.check_conn_support(
                                        self.vmm,
                                        virtinst.support.SUPPORT_CONN_INTERFACE)
@@ -551,7 +551,7 @@ class vmmConnection(vmmGObject):
         return self.interface_capable
 
     def is_nodedev_capable(self):
-        if self._nodedev_capable == None:
+        if self._nodedev_capable is None:
             self._nodedev_capable = virtinst.NodeDeviceParser.is_nodedev_capable(self.vmm)
         return self._nodedev_capable
 
@@ -559,7 +559,7 @@ class vmmConnection(vmmGObject):
         ignore = obj
         flags_dict = self._xml_flags.get(key)
 
-        if flags_dict == None:
+        if flags_dict is None:
             # Flags already set
             inact, act = check_func()
             flags_dict = {}

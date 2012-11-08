@@ -246,13 +246,11 @@ class vmmEngine(vmmGObject):
     def schedule_timer(self):
         interval = self.config.get_stats_update_interval() * 1000
 
-        if self.timer != None:
-            GObject.source_remove(self.timer)
+        if self.timer is not None:
+            self.remove_gobject_timeout(self.timer)
             self.timer = None
 
-        # No need to use 'timeout_add', the tick should be
-        # manually made thread safe
-        self.timer = GObject.timeout_add(interval, self.tick)
+        self.timer = self.timeout_add(interval, self.tick)
 
     def tick(self):
         if not self.config.support_threading:
@@ -326,7 +324,7 @@ class vmmEngine(vmmGObject):
             self.inspection.cleanup()
             self.inspection = None
 
-        if self.timer != None:
+        if self.timer is not None:
             GObject.source_remove(self.timer)
 
         if self.systray:
@@ -495,7 +493,7 @@ class vmmEngine(vmmGObject):
 
     def _do_show_about(self, src):
         try:
-            if self.windowAbout == None:
+            if self.windowAbout is None:
                 self.windowAbout = vmmAbout()
             self.windowAbout.show()
         except Exception, e:
@@ -709,7 +707,7 @@ class vmmEngine(vmmGObject):
         clone_window = self.conns[uri]["windowClone"]
 
         try:
-            if clone_window == None:
+            if clone_window is None:
                 clone_window = vmmCloneVM(orig_vm)
                 clone_window.connect("action-show-help", self._do_show_help)
                 self.conns[uri]["windowClone"] = clone_window
@@ -895,8 +893,8 @@ class vmmEngine(vmmGObject):
                         "The domain could not be restored. Would you like\n"
                         "to remove the saved state and perform a regular\n"
                         "start up?"),
-                    dialog_type=gtk.MESSAGE_WARNING,
-                    buttons=gtk.BUTTONS_YES_NO,
+                    dialog_type=Gtk.MessageType.WARNING,
+                    buttons=Gtk.ButtonsType.YES_NO,
                     async=False)
 
                 if not res:

@@ -262,7 +262,7 @@ class vmmConfig(object):
         self._pervm_helper(uri, uuid, pref_func, self._PEROBJ_FUNC_SET, args)
     def get_pervm(self, uri, uuid, pref_func):
         ret = self._pervm_helper(uri, uuid, pref_func, self._PEROBJ_FUNC_GET)
-        if ret == None:
+        if ret is None:
             # If the GConf value is unset, return the global default.
             ret = pref_func()
         return ret
@@ -274,7 +274,7 @@ class vmmConfig(object):
         self._perconn_helper(uri, pref_func, self._PEROBJ_FUNC_SET, value)
     def get_perconn(self, uri, pref_func):
         ret = self._perconn_helper(uri, pref_func, self._PEROBJ_FUNC_GET)
-        if ret == None:
+        if ret is None:
             # If the GConf value is unset, return the global default.
             ret = pref_func()
         return ret
@@ -286,7 +286,7 @@ class vmmConfig(object):
         self._perhost_helper(uri, pref_func, self._PEROBJ_FUNC_SET, value)
     def get_perhost(self, uri, pref_func):
         ret = self._perhost_helper(uri, pref_func, self._PEROBJ_FUNC_GET)
-        if ret == None:
+        if ret is None:
             # If the GConf value is unset, return the global default.
             ret = pref_func()
         return ret
@@ -386,7 +386,7 @@ class vmmConfig(object):
         # If no schema is installed, we _really_ want this to default to True
         path = self.conf_dir + "/confirm/delete_storage"
         ret = self.conf.get(path)
-        if ret == None:
+        if ret is None:
             return True
         return self.conf.get_bool(path)
 
@@ -478,7 +478,7 @@ class vmmConfig(object):
     def get_console_accels(self):
         console_pref = self.conf.get_bool(self.conf_dir +
                                           "/console/enable-accels")
-        if console_pref == None:
+        if console_pref is None:
             console_pref = False
         return console_pref
     def set_console_accels(self, pref):
@@ -488,7 +488,7 @@ class vmmConfig(object):
         return self.conf.notify_add(self.conf_dir + "/console/scaling", cb, userdata)
     def get_console_scaling(self):
         ret = self.conf.get(self.conf_dir + "/console/scaling")
-        if ret != None:
+        if ret is not None:
             ret = ret.get_int()
         return ret
     def set_console_scaling(self, pref):
@@ -497,7 +497,7 @@ class vmmConfig(object):
     # Show VM details toolbar
     def get_details_show_toolbar(self):
         res = self.conf.get_bool(self.conf_dir + "/details/show-toolbar")
-        if res == None:
+        if res is None:
             res = True
         return res
     def set_details_show_toolbar(self, state):
@@ -556,7 +556,7 @@ class vmmConfig(object):
     # URL/Media path history
     def _url_add_helper(self, gconf_path, url):
         urls = self.get_string_list(gconf_path)
-        if urls == None:
+        if urls is None:
             urls = []
 
         if urls.count(url) == 0 and len(url) > 0 and not url.isspace():
@@ -610,7 +610,7 @@ class vmmConfig(object):
             return
 
         uris = self.get_string_list(self.conf_dir + "/connections/uris")
-        if uris == None:
+        if uris is None:
             uris = []
 
         if uris.count(uri) == 0:
@@ -619,7 +619,7 @@ class vmmConfig(object):
     def remove_conn(self, uri):
         uris = self.get_string_list(self.conf_dir + "/connections/uris")
 
-        if uris == None:
+        if uris is None:
             return
 
         if uris.count(uri) != 0:
@@ -734,7 +734,7 @@ class vmmConfig(object):
         return "vm-console-" + vm.get_uuid()
 
     def has_keyring(self):
-        if self.keyring == None:
+        if self.keyring is None:
             logging.warning("Initializing keyring")
             self.keyring = vmmKeyring()
         return self.keyring.is_available()
@@ -742,7 +742,7 @@ class vmmConfig(object):
     def clear_console_password(self, vm):
         _id = self.conf.get_int(self.conf_dir + "/console/passwords/" + vm.get_uuid())
 
-        if _id != None:
+        if _id is not None:
             if not(self.has_keyring()):
                 return
 
@@ -756,12 +756,12 @@ class vmmConfig(object):
         if username is None:
             username = ""
 
-        if _id != None:
+        if _id is not None:
             if not(self.has_keyring()):
                 return ("", "")
 
             secret = self.keyring.get_secret(_id)
-            if secret != None and secret.get_name() == self.get_secret_name(vm):
+            if secret is not None and secret.get_name() == self.get_secret_name(vm):
                 if not(secret.has_attribute("hvuri")):
                     return ("", "")
                 if secret.get_attribute("hvuri") != vm.conn.get_uri():
@@ -787,6 +787,6 @@ class vmmConfig(object):
                            {"uuid" : vm.get_uuid(),
                             "hvuri": vm.conn.get_uri()})
         _id = self.keyring.add_secret(secret)
-        if _id != None:
+        if _id is not None:
             self.conf.set_int(self.conf_dir + "/console/passwords/" + vm.get_uuid(), _id)
             self.conf.set_string(self.conf_dir + "/console/usernames/" + vm.get_uuid(), username)

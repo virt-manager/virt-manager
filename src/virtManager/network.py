@@ -20,8 +20,6 @@
 
 from IPy import IP
 
-from gi.repository import GObject
-
 from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 

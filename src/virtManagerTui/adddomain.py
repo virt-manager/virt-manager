@@ -21,7 +21,7 @@ import snack
 import os
 
 from vmmconfigscreen import VmmTuiConfigScreen
-from createmeter  import CreateMeter
+from createmeter import CreateMeter
 from domainconfig import DomainConfig
 
 from virtinst import Guest
@@ -148,7 +148,7 @@ class DomainConfigScreen(VmmTuiConfigScreen):
             elif self.__install_source.getSelection() == DomainConfig.INSTALL_SOURCE_ISO:
                 return True
         elif page is SELECT_CDROM_PAGE:
-            if self.__install_media.getSelection() != None:
+            if self.__install_media.getSelection() is not None:
                 if len(self.get_libvirt().list_installable_volumes()) == 0:
                     errors.append("No installable media detected.")
                 else:
@@ -177,8 +177,10 @@ class DomainConfigScreen(VmmTuiConfigScreen):
         elif page is OS_VARIANT_PAGE:
             return True
         elif page is RAM_CPU_PAGE:
-            if (len(self.__memory.value()) > 0 and len(self.__cpus.value()) > 0) \
-                    and  (int(self.__memory.value()) > 0 and int(self.__cpus.value()) > 0):
+            if (len(self.__memory.value()) > 0 and
+                len(self.__cpus.value()) > 0 and
+                int(self.__memory.value()) > 0 and
+                int(self.__cpus.value()) > 0):
                 return True
             else:
                 if len(self.__memory.value()) == 0:
@@ -210,7 +212,7 @@ class DomainConfigScreen(VmmTuiConfigScreen):
             else:
                 errors.append("Please select a storage volume.")
         elif page is BRIDGE_PAGE:
-            if self.__network_bridges.getSelection() != None:
+            if self.__network_bridges.getSelection() is not None:
                 if len(self.__mac_address.value()) > 0:
                     # TODO: regex check the format
                     return True
@@ -219,7 +221,8 @@ class DomainConfigScreen(VmmTuiConfigScreen):
             else:
                 errors.append("A network bridge must be selected.")
         elif page is VIRT_DETAILS_PAGE:
-            if self.__virt_types.getSelection() != None and self.__architectures.getSelection() != None:
+            if (self.__virt_types.getSelection() is not None and
+                self.__architectures.getSelection() is not None):
                 return True
             if self.__virt_types.getSelection() is None:
                 errors.append("Please select a virtualization type.")
@@ -399,7 +402,7 @@ class DomainConfigScreen(VmmTuiConfigScreen):
                 self.__has_install_media = True
                 self.__install_media = snack.RadioBar(screen, (drives))
                 fields.append((self.__install_media, None))
-        if self.__has_install_media == False:
+        if self.__has_install_media is False:
             fields.append(("No media detected.", None))
         return [snack.Label("Select the install media"),
                 self.create_grid_from_fields(fields)]

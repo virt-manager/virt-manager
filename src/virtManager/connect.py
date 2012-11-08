@@ -80,7 +80,7 @@ class vmmConnect(vmmGObjectUI):
             "on_cancel_clicked": self.cancel,
             "on_connect_clicked": self.open_conn,
             "on_vmm_open_connection_delete_event": self.cancel,
-            })
+        })
 
         self.browser = None
         self.browser_sigs = []
@@ -393,10 +393,10 @@ class vmmConnect(vmmGObjectUI):
         #      Attempt to resolve the name. If it fails, remove .local
         #      if present, and try again
         if host.endswith(".local"):
-            if self.can_resolve_local == False:
+            if self.can_resolve_local is False:
                 host = host[:-6]
 
-            elif self.can_resolve_local == None:
+            elif self.can_resolve_local is None:
                 try:
                     socket.getaddrinfo(host, None)
                 except:
@@ -408,9 +408,9 @@ class vmmConnect(vmmGObjectUI):
                     self.can_resolve_local = True
 
         else:
-            if self.can_resolve_hostname == False:
+            if self.can_resolve_hostname is False:
                 host = ""
-            elif self.can_resolve_hostname == None:
+            elif self.can_resolve_hostname is None:
                 try:
                     socket.getaddrinfo(host, None)
                 except:

@@ -363,7 +363,7 @@ class vmmCreatePool(vmmGObjectUI):
 
     def get_config_type(self):
         typ = self.widget("pool-type")
-        if typ.get_active_iter() != None:
+        if typ.get_active_iter() is not None:
             return typ.get_model().get_value(typ.get_active_iter(), 0)
         return None
 
@@ -405,7 +405,7 @@ class vmmCreatePool(vmmGObjectUI):
     def get_config_format(self):
         format_combo = self.widget("pool-format")
         model = format_combo.get_model()
-        if format_combo.get_active_iter() != None:
+        if format_combo.get_active_iter() is not None:
             model = format_combo.get_model()
             return model.get_value(format_combo.get_active_iter(), 0)
         return None
@@ -451,7 +451,7 @@ class vmmCreatePool(vmmGObjectUI):
     def forward(self, ignore=None):
         notebook = self.widget("pool-pages")
         try:
-            if(self.validate(notebook.get_current_page()) != True):
+            if(self.validate(notebook.get_current_page()) is not True):
                 return
             if notebook.get_current_page() == PAGE_FORMAT:
                 self.finish()

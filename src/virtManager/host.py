@@ -137,7 +137,7 @@ class vmmHost(vmmGObjectUI):
             "on_interface_apply_clicked" : self.interface_apply,
 
             "on_config_autoconnect_toggled": self.toggle_autoconnect,
-            })
+        })
 
         # XXX: Help docs useless/out of date
         self.widget("help_menuitem").hide()
@@ -483,7 +483,7 @@ class vmmHost(vmmGObjectUI):
     def current_network(self):
         sel = self.widget("net-list").get_selection()
         active = sel.get_selected()
-        if active[1] != None:
+        if active[1] is not None:
             curruuid = active[0].get_value(active[1], 0)
             return self.conn.get_net(curruuid)
         return None
@@ -497,7 +497,7 @@ class vmmHost(vmmGObjectUI):
             if row[0] == uuid:
                 row[4] = self.conn.get_net(uuid).is_active()
 
-        if active[1] != None:
+        if active[1] is not None:
             currname = active[0].get_value(active[1], 0)
             if currname == uuid:
                 self.net_selected(sel)
@@ -509,8 +509,8 @@ class vmmHost(vmmGObjectUI):
 
     def net_selected(self, src):
         selected = src.get_selected()
-        if selected[1] == None or \
-           selected[0].get_value(selected[1], 0) == None:
+        if selected[1] is None or \
+           selected[0].get_value(selected[1], 0) is None:
             self.set_net_error_page(_("No virtual network selected."))
             return
 
@@ -726,7 +726,7 @@ class vmmHost(vmmGObjectUI):
     def current_pool(self):
         sel = self.widget("pool-list").get_selection()
         active = sel.get_selected()
-        if active[1] != None:
+        if active[1] is not None:
             curruuid = active[0].get_value(active[1], 0)
             return self.conn.get_pool(curruuid)
         return None
@@ -737,7 +737,7 @@ class vmmHost(vmmGObjectUI):
             return None
         sel = self.widget("vol-list").get_selection()
         active = sel.get_selected()
-        if active[1] != None:
+        if active[1] is not None:
             curruuid = active[0].get_value(active[1], 0)
             return pool.get_volume(curruuid)
         return None
@@ -988,7 +988,7 @@ class vmmHost(vmmGObjectUI):
     def current_interface(self):
         sel = self.widget("interface-list").get_selection()
         active = sel.get_selected()
-        if active[1] != None:
+        if active[1] is not None:
             currname = active[0].get_value(active[1], 0)
             return self.conn.get_interface(currname)
 
@@ -1138,7 +1138,7 @@ class vmmHost(vmmGObjectUI):
             if row[0] == name:
                 row[4] = self.conn.get_interface(name).is_active()
 
-        if active[1] != None:
+        if active[1] is not None:
             currname = active[0].get_value(active[1], 0)
             if currname == name:
                 self.interface_selected(sel)

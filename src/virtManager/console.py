@@ -482,7 +482,7 @@ class SpiceViewer(Viewer):
         self.display_channel = None
 
     def is_open(self):
-        return self.spice_session != None
+        return self.spice_session is not None
 
     def _main_channel_event_cb(self, channel, event):
         if event == SpiceClientGLib.ChannelEvent.CLOSED:
@@ -817,10 +817,10 @@ class vmmConsolePages(vmmGObjectUI):
         vnc_scroll = self.widget("console-vnc-scroll")
 
         if (self.scale_type == self.config.CONSOLE_SCALE_NEVER
-            and curscale == True):
+            and curscale is True):
             self.viewer.set_scaling(False)
         elif (self.scale_type == self.config.CONSOLE_SCALE_ALWAYS
-              and curscale == False):
+              and curscale is False):
             self.viewer.set_scaling(True)
         elif (self.scale_type == self.config.CONSOLE_SCALE_FULLSCREEN
               and curscale != fs):
@@ -875,7 +875,7 @@ class vmmConsolePages(vmmGObjectUI):
     def send_key(self, src, keys):
         ignore = src
 
-        if keys != None:
+        if keys is not None:
             self.viewer.send_keys(keys)
 
 
@@ -1246,10 +1246,6 @@ class vmmConsolePages(vmmGObjectUI):
             desktop_h = int(req.width / desktop_ratio)
             dy = (req.height - desktop_h) / 2
 
-        # XXX
-        #@    viewer_alloc = (x=dx,
-        #                             y=dy,
-        #                             width=desktop_w,
-        #                             height=desktop_h)
-
-        #self.viewer.display.size_allocate(viewer_alloc)
+        #viewer_alloc = (x=dx, y=dy, width=desktop_w, height=desktop_h)
+        viewer_alloc = (dx, dy, desktop_w, desktop_h)
+        self.viewer.display.size_allocate(viewer_alloc)

@@ -431,7 +431,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         if self.get_config_max_downtime_enabled() and max_downtime == 0:
             return self.err.val_err(_("max downtime must be greater than 0."))
 
-        if self.get_config_interface_enabled() and interface == None:
+        if self.get_config_interface_enabled() and interface is None:
             return self.err.val_err(_("An interface must be specified."))
 
         if self.get_config_rate_enabled() and rate == 0:

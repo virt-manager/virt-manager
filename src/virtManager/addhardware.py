@@ -126,7 +126,7 @@ class vmmAddHardware(vmmGObjectUI):
             "char_bind_host_focus_in": (self.update_doc, "bind_host"),
             "char_telnet_focus_in": (self.update_doc, "protocol"),
             "char_name_focus_in": (self.update_doc, "target_name"),
-            })
+        })
         self.bind_escape_key_close()
 
         # XXX: Help docs useless/out of date
@@ -191,7 +191,7 @@ class vmmAddHardware(vmmGObjectUI):
     def remove_timers(self):
         try:
             if self.host_storage_timer:
-                self.remove_timeout(self.host_storage_timer)
+                self.remove_gobject_timeout(self.host_storage_timer)
                 self.host_storage_timer = None
         except:
             pass
@@ -887,7 +887,7 @@ class vmmAddHardware(vmmGObjectUI):
     def finish(self, ignore=None):
         notebook = self.widget("create-pages")
         try:
-            if self.validate(notebook.get_current_page()) == False:
+            if self.validate(notebook.get_current_page()) is False:
                 return
         except Exception, e:
             self.err.show_err(_("Uncaught error validating hardware "
@@ -1345,7 +1345,7 @@ class vmmAddHardware(vmmGObjectUI):
         disk.vmm_controller = None
         if (controller_model == "virtio-scsi") and (bus == "scsi"):
             controllers = self.vm.get_controller_devices()
-            controller = VirtualControllerSCSI(conn = self.conn.vmm)
+            controller = VirtualControllerSCSI(conn=self.conn.vmm)
             controller.set_model(controller_model)
             disk.vmm_controller = controller
             for d in controllers:
@@ -1371,7 +1371,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         ret = uihelpers.validate_network(self.topwin, self.conn,
                                          nettype, devname, mac, model)
-        if ret == False:
+        if ret is False:
             return False
 
         self._dev = ret
@@ -1413,7 +1413,7 @@ class vmmAddHardware(vmmGObjectUI):
         ret = self.get_config_host_device_info()
         nodedev_name = ret and ret[1] or None
 
-        if nodedev_name == None:
+        if nodedev_name is None:
             return self.err.val_err(_("Physical Device Required"),
                                     _("A device must be selected."))
 
@@ -1576,7 +1576,7 @@ class vmmAddHardware(vmmGObjectUI):
         reason = (isdir and
                   self.config.CONFIG_DIR_FS or
                   self.config.CONFIG_DIR_IMAGE)
-        if self.storage_browser == None:
+        if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(conn)
 
         rhel6 = self.vm.rhel6_defaults()

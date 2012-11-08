@@ -23,7 +23,7 @@ class vmmSecret(object):
 
         self.name = name
         self.secret = secret
-        if attributes == None:
+        if attributes is None:
             attributes = {}
         self.attributes = attributes
 
