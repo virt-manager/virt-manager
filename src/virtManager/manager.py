@@ -91,7 +91,6 @@ class vmmManager(vmmGObjectUI):
         "action-reboot-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-destroy-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-save-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-connect": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-migrate-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-clone-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),

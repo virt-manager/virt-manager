@@ -203,41 +203,17 @@ class vmmEngine(vmmGObject):
 
     def load_stored_uris(self):
         uris = self.config.get_conn_uris()
-        if uris != None:
-            logging.debug("About to connect to uris %s", uris)
-            for uri in uris:
-                self.add_conn(uri)
+        if not uris:
+            return
+        logging.debug("About to connect to uris %s", uris)
+        for uri in uris:
+            self.add_conn_to_ui(uri)
 
     def autostart_conns(self):
         for uri in self.conns:
             conn = self.conns[uri]["conn"]
             if conn.get_autoconnect():
                 self.connect_to_uri(uri)
-
-    def connect_to_uri(self, uri, autoconnect=None, do_start=True):
-        try:
-            conn = self._check_conn(uri)
-            if not conn:
-                # Unknown connection, add it
-                conn = self.add_conn(uri)
-
-            if autoconnect is not None:
-                conn.set_autoconnect(bool(autoconnect))
-
-            self.show_manager()
-            if do_start:
-                conn.open()
-            return conn
-        except Exception:
-            logging.exception("Error connecting to %s", uri)
-            return None
-
-    def _do_connect(self, src_ignore, uri):
-        return self.connect_to_uri(uri)
-
-    def _connect_cancelled(self, src):
-        if len(self.conns.keys()) == 0:
-            self.exit_app(src)
 
 
     def _do_vm_removed(self, conn, vmuuid):
@@ -424,7 +400,9 @@ class vmmEngine(vmmGObject):
         self.connect("conn-removed", self.inspection.conn_removed)
         return
 
-    def add_conn(self, uri):
+
+    def add_conn_to_ui(self, uri):
+        # Public method called from virt-manager.py
         conn = self._check_conn(uri)
         if conn:
             return conn
@@ -441,9 +419,29 @@ class vmmEngine(vmmGObject):
         conn.connect("state-changed", self._do_conn_changed)
         conn.tick()
         self.emit("conn-added", conn)
-        self.config.add_conn(conn.get_uri())
 
         return conn
+
+
+    def connect_to_uri(self, uri, autoconnect=None, do_start=True):
+        # Public method called from virt-manager.py
+        try:
+            conn = self.add_conn_to_ui(uri)
+
+            if conn.get_uri() not in (self.config.get_conn_uris() or []):
+                self.config.add_conn(conn.get_uri())
+
+            if autoconnect is not None:
+                conn.set_autoconnect(bool(autoconnect))
+
+            self.show_manager()
+            if do_start:
+                conn.open()
+            return conn
+        except Exception:
+            logging.exception("Error connecting to %s", uri)
+            return None
+
 
     def cleanup_conn(self, uri):
         try:
@@ -552,19 +550,25 @@ class vmmEngine(vmmGObject):
         except Exception, e:
             src.err.show_err(_("Error launching host dialog: %s") % str(e))
 
+
     def _get_connect_dialog(self):
         if self.windowConnect:
             return self.windowConnect
 
-        def connect_wrap(src, uri, autoconnect):
+        def completed(src, uri, autoconnect):
             ignore = src
             return self.connect_to_uri(uri, autoconnect)
 
+        def cancelled(src):
+            if len(self.conns.keys()) == 0:
+                self.exit_app(src)
+
         obj = vmmConnect()
-        obj.connect("completed", connect_wrap)
-        obj.connect("cancelled", self._connect_cancelled)
+        obj.connect("completed", completed)
+        obj.connect("cancelled", cancelled)
         self.windowConnect = obj
         return self.windowConnect
+
 
     def _do_show_connect(self, src):
         try:
@@ -642,7 +646,6 @@ class vmmEngine(vmmGObject):
         obj.connect("action-show-about", self._do_show_about)
         obj.connect("action-show-host", self._do_show_host)
         obj.connect("action-show-connect", self._do_show_connect)
-        obj.connect("action-connect", self._do_connect)
         obj.connect("action-exit-app", self.exit_app)
         obj.connect("manager-opened", self.increment_window_counter)
         obj.connect("manager-closed", self.decrement_window_counter)

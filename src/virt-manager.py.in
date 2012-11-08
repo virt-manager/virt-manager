@@ -195,7 +195,7 @@ def show_engine(engine, show, uri, uuid, no_conn_auto):
     engine.show_manager()
 
     if uri:
-        conn = engine.add_conn(uri)
+        conn = engine.add_conn_to_ui(uri)
 
         if conn and show:
             conn.connect_opt_out("state-changed",
