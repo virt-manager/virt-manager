@@ -528,12 +528,12 @@ class vmmCreate(vmmGObjectUI):
             local_tt = base % "CDROM/ISO"
 
         for w in virt_methods:
-            if w.get_property("sensitive"):
+            if w.get_sensitive():
                 w.set_active(True)
                 break
 
         if not (is_container or
-                filter(lambda w: w.get_property("sensitive"), virt_methods)):
+                filter(lambda w: w.get_sensitive(), virt_methods)):
             return self.startup_error(
                     _("No install methods available for this connection."),
                     hideinstall=False)

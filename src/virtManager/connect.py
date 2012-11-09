@@ -363,7 +363,7 @@ class vmmConnect(vmmGObjectUI):
             return
 
         auto = False
-        if self.widget("autoconnect").get_property("sensitive"):
+        if self.widget("autoconnect").get_sensitive():
             auto = self.widget("autoconnect").get_active()
         uri = self.generate_uri()
 

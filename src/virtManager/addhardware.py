@@ -685,7 +685,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def get_config_keymap(self):
         g = self.widget("graphics-keymap")
-        if g.get_property("sensitive") and g.get_text() != "":
+        if g.get_sensitive() and g.get_text() != "":
             return g.get_text()
         else:
             return None

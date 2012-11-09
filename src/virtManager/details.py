@@ -1265,7 +1265,7 @@ class vmmDetails(vmmGObjectUI):
         if not row:
             return False
 
-        if not self.widget("config-apply").get_property("sensitive"):
+        if not self.widget("config-apply").get_sensitive():
             return False
 
         if not util.chkbox_helper(self,
@@ -2104,7 +2104,7 @@ class vmmDetails(vmmGObjectUI):
             if self.widget("security-dynamic").get_active():
                 setype = "dynamic"
                 relabel = True
-            if self.widget("security-type-box").get_property("sensitive"):
+            if self.widget("security-type-box").get_sensitive():
                 semodel = self.get_text("security-model")
 
             add_define(self.vm.define_seclabel, semodel, setype, selabel, relabel)
@@ -2198,7 +2198,7 @@ class vmmDetails(vmmGObjectUI):
         if self.editted(EDIT_MEM):
             curmem = None
             maxmem = self.config_get_maxmem()
-            if self.widget("config-memory").get_property("sensitive"):
+            if self.widget("config-memory").get_sensitive():
                 curmem = self.config_get_memory()
 
             if curmem:
@@ -2620,7 +2620,7 @@ class vmmDetails(vmmGObjectUI):
         if pagetype is None:
             return
 
-        if self.widget("config-apply").get_property("sensitive"):
+        if self.widget("config-apply").get_sensitive():
             # Apply button sensitive means user is making changes, don't
             # erase them
             return
@@ -2897,7 +2897,7 @@ class vmmDetails(vmmGObjectUI):
         curmem.value = int(round(vm_cur_mem))
         maxmem.value = int(round(vm_max_mem))
 
-        if not self.widget("config-memory").get_property("sensitive"):
+        if not self.widget("config-memory").get_sensitive():
             maxmem.lower = curmem.value
 
 

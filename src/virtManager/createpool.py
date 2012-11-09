@@ -372,7 +372,7 @@ class vmmCreatePool(vmmGObjectUI):
 
     def get_config_target_path(self):
         src = self.widget("pool-target-path")
-        if not src.get_property("sensitive"):
+        if not src.get_sensitive():
             return None
 
         # If we provide the user with a drop down
@@ -385,7 +385,7 @@ class vmmCreatePool(vmmGObjectUI):
 
     def get_config_source_path(self):
         src = self.widget("pool-source-path")
-        if not src.get_property("sensitive"):
+        if not src.get_sensitive():
             return None
 
         # If we provide the user with a drop down
@@ -398,7 +398,7 @@ class vmmCreatePool(vmmGObjectUI):
 
     def get_config_host(self):
         host = self.widget("pool-hostname")
-        if host.get_property("sensitive"):
+        if host.get_sensitive():
             return host.get_text().strip()
         return None
 
@@ -412,7 +412,7 @@ class vmmCreatePool(vmmGObjectUI):
 
     def get_config_iqn(self):
         iqn = self.widget("pool-iqn")
-        if iqn.get_property("sensitive") and iqn.get_property("visible"):
+        if iqn.get_sensitive() and iqn.get_property("visible"):
             return iqn.get_text().strip()
         return None
 
@@ -571,7 +571,7 @@ class vmmCreatePool(vmmGObjectUI):
                 return self.err.val_err(_("Pool Parameter Error"), e)
 
             buildval = self.widget("pool-build").get_active()
-            buildsen = (self.widget("pool-build").get_property("sensitive") and
+            buildsen = (self.widget("pool-build").get_sensitive() and
                         self.widget("pool-build-box").get_property("visible"))
             if buildsen and buildval:
                 ret = self.err.yes_no(_("Building a pool of this type will "

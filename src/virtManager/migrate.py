@@ -233,24 +233,24 @@ class vmmMigrateDialog(vmmGObjectUI):
         return self.widget("migrate-secure").get_active()
 
     def get_config_max_downtime_enabled(self):
-        return self.widget("migrate-max-downtime").get_property("sensitive")
+        return self.widget("migrate-max-downtime").get_sensitive()
 
     def get_config_rate_enabled(self):
-        return self.widget("migrate-rate").get_property("sensitive")
+        return self.widget("migrate-rate").get_sensitive()
     def get_config_rate(self):
         if not self.get_config_rate_enabled():
             return 0
         return int(self.widget("migrate-rate").get_value())
 
     def get_config_interface_enabled(self):
-        return self.widget("migrate-interface").get_property("sensitive")
+        return self.widget("migrate-interface").get_sensitive()
     def get_config_interface(self):
         if not self.get_config_interface_enabled():
             return None
         return self.widget("migrate-interface").get_text()
 
     def get_config_port_enabled(self):
-        return self.widget("migrate-port").get_property("sensitive")
+        return self.widget("migrate-port").get_sensitive()
     def get_config_port(self):
         if not self.get_config_port_enabled():
             return 0
