@@ -23,7 +23,6 @@ import re
 
 from IPy import IP
 
-from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
 
@@ -39,10 +38,6 @@ PAGE_SUMMARY = 5
 
 
 class vmmCreateNetwork(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-    }
-
     def __init__(self, conn):
         vmmGObjectUI.__init__(self, "vmm-create-net.ui", "vmm-create-net")
         self.conn = conn
@@ -61,12 +56,9 @@ class vmmCreateNetwork(vmmGObjectUI):
             "on_net_dhcp_enable_toggled": self.change_dhcp_enable,
             "on_net_dhcp_start_changed": self.change_dhcp_start,
             "on_net_dhcp_end_changed": self.change_dhcp_end,
-            "on_create_help_clicked": self.show_help,
         })
         self.bind_escape_key_close()
 
-        # XXX: Help docs useless/out of date
-        self.widget("create-help").hide()
         finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
                                               Gtk.IconSize.BUTTON)
         self.widget("create-finish").set_image(finish_img)
@@ -440,19 +432,3 @@ class vmmCreateNetwork(vmmGObjectUI):
         elif page_num == PAGE_FORWARDING:
             return self.validate_forwarding()
         return True
-
-    def show_help(self, src_ignore):
-        # help to show depends on the notebook page, yahoo
-        page = self.widget("create-pages").get_current_page()
-        if page == PAGE_INTRO:
-            self.emit("action-show-help", "virt-manager-create-net-intro")
-        elif page == PAGE_NAME:
-            self.emit("action-show-help", "virt-manager-create-net-name")
-        elif page == PAGE_IPV4:
-            self.emit("action-show-help", "virt-manager-create-net-ipv4")
-        elif page == PAGE_DHCP:
-            self.emit("action-show-help", "virt-manager-create-net-dhcp")
-        elif page == PAGE_FORWARDING:
-            self.emit("action-show-help", "virt-manager-create-net-forwarding")
-        elif page == PAGE_SUMMARY:
-            self.emit("action-show-help", "virt-manager-create-net-sumary")

@@ -21,7 +21,6 @@
 import logging
 import os
 
-from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
 
@@ -121,10 +120,6 @@ def do_we_default(conn, vol, path, ro, shared, devtype):
     return (not info, info)
 
 class vmmCloneVM(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-    }
-
     def __init__(self, orig_vm):
         vmmGObjectUI.__init__(self, "vmm-clone.ui", "vmm-clone")
         self.orig_vm = orig_vm
@@ -150,7 +145,6 @@ class vmmCloneVM(vmmGObjectUI):
             "on_clone_delete_event" : self.close,
             "on_clone_cancel_clicked" : self.close,
             "on_clone_ok_clicked" : self.finish,
-            "on_clone_help_clicked" : self.show_help,
 
             # Change mac dialog
             "on_vmm_change_mac_delete_event": self.change_mac_close,
@@ -167,8 +161,6 @@ class vmmCloneVM(vmmGObjectUI):
         })
         self.bind_escape_key_close()
 
-        # XXX: Help docs useless/out of date
-        self.widget("clone-help").hide()
         finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_NEW,
                                               Gtk.IconSize.BUTTON)
         self.widget("clone-ok").set_image(finish_img)
@@ -845,7 +837,3 @@ class vmmCloneVM(vmmGObjectUI):
             self.storage_browser.connect("storage-browse-finish", callback)
 
         self.storage_browser.show(self.topwin, self.conn)
-
-    def show_help(self, ignore1=None):
-        # Nothing yet
-        return

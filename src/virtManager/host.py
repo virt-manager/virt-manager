@@ -43,7 +43,6 @@ INTERFACE_PAGE_ERROR = 1
 
 class vmmHost(vmmGObjectUI):
     __gsignals__ = {
-        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-restore-domain": (GObject.SignalFlags.RUN_FIRST, None, [str]),
@@ -109,7 +108,6 @@ class vmmHost(vmmGObjectUI):
             "on_vmm_host_delete_event": self.close,
 
             "on_menu_restore_saved_activate": self.restore_domain,
-            "on_menu_help_contents_activate": self.show_help,
 
             "on_net_add_clicked": self.add_network,
             "on_net_delete_clicked": self.delete_network,
@@ -139,8 +137,6 @@ class vmmHost(vmmGObjectUI):
             "on_config_autoconnect_toggled": self.toggle_autoconnect,
         })
 
-        # XXX: Help docs useless/out of date
-        self.widget("help_menuitem").hide()
         finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_DELETE,
                                               Gtk.IconSize.BUTTON)
         self.widget("vol-delete").set_image(finish_img)
@@ -345,9 +341,6 @@ class vmmHost(vmmGObjectUI):
 
         self.memory_usage_graph.destroy()
         self.memory_usage_graph = None
-
-    def show_help(self, src_ignore):
-        self.emit("action-show-help", "virt-manager-host-window")
 
     def view_manager(self, src_ignore):
         self.emit("action-view-manager")

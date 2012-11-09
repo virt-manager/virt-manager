@@ -21,7 +21,6 @@
 import logging
 import traceback
 
-from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
 
@@ -65,10 +64,6 @@ char_widget_mappings = {
 
 
 class vmmAddHardware(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-    }
-
     def __init__(self, vm):
         vmmGObjectUI.__init__(self, "vmm-add-hardware.ui", "vmm-add-hardware")
 
@@ -86,7 +81,6 @@ class vmmAddHardware(vmmGObjectUI):
             "on_create_cancel_clicked" : self.close,
             "on_vmm_create_delete_event" : self.close,
             "on_create_finish_clicked" : self.finish,
-            "on_create_help_clicked": self.show_help,
 
             "on_config_storage_browse_clicked": self.browse_storage,
             "on_config_storage_select_toggled": self.toggle_storage_select,
@@ -116,10 +110,6 @@ class vmmAddHardware(vmmGObjectUI):
             "char_name_focus_in": (self.update_doc, "target_name"),
         })
         self.bind_escape_key_close()
-
-        # XXX: Help docs useless/out of date
-        self.widget("create-help").hide()
-
 
         finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
                                               Gtk.IconSize.BUTTON)
@@ -1574,13 +1564,3 @@ class vmmAddHardware(vmmGObjectUI):
         self.storage_browser.set_browse_reason(reason)
 
         self.storage_browser.show(self.topwin, conn)
-
-    def show_help(self, src_ignore):
-        # help to show depends on the notebook page, yahoo
-        page = self.widget("create-pages").get_current_page()
-        if page == PAGE_ERROR:
-            self.emit("action-show-help", "virt-manager-create-wizard")
-        elif page == PAGE_DISK:
-            self.emit("action-show-help", "virt-manager-storage-space")
-        elif page == PAGE_NETWORK:
-            self.emit("action-show-help", "virt-manager-network")

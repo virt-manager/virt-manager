@@ -96,8 +96,6 @@ class vmmCreatePool(vmmGObjectUI):
         })
         self.bind_escape_key_close()
 
-        # XXX: Help docs useless/out of date
-        self.widget("pool-help").hide()
         finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
                                               Gtk.IconSize.BUTTON)
         self.widget("pool-finish").set_image(finish_img)

@@ -311,7 +311,6 @@ class vmmDetails(vmmGObjectUI):
         "action-shutdown-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-reset-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-reboot-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-migrate-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
@@ -485,8 +484,6 @@ class vmmDetails(vmmGObjectUI):
 
             "on_config_apply_clicked": self.config_apply,
             "on_config_cancel_clicked": self.config_cancel,
-
-            "on_details_help_activate": self.show_help,
 
             "on_config_cdrom_connect_clicked": self.toggle_storage_media,
             "on_config_remove_clicked": self.remove_xml_dev,
@@ -664,8 +661,6 @@ class vmmDetails(vmmGObjectUI):
                                                     self.console.send_key)
         self.widget("details-menu-send-key").set_submenu(self.keycombo_menu)
 
-        # XXX: Help docs useless/out of date
-        self.widget("help_menuitem").hide()
 
     def init_graphs(self):
         graph_table = self.widget("graph-table")
@@ -1456,9 +1451,6 @@ class vmmDetails(vmmGObjectUI):
     #############################
     # External action listeners #
     #############################
-
-    def show_help(self, src_ignore):
-        self.emit("action-show-help", "virt-manager-details-window")
 
     def view_manager(self, src_ignore):
         self.emit("action-view-manager")

@@ -20,7 +20,6 @@
 
 import logging
 
-from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
 
@@ -30,10 +29,6 @@ PREFS_PAGE_STATS    = 0
 PREFS_PAGE_VM_PREFS = 1
 
 class vmmPreferences(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-    }
-
     def __init__(self):
         vmmGObjectUI.__init__(self, "vmm-preferences.ui", "vmm-preferences")
 
@@ -85,7 +80,6 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_console_scaling_changed": self.change_console_scaling,
             "on_prefs_close_clicked": self.close,
             "on_vmm_preferences_delete_event": self.close,
-            "on_prefs_help_clicked": self.show_help,
             "on_prefs_sound_local_toggled": self.change_local_sound,
             "on_prefs_sound_remote_toggled": self.change_remote_sound,
             "on_prefs_stats_enable_disk_toggled": self.change_disk_poll,
@@ -102,9 +96,6 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_storage_format_changed": self.change_storage_format,
         })
         self.bind_escape_key_close()
-
-        # XXX: Help docs useless/out of date
-        self.widget("prefs-help").hide()
 
     def close(self, ignore1=None, ignore2=None):
         logging.debug("Closing preferences")
@@ -352,8 +343,3 @@ class vmmPreferences(vmmGObjectUI):
         if idx >= 0:
             typ = src.get_model()[idx][0]
         self.config.set_storage_format(typ.lower())
-
-    def show_help(self, src_ignore):
-        # From the Preferences window, show the help document from
-        # the Preferences page
-        self.emit("action-show-help", "virt-manager-preferences-window")

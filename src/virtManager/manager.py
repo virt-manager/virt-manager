@@ -91,7 +91,6 @@ class vmmManager(vmmGObjectUI):
         "action-reboot-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-destroy-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-save-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-migrate-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-clone-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
@@ -160,16 +159,12 @@ class vmmManager(vmmGObjectUI):
 
             "on_menu_edit_preferences_activate": self.show_preferences,
             "on_menu_help_about_activate": self.show_about,
-            "on_menu_help_activate": self.show_help,
         })
 
         self.init_vmlist()
         self.init_stats()
         self.init_toolbar()
         self.init_context_menus()
-
-        # XXX: Help docs useless/out of date
-        self.widget("menu_help").hide()
 
         self.vm_selected()
         self.widget("vm-list").get_selection().connect("changed",
@@ -546,9 +541,6 @@ class vmmManager(vmmGObjectUI):
 
     def show_about(self, src_ignore):
         self.emit("action-show-about")
-
-    def show_help(self, src_ignore):
-        self.emit("action-show-help", None)
 
     def show_preferences(self, src_ignore):
         self.emit("action-show-preferences")

@@ -63,7 +63,6 @@ RHEL6_OS_SUPPORT = [
 class vmmCreate(vmmGObjectUI):
     __gsignals__ = {
         "action-show-vm": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
-        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str]),
     }
 
     def __init__(self, engine):
@@ -108,7 +107,6 @@ class vmmCreate(vmmGObjectUI):
             "on_create_back_clicked" : self.back,
             "on_create_forward_clicked" : self.forward,
             "on_create_finish_clicked" : self.finish,
-            "on_create_help_clicked": self.show_help,
             "on_create_pages_switch_page": self.page_changed,
 
             "on_create_vm_name_activate": self.forward,
@@ -231,8 +229,6 @@ class vmmCreate(vmmGObjectUI):
         self.widget("create-pages").set_show_tabs(False)
         self.widget("install-method-pages").set_show_tabs(False)
 
-        # FIXME: Unhide this when we make some documentation
-        self.widget("create-help").hide()
         finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
                                               Gtk.IconSize.BUTTON)
         self.widget("create-finish").set_image(finish_img)
@@ -2135,7 +2131,3 @@ class vmmCreate(vmmGObjectUI):
         self.storage_browser.set_finish_cb(callback)
         self.storage_browser.set_browse_reason(reason)
         self.storage_browser.show(self.topwin, self.conn)
-
-    def show_help(self, ignore):
-        # No help available yet.
-        pass

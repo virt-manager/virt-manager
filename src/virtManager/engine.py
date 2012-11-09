@@ -499,23 +499,11 @@ class vmmEngine(vmmGObject):
         except Exception, e:
             src.err.show_err(_("Error launching 'About' dialog: %s") % str(e))
 
-    def _do_show_help(self, src, index):
-        try:
-            uri = "ghelp:%s" % self.config.get_appname()
-            if index:
-                uri += "#%s" % index
-
-            logging.debug("Showing help for %s", uri)
-            Gtk.show_uri(None, uri, Gtk.get_current_event_time())
-        except Exception, e:
-            src.err.show_err(_("Unable to display documentation: %s") % e)
-
     def _get_preferences(self):
         if self.windowPreferences:
             return self.windowPreferences
 
         obj = vmmPreferences()
-        obj.connect("action-show-help", self._do_show_help)
         self.windowPreferences = obj
         return self.windowPreferences
 
@@ -532,7 +520,6 @@ class vmmEngine(vmmGObject):
         con = self._lookup_conn(uri)
         obj = vmmHost(con)
 
-        obj.connect("action-show-help", self._do_show_help)
         obj.connect("action-exit-app", self.exit_app)
         obj.connect("action-view-manager", self._do_show_manager)
         obj.connect("action-restore-domain", self._do_restore_domain)
@@ -584,7 +571,6 @@ class vmmEngine(vmmGObject):
         obj.connect("action-save-domain", self._do_save_domain)
         obj.connect("action-destroy-domain", self._do_destroy_domain)
         obj.connect("action-reset-domain", self._do_reset_domain)
-        obj.connect("action-show-help", self._do_show_help)
         obj.connect("action-suspend-domain", self._do_suspend_domain)
         obj.connect("action-resume-domain", self._do_resume_domain)
         obj.connect("action-run-domain", self._do_run_domain)
@@ -640,7 +626,6 @@ class vmmEngine(vmmGObject):
         obj.connect("action-show-vm", self._do_show_vm)
         obj.connect("action-show-preferences", self._do_show_preferences)
         obj.connect("action-show-create", self._do_show_create)
-        obj.connect("action-show-help", self._do_show_help)
         obj.connect("action-show-about", self._do_show_about)
         obj.connect("action-show-host", self._do_show_host)
         obj.connect("action-show-connect", self._do_show_connect)
@@ -678,7 +663,6 @@ class vmmEngine(vmmGObject):
 
         obj = vmmCreate(self)
         obj.connect("action-show-vm", self._do_show_vm)
-        obj.connect("action-show-help", self._do_show_help)
         self.windowCreate = obj
         return self.windowCreate
 
@@ -709,7 +693,6 @@ class vmmEngine(vmmGObject):
         try:
             if clone_window is None:
                 clone_window = vmmCloneVM(orig_vm)
-                clone_window.connect("action-show-help", self._do_show_help)
                 self.conns[uri]["windowClone"] = clone_window
             else:
                 clone_window.set_orig_vm(orig_vm)

@@ -58,9 +58,7 @@ IP_STATIC = 1
 IP_NONE = 2
 
 class vmmCreateInterface(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-help": (GObject.SignalFlags.RUN_FIRST, None, [str])
-    }
+    __gsignals__ = {}
 
     def __init__(self, conn):
         vmmGObjectUI.__init__(self,
@@ -87,7 +85,6 @@ class vmmCreateInterface(vmmGObjectUI):
             "on_back_clicked" : self.back,
             "on_forward_clicked" : self.forward,
             "on_finish_clicked" : self.finish,
-            "on_help_clicked": self.show_help,
             "on_pages_switch_page": self.page_changed,
 
             "on_bridge_config_button_clicked": self.show_bridge_config,
@@ -171,8 +168,6 @@ class vmmCreateInterface(vmmGObjectUI):
         self.widget("pages").set_show_tabs(False)
         self.widget("bond-pages").set_show_tabs(False)
 
-        # FIXME: Unhide this when we make some documentation
-        self.widget("help").hide()
         finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
                                               Gtk.IconSize.BUTTON)
         self.widget("finish").set_image(finish_img)
@@ -1137,7 +1132,3 @@ class vmmCreateInterface(vmmGObjectUI):
 
         self.interface.install(meter, create=activate)
         logging.debug("Install completed")
-
-    def show_help(self, ignore):
-        # No help available yet.
-        pass

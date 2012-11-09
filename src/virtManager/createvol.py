@@ -67,8 +67,6 @@ class vmmCreateVolume(vmmGObjectUI):
         self.widget("vol-info-view").modify_bg(Gtk.StateType.NORMAL,
                                                Gdk.Color.parse("grey")[1])
 
-        # XXX: Help docs useless/out of date
-        self.widget("pool-help").hide()
         finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
                                               Gtk.IconSize.BUTTON)
         self.widget("vol-create").set_image(finish_img)
