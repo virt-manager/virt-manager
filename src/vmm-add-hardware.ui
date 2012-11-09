@@ -426,9 +426,6 @@
                                         <property name="column_spacing">6</property>
                                         <property name="row_spacing">6</property>
                                         <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
                                           <object class="GtkComboBox" id="config-storage-devtype">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
@@ -499,6 +496,24 @@
                                             <property name="top_attach">2</property>
                                             <property name="bottom_attach">3</property>
                                             <property name="x_options">GTK_FILL</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkComboBox" id="config-storage-format">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="has_entry">True</property>
+                                            <child internal-child="entry">
+                                              <object class="GtkEntry" id="combobox-entry">
+                                                <property name="can_focus">False</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">2</property>
+                                            <property name="bottom_attach">3</property>
                                           </packing>
                                         </child>
                                       </object>

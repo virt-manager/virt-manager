@@ -682,11 +682,24 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="left_padding">20</property>
+                                                    <child>
+                                                      <object class="GtkComboBox" id="install-local-box">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="has_entry">True</property>
+                                                        <signal name="changed" handler="on_install_local_box_changed" swapped="no"/>
+                                                        <child internal-child="entry">
+                                                          <object class="GtkEntry" id="combobox-entry">
+                                                            <property name="can_focus">False</property>
+                                                          </object>
+                                                        </child>
+                                                      </object>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">True</property>
                                                     <property name="fill">True</property>
-                                                    <property name="position">0</property>
+                                                    <property name="position">-1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -846,7 +859,20 @@
                                                           </packing>
                                                         </child>
                                                         <child>
-                                                          <placeholder/>
+                                                          <object class="GtkComboBox" id="install-ks-box">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="has_entry">True</property>
+                                                            <child internal-child="entry">
+                                                            <object class="GtkEntry" id="combobox-entry2">
+                                                            <property name="can_focus">False</property>
+                                                            </object>
+                                                            </child>
+                                                          </object>
+                                                          <packing>
+                                                            <property name="left_attach">1</property>
+                                                            <property name="right_attach">2</property>
+                                                          </packing>
                                                         </child>
                                                       </object>
                                                     </child>
@@ -869,7 +895,21 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <placeholder/>
+                                          <object class="GtkComboBox" id="install-url-box">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="has_entry">True</property>
+                                            <signal name="changed" handler="on_install_url_box_changed" swapped="no"/>
+                                            <child internal-child="entry">
+                                              <object class="GtkEntry" id="combobox-entry1">
+                                                <property name="can_focus">False</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                          </packing>
                                         </child>
                                       </object>
                                     </child>

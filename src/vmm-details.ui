@@ -2400,7 +2400,17 @@ I/O:</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
                                                         <child>
-                                                          <placeholder/>
+                                                          <object class="GtkComboBox" id="cpu-model">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="has_entry">True</property>
+                                                            <signal name="changed" handler="on_cpu_model_changed" swapped="no"/>
+                                                            <child internal-child="entry">
+                                                            <object class="GtkEntry" id="combobox-entry">
+                                                            <property name="can_focus">False</property>
+                                                            </object>
+                                                            </child>
+                                                          </object>
                                                         </child>
                                                       </object>
                                                       <packing>
@@ -4005,7 +4015,17 @@ I/O:</property>
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <child>
-                                                            <placeholder/>
+                                                            <object class="GtkComboBox" id="disk-format">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="has_entry">True</property>
+                                                            <signal name="changed" handler="on_disk_format_changed" swapped="no"/>
+                                                            <child internal-child="entry">
+                                                            <object class="GtkEntry" id="combobox-entry1">
+                                                            <property name="can_focus">False</property>
+                                                            </object>
+                                                            </child>
+                                                            </object>
                                                             </child>
                                                           </object>
                                                           <packing>

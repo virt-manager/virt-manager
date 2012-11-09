@@ -49,15 +49,6 @@ def default_conn_user(conn):
         return "root"
     return current_user()
 
-_hostname_xml = """
-<interface>
-               <object class="GtkComboBoxText" id="hostname">
-                 <property name="visible">True</property>
-                 <property name="has_entry">True</property>
-                 <signal name="changed" handler="on_hostname_combo_changed"/>
-               </object>
-</interface>
-"""
 
 class vmmConnect(vmmGObjectUI):
     __gsignals__ = {
@@ -85,10 +76,6 @@ class vmmConnect(vmmGObjectUI):
         self.browser = None
         self.browser_sigs = []
         self.can_browse = False
-
-        self.get_window().add_from_string(_hostname_xml)
-        self.widget("table1").attach(self.widget("hostname"),
-                                     1, 2, 4, 5, yoptions=Gtk.AttachOptions.FILL)
 
         # Set this if we can't resolve 'hostname.local': means avahi
         # prob isn't configured correctly, and we should strip .local

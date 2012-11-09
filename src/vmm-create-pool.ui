@@ -374,6 +374,25 @@
                             <property name="can_focus">False</property>
                             <property name="spacing">6</property>
                             <child>
+                              <object class="GtkComboBox" id="pool-source-path">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="has_entry">True</property>
+                                <signal name="changed" handler="on_pool_source_path_changed" swapped="no"/>
+                                <signal name="focus" handler="on_pool_source_path_focus" swapped="no"/>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry" id="combobox-entry">
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkButton" id="pool-source-button">
                                 <property name="label" translatable="yes">Bro_wse</property>
                                 <property name="visible">True</property>
@@ -403,6 +422,25 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkComboBox" id="pool-target-path">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="has_entry">True</property>
+                                <signal name="changed" handler="on_pool_target_path_changed" swapped="no"/>
+                                <signal name="focus" handler="on_pool_target_path_focus_in_event" swapped="no"/>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry" id="combobox-entry1">
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
                             <child>
                               <object class="GtkButton" id="pool-target-button">
                                 <property name="label" translatable="yes">B_rowse</property>

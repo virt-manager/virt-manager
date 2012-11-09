@@ -33,21 +33,6 @@ from virtinst import Storage
 PAGE_NAME   = 0
 PAGE_FORMAT = 1
 
-_comboentry_xml = """
-<interface>
-    <object class="GtkComboBoxEntry" id="pool-source-path">
-        <property name="visible">True</property>
-        <signal name="changed" handler="on_pool_source_path_changed"/>
-        <signal name="focus" handler="on_pool_source_path_focus"/>
-    </object>
-    <object class="GtkComboBoxEntry" id="pool-target-path">
-        <property name="visible">True</property>
-        <signal name="changed" handler="on_pool_target_path_changed"/>
-        <signal name="focus_in_event" handler="on_pool_target_path_focus_in_event"/>
-    </object>
-</interface>
-"""
-
 class vmmCreatePool(vmmGObjectUI):
     def __init__(self, conn):
         vmmGObjectUI.__init__(self,
@@ -57,12 +42,6 @@ class vmmCreatePool(vmmGObjectUI):
 
         self._pool = None
         self._pool_class = Storage.StoragePool
-
-        self.get_window().add_from_string(_comboentry_xml)
-        self.widget("pool-source-box").pack_start(
-            self.widget("pool-source-path"), True, True, 0)
-        self.widget("pool-target-box").pack_start(
-            self.widget("pool-target-path"), True, True, 0)
 
         self.get_window().connect_signals({
             "on_pool_forward_clicked" : self.forward,

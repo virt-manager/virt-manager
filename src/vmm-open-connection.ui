@@ -103,9 +103,6 @@
             <property name="column_spacing">6</property>
             <property name="row_spacing">6</property>
             <child>
-              <placeholder/>
-            </child>
-            <child>
               <object class="GtkComboBox" id="hypervisor">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -343,6 +340,25 @@
                 <property name="right_attach">2</property>
                 <property name="top_attach">3</property>
                 <property name="bottom_attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="hostname">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="has_entry">True</property>
+                <signal name="changed" handler="on_hostname_combo_changed" swapped="no"/>
+                <child internal-child="entry">
+                  <object class="GtkEntry" id="combobox-entry">
+                    <property name="can_focus">False</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">2</property>
+                <property name="top_attach">4</property>
+                <property name="bottom_attach">5</property>
               </packing>
             </child>
           </object>
