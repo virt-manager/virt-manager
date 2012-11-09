@@ -18,33 +18,57 @@
 # MA 02110-1301 USA.
 #
 
-from virtManager.secret import vmmSecret
-
 import logging
 
-haveKeyring = False
 try:
-    import gnomekeyring
-    haveKeyring = True
+    from gi.repository import GnomeKeyring
 except:
-    logging.warning("gnomekeyring bindings not installed, no keyring support")
+    GnomeKeyring = None
+    logging.debug("GnomeKeyring bindings not installed, no keyring support")
+
+
+class vmmSecret(object):
+    def __init__(self, name, secret=None, attributes=None):
+        self.name = name
+        self.secret = secret
+
+        self.attributes = {}
+        if isinstance(attributes, dict):
+            self.attributes = attributes
+        elif isinstance(attributes, list):
+            for attr in attributes:
+                self.attributes[attr.name] = attr.get_string()
+
+    def get_secret(self):
+        return self.secret
+    def get_name(self):
+        return self.name
+
+    def get_attributes_for_keyring(self):
+        attrs = GnomeKeyring.attribute_list_new()
+        for key, value in self.attributes.items():
+            GnomeKeyring.attribute_list_append_string(attrs, key, value)
+        return attrs
 
 
 class vmmKeyring(object):
     def __init__(self):
         self.keyring = None
-        if not haveKeyring:
+        if GnomeKeyring is None:
             return
 
         try:
-            self.keyring = gnomekeyring.get_default_keyring_sync()
+            result = GnomeKeyring.get_default_keyring_sync()
+            if result and result[0] == GnomeKeyring.Result.OK:
+                self.keyring = result[1]
+
             if self.keyring is None:
-                # Code borrowed from
-                # http://trac.gajim.org/browser/src/common/passwords.py
                 self.keyring = 'default'
+                logging.debug("No default keyring, creating '%s'",
+                              self.keyring)
                 try:
-                    gnomekeyring.create_sync(self.keyring, None)
-                except gnomekeyring.AlreadyExistsError:
+                    GnomeKeyring.create_sync(self.keyring, None)
+                except GnomeKeyring.AlreadyExistsError:
                     pass
         except:
             logging.exception("Error determining keyring")
@@ -56,32 +80,43 @@ class vmmKeyring(object):
     def add_secret(self, secret):
         _id = None
         try:
-            _id = gnomekeyring.item_create_sync(self.keyring,
-                                               gnomekeyring.ITEM_GENERIC_SECRET,
-                                               secret.get_name(),
-                                               secret.get_attributes(),
-                                               secret.get_secret(),
-                                               True)
+            result, _id = GnomeKeyring.item_create_sync(
+                                    self.keyring,
+                                    GnomeKeyring.ItemType.GENERIC_SECRET,
+                                    secret.get_name(),
+                                    secret.get_attributes_for_keyring(),
+                                    secret.get_secret(),
+                                    True)
 
+            if result != GnomeKeyring.Result.OK:
+                raise RuntimeError("Creating keyring item failed with: %s" %
+                                   repr(result))
         except:
             logging.exception("Failed to add keyring secret")
 
         return _id
 
     def get_secret(self, _id):
+        """
+        ignore, item = GnomeKeyring.item_get_info_sync(self.keyring, _id)
+        if item is None:
+            return
+
         sec = None
         try:
-            item = gnomekeyring.item_get_info_sync(self.keyring, _id)
-            attrs = gnomekeyring.item_get_attributes_sync(self.keyring, _id)
+            result, attrs = GnomeKeyring.item_get_attributes_sync(
+                                                        self.keyring, _id)
+            if result != GnomeKeyring.Result.OK:
+                raise RuntimeError("Fetching keyring attributes failed "
+                                   "with %s" % result)
+
             sec = vmmSecret(item.get_display_name(), item.get_secret(), attrs)
         except:
-            pass
+            logging.exception("Failed to lookup keyring item %s", item)
 
         return sec
-
-    def clear_secret(self, _id):
-        try:
-            gnomekeyring.item_delete_sync(self.keyring, _id)
-            return True
-        except:
-            return False
+        """
+        # FIXME: Uncomment this once gnome-keyring is fixed
+        # https://bugzilla.gnome.org/show_bug.cgi?id=691638
+        ignore = _id
+        return None

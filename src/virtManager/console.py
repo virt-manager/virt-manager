@@ -340,7 +340,12 @@ class VNCViewer(Viewer):
         return self.desktop_resolution
 
     def _auth_credential(self, src_ignore, credList):
-        for cred in credList:
+        # XXX shouldn't need this
+        values = []
+        for idx in range(int(credList.n_values)):
+            values.append(credList.get_nth(idx))
+
+        for cred in values:
             if cred in [GtkVnc.DisplayCredential.PASSWORD,
                         GtkVnc.DisplayCredential.USERNAME,
                         GtkVnc.DisplayCredential.CLIENTNAME]:
@@ -363,7 +368,7 @@ class VNCViewer(Viewer):
 
         withUsername = False
         withPassword = False
-        for cred in credList:
+        for cred in values:
             logging.debug("Got credential request %s", cred)
             if cred == GtkVnc.DisplayCredential.PASSWORD:
                 withPassword = True

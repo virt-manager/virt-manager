@@ -25,8 +25,8 @@ from gi.repository import GConf
 
 import virtinst
 
-from virtManager.keyring import vmmKeyring
-from virtManager.secret import vmmSecret
+from virtManager.keyring import vmmKeyring, vmmSecret
+
 
 class vmmConfig(object):
 
@@ -735,47 +735,31 @@ class vmmConfig(object):
 
     def has_keyring(self):
         if self.keyring is None:
-            logging.warning("Initializing keyring")
             self.keyring = vmmKeyring()
         return self.keyring.is_available()
 
-    def clear_console_password(self, vm):
-        _id = self.conf.get_int(self.conf_dir + "/console/passwords/" + vm.get_uuid())
-
-        if _id is not None:
-            if not(self.has_keyring()):
-                return
-
-            if self.keyring.clear_secret(_id):
-                self.conf.unset(self.conf_dir + "/console/passwords/" + vm.get_uuid())
 
     def get_console_password(self, vm):
-        _id = self.conf.get_int(self.conf_dir + "/console/passwords/" + vm.get_uuid())
-        username = self.conf.get_string(self.conf_dir + "/console/usernames/" + vm.get_uuid())
+        keyid = self.conf.get_int(self.conf_dir +
+                                "/console/passwords/" + vm.get_uuid())
+        username = self.conf.get_string(self.conf_dir +
+                                        "/console/usernames/" + vm.get_uuid())
 
-        if username is None:
-            username = ""
+        if keyid is None or not self.has_keyring():
+            return ("", "")
 
-        if _id is not None:
-            if not(self.has_keyring()):
-                return ("", "")
+        secret = self.keyring.get_secret(keyid)
+        if secret is None or secret.get_name() != self.get_secret_name(vm):
+            return ("", "")
 
-            secret = self.keyring.get_secret(_id)
-            if secret is not None and secret.get_name() == self.get_secret_name(vm):
-                if not(secret.has_attribute("hvuri")):
-                    return ("", "")
-                if secret.get_attribute("hvuri") != vm.conn.get_uri():
-                    return ("", "")
-                if not(secret.has_attribute("uuid")):
-                    return ("", "")
-                if secret.get_attribute("uuid") != vm.get_uuid():
-                    return ("", "")
+        if (secret.attributes.get("hvuri", None) != vm.conn.get_uri() or
+            secret.attributes.get("uuid", None) != vm.get_uuid()):
+            return ("", "")
 
-                return (secret.get_secret(), username)
-        return ("", username)
+        return (secret.get_secret(), username or "")
 
     def set_console_password(self, vm, password, username=""):
-        if not(self.has_keyring()):
+        if not self.has_keyring():
             return
 
         # Nb, we don't bother to check if there is an existing
@@ -786,7 +770,11 @@ class vmmConfig(object):
         secret = vmmSecret(self.get_secret_name(vm), password,
                            {"uuid" : vm.get_uuid(),
                             "hvuri": vm.conn.get_uri()})
-        _id = self.keyring.add_secret(secret)
-        if _id is not None:
-            self.conf.set_int(self.conf_dir + "/console/passwords/" + vm.get_uuid(), _id)
-            self.conf.set_string(self.conf_dir + "/console/usernames/" + vm.get_uuid(), username)
+        keyid = self.keyring.add_secret(secret)
+        if keyid is None:
+            return
+
+        self.conf.set_int(self.conf_dir +
+                          "/console/passwords/" + vm.get_uuid(), keyid)
+        self.conf.set_string(self.conf_dir +
+                             "/console/usernames/" + vm.get_uuid(), username)
