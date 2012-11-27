@@ -426,7 +426,7 @@ def sanitize_gtkbuilder(filename):
     xml = file(filename).read()
 
     if (ver[0] > 2 or
-        (ver[0] == 2 and ver[1] > 18)):
+        (ver[0] == 2 and ver[1] > 20)):
         # Skip altering for gtk > 2.18
         return xml
 
