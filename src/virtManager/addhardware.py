@@ -529,18 +529,24 @@ class vmmAddHardware(vmmGObjectUI):
             model.append([bus, device, icon, desc, gtk.ICON_SIZE_BUTTON])
 
         if self.vm.is_hvm():
-            add_dev("ide", virtinst.VirtualDisk.DEVICE_DISK, "IDE disk")
-            add_dev("ide", virtinst.VirtualDisk.DEVICE_CDROM, "IDE cdrom")
-            add_dev("fdc", virtinst.VirtualDisk.DEVICE_FLOPPY, "Floppy disk")
+            add_dev("ide", virtinst.VirtualDisk.DEVICE_DISK, _("IDE disk"))
+            add_dev("ide", virtinst.VirtualDisk.DEVICE_CDROM, _("IDE CDROM"))
+            add_dev("fdc", virtinst.VirtualDisk.DEVICE_FLOPPY,
+                    _("Floppy disk"))
 
             if self.vm.rhel6_defaults():
-                add_dev("scsi", virtinst.VirtualDisk.DEVICE_DISK, "SCSI disk")
-                add_dev("usb", virtinst.VirtualDisk.DEVICE_DISK, "USB disk")
-        if self.vm.get_hv_type() == "kvm":
-            add_dev("sata", virtinst.VirtualDisk.DEVICE_DISK, "SATA disk")
-            add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK, "Virtio disk")
-        if self.conn.is_xen():
-            add_dev("xen", virtinst.VirtualDisk.DEVICE_DISK, "Virtual disk")
+                add_dev("scsi", virtinst.VirtualDisk.DEVICE_DISK,
+                        _("SCSI disk"))
+                add_dev("usb", virtinst.VirtualDisk.DEVICE_DISK,
+                        _("USB disk"))
+        if self.vm.get_hv_type() in ["kvm", "test"]:
+            add_dev("sata", virtinst.VirtualDisk.DEVICE_DISK,
+                    _("SATA disk"))
+            add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK,
+                    _("Virtio disk"))
+        if self.conn.is_xen() or self.conn.is_test_conn():
+            add_dev("xen", virtinst.VirtualDisk.DEVICE_DISK,
+                    _("Xen virtual disk"))
 
     def populate_input_model(self, model):
         model.clear()
