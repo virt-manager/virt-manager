@@ -264,12 +264,11 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Input device type
         input_list = self.widget("input-type")
-        input_model = gtk.ListStore(str, str, str, bool)
+        input_model = gtk.ListStore(str, str, str)
         input_list.set_model(input_model)
         text = gtk.CellRendererText()
         input_list.pack_start(text, True)
         input_list.add_attribute(text, 'text', 0)
-        input_list.add_attribute(text, 'sensitive', 3)
 
         # Graphics type
         graphics_list = self.widget("graphics-type")
@@ -550,11 +549,8 @@ class vmmAddHardware(vmmGObjectUI):
 
     def populate_input_model(self, model):
         model.clear()
-        model.append([_("EvTouch USB Graphics Tablet"), "tablet", "usb", True])
-        # XXX libvirt needs to support 'model' for input devices to distinguish
-        # wacom from evtouch tablets
-        #model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
-        model.append([_("Generic USB Mouse"), "mouse", "usb", True])
+        model.append([_("EvTouch USB Graphics Tablet"), "tablet", "usb"])
+        model.append([_("Generic USB Mouse"), "mouse", "usb"])
 
     def populate_graphics_model(self, model):
         model.clear()
