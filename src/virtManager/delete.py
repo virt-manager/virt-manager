@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 Red Hat, Inc.
+# Copyright (C) 2009, 2012 Red Hat, Inc.
 # Copyright (C) 2009 Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -96,7 +96,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.widget("delete-cancel").grab_focus()
 
         # Disable storage removal by default
-        self.widget("delete-remove-storage").set_active(False)
+        self.widget("delete-remove-storage").set_active(True)
         self.widget("delete-remove-storage").toggled()
 
         populate_storage_list(self.widget("delete-storage-list"),
@@ -124,6 +124,17 @@ class vmmDeleteDialog(vmmGObjectUI):
 
     def finish(self, src_ignore):
         devs = self.get_paths_to_delete()
+
+        if devs:
+            ret = util.chkbox_helper(self,
+                                     self.config.get_confirm_delstorage,
+                                     self.config.set_confirm_delstorage,
+                                     text1=_("Are you sure you want to delete "
+                                             "all the storage?"),
+                                     text2=_("This will delete all selected "
+                                             "storage data."))
+            if not ret:
+                return
 
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))

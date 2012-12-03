@@ -378,6 +378,19 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/::PACKAGE::/confirm/delete_storage</key>
+      <applyto>/apps/::PACKAGE::/confirm/delete_storage</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>bool</type>
+      <default>1</default>
+
+      <locale name="C">
+        <short>Confirm deleting storage</short>
+        <long>Whether we require a confirmation on deleting storage</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/::PACKAGE::/manager_window_height</key>
       <applyto>/apps/::PACKAGE::/manager_window_height</applyto>
       <owner>::PACKAGE::</owner>

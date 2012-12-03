@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 Red Hat, Inc.
+# Copyright (C) 2006, 2012 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -375,6 +375,13 @@ class vmmConfig(object):
         return self.conf.get_bool(self.conf_dir + "/confirm/interface_power")
     def get_confirm_unapplied(self):
         return self.conf.get_bool(self.conf_dir + "/confirm/unapplied_dev")
+    def get_confirm_delstorage(self):
+        # If no schema is installed, we _really_ want this to default to True
+        path = self.conf_dir + "/confirm/delete_storage"
+        ret = self.conf.get(path)
+        if ret == None:
+            return True
+        return self.conf.get_bool(path)
 
 
     def set_confirm_forcepoweroff(self, val):
@@ -389,6 +396,8 @@ class vmmConfig(object):
         self.conf.set_bool(self.conf_dir + "/confirm/interface_power", val)
     def set_confirm_unapplied(self, val):
         self.conf.set_bool(self.conf_dir + "/confirm/unapplied_dev", val)
+    def set_confirm_delstorage(self, val):
+        self.conf.set_bool(self.conf_dir + "/confirm/delete_storage", val)
 
     def on_confirm_forcepoweroff_changed(self, cb):
         return self.conf.notify_add(self.conf_dir + "/confirm/forcepoweroff", cb)
@@ -402,6 +411,8 @@ class vmmConfig(object):
         return self.conf.notify_add(self.conf_dir + "/confirm/interface_power", cb)
     def on_confirm_unapplied_changed(self, cb):
         return self.conf.notify_add(self.conf_dir + "/confirm/unapplied_dev", cb)
+    def on_confirm_delstorage_changed(self, cb):
+        return self.conf.notify_add(self.conf_dir + "/confirm/delete_storage", cb)
 
 
     # System tray visibility
