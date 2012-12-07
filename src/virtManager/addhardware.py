@@ -28,6 +28,7 @@ from virtinst import (VirtualCharDevice, VirtualDevice,
                       VirtualVideoDevice, VirtualWatchdog,
                       VirtualFilesystem, VirtualSmartCardDevice,
                       VirtualRedirDevice)
+from virtinst.VirtualController import VirtualControllerSCSI
 
 import virtManager.util as util
 import virtManager.uihelpers as uihelpers
@@ -543,6 +544,8 @@ class vmmAddHardware(vmmGObjectUI):
                     _("SATA disk"))
             add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK,
                     _("Virtio disk"))
+            add_dev("virtio-scsi", virtinst.VirtualDisk.DEVICE_DISK,
+                    _("Virtio SCSI disk"))
         if self.conn.is_xen() or self.conn.is_test_conn():
             add_dev("xen", virtinst.VirtualDisk.DEVICE_DISK,
                     _("Xen virtual disk"))
@@ -1154,9 +1157,15 @@ class vmmAddHardware(vmmGObjectUI):
         self._dev.get_xml_config()
         logging.debug("Adding device:\n" + self._dev.get_xml_config())
 
+        controller = getattr(self._dev, "vmm_controller", None)
+        if controller is not None:
+            logging.debug("Adding controller:\n%s",
+                          self._dev.vmm_controller.get_xml_config())
         # Hotplug device
         attach_err = False
         try:
+            if controller is not None:
+                self.vm.attach_device(self._dev.vmm_controller)
             self.vm.attach_device(self._dev)
         except Exception, e:
             logging.debug("Device could not be hotplugged: %s", str(e))
@@ -1179,6 +1188,8 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Alter persistent config
         try:
+            if controller is not None:
+                self.vm.add_device(self._dev.vmm_controller)
             self.vm.add_device(self._dev)
         except Exception, e:
             self.err.show_err(_("Error adding device: %s" % str(e)))
@@ -1224,6 +1235,10 @@ class vmmAddHardware(vmmGObjectUI):
         bus, device = self.get_config_disk_target()
         cache = self.get_config_disk_cache()
         fmt = self.get_config_disk_format()
+        controller_model = None
+        if bus == "virtio-scsi":
+           bus = "scsi"
+           controller_model = "virtio-scsi"
 
         # Make sure default pool is running
         if self.is_default_storage():
@@ -1317,6 +1332,17 @@ class vmmAddHardware(vmmGObjectUI):
 
         uihelpers.check_path_search_for_qemu(self.topwin,
                                              self.conn, disk.path)
+
+        # Add a SCSI controller with model virtio-scsi if needed
+        disk.vmm_controller = None
+        if (controller_model == "virtio-scsi") and (bus == "scsi"):
+            controllers = self.vm.get_controller_devices()
+            controller = VirtualControllerSCSI(conn = self.conn.vmm)
+            controller.set_model(controller_model)
+            disk.vmm_controller = controller
+            for d in controllers:
+                if controller_model == d.model:
+                   disk.vmm_controller = None
 
         self._dev = disk
         return True
