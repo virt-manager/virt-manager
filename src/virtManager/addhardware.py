@@ -544,8 +544,12 @@ class vmmAddHardware(vmmGObjectUI):
                     _("SATA disk"))
             add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK,
                     _("Virtio disk"))
+            add_dev("virtio", virtinst.VirtualDisk.DEVICE_LUN,
+                    _("Virtio lun"))
             add_dev("virtio-scsi", virtinst.VirtualDisk.DEVICE_DISK,
                     _("Virtio SCSI disk"))
+            add_dev("virtio-scsi", virtinst.VirtualDisk.DEVICE_LUN,
+                    _("Virtio SCSI lun"))
         if self.conn.is_xen() or self.conn.is_test_conn():
             add_dev("xen", virtinst.VirtualDisk.DEVICE_DISK,
                     _("Xen virtual disk"))
