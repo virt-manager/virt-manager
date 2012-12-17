@@ -101,12 +101,22 @@ class vmmNetwork(vmmLibvirtObject):
             return None
         addrStr = util.xpath(xml, "/network/ip/@address")
         netmaskStr = util.xpath(xml, "/network/ip/@netmask")
+        prefix = util.xpath(xml, "/network/ip/@prefix")
 
-        netmask = IP(netmaskStr)
-        gateway = IP(addrStr)
+        if prefix:
+            prefix = int(prefix)
+            binstr = ((prefix * "1") + ((32 - prefix) * "0"))
+            netmaskStr = str(IP(int(binstr, base=2)))
 
-        network = IP(gateway.int() & netmask.int())
-        return IP(str(network) + "/" + netmaskStr)
+        if netmaskStr:
+            netmask = IP(netmaskStr)
+            gateway = IP(addrStr)
+            network = IP(gateway.int() & netmask.int())
+            ret = IP(str(network) + "/" + netmaskStr)
+        else:
+            ret = IP(str(addrStr))
+
+        return ret
 
     def get_ipv4_forward(self):
         xml = self.get_xml()
