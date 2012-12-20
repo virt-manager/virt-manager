@@ -131,7 +131,8 @@ def packagekit_install(package_list):
     # Set 2 hour timeout
     timeout = 60 * 60 * 2
     logging.debug("Installing packages: %s", package_list)
-    pk_control.InstallPackageNames(0, package_list, "hide-confirm-search",
+    pk_control.InstallPackageNames(dbus.Uint32(0),
+                                   package_list, "hide-confirm-search",
                                    timeout=timeout)
 
 def packagekit_search(session, pk_control, package_name, packages):
