@@ -316,10 +316,6 @@ def main():
         import libvirt
         libvirt = virtManager.module_trace.wrap_module(libvirt)
 
-    # Add our icon dir to icon theme
-    icon_theme = gtk.icon_theme_get_default()
-    icon_theme.prepend_search_path(icon_dir)
-
     gobject.threads_init()
 
     import dbus
@@ -354,6 +350,10 @@ def main():
 
         # Ignore SIGHUP, otherwise a serial console closing drops the whole app
         signal.signal(signal.SIGHUP, signal.SIG_IGN)
+
+    # Add our icon dir to icon theme
+    icon_theme = gtk.icon_theme_get_default()
+    icon_theme.prepend_search_path(icon_dir)
 
     from virtManager.engine import vmmEngine
 
