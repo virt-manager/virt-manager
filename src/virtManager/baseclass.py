@@ -91,9 +91,11 @@ class vmmGObject(GObject.GObject):
         GObject.source_remove(handle)
         self._gobject_timeouts.remove(handle)
 
-    def _logtrace(self, msg):
+    def _logtrace(self, msg=""):
         import traceback
-        logging.debug("%s (%s %s)\n:%s",
+        if msg:
+            msg += " "
+        logging.debug("%s(%s %s)\n:%s",
                       msg, self.object_key, self.refcount(),
                        "".join(traceback.format_stack()))
 
