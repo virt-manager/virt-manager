@@ -217,6 +217,11 @@ class vmmCloneVM(vmmGObjectUI):
         blue = Gdk.Color.parse("#0072A8")[1]
         self.widget("clone-header").modify_bg(Gtk.StateType.NORMAL, blue)
 
+        context = self.topwin.get_style_context()
+        defcolor = context.get_background_color(Gtk.StateType.NORMAL)
+        self.widget("storage-viewport").modify_bg(Gtk.StateType.NORMAL,
+                                                  defcolor.to_color())
+
         box = self.widget("clone-vm-icon-box")
         image = Gtk.Image.new_from_icon_name("vm_clone_wizard",
                                              Gtk.IconSize.DIALOG)
@@ -279,7 +284,7 @@ class vmmCloneVM(vmmGObjectUI):
             hbox.pack_start(label, True, True, 0)
             hbox.pack_end(button, False, False, False)
             hbox.show_all()
-            net_box.pack_start(hbox, False, False)
+            net_box.pack_start(hbox, False, False, False)
 
             net_row = []
             net_row.insert(NETWORK_INFO_LABEL, labelstr)
@@ -489,8 +494,8 @@ class vmmCloneVM(vmmGObjectUI):
         disk_name_label = Gtk.Label(label=disk_label)
         disk_name_label.set_alignment(0, .5)
         disk_name_box = Gtk.HBox(spacing=9)
-        disk_name_box.pack_start(icon, False)
-        disk_name_box.pack_start(disk_name_label, True)
+        disk_name_box.pack_start(icon, False, False, 0)
+        disk_name_box.pack_start(disk_name_label, True, True, 0)
 
         def sep_func(model, it, combo):
             ignore = combo
@@ -498,9 +503,10 @@ class vmmCloneVM(vmmGObjectUI):
 
         # [String, sensitive, is sep]
         model = Gtk.ListStore(str, bool, bool)
-        option_combo = Gtk.ComboBox(model)
+        option_combo = Gtk.ComboBox()
+        option_combo.set_model(model)
         text = Gtk.CellRendererText()
-        option_combo.pack_start(text, True, True, 0)
+        option_combo.pack_start(text, True)
         option_combo.add_attribute(text, "text", 0)
         option_combo.add_attribute(text, "sensitive", 1)
         option_combo.set_row_separator_func(sep_func, option_combo)
@@ -529,11 +535,11 @@ class vmmCloneVM(vmmGObjectUI):
                          False, False])
             option_combo.set_active(STORAGE_COMBO_CLONE)
 
-        vbox.pack_start(disk_name_box, False, False)
-        vbox.pack_start(option_combo, False, False)
+        vbox.pack_start(disk_name_box, False, False, 0)
+        vbox.pack_start(option_combo, False, False, 0)
         if info_label:
-            vbox.pack_start(info_label, False, False)
-        storage_box.pack_start(vbox, False, False)
+            vbox.pack_start(info_label, False, False, 0)
+        storage_box.pack_start(vbox, False, False, 0)
 
         disk[STORAGE_INFO_COMBO] = option_combo
 

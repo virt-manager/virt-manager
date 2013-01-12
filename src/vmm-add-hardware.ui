@@ -38,6 +38,7 @@
   <object class="GtkWindow" id="vmm-add-hardware">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Add New Virtual Hardware</property>
+    <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="on_vmm_create_delete_event" swapped="no"/>
     <child>
@@ -505,7 +506,7 @@
                                             <property name="has_entry">True</property>
                                             <child internal-child="entry">
                                               <object class="GtkEntry" id="combobox-entry">
-                                                <property name="can_focus">False</property>
+                                                <property name="can_focus">True</property>
                                               </object>
                                             </child>
                                           </object>
@@ -616,6 +617,7 @@
                                             <property name="top_attach">2</property>
                                             <property name="bottom_attach">3</property>
                                             <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -717,6 +719,7 @@
                                             <property name="right_attach">2</property>
                                             <property name="top_attach">2</property>
                                             <property name="bottom_attach">3</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -731,6 +734,7 @@
                                           </object>
                                           <packing>
                                             <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -767,7 +771,7 @@
                                                 </child>
                                               </object>
                                               <packing>
-                                                <property name="expand">True</property>
+                                                <property name="expand">False</property>
                                                 <property name="fill">True</property>
                                                 <property name="position">0</property>
                                               </packing>
@@ -812,7 +816,7 @@
                                                 </child>
                                               </object>
                                               <packing>
-                                                <property name="expand">True</property>
+                                                <property name="expand">False</property>
                                                 <property name="fill">True</property>
                                                 <property name="position">1</property>
                                               </packing>
@@ -821,6 +825,7 @@
                                           <packing>
                                             <property name="left_attach">1</property>
                                             <property name="right_attach">2</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                       </object>
@@ -834,7 +839,7 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
+                                <property name="expand">False</property>
                                 <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
@@ -940,6 +945,7 @@
                                           <packing>
                                             <property name="left_attach">1</property>
                                             <property name="right_attach">2</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                       </object>
@@ -953,7 +959,7 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
+                                <property name="expand">False</property>
                                 <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
@@ -1036,6 +1042,7 @@
                                             <property name="left_attach">1</property>
                                             <property name="right_attach">2</property>
                                             <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -1128,10 +1135,12 @@
                                                   <object class="GtkLabel" id="label428">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
+                                                    <property name="yalign">0</property>
                                                     <property name="xpad">7</property>
                                                     <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Tip:&lt;/b&gt; VNC or Spice server is strongly recommended because it allows the virtual display to be embedded inside this application. It may also be used to allow access to the virtual display from a remote system.&lt;/small&gt;</property>
                                                     <property name="use_markup">True</property>
                                                     <property name="wrap">True</property>
+                                                    <property name="width_chars">50</property>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -1167,6 +1176,7 @@
                                             <property name="top_attach">4</property>
                                             <property name="bottom_attach">5</property>
                                             <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -1202,6 +1212,7 @@
                                             <property name="top_attach">6</property>
                                             <property name="bottom_attach">7</property>
                                             <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -1224,6 +1235,7 @@
                                               </object>
                                               <packing>
                                                 <property name="x_options">GTK_FILL</property>
+                                                <property name="y_options">GTK_FILL</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1278,6 +1290,7 @@
                                             <property name="top_attach">6</property>
                                             <property name="bottom_attach">7</property>
                                             <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -1292,6 +1305,7 @@
                                             <property name="top_attach">4</property>
                                             <property name="bottom_attach">5</property>
                                             <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -1306,6 +1320,7 @@
                                             <property name="top_attach">1</property>
                                             <property name="bottom_attach">2</property>
                                             <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -1340,6 +1355,9 @@
                                                 <property name="numeric">True</property>
                                                 <property name="update_policy">if-valid</property>
                                               </object>
+                                              <packing>
+                                                <property name="y_options">GTK_FILL</property>
+                                              </packing>
                                             </child>
                                             <child>
                                               <object class="GtkCheckButton" id="graphics-port-auto">
@@ -1355,6 +1373,7 @@
                                               <packing>
                                                 <property name="left_attach">3</property>
                                                 <property name="right_attach">4</property>
+                                                <property name="y_options">GTK_FILL</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1371,6 +1390,7 @@
                                               <packing>
                                                 <property name="left_attach">2</property>
                                                 <property name="right_attach">3</property>
+                                                <property name="y_options">GTK_FILL</property>
                                               </packing>
                                             </child>
                                           </object>
@@ -1379,6 +1399,7 @@
                                             <property name="right_attach">2</property>
                                             <property name="top_attach">3</property>
                                             <property name="bottom_attach">4</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                       </object>
@@ -1459,6 +1480,7 @@
                                             <property name="left_attach">1</property>
                                             <property name="right_attach">2</property>
                                             <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -1677,6 +1699,7 @@ to connect to the virtual machine.</property>
                                                         <property name="left_attach">1</property>
                                                         <property name="right_attach">2</property>
                                                         <property name="x_options">GTK_FILL</property>
+                                                        <property name="y_options">GTK_FILL</property>
                                                       </packing>
                                                     </child>
                                                     <child>
@@ -1690,6 +1713,7 @@ to connect to the virtual machine.</property>
                                                       </object>
                                                       <packing>
                                                         <property name="x_options">GTK_FILL</property>
+                                                        <property name="y_options">GTK_FILL</property>
                                                       </packing>
                                                     </child>
                                                   </object>
@@ -1739,6 +1763,7 @@ to connect to the virtual machine.</property>
                                                       <packing>
                                                         <property name="left_attach">1</property>
                                                         <property name="right_attach">2</property>
+                                                        <property name="y_options">GTK_FILL</property>
                                                       </packing>
                                                     </child>
                                                     <child>
@@ -1752,6 +1777,7 @@ to connect to the virtual machine.</property>
                                                         <property name="right_attach">2</property>
                                                         <property name="top_attach">5</property>
                                                         <property name="bottom_attach">6</property>
+                                                        <property name="y_options">GTK_FILL</property>
                                                       </packing>
                                                     </child>
                                                     <child>
@@ -1832,6 +1858,7 @@ to connect to the virtual machine.</property>
                                                         <property name="top_attach">3</property>
                                                         <property name="bottom_attach">4</property>
                                                         <property name="x_options">GTK_FILL</property>
+                                                        <property name="y_options">GTK_FILL</property>
                                                       </packing>
                                                     </child>
                                                     <child>
@@ -1846,6 +1873,7 @@ to connect to the virtual machine.</property>
                                                       </object>
                                                       <packing>
                                                         <property name="x_options">GTK_FILL</property>
+                                                        <property name="y_options">GTK_FILL</property>
                                                       </packing>
                                                     </child>
                                                     <child>
@@ -1862,6 +1890,7 @@ to connect to the virtual machine.</property>
                                                         <property name="top_attach">2</property>
                                                         <property name="bottom_attach">3</property>
                                                         <property name="x_options">GTK_FILL</property>
+                                                        <property name="y_options">GTK_FILL</property>
                                                       </packing>
                                                     </child>
                                                     <child>
@@ -1915,6 +1944,7 @@ to connect to the virtual machine.</property>
                                                         <property name="right_attach">2</property>
                                                         <property name="top_attach">2</property>
                                                         <property name="bottom_attach">3</property>
+                                                        <property name="y_options">GTK_FILL</property>
                                                       </packing>
                                                     </child>
                                                     <child>
@@ -1968,6 +1998,7 @@ to connect to the virtual machine.</property>
                                                         <property name="right_attach">2</property>
                                                         <property name="top_attach">3</property>
                                                         <property name="bottom_attach">4</property>
+                                                        <property name="y_options">GTK_FILL</property>
                                                       </packing>
                                                     </child>
                                                     <child>
@@ -1984,6 +2015,7 @@ to connect to the virtual machine.</property>
                                                         <property name="top_attach">1</property>
                                                         <property name="bottom_attach">2</property>
                                                         <property name="x_options">GTK_FILL</property>
+                                                        <property name="y_options">GTK_FILL</property>
                                                       </packing>
                                                     </child>
                                                   </object>
@@ -2031,6 +2063,7 @@ to connect to the virtual machine.</property>
                                                 <property name="ypad">6</property>
                                                 <property name="label" translatable="yes">label</property>
                                                 <property name="wrap">True</property>
+                                                <property name="max_width_chars">20</property>
                                               </object>
                                             </child>
                                           </object>
@@ -2038,7 +2071,7 @@ to connect to the virtual machine.</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="fill">True</property>
+                                        <property name="fill">False</property>
                                         <property name="position">1</property>
                                       </packing>
                                     </child>
@@ -2109,6 +2142,7 @@ to connect to the virtual machine.</property>
                                         <property name="left_attach">1</property>
                                         <property name="right_attach">2</property>
                                         <property name="x_options">GTK_FILL</property>
+                                        <property name="y_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2122,6 +2156,7 @@ to connect to the virtual machine.</property>
                                       </object>
                                       <packing>
                                         <property name="x_options">GTK_FILL</property>
+                                        <property name="y_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -2197,6 +2232,7 @@ and default action should be used.</property>
                                             <property name="left_attach">1</property>
                                             <property name="right_attach">2</property>
                                             <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -2210,6 +2246,7 @@ and default action should be used.</property>
                                           </object>
                                           <packing>
                                             <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -2224,6 +2261,7 @@ and default action should be used.</property>
                                             <property name="top_attach">1</property>
                                             <property name="bottom_attach">2</property>
                                             <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -2237,6 +2275,7 @@ and default action should be used.</property>
                                             <property name="top_attach">1</property>
                                             <property name="bottom_attach">2</property>
                                             <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                       </object>
@@ -2316,6 +2355,7 @@ access in the guest.</property>
                                       </object>
                                       <packing>
                                         <property name="x_options">GTK_FILL</property>
+                                        <property name="y_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2351,6 +2391,7 @@ access in the guest.</property>
                                       <packing>
                                         <property name="left_attach">1</property>
                                         <property name="right_attach">2</property>
+                                        <property name="y_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2366,6 +2407,7 @@ access in the guest.</property>
                                         <property name="top_attach">1</property>
                                         <property name="bottom_attach">2</property>
                                         <property name="x_options">GTK_FILL</property>
+                                        <property name="y_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2402,6 +2444,7 @@ access in the guest.</property>
                                         <property name="right_attach">2</property>
                                         <property name="top_attach">1</property>
                                         <property name="bottom_attach">2</property>
+                                        <property name="y_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2417,6 +2460,7 @@ access in the guest.</property>
                                         <property name="top_attach">2</property>
                                         <property name="bottom_attach">3</property>
                                         <property name="x_options">GTK_FILL</property>
+                                        <property name="y_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2454,6 +2498,7 @@ access in the guest.</property>
                                         <property name="right_attach">2</property>
                                         <property name="top_attach">2</property>
                                         <property name="bottom_attach">3</property>
+                                        <property name="y_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2469,6 +2514,7 @@ access in the guest.</property>
                                         <property name="top_attach">3</property>
                                         <property name="bottom_attach">4</property>
                                         <property name="x_options">GTK_FILL</property>
+                                        <property name="y_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2505,6 +2551,7 @@ access in the guest.</property>
                                         <property name="right_attach">2</property>
                                         <property name="top_attach">3</property>
                                         <property name="bottom_attach">4</property>
+                                        <property name="y_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2520,6 +2567,7 @@ access in the guest.</property>
                                         <property name="top_attach">4</property>
                                         <property name="bottom_attach">5</property>
                                         <property name="x_options">GTK_FILL</property>
+                                        <property name="y_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2535,6 +2583,7 @@ access in the guest.</property>
                                         <property name="top_attach">5</property>
                                         <property name="bottom_attach">6</property>
                                         <property name="x_options">GTK_FILL</property>
+                                        <property name="y_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2548,6 +2597,7 @@ access in the guest.</property>
                                         <property name="right_attach">2</property>
                                         <property name="top_attach">5</property>
                                         <property name="bottom_attach">6</property>
+                                        <property name="y_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2565,6 +2615,7 @@ access in the guest.</property>
                                         <property name="right_attach">2</property>
                                         <property name="top_attach">6</property>
                                         <property name="bottom_attach">7</property>
+                                        <property name="y_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2608,6 +2659,7 @@ access in the guest.</property>
                                         <property name="right_attach">2</property>
                                         <property name="top_attach">4</property>
                                         <property name="bottom_attach">5</property>
+                                        <property name="y_options">GTK_FILL</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -2681,6 +2733,7 @@ access in the guest.</property>
                                             <property name="left_attach">1</property>
                                             <property name="right_attach">2</property>
                                             <property name="x_options">GTK_FILL</property>
+                                            <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>
                                         <child>

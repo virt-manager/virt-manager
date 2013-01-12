@@ -947,12 +947,18 @@ class vmmCreate(vmmGObjectUI):
             variant = row[0]
             vlabel = row[1]
 
-        print str((distro, variant, dlabel, vlabel))
-        return (str(distro), str(variant), str(dlabel), str(vlabel))
+        return (distro and str(distro),
+                variant and str(variant),
+                str(dlabel), str(vlabel))
 
     def get_config_local_media(self, store_media=False):
         if self.widget("install-local-cdrom").get_active():
-            return self.widget("install-local-cdrom-combo").get_active_text()
+            cd = self.widget("install-local-cdrom-combo")
+            idx = cd.get_active()
+            model = cd.get_model()
+            if idx != -1:
+                return model[idx][uihelpers.OPTICAL_DEV_PATH]
+            return None
         else:
             ret = self.widget("install-local-box").get_child().get_text()
             if ret and store_media:
@@ -966,16 +972,16 @@ class vmmCreate(vmmGObjectUI):
         if instpage == INSTALL_PAGE_ISO:
             media = self.get_config_local_media()
         elif instpage == INSTALL_PAGE_URL:
-            media = self.widget("install-url-box").get_active_text()
+            media = self.widget("install-url-box").get_child().get_text()
         elif instpage == INSTALL_PAGE_IMPORT:
             media = self.widget("install-import-entry").get_text()
 
         return media
 
     def get_config_url_info(self, store_media=False):
-        media = self.widget("install-url-box").get_active_text().strip()
+        media = self.widget("install-url-box").get_child().get_text().strip()
         extra = self.widget("install-urlopts-entry").get_text().strip()
-        ks = self.widget("install-ks-box").get_active_text().strip()
+        ks = self.widget("install-ks-box").get_child().get_text().strip()
 
         if media and store_media:
             self.config.add_media_url(media)

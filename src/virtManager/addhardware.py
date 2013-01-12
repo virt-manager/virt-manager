@@ -100,14 +100,14 @@ class vmmAddHardware(vmmGObjectUI):
             "on_usbredir_type_changed": self.change_usbredir_type,
 
             # Char dev info signals
-            "char_device_type_focus": (self.update_doc, "char_type"),
-            "char_path_focus_in": (self.update_doc, "source_path"),
-            "char_mode_changed": (self.update_doc_changed, "source_mode"),
-            "char_mode_focus"  : (self.update_doc, "source_mode"),
-            "char_host_focus_in": (self.update_doc, "source_host"),
-            "char_bind_host_focus_in": (self.update_doc, "bind_host"),
-            "char_telnet_focus_in": (self.update_doc, "protocol"),
-            "char_name_focus_in": (self.update_doc, "target_name"),
+            "char_device_type_focus": self.update_doc_char_type,
+            "char_path_focus_in": self.update_doc_char_source_path,
+            "char_mode_changed": self.update_doc_char_source_mode,
+            "char_mode_focus"  : self.update_doc_char_source_mode,
+            "char_host_focus_in": self.update_doc_char_source_host,
+            "char_bind_host_focus_in": self.update_doc_char_bind_host,
+            "char_telnet_focus_in": self.update_doc_char_protocol,
+            "char_name_focus_in": self.update_doc_char_target_name,
         })
         self.bind_escape_key_close()
 
@@ -120,13 +120,24 @@ class vmmAddHardware(vmmGObjectUI):
         hwlist = self.widget("hardware-list")
         hwlist.get_selection().connect("changed", self.hw_selected)
 
-    def update_doc(self, ignore1, ignore2, param):
+    def _update_doc(self, param):
         doc = self._build_doc_str(param)
         self.widget("char-info").set_markup(doc)
 
-    def update_doc_changed(self, ignore1, param):
-        # Wrapper for update_doc and 'changed' signal
-        self.update_doc(None, None, param)
+    def update_doc_char_type(self, *ignore):
+        return self._update_doc("char_type")
+    def update_doc_char_source_path(self, *ignore):
+        return self._update_doc("source_path")
+    def update_doc_char_source_mode(self, *ignore):
+        return self._update_doc("source_mode")
+    def update_doc_char_source_host(self, *ignore):
+        return self._update_doc("source_host")
+    def update_doc_char_bind_host(self, *ignore):
+        return self._update_doc("bind_host")
+    def update_doc_char_protocol(self, *ignore):
+        return self._update_doc("protocol")
+    def update_doc_char_target_name(self, *ignore):
+        return self._update_doc("target_name")
 
     def _build_doc_str(self, param, docstr=None):
         doc = ""
@@ -1008,7 +1019,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("page-title-label").set_markup(markup)
 
     def change_char_device_type(self, src):
-        self.update_doc(None, None, "char_type")
+        self._update_doc("char_type")
         idx = src.get_active()
         if idx < 0:
             return

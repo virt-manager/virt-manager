@@ -210,6 +210,7 @@ class _errorDialog (Gtk.MessageDialog):
         details.set_overwrite(False)
         details.set_cursor_visible(False)
         details.set_wrap_mode(Gtk.WrapMode.WORD)
+        details.set_border_width(6)
         sw.add(details)
         self.buf_expander.add(sw)
         self.vbox.pack_start(self.buf_expander, False, False, 0)

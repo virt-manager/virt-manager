@@ -57,42 +57,26 @@ class vmmCreatePool(vmmGObjectUI):
             "on_pool_hostname_activate" : self.hostname_changed,
             "on_pool_iqn_chk_toggled": self.iqn_toggled,
 
-            "on_pool_name_focus_in_event": (self.update_doc, "name",
-                                            "pool-info1"),
-            # I cannot for the life of me get a combobox to abide
-            # focus-in, button-pressed, motion-over, etc.
-            "on_pool_type_focus": (self.update_doc, "type", "pool-info1"),
-            "on_pool_type_changed": (self.update_doc_changed, "type",
-                                     "pool-info1"),
+            "on_pool_name_focus_in_event": self.update_doc_name,
 
-            "on_pool_format_focus": (self.update_doc, "format", "pool-info2"),
-            "on_pool_format_changed": (self.update_doc_changed, "format",
-                                       "pool-info2"),
+            "on_pool_type_focus": self.update_doc_type,
+            "on_pool_type_changed": self.update_doc_type,
 
-            "on_pool_target_path_focus_in_event": (self.update_doc,
-                                                   "target_path",
-                                                   "pool-info2"),
-            "on_pool_target_path_focus": (self.update_doc, "target_path",
-                                          "pool-info2"),
-            "on_pool_target_path_changed": (self.update_doc_changed,
-                                            "target_path",
-                                            "pool-info2"),
+            "on_pool_format_focus": self.update_doc_format,
+            "on_pool_format_changed": self.update_doc_format,
 
-            "on_pool_source_path_focus_in_event": (self.update_doc,
-                                                   "source_path",
-                                                   "pool-info2"),
-            "on_pool_source_path_focus": (self.update_doc, "source_path",
-                                          "pool-info2"),
-            "on_pool_source_path_changed": (self.update_doc_changed,
-                                            "source_path",
-                                            "pool-info2"),
+            "on_pool_target_path_focus_in_event": self.update_doc_target_path,
+            "on_pool_target_path_focus": self.update_doc_target_path,
+            "on_pool_target_path_changed": self.update_doc_target_path,
 
-            "on_pool_hostname_focus_in_event": (self.update_doc, "host",
-                                                "pool-info2"),
-            "on_pool_build_focus_in_event": (self.update_build_doc),
+            "on_pool_source_path_focus_in_event": self.update_doc_source_path,
+            "on_pool_source_path_focus": self.update_doc_source_path,
+            "on_pool_source_path_changed": self.update_doc_source_path,
 
-            "on_pool_iqn_focus_in_event": (self.update_doc, "iqn",
-                                           "pool-info2"),
+            "on_pool_hostname_focus_in_event": self.update_doc_hostname,
+            "on_pool_build_focus_in_event": self.update_build_doc,
+
+            "on_pool_iqn_focus_in_event": self.update_doc_iqn,
         })
         self.bind_escape_key_close()
 
@@ -140,9 +124,9 @@ class vmmCreatePool(vmmGObjectUI):
         target_model = Gtk.ListStore(str, str, object)
         target_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         target_list.set_model(target_model)
-        target_list.set_text_column(0)
-        target_list.get_child().connect("focus-in-event", self.update_doc,
-                                  "target_path", "pool-info2")
+        target_list.set_entry_text_column(0)
+        target_list.get_child().connect("focus-in-event",
+                                        self.update_doc_target_path)
 
         # Source path combo box entry
         source_list = self.widget("pool-source-path")
@@ -150,9 +134,9 @@ class vmmCreatePool(vmmGObjectUI):
         source_model = Gtk.ListStore(str, str, object)
         source_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         source_list.set_model(source_model)
-        source_list.set_text_column(0)
-        source_list.get_child().connect("focus-in-event", self.update_doc,
-                                  "source_path", "pool-info2")
+        source_list.set_entry_text_column(0)
+        source_list.get_child().connect("focus-in-event",
+                                        self.update_doc_source_path)
 
         self.populate_pool_type()
 
@@ -560,11 +544,26 @@ class vmmCreatePool(vmmGObjectUI):
             self._pool = tmppool
             return True
 
-    def update_doc(self, ignore1, ignore2, param, infobox):
+    def _update_doc(self, param, infobox):
         doc = self._build_doc_str(param)
         self.widget(infobox).set_markup(doc)
 
-    def update_build_doc(self, ignore1, ignore2):
+    def update_doc_name(self, *ignore):
+        self._update_doc("name", "pool-info1")
+    def update_doc_type(self, *ignore):
+        self._update_doc("type", "pool-info1")
+    def update_doc_target_path(self, *ignore):
+        self._update_doc("target_path", "pool-info2")
+    def update_doc_source_path(self, *ignore):
+        self._update_doc("source_path", "pool-info2")
+    def update_doc_hostname(self, *ignore):
+        self._update_doc("host", "pool-info2")
+    def update_doc_format(self, *ignore):
+        self._update_doc("format", "pool-info2")
+    def update_doc_iqn(self, *ignore):
+        self._update_doc("iqn", "pool-info2")
+
+    def update_build_doc(self, *ignore):
         doc = ""
         docstr = ""
         if self._pool.type == Storage.StoragePool.TYPE_DISK:
@@ -575,10 +574,6 @@ class vmmCreatePool(vmmGObjectUI):
         if docstr:
             doc = self._build_doc_str("build", docstr)
         self.widget("pool-info2").set_markup(doc)
-
-    def update_doc_changed(self, ignore1, param, infobox):
-        # Wrapper for update_doc and 'changed' signal
-        self.update_doc(None, None, param, infobox)
 
     def _build_doc_str(self, param, docstr=None):
         doc = ""

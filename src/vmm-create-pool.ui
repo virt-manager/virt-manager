@@ -49,7 +49,7 @@
                               </object>
                               <packing>
                                 <property name="expand">False</property>
-                                <property name="fill">True</property>
+                                <property name="fill">False</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -71,7 +71,7 @@
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="fill">True</property>
+                            <property name="fill">False</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -84,15 +84,15 @@
                             <property name="label" translatable="yes">Specify a storage location to be later split into virtual machine storage.</property>
                           </object>
                           <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -100,20 +100,21 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">1</property>
                         <property name="yalign">0.05000000074505806</property>
                         <property name="xpad">2</property>
                         <property name="label" translatable="yes">Step 1 of 2</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
+                    <property name="fill">False</property>
                     <property name="padding">5</property>
                     <property name="position">0</property>
                   </packing>
@@ -187,7 +188,7 @@
                             <property name="right_attach">2</property>
                             <property name="top_attach">1</property>
                             <property name="bottom_attach">2</property>
-                            <property name="y_options">GTK_FILL</property>
+                            <property name="y_options"/>
                           </packing>
                         </child>
                       </object>
@@ -203,7 +204,6 @@
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkLabel" id="pool-info1">
-                            <property name="width_request">150</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
@@ -212,6 +212,8 @@
                             <property name="ypad">6</property>
                             <property name="label">label</property>
                             <property name="wrap">True</property>
+                            <property name="width_chars">15</property>
+                            <property name="max_width_chars">15</property>
                           </object>
                         </child>
                       </object>
@@ -271,7 +273,7 @@
                               </object>
                               <packing>
                                 <property name="expand">False</property>
-                                <property name="fill">True</property>
+                                <property name="fill">False</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -293,7 +295,7 @@
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="fill">True</property>
+                            <property name="fill">False</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -306,15 +308,15 @@
                             <property name="label" translatable="yes">Specify a storage location to be later split into virtual machine storage.</property>
                           </object>
                           <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -322,20 +324,21 @@
                       <object class="GtkLabel" id="label15">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">1</property>
                         <property name="yalign">0.05000000074505806</property>
                         <property name="xpad">2</property>
                         <property name="label" translatable="yes">Step 2 of 2</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
+                    <property name="fill">False</property>
                     <property name="padding">5</property>
                     <property name="position">0</property>
                   </packing>
@@ -382,7 +385,7 @@
                                 <signal name="focus" handler="on_pool_source_path_focus" swapped="no"/>
                                 <child internal-child="entry">
                                   <object class="GtkEntry" id="combobox-entry">
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                   </object>
                                 </child>
                               </object>
@@ -431,7 +434,7 @@
                                 <signal name="focus" handler="on_pool_target_path_focus_in_event" swapped="no"/>
                                 <child internal-child="entry">
                                   <object class="GtkEntry" id="combobox-entry1">
-                                    <property name="can_focus">False</property>
+                                    <property name="can_focus">True</property>
                                   </object>
                                 </child>
                               </object>
@@ -638,7 +641,7 @@
                             <property name="top_attach">4</property>
                             <property name="bottom_attach">5</property>
                             <property name="x_options">GTK_FILL</property>
-                            <property name="y_options">GTK_FILL</property>
+                            <property name="y_options"/>
                           </packing>
                         </child>
                         <child>
@@ -697,7 +700,6 @@
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkLabel" id="pool-info2">
-                            <property name="width_request">150</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
@@ -706,6 +708,8 @@
                             <property name="ypad">6</property>
                             <property name="label" translatable="yes">label</property>
                             <property name="wrap">True</property>
+                            <property name="width_chars">15</property>
+                            <property name="max_width_chars">15</property>
                           </object>
                         </child>
                       </object>

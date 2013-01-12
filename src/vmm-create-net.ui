@@ -65,6 +65,7 @@
                         <property name="label" translatable="yes">This assistant will guide you through creating a new virtual network. You will be asked for some information about the virtual network you'd like to create, such as:</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
+                        <property name="width_chars">40</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -152,6 +153,7 @@
                                 <property name="label" translatable="yes">The IPv4 &lt;b&gt;address&lt;/b&gt; and &lt;b&gt;netmask&lt;/b&gt; to assign</property>
                                 <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
+                                <property name="width_chars">40</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -171,6 +173,7 @@
                                 <property name="label" translatable="yes">Whether to &lt;b&gt;forward&lt;/b&gt; traffic to the physical network</property>
                                 <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
+                                <property name="width_chars">40</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -190,6 +193,7 @@
                                 <property name="label" translatable="yes">The &lt;b&gt;address range&lt;/b&gt; from which the &lt;b&gt;DHCP&lt;/b&gt; server will allocate addresses for virtual machines</property>
                                 <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
+                                <property name="width_chars">40</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -209,6 +213,7 @@
                                 <property name="label" translatable="yes">A &lt;b&gt;name&lt;/b&gt; for your new virtual network</property>
                                 <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
+                                <property name="width_chars">40</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -314,9 +319,6 @@
                             <property name="column_spacing">4</property>
                             <property name="row_spacing">3</property>
                             <child>
-                              <placeholder/>
-                            </child>
-                            <child>
                               <object class="GtkEntry" id="net-name">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -386,6 +388,21 @@
                                 <property name="mnemonic_widget">net-name</property>
                               </object>
                               <packing>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"/>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkAlignment" id="alignment3">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options"/>
                               </packing>
@@ -492,12 +509,6 @@
                             <property name="n_columns">2</property>
                             <property name="column_spacing">3</property>
                             <property name="row_spacing">3</property>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
                             <child>
                               <object class="GtkAlignment" id="alignment147">
                                 <property name="visible">True</property>
@@ -696,6 +707,7 @@
                                     <property name="label" translatable="yes">&lt;b&gt;Hint:&lt;/b&gt; The network should be chosen from one of the IPv4 private address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16</property>
                                     <property name="use_markup">True</property>
                                     <property name="wrap">True</property>
+                                    <property name="width_chars">40</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -742,6 +754,36 @@
                               <packing>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options"/>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkAlignment" id="alignment4">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkAlignment" id="alignment5">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="top_attach">2</property>
+                                <property name="bottom_attach">3</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
                           </object>
@@ -869,9 +911,12 @@
                                   <object class="GtkLabel" id="label391">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
                                     <property name="label" translatable="yes">&lt;b&gt;Tip:&lt;/b&gt; Unless you wish to reserve some addresses to allow static network configuration in virtual machines, these parameters can be left with their default values.</property>
                                     <property name="use_markup">True</property>
                                     <property name="wrap">True</property>
+                                    <property name="width_chars">40</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -1179,6 +1224,7 @@
                                 <property name="top_attach">3</property>
                                 <property name="bottom_attach">4</property>
                                 <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1216,6 +1262,7 @@
                                 <property name="right_attach">2</property>
                                 <property name="top_attach">3</property>
                                 <property name="bottom_attach">4</property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -1258,6 +1305,7 @@
                                 <property name="right_attach">2</property>
                                 <property name="top_attach">2</property>
                                 <property name="bottom_attach">3</property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                           </object>

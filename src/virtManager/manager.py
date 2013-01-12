@@ -72,6 +72,9 @@ style "treeview-style" {
 class "GtkToolbar" style "toolbar-style"
 class "GtkTreeView" style "treeview-style"
 """
+
+# XXX: This isn't working anymore. We can probably drop toolbar padding
+# bit anyways, but indent_expanders is important
 Gtk.rc_parse_string(rcstring)
 
 

@@ -181,7 +181,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
     def destconn_changed(self, src):
         active = src.get_active()
-        tooltip = None
+        tooltip = ""
         if active == -1:
             tooltip = _("A valid destination connection must be selected.")
 

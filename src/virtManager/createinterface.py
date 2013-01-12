@@ -164,7 +164,6 @@ class vmmCreateInterface(vmmGObjectUI):
     ###########################
 
     def set_initial_state(self):
-
         self.widget("pages").set_show_tabs(False)
         self.widget("bond-pages").set_show_tabs(False)
 
@@ -179,7 +178,7 @@ class vmmCreateInterface(vmmGObjectUI):
         image = Gtk.Image.new_from_icon_name("network-idle",
                                              Gtk.IconSize.DIALOG)
         image.show()
-        box.pack_end(image, False)
+        box.pack_end(image, False, False, False)
 
         # Interface type
         type_list = self.widget("interface-type")
