@@ -167,7 +167,6 @@ class vmmSystray(vmmGObject):
 
     def build_vm_menu(self, vm):
         icon_size = Gtk.IconSize.MENU
-        stop_icon = self.config.get_shutdown_icon_name()
 
         pause_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Pause"))
         pause_img  = Gtk.Image.new_from_stock(Gtk.STOCK_MEDIA_PAUSE, icon_size)
@@ -190,28 +189,30 @@ class vmmSystray(vmmGObject):
 
         # Shutdown menu
         reboot_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Reboot"))
-        reboot_img = Gtk.Image.new_from_icon_name(stop_icon, icon_size)
+        reboot_img = Gtk.Image.new_from_icon_name("system-shutdown", icon_size)
         reboot_item.set_image(reboot_img)
         reboot_item.connect("activate", self.run_vm_action,
                             "action-reboot-domain", vm.get_uuid())
         reboot_item.show()
 
         shutdown_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Shut Down"))
-        shutdown_img = Gtk.Image.new_from_icon_name(stop_icon, icon_size)
+        shutdown_img = Gtk.Image.new_from_icon_name("system-shutdown",
+                                                    icon_size)
         shutdown_item.set_image(shutdown_img)
         shutdown_item.connect("activate", self.run_vm_action,
                               "action-shutdown-domain", vm.get_uuid())
         shutdown_item.show()
 
         reset_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Force Reset"))
-        reset_img = Gtk.Image.new_from_icon_name(stop_icon, icon_size)
+        reset_img = Gtk.Image.new_from_icon_name("system-shutdown", icon_size)
         reset_item.set_image(reset_img)
         reset_item.show()
         reset_item.connect("activate", self.run_vm_action,
                            "action-reset-domain", vm.get_uuid())
 
         destroy_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Force Off"))
-        destroy_img = Gtk.Image.new_from_icon_name(stop_icon, icon_size)
+        destroy_img = Gtk.Image.new_from_icon_name("system-shutdown",
+                                                   icon_size)
         destroy_item.set_image(destroy_img)
         destroy_item.show()
         destroy_item.connect("activate", self.run_vm_action,
@@ -223,7 +224,8 @@ class vmmSystray(vmmGObject):
         shutdown_menu.add(reset_item)
         shutdown_menu.add(destroy_item)
         shutdown_menu_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Shut Down"))
-        shutdown_menu_img = Gtk.Image.new_from_icon_name(stop_icon, icon_size)
+        shutdown_menu_img = Gtk.Image.new_from_icon_name("system-shutdown",
+                                                         icon_size)
         shutdown_menu_item.set_image(shutdown_menu_img)
         shutdown_menu_item.set_submenu(shutdown_menu)
 

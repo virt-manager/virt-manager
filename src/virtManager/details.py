@@ -612,13 +612,13 @@ class vmmDetails(vmmGObjectUI):
                                              self.control_vm_destroy,
                                              self.control_vm_save)
 
-        icon_name = self.config.get_shutdown_icon_name()
         for name in ["details-menu-shutdown",
                      "details-menu-reboot",
                      "details-menu-reset",
                      "details-menu-poweroff",
                      "details-menu-destroy"]:
-            image = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
+            image = Gtk.Image.new_from_icon_name("system-shutdown",
+                                                 Gtk.IconSize.MENU)
             self.widget(name).set_image(image)
 
         # Add HW popup menu

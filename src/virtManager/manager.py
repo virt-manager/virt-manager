@@ -306,13 +306,11 @@ class vmmManager(vmmGObjectUI):
         def build_stock(name):
             return Gtk.Image.new_from_stock(name, Gtk.IconSize.MENU)
 
-        icon_name = self.config.get_shutdown_icon_name()
-        shutdownmenu_icon   = build_icon(icon_name)
-        reboot_icon         = build_icon(icon_name)
-        shutdown_icon       = build_icon(icon_name)
-        destroy_icon        = build_icon(icon_name)
-        reset_icon          = build_icon(icon_name)
-        reset_icon          = build_stock(icon_name)
+        shutdownmenu_icon   = build_icon("system-shutdown")
+        reboot_icon         = build_icon("system-shutdown")
+        shutdown_icon       = build_icon("system-shutdown")
+        destroy_icon        = build_icon("system-shutdown")
+        reset_icon          = build_icon("system-shutdown")
         run_icon            = build_stock(Gtk.STOCK_MEDIA_PLAY)
         pause_icon          = build_stock(Gtk.STOCK_MEDIA_PAUSE)
         save_icon           = build_stock(Gtk.STOCK_SAVE)

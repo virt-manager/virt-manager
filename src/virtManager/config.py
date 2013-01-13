@@ -169,14 +169,8 @@ class vmmConfig(object):
 
         return False
 
-    # General app wide helpers (gconf agnostic)
 
-    def get_shutdown_icon_name(self):
-        theme = Gtk.IconTheme.get_default()
-        iconname = "system-shutdown"
-        if theme.has_icon(iconname):
-            return iconname
-        return "media-playback-stop"
+    # General app wide helpers (gconf agnostic)
 
     def get_appname(self):
         return self.appname

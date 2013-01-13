@@ -842,15 +842,18 @@ def mediadev_set_default_selection(widget):
 
 def build_shutdown_button_menu(widget, shutdown_cb, reboot_cb, reset_cb,
                                destroy_cb, save_cb):
-    icon_name = util.running_config.get_shutdown_icon_name()
-    widget.set_icon_name(icon_name)
+    widget.set_icon_name("system-shutdown")
     menu = Gtk.Menu()
     widget.set_menu(menu)
 
-    rebootimg = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
-    shutdownimg = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
-    resetimg = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
-    destroyimg = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
+    rebootimg = Gtk.Image.new_from_icon_name("system-shutdown",
+                                             Gtk.IconSize.MENU)
+    shutdownimg = Gtk.Image.new_from_icon_name("system-shutdown",
+                                               Gtk.IconSize.MENU)
+    destroyimg = Gtk.Image.new_from_icon_name("system-shutdown",
+                                              Gtk.IconSize.MENU)
+    resetimg = Gtk.Image.new_from_icon_name("system-shutdown",
+                                            Gtk.IconSize.MENU)
     saveimg = Gtk.Image.new_from_icon_name(Gtk.STOCK_SAVE, Gtk.IconSize.MENU)
 
     reboot = Gtk.ImageMenuItem.new_with_mnemonic(_("_Reboot"))
