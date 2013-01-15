@@ -521,15 +521,17 @@ class SpiceViewer(Viewer):
                 return
 
             self.display_channel = channel
-            self.display = SpiceClientGtk.Display.new(self.spice_session, channel_id)
+            self.display = SpiceClientGtk.Display.new(self.spice_session,
+                                                      channel_id)
             self.console.get_window().get_object("console-vnc-viewport").add(self.display)
             self._init_widget()
             self.console.connected()
             return
 
-        if (type(channel) in [SpiceClientGLib.PlaybackChannel, SpiceClientGLib.RecordChannel] and
+        if (type(channel) in [SpiceClientGLib.PlaybackChannel,
+                              SpiceClientGLib.RecordChannel] and
             not self.audio):
-            self.audio = SpiceClientGLib.Audio(self.spice_session)
+            self.audio = SpiceClientGLib.Audio.get(self.spice_session, None)
             return
 
     def get_desktop_resolution(self):
