@@ -44,12 +44,14 @@ PAGE_UNAVAILABLE = 0
 PAGE_AUTHENTICATE = 1
 PAGE_VIEWER = 2
 
+
 def has_property(obj, setting):
     try:
         obj.get_property(setting)
     except TypeError:
         return False
     return True
+
 
 class ConnectionInfo(object):
     """
@@ -96,6 +98,7 @@ class ConnectionInfo(object):
         if not self.gport:
             return False
         return int(self.gport) == -1
+
 
 class Tunnel(object):
     def __init__(self):
@@ -215,6 +218,7 @@ class Tunnel(object):
 
         return errout
 
+
 class Tunnels(object):
     def __init__(self, ginfo):
         self.ginfo = ginfo
@@ -264,7 +268,7 @@ class Viewer(vmmGObject):
         raise NotImplementedError()
 
     def send_keys(self, keys):
-        return self.display.send_keys(keys)
+        raise NotImplementedError()
 
     def open_host(self, ginfo, password=None):
         raise NotImplementedError()
@@ -274,6 +278,7 @@ class Viewer(vmmGObject):
 
     def get_desktop_resolution(self):
         raise NotImplementedError()
+
 
 class VNCViewer(Viewer):
     def __init__(self, console):
@@ -331,6 +336,9 @@ class VNCViewer(Viewer):
         except Exception, e:
             logging.debug("Error when getting the grab keys combination: %s",
                           str(e))
+
+    def send_keys(self, keys):
+        return self.display.send_keys([Gdk.keyval_from_name(k) for k in keys])
 
     def _desktop_resize(self, src_ignore, w, h):
         self.desktop_resolution = (w, h)
@@ -475,6 +483,10 @@ class SpiceViewer(Viewer):
         except Exception, e:
             logging.debug("Error when getting the grab keys combination: %s",
                           str(e))
+
+    def send_keys(self, keys):
+        return self.display.send_keys([Gdk.keyval_from_name(k) for k in keys],
+                                      SpiceClientGtk.DisplayKeyEvent.CLICK)
 
     def close(self):
         if self.spice_session is not None:
