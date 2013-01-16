@@ -1130,8 +1130,7 @@ class vmmCreate(vmmGObjectUI):
         # If the url_entry has focus, don't fire detect_media_os, it means
         # the user is probably typing
         self.mediaDetected = False
-        if (self.widget("install-url-box").get_child().flags() &
-            Gtk.HAS_FOCUS):
+        if self.widget("install-url-box").get_child().has_focus():
             return
         self.detect_media_os()
 
