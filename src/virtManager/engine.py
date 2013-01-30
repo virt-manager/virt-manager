@@ -48,7 +48,8 @@ from virtManager.error import vmmErrorDialog
 from virtManager.systray import vmmSystray
 
 # Enable this to get a report of leaked objects on app shutdown
-debug_ref_leaks = True
+# XXX: gtk3 has issues here
+debug_ref_leaks = False
 
 def default_uri():
     tryuri = None
