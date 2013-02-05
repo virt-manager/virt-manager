@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008 Red Hat, Inc.
+# Copyright (C) 2006-2008, 2013 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -407,6 +407,7 @@ class vmmDetails(vmmGObjectUI):
             "on_overview_clock_changed": (self.enable_apply, EDIT_CLOCK),
             "on_machine_type_changed": (self.enable_apply, EDIT_MACHTYPE),
             "on_security_label_changed": (self.enable_apply, EDIT_SECURITY),
+            "on_security_relabel_changed": (self.enable_apply, EDIT_SECURITY),
             "on_security_type_changed": self.security_type_changed,
 
             "on_config_vcpus_changed": self.config_vcpus_changed,
@@ -786,7 +787,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Security info tooltips
         util.tooltip_wrapper(self.widget("security-static-info"),
-            _("Static SELinux security type tells libvirt to always start the guest process with the specified label. The administrator is responsible for making sure the images are labeled correctly on disk."))
+            _("Static SELinux security type tells libvirt to always start the guest process with the specified label. Unless 'relabel' is set, the administrator is responsible for making sure the images are labeled correctly on disk."))
         util.tooltip_wrapper(self.widget("security-dynamic-info"),
             _("The dynamic SELinux security type tells libvirt to automatically pick a unique label for the guest process and guest image, ensuring total isolation of the guest. (Default)"))
 
@@ -1740,6 +1741,7 @@ class vmmDetails(vmmGObjectUI):
     def security_type_changed(self, button):
         self.enable_apply(EDIT_SECURITY)
         self.widget("security-label").set_sensitive(not button.get_active())
+        self.widget("security-relabel").set_sensitive(not button.get_active())
 
     # Memory
     def config_get_maxmem(self):
@@ -2021,13 +2023,15 @@ class vmmDetails(vmmGObjectUI):
             semodel = None
             setype = "static"
             selabel = self.get_text("security-label")
+            relabel = self.widget("security-relabel").get_active()
 
             if self.widget("security-dynamic").get_active():
                 setype = "dynamic"
+                relabel = True
             if self.widget("security-type-box").get_property("sensitive"):
                 semodel = self.get_text("security-model")
 
-            add_define(self.vm.define_seclabel, semodel, setype, selabel)
+            add_define(self.vm.define_seclabel, semodel, setype, selabel, relabel)
 
         if self.editted(EDIT_DESC):
             desc_widget = self.widget("overview-description")
@@ -2603,7 +2607,7 @@ class vmmDetails(vmmGObjectUI):
                 self.set_combo_label("machine-type", machtype)
 
         # Security details
-        semodel, ignore, vmlabel = self.vm.get_seclabel()
+        semodel, sectype, vmlabel, relabel = self.vm.get_seclabel()
         caps = self.vm.conn.get_capabilities()
 
         if caps.host.secmodel and caps.host.secmodel.model:
@@ -2617,11 +2621,19 @@ class vmmDetails(vmmGObjectUI):
         else:
             self.widget("security-type-box").set_sensitive(bool(semodel))
 
-            if self.vm.get_seclabel()[1] == "static":
+            if sectype == "static":
                 self.widget("security-static").set_active(True)
+                self.widget("security-relabel").set_sensitive(True)
+                # As "no" is default for relabel with 'static' label and
+                # 'dynamic' must have relabel='yes', this will work properly
+                # for both False (relabel='no') and None (relabel not
+                # specified)
+                self.widget("security-relabel").set_active(relabel)
             else:
                 self.widget("security-dynamic").set_active(True)
-
+                # Dynamic label type must use resource labeling
+                self.widget("security-relabel").set_active(True)
+                self.widget("security-relabel").set_sensitive(False)
             self.widget("security-label").set_text(vmlabel)
 
     def refresh_stats_page(self):

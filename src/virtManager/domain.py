@@ -491,12 +491,18 @@ class vmmDomain(vmmLibvirtObject):
 
     # Security define methods
 
-    def define_seclabel(self, model, t, label):
+    def define_seclabel(self, model, t, label, relabel):
         def change(guest):
             seclabel = guest.seclabel
             seclabel.model = model or None
             if not model:
                 return
+
+            if relabel is not None:
+                if relabel:
+                    seclabel.relabel = "yes"
+                else:
+                    seclabel.relabel = "no"
 
             seclabel.type = t
             if label:
@@ -937,11 +943,19 @@ class vmmDomain(vmmLibvirtObject):
         return (kernel, initrd, args)
 
     def get_seclabel(self):
-        model = self._get_guest().seclabel.model
-        t     = self._get_guest().seclabel.type or "dynamic"
-        label = self._get_guest().seclabel.label or ""
+        seclabel = self._get_guest().seclabel
+        model = seclabel.model
+        t     = seclabel.type or "dynamic"
+        label = seclabel.label or ""
 
-        return [model, t, label]
+        relabel = getattr(seclabel, "relabel", None)
+        if relabel is not None:
+            if relabel == "yes":
+                relabel = True
+            else:
+                relabel = False
+
+        return [model, t, label, relabel]
 
     # XML Device listing
 
