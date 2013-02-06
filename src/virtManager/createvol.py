@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008 Red Hat, Inc.
+# Copyright (C) 2008, 2013 Red Hat, Inc.
 # Copyright (C) 2008 Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -29,7 +29,7 @@ from virtManager.asyncjob import vmmAsyncJob
 from virtinst import Storage
 
 DEFAULT_ALLOC = 0
-DEFAULT_CAP   = 1000
+DEFAULT_CAP   = 8192
 
 class vmmCreateVolume(vmmGObjectUI):
     def __init__(self, conn, parent_pool):
