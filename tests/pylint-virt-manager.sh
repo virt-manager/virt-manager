@@ -139,15 +139,31 @@ skip_pep8() {
     SKIP_PEP8="${SKIP_PEP8}$1"
 }
 
+skip_pep8 "E121"
+skip_pep8 "E122"
+skip_pep8 "E123"
+skip_pep8 "E124"
+skip_pep8 "E125"            # Continuation line indents
+skip_pep8 "E126"
+skip_pep8 "E127"
+skip_pep8 "E128"
+
 skip_pep8 "E203"            # Space before : in dictionary defs
 skip_pep8 "E221"            # Multiple spaces before operator (warns
                             # about column aligning assigments
 skip_pep8 "E241"            # Space after , column alignment nono
+skip_pep8 "E251"            # No space around keyword
 skip_pep8 "E261"            # 2 spaces before inline comment?
+skip_pep8 "E271"            # Multiple spaces before keyword
+skip_pep8 "E272"            # Multiple spaces before keyword
+
 skip_pep8 "E301"            # 1 blank line between methods
 skip_pep8 "E302"            # 2 blank lines between function defs
 skip_pep8 "E303"            # Too many blank lines
 skip_pep8 "E501"            # Line too long
+
+skip_pep8 "E711"            # Comparison to False
+skip_pep8 "E712"            # Comparison to None
 
 echo "Running pep8"
 pep8 -r --exclude=$IGNOREFILES --ignore $SKIP_PEP8 \

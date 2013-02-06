@@ -1241,8 +1241,8 @@ class vmmAddHardware(vmmGObjectUI):
         fmt = self.get_config_disk_format()
         controller_model = None
         if bus == "virtio-scsi":
-           bus = "scsi"
-           controller_model = "virtio-scsi"
+            bus = "scsi"
+            controller_model = "virtio-scsi"
 
         # Make sure default pool is running
         if self.is_default_storage():
@@ -1346,7 +1346,7 @@ class vmmAddHardware(vmmGObjectUI):
             disk.vmm_controller = controller
             for d in controllers:
                 if controller_model == d.model:
-                   disk.vmm_controller = None
+                    disk.vmm_controller = None
 
         self._dev = disk
         return True
