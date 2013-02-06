@@ -34,6 +34,7 @@ import libvirt
 
 from virtManager.baseclass import vmmGObject
 
+
 class ConsoleConnection(vmmGObject):
     def __init__(self, vm):
         vmmGObject.__init__(self)
@@ -57,6 +58,7 @@ class ConsoleConnection(vmmGObject):
         Callback when data has been entered into VTE terminal
         """
         raise NotImplementedError()
+
 
 class LocalConsoleConnection(ConsoleConnection):
     def __init__(self, vm):
@@ -122,8 +124,9 @@ class LocalConsoleConnection(ConsoleConnection):
             return False
 
         data = os.read(self.fd, 1024)
-        terminal.feed(data, len(data))
+        terminal.feed(data)
         return True
+
 
 class LibvirtConsoleConnection(ConsoleConnection):
     def __init__(self, vm):
@@ -232,11 +235,11 @@ class LibvirtConsoleConnection(ConsoleConnection):
         if not self.streamToTerminal:
             return
 
-        terminal.feed(self.streamToTerminal, len(self.streamToTerminal))
+        terminal.feed(self.streamToTerminal)
         self.streamToTerminal = ""
 
-class vmmSerialConsole(vmmGObject):
 
+class vmmSerialConsole(vmmGObject):
     @staticmethod
     def support_remote_console(vm):
         """
@@ -306,14 +309,13 @@ class vmmSerialConsole(vmmGObject):
 
     def init_terminal(self):
         self.terminal = Vte.Terminal()
-        self.terminal.set_cursor_blinks(True)
+        self.terminal.set_cursor_blink_mode(Vte.TerminalCursorBlinkMode.ON)
         self.terminal.set_emulation("xterm")
         self.terminal.set_scrollback_lines(1000)
         self.terminal.set_audible_bell(False)
         self.terminal.set_visible_bell(True)
-        # XXX python VTE binding has bug failing to register constants
-        #self.terminal.set_backspace_binding(Vte.ERASE_ASCII_BACKSPACE)
-        self.terminal.set_backspace_binding(1)
+        self.terminal.set_backspace_binding(
+            Vte.TerminalEraseBinding.ASCII_BACKSPACE)
 
         self.terminal.connect("button-press-event", self.show_serial_rcpopup)
         self.terminal.connect("commit", self.console.send_data, self.terminal)
@@ -333,7 +335,7 @@ class vmmSerialConsole(vmmGObject):
         self.box.set_show_tabs(False)
         self.box.set_show_border(False)
 
-        align = Gtk.Alignment.new()
+        align = Gtk.Alignment()
         align.set_padding(2, 2, 2, 2)
         evbox = Gtk.EventBox()
         evbox.modify_bg(Gtk.StateType.NORMAL, Gdk.Color(0, 0, 0))
@@ -344,15 +346,15 @@ class vmmSerialConsole(vmmGObject):
         self.error_label.set_line_wrap(True)
 
         if self.terminal:
-            scrollbar.set_adjustment(self.terminal.get_adjustment())
+            scrollbar.set_adjustment(self.terminal.get_vadjustment())
             align.add(self.terminal)
 
         evbox.add(align)
         terminalbox.pack_start(evbox, True, True, 0)
-        terminalbox.pack_start(scrollbar, expand=False, fill=False)
+        terminalbox.pack_start(scrollbar, False, False, 0)
 
-        self.box.append_page(terminalbox)
-        self.box.append_page(self.error_label)
+        self.box.append_page(terminalbox, Gtk.Label(""))
+        self.box.append_page(self.error_label, Gtk.Label(""))
         self.box.show_all()
 
     def _cleanup(self):

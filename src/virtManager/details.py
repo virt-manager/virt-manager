@@ -1124,7 +1124,8 @@ class vmmDetails(vmmGObjectUI):
         itemlist = self.build_serial_list()
         for msg, err, sensitive, do_radio, cb, ignore in itemlist:
             if do_radio:
-                item = Gtk.RadioMenuItem(group, msg)
+                item = Gtk.RadioMenuItem(group)
+                item.set_label(msg)
                 if group is None:
                     group = item
             else:
@@ -1156,8 +1157,9 @@ class vmmDetails(vmmGObjectUI):
             src.add(item)
         else:
             dev = devs[0]
-            item = Gtk.RadioMenuItem(group, _("Graphical Console %s") %
-                                     dev.pretty_type_simple(dev.type))
+            item = Gtk.RadioMenuItem(group)
+            item.set_label(_("Graphical Console %s") %
+                           dev.pretty_type_simple(dev.type))
             if group is None:
                 group = item
 
