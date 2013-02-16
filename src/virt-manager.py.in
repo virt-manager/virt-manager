@@ -115,8 +115,9 @@ def drop_stdio():
 def parse_commandline():
     optParser = optparse.OptionParser(version=appversion,
                                       usage="virt-manager [options]")
-
     optParser.set_defaults(uuid=None)
+    optParser.epilog = ("Also accepts standard GTK arguments like "
+                        "--g-fatal-warnings")
 
     # Generate runtime performance profile stats with hotshot
     optParser.add_option("--profile", dest="profile",
