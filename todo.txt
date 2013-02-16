@@ -1,0 +1,112 @@
+  TODO before upstream merge
+  ==========================
+
+drop autotools:
+- at least investigate it, distutils-extra should give us what we need
+- will make the virtinst merge much easier
+
+merge virtinst:
+- no big clean up, just get it all + unit tests working
+- merge history or just add code?
+
+
+
+  TODO before first release
+  =========================
+
+check all XXX/TODO in the code, make sure nothing important is missing
+verify gettext still works
+is tui working? maybe just remove it, check with mcpierce
+gsettings port (or fix gconf bindings)
+gtkapplication + drop dbus uniqueness stuff? at least investigate it
+python3? consider it
+
+
+
+  Misc issues
+  ===========
+
+If libvirt connection is dropped, app segfaults
+segfault if open test:///default, then try and open testdriver that libvirt can't parse XML
+
+
+test:///default->test->Details: Switch to processor page and 'apply' is activated, shouldn't happen. I think it affects master branch as well
+
+
+removing hardware can give:
+Traceback (most recent call last):
+  File "/home/crobinso/src/virt-manager/src/virtManager/details.py", line 1254, in hw_changed
+    if self.compare_hw_rows(newrow, oldrow):
+  File "/home/crobinso/src/virt-manager/src/virtManager/details.py", line 1226, in compare_hw_rows
+    if row1[idx] != row2[idx]:
+  File "/usr/lib64/python2.7/site-packages/gi/overrides/Gtk.py", line 1136, in __getitem__
+    return self.model.get_value(self.iter, key)
+  File "/usr/lib64/python2.7/site-packages/gi/types.py", line 48, in function
+    return info.invoke(*args, **kwargs)
+TypeError: unknown type (null)
+
+
+Traceback (most recent call last):
+  File "/home/crobinso/src/virt-manager/src/virtManager/console.py", line 1270, in scroll_size_allocate
+    self.viewer.display.size_allocate(viewer_alloc)
+  File "/usr/lib64/python2.7/site-packages/gi/types.py", line 48, in function
+    return info.invoke(*args, **kwargs)
+TypeError: argument allocation: Expected cairo.RectangleInt, but got tuple
+
+
+virt-manager: drop all the HAL code, we could convert to udev but it's not
+    really worth it given interface + nodedev APIs
+
+
+start a spice guest, shrink the window to smaller than guest resolution, scrollbars work but don't have any actual 'bar'.
+
+
+
+  After virtinst merge
+  ====================
+
+enable all pep8 bits
+pylint: drop shell script, stick it in setup.py
+drop old stuff from both spec files
+update README
+pull out all python-virtinst selinux stuff, drop spec dep
+virtinst initrd test: drop the big files? just stub em out
+
+
+  Problems in other packages
+  ==========================
+
+gconf set_list: https://bugzilla.gnome.org/show_bug.cgi?id=681433
+gtk tooltip: https://bugzilla.gnome.org/show_bug.cgi?id=691639
+Keyring bindings broken: https://bugzilla.gnome.org/show_bug.cgi?id=691638
+
+pygobject ctrl-c issue: https://bugzilla.gnome.org/show_bug.cgi?id=691658
+get option list for --help: https://bugzilla.gnome.org/show_bug.cgi?id=691659
+pygobject row[idx] = None: https://bugzilla.gnome.org/show_bug.cgi?id=691660
+
+rcm-tools koji virt-install patch: http://post-office.corp.redhat.com/archives/rcm-tools/2012-February/msg00054.html
+
+
+  Manager spacing bug
+  ===================
+
+spacing is weird in manager, prefs window. cant have unequal tree rows
+- have 3 rows: qemu, test default, test custom
+-- connect to test:///default, watch the parent rows expand
+- doing col.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE) for the stats
+    column helps but doesn't fix it entirely, the bottom row will still
+    expand weirdly.
+- save this till the end, narrow it down to a simple reproducer and try and
+    fix, probably a gtk3 issue.
+- list size issues: master actually has bigger list size than collapsed gtk3 rows, maybe that is part of the issue.
+
+
+  Object leaks
+  ============
+
+objects leak on cleanup, pygobject has reference counting issues
+- https://bugzilla.gnome.org/show_bug.cgi?id=692044
+- https://bugzilla.gnome.org/show_bug.cgi?id=693111
+- leak detection disabled in the manager.py for now
+- see if gtk.grab_get_current autodrawer leak fixed by gtk3
+
