@@ -26,7 +26,7 @@ class vmmAbout(vmmGObjectUI):
     def __init__(self):
         vmmGObjectUI.__init__(self, "vmm-about.ui", "vmm-about")
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_vmm_about_delete_event": self.close,
             "on_vmm_about_response": self.close,
         })

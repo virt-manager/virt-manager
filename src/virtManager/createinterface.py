@@ -77,7 +77,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
         self.ip_manually_changed = False
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_vmm_create_interface_delete_event" : self.close,
 
             "on_cancel_clicked": self.close,

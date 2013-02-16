@@ -56,7 +56,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         self.rhel6_defaults = True
         self.local_args = {}
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_vmm_storage_browse_delete_event" : self.close,
             "on_browse_cancel_clicked" : self.close,
             "on_browse_local_clicked" : self.browse_local,

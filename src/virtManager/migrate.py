@@ -55,7 +55,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         self.destconn_rows = []
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_vmm_migrate_delete_event" : self.close,
 
             "on_migrate_cancel_clicked" : self.close,

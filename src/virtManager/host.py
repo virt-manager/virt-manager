@@ -101,7 +101,7 @@ class vmmHost(vmmGObjectUI):
 
         self.conn.connect("state-changed", self.conn_state_changed)
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_menu_file_view_manager_activate" : self.view_manager,
             "on_menu_file_quit_activate" : self.exit_app,
             "on_menu_file_close_activate": self.close,

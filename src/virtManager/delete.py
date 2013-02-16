@@ -47,7 +47,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.vm = None
         self.conn = None
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_vmm_delete_delete_event" : self.close,
             "on_delete_cancel_clicked" : self.close,
             "on_delete_ok_clicked" : self.finish,

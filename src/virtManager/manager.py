@@ -131,7 +131,7 @@ class vmmManager(vmmGObjectUI):
         self.guestcpucol = None
         self.hostcpucol = None
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_menu_view_guest_cpu_usage_activate":
                     self.toggle_stats_visible_guest_cpu,
             "on_menu_view_host_cpu_usage_activate":

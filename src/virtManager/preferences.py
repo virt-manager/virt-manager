@@ -72,7 +72,7 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_confirm_unapplied()
         self.refresh_confirm_delstorage()
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_prefs_system_tray_toggled" : self.change_view_system_tray,
             "on_prefs_stats_update_interval_changed": self.change_update_interval,
             "on_prefs_stats_history_length_changed": self.change_history_length,

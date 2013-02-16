@@ -353,7 +353,7 @@ class vmmDetails(vmmGObjectUI):
         self.ignoreDetails = False
         self._cpu_copy_host = False
 
-        self.console = vmmConsolePages(self.vm, self.window, self.topwin)
+        self.console = vmmConsolePages(self.vm, self.builder, self.topwin)
 
         # Set default window size
         w, h = self.vm.get_details_window_size()
@@ -371,7 +371,7 @@ class vmmDetails(vmmGObjectUI):
         self.network_traffic_graph = None
         self.init_graphs()
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_close_details_clicked": self.close,
             "on_details_menu_close_activate": self.close,
             "on_vmm_details_delete_event": self.close,

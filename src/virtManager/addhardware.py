@@ -77,7 +77,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         self._dev = None
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_create_cancel_clicked" : self.close,
             "on_vmm_create_delete_event" : self.close,
             "on_create_finish_clicked" : self.finish,

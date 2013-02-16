@@ -43,7 +43,7 @@ class vmmCreatePool(vmmGObjectUI):
         self._pool = None
         self._pool_class = Storage.StoragePool
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_pool_forward_clicked" : self.forward,
             "on_pool_back_clicked"    : self.back,
             "on_pool_cancel_clicked"  : self.close,

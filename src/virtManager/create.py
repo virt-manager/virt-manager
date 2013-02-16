@@ -100,7 +100,7 @@ class vmmCreate(vmmGObjectUI):
         self.config_window = None
         self.config_window_signals = []
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_vmm_newcreate_delete_event" : self.close,
 
             "on_create_cancel_clicked": self.close,

@@ -342,7 +342,7 @@ class VNCViewer(Viewer):
 
     def _desktop_resize(self, src_ignore, w, h):
         self.desktop_resolution = (w, h)
-        self.console.get_window().get_object("console-vnc-scroll").queue_resize()
+        self.console.widget("console-vnc-scroll").queue_resize()
 
     def get_desktop_resolution(self):
         return self.desktop_resolution
@@ -535,7 +535,7 @@ class SpiceViewer(Viewer):
             self.display_channel = channel
             self.display = SpiceClientGtk.Display.new(self.spice_session,
                                                       channel_id)
-            self.console.get_window().get_object("console-vnc-viewport").add(self.display)
+            self.console.widget("console-vnc-viewport").add(self.display)
             self._init_widget()
             self.console.connected()
             return
@@ -596,13 +596,13 @@ class SpiceViewer(Viewer):
 
 
 class vmmConsolePages(vmmGObjectUI):
-    def __init__(self, vm, window, topwin):
+    def __init__(self, vm, builder, topwin):
         vmmGObjectUI.__init__(self, None, None)
 
         self.vm = vm
 
         self.windowname = "vmm-details"
-        self.window = window
+        self.builder = builder
         self.topwin = topwin
         self.err = vmmErrorDialog(self.topwin)
 

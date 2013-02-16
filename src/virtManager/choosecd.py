@@ -41,7 +41,7 @@ class vmmChooseCD(vmmGObjectUI):
         self.storage_browser = None
         self.media_type = disk.device
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_media_toggled": self.media_toggled,
             "on_fv_iso_location_browse_clicked": self.browse_fv_iso_location,
             "on_cd_path_changed": self.change_cd_path,

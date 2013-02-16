@@ -61,7 +61,7 @@ class vmmConnect(vmmGObjectUI):
                               "vmm-open-connection.ui",
                               "vmm-open-connection")
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_hypervisor_changed": self.hypervisor_changed,
             "on_connection_changed": self.conn_changed,
             "on_hostname_combo_changed": self.hostname_combo_changed,

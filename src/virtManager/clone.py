@@ -141,7 +141,7 @@ class vmmCloneVM(vmmGObjectUI):
         self.change_storage = self.widget("vmm-change-storage")
         self.change_storage.set_transient_for(self.topwin)
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_clone_delete_event" : self.close,
             "on_clone_cancel_clicked" : self.close,
             "on_clone_ok_clicked" : self.finish,

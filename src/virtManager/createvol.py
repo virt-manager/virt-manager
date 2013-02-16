@@ -47,7 +47,7 @@ class vmmCreateVolume(vmmGObjectUI):
         self.vol = None
         self.vol_class = Storage.StoragePool.get_volume_for_pool(parent_pool.get_type())
 
-        self.get_window().connect_signals({
+        self.builder.connect_signals({
             "on_vmm_create_vol_delete_event" : self.close,
             "on_vol_cancel_clicked"  : self.close,
             "on_vol_create_clicked"  : self.finish,
