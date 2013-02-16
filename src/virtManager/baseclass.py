@@ -25,13 +25,14 @@ import logging
 import virtManager
 import virtManager.guidiff
 
+from gi.repository import GLib
 from gi.repository import GObject
 if virtManager.guidiff.is_gui():
     from gi.repository import Gtk
     from gi.repository import Gdk
 
-class vmmGObject(GObject.GObject):
 
+class vmmGObject(GObject.GObject):
     _leak_check = True
 
     def __init__(self):
@@ -88,7 +89,7 @@ class vmmGObject(GObject.GObject):
     def add_gobject_timeout(self, handle):
         self._gobject_timeouts.append(handle)
     def remove_gobject_timeout(self, handle):
-        GObject.source_remove(handle)
+        GLib.source_remove(handle)
         self._gobject_timeouts.remove(handle)
 
     def _logtrace(self, msg=""):
@@ -136,7 +137,7 @@ class vmmGObject(GObject.GObject):
 
     def idle_emit(self, signal, *args):
         """
-        Safe wrapper for using 'self.emit' with GObject.idle_add
+        Safe wrapper for using 'self.emit' with GLib.idle_add
         """
         def emitwrap(_s, *_a):
             self.emit(_s, *_a)
@@ -148,13 +149,13 @@ class vmmGObject(GObject.GObject):
         """
         Make sure idle functions are run thread safe
         """
-        return GObject.idle_add(func, *args)
+        return GLib.idle_add(func, *args)
 
     def timeout_add(self, timeout, func, *args):
         """
         Make sure timeout functions are run thread safe
         """
-        return GObject.timeout_add(timeout, func, *args)
+        return GLib.timeout_add(timeout, func, *args)
 
     def emit(self, signal_name, *args):
         return GObject.GObject.emit(self, signal_name, *args)

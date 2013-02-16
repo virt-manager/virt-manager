@@ -18,6 +18,7 @@
 # MA 02110-1301 USA.
 #
 
+from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 
@@ -298,7 +299,7 @@ class vmmEngine(vmmGObject):
         return 1
 
     def change_timer_interval(self, ignore1, ignore2, ignore3, ignore4):
-        GObject.source_remove(self.timer)
+        GLib.source_remove(self.timer)
         self.schedule_timer()
 
     def increment_window_counter(self, src):
@@ -326,7 +327,7 @@ class vmmEngine(vmmGObject):
             self.inspection = None
 
         if self.timer is not None:
-            GObject.source_remove(self.timer)
+            GLib.source_remove(self.timer)
 
         if self.systray:
             self.systray.cleanup()

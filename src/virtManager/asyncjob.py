@@ -22,9 +22,9 @@ import logging
 import threading
 import traceback
 
-from gi.repository import GObject
-from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GLib
+from gi.repository import Gtk
 
 import libvirt
 import urlgrabber
@@ -252,7 +252,7 @@ class vmmAsyncJob(vmmGObjectUI):
     ###########
 
     def run(self):
-        timer = GObject.timeout_add(100, self.exit_if_necessary)
+        timer = GLib.timeout_add(100, self.exit_if_necessary)
 
         if self.show_progress:
             self.topwin.present()
@@ -266,7 +266,7 @@ class vmmAsyncJob(vmmGObjectUI):
         else:
             self.bg_thread.run()
 
-        GObject.source_remove(timer)
+        GLib.source_remove(timer)
 
         if self.bg_thread.isAlive():
             # This can happen if the user closes the whole app while the

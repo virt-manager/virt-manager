@@ -22,9 +22,9 @@ import traceback
 import logging
 import threading
 
-from gi.repository import GObject
-from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GLib
+from gi.repository import Gtk
 
 import virtinst
 import libvirt
@@ -553,4 +553,4 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         vm.migrate(dstconn, migrate_uri, rate, live, secure, meter=meter)
         if timer:
-            self.idle_add(GObject.source_remove, timer)
+            self.idle_add(GLib.source_remove, timer)

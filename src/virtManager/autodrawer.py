@@ -22,10 +22,10 @@
 # MA 02110-1301 USA.
 #
 
-from gi.repository import GObject
-from gi.repository import Gtk
-from gi.repository import Gdk
 from gi.repository import cairo
+from gi.repository import Gdk
+from gi.repository import GLib
+from gi.repository import Gtk
 
 class OverBox(Gtk.Box):
     """
@@ -341,8 +341,8 @@ class Drawer(OverBox):
         self.period = period
 
         if self.timer_pending:
-            GObject.source_remove(self.timer_id)
-            self.timer_id = GObject.timeout_add(self.period, self._on_timer)
+            GLib.source_remove(self.timer_id)
+            self.timer_id = GLib.timeout_add(self.period, self._on_timer)
 
         self.step = step
 
@@ -350,7 +350,7 @@ class Drawer(OverBox):
         self.goal = goal
 
         if not self.timer_pending:
-            self.timer_id = GObject.timeout_add(self.period, self._on_timer)
+            self.timer_id = GLib.timeout_add(self.period, self._on_timer)
             self.timer_pending = True
 
     def get_close_time(self):
@@ -485,7 +485,7 @@ class AutoDrawer(Drawer):
                 self.opened = True
 
         if self.delayConnection:
-            GObject.source_remove(self.delayConnection)
+            GLib.source_remove(self.delayConnection)
 
 
         if self.forceClosing:
@@ -493,7 +493,7 @@ class AutoDrawer(Drawer):
         elif do_immediate:
             self._enforce(False)
         else:
-            self.delayConnection = GObject.timeout_add(self.delayValue,
+            self.delayConnection = GLib.timeout_add(self.delayValue,
                                                        self._on_enforce_delay)
 
 
@@ -608,7 +608,7 @@ class AutoDrawer(Drawer):
             toplevel.set_focus(None)
 
         self.forceClosing = True
-        self.closeConnection = GObject.timeout_add(
+        self.closeConnection = GLib.timeout_add(
                                 self.get_close_time() + self.delayValue,
                                 self._on_close_delay)
 

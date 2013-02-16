@@ -18,7 +18,7 @@
 # MA 02110-1301 USA.
 #
 
-from gi.repository import GObject
+from gi.repository import GLib
 
 import logging
 import os
@@ -112,7 +112,7 @@ def creds_dialog(creds):
             ret = -1
         retipc.append(ret)
 
-    GObject.idle_add(wrapper, creds_dialog_main, creds)
+    GLib.idle_add(wrapper, creds_dialog_main, creds)
 
     while not retipc:
         time.sleep(.1)

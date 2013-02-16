@@ -25,9 +25,9 @@ import pty
 import fcntl
 import logging
 
-from gi.repository import GObject
-from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GLib
+from gi.repository import Gtk
 from gi.repository import Vte
 
 import libvirt
@@ -79,8 +79,8 @@ class LocalConsoleConnection(ConsoleConnection):
 
         self.fd = pty.slave_open(ipty)
         fcntl.fcntl(self.fd, fcntl.F_SETFL, os.O_NONBLOCK)
-        self.source = GObject.io_add_watch(self.fd,
-                            GObject.IO_IN | GObject.IO_ERR | GObject.IO_HUP,
+        self.source = GLib.io_add_watch(self.fd,
+                            GLib.IO_IN | GLib.IO_ERR | GLib.IO_HUP,
                             self.display_data, terminal)
 
         # Save term settings & set to raw mode
@@ -102,7 +102,7 @@ class LocalConsoleConnection(ConsoleConnection):
         os.close(self.fd)
         self.fd = None
 
-        GObject.source_remove(self.source)
+        GLib.source_remove(self.source)
         self.source = None
         self.origtermios = None
 
@@ -119,7 +119,7 @@ class LocalConsoleConnection(ConsoleConnection):
     def display_data(self, src, cond, terminal):
         ignore = src
 
-        if cond != GObject.IO_IN:
+        if cond != GLib.IO_IN:
             self.close()
             return False
 
