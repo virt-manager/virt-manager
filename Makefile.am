@@ -12,4 +12,4 @@ srpm: clean
 	$(MAKE) dist && rpmbuild -ts $(distdir).tar.gz
 
 check-pylint:
-	tests/pylint-virt-manager.sh
+	@tests/pylint-virt-manager.sh

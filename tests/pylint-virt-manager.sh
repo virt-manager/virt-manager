@@ -165,6 +165,7 @@ skip_pep8 "E221"            # Multiple spaces before operator (warns
 skip_pep8 "E241"            # Space after , column alignment nono
 skip_pep8 "E251"            # No space around keyword
 skip_pep8 "E261"            # 2 spaces before inline comment?
+skip_pep8 "E271"            # Lining up 'foo =     bar" statements
 skip_pep8 "E272"            # Lining up 'from X   import Y" statements
 
 skip_pep8 "E301"            # 1 blank line between methods

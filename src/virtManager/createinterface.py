@@ -18,7 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
 
