@@ -34,6 +34,7 @@ from virtManager.delete import vmmDeleteDialog
 from virtManager.graphwidgets import CellRendererSparkline
 from virtManager import util as util
 
+
 # Number of data points for performance graphs
 GRAPH_LEN = 40
 
@@ -58,6 +59,15 @@ COL_GUEST_CPU = 1
 COL_HOST_CPU = 2
 COL_DISK = 3
 COL_NETWORK = 4
+
+
+try:
+    import gi
+    gi.check_version("3.7.4")
+    can_set_row_none = True
+except ValueError:
+    can_set_row_none = False
+
 
 rcstring = """
 style "toolbar-style" {
@@ -958,9 +968,10 @@ class vmmManager(vmmGObjectUI):
         row[ROW_MARKUP] = self._build_vm_markup(row)
 
         if config_changed:
-            # XXX: This sets an empty tooltip, but required due to
-            # https://bugzilla.gnome.org/show_bug.cgi?id=691660
-            row[ROW_HINT] = util.xml_escape(vm.get_description() or "")
+            desc = vm.get_description()
+            if not can_set_row_none:
+                desc = desc or ""
+            row[ROW_HINT] = util.xml_escape(desc)
 
         model.row_changed(row.path, row.iter)
 
