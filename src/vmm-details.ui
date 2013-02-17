@@ -51,6 +51,30 @@
     <property name="step_increment">1</property>
     <property name="page_increment">2</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment8">
+    <property name="upper">1000000000</property>
+    <property name="step_increment">1024</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment9">
+    <property name="upper">1000000000</property>
+    <property name="step_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment10">
+    <property name="upper">1000000000</property>
+    <property name="step_increment">1024</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment11">
+    <property name="upper">1000000000</property>
+    <property name="step_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment12">
+    <property name="upper">1000000000</property>
+    <property name="step_increment">1024</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment13">
+    <property name="upper">1000000000</property>
+    <property name="step_increment">10</property>
+  </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -3994,7 +4018,7 @@ I/O:</property>
                                                   <object class="GtkTable" id="table11">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
-                                                    <property name="n_rows">4</property>
+                                                    <property name="n_rows">5</property>
                                                     <property name="n_columns">2</property>
                                                     <property name="column_spacing">8</property>
                                                     <property name="row_spacing">3</property>
@@ -4275,6 +4299,241 @@ I/O:</property>
                                                         <property name="right_attach">2</property>
                                                         <property name="top_attach">3</property>
                                                         <property name="bottom_attach">4</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkExpander" id="iotune-expander">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <child>
+                                                          <object class="GtkTable" id="table20">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="halign">start</property>
+                                                            <property name="n_rows">4</property>
+                                                            <property name="n_columns">3</property>
+                                                            <property name="column_spacing">8</property>
+                                                            <property name="row_spacing">3</property>
+                                                            <child>
+                                                            <object class="GtkLabel" id="label80">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="xalign">1</property>
+                                                            <property name="label" translatable="yes">Read:</property>
+                                                            <property name="use_underline">True</property>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="top_attach">1</property>
+                                                            <property name="bottom_attach">2</property>
+                                                            <property name="x_options">GTK_FILL</property>
+                                                            </packing>
+                                                            </child>
+                                                            <child>
+                                                            <object class="GtkLabel" id="label82">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="xalign">1</property>
+                                                            <property name="label" translatable="yes">Write:</property>
+                                                            <property name="use_underline">True</property>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="top_attach">2</property>
+                                                            <property name="bottom_attach">3</property>
+                                                            <property name="x_options">GTK_FILL</property>
+                                                            </packing>
+                                                            </child>
+                                                            <child>
+                                                            <object class="GtkLabel" id="label84">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="xalign">1</property>
+                                                            <property name="xpad">2</property>
+                                                            <property name="use_underline">True</property>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="x_options">GTK_FILL</property>
+                                                            </packing>
+                                                            </child>
+                                                            <child>
+                                                            <object class="GtkLabel" id="label85">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="xalign">1</property>
+                                                            <property name="label" translatable="yes">Total:</property>
+                                                            <property name="use_underline">True</property>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="top_attach">3</property>
+                                                            <property name="bottom_attach">4</property>
+                                                            <property name="x_options">GTK_FILL</property>
+                                                            </packing>
+                                                            </child>
+                                                            <child>
+                                                            <object class="GtkLabel" id="label86">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="xalign">1</property>
+                                                            <property name="label" translatable="yes">KBytes/Sec</property>
+                                                            <property name="use_underline">True</property>
+                                                            <property name="max_width_chars">20</property>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="left_attach">1</property>
+                                                            <property name="right_attach">2</property>
+                                                            <property name="x_options"></property>
+                                                            </packing>
+                                                            </child>
+                                                            <child>
+                                                            <object class="GtkLabel" id="label87">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="xalign">1</property>
+                                                            <property name="label" translatable="yes">IOPS/Sec</property>
+                                                            <property name="use_underline">True</property>
+                                                            <property name="max_width_chars">20</property>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="left_attach">2</property>
+                                                            <property name="right_attach">3</property>
+                                                            <property name="x_options"></property>
+                                                            </packing>
+                                                            </child>
+                                                            <child>
+                                                            <object class="GtkSpinButton" id="disk-iotune-read-bytes-sec">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">True</property>
+                                                            <property name="invisible_char">●</property>
+                                                            <property name="width_chars">16</property>
+                                                            <property name="adjustment">adjustment8</property>
+                                                            <property name="climb_rate">1</property>
+                                                            <property name="numeric">True</property>
+                                                            <property name="update_policy">if-valid</property>
+                                                            <signal name="changed" handler="on_disk_iotune_changed" swapped="no"/>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="left_attach">1</property>
+                                                            <property name="right_attach">2</property>
+                                                            <property name="top_attach">1</property>
+                                                            <property name="bottom_attach">2</property>
+                                                            <property name="x_options">GTK_FILL</property>
+                                                            </packing>
+                                                            </child>
+                                                            <child>
+                                                            <object class="GtkSpinButton" id="disk-iotune-read-iops-sec">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">True</property>
+                                                            <property name="invisible_char">●</property>
+                                                            <property name="width_chars">16</property>
+                                                            <property name="adjustment">adjustment9</property>
+                                                            <property name="climb_rate">1</property>
+                                                            <property name="numeric">True</property>
+                                                            <property name="update_policy">if-valid</property>
+                                                            <signal name="changed" handler="on_disk_iotune_changed" swapped="no"/>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="left_attach">2</property>
+                                                            <property name="right_attach">3</property>
+                                                            <property name="top_attach">1</property>
+                                                            <property name="bottom_attach">2</property>
+                                                            <property name="x_options">GTK_FILL</property>
+                                                            </packing>
+                                                            </child>
+                                                            <child>
+                                                            <object class="GtkSpinButton" id="disk-iotune-write-bytes-sec">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">True</property>
+                                                            <property name="invisible_char">●</property>
+                                                            <property name="width_chars">16</property>
+                                                            <property name="adjustment">adjustment10</property>
+                                                            <property name="climb_rate">1</property>
+                                                            <property name="numeric">True</property>
+                                                            <property name="update_policy">if-valid</property>
+                                                            <signal name="changed" handler="on_disk_iotune_changed" swapped="no"/>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="left_attach">1</property>
+                                                            <property name="right_attach">2</property>
+                                                            <property name="top_attach">2</property>
+                                                            <property name="bottom_attach">3</property>
+                                                            <property name="x_options">GTK_FILL</property>
+                                                            </packing>
+                                                            </child>
+                                                            <child>
+                                                            <object class="GtkSpinButton" id="disk-iotune-write-iops-sec">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">True</property>
+                                                            <property name="invisible_char">●</property>
+                                                            <property name="width_chars">16</property>
+                                                            <property name="adjustment">adjustment11</property>
+                                                            <property name="climb_rate">1</property>
+                                                            <property name="numeric">True</property>
+                                                            <property name="update_policy">if-valid</property>
+                                                            <signal name="changed" handler="on_disk_iotune_changed" swapped="no"/>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="left_attach">2</property>
+                                                            <property name="right_attach">3</property>
+                                                            <property name="top_attach">2</property>
+                                                            <property name="bottom_attach">3</property>
+                                                            <property name="x_options">GTK_FILL</property>
+                                                            </packing>
+                                                            </child>
+                                                            <child>
+                                                            <object class="GtkSpinButton" id="disk-iotune-total-bytes-sec">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">True</property>
+                                                            <property name="invisible_char">●</property>
+                                                            <property name="width_chars">16</property>
+                                                            <property name="adjustment">adjustment12</property>
+                                                            <property name="climb_rate">1</property>
+                                                            <property name="numeric">True</property>
+                                                            <property name="update_policy">if-valid</property>
+                                                            <signal name="changed" handler="on_disk_iotune_changed" swapped="no"/>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="left_attach">1</property>
+                                                            <property name="right_attach">2</property>
+                                                            <property name="top_attach">3</property>
+                                                            <property name="bottom_attach">4</property>
+                                                            <property name="x_options">GTK_FILL</property>
+                                                            </packing>
+                                                            </child>
+                                                            <child>
+                                                            <object class="GtkSpinButton" id="disk-iotune-total-iops-sec">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">True</property>
+                                                            <property name="invisible_char">●</property>
+                                                            <property name="width_chars">16</property>
+                                                            <property name="adjustment">adjustment13</property>
+                                                            <property name="climb_rate">1</property>
+                                                            <property name="numeric">True</property>
+                                                            <property name="update_policy">if-valid</property>
+                                                            <signal name="changed" handler="on_disk_iotune_changed" swapped="no"/>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="left_attach">2</property>
+                                                            <property name="right_attach">3</property>
+                                                            <property name="top_attach">3</property>
+                                                            <property name="bottom_attach">4</property>
+                                                            <property name="x_options">GTK_FILL</property>
+                                                            </packing>
+                                                            </child>
+                                                          </object>
+                                                        </child>
+                                                        <child type="label">
+                                                          <object class="GtkLabel" id="label83">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="label" translatable="yes">IO _Tuning</property>
+                                                            <property name="use_underline">True</property>
+                                                            <property name="mnemonic_widget">iotune-expander</property>
+                                                          </object>
+                                                        </child>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="right_attach">2</property>
+                                                        <property name="top_attach">4</property>
+                                                        <property name="bottom_attach">5</property>
                                                       </packing>
                                                     </child>
                                                   </object>

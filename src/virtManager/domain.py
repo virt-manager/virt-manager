@@ -616,6 +616,36 @@ class vmmDomain(vmmLibvirtObject):
                 editdev.serial = val or None
         return self._redefine_device(change, devobj)
 
+    def define_disk_iotune_read_bytes_sec(self, devobj, val):
+        def change(editdev):
+            editdev.iotune_read_bytes_sec = val
+        return self._redefine_device(change, devobj)
+
+    def define_disk_iotune_read_iops_sec(self, devobj, val):
+        def change(editdev):
+            editdev.iotune_read_iops_sec = val
+        return self._redefine_device(change, devobj)
+
+    def define_disk_iotune_total_bytes_sec(self, devobj, val):
+        def change(editdev):
+            editdev.iotune_total_bytes_sec = val
+        return self._redefine_device(change, devobj)
+
+    def define_disk_iotune_total_iops_sec(self, devobj, val):
+        def change(editdev):
+            editdev.iotune_total_iops_sec = val
+        return self._redefine_device(change, devobj)
+
+    def define_disk_iotune_write_bytes_sec(self, devobj, val):
+        def change(editdev):
+            editdev.iotune_write_bytes_sec = val
+        return self._redefine_device(change, devobj)
+
+    def define_disk_iotune_write_iops_sec(self, devobj, val):
+        def change(editdev):
+            editdev.iotune_write_iops_sec = val
+        return self._redefine_device(change, devobj)
+
     # Network define methods
 
     def define_network_source(self, devobj, newtype, newsource, newmode):
