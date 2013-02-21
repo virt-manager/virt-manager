@@ -72,7 +72,9 @@ def set_sparse_tooltip(widget):
                    "but the OS install phase will be quicker. \n\n"
                    "Skipping allocation can also cause space issues on "
                    "the host machine, if the maximum image size exceeds "
-                   "available storage space.")
+                   "available storage space. \n\n"
+                   "Tip: Storage format qcow2 and qed "
+                   "do not support full allocation.")
     util.tooltip_wrapper(widget, sparse_str)
 
 def host_disk_space(conn):
