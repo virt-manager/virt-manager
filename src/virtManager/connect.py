@@ -306,7 +306,7 @@ class vmmConnect(vmmGObjectUI):
     def generate_uri(self):
         hv = self.widget("hypervisor").get_active()
         conn = self.widget("connection").get_active()
-        host = self.widget("hostname").child.get_text()
+        host = self.widget("hostname").child.get_text().strip()
         user = self.widget("username-entry").get_text()
         is_remote = self.is_remote()
 
