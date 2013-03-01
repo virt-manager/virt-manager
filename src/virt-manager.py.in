@@ -255,6 +255,7 @@ def opt_show_cb(option, opt_str, value, parser):
     show = s[s.rindex('-') + 1:]
     setattr(parser.values, "show", show)
 
+
 # Run me!
 def main():
     setup_pypath()
@@ -267,7 +268,14 @@ def main():
     # Need to do this before GTK strips args like --sync
     origargs = " ".join(sys.argv[:])
 
-    from gi.repository import Gtk
+    try:
+        from gi.repository import Gtk
+    except:
+        # Don't just let the exception raise here. abrt reports bugs
+        # when users mess up su/sudo and DISPLAY isn't set. Printing
+        # it avoids the issue
+        print "".join(traceback.format_exc())
+        return 1
 
     # Need to parse CLI after import gtk, since gtk strips --sync
     (options, ignore) = parse_commandline()
