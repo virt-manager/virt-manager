@@ -291,8 +291,9 @@ class vmmEngine(vmmGObject):
                     logging.debug("Closing connection since libvirtd "
                                   "appears to have stopped")
                 else:
-                    self.err.show_err(_("Error polling connection '%s': %s") %
-                                      (conn.get_uri(), e))
+                    error_msg = _("Error polling connection '%s': %s") \
+                        % (conn.get_uri(), e)
+                    self.idle_add(lambda: self.err.show_err(error_msg))
 
                 self.idle_add(conn.close)
 
