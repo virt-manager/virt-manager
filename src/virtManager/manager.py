@@ -65,7 +65,7 @@ try:
     import gi
     gi.check_version("3.7.4")
     can_set_row_none = True
-except ValueError:
+except (ValueError, AttributeError):
     can_set_row_none = False
 
 
