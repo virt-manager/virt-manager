@@ -219,8 +219,8 @@ class vmmCloneVM(vmmGObjectUI):
 
         context = self.topwin.get_style_context()
         defcolor = context.get_background_color(Gtk.StateType.NORMAL)
-        self.widget("storage-viewport").modify_bg(Gtk.StateType.NORMAL,
-                                                  defcolor.to_color())
+        self.widget("storage-viewport").override_background_color(Gtk.StateType.NORMAL,
+                                                  defcolor)
 
         box = self.widget("clone-vm-icon-box")
         image = Gtk.Image.new_from_icon_name("vm_clone_wizard",
