@@ -135,9 +135,14 @@ class vmmCreateVolume(vmmGObjectUI):
         else:
             self.widget("vol-format").set_sensitive(False)
 
+        alloc = DEFAULT_ALLOC
+        if self.parent_pool.get_type() == "logical":
+            # Sparse LVM volumes don't auto grow, so alloc=0 is useless
+            alloc = DEFAULT_CAP
+
         self.widget("vol-allocation").set_range(0,
                         int(self.parent_pool.get_available() / 1024 / 1024))
-        self.widget("vol-allocation").set_value(DEFAULT_ALLOC)
+        self.widget("vol-allocation").set_value(alloc)
         self.widget("vol-capacity").set_range(1,
                         int(self.parent_pool.get_available() / 1024 / 1024))
         self.widget("vol-capacity").set_value(DEFAULT_CAP)
