@@ -840,7 +840,7 @@ def mediadev_set_default_selection(widget):
 # Build toolbar shutdown button menu (manager and details toolbar) #
 ####################################################################
 
-def build_shutdown_button_menu(widget, shutdown_cb, reboot_cb,
+def build_shutdown_button_menu(widget, shutdown_cb, reboot_cb, reset_cb,
                                destroy_cb, save_cb):
     icon_name = util.running_config.get_shutdown_icon_name()
     widget.set_icon_name(icon_name)
@@ -849,6 +849,7 @@ def build_shutdown_button_menu(widget, shutdown_cb, reboot_cb,
 
     rebootimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
     shutdownimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
+    resetimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
     destroyimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
     saveimg = gtk.image_new_from_icon_name(gtk.STOCK_SAVE, gtk.ICON_SIZE_MENU)
 
@@ -863,6 +864,12 @@ def build_shutdown_button_menu(widget, shutdown_cb, reboot_cb,
     shutdown.show()
     shutdown.connect("activate", shutdown_cb)
     menu.add(shutdown)
+
+    reset = gtk.ImageMenuItem(_("_Force Reset"))
+    reset.set_image(resetimg)
+    reset.show()
+    reset.connect("activate", reset_cb)
+    menu.add(reset)
 
     destroy = gtk.ImageMenuItem(_("_Force Off"))
     destroy.set_image(destroyimg)

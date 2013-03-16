@@ -1144,6 +1144,11 @@ class vmmDomain(vmmLibvirtObject):
         self._backend.destroy()
         self.idle_add(self.force_update_status)
 
+    def reset(self):
+        self._install_abort = True
+        self._backend.reset(0)
+        self.idle_add(self.force_update_status)
+
     def startup(self):
         if self.get_cloning():
             raise RuntimeError(_("Cannot start guest while cloning "

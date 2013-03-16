@@ -129,6 +129,7 @@ class vmmEngine(vmmGObject):
         self.systray.connect("action-shutdown-domain", self._do_shutdown_domain)
         self.systray.connect("action-reboot-domain", self._do_reboot_domain)
         self.systray.connect("action-destroy-domain", self._do_destroy_domain)
+        self.systray.connect("action-reset-domain", self._do_reset_domain)
         self.systray.connect("action-show-vm", self._do_show_vm)
         self.systray.connect("action-exit-app", self.exit_app)
 
@@ -575,6 +576,7 @@ class vmmEngine(vmmGObject):
         obj = vmmDetails(con.get_vm(uuid))
         obj.connect("action-save-domain", self._do_save_domain)
         obj.connect("action-destroy-domain", self._do_destroy_domain)
+        obj.connect("action-reset-domain", self._do_reset_domain)
         obj.connect("action-show-help", self._do_show_help)
         obj.connect("action-suspend-domain", self._do_suspend_domain)
         obj.connect("action-resume-domain", self._do_resume_domain)
@@ -624,6 +626,7 @@ class vmmEngine(vmmGObject):
         obj.connect("action-shutdown-domain", self._do_shutdown_domain)
         obj.connect("action-reboot-domain", self._do_reboot_domain)
         obj.connect("action-destroy-domain", self._do_destroy_domain)
+        obj.connect("action-reset-domain", self._do_reset_domain)
         obj.connect("action-save-domain", self._do_save_domain)
         obj.connect("action-migrate-domain", self._do_show_migrate)
         obj.connect("action-clone-domain", self._do_show_clone)
@@ -961,6 +964,22 @@ class vmmEngine(vmmGObject):
                                    str(reboot_err)))
 
         vmmAsyncJob.simple_async_noshow(reboot_cb, [], src, "")
+
+    def _do_reset_domain(self, src, uri, uuid):
+        conn = self._lookup_conn(uri)
+        vm = conn.get_vm(uuid)
+
+        if not util.chkbox_helper(src, self.config.get_confirm_forcepoweroff,
+            self.config.set_confirm_forcepoweroff,
+            text1=_("Are you sure you want to force reset '%s'?" %
+                    vm.get_name()),
+            text2=_("This will immediately reset the VM without "
+                    "shutting down the OS and may cause data loss.")):
+            return
+
+        logging.debug("Resetting vm '%s'", vm.get_name())
+        vmmAsyncJob.simple_async_noshow(vm.reset, [], src,
+                                        _("Error resetting domain"))
 
 vmmGObject.type_register(vmmEngine)
 vmmEngine.signal_new(vmmEngine, "conn-added", [object])

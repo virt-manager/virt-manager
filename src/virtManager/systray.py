@@ -187,6 +187,13 @@ class vmmSystray(vmmGObject):
                               "action-shutdown-domain", vm.get_uuid())
         shutdown_item.show()
 
+        reset_item = gtk.ImageMenuItem(_("_Force Reset"))
+        reset_img = gtk.image_new_from_icon_name(stop_icon, icon_size)
+        reset_item.set_image(reset_img)
+        reset_item.show()
+        reset_item.connect("activate", self.run_vm_action,
+                             "action-reset-domain", vm.get_uuid())
+
         destroy_item = gtk.ImageMenuItem(_("_Force Off"))
         destroy_img = gtk.image_new_from_icon_name(stop_icon, icon_size)
         destroy_item.set_image(destroy_img)
@@ -197,6 +204,7 @@ class vmmSystray(vmmGObject):
         shutdown_menu = gtk.Menu()
         shutdown_menu.add(reboot_item)
         shutdown_menu.add(shutdown_item)
+        shutdown_menu.add(reset_item)
         shutdown_menu.add(destroy_item)
         shutdown_menu_item = gtk.ImageMenuItem(_("_Shut Down"))
         shutdown_menu_img = gtk.image_new_from_icon_name(stop_icon, icon_size)
@@ -217,6 +225,7 @@ class vmmSystray(vmmGObject):
         vm_action_dict["shutdown_menu"] = shutdown_menu_item
         vm_action_dict["reboot"] = reboot_item
         vm_action_dict["shutdown"] = shutdown_item
+        vm_action_dict["reset"] = reset_item
         vm_action_dict["destroy"] = destroy_item
         vm_action_dict["sep"] = sep
         vm_action_dict["open"] = open_item
@@ -406,6 +415,7 @@ class vmmSystray(vmmGObject):
         actions["shutdown_menu"].set_sensitive(vm.is_active())
         actions["shutdown"].set_sensitive(vm.is_stoppable())
         actions["reboot"].set_sensitive(vm.is_stoppable())
+        actions["reset"].set_sensitive(vm.is_destroyable())
         actions["destroy"].set_sensitive(vm.is_destroyable())
 
         actions["pause"].set_property("visible", not is_paused)
@@ -434,6 +444,7 @@ vmmSystray.signal_new(vmmSystray, "action-resume-domain", [str, str])
 vmmSystray.signal_new(vmmSystray, "action-run-domain", [str, str])
 vmmSystray.signal_new(vmmSystray, "action-shutdown-domain", [str, str])
 vmmSystray.signal_new(vmmSystray, "action-reboot-domain", [str, str])
+vmmSystray.signal_new(vmmSystray, "action-reset-domain", [str, str])
 vmmSystray.signal_new(vmmSystray, "action-destroy-domain", [str, str])
 vmmSystray.signal_new(vmmSystray, "action-show-host", [str])
 vmmSystray.signal_new(vmmSystray, "action-show-vm", [str, str])

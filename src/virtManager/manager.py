@@ -265,6 +265,7 @@ class vmmManager(vmmGObjectUI):
         uihelpers.build_shutdown_button_menu(self.widget("vm-shutdown"),
                                              self.poweroff_vm,
                                              self.reboot_vm,
+                                             self.reset_vm,
                                              self.destroy_vm,
                                              self.save_vm)
 
@@ -285,6 +286,7 @@ class vmmManager(vmmGObjectUI):
         reboot_icon         = build_icon(icon_name)
         shutdown_icon       = build_icon(icon_name)
         destroy_icon        = build_icon(icon_name)
+        reset_icon          = build_icon(icon_name)
         run_icon            = build_stock(gtk.STOCK_MEDIA_PLAY)
         pause_icon          = build_stock(gtk.STOCK_MEDIA_PAUSE)
         save_icon           = build_stock(gtk.STOCK_SAVE)
@@ -325,6 +327,8 @@ class vmmManager(vmmGObjectUI):
         add_shutdown_menu("reboot", _("_Reboot"), reboot_icon, self.reboot_vm)
         add_shutdown_menu("poweroff", _("_Shut Down"), shutdown_icon,
                           self.poweroff_vm)
+        add_shutdown_menu("forcereset", _("_Force Reset"), reset_icon,
+                          self.reset_vm)
         add_shutdown_menu("forcepoweroff", _("_Force Off"), destroy_icon,
                           self.destroy_vm)
         add_sep(self.vmmenushutdown, self.vmmenushutdown_items, "sep")
@@ -608,6 +612,12 @@ class vmmManager(vmmGObjectUI):
         vm = self.current_vm()
         if vm is not None:
             self.emit("action-destroy-domain",
+                      vm.conn.get_uri(), vm.get_uuid())
+
+    def reset_vm(self, ignore):
+        vm = self.current_vm()
+        if vm is not None:
+            self.emit("action-reset-domain",
                       vm.conn.get_uri(), vm.get_uuid())
 
     def save_vm(self, ignore):
@@ -1234,6 +1244,7 @@ vmmManager.signal_new(vmmManager, "action-run-domain", [str, str])
 vmmManager.signal_new(vmmManager, "action-shutdown-domain", [str, str])
 vmmManager.signal_new(vmmManager, "action-reboot-domain", [str, str])
 vmmManager.signal_new(vmmManager, "action-destroy-domain", [str, str])
+vmmManager.signal_new(vmmManager, "action-reset-domain", [str, str])
 vmmManager.signal_new(vmmManager, "action-save-domain", [str, str])
 vmmManager.signal_new(vmmManager, "action-connect", [str])
 vmmManager.signal_new(vmmManager, "action-show-help", [str])

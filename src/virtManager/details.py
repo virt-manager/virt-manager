@@ -390,6 +390,7 @@ class vmmDetails(vmmGObjectUI):
             "on_details_menu_poweroff_activate": self.control_vm_shutdown,
             "on_details_menu_reboot_activate": self.control_vm_reboot,
             "on_details_menu_save_activate": self.control_vm_save,
+            "on_details_menu_reset_activate": self.control_vm_reset,
             "on_details_menu_destroy_activate": self.control_vm_destroy,
             "on_details_menu_pause_activate": self.control_vm_pause,
             "on_details_menu_clone_activate": self.control_vm_clone,
@@ -614,12 +615,14 @@ class vmmDetails(vmmGObjectUI):
         uihelpers.build_shutdown_button_menu(self.widget("control-shutdown"),
                                              self.control_vm_shutdown,
                                              self.control_vm_reboot,
+                                             self.control_vm_reset,
                                              self.control_vm_destroy,
                                              self.control_vm_save)
 
         icon_name = self.config.get_shutdown_icon_name()
         for name in ["details-menu-shutdown",
                      "details-menu-reboot",
+                     "details-menu-reset",
                      "details-menu-poweroff",
                      "details-menu-destroy"]:
             image = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
@@ -1560,6 +1563,10 @@ class vmmDetails(vmmGObjectUI):
 
     def control_vm_save(self, src_ignore):
         self.emit("action-save-domain",
+                  self.vm.conn.get_uri(), self.vm.get_uuid())
+
+    def control_vm_reset(self, src_ignore):
+        self.emit("action-reset-domain",
                   self.vm.conn.get_uri(), self.vm.get_uuid())
 
     def control_vm_destroy(self, src_ignore):
@@ -3673,6 +3680,7 @@ class vmmDetails(vmmGObjectUI):
 vmmGObjectUI.type_register(vmmDetails)
 vmmDetails.signal_new(vmmDetails, "action-save-domain", [str, str])
 vmmDetails.signal_new(vmmDetails, "action-destroy-domain", [str, str])
+vmmDetails.signal_new(vmmDetails, "action-reset-domain", [str, str])
 vmmDetails.signal_new(vmmDetails, "action-suspend-domain", [str, str])
 vmmDetails.signal_new(vmmDetails, "action-resume-domain", [str, str])
 vmmDetails.signal_new(vmmDetails, "action-run-domain", [str, str])
