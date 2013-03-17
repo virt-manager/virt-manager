@@ -259,8 +259,6 @@ def main():
     logging.debug("virt-manager version: %s", cliconfig.__version__)
     logging.debug("virtManager import: %s", str(virtManager))
 
-    cliutils.check_virtinst_version()
-
     if options.tracelibvirt:
         logging.debug("Libvirt tracing requested")
         import virtManager.module_trace

@@ -55,8 +55,6 @@ def main():
     import virtManager
     logging.debug("Launched as: %s", " ".join(sys.argv[:]))
 
-    cliutils.check_virtinst_version()
-
     import virtManager.guidiff
     virtManager.guidiff.is_gui(False)
 

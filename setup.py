@@ -33,20 +33,55 @@ class my_build(build_extra):
     Compile .pod file
     """
 
-    def run(self):
-        cmds = ["virt-manager"]
+    def _make_bin_wrappers(self):
+        cmds = ["virt-manager", "virt-install", "virt-clone",
+                "virt-image", "virt-convert"]
         if cliconfig.with_tui:
             cmds += ["virt-manager-tui"]
 
+        if not os.path.exists("build"):
+            os.mkdir("build")
+
         for app in cmds:
-            sharepath = os.path.join(cliconfig.asset_dir, app + ".py")
+            sharepath = os.path.join(cliconfig.asset_dir, app)
 
             wrapper = "#!/bin/sh\n\n"
-            wrapper += "exec python \"%s\" \"$@\"" % (sharepath)
-            file(app, "w").write(wrapper)
+            wrapper += "exec \"%s\" \"$@\"" % (sharepath)
 
-        os.system('pod2man --release="" --center="Virtual Machine Manager" '
-                  '< ./man/virt-manager.pod > ./man/virt-manager.1')
+            newpath = os.path.abspath(os.path.join("build", app))
+            print "Generating %s" % newpath
+            file(newpath, "w").write(wrapper)
+
+
+    def _make_man_pages(self):
+        for path in glob.glob("man/*.pod"):
+            base = os.path.basename(path)
+
+            mantype = "1"
+            newbase = base
+            if base == "virt-image-xml.pod":
+                mantype = "5"
+                newbase = "virt-image.pod"
+
+            newpath = os.path.join(os.path.dirname(path),
+                                os.path.splitext(newbase)[0] + "." + mantype)
+
+            print "Generating %s" % newpath
+            ret = os.system('pod2man --release="" '
+                            '--center "Virtual Machine Manager" '
+                            '< %s > %s' % (path, newpath))
+            if ret != 0:
+                raise RuntimeError("Generating '%s' failed." % newpath)
+
+        if os.system("grep -IRq 'Hey!' man/") == 0:
+            raise RuntimeError("man pages have errors in them! "
+                               "(grep for 'Hey!')")
+
+
+    def run(self):
+        self._make_bin_wrappers()
+        self._make_man_pages()
+
         build_extra.run(self)
 
 
@@ -161,7 +196,7 @@ class configure(Command):
 
 
 tui_files = [
-    ("share/virt-manager/", ["virt-manager-tui.py"]),
+    ("share/virt-manager/", ["virt-manager-tui"]),
 
     ("share/virt-manager/virtManagerTui",
      glob.glob("virtManagerTui/*.py")),
@@ -299,21 +334,46 @@ class TestURLFetch(TestBaseCommand):
 setup(
     name = "virt-manager",
     version = cliconfig.__version__,
-    # XXX: proper version, description, long_description, author, author_email
+    author = "Cole Robinson",
+    author_email = "virt-tools-list@redhat.com",
     url = "http://virt-manager.org",
     license = "GPLv2+",
 
-    scripts = (["virt-manager"] +
-               (cliconfig.with_tui and ["virt-manager-tui"] or [])),
+    # These wrappers are generated in our custom build command
+    scripts = ([
+        "build/virt-manager",
+        "build/virt-clone",
+        "build/virt-install",
+        "build/virt-image",
+        "build/virt-convert"] +
+        (cliconfig.with_tui and ["build/virt-manager-tui"] or [])),
 
     data_files = [
-        ("share/virt-manager/", ["virt-manager.py"]),
+        ("share/virt-manager/", [
+            "virt-manager",
+            "virt-install",
+            "virt-clone",
+            "virt-image",
+            "virt-convert",
+        ]),
         ("/etc/gconf/schemas", ["data/virt-manager.schemas"]),
         ("share/virt-manager/ui", glob.glob("ui/*.ui")),
 
-        ("share/man/man1", ["man/virt-manager.1"]),
+        ("share/man/man1", [
+            "man/virt-manager.1",
+            "man/virt-install.1",
+            "man/virt-clone.1",
+            "man/virt-image.1",
+            "man/virt-convert.1"
+        ]),
+        ("share/man/man5", ["man/virt-image.5"]),
 
         ("share/virt-manager/virtManager", glob.glob("virtManager/*.py")),
+
+        ("share/virt-manager/virtinst", glob.glob("virtinst/*.py")),
+        ("share/virt-manager/virtconv", glob.glob("virtconv/*.py")),
+        ("share/virt-manager/virtconv/parsers",
+         glob.glob("virtconv/parsers/*.py")),
     ] + tui_files,
 
     cmdclass = {

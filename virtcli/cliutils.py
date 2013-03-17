@@ -97,29 +97,3 @@ def setup_i18n():
 
     gettext.install("virt-manager", cliconfig.gettext_dir)
     gettext.bindtextdomain("virt-manager", cliconfig.gettext_dir)
-
-
-def check_virtinst_version():
-    # Make sure we have a sufficiently new virtinst version, since we are
-    # very closely tied to the lib
-    virtinst_str = "0.600.3"
-    virtinst_version = tuple([int(num) for num in virtinst_str.split('.')])
-
-    msg = ("virt-manager requires the python-virtinst library version " +
-            virtinst_str + " or greater. This can be downloaded at:"
-            "\n\nhttp://virt-manager.org/download.html")
-    try:
-        import virtinst
-        ignore = virtinst.__version__
-        ignore = virtinst.__version_info__
-    except Exception, e:
-        logging.exception("Error import virtinst")
-        raise RuntimeError(str(e) + "\n\n" + msg)
-
-    if virtinst.__version_info__ < virtinst_version:
-        raise RuntimeError("virtinst version %s is too old." %
-                            (virtinst.__version__) +
-                           "\n\n" + msg)
-
-    logging.debug("virtinst version: %s", str(virtinst_str))
-    logging.debug("virtinst import: %s", str(virtinst))

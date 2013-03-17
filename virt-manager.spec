@@ -2,7 +2,6 @@
 
 %define _version 0.9.4
 %define _release 1
-%define virtinst_version 0.600.4
 
 %define qemu_user                  ""
 %define preferred_distros          ""
@@ -12,7 +11,7 @@
 %define disable_unsupported_rhel   0
 
 %define with_guestfs               0
-%define with_tui                   0
+%define with_tui                   1
 
 %define with_spice                 0
 
@@ -71,6 +70,7 @@ Source0: http://virt-manager.org/download/sources/%{name}/%{name}-%{version}.tar
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
 
+
 Requires: pygobject3
 Requires: gtk3
 Requires: cairo-gobject
@@ -95,8 +95,6 @@ Requires: libgnome-keyring
 Requires: gnome-python2-gnomekeyring >= 2.15.4
 # Minimum we've tested with
 Requires: libxml2-python >= 2.6.23
-# Absolutely require this version or later
-Requires: python-virtinst >= %{virtinst_version}
 # Earlier vte had broken python binding module
 Requires: vte >= 0.12.2
 # For console widget
@@ -117,6 +115,8 @@ Requires: virt-manager-common = %{verrel}
 %endif
 
 BuildRequires: gettext
+BuildRequires: python
+BuildRequires: python-distutils-extra
 BuildRequires: intltool
 BuildRequires: GConf2
 BuildRequires: /usr/bin/pod2man
@@ -134,18 +134,6 @@ connect to a graphical or serial console, and see resource usage statistics
 for existing VMs on local or remote machines. Uses libvirt as the backend
 management API.
 
-# TUI package setup
-%if %{with_tui}
-%package tui
-Summary: Virtual Machine Manager text user interface
-Group: Applications/Emulators
-
-Requires: virt-manager-common = %{verrel}
-Requires: python-newt_syrup >= 0.1.2
-Requires: libuser-python
-
-%description tui
-An interactive text user interface for Virtual Machine Manager.
 
 %package common
 Summary: Common files used by the different Virtual Machine Manager interfaces
@@ -154,16 +142,46 @@ Group: Applications/Emulators
 # This version not strictly required: virt-manager should work with older,
 # however varying amounts of functionality will not be enabled.
 Requires: libvirt-python >= 0.7.0
-Requires: dbus-python
-# Minimum we've tested with
-Requires: libxml2-python >= 2.6.23
-# Absolutely require this version or later
-Requires: python-virtinst >= %{virtinst_version}
-Requires: python-IPy
+Requires: libxml2-python
+Requires: python-urlgrabber
 
 %description common
-Common files used by the different Virtual Machine Manager interfaces.
+Common files used by the different virt-manager interfaces, as well as
+virt-install related tools.
+
+
+%package -n virt-install
+Summary: Utilities for installing virtual machines
+
+Requires: virt-manager-common = %{verrel}
+
+Provides: virt-install
+Provides: virt-clone
+Provides: virt-image
+Provides: virt-convert
+Obsoletes: python-virtinst
+
+%description -n virt-install
+Package includes several command line utilities, including virt-install
+(build and install new VMs) and virt-clone (clone an existing virtual
+machine).
+
+
+%if %{with_tui}
+%package tui
+Summary: Virtual Machine Manager text user interface
+Group: Applications/Emulators
+
+Requires: virt-manager-common = %{verrel}
+Requires: python-newt_syrup >= 0.1.2
+Requires: libuser-python
+Requires: python-IPy
+
+%description tui
+An interactive text user interface for Virtual Machine Manager.
 %endif
+
+
 
 %prep
 %setup -q
@@ -250,11 +268,7 @@ update-desktop-database -q %{_datadir}/applications
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
-%if %{with_tui}
 %files
-%else
-%files -f %{name}.lang
-%endif
 %defattr(-,root,root,-)
 %doc README COPYING AUTHORS NEWS
 %{_sysconfdir}/gconf/schemas/%{name}.schemas
@@ -262,14 +276,8 @@ update-desktop-database -q %{_datadir}/applications
 
 %{_mandir}/man1/%{name}.1*
 
-%if %{with_tui} == 0
-%dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/virtManager/
-%{_datadir}/%{name}/virtManager/*.py*
-%endif
-
 %{_datadir}/%{name}/ui/*.ui
-%{_datadir}/%{name}/%{name}.py*
+%{_datadir}/%{name}/%{name}
 
 %{_datadir}/%{name}/icons
 %{_datadir}/icons/hicolor/*/apps/*
@@ -277,22 +285,43 @@ update-desktop-database -q %{_datadir}/applications
 %{_datadir}/applications/%{name}.desktop
 
 
-%if %{with_tui}
 %files common -f %{name}.lang
 %defattr(-,root,root,-)
 %dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/virtManager/
 
-%{_datadir}/%{name}/virtManager/*.py*
+%{_datadir}/%{name}/virtconv
+%{_datadir}/%{name}/virtinst
+%{_datadir}/%{name}/virtManager
 
+
+%files -n virt-install
+%{_mandir}/man1/virt-install.1*
+%{_mandir}/man1/virt-clone.1*
+%{_mandir}/man1/virt-convert.1*
+%{_mandir}/man1/virt-image.1*
+%{_mandir}/man5/virt-image.5*
+
+%{_datadir}/%{name}/virt-install
+%{_datadir}/%{name}/virt-clone
+%{_datadir}/%{name}/virt-image
+%{_datadir}/%{name}/virt-convert
+
+%{_bindir}/virt-install
+%{_bindir}/virt-clone
+%{_bindir}/virt-image
+%{_bindir}/virt-convert
+
+
+%if %{with_tui}
 %files tui
 %defattr(-,root,root,-)
 
 %{_bindir}/%{name}-tui
-%{_datadir}/%{name}/%{name}-tui.py*
+%{_datadir}/%{name}/%{name}-tui
 
 %{_datadir}/%{name}/virtManagerTui
 %endif
+
 
 %changelog
 * Mon Apr 01 2013 Cole Robinson <crobinso@redhat.com> - 0.9.5-1
