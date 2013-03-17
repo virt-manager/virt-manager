@@ -31,7 +31,6 @@ import virtinst
 import XMLBuilderDomain
 from XMLBuilderDomain import _xml_property
 from virtinst import CapabilitiesParser
-from virtinst import _gettext as _
 from VirtualDisk import VirtualDisk
 from Boot import Boot
 

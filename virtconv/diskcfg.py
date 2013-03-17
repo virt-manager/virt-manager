@@ -27,7 +27,6 @@ import os
 import re
 import logging
 
-from virtconv import _gettext as _
 
 DISK_FORMAT_NONE = 0
 DISK_FORMAT_RAW = 1

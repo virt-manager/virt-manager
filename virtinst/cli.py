@@ -34,10 +34,11 @@ import itertools
 
 import libvirt
 
+from virtcli import cliconfig
+
 import virtinst
 from virtinst import _util
 from _util import listify
-from virtinst import _gettext as _
 
 from virtinst import Guest
 from virtinst import VirtualNetworkInterface
@@ -47,6 +48,7 @@ from virtinst import VirtualDisk
 from virtinst import VirtualCharDevice
 from virtinst import VirtualDevice
 from virtinst import User
+
 
 DEFAULT_POOL_PATH = "/var/lib/libvirt/images"
 DEFAULT_POOL_NAME = "default"
@@ -141,19 +143,8 @@ def setupParser(usage=None):
 
     parser = parse_class(usage=usage,
                          formatter=VirtHelpFormatter(),
-                         version=virtinst.__version__)
+                         version=cliconfig.__version__)
     return parser
-
-def setupGettext():
-    try:
-        locale.setlocale(locale.LC_ALL, '')
-    except locale.Error, e:
-        print >> sys.stderr, "warning: failed to set locale, defaulting to C"
-        os.environ['LC_ALL'] = 'C'
-        locale.setlocale(locale.LC_ALL, 'C')
-
-    gettext.bindtextdomain("virtinst")
-    gettext.install("virtinst")
 
 def earlyLogging():
     logging.basicConfig(level=logging.DEBUG, format='%(message)s')

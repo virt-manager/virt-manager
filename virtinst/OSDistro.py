@@ -30,7 +30,6 @@ import ConfigParser
 import virtinst
 import osdict
 from virtinst import _util
-from virtinst import _gettext as _
 
 from ImageFetcher import MountedImageFetcher
 from ImageFetcher import FTPImageFetcher

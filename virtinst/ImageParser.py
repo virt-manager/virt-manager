@@ -26,7 +26,6 @@ import libxml2
 import urlgrabber
 
 import CapabilitiesParser
-from virtinst import _gettext as _
 import _util
 
 

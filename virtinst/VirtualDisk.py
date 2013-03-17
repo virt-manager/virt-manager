@@ -35,7 +35,6 @@ import _util
 import Storage
 from VirtualDevice import VirtualDevice
 from XMLBuilderDomain import _xml_property
-from virtinst import _gettext as _
 
 def _vdisk_create(path, size, kind, sparse=True):
     force_fixed = "raw"

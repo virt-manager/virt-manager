@@ -19,7 +19,6 @@
 #
 
 import platform
-from virtconv import _gettext as _
 from virtconv import diskcfg
 from virtinst import CapabilitiesParser
 

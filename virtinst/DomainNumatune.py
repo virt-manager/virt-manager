@@ -22,7 +22,6 @@ import re
 import _util
 import XMLBuilderDomain
 from XMLBuilderDomain import _xml_property
-from virtinst import _gettext as _
 
 class DomainNumatune(XMLBuilderDomain.XMLBuilderDomain):
     """

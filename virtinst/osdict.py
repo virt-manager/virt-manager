@@ -21,7 +21,6 @@
 
 import support
 from VirtualDevice import VirtualDevice
-from virtinst import _gettext as _
 
 HV_ALL = "all"
 

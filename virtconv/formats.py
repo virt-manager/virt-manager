@@ -20,9 +20,8 @@
 
 import os
 
-from virtconv import _gettext as _
-
 _parsers = [ ]
+
 
 class parser(object):
     """

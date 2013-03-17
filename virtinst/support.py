@@ -22,7 +22,6 @@
 import libvirt
 import _util
 
-from virtinst import _gettext as _
 
 # Flags for check_conn_support
 SUPPORT_CONN_STORAGE = 0

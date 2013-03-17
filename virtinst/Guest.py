@@ -48,7 +48,6 @@ from DomainNumatune import DomainNumatune
 from DomainFeatures import DomainFeatures
 
 import osdict
-from virtinst import _gettext as _
 
 
 class Guest(XMLBuilderDomain.XMLBuilderDomain):

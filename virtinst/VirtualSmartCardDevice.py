@@ -21,7 +21,6 @@
 
 import VirtualDevice
 from XMLBuilderDomain import _xml_property
-from virtinst import _gettext as _
 
 class VirtualSmartCardDevice(VirtualDevice.VirtualDevice):
 

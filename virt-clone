@@ -20,18 +20,18 @@
 # MA 02110-1301 USA.
 
 
-import sys
-import logging
-import virtinst.CloneManager as clmgr
-import urlgrabber.progress as progress
-
 import optparse
 from optparse import OptionGroup
+import sys
+import logging
+
+import urlgrabber.progress as progress
+
+import virtinst.CloneManager as clmgr
 import virtinst.cli as cli
 from virtinst.cli import fail, print_stdout, print_stderr
 from virtinst.User import User
 
-cli.setupGettext()
 
 ### General input gathering functions
 def get_clone_name(new_name, auto_clone, design):

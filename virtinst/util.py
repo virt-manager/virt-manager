@@ -36,7 +36,6 @@ import logging
 import subprocess
 
 import libvirt
-from virtinst import _gettext as _
 import virtinst
 import CapabilitiesParser
 import User

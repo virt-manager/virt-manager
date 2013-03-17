@@ -20,7 +20,6 @@
 
 import libxml2
 
-from virtconv import _gettext as _
 import virtconv.formats as formats
 import virtconv.vmcfg as vmcfg
 import virtconv.diskcfg as diskcfg

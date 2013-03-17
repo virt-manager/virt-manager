@@ -20,7 +20,6 @@
 import os
 
 import VirtualDevice
-from virtinst import _gettext as _
 from XMLBuilderDomain import _xml_property
 
 class VirtualFilesystem(VirtualDevice.VirtualDevice):

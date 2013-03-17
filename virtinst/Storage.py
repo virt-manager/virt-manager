@@ -56,7 +56,6 @@ import urlgrabber
 from _util import xml_escape as escape
 import _util
 import support
-from virtinst import _gettext as _
 
 
 DEFAULT_DEV_TARGET = "/dev"

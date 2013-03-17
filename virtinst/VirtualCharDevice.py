@@ -21,7 +21,6 @@ import VirtualDevice
 from _util import  xml_escape
 
 from XMLBuilderDomain import _xml_property
-from virtinst import _gettext as _
 
 class VirtualCharDevice(VirtualDevice.VirtualDevice):
     """

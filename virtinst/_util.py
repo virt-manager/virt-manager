@@ -35,7 +35,6 @@ import libxml2
 import libvirt
 
 import virtinst.util as util
-from virtinst import _gettext as _
 
 try:
     import selinux

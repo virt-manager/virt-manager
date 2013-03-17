@@ -24,7 +24,7 @@ import Installer
 import ImageParser
 import CapabilitiesParser as Cap
 from VirtualDisk import VirtualDisk
-from virtinst import _gettext as _
+
 
 class ImageInstallerException(Exception):
     def __init__(self, msg):

@@ -20,7 +20,6 @@
 # MA 02110-1301 USA.
 
 from XMLBuilderDomain import XMLBuilderDomain, _xml_property
-from virtinst import _gettext as _
 import logging
 
 class VirtualDevice(XMLBuilderDomain):

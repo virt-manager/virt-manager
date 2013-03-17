@@ -24,7 +24,6 @@ import _util
 import VirtualDevice
 import support
 from XMLBuilderDomain import _xml_property
-from virtinst import _gettext as _
 
 def _get_mode_prop(channel_type):
     xpath = "./channel[@name='%s']/@mode" % channel_type

@@ -26,7 +26,7 @@ import logging
 
 import _util
 import support
-from virtinst import _gettext as _
+
 
 class Interface(object):
     """

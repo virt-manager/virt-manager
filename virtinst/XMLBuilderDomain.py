@@ -27,7 +27,6 @@ import libxml2
 
 import CapabilitiesParser
 import _util
-from virtinst import _gettext as _
 
 _xml_refs_lock = threading.Lock()
 _xml_refs = {}

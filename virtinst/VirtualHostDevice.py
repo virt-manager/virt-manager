@@ -21,7 +21,6 @@ import VirtualDevice
 import NodeDeviceParser
 import logging
 
-from virtinst import _gettext as _
 from XMLBuilderDomain import _xml_property
 
 class VirtualHostDevice(VirtualDevice.VirtualDevice):

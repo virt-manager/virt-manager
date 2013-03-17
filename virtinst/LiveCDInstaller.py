@@ -21,7 +21,7 @@
 
 import Installer
 from VirtualDisk import VirtualDisk
-from virtinst import _gettext as _
+
 
 class LiveCDInstallerException(Exception):
     def __init__(self, msg):

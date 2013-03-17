@@ -33,7 +33,6 @@ from VirtualDisk import VirtualDisk
 from User import User
 import OSDistro
 
-from virtinst import _gettext as _
 
 def _is_url(url, is_local):
     """

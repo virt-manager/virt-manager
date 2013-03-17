@@ -2,6 +2,8 @@
 
 import glob
 import os
+import sys
+import unittest
 
 from distutils.core import Command, setup
 from distutils.command.install_egg_info import install_egg_info
@@ -170,6 +172,130 @@ if not cliconfig.with_tui:
     tui_files = []
 
 
+class TestBaseCommand(Command):
+    user_options = [('debug', 'd', 'Show debug output')]
+    boolean_options = ['debug']
+
+    def initialize_options(self):
+        self.debug = 0
+        self._testfiles = []
+        self._dir = os.getcwd()
+
+    def finalize_options(self):
+        if self.debug and "DEBUG_TESTS" not in os.environ:
+            os.environ["DEBUG_TESTS"] = "1"
+
+    def run(self):
+        try:
+            # Use system 'coverage' if available
+            import coverage
+            use_coverage = True
+        except:
+            use_coverage = False
+
+        tests = unittest.TestLoader().loadTestsFromNames(self._testfiles)
+        t = unittest.TextTestRunner(verbosity=1)
+
+        if use_coverage:
+            coverage.erase()
+            coverage.start()
+
+        if hasattr(unittest, "installHandler"):
+            try:
+                unittest.installHandler()
+            except:
+                print "installHandler hack failed"
+
+        try:
+            result = t.run(tests)
+        except KeyboardInterrupt:
+            sys.exit(1)
+
+        if use_coverage:
+            coverage.stop()
+
+        sys.exit(int(bool(len(result.failures) > 0 or
+                          len(result.errors) > 0)))
+
+
+class TestCommand(TestBaseCommand):
+    description = "Runs a quick unit test suite"
+    user_options = TestBaseCommand.user_options + \
+                   [("testfile=", None, "Specific test file to run (e.g "
+                                        "validation, storage, ...)"),
+                    ("skipcli", None, "Skip CLI tests")]
+
+    def initialize_options(self):
+        TestBaseCommand.initialize_options(self)
+        self.testfile = None
+        self.skipcli = None
+
+    def finalize_options(self):
+        TestBaseCommand.finalize_options(self)
+
+    def run(self):
+        '''
+        Finds all the tests modules in tests/, and runs them.
+        '''
+        testfiles = []
+        for t in glob.glob(os.path.join(self._dir, 'tests', '*.py')):
+            if (t.endswith("__init__.py") or
+                t.endswith("urltest.py")):
+                continue
+
+            base = os.path.basename(t)
+            if self.testfile:
+                check = os.path.basename(self.testfile)
+                if base != check and base != (check + ".py"):
+                    continue
+            if self.skipcli and base.count("clitest"):
+                continue
+
+            testfiles.append('.'.join(['tests', os.path.splitext(base)[0]]))
+
+        if not testfiles:
+            raise RuntimeError("--testfile didn't catch anything")
+
+        self._testfiles = testfiles
+        TestBaseCommand.run(self)
+
+
+class TestURLFetch(TestBaseCommand):
+    description = "Test fetching kernels and isos from various distro trees"
+
+    user_options = TestBaseCommand.user_options + \
+                   [("match=", None, "Regular expression of dist names to "
+                                     "match [default: '.*']"),
+                    ("path=", None, "Paths to local iso or directory or check"
+                                    " for installable distro. Comma separated")]
+
+    def initialize_options(self):
+        TestBaseCommand.initialize_options(self)
+        self.match = None
+        self.path = ""
+
+    def finalize_options(self):
+        TestBaseCommand.finalize_options(self)
+        if self.match is None:
+            self.match = ".*"
+
+        origpath = str(self.path)
+        if not origpath:
+            self.path = []
+        else:
+            self.path = origpath.split(",")
+
+    def run(self):
+        import tests
+        self._testfiles = ["tests.urltest"]
+        tests.urltest.MATCH_FILTER = self.match
+        if self.path:
+            for p in self.path:
+                tests.urltest.LOCAL_MEDIA.append(p)
+        TestBaseCommand.run(self)
+
+
+
 setup(
     name = "virt-manager",
     version = cliconfig.__version__,
@@ -195,11 +321,12 @@ setup(
         'build_i18n': my_build_i18n,
         'build_icons': my_build_icons,
         'sdist': sdist_auto,
-
         'install_egg_info': my_egg_info,
 
         'configure': configure,
 
         'rpm': my_rpm,
+        'test': TestCommand,
+        'test_urls' : TestURLFetch,
     }
 )

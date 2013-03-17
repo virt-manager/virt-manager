@@ -16,9 +16,10 @@
 
 import logging
 import os
-import virtinst
 
-import utils
+import virtinst
+from tests import utils
+
 
 # Force certain helpers to return consistent values
 virtinst._util.is_blktap_capable = lambda: False

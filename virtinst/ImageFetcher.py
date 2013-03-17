@@ -28,7 +28,7 @@ import urllib2
 import urlparse
 import ftplib
 import tempfile
-from virtinst import _gettext as _
+
 
 # This is a generic base class for fetching/extracting files from
 # a media source, such as CD ISO, NFS server, or HTTP/FTP server

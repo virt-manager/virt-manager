@@ -14,21 +14,10 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import gettext
-import sys
+from virtcli import cliconfig, cliutils
+enable_rhel6_defaults = not cliconfig.rhel_enable_unsupported_opts
+cliutils.setup_i18n()
 
-gettext.bindtextdomain("virtinst")
-_gettext = lambda m: gettext.dgettext("virtinst", m)
-
-try:
-    import _config
-except ImportError:
-    print "virtinst: Please run 'python setup.py build' in the source"
-    print "          directory before using the code."
-    sys.exit(1)
-__version__ = _config.__version__
-__version_info__ = _config.__version_info__
-enable_rhel6_defaults = _config.rhel6defaults
 
 # Public imports
 
