@@ -1,26 +1,29 @@
-  TODO before upstream merge
-  ==========================
-
-drop autotools:
-- at least investigate it, distutils-extra should give us what we need
-- will make the virtinst merge much easier
-
-merge virtinst:
-- no big clean up, just get it all + unit tests working
-- merge history or just add code?
-
-
 
   TODO before first release
   =========================
 
+virtinst merge bits:
+    translations:
+        autogenerate POTFILES
+        merge in existing translations from virtinst.git. may need to
+            massage this by hand but in my head it sounds easy enough.
+        make sure translations actually work when installed
+        why isn't distutils doing msgmerge? maybe I'm missing something
+    merge pylint scripts, make sure there are no warnings
+    break out osdistro bits so we don't need to carry virt-install.pod
+    merge README, HACKING, INSTALL, autobuild.sh
+
+is dbus uniqueness still working? I dropped the service file but it
+    shouldn't be necc.
 check all XXX/TODO in the code, make sure nothing important is missing
-verify gettext still works
 is tui working? maybe just remove it, check with mcpierce
 gsettings port (or fix gconf bindings)
 gtkapplication + drop dbus uniqueness stuff? at least investigate it
 python3? consider it
 website: wiki-ify the whole thing, drop static content, move site styling into virt-manager.git, kill the old web repo. and get that old hideous screenshot off the front page. linux-kvm.org should be the template here.
+consider dropping python-distutils-extra dep. I think we rely on about 300
+    lines of code, tops, and since it isn't in RHEL it could be an issue.
+    we can prob reimplement the bits that are important to us fairly easilly.
 
 
   Misc issues
@@ -65,6 +68,8 @@ drop old stuff from both spec files
 update README
 pull out all python-virtinst selinux stuff, drop spec dep
 virtinst initrd test: drop the big files? just stub em out
+setup.py rpm: drop hardcoding rpm version, specify it with rpmbuild
+setup.py rpm: dump output in sourcedir, or dist/
 
 
   Problems in other packages
