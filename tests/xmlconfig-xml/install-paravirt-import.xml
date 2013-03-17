@@ -1,0 +1,19 @@
+<domain type='xen'>
+  <name>TestGuest</name>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <memory>409600</memory>
+  <currentMemory>204800</currentMemory>
+  <vcpu>5</vcpu>
+  <bootloader>/usr/bin/pygrub</bootloader>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <disk type='file' device='disk'>
+      <source file='/tmp/test.img'/>
+      <target dev='xvda' bus='xen'/>
+    </disk>
+    <input type='mouse' bus='xen'/>
+    <graphics type='vnc' port='-1' keymap='ja'/>
+  </devices>
+</domain>

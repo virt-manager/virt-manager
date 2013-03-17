@@ -1,0 +1,25 @@
+<image>
+ <name>esx4.0-rhel4.8-i386</name>
+ <label>esx4.0-rhel4.8-i386</label>
+ <description></description>
+ <domain>
+  <boot type="hvm">
+   <guest>
+    <arch>i686</arch>
+   </guest>
+   <os>
+    <loader dev="hd"/>
+   </os>
+   <drive disk="ESX4.0-rhel4u8-32b-flat.vmdk" target="hda"/>
+  </boot>
+  <devices>
+   <vcpu>2</vcpu>
+   <memory>524288</memory>
+   <interface/>
+   <graphics/>
+  </devices>
+ </domain>
+ <storage>
+  <disk file="ESX4.0-rhel4u8-32b-flat.vmdk" use="system" format="vmdk"/>
+ </storage>
+</image>

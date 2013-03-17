@@ -1,0 +1,40 @@
+<domain type="xen">
+  <name>TestGuest</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <description>foooo barrrr somedesc</description>
+  <os>
+    <type arch="i686">hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="localtime"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu>5</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type="block" device="floppy">
+      <source dev="/dev/loop0"/>
+      <target dev="fda" bus="fdc"/>
+    </disk>
+    <graphics type="vnc" passwd="newpass" port="6000" listen="1.2.3.4"/>
+    <graphics type="sdl" xauth="fooauth" display="6:1"/>
+    <graphics type="rdp"/>
+    <graphics type="vnc" port="-1" socket="/var/lib/libvirt/socket/foo"/>
+    <graphics type="spice" passwd="newpass" port="6000" tlsPort="6001" listen="1.2.3.4" passwdValidTo="2011-01-07T19:08:00">
+      <channel name="inputs" mode="secure"/>
+      <channel name="main" mode="any"/>
+      <channel name="record" mode="insecure"/>
+    </graphics>
+  </devices>
+  <seclabel type="static" model="selinux">
+    <label>foolabel</label>
+    <imagelabel>imagelabel</imagelabel>
+  </seclabel>
+</domain>

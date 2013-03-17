@@ -1,0 +1,216 @@
+#!/usr/bin/python -tt
+#
+# Create a virtual machine from an XML image description
+#
+# Copyright 2007  Red Hat, Inc.
+# David Lutterkort <dlutter@redhat.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA 02110-1301 USA.
+
+import sys
+import urlgrabber.progress as progress
+
+import virtinst
+import virtinst.ImageParser
+import virtinst.CapabilitiesParser
+import virtinst.cli as cli
+from virtinst.cli import fail, print_stdout, print_stderr
+
+import optparse
+from optparse import OptionGroup
+
+cli.setupGettext()
+
+### General input gathering functions
+
+def get_networks(domain, guest, options):
+    nnics = domain.interface
+    networks, macs = cli.digest_networks(guest, options, numnics=nnics)
+
+    if nnics > len(networks):
+        fail(_("The image requires %i network interface.") % nnics)
+
+    cli.get_networks(guest, networks, macs)
+
+def get_graphics(image, guest, options):
+    graphics = cli.digest_graphics(guest, options,
+                                   default_override=bool(image.graphics))
+    cli.get_graphics(guest, graphics)
+
+### Option parsing
+def parse_args():
+    usage = "%prog [options] image.xml"
+    parser = cli.setupParser(usage)
+    cli.add_connect_option(parser)
+
+    geng = OptionGroup(parser, _("General Options"))
+    geng.add_option("-n", "--name", dest="name",
+                    help=_("Name of the guest instance"))
+    geng.add_option("-r", "--ram", type="int", dest="memory",
+                    help=_("Memory to allocate for guest instance in "
+                           "megabytes"))
+    geng.add_option("-u", "--uuid", dest="uuid",
+                    help=_("UUID for the guest."))
+    cli.vcpu_cli_options(geng)
+    geng.add_option("", "--os-type", dest="distro_type",
+                    help=_("The OS type being installed, e.g. "
+                           "'linux', 'unix', 'windows'"))
+    geng.add_option("", "--os-variant", dest="distro_variant",
+                      help=_("The OS variant being installed, "
+                             "e.g. 'fedora6', 'rhel5', 'solaris10', 'win2k'"))
+    parser.add_option_group(geng)
+
+    fulg = OptionGroup(parser, _("Full Virtualization specific options"))
+    fulg.add_option("", "--noapic", action="store_true", dest="noapic",
+                    default=False,
+                    help=_("Disables APIC for fully virtualized guest"))
+    fulg.add_option("", "--noacpi", action="store_true", dest="noacpi",
+                    default=False,
+                    help=_("Disables ACPI for fully virtualized guest"))
+    parser.add_option_group(fulg)
+
+    netg = cli.network_option_group(parser)
+    parser.add_option_group(netg)
+
+    vncg = cli.graphics_option_group(parser)
+    parser.add_option_group(vncg)
+
+    misc = OptionGroup(parser, _("Miscellaneous Options"))
+    misc.add_option("-p", "--print", action="store_true", dest="print_only",
+                    help=_("Print the libvirt XML, but do not start the "
+                           "domain"))
+    misc.add_option("", "--boot", type="int", dest="boot",
+                    help=_("The zero-based index of the boot record to use"))
+    misc.add_option("", "--replace", action="store_true", dest="replace",
+                    default=False,
+                    help=_("Overwrite, or destroy, an existing image with "
+                           "the same name"))
+    misc.add_option("", "--noreboot", action="store_true", dest="noreboot",
+                    help=_("Don't boot guest after completing install."))
+    misc.add_option("", "--skip-checksum", action="store_true",
+                    dest="skipchecksum",
+                    help=_("Skip disk checksum verification process"))
+    misc.add_option("-d", "--debug", action="store_true", dest="debug",
+                    help=_("Print debugging information"))
+    misc.add_option("", "--prompt", action="store_true", dest="prompt",
+                    default=False,
+                    help=optparse.SUPPRESS_HELP)
+    misc.add_option("", "--force", action="store_true", dest="force",
+                    default=False,
+                    #help=_("Do not prompt for input. Answers yes where "
+                    #       "applicable, terminates for all other prompts"),
+                    help=optparse.SUPPRESS_HELP)
+    misc.add_option("-q", "--quiet", action="store_true", dest="quiet",
+                    help=_("Suppress non-error output"))
+    parser.add_option_group(misc)
+
+    (options, args) = parser.parse_args()
+
+    if len(args) < 1:
+        parser.error(_("You need to provide an image XML descriptor"))
+    options.image = args[0]
+
+    return options
+
+def main(conn=None):
+    cli.earlyLogging()
+    options = parse_args()
+
+    options.quiet = options.print_only or options.quiet
+    cli.setupLogging("virt-image", options.debug, options.quiet)
+    cli.set_prompt(False)
+
+    if conn is None:
+        conn = cli.getConnection(options.connect)
+
+    try:
+        image = virtinst.ImageParser.parse_file(options.image)
+    except virtinst.ImageParser.ParserException, msg:
+        fail( "%s '%s': %s" % (_("Cannot parse"),  options.image, msg))
+
+    if options.boot is not None:
+        nboots = len(image.domain.boots)
+        if options.boot < 0 or options.boot >= nboots:
+            fail(_("The index for --boot must be between 0 and %d") %
+                 (nboots - 1))
+
+
+    # Build the Installer instance
+    installer = virtinst.ImageInstaller(boot_index=options.boot,
+                                        image=image,
+                                        conn=conn)
+
+
+    # Get Guest instance from installer parameters.
+    guest = installer.guest_from_installer()
+
+
+    # now let's get some of the common questions out of the way
+    guest.replace = options.replace
+    cli.get_name(options.name, guest, image.name)
+    cli.get_memory(options.memory, guest, image.domain.memory)
+    cli.get_uuid(options.uuid, guest)
+    cli.get_vcpus(guest, options.vcpus, options.check_cpu, image.domain.vcpu)
+    cli.get_cpuset(guest, options.cpuset, guest.memory)
+    cli.parse_cpu(guest, options.cpu)
+    get_networks(image.domain, guest, options)
+
+    get_graphics(image.domain, guest, options)
+    cli.get_video(guest)
+
+    cli.set_os_variant(guest, options.distro_type, options.distro_variant)
+
+    if installer.is_hvm():
+        if options.noacpi:
+            guest.features["acpi"] = False
+        if options.noapic:
+            guest.features["apic"] = False
+
+
+    # we've got everything -- try to start the install
+    if options.print_only:
+        start_xml, final_xml = guest.start_install(return_xml=True)
+        print_stdout(start_xml or final_xml, do_force=True)
+        return 0
+
+    meter = progress.TextMeter(fo=sys.stdout)
+
+    if not options.skipchecksum:
+        for disk in image.storage.values():
+            disk.check_disk_signature(meter=meter)
+
+    try:
+        print_stdout("\n")
+        print_stdout(_("Creating guest %s...") % guest.name)
+
+        guest.start_install(None, meter, noboot=options.noreboot)
+    except RuntimeError:
+        raise
+    except Exception, e:
+        fail(e, do_exit=False)
+        cli.install_fail(guest)
+
+    return 0
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except SystemExit, sys_e:
+        sys.exit(sys_e.code)
+    except KeyboardInterrupt:
+        print_stderr(_("Installation aborted at user request"))
+    except Exception, main_e:
+        fail(main_e)

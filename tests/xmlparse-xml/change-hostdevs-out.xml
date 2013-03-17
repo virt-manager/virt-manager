@@ -1,0 +1,42 @@
+<domain type="xen">
+  <name>TestGuest</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <os>
+    <type arch="i686">hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev="network"/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu>5</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <input type="mouse" bus="ps2"/>
+    <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
+    <console type="pty"/>
+    <hostdev type="usb" managed="no">
+      <source>
+        <vendor id="0x1111"/>
+        <product id="0x2222"/>
+        <address bus="1" device="2"/>
+      </source>
+    </hostdev>
+    <hostdev mode="subsystem" type="usb" managed="yes">
+      <source>
+        <address bus="0x56" device="0x78"/>
+      </source>
+    </hostdev>
+    <hostdev mode="capabilities" type="pci" managed="yes">
+      <source>
+        <address domain="0x4" bus="0x5" slot="0x6" function="0x7"/>
+      </source>
+    </hostdev>
+  </devices>
+</domain>

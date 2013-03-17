@@ -1,0 +1,25 @@
+<domain type='kvm'>
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <bootloader>/usr/bin/pygrub</bootloader>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='00:11:22:33:44:55'/>
+    </interface>
+    <input type='mouse' bus='xen'/>
+    <graphics type='vnc' port='-1'/>
+    <video>
+      <model type='cirrus'/>
+    </video>
+  </devices>
+</domain>

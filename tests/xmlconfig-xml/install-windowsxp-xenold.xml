@@ -1,0 +1,41 @@
+<domain type='xen'>
+  <name>TestGuest</name>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <memory>409600</memory>
+  <currentMemory>204800</currentMemory>
+  <vcpu>5</vcpu>
+  <os>
+    <type arch='i686'>hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev='cdrom'/>
+    <boot dev='hd'/>
+  </os>
+  <clock offset="localtime"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>destroy</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type='file' device='disk'>
+      <source file='/tmp/test.img'/>
+      <target dev='hda' bus='ide'/>
+    </disk>
+    <disk type='block' device='disk'>
+      <source dev='/dev/loop0'/>
+      <target dev='hdb' bus='ide'/>
+    </disk>
+    <disk type='block' device='cdrom'>
+      <source dev='/dev/loop0'/>
+      <target dev='hdc' bus='ide'/>
+      <readonly/>
+    </disk>
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='22:22:33:44:55:66'/>
+    </interface>
+    <input type='tablet' bus='usb'/>
+    <graphics type='sdl' display=':3.4' xauth='/tmp/.Xauthority'/>
+    <console type='pty'/>
+    <sound model='es1370'/>
+  </devices>
+</domain>

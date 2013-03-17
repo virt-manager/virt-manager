@@ -1,0 +1,56 @@
+[addon-ClusteredStorage]
+repository = ClusteredStorage
+name = Clustered Storage
+identity = ClusteredStorage/ClusteredStorage.cert
+
+[images-x86_64]
+initrd = images/pxeboot/initrd.img
+boot.iso = images/boot.iso
+kernel = images/pxeboot/vmlinuz
+
+[general]
+family = Red Hat Enterprise Linux
+timestamp = 1279616972.112428
+variant = Server
+totaldiscs = 1
+version = 6.0
+discnum = 1
+packagedir = Packages
+variants = Server
+arch = x86_64
+
+[addon-LargeFileSystem]
+repository = LargeFileSystem
+name = Large Filesystem Support
+identity = LargeFileSystem/LargeFileSystem.cert
+
+[addon-LoadBalance]
+repository = LoadBalance
+name = Load Balance
+identity = LoadBalance/LoadBalance.cert
+
+[images-xen]
+initrd = images/pxeboot/initrd.img
+kernel = images/pxeboot/vmlinuz
+
+[variant-Server]
+addons = ClusteredStorage,HighAvailability,LargeFileSystem,LoadBalance
+repository = Server/repodata
+identity = Server/Server.cert
+
+[addon-HighAvailability]
+repository = HighAvailability
+name = High Availability
+identity = HighAvailability/HighAvailability.cert
+
+[checksums]
+images/pxeboot/initrd.img = sha256:40fda5e693f1f446623a6d94e0f89d7ec8963f096bf1613a6e0d22ae3efbee04
+images/efiboot.img = sha256:ab891e10ad69408659bb710a1469b08db681cad96ef4b61635a32c2ffc711aa4
+images/boot.iso = sha256:56e92c567fee183f83f30d1d001b4237ff27de74803f0ced827ec461e51b9608
+images/pxeboot/vmlinuz = sha256:4bea4f88b26302d4cf095ef1fe6a0f0c064f2131b7d1b6460f30d03d08905336
+images/install.img = sha256:4eb68c16b34da7165e23715a3bc5250edc7cc0bc1d3d04b0f3131724481390fa
+images/efidisk.img = sha256:15faa40fe22e9797b2bd76c065e1f258848d007e901ff315aa44c4637b74024e
+
+[stage2]
+mainimage = images/install.img
+

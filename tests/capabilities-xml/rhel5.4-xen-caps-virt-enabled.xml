@@ -1,0 +1,89 @@
+<capabilities>
+
+  <host>
+    <cpu>
+      <arch>x86_64</arch>
+      <features>
+        <vmx/>
+      </features>
+    </cpu>
+    <migration_features>
+      <live/>
+      <uri_transports>
+        <uri_transport>xenmigr</uri_transport>
+      </uri_transports>
+    </migration_features>
+    <topology>
+      <cells num='1'>
+        <cell id='0'>
+          <cpus num='2'>
+            <cpu id='0'/>
+            <cpu id='1'/>
+          </cpus>
+        </cell>
+      </cells>
+    </topology>
+  </host>
+
+  <guest>
+    <os_type>xen</os_type>
+    <arch name='x86_64'>
+      <wordsize>64</wordsize>
+      <emulator>/usr/lib64/xen/bin/qemu-dm</emulator>
+      <machine>xenpv</machine>
+      <domain type='xen'>
+      </domain>
+    </arch>
+  </guest>
+
+  <guest>
+    <os_type>xen</os_type>
+    <arch name='i686'>
+      <wordsize>32</wordsize>
+      <emulator>/usr/lib64/xen/bin/qemu-dm</emulator>
+      <machine>xenpv</machine>
+      <domain type='xen'>
+      </domain>
+    </arch>
+    <features>
+      <pae/>
+    </features>
+  </guest>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name='i686'>
+      <wordsize>32</wordsize>
+      <emulator>/usr/lib64/xen/bin/qemu-dm</emulator>
+      <loader>/usr/lib/xen/boot/hvmloader</loader>
+      <machine>xenfv</machine>
+      <domain type='xen'>
+      </domain>
+    </arch>
+    <features>
+      <pae/>
+      <nonpae/>
+      <acpi default='on' toggle='yes'/>
+      <apic default='on' toggle='yes'/>
+    </features>
+  </guest>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name='x86_64'>
+      <wordsize>64</wordsize>
+      <emulator>/usr/lib64/xen/bin/qemu-dm</emulator>
+      <loader>/usr/lib/xen/boot/hvmloader</loader>
+      <machine>xenfv</machine>
+      <domain type='xen'>
+      </domain>
+    </arch>
+    <features>
+      <acpi default='on' toggle='yes'/>
+      <apic default='on' toggle='yes'/>
+    </features>
+  </guest>
+
+</capabilities>
+
+

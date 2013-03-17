@@ -1,0 +1,110 @@
+<domain type='kvm'>
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch='x86_64'>hvm</type>
+    <kernel>./virtinst-vmlinuz.</kernel>
+    <initrd>./virtinst-initrd.img.</initrd>
+    <cmdline>method=tests/cli-test-xml/faketree console=ttyS0</cmdline>
+  </os>
+  <features>
+    <acpi/><apic/><pae/>
+  </features>
+  <cpu match='exact'>
+    <model>core2duo</model>
+    <vendor>Intel</vendor>
+    <feature policy='require' name='pbe'/>
+    <feature policy='require' name='tm2'/>
+    <feature policy='require' name='est'/>
+    <feature policy='require' name='ss'/>
+    <feature policy='require' name='ht'/>
+    <feature policy='require' name='ds'/>
+    <feature policy='require' name='lahf_lm'/>
+    <feature policy='require' name='tm'/>
+    <feature policy='require' name='cx16'/>
+    <feature policy='require' name='vmx'/>
+    <feature policy='require' name='ds_cpl'/>
+    <feature policy='require' name='xtpr'/>
+    <feature policy='require' name='acpi'/>
+  </cpu>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>destroy</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <emulator>/usr/bin/qemu-kvm</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu'/>
+      <source file='/tmp/__virtinst_cli_exist1.img'/>
+      <target dev='vda' bus='virtio'/>
+    </disk>
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='00:11:22:33:44:55'/>
+      <model type='virtio'/>
+    </interface>
+    <input type='tablet' bus='usb'/>
+    <graphics type='vnc' port='-1'/>
+    <console type='pty'/>
+    <video>
+      <model type='cirrus'/>
+    </video>
+  </devices>
+</domain>
+<domain type='kvm'>
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch='x86_64'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/><pae/>
+  </features>
+  <cpu match='exact'>
+    <model>core2duo</model>
+    <vendor>Intel</vendor>
+    <feature policy='require' name='pbe'/>
+    <feature policy='require' name='tm2'/>
+    <feature policy='require' name='est'/>
+    <feature policy='require' name='ss'/>
+    <feature policy='require' name='ht'/>
+    <feature policy='require' name='ds'/>
+    <feature policy='require' name='lahf_lm'/>
+    <feature policy='require' name='tm'/>
+    <feature policy='require' name='cx16'/>
+    <feature policy='require' name='vmx'/>
+    <feature policy='require' name='ds_cpl'/>
+    <feature policy='require' name='xtpr'/>
+    <feature policy='require' name='acpi'/>
+  </cpu>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/bin/qemu-kvm</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu'/>
+      <source file='/tmp/__virtinst_cli_exist1.img'/>
+      <target dev='vda' bus='virtio'/>
+    </disk>
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='00:11:22:33:44:55'/>
+      <model type='virtio'/>
+    </interface>
+    <input type='tablet' bus='usb'/>
+    <graphics type='vnc' port='-1'/>
+    <console type='pty'/>
+    <video>
+      <model type='cirrus'/>
+    </video>
+  </devices>
+</domain>

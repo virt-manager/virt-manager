@@ -1,0 +1,27 @@
+<image>
+  <name>demo</name>
+  <domain>
+    <boot type="hvm">
+    <guest>
+      <arch>i686</arch>
+    </guest>
+      <os>
+        <loader dev="hd"/>
+      </os>
+      <drive disk="mydisk1" target="hda"/>
+      <drive disk="mydisk2" target="hdb"/>
+      <drive disk="mydisk3" target="hdc"/>
+    </boot>
+    <devices>
+      <vcpu>1</vcpu>
+      <memory>262144</memory>
+      <interface/>
+      <graphics/>
+    </devices>
+  </domain>
+  <storage>
+    <disk id="mydisk1" file="image-kernel.xml" use="system" format="qcow2"/>
+    <disk id="mydisk2" file="image.xml" use="system" format="qcow"/>
+    <disk id="mydisk3" file="image-format.xml" use="system" format="vmdk"/>
+  </storage>
+</image>

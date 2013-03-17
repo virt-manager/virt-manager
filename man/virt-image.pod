@@ -1,0 +1,251 @@
+=pod
+
+=head1 NAME
+
+virt-image - create virtual machines from an image descriptor
+
+=head1 SYNOPSIS
+
+B<virt-image> [OPTION]... IMAGE.XML
+
+=head1 DESCRIPTION
+
+B<virt-image> is a command line tool for creating virtual machines from an
+XML image descriptor C<IMAGE.XML> (L<virt-image(5)>). Most attributes of
+the virtual machine are taken from the XML descriptor (e.g., where the
+files to back the virtual machine's disks are and how to map them into the
+guest), though certain information must be added on the command line, such
+as the name of the guest.
+
+The XML descriptor defines most attributes of the guest, making it possible
+to bundle and distribute it together with the files backing the guest's
+disks.
+
+=head1 OPTIONS
+
+Most options can be omitted, in which case B<virt-image> will use defaults
+from the XML descriptor. When defaults are taken from the XML descriptor,
+they are indicated below as a path. --name is the only required command
+line option.
+
+=over 4
+
+=item -h, --help
+
+Show the help message and exit
+
+=item --connect=URI
+
+Connect to a non-default hypervisor. See L<virt-install(1)> for details
+
+=back
+
+
+
+=head2 General Options
+
+General configuration parameters that apply to all types of guest installs.
+
+=over 2
+
+=item  -n NAME, --name=NAME
+
+Name of the guest instance
+
+=item -r MEMORY, --ram=MEMORY
+
+Memory to allocate for guest instance in megabytes. Defaults to
+C</image/devices/memory> in the XML descriptor.
+
+=item  -u UUID, --uuid=UUID
+
+UUID for the guest; if none is given a random UUID will be generated. If
+you specify UUID, you should use a 32-digit hexadecimal number.
+
+=item --vcpus=VCPUS
+
+Number of vcpus to configure for your guest. Defaults to
+C</image/devices/vcpu> in the XML descriptor. This option can also be
+used to set CPU topology, please see L<virt-install(1)> for more info.
+
+=item --cpuset
+
+Set which physical cpus the guest can use. Please see L<virt-install(1)> for
+more info.
+
+=item --cpu
+
+Configure the CPU and CPU features exposed to the guest. Please see
+L<virt-install(1)> for more info.
+
+=item  --check-cpu
+
+Check that vcpus do not exceed physical CPUs and warn if they do.
+
+=item  --os-type=OS_TYPE
+
+Optimize the guest configuration for a type of operating system (ex. 'linux',
+'windows'). This will attempt to pick the most suitable ACPI & APIC settings,
+optimally supported mouse drivers, virtio, and generally accommodate other
+operating system quirks.  See L<virt-install(1)> for valid values.
+
+=item --os-variant=OS_VARIANT
+
+Further optimize the guest configuration for a specific operating system
+variant (ex. 'fedora8', 'winxp'). This parameter is optional, and does not
+require an C<--os-type> to be specified. See L<virt-install(1)> for valid
+values.
+
+=back
+
+
+
+=head2 Full Virtualization specific options
+
+Parameters specific only to fully virtualized guest installs.
+
+=over 2
+
+=item --noapic
+
+Force disable APIC for the guest.
+
+=item --noacpi
+
+Force disable ACPI for the guest.
+
+=back
+
+
+
+
+=head2 Networking Configuration
+
+=over 2
+
+=item -w NETWORK, --network=NETWORK
+
+Connect the guest to the host network. See L<virt-install(1)> for details
+
+=item -m MAC, --mac=MAC
+
+This is deprecated in favor of C<--network ...,mac=MAC,...>
+
+=item -b BRIDGE, --bridge=BRIDGE
+
+This is deprecated in favor of C<--network bridge=BRIDGE>
+
+=back
+
+
+
+=head2 Graphics Configuration
+
+If no graphics option is specified, C<virt-image> will default to
+'--graphics vnc' if the DISPLAY environment variable is set, otherwise
+'--graphics none' is used.
+
+=over 2
+
+=item --graphics TYPE,opt1=arg1,opt2=arg2,...
+
+Specifies the graphical display configuration. This does not configure any
+virtual hardware, just how the guest's graphical display can be accessed.
+See L<virt-install(1)> for details usage info.
+
+=item  --vnc
+
+This option is deprecated in favor of C<--graphics vnc,...>
+
+=item  --vncport=VNCPORT
+
+This option is deprecated in favor of C<--graphics vnc,port=PORT,...>
+
+=item --vnclisten=VNCLISTEN
+
+This option is deprecated in favor of C<--graphics vnc,listen=LISTEN,...>
+
+=item  -k KEYMAP, --keymap=KEYMAP
+
+This option is deprecated in favor of C<--graphics vnc,keymap=KEYMAP,...>
+
+=item  --sdl
+
+This option is deprecated in favor of C<--graphics sdl,...>
+
+=item  --nographics
+
+This option is deprecated in favor of C<--graphics none>
+
+=back
+
+=head2 Miscellaneous Options
+
+=over 2
+
+=item -p, --print
+
+Print the libvirt XML, but do not start the guest.
+
+=item --boot=BOOT
+
+The zero-based index of the boot record to use. The XML descriptor can
+contain multiple C</image/domain/boot> elements for use on different
+hypervisors. By default, the one that is most appropriate for the current
+hypervisor is selected.
+
+=item --replace
+
+Shutdown and remove any existing guest with the passed C<--name> before
+installing from the image.
+
+=item --noreboot
+
+Prevent the domain automatically booting after importing the image.
+
+=item --skip-checksum
+
+Do not check disk images against checksums (if they are listed in the
+image xml).
+
+=item -d, --debug
+
+Print debugging information.
+
+=back
+
+=head1 EXAMPLES
+
+Create and start a guest called C<example> with a VNC console from
+C<image.xml>:
+
+  # virt-image --name example --vnc image.xml
+
+Print the libvirt XML for a guest called C<example> without graphics, but
+do not create or start a virtual machine:
+
+  # virt-image --print --name example --nographics image.xml
+
+=head1 AUTHOR
+
+Written by David Lutterkort and Cole Robinson. See the AUTHORS file in
+the source distribution for the complete list of credits.
+
+=head1 BUGS
+
+Please see http://virt-manager.org/page/BugReporting
+
+=head1 COPYRIGHT
+
+Copyright (C) 2006-2012 Red Hat, Inc, and various contributors.
+This is free software. You may redistribute copies of it under the terms
+of the GNU General Public License C<http://www.gnu.org/licenses/gpl.html>.
+There is NO WARRANTY, to the extent permitted by law.
+
+=head1 SEE ALSO
+
+L<virt-image(5)>, L<virt-install(1)>, the project website
+C<http://virt-manager.org>
+
+=cut
+

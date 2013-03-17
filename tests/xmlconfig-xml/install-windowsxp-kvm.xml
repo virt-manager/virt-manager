@@ -1,0 +1,49 @@
+<domain type='kvm'>
+  <name>TestGuest</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <os>
+    <type arch='i686'>hvm</type>
+    <boot dev='cdrom'/>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="localtime"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>destroy</on_reboot>
+  <on_crash>destroy</on_crash>
+  <vcpu>5</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='raw'/>
+      <source file='/tmp/test.img'/>
+      <target dev='hda' bus='ide'/>
+    </disk>
+    <disk type='block' device='disk'>
+      <driver name='qemu'/>
+      <source dev='/dev/loop0'/>
+      <target dev='hdb' bus='ide'/>
+    </disk>
+    <disk type='block' device='cdrom'>
+      <driver name='qemu'/>
+      <source dev='/dev/loop0'/>
+      <target dev='hdc' bus='ide'/>
+      <readonly/>
+    </disk>
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='22:22:33:44:55:66'/>
+    </interface>
+    <input type='tablet' bus='usb'/>
+    <graphics type='sdl' display=':3.4' xauth='/tmp/.Xauthority'/>
+    <console type='pty'/>
+    <sound model='es1370'/>
+    <video>
+      <model type='vga'/>
+    </video>
+  </devices>
+</domain>

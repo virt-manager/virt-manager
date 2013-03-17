@@ -1,0 +1,115 @@
+<domain type='test'>
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>4</vcpu>
+  <os>
+    <type arch='i686'>hvm</type>
+    <boot dev='cdrom'/>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/><pae/>
+  </features>
+  <cpu>
+    <topology sockets='1' cores='4' threads='1'/>
+  </cpu>
+  <clock offset="localtime"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>destroy</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <emulator>/usr/bin/test-hv</emulator>
+    <disk type='file' device='disk'>
+      <source file='/tmp/__virtinst_cli_exist1.img'/>
+      <target dev='hda' bus='ide'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <source file='/tmp/__virtinst_cli_exist2.img'/>
+      <target dev='hdc' bus='ide'/>
+      <readonly/>
+    </disk>
+    <interface type='user'>
+      <mac address='00:11:22:33:44:55'/>
+    </interface>
+    <input type='tablet' bus='usb'/>
+    <console type='pty'/>
+  </devices>
+</domain>
+<domain type='test'>
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>4</vcpu>
+  <os>
+    <type arch='i686'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/><pae/>
+  </features>
+  <cpu>
+    <topology sockets='1' cores='4' threads='1'/>
+  </cpu>
+  <clock offset="localtime"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>destroy</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <emulator>/usr/bin/test-hv</emulator>
+    <disk type='file' device='disk'>
+      <source file='/tmp/__virtinst_cli_exist1.img'/>
+      <target dev='hda' bus='ide'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <source file='/tmp/__virtinst_cli_exist2.img'/>
+      <target dev='hdc' bus='ide'/>
+      <readonly/>
+    </disk>
+    <interface type='user'>
+      <mac address='00:11:22:33:44:55'/>
+    </interface>
+    <input type='tablet' bus='usb'/>
+    <console type='pty'/>
+  </devices>
+</domain>
+<domain type='test'>
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>4</vcpu>
+  <os>
+    <type arch='i686'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/><pae/>
+  </features>
+  <cpu>
+    <topology sockets='1' cores='4' threads='1'/>
+  </cpu>
+  <clock offset="localtime"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/bin/test-hv</emulator>
+    <disk type='file' device='disk'>
+      <source file='/tmp/__virtinst_cli_exist1.img'/>
+      <target dev='hda' bus='ide'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <source file='/tmp/__virtinst_cli_exist2.img'/>
+      <target dev='hdc' bus='ide'/>
+      <readonly/>
+    </disk>
+    <interface type='user'>
+      <mac address='00:11:22:33:44:55'/>
+    </interface>
+    <input type='tablet' bus='usb'/>
+    <console type='pty'/>
+  </devices>
+</domain>

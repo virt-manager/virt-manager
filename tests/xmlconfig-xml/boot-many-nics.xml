@@ -1,0 +1,46 @@
+<domain type='xen'>
+  <name>TestGuest</name>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <memory>409600</memory>
+  <currentMemory>204800</currentMemory>
+  <vcpu>5</vcpu>
+  <os>
+    <type arch='i686'>hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev='network'/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <interface type='user'>
+      <mac address='22:11:11:11:11:11'/>
+    </interface>
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='22:22:33:44:55:66'/>
+    </interface>
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='22:22:33:44:55:66'/>
+      <model type='e1000'/>
+    </interface>
+    <interface type='bridge'>
+      <source bridge='foobr0'/>
+      <mac address='22:22:22:22:22:22'/>
+      <target dev='foo1'/>
+    </interface>
+    <interface type='ethernet'>
+      <source dev='testeth1'/>
+      <mac address='00:11:00:22:00:33'/>
+    </interface>
+    <input type='mouse' bus='ps2'/>
+    <graphics type='sdl' display=':3.4' xauth='/tmp/.Xauthority'/>
+    <console type='pty'/>
+  </devices>
+</domain>

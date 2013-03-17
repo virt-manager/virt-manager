@@ -1,0 +1,25 @@
+<image>
+ <name>conv-image</name>
+ <label>conv-image</label>
+ <description></description>
+ <domain>
+  <boot type="hvm">
+   <guest>
+    <arch>x86_64</arch>
+   </guest>
+   <os>
+    <loader dev="hd"/>
+   </os>
+   <drive disk="image.qcow2" target="hda"/>
+  </boot>
+  <devices>
+   <vcpu>2</vcpu>
+   <memory>524288</memory>
+   <interface/>
+   <graphics/>
+  </devices>
+ </domain>
+ <storage>
+  <disk file="image.qcow2" use="system" format="qcow2"/>
+ </storage>
+</image>

@@ -1,0 +1,69 @@
+<domain type="test">
+  <name>change_name</name>
+  <currentMemory>1024000</currentMemory>
+  <memory>2048000</memory>
+  <uuid>11111111-2222-3333-4444-555555555555</uuid>
+  <os>
+    <type machine="pc-0.11">xen</type>
+    <boot dev="fd"/>
+    <loader>/foo/loader</loader>
+    <init>/sbin/init</init>
+    <bootmenu enable="no"/>
+  </os>
+  <features>
+    <apic/>
+  </features>
+  <numatune>
+    <memory nodeset="2,4,6"/>
+  </numatune>
+  <cpu match="strict">
+    <model>qemu64</model>
+    <vendor>qemuvendor</vendor>
+    <topology sockets="4" cores="3" threads="1"/>
+    <feature policy="disable" name="foofeat"/>
+    <feature policy="require" name="addfeature"/>
+  </cpu>
+  <clock offset="localtime"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu cpuset="1-5,15" current="10">12</vcpu>
+  <devices>
+    <emulator>/usr/binnnn/fooemu</emulator>
+    <disk type="file" device="floppy">
+      <driver name="qemu" type="qcow2"/>
+      <source file="/default-pool/testvol1.img"/>
+      <target dev="fda" bus="fdc"/>
+    </disk>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="raw"/>
+      <source file="/tmp/test.img"/>
+      <target dev="vda" bus="virtio"/>
+    </disk>
+    <disk type="block" device="disk">
+      <driver name="qemu"/>
+      <source dev="/dev/loop0"/>
+      <target dev="vdb" bus="virtio"/>
+    </disk>
+    <disk type="block" device="cdrom">
+      <target dev="hdc" bus="ide"/>
+      <readonly/>
+    </disk>
+    <interface type="network">
+      <source network="default"/>
+      <mac address="22:22:33:44:55:66"/>
+      <model type="virtio"/>
+    </interface>
+    <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
+    <console type="pty"/>
+    <memballoon model="none"/>
+  </devices>
+  <seclabel type="static" model="apparmor">
+    <label>barlabel</label>
+    <imagelabel>fooimage</imagelabel>
+  </seclabel>
+  <description>Hey desc changed&amp;</description>
+  <memoryBacking>
+    <hugepages/>
+  </memoryBacking>
+</domain>

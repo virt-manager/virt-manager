@@ -1,0 +1,25 @@
+<image>
+ <name>fedora</name>
+ <label>fedora</label>
+ <description></description>
+ <domain>
+  <boot type="hvm">
+   <guest>
+    <arch>i686</arch>
+   </guest>
+   <os>
+    <loader dev="hd"/>
+   </os>
+   <drive disk="fedora.vmdk" target="hda"/>
+  </boot>
+  <devices>
+   <vcpu>1</vcpu>
+   <memory>524288</memory>
+   <interface/>
+   <graphics/>
+  </devices>
+ </domain>
+ <storage>
+  <disk file="fedora.vmdk" use="system" format="vmdk"/>
+ </storage>
+</image>

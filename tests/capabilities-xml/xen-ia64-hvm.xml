@@ -1,0 +1,42 @@
+<capabilities>
+
+  <host>
+    <cpu>
+      <arch>ia64</arch>
+    </cpu>
+    <migration_features>
+      <live/>
+      <uri_transports>
+        <uri_transport>xenmigr</uri_transport>
+      </uri_transports>
+    </migration_features>
+  </host>
+
+  <guest>
+    <os_type>xen</os_type>
+    <arch name='ia64'>
+      <wordsize>64</wordsize>
+      <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+      <machine>xenpv</machine>
+      <domain type='xen'>
+      </domain>
+    </arch>
+  </guest>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name='ia64'>
+      <wordsize>64</wordsize>
+      <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+      <loader>/usr/lib/xen/boot/hvmloader</loader>
+      <machine>xenfv</machine>
+      <domain type='xen'>
+      </domain>
+    </arch>
+    <features>
+      <acpi default='on' toggle='yes'/>
+      <apic default='on' toggle='yes'/>
+    </features>
+  </guest>
+
+</capabilities>

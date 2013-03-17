@@ -1,0 +1,25 @@
+<domain type="xen">
+  <name>TestGuest</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <description>foooo barrrr somedesc</description>
+  <os>
+    <type arch="i686">hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="localtime"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu>5</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <input type="mouse" bus="ps2"/>
+    <input type="tablet" bus="usb"/>
+  </devices>
+</domain>

@@ -1,0 +1,286 @@
+#!/usr/bin/python
+#
+# Copyright 2008, 2013  Red Hat, Inc.
+# Joey Boggs <jboggs@redhat.com>
+#
+# Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
+# Use is subject to license terms.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA 02110-1301 USA.
+
+import sys
+import os
+import logging
+import errno
+from optparse import OptionGroup
+
+import virtinst.cli as cli
+from virtinst.cli import fail, print_stdout, print_stderr
+import virtinst.util as util
+import virtconv.formats as formats
+import virtconv.vmcfg as vmcfg
+import virtconv.diskcfg as diskcfg
+
+cli.setupGettext()
+
+def parse_args():
+    """Parse and verify command line."""
+    usage = "%prog [options] inputdir|input.vmx [outputdir|output.xml]"
+    opts = cli.setupParser(usage)
+
+    cong = OptionGroup(opts, "Conversion Options")
+    cong.add_option("-i", "--input-format", dest="input_format",
+                    help=_("Input format, e.g. 'vmx'"))
+    cong.add_option("-o", "--output-format", dest="output_format",
+                    default="virt-image",
+                    help=_("Output format, e.g. 'virt-image'"))
+    cong.add_option("-D", "--disk-format", dest="disk_format",
+                    help=_("Output disk format"))
+    opts.add_option_group(cong)
+
+    virg = OptionGroup(opts, "Virtualization Type Options")
+    virg.add_option("-v", "--hvm", action="store_true", dest="fullvirt",
+                    help=_("This guest should be a fully virtualized guest"))
+    virg.add_option("-p", "--paravirt", action="store_true", dest="paravirt",
+                    help=_("This guest should be a paravirtualized guest"))
+    opts.add_option_group(virg)
+
+    cfgg = OptionGroup(opts, "Guest Configuration Options")
+    cfgg.add_option("-a", "--arch", dest="arch",
+                    default=util.get_default_arch(),
+                    help=_("Machine Architecture Type (i686/x86_64/ppc)"))
+    cfgg.add_option("", "--os-type", dest="os_type",
+                    help=_("The OS type for fully virtualized guests, e.g. "
+                           "'linux', 'unix', 'windows'"))
+    cfgg.add_option("", "--os-variant", dest="os_variant",
+                    help=_("The OS variant for fully virtualized guests, e.g. "
+                           "'fedora6', 'rhel5', 'solaris10', 'win2k', 'vista'"))
+    cfgg.add_option("", "--noapic", action="store_true", dest="noapic",
+                    default=False,
+                    help=_("Disables APIC for fully virtualized guest "
+                           "(overrides value in os-type/os-variant db)"))
+    cfgg.add_option("", "--noacpi", action="store_true", dest="noacpi",
+                    default=False,
+                    help=_("Disables ACPI for fully virtualized guest "
+                           "(overrides value in os-type/os-variant db)"))
+    opts.add_option_group(cfgg)
+
+    misc = OptionGroup(opts, "Miscellaneous Options")
+    misc.add_option("-q", "--quiet", action="store_true", dest="quiet",
+                    help=_("Suppress non-error output"))
+    misc.add_option("-d", "--debug", action="store_true", dest="debug",
+                    help=_("Print debugging information"))
+    misc.add_option("", "--dry-run", action="store_false", dest="nodry",
+                    default=True,
+                    help=_("Dry run, don't make any changes"))
+    opts.add_option_group(misc)
+
+
+    (options, args) = opts.parse_args()
+
+    cli.setupLogging("virt-convert", options.debug, options.quiet)
+
+    if len(args) < 1:
+        opts.error(_("You need to provide an input VM definition"))
+    if len(args) > 2:
+        opts.error(_("Too many arguments provided"))
+
+    if (options.disk_format and
+        options.disk_format not in diskcfg.disk_formats()):
+        opts.error(_("Unknown output disk format \"%s\"") % options.disk_format)
+
+    if len(args) == 1:
+        options.output_file = None
+        options.output_dir = None
+        if os.path.isdir(args[0]):
+            options.output_dir = args[0]
+    elif os.path.isdir(args[1]) or args[1].endswith("/"):
+        options.output_file = None
+        options.output_dir = args[1]
+    else:
+        options.output_file = args[1]
+        options.output_dir = os.path.dirname(os.path.realpath(args[1]))
+
+    if options.output_format not in formats.formats():
+        opts.error(_("Unknown output format \"%s\")" % options.output_format))
+    if options.output_format not in formats.output_formats():
+        opts.error(_("No output handler for format \"%s\")"
+            % options.output_format))
+
+    if not os.access(args[0], os.R_OK):
+        opts.error(_("Couldn't access input argument \"%s\"\n") % args[0])
+        sys.exit(1)
+
+    if not options.input_format:
+        try:
+            (args[0], options.input_format) = formats.find_input(args[0])
+        except StandardError, e:
+            opts.error(_("Couldn't determine input format for \"%s\": %s") %
+                (args[0], e))
+            sys.exit(1)
+
+    if options.input_format not in formats.formats():
+        opts.error(_("Unknown input format \"%s\")" % options.input_format))
+    if options.input_format not in formats.input_formats():
+        opts.error(_("No input handler for format \"%s\"")
+            % options.input_format)
+
+    if os.path.isdir(args[0]):
+        (options.input_file, ignore) = formats.find_input(args[0],
+            options.input_format)
+        options.input_dir = args[0]
+    else:
+        options.input_file = args[0]
+        options.input_dir = os.path.dirname(os.path.realpath(args[0]))
+
+    return options
+
+def cleanup(msg, options, vmdef, paths):
+    """
+    After failure, clean up anything we created.
+    """
+    logging.error(msg)
+    if not options.nodry:
+        return
+
+    try:
+        for disk in vmdef.disks.values():
+            disk.cleanup()
+
+        paths.reverse()
+        for path in paths:
+            if os.path.isdir(path):
+                os.rmdir(path)
+            elif os.path.isfile(path):
+                os.remove(path)
+    except OSError, e:
+        fail(_("Couldn't clean up output directory \"%s\": %s") %
+               (options.output_dir, e.strerror))
+
+    sys.exit(1)
+
+def main():
+    cli.earlyLogging()
+    options = parse_args()
+
+    inp = formats.parser_by_name(options.input_format)
+    outp = formats.parser_by_name(options.output_format)
+
+    vmdef = None
+
+    try:
+        vmdef = inp.import_file(options.input_file)
+    except IOError, e:
+        fail(_("Couldn't import file \"%s\": %s") %
+            (options.input_file, e.strerror))
+    except Exception, e:
+        fail(_("Couldn't import file \"%s\": %s") % (options.input_file, e))
+
+    if options.paravirt:
+        vmdef.type = vmcfg.VM_TYPE_PV
+    else:
+        vmdef.type = vmcfg.VM_TYPE_HVM
+
+    vmdef.arch = options.arch
+    vmdef.os_type = options.os_type
+    vmdef.os_variant = options.os_variant
+    vmdef.noapic = options.noapic
+    vmdef.noacpi = options.noacpi
+
+    clean = []
+
+    unixname = vmdef.name.replace(" ", "-")
+
+    if not options.output_dir:
+        options.output_dir = unixname
+    try:
+        logging.debug("Creating directory %s", options.output_dir)
+        if options.nodry:
+            os.mkdir(options.output_dir)
+        clean += [ options.output_dir ]
+    except OSError, e:
+        if (e.errno != errno.EEXIST):
+            fail("Could not create directory %s: %s" %
+                 (options.output_dir, e.strerror))
+
+    if not options.output_file:
+        options.output_file = os.path.join(options.output_dir,
+           "%s%s" % (unixname, outp.suffix))
+
+    logging.debug("input_file: %s", options.input_file)
+    logging.debug("input_dir: %s", options.input_dir)
+    logging.debug("output_file: %s", options.output_file)
+    logging.debug("output_dir: %s", options.output_dir)
+
+    print_stdout(_("Generating output in '%(format)s' format to %(dir)s/") %
+        {"format": options.output_format, "dir": options.output_dir})
+
+    try:
+        for d in vmdef.disks.values():
+            dformat = options.disk_format
+
+            if not dformat:
+                # VMDK disks on Solaris converted to vdisk by default
+                if (d.format == diskcfg.DISK_FORMAT_VMDK and
+                    vmcfg.host() == "SunOS"):
+                    dformat = "vdisk"
+
+                elif options.output_format == "vmx":
+                    dformat = "vmdk"
+
+                else:
+                    dformat = "raw"
+
+            if d.path and dformat != "none":
+                print_stdout(_("Converting disk '%(path)s' to type "
+                               "%(format)s...") % {"path": d.path,
+                                                   "format": dformat})
+
+            if options.nodry:
+                d.convert(options.input_dir, options.output_dir, dformat)
+
+    except OSError, e:
+        cleanup(_("Couldn't convert disks: %s") % e.strerror,
+            options, vmdef, clean)
+    except RuntimeError, e:
+        cleanup(_("Couldn't convert disks: %s") % e, options, vmdef, clean)
+
+    try:
+        output = outp.export(vmdef)
+        logging.debug("Output VM config:\n%s", output)
+
+        if options.nodry:
+            outfile = open(options.output_file, "w")
+            outfile.writelines(output)
+            outfile.close()
+
+        clean += [ options.output_file ]
+    except ValueError, e:
+        cleanup(_("Couldn't export to file \"%s\": %s") %
+            (options.output_file, e), options, vmdef, clean)
+
+    print_stdout("Done.")
+    return 0
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except SystemExit, sys_e:
+        sys.exit(sys_e.code)
+    except KeyboardInterrupt:
+        print_stderr(_("Aborted at user request"))
+    except Exception, main_e:
+        fail(main_e)

@@ -1,0 +1,48 @@
+<domain type="xen">
+  <name>TestGuest</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <os>
+    <type arch="i686">hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev="network"/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu>5</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <input type="mouse" bus="ps2"/>
+    <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
+    <serial type="null"/>
+    <serial type="tcp">
+      <source mode="bind" host="my.source.host" service="1234"/>
+      <protocol type="telnet"/>
+    </serial>
+    <parallel type="unix">
+      <source mode="bind" path="/tmp/foobar"/>
+    </parallel>
+    <parallel type="udp">
+      <source mode="bind" host="my.bind.host" service="1111"/>
+      <source mode="connect" host="my.source.host" service="2222"/>
+    </parallel>
+    <console type="pty"/>
+    <console type="file">
+      <source path="/tmp/foo.img"/>
+      <target type="virtio"/>
+    </console>
+    <channel type="pty">
+      <target type="virtio" name="foo.bar.frob"/>
+    </channel>
+    <channel type="unix">
+      <source mode="bind" path="/tmp/foobar"/>
+      <target type="guestfwd" address="1.2.3.4" port="4567"/>
+    </channel>
+  </devices>
+</domain>

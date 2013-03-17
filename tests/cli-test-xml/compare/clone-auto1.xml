@@ -1,0 +1,68 @@
+<domain type="test" id="3">
+  <name>test-for-clone1</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory unit="KiB">409600</memory>
+  <currentMemory unit="KiB">204800</currentMemory>
+  <vcpu placement="static">5</vcpu>
+  <os>
+    <type arch="i686">hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type="block" device="disk">
+      <source dev="/disk-pool/diskvol1-clone"/>
+      <target dev="sda" bus="scsi"/>
+      <address type="drive" controller="0" bus="0" target="0" unit="0"/>
+      <driver name="qemu" type="raw"/>
+    </disk>
+    <disk type="block" device="cdrom">
+      <target dev="sdb" bus="scsi"/>
+      <readonly/>
+      <address type="drive" controller="0" bus="0" target="0" unit="1"/>
+    </disk>
+    <disk type="block" device="disk">
+      <source dev="/default-pool/collidevol1.img"/>
+      <target dev="sdc" bus="scsi"/>
+      <readonly/>
+      <address type="drive" controller="0" bus="0" target="0" unit="2"/>
+    </disk>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2"/>
+      <target dev="sdd" bus="scsi"/>
+      <address type="drive" controller="0" bus="0" target="0" unit="3"/>
+      <source file="/default-pool/default-vol-clone"/>
+    </disk>
+    <disk type="block" device="disk">
+      <source dev="/default-pool/sharevol.img"/>
+      <target dev="sdx" bus="scsi"/>
+      <shareable/>
+      <address type="drive" controller="3" bus="0" target="0" unit="2"/>
+    </disk>
+    <controller type="scsi" index="0"/>
+    <controller type="scsi" index="1"/>
+    <controller type="scsi" index="2"/>
+    <controller type="scsi" index="3"/>
+    <interface type="network">
+      <mac address="00:11:22:33:44:55"/>
+      <source network="default"/>
+      <model type="e1000"/>
+    </interface>
+    <interface type="user">
+      <mac address="00:11:22:33:44:55"/>
+    </interface>
+    <parallel type="file">
+      <source path="/tmp/foo.log"/>
+      <target port="0"/>
+    </parallel>
+  </devices>
+</domain>

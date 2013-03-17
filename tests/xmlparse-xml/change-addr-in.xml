@@ -1,0 +1,37 @@
+<domain type="kvm">
+  <name>TestGuest</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <os>
+    <type arch="i686" machine="foobar">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type='block' device='disk'>
+      <source dev='/dev/HostVG/QEMUGuest1'/>
+      <target dev='hda' bus='ide'/>
+      <address type='drive' controller='3' bus='5' unit='33'/>
+      <alias name='foo2'/>
+    </disk>
+    <controller type='scsi' index='8'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x7'/>
+    </controller>
+    <channel type='pty'>
+      <target type='virtio' name='org.linux-kvm.port.wizz'/>
+      <address type='virtio-serial' controller='0' bus='0' port='2'/>
+      <alias name='channel0'/>
+    </channel>
+    <smartcard mode='host'>
+      <address type='ccid' controller='0' slot='0'/>
+    </smartcard>
+  </devices>
+</domain>

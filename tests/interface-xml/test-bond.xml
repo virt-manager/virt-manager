@@ -1,0 +1,20 @@
+<interface type='bond' name='test-bond'>
+  <start mode='onboot'/>
+  <mac address='AA:AA:AA:AA:AA:AA'/>
+  <mtu size='1501'/>
+  <protocol family='ipv4'>
+  </protocol>
+  <bond>
+    <interface type='ethernet' name='eth0'>
+      <start mode='none'/>
+      <mac address='00:FF:EE:FF:EE:FF'/>
+    </interface>
+    <interface type='ethernet' name='eth1'>
+      <mac address='00:FF:EE:FF:EE:AB'/>
+    </interface>
+    <interface type='ethernet' name='eth2'>
+      <start mode='hotplug'/>
+      <mac address='00:FF:EE:FF:EE:CD'/>
+    </interface>
+  </bond>
+</interface>

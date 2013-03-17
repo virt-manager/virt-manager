@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<volume>
+  <name>pool-logical-volclone</name>
+  <key>/some/target/path/pool-logical-vol</key>
+  <source>
+  </source>
+  <capacity unit="bytes">10737418240</capacity>
+  <allocation unit="bytes">5368709120</allocation>
+  <target>
+    <path>/some/target/path/pool-logical-vol</path>
+    <permissions>
+      <mode>0700</mode>
+      <owner>10736</owner>
+      <group>10736</group>
+    </permissions>
+  </target>
+</volume>

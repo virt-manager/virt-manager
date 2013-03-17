@@ -1,0 +1,35 @@
+<domain type='test'>
+  <name>TestGuest</name>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <memory>409600</memory>
+  <currentMemory>204800</currentMemory>
+  <vcpu>5</vcpu>
+  <os>
+    <type arch='i686'>xen</type>
+    <kernel>/foo/kernel</kernel>
+    <initrd>/foo/initrd</initrd>
+    <cmdline>ro quiet</cmdline>
+  </os>
+  <features>
+    <pae/>
+  </features>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <disk type='file' device='disk'>
+      <source file='REPLACEME/tests/image-xml/root.raw'/>
+      <target dev='xvda' bus='xen'/>
+    </disk>
+    <disk type='file' device='disk'>
+      <source file='REPLACEME/tests/image-xml/data.raw'/>
+      <target dev='xvdb' bus='xen'/>
+    </disk>
+    <disk type='file' device='disk'>
+      <source file='REPLACEME/tests/image-xml/scratch.raw'/>
+      <target dev='xvdc' bus='xen'/>
+    </disk>
+    <input type='mouse' bus='xen'/>
+    <graphics type='vnc' port='-1' keymap='ja'/>
+  </devices>
+</domain>

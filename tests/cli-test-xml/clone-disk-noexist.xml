@@ -1,0 +1,36 @@
+<domain type='test'>
+  <name>test-clone-noexist</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>abcd5678-1234-1234-1234-12345678FFFF</uuid>
+  <os>
+    <type arch='i686'>hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu>5</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type='block' device='disk'>
+      <source dev='/i/really/dont/exist'/>
+      <target dev='sda' bus='scsi'/>
+    </disk>
+    <interface type='network'>
+      <source network='default'/>
+      <model type='e1000'/>
+    </interface>
+    <interface type='user'>
+      <mac address='22:11:11:11:11:11'/>
+    </interface>
+    <parallel type='file'>
+      <source path='/tmp/foo.log'/>
+    </parallel>
+  </devices>
+</domain>

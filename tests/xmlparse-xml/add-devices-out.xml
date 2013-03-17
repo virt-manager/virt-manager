@@ -1,0 +1,51 @@
+<domain type="kvm">
+  <name>TestGuest</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <os>
+    <type arch="i686">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu cpuset="1-3">5</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type="file" device="floppy">
+      <driver name="qemu" type="qcow2"/>
+      <source file="/default-pool/testvol1.img"/>
+      <target dev="fda" bus="fdc"/>
+    </disk>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="raw"/>
+      <source file="/tmp/test.img"/>
+      <target dev="vda" bus="virtio"/>
+    </disk>
+    <disk type="block" device="cdrom">
+      <target dev="hdc" bus="ide"/>
+      <readonly/>
+    </disk>
+    <interface type="network">
+      <source network="default"/>
+      <mac address="22:22:33:44:55:66"/>
+      <model type="virtio"/>
+    </interface>
+    <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
+    <console type="pty"/>
+    <watchdog model="i6300esb" action="reset"/>
+    <interface type="network">
+      <source network="default"/>
+      <mac address="1A:2A:3A:4A:5A:6A"/>
+    </interface>
+  </devices>
+  <seclabel type="static" model="selinux">
+    <label>foolabel</label>
+    <imagelabel>imagelabel</imagelabel>
+  </seclabel>
+</domain>

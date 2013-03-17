@@ -1,0 +1,247 @@
+=pod
+
+=head1 NAME
+
+virt-image - Format of the virtual image XML descriptor
+
+=head1 DESCRIPTION
+
+L<virt-image(1)> relies on an XML descriptor to create virtual machines from
+virtual machine images. In general, a virtual machine image consists of the
+XML descriptor (usually in a file F<image.xml>) and a number of files for
+the virtual machine's disks.
+
+In the following explanation of the structure of the image descriptor,
+mandatory XML elements are marked as B<element>, whereas optional elements
+are marked as I<element>.
+
+All file names in the image descriptor are relative to the location of the
+descriptor itself. Generally, disk files are either kept in the same
+directory as the image descriptor, or in a subdirectory.
+
+=head1 HOST MATCHING
+
+The image descriptor contains information on the requirements a guest has
+on the host platform through one or more the F</image/domain/boot>
+descriptors (see section L</BOOT>). The image can only be used if at least
+one of the boot descriptors is suitable for the host platform; a boot
+descriptor is suitable if:
+
+=over 4
+
+=item *
+
+The CPU architecture of the boot descriptor, given by the
+F<boot/guest/arch> element, is supported by the host
+
+=item *
+
+The host supports a guest with the features requested in the
+F<boot/guest/features> element, such as providing an APIC, or having ACPI
+turned off
+
+=back
+
+If a suitable boot descriptor is found, the guest is created and booted
+according to the information about booting the OS from the F<boot/os>
+element and with the disks specified in the F<boot/drive> element. If more
+than one suitable boot descriptor is found, one of them is chosen based on
+a heuristic, generally preferring paravirtualized guests over full
+virtualized ones, though this is an implementation detail of the tool
+creating the virtual machine.
+
+=head1 STRUCTURE
+
+The image descriptor consists of three sections, all contained in the
+toplevel B<image> element:
+
+=over 4
+
+=item General metadata about the image
+
+A number of elements like I<label>, B<name>, and I<description> that give
+some simple information about the image. The B<name> must be a string
+suitable as a name for the virtual machine, the I<label> is a short
+human-readable string suitable for display in graphical UI's, and the
+I<description> should be a longer, free-form description of the purpose of
+the image. The B<name> is mandatory.
+
+=item Virtual machine attributes
+
+The B<domain> element contains instructions on how to boot the image, and
+device attributes such as the number of virtual CPU's and the size of the
+memory. (see section L</DOMAIN>)
+
+=item Storage layout
+
+The B<storage> element lists the files to back the virtual machine's disks
+and some information about their format and use. (see section L</STORAGE>)
+
+=back
+
+=head1 DOMAIN
+
+The B<domain> element contains one or more B<boot> descriptors (see section
+L</BOOT>) and a B<devices> element. The B<Devices> element lists the
+recommended number of virtual CPU's in the B<vcpu> element and the
+recommended amount of memory in kB in the B<memory> element. It also
+indicates whether the virtual machine should have a network interface
+through the I<interface> element and whether the virtual machine has a
+graphical interface through the I<graphics> element.
+
+=head2 BOOT
+
+Each B<boot> descriptor details how the virtual machine should be started
+on a certain hypervisor. The B<type> attribute of the B<boot> element,
+which can either be C<xen> or C<hvm>, depending on whether the boot
+descriptor is for a paravirtualized Xen(tm) guest or a fully-virtualized
+guest.
+
+The B<boot> element contains three subelements:
+
+=over 4
+
+=item The platform requirements of the guest
+
+The platform requirements, contained in the B<guest> element, consist of
+the B<arch> element and the I<features> element. The B<arch> element
+indicates the CPU architecture the guest expects, e.g. C<i686>, C<x86_64>,
+or C<ppc>.
+
+The I<features> element indicates whether certain platform features should
+be on or off. Currently, the platform features are I<pae>, I<acpi>, and
+I<apic>. They can be turned on or off by giving a I<state> attribute of
+either C<on> or C<off>. When a feature is mentioned in the I<features>
+element, it defaults to C<on>.
+
+=item The details of booting the image's operating system
+
+The B<os> element for fully-virtualized C<hvm> guests contains a B<loader>
+element whose B<dev> attribute indicates whether to boot off a hard disk
+(C<dev='hd'>) or off a CD-ROM (C<dev='cdrom'>)
+
+For paravirtualized guests, the B<os> element either contains a
+C<< <loader>pygrub</loader> >> element, indicating that the guest should be
+booted with F<pygrub>, or B<kernel>, I<initrd> and I<cmdline> elements. The
+contents of the B<kernel> and I<initrd> elements are the names of the
+kernel and initrd files, whereas the I<cmdline> element contains the
+command line that should be passed to the kernel on boot.
+
+=item The mapping of disk files as devices into the guest
+
+The mapping of disk files into the guest is performed by a list of B<drive>
+elements inside the B<boot> element. Each B<drive> element references the
+name of a disk file from the L</STORAGE> section through its B<disk>
+attribute and can optionally specify as what device that disk file should
+appear in the guest through its I<target> attribute. If the I<target> is
+omitted, device names are assigned in the order in which the B<drive>
+elements appear, skipping already assigned devices.
+
+=back
+
+=head1 STORAGE
+
+The B<storage> element lists the disk image files that are part of the
+virtual machine image in a list of one or more B<disk> elements. Each
+B<disk> element can contain the following attributes:
+
+=over 4
+
+=item *
+
+the B<file> attribute giving the name of the disk file
+
+=item *
+
+an optional I<id> attribute. The name given with that attribute is used to
+reference the disk from the B<drive> element of a B<boot> descriptor. If
+the I<id> attribute is missing, it defaults to the B<file> attribute.
+
+=item *
+
+the B<use> attribute indicating whether the disk file is a C<system>,
+C<user>, or C<scratch> disk. The B<use> attribute differentiates disk files
+so that an update based on replacing disk files can replace C<system>
+disks, but leave C<user> disks untouched.
+
+Generally, C<system> disks contain application code, C<user> disks contain
+the application's data, and C<scratch> disks contain temporary state that
+can be erased between runs of the guest.
+
+The virtual machine image must contain files for all C<system> disks, and
+may contain files for the C<user> and C<scratch> disks. If the latter are
+not part of the image, they are initialized as empty files when a guest is
+created, with the size given by the I<size> attribute.
+
+=item *
+
+the I<size> attribute giving the size of the disk in MB.
+
+=item *
+
+the I<format> attribute giving the format of the disk file. Currently, this
+can be one of: C<raw> C<iso>, C<qcow>, C<qcow2>, or C<vmdk>.
+
+=back
+
+=head1 EXAMPLE
+
+The image descriptor below can be used to create a virtual machine running
+the System Rescue CD (C<http://www.sysresccd.org/>) Besides the descriptor,
+you only need the ISO image from the System Rescue CD website.
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <image>
+      <name>sysresccd</name>
+      <domain>
+        <boot type="hvm">
+          <guest>
+            <arch>i686</arch>
+          </guest>
+          <os>
+            <loader dev="cdrom"/>
+          </os>
+          <drive disk="root.raw" target="hda"/>
+          <drive disk="sysresc"/>
+        </boot>
+        <devices>
+          <vcpu>1</vcpu>
+          <memory>262144</memory>
+          <interface/>
+          <graphics/>
+        </devices>
+      </domain>
+      <storage>
+        <disk file="root.raw" use="scratch" size="100" format="raw"/>
+        <disk id="sysresc" file="isos/systemrescuecd.iso"
+              use="system" format="iso"/>
+      </storage>
+    </image>
+
+To create a virtual machine, save the above XML in F<image.xml> and run:
+
+    # virt-image --vnc image.xml
+
+=head1 AUTHOR
+
+Written by David Lutterkort. See the AUTHORS file in the source distribution
+for the complete list of credits.
+
+=head1 BUGS
+
+Please see C<http://virt-manager.org/page/BugReporting>
+
+=head1 COPYRIGHT
+
+Copyright (C) 2006-2012 Red Hat, Inc, and various contributors.
+This is free software. You may redistribute copies of it under the terms
+of the GNU General Public License C<http://www.gnu.org/licenses/gpl.html>.
+There is NO WARRANTY, to the extent permitted by law.
+
+=head1 SEE ALSO
+
+L<virt-image(1)>, L<virt-install(1)>, the project website
+C<http://virt-manager.org>, the Relax-NG grammar for image XML C<image.rng>
+
+=cut
+

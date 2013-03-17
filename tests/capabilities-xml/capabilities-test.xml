@@ -1,0 +1,57 @@
+<capabilities>
+
+  <host>
+    <cpu>
+      <arch>i686</arch>
+      <features>
+        <pae/>
+        <nonpae/>
+      </features>
+    </cpu>
+    <topology>
+      <cells num='2'>
+        <cell id='0'>
+          <cpus num='8'>
+            <cpu id='0'/>
+            <cpu id='2'/>
+            <cpu id='4'/>
+            <cpu id='6'/>
+            <cpu id='8'/>
+            <cpu id='10'/>
+            <cpu id='12'/>
+            <cpu id='14'/>
+          </cpus>
+        </cell>
+        <cell id='1'>
+          <cpus num='8'>
+            <cpu id='1'/>
+            <cpu id='3'/>
+            <cpu id='5'/>
+            <cpu id='7'/>
+            <cpu id='9'/>
+            <cpu id='11'/>
+            <cpu id='13'/>
+            <cpu id='15'/>
+          </cpus>
+        </cell>
+      </cells>
+    </topology>
+    <secmodel>
+      <model>testSecurity</model>
+      <doi></doi>
+    </secmodel>
+  </host>
+
+
+  <guest>
+    <os_type>linux</os_type>
+    <arch name="i686">
+      <wordsize>32</wordsize>
+      <domain type="test"/>
+    </arch>
+    <features>
+      <pae/>
+      <nonpae/>
+    </features>
+  </guest>
+</capabilities>

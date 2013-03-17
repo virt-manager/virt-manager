@@ -1,0 +1,42 @@
+<capabilities>
+
+  <host>
+    <uuid>97e80381-494f-11cb-8e0e-cbc168f7d753</uuid>
+    <cpu>
+      <arch>x86_64</arch>
+    </cpu>
+    <topology>
+      <cells num='1'>
+        <cell id='0'>
+          <cpus num='2'>
+            <cpu id='0'/>
+            <cpu id='1'/>
+          </cpus>
+        </cell>
+      </cells>
+    </topology>
+  </host>
+
+  <guest>
+    <os_type>exe</os_type>
+    <arch name='x86_64'>
+      <wordsize>64</wordsize>
+      <emulator>/usr/libexec/libvirt_lxc</emulator>
+      <domain type='lxc'>
+      </domain>
+    </arch>
+  </guest>
+
+  <guest>
+    <os_type>exe</os_type>
+    <arch name='i686'>
+      <wordsize>32</wordsize>
+      <emulator>/usr/libexec/libvirt_lxc</emulator>
+      <domain type='lxc'>
+      </domain>
+    </arch>
+  </guest>
+
+</capabilities>
+
+

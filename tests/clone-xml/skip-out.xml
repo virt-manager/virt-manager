@@ -1,0 +1,46 @@
+<domain type="kvm">
+  <name>clone-new</name>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <memory>262144</memory>
+  <currentMemory>262144</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch="i686" machine="pc">hvm</type>
+    <boot dev="cdrom"/>
+  </os>
+  <features>
+    <acpi/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <emulator>/usr/bin/qemu-kvm</emulator>
+    <disk type="file" device="disk">
+      <source file="/tmp/virtinst-test1.img"/>
+      <target dev="hda" bus="ide"/>
+    </disk>
+    <disk type="file" device="floppy">
+      <target dev="fdb" bus="fdc"/>
+    </disk>
+    <disk type="block" device="cdrom">
+      <target dev="sda" bus="scsi"/>
+      <readonly/>
+    </disk>
+    <disk type="block" device="disk">
+      <target dev="sdb" bus="scsi"/>
+      <source dev="/dev/loop0"/>
+    </disk>
+    <interface type="network">
+      <mac address="22:23:45:67:89:00"/>
+      <source network="test1"/>
+    </interface>
+    <interface type="network">
+      <mac address="22:23:45:67:89:01"/>
+      <source network="test2"/>
+    </interface>
+    <input type="mouse" bus="ps2"/>
+    <graphics type="vnc" port="-1" autoport="yes" listen="127.0.0.1"/>
+  </devices>
+</domain>

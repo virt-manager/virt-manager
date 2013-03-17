@@ -1,0 +1,30 @@
+<domain type="kvm">
+  <name>TestGuest</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <os>
+    <type arch="i686">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <vcpu cpuset="1-3">4</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type="block" device="cdrom">
+      <target dev="hdc" bus="ide"/>
+      <readonly/>
+    </disk>
+  </devices>
+  <features>
+    <acpi/>
+  </features>
+  <clock offset="utc"/>
+  <seclabel model="testSecurity" type="static">
+    <label>frob</label>
+  </seclabel>
+  <cpu match="exact">
+    <model>foobar</model>
+    <topology cores="4" sockets="1" threads="1"/>
+    <feature policy="forbid" name="x2apic"/>
+  </cpu>
+</domain>

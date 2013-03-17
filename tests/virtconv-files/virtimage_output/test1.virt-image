@@ -1,0 +1,29 @@
+<image>
+ <name>test-image</name>
+ <label>test-image</label>
+ <description></description>
+ <domain>
+  <boot type="hvm">
+   <guest>
+    <arch>i686</arch>
+   </guest>
+   <os>
+    <loader dev="hd"/>
+   </os>
+   <drive disk="root.raw" target="hda"/>
+   <drive disk="data.raw" target="hdb"/>
+   <drive disk="scratch.raw" target="hdc"/>
+  </boot>
+  <devices>
+   <vcpu>7</vcpu>
+   <memory>262144</memory>
+   <interface/>
+   <graphics/>
+  </devices>
+ </domain>
+ <storage>
+  <disk file="root.raw" use="system" format="raw"/>
+  <disk file="data.raw" use="system" format="raw"/>
+  <disk file="scratch.raw" use="system" format="raw"/>
+ </storage>
+</image>

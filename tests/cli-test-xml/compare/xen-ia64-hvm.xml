@@ -1,0 +1,72 @@
+<domain type='xen'>
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch='ia64'>hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <kernel>./virtinst-vmlinuz.</kernel>
+    <initrd>./virtinst-initrd.img.</initrd>
+    <cmdline>method=tests/cli-test-xml/faketree</cmdline>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>destroy</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type='file' device='disk'>
+      <source file='/tmp/__virtinst_cli_exist1.img'/>
+      <target dev='hda' bus='ide'/>
+    </disk>
+    <interface type='user'>
+      <mac address='00:11:22:33:44:55'/>
+    </interface>
+    <input type='mouse' bus='ps2'/>
+    <graphics type='vnc' port='-1' keymap='en-us'/>
+    <console type='pty'/>
+    <video>
+      <model type='cirrus'/>
+    </video>
+  </devices>
+</domain>
+<domain type='xen'>
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch='ia64'>hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type='file' device='disk'>
+      <source file='/tmp/__virtinst_cli_exist1.img'/>
+      <target dev='hda' bus='ide'/>
+    </disk>
+    <interface type='user'>
+      <mac address='00:11:22:33:44:55'/>
+    </interface>
+    <input type='mouse' bus='ps2'/>
+    <graphics type='vnc' port='-1' keymap='en-us'/>
+    <console type='pty'/>
+    <video>
+      <model type='cirrus'/>
+    </video>
+  </devices>
+</domain>

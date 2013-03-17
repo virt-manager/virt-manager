@@ -1,0 +1,20 @@
+<interface type='bridge' name='test-bridge'>
+  <bridge stp='off' delay='7'>
+    <interface type='ethernet' name='vlaneth1'>
+    </interface>
+    <interface type='bond' name='bond-brbond'>
+      <start mode='none'/>
+      <bond mode='active-backup'>
+        <miimon freq='100' updelay='10' carrier='ioctl'/>
+        <interface type='ethernet' name='brbond-eth0'>
+        </interface>
+        <interface type='ethernet' name='brbond-eth1'>
+        </interface>
+      </bond>
+    </interface>
+    <interface type='ethernet' name='eth0'>
+      <start mode='none'/>
+      <mac address='00:FF:EE:FF:EE:FF'/>
+    </interface>
+  </bridge>
+</interface>

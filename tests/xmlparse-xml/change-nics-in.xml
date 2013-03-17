@@ -1,0 +1,51 @@
+<domain type="xen">
+  <name>TestGuest</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <os>
+    <type arch="i686">hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev="network"/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu>5</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <interface type="user">
+      <mac address="22:11:11:11:11:11"/>
+    </interface>
+    <interface type="network">
+      <source network="default"/>
+      <mac address="22:22:33:44:55:66"/>
+      <model type="e1000"/>
+    </interface>
+    <interface type="bridge">
+      <source bridge="foobr0"/>
+      <mac address="22:22:22:22:22:22"/>
+    </interface>
+    <interface type="ethernet">
+      <mac address="00:11:22:33:44:55"/>
+      <source dev="eth0"/>
+      <script path="/etc/qemu-ifup"/>
+      <target dev="nic02"/>
+    </interface>
+    <interface type="direct">
+      <mac address="00:11:22:33:44:55"/>
+      <source dev="eth0.1" mode="vepa"/>
+      <virtualport type="802.1Qbg">
+        <parameters managerid="12" typeid="1193046" typeidversion="1" instanceid="09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b"/>
+      </virtualport>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x07" function="0x0"/>
+    </interface>
+    <input type="mouse" bus="ps2"/>
+    <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
+    <console type="pty"/>
+  </devices>
+</domain>

@@ -1,0 +1,30 @@
+<domain type="xen">
+  <name>TestGuest</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <description>foooo barrrr somedesc</description>
+  <os>
+    <type arch="i686">hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="localtime"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu>5</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <controller type="ide" index="3"/>
+    <controller type="virtio-serial" index="0" ports="32" vectors="17"/>
+    <controller type="scsi" index="1"/>
+    <controller type='usb' index='3' model='ich9-uhci3'>
+      <master startport='4'/>
+      <address type='pci' domain='0' bus='0' slot='4' function='2'/>
+    </controller>
+  </devices>
+</domain>

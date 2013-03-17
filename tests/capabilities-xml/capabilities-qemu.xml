@@ -1,0 +1,75 @@
+<capabilities>
+  <host>
+    <cpu>
+      <arch>x86_64</arch>
+    </cpu>
+    <secmodel>
+      <model>selinux</model>
+      <doi>0</doi>
+    </secmodel>
+  </host>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name="x86_64">
+      <wordsize>64</wordsize>
+      <emulator>/usr/bin/qemu-system-x86_64</emulator>
+      <domain type="qemu"/>
+      <machine>pc</machine>
+      <machine>isapc</machine>
+    </arch>
+  </guest>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name="i686">
+      <wordsize>32</wordsize>
+      <emulator>/usr/bin/qemu</emulator>
+      <domain type="qemu"/>
+      <machine>pc</machine>
+      <machine>isapc</machine>
+    </arch>
+  </guest>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name="mips">
+      <wordsize>32</wordsize>
+      <emulator>/usr/bin/qemu-system-mips</emulator>
+      <domain type="qemu"/>
+      <machine>mips</machine>
+    </arch>
+  </guest>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name="mipsel">
+      <wordsize>32</wordsize>
+      <emulator>/usr/bin/qemu-system-mipsel</emulator>
+      <domain type="qemu"/>
+      <machine>mips</machine>
+    </arch>
+  </guest>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name="sparc">
+      <wordsize>32</wordsize>
+      <emulator>/usr/bin/qemu-system-sparc</emulator>
+      <domain type="qemu"/>
+      <machine>sun4m</machine>
+    </arch>
+  </guest>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name="ppc">
+      <wordsize>32</wordsize>
+      <emulator>/usr/bin/qemu-system-ppc</emulator>
+      <domain type="qemu"/>
+      <machine>g3bw</machine>
+      <machine>mac99</machine>
+      <machine>prep</machine>
+    </arch>
+  </guest>
+</capabilities>

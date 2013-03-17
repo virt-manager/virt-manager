@@ -1,0 +1,21 @@
+<domain type='lxc'>
+  <name>foolxc</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch='x86_64'>exe</type>
+    <init>/bin/sh</init>
+  </os>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/libexec/libvirt_lxc</emulator>
+    <interface type='user'>
+      <mac address='00:11:22:33:44:55'/>
+    </interface>
+    <console type='pty'/>
+  </devices>
+</domain>

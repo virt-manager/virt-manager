@@ -1,0 +1,1564 @@
+<node>
+
+  <cpu>
+    <nodes>1</nodes>
+    <sockets>4</sockets>
+    <cores>4</cores>
+    <threads>1</threads>
+    <active>4</active>
+    <mhz>4000</mhz>
+    <model>i686</model>
+  </cpu>
+  <memory>10000000</memory>
+
+<domain type='test'>
+  <name>test</name>
+  <uuid>4a64cc71-19c4-2fd0-2323-3050941ea3c3</uuid>
+  <memory>8388608</memory>
+  <currentMemory>2097152</currentMemory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch='i686'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+  </devices>
+</domain>
+
+<domain type='test'>
+  <name>test-clone-simple</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-FFFF-1234-12345678FFFF</uuid>
+  <os>
+    <type arch='i686'>hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu>5</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type='file' device='disk'>
+      <source file='/default-pool/test-clone-simple.img'/>
+      <target dev='hda' bus='ide'/>
+    </disk>
+    <interface type='user'>
+      <mac address='22:11:11:11:11:11'/>
+    </interface>
+    <parallel type='file'>
+      <source path='/tmp/foo.log'/>
+    </parallel>
+  </devices>
+</domain>
+
+<domain type='test'>
+  <name>test-for-clone</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-1234-1234-12345678FFFF</uuid>
+  <os>
+    <type arch='i686'>hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu>5</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type='block' device='disk'>
+      <source dev='/disk-pool/diskvol1'/>
+      <target dev='sda' bus='scsi'/>
+    </disk>
+    <disk type='block' device='cdrom'>
+      <target dev='sdb' bus='scsi'/>
+    </disk>
+    <disk type='block' device='disk'>
+      <source dev='/default-pool/collidevol1.img'/>
+      <target dev='sdc' bus='scsi'/>
+      <readonly/>
+    </disk>
+    <disk type='file' device='disk'>
+      <source file='/default-pool/default-vol'/>
+      <target dev='sdd' bus='scsi'/>
+      <driver name="qemu" type="qcow2"/>
+    </disk>
+    <disk type='block' device='disk'>
+      <source dev='/default-pool/sharevol.img'/>
+      <target dev='sdx' bus='scsi'/>
+      <shareable/>
+    </disk>
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='22:22:33:12:34:AB'/>
+      <model type='e1000'/>
+    </interface>
+    <interface type='user'>
+      <mac address='22:11:11:11:11:11'/>
+    </interface>
+    <parallel type='file'>
+      <source path='/tmp/foo.log'/>
+    </parallel>
+  </devices>
+</domain>
+
+<network>
+  <name>default</name>
+  <uuid>715666b7-dbd4-6c78-fa55-94863da09f2d</uuid>
+  <forward mode='nat'/>
+  <bridge name='virbr0' stp='on' forwardDelay='0' />
+  <ip address='192.168.122.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.122.2' end='192.168.122.254' />
+    </dhcp>
+  </ip>
+</network>
+
+<network>
+  <name>route</name>
+  <uuid>715666b7-aaaa-6c78-fa55-94863da09f2d</uuid>
+  <forward mode='route'/>
+  <ip address='192.168.123.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.123.2' end='192.168.123.254' />
+    </dhcp>
+  </ip>
+</network>
+
+<pool type='dir'>
+  <name>default-pool</name>
+  <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e53fe</uuid>
+  <capacity>107374182400</capacity>
+  <allocation>0</allocation>
+  <available>107374182400</available>
+  <source>
+  </source>
+  <target>
+    <path>/default-pool</path>
+    <permissions>
+      <mode>0700</mode>
+      <owner>10736</owner>
+      <group>10736</group>
+    </permissions>
+  </target>
+
+  <volume>
+    <name>default-vol</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='qcow2'/>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+  <volume>
+    <name>iso-vol</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='iso'/>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+  <volume>
+    <name>bochs-vol</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='bochs'/>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+  <volume>
+    <name>testvol1.img</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='qcow2'/>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+  <volume>
+    <name>testvol2.img</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='qcow2'/>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+  <volume>
+    <name>UPPER</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+  <volume>
+    <name>test-clone-simple.img</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+  <volume>
+    <name>collidevol1.img</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target/>
+  </volume>
+  <volume>
+    <name>sharevol.img</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target/>
+  </volume>
+</pool>
+
+<pool type='dir'>
+  <name>inactive-pool</name>
+  <uuid>35bb2aaa-388a-cdfe-461a-b8907f6e53fe</uuid>
+  <capacity>107374182400</capacity>
+  <allocation>0</allocation>
+  <available>107374182400</available>
+  <source>
+  </source>
+  <target>
+    <path>/inactive-pool</path>
+    <permissions>
+      <mode>0700</mode>
+      <owner>10736</owner>
+      <group>10736</group>
+    </permissions>
+  </target>
+
+  <volume>
+    <name>inactive-vol</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='qcow2'/>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+</pool>
+
+<pool type='dir'>
+  <name>cross-pool</name>
+  <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e5abc</uuid>
+  <capacity>107374182400</capacity>
+  <allocation>0</allocation>
+  <available>107374182400</available>
+  <source>
+  </source>
+  <target>
+    <path>/cross-pool</path>
+    <permissions>
+      <mode>0700</mode>
+      <owner>10736</owner>
+      <group>10736</group>
+    </permissions>
+  </target>
+  <volume>
+    <name>testvol1.img</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+  <volume>
+    <name>testvol2.img</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+</pool>
+
+<pool type='logical'>
+  <name>disk-pool</name>
+  <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e5aaa</uuid>
+  <capacity>107374182400</capacity>
+  <allocation>0</allocation>
+  <available>107374182400</available>
+  <source>
+  </source>
+  <target>
+    <path>/disk-pool</path>
+    <permissions>
+      <mode>0700</mode>
+      <owner>10736</owner>
+      <group>10736</group>
+    </permissions>
+  </target>
+
+  <volume>
+    <name>diskvol1</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+</pool>
+
+<pool type='iscsi'>
+  <name>iscsi-pool</name>
+  <uuid>abcdead9-388a-cdfe-461a-b8907f6e5aaa</uuid>
+  <capacity>107374182400</capacity>
+  <allocation>0</allocation>
+  <available>107374182400</available>
+  <source>
+    <host name="iscsi.example.com"/>
+    <device path="demo-target"/>
+    <auth type='chap' login='foobar' passwd='frobbar'/>
+  </source>
+  <target>
+    <path>/iscsi-pool</path>
+    <permissions>
+      <mode>0700</mode>
+      <owner>10736</owner>
+      <group>10736</group>
+    </permissions>
+  </target>
+
+  <volume>
+    <name>diskvol1</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='unknown'/>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+</pool>
+
+<pool type='dir'>
+  <name>full-pool</name>
+  <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e5555</uuid>
+  <capacity>1</capacity>
+  <allocation>1</allocation>
+  <available>0</available>
+  <source>
+  </source>
+  <target>
+    <path>/full-pool</path>
+    <permissions>
+      <mode>0700</mode>
+      <owner>10736</owner>
+      <group>10736</group>
+    </permissions>
+  </target>
+  <volume>
+    <name>testvol1.img</name>
+    <capacity>107374182400</capacity>
+    <allocation>107374182400</allocation>
+    <target>
+      <format type='qcow2'/>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+</pool>
+
+<pool type='disk'>
+  <name>halffull-pool</name>
+  <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e5444</uuid>
+  <capacity>3000</capacity>
+  <allocation>3000</allocation>
+  <available>0</available>
+  <source>
+    <device path='/dev/hda'/>
+  </source>
+  <target>
+    <path>/halffull-pool</path>
+    <permissions>
+      <mode>0700</mode>
+      <owner>10736</owner>
+      <group>10736</group>
+    </permissions>
+  </target>
+  <volume>
+    <name>testvol1.img</name>
+    <capacity>1000</capacity>
+    <allocation>1000</allocation>
+    <target>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+  <volume>
+    <name>testvol2.img</name>
+    <capacity>1000</capacity>
+    <allocation>1000</allocation>
+    <target>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+</pool>
+
+<device>
+  <name>computer</name>
+  <capability type='system'>
+    <hardware>
+      <vendor>LENOVO</vendor>
+      <version>ThinkPad T61</version>
+      <serial>L3B2616</serial>
+      <uuid>97e80381-494f-11cb-8e0e-cbc168f7d753</uuid>
+    </hardware>
+    <firmware>
+      <vendor>LENOVO</vendor>
+      <version>7LET51WW (1.21 )</version>
+      <release_date>08/22/2007</release_date>
+    </firmware>
+  </capability>
+</device>
+
+
+<device>
+  <name>net_00_1c_25_10_b1_e4</name>
+  <parent>pci_8086_1049</parent>
+  <capability type='net'>
+    <interface>eth0</interface>
+    <address>00:1c:25:10:b1:e4</address>
+    <capability type='80203'/>
+  </capability>
+</device>
+
+
+<device>
+  <name>net_00_1c_bf_04_29_a4</name>
+  <parent>pci_8086_4227</parent>
+  <capability type='net'>
+    <interface>wlan0</interface>
+    <address>00:1c:bf:04:29:a4</address>
+    <capability type='80211'/>
+  </capability>
+</device>
+
+
+<device>
+  <name>net_00_1c_bf_04_29_a4_0</name>
+  <parent>pci_8086_4227</parent>
+  <capability type='net'>
+    <interface>wmaster0</interface>
+    <address>00:1c:bf:04:29:a4</address>
+  </capability>
+</device>
+
+
+<device>
+  <name>net_3e_79_a5_6f_37_c3</name>
+  <parent>computer</parent>
+  <capability type='net'>
+    <interface>virbr0</interface>
+    <address>3e:79:a5:6f:37:c3</address>
+  </capability>
+</device>
+
+
+<device>
+  <name>net_computer_loopback</name>
+  <parent>computer</parent>
+  <capability type='net'>
+    <interface>lo</interface>
+    <address>00:00:00:00:00:00</address>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_1180_476</name>
+  <parent>pci_8086_2448</parent>
+  <driver>
+    <name>yenta_cardbus</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>21</bus>
+    <slot>0</slot>
+    <function>0</function>
+    <product id='0x0476'>RL5c476 II</product>
+    <vendor id='0x1180'>Ricoh Co Ltd</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_1180_592</name>
+  <parent>pci_8086_2448</parent>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>21</bus>
+    <slot>0</slot>
+    <function>4</function>
+    <product id='0x0592'>R5C592 Memory Stick Bus Host Adapter</product>
+    <vendor id='0x1180'>Ricoh Co Ltd</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_1180_822</name>
+  <parent>pci_8086_2448</parent>
+  <driver>
+    <name>sdhci-pci</name>
+  </driver>
+  <capability type='pci'>
+    <domain>2</domain>
+    <bus>21</bus>
+    <slot>0</slot>
+    <function>2</function>
+    <product id='0x0822'>R5C822 SD/SDIO/MMC/MS/MSPro Host Adapter</product>
+    <vendor id='0x1180'>Ricoh Co Ltd</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_1180_832</name>
+  <parent>pci_8086_2448</parent>
+  <driver>
+    <name>firewire_ohci</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>21</bus>
+    <slot>0</slot>
+    <function>1</function>
+    <product id='0x0832'>R5C832 IEEE 1394 Controller</product>
+    <vendor id='0x1180'>Ricoh Co Ltd</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_1180_843</name>
+  <parent>pci_8086_2448</parent>
+  <driver>
+    <name>ricoh-mmc</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>21</bus>
+    <slot>0</slot>
+    <function>3</function>
+    <product id='0x0843'>R5C843 MMC Host Controller</product>
+    <vendor id='0x1180'>Ricoh Co Ltd</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_1180_852</name>
+  <parent>pci_8086_2448</parent>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>21</bus>
+    <slot>0</slot>
+    <function>5</function>
+    <product id='0x0852'>xD-Picture Card Controller</product>
+    <vendor id='0x1180'>Ricoh Co Ltd</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_1049</name>
+  <parent>computer</parent>
+  <driver>
+    <name>e1000e</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>25</slot>
+    <function>0</function>
+    <product id='0x1049'>82566MM Gigabit Network Connection</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2448</name>
+  <parent>computer</parent>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>30</slot>
+    <function>0</function>
+    <product id='0x2448'>82801 Mobile PCI Bridge</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2811</name>
+  <parent>computer</parent>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>31</slot>
+    <function>0</function>
+    <product id='0x2811'>82801HBM (ICH8M-E) LPC Interface Controller</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2829</name>
+  <parent>computer</parent>
+  <driver>
+    <name>ahci</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>31</slot>
+    <function>2</function>
+    <product id='0x2829'>82801HBM/HEM (ICH8M/ICH8M-E) SATA AHCI Controller</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2829_scsi_host</name>
+  <parent>pci_8086_2829</parent>
+  <capability type='scsi_host'>
+    <host>0</host>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2829_scsi_host_0</name>
+  <parent>pci_8086_2829</parent>
+  <capability type='scsi_host'>
+    <host>1</host>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2829_scsi_host_1</name>
+  <parent>pci_8086_2829</parent>
+  <capability type='scsi_host'>
+    <host>2</host>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2829_scsi_host_scsi_device_lun0</name>
+  <parent>pci_8086_2829_scsi_host</parent>
+  <driver>
+    <name>sd</name>
+  </driver>
+  <capability type='scsi'>
+    <host>0</host>
+    <bus>0</bus>
+    <target>0</target>
+    <lun>0</lun>
+    <type>disk</type>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2829_scsi_host_scsi_host</name>
+  <parent>pci_8086_2829_scsi_host</parent>
+  <capability type='scsi_host'>
+    <host>0</host>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2830</name>
+  <parent>computer</parent>
+  <driver>
+    <name>uhci_hcd</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>29</slot>
+    <function>0</function>
+    <product id='0x2830'>82801H (ICH8 Family) USB UHCI Controller #1</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2831</name>
+  <parent>computer</parent>
+  <driver>
+    <name>uhci_hcd</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>29</slot>
+    <function>1</function>
+    <product id='0x2831'>82801H (ICH8 Family) USB UHCI Controller #2</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2832</name>
+  <parent>computer</parent>
+  <driver>
+    <name>uhci_hcd</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>29</slot>
+    <function>2</function>
+    <product id='0x2832'>82801H (ICH8 Family) USB UHCI Controller #3</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2834</name>
+  <parent>computer</parent>
+  <driver>
+    <name>uhci_hcd</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>26</slot>
+    <function>0</function>
+    <product id='0x2834'>82801H (ICH8 Family) USB UHCI Controller #4</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2835</name>
+  <parent>computer</parent>
+  <driver>
+    <name>uhci_hcd</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>26</slot>
+    <function>1</function>
+    <product id='0x2835'>82801H (ICH8 Family) USB UHCI Controller #5</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2836</name>
+  <parent>computer</parent>
+  <driver>
+    <name>ehci_hcd</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>29</slot>
+    <function>7</function>
+    <product id='0x2836'>82801H (ICH8 Family) USB2 EHCI Controller #1</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_283a</name>
+  <parent>computer</parent>
+  <driver>
+    <name>ehci_hcd</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>26</slot>
+    <function>7</function>
+    <product id='0x283a'>82801H (ICH8 Family) USB2 EHCI Controller #2</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_283e</name>
+  <parent>computer</parent>
+  <driver>
+    <name>i801_smbus</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>31</slot>
+    <function>3</function>
+    <product id='0x283e'>82801H (ICH8 Family) SMBus Controller</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_283f</name>
+  <parent>computer</parent>
+  <driver>
+    <name>pcieport-driver</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>28</slot>
+    <function>0</function>
+    <product id='0x283f'>82801H (ICH8 Family) PCI Express Port 1</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2841</name>
+  <parent>computer</parent>
+  <driver>
+    <name>pcieport-driver</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>28</slot>
+    <function>1</function>
+    <product id='0x2841'>82801H (ICH8 Family) PCI Express Port 2</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2843</name>
+  <parent>computer</parent>
+  <driver>
+    <name>pcieport-driver</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>28</slot>
+    <function>2</function>
+    <product id='0x2843'>82801H (ICH8 Family) PCI Express Port 3</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2845</name>
+  <parent>computer</parent>
+  <driver>
+    <name>pcieport-driver</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>28</slot>
+    <function>3</function>
+    <product id='0x2845'>82801H (ICH8 Family) PCI Express Port 4</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2847</name>
+  <parent>computer</parent>
+  <driver>
+    <name>pcieport-driver</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>28</slot>
+    <function>4</function>
+    <product id='0x2847'>82801H (ICH8 Family) PCI Express Port 5</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_284b</name>
+  <parent>computer</parent>
+  <driver>
+    <name>HDA Intel</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>27</slot>
+    <function>0</function>
+    <product id='0x284b'>82801H (ICH8 Family) HD Audio Controller</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2850</name>
+  <parent>computer</parent>
+  <driver>
+    <name>ata_piix</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>31</slot>
+    <function>1</function>
+    <product id='0x2850'>82801HBM/HEM (ICH8M/ICH8M-E) IDE Controller</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2850_scsi_host</name>
+  <parent>pci_8086_2850</parent>
+  <capability type='scsi_host'>
+    <host>3</host>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2850_scsi_host_0</name>
+  <parent>pci_8086_2850</parent>
+  <capability type='scsi_host'>
+    <host>4</host>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2850_scsi_host_scsi_device_lun0</name>
+  <parent>pci_8086_2850_scsi_host</parent>
+  <driver>
+    <name>sr</name>
+  </driver>
+  <capability type='scsi'>
+    <host>3</host>
+    <bus>0</bus>
+    <target>0</target>
+    <lun>0</lun>
+    <type>cdrom</type>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2850_scsi_host_scsi_host</name>
+  <parent>pci_8086_2850_scsi_host</parent>
+  <capability type='scsi_host'>
+    <host>3</host>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2a00</name>
+  <parent>computer</parent>
+  <driver>
+    <name>agpgart-intel</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>0</slot>
+    <function>0</function>
+    <product id='0x2a00'>Mobile PM965/GM965/GL960 Memory Controller Hub</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2a02</name>
+  <parent>computer</parent>
+  <driver>
+    <name>i915</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>2</slot>
+    <function>0</function>
+    <product id='0x2a02'>Mobile GM965/GL960 Integrated Graphics Controller</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2a03</name>
+  <parent>computer</parent>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>2</slot>
+    <function>1</function>
+    <product id='0x2a03'>Mobile GM965/GL960 Integrated Graphics Controller</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2a04</name>
+  <parent>computer</parent>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>3</slot>
+    <function>0</function>
+    <product id='0x2a04'>Mobile PM965/GM965 MEI Controller</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2a06</name>
+  <parent>computer</parent>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>3</slot>
+    <function>2</function>
+    <product id='0x2a06'>Mobile PM965/GM965 PT IDER Controller</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_2a07</name>
+  <parent>computer</parent>
+  <driver>
+    <name>serial</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>3</slot>
+    <function>3</function>
+    <product id='0x2a07'>Mobile PM965/GM965 KT Controller</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>pci_8086_4227</name>
+  <parent>pci_8086_2841</parent>
+  <driver>
+    <name>iwl3945</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>3</bus>
+    <slot>0</slot>
+    <function>0</function>
+    <product id='0x4227'>PRO/Wireless 3945ABG [Golan] Network Connection</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+<device>
+  <name>storage_serial_SATA_WDC_WD1600AAJS__WD_WCAP95119685</name>
+  <parent>pci_8086_27c0_scsi_host_scsi_device_lun0</parent>
+  <capability type='storage'>
+    <block>/dev/sda</block>
+    <bus>scsi</bus>
+    <drive_type>disk</drive_type>
+    <model>WDC WD1600AAJS-2</model>
+    <vendor>ATA</vendor>
+    <size>160041885696</size>
+  </capability>
+</device>
+
+<device>
+  <name>storage_serial_SanDisk_Cruzer_Micro_2004453082054CA1BEEE_0_0</name>
+  <parent>usb_device_781_5151_2004453082054CA1BEEE_if0_scsi_host_0_scsi_device_lun0</parent>
+  <capability type='storage'>
+    <block>/dev/sdb</block>
+    <bus>usb</bus>
+    <drive_type>disk</drive_type>
+    <model>Cruzer Micro</model>
+    <vendor>SanDisk</vendor>
+    <capability type='removable'>
+      <media_available>1</media_available>
+      <media_size>12345678</media_size>
+      <media_label>foobar</media_label>
+    </capability>
+    <capability type='hotpluggable' />
+  </capability>
+</device>
+
+<device>
+  <name>storage_model_DVDRAM_GSA_U10N</name>
+  <parent>pci_8086_2850_scsi_host_scsi_device_lun0</parent>
+  <capability type='storage'>
+    <block>/dev/sr0</block>
+    <bus>pci</bus>
+    <drive_type>cdrom</drive_type>
+    <model>DVDRAM GSA-U10N</model>
+    <vendor>HL-DT-ST</vendor>
+    <capability type='removable'>
+      <media_available>0</media_available>
+      <media_size>0</media_size>
+    </capability>
+  </capability>
+</device>
+
+
+<device>
+  <name>storage_serial_ST910021AS_5MH04L87</name>
+  <parent>pci_8086_2829_scsi_host_scsi_device_lun0</parent>
+  <capability type='storage'>
+    <block>/dev/sda</block>
+    <bus>pci</bus>
+    <drive_type>disk</drive_type>
+    <model>ST910021AS</model>
+    <vendor>ATA</vendor>
+    <serial>ST910021AS_5MH04L87</serial>
+    <size>100030242816</size>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_1d6b_1_0000_00_1d_1</name>
+  <parent>pci_8086_2831</parent>
+  <driver>
+    <name>usb</name>
+  </driver>
+  <capability type='usb_device'>
+    <bus>6</bus>
+    <device>1</device>
+    <product id='0x0001'>1.1 root hub</product>
+    <vendor id='0x1d6b'>Linux Foundation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_1d6b_1_0000_00_1d_1_if0</name>
+  <parent>usb_device_1d6b_1_0000_00_1d_1</parent>
+  <driver>
+    <name>hub</name>
+  </driver>
+  <capability type='usb'>
+    <number>0</number>
+    <class>9</class>
+    <subclass>0</subclass>
+    <protocol>0</protocol>
+  </capability>
+</device>
+
+<device>
+  <name>usb_device_781_5151_2004453082054CA1BEEE</name>
+  <parent>usb_device_1d6b_2_0000_00_1a_7</parent>
+  <capability type='usb_device'>
+    <bus>1</bus>
+    <device>4</device>
+    <product id='0x5151'>Cruzer Micro 256/512MB Flash Drive</product>
+    <vendor id='0x0781'>SanDisk Corp.</vendor>
+  </capability>
+</device>
+
+<device>
+  <name>usb_device_1d6b_2_0000_00_1d_7</name>
+  <parent>pci_8086_2836</parent>
+  <driver>
+    <name>usb</name>
+  </driver>
+  <capability type='usb_device'>
+    <bus>2</bus>
+    <device>1</device>
+    <product id='0x0002'>2.0 root hub</product>
+    <vendor id='0x1d6b'>Linux Foundation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_1d6b_2_0000_00_1d_7_if0</name>
+  <parent>usb_device_1d6b_2_0000_00_1d_7</parent>
+  <driver>
+    <name>hub</name>
+  </driver>
+  <capability type='usb'>
+    <number>0</number>
+    <class>9</class>
+    <subclass>0</subclass>
+    <protocol>0</protocol>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_483_2016_noserial</name>
+  <parent>usb_device_1d6b_1_0000_00_1a_0</parent>
+  <driver>
+    <name>usb</name>
+  </driver>
+  <capability type='usb_device'>
+    <bus>3</bus>
+    <device>2</device>
+    <product id='0x2016'>Fingerprint Reader</product>
+    <vendor id='0x0483'>SGS Thomson Microelectronics</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_483_2016_noserial_if0</name>
+  <parent>usb_device_483_2016_noserial</parent>
+  <capability type='usb'>
+    <number>0</number>
+    <class>255</class>
+    <subclass>0</subclass>
+    <protocol>0</protocol>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_4b3_4485_noserial</name>
+  <parent>usb_device_1d6b_2_0000_00_1a_7</parent>
+  <driver>
+    <name>usb</name>
+  </driver>
+  <capability type='usb_device'>
+    <bus>1</bus>
+    <device>3</device>
+    <product id='0x4485'>Serial Converter</product>
+    <vendor id='0x04b3'>IBM Corp.</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_4b3_4485_noserial_if0</name>
+  <parent>usb_device_4b3_4485_noserial</parent>
+  <driver>
+    <name>hub</name>
+  </driver>
+  <capability type='usb'>
+    <number>0</number>
+    <class>9</class>
+    <subclass>0</subclass>
+    <protocol>2</protocol>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_62a_1_noserial</name>
+  <parent>usb_device_4b3_4485_noserial</parent>
+  <driver>
+    <name>usb</name>
+  </driver>
+  <capability type='usb_device'>
+    <bus>1</bus>
+    <device>4</device>
+    <product id='0x0001'>Notebook Optical Mouse</product>
+    <vendor id='0x062a'>Creative Labs</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_62a_1_noserial_if0</name>
+  <parent>usb_device_62a_1_noserial</parent>
+  <driver>
+    <name>usbhid</name>
+  </driver>
+  <capability type='usb'>
+    <number>0</number>
+    <class>3</class>
+    <subclass>1</subclass>
+    <protocol>2</protocol>
+  </capability>
+</device>
+
+<!-- NPIV and fibrechannel -->
+
+<device>
+  <name>pci_8086_25f8</name>
+  <parent>computer</parent>
+  <driver>
+    <name>pcieport-driver</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>4</slot>
+    <function>0</function>
+    <product id='0x25f8'>5000 Series Chipset PCI Express x8 Port 4-5</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+<device>
+  <name>pci_10df_fe00_0</name>
+  <parent>pci_8086_25f8</parent>
+  <driver>
+    <name>lpfc</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>16</bus>
+    <slot>0</slot>
+    <function>1</function>
+    <product id='0xfe00'>Zephyr-X LightPulse Fibre Channel Host Adapter</product>
+    <vendor id='0x10df'>Emulex Corporation</vendor>
+  </capability>
+</device>
+
+<device>
+  <name>pci_10df_fe00_0_scsi_host</name>
+  <parent>pci_10df_fe00_0</parent>
+  <capability type='scsi_host'>
+    <host>4</host>
+    <capability type='fc_host'>
+      <wwnn>20000000c9848141</wwnn>
+      <wwpn>10000000c9848141</wwpn>
+    </capability>
+    <capability type='vport_ops' />
+  </capability>
+</device>
+
+<!-- End NPIV block -->
+
+<!-- Interfaces -->
+
+<interface type='ethernet' name='eth0'>
+  <start mode='none'/>
+  <mac address='00:FF:EE:FF:EE:FF'/>
+</interface>
+<interface type='ethernet' name='eth1'>
+  <mac address='00:FF:EE:FF:EE:AB'/>
+</interface>
+<interface type='ethernet' name='eth2'>
+  <start mode='hotplug'/>
+  <mac address='00:FF:EE:FF:EE:CD'/>
+</interface>
+
+<interface type='ethernet' name='lo'>
+  <start mode='onboot'/>
+  <protocol family='ipv4'>
+    <ip address='127.0.0.1' prefix='8'/>
+  </protocol>
+</interface>
+
+<interface type='ethernet' name='wlan0'>
+  <start mode='none'/>
+  <mac address='00:AA:CC:BB:AA:BB'/>
+</interface>
+
+<!-- backup bond -->
+<interface type="bond" name="bond0">
+  <start mode="none"/>
+  <protocol family="ipv4">
+    <ip address="192.168.50.7" prefix="24"/>
+    <route gateway="192.168.50.1"/>
+  </protocol>
+  <bond mode="active-backup">
+    <miimon freq="100" updelay="10" carrier="ioctl"/>
+    <interface type="ethernet" name="eth-bond0-1"/>
+    <interface type="ethernet" name="eth-bond0-2"/>
+  </bond>
+</interface>
+<interface type="ethernet" name="eth-bond0-1"/>
+<interface type="ethernet" name="eth-bond0-2"/>
+
+<!-- Plain bridge -->
+<interface type="bridge" name="brplain">
+  <start mode="onboot"/>
+  <mtu size="1500"/>
+  <bridge stp="off">
+    <interface type="ethernet" name="eth-brplain0"/>
+    <interface type="ethernet" name="eth-brplain1"/>
+  </bridge>
+</interface>
+
+<interface type="ethernet" name="eth-brplain0"/>
+<interface type="ethernet" name="eth-brplain1"/>
+
+
+<!-- Empty bridge -->
+<interface type="bridge" name="brempty">
+  <start mode="onboot"/>
+  <mtu size="1500"/>
+  <bridge stp="off"/>
+</interface>
+
+<!-- Bridge using vlan -->
+<interface type="bridge" name="brvlan">
+  <start mode="onboot"/>
+  <protocol family="ipv4">
+    <dhcp/>
+  </protocol>
+  <bridge stp="off">
+    <interface type="vlan" name="eth0.42">
+      <vlan tag="42">
+        <interface  name="eth0"/>
+      </vlan>
+    </interface>
+  </bridge>
+</interface>
+
+<interface type="vlan" name="eth0.42">
+  <start mode="onboot"/>
+  <protocol family="ipv4">
+    <dhcp peerdns="no"/>
+  </protocol>
+  <vlan tag="42">
+    <interface name="eth0"/>
+  </vlan>
+</interface>
+
+<!-- Bridge using bond -->
+<interface type="bond" name="bond-brbond">
+  <start mode="none"/>
+  <bond mode="active-backup">
+    <miimon freq="100" updelay="10" carrier="ioctl"/>
+    <interface type="ethernet" name="brbond-eth0"/>
+    <interface type="ethernet" name="brbond-eth1"/>
+  </bond>
+</interface>
+<interface type="ethernet" name="eth-bond-brbond0"/>
+<interface type="ethernet" name="eth-bond-brbond1"/>
+
+<interface type="bridge" name="brbond">
+  <start mode="onboot"/>
+  <mtu size="1500"/>
+  <bridge stp="off">
+    <interface type="bond" name="bond-brbond">
+      <start mode="none"/>
+      <bond mode="active-backup">
+        <miimon freq="100" updelay="10" carrier="ioctl"/>
+        <interface type="ethernet" name="brbond-eth0"/>
+        <interface type="ethernet" name="brbond-eth1"/>
+      </bond>
+    </interface>
+  </bridge>
+</interface>
+
+<!-- Multi interface bridge -->
+
+<!-- Unused vlan -->
+<interface type="vlan" name="vlaneth1.3">
+  <start mode="onboot"/>
+  <vlan tag="43">
+    <interface name="vlaneth1"/>
+  </vlan>
+</interface>
+<interface type="ethernet" name="vlaneth1"/>
+
+<!-- Unused interface -->
+<interface type="ethernet" name="unusedeth0"/>
+
+<!-- End interfaces -->
+
+</node>

@@ -1,0 +1,222 @@
+=pod
+
+=head1 NAME
+
+virt-clone - clone existing virtual machine images
+
+=head1 SYNOPSIS
+
+B<virt-clone> [OPTION]...
+
+=head1 DESCRIPTION
+
+B<virt-clone> is a command line tool for cloning existing virtual machine
+images using the C<libvirt> hypervisor management library. It will copy
+the disk images of any existing virtual machine, and define a new guest
+with an identical virtual hardware configuration. Elements which require
+uniqueness will be updated to avoid a clash between old and new guests.
+
+By default, virt-clone will show an error if the necessary information to
+clone the guest is not provided. The --auto-clone option will generate
+all needed input, aside from the source guest to clone. An interactive mode
+is available with the --prompt option, but this will only ask for the
+minimum required options.
+
+=head1 OPTIONS
+
+Most options are not required. Minimum requirements are --original or
+--original-xml (to specify the guest to clone), --name, and appropriate
+storage options via -file.
+
+=over 4
+
+=item -h, --help
+
+Show the help message and exit
+
+=item  --connect=URI
+
+Connect to a non-default hypervisor. See L<virt-install(1)> for details
+
+=back
+
+=head2 General Options
+
+General configuration parameters that apply to all guest clones.
+
+=over 2
+
+=item -o ORIGINAL_GUEST, --original=ORIGINAL_GUEST
+
+Name of the original guest to be cloned. This guest must be shut off or paused
+since it is not possible to safely clone active guests at this time.
+
+=item --original-xml=ORIGINAL_XML
+
+Libvirt guest xml file to use as the original guest. The guest does not need to
+be defined on the libvirt connection. This takes the place of the
+C<--original> parameter.
+
+=item --auto-clone
+
+Generate a new guest name, and paths for new storage.
+
+An example or possible generated output:
+
+  Original name        : MyVM
+  Generated clone name : MyVM-clone
+
+  Original disk path   : /home/user/foobar.img
+  Generated disk path  : /home/user/foobar-clone.img
+
+If generated names collide with existing VMs or storage, a number is appended,
+such as foobar-clone-1.img, or MyVM-clone-3.
+
+=item -n NAME, --name=NAME
+
+Name of the new guest virtual machine instance. This must be unique amongst
+all guests known to the hypervisor connection, including those not
+currently active.
+
+=item -u UUID, --uuid=UUID
+
+UUID for the guest; if none is given a random UUID will be generated. If you
+specify UUID, you should use a 32-digit hexadecimal number. UUID are intended
+to be unique across the entire data center, and indeed world. Bear this in
+mind if manually specifying a UUID
+
+=back
+
+=head2 Storage Configuration
+
+=over 2
+
+=item -f DISKFILE, --file=DISKFILE
+
+Path to the file, disk partition, or logical volume to use as the backing store
+for the new guest's virtual disk. If the original guest has multiple disks,
+this parameter must be repeated multiple times, once per disk in the original
+virtual machine.
+
+=item --force-copy=TARGET
+
+Force cloning the passed disk target ('hdc', 'sda', etc.). By default,
+C<virt-clone> will skip certain disks, such as those marked 'readonly' or
+'shareable'.
+
+=item --nonsparse
+
+Fully allocate the new storage if the path being cloned is a sparse file.
+See L<virt-install(1)> for more details on sparse vs. nonsparse.
+
+=item --preserve-data
+
+No storage is cloned: disk images specific by --file are preserved as is,
+and referenced in the new clone XML. This is useful if you want to clone
+a VM XML template, but not the storage contents.
+
+=back
+
+=head2 Networking Configuration
+
+=over 2
+
+=item -m MAC, --mac=MAC
+
+Fixed MAC address for the guest; If this parameter is omitted, or the value
+C<RANDOM> is specified a suitable address will be randomly generated. Addresses
+are applied sequentially to the networks as they are listed in the original
+guest XML.
+
+=back
+
+=head2 Miscellaneous Options
+
+=over 2
+
+=item --print-xml
+
+Print the generated clone XML and exit without cloning.
+
+=item --replace
+
+Shutdown and remove any existing guest with the passed C<--name> before
+cloning the original guest.
+
+=item -d, --debug
+
+Print debugging information to the terminal when running the install process.
+The debugging information is also stored in C<$HOME/.virtinst/virt-clone.log>
+even if this parameter is omitted.
+
+=item --force
+
+Prevent interactive prompts. If the intended prompt was a yes/no prompt, always
+say yes. For any other prompts, the application will exit.
+
+=item --prompt
+
+Specifically enable prompting for required information. Default prompting
+is off.
+
+=back
+
+=head1 EXAMPLES
+
+Clone the guest called C<demo> on the default connection, auto generating
+a new name and disk clone path.
+
+  # virt-clone \
+       --original demo \
+       --auto-clone
+
+Clone the guest called C<demo> which has a single disk to copy
+
+  # virt-clone \
+       --original demo \
+       --name newdemo \
+       --file /var/lib/xen/images/newdemo.img
+
+Clone a QEMU guest with multiple disks
+
+  # virt-clone \
+       --connect qemu:///system \
+       --original demo \
+       --name newdemo \
+       --file /var/lib/xen/images/newdemo.img \
+       --file /var/lib/xen/images/newdata.img
+
+Clone a guest to a physical device which is at least as big as the
+original guests disks. If the destination device is bigger, the
+new guest can do a filesystem resize when it boots.
+
+  # virt-clone \
+       --connect qemu:///system \
+       --original demo \
+       --name newdemo \
+       --file /dev/HostVG/DemoVM \
+       --mac 52:54:00:34:11:54
+
+=head1 AUTHOR
+
+Written by Kazuki Mizushima, Cole Robinson, and a team of many other
+contributors. See the AUTHORS file in the source distribution for the
+complete list of credits.
+
+=head1 BUGS
+
+Please see http://virt-manager.org/page/BugReporting
+
+=head1 COPYRIGHT
+
+Copyright (C) Fujitsu Limited, and various contributors.
+This is free software. You may redistribute copies of it under the terms
+of the GNU General Public License C<http://www.gnu.org/licenses/gpl.html>.
+There is NO WARRANTY, to the extent permitted by law.
+
+=head1 SEE ALSO
+
+C<virsh(1)>, C<virt-install(1)>, C<virt-manager(1)>, the project website C<http://virt-manager.org>
+
+=cut
+

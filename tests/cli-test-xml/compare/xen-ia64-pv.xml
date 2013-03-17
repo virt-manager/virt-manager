@@ -1,0 +1,61 @@
+<domain type='xen'>
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch='ia64'>linux</type>
+    <kernel>./virtinst-vmlinuz.</kernel>
+    <initrd>./virtinst-initrd.img.</initrd>
+    <cmdline>method=tests/cli-test-xml/faketree</cmdline>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>destroy</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <disk type='file' device='disk'>
+      <source file='/tmp/__virtinst_cli_exist1.img'/>
+      <target dev='xvda' bus='xen'/>
+    </disk>
+    <interface type='user'>
+      <mac address='00:11:22:33:44:55'/>
+    </interface>
+    <input type='mouse' bus='xen'/>
+    <graphics type='vnc' port='-1' keymap='en-us'/>
+    <video>
+      <model type='cirrus'/>
+    </video>
+  </devices>
+</domain>
+<domain type='xen'>
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <bootloader>/usr/bin/pygrub</bootloader>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <disk type='file' device='disk'>
+      <source file='/tmp/__virtinst_cli_exist1.img'/>
+      <target dev='xvda' bus='xen'/>
+    </disk>
+    <interface type='user'>
+      <mac address='00:11:22:33:44:55'/>
+    </interface>
+    <input type='mouse' bus='xen'/>
+    <graphics type='vnc' port='-1' keymap='en-us'/>
+    <video>
+      <model type='cirrus'/>
+    </video>
+  </devices>
+</domain>

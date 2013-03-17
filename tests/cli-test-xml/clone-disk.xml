@@ -1,0 +1,34 @@
+<domain type='test' id='1'>
+  <name>origtest</name>
+  <uuid>db69fa1f-eef0-e567-3c20-3ef16f10376b</uuid>
+  <memory>8388608</memory>
+  <currentMemory>2097152</currentMemory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch='i686'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <disk type='file' device='disk'>
+      <target dev='hda' bus='ide'/>
+      <source file='/tmp/__virtinst_cli_exist1.img'/>
+    </disk>
+    <disk type='file' device='disk'>
+      <target dev='hdb' bus='ide'/>
+      <source file='/tmp/__virtinst_cli_exist2.img'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <target dev='hdc' bus='ide'/>
+      <source file='/tmp/__virtinst_cli_exist2.img'/>
+      <readonly/>
+    </disk>
+    <disk type='file' device='floppy'>
+      <target dev='fda' bus='fdc'/>
+      <readonly/>
+    </disk>
+  </devices>
+</domain>

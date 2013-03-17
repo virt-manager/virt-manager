@@ -1,0 +1,61 @@
+<capabilities>
+  <host>
+    <cpu>
+      <arch>x86_64</arch>
+      <features>
+        <vmx/>
+      </features>
+    </cpu>
+  </host>
+
+  <guest>
+    <os_type>xen</os_type>
+    <arch name="x86_64">
+      <wordsize>64</wordsize>
+      <domain type="xen"></domain>
+    </arch>
+    <features>
+    </features>
+  </guest>
+
+  <guest>
+    <os_type>xen</os_type>
+    <arch name="i686">
+      <wordsize>32</wordsize>
+      <domain type="xen"></domain>
+    </arch>
+    <features>
+      <pae/>
+    </features>
+  </guest>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name="i686">
+      <wordsize>32</wordsize>
+      <domain type="xen"></domain>
+      <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+      <machine>pc</machine>
+      <machine>isapc</machine>
+      <loader>/usr/lib/xen/boot/hvmloader</loader>
+    </arch>
+    <features>
+      <pae/>
+      <nonpae/>
+    </features>
+  </guest>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name="x86_64">
+      <wordsize>64</wordsize>
+      <domain type="xen"></domain>
+      <emulator>/usr/lib64/xen/bin/qemu-dm</emulator>
+      <machine>pc</machine>
+      <machine>isapc</machine>
+      <loader>/usr/lib/xen/boot/hvmloader</loader>
+    </arch>
+    <features>
+    </features>
+  </guest>
+</capabilities>

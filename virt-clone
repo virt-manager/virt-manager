@@ -1,0 +1,261 @@
+#!/usr/bin/python -tt
+#
+# Copyright(c) FUJITSU Limited 2007.
+#
+# Script to set up an cloning guest configuration and kick off an cloning
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free  Software Foundation; either version 2 of the License, or
+# (at your option)  any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA 02110-1301 USA.
+
+
+import sys
+import logging
+import virtinst.CloneManager as clmgr
+import urlgrabber.progress as progress
+
+import optparse
+from optparse import OptionGroup
+import virtinst.cli as cli
+from virtinst.cli import fail, print_stdout, print_stderr
+from virtinst.User import User
+
+cli.setupGettext()
+
+### General input gathering functions
+def get_clone_name(new_name, auto_clone, design):
+    if not new_name and auto_clone:
+        # Generate a name to use
+        new_name = clmgr.generate_clone_name(design)
+        logging.debug("Auto-generated clone name '%s'", new_name)
+
+    prompt_txt = _("What is the name for the cloned virtual machine?")
+    err_txt = _("A name is required for the new virtual machine.")
+    cli.prompt_loop(prompt_txt, err_txt, new_name, design, "clone_name")
+
+def get_original_guest(guest_name, origfile, design):
+
+    origxml = None
+    if origfile:
+        f = open(origfile, "r")
+        origxml = f.read()
+        f.close()
+
+        try:
+            design.original_xml = origxml
+            return
+        except (ValueError, RuntimeError), e:
+            fail(e)
+
+    prompt_txt = _("What is the name of the original virtual machine?")
+    err_txt = _("An original machine name or xml file is required.")
+    cli.prompt_loop(prompt_txt, err_txt,
+                    guest_name, design, "original_guest")
+
+def get_clone_macaddr(new_mac, design):
+    if new_mac is None:
+        pass
+    elif new_mac[0] == "RANDOM":
+        new_mac = None
+    else:
+        for i in new_mac:
+            design.clone_mac = i
+
+def get_clone_uuid(new_uuid, design):
+    if new_uuid is not None:
+        design.clone_uuid = new_uuid
+
+def get_clone_diskfile(new_diskfiles, design, conn, preserve=False,
+                       auto_clone=False):
+    if new_diskfiles is None:
+        new_diskfiles = [None]
+
+    conn = design.original_conn
+
+    newidx = 0
+    for origdev in design.original_devices:
+        if len(new_diskfiles) <= newidx:
+            # Extend the new/passed paths list with None if it's not
+            # long enough
+            new_diskfiles.append(None)
+        disk = new_diskfiles[newidx]
+
+        if disk is None and auto_clone:
+            disk = clmgr.generate_clone_disk_path(origdev, design)
+
+        if origdev is None:
+            devpath = None
+        else:
+            dev = _check_disk(conn, disk, origdev, preserve)
+            devpath = dev.path
+
+        design.clone_devices = devpath
+        newidx += 1
+
+def _check_disk(conn, clone_path, orig_path, preserve):
+
+    prompt_txt = (_("What would you like to use as the cloned disk "
+                    "(file path) for '%s'?") % orig_path)
+
+    return cli.disk_prompt(conn, clone_path, .00001, False,
+                           prompt_txt,
+                           warn_overwrite=not preserve,
+                           check_size=False,
+                           path_to_clone=orig_path)
+
+def get_clone_sparse(sparse, design):
+    design.clone_sparse = sparse
+
+def get_preserve(preserve, design):
+    design.preserve = preserve
+
+
+def get_force_target(target, design):
+    for i in target or []:
+        design.force_target = i
+
+def parse_args():
+    parser = cli.setupParser()
+    cli.add_connect_option(parser)
+
+    geng = OptionGroup(parser, _("General Options"))
+    geng.add_option("-o", "--original", dest="original_guest",
+                    help=_("Name of the original guest; "
+                           "The status must be shut off or paused."))
+    geng.add_option("", "--original-xml", dest="original_xml",
+                    help=_("XML file to use as the original guest."))
+    geng.add_option("", "--auto-clone", dest="auto_clone", action="store_true",
+                    help=_("Auto generate clone name and storage paths from"
+                           " the original guest configuration."))
+    geng.add_option("-n", "--name", dest="new_name",
+                    help=_("Name for the new guest"))
+    geng.add_option("-u", "--uuid", dest="new_uuid",
+                    help=_("New UUID for the clone guest; Default is a "
+                           "randomly generated UUID"))
+    parser.add_option_group(geng)
+
+    stog = OptionGroup(parser, _("Storage Configuration"))
+    stog.add_option("-f", "--file", dest="new_diskfile", action="append",
+                    help=_("New file to use as the disk image for the "
+                           "new guest"))
+    stog.add_option("", "--force-copy", dest="target", action="append",
+                    help=_("Force to copy devices (eg, if 'hdc' is a "
+                           "readonly cdrom device, --force-copy=hdc)"))
+    stog.add_option("", "--nonsparse", action="store_false", dest="sparse",
+                    default=True,
+                    help=_("Do not use a sparse file for the clone's "
+                           "disk image"))
+    stog.add_option("", "--preserve-data", action="store_false",
+                    dest="preserve", default=True,
+                    help=_("Do not clone storage, new disk images specified "
+                           "via --file are preserved unchanged"))
+    parser.add_option_group(stog)
+
+    netg = OptionGroup(parser, _("Networking Configuration"))
+    netg.add_option("-m", "--mac", dest="new_mac", action="append",
+                    help=_("New fixed MAC address for the clone guest. "
+                           "Default is a randomly generated MAC"))
+    parser.add_option_group(netg)
+
+    misc = OptionGroup(parser, _("Miscellaneous Options"))
+    misc.add_option("", "--print-xml", action="store_true", dest="xmlonly",
+                    help=_("Print the generated domain XML rather than define "
+                           "and clone the guest."))
+    misc.add_option("", "--replace", action="store_true", dest="replace",
+                    help=_("Don't check for name collision. Allows replacing "
+                           "an existing guest with the new clone"))
+    misc.add_option("-d", "--debug", action="store_true", dest="debug",
+                      help=_("Print debugging information"))
+    misc.add_option("", "--prompt", action="store_true", dest="prompt",
+                    default=False,
+                    help=_("Request user input for ambiguous situations or "
+                           "required options."))
+    misc.add_option("", "--force", action="store_true", dest="force",
+                    default=False,
+                    help=_("Do not prompt for input. Answers yes where "
+                           "applicable, terminates for all other prompts"))
+    misc.add_option("-q", "--quiet", action="store_true", dest="quiet",
+                    help=_("Suppress non-error output"))
+    misc.add_option("", "--clone-running", action="store_true",
+                    dest="clone_running", default=False,
+                    help=optparse.SUPPRESS_HELP)
+    parser.add_option_group(misc)
+
+    (options, parseargs) = parser.parse_args()
+    return options, parseargs
+
+### Let's do it!
+def main(conn=None):
+    cli.earlyLogging()
+    options, parseargs = parse_args()
+
+    options.quiet = options.quiet or options.xmlonly
+    cli.setupLogging("virt-clone", options.debug, options.quiet)
+    if parseargs:
+        fail(_("Unknown argument '%s'") % parseargs[0])
+
+    cli.set_prompt(options.prompt)
+    cli.set_force(options.force)
+
+    if conn is None:
+        conn = cli.getConnection(options.connect)
+
+    if not User.current().has_priv(User.PRIV_CLONE, conn.getURI()):
+        fail(_("Must be privileged to clone Xen guests"))
+
+    design = clmgr.CloneDesign(conn=conn)
+
+    design.clone_running = options.clone_running
+    design.replace = bool(options.replace)
+    get_original_guest(options.original_guest, options.original_xml,
+                       design)
+    get_clone_name(options.new_name, options.auto_clone, design)
+
+    get_clone_macaddr(options.new_mac, design)
+    get_clone_uuid(options.new_uuid, design)
+    get_clone_sparse(options.sparse, design)
+    get_force_target(options.target, design)
+    get_preserve(options.preserve, design)
+
+    # This determines the devices that need to be cloned, so that
+    # get_clone_diskfile knows how many new disk paths it needs
+    design.setup_original()
+
+    get_clone_diskfile(options.new_diskfile, design, conn,
+                       not options.preserve, options.auto_clone)
+
+    # setup design object
+    design.setup_clone()
+
+    if options.xmlonly:
+        print_stdout(design.clone_xml, do_force=True)
+    else:
+        # start cloning
+        meter = progress.TextMeter(fo=sys.stdout)
+        clmgr.start_duplicate(design, meter)
+
+    print_stdout("")
+    print_stdout(_("Clone '%s' created successfully.") % design.clone_name)
+    logging.debug("end clone")
+    return 0
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except SystemExit, sys_e:
+        sys.exit(sys_e.code)
+    except KeyboardInterrupt:
+        print_stderr(_("Installation aborted at user request"))
+    except Exception, main_e:
+        fail(main_e)

@@ -1,0 +1,47 @@
+<domain type="xen">
+  <name>TestGuest</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <description>foooo barrrr somedesc</description>
+  <os>
+    <type arch="i686">hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="localtime"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu>5</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type="block" device="floppy">
+      <source dev="/dev/loop0"/>
+      <target dev="fda" bus="fdc"/>
+    </disk>
+    <filesystem type="mount" accessmode="passthrough">
+      <source dir="/new/path"/>
+      <target dir="/new/target"/>
+    </filesystem>
+    <filesystem type="template" accessmode="mapped">
+      <source name="template_new"/>
+      <target dir="/bar/baz"/>
+    </filesystem>
+    <filesystem>
+      <driver type="handle"/>
+      <source dir="/foo/bar"/>
+      <target dir="/bar/baz"/>
+      <readonly/>
+    </filesystem>
+    <filesystem>
+      <driver type="handle" wrpolicy="immediate"/>
+      <source dir="/foo/bar"/>
+      <target dir="/bar/baz"/>
+      <readonly/>
+    </filesystem>
+  </devices>
+</domain>

@@ -1,0 +1,168 @@
+=pod
+
+=head1 NAME
+
+virt-convert - convert virtual machines between formats
+
+=head1 SYNOPSIS
+
+B<virt-convert> [OPTION]... INPUT.VMX|INPUT-DIR [OUTPUT.XML|OUTPUT-DIR]
+
+=head1 DESCRIPTION
+
+B<virt-convert> is a command line tool for converting virtual machines
+from one format to another. Pass in either a VM definition file (such
+as VMWare vmx format) or a directory containing a VM. By default, a new
+VM definition file, and converted disk images, will be placed in a new
+output directory.
+
+If an output directory is specified, it will be created if necessary,
+and the output VM definition placed within, along with any disk images
+as needed.
+
+If an output VM definition file is specified, it will be created
+alongside any disks in the same directory.
+
+=head1 OPTIONS
+
+Any of the options can be omitted, in which case B<virt-convert> will
+use defaults when required. An input VM definition or containing directory
+must be provided. By default, an output directory is generated based upon
+the name of the VM. The default input format is VMWare vmx, and the
+default output format is a libvirt "image" XML definition
+(see L<virt-image(5)>).
+
+=over 4
+
+=item -h, --help
+
+Show the help message and exit
+
+=back
+
+=head2 Conversion Options
+
+=over 2
+
+=item  -i format
+
+Input format. Currently, C<vmx>, C<virt-image>, and C<ovf> are supported.
+
+=item  -o format
+
+Output format. Currently, C<vmx>  and C<virt-image> are supported.
+
+=item  -D format
+
+Output disk format, or C<none> if no conversion should be performed. See
+L<qemu-img(1)>.
+
+=back
+
+=head2 Virtualization Type options
+
+Options to override the default virtualization type choices.
+
+=over 2
+
+=item  -v, --hvm      Create  a fully virtualized guest image
+
+Convert machine to a hvm/qemu based image (this is the default if paravirt
+is not specified)
+
+=item  -p, --paravirt      Create  a paravirtualized guest image
+
+Convert machine to a paravirt xen based image
+
+=back
+
+=head2 General Options
+
+General configuration parameters that apply to all types of guest installs.
+
+=over 2
+
+=item -a ARCH, --arch=ARCH
+
+Architecture of the virtual machine (i686, x86_64, ppc). Defaults to
+that of the host machine.
+
+=item  --os-type=OS_TYPE
+
+Optimize the guest configuration for a type of operating system (ex. 'linux',
+'windows'). This will attempt to pick the most suitable ACPI & APIC settings,
+optimally supported mouse drivers, virtio, and generally accommodate other
+operating system quirks.  See L<virt-install(1)> for valid values.
+
+=item --os-variant=OS_VARIANT
+
+Further optimize the guest configuration for a specific operating system
+variant (ex. 'fedora8', 'winxp'). This parameter is optional, and does not
+require an C<--os-type> to be specified. See L<virt-install(1)> for valid
+values.
+
+=item  --noapic
+
+Override the OS type / variant to disables the APIC setting for fully
+virtualized guest.
+
+=item  --noacpi
+
+Override the OS type / variant to disables the ACPI setting for fully
+virtualized guest.
+
+=back
+
+=head2 Miscellaneous Options
+
+=over 2
+
+=item -q, --quiet
+
+Avoid verbose output.
+
+=item -d, --debug
+
+Print debugging information
+
+=item --dry-run
+
+Proceed through the conversion process, but don't convert disks or actually
+write any converted files.
+
+=back
+
+=head1 EXAMPLES
+
+Convert a paravirt guest from C<image.vmx>:
+
+  # virt-convert --arch=i686 --paravirt image.vmx
+
+Convert a 64-bit hvm guest:
+
+  # virt-convert --arch=x86_64 vmx-appliance/ hvm-appliance/
+
+=head1 AUTHOR
+
+Written by Joey Boggs, John Levon, and Cole Robinson
+
+See the AUTHORS file in the source distribution for the complete list
+of credits.
+
+=head1 BUGS
+
+Please see http://virt-manager.org/page/BugReporting
+
+=head1 COPYRIGHT
+
+Copyright (C) 2006-2012 Red Hat, Inc, and various contributors.
+This is free software. You may redistribute copies of it under the terms
+of the GNU General Public License C<http://www.gnu.org/licenses/gpl.html>.
+There is NO WARRANTY, to the extent permitted by law.
+
+=head1 SEE ALSO
+
+L<virt-image(5)>, the project website C<http://virt-manager.org>
+
+=cut
+

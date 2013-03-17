@@ -1,0 +1,165 @@
+<domain type='test'>
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <numatune>
+    <memory mode='preferred' nodeset='1-3,5'/>
+  </numatune>
+  <os>
+    <type arch='i686'>hvm</type>
+    <loader>/foo/bar</loader>
+    <boot dev='network'/>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/><pae/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>destroy</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <emulator>/usr/bin/test-hv</emulator>
+    <disk type='file' device='disk'>
+      <driver cache='writeback' io='threads'/>
+      <source file='/default-pool/UPPER'/>
+      <target dev='hda' bus='ide'/>
+      <shareable/>
+      <serial>WD-WMAP9A966149</serial>
+    </disk>
+    <disk type='file' device='disk'>
+      <driver error_policy='enospace'/>
+      <source file='/tmp/__virtinst_cli_new1.img'/>
+      <target dev='hdb' bus='ide'/>
+      <readonly/>
+    </disk>
+    <disk type='block' device='cdrom'>
+      <target dev='sda' bus='sata'/>
+      <readonly/>
+    </disk>
+    <controller type='usb' index='0' model='ich9-ehci1'>
+      <address type='pci' domain='0' bus='0' slot='4' function='7'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci1'>
+      <master startport='0'/>
+      <address type='pci' domain='0' bus='0' slot='4' function='0'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci2'>
+      <master startport='2'/>
+      <address type='pci' domain='0' bus='0' slot='4' function='1'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci3'>
+      <master startport='4'/>
+      <address type='pci' domain='0' bus='0' slot='4' function='2'/>
+    </controller>
+    <filesystem accessmode='squash'>
+      <source dir='/source'/>
+      <target dir='/target'/>
+    </filesystem>
+    <interface type='user'>
+      <mac address='12:34:56:78:11:22'/>
+    </interface>
+    <interface type='bridge'>
+      <source bridge='foobar'/>
+      <mac address='00:11:22:33:44:55'/>
+      <model type='virtio'/>
+    </interface>
+    <input type='mouse' bus='ps2'/>
+    <serial type='tcp'>
+      <source mode='bind' host='127.0.0.1' service='2222'/>
+      <protocol type='telnet'/>
+    </serial>
+    <channel type='spicevmc'>
+      <target type='virtio' name='com.redhat.spice.0'/>
+    </channel>
+    <smartcard mode='passthrough' type='spicevmc'>
+    </smartcard>
+  </devices>
+  <seclabel type='static' model='testSecurity' relabel='yes'>
+    <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>
+  </seclabel>
+</domain>
+<domain type='test'>
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <numatune>
+    <memory mode='preferred' nodeset='1-3,5'/>
+  </numatune>
+  <os>
+    <type arch='i686'>hvm</type>
+    <loader>/foo/bar</loader>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/><pae/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/bin/test-hv</emulator>
+    <disk type='file' device='disk'>
+      <driver cache='writeback' io='threads'/>
+      <source file='/default-pool/UPPER'/>
+      <target dev='hda' bus='ide'/>
+      <shareable/>
+      <serial>WD-WMAP9A966149</serial>
+    </disk>
+    <disk type='file' device='disk'>
+      <driver error_policy='enospace'/>
+      <source file='/tmp/__virtinst_cli_new1.img'/>
+      <target dev='hdb' bus='ide'/>
+      <readonly/>
+    </disk>
+    <disk type='block' device='cdrom'>
+      <target dev='sda' bus='sata'/>
+      <readonly/>
+    </disk>
+    <controller type='usb' index='0' model='ich9-ehci1'>
+      <address type='pci' domain='0' bus='0' slot='4' function='7'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci1'>
+      <master startport='0'/>
+      <address type='pci' domain='0' bus='0' slot='4' function='0'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci2'>
+      <master startport='2'/>
+      <address type='pci' domain='0' bus='0' slot='4' function='1'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci3'>
+      <master startport='4'/>
+      <address type='pci' domain='0' bus='0' slot='4' function='2'/>
+    </controller>
+    <filesystem accessmode='squash'>
+      <source dir='/source'/>
+      <target dir='/target'/>
+    </filesystem>
+    <interface type='user'>
+      <mac address='12:34:56:78:11:22'/>
+    </interface>
+    <interface type='bridge'>
+      <source bridge='foobar'/>
+      <mac address='00:11:22:33:44:55'/>
+      <model type='virtio'/>
+    </interface>
+    <input type='mouse' bus='ps2'/>
+    <serial type='tcp'>
+      <source mode='bind' host='127.0.0.1' service='2222'/>
+      <protocol type='telnet'/>
+    </serial>
+    <channel type='spicevmc'>
+      <target type='virtio' name='com.redhat.spice.0'/>
+    </channel>
+    <smartcard mode='passthrough' type='spicevmc'>
+    </smartcard>
+  </devices>
+  <seclabel type='static' model='testSecurity' relabel='yes'>
+    <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>
+  </seclabel>
+</domain>

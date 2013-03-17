@@ -1,0 +1,37 @@
+<image>
+  <label>A simple test image</label>
+  <domain>
+    <boot type='xen'>
+      <guest>
+        <os_type>xen</os_type>
+        <arch>i686</arch>
+        <features><pae/></features>
+      </guest>
+      <os>
+        <loader>pygrub</loader>
+      </os>
+      <drive disk="/tmp/__virtinst__cli_root.raw" target="xvda"/>
+      <drive disk="/tmp/__virtinst__cli_scratch.raw" target="xvdc"/>
+    </boot>
+    <boot type="hvm">
+      <guest>
+        <arch>i686</arch>
+        <features><pae/></features>
+      </guest>
+      <os>
+        <type>hvm</type>
+        <loader dev="hd"/>
+      </os>
+      <drive disk="/tmp/__virtinst__cli_root.raw" target="hda"/>
+    </boot>
+    <devices>
+       <vcpu>7</vcpu>
+       <memory>262144</memory>
+       <interface/>
+    </devices>
+  </domain>
+  <storage>
+    <disk file="/tmp/__virtinst__cli_root.raw" format="raw" size="4096" use="system"/>
+    <disk file="/tmp/__virtinst__cli_scratch.raw" format="raw" size='100' use='scratch'/>
+  </storage>
+</image>

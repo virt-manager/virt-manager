@@ -1,0 +1,102 @@
+<domain type='xen'>
+  <name>TestGuest</name>
+  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <description>foooo barrrr somedesc</description>
+  <memory>409600</memory>
+  <currentMemory>204800</currentMemory>
+  <memoryBacking>
+    <hugepages/>
+  </memoryBacking>
+  <vcpu>5</vcpu>
+  <os>
+    <type arch='i686'>hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="localtime"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type='block' device='floppy'>
+      <source dev='/dev/loop0'/>
+      <target dev='fda' bus='fdc'/>
+    </disk>
+    <disk type='block' device='disk'>
+      <source dev='/dev/loop0'/>
+      <target dev='sda' bus='scsi'/>
+    </disk>
+    <disk type='dir' device='floppy'>
+      <source dir='/tmp'/>
+      <target dev='fdb' bus='fdc'/>
+    </disk>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/default-pool/testvol1.img'/>
+      <target dev='sdb' bus='scsi'/>
+    </disk>
+    <controller type='scsi' index='0'>
+      <address type='spapr-vio'/>
+    </controller>
+    <controller type='ide' index='3'/>
+    <controller type='virtio-serial' index='0' ports='32' vectors='17'/>
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='22:22:33:44:55:66'/>
+      <model type='e1000'/>
+    </interface>
+    <interface type='user'>
+      <mac address='22:11:11:11:11:11'/>
+    </interface>
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='22:22:22:22:22:22'/>
+      <model type='spapr-vlan'/>
+      <address type='spapr-vio'/>
+    </interface>
+    <input type='mouse' bus='ps2'/>
+    <graphics type='sdl' display=':3.4' xauth='/tmp/.Xauthority'/>
+    <graphics type='vnc' port='-1' keymap='en-us'/>
+    <graphics type='vnc' port='-1'/>
+    <graphics type='sdl' display=':3.4' xauth='/tmp/.Xauthority'/>
+    <graphics type='spice' port='-1' tlsPort='-1' autoport='yes' keymap='en-us' passwdValidTo='foobar'/>
+    <graphics type='sdl' display='foodisplay' xauth='fooxauth'/>
+    <serial type='null'/>
+    <parallel type='unix'>
+      <source mode='bind' path='/tmp/foobar'/>
+    </parallel>
+    <channel type='spicevmc'>
+      <target type='virtio' name='com.redhat.spice.0'/>
+    </channel>
+    <sound model='sb16'/>
+    <sound model='es1370'/>
+    <video>
+      <model type='vmvga'/>
+    </video>
+    <video>
+      <model type='cirrus' vram='10240' heads='3'/>
+    </video>
+    <video>
+      <model type='qxl'/>
+    </video>
+    <video>
+      <model type='qxl'/>
+    </video>
+    <hostdev mode='subsystem' type='usb' managed='yes'>
+      <source>
+        <vendor id='0x4321'/>
+        <product id='0x1234'/>
+      </source>
+    </hostdev>
+    <watchdog model='ib700' action='none'/>
+    <memballoon model='virtio'/>
+  </devices>
+  <seclabel type='static' model='selinux'>
+    <label>foolabel</label>
+    <imagelabel>imagelabel</imagelabel>
+  </seclabel>
+</domain>

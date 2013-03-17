@@ -1,0 +1,12 @@
+<pool type='netfs'>
+  <name>pool-netfs-list0</name>
+  <uuid>11010111-6102-1154-5108-105115116481</uuid>
+  <source>
+    <format type="nfs"/>
+    <host name="example.com"/>
+    <dir path="/testshare"/>
+  </source>
+  <target>
+    <path>/var/lib/libvirt/images/pool-netfs-list</path>
+  </target>
+</pool>
