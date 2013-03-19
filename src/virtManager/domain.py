@@ -459,6 +459,10 @@ class vmmDomain(vmmLibvirtObject):
                 guest.cpu.vendor = vendor
 
             guest.cpu.model = model or None
+            if guest.cpu.model is None:
+                for f in guest.cpu.features:
+                    guest.cpu.remove_feature(f)
+                return
 
             origfeatures = guest.cpu.features
             def set_feature(fname, fpol):
