@@ -544,7 +544,7 @@ def lookup_pool_by_path(conn, path):
     def check_pool(poolname, path):
         pool = conn.storagePoolLookupByName(poolname)
         xml_path = get_xml_path(pool.XMLDesc(0), "/pool/target/path")
-        if os.path.abspath(xml_path) == path:
+        if xml_path is not None and os.path.abspath(xml_path) == path:
             return pool
 
     running_list = conn.listStoragePools()
