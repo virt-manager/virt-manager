@@ -21,7 +21,7 @@ from snack import Entry
 from snack import Label
 from snack import RadioBar
 
-from IPy import IP
+import ipaddr
 import logging
 import re
 
@@ -91,8 +91,8 @@ class AddNetworkConfigScreen(VmmTuiConfigScreen):
         elif page is DHCP_RANGE_PAGE:
             try:
                 if len(self.__start_address.value()) > 0 and len(self.__end_address.value()) > 0:
-                    start = IP(self.__start_address.value(), )
-                    end   = IP(self.__end_address.value())
+                    start = ipaddr.IPNetwork(self.__start_address.value(), )
+                    end   = ipaddr.IPNetwork(self.__end_address.value())
                     if not self.__config.is_bad_address(start) and not self.__config.is_bad_address(end):
                         return True
                     else:
@@ -202,8 +202,8 @@ class AddNetworkConfigScreen(VmmTuiConfigScreen):
         self.__end_address   = Entry(15, self.__config.get_ipv4_end_address())
         fields = []
         fields.append(("Select the DHCP range", None))
-        fields.append(("Start", self.__start_address))
-        fields.append(("End", self.__end_address))
+        fields.append(("Start", self.__start_address.network))
+        fields.append(("End", self.__end_address.network))
         return [Label("Selecting The DHCP Range"),
                 self.create_grid_from_fields(fields),
                 Label("TIP: Unless you wish to reserve some addresses to allow static network"),

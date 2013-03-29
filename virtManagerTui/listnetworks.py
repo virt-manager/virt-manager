@@ -18,6 +18,7 @@
 
 from snack import Label
 from networklistconfigscreen import NetworkListConfigScreen
+import ipaddr
 
 LIST_PAGE    = 1
 DETAILS_PAGE = 2
@@ -43,6 +44,11 @@ class ListNetworksConfigScreen(NetworkListConfigScreen):
         network = self.get_selected_network()
         fields = []
 
+        result = network.get_ipv4_network()
+        netaddr = result[0]
+        dhcp = result[1]
+        route = result[2]
+
         fields.append(("Basic details", None))
         fields.append(("Name", network.get_name()))
         fields.append(("Device", network.get_bridge_device()))
@@ -51,12 +57,11 @@ class ListNetworksConfigScreen(NetworkListConfigScreen):
         fields.append(("Autostart", "On Boot" if network.get_autostart() else "Never"))
 
         fields.append(("IPv4 configuration", None))
-        fields.append(("Network", network.get_ipv4_network().strNormal()))
+        fields.append(("Network", str(netaddr)))
 
-        if network.get_ipv4_dhcp_range() is not None:
-            (dhcp_start, dhcp_end) = network.get_ipv4_dhcp_range()
-            dhcp_start = dhcp_start.strNormal()
-            dhcp_end   = dhcp_end.strNormal()
+        if dhcp is not None:
+            dhcp_start = str(dhcp[0])
+            dhcp_end   = str(dhcp[1])
         else:
             dhcp_start = "Disabled"
             dhcp_end   = "Disabled"

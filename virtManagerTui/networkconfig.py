@@ -16,7 +16,7 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from IPy import IP
+import ipaddr
 
 class NetworkConfig:
     def __init__(self):
@@ -35,37 +35,48 @@ class NetworkConfig:
         return self.__name
 
     def set_ipv4_address(self, address):
-        self.__ipv4_address = IP(address)
-        start = int(self.__ipv4_address.len() / 2)
-        end   = self.__ipv4_address.len() - 2
-        self.__ipv4_start = str(self.__ipv4_address[start])
-        self.__ipv4_end   = str(self.__ipv4_address[end])
+        self.__ipv4_address = ipaddr.IPNetwork(address)
+        start = int(self.__ipv4_address.numhosts / 2)
+        end   = self.__ipv4_address.numhosts - 2
+        self.__ipv4_start = self.__ipv4_address.network + start
+        self.__ipv4_end   = self.__ipv4_address.network + end
 
     def get_ipv4_address(self):
-        return self.__ipv4_address.strNormal()
+        return self.__ipv4_address
 
     def get_ipv4_address_raw(self):
         return self.__ipv4_address
 
     def get_ipv4_netmask(self):
-        return self.__ipv4_address.netmask().strNormal()
+        return self.__ipv4_address.netmask
 
     def get_ipv4_broadcast(self):
-        return self.__ipv4_address.broadcast().strNormal()
+        return self.__ipv4_address.broadcast
 
     def get_ipv4_gateway(self):
-        return str(self.__ipv4_address[1])
+        return self.__ipv4_address.network + 1
 
     def get_ipv4_max_addresses(self):
-        return self.__ipv4_address.len()
+        return self.__ipv4_address.numhosts
 
     def get_ipv4_network_type(self):
-        return self.__ipv4_address.iptype()
+        if self.__ipv4_address.is_private:
+            return "PRIVATE"
+        if self.__ipv4_address.is_reserved:
+            return "RESERVED"
+        return "OTHER"
 
-    def is_public_ipv4_network(self):
-        if self.__ipv4_address.iptype() is "PUBLIC":
-            return True
-        return False
+#FIXME ??
+#def is_public_ipv4_network(self):
+#    if self.__ipv4_address.is_private
+#        return False
+#    if self.__ipv4_address.is_loopback
+#        return False
+#    if self.__ipv4_address.is_multicast
+#        return False
+#    if self.__ipv4_address.is_reserved
+#        return False
+#    return True
 
     def set_ipv4_start_address(self, address):
         self.__ipv4_start = address
