@@ -141,6 +141,131 @@
   </ip>
 </network>
 
+<network ipv6='yes'>
+  <name>net0</name>
+  <uuid>591d28b3-25fd-21f5-ac71-e1877d787945</uuid>
+  <bridge name='virbr1' stp='on' delay='0' />
+</network>
+
+<network>
+  <name>net6</name>
+  <uuid>e08c0cc3-b892-b53b-c41d-c4f526291be9</uuid>
+  <forward mode='nat'/>
+  <bridge name='virbr2' stp='on' delay='0' />
+  <domain name='net6'/>
+  <ip address='192.168.6.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.6.128' end='192.168.6.254' />
+    </dhcp>
+  </ip>
+  <ip family='ipv6' address='fd00:beef:10:6::1' prefix='64'>
+    <dhcp>
+      <range start='fd00:beef:10:6::1:1' end='fd00:beef:10:6::1:f1' />
+    </dhcp>
+  </ip>
+</network>
+
+<network>
+  <name>net7</name>
+  <uuid>41b4afe4-87bb-8087-6724-5e208a2d483a</uuid>
+  <forward mode='nat'/>
+  <bridge name='virbr3' stp='on' delay='0' />
+  <domain name='net7'/>
+  <ip address='192.168.7.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.7.128' end='192.168.7.254' />
+      <host mac='52:54:00:60:7d:5d' name='paul' ip='192.168.7.2' />
+      <host mac='52:54:00:69:eb:91' name='badbob' ip='192.168.7.3' />
+    </dhcp>
+  </ip>
+  <ip family='ipv6' address='fd00:beef:10:7::1' prefix='64'>
+    <dhcp>
+      <range start='fd00:beef:10:7::1:1' end='fd00:beef:10:7::1:f1' />
+      <host id='00:03:00:01:52:54:00:60:7d:5d' name='paul' ip='fd00:beef:10:7::7:2' />
+      <host id='00:03:00:01:52:54:00:69:eb:91' name='badbob' ip='fd00:beef:10:7::7:4' />
+    </dhcp>
+  </ip>
+  <ip family='ipv6' address='fd00:beef:12::' prefix='48' via='fd00:beef:10:7::7:2'>
+  </ip>
+  <ip family='ipv4' address='192.168.19.0' netmask='255.255.255.0'>
+  </ip>
+</network>
+
+<network>
+  <name>net8</name>
+  <uuid>f9c6675f-98f8-ce75-b39a-02c1d23081e0</uuid>
+  <forward mode='nat'/>
+  <bridge name='virbr4' stp='on' delay='0' />
+  <domain name='net8'/>
+  <ip family='ipv4' address='192.168.8.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.8.64' end='192.168.8.79' />
+    </dhcp>
+  </ip>
+  <ip family='ipv6' address='fd00:beef:10:8::1' prefix='64'>
+    <dhcp>
+      <range start='fd00:beef:10:8::1:1' end='fd00:beef:10:8::1:f1' />
+      <host id='0:3:0:1:52:54:00:d0:2e:22' name='btrfs2' ip='fd00:beef:10:8::2:5' />
+    </dhcp>
+  </ip>
+  <ip family='ipv6' address='fd00:beef:13::' prefix='48' via='fd00:beef:10:8::2:5'>
+  </ip>
+  <ip family='ipv4' address='192.168.81.0' netmask='255.255.255.0' via='192.168.8.2'>
+  </ip>
+</network>
+
+<network>
+  <name>net9</name>
+  <uuid>327b43c5-6900-2e2c-7f14-e1a29bb2c9f5</uuid>
+  <forward mode='nat'/>
+  <bridge name='virbr5' stp='on' delay='0' />
+  <domain name='net9'/>
+  <ip address='192.168.109.1' netmask='255.255.255.0'>
+  </ip>
+  <ip address='192.168.9.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.9.128' end='192.168.9.254' />
+    </dhcp>
+  </ip>
+  <ip family='ipv6' address='fd00:beef:10:9::1' prefix='64'>
+    <dhcp>
+      <range start='fd00:beef:10:9::100' end='fd00:beef:10:9::1fe' />
+    </dhcp>
+  </ip>
+  <ip family='ipv6' address='fd00:beef:12:9::1' prefix='64'>
+  </ip>
+</network>
+
+<network>
+  <name>net91</name>
+  <uuid>c1621b18-797c-e2cb-71f6-21ca120e51cc</uuid>
+  <forward mode='nat'/>
+  <bridge name='virbr6' stp='on' delay='0' />
+  <domain name='net91'/>
+  <ip address='192.168.91.1' netmask='255.255.255.0'>
+  </ip>
+</network>
+
+<network ipv6='yes'>
+  <name>net92</name>
+  <uuid>bf2e337c-ee12-a1d5-4c14-7185191fe00b</uuid>
+  <forward mode='nat'/>
+  <bridge name='virbr7' stp='on' delay='0' />
+  <ip family='ipv6' address='fd00:beef:10:92::1' prefix='64'>
+  </ip>
+</network>
+
+<network>
+  <name>net93</name>
+  <uuid>f117daa4-5aaf-43d9-3c09-d9e522e5a1df</uuid>
+  <bridge name='virbr15' stp='on' delay='0' />
+  <domain name='net93'/>
+  <ip address='192.168.93.1' netmask='255.255.255.0'>
+  </ip>
+  <ip family='ipv6' address='fd00:beef:10:93::1' prefix='64'>
+  </ip>
+</network>
+
 <pool type='dir'>
   <name>default-pool</name>
   <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e53fe</uuid>

@@ -18,9 +18,9 @@
 # MA 02110-1301 USA.
 #
 
-from IPy import IP
-
 from virtManager import util
+import ipaddr
+import libxml2
 from virtManager.libvirtobject import vmmLibvirtObject
 
 class vmmNetwork(vmmLibvirtObject):
@@ -43,7 +43,7 @@ class vmmNetwork(vmmLibvirtObject):
                 else:
                     desc = "%s network" % forward.capitalize()
         else:
-            desc = _("Isolated network")
+            desc = _("Isolated network, internal and host routing only")
 
         return desc
 
@@ -97,42 +97,143 @@ class vmmNetwork(vmmLibvirtObject):
         return self.net.autostart()
 
     def get_ipv4_network(self):
+        doc = None
+        ret = None
+        goodNode = None
+        dhcpstart = None
+        dhcpend = None
+        routeAddr = None
+        routeVia = None
         xml = self.get_xml()
-        if util.xpath(xml, "/network/ip") is None:
-            return None
-        addrStr = util.xpath(xml, "/network/ip/@address")
-        netmaskStr = util.xpath(xml, "/network/ip/@netmask")
-        prefix = util.xpath(xml, "/network/ip/@prefix")
+        doc = libxml2.parseDoc(xml)
+        nodes = doc.xpathEval('//ip')
+        for node in nodes:
+            family = node.xpathEval('string(./@family)')
+            if not family or family == 'ipv4':
+                dhcp = node.xpathEval('string(./dhcp)')
+                if dhcp:
+                    dhcpstart = node.xpathEval('string(./dhcp/range[1]/@start)')
+                    dhcpend = node.xpathEval('string(./dhcp/range[1]/@end)')
+                    goodNode = node
+                    break
 
-        if prefix:
-            prefix = int(prefix)
-            binstr = ((prefix * "1") + ((32 - prefix) * "0"))
-            netmaskStr = str(IP(int(binstr, base=2)))
+        for node in nodes:
+            family = node.xpathEval('string(./@family)')
+            if not family or family == 'ipv4':
+                routeVia = node.xpathEval('string(./@via)')
+                if routeVia:
+                    routeAddr = node.xpathEval('string(./@address)')
+                    break;
 
-        if netmaskStr:
-            netmask = IP(netmaskStr)
-            gateway = IP(addrStr)
-            network = IP(gateway.int() & netmask.int())
-            ret = IP(str(network) + "/" + netmaskStr)
+        if goodNode == None:
+            for node in nodes:
+                family = node.xpathEval('string(./@family)')
+                if not family or family == 'ipv4':
+                    tmp = node.xpathEval('string(./@via)')
+                    if tmp:
+                        continue
+                    goodNode = node;
+                    break
+
+        if goodNode:
+            addrStr    = goodNode.xpathEval('string(./@address)')
+            netmaskStr = goodNode.xpathEval('string(./@netmask)')
+            prefix     = goodNode.xpathEval('string(./@prefix)')
+            if prefix:
+                prefix = int(prefix)
+                ret = str(ipaddr.IPNetwork(str(addrStr) + "/" + str(prefix)).masked())
+            elif netmaskStr:
+                netmask = ipaddr.IPAddress(netmaskStr)
+                network = ipaddr.IPAddress(addrStr)
+                ret = str(ipaddr.IPNetwork(str(network) + "/" + str(netmask)).masked())
+            else:
+                ret = str(ipaddr.IPNetwork(str(addrStr)))
+        if doc:
+            doc.freeDoc()
+        if dhcpstart and dhcpend:
+            dhcp = [str(ipaddr.IPAddress(dhcpstart)), str(ipaddr.IPAddress(dhcpend))]
         else:
-            ret = IP(str(addrStr))
+            dhcp = None
+        if routeAddr and routeVia:
+            route = [str(ipaddr.IPAddress(routeAddr)), str(ipaddr.IPAddress(routeVia))]
+        else:
+            route = None
+        return [ret, dhcp, route]
 
-        return ret
+    def get_ipv6_network(self):
+        doc = None
+        ret = None
+        goodNode = None
+        dhcpstart = None
+        dhcpend = None
+        routeAddr = None
+        routeVia = None
+        xml = self.get_xml()
+        doc = libxml2.parseDoc(xml)
+        nodes = doc.xpathEval('//ip')
+        for node in nodes:
+            family = node.xpathEval('string(./@family)')
+            if family and family == 'ipv6':
+                dhcp = node.xpathEval('string(./dhcp)')
+                if dhcp:
+                    dhcpstart = node.xpathEval('string(./dhcp/range[1]/@start)')
+                    dhcpend = node.xpathEval('string(./dhcp/range[1]/@end)')
+                    goodNode = node
+                    break
+
+        for node in nodes:
+            family = node.xpathEval('string(./@family)')
+            if family and family == 'ipv6':
+                routeVia = node.xpathEval('string(./@via)')
+                if routeVia:
+                    routeAddr = node.xpathEval('string(./@address)')
+                    break;
+
+        if goodNode == None:
+            for node in nodes:
+                family = node.xpathEval('string(./@family)')
+                if family and family == 'ipv6':
+                    tmp = node.xpathEval('string(./@via)')
+                    if tmp:
+                        continue
+                    goodNode = node;
+                    break
+
+        if goodNode:
+            addrStr    = goodNode.xpathEval('string(./@address)')
+            prefix     = goodNode.xpathEval('string(./@prefix)')
+            if prefix:
+                prefix = int(prefix)
+                ret = str(ipaddr.IPNetwork(str(addrStr) + "/" + str(prefix)).masked())
+            else:
+                ret = str(ipaddr.IPNetwork(str(addrStr)))
+        if doc:
+            doc.freeDoc()
+        if dhcpstart and dhcpend:
+            dhcp = [str(ipaddr.IPAddress(dhcpstart)), str(ipaddr.IPAddress(dhcpend))]
+        else:
+            dhcp = None
+        if routeAddr and routeVia:
+            route = [str(ipaddr.IPAddress(routeAddr)), str(ipaddr.IPAddress(routeVia))]
+        else:
+            route = None
+        return [ret, dhcp, route]
+
+    def get_name_domain(self):
+        xml = self.get_xml()
+        name_domain = util.xpath(xml, "/network/domain/@name")
+        return name_domain
+
+    def get_ipv6_route(self):
+        xml = self.get_xml()
+        ipv6_route = util.xpath(xml, "/network/@ipv6")
+        return ipv6_route
 
     def get_ipv4_forward(self):
         xml = self.get_xml()
         fw = util.xpath(xml, "/network/forward/@mode")
         forwardDev = util.xpath(xml, "/network/forward/@dev")
         return [fw, forwardDev]
-
-    def get_ipv4_dhcp_range(self):
-        xml = self.get_xml()
-        dhcpstart = util.xpath(xml, "/network/ip/dhcp/range[1]/@start")
-        dhcpend = util.xpath(xml, "/network/ip/dhcp/range[1]/@end")
-        if not dhcpstart or not dhcpend:
-            return None
-
-        return [IP(dhcpstart), IP(dhcpend)]
 
     def pretty_forward_mode(self):
         forward, forwardDev = self.get_ipv4_forward()

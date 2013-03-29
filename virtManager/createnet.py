@@ -21,7 +21,7 @@
 import logging
 import re
 
-from IPy import IP
+import ipaddr
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -153,7 +153,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         src.modify_text(Gtk.StateType.NORMAL, black)
 
         # No IP specified or invalid IP
-        if ip is None or ip.version() != 4:
+        if ip is None or ip.version != 4:
             src.modify_base(Gtk.StateType.NORMAL, red)
             self.widget("net-info-netmask").set_text("")
             self.widget("net-info-broadcast").set_text("")
@@ -162,26 +162,25 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("net-info-type").set_text("")
             return
 
+        # FIXME: handle other networks and not just private?
         # We've got a valid IP
-        if ip.len() < 4 or ip.iptype() != "PRIVATE":
-            src.modify_base(Gtk.StateType.NORMAL, red)
+        if ip.numhosts < 16 or not ip.is_private:
+            src.modify_base(gtk.STATE_NORMAL, red)
         else:
             src.modify_base(Gtk.StateType.NORMAL, green)
-        self.widget("net-info-netmask").set_text(str(ip.netmask()))
-        self.widget("net-info-broadcast").set_text(str(ip.broadcast()))
+        self.widget("net-info-netmask").set_text(str(ip.netmask))
+        self.widget("net-info-broadcast").set_text(str(ip.broadcast))
 
-        if ip.len() <= 1:
+        if ip.prefixlen == 32:
             self.widget("net-info-gateway").set_text("")
         else:
-            self.widget("net-info-gateway").set_text(str(ip[1]))
+            self.widget("net-info-gateway").set_text(str(ip.network + 1))
         self.widget("net-info-size").set_text(_("%d addresses") %
-                                                         (ip.len()))
+                                                         (ip.numhosts))
 
-        if ip.iptype() == "PUBLIC":
-            self.widget("net-info-type").set_text(_("Public"))
-        elif ip.iptype() == "PRIVATE":
+        if ip.is_private:
             self.widget("net-info-type").set_text(_("Private"))
-        elif ip.iptype() == "RESERVED":
+        elif ip.is_reserved:
             self.widget("net-info-type").set_text(_("Reserved"))
         else:
             self.widget("net-info-type").set_text(_("Other"))
@@ -192,8 +191,8 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.widget("net-dhcp-end").set_sensitive(val)
 
     def change_dhcp_start(self, src):
-        end = self.get_config_dhcp_start()
-        self.change_dhcp(src, end)
+        start = self.get_config_dhcp_start()
+        self.change_dhcp(src, start)
 
     def change_dhcp_end(self, src):
         end = self.get_config_dhcp_end()
@@ -222,18 +221,18 @@ class vmmCreateNetwork(vmmGObjectUI):
 
     def get_config_ip4(self):
         try:
-            return IP(self.widget("net-network").get_text())
+            return ipaddr.IPNetwork(self.widget("net-network").get_text())
         except:
             return None
 
     def get_config_dhcp_start(self):
         try:
-            return IP(self.widget("net-dhcp-start").get_text())
+            return ipaddr.IPNetwork(self.widget("net-dhcp-start").get_text())
         except:
             return None
     def get_config_dhcp_end(self):
         try:
-            return IP(self.widget("net-dhcp-end").get_text())
+            return ipaddr.IPNetwork(self.widget("net-dhcp-end").get_text())
         except:
             return None
 
@@ -260,16 +259,16 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         ip = self.get_config_ip4()
         self.widget("summary-ip4-network").set_text(str(ip))
-        self.widget("summary-ip4-gateway").set_text(str(ip[1]))
-        self.widget("summary-ip4-netmask").set_text(str(ip.netmask()))
+        self.widget("summary-ip4-gateway").set_text(str(ip.network + 1))
+        self.widget("summary-ip4-netmask").set_text(str(ip.netmask))
 
         self.widget("label-dhcp-end").set_property("visible", dodhcp)
         self.widget("summary-dhcp-end").set_property("visible", dodhcp)
         if dodhcp:
             start = self.get_config_dhcp_start()
             end = self.get_config_dhcp_end()
-            self.widget("summary-dhcp-start").set_text(str(start))
-            self.widget("summary-dhcp-end").set_text(str(end))
+            self.widget("summary-dhcp-start").set_text(str(start.network))
+            self.widget("summary-dhcp-end").set_text(str(end.network))
             self.widget("label-dhcp-start").set_text(_("Start address:"))
             self.widget("label-dhcp-end").show()
             self.widget("summary-dhcp-end").show()
@@ -284,13 +283,13 @@ class vmmCreateNetwork(vmmGObjectUI):
 
     def populate_dhcp(self):
         ip = self.get_config_ip4()
-        start = int(ip.len() / 2)
-        end = ip.len() - 2
+        start = int(ip.numhosts / 2)
+        end   = int(ip.numhosts - 2)
 
         if self.widget("net-dhcp-start").get_text() == "":
-            self.widget("net-dhcp-start").set_text(str(ip[start]))
+            self.widget("net-dhcp-start").set_text(str(ip.network + start))
         if self.widget("net-dhcp-end").get_text() == "":
-            self.widget("net-dhcp-end").set_text(str(ip[end]))
+            self.widget("net-dhcp-end").set_text(str(ip.network + end))
 
     def page_changed(self, ignore1, ignore2, page_number):
         if page_number == PAGE_NAME:
@@ -331,13 +330,13 @@ class vmmCreateNetwork(vmmGObjectUI):
             else:
                 xml += "  <forward mode='%s'/>\n" % mode
 
-        xml += "  <ip address='%s' netmask='%s'>\n" % (str(ip[1]),
-                                                       str(ip.netmask()))
+        xml += "  <ip address='%s' netmask='%s'>\n" % (str(ip.network + 1),
+                                                       str(ip.netmask))
 
         if self.get_config_dhcp_enable():
             xml += "    <dhcp>\n"
-            xml += "      <range start='%s' end='%s'/>\n" % (str(start),
-                                                             str(end))
+            xml += "      <range start='%s' end='%s'/>\n" % (str(start.network),
+                                                             str(end.network))
             xml += "    </dhcp>\n"
 
         xml += "  </ip>\n"
@@ -372,15 +371,15 @@ class vmmCreateNetwork(vmmGObjectUI):
             return self.err.val_err(_("Invalid Network Address"),
                     _("The network address could not be understood"))
 
-        if ip.version() != 4:
+        if ip.version != 4:
             return self.err.val_err(_("Invalid Network Address"),
                     _("The network must be an IPv4 address"))
 
-        if ip.len() < 4:
+        if ip.numhosts < 16:
             return self.err.val_err(_("Invalid Network Address"),
-                    _("The network prefix must be at least /4 (16 addresses)"))
+                    _("The network prefix must be at least /28 (16 addresses)"))
 
-        if ip.iptype() != "PRIVATE":
+        if not ip.is_private:
             res = self.err.yes_no(_("Check Network Address"),
                     _("The network should normally use a private IPv4 "
                       "address. Use this non-private address anyway?"))
