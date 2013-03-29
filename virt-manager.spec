@@ -105,7 +105,7 @@ Requires: spice-gtk3
 %if %{with_guestfs}
 Requires: python-libguestfs
 %endif
-Requires: python-IPy
+Requires: python-ipaddr
 
 %if %{with_tui} == 0
 Obsoletes: virt-manager-common <= %{verrel}
@@ -175,7 +175,7 @@ Group: Applications/Emulators
 Requires: virt-manager-common = %{verrel}
 Requires: python-newt_syrup >= 0.1.2
 Requires: libuser-python
-Requires: python-IPy
+Requires: python-ipaddr
 
 %description tui
 An interactive text user interface for Virtual Machine Manager.
