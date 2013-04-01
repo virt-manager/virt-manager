@@ -290,6 +290,14 @@ update-desktop-database -q %{_datadir}/applications
 %endif
 
 %changelog
+* Mon Apr 01 2013 Cole Robinson <crobinso@redhat.com> - 0.9.5-1
+- virt-manager release 0.9.5
+- Enable adding virtio-scsi disks (Chen Hanxiao)
+- Support security auto-relabel setting (Martin Kletzander)
+- Support disk iotune settings (David Shane Holden)
+- Support 'reset' as a reboot option (John Doyle)
+- Bug fixes and minor improvements
+
 * Sun Jul 29 2012 Cole Robinson <crobinso@redhat.com> - 0.9.4-1
 - virt-manager release 0.9.4
 - Fix VNC keygrab issues
