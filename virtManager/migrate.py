@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 Red Hat, Inc.
+# Copyright (C) 2009, 2013 Red Hat, Inc.
 # Copyright (C) 2009 Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -480,7 +480,7 @@ class vmmMigrateDialog(vmmGObjectUI):
                                max_downtime],
                               _("Migrating VM '%s'" % self.vm.get_name()),
                               (_("Migrating VM '%s' from %s to %s. "
-                                 "This may take awhile.") %
+                                 "This may take a while.") %
                                 (self.vm.get_name(), srchost, dsthost)),
                               self.topwin,
                               cancel_back=_cancel_back,
