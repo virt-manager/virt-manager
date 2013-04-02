@@ -449,10 +449,11 @@ size (in GB) to use if creating new storage
 =item B<sparse>
 
 whether to skip fully allocating newly created storage. Value is 'true' or
-'false'. Default is 'true' (do not fully allocate).
+'false'. Default is 'true' (do not fully allocate) unless it isn't
+supported by the underlying storage type.
 
 The initial time taken to fully-allocate the guest virtual disk (sparse=false)
-will be usually by balanced by faster install times inside the guest. Thus
+will be usually balanced by faster install times inside the guest. Thus
 use of this option is recommended to ensure consistently high performance
 and to avoid I/O errors in the guest should the host filesystem fill up.
 
@@ -589,7 +590,7 @@ Connect to a virtual network in the host called C<NAME>. Virtual networks
 can be listed, created, deleted using the C<virsh> command line tool. In
 an unmodified install of C<libvirt> there is usually a virtual network
 with a name of C<default>. Use a virtual network if the host has dynamic
-networking (eg NetworkManager), or using wireless. The guest will be 
+networking (eg NetworkManager), or using wireless. The guest will be
 NATed to the LAN by whichever connection is active.
 
 =item user
@@ -1368,4 +1369,3 @@ is NO WARRANTY, to the extent permitted by law.
 C<virsh(1)>, C<virt-clone(1)>, C<virt-manager(1)>, the project website C<http://virt-manager.org>
 
 =cut
-

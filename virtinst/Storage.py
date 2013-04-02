@@ -1,5 +1,5 @@
 #
-# Copyright 2008 Red Hat, Inc.
+# Copyright 2008, 2013 Red Hat, Inc.
 # Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -1349,11 +1349,27 @@ class LogicalVolume(StorageVolume):
 
     def __init__(self, name, capacity, pool=None, pool_name=None, conn=None,
                  allocation=None, perms=None):
+        if allocation and allocation != capacity:
+            raise ValueError(_("Sparse logical volumes are not supported, "
+                               "allocation must be equal to capacity"))
         StorageVolume.__init__(self, name=name, pool=pool, pool_name=pool_name,
-                               allocation=allocation, capacity=capacity,
+                               allocation=capacity, capacity=capacity,
                                conn=conn)
         if perms:
             self.perms = perms
+
+    def set_capacity(self, capacity):
+        super(LogicalVolume, self).set_capacity(capacity)
+        self.allocation = capacity
+    capacity = property(StorageVolume.get_capacity, set_capacity)
+
+    def set_allocation(self, allocation):
+        if allocation != self.capacity:
+            raise ValueError(_("Sparse logical volumes are not supported, "
+                               "allocation must be equal to capacity"))
+        super(LogicalVolume, self).set_allocation(allocation)
+    capacity = property(StorageVolume.get_allocation, set_allocation)
+
 
     def _get_target_xml(self):
         return "%s" % self._get_perms_xml()
