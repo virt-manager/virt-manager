@@ -1,27 +1,21 @@
-Basic Install
--------------
+  Basic Install
+  =============
 
-To build virt-manager, run the command:
+For starters, if you just want to run virt-manager/virt-install to test out
+changes, it can be done from the source directory:
 
-    ./autogen.sh && ./configure && make
+    ./virt-manager
 
-You can then run virt-manager in the source directory with
+To install the software into /usr/local (usually), you can do:
 
-    python src/virt-manager.py
-
-To install the software into /usr/local (usually), you can then run:
-
-    make install
+    python setup.py install
 
 To build an RPM, you can run:
 
-    make rpm
+    python setup.py run
 
-virt-manager generally requires the latest upstream version of
-python-virtinst, which checked out with
+setup.py generally has all the build and install commands, for more info see:
 
-git clone git://git.fedorahosted.org/git/python-virtinst.git
-
-If you want to replace your system installed virt-manager version,
-add --prefix=/usr to ./configure. Please see the INSTALL.autotools file
-for much more information about install options.
+    python setup.py --help-commands
+    python setup.py install --help
+    http://docs.python.org/inst/standard-install.html
