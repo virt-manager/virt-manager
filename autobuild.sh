@@ -1,5 +1,6 @@
 #!/bin/sh
 
+set -v
 set -e
 
 if [ -z "$AUTOBUILD_INSTALL_ROOT" ] ; then
@@ -8,28 +9,18 @@ if [ -z "$AUTOBUILD_INSTALL_ROOT" ] ; then
     exit 1
 fi
 
-# Make things clean.
+python setup.py build
+python setup.py test
+python setup.py install --prefix=$AUTOBUILD_INSTALL_ROOT
+python setup.py sdist
 
-make -k distclean ||:
-rm -rf MANIFEST blib
+which /usr/bin/rpmbuild > /dev/null 2>&1 || exit 0
 
-# Make makefiles.
-
-./autogen.sh --prefix=$AUTOBUILD_INSTALL_ROOT
-cd build
-make
-make install
-
-rm -f *.tar.gz
-make dist
-
-if [ -f /usr/bin/rpmbuild ]; then
-  if [ -n "$AUTOBUILD_COUNTER" ]; then
+if [ -n "$AUTOBUILD_COUNTER" ]; then
     EXTRA_RELEASE=".auto$AUTOBUILD_COUNTER"
-  else
+else
     NOW=`date +"%s"`
     EXTRA_RELEASE=".$USER$NOW"
-  fi
-  rpmbuild --nodeps --define "extra_release $EXTRA_RELEASE" -ta --clean *.tar.gz
 fi
+rpmbuild --nodeps --define "extra_release $EXTRA_RELEASE" -ta --clean *.tar.gz
 
