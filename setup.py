@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import glob
+import fnmatch
 import os
 import sys
 import unittest
@@ -16,6 +17,31 @@ from DistUtilsExtra.command.build_icons import build_icons
 from virtcli import cliconfig
 
 
+def _generate_potfiles_in():
+    def find(dirname, ext):
+        ret = []
+        for root, dirnames, filenames in os.walk(dirname):
+            for filename in fnmatch.filter(filenames, ext):
+                ret.append(os.path.join(root, filename))
+        ret.sort(key=lambda s: s.lower())
+        return ret
+
+    scripts = ["virt-manager", "virt-manager-tui", "virt-install",
+               "virt-clone", "virt-image", "virt-convert"]
+
+    potfiles = "\n".join(scripts) + "\n\n"
+    potfiles += "\n".join(find("virtManager", "*.py")) + "\n\n"
+    potfiles += "\n".join(find("virtManagerTui", "*.py")) + "\n\n"
+    potfiles += "\n".join(find("virtcli", "*.py")) + "\n\n"
+    potfiles += "\n".join(find("virtconv", "*.py")) + "\n\n"
+    potfiles += "\n".join(find("virtinst", "*.py")) + "\n\n"
+
+    potfiles += "\n".join(["[type: gettext/glade]" + f for
+                          f in find("ui", "*.ui")])
+
+    return potfiles
+
+
 class my_build_i18n(build_i18n):
     """
     Add our desktop files to the list, saves us having to track setup.cfg
@@ -25,6 +51,18 @@ class my_build_i18n(build_i18n):
 
         self.desktop_files = ('[("share/applications",' +
                               ' ("data/virt-manager.desktop.in", ))]')
+
+    def run(self):
+        potfiles = _generate_potfiles_in()
+        potpath = "po/POTFILES.in"
+
+        try:
+            print "Writing %s" % potpath
+            file(potpath, "w").write(potfiles)
+            build_i18n.run(self)
+        finally:
+            print "Removing %s" % potpath
+            os.unlink(potpath)
 
 
 class my_build(build_extra):
@@ -328,7 +366,6 @@ class TestURLFetch(TestBaseCommand):
             for p in self.path:
                 tests.urltest.LOCAL_MEDIA.append(p)
         TestBaseCommand.run(self)
-
 
 
 setup(

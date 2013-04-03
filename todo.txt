@@ -4,11 +4,9 @@
 
 virtinst merge bits:
     translations:
-        autogenerate POTFILES
         merge in existing translations from virtinst.git. may need to
             massage this by hand but in my head it sounds easy enough.
         make sure translations actually work when installed
-        why isn't distutils doing msgmerge? maybe I'm missing something
     merge pylint scripts, make sure there are no warnings
     break out osdistro bits so we don't need to carry virt-install.pod
     merge README, reference that we merged virtinst and see that repo for
@@ -75,7 +73,7 @@ setup.py rpm: dump output in sourcedir, or dist/
 INSTALL docs about python setup.py refresh_translations from virtinst,
     or whatever the distutils extra equiv is. or update po/README,
     or have a TRANSLATORS file, or update HACKING, etc. see what other
-    projects do.
+    projects do. msgmerge with python setup.py build_i18n --merge-po
 
 
   Problems in other packages
