@@ -20,6 +20,8 @@ website: wiki-ify the whole thing, drop static content, move site styling into v
 consider dropping python-distutils-extra dep. I think we rely on about 300
     lines of code, tops, and since it isn't in RHEL it could be an issue.
     we can prob reimplement the bits that are important to us fairly easilly.
+move RHEL/fedora spec file bits to upstream file like libvirt does
+revive import blacklist for virtinst code, maybe just a unittest that checks Gtk isn't in globals ?
 
 
   Misc issues
