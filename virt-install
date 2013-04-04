@@ -93,6 +93,18 @@ def supports_pxe(guest):
     return False
 
 
+def check_vcpu_option_error(options):
+    # Catch a strangely common error of users passing -vcpus=2 instead of
+    # --vcpus=2. The single dash happens to map to enough shortened options
+    # that things can fail weirdly if --paravirt is also specified.
+    if not options.cdrom:
+        return
+
+    for vcpu in [o for o in sys.argv if o.startswith("-vcpu")]:
+        if options.cdrom == vcpu[3:]:
+            fail("You specified -vcpus, you want --vcpus")
+
+
 ##############################
 # Device validation wrappers #
 ##############################
@@ -980,6 +992,7 @@ def main(conn=None):
 
     if cliargs:
         fail(_("Unknown argument '%s'") % cliargs[0])
+    check_vcpu_option_error(options)
 
     if options.distro_variant == "list":
         logging.debug("OS list requested")
