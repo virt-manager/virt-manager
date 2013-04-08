@@ -1350,8 +1350,8 @@ class LogicalVolume(StorageVolume):
     def __init__(self, name, capacity, pool=None, pool_name=None, conn=None,
                  allocation=None, perms=None):
         if allocation and allocation != capacity:
-            raise ValueError(_("Sparse logical volumes are not supported, "
-                               "allocation must be equal to capacity"))
+            logging.warn(_("Sparse logical volumes are not supported, "
+                           "setting allocation equal to capacity"))
         StorageVolume.__init__(self, name=name, pool=pool, pool_name=pool_name,
                                allocation=capacity, capacity=capacity,
                                conn=conn)
@@ -1365,9 +1365,9 @@ class LogicalVolume(StorageVolume):
 
     def set_allocation(self, allocation):
         if allocation != self.capacity:
-            raise ValueError(_("Sparse logical volumes are not supported, "
-                               "allocation must be equal to capacity"))
-        super(LogicalVolume, self).set_allocation(allocation)
+            logging.warn(_("Sparse logical volumes are not supported, "
+                           "setting allocation equal to capacity"))
+        super(LogicalVolume, self).set_allocation(self.capacity)
     capacity = property(StorageVolume.get_allocation, set_allocation)
 
 
