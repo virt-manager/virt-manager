@@ -549,7 +549,7 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev3)
         check("type", "pci")
         check("managed", True, True)
-        check("mode", "subsystem", "capabilities")
+        check("mode", "subsystem", "subsystem")
         check("domain", "0x0", "0x4")
         check("bus", "0x1", "0x5")
         check("slot", "0x2", "0x6")
