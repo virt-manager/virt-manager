@@ -46,11 +46,12 @@ __version__ = "0.9.4"
 # We should map this into the config somehow but I question if anyone cares
 prefix = _get_param("prefix", "/usr")
 gettext_dir = os.path.join(prefix, "share", "locale")
+install_asset_dir = os.path.join(prefix, "share", "virt-manager")
 if os.getcwd() == _srcdir:
     asset_dir = _srcdir
     icon_dir = os.path.join(_srcdir, "data")
 else:
-    asset_dir = os.path.join(prefix, "share", "virt-manager")
+    asset_dir = install_asset_dir
     icon_dir = os.path.join(asset_dir, "icons")
 
 with_tui = bool(int(_get_param("with_tui", "1")))

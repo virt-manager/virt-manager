@@ -84,7 +84,7 @@ class my_build(build_extra):
             os.mkdir("build")
 
         for app in cmds:
-            sharepath = os.path.join(cliconfig.asset_dir, app)
+            sharepath = os.path.join(cliconfig.install_asset_dir, app)
 
             wrapper = "#!/bin/sh\n\n"
             wrapper += "exec \"%s\" \"$@\"" % (sharepath)
