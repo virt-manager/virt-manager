@@ -35,7 +35,7 @@ if os.path.exists(cfgpath):
 def _split_list(commastr):
     return [d for d in commastr.split(",") if d]
 
-def get_param(name, default):
+def _get_param(name, default):
     if not cfg.sections():
         return default
     return cfg.get("config", name)
@@ -53,14 +53,14 @@ else:
     asset_dir = os.path.join(prefix, "share", "virt-manager")
     icon_dir = os.path.join(asset_dir, "icons")
 
-with_tui = bool(int(get_param("with_tui", "1")))
+with_tui = bool(int(_get_param("with_tui", "1")))
 
-default_qemu_user = get_param("default_qemu_user", "root")
+default_qemu_user = _get_param("default_qemu_user", "root")
 rhel_enable_unsupported_opts = not bool(int(
-    get_param("hide_unsupported_rhel_options", "0")))
+    _get_param("hide_unsupported_rhel_options", "0")))
 
-preferred_distros = _split_list(get_param("preferred_distros", ""))
-hv_packages = _split_list(get_param("hv_packages", ""))
-askpass_package = _split_list(get_param("askpass_packages", ""))
-libvirt_packages = _split_list(get_param("libvirt_packages", ""))
-default_graphics = get_param("default_graphics", "vnc")
+preferred_distros = _split_list(_get_param("preferred_distros", ""))
+hv_packages = _split_list(_get_param("hv_packages", ""))
+askpass_package = _split_list(_get_param("askpass_packages", ""))
+libvirt_packages = _split_list(_get_param("libvirt_packages", ""))
+default_graphics = _get_param("default_graphics", "vnc")
