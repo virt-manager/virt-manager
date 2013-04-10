@@ -289,6 +289,7 @@ update-desktop-database -q %{_datadir}/applications
 %defattr(-,root,root,-)
 %dir %{_datadir}/%{name}
 
+%{_datadir}/%{name}/virtcli
 %{_datadir}/%{name}/virtconv
 %{_datadir}/%{name}/virtinst
 %{_datadir}/%{name}/virtManager
