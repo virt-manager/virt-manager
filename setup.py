@@ -7,7 +7,10 @@ import sys
 import unittest
 
 from distutils.core import Command, setup
+from distutils.command.install import install
 from distutils.command.install_egg_info import install_egg_info
+from distutils.sysconfig import get_config_var
+sysprefix = get_config_var("prefix")
 
 from DistUtilsExtra.auto import sdist_auto
 from DistUtilsExtra.command.build_i18n import build_i18n
@@ -157,6 +160,24 @@ class my_egg_info(install_egg_info):
         pass
 
 
+class my_install(install):
+    """
+    Error if we weren't 'configure'd with the correct install prefix
+    """
+    def finalize_options(self):
+        if self.prefix is None:
+            if cliconfig.prefix != sysprefix:
+                print "Using prefix from 'configure': %s" % cliconfig.prefix
+                self.prefix = cliconfig.prefix
+        elif self.prefix != cliconfig.prefix:
+            print ("Install prefix=%s doesn't match configure prefix=%s\n"
+                   "Pass matching --prefix to 'setup.py configure'" %
+                   (self.prefix, cliconfig.prefix))
+            sys.exit(1)
+
+        install.finalize_options(self)
+
+
 ###################
 # Custom commands #
 ###################
@@ -167,6 +188,7 @@ class my_rpm(Command):
 
     def initialize_options(self):
         pass
+
     def finalize_options(self):
         pass
 
@@ -181,6 +203,7 @@ class my_rpm(Command):
 
 class configure(Command):
     user_options = [
+        ("prefix=", None, "installation prefix"),
         ("without-tui", None, "don't install virt-manager-tui"),
         ("qemu-user=", None,
          "user libvirt uses to launch qemu processes (default=root)"),
@@ -214,11 +237,13 @@ class configure(Command):
         self.hide_unsupported_rhel_options = 0
         self.preferred_distros = ""
         self.default_graphics = "vnc"
+        self.prefix = sysprefix
 
 
     def run(self):
         template = ""
         template += "[config]\n"
+        template += "prefix = %s\n" % self.prefix
         template += "with_tui = %s\n" % int(not self.without_tui)
         template += "default_qemu_user = %s\n" % self.qemu_user
         template += "libvirt_packages = %s\n" % self.libvirt_package_names
@@ -419,7 +444,9 @@ setup(
         'build': my_build,
         'build_i18n': my_build_i18n,
         'build_icons': my_build_icons,
+
         'sdist': sdist_auto,
+        'install': my_install,
         'install_egg_info': my_egg_info,
 
         'configure': configure,

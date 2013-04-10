@@ -44,7 +44,7 @@ __version__ = "0.9.4"
 
 
 # We should map this into the config somehow but I question if anyone cares
-prefix = "/usr"
+prefix = _get_param("prefix", "/usr")
 gettext_dir = os.path.join(prefix, "share", "locale")
 if os.getcwd() == _srcdir:
     asset_dir = _srcdir
