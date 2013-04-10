@@ -17,12 +17,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import VirtualDevice
-from util import  xml_escape
+from virtinst.VirtualDevice import VirtualDevice
+from virtinst.util import  xml_escape
 
-from XMLBuilderDomain import _xml_property
+from virtinst.XMLBuilderDomain import _xml_property
 
-class VirtualCharDevice(VirtualDevice.VirtualDevice):
+class VirtualCharDevice(VirtualDevice):
     """
     Base class for all character devices. Shouldn't be instantiated
     directly.
@@ -181,7 +181,7 @@ class VirtualCharDevice(VirtualDevice.VirtualDevice):
         self._dev_type = dev_type
         self._virtual_device_type = self._dev_type
 
-        VirtualDevice.VirtualDevice.__init__(self, conn,
+        VirtualDevice.__init__(self, conn,
                                              parsexml, parsexmlnode, caps)
 
         # Init

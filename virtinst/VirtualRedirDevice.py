@@ -19,13 +19,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import VirtualDevice
+from virtinst.VirtualDevice import VirtualDevice
 
-from XMLBuilderDomain import _xml_property
+from virtinst.XMLBuilderDomain import _xml_property
 
-class VirtualRedirDevice(VirtualDevice.VirtualDevice):
+class VirtualRedirDevice(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VirtualDevice.VIRTUAL_DEV_REDIRDEV
+    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_REDIRDEV
 
     BUS_DEFAULT = "usb"
     _buses = [ "usb" ]
@@ -39,7 +39,7 @@ class VirtualRedirDevice(VirtualDevice.VirtualDevice):
         @param conn: Connection the device/guest will be installed on
         @type conn: libvirt.virConnect
         """
-        VirtualDevice.VirtualDevice.__init__(self, conn, parsexml,
+        VirtualDevice.__init__(self, conn, parsexml,
                                              parsexmlnode, caps)
 
         self._type = None

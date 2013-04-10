@@ -19,7 +19,7 @@
 
 from snack import Checkbox
 from snack import Label
-from networklistconfigscreen import NetworkListConfigScreen
+from virtManagerTui.networklistconfigscreen import NetworkListConfigScreen
 
 LIST_PAGE     = 1
 CONFIRM_PAGE  = 2

@@ -53,9 +53,9 @@ import logging
 import libvirt
 import urlgrabber
 
-from util import xml_escape as escape
-import util
-import support
+from virtinst.util import xml_escape as escape
+from virtinst import util
+from virtinst import support
 
 
 DEFAULT_DEV_TARGET = "/dev"

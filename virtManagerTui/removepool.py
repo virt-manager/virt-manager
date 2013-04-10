@@ -20,7 +20,7 @@
 from snack import Checkbox
 from snack import Label
 
-from storagelistconfigscreen import StorageListConfigScreen
+from virtManagerTui.storagelistconfigscreen import StorageListConfigScreen
 
 LIST_POOLS_PAGE    = 1
 CONFIRM_PAGE       = 2

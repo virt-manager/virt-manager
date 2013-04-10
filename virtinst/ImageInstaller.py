@@ -20,10 +20,10 @@
 
 import os
 
-import Installer
-import ImageParser
-import CapabilitiesParser as Cap
-from VirtualDisk import VirtualDisk
+from virtinst import Installer
+from virtinst import ImageParser
+from virtinst import CapabilitiesParser as Cap
+from virtinst.VirtualDisk import VirtualDisk
 
 
 class ImageInstallerException(Exception):

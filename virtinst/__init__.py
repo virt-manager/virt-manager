@@ -21,38 +21,33 @@ cliutils.setup_i18n()
 
 # Public imports
 
-import Storage
-import Interface
-from Guest import Guest
-from VirtualDevice import VirtualDevice
-from VirtualNetworkInterface import VirtualNetworkInterface
-from VirtualGraphics import VirtualGraphics
-from VirtualAudio import VirtualAudio
-from VirtualInputDevice import VirtualInputDevice
-from VirtualDisk import VirtualDisk
-from VirtualHostDevice import (VirtualHostDevice, VirtualHostDeviceUSB,
-                               VirtualHostDevicePCI)
-from VirtualCharDevice import VirtualCharDevice
-from VirtualVideoDevice import VirtualVideoDevice
-from VirtualController import VirtualController
-from VirtualWatchdog import VirtualWatchdog
-from VirtualFilesystem import VirtualFilesystem
-from VirtualSmartCardDevice import VirtualSmartCardDevice
-from VirtualRedirDevice import VirtualRedirDevice
-from VirtualMemballoon import VirtualMemballoon
-from FullVirtGuest import FullVirtGuest
-from ParaVirtGuest import ParaVirtGuest
-from DistroInstaller import DistroInstaller
-from PXEInstaller import PXEInstaller
-from LiveCDInstaller import LiveCDInstaller
-from ImportInstaller import ImportInstaller
-from ImageInstaller import ImageInstaller
-from Installer import ContainerInstaller
-from CloneManager import CloneDesign
-from User import User
-from Clock import Clock
-from CPU import CPU, CPUFeature
-from Seclabel import Seclabel
-from XMLBuilderDomain import XMLBuilderDomain
-import util
-import support
+from virtinst.Guest import Guest
+from virtinst.VirtualNetworkInterface import VirtualNetworkInterface
+from virtinst.VirtualGraphics import VirtualGraphics
+from virtinst.VirtualAudio import VirtualAudio
+from virtinst.VirtualInputDevice import VirtualInputDevice
+from virtinst.VirtualDisk import VirtualDisk
+from virtinst.VirtualHostDevice import (VirtualHostDevice,
+                                        VirtualHostDeviceUSB,
+                                        VirtualHostDevicePCI)
+from virtinst.VirtualCharDevice import VirtualCharDevice
+from virtinst.VirtualVideoDevice import VirtualVideoDevice
+from virtinst.VirtualController import VirtualController
+from virtinst.VirtualWatchdog import VirtualWatchdog
+from virtinst.VirtualFilesystem import VirtualFilesystem
+from virtinst.VirtualSmartCardDevice import VirtualSmartCardDevice
+from virtinst.VirtualRedirDevice import VirtualRedirDevice
+from virtinst.VirtualMemballoon import VirtualMemballoon
+from virtinst.FullVirtGuest import FullVirtGuest
+from virtinst.ParaVirtGuest import ParaVirtGuest
+from virtinst.DistroInstaller import DistroInstaller
+from virtinst.PXEInstaller import PXEInstaller
+from virtinst.LiveCDInstaller import LiveCDInstaller
+from virtinst.ImportInstaller import ImportInstaller
+from virtinst.ImageInstaller import ImageInstaller
+from virtinst.Installer import ContainerInstaller
+from virtinst.CloneManager import CloneDesign
+from virtinst.User import User
+from virtinst.Clock import Clock
+from virtinst.CPU import CPU, CPUFeature
+from virtinst.Seclabel import Seclabel

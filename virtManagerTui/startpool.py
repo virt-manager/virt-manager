@@ -18,7 +18,7 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 from snack import Label
-from storagelistconfigscreen import StorageListConfigScreen
+from virtManagerTui.storagelistconfigscreen import StorageListConfigScreen
 
 LIST_POOLS_PAGE    = 1
 FINAL_PAGE         = 2

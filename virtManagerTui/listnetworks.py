@@ -17,7 +17,7 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 from snack import Label
-from networklistconfigscreen import NetworkListConfigScreen
+from virtManagerTui.networklistconfigscreen import NetworkListConfigScreen
 import ipaddr
 
 LIST_PAGE    = 1

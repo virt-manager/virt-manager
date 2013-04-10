@@ -38,7 +38,7 @@ from virtcli import cliconfig
 
 import virtinst
 from virtinst import util
-from util import listify
+from virtinst.util import listify
 
 from virtinst import Guest
 from virtinst import VirtualNetworkInterface
@@ -46,7 +46,6 @@ from virtinst import VirtualGraphics
 from virtinst import VirtualAudio
 from virtinst import VirtualDisk
 from virtinst import VirtualCharDevice
-from virtinst import VirtualDevice
 from virtinst import User
 
 
@@ -963,7 +962,7 @@ def get_graphics(guest, graphics):
 def get_video(guest, video_models=None):
     video_models = video_models or []
 
-    if guest.get_devices(VirtualDevice.VIRTUAL_DEV_GRAPHICS):
+    if guest.get_devices(VirtualGraphics.VIRTUAL_DEV_GRAPHICS):
         if not video_models:
             video_models.append(None)
 
@@ -1693,7 +1692,7 @@ def parse_graphics(guest, optstring, dev=None):
         if not keymap:
             return None
         if keymap.lower() == "local":
-            return virtinst.VirtualGraphics.KEYMAP_LOCAL
+            return VirtualGraphics.KEYMAP_LOCAL
         if keymap.lower() == "none":
             return None
 

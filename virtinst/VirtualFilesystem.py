@@ -19,12 +19,12 @@
 
 import os
 
-import VirtualDevice
-from XMLBuilderDomain import _xml_property
+from virtinst.VirtualDevice import VirtualDevice
+from virtinst.XMLBuilderDomain import _xml_property
 
-class VirtualFilesystem(VirtualDevice.VirtualDevice):
+class VirtualFilesystem(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VirtualDevice.VIRTUAL_DEV_FILESYSTEM
+    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_FILESYSTEM
 
     _target_props = ["dir", "name", "file", "dev"]
 
@@ -70,7 +70,7 @@ class VirtualFilesystem(VirtualDevice.VirtualDevice):
         return "dir"
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
-        VirtualDevice.VirtualDevice.__init__(self, conn, parsexml,
+        VirtualDevice.__init__(self, conn, parsexml,
                                              parsexmlnode, caps)
 
         self._type = None

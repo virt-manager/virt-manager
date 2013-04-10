@@ -28,13 +28,13 @@ import socket
 import ConfigParser
 
 import virtinst
-import osdict
+from virtinst import osdict
 from virtinst import util
 
-from ImageFetcher import MountedImageFetcher
-from ImageFetcher import FTPImageFetcher
-from ImageFetcher import HTTPImageFetcher
-from ImageFetcher import DirectImageFetcher
+from virtinst.ImageFetcher import MountedImageFetcher
+from virtinst.ImageFetcher import FTPImageFetcher
+from virtinst.ImageFetcher import HTTPImageFetcher
+from virtinst.ImageFetcher import DirectImageFetcher
 
 def safeint(c):
     try:

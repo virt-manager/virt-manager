@@ -17,12 +17,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import VirtualDevice
-from XMLBuilderDomain import _xml_property
+from virtinst.VirtualDevice import VirtualDevice
+from virtinst.XMLBuilderDomain import _xml_property
 
-class VirtualWatchdog(VirtualDevice.VirtualDevice):
+class VirtualWatchdog(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VirtualDevice.VIRTUAL_DEV_WATCHDOG
+    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_WATCHDOG
 
     MODEL_DEFAULT = "default"
     MODELS = [ "i6300esb", "ib700", MODEL_DEFAULT ]
@@ -55,7 +55,7 @@ class VirtualWatchdog(VirtualDevice.VirtualDevice):
             return action
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
-        VirtualDevice.VirtualDevice.__init__(self, conn, parsexml,
+        VirtualDevice.__init__(self, conn, parsexml,
                                              parsexmlnode, caps)
 
         self._model = None

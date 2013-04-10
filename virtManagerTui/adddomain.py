@@ -20,9 +20,9 @@
 import snack
 import os
 
-from vmmconfigscreen import VmmTuiConfigScreen
-from createmeter import CreateMeter
-from domainconfig import DomainConfig
+from virtManagerTui.vmmconfigscreen import VmmTuiConfigScreen
+from virtManagerTui.createmeter import CreateMeter
+from virtManagerTui.domainconfig import DomainConfig
 
 from virtinst import Guest
 

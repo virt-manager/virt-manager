@@ -25,8 +25,8 @@ import os
 import libxml2
 import urlgrabber
 
-import CapabilitiesParser
-import util
+from virtinst import CapabilitiesParser
+from virtinst import util
 
 
 class ParserException(Exception):

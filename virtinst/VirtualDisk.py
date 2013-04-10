@@ -33,10 +33,10 @@ import libvirt
 import virtinst
 from virtinst import uriutil
 
-import util
-import Storage
-from VirtualDevice import VirtualDevice
-from XMLBuilderDomain import _xml_property
+from virtinst import util
+from virtinst import Storage
+from virtinst.VirtualDevice import VirtualDevice
+from virtinst.XMLBuilderDomain import _xml_property
 
 def _vdisk_create(path, size, kind, sparse=True):
     force_fixed = "raw"

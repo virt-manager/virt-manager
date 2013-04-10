@@ -38,19 +38,3 @@ if utils.get_debug():
     rootLogger.setLevel(logging.DEBUG)
 else:
     rootLogger.setLevel(logging.ERROR)
-
-
-# Have imports down here so they get the benefit of logging setup etc.
-import capabilities
-import clitest
-import clonetest
-import image
-import interface
-import nodedev
-import storage
-import support
-import urltest
-import validation
-import virtconvtest
-import xmlconfig
-import xmlparse

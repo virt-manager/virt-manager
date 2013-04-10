@@ -18,14 +18,14 @@
 
 from newt_syrup.menuscreen     import MenuScreen
 
-from adddomain      import AddDomain
-from startdomain    import StartDomain
-from stopdomain     import StopDomain
-from pausedomain    import PauseDomain
-from removedomain   import RemoveDomain
-from listdomains    import ListDomains
-from migratedomain  import MigrateDomain
-from createuser     import CreateUser
+from virtManagerTui.adddomain      import AddDomain
+from virtManagerTui.startdomain    import StartDomain
+from virtManagerTui.stopdomain     import StopDomain
+from virtManagerTui.pausedomain    import PauseDomain
+from virtManagerTui.removedomain   import RemoveDomain
+from virtManagerTui.listdomains    import ListDomains
+from virtManagerTui.migratedomain  import MigrateDomain
+from virtManagerTui.createuser     import CreateUser
 
 ADD_DOMAIN     = 1
 START_DOMAIN   = 2

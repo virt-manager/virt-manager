@@ -21,7 +21,7 @@
 
 import re
 
-import util
+from virtinst import util
 
 class CapabilitiesParserException(Exception):
     def __init__(self, msg):

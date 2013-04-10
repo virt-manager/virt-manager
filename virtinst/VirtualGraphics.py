@@ -20,10 +20,10 @@
 import re
 import os
 
-import util
-import VirtualDevice
-import support
-from XMLBuilderDomain import _xml_property
+from virtinst import util
+from virtinst.VirtualDevice import VirtualDevice
+from virtinst import support
+from virtinst.XMLBuilderDomain import _xml_property
 
 def _get_mode_prop(channel_type):
     xpath = "./channel[@name='%s']/@mode" % channel_type
@@ -33,9 +33,9 @@ def _get_mode_prop(channel_type):
         s._channels[channel_type] = val
     return _xml_property(get_mode, set_mode, xpath=xpath)
 
-class VirtualGraphics(VirtualDevice.VirtualDevice):
+class VirtualGraphics(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VirtualDevice.VIRTUAL_DEV_GRAPHICS
+    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_GRAPHICS
 
     TYPE_SDL = "sdl"
     TYPE_VNC = "vnc"
@@ -68,7 +68,7 @@ class VirtualGraphics(VirtualDevice.VirtualDevice):
         """
         Return a list of valid keymap values.
         """
-        import keytable
+        from virtinst import keytable
 
         orig_list = keytable.keytable.values()
         sort_list = []
@@ -94,7 +94,7 @@ class VirtualGraphics(VirtualDevice.VirtualDevice):
                  parsexmlnode=None, tlsPort=-1, channels=None,
                  caps=None, passwdValidTo=None):
 
-        VirtualDevice.VirtualDevice.__init__(self, conn,
+        VirtualDevice.__init__(self, conn,
                                              parsexml, parsexmlnode, caps)
 
         self._type   = None

@@ -18,9 +18,9 @@
 
 import snack
 
-from createmeter import CreateMeter
-from storagelistconfigscreen import StorageListConfigScreen
-from volumeconfig import StorageVolumeConfig
+from virtManagerTui.createmeter import CreateMeter
+from virtManagerTui.storagelistconfigscreen import StorageListConfigScreen
+from virtManagerTui.volumeconfig import StorageVolumeConfig
 
 from newt_syrup import utils
 

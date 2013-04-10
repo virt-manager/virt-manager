@@ -25,8 +25,8 @@ import ipaddr
 import logging
 import re
 
-from vmmconfigscreen import VmmTuiConfigScreen
-from networkconfig import NetworkConfig
+from virtManagerTui.vmmconfigscreen import VmmTuiConfigScreen
+from virtManagerTui.networkconfig import NetworkConfig
 
 NETWORK_NAME_PAGE            = 1
 IPV4_ADDRESS_PAGE            = 2

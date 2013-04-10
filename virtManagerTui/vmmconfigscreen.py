@@ -22,7 +22,7 @@ from snack import Label
 from types import StringType
 
 from newt_syrup import configscreen
-from libvirtworker import LibvirtWorker, VirtManagerConfig
+from virtManagerTui.libvirtworker import LibvirtWorker, VirtManagerConfig
 
 BACK_BUTTON   = "back"
 NEXT_BUTTON   = "next"

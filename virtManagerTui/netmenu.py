@@ -18,11 +18,11 @@
 
 from newt_syrup.menuscreen import MenuScreen
 
-from addnetwork      import AddNetwork
-from startnetwork    import StartNetwork
-from stopnetwork     import StopNetwork
-from removenetwork   import RemoveNetwork
-from listnetworks    import ListNetworks
+from virtManagerTui.addnetwork      import AddNetwork
+from virtManagerTui.startnetwork    import StartNetwork
+from virtManagerTui.stopnetwork     import StopNetwork
+from virtManagerTui.removenetwork   import RemoveNetwork
+from virtManagerTui.listnetworks    import ListNetworks
 
 ADD_NETWORK      = 1
 START_NETWORK    = 2

@@ -17,8 +17,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import Installer
-from VirtualDisk import VirtualDisk
+from virtinst import Installer
+from virtinst.VirtualDisk import VirtualDisk
 
 class ImportInstaller(Installer.Installer):
     """

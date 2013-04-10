@@ -17,13 +17,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import VirtualDevice
-from XMLBuilderDomain import XMLBuilderDomain, _xml_property
+from virtinst.VirtualDevice import VirtualDevice
+from virtinst.XMLBuilderDomain import XMLBuilderDomain, _xml_property
 import logging
 
-class VirtualController(VirtualDevice.VirtualDevice):
+class VirtualController(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VirtualDevice.VIRTUAL_DEV_CONTROLLER
+    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_CONTROLLER
 
     CONTROLLER_TYPE_IDE             = "ide"
     CONTROLLER_TYPE_FDC             = "fdc"
@@ -72,7 +72,7 @@ class VirtualController(VirtualDevice.VirtualDevice):
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None,
                  model=None):
-        VirtualDevice.VirtualDevice.__init__(self, conn,
+        VirtualDevice.__init__(self, conn,
                                              parsexml, parsexmlnode, caps)
 
         self._index = 0

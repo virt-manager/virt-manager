@@ -23,8 +23,8 @@ from snack import RadioBar
 
 from newt_syrup import utils
 
-from vmmconfigscreen import VmmTuiConfigScreen
-from poolconfig import PoolConfig
+from virtManagerTui.vmmconfigscreen import VmmTuiConfigScreen
+from virtManagerTui.poolconfig import PoolConfig
 from virtinst import Storage
 
 POOL_NAME_PAGE    = 1

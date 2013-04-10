@@ -25,7 +25,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 
 import virtinst
-from virtinst import (VirtualCharDevice, VirtualDevice,
+from virtinst import (VirtualCharDevice,
                       VirtualVideoDevice, VirtualWatchdog,
                       VirtualFilesystem, VirtualSmartCardDevice,
                       VirtualRedirDevice)
@@ -976,10 +976,10 @@ class vmmAddHardware(vmmGObjectUI):
             label = row[5]
 
         if label == "parallel":
-            return VirtualDevice.VIRTUAL_DEV_PARALLEL
+            return VirtualCharDevice.VIRTUAL_DEV_PARALLEL
         elif label == "channel":
-            return VirtualDevice.VIRTUAL_DEV_CHANNEL
-        return VirtualDevice.VIRTUAL_DEV_SERIAL
+            return VirtualCharDevice.VIRTUAL_DEV_CHANNEL
+        return VirtualCharDevice.VIRTUAL_DEV_SERIAL
 
     def dev_to_title(self, page):
         if page == PAGE_ERROR:

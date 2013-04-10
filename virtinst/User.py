@@ -20,7 +20,7 @@
 import os
 import platform
 
-import uriutil
+from virtinst import uriutil
 
 
 class User(object):

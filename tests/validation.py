@@ -18,7 +18,7 @@ import virtinst
 from virtinst import VirtualDisk
 from virtinst import Interface
 
-import utils
+from tests import utils
 
 import unittest
 import logging

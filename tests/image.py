@@ -21,7 +21,7 @@ import virtinst.cli
 import virtinst.ImageParser
 import os
 
-import utils
+from tests import utils
 
 qemuuri = "__virtinst_test__test:///default,caps=%s/tests/capabilities-xml/capabilities-kvm.xml,qemu,predictable" % os.getcwd()
 

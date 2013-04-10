@@ -21,7 +21,7 @@ import re
 import platform
 import sys
 
-import utils
+from tests import utils
 import virtinst
 import virtinst.OSDistro as OSDistro
 from virtinst.OSDistro import FedoraDistro

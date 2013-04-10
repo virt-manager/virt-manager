@@ -18,10 +18,10 @@
 
 from newt_syrup.menuscreen  import MenuScreen
 
-from nodemenu    import NodeMenu
-from netmenu     import NetworkMenu
-from storagemenu import StoragePoolMenu
-from hostmenu    import HostMenu
+from virtManagerTui.nodemenu    import NodeMenu
+from virtManagerTui.netmenu     import NetworkMenu
+from virtManagerTui.storagemenu import StoragePoolMenu
+from virtManagerTui.hostmenu    import HostMenu
 
 NODE_MENU    = 1
 NETWORK_MENU = 2

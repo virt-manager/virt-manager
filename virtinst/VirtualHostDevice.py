@@ -17,15 +17,15 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import VirtualDevice
-import NodeDeviceParser
+from virtinst.VirtualDevice import VirtualDevice
+from virtinst import NodeDeviceParser
 import logging
 
-from XMLBuilderDomain import _xml_property
+from virtinst.XMLBuilderDomain import _xml_property
 
-class VirtualHostDevice(VirtualDevice.VirtualDevice):
+class VirtualHostDevice(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VirtualDevice.VIRTUAL_DEV_HOSTDEV
+    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_HOSTDEV
 
     def device_from_node(conn, name=None, nodedev=None):
         """
@@ -76,7 +76,7 @@ class VirtualHostDevice(VirtualDevice.VirtualDevice):
                          attached to the guest
         @type nodedev: L{virtinst.NodeDeviceParser.NodeDevice}
         """
-        VirtualDevice.VirtualDevice.__init__(self, conn, parsexml,
+        VirtualDevice.__init__(self, conn, parsexml,
                                              parsexmlnode, caps)
 
         self._mode = None

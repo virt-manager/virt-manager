@@ -17,19 +17,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import VirtualDevice
-from XMLBuilderDomain import _xml_property
+from virtinst.VirtualDevice import VirtualDevice
+from virtinst.XMLBuilderDomain import _xml_property
 
-class VirtualMemballoon(VirtualDevice.VirtualDevice):
+class VirtualMemballoon(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VirtualDevice.VIRTUAL_DEV_MEMBALLOON
+    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_MEMBALLOON
 
     MODEL_DEFAULT = "virtio"
     MODELS = [ "xen", "none", MODEL_DEFAULT ]
 
     def __init__(self, conn=None, model=MODEL_DEFAULT,
                  parsexml=None, parsexmlnode=None, caps=None):
-        VirtualDevice.VirtualDevice.__init__(self, conn, parsexml,
+        VirtualDevice.__init__(self, conn, parsexml,
                                              parsexmlnode, caps)
 
         self._model = None

@@ -27,8 +27,8 @@ import StringIO
 
 import virtinst.cli
 
-from scriptimports import virtinstall, virtimage, virtclone, virtconvert
-import utils
+from tests.scriptimports import virtinstall, virtimage, virtclone, virtconvert
+from tests import utils
 
 os.environ["VIRTCONV_TEST_NO_DISK_CONVERSION"] = "1"
 os.environ["LANG"] = "en_US.UTF-8"

@@ -19,8 +19,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import support
-from VirtualDevice import VirtualDevice
+from virtinst import support
+from virtinst.VirtualDevice import VirtualDevice
 
 HV_ALL = "all"
 

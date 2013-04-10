@@ -17,12 +17,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import VirtualDevice
-from XMLBuilderDomain import _xml_property
+from virtinst.VirtualDevice import VirtualDevice
+from virtinst.XMLBuilderDomain import _xml_property
 
-class VirtualInputDevice(VirtualDevice.VirtualDevice):
+class VirtualInputDevice(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VirtualDevice.VIRTUAL_DEV_INPUT
+    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_INPUT
 
     INPUT_TYPE_MOUSE = "mouse"
     INPUT_TYPE_TABLET = "tablet"
@@ -37,7 +37,7 @@ class VirtualInputDevice(VirtualDevice.VirtualDevice):
                    INPUT_BUS_DEFAULT]
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
-        VirtualDevice.VirtualDevice.__init__(self, conn, parsexml,
+        VirtualDevice.__init__(self, conn, parsexml,
                                              parsexmlnode, caps)
 
         self._type = None

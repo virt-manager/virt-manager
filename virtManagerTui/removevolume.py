@@ -18,8 +18,8 @@
 
 import snack
 
-from storagelistconfigscreen import StorageListConfigScreen
-from volumeconfig import StorageVolumeConfig
+from virtManagerTui.storagelistconfigscreen import StorageListConfigScreen
+from virtManagerTui.volumeconfig import StorageVolumeConfig
 
 SELECT_POOL_PAGE   = 1
 SELECT_VOLUME_PAGE = 2

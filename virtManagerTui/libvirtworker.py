@@ -24,7 +24,7 @@ import libvirt
 
 from virtManager.connection import vmmConnection
 
-from domainconfig import DomainConfig
+from virtManagerTui.domainconfig import DomainConfig
 
 DEFAULT_POOL_TARGET_PATH = "/var/lib/libvirt/images"
 DEFAULT_URL = "qemu:///system"

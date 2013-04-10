@@ -25,9 +25,9 @@ import threading
 import libvirt
 import libxml2
 
-import CapabilitiesParser
-import uriutil
-import util
+from virtinst import CapabilitiesParser
+from virtinst import uriutil
+from virtinst import util
 
 _xml_refs_lock = threading.Lock()
 _xml_refs = {}

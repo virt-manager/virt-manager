@@ -40,11 +40,11 @@ import os
 import urlgrabber.progress as progress
 import libvirt
 
-import Guest
-from VirtualNetworkInterface import VirtualNetworkInterface
-from VirtualDisk import VirtualDisk
+from virtinst import Guest
+from virtinst.VirtualNetworkInterface import VirtualNetworkInterface
+from virtinst.VirtualDisk import VirtualDisk
 from virtinst import Storage
-import util
+from virtinst import util
 
 def _listify(val):
     """
@@ -150,7 +150,7 @@ class CloneDesign(object):
                                     self.CLONE_POLICY_NO_EMPTYMEDIA]
 
         # Throwaway guest to use for easy validation
-        self._valid_guest        = Guest.Guest(conn=conn)
+        self._valid_guest        = Guest(conn=conn)
 
         # Generate a random UUID at the start
         self.clone_uuid = util.generate_uuid(conn)
@@ -402,7 +402,7 @@ class CloneDesign(object):
 
         logging.debug("Original XML:\n%s", self.original_xml)
 
-        self._guest = Guest.Guest(conn=self._hyper_conn,
+        self._guest = Guest(conn=self._hyper_conn,
                                   parsexml=self.original_xml)
         self._guest.replace = self.replace
 

@@ -18,7 +18,7 @@
 
 import snack
 
-from vmmconfigscreen import VmmTuiConfigScreen
+from virtManagerTui.vmmconfigscreen import VmmTuiConfigScreen
 
 class NetworkListConfigScreen(VmmTuiConfigScreen):
     '''Provides a base class for all config screens that require a network list.'''

@@ -18,7 +18,7 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 import snack
-from domainlistconfigscreen import DomainListConfigScreen
+from virtManagerTui.domainlistconfigscreen import DomainListConfigScreen
 
 class PauseDomainConfigScreen(DomainListConfigScreen):
     LIST_PAGE = 1

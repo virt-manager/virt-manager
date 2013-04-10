@@ -18,7 +18,7 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 import snack
-from domainlistconfigscreen import DomainListConfigScreen
+from virtManagerTui.domainlistconfigscreen import DomainListConfigScreen
 
 LIST_DOMAINS  = 1
 SELECT_TARGET = 2

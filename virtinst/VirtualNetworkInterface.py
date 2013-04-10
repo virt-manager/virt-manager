@@ -20,10 +20,10 @@
 import logging
 import libvirt
 
-import util
-import VirtualDevice
-import XMLBuilderDomain
-from XMLBuilderDomain import _xml_property
+from virtinst import util
+from virtinst.VirtualDevice import VirtualDevice
+from virtinst import XMLBuilderDomain
+from virtinst.XMLBuilderDomain import _xml_property
 
 
 def _compareMAC(p, q):
@@ -114,9 +114,9 @@ class VirtualPort(XMLBuilderDomain.XMLBuilderDomain):
         # FIXME: This should be implemented, currently we can only parse
         return ""
 
-class VirtualNetworkInterface(VirtualDevice.VirtualDevice):
+class VirtualNetworkInterface(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VirtualDevice.VIRTUAL_DEV_NET
+    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_NET
 
     TYPE_BRIDGE     = "bridge"
     TYPE_VIRTUAL    = "network"
@@ -145,7 +145,7 @@ class VirtualNetworkInterface(VirtualDevice.VirtualDevice):
     def __init__(self, macaddr=None, type=TYPE_BRIDGE, bridge=None,
                  network=None, model=None, conn=None,
                  parsexml=None, parsexmlnode=None, caps=None):
-        VirtualDevice.VirtualDevice.__init__(self, conn, parsexml,
+        VirtualDevice.__init__(self, conn, parsexml,
                                              parsexmlnode, caps)
 
         self._network = None

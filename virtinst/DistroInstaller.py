@@ -25,13 +25,13 @@ import tempfile
 
 import urlgrabber
 
-import Storage
-import support
-import util
-import Installer
-from VirtualDisk import VirtualDisk
-from User import User
-import OSDistro
+from virtinst import Storage
+from virtinst import support
+from virtinst import util
+from virtinst import Installer
+from virtinst.VirtualDisk import VirtualDisk
+from virtinst.User import User
+from virtinst import OSDistro
 
 
 def _is_url(url, is_local):

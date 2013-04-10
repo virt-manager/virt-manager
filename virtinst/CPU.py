@@ -17,8 +17,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import XMLBuilderDomain
-from XMLBuilderDomain import _xml_property
+from virtinst import XMLBuilderDomain
+from virtinst.XMLBuilderDomain import _xml_property
 
 import libxml2
 

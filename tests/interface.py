@@ -21,7 +21,7 @@ import logging
 import virtinst.Interface
 from virtinst.Interface import (Interface, InterfaceProtocol,
                                 InterfaceProtocolIPAddress)
-import utils
+from tests import utils
 
 conn = utils.open_testdriver()
 datadir = "tests/interface-xml"

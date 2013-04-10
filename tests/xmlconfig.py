@@ -32,7 +32,7 @@ from virtinst import VirtualController
 from virtinst import VirtualWatchdog
 from virtinst import VirtualInputDevice
 from virtinst import VirtualMemballoon
-import utils
+from tests import utils
 
 _testconn = utils.open_testdriver()
 _kvmconn = utils.open_testkvmdriver()

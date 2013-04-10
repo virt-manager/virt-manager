@@ -35,7 +35,7 @@ import virtinst.CapabilitiesParser
 import virtinst.cli as cli
 import virtinst.util as util
 from virtinst import uriutil
-from virtinst.VirtualDevice import VirtualDevice
+from virtinst import VirtualCharDevice
 from virtinst.cli import fail, print_stdout, print_stderr
 
 
@@ -510,13 +510,13 @@ def build_guest_instance(conn, options):
     get_watchdog(options.watchdog, guest)
     get_filesystems(options.filesystems, guest)
     cli.get_sound(options.sound, options.soundhw, guest)
-    get_chardevs(VirtualDevice.VIRTUAL_DEV_SERIAL, options.serials,
+    get_chardevs(VirtualCharDevice.VIRTUAL_DEV_SERIAL, options.serials,
                  guest, cli.parse_serial)
-    get_chardevs(VirtualDevice.VIRTUAL_DEV_PARALLEL, options.parallels,
+    get_chardevs(VirtualCharDevice.VIRTUAL_DEV_PARALLEL, options.parallels,
                  guest, cli.parse_parallel)
-    get_chardevs(VirtualDevice.VIRTUAL_DEV_CHANNEL, options.channels,
+    get_chardevs(VirtualCharDevice.VIRTUAL_DEV_CHANNEL, options.channels,
                  guest, cli.parse_channel)
-    get_chardevs(VirtualDevice.VIRTUAL_DEV_CONSOLE, options.consoles,
+    get_chardevs(VirtualCharDevice.VIRTUAL_DEV_CONSOLE, options.consoles,
                  guest, cli.parse_console)
     cli.get_hostdevs(options.hostdevs, guest)
     cli.get_smartcard(guest, options.smartcard)

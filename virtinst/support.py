@@ -20,7 +20,7 @@
 # MA 02110-1301 USA.
 
 import libvirt
-import uriutil
+from virtinst import uriutil
 
 
 # Flags for check_conn_support

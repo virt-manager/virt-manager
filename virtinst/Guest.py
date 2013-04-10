@@ -28,26 +28,26 @@ import urlgrabber.progress as progress
 import libvirt
 import libxml2
 
-import util
-import CapabilitiesParser
-import VirtualGraphics
-import support
-import XMLBuilderDomain
+from virtinst import util
+from virtinst import CapabilitiesParser
+from virtinst import VirtualGraphics
+from virtinst import support
+from virtinst import XMLBuilderDomain
 import virtinst
-from XMLBuilderDomain import _xml_property
-import DistroInstaller
-from VirtualDevice import VirtualDevice
-from VirtualDisk import VirtualDisk
-from VirtualInputDevice import VirtualInputDevice
-from VirtualCharDevice import VirtualCharDevice
-from VirtualController import VirtualControllerUSB
-from Clock import Clock
-from Seclabel import Seclabel
-from CPU import CPU
-from DomainNumatune import DomainNumatune
-from DomainFeatures import DomainFeatures
+from virtinst.XMLBuilderDomain import _xml_property
+from virtinst import DistroInstaller
+from virtinst.VirtualDevice import VirtualDevice
+from virtinst.VirtualDisk import VirtualDisk
+from virtinst.VirtualInputDevice import VirtualInputDevice
+from virtinst.VirtualCharDevice import VirtualCharDevice
+from virtinst.VirtualController import VirtualControllerUSB
+from virtinst.Clock import Clock
+from virtinst.Seclabel import Seclabel
+from virtinst.CPU import CPU
+from virtinst.DomainNumatune import DomainNumatune
+from virtinst.DomainFeatures import DomainFeatures
 
-import osdict
+from virtinst import osdict
 
 
 class Guest(XMLBuilderDomain.XMLBuilderDomain):
@@ -882,7 +882,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         for dev in devs:
             xml = util.xml_append(xml, get_dev_xml(dev))
             if (dev.address.type == "spapr-vio" and
-                  dev.virtual_device_type == virtinst.VirtualDevice.VIRTUAL_DEV_DISK):
+                  dev.virtual_device_type == VirtualDevice.VIRTUAL_DEV_DISK):
                 xml = util.xml_append(xml, get_vscsi_ctrl_xml())
 
         return xml

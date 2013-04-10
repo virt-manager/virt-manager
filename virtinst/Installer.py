@@ -26,13 +26,13 @@ import platform
 import logging
 import copy
 
-import util
+from virtinst import util
 import virtinst
-import XMLBuilderDomain
-from XMLBuilderDomain import _xml_property
+from virtinst import XMLBuilderDomain
+from virtinst.XMLBuilderDomain import _xml_property
 from virtinst import CapabilitiesParser
-from VirtualDisk import VirtualDisk
-from Boot import Boot
+from virtinst.VirtualDisk import VirtualDisk
+from virtinst.Boot import Boot
 
 XEN_SCRATCH = "/var/lib/xen"
 LIBVIRT_SCRATCH = "/var/lib/libvirt/boot"

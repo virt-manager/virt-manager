@@ -24,8 +24,8 @@ import libvirt
 
 import logging
 
-import util
-import support
+from virtinst import util
+from virtinst import support
 
 
 class Interface(object):

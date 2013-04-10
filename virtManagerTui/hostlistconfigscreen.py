@@ -18,7 +18,7 @@
 
 import snack
 
-from vmmconfigscreen import VmmTuiConfigScreen
+from virtManagerTui.vmmconfigscreen import VmmTuiConfigScreen
 
 class HostListConfigScreen(VmmTuiConfigScreen):
     '''Provides a base class for working with lists of libvirt hosts.'''

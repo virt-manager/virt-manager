@@ -19,7 +19,7 @@
 import snack
 
 import logging
-from hostlistconfigscreen import HostListConfigScreen
+from virtManagerTui.hostlistconfigscreen import HostListConfigScreen
 
 CONNECTION_LIST_PAGE = 1
 CONNECTED_PAGE       = 2

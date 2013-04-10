@@ -19,7 +19,7 @@
 
 import snack
 
-from domainlistconfigscreen import DomainListConfigScreen
+from virtManagerTui.domainlistconfigscreen import DomainListConfigScreen
 
 class StartDomainConfigScreen(DomainListConfigScreen):
     LIST_PAGE  = 1

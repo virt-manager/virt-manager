@@ -35,7 +35,7 @@ import subprocess
 import libvirt
 import libxml2
 
-import uriutil
+from virtinst import uriutil
 
 def listify(l):
     if l is None:
@@ -664,7 +664,7 @@ def default_keymap():
 
 def is_storage_capable(conn):
     """check if virConnectPtr passed has storage API support"""
-    import support
+    from virtinst import support
 
     return support.check_conn_support(conn, support.SUPPORT_CONN_STORAGE)
 
@@ -729,7 +729,8 @@ def lookup_pool_by_path(conn, path):
     return None
 
 def check_keytable(kt):
-    import keytable
+    from virtinst import keytable
+
     keymap = None
     # Try a simple lookup in the keytable
     if kt.lower() in keytable.keytable:

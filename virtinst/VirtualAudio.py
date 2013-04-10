@@ -17,19 +17,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import VirtualDevice
-from XMLBuilderDomain import _xml_property
+from virtinst.VirtualDevice import VirtualDevice
+from virtinst.XMLBuilderDomain import _xml_property
 
-class VirtualAudio(VirtualDevice.VirtualDevice):
+class VirtualAudio(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VirtualDevice.VIRTUAL_DEV_AUDIO
+    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_AUDIO
 
     MODEL_DEFAULT = "default"
     MODELS = [ "es1370", "sb16", "pcspk", "ac97", "ich6", MODEL_DEFAULT ]
 
     def __init__(self, model=None, conn=None,
                  parsexml=None, parsexmlnode=None, caps=None):
-        VirtualDevice.VirtualDevice.__init__(self, conn,
+        VirtualDevice.__init__(self, conn,
                                              parsexml, parsexmlnode, caps)
 
         self._model = None

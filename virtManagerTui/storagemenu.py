@@ -18,13 +18,13 @@
 
 from newt_syrup.menuscreen import MenuScreen
 
-from addpool       import AddStoragePool
-from startpool     import StartStoragePool
-from stoppool      import StopStoragePool
-from removepool    import RemoveStoragePool
-from addvolume     import AddStorageVolume
-from removevolume  import RemoveStorageVolume
-from listpools     import ListStoragePools
+from virtManagerTui.addpool       import AddStoragePool
+from virtManagerTui.startpool     import StartStoragePool
+from virtManagerTui.stoppool      import StopStoragePool
+from virtManagerTui.removepool    import RemoveStoragePool
+from virtManagerTui.addvolume     import AddStorageVolume
+from virtManagerTui.removevolume  import RemoveStorageVolume
+from virtManagerTui.listpools     import ListStoragePools
 
 ADD_POOL      = 1
 START_POOL    = 2

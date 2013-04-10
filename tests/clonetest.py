@@ -18,7 +18,7 @@ import unittest
 import os
 import logging
 
-import utils
+from tests import utils
 
 from virtinst import CloneManager
 CloneDesign = CloneManager.CloneDesign

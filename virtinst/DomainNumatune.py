@@ -19,9 +19,9 @@
 
 import re
 
-import util
-import XMLBuilderDomain
-from XMLBuilderDomain import _xml_property
+from virtinst import util
+from virtinst import XMLBuilderDomain
+from virtinst.XMLBuilderDomain import _xml_property
 
 
 def get_phy_cpus(conn):

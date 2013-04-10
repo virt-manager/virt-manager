@@ -20,7 +20,7 @@ import unittest
 import virtinst.NodeDeviceParser as nodeparse
 from virtinst import VirtualHostDevice
 
-import utils
+from tests import utils
 
 conn = utils.open_testdriver()
 

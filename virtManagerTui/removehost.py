@@ -18,7 +18,7 @@
 
 import snack
 
-from hostlistconfigscreen import HostListConfigScreen
+from virtManagerTui.hostlistconfigscreen import HostListConfigScreen
 
 SELECT_HOST_PAGE    = 1
 CONFIRM_REMOVE_PAGE = 2

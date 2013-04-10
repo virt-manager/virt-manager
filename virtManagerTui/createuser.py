@@ -19,7 +19,7 @@
 
 import snack
 from newt_syrup.configscreen import ConfigScreen
-from userworker import UserWorker
+from virtManagerTui.userworker import UserWorker
 
 import libuser
 

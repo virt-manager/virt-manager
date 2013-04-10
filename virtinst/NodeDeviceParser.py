@@ -17,8 +17,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import support
-import util
+from virtinst import support
+from virtinst import util
 import libvirt
 import logging
 

@@ -19,7 +19,7 @@
 from snack import Label
 from snack import Listbox
 
-from storagelistconfigscreen import StorageListConfigScreen
+from virtManagerTui.storagelistconfigscreen import StorageListConfigScreen
 
 from newt_syrup import utils
 

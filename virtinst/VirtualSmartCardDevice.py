@@ -19,12 +19,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import VirtualDevice
-from XMLBuilderDomain import _xml_property
+from virtinst.VirtualDevice import VirtualDevice
+from virtinst.XMLBuilderDomain import _xml_property
 
-class VirtualSmartCardDevice(VirtualDevice.VirtualDevice):
+class VirtualSmartCardDevice(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VirtualDevice.VIRTUAL_DEV_SMARTCARD
+    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_SMARTCARD
 
     # Default models list
     MODE_DEFAULT = "passthrough"
@@ -35,7 +35,7 @@ class VirtualSmartCardDevice(VirtualDevice.VirtualDevice):
 
     def __init__(self, conn, mode=MODE_DEFAULT,
                  parsexml=None, parsexmlnode=None, caps=None):
-        VirtualDevice.VirtualDevice.__init__(self, conn,
+        VirtualDevice.__init__(self, conn,
                                              parsexml, parsexmlnode, caps)
 
         self._mode = None

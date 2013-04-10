@@ -18,7 +18,7 @@
 
 import snack
 
-from vmmconfigscreen import VmmTuiConfigScreen
+from virtManagerTui.vmmconfigscreen import VmmTuiConfigScreen
 
 class DomainListConfigScreen(VmmTuiConfigScreen):
     '''Provides a base class for all config screens that require a domain list.'''

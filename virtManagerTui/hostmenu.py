@@ -18,9 +18,9 @@
 
 from newt_syrup.menuscreen import MenuScreen
 
-from changehost import ChangeHost
-from addhost import AddHost
-from removehost import RemoveHost
+from virtManagerTui.changehost import ChangeHost
+from virtManagerTui.addhost import AddHost
+from virtManagerTui.removehost import RemoveHost
 
 SELECT_HOST = 1
 ADD_HOST    = 2

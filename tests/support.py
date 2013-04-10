@@ -18,7 +18,7 @@ import unittest
 
 from virtinst import support
 
-import utils
+from tests import utils
 
 conn = utils.open_testdriver()
 

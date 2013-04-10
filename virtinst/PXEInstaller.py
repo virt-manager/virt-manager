@@ -17,7 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import Installer
+from virtinst import Installer
 
 class PXEInstaller(Installer.Installer):
 

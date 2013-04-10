@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from XMLBuilderDomain import XMLBuilderDomain, _xml_property
+from virtinst.XMLBuilderDomain import XMLBuilderDomain, _xml_property
 import logging
 
 class VirtualDevice(XMLBuilderDomain):

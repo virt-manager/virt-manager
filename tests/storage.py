@@ -19,7 +19,7 @@ import unittest
 
 import virtinst.Storage
 from virtinst.Storage import StoragePool, StorageVolume
-import utils
+from tests import utils
 
 import libvirt
 

@@ -18,7 +18,7 @@
 
 import snack
 
-from vmmconfigscreen import VmmTuiConfigScreen
+from virtManagerTui.vmmconfigscreen import VmmTuiConfigScreen
 
 DETAILS_PAGE = 1
 CONFIRM_PAGE = 2
