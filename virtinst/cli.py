@@ -37,8 +37,8 @@ import libvirt
 from virtcli import cliconfig
 
 import virtinst
-from virtinst import _util
-from _util import listify
+from virtinst import util
+from util import listify
 
 from virtinst import Guest
 from virtinst import VirtualNetworkInterface
@@ -841,7 +841,7 @@ def get_cpuset(guest, cpuset, memory):
 def _default_network_opts(guest):
     opts = ""
     if User.current().has_priv(User.PRIV_CREATE_NETWORK, guest.get_uri()):
-        net = _util.default_network(guest.conn)
+        net = util.default_network(guest.conn)
         opts = "%s=%s" % (net[0], net[1])
     else:
         opts = "user"
@@ -1697,7 +1697,7 @@ def parse_graphics(guest, optstring, dev=None):
         if keymap.lower() == "none":
             return None
 
-        use_keymap = _util.check_keytable(keymap)
+        use_keymap = util.check_keytable(keymap)
         if not use_keymap:
             raise ValueError(
                         _("Didn't match keymap '%s' in keytable!") % keymap)

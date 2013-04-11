@@ -28,7 +28,7 @@ import urlgrabber.progress as progress
 import libvirt
 import libxml2
 
-import _util
+import util
 import CapabilitiesParser
 import VirtualGraphics
 import support
@@ -294,7 +294,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
     def get_name(self):
         return self._name
     def set_name(self, val):
-        _util.validate_name(_("Guest"), val, lencheck=True)
+        util.validate_name(_("Guest"), val, lencheck=True)
 
         do_fail = False
         if self.replace != True:
@@ -357,13 +357,13 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
     def get_uuid(self):
         return self._uuid
     def set_uuid(self, val):
-        val = _util.validate_uuid(val)
+        val = util.validate_uuid(val)
         self._uuid = val
     uuid = _xml_property(get_uuid, set_uuid,
                          xpath="./uuid")
 
     def __validate_cpus(self, val):
-        maxvcpus = _util.get_max_vcpus(self.conn, self.type)
+        maxvcpus = util.get_max_vcpus(self.conn, self.type)
         val = int(val)
         if val < 1:
             raise ValueError(_("Number of vcpus must be a positive integer."))
@@ -880,10 +880,10 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         xml = self._get_emulator_xml()
         # Build XML
         for dev in devs:
-            xml = _util.xml_append(xml, get_dev_xml(dev))
+            xml = util.xml_append(xml, get_dev_xml(dev))
             if (dev.address.type == "spapr-vio" and
                   dev.virtual_device_type == virtinst.VirtualDevice.VIRTUAL_DEV_DISK):
-                xml = _util.xml_append(xml, get_vscsi_ctrl_xml())
+                xml = util.xml_append(xml, get_vscsi_ctrl_xml())
 
         return xml
 
@@ -947,7 +947,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         if not osxml:
             return None
 
-        xml = _util.xml_append(xml,
+        xml = util.xml_append(xml,
                                self.installer.get_xml_config(self, install))
         return xml
 
@@ -1052,10 +1052,10 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         if self.description is not None:
             desc = str(self.description)
             desc_xml = ("  <description>%s</description>" %
-                        _util.xml_escape(desc))
+                        util.xml_escape(desc))
 
         xml = ""
-        add = lambda x: _util.xml_append(xml, x)
+        add = lambda x: util.xml_append(xml, x)
 
         xml = add("<domain type='%s'>" % self.type)
         xml = add("  <name>%s</name>" % self.name)
@@ -1120,7 +1120,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
             raise RuntimeError(_("Name and memory must be specified for "
                                  "all guests!"))
 
-        if _util.vm_uuid_collision(self.conn, self.uuid):
+        if util.vm_uuid_collision(self.conn, self.uuid):
             raise RuntimeError(_("The UUID you entered is already in "
                                  "use by another guest!"))
 
@@ -1442,7 +1442,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         # Default file backed PV guests to tap driver
         for d in devlist_func(VirtualDevice.VIRTUAL_DEV_DISK):
             if (d.type == VirtualDisk.TYPE_FILE
-                and _util.is_blktap_capable()
+                and util.is_blktap_capable()
                 and d.driver_name == None):
                 d.driver_name = VirtualDisk.DRIVER_TAP
 
@@ -1555,7 +1555,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
 
         # Generate UUID
         if self.uuid is None:
-            self.uuid = _util.generate_uuid(self.conn)
+            self.uuid = util.generate_uuid(self.conn)
 
 
     ###################################

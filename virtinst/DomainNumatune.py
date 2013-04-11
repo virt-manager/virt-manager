@@ -19,7 +19,7 @@
 
 import re
 
-import _util
+import util
 import XMLBuilderDomain
 from XMLBuilderDomain import _xml_property
 
@@ -39,7 +39,7 @@ class DomainNumatune(XMLBuilderDomain.XMLBuilderDomain):
             raise ValueError(_("cpuset can only contain numeric, ',', '^', or "
                                "'-' characters"))
 
-        pcpus = _util.get_phy_cpus(conn)
+        pcpus = util.get_phy_cpus(conn)
         for c in val.split(','):
             # Redundant commas
             if not c:
@@ -66,7 +66,7 @@ class DomainNumatune(XMLBuilderDomain.XMLBuilderDomain):
     @staticmethod
     def cpuset_str_to_tuple(conn, cpuset):
         DomainNumatune.validate_cpuset(conn, cpuset)
-        pinlist = [False] * _util.get_phy_cpus(conn)
+        pinlist = [False] * util.get_phy_cpus(conn)
 
         entries = cpuset.split(",")
         for e in entries:

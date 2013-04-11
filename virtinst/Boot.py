@@ -17,7 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import _util
+import util
 import XMLBuilderDomain
 from XMLBuilderDomain import _xml_property
 
@@ -97,22 +97,22 @@ class Boot(XMLBuilderDomain.XMLBuilderDomain):
         xml = ""
 
         if self.kernel:
-            xml = _util.xml_append(xml, "    <kernel>%s</kernel>" %
-                                   _util.xml_escape(self.kernel))
+            xml = util.xml_append(xml, "    <kernel>%s</kernel>" %
+                                   util.xml_escape(self.kernel))
             if self.initrd:
-                xml = _util.xml_append(xml, "    <initrd>%s</initrd>" %
-                                       _util.xml_escape(self.initrd))
+                xml = util.xml_append(xml, "    <initrd>%s</initrd>" %
+                                       util.xml_escape(self.initrd))
             if self.kernel_args:
-                xml = _util.xml_append(xml, "    <cmdline>%s</cmdline>" %
-                                       _util.xml_escape(self.kernel_args))
+                xml = util.xml_append(xml, "    <cmdline>%s</cmdline>" %
+                                       util.xml_escape(self.kernel_args))
 
         else:
             for dev in self.bootorder:
-                xml = _util.xml_append(xml, "    <boot dev='%s'/>" % dev)
+                xml = util.xml_append(xml, "    <boot dev='%s'/>" % dev)
 
             if self.enable_bootmenu in [True, False]:
                 val = self.enable_bootmenu and "yes" or "no"
-                xml = _util.xml_append(xml,
+                xml = util.xml_append(xml,
                                        "    <bootmenu enable='%s'/>" % val)
 
         return xml

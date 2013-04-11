@@ -34,7 +34,6 @@ import virtinst
 import virtinst.CapabilitiesParser
 import virtinst.cli as cli
 import virtinst.util as util
-import virtinst._util as _util
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst.cli import fail, print_stdout, print_stderr
 
@@ -288,7 +287,7 @@ def get_virt_type(conn, options):
     if (not req_virt_type and
         not req_hv_type and
         req_accel and
-        _util.is_qemu(conn) and
+        util.is_qemu(conn) and
         capsguest.arch in ["i686", "x86_64"] and
         not capsdomain.is_accelerated()):
         logging.warn("KVM acceleration not available, using '%s'",

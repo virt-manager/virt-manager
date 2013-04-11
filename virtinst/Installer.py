@@ -26,7 +26,7 @@ import platform
 import logging
 import copy
 
-import _util
+import util
 import virtinst
 import XMLBuilderDomain
 from XMLBuilderDomain import _xml_property
@@ -281,7 +281,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
             scratch = os.path.expanduser("~/.virtinst/boot")
             if not os.path.exists(scratch):
                 os.makedirs(scratch, 0751)
-            _util.selinux_restorecon(scratch)
+            util.selinux_restorecon(scratch)
 
         return scratch
 
@@ -333,7 +333,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         if (not isinstall and
             self.is_xenpv() and
             not self.bootconfig.kernel):
-            return "<bootloader>%s</bootloader>" % _util.pygrub_path(conn)
+            return "<bootloader>%s</bootloader>" % util.pygrub_path(conn)
 
         osblob = "<os>"
 
@@ -344,20 +344,20 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
             typexml += " machine='%s'" % machine
         typexml += ">%s</type>" % os_type
 
-        osblob = _util.xml_append(osblob, typexml)
+        osblob = util.xml_append(osblob, typexml)
 
         if init:
-            osblob = _util.xml_append(osblob,
+            osblob = util.xml_append(osblob,
                                       "    <init>%s</init>" %
-                                      _util.xml_escape(init))
+                                      util.xml_escape(init))
         if loader:
-            osblob = _util.xml_append(osblob,
+            osblob = util.xml_append(osblob,
                                       "    <loader>%s</loader>" %
-                                      _util.xml_escape(loader))
+                                      util.xml_escape(loader))
 
         if not self.is_container():
-            osblob = _util.xml_append(osblob, bootconfig.get_xml_config())
-        osblob = _util.xml_append(osblob, "  </os>")
+            osblob = util.xml_append(osblob, bootconfig.get_xml_config())
+        osblob = util.xml_append(osblob, "  </os>")
 
         return osblob
 
@@ -431,7 +431,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         @type L{Guest}
         """
 
-        if _util.is_uri_remote(guest.conn.getURI(), conn=guest.conn):
+        if util.is_uri_remote(guest.conn.getURI(), conn=guest.conn):
             # XXX: Use block peek for this?
             return True
 
@@ -441,7 +441,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
 
         disk = guest.disks[0]
 
-        if _util.is_vdisk(disk.path):
+        if util.is_vdisk(disk.path):
             return True
 
         if (disk.driver_type and

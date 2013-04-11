@@ -18,7 +18,7 @@
 # MA 02110-1301 USA.
 
 import support
-import _util
+import util
 import libvirt
 import logging
 
@@ -538,7 +538,7 @@ def parse(xml):
         device = devclass(root)
         return device
 
-    return _util.parse_node_helper(xml, "device", _parse_func)
+    return util.parse_node_helper(xml, "device", _parse_func)
 
 def _findNodeType(node):
     child = node.children

@@ -27,7 +27,7 @@ import urlgrabber
 
 import Storage
 import support
-import _util
+import util
 import Installer
 from VirtualDisk import VirtualDisk
 from User import User
@@ -67,13 +67,13 @@ def _sanitize_url(url):
     return url
 
 def _build_pool(conn, meter, path):
-    pool = _util.lookup_pool_by_path(conn, path)
+    pool = util.lookup_pool_by_path(conn, path)
     if pool:
         logging.debug("Existing pool '%s' found for %s", pool.name(), path)
         pool.refresh(0)
         return pool
 
-    name = _util.generate_name("boot-scratch",
+    name = util.generate_name("boot-scratch",
                                conn.storagePoolLookupByName)
     logging.debug("Building storage pool: path=%s name=%s", path, name)
     poolbuild = Storage.DirectoryPool(conn=conn, name=name,
@@ -101,7 +101,7 @@ def _upload_file(conn, meter, destpool, src):
     # Build placeholder volume
     size = os.path.getsize(src)
     basename = os.path.basename(src)
-    poolpath = _util.get_xml_path(destpool.XMLDesc(0), "/pool/target/path")
+    poolpath = util.get_xml_path(destpool.XMLDesc(0), "/pool/target/path")
     name = Storage.StorageVolume.find_free_name(basename,
                                                 pool_object=destpool)
     if name != basename:
@@ -220,7 +220,7 @@ class DistroInstaller(Installer.Installer):
             validated = False
 
         if self._location_is_path or (validated == False and self.conn and
-                                      _util.is_storage_capable(self.conn)):
+                                      util.is_storage_capable(self.conn)):
             # If user passed a storage tuple, OR
             # We couldn't determine the location type and a storage capable
             #   connection was passed:

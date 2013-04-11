@@ -20,7 +20,7 @@
 import logging
 import libvirt
 
-import _util
+import util
 import VirtualDevice
 import XMLBuilderDomain
 from XMLBuilderDomain import _xml_property
@@ -34,14 +34,14 @@ def _countMACaddr(vms, searchmac):
 
         for mac in ctx.xpathEval("/domain/devices/interface/mac"):
             macaddr = mac.xpathEval("attribute::address")[0].content
-            if macaddr and _util.compareMAC(searchmac, macaddr) == 0:
+            if macaddr and util.compareMAC(searchmac, macaddr) == 0:
                 c += 1
         return c
 
     count = 0
     for vm in vms:
         xml = vm.XMLDesc(0)
-        count += _util.get_xml_path(xml, func=count_cb)
+        count += util.get_xml_path(xml, func=count_cb)
     return count
 
 class VirtualPort(XMLBuilderDomain.XMLBuilderDomain):
@@ -160,7 +160,7 @@ class VirtualNetworkInterface(VirtualDevice.VirtualDevice):
         ret = self._default_bridge
         if ret is None:
             ret = False
-            default = _util.default_bridge2(self.conn)
+            default = util.default_bridge2(self.conn)
             if default:
                 ret = default[1]
 
@@ -171,7 +171,7 @@ class VirtualNetworkInterface(VirtualDevice.VirtualDevice):
         if self.conn and not self._random_mac:
             found = False
             for ignore in range(256):
-                self._random_mac = _util.randomMAC(self.conn.getType().lower(),
+                self._random_mac = util.randomMAC(self.conn.getType().lower(),
                                                    conn=self.conn)
                 ret = self.is_conflict_net(self.conn, self._random_mac)
                 if ret[1] is not None:
@@ -231,7 +231,7 @@ class VirtualNetworkInterface(VirtualDevice.VirtualDevice):
             return self._generate_random_mac()
         return self._macaddr
     def set_macaddr(self, val):
-        _util.validate_macaddr(val)
+        util.validate_macaddr(val)
         self._macaddr = val
     macaddr = _xml_property(get_macaddr, set_macaddr,
                             xpath="./mac/@address")
@@ -312,12 +312,12 @@ class VirtualNetworkInterface(VirtualDevice.VirtualDevice):
         if mac is None:
             return (False, None)
 
-        vms, inactive_vm = _util.fetch_all_guests(conn)
+        vms, inactive_vm = util.fetch_all_guests(conn)
 
         # get the Host's NIC MAC address
         hostdevs = []
         if not self.is_remote():
-            hostdevs = _util.get_host_network_devices()
+            hostdevs = util.get_host_network_devices()
 
         if (_countMACaddr(vms, mac) > 0 or
             _countMACaddr(inactive_vm, mac) > 0):

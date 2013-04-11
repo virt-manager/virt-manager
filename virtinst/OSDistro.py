@@ -29,7 +29,7 @@ import ConfigParser
 
 import virtinst
 import osdict
-from virtinst import _util
+from virtinst import util
 
 from ImageFetcher import MountedImageFetcher
 from ImageFetcher import FTPImageFetcher
@@ -1120,7 +1120,7 @@ class SolarisDistro(SunDistro):
                 iargs += ',host-ip=' + guestIP
                 if netmask:
                     iargs += ',subnet-mask=%s' % netmask
-                droute = _util.default_route(guest.nics[0].bridge)
+                droute = util.default_route(guest.nics[0].bridge)
                 if droute:
                     iargs += ',router-ip=' + droute
                 if guest.nics[0].macaddr:

@@ -20,7 +20,7 @@
 import re
 import os
 
-import _util
+import util
 import VirtualDevice
 import support
 from XMLBuilderDomain import _xml_property
@@ -129,7 +129,7 @@ class VirtualGraphics(VirtualDevice.VirtualDevice):
                                 support.SUPPORT_CONN_KEYMAP_AUTODETECT)):
             return None
 
-        return _util.default_keymap()
+        return util.default_keymap()
 
     def get_type(self):
         return self._type
@@ -159,7 +159,7 @@ class VirtualGraphics(VirtualDevice.VirtualDevice):
         if self._keymap == self.KEYMAP_DEFAULT:
             return self._default_keymap()
         if self._keymap == self.KEYMAP_LOCAL:
-            return _util.default_keymap()
+            return util.default_keymap()
         return self._keymap
     def set_keymap(self, val):
         # At this point, 'None' is a valid value
@@ -174,7 +174,7 @@ class VirtualGraphics(VirtualDevice.VirtualDevice):
         if type(val) is not str:
             raise ValueError(_("Keymap must be a string"))
         if val.lower() == self.KEYMAP_LOCAL:
-            val = _util.default_keymap()
+            val = util.default_keymap()
         elif len(val) > 16:
             raise ValueError(_("Keymap must be less than 16 characters"))
         elif re.match("^[a-zA-Z0-9_-]*$", val) == None:

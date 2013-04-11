@@ -151,14 +151,14 @@ class TestXMLConfig(unittest.TestCase):
         self.assertEquals(g.post_install_check(), True)
 
     def testBootParavirtDiskFileBlktapCapable(self):
-        oldblktap = virtinst._util.is_blktap_capable
+        oldblktap = virtinst.util.is_blktap_capable
         try:
-            virtinst._util.is_blktap_capable = lambda: True
+            virtinst.util.is_blktap_capable = lambda: True
             g = utils.get_basic_paravirt_guest()
             g.disks.append(utils.get_filedisk())
             self._compare(g, "boot-paravirt-disk-drv-tap", False)
         finally:
-            virtinst._util.is_blktap_capable = oldblktap
+            virtinst.util.is_blktap_capable = oldblktap
 
     def testBootParavirtDiskBlock(self):
         g = utils.get_basic_paravirt_guest()
@@ -927,7 +927,7 @@ class TestXMLConfig(unittest.TestCase):
         try:
             i = utils.make_pxe_installer()
             g = utils.get_basic_fullyvirt_guest(installer=i)
-            util = getattr(virtinst, "_util")
+            util = getattr(virtinst, "util")
             origfunc = util.default_bridge2
 
             def newbridge(ignore_conn):

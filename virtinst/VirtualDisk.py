@@ -31,7 +31,7 @@ import urlgrabber.progress as progress
 import libvirt
 
 import virtinst
-import _util
+import util
 import Storage
 from VirtualDevice import VirtualDevice
 from XMLBuilderDomain import _xml_property
@@ -126,7 +126,7 @@ def _check_if_pool_source(conn, path):
     If passed path is a host disk device like /dev/sda, want to let the user
     use it
     """
-    if not _util.is_storage_capable(conn):
+    if not util.is_storage_capable(conn):
         return None
 
     def check_pool(poolname, path):
@@ -134,7 +134,7 @@ def _check_if_pool_source(conn, path):
         xml = pool.XMLDesc(0)
 
         for element in ["dir", "device", "adapter"]:
-            xml_path = _util.get_xml_path(xml,
+            xml_path = util.get_xml_path(xml,
                                           "/pool/source/%s/@path" % element)
             if xml_path == path:
                 return pool
@@ -180,7 +180,7 @@ def _check_if_path_managed(conn, path):
 
     vol = lookup_vol_by_path()[0]
     if not vol:
-        pool = _util.lookup_pool_by_path(conn, os.path.dirname(path))
+        pool = util.lookup_pool_by_path(conn, os.path.dirname(path))
 
         # Is pool running?
         if pool and pool.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
@@ -208,7 +208,7 @@ def _check_if_path_managed(conn, path):
             pool = trypool
 
     if not vol and not pool:
-        if not _util.is_uri_remote(conn.getURI(), conn=conn):
+        if not util.is_uri_remote(conn.getURI(), conn=conn):
             # Building local disk
             return None, None, False
 
@@ -355,7 +355,7 @@ class VirtualDisk(VirtualDevice):
         """
         Check if path exists. If we can't determine, return False
         """
-        is_remote = _util.is_uri_remote(conn.getURI(), conn=conn)
+        is_remote = util.is_uri_remote(conn.getURI(), conn=conn)
         try:
             vol = None
             path_is_pool = False
@@ -385,7 +385,7 @@ class VirtualDisk(VirtualDevice):
         """
         if path is None:
             return []
-        if _util.is_uri_remote(conn.getURI(), conn=conn):
+        if util.is_uri_remote(conn.getURI(), conn=conn):
             return []
 
         try:
@@ -483,7 +483,7 @@ class VirtualDisk(VirtualDevice):
         if not path:
             return
 
-        active, inactive = _util.fetch_all_guests(conn)
+        active, inactive = util.fetch_all_guests(conn)
         vms = active + inactive
 
         def count_cb(ctx):
@@ -495,7 +495,7 @@ class VirtualDisk(VirtualDevice):
             template += "source/@%s='%s'])"
 
             for dtype in VirtualDisk._target_props:
-                xpath = template % (dtype, _util.xml_escape(path))
+                xpath = template % (dtype, util.xml_escape(path))
                 c += ctx.xpathEval(xpath)
 
             return c
@@ -503,7 +503,7 @@ class VirtualDisk(VirtualDevice):
         names = []
         for vm in vms:
             xml = vm.XMLDesc(0)
-            tmpcount = _util.get_xml_path(xml, func=count_cb)
+            tmpcount = util.get_xml_path(xml, func=count_cb)
             if tmpcount:
                 names.append(vm.name())
 
@@ -520,7 +520,7 @@ class VirtualDisk(VirtualDevice):
                  max size of storage, default is 0)
         """
         try:
-            return _util.stat_disk(path)
+            return util.stat_disk(path)
         except:
             return (True, 0)
 
@@ -538,7 +538,7 @@ class VirtualDisk(VirtualDevice):
 
         if not conn:
             raise ValueError(_("'volName' requires a passed connection."))
-        if not _util.is_storage_capable(conn):
+        if not util.is_storage_capable(conn):
             raise ValueError(_("Connection does not support storage lookup."))
 
         try:
@@ -677,8 +677,8 @@ class VirtualDisk(VirtualDevice):
         if self.vol_object:
             retpath = self.vol_object.path()
         elif self.vol_install:
-            retpath = (_util.get_xml_path(self.vol_install.pool.XMLDesc(0),
-                                          "/pool/target/path") + "/" +
+            retpath = (util.get_xml_path(self.vol_install.pool.XMLDesc(0),
+                                         "/pool/target/path") + "/" +
                        self.vol_install.name)
 
         return retpath
@@ -1006,7 +1006,7 @@ class VirtualDisk(VirtualDevice):
             self._check_str(val, "selinux_label")
 
             if (self._support_selinux() and
-                not _util.selinux_is_label_valid(val)):
+                not util.selinux_is_label_valid(val)):
                 # XXX Not valid if we support changing labels remotely
                 raise ValueError(_("SELinux label '%s' is not valid.") % val)
 
@@ -1048,7 +1048,7 @@ class VirtualDisk(VirtualDevice):
         pool = None
 
         storage_capable = bool(self.conn and
-                               _util.is_storage_capable(self.conn))
+                               util.is_storage_capable(self.conn))
 
         # Try to lookup self.path storage objects
         if vol_object or vol_install:
@@ -1108,14 +1108,14 @@ class VirtualDisk(VirtualDevice):
             return
 
         if self.vol_object:
-            newsize = _util.get_xml_path(self.vol_object.XMLDesc(0),
+            newsize = util.get_xml_path(self.vol_object.XMLDesc(0),
                                          "/volume/capacity")
             try:
                 newsize = float(newsize) / 1024.0 / 1024.0 / 1024.0
             except:
                 newsize = 0
         elif self._pool_object:
-            newsize = _util.get_xml_path(self.vol_object.XMLDesc(0),
+            newsize = util.get_xml_path(self.vol_object.XMLDesc(0),
                                          "/pool/capacity")
             try:
                 newsize = float(newsize) / 1024.0 / 1024.0 / 1024.0
@@ -1124,7 +1124,7 @@ class VirtualDisk(VirtualDevice):
         elif self.path is None:
             newsize = 0
         else:
-            ignore, newsize = _util.stat_disk(self.path)
+            ignore, newsize = util.stat_disk(self.path)
             newsize = newsize / 1024.0 / 1024.0 / 1024.0
 
         return newsize
@@ -1155,14 +1155,14 @@ class VirtualDisk(VirtualDevice):
             for source, source_type in [("dir", self.TYPE_DIR),
                                         ("device", self.TYPE_BLOCK),
                                         ("adapter", self.TYPE_BLOCK)]:
-                if _util.get_xml_path(xml, "/pool/source/%s/@dev" % source):
+                if util.get_xml_path(xml, "/pool/source/%s/@dev" % source):
                     dtype = source_type
                     break
 
         elif self.path:
             if os.path.isdir(self.path):
                 dtype = self.TYPE_DIR
-            elif _util.stat_disk(self.path)[0]:
+            elif util.stat_disk(self.path)[0]:
                 dtype = self.TYPE_FILE
             else:
                 dtype = self.TYPE_BLOCK
@@ -1196,7 +1196,7 @@ class VirtualDisk(VirtualDevice):
                                                  manual_format=True)
 
         elif self.vol_object:
-            fmt = _util.get_xml_path(self.vol_object.XMLDesc(0),
+            fmt = util.get_xml_path(self.vol_object.XMLDesc(0),
                                      "/volume/target/format/@type")
             if drvname == self.DRIVER_QEMU:
                 drvtype = _qemu_sanitize_drvtype(self.type, fmt)
@@ -1212,7 +1212,7 @@ class VirtualDisk(VirtualDevice):
                 drvtype = self.DRIVER_QEMU_RAW
 
         elif self.path and os.path.exists(self.path):
-            if _util.is_vdisk(self.path):
+            if util.is_vdisk(self.path):
                 drvname = self.DRIVER_TAP
                 drvtype = self.DRIVER_TAP_VDISK
 
@@ -1267,19 +1267,19 @@ class VirtualDisk(VirtualDevice):
             return context
 
         if self.vol_object:
-            context = _util.get_xml_path(self.vol_object.XMLDesc(0),
+            context = util.get_xml_path(self.vol_object.XMLDesc(0),
                                          "/volume/target/permissions/label")
         elif self._pool_object:
-            context = _util.get_xml_path(self._pool_object.XMLDesc(0),
+            context = util.get_xml_path(self._pool_object.XMLDesc(0),
                                          "/pool/target/permissions/label")
         elif self.vol_install:
             # XXX: If user entered a manual label, should we sync this
             # to vol_install?
-            l = _util.get_xml_path(self.vol_install.pool.XMLDesc(0),
+            l = util.get_xml_path(self.vol_install.pool.XMLDesc(0),
                                    "/pool/target/permissions/label")
             context = l or ""
         else:
-            context = _util.selinux_getfilecon(self.path)
+            context = util.selinux_getfilecon(self.path)
 
         return context
 
@@ -1301,7 +1301,7 @@ class VirtualDisk(VirtualDevice):
             return True
 
         storage_capable = bool(self.conn and
-                               _util.is_storage_capable(self.conn))
+                               util.is_storage_capable(self.conn))
 
         if self.is_remote():
             if not storage_capable:
@@ -1325,7 +1325,7 @@ class VirtualDisk(VirtualDevice):
             # Make sure we have access to the local path
             if not managed_storage:
                 if (os.path.isdir(self.path) and
-                    not _util.is_vdisk(self.path) and
+                    not util.is_vdisk(self.path) and
                     not self.device == self.DEVICE_FLOPPY):
                     raise ValueError(_("The path '%s' must be a file or a "
                                        "device, not a directory") % self.path)
@@ -1384,10 +1384,10 @@ class VirtualDisk(VirtualDevice):
 
         if self.clone_path:
             # VDisk clone
-            if (_util.is_vdisk(self.clone_path) or
-                (os.path.exists(self.path) and _util.is_vdisk(self.path))):
+            if (util.is_vdisk(self.clone_path) or
+                (os.path.exists(self.path) and util.is_vdisk(self.path))):
 
-                if (not _util.is_vdisk(self.clone_path) or
+                if (not util.is_vdisk(self.clone_path) or
                     os.path.exists(self.path)):
                     raise RuntimeError(_("copying to an existing vdisk is not"
                                          " supported"))
@@ -1399,7 +1399,7 @@ class VirtualDisk(VirtualDevice):
                 # Plain file clone
                 self._clone_local(progresscb, size_bytes)
 
-        elif _util.is_vdisk(self.path):
+        elif util.is_vdisk(self.path):
             # Create vdisk
             progresscb.update(1024)
             if not _vdisk_create(self.path, size_bytes, "vmdk", self.sparse):
@@ -1534,7 +1534,7 @@ class VirtualDisk(VirtualDevice):
             else:
                 logging.debug("Changing path=%s selinux label %s -> %s",
                               self.path, storage_label, self.selinux_label)
-                _util.selinux_setfilecon(self.path, self.selinux_label)
+                util.selinux_setfilecon(self.path, self.selinux_label)
 
     def _get_xml_config(self, disknode=None):
         """
@@ -1557,7 +1557,7 @@ class VirtualDisk(VirtualDevice):
         elif self.path:
             path = self.path
         if path:
-            path = _util.xml_escape(path)
+            path = util.xml_escape(path)
 
         ret = "    <disk type='%s' device='%s'>\n" % (self.type, self.device)
 
@@ -1618,7 +1618,7 @@ class VirtualDisk(VirtualDevice):
 
         if self.serial:
             ret += ("      <serial>%s</serial>\n" %
-                    _util.xml_escape(self.serial))
+                    util.xml_escape(self.serial))
         
         if (self.iotune_read_bytes_sec or self.iotune_read_iops_sec or
             self.iotune_total_bytes_sec or self.iotune_total_iops_sec or
@@ -1731,7 +1731,7 @@ class VirtualDisk(VirtualDevice):
         elif self.is_remote():
             return False
 
-        elif not _util.have_selinux():
+        elif not util.have_selinux():
             # XXX: When libvirt supports changing labels via storage APIs,
             #      this will need changing.
             return False
@@ -1763,12 +1763,12 @@ class VirtualDisk(VirtualDevice):
         elif self.__no_storage():
             pass
         elif self.read_only:
-            label = _util.selinux_readonly_label()
+            label = util.selinux_readonly_label()
         elif self.shareable:
             # XXX: Should this be different? or do we not care about MLS here?
-            label = _util.selinux_rw_label()
+            label = util.selinux_rw_label()
         else:
-            label = _util.selinux_rw_label()
+            label = util.selinux_rw_label()
 
         return label or ""
 

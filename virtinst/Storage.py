@@ -53,8 +53,8 @@ import logging
 import libvirt
 import urlgrabber
 
-from _util import xml_escape as escape
-import _util
+from util import xml_escape as escape
+import util
 import support
 
 
@@ -106,7 +106,7 @@ def _parse_pool_source_list(source_xml):
 
         return ret_list
 
-    return _util.parse_node_helper(source_xml, "sources", source_parser)
+    return util.parse_node_helper(source_xml, "sources", source_parser)
 
 class StorageObject(object):
     """
@@ -147,7 +147,7 @@ class StorageObject(object):
     def set_conn(self, val):
         if not isinstance(val, libvirt.virConnect):
             raise ValueError(_("'conn' must be a libvirt connection object."))
-        if not _util.is_storage_capable(val):
+        if not util.is_storage_capable(val):
             raise ValueError(_("Passed connection is not libvirt storage "
                                "capable"))
         self._conn = val
@@ -158,7 +158,7 @@ class StorageObject(object):
     def get_name(self):
         return self._name
     def set_name(self, val):
-        _util.validate_name(_("Storage object"), val)
+        util.validate_name(_("Storage object"), val)
 
         # Check that name doesn't collide with other storage objects
         self._check_name_collision(val)
@@ -371,7 +371,7 @@ class StoragePool(StorageObject):
         # Initialize all optional properties
         self._host = None
         self._source_path = None
-        self._random_uuid = _util.generate_uuid(self.conn)
+        self._random_uuid = util.generate_uuid(self.conn)
 
     # Properties used by all pools
     def get_type(self):
@@ -403,7 +403,7 @@ class StoragePool(StorageObject):
     def get_uuid(self):
         return self._uuid
     def set_uuid(self, val):
-        val = _util.validate_uuid(val)
+        val = util.validate_uuid(val)
         self._uuid = val
     uuid = property(get_uuid, set_uuid)
 
@@ -1002,7 +1002,7 @@ class StorageVolume(StorageObject):
         pool_object = StorageVolume.lookup_pool_by_name(pool_object=pool_object,
                                                         pool_name=pool_name,
                                                         conn=conn)
-        return StoragePool.get_volume_for_pool(_util.get_xml_path(pool_object.XMLDesc(0), "/pool/@type"))
+        return StoragePool.get_volume_for_pool(util.get_xml_path(pool_object.XMLDesc(0), "/pool/@type"))
     get_volume_for_pool = staticmethod(get_volume_for_pool)
 
     def find_free_name(name, pool_object=None, pool_name=None, conn=None,
@@ -1032,7 +1032,7 @@ class StorageVolume(StorageObject):
                                                     conn=conn)
         pool_object.refresh(0)
 
-        return _util.generate_name(name, pool_object.storageVolLookupByName,
+        return util.generate_name(name, pool_object.storageVolLookupByName,
                                    suffix, collidelist=collidelist,
                                    start_num=start_num)
     find_free_name = staticmethod(find_free_name)
@@ -1049,7 +1049,7 @@ class StorageVolume(StorageObject):
         if pool_name is not None and pool_object is None:
             if conn is None:
                 raise ValueError(_("'conn' must be specified with 'pool_name'"))
-            if not _util.is_storage_capable(conn):
+            if not util.is_storage_capable(conn):
                 raise ValueError(_("Connection does not support storage "
                                    "management."))
             try:
@@ -1393,9 +1393,9 @@ class CloneVolume(StorageVolume):
         # Populate some basic info
         xml  = input_vol.XMLDesc(0)
         typ  = input_vol.info()[0]
-        cap  = int(_util.get_xml_path(xml, "/volume/capacity"))
-        alc  = int(_util.get_xml_path(xml, "/volume/allocation"))
-        fmt  = _util.get_xml_path(xml, "/volume/target/format/@type")
+        cap  = int(util.get_xml_path(xml, "/volume/capacity"))
+        alc  = int(util.get_xml_path(xml, "/volume/allocation"))
+        fmt  = util.get_xml_path(xml, "/volume/target/format/@type")
 
         StorageVolume.__init__(self, name=name, pool=pool,
                                pool_name=pool.name(),
@@ -1412,7 +1412,7 @@ class CloneVolume(StorageVolume):
 
     def get_xml_config(self):
         xml  = self.input_vol.XMLDesc(0)
-        newxml = _util.set_xml_path(xml, "/volume/name", self.name)
+        newxml = util.set_xml_path(xml, "/volume/name", self.name)
         return newxml
 
 #class iSCSIVolume(StorageVolume):

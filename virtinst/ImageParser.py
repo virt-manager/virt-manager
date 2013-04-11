@@ -26,7 +26,7 @@ import libxml2
 import urlgrabber
 
 import CapabilitiesParser
-import _util
+import util
 
 
 class ParserException(Exception):
@@ -161,7 +161,7 @@ class Boot:
         self.kernel = xpathString(node, "os/kernel")
         self.initrd = xpathString(node, "os/initrd")
         self.cmdline = xpathString(node, "os/cmdline")
-        self.arch = _util.sanitize_arch(xpathString(node, "guest/arch"))
+        self.arch = util.sanitize_arch(xpathString(node, "guest/arch"))
 
         fl = node.xpathEval("guest/features")
         if len(fl) > 1:

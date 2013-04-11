@@ -18,7 +18,7 @@
 # MA 02110-1301 USA.
 
 import VirtualDevice
-from _util import  xml_escape
+from util import  xml_escape
 
 from XMLBuilderDomain import _xml_property
 

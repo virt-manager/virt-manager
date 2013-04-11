@@ -26,7 +26,7 @@ import libvirt
 import libxml2
 
 import CapabilitiesParser
-import _util
+import util
 
 _xml_refs_lock = threading.Lock()
 _xml_refs = {}
@@ -279,7 +279,7 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
         if usexpath is None:
             return getval
 
-        nodes = _util.listify(_get_xpath_node(self._xml_ctx,
+        nodes = util.listify(_get_xpath_node(self._xml_ctx,
                                               usexpath, is_multi))
         if nodes:
             ret = []
@@ -324,7 +324,7 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
         if nodexpath is None:
             return
 
-        nodes = _util.listify(_get_xpath_node(self._xml_ctx,
+        nodes = util.listify(_get_xpath_node(self._xml_ctx,
                                               nodexpath, is_multi))
 
         xpath_list = nodexpath
@@ -332,9 +332,9 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
             xpath_list = xml_set_list(self)
 
         node_map = map(lambda x, y, z: (x, y, z),
-                       _util.listify(nodes),
-                       _util.listify(val),
-                       _util.listify(xpath_list))
+                       util.listify(nodes),
+                       util.listify(val),
+                       util.listify(xpath_list))
 
         for node, val, usexpath in node_map:
             if node:
@@ -348,7 +348,7 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
                     # Boolean property, creating the node is enough
                     pass
                 else:
-                    node.setContent(_util.xml_escape(str(val)))
+                    node.setContent(util.xml_escape(str(val)))
             else:
                 _remove_xpath_node(self._xml_node, usexpath)
 
@@ -421,7 +421,7 @@ class XMLBuilderDomain(object):
             raise ValueError(_("'conn' must be a virConnect instance."))
         self._conn = val
         self._conn_uri = self._conn.getURI()
-        self.__remote = _util.is_uri_remote(self._conn_uri, conn=self._conn)
+        self.__remote = util.is_uri_remote(self._conn_uri, conn=self._conn)
     conn = property(get_conn, set_conn)
 
     def get_uri(self):
@@ -435,13 +435,13 @@ class XMLBuilderDomain(object):
     def is_remote(self):
         return bool(self.__remote)
     def is_qemu(self):
-        return _util.is_qemu(self.conn, self.get_uri())
+        return util.is_qemu(self.conn, self.get_uri())
     def is_qemu_system(self):
-        return _util.is_qemu_system(self.conn, self.get_uri())
+        return util.is_qemu_system(self.conn, self.get_uri())
     def is_session_uri(self):
-        return _util.is_session_uri(self.conn, self.get_uri())
+        return util.is_session_uri(self.conn, self.get_uri())
     def is_xen(self):
-        return _util.is_xen(self.conn, self.get_uri())
+        return util.is_xen(self.conn, self.get_uri())
 
     def _check_bool(self, val, name):
         if val not in [True, False]:

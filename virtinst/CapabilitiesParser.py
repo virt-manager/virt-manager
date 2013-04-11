@@ -21,7 +21,7 @@
 
 import re
 
-import _util
+import util
 
 class CapabilitiesParserException(Exception):
     def __init__(self, msg):
@@ -113,7 +113,7 @@ class CPUValues(object):
             cpu_filename = "/usr/share/libvirt/cpu_map.xml"
         xml = file(cpu_filename).read()
 
-        _util.parse_node_helper(xml, "cpus",
+        util.parse_node_helper(xml, "cpus",
                                 self._parseXML,
                                 CapabilitiesParserException)
 
@@ -677,7 +677,7 @@ class Capabilities(object):
         return self._cpu_values.get_arch(arch)
 
 def parse(xml):
-    return _util.parse_node_helper(xml, "capabilities",
+    return util.parse_node_helper(xml, "capabilities",
                                    Capabilities,
                                    CapabilitiesParserException)
 

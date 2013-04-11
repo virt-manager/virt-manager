@@ -24,7 +24,7 @@ import libvirt
 
 import logging
 
-import _util
+import util
 import support
 
 
@@ -73,7 +73,7 @@ class Interface(object):
         if prefix="br", we find the first unused name such as "br0", "br1",
         etc.
         """
-        return _util.generate_name(prefix, conn.interfaceLookupByName, sep="",
+        return util.generate_name(prefix, conn.interfaceLookupByName, sep="",
                                    force_num=True)
 
     def __init__(self, object_type, name, conn=None):
@@ -123,7 +123,7 @@ class Interface(object):
     def _get_name(self):
         return self._name
     def _set_name(self, val):
-        _util.validate_name(_("Interface name"), val)
+        util.validate_name(_("Interface name"), val)
 
         self._check_name_collision(val)
         self._name = val
@@ -140,7 +140,7 @@ class Interface(object):
     def _get_macaddr(self):
         return self._macaddr
     def _set_macaddr(self, val):
-        _util.validate_macaddr(val)
+        util.validate_macaddr(val)
         self._macaddr = val
     macaddr = property(_get_macaddr, _set_macaddr,
                        doc=_("Interface MAC address"))

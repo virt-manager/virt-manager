@@ -44,7 +44,7 @@ import Guest
 from VirtualNetworkInterface import VirtualNetworkInterface
 from VirtualDisk import VirtualDisk
 from virtinst import Storage
-import _util
+import util
 
 def _listify(val):
     """
@@ -79,7 +79,7 @@ def generate_clone_disk_path(origpath, design, newname=None):
         clonebase = newname
 
     clonebase = os.path.join(dirname, clonebase)
-    return _util.generate_name(
+    return util.generate_name(
                     clonebase,
                     lambda p: VirtualDisk.path_exists(design.original_conn, p),
                     suffix,
@@ -99,7 +99,7 @@ def generate_clone_name(design):
         basename = basename.replace(match.group(), "")
 
     basename = basename + "-clone"
-    return _util.generate_name(basename,
+    return util.generate_name(basename,
                                design.original_conn.lookupByName,
                                sep="", start_num=start_num)
 
@@ -153,7 +153,7 @@ class CloneDesign(object):
         self._valid_guest        = Guest.Guest(conn=conn)
 
         # Generate a random UUID at the start
-        self.clone_uuid = _util.generate_uuid(conn)
+        self.clone_uuid = util.generate_uuid(conn)
 
 
     # Getter/Setter methods
@@ -170,7 +170,7 @@ class CloneDesign(object):
         if type(val) is not str:
             raise ValueError(_("Original xml must be a string."))
         self._original_xml = val
-        self._original_guest = _util.get_xml_path(self.original_xml,
+        self._original_guest = util.get_xml_path(self.original_xml,
                                                   "/domain/name")
     def get_original_xml(self):
         return self._original_xml
@@ -195,7 +195,7 @@ class CloneDesign(object):
         except ValueError, e:
             raise ValueError(_("Invalid uuid for new guest: %s") % e)
 
-        if _util.vm_uuid_collision(self._hyper_conn, uuid):
+        if util.vm_uuid_collision(self._hyper_conn, uuid):
             raise ValueError(_("UUID '%s' is in use by another guest.") %
                              uuid)
         self._clone_uuid = uuid
@@ -454,7 +454,7 @@ class CloneDesign(object):
                 mac = self._clone_mac.pop()
             else:
                 while 1:
-                    mac = _util.randomMAC(self.original_conn.getType().lower(),
+                    mac = util.randomMAC(self.original_conn.getType().lower(),
                                           conn=self.original_conn)
                     dummy, msg = self._check_mac(mac)
                     if msg is not None:
