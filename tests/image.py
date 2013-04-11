@@ -91,7 +91,7 @@ class TestImageParser(unittest.TestCase):
             g.installer = inst
             g._prepare_install(None)
 
-            actual_out = g.get_config_xml(install=False)
+            actual_out = g.get_xml_config(install=False)
             expect_file = os.path.join(image2guestdir + fname)
             expect_out = utils.read_file(expect_file)
             expect_out = expect_out.replace("REPLACEME", os.getcwd())

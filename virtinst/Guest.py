@@ -1607,7 +1607,3 @@ def _wait_for_domain(conn, name):
         time.sleep(0.25)
 
     return dom
-
-# Back compat class to avoid ABI break
-XenGuest = Guest
-Guest.get_config_xml = Guest.get_xml_config

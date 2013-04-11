@@ -66,7 +66,7 @@ class TestXMLConfig(unittest.TestCase):
 
         guest._prepare_install(progress.BaseMeter())
         try:
-            actualXML = guest.get_config_xml(install=do_install,
+            actualXML = guest.get_xml_config(install=do_install,
                                              disk_boot=do_disk_boot)
 
             if filename:
@@ -87,12 +87,6 @@ class TestXMLConfig(unittest.TestCase):
         wait = True
         dom = None
 
-        old_getxml = guest.get_config_xml
-        def new_getxml(install=True, disk_boot=False):
-            xml = old_getxml(install, disk_boot)
-            return utils.sanitize_xml_for_define(xml)
-        guest.get_xml_config = new_getxml
-
         try:
             dom = guest.start_install(consolecb, meter, removeOld, wait)
             dom.destroy()
@@ -103,9 +97,9 @@ class TestXMLConfig(unittest.TestCase):
                 guest.installer._install_bootconfig.kernel = "kernel"
                 guest.installer._install_bootconfig.initrd = "initrd"
 
-            xmlinst = guest.get_config_xml(True, False)
-            xmlboot = guest.get_config_xml(False, False)
-            xmlcont = guest.get_config_xml(True, True)
+            xmlinst = guest.get_xml_config(True, False)
+            xmlboot = guest.get_xml_config(False, False)
+            xmlcont = guest.get_xml_config(True, True)
 
             if instname:
                 utils.diff_compare(xmlinst, instname)
@@ -356,7 +350,7 @@ class TestXMLConfig(unittest.TestCase):
         g.disks.append(utils.get_blkdisk())
         g.nics.append(utils.get_virtual_network())
 
-        # Call get_config_xml sets first round of defaults w/o os_variant set
+        # Call get_xml_config sets first round of defaults w/o os_variant set
         g.get_xml_config(do_install)
 
         g.os_variant = "fedora11"

@@ -1874,10 +1874,3 @@ class VirtualDisk(VirtualDevice):
                 self.target = t
                 return self.target
         raise ValueError(_("No more space for disks of type '%s'" % prefix))
-
-
-class XenDisk(VirtualDisk):
-    """
-    Back compat class to avoid ABI break.
-    """
-    pass

@@ -23,14 +23,13 @@ cliutils.setup_i18n()
 
 import Storage
 import Interface
-from Guest import Guest, XenGuest
+from Guest import Guest
 from VirtualDevice import VirtualDevice
-from VirtualNetworkInterface import VirtualNetworkInterface, \
-                                    XenNetworkInterface
+from VirtualNetworkInterface import VirtualNetworkInterface
 from VirtualGraphics import VirtualGraphics
 from VirtualAudio import VirtualAudio
 from VirtualInputDevice import VirtualInputDevice
-from VirtualDisk import VirtualDisk, XenDisk
+from VirtualDisk import VirtualDisk
 from VirtualHostDevice import (VirtualHostDevice, VirtualHostDeviceUSB,
                                VirtualHostDevicePCI)
 from VirtualCharDevice import VirtualCharDevice
@@ -57,19 +56,3 @@ from Seclabel import Seclabel
 from XMLBuilderDomain import XMLBuilderDomain
 import util
 import support
-
-# This represents the PUBLIC API. Any changes to these classes (or 'util.py')
-# must be mindful of this fact.
-__all__ = ["Guest", "XenGuest", "VirtualNetworkInterface",
-           "XenNetworkInterface", "VirtualGraphics", "VirtualAudio",
-           "VirtualDisk", "XenDisk", "FullVirtGuest", "ParaVirtGuest",
-           "DistroInstaller", "PXEInstaller", "LiveCDInstaller",
-           "ImportInstaller", "ImageInstaller", "CloneDesign",
-           "Storage", "Interface",
-           "User", "util", "support", "VirtualDevice", "Clock", "Seclabel",
-           "CPU",
-           "VirtualHostDevice", "VirtualHostDeviceUSB", "VirtualVideoDevice",
-           "VirtualHostDevicePCI", "VirtualCharDevice", "VirtualInputDevice",
-           "VirtualController", "VirtualWatchdog",
-           "VirtualFilesystem", "VirtualSmartCardDevice",
-           "VirtualHostDeviceUSBRedir", "VirtualMemballoon"]

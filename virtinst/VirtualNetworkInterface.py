@@ -384,7 +384,3 @@ class VirtualNetworkInterface(VirtualDevice.VirtualDevice):
         xml += addr_xml
         xml += "    </interface>"
         return xml
-
-# Back compat class to avoid ABI break
-class XenNetworkInterface(VirtualNetworkInterface):
-    pass

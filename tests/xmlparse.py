@@ -35,7 +35,7 @@ class XMLParseTest(unittest.TestCase):
     def _roundtrip_compare(self, filename):
         expectXML = sanitize_file_xml(file(filename).read())
         guest = virtinst.Guest(conn=conn, parsexml=expectXML)
-        actualXML = guest.get_config_xml()
+        actualXML = guest.get_xml_config()
         utils.diff_compare(actualXML, expect_out=expectXML)
 
     def _alter_compare(self, actualXML, outfile):
@@ -163,7 +163,7 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(guest.get_devices("memballoon")[0])
         check("model", "virtio", "none")
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterMinimalGuest(self):
         infile  = "tests/xmlparse-xml/change-minimal-guest-in.xml"
@@ -197,7 +197,7 @@ class XMLParseTest(unittest.TestCase):
 
         self.assertTrue(guest.installer.get_xml_config().startswith("<os"))
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterBootMulti(self):
         infile  = "tests/xmlparse-xml/change-boot-multi-in.xml"
@@ -212,7 +212,7 @@ class XMLParseTest(unittest.TestCase):
         check("initrd", None, "bar.img")
         check("kernel_args", None, "ks=foo.ks")
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterBootKernel(self):
         infile  = "tests/xmlparse-xml/change-boot-kernel-in.xml"
@@ -228,7 +228,7 @@ class XMLParseTest(unittest.TestCase):
         check("initrd", "/boot/initrd", None)
         check("kernel_args", "location", None)
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterDisk(self):
         """
@@ -270,7 +270,7 @@ class XMLParseTest(unittest.TestCase):
         check("driver_io", None, "threads")
         check("driver_io", "threads", "native")
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testSingleDisk(self):
         xml = ("""<disk type="file" device="disk"><source file="/a.img"/>"""
@@ -336,7 +336,7 @@ class XMLParseTest(unittest.TestCase):
         check("target_address", "1.2.3.4", "5.6.7.8")
         check("target_port", "4567", "1199")
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterControllers(self):
         infile  = "tests/xmlparse-xml/change-controllers-in.xml"
@@ -371,7 +371,7 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev4.get_master())
         check("startport", "4", "2")
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterNics(self):
         infile  = "tests/xmlparse-xml/change-nics-in.xml"
@@ -429,7 +429,7 @@ class XMLParseTest(unittest.TestCase):
         check("instanceid", "09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b",
                             "09b11c53-8b5c-4eeb-8f00-d84eaa0aaa4f")
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterInputs(self):
         infile  = "tests/xmlparse-xml/change-inputs-in.xml"
@@ -449,7 +449,7 @@ class XMLParseTest(unittest.TestCase):
         check("bus", "usb", "xen")
         check("bus", "xen", "usb")
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterGraphics(self):
         infile  = "tests/xmlparse-xml/change-graphics-in.xml"
@@ -493,7 +493,7 @@ class XMLParseTest(unittest.TestCase):
         check("channel_record_mode", "any", "insecure")
         check("passwdValidTo", "2010-04-09T15:51:00", "2011-01-07T19:08:00")
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterVideos(self):
         infile  = "tests/xmlparse-xml/change-videos-in.xml"
@@ -518,7 +518,7 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev3)
         check("model_type", "cirrus", "cirrus")
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterHostdevs(self):
         infile  = "tests/xmlparse-xml/change-hostdevs-in.xml"
@@ -555,7 +555,7 @@ class XMLParseTest(unittest.TestCase):
         check("slot", "0x2", "0x6")
         check("function", "0x3", "0x7")
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterWatchdogs(self):
         infile  = "tests/xmlparse-xml/change-watchdogs-in.xml"
@@ -568,7 +568,7 @@ class XMLParseTest(unittest.TestCase):
         check("model", "ib700", "i6300esb")
         check("action", "none", "poweroff")
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterFilesystems(self):
         devtype = "filesystem"
@@ -610,7 +610,7 @@ class XMLParseTest(unittest.TestCase):
         check("wrpolicy", None, "immediate")
         check("readonly", False, True)
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterSounds(self):
         infile  = "tests/xmlparse-xml/change-sounds-in.xml"
@@ -631,7 +631,7 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev3)
         check("model", "ac97", "sb16")
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterAddr(self):
         infile  = "tests/xmlparse-xml/change-addr-in.xml"
@@ -669,7 +669,7 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev3.alias)
         check("name", "channel0", "channel1")
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterSmartCard(self):
         infile  = "tests/xmlparse-xml/change-smartcard-in.xml"
@@ -687,7 +687,7 @@ class XMLParseTest(unittest.TestCase):
         check("mode", "passthrough", "host")
         check("type", "spicevmc", None)
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterRedirdev(self):
         infile  = "tests/xmlparse-xml/change-redirdev-in.xml"
@@ -705,7 +705,7 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev2)
         check("type", "spicevmc")
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testConsoleCompat(self):
         infile  = "tests/xmlparse-xml/console-compat-in.xml"
@@ -717,7 +717,7 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev1)
         check("source_path", "/dev/pts/4")
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAddRemoveDevices(self):
         infile  = "tests/xmlparse-xml/add-devices-in.xml"
@@ -737,7 +737,7 @@ class XMLParseTest(unittest.TestCase):
         guest.remove_device(adddev)
         guest.add_device(adddev)
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
     def testChangeKVMMedia(self):
         infile  = "tests/xmlparse-xml/change-media-in.xml"
@@ -768,7 +768,7 @@ class XMLParseTest(unittest.TestCase):
 
 
 
-        self._alter_compare(guest.get_config_xml(), outfile)
+        self._alter_compare(guest.get_xml_config(), outfile)
 
 if __name__ == "__main__":
     unittest.main()
