@@ -29,6 +29,11 @@ from gi.repository import GLib
 from gi.repository import Gtk
 # pylint: enable=E0611
 
+# pylint: disable=E1101
+# pylint can't detect functions we inheirit from Gtk, ex:
+# OverBox.set_over: Instance of 'OverBox' has no 'remove' member
+
+
 class OverBox(Gtk.Box):
     """
     Implementation of an overlapping box
