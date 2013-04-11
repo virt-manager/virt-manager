@@ -677,18 +677,17 @@ class vmmDetails(vmmGObjectUI):
         self.disk_io_graph.set_property("reversed", True)
         self.disk_io_graph.set_property("filled", False)
         self.disk_io_graph.set_property("num_sets", 2)
-        self.disk_io_graph.set_property("rgb", map(lambda x: x / 255.0,
-                                        [0x82, 0x00, 0x3B, 0x29, 0x5C, 0x45]))
+        self.disk_io_graph.set_property("rgb", [x / 255.0 for x in
+                                        [0x82, 0x00, 0x3B, 0x29, 0x5C, 0x45]])
         graph_table.attach(self.disk_io_graph, 1, 2, 2, 3)
 
         self.network_traffic_graph = Sparkline()
         self.network_traffic_graph.set_property("reversed", True)
         self.network_traffic_graph.set_property("filled", False)
         self.network_traffic_graph.set_property("num_sets", 2)
-        self.network_traffic_graph.set_property("rgb",
-                                                map(lambda x: x / 255.0,
+        self.network_traffic_graph.set_property("rgb", [x / 255.0 for x in
                                                     [0x82, 0x00, 0x3B,
-                                                     0x29, 0x5C, 0x45]))
+                                                     0x29, 0x5C, 0x45]])
         graph_table.attach(self.network_traffic_graph, 1, 2, 3, 4)
 
         graph_table.show_all()
@@ -862,7 +861,7 @@ class vmmDetails(vmmGObjectUI):
 
         try:
             cpu_values = caps.get_cpu_values(self.vm.get_arch())
-            cpu_names = sorted(map(lambda c: c.model, cpu_values.cpus),
+            cpu_names = sorted([c.model for c in cpu_values.cpus],
                                key=str.lower)
             all_features = cpu_values.features
         except:
@@ -1020,7 +1019,7 @@ class vmmDetails(vmmGObjectUI):
         if comparefunc:
             model_in_list, idx = comparefunc(model_combo.get_model(), value)
         else:
-            model_list = map(lambda x: x[model_idx], model_combo.get_model())
+            model_list = [x[model_idx] for x in model_combo.get_model()]
             model_in_list = (value in model_list)
             if model_in_list:
                 idx = model_list.index(value)
@@ -2355,14 +2354,11 @@ class vmmDetails(vmmGObjectUI):
 
     # Graphics options
     def _do_change_spicevmc(self, gdev, newgtype):
-        has_multi_spice = (len(filter(
-                                lambda dev: dev.type == dev.TYPE_SPICE,
-                                self.vm.get_graphics_devices())) > 1)
-        has_spicevmc = bool(filter(
-                            (lambda dev:
-                                (dev.dev_type == dev.DEV_CHANNEL and
-                                 dev.char_type == dev.CHAR_SPICEVMC)),
-                            self.vm.get_char_devices()))
+        has_multi_spice = (len([d for d in self.vm.get_graphics_devices() if
+                                d.type == d.TYPE_SPICE]) > 1)
+        has_spicevmc = bool([d for d in self.vm.get_char_devices() if
+                             (d.dev_type == d.DEV_CHANNEL and
+                              d.char_type == d.CHAR_SPICEVMC)])
         fromspice = (gdev.type == "spice")
         tospice = (newgtype == "spice")
 
@@ -3605,7 +3601,7 @@ class vmmDetails(vmmGObjectUI):
     def repopulate_boot_list(self, bootdevs=None, dev_select=None):
         boot_list = self.widget("config-boot-list")
         boot_model = boot_list.get_model()
-        old_order = map(lambda x: x[BOOT_DEV_TYPE], boot_model)
+        old_order = [x[BOOT_DEV_TYPE] for x in boot_model]
         boot_model.clear()
 
         if bootdevs is None:

@@ -26,6 +26,9 @@ from virtinst import VirtualAudio
 from virtinst import VirtualDisk
 from virtinst import VirtualVideoDevice
 
+# pylint: disable=W0212
+# Access to protected member, needed to unittest stuff
+
 # Used to ensure consistent SDL xml output
 os.environ["HOME"] = "/tmp"
 os.environ["DISPLAY"] = ":3.4"

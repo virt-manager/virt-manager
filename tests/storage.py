@@ -23,6 +23,9 @@ from tests import utils
 
 import libvirt
 
+# pylint: disable=W0212
+# Access to protected member, needed to unittest stuff
+
 basepath = os.path.join(os.getcwd(), "tests", "storage-xml")
 
 def generate_uuid_from_string(msg):

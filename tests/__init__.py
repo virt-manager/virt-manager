@@ -20,6 +20,8 @@ import os
 import virtinst
 from tests import utils
 
+# pylint: disable=W0212
+# Access to protected member, needed to unittest stuff
 
 # Force certain helpers to return consistent values
 virtinst.util.is_blktap_capable = lambda: False

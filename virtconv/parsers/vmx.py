@@ -169,7 +169,7 @@ def parse_vmdk(disk, filename):
                           filename)
         return
 
-    disklines = filter(lambda l: l.is_disk, vmdkfile.lines)
+    disklines = [l for l in vmdkfile.lines if l.is_disk]
     if len(disklines) == 0:
         raise RuntimeError(_("Didn't detect a storage line in the VMDK "
                              "descriptor file"))

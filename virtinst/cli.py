@@ -857,7 +857,7 @@ def digest_networks(guest, options, numnics=1):
 
     if bridges:
         # Convert old --bridges to --networks
-        networks = map(lambda b: "bridge:" + b, bridges)
+        networks = ["bridge:" + b for b in bridges]
 
     def padlist(l, padsize):
         l = listify(l)
@@ -909,7 +909,7 @@ def digest_graphics(guest, options, default_override=None):
     if graphics and (vnc or sdl or keymap or vncport or vnclisten):
         fail(_("Cannot mix --graphics and old style graphical options"))
 
-    optnum = sum(map(bool, [vnc, nographics, sdl, graphics]))
+    optnum = sum([bool(g) for g in [vnc, nographics, sdl, graphics]])
     if optnum > 1:
         raise ValueError(_("Can't specify more than one of VNC, SDL, "
                            "--graphics or --nographics"))
@@ -1359,7 +1359,7 @@ def parse_boot(guest, optstring):
     Helper to parse --boot string
     """
     opts = parse_optstr(optstring)
-    optlist = map(lambda x: x[0], parse_optstr_tuples(optstring))
+    optlist = [x[0] for x in parse_optstr_tuples(optstring)]
     menu = None
 
     def set_param(paramname, dictname, val=None):
@@ -1482,7 +1482,7 @@ def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
     volobj = None
 
     # Strip media type
-    if sum(map(int, map(bool, [path, pool, vol]))) > 1:
+    if sum([bool(p) for p in [path, pool, vol]]) > 1:
         fail(_("Cannot specify more than 1 storage path"))
 
     if path:

@@ -68,7 +68,7 @@ def check_packagekit(errbox, packages, ishv):
 
     found = progWin.get_data()
 
-    not_found = filter(lambda x: x not in found, packages)
+    not_found = [x for x in packages if x not in found]
     logging.debug("Missing packages: %s", not_found)
 
     do_install = not_found

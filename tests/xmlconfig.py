@@ -32,7 +32,11 @@ from virtinst import VirtualController
 from virtinst import VirtualWatchdog
 from virtinst import VirtualInputDevice
 from virtinst import VirtualMemballoon
+
 from tests import utils
+
+# pylint: disable=W0212
+# Access to protected member, needed to unittest stuff
 
 _testconn = utils.open_testdriver()
 _kvmconn = utils.open_testkvmdriver()

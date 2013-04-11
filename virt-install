@@ -239,9 +239,9 @@ def prompt_virt(caps, arch, req_virt_type, req_accel):
 def get_virt_type(conn, options):
 
     # Set up all virt/hypervisor parameters
-    if sum(map(bool, [options.fullvirt,
-                      options.paravirt,
-                      options.container])) > 1:
+    if sum([bool(f) for f in [options.fullvirt,
+                              options.paravirt,
+                              options.container]]) > 1:
         fail(_("Can't do more than one of --hvm, --paravirt, or --container"))
 
     capabilities = virtinst.CapabilitiesParser.parse(conn.getCapabilities())
@@ -410,8 +410,8 @@ def check_option_collisions(options, guest):
         return
 
     # Install collisions
-    if sum(map(bool, [options.pxe, options.location,
-                      options.cdrom, options.import_install])) > 1:
+    if sum([bool(l) for l in [options.pxe, options.location,
+                      options.cdrom, options.import_install]]) > 1:
         fail(_("Only one install method can be used (%(methods)s)") %
              {"methods" : install_methods})
 

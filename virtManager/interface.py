@@ -124,7 +124,7 @@ class vmmInterface(vmmLibvirtObject):
 
         def node_func(ctx):
             nodes = ctx.xpathEval(xpath)
-            names = map(lambda x: x.content, nodes)
+            names = [x.content for x in nodes]
             ret = []
 
             for name in names:
@@ -144,8 +144,7 @@ class vmmInterface(vmmLibvirtObject):
 
     def get_slave_names(self):
         # Returns a list of names of all enslaved interfaces
-        slaves = self.get_slaves()
-        return map(lambda x: x[0], slaves)
+        return [x[0] for x in self.get_slaves()]
 
     def get_ipv4(self):
         base_xpath = "/interface/protocol[@family='ipv4']"

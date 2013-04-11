@@ -627,7 +627,7 @@ class vmmCreateInterface(vmmGObjectUI):
     def get_config_ipv6_addresses(self):
         src = self.widget("ipv6-address-list")
         model = src.get_model()
-        return map(lambda x: x[0], model)
+        return [x[0] for x in model]
 
     ################
     # UI Listeners #
@@ -818,7 +818,7 @@ class vmmCreateInterface(vmmGObjectUI):
                     if v6_gate:
                         ipv6.gateway = v6_gate
                     if v6_addrlist:
-                        ipv6.ips = map(build_ip, v6_addrlist)
+                        ipv6.ips = [build_ip(i) for i in v6_addrlist]
 
         return [is_manual, copy_name, ipv4, ipv6, proto_xml]
 
@@ -924,7 +924,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
             # Pull info from selected interfaces
             if hasattr(iobj, "interfaces"):
-                iobj.interfaces = map(lambda x: x[INTERFACE_ROW_KEY], ifaces)
+                iobj.interfaces = [x[INTERFACE_ROW_KEY] for x in ifaces]
                 check_conflict = True
 
             elif hasattr(iobj, "parent_interface"):

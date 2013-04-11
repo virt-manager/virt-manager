@@ -50,7 +50,7 @@ class XMLParseTest(unittest.TestCase):
         failed = False
         error = ""
         for f in glob.glob("tests/xmlconfig-xml/*.xml"):
-            if filter(f.endswith, exclude):
+            if [e for e in exclude if f.endswith(e)]:
                 continue
 
             try:

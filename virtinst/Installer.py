@@ -39,14 +39,8 @@ LIBVIRT_SCRATCH = "/var/lib/libvirt/boot"
 
 
 def _pygrub_path(conn=None):
-    """
-    Return the pygrub path for the current host, or connection if
-    available.
-    """
     # FIXME: This should be removed/deprecated when capabilities are
     #        fixed to provide bootloader info
-    from virtinst import CapabilitiesParser
-
     if conn:
         cap = CapabilitiesParser.parse(conn.getCapabilities())
         if (cap.host.arch == "i86pc"):

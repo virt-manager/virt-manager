@@ -711,10 +711,9 @@ class vmmDomain(vmmLibvirtObject):
                 guest.add_device(VirtualCharSpicevmcDevice(guest.conn))
             else:
                 channels = guest.get_devices("channel")
-                channels = filter(lambda x:
+                channels = [x for x in channels if
                             (x.char_type ==
-                             virtinst.VirtualCharDevice.CHAR_SPICEVMC),
-                           channels)
+                             virtinst.VirtualCharDevice.CHAR_SPICEVMC)]
                 for dev in channels:
                     guest.remove_device(dev)
 
@@ -779,9 +778,8 @@ class vmmDomain(vmmLibvirtObject):
 
             guest = self._get_guest_to_define()
             ctrls = guest.get_devices("controller")
-            ctrls = filter(lambda x: (x.type ==
-                           virtinst.VirtualController.CONTROLLER_TYPE_USB),
-                           ctrls)
+            ctrls = [x for x in ctrls if (x.type ==
+                     virtinst.VirtualController.CONTROLLER_TYPE_USB)]
             for dev in ctrls:
                 guest.remove_device(dev)
 
@@ -1006,8 +1004,8 @@ class vmmDomain(vmmLibvirtObject):
         devs = self.get_char_devices()
         devlist = []
 
-        devlist += filter(lambda x: x.virtual_device_type == "serial", devs)
-        devlist += filter(lambda x: x.virtual_device_type == "console", devs)
+        devlist += [x for x in devs if x.virtual_device_type == "serial"]
+        devlist += [x for x in devs if x.virtual_device_type == "console"]
         return devlist
 
     def _build_device_list(self, device_type,
@@ -1342,7 +1340,7 @@ class vmmDomain(vmmLibvirtObject):
         if l > limit:
             data = data[0:end] + data[l:l + end]
 
-        return map(lambda x, y: (x + y) / 2, data[0:end], data[end:end * 2])
+        return [(x + y) / 2 for x, y in zip(data[0:end], data[end:end * 2])]
 
     def toggle_sample_network_traffic(self, ignore1=None, ignore2=None,
                                       ignore3=None, ignore4=None):

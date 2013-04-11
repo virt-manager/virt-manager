@@ -325,7 +325,7 @@ class VNCViewer(Viewer):
                 return
 
             try:
-                keys = map(int, keys.split(','))
+                keys = [int(k) for k in keys.split(',')]
             except:
                 logging.debug("Error in grab_keys configuration in GConf",
                               exc_info=True)
@@ -472,7 +472,7 @@ class SpiceViewer(Viewer):
                 return
 
             try:
-                keys = map(int, keys.split(','))
+                keys = [int(k) for k in keys.split(',')]
             except:
                 logging.debug("Error in grab_keys configuration in GConf",
                               exc_info=True)

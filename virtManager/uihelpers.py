@@ -146,10 +146,10 @@ def build_video_combo(vm, video_dev, no_default=None):
 
 def populate_video_combo(vm, video_dev, no_default=None):
     video_dev_model = video_dev.get_model()
-    has_spice = any(map(lambda g: g.type == g.TYPE_SPICE,
-                        vm.get_graphics_devices()))
-    has_qxl = any(map(lambda v: v.model_type == "qxl",
-                      vm.get_video_devices()))
+    has_spice = bool([g for g in vm.get_graphics_devices()
+                      if g.type == g.TYPE_SPICE])
+    has_qxl = bool([v for v in vm.get_video_devices()
+                    if v.model_type == "qxl"])
 
     video_dev_model.clear()
     tmpdev = virtinst.VirtualVideoDevice(vm.conn.vmm)
@@ -508,7 +508,7 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
     def add_dict(indict, model):
         keylist = indict.keys()
         keylist.sort()
-        rowlist = map(lambda key: indict[key], keylist)
+        rowlist = [indict[k] for k in keylist]
         for row in rowlist:
             model.append(row)
 

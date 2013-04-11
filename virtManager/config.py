@@ -297,8 +297,7 @@ class vmmConfig(object):
         uri = GConf.escape_key(uri, len(uri))
         key = self.conf_dir + "/connection_prefs/%s/vms" % uri
         kill_vms = []
-        gconf_vms = map(lambda inp: inp.split("/")[-1],
-                        self.conf.all_dirs(key))
+        gconf_vms = [inp.split("/")[-1] for inp in self.conf.all_dirs(key)]
 
         for uuid in gconf_vms:
             if len(uuid) == 36 and not uuid in current_vms:
@@ -360,7 +359,7 @@ class vmmConfig(object):
         return ret
     def set_keys_combination(self, val):
         # Val have to be a list of integers
-        val = ','.join(map(str, val))
+        val = ','.join([str(v) for v in val])
         self.conf.set_string(self.conf_dir + "/keys/grab-keys", val)
     def on_keys_combination_changed(self, cb, userdata=None):
         return self.conf.notify_add(self.conf_dir + "/keys/grab-keys", cb, userdata)

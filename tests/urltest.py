@@ -35,6 +35,9 @@ from virtinst.OSDistro import MandrivaDistro
 import libvirt
 import urlgrabber.progress
 
+# pylint: disable=W0212
+# Access to protected member, needed to unittest stuff
+
 # Filters for including/excluding certain distros.
 MATCH_FILTER = ".*"
 

@@ -206,8 +206,8 @@ class vmmCreatePool(vmmGObjectUI):
 
         elif self._pool.type == Storage.StoragePool.TYPE_LOGICAL:
             pool_list = self.list_pool_sources()
-            entry_list = map(lambda p: [p.target_path, p.target_path, p],
-                             pool_list)
+            entry_list = [[p.target_path, p.target_path, p]
+                          for p in pool_list]
             use_list = target_list
             use_model = target_model
 
@@ -220,8 +220,8 @@ class vmmCreatePool(vmmGObjectUI):
             host = self.get_config_host()
             if host:
                 pool_list = self.list_pool_sources(host=host)
-                entry_list = map(lambda p: [p.source_path, p.source_path, p],
-                                 pool_list)
+                entry_list = [[p.source_path, p.source_path, p]
+                              for p in pool_list]
                 use_list = source_list
                 use_model = source_model
 
@@ -233,7 +233,7 @@ class vmmCreatePool(vmmGObjectUI):
 
     def list_scsi_adapters(self):
         scsi_hosts = self.conn.get_nodedevs("scsi_host")
-        host_list = map(lambda dev: dev.host, scsi_hosts)
+        host_list = [dev.host for dev in scsi_hosts]
 
         clean_list = []
         for h in host_list:
@@ -243,7 +243,7 @@ class vmmCreatePool(vmmGObjectUI):
             tmppool.source_path = name
             entry = [name, name, tmppool]
 
-            if name not in map(lambda l: l[0], clean_list):
+            if name not in [l[0] for l in clean_list]:
                 clean_list.append(entry)
 
         return clean_list
@@ -263,7 +263,7 @@ class vmmCreatePool(vmmGObjectUI):
             tmppool.source_path = dev
 
             entry = [dev, dev, tmppool]
-            if dev not in map(lambda l: l[0], clean_list):
+            if dev not in [l[0] for l in clean_list]:
                 clean_list.append(entry)
 
         return clean_list

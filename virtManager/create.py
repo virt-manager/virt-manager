@@ -504,7 +504,7 @@ class vmmCreate(vmmGObjectUI):
                 break
 
         if not (is_container or
-                filter(lambda w: w.get_sensitive(), virt_methods)):
+                [w for w in virt_methods if w.get_sensitive()]):
             return self.startup_error(
                     _("No install methods available for this connection."),
                     hideinstall=False)

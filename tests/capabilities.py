@@ -58,7 +58,8 @@ class TestCapabilities(unittest.TestCase):
             self.assertEqual(secmodel[0], caps.host.secmodel.model)
             self.assertEqual(secmodel[1], caps.host.secmodel.doi)
 
-        map(self._compareGuest, guests, caps.guests)
+        for idx in range(len(guests)):
+            self._compareGuest(guests[idx], caps.guests[idx])
 
     def testCapabilities1(self):
         host = ( 'x86_64', {'vmx': capabilities.FEATURE_ON})
@@ -216,7 +217,7 @@ class TestCapabilities(unittest.TestCase):
         cpu_random = caps.get_cpu_values("mips")
 
         def test_cpu_map(cpumap, vendors, features, cpus):
-            cpunames = sorted(map(lambda c: c.model, cpumap.cpus),
+            cpunames = sorted([c.model for c in cpumap.cpus],
                               key=str.lower)
 
             for v in vendors:

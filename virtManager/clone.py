@@ -343,7 +343,7 @@ class vmmCloneVM(vmmGObjectUI):
         storage_list = {}
 
         # We need to determine which disks fail (and why).
-        all_targets = map(lambda d: d.target, diskinfos)
+        all_targets = [d.target for d in diskinfos]
 
         for disk in diskinfos:
             force_target = disk.target

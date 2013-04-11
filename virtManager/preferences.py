@@ -247,13 +247,13 @@ class vmmPreferences(vmmGObjectUI):
         return keystr
 
     def grabkeys_dlg_press(self, src_ignore, event, label, events):
-        if not filter(lambda e: e[0] == event.hardware_keycode, events):
+        if not [e for e in events if e[0] == event.hardware_keycode]:
             events.append((event.hardware_keycode, event.keyval))
 
         label.set_text(self.grabkeys_get_string(events))
 
     def grabkeys_dlg_release(self, src_ignore, event, label, events):
-        for e in filter(lambda e: e[0] == event.hardware_keycode, events):
+        for e in [e for e in events if e[0] == event.hardware_keycode]:
             events.remove(e)
 
         label.set_text(self.grabkeys_get_string(events))
@@ -288,7 +288,7 @@ class vmmPreferences(vmmGObjectUI):
         result = dialog.run()
 
         if result == Gtk.ResponseType.ACCEPT:
-            self.config.set_keys_combination(map(lambda e: e[1], events))
+            self.config.set_keys_combination([e[1] for e in events])
 
         self.refresh_grabkeys_combination()
         dialog.destroy()

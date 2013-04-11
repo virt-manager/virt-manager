@@ -30,12 +30,10 @@ import libxml2
 
 from virtinst import util
 from virtinst import CapabilitiesParser
-from virtinst import VirtualGraphics
 from virtinst import support
 from virtinst import XMLBuilderDomain
 import virtinst
 from virtinst.XMLBuilderDomain import _xml_property
-from virtinst import DistroInstaller
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst.VirtualDisk import VirtualDisk
 from virtinst.VirtualInputDevice import VirtualInputDevice
@@ -234,10 +232,10 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
             return
 
         if not self.installer:
-            i = DistroInstaller.DistroInstaller(type=type,
-                                                conn=conn,
-                                                os_type=self._default_os_type,
-                                                caps=self._get_caps())
+            i = virtinst.DistroInstaller(type=type,
+                                         conn=conn,
+                                         os_type=self._default_os_type,
+                                         caps=self._get_caps())
             self.installer = i
 
         # Add default devices (if applicable)
@@ -580,7 +578,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
             raise ValueError(_("Graphics enabled must be True or False"))
 
         if enabled:
-            gdev = VirtualGraphics.VirtualGraphics(type=gtype)
+            gdev = virtinst.VirtualGraphics(type=gtype)
             if port:
                 gdev.port = port
             if keymap:
@@ -791,9 +789,9 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
             if node.name != "devices":
                 continue
 
-            children = filter(lambda x: (x.name in device_mappings and
-                                         x.parent == node),
-                              node.children)
+            children = [x for x in node.children if
+                        (x.name in device_mappings and
+                         x.parent == node)]
             for devnode in children:
                 objclass = device_mappings.get(devnode.name)
 

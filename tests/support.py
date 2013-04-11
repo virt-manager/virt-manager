@@ -29,8 +29,7 @@ class TestSupport(unittest.TestCase):
         Verify no support.SUPPORT* have the same value
         """
         valdict = {}
-        supportnames = filter(lambda x: x.startswith("SUPPORT"),
-                              dir(support))
+        supportnames = [x for x in dir(support) if x.startswith("SUPPORT")]
 
         for supportname in supportnames:
             checkval = int(getattr(support, supportname))
