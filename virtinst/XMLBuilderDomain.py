@@ -26,10 +26,12 @@ import libvirt
 import libxml2
 
 import CapabilitiesParser
+import uriutil
 import util
 
 _xml_refs_lock = threading.Lock()
 _xml_refs = {}
+
 
 def _unref_doc(doc):
     if not doc:
@@ -421,7 +423,7 @@ class XMLBuilderDomain(object):
             raise ValueError(_("'conn' must be a virConnect instance."))
         self._conn = val
         self._conn_uri = self._conn.getURI()
-        self.__remote = util.is_uri_remote(self._conn_uri, conn=self._conn)
+        self.__remote = uriutil.is_uri_remote(self._conn_uri, conn=self._conn)
     conn = property(get_conn, set_conn)
 
     def get_uri(self):
@@ -435,13 +437,13 @@ class XMLBuilderDomain(object):
     def is_remote(self):
         return bool(self.__remote)
     def is_qemu(self):
-        return util.is_qemu(self.conn, self.get_uri())
+        return uriutil.is_qemu(self.conn, self.get_uri())
     def is_qemu_system(self):
-        return util.is_qemu_system(self.conn, self.get_uri())
+        return uriutil.is_qemu_system(self.conn, self.get_uri())
     def is_session_uri(self):
-        return util.is_session_uri(self.conn, self.get_uri())
+        return uriutil.is_session_uri(self.conn, self.get_uri())
     def is_xen(self):
-        return util.is_xen(self.conn, self.get_uri())
+        return uriutil.is_xen(self.conn, self.get_uri())
 
     def _check_bool(self, val, name):
         if val not in [True, False]:

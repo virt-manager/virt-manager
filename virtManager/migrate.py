@@ -26,8 +26,9 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 
-import virtinst
 import libvirt
+import virtinst
+from virtinst import uriutil
 
 from virtManager import util
 from virtManager.baseclass import vmmGObjectUI
@@ -273,7 +274,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         return self.edit_uri(srcuri, desthost, None)
 
     def edit_uri(self, uri, hostname, port):
-        split = list(virtinst.util.uri_split(uri))
+        split = list(uriutil.uri_split(uri))
 
         hostname = hostname or split[2]
         if port:

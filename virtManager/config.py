@@ -24,6 +24,7 @@ from gi.repository import Gtk
 from gi.repository import GConf
 
 import virtinst
+from virtinst import uriutil
 
 from virtManager.keyring import vmmKeyring, vmmSecret
 
@@ -201,7 +202,7 @@ class vmmConfig(object):
         suffix = "connection_prefs/%s" % GConf.escape_key(uri, len(uri))
         return self._perobj_helper(suffix, pref_func, func_type, value)
     def _perhost_helper(self, uri, pref_func, func_type, value=None):
-        host = virtinst.util.get_uri_hostname(uri)
+        host = uriutil.get_uri_hostname(uri)
         if not host:
             host = "localhost"
         suffix = "connection_prefs/hosts/%s" % host

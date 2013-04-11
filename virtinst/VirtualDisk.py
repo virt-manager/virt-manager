@@ -31,6 +31,8 @@ import urlgrabber.progress as progress
 import libvirt
 
 import virtinst
+from virtinst import uriutil
+
 import util
 import Storage
 from VirtualDevice import VirtualDevice
@@ -208,7 +210,7 @@ def _check_if_path_managed(conn, path):
             pool = trypool
 
     if not vol and not pool:
-        if not util.is_uri_remote(conn.getURI(), conn=conn):
+        if not uriutil.is_uri_remote(conn.getURI(), conn=conn):
             # Building local disk
             return None, None, False
 
@@ -355,7 +357,7 @@ class VirtualDisk(VirtualDevice):
         """
         Check if path exists. If we can't determine, return False
         """
-        is_remote = util.is_uri_remote(conn.getURI(), conn=conn)
+        is_remote = uriutil.is_uri_remote(conn.getURI(), conn=conn)
         try:
             vol = None
             path_is_pool = False
@@ -385,7 +387,7 @@ class VirtualDisk(VirtualDevice):
         """
         if path is None:
             return []
-        if util.is_uri_remote(conn.getURI(), conn=conn):
+        if uriutil.is_uri_remote(conn.getURI(), conn=conn):
             return []
 
         try:

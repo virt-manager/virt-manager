@@ -20,7 +20,7 @@
 # MA 02110-1301 USA.
 
 import libvirt
-import util
+import uriutil
 
 
 # Flags for check_conn_support
@@ -350,7 +350,7 @@ def _daemon_lib_ver(conn, uri, force_version, minimum_libvirt_version):
     else:
         default_ret = 100000000000
 
-    if not util.is_uri_remote(uri, conn=conn):
+    if not uriutil.is_uri_remote(uri, conn=conn):
         return _local_lib_ver()
 
     if not _has_command("getLibVersion", obj=conn):
@@ -363,7 +363,7 @@ def _daemon_lib_ver(conn, uri, force_version, minimum_libvirt_version):
 
 # Return the hypervisor version
 def _hv_ver(conn, uri):
-    drv_type = util.get_uri_driver(uri)
+    drv_type = uriutil.get_uri_driver(uri)
     args = ()
 
     cmd = _get_command("getVersion", obj=conn)
@@ -423,7 +423,7 @@ def _check_support(conn, feature, data=None):
         return support_info.get(key)
 
     uri = conn.getURI()
-    drv_type = util.get_uri_driver(uri)
+    drv_type = uriutil.get_uri_driver(uri)
     is_rhel6 = _get_rhel6()
     force_version = get_value("force_version") or False
 

@@ -17,9 +17,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import platform
 import os
-import util
+import platform
+
+import uriutil
+
 
 class User(object):
     """Defines a particular user account."""
@@ -52,7 +54,7 @@ class User(object):
             return self._euid == 0
 
         if priv == self.PRIV_CREATE_NETWORK:
-            return (self._euid == 0) or util.is_qemu_system(conn)
+            return (self._euid == 0) or uriutil.is_qemu_system(conn)
 
         if platform.system() == 'SunOS':
             return self._sun_has_priv(priv)
