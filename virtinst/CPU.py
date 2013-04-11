@@ -83,6 +83,7 @@ class CPU(XMLBuilderDomain.XMLBuilderDomain):
         self._model = None
         self._match = None
         self._vendor = None
+        self._mode = None
         self._features = []
 
         self._sockets = None
@@ -132,6 +133,8 @@ class CPU(XMLBuilderDomain.XMLBuilderDomain):
     def _get_model(self):
         return self._model
     def _set_model(self, val):
+        if val:
+            self.mode = "custom"
         if val and not self.match:
             self.match = "exact"
         self._model = val
@@ -151,6 +154,13 @@ class CPU(XMLBuilderDomain.XMLBuilderDomain):
         self._vendor = val
     vendor = _xml_property(_get_vendor, _set_vendor,
                            xpath="./cpu/vendor")
+
+    def _get_mode(self):
+        return self._mode
+    def _set_mode(self, val):
+        self._mode = val
+    mode = _xml_property(_get_mode, _set_mode,
+                         xpath="./cpu/@mode")
 
     # Topology properties
     def _get_sockets(self):
@@ -186,6 +196,7 @@ class CPU(XMLBuilderDomain.XMLBuilderDomain):
         if not cpu.model:
             raise ValueError(_("No host CPU reported in capabilities"))
 
+        self.mode = "custom"
         self.match = "exact"
         self.model = cpu.model
         self.vendor = cpu.vendor
@@ -263,16 +274,26 @@ class CPU(XMLBuilderDomain.XMLBuilderDomain):
     def _get_xml_config(self):
         top_xml = self._get_topology_xml()
         feature_xml = self._get_feature_xml()
+        mode_xml = ""
         match_xml = ""
         if self.match:
             match_xml = " match='%s'" % self.match
         xml = ""
 
+        if self.model == "host-passthrough":
+            self.mode = "host-passthrough"
+            mode_xml = " mode='%s'" % self.mode
+            xml += "  <cpu%s/>" % mode_xml
+            return xml
+        else:
+            self.mode = "custom"
+            mode_xml = " mode='%s'" % self.mode
+
         if not (self.model or top_xml or feature_xml):
             return ""
 
         # Simple topology XML mode
-        xml += "  <cpu%s>\n" % match_xml
+        xml += "  <cpu%s%s>\n" % (mode_xml, match_xml)
         if self.model:
             xml += "    <model>%s</model>\n" % self.model
         if self.vendor:
