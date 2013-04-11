@@ -551,7 +551,7 @@ class VirtualDisk(VirtualDevice):
                  device=None, driverName=None, driverType=None,
                  readOnly=False, sparse=True, conn=None, volObject=None,
                  volInstall=None, volName=None, bus=None, shareable=False,
-                 driverCache=None, selinuxLabel=None, format=None,
+                 driverCache=None, format=None,
                  validate=True, parsexml=None, parsexmlnode=None, caps=None,
                  driverIO=None, sizebytes=None):
         """
@@ -588,8 +588,6 @@ class VirtualDisk(VirtualDevice):
         @type shareable: C{bool}
         @param driverCache: Disk cache mode (none, writethrough, writeback)
         @type driverCache: member of cache_types
-        @param selinuxLabel: Used for labelling new or relabel existing storage
-        @type selinuxLabel: C{str}
         @param format: Storage volume format to use when creating storage
         @type format: C{str}
         @param validate: Whether to validate passed parameters against the
@@ -617,7 +615,6 @@ class VirtualDisk(VirtualDevice):
         self._bus = None
         self._shareable = None
         self._driver_cache = None
-        self._selinux_label = None
         self._clone_path = None
         self._format = None
         self._driverName = driverName
@@ -658,7 +655,6 @@ class VirtualDisk(VirtualDevice):
         self._set_bus(bus, validate=False)
         self._set_shareable(shareable, validate=False)
         self._set_driver_cache(driverCache, validate=False)
-        self._set_selinux_label(selinuxLabel, validate=False)
         self._set_format(format, validate=False)
         self._set_driver_io(driverIO, validate=False)
 
@@ -985,35 +981,6 @@ class VirtualDisk(VirtualDevice):
                                           get_converter=lambda s, x: int(x or 0),
                                           set_converter=lambda s, x: int(x))
 
-    # If there is no selinux support on the libvirt connection or the
-    # system, we won't throw errors if this is set, just silently ignore.
-    def _get_selinux_label(self):
-        # If selinux_label manually specified, return it
-        # If we are using existing storage, pull the label from it
-        # If we are installing via vol_install, pull from the parent pool
-        # If we are creating local storage, use the expected label
-        retlabel = self._selinux_label
-        if not retlabel:
-            retlabel = ""
-            if self.creating_storage() and not self.__managed_storage():
-                retlabel = self._expected_security_label()
-            else:
-                retlabel = self._storage_security_label()
-
-        return retlabel
-    def _set_selinux_label(self, val, validate=True):
-        if val is not None:
-            self._check_str(val, "selinux_label")
-
-            if (self._support_selinux() and
-                not util.selinux_is_label_valid(val)):
-                # XXX Not valid if we support changing labels remotely
-                raise ValueError(_("SELinux label '%s' is not valid.") % val)
-
-        self.__validate_wrapper("_selinux_label", val, validate,
-                                self.selinux_label)
-    selinux_label = property(_get_selinux_label, _set_selinux_label)
-
     def _get_format(self):
         return self._format
     def _set_format(self, val, validate=True):
@@ -1257,33 +1224,6 @@ class VirtualDisk(VirtualDevice):
         return True
 
 
-    def _storage_security_label(self):
-        """
-        Return SELinux label of existing storage, or None
-        """
-        context = ""
-
-        if self.__no_storage():
-            return context
-
-        if self.vol_object:
-            context = util.get_xml_path(self.vol_object.XMLDesc(0),
-                                         "/volume/target/permissions/label")
-        elif self._pool_object:
-            context = util.get_xml_path(self._pool_object.XMLDesc(0),
-                                         "/pool/target/permissions/label")
-        elif self.vol_install:
-            # XXX: If user entered a manual label, should we sync this
-            # to vol_install?
-            l = util.get_xml_path(self.vol_install.pool.XMLDesc(0),
-                                   "/pool/target/permissions/label")
-            context = l or ""
-        else:
-            context = util.selinux_getfilecon(self.path)
-
-        return context
-
-
     def __validate_params(self):
         """
         function to validate all the complex interaction between the various
@@ -1369,7 +1309,6 @@ class VirtualDisk(VirtualDevice):
             (not self.clone_path or self.vol_install.input_vol)):
             self._set_vol_object(self.vol_install.install(meter=progresscb),
                                  validate=False)
-            # Then just leave: vol_install should handle any selinux stuff
             return
 
         if self.clone_path:
@@ -1523,18 +1462,6 @@ class VirtualDisk(VirtualDevice):
 
         if self.creating_storage() or self.clone_path:
             self._do_create_storage(progresscb)
-
-        # Relabel storage if it was requested
-        storage_label = self._storage_security_label()
-        if storage_label and storage_label != self.selinux_label:
-            if not self._support_selinux():
-                logging.debug("No support for changing selinux context.")
-            elif not self._security_can_fix():
-                logging.debug("Can't fix selinux context in this case.")
-            else:
-                logging.debug("Changing path=%s selinux label %s -> %s",
-                              self.path, storage_label, self.selinux_label)
-                util.selinux_setfilecon(self.path, self.selinux_label)
 
     def _get_xml_config(self, disknode=None):
         """
@@ -1716,78 +1643,6 @@ class VirtualDisk(VirtualDevice):
 
         return ret
 
-    def _support_selinux(self):
-        """
-        Return True if we have the requisite libvirt and library support
-        for selinux commands
-        """
-        caps = self._get_caps()
-        if not caps:
-            return False
-
-        elif "selinux" not in [x.model for x in caps.host.secmodels]:
-            return False
-
-        elif self.is_remote():
-            return False
-
-        elif not util.have_selinux():
-            # XXX: When libvirt supports changing labels via storage APIs,
-            #      this will need changing.
-            return False
-
-        elif self.__managed_storage() and self.path:
-            try:
-                statinfo = os.stat(self.path)
-            except:
-                return False
-
-            # Not sure if this is even the correct metric for
-            # 'Can we change the file context'
-            return os.geteuid() in ['0', statinfo.st_uid]
-
-        return True
-
-    def _expected_security_label(self):
-        """
-        Best guess at what the expected selinux label should be for the disk
-        """
-        label = None
-
-        # XXX: These are really only approximations in the remote case?
-        # XXX: Maybe libvirt should expose the relevant selinux labels in
-        #      the capabilities XML?
-
-        if not self._support_selinux():
-            pass
-        elif self.__no_storage():
-            pass
-        elif self.read_only:
-            label = util.selinux_readonly_label()
-        elif self.shareable:
-            # XXX: Should this be different? or do we not care about MLS here?
-            label = util.selinux_rw_label()
-        else:
-            label = util.selinux_rw_label()
-
-        return label or ""
-
-    def _security_can_fix(self):
-        can_fix = True
-
-        if not self._support_selinux():
-            can_fix = False
-        elif self.__no_storage():
-            can_fix = False
-        elif self.type == VirtualDisk.TYPE_BLOCK:
-            # Shouldn't change labelling on block devices (though we can)
-            can_fix = False
-        elif not self.read_only:
-            # XXX Leave all other (R/W disk) relabeling up to libvirt/svirt
-            # for now
-            can_fix = False
-
-        return can_fix
 
     def get_target_prefix(self):
         """

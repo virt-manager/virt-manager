@@ -303,7 +303,6 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
             scratch = os.path.expanduser("~/.virtinst/boot")
             if not os.path.exists(scratch):
                 os.makedirs(scratch, 0751)
-            util.selinux_restorecon(scratch)
 
         return scratch
 
