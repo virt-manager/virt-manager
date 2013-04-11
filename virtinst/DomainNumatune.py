@@ -23,6 +23,16 @@ import util
 import XMLBuilderDomain
 from XMLBuilderDomain import _xml_property
 
+
+def get_phy_cpus(conn):
+    """
+    Get number of physical CPUs.
+    """
+    hostinfo = conn.getInfo()
+    pcpus = hostinfo[4] * hostinfo[5] * hostinfo[6] * hostinfo[7]
+    return pcpus
+
+
 class DomainNumatune(XMLBuilderDomain.XMLBuilderDomain):
     """
     Class for generating <numatune> XML
@@ -39,7 +49,7 @@ class DomainNumatune(XMLBuilderDomain.XMLBuilderDomain):
             raise ValueError(_("cpuset can only contain numeric, ',', '^', or "
                                "'-' characters"))
 
-        pcpus = util.get_phy_cpus(conn)
+        pcpus = get_phy_cpus(conn)
         for c in val.split(','):
             # Redundant commas
             if not c:
@@ -66,7 +76,7 @@ class DomainNumatune(XMLBuilderDomain.XMLBuilderDomain):
     @staticmethod
     def cpuset_str_to_tuple(conn, cpuset):
         DomainNumatune.validate_cpuset(conn, cpuset)
-        pinlist = [False] * util.get_phy_cpus(conn)
+        pinlist = [False] * get_phy_cpus(conn)
 
         entries = cpuset.split(",")
         for e in entries:

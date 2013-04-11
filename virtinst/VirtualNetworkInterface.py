@@ -25,6 +25,26 @@ import VirtualDevice
 import XMLBuilderDomain
 from XMLBuilderDomain import _xml_property
 
+
+def _compareMAC(p, q):
+    """Compare two MAC addresses"""
+    pa = p.split(":")
+    qa = q.split(":")
+
+    if len(pa) != len(qa):
+        if p > q:
+            return 1
+        else:
+            return -1
+
+    for i in xrange(len(pa)):
+        n = int(pa[i], 0x10) - int(qa[i], 0x10)
+        if n > 0:
+            return 1
+        elif n < 0:
+            return -1
+    return 0
+
 def _countMACaddr(vms, searchmac):
     if not searchmac:
         return
@@ -34,7 +54,7 @@ def _countMACaddr(vms, searchmac):
 
         for mac in ctx.xpathEval("/domain/devices/interface/mac"):
             macaddr = mac.xpathEval("attribute::address")[0].content
-            if macaddr and util.compareMAC(searchmac, macaddr) == 0:
+            if macaddr and _compareMAC(searchmac, macaddr) == 0:
                 c += 1
         return c
 

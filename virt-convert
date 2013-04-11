@@ -35,6 +35,13 @@ import virtconv.vmcfg as vmcfg
 import virtconv.diskcfg as diskcfg
 
 
+def get_default_arch():
+    arch = os.uname()[4]
+    if arch == "x86_64":
+        return "x86_64"
+    return "i686"
+
+
 def parse_args():
     """Parse and verify command line."""
     usage = "%prog [options] inputdir|input.vmx [outputdir|output.xml]"
@@ -59,7 +66,7 @@ def parse_args():
 
     cfgg = OptionGroup(opts, "Guest Configuration Options")
     cfgg.add_option("-a", "--arch", dest="arch",
-                    default=util.get_default_arch(),
+                    default=get_default_arch(),
                     help=_("Machine Architecture Type (i686/x86_64/ppc)"))
     cfgg.add_option("", "--os-type", dest="os_type",
                     help=_("The OS type for fully virtualized guests, e.g. "

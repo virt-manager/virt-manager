@@ -596,46 +596,6 @@ def default_connection():
             return "qemu:///session"
     return None
 
-def get_cpu_flags():
-    if platform.system() == 'SunOS':
-        raise OSError('CPU flags not available')
-
-    f = open("/proc/cpuinfo")
-    lines = f.readlines()
-    f.close()
-    for line in lines:
-        if not line.startswith("flags"):
-            continue
-        # get the actual flags
-        flags = line[:-1].split(":", 1)[1]
-        # and split them
-        flst = flags.split(" ")
-        return flst
-    return []
-
-def is_pae_capable(conn=None):
-    """Determine if a machine is PAE capable or not."""
-    if not conn:
-        conn = libvirt.open('')
-    return "pae" in conn.getCapabilities()
-
-def is_hvm_capable():
-    """Determine if a machine is HVM capable or not."""
-    if platform.system() == 'SunOS':
-        raise OSError('HVM capability not determinible')
-
-    caps = ""
-    if os.path.exists("/sys/hypervisor/properties/capabilities"):
-        caps = open("/sys/hypervisor/properties/capabilities").read()
-    if caps.find("hvm") != -1:
-        return True
-    return False
-
-def is_kqemu_capable():
-    return os.path.exists("/dev/kqemu")
-
-def is_kvm_capable():
-    return os.path.exists("/dev/kvm")
 
 def is_blktap_capable():
     if platform.system() == 'SunOS':
@@ -650,11 +610,6 @@ def is_blktap_capable():
             return True
     return False
 
-def get_default_arch():
-    arch = os.uname()[4]
-    if arch == "x86_64":
-        return "x86_64"
-    return "i686"
 
 # this function is directly from xend/server/netif.py and is thus
 # available under the LGPL,
@@ -699,6 +654,7 @@ def randomMAC(type="xen", conn=None):
             random.randint(0x00, 0xff)]
     return ':'.join(map(lambda x: "%02x" % x, mac))
 
+
 # the following three functions are from xend/uuid.py and are thus
 # available under the LGPL,
 # Copyright 2005 Mike Wray <mike.wray@hp.com>
@@ -716,11 +672,6 @@ def uuidToString(u, conn=None):
     return "-".join(["%02x" * 4, "%02x" * 2, "%02x" * 2, "%02x" * 2,
                      "%02x" * 6]) % tuple(u)
 
-def uuidFromString(s):
-    s = s.replace('-', '')
-    return [ int(s[i : i + 2], 16) for i in range(0, 32, 2) ]
-
-# the following function quotes from python2.5/uuid.py
 def get_host_network_devices():
     device = []
     for dirname in ['', '/sbin/', '/usr/sbin']:
@@ -751,17 +702,6 @@ def get_max_vcpus(conn, type=None):
         m = 32
     return m
 
-def get_phy_cpus(conn):
-    """Get number of physical CPUs."""
-    hostinfo = conn.getInfo()
-    pcpus = hostinfo[4] * hostinfo[5] * hostinfo[6] * hostinfo[7]
-    return pcpus
-
-def system(cmd):
-    st = os.system(cmd)
-    if os.WIFEXITED(st) and os.WEXITSTATUS(st) != 0:
-        raise OSError("Failed to run %s, exited with %d" %
-                      (cmd, os.WEXITSTATUS(st)))
 
 def xml_escape(str):
     """Replaces chars ' " < > & with xml safe counterparts"""
@@ -775,24 +715,6 @@ def xml_escape(str):
     str = str.replace(">", "&gt;")
     return str
 
-def compareMAC(p, q):
-    """Compare two MAC addresses"""
-    pa = p.split(":")
-    qa = q.split(":")
-
-    if len(pa) != len(qa):
-        if p > q:
-            return 1
-        else:
-            return -1
-
-    for i in xrange(len(pa)):
-        n = int(pa[i], 0x10) - int(qa[i], 0x10)
-        if n > 0:
-            return 1
-        elif n < 0:
-            return -1
-    return 0
 
 def _xorg_keymap():
     """Look in /etc/X11/xorg.conf for the host machine's keymap, and attempt to
@@ -867,25 +789,6 @@ def default_keymap():
 
     return keymap
 
-def pygrub_path(conn=None):
-    """
-    Return the pygrub path for the current host, or connection if
-    available.
-    """
-    # FIXME: This should be removed/deprecated when capabilities are
-    #        fixed to provide bootloader info
-    from virtinst import CapabilitiesParser
-
-    if conn:
-        cap = CapabilitiesParser.parse(conn.getCapabilities())
-        if (cap.host.arch == "i86pc"):
-            return "/usr/lib/xen/bin/pygrub"
-        else:
-            return "/usr/bin/pygrub"
-
-    if platform.system() == "SunOS":
-        return "/usr/lib/xen/bin/pygrub"
-    return "/usr/bin/pygrub"
 
 def uri_split(uri):
     """

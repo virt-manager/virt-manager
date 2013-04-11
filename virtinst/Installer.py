@@ -37,6 +37,28 @@ from Boot import Boot
 XEN_SCRATCH = "/var/lib/xen"
 LIBVIRT_SCRATCH = "/var/lib/libvirt/boot"
 
+
+def _pygrub_path(conn=None):
+    """
+    Return the pygrub path for the current host, or connection if
+    available.
+    """
+    # FIXME: This should be removed/deprecated when capabilities are
+    #        fixed to provide bootloader info
+    from virtinst import CapabilitiesParser
+
+    if conn:
+        cap = CapabilitiesParser.parse(conn.getCapabilities())
+        if (cap.host.arch == "i86pc"):
+            return "/usr/lib/xen/bin/pygrub"
+        else:
+            return "/usr/bin/pygrub"
+
+    if platform.system() == "SunOS":
+        return "/usr/lib/xen/bin/pygrub"
+    return "/usr/bin/pygrub"
+
+
 class Installer(XMLBuilderDomain.XMLBuilderDomain):
     """
     Installer classes attempt to encapsulate all the parameters needed
@@ -333,7 +355,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         if (not isinstall and
             self.is_xenpv() and
             not self.bootconfig.kernel):
-            return "<bootloader>%s</bootloader>" % util.pygrub_path(conn)
+            return "<bootloader>%s</bootloader>" % _pygrub_path(conn)
 
         osblob = "<os>"
 
