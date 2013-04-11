@@ -232,6 +232,20 @@ class XMLParseTest(unittest.TestCase):
 
         self._alter_compare(guest.get_xml_config(), outfile)
 
+    def testAlterCpuMode(self):
+        infile  = "tests/xmlparse-xml/change-cpumode-in.xml"
+        outfile = "tests/xmlparse-xml/change-cpumode-out.xml"
+        guest = virtinst.Guest(conn=conn,
+                               parsexml=file(infile).read())
+
+        check = self._make_checker(guest.cpu)
+        check("mode", "host-passthrough", "custom")
+        check("mode", "custom", "host-model")
+        # mode will be "custom"
+        check("model", None, "qemu64")
+
+        self._alter_compare(guest.get_xml_config(), outfile)
+
     def testAlterDisk(self):
         """
         Test changing VirtualDisk() parameters after parsing
