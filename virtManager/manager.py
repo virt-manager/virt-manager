@@ -21,10 +21,12 @@
 import logging
 import re
 
+# pylint: disable=E0611
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
+# pylint: enable=E0611
 
 from virtManager import packageutils
 from virtManager import uihelpers

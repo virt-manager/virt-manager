@@ -21,8 +21,10 @@
 import logging
 import socket
 
+# pylint: disable=E0611
 from gi.repository import GObject
 from gi.repository import Gtk
+# pylint: enable=E0611
 
 import virtinst
 import dbus

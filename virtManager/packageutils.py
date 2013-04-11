@@ -18,7 +18,9 @@
 # MA 02110-1301 USA.
 #
 
+# pylint: disable=E0611
 from gi.repository import Gtk
+# pylint: enable=E0611
 
 import dbus
 

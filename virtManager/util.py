@@ -180,7 +180,7 @@ def browse_local(parent, dialog_name, conn, start_folder=None,
         value, and store the user chosen path.
 
     """
-    from gi.repository import Gtk
+    from gi.repository import Gtk # pylint: disable=E0611
 
     # Initial setup
     overwrite_confirm = False
@@ -359,7 +359,7 @@ def chkbox_helper(src, getcb, setcb, text1, text2=None,
     @alwaysrecord: Don't require user to select 'yes' to record chkbox value
     @default: What value to return if getcb tells us not to prompt
     """
-    from gi.repository import Gtk
+    from gi.repository import Gtk # pylint: disable=E0611
 
     do_prompt = getcb()
     if not do_prompt:

@@ -20,7 +20,9 @@
 
 import virtinst
 
+# pylint: disable=E0611
 from gi.repository import GObject
+# pylint: enable=E0611
 
 from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject

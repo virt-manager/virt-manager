@@ -25,11 +25,13 @@ import logging
 import virtManager
 import virtManager.guidiff
 
+# pylint: disable=E0611
 from gi.repository import GLib
 from gi.repository import GObject
 if virtManager.guidiff.is_gui():
     from gi.repository import Gtk
     from gi.repository import Gdk
+# pylint: enable=E0611
 
 
 class vmmGObject(GObject.GObject):

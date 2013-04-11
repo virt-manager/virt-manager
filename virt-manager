@@ -27,8 +27,10 @@ import signal
 import sys
 import traceback
 
+# pylint: disable=E0611
 from gi.repository import GObject
 from gi.repository import LibvirtGLib
+# pylint: enable=E0611
 
 from virtcli import cliutils, cliconfig
 
@@ -235,7 +237,7 @@ def main():
     origargs = " ".join(sys.argv[:])
 
     try:
-        from gi.repository import Gtk
+        from gi.repository import Gtk # pylint: disable=E0611
     except:
         # Don't just let the exception raise here. abrt reports bugs
         # when users mess up su/sudo and DISPLAY isn't set. Printing

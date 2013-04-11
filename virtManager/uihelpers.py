@@ -22,7 +22,9 @@ import logging
 import os
 import statvfs
 
+# pylint: disable=E0611
 from gi.repository import Gtk
+# pylint: enable=E0611
 
 import virtinst
 from virtinst import VirtualNetworkInterface

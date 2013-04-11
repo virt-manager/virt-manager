@@ -21,8 +21,10 @@
 import logging
 import traceback
 
+# pylint: disable=E0611
 from gi.repository import Gtk
 from gi.repository import Gdk
+# pylint: enable=E0611
 
 import virtinst
 from virtinst import (VirtualCharDevice,

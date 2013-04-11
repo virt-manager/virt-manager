@@ -20,8 +20,10 @@
 import os
 import logging
 
+# pylint: disable=E0611
 from gi.repository import Gtk
 from gi.repository import GConf
+# pylint: enable=E0611
 
 import virtinst
 from virtinst import uriutil

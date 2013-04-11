@@ -21,7 +21,7 @@
 import logging
 
 try:
-    from gi.repository import GnomeKeyring
+    from gi.repository import GnomeKeyring # pylint: disable=E0611
 except:
     GnomeKeyring = None
     logging.debug("GnomeKeyring bindings not installed, no keyring support")
