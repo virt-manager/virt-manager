@@ -428,7 +428,10 @@ class CheckPylint(Command):
 
 
             # May be useful to enable someday
-            "W0511",        # W0511: FIXME and XXX: messages
+            "W1001",         # Use of 'property' on old style class
+                             # pylint can't detect our Gtk subclasses are
+                             # new style
+            "W0511",         # W0511: FIXME and XXX: messages
             "Similarities",  # Finds duplicate code
         ]
 
