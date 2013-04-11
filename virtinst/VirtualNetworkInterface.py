@@ -180,7 +180,7 @@ class VirtualNetworkInterface(VirtualDevice.VirtualDevice):
         ret = self._default_bridge
         if ret is None:
             ret = False
-            default = util.default_bridge2(self.conn)
+            default = util.default_bridge(self.conn)
             if default:
                 ret = default[1]
 

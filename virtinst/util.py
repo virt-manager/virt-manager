@@ -361,7 +361,7 @@ def default_nic():
 
     return dev
 
-def default_bridge2(conn=None):
+def default_bridge(conn=None):
     if platform.system() == 'SunOS':
         return ["bridge", default_nic()]
 
@@ -559,18 +559,8 @@ def default_route(nic=None):
     return None
 
 
-def default_bridge():
-    ret = default_bridge2(None)
-    if not ret:
-        # Maintain this behavior for back compat
-        ret = "xenbr0"
-    else:
-        ret = ret[1]
-
-    return ret
-
 def default_network(conn):
-    ret = default_bridge2(conn)
+    ret = default_bridge(conn)
     if not ret:
         # FIXME: Check that this exists
         ret = ["network", "default"]

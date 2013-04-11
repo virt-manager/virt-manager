@@ -23,7 +23,7 @@ from tests import utils
 
 # Force certain helpers to return consistent values
 virtinst.util.is_blktap_capable = lambda: False
-virtinst.util.default_bridge2 = lambda ignore1: ["bridge", "eth0"]
+virtinst.util.default_bridge = lambda ignore1: ["bridge", "eth0"]
 virtinst.Guest._open_uri = lambda ignore1, ignore2: None
 
 # Setup logging

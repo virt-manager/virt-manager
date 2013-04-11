@@ -922,11 +922,11 @@ class TestXMLConfig(unittest.TestCase):
             i = utils.make_pxe_installer()
             g = utils.get_basic_fullyvirt_guest(installer=i)
             util = getattr(virtinst, "util")
-            origfunc = util.default_bridge2
+            origfunc = util.default_bridge
 
             def newbridge(ignore_conn):
                 return ["bridge", "br0"]
-            util.default_bridge2 = newbridge
+            util.default_bridge = newbridge
 
             dev1 = virtinst.VirtualNetworkInterface(conn=g.conn)
             dev1.macaddr = "22:22:33:44:55:66"
@@ -950,7 +950,7 @@ class TestXMLConfig(unittest.TestCase):
             self._compare(g, None, False)
         finally:
             if util and origfunc:
-                util.default_bridge2 = origfunc
+                util.default_bridge = origfunc
 
     def testCpustrToTuple(self):
         conn = utils.get_conn()
