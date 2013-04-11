@@ -606,24 +606,6 @@ def uuidToString(u, conn=None):
     return "-".join(["%02x" * 4, "%02x" * 2, "%02x" * 2, "%02x" * 2,
                      "%02x" * 6]) % tuple(u)
 
-def get_host_network_devices():
-    device = []
-    for dirname in ['', '/sbin/', '/usr/sbin']:
-        executable = os.path.join(dirname, "ifconfig")
-        if not os.path.exists(executable):
-            continue
-        try:
-            cmd = 'LC_ALL=C %s -a 2>/dev/null' % (executable)
-            pipe = os.popen(cmd)
-        except IOError:
-            continue
-        for line in pipe:
-            if line.find("encap:Ethernet") > 0:
-                words = line.lower().split()
-                for i in range(len(words)):
-                    if words[i] == "hwaddr":
-                        device.append(words)
-    return device
 
 def get_max_vcpus(conn, type=None):
     """@param conn: libvirt connection to poll for max possible vcpus

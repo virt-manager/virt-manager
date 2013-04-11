@@ -459,15 +459,6 @@ class TestValidation(unittest.TestCase):
         network = virtinst.VirtualNetworkInterface(conn=testconn)
         self._testArgs(network, virtinst.VirtualNetworkInterface, 'network')
 
-        # Test MAC Address collision
-        hostmac = virtinst.util.get_host_network_devices()
-        if len(hostmac) is not 0:
-            hostmac = hostmac[0][4]
-            for params in ({'macaddr' : hostmac},):
-                network = virtinst.VirtualNetworkInterface(*(), **params)
-                self.assertRaises(RuntimeError, network.setup, \
-                                      testconn)
-
         # Test dynamic MAC/Bridge success
         try:
             network = virtinst.VirtualNetworkInterface()
