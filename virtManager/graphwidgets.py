@@ -19,7 +19,7 @@
 from gi.repository import GObject
 from gi.repository import Gtk
 # pylint: enable=E0611
-import cairo
+
 
 def rect_print(name, rect):
     # For debugging
@@ -165,7 +165,8 @@ class CellRendererSparkline(Gtk.CellRenderer):
             graph_x += xalign_space
 
         cr.set_line_width(3)
-        cr.set_line_cap(cairo.LINE_CAP_ROUND)
+        # 1 == LINE_CAP_ROUND
+        cr.set_line_cap(1)
 
         # Draw gray graph border
         cr.set_source_rgb(0.8828125, 0.8671875, 0.8671875)
