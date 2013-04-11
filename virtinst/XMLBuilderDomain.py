@@ -74,6 +74,24 @@ def _ref_doc(doc):
     finally:
         _xml_refs_lock.release()
 
+
+def _tuplify_lists(*args):
+    """
+    Similar to zip(), but use None if lists aren't long enough, and
+    don't skip any None list entry
+    """
+    args = [util.listify(l) for l in args]
+    maxlen = max([len(l) for l in args])
+
+    ret = []
+    for idx in range(maxlen):
+        tup = tuple()
+        for l in args:
+            tup += (idx >= len(l) and (None,) or (l[idx],))
+        ret.append(tup)
+    return ret
+
+
 def _sanitize_libxml_xml(xml):
     # Strip starting <?...> line
     if xml.startswith("<?"):
@@ -333,11 +351,7 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
         if xml_set_list:
             xpath_list = xml_set_list(self)
 
-        node_map = map(lambda x, y, z: (x, y, z),
-                       util.listify(nodes),
-                       util.listify(val),
-                       util.listify(xpath_list))
-
+        node_map = _tuplify_lists(nodes, val, xpath_list)
         for node, val, usexpath in node_map:
             if node:
                 usexpath = node.nodePath()
