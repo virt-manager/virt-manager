@@ -129,7 +129,7 @@ class TestXMLConfig(unittest.TestCase):
 
     def testBootParavirtDiskFile(self):
         g = utils.get_basic_paravirt_guest()
-        g.disks.append(utils.get_filedisk("/tmp/somerandomfilename.img"))
+        g.add_device(utils.get_filedisk("/tmp/somerandomfilename.img"))
         self._compare(g, "boot-paravirt-disk-file", False)
 
         # Just cram some post_install_checks in here
@@ -139,13 +139,14 @@ class TestXMLConfig(unittest.TestCase):
         except OSError:
             pass
 
-        g.disks[0].path = "virt-install"
+        disk = g.get_devices("disk")[0]
+        disk.path = "virt-install"
         self.assertEquals(g.post_install_check(), False)
 
-        g.disks[0].driver_type = "raw"
+        disk.driver_type = "raw"
         self.assertEquals(g.post_install_check(), False)
 
-        g.disks[0].driver_type = "foobar"
+        disk.driver_type = "foobar"
         self.assertEquals(g.post_install_check(), True)
 
     def testBootParavirtDiskFileBlktapCapable(self):
@@ -153,35 +154,35 @@ class TestXMLConfig(unittest.TestCase):
         try:
             virtinst.util.is_blktap_capable = lambda: True
             g = utils.get_basic_paravirt_guest()
-            g.disks.append(utils.get_filedisk())
+            g.add_device(utils.get_filedisk())
             self._compare(g, "boot-paravirt-disk-drv-tap", False)
         finally:
             virtinst.util.is_blktap_capable = oldblktap
 
     def testBootParavirtDiskBlock(self):
         g = utils.get_basic_paravirt_guest()
-        g.disks.append(utils.get_blkdisk())
+        g.add_device(utils.get_blkdisk())
         self._compare(g, "boot-paravirt-disk-block", False)
 
     def testBootParavirtDiskDrvPhy(self):
         g = utils.get_basic_paravirt_guest()
         disk = utils.get_blkdisk()
         disk.driver_name = VirtualDisk.DRIVER_PHY
-        g.disks.append(disk)
+        g.add_device(disk)
         self._compare(g, "boot-paravirt-disk-drv-phy", False)
 
     def testBootParavirtDiskDrvFile(self):
         g = utils.get_basic_paravirt_guest()
         disk = utils.get_filedisk()
         disk.driver_name = VirtualDisk.DRIVER_FILE
-        g.disks.append(disk)
+        g.add_device(disk)
         self._compare(g, "boot-paravirt-disk-drv-file", False)
 
     def testBootParavirtDiskDrvTap(self):
         g = utils.get_basic_paravirt_guest()
         disk = utils.get_filedisk()
         disk.driver_name = VirtualDisk.DRIVER_TAP
-        g.disks.append(disk)
+        g.add_device(disk)
         self._compare(g, "boot-paravirt-disk-drv-tap", False)
 
     def testBootParavirtDiskDrvTapQCow(self):
@@ -189,7 +190,7 @@ class TestXMLConfig(unittest.TestCase):
         disk = utils.get_filedisk()
         disk.driver_name = VirtualDisk.DRIVER_TAP
         disk.driver_type = VirtualDisk.DRIVER_TAP_QCOW
-        g.disks.append(disk)
+        g.add_device(disk)
         self._compare(g, "boot-paravirt-disk-drv-tap-qcow", False)
 
     def testBootParavirtManyDisks(self):
@@ -198,52 +199,52 @@ class TestXMLConfig(unittest.TestCase):
         disk.driver_name = VirtualDisk.DRIVER_TAP
         disk.driver_type = VirtualDisk.DRIVER_TAP_QCOW
 
-        g.disks.append(utils.get_filedisk("/tmp/test1.img"))
-        g.disks.append(disk)
-        g.disks.append(utils.get_blkdisk())
+        g.add_device(utils.get_filedisk("/tmp/test1.img"))
+        g.add_device(disk)
+        g.add_device(utils.get_blkdisk())
         self._compare(g, "boot-paravirt-many-disks", False)
 
     def testBootFullyvirtDiskFile(self):
         g = utils.get_basic_fullyvirt_guest()
-        g.disks.append(utils.get_filedisk())
+        g.add_device(utils.get_filedisk())
         self._compare(g, "boot-fullyvirt-disk-file", False)
 
     def testBootFullyvirtDiskBlock(self):
         g = utils.get_basic_fullyvirt_guest()
-        g.disks.append(utils.get_blkdisk())
+        g.add_device(utils.get_blkdisk())
         self._compare(g, "boot-fullyvirt-disk-block", False)
 
 
 
     def testInstallParavirtDiskFile(self):
         g = utils.get_basic_paravirt_guest()
-        g.disks.append(utils.get_filedisk())
+        g.add_device(utils.get_filedisk())
         self._compare(g, "install-paravirt-disk-file", True)
 
     def testInstallParavirtDiskBlock(self):
         g = utils.get_basic_paravirt_guest()
-        g.disks.append(utils.get_blkdisk())
+        g.add_device(utils.get_blkdisk())
         self._compare(g, "install-paravirt-disk-block", True)
 
     def testInstallParavirtDiskDrvPhy(self):
         g = utils.get_basic_paravirt_guest()
         disk = utils.get_blkdisk()
         disk.driver_name = VirtualDisk.DRIVER_PHY
-        g.disks.append(disk)
+        g.add_device(disk)
         self._compare(g, "install-paravirt-disk-drv-phy", True)
 
     def testInstallParavirtDiskDrvFile(self):
         g = utils.get_basic_paravirt_guest()
         disk = utils.get_filedisk()
         disk.driver_name = VirtualDisk.DRIVER_FILE
-        g.disks.append(disk)
+        g.add_device(disk)
         self._compare(g, "install-paravirt-disk-drv-file", True)
 
     def testInstallParavirtDiskDrvTap(self):
         g = utils.get_basic_paravirt_guest()
         disk = utils.get_filedisk()
         disk.driver_name = VirtualDisk.DRIVER_TAP
-        g.disks.append(disk)
+        g.add_device(disk)
         self._compare(g, "install-paravirt-disk-drv-tap", True)
 
     def testInstallParavirtDiskDrvTapQCow(self):
@@ -251,7 +252,7 @@ class TestXMLConfig(unittest.TestCase):
         disk = utils.get_filedisk()
         disk.driver_name = VirtualDisk.DRIVER_TAP
         disk.driver_type = VirtualDisk.DRIVER_TAP_QCOW
-        g.disks.append(disk)
+        g.add_device(disk)
         self._compare(g, "install-paravirt-disk-drv-tap-qcow", True)
 
     def testInstallParavirtManyDisks(self):
@@ -260,37 +261,37 @@ class TestXMLConfig(unittest.TestCase):
         disk.driver_name = VirtualDisk.DRIVER_TAP
         disk.driver_type = VirtualDisk.DRIVER_TAP_QCOW
 
-        g.disks.append(utils.get_filedisk("/tmp/test1.img"))
-        g.disks.append(disk)
-        g.disks.append(utils.get_blkdisk())
+        g.add_device(utils.get_filedisk("/tmp/test1.img"))
+        g.add_device(disk)
+        g.add_device(utils.get_blkdisk())
         self._compare(g, "install-paravirt-many-disks", True)
 
     def testInstallFullyvirtDiskFile(self):
         g = utils.get_basic_fullyvirt_guest()
-        g.disks.append(utils.get_filedisk())
+        g.add_device(utils.get_filedisk())
         self._compare(g, "install-fullyvirt-disk-file", True)
 
     def testInstallFullyvirtDiskBlock(self):
         g = utils.get_basic_fullyvirt_guest()
-        g.disks.append(utils.get_blkdisk())
+        g.add_device(utils.get_blkdisk())
         self._compare(g, "install-fullyvirt-disk-block", True)
 
     def testInstallFVPXE(self):
         i = utils.make_pxe_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
-        g.disks.append(utils.get_filedisk())
+        g.add_device(utils.get_filedisk())
         self._compare(g, "install-fullyvirt-pxe", True)
 
     def testBootFVPXE(self):
         i = utils.make_pxe_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
-        g.disks.append(utils.get_filedisk())
+        g.add_device(utils.get_filedisk())
         self._compare(g, "boot-fullyvirt-pxe", False)
 
     def testBootFVPXEAlways(self):
         i = utils.make_pxe_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
-        g.disks.append(utils.get_filedisk())
+        g.add_device(utils.get_filedisk())
 
         g.installer.bootconfig.bootorder = [
             g.installer.bootconfig.BOOT_DEVICE_NETWORK]
@@ -323,7 +324,7 @@ class TestXMLConfig(unittest.TestCase):
 
     def testDefaultDeviceRemoval(self):
         g = utils.get_basic_fullyvirt_guest()
-        g.disks.append(utils.get_filedisk())
+        g.add_device(utils.get_filedisk())
 
         inp = VirtualInputDevice(g.conn)
         cons = VirtualCharDevice.get_dev_instance(g.conn,
@@ -349,10 +350,10 @@ class TestXMLConfig(unittest.TestCase):
 
         do_install = False
         g.installer.cdrom = True
-        g.disks.append(utils.get_floppy())
-        g.disks.append(utils.get_filedisk())
-        g.disks.append(utils.get_blkdisk())
-        g.nics.append(utils.get_virtual_network())
+        g.add_device(utils.get_floppy())
+        g.add_device(utils.get_filedisk())
+        g.add_device(utils.get_blkdisk())
+        g.add_device(utils.get_virtual_network())
 
         # Call get_xml_config sets first round of defaults w/o os_variant set
         g.get_xml_config(do_install)
@@ -364,14 +365,14 @@ class TestXMLConfig(unittest.TestCase):
         i = utils.make_import_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
-        g.disks.append(utils.get_filedisk())
+        g.add_device(utils.get_filedisk())
         self._compare(g, "install-fullyvirt-import", False)
 
     def testInstallFVImportKernel(self):
         i = utils.make_import_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
-        g.disks.append(utils.get_filedisk())
+        g.add_device(utils.get_filedisk())
         g.installer.bootconfig.kernel = "kernel"
         g.installer.bootconfig.initrd = "initrd"
         g.installer.bootconfig.kernel_args = "my kernel args"
@@ -384,40 +385,40 @@ class TestXMLConfig(unittest.TestCase):
 
         g.installer.bootconfig.enable_bootmenu = False
         g.installer.bootconfig.bootorder = ["hd", "fd", "cdrom", "network"]
-        g.disks.append(utils.get_filedisk())
+        g.add_device(utils.get_filedisk())
         self._compare(g, "install-fullyvirt-import-multiboot", False)
 
     def testInstallPVImport(self):
         i = utils.make_import_installer("xen")
         g = utils.get_basic_paravirt_guest(installer=i)
 
-        g.disks.append(utils.get_filedisk())
+        g.add_device(utils.get_filedisk())
         self._compare(g, "install-paravirt-import", False)
 
     def testQEMUDriverName(self):
         utils.set_conn(_plainkvm)
         g = utils.get_basic_fullyvirt_guest()
-        g.disks.append(utils.get_blkdisk())
+        g.add_device(utils.get_blkdisk())
         self._compare(g, "misc-qemu-driver-name", True)
 
         g = utils.get_basic_fullyvirt_guest()
-        g.disks.append(utils.get_filedisk())
-        g.disks.append(utils.get_blkdisk("/iscsi-pool/diskvol1"))
+        g.add_device(utils.get_filedisk())
+        g.add_device(utils.get_blkdisk("/iscsi-pool/diskvol1"))
         self._compare(g, "misc-qemu-driver-type", True)
 
         g = utils.get_basic_fullyvirt_guest()
-        g.disks.append(utils.get_filedisk("/default-pool/iso-vol"))
+        g.add_device(utils.get_filedisk("/default-pool/iso-vol"))
         self._compare(g, "misc-qemu-iso-disk", True)
 
         g = utils.get_basic_fullyvirt_guest()
-        g.disks.append(utils.get_filedisk("/default-pool/iso-vol"))
-        g.disks[0].driver_type = "qcow2"
+        g.add_device(utils.get_filedisk("/default-pool/iso-vol"))
+        g.get_devices("disk")[0].driver_type = "qcow2"
         self._compare(g, "misc-qemu-driver-overwrite", True)
 
     def testXMLEscaping(self):
         g = utils.get_basic_fullyvirt_guest()
         g.description = "foooo barrrr \n baz && snarf. '' \"\" @@$\n"
-        g.disks.append(utils.get_filedisk("/tmp/ISO&'&s"))
+        g.add_device(utils.get_filedisk("/tmp/ISO&'&s"))
         self._compare(g, "misc-xml-escaping", True)
 
     # OS Type/Version configurations
@@ -428,9 +429,9 @@ class TestXMLConfig(unittest.TestCase):
 
         g.os_type = "linux"
         g.os_variant = "fedora10"
-        g.disks.append(utils.get_filedisk())
-        g.disks.append(utils.get_blkdisk())
-        g.nics.append(utils.get_virtual_network())
+        g.add_device(utils.get_filedisk())
+        g.add_device(utils.get_blkdisk())
+        g.add_device(utils.get_virtual_network())
         self._compare(g, "install-f10", True)
 
     def testF11(self):
@@ -441,10 +442,10 @@ class TestXMLConfig(unittest.TestCase):
         g.os_type = "linux"
         g.os_variant = "fedora11"
         g.installer.cdrom = True
-        g.disks.append(utils.get_floppy())
-        g.disks.append(utils.get_filedisk())
-        g.disks.append(utils.get_blkdisk())
-        g.nics.append(utils.get_virtual_network())
+        g.add_device(utils.get_floppy())
+        g.add_device(utils.get_filedisk())
+        g.add_device(utils.get_blkdisk())
+        g.add_device(utils.get_virtual_network())
         self._compare(g, "install-f11", False)
 
     def testF11AC97(self):
@@ -455,10 +456,10 @@ class TestXMLConfig(unittest.TestCase):
             g.os_type = "linux"
             g.os_variant = "fedora11"
             g.installer.cdrom = True
-            g.disks.append(utils.get_floppy())
-            g.disks.append(utils.get_filedisk())
-            g.disks.append(utils.get_blkdisk())
-            g.nics.append(utils.get_virtual_network())
+            g.add_device(utils.get_floppy())
+            g.add_device(utils.get_filedisk())
+            g.add_device(utils.get_blkdisk())
+            g.add_device(utils.get_virtual_network())
             g.add_device(VirtualAudio())
             return g
 
@@ -496,10 +497,10 @@ class TestXMLConfig(unittest.TestCase):
         g.os_type = "linux"
         g.os_variant = "fedora11"
         g.installer.cdrom = True
-        g.disks.append(utils.get_floppy())
-        g.disks.append(utils.get_filedisk())
-        g.disks.append(utils.get_blkdisk())
-        g.nics.append(utils.get_virtual_network())
+        g.add_device(utils.get_floppy())
+        g.add_device(utils.get_filedisk())
+        g.add_device(utils.get_blkdisk())
+        g.add_device(utils.get_virtual_network())
         self._compare(g, "install-f11-qemu", False)
 
     def testF11Xen(self):
@@ -510,10 +511,10 @@ class TestXMLConfig(unittest.TestCase):
         g.os_type = "linux"
         g.os_variant = "fedora11"
         g.installer.cdrom = True
-        g.disks.append(utils.get_floppy())
-        g.disks.append(utils.get_filedisk())
-        g.disks.append(utils.get_blkdisk())
-        g.nics.append(utils.get_virtual_network())
+        g.add_device(utils.get_floppy())
+        g.add_device(utils.get_filedisk())
+        g.add_device(utils.get_blkdisk())
+        g.add_device(utils.get_virtual_network())
         self._compare(g, "install-f11-xen", False)
 
     def testInstallWindowsKVM(self):
@@ -537,9 +538,9 @@ class TestXMLConfig(unittest.TestCase):
             g = utils.get_basic_fullyvirt_guest("xen")
             g.os_type = "windows"
             g.os_variant = "winxp"
-            g.disks.append(utils.get_filedisk())
-            g.disks.append(utils.get_blkdisk())
-            g.nics.append(utils.get_virtual_network())
+            g.add_device(utils.get_filedisk())
+            g.add_device(utils.get_blkdisk())
+            g.add_device(utils.get_virtual_network())
             g.add_device(VirtualAudio())
             return g
 
@@ -556,27 +557,27 @@ class TestXMLConfig(unittest.TestCase):
         i = utils.make_pxe_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
-        g.disks.append(utils.get_filedisk())
-        g.disks.append(utils.get_blkdisk())
-        g.disks.append(VirtualDisk(conn=g.conn, path="/dev/loop0",
+        g.add_device(utils.get_filedisk())
+        g.add_device(utils.get_blkdisk())
+        g.add_device(VirtualDisk(conn=g.conn, path="/dev/loop0",
                                    device=VirtualDisk.DEVICE_CDROM,
                                    driverType="raw"))
-        g.disks.append(VirtualDisk(conn=g.conn, path="/dev/loop0",
+        g.add_device(VirtualDisk(conn=g.conn, path="/dev/loop0",
                                    device=VirtualDisk.DEVICE_DISK,
                                    driverName="qemu", format="qcow2"))
-        g.disks.append(VirtualDisk(conn=g.conn, path=None,
+        g.add_device(VirtualDisk(conn=g.conn, path=None,
                                    device=VirtualDisk.DEVICE_CDROM,
                                    bus="scsi"))
-        g.disks.append(VirtualDisk(conn=g.conn, path=None,
+        g.add_device(VirtualDisk(conn=g.conn, path=None,
                                    device=VirtualDisk.DEVICE_FLOPPY))
-        g.disks.append(VirtualDisk(conn=g.conn, path="/dev/loop0",
+        g.add_device(VirtualDisk(conn=g.conn, path="/dev/loop0",
                                    device=VirtualDisk.DEVICE_FLOPPY,
                                    driverName="phy", driverCache="none"))
         disk = VirtualDisk(conn=g.conn, path="/dev/loop0",
                            bus="virtio", driverName="qemu",
                            driverType="qcow2", driverCache="none")
         disk.driver_io = "threads"
-        g.disks.append(disk)
+        g.add_device(disk)
 
         self._compare(g, "boot-many-disks2", False)
 
@@ -596,11 +597,11 @@ class TestXMLConfig(unittest.TestCase):
                                        macaddr="00:11:00:22:00:33")
         net5.source_dev = "testeth1"
 
-        g.nics.append(net1)
-        g.nics.append(net2)
-        g.nics.append(net3)
-        g.nics.append(net4)
-        g.nics.append(net5)
+        g.add_device(net1)
+        g.add_device(net2)
+        g.add_device(net3)
+        g.add_device(net4)
+        g.add_device(net5)
         self._compare(g, "boot-many-nics", False)
 
     def testManyHostdevs(self):
@@ -616,18 +617,18 @@ class TestXMLConfig(unittest.TestCase):
         dev2.slot = "0x2"
         dev2.function = "0x3"
 
-        g.hostdevs.append(dev1)
-        g.hostdevs.append(dev2)
+        g.add_device(dev1)
+        g.add_device(dev2)
         self._compare(g, "boot-many-hostdevs", False)
 
     def testManySounds(self):
         i = utils.make_pxe_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
-        g.sound_devs.append(VirtualAudio("sb16", conn=g.conn))
-        g.sound_devs.append(VirtualAudio("es1370", conn=g.conn))
-        g.sound_devs.append(VirtualAudio("pcspk", conn=g.conn))
-        g.sound_devs.append(VirtualAudio(conn=g.conn))
+        g.add_device(VirtualAudio("sb16", conn=g.conn))
+        g.add_device(VirtualAudio("es1370", conn=g.conn))
+        g.add_device(VirtualAudio("pcspk", conn=g.conn))
+        g.add_device(VirtualAudio(conn=g.conn))
 
         self._compare(g, "boot-many-sounds", False)
 
@@ -699,22 +700,22 @@ class TestXMLConfig(unittest.TestCase):
         dev1 = VirtualHostDeviceUSB(g.conn)
         dev1.product = "0x1234"
         dev1.vendor = "0x4321"
-        g.hostdevs.append(dev1)
+        g.add_device(dev1)
 
         # Sound devices
-        g.sound_devs.append(VirtualAudio("sb16", conn=g.conn))
-        g.sound_devs.append(VirtualAudio("es1370", conn=g.conn))
+        g.add_device(VirtualAudio("sb16", conn=g.conn))
+        g.add_device(VirtualAudio("es1370", conn=g.conn))
 
         # Disk devices
-        g.disks.append(VirtualDisk(conn=g.conn, path="/dev/loop0",
+        g.add_device(VirtualDisk(conn=g.conn, path="/dev/loop0",
                                    device=VirtualDisk.DEVICE_FLOPPY))
-        g.disks.append(VirtualDisk(conn=g.conn, path="/dev/loop0",
+        g.add_device(VirtualDisk(conn=g.conn, path="/dev/loop0",
                                    bus="scsi"))
-        g.disks.append(VirtualDisk(conn=g.conn, path="/tmp", device="floppy"))
+        g.add_device(VirtualDisk(conn=g.conn, path="/tmp", device="floppy"))
         d3 = VirtualDisk(conn=g.conn, path="/default-pool/testvol1.img",
                          bus="scsi", driverName="qemu")
         d3.address.type = "spapr-vio"
-        g.disks.append(d3)
+        g.add_device(d3)
 
         # Controller devices
         c1 = VirtualController.get_class_for_type(VirtualController.CONTROLLER_TYPE_IDE)(g.conn)
@@ -734,9 +735,9 @@ class TestXMLConfig(unittest.TestCase):
                                        macaddr="22:22:22:22:22:22", network="default")
         net3.model = "spapr-vlan"
         net3.set_address("spapr-vio")
-        g.nics.append(net1)
-        g.nics.append(net2)
-        g.nics.append(net3)
+        g.add_device(net1)
+        g.add_device(net2)
+        g.add_device(net3)
 
         # Character devices
         cdev1 = VirtualCharDevice.get_dev_instance(g.conn,
@@ -878,10 +879,10 @@ class TestXMLConfig(unittest.TestCase):
                                   location="tests/cli-test-xml/fakerhel6tree",
                                   gtype="kvm")
         g = utils.get_basic_fullyvirt_guest("kvm", installer=i)
-        g.disks.append(utils.get_floppy())
-        g.disks.append(utils.get_filedisk("/default-pool/rhel6.img"))
-        g.disks.append(utils.get_blkdisk())
-        g.nics.append(utils.get_virtual_network())
+        g.add_device(utils.get_floppy())
+        g.add_device(utils.get_filedisk("/default-pool/rhel6.img"))
+        g.add_device(utils.get_blkdisk())
+        g.add_device(utils.get_virtual_network())
         g.add_device(VirtualAudio())
         g.add_device(VirtualVideoDevice(g.conn))
         g.os_autodetect = True

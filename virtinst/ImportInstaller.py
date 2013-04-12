@@ -42,9 +42,10 @@ class ImportInstaller(Installer.Installer):
 
     # Private methods
     def _get_bootdev(self, isinstall, guest):
-        if not guest.disks:
+        disks = guest.get_devices("disk")
+        if not disks:
             return self.bootconfig.BOOT_DEVICE_HARDDISK
-        return self._disk_to_bootdev(guest.disks[0])
+        return self._disk_to_bootdev(disks[0])
 
     def _disk_to_bootdev(self, disk):
         if disk.device == VirtualDisk.DEVICE_DISK:

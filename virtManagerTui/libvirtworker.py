@@ -498,8 +498,7 @@ class LibvirtWorker:
 
         self.__guest.add_device(
             virtinst.VirtualGraphics(type=virtinst.VirtualGraphics.TYPE_VNC))
-        self.__guest.sound_devs = []
-        self.__guest.sound_devs.append(virtinst.VirtualAudio(model="es1370"))
+        self.__guest.add_device(virtinst.VirtualAudio())
 
         self._setup_nics(config)
         self._setup_disks(config)
@@ -508,19 +507,17 @@ class LibvirtWorker:
         self.__domain = self.__guest.start_install(False, meter=meter)
 
     def _setup_nics(self, config):
-        self.__guest.nics = []
         nic = virtinst.VirtualNetworkInterface(type=virtinst.VirtualNetworkInterface.TYPE_VIRTUAL,
                                                bridge=config.get_network_bridge(),
                                                network=config.get_network_bridge(),
                                                macaddr=config.get_mac_address())
-        self.__guest.nics.append(nic)
+        self.__guest.add_device(nic)
         # ensure the network is running
         if config.get_network_bridge() not in self.__conn.listNetworks():
             network = self.__conn.networkLookupByName(config.get_network_bridge())
             network.create()
 
     def _setup_disks(self, config):
-        self.__guest.disks = []
         if config.get_enable_storage():
             path = None
             if config.get_use_local_storage():
@@ -540,5 +537,5 @@ class LibvirtWorker:
                 storage = virtinst.VirtualDisk(conn=self.__conn,
                                                path=path,
                                                size=config.get_storage_size())
-                self.__guest.disks.append(storage)
+                self.__guest.add_device(storage)
         self.__guest.conn = self.__conn

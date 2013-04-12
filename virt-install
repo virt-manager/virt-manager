@@ -53,12 +53,14 @@ def install_specified(location, cdpath, pxe, import_install):
     return bool(pxe or cdpath or location or import_install)
 
 def cdrom_specified(guest, diskopts=None):
-    for disk in guest.disks:
+    disks = guest.get_devices("disk")
+
+    for disk in disks:
         if disk.device == virtinst.VirtualDisk.DEVICE_CDROM:
             return True
 
     # Probably haven't set up disks yet
-    if not guest.disks and diskopts:
+    if not disks and diskopts:
         for opts in diskopts:
             if opts.count("device=cdrom"):
                 return True
@@ -155,7 +157,7 @@ def get_disk(diskopts, size, sparse, guest, is_file_path):
     except ValueError, e:
         fail(_("Error with storage parameters: %s" % str(e)))
 
-    guest.disks.append(d)
+    guest.add_device(d)
 
 def get_disks(guest, file_paths, disk_paths, size, sparse, need_storage):
     is_file_path = (file_paths or (not disk_paths and cli.is_prompt()))

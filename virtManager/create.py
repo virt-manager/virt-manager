@@ -869,8 +869,9 @@ class vmmCreate(vmmGObjectUI):
             install = _("Operating system container")
 
         storagetmpl = "<span size='small' color='#484848'>%s</span>"
-        if len(self.guest.disks):
-            disk = self.guest.disks[0]
+        disks = self.guest.get_devices("disk")
+        if disks:
+            disk = disks[0]
             storage = "%s" % self.pretty_storage(disk.size)
             storage += " " + (storagetmpl % disk.path)
         elif len(self.guest.get_devices("filesystem")):
@@ -1004,8 +1005,9 @@ class vmmCreate(vmmGObjectUI):
     def get_default_path(self, name):
         # Don't generate a new path if the install failed
         if self.failed_guest:
-            if len(self.failed_guest.disks) > 0:
-                return self.failed_guest.disks[0].path
+            disks = self.failed_guest.get_devices("disk")
+            if disks:
+                return disks[0].path
 
         return util.get_default_path(self.conn, name)
 
@@ -1825,7 +1827,8 @@ class vmmCreate(vmmGObjectUI):
 
         self.rebuild_guest()
         guest = self.guest
-        disk = len(guest.disks) and guest.disks[0]
+        disks = guest.get_devices("disk")
+        disk = disks and disks[0]
 
         logging.debug("Creating a VM %s" % guest.name +
                       "\n  Type: %s,%s" % (guest.type,

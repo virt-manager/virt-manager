@@ -242,11 +242,12 @@ class XMLParseTest(unittest.TestCase):
         # XXX: Set size up front. VirtualDisk validation is kind of
         # convoluted. If trying to change a non-existing one and size wasn't
         # already specified, we will error out.
-        disk1 = guest.disks[0]
+        disks = guest.get_devices("disk")
+        disk1 = disks[0]
         disk1.size = 1
-        disk2 = guest.disks[2]
+        disk2 = disks[2]
         disk2.size = 1
-        disk3 = guest.disks[5]
+        disk3 = disks[5]
         disk3.size = 1
 
         check = self._make_checker(disk1)

@@ -30,7 +30,8 @@ class PXEInstaller(Installer.Installer):
         bootdev = self.bootconfig.BOOT_DEVICE_NETWORK
 
         if (not isinstall and
-            [d for d in guest.disks if d.device == d.DEVICE_DISK]):
+            [d for d in guest.get_devices("disk") if
+             d.device == d.DEVICE_DISK]):
             # If doing post-install boot and guest has an HD attached
             bootdev = self.bootconfig.BOOT_DEVICE_HARDDISK
 

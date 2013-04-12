@@ -203,9 +203,9 @@ def build_win_kvm(path=None):
     g = get_basic_fullyvirt_guest("kvm")
     g.os_type = "windows"
     g.os_variant = "winxp"
-    g.disks.append(get_filedisk(path))
-    g.disks.append(get_blkdisk())
-    g.nics.append(get_virtual_network())
+    g.add_device(get_filedisk(path))
+    g.add_device(get_blkdisk())
+    g.add_device(get_virtual_network())
     g.add_device(VirtualAudio())
     g.add_device(VirtualVideoDevice(g.conn))
 

@@ -205,12 +205,6 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         self._os_variant = None
         self._os_autodetect = False
 
-        # DEPRECATED: Public device lists unaltered by install process
-        self.disks = []
-        self.nics = []
-        self.sound_devs = []
-        self.hostdevs = []
-
         # General device list. Only access through API calls (even internally)
         self._devices = []
 
@@ -601,16 +595,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
             self._default_console_device = None
 
         # Actually add the device
-        if   devtype == VirtualDevice.VIRTUAL_DEV_DISK:
-            self.disks.append(dev)
-        elif devtype == VirtualDevice.VIRTUAL_DEV_NET:
-            self.nics.append(dev)
-        elif devtype == VirtualDevice.VIRTUAL_DEV_AUDIO:
-            self.sound_devs.append(dev)
-        elif devtype == VirtualDevice.VIRTUAL_DEV_HOSTDEV:
-            self.hostdevs.append(dev)
-        else:
-            self._devices.append(dev)
+        self._devices.append(dev)
 
 
     def get_devices(self, devtype):
@@ -621,17 +606,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         @param devtype: Device type to search for (one of
                         VirtualDevice.virtual_device_types)
         """
-        if   devtype == VirtualDevice.VIRTUAL_DEV_DISK:
-            devlist = self.disks[:]
-        elif devtype == VirtualDevice.VIRTUAL_DEV_NET:
-            devlist = self.nics[:]
-        elif devtype == VirtualDevice.VIRTUAL_DEV_AUDIO:
-            devlist = self.sound_devs[:]
-        elif devtype == VirtualDevice.VIRTUAL_DEV_HOSTDEV:
-            devlist = self.hostdevs[:]
-        else:
-            devlist = self._dev_build_list(devtype)
-
+        devlist = self._dev_build_list(devtype)
         devlist.extend(self._install_devices)
         return self._dev_build_list(devtype, devlist)
 
@@ -651,8 +626,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         @param dev: VirtualDevice instance
         """
         found = False
-        for devlist in [self.disks, self.nics, self.sound_devs, self.hostdevs,
-                        self._devices, self._install_devices]:
+        for devlist in [self._devices, self._install_devices]:
             if found:
                 break
 

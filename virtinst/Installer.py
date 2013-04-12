@@ -416,12 +416,13 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
             # XXX: Use block peek for this?
             return True
 
-        if (len(guest.disks) == 0 or
-            guest.disks[0].device != VirtualDisk.DEVICE_DISK):
+        disks = guest.get_devices("disk")
+        if not disks:
             return True
 
-        disk = guest.disks[0]
-
+        disk = disks[0]
+        if disk.device != VirtualDisk.DEVICE_DISK:
+            return True
         if util.is_vdisk(disk.path):
             return True
 

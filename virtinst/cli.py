@@ -974,8 +974,7 @@ def get_video(guest, video_models=None):
 def get_sound(old_sound_bool, sound_opts, guest):
     if not sound_opts:
         if old_sound_bool:
-            # Use os default
-            guest.sound_devs.append(VirtualAudio(conn=guest.conn))
+            guest.add_device(VirtualAudio(conn=guest.conn))
         return
 
     for opts in listify(sound_opts):
