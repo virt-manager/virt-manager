@@ -536,13 +536,6 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
     scratchdir = property(get_scratchdir)
 
     # Deprecated: Should be called from the installer directly
-    def get_boot(self):
-        return self._installer.boot
-    def set_boot(self, val):
-        self._installer.boot = val
-    boot = property(get_boot, set_boot)
-
-    # Deprecated: Should be called from the installer directly
     def get_extraargs(self):
         return self._installer.extraargs
     def set_extraargs(self, val):

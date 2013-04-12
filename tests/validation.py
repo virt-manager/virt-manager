@@ -150,12 +150,6 @@ args = {
 
 'installer' : {
     'init_conns' : [ testconn, None ],
-    'boot' : {
-        'invalid' : ['', 0, ('1element'), ['1el', '2el', '3el'],
-                     {'1element': '1val'},
-                     {'kernel' : 'a', 'wronglabel' : 'b'}],
-        'valid'   : [('kern', 'init'), ['kern', 'init'],
-                     { 'kernel' : 'a', 'initrd' : 'b'}]},
     'extraargs' : {
         'invalid' : [],
         'valid'   : ['someargs']},

@@ -149,12 +149,15 @@ def get_basic_paravirt_guest(installer=None):
     g.memory = int(200)
     g.maxmemory = int(400)
     g.uuid = "12345678-1234-1234-1234-123456789012"
-    g.boot = ["/boot/vmlinuz", "/boot/initrd"]
     g.add_device(VirtualGraphics("vnc", keymap="ja"))
     g.vcpus = 5
 
     if installer:
         g.installer = installer
+    else:
+        instboot = getattr(g.installer, "_install_bootconfig")
+        instboot.kernel = "/boot/vmlinuz"
+        instboot.initrd = "/boot/initrd"
 
     g.installer._scratchdir = scratch
     return g

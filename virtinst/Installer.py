@@ -80,7 +80,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
     """
 
     _dumpxml_xpath = "/domain/os"
-    def __init__(self, type="xen", location=None, boot=None,
+    def __init__(self, type="xen", location=None,
                  extraargs=None, os_type=None, conn=None,
                  parsexml=None, parsexmlnode=None, caps=None):
         XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
@@ -121,8 +121,6 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         if not location is None:
             self.location = location
 
-        if not boot is None:
-            self.boot = boot
         self.extraargs = extraargs
 
         self._tmpfiles = []
@@ -217,38 +215,6 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
     def set_initrd_injections(self, val):
         self._initrd_injections = val
     initrd_injections = property(get_initrd_injections, set_initrd_injections)
-
-    # kernel + initrd pair to use for installing as opposed to using a location
-    def get_boot(self):
-        return {"kernel" : self._install_bootconfig.kernel,
-                "initrd" : self._install_bootconfig.initrd}
-    def set_boot(self, val):
-        self.cdrom = False
-        boot = {}
-        if type(val) == tuple:
-            if len(val) != 2:
-                raise ValueError(_("Must pass both a kernel and initrd"))
-            (k, i) = val
-            boot = {"kernel": k, "initrd": i}
-
-        elif type(val) == dict:
-            if "kernel" not in val or "initrd" not in val:
-                raise ValueError(_("Must pass both a kernel and initrd"))
-            boot = val
-
-        elif type(val) == list:
-            if len(val) != 2:
-                raise ValueError(_("Must pass both a kernel and initrd"))
-            boot = {"kernel": val[0], "initrd": val[1]}
-
-        else:
-            raise ValueError(_("Kernel and initrd must be specified by "
-                               "a list, dict, or tuple."))
-
-        self._install_bootconfig.kernel = boot.get("kernel")
-        self._install_bootconfig.initrd = boot.get("initrd")
-
-    boot = property(get_boot, set_boot)
 
     # extra arguments to pass to the guest installer
     def get_extra_args(self):
