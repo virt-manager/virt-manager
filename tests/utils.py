@@ -24,6 +24,7 @@ import virtinst
 import virtinst.cli
 from virtinst import VirtualAudio
 from virtinst import VirtualDisk
+from virtinst import VirtualGraphics
 from virtinst import VirtualVideoDevice
 
 # pylint: disable=W0212
@@ -149,7 +150,7 @@ def get_basic_paravirt_guest(installer=None):
     g.maxmemory = int(400)
     g.uuid = "12345678-1234-1234-1234-123456789012"
     g.boot = ["/boot/vmlinuz", "/boot/initrd"]
-    g.graphics = (True, "vnc", None, "ja")
+    g.add_device(VirtualGraphics("vnc", keymap="ja"))
     g.vcpus = 5
 
     if installer:
@@ -165,7 +166,7 @@ def get_basic_fullyvirt_guest(typ="xen", installer=None):
     g.maxmemory = int(400)
     g.uuid = "12345678-1234-1234-1234-123456789012"
     g.cdrom = "/dev/loop0"
-    g.graphics = (True, "sdl")
+    g.add_device(VirtualGraphics("sdl"))
     g.features['pae'] = 0
     g.vcpus = 5
     if installer:

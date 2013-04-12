@@ -82,12 +82,6 @@ args = {
     'vcpus'     : {
         'invalid' : [-1, 0, 1000, ''],
         'valid'   : [ 1, 32 ] },
-    'graphics'  : {
-        'invalid' : ['', True, 'unknown', {}, ('', '', '', 0),
-                     ('', '', '', 'longerthan16chars'),
-                     ('', '', '', 'invalid!!ch@r')],
-        'valid'   : [False, 'sdl', 'vnc', (True, 'sdl', '', 'key_map-2'),
-                     {'enabled' : True, 'type':'vnc', 'opts':5900} ]},
     'type'      : {
         'invalid' : [],
         'valid'   : ['sometype'] },

@@ -590,20 +590,21 @@ def txt_console(dom, uri):
 
 def start_install(guest, continue_inst, options):
     def show_console(dom):
-        if guest.graphics_dev:
-            gtype = guest.graphics_dev.type
-            if gtype in [virtinst.VirtualGraphics.TYPE_VNC,
-                         virtinst.VirtualGraphics.TYPE_SPICE]:
-                logging.debug("Launching virt-viewer for graphics type '%s'",
-                              gtype)
-                return vnc_console(dom, guest.get_uri())
-            else:
-                logging.debug("No viewer to launch for graphics type '%s'",
-                              gtype)
-                return None # SDL needs no viewer app
-        else:
+        gdev = guest.get_devices("graphics")
+        if not gdev:
             logging.debug("Connecting to text console")
             return txt_console(dom, guest.get_uri())
+
+        gtype = gdev[0].type
+        if gtype in [virtinst.VirtualGraphics.TYPE_VNC,
+                     virtinst.VirtualGraphics.TYPE_SPICE]:
+            logging.debug("Launching virt-viewer for graphics type '%s'",
+                          gtype)
+            return vnc_console(dom, guest.get_uri())
+        else:
+            logging.debug("No viewer to launch for graphics type '%s'",
+                          gtype)
+            return None # SDL needs no viewer app
 
     # There are two main cases we care about:
     #

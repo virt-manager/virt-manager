@@ -411,17 +411,6 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
     cpuset = _xml_property(get_cpuset, set_cpuset,
                            xpath="./vcpu/@cpuset")
 
-    def get_graphics_dev(self):
-        gdevs = self.get_devices(VirtualDevice.VIRTUAL_DEV_GRAPHICS)
-        return (gdevs and gdevs[0] or None)
-    def set_graphics_dev(self, val):
-        gdev = self.graphics_dev
-        if val:
-            self.add_device(val)
-        if gdev:
-            self.remove_device(gdev)
-    graphics_dev = property(get_graphics_dev, set_graphics_dev)
-
     # GAH! - installer.os_type = "hvm" or "xen" (aka xen paravirt)
     #        guest.os_type     = "Solaris", "Windows", "Linux"
     # FIXME: We should really rename this property to something else,
@@ -518,74 +507,6 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
     #########################
     # DEPRECATED PROPERTIES #
     #########################
-
-    # Deprecated: Should set graphics_dev.keymap directly
-    def get_keymap(self):
-        if self.graphics_dev is None:
-            return None
-        return self.graphics_dev.keymap
-    def set_keymap(self, val):
-        if self.graphics_dev is not None:
-            self.graphics_dev.keymap = val
-    keymap = property(get_keymap, set_keymap)
-
-    # Deprecated: Should set guest.graphics_dev = VirtualGraphics(...)
-    def get_graphics(self):
-        if self.graphics_dev is None:
-            return { "enabled" : False }
-        return { "enabled" : True, "type" : self.graphics_dev, \
-                 "keymap"  : self.graphics_dev.keymap}
-    def set_graphics(self, val):
-
-        # val can be:
-        #   a dictionary with keys:  enabled, type, port, keymap
-        #   a tuple of the form   : (enabled, type, port, keymap)
-        #                            last 2 optional
-        #                         : "vnc", "sdl", or false
-        port = None
-        gtype = None
-        enabled = False
-        keymap = None
-        gdev = None
-        if type(val) == dict:
-            if "enabled" not in val:
-                raise ValueError(_("Must specify whether graphics are enabled"))
-
-            enabled = val["enabled"]
-            if "type" in val:
-                gtype = val["type"]
-                if "opts" in val:
-                    port = val["opts"]
-
-        elif type(val) == tuple:
-            if len(val) >= 1:
-                enabled = val[0]
-            if len(val) >= 2:
-                gtype = val[1]
-            if len(val) >= 3:
-                port = val[2]
-            if len(val) >= 4:
-                keymap = val[3]
-
-        else:
-            if val in ("vnc", "sdl"):
-                gtype = val
-                enabled = True
-            else:
-                enabled = val
-
-        if enabled not in (True, False):
-            raise ValueError(_("Graphics enabled must be True or False"))
-
-        if enabled:
-            gdev = virtinst.VirtualGraphics(type=gtype)
-            if port:
-                gdev.port = port
-            if keymap:
-                gdev.keymap = keymap
-        self.graphics_dev = gdev
-
-    graphics = property(get_graphics, set_graphics)
 
     # Hypervisor name (qemu, xen, kvm, etc.)
     # Deprecated: should be pulled directly from the installer
