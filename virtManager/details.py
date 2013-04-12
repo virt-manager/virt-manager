@@ -1077,7 +1077,7 @@ class vmmDetails(vmmGObjectUI):
         if event.button != 3:
             return
 
-        self.addhwmenu.popup(None, None, None, 0, event.time)
+        self.addhwmenu.popup(None, None, None, None, 0, event.time)
 
     def build_serial_list(self):
         ret = []
