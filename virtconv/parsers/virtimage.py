@@ -23,7 +23,7 @@ import virtconv.formats as formats
 import virtconv.vmcfg as vmcfg
 import virtconv.diskcfg as diskcfg
 import virtconv.netdevcfg as netdevcfg
-import virtinst.FullVirtGuest as fv
+import virtinst.Guest as Guest
 import virtinst.ImageParser as ImageParser
 
 from xml.sax.saxutils import escape
@@ -86,7 +86,7 @@ def export_os_params(vm):
 
     # TODO: Shouldn't be directly using _OS_TYPES here. virt-image libs (
     # ImageParser?) should handle this info
-    ostype = fv._OS_TYPES.get(vm.os_type)
+    ostype = Guest._OS_TYPES.get(vm.os_type)
     if ostype:
         osvariant = ostype.get('variants').get(vm.os_variant)
 

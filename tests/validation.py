@@ -99,9 +99,6 @@ args = {
         'invalid' : [],
         'valid'   : ["i386", 'i686', 'x86_64'],
     },
-},
-
-'fvguest'  : {
     'os_type'   : {
         'invalid' : ['notpresent', 0, ''],
         'valid'   : ['other', 'windows', 'unix', 'linux']},
@@ -109,6 +106,7 @@ args = {
         'invalid' : ['', 0, 'invalid'],
         'valid'   : ['rhel5', 'sles10']},
 },
+
 
 'disk' : {
   'init_conns' : [ testconn, None ],
@@ -442,18 +440,12 @@ class TestValidation(unittest.TestCase):
 
     # Actual Tests
     def testGuestValidation(self):
-        PVGuest = virtinst.ParaVirtGuest(conn=testconn,
-                                         type="xen")
-        self._testArgs(PVGuest, virtinst.Guest, 'guest')
+        g = virtinst.Guest(conn=testconn, type="xen")
+        self._testArgs(g, virtinst.Guest, 'guest')
 
     def testDiskValidation(self):
         disk = VirtualDisk("/dev/loop0")
         self._testArgs(disk, VirtualDisk, 'disk')
-
-    def testFVGuestValidation(self):
-        FVGuest = virtinst.FullVirtGuest(conn=testconn,
-                                         type="xen")
-        self._testArgs(FVGuest, virtinst.FullVirtGuest, 'fvguest')
 
     def testNetworkValidation(self):
         network = virtinst.VirtualNetworkInterface(conn=testconn)

@@ -760,10 +760,10 @@ class vmmCreate(vmmGObjectUI):
                       RHEL6_OS_SUPPORT or
                       None)
 
-        types = virtinst.FullVirtGuest.list_os_types()
+        types = virtinst.Guest.list_os_types()
         types.sort()
-        supportl = virtinst.FullVirtGuest.list_os_types(supported=True,
-                                                        filtervars=filtervars)
+        supportl = virtinst.Guest.list_os_types(supported=True,
+                                               filtervars=filtervars)
         if not filtervars:
             # Kind of a hack, just show linux + windows by default since
             # that's all 98% of people care about
@@ -772,7 +772,7 @@ class vmmCreate(vmmGObjectUI):
         self._add_os_row(model, None, _("Generic"), True)
 
         for t in types:
-            label = virtinst.FullVirtGuest.get_os_type_label(t)
+            label = virtinst.Guest.get_os_type_label(t)
             supported = (t in supportl)
             self._add_os_row(model, t, label, supported)
 
@@ -794,13 +794,13 @@ class vmmCreate(vmmGObjectUI):
                       RHEL6_OS_SUPPORT or
                       None)
         preferred = self.config.preferred_distros
-        variants = virtinst.FullVirtGuest.list_os_variants(_type, preferred)
-        supportl = virtinst.FullVirtGuest.list_os_variants(
+        variants = virtinst.Guest.list_os_variants(_type, preferred)
+        supportl = virtinst.Guest.list_os_variants(
                                             _type, preferred, supported=True,
                                             filtervars=filtervars)
 
         for v in variants:
-            label = virtinst.FullVirtGuest.get_os_variant_label(_type, v)
+            label = virtinst.Guest.get_os_variant_label(_type, v)
             supported = v in supportl
             self._add_os_row(model, v, label, supported)
 

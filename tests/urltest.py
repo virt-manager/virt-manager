@@ -223,7 +223,8 @@ urls = {
 
 
 testconn = libvirt.open("test:///default")
-testguest = virtinst.FullVirtGuest(conn=testconn, installer=virtinst.DistroInstaller())
+testguest = virtinst.Guest(conn=testconn,
+                           installer=virtinst.DistroInstaller())
 
 class TestURLFetch(unittest.TestCase):
 

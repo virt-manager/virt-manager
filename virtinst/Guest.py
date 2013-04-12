@@ -826,9 +826,6 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         return dev
 
     def _get_default_console_device(self):
-        """
-        Only implemented for FullVirtGuest
-        """
         dev = VirtualCharDevice.get_dev_instance(self.conn,
                                                  VirtualCharDevice.DEV_CONSOLE,
                                                  VirtualCharDevice.CHAR_PTY)
