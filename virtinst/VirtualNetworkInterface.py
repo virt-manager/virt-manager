@@ -145,8 +145,7 @@ class VirtualNetworkInterface(VirtualDevice):
     def __init__(self, macaddr=None, type=TYPE_BRIDGE, bridge=None,
                  network=None, model=None, conn=None,
                  parsexml=None, parsexmlnode=None, caps=None):
-        VirtualDevice.__init__(self, conn, parsexml,
-                                             parsexmlnode, caps)
+        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode, caps)
 
         self._network = None
         self._bridge = None
@@ -192,7 +191,7 @@ class VirtualNetworkInterface(VirtualDevice):
             found = False
             for ignore in range(256):
                 self._random_mac = util.randomMAC(self.conn.getType().lower(),
-                                                   conn=self.conn)
+                                                  conn=self.conn)
                 ret = self.is_conflict_net(self.conn, self._random_mac)
                 if ret[1] is not None:
                     continue

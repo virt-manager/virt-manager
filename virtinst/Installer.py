@@ -507,7 +507,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         guest, domain = CapabilitiesParser.guest_lookup(conn=self.conn,
                                                         caps=self._get_caps(),
                                                         os_type=self.os_type,
-                                                        type=self.type,
+                                                        typ=self.type,
                                                         arch=self.arch,
                                                         machine=self.machine)
 

@@ -151,16 +151,16 @@ def _acquireMedia(iskernel, guest, baseuri, progresscb,
                                  None, media_cb)
 
 # Helper method to lookup install media distro and fetch an install kernel
-def acquireKernel(guest, baseuri, progresscb, scratchdir, type=None):
+def getKernel(guest, baseuri, progresscb, scratchdir, typ):
     iskernel = True
     return _acquireMedia(iskernel, guest, baseuri, progresscb,
-                         scratchdir, type)
+                         scratchdir, typ)
 
 # Helper method to lookup install media distro and fetch a boot iso
-def acquireBootDisk(guest, baseuri, progresscb, scratchdir, type=None):
+def getBootDisk(guest, baseuri, progresscb, scratchdir):
     iskernel = False
     return _acquireMedia(iskernel, guest, baseuri, progresscb,
-                         scratchdir, type)
+                         scratchdir)
 
 def _check_ostype_valid(os_type):
     return bool(os_type in osdict.sort_helper(osdict.OS_TYPES))
@@ -279,6 +279,8 @@ class Distro:
                                        initrdpath)
 
     def acquireBootDisk(self, guest, fetcher, progresscb):
+        ignore = guest
+
         if self._hasTreeinfo(fetcher, progresscb):
             return fetcher.acquireFile(self._getTreeinfoMedia("boot.iso"),
                                        progresscb)
@@ -811,7 +813,7 @@ class SuseDistro(Distro):
 
             # Build a list of all .ko files
             modpaths = {}
-            for root, dummy, files in os.walk(cpiodir + "/kernel/lib/modules", topdown=False):
+            for root, ignore, files in os.walk(cpiodir + "/kernel/lib/modules", topdown=False):
                 for name in files:
                     if name.endswith(".ko"):
                         modpaths[name] = os.path.join(root, name)

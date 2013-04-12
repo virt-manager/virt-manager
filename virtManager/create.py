@@ -566,7 +566,7 @@ class vmmCreate(vmmGObjectUI):
         # CPU
         phys_cpus = self.conn.host_active_processor_count()
 
-        max_v = self.conn.get_max_vcpus(_type=self.capsdomain.hypervisor_type)
+        max_v = self.conn.get_max_vcpus(self.capsdomain.hypervisor_type)
         cmax = phys_cpus
         if int(max_v) < int(phys_cpus):
             cmax = max_v
@@ -830,7 +830,7 @@ class vmmCreate(vmmGObjectUI):
                                                         conn=self.conn.vmm,
                                                         caps=self.caps,
                                                         os_type=gtype,
-                                                        type=dtype,
+                                                        typ=dtype,
                                                         accelerated=True,
                                                         arch=arch)
 

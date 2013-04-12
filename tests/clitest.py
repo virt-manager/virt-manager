@@ -129,33 +129,30 @@ test_files = {
 }
 
 
-"""
-CLI test matrix
-
-Any global args for every invocation should be added to default_args
-function, so that individual tests can easily overwrite them.
-
-Format:
-
-"appname" {
-  "categoryfoo" : { Some descriptive test catagory name (e.g. storage)
-
-    "args" : Args to be applied to all invocations in category
-
-    "valid" : { # Argument strings that should succeed
-      "--option --string --number1" # Some option string to test. The
-          resulting cmdstr would be:
-          $ appname globalargs categoryfoo_args --option --string --number1
-    }
-
-    "invalid" : { # Argument strings that should fail
-      "--opt1 --opt2",
-    }
-  } # End categoryfoo
-
-}
-  "
-"""
+# CLI test matrix
+#
+# Any global args for every invocation should be added to default_args
+# function, so that individual tests can easily overwrite them.
+#
+# Format:
+#
+# "appname" {
+#  "categoryfoo" : { Some descriptive test catagory name (e.g. storage)
+#
+#    "args" : Args to be applied to all invocations in category
+#
+#    "valid" : { # Argument strings that should succeed
+#      "--option --string --number1" # Some option string to test. The
+#          resulting cmdstr would be:
+#          $ appname globalargs categoryfoo_args --option --string --number1
+#    }
+#
+#    "invalid" : { # Argument strings that should fail
+#      "--opt1 --opt2",
+#    }
+#  } # End categoryfoo
+#
+#}
 
 
 def default_args(app, cli, testtype):

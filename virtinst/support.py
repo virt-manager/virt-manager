@@ -69,43 +69,42 @@ SUPPORT_CONN_HV_FILESYSTEM = 5007
 # Flags for check_stream_support
 SUPPORT_STREAM_UPLOAD = 6000
 
-"""
-Possible keys:
+# Possible keys:
+#
+# "version" : Minimum libvirt version required for this feature. Not used
+#             if 'args' provided
+#
+# "force_version" : Demand that version check is met for the checked
+#                   libvirt version. Normally we will make a best effort
+#                   attempt, because determining the daemon version depends
+#                   on a fairly new API call getLibVersion. So for things like
+#                   testing API availability (e.g. createXMLFrom) we won't
+#                   force the check, but for things like XML options (AC97)
+#                   we want to be ABSOLUTELY SURE it is supported so we
+#                   don't enable it by default and break guest creation.
+#                   This isn't required for versions after >= 0.7.3
+#
+# "function" : Function name to check exists. If object not specified,
+#              function is checked against libvirt module.
+#
+# "args": Argument tuple to actually test object.function with.
+#
+# "flag": A flag to check exists. This will be appended to the argument
+#         list if args are provided, otherwise we will only check against
+#         the local libvirt version.
+#
+# "drv_version" : A list of tuples of the form
+#                 (driver name (e.g qemu, xen, lxc), minimum supported version)
+#                 If a hypervisor is not listed, it is assumed to be NOT
+#                 SUPPORTED.
+#
+# "drv_libvirt_version" : List of tuples, similar to drv_version, but
+#                         the version number is minimum supported _libvirt_
+#                         version
+# "hv_version" : A list of tuples of the same form as drv_version, however
+#                listing the actual <domain type='%s'/> from the XML.
+#                example: 'kvm'
 
-  - "version" : Minimum libvirt version required for this feature. Not used
-                if 'args' provided
-
-  - "force_version" : Demand that version check is met for the checked
-                      libvirt version. Normally we will make a best effort
-                      attempt, because determining the daemon version depends
-                      on a fairly new API call getLibVersion. So for things like
-                      testing API availability (e.g. createXMLFrom) we won't
-                      force the check, but for things like XML options (AC97)
-                      we want to be ABSOLUTELY SURE it is supported so we
-                      don't enable it by default and break guest creation.
-                      This isn't required for versions after >= 0.7.3
-
-  - "function" : Function name to check exists. If object not specified,
-                 function is checked against libvirt module.
-
-  - "args": Argument tuple to actually test object.function with.
-
-  - "flag": A flag to check exists. This will be appended to the argument
-            list if args are provided, otherwise we will only check against
-            the local libvirt version.
-
-  - "drv_version" : A list of tuples of the form
-                   (driver name (e.g qemu, xen, lxc), minimum supported version)
-                   If a hypervisor is not listed, it is assumed to be NOT
-                   SUPPORTED.
-
-  - "drv_libvirt_version" : List of tuples, similar to drv_version, but
-                            the version number is minimum supported _libvirt_
-                            version
-  - "hv_version" : A list of tuples of the same form as drv_version, however
-                   listing the actual <domain type='%s'/> from the XML.
-                   example: 'kvm'
-"""
 
 _support_dict = {
     SUPPORT_CONN_STORAGE : {
@@ -282,17 +281,17 @@ _support_dict = {
 # really offer any XML feature introspection, we have to use hacks to
 # make sure we aren't generating bogus config on non RHEL
 _rhel6 = False
-def _set_rhel6(val):
+def set_rhel6(val):
     global _rhel6
     _rhel6 = bool(val)
-def _get_rhel6():
+def get_rhel6():
     return _rhel6
 
 # Pull a connection object from the passed libvirt object
 def _get_conn_from_object(obj):
     if not hasattr(obj, "_conn"):
         return obj
-    return obj._conn
+    return getattr(obj, "_conn")
 
 # Check that command is present in the python bindings, and return the
 # the requested function
@@ -424,7 +423,7 @@ def _check_support(conn, feature, data=None):
 
     uri = conn.getURI()
     drv_type = uriutil.get_uri_driver(uri)
-    is_rhel6 = _get_rhel6()
+    is_rhel6 = get_rhel6()
     force_version = get_value("force_version") or False
 
     minimum_libvirt_version = get_value("version") or 0

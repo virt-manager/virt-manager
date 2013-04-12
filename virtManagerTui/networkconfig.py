@@ -66,17 +66,16 @@ class NetworkConfig:
             return "RESERVED"
         return "OTHER"
 
-#FIXME ??
-#def is_public_ipv4_network(self):
-#    if self.__ipv4_address.is_private
-#        return False
-#    if self.__ipv4_address.is_loopback
-#        return False
-#    if self.__ipv4_address.is_multicast
-#        return False
-#    if self.__ipv4_address.is_reserved
-#        return False
-#    return True
+    def is_public_ipv4_network(self):
+        if self.__ipv4_address.is_private:
+            return False
+        if self.__ipv4_address.is_loopback:
+            return False
+        if self.__ipv4_address.is_multicast:
+            return False
+        if self.__ipv4_address.is_reserved:
+            return False
+        return True
 
     def set_ipv4_start_address(self, address):
         self.__ipv4_start = address

@@ -80,7 +80,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         return vals
 
     @staticmethod
-    def list_os_variants(type, sortpref=None, supported=False, filtervars=None):
+    def list_os_variants(typ, sortpref=None, supported=False, filtervars=None):
         """
         Return a list of sorted os variants for the passed distro type
 
@@ -89,7 +89,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         the sorted list have all fedora distros first
         @param filtervars: List of only variants we want to show by default
         """
-        vals = osdict.sort_helper(Guest._OS_TYPES[type]["variants"],
+        vals = osdict.sort_helper(Guest._OS_TYPES[typ]["variants"],
                                   sortpref)
         ret = []
         for v in vals:
@@ -98,19 +98,19 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
                     continue
             elif supported:
                 if not osdict.lookup_osdict_key(None, None,
-                                                type, v, "supported"):
+                                                typ, v, "supported"):
                     continue
 
             ret.append(v)
         return ret
 
     @staticmethod
-    def get_os_type_label(type):
-        return Guest._OS_TYPES[type]["label"]
+    def get_os_type_label(typ):
+        return Guest._OS_TYPES[typ]["label"]
 
     @staticmethod
-    def get_os_variant_label(type, variant):
-        return Guest._OS_TYPES[type]["variants"][variant]["label"]
+    def get_os_variant_label(typ, variant):
+        return Guest._OS_TYPES[typ]["variants"][variant]["label"]
 
     @staticmethod
     def cpuset_str_to_tuple(conn, cpuset):
@@ -176,7 +176,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         # Set up the connection, since it is fundamental for other init
         conn = conn or connection
         if conn == None:
-            logging.debug("No conn passed to Guest, opening URI '%s'" %
+            logging.debug("No conn passed to Guest, opening URI '%s'",
                           hypervisorURI)
             conn = self._open_uri(hypervisorURI)
 
@@ -1581,12 +1581,12 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         device type and param (bus, model, etc.)
         """
         try:
-            support._set_rhel6(self._is_rhel6())
+            support.set_rhel6(self._is_rhel6())
             return osdict.lookup_device_param(self.conn, self.type,
                                               self.os_type, self.os_variant,
                                               device_key, param)
         finally:
-            support._set_rhel6(False)
+            support.set_rhel6(False)
 
 
 def _wait_for_domain(conn, name):

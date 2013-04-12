@@ -26,7 +26,7 @@ from virtcli import cliconfig
 def _generate_potfiles_in():
     def find(dirname, ext):
         ret = []
-        for root, dirnames, filenames in os.walk(dirname):
+        for root, ignore, filenames in os.walk(dirname):
             for filename in fnmatch.filter(filenames, ext):
                 ret.append(os.path.join(root, filename))
         ret.sort(key=lambda s: s.lower())
@@ -421,10 +421,11 @@ class CheckPylint(Command):
             "I0011",    # I0011: Warn about locally disabled pylint msgs
             "R0201",    # R0201: Method could be a function
 
-            "W0142",    # W0142: *Used * or ** magic*
+            "W0142",    # W0142: Used * or ** magic*
             "W0603",    # W0603: Using the global statement
             "W0702",    # W0702: No exception type specified for 'catch'
             "W0703",    # W0703: Catch 'Exception'
+            "W1401",    # W1401: Anomalous backslash in string
 
 
             # May be useful to enable someday

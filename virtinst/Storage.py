@@ -236,7 +236,7 @@ class StoragePool(StorageObject):
     Base class for building and installing libvirt storage pool xml
     """
 
-    """@group Types: TYPE_*"""
+    # @group Types: TYPE_*
     TYPE_DIR     = "dir"
     TYPE_FS      = "fs"
     TYPE_NETFS   = "netfs"
@@ -399,7 +399,7 @@ class StoragePool(StorageObject):
             raise ValueError(_("Host name must be a string"))
         self._host = val
 
-    """uuid: uuid of the storage object. optional: generated if not set"""
+    # uuid: uuid of the storage object. optional: generated if not set
     def get_uuid(self):
         return self._uuid
     def set_uuid(self, val):
@@ -945,9 +945,10 @@ class MultipathPool(StoragePool):
     def _get_source_xml(self):
         return ""
 
-"""
-Storage Volume classes
-"""
+
+##########################
+# Storage Volume classes #
+##########################
 
 class StorageVolume(StorageObject):
     """

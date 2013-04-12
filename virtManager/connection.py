@@ -259,7 +259,7 @@ class vmmConnection(vmmGObject):
             self._check_caps()
         return self._caps
 
-    def get_max_vcpus(self, _type=None):
+    def get_max_vcpus(self, _type):
         return virtinst.util.get_max_vcpus(self.vmm, _type)
 
     def get_host_info(self):
@@ -1543,11 +1543,12 @@ class vmmConnection(vmmGObject):
                 vector.append(0)
         return vector
 
+    def stats_memory_vector(self):
+        return self._vector_helper("memoryPercent")
+
     def host_cpu_time_vector(self):
         return self._vector_helper("cpuHostPercent")
     guest_cpu_time_vector = host_cpu_time_vector
-    def stats_memory_vector(self):
-        return self._vector_helper("memoryPercent")
 
     def host_cpu_time_vector_limit(self, limit):
         cpudata = self.host_cpu_time_vector()
@@ -1555,11 +1556,10 @@ class vmmConnection(vmmGObject):
             cpudata = cpudata[0:limit]
         return cpudata
     guest_cpu_time_vector_limit = host_cpu_time_vector_limit
-    def disk_io_vector_limit(self, dummy):
-        # No point to accumulate unnormalized I/O for a conenction
+
+    def disk_io_vector_limit(self, ignore):
         return [0.0]
-    def network_traffic_vector_limit(self, dummy):
-        # No point to accumulate unnormalized Rx/Tx for a connection
+    def network_traffic_vector_limit(self, ignore):
         return [0.0]
 
     def _get_record_helper(self, record_name):

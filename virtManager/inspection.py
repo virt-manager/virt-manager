@@ -22,7 +22,7 @@ from threading import Thread
 import logging
 import os
 
-from guestfs import GuestFS
+from guestfs import GuestFS # pylint: disable=F0401
 
 from virtManager.baseclass import vmmGObject
 from virtManager.domain import vmmInspectionData

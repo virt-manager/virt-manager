@@ -123,7 +123,7 @@ class vmmNetwork(vmmLibvirtObject):
                 routeVia = node.xpathEval('string(./@via)')
                 if routeVia:
                     routeAddr = node.xpathEval('string(./@address)')
-                    break;
+                    break
 
         if goodNode == None:
             for node in nodes:
@@ -132,7 +132,7 @@ class vmmNetwork(vmmLibvirtObject):
                     tmp = node.xpathEval('string(./@via)')
                     if tmp:
                         continue
-                    goodNode = node;
+                    goodNode = node
                     break
 
         if goodNode:
@@ -187,7 +187,7 @@ class vmmNetwork(vmmLibvirtObject):
                 routeVia = node.xpathEval('string(./@via)')
                 if routeVia:
                     routeAddr = node.xpathEval('string(./@address)')
-                    break;
+                    break
 
         if goodNode == None:
             for node in nodes:
@@ -196,7 +196,7 @@ class vmmNetwork(vmmLibvirtObject):
                     tmp = node.xpathEval('string(./@via)')
                     if tmp:
                         continue
-                    goodNode = node;
+                    goodNode = node
                     break
 
         if goodNode:

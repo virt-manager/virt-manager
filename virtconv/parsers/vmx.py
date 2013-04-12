@@ -195,7 +195,7 @@ def parse_netdev_entry(vm, fullkey, value):
         return
 
     if not vm.netdevs.get(inst):
-        vm.netdevs[inst] = netdevcfg.netdev(type=netdevcfg.NETDEV_TYPE_UNKNOWN)
+        vm.netdevs[inst] = netdevcfg.netdev(typ=netdevcfg.NETDEV_TYPE_UNKNOWN)
 
     # "vlance", "vmxnet", "e1000"
     if key == "virtualdev":
@@ -235,7 +235,7 @@ def parse_disk_entry(vm, fullkey, value):
     devid = (bus, inst)
     if not vm.disks.get(devid):
         vm.disks[devid] = diskcfg.disk(bus=bus,
-            type=diskcfg.DISK_TYPE_DISK)
+            typ=diskcfg.DISK_TYPE_DISK)
     disk = vm.disks[devid]
 
     if key == "devicetype":

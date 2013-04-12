@@ -168,6 +168,8 @@ class vmmCreateNetwork(vmmGObjectUI):
         notebook.prev_page()
 
     def change_ipv4_enable(self, src):
+        ignore = src
+
         white = Gdk.Color.parse("#f0f0f0")[1]
         net4 = self.widget("net-ipv4-network")
         start4 = self.widget("net-dhcpv4-start")
@@ -191,6 +193,8 @@ class vmmCreateNetwork(vmmGObjectUI):
             end4.modify_bg(Gtk.StateType.NORMAL, white)
 
     def change_ipv6_enable(self, src):
+        ignore = src
+
         white = Gdk.Color.parse("#f0f0f0")[1]
         net6 = self.widget("net-ipv6-network")
         start6 = self.widget("net-dhcpv6-start")
@@ -304,6 +308,8 @@ class vmmCreateNetwork(vmmGObjectUI):
 
 
     def change_dhcpv4_enable(self, src):
+        ignore = src
+
         white = Gdk.Color.parse("#f0f0f0")[1]
         start4 = self.widget("net-dhcpv4-start")
         end4 = self.widget("net-dhcpv4-end")
@@ -352,6 +358,8 @@ class vmmCreateNetwork(vmmGObjectUI):
             src.modify_bg(Gtk.StateType.NORMAL, green)
 
     def change_dhcpv6_enable(self, src):
+        ignore = src
+
         white = Gdk.Color.parse("#f0f0f0")[1]
         start6 = self.widget("net-dhcpv6-start")
         end6 = self.widget("net-dhcpv6-end")
@@ -382,7 +390,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         end = self.get_config_dhcpv6_end()
         self.change_dhcpv6(src, end)
 
-    def change_dhcpv6(self,src,addr):
+    def change_dhcpv6(self, src, addr):
         ip = self.get_config_ip6()
         black = Gdk.Color.parse("#000000")[1]
         src.modify_text(Gtk.StateType.NORMAL, black)
@@ -478,10 +486,10 @@ class vmmCreateNetwork(vmmGObjectUI):
     def populate_summary(self):
         self.widget("summary-name").set_text(self.get_config_name())
         self.widget("summary-domain").set_text(self.get_config_domain_name())
-        self.widget("summary-ip4-network").set_text("");
-        self.widget("summary-ip4-gateway").set_text("");
-        self.widget("summary-ip6-network").set_text("");
-        self.widget("summary-ip6-gateway").set_text("");
+        self.widget("summary-ip4-network").set_text("")
+        self.widget("summary-ip4-gateway").set_text("")
+        self.widget("summary-ip6-network").set_text("")
+        self.widget("summary-ip6-gateway").set_text("")
 
         ip = self.get_config_ip4()
         if ip:

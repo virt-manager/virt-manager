@@ -26,6 +26,7 @@ from virtinst import support
 from virtinst.XMLBuilderDomain import _xml_property
 
 def _get_mode_prop(channel_type):
+    # pylint: disable=W0212
     xpath = "./channel[@name='%s']/@mode" % channel_type
     def get_mode(s):
         return s._channels.get(channel_type, None)

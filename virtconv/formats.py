@@ -101,7 +101,7 @@ def output_formats():
     """
     return [p.name for p in _parsers if p.can_export]
 
-def find_input(path, format=None):
+def find_input(path, fmt=None):
     """
     Search for a configuration file automatically. If @format is given,
     then only search using a matching format parser.
@@ -113,7 +113,7 @@ def find_input(path, format=None):
     for p in _parsers:
         if not p.can_identify:
             continue
-        if format and format != p.name:
+        if fmt and fmt != p.name:
             continue
 
         if os.path.isfile(path):

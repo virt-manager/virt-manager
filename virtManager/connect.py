@@ -160,12 +160,12 @@ class vmmConnect(vmmGObjectUI):
         elif default.startswith("xen"):
             self.widget("hypervisor").set_active(0)
 
-    def add_service(self, interface, protocol, name, type, domain, flags):
+    def add_service(self, interface, protocol, name, typ, domain, flags):
         ignore = flags
         try:
             # Async service resolving
             res = self.server.ServiceResolverNew(interface, protocol, name,
-                                                 type, domain, -1, 0)
+                                                 typ, domain, -1, 0)
             resint = dbus.Interface(self.bus.get_object(
                                     "org.freedesktop.Avahi", res),
                                     "org.freedesktop.Avahi.ServiceResolver")
@@ -174,12 +174,12 @@ class vmmConnect(vmmGObjectUI):
         except Exception, e:
             logging.exception(e)
 
-    def remove_service(self, interface, protocol, name, type, domain, flags):
+    def remove_service(self, interface, protocol, name, typ, domain, flags):
         ignore = domain
         ignore = protocol
         ignore = flags
         ignore = interface
-        ignore = type
+        ignore = typ
 
         try:
             model = self.widget("hostname").get_model()
@@ -190,13 +190,13 @@ class vmmConnect(vmmGObjectUI):
         except Exception, e:
             logging.exception(e)
 
-    def add_conn_to_list(self, interface, protocol, name, type, domain,
+    def add_conn_to_list(self, interface, protocol, name, typ, domain,
                          host, aprotocol, address, port, text, flags):
         ignore = domain
         ignore = protocol
         ignore = flags
         ignore = interface
-        ignore = type
+        ignore = typ
         ignore = text
         ignore = aprotocol
         ignore = port

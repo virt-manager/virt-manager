@@ -279,7 +279,7 @@ def get_virt_type(conn, options):
                         caps=capabilities,
                         os_type=req_virt_type,
                         arch=arch,
-                        type=req_hv_type,
+                        typ=req_hv_type,
                         accelerated=req_accel,
                         machine=options.machine)
     except Exception, e:
@@ -566,7 +566,7 @@ def _run_console(args):
         return child
 
     os.execvp(args[0], args)
-    os._exit(1)
+    os._exit(1) # pylint: disable=W0212
 
 def vnc_console(dom, uri):
     args = ["/usr/bin/virt-viewer",

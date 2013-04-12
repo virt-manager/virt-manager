@@ -505,7 +505,7 @@ def is_blktap_capable():
 # available under the LGPL,
 # Copyright 2004, 2005 Mike Wray <mike.wray@hp.com>
 # Copyright 2005 XenSource Ltd
-def randomMAC(type="xen", conn=None):
+def randomMAC(typ, conn=None):
     """Generate a random MAC address.
 
     00-16-3E allocated to xensource
@@ -534,7 +534,7 @@ def randomMAC(type="xen", conn=None):
     ouis = { 'xen': [ 0x00, 0x16, 0x3E ], 'qemu': [ 0x52, 0x54, 0x00 ] }
 
     try:
-        oui = ouis[type]
+        oui = ouis[typ]
     except KeyError:
         oui = ouis['xen']
 
@@ -551,8 +551,7 @@ def randomMAC(type="xen", conn=None):
 # Copyright 2005 XenSource Ltd
 def randomUUID():
     """Generate a random UUID."""
-
-    return [ random.randint(0, 255) for dummy in range(0, 16) ]
+    return [random.randint(0, 255) for ignore in range(0, 16)]
 
 def uuidToString(u, conn=None):
     if conn and hasattr(conn, "_virtinst__fake_conn_predictable"):
@@ -563,29 +562,31 @@ def uuidToString(u, conn=None):
                      "%02x" * 6]) % tuple(u)
 
 
-def get_max_vcpus(conn, type=None):
+def get_max_vcpus(conn, typ):
     """@param conn: libvirt connection to poll for max possible vcpus
        @type type: optional guest type (kvm, etc.)"""
-    if type is None:
-        type = conn.getType()
+    if typ is None:
+        typ = conn.getType()
     try:
-        m = conn.getMaxVcpus(type.lower())
+        m = conn.getMaxVcpus(typ.lower())
     except libvirt.libvirtError:
         m = 32
     return m
 
 
-def xml_escape(str):
-    """Replaces chars ' " < > & with xml safe counterparts"""
-    if str is None:
+def xml_escape(xml):
+    """
+    Replaces chars ' " < > & with xml safe counterparts
+    """
+    if xml is None:
         return None
 
-    str = str.replace("&", "&amp;")
-    str = str.replace("'", "&apos;")
-    str = str.replace("\"", "&quot;")
-    str = str.replace("<", "&lt;")
-    str = str.replace(">", "&gt;")
-    return str
+    xml = xml.replace("&", "&amp;")
+    xml = xml.replace("'", "&apos;")
+    xml = xml.replace("\"", "&quot;")
+    xml = xml.replace("<", "&lt;")
+    xml = xml.replace(">", "&gt;")
+    return xml
 
 
 def _xorg_keymap():

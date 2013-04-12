@@ -65,7 +65,7 @@ def drop_tty():
     # tty. This prevents libvirt's SSH tunnels from prompting
     # for user input if SSH keys/agent aren't configured.
     if os.fork() != 0:
-        os._exit(0)
+        os._exit(0) # pylint: disable=W0212
 
     os.setsid()
 

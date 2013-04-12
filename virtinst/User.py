@@ -68,7 +68,7 @@ class User(object):
         if self._euid != User.current().euid:
             return self._euid == 0
 
-        import ucred
+        import ucred # pylint: disable=F0401
         cred = ucred.get(os.getpid())
         if priv in [ self.PRIV_CLONE,
                      self.PRIV_CREATE_DOMAIN,

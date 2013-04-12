@@ -41,7 +41,6 @@ class FullVirtGuest(Guest):
             return None
         return self.installer.loader
     def _set_loader(self, val):
-        print val
         if not self.installer:
             return
         self.installer.loader = val

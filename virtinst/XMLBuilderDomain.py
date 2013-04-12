@@ -283,6 +283,11 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
     @param default_converter: If the virtinst value is "default", use
                               this function to get the actual XML value
     """
+
+    # pylint: disable=W0212
+    # Accessing _xml vals of self. This should be a class method, but
+    # we break it out to be more readable
+
     def new_getter(self, *args, **kwargs):
         val = None
         getval = fget(self, *args, **kwargs)

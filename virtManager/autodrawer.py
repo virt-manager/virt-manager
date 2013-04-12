@@ -304,6 +304,12 @@ class OverBox(Gtk.Box):
         over.y = 0
         self.overWidget.size_allocate(over)
 
+    # These make pylint happy
+    def show_all(self, *args, **kwargs):
+        return Gtk.Box.show(self, *args, **kwargs)
+    def destroy(self, *args, **kwargs):
+        return Gtk.Box.destroy(self, *args, **kwargs)
+
 
 class Drawer(OverBox):
     """

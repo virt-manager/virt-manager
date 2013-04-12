@@ -26,7 +26,7 @@ NETDEV_TYPE_NETWORK = 3
 class netdev(object):
     """Definition of an individual network device."""
 
-    def __init__(self, mac="auto", type=NETDEV_TYPE_UNKNOWN,
+    def __init__(self, mac="auto", typ=NETDEV_TYPE_UNKNOWN,
                  source=None, driver=None):
         """
         @mac: either a MAC address, or "auto"
@@ -35,6 +35,6 @@ class netdev(object):
         @driver: device emulated for VM (e.g. vmxnet)
         """
         self.mac = mac
-        self.type = type
+        self.type = typ
         self.source = source
         self.driver = driver

@@ -614,7 +614,7 @@ class Capabilities(object):
                 return True
         return False
 
-    def guestForOSType(self, type=None, arch=None):
+    def guestForOSType(self, typ=None, arch=None):
         if self.host is None:
             return None
 
@@ -625,7 +625,7 @@ class Capabilities(object):
 
         for a in archs:
             for g in self.guests:
-                if (type is None or g.os_type == type) and \
+                if (typ is None or g.os_type == typ) and \
                    (a is None or g.arch == a):
                     return g
 
@@ -681,7 +681,7 @@ def parse(xml):
                                    Capabilities,
                                    CapabilitiesParserException)
 
-def guest_lookup(conn, caps=None, os_type=None, arch=None, type=None,
+def guest_lookup(conn, caps=None, os_type=None, arch=None, typ=None,
                  accelerated=False, machine=None):
     """
     Simple virtualization availability lookup
@@ -691,8 +691,8 @@ def guest_lookup(conn, caps=None, os_type=None, arch=None, type=None,
     we return the default virt type associated with those values. These are
     typically:
 
-        - os_type    : hvm, then xen
-        - type : kvm over plain qemu
+        - os_type : hvm, then xen
+        - typ     : kvm over plain qemu
         - arch    : host arch over all others
 
     Otherwise the default will be the first listed in the capabilities xml.
@@ -703,8 +703,8 @@ def guest_lookup(conn, caps=None, os_type=None, arch=None, type=None,
     @type conn: libvirt.virConnect
     @param caps: Optional L{Capabilities} instance (saves a lookup)
     @type caps: L{Capabilities}
-    @param type: Virtualization type ('hvm', 'xen', ...)
-    @type type: C{str}
+    @param typ: Virtualization type ('hvm', 'xen', ...)
+    @type typ: C{str}
     @param arch: Guest architecture ('x86_64', 'i686' ...)
     @type arch: C{str}
     @param os_type: Hypervisor name ('qemu', 'kvm', 'xen', ...)
@@ -721,7 +721,7 @@ def guest_lookup(conn, caps=None, os_type=None, arch=None, type=None,
     if not caps:
         caps = parse(conn.getCapabilities())
 
-    guest = caps.guestForOSType(type=os_type, arch=arch)
+    guest = caps.guestForOSType(os_type, arch)
     if not guest:
         archstr = _("for arch '%s'") % arch
         if not arch:
@@ -735,7 +735,7 @@ def guest_lookup(conn, caps=None, os_type=None, arch=None, type=None,
                            {'virttype' : osstr, 'arch' : archstr})
 
     domain = guest.bestDomainType(accelerated=accelerated,
-                                  dtype=type,
+                                  dtype=typ,
                                   machine=machine)
 
     if domain == None:
@@ -745,7 +745,7 @@ def guest_lookup(conn, caps=None, os_type=None, arch=None, type=None,
         raise ValueError(_("Host does not support domain type %(domain)s"
                            "%(machine)s for virtualization type "
                            "'%(virttype)s' arch '%(arch)s'") %
-                           {'domain': type, 'virttype': guest.os_type,
+                           {'domain': typ, 'virttype': guest.os_type,
                             'arch': guest.arch, 'machine': machinestr})
 
     return (guest, domain)

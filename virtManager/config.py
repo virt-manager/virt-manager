@@ -151,7 +151,7 @@ class vmmConfig(object):
 
         try:
             # Check we can open the Python guestfs module.
-            from guestfs import GuestFS
+            from guestfs import GuestFS # pylint: disable=F0401
             g = GuestFS()
 
             # Check for the first version which fixed Python GIL bug.

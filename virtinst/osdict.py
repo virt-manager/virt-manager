@@ -24,10 +24,8 @@ from virtinst.VirtualDevice import VirtualDevice
 
 HV_ALL = "all"
 
-"""
-Default values for OS_TYPES keys. Can be overwritten at os_type or
-variant level
-"""
+# Default values for OS_TYPES keys. Can be overwritten at os_type or
+# variant level
 
 NET   = VirtualDevice.VIRTUAL_DEV_NET
 DISK  = VirtualDevice.VIRTUAL_DEV_DISK

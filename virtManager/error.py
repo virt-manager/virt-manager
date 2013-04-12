@@ -45,6 +45,7 @@ def _launch_dialog(dialog, primary_text, secondary_text, title,
 
     return res
 
+
 class vmmErrorDialog(vmmGObject):
     def __init__(self, parent=None):
         vmmGObject.__init__(self)
@@ -175,6 +176,10 @@ class _errorDialog (Gtk.MessageDialog):
     """
     Custom error dialog with optional check boxes or details drop down
     """
+    # pylint: disable=E1101
+    # pylint can't detect functions we inheirit from Gtk, ex:
+    # Instance of '_errorDialog' has no 'set_title' member
+
     def __init__(self, *args, **kwargs):
         Gtk.MessageDialog.__init__(self, *args, **kwargs)
         self.set_title("")

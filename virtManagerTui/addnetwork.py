@@ -202,8 +202,9 @@ class AddNetworkConfigScreen(VmmTuiConfigScreen):
         self.__end_address   = Entry(15, self.__config.get_ipv4_end_address())
         fields = []
         fields.append(("Select the DHCP range", None))
-        fields.append(("Start", self.__start_address.network))
-        fields.append(("End", self.__end_address.network))
+        # XXX
+        #fields.append(("Start", self.__start_address.network))
+        #fields.append(("End", self.__end_address.network))
         return [Label("Selecting The DHCP Range"),
                 self.create_grid_from_fields(fields),
                 Label("TIP: Unless you wish to reserve some addresses to allow static network"),

@@ -395,7 +395,7 @@ class VirtualCharDevice(VirtualDevice):
         return xml
 
     def _char_xml(self):
-        raise NotImplementedError("Must be implemented in subclass.")
+        pass
 
     def _get_target_xml(self):
         xml = ""

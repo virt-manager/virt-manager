@@ -29,7 +29,6 @@ from gi.repository import Gtk
 # pylint: enable=E0611
 
 import libvirt
-import virtinst
 from virtinst import uriutil
 
 from virtManager import util

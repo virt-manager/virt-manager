@@ -455,8 +455,8 @@ class CloneDesign(object):
             else:
                 while 1:
                     mac = util.randomMAC(self.original_conn.getType().lower(),
-                                          conn=self.original_conn)
-                    dummy, msg = self._check_mac(mac)
+                                         conn=self.original_conn)
+                    ignore, msg = self._check_mac(mac)
                     if msg is not None:
                         continue
                     else:

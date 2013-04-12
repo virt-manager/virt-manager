@@ -19,18 +19,16 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import os
-import sys
+import itertools
+import locale
 import logging
 import logging.handlers
-import gettext
-import locale
-import re
-import difflib
-import tempfile
 import optparse
+import os
+import re
 import shlex
-import itertools
+import sys
+import tempfile
 
 import libvirt
 
@@ -91,12 +89,14 @@ class VirtOptionParser(optparse.OptionParser):
     def _get_encoding(self, f):
         encoding = getattr(f, "encoding", None)
         if not encoding:
-            (dummy, encoding) = locale.getlocale()
+            encoding = locale.getlocale()[1]
         if not encoding:
             encoding = "UTF-8"
         return encoding
 
     def print_help(self, file=None):
+        # pylint: disable=W0622
+        # Redefining built in type 'file'
         if file is None:
             file = sys.stdout
 
@@ -206,11 +206,11 @@ def setupLogging(appname, debug=False, do_quiet=False):
     libvirt.registerErrorHandler(f=libvirt_callback, ctx=None)
 
     # Register python error handler to log exceptions
-    def exception_log(type, val, tb):
+    def exception_log(typ, val, tb):
         import traceback
-        s = traceback.format_exception(type, val, tb)
+        s = traceback.format_exception(typ, val, tb)
         logging.exception("".join(s))
-        sys.__excepthook__(type, val, tb)
+        sys.__excepthook__(typ, val, tb)
     sys.excepthook = exception_log
 
     # Log the app command string
@@ -239,6 +239,8 @@ def _open_test_uri(uri):
     conn = open_connection(uri)
 
     def sanitize_xml(xml):
+        import difflib
+
         orig = xml
         xml = re.sub("arch='.*'", "arch='i686'", xml)
         xml = re.sub("domain type='.*'", "domain type='test'", xml)

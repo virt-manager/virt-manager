@@ -20,6 +20,10 @@ from gi.repository import GObject
 from gi.repository import Gtk
 # pylint: enable=E0611
 
+# pylint: disable=E1101
+# pylint can't detect functions we inheirit from Gtk, ex:
+# Instance of 'Sparkline' has no 'get_style_context' member
+
 
 def rect_print(name, rect):
     # For debugging
@@ -260,6 +264,10 @@ class CellRendererSparkline(Gtk.CellRenderer):
         name = self._sanitize_param_spec_name(param_spec.name)
         setattr(self, name, value)
 
+    def set_property(self, *args, **kwargs):
+        # Make pylint happy
+        return Gtk.CellRenderer.set_property(self, *args, **kwargs)
+
 
 class Sparkline(Gtk.DrawingArea):
     __gproperties__ = {
@@ -392,3 +400,11 @@ class Sparkline(Gtk.DrawingArea):
     def do_set_property(self, param_spec, value):
         name = self._sanitize_param_spec_name(param_spec.name)
         setattr(self, name, value)
+
+    # These make pylint happy
+    def set_property(self, *args, **kwargs):
+        return Gtk.DrawingArea.set_property(self, *args, **kwargs)
+    def show(self, *args, **kwargs):
+        return Gtk.DrawingArea.show(self, *args, **kwargs)
+    def destroy(self, *args, **kwargs):
+        return Gtk.DrawingArea.destroy(self, *args, **kwargs)

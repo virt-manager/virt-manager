@@ -262,9 +262,11 @@ class DistroInstaller(Installer.Installer):
         transient = not self.livecd
         if not self._location_is_path:
             # Xen needs a boot.iso if its a http://, ftp://, or nfs: url
-            (store_ignore, os_type_ignore, os_variant_ignore, media) = \
-             OSDistro.acquireBootDisk(guest, self.location, meter,
-                                      self.scratchdir)
+            (store_ignore, os_type_ignore,
+             os_variant_ignore, media) = OSDistro.getBootDisk(guest,
+                                                              self.location,
+                                                              meter,
+                                                              self.scratchdir)
             cdrom = media
 
             self._tmpfiles.append(cdrom)
@@ -381,7 +383,7 @@ class DistroInstaller(Installer.Installer):
 
         # Need to fetch the kernel & initrd from a remote site, or
         # out of a loopback mounted disk image/device
-        ignore, os_type, os_variant, media = OSDistro.acquireKernel(guest,
+        ignore, os_type, os_variant, media = OSDistro.getKernel(guest,
                                                 self.location, meter,
                                                 self.scratchdir,
                                                 self.os_type)

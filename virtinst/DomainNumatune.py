@@ -19,7 +19,6 @@
 
 import re
 
-from virtinst import util
 from virtinst import XMLBuilderDomain
 from virtinst.XMLBuilderDomain import _xml_property
 

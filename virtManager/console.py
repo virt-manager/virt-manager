@@ -171,7 +171,7 @@ class Tunnel(object):
             os.dup(fds[1].fileno())
             os.dup(errorfds[1].fileno())
             os.execlp(*argv)
-            os._exit(1)
+            os._exit(1) # pylint: disable=W0212
         else:
             fds[1].close()
             errorfds[1].close()
@@ -1128,8 +1128,6 @@ class vmmConsolePages(vmmGObjectUI):
 
             msg = (_("Cannot display graphical console type '%s'")
                      % ginfo.gtype)
-            if ginfo.gtype == "spice":
-                msg += ":\n %s" % self.config.get_spice_error()
 
             self.activate_unavailable_page(msg)
             return

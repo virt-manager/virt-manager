@@ -257,7 +257,7 @@ class virtimage_parser(formats.parser):
 
             devid = (bus, nr_disk)
             vm.disks[devid] = diskcfg.disk(bus=bus,
-                type=diskcfg.DISK_TYPE_DISK)
+                typ=diskcfg.DISK_TYPE_DISK)
             vm.disks[devid].format = fmt
             vm.disks[devid].path = disk.file
             nr_disk = nr_disk + 1
@@ -265,10 +265,10 @@ class virtimage_parser(formats.parser):
         nics = domain.interface
         nic_idx = 0
         while nic_idx in range(0, nics):
+            # XXX Eventually need to add support for mac addresses if given
             vm.netdevs[nic_idx] = netdevcfg.netdev(
-                                    type=netdevcfg.NETDEV_TYPE_UNKNOWN)
+                                    typ=netdevcfg.NETDEV_TYPE_UNKNOWN)
             nic_idx = nic_idx + 1
-            """  Eventually need to add support for mac addresses if given"""
         vm.validate()
         return vm
 

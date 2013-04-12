@@ -18,10 +18,10 @@
 
 from snack import Label
 from virtManagerTui.networklistconfigscreen import NetworkListConfigScreen
-import ipaddr
 
 LIST_PAGE    = 1
 DETAILS_PAGE = 2
+
 
 class ListNetworksConfigScreen(NetworkListConfigScreen):
     def __init__(self):
@@ -47,7 +47,6 @@ class ListNetworksConfigScreen(NetworkListConfigScreen):
         result = network.get_ipv4_network()
         netaddr = result[0]
         dhcp = result[1]
-        route = result[2]
 
         fields.append(("Basic details", None))
         fields.append(("Name", network.get_name()))

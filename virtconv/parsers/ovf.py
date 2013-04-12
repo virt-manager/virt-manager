@@ -29,38 +29,38 @@ import logging
 
 # Mapping of ResourceType value to device type
 # http://konkretcmpi.org/cim218/CIM_ResourceAllocationSettingData.html
-"""
-    "Other" [1]
-    "Computer System" [2]
-    "Processor" [3]
-    "Memory" [4]
-    "IDE Controller" [5]
-    "Parallel SCSI HBA" [6]
-    "FC HBA" [7]
-    "iSCSI HBA" [8]
-    "IB HCA" [9]
-    "Ethernet Adapter" [10]
-    "Other Network Adapter" [11]
-    "I/O Slot" [12]
-    "I/O Device" [13]
-    "Floppy Drive" [14]
-    "CD Drive" [15]
-    "DVD drive" [16]
-    "Disk Drive" [17]
-    "Tape Drive" [18]
-    "Storage Extent" [19]
-    "Other storage device" [20]
-    "Serial port" [21]
-    "Parallel port" [22]
-    "USB Controller" [23]
-    "Graphics controller" [24]
-    "IEEE 1394 Controller" [25]
-    "Partitionable Unit" [26]
-    "Base Partitionable Unit" [27]
-    "Power" [28]
-    "Cooling Capacity" [29]
-    "Ethernet Switch Port" [30]
-"""
+#
+# "Other" [1]
+# "Computer System" [2]
+# "Processor" [3]
+# "Memory" [4]
+# "IDE Controller" [5]
+# "Parallel SCSI HBA" [6]
+# "FC HBA" [7]
+# "iSCSI HBA" [8]
+# "IB HCA" [9]
+# "Ethernet Adapter" [10]
+# "Other Network Adapter" [11]
+# "I/O Slot" [12]
+# "I/O Device" [13]
+# "Floppy Drive" [14]
+# "CD Drive" [15]
+# "DVD drive" [16]
+# "Disk Drive" [17]
+# "Tape Drive" [18]
+# "Storage Extent" [19]
+# "Other storage device" [20]
+# "Serial port" [21]
+# "Parallel port" [22]
+# "USB Controller" [23]
+# "Graphics controller" [24]
+# "IEEE 1394 Controller" [25]
+# "Partitionable Unit" [26]
+# "Base Partitionable Unit" [27]
+# "Power" [28]
+# "Cooling Capacity" [29]
+# "Ethernet Switch Port" [30]
+
 
 DEVICE_CPU = "3"
 DEVICE_MEMORY = "4"
@@ -243,8 +243,8 @@ def _parse_hw_section(vm, nodes, file_refs, disk_section):
 
                 path = file_refs[ref]
 
-            disk = diskcfg.disk(path=path, format=fmt, bus=bus,
-                                type=diskcfg.DISK_TYPE_DISK)
+            disk = diskcfg.disk(path=path, fmt=fmt, bus=bus,
+                                typ=diskcfg.DISK_TYPE_DISK)
 
             vm.disks[(bus, dev_num)] = disk
 
