@@ -4,7 +4,6 @@
 
 virtinst merge bits:
     make sure translations actually work when installed
-    merge pylint scripts, make sure there are no warnings
     break out osdistro bits so we don't need to carry virt-install.pod
     merge README, reference that we merged virtinst and see that repo for
         old NEWS, etc.
@@ -61,7 +60,6 @@ start a spice guest, shrink the window to smaller than guest resolution, scrollb
   ====================
 
 enable all pep8 bits
-pylint: drop shell script, stick it in setup.py
 drop old stuff from both spec files
 update README
 virtinst initrd test: drop the big files? just stub em out

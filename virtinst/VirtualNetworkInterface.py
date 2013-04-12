@@ -145,6 +145,9 @@ class VirtualNetworkInterface(VirtualDevice):
     def __init__(self, macaddr=None, type=TYPE_BRIDGE, bridge=None,
                  network=None, model=None, conn=None,
                  parsexml=None, parsexmlnode=None, caps=None):
+        # pylint: disable=W0622
+        # Redefining built-in 'type', but it matches the XML so keep it
+
         VirtualDevice.__init__(self, conn, parsexml, parsexmlnode, caps)
 
         self._network = None

@@ -349,7 +349,10 @@ class StoragePool(StorageObject):
     pool_list_from_sources = staticmethod(pool_list_from_sources)
 
     def __init__(self, conn, name, type, target_path=None, uuid=None):
-        StorageObject.__init__(self, object_type=StorageObject.TYPE_POOL, \
+        # pylint: disable=W0622
+        # Redefining built-in 'type', but it matches the XML so keep it
+
+        StorageObject.__init__(self, object_type=StorageObject.TYPE_POOL,
                                name=name, conn=conn)
 
         if type not in self.get_pool_types():
@@ -545,6 +548,9 @@ class FilesystemPool(StoragePool):
 
     def __init__(self, conn, name, source_path=None, target_path=None,
                  format="auto", uuid=None, perms=None):
+        # pylint: disable=W0622
+        # Redefining built-in 'format', but it matches the XML so keep it
+
         StoragePool.__init__(self, name=name, type=StoragePool.TYPE_FS,
                              target_path=target_path, uuid=uuid, conn=conn)
 
@@ -603,6 +609,9 @@ class NetworkFilesystemPool(StoragePool):
 
     def __init__(self, conn, name, source_path=None, host=None,
                  target_path=None, format="auto", uuid=None):
+        # pylint: disable=W0622
+        # Redefining built-in 'format', but it matches the XML so keep it
+
         StoragePool.__init__(self, name=name, type=StoragePool.TYPE_NETFS,
                              uuid=uuid, target_path=target_path, conn=conn)
 
@@ -762,6 +771,9 @@ class DiskPool(StoragePool):
 
     def __init__(self, conn, name, source_path=None, target_path=None,
                  format="auto", uuid=None):
+        # pylint: disable=W0622
+        # Redefining built-in 'format', but it matches the XML so keep it
+
         StoragePool.__init__(self, name=name, type=StoragePool.TYPE_DISK,
                              uuid=uuid, target_path=target_path, conn=conn)
         self.format = format
@@ -979,11 +991,11 @@ class StorageVolume(StorageObject):
             pool = StorageVolume.lookup_pool_by_name(pool_name=pool_name,
                                                      conn=conn)
         self._pool = None
-
         self.pool = pool
+        poolconn = self.pool._conn # pylint: disable=W0212
 
         StorageObject.__init__(self, object_type=StorageObject.TYPE_VOLUME,
-                               name=name, conn=self.pool._conn)
+                               name=name, conn=poolconn)
         self._allocation = None
         self._capacity = None
         self._format = None
@@ -1130,7 +1142,9 @@ class StorageVolume(StorageObject):
 
         if not isinstance(vol, libvirt.virStorageVol):
             raise ValueError(_("input_vol must be a virStorageVol"))
-        if not is_create_vol_from_supported(self.pool._conn):
+
+        poolconn = self.pool._conn # pylint: disable=W0212
+        if not is_create_vol_from_supported(poolconn):
             raise ValueError(_("Creating storage from an existing volume is"
                                " not supported by this libvirt version."))
         self._input_vol = vol
@@ -1302,6 +1316,9 @@ class FileVolume(StorageVolume):
 
     def __init__(self, name, capacity, pool=None, pool_name=None, conn=None,
                  format="raw", allocation=None, perms=None):
+        # pylint: disable=W0622
+        # Redefining built-in 'format', but it matches the XML so keep it
+
         StorageVolume.__init__(self, name=name, pool=pool, pool_name=pool_name,
                                allocation=allocation, capacity=capacity,
                                conn=conn)

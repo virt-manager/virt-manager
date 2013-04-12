@@ -69,6 +69,9 @@ class DomainFeatures(XMLBuilderDomain.XMLBuilderDomain):
 
 
     def _get_xml_config(self, defaults=None):
+        # pylint: disable=W0221
+        # Argument number differs from overridden method
+
         if not defaults:
             defaults = {}
         ret = ""

@@ -32,6 +32,7 @@ import traceback
 
 import libvirt
 import virtinst
+import virtinst.cli
 from virtinst import uriutil
 
 from virtManager import util
@@ -44,13 +45,6 @@ from virtManager.netdev import vmmNetDevice
 from virtManager.network import vmmNetwork
 from virtManager.nodedev import vmmNodeDevice
 from virtManager.storagepool import vmmStoragePool
-
-def _is_virtinst_test_uri(uri):
-    try:
-        from virtinst import cli
-        return bool(cli._is_virtinst_test_uri(uri))
-    except:
-        return False
 
 
 class vmmConnection(vmmGObject):
@@ -99,7 +93,8 @@ class vmmConnection(vmmGObject):
 
         self._caps = None
         self._caps_xml = None
-        self._is_virtinst_test_uri = _is_virtinst_test_uri(self._uri)
+        self._is_virtinst_test_uri = virtinst.cli.is_virtinst_test_uri(
+                                        self._uri)
 
         self.network_capable = None
         self._storage_capable = None
@@ -967,13 +962,7 @@ class vmmConnection(vmmGObject):
         """
         if not self._is_virtinst_test_uri:
             return
-
-        try:
-            from virtinst import cli
-            return cli._open_test_uri(uri)
-        except:
-            logging.exception("Trouble opening test URI")
-        return
+        return virtinst.cli.open_test_uri(uri)
 
     def open(self, sync=False):
         if self.state != self.STATE_DISCONNECTED:

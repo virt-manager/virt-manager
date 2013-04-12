@@ -157,6 +157,9 @@ class DistroInstaller(Installer.Installer):
     def __init__(self, type="xen", location=None,
                  extraargs=None, os_type=None,
                  conn=None, caps=None):
+        # pylint: disable=W0622
+        # Redefining built-in 'type', but it matches the XML so keep it
+
         Installer.Installer.__init__(self, type, location, extraargs,
                                      os_type, conn=conn, caps=caps)
 
@@ -367,8 +370,13 @@ class DistroInstaller(Installer.Installer):
             not os.path.isdir(self.location)):
 
             device = VirtualDisk.DEVICE_CDROM
-            if (self.is_xenpv() and
-                not guest._lookup_osdict_key('pv_cdrom_install')):
+
+            # pylint: disable=W0212
+            # Access to protected member lookup_osdict_key
+            can_cdrom = guest._lookup_osdict_key('pv_cdrom_install')
+            # pylint: enable=W0212
+
+            if self.is_xenpv() and can_cdrom:
                 device = VirtualDisk.DEVICE_DISK
 
             disk = VirtualDisk(conn=guest.conn,

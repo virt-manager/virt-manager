@@ -223,10 +223,10 @@ def setupLogging(appname, debug=False, do_quiet=False):
 
 _virtinst_uri_magic = "__virtinst_test__"
 
-def _is_virtinst_test_uri(uri):
+def is_virtinst_test_uri(uri):
     return uri and uri.startswith(_virtinst_uri_magic)
 
-def _open_test_uri(uri):
+def open_test_uri(uri):
     """
     This hack allows us to fake various drivers via passing a magic
     URI string to virt-*. Helps with testing
@@ -318,8 +318,8 @@ def getConnection(uri):
         fail(_("Must be root to create Xen guests"))
 
     # Hack to facilitate virtinst unit testing
-    if _is_virtinst_test_uri(uri):
-        return _open_test_uri(uri)
+    if is_virtinst_test_uri(uri):
+        return open_test_uri(uri)
 
     logging.debug("Requesting libvirt URI %s", (uri or "default"))
     conn = open_connection(uri)

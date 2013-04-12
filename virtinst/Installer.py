@@ -83,6 +83,9 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
     def __init__(self, type="xen", location=None,
                  extraargs=None, os_type=None, conn=None,
                  parsexml=None, parsexmlnode=None, caps=None):
+        # pylint: disable=W0622
+        # Redefining built-in 'type', but it matches the XML so keep it
+
         XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
                                                    parsexmlnode, caps=caps)
 
@@ -356,6 +359,9 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
                           'post-install' phase.
         @type isinstall: C{bool}
         """
+        # pylint: disable=W0221
+        # Argument number differs from overridden method
+
         if isinstall:
             bootconfig = self._install_bootconfig
         else:
@@ -485,6 +491,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
 
         return gobj
 
+
 class ContainerInstaller(Installer):
     def prepare(self, guest, meter):
         ignore = guest
@@ -497,6 +504,3 @@ class ContainerInstaller(Installer):
 
     def has_install_phase(self):
         return False
-
-# Back compat
-Installer.get_install_xml = Installer.get_xml_config

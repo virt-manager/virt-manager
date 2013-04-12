@@ -33,7 +33,7 @@ class TestImageParser(unittest.TestCase):
 
     basedir = "tests/image-xml/"
     conn = libvirt.open("test:///default")
-    qemuconn = virtinst.cli._open_test_uri(qemuuri)
+    qemuconn = virtinst.cli.open_test_uri(qemuuri)
     caps = virtinst.CapabilitiesParser.parse(conn.getCapabilities())
     qemucaps = virtinst.CapabilitiesParser.parse(qemuconn.getCapabilities())
 

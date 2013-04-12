@@ -94,9 +94,10 @@ class VirtualGraphics(VirtualDevice):
                  keymap=KEYMAP_DEFAULT, conn=None, parsexml=None,
                  parsexmlnode=None, tlsPort=-1, channels=None,
                  caps=None, passwdValidTo=None):
+        # pylint: disable=W0622
+        # Redefining built-in 'type', but it matches the XML so keep it
 
-        VirtualDevice.__init__(self, conn,
-                                             parsexml, parsexmlnode, caps)
+        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode, caps)
 
         self._type   = None
         self._port   = None

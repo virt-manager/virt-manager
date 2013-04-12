@@ -172,6 +172,8 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
 
     def __init__(self, type=None, connection=None, hypervisorURI=None,
                  installer=None, parsexml=None, caps=None, conn=None):
+        # pylint: disable=W0622
+        # Redefining built-in 'type', but it matches the XML so keep it
 
         # Set up the connection, since it is fundamental for other init
         conn = conn or connection
@@ -219,7 +221,11 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         self._default_input_device = None
         self._default_console_device = None
 
+        # pylint: disable=W0212
+        # Access to protected member _get_caps
         caps = caps or (self._installer and self._installer._get_caps())
+        # pylint: enable=W0212
+
         XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
                                                    caps=caps)
         if self._is_parse():
@@ -581,14 +587,14 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
 
         # If user adds a device conflicting with a default assigned device
         # remove the default
-        if (dev.virtual_device_type == VirtualDevice.VIRTUAL_DEV_INPUT and
+        if (devtype == VirtualDevice.VIRTUAL_DEV_INPUT and
             self._default_input_device):
             if self._default_input_device in self.get_all_devices():
                 self.remove_device(self._default_input_device)
             self._default_input_device = None
 
-        if (dev.virtual_device_type in [VirtualDevice.VIRTUAL_DEV_CONSOLE,
-                                        VirtualDevice.VIRTUAL_DEV_SERIAL] and
+        if (devtype in [VirtualDevice.VIRTUAL_DEV_CONSOLE,
+                        VirtualDevice.VIRTUAL_DEV_SERIAL] and
             self._default_console_device):
             if self._default_console_device in self.get_all_devices():
                 self.remove_device(self._default_console_device)
@@ -899,6 +905,9 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
                           this.)
         @type disk_boot: C{bool}
         """
+        # pylint: disable=W0221
+        # Argument number differs from overridden method
+
         # We do a shallow copy of the device list here, and set the defaults.
         # This way, default changes aren't persistent, and we don't need
         # to worry about when to call set_defaults

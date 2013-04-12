@@ -282,6 +282,8 @@ class VirtualDisk(VirtualDevice):
     __init__ and setting all properties performs lots of validation,
     and will throw ValueError's if problems are found.
     """
+    # pylint: disable=W0622
+    # Redefining built-in 'type', but it matches the XML so keep it
 
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_DISK
 
@@ -1471,6 +1473,9 @@ class VirtualDisk(VirtualDevice):
                          takes precedence.
         @type disknode: C{str}
         """
+        # pylint: disable=W0221
+        # Argument number differs from overridden method
+
         typeattr = self.type
         if self.type == VirtualDisk.TYPE_BLOCK:
             typeattr = 'dev'
