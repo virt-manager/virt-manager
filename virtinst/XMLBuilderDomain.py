@@ -434,10 +434,20 @@ class XMLBuilderDomain(object):
         except:
             pass
 
+    def _cache(self):
+        """
+        This is a hook for classes to cache any state that is expensive
+        to lookup before we copy the object as part of Guest.get_xml_config.
+        Saves us from possibly doing the lookup over and over
+        """
+        pass
+
+
     def copy(self):
         # Otherwise we can double free XML info
         if self._is_parse():
             return self
+        self._cache()
         return copy.copy(self)
 
     def get_conn(self):
