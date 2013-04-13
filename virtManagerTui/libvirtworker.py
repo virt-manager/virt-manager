@@ -493,7 +493,7 @@ class LibvirtWorker:
         if extraargs:
             self.__guest.installer.extraarags = extraargs
 
-        self.__guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
+        self.__guest.uuid = virtinst.util.randomUUID(self.__conn)
 
         if config.get_os_type() != "generic":
             self.__guest.os_type = config.get_os_type()

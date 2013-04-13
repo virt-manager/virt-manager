@@ -1452,7 +1452,7 @@ class vmmCreate(vmmGObjectUI):
 
         # Generate UUID (makes customize dialog happy)
         try:
-            guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
+            guest.uuid = virtinst.util.randomUUID(guest.conn)
         except Exception, e:
             self.err.show_err(_("Error setting UUID: %s") % str(e))
             return None

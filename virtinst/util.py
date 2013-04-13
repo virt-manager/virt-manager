@@ -430,7 +430,7 @@ def find_keymap_from_etc_default():
 
 def generate_uuid(conn):
     for ignore in range(256):
-        uuid = uuidToString(randomUUID(), conn=conn)
+        uuid = randomUUID(conn=conn)
         if not vm_uuid_collision(conn, uuid):
             return uuid
 
@@ -565,20 +565,12 @@ def randomMAC(typ, conn=None):
     return ':'.join(["%02x" % x for x in mac])
 
 
-# the following three functions are from xend/uuid.py and are thus
-# available under the LGPL,
-# Copyright 2005 Mike Wray <mike.wray@hp.com>
-# Copyright 2005 XenSource Ltd
-def randomUUID():
-    """Generate a random UUID."""
-    return [random.randint(0, 255) for ignore in range(0, 16)]
-
-
-def uuidToString(u, conn=None):
+def randomUUID(conn):
     if conn and hasattr(conn, "_virtinst__fake_conn_predictable"):
         # Testing hack
         return "00000000-1111-2222-3333-444444444444"
 
+    u = [random.randint(0, 255) for ignore in range(0, 16)]
     return "-".join(["%02x" * 4, "%02x" * 2, "%02x" * 2, "%02x" * 2,
                      "%02x" * 6]) % tuple(u)
 
