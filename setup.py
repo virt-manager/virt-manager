@@ -420,7 +420,6 @@ class CheckPylint(Command):
 
         print "running pep8"
         cmd = "pep8 "
-        cmd += "--exclude scriptimports "
         cmd += " ".join(files)
         os.system(cmd + " --config tests/pep8.cfg")
 

@@ -15,6 +15,7 @@
 # MA 02110-1301 USA.
 
 import atexit
+import imp
 import logging
 import os
 import shlex
@@ -27,8 +28,12 @@ import StringIO
 
 import virtinst.cli
 
-from tests.scriptimports import virtinstall, virtimage, virtclone, virtconvert
 from tests import utils
+
+virtinstall = imp.load_source("virtinstall", "virt-install")
+virtimage = imp.load_source("virtimage", "virt-image")
+virtclone = imp.load_source("virtclone", "virt-clone")
+virtconvert = imp.load_source("virtconvert", "virt-convert")
 
 os.environ["VIRTCONV_TEST_NO_DISK_CONVERSION"] = "1"
 os.environ["LANG"] = "en_US.UTF-8"
