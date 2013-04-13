@@ -68,7 +68,7 @@ def check_packagekit(errbox, packages, ishv):
     if error:
         return
 
-    found = progWin.get_data()
+    found = progWin.get_extra_data()
 
     not_found = [x for x in packages if x not in found]
     logging.debug("Missing packages: %s", not_found)
@@ -120,7 +120,7 @@ def _do_async_search(asyncjob, session, pk_control, packages):
         logging.exception("Error searching for installed packages")
         asyncjob.set_error(str(e), "".join(traceback.format_exc()))
 
-    asyncjob.set_data(found)
+    asyncjob.set_extra_data(found)
 
 def packagekit_install(package_list):
     session = dbus.SessionBus()

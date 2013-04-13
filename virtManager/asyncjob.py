@@ -212,9 +212,9 @@ class vmmAsyncJob(vmmGObjectUI):
             return (None, None)
         return self._error_info
 
-    def set_data(self, data):
+    def set_extra_data(self, data):
         self._data = data
-    def get_data(self):
+    def get_extra_data(self):
         return self._data
 
     def get_meter(self):
