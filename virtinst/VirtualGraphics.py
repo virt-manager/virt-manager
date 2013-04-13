@@ -112,6 +112,7 @@ class VirtualGraphics(VirtualDevice):
         self._display = None
         self._socket = None
         self._channels = {}
+        self._local_keymap = -1
 
         if self._is_parse():
             return
@@ -127,13 +128,15 @@ class VirtualGraphics(VirtualDevice):
             self.channels = channels
 
 
-    def _default_keymap(self):
-        if (self.conn and
+    def _default_keymap(self, force_local=False):
+        if (not force_local and self.conn and
             support.check_conn_support(self.conn,
                                 support.SUPPORT_CONN_KEYMAP_AUTODETECT)):
             return None
 
-        return util.default_keymap()
+        if self._local_keymap == -1:
+            self._local_keymap = util.default_keymap()
+        return self._local_keymap
 
     def get_type(self):
         return self._type
@@ -163,7 +166,7 @@ class VirtualGraphics(VirtualDevice):
         if self._keymap == self.KEYMAP_DEFAULT:
             return self._default_keymap()
         if self._keymap == self.KEYMAP_LOCAL:
-            return util.default_keymap()
+            return self._default_keymap(force_local=True)
         return self._keymap
     def set_keymap(self, val):
         # At this point, 'None' is a valid value
@@ -178,7 +181,7 @@ class VirtualGraphics(VirtualDevice):
         if type(val) is not str:
             raise ValueError(_("Keymap must be a string"))
         if val.lower() == self.KEYMAP_LOCAL:
-            val = util.default_keymap()
+            val = self._default_keymap(force_local=True)
         elif len(val) > 16:
             raise ValueError(_("Keymap must be less than 16 characters"))
         elif re.match("^[a-zA-Z0-9_-]*$", val) is None:
