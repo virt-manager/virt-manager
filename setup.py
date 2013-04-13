@@ -412,42 +412,11 @@ class CheckPylint(Command):
                  "virtManagerTui", "tests"]
 
         output_format = sys.stdout.isatty() and "colorized" or "text"
-        pylint_skip = [
-            "Design",   # Things like 'too many arguments'
-            "C0103",    # C0103: Name doesn't match some style regex
-            "C0111",    # C0111: No docstring
-            "C0301",    # C0301: Line too long
-            "C0302",    # C0302: Too many lines in module
-            "I0011",    # I0011: Warn about locally disabled pylint msgs
-            "R0201",    # R0201: Method could be a function
-
-            "W0142",    # W0142: Used * or ** magic*
-            "W0603",    # W0603: Using the global statement
-            "W0702",    # W0702: No exception type specified for 'catch'
-            "W0703",    # W0703: Catch 'Exception'
-            "W1401",    # W1401: Anomalous backslash in string
-
-
-            # May be useful to enable someday
-            "W1001",         # Use of 'property' on old style class
-                             # pylint can't detect our Gtk subclasses are
-                             # new style
-            "W0511",         # W0511: FIXME and XXX: messages
-            "Similarities",  # Finds duplicate code
-        ]
 
         cmd = "pylint "
-        cmd += "--ignore scriptimports "
-        cmd += "--reports=n "
         cmd += "--output-format=%s " % output_format
-        cmd += "--dummy-variables-rgx=\"ignore.*|.*_ignore\" "
-        cmd += "--additional-builtins=_  "
-
-        for s in pylint_skip:
-            cmd += "--disable=%s " % s
         cmd += " ".join(files)
-
-        os.system(cmd)
+        os.system(cmd + " --rcfile tests/pylint.cfg")
 
 
 setup(
