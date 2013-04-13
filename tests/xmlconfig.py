@@ -43,16 +43,20 @@ _kvmconn = utils.open_testkvmdriver()
 _plainkvm = utils.open_plainkvm()
 _plainxen = utils.open_plainxen()
 
+
 def qemu_uri():
     return "qemu:///system"
 
+
 def xen_uri():
     return "xen:///"
+
 
 def build_xmlfile(filebase):
     if not filebase:
         return None
     return os.path.join("tests/xmlconfig-xml", filebase + ".xml")
+
 
 class TestXMLConfig(unittest.TestCase):
 
@@ -482,11 +486,11 @@ class TestXMLConfig(unittest.TestCase):
     def testKVMKeymap(self):
         conn = utils.open_plainkvm(connver=10000)
         g = virtinst.VirtualGraphics(conn=conn, type="vnc")
-        self.assertTrue(g.keymap != None)
+        self.assertTrue(g.keymap is not None)
 
         conn = utils.open_plainkvm(connver=11000)
         g = virtinst.VirtualGraphics(conn=conn, type="vnc")
-        self.assertTrue(g.keymap == None)
+        self.assertTrue(g.keymap is None)
 
 
     def testF11Qemu(self):
@@ -785,7 +789,7 @@ class TestXMLConfig(unittest.TestCase):
 
         # Check keymap autoconfig
         gdev1 = virtinst.VirtualGraphics(conn=g.conn, type="vnc")
-        self.assertTrue(gdev1.keymap != None)
+        self.assertTrue(gdev1.keymap is not None)
         gdev1.keymap = "en-us"
 
         # Check keymap None

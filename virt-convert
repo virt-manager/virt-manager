@@ -153,6 +153,7 @@ def parse_args():
 
     return options
 
+
 def cleanup(msg, options, vmdef, paths):
     """
     After failure, clean up anything we created.
@@ -176,6 +177,7 @@ def cleanup(msg, options, vmdef, paths):
                (options.output_dir, e.strerror))
 
     sys.exit(1)
+
 
 def main():
     cli.earlyLogging()
@@ -215,7 +217,7 @@ def main():
         logging.debug("Creating directory %s", options.output_dir)
         if options.nodry:
             os.mkdir(options.output_dir)
-        clean += [ options.output_dir ]
+        clean += [options.output_dir]
     except OSError, e:
         if (e.errno != errno.EEXIST):
             fail("Could not create directory %s: %s" %
@@ -272,7 +274,7 @@ def main():
             outfile.writelines(output)
             outfile.close()
 
-        clean += [ options.output_file ]
+        clean += [options.output_file]
     except ValueError, e:
         cleanup(_("Couldn't export to file \"%s\": %s") %
             (options.output_file, e), options, vmdef, clean)

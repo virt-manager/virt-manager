@@ -50,6 +50,7 @@ OS_VARIANT = "os.variant"
 MEMORY = "memory"
 CPUS = "cpus"
 
+
 class DomainConfigScreen(VmmTuiConfigScreen):
     def __init__(self):
         VmmTuiConfigScreen.__init__(self, "Create A New Virtual Machine")
@@ -348,7 +349,7 @@ class DomainConfigScreen(VmmTuiConfigScreen):
         return False
 
     def page_has_next(self, page):
-        if   page is SELECT_POOL_PAGE:
+        if page is SELECT_POOL_PAGE:
             return self.__has_pools
         elif page is SELECT_VOLUME_PAGE:
             return self.__has_volumes
@@ -571,6 +572,7 @@ class DomainConfigScreen(VmmTuiConfigScreen):
         grid.setField(snack.Label(self.__config.get_network_bridge()), 1, 5, anchorLeft=1)
         return [snack.Label("Ready to begin installation of %s" % self.__config.get_guest_name()),
                 grid]
+
 
 def AddDomain():
     screen = DomainConfigScreen()

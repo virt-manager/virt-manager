@@ -31,14 +31,18 @@ running_config = None
 xml_escape = virtinst.util.xml_escape
 
 # FIXME: selinux policy also has a ~/VirtualMachines/isos dir
+
+
 def get_default_pool_path(conn):
     if conn.is_session_uri():
         return os.path.expanduser("~/VirtualMachines")
     return "/var/lib/libvirt/images"
 
+
 def get_default_pool_name(conn):
     ignore = conn
     return "default"
+
 
 def build_default_pool(vmmconn):
     """
@@ -70,14 +74,17 @@ def build_default_pool(vmmconn):
         raise RuntimeError(_("Couldn't create default storage pool '%s': %s") %
                              (path, str(e)))
 
+
 def get_ideal_path_info(conn, name):
     path = get_default_dir(conn)
     suffix = ".img"
     return (path, name, suffix)
 
+
 def get_ideal_path(conn, name):
     target, name, suffix = get_ideal_path_info(conn, name)
     return os.path.join(target, name) + suffix
+
 
 def get_default_pool(conn):
     pool = None
@@ -89,6 +96,7 @@ def get_default_pool(conn):
 
     return pool
 
+
 def get_default_dir(conn):
     pool = get_default_pool(conn)
 
@@ -96,6 +104,7 @@ def get_default_dir(conn):
         return pool.get_target_path()
     else:
         return running_config.get_default_image_dir(conn)
+
 
 def get_default_path(conn, name, collidelist=None):
     collidelist = collidelist or []
@@ -180,7 +189,7 @@ def browse_local(parent, dialog_name, conn, start_folder=None,
         value, and store the user chosen path.
 
     """
-    from gi.repository import Gtk # pylint: disable=E0611
+    from gi.repository import Gtk  # pylint: disable=E0611
 
     # Initial setup
     overwrite_confirm = False
@@ -245,14 +254,17 @@ def browse_local(parent, dialog_name, conn, start_folder=None,
                                              browse_reason)
     return ret
 
+
 def dup_lib_conn(libconn):
     conn = _dup_all_conn(None, libconn)
     if isinstance(conn, virtManager.connection.vmmConnection):
         return conn.vmm
     return conn
 
+
 def dup_conn(conn):
     return _dup_all_conn(conn, None)
+
 
 def _dup_all_conn(conn, libconn):
 
@@ -284,6 +296,7 @@ def _dup_all_conn(conn, libconn):
 
     return newconn
 
+
 def pretty_hv(gtype, domtype):
     """
     Convert XML <domain type='foo'> and <os><type>bar</type>
@@ -310,6 +323,7 @@ def pretty_hv(gtype, domtype):
 
     return label
 
+
 def uuidstr(rawuuid):
     hx = ['0', '1', '2', '3', '4', '5', '6', '7',
           '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
@@ -320,6 +334,7 @@ def uuidstr(rawuuid):
         if i == 3 or i == 5 or i == 7 or i == 9:
             uuid.append('-')
     return "".join(uuid)
+
 
 def iface_in_use_by(conn, name):
     use_str = ""
@@ -332,12 +347,14 @@ def iface_in_use_by(conn, name):
 
     return use_str
 
+
 def pretty_mem(val):
     val = int(val)
     if val > (10 * 1024 * 1024):
         return "%2.2f GB" % (val / (1024.0 * 1024.0))
     else:
         return "%2.0f MB" % (val / 1024.0)
+
 
 def pretty_bytes(val):
     val = int(val)
@@ -347,6 +364,7 @@ def pretty_bytes(val):
         return "%2.2f MB" % (val / (1024.0 * 1024.0))
 
 xpath = virtinst.util.get_xml_path
+
 
 def chkbox_helper(src, getcb, setcb, text1, text2=None,
                   alwaysrecord=False,
@@ -359,7 +377,7 @@ def chkbox_helper(src, getcb, setcb, text1, text2=None,
     @alwaysrecord: Don't require user to select 'yes' to record chkbox value
     @default: What value to return if getcb tells us not to prompt
     """
-    from gi.repository import Gtk # pylint: disable=E0611
+    from gi.repository import Gtk  # pylint: disable=E0611
 
     do_prompt = getcb()
     if not do_prompt:
@@ -374,6 +392,7 @@ def chkbox_helper(src, getcb, setcb, text1, text2=None,
 
     return response
 
+
 def get_list_selection(widget):
     selection = widget.get_selection()
     active = selection.get_selected()
@@ -382,6 +401,7 @@ def get_list_selection(widget):
     if treeiter is not None:
         return treestore[treeiter]
     return None
+
 
 def set_list_selection(widget, rownum):
     path = str(rownum)

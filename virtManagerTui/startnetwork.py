@@ -24,12 +24,13 @@ from virtManagerTui.networklistconfigscreen import NetworkListConfigScreen
 LIST_PAGE   = 1
 START_PAGE = 2
 
+
 class StartNetworkConfigScreen(NetworkListConfigScreen):
     def __init__(self):
         NetworkListConfigScreen.__init__(self, "Start A Network")
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_PAGE:
+        if page is LIST_PAGE:
             return self.get_network_list_page(screen, started=False)
         elif page is START_PAGE:
             return self.get_start_network_page(screen)
@@ -54,6 +55,7 @@ class StartNetworkConfigScreen(NetworkListConfigScreen):
         ignore = screen
         network = self.get_selected_network()
         return [Label("%s was successfully started." % network.get_name())]
+
 
 def StartNetwork():
     screen = StartNetworkConfigScreen()

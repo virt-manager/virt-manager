@@ -38,13 +38,13 @@ POOL1 = "/default-pool"
 POOL2 = "/cross-pool"
 DISKPOOL = "/disk-pool"
 
-local_files = [ FILE1, FILE2]
+local_files = [FILE1, FILE2]
 
 clonexml_dir = os.path.join(os.getcwd(), "tests/clone-xml")
 clone_files = []
 
 for tmpf in os.listdir(clonexml_dir):
-    black_list = [ "managed-storage", "cross-pool", "force", "skip",
+    black_list = ["managed-storage", "cross-pool", "force", "skip",
                    "fullpool"]
     if tmpf.endswith("-out.xml"):
         tmpf = tmpf[0:(len(tmpf) - len("-out.xml"))]
@@ -52,6 +52,7 @@ for tmpf in os.listdir(clonexml_dir):
             clone_files.append(tmpf)
 
 conn = utils.open_testdriver()
+
 
 class TestClone(unittest.TestCase):
 
@@ -92,7 +93,7 @@ class TestClone(unittest.TestCase):
         cloneobj.clone_mac = "22:23:45:67:89:00"
         cloneobj.clone_mac = "22:23:45:67:89:01"
 
-        if disks != None:
+        if disks is not None:
             for disk in disks:
                 cloneobj.clone_devices = disk
         else:
@@ -149,7 +150,7 @@ class TestClone(unittest.TestCase):
     def testRemoteNoStorage(self):
         """Test remote clone where VM has no storage that needs cloning"""
         useconn = utils.open_test_remote()
-        for base in [ "nostorage", "noclone-storage" ] :
+        for base in ["nostorage", "noclone-storage"] :
             self._clone_helper(base, disks=[], useconn=useconn)
 
     def testRemoteWithStorage(self):
@@ -158,7 +159,7 @@ class TestClone(unittest.TestCase):
         since libvirt has no storage clone api.
         """
         useconn = utils.open_test_remote()
-        for base in [ "general-cfg" ] :
+        for base in ["general-cfg"] :
             try:
                 self._clone_helper(base,
                                    disks=["%s/1.img" % POOL1,

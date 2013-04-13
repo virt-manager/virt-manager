@@ -32,8 +32,10 @@ cfgpath = os.path.join(os.path.dirname(_filepath), "cli.cfg")
 if os.path.exists(cfgpath):
     cfg.read(cfgpath)
 
+
 def _split_list(commastr):
     return [d for d in commastr.split(",") if d]
+
 
 def _get_param(name, default):
     if not cfg.sections():

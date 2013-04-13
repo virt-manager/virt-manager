@@ -32,6 +32,7 @@ POOL_DETAILS_PAGE = 2
 CONFIRM_PAGE      = 3
 HELPER_TEXT       = "Specify a storage location to be later split in virtual machine storage"
 
+
 class AddStoragePoolConfigScreen(VmmTuiConfigScreen):
     def __init__(self):
         VmmTuiConfigScreen.__init__(self, "Add A Storage Pool")
@@ -45,7 +46,7 @@ class AddStoragePoolConfigScreen(VmmTuiConfigScreen):
         self.__source_path = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is POOL_NAME_PAGE:
+        if page is POOL_NAME_PAGE:
             return self.get_pool_name_page(screen)
         elif page is POOL_DETAILS_PAGE:
             return self.get_pool_details_page(screen)
@@ -62,7 +63,7 @@ class AddStoragePoolConfigScreen(VmmTuiConfigScreen):
         return page is CONFIRM_PAGE
 
     def validate_input(self, page, errors):
-        if   page is POOL_NAME_PAGE:
+        if page is POOL_NAME_PAGE:
             if utils.string_is_not_blank(self.__name.value()):
                 if self.get_libvirt().storage_pool_exists(self.__name.value()):
                     errors.append("Name '%s' already in use by another pool." % self.__name.value())
@@ -106,7 +107,7 @@ class AddStoragePoolConfigScreen(VmmTuiConfigScreen):
         if page is POOL_NAME_PAGE:
             self.__config.set_name(self.__name.value())
             self.__config.set_type(self.__type.getSelection())
-            #self._reset_flags(self.__type.current())
+            # self._reset_flags(self.__type.current())
         elif page is POOL_DETAILS_PAGE:
             if self.__config.needs_target_path():
                 self.__config.set_target_path(self.__target_path.value())
@@ -171,6 +172,7 @@ class AddStoragePoolConfigScreen(VmmTuiConfigScreen):
         return [Label("Add Storage Pool"),
                 Label("Confirm Pool Details"),
                 self.create_grid_from_fields(fields)]
+
 
 def AddStoragePool():
     screen = AddStoragePoolConfigScreen()

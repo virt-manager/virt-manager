@@ -22,6 +22,7 @@ from tests import utils
 
 conn = utils.open_testdriver()
 
+
 class TestSupport(unittest.TestCase):
 
     def testSupportCollide(self):

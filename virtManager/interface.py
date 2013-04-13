@@ -23,6 +23,7 @@ from virtinst import Interface
 from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 
+
 class vmmInterface(vmmLibvirtObject):
     def __init__(self, conn, interface, name, active):
         vmmLibvirtObject.__init__(self, conn)

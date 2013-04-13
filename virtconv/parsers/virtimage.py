@@ -77,6 +77,7 @@ image_template = \
 </image>
 """
 
+
 def export_os_params(vm):
     """
     Export OS-specific parameters.
@@ -86,7 +87,7 @@ def export_os_params(vm):
 
     # TODO: Shouldn't be directly using _OS_TYPES here. virt-image libs (
     # ImageParser?) should handle this info
-    ostype = Guest._OS_TYPES.get(vm.os_type) # pylint: disable=W0212
+    ostype = Guest._OS_TYPES.get(vm.os_type)  # pylint: disable=W0212
     if ostype:
         osvariant = ostype.get('variants').get(vm.os_variant)
 
@@ -109,6 +110,7 @@ def export_os_params(vm):
         apic = "<apic />"
 
     return acpi, apic
+
 
 def export_disks(vm):
     """
@@ -143,7 +145,7 @@ def export_disks(vm):
         disks[("ide", instance)] = disk
 
         if disk.path:
-            paths += [ disk.path ]
+            paths += [disk.path]
 
     diskout = []
     storage = []
@@ -180,6 +182,7 @@ def export_disks(vm):
                 (path, typ))
 
     return storage, diskout
+
 
 class virtimage_parser(formats.parser):
     """
@@ -247,7 +250,7 @@ class virtimage_parser(formats.parser):
                 ImageParser.Disk.FORMAT_QCOW: diskcfg.DISK_FORMAT_QCOW,
                 ImageParser.Disk.FORMAT_QCOW2: diskcfg.DISK_FORMAT_QCOW2,
                 ImageParser.Disk.FORMAT_VDI: diskcfg.DISK_FORMAT_VDI,
-            }
+           }
 
             fmt = None
             if disk.format in format_mappings:
@@ -307,7 +310,7 @@ class virtimage_parser(formats.parser):
             "arch" : vm.arch,
             "acpi" : acpi,
             "apic" : apic,
-        }
+       }
 
         out = image_template % {
             "boot_template": boot_xml,
@@ -318,7 +321,7 @@ class virtimage_parser(formats.parser):
             "memory" : int(vm.memory) * 1024,
             "interface" : interface,
             "storage" : "".join(storage).strip("\n"),
-        }
+       }
 
         return out
 

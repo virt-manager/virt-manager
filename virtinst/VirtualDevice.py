@@ -22,6 +22,7 @@
 from virtinst.XMLBuilderDomain import XMLBuilderDomain, _xml_property
 import logging
 
+
 class VirtualDevice(XMLBuilderDomain):
     """
     Base class for all domain xml device objects.
@@ -137,6 +138,7 @@ class VirtualDeviceAlias(XMLBuilderDomain):
 
     def _get_xml_config(self):
         return ""
+
 
 class VirtualDeviceAddress(XMLBuilderDomain):
 

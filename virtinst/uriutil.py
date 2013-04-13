@@ -28,7 +28,7 @@ def uri_split(uri):
                                  fragment)
     """
     def splitnetloc(url, start=0):
-        for c in '/?#': # the order is important!
+        for c in '/?#':  # the order is important!
             delim = url.find(c, start)
             if delim >= 0:
                 break

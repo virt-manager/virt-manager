@@ -23,6 +23,7 @@ import re
 
 from virtinst import util
 
+
 class CapabilitiesParserException(Exception):
     def __init__(self, msg):
         Exception.__init__(self, msg)
@@ -30,6 +31,7 @@ class CapabilitiesParserException(Exception):
 # Whether a guest can be created with a certain feature on resp. off
 FEATURE_ON      = 0x01
 FEATURE_OFF     = 0x02
+
 
 class CPUValuesModel(object):
     """
@@ -102,6 +104,7 @@ class CPUValuesArch(object):
                 return c
         raise ValueError(_("Unknown CPU model '%s'") % model)
 
+
 class CPUValues(object):
     """
     Lists valid values for domain <cpu> parameters, parsed from libvirt's
@@ -138,6 +141,7 @@ class CPUValues(object):
             self.archmap[arch] = cpumap
 
         return cpumap
+
 
 class Features(object):
     """Represent a set of features. For each feature, store a bit mask of
@@ -183,6 +187,7 @@ class Features(object):
         its value. Abstract method, must be overridden"""
         raise NotImplementedError("Abstract base class")
 
+
 class CapabilityFeatures(Features):
     def __init__(self, node=None):
         Features.__init__(self, node)
@@ -208,6 +213,7 @@ class CapabilityFeatures(Features):
                 d["pae"] |= FEATURE_OFF
             else:
                 d[feature] |= FEATURE_ON
+
 
 class CPU(object):
     def __init__(self, node=None):
@@ -254,6 +260,7 @@ class CPU(object):
                 self.features = CapabilityFeatures(child)
 
             child = child.next
+
 
 class Host(object):
     def __init__(self, node=None):
@@ -427,6 +434,7 @@ class Domain(object):
     def is_accelerated(self):
         return self.hypervisor_type in ["kvm", "kqemu"]
 
+
 class Topology(object):
     def __init__(self, node=None):
         self.cells = []
@@ -440,6 +448,7 @@ class Topology(object):
             for cell in child.children:
                 if cell.name == "cell":
                     self.cells.append(TopologyCell(cell))
+
 
 class TopologyCell(object):
     def __init__(self, node=None):
@@ -456,6 +465,7 @@ class TopologyCell(object):
             for cpu in child.children:
                 if cpu.name == "cpu":
                     self.cpus.append(TopologyCPU(cpu))
+
 
 class TopologyCPU(object):
     def __init__(self, node=None):
@@ -482,6 +492,7 @@ class SecurityModel(object):
                 self.model = child.content
             elif child.name == "doi":
                 self.doi = child.content
+
 
 class Capabilities(object):
     def __init__(self, node=None):
@@ -676,10 +687,12 @@ class Capabilities(object):
 
         return self._cpu_values.get_arch(arch)
 
+
 def parse(xml):
     return util.parse_node_helper(xml, "capabilities",
                                    Capabilities,
                                    CapabilitiesParserException)
+
 
 def guest_lookup(conn, caps=None, os_type=None, arch=None, typ=None,
                  accelerated=False, machine=None):
@@ -738,7 +751,7 @@ def guest_lookup(conn, caps=None, os_type=None, arch=None, typ=None,
                                   dtype=typ,
                                   machine=machine)
 
-    if domain == None:
+    if domain is None:
         machinestr = "with machine '%s'" % machine
         if not machine:
             machinestr = ""

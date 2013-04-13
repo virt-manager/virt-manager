@@ -20,6 +20,7 @@
 import snack
 from virtManagerTui.domainlistconfigscreen import DomainListConfigScreen
 
+
 class ListDomainsConfigScreen(DomainListConfigScreen):
     LIST_PAGE   = 1
     DETAIL_PAGE = 2
@@ -77,7 +78,7 @@ class ListDomainsConfigScreen(DomainListConfigScreen):
 
         semodel, setype, vmlabel = domain.get_seclabel()
         caps = self.get_libvirt().get_capabilities()
-        if caps.host.secmodel  and caps.host.secmodel.model:
+        if caps.host.secmodel and caps.host.secmodel.model:
             semodel = caps.host.secmodel.model
         fields.append(("Model", semodel or "None"))
 
@@ -96,6 +97,7 @@ class ListDomainsConfigScreen(DomainListConfigScreen):
             row += 1
 
         return [grid]
+
 
 def ListDomains():
     screen = ListDomainsConfigScreen()

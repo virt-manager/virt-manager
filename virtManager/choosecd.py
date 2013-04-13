@@ -29,6 +29,7 @@ from virtManager.baseclass import vmmGObjectUI
 from virtManager.mediadev import MEDIA_FLOPPY
 from virtManager.storagebrowse import vmmStorageBrowser
 
+
 class vmmChooseCD(vmmGObjectUI):
     __gsignals__ = {
         "cdrom-chosen": (GObject.SignalFlags.RUN_FIRST, None, [object, str])

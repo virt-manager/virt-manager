@@ -30,6 +30,7 @@ class ImageInstallerException(Exception):
     def __init__(self, msg):
         Exception.__init__(self, msg)
 
+
 class ImageInstaller(Installer.Installer):
     """Installer for image-based guests"""
     def __init__(self, image, capabilities=None, boot_index=None, conn=None):
@@ -144,9 +145,11 @@ class ImageInstaller(Installer.Installer):
     def _abspath(self, p):
         return self.image.abspath(p)
 
+
 class PlatformMatchException(Exception):
     def __init__(self, msg):
         Exception.__init__(self, msg)
+
 
 def match_boots(capabilities, boots):
     for b in boots:

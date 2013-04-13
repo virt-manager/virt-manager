@@ -22,6 +22,7 @@ import virtinst
 
 from virtManager.libvirtobject import vmmLibvirtObject
 
+
 class vmmNodeDevice(vmmLibvirtObject):
     def __init__(self, conn, backend, name):
         vmmLibvirtObject.__init__(self, conn)

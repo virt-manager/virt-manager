@@ -63,6 +63,7 @@ NETWORK_INFO_NEW_MAC = 2
 # XXX: What to do for cleanup if clone fails?
 # XXX: Disable mouse scroll for combo boxes
 
+
 def can_we_clone(conn, vol, path):
     """Is the passed path even clone-able"""
     ret = True
@@ -94,6 +95,7 @@ def can_we_clone(conn, vol, path):
 
     return (ret, msg)
 
+
 def do_we_default(conn, vol, path, ro, shared, devtype):
     """ Returns (do we clone by default?, info string if not)"""
     ignore = conn
@@ -120,6 +122,7 @@ def do_we_default(conn, vol, path, ro, shared, devtype):
         info = append_str(info, _("Shareable"))
 
     return (not info, info)
+
 
 class vmmCloneVM(vmmGObjectUI):
     def __init__(self, orig_vm):

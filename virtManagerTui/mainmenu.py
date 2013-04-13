@@ -16,18 +16,19 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from newt_syrup.menuscreen  import MenuScreen
+from newt_syrup.menuscreen import MenuScreen
 
-from virtManagerTui.nodemenu    import NodeMenu
-from virtManagerTui.netmenu     import NetworkMenu
+from virtManagerTui.nodemenu import NodeMenu
+from virtManagerTui.netmenu import NetworkMenu
 from virtManagerTui.storagemenu import StoragePoolMenu
-from virtManagerTui.hostmenu    import HostMenu
+from virtManagerTui.hostmenu import HostMenu
 
 NODE_MENU    = 1
 NETWORK_MENU = 2
 STORAGE_MENU = 3
 HOST_MENU    = 4
 EXIT_CONSOLE = 99
+
 
 class MainMenuScreen(MenuScreen):
     def __init__(self):
@@ -40,7 +41,7 @@ class MainMenuScreen(MenuScreen):
                 ("Host Administration",         HOST_MENU))
 
     def handle_selection(self, page):
-        if   page is NODE_MENU:
+        if page is NODE_MENU:
             NodeMenu()
         elif page is NETWORK_MENU:
             NetworkMenu()
@@ -48,6 +49,7 @@ class MainMenuScreen(MenuScreen):
             StoragePoolMenu()
         elif page is HOST_MENU:
             HostMenu()
+
 
 def MainMenu():
     screen = MainMenuScreen()

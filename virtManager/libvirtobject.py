@@ -29,6 +29,7 @@ import libxml2
 
 from virtManager.baseclass import vmmGObject
 
+
 def _sanitize_xml(xml):
     xml = libxml2.parseDoc(xml).serialize()
     # Strip starting <?...> line
@@ -37,6 +38,7 @@ def _sanitize_xml(xml):
     if not xml.endswith("\n") and xml.count("\n"):
         xml += "\n"
     return xml
+
 
 class vmmLibvirtObject(vmmGObject):
     __gsignals__ = {

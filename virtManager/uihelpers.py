@@ -46,14 +46,17 @@ OPTICAL_IS_VALID = 5
 
 err_dial = vmmErrorDialog()
 
+
 def set_error_parent(parent):
     global err_dial
     err_dial.set_parent(parent)
     err_dial = err_dial
 
+
 def cleanup():
     global err_dial
     err_dial = None
+
 
 def spin_get_helper(widget):
     adj = widget.get_adjustment()
@@ -69,6 +72,7 @@ def spin_get_helper(widget):
 # Helpers for shared storage UI between create/addhardware #
 ############################################################
 
+
 def set_sparse_tooltip(widget):
     sparse_str = _("Fully allocating storage may take longer now, "
                    "but the OS install phase will be quicker. \n\n"
@@ -78,6 +82,7 @@ def set_sparse_tooltip(widget):
                    "Tip: Storage format qcow2 and qed "
                    "do not support full allocation.")
     widget.set_tooltip_text(sparse_str)
+
 
 def host_disk_space(conn):
     pool = util.get_default_pool(conn)
@@ -96,6 +101,7 @@ def host_disk_space(conn):
 
     return float(avail / 1024.0 / 1024.0 / 1024.0)
 
+
 def host_space_tick(conn, widget):
     try:
         max_storage = host_disk_space(conn)
@@ -112,6 +118,7 @@ def host_space_tick(conn, widget):
     widget.set_markup(hd_label)
 
     return 1
+
 
 def check_default_pool_active(topwin, conn):
     default_pool = util.get_default_pool(conn)
@@ -136,6 +143,8 @@ def check_default_pool_active(topwin, conn):
 #####################################################
 # Hardware model list building (for details, addhw) #
 #####################################################
+
+
 def build_video_combo(vm, video_dev, no_default=None):
     video_dev_model = Gtk.ListStore(str, str)
     video_dev.set_model(video_dev_model)
@@ -145,6 +154,7 @@ def build_video_combo(vm, video_dev, no_default=None):
     video_dev_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
     populate_video_combo(vm, video_dev, no_default)
+
 
 def populate_video_combo(vm, video_dev, no_default=None):
     video_dev_model = video_dev.get_model()
@@ -168,6 +178,7 @@ def populate_video_combo(vm, video_dev, no_default=None):
     if len(video_dev_model) > 0:
         video_dev.set_active(0)
 
+
 def build_sound_combo(vm, combo, no_default=False):
     dev_model = Gtk.ListStore(str)
     combo.set_model(dev_model)
@@ -190,6 +201,7 @@ def build_sound_combo(vm, combo, no_default=False):
     if len(dev_model) > 0:
         combo.set_active(0)
 
+
 def build_watchdogmodel_combo(vm, combo, no_default=False):
     ignore = vm
     dev_model = Gtk.ListStore(str)
@@ -205,6 +217,7 @@ def build_watchdogmodel_combo(vm, combo, no_default=False):
         dev_model.append([m])
     if len(dev_model) > 0:
         combo.set_active(0)
+
 
 def build_watchdogaction_combo(vm, combo, no_default=False):
     ignore = vm
@@ -222,6 +235,7 @@ def build_watchdogaction_combo(vm, combo, no_default=False):
     if len(dev_model) > 0:
         combo.set_active(0)
 
+
 def build_source_mode_combo(vm, combo):
     source_mode = Gtk.ListStore(str, str)
     combo.set_model(source_mode)
@@ -231,6 +245,7 @@ def build_source_mode_combo(vm, combo):
 
     populate_source_mode_combo(vm, combo)
     combo.set_active(0)
+
 
 def populate_source_mode_combo(vm, combo):
     ignore = vm
@@ -243,6 +258,7 @@ def populate_source_mode_combo(vm, combo):
     model.append(["bridge", "Bridge"])
     model.append(["private", "Private"])
     model.append(["passthrough", "Passthrough"])
+
 
 def build_smartcard_mode_combo(vm, combo):
     dev_model = Gtk.ListStore(str, str)
@@ -263,6 +279,7 @@ def build_smartcard_mode_combo(vm, combo):
             break
     combo.set_active(idx)
 
+
 def populate_smartcard_mode_combo(vm, combo):
     ignore = vm
     model = combo.get_model()
@@ -274,6 +291,7 @@ def populate_smartcard_mode_combo(vm, combo):
 # TODO
 #    model.append(["host-certificates", "Host Certificates"])
 
+
 def build_redir_type_combo(vm, combo):
     source_mode = Gtk.ListStore(str, str, bool)
     combo.set_model(source_mode)
@@ -284,6 +302,7 @@ def build_redir_type_combo(vm, combo):
     populate_redir_type_combo(vm, combo)
     combo.set_active(0)
 
+
 def populate_redir_type_combo(vm, combo):
     ignore = vm
     model = combo.get_model()
@@ -292,6 +311,7 @@ def populate_redir_type_combo(vm, combo):
     # [xml value, label, conn details]
     model.append(["spicevmc", "Spice channel", False])
     model.append(["tcp", "TCP", True])
+
 
 def build_netmodel_combo(vm, combo):
     dev_model = Gtk.ListStore(str, str)
@@ -303,6 +323,7 @@ def build_netmodel_combo(vm, combo):
 
     populate_netmodel_combo(vm, combo)
     combo.set_active(0)
+
 
 def populate_netmodel_combo(vm, combo):
     model = combo.get_model()
@@ -324,6 +345,7 @@ def populate_netmodel_combo(vm, combo):
         for m in mod_list:
             model.append([m, m])
 
+
 def build_cache_combo(vm, combo, no_default=False):
     ignore = vm
     dev_model = Gtk.ListStore(str, str)
@@ -340,6 +362,7 @@ def build_cache_combo(vm, combo, no_default=False):
     if not no_default:
         dev_model.append([None, "default"])
     combo.set_active(0)
+
 
 def build_io_combo(vm, combo, no_default=False):
     ignore = vm
@@ -358,6 +381,7 @@ def build_io_combo(vm, combo, no_default=False):
         dev_model.append([None, "default"])
     combo.set_active(0)
 
+
 def build_disk_bus_combo(vm, combo, no_default=False):
     ignore = vm
     dev_model = Gtk.ListStore(str, str)
@@ -370,6 +394,7 @@ def build_disk_bus_combo(vm, combo, no_default=False):
     if not no_default:
         dev_model.append([None, "default"])
     combo.set_active(-1)
+
 
 def build_vnc_keymap_combo(vm, combo, no_default=False):
     ignore = vm
@@ -396,6 +421,7 @@ def build_vnc_keymap_combo(vm, combo, no_default=False):
 # Storage format list/combo helpers #
 #####################################
 
+
 def build_storage_format_combo(vm, combo):
     dev_model = Gtk.ListStore(str)
     combo.set_model(dev_model)
@@ -414,6 +440,7 @@ def build_storage_format_combo(vm, combo):
 #######################################################################
 # Widgets for listing network device options (in create, addhardware) #
 #######################################################################
+
 
 def pretty_network_desc(nettype, source=None, netobj=None):
     if nettype == VirtualNetworkInterface.TYPE_USER:
@@ -436,6 +463,7 @@ def pretty_network_desc(nettype, source=None, netobj=None):
 
     return ret
 
+
 def init_network_list(net_list, bridge_box,
                       source_mode_box=None, source_mode_label=None,
                       vport_expander=None):
@@ -451,6 +479,7 @@ def init_network_list(net_list, bridge_box,
     net_list.pack_start(text, True)
     net_list.add_attribute(text, 'text', 2)
     net_list.add_attribute(text, 'sensitive', 3)
+
 
 def net_list_changed(net_list, bridge_box,
                      source_mode_box, source_mode_label, vport_expander):
@@ -473,6 +502,7 @@ def net_list_changed(net_list, bridge_box,
 
     bridge_box.set_property("visible", show_bridge)
 
+
 def get_network_selection(net_list, bridge_entry):
     idx = net_list.get_active()
     if idx == -1:
@@ -488,6 +518,7 @@ def get_network_selection(net_list, bridge_entry):
         net_src = bridge_entry.get_text()
 
     return net_type, net_src
+
 
 def populate_network_list(net_list, conn, show_direct_interfaces=True):
     model = net_list.get_model()
@@ -633,6 +664,7 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
     set_active(default)
     return return_warn
 
+
 def validate_network(parent, conn, nettype, devname, macaddr, model=None):
     set_error_parent(parent)
 
@@ -702,6 +734,7 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
 
     return net
 
+
 def generate_macaddr(conn):
     newmac = ""
     try:
@@ -730,6 +763,7 @@ def init_mediadev_combo(widget):
     widget.add_attribute(text, 'text', OPTICAL_LABEL)
     widget.add_attribute(text, 'sensitive', OPTICAL_IS_VALID)
 
+
 def populate_mediadev_combo(conn, widget, devtype):
     sigs = []
 
@@ -745,9 +779,11 @@ def populate_mediadev_combo(conn, widget, devtype):
 
     return sigs
 
+
 def set_mediadev_default(model):
     if len(model) == 0:
         model.append([None, _("No device present"), False, None, None, False])
+
 
 def set_row_from_object(row, obj):
     row[OPTICAL_DEV_PATH] = obj.get_path()
@@ -756,6 +792,7 @@ def set_row_from_object(row, obj):
     row[OPTICAL_DEV_KEY] = obj.get_key()
     row[OPTICAL_MEDIA_KEY] = obj.get_media_key()
     row[OPTICAL_IS_VALID] = True
+
 
 def mediadev_removed(ignore_helper, key, widget):
     model = widget.get_model()
@@ -777,6 +814,7 @@ def mediadev_removed(ignore_helper, key, widget):
     set_mediadev_default(model)
     mediadev_set_default_selection(widget)
 
+
 def mediadev_added(ignore_helper, newobj, widget, devtype):
     model = widget.get_model()
 
@@ -796,6 +834,7 @@ def mediadev_added(ignore_helper, newobj, widget, devtype):
     model.append(row)
 
     mediadev_set_default_selection(widget)
+
 
 def mediadev_media_changed(newobj, widget):
     model = widget.get_model()
@@ -818,6 +857,7 @@ def mediadev_media_changed(newobj, widget):
         idx = idx + 1
 
     mediadev_set_default_selection(widget)
+
 
 def mediadev_set_default_selection(widget):
     # Set the first active cdrom device as selected, otherwise none
@@ -895,6 +935,8 @@ def build_shutdown_button_menu(widget, shutdown_cb, reboot_cb, reset_cb,
 #####################################
 # Path permissions checker for qemu #
 #####################################
+
+
 def check_path_search_for_qemu(parent, conn, path):
     set_error_parent(parent)
 
@@ -949,6 +991,7 @@ def check_path_search_for_qemu(parent, conn, path):
 ######################################
 # Interface startmode widget builder #
 ######################################
+
 
 def build_startmode_combo(start_list):
     start_model = Gtk.ListStore(str)

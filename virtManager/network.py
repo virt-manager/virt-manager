@@ -23,6 +23,7 @@ import ipaddr
 import libxml2
 from virtManager.libvirtobject import vmmLibvirtObject
 
+
 class vmmNetwork(vmmLibvirtObject):
     @staticmethod
     def pretty_desc(forward, forwardDev):
@@ -125,7 +126,7 @@ class vmmNetwork(vmmLibvirtObject):
                     routeAddr = node.xpathEval('string(./@address)')
                     break
 
-        if goodNode == None:
+        if goodNode is None:
             for node in nodes:
                 family = node.xpathEval('string(./@family)')
                 if not family or family == 'ipv4':
@@ -189,7 +190,7 @@ class vmmNetwork(vmmLibvirtObject):
                     routeAddr = node.xpathEval('string(./@address)')
                     break
 
-        if goodNode == None:
+        if goodNode is None:
             for node in nodes:
                 family = node.xpathEval('string(./@family)')
                 if family and family == 'ipv6':

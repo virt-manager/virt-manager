@@ -25,12 +25,12 @@ import os
 parsers_path = [os.path.join(__path__[0], "parsers/")]
 
 # iter_modules is only in Python 2.5, sadly
-parser_names = [ "vmx", "virtimage", "ovf"]
+parser_names = ["vmx", "virtimage", "ovf"]
 
 if hasattr(pkgutil, "iter_modules"):
     parser_names = []
     for ignore, name, ignore in pkgutil.iter_modules(parsers_path):
-        parser_names += [ name ]
+        parser_names += [name]
 
 for name in parser_names:
     filename, pathname, desc = imp.find_module(name, parsers_path)

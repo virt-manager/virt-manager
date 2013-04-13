@@ -29,6 +29,7 @@ NEXT_BUTTON   = "next"
 CANCEL_BUTTON = "cancel"
 FINISH_BUTTON = "finish"
 
+
 class VmmTuiConfigScreen(configscreen.ConfigScreen):
     '''Enables the creation of navigable, multi-paged configuration screens.'''
 

@@ -33,6 +33,7 @@ import urlgrabber
 
 from virtManager.baseclass import vmmGObjectUI
 
+
 class vmmCreateMeter(urlgrabber.progress.BaseMeter):
     def __init__(self, asyncjob):
         # progress meter has to run asynchronously, so pass in the
@@ -94,6 +95,7 @@ class asyncJobWorker(threading.Thread):
     def run(self):
         threading.Thread.run(self)
 
+
 def cb_wrapper(callback, asyncjob, *args, **kwargs):
     try:
         callback(asyncjob, *args, **kwargs)
@@ -105,6 +107,7 @@ def cb_wrapper(callback, asyncjob, *args, **kwargs):
             return
 
         asyncjob.set_error(str(e), "".join(traceback.format_exc()))
+
 
 def _simple_async(callback, args, title, text, parent, errorintro,
                   show_progress, simplecb, errorcb):
@@ -134,12 +137,15 @@ def _simple_async(callback, args, title, text, parent, errorintro,
         parent.err.show_err(error,
                             details=details)
 
+
 def idle_wrapper(fn):
     def wrapped(self, *args, **kwargs):
         return self.idle_add(fn, self, *args, **kwargs)
     return wrapped
 
 # Displays a progress bar while executing the "callback" method.
+
+
 class vmmAsyncJob(vmmGObjectUI):
 
     @staticmethod

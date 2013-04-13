@@ -471,7 +471,7 @@ class AutoDrawer(Drawer):
 
             if toplevel.get_group():
                 # XXX: Not in pyGtk.
-                #grabbed = toplevel.get_group().get_current_grab()
+                # grabbed = toplevel.get_group().get_current_grab()
                 pass
             if not grabbed:
                 grabbed = Gtk.grab_get_current()

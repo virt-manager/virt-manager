@@ -29,6 +29,7 @@ import time
 import dbus
 import libvirt
 
+
 def do_we_have_session():
     pid = os.getpid()
     try:
@@ -126,7 +127,7 @@ def creds_dialog_main(creds):
     """
     Libvirt openAuth callback for username/password credentials
     """
-    from gi.repository import Gtk # pylint: disable=E0611
+    from gi.repository import Gtk  # pylint: disable=E0611
 
     dialog = Gtk.Dialog("Authentication required", None, 0,
                         (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,

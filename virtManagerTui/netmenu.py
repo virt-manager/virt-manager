@@ -18,17 +18,18 @@
 
 from newt_syrup.menuscreen import MenuScreen
 
-from virtManagerTui.addnetwork      import AddNetwork
-from virtManagerTui.startnetwork    import StartNetwork
-from virtManagerTui.stopnetwork     import StopNetwork
-from virtManagerTui.removenetwork   import RemoveNetwork
-from virtManagerTui.listnetworks    import ListNetworks
+from virtManagerTui.addnetwork import AddNetwork
+from virtManagerTui.startnetwork import StartNetwork
+from virtManagerTui.stopnetwork import StopNetwork
+from virtManagerTui.removenetwork import RemoveNetwork
+from virtManagerTui.listnetworks import ListNetworks
 
 ADD_NETWORK      = 1
 START_NETWORK    = 2
 STOP_NETWORK     = 3
 REMOVE_NETWORK   = 4
 LIST_NETWORKS    = 5
+
 
 class NetworkMenuScreen(MenuScreen):
     def __init__(self):
@@ -42,7 +43,7 @@ class NetworkMenuScreen(MenuScreen):
                 ("List Networks",      LIST_NETWORKS))
 
     def handle_selection(self, item):
-        if   item is ADD_NETWORK:
+        if item is ADD_NETWORK:
             AddNetwork()
         elif item is START_NETWORK:
             StartNetwork()
@@ -52,6 +53,7 @@ class NetworkMenuScreen(MenuScreen):
             RemoveNetwork()
         elif item is LIST_NETWORKS:
             ListNetworks()
+
 
 def NetworkMenu():
     screen = NetworkMenuScreen()

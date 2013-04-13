@@ -23,13 +23,14 @@ from virtManagerTui.hostlistconfigscreen import HostListConfigScreen
 SELECT_HOST_PAGE    = 1
 CONFIRM_REMOVE_PAGE = 2
 
+
 class RemoveHostConfigScreen(HostListConfigScreen):
     def __init__(self):
         HostListConfigScreen.__init__(self, "Remove Host Connection")
         self.__confirm = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is SELECT_HOST_PAGE:
+        if page is SELECT_HOST_PAGE:
             return self.get_connection_list_page(screen)
         elif page is CONFIRM_REMOVE_PAGE:
             return self.get_confirm_remove_page(screen)
@@ -44,7 +45,7 @@ class RemoveHostConfigScreen(HostListConfigScreen):
         return page is CONFIRM_REMOVE_PAGE
 
     def validate_input(self, page, errors):
-        if   page is SELECT_HOST_PAGE:
+        if page is SELECT_HOST_PAGE:
             return True
         elif page is CONFIRM_REMOVE_PAGE:
             if self.__confirm.value():
@@ -65,6 +66,7 @@ class RemoveHostConfigScreen(HostListConfigScreen):
         grid.setField(self.__confirm, 0, 0)
         return [snack.Label("Remove Host Connection"),
                 grid]
+
 
 def RemoveHost():
     screen = RemoveHostConfigScreen()

@@ -34,6 +34,7 @@ import virtinst.support as support
 from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 
+
 def compare_device(origdev, newdev, idx):
     devprops = {
         "disk"      : ["target", "bus"],
@@ -74,6 +75,7 @@ def compare_device(origdev, newdev, idx):
 
     return True
 
+
 def find_device(guest, origdev):
     devlist = guest.get_devices(origdev.virtual_device_type)
     for idx in range(len(devlist)):
@@ -82,6 +84,7 @@ def find_device(guest, origdev):
             return dev
 
     return None
+
 
 def start_job_progress_thread(vm, meter, progtext):
     current_thread = threading.currentThread()
@@ -96,7 +99,7 @@ def start_job_progress_thread(vm, meter, progtext):
             try:
                 jobinfo = vm.job_info()
                 data_total      = float(jobinfo[3])
-                #data_processed  = float(jobinfo[4])
+                # data_processed  = float(jobinfo[4])
                 data_remaining  = float(jobinfo[5])
 
                 # data_total is 0 if the job hasn't started yet
@@ -122,6 +125,7 @@ def start_job_progress_thread(vm, meter, progtext):
         t.daemon = True
         t.start()
 
+
 class vmmInspectionData(object):
     def __init__(self):
         self.type = None
@@ -133,6 +137,7 @@ class vmmInspectionData(object):
         self.product_variant = None
         self.icon = None
         self.applications = None
+
 
 class vmmDomain(vmmLibvirtObject):
     """
@@ -1298,7 +1303,7 @@ class vmmDomain(vmmLibvirtObject):
                          self.record[1]["timestamp"]))
         else:
             ret = 0.0
-        return max(ret, 0, 0) # avoid negative values at poweroff
+        return max(ret, 0, 0)  # avoid negative values at poweroff
 
     def _set_max_rate(self, record, what):
         if record[what] > self.maxRecord[what]:

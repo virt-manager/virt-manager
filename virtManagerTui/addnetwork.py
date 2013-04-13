@@ -37,6 +37,7 @@ NETWORK_TYPE_PAGE            = 6
 SELECT_PHYSICAL_NETWORK_PAGE = 7
 SUMMARY_PAGE                 = 8
 
+
 class AddNetworkConfigScreen(VmmTuiConfigScreen):
     def __init__(self):
         VmmTuiConfigScreen.__init__(self, "Create A Virtual Network Interface")
@@ -49,7 +50,7 @@ class AddNetworkConfigScreen(VmmTuiConfigScreen):
         self.__ipv4_address = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is NETWORK_NAME_PAGE:
+        if page is NETWORK_NAME_PAGE:
             return self.get_network_name_page(screen)
         elif page is IPV4_ADDRESS_PAGE:
             return self.get_ipv4_address_page(screen)
@@ -203,8 +204,8 @@ class AddNetworkConfigScreen(VmmTuiConfigScreen):
         fields = []
         fields.append(("Select the DHCP range", None))
         # XXX
-        #fields.append(("Start", self.__start_address.network))
-        #fields.append(("End", self.__end_address.network))
+        # fields.append(("Start", self.__start_address.network))
+        # fields.append(("End", self.__end_address.network))
         return [Label("Selecting The DHCP Range"),
                 self.create_grid_from_fields(fields),
                 Label("TIP: Unless you wish to reserve some addresses to allow static network"),
@@ -254,6 +255,7 @@ class AddNetworkConfigScreen(VmmTuiConfigScreen):
 
         return [Label("Ready To Create Network"),
                 self.create_grid_from_fields(fields)]
+
 
 def AddNetwork():
     screen = AddNetworkConfigScreen()

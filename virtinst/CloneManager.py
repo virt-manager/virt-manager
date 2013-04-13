@@ -46,6 +46,7 @@ from virtinst.VirtualDisk import VirtualDisk
 from virtinst import Storage
 from virtinst import util
 
+
 def _listify(val):
     """
     Return (was_val_a_list, listified_val)
@@ -54,6 +55,7 @@ def _listify(val):
         return True, val
     else:
         return False, [val]
+
 
 def generate_clone_disk_path(origpath, design, newname=None):
     origname = design.original_guest
@@ -84,6 +86,7 @@ def generate_clone_disk_path(origpath, design, newname=None):
                     lambda p: VirtualDisk.path_exists(design.original_conn, p),
                     suffix,
                     lib_collision=False)
+
 
 def generate_clone_name(design):
     # If the orig name is "foo-clone", we don't want the clone to be
@@ -393,10 +396,10 @@ class CloneDesign(object):
         """
         logging.debug("Validating original guest parameters")
 
-        if self.original_guest == None and self.original_xml == None:
+        if self.original_guest is None and self.original_xml is None:
             raise RuntimeError(_("Original guest name or xml is required."))
 
-        if self.original_guest != None and not self.original_xml:
+        if self.original_guest is not None and not self.original_xml:
             self._original_dom = self._lookup_vm(self.original_guest)
             self.original_xml = self._original_dom.XMLDesc(0)
 
@@ -435,7 +438,7 @@ class CloneDesign(object):
             raise ValueError(_("More disks to clone than new paths specified. "
                                "(%(passed)d specified, %(need)d needed") %
                                {"passed" : len(self.clone_virtual_disks),
-                                "need"   : len(self.original_virtual_disks) })
+                                "need"   : len(self.original_virtual_disks)})
 
         logging.debug("Clone paths: %s", self._clone_devices)
 
@@ -637,7 +640,7 @@ def start_duplicate(design, meter=None):
         # Define domain early to catch any xml errors before duping storage
         dom = design.original_conn.defineXML(design.clone_xml)
 
-        if design.preserve == True:
+        if design.preserve:
             _do_duplicate(design, meter)
 
     except Exception, e:
@@ -650,6 +653,8 @@ def start_duplicate(design, meter=None):
 
 # Iterate over the list of disks, and clone them using the appropriate
 # clone method
+
+
 def _do_duplicate(design, meter):
 
     # Now actually do the cloning

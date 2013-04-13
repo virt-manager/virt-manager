@@ -19,6 +19,7 @@
 import virtinst
 from virtinst import Storage
 
+
 class StorageVolumeConfig:
     def __init__(self):
         self.__pool = None

@@ -18,12 +18,14 @@ import os.path
 import unittest
 import virtinst.CapabilitiesParser as capabilities
 
+
 def build_host_feature_dict(feature_list):
     fdict = {}
     for f in feature_list:
         fdict[f] = capabilities.FEATURE_ON
 
     return fdict
+
 
 class TestCapabilities(unittest.TestCase):
 
@@ -62,74 +64,74 @@ class TestCapabilities(unittest.TestCase):
             self._compareGuest(guests[idx], caps.guests[idx])
 
     def testCapabilities1(self):
-        host = ( 'x86_64', {'vmx': capabilities.FEATURE_ON})
+        host = ('x86_64', {'vmx': capabilities.FEATURE_ON})
 
         guests = [
-            ( 'x86_64', 'xen',
-              [['xen', None, []]], {} ),
-            ( 'i686',   'xen',
-              [['xen', None, []]], { 'pae': capabilities.FEATURE_ON } ),
-            ( 'i686',   'hvm',
-              [['xen', "/usr/lib64/xen/bin/qemu-dm", ['pc', 'isapc']]], { 'pae': capabilities.FEATURE_ON | capabilities.FEATURE_OFF } ),
-            ( 'x86_64', 'hvm',
-              [['xen', "/usr/lib64/xen/bin/qemu-dm", ['pc', 'isapc']]], {} )
-        ]
+            ('x86_64', 'xen',
+              [['xen', None, []]], {}),
+            ('i686',   'xen',
+              [['xen', None, []]], {'pae': capabilities.FEATURE_ON}),
+            ('i686',   'hvm',
+              [['xen', "/usr/lib64/xen/bin/qemu-dm", ['pc', 'isapc']]], {'pae': capabilities.FEATURE_ON | capabilities.FEATURE_OFF}),
+            ('x86_64', 'hvm',
+              [['xen', "/usr/lib64/xen/bin/qemu-dm", ['pc', 'isapc']]], {})
+       ]
 
         self._testCapabilities("capabilities-xen.xml", host, guests)
 
     def testCapabilities2(self):
-        host = ( 'x86_64', {})
+        host = ('x86_64', {})
         secmodel = ('selinux', '0')
 
         guests = [
-            ( 'x86_64', 'hvm',
-              [['qemu', '/usr/bin/qemu-system-x86_64', ['pc', 'isapc']]], {} ),
-            ( 'i686',   'hvm',
-              [['qemu', '/usr/bin/qemu', ['pc', 'isapc']]], {} ),
-            ( 'mips',   'hvm',
-              [['qemu', '/usr/bin/qemu-system-mips', ['mips']]], {} ),
-            ( 'mipsel', 'hvm',
-              [['qemu', '/usr/bin/qemu-system-mipsel', ['mips']]], {} ),
-            ( 'sparc',  'hvm',
-              [['qemu', '/usr/bin/qemu-system-sparc', ['sun4m']]], {} ),
-            ( 'ppc',    'hvm',
+            ('x86_64', 'hvm',
+              [['qemu', '/usr/bin/qemu-system-x86_64', ['pc', 'isapc']]], {}),
+            ('i686',   'hvm',
+              [['qemu', '/usr/bin/qemu', ['pc', 'isapc']]], {}),
+            ('mips',   'hvm',
+              [['qemu', '/usr/bin/qemu-system-mips', ['mips']]], {}),
+            ('mipsel', 'hvm',
+              [['qemu', '/usr/bin/qemu-system-mipsel', ['mips']]], {}),
+            ('sparc',  'hvm',
+              [['qemu', '/usr/bin/qemu-system-sparc', ['sun4m']]], {}),
+            ('ppc',    'hvm',
               [['qemu', '/usr/bin/qemu-system-ppc',
-               ['g3bw', 'mac99', 'prep']]], {} ),
-        ]
+               ['g3bw', 'mac99', 'prep']]], {}),
+       ]
 
         self._testCapabilities("capabilities-qemu.xml", host, guests, secmodel)
 
     def testCapabilities3(self):
-        host = ( 'i686', {})
+        host = ('i686', {})
 
         guests = [
-            ( 'i686',   'hvm',
+            ('i686',   'hvm',
               [['qemu', '/usr/bin/qemu', ['pc', 'isapc']],
-               ['kvm', '/usr/bin/qemu-kvm', ['pc', 'isapc']]], {} ),
-            ( 'x86_64', 'hvm',
-              [['qemu', '/usr/bin/qemu-system-x86_64', ['pc', 'isapc']]], {} ),
-            ( 'mips',   'hvm',
-              [['qemu', '/usr/bin/qemu-system-mips', ['mips']]], {} ),
-            ( 'mipsel', 'hvm',
-              [['qemu', '/usr/bin/qemu-system-mipsel', ['mips']]], {} ),
-            ( 'sparc',  'hvm',
-              [['qemu', '/usr/bin/qemu-system-sparc', ['sun4m']]], {} ),
-            ( 'ppc',    'hvm',
+               ['kvm', '/usr/bin/qemu-kvm', ['pc', 'isapc']]], {}),
+            ('x86_64', 'hvm',
+              [['qemu', '/usr/bin/qemu-system-x86_64', ['pc', 'isapc']]], {}),
+            ('mips',   'hvm',
+              [['qemu', '/usr/bin/qemu-system-mips', ['mips']]], {}),
+            ('mipsel', 'hvm',
+              [['qemu', '/usr/bin/qemu-system-mipsel', ['mips']]], {}),
+            ('sparc',  'hvm',
+              [['qemu', '/usr/bin/qemu-system-sparc', ['sun4m']]], {}),
+            ('ppc',    'hvm',
               [['qemu', '/usr/bin/qemu-system-ppc',
-               ['g3bw', 'mac99', 'prep']]], {} ),
-        ]
+               ['g3bw', 'mac99', 'prep']]], {}),
+       ]
 
         self._testCapabilities("capabilities-kvm.xml", host, guests)
 
     def testCapabilities4(self):
-        host = ( 'i686',
-                 { 'pae': capabilities.FEATURE_ON | capabilities.FEATURE_OFF })
+        host = ('i686',
+                 {'pae': capabilities.FEATURE_ON | capabilities.FEATURE_OFF})
 
         guests = [
-            ( 'i686', 'linux',
+            ('i686', 'linux',
               [['test', None, []]],
-              { 'pae': capabilities.FEATURE_ON | capabilities.FEATURE_OFF } ),
-        ]
+              {'pae': capabilities.FEATURE_ON | capabilities.FEATURE_OFF}),
+       ]
 
         self._testCapabilities("capabilities-test.xml", host, guests)
 
@@ -137,7 +139,7 @@ class TestCapabilities(unittest.TestCase):
         guests = [
             ("x86_64", "exe", [["lxc", "/usr/libexec/libvirt_lxc", []]], {}),
             ("i686", "exe", [["lxc", "/usr/libexec/libvirt_lxc", []]], {}),
-        ]
+       ]
 
         self._testCapabilities("capabilities-lxc.xml",
                                (None, None), guests)

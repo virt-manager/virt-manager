@@ -39,6 +39,7 @@ CONNECTIONS = {CONNECTION_LOCAL    : "Local",
                CONNECTION_SSL      : "Remote SSL/TLS with x509 certificate",
                CONNECTION_SSH      : "Remote tunnel over SSH"}
 
+
 class AddHostConfigScreen(VmmTuiConfigScreen):
     def __init__(self):
         VmmTuiConfigScreen.__init__(self, "Add A Remote Host")
@@ -81,8 +82,8 @@ class AddHostConfigScreen(VmmTuiConfigScreen):
             conn     = self.__connection.getSelection()
             hostname = self.__hostname.value()
 
-            if   hv is HYPERVISOR_XEN:
-                if   conn is CONNECTION_LOCAL:
+            if hv is HYPERVISOR_XEN:
+                if conn is CONNECTION_LOCAL:
                     url = "xen:///"
                 elif conn is CONNECTION_KERBEROS:
                     url = "xen+tcp:///" + hostname + "/"
@@ -91,7 +92,7 @@ class AddHostConfigScreen(VmmTuiConfigScreen):
                 elif conn is CONNECTION_SSH:
                     url = "xen+ssh:///" + hostname + "/"
             elif hv is HYPERVISOR_KVM:
-                if   conn is CONNECTION_LOCAL:
+                if conn is CONNECTION_LOCAL:
                     url = "qemu:///system"
                 elif conn is CONNECTION_KERBEROS:
                     url = "qemu+tcp://" + hostname + "/system"
@@ -147,6 +148,7 @@ class AddHostConfigScreen(VmmTuiConfigScreen):
         grid.setField(snack.Label(label), 1, 3, anchorLeft=1)
         return [snack.Label("Confirm Connection"),
                 grid]
+
 
 def AddHost():
     screen = AddHostConfigScreen()

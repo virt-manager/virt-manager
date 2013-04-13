@@ -20,6 +20,7 @@
 import snack
 from virtManagerTui.domainlistconfigscreen import DomainListConfigScreen
 
+
 class RemoveDomainConfigScreen(DomainListConfigScreen):
     LIST_PAGE     = 1
     CONFIRM_PAGE  = 2
@@ -30,7 +31,7 @@ class RemoveDomainConfigScreen(DomainListConfigScreen):
         self.__confirm_remove = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is self.LIST_PAGE:
+        if page is self.LIST_PAGE:
             return self.get_domain_list_page(screen)
         elif page is self.CONFIRM_PAGE:
             return self.get_confirm_page(screen)
@@ -38,21 +39,21 @@ class RemoveDomainConfigScreen(DomainListConfigScreen):
             return self.get_remove_page(screen)
 
     def page_has_next(self, page):
-        if   page is self.LIST_PAGE:
+        if page is self.LIST_PAGE:
             return self.has_selectable_domains()
         elif page is self.CONFIRM_PAGE:
             return True
         return False
 
     def page_has_back(self, page):
-        if   page is self.CONFIRM_PAGE:
+        if page is self.CONFIRM_PAGE:
             return True
         elif page is self.REMOVE_PAGE:
             return True
         return False
 
     def get_back_page(self, page):
-        if   page is self.CONFIRM_PAGE:
+        if page is self.CONFIRM_PAGE:
             return self.LIST_PAGE
         elif page is self.REMOVE_PAGE:
             return self.LIST_PAGE
@@ -88,6 +89,7 @@ class RemoveDomainConfigScreen(DomainListConfigScreen):
         grid = snack.Grid(1, 1)
         grid.setField(snack.Label("%s has been removed." % self.get_selected_domain().get_name()), 0, 0)
         return [grid]
+
 
 def RemoveDomain():
     screen = RemoveDomainConfigScreen()

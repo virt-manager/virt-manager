@@ -20,6 +20,7 @@
 
 import dbus.service
 
+
 class vmmRemote(dbus.service.Object):
     def __init__(self, engine, bus_name, object_path="/com/redhat/virt/manager"):
         dbus.service.Object.__init__(self, bus_name, object_path)

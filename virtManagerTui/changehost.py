@@ -24,6 +24,7 @@ from virtManagerTui.hostlistconfigscreen import HostListConfigScreen
 CONNECTION_LIST_PAGE = 1
 CONNECTED_PAGE       = 2
 
+
 class ChangeHostConfigScreen(HostListConfigScreen):
     def __init__(self):
         HostListConfigScreen.__init__(self, "")
@@ -32,13 +33,13 @@ class ChangeHostConfigScreen(HostListConfigScreen):
         return "Currently: %s" % self.get_libvirt().get_url()
 
     def get_elements_for_page(self, screen, page):
-        if   page is CONNECTION_LIST_PAGE:
+        if page is CONNECTION_LIST_PAGE:
             return self.get_connection_list_page(screen)
         elif page is CONNECTED_PAGE:
             return self.get_connected_page(screen)
 
     def process_input(self, page):
-        if   page is CONNECTION_LIST_PAGE:
+        if page is CONNECTION_LIST_PAGE:
             logging.info("Changing libvirt connection to %s",
                          self.get_selected_connection())
             self.get_libvirt().open_connection(self.get_selected_connection())
@@ -59,6 +60,7 @@ class ChangeHostConfigScreen(HostListConfigScreen):
     def get_connected_page(self, screen):
         ignore = screen
         return [snack.Label("Connected to %s" % self.get_selected_connection())]
+
 
 def ChangeHost():
     screen = ChangeHostConfigScreen()

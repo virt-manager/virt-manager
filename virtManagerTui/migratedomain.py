@@ -24,6 +24,7 @@ LIST_DOMAINS  = 1
 SELECT_TARGET = 2
 CONFIRM_PAGE  = 3
 
+
 class MigrateDomainConfigScreen(DomainListConfigScreen):
     def __init__(self):
         DomainListConfigScreen.__init__(self, "Migrate Virtual Machine")
@@ -32,7 +33,7 @@ class MigrateDomainConfigScreen(DomainListConfigScreen):
         self.__targets = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_DOMAINS:
+        if page is LIST_DOMAINS:
             return self.get_domain_list_page(screen)
         elif page is SELECT_TARGET:
             return self.get_target_page(screen)
@@ -40,7 +41,7 @@ class MigrateDomainConfigScreen(DomainListConfigScreen):
             return self.get_confirm_page(screen)
 
     def page_has_next(self, page):
-        if   page is LIST_DOMAINS:
+        if page is LIST_DOMAINS:
             return self.has_selectable_domains()
         else:
             return page < CONFIRM_PAGE
@@ -52,7 +53,7 @@ class MigrateDomainConfigScreen(DomainListConfigScreen):
         return page is CONFIRM_PAGE
 
     def validate_input(self, page, errors):
-        if   page is LIST_DOMAINS:
+        if page is LIST_DOMAINS:
             return self.get_selected_domain() is not None
         elif page is SELECT_TARGET:
             if self.__targets.current() is None:
@@ -83,6 +84,7 @@ class MigrateDomainConfigScreen(DomainListConfigScreen):
         grid = snack.Grid(1, 1)
         grid.setField(self.__confirm, 0, 0)
         return [grid]
+
 
 def MigrateDomain():
     screen = MigrateDomainConfigScreen()

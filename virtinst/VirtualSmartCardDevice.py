@@ -22,16 +22,17 @@
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst.XMLBuilderDomain import _xml_property
 
+
 class VirtualSmartCardDevice(VirtualDevice):
 
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_SMARTCARD
 
     # Default models list
     MODE_DEFAULT = "passthrough"
-    _modes = [ "passthrough", "host-certificates", "host" ]
+    _modes = ["passthrough", "host-certificates", "host"]
 
     TYPE_DEFAULT = "tcp"
-    _types = [ "tcp", "spicevmc", None ]
+    _types = ["tcp", "spicevmc", None]
 
     def __init__(self, conn, mode=MODE_DEFAULT,
                  parsexml=None, parsexmlnode=None, caps=None):

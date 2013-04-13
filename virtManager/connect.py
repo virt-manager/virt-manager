@@ -39,12 +39,14 @@ CONN_SSH = 0
 CONN_TCP = 1
 CONN_TLS = 2
 
+
 def current_user():
     try:
         import getpass
         return getpass.getuser()
     except:
         return ""
+
 
 def default_conn_user(conn):
     if conn == CONN_SSH:
@@ -219,7 +221,7 @@ class vmmConnect(vmmGObjectUI):
         # Call method to create new browser, and get back an object path for it.
         interface = -1              # physical interface to use? -1 is unspec
         protocol  = 0               # 0 = IPv4, 1 = IPv6, -1 = Unspecified
-        service   = '_libvirt._tcp' # Service name to poll for
+        service   = '_libvirt._tcp'  # Service name to poll for
         flags     = 0               # Extra option flags
         domain    = ""              # Domain to browse in. NULL uses default
         bpath = self.server.ServiceBrowserNew(interface, protocol, service,

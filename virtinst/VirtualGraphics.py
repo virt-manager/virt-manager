@@ -25,6 +25,7 @@ from virtinst.VirtualDevice import VirtualDevice
 from virtinst import support
 from virtinst.XMLBuilderDomain import _xml_property
 
+
 def _get_mode_prop(channel_type):
     # pylint: disable=W0212
     xpath = "./channel[@name='%s']/@mode" % channel_type
@@ -33,6 +34,7 @@ def _get_mode_prop(channel_type):
     def set_mode(s, val):
         s._channels[channel_type] = val
     return _xml_property(get_mode, set_mode, xpath=xpath)
+
 
 class VirtualGraphics(VirtualDevice):
 
@@ -165,7 +167,7 @@ class VirtualGraphics(VirtualDevice):
         return self._keymap
     def set_keymap(self, val):
         # At this point, 'None' is a valid value
-        if val == None:
+        if val is None:
             self._keymap = None
             return
 
@@ -179,7 +181,7 @@ class VirtualGraphics(VirtualDevice):
             val = util.default_keymap()
         elif len(val) > 16:
             raise ValueError(_("Keymap must be less than 16 characters"))
-        elif re.match("^[a-zA-Z0-9_-]*$", val) == None:
+        elif re.match("^[a-zA-Z0-9_-]*$", val) is None:
             raise ValueError(_("Keymap can only contain alphanumeric, "
                                "'_', or '-' characters"))
 
@@ -269,8 +271,8 @@ class VirtualGraphics(VirtualDevice):
         doautoport = (canautoport and
                       (port in [None, -1] and
                        tlsPort in [None, -1]))
-        portxml     = (port != None and (" port='%d'" % port) or "")
-        tlsportxml  = (tlsPort != None and (" tlsPort='%d'" % tlsPort) or "")
+        portxml     = (port is not None and (" port='%d'" % port) or "")
+        tlsportxml  = (tlsPort is not None and (" tlsPort='%d'" % tlsPort) or "")
         autoportxml = (doautoport and " autoport='yes'" or "")
 
         keymapxml   = (keymap and (" keymap='%s'" % keymap) or "")
@@ -279,7 +281,7 @@ class VirtualGraphics(VirtualDevice):
         passwdValidToxml = (passwdValidTo and
                             (" passwdValidTo='%s'" % passwdValidTo) or "")
 
-        xauthxml    = (xauth and  (" xauth='%s'" % xauth) or "")
+        xauthxml    = (xauth and (" xauth='%s'" % xauth) or "")
         displayxml  = (display and (" display='%s'" % display) or "")
 
         socketxml   = (socket and (" socket='%s'" % socket) or "")

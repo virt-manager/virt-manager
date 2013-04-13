@@ -20,6 +20,7 @@
 from virtinst import XMLBuilderDomain
 from virtinst.XMLBuilderDomain import _xml_property
 
+
 class Seclabel(XMLBuilderDomain.XMLBuilderDomain):
     """
     Class for generating <seclabel> XML
@@ -36,9 +37,9 @@ class Seclabel(XMLBuilderDomain.XMLBuilderDomain):
     SECLABEL_MODEL_SELINUX = "selinux"
     SECLABEL_MODEL_DAC = "dac"
     SECLABEL_MODEL_NONE = "none"
-    SECLABEL_MODELS = [ SECLABEL_MODEL_SELINUX,
+    SECLABEL_MODELS = [SECLABEL_MODEL_SELINUX,
                         SECLABEL_MODEL_DAC,
-                        SECLABEL_MODEL_NONE ]
+                        SECLABEL_MODEL_NONE]
 
     _dumpxml_xpath = "/domain/seclabel"
     def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):

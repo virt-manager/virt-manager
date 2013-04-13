@@ -20,12 +20,13 @@
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst.XMLBuilderDomain import _xml_property
 
+
 class VirtualAudio(VirtualDevice):
 
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_AUDIO
 
     MODEL_DEFAULT = "default"
-    MODELS = [ "es1370", "sb16", "pcspk", "ac97", "ich6", MODEL_DEFAULT ]
+    MODELS = ["es1370", "sb16", "pcspk", "ac97", "ich6", MODEL_DEFAULT]
 
     def __init__(self, model=None, conn=None,
                  parsexml=None, parsexmlnode=None, caps=None):
@@ -36,7 +37,7 @@ class VirtualAudio(VirtualDevice):
         if self._is_parse():
             return
 
-        if model == None:
+        if model is None:
             model = self.MODEL_DEFAULT
         self.model = model
 

@@ -137,20 +137,20 @@ test_files = {
 # Format:
 #
 # "appname" {
-#  "categoryfoo" : { Some descriptive test catagory name (e.g. storage)
+#  "categoryfoo" : {Some descriptive test catagory name (e.g. storage)
 #
 #    "args" : Args to be applied to all invocations in category
 #
-#    "valid" : { # Argument strings that should succeed
+#    "valid" : {# Argument strings that should succeed
 #      "--option --string --number1" # Some option string to test. The
 #          resulting cmdstr would be:
 #          $ appname globalargs categoryfoo_args --option --string --number1
-#    }
+#   }
 #
-#    "invalid" : { # Argument strings that should fail
+#    "invalid" : {# Argument strings that should fail
 #      "--opt1 --opt2",
-#    }
-#  } # End categoryfoo
+#   }
+# } # End categoryfoo
 #
 #}
 
@@ -253,7 +253,7 @@ args_dict = {
         "--disk /dev/hda",
         # Building 'default' pool
         "--disk pool=default,size=.00001",
-      ],
+     ],
 
       "invalid": [
         # Nonexisting file, size too big
@@ -288,8 +288,8 @@ args_dict = {
         "--disk %(DIR)s,device=cdrom",
         # Unknown driver name and type options (as of 1.0.0)
         "--disk %(EXISTIMG1)s,driver_name=foobar,driver_type=foobaz",
-      ]
-     }, # category "storage"
+     ]
+    },  # category "storage"
 
      "install" : {
       "args": "--nographics --noautoconsole --nodisks",
@@ -331,7 +331,7 @@ args_dict = {
         "--hvm --pxe --boot cdrom,fd,hd,network,menu=off",
         # Boot w/o other install option
         "--hvm --boot network,hd,menu=on",
-      ],
+     ],
 
       "invalid": [
         # Bogus virt-type
@@ -352,8 +352,8 @@ args_dict = {
         "--hvm --cdrom %(EXISTIMG1)s --extra-args console=ttyS0",
         # initrd-inject with manual kernel/initrd
         "--hvm --boot kernel=%(TREEDIR)s/pxeboot/vmlinuz,initrd=%(TREEDIR)s/pxeboot/initrd.img --initrd-inject virt-install",
-      ],
-     }, # category "install"
+     ],
+    },  # category "install"
 
      "graphics": {
       "args": "--noautoconsole --nodisks --pxe",
@@ -379,7 +379,7 @@ args_dict = {
         "--vnc --keymap local",
         # --keymap none
         "--vnc --keymap none",
-      ],
+     ],
 
       "invalid": [
         # Invalid keymap
@@ -394,9 +394,9 @@ args_dict = {
         "--graphics vnc,foobar=baz",
         # mixing old and new
         "--graphics vnc --vnclisten 1.2.3.4",
-      ],
+     ],
 
-     }, # category "graphics"
+    },  # category "graphics"
 
      "smartcard": {
       "args": "--noautoconsole --nodisks --pxe",
@@ -411,7 +411,7 @@ args_dict = {
         # --smartcard mode with type
         # XXX Requires implementing more opts
         #"--smartcard passthrough,type=tcp",
-      ],
+     ],
 
       "invalid": [
         # Missing argument
@@ -422,9 +422,9 @@ args_dict = {
         "--smartcard passthrough,type=foo",
         # --smartcard bogus
         "--smartcard host,foobar=baz",
-      ],
+     ],
 
-     }, # category "smartcard"
+    },  # category "smartcard"
 
     "char" : {
      "args": "--hvm --nographics --noautoconsole --nodisks --pxe",
@@ -452,7 +452,7 @@ args_dict = {
         "--console pty,target_type=virtio",
         # --console xen
         "--console pty,target_type=xen",
-     ],
+    ],
      "invalid" : [
         # Bogus device type
         "--parallel foobah",
@@ -466,9 +466,9 @@ args_dict = {
         "--channel pty,target_type=guestfwd",
         # --console unknown type
         "--console pty,target_type=abcd",
-     ],
+    ],
 
-     }, # category 'char'
+    },  # category 'char'
 
      "cpuram" : {
       "args" : "--hvm --nographics --noautoconsole --nodisks --pxe",
@@ -498,7 +498,7 @@ args_dict = {
         "--cpu foobar,+x2apic,+x2apicagain,-distest,forbid=foo,forbid=bar,disable=distest2,optional=opttest,require=reqtest,match=strict,vendor=meee",
         # Simple --numatune
         "--numatune 1,2,3,5-7,^6",
-      ],
+     ],
 
       "invalid" : [
         # Bogus cpuset
@@ -517,9 +517,9 @@ args_dict = {
         "--cpu host",
         # Non-escaped numatune
         "--numatune 1-3,4,mode=strict",
-      ],
+     ],
 
-    }, # category 'cpuram'
+   },  # category 'cpuram'
 
      "misc": {
       "args": "--nographics --noautoconsole",
@@ -571,7 +571,7 @@ args_dict = {
         "--hvm --nodisks --pxe --memballoon virtio",
         # --memballoon disabled
         "--hvm --nodisks --pxe --memballoon none",
-      ],
+     ],
 
       "invalid": [
         # Positional arguments error
@@ -592,7 +592,7 @@ args_dict = {
         "--hvm --nodisks --pxe --print-xml",
         # Busted --memballoon
         "--hvm --nodisks --pxe --memballoon foobar",
-      ],
+     ],
 
       "compare": [
         # No arguments
@@ -624,9 +624,9 @@ args_dict = {
         ("--connect %(DEFAULTURI)s --hvm --nodisks --pxe --cpuset auto "
          "--vcpus 2",
          "cpuset-auto"),
-      ],
+     ],
 
-     }, # category "misc"
+    },  # category "misc"
 
      "network": {
       "args": "--pxe --nographics --noautoconsole --nodisks",
@@ -652,7 +652,7 @@ args_dict = {
         "--network=user,model=e1000",
         # several networks
         "--network=network:default,model=e1000 --network=user,model=virtio,mac=22:22:33:44:55:AF",
-      ],
+     ],
       "invalid": [
         # Nonexistent network
         "--network=FOO",
@@ -662,9 +662,9 @@ args_dict = {
         "--network user --bridge foo0",
         # Colliding macaddr
         "--mac 22:22:33:12:34:AB",
-      ],
+     ],
 
-     }, # category "network"
+    },  # category "network"
 
      "controller": {
       "args": "--noautoconsole --nodisks --pxe",
@@ -674,7 +674,7 @@ args_dict = {
         "--controller usb,model=ich9-ehci1,address=0:0:4.7,index=0",
         "--controller usb,model=ich9-ehci1,address=0:0:4.7,index=1,master=0",
         "--controller usb2",
-      ],
+     ],
 
       "invalid": [
         # Missing argument
@@ -685,9 +685,9 @@ args_dict = {
         "--controller usb,model=ich9-ehci1,address=0:0:4.7,index=bar,master=foo",
         # --bogus
         "--controller host,foobar=baz",
-      ],
+     ],
 
-     }, # category "controller"
+    },  # category "controller"
 
      "hostdev" : {
       "args": "--noautoconsole --nographics --nodisks --pxe",
@@ -697,7 +697,7 @@ args_dict = {
         "--host-device usb_device_781_5151_2004453082054CA1BEEE",
         # Many hostdev parsing types
         "--host-device 001.003 --host-device 15:0.1 --host-device 2:15:0.2 --host-device 0:15:0.3 --host-device 0x0781:0x5151 --host-device 1d6b:2",
-      ],
+     ],
 
       "invalid" : [
         # Unsupported hostdev type
@@ -706,8 +706,8 @@ args_dict = {
         "--host-device foobarhostdev",
         # Parseable hostdev, but unknown digits
         "--host-device 300:400",
-      ],
-     }, # category "hostdev"
+     ],
+    },  # category "hostdev"
 
      "redirdev" : {
       "args": "--noautoconsole --nographics --nodisks --pxe",
@@ -717,7 +717,7 @@ args_dict = {
         "--redirdev usb,type=tcp,server=localhost:4000",
         # Different host server
         "--redirdev usb,type=tcp,server=127.0.0.1:4002",
-      ],
+     ],
 
       "invalid" : [
         # Missing argument
@@ -734,8 +734,8 @@ args_dict = {
         "--redirdev usb,type=tcp,server=localhost:",
         # Missing host
         "--redirdev usb,type=tcp,server=:399",
-      ],
-     }, # category "redirdev"
+     ],
+    },  # category "redirdev"
 
      "remote" : {
       "args": "--connect %(REMOTEURI)s --nographics --noautoconsole",
@@ -751,15 +751,15 @@ args_dict = {
         "--pxe --disk vol=%(POOL)s/%(VOL)s",
         # Creating storage on managed pool
         "--pxe --disk pool=%(POOL)s,size=.04",
-      ],
+     ],
       "invalid": [
         # Use of --location
         "--nodisks --location /tmp",
         # Trying to use unmanaged storage
         "--file %(EXISTIMG1)s --pxe",
-      ],
+     ],
 
-     }, # category "remote"
+    },  # category "remote"
 
 
 "kvm" : {
@@ -770,7 +770,7 @@ args_dict = {
     "--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --sound",
     # F14 Directory tree URL install with extra-args
     "--os-variant fedora14 --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --sound"
-  ],
+ ],
 
   "invalid" : [
     # Unknown machine type
@@ -779,7 +779,7 @@ args_dict = {
     "--nodisks --boot network --arch mips --virt-type kvm",
     # Invalid arch/virt combo
     "--nodisks --boot network --paravirt --arch mips",
-  ],
+ ],
 
   "compare" : [
     # F14 Directory tree URL install with extra-args
@@ -803,9 +803,9 @@ args_dict = {
     # exotic arch + machine type
     ("--os-variant fedora14 --nodisks --boot fd --graphics sdl --arch sparc --machine SS-20",
      "qemu-sparc"),
-  ],
+ ],
 
-}, # category "kvm"
+},  # category "kvm"
 
 "xen" : {
   "args": "--connect %(XENURI)s --noautoconsole",
@@ -817,10 +817,10 @@ args_dict = {
     "--nodisks --boot hd --paravirt",
     # 32 on 64 xen
     "--nodisks --boot hd --paravirt --arch i686",
-  ],
+ ],
 
   "invalid" : [
-  ],
+ ],
 
   "compare" : [
     # Xen default
@@ -836,7 +836,7 @@ args_dict = {
     ("--connect %(XENIA64URI)s --disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt", "xen-ia64-pv"),
     # ia64 hvm
     ("--connect %(XENIA64URI)s --disk %(EXISTIMG1)s --location %(TREEDIR)s --hvm", "xen-ia64-hvm"),
-  ],
+ ],
 
 },
 
@@ -850,11 +850,11 @@ args_dict = {
     ("", "default"),
     ("--filesystem /source,/", "fs-default"),
     ("--init /usr/bin/httpd", "manual-init"),
-  ],
+ ],
 
-}, # lxc
+},  # lxc
 
-}, # virt-install
+},  # virt-install
 
 
 
@@ -888,7 +888,7 @@ args_dict = {
         "--original-xml %(CLONE_NOEXIST_XML)s --file %(EXISTIMG1)s --preserve",
         # Overwriting existing VM
         "-o test -n test-many-devices --replace",
-      ],
+     ],
 
       "invalid": [
         # Positional arguments error
@@ -913,8 +913,8 @@ args_dict = {
         "--original-xml %(CLONE_DISK_XML)s --file %(ROIMG)s --file %(ROIMG)s --force",
         # XML w/ managed storage, specify RO non existent
         "--original-xml %(CLONE_DISK_XML)s --file %(ROIMG)s --file %(ROIMGNOEXIST)s --force",
-      ]
-     }, # category "general"
+     ]
+    },  # category "general"
 
     "misc" : {
       "args": "",
@@ -928,21 +928,21 @@ args_dict = {
         "--original-xml %(CLONE_STORAGE_XML)s --auto-clone",
         # Auto flag, actual VM, skip state check
         "-o test-for-clone --auto-clone --clone-running",
-      ],
+     ],
 
       "invalid" : [
         # Just the auto flag
         "--auto-clone"
         # Auto flag, actual VM, without state skip
         "-o test-for-clone --auto-clone",
-      ],
+     ],
 
       "compare" : [
         ("--connect %(KVMURI)s -o test-for-clone --auto-clone --clone-running", "clone-auto1"),
         ("-o test-clone-simple --name newvm --auto-clone --clone-running",
          "clone-auto2"),
-      ],
-    }, # category "misc"
+     ],
+   },  # category "misc"
 
      "remote" : {
       "args": "--connect %(REMOTEURI)s",
@@ -952,15 +952,15 @@ args_dict = {
         "-o test --auto-clone",
         # Auto flag w/ managed storage,
         "--original-xml %(CLONE_STORAGE_XML)s --auto-clone",
-      ],
+     ],
       "invalid": [
         # Auto flag w/ storage,
         "--original-xml %(CLONE_DISK_XML)s --auto-clone",
-      ],
-    }, # categort "remote"
+     ],
+   },  # categort "remote"
 
 
-}, # app 'virt-clone'
+},  # app 'virt-clone'
 
 
 
@@ -982,13 +982,13 @@ args_dict = {
         "--name foobar --ram 64 --os-variant winxp",
         # OS variant 'none'
         "--name foobar --ram 64 --os-variant none",
-      ],
+     ],
 
       "invalid": [
         # Out of bounds index
         "--boot 10",
-      ],
-     }, # category 'general'
+     ],
+    },  # category 'general'
 
     "graphics" : {
       "args" : "--name test-image --boot 0 %(IMAGE_XML)s",
@@ -998,10 +998,10 @@ args_dict = {
         "--sdl",
         # VNC w/ lots of options
         "--vnc --keymap ja --vncport 5950 --vnclisten 1.2.3.4",
-      ],
+     ],
 
       "invalid": [],
-    },
+   },
 
     "misc": {
      "args" : "",
@@ -1009,13 +1009,13 @@ args_dict = {
       "valid" : [
         # Colliding VM name w/ --replace
         "--name test --replace %(IMAGE_XML)s",
-      ],
+     ],
       "invalid" : [
         # No name specified, and no prompt flag
         "%(IMAGE_XML)s",
         # Colliding VM name without --replace
         "--name test %(IMAGE_XML)s",
-      ],
+     ],
 
       "compare" : [
         ("--name foobar --ram 64 --os-variant winxp --boot 0 %(IMAGE_XML)s",
@@ -1026,9 +1026,9 @@ args_dict = {
         ("--name foobar --ram 64 --boot 0 "
          "%(IMAGE_NOGFX_XML)s",
          "image-nogfx"),
-      ]
+     ]
 
-     }, # category 'misc'
+    },  # category 'misc'
 
      "network": {
       "args": "--name test-image --boot 0 --nographics %(IMAGE_XML)s",
@@ -1044,18 +1044,18 @@ args_dict = {
         "--network=user,model=e1000",
         # several networks
         "--network=network:default,model=e1000 --network=user,model=virtio",
-      ],
+     ],
       "invalid": [
         # Nonexistent network
         "--network=FOO",
         # Invalid mac
         "--network=network:default --mac 1234",
-      ],
+     ],
 
-     }, # category "network"
+    },  # category "network"
 
 
-  }, # app 'virt-image'
+ },  # app 'virt-image'
 
 
   "virt-convert" : {
@@ -1079,25 +1079,27 @@ args_dict = {
         "%(VMX_IMG1)s -o vmx -D none %(VIRTCONV_OUT)s",
         # virt-image with exotic formats specified
         "%(VC_IMG2)s -o vmx -D vmdk %(VIRTCONV_OUT)s"
-     ],
+    ],
 
      "invalid": [
         # virt-image to virt-image with invalid format
         "%(VC_IMG1)s -o virt-image -D foobarfmt %(VIRTCONV_OUT)s",
         # virt-image to ovf (has no output formatter)
         "%(VC_IMG1)s -o ovf %(VIRTCONV_OUT)s",
-     ],
+    ],
 
      "compare": [
         # virt-image to default (virt-image) w/ no convert
         ("%(VC_IMG1)s %(VIRTCONV_OUT)s", "convert-default"),
-     ],
-    }, # category 'misc'
+    ],
+   },  # category 'misc'
 
-  }, # app 'virt-convert'
+ },  # app 'virt-convert'
 }
 
 _conns = {}
+
+
 def open_conn(uri):
     #if uri not in _conns:
     #    _conns[uri] = virtinst.cli.getConnection(uri)
@@ -1107,6 +1109,7 @@ def open_conn(uri):
 ######################
 # Test class helpers #
 ######################
+
 
 class Command(object):
     """
@@ -1380,6 +1383,7 @@ newidx = 0
 curtest = 0
 old_bridge = virtinst.util.default_bridge
 
+
 def setup():
     """
     Create initial test files/dirs
@@ -1406,6 +1410,7 @@ def cleanup():
 
     virtinst.util.default_bridge = old_bridge
 
+
 class CLITests(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         unittest.TestCase.__init__(self, *args, **kwargs)
@@ -1421,6 +1426,7 @@ class CLITests(unittest.TestCase):
         # Only run this on the last test
         if curtest == newidx:
             cleanup()
+
 
 def maketest(cmd):
     def cmdtemplate(self, c):

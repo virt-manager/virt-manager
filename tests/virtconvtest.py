@@ -30,6 +30,7 @@ virtimage_output = BASE + "/virtimage_output"
 
 ovf_input = BASE + "/ovf_input"
 
+
 class TestVirtConv(unittest.TestCase):
 
     def setUp(self):
@@ -43,7 +44,7 @@ class TestVirtConv(unittest.TestCase):
             raise AssertionError("find_parser_by_file for '%s' returned "
                                  "wrong parser type.\n"
                                  "Expected: %s\n"
-                                 "Received: %s\n" % \
+                                 "Received: %s\n" %
                                  (infile, in_type,
                                  str((not inp) and str(inp) or inp.name)))
 

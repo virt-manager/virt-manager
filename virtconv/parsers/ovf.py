@@ -71,7 +71,7 @@ DEVICE_DISK = "17"
 DEVICE_GRAPHICS = "24"
 
 # AllocationUnits mapping can be found in Appendix C here:
-#http://www.dmtf.org/standards/documents/CIM/DSP0004.pdf
+# http://www.dmtf.org/standards/documents/CIM/DSP0004.pdf
 
 
 
@@ -82,6 +82,7 @@ def register_namespace(ctx):
     ctx.xpathRegisterNs("vssd", "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_VirtualSystemSettingData")
     ctx.xpathRegisterNs("vmw", "http://www.vmware.com/schema/ovf")
 
+
 def node_list(node):
     child_list = []
     child = node.children
@@ -90,6 +91,7 @@ def node_list(node):
         child = child.next
     return child_list
 
+
 def get_child_content(parent_node, child_name):
 
     for node in node_list(parent_node):
@@ -97,6 +99,7 @@ def get_child_content(parent_node, child_name):
             return node.content
 
     return None
+
 
 def convert_alloc_val(ignore, val):
     # XXX: This is a hack, but should we really have to decode
@@ -117,6 +120,7 @@ def convert_alloc_val(ignore, val):
 
     return int(val)
 
+
 def _xml_wrapper(xml, func):
     doc = None
     ctx = None
@@ -135,6 +139,7 @@ def _xml_wrapper(xml, func):
             ctx.xpathFreeContext()
     return result
 
+
 def get_xml_path(xml, path=None, func=None):
     """
     Return the content from the passed xml xpath, or return the result
@@ -145,10 +150,10 @@ def get_xml_path(xml, path=None, func=None):
 
         if path:
             ret = ctx.xpathEval(path)
-            if ret != None:
+            if ret is not None:
                 if type(ret) == list:
                     if len(ret) >= 1:
-                        #result = ret[0].content
+                        # result = ret[0].content
                         result = ret
                 else:
                     result = ret
@@ -161,6 +166,7 @@ def get_xml_path(xml, path=None, func=None):
         return result
 
     return _xml_wrapper(xml, _get_xml_path)
+
 
 def _parse_hw_section(vm, nodes, file_refs, disk_section):
     vm.nr_vcpus = 0
@@ -201,7 +207,7 @@ def _parse_hw_section(vm, nodes, file_refs, disk_section):
             instance_id = get_child_content(device_node, "InstanceID")
             disk_buses[instance_id] = "scsi"
 
-        elif devtype in [ DEVICE_DISK ]:
+        elif devtype in [DEVICE_DISK]:
             bus_id = get_child_content(device_node, "Parent")
             path = get_child_content(device_node, "HostResource")
 
@@ -251,6 +257,7 @@ def _parse_hw_section(vm, nodes, file_refs, disk_section):
         else:
             desc = get_child_content(device_node, "Description")
             logging.debug("Unhandled device type=%s desc=%s", devtype, desc)
+
 
 class ovf_parser(formats.parser):
     """
@@ -303,7 +310,7 @@ class ovf_parser(formats.parser):
         def xpath_str(path):
             ret = ctx.xpathEval(path)
             result = None
-            if ret != None:
+            if ret is not None:
                 if type(ret) == list:
                     if len(ret) >= 1:
                         result = ret[0].content

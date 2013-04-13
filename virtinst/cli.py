@@ -83,6 +83,7 @@ class VirtStreamHandler(logging.StreamHandler):
         except:
             self.handleError(record)
 
+
 class VirtOptionParser(optparse.OptionParser):
     '''Subclass to get print_help to work properly with non-ascii text'''
 
@@ -112,6 +113,7 @@ class VirtOptionParser(optparse.OptionParser):
 
         file.write(encodedhelp)
 
+
 class VirtHelpFormatter(optparse.IndentedHelpFormatter):
     """
     Subclass the default help formatter to allow printing newline characters
@@ -137,6 +139,7 @@ class VirtHelpFormatter(optparse.IndentedHelpFormatter):
             ret.extend(self.oldwrap(line, width))
         return ret
 
+
 def setupParser(usage=None):
     parse_class = VirtOptionParser
 
@@ -145,8 +148,10 @@ def setupParser(usage=None):
                          version=cliconfig.__version__)
     return parser
 
+
 def earlyLogging():
     logging.basicConfig(level=logging.DEBUG, format='%(message)s')
+
 
 def setupLogging(appname, debug=False, do_quiet=False):
     global quiet
@@ -223,8 +228,10 @@ def setupLogging(appname, debug=False, do_quiet=False):
 
 _virtinst_uri_magic = "__virtinst_test__"
 
+
 def is_virtinst_test_uri(uri):
     return uri and uri.startswith(_virtinst_uri_magic)
+
 
 def open_test_uri(uri):
     """
@@ -313,6 +320,7 @@ def open_test_uri(uri):
 
     return conn
 
+
 def getConnection(uri):
     if (uri and not User.current().has_priv(User.PRIV_CREATE_DOMAIN, uri)):
         fail(_("Must be root to create Xen guests"))
@@ -339,12 +347,14 @@ def open_connection(uri):
     return libvirt.openAuth(uri, [valid_auth_options, authcb, authcb_data],
                             open_flags)
 
+
 def do_creds(creds, cbdata):
     try:
         return _do_creds(creds, cbdata)
     except:
         logging.debug("Error in creds callback.", exc_info=True)
         raise
+
 
 def _do_creds(creds, cbdata_ignore):
 
@@ -360,10 +370,12 @@ def _do_creds(creds, cbdata_ignore):
     return _do_creds_authname(creds)
 
 # PolicyKit auth
+
+
 def _do_creds_polkit(action):
     if os.getuid() == 0:
         logging.debug("Skipping policykit check as root")
-        return 0 # Success
+        return 0  # Success
     logging.debug("Doing policykit for %s", action)
 
     import subprocess
@@ -404,6 +416,8 @@ def _do_creds_polkit(action):
     return 0
 
 # SASL username/pass auth
+
+
 def _do_creds_authname(creds):
     retindex = 4
 
@@ -441,23 +455,29 @@ def fail(msg, do_exit=True):
     if do_exit:
         _fail_exit()
 
+
 def print_stdout(msg, do_force=False):
     if do_force or not quiet:
         print msg
+
 
 def print_stderr(msg):
     logging.debug(msg)
     print >> sys.stderr, msg
 
+
 def _fail_exit():
     sys.exit(1)
+
 
 def nice_exit():
     print_stdout(_("Exiting at user request."))
     sys.exit(0)
 
+
 def virsh_start_cmd(guest):
     return ("virsh --connect %s start %s" % (guest.get_uri(), guest.name))
+
 
 def install_fail(guest):
     virshcmd = virsh_start_cmd(guest)
@@ -468,6 +488,7 @@ def install_fail(guest):
           "  %s\n"
           "otherwise, please restart your installation.") % virshcmd)
     sys.exit(1)
+
 
 def build_default_pool(guest):
 
@@ -494,6 +515,7 @@ def build_default_pool(guest):
         raise RuntimeError(_("Couldn't create default storage pool '%s': %s") %
                              (DEFAULT_POOL_PATH, str(e)))
 
+
 def partition(string, sep):
     if not string:
         return (None, None, None)
@@ -514,13 +536,16 @@ def set_force(val=True):
     global force
     force = val
 
+
 def set_prompt(prompt=True):
     # Set whether we allow prompts, or fail if a prompt pops up
     global doprompt
     doprompt = prompt
 
+
 def is_prompt():
     return doprompt
+
 
 def yes_or_no_convert(s):
     if s is None:
@@ -533,11 +558,13 @@ def yes_or_no_convert(s):
         return False
     return None
 
+
 def yes_or_no(s):
     ret = yes_or_no_convert(s)
-    if ret == None:
+    if ret is None:
         raise ValueError(_("A yes or no response is required"))
     return ret
+
 
 def prompt_for_input(noprompt_err, prompt="", val=None, failed=False):
     if val is not None:
@@ -553,6 +580,7 @@ def prompt_for_input(noprompt_err, prompt="", val=None, failed=False):
     print_stdout(prompt + " ", do_force=True)
     sys.stdout.flush()
     return sys.stdin.readline().strip()
+
 
 def prompt_for_yes_or_no(warning, question):
     """catches yes_or_no errors and ensures a valid bool return"""
@@ -575,6 +603,7 @@ def prompt_for_yes_or_no(warning, question):
             logging.error(e)
             continue
     return res
+
 
 def prompt_loop(prompt_txt, noprompt_err, passed_val, obj, param_name,
                 err_txt="%s", func=None):
@@ -761,6 +790,7 @@ def disk_prompt(conn, origpath, origsize, origsparse,
 name_missing    = _("--name is required")
 ram_missing     = _("--ram amount in MB is required")
 
+
 def get_name(name, guest, image_name=None):
     prompt_txt = _("What is the name of your virtual machine?")
     err_txt = name_missing
@@ -768,6 +798,7 @@ def get_name(name, guest, image_name=None):
     if name is None:
         name = image_name
     prompt_loop(prompt_txt, err_txt, name, guest, "name")
+
 
 def get_memory(memory, guest, image_memory=None):
     prompt_txt = _("How much RAM should be allocated (in megabytes)?")
@@ -785,12 +816,14 @@ def get_memory(memory, guest, image_memory=None):
     prompt_loop(prompt_txt, err_txt, memory, guest, "memory",
                 func=check_memory)
 
+
 def get_uuid(uuid, guest):
     if uuid:
         try:
             guest.uuid = uuid
         except ValueError, e:
             fail(e)
+
 
 def get_vcpus(guest, vcpus, check_cpu, image_vcpus=None):
     """
@@ -821,6 +854,7 @@ def get_vcpus(guest, vcpus, check_cpu, image_vcpus=None):
             if not prompt_for_yes_or_no(msg, askmsg):
                 nice_exit()
 
+
 def get_cpuset(guest, cpuset, memory):
     conn = guest.conn
     if cpuset and cpuset != "auto":
@@ -839,6 +873,7 @@ def get_cpuset(guest, cpuset, memory):
 
     return
 
+
 def _default_network_opts(guest):
     opts = ""
     if User.current().has_priv(User.PRIV_CREATE_NETWORK, guest.get_uri()):
@@ -848,6 +883,7 @@ def _default_network_opts(guest):
         opts = "user"
 
     return opts
+
 
 def digest_networks(guest, options, numnics=1):
     macs     = listify(options.mac)
@@ -876,6 +912,7 @@ def digest_networks(guest, options, numnics=1):
 
     return networks, macs
 
+
 def get_networks(guest, networks, macs):
     for idx in range(len(networks)):
         mac = macs[idx]
@@ -886,6 +923,7 @@ def get_networks(guest, networks, macs):
             guest.add_device(dev)
         except Exception, e:
             fail(_("Error in network device parameters: %s") % str(e))
+
 
 def set_os_variant(guest, distro_type, distro_variant):
     if not distro_type and not distro_variant:
@@ -898,6 +936,7 @@ def set_os_variant(guest, distro_type, distro_variant):
 
     if (distro_variant and str(distro_variant).lower() != "none"):
         guest.set_os_variant(distro_variant)
+
 
 def digest_graphics(guest, options, default_override=None):
     vnc = options.vnc
@@ -951,6 +990,7 @@ def digest_graphics(guest, options, default_override=None):
     logging.debug("--graphics compat generated: %s", optstr)
     return [optstr]
 
+
 def get_graphics(guest, graphics):
     for optstr in graphics:
         try:
@@ -960,6 +1000,7 @@ def get_graphics(guest, graphics):
 
         if dev:
             guest.add_device(dev)
+
 
 def get_video(guest, video_models=None):
     video_models = video_models or []
@@ -971,6 +1012,7 @@ def get_video(guest, video_models=None):
     for model in video_models:
         guest.add_device(parse_video(guest, model))
 
+
 def get_sound(old_sound_bool, sound_opts, guest):
     if not sound_opts:
         if old_sound_bool:
@@ -980,12 +1022,14 @@ def get_sound(old_sound_bool, sound_opts, guest):
     for opts in listify(sound_opts):
         guest.add_device(parse_sound(guest, opts))
 
+
 def get_hostdevs(hostdevs, guest):
     if not hostdevs:
         return
 
     for devname in hostdevs:
         guest.add_device(parse_hostdev(guest, devname))
+
 
 def get_smartcard(guest, sc_opts):
     for sc in listify(sc_opts):
@@ -997,6 +1041,7 @@ def get_smartcard(guest, sc_opts):
         if dev:
             guest.add_device(dev)
 
+
 def get_controller(guest, sc_opts):
     for sc in listify(sc_opts):
         try:
@@ -1007,6 +1052,7 @@ def get_controller(guest, sc_opts):
         if dev:
             guest.add_device(dev)
 
+
 def get_redirdev(guest, sc_opts):
     for sc in listify(sc_opts):
         try:
@@ -1016,6 +1062,7 @@ def get_redirdev(guest, sc_opts):
 
         if dev:
             guest.add_device(dev)
+
 
 def get_memballoon(guest, sc_opts):
     for sc in listify(sc_opts):
@@ -1031,9 +1078,11 @@ def get_memballoon(guest, sc_opts):
 # Common CLI option/group   #
 #############################
 
+
 def add_connect_option(parser):
     parser.add_option("", "--connect", metavar="URI", dest="connect",
                       help=_("Connect to hypervisor with libvirt URI"))
+
 
 def vcpu_cli_options(grp, backcompat=True):
     grp.add_option("", "--vcpus", dest="vcpus",
@@ -1049,6 +1098,7 @@ def vcpu_cli_options(grp, backcompat=True):
     if backcompat:
         grp.add_option("", "--check-cpu", action="store_true",
                        dest="check_cpu", help=optparse.SUPPRESS_HELP)
+
 
 def graphics_option_group(parser):
     """
@@ -1071,6 +1121,7 @@ def graphics_option_group(parser):
                     help=optparse.SUPPRESS_HELP)
     return vncg
 
+
 def network_option_group(parser):
     """
     Register common network options for virt-install and virt-image
@@ -1087,12 +1138,14 @@ def network_option_group(parser):
 
     return netg
 
+
 def add_net_option(devg):
     devg.add_option("-w", "--network", dest="network", action="append",
       help=_("Configure a guest network interface. Ex:\n"
              "--network bridge=mybr0\n"
              "--network network=my_libvirt_virtual_net\n"
              "--network network=mynet,model=virtio,mac=00:11..."))
+
 
 def add_device_options(devg):
     devg.add_option("", "--controller", dest="controller", action="append",
@@ -1126,6 +1179,7 @@ def add_device_options(devg):
                     help=_("Configure a guest memballoon device. Ex:\n"
                            "--memballoon model=virtio"))
 
+
 def add_gfx_option(devg):
     devg.add_option("", "--graphics", dest="graphics", action="append",
       help=_("Configure guest display settings. Ex:\n"
@@ -1133,6 +1187,7 @@ def add_gfx_option(devg):
              "--graphics spice,port=5901,tlsport=5902\n"
              "--graphics none\n"
              "--graphics vnc,password=foobar,port=5910,keymap=ja"))
+
 
 def add_fs_option(devg):
     devg.add_option("", "--filesystem", dest="filesystems", action="append",
@@ -1145,26 +1200,29 @@ def add_fs_option(devg):
 # (for options like --disk, --network, etc. #
 #############################################
 
+
 def get_opt_param(opts, dictnames, val=None):
     if type(dictnames) is not list:
         dictnames = [dictnames]
 
     for key in dictnames:
         if key in opts:
-            if val == None:
+            if val is None:
                 val = opts[key]
             del(opts[key])
 
     return val
 
+
 def _build_set_param(inst, opts):
     def _set_param(paramname, keyname, val=None):
         val = get_opt_param(opts, keyname, val)
-        if val == None:
+        if val is None:
             return
         setattr(inst, paramname, val)
 
     return _set_param
+
 
 def parse_optstr_tuples(optstr, compress_first=False):
     """
@@ -1195,6 +1253,7 @@ def parse_optstr_tuples(optstr, compress_first=False):
 
     return optlist
 
+
 def parse_optstr(optstr, basedict=None, remove_first=None,
                  compress_first=False):
     """
@@ -1222,7 +1281,7 @@ def parse_optstr(optstr, basedict=None, remove_first=None,
         if len(optlist) < len(paramlist):
             break
 
-        if optlist[idx][1] == None:
+        if optlist[idx][1] is None:
             optlist[idx] = (paramlist[idx], optlist[idx][0])
 
     for opt, val in optlist:
@@ -1264,6 +1323,7 @@ def parse_numatune(guest, optstring):
 # --vcpu parsing #
 ##################
 
+
 def parse_vcpu(guest, optstring, default_vcpus=None):
     """
     Helper to parse --vcpu string
@@ -1301,6 +1361,7 @@ def parse_vcpu(guest, optstring, default_vcpus=None):
 # --cpu parsing #
 #################
 
+
 def parse_cpu(guest, optstring):
     default_dict = {
         "force": [],
@@ -1308,7 +1369,7 @@ def parse_cpu(guest, optstring):
         "optional": [],
         "disable": [],
         "forbid": [],
-    }
+   }
     opts = parse_optstr(optstring,
                         basedict=default_dict,
                         remove_first="model")
@@ -1355,6 +1416,7 @@ def parse_cpu(guest, optstring):
 # --boot parsing #
 ##################
 
+
 def parse_boot(guest, optstring):
     """
     Helper to parse --boot string
@@ -1365,7 +1427,7 @@ def parse_boot(guest, optstring):
 
     def set_param(paramname, dictname, val=None):
         val = get_opt_param(opts, dictname, val)
-        if val == None:
+        if val is None:
             return
 
         if paramname == "loader":
@@ -1385,7 +1447,7 @@ def parse_boot(guest, optstring):
         else:
             menu = yes_or_no_convert(menustr)
 
-        if menu == None:
+        if menu is None:
             fail(_("--boot menu must be 'on' or 'off'"))
 
     set_param("enable_bootmenu", "menu", menu)
@@ -1413,6 +1475,7 @@ def parse_boot(guest, optstring):
 ######################
 # --security parsing #
 ######################
+
 
 def parse_security(guest, security):
     seclist = listify(security)
@@ -1477,6 +1540,7 @@ def parse_security(guest, security):
 
 _disk_counter = itertools.count()
 
+
 def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
     abspath = None
     volinst = None
@@ -1529,6 +1593,7 @@ def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
         volobj = virtinst.VirtualDisk.lookup_vol_object(guest.conn, voltuple)
 
     return abspath, volinst, volobj
+
 
 def parse_disk(guest, optstr, dev=None):
     """
@@ -1640,6 +1705,7 @@ def parse_disk(guest, optstr, dev=None):
 # --network parsing #
 #####################
 
+
 def parse_network(guest, optstring, dev=None, mac=None):
     # Handle old format of bridge:foo instead of bridge=foo
     for prefix in ["network", "bridge"]:
@@ -1685,6 +1751,7 @@ def parse_network(guest, optstring, dev=None, mac=None):
 # --graphics parsing #
 ######################
 
+
 def parse_graphics(guest, optstring, dev=None):
     if optstring is None:
         return None
@@ -1713,7 +1780,7 @@ def parse_graphics(guest, optstring, dev=None):
 
     def set_param(paramname, dictname, val=None):
         val = get_opt_param(opts, dictname, val)
-        if val == None:
+        if val is None:
             return
 
         if paramname == "keymap":
@@ -1736,6 +1803,7 @@ def parse_graphics(guest, optstring, dev=None):
 #######################
 # --controller parsing #
 #######################
+
 
 def parse_controller(guest, optstring, dev=None):
     if optstring is None:
@@ -1771,6 +1839,7 @@ def parse_controller(guest, optstring, dev=None):
 # --smartcard parsing #
 #######################
 
+
 def parse_smartcard(guest, optstring, dev=None):
     if optstring is None:
         return None
@@ -1796,6 +1865,7 @@ def parse_smartcard(guest, optstring, dev=None):
 ######################
 # --redirdev parsing #
 ######################
+
 
 def parse_redirdev(guest, optstring, dev=None):
     if optstring is None:
@@ -1833,6 +1903,7 @@ def parse_redirdev(guest, optstring, dev=None):
 # --watchdog parsing #
 ######################
 
+
 def parse_watchdog(guest, optstring, dev=None):
     # Peel the model type off the front
     opts = parse_optstr(optstring, remove_first="model")
@@ -1842,7 +1913,7 @@ def parse_watchdog(guest, optstring, dev=None):
 
     def set_param(paramname, dictname, val=None):
         val = get_opt_param(opts, dictname, val)
-        if val == None:
+        if val is None:
             return
 
         setattr(dev, paramname, val)
@@ -1858,6 +1929,7 @@ def parse_watchdog(guest, optstring, dev=None):
 ########################
 # --memballoon parsing #
 ########################
+
 
 def parse_memballoon(guest, optstring, dev=None):
     if optstring is None:
@@ -1883,12 +1955,19 @@ def parse_memballoon(guest, optstring, dev=None):
 
 def parse_serial(guest, optstring, dev=None):
     return _parse_char(guest, optstring, "serial", dev)
+
+
 def parse_parallel(guest, optstring, dev=None):
     return _parse_char(guest, optstring, "parallel", dev)
+
+
 def parse_console(guest, optstring, dev=None):
     return _parse_char(guest, optstring, "console", dev)
+
+
 def parse_channel(guest, optstring, dev=None):
     return _parse_char(guest, optstring, "channel", dev)
+
 
 def _parse_char(guest, optstring, dev_type, dev=None):
     """
@@ -1904,14 +1983,14 @@ def _parse_char(guest, optstring, dev_type, dev=None):
 
     def set_param(paramname, dictname, val=None):
         val = get_opt_param(opts, dictname, val)
-        if val == None:
+        if val is None:
             return
 
         if not dev.supports_property(paramname):
             raise ValueError(_("%(devtype)s type '%(chartype)s' does not "
                                 "support '%(optname)s' option.") %
                                 {"devtype" : dev_type, "chartype": char_type,
-                                 "optname" : dictname} )
+                                 "optname" : dictname})
         setattr(dev, paramname, val)
 
     def parse_host(key):
@@ -1959,7 +2038,7 @@ def parse_filesystem(guest, optstring, dev=None):
 
     def set_param(paramname, dictname, val=None):
         val = get_opt_param(opts, dictname, val)
-        if val == None:
+        if val is None:
             return
 
         setattr(dev, paramname, val)
@@ -1977,6 +2056,7 @@ def parse_filesystem(guest, optstring, dev=None):
 ###################
 # --video parsing #
 ###################
+
 
 def parse_video(guest, optstr, dev=None):
     opts = {"model" : optstr}
@@ -1996,6 +2076,7 @@ def parse_video(guest, optstr, dev=None):
 # --soundhw parsing #
 #####################
 
+
 def parse_sound(guest, optstr, dev=None):
     opts = {"model" : optstr}
 
@@ -2013,6 +2094,7 @@ def parse_sound(guest, optstr, dev=None):
 #####################
 # --hostdev parsing #
 #####################
+
 
 def parse_hostdev(guest, optstr, dev=None):
     # XXX: Need to implement this for virt-xml

@@ -20,13 +20,14 @@
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst.XMLBuilderDomain import _xml_property
 
+
 class VirtualVideoDevice(VirtualDevice):
 
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_VIDEO
 
     # Default models list
     MODEL_DEFAULT = "default"
-    _model_types = [ "cirrus", "vga", "vmvga", "xen", "qxl", MODEL_DEFAULT]
+    _model_types = ["cirrus", "vga", "vmvga", "xen", "qxl", MODEL_DEFAULT]
 
     @staticmethod
     def pretty_model(model):

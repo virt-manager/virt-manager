@@ -20,12 +20,13 @@
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst.XMLBuilderDomain import _xml_property
 
+
 class VirtualWatchdog(VirtualDevice):
 
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_WATCHDOG
 
     MODEL_DEFAULT = "default"
-    MODELS = [ "i6300esb", "ib700", MODEL_DEFAULT ]
+    MODELS = ["i6300esb", "ib700", MODEL_DEFAULT]
 
     ACTION_DEFAULT  = "default"
     ACTION_SHUTDOWN = "shutdown"

@@ -27,6 +27,7 @@ class LiveCDInstallerException(Exception):
     def __init__(self, msg):
         Exception.__init__(self, msg)
 
+
 class LiveCDInstaller(Installer.Installer):
 
     # LiveCD specific methods/overwrites

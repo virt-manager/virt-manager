@@ -65,9 +65,10 @@ def drop_tty():
     # tty. This prevents libvirt's SSH tunnels from prompting
     # for user input if SSH keys/agent aren't configured.
     if os.fork() != 0:
-        os._exit(0) # pylint: disable=W0212
+        os._exit(0)  # pylint: disable=W0212
 
     os.setsid()
+
 
 def drop_stdio():
     # We close STDIN/OUT/ERR since they're generally spewing
@@ -84,6 +85,7 @@ def drop_stdio():
     os.open(os.devnull, os.O_RDWR)
     os.dup2(0, 1)
     os.dup2(0, 2)
+
 
 def parse_commandline():
     optParser = optparse.OptionParser(version=cliconfig.__version__,
@@ -152,6 +154,7 @@ def launch_specific_window(engine, show, uri, uuid):
     elif show == 'summary':
         engine.show_host_summary(uri)
 
+
 def _conn_state_changed(conn, engine, show, uri, uuid):
     if conn.state == conn.STATE_DISCONNECTED:
         return True
@@ -162,6 +165,8 @@ def _conn_state_changed(conn, engine, show, uri, uuid):
     return True
 
 # maps --show-* to engine (ie local instance) methods
+
+
 def show_engine(engine, show, uri, uuid, no_conn_auto):
     conn = None
 
@@ -182,12 +187,15 @@ def show_engine(engine, show, uri, uuid, no_conn_auto):
         engine.autostart_conns()
 
 # maps --show-* to remote manager (ie dbus call) methods
+
+
 def show_remote(managerObj, show, uri, uuid):
     # Do this regardless
     managerObj.show_manager()
 
     if show or uri or uuid:
         launch_specific_window(managerObj, show, uri, uuid)
+
 
 def dbus_config(engine):
     """
@@ -221,6 +229,8 @@ def dbus_config(engine):
 # Generic OptionParser callback for all --show-* options
 # This routine stores UUID to options.uuid for all --show-* options
 # where is metavar="UUID" and also sets options.show
+
+
 def opt_show_cb(option, opt_str, value, parser):
     if option.metavar == "UUID":
         setattr(parser.values, "uuid", value)
@@ -237,7 +247,7 @@ def main():
     origargs = " ".join(sys.argv[:])
 
     try:
-        from gi.repository import Gtk # pylint: disable=E0611
+        from gi.repository import Gtk  # pylint: disable=E0611
     except:
         # Don't just let the exception raise here. abrt reports bugs
         # when users mess up su/sudo and DISPLAY isn't set. Printing

@@ -177,12 +177,12 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
 
         # Set up the connection, since it is fundamental for other init
         conn = conn or connection
-        if conn == None:
+        if conn is None:
             logging.debug("No conn passed to Guest, opening URI '%s'",
                           hypervisorURI)
             conn = self._open_uri(hypervisorURI)
 
-        if conn == None:
+        if conn is None:
             raise RuntimeError(_("Unable to connect to hypervisor, aborting "
                                  "installation!"))
 
@@ -295,7 +295,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         util.validate_name(_("Guest"), val, lencheck=True)
 
         do_fail = False
-        if self.replace != True:
+        if self.replace is not True:
             try:
                 self.conn.lookupByName(val)
                 do_fail = True
@@ -314,7 +314,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
     def get_memory(self):
         return self._memory
     def set_memory(self, val):
-        if (type(val) is not type(1) or val <= 0):
+        if not isinstance(val, int) or val <= 0:
             raise ValueError(_("Memory value must be an integer greater "
                                "than 0"))
         self._memory = val
@@ -332,7 +332,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
     def get_maxmemory(self):
         return self._maxmemory
     def set_maxmemory(self, val):
-        if (type(val) is not type(1) or val <= 0):
+        if not isinstance(val, int) or val <= 0:
             raise ValueError(_("Max Memory value must be an integer greater "
                                "than 0"))
         self._maxmemory = val
@@ -675,7 +675,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
             "smartcard" : virtinst.VirtualSmartCardDevice,
             "redirdev"  : virtinst.VirtualRedirDevice,
             "memballoon": virtinst.VirtualMemballoon,
-        }
+       }
 
         # Hand off all child element parsing to relevant classes
         caps = self._get_caps()
@@ -1081,7 +1081,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         Remove the existing VM with the same name if requested, or error
         if there is a collision.
         """
-        if force == None:
+        if force is None:
             force = self.replace
 
         vm = None
@@ -1169,7 +1169,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         else:
             meter_label = _("Starting domain...")
 
-        if meter == None:
+        if meter is None:
             meter = progress.BaseMeter()
         meter.start(size=None, text=meter_label)
 
@@ -1316,7 +1316,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
                 disk.device == VirtualDisk.DEVICE_DISK):
                 disk.bus = disk_bus
 
-        if self.clock.offset == None:
+        if self.clock.offset is None:
             self.clock.offset = self._lookup_osdict_key("clock")
 
         if features["acpi"] is None:
@@ -1326,7 +1326,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         if features["pae"] is None and self._get_caps():
             features["pae"] = self._get_caps().support_pae()
 
-        if (self.installer.machine == None and
+        if (self.installer.machine is None and
             self._get_caps().host.arch == "ppc64"):
             self.installer.machine = "pseries"
 
@@ -1335,7 +1335,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         for d in devlist_func(VirtualDevice.VIRTUAL_DEV_DISK):
             if (d.type == VirtualDisk.TYPE_FILE
                 and util.is_blktap_capable()
-                and d.driver_name == None):
+                and d.driver_name is None):
                 d.driver_name = VirtualDisk.DRIVER_TAP
 
         for d in devlist_func(VirtualDevice.VIRTUAL_DEV_INPUT):
@@ -1488,7 +1488,7 @@ def _wait_for_domain(conn, name):
     # domain ID or b) it's been 5 seconds.  this is so that
     # we can try to gracefully handle domain restarting failures
     dom = None
-    for ignore in range(1, int(5 / .25)): # 5 seconds, .25 second sleeps
+    for ignore in range(1, int(5 / .25)):  # 5 seconds, .25 second sleeps
         try:
             dom = conn.lookupByName(name)
             if dom and dom.ID() != -1:

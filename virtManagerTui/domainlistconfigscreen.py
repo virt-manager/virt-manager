@@ -20,6 +20,7 @@ import snack
 
 from virtManagerTui.vmmconfigscreen import VmmTuiConfigScreen
 
+
 class DomainListConfigScreen(VmmTuiConfigScreen):
     '''Provides a base class for all config screens that require a domain list.'''
 
@@ -29,7 +30,7 @@ class DomainListConfigScreen(VmmTuiConfigScreen):
         self.__domain_list = None
 
     def get_domain_list_page(self, screen, defined=True, created=True):
-        ignore = screen # pylint ignore since it is not used here
+        ignore = screen  # pylint ignore since it is not used here
         domuuids = self.get_libvirt().list_domains(defined, created)
         self.__has_domains = bool(domuuids)
         result = None

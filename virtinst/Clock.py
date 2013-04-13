@@ -20,6 +20,7 @@
 from virtinst import XMLBuilderDomain
 from virtinst.XMLBuilderDomain import _xml_property
 
+
 class Clock(XMLBuilderDomain.XMLBuilderDomain):
     """
     Class for generating <clock> XML

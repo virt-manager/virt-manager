@@ -20,6 +20,7 @@
 from virtinst import Installer
 from virtinst.VirtualDisk import VirtualDisk
 
+
 class ImportInstaller(Installer.Installer):
     """
     Create a Guest around an existing disk device, and perform no 'install'

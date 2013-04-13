@@ -18,6 +18,7 @@
 
 import libuser
 
+
 class UserWorker:
     '''Provides APIs for creating, modifying and deleting user accounts.'''
     def __init__(self):

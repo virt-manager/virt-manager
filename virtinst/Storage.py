@@ -68,9 +68,11 @@ DEFAULT_MPATH_TARGET = "/dev/mapper"
 VIR_STORAGE_VOL_FILE = 0
 VIR_STORAGE_VOL_BLOCK = 1
 
+
 def is_create_vol_from_supported(conn):
     return support.check_pool_support(conn,
                                       support.SUPPORT_STORAGE_CREATEVOLFROM)
+
 
 def _parse_pool_source_list(source_xml):
     def source_parser(node):
@@ -107,6 +109,7 @@ def _parse_pool_source_list(source_xml):
         return ret_list
 
     return util.parse_node_helper(source_xml, "sources", source_parser)
+
 
 class StorageObject(object):
     """
@@ -179,7 +182,7 @@ class StorageObject(object):
 
     # Validation helper functions
     def _validate_path(self, path):
-        if type(path) is not type("str") or not path.startswith("/"):
+        if not isinstance(path, str) or not path.startswith("/"):
             raise ValueError(_("'%s' is not an absolute path." % path))
 
     def _check_name_collision(self, name):
@@ -224,7 +227,7 @@ class StorageObject(object):
 
         xml = "%s" % (root_xml) + \
               """  <name>%s</name>\n""" % (self.name) + \
-              """%(stor_xml)s""" % { "stor_xml" : self._get_storage_xml() } + \
+              """%(stor_xml)s""" % {"stor_xml" : self._get_storage_xml()} + \
               """</%s>\n""" % (self.object_type)
         return xml
 
@@ -398,7 +401,7 @@ class StoragePool(StorageObject):
     def get_host(self):
         return self._host
     def set_host(self, val):
-        if type(val) is not type("str"):
+        if not isinstance(val, str):
             raise ValueError(_("Host name must be a string"))
         self._host = val
 
@@ -525,6 +528,7 @@ class DirectoryPool(StoragePool):
     def _get_source_xml(self):
         return ""
 
+
 class FilesystemPool(StoragePool):
     """
     Create a formatted partition based storage pool
@@ -534,8 +538,8 @@ class FilesystemPool(StoragePool):
         return FileVolume
     get_volume_class = staticmethod(get_volume_class)
 
-    formats = [ "auto", "ext2", "ext3", "ext4", "ufs", "iso9660", "udf",
-                "gfs", "gfs2", "vfat", "hfs+", "xfs" ]
+    formats = ["auto", "ext2", "ext3", "ext4", "ufs", "iso9660", "udf",
+                "gfs", "gfs2", "vfat", "hfs+", "xfs"]
 
     # Register applicable property methods from parent class
     perms = property(StorageObject.get_perms, StorageObject.set_perms)
@@ -586,6 +590,7 @@ class FilesystemPool(StoragePool):
               "    <device path='%s'/>\n" % escape(self.source_path)
         return xml
 
+
 class NetworkFilesystemPool(StoragePool):
     """
     Create a network mounted filesystem storage pool
@@ -595,7 +600,7 @@ class NetworkFilesystemPool(StoragePool):
         return FileVolume
     get_volume_class = staticmethod(get_volume_class)
 
-    formats = [ "auto", "nfs", "glusterfs"]
+    formats = ["auto", "nfs", "glusterfs"]
 
     # Register applicable property methods from parent class
     source_path = property(StoragePool.get_source_path,
@@ -648,6 +653,7 @@ class NetworkFilesystemPool(StoragePool):
               """    <host name="%s"/>\n""" % self.host + \
               """    <dir path="%s"/>\n""" % escape(self.source_path)
         return xml
+
 
 class LogicalPool(StoragePool):
     """
@@ -750,6 +756,7 @@ class LogicalPool(StoragePool):
         return StoragePool.install(self, meter=meter, create=create,
                                    build=build, autostart=autostart)
 
+
 class DiskPool(StoragePool):
     """
     Create a storage pool from a physical disk
@@ -767,7 +774,7 @@ class DiskPool(StoragePool):
                            doc=_("Root location for identifying new storage"
                                  " volumes."))
 
-    formats = [ "auto", "bsd", "dos", "dvh", "gpt", "mac", "pc98", "sun" ]
+    formats = ["auto", "bsd", "dos", "dvh", "gpt", "mac", "pc98", "sun"]
 
     def __init__(self, conn, name, source_path=None, target_path=None,
                  format="auto", uuid=None):
@@ -814,6 +821,7 @@ class DiskPool(StoragePool):
                                "formatting disk device."))
         return StoragePool.install(self, meter=meter, create=create,
                                    build=build, autostart=autostart)
+
 
 class iSCSIPool(StoragePool):
     """
@@ -884,6 +892,7 @@ class iSCSIPool(StoragePool):
 
         return xml
 
+
 class SCSIPool(StoragePool):
     """
     Create a SCSI based storage pool
@@ -927,6 +936,7 @@ class SCSIPool(StoragePool):
             raise RuntimeError(_("Adapter name is required"))
         xml = """    <adapter name="%s"/>\n""" % escape(self.source_path)
         return xml
+
 
 class MultipathPool(StoragePool):
     """
@@ -992,7 +1002,7 @@ class StorageVolume(StorageObject):
                                                      conn=conn)
         self._pool = None
         self.pool = pool
-        poolconn = self.pool._conn # pylint: disable=W0212
+        poolconn = self.pool._conn  # pylint: disable=W0212
 
         StorageObject.__init__(self, object_type=StorageObject.TYPE_VOLUME,
                                name=name, conn=poolconn)
@@ -1068,7 +1078,7 @@ class StorageVolume(StorageObject):
             try:
                 pool_object = conn.storagePoolLookupByName(pool_name)
             except Exception, e:
-                raise ValueError(_("Couldn't find storage pool '%s': %s" % \
+                raise ValueError(_("Couldn't find storage pool '%s': %s" %
                                    (pool_name, str(e))))
 
         if not isinstance(pool_object, libvirt.virStoragePool):
@@ -1091,7 +1101,7 @@ class StorageVolume(StorageObject):
         origcap = self.capacity
         origall = self.allocation
         self._capacity = newcap
-        if self.allocation != None and (newcap < self.allocation):
+        if self.allocation is not None and (newcap < self.allocation):
             self._allocation = newcap
 
         ret = self.is_size_conflict()
@@ -1109,7 +1119,7 @@ class StorageVolume(StorageObject):
         if type(val) not in (int, float, long) or val < 0:
             raise ValueError(_("Allocation must be a non-negative number"))
         newall = int(val)
-        if self.capacity != None and newall > self.capacity:
+        if self.capacity is not None and newall > self.capacity:
             logging.debug("Capping allocation at capacity.")
             newall = self.capacity
         origall = self._allocation
@@ -1143,7 +1153,7 @@ class StorageVolume(StorageObject):
         if not isinstance(vol, libvirt.virStorageVol):
             raise ValueError(_("input_vol must be a virStorageVol"))
 
-        poolconn = self.pool._conn # pylint: disable=W0212
+        poolconn = self.pool._conn  # pylint: disable=W0212
         if not is_create_vol_from_supported(poolconn):
             raise ValueError(_("Creating storage from an existing volume is"
                                " not supported by this libvirt version."))
@@ -1196,10 +1206,10 @@ class StorageVolume(StorageObject):
         tar_xml = "  <target>\n" + \
                   "%s" % (self._get_target_xml()) + \
                   "  </target>\n"
-        return  "  <capacity>%d</capacity>\n" % self.capacity + \
-                "  <allocation>%d</allocation>\n" % self.allocation + \
-                "%s" % src_xml + \
-                "%s" % tar_xml
+        return "  <capacity>%d</capacity>\n" % self.capacity + \
+               "  <allocation>%d</allocation>\n" % self.allocation + \
+               "%s" % src_xml + \
+               "%s" % tar_xml
 
     def install(self, meter=None):
         """
@@ -1264,7 +1274,7 @@ class StorageVolume(StorageObject):
                     continue
             break
 
-        if vol == None:
+        if vol is None:
             logging.debug("Couldn't lookup storage volume in prog thread.")
             return
 
@@ -1283,22 +1293,23 @@ class StorageVolume(StorageObject):
             2. String message if some collision was encountered.
         @rtype: 2 element C{tuple}: (C{bool}, C{str})
         """
-        # pool info is [ pool state, capacity, allocation, available ]
+        # pool info is [pool state, capacity, allocation, available]
         avail = self.pool.info()[3]
         if self.allocation > avail:
             return (True, _("There is not enough free space on the storage "
                             "pool to create the volume. "
-                            "(%d M requested allocation > %d M available)" % \
+                            "(%d M requested allocation > %d M available)" %
                             ((self.allocation / (1024 * 1024)),
                              (avail / (1024 * 1024)))))
         elif self.capacity > avail:
             return (False, _("The requested volume capacity will exceed the "
                              "available pool space when the volume is fully "
                              "allocated. "
-                             "(%d M requested capacity > %d M available)" % \
+                             "(%d M requested capacity > %d M available)" %
                              ((self.capacity / (1024 * 1024)),
                               (avail / (1024 * 1024)))))
         return (False, "")
+
 
 class FileVolume(StorageVolume):
     """
@@ -1333,6 +1344,7 @@ class FileVolume(StorageVolume):
     def _get_source_xml(self):
         return ""
 
+
 class DiskVolume(StorageVolume):
     """
     Build and install xml volumes for use on physical disk pools
@@ -1355,6 +1367,7 @@ class DiskVolume(StorageVolume):
 
     def _get_source_xml(self):
         return ""
+
 
 class LogicalVolume(StorageVolume):
     """
@@ -1395,6 +1408,7 @@ class LogicalVolume(StorageVolume):
     def _get_source_xml(self):
         return ""
 
+
 class CloneVolume(StorageVolume):
     """
     Build and install a volume that is a clone of an existing volume
@@ -1433,7 +1447,7 @@ class CloneVolume(StorageVolume):
         newxml = util.set_xml_path(xml, "/volume/name", self.name)
         return newxml
 
-#class iSCSIVolume(StorageVolume):
+# class iSCSIVolume(StorageVolume):
 #    """
 #    Build and install xml for use on iSCSI device pools
 #    """

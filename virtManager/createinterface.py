@@ -58,6 +58,7 @@ IP_DHCP = 0
 IP_STATIC = 1
 IP_NONE = 2
 
+
 class vmmCreateInterface(vmmGObjectUI):
     __gsignals__ = {}
 

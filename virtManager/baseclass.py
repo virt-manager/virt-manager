@@ -164,13 +164,14 @@ class vmmGObject(GObject.GObject):
 
     def __del__(self):
         # XXX
-        #GObject.GObject.__del__(self)
+        # GObject.GObject.__del__(self)
 
         try:
             if self.config and self._leak_check:
                 self.config.remove_object(self.object_key)
         except:
             logging.exception("Error removing %s", self.object_key)
+
 
 class vmmGObjectUI(vmmGObject):
     def __init__(self, filename, windowname):

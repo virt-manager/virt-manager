@@ -21,6 +21,7 @@ from virtinst import util
 from virtinst import XMLBuilderDomain
 from virtinst.XMLBuilderDomain import _xml_property
 
+
 class Boot(XMLBuilderDomain.XMLBuilderDomain):
     """
     Class for generating boot device related XML
@@ -50,7 +51,7 @@ class Boot(XMLBuilderDomain.XMLBuilderDomain):
         self._enable_bootmenu = val
     def _get_menu_converter(self, val):
         ignore = self
-        if val == None:
+        if val is None:
             return None
         return bool(val == "yes")
     enable_bootmenu = _xml_property(_get_enable_bootmenu, _set_enable_bootmenu,

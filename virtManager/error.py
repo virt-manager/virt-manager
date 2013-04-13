@@ -26,6 +26,7 @@ import traceback
 
 from virtManager.baseclass import vmmGObject
 
+
 def _launch_dialog(dialog, primary_text, secondary_text, title,
                    sync=True):
     dialog.set_property("text", primary_text)

@@ -33,12 +33,13 @@ class ParserException(Exception):
     def __init__(self, msg):
         Exception.__init__(self, msg)
 
+
 class Image:
     """The toplevel object representing a VM image"""
     def __init__(self, node=None, base=None, filename=None):
         self.storage = {}
         self.domain = None
-        if filename == None:
+        if filename is None:
             self.filename = None
         else:
             self.filename = os.path.abspath(filename)
@@ -92,6 +93,7 @@ class Image:
                                                % d.disk_id)
                 d.disk = self.storage[d.disk_id]
 
+
 class Domain:
     """The description of a virtual domain as part of an image"""
     def __init__(self, node=None):
@@ -104,7 +106,7 @@ class Domain:
             self.parseXML(node)
 
     def parseXML(self, node):
-        self.boots = [ Boot(b) for b in node.xpathEval("boot") ]
+        self.boots = [Boot(b) for b in node.xpathEval("boot")]
         self.vcpu = xpathString(node, "devices/vcpu", 1)
         tmpmem = xpathString(node, "devices/memory")
         self.interface = int(node.xpathEval("count(devices/interface)"))
@@ -120,6 +122,7 @@ class Domain:
         else:
             tmpmem = 0
 
+
 class ImageFeatures(CapabilitiesParser.Features):
     def __init__(self, node=None):
         CapabilitiesParser.Features.__init__(self, node)
@@ -133,6 +136,7 @@ class ImageFeatures(CapabilitiesParser.Features):
             d[feature] = CapabilitiesParser.FEATURE_OFF
         else:
             raise ParserException("The state for feature %s must be either 'on' or 'off', but is '%s'" % (feature, state))
+
 
 class Boot:
     """The overall description of how the image can be booted, including
@@ -184,6 +188,7 @@ class Boot:
         # We should make sure that kernel/initrd/cmdline are only used for pv
         # and without a loader
 
+
 class Drive:
     """The mapping of a disk from the storage section to a virtual drive
     in a guest"""
@@ -197,6 +202,7 @@ class Drive:
     def parseXML(self, node):
         self.disk_id = xpathString(node, "@disk")
         self.target = xpathString(node, "@target")
+
 
 class Disk:
     FORMAT_RAW = "raw"
@@ -290,15 +296,18 @@ class Disk:
             raise ValueError(_("Disk signature for %s does not "
                                "match" % self.file))
 
+
 def validate(cond, msg):
     if not cond:
         raise ParserException(msg)
+
 
 def xpathString(node, path, default=None):
     result = node.xpathEval("string(%s)" % path)
     if len(result) == 0:
         result = default
     return result
+
 
 def parse(xml, filename):
     """Parse the XML description of a VM image into a data structure. Returns
@@ -333,6 +342,7 @@ def parse(xml, filename):
         doc.freeDoc()
 
     return image
+
 
 def parse_file(filename):
     f = open(filename, "r")

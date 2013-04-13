@@ -38,6 +38,7 @@ from virtinst import Storage
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst.XMLBuilderDomain import _xml_property
 
+
 def _vdisk_create(path, size, kind, sparse=True):
     force_fixed = "raw"
     path = os.path.expanduser(path)
@@ -46,11 +47,12 @@ def _vdisk_create(path, size, kind, sparse=True):
     else:
         _type = kind + ":sparse"
     try:
-        rc = subprocess.call([ '/usr/sbin/vdiskadm', 'create', '-t', _type,
-            '-s', str(size), path ])
+        rc = subprocess.call(['/usr/sbin/vdiskadm', 'create', '-t', _type,
+            '-s', str(size), path])
         return rc == 0
     except OSError:
         return False
+
 
 def _vdisk_clone(path, clone):
     logging.debug("Using vdisk clone.")
@@ -58,16 +60,17 @@ def _vdisk_clone(path, clone):
     path = os.path.expanduser(path)
     clone = os.path.expanduser(clone)
     try:
-        rc = subprocess.call([ '/usr/sbin/vdiskadm', 'clone', path, clone ])
+        rc = subprocess.call(['/usr/sbin/vdiskadm', 'clone', path, clone])
         return rc == 0
     except OSError:
         return False
+
 
 def _qemu_sanitize_drvtype(phystype, fmt, manual_format=False):
     """
     Sanitize libvirt storage volume format to a valid qemu driver type
     """
-    raw_list = [ "iso" ]
+    raw_list = ["iso"]
 
     if phystype == VirtualDisk.TYPE_BLOCK:
         if not fmt:
@@ -80,12 +83,14 @@ def _qemu_sanitize_drvtype(phystype, fmt, manual_format=False):
 
     return fmt
 
+
 def _name_uid(user):
     """
     Return UID for string username
     """
     pwdinfo = pwd.getpwnam(user)
     return pwdinfo[2]
+
 
 def _is_dir_searchable(uid, username, path):
     """
@@ -123,6 +128,7 @@ def _is_dir_searchable(uid, username, path):
 
     return bool(re.search("user:%s:..x" % username, out))
 
+
 def _check_if_pool_source(conn, path):
     """
     If passed path is a host disk device like /dev/sda, want to let the user
@@ -149,6 +155,7 @@ def _check_if_pool_source(conn, path):
             if p:
                 return p
     return None
+
 
 def _check_if_path_managed(conn, path):
     """
@@ -218,20 +225,21 @@ def _check_if_path_managed(conn, path):
             # Since there is no error, no pool was ever found
             err = (_("Cannot use storage '%(path)s': '%(rootdir)s' is "
                      "not managed on the remote host.") %
-                      { 'path' : path,
+                      {'path' : path,
                         'rootdir' : os.path.dirname(path)})
         else:
             err = (_("Cannot use storage %(path)s: %(err)s") %
-                    { 'path' : path, 'err' : verr })
+                    {'path' : path, 'err' : verr})
 
         raise ValueError(err)
 
     return vol, pool, path_is_pool
 
+
 def _build_vol_install(path, pool, size, sparse):
     # Path wasn't a volume. See if base of path is a managed
     # pool, and if so, setup a StorageVolume object
-    if size == None:
+    if size is None:
         raise ValueError(_("Size must be specified for non "
                            "existent volume path '%s'" % path))
 
@@ -419,7 +427,7 @@ class VirtualDisk(VirtualDevice):
         """
         Try to fix any permission problems found by check_path_search_for_user
 
-        @return: Return a dictionary of entries { broken path : error msg }
+        @return: Return a dictionary of entries {broken path : error msg}
         @rtype : C{dict}
         """
         def fix_perms(dirname, useacl=True):
@@ -906,11 +914,11 @@ class VirtualDisk(VirtualDevice):
                                 self.serial)
     serial = _xml_property(_get_serial, _set_serial,
                            xpath="./serial")
-    
+
     def _get_iotune_read_bytes_sec(self):
         return self._iotune_read_bytes_sec
     def _set_iotune_read_bytes_sec(self, val):
-        if (type(val) is not type(1) or val < 0):
+        if not isinstance(val, int) or val < 0:
             raise ValueError(_("IOTune read bytes per second value must be an "
                                "integer"))
         self._iotune_read_bytes_sec = val
@@ -919,11 +927,11 @@ class VirtualDisk(VirtualDevice):
                                           xpath="./iotune/read_bytes_sec",
                                           get_converter=lambda s, x: int(x or 0),
                                           set_converter=lambda s, x: int(x))
-    
+
     def _get_iotune_read_iops_sec(self):
         return self._iotune_read_iops_sec
     def _set_iotune_read_iops_sec(self, val):
-        if (type(val) is not type(1) or val < 0):
+        if not isinstance(val, int) or val < 0:
             raise ValueError(_("IOTune read iops per second value must be an "
                                "integer"))
         self._iotune_read_iops_sec = val
@@ -932,11 +940,11 @@ class VirtualDisk(VirtualDevice):
                                          xpath="./iotune/read_iops_sec",
                                          get_converter=lambda s, x: int(x or 0),
                                          set_converter=lambda s, x: int(x))
-    
+
     def _get_iotune_total_bytes_sec(self):
         return self._iotune_total_bytes_sec
     def _set_iotune_total_bytes_sec(self, val):
-        if (type(val) is not type(1) or val < 0):
+        if not isinstance(val, int) or val < 0:
             raise ValueError(_("IOTune total bytes per second value must be an "
                                "integer"))
         self._iotune_total_bytes_sec = val
@@ -945,11 +953,11 @@ class VirtualDisk(VirtualDevice):
                                            xpath="./iotune/total_bytes_sec",
                                            get_converter=lambda s, x: int(x or 0),
                                            set_converter=lambda s, x: int(x))
-    
+
     def _get_iotune_total_iops_sec(self):
         return self._iotune_total_iops_sec
     def _set_iotune_total_iops_sec(self, val):
-        if (type(val) is not type(1) or val < 0):
+        if not isinstance(val, int) or val < 0:
             raise ValueError(_("IOTune total iops per second value must be an "
                                "integer"))
         self._iotune_total_iops_sec = val
@@ -958,11 +966,11 @@ class VirtualDisk(VirtualDevice):
                                           xpath="./iotune/total_iops_sec",
                                           get_converter=lambda s, x: int(x or 0),
                                           set_converter=lambda s, x: int(x))
-    
+
     def _get_iotune_write_bytes_sec(self):
         return self._iotune_write_bytes_sec
     def _set_iotune_write_bytes_sec(self, val):
-        if (type(val) is not type(1) or val < 0):
+        if not isinstance(val, int) or val < 0:
             raise ValueError(_("IOTune write bytes per second value must be an "
                                "integer"))
         self._iotune_write_bytes_sec = val
@@ -971,11 +979,11 @@ class VirtualDisk(VirtualDevice):
                                            xpath="./iotune/write_bytes_sec",
                                            get_converter=lambda s, x: int(x or 0),
                                            set_converter=lambda s, x: int(x))
-    
+
     def _get_iotune_write_iops_sec(self):
         return self._iotune_write_iops_sec
     def _set_iotune_write_iops_sec(self, val):
-        if (type(val) is not type(1) or val < 0):
+        if not isinstance(val, int) or val < 0:
             raise ValueError(_("IOTune write iops per second value must be an "
                                "integer"))
         self._iotune_write_iops_sec = val
@@ -1107,7 +1115,7 @@ class VirtualDisk(VirtualDevice):
 
         dtype = None
         if self.vol_object:
-            # vol info is [ vol type (file or block), capacity, allocation ]
+            # vol info is [vol type (file or block), capacity, allocation]
             t = self.vol_object.info()[0]
             if t == libvirt.VIR_STORAGE_VOL_FILE:
                 dtype = self.TYPE_FILE
@@ -1194,9 +1202,9 @@ class VirtualDisk(VirtualDevice):
         Return bool representing if managed storage parameters have
         been explicitly specified or filled in
         """
-        return bool(self.vol_object != None or
-                    self.vol_install != None or
-                    self._pool_object != None)
+        return bool(self.vol_object is not None or
+                    self.vol_install is not None or
+                    self._pool_object is not None)
 
     def creating_storage(self):
         """
@@ -1392,7 +1400,7 @@ class VirtualDisk(VirtualDevice):
 
         # if a destination file exists and sparse flg is True,
         # this priority takes a existing file.
-        if (os.path.exists(self.path) == False and self.sparse == True):
+        if (not os.path.exists(self.path) and self.sparse):
             clone_block_size = 4096
             sparse = True
             fd = None
@@ -1553,7 +1561,7 @@ class VirtualDisk(VirtualDevice):
         if self.serial:
             ret += ("      <serial>%s</serial>\n" %
                     util.xml_escape(self.serial))
-        
+
         if (self.iotune_read_bytes_sec or self.iotune_read_iops_sec or
             self.iotune_total_bytes_sec or self.iotune_total_iops_sec or
             self.iotune_write_bytes_sec or self.iotune_write_iops_sec):

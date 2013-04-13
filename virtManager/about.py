@@ -22,6 +22,7 @@ import logging
 
 from virtManager.baseclass import vmmGObjectUI
 
+
 class vmmAbout(vmmGObjectUI):
     def __init__(self):
         vmmGObjectUI.__init__(self, "vmm-about.ui", "vmm-about")

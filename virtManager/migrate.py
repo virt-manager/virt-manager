@@ -36,6 +36,7 @@ from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.domain import vmmDomain
 
+
 def uri_join(uri_tuple):
     scheme, user, host, path, query, fragment = uri_tuple
 

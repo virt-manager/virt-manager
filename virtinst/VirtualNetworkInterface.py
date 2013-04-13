@@ -45,6 +45,7 @@ def _compareMAC(p, q):
             return -1
     return 0
 
+
 def _countMACaddr(vms, searchmac):
     if not searchmac:
         return
@@ -63,6 +64,7 @@ def _countMACaddr(vms, searchmac):
         xml = vm.XMLDesc(0)
         count += util.get_xml_path(xml, func=count_cb)
     return count
+
 
 class VirtualPort(XMLBuilderDomain.XMLBuilderDomain):
 
@@ -113,6 +115,7 @@ class VirtualPort(XMLBuilderDomain.XMLBuilderDomain):
     def _get_xml_config(self):
         # FIXME: This should be implemented, currently we can only parse
         return ""
+
 
 class VirtualNetworkInterface(VirtualDevice):
 
@@ -225,7 +228,7 @@ class VirtualNetworkInterface(VirtualDevice):
         Conveninece function, try to set the relevant <source> value
         per the network type
         """
-        if   self.type == self.TYPE_VIRTUAL:
+        if self.type == self.TYPE_VIRTUAL:
             self.network = newsource
         elif self.type == self.TYPE_BRIDGE:
             self.bridge = newsource
@@ -272,7 +275,7 @@ class VirtualNetworkInterface(VirtualDevice):
             try:
                 net = self.conn.networkLookupByName(newnet)
             except libvirt.libvirtError, e:
-                raise ValueError(_("Virtual network '%s' does not exist: %s") \
+                raise ValueError(_("Virtual network '%s' does not exist: %s")
                                    % (newnet, str(e)))
             if not _is_net_active(net):
                 raise ValueError(_("Virtual network '%s' has not been "

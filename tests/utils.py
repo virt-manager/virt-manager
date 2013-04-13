@@ -44,9 +44,11 @@ _plainkvm   = "%s,qemu" % _fakeuri
 _plainxen   = "%s,xen" % _fakeuri
 _kvmuri     = "%s,caps=%s" % (_plainkvm, _kvmcaps)
 
+
 def get_debug():
     return ("DEBUG_TESTS" in os.environ and
             os.environ["DEBUG_TESTS"] == "1")
+
 
 def _make_uri(base, connver=None, libver=None):
     if connver:
@@ -55,32 +57,50 @@ def _make_uri(base, connver=None, libver=None):
         base += ",libver=%s" % libver
     return base
 
+
 def open_testdriver():
     return virtinst.cli.getConnection(_testuri)
+
+
 def open_testkvmdriver():
     return virtinst.cli.getConnection(_kvmuri)
+
+
 def open_plainkvm(connver=None, libver=None):
     return virtinst.cli.getConnection(_make_uri(_plainkvm, connver, libver))
+
+
 def open_plainxen(connver=None, libver=None):
     return virtinst.cli.getConnection(_make_uri(_plainxen, connver, libver))
+
+
 def open_test_remote():
     return virtinst.cli.getConnection(_remoteuri)
 
 _default_conn = open_testdriver()
 _conn = None
+
+
 def set_conn(newconn):
     global _conn
     _conn = newconn
+
+
 def reset_conn():
     set_conn(_default_conn)
+
+
 def get_conn():
     return _conn
 reset_conn()
 
 # Register libvirt handler
+
+
 def libvirt_callback(ignore, err):
     logging.warn("libvirt errmsg: %s", err[2])
 libvirt.registerErrorHandler(f=libvirt_callback, ctx=None)
+
 
 def sanitize_xml_for_define(xml):
     # Libvirt throws errors since we are defining domain
@@ -99,6 +119,7 @@ def sanitize_xml_for_define(xml):
     xml = xml.replace(">linux<", ">xen<")
 
     return xml
+
 
 def test_create(testconn, xml):
     xml = sanitize_xml_for_define(xml)
@@ -122,6 +143,7 @@ def test_create(testconn, xml):
         except:
             pass
 
+
 def read_file(filename):
     """Helper function to read a files contents and return them"""
     f = open(filename, "r")
@@ -129,6 +151,7 @@ def read_file(filename):
     f.close()
 
     return out
+
 
 def diff_compare(actual_out, filename=None, expect_out=None):
     """Compare passed string output to contents of filename"""
@@ -162,6 +185,7 @@ def get_basic_paravirt_guest(installer=None):
     g.installer._scratchdir = scratch
     return g
 
+
 def get_basic_fullyvirt_guest(typ="xen", installer=None):
     g = virtinst.Guest(conn=_conn, type=typ)
     g.name = "TestGuest"
@@ -181,23 +205,28 @@ def get_basic_fullyvirt_guest(typ="xen", installer=None):
     g.installer._scratchdir = scratch
     return g
 
+
 def make_import_installer(os_type="hvm"):
     inst = virtinst.ImportInstaller(type="xen", os_type=os_type, conn=_conn)
     return inst
+
 
 def make_distro_installer(location="/default-pool/default-vol", gtype="xen"):
     inst = virtinst.DistroInstaller(type=gtype, os_type="hvm", conn=_conn,
                                     location=location)
     return inst
 
+
 def make_live_installer(location="/dev/loop0", gtype="xen"):
     inst = virtinst.LiveCDInstaller(type=gtype, os_type="hvm",
                                     conn=_conn, location=location)
     return inst
 
+
 def make_pxe_installer(gtype="xen"):
     inst = virtinst.PXEInstaller(type=gtype, os_type="hvm", conn=_conn)
     return inst
+
 
 def build_win_kvm(path=None):
     g = get_basic_fullyvirt_guest("kvm")
@@ -211,18 +240,22 @@ def build_win_kvm(path=None):
 
     return g
 
+
 def get_floppy(path=None):
     if not path:
         path = "/default-pool/testvol1.img"
     return VirtualDisk(path, conn=_conn, device=VirtualDisk.DEVICE_FLOPPY)
+
 
 def get_filedisk(path=None):
     if not path:
         path = "/tmp/test.img"
     return VirtualDisk(path, size=.0001, conn=_conn)
 
+
 def get_blkdisk(path="/dev/loop0"):
     return VirtualDisk(path, conn=_conn)
+
 
 def get_virtual_network():
     dev = virtinst.VirtualNetworkInterface(conn=_conn)

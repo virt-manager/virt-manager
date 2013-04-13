@@ -26,6 +26,7 @@ SELECT_HOST = 1
 ADD_HOST    = 2
 REMOVE_HOST = 3
 
+
 class HostMenuScreen(MenuScreen):
     def __init__(self):
         MenuScreen.__init__(self, "Host Menu Screen")
@@ -36,12 +37,13 @@ class HostMenuScreen(MenuScreen):
                 ("Remove A Host", REMOVE_HOST))
 
     def handle_selection(self, item):
-        if   item is SELECT_HOST:
+        if item is SELECT_HOST:
             ChangeHost()
         elif item is ADD_HOST:
             AddHost()
         elif item is REMOVE_HOST:
             RemoveHost()
+
 
 def HostMenu():
     screen = HostMenuScreen()

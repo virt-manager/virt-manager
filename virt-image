@@ -44,12 +44,15 @@ def get_networks(domain, guest, options):
 
     cli.get_networks(guest, networks, macs)
 
+
 def get_graphics(image, guest, options):
     graphics = cli.digest_graphics(guest, options,
                                    default_override=bool(image.graphics))
     cli.get_graphics(guest, graphics)
 
 ### Option parsing
+
+
 def parse_args():
     usage = "%prog [options] image.xml"
     parser = cli.setupParser(usage)
@@ -109,8 +112,6 @@ def parse_args():
                     help=optparse.SUPPRESS_HELP)
     misc.add_option("", "--force", action="store_true", dest="force",
                     default=False,
-                    #help=_("Do not prompt for input. Answers yes where "
-                    #       "applicable, terminates for all other prompts"),
                     help=optparse.SUPPRESS_HELP)
     misc.add_option("-q", "--quiet", action="store_true", dest="quiet",
                     help=_("Suppress non-error output"))
@@ -123,6 +124,7 @@ def parse_args():
     options.image = args[0]
 
     return options
+
 
 def main(conn=None):
     cli.earlyLogging()
@@ -138,7 +140,7 @@ def main(conn=None):
     try:
         image = virtinst.ImageParser.parse_file(options.image)
     except virtinst.ImageParser.ParserException, msg:
-        fail( "%s '%s': %s" % (_("Cannot parse"),  options.image, msg))
+        fail("%s '%s': %s" % (_("Cannot parse"),  options.image, msg))
 
     if options.boot is not None:
         nboots = len(image.domain.boots)

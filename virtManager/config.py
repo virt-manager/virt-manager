@@ -140,10 +140,10 @@ class vmmConfig(object):
             nv.set_string(v)
             newValues.append(nv)
         ignore = path
-        #XXX: set_list is not available with introspection
+        # XXX: set_list is not available with introspection
         # val = GConf.Value()
-        #val.set_list(newValues)
-        #self.conf.set(path, val)
+        # val.set_list(newValues)
+        # self.conf.set(path, val)
 
     def check_inspection(self, support_threading):
         if not support_threading:
@@ -151,20 +151,20 @@ class vmmConfig(object):
 
         try:
             # Check we can open the Python guestfs module.
-            from guestfs import GuestFS # pylint: disable=F0401
+            from guestfs import GuestFS  # pylint: disable=F0401
             g = GuestFS()
 
             # Check for the first version which fixed Python GIL bug.
             version = g.version()
-            if version["major"] == 1: # major must be 1
+            if version["major"] == 1:  # major must be 1
                 if version["minor"] == 8:
-                    if version["release"] >= 6: # >= 1.8.6
+                    if version["release"] >= 6:  # >= 1.8.6
                         return True
                 elif version["minor"] == 10:
-                    if version["release"] >= 1: # >= 1.10.1
+                    if version["release"] >= 1:  # >= 1.10.1
                         return True
                 elif version["minor"] == 11:
-                    if version["release"] >= 2: # >= 1.11.2
+                    if version["release"] >= 2:  # >= 1.11.2
                         return True
                 elif version["minor"] >= 12:    # >= 1.12, 1.13, etc.
                     return True

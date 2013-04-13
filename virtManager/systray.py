@@ -29,9 +29,10 @@ from virtManager.baseclass import vmmGObject
 from virtManager.error import vmmErrorDialog
 
 try:
-    import appindicator # pylint: disable=F0401
+    import appindicator  # pylint: disable=F0401
 except:
     appindicator = None
+
 
 def build_image_menu_item(label):
     hasfunc = hasattr(Gtk.ImageMenuItem, "set_use_underline")
@@ -43,6 +44,7 @@ def build_image_menu_item(label):
         menu_item.set_use_underline(False)
 
     return menu_item
+
 
 class vmmSystray(vmmGObject):
     __gsignals__ = {

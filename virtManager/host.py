@@ -43,6 +43,7 @@ from virtManager.graphwidgets import Sparkline
 INTERFACE_PAGE_INFO = 0
 INTERFACE_PAGE_ERROR = 1
 
+
 class vmmHost(vmmGObjectUI):
     __gsignals__ = {
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
@@ -1271,6 +1272,7 @@ def init_pool_list(pool_list, changed_func):
     pool_list.append_column(poolCol)
     poolListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
+
 def refresh_pool_in_list(pool_list, conn, uuid):
     for row in pool_list.get_model():
         if row[0] == uuid:
@@ -1278,6 +1280,7 @@ def refresh_pool_in_list(pool_list, conn, uuid):
             row[3] = get_pool_size_percent(conn, uuid)
             row[2] = conn.get_pool(uuid).is_active()
             return
+
 
 def populate_storage_pools(pool_list, conn):
     model = pool_list.get_model()
@@ -1296,6 +1299,7 @@ def populate_storage_pools(pool_list, conn):
     if _iter:
         pool_list.get_selection().select_iter(_iter)
     pool_list.get_selection().emit("changed")
+
 
 def get_pool_size_percent(conn, uuid):
     pool = conn.get_pool(uuid)

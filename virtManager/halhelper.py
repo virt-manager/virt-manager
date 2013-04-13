@@ -33,17 +33,20 @@ from virtManager.mediadev import vmmMediaDevice
 
 _hal_helper = None
 
+
 def get_hal_helper(init=True):
     global _hal_helper
     if not _hal_helper and init:
         _hal_helper = vmmHalHelper()
     return _hal_helper
 
+
 def cleanup():
     global _hal_helper
     if _hal_helper:
         _hal_helper.cleanup()
     _hal_helper = None
+
 
 def get_net_bridge_owner(name_ignore, sysfspath):
     # Now magic to determine if the device is part of a bridge
@@ -60,6 +63,7 @@ def get_net_bridge_owner(name_ignore, sysfspath):
 
     return None
 
+
 def get_net_mac_address(name_ignore, sysfspath):
     mac = None
     addrpath = sysfspath + "/address"
@@ -68,6 +72,7 @@ def get_net_mac_address(name_ignore, sysfspath):
         mac = df.readline().strip(" \n\t")
         df.close()
     return mac
+
 
 def get_bonding_masters():
     masters = []
@@ -83,11 +88,13 @@ def get_bonding_masters():
             masters = rline[:].split(' ')
     return masters
 
+
 def is_net_bonding_slave(name_ignore, sysfspath):
     masterpath = sysfspath + "/master"
     if os.path.exists(masterpath):
         return True
     return False
+
 
 class vmmHalHelper(vmmGObject):
     __gsignals__ = {

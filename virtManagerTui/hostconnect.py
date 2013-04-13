@@ -18,9 +18,11 @@
 
 from newt_syrup.configscreen import ConfigScreen
 
+
 class HostConnectConfigScreen(ConfigScreen):
     def __init__(self):
         ConfigScreen.__init__(self, "Host Connect")
+
 
 def HostConnect():
     screen = HostConnectConfigScreen()

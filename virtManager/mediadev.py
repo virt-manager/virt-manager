@@ -34,6 +34,7 @@ MEDIA_CDROM = "cdrom"
 
 MEDIA_TIMEOUT = 3
 
+
 class vmmMediaDevice(vmmGObject):
     __gsignals__ = {
         "media-added": (GObject.SignalFlags.RUN_FIRST, None, []),

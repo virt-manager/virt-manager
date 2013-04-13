@@ -20,6 +20,7 @@ import snack
 
 from virtManagerTui.vmmconfigscreen import VmmTuiConfigScreen
 
+
 class StorageListConfigScreen(VmmTuiConfigScreen):
     '''Provides a base class for any configuration screen that deals with storage pool lists.'''
 

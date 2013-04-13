@@ -43,6 +43,7 @@ STORAGE_ROW_ICON = 5
 STORAGE_ROW_ICON_SIZE = 6
 STORAGE_ROW_TOOLTIP = 7
 
+
 class vmmDeleteDialog(vmmGObjectUI):
     def __init__(self):
         vmmGObjectUI.__init__(self, "vmm-delete.ui", "vmm-delete")
@@ -322,11 +323,13 @@ def prepare_storage_list(storage_list):
     infoCol.add_attribute(info_img, 'stock-size', STORAGE_ROW_ICON_SIZE)
     infoCol.set_sort_column_id(STORAGE_ROW_ICON)
 
+
 def storage_item_toggled(src, index, storage_list):
     active = src.get_active()
 
     model = storage_list.get_model()
     model[index][STORAGE_ROW_CONFIRM] = not active
+
 
 def can_delete(conn, vol, path):
     """Is the passed path even deleteable"""
@@ -352,6 +355,7 @@ def can_delete(conn, vol, path):
         ret = False
 
     return (ret, msg)
+
 
 def do_we_default(conn, vm_name, vol, path, ro, shared):
     """ Returns (do we delete by default?, info string if not)"""

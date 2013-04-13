@@ -18,9 +18,10 @@
 # MA 02110-1301 USA.
 
 from virtinst.VirtualDevice import VirtualDevice
-from virtinst.util import  xml_escape
+from virtinst.util import xml_escape
 
 from virtinst.XMLBuilderDomain import _xml_property
+
 
 class VirtualCharDevice(VirtualDevice):
     """
@@ -32,7 +33,7 @@ class VirtualCharDevice(VirtualDevice):
     DEV_PARALLEL = "parallel"
     DEV_CONSOLE  = "console"
     DEV_CHANNEL  = "channel"
-    dev_types    = [ DEV_SERIAL, DEV_PARALLEL, DEV_CONSOLE, DEV_CHANNEL]
+    dev_types    = [DEV_SERIAL, DEV_PARALLEL, DEV_CONSOLE, DEV_CHANNEL]
 
     CHAR_PTY      = "pty"
     CHAR_DEV      = "dev"
@@ -45,9 +46,9 @@ class VirtualCharDevice(VirtualDevice):
     CHAR_UDP      = "udp"
     CHAR_UNIX     = "unix"
     CHAR_SPICEVMC = "spicevmc"
-    char_types  = [ CHAR_PTY, CHAR_DEV, CHAR_STDIO, CHAR_FILE, CHAR_VC,
+    char_types  = [CHAR_PTY, CHAR_DEV, CHAR_STDIO, CHAR_FILE, CHAR_VC,
                     CHAR_PIPE, CHAR_NULL, CHAR_TCP, CHAR_UDP, CHAR_UNIX,
-                    CHAR_SPICEVMC ]
+                    CHAR_SPICEVMC]
 
     _non_channel_types = char_types[:]
     _non_channel_types.remove(CHAR_SPICEVMC)
@@ -56,24 +57,24 @@ class VirtualCharDevice(VirtualDevice):
         DEV_SERIAL: _non_channel_types,
         DEV_PARALLEL: _non_channel_types,
         DEV_CONSOLE: _non_channel_types,
-        DEV_CHANNEL: [ CHAR_SPICEVMC ],
-    }
+        DEV_CHANNEL: [CHAR_SPICEVMC],
+   }
 
     CHAR_MODE_CONNECT = "connect"
     CHAR_MODE_BIND = "bind"
-    char_modes = [ CHAR_MODE_CONNECT, CHAR_MODE_BIND ]
+    char_modes = [CHAR_MODE_CONNECT, CHAR_MODE_BIND]
 
     CHAR_PROTOCOL_RAW = "raw"
     CHAR_PROTOCOL_TELNET = "telnet"
-    char_protocols = [ CHAR_PROTOCOL_RAW, CHAR_PROTOCOL_TELNET ]
+    char_protocols = [CHAR_PROTOCOL_RAW, CHAR_PROTOCOL_TELNET]
 
     CHAR_CHANNEL_TARGET_GUESTFWD = "guestfwd"
     CHAR_CHANNEL_TARGET_VIRTIO = "virtio"
-    target_types = [ CHAR_CHANNEL_TARGET_GUESTFWD,
-                     CHAR_CHANNEL_TARGET_VIRTIO ]
+    target_types = [CHAR_CHANNEL_TARGET_GUESTFWD,
+                     CHAR_CHANNEL_TARGET_VIRTIO]
 
     CHAR_CHANNEL_ADDRESS_VIRTIO_SERIAL = "virtio-serial"
-    address_types = [ CHAR_CHANNEL_ADDRESS_VIRTIO_SERIAL ]
+    address_types = [CHAR_CHANNEL_ADDRESS_VIRTIO_SERIAL]
 
     CHAR_CONSOLE_TARGET_SERIAL = "serial"
     CHAR_CONSOLE_TARGET_UML = "uml"
@@ -222,14 +223,14 @@ class VirtualCharDevice(VirtualDevice):
             "protocol"      : [self.CHAR_TCP],
             "bind_host"     : [self.CHAR_UDP],
             "bind_port"     : [self.CHAR_UDP],
-        }
+       }
 
         if ro:
             users["source_path"] += [self.CHAR_PTY]
 
         channel_users = {
             "target_name"   : [self.CHAR_CHANNEL_TARGET_VIRTIO],
-        }
+       }
 
         if users.get(propname):
             return self.char_type in users[propname]
@@ -469,6 +470,8 @@ class VirtualCharDevice(VirtualDevice):
         return xml
 
 # Back compat class for building a simple PTY 'console' element
+
+
 class VirtualConsoleDevice(VirtualCharDevice):
     _char_xml = VirtualCharDevice._char_empty_xml
     _char_type = VirtualCharDevice.CHAR_PTY
@@ -484,21 +487,29 @@ class VirtualConsoleDevice(VirtualCharDevice):
 
 # Classes for each device 'type'
 
+
 class VirtualCharPtyDevice(VirtualCharDevice):
     _char_type = VirtualCharDevice.CHAR_PTY
     _char_xml = VirtualCharDevice._char_empty_xml
     source_path = property(VirtualCharDevice.get_source_path,
                            VirtualCharDevice.set_source_path,
                            doc=_("PTY allocated to the guest."))
+
+
 class VirtualCharStdioDevice(VirtualCharDevice):
     _char_type = VirtualCharDevice.CHAR_STDIO
     _char_xml = VirtualCharDevice._char_empty_xml
+
+
 class VirtualCharNullDevice(VirtualCharDevice):
     _char_type = VirtualCharDevice.CHAR_NULL
     _char_xml = VirtualCharDevice._char_empty_xml
+
+
 class VirtualCharVcDevice(VirtualCharDevice):
     _char_type = VirtualCharDevice.CHAR_VC
     _char_xml = VirtualCharDevice._char_empty_xml
+
 
 class VirtualCharDevDevice(VirtualCharDevice):
     _char_type = VirtualCharDevice.CHAR_DEV
@@ -506,18 +517,23 @@ class VirtualCharDevDevice(VirtualCharDevice):
     source_path = property(VirtualCharDevice.get_source_path,
                            VirtualCharDevice.set_source_path,
                            doc=_("Host character device to attach to guest."))
+
+
 class VirtualCharPipeDevice(VirtualCharDevice):
     _char_type = VirtualCharDevice.CHAR_PIPE
     _char_xml = VirtualCharDevice._char_file_xml
     source_path = property(VirtualCharDevice.get_source_path,
                            VirtualCharDevice.set_source_path,
                            doc=_("Named pipe to use for input and output."))
+
+
 class VirtualCharFileDevice(VirtualCharDevice):
     _char_type = VirtualCharDevice.CHAR_FILE
     _char_xml = VirtualCharDevice._char_file_xml
     source_path = property(VirtualCharDevice.get_source_path,
                            VirtualCharDevice.set_source_path,
                            doc=_("File path to record device output."))
+
 
 class VirtualCharUnixDevice(VirtualCharDevice):
     _char_type = VirtualCharDevice.CHAR_UNIX
@@ -529,6 +545,7 @@ class VirtualCharUnixDevice(VirtualCharDevice):
     source_path = property(VirtualCharDevice.get_source_path,
                            VirtualCharDevice.set_source_path,
                            doc=_("Unix socket path."))
+
 
 class VirtualCharTcpDevice(VirtualCharDevice):
     _char_type = VirtualCharDevice.CHAR_TCP
@@ -554,6 +571,7 @@ class VirtualCharTcpDevice(VirtualCharDevice):
                (self.source_mode, self.source_host, self.source_port))
         xml += "      <protocol type='%s'/>\n" % self.protocol
         return xml
+
 
 class VirtualCharUdpDevice(VirtualCharDevice):
     _char_type = VirtualCharDevice.CHAR_UDP
@@ -600,10 +618,11 @@ class VirtualCharUdpDevice(VirtualCharDevice):
                 (source_host_xml, self.source_port))
         return xml
 
+
 class VirtualCharSpicevmcDevice(VirtualCharDevice):
     _char_type = VirtualCharDevice.CHAR_SPICEVMC
     _char_xml = VirtualCharDevice._char_empty_xml
-    target_types = [ VirtualCharDevice.CHAR_CHANNEL_TARGET_VIRTIO ]
+    target_types = [VirtualCharDevice.CHAR_CHANNEL_TARGET_VIRTIO]
     has_target = True
 
     def __init__(self, conn, dev_type=VirtualCharDevice.DEV_CHANNEL,

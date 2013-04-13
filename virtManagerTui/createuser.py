@@ -26,6 +26,7 @@ import libuser
 DETAILS_PAGE = 1
 CONFIRM_PAGE = 2
 
+
 class CreateUserConfigScreen(ConfigScreen):
     def __init__(self):
         ConfigScreen.__init__(self, "Create A User Account")
@@ -37,7 +38,7 @@ class CreateUserConfigScreen(ConfigScreen):
         self.__user_worker = UserWorker()
 
     def get_elements_for_page(self, screen, page):
-        if   page is DETAILS_PAGE:
+        if page is DETAILS_PAGE:
             return self.get_details_page(screen)
         elif page is CONFIRM_PAGE:
             return self.get_confirm_page(screen)
@@ -107,6 +108,7 @@ class CreateUserConfigScreen(ConfigScreen):
         grid.setField(snack.Label("This user %s an administrator." % admin_label), 0, 1)
         return [snack.Label("Create this user account?"),
                 grid]
+
 
 def CreateUser():
     screen = CreateUserConfigScreen()

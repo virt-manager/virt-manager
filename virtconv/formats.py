@@ -20,7 +20,7 @@
 
 import os
 
-_parsers = [ ]
+_parsers = []
 
 
 class parser(object):
@@ -57,6 +57,7 @@ class parser(object):
         """
         raise NotImplementedError
 
+
 def register_parser(new_parser):
     """
     Register a particular config format parser.  This should be called by each
@@ -64,7 +65,8 @@ def register_parser(new_parser):
     """
 
     global _parsers
-    _parsers += [ new_parser ]
+    _parsers += [new_parser]
+
 
 def parser_by_name(name):
     """
@@ -73,6 +75,7 @@ def parser_by_name(name):
     parsers = [p for p in _parsers if p.name == name]
     if len(parsers):
         return parsers[0]
+
 
 def find_parser_by_file(input_file):
     """
@@ -83,11 +86,13 @@ def find_parser_by_file(input_file):
             return p
     return None
 
+
 def formats():
     """
     Return a list of supported formats.
     """
     return [p.name for p in _parsers]
+
 
 def input_formats():
     """
@@ -95,11 +100,13 @@ def input_formats():
     """
     return [p.name for p in _parsers if p.can_import]
 
+
 def output_formats():
     """
     Return a list of supported output formats.
     """
     return [p.name for p in _parsers if p.can_export]
+
 
 def find_input(path, fmt=None):
     """
@@ -120,7 +127,7 @@ def find_input(path, fmt=None):
             if p.identify_file(path):
                 return (path, p.name)
         elif os.path.isdir(path):
-            for cfgfile in [ x for x in files if x.endswith(p.suffix) ]:
+            for cfgfile in [x for x in files if x.endswith(p.suffix)]:
                 if p.identify_file(os.path.join(path, cfgfile)):
                     return (os.path.join(path, cfgfile), p.name)
 

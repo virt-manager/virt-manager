@@ -31,6 +31,7 @@ from types import FunctionType
 from types import ClassType
 from types import MethodType
 
+
 def generate_wrapper(origfunc, name, do_tb):
     def newfunc(*args, **kwargs):
         tb = do_tb and ("\n%s" % "".join(traceback.format_stack())) or ""
@@ -40,12 +41,14 @@ def generate_wrapper(origfunc, name, do_tb):
 
     return newfunc
 
+
 def wrap_func(module, funcobj, tb):
     name = funcobj.__name__
     logging.debug("wrapfunc %s %s", funcobj, name)
 
     newfunc = generate_wrapper(funcobj, name, tb)
     setattr(module, name, newfunc)
+
 
 def wrap_method(classobj, methodobj, tb):
     name = methodobj.__name__
@@ -55,6 +58,7 @@ def wrap_method(classobj, methodobj, tb):
     newfunc = generate_wrapper(methodobj, fullname, tb)
     setattr(classobj, name, newfunc)
 
+
 def wrap_class(classobj, tb):
     logging.debug("wrapclas %s %s", classobj, classobj.__name__)
 
@@ -62,6 +66,7 @@ def wrap_class(classobj, tb):
         obj = getattr(classobj, name)
         if type(obj) is MethodType:
             wrap_method(classobj, obj, tb)
+
 
 def wrap_module(module, regex=None, tb=False):
     for name in dir(module):

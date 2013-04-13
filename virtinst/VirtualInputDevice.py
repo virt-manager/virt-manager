@@ -20,6 +20,7 @@
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst.XMLBuilderDomain import _xml_property
 
+
 class VirtualInputDevice(VirtualDevice):
 
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_INPUT

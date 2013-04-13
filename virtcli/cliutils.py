@@ -88,6 +88,7 @@ def setup_logging(appname, debug_stdout):
         sys.__excepthook__(typ, val, tb)
     sys.excepthook = exception_log
 
+
 def setup_i18n():
     try:
         locale.setlocale(locale.LC_ALL, '')

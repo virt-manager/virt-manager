@@ -23,12 +23,13 @@ from virtManagerTui.storagelistconfigscreen import StorageListConfigScreen
 LIST_POOLS_PAGE    = 1
 FINAL_PAGE         = 2
 
+
 class StartStoragePoolConfigScreen(StorageListConfigScreen):
     def __init__(self):
         StorageListConfigScreen.__init__(self, "Start A Storage Pool")
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_POOLS_PAGE:
+        if page is LIST_POOLS_PAGE:
             return self.get_storage_pool_list_page(screen, created=False)
         elif page is FINAL_PAGE:
             return self.get_final_page(screen)
@@ -55,6 +56,7 @@ class StartStoragePoolConfigScreen(StorageListConfigScreen):
         ignore = screen
         self.set_finished()
         return [Label("Storage pool started: %s" % self.get_selected_pool())]
+
 
 def StartStoragePool():
     screen = StartStoragePoolConfigScreen()

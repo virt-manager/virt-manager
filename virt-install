@@ -46,11 +46,13 @@ from virtinst.cli import fail, print_stdout, print_stderr
 
 install_methods = "--location URL, --cdrom CD/ISO, --pxe, --import, --boot hd|cdrom|..."
 install_missing = (_("An install method must be specified\n(%(methods)s)") %
-                   {"methods" : install_methods })
+                   {"methods" : install_methods})
 disk_missing = _("--disk storage must be specified (override with --nodisks)")
+
 
 def install_specified(location, cdpath, pxe, import_install):
     return bool(pxe or cdpath or location or import_install)
+
 
 def cdrom_specified(guest, diskopts=None):
     disks = guest.get_devices("disk")
@@ -67,8 +69,10 @@ def cdrom_specified(guest, diskopts=None):
 
     return False
 
+
 def storage_specified(files, disks, nodisks, filesystems):
     return bool(files or disks or nodisks or filesystems)
+
 
 def supports_pxe(guest):
     """
@@ -115,6 +119,7 @@ def get_graphics(guest, options):
     graphics = cli.digest_graphics(guest, options)
     cli.get_graphics(guest, graphics)
 
+
 def get_chardevs(char_type, opts, guest, cb):
     for optstr in cli.listify(opts):
         try:
@@ -124,6 +129,7 @@ def get_chardevs(char_type, opts, guest, cb):
             fail(_("Error in %(chartype)s device parameters: %(err)s") %
                  {"chartype": char_type, "err": str(e)})
 
+
 def get_watchdog(watchdogs, guest):
     for optstr in cli.listify(watchdogs):
         try:
@@ -132,6 +138,7 @@ def get_watchdog(watchdogs, guest):
         except Exception, e:
             fail(_("Error in watchdog device parameters: %s") % str(e))
 
+
 def get_filesystems(filesystems, guest):
     for optstr in cli.listify(filesystems):
         try:
@@ -139,6 +146,7 @@ def get_filesystems(filesystems, guest):
             guest.add_device(dev)
         except Exception, e:
             fail(_("Error in filesystem device parameters: %s") % str(e))
+
 
 def get_disk(diskopts, size, sparse, guest, is_file_path):
     try:
@@ -159,6 +167,7 @@ def get_disk(diskopts, size, sparse, guest, is_file_path):
 
     guest.add_device(d)
 
+
 def get_disks(guest, file_paths, disk_paths, size, sparse, need_storage):
     is_file_path = (file_paths or (not disk_paths and cli.is_prompt()))
     disks = (file_paths or disk_paths)
@@ -175,6 +184,7 @@ def get_disks(guest, file_paths, disk_paths, size, sparse, need_storage):
 
     for idx in range(len(disklist)):
         get_disk(disklist[idx], sizelist[idx], sparse, guest, is_file_path)
+
 
 def get_networks(guest, options):
     networks, macs = cli.digest_networks(guest, options)
@@ -237,6 +247,7 @@ def prompt_virt(caps, arch, req_virt_type, req_accel):
         req_accel = cli.prompt_for_yes_or_no(prompt_txt, "")
 
     return (req_virt_type, req_accel)
+
 
 def get_virt_type(conn, options):
 
@@ -318,6 +329,7 @@ def get_install_media(guest, location, cdpath, need_install):
     except ValueError, e:
         fail(_("Error validating install location: %s" % str(e)))
 
+
 def media_prompt(guest):
     if guest.installer.is_hvm():
         prompt_txt = _("What is the install CD-ROM/ISO or URL?")
@@ -343,6 +355,7 @@ def media_prompt(guest):
             logging.error(str(e))
             continue
         break
+
 
 def validate_install_media(guest, location, cdpath, cdinstall=False):
     if cdinstall or cdpath:
@@ -389,6 +402,7 @@ def validate_required_options(options, guest):
 
     return need_storage, need_install
 
+
 def check_option_collisions(options, guest):
     # Disk collisions
     if options.nodisks and (options.file_paths or
@@ -396,7 +410,7 @@ def check_option_collisions(options, guest):
                             options.disksize):
         fail(_("Cannot specify storage and use --nodisks"))
 
-    if ((options.file_paths or options.disksize or options.sparse == False) and
+    if ((options.file_paths or options.disksize or not options.sparse) and
         options.diskopts):
         fail(_("Cannot mix --file, --nonsparse, or --file-size with --disk "
                "options. Use --disk PATH[,size=SIZE][,sparse=yes|no]"))
@@ -473,6 +487,7 @@ def build_installer(options, conn, virt_type, hv_name, arch, machine):
     installer.machine = machine
 
     return installer
+
 
 def build_guest_instance(conn, options):
     capsguest, capsdomain = get_virt_type(conn, options)
@@ -568,7 +583,8 @@ def _run_console(args):
         return child
 
     os.execvp(args[0], args)
-    os._exit(1) # pylint: disable=W0212
+    os._exit(1)  # pylint: disable=W0212
+
 
 def vnc_console(dom, uri):
     args = ["/usr/bin/virt-viewer",
@@ -583,12 +599,14 @@ def vnc_console(dom, uri):
 
     return _run_console(args)
 
+
 def txt_console(dom, uri):
     args = ["/usr/bin/virsh",
             "--connect", uri,
             "console", str(dom.ID())]
 
     return _run_console(args)
+
 
 def start_install(guest, continue_inst, options):
     def show_console(dom):
@@ -606,7 +624,7 @@ def start_install(guest, continue_inst, options):
         else:
             logging.debug("No viewer to launch for graphics type '%s'",
                           gtype)
-            return None # SDL needs no viewer app
+            return None  # SDL needs no viewer app
 
     # There are two main cases we care about:
     #
@@ -620,7 +638,7 @@ def start_install(guest, continue_inst, options):
     #
     wait_on_install = continue_inst
     wait_time = -1
-    if options.wait != None:
+    if options.wait is not None:
         wait_on_install = True
         wait_time = options.wait * 60
 
@@ -680,6 +698,7 @@ def start_install(guest, continue_inst, options):
     except Exception, e:
         fail(e, do_exit=False)
         cli.install_fail(guest)
+
 
 def check_domain(guest, dom, conscb, wait_for_install, wait_time, start_time):
     """

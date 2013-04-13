@@ -32,6 +32,7 @@ import virtManager.util as util
 from virtManager.createvol import vmmCreateVolume
 from virtManager.baseclass import vmmGObjectUI
 
+
 class vmmStorageBrowser(vmmGObjectUI):
     __gsignals__ = {
         "storage-browse-finish": (GObject.SignalFlags.RUN_FIRST, None, [str]),

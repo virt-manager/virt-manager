@@ -32,8 +32,8 @@ class User(object):
     PRIV_CREATE_DOMAIN = 4
     PRIV_CREATE_NETWORK = 5
 
-    _privs = [ PRIV_CLONE, PRIV_NFS_MOUNT, PRIV_QEMU_SYSTEM,
-        PRIV_CREATE_DOMAIN, PRIV_CREATE_NETWORK ]
+    _privs = [PRIV_CLONE, PRIV_NFS_MOUNT, PRIV_QEMU_SYSTEM,
+        PRIV_CREATE_DOMAIN, PRIV_CREATE_NETWORK]
 
     def __init__(self, euid):
         self._euid = euid
@@ -68,11 +68,11 @@ class User(object):
         if self._euid != User.current().euid:
             return self._euid == 0
 
-        import ucred # pylint: disable=F0401
+        import ucred  # pylint: disable=F0401
         cred = ucred.get(os.getpid())
-        if priv in [ self.PRIV_CLONE,
+        if priv in [self.PRIV_CLONE,
                      self.PRIV_CREATE_DOMAIN,
-                     self.PRIV_CREATE_NETWORK ]:
+                     self.PRIV_CREATE_NETWORK]:
             return cred.has_priv('Effective', 'virt_manage')
         if priv == self.PRIV_NFS_MOUNT:
             return (cred.has_priv('Effective', 'sys_mount') and

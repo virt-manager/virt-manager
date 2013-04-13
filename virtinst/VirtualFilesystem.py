@@ -22,6 +22,7 @@ import os
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst.XMLBuilderDomain import _xml_property
 
+
 class VirtualFilesystem(VirtualDevice):
 
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_FILESYSTEM

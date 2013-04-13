@@ -18,6 +18,7 @@
 
 from virtinst import Guest
 
+
 class DomainConfig:
     LOCAL_INSTALL   = "local"
     NETWORK_INSTALL = "network"

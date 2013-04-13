@@ -28,6 +28,7 @@ from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 from virtManager.storagevol import vmmStorageVolume
 
+
 class vmmStoragePool(vmmLibvirtObject):
     __gsignals__ = {
         "refreshed": (GObject.SignalFlags.RUN_FIRST, None, [])

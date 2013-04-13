@@ -444,7 +444,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         except OSError, (err, msg):
             logging.debug("Failed to open guest disk: %s", msg)
             if err == errno.EACCES and os.geteuid() != 0:
-                return True # non root might not have access to block devices
+                return True  # non root might not have access to block devices
             else:
                 raise
 

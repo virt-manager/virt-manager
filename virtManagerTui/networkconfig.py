@@ -18,6 +18,7 @@
 
 import ipaddr
 
+
 class NetworkConfig:
     def __init__(self):
         self.__name = ""

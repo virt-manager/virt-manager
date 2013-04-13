@@ -81,6 +81,7 @@ ide%(dev)s.startConnected = "TRUE"
 ide%(dev)s.writeThrough = "TRUE"
 """
 
+
 class _VMXLine(object):
     """
     Class tracking an individual line in a VMX/VMDK file
@@ -118,6 +119,7 @@ class _VMXLine(object):
             raise ValueError("Path was not fourth entry in VMDK storage line")
         return shlex.split(content, " ", 1)[0]
 
+
 class _VMXFile(object):
     """
     Class tracking a parsed VMX/VMDK format file
@@ -143,6 +145,7 @@ class _VMXFile(object):
             if line.pair:
                 ret[line.pair[0]] = line.pair[1]
         return ret
+
 
 def parse_vmdk(disk, filename):
     """
@@ -182,6 +185,7 @@ def parse_vmdk(disk, filename):
     logging.debug("VMDK file parsed path %s->%s", disk.path, newpath)
     disk.path = newpath
 
+
 def parse_netdev_entry(vm, fullkey, value):
     """
     Parse a particular key/value for a network.  Throws ValueError.
@@ -205,6 +209,7 @@ def parse_netdev_entry(vm, fullkey, value):
     # we ignore .generatedAddress for auto mode
     if key == "address":
         vm.netdevs[inst].mac = lvalue
+
 
 def parse_disk_entry(vm, fullkey, value):
     """
@@ -347,7 +352,7 @@ class vmx_parser(formats.parser):
             "vm_description": vm.description or "None",
             "vm_nr_vcpus" : vm.nr_vcpus,
             "vm_memory": long(vm.memory)
-        }
+       }
         vmx_out = _VMX_MAIN_TEMPLATE % vmx_dict
         vmx_out_template.append(vmx_out)
 
@@ -363,7 +368,7 @@ class vmx_parser(formats.parser):
             disk_dict = {
                 "dev": dev,
                 "disk_filename" : disk.path
-            }
+           }
             disk_out = _VMX_IDE_TEMPLATE % disk_dict
             disk_out_template.append(disk_out)
 
@@ -372,7 +377,7 @@ class vmx_parser(formats.parser):
             for devnum in vm.netdevs:
                 eth_dict = {
                    "dev" : devnum
-                }
+               }
                 eth_out = _VMX_ETHERNET_TEMPLATE % eth_dict
                 eth_out_template.append(eth_out)
 

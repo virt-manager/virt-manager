@@ -16,16 +16,16 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from newt_syrup.menuscreen     import MenuScreen
+from newt_syrup.menuscreen import MenuScreen
 
-from virtManagerTui.adddomain      import AddDomain
-from virtManagerTui.startdomain    import StartDomain
-from virtManagerTui.stopdomain     import StopDomain
-from virtManagerTui.pausedomain    import PauseDomain
-from virtManagerTui.removedomain   import RemoveDomain
-from virtManagerTui.listdomains    import ListDomains
-from virtManagerTui.migratedomain  import MigrateDomain
-from virtManagerTui.createuser     import CreateUser
+from virtManagerTui.adddomain import AddDomain
+from virtManagerTui.startdomain import StartDomain
+from virtManagerTui.stopdomain import StopDomain
+from virtManagerTui.pausedomain import PauseDomain
+from virtManagerTui.removedomain import RemoveDomain
+from virtManagerTui.listdomains import ListDomains
+from virtManagerTui.migratedomain import MigrateDomain
+from virtManagerTui.createuser import CreateUser
 
 ADD_DOMAIN     = 1
 START_DOMAIN   = 2
@@ -35,6 +35,7 @@ REMOVE_DOMAIN  = 5
 LIST_DOMAINS   = 6
 MIGRATE_DOMAIN = 7
 CREATE_USER    = 8
+
 
 class NodeMenuScreen(MenuScreen):
     def __init__(self):
@@ -67,6 +68,7 @@ class NodeMenuScreen(MenuScreen):
             MigrateDomain()
         elif item is CREATE_USER:
             CreateUser()
+
 
 def NodeMenu():
     screen = NodeMenuScreen()

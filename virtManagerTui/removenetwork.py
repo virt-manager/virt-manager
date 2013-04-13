@@ -25,6 +25,7 @@ LIST_PAGE     = 1
 CONFIRM_PAGE  = 2
 REMOVE_PAGE   = 3
 
+
 class RemoveNetworkConfigScreen(NetworkListConfigScreen):
     def __init__(self):
         NetworkListConfigScreen.__init__(self, "Remove A Network")
@@ -32,7 +33,7 @@ class RemoveNetworkConfigScreen(NetworkListConfigScreen):
         self.__confirm_remove = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_PAGE:
+        if page is LIST_PAGE:
             return self.get_network_list_page(screen, started=False)
         elif page is CONFIRM_PAGE:
             return self.get_confirm_page(screen)
@@ -54,13 +55,13 @@ class RemoveNetworkConfigScreen(NetworkListConfigScreen):
         return False
 
     def get_back_page(self, page):
-        if   page is CONFIRM_PAGE:
+        if page is CONFIRM_PAGE:
             return LIST_PAGE
         elif page is REMOVE_PAGE:
             return LIST_PAGE
 
     def validate_input(self, page, errors):
-        if   page is LIST_PAGE:
+        if page is LIST_PAGE:
             return True
         elif page is CONFIRM_PAGE:
             network = self.get_selected_network()
@@ -86,6 +87,7 @@ class RemoveNetworkConfigScreen(NetworkListConfigScreen):
         ignore = screen
         network_name = self.__deleted_network_name
         return [Label("Network has been removed: %s" % network_name)]
+
 
 def RemoveNetwork():
     screen = RemoveNetworkConfigScreen()

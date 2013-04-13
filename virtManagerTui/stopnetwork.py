@@ -24,12 +24,13 @@ import logging
 LIST_PAGE = 1
 STOP_PAGE = 2
 
+
 class StopNetworkConfigScreen(NetworkListConfigScreen):
     def __init__(self):
         NetworkListConfigScreen.__init__(self, "Stop A Network")
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_PAGE:
+        if page is LIST_PAGE:
             return self.get_network_list_page(screen, defined=False)
         elif page is STOP_PAGE:
             return self.get_stop_network_page(screen)
@@ -57,6 +58,7 @@ class StopNetworkConfigScreen(NetworkListConfigScreen):
         ignore = screen
         network = self.get_selected_network()
         return [Label("%s has been stopped." % network.get_name())]
+
 
 def StopNetwork():
     screen = StopNetworkConfigScreen()

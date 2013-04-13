@@ -20,12 +20,13 @@
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst.XMLBuilderDomain import _xml_property
 
+
 class VirtualMemballoon(VirtualDevice):
 
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_MEMBALLOON
 
     MODEL_DEFAULT = "virtio"
-    MODELS = [ "xen", "none", MODEL_DEFAULT ]
+    MODELS = ["xen", "none", MODEL_DEFAULT]
 
     def __init__(self, conn=None, model=MODEL_DEFAULT,
                  parsexml=None, parsexmlnode=None, caps=None):

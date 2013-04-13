@@ -23,6 +23,7 @@ import logging
 
 from virtinst.XMLBuilderDomain import _xml_property
 
+
 class VirtualHostDevice(VirtualDevice):
 
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_HOSTDEV
@@ -184,7 +185,7 @@ class VirtualHostDevice(VirtualDevice):
         ignore = conn
 
     def _get_xml_config(self):
-        xml  = ("    <hostdev mode='%s' type='%s' managed='%s'>\n" % \
+        xml  = ("    <hostdev mode='%s' type='%s' managed='%s'>\n" %
                 (self.mode, self.type, self.managed and "yes" or "no"))
         xml += "      <source>\n"
         xml += self._get_source_xml()

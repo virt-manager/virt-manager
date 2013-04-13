@@ -19,6 +19,7 @@
 
 from virtinst import Installer
 
+
 class PXEInstaller(Installer.Installer):
 
     # General Installer methods

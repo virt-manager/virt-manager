@@ -26,11 +26,11 @@ import traceback
 import os
 
 # Template for adding arguments to test
-# { 'label' : { \
-#       'VAR' : { \
+# {'label' : {\
+#       'VAR' : {\
 #           'invalid' : [param],
 #           'valid'   : [param]},
-#       '__init__'  : { \
+#       '__init__'  : {\
 #           'invalid' : [{'initparam':val}],
 #           'valid'   : [{'initparam':val}]}
 #
@@ -66,33 +66,33 @@ args = {
     'name'  : {
         'invalid' : ['123456789', 'im_invalid!', '', 0,
                      'verylongnameverylongnameverylongnamevery'
-                     'longnameveryvery', "test" # In use,
-                     ],
-        'valid'   : ['Valid_name.01'] },
+                     'longnameveryvery', "test",
+                   ],
+        'valid'   : ['Valid_name.01']},
     'memory' : {
         'invalid' : [-1, 0, ''],
-        'valid'   : [200, 2000] },
+        'valid'   : [200, 2000]},
     'maxmemory' : {
         'invalid' : [-1, 0, ''],
         'valid'   : [200, 2000], },
     'uuid'      : {
-        'invalid' : [ '', 0, '1234567812345678123456781234567x'],
+        'invalid' : ['', 0, '1234567812345678123456781234567x'],
         'valid'   : ['12345678123456781234567812345678',
                      '12345678-1234-1234-ABCD-ABCDEF123456']},
     'vcpus'     : {
         'invalid' : [-1, 0, 1000, ''],
-        'valid'   : [ 1, 32 ] },
+        'valid'   : [1, 32]},
     'type'      : {
         'invalid' : [],
-        'valid'   : ['sometype'] },
+        'valid'   : ['sometype']},
     'cdrom'     : {
         'invalid' : ['', 0, '/somepath'],
         'valid'   : ['/dev/loop0']
-    },
+  },
     'arch'      : {
         'invalid' : [],
         'valid'   : ["i386", 'i686', 'x86_64'],
-    },
+  },
     'os_type'   : {
         'invalid' : ['notpresent', 0, ''],
         'valid'   : ['other', 'windows', 'unix', 'linux']},
@@ -103,103 +103,102 @@ args = {
 
 
 'disk' : {
-  'init_conns' : [ testconn, None ],
+  'init_conns' : [testconn, None],
   '__init__' : {
 
    'invalid' : [
     {'path' : 0},
-    { 'path' : '/root' },
-    { 'path' : 'valid', 'size' : None },
-    { 'path' : "valid", 'size' : 'invalid' },
-    { 'path' : 'valid', 'size' : -1},
-    { 'path' : None },
-    { 'path' : "noexist1", 'size' : 900000, 'sparse' : False },
-    { 'path' : "noexist2", 'type' : VirtualDisk.DEVICE_CDROM},
-    { 'volName' : ("default-pool", "default-vol")},
-    { 'conn' : testconn, 'volName' : ("pool-noexist", "default-vol")},
-    { 'conn' : testconn, 'volName' : ("default-pool", "vol-noexist")},
-    { 'conn' : testconn, 'volName' : ( 1234, "vol-noexist")},
-    { 'path' : 'valid', 'size' : 1, 'driverCache' : 'invalid' },
-    { 'conn' : testconn, "path" : "/full-pool/newvol.img", "size" : 1,
-      'sparse' : False },
+    {'path' : '/root'},
+    {'path' : 'valid', 'size' : None},
+    {'path' : "valid", 'size' : 'invalid'},
+    {'path' : 'valid', 'size' : -1},
+    {'path' : None},
+    {'path' : "noexist1", 'size' : 900000, 'sparse' : False},
+    {'path' : "noexist2", 'type' : VirtualDisk.DEVICE_CDROM},
+    {'volName' : ("default-pool", "default-vol")},
+    {'conn' : testconn, 'volName' : ("pool-noexist", "default-vol")},
+    {'conn' : testconn, 'volName' : ("default-pool", "vol-noexist")},
+    {'conn' : testconn, 'volName' : (1234, "vol-noexist")},
+    {'path' : 'valid', 'size' : 1, 'driverCache' : 'invalid'},
+    {'conn' : testconn, "path" : "/full-pool/newvol.img", "size" : 1,
+      'sparse' : False},
     # Inactive pool w/ volume
-    { 'conn' : testconn, "path" : "/inactive-pool/inactive-vol"},
-   ],
+    {'conn' : testconn, "path" : "/inactive-pool/inactive-vol"},
+ ],
 
    'valid' : [
-    { 'path' : '/dev/loop0' },
-    { 'path' : 'nonexist', 'size' : 1 },
-    { 'path' :'/dev/null'},
-    { 'path' : None, 'device' : VirtualDisk.DEVICE_CDROM},
-    { 'path' : None, 'device' : VirtualDisk.DEVICE_FLOPPY},
-    { 'conn' : testconn, 'volName' : ("default-pool", "default-vol")},
-    { 'conn' : testconn, 'path' : "/default-pool/default-vol" },
-    { 'conn' : testconn, 'path' : "/default-pool/vol-noexist", 'size' : 1 },
-    { 'conn' : testconn, 'volInstall': volinst},
-    { 'path' : 'nonexist', 'size' : 1, 'driverCache' : 'writethrough' },
+    {'path' : '/dev/loop0'},
+    {'path' : 'nonexist', 'size' : 1},
+    {'path' : '/dev/null'},
+    {'path' : None, 'device' : VirtualDisk.DEVICE_CDROM},
+    {'path' : None, 'device' : VirtualDisk.DEVICE_FLOPPY},
+    {'conn' : testconn, 'volName' : ("default-pool", "default-vol")},
+    {'conn' : testconn, 'path' : "/default-pool/default-vol"},
+    {'conn' : testconn, 'path' : "/default-pool/vol-noexist", 'size' : 1},
+    {'conn' : testconn, 'volInstall': volinst},
+    {'path' : 'nonexist', 'size' : 1, 'driverCache' : 'writethrough'},
     # Full pool, but we are nonsparse
-    { 'conn' : testconn, "path" : "/full-pool/newvol.img", "size" : 1 },
-   ]
-  },
+    {'conn' : testconn, "path" : "/full-pool/newvol.img", "size" : 1},
+ ]
+},
 
   'shareable' : {
-    'invalid': [ None, 1234 ],
-    'valid': [ True, False ]
-  },
+    'invalid': [None, 1234],
+    'valid': [True, False]
+},
 },
 
 'installer' : {
-    'init_conns' : [ testconn, None ],
+    'init_conns' : [testconn, None],
     'extraargs' : {
         'invalid' : [],
         'valid'   : ['someargs']},
     'arch' : {
         'invalid' : [],
         'valid'   : ['i686', 'i386', 'x86_64'],
-    }
+  }
 },
 
 'distroinstaller' : {
-    'init_conns' : [ testconn, None ],
+    'init_conns' : [testconn, None],
     'location'  : {
         'invalid' : ['nogood', 'http:/nogood', [], None,
                      ("pool-noexist", "default-vol"),
                      ("default-pool", "vol-noexist"),
-                    ],
+                  ],
         'valid'   : ['/dev/null', 'http://web', 'ftp://ftp', 'nfs:nfsserv',
-                     '/tmp', # For installing from local dir tree
-                     ("default-pool", "default-vol"),
-                    ]}
+                     '/tmp', ("default-pool", "default-vol"),
+                  ]}
 },
 
 'livecdinstaller' : {
-    'init_conns' : [ testconn, None ],
+    'init_conns' : [testconn, None],
     'location'  : {
         'invalid' : ['path-noexist',
                      ("pool-noexist", "default-vol"),
                      ("default-pool", "vol-noexist"),
-                    ],
+                  ],
         'valid'   : ['/dev/null', ("default-pool", "default-vol"),
-                    ]}
+                  ]}
 },
 
 'imageinstaller' : {
     '__init__' : {
-        'invalid' : \
+        'invalid' :
             [{'image' : virtimage, 'capabilities': testcaps, 'boot_index': 5},
              {'image' : virtimage, 'capabilities': "foo"}],
-        'valid'   : \
+        'valid'   :
             [{'image' : virtimage, 'capabilities': testcaps, 'boot_index': 1},
-            {'image' : virtimage },
+            {'image' : virtimage},
             {'image' : virtimage, 'capabilities': testcaps, 'conn': None}],
-    }
+  }
 },
 
 'network'   : {
-    'init_conns' : [ testconn, None ],
+    'init_conns' : [testconn, None],
     '__init__'  : {
-        'invalid' : [ {'macaddr':0}, {'macaddr':''}, {'macaddr':'$%XD'},
-                      {'type':'network'} ],
+        'invalid' : [{'macaddr' : 0}, {'macaddr' : ''}, {'macaddr' : '$%XD'},
+                      {'type' : 'network'}],
         'valid'   : []}
 },
 
@@ -207,53 +206,52 @@ args = {
     'original_guest' : {
         'invalid' : ['idontexist'],
         'valid'   : ['test']},
-    'clone_name': { 'invalid' : [0, 'test' # Already in use
-                                ],
+    'clone_name': {'invalid' : [0, 'test'],
                     'valid'   : ['some.valid-name_9']},
-    'clone_uuid': { 'invalid' : [0],
+    'clone_uuid': {'invalid' : [0],
                     'valid'   : ['12345678123456781234567812345678']},
-    'clone_mac' : { 'invalid' : ['badformat'],
+    'clone_mac' : {'invalid' : ['badformat'],
                     'valid'   : ['AA:BB:CC:DD:EE:FF']},
-    'clone_bs'  : { 'invalid' : [], 'valid'   : ['valid']},
+    'clone_bs'  : {'invalid' : [], 'valid'   : ['valid']},
 },
 
 'inputdev' : {
-    'init_conns' : [ testconn ],
+    'init_conns' : [testconn],
     'type' : {
-        'valid'   : [ "mouse", "tablet"],
-        'invalid' : [ "foobar", 1234]},
+        'valid'   : ["mouse", "tablet"],
+        'invalid' : ["foobar", 1234]},
     'bus' : {
-        'valid'   : [ "ps2", "xen", "usb"],
-        'invalid' : [ "foobar", 1234]},
+        'valid'   : ["ps2", "xen", "usb"],
+        'invalid' : ["foobar", 1234]},
 },
 
 'chardev' : {
-    'init_conns' : [ testconn ],
+    'init_conns' : [testconn],
     'source_path': {
         'invalid'   : [],
-        'valid'     : [ "/some/path" ]},
+        'valid'     : ["/some/path"]},
     'source_mode': {
-        'invalid'   : [ None ],
-        'valid'     : virtinst.VirtualCharDevice.char_modes },
+        'invalid'   : [None],
+        'valid'     : virtinst.VirtualCharDevice.char_modes},
     'source_host': {
         'invalid'   : [],
-        'valid'     : [ "some.source.host" ]},
+        'valid'     : ["some.source.host"]},
     'source_port': {
-        'invalid'   : [ "foobar"],
-        'valid'     : [ 1234 ]},
+        'invalid'   : ["foobar"],
+        'valid'     : [1234]},
     'connect_host': {
         'invalid'   : [],
-        'valid'     : [ "some.connect.com" ]},
+        'valid'     : ["some.connect.com"]},
     'connect_port': {
-        'invalid'   : [ "foobar"],
-        'valid'     : [ 1234 ]},
+        'invalid'   : ["foobar"],
+        'valid'     : [1234]},
     'protocol': {
-        'invalid'   : [ None ],
-        'valid'     : virtinst.VirtualCharDevice.char_protocols },
+        'invalid'   : [None],
+        'valid'     : virtinst.VirtualCharDevice.char_protocols},
 },
 
 'interface' : {
-    'init_conns'    : [ testconn ],
+    'init_conns'    : [testconn],
     'name' : {
         'invalid'   : ["eth0", None, 1234],
         'valid'     : ["foobar"], },
@@ -341,7 +339,7 @@ args = {
 
 }
 
-} # End of validation dict
+}  # End of validation dict
 
 
 class TestValidation(unittest.TestCase):
@@ -409,7 +407,7 @@ class TestValidation(unittest.TestCase):
            @name String name indexing args"""
         logging.debug("Testing '%s'", name)
         testdict = args[name]
-        if manual_dict != None:
+        if manual_dict is not None:
             testdict = manual_dict
 
         for paramname in testdict.keys():

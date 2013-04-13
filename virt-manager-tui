@@ -40,10 +40,12 @@ def parse_commandline():
 
     return optParser.parse_args()
 
+
 def _show_startup_error(message, details):
     errordlg = DialogScreen("Error Starting Virtual Machine Manager",
                             message + "\n\n" + details)
     errordlg.show()
+
 
 def main():
     cliutils.setup_i18n()

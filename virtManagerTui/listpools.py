@@ -26,12 +26,13 @@ from newt_syrup import utils
 LIST_PAGE    = 1
 DETAILS_PAGE = 2
 
+
 class ListStoragePoolsConfigScreen(StorageListConfigScreen):
     def __init__(self):
         StorageListConfigScreen.__init__(self, "List Storage Pools")
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_PAGE:
+        if page is LIST_PAGE:
             return self.get_storage_pool_list_page(screen)
         elif page is DETAILS_PAGE:
             return self.get_pool_details_page(screen)
@@ -62,6 +63,7 @@ class ListStoragePoolsConfigScreen(StorageListConfigScreen):
         fields.append(("Autostart", autostart))
         return [Label("Details For Storage Pool: %s" % self.get_selected_pool()),
                 self.create_grid_from_fields(fields)]
+
 
 def ListStoragePools():
     screen = ListStoragePoolsConfigScreen()

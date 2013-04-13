@@ -23,6 +23,7 @@ NETDEV_TYPE_BRIDGE = 1
 NETDEV_TYPE_DEV = 2
 NETDEV_TYPE_NETWORK = 3
 
+
 class netdev(object):
     """Definition of an individual network device."""
 

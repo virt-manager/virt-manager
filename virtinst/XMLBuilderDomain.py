@@ -56,6 +56,7 @@ def _unref_doc(doc):
     finally:
         _xml_refs_lock.release()
 
+
 def _ref_doc(doc):
     if not doc:
         return
@@ -100,11 +101,13 @@ def _sanitize_libxml_xml(xml):
         xml += "\n"
     return xml
 
+
 def _get_xpath_node(ctx, xpath, is_multi=False):
     node = ctx.xpathEval(xpath)
     if not is_multi:
         return (node and node[0] or None)
     return node
+
 
 def _build_xpath_node(ctx, xpath, addnode=None):
     """
@@ -207,6 +210,7 @@ def _build_xpath_node(ctx, xpath, addnode=None):
         parentnode = make_node(parentnode, addnode)
 
     return parentnode
+
 
 def _remove_xpath_node(ctx, xpath, dofree=True):
     """
@@ -379,6 +383,7 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
         raise RuntimeError("XML deleter not yet supported.")
 
     return property(fget=new_getter, fset=new_setter, doc=doc)
+
 
 class XMLBuilderDomain(object):
     """

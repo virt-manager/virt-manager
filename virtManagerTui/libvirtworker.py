@@ -31,15 +31,18 @@ DEFAULT_URL = "qemu:///system"
 
 default_url = DEFAULT_URL
 
+
 def set_default_url(url):
     logging.info("Changing DEFAULT_URL to %s", url)
     global default_url
 
     default_url = url
 
+
 def get_default_url():
     logging.info("Returning default URL of %s", default_url)
     return default_url
+
 
 class VirtManagerConfig:
     def __init__(self, filename=None):
@@ -72,6 +75,7 @@ class VirtManagerConfig:
         for entry in connections:
             print >> output, entry
         output.close()
+
 
 class LibvirtWorker:
     '''Provides utilities for interfacing with libvirt.'''
@@ -320,7 +324,7 @@ class LibvirtWorker:
             pool.conn = self.__conn
             pool.get_xml_config()
             newpool = pool.install(meter=meter,
-                                   build=True, # config.get_build_pool(),
+                                   build=True,  # config.get_build_pool(),
                                    create=True)
             newpool.setAutostart(True)
 

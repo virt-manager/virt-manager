@@ -102,6 +102,8 @@ class ImageFetcher:
         raise NotImplementedError("Must be implemented in subclass")
 
 # Base class for downloading from FTP / HTTP
+
+
 class URIImageFetcher(ImageFetcher):
 
     def hasFile(self, filename):
@@ -111,6 +113,7 @@ class URIImageFetcher(ImageFetcher):
         if not self.hasFile(""):
             raise ValueError(_("Opening URL %s failed.") %
                               (self.location))
+
 
 class HTTPImageFetcher(URIImageFetcher):
 
@@ -124,6 +127,7 @@ class HTTPImageFetcher(URIImageFetcher):
             logging.debug("HTTP hasFile: didn't find %s: %s", path, str(e))
             return False
         return True
+
 
 class FTPImageFetcher(URIImageFetcher):
 
@@ -155,6 +159,7 @@ class FTPImageFetcher(URIImageFetcher):
 
         return True
 
+
 class LocalImageFetcher(ImageFetcher):
 
     def __init__(self, location, scratchdir, srcdir=None):
@@ -171,6 +176,8 @@ class LocalImageFetcher(ImageFetcher):
 
 # This is a fetcher capable of extracting files from a NFS server
 # or loopback mounted file, or local CDROM device
+
+
 class MountedImageFetcher(LocalImageFetcher):
 
     def prepareLocation(self):
@@ -212,6 +219,7 @@ class MountedImageFetcher(LocalImageFetcher):
             os.rmdir(self.srcdir)
         except:
             pass
+
 
 class DirectImageFetcher(LocalImageFetcher):
 

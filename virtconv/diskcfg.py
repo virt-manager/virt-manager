@@ -80,6 +80,7 @@ checksum_types = {
     CSUM_SHA256 : "sha256",
 }
 
+
 def ensuredirs(path):
     """
     Make sure that all the containing directories of the given file
@@ -90,6 +91,7 @@ def ensuredirs(path):
     except OSError, e:
         if e.errno != errno.EEXIST:
             raise
+
 
 def run_cmd(cmd):
     """
@@ -102,9 +104,10 @@ def run_cmd(cmd):
     ret = proc.wait()
     return ret, proc.stdout.readlines(), proc.stderr.readlines()
 
+
 def run_vdiskadm(args):
     """Run vdiskadm, returning the output."""
-    ret, stdout, stderr = run_cmd([ "/usr/sbin/vdiskadm" ] + args)
+    ret, stdout, stderr = run_cmd(["/usr/sbin/vdiskadm"] + args)
 
     if ret != 0:
         raise RuntimeError("Disk conversion failed with "
@@ -113,6 +116,7 @@ def run_vdiskadm(args):
         print >> sys.stderr, stderr
 
     return stdout
+
 
 class disk(object):
     """Definition of an individual disk instance."""
@@ -141,7 +145,7 @@ class disk(object):
 
     def copy_file(self, infile, outfile):
         """Copy an individual file."""
-        self.clean += [ outfile ]
+        self.clean += [outfile]
         ensuredirs(outfile)
         shutil.copy(infile, outfile)
 
@@ -160,13 +164,13 @@ class disk(object):
         necessary.
         """
 
-        stdout = run_vdiskadm([ "import", "-fnp", absin, absout ])
+        stdout = run_vdiskadm(["import", "-fnp", absin, absout])
 
         for item in stdout:
             ignore, path = item.strip().split(':', 1)
-            self.clean += [ os.path.join(absout, path) ]
+            self.clean += [os.path.join(absout, path)]
 
-        run_vdiskadm([ "import", "-fp", absin, absout ])
+        run_vdiskadm(["import", "-fp", absin, absout])
 
     def qemu_convert(self, absin, absout, out_format):
         """
@@ -177,7 +181,7 @@ class disk(object):
         with kvm and qemu-img with qemu. Both would work.
         """
 
-        self.clean += [ absout ]
+        self.clean += [absout]
 
         ret, ignore, stderr = run_cmd(["qemu-img", "convert", "-O",
             qemu_formats[out_format], absin, absout])
@@ -226,7 +230,7 @@ class disk(object):
                 if self.format == DISK_FORMAT_VDISK:
                     raise RuntimeError("Disk conversion failed: "
                         "invalid vdisk '%s'" % self.path)
-                self.clean += [ absout ]
+                self.clean += [absout]
                 self.copy_file(absin, absout)
                 self.path = relout
             return True, need_conversion
@@ -236,7 +240,7 @@ class disk(object):
         # XXX: This can go wrong for multi-part disks!
         #
         if not need_conversion:
-            self.clean += [ absout ]
+            self.clean += [absout]
             self.copy_file(absin, absout)
             self.path = relout
             return True, False
@@ -303,6 +307,7 @@ class disk(object):
 
         self.format = out_format
         self.path = relout
+
 
 def disk_formats():
     """

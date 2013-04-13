@@ -28,6 +28,7 @@ import libvirt
 
 basepath = os.path.join(os.getcwd(), "tests", "storage-xml")
 
+
 def generate_uuid_from_string(msg):
 
     res = msg.split("-", 1)
@@ -44,6 +45,7 @@ def generate_uuid_from_string(msg):
 
     return numstr
 
+
 def _findFreePoolName(conn, namebase):
 
     i = 0
@@ -54,6 +56,7 @@ def _findFreePoolName(conn, namebase):
             i += 1
         except:
             return poolname
+
 
 def createPool(conn, ptype, poolname=None, fmt=None, target_path=None,
                source_path=None, source_name=None, uuid=None, iqn=None):
@@ -82,6 +85,7 @@ def createPool(conn, ptype, poolname=None, fmt=None, target_path=None,
 
     return poolCompare(pool_inst)
 
+
 def poolCompare(pool_inst):
     filename = os.path.join(basepath, pool_inst.name + ".xml")
     out_expect = pool_inst.get_xml_config()
@@ -92,10 +96,11 @@ def poolCompare(pool_inst):
 
     return pool_inst.install(build=True, meter=None, create=True)
 
+
 def createVol(poolobj, volname=None, input_vol=None, clone_vol=None):
     volclass = StorageVolume.get_volume_for_pool(pool_object=poolobj)
 
-    if volname == None:
+    if volname is None:
         volname = poolobj.name() + "-vol"
 
     alloc = 5 * 1024 * 1024 * 1024
@@ -124,6 +129,7 @@ def createVol(poolobj, volname=None, input_vol=None, clone_vol=None):
     utils.diff_compare(vol_inst.get_xml_config(), filename)
 
     return vol_inst.install(meter=False)
+
 
 class TestStorage(unittest.TestCase):
 
@@ -166,7 +172,7 @@ class TestStorage(unittest.TestCase):
 
         # Test creating with many devices
         createPool(self.conn, StoragePool.TYPE_LOGICAL, "pool-logical-manydev",
-                   source_path=[ "/tmp/path1", "/tmp/path2", "/tmp/path3" ],
+                   source_path=["/tmp/path1", "/tmp/path2", "/tmp/path3"],
                    target_path=None)
 
     def testDiskPool(self):

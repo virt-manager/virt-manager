@@ -21,6 +21,7 @@ import sys
 
 from virtManagerTui.mainmenu import MainMenu
 
+
 def NodeAdmin():
     MainMenu()
 

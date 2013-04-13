@@ -19,6 +19,7 @@
 import urlgrabber.progress as progress
 import logging
 
+
 class CreateMeter(progress.BaseMeter):
     def _do_start(self, now=None):
         logging.info("Starting...")

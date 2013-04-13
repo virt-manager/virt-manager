@@ -47,6 +47,7 @@ def _is_url(url, is_local):
     return (url.startswith("http://") or url.startswith("ftp://") or
             url.startswith("nfs:"))
 
+
 def _sanitize_url(url):
     """
     Do nothing for http or ftp, but make sure nfs is in the expected format
@@ -65,6 +66,7 @@ def _sanitize_url(url):
             url = url[:index] + ":" + url[index:]
 
     return url
+
 
 def _build_pool(conn, meter, path):
     pool = util.lookup_pool_by_path(conn, path)
@@ -132,7 +134,7 @@ def _upload_file(conn, meter, destpool, src):
         meter.start(size=size,
                     text=_("Transferring %s") % os.path.basename(src))
         while True:
-            #blocksize = (1024 ** 2)
+            # blocksize = (1024 ** 2)
             blocksize = 1024
             data = fileobj.read(blocksize)
             if not data:
@@ -222,7 +224,7 @@ class DistroInstaller(Installer.Installer):
             # Didn't determine anything about the location
             validated = False
 
-        if self._location_is_path or (validated == False and self.conn and
+        if self._location_is_path or (not validated and self.conn and
                                       util.is_storage_capable(self.conn)):
             # If user passed a storage tuple, OR
             # We couldn't determine the location type and a storage capable

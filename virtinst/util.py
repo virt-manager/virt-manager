@@ -37,13 +37,15 @@ import libxml2
 
 from virtinst import uriutil
 
+
 def listify(l):
     if l is None:
         return []
     elif type(l) != list:
-        return [ l ]
+        return [l]
     else:
         return l
+
 
 def is_vdisk(path):
     if not os.path.exists("/usr/sbin/vdiskadm"):
@@ -54,6 +56,7 @@ def is_vdisk(path):
        os.path.exists(path + "/vdisk.xml"):
         return True
     return False
+
 
 def stat_disk(path):
     """Returns the tuple (isreg, size)."""
@@ -82,6 +85,7 @@ def stat_disk(path):
 
     return True, 0
 
+
 def blkdev_size(path):
     """Return the size of the block device.  We can't use os.stat() as
     that returns zero on many platforms."""
@@ -90,6 +94,7 @@ def blkdev_size(path):
     size = os.lseek(fd, 0, 2)
     os.close(fd)
     return size
+
 
 def sanitize_arch(arch):
     """Ensure passed architecture string is the format we expect it.
@@ -103,12 +108,14 @@ def sanitize_arch(arch):
         return "x86_64"
     return arch
 
+
 def vm_uuid_collision(conn, uuid):
     """
     Check if passed UUID string is in use by another guest of the connection
     Returns true/false
     """
     return libvirt_collision(conn.lookupByUUIDString, uuid)
+
 
 def libvirt_collision(collision_cb, val):
     """
@@ -124,6 +131,7 @@ def libvirt_collision(collision_cb, val):
         except libvirt.libvirtError:
             pass
     return check
+
 
 def validate_uuid(val):
     if type(val) is not str:
@@ -144,6 +152,7 @@ def validate_uuid(val):
                    "-" + val[16:20] + "-" + val[20:32])
     return val
 
+
 def validate_name(name_type, val, lencheck=False):
     if type(val) is not str or len(val) == 0:
         raise ValueError(_("%s name must be a string") % name_type)
@@ -155,9 +164,10 @@ def validate_name(name_type, val, lencheck=False):
     if re.match("^[0-9]+$", val):
         raise ValueError(_("%s name can not be only numeric characters") %
                           name_type)
-    if re.match("^[a-zA-Z0-9._-]+$", val) == None:
+    if re.match("^[a-zA-Z0-9._-]+$", val) is None:
         raise ValueError(_("%s name can only contain alphanumeric, '_', '.', "
                            "or '-' characters") % name_type)
+
 
 def validate_macaddr(val):
     if val is None:
@@ -170,6 +180,8 @@ def validate_macaddr(val):
     if form is None:
         raise ValueError(_("MAC address must be of the format "
                            "AA:BB:CC:DD:EE:FF"))
+
+
 def xml_append(orig, new):
     """
     Little function that helps generate consistent xml
@@ -179,6 +191,7 @@ def xml_append(orig, new):
     if orig:
         orig += "\n"
     return orig + new
+
 
 def fetch_all_guests(conn):
     """
@@ -209,6 +222,7 @@ def fetch_all_guests(conn):
 
     return (active, inactive)
 
+
 def set_xml_path(xml, path, newval):
     """
     Set the passed xml xpath to the new value
@@ -222,7 +236,7 @@ def set_xml_path(xml, path, newval):
         ctx = doc.xpathNewContext()
 
         ret = ctx.xpathEval(path)
-        if ret != None:
+        if ret is not None:
             if type(ret) == list:
                 if len(ret) == 1:
                     ret[0].setContent(newval)
@@ -306,6 +320,7 @@ def default_nic():
 
     return dev
 
+
 def default_bridge(conn=None):
     if platform.system() == 'SunOS':
         return ["bridge", default_nic()]
@@ -368,6 +383,7 @@ def parse_node_helper(xml, root_name, callback, exec_class=ValueError):
 
     return ret
 
+
 def find_xkblayout(path):
     """
     Reads a keyboard layout from a file that defines an XKBLAYOUT
@@ -393,6 +409,7 @@ def find_xkblayout(path):
         f.close()
     return kt
 
+
 def find_keymap_from_etc_default():
     """
     Look under /etc/default for the host machine's keymap.
@@ -403,12 +420,13 @@ def find_keymap_from_etc_default():
     """
 
     KEYBOARD_DEFAULT = "/etc/default/keyboard"
-    paths = [ KEYBOARD_DEFAULT, CONSOLE_SETUP_CONF ]
+    paths = [KEYBOARD_DEFAULT, CONSOLE_SETUP_CONF]
     for path in paths:
         kt = find_xkblayout(path)
-        if kt != None:
+        if kt is not None:
             break
     return kt
+
 
 def generate_uuid(conn):
     for ignore in range(256):
@@ -426,11 +444,12 @@ KEYBOARD_DIR = "/etc/sysconfig/keyboard"
 XORG_CONF = "/etc/X11/xorg.conf"
 CONSOLE_SETUP_CONF = "/etc/default/console-setup"
 
+
 def default_route(nic=None):
     if platform.system() == 'SunOS':
-        cmd = [ '/usr/bin/netstat', '-rn' ]
+        cmd = ['/usr/bin/netstat', '-rn']
         if nic:
-            cmd += [ '-I', nic ]
+            cmd += ['-I', nic]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         for line in proc.stdout.readlines():
@@ -445,7 +464,7 @@ def default_route(nic=None):
     defn = 0
     for line in d.xreadlines():
         info = line.split()
-        if (len(info) != 11): # 11 = typical num of fields in the file
+        if (len(info) != 11):  # 11 = typical num of fields in the file
             logging.warn(_("Invalid line length while parsing %s."),
                          route_file)
             logging.warn(_("Defaulting bridge to xenbr%d"), defn)
@@ -466,6 +485,7 @@ def default_network(conn):
         ret = ["network", "default"]
 
     return ret
+
 
 def default_connection():
     if os.path.exists('/var/lib/xend'):
@@ -491,7 +511,7 @@ def is_blktap_capable():
     if platform.system() == 'SunOS':
         return False
 
-    #return os.path.exists("/dev/xen/blktapctrl")
+    # return os.path.exists("/dev/xen/blktapctrl")
     f = open("/proc/modules")
     lines = f.readlines()
     f.close()
@@ -531,7 +551,7 @@ def randomMAC(typ, conn=None):
         # Testing hack
         return "00:11:22:33:44:55"
 
-    ouis = { 'xen': [ 0x00, 0x16, 0x3E ], 'qemu': [ 0x52, 0x54, 0x00 ] }
+    ouis = {'xen': [0x00, 0x16, 0x3E], 'qemu': [0x52, 0x54, 0x00]}
 
     try:
         oui = ouis[typ]
@@ -552,6 +572,7 @@ def randomMAC(typ, conn=None):
 def randomUUID():
     """Generate a random UUID."""
     return [random.randint(0, 255) for ignore in range(0, 16)]
+
 
 def uuidToString(u, conn=None):
     if conn and hasattr(conn, "_virtinst__fake_conn_predictable"):
@@ -610,10 +631,12 @@ def _xorg_keymap():
         f.close()
     return kt
 
+
 def _console_setup_keymap():
     """Look in /etc/default/console-setup for the host machine's keymap, and attempt to
        map it to a keymap supported by qemu"""
     return find_xkblayout(CONSOLE_SETUP_CONF)
+
 
 def default_keymap():
     """Look in /etc/sysconfig for the host machine's keymap, and attempt to
@@ -636,9 +659,9 @@ def default_keymap():
             s = f.readline()
             if s == "":
                 break
-            if re.search("KEYTABLE", s) != None or \
-               (re.search("KEYBOARD", s) != None and
-                re.search("KEYBOARDTYPE", s) == None):
+            if re.search("KEYTABLE", s) is not None or \
+               (re.search("KEYBOARD", s) is not None and
+                re.search("KEYBOARDTYPE", s) is None):
                 if s.count('"'):
                     delim = '"'
                 elif s.count('='):
@@ -648,7 +671,7 @@ def default_keymap():
                 kt = s.split(delim)[1].strip()
         f.close()
 
-    if kt == None:
+    if kt is None:
         logging.debug("Did not parse any usable keymapping.")
         return default
 
@@ -669,6 +692,7 @@ def is_storage_capable(conn):
 
     return support.check_conn_support(conn, support.SUPPORT_CONN_STORAGE)
 
+
 def get_xml_path(xml, path=None, func=None):
     """
     Return the content from the passed xml xpath, or return the result
@@ -684,7 +708,7 @@ def get_xml_path(xml, path=None, func=None):
 
         if path:
             ret = ctx.xpathEval(path)
-            if ret != None:
+            if ret is not None:
                 if type(ret) == list:
                     if len(ret) >= 1:
                         result = ret[0].content
@@ -702,6 +726,7 @@ def get_xml_path(xml, path=None, func=None):
         if ctx:
             ctx.xpathFreeContext()
     return result
+
 
 def lookup_pool_by_path(conn, path):
     """
@@ -729,6 +754,7 @@ def lookup_pool_by_path(conn, path):
                 return p
     return None
 
+
 def check_keytable(kt):
     from virtinst import keytable
 
@@ -754,6 +780,7 @@ def check_keytable(kt):
                 return keytable.keytable[origkey]
 
     return keymap
+
 
 def _test():
     import doctest

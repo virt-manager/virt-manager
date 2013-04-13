@@ -140,6 +140,7 @@ PAGE_CONSOLE = 0
 PAGE_DETAILS = 1
 PAGE_DYNAMIC_OFFSET = 2
 
+
 def prettyify_disk_bus(bus):
     if bus in ["ide", "sata", "scsi", "usb"]:
         return bus.upper()
@@ -154,6 +155,7 @@ def prettyify_disk_bus(bus):
         return "vSCSI"
 
     return bus
+
 
 def prettyify_disk(devtype, bus, idx):
     busstr = prettyify_disk_bus(bus) or ""
@@ -173,6 +175,7 @@ def prettyify_disk(devtype, bus, idx):
 
     return "%s %s" % (ret, idx)
 
+
 def safeint(val, fmt="%.3d"):
     try:
         int(val)
@@ -180,11 +183,13 @@ def safeint(val, fmt="%.3d"):
         return str(val)
     return fmt % int(val)
 
+
 def prettyify_bytes(val):
     if val > (1024 * 1024 * 1024):
         return "%2.2f GB" % (val / (1024.0 * 1024.0 * 1024.0))
     else:
         return "%2.2f MB" % (val / (1024.0 * 1024.0))
+
 
 def build_redir_label(redirdev):
     # String shown in the devices details section
@@ -249,6 +254,7 @@ def build_hostdev_label(hostdev):
 
     return srclabel, hwlabel
 
+
 def lookup_nodedev(vmmconn, hostdev):
     def intify(val, do_hex=False):
         try:
@@ -302,6 +308,7 @@ def lookup_nodedev(vmmconn, hostdev):
                 break
 
     return found_dev
+
 
 class vmmDetails(vmmGObjectUI):
     __gsignals__ = {
@@ -3029,7 +3036,7 @@ class vmmDetails(vmmGObjectUI):
             return
 
         ident = "%s:%s" % (inp.type, inp.bus)
-        if   ident == "tablet:usb":
+        if ident == "tablet:usb":
             dev = _("EvTouch USB Graphics Tablet")
         elif ident == "mouse:usb":
             dev = _("Generic USB Mouse")

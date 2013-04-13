@@ -33,6 +33,7 @@ eth_iface2 = conn.interfaceLookupByName("eth1")
 eth_iface3 = conn.interfaceLookupByName("eth2")
 br_iface = conn.interfaceLookupByName("brempty")
 
+
 class TestInterfaces(unittest.TestCase):
 
     def setUp(self):

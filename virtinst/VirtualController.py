@@ -21,6 +21,7 @@ from virtinst.VirtualDevice import VirtualDevice
 from virtinst.XMLBuilderDomain import XMLBuilderDomain, _xml_property
 import logging
 
+
 class VirtualController(VirtualDevice):
 
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_CONTROLLER
@@ -44,7 +45,7 @@ class VirtualController(VirtualDevice):
             VirtualController.CONTROLLER_TYPE_SATA          : "SATA",
             VirtualController.CONTROLLER_TYPE_VIRTIOSERIAL  : "Virtio Serial",
             VirtualController.CONTROLLER_TYPE_USB           : "USB"
-        }
+       }
 
         if ctype not in pretty_mappings:
             return ctype
@@ -150,26 +151,31 @@ class VirtualController(VirtualDevice):
 class VirtualControllerIDE(VirtualController):
     _controller_type = VirtualController.CONTROLLER_TYPE_IDE
 
+
 class VirtualControllerFDC(VirtualController):
     _controller_type = VirtualController.CONTROLLER_TYPE_FDC
+
 
 class VirtualControllerSCSI(VirtualController):
     _controller_type = VirtualController.CONTROLLER_TYPE_SCSI
 
+
 class VirtualControllerSATA(VirtualController):
     _controller_type = VirtualController.CONTROLLER_TYPE_SATA
+
 
 class VirtualControllerVirtioSerial(VirtualController):
     _controller_type = VirtualController.CONTROLLER_TYPE_VIRTIOSERIAL
 
     def _extra_config(self):
         xml = ""
-        if self.ports != None:
+        if self.ports is not None:
             xml += " ports='%s'" % self.ports
-        if self.vectors != None:
+        if self.vectors is not None:
             xml += " vectors='%s'" % self.vectors
 
         return xml
+
 
 class VirtualControllerUSB(VirtualController):
     _controller_type = VirtualController.CONTROLLER_TYPE_USB

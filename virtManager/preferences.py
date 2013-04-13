@@ -30,6 +30,7 @@ from virtManager.baseclass import vmmGObjectUI
 PREFS_PAGE_STATS    = 0
 PREFS_PAGE_VM_PREFS = 1
 
+
 class vmmPreferences(vmmGObjectUI):
     def __init__(self):
         vmmGObjectUI.__init__(self, "vmm-preferences.ui", "vmm-preferences")

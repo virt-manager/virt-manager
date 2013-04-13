@@ -22,8 +22,10 @@ from virtinst.XMLBuilderDomain import _xml_property
 
 import libxml2
 
+
 def _int_or_none(val):
     return val and int(val) or val
+
 
 class CPUFeature(XMLBuilderDomain.XMLBuilderDomain):
     """

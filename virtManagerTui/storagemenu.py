@@ -18,13 +18,13 @@
 
 from newt_syrup.menuscreen import MenuScreen
 
-from virtManagerTui.addpool       import AddStoragePool
-from virtManagerTui.startpool     import StartStoragePool
-from virtManagerTui.stoppool      import StopStoragePool
-from virtManagerTui.removepool    import RemoveStoragePool
-from virtManagerTui.addvolume     import AddStorageVolume
-from virtManagerTui.removevolume  import RemoveStorageVolume
-from virtManagerTui.listpools     import ListStoragePools
+from virtManagerTui.addpool import AddStoragePool
+from virtManagerTui.startpool import StartStoragePool
+from virtManagerTui.stoppool import StopStoragePool
+from virtManagerTui.removepool import RemoveStoragePool
+from virtManagerTui.addvolume import AddStorageVolume
+from virtManagerTui.removevolume import RemoveStorageVolume
+from virtManagerTui.listpools import ListStoragePools
 
 ADD_POOL      = 1
 START_POOL    = 2
@@ -33,6 +33,7 @@ REMOVE_POOL   = 4
 ADD_VOLUME    = 5
 REMOVE_VOLUME = 6
 LIST_POOLS    = 7
+
 
 class StoragePoolMenuScreen(MenuScreen):
     def __init__(self):
@@ -48,7 +49,7 @@ class StoragePoolMenuScreen(MenuScreen):
                 ("List Storage Pools",      LIST_POOLS))
 
     def handle_selection(self, item):
-        if   item is ADD_POOL:
+        if item is ADD_POOL:
             AddStoragePool()
         elif item is START_POOL:
             StartStoragePool()
@@ -62,6 +63,7 @@ class StoragePoolMenuScreen(MenuScreen):
             RemoveStorageVolume()
         elif item is LIST_POOLS:
             ListStoragePools()
+
 
 def StoragePoolMenu():
     screen = StoragePoolMenuScreen()

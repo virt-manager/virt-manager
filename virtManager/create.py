@@ -1157,7 +1157,7 @@ class vmmCreate(vmmGObjectUI):
             self.widget("install-os-type").hide()
             self.widget("install-os-version").hide()
             self.mediaDetected = False
-            self.detect_media_os() # Run detection
+            self.detect_media_os()  # Run detection
         else:
             self.widget("install-os-type-label").hide()
             self.widget("install-os-version-label").hide()

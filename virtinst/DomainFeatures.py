@@ -20,10 +20,12 @@
 from virtinst import XMLBuilderDomain
 from virtinst.XMLBuilderDomain import _xml_property
 
+
 def _none_or_bool(val):
     if val is None:
         return val
     return bool(val)
+
 
 class DomainFeatures(XMLBuilderDomain.XMLBuilderDomain):
     """

@@ -33,6 +33,7 @@ CAPABILITY_TYPE_STORAGE = "storage"
 CAPABILITY_TYPE_SCSIBUS = "scsi_host"
 CAPABILITY_TYPE_SCSIDEV = "scsi"
 
+
 class NodeDevice(object):
     def __init__(self, node):
         self.name = None
@@ -84,6 +85,7 @@ class NodeDevice(object):
             self._parseValueHelper(node, value_map)
             node = node.next
 
+
 class SystemDevice(NodeDevice):
     def __init__(self, node):
         NodeDevice.__init__(self, node)
@@ -125,6 +127,7 @@ class SystemDevice(NodeDevice):
 
         return desc
 
+
 class NetDevice(NodeDevice):
     def __init__(self, node):
         NodeDevice.__init__(self, node)
@@ -136,8 +139,8 @@ class NetDevice(NodeDevice):
         self.parseXML(self._getCapabilityNode(node))
 
     def parseXML(self, node):
-        value_map = { "interface" : "interface",
-                      "address" : "address", }
+        value_map = {"interface" : "interface",
+                     "address" : "address"}
         child = node.children
         while child:
             if child.name == "capability":
@@ -153,6 +156,7 @@ class NetDevice(NodeDevice):
             desc = _("Interface %s") % self.interface
 
         return desc
+
 
 class PCIDevice(NodeDevice):
     def __init__(self, node):
@@ -171,10 +175,10 @@ class PCIDevice(NodeDevice):
         self.parseXML(self._getCapabilityNode(node))
 
     def parseXML(self, node):
-        val_map = { "domain" : "domain",
+        val_map = {"domain" : "domain",
                     "bus" : "bus",
                     "slot" : "slot",
-                    "function" : "function" }
+                    "function" : "function"}
         child = node.children
         while child:
             if child.name == "vendor":
@@ -201,6 +205,7 @@ class PCIDevice(NodeDevice):
             desc = "%s %s" % (devstr, str(self.product_name))
         return desc
 
+
 class USBDevice(NodeDevice):
     def __init__(self, node):
         NodeDevice.__init__(self, node)
@@ -216,7 +221,7 @@ class USBDevice(NodeDevice):
         self.parseXML(self._getCapabilityNode(node))
 
     def parseXML(self, node):
-        val_map = { "bus": "bus", "device": "device"}
+        val_map = {"bus": "bus", "device": "device"}
         child = node.children
         while child:
             if child.name == "vendor":
@@ -238,6 +243,7 @@ class USBDevice(NodeDevice):
         desc = "%s %s %s" % (devstr, str(self.vendor_name),
                              str(self.product_name))
         return desc
+
 
 class StorageDevice(NodeDevice):
     def __init__(self, node):
@@ -262,7 +268,7 @@ class StorageDevice(NodeDevice):
         self.parseXML(self._getCapabilityNode(node))
 
     def parseXML(self, node):
-        val_map = { "block" : "block",
+        val_map = {"block" : "block",
                     "bus" : "bus",
                     "drive_type" : "drive_type",
                     "model" : "model",
@@ -306,6 +312,7 @@ class StorageDevice(NodeDevice):
             desc = ": ".join((desc, self.name))
         return desc
 
+
 class USBBus(NodeDevice):
     def __init__(self, node):
         NodeDevice.__init__(self, node)
@@ -318,10 +325,10 @@ class USBBus(NodeDevice):
         self.parseXML(self._getCapabilityNode(node))
 
     def parseXML(self, node):
-        val_map = { "number" : "number",
+        val_map = {"number" : "number",
                     "class" : "classval",
                     "subclass" : "subclass",
-                    "protocol" : "protocol" }
+                    "protocol" : "protocol"}
         self._parseHelper(node, val_map)
 
 
@@ -338,12 +345,13 @@ class SCSIDevice(NodeDevice):
         self.parseXML(self._getCapabilityNode(node))
 
     def parseXML(self, node):
-        val_map = { "host" : "host",
+        val_map = {"host" : "host",
                     "bus" : "bus",
                     "target": "target",
                     "lun" : "lun",
                     "type" : "type"}
         self._parseHelper(node, val_map)
+
 
 class SCSIBus(NodeDevice):
     def __init__(self, node):
@@ -360,7 +368,7 @@ class SCSIBus(NodeDevice):
         self.parseXML(self._getCapabilityNode(node))
 
     def parseXML(self, node):
-        val_map = { "host" : "host" }
+        val_map = {"host" : "host"}
 
         child = node.children
         while child:
@@ -383,6 +391,7 @@ class SCSIBus(NodeDevice):
 
             child = child.next
 
+
 def is_nodedev_capable(conn):
     """
     Check if the passed libvirt connection supports host device routines
@@ -393,6 +402,7 @@ def is_nodedev_capable(conn):
     @rtype: C{bool}
     """
     return support.check_conn_support(conn, support.SUPPORT_CONN_NODEDEV)
+
 
 def is_pci_detach_capable(conn):
     """
@@ -406,10 +416,12 @@ def is_pci_detach_capable(conn):
     return support.check_conn_support(conn,
                                       support.SUPPORT_NODEDEV_PCI_DETACH)
 
+
 def _lookupNodeName(conn, name):
     nodedev = conn.nodeDeviceLookupByName(name)
     xml = nodedev.XMLDesc(0)
     return parse(xml)
+
 
 def lookupNodeName(conn, name):
     """
@@ -436,6 +448,7 @@ def lookupNodeName(conn, name):
             raise e
 
         return devAddressToNodedev(conn, name)
+
 
 def _isAddressStr(addrstr):
     cmp_func = None
@@ -491,6 +504,7 @@ def _isAddressStr(addrstr):
 
     return cmp_func, devtype
 
+
 def devAddressToNodedev(conn, addrstr):
     """
     Look up the passed host device address string as a libvirt node device,
@@ -523,6 +537,7 @@ def devAddressToNodedev(conn, addrstr):
     raise ValueError(_("Did not find a matching node device for '%s'") %
                      addrstr)
 
+
 def parse(xml):
     """
     Convert the passed libvirt node device xml into a NodeDevice object
@@ -540,6 +555,7 @@ def parse(xml):
 
     return util.parse_node_helper(xml, "device", _parse_func)
 
+
 def _findNodeType(node):
     child = node.children
     while child:
@@ -547,6 +563,7 @@ def _findNodeType(node):
             return child.prop("type")
         child = child.next
     return None
+
 
 def _typeToDeviceClass(t):
     if t == CAPABILITY_TYPE_SYSTEM:

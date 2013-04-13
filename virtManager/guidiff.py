@@ -20,6 +20,7 @@
 
 _is_gui = True
 
+
 class stubclass(object):
     def __init__(self, *args, **kwargs):
         ignore = args
@@ -35,11 +36,13 @@ class stubclass(object):
         ignore = attr
         ignore = val
 
+
 def is_gui(isgui=None):
     global _is_gui
     if isgui is not None:
         _is_gui = isgui
     return _is_gui
+
 
 def get_running_config():
     if _is_gui:

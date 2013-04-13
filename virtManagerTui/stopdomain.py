@@ -20,6 +20,7 @@
 import snack
 from virtManagerTui.domainlistconfigscreen import DomainListConfigScreen
 
+
 class StopDomainConfigScreen(DomainListConfigScreen):
     LIST_PAGE    = 1
     STOP_PAGE = 2
@@ -65,6 +66,7 @@ class StopDomainConfigScreen(DomainListConfigScreen):
         grid = snack.Grid(1, 1)
         grid.setField(snack.Label("%s was successfully stopped." % self.get_selected_domain().get_name()), 0, 0)
         return [grid]
+
 
 def StopDomain():
     screen = StopDomainConfigScreen()

@@ -110,95 +110,95 @@ _support_dict = {
     SUPPORT_CONN_STORAGE : {
         "function" : "virConnect.listStoragePools",
         "args" : (),
-    },
+   },
 
     SUPPORT_CONN_NODEDEV : {
         "function" : "virConnect.listDevices",
         "args" : (None, 0),
-    },
+   },
 
     SUPPORT_CONN_FINDPOOLSOURCES : {
         "function" : "virConnect.findStoragePoolSources",
-    },
+   },
 
     SUPPORT_CONN_KEYMAP_AUTODETECT : {
-        "drv_version" : [ ("qemu", 11000) ],
-    },
+        "drv_version" : [("qemu", 11000)],
+   },
 
     SUPPORT_CONN_GETHOSTNAME : {
         "function" : "virConnect.getHostname()",
         "args" : (),
-    },
+   },
 
     SUPPORT_CONN_DOMAIN_VIDEO : {
         "version" : 6005,
-    },
+   },
 
 
     SUPPORT_CONN_NETWORK : {
         "function" : "virConnect.listNetworks",
         "args" : (),
-    },
+   },
 
     SUPPORT_CONN_INTERFACE : {
         "function" : "virConnect.listInterfaces",
         "args" : (),
-    },
+   },
 
     SUPPORT_CONN_MAXVCPUS_XML : {
         "version" : 8005,
-    },
+   },
 
     SUPPORT_CONN_STREAM : {
         # Earliest version with working bindings
         "version" : 9003,
         "function" : "virConnect.newStream",
         "args" : (0,),
-    },
+   },
 
 
     # Domain checks
     SUPPORT_DOMAIN_GETVCPUS : {
         "function" : "virDomain.vcpus",
         "args" : (),
-    },
+   },
 
     SUPPORT_DOMAIN_XML_INACTIVE : {
         "function" : "virDomain.XMLDesc",
         "args" : (),
         "flag" : "VIR_DOMAIN_XML_INACTIVE",
-    },
+   },
 
     SUPPORT_DOMAIN_XML_SECURE : {
         "function" : "virDomain.XMLDesc",
         "args" : (),
         "flag" : "VIR_DOMAIN_XML_SECURE",
-    },
+   },
 
     SUPPORT_DOMAIN_MANAGED_SAVE : {
         "function" : "virDomain.hasManagedSaveImage",
         "args" : (0,),
-    },
+   },
 
     SUPPORT_DOMAIN_MIGRATE_DOWNTIME : {
         "function" : "virDomain.migrateSetMaxDowntime",
         # Use a bogus flags value, so that we don't overwrite existing
         # downtime value
         "args" : (30, 12345678),
-    },
+   },
 
     SUPPORT_DOMAIN_JOB_INFO : {
         "function" : "virDomain.jobInfo",
         "args" : (),
-    },
+   },
 
     SUPPORT_DOMAIN_CONSOLE_STREAM : {
         "version" : 9003,
-    },
+   },
 
     SUPPORT_DOMAIN_SET_METADATA : {
         "version" : 9010,
-    },
+   },
 
 
     # Pool checks
@@ -206,88 +206,94 @@ _support_dict = {
     SUPPORT_STORAGE_CREATEVOLFROM : {
         "function" : "virStoragePool.createXMLFrom",
         "version" : 6004,
-    },
+   },
 
     # Nodedev checks
     # This can't ever require a nodedev object for back compat reasons
     SUPPORT_NODEDEV_PCI_DETACH : {
         "function" : "virNodeDevice.dettach",
         "version" : 6001,
-    },
+   },
 
     # Interface checks
     SUPPORT_INTERFACE_XML_INACTIVE : {
         "function" : "virInterface.XMLDesc",
         "args" : (),
         "flag" : "VIR_INTERFACE_XML_INACTIVE",
-    },
+   },
 
     # Conn HV checks
     SUPPORT_CONN_HV_VIRTIO : {
-        "drv_version": [ ("qemu", 0) ],
-        "hv_version" : [ ("kvm", 0) ],
-    },
+        "drv_version": [("qemu", 0)],
+        "hv_version" : [("kvm", 0)],
+   },
 
     SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI : {
-        "drv_version" : [ ("xen", -3001000)],
-    },
+        "drv_version" : [("xen", -3001000)],
+   },
 
     SUPPORT_CONN_HV_SOUND_AC97 : {
         "version" : 6000,
         "force_version" : True,
-        "drv_version" : [ ("qemu", 11000), ],
-    },
+        "drv_version" : [("qemu", 11000), ],
+   },
 
     SUPPORT_CONN_HV_SOUND_ICH6 : {
         "version" : 8008,
-        "drv_version" : [ ("qemu", 14000), ],
-        "rhel6_drv_version" : [ ("qemu", 12001) ],
+        "drv_version" : [("qemu", 14000), ],
+        "rhel6_drv_version" : [("qemu", 12001)],
         "rhel6_version" : 8007,
-    },
+   },
 
     SUPPORT_CONN_HV_GRAPHICS_SPICE : {
         "version" : 8006,
-        "drv_version" : [ ("qemu", 14000), ],
-    },
+        "drv_version" : [("qemu", 14000), ],
+   },
 
     SUPPORT_CONN_HV_CHAR_SPICEVMC : {
         "version" : 8008,
-        "drv_version" : [ ("qemu", 14000), ],
-    },
+        "drv_version" : [("qemu", 14000), ],
+   },
     SUPPORT_CONN_HV_DIRECT_INTERFACE : {
         "version" : 8007,
-        "drv_version" : [ ("qemu", 0), ],
-    },
+        "drv_version" : [("qemu", 0), ],
+   },
     SUPPORT_CONN_HV_FILESYSTEM : {
-        "drv_version" : [ ("qemu", 13000),
+        "drv_version" : [("qemu", 13000),
                           ("lxc", 0),
                           ("openvz", 0),
                           ("test", 0)],
-        "drv_libvirt_version" : [ ("qemu", 8005),
+        "drv_libvirt_version" : [("qemu", 8005),
                                   ("lxc", 0),
                                   ("openvz", 0),
                                   ("test", 0)],
-    },
+   },
 
 
     SUPPORT_STREAM_UPLOAD : {
         # Latest I tested with, and since we will use it by default
         # for URL installs, want to be sure it works
         "version" : 9004,
-    },
+   },
 }
 
 # XXX: RHEL6 has lots of feature backports, and since libvirt doesn't
 # really offer any XML feature introspection, we have to use hacks to
 # make sure we aren't generating bogus config on non RHEL
 _rhel6 = False
+
+
 def set_rhel6(val):
     global _rhel6
     _rhel6 = bool(val)
+
+
 def get_rhel6():
     return _rhel6
 
 # Pull a connection object from the passed libvirt object
+
+
 def _get_conn_from_object(obj):
     if not hasattr(obj, "_conn"):
         return obj
@@ -295,6 +301,8 @@ def _get_conn_from_object(obj):
 
 # Check that command is present in the python bindings, and return the
 # the requested function
+
+
 def _get_command(funcname, objname=None, obj=None):
     if not obj:
         obj = libvirt
@@ -310,15 +318,21 @@ def _get_command(funcname, objname=None, obj=None):
     return getattr(obj, funcname)
 
 # Make sure libvirt object 'objname' has function 'funcname'
+
+
 def _has_command(funcname, objname=None, obj=None):
     return bool(_get_command(funcname, objname, obj))
 
 # Make sure libvirt object has flag 'flag_name'
+
+
 def _get_flag(flag_name):
     return _get_command(flag_name)
 
 # Try to call the passed function, and look for signs that libvirt or driver
 # doesn't support it
+
+
 def _try_command(func, args, check_all_error=False):
     try:
         func(*args)
@@ -337,10 +351,14 @@ def _try_command(func, args, check_all_error=False):
     return True
 
 # Version of the local libvirt library
+
+
 def _local_lib_ver():
     return libvirt.getVersion()
 
 # Version of libvirt library/daemon on the connection (could be remote)
+
+
 def _daemon_lib_ver(conn, uri, force_version, minimum_libvirt_version):
     # Always force the required version if it's after the version which
     # has getLibVersion
@@ -361,6 +379,8 @@ def _daemon_lib_ver(conn, uri, force_version, minimum_libvirt_version):
     return conn.getLibVersion()
 
 # Return the hypervisor version
+
+
 def _hv_ver(conn, uri):
     drv_type = uriutil.get_uri_driver(uri)
     args = ()
@@ -385,6 +405,7 @@ def _hv_ver(conn, uri):
 
     return ret
 
+
 def _split_function_name(function):
     if not function:
         return (None, None)
@@ -394,6 +415,7 @@ def _split_function_name(function):
         return (None, output[0])
     else:
         return (output[0], output[1])
+
 
 def _check_support(conn, feature, data=None):
     """
@@ -554,6 +576,7 @@ def _check_support(conn, feature, data=None):
 
 # Public API below
 
+
 def is_error_nosupport(err):
     """
     Check if passed exception indicates that the called libvirt command isn't
@@ -571,28 +594,38 @@ def is_error_nosupport(err):
 
     return False
 
+
 def support_threading():
     return bool(_local_lib_ver() >= 6000)
+
+
 def support_openauth():
     return bool(_local_lib_ver() >= 4000)
+
 
 def check_conn_support(conn, feature):
     return _check_support(conn, feature, conn)
 
+
 def check_conn_hv_support(conn, feature, hv):
     return _check_support(conn, feature, hv)
+
 
 def check_domain_support(dom, feature):
     return _check_support(_get_conn_from_object(dom), feature, dom)
 
+
 def check_pool_support(pool, feature):
     return _check_support(_get_conn_from_object(pool), feature, pool)
+
 
 def check_nodedev_support(nodedev, feature):
     return _check_support(_get_conn_from_object(nodedev), feature, nodedev)
 
+
 def check_interface_support(nodedev, feature):
     return _check_support(_get_conn_from_object(nodedev), feature, nodedev)
+
 
 def check_stream_support(conn, feature):
     return (check_conn_support(conn, SUPPORT_CONN_STREAM) and

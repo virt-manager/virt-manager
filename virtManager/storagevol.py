@@ -21,6 +21,7 @@
 from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 
+
 class vmmStorageVolume(vmmLibvirtObject):
     def __init__(self, conn, vol, name):
         vmmLibvirtObject.__init__(self, conn)

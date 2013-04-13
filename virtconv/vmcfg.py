@@ -26,6 +26,7 @@ VM_TYPE_UNKNOWN = 0
 VM_TYPE_PV = 1
 VM_TYPE_HVM = 2
 
+
 class vm(object):
     """
     Generic configuration for a particular VM instance.
@@ -81,6 +82,7 @@ class vm(object):
             if disk.type == diskcfg.DISK_TYPE_DISK and not disk.path:
                 raise ValueError(_("Disk %s:%s storage does not exist")
                     % (bus, inst))
+
 
 def host(conn=None):
     """

@@ -69,6 +69,8 @@ NOBOOTISO_FILTER = ".*opensuse12.*|.*opensuse11.*|.*opensuse10.3.*|.*opensuse10.
 EXPECT_XEN_FAIL = ".*opensuse10.2.*|.*opensuse10.0.*"
 
 # Return the expected Distro class for the passed distro label
+
+
 def distroClass(distname):
     if re.match(r".*fedora.*", distname):
         return FedoraDistro
@@ -93,90 +95,90 @@ urls = {
     "fedora15" : {
         'x86_64': FEDORA_BASEURL % ("15", "x86_64"),
         'distro': ("linux", "fedora15")
-    },
+   },
     "fedora16" : {
         'x86_64': FEDORA_BASEURL % ("16", "x86_64"),
         'distro': ("linux", "fedora16")
-    },
+   },
 
     # SUSE Distros
     "opensuse10.0" : {
         'i386'  : "http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/10.0/",
         'x86_64': "http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/10.0/",
-    },
+   },
     "opensuse10.2" : {
         'x86_64': OLD_OPENSUSE_BASEURL % ("10.2")
-    },
+   },
     "opensuse10.3" : {
         'x86_64': OLD_OPENSUSE_BASEURL % ("10.3")
-    },
+   },
     "opensuse11.4" : {
         'i386'  : OPENSUSE_BASEURL % ("11.4"),
         'x86_64': OPENSUSE_BASEURL % ("11.4")
-    },
+   },
     "opensuse12.1" : {
         'i386'  : OPENSUSE_BASEURL % ("12.1"),
         'x86_64': OPENSUSE_BASEURL % ("12.1")
-    },
+   },
 
     # Debian Distros
     "debian-lenny-64" : {
         "noxen": True,
         'x86_64': DEBIAN_BASEURL % ("lenny", "amd64"),
         'distro': ("linux", None)
-    },
+   },
     "debian-squeeze" : {
         'i386' : DEBIAN_BASEURL % ("squeeze", "i386"),
         'x86_64': DEBIAN_BASEURL % ("squeeze", "amd64"),
         'distro': ("linux", None)
-    },
+   },
     "debian-wheezy" : {
         'x86_64': DEBIAN_BASEURL % ("wheezy", "amd64"),
         'distro': ("linux", None)
-    },
+   },
     "debian-sid" : {
         'x86_64': DEBIAN_BASEURL % ("sid", "amd64"),
         'distro': ("linux", None)
-    },
+   },
     "debian-daily" : {
         'i386' : "http://d-i.debian.org/daily-images/amd64/",
         'distro': ("linux", None)
-    },
+   },
 
     # CentOS Distros
     "centos-5-latest" : {
         'i386' : CURCENTOS_BASEURL % ("5", "i386"),
         'x86_64' : CURCENTOS_BASEURL % ("5", "x86_64"),  # No .treeinfo
         'distro': ("linux", "rhel5.4")
-    },
+   },
     "centos-4.9" : {
         'i386' : CURCENTOS_BASEURL % ("4.9", "i386"),
         'x86_64' : CURCENTOS_BASEURL % ("4.9", "x86_64"),
         'distro': ("linux", None)
-    },
+   },
     "centos-5.0" : {
         'x86_64' : OLDCENTOS_BASEURL % ("5.0", "x86_64"),
         'distro': ("linux", None)
-    },
+   },
     "centos-4.0" : {
         "noxen": True,
         'x86_64' : OLDCENTOS_BASEURL % ("4.0", "x86_64"),
         'distro': ("linux", None)
-    },
+   },
 
     # Scientific Linux
     "scientific-5.4" : {
         'x86_64': SCIENTIFIC_BASEURL % ("54", "x86_64"),
         'distro': ("linux", "rhel5.4")
-    },
+   },
     "scientific-5.2" : {
         'x86_64': SCIENTIFIC_BASEURL % ("52", "x86_64"),
         'distro': ("linux", "rhel5")
-    },
+   },
     "scientific-5.0" : {
         'x86_64': SCIENTIFIC_BASEURL % ("50", "x86_64"),
         'distro': ("linux", None)
-    },
+   },
 
     # Ubuntu
     "ubuntu-hardy" : {
@@ -184,27 +186,27 @@ urls = {
         'i386': UBUNTU_BASEURL % ("hardy", "i386"),
         'x86_64': UBUNTU_BASEURL % ("hardy", "amd64"),
         'distro': ("linux", None)
-    },
+   },
     "ubuntu-maverick" : {
         'i386': UBUNTU_BASEURL % ("maverick", "i386"),
         'x86_64': UBUNTU_BASEURL % ("maverick", "amd64"),
         'distro': ("linux", None)
-    },
+   },
     "ubuntu-natty" : {
         'i386': UBUNTU_BASEURL % ("natty", "i386"),
         'x86_64': UBUNTU_BASEURL % ("natty", "amd64"),
         'distro': ("linux", None)
-    },
+   },
     "ubuntu-oneiric" : {
         'i386': UBUNTU_BASEURL % ("oneiric", "i386"),
         'x86_64': UBUNTU_BASEURL % ("oneiric", "amd64"),
         'distro': ("linux", None)
-    },
+   },
     "ubuntu-precise" : {
         'i386': UBUNTU_BASEURL % ("precise", "i386"),
         'x86_64': UBUNTU_BASEURL % ("precise", "amd64"),
         'distro': ("linux", None)
-    },
+   },
 
     # Mandriva
     "mandriva-2009.1" : {
@@ -212,19 +214,20 @@ urls = {
         'i586': MANDRIVA_BASEURL % ("2009.1", "i586"),
         'x86_64': MANDRIVA_BASEURL % ("2009.1", "x86_64"),
         'distro': ("linux", None)
-    },
+   },
     "mandriva-2010.2" : {
         "noxen": True,
         'i586': MANDRIVA_BASEURL % ("2010.2", "i586"),
         'x86_64': MANDRIVA_BASEURL % ("2010.2", "x86_64"),
         'distro': ("linux", None)
-    },
+   },
 }
 
 
 testconn = libvirt.open("test:///default")
 testguest = virtinst.Guest(conn=testconn,
                            installer=virtinst.DistroInstaller())
+
 
 class TestURLFetch(unittest.TestCase):
 
@@ -336,7 +339,7 @@ class TestURLFetch(unittest.TestCase):
                 boot = hvmstore.acquireBootDisk(testguest, fetcher, self.meter)
                 logging.debug("acquireBootDisk: %s", str(boot))
 
-                if boot != True:
+                if boot is not True:
                     raise RuntimeError("Didn't fetch any boot iso.")
         except Exception, e:
             logging.exception("%s-%s: bootdisk fetching: %s",

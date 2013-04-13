@@ -20,6 +20,7 @@ from virtinst import Storage
 
 ROOT_TARGET_PATH = "/var/lib/libvirt/images/%s"
 
+
 class PoolConfig:
     def __init__(self, libvirt):
         self.__libvirt = libvirt
@@ -58,7 +59,7 @@ class PoolConfig:
         self.__needs_source_path = False
         self.__needs_build_pool  = False
         if pooltype is not None:
-            if   pooltype is Storage.StoragePool.TYPE_DIR:
+            if pooltype is Storage.StoragePool.TYPE_DIR:
                 self.__needs_target_path = True
                 self.__target_path = ROOT_TARGET_PATH % self.__name
                 self.__build_pool = True
@@ -149,5 +150,5 @@ class PoolConfig:
     def set_build_pool(self, build_pool):
         self.__build_pool = build_pool
 
-    def  get_build_pool(self):
+    def get_build_pool(self):
         return self.__build_pool

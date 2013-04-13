@@ -23,15 +23,16 @@ from virtinst.VirtualDevice import VirtualDevice
 
 from virtinst.XMLBuilderDomain import _xml_property
 
+
 class VirtualRedirDevice(VirtualDevice):
 
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_REDIRDEV
 
     BUS_DEFAULT = "usb"
-    _buses = [ "usb" ]
+    _buses = ["usb"]
 
     TYPE_DEFAULT = "spicevmc"
-    _types = [ "tcp", "spicevmc", None ]
+    _types = ["tcp", "spicevmc", None]
 
     def __init__(self, bus=BUS_DEFAULT, stype=TYPE_DEFAULT,
                  conn=None, parsexml=None, parsexmlnode=None, caps=None):
@@ -102,13 +103,13 @@ class VirtualRedirDevice(VirtualDevice):
             raise ValueError(_("Could not determine or unsupported format of '%s'") % serverstr)
 
     def _get_xml_config(self):
-        xml  = ("    <redirdev bus='%s' type='%s'" % \
+        xml  = ("    <redirdev bus='%s' type='%s'" %
                     (self.bus, self.type))
         if self.type == 'spicevmc':
             xml += "/>"
             return xml
         xml += ">\n"
-        xml += ("      <source mode='connect' host='%s' service='%s'/>\n" % \
+        xml += ("      <source mode='connect' host='%s' service='%s'/>\n" %
                     (self.host, self.service))
         xml += "    </redirdev>"
         return xml

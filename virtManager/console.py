@@ -171,7 +171,7 @@ class Tunnel(object):
             os.dup(fds[1].fileno())
             os.dup(errorfds[1].fileno())
             os.execlp(*argv)
-            os._exit(1) # pylint: disable=W0212
+            os._exit(1)  # pylint: disable=W0212
         else:
             fds[1].close()
             errorfds[1].close()
@@ -614,7 +614,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         # State for disabling modifiers when keyboard is grabbed
         # XXX
-        #self.accel_groups = Gtk.accel_groups_from_object(self.topwin)
+        # self.accel_groups = Gtk.accel_groups_from_object(self.topwin)
         self.accel_groups = []
         self.gtk_settings_accel = None
         self.gtk_settings_mnemonic = None
@@ -917,7 +917,7 @@ class vmmConsolePages(vmmGObjectUI):
         if self.viewer is None:
             return
 
-        v = self.viewer # close_viewer() can be reentered
+        v = self.viewer  # close_viewer() can be reentered
         self.viewer = None
         w = v.display
 
@@ -1265,6 +1265,6 @@ class vmmConsolePages(vmmGObjectUI):
             desktop_h = int(req.width / desktop_ratio)
             dy = (req.height - desktop_h) / 2
 
-        #viewer_alloc = (x=dx, y=dy, width=desktop_w, height=desktop_h)
+        # viewer_alloc = (x=dx, y=dy, width=desktop_w, height=desktop_h)
         viewer_alloc = (dx, dy, desktop_w, desktop_h)
         self.viewer.display.size_allocate(viewer_alloc)

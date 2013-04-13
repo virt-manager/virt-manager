@@ -26,13 +26,14 @@ LIST_POOLS_PAGE    = 1
 CONFIRM_PAGE       = 2
 FINISHED_REMOVING  = 3
 
+
 class RemoveStoragePoolConfigScreen(StorageListConfigScreen):
     def __init__(self):
         StorageListConfigScreen.__init__(self, "Remove A Storage Pool")
         self.__confirm = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_POOLS_PAGE:
+        if page is LIST_POOLS_PAGE:
             return self.get_storage_pool_list_page(screen)
         elif page is CONFIRM_PAGE:
             return self.get_confirm_page(screen)
@@ -90,6 +91,7 @@ class RemoveStoragePoolConfigScreen(StorageListConfigScreen):
         if self.get_libvirt().storage_pool_exists(pool):
             state = "was not "
         return [Label("Storage pool '%s' %sdeleted." % (pool, state))]
+
 
 def RemoveStoragePool():
     screen = RemoveStoragePoolConfigScreen()

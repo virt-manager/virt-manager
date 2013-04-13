@@ -140,7 +140,7 @@ class my_build_icons(build_icons):
         for size in glob.glob(os.path.join(self.icon_dir, "*")):
             for category in glob.glob(os.path.join(size, "*")):
                 icons = []
-                for icon in glob.glob(os.path.join(category,"*")):
+                for icon in glob.glob(os.path.join(category, "*")):
                     if not os.path.islink(icon):
                         icons.append(icon)
                 if not icons:
@@ -418,17 +418,23 @@ class CheckPylint(Command):
         cmd += " ".join(files)
         os.system(cmd + " --rcfile tests/pylint.cfg")
 
+        print "running pep8"
+        cmd = "pep8 "
+        cmd += "--exclude scriptimports "
+        cmd += " ".join(files)
+        os.system(cmd + " --config tests/pep8.cfg")
+
 
 setup(
-    name = "virt-manager",
-    version = cliconfig.__version__,
-    author = "Cole Robinson",
-    author_email = "virt-tools-list@redhat.com",
-    url = "http://virt-manager.org",
-    license = "GPLv2+",
+    name="virt-manager",
+    version=cliconfig.__version__,
+    author="Cole Robinson",
+    author_email="virt-tools-list@redhat.com",
+    url="http://virt-manager.org",
+    license="GPLv2+",
 
     # These wrappers are generated in our custom build command
-    scripts = ([
+    scripts=([
         "build/virt-manager",
         "build/virt-clone",
         "build/virt-install",
@@ -436,7 +442,7 @@ setup(
         "build/virt-convert"] +
         (cliconfig.with_tui and ["build/virt-manager-tui"] or [])),
 
-    data_files = [
+    data_files=[
         ("share/virt-manager/", [
             "virt-manager",
             "virt-install",
@@ -466,7 +472,7 @@ setup(
          glob.glob("virtconv/parsers/*.py")),
     ] + tui_files,
 
-    cmdclass = {
+    cmdclass={
         'build': my_build,
         'build_i18n': my_build_i18n,
         'build_icons': my_build_icons,

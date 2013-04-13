@@ -34,6 +34,7 @@ from virtManager.asyncjob import vmmAsyncJob
 # PackageKit lookup helpers #
 #############################
 
+
 def check_packagekit(errbox, packages, ishv):
     """
     Returns None when we determine nothing useful.
@@ -109,6 +110,7 @@ def check_packagekit(errbox, packages, ishv):
 
     return do_install
 
+
 def _do_async_search(asyncjob, session, pk_control, packages):
     found = []
     try:
@@ -121,6 +123,7 @@ def _do_async_search(asyncjob, session, pk_control, packages):
         asyncjob.set_error(str(e), "".join(traceback.format_exc()))
 
     asyncjob.set_extra_data(found)
+
 
 def packagekit_install(package_list):
     session = dbus.SessionBus()
@@ -136,6 +139,7 @@ def packagekit_install(package_list):
     pk_control.InstallPackageNames(dbus.UInt32(0),
                                    package_list, "hide-confirm-search",
                                    timeout=timeout)
+
 
 def packagekit_search(session, pk_control, package_name, packages):
     newstyle = False
@@ -190,6 +194,7 @@ def packagekit_search(session, pk_control, package_name, packages):
 ###################
 # Service helpers #
 ###################
+
 
 def start_libvirtd():
     """

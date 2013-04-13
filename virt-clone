@@ -44,6 +44,7 @@ def get_clone_name(new_name, auto_clone, design):
     err_txt = _("A name is required for the new virtual machine.")
     cli.prompt_loop(prompt_txt, err_txt, new_name, design, "clone_name")
 
+
 def get_original_guest(guest_name, origfile, design):
 
     origxml = None
@@ -63,6 +64,7 @@ def get_original_guest(guest_name, origfile, design):
     cli.prompt_loop(prompt_txt, err_txt,
                     guest_name, design, "original_guest")
 
+
 def get_clone_macaddr(new_mac, design):
     if new_mac is None:
         pass
@@ -72,9 +74,11 @@ def get_clone_macaddr(new_mac, design):
         for i in new_mac:
             design.clone_mac = i
 
+
 def get_clone_uuid(new_uuid, design):
     if new_uuid is not None:
         design.clone_uuid = new_uuid
+
 
 def get_clone_diskfile(new_diskfiles, design, conn, preserve=False,
                        auto_clone=False):
@@ -103,6 +107,7 @@ def get_clone_diskfile(new_diskfiles, design, conn, preserve=False,
         design.clone_devices = devpath
         newidx += 1
 
+
 def _check_disk(conn, clone_path, orig_path, preserve):
 
     prompt_txt = (_("What would you like to use as the cloned disk "
@@ -114,8 +119,10 @@ def _check_disk(conn, clone_path, orig_path, preserve):
                            check_size=False,
                            path_to_clone=orig_path)
 
+
 def get_clone_sparse(sparse, design):
     design.clone_sparse = sparse
+
 
 def get_preserve(preserve, design):
     design.preserve = preserve
@@ -124,6 +131,7 @@ def get_preserve(preserve, design):
 def get_force_target(target, design):
     for i in target or []:
         design.force_target = i
+
 
 def parse_args():
     parser = cli.setupParser()
@@ -196,6 +204,8 @@ def parse_args():
     return options, parseargs
 
 ### Let's do it!
+
+
 def main(conn=None):
     cli.earlyLogging()
     options, parseargs = parse_args()

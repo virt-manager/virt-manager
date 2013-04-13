@@ -54,6 +54,7 @@ from virtManager.systray import vmmSystray
 # XXX: gtk3 has issues here
 debug_ref_leaks = False
 
+
 def default_uri():
     tryuri = None
     if os.path.exists("/var/lib/xend") and os.path.exists("/proc/xen"):
@@ -70,6 +71,7 @@ def default_uri():
 DETAILS_PERF = 1
 DETAILS_CONFIG = 2
 DETAILS_CONSOLE = 3
+
 
 def _safe_getattr(obj, name):
     if not hasattr(obj, name):

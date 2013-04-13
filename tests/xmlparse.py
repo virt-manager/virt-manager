@@ -25,10 +25,12 @@ from tests import utils
 conn = utils.open_testdriver()
 kvmconn = utils.open_testkvmdriver()
 
+
 def sanitize_file_xml(xml):
     # s/"/'/g from generated XML, matches what libxml dumps out
     # This won't work all the time, but should be good enough for testing
     return xml.replace("'", "\"")
+
 
 class XMLParseTest(unittest.TestCase):
 

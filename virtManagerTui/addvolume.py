@@ -30,6 +30,7 @@ VOLUME_FORMAT_PAGE = 3
 MAX_CAPACITY_PAGE  = 4
 CONFIRM_PAGE       = 5
 
+
 class AddVolumeConfigScreen(StorageListConfigScreen):
     def __init__(self):
         StorageListConfigScreen.__init__(self, "Add A New Storage Volume")
@@ -40,7 +41,7 @@ class AddVolumeConfigScreen(StorageListConfigScreen):
         self.__formats = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is SELECT_POOL_PAGE:
+        if page is SELECT_POOL_PAGE:
             return self.get_storage_pool_list_page(screen)
         elif page is VOLUME_NAME_PAGE:
             return self.get_volume_name_page(screen)
@@ -188,6 +189,7 @@ class AddVolumeConfigScreen(StorageListConfigScreen):
         grid.setField(snack.Label("%s" % (utils.size_as_mb_or_gb(self.__config.get_allocation() * (1024 ** 2)))), 1, 3, anchorLeft=1)
         return [snack.Label("Ready To Allocation New Storage Volume"),
                 grid]
+
 
 def AddStorageVolume():
     screen = AddVolumeConfigScreen()

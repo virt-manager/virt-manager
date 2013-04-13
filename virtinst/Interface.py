@@ -186,7 +186,7 @@ class Interface(object):
         """
         Returns IP protocol XML
         """
-        if self.protocol_xml != None:
+        if self.protocol_xml is not None:
             return self.protocol_xml
         xml = ""
         for p in self.protocols:
@@ -353,24 +353,25 @@ class InterfaceBridge(_InterfaceCompound):
         xml += "  </bridge>\n"
         return xml
 
+
 class InterfaceBond(_InterfaceCompound):
     """
     Class for building and installing libvirt interface bond xml
     """
 
-    INTERFACE_BOND_MODES = [ "active-backup", "balance-alb", "balance-rr",
+    INTERFACE_BOND_MODES = ["active-backup", "balance-alb", "balance-rr",
                              "balance-tlb", "balance-xor", "broadcast",
-                             "802.3ad" ]
+                             "802.3ad"]
 
     INTERFACE_BOND_MONITOR_MODE_ARP = "arpmon"
     INTERFACE_BOND_MONITOR_MODE_MII = "miimon"
-    INTERFACE_BOND_MONITOR_MODES    = [ INTERFACE_BOND_MONITOR_MODE_ARP,
-                                        INTERFACE_BOND_MONITOR_MODE_MII ]
+    INTERFACE_BOND_MONITOR_MODES    = [INTERFACE_BOND_MONITOR_MODE_ARP,
+                                        INTERFACE_BOND_MONITOR_MODE_MII]
 
-    INTERFACE_BOND_MONITOR_MODE_ARP_VALIDATE_MODES = [ "active", "backup",
-                                                       "all" ]
+    INTERFACE_BOND_MONITOR_MODE_ARP_VALIDATE_MODES = ["active", "backup",
+                                                       "all"]
 
-    INTERFACE_BOND_MONITOR_MODE_MII_CARRIER_TYPES = [ "netif", "ioctl" ]
+    INTERFACE_BOND_MONITOR_MODE_MII_CARRIER_TYPES = ["netif", "ioctl"]
 
     def __init__(self, name, conn=None):
         _InterfaceCompound.__init__(self, Interface.INTERFACE_TYPE_BOND,
@@ -514,6 +515,7 @@ class InterfaceBond(_InterfaceCompound):
         xml += "  </bond>\n"
         return xml
 
+
 class InterfaceEthernet(Interface):
     """
     Class for building and installing libvirt interface ethernet xml
@@ -526,6 +528,7 @@ class InterfaceEthernet(Interface):
     def _get_interface_xml(self):
         # No ethernet specific XML
         return ""
+
 
 class InterfaceVLAN(Interface):
     """
@@ -578,8 +581,8 @@ class InterfaceProtocol(object):
 
     INTERFACE_PROTOCOL_FAMILY_IPV4 = "ipv4"
     INTERFACE_PROTOCOL_FAMILY_IPV6 = "ipv6"
-    INTERFACE_PROTOCOL_FAMILIES = [ INTERFACE_PROTOCOL_FAMILY_IPV4,
-                                    INTERFACE_PROTOCOL_FAMILY_IPV6 ]
+    INTERFACE_PROTOCOL_FAMILIES = [INTERFACE_PROTOCOL_FAMILY_IPV4,
+                                    INTERFACE_PROTOCOL_FAMILY_IPV6]
 
     @staticmethod
     def protocol_class_for_family(family):
@@ -613,6 +616,7 @@ class InterfaceProtocol(object):
         xml += "  </protocol>\n"
 
         return xml
+
 
 class InterfaceProtocolIP(InterfaceProtocol):
 
@@ -677,12 +681,14 @@ class InterfaceProtocolIP(InterfaceProtocol):
 
         return xml
 
+
 class InterfaceProtocolIPv4(InterfaceProtocolIP):
     def __init__(self):
         InterfaceProtocolIP.__init__(self, self.INTERFACE_PROTOCOL_FAMILY_IPV4)
 
     def _get_protocol_xml(self):
         return self._get_ip_xml()
+
 
 class InterfaceProtocolIPv6(InterfaceProtocolIP):
     def __init__(self):
@@ -705,6 +711,7 @@ class InterfaceProtocolIPv6(InterfaceProtocolIP):
 
         xml += self._get_ip_xml()
         return xml
+
 
 class InterfaceProtocolIPAddress(object):
     def __init__(self, address, prefix=None):

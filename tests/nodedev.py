@@ -36,6 +36,7 @@ unknown_xml = """
 </device>
 """
 
+
 class TestNodeDev(unittest.TestCase):
 
     def _nodeDevFromName(self, devname):

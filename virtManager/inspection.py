@@ -22,10 +22,11 @@ from threading import Thread
 import logging
 import os
 
-from guestfs import GuestFS # pylint: disable=F0401
+from guestfs import GuestFS  # pylint: disable=F0401
 
 from virtManager.baseclass import vmmGObject
 from virtManager.domain import vmmInspectionData
+
 
 class vmmInspection(vmmGObject):
     # Can't find a way to make Thread release our reference
@@ -36,7 +37,7 @@ class vmmInspection(vmmGObject):
 
         self._thread = Thread(name="inspection thread", target=self._run)
         self._thread.daemon = True
-        self._wait = 15 * 1000 # 15 seconds
+        self._wait = 15 * 1000  # 15 seconds
 
         self._q = Queue()
         self._conns = {}
@@ -182,17 +183,17 @@ class vmmInspection(vmmGObject):
         root = roots[0]
 
         # Inspection results.
-        typ = g.inspect_get_type(root) # eg. "linux"
-        distro = g.inspect_get_distro(root) # eg. "fedora"
-        major_version = g.inspect_get_major_version(root) # eg. 14
-        minor_version = g.inspect_get_minor_version(root) # eg. 0
-        hostname = g.inspect_get_hostname(root) # string
-        product_name = g.inspect_get_product_name(root) # string
+        typ = g.inspect_get_type(root)  # eg. "linux"
+        distro = g.inspect_get_distro(root)  # eg. "fedora"
+        major_version = g.inspect_get_major_version(root)  # eg. 14
+        minor_version = g.inspect_get_minor_version(root)  # eg. 0
+        hostname = g.inspect_get_hostname(root)  # string
+        product_name = g.inspect_get_product_name(root)  # string
 
         # Added in libguestfs 1.9.13:
         product_variant = None
         if hasattr(g, "inspect_get_product_variant"):
-            product_variant = g.inspect_get_product_variant(root) # string
+            product_variant = g.inspect_get_product_variant(root)  # string
 
         # For inspect_list_applications and inspect_get_icon we
         # require that the guest filesystems are mounted.  However

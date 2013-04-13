@@ -35,6 +35,7 @@ from virtinst import Storage
 DEFAULT_ALLOC = 0
 DEFAULT_CAP   = 8192
 
+
 class vmmCreateVolume(vmmGObjectUI):
     __gsignals__ = {
         "vol-created": (GObject.SignalFlags.RUN_FIRST, None, []),
