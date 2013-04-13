@@ -1,26 +1,19 @@
 # to be included/excluded from the tarball produced by sdist
 include AUTHORS COPYING HACKING INSTALL NEWS README
 include autobuild.sh
-include MANIFEST
 include MANIFEST.in
 include setup.py
 include todo.txt
 include .tx/config
 include virt-*
-exclude build dist
 recursive-include data *
 recursive-include man *
 recursive-include po *
 recursive-include tests *
-recursive-exclude tests *.pyc
 recursive-include ui *
 recursive-include virtManager *
-recursive-exclude virtManager *.pyc
 recursive-include virtManagerTui *
-recursive-exclude virtManagerTui *.pyc
 recursive-include virtcli *
-recursive-exclude virtcli/*.pyc
 recursive-include virtconv *
-recursive-exclude virtconv *.pyc
 recursive-include virtinst *
-recursive-exclude virtinst *.pyc
+global-exclude *.pyc
