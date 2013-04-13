@@ -1757,6 +1757,8 @@ def parse_graphics(guest, optstring, dev=None):
         return None
 
     def sanitize_keymap(keymap):
+        from virtinst import hostkeymap
+
         if not keymap:
             return None
         if keymap.lower() == "local":
@@ -1764,7 +1766,7 @@ def parse_graphics(guest, optstring, dev=None):
         if keymap.lower() == "none":
             return None
 
-        use_keymap = util.check_keytable(keymap)
+        use_keymap = hostkeymap.sanitize_keymap(keymap)
         if not use_keymap:
             raise ValueError(
                         _("Didn't match keymap '%s' in keytable!") % keymap)

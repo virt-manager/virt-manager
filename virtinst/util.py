@@ -18,11 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-#
-# Internal utility functions. These do NOT form part of the API and must
-# not be used by clients.
-#
-
 import commands
 import logging
 import os
@@ -384,50 +379,6 @@ def parse_node_helper(xml, root_name, callback, exec_class=ValueError):
     return ret
 
 
-def find_xkblayout(path):
-    """
-    Reads a keyboard layout from a file that defines an XKBLAYOUT
-    variable, e.g. /etc/default/{keyboard,console-setup}.
-    The format of these files is such that they can be 'sourced'
-    in a shell script.
-    """
-
-    kt = None
-    try:
-        f = open(path, "r")
-    except IOError, e:
-        logging.debug('Could not open "%s": %s ', path, str(e))
-    else:
-        keymap_re = re.compile(r'\s*XKBLAYOUT="(?P<kt>[a-z-]+)"')
-        for line in f:
-            m = keymap_re.match(line)
-            if m:
-                kt = m.group('kt')
-                break
-        else:
-            logging.debug("Didn't find keymap in '%s'!", path)
-        f.close()
-    return kt
-
-
-def find_keymap_from_etc_default():
-    """
-    Look under /etc/default for the host machine's keymap.
-
-    This checks both /etc/default/keyboard and /etc/default/console-setup.
-    The former is used by Debian 6.0 (Squeeze) and later.  The latter is
-    used by older versions of Debian, and Ubuntu.
-    """
-
-    KEYBOARD_DEFAULT = "/etc/default/keyboard"
-    paths = [KEYBOARD_DEFAULT, CONSOLE_SETUP_CONF]
-    for path in paths:
-        kt = find_xkblayout(path)
-        if kt is not None:
-            break
-    return kt
-
-
 def generate_uuid(conn):
     for ignore in range(256):
         uuid = randomUUID(conn=conn)
@@ -436,13 +387,6 @@ def generate_uuid(conn):
 
     logging.error("Failed to generate non-conflicting UUID")
 
-#
-# These functions accidentally ended up in the API under virtinst.util
-#
-
-KEYBOARD_DIR = "/etc/sysconfig/keyboard"
-XORG_CONF = "/etc/X11/xorg.conf"
-CONSOLE_SETUP_CONF = "/etc/default/console-setup"
 
 
 def default_route(nic=None):
@@ -602,82 +546,6 @@ def xml_escape(xml):
     return xml
 
 
-def _xorg_keymap():
-    """Look in /etc/X11/xorg.conf for the host machine's keymap, and attempt to
-       map it to a keymap supported by qemu"""
-
-    kt = None
-    try:
-        f = open(XORG_CONF, "r")
-    except IOError, e:
-        logging.debug('Could not open "%s": %s ', XORG_CONF, str(e))
-    else:
-        keymap_re = re.compile(r'\s*Option\s+"XkbLayout"\s+"(?P<kt>[a-z-]+)"')
-        for line in f:
-            m = keymap_re.match(line)
-            if m:
-                kt = m.group('kt')
-                break
-        else:
-            logging.debug("Didn't find keymap in '%s'!", XORG_CONF)
-        f.close()
-    return kt
-
-
-def _console_setup_keymap():
-    """Look in /etc/default/console-setup for the host machine's keymap, and attempt to
-       map it to a keymap supported by qemu"""
-    return find_xkblayout(CONSOLE_SETUP_CONF)
-
-
-def default_keymap():
-    """Look in /etc/sysconfig for the host machine's keymap, and attempt to
-       map it to a keymap supported by qemu"""
-
-    # Set keymap to same as hosts
-    default = "en-us"
-    keymap = None
-
-    kt = None
-    try:
-        f = open(KEYBOARD_DIR, "r")
-    except IOError, e:
-        logging.debug('Could not open "/etc/sysconfig/keyboard" ' + str(e))
-        kt = _xorg_keymap()
-        if not kt:
-            kt = find_keymap_from_etc_default()
-    else:
-        while 1:
-            s = f.readline()
-            if s == "":
-                break
-            if re.search("KEYTABLE", s) is not None or \
-               (re.search("KEYBOARD", s) is not None and
-                re.search("KEYBOARDTYPE", s) is None):
-                if s.count('"'):
-                    delim = '"'
-                elif s.count('='):
-                    delim = '='
-                else:
-                    continue
-                kt = s.split(delim)[1].strip()
-        f.close()
-
-    if kt is None:
-        logging.debug("Did not parse any usable keymapping.")
-        return default
-
-    kt = kt.lower()
-
-    keymap = check_keytable(kt)
-
-    if not keymap:
-        logging.debug("Didn't match keymap '%s' in keytable!", kt)
-        return default
-
-    return keymap
-
-
 def is_storage_capable(conn):
     """check if virConnectPtr passed has storage API support"""
     from virtinst import support
@@ -745,33 +613,6 @@ def lookup_pool_by_path(conn, path):
             if p:
                 return p
     return None
-
-
-def check_keytable(kt):
-    from virtinst import keytable
-
-    keymap = None
-    # Try a simple lookup in the keytable
-    if kt.lower() in keytable.keytable:
-        return keytable.keytable[kt]
-    else:
-        # Try a more intelligent lookup: strip out all '-' and '_', sort
-        # the keytable keys putting the longest first, then compare
-        # by string prefix
-        def len_cmp(a, b):
-            return len(b) - len(a)
-
-        clean_kt = kt.replace("-", "").replace("_", "")
-        sorted_keys = sorted(keytable.keytable.keys(), len_cmp)
-
-        for key in sorted_keys:
-            origkey = key
-            key = key.replace("-", "").replace("_", "")
-
-            if clean_kt.startswith(key):
-                return keytable.keytable[origkey]
-
-    return keymap
 
 
 def _test():

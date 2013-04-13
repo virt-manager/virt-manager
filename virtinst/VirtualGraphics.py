@@ -20,7 +20,6 @@
 import re
 import os
 
-from virtinst import util
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst import support
 from virtinst.XMLBuilderDomain import _xml_property
@@ -71,9 +70,9 @@ class VirtualGraphics(VirtualDevice):
         """
         Return a list of valid keymap values.
         """
-        from virtinst import keytable
+        from virtinst import hostkeymap
 
-        orig_list = keytable.keytable.values()
+        orig_list = hostkeymap.keytable.values()
         sort_list = []
 
         orig_list.sort()
@@ -138,7 +137,8 @@ class VirtualGraphics(VirtualDevice):
             return None
 
         if self._local_keymap == -1:
-            self._local_keymap = util.default_keymap()
+            from virtinst import hostkeymap
+            self._local_keymap = hostkeymap.default_keymap()
         return self._local_keymap
 
     def get_type(self):
