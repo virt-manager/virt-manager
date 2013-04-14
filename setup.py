@@ -464,7 +464,7 @@ setup(
         ("share/virt-manager/virtManager", glob.glob("virtManager/*.py")),
 
         ("share/virt-manager/virtcli",
-         glob.glob("virtcli/*.py") + ["virtcli/cli.cfg"]),
+         glob.glob("virtcli/*.py") + glob.glob("virtcli/cli.cfg")),
         ("share/virt-manager/virtinst", glob.glob("virtinst/*.py")),
         ("share/virt-manager/virtconv", glob.glob("virtconv/*.py")),
         ("share/virt-manager/virtconv/parsers",
