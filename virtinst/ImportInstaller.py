@@ -35,9 +35,6 @@ class ImportInstaller(Installer.Installer):
     def prepare(self, guest, meter):
         pass
 
-    def post_install_check(self, guest):
-        return True
-
     def has_install_phase(self):
         return False
 

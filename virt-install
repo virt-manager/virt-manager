@@ -669,10 +669,6 @@ def start_install(guest, continue_inst, options):
         dom = check_domain(guest, dom, conscb,
                            wait_on_install, wait_time, start_time)
 
-        # This should be valid even before doing continue install
-        if not guest.post_install_check():
-            cli.install_fail(guest)
-
         if continue_inst:
             dom = guest.continue_install(conscb, meter, wait=wait_on_console)
             dom = check_domain(guest, dom, conscb,

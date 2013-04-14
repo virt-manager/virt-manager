@@ -983,12 +983,6 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
 
         return xml
 
-    def post_install_check(self):
-        """
-        Back compat mapping to installer post_install_check
-        """
-        return self.installer.post_install_check(self)
-
     def get_continue_inst(self):
         """
         Return True if this guest requires a call to 'continue_install',

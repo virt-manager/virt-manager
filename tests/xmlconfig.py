@@ -136,23 +136,6 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(utils.get_filedisk("/tmp/somerandomfilename.img"))
         self._compare(g, "boot-paravirt-disk-file", False)
 
-        # Just cram some post_install_checks in here
-        try:
-            g.post_install_check()
-            raise AssertionError("Expected OSError, none caught.")
-        except OSError:
-            pass
-
-        disk = g.get_devices("disk")[0]
-        disk.path = "virt-install"
-        self.assertEquals(g.post_install_check(), False)
-
-        disk.driver_type = "raw"
-        self.assertEquals(g.post_install_check(), False)
-
-        disk.driver_type = "foobar"
-        self.assertEquals(g.post_install_check(), True)
-
     def testBootParavirtDiskFileBlktapCapable(self):
         oldblktap = virtinst.util.is_blktap_capable
         try:

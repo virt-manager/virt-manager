@@ -68,9 +68,6 @@ class LiveCDInstaller(Installer.Installer):
 
         self.install_devices.append(disk)
 
-    def post_install_check(self, guest):
-        return True
-
     def has_install_phase(self):
         return False
 

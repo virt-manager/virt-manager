@@ -102,9 +102,6 @@ class ImageInstaller(Installer.Installer):
         self.bootconfig.initrd = self.boot_caps.initrd
         self.bootconfig.kernel_args = self.boot_caps.cmdline
 
-    def post_install_check(self, guest):
-        return True
-
     def has_install_phase(self):
         return False
 

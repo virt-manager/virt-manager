@@ -20,8 +20,6 @@
 # MA 02110-1301 USA.
 
 import os
-import errno
-import struct
 import platform
 import logging
 import copy
@@ -31,7 +29,6 @@ import virtinst
 from virtinst import XMLBuilderDomain
 from virtinst.XMLBuilderDomain import _xml_property
 from virtinst import CapabilitiesParser
-from virtinst.VirtualDisk import VirtualDisk
 from virtinst.Boot import Boot
 
 XEN_SCRATCH = "/var/lib/xen"
@@ -410,48 +407,6 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         @type meter: Urlgrabber ProgressMeter
         """
         raise NotImplementedError("Must be implemented in subclass")
-
-    def post_install_check(self, guest):
-        """
-        Attempt to verify that installing to disk was successful.
-        @param guest: guest instance that was installed
-        @type L{Guest}
-        """
-
-        if guest.is_remote():
-            # XXX: Use block peek for this?
-            return True
-
-        disks = guest.get_devices("disk")
-        if not disks:
-            return True
-
-        disk = disks[0]
-        if disk.device != VirtualDisk.DEVICE_DISK:
-            return True
-        if util.is_vdisk(disk.path):
-            return True
-
-        if (disk.driver_type and
-            disk.driver_type not in [disk.DRIVER_TAP_RAW,
-                                     disk.DRIVER_QEMU_RAW]):
-            # Might be a non-raw format
-            return True
-
-        # Check for the 0xaa55 signature at the end of the MBR
-        try:
-            fd = os.open(disk.path, os.O_RDONLY)
-        except OSError, (err, msg):
-            logging.debug("Failed to open guest disk: %s", msg)
-            if err == errno.EACCES and os.geteuid() != 0:
-                return True  # non root might not have access to block devices
-            else:
-                raise
-
-        buf = os.read(fd, 512)
-        os.close(fd)
-        return (len(buf) == 512 and
-                struct.unpack("H", buf[0x1fe: 0x200]) == (0xaa55,))
 
     def detect_distro(self):
         """
