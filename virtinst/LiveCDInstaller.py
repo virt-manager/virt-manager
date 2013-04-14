@@ -29,6 +29,7 @@ class LiveCDInstallerException(Exception):
 
 
 class LiveCDInstaller(Installer.Installer):
+    _has_install_phase = False
 
     # LiveCD specific methods/overwrites
     def _validate_location(self, val):
@@ -67,9 +68,6 @@ class LiveCDInstaller(Installer.Installer):
                                "CD installer."))
 
         self.install_devices.append(disk)
-
-    def has_install_phase(self):
-        return False
 
     # Internal methods
     def _get_bootdev(self, isinstall, guest):

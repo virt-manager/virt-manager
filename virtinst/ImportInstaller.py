@@ -30,13 +30,11 @@ class ImportInstaller(Installer.Installer):
     attached to the Guest (so, one of 'hd', 'cdrom', or 'fd'). All the
     user has to do is fill in the Guest object with the desired parameters.
     """
+    _has_install_phase = False
 
     # General Installer methods
     def prepare(self, guest, meter):
         pass
-
-    def has_install_phase(self):
-        return False
 
     # Private methods
     def _get_bootdev(self, isinstall, guest):

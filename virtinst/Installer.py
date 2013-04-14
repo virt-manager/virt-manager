@@ -75,8 +75,9 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         - Hypervisor name (parameter 'type') ('qemu', 'kvm', 'xen', etc.)
         - Guest architecture ('i686', 'x86_64')
     """
-
     _dumpxml_xpath = "/domain/os"
+    _has_install_phase = True
+
     def __init__(self, type="xen", location=None,
                  extraargs=None, os_type=None, conn=None,
                  parsexml=None, parsexmlnode=None, caps=None):
@@ -380,7 +381,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         into the guest. Things like LiveCDs, Import, or a manually specified
         bootorder do not have an install phase.
         """
-        return True
+        return self._has_install_phase
 
     def cleanup(self):
         """
@@ -448,6 +449,8 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
 
 
 class ContainerInstaller(Installer):
+    _has_install_phase = False
+
     def prepare(self, guest, meter):
         ignore = guest
         ignore = meter
@@ -456,6 +459,3 @@ class ContainerInstaller(Installer):
         ignore = isinstall
         ignore = guest
         return self.bootconfig.BOOT_DEVICE_HARDDISK
-
-    def has_install_phase(self):
-        return False

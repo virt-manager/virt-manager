@@ -32,7 +32,11 @@ class ImageInstallerException(Exception):
 
 
 class ImageInstaller(Installer.Installer):
-    """Installer for image-based guests"""
+    """
+    Installer for virt-image-based guests
+    """
+    _has_install_phase = False
+
     def __init__(self, image, capabilities=None, boot_index=None, conn=None):
         Installer.Installer.__init__(self, conn=conn, caps=capabilities)
 
@@ -101,9 +105,6 @@ class ImageInstaller(Installer.Installer):
         self.bootconfig.kernel = self.boot_caps.kernel
         self.bootconfig.initrd = self.boot_caps.initrd
         self.bootconfig.kernel_args = self.boot_caps.cmdline
-
-    def has_install_phase(self):
-        return False
 
     # Private methods
     def _get_bootdev(self, isinstall, guest):
