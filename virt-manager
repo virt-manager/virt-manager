@@ -50,6 +50,8 @@ logging_setup = False
 
 
 def _show_startup_error(msg, details):
+    if logging_setup:
+        logging.exception("Error starting virt-manager")
     from virtManager.error import vmmErrorDialog
     err = vmmErrorDialog()
     title = _("Error starting Virtual Machine Manager")
@@ -255,6 +257,7 @@ def main():
         print "".join(traceback.format_exc())
         return 1
 
+    globals()["Gtk"] = Gtk
     # Need to parse CLI after import gtk, since gtk strips --sync
     (options, ignore) = parse_commandline()
 
@@ -366,8 +369,6 @@ if __name__ == "__main__":
     except SystemExit:
         raise
     except Exception, run_e:
-        if logging_setup:
-            logging.exception(run_e)
         if "Gtk" not in globals():
             raise
         _show_startup_error(str(run_e), "".join(traceback.format_exc()))
