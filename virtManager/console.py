@@ -1220,7 +1220,7 @@ class vmmConsolePages(vmmGObjectUI):
         # dimensions can erroneously show scroll bars when they aren't needed
         widget.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
 
-        signal_id = widget.connect("size-request", request_cb)
+        signal_id = widget.connect("size-allocate", request_cb)
         signal_holder.append(signal_id)
 
         widget.queue_resize()
