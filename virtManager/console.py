@@ -1265,6 +1265,9 @@ class vmmConsolePages(vmmGObjectUI):
             desktop_h = int(req.width / desktop_ratio)
             dy = (req.height - desktop_h) / 2
 
-        # viewer_alloc = (x=dx, y=dy, width=desktop_w, height=desktop_h)
-        viewer_alloc = (dx, dy, desktop_w, desktop_h)
+        viewer_alloc = Gdk.Rectangle()
+        viewer_alloc.x = dx
+        viewer_alloc.y = dy
+        viewer_alloc.width = desktop_w
+        viewer_alloc.height = desktop_h
         self.viewer.display.size_allocate(viewer_alloc)

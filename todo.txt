@@ -40,13 +40,6 @@ Traceback (most recent call last):
     return info.invoke(*args, **kwargs)
 TypeError: unknown type (null)
 
-Traceback (most recent call last):
-  File "/home/crobinso/src/virt-manager/src/virtManager/console.py", line 1270, in scroll_size_allocate
-    self.viewer.display.size_allocate(viewer_alloc)
-  File "/usr/lib64/python2.7/site-packages/gi/types.py", line 48, in function
-    return info.invoke(*args, **kwargs)
-TypeError: argument allocation: Expected cairo.RectangleInt, but got tuple
-
 
 virt-manager: drop all the HAL code, we could convert to udev but it's not
     really worth it given interface + nodedev APIs
