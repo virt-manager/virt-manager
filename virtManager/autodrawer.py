@@ -423,15 +423,19 @@ class AutoDrawer(Drawer):
 
         if newover:
             def size_allocate(src, newalloc):
-                req = (newalloc.width, newalloc.height)
-                if req == src.size_request():
-                    # If over widget was just allocated it's requested size,
-                    # something caused it to pop up, so make sure state
-                    # is updated.
-                    #
-                    # Without this, switching to fullscreen keeps the toolbar
-                    # stuck open until mouse over
-                    self._update(False)
+                srcreq = src.size_request()
+
+                if (newalloc.width != srcreq.width or
+                    newalloc.height != srcreq.height):
+                    return
+
+                # If over widget was just allocated its requested size,
+                # something caused it to pop up, so make sure state
+                # is updated.
+                #
+                # Without this, switching to fullscreen keeps the toolbar
+                # stuck open until mouse over
+                self._update(False)
 
             self.eventBox.add(newover)
             self.overAllocID = newover.connect("size-allocate", size_allocate)
