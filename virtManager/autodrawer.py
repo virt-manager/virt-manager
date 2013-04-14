@@ -23,7 +23,6 @@
 #
 
 # pylint: disable=E0611
-from gi.repository import cairo
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -69,7 +68,7 @@ class OverBox(Gtk.Box):
         return ret
 
     def _get_under_window_geometry(self):
-        geo = cairo.RectangleInt()
+        geo = Gdk.Rectangle()
         actual_min = self._get_actual_min()
 
         geo.x = 0
@@ -80,7 +79,7 @@ class OverBox(Gtk.Box):
         return geo
 
     def _get_over_window_geometry(self):
-        geo = cairo.RectangleInt()
+        geo = Gdk.Rectangle()
         boxwidth = self.allocation.width
         expand = True
         fill = True
