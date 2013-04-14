@@ -706,9 +706,9 @@ class vmmConsolePages(vmmGObjectUI):
 
                 return x, y + height, True
 
-            self.keycombo_menu.popup(None, None, menu_location, 0,
-                                     Gtk.get_current_event_time(),
-                                     self.fs_toolbar)
+            self.keycombo_menu.popup(None, None, menu_location,
+                                     self.fs_toolbar, 0,
+                                     Gtk.get_current_event_time())
 
         self.send_key_button = Gtk.ToolButton()
         self.send_key_button.set_icon_name(

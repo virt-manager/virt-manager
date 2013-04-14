@@ -940,7 +940,7 @@ class vmmHost(vmmGObjectUI):
         if event.button != 3:
             return
 
-        self.volmenu.popup(None, None, None, 0, event.time)
+        self.volmenu.popup(None, None, None, None, 0, event.time)
 
     def copy_vol_path(self, ignore=None):
         vol = self.current_vol()

@@ -426,7 +426,7 @@ class vmmSerialConsole(vmmGObject):
             self.serial_copy.set_sensitive(True)
         else:
             self.serial_copy.set_sensitive(False)
-        self.serial_popup.popup(None, None, None, 0, event.time)
+        self.serial_popup.popup(None, None, None, None, 0, event.time)
 
     def serial_copy_text(self, src_ignore, terminal):
         terminal.copy_clipboard()
