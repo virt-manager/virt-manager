@@ -266,8 +266,6 @@ tui_files = [
 
     ("share/virt-manager/virtManagerTui",
      glob.glob("virtManagerTui/*.py")),
-    ("share/virt-manager/virtManagerTui/importblacklist",
-     glob.glob("virtManagerTui/importblacklist/*.py")),
 ]
 if not cliconfig.with_tui:
     tui_files = []
