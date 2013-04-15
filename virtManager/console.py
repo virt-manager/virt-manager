@@ -701,8 +701,8 @@ class vmmConsolePages(vmmGObjectUI):
             ignore = src
             def menu_location(menu, toolbar):
                 ignore = menu
-                x, y = toolbar.get_window().get_origin()
-                ignore, height = toolbar.get_window().get_size()
+                ignore, x, y = toolbar.get_window().get_origin()
+                height = toolbar.get_window().get_height()
 
                 return x, y + height, True
 
