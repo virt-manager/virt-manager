@@ -102,6 +102,11 @@ class vmmEngine(vmmGObject):
         self.last_timeout = 0
 
         self.systray = None
+        self.application = Gtk.Application(
+                                 application_id="com.redhat.virt-manager",
+                                 flags=0)
+        self.application.connect("activate", self._activate)
+        self._appwindow = Gtk.Window()
 
         self._tick_thread = None
         self._tick_thread_slow = False
@@ -116,6 +121,11 @@ class vmmEngine(vmmGObject):
         # keep running in system tray if enabled
         self.windows = 0
 
+        # Public bits set by virt-manager cli
+        self.skip_autostart = False
+        self.uri_at_startup = None
+        self.uri_cb = None
+
         self.init_systray()
 
         self.add_gconf_handle(
@@ -126,6 +136,21 @@ class vmmEngine(vmmGObject):
         self.schedule_timer()
         self.load_stored_uris()
         self.tick()
+
+
+    def _activate(self, ignore):
+        self.show_manager()
+        self.application.add_window(self._appwindow)
+
+        if self.uri_at_startup:
+            conn = self.add_conn_to_ui(self.uri_at_startup)
+            if conn and self.uri_cb:
+                conn.connect_opt_out("state-changed", self.uri_cb)
+
+            self.connect_to_uri(self.uri_at_startup)
+
+        if not self.skip_autostart:
+            self.autostart_conns()
 
 
     def init_systray(self):
@@ -390,7 +415,7 @@ class vmmEngine(vmmGObject):
                 logging.debug("Leaked %s", name)
 
         logging.debug("Exiting app normally.")
-        Gtk.main_quit()
+        self.application.remove_window(self._appwindow)
 
     def _create_inspection_thread(self):
         if not self.config.support_inspection:
