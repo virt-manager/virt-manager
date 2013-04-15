@@ -29,6 +29,7 @@ import os
 import logging
 import shlex
 
+
 _VMX_MAIN_TEMPLATE = """
 #!/usr/bin/vmplayer
 
