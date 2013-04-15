@@ -1,117 +1,49 @@
- Virtual Machine Manager
- =======================
+  Virtual Machine Manager
+  =======================
 
 This application provides a graphical tool for managing virtual machines
 via the libvirt library.
 
-The front end of the application uses the PyGTK / Glade libraries for
+The front end of the application uses the GTK / Glade libraries for
 all user interaction components. The back end uses libvirt for managing
-Xen, QEMU & KVM virtual machines. The UI is primarily tested with Xen
-and QEMU, but is intended to be portable to any virtualization backend
-libvirt supports. So when libvirt is ported to UML / VMware / etc the
-UI should not require any significant changes to deal with these drivers.
+Qemu/KVM and Xen virtual machines, as well as LXC containers. The UI is
+primarily tested with KVM, but is intended to be reasonably portable to any
+virtualization backend libvirt supports.
 
-Terminology
------------
 
-In prose this app should be referred to as 'Virtual Machine Manager'.
-For source / RPM packaging, & the command name, it is called by the
-shortened form 'virt-manager'
+  Pre-requisite software
+  ======================
 
-Pre-requisite software
-----------------------
+virt-manager was ported to GTK3 at the beginning of 2013. Older GTK3
+or pygobject3 versions likely will not work for running virt-manager.
 
-Where versions are noted below these are the versions tested to definitely
-work. For some of them you may be able to run with earlier releases, so
-please report any success to the mailing lists
+Earliest tested versions of major components:
 
- python  >= 2.4
- pygtk2 >= 1.99.12-6
- gnome-python2-gconf >= 1.99.11-7
- libvirt-python >= 0.4.0
- dbus-python >= 0.61
- gnome-keyring >= 0.4.9
- gnome-python-desktop >= 2.15.4
- libxml2-python >= 2.6.23
- vte >= 0.12.2
- gtk-vnc >= 0.0.1
- python-virtinst >= 0.300.0
- PolicyKit >= 0.6
+  python >= 2.6
+  gtk3 >= 3.6
+  libvirt-python >= 0.4.0
+  pygobject3 >= 3.4
 
-The latter is available from
+A more detailed dependency list can be found in virt-manager.spec.in.
 
-http://git.fedorahosted.org/git/python-virtinst.git
 
-Contact
--------
+  Contact
+  =======
 
 All comments / suggestions / patches should be directed to the virt-tools-list
 mailing list:
 
   http://www.redhat.com/mailman/listinfo/virt-tools-list
 
+For IRC we use #virt on OFTC.
+
 For bug reporting info, see:
 
-http://virt-manager.org/page/BugReporting
+  http://virt-manager.org/page/BugReporting
 
 There are further project details on the website:
 
   http://virt-manager.org/
 
-Submitting patches
-------------------
-
-Patches should be submitted either as unified diffs:
-
-   tar zxvf virt-manager-X.Y.Z.tar.gz
-   cp -a virt-manager-X.Y.Z virt-manager-X.Y.Z-myfeature
-   cd virt-manager-X.Y.Z-myfeature
-   ... make some changes ..
-   cd ..
-   diff -ruN virt-manager-X.Y.Z virt-manager-X.Y.Z-myfeature \
-      > myfeature.patch
-
-Alternatively use git and submit a diff against the main source repository:
-
-   git clone git://git.fedorahosted.org/git/virt-manager.git
-   cd virt-manager
-   ... make your changes ...
-   git commit -a -m "Some changelog message"
-   git show > my_feature.patch
-
-Then mail the 'my_feature.patch' file to the virt-tools-list@redhat.com list,
-with [PATCH] and a brief description in the subject.
-
-Using git format-patch and/or git send-email is also fine.
-
-Related software
-----------------
-
-Links which are relevant:
-
-  http://libvirt.org
-  http://www.linux-kvm.org
-  http://xensource.com/xen/
-  http://pygtk.org/
-  http://gtk.org/
-  http://gtk-vnc.sourceforge.net/
-
-Copyright /  License
---------------------
-
-Unless otherwise noted, all the code for the Virtual Machine Manager
-is covered under the GPL, and Copyright (C) Red Hat.
-
-  Notes on translation process
-  ============================
-
-The translations for virt-manager are handled via transifex.net.
-To pull in the latest translations requires the transifex-client package:
-
-  tx pull
-  make update-po
-
-Translators can easily sign up to contribute:
-
-http://help.transifex.net/
-
+See the HACKING file for info about submitting patches or contributing
+translations.
