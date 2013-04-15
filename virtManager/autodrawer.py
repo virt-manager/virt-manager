@@ -25,12 +25,19 @@
 # pylint: disable=E0611
 from gi.repository import Gdk
 from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 # pylint: enable=E0611
 
 # pylint: disable=E1101
 # pylint can't detect functions we inheirit from Gtk, ex:
 # OverBox.set_over: Instance of 'OverBox' has no 'remove' member
+
+
+def rect_print(name, rect):
+    # For debugging
+    print ("%s: height=%d, width=%d, x=%d, y=%d" %
+           (name, rect.height, rect.width, rect.x, rect.y))
 
 
 class OverBox(Gtk.Box):
@@ -87,11 +94,9 @@ class OverBox(Gtk.Box):
         actual_min = self._get_actual_min()
 
         if self.overWidget:
-            # XXX
-            expand = self.child_get_property(self.overWidget, "expand", "")
-            fill = self.child_get_property(self.overWidget, "fill", "")
-            padding = self.child_get_property(self.overWidget, "padding", "")
-            padding = 0
+            expand = self.child_get_property(self.overWidget, "expand")
+            fill = self.child_get_property(self.overWidget, "fill")
+            padding = self.child_get_property(self.overWidget, "padding")
 
         if not expand:
             width = min(self.overWidth, boxwidth - padding)
@@ -139,11 +144,9 @@ class OverBox(Gtk.Box):
         self.overWidth = over.width
         self.overHeight = over.height
 
-        # XXXX
-        expand = self.child_get_property(self.overWidget, "expand", "")
-        fill = self.child_get_property(self.overWidget, "fill", "")
-        padding = self.child_get_property(self.overWidget, "padding", "")
-        padding = 0
+        expand = self.child_get_property(self.overWidget, "expand")
+        fill = self.child_get_property(self.overWidget, "fill")
+        padding = self.child_get_property(self.overWidget, "padding")
 
         if expand or fill:
             wpad = 0
@@ -158,6 +161,14 @@ class OverBox(Gtk.Box):
     ########################
     # Custom functionality #
     ########################
+
+    def child_get_property(self, widget, propname):
+        # gtk3 bindings are crappy here, make it work like
+        # gobject.get_property()
+        value = GObject.Value()
+        value.init(GObject.TYPE_INT)
+        Gtk.Box.child_get_property(self, widget, propname, value)
+        return value.get_int()
 
     def do_set_over(self, widget):
         self.set_over(widget)
@@ -278,13 +289,19 @@ class OverBox(Gtk.Box):
         self.do_size_request(req)
         return (req.width, req.width)
 
-    def do_get_preferred_heigh(self):
+    def do_get_preferred_height(self):
         req = Gtk.Requisition()
         self.do_size_request(req)
         return (req.height, req.height)
 
     def do_size_allocate(self, newalloc):
-        self.allocation = newalloc
+        tmpalloc = Gdk.Rectangle()
+        tmpalloc.width = newalloc.width
+        tmpalloc.height = newalloc.height
+        tmpalloc.x = newalloc.x
+        tmpalloc.y = newalloc.y
+
+        self.allocation = tmpalloc
 
         over = self._get_over_window_geometry()
         under = self._get_under_window_geometry()
@@ -324,8 +341,6 @@ class Drawer(OverBox):
         self.timer_pending = False
         self.timer_id = None
 
-
-    # XXX: C version has a finalize impl
 
     ####################
     # Internal helpers #
@@ -407,7 +422,6 @@ class AutoDrawer(Drawer):
         self._update(True)
         self._refresh_packing()
 
-    # XXX: Has a finalize method
 
     ####################
     # Internal Helpers #
@@ -478,7 +492,6 @@ class AutoDrawer(Drawer):
                 grabbed = Gtk.grab_get_current()
 
             if grabbed and isinstance(grabbed, Gtk.Menu):
-
                 while True:
                     menuAttach = grabbed.get_attach_widget()
                     if not menuAttach:
@@ -508,7 +521,7 @@ class AutoDrawer(Drawer):
             self._enforce(False)
         else:
             self.delayConnection = GLib.timeout_add(self.delayValue,
-                                                       self._on_enforce_delay)
+                                                    self._on_enforce_delay)
 
 
     def _refresh_packing(self):
