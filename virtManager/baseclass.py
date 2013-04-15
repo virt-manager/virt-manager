@@ -106,10 +106,6 @@ class vmmGObject(GObject.GObject):
         # Function generates 2 temporary refs, so adjust total accordingly
         return (sys.getrefcount(self) - 2)
 
-    def get_hal_helper(self, init=True):
-        from virtManager import halhelper
-        return halhelper.get_hal_helper(init=init)
-
     def connect_once(self, signal, func, *args):
         id_list = []
 

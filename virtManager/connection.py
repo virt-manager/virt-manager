@@ -122,9 +122,6 @@ class vmmConnection(vmmGObject):
         self.record = []
         self.hostinfo = None
 
-        self.hal_helper_remove_sig = None
-        self.hal_handles = []
-
         self.netdev_initialized = False
         self.netdev_error = ""
         self.netdev_use_libvirt = False
@@ -137,13 +134,6 @@ class vmmConnection(vmmGObject):
     # Init routines #
     #################
 
-    def _set_hal_remove_sig(self, hal_helper):
-        if not self.hal_helper_remove_sig:
-            sig = hal_helper.connect("device-removed",
-                                     self._haldev_removed)
-            self.hal_helper_remove_sig = sig
-            self.hal_handles.append(sig)
-
     def _init_netdev(self):
         """
         Determine how we will be polling for net devices (HAL or libvirt)
@@ -155,23 +145,6 @@ class vmmConnection(vmmGObject):
             except Exception, e:
                 self.netdev_error = _("Could not build physical interface "
                                       "list via libvirt: %s") % str(e)
-        elif self.get_hal_helper():
-            hal_helper = self.get_hal_helper()
-
-            if self.is_remote():
-                self.netdev_error = _("Libvirt version does not support "
-                                      "physical interface listing")
-
-            else:
-                error = hal_helper.get_init_error()
-                if not error:
-                    self.hal_handles.append(
-                        hal_helper.connect("netdev-added", self._netdev_added))
-                    self._set_hal_remove_sig(hal_helper)
-
-                else:
-                    self.netdev_error = _("Could not initialize HAL for "
-                                          "interface listing: %s") % error
         else:
             self.netdev_error = _("Libvirt version does not support "
                                   "physical interface listing.")
@@ -194,24 +167,6 @@ class vmmConnection(vmmGObject):
             except Exception, e:
                 self.mediadev_error = _("Could not build media "
                                         "list via libvirt: %s") % str(e)
-
-        elif self.get_hal_helper():
-            hal_helper = self.get_hal_helper()
-
-            if self.is_remote():
-                self.mediadev_error = _("Libvirt version does not support "
-                                        "media listing.")
-
-            else:
-                error = hal_helper.get_init_error()
-                if not error:
-                    self.hal_handles.append(
-                      hal_helper.connect("optical-added", self._optical_added))
-                    self._set_hal_remove_sig(hal_helper)
-
-                else:
-                    self.mediadev_error = _("Could not initialize HAL for "
-                                            "media listing: %s") % error
         else:
             self.mediadev_error = _("Libvirt version does not support "
                                     "media listing.")
@@ -224,6 +179,7 @@ class vmmConnection(vmmGObject):
                 logging.debug("Using libvirt API for mediadev enumeration")
             else:
                 logging.debug("Using HAL for mediadev enumeration")
+
 
     ########################
     # General data getters #
@@ -862,18 +818,6 @@ class vmmConnection(vmmGObject):
         self.mediadevs[key] = dev
         self.emit("mediadev-added", dev)
 
-    def _haldev_removed(self, ignore, hal_path):
-        # Physical net device
-        for name, obj in self.netdevs.items():
-            if obj.get_hal_path() == hal_path:
-                self.netdevs[name].cleanup()
-                del self.netdevs[name]
-                return
-
-        for key, obj in self.mediadevs.items():
-            if key == hal_path:
-                self._remove_mediadev(key)
-
     def _netdev_added(self, ignore, netdev):
         name = netdev.get_name()
         if name in self.netdevs:
@@ -949,11 +893,6 @@ class vmmConnection(vmmGObject):
     def _cleanup(self):
         self.close()
         self.connectError = None
-
-        hal_helper = self.get_hal_helper(init=False)
-        if hal_helper:
-            for h in self.hal_handles:
-                hal_helper.disconnect(h)
 
     def _open_dev_conn(self, uri):
         """

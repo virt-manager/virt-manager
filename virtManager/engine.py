@@ -31,7 +31,6 @@ import os
 import libvirt
 import virtinst
 
-from virtManager import halhelper
 from virtManager import packageutils
 from virtManager import uihelpers
 from virtManager import util
@@ -349,7 +348,6 @@ class vmmEngine(vmmGObject):
 
     def _cleanup(self):
         uihelpers.cleanup()
-        halhelper.cleanup()
         self.err = None
 
         if self.inspection:

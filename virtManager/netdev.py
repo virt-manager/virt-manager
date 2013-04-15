@@ -21,16 +21,17 @@ from virtManager.baseclass import vmmGObject
 
 
 class vmmNetDevice(vmmGObject):
-    def __init__(self, name, mac, is_shared, bridge=None, hal_path=None):
+    """
+    Backend indepent class for a host network device.
+    Filled in by a combination of interface and nodedev APIs
+    """
+    def __init__(self, name, mac, is_shared, bridge=None):
         vmmGObject.__init__(self)
 
         self.name = name
         self.mac = mac
         self.shared = is_shared
         self.bridge = bridge
-
-        # Used for HAL backend population
-        self.hal_path = hal_path
 
     def _cleanup(self):
         pass
@@ -46,6 +47,3 @@ class vmmNetDevice(vmmGObject):
 
     def get_mac(self):
         return self.mac
-
-    def get_hal_path(self):
-        return self.hal_path
