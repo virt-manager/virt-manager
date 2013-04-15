@@ -2,29 +2,22 @@
   TODO before first release
   =========================
 
-virtinst merge bits:
-    make sure translations actually work when installed
-    break out osdistro bits so we don't need to carry virt-install.pod
-    merge README, reference that we merged virtinst and see that repo for
-        old NEWS, etc.
+check all XXX/TODO in the code, make sure nothing important is missing
+revive import blacklist for virtinst code, maybe just a unittest that checks Gtk isn't in globals ?
+break out osdistro bits so we don't need to carry virt-install.pod
+merge README, reference that we merged virtinst and see that repo for old NEWS, etc.
 
 is dbus uniqueness still working? I dropped the service file but it
     shouldn't be necc.
-check all XXX/TODO in the code, make sure nothing important is missing
+gtkapplication + drop dbus uniqueness stuff? at least investigate it
 is tui working? maybe just remove it, check with mcpierce
 gsettings port (or fix gconf bindings)
-gtkapplication + drop dbus uniqueness stuff? at least investigate it
-python3? consider it
 website: wiki-ify the whole thing, drop static content, move site styling into virt-manager.git, kill the old web repo. and get that old hideous screenshot off the front page. linux-kvm.org should be the template here.
 consider dropping python-distutils-extra dep. I think we rely on about 300
     lines of code, tops, and since it isn't in RHEL it could be an issue.
     we can prob reimplement the bits that are important to us fairly easilly.
-move RHEL/fedora spec file bits to upstream file like libvirt does
-revive import blacklist for virtinst code, maybe just a unittest that checks Gtk isn't in globals ?
-
-
-  Misc issues
-  ===========
+move RHEL/fedora spec file bits to upstream file like libvirt does, drop old spec stuff like gconf compat
+python3? consider it
 
 test:///default->test->Details: Switch to processor page and 'apply' is activated, shouldn't happen. I think it affects master branch as well
 
@@ -49,33 +42,6 @@ start a spice guest, shrink the window to smaller than guest resolution, scrollb
 
 
 
-  After virtinst merge
-  ====================
-
-drop old stuff from both spec files
-update README
-virtinst initrd test: drop the big files? just stub em out
-setup.py rpm: drop hardcoding rpm version, specify it with rpmbuild
-setup.py rpm: dump output in sourcedir, or dist/
-
-INSTALL docs about python setup.py refresh_translations from virtinst,
-    or whatever the distutils extra equiv is. or update po/README,
-    or have a TRANSLATORS file, or update HACKING, etc. see what other
-    projects do. msgmerge with python setup.py build_i18n --merge-po
-
-
-  Problems in other packages
-  ==========================
-
-gconf set_list: https://bugzilla.gnome.org/show_bug.cgi?id=681433
-gtk tooltip: https://bugzilla.gnome.org/show_bug.cgi?id=691639
-Keyring bindings broken: https://bugzilla.gnome.org/show_bug.cgi?id=691638
-
-pygobject ctrl-c issue: https://bugzilla.gnome.org/show_bug.cgi?id=691658
-get option list for --help: https://bugzilla.gnome.org/show_bug.cgi?id=691659
-pygobject row[idx] = None: https://bugzilla.gnome.org/show_bug.cgi?id=691660
-
-rcm-tools koji virt-install patch: http://post-office.corp.redhat.com/archives/rcm-tools/2012-February/msg00054.html
 
 
   Manager spacing bug
@@ -92,6 +58,7 @@ spacing is weird in manager, prefs window. cant have unequal tree rows
 - list size issues: master actually has bigger list size than collapsed gtk3 rows, maybe that is part of the issue.
 
 
+
   Object leaks
   ============
 
@@ -99,5 +66,19 @@ objects leak on cleanup, pygobject has reference counting issues
 - https://bugzilla.gnome.org/show_bug.cgi?id=692044
 - https://bugzilla.gnome.org/show_bug.cgi?id=693111
 - leak detection disabled in the manager.py for now
-- see if gtk.grab_get_current autodrawer leak fixed by gtk3
+
+
+
+  Problems in other packages
+  ==========================
+
+gconf set_list: https://bugzilla.gnome.org/show_bug.cgi?id=681433
+gtk tooltip: https://bugzilla.gnome.org/show_bug.cgi?id=691639
+Keyring bindings broken: https://bugzilla.gnome.org/show_bug.cgi?id=691638
+
+pygobject ctrl-c issue: https://bugzilla.gnome.org/show_bug.cgi?id=691658
+get option list for --help: https://bugzilla.gnome.org/show_bug.cgi?id=691659
+pygobject row[idx] = None: https://bugzilla.gnome.org/show_bug.cgi?id=691660
+
+rcm-tools koji virt-install patch: http://post-office.corp.redhat.com/archives/rcm-tools/2012-February/msg00054.html
 
