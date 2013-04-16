@@ -114,8 +114,6 @@ def parse_commandline():
     optParser.add_option("--debug", action="store_true", dest="debug",
         help="Print debug output to stdout (implies --no-fork)",
         default=False)
-    optParser.add_option("--no-dbus", action="store_true", dest="nodbus",
-        help="Disable DBus service for controlling UI")
     optParser.add_option("--no-fork", action="store_true", dest="nofork",
         help="Don't fork into background on startup")
     optParser.add_option("--no-conn-autostart", action="store_true",
@@ -215,11 +213,6 @@ def main():
         import virtManager.module_trace
         import libvirt
         virtManager.module_trace.wrap_module(libvirt)
-
-    import dbus
-    import dbus.mainloop.glib
-    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-    dbus.mainloop.glib.threads_init()
 
     # Specifically init config/gconf before the fork, so that pam
     # doesn't think we closed the app, therefor robbing us of

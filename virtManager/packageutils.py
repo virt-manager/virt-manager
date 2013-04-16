@@ -19,10 +19,9 @@
 #
 
 # pylint: disable=E0611
+from gi.repository import Gio
 from gi.repository import Gtk
 # pylint: enable=E0611
-
-import dbus
 
 import logging
 import time
@@ -40,18 +39,18 @@ def check_packagekit(errbox, packages, ishv):
     Returns None when we determine nothing useful.
     Returns (success, did we just install libvirt) otherwise.
     """
+    packages = ["avahi-tools"]
     if not packages:
         logging.debug("No PackageKit packages to search for.")
         return
 
     logging.debug("Asking PackageKit what's installed locally.")
     try:
-        session = dbus.SystemBus()
-
-        pk_control = dbus.Interface(
-                        session.get_object("org.freedesktop.PackageKit",
-                                           "/org/freedesktop/PackageKit"),
-                        "org.freedesktop.PackageKit")
+        bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+        pk_control = Gio.DBusProxy.new_sync(bus, 0, None,
+                                "org.freedesktop.PackageKit",
+                                "/org/freedesktop/PackageKit",
+                                "org.freedesktop.PackageKit", None)
     except Exception:
         logging.exception("Couldn't connect to packagekit")
         return
@@ -63,7 +62,7 @@ def check_packagekit(errbox, packages, ishv):
 
     found = []
     progWin = vmmAsyncJob(_do_async_search,
-                          [session, pk_control, packages], msg, msg,
+                          [bus, pk_control, packages], msg, msg,
                           errbox.get_parent(), async=False)
     error, ignore = progWin.run()
     if error:
@@ -111,11 +110,11 @@ def check_packagekit(errbox, packages, ishv):
     return do_install
 
 
-def _do_async_search(asyncjob, session, pk_control, packages):
+def _do_async_search(asyncjob, bus, pk_control, packages):
     found = []
     try:
         for name in packages:
-            ret_found = packagekit_search(session, pk_control, name, packages)
+            ret_found = packagekit_search(bus, pk_control, name, packages)
             found += ret_found
 
     except Exception, e:
@@ -126,34 +125,25 @@ def _do_async_search(asyncjob, session, pk_control, packages):
 
 
 def packagekit_install(package_list):
-    session = dbus.SessionBus()
-
-    pk_control = dbus.Interface(
-                    session.get_object("org.freedesktop.PackageKit",
-                                       "/org/freedesktop/PackageKit"),
-                        "org.freedesktop.PackageKit.Modify")
+    bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+    pk_control = Gio.DBusProxy.new_sync(bus, 0, None,
+                            "org.freedesktop.PackageKit",
+                            "/org/freedesktop/PackageKit",
+                            "org.freedesktop.PackageKit.Modify", None)
 
     # Set 2 hour timeout
-    timeout = 60 * 60 * 2
+    timeout = 1000 * 60 * 60 * 2
     logging.debug("Installing packages: %s", package_list)
-    pk_control.InstallPackageNames(dbus.UInt32(0),
+    pk_control.InstallPackageNames("(uass)", 0,
                                    package_list, "hide-confirm-search",
                                    timeout=timeout)
 
 
-def packagekit_search(session, pk_control, package_name, packages):
-    newstyle = False
-    try:
-        tid = pk_control.GetTid()
-    except dbus.exceptions.DBusException, e:
-        if e.get_dbus_name() != "org.freedesktop.DBus.Error.UnknownMethod":
-            raise
-        newstyle = True
-        tid = pk_control.CreateTransaction()
-
-    pk_trans = dbus.Interface(
-                    session.get_object("org.freedesktop.PackageKit", tid),
-                    "org.freedesktop.PackageKit.Transaction")
+def packagekit_search(bus, pk_control, package_name, packages):
+    tid = pk_control.CreateTransaction()
+    pk_trans = Gio.DBusProxy.new_sync(bus, 0, None,
+                            "org.freedesktop.PackageKit", tid,
+                            "org.freedesktop.PackageKit.Transaction", None)
 
     found = []
     def package(info, package_id, summary):
@@ -171,20 +161,18 @@ def packagekit_search(session, pk_control, package_name, packages):
     def finished(ignore, runtime_ignore):
         Gtk.main_quit()
 
-    pk_trans.connect_to_signal('Finished', finished)
-    pk_trans.connect_to_signal('ErrorCode', error)
-    pk_trans.connect_to_signal('Package', package)
-    try:
-        searchtype = "installed"
-        if newstyle:
-            searchtype = 2 ** 2
-        pk_trans.SearchNames(searchtype, [package_name])
-    except dbus.exceptions.DBusException, e:
-        if e.get_dbus_name() != "org.freedesktop.DBus.Error.UnknownMethod":
-            raise
+    def signal_cb(proxy, sender, signal, args):
+        ignore = proxy
+        sender = proxy
+        if signal == "Finished":
+            finished(*args)
+        elif signal == "ErrorCode":
+            error(*args)
+        elif signal == "Package":
+            package(*args)
 
-        # Try older search API
-        pk_trans.SearchName("installed", package_name)
+    pk_trans.connect("g-signal", signal_cb)
+    pk_trans.SearchNames("(tas)", 2 ** 2, [package_name])
 
     # Call main() so this function is synchronous
     Gtk.main()
@@ -204,28 +192,29 @@ def start_libvirtd():
     unitname = "libvirtd.service"
 
     try:
-        bus = dbus.SystemBus()
+        bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
     except:
         logging.exception("Error getting system bus handle")
         return
 
     try:
-        systemd = dbus.Interface(bus.get_object(
+        systemd = Gio.DBusProxy.new_sync(bus, 0, None,
                                  "org.freedesktop.systemd1",
-                                 "/org/freedesktop/systemd1"),
-                                 "org.freedesktop.systemd1.Manager")
+                                 "/org/freedesktop/systemd1",
+                                 "org.freedesktop.systemd1.Manager", None)
     except:
         logging.exception("Couldn't connect to systemd")
         return
 
     try:
-        unitpath = systemd.GetUnit(unitname)
-        proxy = bus.get_object("org.freedesktop.systemd1", unitpath)
-        props = dbus.Interface(proxy, "org.freedesktop.DBus.Properties")
-        state = props.Get("org.freedesktop.systemd1.Unit", "ActiveState")
+        unitpath = systemd.GetUnit("(s)", unitname)
+        unit = Gio.DBusProxy.new_sync(bus, 0, None,
+                                 "org.freedesktop.systemd1", unitpath,
+                                 "org.freedesktop.systemd1.Unit", None)
+        state = unit.get_cached_property("ActiveState")
 
         logging.debug("libvirtd state=%s", state)
-        if str(state).lower() == "active":
+        if str(state).lower().strip("'") == "active":
             logging.debug("libvirtd already active, not starting")
             return True
     except:
@@ -236,11 +225,11 @@ def start_libvirtd():
     try:
         logging.debug("libvirtd not running, asking system-config-services "
                       "to start it")
-        scs = dbus.Interface(bus.get_object(
+        scs = Gio.DBusProxy.new_sync(bus, 0, None,
                              "org.fedoraproject.Config.Services",
-                             "/org/fedoraproject/Config/Services/systemd1"),
-                             "org.freedesktop.systemd1.Manager")
-        scs.StartUnit(unitname, "replace")
+                             "/org/fedoraproject/Config/Services/systemd1",
+                             "org.freedesktop.systemd1.Manager", None)
+        scs.StartUnit("(ss)", unitname, "replace")
         time.sleep(2)
         logging.debug("Starting libvirtd appeared to succeed")
         return True

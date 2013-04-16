@@ -22,12 +22,12 @@ import logging
 import socket
 
 # pylint: disable=E0611
+from gi.repository import Gio
 from gi.repository import GObject
 from gi.repository import Gtk
 # pylint: enable=E0611
 
 import virtinst
-import dbus
 
 from virtManager.baseclass import vmmGObjectUI
 
@@ -79,7 +79,6 @@ class vmmConnect(vmmGObjectUI):
 
         self.browser = None
         self.browser_sigs = []
-        self.can_browse = False
 
         # Set this if we can't resolve 'hostname.local': means avahi
         # prob isn't configured correctly, and we should strip .local
@@ -90,15 +89,13 @@ class vmmConnect(vmmGObjectUI):
 
         self.set_initial_state()
 
-        self.bus = None
-        self.server = None
-        self.can_browse = False
+        self.dbus = None
+        self.avahiserver = None
         try:
-            self.bus = dbus.SystemBus()
-            self.server = dbus.Interface(
-                            self.bus.get_object("org.freedesktop.Avahi", "/"),
-                            "org.freedesktop.Avahi.Server")
-            self.can_browse = True
+            self.dbus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+            self.avahiserver = Gio.DBusProxy.new_sync(self.dbus, 0, None,
+                                    "org.freedesktop.Avahi", "/",
+                                    "org.freedesktop.Avahi.Server", None)
         except Exception, e:
             logging.debug("Couldn't contact avahi: %s", str(e))
 
@@ -166,13 +163,22 @@ class vmmConnect(vmmGObjectUI):
         ignore = flags
         try:
             # Async service resolving
-            res = self.server.ServiceResolverNew(interface, protocol, name,
-                                                 typ, domain, -1, 0)
-            resint = dbus.Interface(self.bus.get_object(
-                                    "org.freedesktop.Avahi", res),
-                                    "org.freedesktop.Avahi.ServiceResolver")
-            self.browser_sigs.append(
-                resint.connect_to_signal("Found", self.add_conn_to_list))
+            res = self.avahiserver.ServiceResolverNew("(iisssiu)",
+                                                 interface, protocol,
+                                                 name, typ, domain, -1, 0)
+            resint = Gio.DBusProxy.new_sync(self.dbus, 0, None,
+                                    "org.freedesktop.Avahi", res,
+                                    "org.freedesktop.Avahi.ServiceResolver",
+                                    None)
+
+            def cb(proxy, sender, signal, args):
+                ignore = proxy
+                ignore = sender
+                if signal == "Found":
+                    self.add_conn_to_list(*args)
+
+            sig = resint.connect("g-signal", cb)
+            self.browser_sigs.append((resint, sig))
         except Exception, e:
             logging.exception(e)
 
@@ -216,7 +222,7 @@ class vmmConnect(vmmGObjectUI):
             logging.exception(e)
 
     def start_browse(self):
-        if self.browser or not self.can_browse:
+        if self.browser or not self.avahiserver:
             return
         # Call method to create new browser, and get back an object path for it.
         interface = -1              # physical interface to use? -1 is unspec
@@ -224,23 +230,31 @@ class vmmConnect(vmmGObjectUI):
         service   = '_libvirt._tcp'  # Service name to poll for
         flags     = 0               # Extra option flags
         domain    = ""              # Domain to browse in. NULL uses default
-        bpath = self.server.ServiceBrowserNew(interface, protocol, service,
-                                              domain, flags)
+        bpath = self.avahiserver.ServiceBrowserNew("(iissu)",
+                                                   interface, protocol,
+                                                   service, domain, flags)
 
         # Create browser interface for the new object
-        self.browser = dbus.Interface(self.bus.get_object(
-                                      "org.freedesktop.Avahi", bpath),
-                                      "org.freedesktop.Avahi.ServiceBrowser")
+        self.browser = Gio.DBusProxy.new_sync(self.dbus, 0, None,
+                                    "org.freedesktop.Avahi", bpath,
+                                    "org.freedesktop.Avahi.ServiceBrowser",
+                                    None)
 
-        self.browser_sigs.append(
-            self.browser.connect_to_signal("ItemNew", self.add_service))
-        self.browser_sigs.append(
-            self.browser.connect_to_signal("ItemRemove", self.remove_service))
+        def cb(proxy, sender, signal, args):
+            ignore = proxy
+            ignore = sender
+            if signal == "ItemNew":
+                self.add_service(*args)
+            elif signal == "ItemRemove":
+                self.remove_service(*args)
+
+        self.browser_sigs.append((self.browser,
+                                  self.browser.connect("g-signal", cb)))
 
     def stop_browse(self):
         if self.browser:
-            for sig in self.browser_sigs:
-                sig.remove()
+            for obj, sig in self.browser_sigs:
+                obj.disconnect(sig)
             self.browser_sigs = []
             self.browser = None
 
@@ -280,7 +294,7 @@ class vmmConnect(vmmGObjectUI):
         self.widget("connection").set_sensitive(is_remote)
         self.widget("autoconnect").set_active(not is_remote)
         self.widget("username-entry").set_sensitive(is_remote)
-        if is_remote and self.can_browse:
+        if is_remote and self.avahiserver:
             self.start_browse()
         else:
             self.stop_browse()

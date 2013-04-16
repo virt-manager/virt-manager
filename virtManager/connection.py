@@ -928,13 +928,10 @@ class vmmConnection(vmmGObject):
         """
         ignore = cbdata
         try:
-            if (len(creds) == 1 and
-                creds[0][0] == libvirt.VIR_CRED_EXTERNAL and
-                creds[0][2] == "PolicyKit"):
-                return connectauth.creds_polkit(creds[0][1])
-
             for cred in creds:
                 if cred[0] == libvirt.VIR_CRED_EXTERNAL:
+                    logging.debug("Don't know how to handle external cred %s",
+                                  cred[2])
                     return -1
 
             return connectauth.creds_dialog(creds)

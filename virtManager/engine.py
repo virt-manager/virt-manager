@@ -190,7 +190,6 @@ class vmmEngine(vmmGObject):
         logging.debug("Determining default libvirt URI")
 
         ret = None
-        did_install_libvirt = False
         try:
             libvirt_packages = self.config.libvirt_packages
             packages = self.config.hv_packages + libvirt_packages

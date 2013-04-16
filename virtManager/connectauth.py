@@ -20,84 +20,38 @@
 
 # pylint: disable=E0611
 from gi.repository import GLib
+from gi.repository import Gio
 # pylint: enable=E0611
 
 import logging
 import os
 import time
 
-import dbus
 import libvirt
 
 
 def do_we_have_session():
     pid = os.getpid()
     try:
-        bus = dbus.SystemBus()
+        bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
     except:
         logging.exception("Error getting system bus handle")
         return
 
     # Check systemd
     try:
-        manager = dbus.Interface(bus.get_object(
-                                 "org.freedesktop.login1",
-                                 "/org/freedesktop/login1"),
-                                 "org.freedesktop.login1.Manager")
-        ret = manager.GetSessionByPID(pid)
+        manager = Gio.DBusProxy.new_sync(bus, 0, None,
+                        "org.freedesktop.login1",
+                        "/org/freedesktop/login1",
+                        "org.freedesktop.login1.Manager", None)
+
+        ret = manager.GetSessionByPID("(u)", pid)
         logging.debug("Found login1 session=%s", ret)
         return True
     except:
         logging.exception("Couldn't connect to logind")
 
-    # Check ConsoleKit
-    try:
-        manager = dbus.Interface(bus.get_object(
-                                 "org.freedesktop.ConsoleKit",
-                                 "/org/freedesktop/ConsoleKit/Manager"),
-                                 "org.freedesktop.ConsoleKit.Manager")
-        ret = manager.GetSessionForUnixProcess(pid)
-        logging.debug("Found ConsoleKit session=%s", ret)
-        return True
-    except:
-        logging.exception("Couldn't connect to ConsoleKit")
-
     return False
-
-
-def creds_polkit(action):
-    """
-    Libvirt openAuth callback for PolicyKit < 1.0
-    """
-    if os.getuid() == 0:
-        logging.debug("Skipping policykit check as root")
-        return 0
-
-    logging.debug("Doing policykit for %s", action)
-
-    try:
-        # First try to use org.freedesktop.PolicyKit.AuthenticationAgent
-        # which is introduced with PolicyKit-0.7
-        bus = dbus.SessionBus()
-
-        obj = bus.get_object("org.freedesktop.PolicyKit.AuthenticationAgent",
-                             "/")
-        pkit = dbus.Interface(obj,
-                              "org.freedesktop.PolicyKit.AuthenticationAgent")
-
-        pkit.ObtainAuthorization(action, 0, os.getpid())
-    except dbus.exceptions.DBusException, e:
-        if (e.get_dbus_name() != "org.freedesktop.DBus.Error.ServiceUnknown"):
-            raise
-
-        # If PolicyKit < 0.7, fallback to org.gnome.PolicyKit
-        logging.debug("Falling back to org.gnome.PolicyKit")
-        obj = bus.get_object("org.gnome.PolicyKit",
-                             "/org/gnome/PolicyKit/Manager")
-        pkit = dbus.Interface(obj, "org.gnome.PolicyKit.Manager")
-        pkit.ShowDialog(action, 0)
-
-    return 0
 
 
 def creds_dialog(creds):
@@ -199,10 +153,12 @@ def acquire_tgt():
     """
     logging.debug("In acquire tgt.")
     try:
-        bus = dbus.SessionBus()
-        ka = bus.get_object('org.gnome.KrbAuthDialog',
-                            '/org/gnome/KrbAuthDialog')
-        ret = ka.acquireTgt("", dbus_interface='org.gnome.KrbAuthDialog')
+        bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+        ka = Gio.DBusProxy.new_sync(bus, 0, None,
+                                "org.gnome.KrbAuthDialog",
+                                "/org/gnome/KrbAuthDialog",
+                                "org.freedesktop.KrbAuthDialog", None)
+        ret = ka.acquireTgt("(s)", "")
     except Exception, e:
         logging.info("Cannot acquire tgt" + str(e))
         ret = False

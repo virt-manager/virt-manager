@@ -79,9 +79,6 @@ Requires: gnome-python2-gconf >= 1.99.11-7
 # This version not strictly required: virt-manager should work with older,
 # however varying amounts of functionality will not be enabled.
 Requires: libvirt-python >= 0.7.0
-# Definitely does not work with earlier due to python API changes
-Requires: dbus-python >= 0.61
-Requires: dbus-x11
 %if 0%{?rhel} > 6
 # Might work with earlier, but this is what we've tested
 Requires: gnome-keyring >= 0.4.9
