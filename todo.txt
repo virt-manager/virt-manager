@@ -14,23 +14,7 @@ consider dropping python-distutils-extra dep. I think we rely on about 300
     we can prob reimplement the bits that are important to us fairly easilly.
 python3? consider it
 
-removing hardware can give:
-Traceback (most recent call last):
-  File "/home/crobinso/src/virt-manager/src/virtManager/details.py", line 1254, in hw_changed
-    if self.compare_hw_rows(newrow, oldrow):
-  File "/home/crobinso/src/virt-manager/src/virtManager/details.py", line 1226, in compare_hw_rows
-    if row1[idx] != row2[idx]:
-  File "/usr/lib64/python2.7/site-packages/gi/overrides/Gtk.py", line 1136, in __getitem__
-    return self.model.get_value(self.iter, key)
-  File "/usr/lib64/python2.7/site-packages/gi/types.py", line 48, in function
-    return info.invoke(*args, **kwargs)
-TypeError: unknown type (null)
-
-
 start a spice guest, shrink the window to smaller than guest resolution, scrollbars work but don't have any actual 'bar'.
-
-
-
 
 
   Manager spacing bug
@@ -47,7 +31,6 @@ spacing is weird in manager, prefs window. cant have unequal tree rows
 - list size issues: master actually has bigger list size than collapsed gtk3 rows, maybe that is part of the issue.
 
 
-
   Object leaks
   ============
 
@@ -55,19 +38,3 @@ objects leak on cleanup, pygobject has reference counting issues
 - https://bugzilla.gnome.org/show_bug.cgi?id=692044
 - https://bugzilla.gnome.org/show_bug.cgi?id=693111
 - leak detection disabled in the manager.py for now
-
-
-
-  Problems in other packages
-  ==========================
-
-gconf set_list: https://bugzilla.gnome.org/show_bug.cgi?id=681433
-gtk tooltip: https://bugzilla.gnome.org/show_bug.cgi?id=691639
-Keyring bindings broken: https://bugzilla.gnome.org/show_bug.cgi?id=691638
-
-pygobject ctrl-c issue: https://bugzilla.gnome.org/show_bug.cgi?id=691658
-get option list for --help: https://bugzilla.gnome.org/show_bug.cgi?id=691659
-pygobject row[idx] = None: https://bugzilla.gnome.org/show_bug.cgi?id=691660
-
-rcm-tools koji virt-install patch: http://post-office.corp.redhat.com/archives/rcm-tools/2012-February/msg00054.html
-

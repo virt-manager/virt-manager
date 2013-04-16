@@ -368,7 +368,7 @@ class vmmDetails(vmmGObjectUI):
         w, h = self.vm.get_details_window_size()
         self.topwin.set_default_size(w or 800, h or 600)
 
-        self.oldhwrow = None
+        self.oldhwkey = None
         self.addhwmenu = None
         self.keycombo_menu = None
         self.init_menus()
@@ -535,7 +535,7 @@ class vmmDetails(vmmGObjectUI):
         self.refresh_vm_state()
 
     def _cleanup(self):
-        self.oldhwrow = None
+        self.oldhwkey = None
 
         if self.addhw:
             self.addhw.cleanup()
@@ -1237,17 +1237,6 @@ class vmmDetails(vmmGObjectUI):
 
         return page
 
-    def compare_hw_rows(self, row1, row2):
-        if row1 == row2:
-            return True
-        if not row1 or not row2:
-            return False
-
-        for idx in range(row1.model.get_n_columns()):
-            if row1[idx] != row2[idx]:
-                return False
-        return True
-
     def has_unapplied_changes(self, row):
         if not row:
             return False
@@ -1269,22 +1258,27 @@ class vmmDetails(vmmGObjectUI):
 
     def hw_changed(self, ignore):
         newrow = self.get_hw_row()
-        oldrow = self.oldhwrow
         model = self.widget("hw-list").get_model()
 
-        if self.compare_hw_rows(newrow, oldrow):
+        if newrow[HW_LIST_COL_DEVICE] == self.oldhwkey:
             return
 
-        if self.has_unapplied_changes(oldrow):
+        oldhwrow = None
+        for row in model:
+            if row[HW_LIST_COL_DEVICE] == self.oldhwkey:
+                oldhwrow = row
+                break
+
+        if self.has_unapplied_changes(oldhwrow):
             # Unapplied changes, and syncing them failed
             pageidx = 0
             for idx in range(len(model)):
-                if self.compare_hw_rows(model[idx], oldrow):
+                if model[idx][HW_LIST_COL_DEVICE] == self.oldhwkey:
                     pageidx = idx
                     break
             self.set_hw_selection(pageidx, disable_apply=False)
         else:
-            self.oldhwrow = newrow
+            self.oldhwkey = newrow[HW_LIST_COL_DEVICE]
             self.hw_selected()
 
     def hw_selected(self, page=None):
@@ -3421,18 +3415,18 @@ class vmmDetails(vmmGObjectUI):
         hw_list_model = self.widget("hw-list").get_model()
         hw_list_model.clear()
 
-        def add_hw_list_option(title, page_id, data, icon_name):
+        def add_hw_list_option(title, page_id, icon_name):
             hw_list_model.append([title, icon_name,
                                   Gtk.IconSize.LARGE_TOOLBAR,
-                                  page_id, data])
+                                  page_id, title])
 
-        add_hw_list_option("Overview", HW_LIST_TYPE_GENERAL, [], "computer")
+        add_hw_list_option("Overview", HW_LIST_TYPE_GENERAL, "computer")
         if not self.is_customize_dialog:
-            add_hw_list_option("Performance", HW_LIST_TYPE_STATS, [],
+            add_hw_list_option("Performance", HW_LIST_TYPE_STATS,
                                "utilities-system-monitor")
-        add_hw_list_option("Processor", HW_LIST_TYPE_CPU, [], "device_cpu")
-        add_hw_list_option("Memory", HW_LIST_TYPE_MEMORY, [], "device_mem")
-        add_hw_list_option("Boot Options", HW_LIST_TYPE_BOOT, [], "system-run")
+        add_hw_list_option("Processor", HW_LIST_TYPE_CPU, "device_cpu")
+        add_hw_list_option("Memory", HW_LIST_TYPE_MEMORY, "device_mem")
+        add_hw_list_option("Boot Options", HW_LIST_TYPE_BOOT, "system-run")
 
         self.repopulate_hw_list()
 
@@ -3443,7 +3437,7 @@ class vmmDetails(vmmGObjectUI):
         currentDevices = []
 
         def dev_cmp(origdev, newdev):
-            if not origdev:
+            if isinstance(origdev, str):
                 return False
 
             if origdev == newdev:
