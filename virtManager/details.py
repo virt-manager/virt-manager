@@ -1768,7 +1768,7 @@ class vmmDetails(vmmGObjectUI):
         if maxadj.get_value() < mem:
             maxadj.set_value(mem)
 
-        lower, upper = maxadj.get_range()
+        ignore, upper = maxadj.get_range()
         maxadj.set_range(mem, upper)
 
     def generate_cpuset(self):
@@ -1806,7 +1806,7 @@ class vmmDetails(vmmGObjectUI):
         maxval = self.config_get_maxvcpus()
         if maxval < cur:
             maxadj.set_value(cur)
-        lower, upper = maxadj.get_range()
+        ignore, upper = maxadj.get_range()
         maxadj.set_range(cur, upper)
 
     def config_maxvcpus_changed(self, ignore):
@@ -2878,7 +2878,7 @@ class vmmDetails(vmmGObjectUI):
         maxmem.set_value(int(round(vm_max_mem)))
 
         if not self.widget("config-memory").get_sensitive():
-            lower, upper = maxmem.get_range()
+            ignore, upper = maxmem.get_range()
             maxmem.set_range(curmem.get_value(), upper)
 
 
