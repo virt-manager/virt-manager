@@ -200,12 +200,6 @@ class vmmEngine(vmmGObject):
             logging.exception("Error talking to PackageKit")
 
         if ret is not None:
-            did_install_libvirt = False
-            for p in libvirt_packages:
-                if p in ret:
-                    did_install_libvirt = True
-                    break
-
             tryuri = "qemu:///system"
         else:
             tryuri = default_uri()
@@ -214,19 +208,15 @@ class vmmEngine(vmmGObject):
             manager.set_startup_error(msg)
             return
 
-        do_start = not did_install_libvirt
-        if did_install_libvirt:
-            didstart = packageutils.start_libvirtd()
-            do_start = didstart
+        do_start = packageutils.start_libvirtd()
+        warnmsg = _(
+            "Libvirt was just installed, so the 'libvirtd' service will\n"
+            "will need to be started.\n"
+            "virt-manager will connect to libvirt on the next application\n"
+            "start up.")
 
-            warnmsg = _(
-                "Libvirt was just installed, so the 'libvirtd' service will\n"
-                "will need to be started.\n"
-                "virt-manager will connect to libvirt on the next application\n"
-                "start up.")
-
-            if not didstart:
-                manager.err.ok(_("Libvirt service must be started"), warnmsg)
+        if not do_start:
+            manager.err.ok(_("Libvirt service must be started"), warnmsg)
 
         self.connect_to_uri(tryuri, autoconnect=True, do_start=do_start)
 
