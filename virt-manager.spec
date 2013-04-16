@@ -1,54 +1,27 @@
 # -*- rpm-spec -*-
 
-%define _version 0.9.4
-%define _release 1
 
-%define qemu_user                  ""
-%define preferred_distros          ""
-%define kvm_packages               ""
-%define libvirt_packages           ""
-%define askpass_package            ""
-%define disable_unsupported_rhel   0
-
-%define with_guestfs               0
 %define with_tui                   1
+%define with_guestfs               0
+%define disable_unsupported_rhel   0
+%define askpass_package            "openssh-askpass"
+%define qemu_user                  "qemu"
+%define libvirt_packages           "libvirt-daemon-kvm"
+%define preferred_distros          "fedora,rhel"
+%define kvm_packages               "qemu-system-x86"
 
-%define with_spice                 0
+%if 0%{?rhel}
+%define preferred_distros          "rhel,fedora"
+%define kvm_packages               "qemu-kvm"
+%define disable_unsupported_rhel   1
+%endif
+
 
 # End local config
-# Default option handling
-
-%if %{with_spice}
-%define default_graphics "spice"
-%endif
 
 
-# Compat for use of spec in multiple distros
-
-%if 0%{?gconf_schema_prepare} == 0
-%define gconf_schema_prepare() \
-if [ "$1" -gt 1 ]; then \
-    export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source` \
-    gconftool-2 --makefile-uninstall-rule %{_sysconfdir}/gconf/schemas/%1.schemas > /dev/null || : \
-fi \
-%{nil}
-%endif
-
-%if 0%{?gconf_schema_upgrade} == 0
-%define gconf_schema_upgrade() \
-export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source` \
-gconftool-2 --makefile-install-rule %{_sysconfdir}/gconf/schemas/%1.schemas > /dev/null || : \
-%{nil}
-%endif
-
-%if 0%{?gconf_schema_remove} == 0
-%define gconf_schema_remove() \
-if [ "$1" -eq 0 ]; then \
-    export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source` \
-    gconftool-2 --makefile-uninstall-rule %{_sysconfdir}/gconf/schemas/%1.schemas > /dev/null || : \
-fi \
-%{nil}
-%endif
+%define _version 0.9.4
+%define _release 1
 
 
 # This macro is used for the continuous automated builds. It just
@@ -67,31 +40,30 @@ Group: Applications/Emulators
 License: GPLv2+
 URL: http://virt-manager.org/
 Source0: http://virt-manager.org/download/sources/%{name}/%{name}-%{version}.tar.gz
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
 
 
 Requires: pygobject3
 Requires: gtk3
-Requires: cairo-gobject
 Requires: libvirt-glib
-Requires: gnome-python2-gconf >= 1.99.11-7
+Requires: gnome-python2-gconf
+Requires: libxml2-python
+Requires: vte
+Requires: python-ipaddr
+
+# For console widget
+Requires: gtk-vnc2
+Requires: spice-gtk3
+
 # This version not strictly required: virt-manager should work with older,
 # however varying amounts of functionality will not be enabled.
 Requires: libvirt-python >= 0.7.0
-# Minimum we've tested with
-Requires: libxml2-python >= 2.6.23
-# Earlier vte had broken python binding module
-Requires: vte >= 0.12.2
-# For console widget
-Requires: gtk-vnc2
-%if %{with_spice}
-Requires: spice-gtk3
-%endif
+
+
 %if %{with_guestfs}
 Requires: python-libguestfs
 %endif
-Requires: python-ipaddr
+
 
 %if %{with_tui} == 0
 Obsoletes: virt-manager-common <= %{verrel}
@@ -100,6 +72,7 @@ Conflicts: virt-manager-common > %{verrel}
 Requires: virt-manager-common = %{verrel}
 %endif
 
+
 BuildRequires: gettext
 BuildRequires: python
 BuildRequires: python-distutils-extra
@@ -107,11 +80,13 @@ BuildRequires: intltool
 BuildRequires: GConf2
 BuildRequires: /usr/bin/pod2man
 
+
 Requires(pre): GConf2
 Requires(post): GConf2
 Requires(preun): GConf2
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
+
 
 %description
 Virtual Machine Manager provides a graphical tool for administering virtual
@@ -218,14 +193,9 @@ python setup.py configure \
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
 python setup.py install -O1 --root=$RPM_BUILD_ROOT
 
 %find_lang %{name}
-
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 
 %pre
@@ -255,7 +225,6 @@ update-desktop-database -q %{_datadir}/applications
 
 
 %files
-%defattr(-,root,root,-)
 %doc README COPYING AUTHORS NEWS
 %{_sysconfdir}/gconf/schemas/%{name}.schemas
 %{_bindir}/%{name}
@@ -272,7 +241,6 @@ update-desktop-database -q %{_datadir}/applications
 
 
 %files common -f %{name}.lang
-%defattr(-,root,root,-)
 %dir %{_datadir}/%{name}
 
 %{_datadir}/%{name}/virtcli
@@ -301,7 +269,6 @@ update-desktop-database -q %{_datadir}/applications
 
 %if %{with_tui}
 %files tui
-%defattr(-,root,root,-)
 
 %{_bindir}/%{name}-tui
 %{_datadir}/%{name}/%{name}-tui

@@ -12,7 +12,6 @@ website: wiki-ify the whole thing, drop static content, move site styling into v
 consider dropping python-distutils-extra dep. I think we rely on about 300
     lines of code, tops, and since it isn't in RHEL it could be an issue.
     we can prob reimplement the bits that are important to us fairly easilly.
-move RHEL/fedora spec file bits to upstream file like libvirt does, drop old spec stuff like gconf compat
 python3? consider it
 
 test:///default->test->Details: Switch to processor page and 'apply' is activated, shouldn't happen. I think it affects master branch as well
