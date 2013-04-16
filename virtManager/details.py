@@ -1766,12 +1766,14 @@ class vmmDetails(vmmGObjectUI):
     def config_memory_changed(self, src_ignore):
         self.enable_apply(EDIT_MEM)
 
-        maxadj = self.widget("config-maxmem").get_adjustment()
+        maxadj = self.widget("config-maxmem")
 
         mem = self.config_get_memory()
-        if maxadj.value < mem:
-            maxadj.value = mem
-        maxadj.lower = mem
+        if maxadj.get_value() < mem:
+            maxadj.set_value(mem)
+
+        lower, upper = maxadj.get_range()
+        maxadj.set_range(mem, upper)
 
     def generate_cpuset(self):
         mem = int(self.vm.get_memory()) / 1024 / 1024
@@ -1804,11 +1806,12 @@ class vmmDetails(vmmGObjectUI):
         warn = bool(cur > host_active_count)
         self.widget("config-vcpus-warn-box").set_property("visible", warn)
 
-        maxadj = self.widget("config-maxvcpus").get_adjustment()
+        maxadj = self.widget("config-maxvcpus")
         maxval = self.config_get_maxvcpus()
         if maxval < cur:
-            maxadj.value = cur
-        maxadj.lower = cur
+            maxadj.set_value(cur)
+        lower, upper = maxadj.get_range()
+        maxadj.set_range(cur, upper)
 
     def config_maxvcpus_changed(self, ignore):
         self.enable_apply(EDIT_VCPUS)
@@ -1906,10 +1909,10 @@ class vmmDetails(vmmGObjectUI):
                                                      have_rw_bytes)
 
         if have_rw_bytes:
-            self.widget("disk-iotune-tbs").get_adjustment().value = 0
+            self.widget("disk-iotune-tbs").set_value(0)
         elif have_t_bytes:
-            self.widget("disk-iotune-rbs").get_adjustment().value = 0
-            self.widget("disk-iotune-wbs").get_adjustment().value = 0
+            self.widget("disk-iotune-rbs").set_value(0)
+            self.widget("disk-iotune-wbs").set_value(0)
 
         have_rw_iops = (iotune_ris > 0 or iotune_wis > 0)
         have_t_iops = (not have_rw_iops and iotune_tis > 0)
@@ -1922,10 +1925,10 @@ class vmmDetails(vmmGObjectUI):
                                                      have_rw_iops)
 
         if have_rw_iops:
-            self.widget("disk-iotune-tis").get_adjustment().value = 0
+            self.widget("disk-iotune-tis").set_value(0)
         elif have_t_iops:
-            self.widget("disk-iotune-ris").get_adjustment().value = 0
-            self.widget("disk-iotune-wis").get_adjustment().value = 0
+            self.widget("disk-iotune-ris").set_value(0)
+            self.widget("disk-iotune-wis").set_value(0)
 
         self.enable_apply(EDIT_DISK_IOTUNE)
 
@@ -2277,12 +2280,12 @@ class vmmDetails(vmmGObjectUI):
             add_define(self.vm.define_disk_serial, dev_id_info, serial)
 
         if self.editted(EDIT_DISK_IOTUNE):
-            iotune_rbs = int(self.widget("disk-iotune-rbs").get_adjustment().value * 1024)
-            iotune_ris = int(self.widget("disk-iotune-ris").get_adjustment().value)
-            iotune_tbs = int(self.widget("disk-iotune-tbs").get_adjustment().value * 1024)
-            iotune_tis = int(self.widget("disk-iotune-tis").get_adjustment().value)
-            iotune_wbs = int(self.widget("disk-iotune-wbs").get_adjustment().value * 1024)
-            iotune_wis = int(self.widget("disk-iotune-wis").get_adjustment().value)
+            iotune_rbs = int(self.widget("disk-iotune-rbs").get_value() * 1024)
+            iotune_ris = int(self.widget("disk-iotune-ris").get_value())
+            iotune_tbs = int(self.widget("disk-iotune-tbs").get_value() * 1024)
+            iotune_tis = int(self.widget("disk-iotune-tis").get_value())
+            iotune_wbs = int(self.widget("disk-iotune-wbs").get_value() * 1024)
+            iotune_wis = int(self.widget("disk-iotune-wis").get_value())
 
             add_define(self.vm.define_disk_iotune_rbs, dev_id_info, iotune_rbs)
             add_define(self.vm.define_disk_iotune_ris, dev_id_info, iotune_ris)
@@ -2758,10 +2761,10 @@ class vmmDetails(vmmGObjectUI):
         maxvcpus = self.vm.vcpu_max_count()
         curvcpus = self.vm.vcpu_count()
 
-        curadj = self.widget("config-vcpus").get_adjustment()
-        maxadj = self.widget("config-maxvcpus").get_adjustment()
-        curadj.value = int(curvcpus)
-        maxadj.value = int(maxvcpus)
+        curadj = self.widget("config-vcpus")
+        maxadj = self.widget("config-maxvcpus")
+        curadj.set_value(int(curvcpus))
+        maxadj.set_value(int(maxvcpus))
 
         self.widget("state-host-cpus").set_text(str(host_active_count))
 
@@ -2873,13 +2876,14 @@ class vmmDetails(vmmGObjectUI):
 
         host_mem_widget.set_text("%d MB" % (int(round(host_mem))))
 
-        curmem = self.widget("config-memory").get_adjustment()
-        maxmem = self.widget("config-maxmem").get_adjustment()
-        curmem.value = int(round(vm_cur_mem))
-        maxmem.value = int(round(vm_max_mem))
+        curmem = self.widget("config-memory")
+        maxmem = self.widget("config-maxmem")
+        curmem.set_value(int(round(vm_cur_mem)))
+        maxmem.set_value(int(round(vm_max_mem)))
 
         if not self.widget("config-memory").get_sensitive():
-            maxmem.lower = curmem.value
+            lower, upper = maxmem.get_range()
+            maxmem.set_range(curmem.get_value(), upper)
 
 
     def refresh_disk_page(self):
@@ -2948,12 +2952,12 @@ class vmmDetails(vmmGObjectUI):
         self.set_combo_label("disk-bus", bus)
         self.widget("disk-serial").set_text(serial or "")
 
-        self.widget("disk-iotune-rbs").get_adjustment().value = iotune_rbs
-        self.widget("disk-iotune-ris").get_adjustment().value = iotune_ris
-        self.widget("disk-iotune-tbs").get_adjustment().value = iotune_tbs
-        self.widget("disk-iotune-tis").get_adjustment().value = iotune_tis
-        self.widget("disk-iotune-wbs").get_adjustment().value = iotune_wbs
-        self.widget("disk-iotune-wis").get_adjustment().value = iotune_wis
+        self.widget("disk-iotune-rbs").set_value(iotune_rbs)
+        self.widget("disk-iotune-ris").set_value(iotune_ris)
+        self.widget("disk-iotune-tbs").set_value(iotune_tbs)
+        self.widget("disk-iotune-tis").set_value(iotune_tis)
+        self.widget("disk-iotune-wbs").set_value(iotune_wbs)
+        self.widget("disk-iotune-wis").set_value(iotune_wis)
 
         button = self.widget("config-cdrom-connect")
         if is_cdrom or is_floppy:

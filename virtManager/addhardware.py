@@ -480,9 +480,9 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("char-device-type").set_active(0)
         self.widget("char-path").set_text("")
         self.widget("char-host").set_text("127.0.0.1")
-        self.widget("char-port").get_adjustment().value = 4555
+        self.widget("char-port").set_value(4555)
         self.widget("char-bind-host").set_text("127.0.0.1")
-        self.widget("char-bind-port").get_adjustment().value = 4556
+        self.widget("char-bind-port").set_value(4556)
         self.widget("char-use-telnet").set_active(False)
         self.widget("char-target-name").set_text("com.redhat.spice.0")
 
@@ -1428,8 +1428,8 @@ class vmmAddHardware(vmmGObjectUI):
         source_mode = modebox.get_model()[modebox.get_active()][0]
         source_host = self.widget("char-host").get_text()
         bind_host = self.widget("char-bind-host").get_text()
-        source_port = self.widget("char-port").get_adjustment().value
-        bind_port = self.widget("char-bind-port").get_adjustment().value
+        source_port = self.widget("char-port").get_value()
+        bind_port = self.widget("char-bind-port").get_value()
         target_name = self.widget("char-target-name").get_text()
 
         if self.widget("char-use-telnet").get_active():
