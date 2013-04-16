@@ -20,103 +20,98 @@
 
 import logging
 
-try:
-    from gi.repository import GnomeKeyring  # pylint: disable=E0611
-except:
-    GnomeKeyring = None
-    logging.debug("GnomeKeyring bindings not installed, no keyring support")
+# pylint: disable=E0611
+from gi.repository import Gio
+from gi.repository import GLib
+# pylint: enable=E0611
 
 
 class vmmSecret(object):
     def __init__(self, name, secret=None, attributes=None):
         self.name = name
         self.secret = secret
-
-        self.attributes = {}
-        if isinstance(attributes, dict):
-            self.attributes = attributes
-        elif isinstance(attributes, list):
-            for attr in attributes:
-                self.attributes[attr.name] = attr.get_string()
+        self.attributes = attributes
 
     def get_secret(self):
         return self.secret
     def get_name(self):
         return self.name
 
-    def get_attributes_for_keyring(self):
-        attrs = GnomeKeyring.attribute_list_new()
-        for key, value in self.attributes.items():
-            GnomeKeyring.attribute_list_append_string(attrs, key, value)
-        return attrs
-
 
 class vmmKeyring(object):
+
     def __init__(self):
-        self.keyring = None
-        if GnomeKeyring is None:
-            return
+        self._collection = None
 
         try:
-            result = GnomeKeyring.get_default_keyring_sync()
-            if result and result[0] == GnomeKeyring.Result.OK:
-                self.keyring = result[1]
+            self._dbus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+            self._service = Gio.DBusProxy.new_sync(self._dbus, 0, None,
+                                    "org.freedesktop.secrets",
+                                    "/org/freedesktop/secrets",
+                                    "org.freedesktop.Secret.Service", None)
 
-            if self.keyring is None:
-                self.keyring = 'default'
-                logging.debug("No default keyring, creating '%s'",
-                              self.keyring)
-                try:
-                    GnomeKeyring.create_sync(self.keyring, None)
-                except GnomeKeyring.AlreadyExistsError:
-                    pass
+            self._session = self._service.OpenSession("(sv)", "plain",
+                                                      GLib.Variant("s", ""))[1]
+
+            self._collection = Gio.DBusProxy.new_sync(self._dbus, 0, None,
+                                "org.freedesktop.secrets",
+                                "/org/freedesktop/secrets/aliases/default",
+                                "org.freedesktop.Secret.Collection", None)
+
+            logging.debug("Using keyring session %s", self._session)
         except:
             logging.exception("Error determining keyring")
-            self.keyring = None
+
+
+    ##############
+    # Public API #
+    ##############
 
     def is_available(self):
-        return not (self.keyring is None)
+        return not (self._collection is None)
 
     def add_secret(self, secret):
-        _id = None
+        ret = None
         try:
-            result, _id = GnomeKeyring.item_create_sync(
-                                    self.keyring,
-                                    GnomeKeyring.ItemType.GENERIC_SECRET,
-                                    secret.get_name(),
-                                    secret.get_attributes_for_keyring(),
-                                    secret.get_secret(),
-                                    True)
+            props = {
+                "org.freedesktop.Secret.Item.Label" : GLib.Variant("s", secret.get_name()),
+                "org.freedesktop.Secret.Item.Attributes" : GLib.Variant("a{ss}", secret.attributes),
+            }
+            params = (self._session, [],
+                      [ord(v) for v in secret.get_secret()],
+                      "text/plain; charset=utf8")
+            replace = True
 
-            if result != GnomeKeyring.Result.OK:
-                raise RuntimeError("Creating keyring item failed with: %s" %
-                                   repr(result))
+            _id = self._collection.CreateItem("(a{sv}(oayays)b)",
+                                              props, params, replace)[0]
+            ret = int(_id.rsplit("/")[-1])
         except:
             logging.exception("Failed to add keyring secret")
 
-        return _id
+        return ret
 
     def get_secret(self, _id):
-        """
-        ignore, item = GnomeKeyring.item_get_info_sync(self.keyring, _id)
-        if item is None:
-            return
-
-        sec = None
+        ret = None
         try:
-            result, attrs = GnomeKeyring.item_get_attributes_sync(
-                                                        self.keyring, _id)
-            if result != GnomeKeyring.Result.OK:
-                raise RuntimeError("Fetching keyring attributes failed "
-                                   "with %s" % result)
+            path = self._collection.get_object_path() + "/" + str(_id)
+            iface = Gio.DBusProxy.new_sync(self._dbus, 0, None,
+                                    "org.freedesktop.secrets", path,
+                                    "org.freedesktop.Secret.Item", None)
 
-            sec = vmmSecret(item.get_display_name(), item.get_secret(), attrs)
+            secretbytes = iface.GetSecret("(o)", self._session)[2]
+            label = iface.get_cached_property("Label").unpack().strip("'")
+            dbusattrs = iface.get_cached_property("Attributes").unpack()
+
+            secret = u"".join([unichr(c) for c in secretbytes])
+
+            attrs = {}
+            for key, val in dbusattrs.items():
+                if key not in ["hvuri", "uuid"]:
+                    continue
+                attrs["%s" % key] = "%s" % val
+
+            ret = vmmSecret(label, secret, attrs)
         except:
-            logging.exception("Failed to lookup keyring item %s", item)
+            logging.exception("Failed to get keyring secret id=%s", _id)
 
-        return sec
-        """
-        # FIXME: Uncomment this once gnome-keyring is fixed
-        # https://bugzilla.gnome.org/show_bug.cgi?id=691638
-        ignore = _id
-        return None
+        return ret

@@ -79,17 +79,6 @@ Requires: gnome-python2-gconf >= 1.99.11-7
 # This version not strictly required: virt-manager should work with older,
 # however varying amounts of functionality will not be enabled.
 Requires: libvirt-python >= 0.7.0
-%if 0%{?rhel} > 6
-# Might work with earlier, but this is what we've tested
-Requires: gnome-keyring >= 0.4.9
-%else
-Requires: libgnome-keyring
-%endif
-# Minimum we've tested with
-# Although if you don't have this, comment it out and the app
-# will work just fine - keyring functionality will simply be
-# disabled
-Requires: gnome-python2-gnomekeyring >= 2.15.4
 # Minimum we've tested with
 Requires: libxml2-python >= 2.6.23
 # Earlier vte had broken python binding module
