@@ -636,34 +636,34 @@ class vmmDomain(vmmLibvirtObject):
                 editdev.serial = val or None
         return self._redefine_device(change, devobj)
 
-    def define_disk_iotune_read_bytes_sec(self, devobj, val):
+    def define_disk_iotune_rbs(self, devobj, val):
         def change(editdev):
-            editdev.iotune_read_bytes_sec = val
+            editdev.iotune_rbs = val
         return self._redefine_device(change, devobj)
 
-    def define_disk_iotune_read_iops_sec(self, devobj, val):
+    def define_disk_iotune_ris(self, devobj, val):
         def change(editdev):
-            editdev.iotune_read_iops_sec = val
+            editdev.iotune_ris = val
         return self._redefine_device(change, devobj)
 
-    def define_disk_iotune_total_bytes_sec(self, devobj, val):
+    def define_disk_iotune_tbs(self, devobj, val):
         def change(editdev):
-            editdev.iotune_total_bytes_sec = val
+            editdev.iotune_tbs = val
         return self._redefine_device(change, devobj)
 
-    def define_disk_iotune_total_iops_sec(self, devobj, val):
+    def define_disk_iotune_tis(self, devobj, val):
         def change(editdev):
-            editdev.iotune_total_iops_sec = val
+            editdev.iotune_tis = val
         return self._redefine_device(change, devobj)
 
-    def define_disk_iotune_write_bytes_sec(self, devobj, val):
+    def define_disk_iotune_wbs(self, devobj, val):
         def change(editdev):
-            editdev.iotune_write_bytes_sec = val
+            editdev.iotune_wbs = val
         return self._redefine_device(change, devobj)
 
-    def define_disk_iotune_write_iops_sec(self, devobj, val):
+    def define_disk_iotune_wis(self, devobj, val):
         def change(editdev):
-            editdev.iotune_write_iops_sec = val
+            editdev.iotune_wis = val
         return self._redefine_device(change, devobj)
 
     # Network define methods

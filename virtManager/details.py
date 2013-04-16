@@ -1884,49 +1884,51 @@ class vmmDetails(vmmGObjectUI):
 
     # IO Tuning
     def iotune_changed(self, ignore):
-        iotune_read_bytes_sec = int(self.get_text("disk-iotune-read-bytes-sec") or 0)
-        iotune_read_iops_sec = int(self.get_text("disk-iotune-read-iops-sec") or 0)
-        iotune_total_bytes_sec = int(self.get_text("disk-iotune-total-bytes-sec") or 0)
-        iotune_total_iops_sec = int(self.get_text("disk-iotune-total-iops-sec") or 0)
-        iotune_write_bytes_sec = int(self.get_text("disk-iotune-write-bytes-sec") or 0)
-        iotune_write_iops_sec = int(self.get_text("disk-iotune-write-iops-sec") or 0)
+        iotune_rbs = int(self.get_text("disk-iotune-rbs") or 0)
+        iotune_ris = int(self.get_text("disk-iotune-ris") or 0)
+        iotune_tbs = int(self.get_text("disk-iotune-tbs") or 0)
+        iotune_tis = int(self.get_text("disk-iotune-tis") or 0)
+        iotune_wbs = int(self.get_text("disk-iotune-wbs") or 0)
+        iotune_wis = int(self.get_text("disk-iotune-wis") or 0)
 
         # libvirt doesn't support having read/write settings along side total
         # settings, so disable the widgets accordingly.
 
-        if (iotune_read_bytes_sec > 0 or iotune_write_bytes_sec > 0):
-            iotune_total_bytes_sec = int(0)
-            self.widget("disk-iotune-total-bytes-sec").get_adjustment().value = int(0)
-            self.widget("disk-iotune-total-bytes-sec").set_sensitive(False)
-        else:
-            self.widget("disk-iotune-total-bytes-sec").set_sensitive(True)
+        have_rw_bytes = (iotune_rbs > 0 or
+                         iotune_wbs > 0)
+        have_t_bytes = (not have_rw_bytes and iotune_tbs > 0)
 
-        if (iotune_total_bytes_sec > 0):
-            self.widget("disk-iotune-read-bytes-sec").get_adjustment().value = int(0)
-            self.widget("disk-iotune-write-bytes-sec").get_adjustment().value = int(0)
-            self.widget("disk-iotune-read-bytes-sec").set_sensitive(False)
-            self.widget("disk-iotune-write-bytes-sec").set_sensitive(False)
-        else:
-            self.widget("disk-iotune-read-bytes-sec").set_sensitive(True)
-            self.widget("disk-iotune-write-bytes-sec").set_sensitive(True)
+        self.widget("disk-iotune-rbs").set_sensitive(have_rw_bytes or not
+                                                     have_t_bytes)
+        self.widget("disk-iotune-wbs").set_sensitive(have_rw_bytes or not
+                                                     have_t_bytes)
+        self.widget("disk-iotune-tbs").set_sensitive(have_t_bytes or not
+                                                     have_rw_bytes)
 
-        if (iotune_read_iops_sec > 0 or iotune_write_iops_sec > 0):
-            iotune_total_iops_sec = int(0)
-            self.widget("disk-iotune-total-iops-sec").get_adjustment().value = int(0)
-            self.widget("disk-iotune-total-iops-sec").set_sensitive(False)
-        else:
-            self.widget("disk-iotune-total-iops-sec").set_sensitive(True)
+        if have_rw_bytes:
+            self.widget("disk-iotune-tbs").get_adjustment().value = 0
+        elif have_t_bytes:
+            self.widget("disk-iotune-rbs").get_adjustment().value = 0
+            self.widget("disk-iotune-wbs").get_adjustment().value = 0
 
-        if (iotune_total_iops_sec > 0):
-            self.widget("disk-iotune-read-iops-sec").get_adjustment().value = int(0)
-            self.widget("disk-iotune-write-iops-sec").get_adjustment().value = int(0)
-            self.widget("disk-iotune-read-iops-sec").set_sensitive(False)
-            self.widget("disk-iotune-write-iops-sec").set_sensitive(False)
-        else:
-            self.widget("disk-iotune-read-iops-sec").set_sensitive(True)
-            self.widget("disk-iotune-write-iops-sec").set_sensitive(True)
+        have_rw_iops = (iotune_ris > 0 or iotune_wis > 0)
+        have_t_iops = (not have_rw_iops and iotune_tis > 0)
+
+        self.widget("disk-iotune-ris").set_sensitive(have_rw_iops or not
+                                                     have_t_iops)
+        self.widget("disk-iotune-wis").set_sensitive(have_rw_iops or not
+                                                     have_t_iops)
+        self.widget("disk-iotune-tis").set_sensitive(have_t_iops or not
+                                                     have_rw_iops)
+
+        if have_rw_iops:
+            self.widget("disk-iotune-tis").get_adjustment().value = 0
+        elif have_t_iops:
+            self.widget("disk-iotune-ris").get_adjustment().value = 0
+            self.widget("disk-iotune-wis").get_adjustment().value = 0
 
         self.enable_apply(EDIT_DISK_IOTUNE)
+
 
     # CDROM Eject/Connect
     def toggle_storage_media(self, src_ignore):
@@ -2275,19 +2277,19 @@ class vmmDetails(vmmGObjectUI):
             add_define(self.vm.define_disk_serial, dev_id_info, serial)
 
         if self.editted(EDIT_DISK_IOTUNE):
-            iotune_read_bytes_sec = int(self.widget("disk-iotune-read-bytes-sec").get_adjustment().value * 1024)
-            iotune_read_iops_sec = int(self.widget("disk-iotune-read-iops-sec").get_adjustment().value)
-            iotune_total_bytes_sec = int(self.widget("disk-iotune-total-bytes-sec").get_adjustment().value * 1024)
-            iotune_total_iops_sec = int(self.widget("disk-iotune-total-iops-sec").get_adjustment().value)
-            iotune_write_bytes_sec = int(self.widget("disk-iotune-write-bytes-sec").get_adjustment().value * 1024)
-            iotune_write_iops_sec = int(self.widget("disk-iotune-write-iops-sec").get_adjustment().value)
+            iotune_rbs = int(self.widget("disk-iotune-rbs").get_adjustment().value * 1024)
+            iotune_ris = int(self.widget("disk-iotune-ris").get_adjustment().value)
+            iotune_tbs = int(self.widget("disk-iotune-tbs").get_adjustment().value * 1024)
+            iotune_tis = int(self.widget("disk-iotune-tis").get_adjustment().value)
+            iotune_wbs = int(self.widget("disk-iotune-wbs").get_adjustment().value * 1024)
+            iotune_wis = int(self.widget("disk-iotune-wis").get_adjustment().value)
 
-            add_define(self.vm.define_disk_iotune_read_bytes_sec, dev_id_info, iotune_read_bytes_sec)
-            add_define(self.vm.define_disk_iotune_read_iops_sec, dev_id_info, iotune_read_iops_sec)
-            add_define(self.vm.define_disk_iotune_total_bytes_sec, dev_id_info, iotune_total_bytes_sec)
-            add_define(self.vm.define_disk_iotune_total_iops_sec, dev_id_info, iotune_total_iops_sec)
-            add_define(self.vm.define_disk_iotune_write_bytes_sec, dev_id_info, iotune_write_bytes_sec)
-            add_define(self.vm.define_disk_iotune_write_iops_sec, dev_id_info, iotune_write_iops_sec)
+            add_define(self.vm.define_disk_iotune_rbs, dev_id_info, iotune_rbs)
+            add_define(self.vm.define_disk_iotune_ris, dev_id_info, iotune_ris)
+            add_define(self.vm.define_disk_iotune_tbs, dev_id_info, iotune_tbs)
+            add_define(self.vm.define_disk_iotune_tis, dev_id_info, iotune_tis)
+            add_define(self.vm.define_disk_iotune_wbs, dev_id_info, iotune_wbs)
+            add_define(self.vm.define_disk_iotune_wis, dev_id_info, iotune_wis)
 
         # Do this last since it can change uniqueness info of the dev
         if self.editted(EDIT_DISK_BUS):
@@ -2897,12 +2899,12 @@ class vmmDetails(vmmGObjectUI):
         driver_type = disk.driver_type or ""
         serial = disk.serial
 
-        iotune_read_bytes_sec = disk.iotune_read_bytes_sec / 1024
-        iotune_read_iops_sec = disk.iotune_read_iops_sec
-        iotune_total_bytes_sec = disk.iotune_total_bytes_sec / 1024
-        iotune_total_iops_sec = disk.iotune_total_iops_sec
-        iotune_write_bytes_sec = disk.iotune_write_bytes_sec / 1024
-        iotune_write_iops_sec = disk.iotune_write_iops_sec
+        iotune_rbs = disk.iotune_rbs / 1024
+        iotune_ris = disk.iotune_ris
+        iotune_tbs = disk.iotune_tbs / 1024
+        iotune_tis = disk.iotune_tis
+        iotune_wbs = disk.iotune_wbs / 1024
+        iotune_wis = disk.iotune_wis
 
         show_format = (not self.is_customize_dialog or
                        disk.path_exists(disk.conn, disk.path))
@@ -2946,12 +2948,12 @@ class vmmDetails(vmmGObjectUI):
         self.set_combo_label("disk-bus", bus)
         self.widget("disk-serial").set_text(serial or "")
 
-        self.widget("disk-iotune-read-bytes-sec").get_adjustment().value = iotune_read_bytes_sec
-        self.widget("disk-iotune-read-iops-sec").get_adjustment().value = iotune_read_iops_sec
-        self.widget("disk-iotune-total-bytes-sec").get_adjustment().value = iotune_total_bytes_sec
-        self.widget("disk-iotune-total-iops-sec").get_adjustment().value = iotune_total_iops_sec
-        self.widget("disk-iotune-write-bytes-sec").get_adjustment().value = iotune_write_bytes_sec
-        self.widget("disk-iotune-write-iops-sec").get_adjustment().value = iotune_write_iops_sec
+        self.widget("disk-iotune-rbs").get_adjustment().value = iotune_rbs
+        self.widget("disk-iotune-ris").get_adjustment().value = iotune_ris
+        self.widget("disk-iotune-tbs").get_adjustment().value = iotune_tbs
+        self.widget("disk-iotune-tis").get_adjustment().value = iotune_tis
+        self.widget("disk-iotune-wbs").get_adjustment().value = iotune_wbs
+        self.widget("disk-iotune-wis").get_adjustment().value = iotune_wis
 
         button = self.widget("config-cdrom-connect")
         if is_cdrom or is_floppy:
