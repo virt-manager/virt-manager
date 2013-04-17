@@ -923,10 +923,10 @@ class VirtualDisk(VirtualDevice):
                                "integer"))
         self._iotune_rbs = val
     iotune_rbs = _xml_property(_get_iotune_rbs,
-                                          _set_iotune_rbs,
-                                          xpath="./iotune/read_bytes_sec",
-                                          get_converter=lambda s, x: int(x or 0),
-                                          set_converter=lambda s, x: int(x))
+                               _set_iotune_rbs,
+                               xpath="./iotune/read_bytes_sec",
+                               get_converter=lambda s, x: int(x or 0),
+                               set_converter=lambda s, x: int(x))
 
     def _get_iotune_ris(self):
         return self._iotune_ris
@@ -936,10 +936,10 @@ class VirtualDisk(VirtualDevice):
                                "integer"))
         self._iotune_ris = val
     iotune_ris = _xml_property(_get_iotune_ris,
-                                         _set_iotune_ris,
-                                         xpath="./iotune/read_iops_sec",
-                                         get_converter=lambda s, x: int(x or 0),
-                                         set_converter=lambda s, x: int(x))
+                               _set_iotune_ris,
+                               xpath="./iotune/read_iops_sec",
+                               get_converter=lambda s, x: int(x or 0),
+                               set_converter=lambda s, x: int(x))
 
     def _get_iotune_tbs(self):
         return self._iotune_tbs
@@ -949,10 +949,10 @@ class VirtualDisk(VirtualDevice):
                                "integer"))
         self._iotune_tbs = val
     iotune_tbs = _xml_property(_get_iotune_tbs,
-                                           _set_iotune_tbs,
-                                           xpath="./iotune/total_bytes_sec",
-                                           get_converter=lambda s, x: int(x or 0),
-                                           set_converter=lambda s, x: int(x))
+                               _set_iotune_tbs,
+                               xpath="./iotune/total_bytes_sec",
+                               get_converter=lambda s, x: int(x or 0),
+                               set_converter=lambda s, x: int(x))
 
     def _get_iotune_tis(self):
         return self._iotune_tis
@@ -962,10 +962,10 @@ class VirtualDisk(VirtualDevice):
                                "integer"))
         self._iotune_tis = val
     iotune_tis = _xml_property(_get_iotune_tis,
-                                          _set_iotune_tis,
-                                          xpath="./iotune/total_iops_sec",
-                                          get_converter=lambda s, x: int(x or 0),
-                                          set_converter=lambda s, x: int(x))
+                               _set_iotune_tis,
+                               xpath="./iotune/total_iops_sec",
+                               get_converter=lambda s, x: int(x or 0),
+                               set_converter=lambda s, x: int(x))
 
     def _get_iotune_wbs(self):
         return self._iotune_wbs
@@ -975,10 +975,10 @@ class VirtualDisk(VirtualDevice):
                                "integer"))
         self._iotune_wbs = val
     iotune_wbs = _xml_property(_get_iotune_wbs,
-                                           _set_iotune_wbs,
-                                           xpath="./iotune/write_bytes_sec",
-                                           get_converter=lambda s, x: int(x or 0),
-                                           set_converter=lambda s, x: int(x))
+                               _set_iotune_wbs,
+                               xpath="./iotune/write_bytes_sec",
+                               get_converter=lambda s, x: int(x or 0),
+                               set_converter=lambda s, x: int(x))
 
     def _get_iotune_wis(self):
         return self._iotune_wis
@@ -988,10 +988,10 @@ class VirtualDisk(VirtualDevice):
                                "integer"))
         self._iotune_wis = val
     iotune_wis = _xml_property(_get_iotune_wis,
-                                          _set_iotune_wis,
-                                          xpath="./iotune/write_iops_sec",
-                                          get_converter=lambda s, x: int(x or 0),
-                                          set_converter=lambda s, x: int(x))
+                               _set_iotune_wis,
+                               xpath="./iotune/write_iops_sec",
+                               get_converter=lambda s, x: int(x or 0),
+                               set_converter=lambda s, x: int(x))
 
     def _get_format(self):
         return self._format
