@@ -319,7 +319,7 @@ See C<--os-variant> for valid options.
 =item --os-variant=OS_VARIANT
 
 Further optimize the guest configuration for a specific operating system
-variant (ex. 'fedora8', 'winxp'). This parameter is optional, and does not
+variant (ex. 'fedora18', 'winxp'). This parameter is optional, and does not
 require an C<--os-type> to be specified.
 
 By default, virt-install will attempt to auto detect this value from
@@ -329,77 +329,6 @@ can be disabled with the special value 'none'.
 If the special value 'list' is passed, virt-install will print the full
 list of variant values and exit. The printed format is not a stable
 interface, DO NOT PARSE IT.
-
-If the special value 'none' is passed, no os variant is recorded and
-OS autodetection is disabled.
-
-Values for some recent OS options are:
-
-=over 2
-
-=item win7                 : Microsoft Windows 7
-
-=item vista                : Microsoft Windows Vista
-
-=item winxp64              : Microsoft Windows XP (x86_64)
-
-=item winxp                : Microsoft Windows XP
-
-=item win2k8               : Microsoft Windows Server 2008
-
-=item win2k3               : Microsoft Windows Server 2003
-
-=item freebsd8             : FreeBSD 8.x
-
-=item generic              : Generic
-
-=item debianwheezy         : Debian Wheezy
-
-=item debiansqueeze        : Debian Squeeze
-
-=item debianlenny          : Debian Lenny
-
-=item fedora18             : Fedora 18
-
-=item fedora17             : Fedora 17
-
-=item fedora16             : Fedora 16
-
-=item fedora15             : Fedora 15
-
-=item mageia1              : Mageia 1 and later
-
-=item mes5.1               : Mandriva Enterprise Server 5.1 and later
-
-=item rhel6                : Red Hat Enterprise Linux 6
-
-=item rhel5.4              : Red Hat Enterprise Linux 5.4 or later
-
-=item rhel4                : Red Hat Enterprise Linux 4
-
-=item sles11               : Suse Linux Enterprise Server 11
-
-=item sles10               : Suse Linux Enterprise Server
-
-=item opensuse12           : openSuse 12
-
-=item opensuse11           : openSuse 11
-
-=item ubuntuquantal        : Ubuntu 12.10 (Quantal Quetzal)
-
-=item ubuntuprecise        : Ubuntu 12.04 LTS (Precise Pangolin)
-
-=item ubuntuoneiric        : Ubuntu 11.10 (Oneiric Ocelot)
-
-=item ubuntunatty          : Ubuntu 11.04 (Natty Narwhal)
-
-=item ubuntulucid          : Ubuntu 10.04 LTS (Lucid Lynx)
-
-=item ubuntuhardy          : Ubuntu 8.04 LTS (Hardy Heron)
-
-=back
-
-
 
 Use '--os-variant list' to see the full OS list
 
@@ -411,7 +340,7 @@ option kernel arguments, and enabling a BIOS boot menu (requires libvirt
 0.8.3 or later)
 
 --boot can be specified in addition to other install options
-(such as --location, --cdrom, etc.) or can be specified on it's own. In
+(such as --location, --cdrom, etc.) or can be specified on its own. In
 the latter case, behavior is similar to the --import install option: there
 is no 'install' phase, the guest is just created and launched as specified.
 
@@ -513,10 +442,11 @@ size (in GB) to use if creating new storage
 =item B<sparse>
 
 whether to skip fully allocating newly created storage. Value is 'true' or
-'false'. Default is 'true' (do not fully allocate).
+'false'. Default is 'true' (do not fully allocate) unless it isn't
+supported by the underlying storage type.
 
 The initial time taken to fully-allocate the guest virtual disk (sparse=false)
-will be usually by balanced by faster install times inside the guest. Thus
+will be usually balanced by faster install times inside the guest. Thus
 use of this option is recommended to ensure consistently high performance
 and to avoid I/O errors in the guest should the host filesystem fill up.
 
@@ -653,7 +583,7 @@ Connect to a virtual network in the host called C<NAME>. Virtual networks
 can be listed, created, deleted using the C<virsh> command line tool. In
 an unmodified install of C<libvirt> there is usually a virtual network
 with a name of C<default>. Use a virtual network if the host has dynamic
-networking (eg NetworkManager), or using wireless. The guest will be 
+networking (eg NetworkManager), or using wireless. The guest will be
 NATed to the LAN by whichever connection is active.
 
 =item user
@@ -909,6 +839,9 @@ Force disable ACPI for the guest.
 
 Attach a controller device to the guest. TYPE is one of:
 B<ide>, B<fdc>, B<scsi>, B<sata>, B<virtio-serial>, or B<usb>.
+
+Controller also supports the special value B<usb2>, which will set up
+a USB2 controller with fallback USB1 support.
 
 =over 4
 
@@ -1429,4 +1362,3 @@ is NO WARRANTY, to the extent permitted by law.
 C<virsh(1)>, C<virt-clone(1)>, C<virt-manager(1)>, the project website C<http://virt-manager.org>
 
 =cut
-
