@@ -42,7 +42,7 @@ def _get_param(name, default):
         return default
     return cfg.get("config", name)
 
-__version__ = "0.9.4"
+__version__ = "0.9.100"
 
 
 # We should map this into the config somehow but I question if anyone cares
