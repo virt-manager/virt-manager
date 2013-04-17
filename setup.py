@@ -3,15 +3,14 @@
 # pylint: disable=W0201
 # Attribute defined outside __init__: custom commands require breaking this
 
+import datetime
 import glob
 import fnmatch
 import os
 import sys
 import unittest
-from datetime import date
 
 from distutils.core import Command, setup
-from distutils.command.sdist import sdist
 from distutils.command.install import install
 from distutils.command.install_egg_info import install_egg_info
 from distutils.sysconfig import get_config_var
@@ -182,32 +181,31 @@ class my_install(install):
 
         install.finalize_options(self)
 
-# Note: cliconfig.__snapshot__ by default is 0, it can be set to 1 by
-#       either sdist or rpm and then the snapshot suffix is appended.
 
 class my_sdist(sdist_auto):
-    user_options=sdist.user_options + [
+    user_options = sdist_auto.user_options + [
             ("snapshot", "s", "add snapshot id to version")]
-
-    boolean_options=sdist.boolean_options + ["snapshot"]
 
     description = "Update virt-manager.spec; build sdist-tarball."
 
     def initialize_options(self):
         self.snapshot = None
-        sdist.initialize_options(self)
+        sdist_auto.initialize_options(self)
 
     def finalize_options(self):
         if self.snapshot is not None:
             self.snapshot = 1
             cliconfig.__snapshot__ = 1
-        sdist.finalize_options(self)
+        sdist_auto.finalize_options(self)
 
     def run(self):
+        # Note: cliconfig.__snapshot__ by default is 0, it can be set to 1 by
+        #       either sdist or rpm and then the snapshot suffix is appended.
         ver = cliconfig.__version__
         if cliconfig.__snapshot__ == 1:
-            ver = ver + '.' +  date.today().isoformat().replace('-', '')
+            ver = ver + '.' + datetime.date.today().isoformat().replace('-', '')
         cliconfig.__version__ = ver
+
         setattr(self.distribution.metadata, 'version', ver)
         f1 = open('virt-manager.spec.in', 'r')
         f2 = open('virt-manager.spec', 'w')
@@ -215,6 +213,7 @@ class my_sdist(sdist_auto):
             f2.write(line.replace('@VERSION@', ver))
         f1.close()
         f2.close()
+
         sdist_auto.run(self)
 
 
@@ -223,7 +222,7 @@ class my_sdist(sdist_auto):
 ###################
 
 class my_rpm(Command):
-    user_options=[("snapshot", "s", "add snapshot id to version")]
+    user_options = [("snapshot", "s", "add snapshot id to version")]
 
     description = "Build src and noarch rpms."
 
