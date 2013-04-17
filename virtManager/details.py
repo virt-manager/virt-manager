@@ -3604,7 +3604,7 @@ class vmmDetails(vmmGObjectUI):
             olddev = hw_list_model[i][HW_LIST_COL_DEVICE]
 
             # Existing device, don't remove it
-            if not olddev or olddev in currentDevices:
+            if type(olddev) is str or olddev in currentDevices:
                 continue
 
             hw_list_model.remove(_iter)
