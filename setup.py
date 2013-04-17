@@ -8,6 +8,7 @@ import fnmatch
 import os
 import sys
 import unittest
+from datetime import date
 
 from distutils.core import Command, setup
 from distutils.command.sdist import sdist
@@ -181,19 +182,40 @@ class my_install(install):
 
         install.finalize_options(self)
 
-class my_sdist(sdist_auto, sdist):
-    user_option = []
+# Note: cliconfig.__snapshot__ by default is 0, it can be set to 1 by
+#       either sdist or rpm and then the snapshot suffix is appended.
+
+class my_sdist(sdist_auto):
+    user_options=sdist.user_options + [
+            ("snapshot", "s", "add snapshot id to version")]
+
+    boolean_options=sdist.boolean_options + ["snapshot"]
+
     description = "Update virt-manager.spec; build sdist-tarball."
+
+    def initialize_options(self):
+        self.snapshot = None
+        sdist.initialize_options(self)
+
+    def finalize_options(self):
+        if self.snapshot is not None:
+            self.snapshot = 1
+            cliconfig.__snapshot__ = 1
+        sdist.finalize_options(self)
 
     def run(self):
         ver = cliconfig.__version__
+        if cliconfig.__snapshot__ == 1:
+            ver = ver + '.' +  date.today().isoformat().replace('-', '')
+        cliconfig.__version__ = ver
+        setattr(self.distribution.metadata, 'version', ver)
         f1 = open('virt-manager.spec.in', 'r')
         f2 = open('virt-manager.spec', 'w')
         for line in f1:
             f2.write(line.replace('@VERSION@', ver))
         f1.close()
         f2.close()
-        sdist.run(self)
+        sdist_auto.run(self)
 
 
 ###################
@@ -201,21 +223,24 @@ class my_sdist(sdist_auto, sdist):
 ###################
 
 class my_rpm(Command):
-    user_options = []
-    description = "Build a non-binary rpm."
+    user_options=[("snapshot", "s", "add snapshot id to version")]
+
+    description = "Build src and noarch rpms."
 
     def initialize_options(self):
-        pass
+        self.snapshot = None
 
     def finalize_options(self):
-        pass
+        if self.snapshot is not None:
+            self.snapshot = 1
+            cliconfig.__snapshot__ = 1
 
     def run(self):
         """
         Run sdist, then 'rpmbuild' the tar.gz
         """
         self.run_command('sdist')
-        os.system('rpmbuild -ta dist/virt-manager-%s.tar.gz' %
+        os.system('rpmbuild -ta --clean dist/virt-manager-%s.tar.gz' %
                   cliconfig.__version__)
 
 

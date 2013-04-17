@@ -44,6 +44,8 @@ def _get_param(name, default):
 
 __version__ = "0.9.100"
 
+__snapshot__ = 0
+
 _usr_version = _get_param("pkgversion", "")
 if _usr_version is not None and _usr_version != "":
     __version__ = _usr_version
