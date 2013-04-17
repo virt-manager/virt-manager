@@ -10,6 +10,7 @@ import sys
 import unittest
 
 from distutils.core import Command, setup
+from distutils.command.sdist import sdist
 from distutils.command.install import install
 from distutils.command.install_egg_info import install_egg_info
 from distutils.sysconfig import get_config_var
@@ -179,6 +180,20 @@ class my_install(install):
             sys.exit(1)
 
         install.finalize_options(self)
+
+class my_sdist(sdist_auto, sdist):
+    user_option = []
+    description = "Update virt-manager.spec; build sdist-tarball."
+
+    def run(self):
+        ver = cliconfig.__version__
+        f1 = open('virt-manager.spec.in', 'r')
+        f2 = open('virt-manager.spec', 'w')
+        for line in f1:
+            f2.write(line.replace('@VERSION@', ver))
+        f1.close()
+        f2.close()
+        sdist.run(self)
 
 
 ###################
@@ -474,7 +489,7 @@ setup(
         'build_i18n': my_build_i18n,
         'build_icons': my_build_icons,
 
-        'sdist': sdist_auto,
+        'sdist': my_sdist,
         'install': my_install,
         'install_egg_info': my_egg_info,
 
