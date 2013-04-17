@@ -2899,12 +2899,12 @@ class vmmDetails(vmmGObjectUI):
         driver_type = disk.driver_type or ""
         serial = disk.serial
 
-        iotune_rbs = disk.iotune_rbs / 1024
-        iotune_ris = disk.iotune_ris
-        iotune_tbs = disk.iotune_tbs / 1024
-        iotune_tis = disk.iotune_tis
-        iotune_wbs = disk.iotune_wbs / 1024
-        iotune_wis = disk.iotune_wis
+        iotune_rbs = (disk.iotune_rbs or 0) / 1024
+        iotune_ris = (disk.iotune_ris or 0)
+        iotune_tbs = (disk.iotune_tbs or 0) / 1024
+        iotune_tis = (disk.iotune_tis or 0)
+        iotune_wbs = (disk.iotune_wbs or 0) / 1024
+        iotune_wis = (disk.iotune_wis or 0)
 
         show_format = (not self.is_customize_dialog or
                        disk.path_exists(disk.conn, disk.path))
