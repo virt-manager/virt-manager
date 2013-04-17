@@ -106,12 +106,8 @@ class TestImageParser(unittest.TestCase):
 
             utils.reset_conn()
 
-    # Build libvirt XML from the image xml
-    # XXX: This doesn't set up devices, so the guest xml will be pretty
-    # XXX: sparse. There should really be a helper in the Image classes
-    # XXX: that turns virt-image xml into a minimal Guest object, but
-    # XXX: maybe that's just falling into the realm of virt-convert
     def testImage2XML(self):
+        # Build libvirt XML from the image xml
         self._image2XMLhelper("image.xml", ["image-xenpv32.xml",
                                             "image-xenfv32.xml"])
         self._image2XMLhelper("image-kernel.xml", ["image-xenpv32-kernel.xml"])

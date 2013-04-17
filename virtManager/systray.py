@@ -341,7 +341,6 @@ class vmmSystray(vmmGObject):
         self.repopulate_menu_list()
 
     def conn_state_changed(self, conn):
-        # XXX: Even 'paused' conn?
         sensitive = conn.is_active()
         menu_item = self.conn_menuitems[conn.get_uri()]
         menu_item.set_sensitive(sensitive)

@@ -251,7 +251,6 @@ class StorageDevice(NodeDevice):
 
         self.block = None
         self.bus = None
-        # FIXME: Map this to virtinst.device?
         self.drive_type = None
         self.size = 0
 

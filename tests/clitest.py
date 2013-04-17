@@ -414,8 +414,6 @@ args_dict = {
         # --smartcard mode with type
         "--smartcard passthrough,type=spicevmc",
         # --smartcard mode with type
-        # XXX Requires implementing more opts
-        #"--smartcard passthrough,type=tcp",
      ],
 
       "invalid": [
@@ -887,7 +885,7 @@ args_dict = {
         # XML w/ managed storage, specify managed path
         "--original-xml %(CLONE_STORAGE_XML)s --file %(MANAGEDNEW1)s",
         # XML w/ managed storage, specify managed path across pools
-        # XXX: Libvirt test driver doesn't support cloning across pools
+        # Libvirt test driver doesn't support cloning across pools
         #"--original-xml %(CLONE_STORAGE_XML)s --file /cross-pool/clonevol",
         # XML w/ non-existent storage, with --preserve
         "--original-xml %(CLONE_NOEXIST_XML)s --file %(EXISTIMG1)s --preserve",

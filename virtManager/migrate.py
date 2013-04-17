@@ -116,7 +116,6 @@ class vmmMigrateDialog(vmmGObjectUI):
         dest_combo.add_attribute(text, 'text', 0)
         dest_combo.add_attribute(text, 'sensitive', 2)
         dest_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-        # XXX no way to set tooltips here, kind of annoying
 
         # Hook up signals to get connection listing
         self.engine.connect("conn-added", self.dest_add_conn)

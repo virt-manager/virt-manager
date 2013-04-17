@@ -30,8 +30,6 @@ running_config = None
 
 xml_escape = virtinst.util.xml_escape
 
-# FIXME: selinux policy also has a ~/VirtualMachines/isos dir
-
 
 def get_default_pool_path(conn):
     if conn.is_session_uri():
@@ -48,7 +46,6 @@ def build_default_pool(vmmconn):
     """
     Helper to build the 'default' storage pool
     """
-    # FIXME: This should use config.get_default_image_path ?
     conn = vmmconn.vmm
 
     path = get_default_pool_path(vmmconn)

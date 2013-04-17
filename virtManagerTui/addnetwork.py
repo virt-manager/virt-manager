@@ -203,7 +203,7 @@ class AddNetworkConfigScreen(VmmTuiConfigScreen):
         self.__end_address   = Entry(15, self.__config.get_ipv4_end_address())
         fields = []
         fields.append(("Select the DHCP range", None))
-        # XXX
+        # XXX: Broken after gtk3/ipaddr conversion
         # fields.append(("Start", self.__start_address.network))
         # fields.append(("End", self.__end_address.network))
         return [Label("Selecting The DHCP Range"),

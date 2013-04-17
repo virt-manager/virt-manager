@@ -215,7 +215,6 @@ class DomainConfigScreen(VmmTuiConfigScreen):
         elif page is BRIDGE_PAGE:
             if self.__network_bridges.getSelection() is not None:
                 if len(self.__mac_address.value()) > 0:
-                    # TODO: regex check the format
                     return True
                 else:
                     errors.append("MAC address must be supplied.")

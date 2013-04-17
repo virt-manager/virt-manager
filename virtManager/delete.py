@@ -282,11 +282,7 @@ def prepare_storage_list(storage_list):
     # icon size, tooltip
     model = Gtk.ListStore(bool, bool, str, str, bool, str, int, str)
     storage_list.set_model(model)
-    try:
-        storage_list.set_tooltip_column(STORAGE_ROW_TOOLTIP)
-    except:
-        # FIXME: use tooltip wrapper for this
-        pass
+    storage_list.set_tooltip_column(STORAGE_ROW_TOOLTIP)
 
     confirmCol = Gtk.TreeViewColumn()
     pathCol = Gtk.TreeViewColumn(_("Storage Path"))

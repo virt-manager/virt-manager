@@ -255,7 +255,7 @@ class XMLParseTest(unittest.TestCase):
         guest = virtinst.Guest(conn=conn,
                                parsexml=file(infile).read())
 
-        # XXX: Set size up front. VirtualDisk validation is kind of
+        # Set size up front. VirtualDisk validation is kind of
         # convoluted. If trying to change a non-existing one and size wasn't
         # already specified, we will error out.
         disks = guest.get_devices("disk")

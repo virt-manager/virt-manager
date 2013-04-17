@@ -50,7 +50,7 @@ from virtManager.error import vmmErrorDialog
 from virtManager.systray import vmmSystray
 
 # Enable this to get a report of leaked objects on app shutdown
-# XXX: gtk3 has issues here
+# gtk3/pygobject has issues here as of Fedora 18
 debug_ref_leaks = False
 
 

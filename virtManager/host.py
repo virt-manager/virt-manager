@@ -1081,7 +1081,7 @@ class vmmHost(vmmGObjectUI):
                               str(e))
             return
 
-        # XXX: This will require an interface restart
+        # This will require an interface restart
         self.widget("interface-apply").set_sensitive(False)
 
     def interface_startmode_changed(self, src_ignore):

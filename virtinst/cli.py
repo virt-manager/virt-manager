@@ -2099,7 +2099,6 @@ def parse_sound(guest, optstr, dev=None):
 
 
 def parse_hostdev(guest, optstr, dev=None):
-    # XXX: Need to implement this for virt-xml
     ignore = dev
     return virtinst.VirtualHostDevice.device_from_node(conn=guest.conn,
                                                        name=optstr)

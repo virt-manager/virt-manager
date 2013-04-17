@@ -112,7 +112,6 @@ class Domain:
         self.interface = int(node.xpathEval("count(devices/interface)"))
         self.graphics = node.xpathEval("count(devices/graphics)") > 0
 
-        # FIXME: There must be a better way to check this
         if tmpmem is not None:
             try:
                 self.memory = int(tmpmem)

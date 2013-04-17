@@ -277,7 +277,7 @@ _support_dict = {
    },
 }
 
-# XXX: RHEL6 has lots of feature backports, and since libvirt doesn't
+# RHEL6 has lots of feature backports, and since libvirt doesn't
 # really offer any XML feature introspection, we have to use hacks to
 # make sure we aren't generating bogus config on non RHEL
 _rhel6 = False
@@ -559,7 +559,7 @@ def _check_support(conn, feature, data=None):
             if hv != hv_type:
                 continue
 
-            # XXX: No HV specific version info, just use driver version
+            # No HV specific version info, just use driver version
             if min_hv_ver < 0:
                 if actual_drv_ver <= -min_hv_ver:
                     found = True

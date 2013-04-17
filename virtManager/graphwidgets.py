@@ -373,9 +373,9 @@ class Sparkline(Gtk.DrawingArea):
 
             draw_line(cr, 0, 0, w, h, points)
             if self.filled:
-                # XXX: Fixes a fully filled graph from having an oddly
-                #      tapered in end (bug 560913). Need to figure out
-                #      what's really going on.
+                # Fixes a fully filled graph from having an oddly
+                # tapered in end (bug 560913). Need to figure out
+                # what's really going on.
                 points = [(0, h)] + points
                 draw_fill(cr, 0, 0, w, h, points, taper=True)
 

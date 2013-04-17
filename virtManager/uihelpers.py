@@ -288,8 +288,6 @@ def populate_smartcard_mode_combo(vm, combo):
     # [xml value, label]
     model.append(["passthrough", "Passthrough"])
     model.append(["host", "Host"])
-# TODO
-#    model.append(["host-certificates", "Host Certificates"])
 
 
 def build_redir_type_combo(vm, combo):

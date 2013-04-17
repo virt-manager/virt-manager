@@ -93,7 +93,6 @@ def _storeForDistro(fetcher, baseuri, typ, progresscb, arch, distro=None,
         stores.append(MandrivaDistro)
     if distro == "mageia" or distro is None:
         stores.append(MageiaDistro)
-    # XXX: this is really "nevada"
     if distro == "solaris" or distro is None:
         stores.append(SolarisDistro)
     if distro == "solaris" or distro is None:
@@ -760,8 +759,6 @@ class SuseDistro(Distro):
             # On i686 arch, we also look under i585 and i386 dirs
             # in case the RPM is built for a lesser arch. We also
             # need the PAE variant (for Fedora dom0 at least)
-            #
-            # XXX shouldn't hard code that dom0 is PAE
             if self.arch == "i386":
                 arches.append("i586")
                 arches.append("i686")
@@ -1105,7 +1102,6 @@ class SolarisDistro(SunDistro):
            the pathname of the kernel (32/64) to load, kernel options
            and args, and '-B' boot properties."""
 
-        # XXX: ignoring smfargs for the time being
         (kopts, kargs, ignore_smfargs, kbargs) = \
             self.process_extra_args(guest.extraargs)
 
@@ -1199,7 +1195,6 @@ class OpenSolarisDistro(SunDistro):
            the pathname of the kernel (32/64) to load, kernel options
            and args, and '-B' boot properties."""
 
-        # XXX: ignoring smfargs and kargs for the time being
         (kopts, ignore_kargs, ignore_smfargs, kbargs) = \
             self.process_extra_args(guest.extraargs)
 

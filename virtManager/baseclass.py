@@ -159,9 +159,6 @@ class vmmGObject(GObject.GObject):
         return GObject.GObject.emit(self, signal_name, *args)
 
     def __del__(self):
-        # XXX
-        # GObject.GObject.__del__(self)
-
         try:
             if self.config and self._leak_check:
                 self.config.remove_object(self.object_key)

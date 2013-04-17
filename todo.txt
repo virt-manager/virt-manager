@@ -2,7 +2,6 @@
   TODO before first release
   =========================
 
-check all XXX/TODO in the code, make sure nothing important is missing
 revive import blacklist for virtinst code, maybe just a unittest that checks Gtk isn't in globals ?
 
 is tui working? maybe just remove it, check with mcpierce
@@ -28,6 +27,7 @@ spacing is weird in manager, prefs window. cant have unequal tree rows
 - save this till the end, narrow it down to a simple reproducer and try and
     fix, probably a gtk3 issue.
 - list size issues: master actually has bigger list size than collapsed gtk3 rows, maybe that is part of the issue.
+- check if manual themeing at the top of manager.py is still required/works
 
 
   Object leaks

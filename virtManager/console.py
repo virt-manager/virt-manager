@@ -350,7 +350,6 @@ class VNCViewer(Viewer):
         return self.desktop_resolution
 
     def _auth_credential(self, src_ignore, credList):
-        # XXX shouldn't need this
         values = []
         for idx in range(int(credList.n_values)):
             values.append(credList.get_nth(idx))

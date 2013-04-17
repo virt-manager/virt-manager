@@ -139,8 +139,8 @@ def validate_uuid(val):
         if form is None:
             raise ValueError(
                   _("UUID must be a 32-digit hexadecimal number. It may take "
-                    "the form XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX or may omit "
-                    "hyphens altogether."))
+                    "the form xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or may "
+                    "omit hyphens altogether."))
 
         else:   # UUID had no dashes, so add them in
             val = (val[0:8] + "-" + val[8:12] + "-" + val[12:16] +
@@ -305,7 +305,6 @@ def default_nic():
     if platform.system() != 'SunOS':
         return dev
 
-    # XXX: fails without PRIV_XVM_CONTROL
     proc = subprocess.Popen(['/usr/lib/xen/bin/xenstore-read',
         'device-misc/vif/default-nic'], stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)

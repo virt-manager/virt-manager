@@ -393,10 +393,11 @@ class vmmConnect(vmmGObjectUI):
 
     def check_resolve_host(self, host):
         # Try to resolve hostname
-        # XXX: Avahi always uses 'hostname.local', but for some reason
-        #      fedora out of the box can't resolve '.local' names
-        #      Attempt to resolve the name. If it fails, remove .local
-        #      if present, and try again
+        #
+        # Avahi always uses 'hostname.local', but for some reason
+        # fedora 12 out of the box can't resolve '.local' names
+        # Attempt to resolve the name. If it fails, remove .local
+        # if present, and try again
         if host.endswith(".local"):
             if self.can_resolve_local is False:
                 host = host[:-6]
