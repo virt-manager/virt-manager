@@ -612,9 +612,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.vm.connect("config-changed", self.change_title)
 
         # State for disabling modifiers when keyboard is grabbed
-        # XXX
-        # self.accel_groups = Gtk.accel_groups_from_object(self.topwin)
-        self.accel_groups = []
+        self.accel_groups = Gtk.accel_groups_from_object(self.topwin)
         self.gtk_settings_accel = None
         self.gtk_settings_mnemonic = None
 
