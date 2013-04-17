@@ -182,6 +182,7 @@ An interactive text user interface for Virtual Machine Manager.
 
 
 python setup.py configure \
+    --pkgversion="%{version}" \
     %{?_tui_opt} \
     %{?_qemu_user} \
     %{?_kvm_packages} \
