@@ -643,7 +643,8 @@ class vmmConsolePages(vmmGObjectUI):
 
         # Signals are added by vmmDetails. Don't use connect_signals here
         # or it changes will be overwritten
-        # Set console scaling
+
+        self.refresh_scaling()
         self.add_gconf_handle(
             self.vm.on_console_scaling_changed(self.refresh_scaling))
 
@@ -790,18 +791,14 @@ class vmmConsolePages(vmmGObjectUI):
         for g in self.accel_groups:
             self.topwin.add_accel_group(g)
 
-    def grab_keys_changed(self,
-                          ignore1=None, ignore2=None,
-                          ignore3=None, ignore4=None):
+    def grab_keys_changed(self):
         self.viewer.set_grab_keys()
 
-    def set_enable_accel(self, ignore=None, ignore1=None,
-                         ignore2=None, ignore3=None):
+    def set_enable_accel(self):
         # Make sure modifiers are up to date
         self.viewer_focus_changed()
 
-    def refresh_scaling(self, ignore1=None, ignore2=None, ignore3=None,
-                        ignore4=None):
+    def refresh_scaling(self):
         self.scale_type = self.vm.get_console_scaling()
         self.widget("details-menu-view-scale-always").set_active(
             self.scale_type == self.config.CONSOLE_SCALE_ALWAYS)

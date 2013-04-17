@@ -21,19 +21,77 @@ import os
 import logging
 
 # pylint: disable=E0611
+from gi.repository import Gio
+from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import GConf
 # pylint: enable=E0611
 
 import virtinst
-from virtinst import uriutil
 
 from virtManager.keyring import vmmKeyring, vmmSecret
 
 
-class vmmConfig(object):
+class SettingsWrapper(object):
+    def __init__(self, settings_id):
+        self._root = settings_id
+        self._settings = Gio.Settings.new(self._root)
 
-    # GConf directory names for saving last used paths
+        self._settingsmap = {"": self._settings}
+        self._handler_map = {}
+        for child in self._settings.list_children():
+            childschema = self._root + "." + child
+            self._settingsmap[child] = Gio.Settings.new(childschema)
+
+
+    def _parse_key(self, key):
+        value = key.strip("/")
+        settingskey = ""
+        if "/" in value:
+            settingskey, value = value.rsplit("/", 1)
+        return settingskey, value
+
+    def make_vm_settings(self, key):
+        settingskey = self._parse_key(key)[0]
+
+        if settingskey in self._settingsmap:
+            return True
+
+        schema = self._root + ".vm"
+        path = "/" + self._root.replace(".", "/") + key.rsplit("/", 1)[0] + "/"
+        self._settingsmap[settingskey] = Gio.Settings.new_with_path(schema,
+                                                                    path)
+        return True
+
+    def _find_settings(self, key):
+        settingskey, value = self._parse_key(key)
+        return self._settingsmap[settingskey], value
+
+    def _cmd_helper(self, cmd, key, *args, **kwargs):
+        settings, key = self._find_settings(key)
+        return getattr(settings, cmd)(key, *args, **kwargs)
+
+    def notify_add(self, key, cb, *args, **kwargs):
+        settings, key = self._find_settings(key)
+        def wrapcb(*ignore):
+            return cb(*args, **kwargs)
+        ret = settings.connect("changed::%s" % key, wrapcb, *args, **kwargs)
+        self._handler_map[ret] = settings
+        return ret
+    def notify_remove(self, h):
+        settings = self._handler_map.pop(h)
+        return settings.disconnect(h)
+
+    def get(self, key):
+        return self._cmd_helper("get_value", key).unpack()
+    def set(self, key, value, *args, **kwargs):
+        fmt = self._cmd_helper("get_value", key).get_type_string()
+        return self._cmd_helper("set_value", key,
+                                GLib.Variant(fmt, value),
+                                *args, **kwargs)
+
+
+class vmmConfig(object):
+    # key names for saving last used paths
     CONFIG_DIR_IMAGE = "image"
     CONFIG_DIR_ISO_MEDIA = "isomedia"
     CONFIG_DIR_FLOPPY_MEDIA = "floppymedia"
@@ -77,10 +135,6 @@ class vmmConfig(object):
     CONSOLE_SCALE_FULLSCREEN = 1
     CONSOLE_SCALE_ALWAYS = 2
 
-    CONSOLE_KEYGRAB_NEVER = 0
-    CONSOLE_KEYGRAB_FULLSCREEN = 1
-    CONSOLE_KEYGRAB_MOUSEOVER = 2
-
     _PEROBJ_FUNC_SET    = 0
     _PEROBJ_FUNC_GET    = 1
     _PEROBJ_FUNC_LISTEN = 2
@@ -94,12 +148,11 @@ class vmmConfig(object):
     def __init__(self, appname, appversion, ui_dir, test_first_run=False):
         self.appname = appname
         self.appversion = appversion
-        self.conf_dir = "/apps/" + appname
+        self.conf_dir = "/org/virt-manager/%s/" % self.appname
         self.ui_dir = ui_dir
         self.test_first_run = bool(test_first_run)
 
-        self.conf = GConf.Client.get_default()
-        self.conf.add_dir(self.conf_dir, GConf.ClientPreloadType.PRELOAD_NONE)
+        self.conf = SettingsWrapper("org.virt-manager.virt-manager")
 
         # We don't create it straight away, since we don't want
         # to block the app pending user authorizaation to access
@@ -124,26 +177,6 @@ class vmmConfig(object):
 
         self._spice_error = None
 
-    def get_string_list(self, path):
-        val = self.conf.get(path)
-        if val is None:
-            return None
-        values = []
-        for v in val.get_list():
-            values.append(v.get_string())
-        return values
-
-    def set_string_list(self, path, values):
-        newValues = []
-        for v in values:
-            nv = GConf.Value.new(GConf.ValueType.STRING)
-            nv.set_string(v)
-            newValues.append(nv)
-        ignore = path
-        # XXX: set_list is not available with introspection
-        # val = GConf.Value()
-        # val.set_list(newValues)
-        # self.conf.set(path, val)
 
     def check_inspection(self, support_threading):
         if not support_threading:
@@ -199,162 +232,61 @@ class vmmConfig(object):
     def get_objects(self):
         return self._objects[:]
 
-    # Per-VM/Connection/Connection Host Option dealings
-    def _perconn_helper(self, uri, pref_func, func_type, value=None):
-        suffix = "connection_prefs/%s" % GConf.escape_key(uri, len(uri))
-        return self._perobj_helper(suffix, pref_func, func_type, value)
-    def _perhost_helper(self, uri, pref_func, func_type, value=None):
-        host = uriutil.get_uri_hostname(uri)
-        if not host:
-            host = "localhost"
-        suffix = "connection_prefs/hosts/%s" % host
-        return self._perobj_helper(suffix, pref_func, func_type, value)
-    def _pervm_helper(self, uri, uuid, pref_func, func_type, value=None):
-        suffix = ("connection_prefs/%s/vms/%s" %
-                  (GConf.escape_key(uri, len(uri)), uuid))
-        return self._perobj_helper(suffix, pref_func, func_type, value)
+    def _make_pervm_key(self, uuid, key):
+        return "/vms/%s%s" % (uuid.replace("-", ""), key)
 
-    def _perobj_helper(self, suffix, pref_func, func_type, value=None):
-        # This function wraps the regular preference setting functions,
-        # replacing conf_dir with a connection, host, or vm specific path. For
-        # VMs, the path is:
-        #
-        # conf_dir/connection_prefs/{CONN_URI}/vms/{VM_UUID}
-        #
-        # So a per-VM pref will look like
-        # .../connection_prefs/qemu:---system/vms/1234.../console/scaling
-        #
-        # Yeah this is evil but it's also nice and easy :)
+    def listen_pervm(self, uuid, key, *args, **kwargs):
+        key = self._make_pervm_key(uuid, key)
+        self.conf.make_vm_settings(key)
+        return self.conf.notify_add(key, *args, **kwargs)
 
-        oldconf = self.conf_dir
-        newconf = oldconf
-
-        # Don't make a bogus gconf path if this is called nested.
-        if not oldconf.count(suffix):
-            newconf = "%s/%s" % (oldconf, suffix)
-
-        ret = None
-        try:
-            self.conf_dir = newconf
-            if func_type == self._PEROBJ_FUNC_SET:
-                if type(value) is not tuple:
-                    value = (value,)
-                pref_func(*value)
-            elif func_type == self._PEROBJ_FUNC_GET:
-                ret = pref_func()
-            elif func_type == self._PEROBJ_FUNC_LISTEN:
-                ret = pref_func(value)
-        finally:
-            self.conf_dir = oldconf
-
+    def set_pervm(self, uuid, key, *args, **kwargs):
+        key = self._make_pervm_key(uuid, key)
+        self.conf.make_vm_settings(key)
+        ret = self.conf.set(key, *args, **kwargs)
         return ret
 
-    def set_pervm(self, uri, uuid, pref_func, args):
-        """
-        @param uri: VM connection URI
-        @param uuid: VM UUID
-        @param value: Set value or listener callback function
-        @param pref_func: Global preference get/set/listen func that the
-                          pervm instance will overshadow
-        """
-        self._pervm_helper(uri, uuid, pref_func, self._PEROBJ_FUNC_SET, args)
-    def get_pervm(self, uri, uuid, pref_func):
-        ret = self._pervm_helper(uri, uuid, pref_func, self._PEROBJ_FUNC_GET)
-        if ret is None:
-            # If the GConf value is unset, return the global default.
-            ret = pref_func()
-        return ret
-    def listen_pervm(self, uri, uuid, pref_func, cb):
-        return self._pervm_helper(uri, uuid, pref_func,
-                                  self._PEROBJ_FUNC_LISTEN, cb)
+    def get_pervm(self, uuid, key):
+        key = self._make_pervm_key(uuid, key)
+        self.conf.make_vm_settings(key)
+        return self.conf.get(key)
 
-    def set_perconn(self, uri, pref_func, value):
-        self._perconn_helper(uri, pref_func, self._PEROBJ_FUNC_SET, value)
-    def get_perconn(self, uri, pref_func):
-        ret = self._perconn_helper(uri, pref_func, self._PEROBJ_FUNC_GET)
-        if ret is None:
-            # If the GConf value is unset, return the global default.
-            ret = pref_func()
-        return ret
-    def listen_perconn(self, uri, pref_func, cb):
-        return self._perconn_helper(uri, pref_func,
-                                    self._PEROBJ_FUNC_LISTEN, cb)
 
-    def set_perhost(self, uri, pref_func, value):
-        self._perhost_helper(uri, pref_func, self._PEROBJ_FUNC_SET, value)
-    def get_perhost(self, uri, pref_func):
-        ret = self._perhost_helper(uri, pref_func, self._PEROBJ_FUNC_GET)
-        if ret is None:
-            # If the GConf value is unset, return the global default.
-            ret = pref_func()
-        return ret
-    def listen_perhost(self, uri, pref_func, cb):
-        return self._perhost_helper(uri, pref_func,
-                                    self._PEROBJ_FUNC_LISTEN, cb)
-
-    def reconcile_vm_entries(self, uri, current_vms):
-        """
-        Remove any old VM preference entries for the passed URI
-        """
-        uri = GConf.escape_key(uri, len(uri))
-        key = self.conf_dir + "/connection_prefs/%s/vms" % uri
-        kill_vms = []
-        gconf_vms = [inp.split("/")[-1] for inp in self.conf.all_dirs(key)]
-
-        for uuid in gconf_vms:
-            if len(uuid) == 36 and not uuid in current_vms:
-                kill_vms.append(uuid)
-
-        for uuid in kill_vms:
-            self.conf.recursive_unset(key + "/%s" % uuid, 0)
-
-        if kill_vms:
-            # Suggest gconf syncs, so that the unset dirs are fully removed
-            self.conf.suggest_sync()
-
-    #########################
-    # General GConf helpers #
-    #########################
+    ###################
+    # General helpers #
+    ###################
 
     # Manager stats view preferences
     def is_vmlist_guest_cpu_usage_visible(self):
-        return self.conf.get_bool(self.conf_dir + "/vmlist-fields/cpu_usage")
+        return self.conf.get("/vmlist-fields/cpu-usage")
     def is_vmlist_host_cpu_usage_visible(self):
-        return self.conf.get_bool(self.conf_dir +
-                                  "/vmlist-fields/host_cpu_usage")
+        return self.conf.get("/vmlist-fields/host-cpu-usage")
     def is_vmlist_disk_io_visible(self):
-        return self.conf.get_bool(self.conf_dir + "/vmlist-fields/disk_usage")
+        return self.conf.get("/vmlist-fields/disk-usage")
     def is_vmlist_network_traffic_visible(self):
-        return self.conf.get_bool(self.conf_dir +
-                                  "/vmlist-fields/network_traffic")
+        return self.conf.get("/vmlist-fields/network-traffic")
 
     def set_vmlist_guest_cpu_usage_visible(self, state):
-        self.conf.set_bool(self.conf_dir + "/vmlist-fields/cpu_usage", state)
+        self.conf.set("/vmlist-fields/cpu-usage", state)
     def set_vmlist_host_cpu_usage_visible(self, state):
-        self.conf.set_bool(self.conf_dir + "/vmlist-fields/host_cpu_usage",
-                           state)
+        self.conf.set("/vmlist-fields/host-cpu-usage", state)
     def set_vmlist_disk_io_visible(self, state):
-        self.conf.set_bool(self.conf_dir + "/vmlist-fields/disk_usage", state)
+        self.conf.set("/vmlist-fields/disk-usage", state)
     def set_vmlist_network_traffic_visible(self, state):
-        self.conf.set_bool(self.conf_dir + "/vmlist-fields/network_traffic",
-                           state)
+        self.conf.set("/vmlist-fields/network-traffic", state)
 
-    def on_vmlist_guest_cpu_usage_visible_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/vmlist-fields/cpu_usage",
-                                    cb, userdata)
-    def on_vmlist_host_cpu_usage_visible_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir +
-                                    "/vmlist-fields/host_cpu_usage", cb, userdata)
-    def on_vmlist_disk_io_visible_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/vmlist-fields/disk_usage",
-                                    cb, userdata)
-    def on_vmlist_network_traffic_visible_changed(self, cb, userdata=None):
-        return self.conf.notify_add(
-                        self.conf_dir + "/vmlist-fields/network_traffic", cb, userdata)
+    def on_vmlist_guest_cpu_usage_visible_changed(self, cb):
+        return self.conf.notify_add("/vmlist-fields/cpu-usage", cb)
+    def on_vmlist_host_cpu_usage_visible_changed(self, cb):
+        return self.conf.notify_add("/vmlist-fields/host-cpu-usage", cb)
+    def on_vmlist_disk_io_visible_changed(self, cb):
+        return self.conf.notify_add("/vmlist-fields/disk-usage", cb)
+    def on_vmlist_network_traffic_visible_changed(self, cb):
+        return self.conf.notify_add("/vmlist-fields/network-traffic", cb)
 
     # Keys preferences
     def get_keys_combination(self):
-        ret = self.conf.get_string(self.conf_dir + "/keys/grab-keys")
+        ret = self.conf.get("/console/grab-keys")
         if not ret:
             # Left Control + Left Alt
             return "65507,65513"
@@ -362,199 +294,160 @@ class vmmConfig(object):
     def set_keys_combination(self, val):
         # Val have to be a list of integers
         val = ','.join([str(v) for v in val])
-        self.conf.set_string(self.conf_dir + "/keys/grab-keys", val)
-    def on_keys_combination_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/keys/grab-keys", cb, userdata)
+        self.conf.set("/console/grab-keys", val)
+    def on_keys_combination_changed(self, cb):
+        return self.conf.notify_add("/console/grab-keys", cb)
 
     # Confirmation preferences
     def get_confirm_forcepoweroff(self):
-        return self.conf.get_bool(self.conf_dir + "/confirm/forcepoweroff")
+        return self.conf.get("/confirm/forcepoweroff")
     def get_confirm_poweroff(self):
-        return self.conf.get_bool(self.conf_dir + "/confirm/poweroff")
+        return self.conf.get("/confirm/poweroff")
     def get_confirm_pause(self):
-        return self.conf.get_bool(self.conf_dir + "/confirm/pause")
+        return self.conf.get("/confirm/pause")
     def get_confirm_removedev(self):
-        return self.conf.get_bool(self.conf_dir + "/confirm/removedev")
+        return self.conf.get("/confirm/removedev")
     def get_confirm_interface(self):
-        return self.conf.get_bool(self.conf_dir + "/confirm/interface_power")
+        return self.conf.get("/confirm/interface-power")
     def get_confirm_unapplied(self):
-        return self.conf.get_bool(self.conf_dir + "/confirm/unapplied_dev")
+        return self.conf.get("/confirm/unapplied-dev")
     def get_confirm_delstorage(self):
-        # If no schema is installed, we _really_ want this to default to True
-        path = self.conf_dir + "/confirm/delete_storage"
-        ret = self.conf.get(path)
-        if ret is None:
-            return True
-        return self.conf.get_bool(path)
+        return self.conf.get("/confirm/delete-storage")
 
 
     def set_confirm_forcepoweroff(self, val):
-        self.conf.set_bool(self.conf_dir + "/confirm/forcepoweroff", val)
+        self.conf.set("/confirm/forcepoweroff", val)
     def set_confirm_poweroff(self, val):
-        self.conf.set_bool(self.conf_dir + "/confirm/poweroff", val)
+        self.conf.set("/confirm/poweroff", val)
     def set_confirm_pause(self, val):
-        self.conf.set_bool(self.conf_dir + "/confirm/pause", val)
+        self.conf.set("/confirm/pause", val)
     def set_confirm_removedev(self, val):
-        self.conf.set_bool(self.conf_dir + "/confirm/removedev", val)
+        self.conf.set("/confirm/removedev", val)
     def set_confirm_interface(self, val):
-        self.conf.set_bool(self.conf_dir + "/confirm/interface_power", val)
+        self.conf.set("/confirm/interface-power", val)
     def set_confirm_unapplied(self, val):
-        self.conf.set_bool(self.conf_dir + "/confirm/unapplied_dev", val)
+        self.conf.set("/confirm/unapplied-dev", val)
     def set_confirm_delstorage(self, val):
-        self.conf.set_bool(self.conf_dir + "/confirm/delete_storage", val)
-
-    def on_confirm_forcepoweroff_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/confirm/forcepoweroff", cb, userdata)
-    def on_confirm_poweroff_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/confirm/poweroff", cb, userdata)
-    def on_confirm_pause_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/confirm/pause", cb, userdata)
-    def on_confirm_removedev_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/confirm/removedev", cb, userdata)
-    def on_confirm_interface_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/confirm/interface_power", cb, userdata)
-    def on_confirm_unapplied_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/confirm/unapplied_dev", cb, userdata)
-    def on_confirm_delstorage_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/confirm/delete_storage", cb, userdata)
+        self.conf.set("/confirm/delete-storage", val)
 
 
     # System tray visibility
-    def on_view_system_tray_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/system-tray", cb, userdata)
+    def on_view_system_tray_changed(self, cb):
+        return self.conf.notify_add("/system-tray", cb)
     def get_view_system_tray(self):
-        return self.conf.get_bool(self.conf_dir + "/system-tray")
+        return self.conf.get("/system-tray")
     def set_view_system_tray(self, val):
-        self.conf.set_bool(self.conf_dir + "/system-tray", val)
+        self.conf.set("/system-tray", val)
 
 
     # Stats history and interval length
     def get_stats_update_interval(self):
-        interval = self.conf.get_int(self.conf_dir + "/stats/update-interval")
+        interval = self.conf.get("/stats/update-interval")
         if interval < 1:
             return 1
         return interval
     def get_stats_history_length(self):
-        history = self.conf.get_int(self.conf_dir + "/stats/history-length")
+        history = self.conf.get("/stats/history-length")
         if history < 10:
             return 10
         return history
 
     def set_stats_update_interval(self, interval):
-        self.conf.set_int(self.conf_dir + "/stats/update-interval", interval)
+        self.conf.set("/stats/update-interval", interval)
     def set_stats_history_length(self, length):
-        self.conf.set_int(self.conf_dir + "/stats/history-length", length)
+        self.conf.set("/stats/history-length", length)
 
-    def on_stats_update_interval_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/stats/update-interval", cb, userdata)
-    def on_stats_history_length_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/stats/history-length", cb, userdata)
+    def on_stats_update_interval_changed(self, cb):
+        return self.conf.notify_add("/stats/update-interval", cb)
+    def on_stats_history_length_changed(self, cb):
+        return self.conf.notify_add("/stats/history-length", cb)
 
 
     # Disable/Enable different stats polling
     def get_stats_enable_disk_poll(self):
-        return self.conf.get_bool(self.conf_dir + "/stats/enable-disk-poll")
+        return self.conf.get("/stats/enable-disk-poll")
     def get_stats_enable_net_poll(self):
-        return self.conf.get_bool(self.conf_dir + "/stats/enable-net-poll")
+        return self.conf.get("/stats/enable-net-poll")
 
     def set_stats_enable_disk_poll(self, val):
-        self.conf.set_bool(self.conf_dir + "/stats/enable-disk-poll", val)
+        self.conf.set("/stats/enable-disk-poll", val)
     def set_stats_enable_net_poll(self, val):
-        self.conf.set_bool(self.conf_dir + "/stats/enable-net-poll", val)
+        self.conf.set("/stats/enable-net-poll", val)
 
-    def on_stats_enable_disk_poll_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/stats/enable-disk-poll",
-                                    cb, userdata)
-    def on_stats_enable_net_poll_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/stats/enable-net-poll",
-                                    cb, userdata)
+    def on_stats_enable_disk_poll_changed(self, cb, row=None):
+        return self.conf.notify_add("/stats/enable-disk-poll", cb, row)
+    def on_stats_enable_net_poll_changed(self, cb, row=None):
+        return self.conf.notify_add("/stats/enable-net-poll", cb, row)
 
     # VM Console preferences
-    def on_console_accels_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/console/enable-accels", cb, userdata)
+    def on_console_accels_changed(self, cb):
+        return self.conf.notify_add("/console/enable-accels", cb)
     def get_console_accels(self):
-        console_pref = self.conf.get_bool(self.conf_dir +
-                                          "/console/enable-accels")
+        console_pref = self.conf.get("/console/enable-accels")
         if console_pref is None:
             console_pref = False
         return console_pref
     def set_console_accels(self, pref):
-        self.conf.set_bool(self.conf_dir + "/console/enable-accels", pref)
+        self.conf.set("/console/enable-accels", pref)
 
-    def on_console_scaling_changed(self, cb, userdata=None):
-        return self.conf.notify_add(self.conf_dir + "/console/scaling", cb, userdata)
+    def on_console_scaling_changed(self, cb):
+        return self.conf.notify_add("/console/scaling", cb)
     def get_console_scaling(self):
-        ret = self.conf.get(self.conf_dir + "/console/scaling")
-        if ret is not None:
-            ret = ret.get_int()
-        return ret
+        return self.conf.get("/console/scaling")
     def set_console_scaling(self, pref):
-        self.conf.set_int(self.conf_dir + "/console/scaling", pref)
+        self.conf.set("/console/scaling", pref)
 
     # Show VM details toolbar
     def get_details_show_toolbar(self):
-        res = self.conf.get_bool(self.conf_dir + "/details/show-toolbar")
+        res = self.conf.get("/details/show-toolbar")
         if res is None:
             res = True
         return res
     def set_details_show_toolbar(self, state):
-        self.conf.set_bool(self.conf_dir + "/details/show-toolbar", state)
+        self.conf.set("/details/show-toolbar", state)
 
     # VM details default size
     def get_details_window_size(self):
-        w = self.conf.get_int(self.conf_dir + "/details/window_width")
-        h = self.conf.get_int(self.conf_dir + "/details/window_height")
+        w = self.conf.get("/details/window_width")
+        h = self.conf.get("/details/window_height")
         return (w, h)
     def set_details_window_size(self, w, h):
-        self.conf.set_int(self.conf_dir + "/details/window_width", w)
-        self.conf.set_int(self.conf_dir + "/details/window_height", h)
+        self.conf.set("/details/window_width", w)
+        self.conf.set("/details/window_height", h)
 
     # Create sound device for default guest
     def get_local_sound(self):
-        return self.conf.get_bool(self.conf_dir + "/new-vm/local-sound")
+        return self.conf.get("/new-vm/local-sound")
     def get_remote_sound(self):
-        return self.conf.get_bool(self.conf_dir + "/new-vm/remote-sound")
+        return self.conf.get("/new-vm/remote-sound")
 
     def set_local_sound(self, state):
-        self.conf.set_bool(self.conf_dir + "/new-vm/local-sound", state)
+        self.conf.set("/new-vm/local-sound", state)
     def set_remote_sound(self, state):
-        self.conf.set_bool(self.conf_dir + "/new-vm/remote-sound", state)
-
-    def on_sound_local_changed(self, cb, data=None):
-        return self.conf.notify_add(self.conf_dir + "/new-vm/local-sound", cb, data)
-    def on_sound_remote_changed(self, cb, data=None):
-        return self.conf.notify_add(self.conf_dir + "/new-vm/remote-sound", cb, data)
+        self.conf.set("/new-vm/remote-sound", state)
 
     def get_graphics_type(self):
-        ret = self.conf.get_string(self.conf_dir + "/new-vm/graphics_type")
+        ret = self.conf.get("/new-vm/graphics-type")
         if ret == "system":
             return self.default_graphics_from_config
         if ret not in ["vnc", "spice"]:
             return "vnc"
         return ret
     def set_graphics_type(self, gtype):
-        self.conf.set_string(self.conf_dir + "/new-vm/graphics_type",
-                             gtype.lower())
-    def on_graphics_type_changed(self, cb, data=None):
-        return self.conf.notify_add(self.conf_dir + "/new-vm/graphics_type",
-                                    cb, data)
+        self.conf.set("/new-vm/graphics-type", gtype.lower())
 
     def get_storage_format(self):
-        ret = self.conf.get_string(self.conf_dir + "/new-vm/storage-format")
+        ret = self.conf.get("/new-vm/storage-format")
         if ret not in ["default", "raw", "qcow2"]:
             return "default"
         return ret
     def set_storage_format(self, typ):
-        self.conf.set_string(self.conf_dir + "/new-vm/storage-format",
-                             typ.lower())
-    def on_storage_format_changed(self, cb, data=None):
-        return self.conf.notify_add(self.conf_dir + "/new-vm/storage-format",
-                                    cb, data)
+        self.conf.set("/new-vm/storage-format", typ.lower())
 
 
     # URL/Media path history
     def _url_add_helper(self, gconf_path, url):
-        urls = self.get_string_list(gconf_path)
+        urls = self.conf.get(gconf_path)
         if urls is None:
             urls = []
 
@@ -564,31 +457,29 @@ class vmmConfig(object):
             length = self.get_url_list_length()
             if len(urls) > length:
                 del urls[len(urls) - 1]
-            self.set_string_list(gconf_path, urls)
+            self.conf.set(gconf_path, urls)
 
     def add_media_url(self, url):
-        self._url_add_helper(self.conf_dir + "/urls/media", url)
+        self._url_add_helper("/urls/media", url)
     def add_kickstart_url(self, url):
-        self._url_add_helper(self.conf_dir + "/urls/kickstart", url)
+        self._url_add_helper("/urls/kickstart", url)
     def add_iso_path(self, path):
-        self._url_add_helper(self.conf_dir + "/urls/local_media", path)
+        self._url_add_helper("/urls/isos", path)
 
     def get_media_urls(self):
-        return self.get_string_list(self.conf_dir + "/urls/media")
-
+        return self.conf.get("/urls/media")
     def get_kickstart_urls(self):
-        return self.get_string_list(self.conf_dir + "/urls/kickstart")
-
+        return self.conf.get("/urls/kickstart")
     def get_iso_paths(self):
-        return self.get_string_list(self.conf_dir + "/urls/local_media")
+        return self.conf.get("/urls/isos")
 
     def get_url_list_length(self):
-        length = self.conf.get_int(self.conf_dir + "/urls/url-list-length")
+        length = self.conf.get("/urls/url-list-length")
         if length < 5:
             return 5
         return length
     def set_url_list_length(self, length):
-        self.conf.set_int(self.conf_dir + "/urls/url-list-length", length)
+        self.conf.set("/urls/url-list-length", length)
 
     # Whether to ask about fixing path permissions
     def add_perms_fix_ignore(self, pathlist):
@@ -597,10 +488,9 @@ class vmmConfig(object):
             if path in current_list:
                 continue
             current_list.append(path)
-        self.set_string_list(self.conf_dir + "/paths/perms_fix_ignore",
-                             current_list)
+        self.conf.set("/paths/perms_fix_ignore", current_list)
     def get_perms_fix_ignore(self):
-        return self.get_string_list(self.conf_dir + "/paths/perms_fix_ignore")
+        return self.conf.get("/paths/perms_fix_ignore")
 
 
     # Manager view connection list
@@ -608,54 +498,52 @@ class vmmConfig(object):
         if self.test_first_run:
             return
 
-        uris = self.get_string_list(self.conf_dir + "/connections/uris")
+        uris = self.conf.get("/connections/uris")
         if uris is None:
             uris = []
 
         if uris.count(uri) == 0:
             uris.insert(len(uris) - 1, uri)
-            self.set_string_list(self.conf_dir + "/connections/uris", uris)
+            self.conf.set("/connections/uris", uris)
     def remove_conn(self, uri):
-        uris = self.get_string_list(self.conf_dir + "/connections/uris")
+        uris = self.conf.get("/connections/uris")
 
         if uris is None:
             return
 
         if uris.count(uri) != 0:
             uris.remove(uri)
-            self.set_string_list(self.conf_dir + "/connections/uris", uris)
+            self.conf.set("/connections/uris", uris)
 
         if self.get_conn_autoconnect(uri):
-            uris = self.get_string_list(self.conf_dir +
-                                             "/connections/autoconnect")
+            uris = self.conf.get("/connections/autoconnect")
             uris.remove(uri)
-            self.set_string_list(self.conf_dir + "/connections/autoconnect",
-                                 uris)
+            self.conf.set("/connections/autoconnect", uris)
 
     def get_conn_uris(self):
         if self.test_first_run:
             return []
-        return self.get_string_list(self.conf_dir + "/connections/uris")
+        return self.conf.get("/connections/uris")
 
     # Manager default window size
     def get_manager_window_size(self):
-        w = self.conf.get_int(self.conf_dir + "/manager_window_width")
-        h = self.conf.get_int(self.conf_dir + "/manager_window_height")
+        w = self.conf.get("/manager-window-width")
+        h = self.conf.get("/manager-window-height")
         return (w, h)
     def set_manager_window_size(self, w, h):
-        self.conf.set_int(self.conf_dir + "/manager_window_width", w)
-        self.conf.set_int(self.conf_dir + "/manager_window_height", h)
+        self.conf.set("/manager-window-width", w)
+        self.conf.set("/manager-window-height", h)
 
     # URI autoconnect
     def get_conn_autoconnect(self, uri):
-        uris = self.get_string_list(self.conf_dir + "/connections/autoconnect")
+        uris = self.conf.get("/connections/autoconnect")
         return ((uris is not None) and (uri in uris))
 
     def set_conn_autoconnect(self, uri, val):
         if self.test_first_run:
             return
 
-        uris = self.get_string_list(self.conf_dir + "/connections/autoconnect")
+        uris = self.conf.get("/connections/autoconnect")
         if uris is None:
             uris = []
         if not val and uri in uris:
@@ -663,8 +551,7 @@ class vmmConfig(object):
         elif val and uri not in uris:
             uris.append(uri)
 
-        self.set_string_list(self.conf_dir + "/connections/autoconnect",
-                             uris)
+        self.conf.set("/connections/autoconnect", uris)
 
 
     # Default directory location dealings
@@ -681,8 +568,7 @@ class vmmConfig(object):
 
         key = self._get_default_dir_key(_type)
         try:
-            path = self.conf.get_value(self.conf_dir +
-                                       "/paths/default-%s-path" % key)
+            path = self.conf.get("/paths/default-%s-path" % key)
         except:
             path = None
 
@@ -704,8 +590,7 @@ class vmmConfig(object):
             return
 
         logging.debug("set_default_directory(%s): saving %s", _type, folder)
-        self.conf.set_string(self.conf_dir + "/paths/default-%s-path" % _type,
-                             folder)
+        self.conf.set("/paths/default-%s-path" % _type, folder)
 
     def get_default_image_dir(self, conn):
         if conn.is_xen():
@@ -737,14 +622,13 @@ class vmmConfig(object):
             self.keyring = vmmKeyring()
         return self.keyring.is_available()
 
-
     def get_console_password(self, vm):
-        keyid = self.conf.get_int(self.conf_dir +
-                                "/console/passwords/" + vm.get_uuid())
-        username = self.conf.get_string(self.conf_dir +
-                                        "/console/usernames/" + vm.get_uuid())
+        if not self.has_keyring():
+            return ("", "")
 
-        if keyid is None or not self.has_keyring():
+        username, keyid = vm.get_console_password()
+
+        if keyid == -1:
             return ("", "")
 
         secret = self.keyring.get_secret(keyid)
@@ -761,11 +645,6 @@ class vmmConfig(object):
         if not self.has_keyring():
             return
 
-        # Nb, we don't bother to check if there is an existing
-        # secret, because gnome-keyring auto-replaces an existing
-        # one if the attributes match - which they will since UUID
-        # is our unique key
-
         secret = vmmSecret(self.get_secret_name(vm), password,
                            {"uuid" : vm.get_uuid(),
                             "hvuri": vm.conn.get_uri()})
@@ -773,7 +652,4 @@ class vmmConfig(object):
         if keyid is None:
             return
 
-        self.conf.set_int(self.conf_dir +
-                          "/console/passwords/" + vm.get_uuid(), keyid)
-        self.conf.set_string(self.conf_dir +
-                             "/console/usernames/" + vm.get_uuid(), username)
+        vm.set_console_password(username, keyid)

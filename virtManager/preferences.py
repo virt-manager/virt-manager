@@ -35,26 +35,6 @@ class vmmPreferences(vmmGObjectUI):
     def __init__(self):
         vmmGObjectUI.__init__(self, "vmm-preferences.ui", "vmm-preferences")
 
-        self.add_gconf_handle(self.config.on_view_system_tray_changed(self.refresh_view_system_tray))
-        self.add_gconf_handle(self.config.on_console_accels_changed(self.refresh_console_accels))
-        self.add_gconf_handle(self.config.on_console_scaling_changed(self.refresh_console_scaling))
-        self.add_gconf_handle(self.config.on_stats_update_interval_changed(self.refresh_update_interval))
-        self.add_gconf_handle(self.config.on_stats_history_length_changed(self.refresh_history_length))
-        self.add_gconf_handle(self.config.on_sound_local_changed(self.refresh_sound_local))
-        self.add_gconf_handle(self.config.on_sound_remote_changed(self.refresh_sound_remote))
-        self.add_gconf_handle(self.config.on_graphics_type_changed(self.refresh_graphics_type))
-        self.add_gconf_handle(self.config.on_storage_format_changed(self.refresh_storage_format))
-        self.add_gconf_handle(self.config.on_stats_enable_disk_poll_changed(self.refresh_disk_poll))
-        self.add_gconf_handle(self.config.on_stats_enable_net_poll_changed(self.refresh_net_poll))
-
-        self.add_gconf_handle(self.config.on_confirm_forcepoweroff_changed(self.refresh_confirm_forcepoweroff))
-        self.add_gconf_handle(self.config.on_confirm_poweroff_changed(self.refresh_confirm_poweroff))
-        self.add_gconf_handle(self.config.on_confirm_pause_changed(self.refresh_confirm_pause))
-        self.add_gconf_handle(self.config.on_confirm_removedev_changed(self.refresh_confirm_removedev))
-        self.add_gconf_handle(self.config.on_confirm_interface_changed(self.refresh_confirm_interface))
-        self.add_gconf_handle(self.config.on_confirm_unapplied_changed(self.refresh_confirm_unapplied))
-        self.add_gconf_handle(self.config.on_confirm_delstorage_changed(self.refresh_confirm_delstorage))
-
         self.refresh_view_system_tray()
         self.refresh_update_interval()
         self.refresh_history_length()
@@ -117,41 +97,33 @@ class vmmPreferences(vmmGObjectUI):
     # Config Change Options #
     #########################
 
-    def refresh_view_system_tray(self, ignore1=None, ignore2=None,
-                                 ignore3=None, ignore4=None):
+    def refresh_view_system_tray(self):
         val = self.config.get_view_system_tray()
         self.widget("prefs-system-tray").set_active(bool(val))
 
-    def refresh_update_interval(self, ignore1=None, ignore2=None,
-                                ignore3=None, ignore4=None):
+    def refresh_update_interval(self):
         self.widget("prefs-stats-update-interval").set_value(
             self.config.get_stats_update_interval())
-    def refresh_history_length(self, ignore1=None, ignore2=None,
-                               ignore3=None, ignore4=None):
+    def refresh_history_length(self):
         self.widget("prefs-stats-history-len").set_value(
             self.config.get_stats_history_length())
 
-    def refresh_console_accels(self, ignore1=None, ignore2=None,
-                                ignore3=None, ignore4=None):
+    def refresh_console_accels(self):
         self.widget("prefs-console-accels").set_active(
             self.config.get_console_accels())
-    def refresh_console_scaling(self, ignore1=None, ignore2=None,
-                                ignore3=None, ignore4=None):
+    def refresh_console_scaling(self):
         val = self.config.get_console_scaling()
         if val is None:
             val = 0
         self.widget("prefs-console-scaling").set_active(val)
 
-    def refresh_sound_local(self, ignore1=None, ignore2=None, ignore=None,
-                            ignore4=None):
+    def refresh_sound_local(self):
         self.widget("prefs-sound-local").set_active(
             self.config.get_local_sound())
-    def refresh_sound_remote(self, ignore1=None, ignore2=None, ignore=None,
-                             ignore4=None):
+    def refresh_sound_remote(self):
         self.widget("prefs-sound-remote").set_active(
             self.config.get_remote_sound())
-    def refresh_graphics_type(self, ignore1=None, ignore2=None, ignore=None,
-                             ignore4=None):
+    def refresh_graphics_type(self):
         combo = self.widget("prefs-graphics-type")
         model = combo.get_model()
         gtype = self.config.get_graphics_type()
@@ -164,8 +136,7 @@ class vmmPreferences(vmmGObjectUI):
                 break
 
         self.widget("prefs-graphics-type").set_active(active)
-    def refresh_storage_format(self, ignore1=None, ignore2=None, ignore=None,
-                               ignore4=None):
+    def refresh_storage_format(self):
         combo = self.widget("prefs-storage-format")
         model = combo.get_model()
         gtype = self.config.get_storage_format()
@@ -179,17 +150,14 @@ class vmmPreferences(vmmGObjectUI):
 
         self.widget("prefs-storage-format").set_active(active)
 
-    def refresh_disk_poll(self, ignore1=None, ignore2=None, ignore3=None,
-                          ignore4=None):
+    def refresh_disk_poll(self):
         self.widget("prefs-stats-enable-disk").set_active(
             self.config.get_stats_enable_disk_poll())
-    def refresh_net_poll(self, ignore1=None, ignore2=None, ignore3=None,
-                         ignore4=None):
+    def refresh_net_poll(self):
         self.widget("prefs-stats-enable-net").set_active(
             self.config.get_stats_enable_net_poll())
 
-    def refresh_grabkeys_combination(self, ignore1=None, ignore2=None,
-                           ignore3=None, ignore4=None):
+    def refresh_grabkeys_combination(self):
         val = self.config.get_keys_combination()
 
         # We convert keysyms to names
@@ -212,32 +180,25 @@ class vmmPreferences(vmmGObjectUI):
 
         self.widget("prefs-keys-grab-sequence").set_text(keystr)
 
-    def refresh_confirm_forcepoweroff(self, ignore1=None, ignore2=None,
-                                      ignore3=None, ignore4=None):
+    def refresh_confirm_forcepoweroff(self):
         self.widget("prefs-confirm-forcepoweroff").set_active(
                                 self.config.get_confirm_forcepoweroff())
-    def refresh_confirm_poweroff(self, ignore1=None, ignore2=None,
-                                      ignore3=None, ignore4=None):
+    def refresh_confirm_poweroff(self):
         self.widget("prefs-confirm-poweroff").set_active(
                                 self.config.get_confirm_poweroff())
-    def refresh_confirm_pause(self, ignore1=None, ignore2=None,
-                              ignore3=None, ignore4=None):
+    def refresh_confirm_pause(self):
         self.widget("prefs-confirm-pause").set_active(
                                 self.config.get_confirm_pause())
-    def refresh_confirm_removedev(self, ignore1=None, ignore2=None,
-                                  ignore3=None, ignore4=None):
+    def refresh_confirm_removedev(self):
         self.widget("prefs-confirm-removedev").set_active(
                                 self.config.get_confirm_removedev())
-    def refresh_confirm_interface(self, ignore1=None, ignore2=None,
-                                  ignore3=None, ignore4=None):
+    def refresh_confirm_interface(self):
         self.widget("prefs-confirm-interface").set_active(
                                 self.config.get_confirm_interface())
-    def refresh_confirm_unapplied(self, ignore1=None, ignore2=None,
-                                  ignore3=None, ignore4=None):
+    def refresh_confirm_unapplied(self):
         self.widget("prefs-confirm-unapplied").set_active(
                                 self.config.get_confirm_unapplied())
-    def refresh_confirm_delstorage(self, ignore1=None, ignore2=None,
-                                   ignore3=None, ignore4=None):
+    def refresh_confirm_delstorage(self):
         self.widget("prefs-confirm-delstorage").set_active(
                                 self.config.get_confirm_delstorage())
 

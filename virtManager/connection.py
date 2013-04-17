@@ -1035,11 +1035,6 @@ class vmmConnection(vmmGObject):
                           self.get_uri(), caps)
 
             self.tick()
-            # If VMs disappeared since the last time we connected to
-            # this uri, remove their gconf entries so we don't pollute
-            # the database
-            self.config.reconcile_vm_entries(self.get_uri(),
-                                             self.vms.keys())
 
         if self.state == self.STATE_DISCONNECTED:
             if self.connectError:
@@ -1518,14 +1513,3 @@ class vmmConnection(vmmGObject):
         return self.disk_read_rate() + self.disk_write_rate()
     def disk_io_max_rate(self):
         return self._get_record_helper("diskMaxRate")
-
-
-    ####################################
-    # Per-Connection gconf preferences #
-    ####################################
-
-    def config_add_iso_path(self, path):
-        self.config.set_perhost(self.get_uri(), self.config.add_iso_path, path)
-    def config_get_iso_paths(self):
-        return self.config.get_perhost(self.get_uri(),
-                                       self.config.get_iso_paths)

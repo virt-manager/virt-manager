@@ -1,0 +1,286 @@
+<schemalist>
+
+  <!-- Relocatable per VM schema -->
+  <schema id="org.virt-manager.virt-manager.vm">
+    <key name="vm-window-size" type="(ii)">
+      <default>(-1, -1)</default>
+      <summary>VM window dimensions</summary>
+      <description>VM window dimensions</description>
+    </key>
+
+    <key name="scaling" type="i">
+      <default>-1</default>
+      <summary>When to scale the VM graphical console</summary>
+      <description>When to scale the VM graphical console. -1 = global default, 0 = never, 1 = only when in full screen mode, 2 = Always</description>
+    </key>
+
+    <key name="console-password" type="(si)">
+      <default>("", -1)</default>
+      <summary>Username and secrets ID for graphical password</summary>
+      <description>Username and secrets ID for graphical password</description>
+    </key>
+  </schema>
+
+  <schema id="org.virt-manager.virt-manager"
+          path="/org/virt-manager/virt-manager/">
+
+    <key name="system-tray" type="b">
+      <default>false</default>
+      <summary>Show system tray icon</summary>
+      <description>Show system tray icon while app is running</description>
+    </key>
+
+    <key name="manager-window-height" type="i">
+      <default>0</default>
+      <summary>Default manager window height</summary>
+      <description>Default manager window height</description>
+    </key>
+
+    <key name="manager-window-width" type="i">
+      <default>0</default>
+      <summary>Default manager window width</summary>
+      <description>Default manager window width</description>
+    </key>
+
+    <child name="connections" schema="org.virt-manager.virt-manager.connections"/>
+    <child name="vmlist-fields" schema="org.virt-manager.virt-manager.vmlist-fields"/>
+    <child name="stats" schema="org.virt-manager.virt-manager.stats"/>
+    <child name="urls" schema="org.virt-manager.virt-manager.urls"/>
+    <child name="console" schema="org.virt-manager.virt-manager.console"/>
+    <child name="details" schema="org.virt-manager.virt-manager.details"/>
+    <child name="new-vm" schema="org.virt-manager.virt-manager.new-vm"/>
+    <child name="paths" schema="org.virt-manager.virt-manager.paths"/>
+    <child name="confirm" schema="org.virt-manager.virt-manager.confirm"/>
+  </schema>
+
+  <schema id="org.virt-manager.virt-manager.connections"
+          path="/org/virt-manager/virt-manager/connections/">
+    <key name="uris" type="as">
+      <default>[]</default>
+      <summary>Libvirt URIs listed in the manager window</summary>
+      <description>Libvirt URIs listed in the manager window</description>
+    </key>
+
+    <key name="autoconnect" type="as">
+      <default>[]</default>
+      <summary>Libvirt URIs to connect to on app startup</summary>
+      <description>Libvirt URIs to connect to on app startup</description>
+    </key>
+  </schema>
+
+  <schema id="org.virt-manager.virt-manager.vmlist-fields" path="/org/virt-manager/virt-manager/vmlist-fields/">
+
+    <key name="disk-usage" type="b">
+      <default>false</default>
+      <summary>Show disk I/O in summary</summary>
+      <description>Show the disk I/O field in the domain list summary view</description>
+    </key>
+
+    <key name="network-traffic" type="b">
+      <default>false</default>
+      <summary>Show network I/O in summary</summary>
+      <description>Show the network I/O field in the domain list summary view</description>
+    </key>
+
+    <key name="cpu-usage" type="b">
+      <default>true</default>
+      <summary>Show guest cpu usage in summary</summary>
+      <description>Show the guest cpu usage field in the domain list summary view</description>
+    </key>
+
+    <key name="host-cpu-usage" type="b">
+      <default>false</default>
+      <summary>Show host cpu usage in summary</summary>
+      <description>Show the host cpu usage field in the domain list summary view</description>
+    </key>
+
+  </schema>
+
+  <schema id="org.virt-manager.virt-manager.stats" path="/org/virt-manager/virt-manager/stats/">
+
+    <key name="update-interval" type="i">
+      <default>1</default>
+      <summary>The statistics update interval</summary>
+      <description>The statistics update interval in seconds</description>
+    </key>
+
+    <key name="history-length" type="i">
+      <default>120</default>
+      <summary>The statistics history length</summary>
+      <description>The number of samples to keep in the statistics history</description>
+
+    </key>
+    <key name="enable-disk-poll" type="b">
+      <default>false</default>
+      <summary>Poll disk i/o stats</summary>
+      <description>Whether or not the app will poll VM disk i/o statistics</description>
+
+    </key>
+    <key name="enable-net-poll" type="b">
+      <default>false</default>
+      <summary>Poll net i/o stats</summary>
+      <description>Whether or not the app will poll VM network i/o statistics</description>
+    </key>
+
+  </schema>
+
+  <schema id="org.virt-manager.virt-manager.urls"
+          path="/org/virt-manager/virt-manager/urls/">
+    <key name="url-list-length" type="i">
+      <default>10</default>
+      <summary>The length of the list of URLs</summary>
+      <description>The number of urls to keep in the history for the install media address page.</description>
+    </key>
+
+    <key name="urls" type="as">
+      <default>[]</default>
+      <summary>Saved list of install URLs</summary>
+      <description>Saved list of install URLs</description>
+    </key>
+
+    <key name="isos" type="as">
+      <default>[]</default>
+      <summary>Saved list of install ISOs</summary>
+      <description>Saved list of install ISOs</description>
+    </key>
+
+    <key name="kickstarts" type="as">
+      <default>[]</default>
+      <summary>Saved list of install kickstarts</summary>
+      <description>Saved list of install kickstarts</description>
+    </key>
+
+  </schema>
+
+  <schema id="org.virt-manager.virt-manager.console"
+          path="/org/virt-manager/virt-manager/console/">
+    <key name="enable-accels" type="b">
+      <default>false</default>
+      <summary>Enable menu accelerators in console window</summary>
+      <description>Whether to enable menu accelerators while connected to the guest graphical console.</description>
+    </key>
+
+    <key name="scaling" type="i">
+      <default>1</default>
+      <summary>When to scale the VM graphical console</summary>
+      <description>When to scale the VM graphical console. 0 = never, 1 = only when in full screen mode, 2 = Always</description>
+    </key>
+
+    <key name="grab-keys" type="s">
+      <default>''</default>
+      <summary>Grab keyboard sequence for the graphical console</summary>
+      <description>Grab keyboard sequence for the graphical console</description>
+    </key>
+  </schema>
+
+  <schema id="org.virt-manager.virt-manager.details" path="/org/virt-manager/virt-manager/details/">
+
+    <key name="show-toolbar" type="b">
+      <default>true</default>
+      <summary>Whether to show VM button toolbar in Details display</summary>
+      <description>Whether to show toolbar containing Virtual Machine action buttons (such as Run, Pause, Shutdown) in the details display</description>
+    </key>
+
+  </schema>
+
+  <schema id="org.virt-manager.virt-manager.new-vm" path="/org/virt-manager/virt-manager/new-vm/">
+
+    <key name="local-sound" type="b">
+      <default>true</default>
+      <summary>Install sound device for local VM</summary>
+      <description>Whether to install a sound device for local VMs or not</description>
+    </key>
+
+    <key name="remote-sound" type="b">
+      <default>false</default>
+      <summary>Install sound device for remote VM</summary>
+      <description>Whether to install a sound device for remote VMs or not</description>
+    </key>
+
+    <key name="graphics-type" type="s">
+      <default>'system'</default>
+      <summary>Install selected graphics type for new VM</summary>
+      <description>Install selected graphics type for new VM. vnc or spice, system for software configured default</description>
+    </key>
+
+    <key name="storage-format" type="s">
+      <default>'default'</default>
+      <summary>Use selected format for new VM storage</summary>
+      <description>Use selected format when creating new disk images in new VM wizard</description>
+    </key>
+  </schema>
+  <schema id="org.virt-manager.virt-manager.paths" path="/org/virt-manager/virt-manager/paths/">
+    <key name="default-image-path" type="s">
+      <default>''</default>
+      <summary>Default image path</summary>
+      <description>Default path for choosing VM images</description>
+    </key>
+    <key name="default-media-path" type="s">
+      <default>''</default>
+      <summary>Default media path</summary>
+      <description>Default path for choosing media</description>
+    </key>
+    <key name="default-save-path" type="s">
+      <default>''</default>
+      <summary>Default save domain path</summary>
+      <description>Default path for saving VM snapshots</description>
+    </key>
+    <key name="default-restore-path" type="s">
+      <default>''</default>
+      <summary>Default restore path</summary>
+      <description>Default path for stored VM snapshots</description>
+    </key>
+    <key name="default-screenshot-path" type="s">
+      <default>''</default>
+      <summary>Default screenshot path</summary>
+      <description>Default path for saving screenshots from VMs</description>
+    </key>
+  </schema>
+
+  <schema id="org.virt-manager.virt-manager.confirm" path="/org/virt-manager/virt-manager/confirm/">
+
+    <key name="forcepoweroff" type="b">
+      <default>true</default>
+      <summary>Confirm force poweroff request</summary>
+      <description>Whether we require confirmation to forcepoweroff a VM</description>
+    </key>
+
+    <key name="poweroff" type="b">
+      <default>false</default>
+      <summary>Confirm poweroff request</summary>
+      <description>Whether we require confirmation to poweroff/reboot a VM</description>
+    </key>
+
+    <key name="pause" type="b">
+      <default>false</default>
+      <summary>Confirm pause request</summary>
+      <description>Whether we require confirmation to pause a VM</description>
+    </key>
+
+    <key name="removedev" type="b">
+      <default>true</default>
+      <summary>Confirm device removal request</summary>
+      <description>Whether we require confirmation to remove a virtual device</description>
+    </key>
+
+    <key name="interface-power" type="b">
+      <default>true</default>
+      <summary>Confirm device interface start and stop</summary>
+      <description>Whether we require confirmation to start or stop a libvirt virtual interface</description>
+    </key>
+
+    <key name="unapplied-dev" type="b">
+      <default>true</default>
+      <summary>Confirm about unapplied device changes</summary>
+      <description>Whether we ask the user to apply or discard unapplied device changes</description>
+    </key>
+
+    <key name="delete-storage" type="b">
+      <default>true</default>
+      <summary>Confirm deleting storage</summary>
+      <description>Whether we require a confirmation on deleting storage</description>
+    </key>
+
+  </schema>
+
+</schemalist>

@@ -152,8 +152,7 @@ class vmmSystray(vmmGObject):
             self.systray_icon.connect("popup-menu", self.systray_popup)
             self.systray_icon.set_tooltip_text(_("Virtual Machine Manager"))
 
-    def show_systray(self, ignore1=None, ignore2=None, ignore3=None,
-                     ignore4=None):
+    def show_systray(self):
         do_show = self.config.get_view_system_tray()
         logging.debug("Showing systray: %s", do_show)
 

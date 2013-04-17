@@ -190,10 +190,8 @@ class vmmManager(vmmGObjectUI):
 
         # Initialize stat polling columns based on global polling
         # preferences (we want signal handlers for this)
-        for typ, init_val in [
-            (COL_DISK, self.config.get_stats_enable_disk_poll()),
-            (COL_NETWORK, self.config.get_stats_enable_net_poll())]:
-            self.enable_polling(None, None, init_val, typ)
+        self.enable_polling(COL_DISK)
+        self.enable_polling(COL_NETWORK)
 
         # Select first list entry
         vmlist = self.widget("vm-list")
@@ -1179,17 +1177,18 @@ class vmmManager(vmmGObjectUI):
 
         return cmp(obj1.network_traffic_rate(), obj2.network_traffic_rate())
 
-    def enable_polling(self, ignore1, ignore2, conf_entry, userdata):
-        if userdata == COL_DISK:
+    def enable_polling(self, column):
+        if column == COL_DISK:
             widgn = "menu_view_stats_disk"
-        elif userdata == COL_NETWORK:
+            do_enable = self.config.get_stats_enable_disk_poll()
+        elif column == COL_NETWORK:
             widgn = "menu_view_stats_network"
+            do_enable = self.config.get_stats_enable_net_poll()
         widget = self.widget(widgn)
 
         tool_text = ""
 
-        if conf_entry and (conf_entry is True or
-                           conf_entry.get_value().get_bool()):
+        if do_enable:
             widget.set_sensitive(True)
         else:
             if widget.get_active():
@@ -1205,22 +1204,22 @@ class vmmManager(vmmGObjectUI):
             current_text = current_text + disabled_text
         widget.set_label(current_text)
 
-    def toggle_network_traffic_visible_widget(self, *ignore):
+    def toggle_network_traffic_visible_widget(self):
         val = self.config.is_vmlist_network_traffic_visible()
         self.netcol.set_visible(val)
         self.widget("menu_view_stats_network").set_active(val)
 
-    def toggle_disk_io_visible_widget(self, *ignore):
+    def toggle_disk_io_visible_widget(self):
         val = self.config.is_vmlist_disk_io_visible()
         self.diskcol.set_visible(val)
         self.widget("menu_view_stats_disk").set_active(val)
 
-    def toggle_guest_cpu_usage_visible_widget(self, *ignore):
+    def toggle_guest_cpu_usage_visible_widget(self):
         val = self.config.is_vmlist_guest_cpu_usage_visible()
         self.guestcpucol.set_visible(val)
         self.widget("menu_view_stats_guest_cpu").set_active(val)
 
-    def toggle_host_cpu_usage_visible_widget(self, *ignore):
+    def toggle_host_cpu_usage_visible_widget(self):
         val = self.config.is_vmlist_host_cpu_usage_visible()
         self.hostcpucol.set_visible(val)
         self.widget("menu_view_stats_host_cpu").set_active(val)

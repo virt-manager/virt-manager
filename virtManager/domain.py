@@ -1349,8 +1349,7 @@ class vmmDomain(vmmLibvirtObject):
 
         return [(x + y) / 2 for x, y in zip(data[0:end], data[end:end * 2])]
 
-    def toggle_sample_network_traffic(self, ignore1=None, ignore2=None,
-                                      ignore3=None, ignore4=None):
+    def toggle_sample_network_traffic(self):
         self._enable_net_poll = self.config.get_stats_enable_net_poll()
 
         if self._enable_net_poll and len(self.record) > 1:
@@ -1361,8 +1360,7 @@ class vmmDomain(vmmLibvirtObject):
             self.record[0]["netRxKB"] = rxBytes / 1024
             self.record[0]["netTxKB"] = txBytes / 1024
 
-    def toggle_sample_disk_io(self, ignore1=None, ignore2=None,
-                              ignore3=None, ignore4=None):
+    def toggle_sample_disk_io(self):
         self._enable_disk_poll = self.config.get_stats_enable_disk_poll()
 
         if self._enable_disk_poll and len(self.record) > 1:
@@ -1560,31 +1558,36 @@ class vmmDomain(vmmLibvirtObject):
 
         self.idle_emit("status-changed", oldstatus, status)
 
-
-    #################
-    # GConf helpers #
-    #################
-
-    def set_console_scaling(self, value):
-        self.config.set_pervm(self.conn.get_uri(), self.uuid,
-                              self.config.set_console_scaling, value)
-    def get_console_scaling(self):
-        return self.config.get_pervm(self.conn.get_uri(), self.uuid,
-                                     self.config.get_console_scaling)
-    def on_console_scaling_changed(self, cb):
-        return self.config.listen_pervm(self.conn.get_uri(), self.uuid,
-                                        self.config.on_console_scaling_changed,
-                                        cb)
-
-    def set_details_window_size(self, w, h):
-        self.config.set_pervm(self.conn.get_uri(), self.uuid,
-                              self.config.set_details_window_size, (w, h))
-    def get_details_window_size(self):
-        return self.config.get_pervm(self.conn.get_uri(), self.uuid,
-                                     self.config.get_details_window_size)
-
     def inspection_data_updated(self):
         self.idle_emit("inspection-changed")
+
+
+    ##################
+    # config helpers #
+    ##################
+
+    def on_console_scaling_changed(self, *args, **kwargs):
+        return self.config.listen_pervm(self.uuid, "/scaling",
+                                        *args, **kwargs)
+    def set_console_scaling(self, value):
+        self.config.set_pervm(self.uuid, "/scaling", value)
+    def get_console_scaling(self):
+        ret = self.config.get_pervm(self.uuid, "/scaling")
+        if ret == -1:
+            return self.config.get_console_scaling()
+        return ret
+
+    def set_details_window_size(self, w, h):
+        self.config.set_pervm(self.uuid, "/vm-window-size", (w, h))
+    def get_details_window_size(self):
+        ret = self.config.get_pervm(self.uuid, "/vm-window-size")
+        return ret
+
+    def get_console_password(self):
+        return self.config.get_pervm(self.uuid, "/console-password")
+    def set_console_password(self, username, keyid):
+        return self.config.set_pervm(self.uuid, "/console-password",
+                                     (username, keyid))
 
 
     ###################

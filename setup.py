@@ -489,7 +489,8 @@ setup(
             "virt-image",
             "virt-convert",
         ]),
-        ("/etc/gconf/schemas", ["data/virt-manager.schemas"]),
+        ("share/glib-2.0/schemas",
+         ["data/org.virt-manager.virt-manager.gschema.xml"]),
         ("share/virt-manager/ui", glob.glob("ui/*.ui")),
 
         ("share/man/man1", [

@@ -49,15 +49,10 @@ Requires: libvirt-glib >= 0.0.9
 Requires: gnome-python2-gconf
 Requires: libxml2-python
 Requires: vte
-Requires: python-ipaddr
 
 # For console widget
 Requires: gtk-vnc2
 Requires: spice-gtk3
-
-# This version not strictly required: virt-manager should work with older,
-# however varying amounts of functionality will not be enabled.
-Requires: libvirt-python >= 0.7.0
 
 
 %if %{with_guestfs}
@@ -73,19 +68,9 @@ Requires: virt-manager-common = %{verrel}
 %endif
 
 
-BuildRequires: gettext
-BuildRequires: python
 BuildRequires: python-distutils-extra
 BuildRequires: intltool
-BuildRequires: GConf2
 BuildRequires: /usr/bin/pod2man
-
-
-Requires(pre): GConf2
-Requires(post): GConf2
-Requires(preun): GConf2
-Requires(post): desktop-file-utils
-Requires(postun): desktop-file-utils
 
 
 %description
@@ -105,6 +90,7 @@ Group: Applications/Emulators
 Requires: libvirt-python >= 0.7.0
 Requires: libxml2-python
 Requires: python-urlgrabber
+Requires: python-ipaddr
 
 %description common
 Common files used by the different virt-manager interfaces, as well as
@@ -136,7 +122,6 @@ Group: Applications/Emulators
 Requires: virt-manager-common = %{verrel}
 Requires: python-newt_syrup >= 0.1.2
 Requires: libuser-python
-Requires: python-ipaddr
 
 %description tui
 An interactive text user interface for Virtual Machine Manager.
@@ -199,35 +184,27 @@ python setup.py install -O1 --root=$RPM_BUILD_ROOT
 %find_lang %{name}
 
 
-%pre
-%gconf_schema_prepare %{name}
-
-
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-update-desktop-database -q %{_datadir}/applications
-%gconf_schema_upgrade %{name}
+/usr/bin/update-desktop-database &> /dev/null || :
 
 
 %postun
 if [ $1 -eq 0 ] ; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+    /usr/bin/glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 fi
-update-desktop-database -q %{_datadir}/applications
-
-
-%preun
-%gconf_schema_remove %{name}
+/usr/bin/update-desktop-database &> /dev/null || :
 
 
 %posttrans
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+/usr/bin/glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %files
 %doc README COPYING AUTHORS NEWS
-%{_sysconfdir}/gconf/schemas/%{name}.schemas
 %{_bindir}/%{name}
 
 %{_mandir}/man1/%{name}.1*
@@ -239,6 +216,7 @@ update-desktop-database -q %{_datadir}/applications
 %{_datadir}/icons/hicolor/*/apps/*
 
 %{_datadir}/applications/%{name}.desktop
+%{_datadir}/glib-2.0/schemas/org.virt-manager.virt-manager.gschema.xml
 
 
 %files common -f %{name}.lang

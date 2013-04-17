@@ -368,7 +368,7 @@ class vmmCreate(vmmGObjectUI):
 
         self.widget("install-local-box").get_child().set_text("")
         iso_model = self.widget("install-local-box").get_model()
-        self.populate_media_model(iso_model, self.conn.config_get_iso_paths())
+        self.populate_media_model(iso_model, self.config.get_iso_paths())
 
         # Install URL
         self.widget("install-urlopts-entry").set_text("")
@@ -965,7 +965,7 @@ class vmmCreate(vmmGObjectUI):
         else:
             ret = self.widget("install-local-box").get_child().get_text()
             if ret and store_media:
-                self.conn.config_add_iso_path(ret)
+                self.config.add_iso_path(ret)
             return ret
 
     def get_config_detectable_media(self):

@@ -42,6 +42,18 @@ def _get_param(name, default):
         return default
     return cfg.get("config", name)
 
+
+def _setup_gsettings_path(schemadir):
+    """
+    If running from the virt-manager.git srcdir, compile our gsettings
+    schema and use it directly
+    """
+    import subprocess
+
+    os.environ["GSETTINGS_SCHEMA_DIR"] = schemadir
+    subprocess.call(["glib-compile-schemas", schemadir])
+
+
 __version__ = "0.9.100"
 
 __snapshot__ = 0
@@ -57,6 +69,7 @@ install_asset_dir = os.path.join(prefix, "share", "virt-manager")
 if os.getcwd() == _srcdir:
     asset_dir = _srcdir
     icon_dir = os.path.join(_srcdir, "data")
+    _setup_gsettings_path(icon_dir)
 else:
     asset_dir = install_asset_dir
     icon_dir = os.path.join(asset_dir, "icons")
