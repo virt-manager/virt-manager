@@ -44,6 +44,9 @@ def _get_param(name, default):
 
 __version__ = "0.9.100"
 
+_usr_version = _get_param("pkgversion", "")
+if _usr_version is not None and _usr_version != "":
+    __version__ = _usr_version
 
 # We should map this into the config somehow but I question if anyone cares
 prefix = _get_param("prefix", "/usr")

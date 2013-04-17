@@ -221,6 +221,7 @@ class my_rpm(Command):
 
 class configure(Command):
     user_options = [
+        ("pkgversion=", None, "user specified version-id"),
         ("prefix=", None, "installation prefix"),
         ("without-tui", None, "don't install virt-manager-tui"),
         ("qemu-user=", None,
@@ -256,12 +257,14 @@ class configure(Command):
         self.preferred_distros = ""
         self.default_graphics = "vnc"
         self.prefix = sysprefix
+        self.pkgversion = ""
 
 
     def run(self):
         template = ""
         template += "[config]\n"
         template += "prefix = %s\n" % self.prefix
+        template += "pkgversion = %s\n" % self.pkgversion
         template += "with_tui = %s\n" % int(not self.without_tui)
         template += "default_qemu_user = %s\n" % self.qemu_user
         template += "libvirt_packages = %s\n" % self.libvirt_package_names
