@@ -360,7 +360,6 @@ class vmmDetails(vmmGObjectUI):
 
         self.ignorePause = False
         self.ignoreDetails = False
-        self._cpu_copy_host = False
 
         self.console = vmmConsolePages(self.vm, self.builder, self.topwin)
 
@@ -431,7 +430,7 @@ class vmmDetails(vmmGObjectUI):
             "on_cpu_cores_changed": lambda *x: self.enable_apply(x, EDIT_TOPOLOGY),
             "on_cpu_sockets_changed": lambda *x: self.enable_apply(x, EDIT_TOPOLOGY),
             "on_cpu_threads_changed": lambda *x: self.enable_apply(x, EDIT_TOPOLOGY),
-            "on_cpu_copy_host_clicked": self.config_cpu_copy_host,
+            "on_cpu_host_model_enable_toggled": self.config_cpu_host_model_enable,
             "on_cpu_topology_enable_toggled": self.config_cpu_topology_enable,
 
             "on_config_memory_changed": self.config_memory_changed,
@@ -918,6 +917,8 @@ class vmmDetails(vmmGObjectUI):
             feat_model.append([name, "default"])
 
         # CPU model combo
+        self.widget("cpu-host-model-checkbutton").set_tooltip_text(
+            _("Use CPU model which most closely matches the host. This gives maximum functionality and performance."))
         cpu_model = self.widget("cpu-model")
 
         model = Gtk.ListStore(str, object)
@@ -1812,17 +1813,11 @@ class vmmDetails(vmmGObjectUI):
     def config_maxvcpus_changed(self, ignore):
         self.enable_apply(EDIT_VCPUS)
 
-    def config_cpu_copy_host(self, src_ignore):
-        # Update UI with output copied from host
-        try:
-            CPU = virtinst.CPU(self.vm.conn.vmm)
-            CPU.copy_host_cpu()
-
-            self._refresh_cpu_config(CPU)
-            self._cpu_copy_host = True
-        except Exception, e:
-            self.err.show_err(_("Error copying host CPU: %s") % str(e))
-            return
+    def config_cpu_host_model_enable(self, src):
+        do_enable = src.get_active()
+        self.widget("cpu-model").set_sensitive(not bool(do_enable))
+        self.widget("cpu-features").set_sensitive(not bool(do_enable))
+        self.enable_apply(EDIT_CPU)
 
     def config_cpu_topology_enable(self, src):
         do_enable = src.get_active()
@@ -2117,10 +2112,14 @@ class vmmDetails(vmmGObjectUI):
             add_hotplug(self.config_vcpu_pin_cpuset, cpuset)
 
         if self.editted(EDIT_CPU):
+            from_host = False
+            if self.widget("cpu-host-model-checkbutton").get_active():
+                from_host = True
+
             model, vendor = self.get_config_cpu_model()
             features = self.get_config_cpu_features()
             add_define(self.vm.define_cpu,
-                       model, vendor, self._cpu_copy_host, features)
+                       model, vendor, from_host, features)
 
         if self.editted(EDIT_TOPOLOGY):
             do_top = self.widget("cpu-topology-enable").get_active()
@@ -2135,8 +2134,6 @@ class vmmDetails(vmmGObjectUI):
             add_define(self.vm.define_cpu_topology, sockets, cores, threads)
 
         ret = self._change_config_helper(df, da, hf, ha)
-        if ret:
-            self._cpu_copy_host = False
         return ret
 
     def config_vcpu_pin(self, src_ignore, path, new_text):
@@ -2816,6 +2813,8 @@ class vmmDetails(vmmGObjectUI):
     def _refresh_cpu_config(self, cpu):
         feature_ui = self.widget("cpu-features")
         model = cpu.model or ""
+        mode = cpu.mode or ""
+
         caps = self.vm.conn.get_capabilities()
 
         capscpu = None
@@ -2834,6 +2833,11 @@ class vmmDetails(vmmGObjectUI):
         sockets = cpu.sockets or 1
         cores = cpu.cores or 1
         threads = cpu.threads or 1
+
+        host_model = self.widget("cpu-host-model-checkbutton")
+        active = host_model.get_active()
+        if (not mode and active) or (mode == "host-model" and not active):
+            host_model.set_active(not bool(active))
 
         self.widget("cpu-topology-enable").set_active(show_top)
         self.widget("cpu-model").get_child().set_text(model)
@@ -2856,7 +2860,6 @@ class vmmDetails(vmmGObjectUI):
             row[1] = get_feature_policy(row[0])
 
     def refresh_config_cpu(self):
-        self._cpu_copy_host = False
         cpu = self.vm.get_cpu_config()
 
         self._refresh_cpu_count()

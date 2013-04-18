@@ -468,16 +468,19 @@ class vmmDomain(vmmLibvirtObject):
     def define_cpu(self, model, vendor, from_host, featurelist):
         def change(guest):
             if from_host:
-                guest.cpu.copy_host_cpu()
-            elif guest.cpu.model != model:
-                # Since we don't expose this in the UI, have host value trump
-                # caps value
-                guest.cpu.vendor = vendor
+                if virtinst.support.check_domain_support(self._backend,
+                    virtinst.support.SUPPORT_DOMAIN_CPU_HOST_MODEL):
+                    guest.cpu.clear_attrs()
+                    guest.cpu.mode = "host-model"
+                else:
+                    guest.cpu.copy_host_cpu()
+                return
 
             guest.cpu.model = model or None
+            guest.cpu.vendor = vendor or None
+
             if guest.cpu.model is None:
-                for f in guest.cpu.features:
-                    guest.cpu.remove_feature(f)
+                guest.cpu.clear_attrs()
                 return
 
             origfeatures = guest.cpu.features
