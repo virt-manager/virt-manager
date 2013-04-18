@@ -239,8 +239,8 @@ class vmmPreferences(vmmGObjectUI):
 
         vbox = Gtk.VBox()
         vbox.set_spacing(12)
-        vbox.pack_start(infolabel, False, False)
-        vbox.pack_start(keylabel, False, False)
+        vbox.pack_start(infolabel, False, False, 0)
+        vbox.pack_start(keylabel, False, False, 0)
         dialog.get_content_area().add(vbox)
 
         events = []
