@@ -11,15 +11,12 @@ import sys
 import unittest
 
 from distutils.core import Command, setup
+from distutils.command.build import build
 from distutils.command.install import install
 from distutils.command.install_egg_info import install_egg_info
+from distutils.command.sdist import sdist
 from distutils.sysconfig import get_config_var
 sysprefix = get_config_var("prefix")
-
-from DistUtilsExtra.auto import sdist_auto
-from DistUtilsExtra.command.build_i18n import build_i18n
-from DistUtilsExtra.command.build_extra import build_extra
-from DistUtilsExtra.command.build_icons import build_icons
 
 from virtcli import cliconfig
 
@@ -48,15 +45,18 @@ def _generate_potfiles_in():
     return potfiles
 
 
-class my_build_i18n(build_i18n):
+class my_build_i18n(build):
     """
     Add our desktop files to the list, saves us having to track setup.cfg
     """
-    def finalize_options(self):
-        build_i18n.finalize_options(self)
+    user_options = [
+        ('merge-po', 'm', 'merge po files against template'),
+    ]
 
-        self.desktop_files = ('[("share/applications",' +
-                              ' ("data/virt-manager.desktop.in", ))]')
+    def initialize_options(self):
+        self.merge_po = False
+    def finalize_options(self):
+        pass
 
     def run(self):
         potfiles = _generate_potfiles_in()
@@ -65,13 +65,77 @@ class my_build_i18n(build_i18n):
         try:
             print "Writing %s" % potpath
             file(potpath, "w").write(potfiles)
-            build_i18n.run(self)
+            self._run()
         finally:
             print "Removing %s" % potpath
             os.unlink(potpath)
 
+    def _run(self):
+        # Borrowed from python-distutils-extra
+        desktop_files = [
+            ("share/applications", ["data/virt-manager.desktop.in"]),
+        ]
+        po_dir = "po"
 
-class my_build(build_extra):
+
+        # Update po(t) files and print a report
+        # We have to change the working dir to the po dir for intltool
+        cmd = ["intltool-update",
+               (self.merge_po and "-r" or "-p"), "-g", "virt-manager"]
+
+        wd = os.getcwd()
+        os.chdir("po")
+        self.spawn(cmd)
+        os.chdir(wd)
+        max_po_mtime = 0
+        for po_file in glob.glob("%s/*.po" % po_dir):
+            lang = os.path.basename(po_file[:-3])
+            mo_dir = os.path.join("build", "mo", lang, "LC_MESSAGES")
+            mo_file = os.path.join(mo_dir, "virt-manager.mo")
+            if not os.path.exists(mo_dir):
+                os.makedirs(mo_dir)
+
+            cmd = ["msgfmt", po_file, "-o", mo_file]
+            po_mtime = os.path.getmtime(po_file)
+            mo_mtime = (os.path.exists(mo_file) and
+                        os.path.getmtime(mo_file)) or 0
+            if po_mtime > max_po_mtime:
+                max_po_mtime = po_mtime
+            if po_mtime > mo_mtime:
+                self.spawn(cmd)
+
+            targetpath = os.path.join("share/locale", lang, "LC_MESSAGES")
+            self.distribution.data_files.append((targetpath, (mo_file,)))
+
+        # merge .in with translation
+        for (file_set, switch) in [(desktop_files, "-d")]:
+            for (target, files) in file_set:
+                build_target = os.path.join("build", target)
+                if not os.path.exists(build_target):
+                    os.makedirs(build_target)
+
+                files_merged = []
+                for f in files:
+                    if f.endswith(".in"):
+                        file_merged = os.path.basename(f[:-3])
+                    else:
+                        file_merged = os.path.basename(f)
+
+                    file_merged = os.path.join(build_target, file_merged)
+                    cmd = ["intltool-merge", switch, po_dir, f,
+                           file_merged]
+                    mtime_merged = (os.path.exists(file_merged) and
+                                    os.path.getmtime(file_merged)) or 0
+                    mtime_file = os.path.getmtime(f)
+                    if (mtime_merged < max_po_mtime or
+                        mtime_merged < mtime_file):
+                        # Only build if output is older than input (.po,.in)
+                        self.spawn(cmd)
+                    files_merged.append(file_merged)
+                self.distribution.data_files.append((target, files_merged))
+
+
+class my_build(build):
     """
     Create simple shell wrappers for /usr/bin/ tools to point to /usr/share
     Compile .pod file
@@ -119,28 +183,12 @@ class my_build(build_extra):
             raise RuntimeError("man pages have errors in them! "
                                "(grep for 'Hey!')")
 
-
-    def run(self):
-        self._make_bin_wrappers()
-        self._make_man_pages()
-
-        build_extra.run(self)
-
-
-class my_build_icons(build_icons):
-    """
-    Fix up build_icon output to put or private icons in share/virt-manager
-    """
-
-    def run(self):
-        data_files = self.distribution.data_files
-
-        for size in glob.glob(os.path.join(self.icon_dir, "*")):
+    def _build_icons(self):
+        for size in glob.glob(os.path.join("data/icons", "*")):
             for category in glob.glob(os.path.join(size, "*")):
                 icons = []
                 for icon in glob.glob(os.path.join(category, "*")):
-                    if not os.path.islink(icon):
-                        icons.append(icon)
+                    icons.append(icon)
                 if not icons:
                     continue
 
@@ -150,7 +198,16 @@ class my_build_icons(build_icons):
                 if category != "apps":
                     dest = dest.replace("share/", "share/virt-manager/")
 
-                data_files.append((dest, icons))
+                self.distribution.data_files.append((dest, icons))
+
+
+    def run(self):
+        self._make_bin_wrappers()
+        self._make_man_pages()
+        self._build_icons()
+
+        self.run_command("build_i18n")
+        build.run(self)
 
 
 class my_egg_info(install_egg_info):
@@ -179,21 +236,22 @@ class my_install(install):
         install.finalize_options(self)
 
 
-class my_sdist(sdist_auto):
-    user_options = sdist_auto.user_options + [
-            ("snapshot", "s", "add snapshot id to version")]
+class my_sdist(sdist):
+    user_options = [
+        ("snapshot", "s", "add snapshot id to version"),
+    ]
 
     description = "Update virt-manager.spec; build sdist-tarball."
 
     def initialize_options(self):
         self.snapshot = None
-        sdist_auto.initialize_options(self)
+        sdist.initialize_options(self)
 
     def finalize_options(self):
         if self.snapshot is not None:
             self.snapshot = 1
             cliconfig.__snapshot__ = 1
-        sdist_auto.finalize_options(self)
+        sdist.finalize_options(self)
 
     def run(self):
         # Note: cliconfig.__snapshot__ by default is 0, it can be set to 1 by
@@ -211,7 +269,7 @@ class my_sdist(sdist_auto):
         f1.close()
         f2.close()
 
-        sdist_auto.run(self)
+        sdist.run(self)
 
 
 ###################
@@ -498,7 +556,6 @@ setup(
     cmdclass={
         'build': my_build,
         'build_i18n': my_build_i18n,
-        'build_icons': my_build_icons,
 
         'sdist': my_sdist,
         'install': my_install,
