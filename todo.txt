@@ -2,16 +2,13 @@
   TODO before first release
   =========================
 
-revive import blacklist for virtinst code, maybe just a unittest that checks Gtk isn't in globals ?
-
-gsettings port (or fix gconf bindings)
-website: wiki-ify the whole thing, drop static content, move site styling into virt-manager.git, kill the old web repo. and get that old hideous screenshot off the front page. linux-kvm.org should be the template here.
 consider dropping python-distutils-extra dep. I think we rely on about 300
     lines of code, tops, and since it isn't in RHEL it could be an issue.
     we can prob reimplement the bits that are important to us fairly easilly.
-python3? consider it
 
 start a spice guest, shrink the window to smaller than guest resolution, scrollbars work but don't have any actual 'bar'.
+
+website: audit new site content. simplify download page to not have explicit lists to previous releases, just link to NEWS and release directory. update my release script.
 
 
   Manager spacing bug
@@ -27,12 +24,3 @@ spacing is weird in manager, prefs window. cant have unequal tree rows
     fix, probably a gtk3 issue.
 - list size issues: master actually has bigger list size than collapsed gtk3 rows, maybe that is part of the issue.
 - check if manual themeing at the top of manager.py is still required/works
-
-
-  Object leaks
-  ============
-
-objects leak on cleanup, pygobject has reference counting issues
-- https://bugzilla.gnome.org/show_bug.cgi?id=692044
-- https://bugzilla.gnome.org/show_bug.cgi?id=693111
-- leak detection disabled in the manager.py for now
