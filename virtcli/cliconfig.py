@@ -74,8 +74,6 @@ else:
     asset_dir = install_asset_dir
     icon_dir = os.path.join(asset_dir, "icons")
 
-with_tui = bool(int(_get_param("with_tui", "1")))
-
 default_qemu_user = _get_param("default_qemu_user", "root")
 rhel_enable_unsupported_opts = not bool(int(
     _get_param("hide_unsupported_rhel_options", "0")))

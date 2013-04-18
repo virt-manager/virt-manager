@@ -1,7 +1,6 @@
 # -*- rpm-spec -*-
 
 
-%define with_tui                   1
 %define with_guestfs               0
 %define disable_unsupported_rhel   0
 %define askpass_package            "openssh-askpass"
@@ -60,14 +59,6 @@ Requires: python-libguestfs
 %endif
 
 
-%if %{with_tui} == 0
-Obsoletes: virt-manager-common <= %{verrel}
-Conflicts: virt-manager-common > %{verrel}
-%else
-Requires: virt-manager-common = %{verrel}
-%endif
-
-
 BuildRequires: python-distutils-extra
 BuildRequires: intltool
 BuildRequires: /usr/bin/pod2man
@@ -114,21 +105,6 @@ Package includes several command line utilities, including virt-install
 machine).
 
 
-%if %{with_tui}
-%package tui
-Summary: Virtual Machine Manager text user interface
-Group: Applications/Emulators
-
-Requires: virt-manager-common = %{verrel}
-Requires: python-newt_syrup >= 0.1.2
-Requires: libuser-python
-
-%description tui
-An interactive text user interface for Virtual Machine Manager.
-%endif
-
-
-
 %prep
 %setup -q
 
@@ -161,14 +137,9 @@ An interactive text user interface for Virtual Machine Manager.
 %define _default_graphics --default-graphics=%{default_graphics}
 %endif
 
-%if ! %{with_tui}
-%define _tui_opt --without-tui
-%endif
-
 
 python setup.py configure \
     --pkgversion="%{version}" \
-    %{?_tui_opt} \
     %{?_qemu_user} \
     %{?_kvm_packages} \
     %{?_libvirt_packages} \
@@ -210,7 +181,8 @@ fi
 %{_mandir}/man1/%{name}.1*
 
 %{_datadir}/%{name}/ui/*.ui
-%{_datadir}/%{name}/%{name}
+%{_datadir}/%{name}/virt-manager
+%{_datadir}/%{name}/virtManager
 
 %{_datadir}/%{name}/icons
 %{_datadir}/icons/hicolor/*/apps/*
@@ -225,7 +197,6 @@ fi
 %{_datadir}/%{name}/virtcli
 %{_datadir}/%{name}/virtconv
 %{_datadir}/%{name}/virtinst
-%{_datadir}/%{name}/virtManager
 
 
 %files -n virt-install
@@ -244,16 +215,6 @@ fi
 %{_bindir}/virt-clone
 %{_bindir}/virt-image
 %{_bindir}/virt-convert
-
-
-%if %{with_tui}
-%files tui
-
-%{_bindir}/%{name}-tui
-%{_datadir}/%{name}/%{name}-tui
-
-%{_datadir}/%{name}/virtManagerTui
-%endif
 
 
 %changelog

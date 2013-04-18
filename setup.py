@@ -33,12 +33,11 @@ def _generate_potfiles_in():
         ret.sort(key=lambda s: s.lower())
         return ret
 
-    scripts = ["virt-manager", "virt-manager-tui", "virt-install",
+    scripts = ["virt-manager", "virt-install",
                "virt-clone", "virt-image", "virt-convert"]
 
     potfiles = "\n".join(scripts) + "\n\n"
     potfiles += "\n".join(find("virtManager", "*.py")) + "\n\n"
-    potfiles += "\n".join(find("virtManagerTui", "*.py")) + "\n\n"
     potfiles += "\n".join(find("virtcli", "*.py")) + "\n\n"
     potfiles += "\n".join(find("virtconv", "*.py")) + "\n\n"
     potfiles += "\n".join(find("virtinst", "*.py")) + "\n\n"
@@ -81,8 +80,6 @@ class my_build(build_extra):
     def _make_bin_wrappers(self):
         cmds = ["virt-manager", "virt-install", "virt-clone",
                 "virt-image", "virt-convert"]
-        if cliconfig.with_tui:
-            cmds += ["virt-manager-tui"]
 
         if not os.path.exists("build"):
             os.mkdir("build")
@@ -247,7 +244,6 @@ class configure(Command):
     user_options = [
         ("pkgversion=", None, "user specified version-id"),
         ("prefix=", None, "installation prefix"),
-        ("without-tui", None, "don't install virt-manager-tui"),
         ("qemu-user=", None,
          "user libvirt uses to launch qemu processes (default=root)"),
         ("libvirt-package-names=", None,
@@ -272,7 +268,6 @@ class configure(Command):
         pass
 
     def initialize_options(self):
-        self.without_tui = 0
         self.qemu_user = "root"
         self.libvirt_package_names = ""
         self.kvm_package_names = ""
@@ -289,7 +284,6 @@ class configure(Command):
         template += "[config]\n"
         template += "prefix = %s\n" % self.prefix
         template += "pkgversion = %s\n" % self.pkgversion
-        template += "with_tui = %s\n" % int(not self.without_tui)
         template += "default_qemu_user = %s\n" % self.qemu_user
         template += "libvirt_packages = %s\n" % self.libvirt_package_names
         template += "hv_packages = %s\n" % self.kvm_package_names
@@ -301,16 +295,6 @@ class configure(Command):
 
         file(cliconfig.cfgpath, "w").write(template)
         print "Generated %s" % cliconfig.cfgpath
-
-
-tui_files = [
-    ("share/virt-manager/", ["virt-manager-tui"]),
-
-    ("share/virt-manager/virtManagerTui",
-     glob.glob("virtManagerTui/*.py")),
-]
-if not cliconfig.with_tui:
-    tui_files = []
 
 
 class TestBaseCommand(Command):
@@ -447,9 +431,9 @@ class CheckPylint(Command):
 
     def run(self):
         files = ["setup.py", "virt-install", "virt-clone", "virt-image",
-                 "virt-convert", "virt-manager", "virt-manager-tui",
+                 "virt-convert", "virt-manager",
                  "virtcli", "virtinst", "virtconv", "virtManager",
-                 "virtManagerTui", "tests"]
+                 "tests"]
 
         output_format = sys.stdout.isatty() and "colorized" or "text"
 
@@ -478,8 +462,7 @@ setup(
         "build/virt-clone",
         "build/virt-install",
         "build/virt-image",
-        "build/virt-convert"] +
-        (cliconfig.with_tui and ["build/virt-manager-tui"] or [])),
+        "build/virt-convert"]),
 
     data_files=[
         ("share/virt-manager/", [
@@ -510,7 +493,7 @@ setup(
         ("share/virt-manager/virtconv", glob.glob("virtconv/*.py")),
         ("share/virt-manager/virtconv/parsers",
          glob.glob("virtconv/parsers/*.py")),
-    ] + tui_files,
+    ],
 
     cmdclass={
         'build': my_build,

@@ -23,14 +23,12 @@ import sys
 import logging
 
 import virtManager
-import virtManager.guidiff
 
 # pylint: disable=E0611
+from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
-if virtManager.guidiff.is_gui():
-    from gi.repository import Gtk
-    from gi.repository import Gdk
+from gi.repository import Gtk
 # pylint: enable=E0611
 
 
@@ -39,7 +37,7 @@ class vmmGObject(GObject.GObject):
 
     def __init__(self):
         GObject.GObject.__init__(self)
-        self.config = virtManager.guidiff.get_running_config()
+        self.config = virtManager.util.running_config
 
         self._gobject_handles = []
         self._gobject_timeouts = []

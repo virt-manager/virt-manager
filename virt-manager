@@ -234,9 +234,6 @@ def main():
     config.askpass_package = cliconfig.askpass_package
     config.default_graphics_from_config = cliconfig.default_graphics
 
-    import virtManager.guidiff
-    virtManager.guidiff.is_gui(True)
-
     # Now we've got basic environment up & running we can fork
     if not options.nofork and not options.debug:
         drop_tty()
