@@ -187,6 +187,15 @@ class CPU(XMLBuilderDomain.XMLBuilderDomain):
                             get_converter=lambda s, x: _int_or_none(x),
                             xpath="./cpu/topology/@threads")
 
+    def clear_attrs(self):
+        self.match = None
+        self.mode = None
+        self.vendor = None
+        self.model = None
+
+        for feature in self.features:
+            self.remove_feature(feature)
+
     def copy_host_cpu(self):
         """
         Enact the equivalent of qemu -cpu host, pulling all info
