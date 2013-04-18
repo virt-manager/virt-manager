@@ -90,9 +90,19 @@ def drop_stdio():
     os.dup2(0, 2)
 
 
+class PassThroughOptionParser(optparse.OptionParser):
+    # From http://stackoverflow.com/questions/1885161/how-can-i-get-optparses-optionparser-to-ignore-invalid-options
+    def _process_args(self, largs, rargs, values):
+        while rargs:
+            try:
+                optparse.OptionParser._process_args(self, largs, rargs, values)
+            except (optparse.BadOptionError, optparse.AmbiguousOptionError), e:
+                largs.append(e.opt_str)
+
+
 def parse_commandline():
-    optParser = optparse.OptionParser(version=cliconfig.__version__,
-                                      usage="virt-manager [options]")
+    optParser = PassThroughOptionParser(version=cliconfig.__version__,
+                                        usage="virt-manager [options]")
     optParser.set_defaults(uuid=None)
     optParser.epilog = ("Also accepts standard GTK arguments like "
                         "--g-fatal-warnings")
@@ -179,33 +189,14 @@ def opt_show_cb(option, opt_str, value, parser):
 
 def main():
     cliutils.setup_i18n()
-
-    # Need to do this before GTK strips args like --sync
-    origargs = " ".join(sys.argv[:])
-
-    try:
-        from gi.repository import Gtk  # pylint: disable=E0611
-    except:
-        # Don't just let the exception raise here. abrt reports bugs
-        # when users mess up su/sudo and DISPLAY isn't set. Printing
-        # it avoids the issue
-        print "".join(traceback.format_exc())
-        return 1
-
-    globals()["Gtk"] = Gtk
-    # Need to parse CLI after import gtk, since gtk strips --sync
-    (options, ignore) = parse_commandline()
+    (options, leftovers) = parse_commandline()
 
     cliutils.setup_logging("virt-manager", options.debug)
     global logging_setup
     logging_setup = True
 
     import virtManager
-    logging.debug("Launched as: %s", origargs)
-    logging.debug("GTK version: %d.%d.%d",
-                  Gtk.get_major_version(),
-                  Gtk.get_minor_version(),
-                  Gtk.get_micro_version())
+    logging.debug("Launched as: %s", sys.argv)
     logging.debug("virt-manager version: %s", cliconfig.__version__)
     logging.debug("virtManager import: %s", str(virtManager))
 
@@ -215,9 +206,43 @@ def main():
         import libvirt
         virtManager.module_trace.wrap_module(libvirt)
 
-    # Specifically init config/gconf before the fork, so that pam
-    # doesn't think we closed the app, therefor robbing us of
-    # display access
+    # Now we've got basic environment up & running we can fork
+    if not options.nofork and not options.debug:
+        drop_tty()
+        drop_stdio()
+
+        # Ignore SIGHUP, otherwise a serial console closing drops the whole app
+        signal.signal(signal.SIGHUP, signal.SIG_IGN)
+
+    # The never ending fork+gconf/gsettings problems now require
+    # us to import Gtk before the fork. This creates a funny race,
+    # since we need to parse the command line arguments to know if
+    # we need to fork, but need to import Gtk before cli processing
+    # so it can handle --g-fatal-args. We strip out our flags first
+    # and pass the left overs to gtk
+    origargv = sys.argv
+    try:
+        sys.argv = origargv[:1] + leftovers[:]
+        from gi.repository import Gtk  # pylint: disable=E0611
+        globals()["Gtk"] = Gtk
+        leftovers = sys.argv[1:]
+    except:
+        # Don't just let the exception raise here. abrt reports bugs
+        # when users mess up su/sudo and DISPLAY isn't set. Printing
+        # it avoids the issue
+        print "".join(traceback.format_exc())
+        return 1
+    finally:
+        sys.argv = origargv
+
+    if leftovers:
+        raise RuntimeError("Unhandled command line options '%s'" % leftovers)
+
+    logging.debug("GTK version: %d.%d.%d",
+                  Gtk.get_major_version(),
+                  Gtk.get_minor_version(),
+                  Gtk.get_micro_version())
+
     import virtManager.config
     import virtManager.util
     config = virtManager.config.vmmConfig("virt-manager",
@@ -233,14 +258,6 @@ def main():
     config.libvirt_packages = cliconfig.libvirt_packages
     config.askpass_package = cliconfig.askpass_package
     config.default_graphics_from_config = cliconfig.default_graphics
-
-    # Now we've got basic environment up & running we can fork
-    if not options.nofork and not options.debug:
-        drop_tty()
-        drop_stdio()
-
-        # Ignore SIGHUP, otherwise a serial console closing drops the whole app
-        signal.signal(signal.SIGHUP, signal.SIG_IGN)
 
     # Add our icon dir to icon theme
     icon_theme = Gtk.IconTheme.get_default()
