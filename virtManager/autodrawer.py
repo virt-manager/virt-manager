@@ -436,14 +436,14 @@ class AutoDrawer(Drawer):
                 #
                 # Without this, switching to fullscreen keeps the toolbar
                 # stuck open until mouse over
-                self._update(False)
+                self._update(False, 1500)
 
             self.eventBox.add(newover)
             self.overAllocID = newover.connect("size-allocate", size_allocate)
 
         self.over = newover
 
-    def _update(self, do_immediate):
+    def _update(self, do_immediate, customDelay=-1):
         toplevel = self.get_toplevel()
         if not toplevel or not toplevel.is_toplevel():
             # The autoDrawer cannot function properly without a toplevel.
@@ -507,7 +507,10 @@ class AutoDrawer(Drawer):
         elif do_immediate:
             self._enforce(False)
         else:
-            self.delayConnection = GLib.timeout_add(self.delayValue,
+            delay = self.delayValue
+            if customDelay != -1:
+                delay = customDelay
+            self.delayConnection = GLib.timeout_add(delay,
                                                     self._on_enforce_delay)
 
 
