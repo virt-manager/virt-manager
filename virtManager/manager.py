@@ -848,7 +848,7 @@ class vmmManager(vmmGObjectUI):
         # Expand a connection when adding a vm to it
         self.widget("vm-list").expand_row(model.get_path(parent), False)
 
-    def _append_conn(self, model, conn):
+    def _build_conn_row(self, conn):
         row = []
         row.insert(ROW_HANDLE, conn)
         row.insert(ROW_NAME, conn.get_pretty_desc_inactive(False))
@@ -865,6 +865,11 @@ class vmmManager(vmmGObjectUI):
         row.insert(ROW_IS_VM_RUNNING, False)
         row.insert(ROW_COLOR, self._build_conn_color(conn))
         row.insert(ROW_INSPECTION_OS_ICON, None)
+
+        return row
+
+    def _append_conn(self, model, conn):
+        row = self._build_conn_row(conn)
 
         _iter = model.append(None, row)
         path = model.get_path(_iter)
