@@ -71,23 +71,11 @@ except (ValueError, AttributeError):
     can_set_row_none = False
 
 
-rcstring = """
-style "toolbar-style" {
-    #GtkToolbar::button_relief = GTK_RELIEF_NONE
-    #GtkToolbar::shadow_type = GTK_SHADOW_NONE
-    GtkToolbar::internal_padding = 2
-}
-style "treeview-style" {
-    GtkTreeView::indent_expanders = 0
-}
-
-class "GtkToolbar" style "toolbar-style"
-class "GtkTreeView" style "treeview-style"
-"""
-
-# XXX: This isn't working anymore. We can probably drop toolbar padding
-# bit anyways, but indent_expanders is important
-Gtk.rc_parse_string(rcstring)
+def _style_get_prop(widget, propname):
+    value = GObject.Value()
+    value.init(GObject.TYPE_INT)
+    widget.style_get_property(propname, value)
+    return value.get_int()
 
 
 class vmmManager(vmmGObjectUI):
