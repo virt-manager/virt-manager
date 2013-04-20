@@ -432,17 +432,20 @@ class vmmManager(vmmGObjectUI):
         def make_stats_column(title, datafunc, is_visible, colnum):
             col = Gtk.TreeViewColumn(title)
             col.set_min_width(140)
+
             txt = Gtk.CellRendererText()
             txt.set_property("ypad", 4)
+            col.pack_start(txt, True)
+            col.add_attribute(txt, 'visible', ROW_IS_CONN)
+
             img = CellRendererSparkline()
             img.set_property("xpad", 6)
             img.set_property("ypad", 12)
             img.set_property("reversed", True)
             col.pack_start(img, True)
-            col.pack_start(txt, True)
             col.add_attribute(img, 'visible', ROW_IS_VM)
-            col.add_attribute(txt, 'visible', ROW_IS_CONN)
             col.set_cell_data_func(img, datafunc, None)
+
             col.set_visible(is_visible)
             col.set_sort_column_id(colnum)
             vmlist.append_column(col)
