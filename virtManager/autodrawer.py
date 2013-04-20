@@ -57,9 +57,6 @@ class OverBox(Gtk.Box):
         self._fraction = 0
         self.verticalOffset = 0
 
-        self.window = None
-        self.allocation = None
-
         self.set_has_window(True)
 
     ####################
@@ -80,14 +77,14 @@ class OverBox(Gtk.Box):
 
         geo.x = 0
         geo.y = actual_min
-        geo.width = self.allocation.width
-        geo.height = (self.allocation.height - actual_min)
+        geo.width = self.get_allocation().width
+        geo.height = (self.get_allocation().height - actual_min)
 
         return geo
 
     def _get_over_window_geometry(self):
         geo = Gdk.Rectangle()
-        boxwidth = self.allocation.width
+        boxwidth = self.get_allocation().width
         expand = True
         fill = True
         padding = 0
@@ -118,45 +115,13 @@ class OverBox(Gtk.Box):
         geo.height = height
         return geo
 
-    def _set_overwin_size(self, alloc):
-        # Trying to set the overwindow size to 0,0 always draws a 1,1 pixel
-        # on the screen. Have this wrapper hide the window if trying to
-        # resize to 0,0
-
-        self.overWin.move_resize(alloc.x, alloc.y,
-                                 alloc.width, alloc.height)
-
-        if alloc.height == 0 and alloc.width == 0:
-            self.overWin.hide()
-        else:
-            self.overWin.show()
-
     def _set_background(self):
         ctx = self.get_style_context()
-        ctx.set_background(self.window)
+        ctx.set_state(Gtk.StateFlags.NORMAL)
+        ctx.set_background(self.get_window())
         ctx.set_background(self.underWin)
         ctx.set_background(self.overWin)
 
-    def _size_request(self):
-        under = self.underWidget.size_request()
-        over = self.overWidget.size_request()
-
-        self.overWidth = over.width
-        self.overHeight = over.height
-
-        expand = self.child_get_property(self.overWidget, "expand")
-        fill = self.child_get_property(self.overWidget, "fill")
-        padding = self.child_get_property(self.overWidget, "padding")
-
-        if expand or fill:
-            wpad = 0
-        else:
-            wpad = padding
-
-        width = max(under.width, over.width + wpad)
-        height = max(under.height + self._get_actual_min(), over.height)
-
-        return width, height
 
     ########################
     # Custom functionality #
@@ -231,20 +196,20 @@ class OverBox(Gtk.Box):
         attr = Gdk.WindowAttr()
         attr.window_type = Gdk.WindowType.CHILD
         attr.wclass = Gdk.WindowWindowClass.INPUT_OUTPUT
-        attr.event_mask = self.get_events() | Gdk.EventMask.EXPOSURE_MASK
         attr.visual = self.get_visual()
-        attr.x = self.allocation.x
-        attr.y = self.allocation.y
-        attr.width = self.allocation.width
-        attr.height = self.allocation.height
-
+        attr.event_mask = self.get_events() | Gdk.EventMask.EXPOSURE_MASK
         mask = (Gdk.WindowAttributesType.VISUAL |
                 Gdk.WindowAttributesType.X |
                 Gdk.WindowAttributesType.Y)
 
+        attr.x = self.get_allocation().x
+        attr.y = self.get_allocation().y
+        attr.width = self.get_allocation().width
+        attr.height = self.get_allocation().height
+
         window = Gdk.Window.new(self.get_parent_window(), attr, mask)
-        self.window = window
         self.set_window(window)
+        window.set_user_data(self)
 
         geo = self._get_under_window_geometry()
         attr.x = geo.x
@@ -252,6 +217,7 @@ class OverBox(Gtk.Box):
         attr.width = geo.width
         attr.height = geo.height
         self.underWin = Gdk.Window.new(window, attr, mask)
+        self.underWin.set_user_data(self)
         if self.underWidget:
             self.underWidget.set_parent_window(self.underWin)
         self.underWin.show()
@@ -262,27 +228,42 @@ class OverBox(Gtk.Box):
         attr.width = geo.width
         attr.height = geo.height
         self.overWin = Gdk.Window.new(window, attr, mask)
+        self.overWin.set_user_data(self)
         if self.overWidget:
             self.overWidget.set_parent_window(self.overWin)
-        self._set_overwin_size(geo)
+        self.overWin.show()
 
         self._set_background()
 
     def do_unrealize(self):
         Gtk.Box.do_unrealize(self)
 
+        self.underWin.set_user_data(None)
+        self.underWin.destroy()
+        self.underWin = None
+
+        self.overWin.set_user_data(None)
         self.overWin.destroy()
         self.overWin = None
 
-        self.underWin.destroy()
-        self.underWin = None
-        self.set_realized(False)
-
     def do_size_request(self, req):
-        width, height = self._size_request()
+        under = self.underWidget.get_preferred_size()[0]
+        over = self.overWidget.get_preferred_size()[0]
 
-        req.width = width
-        req.height = height
+        self.overWidth = over.width
+        self.overHeight = over.height
+
+        expand = self.child_get_property(self.overWidget, "expand")
+        fill = self.child_get_property(self.overWidget, "fill")
+        padding = self.child_get_property(self.overWidget, "padding")
+
+        if expand or fill:
+            wpad = 0
+        else:
+            wpad = padding
+
+        req.width = max(under.width, over.width + wpad)
+        req.height = max(under.height + self._get_actual_min(), over.height)
 
     def do_get_preferred_width(self):
         req = Gtk.Requisition()
@@ -301,17 +282,18 @@ class OverBox(Gtk.Box):
         tmpalloc.x = newalloc.x
         tmpalloc.y = newalloc.y
 
-        self.allocation = tmpalloc
+        self.set_allocation(tmpalloc)
 
-        over = self._get_over_window_geometry()
         under = self._get_under_window_geometry()
+        over = self._get_over_window_geometry()
 
         if self.get_realized():
             self.get_window().move_resize(newalloc.x, newalloc.y,
                                     newalloc.width, newalloc.height)
             self.underWin.move_resize(under.x, under.y,
                                       under.width, under.height)
-            self._set_overwin_size(over)
+            self.overWin.move_resize(over.x, over.y,
+                                     over.width, over.height)
 
         under.x = 0
         under.y = 0
@@ -319,6 +301,11 @@ class OverBox(Gtk.Box):
         over.x = 0
         over.y = 0
         self.overWidget.size_allocate(over)
+
+    def do_style_set(self, previous_style):
+        if self.get_realized():
+            self._set_background()
+        return Gtk.Box.set_style(self, previous_style)
 
     # These make pylint happy
     def show_all(self, *args, **kwargs):
