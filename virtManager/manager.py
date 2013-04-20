@@ -62,12 +62,6 @@ COL_HOST_CPU = 2
 COL_DISK = 3
 COL_NETWORK = 4
 
-def _style_get_prop(widget, propname):
-    value = GObject.Value()
-    value.init(GObject.TYPE_INT)
-    widget.style_get_property(propname, value)
-    return value.get_int()
-
 
 try:
     import gi
