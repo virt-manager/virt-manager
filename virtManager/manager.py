@@ -62,6 +62,12 @@ COL_HOST_CPU = 2
 COL_DISK = 3
 COL_NETWORK = 4
 
+def _style_get_prop(widget, propname):
+    value = GObject.Value()
+    value.init(GObject.TYPE_INT)
+    widget.style_get_property(propname, value)
+    return value.get_int()
+
 
 try:
     import gi
@@ -395,7 +401,8 @@ class vmmManager(vmmGObjectUI):
         vmlist.set_model(model)
         vmlist.set_tooltip_column(ROW_HINT)
         vmlist.set_headers_visible(True)
-        vmlist.set_level_indentation(-15)
+        vmlist.set_level_indentation(
+                -(_style_get_prop(vmlist, "expander-size") + 3))
 
         nameCol = Gtk.TreeViewColumn(_("Name"))
         nameCol.set_expand(True)
