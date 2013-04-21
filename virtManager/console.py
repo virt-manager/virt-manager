@@ -344,7 +344,7 @@ class VNCViewer(Viewer):
 
     def _desktop_resize(self, src_ignore, w, h):
         self.desktop_resolution = (w, h)
-        self.console.widget("console-vnc-scroll").queue_resize()
+        self.console.widget("console-gfx-scroll").queue_resize()
 
     def get_desktop_resolution(self):
         return self.desktop_resolution
@@ -536,7 +536,7 @@ class SpiceViewer(Viewer):
             self.display_channel = channel
             self.display = SpiceClientGtk.Display.new(self.spice_session,
                                                       channel_id)
-            self.console.widget("console-vnc-viewport").add(self.display)
+            self.console.widget("console-gfx-viewport").add(self.display)
             self._init_widget()
             self.console.connected()
             return
@@ -638,7 +638,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         # Make viewer widget background always be black
         black = Gdk.Color(0, 0, 0)
-        self.widget("console-vnc-viewport").modify_bg(Gtk.StateType.NORMAL,
+        self.widget("console-gfx-viewport").modify_bg(Gtk.StateType.NORMAL,
                                                       black)
 
         # Signals are added by vmmDetails. Don't use connect_signals here
@@ -648,7 +648,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.add_gconf_handle(
             self.vm.on_console_scaling_changed(self.refresh_scaling))
 
-        scroll = self.widget("console-vnc-scroll")
+        scroll = self.widget("console-gfx-scroll")
         scroll.connect("size-allocate", self.scroll_size_allocate)
         self.add_gconf_handle(
             self.config.on_console_accels_changed(self.set_enable_accel))
@@ -679,7 +679,7 @@ class vmmConsolePages(vmmGObjectUI):
     ##########################
 
     def init_fs_toolbar(self):
-        scroll = self.widget("console-vnc-scroll")
+        scroll = self.widget("console-gfx-scroll")
         pages = self.widget("console-pages")
         pages.remove(scroll)
 
@@ -829,7 +829,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         curscale = self.viewer.get_scaling()
         fs = self.widget("control-fullscreen").get_active()
-        vnc_scroll = self.widget("console-vnc-scroll")
+        vnc_scroll = self.widget("console-gfx-scroll")
 
         if (self.scale_type == self.config.CONSOLE_SCALE_NEVER
             and curscale is True):
@@ -907,7 +907,7 @@ class vmmConsolePages(vmmGObjectUI):
                 self.activate_unavailable_page(_("Guest has crashed"))
 
     def close_viewer(self):
-        viewport = self.widget("console-vnc-viewport")
+        viewport = self.widget("console-gfx-viewport")
         if self.viewer is None:
             return
 
@@ -1139,7 +1139,7 @@ class vmmConsolePages(vmmGObjectUI):
         try:
             if ginfo.gtype == "vnc":
                 self.viewer = VNCViewer(self)
-                self.widget("console-vnc-viewport").add(self.viewer.display)
+                self.widget("console-gfx-viewport").add(self.viewer.display)
                 self.viewer.init_widget()
             elif ginfo.gtype == "spice":
                 self.viewer = SpiceViewer(self)
@@ -1179,7 +1179,7 @@ class vmmConsolePages(vmmGObjectUI):
         isn't a hard requirment so the user can still shrink the window
         again, as opposed to set_size_request
         """
-        widget = self.widget("console-vnc-scroll")
+        widget = self.widget("console-gfx-scroll")
         signal_holder = []
 
         def restore_scroll(src):
@@ -1223,7 +1223,7 @@ class vmmConsolePages(vmmGObjectUI):
         if not self.viewer or not self.viewer.get_desktop_resolution():
             return
 
-        scroll = self.widget("console-vnc-scroll")
+        scroll = self.widget("console-gfx-scroll")
         is_scale = self.viewer.get_scaling()
 
         dx = 0
