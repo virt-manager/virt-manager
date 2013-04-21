@@ -99,13 +99,22 @@ def supports_pxe(guest):
     return False
 
 
-def check_vcpu_option_error(options):
-    # Catch a strangely common error of users passing -vcpus=2 instead of
-    # --vcpus=2. The single dash happens to map to enough shortened options
-    # that things can fail weirdly if --paravirt is also specified.
+def check_cdrom_option_error(options):
+    if options.cdrom_short and options.cdrom:
+        fail("Cannot specify both -c and --cdrom")
+
+    if options.cdrom_short:
+        if "://" in options.cdrom_short:
+            fail("-c specified with what looks like a URI. Did you mean "
+                 "to use --connect? If not, use --cdrom instead")
+        options.cdrom = options.cdrom_short
+
     if not options.cdrom:
         return
 
+    # Catch a strangely common error of users passing -vcpus=2 instead of
+    # --vcpus=2. The single dash happens to map to enough shortened options
+    # that things can fail weirdly if --paravirt is also specified.
     for vcpu in [o for o in sys.argv if o.startswith("-vcpu")]:
         if options.cdrom == vcpu[3:]:
             fail("You specified -vcpus, you want --vcpus")
@@ -856,7 +865,8 @@ def parse_args():
     parser.add_option_group(geng)
 
     insg = optparse.OptionGroup(parser, _("Installation Method Options"))
-    insg.add_option("-c", "--cdrom", dest="cdrom",
+    insg.add_option("-c", dest="cdrom_short", help=optparse.SUPPRESS_HELP)
+    insg.add_option("", "--cdrom", dest="cdrom",
                     help=_("CD-ROM installation media"))
     insg.add_option("-l", "--location", dest="location",
                     help=_("Installation source (eg, nfs:host:/path, "
@@ -1010,7 +1020,7 @@ def main(conn=None):
 
     if cliargs:
         fail(_("Unknown argument '%s'") % cliargs[0])
-    check_vcpu_option_error(options)
+    check_cdrom_option_error(options)
 
     if options.distro_variant == "list":
         logging.debug("OS list requested")
