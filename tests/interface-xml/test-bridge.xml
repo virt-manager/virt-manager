@@ -4,6 +4,11 @@
     </interface>
     <interface type='bond' name='bond-brbond'>
       <start mode='none'/>
+      <protocol family='ipv6'>
+        <ip address='3ffe:ffff:0:5::1' prefix='128'/>
+        <ip address='3ffe:ffff:0:5::3' prefix='128'/>
+        <ip address='3ffe:ffff:0:5::5' prefix='128'/>
+      </protocol>
       <bond mode='active-backup'>
         <miimon freq='100' updelay='10' carrier='ioctl'/>
         <interface type='ethernet' name='brbond-eth0'>

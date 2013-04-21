@@ -1,4 +1,4 @@
-<domain type="test" id="3">
+<domain type="test" id="5">
   <name>test-for-clone1</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <memory unit="KiB">409600</memory>
@@ -19,11 +19,17 @@
   <on_crash>restart</on_crash>
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
-    <disk type="block" device="disk">
+    <disk type="block" device="floppy">
       <source dev="/disk-pool/diskvol1-clone"/>
-      <target dev="sda" bus="scsi"/>
+      <target dev="fda" bus="fdc"/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
       <driver name="qemu" type="raw"/>
+    </disk>
+    <disk type="block" device="disk">
+      <source dev="/disk-pool/diskvol2"/>
+      <target dev="sda" bus="scsi"/>
+      <readonly/>
+      <address type="drive" controller="0" bus="0" target="0" unit="0"/>
     </disk>
     <disk type="block" device="cdrom">
       <target dev="sdb" bus="scsi"/>
@@ -34,24 +40,24 @@
       <source dev="/default-pool/collidevol1.img"/>
       <target dev="sdc" bus="scsi"/>
       <readonly/>
+      <shareable/>
       <address type="drive" controller="0" bus="0" target="0" unit="2"/>
     </disk>
     <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2"/>
-      <target dev="sdd" bus="scsi"/>
-      <address type="drive" controller="0" bus="0" target="0" unit="3"/>
+      <target dev="hda" bus="ide"/>
+      <address type="drive" controller="0" bus="0" target="0" unit="0"/>
+      <driver name="qemu" type="raw"/>
       <source file="/default-pool/default-vol-clone"/>
     </disk>
-    <disk type="block" device="disk">
-      <source dev="/default-pool/sharevol.img"/>
-      <target dev="sdx" bus="scsi"/>
-      <shareable/>
-      <address type="drive" controller="3" bus="0" target="0" unit="2"/>
+    <disk type="file" device="disk">
+      <target dev="hdb" bus="ide"/>
+      <address type="drive" controller="0" bus="0" target="0" unit="1"/>
+      <driver name="qemu" type="raw"/>
+      <source file="/default-pool/testvol2-clone.img"/>
     </disk>
     <controller type="scsi" index="0"/>
-    <controller type="scsi" index="1"/>
-    <controller type="scsi" index="2"/>
-    <controller type="scsi" index="3"/>
+    <controller type="fdc" index="0"/>
+    <controller type="ide" index="0"/>
     <interface type="network">
       <mac address="00:11:22:33:44:55"/>
       <source network="default"/>

@@ -11,6 +11,16 @@
   </cpu>
   <memory>10000000</memory>
 
+
+
+
+
+
+  <!-- ####### -->
+  <!-- Domains -->
+  <!-- ####### -->
+
+
 <domain type='test'>
   <name>test</name>
   <uuid>4a64cc71-19c4-2fd0-2323-3050941ea3c3</uuid>
@@ -28,6 +38,307 @@
   <devices>
   </devices>
 </domain>
+
+
+<domain type='test'>
+  <name>test-many-devices</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <memoryBacking>
+    <hugepages/>
+  </memoryBacking>
+  <uuid>12345678-12F4-1234-1234-123456789012</uuid>
+  <os>
+    <type arch='i686'>hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev='hd'/>
+  </os>
+  <description>Foo bar baz &amp;
+    yeah boii &lt; &gt; yeahfoo
+  </description>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu cpuset="1,2,5-9,11,13-14">9</vcpu>
+  <cpu match="exact">
+    <model>core2duo</model>
+    <vendor>Intel</vendor>
+    <feature policy="require" name="pbe"/>
+    <feature policy="require" name="tm2"/>
+    <feature policy="require" name="est"/>
+    <feature policy="require" name="ss"/>
+    <feature policy="require" name="ht"/>
+    <feature policy="require" name="ds"/>
+    <feature policy="require" name="lahf_lm"/>
+    <feature policy="require" name="tm"/>
+    <feature policy="require" name="cx16"/>
+    <feature policy="require" name="vmx"/>
+    <feature policy="require" name="ds_cpl"/>
+    <feature policy="require" name="xtpr"/>
+    <feature policy="require" name="acpi"/>
+  </cpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+
+
+    <!-- disk devices -->
+    <disk type='block' device='floppy'>
+      <source dev='/dev/loop0'/>
+      <target dev='fda' bus='fdc'/>
+    </disk>
+    <disk type='dir' device='floppy'>
+      <source dir='/tmp'/>
+      <target dev='fdb' bus='fdc'/>
+    </disk>
+    <disk type='file' device='disk'>
+      <source file='/tmp/foobar'/>
+      <target dev='hda' bus='ide'/>
+      <iotune>
+        <read_bytes_sec>5242880</read_bytes_sec>
+        <total_iops_sec>50</total_iops_sec>
+      </iotune>
+    </disk>
+    <disk type='block' device='disk'>
+      <driver cache='none' type="raw"/>
+      <source dev='/dev/loop0'/>
+      <target dev='hdc' bus='ide'/>
+    </disk>
+    <disk type='block' device='cdrom'>
+      <target dev='sdb' bus='scsi'/>
+    </disk>
+    <disk type='file' device='disk'>
+      <driver name="qemu" type="qcow2" cache="none"/>
+      <source file='/tmp/foobar2'/>
+      <target dev='vdc' bus='virtio'/>
+    </disk>
+    <disk type='file' device='disk'>
+      <source file='/tmp/foobar3'/>
+      <target dev='sdd' bus='usb'/>
+    </disk>
+    <disk type='file' device='disk'>
+      <driver name='tap' type='qcow' cache="writethrough"/>
+      <source file='/tmp/foobar4'/>
+      <target dev='xvdc' bus='xen'/>
+    </disk>
+
+
+    <!-- interfaces -->
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='22:22:33:54:32:10'/>
+      <model type='e1000'/>
+    </interface>
+    <interface type='network'>
+      <source network='idontexistfool'/>
+    </interface>
+    <interface type='network'>
+      <source network='dupmac'/>
+      <mac address='22:22:33:54:32:11'/>
+    </interface>
+    <interface type='user'>
+      <mac address='22:11:11:11:11:11'/>
+    </interface>
+    <interface type='bridge'>
+      <source bridge='brempty'/>
+      <mac address='22:22:33:44:AA:BB'/>
+      <model type='virtio'/>
+    </interface>
+    <interface type='bridge'>
+      <source bridge='br0'/>
+      <mac address='22:00:00:44:AA:BF'/>
+      <model type='e1000'/>
+    </interface>
+    <controller type='usb'/>
+    <interface type='ethernet'>
+        <mac address='00:11:7F:33:44:55'/>
+        <script path='/etc/qemu-ifup'/>
+        <target dev='nic02'/>
+    </interface>
+    <interface type="direct">
+      <mac address="F0:11:22:33:44:5F"/>
+      <source dev="eth0.1" mode="vepa"/>
+      <virtualport type="802.1Qbg">
+        <parameters managerid="12" typeid="1193046" typeidversion="1" instanceid="09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b"/>
+      </virtualport>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x07" function="0x0"/>
+    </interface>
+
+
+    <!-- input devices -->
+    <input type='mouse' bus='ps2'/>
+    <input type='tablet' bus='usb'/>
+
+
+    <!-- Graphics devices -->
+    <graphics type='sdl' display=':3.4' xauth='/testdir/.Xauthority' fullscreen='yes'/>
+    <graphics type='vnc'/>
+    <graphics type='vnc' listen="1.2.3.4" keymap="fi"/>
+    <graphics type='vnc' port="5903" passwd="foobar"/>
+    <graphics type='rdp'/>
+    <graphics type='spice'/>
+    <graphics type="spice" passwd="newpass" port="6000" tlsPort="6001" listen="1.2.3.4">
+      <channel name="inputs" mode="secure"/>
+      <channel name="main" mode="any"/>
+      <channel name="record" mode="insecure"/>
+    </graphics>
+
+
+    <!-- sound devices -->
+    <sound model='sb16'/>
+    <sound model='es1370'/>
+    <sound model='ich6'/>
+
+
+    <!-- Video devices -->
+    <video>
+      <model type='vmvga'/>
+    </video>
+    <video>
+      <model type='cirrus' vram='10240' heads='3'/>
+    </video>
+
+
+    <!-- hostdev devices -->
+    <hostdev mode='subsystem' type='usb' managed='yes'>
+      <source>
+        <vendor id='0x04b3'/>
+        <product id='0x4485'/>
+      </source>
+    </hostdev>
+    <hostdev mode='subsystem' type='usb' managed='yes'>
+      <source>
+        <address bus='0x03' device='0x02'/>
+      </source>
+    </hostdev>
+    <hostdev mode='subsystem' type='pci' managed='yes'>
+      <source>
+        <address bus='0x00' slot='0x19' function="0x0"/>
+      </source>
+    </hostdev>
+    <hostdev mode='subsystem' type='pci' managed='yes'>
+      <source>
+        <address domain="0x03" bus='0x00' slot='0x19' function="0x0"/>
+      </source>
+    </hostdev>
+
+
+    <!-- serial/parallel devices -->
+    <serial type='null'/>
+    <parallel type='file'>
+      <source path='/tmp/foo.log'/>
+    </parallel>
+    <serial type='tcp'>
+      <source mode='bind' host='my.source.host' service='1234'/>
+      <protocol type='telnet'/>
+    </serial>
+    <parallel type='unix'>
+      <source mode='bind' path='/tmp/foobar'/>
+    </parallel>
+    <parallel type='udp'>
+      <source mode='bind' host='my.bind.host' service='1111'/>
+      <source mode='connect' host='my.source.host' service='2222'/>
+    </parallel>
+
+
+    <!-- watchdog devices -->
+    <watchdog model='ib700' action='poweroff'/>
+
+
+    <!-- smartcard devices -->
+    <smartcard mode='host'>
+      <address type='ccid' controller='0' slot='0'/>
+    </smartcard>
+    <smartcard mode='host-certificates'>
+      <certificate>cert1</certificate>
+      <certificate>cert2</certificate>
+      <certificate>cert3</certificate>
+    </smartcard>
+    <smartcard mode='passthrough' type='spicevmc'/>
+    <smartcard mode='passthrough' type='tcp'>
+      <source mode='bind' host='127.0.0.1' service='2001'/>
+      <protocol type='raw'/>
+    </smartcard>
+
+
+    <!-- channel devices -->
+    <channel type='pipe'>
+      <source path='/tmp/guestfwd'/>
+      <target type='guestfwd' address='10.0.2.1' port='4600'/>
+    </channel>
+    <channel type='spicevmc'>
+      <target type='virtio' name='com.redhat.spice.0'/>
+      <address type='virtio-serial' controller='1' bus='0' port='3'/>
+    </channel>
+    <channel type='pty'>
+      <target type='virtio' name='org.linux-kvm.port.0'/>
+    </channel>
+
+
+    <!-- redir devices -->
+    <redirdev bus='usb' type='tcp'>
+      <source mode='connect' host='localhost' service='4000'/>
+      <protocol type='raw'/>
+    </redirdev>
+    <redirdev bus='usb' type='spicevmc'>
+      <address type='usb' bus='0' port='4'/>
+    </redirdev>
+    <redirfilter>
+      <usbdev class='0x08' vendor='0x15E1' product='0x2007' version='1.10' allow='yes'/>
+      <usbdev class='-1' vendor='-1' product='-1' version='-1' allow='no'/>
+    </redirfilter>
+
+
+  </devices>
+</domain>
+
+
+<domain type='test'>
+  <name>test-many-nets</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>12345678-1234-1234-1234-123456789001</uuid>
+  <os>
+    <type arch='i686'>hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu>5</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type='file' device='disk'>
+      <source file='/default-pool/default-vol'/>
+      <target dev='hda' bus='ide'/>
+    </disk>
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='22:22:33:00:00:00'/>
+      <model type='e1000'/>
+    </interface>
+    <interface type='network'>
+      <source network='nat_to_eth0'/>
+      <mac address='22:22:33:11:11:11'/>
+    </interface>
+    <interface type='network'>
+      <source network='isolated_net'/>
+      <mac address='22:22:33:22:22:33'/>
+    </interface>
+    <interface type='user'>
+      <mac address='22:11:11:11:11:11'/>
+    </interface>
+  </devices>
+</domain>
+
 
 <domain type='test'>
   <name>test-clone-simple</name>
@@ -62,6 +373,7 @@
   </devices>
 </domain>
 
+
 <domain type='test'>
   <name>test-for-clone</name>
   <currentMemory>204800</currentMemory>
@@ -82,9 +394,14 @@
   <vcpu>5</vcpu>
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
-    <disk type='block' device='disk'>
+    <disk type='block' device='floppy'>
       <source dev='/disk-pool/diskvol1'/>
+      <target dev='fda' bus='fdc'/>
+    </disk>
+    <disk type='block' device='disk'>
+      <source dev='/disk-pool/diskvol2'/>
       <target dev='sda' bus='scsi'/>
+      <readonly/>
     </disk>
     <disk type='block' device='cdrom'>
       <target dev='sdb' bus='scsi'/>
@@ -93,16 +410,15 @@
       <source dev='/default-pool/collidevol1.img'/>
       <target dev='sdc' bus='scsi'/>
       <readonly/>
+      <shareable/>
     </disk>
     <disk type='file' device='disk'>
       <source file='/default-pool/default-vol'/>
-      <target dev='sdd' bus='scsi'/>
-      <driver name="qemu" type="qcow2"/>
+      <target dev='hda' bus='ide'/>
     </disk>
-    <disk type='block' device='disk'>
-      <source dev='/default-pool/sharevol.img'/>
-      <target dev='sdx' bus='scsi'/>
-      <shareable/>
+    <disk type='file' device='disk'>
+      <source file='/default-pool/testvol2.img'/>
+      <target dev='hdb' bus='ide'/>
     </disk>
     <interface type='network'>
       <source network='default'/>
@@ -118,6 +434,106 @@
   </devices>
 </domain>
 
+<domain type='test'>
+  <name>test-halffull-clone</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>abcd5678-1234-1234-1234-12345678FFFF</uuid>
+  <os>
+    <type arch='i686'>hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu>5</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type='block' device='disk'>
+      <source dev='/halffull-pool/testvol1.img'/>
+      <target dev='hda' bus='ide'/>
+    </disk>
+    <disk type='block' device='disk'>
+      <source dev='/halffull-pool/testvol2.img'/>
+      <target dev='hdb' bus='ide'/>
+    </disk>
+    <interface type='user'>
+      <mac address='22:11:11:11:11:11'/>
+    </interface>
+  </devices>
+</domain>
+
+
+<domain type='test'>
+  <name>test-full-clone</name>
+  <currentMemory>204800</currentMemory>
+  <memory>409600</memory>
+  <uuid>abcd5678-aaaa-1234-1234-12345678FFFF</uuid>
+  <os>
+    <type arch='i686'>hvm</type>
+    <loader>/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/><apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <vcpu>5</vcpu>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type='block' device='disk'>
+      <source dev='/full-pool/testvol1.img'/>
+      <target dev='hda' bus='ide'/>
+    </disk>
+    <interface type='user'>
+      <mac address='22:11:11:11:11:11'/>
+    </interface>
+    <console type='pty'/>
+  </devices>
+</domain>
+
+
+<domain type='test'>
+  <name>test_xenpv_kernel</name>
+  <uuid>596a5d2171f48fb2e068e2386a5c413e</uuid>
+  <os>
+    <type>xen</type>
+    <kernel>/var/lib/xen/vmlinuz.2Dn2YT</kernel>
+    <initrd>/var/lib/xen/initrd.img.0u-Vhq</initrd>
+    <cmdline> method=http://download.fedora.devel.redhat.com/pub/fedora/linux/core/test/5.91/x86_64/os  </cmdline>
+  </os>
+  <memory>430080</memory>
+  <vcpu>2</vcpu>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>destroy</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <disk type='file' device='disk'>
+      <source file='/root/some.img'/>
+      <target dev='xvda'/>
+    </disk>
+    <console tty='/dev/pts/4'/>
+  </devices>
+</domain>
+
+
+
+
+
+<!-- ######## -->
+<!-- Networks -->
+<!-- ######## -->
+
+
+
 <network>
   <name>default</name>
   <uuid>715666b7-dbd4-6c78-fa55-94863da09f2d</uuid>
@@ -130,6 +546,28 @@
   </ip>
 </network>
 
+
+<network>
+  <name>isolated_net</name>
+  <ip address='192.168.100.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.100.128' end='192.168.100.254'/>
+    </dhcp>
+  </ip>
+</network>
+
+
+<network>
+  <name>nat_to_eth0</name>
+  <forward dev='eth0'/>
+  <ip address='192.168.100.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.100.128' end='192.168.100.254'/>
+    </dhcp>
+  </ip>
+</network>
+
+
 <network>
   <name>route</name>
   <uuid>715666b7-aaaa-6c78-fa55-94863da09f2d</uuid>
@@ -141,14 +579,61 @@
   </ip>
 </network>
 
+
+<network>
+  <name>netboot</name>
+  <uuid>81ff0d90-c91e-6742-64da-4a736edb9a9b</uuid>
+  <bridge name="virbr1" stp='off' delay='1'/>
+  <domain name="example.com"/>
+  <forward/>
+  <ip address="192.168.122.1" netmask="255.255.255.0">
+    <tftp root="/var/lib/tftproot" />
+    <dhcp>
+      <range start="192.168.122.2" end="192.168.122.254" />
+      <bootp file="pxeboot.img" />
+    </dhcp>
+  </ip>
+</network>
+
+
+<network>
+  <name>plainbridge</name>
+  <uuid>b1b9d7c6-f620-048f-71ee-ca3ba1ac3e98</uuid>
+  <forward mode='bridge'/>
+  <bridge name='br2' />
+</network>
+
+
+<network>
+  <name>ipv4_prefix</name>
+  <uuid>81ff0d90-c91e-6742-64da-4a736edb9a9b</uuid>
+  <forward dev='eth1' mode='nat'>
+    <interface dev='eth1'/>
+  </forward>
+  <bridge name='ipv4_prefix' stp='on' delay='0' />
+  <ip family='ipv4' address='192.168.50.1' prefix='24'>
+  </ip>
+</network>
+
+
+<network>
+  <name>ipv4_nomask</name>
+  <uuid>81ff0d90-aaaa-6742-64da-4a736edb9a9b</uuid>
+  <bridge name='ipv4_nomask' stp='on' delay='0' />
+  <ip family='ipv4' address='10.24.10.1'>
+  </ip>
+</network>
+
+
 <network ipv6='yes'>
-  <name>net0</name>
+  <name>ipv6_empty</name>
   <uuid>591d28b3-25fd-21f5-ac71-e1877d787945</uuid>
   <bridge name='virbr1' stp='on' delay='0' />
 </network>
 
+
 <network>
-  <name>net6</name>
+  <name>ipv6_2ranges</name>
   <uuid>e08c0cc3-b892-b53b-c41d-c4f526291be9</uuid>
   <forward mode='nat'/>
   <bridge name='virbr2' stp='on' delay='0' />
@@ -165,8 +650,9 @@
   </ip>
 </network>
 
+
 <network>
-  <name>net7</name>
+  <name>ipv6_multirange</name>
   <uuid>41b4afe4-87bb-8087-6724-5e208a2d483a</uuid>
   <forward mode='nat'/>
   <bridge name='virbr3' stp='on' delay='0' />
@@ -191,8 +677,9 @@
   </ip>
 </network>
 
+
 <network>
-  <name>net8</name>
+  <name>ipv6_multirange2</name>
   <uuid>f9c6675f-98f8-ce75-b39a-02c1d23081e0</uuid>
   <forward mode='nat'/>
   <bridge name='virbr4' stp='on' delay='0' />
@@ -214,57 +701,18 @@
   </ip>
 </network>
 
-<network>
-  <name>net9</name>
-  <uuid>327b43c5-6900-2e2c-7f14-e1a29bb2c9f5</uuid>
-  <forward mode='nat'/>
-  <bridge name='virbr5' stp='on' delay='0' />
-  <domain name='net9'/>
-  <ip address='192.168.109.1' netmask='255.255.255.0'>
-  </ip>
-  <ip address='192.168.9.1' netmask='255.255.255.0'>
-    <dhcp>
-      <range start='192.168.9.128' end='192.168.9.254' />
-    </dhcp>
-  </ip>
-  <ip family='ipv6' address='fd00:beef:10:9::1' prefix='64'>
-    <dhcp>
-      <range start='fd00:beef:10:9::100' end='fd00:beef:10:9::1fe' />
-    </dhcp>
-  </ip>
-  <ip family='ipv6' address='fd00:beef:12:9::1' prefix='64'>
-  </ip>
-</network>
 
-<network>
-  <name>net91</name>
-  <uuid>c1621b18-797c-e2cb-71f6-21ca120e51cc</uuid>
-  <forward mode='nat'/>
-  <bridge name='virbr6' stp='on' delay='0' />
-  <domain name='net91'/>
-  <ip address='192.168.91.1' netmask='255.255.255.0'>
-  </ip>
-</network>
 
-<network ipv6='yes'>
-  <name>net92</name>
-  <uuid>bf2e337c-ee12-a1d5-4c14-7185191fe00b</uuid>
-  <forward mode='nat'/>
-  <bridge name='virbr7' stp='on' delay='0' />
-  <ip family='ipv6' address='fd00:beef:10:92::1' prefix='64'>
-  </ip>
-</network>
 
-<network>
-  <name>net93</name>
-  <uuid>f117daa4-5aaf-43d9-3c09-d9e522e5a1df</uuid>
-  <bridge name='virbr15' stp='on' delay='0' />
-  <domain name='net93'/>
-  <ip address='192.168.93.1' netmask='255.255.255.0'>
-  </ip>
-  <ip family='ipv6' address='fd00:beef:10:93::1' prefix='64'>
-  </ip>
-</network>
+
+
+
+
+<!-- ####### -->
+<!-- Storage -->
+<!-- ####### -->
+
+
 
 <pool type='dir'>
   <name>default-pool</name>
@@ -386,6 +834,51 @@
   </volume>
 </pool>
 
+
+<pool type='dir'>
+  <name>spurious-slash-pool</name>
+  <uuid>35bb2ad9-1122-cdfe-461a-b8907f6e53fe</uuid>
+  <capacity>107374182400</capacity>
+  <allocation>0</allocation>
+  <available>107374182400</available>
+  <source>
+  </source>
+  <target>
+    <path>/spurious-slash-pool//</path>
+    <permissions>
+      <mode>0700</mode>
+      <owner>10736</owner>
+      <group>10736</group>
+    </permissions>
+  </target>
+
+  <volume>
+    <name>default-vol</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target/>
+  </volume>
+  <volume>
+    <name>testvol1.img</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target/>
+  </volume>
+  <volume>
+    <name>testvol2.img</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target/>
+  </volume>
+  <volume>
+    <name>collidevol1.img</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target/>
+  </volume>
+</pool>
+
+
 <pool type='dir'>
   <name>inactive-pool</name>
   <uuid>35bb2aaa-388a-cdfe-461a-b8907f6e53fe</uuid>
@@ -417,6 +910,7 @@
     </target>
   </volume>
 </pool>
+
 
 <pool type='dir'>
   <name>cross-pool</name>
@@ -460,102 +954,6 @@
   </volume>
 </pool>
 
-<pool type='logical'>
-  <name>disk-pool</name>
-  <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e5aaa</uuid>
-  <capacity>107374182400</capacity>
-  <allocation>0</allocation>
-  <available>107374182400</available>
-  <source>
-  </source>
-  <target>
-    <path>/disk-pool</path>
-    <permissions>
-      <mode>0700</mode>
-      <owner>10736</owner>
-      <group>10736</group>
-    </permissions>
-  </target>
-
-  <volume>
-    <name>diskvol1</name>
-    <capacity>1000000</capacity>
-    <allocation>50000</allocation>
-    <target>
-      <permissions>
-        <mode>0700</mode>
-        <owner>10736</owner>
-        <group>10736</group>
-      </permissions>
-    </target>
-  </volume>
-</pool>
-
-<pool type='iscsi'>
-  <name>iscsi-pool</name>
-  <uuid>abcdead9-388a-cdfe-461a-b8907f6e5aaa</uuid>
-  <capacity>107374182400</capacity>
-  <allocation>0</allocation>
-  <available>107374182400</available>
-  <source>
-    <host name="iscsi.example.com"/>
-    <device path="demo-target"/>
-    <auth type='chap' login='foobar' passwd='frobbar'/>
-  </source>
-  <target>
-    <path>/iscsi-pool</path>
-    <permissions>
-      <mode>0700</mode>
-      <owner>10736</owner>
-      <group>10736</group>
-    </permissions>
-  </target>
-
-  <volume>
-    <name>diskvol1</name>
-    <capacity>1000000</capacity>
-    <allocation>50000</allocation>
-    <target>
-      <format type='unknown'/>
-      <permissions>
-        <mode>0700</mode>
-        <owner>10736</owner>
-        <group>10736</group>
-      </permissions>
-    </target>
-  </volume>
-</pool>
-
-<pool type='dir'>
-  <name>full-pool</name>
-  <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e5555</uuid>
-  <capacity>1</capacity>
-  <allocation>1</allocation>
-  <available>0</available>
-  <source>
-  </source>
-  <target>
-    <path>/full-pool</path>
-    <permissions>
-      <mode>0700</mode>
-      <owner>10736</owner>
-      <group>10736</group>
-    </permissions>
-  </target>
-  <volume>
-    <name>testvol1.img</name>
-    <capacity>107374182400</capacity>
-    <allocation>107374182400</allocation>
-    <target>
-      <format type='qcow2'/>
-      <permissions>
-        <mode>0700</mode>
-        <owner>10736</owner>
-        <group>10736</group>
-      </permissions>
-    </target>
-  </volume>
-</pool>
 
 <pool type='disk'>
   <name>halffull-pool</name>
@@ -600,6 +998,107 @@
   </volume>
 </pool>
 
+
+<pool type='dir'>
+  <name>full-pool</name>
+  <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e5555</uuid>
+  <capacity>1</capacity>
+  <allocation>1</allocation>
+  <available>0</available>
+  <source>
+  </source>
+  <target>
+    <path>/full-pool</path>
+    <permissions>
+      <mode>0700</mode>
+      <owner>10736</owner>
+      <group>10736</group>
+    </permissions>
+  </target>
+  <volume>
+    <name>testvol1.img</name>
+    <capacity>107374182400</capacity>
+    <allocation>107374182400</allocation>
+    <target>
+      <format type='qcow2'/>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+</pool>
+
+
+<pool type='logical'>
+  <name>disk-pool</name>
+  <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e5aaa</uuid>
+  <capacity>107374182400</capacity>
+  <allocation>0</allocation>
+  <available>107374182400</available>
+  <source>
+  </source>
+  <target>
+    <path>/disk-pool</path>
+    <permissions>
+      <mode>0700</mode>
+      <owner>10736</owner>
+      <group>10736</group>
+    </permissions>
+  </target>
+
+  <volume>
+    <name>diskvol1</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+</pool>
+
+
+<pool type='iscsi'>
+  <name>iscsi-pool</name>
+  <uuid>abcdead9-388a-cdfe-461a-b8907f6e5aaa</uuid>
+  <capacity>107374182400</capacity>
+  <allocation>0</allocation>
+  <available>107374182400</available>
+  <source>
+    <host name="iscsi.example.com"/>
+    <device path="demo-target"/>
+    <auth type='chap' login='foobar' passwd='frobbar'/>
+  </source>
+  <target>
+    <path>/iscsi-pool</path>
+    <permissions>
+      <mode>0700</mode>
+      <owner>10736</owner>
+      <group>10736</group>
+    </permissions>
+  </target>
+
+  <volume>
+    <name>diskvol1</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='unknown'/>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+</pool>
+
+
 <pool type='rbd'>
   <name>rbd-ceph</name>
   <uuid>4bcd023e-990e-fcf6-d95c-52dd0cd938c8</uuid>
@@ -613,6 +1112,19 @@
     <name>rbd</name>
   </source>
 </pool>
+
+
+
+
+
+
+
+
+<!-- ####### -->
+<!-- Devices -->
+<!-- ####### -->
+
+
 
 <device>
   <name>computer</name>
@@ -642,6 +1154,15 @@
   </capability>
 </device>
 
+<device>
+  <name>net_00_1c_25_10_b1_ea</name>
+  <parent>pci_8086_1022</parent>
+  <capability type='net'>
+    <interface>physeth2</interface>
+    <address>00:1c:25:10:aa:e4</address>
+    <capability type='80203'/>
+  </capability>
+</device>
 
 <device>
   <name>net_00_1c_bf_04_29_a4</name>
@@ -691,10 +1212,10 @@
     <name>yenta_cardbus</name>
   </driver>
   <capability type='pci'>
-    <domain>0</domain>
+    <domain>1</domain>
     <bus>21</bus>
-    <slot>0</slot>
-    <function>0</function>
+    <slot>10</slot>
+    <function>50</function>
     <product id='0x0476'>RL5c476 II</product>
     <vendor id='0x1180'>Ricoh Co Ltd</vendor>
   </capability>
@@ -1200,9 +1721,9 @@
   </driver>
   <capability type='pci'>
     <domain>0</domain>
-    <bus>0</bus>
+    <bus>2</bus>
     <slot>0</slot>
-    <function>0</function>
+    <function>15</function>
     <product id='0x2a00'>Mobile PM965/GM965/GL960 Memory Controller Hub</product>
     <vendor id='0x8086'>Intel Corporation</vendor>
   </capability>
@@ -1301,6 +1822,22 @@
   </capability>
 </device>
 
+
+<device>
+  <name>storage_serial_ST910021AS_5MH04L87</name>
+  <parent>pci_8086_2829_scsi_host_scsi_device_lun0</parent>
+  <capability type='storage'>
+    <block>/dev/sda</block>
+    <bus>pci</bus>
+    <drive_type>disk</drive_type>
+    <model>ST910021AS</model>
+    <vendor>ATA</vendor>
+    <serial>ST910021AS_5MH04L87</serial>
+    <size>100030242816</size>
+  </capability>
+</device>
+
+
 <device>
   <name>storage_serial_SATA_WDC_WD1600AAJS__WD_WCAP95119685</name>
   <parent>pci_8086_27c0_scsi_host_scsi_device_lun0</parent>
@@ -1315,28 +1852,10 @@
 </device>
 
 <device>
-  <name>storage_serial_SanDisk_Cruzer_Micro_2004453082054CA1BEEE_0_0</name>
-  <parent>usb_device_781_5151_2004453082054CA1BEEE_if0_scsi_host_0_scsi_device_lun0</parent>
-  <capability type='storage'>
-    <block>/dev/sdb</block>
-    <bus>usb</bus>
-    <drive_type>disk</drive_type>
-    <model>Cruzer Micro</model>
-    <vendor>SanDisk</vendor>
-    <capability type='removable'>
-      <media_available>1</media_available>
-      <media_size>12345678</media_size>
-      <media_label>foobar</media_label>
-    </capability>
-    <capability type='hotpluggable' />
-  </capability>
-</device>
-
-<device>
   <name>storage_model_DVDRAM_GSA_U10N</name>
   <parent>pci_8086_2850_scsi_host_scsi_device_lun0</parent>
   <capability type='storage'>
-    <block>/dev/sr0</block>
+    <block>/dev/sr1</block>
     <bus>pci</bus>
     <drive_type>cdrom</drive_type>
     <model>DVDRAM GSA-U10N</model>
@@ -1350,16 +1869,169 @@
 
 
 <device>
-  <name>storage_serial_ST910021AS_5MH04L87</name>
-  <parent>pci_8086_2829_scsi_host_scsi_device_lun0</parent>
+  <name>storage_model_DVDRAM_GSA_U1200N</name>
+  <parent>pci_8086_2850_scsi_host_scsi_device_lun0</parent>
   <capability type='storage'>
-    <block>/dev/sda</block>
+    <block>/dev/sr0</block>
     <bus>pci</bus>
+    <drive_type>cdrom</drive_type>
+    <model>DVDRAM GSA-U10N</model>
+    <vendor>HL-DT-ST</vendor>
+    <capability type='removable'>
+      <media_available>1</media_available>
+      <media_size>1234</media_size>
+      <media_label>Fedora12_media</media_label>
+    </capability>
+  </capability>
+</device>
+
+
+<!-- Floppy drive empty -->
+<device>
+  <name>storage_serial_MITSUMI_MITSUMI_USB_FDD_061M</name>
+  <parent>usb_device_3ee_6901_noserial_if0_scsi_host_0_scsi_device_lun0</parent>
+  <capability type='storage'>
+    <block>/dev/fda</block>
+    <bus>usb</bus>
+    <drive_type>floppy</drive_type>
+    <model>USB FDD 061M</model>
+    <vendor>MITSUMI</vendor>
+    <serial>MITSUMI_MITSUMI_USB_FDD_061M</serial>
+    <capability type='removable'>
+      <media_available>0</media_available>
+      <media_size>0</media_size>
+    </capability>
+    <capability type='hotpluggable' />
+  </capability>
+</device>
+
+
+<!-- Floppy drive full -->
+<device>
+  <name>storage_serial_MITSUMI_MITSUMI_USB_FDD_061M_2</name>
+  <parent>usb_device_3ee_6901_noserial_if0_scsi_host_0_scsi_device_lun0</parent>
+  <capability type='storage'>
+    <block>/dev/fdb</block>
+    <bus>usb</bus>
+    <drive_type>floppy</drive_type>
+    <model>USB FDD 061M</model>
+    <vendor>MITSUMI</vendor>
+    <serial>MITSUMI_MITSUMI_USB_FDD_061M</serial>
+    <capability type='removable'>
+      <media_available>1</media_available>
+      <media_size>123456</media_size>
+      <media_label>Floppy_install_label</media_label>
+    </capability>
+    <capability type='hotpluggable' />
+  </capability>
+</device>
+
+
+<device>
+  <name>storage_serial_SanDisk_Cruzer_Micro_2004453082054CA1BEEE_0_0</name>
+  <parent>usb_device_781_5151_2004453082054CA1BEEE_if0_scsi_host_0_scsi_device_lun0</parent>
+  <capability type='storage'>
+    <block>/dev/sdb</block>
+    <bus>usb</bus>
     <drive_type>disk</drive_type>
-    <model>ST910021AS</model>
-    <vendor>ATA</vendor>
-    <serial>ST910021AS_5MH04L87</serial>
-    <size>100030242816</size>
+    <model>Cruzer Micro</model>
+    <vendor>SanDisk</vendor>
+    <capability type='removable'>
+      <media_available>1</media_available>
+      <media_size>12345678</media_size>
+      <media_label>Windows_Media</media_label>
+    </capability>
+    <capability type='hotpluggable' />
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_1d6b_1_0000_00_1a_0</name>
+  <parent>pci_8086_2834</parent>
+  <driver>
+    <name>usb</name>
+  </driver>
+  <capability type='usb_device'>
+    <bus>3</bus>
+    <device>1</device>
+    <product id='0x0001'>1.1 root hub</product>
+    <vendor id='0x1d6b'>Linux Foundation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_1d6b_1_0000_00_1a_0_if0</name>
+  <parent>usb_device_1d6b_1_0000_00_1a_0</parent>
+  <driver>
+    <name>hub</name>
+  </driver>
+  <capability type='usb'>
+    <number>0</number>
+    <class>9</class>
+    <subclass>0</subclass>
+    <protocol>0</protocol>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_1d6b_1_0000_00_1a_1</name>
+  <parent>pci_8086_2835</parent>
+  <driver>
+    <name>usb</name>
+  </driver>
+  <capability type='usb_device'>
+    <bus>4</bus>
+    <device>1</device>
+    <product id='0x0001'>1.1 root hub</product>
+    <vendor id='0x1d6b'>Linux Foundation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_1d6b_1_0000_00_1a_1_if0</name>
+  <parent>usb_device_1d6b_1_0000_00_1a_1</parent>
+  <driver>
+    <name>hub</name>
+  </driver>
+  <capability type='usb'>
+    <number>0</number>
+    <class>9</class>
+    <subclass>0</subclass>
+    <protocol>0</protocol>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_1d6b_1_0000_00_1d_0</name>
+  <parent>pci_8086_2830</parent>
+  <driver>
+    <name>usb</name>
+  </driver>
+  <capability type='usb_device'>
+    <bus>5</bus>
+    <device>1</device>
+    <product id='0x0001'>1.1 root hub</product>
+    <vendor id='0x1d6b'>Linux Foundation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_1d6b_1_0000_00_1d_0_if0</name>
+  <parent>usb_device_1d6b_1_0000_00_1d_0</parent>
+  <driver>
+    <name>hub</name>
+  </driver>
+  <capability type='usb'>
+    <number>0</number>
+    <class>9</class>
+    <subclass>0</subclass>
+    <protocol>0</protocol>
   </capability>
 </device>
 
@@ -1393,6 +2065,7 @@
   </capability>
 </device>
 
+
 <device>
   <name>usb_device_781_5151_2004453082054CA1BEEE</name>
   <parent>usb_device_1d6b_2_0000_00_1a_7</parent>
@@ -1403,6 +2076,67 @@
     <vendor id='0x0781'>SanDisk Corp.</vendor>
   </capability>
 </device>
+
+
+<device>
+  <name>usb_device_1d6b_1_0000_00_1d_2</name>
+  <parent>pci_8086_2832</parent>
+  <driver>
+    <name>usb</name>
+  </driver>
+  <capability type='usb_device'>
+    <bus>7</bus>
+    <device>1</device>
+    <product id='0x0001'>1.1 root hub</product>
+    <vendor id='0x1d6b'>Linux Foundation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_1d6b_1_0000_00_1d_2_if0</name>
+  <parent>usb_device_1d6b_1_0000_00_1d_2</parent>
+  <driver>
+    <name>hub</name>
+  </driver>
+  <capability type='usb'>
+    <number>0</number>
+    <class>9</class>
+    <subclass>0</subclass>
+    <protocol>0</protocol>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_1d6b_2_0000_00_1a_7</name>
+  <parent>pci_8086_283a</parent>
+  <driver>
+    <name>usb</name>
+  </driver>
+  <capability type='usb_device'>
+    <bus>1</bus>
+    <device>1</device>
+    <product id='0x0002'>2.0 root hub</product>
+    <vendor id='0x1d6b'>Linux Foundation</vendor>
+  </capability>
+</device>
+
+
+<device>
+  <name>usb_device_1d6b_2_0000_00_1a_7_if0</name>
+  <parent>usb_device_1d6b_2_0000_00_1a_7</parent>
+  <driver>
+    <name>hub</name>
+  </driver>
+  <capability type='usb'>
+    <number>0</number>
+    <class>9</class>
+    <subclass>0</subclass>
+    <protocol>0</protocol>
+  </capability>
+</device>
+
 
 <device>
   <name>usb_device_1d6b_2_0000_00_1d_7</name>
@@ -1520,8 +2254,8 @@
   </capability>
 </device>
 
-<!-- NPIV and fibrechannel -->
 
+<!-- NPIV and fibrechannel -->
 <device>
   <name>pci_8086_25f8</name>
   <parent>computer</parent>
@@ -1537,6 +2271,7 @@
     <vendor id='0x8086'>Intel Corporation</vendor>
   </capability>
 </device>
+
 
 <device>
   <name>pci_10df_fe00_0</name>
@@ -1554,6 +2289,7 @@
   </capability>
 </device>
 
+
 <device>
   <name>pci_10df_fe00_0_scsi_host</name>
   <parent>pci_10df_fe00_0</parent>
@@ -1566,10 +2302,18 @@
     <capability type='vport_ops' />
   </capability>
 </device>
-
 <!-- End NPIV block -->
 
+
+
+
+
+
+
+<!-- ########## -->
 <!-- Interfaces -->
+<!-- ########## -->
+
 
 <interface type='ethernet' name='eth0'>
   <start mode='none'/>
@@ -1595,6 +2339,7 @@
   <mac address='00:AA:CC:BB:AA:BB'/>
 </interface>
 
+
 <!-- backup bond -->
 <interface type="bond" name="bond0">
   <start mode="none"/>
@@ -1610,6 +2355,7 @@
 </interface>
 <interface type="ethernet" name="eth-bond0-1"/>
 <interface type="ethernet" name="eth-bond0-2"/>
+
 
 <!-- Plain bridge -->
 <interface type="bridge" name="brplain">
@@ -1630,7 +2376,15 @@
   <start mode="onboot"/>
   <mtu size="1500"/>
   <bridge stp="off"/>
+  <protocol family='ipv4'>
+    <dhcp/>
+  </protocol>
+  <protocol family='ipv6'>
+    <autoconf/>
+    <dhcp/>
+  </protocol>
 </interface>
+
 
 <!-- Bridge using vlan -->
 <interface type="bridge" name="brvlan">
@@ -1651,11 +2405,13 @@
   <start mode="onboot"/>
   <protocol family="ipv4">
     <dhcp peerdns="no"/>
+    <ip address='192.168.1.2'/>
   </protocol>
   <vlan tag="42">
     <interface name="eth0"/>
   </vlan>
 </interface>
+
 
 <!-- Bridge using bond -->
 <interface type="bond" name="bond-brbond">
@@ -1665,10 +2421,17 @@
     <interface type="ethernet" name="brbond-eth0"/>
     <interface type="ethernet" name="brbond-eth1"/>
   </bond>
+  <protocol family='ipv6'>
+    <ip address='3ffe:ffff:0:5::1' prefix='128'/>
+    <ip address='3ffe:ffff:0:5::3' prefix='128'/>
+    <ip address='3ffe:ffff:0:5::5' prefix='128'/>
+  </protocol>
 </interface>
 <interface type="ethernet" name="eth-bond-brbond0"/>
 <interface type="ethernet" name="eth-bond-brbond1"/>
 
+
+<!-- Multi interface bridge -->
 <interface type="bridge" name="brbond">
   <start mode="onboot"/>
   <mtu size="1500"/>
@@ -1682,9 +2445,12 @@
       </bond>
     </interface>
   </bridge>
+  <protocol family='ipv4'>
+    <ip address='192.168.0.5' prefix='24'/>
+    <route gateway='192.168.0.1'/>
+  </protocol>
 </interface>
 
-<!-- Multi interface bridge -->
 
 <!-- Unused vlan -->
 <interface type="vlan" name="vlaneth1.3">
@@ -1698,6 +2464,5 @@
 <!-- Unused interface -->
 <interface type="ethernet" name="unusedeth0"/>
 
-<!-- End interfaces -->
 
 </node>

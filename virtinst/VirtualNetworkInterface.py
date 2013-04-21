@@ -341,8 +341,8 @@ class VirtualNetworkInterface(VirtualDevice):
 
         if (_countMACaddr(vms, mac) > 0 or
             _countMACaddr(inactive_vm, mac) > 0):
-            return (True, _("The MAC address you entered is already in use "
-                            "by another virtual machine."))
+            return (True, _("The MAC address '%s' is in use "
+                            "by another virtual machine.") % mac)
 
         return (False, None)
 

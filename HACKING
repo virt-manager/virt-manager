@@ -22,8 +22,14 @@ to see a code coverage report.
 
 'test*' have a --debug option if you are hitting problems.
 
-For translations, please sign up for transifex.com and contribute to the
-virt-manager project.
+One useful way to manually test virt-manager's UI is using libvirt's
+unit test driver. From the source directory, Launch virt-manager like:
+
+  virt-manager --connect test://$PWD/tests/testdriver.xml
+
+This testdriver has many fake XML definitions that can be used to see
+each bit of virt-manager's UI. It also enables testing the various wizards
+without having to alter your host virt config.
 
 
   Submitting patches
@@ -41,3 +47,10 @@ For an web view, see:
 Patches should be sent to the mailing list (see README for details). Using
 git format-patch/send-email is preferred, but an attachment with
 format-patch output is fine too.
+
+
+  Translations
+  ============
+
+For translations, please sign up for transifex.com and contribute to the
+virt-manager project.
