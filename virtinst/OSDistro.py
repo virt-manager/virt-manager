@@ -1,7 +1,7 @@
 #
 # Represents OS distribution specific install data
 #
-# Copyright 2006-2007  Red Hat, Inc.
+# Copyright 2006-2007, 2013  Red Hat, Inc.
 # Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -268,9 +268,13 @@ class Distro:
         kernelpath = None
         initrdpath = None
         if self._hasTreeinfo(fetcher, progresscb):
-            kernelpath = self._getTreeinfoMedia("kernel")
-            initrdpath = self._getTreeinfoMedia("initrd")
-        else:
+            try:
+                kernelpath = self._getTreeinfoMedia("kernel")
+                initrdpath = self._getTreeinfoMedia("initrd")
+            except ConfigParser.NoSectionError:
+                pass
+
+        if not kernelpath or not initrdpath:
             # fall back to old code
             if self.type is None or self.type == "hvm":
                 paths = self._hvm_kernel_paths
