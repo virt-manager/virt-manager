@@ -30,11 +30,6 @@ import virtinst.cli
 
 from tests import utils
 
-virtinstall = imp.load_source("virtinstall", "virt-install")
-virtimage = imp.load_source("virtimage", "virt-image")
-virtclone = imp.load_source("virtclone", "virt-clone")
-virtconvert = imp.load_source("virtconvert", "virt-convert")
-
 os.environ["VIRTCONV_TEST_NO_DISK_CONVERSION"] = "1"
 os.environ["LANG"] = "en_US.UTF-8"
 
@@ -132,6 +127,27 @@ test_files = {
     'VC_IMG2'           : "tests/image-xml/image-format.xml",
     'VMX_IMG1'          : "%s/vmx/test1.vmx" % vcdir,
 }
+
+
+_cleanup_imports = []
+
+
+def _import(name, path):
+    _cleanup_imports.append(path + "c")
+    return imp.load_source(name, path)
+
+
+def _cleanup_imports_cb():
+    for f in _cleanup_imports:
+        if os.path.exists(f):
+            os.unlink(f)
+
+
+atexit.register(_cleanup_imports_cb)
+virtinstall = _import("virtinstall", "virt-install")
+virtimage = _import("virtimage", "virt-image")
+virtclone = _import("virtclone", "virt-clone")
+virtconvert = _import("virtconvert", "virt-convert")
 
 
 ######################
