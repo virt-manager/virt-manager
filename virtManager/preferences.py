@@ -37,7 +37,6 @@ class vmmPreferences(vmmGObjectUI):
 
         self.refresh_view_system_tray()
         self.refresh_update_interval()
-        self.refresh_history_length()
         self.refresh_console_accels()
         self.refresh_console_scaling()
         self.refresh_sound_local()
@@ -58,7 +57,6 @@ class vmmPreferences(vmmGObjectUI):
         self.builder.connect_signals({
             "on_prefs_system_tray_toggled" : self.change_view_system_tray,
             "on_prefs_stats_update_interval_changed": self.change_update_interval,
-            "on_prefs_stats_history_length_changed": self.change_history_length,
             "on_prefs_console_accels_toggled": self.change_console_accels,
             "on_prefs_console_scaling_changed": self.change_console_scaling,
             "on_prefs_close_clicked": self.close,
@@ -104,9 +102,6 @@ class vmmPreferences(vmmGObjectUI):
     def refresh_update_interval(self):
         self.widget("prefs-stats-update-interval").set_value(
             self.config.get_stats_update_interval())
-    def refresh_history_length(self):
-        self.widget("prefs-stats-history-len").set_value(
-            self.config.get_stats_history_length())
 
     def refresh_console_accels(self):
         self.widget("prefs-console-accels").set_active(
@@ -262,8 +257,6 @@ class vmmPreferences(vmmGObjectUI):
 
     def change_update_interval(self, src):
         self.config.set_stats_update_interval(src.get_value_as_int())
-    def change_history_length(self, src):
-        self.config.set_stats_history_length(src.get_value_as_int())
 
     def change_console_accels(self, src):
         self.config.set_console_accels(src.get_active())

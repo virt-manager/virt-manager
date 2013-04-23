@@ -341,26 +341,17 @@ class vmmConfig(object):
 
 
     # Stats history and interval length
+    def get_stats_history_length(self):
+        return 120
     def get_stats_update_interval(self):
         interval = self.conf.get("/stats/update-interval")
         if interval < 1:
             return 1
         return interval
-    def get_stats_history_length(self):
-        history = self.conf.get("/stats/history-length")
-        if history < 10:
-            return 10
-        return history
-
     def set_stats_update_interval(self, interval):
         self.conf.set("/stats/update-interval", interval)
-    def set_stats_history_length(self, length):
-        self.conf.set("/stats/history-length", length)
-
     def on_stats_update_interval_changed(self, cb):
         return self.conf.notify_add("/stats/update-interval", cb)
-    def on_stats_history_length_changed(self, cb):
-        return self.conf.notify_add("/stats/history-length", cb)
 
 
     # Disable/Enable different stats polling
