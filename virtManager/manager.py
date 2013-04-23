@@ -41,19 +41,19 @@ from virtManager import util as util
 GRAPH_LEN = 40
 
 # fields in the tree model data set
-ROW_HANDLE = 0
-ROW_NAME = 1
-ROW_MARKUP = 2
-ROW_STATUS = 3
-ROW_STATUS_ICON = 4
-ROW_KEY = 5
-ROW_HINT = 6
-ROW_IS_CONN = 7
-ROW_IS_CONN_CONNECTED = 8
-ROW_IS_VM = 9
-ROW_IS_VM_RUNNING = 10
-ROW_COLOR = 11
-ROW_INSPECTION_OS_ICON = 12
+(ROW_HANDLE,
+ROW_NAME,
+ROW_MARKUP,
+ROW_STATUS,
+ROW_STATUS_ICON,
+ROW_KEY,
+ROW_HINT,
+ROW_IS_CONN,
+ROW_IS_CONN_CONNECTED,
+ROW_IS_VM,
+ROW_IS_VM_RUNNING,
+ROW_COLOR,
+ROW_INSPECTION_OS_ICON) = range(13)
 
 # Columns in the tree view
 COL_NAME = 0
@@ -386,12 +386,22 @@ class vmmManager(vmmGObjectUI):
         vmlist = self.widget("vm-list")
         self.widget("vm-notebook").set_show_tabs(False)
 
-        # Handle, name, markup, status, status icon name, key/uuid, hint,
-        # is conn, is conn connected, is vm, is vm running, fg color,
-        # inspection icon
-        model = Gtk.TreeStore(object, str, str, str, str, str, str,
-                              bool, bool, bool, bool, Gdk.Color,
-                              GdkPixbuf.Pixbuf)
+        rowtypes = []
+        rowtypes.insert(ROW_HANDLE, object)  # backing object
+        rowtypes.insert(ROW_NAME, str)  # object name
+        rowtypes.insert(ROW_MARKUP, str)  # row markup text
+        rowtypes.insert(ROW_STATUS, str)  # object status string
+        rowtypes.insert(ROW_STATUS_ICON, str)  # status icon name
+        rowtypes.insert(ROW_KEY, str)  # key/uuid
+        rowtypes.insert(ROW_HINT, str)  # row tooltip
+        rowtypes.insert(ROW_IS_CONN, bool)  # if object is a connection
+        rowtypes.insert(ROW_IS_CONN_CONNECTED, bool)  # if conn is connected
+        rowtypes.insert(ROW_IS_VM, bool)  # if row is VM
+        rowtypes.insert(ROW_IS_VM_RUNNING, bool)  # if VM is running
+        rowtypes.insert(ROW_COLOR, Gdk.Color)  # row markup color
+        rowtypes.insert(ROW_INSPECTION_OS_ICON, GdkPixbuf.Pixbuf) # OS icon
+
+        model = Gtk.TreeStore(*rowtypes)
         vmlist.set_model(model)
         vmlist.set_tooltip_column(ROW_HINT)
         vmlist.set_headers_visible(True)
