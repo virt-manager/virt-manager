@@ -399,7 +399,7 @@ class vmmManager(vmmGObjectUI):
         rowtypes.insert(ROW_IS_VM, bool)  # if row is VM
         rowtypes.insert(ROW_IS_VM_RUNNING, bool)  # if VM is running
         rowtypes.insert(ROW_COLOR, str)  # row markup color string
-        rowtypes.insert(ROW_INSPECTION_OS_ICON, GdkPixbuf.Pixbuf) # OS icon
+        rowtypes.insert(ROW_INSPECTION_OS_ICON, GdkPixbuf.Pixbuf)  # OS icon
 
         model = Gtk.TreeStore(*rowtypes)
         vmlist.set_model(model)
