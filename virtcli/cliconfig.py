@@ -51,7 +51,9 @@ def _setup_gsettings_path(schemadir):
     import subprocess
 
     os.environ["GSETTINGS_SCHEMA_DIR"] = schemadir
-    subprocess.call(["glib-compile-schemas", schemadir])
+    ret = subprocess.call(["glib-compile-schemas", "--strict", schemadir])
+    if ret != 0:
+        raise RuntimeError("Failed to compile local gsettings schemas")
 
 
 __version__ = "0.9.100"
