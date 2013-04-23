@@ -398,7 +398,7 @@ class vmmManager(vmmGObjectUI):
         rowtypes.insert(ROW_IS_CONN_CONNECTED, bool)  # if conn is connected
         rowtypes.insert(ROW_IS_VM, bool)  # if row is VM
         rowtypes.insert(ROW_IS_VM_RUNNING, bool)  # if VM is running
-        rowtypes.insert(ROW_COLOR, Gdk.Color)  # row markup color
+        rowtypes.insert(ROW_COLOR, str)  # row markup color string
         rowtypes.insert(ROW_INSPECTION_OS_ICON, GdkPixbuf.Pixbuf) # OS icon
 
         model = Gtk.TreeStore(*rowtypes)
@@ -430,7 +430,7 @@ class vmmManager(vmmGObjectUI):
         name_txt = Gtk.CellRendererText()
         nameCol.pack_start(name_txt, True)
         nameCol.add_attribute(name_txt, 'markup', ROW_MARKUP)
-        nameCol.add_attribute(name_txt, 'foreground-gdk', ROW_COLOR)
+        nameCol.add_attribute(name_txt, 'foreground', ROW_COLOR)
         nameCol.set_sort_column_id(COL_NAME)
 
         def make_stats_column(title, datafunc, is_visible, colnum):
@@ -806,10 +806,9 @@ class vmmManager(vmmGObjectUI):
         return markup
 
     def _build_conn_color(self, conn):
-        color = Gdk.Color(0, 0, 0)
+        color = "#000000"
         if conn.state == conn.STATE_DISCONNECTED:
-            # Color code #5b5b5b
-            color = Gdk.Color(23296, 23296, 23296)
+            color = "#5b5b5b"
         return color
 
     def _build_vm_markup(self, row):
