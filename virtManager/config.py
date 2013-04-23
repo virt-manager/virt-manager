@@ -534,22 +534,21 @@ class vmmConfig(object):
 
 
     # Default directory location dealings
-    def _get_default_dir_key(self, typ):
-        if (typ == self.CONFIG_DIR_ISO_MEDIA or
-            typ == self.CONFIG_DIR_FLOPPY_MEDIA):
+    def _get_default_dir_key(self, _type):
+        if (_type in [self.CONFIG_DIR_ISO_MEDIA,
+                      self.CONFIG_DIR_FLOPPY_MEDIA]):
             return "media"
-        return typ
+        if (_type in [self.CONFIG_DIR_IMAGE,
+                      self.CONFIG_DIR_SCREENSHOT]):
+            return _type
+        return None
 
     def get_default_directory(self, conn, _type):
-        if not _type:
-            logging.error("Unknown type '%s' for get_default_directory", _type)
-            return
-
         key = self._get_default_dir_key(_type)
-        try:
-            path = self.conf.get("/paths/default-%s-path" % key)
-        except:
-            path = None
+        path = None
+
+        if key:
+            path = self.conf.get("/paths/%s-default" % key)
 
         if not path:
             if (_type == self.CONFIG_DIR_IMAGE or
@@ -560,16 +559,16 @@ class vmmConfig(object):
                 _type == self.CONFIG_DIR_RESTORE):
                 path = self.get_default_save_dir(conn)
 
-        logging.debug("get_default_directory(%s): returning %s", _type, path)
+        logging.debug("directory for type=%s returning=%s", _type, path)
         return path
 
     def set_default_directory(self, folder, _type):
-        if not _type:
-            logging.error("Unknown type for set_default_directory")
+        key = self._get_default_dir_key(_type)
+        if not key:
             return
 
-        logging.debug("set_default_directory(%s): saving %s", _type, folder)
-        self.conf.set("/paths/default-%s-path" % _type, folder)
+        logging.debug("saving directory for type=%s to %s", key, folder)
+        self.conf.set("/paths/%s-default" % key, folder)
 
     def get_default_image_dir(self, conn):
         if conn.is_xen():

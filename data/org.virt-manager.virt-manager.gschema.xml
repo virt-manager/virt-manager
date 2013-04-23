@@ -191,28 +191,22 @@
       <description>Use selected format when creating new disk images in new VM wizard</description>
     </key>
   </schema>
-  <schema id="org.virt-manager.virt-manager.paths" path="/org/virt-manager/virt-manager/paths/">
-    <key name="default-image-path" type="s">
+
+  <schema id="org.virt-manager.virt-manager.paths"
+          path="/org/virt-manager/virt-manager/paths/">
+    <key name="image-default" type="s">
       <default>''</default>
       <summary>Default image path</summary>
       <description>Default path for choosing VM images</description>
     </key>
-    <key name="default-media-path" type="s">
+
+    <key name="media-default" type="s">
       <default>''</default>
       <summary>Default media path</summary>
       <description>Default path for choosing media</description>
     </key>
-    <key name="default-save-path" type="s">
-      <default>''</default>
-      <summary>Default save domain path</summary>
-      <description>Default path for saving VM snapshots</description>
-    </key>
-    <key name="default-restore-path" type="s">
-      <default>''</default>
-      <summary>Default restore path</summary>
-      <description>Default path for stored VM snapshots</description>
-    </key>
-    <key name="default-screenshot-path" type="s">
+
+    <key name="screenshot-default" type="s">
       <default>''</default>
       <summary>Default screenshot path</summary>
       <description>Default path for saving screenshots from VMs</description>
