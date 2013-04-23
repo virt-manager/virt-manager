@@ -270,19 +270,25 @@ def lookup_nodedev(vmmconn, hostdev):
             return None
         return getattr(node, attr)
 
-    devtype     = hostdev.type
-    vendor_id   = hostdev.vendor or -1
-    product_id  = hostdev.product or -1
-    device      = intify(hostdev.device, True)
-    bus         = intify(hostdev.bus, True)
-    domain      = intify(hostdev.domain, True)
-    func        = intify(hostdev.function, True)
-    slot        = intify(hostdev.slot, True)
+    devtype = hostdev.type
     found_dev = None
+
+    vendor_id = product_id = bus = device = \
+        domain = slot = func = None
 
     # For USB we want a device, not a bus
     if devtype == 'usb':
-        devtype = 'usb_device'
+        devtype    = 'usb_device'
+        vendor_id  = hostdev.vendor or -1
+        product_id = hostdev.product or -1
+        bus        = intify(hostdev.bus)
+        device     = intify(hostdev.device)
+
+    elif devtype == 'pci':
+        domain     = intify(hostdev.domain, True)
+        bus        = intify(hostdev.bus, True)
+        slot       = intify(hostdev.slot, True)
+        func       = intify(hostdev.function, True)
 
     devs = vmmconn.get_nodedevs(devtype, None)
     for dev in devs:
