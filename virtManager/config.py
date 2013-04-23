@@ -447,6 +447,7 @@ class vmmConfig(object):
 
     # URL/Media path history
     def _url_add_helper(self, gconf_path, url):
+        maxlength = 10
         urls = self.conf.get(gconf_path)
         if urls is None:
             urls = []
@@ -454,8 +455,7 @@ class vmmConfig(object):
         if urls.count(url) == 0 and len(url) > 0 and not url.isspace():
             # The url isn't already in the list, so add it
             urls.insert(0, url)
-            length = self.get_url_list_length()
-            if len(urls) > length:
+            if len(urls) > maxlength:
                 del urls[len(urls) - 1]
             self.conf.set(gconf_path, urls)
 
@@ -473,13 +473,6 @@ class vmmConfig(object):
     def get_iso_paths(self):
         return self.conf.get("/urls/isos")
 
-    def get_url_list_length(self):
-        length = self.conf.get("/urls/url-list-length")
-        if length < 5:
-            return 5
-        return length
-    def set_url_list_length(self, length):
-        self.conf.set("/urls/url-list-length", length)
 
     # Whether to ask about fixing path permissions
     def add_perms_fix_ignore(self, pathlist):
