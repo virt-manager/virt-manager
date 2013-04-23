@@ -460,16 +460,16 @@ class vmmConfig(object):
             self.conf.set(gconf_path, urls)
 
     def add_media_url(self, url):
-        self._url_add_helper("/urls/media", url)
+        self._url_add_helper("/urls/urls", url)
     def add_kickstart_url(self, url):
-        self._url_add_helper("/urls/kickstart", url)
+        self._url_add_helper("/urls/kickstarts", url)
     def add_iso_path(self, path):
         self._url_add_helper("/urls/isos", path)
 
     def get_media_urls(self):
-        return self.conf.get("/urls/media")
+        return self.conf.get("/urls/urls")
     def get_kickstart_urls(self):
-        return self.conf.get("/urls/kickstart")
+        return self.conf.get("/urls/kickstarts")
     def get_iso_paths(self):
         return self.conf.get("/urls/isos")
 
