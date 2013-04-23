@@ -1044,11 +1044,6 @@ class vmmCreate(vmmGObjectUI):
 
         return net_type, net_src, macaddr.strip()
 
-    def get_config_sound(self):
-        if self.conn.is_remote():
-            return self.config.get_remote_sound()
-        return self.config.get_local_sound()
-
     def get_config_graphics_type(self):
         return self.config.get_graphics_type()
 
@@ -1442,7 +1437,8 @@ class vmmCreate(vmmGObjectUI):
         return virtinst.VirtualVideoDevice(conn=guest.conn)
 
     def get_sound_device(self, guest):
-        if not self.get_config_sound() or guest.installer.is_container():
+        if (not self.config.get_new_vm_sound() or
+            guest.installer.is_container()):
             return
         return virtinst.VirtualAudio(conn=guest.conn)
 
@@ -1827,22 +1823,6 @@ class vmmCreate(vmmGObjectUI):
 
         self.rebuild_guest()
         guest = self.guest
-        disks = guest.get_devices("disk")
-        disk = disks and disks[0]
-
-        logging.debug("Creating a VM %s" % guest.name +
-                      "\n  Type: %s,%s" % (guest.type,
-                                           guest.installer.os_type) +
-                      "\n  UUID: %s" % guest.uuid +
-                      "\n  Install Source: %s" % guest.location +
-                      "\n  OS: %s:%s" % (guest.os_type, guest.os_variant) +
-                      "\n  Kernel args: %s" % guest.extraargs +
-                      "\n  Memory: %s" % guest.memory +
-                      "\n  Max Memory: %s" % guest.maxmemory +
-                      "\n  # VCPUs: %s" % str(guest.vcpus) +
-                      "\n  Filesize: %s" % (disk and disk.size) or "None" +
-                      "\n  Disk image: %s" % (disk and disk.path) or "None" +
-                      "\n  Audio?: %s" % str(self.get_config_sound()))
 
         # Start the install
         self.failed_guest = None

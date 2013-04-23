@@ -39,8 +39,7 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_update_interval()
         self.refresh_console_accels()
         self.refresh_console_scaling()
-        self.refresh_sound_local()
-        self.refresh_sound_remote()
+        self.refresh_new_vm_sound()
         self.refresh_graphics_type()
         self.refresh_storage_format()
         self.refresh_disk_poll()
@@ -61,8 +60,7 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_console_scaling_changed": self.change_console_scaling,
             "on_prefs_close_clicked": self.close,
             "on_vmm_preferences_delete_event": self.close,
-            "on_prefs_sound_local_toggled": self.change_local_sound,
-            "on_prefs_sound_remote_toggled": self.change_remote_sound,
+            "on_prefs_new_vm_sound_toggled": self.change_new_vm_sound,
             "on_prefs_stats_enable_disk_toggled": self.change_disk_poll,
             "on_prefs_stats_enable_net_toggled": self.change_net_poll,
             "on_prefs_confirm_forcepoweroff_toggled": self.change_confirm_forcepoweroff,
@@ -112,12 +110,9 @@ class vmmPreferences(vmmGObjectUI):
             val = 0
         self.widget("prefs-console-scaling").set_active(val)
 
-    def refresh_sound_local(self):
-        self.widget("prefs-sound-local").set_active(
-            self.config.get_local_sound())
-    def refresh_sound_remote(self):
-        self.widget("prefs-sound-remote").set_active(
-            self.config.get_remote_sound())
+    def refresh_new_vm_sound(self):
+        self.widget("prefs-new-vm-sound").set_active(
+            self.config.get_new_vm_sound())
     def refresh_graphics_type(self):
         combo = self.widget("prefs-graphics-type")
         model = combo.get_model()
@@ -263,10 +258,8 @@ class vmmPreferences(vmmGObjectUI):
     def change_console_scaling(self, box):
         self.config.set_console_scaling(box.get_active())
 
-    def change_local_sound(self, src):
-        self.config.set_local_sound(src.get_active())
-    def change_remote_sound(self, src):
-        self.config.set_remote_sound(src.get_active())
+    def change_new_vm_sound(self, src):
+        self.config.set_new_vm_sound(src.get_active())
 
     def change_disk_poll(self, src):
         self.config.set_stats_enable_disk_poll(src.get_active())

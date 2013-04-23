@@ -162,28 +162,21 @@
     </key>
   </schema>
 
-  <schema id="org.virt-manager.virt-manager.details" path="/org/virt-manager/virt-manager/details/">
-
+  <schema id="org.virt-manager.virt-manager.details"
+          path="/org/virt-manager/virt-manager/details/">
     <key name="show-toolbar" type="b">
       <default>true</default>
       <summary>Whether to show VM button toolbar in Details display</summary>
       <description>Whether to show toolbar containing Virtual Machine action buttons (such as Run, Pause, Shutdown) in the details display</description>
     </key>
-
   </schema>
 
-  <schema id="org.virt-manager.virt-manager.new-vm" path="/org/virt-manager/virt-manager/new-vm/">
-
-    <key name="local-sound" type="b">
+  <schema id="org.virt-manager.virt-manager.new-vm"
+          path="/org/virt-manager/virt-manager/new-vm/">
+    <key name="add-sound" type="b">
       <default>true</default>
-      <summary>Install sound device for local VM</summary>
-      <description>Whether to install a sound device for local VMs or not</description>
-    </key>
-
-    <key name="remote-sound" type="b">
-      <default>false</default>
-      <summary>Install sound device for remote VM</summary>
-      <description>Whether to install a sound device for remote VMs or not</description>
+      <summary>Install sound device for new Vms</summary>
+      <description>Whether to install a sound device for new VMs</description>
     </key>
 
     <key name="graphics-type" type="s">

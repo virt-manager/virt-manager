@@ -407,15 +407,10 @@ class vmmConfig(object):
         self.conf.set("/details/window_height", h)
 
     # Create sound device for default guest
-    def get_local_sound(self):
-        return self.conf.get("/new-vm/local-sound")
-    def get_remote_sound(self):
-        return self.conf.get("/new-vm/remote-sound")
-
-    def set_local_sound(self, state):
-        self.conf.set("/new-vm/local-sound", state)
-    def set_remote_sound(self, state):
-        self.conf.set("/new-vm/remote-sound", state)
+    def get_new_vm_sound(self):
+        return self.conf.get("/new-vm/add-sound")
+    def set_new_vm_sound(self, state):
+        self.conf.set("/new-vm/add-sound", state)
 
     def get_graphics_type(self):
         ret = self.conf.get("/new-vm/graphics-type")
