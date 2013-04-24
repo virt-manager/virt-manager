@@ -527,14 +527,24 @@ def devAddressToNodedev(conn, addrstr):
     cmp_func, devtype = ret
 
     # Iterate over node devices and compare
+    count = 0
+    nodedev = None
+
     nodenames = conn.listDevices(devtype, 0)
     for name in nodenames:
-        nodedev = _lookupNodeName(conn, name)
-        if cmp_func(nodedev):
-            return nodedev
+        tmpnode = _lookupNodeName(conn, name)
+        if cmp_func(tmpnode):
+            nodedev = tmpnode
+            count += 1
 
-    raise ValueError(_("Did not find a matching node device for '%s'") %
-                     addrstr)
+    if count == 1:
+        return nodedev
+    elif count > 1:
+        raise ValueError(_("%s corresponds to multiple node devices") %
+                         addrstr)
+    elif count < 1:
+        raise ValueError(_("Did not find a matching node device for '%s'") %
+                         addrstr)
 
 
 def parse(xml):

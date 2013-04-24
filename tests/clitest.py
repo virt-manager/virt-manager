@@ -640,7 +640,8 @@ vinst.add_invalid("redirdev", "--redirdev usb,type=tcp,server=:399")  # Missing 
 
 vinst.add_category("hostdev", "--noautoconsole --nographics --nodisks --pxe")
 vinst.add_valid("hostdev", "--host-device usb_device_781_5151_2004453082054CA1BEEE")  # Host dev by libvirt name
-vinst.add_valid("hostdev", "--host-device 001.003 --host-device 15:0.1 --host-device 2:15:0.2 --host-device 0:15:0.3 --host-device 0x0781:0x5151 --host-device 1d6b:2")  # Many hostdev parsing types
+vinst.add_valid("hostdev", "--host-device 001.003 --host-device 15:0.1 --host-device 2:15:0.2 --host-device 0:15:0.3 --host-device 0x0781:0x5151")  # Many hostdev parsing types
+vinst.add_invalid("hostdev", "--host-device 1d6b:2")  # multiple USB devices with identical vendorId and productId
 vinst.add_invalid("hostdev", "--host-device pci_8086_2850_scsi_host_scsi_host")  # Unsupported hostdev type
 vinst.add_invalid("hostdev", "--host-device foobarhostdev")  # Unknown hostdev
 vinst.add_invalid("hostdev", "--host-device 300:400")  # Parseable hostdev, but unknown digits
