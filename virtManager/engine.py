@@ -72,12 +72,6 @@ DETAILS_CONFIG = 2
 DETAILS_CONSOLE = 3
 
 
-def _safe_getattr(obj, name):
-    if not hasattr(obj, name):
-        return None
-    return getattr(obj, name)
-
-
 class vmmEngine(vmmGObject):
     __gsignals__ = {
         "conn-added": (GObject.SignalFlags.RUN_FIRST, None, [object]),
@@ -295,9 +289,9 @@ class vmmEngine(vmmGObject):
             except KeyboardInterrupt:
                 raise
             except libvirt.libvirtError, e:
-                from_remote = _safe_getattr(libvirt, "VIR_FROM_REMOTE")
-                from_rpc = _safe_getattr(libvirt, "VIR_FROM_RPC")
-                sys_error = _safe_getattr(libvirt, "VIR_ERR_SYSTEM_ERROR")
+                from_remote = getattr(libvirt, "VIR_FROM_REMOTE", None)
+                from_rpc = getattr(libvirt, "VIR_FROM_RPC", None)
+                sys_error = getattr(libvirt, "VIR_ERR_SYSTEM_ERROR", None)
 
                 dom = e.get_error_domain()
                 code = e.get_error_code()
