@@ -746,6 +746,7 @@ vclon.add_valid("misc", "-o test --auto-clone")  # Auto flag, no storage
 vclon.add_valid("misc", "--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ storage,
 vclon.add_valid("misc", "--original-xml %(CLONE_STORAGE_XML)s --auto-clone")  # Auto flag w/ managed storage,
 vclon.add_valid("misc", "-o test-for-clone --auto-clone --clone-running")  # Auto flag, actual VM, skip state check
+vclon.add_valid("misc", "-o test-clone-simple -n newvm --preserve-data --file /default-pool/default-vol --clone-running --force")  # Preserve data shouldn't complain about existing volume
 vclon.add_invalid("misc", "--auto-clone# Auto flag, actual VM, without state skip ")  # Just the auto flag
 vclon.add_invalid("misc", "-o test-for-clone --auto-clone")
 

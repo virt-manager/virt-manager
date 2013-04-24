@@ -425,6 +425,53 @@ class CloneDesign(object):
                 raise RuntimeError(_("Domain with devices to clone must be "
                                      "paused or shutoff."))
 
+    def _setup_disk_clone_destination(self, orig_disk, clone_disk):
+        """
+        Helper that validates the new path location
+        """
+        if self.preserve_dest_disks:
+            return
+
+        if clone_disk.vol_object:
+            # XXX We could always do this with vol upload?
+
+            # Special case: non remote cloning of a guest using
+            # managed block devices: fall back to local cloning if
+            # we have permissions to do so. This validation check
+            # caused a few bug reports in a short period of time,
+            # so must be a common case.
+            if (clone_disk.is_remote() or
+                clone_disk.type != clone_disk.TYPE_BLOCK or
+                not orig_disk.path or
+                not os.access(orig_disk.path, os.R_OK) or
+                not clone_disk.path or
+                not os.access(clone_disk.path, os.W_OK)):
+                raise RuntimeError(
+                    _("Clone onto existing storage volume is not "
+                      "currently supported: '%s'") % clone_disk.path)
+
+        # Sync 'size' between the two
+        if orig_disk.size:
+            clone_disk.size = orig_disk.size
+
+        # Setup proper cloning inputs for the new virtual disks
+        if orig_disk.vol_object and clone_disk.vol_install:
+
+            # Source and dest are managed. If they share the same pool,
+            # replace vol_install with a CloneVolume instance, otherwise
+            # simply set input_vol on the dest vol_install
+            if (clone_disk.vol_install.pool.name() ==
+                orig_disk.vol_object.storagePoolLookupByVolume().name()):
+                newname = clone_disk.vol_install.name
+                clone_disk.vol_install = Storage.CloneVolume(newname,
+                                                    orig_disk.vol_object)
+
+            else:
+                clone_disk.vol_install.input_vol = orig_disk.vol_object
+
+        else:
+            clone_disk.clone_path = orig_disk.path
+
 
     def setup_clone(self):
         """
@@ -476,45 +523,7 @@ class CloneDesign(object):
                 if disk.target == orig_disk.target:
                     xmldisk = disk
 
-            if clone_disk.vol_object:
-                # XXX We could always do this with vol upload?
-
-                # Special case: non remote cloning of a guest using
-                # managed block devices: fall back to local cloning if
-                # we have permissions to do so. This validation check
-                # caused a few bug reports in a short period of time,
-                # so must be a common case.
-                if (clone_disk.is_remote() or
-                    clone_disk.type != clone_disk.TYPE_BLOCK or
-                    not orig_disk.path or
-                    not os.access(orig_disk.path, os.R_OK) or
-                    not clone_disk.path or
-                    not os.access(clone_disk.path, os.W_OK)):
-                    raise RuntimeError(
-                        _("Clone onto existing storage volume is not "
-                          "currently supported: '%s'") % clone_disk.path)
-
-            # Sync 'size' between the two
-            if orig_disk.size:
-                clone_disk.size = orig_disk.size
-
-            # Setup proper cloning inputs for the new virtual disks
-            if orig_disk.vol_object and clone_disk.vol_install:
-
-                # Source and dest are managed. If they share the same pool,
-                # replace vol_install with a CloneVolume instance, otherwise
-                # simply set input_vol on the dest vol_install
-                if (clone_disk.vol_install.pool.name() ==
-                    orig_disk.vol_object.storagePoolLookupByVolume().name()):
-                    newname = clone_disk.vol_install.name
-                    clone_disk.vol_install = Storage.CloneVolume(newname,
-                                                        orig_disk.vol_object)
-
-                else:
-                    clone_disk.vol_install.input_vol = orig_disk.vol_object
-
-            elif not self.preserve_dest_disks:
-                clone_disk.clone_path = orig_disk.path
+            self._setup_disk_clone_destination(orig_disk, clone_disk)
 
             # Change the XML
             xmldisk.path = None
