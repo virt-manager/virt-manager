@@ -847,7 +847,11 @@ a USB2 controller with fallback USB1 support.
 
 =item B<model>
 
-Controller model.
+Controller model.  These may vary according to the hypervisor and its
+version.  Most commonly used models are e.g. B<auto>, B<virtio-scsi>
+for the B<scsi> controller, B<ehci> or B<none> for the B<usb>
+controller.  For full list and further details on controllers/models,
+see C<http://libvirt.org/formatdomain.html#elementsControllers>.
 
 =item B<address>
 
