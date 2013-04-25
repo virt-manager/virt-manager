@@ -97,10 +97,10 @@ class vmmGObject(GObject.GObject):
         if msg:
             msg += " "
         logging.debug("%s(%s %s)\n:%s",
-                      msg, self.object_key, self.refcount(),
+                      msg, self.object_key, self._refcount(),
                        "".join(traceback.format_stack()))
 
-    def refcount(self):
+    def _refcount(self):
         # Function generates 2 temporary refs, so adjust total accordingly
         return (sys.getrefcount(self) - 2)
 
