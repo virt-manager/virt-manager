@@ -237,7 +237,7 @@ class my_install(install):
 
 
 class my_sdist(sdist):
-    user_options = [
+    user_options = sdist.user_options + [
         ("snapshot", "s", "add snapshot id to version"),
     ]
 
