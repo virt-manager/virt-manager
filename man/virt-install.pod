@@ -868,14 +868,18 @@ Applicable to USB companion controllers, to define the master bus startport.
 
 =back
 
-Example:
+Examples:
 
 =over 4
 
+=item B<--controller usb,model=ich9-ehci1,address=0:0:4.7,index=0>
+
+Adds a ICH9 EHCI1 USB controller on PCI address 0:0:4.7
+
 =item B<--controller usb,model=ich9-uhci2,address=0:0:4.7,index=0,master=2>
 
-Adds a ICH9 USB companion controller on PCI address 0:0:4.7 with
-master bus 0 and first port 2.
+Adds a ICH9 UHCI2 USB companion controller for the previous master
+controller, ports start from port number 2.
 
 =back
 
