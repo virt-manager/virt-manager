@@ -2728,12 +2728,12 @@ class vmmDetails(vmmGObjectUI):
         dsk_txt = _("Disabled")
         net_txt = _("Disabled")
 
-        cpu_txt = "%d %%" % self.vm.host_cpu_time_percentage()
+        cpu_txt = "%d %%" % self.vm.guest_cpu_time_percentage()
 
-        vm_memory = self.vm.stats_memory()
-        host_memory = self.vm.conn.host_memory_size()
-        mem_txt = "%d MB of %d MB" % (int(round(vm_memory / 1024.0)),
-                                      int(round(host_memory / 1024.0)))
+        cur_vm_memory = self.vm.stats_memory()
+        vm_memory = self.vm.maximum_memory()
+        mem_txt = "%s of %s" % (util.pretty_mem(cur_vm_memory),
+                                util.pretty_mem(vm_memory))
 
         if self.config.get_stats_enable_disk_poll():
             dsk_txt = _dsk_rx_tx_text(self.vm.disk_read_rate(),
@@ -2749,7 +2749,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("overview-disk-usage-text").set_markup(dsk_txt)
 
         self.cpu_usage_graph.set_property("data_array",
-                                          self.vm.host_cpu_time_vector())
+                                          self.vm.guest_cpu_time_vector())
         self.memory_usage_graph.set_property("data_array",
                                              self.vm.stats_memory_vector())
         self.disk_io_graph.set_property("data_array",

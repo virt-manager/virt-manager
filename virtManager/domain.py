@@ -1261,7 +1261,7 @@ class vmmDomain(vmmLibvirtObject):
         if not self.is_active():
             curmem = 0
 
-        pcentCurrMem = curmem * 100.0 / self.conn.host_memory_size()
+        pcentCurrMem = curmem * 100.0 / self.maximum_memory()
         pcentCurrMem = max(0.0, min(pcentCurrMem, 100.0))
 
         return pcentCurrMem, curmem
