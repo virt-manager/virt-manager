@@ -712,6 +712,21 @@ class vmmConnection(vmmGObject):
 
         return retdevs
 
+    def get_nodedevs_number(self, devtype, vendor, product):
+        count = 0
+        devs = self.get_nodedevs(devtype)
+
+        for dev in devs:
+            if vendor == dev.vendor_id and \
+                product == dev.product_id:
+                count += 1
+
+        logging.debug("There are %d node devices with "
+                      "vendorId: %s, productId: %s",
+                       count, vendor, product)
+
+        return count
+
     def get_net_by_name(self, name):
         for net in self.nets.values():
             if net.get_name() == name:

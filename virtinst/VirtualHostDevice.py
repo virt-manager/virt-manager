@@ -28,7 +28,7 @@ class VirtualHostDevice(VirtualDevice):
 
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_HOSTDEV
 
-    def device_from_node(conn, name=None, nodedev=None):
+    def device_from_node(conn, name=None, nodedev=None, is_dup=False):
         """
         Convert the passed device name to a VirtualHostDevice
         instance, with proper error reporting. Name can be any of the
@@ -56,7 +56,7 @@ class VirtualHostDevice(VirtualDevice):
         if isinstance(nodeinst, NodeDeviceParser.PCIDevice):
             return VirtualHostDevicePCI(conn, nodedev=nodeinst)
         elif isinstance(nodeinst, NodeDeviceParser.USBDevice):
-            return VirtualHostDeviceUSB(conn, nodedev=nodeinst)
+            return VirtualHostDeviceUSB(conn, nodedev=nodeinst, is_dup=is_dup)
         elif isinstance(nodeinst, NodeDeviceParser.NetDevice):
             parentname = nodeinst.parent
             try:
@@ -198,11 +198,12 @@ class VirtualHostDevice(VirtualDevice):
 
 class VirtualHostDeviceUSB(VirtualHostDevice):
 
-    def __init__(self, conn, nodedev=None):
+    def __init__(self, conn, nodedev=None, is_dup=False):
         VirtualHostDevice.__init__(self, conn, nodedev)
 
         self.mode = "subsystem"
         self.type = "usb"
+        self.is_dup = is_dup
 
         self._set_from_nodedev(self._nodedev)
 
@@ -217,7 +218,7 @@ class VirtualHostDeviceUSB(VirtualHostDevice):
         self.vendor = nodedev.vendor_id
         self.product = nodedev.product_id
 
-        if not (self.vendor or self.product):
+        if self.is_dup:
             self.bus = nodedev.bus
             self.device = nodedev.device
 

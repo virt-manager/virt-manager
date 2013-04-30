@@ -281,7 +281,7 @@ class vmmAddHardware(vmmGObjectUI):
         # Host device list
         # model = [ Description, nodedev name ]
         host_dev = self.widget("host-device")
-        host_dev_model = Gtk.ListStore(str, str)
+        host_dev_model = Gtk.ListStore(str, str, str, object)
         host_dev.set_model(host_dev_model)
 
         host_col = Gtk.TreeViewColumn()
@@ -577,7 +577,7 @@ class vmmAddHardware(vmmGObjectUI):
                 if dev.name == subdev.parent:
                     prettyname = dev.pretty_name(subdev)
 
-            model.append([prettyname, dev.name])
+            model.append([prettyname, dev.name, devtype, dev])
 
         if len(model) == 0:
             model.append([_("No Devices Available"), None])
@@ -1403,15 +1403,32 @@ class vmmAddHardware(vmmGObjectUI):
     def validate_page_hostdev(self):
         ret = self.get_config_host_device_info()
         nodedev_name = ret and ret[1] or None
+        is_dup = False
 
         if nodedev_name is None:
             return self.err.val_err(_("Physical Device Required"),
                                     _("A device must be selected."))
 
+        devtype = ret[2]
+        nodedev = ret[3]
+        if devtype == "usb_device":
+            vendor = nodedev.vendor_id
+            product = nodedev.product_id
+            count = self.conn.get_nodedevs_number(devtype, vendor, product)
+            if not count:
+                raise RuntimeError(_("Could not find USB device "
+                                     "(vendorId: %s, productId: %s) "
+                                     % (vendor, product)))
+
+            if count > 1:
+                is_dup = True
+
         try:
             self._dev = virtinst.VirtualHostDevice.device_from_node(
                             conn=self.conn.vmm,
-                            name=nodedev_name)
+                            name=nodedev_name,
+                            nodedev=nodedev,
+                            is_dup=is_dup)
         except Exception, e:
             return self.err.val_err(_("Host device parameter error"), e)
 
