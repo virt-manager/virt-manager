@@ -33,6 +33,10 @@ CAPABILITY_TYPE_STORAGE = "storage"
 CAPABILITY_TYPE_SCSIBUS = "scsi_host"
 CAPABILITY_TYPE_SCSIDEV = "scsi"
 
+HOSTDEV_ADDR_TYPE_LIBVIRT = 0
+HOSTDEV_ADDR_TYPE_PCI = 1
+HOSTDEV_ADDR_TYPE_USB_BUSADDR = 2
+HOSTDEV_ADDR_TYPE_USB_VENPRO = 3
 
 class NodeDevice(object):
     def __init__(self, node):
@@ -440,7 +444,8 @@ def lookupNodeName(conn, name):
                            "enumeration."))
 
     try:
-        return _lookupNodeName(conn, name)
+        return (_lookupNodeName(conn, name),
+                 HOSTDEV_ADDR_TYPE_LIBVIRT)
     except libvirt.libvirtError, e:
         ret = _isAddressStr(name)
         if not ret:
@@ -451,6 +456,7 @@ def lookupNodeName(conn, name):
 
 def _isAddressStr(addrstr):
     cmp_func = None
+    addr_type = None
 
     try:
         # Determine addrstr type
@@ -475,6 +481,7 @@ def _isAddressStr(addrstr):
                         (int(nodedev.bus) == bus) and
                         (int(nodedev.slot) == slot))
             cmp_func = pci_cmp
+            addr_type = HOSTDEV_ADDR_TYPE_PCI
 
         elif addrstr.count(":"):
             devtype = CAPABILITY_TYPE_USBDEV
@@ -486,6 +493,7 @@ def _isAddressStr(addrstr):
                 return ((int(nodedev.vendor_id, 16) == vendor) and
                         (int(nodedev.product_id, 16) == product))
             cmp_func = usbprod_cmp
+            addr_type = HOSTDEV_ADDR_TYPE_USB_VENPRO
 
         elif addrstr.count("."):
             devtype = CAPABILITY_TYPE_USBDEV
@@ -497,11 +505,12 @@ def _isAddressStr(addrstr):
                 return ((int(nodedev.bus) == bus) and
                         (int(nodedev.device) == addr))
             cmp_func = usbaddr_cmp
+            addr_type = HOSTDEV_ADDR_TYPE_USB_BUSADDR
     except:
         logging.exception("Error parsing node device string.")
         return None
 
-    return cmp_func, devtype
+    return cmp_func, devtype, addr_type
 
 
 def devAddressToNodedev(conn, addrstr):
@@ -524,7 +533,7 @@ def devAddressToNodedev(conn, addrstr):
     if not ret:
         raise ValueError(_("Could not determine format of '%s'") % addrstr)
 
-    cmp_func, devtype = ret
+    cmp_func, devtype, addr_type = ret
 
     # Iterate over node devices and compare
     count = 0
@@ -538,7 +547,7 @@ def devAddressToNodedev(conn, addrstr):
             count += 1
 
     if count == 1:
-        return nodedev
+        return nodedev, addr_type
     elif count > 1:
         raise ValueError(_("%s corresponds to multiple node devices") %
                          addrstr)

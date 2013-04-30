@@ -49,7 +49,9 @@ class VirtualHostDevice(VirtualDevice):
         if nodedev:
             nodeinst = nodedev
         else:
-            nodeinst = NodeDeviceParser.lookupNodeName(conn, name)
+            nodeinst, addr_type = NodeDeviceParser.lookupNodeName(conn, name)
+            if addr_type == NodeDeviceParser.HOSTDEV_ADDR_TYPE_USB_BUSADDR:
+                is_dup = True
 
         if isinstance(nodeinst, NodeDeviceParser.PCIDevice):
             return VirtualHostDevicePCI(conn, nodedev=nodeinst)
