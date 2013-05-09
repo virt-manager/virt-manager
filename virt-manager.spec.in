@@ -42,6 +42,7 @@ Source0: http://virt-manager.org/download/sources/%{name}/%{name}-%{version}.tar
 BuildArch: noarch
 
 
+Requires: virt-manager-common = %{verrel}
 Requires: pygobject3
 Requires: gtk3
 Requires: libvirt-glib >= 0.0.9
