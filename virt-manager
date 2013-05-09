@@ -226,6 +226,9 @@ def main():
         from gi.repository import Gtk  # pylint: disable=E0611
         globals()["Gtk"] = Gtk
         leftovers = sys.argv[1:]
+
+        import virtManager.config
+        import virtManager.util
     except:
         # Don't just let the exception raise here. abrt reports bugs
         # when users mess up su/sudo and DISPLAY isn't set. Printing
@@ -243,8 +246,6 @@ def main():
                   Gtk.get_minor_version(),
                   Gtk.get_micro_version())
 
-    import virtManager.config
-    import virtManager.util
     config = virtManager.config.vmmConfig("virt-manager",
                                     cliconfig.__version__,
                                     os.path.join(cliconfig.asset_dir, "ui"),
