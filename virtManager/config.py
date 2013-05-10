@@ -467,9 +467,9 @@ class vmmConfig(object):
             if path in current_list:
                 continue
             current_list.append(path)
-        self.conf.set("/paths/perms_fix_ignore", current_list)
+        self.conf.set("/paths/perms-fix-ignore", current_list)
     def get_perms_fix_ignore(self):
-        return self.conf.get("/paths/perms_fix_ignore")
+        return self.conf.get("/paths/perms-fix-ignore")
 
 
     # Manager view connection list
