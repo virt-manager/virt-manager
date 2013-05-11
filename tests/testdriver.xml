@@ -434,6 +434,7 @@
   </devices>
 </domain>
 
+
 <domain type='test'>
   <name>test-halffull-clone</name>
   <currentMemory>204800</currentMemory>
@@ -524,6 +525,30 @@
   </devices>
 </domain>
 
+
+<domain type='test'>
+  <name>test-duplicate-usb</name>
+  <uuid>4a64cc71-19c4-2fd0-2323-3050abaea3c3</uuid>
+  <memory>8388608</memory>
+  <currentMemory>2097152</currentMemory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch='i686'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <hostdev mode='subsystem' type='usb' managed='yes'>
+      <source>
+        <product id='0x7e04'/>
+        <vendor id='0x03f0'/>
+      </source>
+    </hostdev>
+  </devices>
+</domain>
 
 
 
@@ -2305,6 +2330,35 @@
 <!-- End NPIV block -->
 
 
+<!-- Duplicate USB devices -->
+<device>
+  <name>usb_5_20</name>
+  <parent>usb_usb5</parent>
+  <driver>
+    <name>usb</name>
+  </driver>
+  <capability type='usb_device'>
+    <bus>1</bus>
+    <device>20</device>
+    <product id='0x7e04'>Dup USB 1</product>
+    <vendor id='0x03f0'>HP</vendor>
+  </capability>
+</device>
+
+<device>
+  <name>usb_5_21</name>
+  <parent>usb_usb5</parent>
+  <driver>
+    <name>usb</name>
+  </driver>
+  <capability type='usb_device'>
+    <bus>1</bus>
+    <device>21</device>
+    <product id='0x7e04'>Dup USB 2</product>
+    <vendor id='0x03f0'>HP</vendor>
+  </capability>
+</device>
+<!-- End duplicate USB devices -->
 
 
 
