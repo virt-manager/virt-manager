@@ -149,6 +149,7 @@ class vmmDomain(vmmLibvirtObject):
         "status-changed": (GObject.SignalFlags.RUN_FIRST, None, [int, int]),
         "resources-sampled": (GObject.SignalFlags.RUN_FIRST, None, []),
         "inspection-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "pre-startup": (GObject.SignalFlags.RUN_FIRST, None, [object]),
     }
 
     def __init__(self, conn, backend, uuid):
@@ -252,7 +253,34 @@ class vmmDomain(vmmLibvirtObject):
 
         self.connect("status-changed", self._update_start_vcpus)
         self.connect("config-changed", self._reparse_xml)
+        self.connect("pre-startup", self._prestartup_nodedev_check)
 
+    def _prestartup_nodedev_check(self, src, ret):
+        ignore = src
+        error = _("These is more than one '%s' device attached to "
+                  "your host, and we can't determine which one to "
+                  "use for your guest.\n"
+                  "To fix this, remove and reattach the USB device "
+                  "to your guest using the 'Add Hardware' wizard.")
+
+        for hostdev in self.get_hostdev_devices():
+            devtype = hostdev.type
+
+            if devtype != "usb":
+                continue
+
+            vendor = hostdev.vendor
+            product = hostdev.product
+            bus = hostdev.bus
+            device = hostdev.device
+
+            if vendor and product:
+                count = self.conn.get_nodedevs_number("usb_device",
+                                                      vendor,
+                                                      product)
+                if count > 1 and not (bus and device):
+                    prettyname = "%s %s" % (vendor, product)
+                    ret.append(error % prettyname)
 
     ###########################
     # Misc API getter methods #
@@ -1171,6 +1199,13 @@ class vmmDomain(vmmLibvirtObject):
         if self.get_cloning():
             raise RuntimeError(_("Cannot start guest while cloning "
                                  "operation in progress"))
+
+        pre_startup_ret = []
+        self.emit("pre-startup", pre_startup_ret)
+
+        for error in pre_startup_ret:
+            raise RuntimeError(error)
+
         self._backend.create()
         self.idle_add(self.force_update_status)
 
