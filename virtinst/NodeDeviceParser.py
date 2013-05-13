@@ -38,6 +38,7 @@ HOSTDEV_ADDR_TYPE_PCI = 1
 HOSTDEV_ADDR_TYPE_USB_BUSADDR = 2
 HOSTDEV_ADDR_TYPE_USB_VENPRO = 3
 
+
 class NodeDevice(object):
     def __init__(self, node):
         self.name = None
