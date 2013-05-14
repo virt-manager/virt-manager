@@ -54,16 +54,26 @@ class vmmCreateNetwork(vmmGObjectUI):
 
             "on_net_name_activate": self.forward,
             "on_net_forward_toggled" : self.change_forward_type,
-            "on_net-ipv4-enable_toggled" : self.change_ipv4_enable,
-            "on_net-ipv4-network_changed": self.change_network,
+
+            "on_net-ipv4-enable_toggled" :  self.change_ipv4_enable,
+            "on_net-ipv4-network_changed":  self.change_ipv4_network,
             "on_net-dhcpv4-enable_toggled": self.change_dhcpv4_enable,
-            "on_net-dhcpv4-start_changed": self.change_dhcpv4_start,
-            "on_net-dhcpv4-end_changed": self.change_dhcpv4_end,
-            "on_net-ipv6-enable_toggled" : self.change_ipv6_enable,
-            "on_net-ipv6-network_changed": self.change_ipv6_network,
+            "on_net-dhcpv4-start_changed":  self.change_dhcpv4_start,
+            "on_net-dhcpv4-end_changed":    self.change_dhcpv4_end,
+
+            "on_net-ipv6-enable_toggled" :  self.change_ipv6_enable,
+            "on_net-ipv6-network_changed":  self.change_ipv6_network,
             "on_net-dhcpv6-enable_toggled": self.change_dhcpv6_enable,
-            "on_net-dhcpv6-start_changed": self.change_dhcpv6_start,
-            "on_net-dhcpv6-end_changed": self.change_dhcpv6_end,
+            "on_net-dhcpv6-start_changed":  self.change_dhcpv6_start,
+            "on_net-dhcpv6-end_changed":    self.change_dhcpv6_end,
+
+            "on_net-routev4-enable_toggled":  self.change_routev4_enable,
+            "on_net-routev4-network_changed": self.change_routev4_network,
+            "on_net-routev4-gateway_changed": self.change_routev4_gateway,
+
+            "on_net-routev6-enable_toggled":  self.change_routev6_enable,
+            "on_net-routev6-network_changed": self.change_routev6_network,
+            "on_net-routev6-gateway_changed": self.change_routev6_gateway,
         })
         self.bind_escape_key_close()
 
@@ -171,53 +181,77 @@ class vmmCreateNetwork(vmmGObjectUI):
         ignore = src
 
         white = Gdk.Color.parse("#f0f0f0")[1]
-        net4 = self.widget("net-ipv4-network")
-        start4 = self.widget("net-dhcpv4-start")
-        end4 = self.widget("net-dhcpv4-end")
+        net = self.widget("net-ipv4-network")
+        start = self.widget("net-dhcpv4-start")
+        end = self.widget("net-dhcpv4-end")
+        network = self.widget("net-routev4-network")
+        gateway = self.widget("net-routev4-gateway")
         if self.get_config_ipv4_enable():
-            net4.set_sensitive(True)
-            net4.set_text("")
-            net4.modify_bg(Gtk.StateType.NORMAL, white)
+            net.set_sensitive(True)
+            net.set_text("")
+            net.modify_bg(Gtk.StateType.NORMAL, white)
             if self.get_config_dhcpv4_enable():
-                start4.set_sensitive(True)
-                end4.set_sensitive(True)
+                start.set_sensitive(True)
+                end.set_sensitive(True)
+            if self.get_config_routev4_enable():
+                network.set_sensitive(True)
+                gateway.set_sensitive(True)
         else:
-            net4.set_text("")
-            start4.set_text("")
-            end4.set_text("")
-            net4.set_sensitive(False)
-            start4.set_sensitive(False)
-            end4.set_sensitive(False)
-            net4.modify_bg(Gtk.StateType.NORMAL, white)
-            start4.modify_bg(Gtk.StateType.NORMAL, white)
-            end4.modify_bg(Gtk.StateType.NORMAL, white)
+            net.set_text("")
+            start.set_text("")
+            end.set_text("")
+            network.set_text("")
+            gateway.set_text("")
+            net.set_sensitive(False)
+            start.set_sensitive(False)
+            end.set_sensitive(False)
+            network.set_sensitive(False)
+            gateway.set_sensitive(False)
+            net.modify_bg(Gtk.StateType.NORMAL, white)
+            start.modify_bg(Gtk.StateType.NORMAL, white)
+            end.modify_bg(Gtk.StateType.NORMAL, white)
+            network.modify_bg(Gtk.StateType.NORMAL, white)
+            gateway.modify_bg(Gtk.StateType.NORMAL, white)
 
     def change_ipv6_enable(self, src):
         ignore = src
 
         white = Gdk.Color.parse("#f0f0f0")[1]
-        net6 = self.widget("net-ipv6-network")
-        start6 = self.widget("net-dhcpv6-start")
-        end6 = self.widget("net-dhcpv6-end")
+        net = self.widget("net-ipv6-network")
+        start = self.widget("net-dhcpv6-start")
+        end = self.widget("net-dhcpv6-end")
+        network = self.widget("net-routev6-network")
+        gateway = self.widget("net-routev6-gateway")
         if self.get_config_ipv6_enable():
-            net6.set_sensitive(True)
-            net6.set_text("")
-            net6.modify_bg(Gtk.StateType.NORMAL, white)
+            net.set_sensitive(True)
+            net.set_text("")
+            net.modify_bg(Gtk.StateType.NORMAL, white)
             if self.get_config_dhcpv6_enable():
-                start6.set_sensitive(True)
-                end6.set_sensitive(True)
+                start.set_sensitive(True)
+                end.set_sensitive(True)
+            if self.get_config_routev6_enable():
+                network.set_sensitive(True)
+                gateway.set_sensitive(True)
         else:
-            net6.set_text("")
-            start6.set_text("")
-            end6.set_text("")
-            net6.set_sensitive(False)
-            start6.set_sensitive(False)
-            end6.set_sensitive(False)
-            net6.modify_bg(Gtk.StateType.NORMAL, white)
-            start6.modify_bg(Gtk.StateType.NORMAL, white)
-            end6.modify_bg(Gtk.StateType.NORMAL, white)
+            net.set_text("")
+            start.set_text("")
+            end.set_text("")
+            network.set_text("")
+            gateway.set_text("")
+            net.set_sensitive(False)
+            start.set_sensitive(False)
+            end.set_sensitive(False)
+            network.set_sensitive(False)
+            gateway.set_sensitive(False)
+            net.modify_bg(Gtk.StateType.NORMAL, white)
+            start.modify_bg(Gtk.StateType.NORMAL, white)
+            end.modify_bg(Gtk.StateType.NORMAL, white)
+            network.modify_bg(Gtk.StateType.NORMAL, white)
+            gateway.modify_bg(Gtk.StateType.NORMAL, white)
 
-    def change_network(self, src):
+    def change_ipv4_network(self, src):
+        ignore = src
+
         ip = self.get_config_ip4()
         green = Gdk.Color.parse("#c0ffc0")[1]
         red = Gdk.Color.parse("#ffc0c0")[1]
@@ -231,6 +265,8 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("net-info-type").set_text("")
             self.widget("net-dhcpv4-start").set_text("")
             self.widget("net-dhcpv4-end").set_text("")
+            self.widget("net-routev4-network").set_text("")
+            self.widget("net-routev4-gateway").set_text("")
             return
 
         # We've got a valid IP
@@ -260,7 +296,16 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("net-dhcpv4-start").set_sensitive(False)
             self.widget("net-dhcpv4-end").set_sensitive(False)
 
+        if self.get_config_routev4_enable():
+            self.widget("net-routev4-network").set_sensitive(True)
+            self.widget("net-routev4-gateway").set_sensitive(True)
+        else:
+            self.widget("net-routev4-network").set_sensitive(False)
+            self.widget("net-routev4-gateway").set_sensitive(False)
+
     def change_ipv6_network(self, src):
+        ignore = src
+
         ip = self.get_config_ip6()
         green = Gdk.Color.parse("#c0ffc0")[1]
         red = Gdk.Color.parse("#ffc0c0")[1]
@@ -274,12 +319,16 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("net-info-type-ip6").set_text("")
             self.widget("net-dhcpv6-start").set_text("")
             self.widget("net-dhcpv6-end").set_text("")
+            self.widget("net-routev6-network").set_text("")
+            self.widget("net-routev6-gateway").set_text("")
             return
 
-        if ip.prefixlen != 64 or not ip.is_private:
-            src.modify_bg(Gtk.StateType.NORMAL, red)
-        else:
-            src.modify_bg(Gtk.StateType.NORMAL, green)
+        color = green
+        if not ip.is_private:
+            color = red
+        if ip.prefixlen != 64:
+            color = red
+        src.modify_bg(Gtk.StateType.NORMAL, color)
 
         if ip.prefixlen != 64:
             self.widget("net-info-gateway-ip6").set_text("")
@@ -306,37 +355,135 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("net-dhcpv6-start").set_sensitive(False)
             self.widget("net-dhcpv6-end").set_sensitive(False)
 
+        if self.get_config_routev6_enable():
+            self.widget("net-routev6-network").set_sensitive(True)
+            self.widget("net-routev6-gateway").set_sensitive(True)
+        else:
+            self.widget("net-routev6-network").set_sensitive(False)
+            self.widget("net-routev6-gateway").set_sensitive(False)
+
+
+    def change_routev4_enable(self, src):
+        ignore = src
+
+        white = Gdk.Color.parse("#f0f0f0")[1]
+        ntwk = self.widget("net-routev4-network")
+        gway = self.widget("net-routev4-gateway")
+        ntwk.modify_bg(Gtk.StateType.NORMAL, white)
+        gway.modify_bg(Gtk.StateType.NORMAL, white)
+        ntwk.set_text("")
+        gway.set_text("")
+
+        if self.get_config_routev4_enable():
+            ntwk.set_sensitive(True)
+            gway.set_sensitive(True)
+        else:
+            ntwk.set_sensitive(False)
+            gway.set_sensitive(False)
+
+    def get_config_routev4_network(self):
+        if not self.get_config_routev4_enable():
+            return None
+        return self.widget("net-routev4-network").get_text()
+
+    def get_config_routev4_gateway(self):
+        if not self.get_config_routev4_enable():
+            return None
+        return self.widget("net-routev4-gateway").get_text()
+
+    def get_route_addr(self, addrStr):
+        if addrStr is None:
+            return None
+        try:
+            addr = ipaddr.IPNetwork(addrStr)
+        except:
+            addr = None
+        return addr
+
+    def change_routev4_network(self, src):
+        ignore = src
+
+        ntwk = self.get_config_routev4_network()
+        ipAddr = self.get_config_ip4()
+        black = Gdk.Color.parse("#000000")[1]
+        src.modify_text(Gtk.StateType.NORMAL, black)
+
+        if ipAddr is None or ntwk is None:
+            white = Gdk.Color.parse("#f0f0f0")[1]
+            src.modify_bg(Gtk.StateType.NORMAL, white)
+            return
+        addr = self.get_route_addr(ntwk)
+        red = Gdk.Color.parse("#ffc0c0")[1]
+        green = Gdk.Color.parse("#c0ffc0")[1]
+        color = green
+        if addr is None:
+            color = red
+        else:
+            if addr.version != 4:
+                color = red
+            if addr.prefixlen > 28:
+                color = red
+        src.modify_bg(Gtk.StateType.NORMAL, color)
+
+    def change_routev4_gateway(self, src):
+        ignore = src
+
+        gway = self.get_config_routev4_gateway()
+        ipAddr = self.get_config_ip4()
+        black = Gdk.Color.parse("#000000")[1]
+        src.modify_text(Gtk.StateType.NORMAL, black)
+
+        if ipAddr is None or gway is None:
+            white = Gdk.Color.parse("#f0f0f0")[1]
+            src.modify_bg(Gtk.StateType.NORMAL, white)
+            return
+        addr = self.get_route_addr(gway)
+        red = Gdk.Color.parse("#ffc0c0")[1]
+        green = Gdk.Color.parse("#c0ffc0")[1]
+        color = green
+        if addr is None:
+            color = red
+        else:
+            if addr.version != 4:
+                color = red
+            if not ipAddr.overlaps(addr):
+                color = red
+            if addr.prefixlen != 32:
+                color = red
+        src.modify_bg(Gtk.StateType.NORMAL, color)
 
     def change_dhcpv4_enable(self, src):
         ignore = src
 
         white = Gdk.Color.parse("#f0f0f0")[1]
-        start4 = self.widget("net-dhcpv4-start")
-        end4 = self.widget("net-dhcpv4-end")
-        start4.modify_bg(Gtk.StateType.NORMAL, white)
-        end4.modify_bg(Gtk.StateType.NORMAL, white)
-        start4.set_text("")
-        end4.set_text("")
+        start = self.widget("net-dhcpv4-start")
+        end = self.widget("net-dhcpv4-end")
+        start.modify_bg(Gtk.StateType.NORMAL, white)
+        end.modify_bg(Gtk.StateType.NORMAL, white)
+        start.set_text("")
+        end.set_text("")
 
         if not self.get_config_dhcpv4_enable():
-            start4.set_sensitive(False)
-            end4.set_sensitive(False)
+            start.set_sensitive(False)
+            end.set_sensitive(False)
         else:
-            start4.set_sensitive(True)
-            end4.set_sensitive(True)
+            start.set_sensitive(True)
+            end.set_sensitive(True)
 
             ip = self.get_config_ip4()
             if ip:
-                start = int(ip.numhosts / 2)
-                end   = int(ip.numhosts - 2)
-                start4.set_text(str(ip.network + start))
-                end4.set_text(str(ip.network + end))
+                start.set_text(str(ip.network + int(ip.numhosts / 2)))
+                end.set_text(str(ip.network + int(ip.numhosts - 2)))
 
     def change_dhcpv4_start(self, src):
+        ignore = src
+
         start = self.get_config_dhcpv4_start()
         self.change_dhcpv4(src, start)
 
     def change_dhcpv4_end(self, src):
+        ignore = src
+
         end = self.get_config_dhcpv4_end()
         self.change_dhcpv4(src, end)
 
@@ -344,43 +491,112 @@ class vmmCreateNetwork(vmmGObjectUI):
         ip = self.get_config_ip4()
         black = Gdk.Color.parse("#000000")[1]
         src.modify_text(Gtk.StateType.NORMAL, black)
-        if not ip:
-            return
 
-        if addr is None:
+        if ip is None or addr is None:
             white = Gdk.Color.parse("#f0f0f0")[1]
             src.modify_bg(Gtk.StateType.NORMAL, white)
-        elif not ip.overlaps(addr):
+            return
+        if addr.version != 4 or not ip.overlaps(addr):
             red = Gdk.Color.parse("#ffc0c0")[1]
             src.modify_bg(Gtk.StateType.NORMAL, red)
         else:
             green = Gdk.Color.parse("#c0ffc0")[1]
             src.modify_bg(Gtk.StateType.NORMAL, green)
 
-    def change_dhcpv6_enable(self, src):
-        ignore = src
-
+    def change_routev6_enable(self, src):
         white = Gdk.Color.parse("#f0f0f0")[1]
-        start6 = self.widget("net-dhcpv6-start")
-        end6 = self.widget("net-dhcpv6-end")
-        start6.modify_bg(Gtk.StateType.NORMAL, white)
-        end6.modify_bg(Gtk.StateType.NORMAL, white)
-        start6.set_text("")
-        end6.set_text("")
+        ntwk = self.widget("net-routev6-network")
+        gway = self.widget("net-routev6-gateway")
+        ntwk.modify_bg(Gtk.StateType.NORMAL, white)
+        gway.modify_bg(Gtk.StateType.NORMAL, white)
+        ntwk.set_text("")
+        gway.set_text("")
+
+        if self.get_config_routev6_enable():
+            ntwk.set_sensitive(True)
+            gway.set_sensitive(True)
+        else:
+            ntwk.set_sensitive(False)
+            gway.set_sensitive(False)
+
+    def get_config_routev6_network(self):
+        if not self.get_config_routev6_enable():
+            return None
+        return self.widget("net-routev6-network").get_text()
+
+    def get_config_routev6_gateway(self):
+        if not self.get_config_routev6_enable():
+            return None
+        return self.widget("net-routev6-gateway").get_text()
+
+    def change_routev6_network(self, src):
+        ntwk = self.get_config_routev6_network()
+        ip = self.get_config_ip6()
+        black = Gdk.Color.parse("#000000")[1]
+        src.modify_text(Gtk.StateType.NORMAL, black)
+
+        if ip is None or ntwk is None:
+            white = Gdk.Color.parse("#f0f0f0")[1]
+            src.modify_bg(Gtk.StateType.NORMAL, white)
+            return
+        addr = self.get_route_addr(ntwk)
+        red = Gdk.Color.parse("#ffc0c0")[1]
+        green = Gdk.Color.parse("#c0ffc0")[1]
+        color = green
+        if addr is None:
+            color = red
+        else:
+            if addr.version != 6:
+                color = red
+            if  addr.prefixlen > 64:
+                color = red
+        src.modify_bg(Gtk.StateType.NORMAL, color)
+
+    def change_routev6_gateway(self, src):
+        gway = self.get_config_routev6_gateway()
+        ip = self.get_config_ip6()
+        black = Gdk.Color.parse("#000000")[1]
+        src.modify_text(Gtk.StateType.NORMAL, black)
+
+        if ip is None or gway is None:
+            white = Gdk.Color.parse("#f0f0f0")[1]
+            src.modify_bg(Gtk.StateType.NORMAL, white)
+            return
+        addr = self.get_route_addr(gway)
+        red = Gdk.Color.parse("#ffc0c0")[1]
+        green = Gdk.Color.parse("#c0ffc0")[1]
+        color = green
+        if addr is None:
+            color = red
+        else:
+            if addr.version != 6:
+                color = red
+            if not ip.overlaps(addr):
+                color = red
+            if addr.prefixlen != 128:
+                color = red
+        src.modify_bg(Gtk.StateType.NORMAL, color)
+
+    def change_dhcpv6_enable(self, src):
+        white = Gdk.Color.parse("#f0f0f0")[1]
+        start = self.widget("net-dhcpv6-start")
+        end = self.widget("net-dhcpv6-end")
+        start.modify_bg(Gtk.StateType.NORMAL, white)
+        end.modify_bg(Gtk.StateType.NORMAL, white)
+        start.set_text("")
+        end.set_text("")
         if not self.get_config_dhcpv6_enable():
-            start6.set_sensitive(False)
-            end6.set_sensitive(False)
+            start.set_sensitive(False)
+            end.set_sensitive(False)
 
         else:
-            start6.set_sensitive(True)
-            end6.set_sensitive(True)
+            start.set_sensitive(True)
+            end.set_sensitive(True)
 
             ip = self.get_config_ip6()
             if ip:
-                start = 256
-                end   = 512 - 1
-                start6.set_text(str(ip.network + start))
-                end6.set_text(str(ip.network + end))
+                start.set_text(str(ip.network + 256))
+                end.set_text(str(ip.network + 511))
 
     def change_dhcpv6_start(self, src):
         start = self.get_config_dhcpv6_start()
@@ -394,13 +610,12 @@ class vmmCreateNetwork(vmmGObjectUI):
         ip = self.get_config_ip6()
         black = Gdk.Color.parse("#000000")[1]
         src.modify_text(Gtk.StateType.NORMAL, black)
-        if not ip:
-            return
 
-        if addr is None:
+        if ip is None or addr is None:
             white = Gdk.Color.parse("#f0f0f0")[1]
             src.modify_bg(Gtk.StateType.NORMAL, white)
-        elif not ip.overlaps(addr):
+            return
+        if addr.version != 6 or not ip.overlaps(addr):
             red = Gdk.Color.parse("#ffc0c0")[1]
             src.modify_bg(Gtk.StateType.NORMAL, red)
         else:
@@ -451,12 +666,12 @@ class vmmCreateNetwork(vmmGObjectUI):
             return ipaddr.IPNetwork(self.widget("net-dhcpv6-start").get_text())
         except:
             return None
+
     def get_config_dhcpv6_end(self):
         try:
             return ipaddr.IPNetwork(self.widget("net-dhcpv6-end").get_text())
         except:
             return None
-
 
     def get_config_forwarding(self):
         if self.widget("net-forward-none").get_active():
@@ -483,6 +698,12 @@ class vmmCreateNetwork(vmmGObjectUI):
     def get_config_dhcpv6_enable(self):
         return self.widget("net-dhcpv6-enable").get_active()
 
+    def get_config_routev4_enable(self):
+        return self.widget("net-routev4-enable").get_active()
+
+    def get_config_routev6_enable(self):
+        return self.widget("net-routev6-enable").get_active()
+
     def populate_summary(self):
         self.widget("summary-name").set_text(self.get_config_name())
         self.widget("summary-domain").set_text(self.get_config_domain_name())
@@ -495,7 +716,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         if ip:
             self.widget("label-ip4-gateway").show()
             self.widget("summary-ip4-gateway").show()
-            self.widget("label-ip4-network").set_text(_("Network:"))
+            self.widget("label-ip4-network").set_text(_("Network Address / prefix:"))
             self.widget("summary-ip4-network").set_text(str(ip))
             self.widget("summary-ip4-gateway").set_text(str(ip.network + 1))
         else:
@@ -509,7 +730,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("summary-dhcp-end").show()
             start = self.get_config_dhcpv4_start()
             end = self.get_config_dhcpv4_end()
-            self.widget("label-dhcp-start").set_text("Start Address:")
+            self.widget("label-dhcp-start").set_text("DHCPv4 Start Address:")
             if start and end:
                 self.widget("summary-dhcp-start").set_text(str(start.network))
                 self.widget("summary-dhcp-end").set_text(str(end.network))
@@ -522,6 +743,32 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("label-dhcp-start").set_text(_("DHCPv4 Status:"))
             self.widget("summary-dhcp-start").set_text(_("Disabled"))
 
+        if ip and self.get_config_routev4_enable():
+            self.widget("label-routev4-network").show()
+            self.widget("label-routev4-gateway").show()
+            self.widget("summary-routev4-network").show()
+            self.widget("summary-routev4-gateway").show()
+            self.widget("summary-routev4-network").set_text("")
+            self.widget("summary-routev4-gateway").set_text("")
+            ntwk = self.get_config_routev4_network()
+            try:
+                naddr = ipaddr.IPNetwork(ntwk)
+            except:
+                naddr = None
+            gway = self.get_config_routev4_gateway()
+            try:
+                gaddr = ipaddr.IPNetwork(gway)
+            except:
+                gaddr = None
+            if naddr and gaddr:
+                self.widget("summary-routev4-network").set_text(str(naddr))
+                self.widget("summary-routev4-gateway").set_text(str(gaddr.network))
+        else:
+            self.widget("label-routev4-network").hide()
+            self.widget("label-routev4-gateway").hide()
+            self.widget("summary-routev4-network").hide()
+            self.widget("summary-routev4-gateway").hide()
+
         forward_txt = ""
         dev, mode = self.get_config_forwarding()
         forward_txt = vmmNetwork.pretty_desc(mode, dev)
@@ -531,7 +778,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         if ip:
             self.widget("label-ip6-gateway").show()
             self.widget("summary-ip6-gateway").show()
-            self.widget("label-ip6-network").set_text(_("Network:"))
+            self.widget("label-ip6-network").set_text(_("Network Address / prefix:"))
             self.widget("summary-ip6-network").set_text(str(ip))
             self.widget("summary-ip6-gateway").set_text(str(ip.network + 1))
         else:
@@ -546,7 +793,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("summary-dhcpv6-end").show()
             start = self.get_config_dhcpv6_start()
             end = self.get_config_dhcpv6_end()
-            self.widget("label-dhcpv6-start").set_text("Start Address:")
+            self.widget("label-dhcpv6-start").set_text("DHCPv6 Start Address:")
             if start and end:
                 self.widget("summary-dhcpv6-start").set_text(str(start.network))
                 self.widget("summary-dhcpv6-end").set_text(str(end.network))
@@ -558,6 +805,34 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("summary-dhcpv6-end").hide()
             self.widget("label-dhcpv6-start").set_text(_("DHCPv6 Status:"))
             self.widget("summary-dhcpv6-start").set_text(_("Disabled"))
+
+        if ip and self.get_config_routev6_enable():
+            self.widget("label-routev6-network").show()
+            self.widget("label-routev6-gateway").show()
+            self.widget("summary-routev6-network").show()
+            self.widget("summary-routev6-gateway").show()
+            self.widget("summary-routev6-network").set_text("")
+            self.widget("summary-routev6-gateway").set_text("")
+            ntwk = self.get_config_routev6_network()
+            try:
+                naddr = ipaddr.IPNetwork(ntwk)
+            except:
+                naddr = None
+            gway = self.get_config_routev6_gateway()
+            try:
+                gaddr = ipaddr.IPNetwork(gway)
+            except:
+                gaddr = None
+            if naddr and gaddr:
+                self.widget("summary-routev6-network").set_text(str(naddr))
+                self.widget("summary-routev6-gateway").set_text(str(gaddr.network))
+        else:
+            self.widget("label-routev6-network").hide()
+            self.widget("label-routev6-gateway").hide()
+            self.widget("summary-routev6-network").hide()
+            self.widget("summary-routev6-gateway").hide()
+
+
         if ip:
             self.widget("summary-ipv6-forwarding").set_text("Routed network")
         else:
@@ -574,15 +849,14 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("net-ipv4-network").set_sensitive(False)
             self.widget("net-dhcpv4-start").set_sensitive(False)
             self.widget("net-dhcpv4-end").set_sensitive(False)
-            return
-        self.widget("net-ipv4-network").set_sensitive(True)
+        else:
+            self.widget("net-ipv4-network").set_sensitive(True)
 
         if not self.get_config_dhcpv4_enable():
             self.widget("net-dhcpv4-end").set_text("")
             self.widget("net-dhcpv4-start").set_text("")
             self.widget("net-dhcpv4-start").set_sensitive(False)
             self.widget("net-dhcpv4-end").set_sensitive(False)
-            return
         else:
             ip = self.get_config_ip4()
             if ip:
@@ -603,15 +877,16 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("net-ipv6-network").set_sensitive(False)
             self.widget("net-dhcpv6-start").set_sensitive(False)
             self.widget("net-dhcpv6-end").set_sensitive(False)
-            return
-        self.widget("net-ipv6-network").set_sensitive(True)
+            self.widget("net-routev6-network").set_sensitive(False)
+            self.widget("net-routev6-gateway").set_sensitive(False)
+        else:
+            self.widget("net-ipv6-network").set_sensitive(True)
 
         if not self.get_config_dhcpv6_enable():
             self.widget("net-dhcpv6-end").set_text("")
             self.widget("net-dhcpv6-start").set_text("")
             self.widget("net-dhcpv6-start").set_sensitive(False)
             self.widget("net-dhcpv6-end").set_sensitive(False)
-            return
         else:
             ip = self.get_config_ip6()
             if ip:
@@ -622,6 +897,21 @@ class vmmCreateNetwork(vmmGObjectUI):
                     self.widget("net-dhcpv6-end").set_text(str(ip.network + end))
             self.widget("net-dhcpv6-start").set_sensitive(True)
             self.widget("net-dhcpv6-end").set_sensitive(True)
+        if not self.get_config_routev6_enable():
+            self.widget("net-routev6-network").set_text("")
+            self.widget("net-routev6-gateway").set_text("")
+            self.widget("net-routev6-network").set_sensitive(False)
+            self.widget("net-routev6-gateway").set_sensitive(False)
+        else:
+            self.widget("net-routev6-network").set_text("")
+            self.widget("net-routev6-gateway").set_text("")
+            self.widget("net-routev6-network").set_sensitive(True)
+            self.widget("net-routev6-gateway").set_sensitive(True)
+
+    def populate_misc(self):
+        name = self.widget("net-name").get_text()
+        if self.widget("net-domain-name").get_text() == "":
+            self.widget("net-domain-name").set_text(name)
 
     def page_changed(self, ignore1, ignore2, page_number):
         if page_number == PAGE_NAME:
@@ -632,6 +922,8 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.populate_ipv4()
         elif page_number == PAGE_IPV6:
             self.populate_ipv6()
+        elif page_number == PAGE_MISC:
+            self.populate_misc()
         elif page_number == PAGE_SUMMARY:
             self.populate_summary()
 
@@ -698,6 +990,39 @@ class vmmCreateNetwork(vmmGObjectUI):
                 xml += "    </dhcp>\n"
             xml += "  </ip>\n"
 
+        ntwk = self.get_config_routev4_network()
+        try:
+            netaddr = ipaddr.IPNetwork(ntwk)
+        except:
+            netaddr = None
+        gway = self.get_config_routev4_gateway()
+        try:
+            gwaddr = ipaddr.IPNetwork(gway)
+        except:
+            gwaddr = None
+        if netaddr and gwaddr:
+            xml += "<route family='ipv4'"
+            xml += " address='%s'" % netaddr.network
+            xml += " prefix='%s'" % netaddr.prefixlen
+            xml += " gateway='%s' />" % gwaddr.network
+
+        ntwk = self.get_config_routev6_network()
+        try:
+            netaddr = ipaddr.IPNetwork(ntwk)
+        except:
+            netaddr = None
+        gway = self.get_config_routev6_gateway()
+        try:
+            gwaddr = ipaddr.IPNetwork(gway)
+        except:
+            gwaddr = None
+        if netaddr and gwaddr:
+            xml += "<route family='ipv6'"
+            xml += " address='%s'" % netaddr.network
+            xml += " prefix='%s'" % netaddr.prefixlen
+            xml += " gateway='%s' />" % gwaddr.network
+
+
         xml += "</network>\n"
 
         logging.debug("Generated network XML:\n" + xml)
@@ -753,20 +1078,55 @@ class vmmCreateNetwork(vmmGObjectUI):
         if enabled:
             start = self.get_config_dhcpv4_start()
             end = self.get_config_dhcpv4_end()
-            if enabled and start is None:
+            if start is None:
                 return self.err.val_err(_("Invalid DHCP Address"),
                             _("The DHCP start address could not be understood"))
-            if enabled and end is None:
+            if end is None:
                 return self.err.val_err(_("Invalid DHCP Address"),
                             _("The DHCP end address could not be understood"))
-            if enabled and not ip.overlaps(start):
+            if not ip.overlaps(start):
                 return self.err.val_err(_("Invalid DHCP Address"),
                         (_("The DHCP start address is not with the network %s") %
                          (str(ip))))
-            if enabled and not ip.overlaps(end):
+            if not ip.overlaps(end):
                 return self.err.val_err(_("Invalid DHCP Address"),
                         (_("The DHCP end address is not with the network %s") %
                          (str(ip))))
+
+        enabled = self.get_config_routev4_enable()
+        if enabled:
+            ntwk = self.get_config_routev4_network()
+            ntwkbad = False
+            gway = self.get_config_routev4_gateway()
+            gwaybad = False
+            if ntwk is None or gway is None:
+                return True
+            if ntwk == "" and gway == "":
+                return True
+            naddr = self.get_route_addr(ntwk)
+            if naddr is None:
+                ntwkbad = True
+            else:
+                if naddr.version != 4:
+                    ntwkbad = True
+                if naddr.prefixlen > 28:
+                    ntwkbad = True
+            gaddr = self.get_route_addr(gway)
+            if gaddr is None:
+                gwaybad = True
+            else:
+                if gaddr.version != 4:
+                    gwaybad = True
+                if gaddr.prefixlen != 32:
+                    gwaybad = True
+                if not ip.overlaps(gaddr):
+                    gwaybad = True
+            if ntwkbad:
+                return self.err.val_err(_("Invalid static route"),
+                            _("The network address is incorrect."))
+            if gwaybad:
+                return self.err.val_err(_("Invalid static route"),
+                            _("The gateway address is incorrect."))
 
         return True
 
@@ -811,6 +1171,41 @@ class vmmCreateNetwork(vmmGObjectUI):
                 return self.err.val_err(_("Invalid DHCPv6 Address"),
                         (_("The DHCPv6 end address is not with the network %s") %
                          (str(ip))))
+
+        enabled = self.get_config_routev6_enable()
+        if enabled:
+            ntwk = self.get_config_routev6_network()
+            ntwkbad = False
+            gway = self.get_config_routev6_gateway()
+            gwaybad = False
+            if ntwk is None or gway is None:
+                return True
+            if ntwk == "" and gway == "":
+                return True
+            naddr = self.get_route_addr(ntwk)
+            if naddr is None:
+                ntwkbad = True
+            else:
+                if naddr.version != 6:
+                    ntwkbad = True
+                if naddr.prefixlen > 64:
+                    ntwkbad = True
+            gaddr = self.get_route_addr(gway)
+            if gaddr is None:
+                gwaybad = True
+            else:
+                if gaddr.version != 6:
+                    gwaybad = True
+                if gaddr.prefixlen != 128:
+                    gwaybad = True
+                if not ip.overlaps(gaddr):
+                    gwaybad = True
+            if ntwkbad:
+                return self.err.val_err(_("Invalid static route"),
+                            _("The network address is incorrect."))
+            if gwaybad:
+                return self.err.val_err(_("Invalid static route"),
+                            _("The gateway address is incorrect."))
 
         return True
 

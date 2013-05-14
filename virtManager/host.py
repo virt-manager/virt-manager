@@ -575,7 +575,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-ip4-dhcp-start").set_text(start)
         self.widget("net-ip4-dhcp-end").set_text(end)
         if route and route[0] and route[1]:
-            routeVia = str(route[0]) + " via " + str(route[1])
+            routeVia = str(route[0]) + ", gateway=" + str(route[1])
             self.widget("net-ip4-route-label").show()
         else:
             routeVia = _("")
@@ -605,7 +605,7 @@ class vmmHost(vmmGObjectUI):
             iconsize = Gtk.IconSize.MENU
             icon = Gtk.STOCK_DISCONNECT
             self.widget("net-ip6-forwarding-icon").set_from_stock(icon, iconsize)
-            ipv6 = net.get_ipv6_route()
+            ipv6 = net.get_ipv6_routing()
             if ipv6:
                 self.widget("net-ip6-forwarding").set_text(
                                         _("Isolated network, internal and host routing only"))
@@ -622,7 +622,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-ip6-dhcp-start").set_text(start)
         self.widget("net-ip6-dhcp-end").set_text(end)
         if route and route[0] and route[1]:
-            routeVia = str(route[0]) + " via " + str(route[1])
+            routeVia = str(route[0]) + ", gateway=" + str(route[1])
             self.widget("net-ip6-route-label").show()
         else:
             routeVia = ""
@@ -1081,7 +1081,7 @@ class vmmHost(vmmGObjectUI):
                               str(e))
             return
 
-        # This will require an interface restart
+        # XXX: This will require an interface restart
         self.widget("interface-apply").set_sensitive(False)
 
     def interface_startmode_changed(self, src_ignore):

@@ -17,6 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 #
+import logging
 
 from virtManager import util
 import ipaddr
@@ -97,14 +98,47 @@ class vmmNetwork(vmmLibvirtObject):
     def get_autostart(self):
         return self.net.autostart()
 
+    def get_ipv4_static_route(self):
+        doc = None
+        ret = None
+        routeAddr = None
+        routeVia = None
+        xml = self.get_xml()
+        doc = libxml2.parseDoc(xml)
+        nodes = doc.xpathEval('//route')
+        for node in nodes:
+            family = node.xpathEval('string(./@family)')
+            if not family or family == 'ipv4':
+                addrStr    = node.xpathEval('string(./@address)')
+                netmaskStr = node.xpathEval('string(./@netmask)')
+                gatewayStr = node.xpathEval('string(./@gateway)')
+                prefix     = node.xpathEval('string(./@prefix)')
+                if prefix:
+                    prefix = int(prefix)
+                    routeAddr = str(ipaddr.IPNetwork(str(addrStr) + "/" + str(prefix)).masked())
+                elif netmaskStr:
+                    netmask = ipaddr.IPAddress(netmaskStr)
+                    network = ipaddr.IPAddress(addrStr)
+                    routeAddr = str(ipaddr.IPNetwork(str(network) + "/" + str(netmask)).masked())
+                else:
+                    routeAddr = str(ipaddr.IPNetwork(str(addrStr)))
+                routeVia = str(ipaddr.IPAddress(str(gatewayStr)))
+                break
+
+        if doc:
+            doc.freeDoc()
+        if routeAddr and routeVia:
+            ret = [routeAddr, routeVia]
+        else:
+            ret = None
+        return ret
+
     def get_ipv4_network(self):
         doc = None
         ret = None
         goodNode = None
         dhcpstart = None
         dhcpend = None
-        routeAddr = None
-        routeVia = None
         xml = self.get_xml()
         doc = libxml2.parseDoc(xml)
         nodes = doc.xpathEval('//ip')
@@ -118,21 +152,10 @@ class vmmNetwork(vmmLibvirtObject):
                     goodNode = node
                     break
 
-        for node in nodes:
-            family = node.xpathEval('string(./@family)')
-            if not family or family == 'ipv4':
-                routeVia = node.xpathEval('string(./@via)')
-                if routeVia:
-                    routeAddr = node.xpathEval('string(./@address)')
-                    break
-
         if goodNode is None:
             for node in nodes:
                 family = node.xpathEval('string(./@family)')
                 if not family or family == 'ipv4':
-                    tmp = node.xpathEval('string(./@via)')
-                    if tmp:
-                        continue
                     goodNode = node
                     break
 
@@ -155,11 +178,38 @@ class vmmNetwork(vmmLibvirtObject):
             dhcp = [str(ipaddr.IPAddress(dhcpstart)), str(ipaddr.IPAddress(dhcpend))]
         else:
             dhcp = None
-        if routeAddr and routeVia:
-            route = [str(ipaddr.IPAddress(routeAddr)), str(ipaddr.IPAddress(routeVia))]
-        else:
-            route = None
+        route = self.get_ipv4_static_route()
         return [ret, dhcp, route]
+
+    def get_ipv6_static_route(self):
+        doc = None
+        ret = None
+        routeAddr = None
+        routeVia = None
+        xml = self.get_xml()
+        doc = libxml2.parseDoc(xml)
+        nodes = doc.xpathEval('//route')
+        for node in nodes:
+            family = node.xpathEval('string(./@family)')
+            if family and family == 'ipv6':
+                addrStr    = node.xpathEval('string(./@address)')
+                prefix     = node.xpathEval('string(./@prefix)')
+                gatewayStr = node.xpathEval('string(./@gateway)')
+                if prefix:
+                    prefix    = int(prefix)
+                    routeAddr = str(ipaddr.IPNetwork(str(addrStr) + "/" + str(prefix)).masked())
+                else:
+                    routeAddr = str(ipaddr.IPNetwork(str(addrStr)))
+                routeVia = str(ipaddr.IPAddress(str(gatewayStr)))
+                break
+
+        if doc:
+            doc.freeDoc()
+        if routeAddr and routeVia:
+            ret = [routeAddr, routeVia]
+        else:
+            ret = None
+        return ret
 
     def get_ipv6_network(self):
         doc = None
@@ -167,8 +217,6 @@ class vmmNetwork(vmmLibvirtObject):
         goodNode = None
         dhcpstart = None
         dhcpend = None
-        routeAddr = None
-        routeVia = None
         xml = self.get_xml()
         doc = libxml2.parseDoc(xml)
         nodes = doc.xpathEval('//ip')
@@ -182,21 +230,10 @@ class vmmNetwork(vmmLibvirtObject):
                     goodNode = node
                     break
 
-        for node in nodes:
-            family = node.xpathEval('string(./@family)')
-            if family and family == 'ipv6':
-                routeVia = node.xpathEval('string(./@via)')
-                if routeVia:
-                    routeAddr = node.xpathEval('string(./@address)')
-                    break
-
         if goodNode is None:
             for node in nodes:
                 family = node.xpathEval('string(./@family)')
                 if family and family == 'ipv6':
-                    tmp = node.xpathEval('string(./@via)')
-                    if tmp:
-                        continue
                     goodNode = node
                     break
 
@@ -214,10 +251,7 @@ class vmmNetwork(vmmLibvirtObject):
             dhcp = [str(ipaddr.IPAddress(dhcpstart)), str(ipaddr.IPAddress(dhcpend))]
         else:
             dhcp = None
-        if routeAddr and routeVia:
-            route = [str(ipaddr.IPAddress(routeAddr)), str(ipaddr.IPAddress(routeVia))]
-        else:
-            route = None
+        route = self.get_ipv6_static_route()
         return [ret, dhcp, route]
 
     def get_name_domain(self):
@@ -225,10 +259,10 @@ class vmmNetwork(vmmLibvirtObject):
         name_domain = util.xpath(xml, "/network/domain/@name")
         return name_domain
 
-    def get_ipv6_route(self):
+    def get_ipv6_routing(self):
         xml = self.get_xml()
-        ipv6_route = util.xpath(xml, "/network/@ipv6")
-        return ipv6_route
+        ipv6_routing = util.xpath(xml, "/network/@ipv6")
+        return ipv6_routing
 
     def get_ipv4_forward(self):
         xml = self.get_xml()
