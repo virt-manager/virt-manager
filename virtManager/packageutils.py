@@ -39,7 +39,6 @@ def check_packagekit(errbox, packages, ishv):
     Returns None when we determine nothing useful.
     Returns (success, did we just install libvirt) otherwise.
     """
-    packages = ["avahi-tools"]
     if not packages:
         logging.debug("No PackageKit packages to search for.")
         return
