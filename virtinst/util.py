@@ -1,5 +1,5 @@
 #
-# Copyright 2006  Red Hat, Inc.
+# Copyright 2006, 2013  Red Hat, Inc.
 # Jeremy Katz <katzj@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -514,6 +514,8 @@ def randomUUID(conn):
         return "00000000-1111-2222-3333-444444444444"
 
     u = [random.randint(0, 255) for ignore in range(0, 16)]
+    u[7] = (u[7] & 0x0F) | (4 << 4)
+    u[9] = (u[9] & 0x3F) | (2 << 6)
     return "-".join(["%02x" * 4, "%02x" * 2, "%02x" * 2, "%02x" * 2,
                      "%02x" * 6]) % tuple(u)
 
