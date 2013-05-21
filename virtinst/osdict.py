@@ -60,6 +60,12 @@ VGA_VIDEO = {
    ]
 }
 
+VMVGA_VIDEO = {
+    "model_type": [
+        (HV_ALL, "vmvga"),
+    ]
+}
+
 DEFAULTS = {
     "acpi":             True,
     "apic":             True,
@@ -507,7 +513,6 @@ OS_TYPES = {
     "ubuntuhardy": {
         "label": "Ubuntu 8.04 LTS (Hardy Heron)",
         "distro": "ubuntu",
-        "supported": True,
         "devices" : {
             NET  : VIRTIO_NET,
        },
@@ -555,7 +560,6 @@ OS_TYPES = {
     "ubuntunatty": {
         "label": "Ubuntu 11.04 (Natty Narwhal)",
         "distro": "ubuntu",
-        "supported": True,
         "devices" : {
             DISK : VIRTIO_DISK,
             NET  : VIRTIO_NET,
@@ -564,7 +568,6 @@ OS_TYPES = {
     "ubuntuoneiric": {
         "label": "Ubuntu 11.10 (Oneiric Ocelot)",
         "distro": "ubuntu",
-        "supported": True,
         "devices" : {
             DISK : VIRTIO_DISK,
             NET  : VIRTIO_NET,
@@ -588,6 +591,26 @@ OS_TYPES = {
             NET  : VIRTIO_NET,
        },
    },
+    "ubunturaring": {
+        "label": "Ubuntu 13.04 (Raring Ringtail)",
+        "distro": "ubuntu",
+        "supported": True,
+        "devices" : {
+            DISK : VIRTIO_DISK,
+            NET  : VIRTIO_NET,
+            VIDEO : VMVGA_VIDEO,
+        },
+    },
+    "ubuntusaucy": {
+        "label": "Ubuntu 13.10 (Saucy Salamander)",
+        "distro": "ubuntu",
+        "supported": True,
+        "devices" : {
+            DISK : VIRTIO_DISK,
+            NET  : VIRTIO_NET,
+            VIDEO : VMVGA_VIDEO,
+        },
+    },
 
     "generic24": {
         "label": "Generic 2.4.x kernel"
