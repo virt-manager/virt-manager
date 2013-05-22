@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2007 Red Hat, Inc.
+# Copyright (C) 2006-2007, 2013 Red Hat, Inc.
 # Copyright (C) 2006 Hugh O. Brock <hbrock@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -177,9 +177,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         notebook = self.widget("create-pages")
         notebook.prev_page()
 
-    def change_ipv4_enable(self, src):
-        ignore = src
-
+    def change_ipv4_enable(self, ignore):
         white = Gdk.Color.parse("#f0f0f0")[1]
         net = self.widget("net-ipv4-network")
         start = self.widget("net-dhcpv4-start")
@@ -213,9 +211,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             network.modify_bg(Gtk.StateType.NORMAL, white)
             gateway.modify_bg(Gtk.StateType.NORMAL, white)
 
-    def change_ipv6_enable(self, src):
-        ignore = src
-
+    def change_ipv6_enable(self, ignore):
         white = Gdk.Color.parse("#f0f0f0")[1]
         net = self.widget("net-ipv6-network")
         start = self.widget("net-dhcpv6-start")
@@ -250,8 +246,6 @@ class vmmCreateNetwork(vmmGObjectUI):
             gateway.modify_bg(Gtk.StateType.NORMAL, white)
 
     def change_ipv4_network(self, src):
-        ignore = src
-
         ip = self.get_config_ip4()
         green = Gdk.Color.parse("#c0ffc0")[1]
         red = Gdk.Color.parse("#ffc0c0")[1]
@@ -304,8 +298,6 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("net-routev4-gateway").set_sensitive(False)
 
     def change_ipv6_network(self, src):
-        ignore = src
-
         ip = self.get_config_ip6()
         green = Gdk.Color.parse("#c0ffc0")[1]
         red = Gdk.Color.parse("#ffc0c0")[1]
@@ -363,9 +355,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("net-routev6-gateway").set_sensitive(False)
 
 
-    def change_routev4_enable(self, src):
-        ignore = src
-
+    def change_routev4_enable(self, ignore):
         white = Gdk.Color.parse("#f0f0f0")[1]
         ntwk = self.widget("net-routev4-network")
         gway = self.widget("net-routev4-gateway")
@@ -401,8 +391,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         return addr
 
     def change_routev4_network(self, src):
-        ignore = src
-
         ntwk = self.get_config_routev4_network()
         ipAddr = self.get_config_ip4()
         black = Gdk.Color.parse("#000000")[1]
@@ -426,8 +414,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         src.modify_bg(Gtk.StateType.NORMAL, color)
 
     def change_routev4_gateway(self, src):
-        ignore = src
-
         gway = self.get_config_routev4_gateway()
         ipAddr = self.get_config_ip4()
         black = Gdk.Color.parse("#000000")[1]
@@ -452,9 +438,7 @@ class vmmCreateNetwork(vmmGObjectUI):
                 color = red
         src.modify_bg(Gtk.StateType.NORMAL, color)
 
-    def change_dhcpv4_enable(self, src):
-        ignore = src
-
+    def change_dhcpv4_enable(self, ignore):
         white = Gdk.Color.parse("#f0f0f0")[1]
         start = self.widget("net-dhcpv4-start")
         end = self.widget("net-dhcpv4-end")
@@ -476,14 +460,10 @@ class vmmCreateNetwork(vmmGObjectUI):
                 end.set_text(str(ip.network + int(ip.numhosts - 2)))
 
     def change_dhcpv4_start(self, src):
-        ignore = src
-
         start = self.get_config_dhcpv4_start()
         self.change_dhcpv4(src, start)
 
     def change_dhcpv4_end(self, src):
-        ignore = src
-
         end = self.get_config_dhcpv4_end()
         self.change_dhcpv4(src, end)
 
@@ -503,7 +483,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             green = Gdk.Color.parse("#c0ffc0")[1]
             src.modify_bg(Gtk.StateType.NORMAL, green)
 
-    def change_routev6_enable(self, src):
+    def change_routev6_enable(self, ignore):
         white = Gdk.Color.parse("#f0f0f0")[1]
         ntwk = self.widget("net-routev6-network")
         gway = self.widget("net-routev6-gateway")
@@ -548,7 +528,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         else:
             if addr.version != 6:
                 color = red
-            if  addr.prefixlen > 64:
+            if addr.prefixlen > 64:
                 color = red
         src.modify_bg(Gtk.StateType.NORMAL, color)
 
@@ -577,7 +557,7 @@ class vmmCreateNetwork(vmmGObjectUI):
                 color = red
         src.modify_bg(Gtk.StateType.NORMAL, color)
 
-    def change_dhcpv6_enable(self, src):
+    def change_dhcpv6_enable(self, ignore):
         white = Gdk.Color.parse("#f0f0f0")[1]
         start = self.widget("net-dhcpv6-start")
         end = self.widget("net-dhcpv6-end")
@@ -622,7 +602,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             green = Gdk.Color.parse("#c0ffc0")[1]
             src.modify_bg(Gtk.StateType.NORMAL, green)
 
-    def change_forward_type(self, src_ignore):
+    def change_forward_type(self, ignore):
         skip_fwd = self.widget("net-forward-none").get_active()
 
         self.widget("net-forward-mode").set_sensitive(not skip_fwd)
@@ -941,7 +921,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("create-finish").hide()
 
 
-    def finish(self, ignore=None):
+    def finish(self, ignore):
         name = self.get_config_name()
         dev, mode = self.get_config_forwarding()
 

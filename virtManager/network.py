@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 Red Hat, Inc.
+# Copyright (C) 2006, 2013 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 #
-import logging
-
 from virtManager import util
 import ipaddr
 import libxml2
