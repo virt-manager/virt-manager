@@ -1,331 +1,319 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
-# Peter Mráz <etkinator@gmail.com>, 2010.
-#: ../virtManager/host.py:581
+# Michal Hriň <michalhrin@aol.com>, 2013
+# Peter  Mráz <etkinator@gmail.com>, 2010
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-15 13:35-0400\n"
-"PO-Revision-Date: 2012-08-14 08:17+0000\n"
-"Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
-"Language-Team: Slovak (http://www.transifex.com/projects/p/virt-manager/"
-"language/sk/)\n"
-"Language: sk\n"
+"Report-Msgid-Bugs-To: http://bugzilla.redhat.com/\n"
+"POT-Creation-Date: 2013-05-10 09:43-0400\n"
+"PO-Revision-Date: 2013-05-10 13:43+0000\n"
+"Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
+"Language-Team: Slovak (http://www.transifex.com/projects/p/virt-manager/language/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: sk\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: ../virt-manager:57
+#: ../virt-manager:58
 msgid "Error starting Virtual Machine Manager"
 msgstr "Chyba pri spúšťaní Správcu virtuálnych počítačov"
 
 #: ../virt-install:48
-#, fuzzy
 msgid ""
 "An install method must be specified\n"
 "(%(methods)s)"
-msgstr "Musí byť určené rozhranie."
+msgstr ""
 
 #: ../virt-install:50
 msgid "--disk storage must be specified (override with --nodisks)"
 msgstr ""
 
-#: ../virt-install:129
-#, fuzzy
+#: ../virt-install:138
 msgid "Error in %(chartype)s device parameters: %(err)s"
-msgstr "Chyba pri nastavovaní parametrov klonovania: %s"
-
-#: ../virt-install:139
-#, fuzzy, c-format
-msgid "Error in watchdog device parameters: %s"
-msgstr "Chyba pri nastavovaní parametrov klonovania: %s"
-
-#: ../virt-install:148
-#, fuzzy, c-format
-msgid "Error in filesystem device parameters: %s"
-msgstr "Chyba pri nastavovaní parametrov klonovania: %s"
-
-#: ../virt-install:166 ../virtinst/cli.py:768
-#, fuzzy, c-format, python-format
-msgid "Error with storage parameters: %s"
-msgstr "Chyba sieťových parametrov."
-
-#: ../virt-install:219
-msgid ""
-"Would you like a fully virtualized guest (yes or no)? This will allow you to "
-"run unmodified operating systems."
 msgstr ""
 
-#: ../virt-install:244
+#: ../virt-install:148
+#, c-format
+msgid "Error in watchdog device parameters: %s"
+msgstr ""
+
+#: ../virt-install:157
+#, c-format
+msgid "Error in filesystem device parameters: %s"
+msgstr ""
+
+#: ../virt-install:175 ../virtinst/cli.py:768
+#, c-format, python-format
+msgid "Error with storage parameters: %s"
+msgstr ""
+
+#: ../virt-install:228
+msgid ""
+"Would you like a fully virtualized guest (yes or no)? This will allow you to"
+" run unmodified operating systems."
+msgstr ""
+
+#: ../virt-install:253
 #, c-format
 msgid "Would you like to use %s acceleration? (yes or no)"
 msgstr ""
 
-#: ../virt-install:258
+#: ../virt-install:267
 msgid "Can't do more than one of --hvm, --paravirt, or --container"
 msgstr ""
 
-#: ../virt-install:281 ../virt-install:282
-#, fuzzy
+#: ../virt-install:290 ../virt-install:291
 msgid "default"
-msgstr "Predvolené systémom"
+msgstr ""
 
-#: ../virt-install:330
-#, fuzzy, c-format
+#: ../virt-install:339
+#, c-format
 msgid "Error validating install location: %s"
-msgstr "Chyba pri overovaní konfigurácie IP: %s"
+msgstr ""
 
-#: ../virt-install:335
+#: ../virt-install:344
 msgid "What is the install CD-ROM/ISO or URL?"
 msgstr ""
 
-#: ../virt-install:337
+#: ../virt-install:346
 msgid "What is the install URL?"
 msgstr ""
 
-#: ../virt-install:411
+#: ../virt-install:420
 msgid "Cannot specify storage and use --nodisks"
 msgstr ""
 
-#: ../virt-install:415
+#: ../virt-install:424
 msgid ""
-"Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
-"disk PATH[,size=SIZE][,sparse=yes|no]"
+"Cannot mix --file, --nonsparse, or --file-size with --disk options. Use "
+"--disk PATH[,size=SIZE][,sparse=yes|no]"
 msgstr ""
 
-#: ../virt-install:421
+#: ../virt-install:430
 msgid "Cannot use --mac with --nonetworks"
 msgstr ""
 
-#: ../virt-install:423
+#: ../virt-install:432
 msgid "Cannot use --bridge with --nonetworks"
 msgstr ""
 
-#: ../virt-install:425
+#: ../virt-install:434
 msgid "Cannot use --network with --nonetworks"
 msgstr ""
 
-#: ../virt-install:431
+#: ../virt-install:440
 msgid "Only one install method can be used (%(methods)s)"
 msgstr ""
 
-#: ../virt-install:437
+#: ../virt-install:446
 #, c-format
 msgid "Install methods (%s) cannot be specified for container guests"
 msgstr ""
 
-#: ../virt-install:442
+#: ../virt-install:451
 msgid "Network PXE boot is not supported for paravirtualized guests"
 msgstr ""
 
-#: ../virt-install:445
+#: ../virt-install:454
 msgid "Paravirtualized guests cannot install off cdrom media."
 msgstr ""
 
-#: ../virt-install:450
-#, fuzzy
+#: ../virt-install:459
 msgid "Libvirt version does not support remote --location installs"
-msgstr "Táto verzia libvirt nepodporuje výpis zoznamu médií."
+msgstr ""
 
-#: ../virt-install:453
+#: ../virt-install:462
 msgid "--extra-args only work if specified with --location."
 msgstr ""
 
-#: ../virt-install:455
+#: ../virt-install:464
 msgid "--initrd-inject only works if specified with --location."
 msgstr ""
 
-#: ../virt-install:468
+#: ../virt-install:477
 msgid "Can't use --pxe with --nonetworks"
 msgstr ""
 
-#: ../virt-install:475
-#, fuzzy
+#: ../virt-install:484
 msgid "A disk device must be specified with --import."
-msgstr "Musí byť určené rozhranie."
+msgstr ""
 
-#: ../virt-install:569
+#: ../virt-install:578
 msgid "The guest's network configuration does not support PXE"
 msgstr ""
 
-#: ../virt-install:595
+#: ../virt-install:604
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
 msgstr ""
 
-#: ../virt-install:661
+#: ../virt-install:670
 msgid ""
 "\n"
 "Starting install..."
 msgstr ""
 
-#: ../virt-install:679
+#: ../virt-install:688
 #, c-format
 msgid ""
 "Domain creation completed. You can restart your domain by running:\n"
 "  %s"
 msgstr ""
 
-#: ../virt-install:683
+#: ../virt-install:692
 msgid "Guest installation complete... restarting guest."
 msgstr ""
 
-#: ../virt-install:690
-#, fuzzy
+#: ../virt-install:699
 msgid "Domain install interrupted."
-msgstr "Je potrebný inštalačný strom."
+msgstr ""
 
-#: ../virt-install:712
-#, fuzzy
+#: ../virt-install:721
 msgid "Domain has crashed."
-msgstr "Hosťujúci počítač havaroval"
+msgstr ""
 
-#: ../virt-install:749
+#: ../virt-install:758
 msgid ""
 "Domain installation still in progress. You can reconnect to \n"
 "the console to complete the installation process."
 msgstr ""
 
-#: ../virt-install:754
+#: ../virt-install:763
 #, c-format
 msgid "%d minutes "
 msgstr ""
 
-#: ../virt-install:756
+#: ../virt-install:765
 #, c-format
 msgid ""
 "Domain installation still in progress. Waiting %sfor installation to "
 "complete."
 msgstr ""
 
-#: ../virt-install:762
+#: ../virt-install:771
 msgid "Domain has shutdown. Continuing."
 msgstr ""
 
-#: ../virt-install:769
-#, fuzzy, c-format
+#: ../virt-install:778
+#, c-format
 msgid "Could not lookup domain after install: %s"
-msgstr "Nepodarilo sa zostaviť zoznam médií prostredníctvom libvirt: %s"
+msgstr ""
 
-#: ../virt-install:776
+#: ../virt-install:785
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr ""
 
-#: ../virt-install:801
+#: ../virt-install:810
 msgid "Dry run completed successfully"
 msgstr ""
 
-#: ../virt-install:807
+#: ../virt-install:816
 msgid ""
 "--print-xml can only be used with guests that do not have an installation "
-"phase (--import, --boot, etc.). To see all generated XML, please use --print-"
-"step all."
+"phase (--import, --boot, etc.). To see all generated XML, please use "
+"--print-step all."
 msgstr ""
 
-#: ../virt-install:817
+#: ../virt-install:826
 msgid "Requested installation does not have XML step 2"
 msgstr ""
 
-#: ../virt-install:821
+#: ../virt-install:830
 msgid "Requested installation does not have XML step 3"
 msgstr ""
 
-#: ../virt-install:842 ../virt-clone:140 ../virt-image:61
-#, fuzzy
+#: ../virt-install:851 ../virt-clone:140 ../virt-image:61
 msgid "General Options"
-msgstr "Voľby jadra:"
+msgstr ""
 
-#: ../virt-install:844 ../virt-image:63
+#: ../virt-install:853 ../virt-image:63
 msgid "Name of the guest instance"
 msgstr ""
 
-#: ../virt-install:846 ../virt-image:65
+#: ../virt-install:855 ../virt-image:65
 msgid "Memory to allocate for guest instance in megabytes"
 msgstr ""
 
-#: ../virt-install:850
+#: ../virt-install:859
 msgid "Human readable description of the VM to store in the generated XML."
 msgstr ""
 
-#: ../virt-install:853
-#, fuzzy
+#: ../virt-install:862
 msgid "Set domain security driver configuration."
-msgstr "Statická konfigurácia"
+msgstr ""
 
-#: ../virt-install:855
+#: ../virt-install:864
 msgid "Tune NUMA policy for the domain process."
 msgstr ""
 
-#: ../virt-install:858
+#: ../virt-install:867
 msgid "Installation Method Options"
 msgstr ""
 
-#: ../virt-install:860
+#: ../virt-install:870
 msgid "CD-ROM installation media"
 msgstr ""
 
-#: ../virt-install:862
+#: ../virt-install:872
 msgid ""
 "Installation source (eg, nfs:host:/path, http://host/path, ftp://host/path)"
 msgstr ""
 
-#: ../virt-install:865
+#: ../virt-install:875
 msgid "Boot from the network using the PXE protocol"
 msgstr ""
 
-#: ../virt-install:867
-#, fuzzy
+#: ../virt-install:877
 msgid "Build guest around an existing disk image"
-msgstr "Iportovať _existujúci obraz disku"
+msgstr ""
 
-#: ../virt-install:869
+#: ../virt-install:879
 msgid ""
 "Path to init binary for container guest. Ex:\n"
 "--init /path/to/app (to contain an application)\n"
 "--init /sbin/init (for a full OS container)"
 msgstr ""
 
-#: ../virt-install:873
+#: ../virt-install:883
 msgid "Treat the CD-ROM media as a Live CD"
 msgstr ""
 
-#: ../virt-install:876
+#: ../virt-install:886
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
 
-#: ../virt-install:880
+#: ../virt-install:890
 msgid "Add given file to root of initrd from --location"
 msgstr ""
 
-#: ../virt-install:882 ../virt-image:71
+#: ../virt-install:892 ../virt-image:71
 msgid "The OS type being installed, e.g. 'linux', 'unix', 'windows'"
 msgstr ""
 
-#: ../virt-install:885
+#: ../virt-install:895
 msgid ""
-"The OS variant being installed guests, e.g. 'fedora6', 'rhel5', 'solaris10', "
-"'win2k'"
+"The OS variant being installed guests, e.g. 'fedora6', 'rhel5', 'solaris10',"
+" 'win2k'"
 msgstr ""
 
-#: ../virt-install:888
+#: ../virt-install:898
 msgid ""
 "Optionally configure post-install boot order, menu, permanent kernel boot, "
 "etc."
 msgstr ""
 
-#: ../virt-install:892 ../virt-clone:156
-#, fuzzy
+#: ../virt-install:902 ../virt-clone:156
 msgid "Storage Configuration"
-msgstr "Konfigurácia premostenia"
+msgstr ""
 
-#: ../virt-install:894
+#: ../virt-install:904
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk path=/my/existing/disk\n"
@@ -333,149 +321,141 @@ msgid ""
 "--disk vol=poolname/volname,device=cdrom,bus=scsi,..."
 msgstr ""
 
-#: ../virt-install:899
+#: ../virt-install:909
 msgid "Don't set up any disks for the guest."
 msgstr ""
 
-#: ../virt-install:916
-#, fuzzy
+#: ../virt-install:926
 msgid "Don't create network interfaces for the guest."
-msgstr "Nastaviť sieťové rozhranie"
+msgstr ""
 
-#: ../virt-install:922
+#: ../virt-install:932
 msgid "Don't automatically try to connect to the guest console"
 msgstr ""
 
-#: ../virt-install:926
-#, fuzzy
+#: ../virt-install:936
 msgid "Device Options"
-msgstr "Rozšírené možnosti"
-
-#: ../virt-install:935
-msgid "Virtualization Platform Options"
-msgstr ""
-
-#: ../virt-install:937 ../virt-convert:61
-msgid "This guest should be a fully virtualized guest"
-msgstr ""
-
-#: ../virt-install:939 ../virt-convert:63
-msgid "This guest should be a paravirtualized guest"
-msgstr ""
-
-#: ../virt-install:942
-msgid "This guest should be a container guest"
 msgstr ""
 
 #: ../virt-install:945
+msgid "Virtualization Platform Options"
+msgstr ""
+
+#: ../virt-install:947 ../virt-convert:61
+msgid "This guest should be a fully virtualized guest"
+msgstr ""
+
+#: ../virt-install:949 ../virt-convert:63
+msgid "This guest should be a paravirtualized guest"
+msgstr ""
+
+#: ../virt-install:952
+msgid "This guest should be a container guest"
+msgstr ""
+
+#: ../virt-install:955
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr ""
 
-#: ../virt-install:949
+#: ../virt-install:959
 msgid "The CPU architecture to simulate"
 msgstr ""
 
-#: ../virt-install:951
+#: ../virt-install:961
 msgid "The machine type to emulate"
 msgstr ""
 
-#: ../virt-install:954 ../virt-convert:78
+#: ../virt-install:964 ../virt-convert:78
 msgid ""
 "Disables APIC for fully virtualized guest (overrides value in os-type/os-"
 "variant db)"
 msgstr ""
 
-#: ../virt-install:958 ../virt-convert:82
+#: ../virt-install:968 ../virt-convert:82
 msgid ""
 "Disables ACPI for fully virtualized guest (overrides value in os-type/os-"
 "variant db)"
 msgstr ""
 
-#: ../virt-install:961 ../virt-image:68
+#: ../virt-install:971 ../virt-image:68
 msgid "UUID for the guest."
 msgstr ""
 
-#: ../virt-install:964 ../virt-clone:179 ../virt-image:93
+#: ../virt-install:974 ../virt-clone:179 ../virt-image:93
 msgid "Miscellaneous Options"
 msgstr ""
 
-#: ../virt-install:967
-#, fuzzy
+#: ../virt-install:977
 msgid "Have domain autostart on host boot up."
-msgstr "Spustiť virt_uálny počítač pri zavádzaní hostiteľa"
+msgstr ""
 
-#: ../virt-install:969
+#: ../virt-install:979
 msgid "Print the generated domain XML rather than define the guest."
 msgstr ""
 
-#: ../virt-install:972
+#: ../virt-install:982
 msgid ""
 "Print XML of a specific install step (1, 2, 3, all) rather than define the "
 "guest."
 msgstr ""
 
-#: ../virt-install:975 ../virt-image:104
+#: ../virt-install:985 ../virt-image:104
 msgid "Don't boot guest after completing install."
 msgstr ""
 
-#: ../virt-install:977
+#: ../virt-install:987
 msgid "Time to wait (in minutes)"
 msgstr ""
 
-#: ../virt-install:979
+#: ../virt-install:989
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 
-#: ../virt-install:982
+#: ../virt-install:992
 msgid "Forces 'yes' for any applicable prompts, terminates for all others"
 msgstr ""
 
-#: ../virt-install:985 ../virt-clone:197 ../virt-image:117 ../virt-convert:88
+#: ../virt-install:995 ../virt-clone:197 ../virt-image:117 ../virt-convert:88
 msgid "Suppress non-error output"
 msgstr ""
 
-#: ../virt-install:988 ../virt-clone:190
+#: ../virt-install:998 ../virt-clone:190
 msgid "Request user input for ambiguous situations or required options."
 msgstr ""
 
-#: ../virt-install:991 ../virt-clone:187 ../virt-image:109 ../virt-convert:90
-#, fuzzy
+#: ../virt-install:1001 ../virt-clone:187 ../virt-image:109 ../virt-convert:90
 msgid "Print debugging information"
-msgstr "Chyba pri nastavovaní informácií o OS."
+msgstr ""
 
-#: ../virt-install:1012 ../virt-clone:216
+#: ../virt-install:1022 ../virt-clone:216
 #, c-format
 msgid "Unknown argument '%s'"
 msgstr ""
 
-#: ../virt-install:1027
+#: ../virt-install:1037
 msgid "--print-step must be 1, 2, 3, or all"
 msgstr ""
 
-#: ../virt-install:1049 ../virt-clone:269 ../virt-image:215
+#: ../virt-install:1059 ../virt-clone:269 ../virt-image:215
 msgid "Installation aborted at user request"
 msgstr ""
 
 #: ../virt-clone:43
-#, fuzzy
 msgid "What is the name for the cloned virtual machine?"
-msgstr "_Povoliť tomuto virtuálnemu počítaču ukladanie"
+msgstr ""
 
 #: ../virt-clone:44
-#, fuzzy
 msgid "A name is required for the new virtual machine."
-msgstr "_Povoliť tomuto virtuálnemu počítaču ukladanie"
+msgstr ""
 
 #: ../virt-clone:62
-#, fuzzy
 msgid "What is the name of the original virtual machine?"
-msgstr "_Povoliť tomuto virtuálnemu počítaču ukladanie"
+msgstr ""
 
 #: ../virt-clone:63
-#, fuzzy
 msgid "An original machine name or xml file is required."
-msgstr "Vyžaduje sa názov rozhrania."
+msgstr ""
 
 #: ../virt-clone:113
 #, c-format
@@ -525,9 +505,8 @@ msgid ""
 msgstr ""
 
 #: ../virt-clone:173 ../virtinst/cli.py:1129
-#, fuzzy
 msgid "Networking Configuration"
-msgstr "Konfigurácia zväzovania"
+msgstr ""
 
 #: ../virt-clone:175
 msgid ""
@@ -561,13 +540,14 @@ msgid "Clone '%s' created successfully."
 msgstr ""
 
 #: ../virt-image:43
-#, fuzzy, c-format
+#, c-format
 msgid "The image requires %i network interface."
-msgstr "Nastaviť sieťové rozhranie"
+msgstr ""
 
 #: ../virt-image:74
 msgid ""
-"The OS variant being installed, e.g. 'fedora6', 'rhel5', 'solaris10', 'win2k'"
+"The OS variant being installed, e.g. 'fedora6', 'rhel5', 'solaris10', "
+"'win2k'"
 msgstr ""
 
 #: ../virt-image:78
@@ -612,9 +592,9 @@ msgid "The index for --boot must be between 0 and %d"
 msgstr ""
 
 #: ../virt-image:198
-#, fuzzy, c-format
+#, c-format
 msgid "Creating guest %s..."
-msgstr "Vytváranie zoskupenia úložísk..."
+msgstr ""
 
 #: ../virt-convert:51
 msgid "Input format, e.g. 'vmx'"
@@ -676,9 +656,9 @@ msgid "Couldn't access input argument \"%s\"\n"
 msgstr ""
 
 #: ../virt-convert:136
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't determine input format for \"%s\": %s"
-msgstr "Nebolo možné vytvoriť predvolené zoskupenie úložísk '%s': %s"
+msgstr ""
 
 #: ../virt-convert:141
 #, c-format
@@ -696,9 +676,9 @@ msgid "Couldn't clean up output directory \"%s\": %s"
 msgstr ""
 
 #: ../virt-convert:194 ../virt-convert:197
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't import file \"%s\": %s"
-msgstr "Nepodarilo sa spustiť virtuálnu sieť '%s': %s"
+msgstr ""
 
 #: ../virt-convert:235
 msgid "Generating output in '%(format)s' format to %(dir)s/"
@@ -719,9 +699,8 @@ msgid "Couldn't export to file \"%s\": %s"
 msgstr ""
 
 #: ../virt-convert:291
-#, fuzzy
 msgid "Aborted at user request"
-msgstr "Potvrdzovať požiadavku na pozastavenie"
+msgstr ""
 
 #: ../virtManager/addhardware.py:357 ../virtManager/create.py:495
 #: ../virtManager/create.py:597 ../virtinst/Storage.py:1076
@@ -755,9 +734,8 @@ msgid "IDE CDROM"
 msgstr ""
 
 #: ../virtManager/addhardware.py:530
-#, fuzzy
 msgid "Floppy disk"
-msgstr "_Disketová mechanika"
+msgstr ""
 
 #: ../virtManager/addhardware.py:534
 msgid "SCSI disk"
@@ -772,9 +750,8 @@ msgid "SATA disk"
 msgstr ""
 
 #: ../virtManager/addhardware.py:541
-#, fuzzy
 msgid "Virtio disk"
-msgstr "Exisujúci disk"
+msgstr ""
 
 #: ../virtManager/addhardware.py:543
 msgid "Virtio lun"
@@ -789,15 +766,14 @@ msgid "Virtio SCSI lun"
 msgstr ""
 
 #: ../virtManager/addhardware.py:550
-#, fuzzy
 msgid "Xen virtual disk"
-msgstr "Žiadne virtuálne počítače"
+msgstr ""
 
-#: ../virtManager/addhardware.py:554 ../virtManager/details.py:3040
+#: ../virtManager/addhardware.py:554 ../virtManager/details.py:3048
 msgid "EvTouch USB Graphics Tablet"
 msgstr "Grafický USB tablet EvTouch"
 
-#: ../virtManager/addhardware.py:555 ../virtManager/details.py:3042
+#: ../virtManager/addhardware.py:555 ../virtManager/details.py:3050
 msgid "Generic USB Mouse"
 msgstr "Bežná USB myš"
 
@@ -807,7 +783,7 @@ msgstr "VNC server"
 
 #: ../virtManager/addhardware.py:560
 msgid "Spice server"
-msgstr ""
+msgstr "Spice server"
 
 #: ../virtManager/addhardware.py:561
 msgid "Local SDL window"
@@ -840,7 +816,7 @@ msgstr "Úložiská"
 msgid "Network"
 msgstr "Sieť"
 
-#: ../virtManager/addhardware.py:994 ../virtManager/details.py:3514
+#: ../virtManager/addhardware.py:994 ../virtManager/details.py:3522
 msgid "Input"
 msgstr "Vstup"
 
@@ -864,7 +840,7 @@ msgstr ""
 msgid "Filesystem Passthrough"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1006 ../virtManager/details.py:3596
+#: ../virtManager/addhardware.py:1006 ../virtManager/details.py:3604
 msgid "Smartcard"
 msgstr ""
 
@@ -903,7 +879,7 @@ msgstr ""
 msgid "Error adding device: %s"
 msgstr "Chyba pri pridávaní zariadenia: %s"
 
-#: ../virtManager/addhardware.py:1275 ../virtManager/create.py:1706
+#: ../virtManager/addhardware.py:1275 ../virtManager/create.py:1702
 #, python-format
 msgid ""
 "The following storage already exists, but is not\n"
@@ -914,21 +890,21 @@ msgid ""
 "Would you like to reuse this storage?"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1306 ../virtManager/create.py:1729
+#: ../virtManager/addhardware.py:1306 ../virtManager/create.py:1725
 msgid "Storage parameter error."
 msgstr "Chyba parametra úložiska."
 
 #. Fatal errors are reported when setting 'size'
-#: ../virtManager/addhardware.py:1320 ../virtManager/create.py:1734
+#: ../virtManager/addhardware.py:1320 ../virtManager/create.py:1730
 msgid "Not Enough Free Space"
 msgstr "Nedostatok voľného priestoru"
 
-#: ../virtManager/addhardware.py:1326 ../virtManager/create.py:1740
+#: ../virtManager/addhardware.py:1326 ../virtManager/create.py:1736
 #, python-format
 msgid "Disk \"%s\" is already in use by another guest!"
 msgstr "Disk \"%s\" už používa iný hosť!"
 
-#: ../virtManager/addhardware.py:1328 ../virtManager/create.py:1742
+#: ../virtManager/addhardware.py:1328 ../virtManager/create.py:1738
 msgid "Do you really want to use the disk?"
 msgstr "Naozaj chcete disk použiť?"
 
@@ -956,52 +932,57 @@ msgstr "Chyba parametra grafického zariadenia"
 msgid "Sound device parameter error"
 msgstr "Chyba parametra zvukového zariadenia"
 
-#: ../virtManager/addhardware.py:1408
+#: ../virtManager/addhardware.py:1409
 msgid "Physical Device Required"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1409
+#: ../virtManager/addhardware.py:1410
 msgid "A device must be selected."
 msgstr "Musí byť vybrané zariadenie."
 
-#: ../virtManager/addhardware.py:1416
+#: ../virtManager/addhardware.py:1419
+#, python-format
+msgid "Could not find USB device (vendorId: %s, productId: %s) "
+msgstr ""
+
+#: ../virtManager/addhardware.py:1433
 msgid "Host device parameter error"
 msgstr "Chyba parametra hostiteľského zariadenia"
 
-#: ../virtManager/addhardware.py:1461
+#: ../virtManager/addhardware.py:1478
 #, python-format
 msgid "%s device parameter error"
 msgstr "Chyba parametra zariadenia %s"
 
-#: ../virtManager/addhardware.py:1472
+#: ../virtManager/addhardware.py:1489
 msgid "Video device parameter error"
 msgstr "Chyba parametra video zariadenia"
 
-#: ../virtManager/addhardware.py:1484
+#: ../virtManager/addhardware.py:1501
 msgid "Watchdog parameter error"
 msgstr "Chyba parametra ochranného časovača"
 
-#: ../virtManager/addhardware.py:1497
+#: ../virtManager/addhardware.py:1514
 msgid "A filesystem source must be specified"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1499
+#: ../virtManager/addhardware.py:1516
 msgid "A filesystem target must be specified"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1502
+#: ../virtManager/addhardware.py:1519
 msgid "Invalid target path. A filesystem with that target already exists"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1520
+#: ../virtManager/addhardware.py:1537
 msgid "Filesystem parameter error"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1538
+#: ../virtManager/addhardware.py:1555
 msgid "Smartcard device parameter error"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1553
+#: ../virtManager/addhardware.py:1570
 msgid "USB redirected device parameter error"
 msgstr ""
 
@@ -1056,11 +1037,11 @@ msgid ""
 "managed storage volumes."
 msgstr ""
 
-#: ../virtManager/clone.py:89 ../virtManager/delete.py:350
+#: ../virtManager/clone.py:89 ../virtManager/delete.py:346
 msgid "No write access to parent directory."
 msgstr "Chýba právo na zápis do rodičovského priečinka."
 
-#: ../virtManager/clone.py:91 ../virtManager/delete.py:348
+#: ../virtManager/clone.py:91 ../virtManager/delete.py:344
 msgid "Path does not exist."
 msgstr "Cesta neexistuje."
 
@@ -1126,9 +1107,7 @@ msgstr "Klonovanie nahradí existujúci súbor"
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
-msgstr ""
-"Pri použití existujúceho obrazu sa počas procesu klonovania obraz prepíše. "
-"Naozaj chcete použiť túto cestu?"
+msgstr "Pri použití existujúceho obrazu sa počas procesu klonovania obraz prepíše. Naozaj chcete použiť túto cestu?"
 
 #: ../virtManager/clone.py:726
 #, python-format
@@ -1146,14 +1125,10 @@ msgid ""
 "\n"
 "%s\n"
 "Running the new guest could overwrite data in these disk images."
-msgstr ""
-"Nasledujúce diskové zariadenia nebudú klonované:\n"
-"\n"
-"%s\n"
-"Spustením nového hosťa by mohlo prepísať údaje na obrazoch týchto diskov."
+msgstr "Nasledujúce diskové zariadenia nebudú klonované:\n\n%s\nSpustením nového hosťa by mohlo prepísať údaje na obrazoch týchto diskov."
 
 #: ../virtManager/clone.py:796 ../virtManager/createpool.py:426
-#: ../virtManager/createvol.py:225 ../virtManager/migrate.py:466
+#: ../virtManager/createvol.py:225 ../virtManager/migrate.py:465
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "Nezachytený chyba overenia vstupu: %s"
@@ -1172,104 +1147,89 @@ msgstr "a vybraného úložiska (môže chvíľu trvať)"
 msgid "Error creating virtual machine clone '%s': %s"
 msgstr "Chyba pri vytváraní klonu virtuálneho počítača '%s': %s"
 
-#: ../virtManager/config.py:50
+#: ../virtManager/config.py:108
 msgid "Locate or create storage volume"
 msgstr "Vybrať alebo vytvoriť zväzok úložiska"
 
-#: ../virtManager/config.py:51
+#: ../virtManager/config.py:109
 msgid "Locate existing storage"
 msgstr "Nájsť existujúce úložisko"
 
-#: ../virtManager/config.py:58
+#: ../virtManager/config.py:116
 msgid "Locate ISO media volume"
 msgstr "Nájsť ISO obraz zväzku"
 
-#: ../virtManager/config.py:59
+#: ../virtManager/config.py:117
 msgid "Locate ISO media"
 msgstr "Nájsť ISO obraz"
 
-#: ../virtManager/config.py:64
+#: ../virtManager/config.py:122
 msgid "Locate floppy media volume"
 msgstr ""
 
-#: ../virtManager/config.py:65
+#: ../virtManager/config.py:123
 msgid "Locate floppy media"
 msgstr ""
 
-#: ../virtManager/config.py:70 ../virtManager/config.py:71
+#: ../virtManager/config.py:128 ../virtManager/config.py:129
 msgid "Locate directory volume"
 msgstr ""
 
-#: ../virtManager/connect.py:347
+#: ../virtManager/connect.py:361
 msgid "A hostname is required for remote connections."
 msgstr ""
 
-#: ../virtManager/connection.py:156
+#: ../virtManager/connection.py:146
 #, python-format
 msgid "Could not build physical interface list via libvirt: %s"
-msgstr ""
-"Nepodarilo sa zostaviť zoznam fyzických zariadení prostredníctvom libvirt: %s"
+msgstr "Nepodarilo sa zostaviť zoznam fyzických zariadení prostredníctvom libvirt: %s"
 
-#: ../virtManager/connection.py:162
-msgid "Libvirt version does not support physical interface listing"
-msgstr "Táto verzia libvirt nepodporuje vypísanie zoznamu fyzických rozhraní"
-
-#: ../virtManager/connection.py:173
-#, python-format
-msgid "Could not initialize HAL for interface listing: %s"
-msgstr "Nepodarilo sa inicializovať HAL na zobrazenie zoznamu rozhraní: %s"
-
-#: ../virtManager/connection.py:176
+#: ../virtManager/connection.py:149
 msgid "Libvirt version does not support physical interface listing."
 msgstr "Táto verzia libvirt nepodporuje vypísanie zoznamu fyzických rozhraní."
 
-#: ../virtManager/connection.py:195
+#: ../virtManager/connection.py:168
 #, python-format
 msgid "Could not build media list via libvirt: %s"
 msgstr "Nepodarilo sa zostaviť zoznam médií prostredníctvom libvirt: %s"
 
-#: ../virtManager/connection.py:202 ../virtManager/connection.py:216
+#: ../virtManager/connection.py:171
 msgid "Libvirt version does not support media listing."
 msgstr "Táto verzia libvirt nepodporuje výpis zoznamu médií."
 
-#: ../virtManager/connection.py:213
-#, python-format
-msgid "Could not initialize HAL for media listing: %s"
-msgstr "Nepodarilo sa inicializovať HAL kvôli vypísaniu médií: %s"
-
-#: ../virtManager/connection.py:638
+#: ../virtManager/connection.py:601
 msgid "Disconnected"
 msgstr "Odpojené"
 
-#: ../virtManager/connection.py:640
+#: ../virtManager/connection.py:603
 msgid "Connecting"
 msgstr "Pripájanie"
 
-#: ../virtManager/connection.py:643
+#: ../virtManager/connection.py:606
 msgid "Active (RO)"
 msgstr "Aktívne (len čítanie)"
 
-#: ../virtManager/connection.py:645 ../virtManager/host.py:543
+#: ../virtManager/connection.py:608 ../virtManager/host.py:543
 #: ../virtManager/host.py:878 ../virtManager/host.py:1134
 #: ../ui/vmm-host.ui.h:41
 msgid "Active"
 msgstr "Aktívny"
 
-#: ../virtManager/connection.py:647 ../virtManager/host.py:543
+#: ../virtManager/connection.py:610 ../virtManager/host.py:543
 #: ../virtManager/host.py:638 ../virtManager/host.py:878
 #: ../virtManager/host.py:917 ../virtManager/host.py:1134
-#: ../virtManager/uihelpers.py:565
+#: ../virtManager/uihelpers.py:563
 msgid "Inactive"
 msgstr "Neaktívny"
 
-#: ../virtManager/connection.py:649 ../virtManager/create.py:2048
-#: ../virtManager/details.py:2619 ../virtManager/details.py:2910
-#: ../virtManager/details.py:3121 ../virtManager/details.py:3122
-#: ../virtManager/domain.py:1478 ../virtManager/host.py:1128
+#: ../virtManager/connection.py:612 ../virtManager/create.py:2028
+#: ../virtManager/details.py:2626 ../virtManager/details.py:2918
+#: ../virtManager/details.py:3129 ../virtManager/details.py:3130
+#: ../virtManager/domain.py:1476 ../virtManager/host.py:1128
 msgid "Unknown"
 msgstr "Neznámy"
 
-#: ../virtManager/connection.py:825
+#: ../virtManager/connection.py:803
 #, python-format
 msgid ""
 "Domain rename failed. Attempting to recover also failed.\n"
@@ -1279,82 +1239,82 @@ msgid ""
 "Recover error: %s"
 msgstr ""
 
-#: ../virtManager/console.py:365
+#: ../virtManager/console.py:364
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr "Nie je možné poskytnúť VNC serveru potrebné doklady o pravosti"
 
-#: ../virtManager/console.py:367
+#: ../virtManager/console.py:366
 #, python-format
 msgid "The credential type %s is not supported"
 msgstr "Typ dokladu o pravosti %s nie je podporovaný"
 
-#: ../virtManager/console.py:369
+#: ../virtManager/console.py:368
 msgid "Unable to authenticate"
 msgstr "Nie je možné overiť totožnosť"
 
-#: ../virtManager/console.py:376
+#: ../virtManager/console.py:375
 msgid "Unsupported console authentication type"
 msgstr "Nepodporovaný typ overenia totožnosti"
 
-#: ../virtManager/console.py:424
+#: ../virtManager/console.py:423
 #, python-format
 msgid "Error opening socket path '%s': %s"
 msgstr ""
 
-#: ../virtManager/console.py:429
+#: ../virtManager/console.py:428
 #, python-format
 msgid "Error opening socket path '%s'"
 msgstr ""
 
-#: ../virtManager/console.py:695
+#: ../virtManager/console.py:693
 msgid "Leave fullscreen"
 msgstr ""
 
-#: ../virtManager/console.py:716
+#: ../virtManager/console.py:714
 msgid "Send key combination"
 msgstr ""
 
-#: ../virtManager/console.py:734 ../ui/vmm-details.ui.h:1
+#: ../virtManager/console.py:732 ../ui/vmm-details.ui.h:1
 msgid "Virtual Machine"
 msgstr "Virtuálny počítač"
 
-#: ../virtManager/console.py:738
+#: ../virtManager/console.py:736
 #, python-format
 msgid "Press %s to release pointer."
 msgstr ""
 
 #. Guest isn't running, schedule another try
-#: ../virtManager/console.py:910 ../virtManager/console.py:1103
+#: ../virtManager/console.py:904 ../virtManager/console.py:1097
 msgid "Guest not running"
 msgstr "Hosťujúci počítač nie je spustený"
 
-#: ../virtManager/console.py:913
+#: ../virtManager/console.py:907
 msgid "Guest has crashed"
 msgstr "Hosťujúci počítač havaroval"
 
-#: ../virtManager/console.py:1042
+#: ../virtManager/console.py:1036
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
 msgstr ""
 
-#: ../virtManager/console.py:1122
+#: ../virtManager/console.py:1116
 msgid "Graphical console not configured for guest"
 msgstr "Grafická konzola pre hosťa nebola nastavená"
 
-#: ../virtManager/console.py:1129
+#: ../virtManager/console.py:1123
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr ""
 
-#: ../virtManager/console.py:1137
+#: ../virtManager/console.py:1131
 msgid "Graphical console is not yet active for guest"
 msgstr "Grafická konzola nie je na hosťovi zatiaľ aktívna"
 
-#: ../virtManager/console.py:1142
+#: ../virtManager/console.py:1136
 msgid "Connecting to graphical console for guest"
 msgstr "Pripájanie ku grafickej konzole hosťa"
 
-#: ../virtManager/console.py:1168
+#: ../virtManager/console.py:1162
 msgid "Error connecting to graphical console"
 msgstr ""
 
@@ -1372,8 +1332,8 @@ msgstr ""
 
 #: ../virtManager/create.py:430
 msgid ""
-"This usually means that QEMU or KVM is not installed on your machine, or the "
-"KVM kernel modules are not loaded."
+"This usually means that QEMU or KVM is not installed on your machine, or the"
+" KVM kernel modules are not loaded."
 msgstr ""
 
 #: ../virtManager/create.py:445
@@ -1384,14 +1344,15 @@ msgstr ""
 
 #: ../virtManager/create.py:452
 msgid ""
-"Host does not appear to support hardware virtualization. Install options may "
-"be limited."
+"Host does not appear to support hardware virtualization. Install options may"
+" be limited."
 msgstr ""
 
 #: ../virtManager/create.py:458
 msgid ""
-"KVM is not available. This may mean the KVM package is not installed, or the "
-"KVM kernel modules are not loaded. Your virtual machines may perform poorly."
+"KVM is not available. This may mean the KVM package is not installed, or the"
+" KVM kernel modules are not loaded. Your virtual machines may perform "
+"poorly."
 msgstr ""
 
 #: ../virtManager/create.py:492
@@ -1424,8 +1385,7 @@ msgstr "z %(numcpus)d dostupných"
 
 #: ../virtManager/create.py:670
 msgid "Only URL or import installs are supported for paravirt."
-msgstr ""
-"Pre paravirtuálne počítač je možné použiť iba URL inštaláciu alebo import."
+msgstr "Pre paravirtuálne počítač je možné použiť iba URL inštaláciu alebo import."
 
 #: ../virtManager/create.py:772 ../virtManager/create.py:790
 #: ../virtManager/create.py:890 ../virtManager/create.py:893
@@ -1465,8 +1425,8 @@ msgstr ""
 msgid "Host filesystem"
 msgstr ""
 
-#: ../virtManager/create.py:883 ../virtManager/details.py:2620
-#: ../virtManager/details.py:2686
+#: ../virtManager/create.py:883 ../virtManager/details.py:2627
+#: ../virtManager/details.py:2693
 msgid "None"
 msgstr "Žiadny/a/e"
 
@@ -1474,113 +1434,111 @@ msgstr "Žiadny/a/e"
 msgid "Linux"
 msgstr ""
 
-#: ../virtManager/create.py:1111
+#: ../virtManager/create.py:1106
 msgid "Network selection does not support PXE"
 msgstr ""
 
-#: ../virtManager/create.py:1376 ../virtManager/createinterface.py:876
+#: ../virtManager/create.py:1371 ../virtManager/createinterface.py:876
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "Krok %(current_page)d z %(max_page)d"
 
-#: ../virtManager/create.py:1457
+#: ../virtManager/create.py:1453
 #, python-format
 msgid "Error setting UUID: %s"
 msgstr "Chyba pri nastavovaní UUID: %s"
 
-#: ../virtManager/create.py:1471
+#: ../virtManager/create.py:1467
 msgid "Error setting up default devices:"
 msgstr ""
 
-#: ../virtManager/create.py:1490 ../virtManager/createinterface.py:905
+#: ../virtManager/create.py:1486 ../virtManager/createinterface.py:905
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "Nezachytená chyba pri overovaní inštalačných parametrov: %s"
 
-#: ../virtManager/create.py:1501
+#: ../virtManager/create.py:1497
 msgid "Invalid System Name"
 msgstr "Neplatný názov systému"
 
-#: ../virtManager/create.py:1523
+#: ../virtManager/create.py:1519
 msgid "An install media selection is required."
 msgstr "Je potrebné vybrať inštalačné médium."
 
-#: ../virtManager/create.py:1533
+#: ../virtManager/create.py:1529
 msgid "An install tree is required."
 msgstr "Je potrebný inštalačný strom."
 
-#: ../virtManager/create.py:1547
+#: ../virtManager/create.py:1543
 msgid "A storage path to import is required."
 msgstr "Pre import je potrebná cesta k úložisku."
 
-#: ../virtManager/create.py:1554
+#: ../virtManager/create.py:1550
 msgid "An application path is required."
 msgstr ""
 
-#: ../virtManager/create.py:1561
+#: ../virtManager/create.py:1557
 msgid "An OS directory path is required."
 msgstr ""
 
-#: ../virtManager/create.py:1572
+#: ../virtManager/create.py:1568
 msgid "Error setting installer parameters."
 msgstr "Chyba pri nastavovaní parametrov inštalátora."
 
-#: ../virtManager/create.py:1601
+#: ../virtManager/create.py:1597
 msgid "Error setting install media location."
 msgstr "Chyba pri nastavovaní umiestnenia inštalačného média."
 
-#: ../virtManager/create.py:1610
+#: ../virtManager/create.py:1606
 msgid "Error setting OS information."
 msgstr "Chyba pri nastavovaní informácií o OS."
 
-#: ../virtManager/create.py:1644
+#: ../virtManager/create.py:1640
 msgid "Error setting CPUs."
 msgstr "Chyba pri nastavovaní procesorov."
 
-#: ../virtManager/create.py:1651
+#: ../virtManager/create.py:1647
 msgid "Error setting guest memory."
 msgstr "Chyba pri nastavovaní pamäte hostiteľa."
 
-#: ../virtManager/create.py:1714
+#: ../virtManager/create.py:1710
 msgid "A storage path must be specified."
 msgstr "Musí byť zadaná cesta k úložisku."
 
-#: ../virtManager/create.py:1774
+#: ../virtManager/create.py:1770
 #, python-format
 msgid "Network device required for %s install."
 msgstr "Na inštaláciu %s je potrebné sieťové zariadenie."
 
-#: ../virtManager/create.py:1870
+#: ../virtManager/create.py:1850
 msgid "Error starting installation: "
 msgstr ""
 
-#: ../virtManager/create.py:1907
+#: ../virtManager/create.py:1887
 msgid "Creating Virtual Machine"
 msgstr "Vytváranie virtuálneho počítača"
 
-#: ../virtManager/create.py:1908
+#: ../virtManager/create.py:1888
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
-msgstr ""
-"Virtuálny počítač sa teraz vytvára. Rezervovanie diskového priestoru a "
-"získanie inštalačného obrazu môže trvať niekoľko minút."
+msgstr "Virtuálny počítač sa teraz vytvára. Rezervovanie diskového priestoru a získanie inštalačného obrazu môže trvať niekoľko minút."
 
-#: ../virtManager/create.py:1920
+#: ../virtManager/create.py:1900
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "Nepodarilo sa dokončiť inštaláciu: '%s'"
 
-#: ../virtManager/create.py:1994
+#: ../virtManager/create.py:1974
 #, python-format
 msgid "Error continue install: %s"
 msgstr "Chyba pri pokračovaní inštalácie: %s"
 
-#: ../virtManager/create.py:2063
+#: ../virtManager/create.py:2043
 msgid "Detecting"
 msgstr "Detekcia"
 
-#: ../virtManager/createinterface.py:193 ../virtManager/uihelpers.py:451
+#: ../virtManager/createinterface.py:193 ../virtManager/uihelpers.py:449
 msgid "Bridge"
 msgstr "Premostenie"
 
@@ -1596,8 +1554,8 @@ msgstr "Ethernet"
 msgid "VLAN"
 msgstr "VLAN"
 
-#: ../virtManager/createinterface.py:214 ../virtManager/details.py:733
-#: ../virtManager/manager.py:414 ../virtManager/storagebrowse.py:133
+#: ../virtManager/createinterface.py:214 ../virtManager/details.py:741
+#: ../virtManager/manager.py:411 ../virtManager/storagebrowse.py:133
 #: ../ui/vmm-create-net.ui.h:15 ../ui/vmm-create-pool.ui.h:7
 #: ../ui/vmm-create.ui.h:15
 msgid "Name"
@@ -1650,15 +1608,8 @@ msgid ""
 "\n"
 "%s\n"
 "\n"
-"Using these may overwrite their existing configuration. Are you sure you "
-"want to use the selected interface(s)?"
-msgstr ""
-"Nasledujúce rozhranie(a) sú už nakonfigurované:\n"
-"\n"
-"%s\n"
-"\n"
-"Ich použitím môžete prepísať existujúcu konfiguráciu. Naozaj chcete použiť "
-"vybrané rozhranie(a)?"
+"Using these may overwrite their existing configuration. Are you sure you want to use the selected interface(s)?"
+msgstr "Nasledujúce rozhranie(a) sú už nakonfigurované:\n\n%s\n\nIch použitím môžete prepísať existujúcu konfiguráciu. Naozaj chcete použiť vybrané rozhranie(a)?"
 
 #: ../virtManager/createinterface.py:991
 msgid "Error setting interface parameters."
@@ -1706,9 +1657,8 @@ msgid "Private"
 msgstr "Súkromná"
 
 #: ../virtManager/createnet.py:250 ../virtManager/createnet.py:296
-#, fuzzy
 msgid "Other/Public"
-msgstr "Verejná"
+msgstr ""
 
 #: ../virtManager/createnet.py:292
 msgid "Reserved"
@@ -1724,32 +1674,28 @@ msgid "Network:"
 msgstr "Sieť:"
 
 #: ../virtManager/createnet.py:522
-#, fuzzy
 msgid "DHCPv4 Status:"
-msgstr "DHCP od:"
+msgstr ""
 
 #: ../virtManager/createnet.py:523 ../virtManager/createnet.py:560
-#: ../virtManager/details.py:2719 ../virtManager/details.py:2720
-#: ../virtManager/details.py:2721 ../virtManager/details.py:2722
+#: ../virtManager/details.py:2726 ../virtManager/details.py:2727
+#: ../virtManager/details.py:2728 ../virtManager/details.py:2729
 #: ../virtManager/host.py:573 ../virtManager/host.py:574
 #: ../virtManager/host.py:620 ../virtManager/host.py:621
 msgid "Disabled"
 msgstr "Vypnuté"
 
 #: ../virtManager/createnet.py:540
-#, fuzzy
 msgid "IPV6 Network:"
-msgstr "Sieť:"
+msgstr ""
 
 #: ../virtManager/createnet.py:541
-#, fuzzy
 msgid "Not Defined"
-msgstr "Nepremostené"
+msgstr ""
 
 #: ../virtManager/createnet.py:559
-#, fuzzy
 msgid "DHCPv6 Status:"
-msgstr "DHCP od:"
+msgstr ""
 
 #: ../virtManager/createnet.py:708
 #, python-format
@@ -1783,9 +1729,8 @@ msgid "The network must be an IPv4 address"
 msgstr "Sieť musí mať adresu typu IPv4"
 
 #: ../virtManager/createnet.py:743
-#, fuzzy
 msgid "The network prefix must be at least /28 (16 addresses)"
-msgstr "Predpona siete musí byť najmenej /4 (16 adries)"
+msgstr ""
 
 #: ../virtManager/createnet.py:746 ../virtManager/createnet.py:790
 msgid "Check Network Address"
@@ -1793,11 +1738,9 @@ msgstr "Kontrola sieťovej adresy"
 
 #: ../virtManager/createnet.py:747 ../virtManager/createnet.py:791
 msgid ""
-"The network should normally use a private IPv4 address. Use this non-private "
-"address anyway?"
-msgstr ""
-"Sieť by mala používať súkromnú IPv4 adresu. Chcete aj napriek tomu použi "
-"adresu, ktorá nie je súkromná?"
+"The network should normally use a private IPv4 address. Use this non-private"
+" address anyway?"
+msgstr "Sieť by mala používať súkromnú IPv4 adresu. Chcete aj napriek tomu použi adresu, ktorá nie je súkromná?"
 
 #: ../virtManager/createnet.py:757 ../virtManager/createnet.py:760
 #: ../virtManager/createnet.py:763 ../virtManager/createnet.py:767
@@ -1823,9 +1766,8 @@ msgid "The DHCP end address is not with the network %s"
 msgstr "Koncová DHCP adresa nepochádza zo siete %s"
 
 #: ../virtManager/createnet.py:783
-#, fuzzy
 msgid "The network must be an IPv6 address"
-msgstr "Sieť musí mať adresu typu IPv4"
+msgstr ""
 
 #: ../virtManager/createnet.py:787
 msgid "For libvirt, the IPv6 network prefix must be 64"
@@ -1833,44 +1775,38 @@ msgstr ""
 
 #: ../virtManager/createnet.py:801 ../virtManager/createnet.py:804
 #: ../virtManager/createnet.py:807 ../virtManager/createnet.py:811
-#, fuzzy
 msgid "Invalid DHCPv6 Address"
-msgstr "Neplatná DHCP adresa"
+msgstr ""
 
 #: ../virtManager/createnet.py:802
-#, fuzzy
 msgid "The DHCPv6 start address could not be understood"
-msgstr "Začiatočnú DHCP adresu sa nepodarilo objasniť"
+msgstr ""
 
 #: ../virtManager/createnet.py:805
-#, fuzzy
 msgid "The DHCPv6 end address could not be understood"
-msgstr "Koncovú DHCP adresu sa nepodarilo objasniť"
+msgstr ""
 
 #: ../virtManager/createnet.py:808
-#, fuzzy, python-format
+#, python-format
 msgid "The DHCPv6 start address is not with the network %s"
-msgstr "Začiatočná DHCP adresa nepochádza zo siete %s"
+msgstr ""
 
 #: ../virtManager/createnet.py:812
-#, fuzzy, python-format
+#, python-format
 msgid "The DHCPv6 end address is not with the network %s"
-msgstr "Koncová DHCP adresa nepochádza zo siete %s"
+msgstr ""
 
 #: ../virtManager/createnet.py:821 ../virtManager/createnet.py:824
-#, fuzzy
 msgid "Invalid Domain Name"
-msgstr "Neplatný názov systému"
+msgstr ""
 
 #: ../virtManager/createnet.py:822
-#, fuzzy
 msgid "Domain name must be less than 17 characters"
-msgstr "Názov siete nesmie byť prázdny a musí mať menej ako 50 znakov."
+msgstr ""
 
 #: ../virtManager/createnet.py:825
-#, fuzzy
 msgid "Domain name may contain alphanumeric and '_' characters only"
-msgstr "Názov siete môže obsahovať iba alfanumerické znaky a znak '_'"
+msgstr ""
 
 #: ../virtManager/createnet.py:833
 msgid "Invalid forwarding mode"
@@ -1907,11 +1843,9 @@ msgstr "Chyba parametra zoskupenia"
 
 #: ../virtManager/createpool.py:541
 msgid ""
-"Building a pool of this type will format the source device. Are you sure you "
-"want to 'build' this pool?"
-msgstr ""
-"Pri zostavovaní zoskupenia tohto typu sa bude formátovať zdrojové "
-"zariadenie. Naozaj chcete 'zostaviť' toto zoskupenie?"
+"Building a pool of this type will format the source device. Are you sure you"
+" want to 'build' this pool?"
+msgstr "Pri zostavovaní zoskupenia tohto typu sa bude formátovať zdrojové zariadenie. Naozaj chcete 'zostaviť' toto zoskupenie?"
 
 #: ../virtManager/createpool.py:573
 msgid "Format the source device."
@@ -1943,9 +1877,8 @@ msgid "Delete"
 msgstr "Odstrániť"
 
 #: ../virtManager/delete.py:136
-#, fuzzy
 msgid "Are you sure you want to delete all the storage?"
-msgstr "Naozaj chcete spustiť rozhranie '%s'?"
+msgstr ""
 
 #: ../virtManager/delete.py:138
 msgid "This will delete all selected storage data."
@@ -1968,53 +1901,50 @@ msgstr "Chyba pri odstraňovaní virtuálneho počítača '%s': %s"
 
 #: ../virtManager/delete.py:207
 msgid "Additionally, there were errors removing certain storage devices: \n"
-msgstr ""
-"Okrem toho nastali chyby pri odstraňovaní niektorých zariadení úložísk: \n"
+msgstr "Okrem toho nastali chyby pri odstraňovaní niektorých zariadení úložísk: \n"
 
 #: ../virtManager/delete.py:211
 msgid "Errors encountered while removing certain storage devices."
 msgstr "Nastala chyba počas odstraňovania niktorých zariadení úložísk."
 
-#: ../virtManager/delete.py:292
+#: ../virtManager/delete.py:288
 msgid "Storage Path"
 msgstr "Cesta k úložisku"
 
-#: ../virtManager/delete.py:293
+#: ../virtManager/delete.py:289
 msgid "Target"
 msgstr "Cieľ"
 
-#: ../virtManager/delete.py:343
+#: ../virtManager/delete.py:339
 msgid "Cannot delete iscsi share."
 msgstr "Nedá sa odstrániť zdieľanie iscsi."
 
-#: ../virtManager/delete.py:346
+#: ../virtManager/delete.py:342
 msgid "Cannot delete unmanaged remote storage."
 msgstr "Nedá sa odstrániť nespravované vzdialené úložisko."
 
-#: ../virtManager/delete.py:352
+#: ../virtManager/delete.py:348
 msgid "Cannot delete unmanaged block device."
 msgstr "Nedá sa odstrániť nespravované blokové zariadenie."
 
-#: ../virtManager/delete.py:373
+#: ../virtManager/delete.py:369
 msgid "Storage is read-only."
 msgstr "Úložisko je určené len na čítanie."
 
-#: ../virtManager/delete.py:375
+#: ../virtManager/delete.py:371
 msgid "No write access to path."
 msgstr "Cesta nemá právo na zápis."
 
-#: ../virtManager/delete.py:378
+#: ../virtManager/delete.py:374
 msgid "Storage is marked as shareable."
 msgstr "Úložisko je označené ako zdielateľné."
 
-#: ../virtManager/delete.py:388
+#: ../virtManager/delete.py:384
 #, python-format
 msgid ""
 "Storage is in use by the following virtual machines:\n"
 "- %s "
-msgstr ""
-"Úložisko používajú nasledujúce virtuálne počítače:\n"
-"- %s "
+msgstr "Úložisko používajú nasledujúce virtuálne počítače:\n- %s "
 
 #: ../virtManager/details.py:203
 #, python-format
@@ -2026,309 +1956,304 @@ msgstr ""
 msgid "Redirected %s"
 msgstr ""
 
-#: ../virtManager/details.py:636
+#: ../virtManager/details.py:642
 msgid "_Add Hardware"
 msgstr ""
 
-#: ../virtManager/details.py:643
+#: ../virtManager/details.py:650
 msgid "_Remove Hardware"
 msgstr ""
 
-#: ../virtManager/details.py:734
+#: ../virtManager/details.py:742
 msgid "Version"
 msgstr ""
 
-#: ../virtManager/details.py:795
+#: ../virtManager/details.py:803
 msgid ""
-"Static SELinux security type tells libvirt to always start the guest process "
-"with the specified label. Unless 'relabel' is set, the administrator is "
+"Static SELinux security type tells libvirt to always start the guest process"
+" with the specified label. Unless 'relabel' is set, the administrator is "
 "responsible for making sure the images are labeled correctly on disk."
 msgstr ""
 
-#: ../virtManager/details.py:797
+#: ../virtManager/details.py:805
 msgid ""
 "The dynamic SELinux security type tells libvirt to automatically pick a "
-"unique label for the guest process and guest image, ensuring total isolation "
-"of the guest. (Default)"
-msgstr ""
-"Typ dynamického zabezpečenie SELinuxu povie programu libvirt aby automaticky "
-"vytvoril jedinečné označenie pre proces hosťovaného počítača a hosťovaného "
-"obrazu, zabezpečujúci úplnú izoláciu počítača. (Predvolené)"
+"unique label for the guest process and guest image, ensuring total isolation"
+" of the guest. (Default)"
+msgstr "Typ dynamického zabezpečenie SELinuxu povie programu libvirt aby automaticky vytvoril jedinečné označenie pre proces hosťovaného počítača a hosťovaného obrazu, zabezpečujúci úplnú izoláciu počítača. (Predvolené)"
 
-#: ../virtManager/details.py:805
+#: ../virtManager/details.py:813
 msgid "Libvirt did not detect NUMA capabilities."
 msgstr ""
 
-#: ../virtManager/details.py:813
+#: ../virtManager/details.py:821
 msgid "VCPU"
 msgstr "VCPU"
 
-#: ../virtManager/details.py:814
+#: ../virtManager/details.py:822
 msgid "On CPU"
 msgstr "K CPU"
 
-#: ../virtManager/details.py:815
+#: ../virtManager/details.py:823
 msgid "Pinning"
 msgstr "Prepojenie"
 
-#: ../virtManager/details.py:1090
+#: ../virtManager/details.py:1098
 msgid "No text console available"
 msgstr ""
 
-#: ../virtManager/details.py:1163
+#: ../virtManager/details.py:1171
 msgid "No graphical console available"
 msgstr ""
 
-#: ../virtManager/details.py:1169
+#: ../virtManager/details.py:1177
 #, python-format
 msgid "Graphical Console %s"
 msgstr "Grafická konzola %s"
 
-#: ../virtManager/details.py:1259
+#: ../virtManager/details.py:1256
 msgid "There are unapplied changes. Would you like to apply them now?"
 msgstr ""
 
-#: ../virtManager/details.py:1261
+#: ../virtManager/details.py:1258
 msgid "Don't warn me again."
 msgstr ""
 
-#: ../virtManager/details.py:1335
+#: ../virtManager/details.py:1337
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Chyba pri obnovovaní stránky s hardvérom: %s"
 
-#: ../virtManager/details.py:1395 ../virtManager/manager.py:1044
+#: ../virtManager/details.py:1397 ../virtManager/manager.py:1049
 msgid "_Restore"
 msgstr ""
 
 #. Build VM context menu
-#: ../virtManager/details.py:1397 ../virtManager/manager.py:363
-#: ../virtManager/manager.py:1046 ../virtManager/systray.py:188
+#: ../virtManager/details.py:1399 ../virtManager/manager.py:349
+#: ../virtManager/manager.py:1051 ../virtManager/systray.py:187
 #: ../ui/vmm-details.ui.h:5 ../ui/vmm-manager.ui.h:19
 msgid "_Run"
 msgstr "_Spustiť"
 
-#: ../virtManager/details.py:1512
+#: ../virtManager/details.py:1514
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr ""
 
-#: ../virtManager/details.py:1588
+#: ../virtManager/details.py:1590
 msgid "Save Virtual Machine Screenshot"
 msgstr "Uložiť snímok obrazovky virtuálneho počítača"
 
-#: ../virtManager/details.py:1612
+#: ../virtManager/details.py:1614
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
 "%s"
-msgstr ""
-"Snímok obrazovky bude uložený do:\n"
-"%s"
+msgstr "Snímok obrazovky bude uložený do:\n%s"
 
-#: ../virtManager/details.py:1614
+#: ../virtManager/details.py:1616
 msgid "Screenshot saved"
 msgstr "Snímok obrazovky uložený."
 
-#: ../virtManager/details.py:1791
+#: ../virtManager/details.py:1795
 msgid "Error generating CPU configuration"
 msgstr ""
 
-#: ../virtManager/details.py:1825
+#: ../virtManager/details.py:1830
 #, python-format
 msgid "Error copying host CPU: %s"
 msgstr ""
 
-#: ../virtManager/details.py:1947
+#: ../virtManager/details.py:1954
 #, python-format
 msgid "Error disconnecting media: %s"
 msgstr ""
 
-#: ../virtManager/details.py:1966
+#: ../virtManager/details.py:1973
 #, python-format
 msgid "Error launching media dialog: %s"
 msgstr ""
 
-#: ../virtManager/details.py:2018
+#: ../virtManager/details.py:2025
 #, python-format
 msgid "Error apply changes: %s"
 msgstr ""
 
-#: ../virtManager/details.py:2152
+#: ../virtManager/details.py:2159
 msgid "Error building pin list"
 msgstr ""
 
-#: ../virtManager/details.py:2158
+#: ../virtManager/details.py:2165
 msgid "Error pinning vcpus"
 msgstr ""
 
-#: ../virtManager/details.py:2207
+#: ../virtManager/details.py:2214
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "Chyba pri zmene hodnoty autoštartu: %s"
 
-#: ../virtManager/details.py:2225
+#: ../virtManager/details.py:2232
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr ""
 
-#: ../virtManager/details.py:2228
+#: ../virtManager/details.py:2235
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr ""
 
-#: ../virtManager/details.py:2235
+#: ../virtManager/details.py:2242
 msgid "An init path must be specified"
 msgstr ""
 
-#: ../virtManager/details.py:2388
+#: ../virtManager/details.py:2395
 #, python-format
 msgid ""
 "You are switching graphics type to %(gtype)s, would you like to %(action)s "
 "Spice agent channels?"
 msgstr ""
 
-#: ../virtManager/details.py:2461
+#: ../virtManager/details.py:2468
 msgid "Are you sure you want to remove this device?"
 msgstr "Naozaj chcete odstrániť toto zariadenie?"
 
-#: ../virtManager/details.py:2468
+#: ../virtManager/details.py:2475
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "Chyba pri odstraňovaní zariadenia: %s"
 
-#: ../virtManager/details.py:2485
+#: ../virtManager/details.py:2492
 msgid "Device could not be removed from the running machine"
 msgstr ""
 
-#: ../virtManager/details.py:2487
+#: ../virtManager/details.py:2494
 msgid "This change will take effect after the next guest shutdown."
 msgstr ""
 
-#: ../virtManager/details.py:2541
+#: ../virtManager/details.py:2548
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Chyba pri nastavovaní VPC: %s"
 
-#: ../virtManager/details.py:2551
+#: ../virtManager/details.py:2558
 msgid "Some changes may require a guest shutdown to take effect."
 msgstr ""
 
-#: ../virtManager/details.py:2554
+#: ../virtManager/details.py:2561
 msgid "These changes will take effect after the next guest shutdown."
 msgstr ""
 
-#: ../virtManager/details.py:2627 ../virtManager/details.py:2631
+#: ../virtManager/details.py:2634 ../virtManager/details.py:2638
 msgid "unknown"
 msgstr ""
 
-#: ../virtManager/details.py:2672 ../ui/vmm-add-hardware.ui.h:28
+#: ../virtManager/details.py:2679 ../ui/vmm-add-hardware.ui.h:28
 msgid "Same as host"
 msgstr "Rovnaké ako hostiteľ"
 
-#: ../virtManager/details.py:2784
+#: ../virtManager/details.py:2791
 msgid "VCPU info only available for running domain."
 msgstr "Info. o VCPU je dostupné iba na bežiacej doméne."
 
-#: ../virtManager/details.py:2789
+#: ../virtManager/details.py:2796
 #, python-format
 msgid "Error getting VCPU info: %s"
 msgstr "Chyba pri získavaní info. o VCPU: %s"
 
-#: ../virtManager/details.py:2792
+#: ../virtManager/details.py:2799
 msgid "Virtual machine does not support runtime VPCU info."
 msgstr "Virtuálny počítač nepodporuje zobrazenie info. o VCP počas behu."
 
-#: ../virtManager/details.py:3044
+#: ../virtManager/details.py:3052
 msgid "Xen Mouse"
 msgstr "Xen Myš"
 
-#: ../virtManager/details.py:3046
+#: ../virtManager/details.py:3054
 msgid "PS/2 Mouse"
 msgstr "PS/2 Myš"
 
-#: ../virtManager/details.py:3051
+#: ../virtManager/details.py:3059
 msgid "Absolute Movement"
 msgstr "Absolútny pohyb"
 
-#: ../virtManager/details.py:3053
+#: ../virtManager/details.py:3061
 msgid "Relative Movement"
 msgstr "Relatívny pohyb"
 
-#: ../virtManager/details.py:3088
+#: ../virtManager/details.py:3096
 msgid "Automatically allocated"
 msgstr "Automaticky rezervované"
 
-#: ../virtManager/details.py:3096
+#: ../virtManager/details.py:3104
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr ""
 
-#: ../virtManager/details.py:3119
+#: ../virtManager/details.py:3127
 msgid "Local SDL Window"
 msgstr ""
 
-#: ../virtManager/details.py:3206
+#: ../virtManager/details.py:3214
 msgid "Serial Device"
 msgstr ""
 
-#: ../virtManager/details.py:3208
+#: ../virtManager/details.py:3216
 msgid "Parallel Device"
 msgstr ""
 
-#: ../virtManager/details.py:3210
+#: ../virtManager/details.py:3218
 msgid "Console Device"
 msgstr ""
 
-#: ../virtManager/details.py:3212
+#: ../virtManager/details.py:3220
 msgid "Channel Device"
 msgstr ""
 
-#: ../virtManager/details.py:3214
+#: ../virtManager/details.py:3222
 #, python-format
 msgid "%s Device"
 msgstr ""
 
-#: ../virtManager/details.py:3219
+#: ../virtManager/details.py:3227
 msgid "Primary Console"
 msgstr "Hlavná konzola"
 
-#: ../virtManager/details.py:3293 ../virtManager/details.py:3324
-#: ../virtManager/details.py:3326 ../ui/vmm-add-hardware.ui.h:55
+#: ../virtManager/details.py:3301 ../virtManager/details.py:3332
+#: ../virtManager/details.py:3334 ../ui/vmm-add-hardware.ui.h:55
 msgid "Default"
 msgstr ""
 
-#: ../virtManager/details.py:3509
+#: ../virtManager/details.py:3517
 msgid "Tablet"
 msgstr "Tablet"
 
-#: ../virtManager/details.py:3512
+#: ../virtManager/details.py:3520
 msgid "Mouse"
 msgstr "Myš"
 
-#: ../virtManager/details.py:3521
+#: ../virtManager/details.py:3529
 #, python-format
 msgid "Display %s"
 msgstr "Displej %s"
 
-#: ../virtManager/details.py:3527
+#: ../virtManager/details.py:3535
 #, python-format
 msgid "Sound: %s"
 msgstr "Zvuk: %s"
 
-#: ../virtManager/details.py:3567
-#, fuzzy, python-format
+#: ../virtManager/details.py:3575
+#, python-format
 msgid "Video %s"
-msgstr "Video"
+msgstr ""
 
-#: ../virtManager/details.py:3572
+#: ../virtManager/details.py:3580
 msgid "Watchdog"
 msgstr "Ochranný časovač"
 
-#: ../virtManager/details.py:3583
+#: ../virtManager/details.py:3591
 #, python-format
 msgid "Controller %s"
 msgstr ""
 
-#: ../virtManager/details.py:3590
+#: ../virtManager/details.py:3598
 #, python-format
 msgid "Filesystem %s"
 msgstr ""
@@ -2358,36 +2283,36 @@ msgstr ""
 msgid "Migrating domain"
 msgstr ""
 
-#: ../virtManager/domain.py:1461
+#: ../virtManager/domain.py:1459
 msgid "Running"
 msgstr "Spustený"
 
-#: ../virtManager/domain.py:1463
+#: ../virtManager/domain.py:1461
 msgid "Paused"
 msgstr "Pozastavený"
 
-#: ../virtManager/domain.py:1465
+#: ../virtManager/domain.py:1463
 msgid "Shutting Down"
 msgstr ""
 
-#: ../virtManager/domain.py:1468
+#: ../virtManager/domain.py:1466
 msgid "Saved"
 msgstr ""
 
-#: ../virtManager/domain.py:1470
+#: ../virtManager/domain.py:1468
 msgid "Shutoff"
 msgstr "Vypnutý"
 
-#: ../virtManager/domain.py:1472
+#: ../virtManager/domain.py:1470
 msgid "Crashed"
 msgstr "Zhavarovaný"
 
-#: ../virtManager/domain.py:1475
+#: ../virtManager/domain.py:1473
 msgid "Suspended"
 msgstr ""
 
 #. Manager fail message
-#: ../virtManager/engine.py:159
+#: ../virtManager/engine.py:177
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -2396,16 +2321,9 @@ msgid ""
 "\n"
 "A hypervisor connection can be manually\n"
 "added via File->Add Connection"
-msgstr ""
-"Nebolo možné rozpoznať predvolený hypervízor.\n"
-"Uistite sa, či sú nainštalované príslušné\n"
-"virtualizačné balíčky (kvm, qemu, libvirt, atď.),\n"
-"a či je spustený démon libvirtd.\n"
-"\n"
-"Pripojenie k hypervízoru sa dá pridať ručne\n"
-"prostredníctvom ponuky Súbor->Pridať pripojenie"
+msgstr "Nebolo možné rozpoznať predvolený hypervízor.\nUistite sa, či sú nainštalované príslušné\nvirtualizačné balíčky (kvm, qemu, libvirt, atď.),\na či je spustený démon libvirtd.\n\nPripojenie k hypervízoru sa dá pridať ručne\nprostredníctvom ponuky Súbor->Pridať pripojenie"
 
-#: ../virtManager/engine.py:199
+#: ../virtManager/engine.py:206
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started.\n"
@@ -2413,195 +2331,190 @@ msgid ""
 "start up."
 msgstr ""
 
-#: ../virtManager/engine.py:205
+#: ../virtManager/engine.py:212
 msgid "Libvirt service must be started"
 msgstr "Služba libvirt musí byť spustená"
 
-#: ../virtManager/engine.py:298
+#: ../virtManager/engine.py:305
 #, python-format
 msgid "Error polling connection '%s': %s"
 msgstr ""
 
-#: ../virtManager/engine.py:494
+#: ../virtManager/engine.py:500
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "Neznáme URI pripojenia %s"
 
-#: ../virtManager/engine.py:507
+#: ../virtManager/engine.py:513
 #, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr ""
 
-#: ../virtManager/engine.py:521
+#: ../virtManager/engine.py:527
 #, python-format
 msgid "Error launching preferences: %s"
 msgstr ""
 
-#: ../virtManager/engine.py:543
+#: ../virtManager/engine.py:549
 #, python-format
 msgid "Error launching host dialog: %s"
 msgstr ""
 
-#: ../virtManager/engine.py:569
+#: ../virtManager/engine.py:575
 #, python-format
 msgid "Error launching connect dialog: %s"
 msgstr ""
 
-#: ../virtManager/engine.py:613
+#: ../virtManager/engine.py:619
 #, python-format
 msgid "Error launching details: %s"
 msgstr ""
 
-#: ../virtManager/engine.py:665 ../virtManager/engine.py:680
+#: ../virtManager/engine.py:671 ../virtManager/engine.py:686
 #, python-format
 msgid "Error launching manager: %s"
 msgstr ""
 
-#: ../virtManager/engine.py:693
+#: ../virtManager/engine.py:699
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr ""
 
-#: ../virtManager/engine.py:709
+#: ../virtManager/engine.py:715
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "Chyba pri nastavovaní parametrov klonovania: %s"
 
-#: ../virtManager/engine.py:749
+#: ../virtManager/engine.py:755
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
 "libvirt version or hypervisor."
 msgstr ""
 
-#: ../virtManager/engine.py:756
+#: ../virtManager/engine.py:762
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr ""
 
-#: ../virtManager/engine.py:762
+#: ../virtManager/engine.py:768
 msgid "Save Virtual Machine"
 msgstr "Uložiť virtuálny počítač"
 
-#: ../virtManager/engine.py:777
+#: ../virtManager/engine.py:783
 msgid "Saving Virtual Machine"
 msgstr "Ukladanie virtuálneho počítača"
 
-#: ../virtManager/engine.py:778
+#: ../virtManager/engine.py:784
 msgid "Saving virtual machine memory to disk "
 msgstr ""
 
-#: ../virtManager/engine.py:785
+#: ../virtManager/engine.py:791
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "Chyba pri ukladaní domény: %s"
 
-#: ../virtManager/engine.py:797
+#: ../virtManager/engine.py:803
 #, python-format
 msgid "Error cancelling save job: %s"
 msgstr ""
 
-#: ../virtManager/engine.py:813
-msgid "Restoring virtual machines over remote connections is not yet supported"
-msgstr ""
-"Obnovovanie virtuálnych počítačov cez vzdialené pripojenie zatiaľ nie je "
-"podporované"
+#: ../virtManager/engine.py:819
+msgid ""
+"Restoring virtual machines over remote connections is not yet supported"
+msgstr "Obnovovanie virtuálnych počítačov cez vzdialené pripojenie zatiaľ nie je podporované"
 
-#: ../virtManager/engine.py:818
+#: ../virtManager/engine.py:824
 msgid "Restore Virtual Machine"
 msgstr "Obnoviť virtuálny počítač"
 
-#: ../virtManager/engine.py:830 ../virtManager/engine.py:880
+#: ../virtManager/engine.py:836 ../virtManager/engine.py:886
 msgid "Error restoring domain"
 msgstr "Chyba pri obnovovaní domény"
 
-#: ../virtManager/engine.py:838
+#: ../virtManager/engine.py:844
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "Naozaj chcete natvrdo vypnúť '%s'?"
 
-#: ../virtManager/engine.py:840
+#: ../virtManager/engine.py:846
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
-msgstr ""
-"Toto okamžite vypne VPC bez vypnutia OS a môže to spôsobiť stratu údajov."
+msgstr "Toto okamžite vypne VPC bez vypnutia OS a môže to spôsobiť stratu údajov."
 
-#: ../virtManager/engine.py:846 ../virtManager/engine.py:923
+#: ../virtManager/engine.py:852 ../virtManager/engine.py:929
 msgid "Error shutting down domain"
 msgstr ""
 
-#: ../virtManager/engine.py:854
+#: ../virtManager/engine.py:860
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "Naozaj chcete pozastaviť  '%s'?"
 
-#: ../virtManager/engine.py:860
+#: ../virtManager/engine.py:866
 msgid "Error pausing domain"
 msgstr ""
 
-#: ../virtManager/engine.py:868
+#: ../virtManager/engine.py:874
 msgid "Error unpausing domain"
 msgstr ""
 
-#: ../virtManager/engine.py:883
+#: ../virtManager/engine.py:889
 msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
 "start up?"
 msgstr ""
 
-#: ../virtManager/engine.py:897
+#: ../virtManager/engine.py:903
 #, python-format
 msgid "Error removing domain state: %s"
 msgstr ""
 
 #. VM will be restored, which can take some time, so show progress
-#: ../virtManager/engine.py:901
+#: ../virtManager/engine.py:907
 msgid "Restoring Virtual Machine"
 msgstr "Obnovovanie virtuálneho počítača"
 
-#: ../virtManager/engine.py:902
+#: ../virtManager/engine.py:908
 msgid "Restoring virtual machine memory from disk"
 msgstr ""
 
 #. Regular startup
-#: ../virtManager/engine.py:908
+#: ../virtManager/engine.py:914
 msgid "Error starting domain"
 msgstr ""
 
-#: ../virtManager/engine.py:917
+#: ../virtManager/engine.py:923
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "Naozaj chcete vypnúť '%s'?"
 
-#: ../virtManager/engine.py:931
+#: ../virtManager/engine.py:937
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "Naozaj chcete reštartovať '%s'?"
 
 #. Raise the original error message
-#: ../virtManager/engine.py:945 ../virtManager/engine.py:959
+#: ../virtManager/engine.py:951 ../virtManager/engine.py:965
 #, python-format
 msgid "Error rebooting domain: %s"
 msgstr "Chyba pri reštartovaní domény: %s"
 
-#: ../virtManager/engine.py:970
-#, fuzzy, python-format
+#: ../virtManager/engine.py:976
+#, python-format
 msgid "Are you sure you want to force reset '%s'?"
-msgstr "Naozaj chcete natvrdo vypnúť '%s'?"
+msgstr ""
 
-#: ../virtManager/engine.py:972
-#, fuzzy
+#: ../virtManager/engine.py:978
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
-"Toto okamžite vypne VPC bez vypnutia OS a môže to spôsobiť stratu údajov."
 
-#: ../virtManager/engine.py:978
-#, fuzzy
+#: ../virtManager/engine.py:984
 msgid "Error resetting domain"
-msgstr "Chyba pri obnovovaní domény"
+msgstr ""
 
 #: ../virtManager/error.py:109
 msgid "Input Error"
@@ -2701,9 +2614,8 @@ msgid "Isolated network, internal routing only"
 msgstr ""
 
 #: ../virtManager/host.py:617
-#, fuzzy
 msgid "Isolated network, routing disabled"
-msgstr "Izolovaná sieť"
+msgstr ""
 
 #: ../virtManager/host.py:654 ../virtManager/host.py:661
 msgid "Isolated network"
@@ -2817,75 +2729,74 @@ msgstr "Žiadne vybrané rozhranie."
 msgid "Error selecting interface: %s"
 msgstr "Chyba pri výbere rozhrania? %s"
 
-#: ../virtManager/manager.py:364 ../virtManager/systray.py:175
+#: ../virtManager/manager.py:350 ../virtManager/systray.py:174
 #: ../ui/vmm-details.ui.h:6 ../ui/vmm-manager.ui.h:21
 msgid "_Pause"
 msgstr "Po_zastaviť"
 
-#: ../virtManager/manager.py:365
+#: ../virtManager/manager.py:351
 msgid "R_esume"
 msgstr "P_okračovať"
 
-#: ../virtManager/manager.py:367 ../virtManager/manager.py:370
-#: ../virtManager/systray.py:202 ../virtManager/systray.py:230
-#: ../virtManager/uihelpers.py:907
+#: ../virtManager/manager.py:353 ../virtManager/manager.py:356
+#: ../virtManager/systray.py:201 ../virtManager/systray.py:229
+#: ../virtManager/uihelpers.py:905
 msgid "_Shut Down"
 msgstr "_Vypnúť"
 
 #. Shutdown menu
-#: ../virtManager/manager.py:369 ../virtManager/systray.py:195
-#: ../virtManager/uihelpers.py:901 ../ui/vmm-details.ui.h:8
+#: ../virtManager/manager.py:355 ../virtManager/systray.py:194
+#: ../virtManager/uihelpers.py:899 ../ui/vmm-details.ui.h:8
 msgid "_Reboot"
 msgstr "_Reštartovať"
 
-#: ../virtManager/manager.py:372 ../virtManager/systray.py:210
-#: ../virtManager/uihelpers.py:913
-#, fuzzy
+#: ../virtManager/manager.py:358 ../virtManager/systray.py:209
+#: ../virtManager/uihelpers.py:911
 msgid "_Force Reset"
-msgstr "_Natvrdo vypnúť"
+msgstr ""
 
-#: ../virtManager/manager.py:374 ../virtManager/systray.py:217
-#: ../virtManager/uihelpers.py:919 ../ui/vmm-details.ui.h:10
+#: ../virtManager/manager.py:360 ../virtManager/systray.py:216
+#: ../virtManager/uihelpers.py:917 ../ui/vmm-details.ui.h:10
 msgid "_Force Off"
 msgstr "_Natvrdo vypnúť"
 
-#: ../virtManager/manager.py:377 ../virtManager/uihelpers.py:929
+#: ../virtManager/manager.py:363 ../virtManager/uihelpers.py:927
 msgid "Sa_ve"
 msgstr ""
 
-#: ../virtManager/manager.py:380
+#: ../virtManager/manager.py:366
 msgid "_Clone..."
 msgstr ""
 
-#: ../virtManager/manager.py:381 ../ui/vmm-details.ui.h:12
+#: ../virtManager/manager.py:367 ../ui/vmm-details.ui.h:12
 msgid "_Migrate..."
 msgstr "_Migrovať..."
 
-#: ../virtManager/manager.py:382
+#: ../virtManager/manager.py:368
 msgid "_Delete"
 msgstr "O_dstrániť"
 
-#: ../virtManager/manager.py:396
+#: ../virtManager/manager.py:382
 msgid "D_etails"
 msgstr ""
 
-#: ../virtManager/manager.py:457
+#: ../virtManager/manager.py:458
 msgid "CPU usage"
 msgstr "Využitie procesora"
 
-#: ../virtManager/manager.py:461
+#: ../virtManager/manager.py:462
 msgid "Host CPU usage"
 msgstr ""
 
-#: ../virtManager/manager.py:465
+#: ../virtManager/manager.py:466
 msgid "Disk I/O"
 msgstr "Aktivita diskov"
 
-#: ../virtManager/manager.py:469
+#: ../virtManager/manager.py:470
 msgid "Network I/O"
 msgstr "Aktivita siete"
 
-#: ../virtManager/manager.py:594
+#: ../virtManager/manager.py:595
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -2893,39 +2804,34 @@ msgid ""
 "%s\n"
 "\n"
 "Are you sure?"
-msgstr ""
-"Týmto odstránite pripojenie:\n"
-"\n"
-"%s\n"
-"\n"
-"Naozaj to chcete?"
+msgstr "Týmto odstránite pripojenie:\n\n%s\n\nNaozaj to chcete?"
 
-#: ../virtManager/manager.py:706
+#: ../virtManager/manager.py:707
 msgid ""
 "The remote host requires a version of netcat/nc\n"
 "which supports the -U option."
 msgstr ""
 
-#: ../virtManager/manager.py:721
+#: ../virtManager/manager.py:722
 msgid ""
 "You need to install openssh-askpass or similar\n"
 "to connect to this host."
 msgstr ""
 
-#: ../virtManager/manager.py:725
+#: ../virtManager/manager.py:726
 msgid ""
 "Verify that the 'libvirtd' daemon is running\n"
 "on the remote host."
 msgstr ""
 
-#: ../virtManager/manager.py:729
+#: ../virtManager/manager.py:730
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
 " - The Xen service has been started"
 msgstr ""
 
-#: ../virtManager/manager.py:735
+#: ../virtManager/manager.py:736
 msgid ""
 "Could not detect a local session: if you are \n"
 "running virt-manager over ssh -X or VNC, you \n"
@@ -2933,35 +2839,35 @@ msgid ""
 "regular user. Try running as root."
 msgstr ""
 
-#: ../virtManager/manager.py:741
+#: ../virtManager/manager.py:742
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr ""
 
-#: ../virtManager/manager.py:744
+#: ../virtManager/manager.py:745
 msgid "Unable to connect to libvirt."
 msgstr ""
 
-#: ../virtManager/manager.py:756
+#: ../virtManager/manager.py:757
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Zlyhanie pripojenia k správcovi virtuálnych počítačov"
 
-#: ../virtManager/manager.py:793
+#: ../virtManager/manager.py:794
 msgid "Double click to connect"
 msgstr "Dvojitým kliknutím sa pripojíte"
 
-#: ../virtManager/manager.py:800
+#: ../virtManager/manager.py:801
 msgid "Not Connected"
 msgstr ""
 
-#: ../virtManager/manager.py:802
+#: ../virtManager/manager.py:803
 msgid "Connecting..."
 msgstr ""
 
-#: ../virtManager/manager.py:1198
+#: ../virtManager/manager.py:1204
 msgid "Disabled in preferences dialog."
 msgstr "Zakázané v nastaveniach."
 
-#: ../virtManager/manager.py:1202
+#: ../virtManager/manager.py:1208
 msgid " (disabled)"
 msgstr ""
 
@@ -2973,19 +2879,19 @@ msgstr "Žiadne médium nezistené"
 msgid "Media Unknown"
 msgstr "Neznáme médium"
 
-#: ../virtManager/migrate.py:128
+#: ../virtManager/migrate.py:127
 msgid "Migrate"
 msgstr "Presunúť"
 
-#: ../virtManager/migrate.py:156
+#: ../virtManager/migrate.py:155
 msgid "Libvirt version does not support setting downtime."
 msgstr ""
 
-#: ../virtManager/migrate.py:172
+#: ../virtManager/migrate.py:171
 msgid "Libvirt version does not support tunnelled migration."
 msgstr "Táto verzia libvirt nepodporuje prenos cez tunel."
 
-#: ../virtManager/migrate.py:189
+#: ../virtManager/migrate.py:188
 msgid "A valid destination connection must be selected."
 msgstr "Musí byť vybrané platné cieľové pripojenie."
 
@@ -2994,55 +2900,55 @@ msgstr "Musí byť vybrané platné cieľové pripojenie."
 #. /etc/hosts is likely borked and the only hostname it will
 #. give us is localhost. Remember, the dest machine can actually
 #. be our local machine so we may not already know its hostname
-#: ../virtManager/migrate.py:270
+#: ../virtManager/migrate.py:269
 msgid ""
 "Could not determine remotely accessible hostname for destination connection."
 msgstr "Nebolo možné určiť adresu vzdialenej stanice pre cieľové pripojenie."
 
-#: ../virtManager/migrate.py:345
+#: ../virtManager/migrate.py:344
 msgid "No connections available."
 msgstr "Pripojenie nedostupné."
 
-#: ../virtManager/migrate.py:414
+#: ../virtManager/migrate.py:413
 msgid "Connection hypervisors do not match."
 msgstr "Pripojené hypervízory sa nezhodujú. "
 
-#: ../virtManager/migrate.py:416
+#: ../virtManager/migrate.py:415
 msgid "Connection is disconnected."
 msgstr "Pripojenie je odpojené."
 
-#: ../virtManager/migrate.py:435
+#: ../virtManager/migrate.py:434
 msgid "max downtime must be greater than 0."
 msgstr ""
 
-#: ../virtManager/migrate.py:438
+#: ../virtManager/migrate.py:437
 msgid "An interface must be specified."
 msgstr "Musí byť určené rozhranie."
 
-#: ../virtManager/migrate.py:441
+#: ../virtManager/migrate.py:440
 msgid "Transfer rate must be greater than 0."
 msgstr "Rýchlosť prenosu musí byť väčšia ako 0."
 
-#: ../virtManager/migrate.py:444
+#: ../virtManager/migrate.py:443
 msgid "Port must be greater than 0."
 msgstr "Port musí byť väčší ako 0."
 
-#: ../virtManager/migrate.py:484
+#: ../virtManager/migrate.py:483
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr "Presúvanie VPC '%s'"
 
-#: ../virtManager/migrate.py:485
-#, fuzzy, python-format
+#: ../virtManager/migrate.py:484
+#, python-format
 msgid "Migrating VM '%s' from %s to %s. This may take a while."
-msgstr "Presúvanie VPC '%s' z %s do %s. Môže to chvíľu trvať."
+msgstr ""
 
-#: ../virtManager/migrate.py:497
+#: ../virtManager/migrate.py:496
 #, python-format
 msgid "Unable to migrate guest: %s"
 msgstr ""
 
-#: ../virtManager/migrate.py:529
+#: ../virtManager/migrate.py:528
 #, python-format
 msgid "Error cancelling migrate job: %s"
 msgstr ""
@@ -3057,16 +2963,16 @@ msgstr "Preklad do %s"
 msgid "Route to %s"
 msgstr "Smerovanie do %s"
 
-#: ../virtManager/packageutils.py:60
+#: ../virtManager/packageutils.py:59
 msgid "Searching for available hypervisors..."
 msgstr "Vyhľadávanie dostupných hypervízorov..."
 
-#: ../virtManager/packageutils.py:62
+#: ../virtManager/packageutils.py:61
 #, python-format
 msgid "Checking for installed package '%s'"
 msgstr ""
 
-#: ../virtManager/packageutils.py:90
+#: ../virtManager/packageutils.py:89
 #, python-format
 msgid ""
 "The following packages are not installed:\n"
@@ -3074,18 +2980,13 @@ msgid ""
 "\n"
 "These are required to create KVM guests locally.\n"
 "Would you like to install them now?"
-msgstr ""
-"Nasledujúce balíky nie sú nainštalované:\n"
-"%s\n"
-"\n"
-"Tieto balíky sú potrebný na vytvorenie lokálnych KVM hosťov.\n"
-"Chcete ich teraz nainštalovať?"
+msgstr "Nasledujúce balíky nie sú nainštalované:\n%s\n\nTieto balíky sú potrebný na vytvorenie lokálnych KVM hosťov.\nChcete ich teraz nainštalovať?"
 
-#: ../virtManager/packageutils.py:93
+#: ../virtManager/packageutils.py:92
 msgid "Packages required for KVM usage"
 msgstr "Balíky potrebné pre použitie KVM"
 
-#: ../virtManager/packageutils.py:95
+#: ../virtManager/packageutils.py:94
 #, python-format
 msgid ""
 "The following packages are not installed:\n"
@@ -3094,27 +2995,27 @@ msgid ""
 "Would you like to install them now?"
 msgstr ""
 
-#: ../virtManager/packageutils.py:97
+#: ../virtManager/packageutils.py:96
 msgid "Recommended package installs"
 msgstr ""
 
-#: ../virtManager/packageutils.py:108
+#: ../virtManager/packageutils.py:107
 #, python-format
 msgid "Error talking to PackageKit: %s"
 msgstr "Chyba pri komunikácii s PackageKit: %s"
 
-#: ../virtManager/preferences.py:265
+#: ../virtManager/preferences.py:216
 msgid "Configure grab key combination"
 msgstr ""
 
-#: ../virtManager/preferences.py:274
+#: ../virtManager/preferences.py:225
 msgid ""
 "You can now define grab keys by pressing them.\n"
 "To confirm your selection please click OK button\n"
 "while you have desired keys pressed."
 msgstr ""
 
-#: ../virtManager/preferences.py:277
+#: ../virtManager/preferences.py:228
 msgid "Please press desired grab key combination"
 msgstr ""
 
@@ -3165,21 +3066,19 @@ msgstr "Lokálne úložisko sa nedá použiť pri vzdialenom pripojení."
 msgid "Virtual Machine Manager"
 msgstr "Správca virtuálnych počítačov"
 
-#: ../virtManager/systray.py:181
+#: ../virtManager/systray.py:180
 msgid "_Resume"
 msgstr "_Pokračovať"
 
-#: ../virtManager/systray.py:366 ../virtManager/systray.py:418
+#: ../virtManager/systray.py:364 ../virtManager/systray.py:416
 msgid "No virtual machines"
 msgstr "Žiadne virtuálne počítače"
 
 #: ../virtManager/uihelpers.py:77
 msgid ""
-"Fully allocating storage may take longer now, but the OS install phase will "
-"be quicker. \n"
+"Fully allocating storage may take longer now, but the OS install phase will be quicker. \n"
 "\n"
-"Skipping allocation can also cause space issues on the host machine, if the "
-"maximum image size exceeds available storage space. \n"
+"Skipping allocation can also cause space issues on the host machine, if the maximum image size exceeds available storage space. \n"
 "\n"
 "Tip: Storage format qcow2 and qed do not support full allocation."
 msgstr ""
@@ -3199,104 +3098,104 @@ msgid "Could not start storage_pool '%s': %s"
 msgstr ""
 
 #. [xml value, label]
-#: ../virtManager/uihelpers.py:333 ../virtinst/VirtualWatchdog.py:54
+#: ../virtManager/uihelpers.py:331 ../virtinst/VirtualWatchdog.py:54
 msgid "Hypervisor default"
 msgstr "Predvolené hypervízorom"
 
-#: ../virtManager/uihelpers.py:447 ../virtinst/VirtualNetworkInterface.py:143
+#: ../virtManager/uihelpers.py:445 ../virtinst/VirtualNetworkInterface.py:143
 msgid "Usermode networking"
 msgstr "Sieť v používateľskom režime"
 
-#: ../virtManager/uihelpers.py:453
+#: ../virtManager/uihelpers.py:451
 msgid "Virtual network"
 msgstr "Virtuálna sieť"
 
-#: ../virtManager/uihelpers.py:583
+#: ../virtManager/uihelpers.py:581
 msgid "No virtual networks available"
 msgstr "Nie sú dostupné žiadne virtuálne siete"
 
-#: ../virtManager/uihelpers.py:605
+#: ../virtManager/uihelpers.py:603
 msgid "(Empty bridge)"
 msgstr "(Prázdne premostenie)"
 
-#: ../virtManager/uihelpers.py:612
+#: ../virtManager/uihelpers.py:610
 msgid "macvtap"
 msgstr ""
 
-#: ../virtManager/uihelpers.py:615
+#: ../virtManager/uihelpers.py:613
 msgid "Not bridged"
 msgstr "Nepremostené"
 
-#: ../virtManager/uihelpers.py:617
+#: ../virtManager/uihelpers.py:615
 #, python-format
 msgid "Host device %s %s"
 msgstr "Zariadenie hostiteľa %s %s"
 
-#: ../virtManager/uihelpers.py:655
+#: ../virtManager/uihelpers.py:653
 msgid "No networking"
 msgstr ""
 
 #. After all is said and done, add a manual bridge option
-#: ../virtManager/uihelpers.py:660
+#: ../virtManager/uihelpers.py:658
 msgid "Specify shared device name"
 msgstr "Určte názov zdielaného zariadenia"
 
-#: ../virtManager/uihelpers.py:681
+#: ../virtManager/uihelpers.py:679
 msgid "Virtual Network is not active."
 msgstr "Virtuálna sieť nie je aktívna."
 
-#: ../virtManager/uihelpers.py:682
+#: ../virtManager/uihelpers.py:680
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr "Virtuálna sieť '%s' nie je aktívna. Chcete aby sa sieť spustila teraz?"
 
-#: ../virtManager/uihelpers.py:694
+#: ../virtManager/uihelpers.py:692
 #, python-format
 msgid "Could not start virtual network '%s': %s"
 msgstr "Nepodarilo sa spustiť virtuálnu sieť '%s': %s"
 
-#: ../virtManager/uihelpers.py:722
+#: ../virtManager/uihelpers.py:720
 msgid "Error with network parameters."
 msgstr "Chyba sieťových parametrov."
 
-#: ../virtManager/uihelpers.py:727 ../virtManager/uihelpers.py:729
+#: ../virtManager/uihelpers.py:725 ../virtManager/uihelpers.py:727
 msgid "Mac address collision."
 msgstr "Kolízia MAC adries."
 
-#: ../virtManager/uihelpers.py:730
+#: ../virtManager/uihelpers.py:728
 #, python-format
 msgid "%s Are you sure you want to use this address?"
 msgstr "%s Naozaj chcete použiť túto adresu?"
 
-#: ../virtManager/uihelpers.py:785
+#: ../virtManager/uihelpers.py:783
 msgid "No device present"
 msgstr "Žiadne zariadenie"
 
-#: ../virtManager/uihelpers.py:959
+#: ../virtManager/uihelpers.py:957
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
 msgstr "Emulátor možno nemá právo na prechádzanie cesty '%s'."
 
-#: ../virtManager/uihelpers.py:961
+#: ../virtManager/uihelpers.py:959
 msgid "Do you want to correct this now?"
 msgstr "Chcete to teraz opraviť?"
 
-#: ../virtManager/uihelpers.py:962 ../virtManager/uihelpers.py:986
+#: ../virtManager/uihelpers.py:960 ../virtManager/uihelpers.py:984
 msgid "Don't ask about these directories again."
 msgstr "Viac sa to pri týchto priečinkoch nepýtať."
 
-#: ../virtManager/uihelpers.py:975
+#: ../virtManager/uihelpers.py:973
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr "Nastali chyby pri zmene nastavení oprávnení pre nasledujúce priečinky:"
 
-#: ../virtManager/util.py:74 ../virtinst/cli.py:515
+#: ../virtManager/util.py:71 ../virtinst/cli.py:515
 #, python-format
 msgid "Couldn't create default storage pool '%s': %s"
 msgstr "Nebolo možné vytvoriť predvolené zoskupenie úložísk '%s': %s"
 
-#: ../virtManager/util.py:372
+#: ../virtManager/util.py:369
 msgid "Don't ask me again"
 msgstr ""
 
@@ -3311,14 +3210,12 @@ msgid "Cannot convert disk with absolute path %s"
 msgstr ""
 
 #: ../virtconv/formats.py:134
-#, fuzzy
 msgid "Unknown format"
-msgstr "Neznámy"
+msgstr ""
 
-#: ../virtconv/parsers/ovf.py:164 ../virtinst/util.py:582
-#, fuzzy
+#: ../virtconv/parsers/ovf.py:164 ../virtinst/util.py:581
 msgid "'path' or 'func' is required."
-msgstr "Pre import je potrebná cesta k úložisku."
+msgstr ""
 
 #: ../virtconv/parsers/ovf.py:217
 #, python-format
@@ -3331,9 +3228,9 @@ msgid "Unknown reference id '%s' for path %s."
 msgstr ""
 
 #: ../virtconv/parsers/ovf.py:240
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown storage path type %s."
-msgstr "Musí byť zadaná cesta k úložisku."
+msgstr ""
 
 #: ../virtconv/parsers/ovf.py:404
 #, python-format
@@ -3343,9 +3240,9 @@ msgid ""
 msgstr ""
 
 #: ../virtconv/parsers/virtimage.py:227
-#, fuzzy, python-format
+#, python-format
 msgid "Couldn't import file '%s': %s"
-msgstr "Nepodarilo sa spustiť virtuálnu sieť '%s': %s"
+msgstr ""
 
 #: ../virtconv/parsers/virtimage.py:234
 #, python-format
@@ -3361,30 +3258,29 @@ msgstr ""
 msgid "VM must have a memory setting"
 msgstr ""
 
-#: ../virtconv/parsers/vmx.py:139
+#: ../virtconv/parsers/vmx.py:140
 #, python-format
 msgid ""
 "Syntax error at line %d: %s\n"
 "%s"
 msgstr ""
 
-#: ../virtconv/parsers/vmx.py:177
+#: ../virtconv/parsers/vmx.py:178
 msgid "Didn't detect a storage line in the VMDK descriptor file"
 msgstr ""
 
-#: ../virtconv/parsers/vmx.py:180
+#: ../virtconv/parsers/vmx.py:181
 msgid "Don't know how to handle multistorage VMDK descriptors"
 msgstr ""
 
-#: ../virtconv/parsers/vmx.py:309
+#: ../virtconv/parsers/vmx.py:310
 #, python-format
 msgid "No displayName defined in '%s'"
 msgstr ""
 
 #: ../virtconv/vmcfg.py:71
-#, fuzzy
 msgid "VM name is not set"
-msgstr "Rovnaké ako hostiteľ"
+msgstr ""
 
 #: ../virtconv/vmcfg.py:77
 msgid "VM type is not set"
@@ -3395,9 +3291,9 @@ msgid "VM arch is not set"
 msgstr ""
 
 #: ../virtconv/vmcfg.py:83
-#, fuzzy, python-format
+#, python-format
 msgid "Disk %s:%s storage does not exist"
-msgstr "Cesta neexistuje."
+msgstr ""
 
 #: ../virtinst/CapabilitiesParser.py:105
 #, python-format
@@ -3425,9 +3321,9 @@ msgid "for arch '%s'"
 msgstr ""
 
 #: ../virtinst/CapabilitiesParser.py:743
-#, fuzzy, python-format
+#, python-format
 msgid "virtualization type '%s'"
-msgstr "Odstraňovanie virtuálneho počítača '%s'"
+msgstr ""
 
 #: ../virtinst/CapabilitiesParser.py:745
 msgid "any virtualization options"
@@ -3450,9 +3346,8 @@ msgid "Must be root to create Xen guests"
 msgstr ""
 
 #: ../virtinst/cli.py:474
-#, fuzzy
 msgid "Exiting at user request."
-msgstr "Potvrdzovať požiadavku na pozastavenie"
+msgstr ""
 
 #: ../virtinst/cli.py:486
 #, python-format
@@ -3464,28 +3359,25 @@ msgid ""
 msgstr ""
 
 #: ../virtinst/cli.py:565
-#, fuzzy
 msgid "A yes or no response is required"
-msgstr "Pre import je potrebná cesta k úložisku."
+msgstr ""
 
 #: ../virtinst/cli.py:591
 msgid " (Use --prompt or --force to override)"
 msgstr ""
 
 #: ../virtinst/cli.py:640
-#, fuzzy
 msgid "Do you really want to use this disk (yes or no)"
-msgstr "Naozaj chcete disk použiť?"
+msgstr ""
 
 #: ../virtinst/cli.py:653
-#, fuzzy
 msgid "A disk path must be specified."
-msgstr "Musí byť zadaná cesta k médiu."
+msgstr ""
 
 #: ../virtinst/cli.py:655
-#, fuzzy, python-format
+#, python-format
 msgid "A disk path must be specified to clone '%s'."
-msgstr "Musí byť zadaná cesta k médiu."
+msgstr ""
 
 #: ../virtinst/cli.py:659
 msgid "What would you like to use as the disk (file path)?"
@@ -3494,8 +3386,8 @@ msgstr ""
 #: ../virtinst/cli.py:661
 #, python-format
 msgid ""
-"Please enter the path to the file you would like to use for storage. It will "
-"have size %sGB."
+"Please enter the path to the file you would like to use for storage. It will"
+" have size %sGB."
 msgstr ""
 
 #: ../virtinst/cli.py:675
@@ -3508,31 +3400,29 @@ msgid "How large would you like the disk (%s) to be (in gigabytes)?"
 msgstr ""
 
 #: ../virtinst/cli.py:701
-#, fuzzy, python-format
+#, python-format
 msgid "This will overwrite the existing path '%s'"
-msgstr "Klonovanie nahradí existujúci súbor"
+msgstr ""
 
 #: ../virtinst/cli.py:714
-#, fuzzy, python-format
+#, python-format
 msgid "Disk %s is already in use by another guest"
-msgstr "Disk \"%s\" už používa iný hosť!"
+msgstr ""
 
 #. ######################
 #. Validation wrappers #
 #. ######################
 #: ../virtinst/cli.py:790
-#, fuzzy
 msgid "--name is required"
-msgstr "Vyžaduje sa názov rozhrania."
+msgstr ""
 
 #: ../virtinst/cli.py:791
 msgid "--ram amount in MB is required"
 msgstr ""
 
 #: ../virtinst/cli.py:795
-#, fuzzy
 msgid "What is the name of your virtual machine?"
-msgstr "Pozastaviť virtuálny počítač"
+msgstr ""
 
 #: ../virtinst/cli.py:804
 msgid "How much RAM should be allocated (in megabytes)?"
@@ -3559,9 +3449,9 @@ msgid "Cannot mix both --bridge and --network arguments"
 msgstr ""
 
 #: ../virtinst/cli.py:925
-#, fuzzy, python-format
+#, python-format
 msgid "Error in network device parameters: %s"
-msgstr "Chyba sieťových parametrov."
+msgstr ""
 
 #: ../virtinst/cli.py:951
 msgid "Cannot mix --graphics and old style graphical options"
@@ -3572,34 +3462,33 @@ msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr ""
 
 #: ../virtinst/cli.py:999
-#, fuzzy, python-format
+#, python-format
 msgid "Error in graphics device parameters: %s"
-msgstr "Chyba pri nastavovaní parametrov klonovania: %s"
+msgstr ""
 
 #: ../virtinst/cli.py:1039
-#, fuzzy, python-format
+#, python-format
 msgid "Error in smartcard device parameters: %s"
-msgstr "Chyba pri nastavovaní parametrov klonovania: %s"
+msgstr ""
 
 #: ../virtinst/cli.py:1050
-#, fuzzy, python-format
+#, python-format
 msgid "Error in controller device parameters: %s"
-msgstr "Chyba pri nastavovaní parametrov klonovania: %s"
+msgstr ""
 
 #: ../virtinst/cli.py:1061
-#, fuzzy, python-format
+#, python-format
 msgid "Error in redirdev device parameters: %s"
-msgstr "Chyba pri nastavovaní parametrov klonovania: %s"
+msgstr ""
 
 #: ../virtinst/cli.py:1072
-#, fuzzy, python-format
+#, python-format
 msgid "Error in memballoon device parameters: %s"
-msgstr "Chyba pri nastavovaní parametrov klonovania: %s"
+msgstr ""
 
 #: ../virtinst/cli.py:1084
-#, fuzzy
 msgid "Connect to hypervisor with libvirt URI"
-msgstr "Pripojené hypervízory sa nezhodujú. "
+msgstr ""
 
 #: ../virtinst/cli.py:1089
 msgid ""
@@ -3618,9 +3507,8 @@ msgid "CPU model and features. Ex: --cpu coreduo,+x2apic"
 msgstr ""
 
 #: ../virtinst/cli.py:1108
-#, fuzzy
 msgid "Graphics Configuration"
-msgstr "Statická konfigurácia"
+msgstr ""
 
 #: ../virtinst/cli.py:1144
 msgid ""
@@ -3637,9 +3525,8 @@ msgid ""
 msgstr ""
 
 #: ../virtinst/cli.py:1155
-#, fuzzy
 msgid "Configure a guest serial device"
-msgstr "Nastaviť sieťové rozhranie"
+msgstr ""
 
 #: ../virtinst/cli.py:1157
 msgid "Configure a guest parallel device"
@@ -3662,14 +3549,12 @@ msgid "Configure guest sound device emulation"
 msgstr ""
 
 #: ../virtinst/cli.py:1169
-#, fuzzy
 msgid "Configure a guest watchdog device"
-msgstr "Nastaviť sieťové rozhranie"
+msgstr ""
 
 #: ../virtinst/cli.py:1171
-#, fuzzy
 msgid "Configure guest video hardware."
-msgstr "Nastaviť sieťové rozhranie"
+msgstr ""
 
 #: ../virtinst/cli.py:1173
 msgid ""
@@ -3711,9 +3596,9 @@ msgstr ""
 #: ../virtinst/cli.py:1863 ../virtinst/cli.py:1900 ../virtinst/cli.py:1927
 #: ../virtinst/cli.py:1949 ../virtinst/cli.py:2023 ../virtinst/cli.py:2054
 #: ../virtinst/cli.py:2074 ../virtinst/cli.py:2093
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown options %s"
-msgstr "Neznáme URI pripojenia %s"
+msgstr ""
 
 #: ../virtinst/cli.py:1451
 msgid "--boot menu must be 'on' or 'off'"
@@ -3728,9 +3613,8 @@ msgid "Size must be specified with all 'pool='"
 msgstr ""
 
 #: ../virtinst/cli.py:1575
-#, fuzzy
 msgid "Format attribute not supported for this volume type"
-msgstr "Nie je podporovaný pre tento typ hosťa."
+msgstr ""
 
 #: ../virtinst/cli.py:1584
 msgid "Storage volume must be specified as vol=poolname/volname"
@@ -3765,9 +3649,8 @@ msgid "%(devtype)s type '%(chartype)s' does not support '%(optname)s' option."
 msgstr ""
 
 #: ../virtinst/CloneManager.py:124
-#, fuzzy
 msgid "Connection must be a 'virConnect' instance."
-msgstr "Pripojenie je odpojené."
+msgstr ""
 
 #: ../virtinst/CloneManager.py:174
 msgid "Original xml must be a string."
@@ -3784,9 +3667,9 @@ msgid "Invalid uuid for new guest: %s"
 msgstr ""
 
 #: ../virtinst/CloneManager.py:202
-#, fuzzy, python-format
+#, python-format
 msgid "UUID '%s' is in use by another guest."
-msgstr "Disk \"%s\" už používa iný hosť!"
+msgstr ""
 
 #: ../virtinst/CloneManager.py:229
 #, python-format
@@ -3798,47 +3681,46 @@ msgid "Cloning policy must be a list of rules."
 msgstr ""
 
 #: ../virtinst/CloneManager.py:400
-#, fuzzy
 msgid "Original guest name or xml is required."
-msgstr "Vyžaduje sa názov rozhrania."
+msgstr ""
 
 #: ../virtinst/CloneManager.py:425
 msgid "Domain with devices to clone must be paused or shutoff."
 msgstr ""
 
-#: ../virtinst/CloneManager.py:438
+#: ../virtinst/CloneManager.py:450
+#, python-format
+msgid "Clone onto existing storage volume is not currently supported: '%s'"
+msgstr ""
+
+#: ../virtinst/CloneManager.py:485
 #, python-format
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
 "%(need)d needed"
 msgstr ""
 
-#: ../virtinst/CloneManager.py:450
+#: ../virtinst/CloneManager.py:497
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 
-#: ../virtinst/CloneManager.py:494
+#: ../virtinst/CloneManager.py:575
 #, python-format
-msgid "Clone onto existing storage volume is not currently supported: '%s'"
+msgid "Disk '%s' does not exist."
 msgstr ""
 
-#: ../virtinst/CloneManager.py:566
-#, fuzzy, python-format
-msgid "Disk '%s' does not exist."
-msgstr "Cesta neexistuje."
-
-#: ../virtinst/CloneManager.py:580
-#, fuzzy, python-format
+#: ../virtinst/CloneManager.py:589
+#, python-format
 msgid "Could not determine original disk information: %s"
-msgstr "Nepodarilo sa inicializovať HAL kvôli vypísaniu médií: %s"
+msgstr ""
 
-#: ../virtinst/CloneManager.py:621
+#: ../virtinst/CloneManager.py:630
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr ""
 
-#: ../virtinst/CPU.py:197
+#: ../virtinst/CPU.py:206
 msgid "No host CPU reported in capabilities"
 msgstr ""
 
@@ -3876,18 +3758,16 @@ msgid ""
 msgstr ""
 
 #: ../virtinst/DistroInstaller.py:258
-#, fuzzy
 msgid "Privilege is required for NFS installations"
-msgstr "Na inštaláciu %s je potrebné sieťové zariadenie."
+msgstr ""
 
 #: ../virtinst/DomainNumatune.py:46
 msgid "cpuset must be string"
 msgstr ""
 
 #: ../virtinst/DomainNumatune.py:48
-#, fuzzy
 msgid "cpuset can only contain numeric, ',', '^', or '-' characters"
-msgstr "Názov siete môže obsahovať iba alfanumerické znaky a znak '_'"
+msgstr ""
 
 #: ../virtinst/DomainNumatune.py:62
 msgid "cpuset contains invalid format."
@@ -3923,14 +3803,12 @@ msgid "Guest name '%s' is already in use."
 msgstr ""
 
 #: ../virtinst/Guest.py:318
-#, fuzzy
 msgid "Memory value must be an integer greater than 0"
-msgstr "Port musí byť väčší ako 0."
+msgstr ""
 
 #: ../virtinst/Guest.py:336
-#, fuzzy
 msgid "Max Memory value must be an integer greater than 0"
-msgstr "Rýchlosť prenosu musí byť väčšia ako 0."
+msgstr ""
 
 #: ../virtinst/Guest.py:367
 msgid "Number of vcpus must be a positive integer."
@@ -3974,9 +3852,9 @@ msgid "Must pass a VirtualDevice instance."
 msgstr ""
 
 #: ../virtinst/Guest.py:645
-#, fuzzy, python-format
+#, python-format
 msgid "Did not find device %s"
-msgstr "Chyba pri pridávaní zariadenia: %s"
+msgstr ""
 
 #: ../virtinst/Guest.py:1003
 msgid "Domain has already been started!"
@@ -3987,9 +3865,8 @@ msgid "Name and memory must be specified for all guests!"
 msgstr ""
 
 #: ../virtinst/Guest.py:1010
-#, fuzzy
 msgid "The UUID you entered is already in use by another guest!"
-msgstr "Disk \"%s\" už používa iný hosť!"
+msgstr ""
 
 #: ../virtinst/Guest.py:1091
 #, python-format
@@ -3997,19 +3874,17 @@ msgid "Domain named %s already exists!"
 msgstr ""
 
 #: ../virtinst/Guest.py:1103
-#, fuzzy, python-format
+#, python-format
 msgid "Could not remove old vm '%s': %s"
-msgstr "Nepodarilo sa spustiť virtuálnu sieť '%s': %s"
+msgstr ""
 
 #: ../virtinst/Guest.py:1162
-#, fuzzy
 msgid "Creating domain..."
-msgstr "Vytváranie zoskupenia úložísk..."
+msgstr ""
 
 #: ../virtinst/Guest.py:1164
-#, fuzzy
 msgid "Starting domain..."
-msgstr "Chyba pri obnovovaní domény"
+msgstr ""
 
 #: ../virtinst/Guest.py:1239
 msgid ""
@@ -4029,9 +3904,9 @@ msgid "Retrieving file %s..."
 msgstr ""
 
 #: ../virtinst/ImageFetcher.py:90
-#, fuzzy, python-format
+#, python-format
 msgid "Couldn't acquire file %s: %s"
-msgstr "Nebolo možné vytvoriť predvolené zoskupenie úložísk '%s': %s"
+msgstr ""
 
 #: ../virtinst/ImageFetcher.py:114
 #, python-format
@@ -4044,9 +3919,8 @@ msgid "Mounting location '%s' failed"
 msgstr ""
 
 #: ../virtinst/ImageInstaller.py:47
-#, fuzzy
 msgid "'conn' or 'capabilities' must be specified."
-msgstr "Musí byť zadaná cesta k úložisku."
+msgstr ""
 
 #: ../virtinst/ImageInstaller.py:54
 msgid "Could not find suitable boot descriptor for this host"
@@ -4057,14 +3931,14 @@ msgid "boot_index out of range."
 msgstr ""
 
 #: ../virtinst/ImageInstaller.py:66
-#, fuzzy, python-format
+#, python-format
 msgid "Unsupported virtualization type: %s %s"
-msgstr "Nepodporovaný typ overenia totožnosti"
+msgstr ""
 
 #: ../virtinst/ImageInstaller.py:126
-#, fuzzy, python-format
+#, python-format
 msgid "System disk %s does not exist"
-msgstr "Cesta neexistuje."
+msgstr ""
 
 #: ../virtinst/ImageParser.py:87
 msgid "Expected exactly one 'domain' element"
@@ -4075,32 +3949,32 @@ msgstr ""
 msgid "Disk entry for '%s' not found"
 msgstr ""
 
-#: ../virtinst/ImageParser.py:120
+#: ../virtinst/ImageParser.py:119
 #, python-format
 msgid "Memory must be an integer, but is '%s'"
 msgstr ""
 
-#: ../virtinst/ImageParser.py:247
-#, fuzzy, python-format
+#: ../virtinst/ImageParser.py:246
+#, python-format
 msgid "The format for disk %s must be one of %s"
-msgstr "Jeden alebo viac diskov sa nedá naklonovať alebo nazdielať."
+msgstr ""
 
-#: ../virtinst/ImageParser.py:281
+#: ../virtinst/ImageParser.py:280
 #, python-format
 msgid "Checking disk signature for %s"
 msgstr ""
 
-#: ../virtinst/ImageParser.py:293
+#: ../virtinst/ImageParser.py:292
 #, python-format
 msgid "Disk signature for %s does not match Expected: %s  Received: %s"
 msgstr ""
 
-#: ../virtinst/ImageParser.py:296
+#: ../virtinst/ImageParser.py:295
 #, python-format
 msgid "Disk signature for %s does not match"
 msgstr ""
 
-#: ../virtinst/ImageParser.py:338
+#: ../virtinst/ImageParser.py:337
 msgid "Root element is not 'image'"
 msgstr ""
 
@@ -4109,37 +3983,32 @@ msgid "Guest.cdrom must be a boolean type"
 msgstr ""
 
 #: ../virtinst/Installer.py:434
-#, fuzzy
 msgid "A connection must be specified."
-msgstr "Musí byť určené rozhranie."
+msgstr ""
 
 #: ../virtinst/Interface.py:114 ../virtinst/Storage.py:152
 msgid "'conn' must be a libvirt connection object."
 msgstr ""
 
 #: ../virtinst/Interface.py:116
-#, fuzzy
 msgid "Passed connection is not libvirt interface capable"
-msgstr "Pripojenie k libvirt nepodporuje správu rozhraní."
+msgstr ""
 
 #: ../virtinst/Interface.py:126
-#, fuzzy
 msgid "Interface name"
-msgstr "_Typ rozhrania:"
+msgstr ""
 
 #: ../virtinst/Interface.py:131
-#, fuzzy
 msgid "Name for the interface object."
-msgstr "Žiadne vybrané rozhranie."
+msgstr ""
 
 #: ../virtinst/Interface.py:138
 msgid "Maximum transmit size in bytes"
 msgstr ""
 
 #: ../virtinst/Interface.py:146
-#, fuzzy
 msgid "Interface MAC address"
-msgstr "Neplatná MAC adresa"
+msgstr ""
 
 #: ../virtinst/Interface.py:152
 #, python-format
@@ -4147,29 +4016,27 @@ msgid "Unknown start mode '%s"
 msgstr ""
 
 #: ../virtinst/Interface.py:155
-#, fuzzy
 msgid "When the interface will be auto-started."
-msgstr "Teraz sa vytvára virtuálne rozhranie."
+msgstr ""
 
 #: ../virtinst/Interface.py:162
-#, fuzzy
 msgid "Network protocol configuration"
-msgstr "Statická konfigurácia"
+msgstr ""
 
 #: ../virtinst/Interface.py:181
-#, fuzzy, python-format
+#, python-format
 msgid "Name '%s' already in use by another interface."
-msgstr "Disk \"%s\" už používa iný hosť!"
+msgstr ""
 
 #: ../virtinst/Interface.py:242
-#, fuzzy, python-format
+#, python-format
 msgid "Could not define interface: %s"
-msgstr "Nepodarilo sa inicializovať HAL na zobrazenie zoznamu rozhraní: %s"
+msgstr ""
 
 #: ../virtinst/Interface.py:249
-#, fuzzy, python-format
+#, python-format
 msgid "Could not create interface: %s"
-msgstr "Chyba pri vytváraní rozhrania: '%s'"
+msgstr ""
 
 #: ../virtinst/Interface.py:334
 msgid "Whether STP is enabled on the bridge"
@@ -4188,9 +4055,8 @@ msgid "Availability monitoring mode for the bond device"
 msgstr ""
 
 #: ../virtinst/Interface.py:423
-#, fuzzy
 msgid "ARP monitoring interval in milliseconds"
-msgstr "Interval obnovenia štatistiky v sekundách"
+msgstr ""
 
 #: ../virtinst/Interface.py:430
 msgid "IP target used in ARP monitoring packets"
@@ -4201,14 +4067,12 @@ msgid "ARP monitor validation mode"
 msgstr ""
 
 #: ../virtinst/Interface.py:446
-#, fuzzy
 msgid "MII monitoring method."
-msgstr "Režim sledovania zviazania:"
+msgstr ""
 
 #: ../virtinst/Interface.py:453
-#, fuzzy
 msgid "MII monitoring interval in milliseconds"
-msgstr "Interval obnovenia štatistiky v sekundách"
+msgstr ""
 
 #: ../virtinst/Interface.py:460
 msgid ""
@@ -4229,23 +4093,20 @@ msgid "Parent interface to create VLAN on"
 msgstr ""
 
 #: ../virtinst/Interface.py:566
-#, fuzzy
 msgid "Tag and parent interface are required."
-msgstr "Vyžaduje sa názov rozhrania."
+msgstr ""
 
 #: ../virtinst/Interface.py:641
 msgid "Whether to enable DHCP"
 msgstr ""
 
 #: ../virtinst/Interface.py:654
-#, fuzzy
 msgid "Network gateway address"
-msgstr "Kontrola sieťovej adresy"
+msgstr ""
 
 #: ../virtinst/Interface.py:661
-#, fuzzy
 msgid "Static IP addresses"
-msgstr "Počiatočná adresa:"
+msgstr ""
 
 #: ../virtinst/Interface.py:704
 msgid "Whether to enable IPv6 autoconfiguration"
@@ -4256,35 +4117,37 @@ msgid "IPv6 address prefix"
 msgstr ""
 
 #: ../virtinst/Interface.py:733
-#, fuzzy
 msgid "IP address"
-msgstr "%d adries"
+msgstr ""
 
 #: ../virtinst/LiveCDInstaller.py:67
 msgid "CDROM media must be specified for the live CD installer."
 msgstr ""
 
-#: ../virtinst/NodeDeviceParser.py:122
-#, fuzzy
+#: ../virtinst/NodeDeviceParser.py:126
 msgid "System"
-msgstr "Predvolené systémom"
+msgstr ""
 
-#: ../virtinst/NodeDeviceParser.py:156
-#, fuzzy, python-format
+#: ../virtinst/NodeDeviceParser.py:160
+#, python-format
 msgid "Interface %s"
-msgstr "Pridať rozhranie"
+msgstr ""
 
-#: ../virtinst/NodeDeviceParser.py:440 ../virtinst/NodeDeviceParser.py:521
-#, fuzzy
+#: ../virtinst/NodeDeviceParser.py:443 ../virtinst/NodeDeviceParser.py:529
 msgid "Connection does not support host device enumeration."
-msgstr "Pripojenie nepodporuje vymenovanie zariadení hostiteľa"
+msgstr ""
 
-#: ../virtinst/NodeDeviceParser.py:526
+#: ../virtinst/NodeDeviceParser.py:534
 #, python-format
 msgid "Could not determine format of '%s'"
 msgstr ""
 
-#: ../virtinst/NodeDeviceParser.py:537
+#: ../virtinst/NodeDeviceParser.py:552
+#, python-format
+msgid "%s corresponds to multiple node devices"
+msgstr ""
+
+#: ../virtinst/NodeDeviceParser.py:555
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr ""
@@ -4294,46 +4157,45 @@ msgstr ""
 msgid "Invalid dictionary entry for device '%s %s'"
 msgstr ""
 
-#: ../virtinst/OSDistro.py:114
+#: ../virtinst/OSDistro.py:113
 #, python-format
 msgid ""
 "Could not find an installable distribution at '%s'\n"
 "The location must be the root directory of an install tree."
 msgstr ""
 
-#: ../virtinst/OSDistro.py:129
-#, fuzzy
+#: ../virtinst/OSDistro.py:128
 msgid "Invalid install location: "
-msgstr "Maximálna rezervácia:"
+msgstr ""
 
-#: ../virtinst/OSDistro.py:287
+#: ../virtinst/OSDistro.py:290
 #, python-format
 msgid "Couldn't find %(type)s kernel for %(distro)s tree."
 msgstr ""
 
-#: ../virtinst/OSDistro.py:304
+#: ../virtinst/OSDistro.py:307
 #, python-format
 msgid "Could not find boot.iso in %s tree."
 msgstr ""
 
-#: ../virtinst/OSDistro.py:467
+#: ../virtinst/OSDistro.py:470
 #, python-format
 msgid "Could not find a kernel path for virt type '%s'"
 msgstr ""
 
-#: ../virtinst/OSDistro.py:476
+#: ../virtinst/OSDistro.py:479
 msgid "Could not find a boot iso path for this tree."
 msgstr ""
 
-#: ../virtinst/OSDistro.py:798
+#: ../virtinst/OSDistro.py:799
 msgid "Unable to determine kernel RPM path"
 msgstr ""
 
-#: ../virtinst/OSDistro.py:800
+#: ../virtinst/OSDistro.py:801
 msgid "Unable to determine install-initrd RPM path"
 msgstr ""
 
-#: ../virtinst/OSDistro.py:811
+#: ../virtinst/OSDistro.py:812
 msgid "Building initrd"
 msgstr ""
 
@@ -4342,7 +4204,7 @@ msgstr ""
 msgid "Solaris miniroot not found at %s"
 msgstr ""
 
-#: ../virtinst/OSDistro.py:1219
+#: ../virtinst/OSDistro.py:1218
 #, python-format
 msgid "OpenSolaris PV kernel not found at %s"
 msgstr ""
@@ -4353,19 +4215,16 @@ msgid "Unknown storage object type: %s"
 msgstr ""
 
 #: ../virtinst/Storage.py:154
-#, fuzzy
 msgid "Passed connection is not libvirt storage capable"
-msgstr "Pripojenie nepodporuje správu úložiska."
+msgstr ""
 
 #: ../virtinst/Storage.py:164
-#, fuzzy
 msgid "Storage object"
-msgstr "Cesta k úložisku"
+msgstr ""
 
 #: ../virtinst/Storage.py:169
-#, fuzzy
 msgid "Name for the storage object."
-msgstr "Vybrať alebo vytvoriť zväzok úložiska"
+msgstr ""
 
 #: ../virtinst/Storage.py:176
 msgid "Permissions must be passed as a dict object"
@@ -4385,9 +4244,8 @@ msgid "Filesystem Directory"
 msgstr ""
 
 #: ../virtinst/Storage.py:255
-#, fuzzy
 msgid "Pre-Formatted Block Device"
-msgstr "Formát zdrojového zariadenia."
+msgstr ""
 
 #: ../virtinst/Storage.py:256
 msgid "Network Exported Directory"
@@ -4398,14 +4256,12 @@ msgid "LVM Volume Group"
 msgstr ""
 
 #: ../virtinst/Storage.py:258
-#, fuzzy
 msgid "Physical Disk Device"
-msgstr "Fyzické zariadenie %s"
+msgstr ""
 
 #: ../virtinst/Storage.py:259
-#, fuzzy
 msgid "iSCSI Target"
-msgstr "Cieľ"
+msgstr ""
 
 #: ../virtinst/Storage.py:260
 msgid "SCSI Host Adapter"
@@ -4416,9 +4272,9 @@ msgid "Multipath Device Enumerator"
 msgstr ""
 
 #: ../virtinst/Storage.py:271 ../virtinst/Storage.py:362
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown storage pool type: %s"
-msgstr "Žiadne vybrané zoskupenie úložísk."
+msgstr ""
 
 #: ../virtinst/Storage.py:386
 msgid "Storage device type the pool will represent."
@@ -4429,29 +4285,29 @@ msgid "Host name must be a string"
 msgstr ""
 
 #: ../virtinst/Storage.py:424
-#, fuzzy, python-format
+#, python-format
 msgid "Name '%s' already in use by another pool."
-msgstr "Disk \"%s\" už používa iný hosť!"
+msgstr ""
 
 #: ../virtinst/Storage.py:465
-#, fuzzy, python-format
+#, python-format
 msgid "Could not define storage pool: %s"
-msgstr "Nebolo možné vytvoriť predvolené zoskupenie úložísk '%s': %s"
+msgstr ""
 
 #: ../virtinst/Storage.py:472
-#, fuzzy, python-format
+#, python-format
 msgid "Could not build storage pool: %s"
-msgstr "Nebolo možné vytvoriť predvolené zoskupenie úložísk '%s': %s"
+msgstr ""
 
 #: ../virtinst/Storage.py:478
-#, fuzzy, python-format
+#, python-format
 msgid "Could not start storage pool: %s"
-msgstr "Nebolo možné vytvoriť predvolené zoskupenie úložísk '%s': %s"
+msgstr ""
 
 #: ../virtinst/Storage.py:484
-#, fuzzy, python-format
+#, python-format
 msgid "Could not set pool autostart flag: %s"
-msgstr "Chyba pri automatickom spúšťaní zoskupenia: %s"
+msgstr ""
 
 #: ../virtinst/Storage.py:511
 msgid "Directory to use for the storage pool."
@@ -4462,9 +4318,8 @@ msgid "The existing device to mount for the pool."
 msgstr ""
 
 #: ../virtinst/Storage.py:551 ../virtinst/Storage.py:613
-#, fuzzy
 msgid "Location to mount the source device."
-msgstr "Formát zdrojového zariadenia."
+msgstr ""
 
 #: ../virtinst/Storage.py:572
 #, python-format
@@ -4472,14 +4327,12 @@ msgid "Unknown Filesystem format: %s"
 msgstr ""
 
 #: ../virtinst/Storage.py:575
-#, fuzzy
 msgid "Filesystem type of the source device."
-msgstr "Formát zdrojového zariadenia."
+msgstr ""
 
 #: ../virtinst/Storage.py:588
-#, fuzzy
 msgid "Device path is required"
-msgstr "Vyžaduje sa názov rozhrania."
+msgstr ""
 
 #: ../virtinst/Storage.py:608 ../virtinst/Storage.py:861
 msgid "Path on the host that is being shared."
@@ -4499,15 +4352,13 @@ msgid "Type of network filesystem."
 msgstr ""
 
 #: ../virtinst/Storage.py:649 ../virtinst/Storage.py:879
-#, fuzzy
 msgid "Hostname is required"
-msgstr "Vyžaduje sa názov rozhrania."
+msgstr ""
 
 #: ../virtinst/Storage.py:651 ../virtinst/Storage.py:808
 #: ../virtinst/Storage.py:881
-#, fuzzy
 msgid "Host path is required"
-msgstr "Pre import je potrebná cesta k úložisku."
+msgstr ""
 
 #: ../virtinst/Storage.py:670
 msgid "Location of the existing LVM volume group."
@@ -4526,15 +4377,13 @@ msgid "Must explicitly specify source path if building pool"
 msgstr ""
 
 #: ../virtinst/Storage.py:771
-#, fuzzy
 msgid "Path to the existing disk device."
-msgstr "Iportovať _existujúci obraz disku"
+msgstr ""
 
 #: ../virtinst/Storage.py:774 ../virtinst/Storage.py:835
 #: ../virtinst/Storage.py:903 ../virtinst/Storage.py:948
-#, fuzzy
 msgid "Root location for identifying new storage volumes."
-msgstr "Vybrať alebo vytvoriť zväzok úložiska"
+msgstr ""
 
 #: ../virtinst/Storage.py:794
 #, python-format
@@ -4542,46 +4391,40 @@ msgid "Unknown Disk format: %s"
 msgstr ""
 
 #: ../virtinst/Storage.py:797
-#, fuzzy
 msgid "Format of the source device's partition table."
-msgstr "Formát zdrojového zariadenia."
+msgstr ""
 
 #: ../virtinst/Storage.py:820
 msgid "Must explicitly specify disk format if formatting disk device."
 msgstr ""
 
 #: ../virtinst/Storage.py:839
-#, fuzzy
 msgid "iSCSI volume creation is not supported."
-msgstr "Typ dokladu o pravosti %s nie je podporovaný"
+msgstr ""
 
 #: ../virtinst/Storage.py:868
 msgid "iSCSI initiator qualified name"
 msgstr ""
 
 #: ../virtinst/Storage.py:907
-#, fuzzy
 msgid "SCSI volume creation is not supported."
-msgstr "Typ dokladu o pravosti %s nie je podporovaný"
+msgstr ""
 
 #: ../virtinst/Storage.py:925
 msgid "Name of the scsi adapter (ex. host2)"
 msgstr ""
 
 #: ../virtinst/Storage.py:936
-#, fuzzy
 msgid "Adapter name is required"
-msgstr "Vyžaduje sa názov rozhrania."
+msgstr ""
 
 #: ../virtinst/Storage.py:952
-#, fuzzy
 msgid "Multipath volume creation is not supported."
-msgstr "Typ dokladu o pravosti %s nie je podporovaný"
+msgstr ""
 
 #: ../virtinst/Storage.py:997
-#, fuzzy
 msgid "One of pool or pool_name must be specified."
-msgstr "Musí byť zadaná cesta k úložisku."
+msgstr ""
 
 #: ../virtinst/Storage.py:1000 ../virtinst/Storage.py:1074
 msgid "'conn' must be specified with 'pool_name'"
@@ -4592,9 +4435,9 @@ msgid "Must specify pool_object or pool_name"
 msgstr ""
 
 #: ../virtinst/Storage.py:1081
-#, fuzzy, python-format
+#, python-format
 msgid "Couldn't find storage pool '%s': %s"
-msgstr "Nebolo možné vytvoriť predvolené zoskupenie úložísk '%s': %s"
+msgstr ""
 
 #: ../virtinst/Storage.py:1085
 msgid "pool_object must be a virStoragePool"
@@ -4637,20 +4480,20 @@ msgid "'%s' is not a valid format."
 msgstr ""
 
 #: ../virtinst/Storage.py:1180
-#, fuzzy, python-format
+#, python-format
 msgid "Name '%s' already in use by another volume."
-msgstr "Disk \"%s\" už používa iný hosť!"
+msgstr ""
 
 #: ../virtinst/Storage.py:1235
-#, fuzzy, python-format
+#, python-format
 msgid "Allocating '%s'"
-msgstr "_Rezervované:"
+msgstr ""
 
 #: ../virtinst/Storage.py:1299
 #, python-format
 msgid ""
-"There is not enough free space on the storage pool to create the volume. (%d "
-"M requested allocation > %d M available)"
+"There is not enough free space on the storage pool to create the volume. (%d"
+" M requested allocation > %d M available)"
 msgstr ""
 
 #: ../virtinst/Storage.py:1305
@@ -4666,7 +4509,7 @@ msgid ""
 "capacity"
 msgstr ""
 
-#: ../virtinst/support.py:439 ../virtinst/XMLBuilderDomain.py:457
+#: ../virtinst/support.py:444 ../virtinst/XMLBuilderDomain.py:457
 msgid "'conn' must be a virConnect instance."
 msgstr ""
 
@@ -4676,8 +4519,8 @@ msgstr ""
 
 #: ../virtinst/util.py:141
 msgid ""
-"UUID must be a 32-digit hexadecimal number. It may take the form XXXXXXXX-"
-"XXXX-XXXX-XXXX-XXXXXXXXXXXX or may omit hyphens altogether."
+"UUID must be a 32-digit hexadecimal number. It may take the form xxxxxxxx-"
+"xxxx-xxxx-xxxx-xxxxxxxxxxxx or may omit hyphens altogether."
 msgstr ""
 
 #: ../virtinst/util.py:153
@@ -4686,9 +4529,9 @@ msgid "%s name must be a string"
 msgstr ""
 
 #: ../virtinst/util.py:157
-#, fuzzy, python-format
+#, python-format
 msgid "%s name must be less than 50 characters"
-msgstr "Názov siete nesmie byť prázdny a musí mať menej ako 50 znakov."
+msgstr ""
 
 #: ../virtinst/util.py:160
 #, python-format
@@ -4696,14 +4539,13 @@ msgid "%s name can not be only numeric characters"
 msgstr ""
 
 #: ../virtinst/util.py:163
-#, fuzzy, python-format
+#, python-format
 msgid "%s name can only contain alphanumeric, '_', '.', or '-' characters"
-msgstr "Názov siete môže obsahovať iba alfanumerické znaky a znak '_'"
+msgstr ""
 
 #: ../virtinst/util.py:172
-#, fuzzy
 msgid "MAC address must be a string."
-msgstr "Musí byť zadaný MAC adresa."
+msgstr ""
 
 #: ../virtinst/util.py:176
 msgid "MAC address must be of the format AA:BB:CC:DD:EE:FF"
@@ -4714,12 +4556,12 @@ msgid "Name generation range exceeded."
 msgstr ""
 
 #. 11 = typical num of fields in the file
-#: ../virtinst/util.py:412
+#: ../virtinst/util.py:411
 #, python-format
 msgid "Invalid line length while parsing %s."
 msgstr ""
 
-#: ../virtinst/util.py:414
+#: ../virtinst/util.py:413
 #, python-format
 msgid "Defaulting bridge to xenbr%d"
 msgstr ""
@@ -4740,9 +4582,8 @@ msgid "Pseudo TTY"
 msgstr ""
 
 #: ../virtinst/VirtualCharDevice.py:95
-#, fuzzy
 msgid "Physical host character device"
-msgstr "Fyzické zariadenie %s"
+msgstr ""
 
 #: ../virtinst/VirtualCharDevice.py:97
 msgid "Standard input/output"
@@ -4757,24 +4598,20 @@ msgid "Output to a file"
 msgstr ""
 
 #: ../virtinst/VirtualCharDevice.py:103
-#, fuzzy
 msgid "Virtual console"
-msgstr "Virtuálny počítač"
+msgstr ""
 
 #: ../virtinst/VirtualCharDevice.py:105
-#, fuzzy
 msgid "Null device"
-msgstr "Zdrojové zariadenie:"
+msgstr ""
 
 #: ../virtinst/VirtualCharDevice.py:107
-#, fuzzy
 msgid "TCP net console"
-msgstr "_Textové konzoly"
+msgstr ""
 
 #: ../virtinst/VirtualCharDevice.py:109
-#, fuzzy
 msgid "UDP net console"
-msgstr "_Textové konzoly"
+msgstr ""
 
 #: ../virtinst/VirtualCharDevice.py:111
 msgid "Unix socket"
@@ -4785,14 +4622,12 @@ msgid "Spice agent"
 msgstr ""
 
 #: ../virtinst/VirtualCharDevice.py:125
-#, fuzzy
 msgid "Client mode"
-msgstr "Režim overenia:"
+msgstr ""
 
 #: ../virtinst/VirtualCharDevice.py:127
-#, fuzzy
 msgid "Server mode"
-msgstr "_Model zariadenia:"
+msgstr ""
 
 #: ../virtinst/VirtualCharDevice.py:169
 #, python-format
@@ -4886,9 +4721,8 @@ msgid "Format used when sending data."
 msgstr ""
 
 #: ../virtinst/VirtualCharDevice.py:568
-#, fuzzy
 msgid "A host and port must be specified."
-msgstr "Musí byť zadaná cesta k úložisku."
+msgstr ""
 
 #: ../virtinst/VirtualCharDevice.py:581
 msgid "Host address to bind to."
@@ -4907,9 +4741,8 @@ msgid "Host port to send output to."
 msgstr ""
 
 #: ../virtinst/VirtualCharDevice.py:595
-#, fuzzy
 msgid "A connection port must be specified."
-msgstr "Musí byť zadaná cesta k médiu."
+msgstr ""
 
 #: ../virtinst/VirtualDevice.py:92
 msgid "Virtual device type must be set in subclass."
@@ -4934,9 +4767,9 @@ msgid ""
 msgstr ""
 
 #: ../virtinst/VirtualDisk.py:231
-#, fuzzy, python-format
+#, python-format
 msgid "Cannot use storage %(path)s: %(err)s"
-msgstr "Zmeniť cestu k úložisku"
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:243
 #, python-format
@@ -4959,9 +4792,8 @@ msgid "'volName' requires a passed connection."
 msgstr ""
 
 #: ../virtinst/VirtualDisk.py:554
-#, fuzzy
 msgid "Connection does not support storage lookup."
-msgstr "Pripojenie nepodporuje správu úložiska."
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:560
 #, python-format
@@ -4977,14 +4809,13 @@ msgid "vol_install must be a StorageVolume  instance."
 msgstr ""
 
 #: ../virtinst/VirtualDisk.py:757
-#, fuzzy, python-format
+#, python-format
 msgid "Error validating clone path: %s"
-msgstr "Chyba pri overovaní konfigurácie IP: %s"
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:773
-#, fuzzy
 msgid "'size' must be a number greater than 0."
-msgstr "Port musí byť väčší ako 0."
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:786
 #, python-format
@@ -5002,9 +4833,9 @@ msgid "Unknown cache mode '%s'"
 msgstr ""
 
 #: ../virtinst/VirtualDisk.py:890
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown io mode '%s'"
-msgstr "Neznáme URI pripojenia %s"
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:902
 #, python-format
@@ -5036,14 +4867,12 @@ msgid "IOTune write iops per second value must be an integer"
 msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1073
-#, fuzzy
 msgid "Storage type does not support format parameter."
-msgstr "Pripojenie nepodporuje správu úložiska."
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1079
-#, fuzzy
 msgid "Format cannot be specified for unmanaged storage."
-msgstr "Nedá sa odstrániť nespravované vzdialené úložisko."
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1250
 #, python-format
@@ -5051,14 +4880,12 @@ msgid "Device type '%s' requires a path"
 msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1260
-#, fuzzy
 msgid "Connection doesn't support remote storage."
-msgstr "Pripojenie nepodporuje klonovanie spravovaného úložiska."
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1263
-#, fuzzy
 msgid "Must specify libvirt managed storage if on a remote connection"
-msgstr "Lokálne úložisko sa nedá použiť pri vzdialenom pripojení."
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1282
 #, python-format
@@ -5066,9 +4893,9 @@ msgid "The path '%s' must be a file or a device, not a directory"
 msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1290
-#, fuzzy, python-format
+#, python-format
 msgid "Cannot create storage for %s device."
-msgstr "Nedá sa odstrániť nespravované blokové zariadenie."
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1295
 #, python-format
@@ -5081,9 +4908,9 @@ msgid "size is required for non-existent disk '%s'"
 msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1306
-#, fuzzy, python-format
+#, python-format
 msgid "No write access to directory '%s'"
-msgstr "Chýba právo na zápis do rodičovského priečinka."
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1327
 #, python-format
@@ -5091,9 +4918,9 @@ msgid "Cloning %(srcfile)s"
 msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1330
-#, fuzzy, python-format
+#, python-format
 msgid "Creating storage file %s"
-msgstr "Vytvorenie úložiskového súboru"
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1343
 msgid "copying to an existing vdisk is not supported"
@@ -5104,19 +4931,19 @@ msgid "failed to clone disk"
 msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1357
-#, fuzzy, python-format
+#, python-format
 msgid "Error creating vdisk %s"
-msgstr "Chyba pri vytváraní zväzku: %s"
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1392
-#, fuzzy, python-format
+#, python-format
 msgid "Error creating diskimage %s: %s"
-msgstr "Chyba pri vytváraní rozhrania: '%s'"
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1447
-#, fuzzy, python-format
+#, python-format
 msgid "Error cloning diskimage %s to %s: %s"
-msgstr "Chyba pri zmene cesty k úložisku: %s"
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1494
 msgid "'disknode' or self.target must be set!"
@@ -5138,9 +4965,8 @@ msgid " %d M requested > %d M available"
 msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1701
-#, fuzzy
 msgid "Cannot determine device bus/type."
-msgstr "Nedá sa odstrániť nespravované blokové zariadenie."
+msgstr ""
 
 #: ../virtinst/VirtualDisk.py:1746
 #, python-format
@@ -5148,9 +4974,9 @@ msgid "No more space for disks of type '%s'"
 msgstr ""
 
 #: ../virtinst/VirtualFilesystem.py:97
-#, fuzzy, python-format
+#, python-format
 msgid "Unsupported filesystem type '%s'"
-msgstr "Nie je podporovaný pre tento typ hosťa."
+msgstr ""
 
 #: ../virtinst/VirtualFilesystem.py:105
 #, python-format
@@ -5173,9 +4999,8 @@ msgid "Filesystem target '%s' must be an absolute path"
 msgstr ""
 
 #: ../virtinst/VirtualFilesystem.py:194
-#, fuzzy
 msgid "A filesystem source and target must be specified"
-msgstr "Musí byť zadaná cesta k úložisku."
+msgstr ""
 
 #: ../virtinst/VirtualGraphics.py:148
 #, python-format
@@ -5187,14 +5012,12 @@ msgid "Keymap must be a string"
 msgstr ""
 
 #: ../virtinst/VirtualGraphics.py:189
-#, fuzzy
 msgid "Keymap must be less than 16 characters"
-msgstr "Názov siete nesmie byť prázdny a musí mať menej ako 50 znakov."
+msgstr ""
 
 #: ../virtinst/VirtualGraphics.py:191
-#, fuzzy
 msgid "Keymap can only contain alphanumeric, '_', or '-' characters"
-msgstr "Názov siete môže obsahovať iba alfanumerické znaky a znak '_'"
+msgstr ""
 
 #: ../virtinst/VirtualGraphics.py:211
 msgid ""
@@ -5214,24 +5037,24 @@ msgstr ""
 msgid "'name' or 'nodedev' required."
 msgstr ""
 
-#: ../virtinst/VirtualHostDevice.py:66
+#: ../virtinst/VirtualHostDevice.py:68
 #, python-format
 msgid "Node device type '%s' cannot be attached to  guest."
 msgstr ""
 
-#: ../virtinst/VirtualHostDevice.py:213
+#: ../virtinst/VirtualHostDevice.py:216
 msgid "'nodedev' must be a USBDevice instance."
 msgstr ""
 
-#: ../virtinst/VirtualHostDevice.py:237
+#: ../virtinst/VirtualHostDevice.py:240
 msgid "'vendor' and 'product', or 'bus' and  'device' are required."
 msgstr ""
 
-#: ../virtinst/VirtualHostDevice.py:258
+#: ../virtinst/VirtualHostDevice.py:261
 msgid "'nodedev' must be a PCIDevice instance."
 msgstr ""
 
-#: ../virtinst/VirtualHostDevice.py:267
+#: ../virtinst/VirtualHostDevice.py:270
 msgid "'domain', 'bus', 'slot', and 'function' must be specified."
 msgstr ""
 
@@ -5251,37 +5074,35 @@ msgid "Unsupported memballoon model '%s'"
 msgstr ""
 
 #: ../virtinst/VirtualNetworkInterface.py:139
-#, fuzzy
 msgid "Shared physical device"
-msgstr "Akékoľvek fyzické zariadenie"
+msgstr ""
 
 #: ../virtinst/VirtualNetworkInterface.py:141
-#, fuzzy
 msgid "Virtual networking"
-msgstr "Virtuálna sieť"
+msgstr ""
 
 #: ../virtinst/VirtualNetworkInterface.py:182
 msgid "A network name was not provided"
 msgstr ""
 
 #: ../virtinst/VirtualNetworkInterface.py:248
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown network type %s"
-msgstr "Neznáme URI pripojenia %s"
+msgstr ""
 
 #: ../virtinst/VirtualNetworkInterface.py:278
-#, fuzzy, python-format
+#, python-format
 msgid "Virtual network '%s' does not exist: %s"
-msgstr "Virtuálna sieť nie je aktívna."
+msgstr ""
 
 #: ../virtinst/VirtualNetworkInterface.py:281
-#, fuzzy, python-format
+#, python-format
 msgid "Virtual network '%s' has not been started."
-msgstr "Virtuálna sieť nie je aktívna."
+msgstr ""
 
 #: ../virtinst/VirtualNetworkInterface.py:344
-msgid ""
-"The MAC address you entered is already in use by another virtual machine."
+#, python-format
+msgid "The MAC address '%s' is in use by another virtual machine."
 msgstr ""
 
 #: ../virtinst/VirtualRedirDevice.py:64
@@ -5290,14 +5111,13 @@ msgid "Unsupported bus '%s'"
 msgstr ""
 
 #: ../virtinst/VirtualRedirDevice.py:77
-#, fuzzy, python-format
+#, python-format
 msgid "Unsupported redirection type '%s'"
-msgstr "Nepodporovaný typ overenia totožnosti"
+msgstr ""
 
 #: ../virtinst/VirtualRedirDevice.py:86
-#, fuzzy
 msgid "Invalid host value"
-msgstr "Neplatný názov systému"
+msgstr ""
 
 #: ../virtinst/VirtualSmartCardDevice.py:58
 #, python-format
@@ -5318,19 +5138,16 @@ msgid "Gracefully shutdown the guest"
 msgstr ""
 
 #: ../virtinst/VirtualWatchdog.py:48
-#, fuzzy
 msgid "Forcefully power off the guest"
-msgstr "Potvrdzovať požiadavku na tvrdé vypnutie"
+msgstr ""
 
 #: ../virtinst/VirtualWatchdog.py:50
-#, fuzzy
 msgid "Pause the guest"
-msgstr "Pozastaviť virtuálny počítač"
+msgstr ""
 
 #: ../virtinst/VirtualWatchdog.py:52
-#, fuzzy
 msgid "No action"
-msgstr "Umiestnenie:"
+msgstr ""
 
 #: ../virtinst/VirtualWatchdog.py:78
 #, python-format
@@ -5408,11 +5225,9 @@ msgstr ""
 
 #: ../ui/vmm-add-hardware.ui.h:12
 msgid ""
-"Please indicate how you'd like to connect your new virtual network device to "
-"the host network."
-msgstr ""
-"Vyberte si, ako sa má nové zariadenie virtuálnej siete pripojiť k sieti "
-"hostiteľa. "
+"Please indicate how you'd like to connect your new virtual network device to"
+" the host network."
+msgstr "Vyberte si, ako sa má nové zariadenie virtuálnej siete pripojiť k sieti hostiteľa. "
 
 #: ../ui/vmm-add-hardware.ui.h:13
 msgid "_MAC address:"
@@ -5443,9 +5258,7 @@ msgstr "_Názov premostenia:"
 msgid ""
 "Please indicate what kind of pointer device to connect to the virtual "
 "machine."
-msgstr ""
-"Vyberte si, aký typ zariadenia ukazovateľa sa má pripojiť do virtuálneho "
-"počítača."
+msgstr "Vyberte si, aký typ zariadenia ukazovateľa sa má pripojiť do virtuálneho počítača."
 
 #: ../ui/vmm-add-hardware.ui.h:20 ../ui/vmm-create-pool.ui.h:6
 msgid "_Type:"
@@ -5472,8 +5285,8 @@ msgstr "_Heslo:"
 msgid ""
 "<small><b>Tip:</b> VNC or Spice server is strongly recommended because it "
 "allows the virtual display to be embedded inside this application. It may "
-"also be used to allow access to the virtual display from a remote system.</"
-"small>"
+"also be used to allow access to the virtual display from a remote "
+"system.</small>"
 msgstr ""
 
 #: ../ui/vmm-add-hardware.ui.h:26
@@ -5499,9 +5312,7 @@ msgstr "A_utomaticky rezervovaný"
 #: ../ui/vmm-add-hardware.ui.h:32
 msgid ""
 "Please indicate what sound device type to connect to the virtual machine."
-msgstr ""
-"Vyberte si, aký typ zvukového zariadenia sa má pripojiť do virtuálneho "
-"počítača."
+msgstr "Vyberte si, aký typ zvukového zariadenia sa má pripojiť do virtuálneho počítača."
 
 #: ../ui/vmm-add-hardware.ui.h:33
 msgid "_Model:"
@@ -5511,9 +5322,7 @@ msgstr "_Model:"
 msgid ""
 "Please indicate what physical device\n"
 "to connect to the virtual machine."
-msgstr ""
-"Vyberte si, aké fyzické zariadenie\n"
-"sa má pripojiť do virtuálneho počítača."
+msgstr "Vyberte si, aké fyzické zariadenie\nsa má pripojiť do virtuálneho počítača."
 
 #: ../ui/vmm-add-hardware.ui.h:36
 msgid "Host _Device:"
@@ -5571,17 +5380,13 @@ msgstr "označenie"
 msgid ""
 "Please indicate what video device type\n"
 "to connect to the virtual machine."
-msgstr ""
-"Vyberte si, aký typ zobrazovacieho zariadenia\n"
-"sa má pripojiť do virtuálneho počítača."
+msgstr "Vyberte si, aký typ zobrazovacieho zariadenia\nsa má pripojiť do virtuálneho počítača."
 
 #: ../ui/vmm-add-hardware.ui.h:50
 msgid ""
 "Please indicate what watchdog device type\n"
 "and default action should be used."
-msgstr ""
-"Vyberte si, aký typ ochranného časovača\n"
-"a aká predvolená akcia sa má použiť."
+msgstr "Vyberte si, aký typ ochranného časovača\na aká predvolená akcia sa má použiť."
 
 #: ../ui/vmm-add-hardware.ui.h:52
 msgid "Ac_tion:"
@@ -5616,7 +5421,8 @@ msgstr "_Prechádzať..."
 
 #: ../ui/vmm-add-hardware.ui.h:61
 msgid ""
-"Please indicate what smartcard device mode to connect to the virtual machine."
+"Please indicate what smartcard device mode to connect to the virtual "
+"machine."
 msgstr ""
 
 #: ../ui/vmm-add-hardware.ui.h:62
@@ -5707,8 +5513,7 @@ msgstr "Klonovať virtuálny počítač"
 
 #: ../ui/vmm-clone.ui.h:14
 msgid "<span size='large' color='white'>Clone virtual machine</span>"
-msgstr ""
-"<span size='large' color='white'>Klonovanie virtuálneho počítača</span>"
+msgstr "<span size='large' color='white'>Klonovanie virtuálneho počítača</span>"
 
 #: ../ui/vmm-clone.ui.h:15
 msgid "Create a clone based on:"
@@ -5736,15 +5541,9 @@ msgstr "<span color='#484848'>_Názov:</span>"
 
 #: ../ui/vmm-clone.ui.h:21
 msgid ""
-"<span size='small'>Cloning creates a new, independent copy of the original "
-"disk. Sharing\n"
-"uses the existing disk image for both the original and the new machine.</"
-"span>"
-msgstr ""
-"<span size='small'>Klonovanie vytvorí novú, nezávislú kópiu pôvodného disku. "
-"Zdieľanie existujúci\n"
-" obraz disku ponechá v pôvodnom počítači a pripojí ho aj do nového počítača."
-"</span>"
+"<span size='small'>Cloning creates a new, independent copy of the original disk. Sharing\n"
+"uses the existing disk image for both the original and the new machine.</span>"
+msgstr "<span size='small'>Klonovanie vytvorí novú, nezávislú kópiu pôvodného disku. Zdieľanie existujúci\n obraz disku ponechá v pôvodnom počítači a pripojí ho aj do nového počítača.</span>"
 
 #: ../ui/vmm-clone.ui.h:23
 msgid "C_lone"
@@ -5770,7 +5569,7 @@ msgstr "Adresa cieľa:"
 msgid "Interval:"
 msgstr "Interval:"
 
-#: ../ui/vmm-create-interface.ui.h:6 ../ui/vmm-preferences.ui.h:11
+#: ../ui/vmm-create-interface.ui.h:6 ../ui/vmm-preferences.ui.h:10
 msgid "seconds"
 msgstr "sekúnd"
 
@@ -5918,24 +5717,18 @@ msgstr "Vytvoriť novú virtuálnu sieť"
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
 "virtual network </span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Vytvorenie "
-"novej virtuálnej siete </span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Vytvorenie novej virtuálnej siete </span>"
 
 #: ../ui/vmm-create-net.ui.h:3
 msgid ""
 "This assistant will guide you through creating a new virtual network. You "
 "will be asked for some information about the virtual network you'd like to "
 "create, such as:"
-msgstr ""
-"Tento asistent vás prevedie vytvorením novej virtuálnej siete. Bude "
-"potrebné, aby ste odpovedali na niekoľko otázok ohľadne virtuálnej siete, "
-"ktorú chcete vytvoriť, ako napríklad:"
+msgstr "Tento asistent vás prevedie vytvorením novej virtuálnej siete. Bude potrebné, aby ste odpovedali na niekoľko otázok ohľadne virtuálnej siete, ktorú chcete vytvoriť, ako napríklad:"
 
 #: ../ui/vmm-create-net.ui.h:4
-#, fuzzy
 msgid "<small>●</small> A <b>name</b> for the new virtual network"
-msgstr "<b>Názov</b> pre novú virtuálnu sieť"
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:5
 msgid ""
@@ -5944,19 +5737,15 @@ msgid ""
 msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:6
-#, fuzzy
 msgid ""
 "<small>●</small> The network address range which the <b>DHCPv4</b> and/or "
 "<b>DHCPv6</b> server will assign addresses to virtual machines"
 msgstr ""
-"<b>Rozsah adries</b>, z ktorých <b>DHCP</b> server bude prideľovať adresy "
-"virtuálnym počítačom"
 
 #: ../ui/vmm-create-net.ui.h:7
-#, fuzzy
 msgid ""
 "<small>●</small> Whether to <b>forward</b> traffic to a physical network"
-msgstr "Či sa má nastaviť <b>preposielanie</b> komunikácie do fyzickej siete"
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:8
 msgid ""
@@ -5973,9 +5762,7 @@ msgstr "Úvod"
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
 "virtual network </span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Pomenovanie "
-"virtuálnej siete</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Pomenovanie virtuálnej siete</span>"
 
 #: ../ui/vmm-create-net.ui.h:11
 msgid "Please choose a name for your virtual network:"
@@ -5994,19 +5781,16 @@ msgid "Network _Name:"
 msgstr "_Názov siete:"
 
 #: ../ui/vmm-create-net.ui.h:16
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Defining IPv4 "
 "addresses</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Zvolenie "
-"adresného priestoru IPv4</span>"
 
 #: ../ui/vmm-create-net.ui.h:17
-#, fuzzy
 msgid ""
-"You will need to choose an <b>IPv4</b> address space for the virtual network."
-msgstr "Je potrebné zadať adresný priestor IPv4 pre vašu virtuálnu sieť:"
+"You will need to choose an <b>IPv4</b> address space for the virtual "
+"network."
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:18
 msgid "Enable IPv4 network address space definition"
@@ -6017,9 +5801,8 @@ msgid "Gateway:"
 msgstr "Brána:"
 
 #: ../ui/vmm-create-net.ui.h:20
-#, fuzzy
 msgid "Network Type:"
-msgstr "Názov siete:"
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:21
 msgid "192.168.100.1"
@@ -6037,38 +5820,31 @@ msgstr "_Sieť:"
 msgid ""
 "<b>Hint:</b> The network should be chosen from one of the IPv4 private "
 "address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
-msgstr ""
-"<b>Rada:</b> Sieť by ste mali zvoliť z IPv4 rozsahov určených pre súkromné "
-"účely. Napríklad 10.0.0.0/8,  172.16.0.0/12 alebo 192.168.0.0/16"
+msgstr "<b>Rada:</b> Sieť by ste mali zvoliť z IPv4 rozsahov určených pre súkromné účely. Napríklad 10.0.0.0/8,  172.16.0.0/12 alebo 192.168.0.0/16"
 
 #: ../ui/vmm-create-net.ui.h:25
-#, fuzzy
 msgid "Start:"
-msgstr "Z_ačiatok:"
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:26
 msgid "End:"
 msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:27
-#, fuzzy
 msgid "Enable DHCPv4"
-msgstr "_Povoliť DHCP:"
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:29
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Defining IPv6 "
 "addresses</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Zvolenie "
-"adresného priestoru IPv4</span>"
 
 #: ../ui/vmm-create-net.ui.h:30
-#, fuzzy
 msgid ""
-"You will need to choose an <b>IPv6</b> address space for the virtual network:"
-msgstr "Je potrebné zadať adresný priestor IPv4 pre vašu virtuálnu sieť:"
+"You will need to choose an <b>IPv6</b> address space for the virtual "
+"network:"
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:31
 msgid "Enable IPv6 network address space definition"
@@ -6080,32 +5856,25 @@ msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:33
 msgid ""
-"<b>Note:</b> The network could be chosen from one of the IPv6 private "
-"address ranges. eg FC00::/7.  In any case. the prefix must  <b>be 64</b>.\n"
-"A typical IPv6 network address will look something like:  fd00:dead:"
-"beef:55::/64"
+"<b>Note:</b> The network could be chosen from one of the IPv6 private address ranges. eg FC00::/7.  In any case. the prefix must  <b>be 64</b>.\n"
+"A typical IPv6 network address will look something like:  fd00:dead:beef:55::/64"
 msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:35
-#, fuzzy
 msgid "Enable DHCPv6"
-msgstr "_Povoliť DHCP:"
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:37
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Miscellaneous "
 "Settings</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Sumár o "
-"vytváranej sieti</span>"
 
 #: ../ui/vmm-create-net.ui.h:38
-#, fuzzy
 msgid ""
 "Please indicate whether this virtual network should be connected to the "
 "<b>physical network</b>."
-msgstr "Zvoľte si, či táto virtuálna sieť má byť pripojená do fyzickej siete."
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:39
 msgid "_Destination:"
@@ -6150,11 +5919,9 @@ msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:49
 msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to create "
-"network</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Sumár o "
-"vytváranej sieti</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to create"
+" network</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Sumár o vytváranej sieti</span>"
 
 #: ../ui/vmm-create-net.ui.h:50
 msgid "<b>IPv4 network</b>"
@@ -6165,23 +5932,20 @@ msgid "192.168.10.128"
 msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:52
-#, fuzzy
 msgid "<b>IPv6 network</b>"
-msgstr "<b>IPv4 sieť</b>"
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:53
 msgid "FD00:100::/64"
 msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:54
-#, fuzzy
 msgid "DHCPv6 End Address:"
-msgstr "Koncová adresa"
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:55
-#, fuzzy
 msgid "DHCPv6 Start Address:"
-msgstr "Počiatočná adresa"
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:56
 msgid "FD00:100::100"
@@ -6192,32 +5956,28 @@ msgid "FD00:100::1FF"
 msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:59
-#, fuzzy
 msgid "DHCPv4 Start Address:"
-msgstr "Počiatočná adresa"
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:60
-#, fuzzy
 msgid "DHCPv4 End  Address:"
-msgstr "Koncová adresa"
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:61
 msgid "<b>Summary</b>"
 msgstr "<b>Súhrn</b>"
 
 #: ../ui/vmm-create-net.ui.h:62
-#, fuzzy
 msgid "Network Name:"
-msgstr "_Názov siete:"
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:63
 msgid "demo"
 msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:64
-#, fuzzy
 msgid "Forwarding/Connectivity:"
-msgstr "Spôsob pripojenia:"
+msgstr ""
 
 #: ../ui/vmm-create-net.ui.h:67
 msgid "Complete"
@@ -6234,9 +5994,7 @@ msgstr "<span size='x-large'>Pridať zoskupenie úložísk</span>"
 #: ../ui/vmm-create-pool.ui.h:3
 msgid ""
 "Specify a storage location to be later split into virtual machine storage."
-msgstr ""
-"Určte umiestnenie úložiska, ktoré neskôr môžete rozdeliť medzi virtuálne "
-"počítače."
+msgstr "Určte umiestnenie úložiska, ktoré neskôr môžete rozdeliť medzi virtuálne počítače."
 
 #: ../ui/vmm-create-pool.ui.h:4
 msgid "Step 1 of 2"
@@ -6288,8 +6046,7 @@ msgstr "<span size='x-large'>Nový zväzok úložiska</span>"
 
 #: ../ui/vmm-create-vol.ui.h:3
 msgid "Create a storage unit that can be used directly by a virtual machine."
-msgstr ""
-"Vytvorte jednotku úložiska, ktorá sa bude môcť použiť virtuálny počítač."
+msgstr "Vytvorte jednotku úložiska, ktorá sa bude môcť použiť virtuálny počítač."
 
 #: ../ui/vmm-create-vol.ui.h:4
 msgid "_Format:"
@@ -6332,21 +6089,7 @@ msgid ""
 "<u>Allocation</u>: Actual size\n"
 "  allocated to volume\n"
 "  at this time.</i></span>"
-msgstr ""
-"<span size='small'><i><u>Názov</u>: Názov\n"
-"  vytváraného zväzku. Môžete \n"
-"  pridať príponu\n"
-"  súboru\n"
-"\n"
-"<u>Formát</u>: Formát\n"
-"  súboru/oddielu zväzku\n"
-"\n"
-"<u>Kapacita</u>: Maximálna\n"
-"  veľkosť zväzku.\n"
-"\n"
-"<u>Rezervované</u>: Priestor\n"
-"  rezervovaný pre zväzok\n"
-"  v tejto chvíli.</i></span>"
+msgstr "<span size='small'><i><u>Názov</u>: Názov\n  vytváraného zväzku. Môžete \n  pridať príponu\n  súboru\n\n<u>Formát</u>: Formát\n  súboru/oddielu zväzku\n\n<u>Kapacita</u>: Maximálna\n  veľkosť zväzku.\n\n<u>Rezervované</u>: Priestor\n  rezervovaný pre zväzok\n  v tejto chvíli.</i></span>"
 
 #: ../ui/vmm-create.ui.h:1
 msgid "New VM"
@@ -6354,8 +6097,7 @@ msgstr "Nový virtuálny počítač"
 
 #: ../ui/vmm-create.ui.h:2
 msgid "<span size='large' color='white'>Create a new virtual machine</span>"
-msgstr ""
-"<span size='large' color='white'>Vytvoriť nový virtuálny počítač</span>"
+msgstr "<span size='large' color='white'>Vytvoriť nový virtuálny počítač</span>"
 
 #: ../ui/vmm-create.ui.h:3
 msgid "Enter your virtual machine details"
@@ -6455,8 +6197,7 @@ msgstr ""
 
 #: ../ui/vmm-create.ui.h:32
 msgid ""
-"<small>The OS directory tree must already exist. Creating an OS directory "
-"tree\n"
+"<small>The OS directory tree must already exist. Creating an OS directory tree\n"
 "is not yet supported.</small>"
 msgstr ""
 
@@ -6526,8 +6267,8 @@ msgstr "P_rispôsobiť konfiguráciu pred inštaláciou"
 
 #: ../ui/vmm-create.ui.h:57
 msgid ""
-"<small>Specifying an operating system is required for best performance</"
-"small>"
+"<small>Specifying an operating system is required for best "
+"performance</small>"
 msgstr ""
 
 #: ../ui/vmm-create.ui.h:59
@@ -6787,9 +6528,8 @@ msgid "_Label:"
 msgstr "_Označenie:"
 
 #: ../ui/vmm-details.ui.h:67
-#, fuzzy
 msgid "relabel"
-msgstr "označenie"
+msgstr ""
 
 #: ../ui/vmm-details.ui.h:68
 msgid "D_ynamic"
@@ -6815,41 +6555,31 @@ msgstr "<b>Zabezpečenie</b>"
 msgid ""
 "CPU\n"
 "usage:"
-msgstr ""
-"Využitie\n"
-"procesora:"
+msgstr "Využitie\nprocesora:"
 
 #: ../ui/vmm-details.ui.h:75
 msgid ""
 "Memory\n"
 "usage:"
-msgstr ""
-"Využitie\n"
-"pamäte:"
+msgstr "Využitie\npamäte:"
 
 #: ../ui/vmm-details.ui.h:77
 msgid ""
 "Disk\n"
 "I/O:"
-msgstr ""
-"Aktivita\n"
-"disku:"
+msgstr "Aktivita\ndisku:"
 
 #: ../ui/vmm-details.ui.h:79
 msgid ""
 "Network\n"
 "I/O:"
-msgstr ""
-"Aktivita\n"
-"siete:"
+msgstr "Aktivita\nsiete:"
 
 #: ../ui/vmm-details.ui.h:81
 msgid ""
 "0 KBytes/s\n"
 "0KBytes/s"
-msgstr ""
-"0 KBajtov/s\n"
-"0KBajtov/s"
+msgstr "0 KBajtov/s\n0KBajtov/s"
 
 #: ../ui/vmm-details.ui.h:83 ../ui/vmm-host.ui.h:16
 msgid "<b>Performance</b>"
@@ -7292,19 +7022,16 @@ msgid "DNS Domain Name:"
 msgstr ""
 
 #: ../ui/vmm-host.ui.h:23
-#, fuzzy
 msgid "IPv4 Forwarding:"
-msgstr "Preposielanie:"
+msgstr ""
 
 #: ../ui/vmm-host.ui.h:24
-#, fuzzy
 msgid "NAT to any device"
-msgstr "Preklad na ľubovolné fyzické zariadenie"
+msgstr ""
 
 #: ../ui/vmm-host.ui.h:25
-#, fuzzy
 msgid "IPv6 Forwarding:"
-msgstr "Preposielanie:"
+msgstr ""
 
 #: ../ui/vmm-host.ui.h:28
 msgid "DHCP start:"
@@ -7315,23 +7042,20 @@ msgid "DHCP end:"
 msgstr "DHCP po:"
 
 #: ../ui/vmm-host.ui.h:30
-#, fuzzy
 msgid "Route-Via:"
-msgstr "Smerovanie"
+msgstr ""
 
 #: ../ui/vmm-host.ui.h:31
-#, fuzzy
 msgid "<network-addr> via <gateway-addr>"
-msgstr "Kontrola sieťovej adresy"
+msgstr ""
 
 #: ../ui/vmm-host.ui.h:32
 msgid "<b>IPv4 configuration</b>"
 msgstr "<b>IPv4 konfigurácia</b>"
 
 #: ../ui/vmm-host.ui.h:33
-#, fuzzy
 msgid "<b>IPv6 configuration</b>"
-msgstr "<b>IPv4 konfigurácia</b>"
+msgstr ""
 
 #: ../ui/vmm-host.ui.h:34
 msgid "Add Network"
@@ -7469,11 +7193,11 @@ msgstr ""
 msgid "_Host CPU Usage"
 msgstr ""
 
-#: ../ui/vmm-manager.ui.h:11 ../ui/vmm-preferences.ui.h:16
+#: ../ui/vmm-manager.ui.h:11
 msgid "_Disk I/O"
 msgstr "Aktivita _diskov"
 
-#: ../ui/vmm-manager.ui.h:12 ../ui/vmm-preferences.ui.h:15
+#: ../ui/vmm-manager.ui.h:12
 msgid "_Network I/O"
 msgstr "Aktivita _siete"
 
@@ -7645,128 +7369,115 @@ msgstr "<b>Všeobecné</b>"
 msgid "General"
 msgstr "Všeobecné"
 
-#: ../ui/vmm-preferences.ui.h:10
-msgid "samples"
-msgstr "vzoriek"
-
-#: ../ui/vmm-preferences.ui.h:12
-msgid "Maintain h_istory of"
-msgstr "Spracovať _históriu z"
-
-#: ../ui/vmm-preferences.ui.h:13
+#: ../ui/vmm-preferences.ui.h:11
 msgid "_Update status every"
 msgstr "_Aktualizovať stav každých"
+
+#: ../ui/vmm-preferences.ui.h:12
+msgid "Poll _Disk I/O"
+msgstr ""
+
+#: ../ui/vmm-preferences.ui.h:13
+msgid "Poll _Network I/O"
+msgstr ""
 
 #: ../ui/vmm-preferences.ui.h:14
 msgid "<b>Stats Options</b>"
 msgstr "<b>Možnosti štatistík</b>"
 
-#: ../ui/vmm-preferences.ui.h:17
-msgid "<b>Enable Stats Polling</b>"
-msgstr "<b>Povoliť zobrazovanie štatistík</b>"
-
-#: ../ui/vmm-preferences.ui.h:18
+#: ../ui/vmm-preferences.ui.h:15
 msgid "Stats"
 msgstr "Štatisktiky"
 
-#: ../ui/vmm-preferences.ui.h:19
+#: ../ui/vmm-preferences.ui.h:16
 msgid "Graphical console _scaling:"
 msgstr "Prispôsobovať _rozmery grafickej konzoly:"
 
-#: ../ui/vmm-preferences.ui.h:20
+#: ../ui/vmm-preferences.ui.h:17
 msgid "Grab keys:"
 msgstr ""
 
-#: ../ui/vmm-preferences.ui.h:21
+#: ../ui/vmm-preferences.ui.h:18
 msgid "Not supported"
 msgstr ""
 
-#: ../ui/vmm-preferences.ui.h:22
+#: ../ui/vmm-preferences.ui.h:19
 msgid "Change..."
 msgstr ""
 
-#: ../ui/vmm-preferences.ui.h:23
+#: ../ui/vmm-preferences.ui.h:20
 msgid ""
 "When the guest graphical console has keyboard focus, do not disable "
 "shortcuts for console window menus (Alt+F -> File, etc.) Normally these are "
-"disabled to ensure that typing in the guest does not accidentally perform an "
-"operation in virt-manager's console window."
+"disabled to ensure that typing in the guest does not accidentally perform an"
+" operation in virt-manager's console window."
 msgstr ""
 
-#: ../ui/vmm-preferences.ui.h:24
+#: ../ui/vmm-preferences.ui.h:21
 msgid "Don't disable console shortcuts:"
 msgstr ""
 
-#: ../ui/vmm-preferences.ui.h:25
+#: ../ui/vmm-preferences.ui.h:22
 msgid "<b>Graphical Consoles</b>"
 msgstr ""
 
-#: ../ui/vmm-preferences.ui.h:26
-msgid "_Local virtual machine"
-msgstr "_Lokálny virtuálny počítač"
-
-#: ../ui/vmm-preferences.ui.h:27
-msgid "_Remote virtual machine"
-msgstr "_Vzdialený virtuálny počítač"
-
-#: ../ui/vmm-preferences.ui.h:28
-msgid "Install Audio Device:"
-msgstr "Inštalovať zvukové zariadenie:"
-
-#: ../ui/vmm-preferences.ui.h:29
-msgid "Install Graphics:"
+#: ../ui/vmm-preferences.ui.h:23
+msgid "Graphics type:"
 msgstr ""
 
-#: ../ui/vmm-preferences.ui.h:30
+#: ../ui/vmm-preferences.ui.h:24
 msgid "Default storage format for new disk images."
 msgstr ""
 
-#: ../ui/vmm-preferences.ui.h:31
+#: ../ui/vmm-preferences.ui.h:25
 msgid "Default storage format:"
 msgstr ""
 
-#: ../ui/vmm-preferences.ui.h:32
+#: ../ui/vmm-preferences.ui.h:26
+msgid "Install _audio device:"
+msgstr ""
+
+#: ../ui/vmm-preferences.ui.h:27
 msgid "<b>New VM</b>"
 msgstr "<b>Nový virtuálny počítač</b>"
 
-#: ../ui/vmm-preferences.ui.h:33
+#: ../ui/vmm-preferences.ui.h:28
 msgid "VM Details"
 msgstr "Podrobnosti VPC"
 
-#: ../ui/vmm-preferences.ui.h:34
+#: ../ui/vmm-preferences.ui.h:29
 msgid "_Force Poweroff:"
 msgstr "_Tvrdé vypnutie:"
 
-#: ../ui/vmm-preferences.ui.h:35
+#: ../ui/vmm-preferences.ui.h:30
 msgid "Poweroff/_Reboot/Save:"
 msgstr ""
 
-#: ../ui/vmm-preferences.ui.h:36
+#: ../ui/vmm-preferences.ui.h:31
 msgid "_Pause:"
 msgstr "_Pozastavenie:"
 
-#: ../ui/vmm-preferences.ui.h:37
+#: ../ui/vmm-preferences.ui.h:32
 msgid "Device re_moval:"
 msgstr "_Odstránenie zariadenia:"
 
-#: ../ui/vmm-preferences.ui.h:38
+#: ../ui/vmm-preferences.ui.h:33
 msgid "_Interface start/stop:"
 msgstr "_Spustenie/zastavenie rozhrania:"
 
-#: ../ui/vmm-preferences.ui.h:39
+#: ../ui/vmm-preferences.ui.h:34
 msgid "Unapplied changes:"
 msgstr ""
 
-#: ../ui/vmm-preferences.ui.h:40
-#, fuzzy
+#: ../ui/vmm-preferences.ui.h:35
 msgid "Deleting storage:"
-msgstr "Nájsť existujúce úložisko"
+msgstr ""
 
-#: ../ui/vmm-preferences.ui.h:41
+#: ../ui/vmm-preferences.ui.h:36
 msgid "<b>Confirmations</b>"
 msgstr "<b>Potvrdzovať</b>"
 
-#: ../ui/vmm-preferences.ui.h:42
+#: ../ui/vmm-preferences.ui.h:37
 msgid "Feedback"
 msgstr "Spätná väzba"
 
@@ -7789,253 +7500,3 @@ msgstr "_Prechádzať miestne"
 #: ../ui/vmm-storage-browse.ui.h:4
 msgid "Choose _Volume"
 msgstr "Vybrať z_väzok"
-
-#~ msgid "%d addresses"
-#~ msgstr "%d adries"
-
-#~ msgid "Other"
-#~ msgstr "Iné"
-
-#~ msgid "Start address:"
-#~ msgstr "Počiatočná adresa:"
-
-#~ msgid "Isolated virtual network"
-#~ msgstr "Izolovaná virtuálna sieť"
-
-#~ msgid "The IPv4 <b>address</b> and <b>netmask</b> to assign"
-#~ msgstr "IPv4 <b>adresu</b> a <b>sieťovú masku</b>, ktorá sa jej priradí"
-
-#~ msgid "Size:"
-#~ msgstr "Veľkosť:"
-
-#~ msgid "Broadcast:"
-#~ msgstr "Vysielanie:"
-
-#~ msgid "Netmask:"
-#~ msgstr "Maska siete:"
-
-#~ msgid "Network Range"
-#~ msgstr "Rozsah adries"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Selecting "
-#~ "the DHCP range</span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Nastavenie "
-#~ "rozsahu DHCP</span>"
-
-#~ msgid ""
-#~ "Please choose the range of addresses the DHCP server will allocate to "
-#~ "virtual machines attached to the virtual network."
-#~ msgstr ""
-#~ "Zvolte si rozsah adries, ktoré DHCP server bude prideľovať virtuálnym "
-#~ "počítačom pripojeným do tejto siete."
-
-#~ msgid ""
-#~ "<b>Tip:</b> Unless you wish to reserve some addresses to allow static "
-#~ "network configuration in virtual machines, these parameters can be left "
-#~ "with their default values."
-#~ msgstr ""
-#~ "<b>Tip:</b> Aj keď niektorým virtuálnym počítačom chcete prideliť "
-#~ "statickú adresu, aj tak môžete ponechať tieto predvolené hodnoty."
-
-#~ msgid "E_nd:"
-#~ msgstr "_Koniec:"
-
-#~ msgid "DHCP"
-#~ msgstr "DHCP"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connecting "
-#~ "to physical network</span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Pripojenie "
-#~ "do fyzickej siete</span>"
-
-#~ msgid "Forwarding"
-#~ msgstr "Preposielanie"
-
-#~ msgid "<b>DHCP</b>"
-#~ msgstr "<b>DHCP</b>"
-
-#~ msgid "<b>Forwarding</b>"
-#~ msgstr "<b>Preposielanie</b>"
-
-#~ msgid "End address:"
-#~ msgstr "Koncová adresa:"
-
-#~ msgid "Manage virtual machines"
-#~ msgstr "Spravuje virtruálne počítače"
-
-#~ msgid "Unable to initialize GTK: %s"
-#~ msgstr "Nepodarilo sa inicializovať GTK: %s"
-
-#~ msgid "Show disk I/O in summary"
-#~ msgstr "Zobraziť aktivitu diskov v prehľade"
-
-#~ msgid "Show the disk I/O field in the domain list summary view"
-#~ msgstr "Zobraziť aktivitu diskov v prehľade so zoznamom domén"
-
-#~ msgid "Show network I/O in summary"
-#~ msgstr "Zobraziť aktivitu siete v prehľade"
-
-#~ msgid "Show the network I/O field in the domain list summary view"
-#~ msgstr "Zobraziť aktivitu siete v prehľade so zoznamom domén"
-
-#~ msgid "The statistics update interval"
-#~ msgstr "Interval obnovenia štatistiky"
-
-#~ msgid "The statistics history length"
-#~ msgstr "Dĺžka histórie štatistiky"
-
-#~ msgid "The number of samples to keep in the statistics history"
-#~ msgstr "Počet vzoriek, ktoré sa majú uchovávať v štatistike"
-
-#~ msgid "Poll disk i/o stats"
-#~ msgstr "Zhromažďovať štatistiku o diskovej aktivite"
-
-#~ msgid "Whether or not the app will poll VM disk i/o statistics"
-#~ msgstr "Či sa má alebo nemá získavať štatistika i aktivite diskov VPC "
-
-#~ msgid "Poll net i/o stats"
-#~ msgstr "Zhromažďovať štatistiku o sieťovej aktivite"
-
-#~ msgid "Whether or not the app will poll VM network i/o statistics"
-#~ msgstr "Či sa má alebo nemá získavať štatistika i aktivite siete VPC "
-
-#~ msgid "The length of the list of URLs"
-#~ msgstr "Dĺžka zoznamu URL adries"
-
-#~ msgid ""
-#~ "The number of urls to keep in the history for the install media address "
-#~ "page."
-#~ msgstr ""
-#~ "Počet URL adries, ktorý sa majú uchovávať na stránke s inštalačnými "
-#~ "médiami."
-
-#~ msgid "Whether to show notification when grabbing mouse"
-#~ msgstr "Či sa má zobraziť upozornenie pri zachytení kurzora myši"
-
-#~ msgid ""
-#~ "Whether to show the notification hint when grabbing the mouse in the "
-#~ "console"
-#~ msgstr ""
-#~ "Či sa má zobraziť upozornenie keď sa pohyb kurzora myši obmedzí na okno "
-#~ "konzoly"
-
-#~ msgid "When to scale the VM graphical console"
-#~ msgstr "Kedy sa majú prispôsobovať rozmery grafickej konzoly VPC"
-
-#~ msgid ""
-#~ "When to scale the VM graphical console. 0 = never, 1 = only when in full "
-#~ "screen mode, 2 = Always"
-#~ msgstr ""
-#~ "Kedy sa majú prispôsobovať rozmery grafickej konzoly VPC. 0 = nikdy, 1 = "
-#~ "iba ak je v režime na celú obrazovku, 2 = vždy"
-
-#~ msgid "Whether to show VM button toolbar in Details display"
-#~ msgstr "Či sa má zobraziť nástrojová lišta v okne s podrobnosťami o VPC"
-
-#~ msgid ""
-#~ "Whether to show toolbar containing Virtual Machine action buttons (such "
-#~ "as Run, Pause, Shutdown) in the details display"
-#~ msgstr ""
-#~ "Či sa má v okne s podrobnosťami o počítači zobrazovať nástrojová lišta "
-#~ "obsahujúca tlačidlá na prácu s virtuálnym počítačom (ako Spustiť, "
-#~ "Pozastaviť, Vypnúť)"
-
-#~ msgid "Install sound device for local VM"
-#~ msgstr "Nainštalovať zvukové zariadenie pre lokálny VPC"
-
-#~ msgid "Whether to install a sound device for local VMs or not"
-#~ msgstr "ČI sa má zvukové zariadenie nainštalovať na lokálne VPC alebo nie"
-
-#~ msgid "Install sound device for remote VM"
-#~ msgstr "Nainštalovať zvukové zariadenie pre vzdialený VPC"
-
-#~ msgid "Whether to install a sound device for remote VMs or not"
-#~ msgstr "ČI sa má zvukové zariadenie nainštalovať na vzdialené VPC alebo nie"
-
-#~ msgid "Show system tray icon"
-#~ msgstr "Zobraziť ikonu v systémovej oblasti"
-
-#~ msgid "Show system tray icon while app is running"
-#~ msgstr "Zobraziť ikonu v systémovej oblasti počas behu aplikácie"
-
-#~ msgid "Default image path"
-#~ msgstr "Predvolená cesta k obrazu"
-
-#~ msgid "Default path for choosing VM images"
-#~ msgstr "Predvolená cesta pre výber obrazov VPC"
-
-#~ msgid "Default media path"
-#~ msgstr "Predvolená cesta k médiu"
-
-#~ msgid "Default path for choosing media"
-#~ msgstr "Predvolená cesta pre výber média"
-
-#~ msgid "Default save domain path"
-#~ msgstr "Predvolená cesta k uloženej doméne"
-
-#~ msgid "Default restore path"
-#~ msgstr "Predvolený cesta pre obnovu"
-
-#~ msgid "Default path for stored VM snapshots"
-#~ msgstr "Predvolená cesta pre uložené snímky VPC"
-
-#~ msgid "Default screenshot path"
-#~ msgstr "Predvolená cesta k snímkam obrazoviek"
-
-#~ msgid "Default path for saving screenshots from VMs"
-#~ msgstr "Predvolená cesta pre ukladanie snímok obrazoviek z VPC"
-
-#~ msgid "Whether we require confirmation to forcepoweroff a VM"
-#~ msgstr "Či bude potrebné potvrdzovať tvrdé vypnutie VPC"
-
-#~ msgid "Confirm poweroff request"
-#~ msgstr "Potvrdzovať požiadavku na vypnutie"
-
-#~ msgid "Whether we require confirmation to poweroff/reboot a VM"
-#~ msgstr "Či bude potrebné potvrdzovať vypnutie alebo reštart VPC"
-
-#~ msgid "Whether we require confirmation to pause a VM"
-#~ msgstr "Či bude potrebné potvrdzovať pozastavenie VPC"
-
-#~ msgid "Confirm device removal request"
-#~ msgstr "Potvrdzovať požiadavku na odstránenie zariadenia"
-
-#~ msgid "Whether we require confirmation to remove a virtual device"
-#~ msgstr "Či bude potrebné potvrdzovať odstránenie virtuálneho zariadenia"
-
-#~ msgid "Confirm device interface start and stop"
-#~ msgstr "Potvrdzovať spustenie a zastavenie rozhrania zariadenia"
-
-#~ msgid ""
-#~ "Whether we require confirmation to start or stop a libvirt virtual "
-#~ "interface"
-#~ msgstr ""
-#~ "Či sa má alebo nemá potvrdzovať spustenie alebo zastavenie virtuálneho "
-#~ "rozhrania libvirt"
-
-#~ msgid "Default manager window height"
-#~ msgstr "Predvolená výška okna správcu"
-
-#~ msgid "Default manager window width"
-#~ msgstr "Predvolená šírka okna správcu"
-
-#~ msgid ""
-#~ "<b>Tip:</b> 'source' refers to information seen from the host OS, while "
-#~ "'target' refers to information seen from the guest OS"
-#~ msgstr ""
-#~ "<b>Tip:</b> 'zdroj' predstavuje informácie viditeľné z hostiteľského "
-#~ "operačného systému, zatiaľčo 'target' predstavuje informácie viditeľné z "
-#~ "hosťovaného informačného systému."
-
-#~ msgid ""
-#~ "<b>Tip:</b> A graphics tablet configured as the default pointer in the "
-#~ "guest OS will ensure that the virtual cursor moves in sync with the local "
-#~ "desktop cursor."
-#~ msgstr ""
-#~ "<b>Tip:</b> Grafický tablet nastavený ako predvolený ukazovateľ v "
-#~ "hosťovanom OS zaistí, že sa virtuálny kurzor bude pohybovať "
-#~ "synchronizovane s kurzorom v lokálnom pracovnom prostredí."
