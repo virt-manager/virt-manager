@@ -1065,7 +1065,7 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         if ip.numhosts < 16:
             return self.err.val_err(_("Invalid Network Address"),
-                    _("The network prefix must be at least /28 (16 addresses)"))
+                    _("The network must address at least 16 addresses."))
 
         if not ip.is_private:
             res = self.err.yes_no(_("Check Network Address"),
@@ -1144,7 +1144,7 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         if ip.prefixlen != 64:
             return self.err.val_err(_("Invalid Network Address"),
-                    _("For libvirt, the IPv6 network prefix must be 64"))
+                    _("For libvirt, the IPv6 network prefix must be /64"))
 
         if not ip.is_private:
             res = self.err.yes_no(_("Check Network Address"),
