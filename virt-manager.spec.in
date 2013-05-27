@@ -133,13 +133,9 @@ machine).
 %define _disable_unsupported_rhel --hide-unsupported-rhel-options
 %endif
 
-%if 0%{?default_graphics:1}
-%define _default_graphics --default-graphics=%{default_graphics}
-%endif
-
-
 python setup.py configure \
     --pkgversion="%{version}" \
+    --default-graphics="spice" \
     %{?_qemu_user} \
     %{?_kvm_packages} \
     %{?_libvirt_packages} \
