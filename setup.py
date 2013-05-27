@@ -317,7 +317,7 @@ class configure(Command):
         ("preferred-distros=", None,
          "Distros to list first in the New VM wizard (default=none)"),
         ("default-graphics=", None,
-         "Default graphics type (spice or vnc) (default=vnc)"),
+         "Default graphics type (spice or vnc) (default=spice)"),
 
     ]
     description = "Configure the build, similar to ./configure"
@@ -332,7 +332,7 @@ class configure(Command):
         self.askpass_package_names = ""
         self.hide_unsupported_rhel_options = 0
         self.preferred_distros = ""
-        self.default_graphics = "vnc"
+        self.default_graphics = "spice"
         self.prefix = sysprefix
         self.pkgversion = ""
 
