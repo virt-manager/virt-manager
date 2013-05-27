@@ -65,6 +65,9 @@ class VirtualVideoDevice(VirtualDevice):
         self._vram = val
     vram = _xml_property(get_vram, set_vram,
                          xpath="./model/@vram")
+    ram = _xml_property(lambda o: None, lambda o, v: None,
+                        xpath="./model/@ram")
+
 
     def get_heads(self):
         return self._heads
