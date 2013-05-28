@@ -33,9 +33,11 @@ class VirtualController(VirtualDevice):
     CONTROLLER_TYPE_VIRTIOSERIAL    = "virtio-serial"
     CONTROLLER_TYPE_USB             = "usb"
     CONTROLLER_TYPE_PCI             = "pci"
+    CONTROLLER_TYPE_CCID            = "ccid"
     CONTROLLER_TYPES = [CONTROLLER_TYPE_IDE, CONTROLLER_TYPE_FDC,
                         CONTROLLER_TYPE_SCSI, CONTROLLER_TYPE_SATA,
-                        CONTROLLER_TYPE_VIRTIOSERIAL, CONTROLLER_TYPE_USB]
+                        CONTROLLER_TYPE_VIRTIOSERIAL, CONTROLLER_TYPE_USB,
+                        CONTROLLER_TYPE_PCI, CONTROLLER_TYPE_CCID]
 
     @staticmethod
     def pretty_type(ctype):
@@ -45,8 +47,9 @@ class VirtualController(VirtualDevice):
             VirtualController.CONTROLLER_TYPE_SCSI          : "SCSI",
             VirtualController.CONTROLLER_TYPE_SATA          : "SATA",
             VirtualController.CONTROLLER_TYPE_VIRTIOSERIAL  : "Virtio Serial",
-            VirtualController.CONTROLLER_TYPE_USB           : "USB"
-            VirtualController.CONTROLLER_TYPE_PCI           : "PCI"
+            VirtualController.CONTROLLER_TYPE_USB           : "USB",
+            VirtualController.CONTROLLER_TYPE_PCI           : "PCI",
+            VirtualController.CONTROLLER_TYPE_CCID          : "CCID",
        }
 
         if ctype not in pretty_mappings:
