@@ -257,7 +257,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def _prestartup_nodedev_check(self, src, ret):
         ignore = src
-        error = _("These is more than one '%s' device attached to "
+        error = _("There is more than one '%s' device attached to "
                   "your host, and we can't determine which one to "
                   "use for your guest.\n"
                   "To fix this, remove and reattach the USB device "
