@@ -118,6 +118,7 @@ class vmmEngine(vmmGObject):
         self.skip_autostart = False
         self.uri_at_startup = None
         self.uri_cb = None
+        self.show_manager_window = True
 
         self.init_systray()
 
@@ -132,7 +133,10 @@ class vmmEngine(vmmGObject):
 
 
     def _activate(self, ignore):
-        self.show_manager()
+        if self.show_manager_window:
+            self.show_manager()
+        else:
+            self.get_manager()
         self.application.add_window(self._appwindow)
 
         if self.uri_at_startup:
@@ -444,7 +448,6 @@ class vmmEngine(vmmGObject):
             if autoconnect is not None:
                 conn.set_autoconnect(bool(autoconnect))
 
-            self.show_manager()
             if do_start:
                 conn.open()
             return conn

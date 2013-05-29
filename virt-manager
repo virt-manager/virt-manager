@@ -285,6 +285,7 @@ def main():
             return _conn_state_changed(conn, engine, options.show,
                                        options.uri, options.uuid)
         engine.uri_cb = cb
+        engine.show_manager_window = False
 
 
     # Finally start the app for real
