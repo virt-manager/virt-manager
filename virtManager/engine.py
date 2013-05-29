@@ -435,7 +435,6 @@ class vmmEngine(vmmGObject):
 
 
     def connect_to_uri(self, uri, autoconnect=None, do_start=True):
-        # Public method called from virt-manager.py
         try:
             conn = self.add_conn_to_ui(uri)
 
