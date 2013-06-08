@@ -165,27 +165,23 @@ class vmmGObject(GObject.GObject):
 
 
 class vmmGObjectUI(vmmGObject):
-    def __init__(self, filename, windowname):
+    def __init__(self, filename, windowname, builder=None, topwin=None):
         vmmGObject.__init__(self)
 
-        self.windowname = windowname
-        self.builder = None
-        self.topwin = None
-        self.uifile = None
-        self.err = None
-
         if filename:
-            self.uifile = os.path.join(self.config.get_ui_dir(), filename)
+            uifile = os.path.join(self.config.get_ui_dir(), filename)
 
             self.builder = Gtk.Builder()
             self.builder.set_translation_domain("virt-manager")
-            self.builder.add_from_string(
-                file(self.uifile).read())
+            self.builder.add_from_string(file(uifile).read())
 
-            self.topwin = self.widget(self.windowname)
+            self.topwin = self.widget(windowname)
             self.topwin.hide()
+        else:
+            self.builder = builder
+            self.topwin = topwin
 
-            self.err = virtManager.error.vmmErrorDialog(self.topwin)
+        self.err = virtManager.error.vmmErrorDialog(self.topwin)
 
     def widget(self, name):
         return self.builder.get_object(name)
@@ -196,7 +192,6 @@ class vmmGObjectUI(vmmGObject):
         self.builder = None
         self.topwin.destroy()
         self.topwin = None
-        self.uifile = None
         self.err = None
 
     def _cleanup(self):

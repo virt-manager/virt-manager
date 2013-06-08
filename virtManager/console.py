@@ -39,7 +39,6 @@ import logging
 import virtManager.uihelpers as uihelpers
 from virtManager.autodrawer import AutoDrawer
 from virtManager.baseclass import vmmGObjectUI, vmmGObject
-from virtManager.error import vmmErrorDialog
 
 # Console pages
 PAGE_UNAVAILABLE = 0
@@ -598,15 +597,9 @@ class SpiceViewer(Viewer):
 
 class vmmConsolePages(vmmGObjectUI):
     def __init__(self, vm, builder, topwin):
-        vmmGObjectUI.__init__(self, None, None)
+        vmmGObjectUI.__init__(self, None, None, builder=builder, topwin=topwin)
 
         self.vm = vm
-
-        self.windowname = "vmm-details"
-        self.builder = builder
-        self.topwin = topwin
-        self.err = vmmErrorDialog(self.topwin)
-
         self.pointer_is_grabbed = False
         self.change_title()
         self.vm.connect("config-changed", self.change_title)
