@@ -1278,9 +1278,9 @@ class StorageVolume(StorageObject):
             return
 
         while not self._install_finished:
-            time.sleep(1)
             ignore, ignore, alloc = vol.info()
             meter.update(alloc)
+            time.sleep(1)
 
 
     def is_size_conflict(self):
