@@ -1228,29 +1228,28 @@ class StorageVolume(StorageObject):
             meter = urlgrabber.progress.BaseMeter()
 
         try:
-            try:
-                self._install_finished = False
-                t.start()
-                meter.start(size=self.capacity,
-                            text=_("Allocating '%s'") % self.name)
+            self._install_finished = False
+            t.start()
+            meter.start(size=self.capacity,
+                        text=_("Allocating '%s'") % self.name)
 
-                if self.input_vol:
-                    vol = self.pool.createXMLFrom(xml, self.input_vol, 0)
-                else:
-                    vol = self.pool.createXML(xml, 0)
+            if self.input_vol:
+                vol = self.pool.createXMLFrom(xml, self.input_vol, 0)
+            else:
+                vol = self.pool.createXML(xml, 0)
 
-                meter.end(self.capacity)
-                logging.debug("Storage volume '%s' install complete.",
-                              self.name)
-                return vol
-            except libvirt.libvirtError, e:
-                if support.is_error_nosupport(e):
-                    raise RuntimeError("Libvirt version does not support "
-                                       "storage cloning.")
-                raise
-            except Exception, e:
-                raise RuntimeError("Couldn't create storage volume "
-                                   "'%s': '%s'" % (self.name, str(e)))
+            meter.end(self.capacity)
+            logging.debug("Storage volume '%s' install complete.",
+                          self.name)
+            return vol
+        except libvirt.libvirtError, e:
+            if support.is_error_nosupport(e):
+                raise RuntimeError("Libvirt version does not support "
+                                   "storage cloning.")
+            raise
+        except Exception, e:
+            raise RuntimeError("Couldn't create storage volume "
+                               "'%s': '%s'" % (self.name, str(e)))
         finally:
             self._install_finished = True
 
