@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 Red Hat, Inc.
+# Copyright (C) 2006, 2013 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -158,6 +158,8 @@ class LibvirtConsoleConnection(ConsoleConnection):
 
             if got == -2:
                 return
+            if len(got) == 0:
+                self.close()
 
             queued_text = bool(self.streamToTerminal)
             self.streamToTerminal += got
