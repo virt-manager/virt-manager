@@ -331,7 +331,9 @@ class vmmEngine(vmmGObject):
         if (self.windows <= 0 and
             self.systray and
             not self.systray.is_visible()):
-            self.exit_app(src)
+            # Defer this to an idle callback, since we can race with
+            # a vmmDetails window being deleted.
+            self.idle_add(self.exit_app, src)
 
     def _cleanup(self):
         uihelpers.cleanup()
