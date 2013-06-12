@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 Red Hat, Inc.
+# Copyright (C) 2009, 2013 Red Hat, Inc.
 # Copyright (C) 2009 Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -188,13 +188,13 @@ def build_sound_combo(vm, combo, no_default=False):
     dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     disable_rhel = not vm.rhel6_defaults()
-    rhel6_soundmodels = ["ich6", "ac97", "es1370"]
+    rhel_soundmodels = ["ich6", "ac97"]
 
     for m in virtinst.VirtualAudio.MODELS:
         if m == virtinst.VirtualAudio.MODEL_DEFAULT and no_default:
             continue
 
-        if (disable_rhel and m not in rhel6_soundmodels):
+        if (disable_rhel and m not in rhel_soundmodels):
             continue
 
         dev_model.append([m])
