@@ -162,22 +162,22 @@ class vmmAsyncJob(vmmGObjectUI):
 
 
     def __init__(self, callback, args, title, text, parent,
-                 async=True, show_progress=True,
-                 cancel_back=None, cancel_args=None):
+                 async=True, show_progress=True, cancel_cb=None):
         """
         @async: If False, run synchronously without a separate thread
         @show_progress: If False, don't actually show a progress dialog
-        @cancel_back: If operation supports cancelling, call this function
-                      when cancel button is clicked
-        @cancel_args: Arguments for optional cancel_back
+        @cancel_cb: Cancel callback if operation supports it.
+            (cb, arg1, arg2, ...)
         """
         vmmGObjectUI.__init__(self, "vmm-progress.ui", "vmm-progress")
         self.topwin.set_transient_for(parent)
 
         self.async = bool(async)
         self.show_progress = bool(show_progress)
-        self.cancel_job = cancel_back
-        self.cancel_args = [self] + (cancel_args or [])
+
+        cancel_cb = cancel_cb or (None, [])
+        self.cancel_cb = cancel_cb[0]
+        self.cancel_args = [self] + list(cancel_cb[1:])
         self.job_canceled = False
 
         self._error_info = None
@@ -200,10 +200,7 @@ class vmmAsyncJob(vmmGObjectUI):
         # UI state
         self.topwin.set_title(title)
         self.widget("pbar-text").set_text(text)
-        if self.cancel_job:
-            self.widget("cancel-async-job").show()
-        else:
-            self.widget("cancel-async-job").hide()
+        self.widget("cancel-async-job").set_visible(bool(self.cancel_cb))
 
 
     #############
@@ -229,11 +226,11 @@ class vmmAsyncJob(vmmGObjectUI):
         return self._meter
 
     def can_cancel(self):
-        return bool(self.cancel_job)
+        return bool(self.cancel_cb)
 
     def _cleanup(self):
         self.bg_thread = None
-        self.cancel_job = None
+        self.cancel_cb = None
         self.cancel_args = None
         self._meter = None
 
@@ -265,8 +262,9 @@ class vmmAsyncJob(vmmGObjectUI):
         if self.show_progress:
             self.topwin.present()
 
-        if not self.cancel_job and self.show_progress:
-            self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
+        if not self.cancel_cb and self.show_progress:
+            self.topwin.get_window().set_cursor(
+                            Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         if self.async:
             self.bg_thread.start()
@@ -289,7 +287,7 @@ class vmmAsyncJob(vmmGObjectUI):
 
     def delete(self, ignore1=None, ignore2=None):
         thread_active = (self.bg_thread.isAlive() or not self.async)
-        if not self.cancel_job or not thread_active:
+        if not self.cancel_cb or not thread_active:
             return
 
         res = self.err.warn_chkbox(
@@ -306,10 +304,10 @@ class vmmAsyncJob(vmmGObjectUI):
 
 
     def cancel(self, ignore1=None, ignore2=None):
-        if not self.cancel_job:
+        if not self.cancel_cb:
             return
 
-        self.cancel_job(*self.cancel_args)
+        self.cancel_cb(*self.cancel_args)
         if self.job_canceled:
             self.hide_warning()
             self.set_stage_text(_("Cancelling job..."), canceling=True)

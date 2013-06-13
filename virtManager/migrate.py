@@ -470,12 +470,9 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.topwin.set_sensitive(False)
         self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
+        cancel_cb = None
         if self.vm.getjobinfo_supported:
-            _cancel_back = self.cancel_migration
-            _cancel_args = [self.vm]
-        else:
-            _cancel_back = None
-            _cancel_args = [None]
+            cancel_cb = (self.cancel_migration, self.vm)
 
         progWin = vmmAsyncJob(self._async_migrate,
                               [self.vm, destconn, uri, rate, live, secure,
@@ -484,9 +481,7 @@ class vmmMigrateDialog(vmmGObjectUI):
                               (_("Migrating VM '%s' from %s to %s. "
                                  "This may take a while.") %
                                 (self.vm.get_name(), srchost, dsthost)),
-                              self.topwin,
-                              cancel_back=_cancel_back,
-                              cancel_args=_cancel_args)
+                              self.topwin, cancel_cb=cancel_cb)
         error, details = progWin.run()
 
         self.topwin.set_sensitive(True)

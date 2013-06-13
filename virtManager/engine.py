@@ -776,19 +776,15 @@ class vmmEngine(vmmGObject):
             if not path:
                 return
 
-        _cancel_back = None
-        _cancel_args = []
+        _cancel_cb = None
         if vm.getjobinfo_supported:
-            _cancel_back = self._save_cancel
-            _cancel_args = [vm]
+            _cancel_cb = (self._save_cancel, vm)
 
         progWin = vmmAsyncJob(self._save_callback,
                     [vm, path],
                     _("Saving Virtual Machine"),
                     _("Saving virtual machine memory to disk "),
-                    src.topwin,
-                    cancel_back=_cancel_back,
-                    cancel_args=_cancel_args)
+                    src.topwin, cancel_cb=_cancel_cb)
         error, details = progWin.run()
 
         if error is not None:
