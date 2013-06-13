@@ -405,11 +405,11 @@ class vmmEngine(vmmGObject):
         self.application.remove_window(self._appwindow)
 
     def _create_inspection_thread(self):
+        logging.debug("libguestfs inspection support: %s",
+                      self.config.support_inspection)
         if not self.config.support_inspection:
-            logging.debug("No inspection thread because "
-                          "libguestfs is too old, not available, "
-                          "or libvirt is not thread safe.")
             return
+
         from virtManager.inspection import vmmInspection
         self.inspection = vmmInspection()
         self.inspection.start()

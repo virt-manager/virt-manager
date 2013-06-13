@@ -189,11 +189,7 @@ class vmmInspection(vmmGObject):
         minor_version = g.inspect_get_minor_version(root)  # eg. 0
         hostname = g.inspect_get_hostname(root)  # string
         product_name = g.inspect_get_product_name(root)  # string
-
-        # Added in libguestfs 1.9.13:
-        product_variant = None
-        if hasattr(g, "inspect_get_product_variant"):
-            product_variant = g.inspect_get_product_variant(root)  # string
+        product_variant = g.inspect_get_product_variant(root)  # string
 
         # For inspect_list_applications and inspect_get_icon we
         # require that the guest filesystems are mounted.  However
@@ -231,12 +227,10 @@ class vmmInspection(vmmGObject):
         icon = None
         apps = None
         if filesystems_mounted:
-            # Added in libguestfs 1.11.12:
-            if hasattr(g, "inspect_get_icon"):
-                # string containing PNG data
-                icon = g.inspect_get_icon(root, favicon=0, highquality=1)
-                if icon == "":
-                    icon = None
+            # string containing PNG data
+            icon = g.inspect_get_icon(root, favicon=0, highquality=1)
+            if icon == "":
+                icon = None
 
             # Inspection applications.
             apps = g.inspect_list_applications(root)

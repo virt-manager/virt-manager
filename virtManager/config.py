@@ -185,27 +185,10 @@ class vmmConfig(object):
         try:
             # Check we can open the Python guestfs module.
             from guestfs import GuestFS  # pylint: disable=F0401
-            g = GuestFS()
-
-            # Check for the first version which fixed Python GIL bug.
-            version = g.version()
-            if version["major"] == 1:  # major must be 1
-                if version["minor"] == 8:
-                    if version["release"] >= 6:  # >= 1.8.6
-                        return True
-                elif version["minor"] == 10:
-                    if version["release"] >= 1:  # >= 1.10.1
-                        return True
-                elif version["minor"] == 11:
-                    if version["release"] >= 2:  # >= 1.11.2
-                        return True
-                elif version["minor"] >= 12:    # >= 1.12, 1.13, etc.
-                    return True
+            GuestFS()
+            return True
         except:
-            pass
-
-        return False
-
+            return False
 
     # General app wide helpers (gconf agnostic)
 
