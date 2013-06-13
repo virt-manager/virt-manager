@@ -201,7 +201,7 @@ class vmmInspection(vmmGObject):
 
             # Sort keys by length, shortest first, so that we end up
             # mounting the filesystems in the correct order.
-            mps = g.inspect_get_mountpoints(root)
+            mps = list(g.inspect_get_mountpoints(root))
             def compare(a, b):
                 if len(a[0]) > len(b[0]):
                     return 1
