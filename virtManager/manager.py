@@ -999,6 +999,7 @@ class vmmManager(vmmGObjectUI):
         png_data = vm.inspection.icon
         if png_data is None:
             return None
+
         try:
             pb = GdkPixbuf.PixbufLoader()
             pb.set_size(w, h)

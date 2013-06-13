@@ -256,7 +256,7 @@ class vmmInspection(vmmGObject):
         data.hostname = str(hostname)
         data.product_name = str(product_name)
         data.product_variant = str(product_variant)
-        data.icon = str(icon)
+        data.icon = icon
         data.applications = list(apps)
 
         self._set_vm_inspection_data(vm, data)
