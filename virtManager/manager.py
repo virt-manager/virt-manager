@@ -195,12 +195,12 @@ class vmmManager(vmmGObjectUI):
     ##################
 
     def show(self):
-        logging.debug("Showing manager")
         vis = self.is_visible()
         self.topwin.present()
         if vis:
             return
 
+        logging.debug("Showing manager")
         if self.prev_position:
             self.topwin.move(*self.prev_position)
             self.prev_position = None
@@ -208,10 +208,10 @@ class vmmManager(vmmGObjectUI):
         self.emit("manager-opened")
 
     def close(self, src_ignore=None, src2_ignore=None):
-        logging.debug("Closing manager")
         if not self.is_visible():
             return
 
+        logging.debug("Closing manager")
         self.prev_position = self.topwin.get_position()
         self.topwin.hide()
         self.emit("manager-closed")
