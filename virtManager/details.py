@@ -1580,42 +1580,51 @@ class vmmDetails(vmmGObjectUI):
         self.emit("action-migrate-domain",
                   self.vm.conn.get_uri(), self.vm.get_uuid())
 
-    def control_vm_screenshot(self, src_ignore):
+    def control_vm_screenshot(self, src):
+        ignore = src
+        try:
+            return self._take_screenshot()
+        except Exception, e:
+            self.err.show_err(_("Error taking screenshot: %s") % str(e))
+
+    def _take_screenshot(self):
         image = self.console.viewer.get_pixbuf()
 
-        # If someone feels kind they could extend this code to allow
-        # user to choose what image format they'd like to save in....
+        metadata = {
+            'tEXt::Hypervisor URI': self.vm.conn.get_uri(),
+            'tEXt::Domain Name': self.vm.get_name(),
+            'tEXt::Domain UUID': self.vm.get_uuid(),
+            'tEXt::Generator App': self.config.get_appname(),
+            'tEXt::Generator Version': self.config.get_appversion(),
+        }
+
+        ret = image.save_to_bufferv('png', metadata.keys(), metadata.values())
+        # On Fedora 19, ret is (bool, str)
+        # Someday the bindings might be fixed to just return the str, try
+        # and future proof it a bit
+        if type(ret) is tuple and len(ret) >= 2:
+            ret = ret[1]
+
+        import datetime
+        now = str(datetime.datetime.now()).split(".")[0].replace(" ", "_")
+        default = "Screenshot_%s_%s.png" % (self.vm.get_name(), now)
+
         path = util.browse_local(
                         self.topwin,
                         _("Save Virtual Machine Screenshot"),
                         self.vm.conn,
                         _type=("png", "PNG files"),
                         dialog_type=Gtk.FileChooserAction.SAVE,
-                        browse_reason=self.config.CONFIG_DIR_SCREENSHOT)
+                        browse_reason=self.config.CONFIG_DIR_SCREENSHOT,
+                        default_name=default)
         if not path:
+            logging.debug("No screenshot path given, skipping save.")
             return
 
         filename = path
         if not filename.endswith(".png"):
             filename += ".png"
-
-        # Save along with a little metadata about us & the domain
-        image.save(filename, 'png',
-                   {'tEXt::Hypervisor URI': self.vm.conn.get_uri(),
-                    'tEXt::Domain Name': self.vm.get_name(),
-                    'tEXt::Domain UUID': self.vm.get_uuid(),
-                    'tEXt::Generator App': self.config.get_appname(),
-                    'tEXt::Generator Version': self.config.get_appversion()})
-
-        msg = Gtk.MessageDialog(self.topwin,
-                                Gtk.DialogFlags.MODAL,
-                                Gtk.MessageType.INFO,
-                                Gtk.ButtonsType.OK,
-                                (_("The screenshot has been saved to:\n%s") %
-                                 filename))
-        msg.set_title(_("Screenshot saved"))
-        msg.run()
-        msg.destroy()
+        file(filename, "wb").write(ret)
 
 
     #########################

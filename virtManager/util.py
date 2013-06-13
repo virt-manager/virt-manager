@@ -170,7 +170,7 @@ def xml_parse_wrapper(xml, parse_func, *args, **kwargs):
 def browse_local(parent, dialog_name, conn, start_folder=None,
                  _type=None, dialog_type=None,
                  confirm_func=None, browse_reason=None,
-                 choose_button=None):
+                 choose_button=None, default_name=None):
     """
     Helper function for launching a filechooser
 
@@ -209,6 +209,9 @@ def browse_local(parent, dialog_name, conn, start_folder=None,
                                          choose_button,
                                          Gtk.ResponseType.ACCEPT))
     fcdialog.set_default_response(Gtk.ResponseType.ACCEPT)
+
+    if default_name:
+        fcdialog.set_current_name(default_name)
 
     # If confirm is set, warn about a file overwrite
     if confirm_func:
