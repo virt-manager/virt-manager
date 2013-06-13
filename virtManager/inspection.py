@@ -37,7 +37,7 @@ class vmmInspection(vmmGObject):
 
         self._thread = Thread(name="inspection thread", target=self._run)
         self._thread.daemon = True
-        self._wait = 15 * 1000  # 15 seconds
+        self._wait = 5 * 1000  # 5 seconds
 
         self._q = Queue()
         self._conns = {}
