@@ -205,17 +205,22 @@ class vmmEngine(vmmGObject):
             manager.set_startup_error(msg)
             return
 
-        do_start = packageutils.start_libvirtd()
-        warnmsg = _(
-            "Libvirt was just installed, so the 'libvirtd' service will\n"
-            "will need to be started.\n"
-            "virt-manager will connect to libvirt on the next application\n"
-            "start up.")
+        warnmsg = _("virt-manager will connect to libvirt on the next\n"
+            "application start up.")
+        if any(["libvirt" in p for p in ret or []]):
+            warnmsg = _(
+              "Libvirt was just installed, so the 'libvirtd' service will\n"
+              "will need to be started.") + "\n\n" + warnmsg
 
-        if not do_start:
-            manager.err.ok(_("Libvirt service must be started"), warnmsg)
+        # Do the initial connection in an idle callback, so the
+        # packagekit async dialog has a chance to go away
+        def idle_connect():
+            do_start = packageutils.start_libvirtd()
+            if not do_start:
+                manager.err.ok(_("Libvirt service must be started"), warnmsg)
 
-        self.connect_to_uri(tryuri, autoconnect=True, do_start=do_start)
+            self.connect_to_uri(tryuri, autoconnect=True, do_start=do_start)
+        self.idle_add(idle_connect)
 
 
     def load_stored_uris(self):
