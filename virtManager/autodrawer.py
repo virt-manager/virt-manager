@@ -241,11 +241,20 @@ class OverBox(Gtk.Box):
         Gtk.Box.do_unrealize(self)
 
         self.underWin.set_user_data(None)
-        self.underWin.destroy()
-        self.underWin = None
-
         self.overWin.set_user_data(None)
-        self.overWin.destroy()
+
+        # XXX: Destroying this windows gives a warning when the vmmDetails
+        # window is destroyed:
+        #
+        # /usr/lib64/python2.7/site-packages/gi/types.py:113: Warning: g_object_unref: assertion `G_IS_OBJECT (object)' failed
+        #
+        # There's something weird here with destroying this gdk window,
+        # then destroying the over/under widgets. Error seems harmless
+        # but lets shut it up anyways.
+        #self.underWin.destroy()
+        #self.overWin.destroy()
+
+        self.underWin = None
         self.overWin = None
 
     def do_size_request(self, req):
