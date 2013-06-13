@@ -29,9 +29,9 @@ from virtManager.baseclass import vmmGObject
 from virtManager.error import vmmErrorDialog
 
 try:
-    import appindicator  # pylint: disable=F0401
+    from gi.repository import AppIndicator3  # pylint: disable=F0401
 except:
-    appindicator = None
+    AppIndicator3 = None
 
 
 def build_image_menu_item(label):
@@ -79,7 +79,7 @@ class vmmSystray(vmmGObject):
         engine.connect("conn-removed", self.conn_removed)
 
         # Are we using Application Indicators?
-        if appindicator is not None:
+        if AppIndicator3 is not None:
             self.systray_indicator = True
 
         self.init_systray_menu()
@@ -138,10 +138,10 @@ class vmmSystray(vmmGObject):
             return
 
         if self.systray_indicator:
-            self.systray_icon = appindicator.Indicator("virt-manager",
+            self.systray_icon = AppIndicator3.Indicator("virt-manager",
                                 "virt-manager-icon",
-                                appindicator.CATEGORY_OTHER)
-            self.systray_icon.set_status(appindicator.STATUS_ACTIVE)
+                                AppIndicator3.CATEGORY_OTHER)
+            self.systray_icon.set_status(AppIndicator3.STATUS_ACTIVE)
             self.systray_icon.set_menu(self.systray_menu)
 
         else:
@@ -162,9 +162,9 @@ class vmmSystray(vmmGObject):
         else:
             if self.systray_indicator:
                 if do_show:
-                    self.systray_icon.set_status(appindicator.STATUS_ACTIVE)
+                    self.systray_icon.set_status(AppIndicator3.STATUS_ACTIVE)
                 else:
-                    self.systray_icon.set_status(appindicator.STATUS_PASSIVE)
+                    self.systray_icon.set_status(AppIndicator3.STATUS_PASSIVE)
             else:
                 self.systray_icon.set_visible(do_show)
 
