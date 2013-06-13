@@ -1000,12 +1000,14 @@ class vmmManager(vmmGObjectUI):
         if png_data is None:
             return None
         try:
-            pb = GdkPixbuf.PixbufLoader(image_type="png")
+            pb = GdkPixbuf.PixbufLoader()
             pb.set_size(w, h)
             pb.write(png_data)
             pb.close()
             return pb.get_pixbuf()
         except:
+            logging.exception("Error loading inspection icon data")
+            vm.inspection.icon = None
             return None
 
     def conn_state_changed(self, conn):
