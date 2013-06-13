@@ -147,6 +147,7 @@ class LibvirtConsoleConnection(ConsoleConnection):
             events & libvirt.VIR_EVENT_HANDLE_HANGUP):
             logging.debug("Received stream ERROR/HANGUP, closing console")
             self.close()
+            return
 
         if events & libvirt.VIR_EVENT_HANDLE_READABLE:
             try:
@@ -157,9 +158,12 @@ class LibvirtConsoleConnection(ConsoleConnection):
                 return
 
             if got == -2:
+                # This is basically EAGAIN
                 return
             if len(got) == 0:
+                logging.debug("Received EOF from stream, closing")
                 self.close()
+                return
 
             queued_text = bool(self.streamToTerminal)
             self.streamToTerminal += got
@@ -177,6 +181,7 @@ class LibvirtConsoleConnection(ConsoleConnection):
                 return
 
             if done == -2:
+                # This is basically EAGAIN
                 return
 
             self.terminalToStream = self.terminalToStream[done:]
