@@ -59,10 +59,11 @@ def check_packagekit(errbox, packages, ishv):
     else:
         msg = _("Checking for installed package '%s'") % packages[0]
 
-    found = []
+    cancellable = Gio.Cancellable()
     progWin = vmmAsyncJob(_do_async_search,
-                          [bus, pk_control, packages], msg, msg,
-                          errbox.get_parent(), async=False)
+                          [bus, pk_control, packages, cancellable], msg, msg,
+                          errbox.get_parent(), async=False,
+                          cancel_cb=[_cancel_search, cancellable])
     error, ignore = progWin.run()
     if error:
         return
@@ -109,16 +110,25 @@ def check_packagekit(errbox, packages, ishv):
     return do_install
 
 
-def _do_async_search(asyncjob, bus, pk_control, packages):
+def _cancel_search(asyncjob, cancellable):
+    cancellable.cancel()
+    asyncjob.job_cancelled = True
+
+
+def _do_async_search(asyncjob, bus, pk_control, packages, cancellable):
     found = []
     try:
         for name in packages:
-            ret_found = packagekit_search(bus, pk_control, name, packages)
+            ret_found = packagekit_search(bus, pk_control, name, packages,
+                                          cancellable)
             found += ret_found
-
     except Exception, e:
-        logging.exception("Error searching for installed packages")
-        asyncjob.set_error(str(e), "".join(traceback.format_exc()))
+        if cancellable.is_cancelled():
+            logging.debug("Package search cancelled by user")
+            asyncjob.set_error("Package search cancelled by user")
+        else:
+            logging.exception("Error searching for installed packages")
+            asyncjob.set_error(str(e), "".join(traceback.format_exc()))
 
     asyncjob.set_extra_data(found)
 
@@ -138,11 +148,12 @@ def packagekit_install(package_list):
                                    timeout=timeout)
 
 
-def packagekit_search(bus, pk_control, package_name, packages):
+def packagekit_search(bus, pk_control, package_name, packages, cancellable):
     tid = pk_control.CreateTransaction()
     pk_trans = Gio.DBusProxy.new_sync(bus, 0, None,
                             "org.freedesktop.PackageKit", tid,
-                            "org.freedesktop.PackageKit.Transaction", None)
+                            "org.freedesktop.PackageKit.Transaction",
+                            cancellable)
 
     found = []
     def package(info, package_id, summary):
