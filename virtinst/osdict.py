@@ -361,7 +361,6 @@ OS_TYPES = {
     "fedora15": {
         "label": "Fedora 15",
         "distro": "fedora",
-        "supported": True,
         "devices" : {
             DISK : VIRTIO_DISK,
             NET  : VIRTIO_NET,
@@ -371,7 +370,6 @@ OS_TYPES = {
     "fedora16": {
         "label": "Fedora 16",
         "distro": "fedora",
-        "supported": True,
         "devices" : {
             DISK : VIRTIO_DISK,
             NET  : VIRTIO_NET,
@@ -390,6 +388,16 @@ OS_TYPES = {
    },
     "fedora18": {
         "label": "Fedora 18",
+        "distro": "fedora",
+        "supported": True,
+        "devices" : {
+            DISK : VIRTIO_DISK,
+            NET  : VIRTIO_NET,
+            INPUT: USB_TABLET,
+       }
+   },
+    "fedora19": {
+        "label": "Fedora 19",
         "distro": "fedora",
         "supported": True,
         "devices" : {
