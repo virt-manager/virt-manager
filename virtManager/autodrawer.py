@@ -95,15 +95,17 @@ class OverBox(Gtk.Box):
             fill = self.child_get_property(self.overWidget, "fill")
             padding = self.child_get_property(self.overWidget, "padding")
 
-        if not expand:
-            width = min(self.overWidth, boxwidth - padding)
-            x = padding
-        elif not fill:
-            width = min(self.overWidth, boxwidth)
-            x = ((boxwidth - width) / 2)
-        else:
+        # XXX: On Fedora 19 child_get_property isn't working :(
+        expand = True
+        if expand and fill:
             width = boxwidth
             x = 0
+        elif fill:
+            width = min(self.overWidth, boxwidth - padding)
+            x = padding
+        else:
+            width = min(self.overWidth, boxwidth)
+            x = ((boxwidth - width) / 2)
 
         y = (((self.overHeight - actual_min) * (self.fraction - 1)) +
              self.verticalOffset)
