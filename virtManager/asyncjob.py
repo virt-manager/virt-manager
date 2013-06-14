@@ -34,13 +34,15 @@ import urlgrabber
 from virtManager.baseclass import vmmGObjectUI
 
 
-class vmmCreateMeter(urlgrabber.progress.BaseMeter):
-    def __init__(self, asyncjob):
-        # progress meter has to run asynchronously, so pass in the
-        # async job to call back to with progress info
+class vmmMeter(urlgrabber.progress.BaseMeter):
+    def __init__(self, cb_pulse, cb_fraction, cb_done):
         urlgrabber.progress.BaseMeter.__init__(self)
-        self.asyncjob = asyncjob
         self.started = False
+
+        self._vmm_pulse = cb_pulse
+        self._vmm_fraction = cb_fraction
+        self._vmm_done = cb_done
+
 
     def _do_start(self, now=None):
         if self.text is not None:
@@ -49,10 +51,10 @@ class vmmCreateMeter(urlgrabber.progress.BaseMeter):
             text = self.basename
         if self.size is None:
             out = "    %5sB" % (0)
-            self.asyncjob.pulse_pbar(out, text)
+            self._vmm_pulse(out, text)
         else:
             out = "%3i%% %5sB" % (0, 0)
-            self.asyncjob.set_pbar_fraction(0, out, text)
+            self._vmm_fraction(0, out, text)
         self.started = True
 
     def _do_update(self, amount_read, now=None):
@@ -63,11 +65,11 @@ class vmmCreateMeter(urlgrabber.progress.BaseMeter):
         fread = urlgrabber.progress.format_number(amount_read)
         if self.size is None:
             out = "    %5sB" % (fread)
-            self.asyncjob.pulse_pbar(out, text)
+            self._vmm_pulse(out, text)
         else:
             frac = self.re.fraction_read()
             out = "%3i%% %5sB" % (frac * 100, fread)
-            self.asyncjob.set_pbar_fraction(frac, out, text)
+            self._vmm_fraction(frac, out, text)
 
     def _do_end(self, amount_read, now=None):
         if self.text is not None:
@@ -77,10 +79,10 @@ class vmmCreateMeter(urlgrabber.progress.BaseMeter):
         fread = urlgrabber.progress.format_number(amount_read)
         if self.size is None:
             out = "    %5sB" % (fread)
-            self.asyncjob.pulse_pbar(out, text)
+            self._vmm_pulse(out, text)
         else:
             out = "%3i%% %5sB" % (100, fread)
-            self.asyncjob.set_pbar_done(out, text)
+            self._vmm_done(out, text)
         self.started = False
 
 
@@ -222,7 +224,9 @@ class vmmAsyncJob(vmmGObjectUI):
 
     def get_meter(self):
         if not self._meter:
-            self._meter = vmmCreateMeter(self)
+            self._meter = vmmMeter(self._pbar_pulse,
+                                   self._pbar_fraction,
+                                   self._pbar_done)
         return self._meter
 
     def can_cancel(self):
@@ -331,13 +335,13 @@ class vmmAsyncJob(vmmGObjectUI):
         return True
 
     @idle_wrapper
-    def pulse_pbar(self, progress="", stage=None):
+    def _pbar_pulse(self, progress="", stage=None):
         self.is_pulsing = True
         self.pbar.set_text(progress)
         self.set_stage_text(stage or _("Processing..."))
 
     @idle_wrapper
-    def set_pbar_fraction(self, frac, progress, stage=None):
+    def _pbar_fraction(self, frac, progress, stage=None):
         self.is_pulsing = False
         self.set_stage_text(stage or _("Processing..."))
         self.pbar.set_text(progress)
@@ -349,7 +353,7 @@ class vmmAsyncJob(vmmGObjectUI):
         self.pbar.set_fraction(frac)
 
     @idle_wrapper
-    def set_pbar_done(self, progress, stage=None):
+    def _pbar_done(self, progress, stage=None):
         self.is_pulsing = False
         self.set_stage_text(stage or _("Completed"))
         self.pbar.set_text(progress)
