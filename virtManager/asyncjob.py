@@ -92,10 +92,7 @@ class asyncJobWorker(threading.Thread):
     def __init__(self, callback, args):
         args = [callback] + args
         threading.Thread.__init__(self, target=cb_wrapper, args=args)
-        self.setDaemon(True)
-
-    def run(self):
-        threading.Thread.run(self)
+        self.daemon = True
 
 
 def cb_wrapper(callback, asyncjob, *args, **kwargs):
@@ -185,18 +182,16 @@ class vmmAsyncJob(vmmGObjectUI):
         self._error_info = None
         self._data = None
 
-        self.stage = self.widget("pbar-stage")
-        self.pbar = self.widget("pbar")
-        self.is_pulsing = True
+        self._is_pulsing = True
         self._meter = None
 
         args = [self] + args
-        self.bg_thread = asyncJobWorker(callback, args)
+        self._bg_thread = asyncJobWorker(callback, args)
         logging.debug("Creating async job for function cb=%s", callback)
 
         self.builder.connect_signals({
-            "on_async_job_delete_event" : self.delete,
-            "on_async_job_cancel_clicked" : self.cancel,
+            "on_async_job_delete_event" : self._on_window_delete,
+            "on_async_job_cancel_clicked" : self._on_cancel,
         })
 
         # UI state
@@ -205,92 +200,37 @@ class vmmAsyncJob(vmmGObjectUI):
         self.widget("cancel-async-job").set_visible(bool(self.cancel_cb))
 
 
-    #############
-    # Accessors #
-    #############
-
-    def set_error(self, error, details):
-        self._error_info = (error, details)
-
-    def _get_error(self):
-        if not self._error_info:
-            return (None, None)
-        return self._error_info
-
-    def set_extra_data(self, data):
-        self._data = data
-    def get_extra_data(self):
-        return self._data
-
-    def get_meter(self):
-        if not self._meter:
-            self._meter = vmmMeter(self._pbar_pulse,
-                                   self._pbar_fraction,
-                                   self._pbar_done)
-        return self._meter
-
-    def can_cancel(self):
-        return bool(self.cancel_cb)
-
-    def _cleanup(self):
-        self.bg_thread = None
-        self.cancel_cb = None
-        self.cancel_args = None
-        self._meter = None
-
     ####################
     # Internal helpers #
     ####################
 
-    def set_stage_text(self, text, canceling=False):
+    def _cleanup(self):
+        self._bg_thread = None
+        self.cancel_cb = None
+        self.cancel_args = None
+        self._meter = None
+
+    def _set_stage_text(self, text, canceling=False):
+        # This should be thread safe, since it's only ever called from
+        # pbar idle callbacks and cancel routine which is invoked from the
+        # main thread
         if self.job_canceled and not canceling:
             return
-        self.stage.set_text(text)
+        self.widget("pbar-stage").set_text(text)
 
-    def hide_warning(self):
+    def _hide_warning(self):
         self.widget("warning-box").hide()
 
-    def show_warning(self, summary):
-        markup = "<small>%s</small>" % summary
-        self.widget("warning-box").show()
-        self.widget("warning-text").set_markup(markup)
+    def _is_thread_active(self):
+        return (self._bg_thread.isAlive() or not self.async)
 
 
-    ###########
-    # Actions #
-    ###########
+    ################
+    # UI listeners #
+    ################
 
-    def run(self):
-        timer = GLib.timeout_add(100, self.exit_if_necessary)
-
-        if self.show_progress:
-            self.topwin.present()
-
-        if not self.cancel_cb and self.show_progress:
-            self.topwin.get_window().set_cursor(
-                            Gdk.Cursor.new(Gdk.CursorType.WATCH))
-
-        if self.async:
-            self.bg_thread.start()
-            Gtk.main()
-        else:
-            self.bg_thread.run()
-
-        GLib.source_remove(timer)
-
-        if self.bg_thread.isAlive():
-            # This can happen if the user closes the whole app while the
-            # async dialog is running. This forces us to clean up properly
-            # and not leave a dead process around.
-            logging.debug("Forcing main_quit from async job.")
-            self.exit_if_necessary(force_exit=True)
-
-        self.topwin.destroy()
-        self.cleanup()
-        return self._get_error()
-
-    def delete(self, ignore1=None, ignore2=None):
-        thread_active = (self.bg_thread.isAlive() or not self.async)
+    def _on_window_delete(self, ignore1=None, ignore2=None):
+        thread_active = (self._bg_thread.isAlive() or not self.async)
         if not self.cancel_cb or not thread_active:
             return
 
@@ -300,61 +240,115 @@ class vmmAsyncJob(vmmGObjectUI):
         if not res:
             return
 
-        # The job may end after we click 'Yes', so check whether the
-        # thread is active again
-        thread_active = (self.bg_thread.isAlive() or not self.async)
-        if thread_active:
-            self.cancel()
+        self._on_cancel()
 
-
-    def cancel(self, ignore1=None, ignore2=None):
-        if not self.cancel_cb:
+    def _on_cancel(self, ignore1=None, ignore2=None):
+        if not self.cancel_cb or not self._is_thread_active():
             return
 
         self.cancel_cb(*self.cancel_args)
         if self.job_canceled:
-            self.hide_warning()
-            self.set_stage_text(_("Cancelling job..."), canceling=True)
+            self._hide_warning()
+            self._set_stage_text(_("Cancelling job..."), canceling=True)
 
 
-    # All functions after this point are called from the timer loop
-    # which means we need to be careful and lock threads before doing
-    # any UI bits
-    def exit_if_necessary(self, force_exit=False):
-        thread_active = (self.bg_thread.isAlive() or not self.async)
+    ##############
+    # Public API #
+    ##############
 
-        if not thread_active or force_exit:
+    def get_meter(self):
+        if not self._meter:
+            self._meter = vmmMeter(self._pbar_pulse,
+                                   self._pbar_fraction,
+                                   self._pbar_done)
+        return self._meter
+
+    def set_error(self, error, details):
+        self._error_info = (error, details)
+
+    def set_extra_data(self, data):
+        self._data = data
+    def get_extra_data(self):
+        return self._data
+
+    def can_cancel(self):
+        return bool(self.cancel_cb)
+
+    def show_warning(self, summary):
+        # This should only be called from cancel callbacks, not a the thread
+        markup = "<small>%s</small>" % summary
+        self.widget("warning-box").show()
+        self.widget("warning-text").set_markup(markup)
+
+    def run(self):
+        timer = GLib.timeout_add(100, self._exit_if_necessary)
+
+        if self.show_progress:
+            self.topwin.present()
+
+        if not self.cancel_cb and self.show_progress:
+            self.topwin.get_window().set_cursor(
+                            Gdk.Cursor.new(Gdk.CursorType.WATCH))
+
+        if self.async:
+            self._bg_thread.start()
+            Gtk.main()
+        else:
+            self._bg_thread.run()
+
+        GLib.source_remove(timer)
+
+        if self._bg_thread.isAlive():
+            # This can happen if the user closes the whole app while the
+            # async dialog is running. This forces us to clean up properly
+            # and not leave a dead process around.
+            logging.debug("Forcing main_quit from async job.")
+            self._exit_if_necessary(force_exit=True)
+
+        self.topwin.destroy()
+        self.cleanup()
+        return self._error_info or (None, None)
+
+
+    ####################################################################
+    # All functions after this point are called from the timer loop or #
+    # the worker thread, so anything that touches Gtk needs to be      #
+    # dispatches with idle_add                                         #
+    ####################################################################
+
+    def _exit_if_necessary(self, force_exit=False):
+        if not self._is_thread_active() or force_exit:
             if self.async:
                 Gtk.main_quit()
             return False
 
-        if not self.is_pulsing or not self.show_progress:
+        if not self._is_pulsing or not self.show_progress:
             return True
 
-        self.idle_add(self.pbar.pulse)
+        self._pbar_pulse()
         return True
 
     @idle_wrapper
     def _pbar_pulse(self, progress="", stage=None):
-        self.is_pulsing = True
-        self.pbar.set_text(progress)
-        self.set_stage_text(stage or _("Processing..."))
+        self._is_pulsing = True
+        self.widget("pbar").set_text(progress)
+        self._set_stage_text(stage or _("Processing..."))
 
     @idle_wrapper
     def _pbar_fraction(self, frac, progress, stage=None):
-        self.is_pulsing = False
-        self.set_stage_text(stage or _("Processing..."))
-        self.pbar.set_text(progress)
+        self._is_pulsing = False
+        self._set_stage_text(stage or _("Processing..."))
+        self.widget("pbar").set_text(progress)
 
         if frac > 1:
             frac = 1.0
         if frac < 0:
             frac = 0
-        self.pbar.set_fraction(frac)
+        self.widget("pbar").set_fraction(frac)
 
     @idle_wrapper
     def _pbar_done(self, progress, stage=None):
-        self.is_pulsing = False
-        self.set_stage_text(stage or _("Completed"))
-        self.pbar.set_text(progress)
-        self.pbar.set_fraction(1)
+        self._is_pulsing = False
+        self._set_stage_text(stage or _("Completed"))
+        self.widget("pbar").set_text(progress)
+        self.widget("pbar").set_fraction(1)
