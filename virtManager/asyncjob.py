@@ -232,13 +232,18 @@ class vmmAsyncJob(vmmGObjectUI):
     def _on_window_delete(self, ignore1=None, ignore2=None):
         thread_active = (self._bg_thread.isAlive() or not self.async)
         if not self.cancel_cb or not thread_active:
-            return
+            logging.debug("User closed progress window, but thread "
+                          "still running and process isn't cancellable, "
+                          "ignoring.")
+            return 1
 
         res = self.err.warn_chkbox(
-                text1=_("Cancel the job before closing window?"),
+                text1=_("Cancel the job?"),
                 buttons=Gtk.ButtonsType.YES_NO)
         if not res:
-            return
+            logging.debug("User closed progress window, but chose not "
+                          "cancel operation, ignoring.")
+            return 1
 
         self._on_cancel()
 
