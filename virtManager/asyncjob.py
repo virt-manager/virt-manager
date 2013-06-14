@@ -303,13 +303,6 @@ class vmmAsyncJob(vmmGObjectUI):
 
         GLib.source_remove(timer)
 
-        if self._bg_thread.isAlive():
-            # This can happen if the user closes the whole app while the
-            # async dialog is running. This forces us to clean up properly
-            # and not leave a dead process around.
-            logging.debug("Forcing main_quit from async job.")
-            self._exit_if_necessary(force_exit=True)
-
         self.topwin.destroy()
         self.cleanup()
         return self._error_info or (None, None)
@@ -321,10 +314,8 @@ class vmmAsyncJob(vmmGObjectUI):
     # dispatches with idle_add                                         #
     ####################################################################
 
-    def _exit_if_necessary(self, force_exit=False):
-        if not self._is_thread_active() or force_exit:
-            if self.async:
-                Gtk.main_quit()
+    def _exit_if_necessary(self):
+        if not self._is_thread_active():
             return False
 
         if not self._is_pulsing or not self.show_progress:
