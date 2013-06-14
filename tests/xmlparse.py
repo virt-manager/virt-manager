@@ -41,8 +41,8 @@ class XMLParseTest(unittest.TestCase):
         utils.diff_compare(actualXML, expect_out=expectXML)
 
     def _alter_compare(self, actualXML, outfile):
-        utils.test_create(conn, actualXML)
         utils.diff_compare(actualXML, outfile)
+        utils.test_create(conn, actualXML)
 
     def testRoundTrip(self):
         """
@@ -383,10 +383,10 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev4)
         check("type", "usb")
         check("index", "3", "9")
-        check("model", "ich9-uhci3")
+        check("model", "ich9-ehci1")
 
         check = self._make_checker(dev4.get_master())
-        check("startport", "4", "2")
+        check("startport", "4", "2", None)
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

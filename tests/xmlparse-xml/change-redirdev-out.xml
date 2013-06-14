@@ -18,7 +18,6 @@
   <devices>
     <emulator>/usr/local/bin/qemu-kvm</emulator>
     <controller type="usb" index="1" model="ich9-ehci1">
-      <master startport="0"/>
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>
     </controller>
     <interface type="user">

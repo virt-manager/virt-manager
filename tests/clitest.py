@@ -520,7 +520,7 @@ vinst.add_invalid("char", "--console pty,target_type=abcd")  # --console unknown
 vinst.add_category("controller", "--noautoconsole --nodisks --pxe")
 vinst.add_valid("controller", "--controller usb,model=ich9-ehci1,address=0:0:4.7")
 vinst.add_valid("controller", "--controller usb,model=ich9-ehci1,address=0:0:4.7,index=0")
-vinst.add_valid("controller", "--controller usb,model=ich9-ehci1,address=0:0:4.7,index=1,master=0")
+vinst.add_valid("controller", "--controller usb,model=ich9-ehci1,address=0:0:4.7,index=1")
 vinst.add_valid("controller", "--controller usb2")
 vinst.add_invalid("controller", "--controller")  # Missing argument
 vinst.add_invalid("controller", "--controller foo")  # Invalid argument

@@ -124,10 +124,10 @@ def sanitize_xml_for_define(xml):
 def test_create(testconn, xml):
     xml = sanitize_xml_for_define(xml)
 
-#    try:
-    dom = testconn.defineXML(xml)
-#    except Exception, e:
-#        raise RuntimeError(str(e) + "\n" + xml)
+    try:
+        dom = testconn.defineXML(xml)
+    except Exception, e:
+        raise RuntimeError(str(e) + "\n" + xml)
 
     try:
         dom.create()
