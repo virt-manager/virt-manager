@@ -153,6 +153,7 @@ class vmmGObject(GObject.GObject):
         """
         ret = GLib.timeout_add(timeout, func, *args)
         self.add_gobject_timeout(ret)
+        return ret
 
     def emit(self, signal_name, *args):
         return GObject.GObject.emit(self, signal_name, *args)
