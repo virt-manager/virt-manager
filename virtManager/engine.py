@@ -262,7 +262,7 @@ class vmmEngine(vmmGObject):
             self.windowCreate.conn.get_uri() == hvuri):
             self.windowCreate.close()
 
-    def reschedule_timer(self, ignore1, ignore2, ignore3, ignore4):
+    def reschedule_timer(self, *args, **kwargs):
         self.schedule_timer()
 
     def schedule_timer(self):
@@ -318,10 +318,6 @@ class vmmEngine(vmmGObject):
                 self.idle_add(conn.close)
 
         return 1
-
-    def change_timer_interval(self, ignore1, ignore2, ignore3, ignore4):
-        GLib.source_remove(self.timer)
-        self.schedule_timer()
 
     def increment_window_counter(self, src):
         ignore = src

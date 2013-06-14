@@ -151,7 +151,8 @@ class vmmGObject(GObject.GObject):
         """
         Make sure timeout functions are run thread safe
         """
-        return GLib.timeout_add(timeout, func, *args)
+        ret = GLib.timeout_add(timeout, func, *args)
+        self.add_gobject_timeout(ret)
 
     def emit(self, signal_name, *args):
         return GObject.GObject.emit(self, signal_name, *args)
