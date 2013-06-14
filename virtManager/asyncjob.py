@@ -316,13 +316,19 @@ class vmmAsyncJob(vmmGObjectUI):
 
     def _exit_if_necessary(self):
         if not self._is_thread_active():
+            if self.async:
+                Gtk.main_quit()
             return False
 
         if not self._is_pulsing or not self.show_progress:
             return True
 
-        self._pbar_pulse()
+        self._pbar_do_pulse()
         return True
+
+    @idle_wrapper
+    def _pbar_do_pulse(self):
+        self.widget("pbar").pulse()
 
     @idle_wrapper
     def _pbar_pulse(self, progress="", stage=None):
