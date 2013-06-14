@@ -29,7 +29,7 @@ from virtManager.baseclass import vmmGObject
 from virtManager.error import vmmErrorDialog
 
 try:
-    from gi.repository import AppIndicator3  # pylint: disable=F0401
+    from gi.repository import AppIndicator3  # pylint: disable=E0611
 except:
     AppIndicator3 = None
 
