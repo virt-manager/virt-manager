@@ -134,9 +134,9 @@ class vmmDeleteDialog(vmmGObjectUI):
                                      self.config.get_confirm_delstorage,
                                      self.config.set_confirm_delstorage,
                                      text1=_("Are you sure you want to delete "
-                                             "all the storage?"),
-                                     text2=_("This will delete all selected "
-                                             "storage data."))
+                                             "the storage?"),
+                                     text2=_("All selected storage will "
+                                             "be deleted."))
             if not ret:
                 return
 
