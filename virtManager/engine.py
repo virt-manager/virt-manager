@@ -48,6 +48,7 @@ from virtManager.create import vmmCreate
 from virtManager.host import vmmHost
 from virtManager.error import vmmErrorDialog
 from virtManager.systray import vmmSystray
+from virtManager.delete import vmmDeleteDialog
 
 # Enable this to get a report of leaked objects on app shutdown
 # gtk3/pygobject has issues here as of Fedora 18
@@ -95,6 +96,7 @@ class vmmEngine(vmmGObject):
         self.last_timeout = 0
 
         self.systray = None
+        self.delete_dialog = None
         self.application = Gtk.Application(
                                  application_id="com.redhat.virt-manager",
                                  flags=0)
@@ -376,6 +378,10 @@ class vmmEngine(vmmGObject):
             self.windowMigrate.cleanup()
             self.windowMigrate = None
 
+        if self.delete_dialog:
+            self.delete_dialog.cleanup()
+            self.delete_dialog = None
+
         # Do this last, so any manually 'disconnected' signals
         # take precedence over cleanup signal removal
         for uri in self.conns:
@@ -605,6 +611,7 @@ class vmmEngine(vmmGObject):
         obj.connect("action-exit-app", self.exit_app)
         obj.connect("action-view-manager", self._do_show_manager)
         obj.connect("action-migrate-domain", self._do_show_migrate)
+        obj.connect("action-delete-domain", self._do_delete_domain)
         obj.connect("action-clone-domain", self._do_show_clone)
         obj.connect("details-opened", self.increment_window_counter)
         obj.connect("details-closed", self.decrement_window_counter)
@@ -648,6 +655,7 @@ class vmmEngine(vmmGObject):
         obj.connect("action-reset-domain", self._do_reset_domain)
         obj.connect("action-save-domain", self._do_save_domain)
         obj.connect("action-migrate-domain", self._do_show_migrate)
+        obj.connect("action-delete-domain", self._do_delete_domain)
         obj.connect("action-clone-domain", self._do_show_clone)
         obj.connect("action-show-vm", self._do_show_vm)
         obj.connect("action-show-preferences", self._do_show_preferences)
@@ -991,3 +999,11 @@ class vmmEngine(vmmGObject):
         logging.debug("Resetting vm '%s'", vm.get_name())
         vmmAsyncJob.simple_async_noshow(vm.reset, [], src,
                                         _("Error resetting domain"))
+
+    def _do_delete_domain(self, src, uri, uuid):
+        conn = self._lookup_conn(uri)
+        vm = conn.get_vm(uuid)
+
+        if not self.delete_dialog:
+            self.delete_dialog = vmmDeleteDialog()
+        self.delete_dialog.show(vm, src.topwin)

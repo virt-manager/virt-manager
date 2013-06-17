@@ -32,7 +32,6 @@ from virtManager import packageutils
 from virtManager import uihelpers
 from virtManager.connection import vmmConnection
 from virtManager.baseclass import vmmGObjectUI
-from virtManager.delete import vmmDeleteDialog
 from virtManager.graphwidgets import CellRendererSparkline
 from virtManager import util as util
 
@@ -95,6 +94,7 @@ class vmmManager(vmmGObjectUI):
         "action-destroy-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-save-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-migrate-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-delete-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-clone-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
         "manager-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
@@ -106,7 +106,6 @@ class vmmManager(vmmGObjectUI):
     def __init__(self):
         vmmGObjectUI.__init__(self, "vmm-manager.ui", "vmm-manager")
 
-        self.delete_dialog = None
         self.ignore_pause = False
 
         # Mapping of VM UUID -> tree model rows to
@@ -226,10 +225,6 @@ class vmmManager(vmmGObjectUI):
         self.guestcpucol = None
         self.hostcpucol = None
         self.netcol = None
-
-        if self.delete_dialog:
-            self.delete_dialog.cleanup()
-            self.delete_dialog = None
 
         self.vmmenu.destroy()
         self.vmmenu = None
@@ -586,7 +581,7 @@ class vmmManager(vmmGObjectUI):
         if vm is None:
             self._do_delete_conn(conn)
         else:
-            self._do_delete_vm(vm)
+            self.emit("action-delete-domain", conn.get_uri(), vm.get_uuid())
 
     def _do_delete_conn(self, conn):
         if conn is None:
@@ -598,14 +593,6 @@ class vmmManager(vmmGObjectUI):
             return
 
         self.emit("remove-conn", conn.get_uri())
-
-    def _do_delete_vm(self, vm):
-        if vm.is_active():
-            return
-
-        if not self.delete_dialog:
-            self.delete_dialog = vmmDeleteDialog()
-        self.delete_dialog.show(vm, self.topwin)
 
     def set_pause_state(self, state):
         src = self.widget("vm-pause")

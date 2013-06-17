@@ -184,6 +184,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Virtual _Machine</property>
                 <property name="use_underline">True</property>
+                <signal name="activate" handler="on_details_menu_vm" swapped="no"/>
                 <child type="submenu">
                   <object class="GtkMenu" id="virtual_machine1_menu">
                     <property name="can_focus">False</property>
@@ -309,6 +310,21 @@
                     </child>
                     <child>
                       <object class="GtkSeparatorMenuItem" id="separator12">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="details-menu-delete">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">_Delete...</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_details_menu_delete_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="separator2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>

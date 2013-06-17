@@ -329,6 +329,7 @@ class vmmDetails(vmmGObjectUI):
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-view-manager": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-migrate-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-delete-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-clone-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "details-closed": (GObject.SignalFlags.RUN_FIRST, None, []),
         "details-opened": (GObject.SignalFlags.RUN_FIRST, None, []),
@@ -403,6 +404,7 @@ class vmmDetails(vmmGObjectUI):
             "on_details_customize_finish_clicked": self.customize_finish,
             "on_details_cancel_customize_clicked": self.close,
 
+            "on_details_menu_vm": self.update_vm_menu,
             "on_details_menu_run_activate": self.control_vm_run,
             "on_details_menu_poweroff_activate": self.control_vm_shutdown,
             "on_details_menu_reboot_activate": self.control_vm_reboot,
@@ -412,6 +414,7 @@ class vmmDetails(vmmGObjectUI):
             "on_details_menu_pause_activate": self.control_vm_pause,
             "on_details_menu_clone_activate": self.control_vm_clone,
             "on_details_menu_migrate_activate": self.control_vm_migrate,
+            "on_details_menu_delete_activate": self.control_vm_delete,
             "on_details_menu_screenshot_activate": self.control_vm_screenshot,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
             "on_details_menu_view_manager_activate": self.view_manager,
@@ -1548,6 +1551,10 @@ class vmmDetails(vmmGObjectUI):
                       self.vm.get_uuid())
 
 
+    def update_vm_menu(self, src_ignore):
+        delete = bool(self.vm and self.vm.is_runable())
+        self.widget("details-menu-delete").set_sensitive(delete)
+
     def control_vm_run(self, src_ignore):
         self.emit("action-run-domain",
                   self.vm.conn.get_uri(), self.vm.get_uuid())
@@ -1578,6 +1585,10 @@ class vmmDetails(vmmGObjectUI):
 
     def control_vm_migrate(self, src_ignore):
         self.emit("action-migrate-domain",
+                  self.vm.conn.get_uri(), self.vm.get_uuid())
+
+    def control_vm_delete(self, src_ignore):
+        self.emit("action-delete-domain",
                   self.vm.conn.get_uri(), self.vm.get_uuid())
 
     def control_vm_screenshot(self, src):
