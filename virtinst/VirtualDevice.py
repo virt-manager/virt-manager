@@ -1,7 +1,7 @@
 #
 # Base class for all VM devices
 #
-# Copyright 2008  Red Hat, Inc.
+# Copyright 2008, 2013  Red Hat, Inc.
 # Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -267,14 +267,17 @@ class VirtualDeviceAddress(XMLBuilderDomain):
         if not self.type:
             return
 
+        def format_props(*args):
+            return "".join([" %s='%s'" % (k, getattr(self, k)) for k in args if getattr(self, k, None) is not None])
+
         xml = "<address type='%s'" % self.type
         if self.type == self.ADDRESS_TYPE_PCI:
-            xml += " domain='%s' bus='%s' slot='%s' function='%s'" % (self.domain, self.bus, self.slot, self.function)
+            xml += format_props("domain", "bus", "slot", "function")
         elif self.type == self.ADDRESS_TYPE_DRIVE:
-            xml += " controller='%s' bus='%s' unit='%s'" % (self.controller, self.bus, self.unit)
+            xml += format_props("controller", "bus", "unit")
         elif self.type == self.ADDRESS_TYPE_VIRTIO_SERIAL:
-            xml += " controller='%s' bus='%s' port='%s'" % (self.controller, self.bus, self.port)
+            xml += format_props("controller", "bus", "port")
         elif self.type == self.ADDRESS_TYPE_CCID:
-            xml += " controller='%s' slot='%s'" % (self.controller, self.slot)
+            xml += format_props("controller", "slot")
         xml += "/>"
         return xml

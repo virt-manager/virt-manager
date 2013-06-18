@@ -38,6 +38,7 @@
       <driver name='qemu' type='qcow2'/>
       <source file='/default-pool/testvol1.img'/>
       <target dev='sdb' bus='scsi'/>
+      <address type='spapr-vio'/>
     </disk>
     <controller type='scsi' index='0'>
       <address type='spapr-vio'/>
