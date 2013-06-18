@@ -301,6 +301,8 @@ class vmmAsyncJob(vmmGObjectUI):
         else:
             self._bg_thread.run()
 
+        GLib.source_remove(timer)
+
         self.topwin.destroy()
         self.cleanup()
         return self._error_info or (None, None)
