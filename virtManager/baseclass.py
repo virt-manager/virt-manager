@@ -18,9 +18,10 @@
 # MA 02110-1301 USA.
 #
 
+import logging
 import os
 import sys
-import logging
+import traceback
 
 import virtManager
 
@@ -93,7 +94,6 @@ class vmmGObject(GObject.GObject):
         self._gobject_timeouts.remove(handle)
 
     def _logtrace(self, msg=""):
-        import traceback
         if msg:
             msg += " "
         logging.debug("%s(%s %s)\n:%s",
@@ -145,13 +145,25 @@ class vmmGObject(GObject.GObject):
         """
         Make sure idle functions are run thread safe
         """
-        return GLib.idle_add(func, *args)
+        def cb():
+            try:
+                return func(*args)
+            except:
+                print traceback.format_exc()
+            return False
+        return GLib.idle_add(cb)
 
     def timeout_add(self, timeout, func, *args):
         """
         Make sure timeout functions are run thread safe
         """
-        ret = GLib.timeout_add(timeout, func, *args)
+        def cb():
+            try:
+                return func(*args)
+            except:
+                print traceback.format_exc()
+            return False
+        ret = GLib.timeout_add(timeout, cb)
         self.add_gobject_timeout(ret)
         return ret
 
