@@ -404,7 +404,6 @@ class vmmDetails(vmmGObjectUI):
             "on_details_customize_finish_clicked": self.customize_finish,
             "on_details_cancel_customize_clicked": self.close,
 
-            "on_details_menu_vm": self.update_vm_menu,
             "on_details_menu_run_activate": self.control_vm_run,
             "on_details_menu_poweroff_activate": self.control_vm_shutdown,
             "on_details_menu_reboot_activate": self.control_vm_reboot,
@@ -1550,10 +1549,6 @@ class vmmDetails(vmmGObjectUI):
                       self.vm.conn.get_uri(),
                       self.vm.get_uuid())
 
-
-    def update_vm_menu(self, src_ignore):
-        delete = bool(self.vm and self.vm.is_runable())
-        self.widget("details-menu-delete").set_sensitive(delete)
 
     def control_vm_run(self, src_ignore):
         self.emit("action-run-domain",

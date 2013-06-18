@@ -651,7 +651,10 @@ class vmmConsolePages(vmmGObjectUI):
         self.page_changed()
 
     def is_visible(self):
-        return self.topwin.get_visible()
+        if self.topwin:
+            return self.topwin.get_visible()
+        else:
+            return False
 
     def _cleanup(self):
         self.vm = None
@@ -892,6 +895,9 @@ class vmmConsolePages(vmmGObjectUI):
     ##########################
 
     def view_vm_status(self):
+        if not self.vm:
+            # window has been closed and no pages to update are available.
+            return
         status = self.vm.status()
         if status == libvirt.VIR_DOMAIN_SHUTOFF:
             self.activate_unavailable_page(_("Guest not running"))
@@ -900,7 +906,6 @@ class vmmConsolePages(vmmGObjectUI):
                 self.activate_unavailable_page(_("Guest has crashed"))
 
     def close_viewer(self):
-        viewport = self.widget("console-gfx-viewport")
         if self.viewer is None:
             return
 
@@ -908,6 +913,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.viewer = None
         w = v.display
 
+        viewport = self.widget("console-gfx-viewport")
         if w and w in viewport.get_children():
             viewport.remove(w)
 

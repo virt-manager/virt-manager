@@ -1045,15 +1045,12 @@ class vmmManager(vmmGObjectUI):
         self.widget("vm-run").set_label(strip_text)
 
     def vm_selected(self, ignore=None):
-        conn = self.current_conn()
         vm = self.current_vm()
 
         show_open = bool(vm)
         show_details = bool(vm)
         host_details = bool(len(self.rows))
 
-        delete = bool((vm and vm.is_runable()) or
-                      (not vm and conn))
         show_run = bool(vm and vm.is_runable())
         is_paused = bool(vm and vm.is_paused())
         if is_paused:
@@ -1073,7 +1070,6 @@ class vmmManager(vmmGObjectUI):
 
         self.widget("menu_edit_details").set_sensitive(show_details)
         self.widget("menu_host_details").set_sensitive(host_details)
-        self.widget("menu_edit_delete").set_sensitive(delete)
 
     def popup_vm_menu_key(self, widget_ignore, event):
         if Gdk.keyval_name(event.keyval) != "Menu":
@@ -1118,7 +1114,6 @@ class vmmManager(vmmGObjectUI):
             self.vmmenu_items["resume"].set_sensitive(paused)
             self.vmmenu_items["migrate"].set_sensitive(stop)
             self.vmmenu_items["clone"].set_sensitive(not ro)
-            self.vmmenu_items["delete"].set_sensitive(run)
 
             self.vmmenushutdown_items["poweroff"].set_sensitive(stop)
             self.vmmenushutdown_items["reboot"].set_sensitive(stop)

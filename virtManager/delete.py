@@ -99,6 +99,10 @@ class vmmDeleteDialog(vmmGObjectUI):
 
         self.widget("delete-cancel").grab_focus()
 
+        # Show warning message if VM is running
+        vm_active = self.vm.is_active()
+        self.widget("delete-warn-running-vm-box").set_visible(vm_active)
+
         # Disable storage removal by default
         self.widget("delete-remove-storage").set_active(True)
         self.widget("delete-remove-storage").toggled()
@@ -169,6 +173,10 @@ class vmmDeleteDialog(vmmGObjectUI):
         details = ""
 
         try:
+            if self.vm.is_active():
+                logging.debug("Forcing VM '%s' power off.", self.vm.get_name())
+                self.vm.destroy()
+
             # Open a seperate connection to install on since this is async
             logging.debug("Threading off connection to delete vol.")
             newconn = util.dup_conn(self.conn).vmm
