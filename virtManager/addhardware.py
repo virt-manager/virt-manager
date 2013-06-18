@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2007 Red Hat, Inc.
+# Copyright (C) 2006-2007, 2013 Red Hat, Inc.
 # Copyright (C) 2006 Hugh O. Brock <hbrock@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -1340,8 +1340,15 @@ class vmmAddHardware(vmmGObjectUI):
             controller.set_model(controller_model)
             disk.vmm_controller = controller
             for d in controllers:
+                if controller.type == d.type:
+                    controller.index += 1
                 if controller_model == d.model:
                     disk.vmm_controller = None
+                    controller = d
+                    break
+
+            disk.address.type = disk.address.ADDRESS_TYPE_DRIVE
+            disk.address.controller = controller.index
 
         self._dev = disk
         return True
