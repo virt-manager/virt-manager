@@ -265,6 +265,8 @@ class vmmEngine(vmmGObject):
             self.windowCreate.close()
 
     def reschedule_timer(self, *args, **kwargs):
+        ignore = args
+        ignore = kwargs
         self.schedule_timer()
 
     def schedule_timer(self):
