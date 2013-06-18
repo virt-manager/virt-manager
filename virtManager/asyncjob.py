@@ -301,8 +301,6 @@ class vmmAsyncJob(vmmGObjectUI):
         else:
             self._bg_thread.run()
 
-        GLib.source_remove(timer)
-
         self.topwin.destroy()
         self.cleanup()
         return self._error_info or (None, None)
@@ -328,17 +326,23 @@ class vmmAsyncJob(vmmGObjectUI):
 
     @idle_wrapper
     def _pbar_do_pulse(self):
+        if not self.builder:
+            return
         self.widget("pbar").pulse()
 
     @idle_wrapper
     def _pbar_pulse(self, progress="", stage=None):
         self._is_pulsing = True
+        if not self.builder:
+            return
         self.widget("pbar").set_text(progress)
         self._set_stage_text(stage or _("Processing..."))
 
     @idle_wrapper
     def _pbar_fraction(self, frac, progress, stage=None):
         self._is_pulsing = False
+        if not self.builder:
+            return
         self._set_stage_text(stage or _("Processing..."))
         self.widget("pbar").set_text(progress)
 
@@ -351,6 +355,8 @@ class vmmAsyncJob(vmmGObjectUI):
     @idle_wrapper
     def _pbar_done(self, progress, stage=None):
         self._is_pulsing = False
+        if not self.builder:
+            return
         self._set_stage_text(stage or _("Completed"))
         self.widget("pbar").set_text(progress)
         self.widget("pbar").set_fraction(1)
