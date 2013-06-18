@@ -1,7 +1,7 @@
 #
 # Classes for building disk device xml
 #
-# Copyright 2006-2008, 2012  Red Hat, Inc.
+# Copyright 2006-2008, 2012-2013  Red Hat, Inc.
 # Jeremy Katz <katzj@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -1565,21 +1565,24 @@ class VirtualDisk(VirtualDevice):
         if (self.iotune_rbs or self.iotune_ris or
             self.iotune_tbs or self.iotune_tis or
             self.iotune_wbs or self.iotune_wis):
-            ret += "      <iotune>"
+            ret += "      <iotune>\n"
             if self.iotune_rbs:
-                ret += "        <read_bytes_sec>%s</read_bytes_sec>" % (self.iotune_rbs)
+                ret += "        <read_bytes_sec>%s</read_bytes_sec>\n" % (self.iotune_rbs)
             if self.iotune_ris:
-                ret += "        <read_iops_sec>%s</read_iops_sec>" % (self.iotune_ris)
+                ret += "        <read_iops_sec>%s</read_iops_sec>\n" % (self.iotune_ris)
             if self.iotune_tbs:
-                ret += "        <total_bytes_sec>%s</total_bytes_sec>" % (self.iotune_tbs)
+                ret += "        <total_bytes_sec>%s</total_bytes_sec>\n" % (self.iotune_tbs)
             if self.iotune_tis:
-                ret += "        <total_iops_sec>%s</total_iops_sec>" % (self.iotune_tis)
+                ret += "        <total_iops_sec>%s</total_iops_sec>\n" % (self.iotune_tis)
             if self.iotune_wbs:
-                ret += "        <write_bytes_sec>%s</write_bytes_sec>" % (self.iotune_wbs)
+                ret += "        <write_bytes_sec>%s</write_bytes_sec>\n" % (self.iotune_wbs)
             if self.iotune_wis:
-                ret += "        <write_iops_sec>%s</write_iops_sec>" % (self.iotune_wis)
-            ret += "      </iotune>"
+                ret += "        <write_iops_sec>%s</write_iops_sec>\n" % (self.iotune_wis)
+            ret += "      </iotune>\n"
 
+        addr = self.indent(self.address.get_xml_config(), 6)
+        if addr:
+            ret += addr
         ret += "    </disk>"
         return ret
 
