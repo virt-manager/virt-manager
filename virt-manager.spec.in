@@ -213,6 +213,17 @@ fi
 
 
 %changelog
+* Wed Jun 19 2013 Cole Robinson <crobinso@redhat.com> - 0.10.0-1
+- virt-manager release 0.10.0
+- Merged code with python-virtinst. virtinst is no longer public
+- Port from GTK2 to GTK3 (Daniel Berrange, Cole Robinson)
+- Port from gconf to gsettings
+- Port from autotools to python distutils
+- Remove virt-manager-tui
+- Remove HAL support
+- IPv6 and static route virtual network support (Gene Czarcinski)
+- virt-install: Add --cpu host-passthrough (Ken ICHIKAWA, Hu Tao)
+
 * Mon Apr 01 2013 Cole Robinson <crobinso@redhat.com> - 0.9.5-1
 - virt-manager release 0.9.5
 - Enable adding virtio-scsi disks (Chen Hanxiao)
