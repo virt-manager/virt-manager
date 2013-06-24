@@ -207,12 +207,9 @@ class vmmEngine(vmmGObject):
             manager.set_startup_error(msg)
             return
 
-        warnmsg = _("virt-manager will connect to libvirt on the next\n"
-            "application start up.")
-        if any(["libvirt" in p for p in ret or []]):
-            warnmsg = _(
-              "Libvirt was just installed, so the 'libvirtd' service will\n"
-              "will need to be started.") + "\n\n" + warnmsg
+        warnmsg = _("The 'libvirtd' service will need to be started.\n\n"
+                    "After that, virt-manager will connect to libvirt on\n"
+                    "the next application start up.")
 
         # Do the initial connection in an idle callback, so the
         # packagekit async dialog has a chance to go away
