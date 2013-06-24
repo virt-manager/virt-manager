@@ -286,6 +286,7 @@ class VNCViewer(Viewer):
         Viewer.__init__(self, console)
         self.display = GtkVnc.Display.new()
         self.sockfd = None
+        self.type = "vnc"
 
         # Last noticed desktop resolution
         self.desktop_resolution = None
@@ -446,6 +447,7 @@ class SpiceViewer(Viewer):
         self.display = None
         self.audio = None
         self.display_channel = None
+        self.type = "spice"
 
     def _init_widget(self):
         self.set_grab_keys()
@@ -593,6 +595,22 @@ class SpiceViewer(Viewer):
             logging.debug("Spice version doesn't support scaling.")
             return
         self.display.set_property("scaling", scaling)
+
+    def get_usb_widget(self):
+
+        # The @format positional parameters are the following:
+        # 1 '%s' manufacturer
+        # 2 '%s' product
+        # 3 '%s' descriptor (a [vendor_id:product_id] string)
+        # 4 '%d' bus
+        # 5 '%d' address
+
+        usb_device_description_fmt = _("%s %s %s at %d-%d")
+
+        if self.spice_session:
+            return SpiceClientGtk.UsbDeviceWidget.new(self.spice_session,
+                                                      usb_device_description_fmt)
+        return
 
 
 class vmmConsolePages(vmmGObjectUI):
@@ -955,11 +973,13 @@ class vmmConsolePages(vmmGObjectUI):
         self.close_viewer()
         self.widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
         self.widget("details-menu-vm-screenshot").set_sensitive(False)
+        self.widget("details-menu-usb-redirection").set_sensitive(False)
         self.widget("console-unavailable").set_label("<b>" + msg + "</b>")
 
     def activate_auth_page(self, withPassword=True, withUsername=False):
         (pw, username) = self.config.get_console_password(self.vm)
         self.widget("details-menu-vm-screenshot").set_sensitive(False)
+        self.widget("details-menu-usb-redirection").set_sensitive(False)
 
         if withPassword:
             self.widget("console-auth-password").show()
@@ -998,6 +1018,9 @@ class vmmConsolePages(vmmGObjectUI):
         self.widget("details-menu-vm-screenshot").set_sensitive(True)
         if self.viewer and self.viewer.display:
             self.viewer.display.grab_focus()
+
+            if self.viewer.type == "spice":
+                self.widget("details-menu-usb-redirection").set_sensitive(True)
 
     def page_changed(self, ignore1=None, ignore2=None, ignore3=None):
         self.set_allow_fullscreen()

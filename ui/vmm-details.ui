@@ -337,6 +337,21 @@
                         <signal name="activate" handler="on_details_menu_screenshot_activate" swapped="no"/>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="separator13">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="details-menu-usb-redirection">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">_Select USB devices to redirect</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_details_menu_usb_redirection" swapped="no"/>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
