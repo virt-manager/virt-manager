@@ -724,6 +724,19 @@ class XMLParseTest(unittest.TestCase):
 
         self._alter_compare(guest.get_xml_config(), outfile)
 
+    def testAlterTPM(self):
+        infile  = "tests/xmlparse-xml/change-tpm-in.xml"
+        outfile = "tests/xmlparse-xml/change-tpm-out.xml"
+        guest = virtinst.Guest(conn=conn,
+                               parsexml=file(infile).read())
+
+        dev1 = guest.get_devices("tpm")[0]
+
+        check = self._make_checker(dev1)
+        check("model", "tpm-tis", "tpm-tis")
+
+        self._alter_compare(guest.get_xml_config(), outfile)
+
     def testConsoleCompat(self):
         infile  = "tests/xmlparse-xml/console-compat-in.xml"
         outfile = "tests/xmlparse-xml/console-compat-out.xml"

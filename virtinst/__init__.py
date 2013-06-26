@@ -38,6 +38,7 @@ from virtinst.VirtualFilesystem import VirtualFilesystem
 from virtinst.VirtualSmartCardDevice import VirtualSmartCardDevice
 from virtinst.VirtualRedirDevice import VirtualRedirDevice
 from virtinst.VirtualMemballoon import VirtualMemballoon
+from virtinst.VirtualTPMDevice import VirtualTPMDevice
 from virtinst.DistroInstaller import DistroInstaller
 from virtinst.PXEInstaller import PXEInstaller
 from virtinst.LiveCDInstaller import LiveCDInstaller
