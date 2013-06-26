@@ -55,6 +55,7 @@ def compare_device(origdev, newdev, idx):
         "filesystem" : ["target" , "vmmindex"],
         "smartcard" : ["mode" , "vmmindex"],
         "redirdev" : ["bus" , "type", "vmmindex"],
+        "tpm"       : ["type" , "vmmindex"],
     }
 
     if id(origdev) == id(newdev):
@@ -824,6 +825,13 @@ class vmmDomain(vmmLibvirtObject):
 
         return self._redefine_device(change, devobj)
 
+    # TPM define methods
+
+    def define_tpm_type(self, devobj, newtype):
+        def change(editdev):
+            editdev.type = newtype
+        return self._redefine_device(change, devobj)
+
 
 
     ####################
@@ -1079,6 +1087,8 @@ class vmmDomain(vmmLibvirtObject):
         return self._build_device_list("smartcard")
     def get_redirdev_devices(self):
         return self._build_device_list("redirdev")
+    def get_tpm_devices(self):
+        return self._build_device_list("tpm")
 
     def get_disk_devices(self, refresh_if_necc=True, inactive=False):
         devs = self._build_device_list("disk", refresh_if_necc, inactive)
