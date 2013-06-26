@@ -429,6 +429,15 @@ vinst.add_invalid("smartcard", "--smartcard passthrough,type=foo")  # Invalid ty
 vinst.add_invalid("smartcard", "--smartcard host,foobar=baz")  # --smartcard bogus
 
 
+vinst.add_category("tpm", "--noautoconsole --nodisks --pxe")
+vinst.add_valid("tpm", "--tpm passthrough")  # --tpm passthrough
+vinst.add_valid("tpm", "--tpm passthrough,model=tpm-tis")  # --tpm backend type with model
+vinst.add_valid("tpm", "--tpm passthrough,model=tpm-tis,path=/dev/tpm0")  # --tpm backend type with model and device path
+vinst.add_invalid("tpm", "--tpm")  # Missing argument
+vinst.add_invalid("tpm", "--tpm foo")  # Invalid argument
+vinst.add_invalid("tpm", "--tpm passthrough,model=foo")  # Invalid model
+
+
 vinst.add_category("xen", "--connect %(XENURI)s --noautoconsole")
 vinst.add_compare("xen", "--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
 vinst.add_compare("xen", "--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt", "xen-pv")  # Xen PV
@@ -461,7 +470,7 @@ vinst.add_category("misc", "--nographics --noautoconsole")
 vinst.add_compare("misc", "", "noargs-fail")  # No arguments
 vinst.add_compare("misc", "--hvm --nodisks --pxe --print-step all", "simple-pxe")  # Diskless PXE install
 vinst.add_compare("misc", "--hvm --cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --vcpus cores=4", "w2k3-cdrom")  # HVM windows install with disk
-vinst.add_compare("misc", """--hvm --pxe --controller usb,model=ich9-ehci1,address=0:0:4.7,index=0 --controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0 --controller usb,model=ich9-uhci2,address=0:0:4.1,index=0,master=2 --controller usb,model=ich9-uhci3,address=0:0:4.2,index=0,master=4 --disk %(MANAGEDEXISTUPPER)s,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149 --disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace --disk device=cdrom,bus=sata --serial tcp,host=:2222,mode=bind,protocol=telnet --filesystem /source,/target,mode=squash --network user,mac=12:34:56:78:11:22 --network bridge=foobar,model=virtio --channel spicevmc --smartcard passthrough,type=spicevmc --security type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes  --numatune \\"1-3,5\\",mode=preferred --boot loader=/foo/bar """, "many-devices")  # Lot's of devices
+vinst.add_compare("misc", """--hvm --pxe --controller usb,model=ich9-ehci1,address=0:0:4.7,index=0 --controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0 --controller usb,model=ich9-uhci2,address=0:0:4.1,index=0,master=2 --controller usb,model=ich9-uhci3,address=0:0:4.2,index=0,master=4 --disk %(MANAGEDEXISTUPPER)s,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149 --disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace --disk device=cdrom,bus=sata --serial tcp,host=:2222,mode=bind,protocol=telnet --filesystem /source,/target,mode=squash --network user,mac=12:34:56:78:11:22 --network bridge=foobar,model=virtio --channel spicevmc --smartcard passthrough,type=spicevmc --tpm passthrough,model=tpm-tis,path=/dev/tpm0 --security type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes  --numatune \\"1-3,5\\",mode=preferred --boot loader=/foo/bar """, "many-devices")  # Lot's of devices
 vinst.add_compare("misc", "--connect %(DEFAULTURI)s --hvm --nodisks --pxe --cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
 vinst.add_valid("misc", "--hvm --disk path=virt-install,device=cdrom")  # Specifying cdrom media via --disk
 vinst.add_valid("misc", "--hvm --import --disk path=virt-install")  # FV Import install

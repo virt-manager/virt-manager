@@ -76,6 +76,11 @@
     </channel>
     <smartcard mode='passthrough' type='spicevmc'>
     </smartcard>
+    <tpm model='tpm-tis'>
+      <backend type='passthrough'>
+        <device path='/dev/tpm0'/>
+      </backend>
+    </tpm>
   </devices>
   <seclabel type='static' model='testSecurity' relabel='yes'>
     <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>
@@ -158,6 +163,11 @@
     </channel>
     <smartcard mode='passthrough' type='spicevmc'>
     </smartcard>
+    <tpm model='tpm-tis'>
+      <backend type='passthrough'>
+        <device path='/dev/tpm0'/>
+      </backend>
+    </tpm>
   </devices>
   <seclabel type='static' model='testSecurity' relabel='yes'>
     <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>

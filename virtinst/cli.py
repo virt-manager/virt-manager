@@ -1042,6 +1042,17 @@ def get_smartcard(guest, sc_opts):
             guest.add_device(dev)
 
 
+def get_tpm(guest, tpm_opts):
+    for tpm in listify(tpm_opts):
+        try:
+            dev = parse_tpm(guest, tpm)
+        except Exception, e:
+            fail(_("Error in TPM device parameters: %s") % str(e))
+
+        if dev:
+            guest.add_device(dev)
+
+
 def get_controller(guest, sc_opts):
     for sc in listify(sc_opts):
         try:
@@ -1178,6 +1189,9 @@ def add_device_options(devg):
     devg.add_option("", "--memballoon", dest="memballoon", action="append",
                     help=_("Configure a guest memballoon device. Ex:\n"
                            "--memballoon model=virtio"))
+    devg.add_option("", "--tpm", dest="tpm", action="append",
+                    help=_("Configure a guest TPM device. Ex:\n"
+                           "--tpm type=passthrough"))
 
 
 def add_gfx_option(devg):
@@ -1895,6 +1909,34 @@ def parse_redirdev(guest, optstring, dev=None):
 
     if server:
         dev.parse_friendly_server(server)
+
+    if opts:
+        raise ValueError(_("Unknown options %s") % opts.keys())
+
+    return dev
+
+#######################
+# --tpm parsing #
+#######################
+
+
+def parse_tpm(guest, optstring, dev=None):
+    if optstring is None:
+        return None
+
+    # Peel the type off the front
+    opts = parse_optstr(optstring, remove_first="type")
+    if opts.get("type") == "none":
+        return None
+
+    if not dev:
+        dev = virtinst.VirtualTPMDevice(guest.conn, opts.get("type"))
+
+    set_param = _build_set_param(dev, opts)
+
+    set_param("model", "model")
+    set_param("type", "type")
+    set_param("path", "path")
 
     if opts:
         raise ValueError(_("Unknown options %s") % opts.keys())

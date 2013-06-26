@@ -546,6 +546,7 @@ def build_guest_instance(conn, options):
                  guest, cli.parse_console)
     cli.get_hostdevs(options.hostdevs, guest)
     cli.get_smartcard(guest, options.smartcard)
+    cli.get_tpm(guest, options.tpm)
 
 
     # Install options

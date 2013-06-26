@@ -1175,6 +1175,34 @@ Do not use memballoon device:
 
 --memballoon none
 
+=item --tpm=TYPE[,OPTS]
+
+Configure a virtual TPM device.
+
+Type must be B<passthrough>. Additional options are:
+
+=over 4
+
+=item B<model>
+
+The device model to present to the guest operating system. Model
+must be B<tpm-tis>.
+
+=back
+
+An example invocation:
+
+=over 4
+
+=item B<--tpm passthrough,model=tpm-tis>
+
+Make the host's TPM accessible to a single guest.
+
+=back
+
+See C<http://libvirt.org/formatdomain.html#elementsTpm> for complete
+details.
+
 =back
 
 =head2 Miscellaneous Options
