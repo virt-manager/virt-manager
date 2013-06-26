@@ -30,7 +30,7 @@ import virtinst
 from virtinst import (VirtualCharDevice,
                       VirtualVideoDevice, VirtualWatchdog,
                       VirtualFilesystem, VirtualSmartCardDevice,
-                      VirtualRedirDevice)
+                      VirtualRedirDevice, VirtualTPMDevice)
 from virtinst.VirtualController import VirtualControllerSCSI
 
 import virtManager.util as util
@@ -52,6 +52,7 @@ PAGE_WATCHDOG = 9
 PAGE_FILESYSTEM = 10
 PAGE_SMARTCARD = 11
 PAGE_USBREDIR = 12
+PAGE_TPM = 13
 
 char_widget_mappings = {
     "source_path" : "char-path",
@@ -62,6 +63,11 @@ char_widget_mappings = {
     "bind_host" : "char-bind-host",
     "protocol"  : "char-use-telnet",
     "target_name" : "char-target-name",
+}
+
+
+tpm_widget_mappings = {
+    "device_path" : "tpm-device-path",
 }
 
 
@@ -94,6 +100,8 @@ class vmmAddHardware(vmmGObjectUI):
             "on_graphics_keymap_toggled": self.change_keymap,
 
             "on_char_device_type_changed": self.change_char_device_type,
+
+            "on_tpm_device_type_changed": self.change_tpm_device_type,
 
             "on_fs_type_combo_changed": self.change_fs_type,
             "on_fs_driver_combo_changed": self.change_fs_driver,
@@ -347,6 +355,10 @@ class vmmAddHardware(vmmGObjectUI):
         combo = self.widget("usbredir-list")
         uihelpers.build_redir_type_combo(self.vm, combo)
 
+        # TPM widgets
+        combo = self.widget("tpm-type")
+        uihelpers.build_tpm_type_combo(self.vm, combo)
+
         # Available HW options
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
@@ -412,6 +424,8 @@ class vmmAddHardware(vmmGObjectUI):
         add_hw_option("Smartcard", "device_serial", PAGE_SMARTCARD,
                       True, None)
         add_hw_option("USB Redirection", "device_usb", PAGE_USBREDIR,
+                      True, None)
+        add_hw_option("TPM", "device_cpu", PAGE_TPM,
                       True, None)
 
     def reset_state(self):
@@ -808,6 +822,12 @@ class vmmAddHardware(vmmGObjectUI):
         typebox = self.widget("usbredir-list")
         return typebox.get_model()[typebox.get_active()][0]
 
+    # TPM getters
+    def get_config_tpm_type(self):
+        typ = self.widget("tpm-type")
+        typestr = typ.get_model().get_value(typ.get_active_iter(), 0)
+        return typestr
+
     ################
     # UI listeners #
     ################
@@ -1006,6 +1026,8 @@ class vmmAddHardware(vmmGObjectUI):
             return _("Smartcard")
         if page == PAGE_USBREDIR:
             return _("USB Redirection")
+        if page == PAGE_TPM:
+            return _("TPM")
 
         if page == PAGE_CHAR:
             return self.get_char_type().capitalize() + " Device"
@@ -1019,6 +1041,29 @@ class vmmAddHardware(vmmGObjectUI):
         markup = ("""<span weight="heavy" size="xx-large" """
                   """foreground="#FFF">%s</span>""") % title
         self.widget("page-title-label").set_markup(markup)
+
+    def change_tpm_device_type(self, src):
+        idx = src.get_active()
+        if idx < 0:
+            return
+
+        devtype = src.get_model()[src.get_active()][0]
+        conn = self.conn.vmm
+
+        self._dev = VirtualTPMDevice.get_dev_instance(conn,
+                                                      devtype)
+
+        show_something = False
+        for param_name, widget_name in tpm_widget_mappings.items():
+            make_visible = self._dev.supports_property(param_name)
+            if make_visible:
+                show_something = True
+
+            self.widget(widget_name).set_property("visible", make_visible)
+            self.widget(widget_name + "-label").set_property("visible",
+                                                             make_visible)
+
+        self.widget("tpm-param-box").set_property("visible", show_something)
 
     def change_char_device_type(self, src):
         self._update_doc("char_type")
@@ -1229,6 +1274,8 @@ class vmmAddHardware(vmmGObjectUI):
             return self.validate_page_smartcard()
         elif page_num == PAGE_USBREDIR:
             return self.validate_page_usbredir()
+        elif page_num == PAGE_TPM:
+            return self.validate_page_tpm()
 
     def validate_page_storage(self):
         bus, device = self.get_config_disk_target()
@@ -1577,6 +1624,27 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("USB redirected device parameter error"),
                                     str(e))
 
+    def validate_page_tpm(self):
+        conn = self.conn.vmm
+        typ = self.get_config_tpm_type()
+
+        device_path = self.widget("tpm-device-path").get_text()
+
+        value_mappings = {
+            "device_path" : device_path,
+        }
+
+        try:
+            self._dev = VirtualTPMDevice.get_dev_instance(conn, typ)
+
+            for param_name, val in value_mappings.items():
+                if self._dev.supports_property(param_name):
+                    setattr(self._dev, param_name, val)
+
+            # Dump XML for sanity checking
+            self._dev.get_xml_config()
+        except Exception, e:
+            return self.err.val_err(_("TPM device parameter error"), e)
 
     ####################
     # Unsorted helpers #

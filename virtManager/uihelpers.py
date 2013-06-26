@@ -311,6 +311,36 @@ def populate_redir_type_combo(vm, combo):
     model.append(["tcp", "TCP", True])
 
 
+def build_tpm_type_combo(vm, combo):
+    dev_model = Gtk.ListStore(str, str)
+    combo.set_model(dev_model)
+    text = Gtk.CellRendererText()
+    combo.pack_start(text, True)
+    combo.add_attribute(text, 'text', 1)
+    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+
+    populate_tpm_type_combo(vm, combo)
+
+    idx = -1
+    for rowid in range(len(combo.get_model())):
+        idx = 0
+        row = combo.get_model()[rowid]
+        if row[0] == virtinst.VirtualTPMDevice.TYPE_DEFAULT:
+            idx = rowid
+            break
+    combo.set_active(idx)
+
+
+def populate_tpm_type_combo(vm, combo):
+    ignore = vm
+    types = combo.get_model()
+    types.clear()
+
+    # [xml value, label]
+    types.append(["passthrough", "Passthrough device (passthrough)"])
+
+
+
 def build_netmodel_combo(vm, combo):
     dev_model = Gtk.ListStore(str, str)
     combo.set_model(dev_model)
