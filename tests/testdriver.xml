@@ -291,6 +291,12 @@
       <usbdev class='-1' vendor='-1' product='-1' version='-1' allow='no'/>
     </redirfilter>
 
+    <!-- tpm devices -->
+    <tpm model='tpm-tis'>
+      <backend type='passthrough'>
+        <backend path='/dev/tpm0'/>
+      </backend>
+    </tpm>
 
   </devices>
 </domain>
@@ -550,29 +556,6 @@
   </devices>
 </domain>
 
-
-<domain type='test'>
-  <name>test-tpm-passthrough</name>
-  <uuid>0d2b6da9-3dba-42f2-b3ff-0a5341edf31f</uuid>
-  <memory>8388608</memory>
-  <currentMemory>2097152</currentMemory>
-  <vcpu>2</vcpu>
-  <os>
-    <type arch='i686'>hvm</type>
-    <boot dev='hd'/>
-  </os>
-  <clock offset='utc'/>
-  <on_poweroff>destroy</on_poweroff>
-  <on_reboot>restart</on_reboot>
-  <on_crash>destroy</on_crash>
-  <devices>
-    <tpm model='tpm-tis'>
-      <backend type='passthrough'>
-        <backend path='/dev/tpm0'/>
-      </backend>
-    </tpm>
-  </devices>
-</domain>
 
 
 

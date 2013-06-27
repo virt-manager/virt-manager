@@ -337,7 +337,7 @@ def populate_tpm_type_combo(vm, combo):
     types.clear()
 
     # [xml value, label]
-    types.append(["passthrough", "Passthrough device (passthrough)"])
+    types.append(["passthrough", "Passthrough device"])
 
 
 
