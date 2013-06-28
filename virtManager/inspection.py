@@ -21,6 +21,7 @@ from Queue import Queue, Empty
 from threading import Thread
 import logging
 import os
+import re
 
 from guestfs import GuestFS  # pylint: disable=F0401
 
@@ -144,6 +145,11 @@ class vmmInspection(vmmGObject):
                                       prettyvm)
 
     def _process(self, conn, vm, vmuuid):
+        if re.search(r"^guestfs-", vm.get_name()):
+            logging.debug("ignore libvirt/guestfs temporary VM %s",
+                          vm.get_name())
+            return
+
         g = GuestFS()
         prettyvm = conn.get_uri() + ":" + vm.get_name()
         ignore = vmuuid
