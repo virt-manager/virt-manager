@@ -418,7 +418,6 @@ class vmmDetails(vmmGObjectUI):
             "on_details_menu_migrate_activate": self.control_vm_migrate,
             "on_details_menu_delete_activate": self.control_vm_delete,
             "on_details_menu_screenshot_activate": self.control_vm_screenshot,
-            "on_details_menu_usb_redirection": self.control_vm_usb_redirection,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
             "on_details_menu_view_manager_activate": self.view_manager,
             "on_details_menu_view_details_toggled": self.details_console_changed,
@@ -1601,31 +1600,6 @@ class vmmDetails(vmmGObjectUI):
             return self._take_screenshot()
         except Exception, e:
             self.err.show_err(_("Error taking screenshot: %s") % str(e))
-
-    def spice_usbdev_rediret_error(self,
-                                   spice_usbdev_widget, spice_usb_device,
-                                   errstr):
-        ignore_widget = spice_usbdev_widget
-        ignore_device = spice_usb_device
-
-        self.err.show_err(_("USB redirection error"),
-                         text2=str(errstr),
-                         async=False)
-
-    def control_vm_usb_redirection(self, src):
-        ignore = src
-        spice_usbdev_dialog = self.err
-
-        spice_usbdev_widget = self.console.viewer.get_usb_widget()
-        if not spice_usbdev_widget:
-            self.err.show_err(_("Error initialize spice USB device widget"))
-            return
-
-        spice_usbdev_widget.connect("connect-failed",
-                                    self.spice_usbdev_rediret_error)
-        spice_usbdev_widget.show()
-        spice_usbdev_dialog.show_info_with_widget(_("Select USB devices for redirection"),
-                                                   widget=spice_usbdev_widget)
 
     def _take_screenshot(self):
         image = self.console.viewer.get_pixbuf()
