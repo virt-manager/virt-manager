@@ -977,8 +977,10 @@ class vmmManager(vmmGObjectUI):
             return
 
         row = self.rows[self.vm_row_key(vm)]
-        row[ROW_INSPECTION_OS_ICON] = \
-            self.get_inspection_icon_pixbuf(vm, 16, 16)
+        new_icon = self.get_inspection_icon_pixbuf(vm, 16, 16)
+        if not can_set_row_none:
+            new_icon = new_icon or ""
+        row[ROW_INSPECTION_OS_ICON] = new_icon
         model.row_changed(row.path, row.iter)
 
     def get_inspection_icon_pixbuf(self, vm, w, h):
