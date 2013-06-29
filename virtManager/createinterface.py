@@ -696,7 +696,7 @@ class vmmCreateInterface(vmmGObjectUI):
     def update_bridge_desc(self):
         delay, stp = self.get_config_bridge_params()
         txt  = "STP %s" % (stp and "on" or "off")
-        txt += ", delay %d sec" % int(delay)
+        txt += ", delay %.2f sec" % float(delay)
 
         self.widget("bridge-config-label").set_text(txt)
 
@@ -997,7 +997,7 @@ class vmmCreateInterface(vmmGObjectUI):
         stp = self.widget("bridge-stp").get_active()
 
         iobj.stp = stp
-        iobj.delay = int(delay)
+        iobj.delay = float(delay)
 
         return True
 
