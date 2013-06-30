@@ -77,6 +77,12 @@ class ConnectionInfo(object):
 
         return self.transport in ["ssh", "ext"]
 
+    def is_bad_localhost(self):
+        host, port = self.get_conn_host()
+        if self.need_tunnel():
+            return False
+        return self.transport and host == "127.0.0.1"
+
     def get_conn_host(self):
         host = self._connhost
         port = self._connport
@@ -1123,6 +1129,14 @@ class vmmConsolePages(vmmGObjectUI):
                      % ginfo.gtype)
 
             self.activate_unavailable_page(msg)
+            return
+
+        if ginfo.is_bad_localhost():
+            self.activate_unavailable_page(
+                        _("Guest is on a remote host with transport '%s'\n"
+                          "but is only configured to listen on 127.0.0.1.\n"
+                          "Connect using 'ssh' transport or change the\n"
+                          "guest's listen address." % ginfo.transport))
             return
 
         if ginfo.console_active():
