@@ -78,7 +78,7 @@ class ConnectionInfo(object):
         return self.transport in ["ssh", "ext"]
 
     def is_bad_localhost(self):
-        host, port = self.get_conn_host()
+        host, ignore = self.get_conn_host()
         if self.need_tunnel():
             return False
         return self.transport and host == "127.0.0.1"
