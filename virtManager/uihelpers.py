@@ -611,6 +611,12 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
         label = _("No virtual networks available")
         vnet_dict[label] = build_row(None, None, label, False, False)
 
+    vnet_taps = []
+    for vm in conn.vms.values():
+        for nic in vm.get_network_devices(refresh_if_necc=False):
+            if nic.target_dev and nic.target_dev not in vnet_taps:
+                vnet_taps.append(nic.target_dev)
+
     # Physical devices
     hasShared = False
     brIdxLabel = None
@@ -619,7 +625,10 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
         bridge_name = br.get_bridge()
         nettype = VirtualNetworkInterface.TYPE_BRIDGE
 
-        if (bridge_name in vnet_bridges) or (br.get_name() in vnet_bridges):
+        if ((bridge_name in vnet_bridges) or
+            (br.get_name() in vnet_bridges) or
+            (br.get_name() in vnet_taps) or
+            (br.get_name() in [v + "-nic" for v in vnet_bridges])):
             # Don't list this, as it is basically duplicating virtual net info
             continue
 
