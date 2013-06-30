@@ -381,16 +381,23 @@ class vmmHost(vmmGObjectUI):
         self.memory_usage_graph.set_property("data_array", memory_vector)
 
     def conn_state_changed(self, ignore1=None):
-        state = (self.conn.get_state() == vmmConnection.STATE_ACTIVE)
-        self.widget("menu_file_restore_saved").set_sensitive(state)
-        self.widget("net-add").set_sensitive(state)
-        self.widget("pool-add").set_sensitive(state)
+        conn_active = (self.conn.get_state() == vmmConnection.STATE_ACTIVE)
+        self.widget("menu_file_restore_saved").set_sensitive(conn_active)
+        self.widget("net-add").set_sensitive(conn_active and
+            self.conn.is_network_capable())
+        self.widget("pool-add").set_sensitive(conn_active and
+            self.conn.is_storage_capable())
+        self.widget("interface-add").set_sensitive(conn_active and
+            self.conn.is_interface_capable())
 
-        # Set error pages
-        if not state:
+        if not conn_active:
             self.set_net_error_page(_("Connection not active."))
             self.set_storage_error_page(_("Connection not active."))
             self.set_interface_error_page(_("Connection not active."))
+
+            self.repopulate_networks()
+            self.repopulate_storage_pools()
+            self.repopulate_interfaces()
             return
 
         if not self.conn.network_capable:
@@ -661,7 +668,7 @@ class vmmHost(vmmGObjectUI):
                                     _("Isolated network"))
         self.widget("net-apply").set_sensitive(False)
 
-    def repopulate_networks(self, src_ignore, uuid_ignore):
+    def repopulate_networks(self, src_ignore=None, uuid_ignore=None):
         self.populate_networks(self.widget("net-list").get_model())
 
     def populate_networks(self, model):
@@ -952,7 +959,7 @@ class vmmHost(vmmGObjectUI):
             clipboard.set_text(target_path)
 
 
-    def repopulate_storage_pools(self, src_ignore, uuid_ignore):
+    def repopulate_storage_pools(self, src_ignore=None, uuid_ignore=None):
         pool_list = self.widget("pool-list")
         populate_storage_pools(pool_list, self.conn)
 
@@ -1190,7 +1197,6 @@ class vmmHost(vmmGObjectUI):
         self.widget("interface-delete").set_sensitive(not active)
         self.widget("interface-stop").set_sensitive(active)
         self.widget("interface-start").set_sensitive(not active)
-        self.widget("interface-add").set_sensitive(bool(self.conn.interface_capable))
 
         show_child = (children or
                       itype in [Interface.Interface.INTERFACE_TYPE_BRIDGE,
@@ -1214,13 +1220,12 @@ class vmmHost(vmmGObjectUI):
 
 
     def reset_interface_state(self):
-        self.widget("interface-add").set_sensitive(bool(self.conn.interface_capable))
         self.widget("interface-delete").set_sensitive(False)
         self.widget("interface-stop").set_sensitive(False)
         self.widget("interface-start").set_sensitive(False)
         self.widget("interface-apply").set_sensitive(False)
 
-    def repopulate_interfaces(self, src_ignore, name_ignore):
+    def repopulate_interfaces(self, src_ignore=None, name_ignore=None):
         interface_list = self.widget("interface-list")
         self.populate_interfaces(interface_list.get_model())
 
