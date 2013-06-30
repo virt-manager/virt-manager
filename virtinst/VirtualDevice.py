@@ -111,7 +111,7 @@ class VirtualDevice(XMLBuilderDomain):
         Perform potentially hazardous device initialization, like
         storage creation or host device reset
 
-        @param conn: Optional connection to use if neccessary. If not
+        @param conn: Optional connection to use if necessary. If not
                      specified, device's 'conn' will be used
         @param meter: Optional progress meter to use
         """

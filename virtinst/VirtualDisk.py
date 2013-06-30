@@ -285,7 +285,7 @@ class VirtualDisk(VirtualDevice):
     will be set to the returned virStorageVol. For the last case, 'volInstall'
     will be populated for a StorageVolume instance. All the above cases also
     work on a local connection as well, the only difference being that
-    option 3 won't neccessarily error out if the volume isn't found.
+    option 3 won't necessarily error out if the volume isn't found.
 
     __init__ and setting all properties performs lots of validation,
     and will throw ValueError's if problems are found.

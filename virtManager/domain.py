@@ -379,18 +379,18 @@ class vmmDomain(vmmLibvirtObject):
         xml = guest.get_xml_config(install=False)
         self._redefine_xml(xml)
 
-    def _get_domain_xml(self, inactive=False, refresh_if_necc=True):
+    def _get_domain_xml(self, inactive=False, refresh_if_nec=True):
         return vmmLibvirtObject.get_xml(self,
                                         inactive=inactive,
-                                        refresh_if_necc=refresh_if_necc)
+                                        refresh_if_nec=refresh_if_nec)
 
-    def get_xml(self, inactive=False, refresh_if_necc=True):
+    def get_xml(self, inactive=False, refresh_if_nec=True):
         guest = self._get_guest(inactive=inactive,
-                                refresh_if_necc=refresh_if_necc)
+                                refresh_if_nec=refresh_if_nec)
         return guest.get_xml_config(install=False)
 
-    def _get_guest(self, inactive=False, refresh_if_necc=True):
-        xml = self._get_domain_xml(inactive, refresh_if_necc)
+    def _get_guest(self, inactive=False, refresh_if_nec=True):
+        xml = self._get_domain_xml(inactive, refresh_if_nec)
 
         if inactive:
             # If inactive XML requested, always return a fresh guest even
@@ -1053,8 +1053,8 @@ class vmmDomain(vmmLibvirtObject):
         return devlist
 
     def _build_device_list(self, device_type,
-                           refresh_if_necc=True, inactive=False):
-        guest = self._get_guest(refresh_if_necc=refresh_if_necc,
+                           refresh_if_nec=True, inactive=False):
+        guest = self._get_guest(refresh_if_nec=refresh_if_nec,
                                 inactive=inactive)
         devs = guest.get_devices(device_type)
 
@@ -1065,8 +1065,8 @@ class vmmDomain(vmmLibvirtObject):
 
         return devs
 
-    def get_network_devices(self, refresh_if_necc=True):
-        return self._build_device_list("interface", refresh_if_necc)
+    def get_network_devices(self, refresh_if_nec=True):
+        return self._build_device_list("interface", refresh_if_nec)
     def get_video_devices(self):
         return self._build_device_list("video")
     def get_hostdev_devices(self):
@@ -1090,8 +1090,8 @@ class vmmDomain(vmmLibvirtObject):
     def get_tpm_devices(self):
         return self._build_device_list("tpm")
 
-    def get_disk_devices(self, refresh_if_necc=True, inactive=False):
-        devs = self._build_device_list("disk", refresh_if_necc, inactive)
+    def get_disk_devices(self, refresh_if_nec=True, inactive=False):
+        devs = self._build_device_list("disk", refresh_if_nec, inactive)
 
         # Iterate through all disks and calculate what number they are
         # HACK: We are making a variable in VirtualDisk to store the index
@@ -1648,7 +1648,7 @@ class vmmDomain(vmmLibvirtObject):
             not self.is_active()):
             return rx, tx
 
-        for netdev in self.get_network_devices(refresh_if_necc=False):
+        for netdev in self.get_network_devices(refresh_if_nec=False):
             dev = netdev.target_dev
             if not dev:
                 continue
@@ -1685,7 +1685,7 @@ class vmmDomain(vmmLibvirtObject):
             not self.is_active()):
             return rd, wr
 
-        for disk in self.get_disk_devices(refresh_if_necc=False):
+        for disk in self.get_disk_devices(refresh_if_nec=False):
             dev = disk.target
             if not dev:
                 continue
@@ -1792,9 +1792,9 @@ class vmmDomainVirtinst(vmmDomain):
     def _XMLDesc(self, flags):
         raise RuntimeError("Shouldn't be called")
 
-    def get_xml(self, inactive=False, refresh_if_necc=True):
+    def get_xml(self, inactive=False, refresh_if_nec=True):
         ignore = inactive
-        ignore = refresh_if_necc
+        ignore = refresh_if_nec
 
         xml = self._backend.get_xml_config(install=False)
         if not self._orig_xml:
@@ -1802,7 +1802,7 @@ class vmmDomainVirtinst(vmmDomain):
         return xml
 
     # Internal XML implementations
-    def _get_guest(self, inactive=False, refresh_if_necc=True):
+    def _get_guest(self, inactive=False, refresh_if_nec=True):
         # Make sure XML is up2date
         self.get_xml()
         return self._backend

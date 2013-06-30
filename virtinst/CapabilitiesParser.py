@@ -558,7 +558,7 @@ class Capabilities(object):
             return False
 
         # Xen caps have always shown this info, so if we didn't find any
-        # features, the host really doesn't have the necc support
+        # features, the host really doesn't have the nec support
         if self._is_xen():
             return False
 

@@ -386,7 +386,7 @@ class Distro:
     def _kernelFetchHelper(self, fetcher, guest, progresscb, kernelpath,
                            initrdpath):
         # Simple helper for fetching kernel + initrd and performing
-        # cleanup if neccessary
+        # cleanup if necessary
         kernel = fetcher.acquireFile(kernelpath, progresscb)
         args = ''
 

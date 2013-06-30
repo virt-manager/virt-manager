@@ -84,14 +84,14 @@ class vmmLibvirtObject(vmmGObject):
     # Public XML API #
     ##################
 
-    def get_xml(self, inactive=False, refresh_if_necc=True):
+    def get_xml(self, inactive=False, refresh_if_nec=True):
         """
         Get domain xml. If cached xml is invalid, update.
 
         @param inactive: Return persistent XML, not the running config.
                     No effect if domain is not running. Use this flag
                     if the XML will be used for redefining a guest
-        @param refresh_if_necc: Check if XML is out of date, and if so,
+        @param refresh_if_nec: Check if XML is out of date, and if so,
                     refresh it (default behavior). Skipping a refresh is
                     useful to prevent updating xml in the tick loop when
                     it's not that important (disk/net stats)
@@ -101,7 +101,7 @@ class vmmLibvirtObject(vmmGObject):
 
         if self._xml is None:
             self.refresh_xml()
-        elif refresh_if_necc and not self._is_xml_valid:
+        elif refresh_if_nec and not self._is_xml_valid:
             self.refresh_xml()
 
         return self._xml

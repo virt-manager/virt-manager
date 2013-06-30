@@ -613,7 +613,7 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
 
     vnet_taps = []
     for vm in conn.vms.values():
-        for nic in vm.get_network_devices(refresh_if_necc=False):
+        for nic in vm.get_network_devices(refresh_if_nec=False):
             if nic.target_dev and nic.target_dev not in vnet_taps:
                 vnet_taps.append(nic.target_dev)
 

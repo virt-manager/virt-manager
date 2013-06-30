@@ -1545,7 +1545,7 @@ class vmmDetails(vmmGObjectUI):
         if self.ignorePause:
             return
 
-        # Let state handler listener change things if necc.
+        # Let state handler listener change things if nec.
         self.set_pause_state(not src.get_active())
 
         if not self.vm.is_paused():

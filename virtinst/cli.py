@@ -647,7 +647,7 @@ def disk_prompt(conn, origpath, origsize, origsparse,
 
     def prompt_path(chkpath, chksize):
         """
-        Prompt for disk path if necc
+        Prompt for disk path if nec
         """
         msg = None
         patherr = _("A disk path must be specified.")
@@ -670,7 +670,7 @@ def disk_prompt(conn, origpath, origsize, origsparse,
 
     def prompt_size(chkpath, chksize, path_exists):
         """
-        Prompt for disk size if necc.
+        Prompt for disk size if nec.
         """
         sizeerr = _("A size must be specified for non-existent disks.")
         size_prompt = _("How large would you like the disk (%s) to "
