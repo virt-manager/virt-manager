@@ -845,8 +845,9 @@ def xml_to_print(guest, continue_inst, xmlonly, xmlstep, dry):
 #######################
 
 def parse_args():
-    usage = "%prog --name NAME --ram RAM STORAGE INSTALL [options]"
-    parser = cli.setupParser(usage)
+    parser = cli.setupParser(
+        "%prog --name NAME --ram RAM STORAGE INSTALL [options]",
+        _("Create a new virtual machine from specified install media."))
     cli.add_connect_option(parser)
 
     geng = optparse.OptionGroup(parser, _("General Options"))

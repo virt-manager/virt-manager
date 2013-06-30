@@ -140,12 +140,15 @@ class VirtHelpFormatter(optparse.IndentedHelpFormatter):
         return ret
 
 
-def setupParser(usage=None):
+def setupParser(usage, description):
     parse_class = VirtOptionParser
 
-    parser = parse_class(usage=usage,
+    parser = parse_class(usage=usage, description=description,
                          formatter=VirtHelpFormatter(),
                          version=cliconfig.__version__)
+
+    parser.epilog = _("See man page for examples and full option syntax.")
+
     return parser
 
 

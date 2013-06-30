@@ -54,8 +54,9 @@ def get_graphics(image, guest, options):
 
 
 def parse_args():
-    usage = "%prog [options] image.xml"
-    parser = cli.setupParser(usage)
+    parser = cli.setupParser(
+        "%prog image.xml [OPTIONS]",
+        _("Create a virtual machine from a virt-image(5) image descriptor."))
     cli.add_connect_option(parser)
 
     geng = OptionGroup(parser, _("General Options"))

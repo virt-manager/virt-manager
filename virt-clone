@@ -134,7 +134,10 @@ def get_force_target(target, design):
 
 
 def parse_args():
-    parser = cli.setupParser()
+    parser = cli.setupParser(
+        "%prog --original [NAME] ...",
+        _("Duplicate a virtual machine, changing all unique configuration "
+          "like MAC address, name, etc. The VM contents are not altered."))
     cli.add_connect_option(parser)
 
     geng = OptionGroup(parser, _("General Options"))

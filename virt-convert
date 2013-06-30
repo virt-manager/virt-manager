@@ -43,8 +43,10 @@ def get_default_arch():
 
 def parse_args():
     """Parse and verify command line."""
-    usage = "%prog [options] inputdir|input.vmx [outputdir|output.xml]"
-    opts = cli.setupParser(usage)
+    opts = cli.setupParser(
+        "%prog [options] inputdir|input.vmx [outputdir|output.xml]",
+        _("Convert from virtual machine descriptor format to another. The "
+          "VM contents are not altered."))
 
     cong = OptionGroup(opts, "Conversion Options")
     cong.add_option("-i", "--input-format", dest="input_format",
