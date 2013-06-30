@@ -67,7 +67,10 @@ class vmmErrorDialog(vmmGObject):
                  buttons=Gtk.ButtonsType.CLOSE,
                  text2=None):
         if details is None:
-            details = summary + "\n\n" + "".join(traceback.format_exc())
+            details = summary
+            tb = "".join(traceback.format_exc()).strip()
+            if tb != "None":
+                details += "\n\n" + tb
 
         # Make sure we have consistent details for error dialogs
         if (dialog_type == Gtk.MessageType.ERROR and not summary in details):
