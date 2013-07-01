@@ -145,6 +145,8 @@ def parse_commandline():
         help="Show domain graphical console window")
     optParser.add_option("--show-host-summary", action="callback",
        callback=opt_show_cb, help="Show connection details window")
+    optParser.add_option("--spice-disable-usbredir", action="store_true",
+                        dest="usbredir", help="Disable USB redirection support")
 
     return optParser.parse_args()
 
@@ -259,6 +261,9 @@ def main():
     config.libvirt_packages = cliconfig.libvirt_packages
     config.askpass_package = cliconfig.askpass_package
     config.default_graphics_from_config = cliconfig.default_graphics
+
+    if options.usbredir and config.get_auto_redirection():
+        config.set_auto_redirection(False)
 
     # Add our icon dir to icon theme
     icon_theme = Gtk.IconTheme.get_default()

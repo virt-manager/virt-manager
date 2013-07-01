@@ -371,6 +371,11 @@ class vmmConfig(object):
     def set_console_scaling(self, pref):
         self.conf.set("/console/scaling", pref)
 
+    def get_auto_redirection(self):
+        return self.conf.get("/console/auto-redirect")
+    def set_auto_redirection(self, state):
+        self.conf.set("/console/auto-redirect", state)
+
     # Show VM details toolbar
     def get_details_show_toolbar(self):
         res = self.conf.get("/details/show-toolbar")
