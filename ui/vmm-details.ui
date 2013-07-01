@@ -184,6 +184,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Virtual _Machine</property>
                 <property name="use_underline">True</property>
+                <signal name="activate" handler="on_details_menu_virtual_manager_activate" swapped="no"/>
                 <child type="submenu">
                   <object class="GtkMenu" id="virtual_machine1_menu">
                     <property name="can_focus">False</property>
@@ -329,6 +330,15 @@
                         <property name="label" translatable="yes">_Take Screenshot</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_screenshot_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="details-menu-usb-redirection">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">_Redirect USB device</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_details_menu_usb_redirection" swapped="no"/>
                       </object>
                     </child>
                   </object>

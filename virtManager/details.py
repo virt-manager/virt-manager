@@ -407,6 +407,7 @@ class vmmDetails(vmmGObjectUI):
             "on_details_customize_finish_clicked": self.customize_finish,
             "on_details_cancel_customize_clicked": self.close,
 
+            "on_details_menu_virtual_manager_activate": self.control_vm_menu,
             "on_details_menu_run_activate": self.control_vm_run,
             "on_details_menu_poweroff_activate": self.control_vm_shutdown,
             "on_details_menu_reboot_activate": self.control_vm_reboot,
@@ -418,6 +419,7 @@ class vmmDetails(vmmGObjectUI):
             "on_details_menu_migrate_activate": self.control_vm_migrate,
             "on_details_menu_delete_activate": self.control_vm_delete,
             "on_details_menu_screenshot_activate": self.control_vm_screenshot,
+            "on_details_menu_usb_redirection": self.control_vm_usb_redirection,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
             "on_details_menu_view_manager_activate": self.view_manager,
             "on_details_menu_view_details_toggled": self.details_console_changed,
@@ -627,7 +629,9 @@ class vmmDetails(vmmGObjectUI):
     ##########################
 
     def init_menus(self):
-        # Shutdown button menu
+        # Virtual Machine menu
+        self.widget("details-menu-usb-redirection").set_tooltip_text(
+            _("Redirect USB device attached on host to virtual machine with SPICE graphics. USB Redirection device is required for Virtual Machine to support this functionality. Auto-redirection is enabled by default"))
         uihelpers.build_shutdown_button_menu(self.widget("control-shutdown"),
                                              self.control_vm_shutdown,
                                              self.control_vm_reboot,
@@ -1557,6 +1561,12 @@ class vmmDetails(vmmGObjectUI):
                       self.vm.conn.get_uri(),
                       self.vm.get_uuid())
 
+    def control_vm_menu(self, src_ignore):
+        if self.console.viewer.has_usb_redirection() and \
+           self.vm.has_spicevmc_type_redirdev():
+            widget = self.widget("details-menu-usb-redirection")
+            if not widget.get_sensitive():
+                widget.set_sensitive(True)
 
     def control_vm_run(self, src_ignore):
         self.emit("action-run-domain",
@@ -1600,6 +1610,19 @@ class vmmDetails(vmmGObjectUI):
             return self._take_screenshot()
         except Exception, e:
             self.err.show_err(_("Error taking screenshot: %s") % str(e))
+
+    def control_vm_usb_redirection(self, src):
+        ignore = src
+        spice_usbdev_dialog = self.err
+
+        spice_usbdev_widget = self.console.viewer.get_usb_widget()
+        if not spice_usbdev_widget:
+            self.err.show_err(_("Error initializing spice USB device widget"))
+            return
+
+        spice_usbdev_widget.show()
+        spice_usbdev_dialog.show_info(_("Select USB devices for redirection"),
+                                      widget=spice_usbdev_widget)
 
     def _take_screenshot(self):
         image = self.console.viewer.get_pixbuf()

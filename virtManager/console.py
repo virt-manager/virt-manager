@@ -286,6 +286,9 @@ class Viewer(vmmGObject):
     def get_desktop_resolution(self):
         raise NotImplementedError()
 
+    def has_usb_redirection(self):
+        return False
+
 
 class VNCViewer(Viewer):
     def __init__(self, console):
@@ -452,6 +455,8 @@ class SpiceViewer(Viewer):
         self.display = None
         self.audio = None
         self.display_channel = None
+        self.usbdev_manager = None
+        self.usbwidget = None
 
     def _init_widget(self):
         self.set_grab_keys()
@@ -503,6 +508,8 @@ class SpiceViewer(Viewer):
             self.display.destroy()
         self.display = None
         self.display_channel = None
+        self.usbdev_manager = None
+        self.usbwidget = None
 
     def is_open(self):
         return self.spice_session is not None
@@ -558,6 +565,29 @@ class SpiceViewer(Viewer):
             return None
         return self.display_channel.get_properties("width", "height")
 
+    def _create_usbdev_manager(self):
+        if self.usbdev_manager:
+            return self.usbdev_manager
+
+        if self.spice_session:
+            self.usbdev_manager = SpiceClientGLib.UsbDeviceManager.get(self.spice_session)
+            if self.usbdev_manager:
+                self.usbdev_manager.connect("auto-connect-failed", self._usbdev_redirect_error)
+                self.usbdev_manager.connect("device-error", self._usbdev_redirect_error)
+
+        return self.usbdev_manager
+
+    def _create_spice_session(self):
+        self.spice_session = SpiceClientGLib.Session()
+        gtk_session = SpiceClientGtk.GtkSession.get(self.spice_session)
+        gtk_session.set_property("auto-clipboard", True)
+
+        self._create_usbdev_manager()
+
+        autoredir = self.config.get_auto_redirection()
+        if autoredir:
+            gtk_session.set_property("auto-usbredir", True)
+
     def open_host(self, ginfo, password=None):
         host, port = ginfo.get_conn_host()
 
@@ -565,7 +595,7 @@ class SpiceViewer(Viewer):
         uri += str(host) + "?port=" + str(port)
         logging.debug("spice uri: %s", uri)
 
-        self.spice_session = SpiceClientGLib.Session()
+        self._create_spice_session()
         self.spice_session.set_property("uri", uri)
         if password:
             self.spice_session.set_property("password", password)
@@ -574,7 +604,7 @@ class SpiceViewer(Viewer):
         self.spice_session.connect()
 
     def open_fd(self, fd, password=None):
-        self.spice_session = SpiceClientGLib.Session()
+        self._create_spice_session()
         if password:
             self.spice_session.set_property("password", password)
         GObject.GObject.connect(self.spice_session, "channel-new",
@@ -599,6 +629,46 @@ class SpiceViewer(Viewer):
             logging.debug("Spice version doesn't support scaling.")
             return
         self.display.set_property("scaling", scaling)
+
+    def _usbdev_redirect_error(self,
+                             spice_usbdev_widget, spice_usb_device,
+                             errstr):
+        ignore_widget = spice_usbdev_widget
+        ignore_device = spice_usb_device
+
+        error = self.console.err
+        error.show_err(_("USB redirection error"),
+                         text2=str(errstr),
+                         async=False)
+
+    def get_usb_widget(self):
+
+        # The @format positional parameters are the following:
+        # 1 '%s' manufacturer
+        # 2 '%s' product
+        # 3 '%s' descriptor (a [vendor_id:product_id] string)
+        # 4 '%d' bus
+        # 5 '%d' address
+
+        usb_device_description_fmt = _("%s %s %s at %d-%d")
+
+        if self.spice_session:
+            self.usbwidget = SpiceClientGtk.UsbDeviceWidget.new(self.spice_session,
+                                                                usb_device_description_fmt)
+            self.usbwidget.connect("connect-failed", self._usbdev_redirect_error)
+            return self.usbwidget
+
+        return
+
+    def has_usb_redirection(self):
+        usbredir_channel_type = SpiceClientGLib.Channel.string_to_type('usbredir')
+
+        if self.spice_session:
+            if self._create_usbdev_manager() and \
+               self.spice_session.has_channel_type(usbredir_channel_type):
+                return True
+
+        return False
 
 
 class vmmConsolePages(vmmGObjectUI):
@@ -961,11 +1031,13 @@ class vmmConsolePages(vmmGObjectUI):
         self.close_viewer()
         self.widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
         self.widget("details-menu-vm-screenshot").set_sensitive(False)
+        self.widget("details-menu-usb-redirection").set_sensitive(False)
         self.widget("console-unavailable").set_label("<b>" + msg + "</b>")
 
     def activate_auth_page(self, withPassword=True, withUsername=False):
         (pw, username) = self.config.get_console_password(self.vm)
         self.widget("details-menu-vm-screenshot").set_sensitive(False)
+        self.widget("details-menu-usb-redirection").set_sensitive(False)
 
         if withPassword:
             self.widget("console-auth-password").show()
@@ -1004,6 +1076,11 @@ class vmmConsolePages(vmmGObjectUI):
         self.widget("details-menu-vm-screenshot").set_sensitive(True)
         if self.viewer and self.viewer.display:
             self.viewer.display.grab_focus()
+
+        if self.viewer.has_usb_redirection() and \
+           self.vm.has_spicevmc_type_redirdev():
+            self.widget("details-menu-usb-redirection").set_sensitive(True)
+            return
 
     def page_changed(self, ignore1=None, ignore2=None, ignore3=None):
         self.set_allow_fullscreen()

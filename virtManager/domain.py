@@ -329,6 +329,13 @@ class vmmDomain(vmmLibvirtObject):
             self._is_management_domain = (self.get_id() == 0)
         return self._is_management_domain
 
+    def has_spicevmc_type_redirdev(self):
+        devs = self.get_redirdev_devices()
+        for dev in devs:
+            if dev.type == "spicevmc":
+                return True
+        return False
+
     def get_id_pretty(self):
         i = self.get_id()
         if i < 0:
