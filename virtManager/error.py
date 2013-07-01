@@ -28,10 +28,13 @@ from virtManager.baseclass import vmmGObject
 
 
 def _launch_dialog(dialog, primary_text, secondary_text, title,
-                   sync=True):
+                   widget=None, sync=True):
     dialog.set_property("text", primary_text)
     dialog.format_secondary_text(secondary_text or None)
     dialog.set_title(title)
+
+    if widget:
+        dialog.get_content_area().add(widget)
 
     res = False
     if sync:
@@ -95,7 +98,7 @@ class vmmErrorDialog(vmmGObject):
     ###################################
 
     def _simple_dialog(self, dialog_type, buttons, text1,
-                       text2, title, async=False):
+                       text2, title, widget=None, async=False):
 
         dialog = Gtk.MessageDialog(self.get_parent(),
                                    flags=Gtk.DialogFlags.DESTROY_WITH_PARENT,
@@ -107,6 +110,7 @@ class vmmErrorDialog(vmmGObject):
 
         return _launch_dialog(self._simple,
                               text1, text2 or "", title or "",
+                              widget=widget,
                               sync=not async)
 
     def val_err(self, text1, text2=None, title=_("Input Error"), async=True):
@@ -124,13 +128,13 @@ class vmmErrorDialog(vmmGObject):
         self._simple_dialog(dtype, buttons,
                             str(text1),
                             text2 and str(text2) or "",
-                            str(title), async)
+                            str(title), None, async)
         return False
 
-    def show_info(self, text1, text2=None, title="", async=True):
+    def show_info(self, text1, text2=None, title="", widget=None, async=True):
         dtype = Gtk.MessageType.INFO
         buttons = Gtk.ButtonsType.OK
-        self._simple_dialog(dtype, buttons, text1, text2, title, async)
+        self._simple_dialog(dtype, buttons, text1, text2, title, widget, async)
         return False
 
     def yes_no(self, text1, text2=None, title=None):
