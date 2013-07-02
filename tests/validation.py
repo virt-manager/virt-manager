@@ -210,9 +210,8 @@ args = {
                     'valid'   : ['some.valid-name_9']},
     'clone_uuid': {'invalid' : [0],
                     'valid'   : ['12345678123456781234567812345678']},
-    'clone_mac' : {'invalid' : ['badformat'],
+    'clone_macs' : {'invalid' : ['badformat'],
                     'valid'   : ['AA:BB:CC:DD:EE:FF']},
-    'clone_bs'  : {'invalid' : [], 'valid'   : ['valid']},
 },
 
 'inputdev' : {
@@ -492,11 +491,11 @@ class TestValidation(unittest.TestCase):
         #self._testArgs(inst_obj, virtinst.ImageInstaller, 'installer')
         self._testArgs(inst_obj, virtinst.ImageInstaller, label)
 
-    def testCloneManager(self):
+    def testCloner(self):
         label = 'clonedesign'
         for conn in self._getInitConns(label):
-            cman = virtinst.CloneManager.CloneDesign(conn)
-            self._testArgs(cman, virtinst.CloneManager.CloneDesign, label)
+            cman = virtinst.Cloner(conn)
+            self._testArgs(cman, virtinst.Cloner, label)
 
     def testInputDev(self):
         label = 'inputdev'

@@ -20,8 +20,7 @@ import logging
 
 from tests import utils
 
-from virtinst import CloneManager
-CloneDesign = CloneManager.CloneDesign
+from virtinst import Cloner
 
 ORIG_NAME  = "clone-orig"
 CLONE_NAME = "clone-new"
@@ -70,7 +69,7 @@ class TestClone(unittest.TestCase):
         infile = os.path.join(clonexml_dir, filebase + "-in.xml")
         in_content = utils.read_file(infile)
 
-        cloneobj = CloneDesign(conn=useconn or conn)
+        cloneobj = Cloner(useconn or conn)
         cloneobj.original_xml = in_content
         for force in force_list or []:
             cloneobj.force_target = force
@@ -90,20 +89,14 @@ class TestClone(unittest.TestCase):
         cloneobj.clone_name = "clone-new"
         cloneobj.clone_uuid = "12345678-1234-1234-1234-123456789012"
 
-        cloneobj.clone_mac = "22:23:45:67:89:00"
-        cloneobj.clone_mac = "22:23:45:67:89:01"
+        cloneobj.clone_macs = ["22:23:45:67:89:00", "22:23:45:67:89:01"]
 
-        if disks is not None:
-            for disk in disks:
-                cloneobj.clone_devices = disk
-        else:
-            cloneobj.clone_devices = "/dev/loop0"
-            cloneobj.clone_devices = "/tmp/clone2.img"
-            cloneobj.clone_devices = "/tmp/clone3.img"
-            cloneobj.clone_devices = "/tmp/clone4.img"
-            cloneobj.clone_devices = "/tmp/clone5.img"
-            cloneobj.clone_devices = None
+        if disks is None:
+            disks = ["/dev/loop0", "/tmp/clone2.img",
+                     "/tmp/clone3.img", "/tmp/clone4.img",
+                     "/tmp/clone5.img", None]
 
+        cloneobj.clone_paths = disks
         return cloneobj
 
     def _clone_compare(self, cloneobj, outbase):
@@ -133,7 +126,7 @@ class TestClone(unittest.TestCase):
             try:
                 vm = conn.defineXML(utils.read_file(infile))
 
-                cloneobj = CloneDesign(conn=conn)
+                cloneobj = Cloner(conn)
                 cloneobj.original_guest = ORIG_NAME
 
                 cloneobj = self._default_clone_values(cloneobj)

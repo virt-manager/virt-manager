@@ -20,15 +20,14 @@
 # MA 02110-1301 USA.
 
 
-import optparse
-from optparse import OptionGroup
-import sys
 import logging
+import optparse
+import sys
 
 import urlgrabber.progress as progress
 
-import virtinst.CloneManager as clmgr
 import virtinst.cli as cli
+from virtinst import Cloner
 from virtinst.cli import fail, print_stdout, print_stderr
 from virtinst.User import User
 
@@ -37,7 +36,7 @@ from virtinst.User import User
 def get_clone_name(new_name, auto_clone, design):
     if not new_name and auto_clone:
         # Generate a name to use
-        new_name = clmgr.generate_clone_name(design)
+        new_name = design.generate_clone_name()
         logging.debug("Auto-generated clone name '%s'", new_name)
 
     prompt_txt = _("What is the name for the cloned virtual machine?")
@@ -66,13 +65,9 @@ def get_original_guest(guest_name, origfile, design):
 
 
 def get_clone_macaddr(new_mac, design):
-    if new_mac is None:
-        pass
-    elif new_mac[0] == "RANDOM":
-        new_mac = None
-    else:
-        for i in new_mac:
-            design.clone_mac = i
+    if new_mac is None or new_mac[0] == "RANDOM":
+        return
+    design.clone_macs = new_mac
 
 
 def get_clone_uuid(new_uuid, design):
@@ -80,15 +75,14 @@ def get_clone_uuid(new_uuid, design):
         design.clone_uuid = new_uuid
 
 
-def get_clone_diskfile(new_diskfiles, design, conn, preserve=False,
+def get_clone_diskfile(new_diskfiles, design, preserve=False,
                        auto_clone=False):
     if new_diskfiles is None:
         new_diskfiles = [None]
 
-    conn = design.original_conn
-
     newidx = 0
-    for origdev in design.original_devices:
+    clonepaths = []
+    for origpath in [d.path for d in design.original_disks]:
         if len(new_diskfiles) <= newidx:
             # Extend the new/passed paths list with None if it's not
             # long enough
@@ -96,16 +90,17 @@ def get_clone_diskfile(new_diskfiles, design, conn, preserve=False,
         disk = new_diskfiles[newidx]
 
         if disk is None and auto_clone:
-            disk = clmgr.generate_clone_disk_path(origdev, design)
+            disk = design.generate_clone_disk_path(origpath)
 
-        if origdev is None:
+        if origpath is None:
             devpath = None
         else:
-            dev = _check_disk(conn, disk, origdev, preserve)
+            dev = _check_disk(design.conn, disk, origpath, preserve)
             devpath = dev.path
 
-        design.clone_devices = devpath
+        clonepaths.append(devpath)
         newidx += 1
+    design.clone_paths = clonepaths
 
 
 def _check_disk(conn, clone_path, orig_path, preserve):
@@ -140,7 +135,7 @@ def parse_args():
           "like MAC address, name, etc. The VM contents are not altered."))
     cli.add_connect_option(parser)
 
-    geng = OptionGroup(parser, _("General Options"))
+    geng = optparse.OptionGroup(parser, _("General Options"))
     geng.add_option("-o", "--original", dest="original_guest",
                     help=_("Name of the original guest; "
                            "The status must be shut off or paused."))
@@ -156,7 +151,7 @@ def parse_args():
                            "randomly generated UUID"))
     parser.add_option_group(geng)
 
-    stog = OptionGroup(parser, _("Storage Configuration"))
+    stog = optparse.OptionGroup(parser, _("Storage Configuration"))
     stog.add_option("-f", "--file", dest="new_diskfile", action="append",
                     help=_("New file to use as the disk image for the "
                            "new guest"))
@@ -173,13 +168,13 @@ def parse_args():
                            "via --file are preserved unchanged"))
     parser.add_option_group(stog)
 
-    netg = OptionGroup(parser, _("Networking Configuration"))
+    netg = optparse.OptionGroup(parser, _("Networking Configuration"))
     netg.add_option("-m", "--mac", dest="new_mac", action="append",
                     help=_("New fixed MAC address for the clone guest. "
                            "Default is a randomly generated MAC"))
     parser.add_option_group(netg)
 
-    misc = OptionGroup(parser, _("Miscellaneous Options"))
+    misc = optparse.OptionGroup(parser, _("Miscellaneous Options"))
     misc.add_option("", "--print-xml", action="store_true", dest="xmlonly",
                     help=_("Print the generated domain XML rather than define "
                            "and clone the guest."))
@@ -227,7 +222,7 @@ def main(conn=None):
     if not User.current().has_priv(User.PRIV_CLONE, conn.getURI()):
         fail(_("Must be privileged to clone Xen guests"))
 
-    design = clmgr.CloneDesign(conn=conn)
+    design = Cloner(conn)
 
     design.clone_running = options.clone_running
     design.replace = bool(options.replace)
@@ -245,7 +240,7 @@ def main(conn=None):
     # get_clone_diskfile knows how many new disk paths it needs
     design.setup_original()
 
-    get_clone_diskfile(options.new_diskfile, design, conn,
+    get_clone_diskfile(options.new_diskfile, design,
                        not options.preserve, options.auto_clone)
 
     # setup design object
@@ -256,7 +251,7 @@ def main(conn=None):
     else:
         # start cloning
         meter = progress.TextMeter(fo=sys.stdout)
-        clmgr.start_duplicate(design, meter)
+        design.start_duplicate(meter)
 
     print_stdout("")
     print_stdout(_("Clone '%s' created successfully.") % design.clone_name)
