@@ -356,11 +356,14 @@ class configure(Command):
 
 
 class TestBaseCommand(Command):
-    user_options = [('debug', 'd', 'Show debug output')]
-    boolean_options = ['debug']
+    user_options = [
+        ('debug', 'd', 'Show debug output'),
+        ('coverage', 'c', 'Show coverage report')
+    ]
 
     def initialize_options(self):
         self.debug = 0
+        self.coverage = 0
         self._testfiles = []
         self._dir = os.getcwd()
 
@@ -370,18 +373,23 @@ class TestBaseCommand(Command):
 
     def run(self):
         try:
-            # Use system 'coverage' if available
             import coverage
-            use_coverage = True
+            use_cov = True
         except:
-            use_coverage = False
+            use_cov = False
+
+
+        if use_cov:
+            omit = ["/usr/*", "/*/tests/*"]
+            cov = coverage.coverage(omit=omit)
+            cov.erase()
+            cov.start()
+
+        import tests as testsmodule
+        testsmodule.cov = cov
 
         tests = unittest.TestLoader().loadTestsFromNames(self._testfiles)
         t = unittest.TextTestRunner(verbosity=1)
-
-        if use_coverage:
-            coverage.erase()
-            coverage.start()
 
         if hasattr(unittest, "installHandler"):
             try:
@@ -394,11 +402,16 @@ class TestBaseCommand(Command):
         except KeyboardInterrupt:
             sys.exit(1)
 
-        if use_coverage:
-            coverage.stop()
+        if use_cov:
+            cov.stop()
+            cov.save()
 
-        sys.exit(int(bool(len(result.failures) > 0 or
-                          len(result.errors) > 0)))
+        err = int(bool(len(result.failures) > 0 or
+                       len(result.errors) > 0))
+        if not err and use_cov and self.coverage:
+            cov.report(show_missing=False)
+        sys.exit(err)
+
 
 
 class TestCommand(TestBaseCommand):
