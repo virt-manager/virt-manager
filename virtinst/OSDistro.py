@@ -1143,7 +1143,7 @@ class SolarisDistro(SunDistro):
                 iargs += ',host-ip=' + guestIP
                 if netmask:
                     iargs += ',subnet-mask=%s' % netmask
-                droute = util.default_route(guest.nics[0].bridge)
+                droute = util.default_route()
                 if droute:
                     iargs += ',router-ip=' + droute
                 if guest.nics[0].macaddr:

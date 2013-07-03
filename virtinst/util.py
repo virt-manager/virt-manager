@@ -20,11 +20,9 @@
 
 import logging
 import os
-import platform
 import random
 import re
 import stat
-import subprocess
 
 import libvirt
 import libxml2
@@ -278,30 +276,7 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
     raise ValueError(_("Name generation range exceeded."))
 
 
-def default_nic():
-    """
-    Return the default NIC to use, if one is specified.
-    """
-
-    dev = ''
-
-    if platform.system() != 'SunOS':
-        return dev
-
-    proc = subprocess.Popen(['/usr/lib/xen/bin/xenstore-read',
-        'device-misc/vif/default-nic'], stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
-    out = proc.stdout.readlines()
-    if len(out) > 0:
-        dev = out[0].rstrip()
-
-    return dev
-
-
 def default_bridge(conn=None):
-    if platform.system() == 'SunOS':
-        return ["bridge", default_nic()]
-
     dev = default_route()
 
     if (dev is not None and
@@ -371,19 +346,7 @@ def generate_uuid(conn):
 
 
 
-def default_route(nic=None):
-    if platform.system() == 'SunOS':
-        cmd = ['/usr/bin/netstat', '-rn']
-        if nic:
-            cmd += ['-I', nic]
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        for line in proc.stdout.readlines():
-            vals = line.split()
-            if len(vals) > 1 and vals[0] == 'default':
-                return vals[1]
-        return None
-
+def default_route():
     route_file = "/proc/net/route"
     d = file(route_file)
 
@@ -431,9 +394,6 @@ def default_connection():
 
 
 def is_blktap_capable():
-    if platform.system() == 'SunOS':
-        return False
-
     f = open("/proc/modules")
     lines = f.readlines()
     f.close()

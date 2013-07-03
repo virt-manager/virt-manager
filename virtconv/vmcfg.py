@@ -18,9 +18,7 @@
 # MA 02110-1301 USA.
 #
 
-import platform
 from virtconv import diskcfg
-from virtinst import CapabilitiesParser
 
 VM_TYPE_UNKNOWN = 0
 VM_TYPE_PV = 1
@@ -82,21 +80,3 @@ class vm(object):
             if disk.type == diskcfg.DISK_TYPE_DISK and not disk.path:
                 raise ValueError(_("Disk %s:%s storage does not exist")
                     % (bus, inst))
-
-
-def host(conn=None):
-    """
-    Return the host, as seen in platform.system(), but possibly from a
-    hypervisor connection.  Note: use default_arch() in almost all
-    cases, unless you need to detect the OS.  In particular, this value
-    gives no indication of 32 vs 64 bitness.
-    """
-    if conn:
-        cap = CapabilitiesParser.parse(conn.getCapabilities())
-        if cap.host.arch == "i86pc":
-            return "SunOS"
-        else:
-            # or Linux-alike. Hmm.
-            return "Linux"
-
-    return platform.system()
