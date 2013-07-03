@@ -77,14 +77,13 @@ class vmmConnection(vmmGObject):
     STATE_ACTIVE = 2
     STATE_INACTIVE = 3
 
-    def __init__(self, uri, readOnly=False):
+    def __init__(self, uri):
         vmmGObject.__init__(self)
 
         self._uri = uri
         if self._uri is None or self._uri.lower() == "xen":
             self._uri = "xen:///"
 
-        self.readOnly = readOnly
         self.state = self.STATE_DISCONNECTED
         self.connectThread = None
         self.connectError = None
@@ -184,9 +183,6 @@ class vmmConnection(vmmGObject):
     ########################
     # General data getters #
     ########################
-
-    def is_read_only(self):
-        return self.readOnly
 
     def get_uri(self):
         return self._uri
@@ -602,10 +598,7 @@ class vmmConnection(vmmGObject):
         elif self.state == self.STATE_CONNECTING:
             return _("Connecting")
         elif self.state == self.STATE_ACTIVE:
-            if self.is_read_only():
-                return _("Active (RO)")
-            else:
-                return _("Active")
+            return _("Active")
         elif self.state == self.STATE_INACTIVE:
             return _("Inactive")
         else:
@@ -965,15 +958,9 @@ class vmmConnection(vmmGObject):
             return -1
 
     def _try_open(self):
-        flags = 0
-
         vmm = self._open_dev_conn(self.get_uri())
         if vmm:
             return vmm
-
-        if self.readOnly:
-            logging.info("Caller requested read only connection")
-            flags = libvirt.VIR_CONNECT_RO
 
         if virtinst.support.support_openauth():
             vmm = libvirt.openAuth(self.get_uri(),
@@ -983,10 +970,7 @@ class vmmConnection(vmmGObject):
                                     self._do_creds, None],
                                    flags)
         else:
-            if flags:
-                vmm = libvirt.openReadOnly(self.get_uri())
-            else:
-                vmm = libvirt.open(self.get_uri())
+            vmm = libvirt.open(self.get_uri())
 
         return vmm
 

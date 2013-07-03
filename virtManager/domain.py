@@ -318,8 +318,6 @@ class vmmDomain(vmmLibvirtObject):
         return self.conn.rhel6_defaults(self.get_emulator())
 
     def is_read_only(self):
-        if self.conn.is_read_only():
-            return True
         if self.is_management_domain():
             return True
         return False

@@ -415,11 +415,7 @@ class vmmCreate(vmmGObjectUI):
 
     def set_conn_state(self):
         # Update all state that has some dependency on the current connection
-
         self.widget("create-forward").set_sensitive(True)
-
-        if self.conn.is_read_only():
-            return self.startup_error(_("Connection is read only."))
 
         if self.conn.no_install_options():
             error = _("No hypervisor options were found for this "

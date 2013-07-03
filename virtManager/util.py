@@ -267,16 +267,12 @@ def dup_conn(conn):
 
 
 def _dup_all_conn(conn, libconn):
-
-    is_readonly = False
-
     if libconn:
         uri = libconn.getURI()
         is_test = uri.startswith("test")
         vmm = libconn
     else:
         is_test = conn.is_test_conn()
-        is_readonly = conn.is_read_only()
         uri = conn.get_uri()
         vmm = conn.vmm
 
@@ -291,7 +287,7 @@ def _dup_all_conn(conn, libconn):
         return conn or vmm
 
     logging.debug("Duplicating connection for async operation.")
-    newconn = virtManager.connection.vmmConnection(uri, readOnly=is_readonly)
+    newconn = virtManager.connection.vmmConnection(uri)
     newconn.open(sync=True)
 
     return newconn
