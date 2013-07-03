@@ -357,67 +357,15 @@ def do_creds(creds, cbdata):
 
 
 def _do_creds(creds, cbdata_ignore):
-
-    if (len(creds) == 1 and
-        creds[0][0] == libvirt.VIR_CRED_EXTERNAL and
-        creds[0][2] == "PolicyKit"):
-        return _do_creds_polkit(creds[0][1])
-
     for cred in creds:
         if cred[0] == libvirt.VIR_CRED_EXTERNAL:
+            print_stderr("Don't know to do handle external cred %s" % cred[2])
             return -1
 
     return _do_creds_authname(creds)
 
-# PolicyKit auth
-
-
-def _do_creds_polkit(action):
-    if os.getuid() == 0:
-        logging.debug("Skipping policykit check as root")
-        return 0  # Success
-    logging.debug("Doing policykit for %s", action)
-
-    import subprocess
-    import commands
-
-    bin_path = "/usr/bin/polkit-auth"
-
-    if not os.path.exists(bin_path):
-        logging.debug("%s not present, skipping polkit auth.", bin_path)
-        return 0
-
-    cmdstr = "%s %s" % (bin_path, "--explicit")
-    output = commands.getstatusoutput(cmdstr)
-    if output[1].count(action):
-        logging.debug("User already authorized for %s.", action)
-        # Hide spurious output from polkit-auth
-        popen_stdout = subprocess.PIPE
-        popen_stderr = subprocess.PIPE
-    else:
-        popen_stdout = None
-        popen_stderr = None
-
-    # Force polkit prompting to be text mode. Not strictly required, but
-    # launching a dialog is overkill.
-    env = os.environ.copy()
-    env["POLKIT_AUTH_FORCE_TEXT"] = "set"
-
-    cmd = [bin_path, "--obtain", action]
-    proc = subprocess.Popen(cmd, env=env, stdout=popen_stdout,
-                            stderr=popen_stderr)
-    out, err = proc.communicate()
-
-    if out and popen_stdout:
-        logging.debug("polkit-auth stdout: %s", out)
-    if err and popen_stderr:
-        logging.debug("polkit-auth stderr: %s", err)
-
-    return 0
 
 # SASL username/pass auth
-
-
 def _do_creds_authname(creds):
     retindex = 4
 
@@ -432,7 +380,7 @@ def _do_creds_authname(creds):
             import getpass
             res = getpass.getpass(prompt)
         else:
-            logging.debug("Unknown auth type in creds callback: %d", credtype)
+            print_stderr("Unknown auth type in creds callback: %d" % credtype)
             return -1
 
         cred[retindex] = res
