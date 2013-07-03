@@ -70,7 +70,7 @@ class Cloner(object):
                               self.CLONE_POLICY_NO_EMPTYMEDIA]
 
         # Throwaway guest to use for easy validation
-        self._valid_guest = Guest(conn=conn)
+        self._valid_guest = Guest(conn)
 
         # Generate a random UUID at the start
         self.clone_uuid = util.generate_uuid(conn)
@@ -265,7 +265,7 @@ class Cloner(object):
 
         logging.debug("Original XML:\n%s", self.original_xml)
 
-        self._guest = Guest(conn=self.conn,
+        self._guest = Guest(self.conn,
                                   parsexml=self.original_xml)
         self._guest.replace = self.replace
 

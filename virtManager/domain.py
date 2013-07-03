@@ -409,7 +409,7 @@ class vmmDomain(vmmLibvirtObject):
         return self._guest
 
     def _build_guest(self, xml):
-        return virtinst.Guest(conn=self.conn.vmm,
+        return virtinst.Guest(self.conn.vmm,
                               parsexml=xml,
                               caps=self.conn.get_capabilities())
 

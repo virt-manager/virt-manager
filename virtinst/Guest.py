@@ -170,21 +170,10 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
 
         return cpustr
 
-    def __init__(self, type=None, connection=None, hypervisorURI=None,
-                 installer=None, parsexml=None, caps=None, conn=None):
+    def __init__(self, conn, type=None,
+                 installer=None, parsexml=None, caps=None):
         # pylint: disable=W0622
         # Redefining built-in 'type', but it matches the XML so keep it
-
-        # Set up the connection, since it is fundamental for other init
-        conn = conn or connection
-        if conn is None:
-            logging.debug("No conn passed to Guest, opening URI '%s'",
-                          hypervisorURI)
-            conn = self._open_uri(hypervisorURI)
-
-        if conn is None:
-            raise RuntimeError(_("Unable to connect to hypervisor, aborting "
-                                 "installation!"))
 
         self._name = None
         self._uuid = None
@@ -256,10 +245,6 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         self._cpu = CPU(self.conn)
         self._numatune = DomainNumatune(self.conn)
 
-    def _open_uri(self, uri):
-        # This is here so test suite can overwrite it, to make sure
-        # Guest is never opening anything
-        return libvirt.open(uri)
 
     ######################
     # Property accessors #

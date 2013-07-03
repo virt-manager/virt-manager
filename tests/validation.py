@@ -425,7 +425,7 @@ class TestValidation(unittest.TestCase):
 
     # Actual Tests
     def testGuestValidation(self):
-        g = virtinst.Guest(conn=testconn, type="xen")
+        g = virtinst.Guest(testconn, type="xen")
         self._testArgs(g, virtinst.Guest, 'guest')
 
     def testDiskValidation(self):

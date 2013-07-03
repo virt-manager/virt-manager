@@ -440,7 +440,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
                                                         arch=self.arch,
                                                         machine=self.machine)
 
-        gobj = virtinst.Guest(installer=self, conn=self.conn)
+        gobj = virtinst.Guest(self.conn, installer=self)
         gobj.arch = guest.arch
         gobj.emulator = domain.emulator
         self.loader = domain.loader

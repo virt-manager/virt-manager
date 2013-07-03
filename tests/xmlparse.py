@@ -36,7 +36,7 @@ class XMLParseTest(unittest.TestCase):
 
     def _roundtrip_compare(self, filename):
         expectXML = sanitize_file_xml(file(filename).read())
-        guest = virtinst.Guest(conn=conn, parsexml=expectXML)
+        guest = virtinst.Guest(conn, parsexml=expectXML)
         actualXML = guest.get_xml_config()
         utils.diff_compare(actualXML, expect_out=expectXML)
 
@@ -88,7 +88,7 @@ class XMLParseTest(unittest.TestCase):
         """
         infile  = "tests/xmlparse-xml/change-guest-in.xml"
         outfile = "tests/xmlparse-xml/change-guest-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         check = self._make_checker(guest)
@@ -170,7 +170,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterMinimalGuest(self):
         infile  = "tests/xmlparse-xml/change-minimal-guest-in.xml"
         outfile = "tests/xmlparse-xml/change-minimal-guest-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         check = self._make_checker(guest.features)
@@ -204,7 +204,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterBootMulti(self):
         infile  = "tests/xmlparse-xml/change-boot-multi-in.xml"
         outfile = "tests/xmlparse-xml/change-boot-multi-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         check = self._make_checker(guest.installer.bootconfig)
@@ -219,7 +219,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterBootKernel(self):
         infile  = "tests/xmlparse-xml/change-boot-kernel-in.xml"
         outfile = "tests/xmlparse-xml/change-boot-kernel-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         check = self._make_checker(guest.installer.bootconfig)
@@ -235,7 +235,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterCpuMode(self):
         infile  = "tests/xmlparse-xml/change-cpumode-in.xml"
         outfile = "tests/xmlparse-xml/change-cpumode-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         check = self._make_checker(guest.cpu)
@@ -252,7 +252,7 @@ class XMLParseTest(unittest.TestCase):
         """
         infile  = "tests/xmlparse-xml/change-disk-in.xml"
         outfile = "tests/xmlparse-xml/change-disk-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         # Set size up front. VirtualDisk validation is kind of
@@ -299,7 +299,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterChars(self):
         infile  = "tests/xmlparse-xml/change-chars-in.xml"
         outfile = "tests/xmlparse-xml/change-chars-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         serial1     = guest.get_devices("serial")[0]
@@ -358,7 +358,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterControllers(self):
         infile  = "tests/xmlparse-xml/change-controllers-in.xml"
         outfile = "tests/xmlparse-xml/change-controllers-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         dev1 = guest.get_devices("controller")[0]
@@ -393,7 +393,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterNics(self):
         infile  = "tests/xmlparse-xml/change-nics-in.xml"
         outfile = "tests/xmlparse-xml/change-nics-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         dev1 = guest.get_devices("interface")[0]
@@ -451,7 +451,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterInputs(self):
         infile  = "tests/xmlparse-xml/change-inputs-in.xml"
         outfile = "tests/xmlparse-xml/change-inputs-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         dev1 = guest.get_devices("input")[0]
@@ -471,7 +471,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterGraphics(self):
         infile  = "tests/xmlparse-xml/change-graphics-in.xml"
         outfile = "tests/xmlparse-xml/change-graphics-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         dev1 = guest.get_devices("graphics")[0]
@@ -515,7 +515,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterVideos(self):
         infile  = "tests/xmlparse-xml/change-videos-in.xml"
         outfile = "tests/xmlparse-xml/change-videos-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         dev1 = guest.get_devices("video")[0]
@@ -540,7 +540,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterHostdevs(self):
         infile  = "tests/xmlparse-xml/change-hostdevs-in.xml"
         outfile = "tests/xmlparse-xml/change-hostdevs-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         dev1 = guest.get_devices("hostdev")[0]
@@ -577,7 +577,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterWatchdogs(self):
         infile  = "tests/xmlparse-xml/change-watchdogs-in.xml"
         outfile = "tests/xmlparse-xml/change-watchdogs-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         dev1 = guest.get_devices("watchdog")[0]
@@ -591,7 +591,7 @@ class XMLParseTest(unittest.TestCase):
         devtype = "filesystem"
         infile  = "tests/xmlparse-xml/change-%ss-in.xml" % devtype
         outfile = "tests/xmlparse-xml/change-%ss-out.xml" % devtype
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         dev1 = guest.get_devices(devtype)[0]
@@ -632,7 +632,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterSounds(self):
         infile  = "tests/xmlparse-xml/change-sounds-in.xml"
         outfile = "tests/xmlparse-xml/change-sounds-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         dev1 = guest.get_devices("sound")[0]
@@ -653,7 +653,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterAddr(self):
         infile  = "tests/xmlparse-xml/change-addr-in.xml"
         outfile = "tests/xmlparse-xml/change-addr-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         dev1 = guest.get_devices("disk")[0]
@@ -691,7 +691,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterSmartCard(self):
         infile  = "tests/xmlparse-xml/change-smartcard-in.xml"
         outfile = "tests/xmlparse-xml/change-smartcard-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         dev1 = guest.get_devices("smartcard")[0]
@@ -709,7 +709,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterRedirdev(self):
         infile  = "tests/xmlparse-xml/change-redirdev-in.xml"
         outfile = "tests/xmlparse-xml/change-redirdev-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         dev1 = guest.get_devices("redirdev")[0]
@@ -727,7 +727,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterTPM(self):
         infile  = "tests/xmlparse-xml/change-tpm-in.xml"
         outfile = "tests/xmlparse-xml/change-tpm-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         dev1 = guest.get_devices("tpm")[0]
@@ -740,7 +740,7 @@ class XMLParseTest(unittest.TestCase):
     def testConsoleCompat(self):
         infile  = "tests/xmlparse-xml/console-compat-in.xml"
         outfile = "tests/xmlparse-xml/console-compat-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         dev1 = guest.get_devices("console")[0]
@@ -752,7 +752,7 @@ class XMLParseTest(unittest.TestCase):
     def testAddRemoveDevices(self):
         infile  = "tests/xmlparse-xml/add-devices-in.xml"
         outfile = "tests/xmlparse-xml/add-devices-out.xml"
-        guest = virtinst.Guest(conn=conn,
+        guest = virtinst.Guest(conn,
                                parsexml=file(infile).read())
 
         rmdev = guest.get_devices("disk")[2]
@@ -772,7 +772,7 @@ class XMLParseTest(unittest.TestCase):
     def testChangeKVMMedia(self):
         infile  = "tests/xmlparse-xml/change-media-in.xml"
         outfile = "tests/xmlparse-xml/change-media-out.xml"
-        guest = virtinst.Guest(conn=kvmconn,
+        guest = virtinst.Guest(kvmconn,
                                parsexml=file(infile).read())
 
         disk = guest.get_devices("disk")[0]

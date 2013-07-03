@@ -1491,7 +1491,7 @@ class vmmCreate(vmmGObjectUI):
         name = self.get_config_name()
 
         try:
-            g = virtinst.Guest(conn=self.conn.vmm)
+            g = virtinst.Guest(self.conn.vmm)
             g.name = name
         except Exception, e:
             return self.err.val_err(_("Invalid System Name"), e)
