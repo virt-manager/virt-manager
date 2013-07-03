@@ -18,7 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import commands
 import logging
 import os
 import platform
@@ -42,26 +41,10 @@ def listify(l):
         return l
 
 
-def is_vdisk(path):
-    if not os.path.exists("/usr/sbin/vdiskadm"):
-        return False
-    if not os.path.exists(path):
-        return True
-    if os.path.isdir(path) and \
-       os.path.exists(path + "/vdisk.xml"):
-        return True
-    return False
-
-
 def stat_disk(path):
     """Returns the tuple (isreg, size)."""
     if not os.path.exists(path):
         return True, 0
-
-    if is_vdisk(path):
-        size = int(commands.getoutput(
-            "vdiskadm prop-get -p max-size " + path))
-        return True, size
 
     mode = os.stat(path)[stat.ST_MODE]
 

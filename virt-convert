@@ -242,14 +242,8 @@ def main():
             dformat = options.disk_format
 
             if not dformat:
-                # VMDK disks on Solaris converted to vdisk by default
-                if (d.format == diskcfg.DISK_FORMAT_VMDK and
-                    vmcfg.host() == "SunOS"):
-                    dformat = "vdisk"
-
-                elif options.output_format == "vmx":
+                if options.output_format == "vmx":
                     dformat = "vmdk"
-
                 else:
                     dformat = "raw"
 

@@ -39,33 +39,6 @@ from virtinst.VirtualDevice import VirtualDevice
 from virtinst.XMLBuilderDomain import _xml_property
 
 
-def _vdisk_create(path, size, kind, sparse=True):
-    force_fixed = "raw"
-    path = os.path.expanduser(path)
-    if kind in force_fixed or not sparse:
-        _type = kind + ":fixed"
-    else:
-        _type = kind + ":sparse"
-    try:
-        rc = subprocess.call(['/usr/sbin/vdiskadm', 'create', '-t', _type,
-            '-s', str(size), path])
-        return rc == 0
-    except OSError:
-        return False
-
-
-def _vdisk_clone(path, clone):
-    logging.debug("Using vdisk clone.")
-
-    path = os.path.expanduser(path)
-    clone = os.path.expanduser(clone)
-    try:
-        rc = subprocess.call(['/usr/sbin/vdiskadm', 'clone', path, clone])
-        return rc == 0
-    except OSError:
-        return False
-
-
 def _qemu_sanitize_drvtype(phystype, fmt, manual_format=False):
     """
     Sanitize libvirt storage volume format to a valid qemu driver type
@@ -1190,11 +1163,6 @@ class VirtualDisk(VirtualDevice):
             if drvname == self.DRIVER_QEMU:
                 drvtype = self.DRIVER_QEMU_RAW
 
-        elif self.path and os.path.exists(self.path):
-            if util.is_vdisk(self.path):
-                drvname = self.DRIVER_TAP
-                drvtype = self.DRIVER_TAP_VDISK
-
         return drvname or None, drvtype or None
 
     def __managed_storage(self):
@@ -1277,7 +1245,6 @@ class VirtualDisk(VirtualDevice):
             # Make sure we have access to the local path
             if not managed_storage:
                 if (os.path.isdir(self.path) and
-                    not util.is_vdisk(self.path) and
                     not self.device == self.DEVICE_FLOPPY):
                     raise ValueError(_("The path '%s' must be a file or a "
                                        "device, not a directory") % self.path)
@@ -1334,29 +1301,8 @@ class VirtualDisk(VirtualDevice):
                          text=text)
 
         if self.clone_path:
-            # VDisk clone
-            if (util.is_vdisk(self.clone_path) or
-                (os.path.exists(self.path) and util.is_vdisk(self.path))):
-
-                if (not util.is_vdisk(self.clone_path) or
-                    os.path.exists(self.path)):
-                    raise RuntimeError(_("copying to an existing vdisk is not"
-                                         " supported"))
-                if not _vdisk_clone(self.clone_path, self.path):
-                    raise RuntimeError(_("failed to clone disk"))
-                progresscb.end(size_bytes)
-
-            else:
-                # Plain file clone
-                self._clone_local(progresscb, size_bytes)
-
-        elif util.is_vdisk(self.path):
-            # Create vdisk
-            progresscb.update(1024)
-            if not _vdisk_create(self.path, size_bytes, "vmdk", self.sparse):
-                raise RuntimeError(_("Error creating vdisk %s" % self.path))
-
-            progresscb.end(self.size)
+            # Plain file clone
+            self._clone_local(progresscb, size_bytes)
         else:
             # Plain file creation
             self._create_local_file(progresscb, size_bytes)
