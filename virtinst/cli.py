@@ -35,6 +35,7 @@ import libvirt
 from virtcli import cliconfig
 
 import virtinst
+from virtinst import uriutil
 from virtinst import util
 from virtinst.util import listify
 
@@ -44,7 +45,6 @@ from virtinst import VirtualGraphics
 from virtinst import VirtualAudio
 from virtinst import VirtualDisk
 from virtinst import VirtualCharDevice
-from virtinst import User
 
 
 DEFAULT_POOL_PATH = "/var/lib/libvirt/images"
@@ -325,9 +325,6 @@ def open_test_uri(uri):
 
 
 def getConnection(uri):
-    if (uri and not User.current().has_priv(User.PRIV_CREATE_DOMAIN, uri)):
-        fail(_("Must be root to create Xen guests"))
-
     # Hack to facilitate virtinst unit testing
     if is_virtinst_test_uri(uri):
         return open_test_uri(uri)
@@ -879,11 +876,12 @@ def get_cpuset(guest, cpuset, memory):
 
 def _default_network_opts(guest):
     opts = ""
-    if User.current().has_priv(User.PRIV_CREATE_NETWORK, guest.get_uri()):
+    if (uriutil.is_qemu_session(guest.conn) or
+        uriutil.is_test(guest.conn)):
+        opts = "user"
+    else:
         net = util.default_network(guest.conn)
         opts = "%s=%s" % (net[0], net[1])
-    else:
-        opts = "user"
 
     return opts
 

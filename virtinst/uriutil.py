@@ -137,6 +137,10 @@ def is_qemu_system(conn, uri=None):
     return False
 
 
+def is_qemu_session(conn):
+    return is_qemu(conn) and is_session_uri(conn)
+
+
 def is_session_uri(conn, uri=None):
     uri = _get_uri_to_split(conn, uri)
     if not uri:
@@ -145,6 +149,15 @@ def is_session_uri(conn, uri=None):
     (ignore, ignore, ignore,
      path, ignore, ignore) = uri_split(uri)
     return bool(path and path == "/session")
+
+
+def is_test(conn, uri=None):
+    uri = _get_uri_to_split(conn, uri)
+    if not uri:
+        return False
+
+    scheme = uri_split(uri)[0]
+    return scheme.startswith("test")
 
 
 def is_qemu(conn, uri=None):

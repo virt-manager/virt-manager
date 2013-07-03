@@ -29,7 +29,6 @@ import urlgrabber.progress as progress
 import virtinst.cli as cli
 from virtinst import Cloner
 from virtinst.cli import fail, print_stdout, print_stderr
-from virtinst.User import User
 
 
 ### General input gathering functions
@@ -201,7 +200,6 @@ def parse_args():
     (options, parseargs) = parser.parse_args()
     return options, parseargs
 
-### Let's do it!
 
 
 def main(conn=None):
@@ -218,9 +216,6 @@ def main(conn=None):
 
     if conn is None:
         conn = cli.getConnection(options.connect)
-
-    if not User.current().has_priv(User.PRIV_CLONE, conn.getURI()):
-        fail(_("Must be privileged to clone Xen guests"))
 
     design = Cloner(conn)
 

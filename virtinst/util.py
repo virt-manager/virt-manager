@@ -432,18 +432,15 @@ def default_network(conn):
 
 def default_connection():
     if os.path.exists('/var/lib/xend'):
-        if os.path.exists('/dev/xen/evtchn'):
-            return 'xen'
-        if os.path.exists("/proc/xen"):
+        if (os.path.exists('/dev/xen/evtchn') or
+            os.path.exists("/proc/xen")):
             return 'xen'
 
-    from virtinst import User
-
-    if os.path.exists("/usr/bin/qemu") or \
-        os.path.exists("/usr/bin/qemu-kvm") or \
-        os.path.exists("/usr/bin/kvm") or \
-        os.path.exists("/usr/bin/xenner"):
-        if User.current().has_priv(User.PRIV_QEMU_SYSTEM):
+    if (os.path.exists("/usr/bin/qemu") or
+        os.path.exists("/usr/bin/qemu-kvm") or
+        os.path.exists("/usr/bin/kvm") or
+        os.path.exists("/usr/bin/xenner")):
+        if os.geteuid() == 0:
             return "qemu:///system"
         else:
             return "qemu:///session"
@@ -454,7 +451,6 @@ def is_blktap_capable():
     if platform.system() == 'SunOS':
         return False
 
-    # return os.path.exists("/dev/xen/blktapctrl")
     f = open("/proc/modules")
     lines = f.readlines()
     f.close()
@@ -464,10 +460,6 @@ def is_blktap_capable():
     return False
 
 
-# this function is directly from xend/server/netif.py and is thus
-# available under the LGPL,
-# Copyright 2004, 2005 Mike Wray <mike.wray@hp.com>
-# Copyright 2005 XenSource Ltd
 def randomMAC(typ, conn=None):
     """Generate a random MAC address.
 

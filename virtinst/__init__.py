@@ -46,7 +46,6 @@ from virtinst.ImportInstaller import ImportInstaller
 from virtinst.ImageInstaller import ImageInstaller
 from virtinst.Installer import ContainerInstaller
 from virtinst.CloneManager import Cloner
-from virtinst.User import User
 from virtinst.Clock import Clock
 from virtinst.CPU import CPU, CPUFeature
 from virtinst.Seclabel import Seclabel

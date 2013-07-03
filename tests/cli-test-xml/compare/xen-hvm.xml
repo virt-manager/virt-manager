@@ -28,7 +28,8 @@
       <target dev='hdc' bus='ide'/>
       <readonly/>
     </disk>
-    <interface type='user'>
+    <interface type='network'>
+      <source network='default'/>
       <mac address='00:11:22:33:44:55'/>
     </interface>
     <input type='mouse' bus='ps2'/>

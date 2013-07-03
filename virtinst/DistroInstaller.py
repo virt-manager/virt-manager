@@ -30,7 +30,6 @@ from virtinst import support
 from virtinst import util
 from virtinst import Installer
 from virtinst.VirtualDisk import VirtualDisk
-from virtinst.User import User
 from virtinst import OSDistro
 
 
@@ -251,11 +250,6 @@ class DistroInstaller(Installer.Installer):
             raise ValueError(_("Install media location must be an NFS, HTTP "
                                "or FTP network install source, or an existing "
                                "file/device"))
-
-        if (not self._location_is_path and val.startswith("nfs:") and not
-            User.current().has_priv(User.PRIV_NFS_MOUNT,
-                                    (self.conn and self.get_uri()))):
-            raise ValueError(_('Privilege is required for NFS installations'))
 
         self._location = val
     location = property(get_location, set_location)
