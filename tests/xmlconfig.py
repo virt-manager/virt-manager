@@ -802,7 +802,7 @@ class TestXMLConfig(unittest.TestCase):
         self._compare(g, "boot-many-devices", False)
 
     def testCpuset(self):
-        normaltest = libvirt.open("test:///default")
+        normaltest = utils.open_testdefault()
         utils.set_conn(normaltest)
         g = utils.get_basic_fullyvirt_guest()
 

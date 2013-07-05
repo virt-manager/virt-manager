@@ -110,8 +110,6 @@ class Interface(object):
     def _get_conn(self):
         return self._conn
     def _set_conn(self, val):
-        if not isinstance(val, libvirt.virConnect):
-            raise ValueError(_("'conn' must be a libvirt connection object."))
         if not support.check_conn_support(val, support.SUPPORT_CONN_INTERFACE):
             raise ValueError(_("Passed connection is not libvirt interface "
                                "capable"))

@@ -76,7 +76,6 @@ class VirtualDevice(XMLBuilderDomain):
         Initialize device state
 
         @param conn: libvirt connection to validate device against
-        @type conn: virConnect
         """
         XMLBuilderDomain.__init__(self, conn, parsexml, parsexmlnode,
                                   caps=caps)

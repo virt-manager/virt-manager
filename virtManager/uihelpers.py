@@ -164,7 +164,7 @@ def populate_video_combo(vm, video_dev, no_default=None):
                     if v.model_type == "qxl"])
 
     video_dev_model.clear()
-    tmpdev = virtinst.VirtualVideoDevice(vm.conn.vmm)
+    tmpdev = virtinst.VirtualVideoDevice(vm.conn.get_backend())
     for m in tmpdev.model_types:
         if not vm.rhel6_defaults():
             if m == "qxl" and not has_spice and not has_qxl:
@@ -641,7 +641,8 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
                 bridge_name = name
                 brlabel = _("(Empty bridge)")
         else:
-            if (show_direct_interfaces and virtinst.support.check_conn_support(conn.vmm,
+            if (show_direct_interfaces and
+                virtinst.support.check_conn_support(conn.get_backend(),
                          virtinst.support.SUPPORT_CONN_HV_DIRECT_INTERFACE)):
                 sensitive = True
                 nettype = VirtualNetworkInterface.TYPE_DIRECT
@@ -713,7 +714,7 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
 
     # Make sure VirtualNetwork is running
     if (nettype == VirtualNetworkInterface.TYPE_VIRTUAL and
-        devname not in conn.vmm.listNetworks()):
+        devname not in conn.get_backend().listNetworks()):
 
         res = err_dial.yes_no(_("Virtual Network is not active."),
                               _("Virtual Network '%s' is not active. "
@@ -724,7 +725,7 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
 
         # Try to start the network
         try:
-            virnet = conn.vmm.networkLookupByName(devname)
+            virnet = conn.get_backend().networkLookupByName(devname)
             virnet.create()
             logging.info("Started network '%s'", devname)
         except Exception, e:
@@ -744,7 +745,7 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
         elif nettype == VirtualNetworkInterface.TYPE_USER:
             pass
 
-        net = VirtualNetworkInterface(conn=conn.vmm,
+        net = VirtualNetworkInterface(conn=conn.get_backend(),
                                       type=nettype,
                                       bridge=bridge,
                                       network=netname,
@@ -759,7 +760,7 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
         return err_dial.val_err(_("Error with network parameters."), e)
 
     # Make sure there is no mac address collision
-    isfatal, errmsg = net.is_conflict_net(conn.vmm)
+    isfatal, errmsg = net.is_conflict_net(conn.get_backend())
     if isfatal:
         return err_dial.val_err(_("Mac address collision."), errmsg)
     elif errmsg is not None:
@@ -775,8 +776,8 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
 def generate_macaddr(conn):
     newmac = ""
     try:
-        net = VirtualNetworkInterface(conn=conn.vmm)
-        net.setup(conn.vmm)
+        net = VirtualNetworkInterface(conn=conn.get_backend())
+        net.setup(conn.get_backend())
         newmac = net.macaddr
     except:
         pass
@@ -983,7 +984,8 @@ def check_path_search_for_qemu(parent, conn, path):
     user = util.running_config.default_qemu_user
 
     skip_paths = util.running_config.get_perms_fix_ignore()
-    broken_paths = VirtualDisk.check_path_search_for_user(conn.vmm, path, user)
+    broken_paths = VirtualDisk.check_path_search_for_user(conn.get_backend(),
+                                                          path, user)
     for p in broken_paths:
         if p in skip_paths:
             broken_paths.remove(p)
@@ -1005,7 +1007,8 @@ def check_path_search_for_qemu(parent, conn, path):
         return
 
     logging.debug("Attempting to correct permission issues.")
-    errors = VirtualDisk.fix_path_search_for_user(conn.vmm, path, user)
+    errors = VirtualDisk.fix_path_search_for_user(conn.get_backend(),
+                                                  path, user)
     if not errors:
         return
 

@@ -277,9 +277,10 @@ class vmmCreatePool(vmmGObjectUI):
 
         plist = []
         try:
-            plist = Storage.StoragePool.pool_list_from_sources(self.conn.vmm,
-                                                               name, pool_type,
-                                                               host=host)
+            plist = Storage.StoragePool.pool_list_from_sources(
+                                                self.conn.get_backend(),
+                                                name, pool_type,
+                                                host=host)
         except Exception:
             logging.exception("Pool enumeration failed")
 
@@ -454,12 +455,7 @@ class vmmCreatePool(vmmGObjectUI):
             self.close()
 
     def _async_pool_create(self, asyncjob, build):
-        newconn = None
-
-        # Open a seperate connection to install on since this is async
-        newconn = util.dup_lib_conn(self._pool.conn)
         meter = asyncjob.get_meter()
-        self._pool.conn = newconn
 
         logging.debug("Starting backround pool creation.")
         poolobj = self._pool.install(create=True, meter=meter, build=build)
@@ -501,7 +497,7 @@ class vmmCreatePool(vmmGObjectUI):
         if page == PAGE_NAME:
             typ  = self.get_config_type()
             name = self.get_config_name()
-            conn = self.conn.vmm
+            conn = self.conn.get_backend()
 
             try:
                 self._pool_class = Storage.StoragePool.get_pool_class(typ)

@@ -984,7 +984,8 @@ class vmmHost(vmmGObjectUI):
             namestr = None
             try:
                 if path:
-                    names = VirtualDisk.path_in_use_by(self.conn.vmm, path)
+                    names = VirtualDisk.path_in_use_by(self.conn.get_backend(),
+                                                       path)
                     namestr = ", ".join(names)
                     if not namestr:
                         namestr = None

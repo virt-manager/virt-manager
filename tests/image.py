@@ -15,7 +15,6 @@
 # MA 02110-1301 USA.
 
 import unittest
-import libvirt
 import virtinst
 import virtinst.cli
 import virtinst.ImageParser
@@ -32,8 +31,8 @@ qemuuri = "__virtinst_test__test:///default,caps=%s/tests/capabilities-xml/capab
 class TestImageParser(unittest.TestCase):
 
     basedir = "tests/image-xml/"
-    conn = libvirt.open("test:///default")
-    qemuconn = virtinst.cli.open_test_uri(qemuuri)
+    conn = utils.open_testdefault()
+    qemuconn = virtinst.cli.getConnection(qemuuri)
     caps = virtinst.CapabilitiesParser.parse(conn.getCapabilities())
     qemucaps = virtinst.CapabilitiesParser.parse(qemuconn.getCapabilities())
 
@@ -107,7 +106,7 @@ class TestImageParser(unittest.TestCase):
             utils.reset_conn()
 
     def testImage2XML(self):
-        # Build libvirt XML from the image xml
+        # Build guest XML from the image xml
         self._image2XMLhelper("image.xml", ["image-xenpv32.xml",
                                             "image-xenfv32.xml"])
         self._image2XMLhelper("image-kernel.xml", ["image-xenpv32-kernel.xml"])

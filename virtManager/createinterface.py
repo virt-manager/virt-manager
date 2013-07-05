@@ -559,9 +559,11 @@ class vmmCreateInterface(vmmGObjectUI):
 
         name = _("No interface selected")
         if itype == Interface.Interface.INTERFACE_TYPE_BRIDGE:
-            name = Interface.Interface.find_free_name(self.conn.vmm, "br")
+            name = Interface.Interface.find_free_name(self.conn.get_backend(),
+                                                      "br")
         elif itype == Interface.Interface.INTERFACE_TYPE_BOND:
-            name = Interface.Interface.find_free_name(self.conn.vmm, "bond")
+            name = Interface.Interface.find_free_name(self.conn.get_backend(),
+                                                      "bond")
         else:
             ifaces = self.get_config_selected_interfaces()
             if len(ifaces) > 0:
@@ -921,7 +923,7 @@ class vmmCreateInterface(vmmGObjectUI):
             return self.err.val_err(_("An interface must be selected"))
 
         try:
-            iobj = iclass(name, self.conn.vmm)
+            iobj = iclass(name, self.conn.get_backend())
             iobj.start_mode = start
             check_conflict = False
 
@@ -1128,8 +1130,5 @@ class vmmCreateInterface(vmmGObjectUI):
 
     def do_install(self, asyncjob, activate):
         meter = asyncjob.get_meter()
-
-        self.interface.conn = util.dup_conn(self.conn).vmm
-
         self.interface.install(meter, create=activate)
         logging.debug("Install completed")

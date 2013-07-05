@@ -168,7 +168,6 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.close()
 
     def _async_delete(self, asyncjob, paths):
-        newconn = None
         storage_errors = []
         details = ""
 
@@ -177,16 +176,14 @@ class vmmDeleteDialog(vmmGObjectUI):
                 logging.debug("Forcing VM '%s' power off.", self.vm.get_name())
                 self.vm.destroy()
 
-            # Open a seperate connection to install on since this is async
-            logging.debug("Threading off connection to delete vol.")
-            newconn = util.dup_conn(self.conn).vmm
+            conn = self.conn.get_backend()
             meter = asyncjob.get_meter()
 
             for path in paths:
                 try:
                     logging.debug("Deleting path: %s", path)
                     meter.start(text=_("Deleting path '%s'") % path)
-                    self._async_delete_path(newconn, path, meter)
+                    self._async_delete_path(conn, path, meter)
                 except Exception, e:
                     storage_errors.append((str(e),
                                           "".join(traceback.format_exc())))
@@ -382,7 +379,7 @@ def do_we_default(conn, vm_name, vol, path, ro, shared):
         info = append_str(info, _("Storage is marked as shareable."))
 
     try:
-        names = virtinst.VirtualDisk.path_in_use_by(conn.vmm, path)
+        names = virtinst.VirtualDisk.path_in_use_by(conn.get_backend(), path)
 
         if len(names) > 1:
             namestr = ""

@@ -407,7 +407,7 @@ class vmmDomain(vmmLibvirtObject):
         return self._guest
 
     def _build_guest(self, xml):
-        return virtinst.Guest(self.conn.vmm,
+        return virtinst.Guest(self.conn.get_backend(),
                               parsexml=xml,
                               caps=self.conn.get_capabilities())
 
@@ -1289,13 +1289,14 @@ class vmmDomain(vmmLibvirtObject):
             flags |= libvirt.VIR_MIGRATE_PEER2PEER
             flags |= libvirt.VIR_MIGRATE_TUNNELLED
 
+        destconn = destconn.get_backend().libvirtconn
         logging.debug("Migrating: conn=%s flags=%s dname=%s uri=%s rate=%s",
-                      destconn.vmm, flags, newname, interface, rate)
+                      destconn, flags, newname, interface, rate)
 
         if meter:
             start_job_progress_thread(self, meter, _("Migrating domain"))
 
-        self._backend.migrate(destconn.vmm, flags, newname, interface, rate)
+        self._backend.migrate(destconn, flags, newname, interface, rate)
 
         def define_cb():
             newxml = self.get_xml(inactive=True)

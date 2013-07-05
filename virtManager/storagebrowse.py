@@ -340,7 +340,7 @@ class vmmStorageBrowser(vmmGObjectUI):
             try:
                 if path:
                     names = virtinst.VirtualDisk.path_in_use_by(
-                                                self.conn.vmm, path)
+                                                self.conn.get_backend(), path)
                     namestr = ", ".join(names)
                     if not namestr:
                         namestr = None

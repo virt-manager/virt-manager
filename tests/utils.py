@@ -58,6 +58,10 @@ def _make_uri(base, connver=None, libver=None):
     return base
 
 
+def open_testdefault():
+    return virtinst.cli.getConnection("test:///default")
+
+
 def open_testdriver():
     return virtinst.cli.getConnection(_testuri)
 

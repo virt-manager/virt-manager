@@ -49,3 +49,4 @@ from virtinst.CloneManager import Cloner
 from virtinst.Clock import Clock
 from virtinst.CPU import CPU, CPUFeature
 from virtinst.Seclabel import Seclabel
+from virtinst.connection import VirtualConnection

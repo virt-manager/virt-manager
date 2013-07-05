@@ -462,7 +462,8 @@ class vmmCreate(vmmGObjectUI):
         can_storage = (is_local or is_storage_capable)
         is_pv = (self.capsguest.os_type == "xen")
         is_container = self.conn.is_container()
-        can_remote_url = virtinst.support.check_stream_support(self.conn.vmm,
+        can_remote_url = virtinst.support.check_stream_support(
+                            self.conn.get_backend(),
                             virtinst.support.SUPPORT_STREAM_UPLOAD)
 
         # Install Options
@@ -823,12 +824,12 @@ class vmmCreate(vmmGObjectUI):
                     break
 
         (newg, newdom) = virtinst.CapabilitiesParser.guest_lookup(
-                                                        conn=self.conn.vmm,
-                                                        caps=self.caps,
-                                                        os_type=gtype,
-                                                        typ=dtype,
-                                                        accelerated=True,
-                                                        arch=arch)
+                                                conn=self.conn.get_backend(),
+                                                caps=self.caps,
+                                                os_type=gtype,
+                                                typ=dtype,
+                                                accelerated=True,
+                                                arch=arch)
 
         if (self.capsguest and self.capsdomain and
             (newg.arch == self.capsguest.arch and
@@ -1487,7 +1488,7 @@ class vmmCreate(vmmGObjectUI):
         name = self.get_config_name()
 
         try:
-            g = virtinst.Guest(self.conn.vmm)
+            g = virtinst.Guest(self.conn.get_backend())
             g.name = name
         except Exception, e:
             return self.err.val_err(_("Invalid System Name"), e)
@@ -1647,6 +1648,7 @@ class vmmCreate(vmmGObjectUI):
     def validate_storage_page(self, oldguest=None):
         use_storage = self.widget("enable-storage").get_active()
         instcd = self.get_config_install_page() == INSTALL_PAGE_ISO
+        conn = self.conn.get_backend()
 
         # CD/ISO install and no disks implies LiveCD
         if instcd:
@@ -1685,11 +1687,8 @@ class vmmCreate(vmmGObjectUI):
                 ret = True
 
                 try:
-                    do_exist = virtinst.VirtualDisk.path_exists(
-                                                        self.conn.vmm, ideal)
-
-                    ret = virtinst.VirtualDisk.path_in_use_by(self.conn.vmm,
-                                                              ideal)
+                    do_exist = virtinst.VirtualDisk.path_exists(conn, ideal)
+                    ret = virtinst.VirtualDisk.path_in_use_by(conn, ideal)
                 except:
                     logging.exception("Error checking default path usage")
 
@@ -1705,7 +1704,7 @@ class vmmCreate(vmmGObjectUI):
             if not diskpath:
                 return self.err.val_err(_("A storage path must be specified."))
 
-            disk = virtinst.VirtualDisk(conn=self.conn.vmm,
+            disk = virtinst.VirtualDisk(conn=conn,
                                         path=diskpath,
                                         size=disksize,
                                         sparse=sparse)
@@ -1782,7 +1781,7 @@ class vmmCreate(vmmGObjectUI):
 
     # Interesting methods
     def build_installer(self, instclass):
-        installer = instclass(conn=self.conn.vmm,
+        installer = instclass(conn=self.conn.get_backend(),
                               type=self.capsdomain.hypervisor_type,
                               os_type=self.capsguest.os_type)
         installer.arch = self.capsguest.arch
@@ -1908,11 +1907,6 @@ class vmmCreate(vmmGObjectUI):
         meter = asyncjob.get_meter()
 
         logging.debug("Starting background install process")
-
-        guest.conn = util.dup_conn(self.conn).vmm
-        for dev in guest.get_all_devices():
-            dev.conn = guest.conn
-
         guest.start_install(False, meter=meter)
         logging.debug("Install completed")
 

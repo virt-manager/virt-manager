@@ -1825,7 +1825,7 @@ class vmmDetails(vmmGObjectUI):
 
     def generate_cpuset(self):
         mem = int(self.vm.get_memory()) / 1024 / 1024
-        return virtinst.Guest.generate_cpuset(self.conn.vmm, mem)
+        return virtinst.Guest.generate_cpuset(self.conn.get_backend(), mem)
 
     # VCPUS
     def config_get_vcpus(self):
@@ -1867,7 +1867,7 @@ class vmmDetails(vmmGObjectUI):
     def config_cpu_copy_host(self, src_ignore):
         # Update UI with output copied from host
         try:
-            CPU = virtinst.CPU(self.vm.conn.vmm)
+            CPU = virtinst.CPU(self.vm.conn.get_backend())
             CPU.copy_host_cpu()
 
             self._refresh_cpu_config(CPU)
@@ -2202,7 +2202,8 @@ class vmmDetails(vmmGObjectUI):
         try:
             new_text = new_text.strip()
             vcpu_num = int(row[0])
-            pinlist = virtinst.Guest.cpuset_str_to_tuple(conn.vmm, new_text)
+            pinlist = virtinst.Guest.cpuset_str_to_tuple(
+                                                conn.get_backend(), new_text)
         except Exception, e:
             self.err.val_err(_("Error building pin list"), e)
             return
@@ -2223,7 +2224,8 @@ class vmmDetails(vmmGObjectUI):
         if self.vm.vcpu_pinning() == cpuset:
             return
 
-        pinlist = virtinst.Guest.cpuset_str_to_tuple(conn.vmm, cpuset)
+        pinlist = virtinst.Guest.cpuset_str_to_tuple(
+                                                conn.get_backend(), cpuset)
         for row in vcpu_model:
             vcpu_num = row[0]
             self.vm.pin_vcpu(int(vcpu_num), pinlist)

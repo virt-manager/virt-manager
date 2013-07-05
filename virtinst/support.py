@@ -428,7 +428,6 @@ def _check_support(conn, feature, data=None):
     the passed connection.
 
     @param conn: Libvirt connection to check feature on
-    @type  conn: virConnect
     @param feature: Feature type to check support for
     @type  feature: One of the SUPPORT_* flags
     @param data: Option libvirt object to use in feature checking
@@ -437,11 +436,14 @@ def _check_support(conn, feature, data=None):
 
     @returns: True if feature is supported, False otherwise
     """
+    # Temporary hack to make this work
+    if "VirtualConnection" in repr(conn):
+        conn = getattr(conn, "_libvirtconn")
+    if "VirtualConnection" in repr(data):
+        data = getattr(data, "_libvirtconn")
+
     support_info = _support_dict[feature]
     key_list = support_info.keys()
-
-    if not isinstance(conn, libvirt.virConnect):
-        raise ValueError(_("'conn' must be a virConnect instance."))
 
     def get_value(key):
         if key in key_list:
@@ -502,8 +504,9 @@ def _check_support(conn, feature, data=None):
             if object_name:
                 classobj = _get_command(object_name)
                 if not isinstance(data, classobj):
-                    raise ValueError("Passed obj with args must be of type " +
-                                     str(classobj))
+                    raise ValueError(
+                        "Passed obj %s with args must be of type %s, was %s" %
+                        (data, str(classobj), type(data)))
 
             cmd = _get_command(function_name, obj=data)
 
@@ -602,10 +605,6 @@ def is_error_nosupport(err):
 
 def support_threading():
     return bool(_local_lib_ver() >= 6000)
-
-
-def support_openauth():
-    return bool(_local_lib_ver() >= 4000)
 
 
 def check_conn_support(conn, feature):

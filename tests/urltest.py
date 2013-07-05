@@ -32,7 +32,6 @@ from virtinst.OSDistro import SLDistro
 from virtinst.OSDistro import UbuntuDistro
 from virtinst.OSDistro import MandrivaDistro
 
-import libvirt
 import urlgrabber.progress
 
 # pylint: disable=W0212
@@ -224,7 +223,7 @@ urls = {
 }
 
 
-testconn = libvirt.open("test:///default")
+testconn = utils.open_testdefault()
 testguest = virtinst.Guest(testconn, installer=virtinst.DistroInstaller())
 
 

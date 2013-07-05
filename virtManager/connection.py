@@ -88,12 +88,10 @@ class vmmConnection(vmmGObject):
         self.connectThread = None
         self.connectError = None
         self._ticklock = threading.Lock()
-        self.vmm = None
+        self._backend = virtinst.VirtualConnection(self._uri)
 
         self._caps = None
         self._caps_xml = None
-        self._is_virtinst_test_uri = virtinst.cli.is_virtinst_test_uri(
-                                        self._uri)
 
         self.network_capable = None
         self._storage_capable = None
@@ -128,6 +126,7 @@ class vmmConnection(vmmGObject):
         self.mediadev_initialized = False
         self.mediadev_error = ""
         self.mediadev_use_libvirt = False
+
 
     #################
     # Init routines #
@@ -186,6 +185,8 @@ class vmmConnection(vmmGObject):
 
     def get_uri(self):
         return self._uri
+    def get_backend(self):
+        return self._backend
 
     def invalidate_caps(self):
         self._caps_xml = None
@@ -193,7 +194,7 @@ class vmmConnection(vmmGObject):
 
     def _check_caps(self):
         if not (self._caps_xml or self._caps):
-            self._caps_xml = self.vmm.getCapabilities()
+            self._caps_xml = self._backend.getCapabilities()
             self._caps = virtinst.CapabilitiesParser.parse(self._caps_xml)
 
     def get_capabilities_xml(self):
@@ -207,33 +208,33 @@ class vmmConnection(vmmGObject):
         return self._caps
 
     def get_max_vcpus(self, _type):
-        return virtinst.util.get_max_vcpus(self.vmm, _type)
+        return virtinst.util.get_max_vcpus(self._backend, _type)
 
     def get_host_info(self):
         return self.hostinfo
 
     def pretty_host_memory_size(self):
-        if self.vmm is None:
+        if not self._backend.is_open():
             return ""
         return util.pretty_mem(self.host_memory_size())
 
     def host_memory_size(self):
-        if self.vmm is None:
+        if not self._backend.is_open():
             return 0
         return self.hostinfo[1] * 1024
 
     def host_architecture(self):
-        if self.vmm is None:
+        if not self._backend.is_open():
             return ""
         return self.hostinfo[0]
 
     def host_active_processor_count(self):
-        if self.vmm is None:
+        if not self._backend.is_open():
             return 0
         return self.hostinfo[2]
 
     def host_maximum_processor_count(self):
-        if self.vmm is None:
+        if not self._backend.is_open():
             return 0
         return (self.hostinfo[4] * self.hostinfo[5] *
                 self.hostinfo[6] * self.hostinfo[7])
@@ -258,9 +259,9 @@ class vmmConnection(vmmGObject):
     ##########################
 
     def get_qualified_hostname(self):
-        if virtinst.support.check_conn_support(self.vmm,
+        if virtinst.support.check_conn_support(self._backend,
                                 virtinst.support.SUPPORT_CONN_GETHOSTNAME):
-            return self.vmm.getHostname()
+            return self._backend.getHostname()
 
         uri_hostname = self.get_uri_hostname()
         if self.is_remote() and uri_hostname.lower() != "localhost":
@@ -299,7 +300,7 @@ class vmmConnection(vmmGObject):
         return self.is_lxc() or self.is_openvz()
 
     def is_lxc(self):
-        if self._is_virtinst_test_uri:
+        if self._backend.is_virtinst_test_uri:
             self.get_uri().count(",lxc")
 
         return uriutil.uri_split(self.get_uri())[0].startswith("lxc")
@@ -308,14 +309,14 @@ class vmmConnection(vmmGObject):
         return uriutil.uri_split(self.get_uri())[0].startswith("openvz")
 
     def is_xen(self):
-        if self._is_virtinst_test_uri:
+        if self._backend.is_virtinst_test_uri:
             return self.get_uri().count(",xen")
 
         scheme = uriutil.uri_split(self.get_uri())[0]
         return scheme.startswith("xen")
 
     def is_qemu(self):
-        if self._is_virtinst_test_uri:
+        if self._backend.is_virtinst_test_uri:
             return self.get_uri().count(",qemu")
 
         scheme = uriutil.uri_split(self.get_uri())[0]
@@ -465,7 +466,7 @@ class vmmConnection(vmmGObject):
 
     def is_storage_capable(self):
         if self._storage_capable is None:
-            self._storage_capable = virtinst.util.is_storage_capable(self.vmm)
+            self._storage_capable = virtinst.util.is_storage_capable(self._backend)
             if self._storage_capable is False:
                 logging.debug("Connection doesn't seem to support storage "
                               "APIs. Skipping all storage polling.")
@@ -481,7 +482,7 @@ class vmmConnection(vmmGObject):
     def is_network_capable(self):
         if self.network_capable is None:
             self.network_capable = virtinst.support.check_conn_support(
-                                       self.vmm,
+                                       self._backend,
                                        virtinst.support.SUPPORT_CONN_NETWORK)
             if self.network_capable is False:
                 logging.debug("Connection doesn't seem to support network "
@@ -492,7 +493,7 @@ class vmmConnection(vmmGObject):
     def is_interface_capable(self):
         if self.interface_capable is None:
             self.interface_capable = virtinst.support.check_conn_support(
-                                       self.vmm,
+                                       self._backend,
                                        virtinst.support.SUPPORT_CONN_INTERFACE)
             if self.interface_capable is False:
                 logging.debug("Connection doesn't seem to support interface "
@@ -502,7 +503,7 @@ class vmmConnection(vmmGObject):
 
     def is_nodedev_capable(self):
         if self._nodedev_capable is None:
-            self._nodedev_capable = virtinst.NodeDeviceParser.is_nodedev_capable(self.vmm)
+            self._nodedev_capable = virtinst.NodeDeviceParser.is_nodedev_capable(self._backend)
         return self._nodedev_capable
 
     def _get_flags_helper(self, obj, key, check_func):
@@ -765,7 +766,7 @@ class vmmConnection(vmmGObject):
 
     def create_network(self, xml, start=True, autostart=True):
         # Define network
-        net = self.vmm.networkDefineXML(xml)
+        net = self._backend.networkDefineXML(xml)
 
         try:
             if start:
@@ -805,12 +806,12 @@ class vmmConnection(vmmGObject):
                 domainobj.change_name_backend(newobj)
 
     def define_domain(self, xml):
-        return self.vmm.defineXML(xml)
+        return self._backend.defineXML(xml)
     def define_interface(self, xml):
-        self.vmm.interfaceDefineXML(xml, 0)
+        self._backend.interfaceDefineXML(xml, 0)
 
     def restore(self, frm):
-        self.vmm.restore(frm)
+        self._backend.restore(frm)
         try:
             # FIXME: This isn't correct in the remote case. Why do we even
             #        do this? Seems like we should provide an option for this
@@ -879,7 +880,7 @@ class vmmConnection(vmmGObject):
             for dev in devs.values():
                 dev.cleanup()
 
-        self.vmm = None
+        self._backend.close()
         self.record = []
 
         cleanup(self.nodedevs)
@@ -909,15 +910,6 @@ class vmmConnection(vmmGObject):
         self.close()
         self.connectError = None
 
-    def _open_dev_conn(self, uri):
-        """
-        Allow using virtinsts connection hacking to fake capabilities
-        and other reproducible/testable behavior
-        """
-        if not self._is_virtinst_test_uri:
-            return
-        return virtinst.cli.open_test_uri(uri)
-
     def open(self, sync=False):
         if self.state != self.STATE_DISCONNECTED:
             return
@@ -937,18 +929,8 @@ class vmmConnection(vmmGObject):
             self.connectThread.setDaemon(True)
             self.connectThread.start()
 
-    def _do_creds(self, creds, cbdata):
-        """
-        Generic libvirt openAuth callback
-        """
-        ignore = cbdata
+    def _do_creds_password(self, creds):
         try:
-            for cred in creds:
-                if cred[0] == libvirt.VIR_CRED_EXTERNAL:
-                    logging.debug("Don't know how to handle external cred %s",
-                                  cred[2])
-                    return -1
-
             return connectauth.creds_dialog(creds)
         except Exception, e:
             # Detailed error message, in English so it can be Googled.
@@ -956,23 +938,6 @@ class vmmConnection(vmmGObject):
                 "Failed to get credentials for '%s':\n%s\n%s" %
                 (self.get_uri(), str(e), "".join(traceback.format_exc())))
             return -1
-
-    def _try_open(self):
-        vmm = self._open_dev_conn(self.get_uri())
-        if vmm:
-            return vmm
-
-        if virtinst.support.support_openauth():
-            vmm = libvirt.openAuth(self.get_uri(),
-                                   [[libvirt.VIR_CRED_AUTHNAME,
-                                     libvirt.VIR_CRED_PASSPHRASE,
-                                     libvirt.VIR_CRED_EXTERNAL],
-                                    self._do_creds, None],
-                                   flags)
-        else:
-            vmm = libvirt.open(self.get_uri())
-
-        return vmm
 
     def _open_thread(self):
         logging.debug("Background 'open connection' thread is running")
@@ -983,7 +948,7 @@ class vmmConnection(vmmGObject):
             tb = None
             warnconsole = False
             try:
-                self.vmm = self._try_open()
+                self._backend.open(self._do_creds_password)
             except libvirt.libvirtError, libexc:
                 tb = "".join(traceback.format_exc())
             except Exception, exc:
@@ -1123,10 +1088,10 @@ class vmmConnection(vmmGObject):
     def _update_nets(self):
         orig = self.nets.copy()
         name = "network"
-        active_list = self.vmm.listNetworks
-        inactive_list = self.vmm.listDefinedNetworks
+        active_list = self._backend.listNetworks
+        inactive_list = self._backend.listDefinedNetworks
         check_support = self.is_network_capable
-        lookup_func = self.vmm.networkLookupByName
+        lookup_func = self._backend.networkLookupByName
         build_class = vmmNetwork
 
         return self._poll_helper(orig, name, check_support,
@@ -1136,10 +1101,10 @@ class vmmConnection(vmmGObject):
     def _update_pools(self):
         orig = self.pools.copy()
         name = "pool"
-        active_list = self.vmm.listStoragePools
-        inactive_list = self.vmm.listDefinedStoragePools
+        active_list = self._backend.listStoragePools
+        inactive_list = self._backend.listDefinedStoragePools
         check_support = self.is_storage_capable
-        lookup_func = self.vmm.storagePoolLookupByName
+        lookup_func = self._backend.storagePoolLookupByName
         build_class = vmmStoragePool
 
         return self._poll_helper(orig, name, check_support,
@@ -1149,10 +1114,10 @@ class vmmConnection(vmmGObject):
     def _update_interfaces(self):
         orig = self.interfaces.copy()
         name = "interface"
-        active_list = self.vmm.listInterfaces
-        inactive_list = self.vmm.listDefinedInterfaces
+        active_list = self._backend.listInterfaces
+        inactive_list = self._backend.listDefinedInterfaces
         check_support = self.is_interface_capable
-        lookup_func = self.vmm.interfaceLookupByName
+        lookup_func = self._backend.interfaceLookupByName
         build_class = vmmInterface
 
         return self._poll_helper(orig, name, check_support,
@@ -1163,10 +1128,10 @@ class vmmConnection(vmmGObject):
     def _update_nodedevs(self):
         orig = self.nodedevs.copy()
         name = "nodedev"
-        active_list = lambda: self.vmm.listDevices(None, 0)
+        active_list = lambda: self._backend.listDevices(None, 0)
         inactive_list = lambda: []
         check_support = self.is_nodedev_capable
-        lookup_func = self.vmm.nodeDeviceLookupByName
+        lookup_func = self._backend.nodeDeviceLookupByName
         build_class = (lambda conn, obj, key, ignore:
                         vmmNodeDevice(conn, obj, key))
 
@@ -1196,12 +1161,12 @@ class vmmConnection(vmmGObject):
                 oldInactiveNames[vm.get_name()] = vm
 
         try:
-            newActiveIDs = self.vmm.listDomainsID()
+            newActiveIDs = self._backend.listDomainsID()
         except Exception, e:
             logging.debug("Unable to list active domains: %s", e)
 
         try:
-            newInactiveNames = self.vmm.listDefinedDomains()
+            newInactiveNames = self._backend.listDefinedDomains()
         except Exception, e:
             logging.exception("Unable to list inactive domains: %s", e)
 
@@ -1234,7 +1199,7 @@ class vmmConnection(vmmGObject):
             else:
                 # Check if domain is brand new, or old one that changed state
                 try:
-                    vm = self.vmm.lookupByID(_id)
+                    vm = self._backend.lookupByID(_id)
                     uuid = util.uuidstr(vm.UUID())
 
                     check_new(vm, uuid)
@@ -1250,7 +1215,7 @@ class vmmConnection(vmmGObject):
             else:
                 # Check if domain is brand new, or old one that changed state
                 try:
-                    vm = self.vmm.lookupByName(name)
+                    vm = self._backend.lookupByName(name)
                     uuid = util.uuidstr(vm.UUID())
 
                     check_new(vm, uuid)
@@ -1271,7 +1236,7 @@ class vmmConnection(vmmGObject):
         if self.state != self.STATE_ACTIVE:
             return
 
-        self.hostinfo = self.vmm.getInfo()
+        self.hostinfo = self._backend.getInfo()
 
         # Poll for new virtual network objects
         (startNets, stopNets, oldNets,
@@ -1299,7 +1264,7 @@ class vmmConnection(vmmGObject):
             app with long tick operations.
             """
             # Connection closed out from under us
-            if not self.vmm:
+            if not self._backend.is_open():
                 return
 
             # Make sure device polling is setup
@@ -1375,7 +1340,7 @@ class vmmConnection(vmmGObject):
                     (getattr(e, "get_error_code")() ==
                      libvirt.VIR_ERR_SYSTEM_ERROR)):
                     # Try a simple getInfo call to see if conn was dropped
-                    self.vmm.getInfo()
+                    self._backend.getInfo()
                     logging.debug("vm tick raised system error but "
                                   "connection doesn't seem to have dropped. "
                                   "Ignoring.")
@@ -1391,7 +1356,7 @@ class vmmConnection(vmmGObject):
         return 1
 
     def _recalculate_stats(self, now, vms):
-        if self.vmm is None:
+        if not self._backend.is_open():
             return
 
         expected = self.config.get_stats_history_length()

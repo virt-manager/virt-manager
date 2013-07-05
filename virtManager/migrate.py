@@ -531,10 +531,10 @@ class vmmMigrateDialog(vmmGObjectUI):
                        secure, max_downtime):
         meter = asyncjob.get_meter()
 
-        srcconn = util.dup_conn(origvm.conn)
-        dstconn = util.dup_conn(origdconn)
+        srcconn = origvm.conn
+        dstconn = origdconn
 
-        vminst = srcconn.vmm.lookupByName(origvm.get_name())
+        vminst = srcconn.get_backend().lookupByName(origvm.get_name())
         vm = vmmDomain(srcconn, vminst, vminst.UUID())
 
         logging.debug("Migrating vm=%s from %s to %s", vm.get_name(),

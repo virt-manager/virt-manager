@@ -148,8 +148,6 @@ class StorageObject(object):
     def get_conn(self):
         return self._conn
     def set_conn(self, val):
-        if not isinstance(val, libvirt.virConnect):
-            raise ValueError(_("'conn' must be a libvirt connection object."))
         if not util.is_storage_capable(val):
             raise ValueError(_("Passed connection is not libvirt storage "
                                "capable"))
@@ -987,7 +985,7 @@ class StorageVolume(StorageObject):
         """
         @param name: Name for the new storage volume
         @param capacity: Total size of the new volume (in bytes)
-        @param conn: optional virConnect instance to lookup pool_name on
+        @param conn: optional connection instance to lookup pool_name on
         @param pool_name: optional pool_name to install on
         @param pool: virStoragePool object to install on
         @param allocation: amount of storage to actually allocate (default 0)

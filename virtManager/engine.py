@@ -796,8 +796,10 @@ class vmmEngine(vmmGObject):
         if vm.getjobinfo_supported:
             _cancel_cb = (self._save_cancel, vm)
 
-        progWin = vmmAsyncJob(self._save_callback,
-                    [vm, path],
+        def cb(asyncjob):
+            vm.save(path, meter=asyncjob.get_meter())
+
+        progWin = vmmAsyncJob(cb, [],
                     _("Saving Virtual Machine"),
                     _("Saving virtual machine memory to disk "),
                     src.topwin, cancel_cb=_cancel_cb)
@@ -822,13 +824,6 @@ class vmmEngine(vmmGObject):
         asyncjob.job_canceled = True
         return
 
-    def _save_callback(self, asyncjob, vm, file_to_save):
-        conn = util.dup_conn(vm.conn)
-        newvm = conn.get_vm(vm.get_uuid())
-        meter = asyncjob.get_meter()
-
-        newvm.save(file_to_save, meter=meter)
-
     def _do_restore_domain(self, src, uri):
         conn = self._lookup_conn(uri)
         if conn.is_remote():
@@ -844,11 +839,7 @@ class vmmEngine(vmmGObject):
         if not path:
             return
 
-        def cb():
-            newconn = util.dup_conn(conn)
-            newconn.restore(path)
-
-        vmmAsyncJob.simple_async_noshow(cb, [], src,
+        vmmAsyncJob.simple_async_noshow(conn.restore, [path], src,
                                         _("Error restoring domain"))
 
     def _do_destroy_domain(self, src, uri, uuid):

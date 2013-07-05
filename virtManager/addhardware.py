@@ -408,7 +408,7 @@ class vmmAddHardware(vmmGObjectUI):
                       "pci")
         add_hw_option("Video", "video-display", PAGE_VIDEO,
                       virtinst.support.check_conn_support(
-                            self.conn.vmm,
+                            self.conn.get_backend(),
                             virtinst.support.SUPPORT_CONN_DOMAIN_VIDEO),
                       _("Libvirt version does not support video devices."))
         add_hw_option("Watchdog", "device_pci", PAGE_WATCHDOG,
@@ -416,7 +416,7 @@ class vmmAddHardware(vmmGObjectUI):
                       _("Not supported for this guest type."))
         add_hw_option("Filesystem", Gtk.STOCK_DIRECTORY, PAGE_FILESYSTEM,
                       virtinst.support.check_conn_hv_support(
-                        self.conn.vmm,
+                        self.conn.get_backend(),
                         virtinst.support.SUPPORT_CONN_HV_FILESYSTEM,
                         self.vm.get_hv_type()),
                       _("Not supported for this hypervisor/libvirt "
@@ -1048,7 +1048,7 @@ class vmmAddHardware(vmmGObjectUI):
             return
 
         devtype = src.get_model()[src.get_active()][0]
-        conn = self.conn.vmm
+        conn = self.conn.get_backend()
 
         self._dev = VirtualTPMDevice.get_dev_instance(conn,
                                                       devtype)
@@ -1073,7 +1073,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         chartype = self.get_char_type()
         devtype = src.get_model()[src.get_active()][0]
-        conn = self.conn.vmm
+        conn = self.conn.get_backend()
 
         self._dev = VirtualCharDevice.get_dev_instance(conn,
                                                        chartype,
@@ -1167,13 +1167,8 @@ class vmmAddHardware(vmmGObjectUI):
         def do_file_allocate(asyncjob, disk):
             meter = asyncjob.get_meter()
 
-            # If creating disk via storage API, we need to thread
-            # off a new connection
-            if disk.vol_install:
-                newconn = util.dup_lib_conn(disk.conn)
-                disk.conn = newconn
             logging.debug("Starting background file allocate process")
-            disk.setup_dev(self.conn.vmm, meter=meter)
+            disk.setup_dev(self.conn.get_backend(), meter=meter)
             logging.debug("Allocation completed")
 
         progWin = vmmAsyncJob(do_file_allocate,
@@ -1190,7 +1185,7 @@ class vmmAddHardware(vmmGObjectUI):
             self._dev.creating_storage()):
             return self._storage_progress()
 
-        return self._dev.setup_dev(self.conn.vmm)
+        return self._dev.setup_dev(self.conn.get_backend())
 
     def add_device(self):
         ret = self.setup_device()
@@ -1282,6 +1277,8 @@ class vmmAddHardware(vmmGObjectUI):
         cache = self.get_config_disk_cache()
         fmt = self.get_config_disk_format()
         controller_model = None
+        conn = self.conn.get_backend()
+
         if bus == "virtio-scsi":
             bus = "scsi"
             controller_model = "virtio-scsi"
@@ -1309,11 +1306,9 @@ class vmmAddHardware(vmmGObjectUI):
                 ret = True
 
                 try:
-                    do_exist = virtinst.VirtualDisk.path_exists(
-                                                        self.conn.vmm, ideal)
+                    do_exist = virtinst.VirtualDisk.path_exists(conn, ideal)
 
-                    ret = virtinst.VirtualDisk.path_in_use_by(self.conn.vmm,
-                                                              ideal)
+                    ret = virtinst.VirtualDisk.path_in_use_by(conn, ideal)
                 except:
                     logging.exception("Error checking default path usage")
 
@@ -1326,7 +1321,7 @@ class vmmAddHardware(vmmGObjectUI):
                     if do_use:
                         diskpath = ideal
 
-            disk = virtinst.VirtualDisk(conn=self.conn.vmm,
+            disk = virtinst.VirtualDisk(conn=conn,
                                         path=diskpath,
                                         size=disksize,
                                         sparse=sparse,
@@ -1369,7 +1364,7 @@ class vmmAddHardware(vmmGObjectUI):
                 return False
 
         # Disk collision
-        if disk.is_conflict_disk(self.conn.vmm):
+        if disk.is_conflict_disk(conn):
             res = self.err.yes_no(_('Disk "%s" is already in use by another '
                                     'guest!' % disk.path),
                                   _("Do you really want to use the disk?"))
@@ -1383,7 +1378,7 @@ class vmmAddHardware(vmmGObjectUI):
         disk.vmm_controller = None
         if (controller_model == "virtio-scsi") and (bus == "scsi"):
             controllers = self.vm.get_controller_devices()
-            controller = VirtualControllerSCSI(conn=self.conn.vmm)
+            controller = VirtualControllerSCSI(conn=conn)
             controller.set_model(controller_model)
             disk.vmm_controller = controller
             for d in controllers:
@@ -1423,7 +1418,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def validate_page_input(self):
         ignore, inp_type, inp_bus = self.get_config_input()
-        dev = virtinst.VirtualInputDevice(self.conn.vmm)
+        dev = virtinst.VirtualInputDevice(self.conn.get_backend())
         dev.type = inp_type
         dev.bus = inp_bus
 
@@ -1436,7 +1431,7 @@ class vmmAddHardware(vmmGObjectUI):
                  "sdl": virtinst.VirtualGraphics.TYPE_SDL}[graphics]
 
         self._dev = virtinst.VirtualGraphics(type=_type,
-                                             conn=self.conn.vmm)
+                                             conn=self.conn.get_backend())
         try:
             self._dev.port   = self.get_config_graphics_port()
             self._dev.tlsPort = self.get_config_graphics_tls_port()
@@ -1449,7 +1444,7 @@ class vmmAddHardware(vmmGObjectUI):
     def validate_page_sound(self):
         smodel = self.get_config_sound_model()
         try:
-            self._dev = virtinst.VirtualAudio(conn=self.conn.vmm,
+            self._dev = virtinst.VirtualAudio(conn=self.conn.get_backend(),
                                               model=smodel)
         except Exception, e:
             return self.err.val_err(_("Sound device parameter error"), e)
@@ -1479,7 +1474,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         try:
             self._dev = virtinst.VirtualHostDevice.device_from_node(
-                            conn=self.conn.vmm,
+                            conn=self.conn.get_backend(),
                             name=nodedev_name,
                             nodedev=nodedev,
                             is_dup=is_dup)
@@ -1491,7 +1486,7 @@ class vmmAddHardware(vmmGObjectUI):
         modebox = self.widget("char-mode")
         devbox = self.widget("char-device-type")
         devtype = devbox.get_model()[devbox.get_active()][0]
-        conn = self.conn.vmm
+        conn = self.conn.get_backend()
 
         devclass = VirtualCharDevice.get_dev_instance(conn, chartype, devtype)
 
@@ -1533,7 +1528,7 @@ class vmmAddHardware(vmmGObjectUI):
                                     chartype.capitalize(), e)
 
     def validate_page_video(self):
-        conn = self.conn.vmm
+        conn = self.conn.get_backend()
         model = self.get_config_video_model()
 
         try:
@@ -1543,7 +1538,7 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Video device parameter error"), e)
 
     def validate_page_watchdog(self):
-        conn = self.conn.vmm
+        conn = self.conn.get_backend()
         model = self.get_config_watchdog_model()
         action = self.get_config_watchdog_action()
 
@@ -1555,7 +1550,7 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Watchdog parameter error"), e)
 
     def validate_page_filesystem(self):
-        conn = self.conn.vmm
+        conn = self.conn.get_backend()
         source = self.widget("fs-source").get_text()
         target = self.widget("fs-target").get_text()
         mode = self.get_config_fs_mode()
@@ -1600,7 +1595,7 @@ class vmmAddHardware(vmmGObjectUI):
         return False
 
     def validate_page_smartcard(self):
-        conn = self.conn.vmm
+        conn = self.conn.get_backend()
         mode = self.get_config_smartcard_mode()
 
         try:
@@ -1609,7 +1604,7 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Smartcard device parameter error"), e)
 
     def validate_page_usbredir(self):
-        conn = self.conn.vmm
+        conn = self.conn.get_backend()
         stype = self.get_config_usbredir_type()
         host = self.get_config_usbredir_host()
         service = self.get_config_usbredir_service()
@@ -1625,7 +1620,7 @@ class vmmAddHardware(vmmGObjectUI):
                                     str(e))
 
     def validate_page_tpm(self):
-        conn = self.conn.vmm
+        conn = self.conn.get_backend()
         typ = self.get_config_tpm_type()
 
         device_path = self.widget("tpm-device-path").get_text()

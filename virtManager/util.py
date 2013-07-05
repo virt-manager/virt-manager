@@ -23,7 +23,6 @@ import libvirt
 import logging
 import os.path
 
-import virtManager
 import virtinst
 
 running_config = None
@@ -46,7 +45,7 @@ def build_default_pool(vmmconn):
     """
     Helper to build the 'default' storage pool
     """
-    conn = vmmconn.vmm
+    conn = vmmconn.get_backend()
 
     path = get_default_pool_path(vmmconn)
     name = get_default_pool_name(vmmconn)
@@ -253,44 +252,6 @@ def browse_local(parent, dialog_name, conn, start_folder=None,
         running_config.set_default_directory(os.path.dirname(ret),
                                              browse_reason)
     return ret
-
-
-def dup_lib_conn(libconn):
-    conn = _dup_all_conn(None, libconn)
-    if isinstance(conn, virtManager.connection.vmmConnection):
-        return conn.vmm
-    return conn
-
-
-def dup_conn(conn):
-    return _dup_all_conn(conn, None)
-
-
-def _dup_all_conn(conn, libconn):
-    if libconn:
-        uri = libconn.getURI()
-        is_test = uri.startswith("test")
-        vmm = libconn
-    else:
-        is_test = conn.is_test_conn()
-        uri = conn.get_uri()
-        vmm = conn.vmm
-
-    if is_test:
-        # Skip duplicating a test conn, since it doesn't maintain state
-        # between instances
-        return conn or vmm
-
-    if running_config.support_threading:
-        # Libvirt 0.6.0 implemented client side request threading: this
-        # removes the need to actually duplicate the connection.
-        return conn or vmm
-
-    logging.debug("Duplicating connection for async operation.")
-    newconn = virtManager.connection.vmmConnection(uri)
-    newconn.open(sync=True)
-
-    return newconn
 
 
 def pretty_hv(gtype, domtype):

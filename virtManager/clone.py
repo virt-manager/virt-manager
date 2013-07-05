@@ -29,7 +29,6 @@ from gi.repository import Gdk
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.storagebrowse import vmmStorageBrowser
-from virtManager import util
 
 import virtinst
 from virtinst import Cloner
@@ -73,7 +72,8 @@ def can_we_clone(conn, vol, path):
 
     elif vol:
         # Managed storage
-        if not virtinst.Storage.is_create_vol_from_supported(conn.vmm):
+        if not virtinst.Storage.is_create_vol_from_supported(
+                                                        conn.get_backend()):
             if conn.is_remote() or not os.access(path, os.R_OK):
                 msg = _("Connection does not support managed storage cloning.")
     else:
@@ -255,7 +255,7 @@ class vmmCloneVM(vmmGObjectUI):
         self.clone_design = self.build_new_clone_design()
 
     def build_new_clone_design(self, new_name=None):
-        design = Cloner(self.conn.vmm)
+        design = Cloner(self.conn.get_backend())
         design.original_guest = self.orig_vm.get_name()
         if not new_name:
             new_name = design.generate_clone_name()
@@ -302,9 +302,9 @@ class vmmCloneVM(vmmGObjectUI):
             net_type = net.type
 
             # Generate a new MAC
-            obj = VirtualNetworkInterface(conn=self.conn.vmm,
+            obj = VirtualNetworkInterface(conn=self.conn.get_backend(),
                                           type=VirtualNetworkInterface.TYPE_USER)
-            obj.setup(self.conn.vmm)
+            obj.setup(self.conn.get_backend())
             newmac = obj.macaddr
 
 
@@ -676,7 +676,7 @@ class vmmCloneVM(vmmGObjectUI):
         row = self.net_list[orig]
 
         try:
-            VirtualNetworkInterface(conn=self.conn.vmm,
+            VirtualNetworkInterface(conn=self.conn.get_backend(),
                                     type=VirtualNetworkInterface.TYPE_USER,
                                     macaddr=new)
             row[NETWORK_INFO_NEW_MAC] = new
@@ -819,19 +819,9 @@ class vmmCloneVM(vmmGObjectUI):
             self.conn.tick(noStatsUpdate=True)
 
     def _async_clone(self, asyncjob):
-        newconn = None
-
         try:
             self.orig_vm.set_cloning(True)
-
-            # Open a seperate connection to install on since this is async
-            logging.debug("Threading off connection to clone VM.")
-            newconn = util.dup_conn(self.conn).vmm
             meter = asyncjob.get_meter()
-
-            self.clone_design.orig_connection = newconn
-            for d in self.clone_design.clone_disks:
-                d.conn = newconn
 
             self.clone_design.setup()
             self.clone_design.start_duplicate(meter)

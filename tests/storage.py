@@ -19,9 +19,8 @@ import unittest
 
 import virtinst.Storage
 from virtinst.Storage import StoragePool, StorageVolume
-from tests import utils
 
-import libvirt
+from tests import utils
 
 # pylint: disable=W0212
 # Access to protected member, needed to unittest stuff
@@ -134,7 +133,7 @@ def createVol(poolobj, volname=None, input_vol=None, clone_vol=None):
 class TestStorage(unittest.TestCase):
 
     def setUp(self):
-        self.conn = libvirt.open("test:///default")
+        self.conn = utils.open_testdefault()
 
     def testDirPool(self):
         poolobj = createPool(self.conn, StoragePool.TYPE_DIR, "pool-dir")

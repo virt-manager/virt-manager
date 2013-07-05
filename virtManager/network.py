@@ -59,7 +59,7 @@ class vmmNetwork(vmmLibvirtObject):
     def _XMLDesc(self, flags):
         return self.net.XMLDesc(flags)
     def _define(self, xml):
-        return self.conn.vmm.networkDefineXML(xml)
+        return self.conn.get_backend().networkDefineXML(xml)
 
     def set_active(self, state):
         self.active = state

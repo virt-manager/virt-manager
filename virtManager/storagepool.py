@@ -52,7 +52,7 @@ class vmmStoragePool(vmmLibvirtObject):
     def _XMLDesc(self, flags):
         return self.pool.XMLDesc(flags)
     def _define(self, xml):
-        return self.conn.vmm.storagePoolDefineXML(xml, 0)
+        return self.conn.get_backend().storagePoolDefineXML(xml, 0)
 
 
     def set_active(self, state):
@@ -91,7 +91,7 @@ class vmmStoragePool(vmmLibvirtObject):
         return self.pool.autostart()
 
     def get_target_path(self):
-        return util.xpath(self.get_xml(), "/pool/target/path")
+        return util.xpath(self.get_xml(), "/pool/target/path") or ""
 
     def get_allocation(self):
         return long(util.xpath(self.get_xml(), "/pool/allocation"))

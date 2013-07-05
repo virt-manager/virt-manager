@@ -401,7 +401,6 @@ def is_nodedev_capable(conn):
     Check if the passed libvirt connection supports host device routines
 
     @param conn: Connection to check
-    @type conn: libvirt.virConnect
 
     @rtype: C{bool}
     """
@@ -413,7 +412,6 @@ def is_pci_detach_capable(conn):
     Check if the passed libvirt connection support pci device Detach/Reset
 
     @param conn: Connection to check
-    @type conn: libvirt.virConnect
 
     @rtype: C{bool}
     """

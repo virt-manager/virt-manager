@@ -712,8 +712,7 @@ def guest_lookup(conn, caps=None, os_type=None, arch=None, typ=None,
     This function throws C{ValueError}s if any of the requested values are
     not found.
 
-    @param conn: virConnect instance
-    @type conn: libvirt.virConnect
+    @param conn: libvirt connection
     @param caps: Optional L{Capabilities} instance (saves a lookup)
     @type caps: L{Capabilities}
     @param typ: Virtualization type ('hvm', 'xen', ...)

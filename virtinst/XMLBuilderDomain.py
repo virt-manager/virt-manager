@@ -22,7 +22,6 @@
 import copy
 import threading
 
-import libvirt
 import libxml2
 
 from virtinst import CapabilitiesParser
@@ -397,7 +396,7 @@ class XMLBuilderDomain(object):
         Initialize state
 
         @param conn: libvirt connection to validate device against
-        @type conn: virConnect
+        @type conn: VirtualConnection
         @param parsexml: Optional XML string to parse
         @type parsexml: C{str}
         @param parsexmlnode: Option xpathNode to use
@@ -453,8 +452,6 @@ class XMLBuilderDomain(object):
     def get_conn(self):
         return self._conn
     def set_conn(self, val):
-        if not isinstance(val, libvirt.virConnect):
-            raise ValueError(_("'conn' must be a virConnect instance."))
         self._conn = val
         self._conn_uri = self._conn.getURI()
         self.__remote = uriutil.is_uri_remote(self._conn_uri, conn=self._conn)

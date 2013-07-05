@@ -202,7 +202,8 @@ class LibvirtConsoleConnection(ConsoleConnection):
         if not name:
             raise RuntimeError(_("Cannot open a device with no alias name"))
 
-        self.stream = self.conn.vmm.newStream(libvirt.VIR_STREAM_NONBLOCK)
+        self.stream = self.conn.get_backend().newStream(
+                                            libvirt.VIR_STREAM_NONBLOCK)
 
         self.vm.open_console(name, self.stream)
 

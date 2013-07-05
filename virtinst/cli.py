@@ -25,10 +25,8 @@ import logging
 import logging.handlers
 import optparse
 import os
-import re
 import shlex
 import sys
-import tempfile
 import traceback
 
 import libvirt
@@ -236,140 +234,13 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
 # Libvirt connection helpers          #
 #######################################
 
-_virtinst_uri_magic = "__virtinst_test__"
-
-
-def is_virtinst_test_uri(uri):
-    return uri and uri.startswith(_virtinst_uri_magic)
-
-
-def open_test_uri(uri):
-    """
-    This hack allows us to fake various drivers via passing a magic
-    URI string to virt-*. Helps with testing
-    """
-    uri = uri.replace(_virtinst_uri_magic, "")
-    ret = uri.split(",", 1)
-    uri = ret[0]
-    opts = parse_optstr(len(ret) > 1 and ret[1] or "")
-
-    conn = open_connection(uri)
-
-    def sanitize_xml(xml):
-        import difflib
-
-        orig = xml
-        xml = re.sub("arch='.*'", "arch='i686'", xml)
-        xml = re.sub("domain type='.*'", "domain type='test'", xml)
-        xml = re.sub("machine type='.*'", "", xml)
-        xml = re.sub(">exe<", ">hvm<", xml)
-
-        logging.debug("virtinst test sanitizing diff\n:%s",
-                      "\n".join(difflib.unified_diff(orig.split("\n"),
-                                                     xml.split("\n"))))
-        return xml
-
-    # Need tmpfile names to be deterministic
-    if "predictable" in opts:
-        setattr(conn, "_virtinst__fake_conn_predictable", True)
-
-        def fakemkstemp(prefix, *args, **kwargs):
-            ignore = args
-            ignore = kwargs
-            filename = os.path.join(".", prefix)
-            return os.open(filename, os.O_RDWR | os.O_CREAT), filename
-        tempfile.mkstemp = fakemkstemp
-
-    # Fake remote status
-    if "remote" in opts:
-        setattr(conn, "_virtinst__fake_conn_remote", True)
-
-    # Fake capabilities
-    if "caps" in opts:
-        capsxml = file(opts["caps"]).read()
-        conn.getCapabilities = lambda: capsxml
-
-    if ("qemu" in opts) or ("xen" in opts) or ("lxc" in opts):
-        conn.getVersion = lambda: 10000000000
-
-        origcreate = conn.createLinux
-        origdefine = conn.defineXML
-        def newcreate(xml, flags):
-            xml = sanitize_xml(xml)
-            return origcreate(xml, flags)
-        def newdefine(xml):
-            xml = sanitize_xml(xml)
-            return origdefine(xml)
-        conn.createLinux = newcreate
-        conn.defineXML = newdefine
-
-        if "qemu" in opts:
-            conn.getURI = lambda: "qemu+abc:///system"
-        if "xen" in opts:
-            conn.getURI = lambda: "xen+abc:///"
-        if "lxc" in opts:
-            conn.getURI = lambda: "lxc+abc:///"
-
-    # These need to come after the HV setter, since that sets a default
-    # conn version
-    if "connver" in opts:
-        ver = int(opts["connver"])
-        def newconnversion():
-            return ver
-        conn.getVersion = newconnversion
-
-    if "libver" in opts:
-        ver = int(opts["libver"])
-        def newlibversion(drv=None):
-            if drv:
-                return (ver, ver)
-            return ver
-        libvirt.getVersion = newlibversion
-
-    setattr(conn, "_virtinst__fake_conn", True)
-
-    return conn
-
-
 def getConnection(uri):
-    # Hack to facilitate virtinst unit testing
-    if is_virtinst_test_uri(uri):
-        return open_test_uri(uri)
-
     logging.debug("Requesting libvirt URI %s", (uri or "default"))
-    conn = open_connection(uri)
+    conn = virtinst.VirtualConnection(uri)
+    conn.open(_do_creds_authname)
     logging.debug("Received libvirt URI %s", conn.getURI())
 
     return conn
-
-
-def open_connection(uri):
-    open_flags = 0
-    valid_auth_options = [libvirt.VIR_CRED_AUTHNAME,
-                          libvirt.VIR_CRED_PASSPHRASE,
-                          libvirt.VIR_CRED_EXTERNAL]
-    authcb = do_creds
-    authcb_data = None
-
-    return libvirt.openAuth(uri, [valid_auth_options, authcb, authcb_data],
-                            open_flags)
-
-
-def do_creds(creds, cbdata):
-    try:
-        return _do_creds(creds, cbdata)
-    except:
-        logging.debug("Error in creds callback.", exc_info=True)
-        raise
-
-
-def _do_creds(creds, cbdata_ignore):
-    for cred in creds:
-        if cred[0] == libvirt.VIR_CRED_EXTERNAL:
-            print_stderr("Don't know to do handle external cred %s" % cred[2])
-            return -1
-
-    return _do_creds_authname(creds)
 
 
 # SASL username/pass auth
@@ -387,11 +258,10 @@ def _do_creds_authname(creds):
             import getpass
             res = getpass.getpass(prompt)
         else:
-            print_stderr("Unknown auth type in creds callback: %d" % credtype)
-            return -1
+            raise RuntimeError("Unknown auth type in creds callback: %d" %
+                               credtype)
 
         cred[retindex] = res
-
     return 0
 
 

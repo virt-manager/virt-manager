@@ -26,7 +26,6 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 # pylint: enable=E0611
 
-from virtManager import util
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 
@@ -250,10 +249,10 @@ class vmmCreateVolume(vmmGObjectUI):
             self.close()
 
     def _async_vol_create(self, asyncjob):
-        newconn = util.dup_conn(self.conn).vmm
+        conn = self.conn.get_backend()
 
         # Lookup different pool obj
-        newpool = newconn.storagePoolLookupByName(self.parent_pool.get_name())
+        newpool = conn.storagePoolLookupByName(self.parent_pool.get_name())
         self.vol.pool = newpool
 
         meter = asyncjob.get_meter()

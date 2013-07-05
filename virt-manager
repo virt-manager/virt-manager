@@ -44,7 +44,8 @@ GObject.threads_init()
 
 def _show_startup_error(msg, details):
     if logging_setup:
-        logging.exception("Error starting virt-manager")
+        logging.debug("Error starting virt-manager: %s\n%s", msg, details,
+                      exc_info=True)
     from virtManager.error import vmmErrorDialog
     err = vmmErrorDialog()
     title = _("Error starting Virtual Machine Manager")
@@ -243,6 +244,12 @@ def main():
                                     cliconfig.__version__,
                                     os.path.join(cliconfig.asset_dir, "ui"),
                                     options.testfirstrun)
+
+    if not config.support_threading:
+        _show_startup_error(
+                _("virt-manager requires libvirt 0.6.0 or later."), "")
+        return
+
     virtManager.util.running_config = config
     config.default_qemu_user = cliconfig.default_qemu_user
     config.rhel6_defaults = cliconfig.rhel_enable_unsupported_opts
