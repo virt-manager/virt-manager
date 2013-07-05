@@ -29,6 +29,7 @@ import re
 import shlex
 import sys
 import tempfile
+import traceback
 
 import libvirt
 
@@ -156,11 +157,15 @@ def earlyLogging():
     logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 
 
-def setupLogging(appname, debug=False, do_quiet=False):
+def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     global quiet
     quiet = do_quiet
 
-    vi_dir = os.path.expanduser("~/.virtinst")
+    dirname = "~/.virtinst"
+    if appname == "virt-manager":
+        dirname = "~/.virt-manager"
+
+    vi_dir = os.path.expanduser(dirname)
     if not os.access(vi_dir, os.W_OK):
         if os.path.exists(vi_dir):
             raise RuntimeError("No write access to directory %s" % vi_dir)
@@ -187,16 +192,17 @@ def setupLogging(appname, debug=False, do_quiet=False):
     rootLogger.setLevel(logging.DEBUG)
     fileHandler = logging.handlers.RotatingFileHandler(filename, "ae",
                                                        1024 * 1024, 5)
-
     fileHandler.setFormatter(logging.Formatter(fileFormat,
                                                dateFormat))
     rootLogger.addHandler(fileHandler)
 
     streamHandler = VirtStreamHandler(sys.stderr)
-    if debug:
+    if debug_stdout:
         streamHandler.setLevel(logging.DEBUG)
         streamHandler.setFormatter(logging.Formatter(fileFormat,
                                                      dateFormat))
+    elif not cli_app:
+        streamHandler = None
     else:
         if quiet:
             level = logging.ERROR
@@ -204,7 +210,9 @@ def setupLogging(appname, debug=False, do_quiet=False):
             level = logging.WARN
         streamHandler.setLevel(level)
         streamHandler.setFormatter(logging.Formatter(streamErrorFormat))
-    rootLogger.addHandler(streamHandler)
+
+    if streamHandler:
+        rootLogger.addHandler(streamHandler)
 
     # Register libvirt handler
     def libvirt_callback(ignore, err):
@@ -213,16 +221,15 @@ def setupLogging(appname, debug=False, do_quiet=False):
             logging.warn("Non-error from libvirt: '%s'", err[2])
     libvirt.registerErrorHandler(f=libvirt_callback, ctx=None)
 
-    # Register python error handler to log exceptions
+    # Log uncaught exceptions
     def exception_log(typ, val, tb):
-        import traceback
-        s = traceback.format_exception(typ, val, tb)
-        logging.exception("".join(s))
+        logging.debug("Uncaught exception:\n%s",
+                      "".join(traceback.format_exception(typ, val, tb)))
         sys.__excepthook__(typ, val, tb)
     sys.excepthook = exception_log
 
     # Log the app command string
-    logging.debug("Launched with command line:\n%s", " ".join(sys.argv))
+    logging.debug("Launched with command line: %s", " ".join(sys.argv))
 
 
 #######################################
@@ -397,7 +404,6 @@ def fail(msg, do_exit=True):
     Convenience function when failing in cli app
     """
     logging.error(msg)
-    import traceback
     if traceback.format_exc().strip() != "None":
         logging.debug("", exc_info=True)
     if do_exit:
