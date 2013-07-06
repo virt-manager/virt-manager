@@ -400,7 +400,7 @@ class vmmHost(vmmGObjectUI):
             self.repopulate_interfaces()
             return
 
-        if not self.conn.network_capable:
+        if not self.conn.is_network_capable():
             self.set_net_error_page(
                 _("Libvirt connection does not support virtual network "
                   "management."))
@@ -409,7 +409,7 @@ class vmmHost(vmmGObjectUI):
             self.set_storage_error_page(
                 _("Libvirt connection does not support storage management."))
 
-        if not self.conn.interface_capable:
+        if not self.conn.is_interface_capable():
             self.set_interface_error_page(
                 _("Libvirt connection does not support interface management."))
 

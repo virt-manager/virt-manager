@@ -91,9 +91,9 @@ class vmmConnection(vmmGObject):
         self._caps = None
         self._caps_xml = None
 
-        self.network_capable = None
+        self._network_capable = None
         self._storage_capable = None
-        self.interface_capable = None
+        self._interface_capable = None
         self._nodedev_capable = None
 
         self._xml_flags = {}
@@ -422,24 +422,24 @@ class vmmConnection(vmmGObject):
         return self._storage_capable
 
     def is_network_capable(self):
-        if self.network_capable is None:
-            self.network_capable = self.check_conn_support(
+        if self._network_capable is None:
+            self._network_capable = self.check_conn_support(
                                        self._backend.SUPPORT_CONN_NETWORK)
-            if self.network_capable is False:
+            if self._network_capable is False:
                 logging.debug("Connection doesn't seem to support network "
                               "APIs. Skipping all network polling.")
 
-        return self.network_capable
+        return self._network_capable
 
     def is_interface_capable(self):
-        if self.interface_capable is None:
-            self.interface_capable = self.check_conn_support(
+        if self._interface_capable is None:
+            self._interface_capable = self.check_conn_support(
                                        self._backend.SUPPORT_CONN_INTERFACE)
-            if self.interface_capable is False:
+            if self._interface_capable is False:
                 logging.debug("Connection doesn't seem to support interface "
                               "APIs. Skipping all interface polling.")
 
-        return self.interface_capable
+        return self._interface_capable
 
     def is_nodedev_capable(self):
         if self._nodedev_capable is None:
