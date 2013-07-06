@@ -367,3 +367,20 @@ def set_list_selection(widget, rownum):
     selection.unselect_all()
     widget.set_cursor(path)
     selection.select_path(path)
+
+
+def default_uri(always_system=False):
+    if os.path.exists('/var/lib/xend'):
+        if (os.path.exists('/dev/xen/evtchn') or
+            os.path.exists("/proc/xen")):
+            return 'xen:///'
+
+    if (os.path.exists("/usr/bin/qemu") or
+        os.path.exists("/usr/bin/qemu-kvm") or
+        os.path.exists("/usr/bin/kvm") or
+        os.path.exists("/usr/libexec/qemu-kvm")):
+        if always_system or os.geteuid() == 0:
+            return "qemu:///system"
+        else:
+            return "qemu:///session"
+    return None

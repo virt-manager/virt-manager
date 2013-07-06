@@ -55,19 +55,6 @@ from virtManager.delete import vmmDeleteDialog
 debug_ref_leaks = False
 
 
-def default_uri():
-    tryuri = None
-    if os.path.exists("/var/lib/xend") and os.path.exists("/proc/xen"):
-        tryuri = "xen:///"
-    elif (os.path.exists("/dev/kvm") or
-          os.path.exists("/usr/bin/qemu") or
-          os.path.exists("/usr/bin/qemu-kvm") or
-          os.path.exists("/usr/bin/kvm") or
-          os.path.exists("/usr/libexec/qemu-kvm")):
-        tryuri = "qemu:///system"
-
-    return tryuri
-
 DETAILS_PERF = 1
 DETAILS_CONFIG = 2
 DETAILS_CONSOLE = 3
@@ -199,7 +186,7 @@ class vmmEngine(vmmGObject):
         if ret is not None:
             tryuri = "qemu:///system"
         else:
-            tryuri = default_uri()
+            tryuri = util.default_uri(always_system=True)
 
         if tryuri is None:
             manager.set_startup_error(msg)
