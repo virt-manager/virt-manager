@@ -29,7 +29,7 @@ from gi.repository import Gtk
 # pylint: enable=E0611
 
 import libvirt
-from virtinst import uriutil
+from virtinst import util as virtinstutil
 
 from virtManager import util
 from virtManager.baseclass import vmmGObjectUI
@@ -275,7 +275,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         return self.edit_uri(srcuri, desthost, None)
 
     def edit_uri(self, uri, hostname, port):
-        split = list(uriutil.uri_split(uri))
+        split = list(virtinstutil.uri_split(uri))
 
         hostname = hostname or split[2]
         if port:
@@ -303,7 +303,7 @@ class vmmMigrateDialog(vmmGObjectUI):
             # For secure migration, we need to make sure we aren't migrating
             # to the local connection, because libvirt will pull try to use
             # 'qemu:///system' as the migrate URI which will deadlock
-            if destconn.is_local():
+            if destconn.get_uri_hostname() == "localhost":
                 uri = self.build_localhost_uri(destconn, srcuri)
             else:
                 uri = destconn.get_uri()

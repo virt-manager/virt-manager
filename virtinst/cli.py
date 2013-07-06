@@ -34,7 +34,6 @@ import libvirt
 from virtcli import cliconfig
 
 import virtinst
-from virtinst import uriutil
 from virtinst import util
 from virtinst.util import listify
 
@@ -238,7 +237,7 @@ def getConnection(uri):
     logging.debug("Requesting libvirt URI %s", (uri or "default"))
     conn = virtinst.VirtualConnection(uri)
     conn.open(_do_creds_authname)
-    logging.debug("Received libvirt URI %s", conn.getURI())
+    logging.debug("Received libvirt URI %s", conn.uri)
 
     return conn
 
@@ -300,7 +299,7 @@ def nice_exit():
 
 
 def virsh_start_cmd(guest):
-    return ("virsh --connect %s start %s" % (guest.get_uri(), guest.name))
+    return ("virsh --connect %s start %s" % (guest.conn.uri, guest.name))
 
 
 def install_fail(guest):
@@ -700,8 +699,7 @@ def get_cpuset(guest, cpuset, memory):
 
 def _default_network_opts(guest):
     opts = ""
-    if (uriutil.is_qemu_session(guest.conn) or
-        uriutil.is_test(guest.conn)):
+    if (guest.conn.is_qemu_session() or guest.conn.is_test()):
         opts = "user"
     else:
         net = util.default_network(guest.conn)

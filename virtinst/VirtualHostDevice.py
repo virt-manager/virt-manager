@@ -98,7 +98,7 @@ class VirtualHostDevice(VirtualDevice):
             return
 
         self.managed = True
-        if self.is_xen():
+        if self.conn.is_xen():
             self.managed = False
 
 

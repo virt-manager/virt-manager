@@ -20,7 +20,6 @@
 # MA 02110-1301 USA.
 
 import libvirt
-from virtinst import uriutil
 
 
 # Flags for check_conn_support
@@ -296,18 +295,23 @@ def set_rhel6(val):
 def get_rhel6():
     return _rhel6
 
+
 # Pull a connection object from the passed libvirt object
-
-
 def _get_conn_from_object(obj):
-    if not hasattr(obj, "_conn"):
-        return obj
-    return getattr(obj, "_conn")
+    conn = None
+    if hasattr(obj, "getURI"):
+        conn = obj
+    elif hasattr(obj, "_conn"):
+        conn = getattr(obj, "_conn")
+
+    if conn:
+        from virtinst import VirtualConnection
+        return VirtualConnection(conn.getURI())
+    return obj
+
 
 # Check that command is present in the python bindings, and return the
 # the requested function
-
-
 def _get_command(funcname, objname=None, obj=None):
     if not obj:
         obj = libvirt
@@ -322,22 +326,19 @@ def _get_command(funcname, objname=None, obj=None):
 
     return getattr(obj, funcname)
 
+
 # Make sure libvirt object 'objname' has function 'funcname'
-
-
 def _has_command(funcname, objname=None, obj=None):
     return bool(_get_command(funcname, objname, obj))
 
+
 # Make sure libvirt object has flag 'flag_name'
-
-
 def _get_flag(flag_name):
     return _get_command(flag_name)
 
+
 # Try to call the passed function, and look for signs that libvirt or driver
 # doesn't support it
-
-
 def _try_command(func, args, check_all_error=False):
     try:
         func(*args)
@@ -355,16 +356,14 @@ def _try_command(func, args, check_all_error=False):
 
     return True
 
+
 # Version of the local libvirt library
-
-
 def _local_lib_ver():
     return libvirt.getVersion()
 
+
 # Version of libvirt library/daemon on the connection (could be remote)
-
-
-def _daemon_lib_ver(conn, uri, force_version, minimum_libvirt_version):
+def _daemon_lib_ver(conn, is_remote, force_version, minimum_libvirt_version):
     # Always force the required version if it's after the version which
     # has getLibVersion
     if force_version or minimum_libvirt_version >= 7004:
@@ -372,7 +371,7 @@ def _daemon_lib_ver(conn, uri, force_version, minimum_libvirt_version):
     else:
         default_ret = 100000000000
 
-    if not uriutil.is_uri_remote(uri, conn=conn):
+    if not is_remote:
         return _local_lib_ver()
 
     if not _has_command("getLibVersion", obj=conn):
@@ -386,8 +385,7 @@ def _daemon_lib_ver(conn, uri, force_version, minimum_libvirt_version):
 # Return the hypervisor version
 
 
-def _hv_ver(conn, uri):
-    drv_type = uriutil.get_uri_driver(uri)
+def _hv_ver(conn, drv_type):
     args = ()
 
     cmd = _get_command("getVersion", obj=conn)
@@ -436,6 +434,9 @@ def _check_support(conn, feature, data=None):
 
     @returns: True if feature is supported, False otherwise
     """
+    is_remote = conn.is_remote()
+    drv_type = conn.get_uri_driver()
+
     # Temporary hack to make this work
     if "VirtualConnection" in repr(conn):
         conn = getattr(conn, "_libvirtconn")
@@ -450,8 +451,6 @@ def _check_support(conn, feature, data=None):
             key_list.remove(key)
         return support_info.get(key)
 
-    uri = conn.getURI()
-    drv_type = uriutil.get_uri_driver(uri)
     is_rhel6 = get_rhel6()
     force_version = get_value("force_version") or False
 
@@ -473,9 +472,9 @@ def _check_support(conn, feature, data=None):
     flag = get_value("flag")
 
     actual_lib_ver = _local_lib_ver()
-    actual_daemon_ver = _daemon_lib_ver(conn, uri, force_version,
+    actual_daemon_ver = _daemon_lib_ver(conn, is_remote, force_version,
                                         minimum_libvirt_version)
-    actual_drv_ver = _hv_ver(conn, uri)
+    actual_drv_ver = _hv_ver(conn, drv_type)
 
     # Make sure there are no keys left in the key_list. This will
     # ensure we didn't mistype anything above, or in the support_dict

@@ -23,6 +23,7 @@ import re
 import libvirt
 
 from virtinst.cli import parse_optstr
+from virtinst.util import uri_split
 
 _virtinst_uri_magic = "__virtinst_test__"
 
@@ -35,10 +36,22 @@ class VirtualConnection(object):
     - simplified API wrappers that handle new and old ways of doing things
     """
     def __init__(self, uri):
-        self._uri = uri
-        self._libvirtconn = None
+        self._initial_uri = uri or ""
 
-        self.is_virtinst_test_uri = uri and uri.startswith(_virtinst_uri_magic)
+        # virtinst unit test URI handling
+        if self._initial_uri.startswith(_virtinst_uri_magic):
+            uri = self._initial_uri.replace(_virtinst_uri_magic, "")
+            ret = uri.split(",", 1)
+            self._open_uri = ret[0]
+            self._test_opts = parse_optstr(len(ret) > 1 and ret[1] or "")
+            self._uri = self._virtinst_uri_make_fake()
+        else:
+            self._open_uri = self._initial_uri
+            self._uri = self._initial_uri
+            self._test_opts = {}
+
+        self._libvirtconn = None
+        self._urisplits = uri_split(self._uri)
 
 
     # Just proxy virConnect access for now
@@ -53,7 +66,10 @@ class VirtualConnection(object):
     # Properties #
     ##############
 
-    uri = property(lambda self: getattr(self, "_uri"))
+    def _get_uri(self):
+        return self._uri or self._open_uri
+    uri = property(_get_uri)
+
     libvirtconn = property(lambda self: getattr(self, "_libvirtconn"))
 
 
@@ -63,6 +79,7 @@ class VirtualConnection(object):
 
     def close(self):
         self._libvirtconn = None
+        self._uri = None
 
     def is_open(self):
         return bool(self._libvirtconn)
@@ -74,23 +91,62 @@ class VirtualConnection(object):
         authcb = self._auth_cb
         authcb_data = passwordcb
 
-        testopts = []
-        uri = self.uri
-        if self.is_virtinst_test_uri:
-            uri = uri.replace(_virtinst_uri_magic, "")
-            ret = uri.split(",", 1)
-            uri = ret[0]
-            testopts = parse_optstr(len(ret) > 1 and ret[1] or "")
-
-        conn = libvirt.openAuth(uri,
+        conn = libvirt.openAuth(self._open_uri,
                     [valid_auth_options, authcb,
                     (authcb_data, valid_auth_options)],
                     open_flags)
 
-        if testopts:
-            self._fixup_virtinst_test_uri(conn, testopts)
+        self._fixup_virtinst_test_uri(conn)
         self._libvirtconn = conn
 
+
+    ###################
+    # Public URI bits #
+    ###################
+
+    def is_remote(self):
+        if (hasattr(self, "_virtinst__fake_conn_remote") or
+            self._urisplits[2]):
+            return True
+
+    def get_uri_hostname(self):
+        return self._urisplits[2] or "localhost"
+
+    def get_uri_transport(self):
+        scheme = self._urisplits[0]
+        username = self._urisplits[1]
+        offset = scheme.find("+")
+        if offset != -1:
+            return [scheme[offset + 1:], username]
+        return [None, None]
+
+    def get_uri_driver(self):
+        scheme = self._urisplits[0]
+        offset = scheme.find("+")
+        if offset > 0:
+            return scheme[:offset]
+        return scheme
+
+    def is_session_uri(self):
+        return self._urisplits[3] == "/session"
+    def is_qemu(self):
+        return self._urisplits[0].startswith("qemu")
+    def is_qemu_system(self):
+        return (self.is_qemu() and self._urisplits[3] == "/system")
+    def is_qemu_session(self):
+        return (self.is_qemu() and self.is_session_uri())
+
+    def is_test(self):
+        return self._urisplits[0].startswith("test")
+    def is_xen(self):
+        return (self._urisplits[0].startswith("xen") or
+                self._urisplits[0].startswith("libxl"))
+    def is_lxc(self):
+        return self._urisplits[0].startswith("lxc")
+    def is_openvz(self):
+        return self._urisplits[0].startswith("openvz")
+    def is_container(self):
+        return self.is_lxc() or self.is_openvz()
 
 
 
@@ -105,11 +161,24 @@ class VirtualConnection(object):
                                    "%s" % (cred[0], passwordcreds))
         return passwordcb(creds)
 
-    def _fixup_virtinst_test_uri(self, conn, opts):
+    def _virtinst_uri_make_fake(self):
+        if "qemu" in self._test_opts:
+            return "qemu+abc:///system"
+        elif "xen" in self._test_opts:
+            return "xen+abc:///"
+        elif "lxc" in self._test_opts:
+            return "lxc+abc:///"
+        return self._open_uri
+
+    def _fixup_virtinst_test_uri(self, conn):
         """
         This hack allows us to fake various drivers via passing a magic
         URI string to virt-*. Helps with testing
         """
+        if not self._test_opts:
+            return
+        opts = self._test_opts.copy()
+
         def sanitize_xml(xml):
             import difflib
 
@@ -148,7 +217,12 @@ class VirtualConnection(object):
             conn.getCapabilities = lambda: capsxml
 
         if ("qemu" in opts) or ("xen" in opts) or ("lxc" in opts):
+            opts.pop("qemu", None)
+            opts.pop("xen", None)
+            opts.pop("lxc", None)
+
             conn.getVersion = lambda: 10000000000
+            conn.getURI = self._virtinst_uri_make_fake
 
             origcreate = conn.createLinux
             origdefine = conn.defineXML
@@ -161,15 +235,6 @@ class VirtualConnection(object):
             conn.createLinux = newcreate
             conn.defineXML = newdefine
 
-            if "qemu" in opts:
-                opts.pop("qemu")
-                conn.getURI = lambda: "qemu+abc:///system"
-            if "xen" in opts:
-                opts.pop("xen")
-                conn.getURI = lambda: "xen+abc:///"
-            if "lxc" in opts:
-                opts.pop("lxc")
-                conn.getURI = lambda: "lxc+abc:///"
 
         # These need to come after the HV setter, since that sets a default
         # conn version

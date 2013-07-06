@@ -27,8 +27,6 @@ import stat
 import libvirt
 import libxml2
 
-from virtinst import uriutil
-
 
 def listify(l):
     if l is None:
@@ -277,25 +275,28 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
 
 
 def default_bridge(conn):
+    if conn.is_remote():
+        return None
+
     dev = default_route()
+    if not dev:
+        return None
 
-    if (dev is not None and uriutil.is_uri_remote(conn.getURI(), conn)):
-        # New style peth0 == phys dev, eth0 == bridge, eth0 == default route
-        if os.path.exists("/sys/class/net/%s/bridge" % dev):
-            return ["bridge", dev]
+    # New style peth0 == phys dev, eth0 == bridge, eth0 == default route
+    if os.path.exists("/sys/class/net/%s/bridge" % dev):
+        return ["bridge", dev]
 
-        # Old style, peth0 == phys dev, eth0 == netloop, xenbr0 == bridge,
-        # vif0.0 == netloop enslaved, eth0 == default route
-        try:
-            defn = int(dev[-1])
-        except:
-            defn = -1
+    # Old style, peth0 == phys dev, eth0 == netloop, xenbr0 == bridge,
+    # vif0.0 == netloop enslaved, eth0 == default route
+    try:
+        defn = int(dev[-1])
+    except:
+        defn = -1
 
-        if (defn >= 0 and
-            os.path.exists("/sys/class/net/peth%d/brport" % defn) and
-            os.path.exists("/sys/class/net/xenbr%d/bridge" % defn)):
-            return ["bridge", "xenbr%d" % defn]
-
+    if (defn >= 0 and
+        os.path.exists("/sys/class/net/peth%d/brport" % defn) and
+        os.path.exists("/sys/class/net/xenbr%d/bridge" % defn)):
+        return ["bridge", "xenbr%d" % defn]
     return None
 
 
@@ -541,9 +542,36 @@ def lookup_pool_by_path(conn, path):
     return None
 
 
-def _test():
-    import doctest
-    doctest.testmod()
+def uri_split(uri):
+    """
+    Parse a libvirt hypervisor uri into it's individual parts
+    @returns: tuple of the form (scheme (ex. 'qemu', 'xen+ssh'), username,
+                                 hostname, path (ex. '/system'), query,
+                                 fragment)
+    """
+    def splitnetloc(url, start=0):
+        for c in '/?#':  # the order is important!
+            delim = url.find(c, start)
+            if delim >= 0:
+                break
+        else:
+            delim = len(url)
+        return url[start:delim], url[delim:]
 
-if __name__ == "__main__":
-    _test()
+    username = netloc = query = fragment = ''
+    i = uri.find(":")
+    if i > 0:
+        scheme, uri = uri[:i].lower(), uri[i + 1:]
+        if uri[:2] == '//':
+            netloc, uri = splitnetloc(uri, 2)
+            offset = netloc.find("@")
+            if offset > 0:
+                username = netloc[0:offset]
+                netloc = netloc[offset + 1:]
+        if '#' in uri:
+            uri, fragment = uri.split('#', 1)
+        if '?' in uri:
+            uri, query = uri.split('?', 1)
+    else:
+        scheme = uri.lower()
+    return scheme, username, netloc, uri, query, fragment

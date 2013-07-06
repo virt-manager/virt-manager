@@ -32,8 +32,6 @@ import traceback
 
 import libvirt
 import virtinst
-import virtinst.cli
-from virtinst import uriutil
 
 from virtManager import util
 from virtManager import connectauth
@@ -270,9 +268,6 @@ class vmmConnection(vmmGObject):
         # This can throw an exception, so beware when calling!
         return socket.gethostbyaddr(socket.gethostname())[0]
 
-    def get_uri_hostname(self):
-        return uriutil.get_uri_hostname(self.get_uri())
-
     def get_short_hostname(self):
         hostname = self.get_hostname()
         offset = hostname.find(".")
@@ -287,68 +282,23 @@ class vmmConnection(vmmGObject):
         except:
             return self.get_uri_hostname()
 
-    def get_transport(self):
-        return uriutil.get_uri_transport(self.get_uri())
+    get_uri_hostname = property(lambda s:
+                                getattr(s, "_backend").get_uri_hostname)
+    get_transport = property(lambda s:
+                             getattr(s, "_backend").get_uri_transport)
+    get_driver = property(lambda s: getattr(s, "_backend").get_uri_driver)
+    is_container = property(lambda s: getattr(s, "_backend").is_container)
+    is_lxc = property(lambda s: getattr(s, "_backend").is_lxc)
+    is_openvz = property(lambda s: getattr(s, "_backend").is_openvz)
+    is_xen = property(lambda s: getattr(s, "_backend").is_xen)
+    is_remote = property(lambda s: getattr(s, "_backend").is_remote)
+    is_qemu = property(lambda s: getattr(s, "_backend").is_qemu)
+    is_qemu_system = property(lambda s: getattr(s, "_backend").is_qemu_system)
+    is_qemu_session = property(lambda s:
+                               getattr(s, "_backend").is_qemu_session)
+    is_test_conn = property(lambda s: getattr(s, "_backend").is_test)
+    is_session_uri = property(lambda s: getattr(s, "_backend").is_session_uri)
 
-    def get_driver(self):
-        return uriutil.get_uri_driver(self.get_uri())
-
-    def is_local(self):
-        return bool(self.get_uri_hostname() == "localhost")
-
-    def is_container(self):
-        return self.is_lxc() or self.is_openvz()
-
-    def is_lxc(self):
-        if self._backend.is_virtinst_test_uri:
-            self.get_uri().count(",lxc")
-
-        return uriutil.uri_split(self.get_uri())[0].startswith("lxc")
-
-    def is_openvz(self):
-        return uriutil.uri_split(self.get_uri())[0].startswith("openvz")
-
-    def is_xen(self):
-        if self._backend.is_virtinst_test_uri:
-            return self.get_uri().count(",xen")
-
-        scheme = uriutil.uri_split(self.get_uri())[0]
-        return scheme.startswith("xen")
-
-    def is_qemu(self):
-        if self._backend.is_virtinst_test_uri:
-            return self.get_uri().count(",qemu")
-
-        scheme = uriutil.uri_split(self.get_uri())[0]
-        return scheme.startswith("qemu")
-
-    def is_remote(self):
-        return uriutil.is_uri_remote(self.get_uri())
-
-    def is_qemu_system(self):
-        (scheme, ignore, ignore,
-         path, ignore, ignore) = uriutil.uri_split(self.get_uri())
-        if path == "/system" and scheme.startswith("qemu"):
-            return True
-        return False
-
-    def is_qemu_session(self):
-        (scheme, ignore, ignore,
-         path, ignore, ignore) = uriutil.uri_split(self.get_uri())
-        if path == "/session" and scheme.startswith("qemu"):
-            return True
-        return False
-
-    def is_test_conn(self):
-        (scheme, ignore, ignore,
-         ignore, ignore, ignore) = uriutil.uri_split(self.get_uri())
-        if scheme.startswith("test"):
-            return True
-        return False
-
-    def is_session_uri(self):
-        path = uriutil.uri_split(self.get_uri())[3]
-        return path == "/session"
 
     # Connection capabilities debug helpers
     def rhel6_defaults(self, emulator):
@@ -392,7 +342,7 @@ class vmmConnection(vmmGObject):
             return match_whole_string(orig, "[0-9.]+")
 
         (scheme, username, hostname,
-         path, ignore, ignore) = uriutil.uri_split(self.get_uri())
+         path, ignore, ignore) = virtinst.util.uri_split(self.get_uri())
 
         hv = ""
         rest = ""

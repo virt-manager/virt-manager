@@ -301,7 +301,7 @@ class Cloner(object):
             # we have permissions to do so. This validation check
             # caused a few bug reports in a short period of time,
             # so must be a common case.
-            if (clone_disk.is_remote() or
+            if (self.conn.is_remote() or
                 clone_disk.type != clone_disk.TYPE_BLOCK or
                 not orig_disk.path or
                 not os.access(orig_disk.path, os.R_OK) or

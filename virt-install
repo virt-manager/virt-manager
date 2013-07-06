@@ -34,7 +34,6 @@ import virtinst
 import virtinst.CapabilitiesParser
 import virtinst.cli as cli
 import virtinst.util as util
-from virtinst import uriutil
 from virtinst import VirtualCharDevice
 from virtinst.cli import fail, print_stdout, print_stderr
 
@@ -310,7 +309,7 @@ def get_virt_type(conn, options):
     if (not req_virt_type and
         not req_hv_type and
         req_accel and
-        uriutil.is_qemu(conn) and
+        conn.is_qemu() and
         capsguest.arch in ["i686", "x86_64"] and
         not capsdomain.is_accelerated()):
         logging.warn("KVM acceleration not available, using '%s'",
@@ -454,7 +453,7 @@ def check_option_collisions(options, guest):
             fail(_("Paravirtualized guests cannot install off cdrom media."))
 
     if (options.location and
-        guest.is_remote() and not
+        guest.conn.is_remote() and not
         guest.installer.support_remote_url_install()):
         fail(_("Libvirt version does not support remote --location installs"))
 

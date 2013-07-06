@@ -194,7 +194,7 @@ class DistroInstaller(Installer.Installer):
         is_tuple = False
         validated = True
         self._location_is_path = True
-        is_local = not self.is_remote()
+        is_local = not self.conn.is_remote()
 
         # Basic validation
         if type(val) is not str and (type(val) is not tuple and len(val) != 2):
@@ -326,8 +326,9 @@ class DistroInstaller(Installer.Installer):
         conn = guest.conn
         system_scratchdir = self._get_system_scratchdir()
 
-        if (not guest.is_remote() and
-            (self.is_session_uri() or self.scratchdir == system_scratchdir)):
+        if (not self.conn.is_remote() and
+            (self.conn.is_session_uri() or
+             self.scratchdir == system_scratchdir)):
             # We have access to system scratchdir, don't jump through hoops
             logging.debug("Have access to preferred scratchdir so"
                           " nothing to upload")

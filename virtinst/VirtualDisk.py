@@ -31,7 +31,6 @@ import urlgrabber.progress as progress
 import libvirt
 
 import virtinst
-from virtinst import uriutil
 
 from virtinst import util
 from virtinst import Storage
@@ -190,7 +189,7 @@ def _check_if_path_managed(conn, path):
             pool = trypool
 
     if not vol and not pool:
-        if not uriutil.is_uri_remote(conn.getURI(), conn=conn):
+        if not conn.is_remote():
             # Building local disk
             return None, None, False
 
@@ -340,7 +339,6 @@ class VirtualDisk(VirtualDevice):
         """
         Check if path exists. If we can't determine, return False
         """
-        is_remote = uriutil.is_uri_remote(conn.getURI(), conn=conn)
         try:
             vol = None
             path_is_pool = False
@@ -352,7 +350,7 @@ class VirtualDisk(VirtualDevice):
             if vol or path_is_pool:
                 return True
 
-            if not is_remote:
+            if not conn.is_remote():
                 return os.path.exists(path)
         except:
             pass
@@ -370,7 +368,7 @@ class VirtualDisk(VirtualDevice):
         """
         if path is None:
             return []
-        if uriutil.is_uri_remote(conn.getURI(), conn=conn):
+        if conn.is_remote():
             return []
 
         try:
@@ -1131,8 +1129,7 @@ class VirtualDisk(VirtualDevice):
         drvname = self._driverName
         drvtype = self._driverType
 
-        is_qemu = self.is_qemu()
-        if is_qemu and not drvname:
+        if self.conn.is_qemu() and not drvname:
             drvname = self.DRIVER_QEMU
 
         if self.format:
@@ -1181,7 +1178,7 @@ class VirtualDisk(VirtualDevice):
                 return False
             return True
 
-        if (not self.is_remote() and
+        if (not self.conn.is_remote() and
             self.path and
             os.path.exists(self.path)):
             return False
@@ -1217,7 +1214,7 @@ class VirtualDisk(VirtualDevice):
 
         storage_capable = util.is_storage_capable(self.conn)
 
-        if self.is_remote():
+        if self.conn.is_remote():
             if not storage_capable:
                 raise ValueError(_("Connection doesn't support remote "
                                    "storage."))
@@ -1442,13 +1439,13 @@ class VirtualDisk(VirtualDevice):
 
         if virtinst.enable_rhel6_defaults:
             # Enable cache=none for non-CDROM devs
-            if (self.is_qemu() and
+            if (self.conn.is_qemu() and
                 not cache and
                 self.device != self.DEVICE_CDROM):
                 cache = self.CACHE_MODE_NONE
 
             # Enable AIO native for block devices
-            if (self.is_qemu() and
+            if (self.conn.is_qemu() and
                 not iomode and
                 self.device == self.DEVICE_DISK and
                 self.type == self.TYPE_BLOCK):
@@ -1466,7 +1463,7 @@ class VirtualDisk(VirtualDevice):
                 drvxml += " io='%s'" % iomode
 
             if drvxml and self.driver_name is None:
-                if self.is_qemu():
+                if self.conn.is_qemu():
                     self.driver_name = "qemu"
 
             if not self.driver_name is None:

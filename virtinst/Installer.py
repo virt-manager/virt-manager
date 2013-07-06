@@ -236,7 +236,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
 
     def _get_scratchdir(self):
         scratch = None
-        if not self.is_session_uri():
+        if not self.conn.is_session_uri():
             scratch = self._get_system_scratchdir()
 
         if (not scratch or

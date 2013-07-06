@@ -25,7 +25,6 @@ import threading
 import libxml2
 
 from virtinst import CapabilitiesParser
-from virtinst import uriutil
 from virtinst import util
 
 _xml_refs_lock = threading.Lock()
@@ -402,8 +401,6 @@ class XMLBuilderDomain(object):
         @param caps: Capabilities() instance
         """
         self._conn = conn
-        self._conn_uri = self._conn.getURI()
-        self.__remote = uriutil.is_uri_remote(self._conn_uri, conn=self._conn)
         self.__caps = None
 
         self._xml_node = None
@@ -450,24 +447,10 @@ class XMLBuilderDomain(object):
         return self._conn
     conn = property(_get_conn)
 
-    def get_uri(self):
-        return self._conn_uri
-
     def _get_caps(self):
         if not self.__caps:
             self.__caps = CapabilitiesParser.parse(self.conn.getCapabilities())
         return self.__caps
-
-    def is_remote(self):
-        return bool(self.__remote)
-    def is_qemu(self):
-        return uriutil.is_qemu(self.conn, self.get_uri())
-    def is_qemu_system(self):
-        return uriutil.is_qemu_system(self.conn, self.get_uri())
-    def is_session_uri(self):
-        return uriutil.is_session_uri(self.conn, self.get_uri())
-    def is_xen(self):
-        return uriutil.is_xen(self.conn, self.get_uri())
 
     def _check_bool(self, val, name):
         if val not in [True, False]:
