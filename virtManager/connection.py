@@ -960,7 +960,19 @@ class vmmConnection(vmmGObject):
     def _poll_helper(self,
                      origlist, typename, check_support,
                      active_list, inactive_list,
-                     lookup_func, build_class):
+                     lookup_func, build_func):
+        """
+        Helper routine for old style split API libvirt polling.
+        @origlist: Pre-existing mapping of objects, with key->obj mapping
+            objects must have an is_active and set_active API
+        @typename: string describing type of objects we are polling for use
+            in debug messages.
+        @active_list: Function that returns the list of active objects
+        @inactive_list: Function that returns the list of inactive objects
+        @lookup_func: Function to get an object handle for the passed name
+        @build_func: Function that builds a new object class. It is passed
+            args of (raw libvirt object, key (usually UUID), bool is_active)
+        """
         current = {}
         start = []
         stop = []
@@ -990,7 +1002,7 @@ class vmmConnection(vmmGObject):
                     return
 
                 # Object is brand new this tick period
-                current[key] = build_class(self, obj, key, is_active)
+                current[key] = build_func(obj, key, is_active)
                 new.append(key)
 
                 if is_active:
@@ -1032,11 +1044,12 @@ class vmmConnection(vmmGObject):
         inactive_list = self._backend.listDefinedNetworks
         check_support = self.is_network_capable
         lookup_func = self._backend.networkLookupByName
-        build_class = vmmNetwork
+        build_func = (lambda obj, key, is_active:
+                      vmmNetwork(self, obj, key, is_active))
 
         return self._poll_helper(orig, name, check_support,
                                  active_list, inactive_list,
-                                 lookup_func, build_class)
+                                 lookup_func, build_func)
 
     def _update_pools(self):
         orig = self.pools.copy()
@@ -1045,11 +1058,12 @@ class vmmConnection(vmmGObject):
         inactive_list = self._backend.listDefinedStoragePools
         check_support = self.is_storage_capable
         lookup_func = self._backend.storagePoolLookupByName
-        build_class = vmmStoragePool
+        build_func = (lambda obj, key, is_active:
+                      vmmStoragePool(self, obj, key, is_active))
 
         return self._poll_helper(orig, name, check_support,
                                  active_list, inactive_list,
-                                 lookup_func, build_class)
+                                 lookup_func, build_func)
 
     def _update_interfaces(self):
         orig = self.interfaces.copy()
@@ -1058,11 +1072,12 @@ class vmmConnection(vmmGObject):
         inactive_list = self._backend.listDefinedInterfaces
         check_support = self.is_interface_capable
         lookup_func = self._backend.interfaceLookupByName
-        build_class = vmmInterface
+        build_func = (lambda obj, key, is_active:
+                      vmmInterface(self, obj, key, is_active))
 
         return self._poll_helper(orig, name, check_support,
                                  active_list, inactive_list,
-                                 lookup_func, build_class)
+                                 lookup_func, build_func)
 
 
     def _update_nodedevs(self):
@@ -1072,17 +1087,17 @@ class vmmConnection(vmmGObject):
         inactive_list = lambda: []
         check_support = self.is_nodedev_capable
         lookup_func = self._backend.nodeDeviceLookupByName
-        build_class = (lambda conn, obj, key, ignore:
-                        vmmNodeDevice(conn, obj, key))
+        build_func = lambda obj, key, ignore: vmmNodeDevice(self, obj, key)
 
         return self._poll_helper(orig, name, check_support,
                                  active_list, inactive_list,
-                                 lookup_func, build_class)
+                                 lookup_func, build_func)
 
     def _update_vms(self):
-        """
-        returns lists of changed VM states
-        """
+        # We can't easily use _poll_helper here because the domain API
+        # doesn't always return names like other objects, it returns
+        # IDs for active VMs
+
         newActiveIDs = []
         newInactiveNames = []
         oldActiveIDs = {}
@@ -1109,11 +1124,6 @@ class vmmConnection(vmmGObject):
             newInactiveNames = self._backend.listDefinedDomains()
         except Exception, e:
             logging.exception("Unable to list inactive domains: %s", e)
-
-        # NB in these first 2 loops, we go to great pains to
-        # avoid actually instantiating a new VM object so that
-        # the common case of 'no new/old VMs' avoids hitting
-        # XenD too much & thus slowing stuff down.
 
         def add_vm(vm):
             uuid = vm.get_uuid()
