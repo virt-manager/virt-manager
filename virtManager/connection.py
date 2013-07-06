@@ -205,9 +205,6 @@ class vmmConnection(vmmGObject):
             self._check_caps()
         return self._caps
 
-    def get_max_vcpus(self, _type):
-        return virtinst.util.get_max_vcpus(self._backend, _type)
-
     def get_host_info(self):
         return self.hostinfo
 

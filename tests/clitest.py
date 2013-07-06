@@ -411,7 +411,6 @@ vinst.add_valid("cpuram", "--cpu foobar,+x2apic,+x2apicagain,-distest,forbid=foo
 vinst.add_valid("cpuram", "--numatune 1,2,3,5-7,^6")  # Simple --numatune
 vinst.add_invalid("cpuram", "--vcpus 32 --cpuset=969-1000")  # Bogus cpuset
 vinst.add_invalid("cpuram", "--vcpus 32 --cpuset=autofoo")  # Bogus cpuset
-vinst.add_invalid("cpuram", "--vcpus 10000")  # Over max vcpus
 vinst.add_invalid("cpuram", "--vcpus 20 --check-cpu")  # Over host vcpus w/ --check-cpu
 vinst.add_invalid("cpuram", "--vcpus 5,maxvcpus=1")  # maxvcpus less than cpus
 vinst.add_invalid("cpuram", "--vcpus foo=bar")  # vcpus unknown option

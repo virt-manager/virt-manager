@@ -560,19 +560,8 @@ class vmmCreate(vmmGObjectUI):
         self.widget("phys-mem-label").set_markup(mem_label)
 
         # CPU
-        phys_cpus = self.conn.host_active_processor_count()
-
-        max_v = self.conn.get_max_vcpus(self.capsdomain.hypervisor_type)
+        phys_cpus = int(self.conn.host_active_processor_count())
         cmax = phys_cpus
-        if int(max_v) < int(phys_cpus):
-            cmax = max_v
-            cpu_tooltip = (_("Hypervisor only supports %d virtual CPUs.") %
-                           max_v)
-        else:
-            cpu_tooltip = None
-        self.widget("config-cpus").set_tooltip_text(cpu_tooltip or "")
-
-        cmax = int(cmax)
         if cmax <= 0:
             cmax = 1
         cpu_label = (_("Up to %(numcpus)d available") %

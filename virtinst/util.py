@@ -446,18 +446,6 @@ def randomUUID(conn):
                      "%02x" * 6]) % tuple(u)
 
 
-def get_max_vcpus(conn, typ):
-    """@param conn: libvirt connection to poll for max possible vcpus
-       @type type: optional guest type (kvm, etc.)"""
-    if typ is None:
-        typ = conn.getType()
-    try:
-        m = conn.getMaxVcpus(typ.lower())
-    except libvirt.libvirtError:
-        m = 32
-    return m
-
-
 def xml_escape(xml):
     """
     Replaces chars ' " < > & with xml safe counterparts

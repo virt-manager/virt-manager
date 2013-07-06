@@ -346,13 +346,9 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
                          xpath="./uuid")
 
     def __validate_cpus(self, val):
-        maxvcpus = util.get_max_vcpus(self.conn, self.type)
         val = int(val)
         if val < 1:
             raise ValueError(_("Number of vcpus must be a positive integer."))
-        if val > maxvcpus:
-            raise ValueError(_("Number of vcpus must be no greater than %d "
-                               "for this vm type.") % maxvcpus)
         return val
 
     # number of vcpus for the guest
