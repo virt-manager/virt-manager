@@ -2569,17 +2569,10 @@ class vmmDetails(vmmGObjectUI):
         Arguments can be a single arg or a list or appropriate arg type (e.g.
         a list of functions for define_funcs)
         """
-        def listify(val):
-            if not val:
-                return []
-            if type(val) is not list:
-                return [val]
-            return val
-
-        define_funcs = listify(define_funcs)
-        define_funcs_args = listify(define_funcs_args)
-        hotplug_funcs = listify(hotplug_funcs)
-        hotplug_funcs_args = listify(hotplug_funcs_args)
+        define_funcs = virtinst.util.listify(define_funcs)
+        define_funcs_args = virtinst.util.listify(define_funcs_args)
+        hotplug_funcs = virtinst.util.listify(hotplug_funcs)
+        hotplug_funcs_args = virtinst.util.listify(hotplug_funcs_args)
 
         hotplug_err = []
         active = self.vm.is_active()
