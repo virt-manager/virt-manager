@@ -578,3 +578,14 @@ def is_error_nosupport(err):
         return True
 
     return False
+
+
+def local_libvirt_version():
+    """
+    Lookup the local libvirt library version, but cache the value since
+    it never changes.
+    """
+    key = "__virtinst_cached_getVersion"
+    if not hasattr(libvirt, key):
+        setattr(libvirt, key, libvirt.getVersion())
+    return getattr(libvirt, key)

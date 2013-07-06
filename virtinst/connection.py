@@ -23,9 +23,9 @@ import re
 import libvirt
 
 from virtinst import support
+from virtinst import util
 from virtinst import CapabilitiesParser
 from virtinst.cli import parse_optstr
-from virtinst.util import uri_split
 
 _virtinst_uri_magic = "__virtinst_test__"
 
@@ -53,7 +53,12 @@ class VirtualConnection(object):
             self._test_opts = {}
 
         self._libvirtconn = None
-        self._urisplits = uri_split(self._uri)
+        self._urisplits = util.uri_split(self._uri)
+
+        self._fake_libvirt_version = None
+        self._fake_conn_version = None
+        self._daemon_version = None
+        self._conn_version = None
 
         self._caps = None
 
@@ -112,6 +117,41 @@ class VirtualConnection(object):
 
         self._fixup_virtinst_test_uri(conn)
         self._libvirtconn = conn
+
+
+    #########################
+    # Public version checks #
+    #########################
+
+    def local_libvirt_version(self):
+        if self._fake_libvirt_version is not None:
+            return self._fake_libvirt_version
+        # This handles caching for us
+        return util.local_libvirt_version()
+
+    def daemon_version(self):
+        if self._fake_libvirt_version is not None:
+            return self._fake_libvirt_version
+        if not self.is_remote():
+            return self.local_libvirt_version()
+
+        if not self._daemon_version:
+            if not self.check_conn_support(support.SUPPORT_CONN_LIBVERSION):
+                self._daemon_version = 0
+            else:
+                self._daemon_version = self.libvirtconn.getLibVersion()
+        return self._daemon_version
+
+    def conn_version(self):
+        if self._fake_conn_version is not None:
+            return self._fake_conn_version
+
+        if not self._conn_version:
+            if not self.check_conn_support(support.SUPPORT_CONN_GETVERSION):
+                self._conn_version = 0
+            else:
+                self._conn_version = self.libvirtconn.getVersion()
+        return self._conn_version
 
 
     ###################
@@ -259,7 +299,7 @@ class VirtualConnection(object):
             opts.pop("xen", None)
             opts.pop("lxc", None)
 
-            conn.getVersion = lambda: 10000000000
+            self._fake_conn_version = 10000000000
             conn.getURI = self._virtinst_uri_make_fake
 
             origcreate = conn.createLinux
@@ -273,22 +313,12 @@ class VirtualConnection(object):
             conn.createLinux = newcreate
             conn.defineXML = newdefine
 
-
         # These need to come after the HV setter, since that sets a default
         # conn version
         if "connver" in opts:
-            ver = int(opts.pop("connver"))
-            def newconnversion():
-                return ver
-            conn.getVersion = newconnversion
-
+            self._fake_conn_version = int(opts.pop("connver"))
         if "libver" in opts:
-            ver = int(opts.pop("libver"))
-            def newlibversion(drv=None):
-                if drv:
-                    return (ver, ver)
-                return ver
-            libvirt.getVersion = newlibversion
+            self._fake_libvirt_version = int(opts.pop("libver"))
 
         if opts:
             raise RuntimeError("Unhandled virtinst test uri options %s" % opts)

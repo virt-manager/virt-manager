@@ -123,8 +123,7 @@ def _simple_async(callback, args, title, text, parent, errorintro,
         docb = tmpcb
 
     asyncjob = vmmAsyncJob(docb, args, title, text, parent.topwin,
-                           show_progress=show_progress,
-                           async=parent.config.support_threading)
+                           show_progress=show_progress)
     error, details = asyncjob.run()
     if error is None:
         return

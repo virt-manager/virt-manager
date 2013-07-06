@@ -32,6 +32,7 @@ from gi.repository import GObject
 from gi.repository import LibvirtGLib
 # pylint: enable=E0611
 
+from virtinst import util as virtinstutil
 from virtinst import cli as virtinstcli
 from virtcli import cliutils, cliconfig
 
@@ -245,7 +246,8 @@ def main():
                                     os.path.join(cliconfig.asset_dir, "ui"),
                                     options.testfirstrun)
 
-    if not config.support_threading:
+    if not virtinstutil.local_libvirt_version() >= 6000:
+        # We need this version for threaded virConnect access
         _show_startup_error(
                 _("virt-manager requires libvirt 0.6.0 or later."), "")
         return

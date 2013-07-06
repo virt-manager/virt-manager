@@ -33,7 +33,9 @@ from virtinst import util
  SUPPORT_CONN_NETWORK,
  SUPPORT_CONN_INTERFACE,
  SUPPORT_CONN_MAXVCPUS_XML,
- SUPPORT_CONN_STREAM) = range(10)
+ SUPPORT_CONN_STREAM,
+ SUPPORT_CONN_GETVERSION,
+ SUPPORT_CONN_LIBVERSION) = range(12)
 
 # Flags for check_domain_support
 (SUPPORT_DOMAIN_GETVCPUS,
@@ -79,7 +81,7 @@ from virtinst import util
 # "force_version" : Demand that version check is met for the checked
 #                   libvirt version. Normally we will make a best effort
 #                   attempt, because determining the daemon version depends
-#                   on a fairly new API call getLibVersion. So for things like
+#                   on an api call from 2010. So for things like
 #                   testing API availability (e.g. createXMLFrom) we won't
 #                   force the check, but for things like XML options (AC97)
 #                   we want to be ABSOLUTELY SURE it is supported so we
@@ -112,158 +114,184 @@ _support_dict = {
     SUPPORT_CONN_STORAGE : {
         "function" : "virConnect.listStoragePools",
         "args" : (),
-   },
+    },
 
     SUPPORT_CONN_NODEDEV : {
         "function" : "virConnect.listDevices",
         "args" : (None, 0),
-   },
+    },
 
     SUPPORT_CONN_FINDPOOLSOURCES : {
         "function" : "virConnect.findStoragePoolSources",
-   },
+    },
 
     SUPPORT_CONN_KEYMAP_AUTODETECT : {
         "drv_version" : [("qemu", 11000)],
-   },
+    },
 
     SUPPORT_CONN_GETHOSTNAME : {
         "function" : "virConnect.getHostname()",
         "args" : (),
-   },
+    },
 
     SUPPORT_CONN_DOMAIN_VIDEO : {
         "version" : 6005,
-   },
-
+    },
 
     SUPPORT_CONN_NETWORK : {
         "function" : "virConnect.listNetworks",
         "args" : (),
-   },
+    },
 
     SUPPORT_CONN_INTERFACE : {
         "function" : "virConnect.listInterfaces",
         "args" : (),
-   },
+    },
 
     SUPPORT_CONN_MAXVCPUS_XML : {
         "version" : 8005,
-   },
+    },
 
     SUPPORT_CONN_STREAM : {
         # Earliest version with working bindings
         "version" : 9003,
         "function" : "virConnect.newStream",
         "args" : (0,),
-   },
+    },
+
+    SUPPORT_CONN_GETVERSION : {
+        "function": "virConnect.getVersion",
+        "args": (),
+    },
+
+    SUPPORT_CONN_LIBVERSION : {
+        "function": "virConnect.getLibVersion",
+        "args": (),
+    },
 
 
-    # Domain checks
+    #################
+    # Domain checks #
+    #################
+
     SUPPORT_DOMAIN_GETVCPUS : {
         "function" : "virDomain.vcpus",
         "args" : (),
-   },
+    },
 
     SUPPORT_DOMAIN_XML_INACTIVE : {
         "function" : "virDomain.XMLDesc",
         "args" : (),
         "flag" : "VIR_DOMAIN_XML_INACTIVE",
-   },
+    },
 
     SUPPORT_DOMAIN_XML_SECURE : {
         "function" : "virDomain.XMLDesc",
         "args" : (),
         "flag" : "VIR_DOMAIN_XML_SECURE",
-   },
+    },
 
     SUPPORT_DOMAIN_MANAGED_SAVE : {
         "function" : "virDomain.hasManagedSaveImage",
         "args" : (0,),
-   },
+    },
 
     SUPPORT_DOMAIN_MIGRATE_DOWNTIME : {
         "function" : "virDomain.migrateSetMaxDowntime",
         # Use a bogus flags value, so that we don't overwrite existing
         # downtime value
         "args" : (30, 12345678),
-   },
+    },
 
     SUPPORT_DOMAIN_JOB_INFO : {
         "function" : "virDomain.jobInfo",
         "args" : (),
-   },
+    },
 
     SUPPORT_DOMAIN_CONSOLE_STREAM : {
         "version" : 9003,
-   },
+    },
 
     SUPPORT_DOMAIN_SET_METADATA : {
         "version" : 9010,
-   },
+    },
 
-   SUPPORT_DOMAIN_CPU_HOST_MODEL : {
+    SUPPORT_DOMAIN_CPU_HOST_MODEL : {
         "version" : 9010,
-   },
+    },
 
 
-    # Pool checks
+    ###############
+    # Pool checks #
+    ###############
+
     # This can't ever require a pool object for back compat reasons
     SUPPORT_STORAGE_CREATEVOLFROM : {
         "function" : "virStoragePool.createXMLFrom",
         "version" : 6004,
-   },
+    },
 
-    # Nodedev checks
+    ##################
+    # Nodedev checks #
+    ##################
+
     # This can't ever require a nodedev object for back compat reasons
     SUPPORT_NODEDEV_PCI_DETACH : {
         "function" : "virNodeDevice.dettach",
         "version" : 6001,
-   },
+    },
 
-    # Interface checks
+
+    ####################
+    # Interface checks #
+    ####################
+
     SUPPORT_INTERFACE_XML_INACTIVE : {
         "function" : "virInterface.XMLDesc",
         "args" : (),
         "flag" : "VIR_INTERFACE_XML_INACTIVE",
-   },
+    },
 
-    # Conn HV checks
+
+    ##################
+    # Conn HV checks #
+    ##################
+
     SUPPORT_CONN_HV_VIRTIO : {
         "drv_version": [("qemu", 0)],
         "hv_version" : [("kvm", 0)],
-   },
+    },
 
     SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI : {
         "drv_version" : [("xen", -3001000)],
-   },
+    },
 
     SUPPORT_CONN_HV_SOUND_AC97 : {
         "version" : 6000,
         "force_version" : True,
         "drv_version" : [("qemu", 11000), ],
-   },
+    },
 
     SUPPORT_CONN_HV_SOUND_ICH6 : {
         "version" : 8008,
         "drv_version" : [("qemu", 14000), ],
         "rhel6_drv_version" : [("qemu", 12001)],
         "rhel6_version" : 8007,
-   },
+    },
 
     SUPPORT_CONN_HV_GRAPHICS_SPICE : {
         "version" : 8006,
         "drv_version" : [("qemu", 14000), ],
-   },
+    },
 
     SUPPORT_CONN_HV_CHAR_SPICEVMC : {
         "version" : 8008,
         "drv_version" : [("qemu", 14000), ],
-   },
+    },
     SUPPORT_CONN_HV_DIRECT_INTERFACE : {
         "version" : 8007,
         "drv_version" : [("qemu", 0), ],
-   },
+    },
     SUPPORT_CONN_HV_FILESYSTEM : {
         "drv_version" : [("qemu", 13000),
                           ("lxc", 0),
@@ -273,14 +301,14 @@ _support_dict = {
                                   ("lxc", 0),
                                   ("openvz", 0),
                                   ("test", 0)],
-   },
+    },
 
 
     SUPPORT_STREAM_UPLOAD : {
         # Latest I tested with, and since we will use it by default
         # for URL installs, want to be sure it works
         "version" : 9004,
-   },
+    },
 }
 
 # RHEL6 has lots of feature backports, and since libvirt doesn't
@@ -330,72 +358,19 @@ def _get_flag(flag_name):
 def _try_command(func, args, check_all_error=False):
     try:
         func(*args)
-
     except libvirt.libvirtError, e:
         if util.is_error_nosupport(e):
             return False
 
         if check_all_error:
             return False
-
     except Exception:
         # Other python exceptions likely mean the bindings are horked
         return False
-
     return True
 
 
-# Version of the local libvirt library
-def _local_lib_ver():
-    return libvirt.getVersion()
-
-
-# Version of libvirt library/daemon on the connection (could be remote)
-def _daemon_lib_ver(conn, is_remote, force_version, minimum_libvirt_version):
-    # Always force the required version if it's after the version which
-    # has getLibVersion
-    if force_version or minimum_libvirt_version >= 7004:
-        default_ret = 0
-    else:
-        default_ret = 100000000000
-
-    if not is_remote:
-        return _local_lib_ver()
-
-    if not _has_command("getLibVersion", obj=conn):
-        return default_ret
-
-    if not _try_command(getattr(conn, "getLibVersion"), ()):
-        return default_ret
-
-    return conn.getLibVersion()
-
-
 # Return the hypervisor version
-def _hv_ver(conn, drv_type):
-    args = ()
-
-    cmd = _get_command("getVersion", obj=conn)
-    if not cmd:
-        cmd = _get_command("getVersion")
-        args = (drv_type,)
-
-    if not cmd:
-        return 0
-
-    if not _try_command(cmd, args):
-        return 0
-
-    try:
-        ret = cmd(*args)
-        if type(ret) == tuple:
-            ret = ret[1]
-    except libvirt.libvirtError:
-        ret = 0
-
-    return ret
-
-
 def _split_function_name(function):
     if not function:
         return (None, None)
@@ -407,7 +382,7 @@ def _split_function_name(function):
         return (output[0], output[1])
 
 
-def check_support(conn, feature, data=None):
+def check_support(virtconn, feature, data=None):
     """
     Attempt to determine if a specific libvirt feature is support given
     the passed connection.
@@ -421,9 +396,6 @@ def check_support(conn, feature, data=None):
 
     @returns: True if feature is supported, False otherwise
     """
-    is_remote = conn.is_remote()
-    drv_type = conn.get_uri_driver()
-    conn = conn.libvirtconn
     if "VirtualConnection" in repr(data):
         data = data.libvirtconn
 
@@ -454,11 +426,6 @@ def check_support(conn, feature, data=None):
     object_name, function_name = _split_function_name(get_value("function"))
     args = get_value("args")
     flag = get_value("flag")
-
-    actual_lib_ver = _local_lib_ver()
-    actual_daemon_ver = _daemon_lib_ver(conn, is_remote, force_version,
-                                        minimum_libvirt_version)
-    actual_drv_ver = _hv_ver(conn, drv_type)
 
     # Make sure there are no keys left in the key_list. This will
     # ensure we didn't mistype anything above, or in the support_dict
@@ -497,6 +464,16 @@ def check_support(conn, feature, data=None):
             ret = _try_command(cmd, args + flag_tuple,
                                check_all_error=bool(flag_tuple))
             return ret
+
+    # Do this after the function check, since there's an ordering issue
+    # with VirtualConnection
+    drv_type = virtconn.get_uri_driver()
+    actual_lib_ver = virtconn.local_libvirt_version()
+    actual_daemon_ver = virtconn.daemon_version()
+    actual_drv_ver = virtconn.conn_version()
+    if (actual_daemon_ver == 0 and not force_version):
+        # This means the API may not be supported, but we don't care
+        actual_daemon_ver = 1000000000
 
     # Check that local libvirt version is sufficient
     if minimum_libvirt_version > actual_lib_ver:
@@ -564,7 +541,3 @@ def check_support(conn, feature, data=None):
             return False
 
     return True
-
-
-def support_threading():
-    return bool(_local_lib_ver() >= 6000)

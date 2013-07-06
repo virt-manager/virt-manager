@@ -26,8 +26,6 @@ from gi.repository import GLib
 from gi.repository import Gtk
 # pylint: enable=E0611
 
-import virtinst
-
 from virtManager.keyring import vmmKeyring, vmmSecret
 
 
@@ -171,17 +169,12 @@ class vmmConfig(object):
 
         self._objects = []
 
-        self.support_threading = virtinst.support.support_threading()
-
-        self.support_inspection = self.check_inspection(self.support_threading)
+        self.support_inspection = self.check_inspection()
 
         self._spice_error = None
 
 
-    def check_inspection(self, support_threading):
-        if not support_threading:
-            return False
-
+    def check_inspection(self):
         try:
             # Check we can open the Python guestfs module.
             from guestfs import GuestFS  # pylint: disable=F0401

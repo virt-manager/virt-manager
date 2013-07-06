@@ -105,8 +105,6 @@ class vmmEngine(vmmGObject):
 
         self._tick_thread = None
         self._tick_thread_slow = False
-        if not self.config.support_threading:
-            logging.debug("Libvirt doesn't support threading, skipping.")
 
         self.inspection = None
         self._create_inspection_thread()
@@ -276,9 +274,6 @@ class vmmEngine(vmmGObject):
         self.timer = self.timeout_add(interval, self.tick)
 
     def tick(self):
-        if not self.config.support_threading:
-            return self._tick()
-
         if self._tick_thread and self._tick_thread.isAlive():
             if not self._tick_thread_slow:
                 logging.debug("Tick is slow, not running at requested rate.")

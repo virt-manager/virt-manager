@@ -18,7 +18,6 @@ import unittest
 import os
 import logging
 
-import libvirt
 import urlgrabber.progress as progress
 
 import virtinst
@@ -454,13 +453,9 @@ class TestXMLConfig(unittest.TestCase):
         g = build_guest()
         self._compare(g, "install-f11-ac97", False)
 
-        oldver = libvirt.getVersion
-        try:
-            utils.set_conn(utils.open_plainkvm(libver=5000))
-            g = build_guest()
-            self._compare(g, "install-f11-noac97", False)
-        finally:
-            libvirt.getVersion = oldver
+        utils.set_conn(utils.open_plainkvm(libver=5000))
+        g = build_guest()
+        self._compare(g, "install-f11-noac97", False)
 
         utils.set_conn(utils.open_plainkvm(connver=10000))
         g = build_guest()
