@@ -75,5 +75,5 @@ def wrap_module(module, regex=None, tb=False):
         obj = getattr(module, name)
         if type(obj) is FunctionType:
             wrap_func(module, obj, tb)
-        if type(obj) is ClassType:
+        if type(obj) is ClassType or type(obj) is type:
             wrap_class(obj, tb)
