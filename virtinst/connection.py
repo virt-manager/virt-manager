@@ -22,6 +22,7 @@ import re
 
 import libvirt
 
+from virtinst import support
 from virtinst.cli import parse_optstr
 from virtinst.util import uri_split
 
@@ -148,6 +149,30 @@ class VirtualConnection(object):
     def is_container(self):
         return self.is_lxc() or self.is_openvz()
 
+
+    #########################
+    # Support check helpers #
+    #########################
+
+    for _supportname in [_supportname for _supportname in dir(support) if
+                         _supportname.startswith("SUPPORT_")]:
+        locals()[_supportname] = getattr(support, _supportname)
+
+    def check_conn_support(self, feature):
+        return support.check_support(self, feature, self)
+    def check_conn_hv_support(self, feature, hv):
+        return support.check_support(self, feature, hv)
+    def check_domain_support(self, dom, feature):
+        return support.check_support(self, feature, dom)
+    def check_pool_support(self, pool, feature):
+        return support.check_support(self, feature, pool)
+    def check_nodedev_support(self, nodedev, feature):
+        return support.check_support(self, feature, nodedev)
+    def check_interface_support(self, iface, feature):
+        return support.check_support(self, feature, iface)
+    def check_stream_support(self, feature):
+        return (self.check_conn_support(self.SUPPORT_CONN_STREAM) and
+                support.check_support(self, feature, self))
 
 
     ###################

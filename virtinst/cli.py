@@ -314,10 +314,10 @@ def install_fail(guest):
 
 
 def build_default_pool(guest):
-
-    if not virtinst.util.is_storage_capable(guest.conn):
+    if not guest.conn.check_conn_support(guest.conn.SUPPORT_CONN_STORAGE):
         # VirtualDisk will raise an error for us
         return
+
     pool = None
     try:
         pool = guest.conn.storagePoolLookupByName(DEFAULT_POOL_NAME)

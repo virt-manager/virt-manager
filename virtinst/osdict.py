@@ -181,9 +181,7 @@ def parse_key_entry(conn, hv_type, key_entry, defaults):
 
             # HV_ALL means don't check for support, just return the value
             if support_key != HV_ALL:
-                support_ret = support.check_conn_hv_support(conn,
-                                                            support_key,
-                                                            hv_type)
+                support_ret = conn.check_conn_hv_support(support_key, hv_type)
 
                 if support_ret is not True:
                     continue

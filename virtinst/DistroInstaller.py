@@ -26,7 +26,6 @@ import tempfile
 import urlgrabber
 
 from virtinst import Storage
-from virtinst import support
 from virtinst import util
 from virtinst import Installer
 from virtinst.VirtualDisk import VirtualDisk
@@ -220,7 +219,8 @@ class DistroInstaller(Installer.Installer):
             validated = False
 
         if (self._location_is_path or
-            (not validated and util.is_storage_capable(self.conn))):
+            (not validated and
+             self.conn.check_conn_support(self.conn.SUPPORT_CONN_STORAGE))):
             # If user passed a storage tuple, OR
             # We couldn't determine the location type and a storage capable
             #   connection was passed:
@@ -319,8 +319,7 @@ class DistroInstaller(Installer.Installer):
     def support_remote_url_install(self):
         if hasattr(self.conn, "_virtinst__fake_conn"):
             return False
-        return support.check_stream_support(self.conn,
-                                            support.SUPPORT_STREAM_UPLOAD)
+        return self.conn.check_stream_support(self.conn.SUPPORT_STREAM_UPLOAD)
 
     def _upload_media(self, guest, meter, kernel, initrd):
         conn = guest.conn

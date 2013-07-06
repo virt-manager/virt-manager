@@ -96,7 +96,7 @@ def poolCompare(pool_inst):
     return pool_inst.install(build=True, meter=None, create=True)
 
 
-def createVol(poolobj, volname=None, input_vol=None, clone_vol=None):
+def createVol(conn, poolobj, volname=None, input_vol=None, clone_vol=None):
     volclass = StorageVolume.get_volume_for_pool(pool_object=poolobj)
 
     if volname is None:
@@ -104,7 +104,8 @@ def createVol(poolobj, volname=None, input_vol=None, clone_vol=None):
 
     alloc = 5 * 1024 * 1024 * 1024
     cap = 10 * 1024 * 1024 * 1024
-    vol_inst = volclass(name=volname, capacity=cap, allocation=alloc,
+    vol_inst = volclass(conn,
+                        name=volname, capacity=cap, allocation=alloc,
                         pool=poolobj)
 
     perms = {}
@@ -113,14 +114,10 @@ def createVol(poolobj, volname=None, input_vol=None, clone_vol=None):
     perms["group"] = 10736
 
     vol_inst.perms = perms
-    if input_vol or clone_vol:
-        if not virtinst.Storage.is_create_vol_from_supported(poolobj._conn):
-            return
-
     if input_vol:
         vol_inst.input_vol = input_vol
     elif clone_vol:
-        vol_inst = virtinst.Storage.CloneVolume(volname, clone_vol)
+        vol_inst = virtinst.Storage.CloneVolume(conn, volname, clone_vol)
 
     filename = os.path.join(basepath, vol_inst.name + ".xml")
 
@@ -137,28 +134,36 @@ class TestStorage(unittest.TestCase):
 
     def testDirPool(self):
         poolobj = createPool(self.conn, StoragePool.TYPE_DIR, "pool-dir")
-        invol = createVol(poolobj)
-        createVol(poolobj, volname=invol.name() + "input", input_vol=invol)
-        createVol(poolobj, volname=invol.name() + "clone", clone_vol=invol)
+        invol = createVol(self.conn, poolobj)
+        createVol(self.conn, poolobj,
+                  volname=invol.name() + "input", input_vol=invol)
+        createVol(self.conn, poolobj,
+                  volname=invol.name() + "clone", clone_vol=invol)
 
     def testFSPool(self):
         poolobj = createPool(self.conn, StoragePool.TYPE_FS, "pool-fs")
-        invol = createVol(poolobj)
-        createVol(poolobj, volname=invol.name() + "input", input_vol=invol)
-        createVol(poolobj, volname=invol.name() + "clone", clone_vol=invol)
+        invol = createVol(self.conn, poolobj)
+        createVol(self.conn, poolobj,
+                  volname=invol.name() + "input", input_vol=invol)
+        createVol(self.conn, poolobj,
+                  volname=invol.name() + "clone", clone_vol=invol)
 
     def testNetFSPool(self):
         poolobj = createPool(self.conn, StoragePool.TYPE_NETFS, "pool-netfs")
-        invol = createVol(poolobj)
-        createVol(poolobj, volname=invol.name() + "input", input_vol=invol)
-        createVol(poolobj, volname=invol.name() + "clone", clone_vol=invol)
+        invol = createVol(self.conn, poolobj)
+        createVol(self.conn, poolobj,
+                  volname=invol.name() + "input", input_vol=invol)
+        createVol(self.conn, poolobj,
+                  volname=invol.name() + "clone", clone_vol=invol)
 
     def testLVPool(self):
         poolobj = createPool(self.conn, StoragePool.TYPE_LOGICAL,
                              "pool-logical")
-        invol = createVol(poolobj)
-        createVol(poolobj, volname=invol.name() + "input", input_vol=invol)
-        createVol(poolobj, volname=invol.name() + "clone", clone_vol=invol)
+        invol = createVol(self.conn, poolobj)
+        createVol(self.conn, poolobj,
+                  volname=invol.name() + "input", input_vol=invol)
+        createVol(self.conn,
+                  poolobj, volname=invol.name() + "clone", clone_vol=invol)
 
         # Test parsing source name for target path
         createPool(self.conn, StoragePool.TYPE_LOGICAL,
@@ -177,15 +182,17 @@ class TestStorage(unittest.TestCase):
     def testDiskPool(self):
         poolobj = createPool(self.conn, StoragePool.TYPE_DISK,
                              "pool-disk", fmt="dos")
-        invol = createVol(poolobj)
-        createVol(poolobj, volname=invol.name() + "input", input_vol=invol)
-        createVol(poolobj, volname=invol.name() + "clone", clone_vol=invol)
+        invol = createVol(self.conn, poolobj)
+        createVol(self.conn, poolobj,
+                  volname=invol.name() + "input", input_vol=invol)
+        createVol(self.conn, poolobj,
+                  volname=invol.name() + "clone", clone_vol=invol)
 
     def testISCSIPool(self):
         poolobj = createPool(self.conn, StoragePool.TYPE_ISCSI, "pool-iscsi")
         # Not supported
         #volobj = createVol(poolobj)
-        self.assertRaises(RuntimeError, createVol, poolobj)
+        self.assertRaises(RuntimeError, createVol, self.conn, poolobj)
 
         createPool(self.conn, StoragePool.TYPE_ISCSI, "pool-iscsi-iqn",
                    iqn="foo.bar.baz.iqn")
@@ -194,13 +201,13 @@ class TestStorage(unittest.TestCase):
         poolobj = createPool(self.conn, StoragePool.TYPE_SCSI, "pool-scsi")
         # Not supported
         #volobj = createVol(poolobj)
-        self.assertRaises(RuntimeError, createVol, poolobj)
+        self.assertRaises(RuntimeError, createVol, self.conn, poolobj)
 
     def testMpathPool(self):
         poolobj = createPool(self.conn, StoragePool.TYPE_MPATH, "pool-mpath")
         # Not supported
         #volobj = createVol(poolobj)
-        self.assertRaises(RuntimeError, createVol, poolobj)
+        self.assertRaises(RuntimeError, createVol, self.conn, poolobj)
 
     def _enumerateCompare(self, pool_list):
         for pool in pool_list:

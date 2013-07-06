@@ -29,7 +29,6 @@ import threading
 import libvirt
 import virtinst
 from virtinst.VirtualCharDevice import VirtualCharSpicevmcDevice
-import virtinst.support as support
 
 from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
@@ -209,16 +208,16 @@ class vmmDomain(vmmLibvirtObject):
             try:
                 self._backend.vcpus()
             except libvirt.libvirtError, err:
-                if support.is_error_nosupport(err):
+                if virtinst.util.is_error_nosupport(err):
                     self._getvcpus_supported = False
         return self._getvcpus_supported
     getvcpus_supported = property(_get_getvcpus_supported)
 
     def _get_getjobinfo_supported(self):
         if self._getjobinfo_supported is None:
-            self._getjobinfo_supported = support.check_domain_support(
+            self._getjobinfo_supported = self.conn.check_domain_support(
                                             self._backend,
-                                            support.SUPPORT_DOMAIN_JOB_INFO)
+                                            self.conn.SUPPORT_DOMAIN_JOB_INFO)
         return self._getjobinfo_supported
     getjobinfo_supported = property(_get_getjobinfo_supported)
 
@@ -228,11 +227,12 @@ class vmmDomain(vmmLibvirtObject):
         """
         self._reparse_xml()
 
-        self.managedsave_supported = self.conn.get_dom_managedsave_supported(self._backend)
+        self.managedsave_supported = self.conn.get_dom_managedsave_supported(
+                                                        self._backend)
 
-        self.remote_console_supported = support.check_domain_support(
-                                        self._backend,
-                                        support.SUPPORT_DOMAIN_CONSOLE_STREAM)
+        self.remote_console_supported = self.conn.check_domain_support(
+                                    self._backend,
+                                    self.conn.SUPPORT_DOMAIN_CONSOLE_STREAM)
 
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
@@ -916,8 +916,8 @@ class vmmDomain(vmmLibvirtObject):
         # libvirt since 0.9.10 provides a SetMetadata API that provides
         # actual <description> 'hotplug', and using that means checkig
         # for support, version, etc.
-        if not virtinst.support.check_domain_support(self._backend,
-                virtinst.support.SUPPORT_DOMAIN_SET_METADATA):
+        if not self.conn.check_domain_support(self._backend,
+                self.conn.SUPPORT_DOMAIN_SET_METADATA):
             return
 
         flags = (libvirt.VIR_DOMAIN_AFFECT_LIVE |
@@ -1269,8 +1269,8 @@ class vmmDomain(vmmLibvirtObject):
 
 
     def support_downtime(self):
-        return support.check_domain_support(self._backend,
-                        support.SUPPORT_DOMAIN_MIGRATE_DOWNTIME)
+        return self.conn.check_domain_support(self._backend,
+                        self.conn.SUPPORT_DOMAIN_MIGRATE_DOWNTIME)
 
     def migrate_set_max_downtime(self, max_downtime, flag=0):
         self._backend.migrateSetMaxDowntime(max_downtime, flag)
@@ -1668,7 +1668,7 @@ class vmmDomain(vmmLibvirtObject):
                     rx += io[0]
                     tx += io[4]
             except libvirt.libvirtError, err:
-                if support.is_error_nosupport(err):
+                if virtinst.util.is_error_nosupport(err):
                     logging.debug("Net stats not supported: %s", err)
                     self._stats_net_supported = False
                 else:
@@ -1705,7 +1705,7 @@ class vmmDomain(vmmLibvirtObject):
                     rd += io[1]
                     wr += io[3]
             except libvirt.libvirtError, err:
-                if support.is_error_nosupport(err):
+                if virtinst.util.is_error_nosupport(err):
                     logging.debug("Disk stats not supported: %s", err)
                     self._stats_disk_supported = False
                 else:

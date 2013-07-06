@@ -462,9 +462,8 @@ class vmmCreate(vmmGObjectUI):
         can_storage = (is_local or is_storage_capable)
         is_pv = (self.capsguest.os_type == "xen")
         is_container = self.conn.is_container()
-        can_remote_url = virtinst.support.check_stream_support(
-                            self.conn.get_backend(),
-                            virtinst.support.SUPPORT_STREAM_UPLOAD)
+        can_remote_url = self.conn.check_stream_support(
+                            self.conn.SUPPORT_STREAM_UPLOAD)
 
         # Install Options
         method_tree = self.widget("method-tree")
@@ -1414,8 +1413,8 @@ class vmmCreate(vmmGObjectUI):
         if guest.installer.is_container():
             return
 
-        support_spice = virtinst.support.check_conn_support(guest.conn,
-                            virtinst.support.SUPPORT_CONN_HV_GRAPHICS_SPICE)
+        support_spice = guest.conn.check_conn_support(
+                            guest.conn.SUPPORT_CONN_HV_GRAPHICS_SPICE)
         if not self._rhel6_defaults():
             support_spice = True
 

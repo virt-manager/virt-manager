@@ -473,13 +473,6 @@ def xml_escape(xml):
     return xml
 
 
-def is_storage_capable(conn):
-    """check if virConnectPtr passed has storage API support"""
-    from virtinst import support
-
-    return support.check_conn_support(conn, support.SUPPORT_CONN_STORAGE)
-
-
 def get_xml_path(xml, path=None, func=None):
     """
     Return the content from the passed xml xpath, or return the result
@@ -523,7 +516,7 @@ def lookup_pool_by_path(conn, path):
     Favor running pools over inactive pools.
     @returns: virStoragePool object if found, None otherwise
     """
-    if not is_storage_capable(conn):
+    if not conn.check_conn_support(conn.SUPPORT_CONN_STORAGE):
         return None
 
     def check_pool(poolname, path):
@@ -575,3 +568,21 @@ def uri_split(uri):
     else:
         scheme = uri.lower()
     return scheme, username, netloc, uri, query, fragment
+
+
+def is_error_nosupport(err):
+    """
+    Check if passed exception indicates that the called libvirt command isn't
+    supported
+
+    @param err: Exception raised from command call
+    @returns: True if command isn't supported, False if we can't determine
+    """
+    if not isinstance(err, libvirt.libvirtError):
+        return False
+
+    if (err.get_error_code() == libvirt.VIR_ERR_RPC or
+        err.get_error_code() == libvirt.VIR_ERR_NO_SUPPORT):
+        return True
+
+    return False

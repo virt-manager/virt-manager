@@ -106,7 +106,7 @@ def _check_if_pool_source(conn, path):
     If passed path is a host disk device like /dev/sda, want to let the user
     use it
     """
-    if not util.is_storage_capable(conn):
+    if not conn.check_conn_support(conn.SUPPORT_CONN_STORAGE):
         return None
 
     def check_pool(poolname, path):
@@ -208,7 +208,7 @@ def _check_if_path_managed(conn, path):
     return vol, pool, path_is_pool
 
 
-def _build_vol_install(path, pool, size, sparse):
+def _build_vol_install(conn, path, pool, size, sparse):
     # Path wasn't a volume. See if base of path is a managed
     # pool, and if so, setup a StorageVolume object
     if size is None:
@@ -227,7 +227,7 @@ def _build_vol_install(path, pool, size, sparse):
     else:
         alloc = cap
 
-    volinst = volclass(name=os.path.basename(path),
+    volinst = volclass(conn, name=os.path.basename(path),
                        capacity=cap, allocation=alloc, pool=pool)
     return volinst
 
@@ -521,7 +521,7 @@ class VirtualDisk(VirtualDevice):
 
         if not conn:
             raise ValueError(_("'volName' requires a passed connection."))
-        if not util.is_storage_capable(conn):
+        if not conn.check_conn_support(conn.SUPPORT_CONN_STORAGE):
             raise ValueError(_("Connection does not support storage lookup."))
 
         try:
@@ -991,8 +991,8 @@ class VirtualDisk(VirtualDevice):
         Validates and updates params when the backing storage is changed
         """
         pool = None
-
-        storage_capable = util.is_storage_capable(self.conn)
+        storage_capable = self.conn.check_conn_support(
+                                            self.conn.SUPPORT_CONN_STORAGE)
 
         # Try to lookup self.path storage objects
         if vol_object or vol_install:
@@ -1006,7 +1006,8 @@ class VirtualDisk(VirtualDevice):
                 not vol_object and
                 not path_is_pool and
                 not self._is_parse()):
-                vol_install = _build_vol_install(path, pool,
+                vol_install = _build_vol_install(self.conn,
+                                                 path, pool,
                                                  self.size,
                                                  self.sparse)
 
@@ -1212,7 +1213,8 @@ class VirtualDisk(VirtualDevice):
 
             return True
 
-        storage_capable = util.is_storage_capable(self.conn)
+        storage_capable = self.conn.check_conn_support(
+                                        self.conn.SUPPORT_CONN_STORAGE)
 
         if self.conn.is_remote():
             if not storage_capable:

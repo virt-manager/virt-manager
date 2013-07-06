@@ -72,8 +72,8 @@ def can_we_clone(conn, vol, path):
 
     elif vol:
         # Managed storage
-        if not virtinst.Storage.is_create_vol_from_supported(
-                                                        conn.get_backend()):
+        if not conn.check_pool_support(conn,
+                                       conn.SUPPORT_STORAGE_CREATEVOLFROM):
             if conn.is_remote() or not os.access(path, os.R_OK):
                 msg = _("Connection does not support managed storage cloning.")
     else:

@@ -27,8 +27,6 @@ from gi.repository import Gtk
 # pylint: enable=E0611
 
 import virtinst
-from virtinst import VirtualNetworkInterface
-from virtinst import VirtualDisk
 
 from virtManager import util
 from virtManager.error import vmmErrorDialog
@@ -39,6 +37,7 @@ OPTICAL_IS_MEDIA_PRESENT = 2
 OPTICAL_DEV_KEY = 3
 OPTICAL_MEDIA_KEY = 4
 OPTICAL_IS_VALID = 5
+
 
 ##############################################################
 # Initialize an error object to use for validation functions #
@@ -471,13 +470,13 @@ def build_storage_format_combo(vm, combo):
 
 
 def pretty_network_desc(nettype, source=None, netobj=None):
-    if nettype == VirtualNetworkInterface.TYPE_USER:
+    if nettype == virtinst.VirtualNetworkInterface.TYPE_USER:
         return _("Usermode networking")
 
     extra = None
-    if nettype == VirtualNetworkInterface.TYPE_BRIDGE:
+    if nettype == virtinst.VirtualNetworkInterface.TYPE_BRIDGE:
         ret = _("Bridge")
-    elif nettype == VirtualNetworkInterface.TYPE_VIRTUAL:
+    elif nettype == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
         ret = _("Virtual network")
         if netobj:
             extra = ": %s" % netobj.pretty_forward_mode()
@@ -521,7 +520,8 @@ def net_list_changed(net_list, bridge_box,
     row = net_list.get_model()[active]
 
     if source_mode_box is not None:
-        show_source_mode = (row[0] == VirtualNetworkInterface.TYPE_DIRECT)
+        show_source_mode = (row[0] ==
+                            virtinst.VirtualNetworkInterface.TYPE_DIRECT)
         source_mode_box.set_property("visible", show_source_mode)
         source_mode_label.set_property("visible", show_source_mode)
         vport_expander.set_property("visible", show_source_mode)
@@ -542,7 +542,7 @@ def get_network_selection(net_list, bridge_entry):
     net_check_bridge = row[5]
 
     if net_check_bridge and bridge_entry:
-        net_type = VirtualNetworkInterface.TYPE_BRIDGE
+        net_type = virtinst.VirtualNetworkInterface.TYPE_BRIDGE
         net_src = bridge_entry.get_text()
 
     return net_type, net_src
@@ -575,7 +575,7 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
 
     # For qemu:///session
     if conn.is_qemu_session():
-        nettype = VirtualNetworkInterface.TYPE_USER
+        nettype = virtinst.VirtualNetworkInterface.TYPE_USER
         r = build_row(nettype, None, pretty_network_desc(nettype), True, True)
         model.append(r)
         set_active(0)
@@ -586,7 +586,7 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
     # Virtual Networks
     for uuid in conn.list_net_uuids():
         net = conn.get_net(uuid)
-        nettype = VirtualNetworkInterface.TYPE_VIRTUAL
+        nettype = virtinst.VirtualNetworkInterface.TYPE_VIRTUAL
 
         label = pretty_network_desc(nettype, net.get_name(), net)
         if not net.is_active():
@@ -623,7 +623,7 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
     for name in conn.list_net_device_paths():
         br = conn.get_net_device(name)
         bridge_name = br.get_bridge()
-        nettype = VirtualNetworkInterface.TYPE_BRIDGE
+        nettype = virtinst.VirtualNetworkInterface.TYPE_BRIDGE
 
         if ((bridge_name in vnet_bridges) or
             (br.get_name() in vnet_bridges) or
@@ -642,10 +642,10 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
                 brlabel = _("(Empty bridge)")
         else:
             if (show_direct_interfaces and
-                virtinst.support.check_conn_support(conn.get_backend(),
-                         virtinst.support.SUPPORT_CONN_HV_DIRECT_INTERFACE)):
+                conn.check_conn_support(
+                    conn.SUPPORT_CONN_HV_DIRECT_INTERFACE)):
                 sensitive = True
-                nettype = VirtualNetworkInterface.TYPE_DIRECT
+                nettype = virtinst.VirtualNetworkInterface.TYPE_DIRECT
                 bridge_name = name
                 brlabel = ": %s" % _("macvtap")
             else:
@@ -713,7 +713,7 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
         return None
 
     # Make sure VirtualNetwork is running
-    if (nettype == VirtualNetworkInterface.TYPE_VIRTUAL and
+    if (nettype == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL and
         devname not in conn.get_backend().listNetworks()):
 
         res = err_dial.yes_no(_("Virtual Network is not active."),
@@ -736,16 +736,16 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
     try:
         bridge = None
         netname = None
-        if nettype == VirtualNetworkInterface.TYPE_VIRTUAL:
+        if nettype == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
             netname = devname
-        elif nettype == VirtualNetworkInterface.TYPE_BRIDGE:
+        elif nettype == virtinst.VirtualNetworkInterface.TYPE_BRIDGE:
             bridge = devname
-        elif nettype == VirtualNetworkInterface.TYPE_DIRECT:
+        elif nettype == virtinst.VirtualNetworkInterface.TYPE_DIRECT:
             bridge = devname
-        elif nettype == VirtualNetworkInterface.TYPE_USER:
+        elif nettype == virtinst.VirtualNetworkInterface.TYPE_USER:
             pass
 
-        net = VirtualNetworkInterface(conn.get_backend(),
+        net = virtinst.VirtualNetworkInterface(conn.get_backend(),
                                       type=nettype,
                                       bridge=bridge,
                                       network=netname,
@@ -776,7 +776,7 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
 def generate_macaddr(conn):
     newmac = ""
     try:
-        net = VirtualNetworkInterface(conn.get_backend())
+        net = virtinst.VirtualNetworkInterface(conn.get_backend())
         net.setup()
         newmac = net.macaddr
     except:
@@ -984,7 +984,8 @@ def check_path_search_for_qemu(parent, conn, path):
     user = util.running_config.default_qemu_user
 
     skip_paths = util.running_config.get_perms_fix_ignore()
-    broken_paths = VirtualDisk.check_path_search_for_user(conn.get_backend(),
+    broken_paths = virtinst.VirtualDisk.check_path_search_for_user(
+                                                          conn.get_backend(),
                                                           path, user)
     for p in broken_paths:
         if p in skip_paths:
@@ -1007,8 +1008,8 @@ def check_path_search_for_qemu(parent, conn, path):
         return
 
     logging.debug("Attempting to correct permission issues.")
-    errors = VirtualDisk.fix_path_search_for_user(conn.get_backend(),
-                                                  path, user)
+    errors = virtinst.VirtualDisk.fix_path_search_for_user(conn.get_backend(),
+                                                           path, user)
     if not errors:
         return
 

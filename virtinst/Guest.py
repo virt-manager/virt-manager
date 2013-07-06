@@ -827,9 +827,8 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         return xml
 
     def _get_vcpu_xml(self):
-        curvcpus_supported = virtinst.support.check_conn_support(
-                                    self.conn,
-                                    virtinst.support.SUPPORT_CONN_MAXVCPUS_XML)
+        curvcpus_supported = self.conn.check_conn_support(
+                                    self.conn.SUPPORT_CONN_MAXVCPUS_XML)
         cpuset = ""
         if self.cpuset is not None:
             cpuset = " cpuset='%s'" % self.cpuset
@@ -1259,7 +1258,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         try:
             self.domain.setAutostart(True)
         except libvirt.libvirtError, e:
-            if support.is_error_nosupport(e):
+            if util.is_error_nosupport(e):
                 logging.warn("Could not set autostart flag: libvirt "
                              "connection does not support autostart.")
             else:
@@ -1418,8 +1417,8 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
 
         if (has_spice() and
             not has_spice_agent() and
-            support.check_conn_support(self.conn,
-                                       support.SUPPORT_CONN_HV_CHAR_SPICEVMC)):
+            self.conn.check_conn_support(
+                                    self.conn.SUPPORT_CONN_HV_CHAR_SPICEVMC)):
             agentdev = VirtualCharDevice.get_dev_instance(self.conn,
                                             VirtualCharDevice.DEV_CHANNEL,
                                             VirtualCharDevice.CHAR_SPICEVMC)

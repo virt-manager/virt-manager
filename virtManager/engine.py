@@ -953,7 +953,7 @@ class vmmEngine(vmmGObject):
             try:
                 vm.reboot()
             except Exception, reboot_err:
-                no_support = virtinst.support.is_error_nosupport(reboot_err)
+                no_support = virtinst.util.is_error_nosupport(reboot_err)
                 if not no_support:
                     raise RuntimeError(_("Error rebooting domain: %s" %
                                        str(reboot_err)))

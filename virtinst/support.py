@@ -21,6 +21,7 @@
 
 import libvirt
 
+from virtinst import util
 
 # Flags for check_conn_support
 (SUPPORT_CONN_STORAGE,
@@ -297,20 +298,6 @@ def get_rhel6():
     return _rhel6
 
 
-# Pull a connection object from the passed libvirt object
-def _get_conn_from_object(obj):
-    conn = None
-    if hasattr(obj, "getURI"):
-        conn = obj
-    elif hasattr(obj, "_conn"):
-        conn = getattr(obj, "_conn")
-
-    if conn:
-        from virtinst import VirtualConnection
-        return VirtualConnection(conn.getURI())
-    return obj
-
-
 # Check that command is present in the python bindings, and return the
 # the requested function
 def _get_command(funcname, objname=None, obj=None):
@@ -345,7 +332,7 @@ def _try_command(func, args, check_all_error=False):
         func(*args)
 
     except libvirt.libvirtError, e:
-        if is_error_nosupport(e):
+        if util.is_error_nosupport(e):
             return False
 
         if check_all_error:
@@ -383,9 +370,8 @@ def _daemon_lib_ver(conn, is_remote, force_version, minimum_libvirt_version):
 
     return conn.getLibVersion()
 
+
 # Return the hypervisor version
-
-
 def _hv_ver(conn, drv_type):
     args = ()
 
@@ -421,7 +407,7 @@ def _split_function_name(function):
         return (output[0], output[1])
 
 
-def _check_support(conn, feature, data=None):
+def check_support(conn, feature, data=None):
     """
     Attempt to determine if a specific libvirt feature is support given
     the passed connection.
@@ -437,12 +423,9 @@ def _check_support(conn, feature, data=None):
     """
     is_remote = conn.is_remote()
     drv_type = conn.get_uri_driver()
-
-    # Temporary hack to make this work
-    if "VirtualConnection" in repr(conn):
-        conn = getattr(conn, "_libvirtconn")
+    conn = conn.libvirtconn
     if "VirtualConnection" in repr(data):
-        data = getattr(data, "_libvirtconn")
+        data = data.libvirtconn
 
     support_info = _support_dict[feature]
     key_list = support_info.keys()
@@ -582,55 +565,6 @@ def _check_support(conn, feature, data=None):
 
     return True
 
-# Public API below
-
-
-def is_error_nosupport(err):
-    """
-    Check if passed exception indicates that the called libvirt command isn't
-    supported
-
-    @param err: Exception raised from command call
-    @returns: True if command isn't supported, False if we can't determine
-    """
-    if not isinstance(err, libvirt.libvirtError):
-        return False
-
-    if (err.get_error_code() == libvirt.VIR_ERR_RPC or
-        err.get_error_code() == libvirt.VIR_ERR_NO_SUPPORT):
-        return True
-
-    return False
-
 
 def support_threading():
     return bool(_local_lib_ver() >= 6000)
-
-
-def check_conn_support(conn, feature):
-    return _check_support(conn, feature, conn)
-
-
-def check_conn_hv_support(conn, feature, hv):
-    return _check_support(conn, feature, hv)
-
-
-def check_domain_support(dom, feature):
-    return _check_support(_get_conn_from_object(dom), feature, dom)
-
-
-def check_pool_support(pool, feature):
-    return _check_support(_get_conn_from_object(pool), feature, pool)
-
-
-def check_nodedev_support(nodedev, feature):
-    return _check_support(_get_conn_from_object(nodedev), feature, nodedev)
-
-
-def check_interface_support(nodedev, feature):
-    return _check_support(_get_conn_from_object(nodedev), feature, nodedev)
-
-
-def check_stream_support(conn, feature):
-    return (check_conn_support(conn, SUPPORT_CONN_STREAM) and
-            _check_support(conn, feature, conn))

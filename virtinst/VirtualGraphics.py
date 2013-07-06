@@ -21,7 +21,6 @@ import re
 import os
 
 from virtinst.VirtualDevice import VirtualDevice
-from virtinst import support
 from virtinst.XMLBuilderDomain import _xml_property
 
 
@@ -132,8 +131,8 @@ class VirtualGraphics(VirtualDevice):
 
     def _default_keymap(self, force_local=False):
         if (not force_local and
-            support.check_conn_support(self.conn,
-                                support.SUPPORT_CONN_KEYMAP_AUTODETECT)):
+            self.conn.check_conn_support(
+                self.conn.SUPPORT_CONN_KEYMAP_AUTODETECT)):
             return None
 
         if self._local_keymap == -1:

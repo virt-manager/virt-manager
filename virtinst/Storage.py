@@ -55,7 +55,6 @@ import urlgrabber
 
 from virtinst.util import xml_escape as escape
 from virtinst import util
-from virtinst import support
 
 
 DEFAULT_DEV_TARGET = "/dev"
@@ -67,11 +66,6 @@ DEFAULT_MPATH_TARGET = "/dev/mapper"
 # Pulled from libvirt, used for building on older versions
 VIR_STORAGE_VOL_FILE = 0
 VIR_STORAGE_VOL_BLOCK = 1
-
-
-def is_create_vol_from_supported(conn):
-    return support.check_pool_support(conn,
-                                      support.SUPPORT_STORAGE_CREATEVOLFROM)
 
 
 def _parse_pool_source_list(source_xml):
@@ -305,8 +299,7 @@ class StoragePool(StorageObject):
         @param pool_type: Pool type string from I{Types}
         @param host: Option host string to poll for sources
         """
-        if not support.check_conn_support(conn,
-                                     support.SUPPORT_CONN_FINDPOOLSOURCES):
+        if not conn.check_conn_support(conn.SUPPORT_CONN_FINDPOOLSOURCES):
             return []
 
         pool_class = StoragePool.get_pool_class(pool_type)
@@ -320,7 +313,7 @@ class StoragePool(StorageObject):
         try:
             xml = conn.findStoragePoolSources(pool_type, source_xml, 0)
         except libvirt.libvirtError, e:
-            if support.is_error_nosupport(e):
+            if util.is_error_nosupport(e):
                 return []
             raise
 
@@ -971,7 +964,7 @@ class StorageVolume(StorageObject):
     # File vs. Block for the Volume class
     _file_type = None
 
-    def __init__(self, name, capacity, conn=None, pool_name=None, pool=None,
+    def __init__(self, conn, name, capacity, pool_name=None, pool=None,
                  allocation=0):
         """
         @param name: Name for the new storage volume
@@ -985,16 +978,14 @@ class StorageVolume(StorageObject):
             if pool_name is None:
                 raise ValueError(_("One of pool or pool_name must be "
                                    "specified."))
-            if conn is None:
-                raise ValueError(_("'conn' must be specified with 'pool_name'"))
             pool = StorageVolume.lookup_pool_by_name(pool_name=pool_name,
                                                      conn=conn)
         self._pool = None
         self.pool = pool
-        poolconn = self.pool._conn  # pylint: disable=W0212
 
-        StorageObject.__init__(self, object_type=StorageObject.TYPE_VOLUME,
-                               name=name, conn=poolconn)
+        StorageObject.__init__(self, conn,
+                               object_type=StorageObject.TYPE_VOLUME,
+                               name=name)
         self._allocation = None
         self._capacity = None
         self._format = None
@@ -1061,7 +1052,7 @@ class StorageVolume(StorageObject):
         if pool_name is not None and pool_object is None:
             if conn is None:
                 raise ValueError(_("'conn' must be specified with 'pool_name'"))
-            if not util.is_storage_capable(conn):
+            if not conn.check_conn_support(conn.SUPPORT_CONN_STORAGE):
                 raise ValueError(_("Connection does not support storage "
                                    "management."))
             try:
@@ -1142,8 +1133,8 @@ class StorageVolume(StorageObject):
         if not isinstance(vol, libvirt.virStorageVol):
             raise ValueError(_("input_vol must be a virStorageVol"))
 
-        poolconn = self.pool._conn  # pylint: disable=W0212
-        if not is_create_vol_from_supported(poolconn):
+        if not self.conn.check_pool_support(self.conn,
+                    self.conn.SUPPORT_STORAGE_CREATEVOLFROM):
             raise ValueError(_("Creating storage from an existing volume is"
                                " not supported by this libvirt version."))
         self._input_vol = vol
@@ -1232,7 +1223,7 @@ class StorageVolume(StorageObject):
                           self.name)
             return vol
         except libvirt.libvirtError, e:
-            if support.is_error_nosupport(e):
+            if util.is_error_nosupport(e):
                 raise RuntimeError("Libvirt version does not support "
                                    "storage cloning.")
             raise
@@ -1313,14 +1304,15 @@ class FileVolume(StorageVolume):
     perms = property(StorageObject.get_perms, StorageObject.set_perms)
     format = property(StorageVolume.get_format, StorageVolume.set_format)
 
-    def __init__(self, name, capacity, pool=None, pool_name=None, conn=None,
+    def __init__(self, conn, name, capacity,
+                 pool=None, pool_name=None,
                  format="raw", allocation=None, perms=None):
         # pylint: disable=W0622
         # Redefining built-in 'format', but it matches the XML so keep it
 
-        StorageVolume.__init__(self, name=name, pool=pool, pool_name=pool_name,
-                               allocation=allocation, capacity=capacity,
-                               conn=conn)
+        StorageVolume.__init__(self, conn, name=name,
+                               pool=pool, pool_name=pool_name,
+                               allocation=allocation, capacity=capacity)
         self.format = format
         if perms:
             self.perms = perms
@@ -1342,11 +1334,12 @@ class DiskVolume(StorageVolume):
     # Register applicable property methods from parent class
     perms = property(StorageObject.get_perms, StorageObject.set_perms)
 
-    def __init__(self, name, capacity, pool=None, pool_name=None, conn=None,
+    def __init__(self, conn, name, capacity,
+                  pool=None, pool_name=None,
                  allocation=None, perms=None):
-        StorageVolume.__init__(self, name=name, pool=pool, pool_name=pool_name,
-                               allocation=allocation, capacity=capacity,
-                               conn=conn)
+        StorageVolume.__init__(self, conn, name=name,
+                               pool=pool, pool_name=pool_name,
+                               allocation=allocation, capacity=capacity)
         if perms:
             self.perms = perms
 
@@ -1366,14 +1359,15 @@ class LogicalVolume(StorageVolume):
     # Register applicable property methods from parent class
     perms = property(StorageObject.get_perms, StorageObject.set_perms)
 
-    def __init__(self, name, capacity, pool=None, pool_name=None, conn=None,
+    def __init__(self, conn,
+                 name, capacity, pool=None, pool_name=None,
                  allocation=None, perms=None):
         if allocation and allocation != capacity:
             logging.warn(_("Sparse logical volumes are not supported, "
                            "setting allocation equal to capacity"))
-        StorageVolume.__init__(self, name=name, pool=pool, pool_name=pool_name,
-                               allocation=capacity, capacity=capacity,
-                               conn=conn)
+        StorageVolume.__init__(self, conn, name=name,
+                               pool=pool, pool_name=pool_name,
+                               allocation=capacity, capacity=capacity)
         if perms:
             self.perms = perms
 
@@ -1404,7 +1398,7 @@ class CloneVolume(StorageVolume):
 
     format = property(StorageVolume.get_format, StorageVolume.set_format)
 
-    def __init__(self, name, input_vol):
+    def __init__(self, conn, name, input_vol):
         if not isinstance(input_vol, libvirt.virStorageVol):
             raise ValueError(_("input_vol must be a virStorageVol"))
 
@@ -1417,7 +1411,7 @@ class CloneVolume(StorageVolume):
         alc  = int(util.get_xml_path(xml, "/volume/allocation"))
         fmt  = util.get_xml_path(xml, "/volume/target/format/@type")
 
-        StorageVolume.__init__(self, name=name, pool=pool,
+        StorageVolume.__init__(self, conn, name=name, pool=pool,
                                pool_name=pool.name(),
                                allocation=alc, capacity=cap)
 

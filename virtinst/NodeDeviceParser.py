@@ -17,7 +17,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtinst import support
 from virtinst import util
 import libvirt
 import logging
@@ -396,29 +395,6 @@ class SCSIBus(NodeDevice):
             child = child.next
 
 
-def is_nodedev_capable(conn):
-    """
-    Check if the passed libvirt connection supports host device routines
-
-    @param conn: Connection to check
-
-    @rtype: C{bool}
-    """
-    return support.check_conn_support(conn, support.SUPPORT_CONN_NODEDEV)
-
-
-def is_pci_detach_capable(conn):
-    """
-    Check if the passed libvirt connection support pci device Detach/Reset
-
-    @param conn: Connection to check
-
-    @rtype: C{bool}
-    """
-    return support.check_conn_support(conn,
-                                      support.SUPPORT_NODEDEV_PCI_DETACH)
-
-
 def _lookupNodeName(conn, name):
     nodedev = conn.nodeDeviceLookupByName(name)
     xml = nodedev.XMLDesc(0)
@@ -438,7 +414,7 @@ def lookupNodeName(conn, name):
 
     @rtype: L{NodeDevice} instance
     """
-    if not is_nodedev_capable(conn):
+    if not conn.check_conn_support(conn.SUPPORT_CONN_NODEDEV):
         raise ValueError(_("Connection does not support host device "
                            "enumeration."))
 
@@ -524,7 +500,7 @@ def devAddressToNodedev(conn, addrstr):
         - (domain:)bus:slot.func (ex. 00:10.0 for a pci device)
     @param addrstr: C{str}
     """
-    if not is_nodedev_capable(conn):
+    if not conn.check_conn_support(conn.SUPPORT_CONN_NODEDEV):
         raise ValueError(_("Connection does not support host device "
                            "enumeration."))
 

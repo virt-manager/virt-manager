@@ -324,7 +324,8 @@ class Cloner(object):
             if (clone_disk.vol_install.pool.name() ==
                 orig_disk.vol_object.storagePoolLookupByVolume().name()):
                 newname = clone_disk.vol_install.name
-                clone_disk.vol_install = Storage.CloneVolume(newname,
+                clone_disk.vol_install = Storage.CloneVolume(self.conn,
+                                                    newname,
                                                     orig_disk.vol_object)
 
             else:

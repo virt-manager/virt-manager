@@ -269,7 +269,8 @@ class vmmCreateVolume(vmmGObjectUI):
         cap = self.widget("vol-capacity").get_value()
 
         try:
-            self.vol = self.vol_class(name=volname,
+            self.vol = self.vol_class(self.conn,
+                                      name=volname,
                                       allocation=(alloc * 1024 * 1024),
                                       capacity=(cap * 1024 * 1024),
                                       pool=self.parent_pool.pool)

@@ -407,17 +407,15 @@ class vmmAddHardware(vmmGObjectUI):
                       _("Connection does not support host device enumeration"),
                       "pci")
         add_hw_option("Video", "video-display", PAGE_VIDEO,
-                      virtinst.support.check_conn_support(
-                            self.conn.get_backend(),
-                            virtinst.support.SUPPORT_CONN_DOMAIN_VIDEO),
+                      self.conn.check_conn_support(
+                            self.conn.SUPPORT_CONN_DOMAIN_VIDEO),
                       _("Libvirt version does not support video devices."))
         add_hw_option("Watchdog", "device_pci", PAGE_WATCHDOG,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."))
         add_hw_option("Filesystem", Gtk.STOCK_DIRECTORY, PAGE_FILESYSTEM,
-                      virtinst.support.check_conn_hv_support(
-                        self.conn.get_backend(),
-                        virtinst.support.SUPPORT_CONN_HV_FILESYSTEM,
+                      self.conn.check_conn_hv_support(
+                        self.conn.SUPPORT_CONN_HV_FILESYSTEM,
                         self.vm.get_hv_type()),
                       _("Not supported for this hypervisor/libvirt "
                         "combination."))
