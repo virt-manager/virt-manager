@@ -60,6 +60,8 @@ class vmmInterface(vmmLibvirtObject):
         return util.xpath(self.get_xml(inactive=True), *args, **kwargs)
 
     def set_active(self, state):
+        if state != self.active:
+            self.idle_emit(state and "started" or "stopped")
         self.active = state
         self.refresh_xml()
 

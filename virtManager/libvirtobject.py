@@ -43,6 +43,8 @@ def _sanitize_xml(xml):
 class vmmLibvirtObject(vmmGObject):
     __gsignals__ = {
         "config-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "started": (GObject.SignalFlags.RUN_FIRST, None, []),
+        "stopped": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
     def __init__(self, conn):

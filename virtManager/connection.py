@@ -974,14 +974,12 @@ class vmmConnection(vmmGObject):
             args of (raw libvirt object, key (usually UUID), bool is_active)
         """
         current = {}
-        start = []
-        stop = []
-        new = []
+        new = {}
         newActiveNames = []
         newInactiveNames = []
 
         if not check_support():
-            return (stop, start, origlist, new, current)
+            return (origlist, new, current)
 
         try:
             newActiveNames = active_list()
@@ -1003,21 +1001,13 @@ class vmmConnection(vmmGObject):
 
                 # Object is brand new this tick period
                 current[key] = build_func(obj, key, is_active)
-                new.append(key)
-
-                if is_active:
-                    start.append(key)
+                new[key] = current[key]
             else:
                 # Previously known object, see if it changed state
                 current[key] = origlist[key]
 
                 if current[key].is_active() != is_active:
                     current[key].set_active(is_active)
-
-                    if is_active:
-                        start.append(key)
-                    else:
-                        stop.append(key)
 
                 del origlist[key]
 
@@ -1035,7 +1025,7 @@ class vmmConnection(vmmGObject):
                 logging.exception("Couldn't fetch inactive "
                                   "%s '%s'", typename, name)
 
-        return (stop, start, origlist, new, current)
+        return (origlist, new, current)
 
     def _update_nets(self):
         orig = self.nets.copy()
@@ -1172,7 +1162,11 @@ class vmmConnection(vmmGObject):
                 except:
                     logging.exception("Couldn't fetch domain '%s'", name)
 
-        return (new, origlist, current)
+        return (origlist, new, current)
+
+    def _obj_signal_proxy(self, obj, signal, key):
+        ignore = obj
+        self.emit(signal, key)
 
     def tick(self, noStatsUpdate=False):
         try:
@@ -1189,23 +1183,20 @@ class vmmConnection(vmmGObject):
         self.hostinfo = self._backend.getInfo()
 
         # Poll for new virtual network objects
-        (startNets, stopNets, oldNets,
-         newNets, self.nets) = self._update_nets()
+        (goneNets, newNets, self.nets) = self._update_nets()
 
         # Update pools
-        (stopPools, startPools, oldPools,
-         newPools, self.pools) = self._update_pools()
+        (gonePools, newPools, self.pools) = self._update_pools()
 
         # Update interfaces
-        (stopInterfaces, startInterfaces, oldInterfaces,
-         newInterfaces, self.interfaces) = self._update_interfaces()
+        (goneInterfaces, newInterfaces,
+          self.interfaces) = self._update_interfaces()
 
         # Update nodedevice list
-        (ignore, ignore, oldNodedevs,
-         newNodedevs, self.nodedevs) = self._update_nodedevs()
+        (goneNodedevs, newNodedevs, self.nodedevs) = self._update_nodedevs()
 
         # Poll for changed/new/removed VMs
-        (newVMs, oldVMs, self.vms) = self._update_vms()
+        (goneVMs, newVMs, self.vms) = self._update_vms()
 
         def tick_send_signals():
             """
@@ -1225,49 +1216,49 @@ class vmmConnection(vmmGObject):
                 self._init_mediadev()
 
             # Update VM states
-            for uuid in oldVMs:
+            for uuid in goneVMs:
                 self.emit("vm-removed", uuid)
-                oldVMs[uuid].cleanup()
+                goneVMs[uuid].cleanup()
             for uuid in newVMs:
                 self.emit("vm-added", uuid)
 
             # Update virtual network states
-            for uuid in oldNets:
+            for uuid in goneNets:
                 self.emit("net-removed", uuid)
-                oldNets[uuid].cleanup()
-            for uuid in newNets:
+                goneNets[uuid].cleanup()
+            for uuid, obj in newNets.items():
+                obj.connect("started", self._obj_signal_proxy,
+                            "net-started", uuid)
+                obj.connect("stopped", self._obj_signal_proxy,
+                            "net-stopped", uuid)
                 self.emit("net-added", uuid)
-            for uuid in startNets:
-                self.emit("net-started", uuid)
-            for uuid in stopNets:
-                self.emit("net-stopped", uuid)
 
             # Update storage pool states
-            for uuid in oldPools:
+            for uuid in gonePools:
                 self.emit("pool-removed", uuid)
-                oldPools[uuid].cleanup()
-            for uuid in newPools:
+                gonePools[uuid].cleanup()
+            for uuid, obj in newPools.items():
+                obj.connect("started", self._obj_signal_proxy,
+                            "pool-started", uuid)
+                obj.connect("stopped", self._obj_signal_proxy,
+                            "pool-stopped", uuid)
                 self.emit("pool-added", uuid)
-            for uuid in startPools:
-                self.emit("pool-started", uuid)
-            for uuid in stopPools:
-                self.emit("pool-stopped", uuid)
 
             # Update interface states
-            for name in oldInterfaces:
+            for name in goneInterfaces:
                 self.emit("interface-removed", name)
-                oldInterfaces[name].cleanup()
-            for name in newInterfaces:
+                goneInterfaces[name].items()
+            for name, obj in newInterfaces.items():
+                obj.connect("started", self._obj_signal_proxy,
+                            "interface-started", name)
+                obj.connect("stopped", self._obj_signal_proxy,
+                            "interface-stopped", name)
                 self.emit("interface-added", name)
-            for name in startInterfaces:
-                self.emit("interface-started", name)
-            for name in stopInterfaces:
-                self.emit("interface-stopped", name)
 
             # Update nodedev list
-            for name in oldNodedevs:
+            for name in goneNodedevs:
                 self.emit("nodedev-removed", name)
-                oldNodedevs[name].cleanup()
+                goneNodedevs[name].cleanup()
             for name in newNodedevs:
                 self.emit("nodedev-added", name)
 

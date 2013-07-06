@@ -62,6 +62,8 @@ class vmmNetwork(vmmLibvirtObject):
         return self.conn.get_backend().networkDefineXML(xml)
 
     def set_active(self, state):
+        if state != self.active:
+            self.idle_emit(state and "started" or "stopped")
         self.active = state
 
     def is_active(self):
