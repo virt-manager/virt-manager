@@ -97,12 +97,12 @@ class DomainNumatune(XMLBuilderDomain.XMLBuilderDomain):
 
     MEMORY_MODES = ["interleave", "strict", "preferred"]
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
         self._memory_nodeset = None
         self._memory_mode = None
 
         XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
-                                                   parsexmlnode, caps)
+                                                   parsexmlnode)
         if self._is_parse():
             return
 

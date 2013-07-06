@@ -76,10 +76,8 @@ class VirtualController(VirtualDevice):
 
     _controller_type = None
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None,
-                 model=None):
-        VirtualDevice.__init__(self, conn,
-                                             parsexml, parsexmlnode, caps)
+    def __init__(self, conn, parsexml=None, parsexmlnode=None, model=None):
+        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self._index = 0
         self._ports = None
@@ -87,8 +85,7 @@ class VirtualController(VirtualDevice):
         self._model = None
         self._master = VirtualDeviceMaster(conn,
                                            parsexml=parsexml,
-                                           parsexmlnode=parsexmlnode,
-                                           caps=caps)
+                                           parsexmlnode=parsexmlnode)
 
         if self._is_parse():
             return
@@ -187,9 +184,8 @@ class VirtualControllerUSB(VirtualController):
 
 
 class VirtualDeviceMaster(XMLBuilderDomain):
-    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
-        XMLBuilderDomain.__init__(self, conn, parsexml, parsexmlnode,
-                                  caps=caps)
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
+        XMLBuilderDomain.__init__(self, conn, parsexml, parsexmlnode)
 
         self._startport = None
 

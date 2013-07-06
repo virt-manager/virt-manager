@@ -29,7 +29,6 @@ import libvirt
 import libxml2
 
 from virtinst import util
-from virtinst import CapabilitiesParser
 from virtinst import support
 from virtinst import XMLBuilderDomain
 import virtinst
@@ -124,12 +123,10 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         If host doesn't have a suitable NUMA configuration, a RuntimeError
         is thrown.
         """
-        caps = CapabilitiesParser.parse(conn.getCapabilities())
-
-        if caps.host.topology is None:
+        if conn.caps.host.topology is None:
             raise RuntimeError(_("No topology section in capabilities xml."))
 
-        cells = caps.host.topology.cells
+        cells = conn.caps.host.topology.cells
         if len(cells) <= 1:
             raise RuntimeError(_("Capabilities only show <= 1 cell. "
                                  "Not NUMA capable"))
@@ -171,7 +168,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         return cpustr
 
     def __init__(self, conn, type=None,
-                 installer=None, parsexml=None, caps=None):
+                 installer=None, parsexml=None):
         # pylint: disable=W0622
         # Redefining built-in 'type', but it matches the XML so keep it
 
@@ -210,21 +207,14 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         self._default_input_device = None
         self._default_console_device = None
 
-        # pylint: disable=W0212
-        # Access to protected member _get_caps
-        caps = caps or (self._installer and self._installer._get_caps())
-        # pylint: enable=W0212
-
-        XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
-                                                   caps=caps)
+        XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml)
         if self._is_parse():
             return
 
         if not self.installer:
             i = virtinst.DistroInstaller(conn,
                                          type=type,
-                                         os_type=self._default_os_type,
-                                         caps=self._get_caps())
+                                         os_type=self._default_os_type)
             self.installer = i
 
         # Add default devices (if applicable)
@@ -660,7 +650,6 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
        }
 
         # Hand off all child element parsing to relevant classes
-        caps = self._get_caps()
         for node in self._xml_node.children:
             if node.name != "devices":
                 continue
@@ -673,24 +662,20 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
 
                 if objclass == virtinst.VirtualCharDevice:
                     dev = objclass(self.conn, devnode.name,
-                                   parsexmlnode=devnode, caps=caps)
+                                   parsexmlnode=devnode)
                 else:
-                    dev = objclass(self.conn,
-                                   parsexmlnode=devnode, caps=caps)
+                    dev = objclass(self.conn, parsexmlnode=devnode)
                 self._add_device(dev)
 
         self._installer = virtinst.Installer.Installer(self.conn,
-                                                   parsexmlnode=self._xml_node,
-                                                   caps=caps)
+                                                   parsexmlnode=self._xml_node)
         self._features = DomainFeatures(self.conn,
-                                        parsexmlnode=self._xml_node,
-                                        caps=caps)
-        self._clock = Clock(self.conn, parsexmlnode=self._xml_node, caps=caps)
-        self._seclabel = Seclabel(self.conn, parsexmlnode=self._xml_node,
-                                  caps=caps)
-        self._cpu = CPU(self.conn, parsexmlnode=self._xml_node, caps=caps)
+                                        parsexmlnode=self._xml_node)
+        self._clock = Clock(self.conn, parsexmlnode=self._xml_node)
+        self._seclabel = Seclabel(self.conn, parsexmlnode=self._xml_node)
+        self._cpu = CPU(self.conn, parsexmlnode=self._xml_node)
         self._numatune = DomainNumatune(self.conn,
-                                        parsexmlnode=self._xml_node, caps=caps)
+                                        parsexmlnode=self._xml_node)
 
     def _get_default_input_device(self):
         """
@@ -766,7 +751,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         if (not self.emulator and
             self.installer.is_hvm() and
             self.type == "xen"):
-            if self._get_caps().host.arch in ("x86_64"):
+            if self.conn.caps.host.arch in ("x86_64"):
                 emulator = "/usr/lib64/xen/bin/qemu-dm"
             else:
                 emulator = "/usr/lib/xen/bin/qemu-dm"
@@ -1298,11 +1283,11 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
             features["acpi"] = self._lookup_osdict_key("acpi")
         if features["apic"] is None:
             features["apic"] = self._lookup_osdict_key("apic")
-        if features["pae"] is None and self._get_caps():
-            features["pae"] = self._get_caps().support_pae()
+        if features["pae"] is None:
+            features["pae"] = self.conn.caps.support_pae()
 
         if (self.installer.machine is None and
-            self._get_caps().host.arch == "ppc64"):
+            self.conn.caps.host.arch == "ppc64"):
             self.installer.machine = "pseries"
 
     def _set_pv_defaults(self, devlist_func, remove_func):

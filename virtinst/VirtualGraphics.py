@@ -93,11 +93,11 @@ class VirtualGraphics(VirtualDevice):
     def __init__(self, conn, type=TYPE_VNC, port=-1, listen=None, passwd=None,
                  keymap=KEYMAP_DEFAULT, parsexml=None,
                  parsexmlnode=None, tlsPort=-1, channels=None,
-                 caps=None, passwdValidTo=None):
+                 passwdValidTo=None):
         # pylint: disable=W0622
         # Redefining built-in 'type', but it matches the XML so keep it
 
-        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode, caps)
+        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self._type   = None
         self._port   = None

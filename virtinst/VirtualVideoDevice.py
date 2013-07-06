@@ -35,9 +35,8 @@ class VirtualVideoDevice(VirtualDevice):
             return model.upper()
         return model.capitalize()
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
-        VirtualDevice.__init__(self, conn,
-                                             parsexml, parsexmlnode, caps)
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
+        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self._model_type    = None
         self._vram          = None

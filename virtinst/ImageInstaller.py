@@ -22,7 +22,7 @@ import os
 
 from virtinst import Installer
 from virtinst import ImageParser
-from virtinst import CapabilitiesParser as Cap
+from virtinst import CapabilitiesParser
 from virtinst.VirtualDisk import VirtualDisk
 
 
@@ -40,7 +40,7 @@ class ImageInstaller(Installer.Installer):
 
         # Set boot _boot_caps/_boot_parameters
         if boot_index is None:
-            self._boot_caps = match_boots(self._get_caps(),
+            self._boot_caps = match_boots(self.conn.caps,
                                      self.image.domain.boots)
             if self._boot_caps is None:
                 raise RuntimeError(_("Could not find suitable boot "
@@ -52,7 +52,7 @@ class ImageInstaller(Installer.Installer):
             self._boot_caps = image.domain.boots[boot_index]
 
         # Set up internal caps.guest object
-        self._guest = self._get_caps().guestForOSType(self.boot_caps.type,
+        self._guest = self.conn.caps.guestForOSType(self.boot_caps.type,
                                                       self.boot_caps.arch)
         if self._guest is None:
             raise RuntimeError(_("Unsupported virtualization type: %s %s" %
@@ -88,9 +88,9 @@ class ImageInstaller(Installer.Installer):
         self._make_disks()
 
         for f in ['pae', 'acpi', 'apic']:
-            if self.boot_caps.features[f] & Cap.FEATURE_ON:
+            if self.boot_caps.features[f] & CapabilitiesParser.FEATURE_ON:
                 guest.features[f] = True
-            elif self.boot_caps.features[f] & Cap.FEATURE_OFF:
+            elif self.boot_caps.features[f] & CapabilitiesParser.FEATURE_OFF:
                 guest.features[f] = False
 
         self.bootconfig.kernel = self.boot_caps.kernel

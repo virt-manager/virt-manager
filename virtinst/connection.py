@@ -23,6 +23,7 @@ import re
 import libvirt
 
 from virtinst import support
+from virtinst import CapabilitiesParser
 from virtinst.cli import parse_optstr
 from virtinst.util import uri_split
 
@@ -54,6 +55,8 @@ class VirtualConnection(object):
         self._libvirtconn = None
         self._urisplits = uri_split(self._uri)
 
+        self._caps = None
+
 
     # Just proxy virConnect access for now
     def __getattr__(self, attr):
@@ -73,6 +76,13 @@ class VirtualConnection(object):
 
     libvirtconn = property(lambda self: getattr(self, "_libvirtconn"))
 
+    def _get_caps(self):
+        if not self._caps:
+            self._caps = CapabilitiesParser.Capabilities(
+                                        self.libvirtconn.getCapabilities())
+        return self._caps
+    caps = property(_get_caps)
+
 
     ##############
     # Public API #
@@ -81,6 +91,9 @@ class VirtualConnection(object):
     def close(self):
         self._libvirtconn = None
         self._uri = None
+
+    def invalidate_caps(self):
+        self._caps = None
 
     def is_open(self):
         return bool(self._libvirtconn)

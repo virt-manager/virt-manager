@@ -785,7 +785,7 @@ class vmmDetails(vmmGObjectUI):
             clock_model.append([offset])
 
         arch = self.vm.get_arch()
-        caps = self.vm.conn.get_capabilities()
+        caps = self.vm.conn.caps
         machines = []
 
         if len(caps.guests) > 0:
@@ -819,7 +819,7 @@ class vmmDetails(vmmGObjectUI):
         # VCPU Pinning list
         generate_cpuset = self.widget("config-vcpupin-generate")
         generate_warn = self.widget("config-vcpupin-generate-err")
-        if not self.conn.get_capabilities().host.topology:
+        if not self.conn.caps.host.topology:
             generate_cpuset.set_sensitive(False)
             generate_warn.show()
             generate_warn.set_tooltip_text(_("Libvirt did not detect NUMA capabilities."))
@@ -883,7 +883,7 @@ class vmmDetails(vmmGObjectUI):
         no_default = not self.is_customize_dialog
 
         # CPU features
-        caps = self.vm.conn.get_capabilities()
+        caps = self.vm.conn.caps
         cpu_values = None
         cpu_names = []
         all_features = []
@@ -2740,7 +2740,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Security details
         semodel, sectype, vmlabel, relabel = self.vm.get_seclabel()
-        caps = self.vm.conn.get_capabilities()
+        caps = self.vm.conn.caps
 
         if caps.host.secmodel and caps.host.secmodel.model:
             semodel = caps.host.secmodel.model
@@ -2877,7 +2877,7 @@ class vmmDetails(vmmGObjectUI):
     def _refresh_cpu_config(self, cpu):
         feature_ui = self.widget("cpu-features")
         model = cpu.model or ""
-        caps = self.vm.conn.get_capabilities()
+        caps = self.vm.conn.caps
 
         capscpu = None
         try:

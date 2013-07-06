@@ -71,23 +71,20 @@ class VirtualDevice(XMLBuilderDomain):
     # General device type (disk, interface, etc.)
     _virtual_device_type = None
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
         """
         Initialize device state
 
         @param conn: libvirt connection to validate device against
         """
-        XMLBuilderDomain.__init__(self, conn, parsexml, parsexmlnode,
-                                  caps=caps)
+        XMLBuilderDomain.__init__(self, conn, parsexml, parsexmlnode)
 
         self.alias = VirtualDeviceAlias(conn,
                                         parsexml=parsexml,
-                                        parsexmlnode=parsexmlnode,
-                                        caps=caps)
+                                        parsexmlnode=parsexmlnode)
         self.address = VirtualDeviceAddress(conn,
                                             parsexml=parsexml,
-                                            parsexmlnode=parsexmlnode,
-                                            caps=caps)
+                                            parsexmlnode=parsexmlnode)
 
         if not self._virtual_device_type:
             raise ValueError(_("Virtual device type must be set in subclass."))
@@ -121,9 +118,8 @@ class VirtualDevice(XMLBuilderDomain):
 
 
 class VirtualDeviceAlias(XMLBuilderDomain):
-    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
-        XMLBuilderDomain.__init__(self, conn, parsexml, parsexmlnode,
-                                  caps=caps)
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
+        XMLBuilderDomain.__init__(self, conn, parsexml, parsexmlnode)
 
         self._name = None
 
@@ -150,10 +146,9 @@ class VirtualDeviceAddress(XMLBuilderDomain):
              ADDRESS_TYPE_VIRTIO_SERIAL, ADDRESS_TYPE_CCID,
              ADDRESS_TYPE_SPAPR_VIO]
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None,
+    def __init__(self, conn, parsexml=None, parsexmlnode=None,
                  addrstr=None):
-        XMLBuilderDomain.__init__(self, conn, parsexml, parsexmlnode,
-                                  caps=caps)
+        XMLBuilderDomain.__init__(self, conn, parsexml, parsexmlnode)
 
         self._type = None
 

@@ -205,7 +205,7 @@ class virtimage_parser(formats.parser):
             f.close()
 
             ImageParser.parse(output, input_file)
-        except ImageParser.ParserException:
+        except RuntimeError:
             return False
         return True
 

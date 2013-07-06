@@ -68,9 +68,9 @@ def _countMACaddr(vms, searchmac):
 
 class VirtualPort(XMLBuilderDomain.XMLBuilderDomain):
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
         XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
-                                                   parsexmlnode, caps=caps)
+                                                   parsexmlnode)
         self._type = None
         self._managerid = None
         self._typeid = None
@@ -147,11 +147,11 @@ class VirtualNetworkInterface(VirtualDevice):
 
     def __init__(self, conn, macaddr=None, type=TYPE_BRIDGE, bridge=None,
                  network=None, model=None,
-                 parsexml=None, parsexmlnode=None, caps=None):
+                 parsexml=None, parsexmlnode=None):
         # pylint: disable=W0622
         # Redefining built-in 'type', but it matches the XML so keep it
 
-        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode, caps)
+        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self._network = None
         self._bridge = None
@@ -161,7 +161,7 @@ class VirtualNetworkInterface(VirtualDevice):
         self._target_dev = None
         self._source_dev = None
         self._source_mode = "vepa"
-        self._virtualport = VirtualPort(conn, parsexml, parsexmlnode, caps)
+        self._virtualport = VirtualPort(conn, parsexml, parsexmlnode)
 
         # Generate _random_mac
         self._random_mac = None

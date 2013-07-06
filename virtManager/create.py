@@ -417,7 +417,7 @@ class vmmCreate(vmmGObjectUI):
         # Update all state that has some dependency on the current connection
         self.widget("create-forward").set_sensitive(True)
 
-        if self.conn.no_install_options():
+        if self.conn.caps.no_install_options():
             error = _("No hypervisor options were found for this "
                       "connection.")
 
@@ -431,13 +431,13 @@ class vmmCreate(vmmGObjectUI):
         # A bit out of order, but populate arch + hv lists so we can
         # determine a default
         self.conn.invalidate_caps()
-        self.caps = self.conn.get_capabilities()
+        self.caps = self.conn.caps
         self.change_caps()
         self.populate_hv()
 
         if self.conn.is_xen():
-            if self.conn.hw_virt_supported():
-                if self.conn.is_bios_virt_disabled():
+            if self.conn.caps.hw_virt_supported():
+                if self.conn.caps.is_bios_virt_disabled():
                     error = _("Host supports full virtualization, but "
                               "no related install options are available. "
                               "This may mean support is disabled in your "
@@ -450,7 +450,7 @@ class vmmCreate(vmmGObjectUI):
                 self.startup_warning(error)
 
         elif self.conn.is_qemu():
-            if not self.conn.is_kvm_supported():
+            if not self.conn.caps.is_kvm_available():
                 error = _("KVM is not available. This may mean the KVM "
                  "package is not installed, or the KVM kernel modules "
                  "are not loaded. Your virtual machines may perform poorly.")
@@ -811,10 +811,7 @@ class vmmCreate(vmmGObjectUI):
                     gtype = "hvm"
                     break
 
-        (newg, newdom) = virtinst.CapabilitiesParser.guest_lookup(
-                                                conn=self.conn.get_backend(),
-                                                caps=self.caps,
-                                                os_type=gtype,
+        (newg, newdom) = self.caps.guest_lookup(os_type=gtype,
                                                 typ=dtype,
                                                 accelerated=True,
                                                 arch=arch)

@@ -155,12 +155,12 @@ def _upload_file(conn, meter, destpool, src):
 
 class DistroInstaller(Installer.Installer):
     def __init__(self, conn, type="xen", location=None,
-                 extraargs=None, os_type=None, caps=None):
+                 extraargs=None, os_type=None):
         # pylint: disable=W0622
         # Redefining built-in 'type', but it matches the XML so keep it
 
         Installer.Installer.__init__(self, conn, type, location, extraargs,
-                                     os_type, caps=caps)
+                                     os_type)
 
         self._livecd = False
 

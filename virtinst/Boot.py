@@ -35,9 +35,9 @@ class Boot(XMLBuilderDomain.XMLBuilderDomain):
                     BOOT_DEVICE_FLOPPY, BOOT_DEVICE_NETWORK]
 
     _dumpxml_xpath = "/domain/os"
-    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
         XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
-                                                   parsexmlnode, caps)
+                                                   parsexmlnode)
 
         self._bootorder = []
         self._enable_bootmenu = None

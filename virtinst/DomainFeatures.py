@@ -33,9 +33,9 @@ class DomainFeatures(XMLBuilderDomain.XMLBuilderDomain):
     """
 
     _dumpxml_xpath = "/domain/features"
-    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
         XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
-                                                   parsexmlnode, caps)
+                                                   parsexmlnode)
 
         self._acpi = None
         self._apic = None

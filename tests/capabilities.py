@@ -45,7 +45,7 @@ class TestCapabilities(unittest.TestCase):
         path = os.path.join("tests/capabilities-xml", filename)
         xml = file(path).read()
 
-        return capabilities.parse(xml)
+        return capabilities.Capabilities(xml)
 
     def _testCapabilities(self, path, (host_arch, host_features), guests,
                           secmodel=None):

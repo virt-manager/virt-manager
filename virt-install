@@ -31,7 +31,6 @@ import optparse
 import urlgrabber.progress as progress
 
 import virtinst
-import virtinst.CapabilitiesParser
 import virtinst.cli as cli
 import virtinst.util as util
 from virtinst import VirtualCharDevice
@@ -258,14 +257,11 @@ def prompt_virt(caps, arch, req_virt_type, req_accel):
 
 
 def get_virt_type(conn, options):
-
     # Set up all virt/hypervisor parameters
     if sum([bool(f) for f in [options.fullvirt,
                               options.paravirt,
                               options.container]]) > 1:
         fail(_("Can't do more than one of --hvm, --paravirt, or --container"))
-
-    capabilities = virtinst.CapabilitiesParser.parse(conn.getCapabilities())
 
     req_accel = True
     req_hv_type = options.hv_type and options.hv_type.lower() or None
@@ -282,7 +278,7 @@ def get_virt_type(conn, options):
     if cli.is_prompt():
         # User requested prompting but passed no virt type flag, ask for
         # needed info
-        req_virt_type, req_accel = prompt_virt(capabilities, options.arch,
+        req_virt_type, req_accel = prompt_virt(conn.caps, options.arch,
                                                req_virt_type, req_accel)
 
     logging.debug("Requesting virt method '%s', hv type '%s'.",
@@ -295,9 +291,7 @@ def get_virt_type(conn, options):
 
     try:
         (capsguest,
-         capsdomain) = virtinst.CapabilitiesParser.guest_lookup(
-                        conn=conn,
-                        caps=capabilities,
+         capsdomain) = conn.caps.guest_lookup(
                         os_type=req_virt_type,
                         arch=arch,
                         typ=req_hv_type,

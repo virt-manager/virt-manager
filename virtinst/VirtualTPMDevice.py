@@ -59,8 +59,8 @@ class VirtualTPMDevice(VirtualDevice):
     get_dev_instance = staticmethod(get_dev_instance)
 
     def __init__(self, conn, typ=TYPE_DEFAULT,
-                 parsexml=None, parsexmlnode=None, caps=None):
-        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode, caps)
+                 parsexml=None, parsexmlnode=None):
+        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self._type = None
         self._model = self.TPM_TIS

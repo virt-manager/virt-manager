@@ -29,9 +29,8 @@ class VirtualMemballoon(VirtualDevice):
     MODELS = ["xen", "none", MODEL_DEFAULT]
 
     def __init__(self, conn=None, model=MODEL_DEFAULT,
-                 parsexml=None, parsexmlnode=None, caps=None):
-        VirtualDevice.__init__(self, conn, parsexml,
-                                             parsexmlnode, caps)
+                 parsexml=None, parsexmlnode=None):
+        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self._model = None
 

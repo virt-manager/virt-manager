@@ -187,23 +187,8 @@ class vmmConnection(vmmGObject):
         return self._backend
 
     def invalidate_caps(self):
-        self._caps_xml = None
-        self._caps = None
-
-    def _check_caps(self):
-        if not (self._caps_xml or self._caps):
-            self._caps_xml = self._backend.getCapabilities()
-            self._caps = virtinst.CapabilitiesParser.parse(self._caps_xml)
-
-    def get_capabilities_xml(self):
-        if not self._caps_xml:
-            self._check_caps()
-        return self._caps_xml
-
-    def get_capabilities(self):
-        if not self._caps:
-            self._check_caps()
-        return self._caps
+        return self._backend.invalidate_caps()
+    caps = property(lambda self: getattr(self, "_backend").caps)
 
     def get_host_info(self):
         return self.hostinfo
@@ -305,26 +290,16 @@ class vmmConnection(vmmGObject):
         return self.config.rhel6_defaults
 
     def rhel6_defaults_caps(self):
-        caps = self.get_capabilities()
-        for guest in caps.guests:
+        for guest in self.caps.guests:
             for dom in guest.domains:
                 if dom.emulator.startswith("/usr/libexec"):
                     return self.config.rhel6_defaults
         return True
 
-    def is_kvm_supported(self):
-        return self.get_capabilities().is_kvm_available()
 
-    def no_install_options(self):
-        return self.get_capabilities().no_install_options()
-
-    def hw_virt_supported(self):
-        return self.get_capabilities().hw_virt_supported()
-
-    def is_bios_virt_disabled(self):
-        return self.get_capabilities().is_bios_virt_disabled()
-
-    # Connection pretty print routines
+    ####################################
+    # Connection pretty print routines #
+    ####################################
 
     def _get_pretty_desc(self, active, shorthost, show_trans):
         def match_whole_string(orig, reg):
@@ -380,7 +355,7 @@ class vmmConnection(vmmGObject):
         if scheme in pretty_map:
             hv = pretty_map[scheme]
 
-        if hv == "QEMU" and active and self.is_kvm_supported():
+        if hv == "QEMU" and active and self.caps.is_kvm_available():
             hv += "/KVM"
 
         if show_trans:
@@ -968,10 +943,8 @@ class vmmConnection(vmmGObject):
         self.idle_emit("state-changed")
 
         if self.state == self.STATE_ACTIVE:
-            caps = self.get_capabilities_xml()
             logging.debug("%s capabilities:\n%s",
-                          self.get_uri(), caps)
-
+                          self.get_uri(), self.caps.xml)
             self.tick()
 
         if self.state == self.STATE_DISCONNECTED:

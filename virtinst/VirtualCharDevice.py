@@ -175,15 +175,13 @@ class VirtualCharDevice(VirtualDevice):
         return c(conn, dev_type)
     get_dev_instance = staticmethod(get_dev_instance)
 
-    def __init__(self, conn, dev_type,
-                 parsexml=None, parsexmlnode=None, caps=None):
+    def __init__(self, conn, dev_type, parsexml=None, parsexmlnode=None):
         if dev_type not in self.dev_types:
             raise ValueError(_("Unknown character device type '%s'") % dev_type)
         self._dev_type = dev_type
         self._virtual_device_type = self._dev_type
 
-        VirtualDevice.__init__(self, conn,
-                                             parsexml, parsexmlnode, caps)
+        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         # Init
         self._source_path = None
@@ -626,8 +624,8 @@ class VirtualCharSpicevmcDevice(VirtualCharDevice):
     has_target = True
 
     def __init__(self, conn, dev_type=VirtualCharDevice.DEV_CHANNEL,
-                 parsexml=None, parsexmlnode=None, caps=None):
+                 parsexml=None, parsexmlnode=None):
         VirtualCharDevice.__init__(self, conn, dev_type,
-                                   parsexml, parsexmlnode, caps)
+                                   parsexml, parsexmlnode)
         self._target_type = VirtualCharDevice.CHAR_CHANNEL_TARGET_VIRTIO
         self._target_name = "com.redhat.spice.0"

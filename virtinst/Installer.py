@@ -28,7 +28,6 @@ from virtinst import util
 import virtinst
 from virtinst import XMLBuilderDomain
 from virtinst.XMLBuilderDomain import _xml_property
-from virtinst import CapabilitiesParser
 from virtinst.Boot import Boot
 
 XEN_SCRATCH = "/var/lib/xen"
@@ -65,12 +64,12 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
 
     def __init__(self, conn, type="xen", location=None,
                  extraargs=None, os_type=None,
-                 parsexml=None, parsexmlnode=None, caps=None):
+                 parsexml=None, parsexmlnode=None):
         # pylint: disable=W0622
         # Redefining built-in 'type', but it matches the XML so keep it
 
         XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
-                                                   parsexmlnode, caps=caps)
+                                                   parsexmlnode)
 
         self._type = None
         self._location = None
@@ -91,10 +90,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         if self._is_parse():
             return
 
-        # FIXME: Better solution? Skip validating this since we may not be
-        # able to install a VM of the host arch
-        if self._get_caps():
-            self._arch = self._get_caps().host.arch
+        self._arch = self.conn.caps.host.arch
 
         if type is None:
             type = "xen"
@@ -414,12 +410,10 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         if not self.conn:
             raise ValueError(_("A connection must be specified."))
 
-        guest, domain = CapabilitiesParser.guest_lookup(conn=self.conn,
-                                                        caps=self._get_caps(),
-                                                        os_type=self.os_type,
-                                                        typ=self.type,
-                                                        arch=self.arch,
-                                                        machine=self.machine)
+        guest, domain = self.conn.caps.guest_lookup(os_type=self.os_type,
+                                                    typ=self.type,
+                                                    arch=self.arch,
+                                                    machine=self.machine)
 
         gobj = virtinst.Guest(self.conn, installer=self)
         gobj.arch = guest.arch

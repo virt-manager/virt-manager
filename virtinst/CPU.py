@@ -34,9 +34,9 @@ class CPUFeature(XMLBuilderDomain.XMLBuilderDomain):
 
     POLICIES = ["force", "require", "optional", "disable", "forbid"]
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
         XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
-                                                   parsexmlnode, caps)
+                                                   parsexmlnode)
 
         self._name = None
         self._policy = None
@@ -79,7 +79,7 @@ class CPU(XMLBuilderDomain.XMLBuilderDomain):
 
     MATCHS = ["minimum", "exact", "strict"]
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
         self._model = None
         self._match = None
         self._vendor = None
@@ -91,7 +91,7 @@ class CPU(XMLBuilderDomain.XMLBuilderDomain):
         self._threads = None
 
         XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
-                                                   parsexmlnode, caps)
+                                                   parsexmlnode)
         if self._is_parse():
             return
 
@@ -201,7 +201,7 @@ class CPU(XMLBuilderDomain.XMLBuilderDomain):
         Enact the equivalent of qemu -cpu host, pulling all info
         from capabilities about the host CPU
         """
-        cpu = self._get_caps().host.cpu
+        cpu = self.conn.caps.host.cpu
         if not cpu.model:
             raise ValueError(_("No host CPU reported in capabilities"))
 

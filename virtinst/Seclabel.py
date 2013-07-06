@@ -42,9 +42,9 @@ class Seclabel(XMLBuilderDomain.XMLBuilderDomain):
                         SECLABEL_MODEL_NONE]
 
     _dumpxml_xpath = "/domain/seclabel"
-    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
         XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
-                                                   parsexmlnode, caps)
+                                                   parsexmlnode)
 
         self._type = None
         self._model = None
@@ -59,23 +59,19 @@ class Seclabel(XMLBuilderDomain.XMLBuilderDomain):
         self.type = self.SECLABEL_TYPE_DEFAULT
 
     def _get_default_model(self):
-        caps = self._get_caps()
-        if caps:
-            if (self.SECLABEL_MODEL_TEST in
-                [x.model for x in caps.host.secmodels]):
-                return self.SECLABEL_MODEL_TEST
+        if (self.SECLABEL_MODEL_TEST in
+            [x.model for x in self.conn.caps.host.secmodels]):
+            return self.SECLABEL_MODEL_TEST
 
-            for model in self.SECLABEL_MODELS:
-                if model in [x.model for x in caps.host.secmodels]:
-                    return model
+        for model in self.SECLABEL_MODELS:
+            if model in [x.model for x in self.conn.caps.host.secmodels]:
+                return model
         raise RuntimeError("No supported model found in capabilities")
 
     def _guess_secmodel(self, label, imagelabel):
         # We always want the testSecurity model when running tests
-        caps = self._get_caps()
-        if (caps and
-            self.SECLABEL_MODEL_TEST in
-            [x.model for x in caps.host.secmodels]):
+        if (self.SECLABEL_MODEL_TEST in
+            [x.model for x in self.conn.caps.host.secmodels]):
             return self.SECLABEL_MODEL_TEST
 
         if not label and not imagelabel:

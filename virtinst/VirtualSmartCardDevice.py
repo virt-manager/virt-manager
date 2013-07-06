@@ -35,9 +35,8 @@ class VirtualSmartCardDevice(VirtualDevice):
     _types = ["tcp", "spicevmc", None]
 
     def __init__(self, conn, mode=MODE_DEFAULT,
-                 parsexml=None, parsexmlnode=None, caps=None):
-        VirtualDevice.__init__(self, conn,
-                                             parsexml, parsexmlnode, caps)
+                 parsexml=None, parsexmlnode=None):
+        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self._mode = None
         self._type = None

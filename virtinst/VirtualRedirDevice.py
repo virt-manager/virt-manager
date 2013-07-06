@@ -35,12 +35,8 @@ class VirtualRedirDevice(VirtualDevice):
     _types = ["tcp", "spicevmc", None]
 
     def __init__(self, conn, bus=BUS_DEFAULT, stype=TYPE_DEFAULT,
-                 parsexml=None, parsexmlnode=None, caps=None):
-        """
-        @param conn: Connection the device/guest will be installed on
-        @type conn: libvirt.virConnect
-        """
-        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode, caps)
+                 parsexml=None, parsexmlnode=None):
+        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self._type = None
         self._bus = None

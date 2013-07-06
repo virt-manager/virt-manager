@@ -23,14 +23,16 @@ import re
 
 from virtinst import util
 
-
-class CapabilitiesParserException(Exception):
-    def __init__(self, msg):
-        Exception.__init__(self, msg)
-
 # Whether a guest can be created with a certain feature on resp. off
 FEATURE_ON      = 0x01
 FEATURE_OFF     = 0x02
+
+
+def xpathString(node, path, default=None):
+    result = node.xpathEval("string(%s)" % path)
+    if len(result) == 0:
+        result = default
+    return result
 
 
 class CPUValuesModel(object):
@@ -118,7 +120,7 @@ class CPUValues(object):
 
         util.parse_node_helper(xml, "cpus",
                                 self._parseXML,
-                                CapabilitiesParserException)
+                                RuntimeError)
 
     def _parseXML(self, node):
         child = node.children
@@ -203,7 +205,9 @@ class CapabilityFeatures(Features):
             elif default == "off":
                 d[feature] = FEATURE_OFF
             else:
-                raise CapabilitiesParserException("Feature %s: value of default must be 'on' or 'off', but is '%s'" % (feature, default))
+                raise RuntimeError("Feature %s: value of default must "
+                                   "be 'on' or 'off', but is '%s'" %
+                                   (feature, default))
             if toggle == "yes":
                 d[feature] |= d[feature] ^ (FEATURE_ON | FEATURE_OFF)
         else:
@@ -395,7 +399,7 @@ class Guest(object):
                       {'type': self.os_type, 'arch': self.arch})
             error += domainerr
             error += machineerr
-            raise CapabilitiesParserException(error)
+            raise RuntimeError(error)
 
         return self._favoredDomain(accelerated, domains)
 
@@ -495,16 +499,16 @@ class SecurityModel(object):
 
 
 class Capabilities(object):
-    def __init__(self, node=None):
+    def __init__(self, xml):
         self.host = None
         self.guests = []
+        self.xml = xml
         self._topology = None
         self._cpu_values = None
 
-        if not node is None:
-            self.parseXML(node)
-
-
+        util.parse_node_helper(self.xml, "capabilities",
+                               self.parseXML,
+                               RuntimeError)
         self._fixBrokenEmulator()
 
     def _is_xen(self):
@@ -688,83 +692,63 @@ class Capabilities(object):
         return self._cpu_values.get_arch(arch)
 
 
-def parse(xml):
-    return util.parse_node_helper(xml, "capabilities",
-                                   Capabilities,
-                                   CapabilitiesParserException)
+    def guest_lookup(self, os_type=None, arch=None, typ=None,
+                     accelerated=False, machine=None):
+        """
+        Simple virtualization availability lookup
 
+        Convenience function for looking up 'Guest' and 'Domain' capabilities
+        objects for the desired virt type. If type, arch, or os_type are none,
+        we return the default virt type associated with those values. These are
+        typically:
 
-def guest_lookup(conn, caps=None, os_type=None, arch=None, typ=None,
-                 accelerated=False, machine=None):
-    """
-    Simple virtualization availability lookup
+            - os_type : hvm, then xen
+            - typ     : kvm over plain qemu
+            - arch    : host arch over all others
 
-    Convenience function for looking up 'Guest' and 'Domain' capabilities
-    objects for the desired virt type. If type, arch, or os_type are none,
-    we return the default virt type associated with those values. These are
-    typically:
+        Otherwise the default will be the first listed in the capabilities xml.
+        This function throws C{ValueError}s if any of the requested values are
+        not found.
 
-        - os_type : hvm, then xen
-        - typ     : kvm over plain qemu
-        - arch    : host arch over all others
+        @param typ: Virtualization type ('hvm', 'xen', ...)
+        @type typ: C{str}
+        @param arch: Guest architecture ('x86_64', 'i686' ...)
+        @type arch: C{str}
+        @param os_type: Hypervisor name ('qemu', 'kvm', 'xen', ...)
+        @type os_type: C{str}
+        @param accelerated: Whether to look for accelerated domain if none is
+                            specifically requested
+        @type accelerated: C{bool}
+        @param machine: Optional machine type to emulate
+        @type machine: C{str}
 
-    Otherwise the default will be the first listed in the capabilities xml.
-    This function throws C{ValueError}s if any of the requested values are
-    not found.
+        @returns: A (Capabilities Guest, Capabilities Domain) tuple
+        """
+        guest = self.guestForOSType(os_type, arch)
+        if not guest:
+            archstr = _("for arch '%s'") % arch
+            if not arch:
+                archstr = ""
 
-    @param conn: libvirt connection
-    @param caps: Optional L{Capabilities} instance (saves a lookup)
-    @type caps: L{Capabilities}
-    @param typ: Virtualization type ('hvm', 'xen', ...)
-    @type typ: C{str}
-    @param arch: Guest architecture ('x86_64', 'i686' ...)
-    @type arch: C{str}
-    @param os_type: Hypervisor name ('qemu', 'kvm', 'xen', ...)
-    @type os_type: C{str}
-    @param accelerated: Whether to look for accelerated domain if none is
-                        specifically requested
-    @type accelerated: C{bool}
-    @param machine: Optional machine type to emulate
-    @type machine: C{str}
+            osstr = _("virtualization type '%s'") % os_type
+            if not os_type:
+                osstr = _("any virtualization options")
 
-    @returns: A (Capabilities Guest, Capabilities Domain) tuple
-    """
+            raise ValueError(_("Host does not support %(virttype)s %(arch)s") %
+                               {'virttype' : osstr, 'arch' : archstr})
 
-    if not caps:
-        caps = parse(conn.getCapabilities())
+        domain = guest.bestDomainType(accelerated=accelerated,
+                                      dtype=typ,
+                                      machine=machine)
 
-    guest = caps.guestForOSType(os_type, arch)
-    if not guest:
-        archstr = _("for arch '%s'") % arch
-        if not arch:
-            archstr = ""
+        if domain is None:
+            machinestr = "with machine '%s'" % machine
+            if not machine:
+                machinestr = ""
+            raise ValueError(_("Host does not support domain type %(domain)s"
+                               "%(machine)s for virtualization type "
+                               "'%(virttype)s' arch '%(arch)s'") %
+                               {'domain': typ, 'virttype': guest.os_type,
+                                'arch': guest.arch, 'machine': machinestr})
 
-        osstr = _("virtualization type '%s'") % os_type
-        if not os_type:
-            osstr = _("any virtualization options")
-
-        raise ValueError(_("Host does not support %(virttype)s %(arch)s") %
-                           {'virttype' : osstr, 'arch' : archstr})
-
-    domain = guest.bestDomainType(accelerated=accelerated,
-                                  dtype=typ,
-                                  machine=machine)
-
-    if domain is None:
-        machinestr = "with machine '%s'" % machine
-        if not machine:
-            machinestr = ""
-        raise ValueError(_("Host does not support domain type %(domain)s"
-                           "%(machine)s for virtualization type "
-                           "'%(virttype)s' arch '%(arch)s'") %
-                           {'domain': typ, 'virttype': guest.os_type,
-                            'arch': guest.arch, 'machine': machinestr})
-
-    return (guest, domain)
-
-
-def xpathString(node, path, default=None):
-    result = node.xpathEval("string(%s)" % path)
-    if len(result) == 0:
-        result = default
-    return result
+        return (guest, domain)

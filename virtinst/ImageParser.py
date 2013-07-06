@@ -1,5 +1,5 @@
 # Sample code to parse an image XML description and
-# spit out libvirt XML; will be hooked into virt-install
+# spit out libvirt XML
 #
 # Copyright 2007, 2013  Red Hat, Inc.
 # David Lutterkort <dlutter@redhat.com>
@@ -22,19 +22,13 @@
 import logging
 import os
 
-import libxml2
 import urlgrabber
 
 from virtinst import CapabilitiesParser
 from virtinst import util
 
 
-class ParserException(Exception):
-    def __init__(self, msg):
-        Exception.__init__(self, msg)
-
-
-class Image:
+class Image(object):
     """The toplevel object representing a VM image"""
     def __init__(self, node=None, base=None, filename=None):
         self.storage = {}
@@ -77,24 +71,23 @@ class Image:
                 disk.id = "disk%d.img" % len(self.storage)
                 disk.file = "disk%d.img" % (len(self.storage) + 1)
             if disk.id in self.storage:
-                raise ParserException("Disk file '%s' defined twice"
-                                           % disk.file)
+                raise RuntimeError("Disk file '%s' defined twice" % disk.file)
             self.storage[disk.id] = disk
         lm = node.xpathEval("domain")
         if len(lm) == 1:
             self.domain = Domain(lm[0])
         else:
-            raise ParserException(_("Expected exactly one 'domain' element"))
+            raise RuntimeError(_("Expected exactly one 'domain' element"))
         # Connect the disk maps to the disk definitions
         for boot in self.domain.boots:
             for d in boot.drives:
                 if d.disk_id not in self.storage:
-                    raise ParserException(_("Disk entry for '%s' not found")
-                                               % d.disk_id)
+                    raise RuntimeError(_("Disk entry for '%s' not found")
+                                       % d.disk_id)
                 d.disk = self.storage[d.disk_id]
 
 
-class Domain:
+class Domain(object):
     """The description of a virtual domain as part of an image"""
     def __init__(self, node=None):
         self.boots = []
@@ -116,8 +109,8 @@ class Domain:
             try:
                 self.memory = int(tmpmem)
             except ValueError:
-                raise ParserException(_("Memory must be an integer, "
-                                        "but is '%s'") % self.memory)
+                raise RuntimeError(_("Memory must be an integer, "
+                                     "but is '%s'") % self.memory)
         else:
             tmpmem = 0
 
@@ -134,10 +127,12 @@ class ImageFeatures(CapabilitiesParser.Features):
         elif state == "off":
             d[feature] = CapabilitiesParser.FEATURE_OFF
         else:
-            raise ParserException("The state for feature %s must be either 'on' or 'off', but is '%s'" % (feature, state))
+            raise RuntimeError("The state for feature %s must be "
+                               "either 'on' or 'off', but is '%s'" %
+                               (feature, state))
 
 
-class Boot:
+class Boot(object):
     """The overall description of how the image can be booted, including
     required capabilities of the host and mapping of disks into the VM"""
     def __init__(self, node=None):
@@ -168,7 +163,9 @@ class Boot:
 
         fl = node.xpathEval("guest/features")
         if len(fl) > 1:
-            raise ParserException("Expected at most one <features> element in %s boot descriptor for %s" % (self.type, self.arch))
+            raise RuntimeError("Expected at most one <features> element "
+                               "in %s boot descriptor for %s" %
+                               (self.type, self.arch))
         elif len(fl) == 1:
             self.features = ImageFeatures(fl[0])
 
@@ -188,7 +185,7 @@ class Boot:
         # and without a loader
 
 
-class Drive:
+class Drive(object):
     """The mapping of a disk from the storage section to a virtual drive
     in a guest"""
     def __init__(self, node=None):
@@ -203,7 +200,7 @@ class Drive:
         self.target = xpathString(node, "@target")
 
 
-class Disk:
+class Disk(object):
     FORMAT_RAW = "raw"
     FORMAT_ISO = "iso"
     FORMAT_QCOW = "qcow"
@@ -298,7 +295,7 @@ class Disk:
 
 def validate(cond, msg):
     if not cond:
-        raise ParserException(msg)
+        raise RuntimeError(msg)
 
 
 def xpathString(node, path, default=None):
@@ -312,35 +309,9 @@ def parse(xml, filename):
     """Parse the XML description of a VM image into a data structure. Returns
     an object of class Image. BASE should be the directory where the disk
     image files for this image can be found"""
-
-    class ErrorHandler:
-        def __init__(self):
-            self.msg = ""
-        def handler(self, ignore, s):
-            self.msg += s
-    error = ErrorHandler()
-    libxml2.registerErrorHandler(error.handler, None)
-
-    try:
-        try:
-            doc = libxml2.readMemory(xml, len(xml),
-                                     None, None,
-                                     libxml2.XML_PARSE_NOBLANKS)
-        except (libxml2.parserError, libxml2.treeError), e:
-            raise ParserException("%s\n%s" % (e, error.msg))
-    finally:
-        libxml2.registerErrorHandler(None, None)
-
-    try:
-        root = doc.getRootElement()
-        if root.name != "image":
-            raise ParserException(_("Root element is not 'image'"))
-
-        image = Image(root, filename=filename)
-    finally:
-        doc.freeDoc()
-
-    return image
+    def cb(x):
+        return Image(x, filename=filename)
+    return util.parse_node_helper(xml, "image", cb, RuntimeError)
 
 
 def parse_file(filename):

@@ -535,7 +535,7 @@ class VirtualDisk(VirtualDevice):
                  readOnly=False, sparse=True, volObject=None,
                  volInstall=None, volName=None, bus=None, shareable=False,
                  driverCache=None, format=None,
-                 validate=True, parsexml=None, parsexmlnode=None, caps=None,
+                 validate=True, parsexml=None, parsexmlnode=None,
                  driverIO=None, sizebytes=None, nomanaged=False):
         """
         @param path: filesystem path to the disk image.
@@ -583,8 +583,7 @@ class VirtualDisk(VirtualDevice):
         """
 
         VirtualDevice.__init__(self, conn=conn,
-                               parsexml=parsexml, parsexmlnode=parsexmlnode,
-                               caps=caps)
+                               parsexml=parsexml, parsexmlnode=parsexmlnode)
 
         self._path = None
         self._size = None

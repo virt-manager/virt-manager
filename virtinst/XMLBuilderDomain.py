@@ -24,7 +24,6 @@ import threading
 
 import libxml2
 
-from virtinst import CapabilitiesParser
 from virtinst import util
 
 _xml_refs_lock = threading.Lock()
@@ -389,7 +388,7 @@ class XMLBuilderDomain(object):
     """
 
     _dumpxml_xpath = "."
-    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
         """
         Initialize state
 
@@ -398,19 +397,11 @@ class XMLBuilderDomain(object):
         @param parsexml: Optional XML string to parse
         @type parsexml: C{str}
         @param parsexmlnode: Option xpathNode to use
-        @param caps: Capabilities() instance
         """
         self._conn = conn
-        self.__caps = None
 
         self._xml_node = None
         self._xml_ctx = None
-
-
-        if caps:
-            if not isinstance(caps, CapabilitiesParser.Capabilities):
-                raise ValueError("caps must be a Capabilities instance")
-            self.__caps = caps
 
         if parsexml or parsexmlnode:
             self._parsexml(parsexml, parsexmlnode)
@@ -446,11 +437,6 @@ class XMLBuilderDomain(object):
     def _get_conn(self):
         return self._conn
     conn = property(_get_conn)
-
-    def _get_caps(self):
-        if not self.__caps:
-            self.__caps = CapabilitiesParser.parse(self.conn.getCapabilities())
-        return self.__caps
 
     def _check_bool(self, val, name):
         if val not in [True, False]:

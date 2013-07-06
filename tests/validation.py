@@ -40,7 +40,7 @@ import os
 # We install several storage pools on the connection to ensure
 # we aren't bumping up against errors in that department.
 testconn = utils.open_testdriver()
-testcaps = virtinst.CapabilitiesParser.parse(testconn.getCapabilities())
+testcaps = testconn.caps
 
 virtimage = virtinst.ImageParser.parse_file("tests/image-xml/image.xml")
 

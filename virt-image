@@ -25,7 +25,6 @@ import urlgrabber.progress as progress
 
 import virtinst
 import virtinst.ImageParser
-import virtinst.CapabilitiesParser
 import virtinst.cli as cli
 from virtinst.cli import fail, print_stdout, print_stderr
 
@@ -140,7 +139,7 @@ def main(conn=None):
 
     try:
         image = virtinst.ImageParser.parse_file(options.image)
-    except virtinst.ImageParser.ParserException, msg:
+    except RuntimeError, msg:
         fail("%s '%s': %s" % (_("Cannot parse"),  options.image, msg))
 
     if options.boot is not None:
