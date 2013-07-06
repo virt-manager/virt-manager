@@ -121,17 +121,15 @@ class StorageObject(object):
     TYPE_POOL   = "pool"
     TYPE_VOLUME = "volume"
 
-    def __init__(self, object_type, name, conn=None):
+    def __init__(self, conn, object_type, name):
         """
         Initialize storage object parameters
         """
         if object_type not in [self.TYPE_POOL, self.TYPE_VOLUME]:
             raise ValueError(_("Unknown storage object type: %s") % type)
         self._object_type = object_type
-        self._conn = None
+        self._conn = conn
         self._name = None
-        if conn is not None:
-            self.conn = conn
 
         self.name = name
 
@@ -145,16 +143,9 @@ class StorageObject(object):
         return self._object_type
     object_type = property(get_object_type)
 
-    def get_conn(self):
+    def _get_conn(self):
         return self._conn
-    def set_conn(self, val):
-        if not util.is_storage_capable(val):
-            raise ValueError(_("Passed connection is not libvirt storage "
-                               "capable"))
-        self._conn = val
-    conn = property(get_conn, set_conn, doc="""
-    Libvirt connection to check object against/install on
-    """)
+    conn = property(_get_conn)
 
     def get_name(self):
         return self._name

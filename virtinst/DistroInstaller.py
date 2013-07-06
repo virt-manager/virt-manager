@@ -77,7 +77,7 @@ def _build_pool(conn, meter, path):
     name = util.generate_name("boot-scratch",
                                conn.storagePoolLookupByName)
     logging.debug("Building storage pool: path=%s name=%s", path, name)
-    poolbuild = Storage.DirectoryPool(conn=conn, name=name,
+    poolbuild = Storage.DirectoryPool(conn, name=name,
                                       target_path=path)
 
     # Explicitly don't build? since if we are creating this directory
@@ -108,12 +108,12 @@ def _upload_file(conn, meter, destpool, src):
     if name != basename:
         logging.debug("Generated non-colliding volume name %s", name)
 
-    disk = VirtualDisk(conn=conn,
+    disk = VirtualDisk(conn,
                        path=os.path.join(poolpath, name),
                        sizebytes=size,
                        sparse=True)
 
-    disk.setup_dev(meter=meter)
+    disk.setup(meter=meter)
     vol = disk.vol_object
     if not vol:
         raise RuntimeError(_("Failed to lookup scratch media volume"))
@@ -155,14 +155,13 @@ def _upload_file(conn, meter, destpool, src):
 
 
 class DistroInstaller(Installer.Installer):
-    def __init__(self, type="xen", location=None,
-                 extraargs=None, os_type=None,
-                 conn=None, caps=None):
+    def __init__(self, conn, type="xen", location=None,
+                 extraargs=None, os_type=None, caps=None):
         # pylint: disable=W0622
         # Redefining built-in 'type', but it matches the XML so keep it
 
-        Installer.Installer.__init__(self, type, location, extraargs,
-                                     os_type, conn=conn, caps=caps)
+        Installer.Installer.__init__(self, conn, type, location, extraargs,
+                                     os_type, caps=caps)
 
         self._livecd = False
 
@@ -195,7 +194,7 @@ class DistroInstaller(Installer.Installer):
         is_tuple = False
         validated = True
         self._location_is_path = True
-        is_local = (not self.conn or not self.is_remote())
+        is_local = not self.is_remote()
 
         # Basic validation
         if type(val) is not str and (type(val) is not tuple and len(val) != 2):
@@ -204,9 +203,6 @@ class DistroInstaller(Installer.Installer):
         if type(val) is tuple and len(val) == 2:
             logging.debug("DistroInstaller location is a (poolname, volname)"
                           " tuple")
-            if not self.conn:
-                raise ValueError(_("'conn' must be specified if 'location' is"
-                                   " a storage tuple."))
             is_tuple = True
 
         elif _is_url(val, is_local):
@@ -223,8 +219,8 @@ class DistroInstaller(Installer.Installer):
             # Didn't determine anything about the location
             validated = False
 
-        if self._location_is_path or (not validated and self.conn and
-                                      util.is_storage_capable(self.conn)):
+        if (self._location_is_path or
+            (not validated and util.is_storage_capable(self.conn))):
             # If user passed a storage tuple, OR
             # We couldn't determine the location type and a storage capable
             #   connection was passed:
@@ -234,11 +230,11 @@ class DistroInstaller(Installer.Installer):
             path = (not is_tuple and val) or None
 
             try:
-                d = VirtualDisk(path=path,
+                d = VirtualDisk(self.conn,
+                                path=path,
                                 device=VirtualDisk.DEVICE_CDROM,
                                 transient=True,
                                 readOnly=True,
-                                conn=self.conn,
                                 volName=stuple)
                 val = d.path
             except:
@@ -273,8 +269,8 @@ class DistroInstaller(Installer.Installer):
         else:
             cdrom = self.location
 
-        disk = VirtualDisk(path=cdrom,
-                           conn=guest.conn,
+        disk = VirtualDisk(guest.conn,
+                           path=cdrom,
                            device=VirtualDisk.DEVICE_CDROM,
                            readOnly=True,
                            transient=transient)
@@ -321,8 +317,6 @@ class DistroInstaller(Installer.Installer):
             logging.debug("gzip stderr=%s", gziperr)
 
     def support_remote_url_install(self):
-        if not self.conn:
-            return False
         if hasattr(self.conn, "_virtinst__fake_conn"):
             return False
         return support.check_stream_support(self.conn,
@@ -375,7 +369,7 @@ class DistroInstaller(Installer.Installer):
             if self.is_xenpv() and can_cdrom:
                 device = VirtualDisk.DEVICE_DISK
 
-            disk = VirtualDisk(conn=guest.conn,
+            disk = VirtualDisk(guest.conn,
                                device=device,
                                path=self.location,
                                readOnly=True,

@@ -177,15 +177,6 @@ class VirtualHostDevice(VirtualDevice):
     def _get_source_xml(self):
         raise NotImplementedError("Must be implemented in subclass")
 
-    def setup(self, conn=None):
-        """
-        Unused
-
-        @param conn: libvirt virConnect instance to use (defaults to devices
-                     connection)
-        """
-        ignore = conn
-
     def _get_xml_config(self):
         xml  = ("    <hostdev mode='%s' type='%s' managed='%s'>\n" %
                 (self.mode, self.type, self.managed and "yes" or "no"))

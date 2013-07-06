@@ -532,13 +532,13 @@ class VirtualDisk(VirtualDevice):
         except Exception, e:
             raise ValueError(_("Couldn't lookup volume object: %s" % str(e)))
 
-    def __init__(self, path=None, size=None, transient=False, type=None,
+    def __init__(self, conn, path=None, size=None, transient=False, type=None,
                  device=None, driverName=None, driverType=None,
-                 readOnly=False, sparse=True, conn=None, volObject=None,
+                 readOnly=False, sparse=True, volObject=None,
                  volInstall=None, volName=None, bus=None, shareable=False,
                  driverCache=None, format=None,
                  validate=True, parsexml=None, parsexmlnode=None, caps=None,
-                 driverIO=None, sizebytes=None):
+                 driverIO=None, sizebytes=None, nomanaged=False):
         """
         @param path: filesystem path to the disk image.
         @type path: C{str}
@@ -615,6 +615,7 @@ class VirtualDisk(VirtualDevice):
         self._iotune_wbs = None
         self._iotune_wis = None
         self._validate = validate
+        self._nomanaged = nomanaged
 
         # XXX: No property methods for these
         self.transient = transient
@@ -718,14 +719,8 @@ class VirtualDisk(VirtualDevice):
             self._check_str(val, "path")
             val = os.path.abspath(val)
 
-            # Pass the path to a VirtualDisk, which should provide validation
-            # for us
             try:
-                # If this disk isn't managed, don't pass 'conn' to this
-                # validation disk, to ensure we have permissions for manual
-                # cloning
-                conn = self.__managed_storage() and self.conn or None
-                VirtualDisk(conn=conn, path=val)
+                VirtualDisk(self.conn, path=val, nomanaged=True)
             except Exception, e:
                 raise ValueError(_("Error validating clone path: %s") % e)
         self.__validate_wrapper("_clone_path", val, validate, self.clone_path)
@@ -999,8 +994,7 @@ class VirtualDisk(VirtualDevice):
         """
         pool = None
 
-        storage_capable = bool(self.conn and
-                               util.is_storage_capable(self.conn))
+        storage_capable = util.is_storage_capable(self.conn)
 
         # Try to lookup self.path storage objects
         if vol_object or vol_install:
@@ -1137,10 +1131,9 @@ class VirtualDisk(VirtualDevice):
         drvname = self._driverName
         drvtype = self._driverType
 
-        if self.conn:
-            is_qemu = self.is_qemu()
-            if is_qemu and not drvname:
-                drvname = self.DRIVER_QEMU
+        is_qemu = self.is_qemu()
+        if is_qemu and not drvname:
+            drvname = self.DRIVER_QEMU
 
         if self.format:
             if drvname == self.DRIVER_QEMU:
@@ -1170,6 +1163,8 @@ class VirtualDisk(VirtualDevice):
         Return bool representing if managed storage parameters have
         been explicitly specified or filled in
         """
+        if self._nomanaged:
+            return False
         return bool(self.vol_object is not None or
                     self.vol_install is not None or
                     self._pool_object is not None)
@@ -1220,8 +1215,7 @@ class VirtualDisk(VirtualDevice):
 
             return True
 
-        storage_capable = bool(self.conn and
-                               util.is_storage_capable(self.conn))
+        storage_capable = util.is_storage_capable(self.conn)
 
         if self.is_remote():
             if not storage_capable:
@@ -1398,7 +1392,7 @@ class VirtualDisk(VirtualDevice):
             if dst_fd is not None:
                 os.close(dst_fd)
 
-    def setup_dev(self, conn=None, meter=None):
+    def setup(self, meter=None):
         """
         Build storage (if required)
 
@@ -1409,17 +1403,11 @@ class VirtualDisk(VirtualDevice):
         @param meter: Progress meter to report file creation on
         @type meter: instanceof urlgrabber.BaseMeter
         """
-        return self.setup(meter)
-
-    def setup(self, progresscb=None):
-        """
-        DEPRECATED: Please use setup_dev instead
-        """
-        if not progresscb:
-            progresscb = progress.BaseMeter()
+        if not meter:
+            meter = progress.BaseMeter()
 
         if self.creating_storage() or self.clone_path:
-            self._do_create_storage(progresscb)
+            self._do_create_storage(meter)
 
     def _get_xml_config(self, disknode=None):
         """

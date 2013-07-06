@@ -71,7 +71,7 @@ class VirtualDevice(XMLBuilderDomain):
     # General device type (disk, interface, etc.)
     _virtual_device_type = None
 
-    def __init__(self, conn=None, parsexml=None, parsexmlnode=None, caps=None):
+    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
         """
         Initialize device state
 
@@ -105,17 +105,14 @@ class VirtualDevice(XMLBuilderDomain):
         # See XMLBuilderDomain for docs
         raise NotImplementedError()
 
-    def setup_dev(self, conn=None, meter=None):
+    def setup(self, meter=None):
         """
         Perform potentially hazardous device initialization, like
         storage creation or host device reset
 
-        @param conn: Optional connection to use if necessary. If not
-                     specified, device's 'conn' will be used
         @param meter: Optional progress meter to use
         """
         # Will be overwritten by subclasses if necessary.
-        ignore = conn
         ignore = meter
         return
 

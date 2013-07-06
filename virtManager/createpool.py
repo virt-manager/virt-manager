@@ -501,7 +501,7 @@ class vmmCreatePool(vmmGObjectUI):
 
             try:
                 self._pool_class = Storage.StoragePool.get_pool_class(typ)
-                self._pool = self._pool_class(name=name, conn=conn)
+                self._pool = self._pool_class(conn, name=name)
             except ValueError, e:
                 return self.err.val_err(_("Pool Parameter Error"), e)
 

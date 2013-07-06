@@ -1426,18 +1426,18 @@ class vmmCreate(vmmGObjectUI):
                           "Using VNC graphics.")
             gtype = virtinst.VirtualGraphics.TYPE_VNC
 
-        return virtinst.VirtualGraphics(conn=guest.conn, type=gtype)
+        return virtinst.VirtualGraphics(guest.conn, type=gtype)
 
     def get_video_device(self, guest):
         if guest.installer.is_container():
             return
-        return virtinst.VirtualVideoDevice(conn=guest.conn)
+        return virtinst.VirtualVideoDevice(guest.conn)
 
     def get_sound_device(self, guest):
         if (not self.config.get_new_vm_sound() or
             guest.installer.is_container()):
             return
-        return virtinst.VirtualAudio(conn=guest.conn)
+        return virtinst.VirtualAudio(guest.conn)
 
     def build_guest(self, installer, name):
         guest = installer.guest_from_installer()
@@ -1584,7 +1584,7 @@ class vmmCreate(vmmGObjectUI):
                 self.guest.installer.init = init
 
             if fs:
-                fsdev = virtinst.VirtualFilesystem(conn=self.guest.conn)
+                fsdev = virtinst.VirtualFilesystem(self.guest.conn)
                 fsdev.target = "/"
                 fsdev.source = fs
                 self.guest.add_device(fsdev)
@@ -1704,7 +1704,7 @@ class vmmCreate(vmmGObjectUI):
             if not diskpath:
                 return self.err.val_err(_("A storage path must be specified."))
 
-            disk = virtinst.VirtualDisk(conn=conn,
+            disk = virtinst.VirtualDisk(conn,
                                         path=diskpath,
                                         size=disksize,
                                         sparse=sparse)
@@ -1781,7 +1781,7 @@ class vmmCreate(vmmGObjectUI):
 
     # Interesting methods
     def build_installer(self, instclass):
-        installer = instclass(conn=self.conn.get_backend(),
+        installer = instclass(self.conn.get_backend(),
                               type=self.capsdomain.hypervisor_type,
                               os_type=self.capsguest.os_type)
         installer.arch = self.capsguest.arch

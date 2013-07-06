@@ -23,11 +23,6 @@ from virtinst import Installer
 from virtinst.VirtualDisk import VirtualDisk
 
 
-class LiveCDInstallerException(Exception):
-    def __init__(self, msg):
-        Exception.__init__(self, msg)
-
-
 class LiveCDInstaller(Installer.Installer):
     _has_install_phase = False
 
@@ -42,8 +37,8 @@ class LiveCDInstaller(Installer.Installer):
 
         disk = None
         if path or vol_tuple:
-            disk = VirtualDisk(path=path,
-                               conn=self.conn,
+            disk = VirtualDisk(self.conn,
+                               path=path,
                                volName=vol_tuple,
                                device=VirtualDisk.DEVICE_CDROM,
                                readOnly=True)

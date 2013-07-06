@@ -25,7 +25,6 @@ import libvirt
 import logging
 
 from virtinst import util
-from virtinst import support
 
 
 class Interface(object):
@@ -76,7 +75,7 @@ class Interface(object):
         return util.generate_name(prefix, conn.interfaceLookupByName, sep="",
                                    force_num=True)
 
-    def __init__(self, object_type, name, conn=None):
+    def __init__(self, conn, object_type, name):
         """
         Initialize  object parameters
         """
@@ -85,16 +84,13 @@ class Interface(object):
                              object_type)
 
         self._object_type = object_type
-        self._conn = None
+        self._conn = conn
         self._name = None
         self._mtu = None
         self._macaddr = None
         self._start_mode = None
         self._protocols = []
         self._protocol_xml = None
-
-        if conn is not None:
-            self.conn = conn
 
         self.name = name
 
@@ -109,14 +105,7 @@ class Interface(object):
 
     def _get_conn(self):
         return self._conn
-    def _set_conn(self, val):
-        if not support.check_conn_support(val, support.SUPPORT_CONN_INTERFACE):
-            raise ValueError(_("Passed connection is not libvirt interface "
-                               "capable"))
-        self._conn = val
-    conn = property(_get_conn, _set_conn, doc="""
-    Libvirt connection to check object against/install on
-    """)
+    conn = property(_get_conn)
 
     def _get_name(self):
         return self._name
@@ -170,9 +159,8 @@ class Interface(object):
                                 "example.")
 
     def _check_name_collision(self, name):
-        pool = None
         try:
-            pool = self.conn.interfaceLookupByName(name)
+            self.conn.interfaceLookupByName(name)
         except libvirt.libvirtError:
             return
 
@@ -263,8 +251,8 @@ class _InterfaceCompound(Interface):
     Class representing an interface which can have child interfaces
     """
 
-    def __init__(self, interface_type, name, conn=None):
-        Interface.__init__(self, interface_type, name, conn)
+    def __init__(self, conn, interface_type, name):
+        Interface.__init__(self, conn, interface_type, name)
         self._interfaces = []
 
     def _get_interfaces(self):
@@ -315,9 +303,9 @@ class InterfaceBridge(_InterfaceCompound):
     Class for building and installing libvirt interface bridge xml
     """
 
-    def __init__(self, name, conn=None):
-        _InterfaceCompound.__init__(self, Interface.INTERFACE_TYPE_BRIDGE,
-                                    name, conn)
+    def __init__(self, conn, name):
+        _InterfaceCompound.__init__(self, conn,
+                                    Interface.INTERFACE_TYPE_BRIDGE, name)
 
         self._stp = None
         self._delay = None
@@ -371,9 +359,9 @@ class InterfaceBond(_InterfaceCompound):
 
     INTERFACE_BOND_MONITOR_MODE_MII_CARRIER_TYPES = ["netif", "ioctl"]
 
-    def __init__(self, name, conn=None):
-        _InterfaceCompound.__init__(self, Interface.INTERFACE_TYPE_BOND,
-                                    name, conn)
+    def __init__(self, conn, name):
+        _InterfaceCompound.__init__(self, conn,
+                                    Interface.INTERFACE_TYPE_BOND, name)
 
         self._bond_mode = None
         self._monitor_mode = None
@@ -519,9 +507,9 @@ class InterfaceEthernet(Interface):
     Class for building and installing libvirt interface ethernet xml
     """
 
-    def __init__(self, name, conn=None):
-        Interface.__init__(self, Interface.INTERFACE_TYPE_ETHERNET,
-                           name, conn)
+    def __init__(self, conn, name):
+        Interface.__init__(self, conn,
+                           Interface.INTERFACE_TYPE_ETHERNET, name)
 
     def _get_interface_xml(self):
         # No ethernet specific XML
@@ -533,9 +521,9 @@ class InterfaceVLAN(Interface):
     Class for building and installing libvirt interface vlan xml
     """
 
-    def __init__(self, name, conn=None):
-        Interface.__init__(self, Interface.INTERFACE_TYPE_VLAN,
-                           name, conn)
+    def __init__(self, conn, name):
+        Interface.__init__(self, conn,
+                           Interface.INTERFACE_TYPE_VLAN, name)
 
         self._tag = None
         self._parent_interface = None

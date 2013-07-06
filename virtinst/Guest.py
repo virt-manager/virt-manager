@@ -221,8 +221,8 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
             return
 
         if not self.installer:
-            i = virtinst.DistroInstaller(type=type,
-                                         conn=conn,
+            i = virtinst.DistroInstaller(conn,
+                                         type=type,
                                          os_type=self._default_os_type,
                                          caps=self._get_caps())
             self.installer = i
@@ -679,7 +679,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
                     dev = objclass(self.conn, devnode.name,
                                    parsexmlnode=devnode, caps=caps)
                 else:
-                    dev = objclass(conn=self.conn,
+                    dev = objclass(self.conn,
                                    parsexmlnode=devnode, caps=caps)
                 self._add_device(dev)
 
@@ -869,7 +869,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         Ensure that devices are setup
         """
         for dev in self.get_all_devices():
-            dev.setup_dev(self.conn, progresscb)
+            dev.setup(progresscb)
 
     ##############
     # Public API #

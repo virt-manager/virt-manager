@@ -390,8 +390,7 @@ class XMLBuilderDomain(object):
     """
 
     _dumpxml_xpath = "."
-    def __init__(self, conn=None, parsexml=None, parsexmlnode=None,
-                 caps=None):
+    def __init__(self, conn, parsexml=None, parsexmlnode=None, caps=None):
         """
         Initialize state
 
@@ -402,16 +401,14 @@ class XMLBuilderDomain(object):
         @param parsexmlnode: Option xpathNode to use
         @param caps: Capabilities() instance
         """
-        self._conn = None
-        self._conn_uri = None
-        self.__remote = False
+        self._conn = conn
+        self._conn_uri = self._conn.getURI()
+        self.__remote = uriutil.is_uri_remote(self._conn_uri, conn=self._conn)
         self.__caps = None
 
         self._xml_node = None
         self._xml_ctx = None
 
-        if conn:
-            self.set_conn(conn)
 
         if caps:
             if not isinstance(caps, CapabilitiesParser.Capabilities):
@@ -449,19 +446,15 @@ class XMLBuilderDomain(object):
         self._cache()
         return copy.copy(self)
 
-    def get_conn(self):
+    def _get_conn(self):
         return self._conn
-    def set_conn(self, val):
-        self._conn = val
-        self._conn_uri = self._conn.getURI()
-        self.__remote = uriutil.is_uri_remote(self._conn_uri, conn=self._conn)
-    conn = property(get_conn, set_conn)
+    conn = property(_get_conn)
 
     def get_uri(self):
         return self._conn_uri
 
     def _get_caps(self):
-        if not self.__caps and self.conn:
+        if not self.__caps:
             self.__caps = CapabilitiesParser.parse(self.conn.getCapabilities())
         return self.__caps
 

@@ -447,7 +447,7 @@ class TestXMLConfig(unittest.TestCase):
             g.add_device(utils.get_filedisk())
             g.add_device(utils.get_blkdisk())
             g.add_device(utils.get_virtual_network())
-            g.add_device(VirtualAudio())
+            g.add_device(VirtualAudio(g.conn))
             return g
 
         utils.set_conn(utils.open_plainkvm(connver=11000))
@@ -468,11 +468,11 @@ class TestXMLConfig(unittest.TestCase):
 
     def testKVMKeymap(self):
         conn = utils.open_plainkvm(connver=10000)
-        g = virtinst.VirtualGraphics(conn=conn, type="vnc")
+        g = virtinst.VirtualGraphics(conn, type="vnc")
         self.assertTrue(g.keymap is not None)
 
         conn = utils.open_plainkvm(connver=11000)
-        g = virtinst.VirtualGraphics(conn=conn, type="vnc")
+        g = virtinst.VirtualGraphics(conn, type="vnc")
         self.assertTrue(g.keymap is None)
 
 
@@ -528,7 +528,7 @@ class TestXMLConfig(unittest.TestCase):
             g.add_device(utils.get_filedisk())
             g.add_device(utils.get_blkdisk())
             g.add_device(utils.get_virtual_network())
-            g.add_device(VirtualAudio())
+            g.add_device(VirtualAudio(g.conn))
             return g
 
         utils.set_conn(utils.open_plainxen(connver=3000001))
@@ -546,21 +546,21 @@ class TestXMLConfig(unittest.TestCase):
 
         g.add_device(utils.get_filedisk())
         g.add_device(utils.get_blkdisk())
-        g.add_device(VirtualDisk(conn=g.conn, path="/dev/loop0",
-                                   device=VirtualDisk.DEVICE_CDROM,
-                                   driverType="raw"))
-        g.add_device(VirtualDisk(conn=g.conn, path="/dev/loop0",
-                                   device=VirtualDisk.DEVICE_DISK,
-                                   driverName="qemu", format="qcow2"))
-        g.add_device(VirtualDisk(conn=g.conn, path=None,
-                                   device=VirtualDisk.DEVICE_CDROM,
-                                   bus="scsi"))
-        g.add_device(VirtualDisk(conn=g.conn, path=None,
-                                   device=VirtualDisk.DEVICE_FLOPPY))
-        g.add_device(VirtualDisk(conn=g.conn, path="/dev/loop0",
-                                   device=VirtualDisk.DEVICE_FLOPPY,
-                                   driverName="phy", driverCache="none"))
-        disk = VirtualDisk(conn=g.conn, path="/dev/loop0",
+        g.add_device(VirtualDisk(g.conn, path="/dev/loop0",
+                                 device=VirtualDisk.DEVICE_CDROM,
+                                 driverType="raw"))
+        g.add_device(VirtualDisk(g.conn, path="/dev/loop0",
+                                 device=VirtualDisk.DEVICE_DISK,
+                                 driverName="qemu", format="qcow2"))
+        g.add_device(VirtualDisk(g.conn, path=None,
+                                 device=VirtualDisk.DEVICE_CDROM,
+                                 bus="scsi"))
+        g.add_device(VirtualDisk(g.conn, path=None,
+                                 device=VirtualDisk.DEVICE_FLOPPY))
+        g.add_device(VirtualDisk(g.conn, path="/dev/loop0",
+                                 device=VirtualDisk.DEVICE_FLOPPY,
+                                 driverName="phy", driverCache="none"))
+        disk = VirtualDisk(g.conn, path="/dev/loop0",
                            bus="virtio", driverName="qemu",
                            driverType="qcow2", driverCache="none")
         disk.driver_io = "threads"
@@ -572,15 +572,15 @@ class TestXMLConfig(unittest.TestCase):
         i = utils.make_pxe_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
-        net1 = VirtualNetworkInterface(type="user",
+        net1 = VirtualNetworkInterface(g.conn, type="user",
                                        macaddr="22:11:11:11:11:11")
         net2 = utils.get_virtual_network()
         net3 = utils.get_virtual_network()
         net3.model = "e1000"
-        net4 = VirtualNetworkInterface(bridge="foobr0",
+        net4 = VirtualNetworkInterface(g.conn, bridge="foobr0",
                                        macaddr="22:22:22:22:22:22")
         net4.target_dev = "foo1"
-        net5 = VirtualNetworkInterface(type="ethernet",
+        net5 = VirtualNetworkInterface(g.conn, type="ethernet",
                                        macaddr="00:11:00:22:00:33")
         net5.source_dev = "testeth1"
 
@@ -612,10 +612,10 @@ class TestXMLConfig(unittest.TestCase):
         i = utils.make_pxe_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
-        g.add_device(VirtualAudio("sb16", conn=g.conn))
-        g.add_device(VirtualAudio("es1370", conn=g.conn))
-        g.add_device(VirtualAudio("pcspk", conn=g.conn))
-        g.add_device(VirtualAudio(conn=g.conn))
+        g.add_device(VirtualAudio(g.conn, "sb16"))
+        g.add_device(VirtualAudio(g.conn, "es1370"))
+        g.add_device(VirtualAudio(g.conn, "pcspk"))
+        g.add_device(VirtualAudio(g.conn))
 
         self._compare(g, "boot-many-sounds", False)
 
@@ -690,16 +690,15 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(dev1)
 
         # Sound devices
-        g.add_device(VirtualAudio("sb16", conn=g.conn))
-        g.add_device(VirtualAudio("es1370", conn=g.conn))
+        g.add_device(VirtualAudio(g.conn, "sb16"))
+        g.add_device(VirtualAudio(g.conn, "es1370"))
 
         # Disk devices
-        g.add_device(VirtualDisk(conn=g.conn, path="/dev/loop0",
-                                   device=VirtualDisk.DEVICE_FLOPPY))
-        g.add_device(VirtualDisk(conn=g.conn, path="/dev/loop0",
-                                   bus="scsi"))
-        g.add_device(VirtualDisk(conn=g.conn, path="/tmp", device="floppy"))
-        d3 = VirtualDisk(conn=g.conn, path="/default-pool/testvol1.img",
+        g.add_device(VirtualDisk(g.conn, path="/dev/loop0",
+                                 device=VirtualDisk.DEVICE_FLOPPY))
+        g.add_device(VirtualDisk(g.conn, path="/dev/loop0", bus="scsi"))
+        g.add_device(VirtualDisk(g.conn, path="/tmp", device="floppy"))
+        d3 = VirtualDisk(g.conn, path="/default-pool/testvol1.img",
                          bus="scsi", driverName="qemu")
         d3.address.type = "spapr-vio"
         g.add_device(d3)
@@ -716,10 +715,11 @@ class TestXMLConfig(unittest.TestCase):
         # Network devices
         net1 = utils.get_virtual_network()
         net1.model = "e1000"
-        net2 = VirtualNetworkInterface(type="user",
+        net2 = VirtualNetworkInterface(g.conn, type="user",
                                        macaddr="22:11:11:11:11:11")
-        net3 = VirtualNetworkInterface(type=virtinst.VirtualNetworkInterface.TYPE_VIRTUAL,
-                                       macaddr="22:22:22:22:22:22", network="default")
+        net3 = VirtualNetworkInterface(g.conn,
+                        type=virtinst.VirtualNetworkInterface.TYPE_VIRTUAL,
+                        macaddr="22:22:22:22:22:22", network="default")
         net3.model = "spapr-vlan"
         net3.set_address("spapr-vio")
         g.add_device(net1)
@@ -728,15 +728,15 @@ class TestXMLConfig(unittest.TestCase):
 
         # Character devices
         cdev1 = VirtualCharDevice.get_dev_instance(g.conn,
-                                                   VirtualCharDevice.DEV_SERIAL,
-                                                   VirtualCharDevice.CHAR_NULL)
+                                            VirtualCharDevice.DEV_SERIAL,
+                                            VirtualCharDevice.CHAR_NULL)
         cdev2 = VirtualCharDevice.get_dev_instance(g.conn,
-                                                   VirtualCharDevice.DEV_PARALLEL,
-                                                   VirtualCharDevice.CHAR_UNIX)
+                                            VirtualCharDevice.DEV_PARALLEL,
+                                            VirtualCharDevice.CHAR_UNIX)
         cdev2.source_path = "/tmp/foobar"
         cdev3 = VirtualCharDevice.get_dev_instance(g.conn,
-                                                   VirtualCharDevice.DEV_CHANNEL,
-                                                   VirtualCharDevice.CHAR_SPICEVMC)
+                                            VirtualCharDevice.DEV_CHANNEL,
+                                            VirtualCharDevice.CHAR_SPICEVMC)
         g.add_device(cdev1)
         g.add_device(cdev2)
         g.add_device(cdev3)
@@ -771,19 +771,19 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(mdev1)
 
         # Check keymap autoconfig
-        gdev1 = virtinst.VirtualGraphics(conn=g.conn, type="vnc")
+        gdev1 = virtinst.VirtualGraphics(g.conn, type="vnc")
         self.assertTrue(gdev1.keymap is not None)
         gdev1.keymap = "en-us"
 
         # Check keymap None
-        gdev2 = virtinst.VirtualGraphics(conn=g.conn, type="vnc")
+        gdev2 = virtinst.VirtualGraphics(g.conn, type="vnc")
         gdev2.keymap = None
 
-        gdev3 = virtinst.VirtualGraphics(conn=g.conn, type="sdl")
-        gdev4 = virtinst.VirtualGraphics(conn=g.conn, type="spice")
+        gdev3 = virtinst.VirtualGraphics(g.conn, type="sdl")
+        gdev4 = virtinst.VirtualGraphics(g.conn, type="spice")
         gdev4.passwdValidTo = "foobar"
 
-        gdev5 = virtinst.VirtualGraphics(conn=g.conn, type="sdl")
+        gdev5 = virtinst.VirtualGraphics(g.conn, type="sdl")
         gdev5.xauth = "fooxauth"
         gdev5.display = "foodisplay"
         g.add_device(gdev1)
@@ -870,7 +870,7 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(utils.get_filedisk("/default-pool/rhel6.img"))
         g.add_device(utils.get_blkdisk())
         g.add_device(utils.get_virtual_network())
-        g.add_device(VirtualAudio())
+        g.add_device(VirtualAudio(g.conn))
         g.add_device(VirtualVideoDevice(g.conn))
         g.os_autodetect = True
 
@@ -899,7 +899,7 @@ class TestXMLConfig(unittest.TestCase):
         sizebytes = long(sizegigs * 1024L * 1024L * 1024L)
 
         for sparse in [True, False]:
-            disk = VirtualDisk(conn=utils.get_conn(), path=path, size=sizegigs,
+            disk = VirtualDisk(utils.get_conn(), path=path, size=sizegigs,
                                sparse=sparse)
             disk.setup()
 
@@ -920,18 +920,18 @@ class TestXMLConfig(unittest.TestCase):
                 return ["bridge", "br0"]
             util.default_bridge = newbridge
 
-            dev1 = virtinst.VirtualNetworkInterface(conn=g.conn)
+            dev1 = virtinst.VirtualNetworkInterface(g.conn)
             dev1.macaddr = "22:22:33:44:55:66"
             g.add_device(dev1)
 
-            dev2 = virtinst.VirtualNetworkInterface(conn=g.conn,
+            dev2 = virtinst.VirtualNetworkInterface(g.conn,
                                                 parsexml=dev1.get_xml_config())
             dev2.source = None
             dev2.source = "foobr0"
             dev2.macaddr = "22:22:33:44:55:67"
             g.add_device(dev2)
 
-            dev3 = virtinst.VirtualNetworkInterface(conn=g.conn,
+            dev3 = virtinst.VirtualNetworkInterface(g.conn,
                                                 parsexml=dev1.get_xml_config())
             dev3.source = None
             dev3.macaddr = "22:22:33:44:55:68"
@@ -963,7 +963,7 @@ class TestXMLConfig(unittest.TestCase):
                           conn, "16")
 
     def testManyVirtio(self):
-        d = VirtualDisk(conn=utils.get_conn(), bus="virtio",
+        d = VirtualDisk(utils.get_conn(), bus="virtio",
                         path="/default-pool/testvol1.img")
 
         targetlist = []

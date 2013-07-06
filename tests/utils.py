@@ -176,7 +176,7 @@ def get_basic_paravirt_guest(installer=None):
     g.memory = int(200)
     g.maxmemory = int(400)
     g.uuid = "12345678-1234-1234-1234-123456789012"
-    g.add_device(VirtualGraphics("vnc", keymap="ja"))
+    g.add_device(VirtualGraphics(_conn, "vnc", keymap="ja"))
     g.vcpus = 5
 
     if installer:
@@ -197,7 +197,7 @@ def get_basic_fullyvirt_guest(typ="xen", installer=None):
     g.maxmemory = int(400)
     g.uuid = "12345678-1234-1234-1234-123456789012"
     g.cdrom = "/dev/loop0"
-    g.add_device(VirtualGraphics("sdl"))
+    g.add_device(VirtualGraphics(_conn, "sdl"))
     g.features['pae'] = 0
     g.vcpus = 5
     if installer:
@@ -239,7 +239,7 @@ def build_win_kvm(path=None):
     g.add_device(get_filedisk(path))
     g.add_device(get_blkdisk())
     g.add_device(get_virtual_network())
-    g.add_device(VirtualAudio())
+    g.add_device(VirtualAudio(g.conn))
     g.add_device(VirtualVideoDevice(g.conn))
 
     return g
@@ -248,21 +248,21 @@ def build_win_kvm(path=None):
 def get_floppy(path=None):
     if not path:
         path = "/default-pool/testvol1.img"
-    return VirtualDisk(path, conn=_conn, device=VirtualDisk.DEVICE_FLOPPY)
+    return VirtualDisk(_conn, path, device=VirtualDisk.DEVICE_FLOPPY)
 
 
 def get_filedisk(path=None):
     if not path:
         path = "/tmp/test.img"
-    return VirtualDisk(path, size=.0001, conn=_conn)
+    return VirtualDisk(_conn, path, size=.0001)
 
 
 def get_blkdisk(path="/dev/loop0"):
-    return VirtualDisk(path, conn=_conn)
+    return VirtualDisk(_conn, path)
 
 
 def get_virtual_network():
-    dev = virtinst.VirtualNetworkInterface(conn=_conn)
+    dev = virtinst.VirtualNetworkInterface(_conn)
     dev.macaddr = "22:22:33:44:55:66"
     dev.type = virtinst.VirtualNetworkInterface.TYPE_VIRTUAL
     dev.network = "default"

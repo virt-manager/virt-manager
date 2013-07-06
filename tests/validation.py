@@ -107,15 +107,6 @@ args = {
   '__init__' : {
 
    'invalid' : [
-    {'path' : 0},
-    {'path' : '/root'},
-    {'path' : 'valid', 'size' : None},
-    {'path' : "valid", 'size' : 'invalid'},
-    {'path' : 'valid', 'size' : -1},
-    {'path' : None},
-    {'path' : "noexist1", 'size' : 900000, 'sparse' : False},
-    {'path' : "noexist2", 'type' : VirtualDisk.DEVICE_CDROM},
-    {'volName' : ("default-pool", "default-vol")},
     {'conn' : testconn, 'volName' : ("pool-noexist", "default-vol")},
     {'conn' : testconn, 'volName' : ("default-pool", "vol-noexist")},
     {'conn' : testconn, 'volName' : (1234, "vol-noexist")},
@@ -127,16 +118,10 @@ args = {
  ],
 
    'valid' : [
-    {'path' : '/dev/loop0'},
-    {'path' : 'nonexist', 'size' : 1},
-    {'path' : '/dev/null'},
-    {'path' : None, 'device' : VirtualDisk.DEVICE_CDROM},
-    {'path' : None, 'device' : VirtualDisk.DEVICE_FLOPPY},
     {'conn' : testconn, 'volName' : ("default-pool", "default-vol")},
     {'conn' : testconn, 'path' : "/default-pool/default-vol"},
     {'conn' : testconn, 'path' : "/default-pool/vol-noexist", 'size' : 1},
     {'conn' : testconn, 'volInstall': volinst},
-    {'path' : 'nonexist', 'size' : 1, 'driverCache' : 'writethrough'},
     # Full pool, but we are nonsparse
     {'conn' : testconn, "path" : "/full-pool/newvol.img", "size" : 1},
  ]
@@ -148,8 +133,17 @@ args = {
 },
 },
 
+'network'   : {
+    'init_conns' : [testconn],
+    '__init__'  : {
+        'invalid' : [{'macaddr' : 0}, {'macaddr' : ''}, {'macaddr' : '$%XD'},
+                      {'type' : 'network'}],
+        'valid'   : []}
+},
+
+
 'installer' : {
-    'init_conns' : [testconn, None],
+    'init_conns' : [testconn],
     'extraargs' : {
         'invalid' : [],
         'valid'   : ['someargs']},
@@ -160,7 +154,7 @@ args = {
 },
 
 'distroinstaller' : {
-    'init_conns' : [testconn, None],
+    'init_conns' : [testconn],
     'location'  : {
         'invalid' : ['nogood', 'http:/nogood', [], None,
                      ("pool-noexist", "default-vol"),
@@ -172,7 +166,7 @@ args = {
 },
 
 'livecdinstaller' : {
-    'init_conns' : [testconn, None],
+    'init_conns' : [testconn],
     'location'  : {
         'invalid' : ['path-noexist',
                      ("pool-noexist", "default-vol"),
@@ -180,26 +174,6 @@ args = {
                   ],
         'valid'   : ['/dev/null', ("default-pool", "default-vol"),
                   ]}
-},
-
-'imageinstaller' : {
-    '__init__' : {
-        'invalid' :
-            [{'image' : virtimage, 'capabilities': testcaps, 'boot_index': 5},
-             {'image' : virtimage, 'capabilities': "foo"}],
-        'valid'   :
-            [{'image' : virtimage, 'capabilities': testcaps, 'boot_index': 1},
-            {'image' : virtimage},
-            {'image' : virtimage, 'capabilities': testcaps, 'conn': None}],
-  }
-},
-
-'network'   : {
-    'init_conns' : [testconn, None],
-    '__init__'  : {
-        'invalid' : [{'macaddr' : 0}, {'macaddr' : ''}, {'macaddr' : '$%XD'},
-                      {'type' : 'network'}],
-        'valid'   : []}
 },
 
 'clonedesign' : {
@@ -429,17 +403,17 @@ class TestValidation(unittest.TestCase):
         self._testArgs(g, virtinst.Guest, 'guest')
 
     def testDiskValidation(self):
-        disk = VirtualDisk("/dev/loop0")
+        disk = VirtualDisk(testconn, "/dev/loop0")
         self._testArgs(disk, VirtualDisk, 'disk')
 
     def testNetworkValidation(self):
-        network = virtinst.VirtualNetworkInterface(conn=testconn)
+        network = virtinst.VirtualNetworkInterface(testconn)
         self._testArgs(network, virtinst.VirtualNetworkInterface, 'network')
 
         # Test dynamic MAC/Bridge success
         try:
-            network = virtinst.VirtualNetworkInterface()
-            network.setup(testconn)
+            network = virtinst.VirtualNetworkInterface(testconn)
+            network.setup()
         except Exception, e:
             raise AssertionError(
             "Network setup with no params failed, expected success." +
@@ -461,7 +435,7 @@ class TestValidation(unittest.TestCase):
 
         label = 'distroinstaller'
         for conn in self._getInitConns(label):
-            dinstall = virtinst.DistroInstaller(conn=conn)
+            dinstall = virtinst.DistroInstaller(conn)
             self._testArgs(dinstall, virtinst.DistroInstaller, 'installer',
                            exception_check)
             self._testArgs(dinstall, virtinst.DistroInstaller, label,
@@ -478,18 +452,11 @@ class TestValidation(unittest.TestCase):
 
         label = 'livecdinstaller'
         for conn in self._getInitConns(label):
-            dinstall = virtinst.LiveCDInstaller(conn=conn)
+            dinstall = virtinst.LiveCDInstaller(conn)
             self._testArgs(dinstall, virtinst.LiveCDInstaller, 'installer',
                            exception_check)
             self._testArgs(dinstall, virtinst.LiveCDInstaller, label,
                            exception_check)
-
-    def testImageInstaller(self):
-        label = 'imageinstaller'
-        inst_obj = virtinst.ImageInstaller(image=virtimage,
-                                           capabilities=testcaps)
-        #self._testArgs(inst_obj, virtinst.ImageInstaller, 'installer')
-        self._testArgs(inst_obj, virtinst.ImageInstaller, label)
 
     def testCloner(self):
         label = 'clonedesign'
@@ -534,7 +501,7 @@ class TestValidation(unittest.TestCase):
                     custom_dict[key] = paramdict[key]
 
             for conn in self._getInitConns(label):
-                iobj = iclass("foo-validation-test", conn)
+                iobj = iclass(conn, "foo-validation-test")
 
                 self._testArgs(iobj, iclass, label, manual_dict=custom_dict)
 

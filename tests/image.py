@@ -33,8 +33,6 @@ class TestImageParser(unittest.TestCase):
     basedir = "tests/image-xml/"
     conn = utils.open_testdefault()
     qemuconn = virtinst.cli.getConnection(qemuuri)
-    caps = virtinst.CapabilitiesParser.parse(conn.getCapabilities())
-    qemucaps = virtinst.CapabilitiesParser.parse(qemuconn.getCapabilities())
 
     def testImageParsing(self):
         f = open(os.path.join(self.basedir, "image.xml"), "r")
@@ -62,7 +60,7 @@ class TestImageParser(unittest.TestCase):
         """Makes sure we sanitize i386->i686"""
         image = virtinst.ImageParser.parse_file(self.basedir +
                                                 "image-bad-arch.xml")
-        virtinst.ImageInstaller(image, self.caps, 0)
+        virtinst.ImageInstaller(self.conn, image, 0)
         self.assertTrue(True)
 
     def testStorageFormat(self):
@@ -76,13 +74,11 @@ class TestImageParser(unittest.TestCase):
             output_xmls = [output_xmls]
 
         conn = qemu and self.qemuconn or self.conn
-        caps = qemu and self.qemucaps or self.caps
         gtype = qemu and "qemu" or "xen"
 
         for idx in range(len(output_xmls)):
             fname = output_xmls[idx]
-            inst = virtinst.ImageInstaller(image, caps, boot_index=idx,
-                                           conn=conn)
+            inst = virtinst.ImageInstaller(conn, image, boot_index=idx)
 
             utils.set_conn(conn)
 

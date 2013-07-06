@@ -132,8 +132,7 @@ class Cloner(object):
                 if not path:
                     device = VirtualDisk.DEVICE_CDROM
 
-                disk = VirtualDisk(path, size=.0000001,
-                                   conn=self.conn,
+                disk = VirtualDisk(self.conn, path, size=.0000001,
                                    device=device)
                 disklist.append(disk)
             except Exception, e:
@@ -155,7 +154,7 @@ class Cloner(object):
     def set_clone_macs(self, mac):
         maclist = util.listify(mac)
         for m in maclist:
-            VirtualNetworkInterface(m, conn=self.conn)
+            VirtualNetworkInterface(self.conn, m)
 
         self._clone_macs = maclist
     def get_clone_macs(self):
@@ -366,8 +365,7 @@ class Cloner(object):
                 mac = self._clone_macs.pop()
             else:
                 while 1:
-                    mac = util.randomMAC(self.conn.getType().lower(),
-                                         conn=self.conn)
+                    mac = util.randomMAC(self.conn)
                     ignore, msg = self._check_mac(mac)
                     if msg is not None:
                         continue
@@ -439,8 +437,8 @@ class Cloner(object):
                                       "same. Skipping.")
                         continue
 
-                    # VirtualDisk.setup_dev handles everything
-                    dst_dev.setup_dev(meter=meter)
+                    # VirtualDisk.setup handles everything
+                    dst_dev.setup(meter=meter)
 
         except Exception, e:
             logging.debug("Duplicate failed: %s", str(e))
@@ -506,7 +504,7 @@ class Cloner(object):
 
     # Check if new mac address is valid
     def _check_mac(self, mac):
-        nic = VirtualNetworkInterface(macaddr=mac, conn=self.conn)
+        nic = VirtualNetworkInterface(self.conn, macaddr=mac)
         return nic.is_conflict_net(self.conn)
 
     # Parse disk paths that need to be cloned from the original guest's xml
@@ -536,7 +534,7 @@ class Cloner(object):
                     # Tell VirtualDisk we are a cdrom to allow empty media
                     device = VirtualDisk.DEVICE_CDROM
 
-                d = VirtualDisk(disk.path, conn=self.conn,
+                d = VirtualDisk(self.conn, disk.path,
                                 device=device, driverType=disk.driver_type,
                                 validate=validate)
                 d.target = disk.target

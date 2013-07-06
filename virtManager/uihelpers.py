@@ -745,7 +745,7 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
         elif nettype == VirtualNetworkInterface.TYPE_USER:
             pass
 
-        net = VirtualNetworkInterface(conn=conn.get_backend(),
+        net = VirtualNetworkInterface(conn.get_backend(),
                                       type=nettype,
                                       bridge=bridge,
                                       network=netname,
@@ -776,8 +776,8 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
 def generate_macaddr(conn):
     newmac = ""
     try:
-        net = VirtualNetworkInterface(conn=conn.get_backend())
-        net.setup(conn.get_backend())
+        net = VirtualNetworkInterface(conn.get_backend())
+        net.setup()
         newmac = net.macaddr
     except:
         pass

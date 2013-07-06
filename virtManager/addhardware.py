@@ -1050,8 +1050,7 @@ class vmmAddHardware(vmmGObjectUI):
         devtype = src.get_model()[src.get_active()][0]
         conn = self.conn.get_backend()
 
-        self._dev = VirtualTPMDevice.get_dev_instance(conn,
-                                                      devtype)
+        self._dev = VirtualTPMDevice.get_dev_instance(conn, devtype)
 
         show_something = False
         for param_name, widget_name in tpm_widget_mappings.items():
@@ -1075,9 +1074,7 @@ class vmmAddHardware(vmmGObjectUI):
         devtype = src.get_model()[src.get_active()][0]
         conn = self.conn.get_backend()
 
-        self._dev = VirtualCharDevice.get_dev_instance(conn,
-                                                       chartype,
-                                                       devtype)
+        self._dev = VirtualCharDevice.get_dev_instance(conn, chartype, devtype)
 
         show_something = False
         for param_name, widget_name in char_widget_mappings.items():
@@ -1168,7 +1165,7 @@ class vmmAddHardware(vmmGObjectUI):
             meter = asyncjob.get_meter()
 
             logging.debug("Starting background file allocate process")
-            disk.setup_dev(self.conn.get_backend(), meter=meter)
+            disk.setup(meter=meter)
             logging.debug("Allocation completed")
 
         progWin = vmmAsyncJob(do_file_allocate,
@@ -1185,7 +1182,7 @@ class vmmAddHardware(vmmGObjectUI):
             self._dev.creating_storage()):
             return self._storage_progress()
 
-        return self._dev.setup_dev(self.conn.get_backend())
+        return self._dev.setup()
 
     def add_device(self):
         ret = self.setup_device()
@@ -1321,7 +1318,7 @@ class vmmAddHardware(vmmGObjectUI):
                     if do_use:
                         diskpath = ideal
 
-            disk = virtinst.VirtualDisk(conn=conn,
+            disk = virtinst.VirtualDisk(conn,
                                         path=diskpath,
                                         size=disksize,
                                         sparse=sparse,
@@ -1378,7 +1375,7 @@ class vmmAddHardware(vmmGObjectUI):
         disk.vmm_controller = None
         if (controller_model == "virtio-scsi") and (bus == "scsi"):
             controllers = self.vm.get_controller_devices()
-            controller = VirtualControllerSCSI(conn=conn)
+            controller = VirtualControllerSCSI(conn)
             controller.set_model(controller_model)
             disk.vmm_controller = controller
             for d in controllers:
@@ -1430,8 +1427,8 @@ class vmmAddHardware(vmmGObjectUI):
                  "spice": virtinst.VirtualGraphics.TYPE_SPICE,
                  "sdl": virtinst.VirtualGraphics.TYPE_SDL}[graphics]
 
-        self._dev = virtinst.VirtualGraphics(type=_type,
-                                             conn=self.conn.get_backend())
+        self._dev = virtinst.VirtualGraphics(self.conn.get_backend(),
+                                             type=_type)
         try:
             self._dev.port   = self.get_config_graphics_port()
             self._dev.tlsPort = self.get_config_graphics_tls_port()
@@ -1444,7 +1441,7 @@ class vmmAddHardware(vmmGObjectUI):
     def validate_page_sound(self):
         smodel = self.get_config_sound_model()
         try:
-            self._dev = virtinst.VirtualAudio(conn=self.conn.get_backend(),
+            self._dev = virtinst.VirtualAudio(self.conn.get_backend(),
                                               model=smodel)
         except Exception, e:
             return self.err.val_err(_("Sound device parameter error"), e)
@@ -1532,7 +1529,7 @@ class vmmAddHardware(vmmGObjectUI):
         model = self.get_config_video_model()
 
         try:
-            self._dev = VirtualVideoDevice(conn=conn)
+            self._dev = VirtualVideoDevice(conn)
             self._dev.model_type = model
         except Exception, e:
             return self.err.val_err(_("Video device parameter error"), e)
@@ -1543,7 +1540,7 @@ class vmmAddHardware(vmmGObjectUI):
         action = self.get_config_watchdog_action()
 
         try:
-            self._dev = VirtualWatchdog(conn=conn)
+            self._dev = VirtualWatchdog(conn)
             self._dev.model = model
             self._dev.action = action
         except Exception, e:
@@ -1569,7 +1566,7 @@ class vmmAddHardware(vmmGObjectUI):
                                        ' that target already exists'))
 
         try:
-            self._dev = virtinst.VirtualFilesystem(conn=conn)
+            self._dev = virtinst.VirtualFilesystem(conn)
             self._dev.source = source
             self._dev.target = target
             if mode:
@@ -1610,7 +1607,7 @@ class vmmAddHardware(vmmGObjectUI):
         service = self.get_config_usbredir_service()
 
         try:
-            self._dev = VirtualRedirDevice(conn=conn, bus="usb", stype=stype)
+            self._dev = VirtualRedirDevice(conn, bus="usb", stype=stype)
             if host:
                 self._dev.host = host
             if service:

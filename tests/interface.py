@@ -41,7 +41,7 @@ class TestInterfaces(unittest.TestCase):
 
     def build_interface(self, interface_type, name):
         iclass  = Interface.interface_class_for_type(interface_type)
-        iobj    = iclass(name, conn)
+        iobj    = iclass(conn, name)
 
         return iobj
 

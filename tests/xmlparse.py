@@ -292,7 +292,7 @@ class XMLParseTest(unittest.TestCase):
     def testSingleDisk(self):
         xml = ("""<disk type="file" device="disk"><source file="/a.img"/>"""
                """<target dev="hda" bus="ide"/></disk>""")
-        d = virtinst.VirtualDisk(parsexml=xml)
+        d = virtinst.VirtualDisk(conn, parsexml=xml)
         self._set_and_check(d, "target", "hda", "hdb")
         self.assertEquals(xml.replace("hda", "hdb"), d.get_xml_config())
 

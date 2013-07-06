@@ -26,33 +26,25 @@ from virtinst import CapabilitiesParser as Cap
 from virtinst.VirtualDisk import VirtualDisk
 
 
-class ImageInstallerException(Exception):
-    def __init__(self, msg):
-        Exception.__init__(self, msg)
-
-
 class ImageInstaller(Installer.Installer):
     """
     Installer for virt-image-based guests
     """
     _has_install_phase = False
 
-    def __init__(self, image, capabilities=None, boot_index=None, conn=None):
-        Installer.Installer.__init__(self, conn=conn, caps=capabilities)
+    def __init__(self, conn, image, boot_index=None):
+        Installer.Installer.__init__(self, conn)
 
         self._arch = None
         self._image = image
-
-        if not (self.conn or self._get_caps()):
-            raise ValueError(_("'conn' or 'capabilities' must be specified."))
 
         # Set boot _boot_caps/_boot_parameters
         if boot_index is None:
             self._boot_caps = match_boots(self._get_caps(),
                                      self.image.domain.boots)
             if self._boot_caps is None:
-                raise ImageInstallerException(_("Could not find suitable boot "
-                                                "descriptor for this host"))
+                raise RuntimeError(_("Could not find suitable boot "
+                                     "descriptor for this host"))
         else:
             if (boot_index < 0 or
                 (boot_index + 1) > len(image.domain.boots)):
@@ -63,9 +55,8 @@ class ImageInstaller(Installer.Installer):
         self._guest = self._get_caps().guestForOSType(self.boot_caps.type,
                                                       self.boot_caps.arch)
         if self._guest is None:
-            raise PlatformMatchException(_("Unsupported virtualization type: "
-                                           "%s %s" % (self.boot_caps.type,
-                                                      self.boot_caps.arch)))
+            raise RuntimeError(_("Unsupported virtualization type: %s %s" %
+                               (self.boot_caps.type, self.boot_caps.arch)))
 
         self.os_type = self.boot_caps.type
         self._domain = self._guest.bestDomainType()
@@ -123,8 +114,7 @@ class ImageInstaller(Installer.Installer):
             # FIXME: We ignore the target for the mapping in m.target
             if (drive.disk.use == ImageParser.Disk.USE_SYSTEM and
                 not os.path.exists(path)):
-                raise ImageInstallerException(_("System disk %s does not exist")
-                                              % path)
+                raise RuntimeError(_("System disk %s does not exist") % path)
 
             device = VirtualDisk.DEVICE_DISK
             if drive.disk.format == ImageParser.Disk.FORMAT_ISO:
@@ -142,11 +132,6 @@ class ImageInstaller(Installer.Installer):
 
     def _abspath(self, p):
         return self.image.abspath(p)
-
-
-class PlatformMatchException(Exception):
-    def __init__(self, msg):
-        Exception.__init__(self, msg)
 
 
 def match_boots(capabilities, boots):

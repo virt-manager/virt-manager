@@ -276,11 +276,10 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
     raise ValueError(_("Name generation range exceeded."))
 
 
-def default_bridge(conn=None):
+def default_bridge(conn):
     dev = default_route()
 
-    if (dev is not None and
-        (not conn or not uriutil.is_uri_remote(conn.getURI(), conn=conn))):
+    if (dev is not None and uriutil.is_uri_remote(conn.getURI(), conn)):
         # New style peth0 == phys dev, eth0 == bridge, eth0 == default route
         if os.path.exists("/sys/class/net/%s/bridge" % dev):
             return ["bridge", dev]
@@ -403,7 +402,7 @@ def is_blktap_capable():
     return False
 
 
-def randomMAC(typ, conn=None):
+def randomMAC(conn):
     """Generate a random MAC address.
 
     00-16-3E allocated to xensource
@@ -414,25 +413,16 @@ def randomMAC(typ, conn=None):
     The remaining 3 fields are random, with the first bit of the first
     random field set 0.
 
-    >>> randomMAC().startswith("00:16:3E")
-    True
-    >>> randomMAC("foobar").startswith("00:16:3E")
-    True
-    >>> randomMAC("xen").startswith("00:16:3E")
-    True
-    >>> randomMAC("qemu").startswith("52:54:00")
-    True
-
     @return: MAC address string
     """
-    if conn and hasattr(conn, "_virtinst__fake_conn_predictable"):
+    if hasattr(conn, "_virtinst__fake_conn_predictable"):
         # Testing hack
         return "00:11:22:33:44:55"
 
     ouis = {'xen': [0x00, 0x16, 0x3E], 'qemu': [0x52, 0x54, 0x00]}
 
     try:
-        oui = ouis[typ]
+        oui = ouis[conn.getType().lower()]
     except KeyError:
         oui = ouis['xen']
 
@@ -444,7 +434,7 @@ def randomMAC(typ, conn=None):
 
 
 def randomUUID(conn):
-    if conn and hasattr(conn, "_virtinst__fake_conn_predictable"):
+    if hasattr(conn, "_virtinst__fake_conn_predictable"):
         # Testing hack
         return "00000000-1111-2222-3333-444444444444"
 

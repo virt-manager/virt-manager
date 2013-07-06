@@ -923,7 +923,7 @@ class vmmCreateInterface(vmmGObjectUI):
             return self.err.val_err(_("An interface must be selected"))
 
         try:
-            iobj = iclass(name, self.conn.get_backend())
+            iobj = iclass(self.conn.get_backend(), name)
             iobj.start_mode = start
             check_conflict = False
 

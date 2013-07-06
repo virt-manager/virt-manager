@@ -91,8 +91,8 @@ class VirtualGraphics(VirtualDevice):
 
         return str(gtype).capitalize()
 
-    def __init__(self, type=TYPE_VNC, port=-1, listen=None, passwd=None,
-                 keymap=KEYMAP_DEFAULT, conn=None, parsexml=None,
+    def __init__(self, conn, type=TYPE_VNC, port=-1, listen=None, passwd=None,
+                 keymap=KEYMAP_DEFAULT, parsexml=None,
                  parsexmlnode=None, tlsPort=-1, channels=None,
                  caps=None, passwdValidTo=None):
         # pylint: disable=W0622
@@ -131,7 +131,7 @@ class VirtualGraphics(VirtualDevice):
         self._default_keymap()
 
     def _default_keymap(self, force_local=False):
-        if (not force_local and self.conn and
+        if (not force_local and
             support.check_conn_support(self.conn,
                                 support.SUPPORT_CONN_KEYMAP_AUTODETECT)):
             return None

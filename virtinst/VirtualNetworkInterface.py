@@ -145,8 +145,8 @@ class VirtualNetworkInterface(VirtualDevice):
         return desc
     get_network_type_desc = staticmethod(get_network_type_desc)
 
-    def __init__(self, macaddr=None, type=TYPE_BRIDGE, bridge=None,
-                 network=None, model=None, conn=None,
+    def __init__(self, conn, macaddr=None, type=TYPE_BRIDGE, bridge=None,
+                 network=None, model=None,
                  parsexml=None, parsexmlnode=None, caps=None):
         # pylint: disable=W0622
         # Redefining built-in 'type', but it matches the XML so keep it
@@ -193,11 +193,10 @@ class VirtualNetworkInterface(VirtualDevice):
         return ret or None
 
     def _generate_random_mac(self):
-        if self.conn and not self._random_mac:
+        if not self._random_mac:
             found = False
             for ignore in range(256):
-                self._random_mac = util.randomMAC(self.conn.getType().lower(),
-                                                  conn=self.conn)
+                self._random_mac = util.randomMAC(self.conn)
                 ret = self.is_conflict_net(self.conn, self._random_mac)
                 if ret[1] is not None:
                     continue
@@ -346,21 +345,9 @@ class VirtualNetworkInterface(VirtualDevice):
 
         return (False, None)
 
-    def setup_dev(self, conn=None, meter=None):
-        return self.setup(conn)
-
-    def setup(self, conn=None):
-        """
-        DEPRECATED: Please use setup_dev instead
-        """
-        # Access self.macaddr to generate a random one
-        if not self.conn and conn:
-            self.conn = conn
-        if not conn:
-            conn = self.conn
-
+    def setup(self, meter=None):
         if self.macaddr:
-            ret, msg = self.is_conflict_net(conn)
+            ret, msg = self.is_conflict_net(self.conn)
             if msg is not None:
                 if ret is False:
                     logging.warning(msg)

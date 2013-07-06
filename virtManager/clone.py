@@ -302,8 +302,8 @@ class vmmCloneVM(vmmGObjectUI):
             net_type = net.type
 
             # Generate a new MAC
-            obj = VirtualNetworkInterface(conn=self.conn.get_backend(),
-                                          type=VirtualNetworkInterface.TYPE_USER)
+            obj = VirtualNetworkInterface(self.conn.get_backend(),
+                                        type=VirtualNetworkInterface.TYPE_USER)
             obj.setup(self.conn.get_backend())
             newmac = obj.macaddr
 
@@ -676,9 +676,9 @@ class vmmCloneVM(vmmGObjectUI):
         row = self.net_list[orig]
 
         try:
-            VirtualNetworkInterface(conn=self.conn.get_backend(),
-                                    type=VirtualNetworkInterface.TYPE_USER,
-                                    macaddr=new)
+            VirtualNetworkInterface(self.conn.get_backend(),
+                                type=VirtualNetworkInterface.TYPE_USER,
+                                macaddr=new)
             row[NETWORK_INFO_NEW_MAC] = new
         except Exception, e:
             self.err.show_err(_("Error changing MAC address: %s") % str(e))

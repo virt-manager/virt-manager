@@ -35,21 +35,6 @@ XEN_SCRATCH = "/var/lib/xen"
 LIBVIRT_SCRATCH = "/var/lib/libvirt/boot"
 
 
-def _pygrub_path(conn=None):
-    # FIXME: This should be removed/deprecated when capabilities are
-    #        fixed to provide bootloader info
-    if conn:
-        cap = CapabilitiesParser.parse(conn.getCapabilities())
-        if (cap.host.arch == "i86pc"):
-            return "/usr/lib/xen/bin/pygrub"
-        else:
-            return "/usr/bin/pygrub"
-
-    if platform.system() == "SunOS":
-        return "/usr/lib/xen/bin/pygrub"
-    return "/usr/bin/pygrub"
-
-
 class Installer(XMLBuilderDomain.XMLBuilderDomain):
     """
     Installer classes attempt to encapsulate all the parameters needed
@@ -78,8 +63,8 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
     _dumpxml_xpath = "/domain/os"
     _has_install_phase = True
 
-    def __init__(self, type="xen", location=None,
-                 extraargs=None, os_type=None, conn=None,
+    def __init__(self, conn, type="xen", location=None,
+                 extraargs=None, os_type=None,
                  parsexml=None, parsexmlnode=None, caps=None):
         # pylint: disable=W0622
         # Redefining built-in 'type', but it matches the XML so keep it
@@ -126,10 +111,6 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
 
         self._tmpfiles = []
         self._tmpvols = []
-
-    def get_conn(self):
-        return self._conn
-    conn = property(get_conn)
 
     def _get_bootconfig(self):
         return self._bootconfig
@@ -295,7 +276,6 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         return "/bin/sh"
 
     def _get_osblob_helper(self, guest, isinstall, bootconfig):
-        conn = guest.conn
         arch = self.arch
         machine = self.machine
         hvtype = self.type
@@ -315,7 +295,8 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         if (not isinstall and
             self.is_xenpv() and
             not self.bootconfig.kernel):
-            return "<bootloader>%s</bootloader>" % _pygrub_path(conn)
+            # This really should be provided by capabilites xml
+            return "<bootloader>/usr/bin/pygrub</bootloader>"
 
         osblob = "<os>"
 
