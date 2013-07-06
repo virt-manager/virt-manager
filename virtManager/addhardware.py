@@ -1336,7 +1336,7 @@ class vmmAddHardware(vmmGObjectUI):
 
             if (disk.type == virtinst.VirtualDisk.TYPE_FILE and
                 not self.vm.is_hvm() and
-                virtinst.util.is_blktap_capable()):
+                virtinst.util.is_blktap_capable(self.conn.get_backend())):
                 disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
 
         except Exception, e:

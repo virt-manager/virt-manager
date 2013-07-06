@@ -24,7 +24,7 @@ from tests import utils
 # Access to protected member, needed to unittest stuff
 
 # Force certain helpers to return consistent values
-virtinst.util.is_blktap_capable = lambda: False
+virtinst.util.is_blktap_capable = lambda ignore: False
 virtinst.util.default_bridge = lambda ignore1: ["bridge", "eth0"]
 
 # Setup logging

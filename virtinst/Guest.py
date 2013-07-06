@@ -1309,8 +1309,8 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         # Default file backed PV guests to tap driver
         for d in devlist_func(VirtualDevice.VIRTUAL_DEV_DISK):
             if (d.type == VirtualDisk.TYPE_FILE
-                and util.is_blktap_capable()
-                and d.driver_name is None):
+                and d.driver_name is None
+                and util.is_blktap_capable(self.conn)):
                 d.driver_name = VirtualDisk.DRIVER_TAP
 
         for d in devlist_func(VirtualDevice.VIRTUAL_DEV_INPUT):

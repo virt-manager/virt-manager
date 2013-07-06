@@ -393,7 +393,11 @@ def default_connection():
     return None
 
 
-def is_blktap_capable():
+def is_blktap_capable(conn):
+    # Ideally we would get this from libvirt capabilities XML
+    if conn.is_remote():
+        return False
+
     f = open("/proc/modules")
     lines = f.readlines()
     f.close()
