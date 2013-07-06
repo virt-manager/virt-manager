@@ -54,26 +54,26 @@ class VirtualConnection(object):
 
         self._libvirtconn = None
         self._urisplits = util.uri_split(self._uri)
+        self._caps = None
 
         self._fake_libvirt_version = None
         self._fake_conn_version = None
         self._daemon_version = None
         self._conn_version = None
 
-        self._caps = None
-
-
-    # Just proxy virConnect access for now
-    def __getattr__(self, attr):
-        if attr in self.__dict__:
-            return self.__dict__[attr]
-        libvirtconn = self.__dict__.get("_libvirtconn")
-        return getattr(libvirtconn, attr)
+        self._support_cache = {}
 
 
     ##############
     # Properties #
     ##############
+
+    # Proxy virConnect API calls
+    def __getattr__(self, attr):
+        if attr in self.__dict__:
+            return self.__dict__[attr]
+        libvirtconn = self.__dict__.get("_libvirtconn")
+        return getattr(libvirtconn, attr)
 
     def _get_uri(self):
         return self._uri or self._open_uri
@@ -212,9 +212,16 @@ class VirtualConnection(object):
         locals()[_supportname] = getattr(support, _supportname)
 
     def check_conn_support(self, feature):
-        return support.check_support(self, feature, self)
+        key = feature
+        if key not in self._support_cache:
+            self._support_cache[key] = support.check_support(self,
+                                                             feature, self)
+        return self._support_cache[key]
     def check_conn_hv_support(self, feature, hv):
-        return support.check_support(self, feature, hv)
+        key = (feature, hv)
+        if key not in self._support_cache:
+            self._support_cache[key] = support.check_support(self, feature, hv)
+        return self._support_cache[key]
     def check_domain_support(self, dom, feature):
         return support.check_support(self, feature, dom)
     def check_pool_support(self, pool, feature):
