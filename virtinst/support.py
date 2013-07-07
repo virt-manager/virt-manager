@@ -35,7 +35,11 @@ from virtinst import util
  SUPPORT_CONN_MAXVCPUS_XML,
  SUPPORT_CONN_STREAM,
  SUPPORT_CONN_GETVERSION,
- SUPPORT_CONN_LIBVERSION) = range(1, 13)
+ SUPPORT_CONN_LIBVERSION,
+ SUPPORT_CONN_LISTALLDOMAINS,
+ SUPPORT_CONN_LISTALLNETWORKS,
+ SUPPORT_CONN_LISTALLSTORAGEPOOLS,
+ SUPPORT_CONN_LISTALLINTERFACES) = range(1, 17)
 
 # Flags for check_domain_support
 (SUPPORT_DOMAIN_GETVCPUS,
@@ -171,6 +175,23 @@ _support_dict = {
 
     SUPPORT_CONN_LIBVERSION : {
         "function": "virConnect.getLibVersion",
+        "args": (),
+    },
+
+    SUPPORT_CONN_LISTALLDOMAINS : {
+        "function": "virConnect.listAllDomains",
+        "args": (),
+    },
+    SUPPORT_CONN_LISTALLNETWORKS : {
+        "function": "virConnect.listAllNetworks",
+        "args": (),
+    },
+    SUPPORT_CONN_LISTALLSTORAGEPOOLS : {
+        "function": "virConnect.listAllStoragePools",
+        "args": (),
+    },
+    SUPPORT_CONN_LISTALLINTERFACES : {
+        "function": "virConnect.listAllInterfaces",
         "args": (),
     },
 

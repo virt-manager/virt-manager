@@ -32,6 +32,7 @@ import traceback
 
 import libvirt
 import virtinst
+from virtinst import pollhelpers
 
 from virtManager import util
 from virtManager import connectauth
@@ -945,211 +946,37 @@ class vmmConnection(vmmGObject):
     # Tick/Update methods #
     #######################
 
-    def _poll_helper(self,
-                     origlist, typename, check_support,
-                     active_list, inactive_list,
-                     lookup_func, build_func):
-        """
-        Helper routine for old style split API libvirt polling.
-        @origlist: Pre-existing mapping of objects, with key->obj mapping
-            objects must have an is_active and set_active API
-        @typename: string describing type of objects we are polling for use
-            in debug messages.
-        @active_list: Function that returns the list of active objects
-        @inactive_list: Function that returns the list of inactive objects
-        @lookup_func: Function to get an object handle for the passed name
-        @build_func: Function that builds a new object class. It is passed
-            args of (raw libvirt object, key (usually UUID), bool is_active)
-        """
-        current = {}
-        new = {}
-        newActiveNames = []
-        newInactiveNames = []
-
-        if not check_support():
-            return (origlist, new, current)
-
-        try:
-            newActiveNames = active_list()
-        except Exception, e:
-            logging.debug("Unable to list active %ss: %s", typename, e)
-        try:
-            newInactiveNames = inactive_list()
-        except Exception, e:
-            logging.debug("Unable to list inactive %ss: %s", typename, e)
-
-        def check_obj(key):
-            if key not in origlist:
-                try:
-                    obj = lookup_func(key)
-                except Exception, e:
-                    logging.debug("Could not fetch %s '%s': %s",
-                                  typename, key, e)
-                    return
-
-                # Object is brand new this tick period
-                current[key] = build_func(obj, key)
-                new[key] = current[key]
-            else:
-                # Previously known object, see if it changed state
-                current[key] = origlist[key]
-                del origlist[key]
-
-        for name in newActiveNames + newInactiveNames:
-            try:
-                check_obj(name)
-            except:
-                logging.exception("Couldn't fetch %s '%s'", typename, name)
-
-        return (origlist, new, current)
-
     def _update_nets(self, dopoll):
-        orig = self.nets.copy()
-        if not dopoll:
-            return {}, {}, orig
-
-        name = "network"
-        active_list = self._backend.listNetworks
-        inactive_list = self._backend.listDefinedNetworks
-        check_support = self.is_network_capable
-        lookup_func = self._backend.networkLookupByName
-        build_func = (lambda obj, key: vmmNetwork(self, obj, key))
-
-        return self._poll_helper(orig, name, check_support,
-                                 active_list, inactive_list,
-                                 lookup_func, build_func)
+        if not dopoll or not self.is_network_capable():
+            return {}, {}, self.nets
+        return pollhelpers.fetch_nets(self._backend, self.nets.copy(),
+                    (lambda obj, key: vmmNetwork(self, obj, key)))
 
     def _update_pools(self, dopoll):
-        orig = self.pools.copy()
-        if not dopoll:
-            return {}, {}, orig
-
-        name = "pool"
-        active_list = self._backend.listStoragePools
-        inactive_list = self._backend.listDefinedStoragePools
-        check_support = self.is_storage_capable
-        lookup_func = self._backend.storagePoolLookupByName
-        build_func = (lambda obj, key: vmmStoragePool(self, obj, key))
-
-        return self._poll_helper(orig, name, check_support,
-                                 active_list, inactive_list,
-                                 lookup_func, build_func)
+        if not dopoll or not self.is_storage_capable():
+            return {}, {}, self.pools
+        return pollhelpers.fetch_pools(self._backend, self.pools.copy(),
+                    (lambda obj, key: vmmStoragePool(self, obj, key)))
 
     def _update_interfaces(self, dopoll):
-        orig = self.interfaces.copy()
-        if not dopoll:
-            return {}, {}, orig
-
-        name = "interface"
-        active_list = self._backend.listInterfaces
-        inactive_list = self._backend.listDefinedInterfaces
-        check_support = self.is_interface_capable
-        lookup_func = self._backend.interfaceLookupByName
-        build_func = (lambda obj, key: vmmInterface(self, obj, key))
-
-        return self._poll_helper(orig, name, check_support,
-                                 active_list, inactive_list,
-                                 lookup_func, build_func)
-
+        if not dopoll or not self.is_interface_capable():
+            return {}, {}, self.interfaces
+        return pollhelpers.fetch_interfaces(self._backend,
+                    self.interfaces.copy(),
+                    (lambda obj, key: vmmInterface(self, obj, key)))
 
     def _update_nodedevs(self, dopoll):
-        orig = self.nodedevs.copy()
-        if not dopoll:
-            return {}, {}, orig
-
-        name = "nodedev"
-        active_list = lambda: self._backend.listDevices(None, 0)
-        inactive_list = lambda: []
-        check_support = self.is_nodedev_capable
-        lookup_func = self._backend.nodeDeviceLookupByName
-        build_func = lambda obj, key: vmmNodeDevice(self, obj, key)
-
-        return self._poll_helper(orig, name, check_support,
-                                 active_list, inactive_list,
-                                 lookup_func, build_func)
+        if not dopoll or not self.is_nodedev_capable():
+            return {}, {}, self.nodedevs
+        return pollhelpers.fetch_nodedevs(self._backend, self.nodedevs.copy(),
+                    (lambda obj, key: vmmNodeDevice(self, obj, key)))
 
     def _update_vms(self, dopoll):
-        # We can't easily use _poll_helper here because the domain API
-        # doesn't always return names like other objects, it returns
-        # IDs for active VMs
-
-        newActiveIDs = []
-        newInactiveNames = []
-        oldActiveIDs = {}
-        oldInactiveNames = {}
-
-        origlist = self.vms.copy()
-        current = {}
-        new = {}
         if not dopoll:
-            return current, new, origlist
+            return {}, {}, self.vms
+        return pollhelpers.fetch_vms(self._backend, self.vms.copy(),
+                    (lambda obj, key: vmmDomain(self, obj, key)))
 
-        # Build list of previous vms with proper id/name mappings
-        for uuid in origlist:
-            vm = origlist[uuid]
-            if vm.is_active():
-                oldActiveIDs[vm.get_id()] = vm
-            else:
-                oldInactiveNames[vm.get_name()] = vm
-
-        try:
-            newActiveIDs = self._backend.listDomainsID()
-        except Exception, e:
-            logging.debug("Unable to list active domains: %s", e)
-
-        try:
-            newInactiveNames = self._backend.listDefinedDomains()
-        except Exception, e:
-            logging.exception("Unable to list inactive domains: %s", e)
-
-        def add_vm(vm):
-            uuid = vm.get_uuid()
-
-            current[uuid] = vm
-            del(origlist[uuid])
-
-        def check_new(rawvm, uuid):
-            if uuid in origlist:
-                vm = origlist[uuid]
-                del(origlist[uuid])
-            else:
-                vm = vmmDomain(self, rawvm, uuid)
-                new[uuid] = vm
-
-            current[uuid] = vm
-
-        for _id in newActiveIDs:
-            if _id in oldActiveIDs:
-                # No change, copy across existing VM object
-                vm = oldActiveIDs[_id]
-                add_vm(vm)
-            else:
-                # Check if domain is brand new, or old one that changed state
-                try:
-                    vm = self._backend.lookupByID(_id)
-                    uuid = util.uuidstr(vm.UUID())
-
-                    check_new(vm, uuid)
-                except:
-                    logging.exception("Couldn't fetch domain id '%s'", _id)
-
-
-        for name in newInactiveNames:
-            if name in oldInactiveNames:
-                # No change, copy across existing VM object
-                vm = oldInactiveNames[name]
-                add_vm(vm)
-            else:
-                # Check if domain is brand new, or old one that changed state
-                try:
-                    vm = self._backend.lookupByName(name)
-                    uuid = util.uuidstr(vm.UUID())
-
-                    check_new(vm, uuid)
-                except:
-                    logging.exception("Couldn't fetch domain '%s'", name)
-
-        return (origlist, new, current)
 
     def _obj_signal_proxy(self, obj, signal, key):
         ignore = obj
