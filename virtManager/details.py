@@ -1562,8 +1562,9 @@ class vmmDetails(vmmGObjectUI):
                       self.vm.get_uuid())
 
     def control_vm_menu(self, src_ignore):
-        if self.console.viewer.has_usb_redirection() and \
-           self.vm.has_spicevmc_type_redirdev():
+        if (self.console.viewer and
+            self.console.viewer.has_usb_redirection() and
+            self.vm.has_spicevmc_type_redirdev()):
             widget = self.widget("details-menu-usb-redirection")
             if not widget.get_sensitive():
                 widget.set_sensitive(True)
