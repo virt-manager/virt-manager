@@ -1074,7 +1074,7 @@ class vmmConnection(vmmGObject):
 
         origlist = self.vms.copy()
         current = {}
-        new = []
+        new = {}
 
         # Build list of previous vms with proper id/name mappings
         for uuid in origlist:
@@ -1106,7 +1106,7 @@ class vmmConnection(vmmGObject):
                 del(origlist[uuid])
             else:
                 vm = vmmDomain(self, rawvm, uuid)
-                new.append(uuid)
+                new[uuid] = vm
 
             current[uuid] = vm
 
@@ -1157,21 +1157,11 @@ class vmmConnection(vmmGObject):
 
         self.hostinfo = self._backend.getInfo()
 
-        # Poll for new virtual network objects
-        (goneNets, newNets, self.nets) = self._update_nets()
-
-        # Update pools
-        (gonePools, newPools, self.pools) = self._update_pools()
-
-        # Update interfaces
-        (goneInterfaces, newInterfaces,
-          self.interfaces) = self._update_interfaces()
-
-        # Update nodedevice list
-        (goneNodedevs, newNodedevs, self.nodedevs) = self._update_nodedevs()
-
-        # Poll for changed/new/removed VMs
-        (goneVMs, newVMs, self.vms) = self._update_vms()
+        (goneNets, newNets, nets) = self._update_nets()
+        (gonePools, newPools, pools) = self._update_pools()
+        (goneInterfaces, newInterfaces, interfaces) = self._update_interfaces()
+        (goneNodedevs, newNodedevs, nodedevs) = self._update_nodedevs()
+        (goneVMs, newVMs, vms) = self._update_vms()
 
         def tick_send_signals():
             """
@@ -1182,6 +1172,12 @@ class vmmConnection(vmmGObject):
             # Connection closed out from under us
             if not self._backend.is_open():
                 return
+
+            self.vms = vms
+            self.nodedevs = nodedevs
+            self.interfaces = interfaces
+            self.pools = pools
+            self.nets = nets
 
             # Make sure device polling is setup
             if not self.netdev_initialized:
@@ -1194,7 +1190,8 @@ class vmmConnection(vmmGObject):
             for uuid in goneVMs:
                 self.emit("vm-removed", uuid)
                 goneVMs[uuid].cleanup()
-            for uuid in newVMs:
+            for uuid, obj in newVMs.items():
+                ignore = obj
                 self.emit("vm-added", uuid)
 
             # Update virtual network states
@@ -1222,7 +1219,7 @@ class vmmConnection(vmmGObject):
             # Update interface states
             for name in goneInterfaces:
                 self.emit("interface-removed", name)
-                goneInterfaces[name].items()
+                goneInterfaces[name].cleanup()
             for name, obj in newInterfaces.items():
                 obj.connect("started", self._obj_signal_proxy,
                             "interface-started", name)
@@ -1242,12 +1239,11 @@ class vmmConnection(vmmGObject):
         # Finally, we sample each domain
         now = time.time()
 
-        updateVMs = self.vms
+        updateVMs = vms.values()
         if noStatsUpdate:
-            updateVMs = newVMs
+            updateVMs = newVMs.values()
 
-        for uuid in updateVMs:
-            vm = self.vms[uuid]
+        for vm in updateVMs:
             try:
                 vm.tick(now)
             except Exception, e:
@@ -1266,7 +1262,6 @@ class vmmConnection(vmmGObject):
 
         if not noStatsUpdate:
             self._recalculate_stats(now, updateVMs)
-
             self.idle_emit("resources-sampled")
 
         return 1
@@ -1289,8 +1284,7 @@ class vmmConnection(vmmGObject):
         diskMaxRate = self.disk_io_max_rate() or 10.0
         netMaxRate = self.network_traffic_max_rate() or 10.0
 
-        for uuid in vms:
-            vm = vms[uuid]
+        for vm in vms:
             if not vm.is_active():
                 continue
 
@@ -1314,7 +1308,6 @@ class vmmConnection(vmmGObject):
             pcentHostCpu = ((cpuTime) * 100.0 /
                             ((now - prevTimestamp) *
                              1000.0 * 1000.0 * 1000.0 * host_cpus))
-
 
         pcentHostCpu = max(0.0, min(100.0, pcentHostCpu))
         pcentMem = max(0.0, min(100.0, pcentMem))
