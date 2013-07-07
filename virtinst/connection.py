@@ -31,6 +31,24 @@ from virtinst.cli import parse_optstr
 _virtinst_uri_magic = "__virtinst_test__"
 
 
+class _FetchObjWrapper(object):
+    """
+    Wrapper to make virDomain etc. objects have a similar XML API as
+    virt-manager objects, so fetch_all* callers get similar results
+    """
+    def __init__(self, backend):
+        self._backend = backend
+        self._xml = None
+
+    def get_xml(self, refresh_if_nec=True):
+        if self._xml is None or refresh_if_nec:
+            self._xml = self._backend.XMLDesc(0)
+        return self._xml
+
+    def get_backend(self):
+        return self._backend
+
+
 class VirtualConnection(object):
     """
     Wrapper for libvirt connection that provides various bits like
@@ -69,6 +87,11 @@ class VirtualConnection(object):
         # the result. For the virt-* CLI tools this ensures any revalidation
         # isn't hammering the connection over and over
         self.cache_object_fetch = False
+
+        # These let virt-manager register a callback which provides its
+        # own cached object lists, rather than doing fresh calls
+        self.cb_fetch_all_guests = None
+        self.cb_fetch_all_pools = None
 
 
     ##############
@@ -127,25 +150,35 @@ class VirtualConnection(object):
         self._libvirtconn = conn
 
     def fetch_all_guests(self):
+        # pylint: disable=E1102
+        if self.cb_fetch_all_guests:
+            return self.cb_fetch_all_guests()
+        # pylint: enable=E1102
+
         key = "vms"
         if key in self._fetch_cache:
             return self._fetch_cache[key]
 
         ignore, ignore, ret = pollhelpers.fetch_vms(self, {},
                                                     lambda obj, ignore: obj)
-        ret = ret.values()
+        ret = [_FetchObjWrapper(obj) for obj in ret.values()]
         if self.cache_object_fetch:
             self._fetch_cache[key] = ret
         return ret
 
     def fetch_all_pools(self):
+        # pylint: disable=E1102
+        if self.cb_fetch_all_pools:
+            return self.cb_fetch_all_pools()
+        # pylint: enable=E1102
+
         key = "pools"
         if key in self._fetch_cache:
             return self._fetch_cache[key]
 
         ignore, ignore, ret = pollhelpers.fetch_pools(self, {},
                                                     lambda obj, ignore: obj)
-        ret = ret.values()
+        ret = [_FetchObjWrapper(obj) for obj in ret.values()]
         if self.cache_object_fetch:
             self._fetch_cache[key] = ret
         return ret

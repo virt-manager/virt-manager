@@ -465,14 +465,15 @@ def lookup_pool_by_path(conn, path):
         return None
 
     def check_pool(pool, path):
-        xml_path = get_xml_path(pool.XMLDesc(0), "/pool/target/path")
+        xml_path = get_xml_path(pool.get_xml(refresh_if_nec=False),
+                                "/pool/target/path")
         if xml_path is not None and os.path.abspath(xml_path) == path:
             return pool
 
     for pool in conn.fetch_all_pools():
         p = check_pool(pool, path)
         if p:
-            return p
+            return p.get_backend()
     return None
 
 

@@ -469,8 +469,6 @@ class VirtualDisk(VirtualDevice):
         vms = conn.fetch_all_guests()
 
         def count_cb(ctx):
-            c = 0
-
             template = "count(/domain/devices/disk["
             if check_conflict:
                 template += "not(shareable) and "
@@ -478,16 +476,15 @@ class VirtualDisk(VirtualDevice):
 
             for dtype in VirtualDisk._target_props:
                 xpath = template % (dtype, util.xml_escape(path))
-                c += ctx.xpathEval(xpath)
-
-            return c
+                if ctx.xpathEval(xpath):
+                    return True
+            return False
 
         names = []
         for vm in vms:
-            xml = vm.XMLDesc(0)
-            tmpcount = util.get_xml_path(xml, func=count_cb)
-            if tmpcount:
-                names.append(vm.name())
+            xml = vm.get_xml(refresh_if_nec=False)
+            if util.get_xml_path(xml, func=count_cb):
+                names.append(vm.get_backend().name())
 
         return names
 

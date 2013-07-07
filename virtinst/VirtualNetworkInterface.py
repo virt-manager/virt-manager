@@ -46,26 +46,6 @@ def _compareMAC(p, q):
     return 0
 
 
-def _countMACaddr(vms, searchmac):
-    if not searchmac:
-        return
-
-    def count_cb(ctx):
-        c = 0
-
-        for mac in ctx.xpathEval("/domain/devices/interface/mac"):
-            macaddr = mac.xpathEval("attribute::address")[0].content
-            if macaddr and _compareMAC(searchmac, macaddr) == 0:
-                c += 1
-        return c
-
-    count = 0
-    for vm in vms:
-        xml = vm.XMLDesc(0)
-        count += util.get_xml_path(xml, func=count_cb)
-    return count
-
-
 class VirtualPort(XMLBuilderDomain.XMLBuilderDomain):
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
@@ -332,16 +312,22 @@ class VirtualNetworkInterface(VirtualDevice):
             Non fatal collisions (mac addr collides with inactive guest) will
             return (False, "description of collision")
         """
-        mac = mac or self.macaddr
-        if mac is None:
+        searchmac = mac or self.macaddr
+        if searchmac is None:
             return (False, None)
 
-        vms = self.conn.fetch_all_guests()
+        def count_cb(ctx):
+            for mac in ctx.xpathEval("/domain/devices/interface/mac"):
+                macaddr = mac.xpathEval("attribute::address")[0].content
+                if macaddr and _compareMAC(searchmac, macaddr) == 0:
+                    return True
+            return False
 
-        if _countMACaddr(vms, mac) > 0:
-            return (True, _("The MAC address '%s' is in use "
-                            "by another virtual machine.") % mac)
-
+        for vm in self.conn.fetch_all_guests():
+            xml = vm.get_xml(refresh_if_nec=False)
+            if util.get_xml_path(xml, func=count_cb):
+                return (True, _("The MAC address '%s' is in use "
+                                "by another virtual machine.") % searchmac)
         return (False, None)
 
     def setup(self, meter=None):

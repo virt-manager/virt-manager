@@ -127,10 +127,16 @@ class vmmConnection(vmmGObject):
         self.mediadev_error = ""
         self.mediadev_use_libvirt = False
 
+        self._init_virtconn()
+
 
     #################
     # Init routines #
     #################
+
+    def _init_virtconn(self):
+        self._backend.cb_fetch_all_guests = lambda: self.vms.values()
+        self._backend.cb_fetch_all_pools = lambda: self.pools.values()
 
     def _init_netdev(self):
         """
