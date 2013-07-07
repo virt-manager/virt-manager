@@ -167,36 +167,6 @@ def xml_append(orig, new):
     return orig + new
 
 
-def fetch_all_guests(conn):
-    """
-    Return 2 lists: ([all_running_vms], [all_nonrunning_vms])
-    """
-    active = []
-    inactive = []
-
-    # Get all active VMs
-    ids = conn.listDomainsID()
-    for i in ids:
-        try:
-            vm = conn.lookupByID(i)
-            active.append(vm)
-        except libvirt.libvirtError:
-            # guest probably in process of dieing
-            logging.warn("Failed to lookup active domain id %d", i)
-
-    # Get all inactive VMs
-    names = conn.listDefinedDomains()
-    for name in names:
-        try:
-            vm = conn.lookupByName(name)
-            inactive.append(vm)
-        except:
-            # guest probably in process of dieing
-            logging.warn("Failed to lookup inactive domain %d", name)
-
-    return (active, inactive)
-
-
 def set_xml_path(xml, path, newval):
     """
     Set the passed xml xpath to the new value
@@ -494,19 +464,15 @@ def lookup_pool_by_path(conn, path):
     if not conn.check_conn_support(conn.SUPPORT_CONN_STORAGE):
         return None
 
-    def check_pool(poolname, path):
-        pool = conn.storagePoolLookupByName(poolname)
+    def check_pool(pool, path):
         xml_path = get_xml_path(pool.XMLDesc(0), "/pool/target/path")
         if xml_path is not None and os.path.abspath(xml_path) == path:
             return pool
 
-    running_list = conn.listStoragePools()
-    inactive_list = conn.listDefinedStoragePools()
-    for plist in [running_list, inactive_list]:
-        for name in plist:
-            p = check_pool(name, path)
-            if p:
-                return p
+    for pool in conn.fetch_all_pools():
+        p = check_pool(pool, path)
+        if p:
+            return p
     return None
 
 

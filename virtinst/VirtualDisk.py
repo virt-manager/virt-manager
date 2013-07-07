@@ -466,8 +466,7 @@ class VirtualDisk(VirtualDevice):
         if not path:
             return
 
-        active, inactive = util.fetch_all_guests(conn)
-        vms = active + inactive
+        vms = conn.fetch_all_guests()
 
         def count_cb(ctx):
             c = 0

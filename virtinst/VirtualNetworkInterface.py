@@ -336,10 +336,9 @@ class VirtualNetworkInterface(VirtualDevice):
         if mac is None:
             return (False, None)
 
-        vms, inactive_vm = util.fetch_all_guests(conn)
+        vms = self.conn.fetch_all_guests()
 
-        if (_countMACaddr(vms, mac) > 0 or
-            _countMACaddr(inactive_vm, mac) > 0):
+        if _countMACaddr(vms, mac) > 0:
             return (True, _("The MAC address '%s' is in use "
                             "by another virtual machine.") % mac)
 

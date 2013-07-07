@@ -22,6 +22,7 @@ import re
 
 import libvirt
 
+from virtinst import pollhelpers
 from virtinst import support
 from virtinst import util
 from virtinst import CapabilitiesParser
@@ -117,6 +118,16 @@ class VirtualConnection(object):
 
         self._fixup_virtinst_test_uri(conn)
         self._libvirtconn = conn
+
+    def fetch_all_guests(self):
+        ignore, ignore, ret = pollhelpers.fetch_vms(self, {},
+                                                    lambda obj, ignore: obj)
+        return ret.values()
+
+    def fetch_all_pools(self):
+        ignore, ignore, ret = pollhelpers.fetch_pools(self, {},
+                                                    lambda obj, ignore: obj)
+        return ret.values()
 
 
     #########################
