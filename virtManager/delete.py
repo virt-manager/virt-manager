@@ -162,7 +162,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         if error is not None:
             self.err.show_err(error, details=details)
 
-        self.conn.schedule_priority_tick()
+        self.conn.schedule_priority_tick(pollvm=True)
         self.close()
 
     def _async_delete(self, asyncjob, paths):

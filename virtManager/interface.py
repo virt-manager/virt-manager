@@ -91,16 +91,22 @@ class vmmInterface(vmmLibvirtObject):
     def get_mac(self):
         return self.xpath("/interface/mac/@address")
 
+    def _kick_conn(self):
+        self.conn.schedule_priority_tick(polliface=True)
+
     def start(self):
         self._backend.create(0)
         self.idle_add(self.refresh_xml)
+        self._kick_conn()
 
     def stop(self):
         self._backend.destroy(0)
         self.idle_add(self.refresh_xml)
+        self._kick_conn()
 
     def delete(self):
         self._backend.undefine()
+        self._kick_conn()
 
     def is_bridge(self):
         typ = self.get_type()

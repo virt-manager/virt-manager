@@ -930,7 +930,10 @@ class vmmConnection(vmmGObject):
         if self.state == self.STATE_ACTIVE:
             logging.debug("%s capabilities:\n%s",
                           self.get_uri(), self.caps.xml)
-            self.schedule_priority_tick()
+            self.schedule_priority_tick(stats_update=True,
+                                        pollvm=True, pollnet=True,
+                                        pollpool=True, polliface=True,
+                                        pollnodedev=True, pollmedia=True)
 
         if self.state == self.STATE_DISCONNECTED:
             if self.connectError:
@@ -1000,8 +1003,11 @@ class vmmConnection(vmmGObject):
 
         return (origlist, new, current)
 
-    def _update_nets(self):
+    def _update_nets(self, dopoll):
         orig = self.nets.copy()
+        if not dopoll:
+            return {}, {}, orig
+
         name = "network"
         active_list = self._backend.listNetworks
         inactive_list = self._backend.listDefinedNetworks
@@ -1013,8 +1019,11 @@ class vmmConnection(vmmGObject):
                                  active_list, inactive_list,
                                  lookup_func, build_func)
 
-    def _update_pools(self):
+    def _update_pools(self, dopoll):
         orig = self.pools.copy()
+        if not dopoll:
+            return {}, {}, orig
+
         name = "pool"
         active_list = self._backend.listStoragePools
         inactive_list = self._backend.listDefinedStoragePools
@@ -1026,8 +1035,11 @@ class vmmConnection(vmmGObject):
                                  active_list, inactive_list,
                                  lookup_func, build_func)
 
-    def _update_interfaces(self):
+    def _update_interfaces(self, dopoll):
         orig = self.interfaces.copy()
+        if not dopoll:
+            return {}, {}, orig
+
         name = "interface"
         active_list = self._backend.listInterfaces
         inactive_list = self._backend.listDefinedInterfaces
@@ -1040,8 +1052,11 @@ class vmmConnection(vmmGObject):
                                  lookup_func, build_func)
 
 
-    def _update_nodedevs(self):
+    def _update_nodedevs(self, dopoll):
         orig = self.nodedevs.copy()
+        if not dopoll:
+            return {}, {}, orig
+
         name = "nodedev"
         active_list = lambda: self._backend.listDevices(None, 0)
         inactive_list = lambda: []
@@ -1053,7 +1068,7 @@ class vmmConnection(vmmGObject):
                                  active_list, inactive_list,
                                  lookup_func, build_func)
 
-    def _update_vms(self):
+    def _update_vms(self, dopoll):
         # We can't easily use _poll_helper here because the domain API
         # doesn't always return names like other objects, it returns
         # IDs for active VMs
@@ -1066,6 +1081,8 @@ class vmmConnection(vmmGObject):
         origlist = self.vms.copy()
         current = {}
         new = {}
+        if not dopoll:
+            return current, new, origlist
 
         # Build list of previous vms with proper id/name mappings
         for uuid in origlist:
@@ -1138,21 +1155,32 @@ class vmmConnection(vmmGObject):
         ignore = obj
         self.emit(signal, key)
 
-    def schedule_priority_tick(self, obj=None):
-        self.emit("priority-tick", obj or self)
+    def schedule_priority_tick(self, **kwargs):
+        # args/kwargs are what is passed to def tick()
+        if "stats_update" not in kwargs:
+            kwargs["stats_update"] = False
+        self.idle_emit("priority-tick", kwargs)
 
-    def tick(self, stats_update):
+    def tick(self, stats_update,
+             pollvm=False, pollnet=False,
+             pollpool=False, polliface=False,
+             pollnodedev=False, pollmedia=False):
         """ main update function: polls for new objects, updates stats, ..."""
         if self.state != self.STATE_ACTIVE:
             return
 
+        if not pollvm:
+            stats_update = False
+
         self.hostinfo = self._backend.getInfo()
 
-        (goneNets, newNets, nets) = self._update_nets()
-        (gonePools, newPools, pools) = self._update_pools()
-        (goneInterfaces, newInterfaces, interfaces) = self._update_interfaces()
-        (goneNodedevs, newNodedevs, nodedevs) = self._update_nodedevs()
-        (goneVMs, newVMs, vms) = self._update_vms()
+        (goneNets, newNets, nets) = self._update_nets(pollnet)
+        (gonePools, newPools, pools) = self._update_pools(pollpool)
+        (goneInterfaces,
+         newInterfaces, interfaces) = self._update_interfaces(polliface)
+        (goneNodedevs,
+         newNodedevs, nodedevs) = self._update_nodedevs(pollnodedev)
+        (goneVMs, newVMs, vms) = self._update_vms(pollvm)
 
         def tick_send_signals():
             """
@@ -1178,17 +1206,17 @@ class vmmConnection(vmmGObject):
                 self._init_mediadev()
 
             # Update VM states
-            for uuid in goneVMs:
+            for uuid, obj in goneVMs.items():
                 self.emit("vm-removed", uuid)
-                goneVMs[uuid].cleanup()
+                obj.cleanup()
             for uuid, obj in newVMs.items():
                 ignore = obj
                 self.emit("vm-added", uuid)
 
             # Update virtual network states
-            for uuid in goneNets:
+            for uuid, obj in goneNets.items():
                 self.emit("net-removed", uuid)
-                goneNets[uuid].cleanup()
+                obj.cleanup()
             for uuid, obj in newNets.items():
                 obj.connect("started", self._obj_signal_proxy,
                             "net-started", uuid)
@@ -1197,9 +1225,9 @@ class vmmConnection(vmmGObject):
                 self.emit("net-added", uuid)
 
             # Update storage pool states
-            for uuid in gonePools:
+            for uuid, obj in gonePools.items():
                 self.emit("pool-removed", uuid)
-                gonePools[uuid].cleanup()
+                obj.cleanup()
             for uuid, obj in newPools.items():
                 obj.connect("started", self._obj_signal_proxy,
                             "pool-started", uuid)
@@ -1208,9 +1236,9 @@ class vmmConnection(vmmGObject):
                 self.emit("pool-added", uuid)
 
             # Update interface states
-            for name in goneInterfaces:
+            for name, obj in goneInterfaces.items():
                 self.emit("interface-removed", name)
-                goneInterfaces[name].cleanup()
+                obj.cleanup()
             for name, obj in newInterfaces.items():
                 obj.connect("started", self._obj_signal_proxy,
                             "interface-started", name)
@@ -1235,15 +1263,22 @@ class vmmConnection(vmmGObject):
         if stats_update:
             updateVMs = vms
 
-        for key in vms:
-            if key in updateVMs:
-                add_to_ticklist([vms[key]], (True,))
-            else:
-                add_to_ticklist([vms[key]], (stats_update,))
-        add_to_ticklist(nets.values())
-        add_to_ticklist(pools.values())
-        add_to_ticklist(interfaces.values())
-        add_to_ticklist(self.mediadevs.values())
+        if pollvm:
+            for key in vms:
+                if key in updateVMs:
+                    add_to_ticklist([vms[key]], (True,))
+                else:
+                    add_to_ticklist([vms[key]], (stats_update,))
+        if pollnet:
+            add_to_ticklist(nets.values())
+        if pollpool:
+            add_to_ticklist(pools.values())
+        if polliface:
+            add_to_ticklist(interfaces.values())
+        if pollnodedev:
+            add_to_ticklist(nodedevs.values())
+        if pollmedia:
+            add_to_ticklist(self.mediadevs.values())
 
         for obj, args in ticklist:
             try:

@@ -23,7 +23,6 @@ from gi.repository import GObject
 # pylint: enable=E0611
 
 import logging
-import time
 
 import virtinst
 
@@ -31,8 +30,6 @@ from virtManager.baseclass import vmmGObject
 
 MEDIA_FLOPPY = "floppy"
 MEDIA_CDROM = "cdrom"
-
-MEDIA_TIMEOUT = 3
 
 
 class vmmMediaDevice(vmmGObject):
@@ -123,13 +120,8 @@ class vmmMediaDevice(vmmGObject):
     def tick(self):
         if not self.nodedev_obj:
             return
-
         if not self.nodedev_obj.conn.is_active():
             return
-
-        if (time.time() - self.last_tick) < MEDIA_TIMEOUT:
-            return
-        self.last_tick = time.time()
 
         try:
             self.nodedev_obj.refresh_xml()

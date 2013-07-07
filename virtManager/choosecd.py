@@ -71,6 +71,7 @@ class vmmChooseCD(vmmGObjectUI):
         self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
+        self.conn.schedule_priority_tick(pollnodedev=True, pollmedia=True)
 
     def _cleanup(self):
         self.vm = None

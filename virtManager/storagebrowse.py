@@ -83,6 +83,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         self.reset_state(conn)
         self.topwin.set_transient_for(parent)
         self.topwin.present()
+        self.conn.schedule_priority_tick(pollpool=True)
 
     def close(self, ignore1=None, ignore2=None):
         logging.debug("Closing storage browser")
@@ -255,6 +256,8 @@ class vmmStorageBrowser(vmmGObjectUI):
 
     def pool_selected(self, src_ignore=None):
         pool = self.current_pool()
+        pool.tick()
+
         newvol = bool(pool)
         if pool:
             newvol = pool.is_active()

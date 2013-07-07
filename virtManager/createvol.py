@@ -245,6 +245,7 @@ class vmmCreateVolume(vmmGObjectUI):
             self.show_err(error,
                           details=details)
         else:
+            # vol-created will refresh the parent pool
             self.emit("vol-created")
             self.close()
 

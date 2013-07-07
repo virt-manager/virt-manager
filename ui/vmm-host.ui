@@ -106,6 +106,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="border_width">6</property>
+            <signal name="switch-page" handler="on_host_page_switch" swapped="no"/>
             <child>
               <object class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>

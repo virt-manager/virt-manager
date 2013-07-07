@@ -109,6 +109,7 @@ class vmmHost(vmmGObjectUI):
             "on_menu_file_quit_activate" : self.exit_app,
             "on_menu_file_close_activate": self.close,
             "on_vmm_host_delete_event": self.close,
+            "on_host_page_switch": self.page_changed,
 
             "on_menu_restore_saved_activate": self.restore_domain,
 
@@ -362,6 +363,16 @@ class vmmHost(vmmGObjectUI):
         auto = self.conn.get_autoconnect()
         self.widget("config-autoconnect").set_active(auto)
 
+    def page_changed(self, src, child, pagenum):
+        ignore = src
+        ignore = child
+        if pagenum == 1:
+            self.conn.schedule_priority_tick(pollnet=True)
+        elif pagenum == 2:
+            self.conn.schedule_priority_tick(pollpool=True)
+        elif pagenum == 3:
+            self.conn.schedule_priority_tick(polliface=True)
+
     def refresh_resources(self, ignore=None):
         vm_memory = self.conn.pretty_stats_memory()
         host_memory = self.conn.pretty_host_memory_size()
@@ -495,10 +506,12 @@ class vmmHost(vmmGObjectUI):
         uilist = self.widget("net-list")
         sel = uilist.get_selection()
         active = sel.get_selected()
+        net = self.conn.get_net(uuid)
+        net.tick()
 
         for row in uilist.get_model():
             if row[0] == uuid:
-                row[4] = self.conn.get_net(uuid).is_active()
+                row[4] = net.is_active()
 
         if active[1] is not None:
             currname = active[0].get_value(active[1], 0)
@@ -864,6 +877,7 @@ class vmmHost(vmmGObjectUI):
 
     def populate_pool_state(self, uuid):
         pool = self.conn.get_pool(uuid)
+        pool.tick()
         auto = pool.get_autostart()
         active = pool.is_active()
 
@@ -1209,10 +1223,12 @@ class vmmHost(vmmGObjectUI):
         iface_list = self.widget("interface-list")
         sel = iface_list.get_selection()
         active = sel.get_selected()
+        iface = self.conn.get_interface(name)
+        iface.tick()
 
         for row in iface_list.get_model():
             if row[0] == name:
-                row[4] = self.conn.get_interface(name).is_active()
+                row[4] = iface.is_active()
 
         if active[1] is not None:
             currname = active[0].get_value(active[1], 0)

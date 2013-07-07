@@ -416,6 +416,10 @@ class vmmCreate(vmmGObjectUI):
 
     def set_conn_state(self):
         # Update all state that has some dependency on the current connection
+        self.conn.schedule_priority_tick(pollnet=True,
+                                         pollpool=True, polliface=True,
+                                         pollnodedev=True, pollmedia=True)
+
         self.widget("create-forward").set_sensitive(True)
 
         if self.conn.caps.no_install_options():
@@ -1899,7 +1903,7 @@ class vmmCreate(vmmGObjectUI):
         # Make sure we pick up the domain object
 
         # Wait for VM to show up
-        self.conn.schedule_priority_tick()
+        self.conn.schedule_priority_tick(pollvm=True)
         count = 0
         while (guest.uuid not in self.conn.vms) and (count < 100):
             count += 1

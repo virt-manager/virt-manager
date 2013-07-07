@@ -492,8 +492,8 @@ class vmmMigrateDialog(vmmGObjectUI):
             self.err.show_err(error,
                               details=details)
         else:
-            self.conn.schedule_priority_tick()
-            destconn.schedule_priority_tick()
+            self.conn.schedule_priority_tick(pollvm=True)
+            destconn.schedule_priority_tick(pollvm=True)
             self.close()
 
     def _async_set_max_downtime(self, vm, max_downtime, migrate_thread):

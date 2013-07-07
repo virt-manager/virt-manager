@@ -86,15 +86,21 @@ class vmmNetwork(vmmLibvirtObject):
         except:
             return ""
 
+    def _kick_conn(self):
+        self.conn.schedule_priority_tick(pollnet=True)
+
     def start(self):
         self._backend.create()
+        self._kick_conn()
 
     def stop(self):
         self._backend.destroy()
+        self._kick_conn()
 
     def delete(self):
         self._backend.undefine()
         self._backend = None
+        self._kick_conn()
 
     def set_autostart(self, value):
         self._backend.setAutostart(value)

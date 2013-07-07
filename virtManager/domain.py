@@ -1300,6 +1300,7 @@ class vmmDomain(vmmLibvirtObject):
             newxml = self.get_xml(inactive=True)
             destconn.define_domain(newxml)
         self.idle_add(define_cb)
+        # Don't schedule any conn update, migrate dialog handles it for us
 
 
     ###################

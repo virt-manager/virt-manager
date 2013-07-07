@@ -72,12 +72,17 @@ class vmmStoragePool(vmmLibvirtObject):
     def get_uuid(self):
         return self._uuid
 
+    def _kick_conn(self):
+        self.conn.schedule_priority_tick(pollpool=True)
+
     def start(self):
         self._backend.create(0)
+        self._kick_conn()
         self.idle_add(self.refresh_xml)
 
     def stop(self):
         self._backend.destroy()
+        self._kick_conn()
         self.idle_add(self.refresh_xml)
 
     def delete(self, nodelete=True):
@@ -86,6 +91,7 @@ class vmmStoragePool(vmmLibvirtObject):
         else:
             self._backend.delete(0)
         self._backend = None
+        self._kick_conn()
 
     def set_autostart(self, value):
         self._backend.setAutostart(value)

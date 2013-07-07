@@ -1124,7 +1124,7 @@ class vmmCreateInterface(vmmGObjectUI):
             self.err.show_err(error,
                               details=details)
         else:
-            self.conn.schedule_priority_tick()
+            self.conn.schedule_priority_tick(polliface=True)
             self.close()
 
     def do_install(self, asyncjob, activate):

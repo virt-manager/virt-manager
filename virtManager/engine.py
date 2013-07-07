@@ -269,7 +269,7 @@ class vmmEngine(vmmGObject):
 
         self.timer = self.timeout_add(interval, self.tick)
 
-    def _add_obj_to_tick_queue(self, obj, isprio):
+    def _add_obj_to_tick_queue(self, obj, isprio, **kwargs):
         if self._tick_queue.full():
             if not self._tick_thread_slow:
                 logging.debug("Tick is slow, not running at requested rate.")
@@ -278,29 +278,29 @@ class vmmEngine(vmmGObject):
 
         self._tick_counter += 1
         self._tick_queue.put((isprio and PRIO_HIGH or PRIO_LOW,
-                              self._tick_counter, obj))
+                              self._tick_counter,
+                              obj, kwargs))
 
-    def _schedule_priority_tick(self, conn, obj):
-        ignore = conn
-        self._add_obj_to_tick_queue(obj, True)
+    def _schedule_priority_tick(self, conn, kwargs):
+        self._add_obj_to_tick_queue(conn, True, **kwargs)
 
     def tick(self):
         for uri in self.conns.keys():
             conn = self.conns[uri]["conn"]
-            self._add_obj_to_tick_queue(conn, False)
+            self._add_obj_to_tick_queue(conn, False,
+                                        stats_update=True, pollvm=True)
         return 1
 
     def _handle_tick_queue(self):
         while True:
-            prio, ignore, obj = self._tick_queue.get()
-            stats_update = prio != PRIO_HIGH
-            self._tick_single_conn(obj, stats_update)
+            ignore1, ignore2, obj, kwargs = self._tick_queue.get()
+            self._tick_single_conn(obj, kwargs)
             self._tick_queue.task_done()
         return 1
 
-    def _tick_single_conn(self, conn, stats_update):
+    def _tick_single_conn(self, conn, kwargs):
         try:
-            conn.tick(stats_update=stats_update)
+            conn.tick(**kwargs)
         except KeyboardInterrupt:
             raise
         except libvirt.libvirtError, e:
