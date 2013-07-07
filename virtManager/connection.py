@@ -1223,14 +1223,12 @@ class vmmConnection(vmmGObject):
 
         self.idle_add(tick_send_signals)
 
-        now = time.time()
-
         ticklist = []
         def add_to_ticklist(l, args=()):
             ticklist.extend([(o, args) for o in l.values()])
 
         updateVMs = noStatsUpdate and newVMs or vms
-        add_to_ticklist(updateVMs, (now,))
+        add_to_ticklist(updateVMs)
         add_to_ticklist(noStatsUpdate and newNets or nets)
         add_to_ticklist(noStatsUpdate and newPools or pools)
         add_to_ticklist(noStatsUpdate and newInterfaces or interfaces)
@@ -1251,15 +1249,16 @@ class vmmConnection(vmmGObject):
                                   "Ignoring.")
 
         if not noStatsUpdate:
-            self._recalculate_stats(now, updateVMs.values())
+            self._recalculate_stats(updateVMs.values())
             self.idle_emit("resources-sampled")
 
         return 1
 
-    def _recalculate_stats(self, now, vms):
+    def _recalculate_stats(self, vms):
         if not self._backend.is_open():
             return
 
+        now = time.time()
         expected = self.config.get_stats_history_length()
         current = len(self.record)
         if current > expected:

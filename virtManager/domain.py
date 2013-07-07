@@ -1713,10 +1713,7 @@ class vmmDomain(vmmLibvirtObject):
 
         return rd, wr
 
-    def tick(self, now=None):
-        if now is None:
-            now = time.time()
-
+    def tick(self):
         # Invalidate cached values
         self._invalidate_xml()
 
@@ -1734,6 +1731,7 @@ class vmmDomain(vmmLibvirtObject):
             self.is_management_domain()):
             info[1] = self.conn.host_memory_size()
 
+        now = time.time()
         (cpuTime, cpuTimeAbs,
          pcentHostCpu, pcentGuestCpu) = self._sample_cpu_stats(info, now)
         pcentCurrMem, curmem = self._sample_mem_stats(info)
