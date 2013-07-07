@@ -713,9 +713,14 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
         return None
 
     # Make sure VirtualNetwork is running
-    if (nettype == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL and
-        devname not in conn.get_backend().listNetworks()):
+    netobj = None
+    if nettype == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
+        for net in conn.nets.values():
+            if net.get_name() == devname:
+                netobj = net
+                break
 
+    if netobj and not netobj.is_active():
         res = err_dial.yes_no(_("Virtual Network is not active."),
                               _("Virtual Network '%s' is not active. "
                                 "Would you like to start the network "
@@ -725,8 +730,8 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
 
         # Try to start the network
         try:
-            virnet = conn.get_backend().networkLookupByName(devname)
-            virnet.create()
+            netobj.start()
+            netobj.tick()
             logging.info("Started network '%s'", devname)
         except Exception, e:
             return err_dial.show_err(_("Could not start virtual network "
