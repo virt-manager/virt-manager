@@ -1554,20 +1554,13 @@ class VirtualDisk(VirtualDevice):
                         ((need / (1024 * 1024)), (avail / (1024 * 1024))))
         return (ret, msg)
 
-    def is_conflict_disk(self, conn, return_names=False):
+    def is_conflict_disk(self, conn):
         """
         check if specified storage is in use by any other VMs on passed
         connection.
 
-        @param conn: connection to check for collisions on
-        @type conn: libvirt.virConnect
-        @param return_names: Whether or not to return a list of VM names using
-                             the same storage (default = False)
-        @type return_names: C{bool}
-
-        @return: True if a collision, False otherwise (list of names if
-                 return_names passed)
-        @rtype: C{bool}
+        @return: list of colliding VM names
+        @rtype: C{list}
         """
         if self.vol_object:
             path = self.vol_object.path()
@@ -1581,15 +1574,8 @@ class VirtualDisk(VirtualDevice):
             conn = self.conn
 
         check_conflict = self.shareable
-        names = self.path_in_use_by(conn, path,
-                                    check_conflict=check_conflict)
-
-        ret = False
-        if names:
-            ret = True
-        if return_names:
-            ret = names
-
+        ret = self.path_in_use_by(conn, path,
+                                  check_conflict=check_conflict)
         return ret
 
 

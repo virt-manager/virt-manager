@@ -1717,12 +1717,15 @@ class vmmCreate(vmmGObjectUI):
                 return False
 
         # Disk collision
-        if not oldguest and disk.is_conflict_disk(self.guest.conn):
-            res = self.err.yes_no(_('Disk "%s" is already in use by another '
-                                    'guest!' % disk.path),
-                                  _("Do you really want to use the disk?"))
-            if not res:
-                return False
+        if not oldguest:
+            names = disk.is_conflict_disk(self.guest.conn)
+            if names:
+                res = self.err.yes_no(
+                        _('Disk "%s" is already in use by other guests %s') %
+                         (disk.path, names),
+                        _("Do you really want to use the disk?"))
+                if not res:
+                    return False
 
         if not oldguest:
             uihelpers.check_path_search_for_qemu(self.topwin,

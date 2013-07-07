@@ -534,11 +534,12 @@ def disk_prompt(conn, origpath, origsize, origsparse,
         """
         Check if disk is inuse by another guest
         """
-        msg = (_("Disk %s is already in use by another guest" % dev.path))
-
-        if not dev.is_conflict_disk(conn):
+        names = dev.is_conflict_disk(conn)
+        if not names:
             return False
 
+        msg = (_("Disk %s is already in use by other guests %s." %
+               (dev.path, names)))
         return not prompt_for_yes_or_no(msg, askmsg)
 
     def prompt_size_conflict(dev):

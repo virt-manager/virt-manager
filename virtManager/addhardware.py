@@ -1362,10 +1362,12 @@ class vmmAddHardware(vmmGObjectUI):
                 return False
 
         # Disk collision
-        if disk.is_conflict_disk(conn):
-            res = self.err.yes_no(_('Disk "%s" is already in use by another '
-                                    'guest!' % disk.path),
-                                  _("Do you really want to use the disk?"))
+        names = disk.is_conflict_disk(conn)
+        if names:
+            res = self.err.yes_no(
+                    _('Disk "%s" is already in use by other guests %s') %
+                     (disk.path, names),
+                    _("Do you really want to use the disk?"))
             if not res:
                 return False
 
