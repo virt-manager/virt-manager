@@ -101,12 +101,11 @@ def host_disk_space(conn):
     return float(avail / 1024.0 / 1024.0 / 1024.0)
 
 
-def host_space_tick(conn, widget):
+def update_host_space(conn, widget):
     try:
         max_storage = host_disk_space(conn)
     except:
         logging.exception("Error determining host disk space")
-        return 0
 
     def pretty_storage(size):
         return "%.1f Gb" % float(size)
@@ -115,8 +114,6 @@ def host_space_tick(conn, widget):
                 pretty_storage(max_storage))
     hd_label = ("<span color='#484848'>%s</span>" % hd_label)
     widget.set_markup(hd_label)
-
-    return 1
 
 
 def check_default_pool_active(topwin, conn):

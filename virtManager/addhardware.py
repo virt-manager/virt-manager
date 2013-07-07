@@ -80,9 +80,6 @@ class vmmAddHardware(vmmGObjectUI):
 
         self.storage_browser = None
 
-        # Host space polling
-        self.host_storage_timer = None
-
         self._dev = None
 
         self.builder.connect_signals({
@@ -175,7 +172,6 @@ class vmmAddHardware(vmmGObjectUI):
     def close(self, ignore1=None, ignore2=None):
         logging.debug("Closing addhw")
         self.topwin.hide()
-        self.remove_timers()
         if self.storage_browser:
             self.storage_browser.close()
 
@@ -189,14 +185,6 @@ class vmmAddHardware(vmmGObjectUI):
         if self.storage_browser:
             self.storage_browser.cleanup()
             self.storage_browser = None
-
-    def remove_timers(self):
-        try:
-            if self.host_storage_timer:
-                self.remove_gobject_timeout(self.host_storage_timer)
-                self.host_storage_timer = None
-        except:
-            pass
 
     def is_visible(self):
         return self.topwin.get_visible()
@@ -433,11 +421,8 @@ class vmmAddHardware(vmmGObjectUI):
         # Storage init
         label_widget = self.widget("phys-hd-label")
         label_widget.set_markup("")
-        if not self.host_storage_timer:
-            self.host_storage_timer = self.timeout_add(3 * 1000,
-                                                uihelpers.host_space_tick,
-                                                self.conn,
-                                                label_widget)
+        uihelpers.update_host_space(self.conn, label_widget)
+
         self.widget("config-storage-create").set_active(True)
         self.widget("config-storage-size").set_value(8)
         self.widget("config-storage-entry").set_text("")

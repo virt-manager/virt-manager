@@ -96,9 +96,6 @@ class vmmCreate(vmmGObjectUI):
         # Whether there was an error at dialog startup
         self.have_startup_error = False
 
-        # Host space polling
-        self.host_storage_timer = None
-
         # 'Configure before install' window
         self.config_window = None
         self.config_window_signals = []
@@ -161,7 +158,6 @@ class vmmCreate(vmmGObjectUI):
     def close(self, ignore1=None, ignore2=None):
         logging.debug("Closing new vm wizard")
         self.topwin.hide()
-        self.remove_timers()
 
         if self.config_window:
             self.config_window.close()
@@ -185,14 +181,6 @@ class vmmCreate(vmmGObjectUI):
         if self.storage_browser:
             self.storage_browser.cleanup()
             self.storage_browser = None
-
-    def remove_timers(self):
-        try:
-            if self.host_storage_timer:
-                self.remove_gobject_timeout(self.host_storage_timer)
-                self.host_storage_timer = None
-        except:
-            pass
 
     def remove_conn(self):
         if not self.conn:
@@ -397,11 +385,7 @@ class vmmCreate(vmmGObjectUI):
         # Storage
         label_widget = self.widget("phys-hd-label")
         label_widget.set_markup("")
-        if not self.host_storage_timer:
-            self.host_storage_timer = self.timeout_add(3 * 1000,
-                                                    uihelpers.host_space_tick,
-                                                    self.conn,
-                                                    label_widget)
+        uihelpers.update_host_space(self.conn, label_widget)
         self.widget("enable-storage").set_active(True)
         self.widget("config-storage-create").set_active(True)
         self.widget("config-storage-size").set_value(8)
