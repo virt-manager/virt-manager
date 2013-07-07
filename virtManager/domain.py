@@ -1712,11 +1712,19 @@ class vmmDomain(vmmLibvirtObject):
 
         return rd, wr
 
-    def tick(self):
-        # Invalidate cached values
+    def tick(self, stats_update=True):
         self._invalidate_xml()
-
         info = self._backend.info()
+
+        if stats_update:
+            self._tick_stats(info)
+
+        self._update_status(info[0])
+
+        if stats_update:
+            self.idle_emit("resources-sampled")
+
+    def _tick_stats(self, info):
         expected = self.config.get_stats_history_length()
         current = len(self.record)
         if current > expected:
@@ -1756,8 +1764,6 @@ class vmmDomain(vmmLibvirtObject):
             self._set_max_rate(newStats, r + "Rate")
 
         self.record.insert(0, newStats)
-        self._update_status(info[0])
-        self.idle_emit("resources-sampled")
 
 
 ########################

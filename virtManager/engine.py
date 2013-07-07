@@ -58,6 +58,9 @@ DETAILS_PERF = 1
 DETAILS_CONFIG = 2
 DETAILS_CONSOLE = 3
 
+(PRIO_HIGH,
+ PRIO_LOW) = range(1, 3)
+
 
 class vmmEngine(vmmGObject):
     __gsignals__ = {
@@ -274,7 +277,7 @@ class vmmEngine(vmmGObject):
             return
 
         self._tick_counter += 1
-        self._tick_queue.put((isprio and 0 or 100,
+        self._tick_queue.put((isprio and PRIO_HIGH or PRIO_LOW,
                               self._tick_counter, obj))
 
     def _schedule_priority_tick(self, conn, obj):
@@ -290,13 +293,14 @@ class vmmEngine(vmmGObject):
     def _handle_tick_queue(self):
         while True:
             prio, ignore, obj = self._tick_queue.get()
-            self._tick_single_conn(obj, prio == 0)
+            stats_update = prio != PRIO_HIGH
+            self._tick_single_conn(obj, stats_update)
             self._tick_queue.task_done()
         return 1
 
-    def _tick_single_conn(self, conn, noStatsUpdate):
+    def _tick_single_conn(self, conn, stats_update):
         try:
-            conn.tick(noStatsUpdate=noStatsUpdate)
+            conn.tick(stats_update=stats_update)
         except KeyboardInterrupt:
             raise
         except libvirt.libvirtError, e:

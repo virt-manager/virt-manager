@@ -1141,7 +1141,7 @@ class vmmConnection(vmmGObject):
     def schedule_priority_tick(self, obj=None):
         self.emit("priority-tick", obj or self)
 
-    def tick(self, noStatsUpdate=False):
+    def tick(self, stats_update):
         """ main update function: polls for new objects, updates stats, ..."""
         if self.state != self.STATE_ACTIVE:
             return
@@ -1229,14 +1229,21 @@ class vmmConnection(vmmGObject):
 
         ticklist = []
         def add_to_ticklist(l, args=()):
-            ticklist.extend([(o, args) for o in l.values()])
+            ticklist.extend([(o, args) for o in l])
 
-        updateVMs = noStatsUpdate and newVMs or vms
-        add_to_ticklist(updateVMs)
-        add_to_ticklist(noStatsUpdate and newNets or nets)
-        add_to_ticklist(noStatsUpdate and newPools or pools)
-        add_to_ticklist(noStatsUpdate and newInterfaces or interfaces)
-        add_to_ticklist(self.mediadevs)
+        updateVMs = newVMs
+        if stats_update:
+            updateVMs = vms
+
+        for key in vms:
+            if key in updateVMs:
+                add_to_ticklist([vms[key]], (True,))
+            else:
+                add_to_ticklist([vms[key]], (stats_update,))
+        add_to_ticklist(nets.values())
+        add_to_ticklist(pools.values())
+        add_to_ticklist(interfaces.values())
+        add_to_ticklist(self.mediadevs.values())
 
         for obj, args in ticklist:
             try:
@@ -1252,7 +1259,7 @@ class vmmConnection(vmmGObject):
                                   "connection doesn't seem to have dropped. "
                                   "Ignoring.")
 
-        if not noStatsUpdate:
+        if stats_update:
             self._recalculate_stats(updateVMs.values())
             self.idle_emit("resources-sampled")
 

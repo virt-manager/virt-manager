@@ -86,9 +86,6 @@ class vmmLibvirtObject(vmmGObject):
         ignore = xml
         return
 
-    def tick(self):
-        pass
-
 
     ##################
     # Public XML API #
