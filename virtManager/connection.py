@@ -752,8 +752,12 @@ class vmmConnection(vmmGObject):
 
     def define_domain(self, xml):
         return self._backend.defineXML(xml)
+    def define_network(self, xml):
+        return self._backend.networkDefineXML(xml)
+    def define_pool(self, xml):
+        return self._backend.storagePoolDefineXML(xml, 0)
     def define_interface(self, xml):
-        self._backend.interfaceDefineXML(xml, 0)
+        return self._backend.interfaceDefineXML(xml, 0)
 
     def restore(self, frm):
         self._backend.restore(frm)

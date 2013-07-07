@@ -136,7 +136,7 @@ def get_default_path(conn, name, collidelist=None):
                 newcollidelist.append(os.path.basename(c))
 
         path = virtinst.Storage.StorageVolume.find_free_name(name,
-                        pool_object=pool.pool, suffix=suffix,
+                        pool_object=pool.get_backend(), suffix=suffix,
                         collidelist=newcollidelist)
 
         path = os.path.join(target, path)

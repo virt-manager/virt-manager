@@ -111,8 +111,8 @@ class vmmCreateVolume(vmmGObjectUI):
         ret = ""
         try:
             ret = Storage.StorageVolume.find_free_name(self.name_hint,
-                                            pool_object=self.parent_pool.pool,
-                                            suffix=suffix)
+                                pool_object=self.parent_pool.get_backend(),
+                                suffix=suffix)
             ret = ret.rstrip(suffix)
         except:
             pass
@@ -273,7 +273,7 @@ class vmmCreateVolume(vmmGObjectUI):
                                       name=volname,
                                       allocation=(alloc * 1024 * 1024),
                                       capacity=(cap * 1024 * 1024),
-                                      pool=self.parent_pool.pool)
+                                      pool=self.parent_pool.get_backend())
             if fmt:
                 self.vol.format = fmt
         except ValueError, e:

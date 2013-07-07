@@ -152,11 +152,10 @@ class vmmDomain(vmmLibvirtObject):
         "pre-startup": (GObject.SignalFlags.RUN_FIRST, None, [object]),
     }
 
-    def __init__(self, conn, backend, uuid):
-        vmmLibvirtObject.__init__(self, conn)
+    def __init__(self, conn, backend, key):
+        vmmLibvirtObject.__init__(self, conn, backend, key)
 
-        self._backend = backend
-        self.uuid = uuid
+        self.uuid = key
         self.cloning = False
 
         self.record = []
@@ -1771,8 +1770,8 @@ class vmmDomainVirtinst(vmmDomain):
 
     Used for launching a details window for customizing a VM before install.
     """
-    def __init__(self, conn, backend, uuid):
-        vmmDomain.__init__(self, conn, backend, uuid)
+    def __init__(self, conn, backend, key):
+        vmmDomain.__init__(self, conn, backend, key)
 
         self._orig_xml = None
 

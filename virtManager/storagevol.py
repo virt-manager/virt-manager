@@ -23,28 +23,27 @@ from virtManager.libvirtobject import vmmLibvirtObject
 
 
 class vmmStorageVolume(vmmLibvirtObject):
-    def __init__(self, conn, vol, name):
-        vmmLibvirtObject.__init__(self, conn)
+    def __init__(self, conn, backend, key):
+        vmmLibvirtObject.__init__(self, conn, backend, key)
 
-        self.vol = vol      # Libvirt storage volume object
-        self.name = name
+        self._name = key
 
     # Required class methods
     def get_name(self):
-        return self.name
+        return self._name
     def _XMLDesc(self, flags):
-        return self.vol.XMLDesc(flags)
+        return self._backend.XMLDesc(flags)
 
     def get_path(self):
-        return self.vol.path()
+        return self._backend.path()
 
     def get_pool(self):
-        pobj = self.vol.storagePoolLookupByVolume()
+        pobj = self._backend.storagePoolLookupByVolume()
         return self.conn.get_pool_by_name(pobj.name())
 
     def delete(self):
-        self.vol.delete(0)
-        del(self.vol)
+        self._backend.delete(0)
+        self._backend = None
 
     def get_target_path(self):
         return util.xpath(self.get_xml(), "/volume/target/path")

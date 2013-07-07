@@ -47,9 +47,11 @@ class vmmLibvirtObject(vmmGObject):
         "stopped": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
-    def __init__(self, conn):
+    def __init__(self, conn, backend, key):
         vmmGObject.__init__(self)
         self._conn = conn
+        self._backend = backend
+        self._key = key
 
         self._xml = None
         self._is_xml_valid = False
@@ -64,6 +66,11 @@ class vmmLibvirtObject(vmmGObject):
     def _get_conn(self):
         return self._conn
     conn = property(_get_conn)
+
+    def get_backend(self):
+        return self._backend
+    def get_key(self):
+        return self._key
 
     #############################################################
     # Functions that should probably be overridden in sub class #

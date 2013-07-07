@@ -25,19 +25,18 @@ from virtManager.libvirtobject import vmmLibvirtObject
 
 
 class vmmInterface(vmmLibvirtObject):
-    def __init__(self, conn, interface, name):
-        vmmLibvirtObject.__init__(self, conn)
+    def __init__(self, conn, backend, key):
+        vmmLibvirtObject.__init__(self, conn, backend, key)
 
-        self.interface = interface  # Libvirt virInterface object
-        self.name = name            # String name
-        self.active = True          # bool indicating if it is running
+        self._name = key
+        self._active = True
 
-        self._xml = None            # xml cache
+        self._xml = None
         self._xml_flags = None
 
         (self._inactive_xml_flags,
          self._active_xml_flags) = self.conn.get_interface_flags(
-                                                            self.interface)
+                                                            self._backend)
 
         self._support_isactive = None
 
@@ -46,8 +45,7 @@ class vmmInterface(vmmLibvirtObject):
 
     # Routines from vmmLibvirtObject
     def _XMLDesc(self, flags):
-        return self.interface.XMLDesc(flags)
-
+        return self._backend.XMLDesc(flags)
     def _define(self, xml):
         return self.conn.define_interface(xml)
 
@@ -63,46 +61,46 @@ class vmmInterface(vmmLibvirtObject):
         return util.xpath(self.get_xml(inactive=True), *args, **kwargs)
 
     def set_active(self, state):
-        if state == self.active:
+        if state == self._active:
             return
 
         self.idle_emit(state and "started" or "stopped")
-        self.active = state
+        self._active = state
         self.refresh_xml()
 
     def _backend_get_active(self):
         ret = True
         if self._support_isactive is None:
             self._support_isactive = self.conn.check_interface_support(
-                                        self.interface,
+                                        self._backend,
                                         self.conn.SUPPORT_INTERFACE_ISACTIVE)
 
         if not self._support_isactive:
             return True
-        return bool(self.interface.isActive())
+        return bool(self._backend.isActive())
 
     def tick(self):
         self.set_active(self._backend_get_active())
 
     def is_active(self):
-        return self.active
+        return self._active
 
     def get_name(self):
-        return self.name
+        return self._name
 
     def get_mac(self):
         return self.xpath("/interface/mac/@address")
 
     def start(self):
-        self.interface.create(0)
+        self._backend.create(0)
         self.idle_add(self.refresh_xml)
 
     def stop(self):
-        self.interface.destroy(0)
+        self._backend.destroy(0)
         self.idle_add(self.refresh_xml)
 
     def delete(self):
-        self.interface.undefine()
+        self._backend.undefine()
 
     def is_bridge(self):
         typ = self.get_type()

@@ -34,16 +34,13 @@ class vmmStoragePool(vmmLibvirtObject):
         "refreshed": (GObject.SignalFlags.RUN_FIRST, None, [])
     }
 
-    def __init__(self, conn, pool, uuid):
-        vmmLibvirtObject.__init__(self, conn)
+    def __init__(self, conn, backend, key):
+        vmmLibvirtObject.__init__(self, conn, backend, key)
 
-        self.pool = pool            # Libvirt pool object
-        self.uuid = uuid            # String UUID
-        self.active = True          # bool indicating if it is running
+        self._uuid = key
+        self._active = True
 
-        self._volumes = {}          # UUID->vmmStorageVolume mapping of the
-                                    # pools associated volumes
-
+        self._volumes = {}
         self._support_isactive = None
 
         self.tick()
@@ -51,50 +48,50 @@ class vmmStoragePool(vmmLibvirtObject):
 
     # Required class methods
     def get_name(self):
-        return self.pool.name()
+        return self._backend.name()
     def _XMLDesc(self, flags):
-        return self.pool.XMLDesc(flags)
+        return self._backend.XMLDesc(flags)
     def _define(self, xml):
-        return self.conn.get_backend().storagePoolDefineXML(xml, 0)
+        return self.conn.define_pool(xml)
 
 
-    def set_active(self, state):
-        if state == self.active:
+    def _set_active(self, state):
+        if state == self._active:
             return
         self.idle_emit(state and "started" or "stopped")
-        self.active = state
+        self._active = state
         self.refresh_xml()
 
     def is_active(self):
-        return self.active
+        return self._active
 
     def can_change_alloc(self):
         typ = self.get_type()
         return (typ in [virtinst.Storage.StoragePool.TYPE_LOGICAL])
 
     def get_uuid(self):
-        return self.uuid
+        return self._uuid
 
     def start(self):
-        self.pool.create(0)
+        self._backend.create(0)
         self.idle_add(self.refresh_xml)
 
     def stop(self):
-        self.pool.destroy()
+        self._backend.destroy()
         self.idle_add(self.refresh_xml)
 
     def delete(self, nodelete=True):
         if nodelete:
-            self.pool.undefine()
+            self._backend.undefine()
         else:
-            self.pool.delete(0)
-        del(self.pool)
+            self._backend.delete(0)
+        self._backend = None
 
     def set_autostart(self, value):
-        self.pool.setAutostart(value)
+        self._backend.setAutostart(value)
 
     def get_autostart(self):
-        return self.pool.autostart()
+        return self._backend.autostart()
 
     def get_target_path(self):
         return util.xpath(self.get_xml(), "/pool/target/path") or ""
@@ -126,18 +123,18 @@ class vmmStoragePool(vmmLibvirtObject):
     def _backend_get_active(self):
         if self._support_isactive is None:
             self._support_isactive = self.conn.check_pool_support(
-                                        self.pool,
+                                        self._backend,
                                         self.conn.SUPPORT_STORAGE_ISACTIVE)
 
         if not self._support_isactive:
             return True
-        return bool(self.pool.isActive())
+        return bool(self._backend.isActive())
 
     def tick(self):
-        self.set_active(self._backend_get_active())
+        self._set_active(self._backend_get_active())
 
     def refresh(self):
-        if not self.active:
+        if not self.is_active():
             return
 
         def cb():
@@ -145,7 +142,7 @@ class vmmStoragePool(vmmLibvirtObject):
             self.update_volumes(refresh=True)
             self.emit("refreshed")
 
-        self.pool.refresh(0)
+        self._backend.refresh(0)
         self.idle_add(cb)
 
     def update_volumes(self, refresh=False):
@@ -153,7 +150,7 @@ class vmmStoragePool(vmmLibvirtObject):
             self._volumes = {}
             return
 
-        vols = self.pool.listVolumes()
+        vols = self._backend.listVolumes()
         new_vol_list = {}
 
         for volname in vols:
@@ -163,6 +160,6 @@ class vmmStoragePool(vmmLibvirtObject):
                     new_vol_list[volname].refresh_xml()
             else:
                 new_vol_list[volname] = vmmStorageVolume(self.conn,
-                                    self.pool.storageVolLookupByName(volname),
-                                    volname)
+                                self._backend.storageVolLookupByName(volname),
+                                volname)
         self._volumes = new_vol_list

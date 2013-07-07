@@ -906,7 +906,7 @@ class vmmHost(vmmGObjectUI):
     def refresh_storage_pool(self, src_ignore, uuid):
         refresh_pool_in_list(self.widget("pool-list"), self.conn, uuid)
         curpool = self.current_pool()
-        if curpool.uuid != uuid:
+        if curpool.get_uuid() != uuid:
             return
 
         # Currently selected pool changed state: force a 'pool_selected' to

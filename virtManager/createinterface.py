@@ -517,7 +517,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
         for name in self.conn.list_interface_names():
             iface = self.conn.get_interface(name)
-            key = iface.interface
+            key = iface.get_backend()
             iface_type = iface.get_type()
             active = iface.is_active()
             name = iface.get_name()

@@ -47,11 +47,10 @@ class vmmNetwork(vmmLibvirtObject):
 
         return desc
 
-    def __init__(self, conn, net, uuid):
-        vmmLibvirtObject.__init__(self, conn)
-        self.net = net
-        self.uuid = uuid
-        self.active = True
+    def __init__(self, conn, backend, key):
+        vmmLibvirtObject.__init__(self, conn, backend, key)
+        self._uuid = key
+        self._active = True
 
         self._support_isactive = None
 
@@ -60,61 +59,61 @@ class vmmNetwork(vmmLibvirtObject):
 
     # Required class methods
     def get_name(self):
-        return self.net.name()
+        return self._backend.name()
     def _XMLDesc(self, flags):
-        return self.net.XMLDesc(flags)
+        return self._backend.XMLDesc(flags)
     def _define(self, xml):
-        return self.conn.get_backend().networkDefineXML(xml)
+        return self.conn.define_network(xml)
 
-    def set_active(self, state):
-        if state == self.active:
+    def _set_active(self, state):
+        if state == self._active:
             return
         self.idle_emit(state and "started" or "stopped")
-        self.active = state
+        self._active = state
 
     def is_active(self):
-        return self.active
+        return self._active
 
     def get_label(self):
         return self.get_name()
 
     def get_uuid(self):
-        return self.uuid
+        return self._uuid
 
     def get_bridge_device(self):
         try:
-            return self.net.bridgeName()
+            return self._backend.bridgeName()
         except:
             return ""
 
     def start(self):
-        self.net.create()
+        self._backend.create()
 
     def stop(self):
-        self.net.destroy()
+        self._backend.destroy()
 
     def delete(self):
-        self.net.undefine()
-        self.net = None
+        self._backend.undefine()
+        self._backend = None
 
     def set_autostart(self, value):
-        self.net.setAutostart(value)
+        self._backend.setAutostart(value)
 
     def get_autostart(self):
-        return self.net.autostart()
+        return self._backend.autostart()
 
     def _backend_get_active(self):
         if self._support_isactive is None:
             self._support_isactive = self.conn.check_net_support(
-                                        self.net,
+                                        self._backend,
                                         self.conn.SUPPORT_NET_ISACTIVE)
 
         if not self._support_isactive:
             return True
-        return bool(self.net.isActive())
+        return bool(self._backend.isActive())
 
     def tick(self):
-        self.set_active(self._backend_get_active())
+        self._set_active(self._backend_get_active())
 
 
     ########################

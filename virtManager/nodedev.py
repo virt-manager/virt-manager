@@ -24,22 +24,18 @@ from virtManager.libvirtobject import vmmLibvirtObject
 
 
 class vmmNodeDevice(vmmLibvirtObject):
-    def __init__(self, conn, backend, name):
-        vmmLibvirtObject.__init__(self, conn)
+    def __init__(self, conn, backend, key):
+        vmmLibvirtObject.__init__(self, conn, backend, key)
 
-        self.name = name
-        self._backend = backend
-
+        self._name = key
         self._virtinst_obj = None
 
         self.get_virtinst_obj()
 
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
-
     def get_name(self):
-        return self.name
-
+        return self._name
     def is_active(self):
         return True
 
