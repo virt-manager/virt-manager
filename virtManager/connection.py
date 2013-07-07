@@ -756,41 +756,15 @@ class vmmConnection(vmmGObject):
     def restore(self, frm):
         self._backend.restore(frm)
         try:
-            # FIXME: This isn't correct in the remote case. Why do we even
-            #        do this? Seems like we should provide an option for this
-            #        to the user.
             os.remove(frm)
         except:
             logging.debug("Couldn't remove save file '%s' used for restore",
                           frm)
 
+
     ####################
     # Update listeners #
     ####################
-
-    # Generic media device helpers
-    def _remove_mediadev(self, key):
-        self.mediadevs[key].cleanup()
-        del(self.mediadevs[key])
-        self.emit("mediadev-removed", key)
-    def _add_mediadev(self, key, dev):
-        self.mediadevs[key] = dev
-        self.emit("mediadev-added", dev)
-
-    def _netdev_added(self, ignore, netdev):
-        name = netdev.get_name()
-        if name in self.netdevs:
-            return
-
-        self.netdevs[name] = netdev
-
-    # Optical HAL listener
-    def _optical_added(self, ignore, dev):
-        key = dev.get_key()
-        if key in self.mediadevs:
-            return
-
-        self._add_mediadev(key, dev)
 
     def _nodedev_mediadev_added(self, ignore1, name):
         if name in self.mediadevs:
@@ -801,13 +775,17 @@ class vmmConnection(vmmGObject):
         if not mediadev:
             return
 
-        self._add_mediadev(name, mediadev)
+        self.mediadevs[name] = mediadev
+        self.emit("mediadev-added", mediadev)
 
     def _nodedev_mediadev_removed(self, ignore1, name):
         if name not in self.mediadevs:
             return
 
-        self._remove_mediadev(name)
+        self.mediadevs[name].cleanup()
+        del(self.mediadevs[name])
+        self.emit("mediadev-removed", name)
+
 
     ######################################
     # Connection closing/opening methods #
