@@ -47,11 +47,16 @@ class vmmNetwork(vmmLibvirtObject):
 
         return desc
 
-    def __init__(self, conn, net, uuid, active):
+    def __init__(self, conn, net, uuid):
         vmmLibvirtObject.__init__(self, conn)
         self.net = net
         self.uuid = uuid
-        self.active = active
+        self.active = True
+
+        self._support_isactive = None
+
+        self.tick()
+
 
     # Required class methods
     def get_name(self):
@@ -62,8 +67,9 @@ class vmmNetwork(vmmLibvirtObject):
         return self.conn.get_backend().networkDefineXML(xml)
 
     def set_active(self, state):
-        if state != self.active:
-            self.idle_emit(state and "started" or "stopped")
+        if state == self.active:
+            return
+        self.idle_emit(state and "started" or "stopped")
         self.active = state
 
     def is_active(self):
@@ -89,7 +95,6 @@ class vmmNetwork(vmmLibvirtObject):
 
     def delete(self):
         self.net.undefine()
-        del(self.net)
         self.net = None
 
     def set_autostart(self, value):
@@ -97,6 +102,24 @@ class vmmNetwork(vmmLibvirtObject):
 
     def get_autostart(self):
         return self.net.autostart()
+
+    def _backend_get_active(self):
+        if self._support_isactive is None:
+            self._support_isactive = self.conn.check_net_support(
+                                        self.net,
+                                        self.conn.SUPPORT_NET_ISACTIVE)
+
+        if not self._support_isactive:
+            return True
+        return bool(self.net.isActive())
+
+    def tick(self):
+        self.set_active(self._backend_get_active())
+
+
+    ########################
+    # XML parsing routines #
+    ########################
 
     def get_ipv4_static_route(self):
         doc = None

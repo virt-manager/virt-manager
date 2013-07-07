@@ -405,6 +405,8 @@ class vmmConnection(vmmGObject):
         return self._backend.check_interface_support(*args)
     def check_stream_support(self, *args):
         return self._backend.check_stream_support(*args)
+    def check_net_support(self, *args):
+        return self._backend.check_net_support(*args)
 
     def is_storage_capable(self):
         if self._storage_capable is None:
@@ -969,7 +971,7 @@ class vmmConnection(vmmGObject):
         except Exception, e:
             logging.debug("Unable to list inactive %ss: %s", typename, e)
 
-        def check_obj(key, is_active):
+        def check_obj(key):
             if key not in origlist:
                 try:
                     obj = lookup_func(key)
@@ -979,30 +981,18 @@ class vmmConnection(vmmGObject):
                     return
 
                 # Object is brand new this tick period
-                current[key] = build_func(obj, key, is_active)
+                current[key] = build_func(obj, key)
                 new[key] = current[key]
             else:
                 # Previously known object, see if it changed state
                 current[key] = origlist[key]
-
-                if current[key].is_active() != is_active:
-                    current[key].set_active(is_active)
-
                 del origlist[key]
 
-        for name in newActiveNames:
+        for name in newActiveNames + newInactiveNames:
             try:
-                check_obj(name, True)
+                check_obj(name)
             except:
-                logging.exception("Couldn't fetch active "
-                                  "%s '%s'", typename, name)
-
-        for name in newInactiveNames:
-            try:
-                check_obj(name, False)
-            except:
-                logging.exception("Couldn't fetch inactive "
-                                  "%s '%s'", typename, name)
+                logging.exception("Couldn't fetch %s '%s'", typename, name)
 
         return (origlist, new, current)
 
@@ -1013,8 +1003,7 @@ class vmmConnection(vmmGObject):
         inactive_list = self._backend.listDefinedNetworks
         check_support = self.is_network_capable
         lookup_func = self._backend.networkLookupByName
-        build_func = (lambda obj, key, is_active:
-                      vmmNetwork(self, obj, key, is_active))
+        build_func = (lambda obj, key: vmmNetwork(self, obj, key))
 
         return self._poll_helper(orig, name, check_support,
                                  active_list, inactive_list,
@@ -1027,8 +1016,7 @@ class vmmConnection(vmmGObject):
         inactive_list = self._backend.listDefinedStoragePools
         check_support = self.is_storage_capable
         lookup_func = self._backend.storagePoolLookupByName
-        build_func = (lambda obj, key, is_active:
-                      vmmStoragePool(self, obj, key, is_active))
+        build_func = (lambda obj, key: vmmStoragePool(self, obj, key))
 
         return self._poll_helper(orig, name, check_support,
                                  active_list, inactive_list,
@@ -1041,8 +1029,7 @@ class vmmConnection(vmmGObject):
         inactive_list = self._backend.listDefinedInterfaces
         check_support = self.is_interface_capable
         lookup_func = self._backend.interfaceLookupByName
-        build_func = (lambda obj, key, is_active:
-                      vmmInterface(self, obj, key, is_active))
+        build_func = (lambda obj, key: vmmInterface(self, obj, key))
 
         return self._poll_helper(orig, name, check_support,
                                  active_list, inactive_list,
@@ -1056,7 +1043,7 @@ class vmmConnection(vmmGObject):
         inactive_list = lambda: []
         check_support = self.is_nodedev_capable
         lookup_func = self._backend.nodeDeviceLookupByName
-        build_func = lambda obj, key, ignore: vmmNodeDevice(self, obj, key)
+        build_func = lambda obj, key: vmmNodeDevice(self, obj, key)
 
         return self._poll_helper(orig, name, check_support,
                                  active_list, inactive_list,
@@ -1236,18 +1223,24 @@ class vmmConnection(vmmGObject):
 
         self.idle_add(tick_send_signals)
 
-        # Finally, we sample each domain
         now = time.time()
 
-        updateVMs = vms.values()
-        if noStatsUpdate:
-            updateVMs = newVMs.values()
+        ticklist = []
+        def add_to_ticklist(l, args=()):
+            ticklist.extend([(o, args) for o in l.values()])
 
-        for vm in updateVMs:
+        updateVMs = noStatsUpdate and newVMs or vms
+        add_to_ticklist(updateVMs, (now,))
+        add_to_ticklist(noStatsUpdate and newNets or nets)
+        add_to_ticklist(noStatsUpdate and newPools or pools)
+        add_to_ticklist(noStatsUpdate and newInterfaces or interfaces)
+        add_to_ticklist(self.mediadevs)
+
+        for obj, args in ticklist:
             try:
-                vm.tick(now)
+                obj.tick(*args)
             except Exception, e:
-                logging.exception("Tick for VM '%s' failed", vm.get_name())
+                logging.exception("Tick for %s failed", obj)
                 if (isinstance(e, libvirt.libvirtError) and
                     (getattr(e, "get_error_code")() ==
                      libvirt.VIR_ERR_SYSTEM_ERROR)):
@@ -1257,11 +1250,8 @@ class vmmConnection(vmmGObject):
                                   "connection doesn't seem to have dropped. "
                                   "Ignoring.")
 
-        for dev in self.mediadevs.values():
-            dev.tick()
-
         if not noStatsUpdate:
-            self._recalculate_stats(now, updateVMs)
+            self._recalculate_stats(now, updateVMs.values())
             self.idle_emit("resources-sampled")
 
         return 1

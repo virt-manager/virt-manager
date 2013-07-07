@@ -82,6 +82,7 @@ class vmmLibvirtObject(vmmGObject):
     def tick(self, now):
         ignore = now
 
+
     ##################
     # Public XML API #
     ##################
@@ -120,6 +121,7 @@ class vmmLibvirtObject(vmmGObject):
         if origxml != self._xml or forcesignal:
             self.idle_emit("config-changed")
 
+
     ######################################
     # Internal XML cache/update routines #
     ######################################
@@ -127,6 +129,7 @@ class vmmLibvirtObject(vmmGObject):
     def _invalidate_xml(self):
         # Mark cached xml as invalid
         self._is_xml_valid = False
+
 
     ##########################
     # Internal API functions #

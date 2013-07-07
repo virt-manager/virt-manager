@@ -1714,9 +1714,6 @@ class vmmDomain(vmmLibvirtObject):
         return rd, wr
 
     def tick(self, now=None):
-        if self.conn.get_state() != self.conn.STATE_ACTIVE:
-            return
-
         if now is None:
             now = time.time()
 

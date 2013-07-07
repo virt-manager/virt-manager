@@ -25,12 +25,12 @@ from virtManager.libvirtobject import vmmLibvirtObject
 
 
 class vmmInterface(vmmLibvirtObject):
-    def __init__(self, conn, interface, name, active):
+    def __init__(self, conn, interface, name):
         vmmLibvirtObject.__init__(self, conn)
 
         self.interface = interface  # Libvirt virInterface object
         self.name = name            # String name
-        self.active = active        # bool indicating if it is running
+        self.active = True          # bool indicating if it is running
 
         self._xml = None            # xml cache
         self._xml_flags = None
@@ -39,6 +39,9 @@ class vmmInterface(vmmLibvirtObject):
          self._active_xml_flags) = self.conn.get_interface_flags(
                                                             self.interface)
 
+        self._support_isactive = None
+
+        self.tick()
         self.refresh_xml()
 
     # Routines from vmmLibvirtObject
@@ -60,10 +63,26 @@ class vmmInterface(vmmLibvirtObject):
         return util.xpath(self.get_xml(inactive=True), *args, **kwargs)
 
     def set_active(self, state):
-        if state != self.active:
-            self.idle_emit(state and "started" or "stopped")
+        if state == self.active:
+            return
+
+        self.idle_emit(state and "started" or "stopped")
         self.active = state
         self.refresh_xml()
+
+    def _backend_get_active(self):
+        ret = True
+        if self._support_isactive is None:
+            self._support_isactive = self.conn.check_interface_support(
+                                        self.interface,
+                                        self.conn.SUPPORT_INTERFACE_ISACTIVE)
+
+        if not self._support_isactive:
+            return True
+        return bool(self.interface.isActive())
+
+    def tick(self):
+        self.set_active(self._backend_get_active())
 
     def is_active(self):
         return self.active

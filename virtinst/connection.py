@@ -233,6 +233,8 @@ class VirtualConnection(object):
     def check_stream_support(self, feature):
         return (self.check_conn_support(self.SUPPORT_CONN_STREAM) and
                 support.check_support(self, feature, self))
+    def check_net_support(self, net, feature):
+        return support.check_support(self, feature, net)
 
 
     ###################

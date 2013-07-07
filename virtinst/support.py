@@ -35,7 +35,7 @@ from virtinst import util
  SUPPORT_CONN_MAXVCPUS_XML,
  SUPPORT_CONN_STREAM,
  SUPPORT_CONN_GETVERSION,
- SUPPORT_CONN_LIBVERSION) = range(12)
+ SUPPORT_CONN_LIBVERSION) = range(1, 13)
 
 # Flags for check_domain_support
 (SUPPORT_DOMAIN_GETVCPUS,
@@ -51,13 +51,15 @@ from virtinst import util
 
 # Flags for check_pool_support
 (SUPPORT_STORAGE_CREATEVOLFROM,
- SUPPORT_STORAGE_UPLOAD) = range(2000, 2002)
+ SUPPORT_STORAGE_UPLOAD,
+ SUPPORT_STORAGE_ISACTIVE) = range(2000, 2003)
 
 # Flags for check_nodedev_support
 (SUPPORT_NODEDEV_PCI_DETACH,) = range(3000, 3001)
 
 # Flags for check_interface_support
-(SUPPORT_INTERFACE_XML_INACTIVE,) = range(4000, 4001)
+(SUPPORT_INTERFACE_XML_INACTIVE,
+ SUPPORT_INTERFACE_ISACTIVE) = range(4000, 4002)
 
 # Flags for check_conn_hv_support
 (SUPPORT_CONN_HV_VIRTIO,
@@ -71,6 +73,9 @@ from virtinst import util
 
 # Flags for check_stream_support
 (SUPPORT_STREAM_UPLOAD,) = range(6000, 6001)
+
+# Flags for check_net_support
+(SUPPORT_NET_ISACTIVE,) = range(7000, 7001)
 
 
 # Possible keys:
@@ -230,6 +235,11 @@ _support_dict = {
         "function" : "virStoragePool.createXMLFrom",
         "version" : 6004,
     },
+    SUPPORT_STORAGE_ISACTIVE : {
+        "function" : "virStoragePool.isActive",
+        "args": (),
+    },
+
 
     ##################
     # Nodedev checks #
@@ -250,6 +260,10 @@ _support_dict = {
         "function" : "virInterface.XMLDesc",
         "args" : (),
         "flag" : "VIR_INTERFACE_XML_INACTIVE",
+    },
+    SUPPORT_INTERFACE_ISACTIVE : {
+        "function" : "virInterface.isActive",
+        "args": (),
     },
 
 
@@ -304,10 +318,24 @@ _support_dict = {
     },
 
 
+    #################
+    # Stream checks #
+    #################
+
     SUPPORT_STREAM_UPLOAD : {
         # Latest I tested with, and since we will use it by default
         # for URL installs, want to be sure it works
         "version" : 9004,
+    },
+
+
+    ##################
+    # Network checks #
+    ##################
+
+    SUPPORT_NET_ISACTIVE : {
+        "function" : "virNetwork.isActive",
+        "args": (),
     },
 }
 

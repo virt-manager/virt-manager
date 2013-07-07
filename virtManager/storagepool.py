@@ -34,16 +34,19 @@ class vmmStoragePool(vmmLibvirtObject):
         "refreshed": (GObject.SignalFlags.RUN_FIRST, None, [])
     }
 
-    def __init__(self, conn, pool, uuid, active):
+    def __init__(self, conn, pool, uuid):
         vmmLibvirtObject.__init__(self, conn)
 
         self.pool = pool            # Libvirt pool object
         self.uuid = uuid            # String UUID
-        self.active = active        # bool indicating if it is running
+        self.active = True          # bool indicating if it is running
 
         self._volumes = {}          # UUID->vmmStorageVolume mapping of the
                                     # pools associated volumes
 
+        self._support_isactive = None
+
+        self.tick()
         self.refresh()
 
     # Required class methods
@@ -56,8 +59,9 @@ class vmmStoragePool(vmmLibvirtObject):
 
 
     def set_active(self, state):
-        if state != self.active:
-            self.idle_emit(state and "started" or "stopped")
+        if state == self.active:
+            return
+        self.idle_emit(state and "started" or "stopped")
         self.active = state
         self.refresh_xml()
 
@@ -118,6 +122,19 @@ class vmmStoragePool(vmmLibvirtObject):
 
     def get_volume(self, uuid):
         return self._volumes[uuid]
+
+    def _backend_get_active(self):
+        if self._support_isactive is None:
+            self._support_isactive = self.conn.check_pool_support(
+                                        self.pool,
+                                        self.conn.SUPPORT_STORAGE_ISACTIVE)
+
+        if not self._support_isactive:
+            return True
+        return bool(self.pool.isActive())
+
+    def tick(self):
+        self.set_active(self._backend_get_active())
 
     def refresh(self):
         if not self.active:
