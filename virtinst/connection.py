@@ -63,6 +63,12 @@ class VirtualConnection(object):
         self._conn_version = None
 
         self._support_cache = {}
+        self._fetch_cache = {}
+
+        # Setting this means we only do fetch_all* once and just carry
+        # the result. For the virt-* CLI tools this ensures any revalidation
+        # isn't hammering the connection over and over
+        self.cache_object_fetch = False
 
 
     ##############
@@ -97,6 +103,7 @@ class VirtualConnection(object):
     def close(self):
         self._libvirtconn = None
         self._uri = None
+        self._fetch_cache = {}
 
     def invalidate_caps(self):
         self._caps = None
@@ -120,14 +127,28 @@ class VirtualConnection(object):
         self._libvirtconn = conn
 
     def fetch_all_guests(self):
+        key = "vms"
+        if key in self._fetch_cache:
+            return self._fetch_cache[key]
+
         ignore, ignore, ret = pollhelpers.fetch_vms(self, {},
                                                     lambda obj, ignore: obj)
-        return ret.values()
+        ret = ret.values()
+        if self.cache_object_fetch:
+            self._fetch_cache[key] = ret
+        return ret
 
     def fetch_all_pools(self):
+        key = "pools"
+        if key in self._fetch_cache:
+            return self._fetch_cache[key]
+
         ignore, ignore, ret = pollhelpers.fetch_pools(self, {},
                                                     lambda obj, ignore: obj)
-        return ret.values()
+        ret = ret.values()
+        if self.cache_object_fetch:
+            self._fetch_cache[key] = ret
+        return ret
 
 
     #########################

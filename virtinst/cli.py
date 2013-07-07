@@ -237,6 +237,7 @@ def getConnection(uri):
     logging.debug("Requesting libvirt URI %s", (uri or "default"))
     conn = virtinst.VirtualConnection(uri)
     conn.open(_do_creds_authname)
+    conn.cache_object_fetch = True
     logging.debug("Received libvirt URI %s", conn.uri)
 
     return conn
