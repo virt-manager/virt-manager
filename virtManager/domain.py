@@ -1404,9 +1404,6 @@ class vmmDomain(vmmLibvirtObject):
         self._enable_net_poll = self.config.get_stats_enable_net_poll()
 
         if self._enable_net_poll and len(self.record) > 1:
-            # resample the current value before calculating the rate in
-            # self.tick() otherwise we'd get a huge spike when switching
-            # from 0 to bytes_transfered_so_far
             rxBytes, txBytes = self._sample_network_traffic()
             self.record[0]["netRxKB"] = rxBytes / 1024
             self.record[0]["netTxKB"] = txBytes / 1024
@@ -1415,9 +1412,6 @@ class vmmDomain(vmmLibvirtObject):
         self._enable_disk_poll = self.config.get_stats_enable_disk_poll()
 
         if self._enable_disk_poll and len(self.record) > 1:
-            # resample the current value before calculating the rate in
-            # self.tick() otherwise we'd get a huge spike when switching
-            # from 0 to bytes_transfered_so_far
             rdBytes, wrBytes = self._sample_disk_io()
             self.record[0]["diskRdKB"] = rdBytes / 1024
             self.record[0]["diskWrKB"] = wrBytes / 1024

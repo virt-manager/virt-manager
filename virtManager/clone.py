@@ -816,7 +816,7 @@ class vmmCloneVM(vmmGObjectUI):
             self.err.show_err(error, details=details)
         else:
             self.close()
-            self.conn.tick(noStatsUpdate=True)
+            self.conn.schedule_priority_tick()
 
     def _async_clone(self, asyncjob):
         try:

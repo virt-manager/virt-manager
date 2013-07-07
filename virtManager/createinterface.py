@@ -1124,8 +1124,7 @@ class vmmCreateInterface(vmmGObjectUI):
             self.err.show_err(error,
                               details=details)
         else:
-            # FIXME: Hmm, shouldn't we emit a signal here rather than do this?
-            self.conn.tick(noStatsUpdate=True)
+            self.conn.schedule_priority_tick()
             self.close()
 
     def do_install(self, asyncjob, activate):

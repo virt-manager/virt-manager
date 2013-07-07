@@ -452,6 +452,7 @@ class vmmCreatePool(vmmGObjectUI):
             self.err.show_err(error,
                               details=details)
         else:
+            self.conn.schedule_priority_tick()
             self.close()
 
     def _async_pool_create(self, asyncjob, build):

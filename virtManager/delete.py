@@ -158,13 +158,11 @@ class vmmDeleteDialog(vmmGObjectUI):
 
         self.topwin.set_sensitive(True)
         self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
-        conn = self.conn
 
         if error is not None:
             self.err.show_err(error, details=details)
 
-        conn.tick(noStatsUpdate=True)
-
+        self.conn.schedule_priority_tick()
         self.close()
 
     def _async_delete(self, asyncjob, paths):

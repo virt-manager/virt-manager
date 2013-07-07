@@ -67,7 +67,9 @@ class vmmConnection(vmmGObject):
         "mediadev-removed": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "resources-sampled": (GObject.SignalFlags.RUN_FIRST, None, []),
         "state-changed": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "connect-error": (GObject.SignalFlags.RUN_FIRST, None, [str, str, bool]),
+        "connect-error": (GObject.SignalFlags.RUN_FIRST, None,
+                          [str, str, bool]),
+        "priority-tick": (GObject.SignalFlags.RUN_FIRST, None, [object]),
     }
 
     STATE_DISCONNECTED = 0
@@ -85,7 +87,6 @@ class vmmConnection(vmmGObject):
         self.state = self.STATE_DISCONNECTED
         self.connectThread = None
         self.connectError = None
-        self._ticklock = threading.Lock()
         self._backend = virtinst.VirtualConnection(self._uri)
 
         self._caps = None
@@ -945,7 +946,7 @@ class vmmConnection(vmmGObject):
         if self.state == self.STATE_ACTIVE:
             logging.debug("%s capabilities:\n%s",
                           self.get_uri(), self.caps.xml)
-            self.tick()
+            self.schedule_priority_tick()
 
         if self.state == self.STATE_DISCONNECTED:
             if self.connectError:
@@ -1168,14 +1169,10 @@ class vmmConnection(vmmGObject):
         ignore = obj
         self.emit(signal, key)
 
-    def tick(self, noStatsUpdate=False):
-        try:
-            self._ticklock.acquire()
-            self._tick(noStatsUpdate)
-        finally:
-            self._ticklock.release()
+    def schedule_priority_tick(self, obj=None):
+        self.emit("priority-tick", obj or self)
 
-    def _tick(self, noStatsUpdate=False):
+    def tick(self, noStatsUpdate=False):
         """ main update function: polls for new objects, updates stats, ..."""
         if self.state != self.STATE_ACTIVE:
             return

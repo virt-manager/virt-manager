@@ -1013,7 +1013,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.err.show_err(_("Error creating virtual network: %s" % str(e)))
             return
 
-        self.conn.tick(noStatsUpdate=True)
+        self.conn.schedule_priority_tick()
         self.close()
 
     def validate_name(self):

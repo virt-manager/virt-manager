@@ -18,8 +18,9 @@
 # MA 02110-1301 USA.
 #
 
-import threading
 import logging
+import threading
+import time
 
 # pylint: disable=E0611
 from gi.repository import GObject
@@ -1896,7 +1897,14 @@ class vmmCreate(vmmGObjectUI):
         logging.debug("Install completed")
 
         # Make sure we pick up the domain object
-        self.conn.tick(noStatsUpdate=True)
+
+        # Wait for VM to show up
+        self.conn.schedule_priority_tick()
+        count = 0
+        while (guest.uuid not in self.conn.vms) and (count < 100):
+            count += 1
+            time.sleep(.1)
+
         vm = self.conn.get_vm(guest.uuid)
         vm.tick()
 
