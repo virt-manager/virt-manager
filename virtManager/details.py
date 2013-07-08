@@ -1562,12 +1562,10 @@ class vmmDetails(vmmGObjectUI):
                       self.vm.get_uuid())
 
     def control_vm_menu(self, src_ignore):
-        if (self.console.viewer and
-            self.console.viewer.has_usb_redirection() and
-            self.vm.has_spicevmc_type_redirdev()):
-            widget = self.widget("details-menu-usb-redirection")
-            if not widget.get_sensitive():
-                widget.set_sensitive(True)
+        can_usb = bool(self.console.viewer and
+                       self.console.viewer.has_usb_redirection() and
+                       self.vm.has_spicevmc_type_redirdev())
+        self.widget("details-menu-usb-redirection").set_sensitive(can_usb)
 
     def control_vm_run(self, src_ignore):
         self.emit("action-run-domain",

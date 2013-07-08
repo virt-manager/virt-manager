@@ -456,7 +456,6 @@ class SpiceViewer(Viewer):
         self.audio = None
         self.display_channel = None
         self.usbdev_manager = None
-        self.usbwidget = None
 
     def _init_widget(self):
         self.set_grab_keys()
@@ -509,7 +508,6 @@ class SpiceViewer(Viewer):
         self.display = None
         self.display_channel = None
         self.usbdev_manager = None
-        self.usbwidget = None
 
     def is_open(self):
         return self.spice_session is not None
@@ -565,24 +563,17 @@ class SpiceViewer(Viewer):
             return None
         return self.display_channel.get_properties("width", "height")
 
-    def _create_usbdev_manager(self):
-        if self.usbdev_manager:
-            return self.usbdev_manager
-
-        if self.spice_session:
-            self.usbdev_manager = SpiceClientGLib.UsbDeviceManager.get(self.spice_session)
-            if self.usbdev_manager:
-                self.usbdev_manager.connect("auto-connect-failed", self._usbdev_redirect_error)
-                self.usbdev_manager.connect("device-error", self._usbdev_redirect_error)
-
-        return self.usbdev_manager
-
     def _create_spice_session(self):
         self.spice_session = SpiceClientGLib.Session()
         gtk_session = SpiceClientGtk.GtkSession.get(self.spice_session)
         gtk_session.set_property("auto-clipboard", True)
 
-        self._create_usbdev_manager()
+        self.usbdev_manager = SpiceClientGLib.UsbDeviceManager.get(
+                                    self.spice_session)
+        self.usbdev_manager.connect("auto-connect-failed",
+                                    self._usbdev_redirect_error)
+        self.usbdev_manager.connect("device-error",
+                                    self._usbdev_redirect_error)
 
         autoredir = self.config.get_auto_redirection()
         if autoredir:
@@ -652,22 +643,22 @@ class SpiceViewer(Viewer):
 
         usb_device_description_fmt = _("%s %s %s at %d-%d")
 
-        if self.spice_session:
-            self.usbwidget = SpiceClientGtk.UsbDeviceWidget.new(self.spice_session,
-                                                                usb_device_description_fmt)
-            self.usbwidget.connect("connect-failed", self._usbdev_redirect_error)
-            return self.usbwidget
+        if not self.spice_session:
+            return
 
-        return
+        usbwidget = SpiceClientGtk.UsbDeviceWidget.new(
+                                                self.spice_session,
+                                                usb_device_description_fmt)
+        usbwidget.connect("connect-failed", self._usbdev_redirect_error)
+        return usbwidget
 
     def has_usb_redirection(self):
-        usbredir_channel_type = SpiceClientGLib.Channel.string_to_type('usbredir')
+        if not self.spice_session or not self.usbdev_manager:
+            return False
 
-        if self.spice_session:
-            if self._create_usbdev_manager() and \
-               self.spice_session.has_channel_type(usbredir_channel_type):
+        for c in self.spice_session.get_channels():
+            if c.__class__ is SpiceClientGLib.UsbredirChannel:
                 return True
-
         return False
 
 
