@@ -256,10 +256,10 @@ class vmmStorageBrowser(vmmGObjectUI):
 
     def pool_selected(self, src_ignore=None):
         pool = self.current_pool()
-        pool.tick()
 
         newvol = bool(pool)
         if pool:
+            pool.tick()
             newvol = pool.is_active()
 
         newvol = newvol and self.allow_create()
