@@ -1,7 +1,7 @@
 #
 # Common code for all guests
 #
-# Copyright 2006-2009  Red Hat, Inc.
+# Copyright 2006-2009, 2013  Red Hat, Inc.
 # Jeremy Katz <katzj@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -536,11 +536,12 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
                 newlist.append(i)
         return newlist
 
-    def add_device(self, dev):
+    def add_device(self, dev, set_defaults=False):
         """
         Add the passed device to the guest's device list.
 
         @param dev: VirtualDevice instance to attach to guest
+        @param set_defaults: Whether to set defaults for the device
         """
         if not isinstance(dev, VirtualDevice):
             raise ValueError(_("Must pass a VirtualDevice instance."))
@@ -551,7 +552,14 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
             dev.set_xml_node(node)
             self._add_child_node("./devices", node)
 
-        return self._add_device(dev)
+        self._add_device(dev)
+        if set_defaults:
+            def list_one_dev(devtype):
+                if dev.virtual_device_type == devtype:
+                    return [dev][:]
+                else:
+                    return []
+            self._set_defaults(list_one_dev, None, self.features)
 
     def _add_device(self, dev):
         devtype = dev.virtual_device_type
