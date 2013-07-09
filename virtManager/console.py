@@ -536,7 +536,8 @@ class SpiceViewer(Viewer):
             channel.connect_after("channel-event", self._main_channel_event_cb)
             return
 
-        if type(channel) == SpiceClientGLib.DisplayChannel:
+        if (type(channel) == SpiceClientGLib.DisplayChannel and
+            not self.display):
             channel_id = channel.get_property("channel-id")
 
             if channel_id != 0:
