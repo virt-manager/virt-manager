@@ -1268,7 +1268,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Make sure default pool is running
         if self.is_default_storage():
-            ret = uihelpers.check_default_pool_active(self.topwin, self.conn)
+            ret = uihelpers.check_default_pool_active(self.err, self.conn)
             if not ret:
                 return False
 

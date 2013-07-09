@@ -116,13 +116,13 @@ def update_host_space(conn, widget):
     widget.set_markup(hd_label)
 
 
-def check_default_pool_active(topwin, conn):
+def check_default_pool_active(err, conn):
     default_pool = util.get_default_pool(conn)
     if default_pool and not default_pool.is_active():
-        res = err_dial.yes_no(_("Default pool is not active."),
-                              _("Storage pool '%s' is not active. "
-                                "Would you like to start the pool "
-                                "now?") % default_pool.get_name())
+        res = err.yes_no(_("Default pool is not active."),
+                         _("Storage pool '%s' is not active. "
+                           "Would you like to start the pool "
+                           "now?") % default_pool.get_name())
         if not res:
             return False
 
@@ -131,9 +131,9 @@ def check_default_pool_active(topwin, conn):
             default_pool.start()
             logging.info("Started pool '%s'", default_pool.get_name())
         except Exception, e:
-            return topwin.err.show_err(_("Could not start storage_pool "
-                                         "'%s': %s") %
-                                         (default_pool.get_name(), str(e)))
+            return err.show_err(_("Could not start storage_pool "
+                                  "'%s': %s") %
+                                (default_pool.get_name(), str(e)))
     return True
 
 #####################################################
