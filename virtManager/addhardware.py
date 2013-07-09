@@ -1356,8 +1356,7 @@ class vmmAddHardware(vmmGObjectUI):
             if not res:
                 return False
 
-        uihelpers.check_path_search_for_qemu(self.topwin,
-                                             self.conn, disk.path)
+        uihelpers.check_path_search_for_qemu(self.err, self.conn, disk.path)
 
         # Add a SCSI controller with model virtio-scsi if needed
         disk.vmm_controller = None
@@ -1394,7 +1393,7 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Invalid MAC address"),
                                     _("A MAC address must be entered."))
 
-        ret = uihelpers.validate_network(self.topwin, self.conn,
+        ret = uihelpers.validate_network(self.err, self.conn,
                                          nettype, devname, mac, model)
         if ret is False:
             return False

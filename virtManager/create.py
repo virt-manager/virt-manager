@@ -1591,8 +1591,7 @@ class vmmCreate(vmmGObjectUI):
                 path = None
 
             if path:
-                uihelpers.check_path_search_for_qemu(self.topwin,
-                                                     self.conn, path)
+                uihelpers.check_path_search_for_qemu(self.err, self.conn, path)
 
         # Validation passed, store the install path (if there is one) in
         # gconf
@@ -1712,7 +1711,7 @@ class vmmCreate(vmmGObjectUI):
                     return False
 
         if not oldguest:
-            uihelpers.check_path_search_for_qemu(self.topwin,
+            uihelpers.check_path_search_for_qemu(self.err,
                                                  self.conn, disk.path)
 
         self.disk = disk
@@ -1742,7 +1741,7 @@ class vmmCreate(vmmGObjectUI):
                             _("Network device required for %s install.") %
                             methname)
 
-        nic = uihelpers.validate_network(self.topwin,
+        nic = uihelpers.validate_network(self.err,
                                          self.conn, nettype, devname, macaddr)
         if nic is False:
             return False

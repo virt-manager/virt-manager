@@ -32,7 +32,6 @@ import libvirt
 import virtinst
 
 from virtManager import packageutils
-from virtManager import uihelpers
 from virtManager import util
 from virtManager.about import vmmAbout
 from virtManager.baseclass import vmmGObject
@@ -343,7 +342,6 @@ class vmmEngine(vmmGObject):
             self.idle_add(self.exit_app, src)
 
     def _cleanup(self):
-        uihelpers.cleanup()
         self.err = None
 
         if self.inspection:

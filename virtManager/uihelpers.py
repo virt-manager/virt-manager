@@ -29,7 +29,6 @@ from gi.repository import Gtk
 import virtinst
 
 from virtManager import util
-from virtManager.error import vmmErrorDialog
 
 OPTICAL_DEV_PATH = 0
 OPTICAL_LABEL = 1
@@ -39,38 +38,9 @@ OPTICAL_MEDIA_KEY = 4
 OPTICAL_IS_VALID = 5
 
 
-##############################################################
-# Initialize an error object to use for validation functions #
-##############################################################
-
-err_dial = vmmErrorDialog()
-
-
-def set_error_parent(parent):
-    global err_dial
-    err_dial.set_parent(parent)
-    err_dial = err_dial
-
-
-def cleanup():
-    global err_dial
-    err_dial = None
-
-
-def spin_get_helper(widget):
-    adj = widget.get_adjustment()
-    txt = widget.get_text()
-
-    try:
-        ret = int(txt)
-    except:
-        ret = adj.get_value()
-    return ret
-
 ############################################################
 # Helpers for shared storage UI between create/addhardware #
 ############################################################
-
 
 def set_sparse_tooltip(widget):
     sparse_str = _("Fully allocating storage may take longer now, "
@@ -136,10 +106,10 @@ def check_default_pool_active(err, conn):
                                 (default_pool.get_name(), str(e)))
     return True
 
+
 #####################################################
 # Hardware model list building (for details, addhw) #
 #####################################################
-
 
 def build_video_combo(vm, video_dev, no_default=None):
     video_dev_model = Gtk.ListStore(str, str)
@@ -441,10 +411,10 @@ def build_vnc_keymap_combo(vm, combo, no_default=False):
 
     combo.set_active(-1)
 
+
 #####################################
 # Storage format list/combo helpers #
 #####################################
-
 
 def build_storage_format_combo(vm, combo):
     dev_model = Gtk.ListStore(str)
@@ -461,10 +431,10 @@ def build_storage_format_combo(vm, combo):
 
     combo.set_active(0)
 
+
 #######################################################################
 # Widgets for listing network device options (in create, addhardware) #
 #######################################################################
-
 
 def pretty_network_desc(nettype, source=None, netobj=None):
     if nettype == virtinst.VirtualNetworkInterface.TYPE_USER:
@@ -700,9 +670,7 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
     return return_warn
 
 
-def validate_network(parent, conn, nettype, devname, macaddr, model=None):
-    set_error_parent(parent)
-
+def validate_network(err, conn, nettype, devname, macaddr, model=None):
     net = None
     addr = None
 
@@ -718,10 +686,10 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
                 break
 
     if netobj and not netobj.is_active():
-        res = err_dial.yes_no(_("Virtual Network is not active."),
-                              _("Virtual Network '%s' is not active. "
-                                "Would you like to start the network "
-                                "now?") % devname)
+        res = err.yes_no(_("Virtual Network is not active."),
+                         _("Virtual Network '%s' is not active. "
+                           "Would you like to start the network "
+                           "now?") % devname)
         if not res:
             return False
 
@@ -731,8 +699,8 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
             netobj.tick()
             logging.info("Started network '%s'", devname)
         except Exception, e:
-            return err_dial.show_err(_("Could not start virtual network "
-                                       "'%s': %s") % (devname, str(e)))
+            return err.show_err(_("Could not start virtual network "
+                                  "'%s': %s") % (devname, str(e)))
 
     # Create network device
     try:
@@ -759,16 +727,16 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
         net.set_address(addr)
 
     except Exception, e:
-        return err_dial.val_err(_("Error with network parameters."), e)
+        return err.val_err(_("Error with network parameters."), e)
 
     # Make sure there is no mac address collision
     isfatal, errmsg = net.is_conflict_net(conn.get_backend())
     if isfatal:
-        return err_dial.val_err(_("Mac address collision."), errmsg)
+        return err.val_err(_("Mac address collision."), errmsg)
     elif errmsg is not None:
-        retv = err_dial.yes_no(_("Mac address collision."),
-                               _("%s Are you sure you want to use this "
-                                 "address?") % errmsg)
+        retv = err.yes_no(_("Mac address collision."),
+                          _("%s Are you sure you want to use this "
+                            "address?") % errmsg)
         if not retv:
             return False
 
@@ -972,14 +940,12 @@ def build_shutdown_button_menu(widget, shutdown_cb, reboot_cb, reset_cb,
     save.connect("activate", save_cb)
     menu.add(save)
 
+
 #####################################
 # Path permissions checker for qemu #
 #####################################
 
-
-def check_path_search_for_qemu(parent, conn, path):
-    set_error_parent(parent)
-
+def check_path_search_for_qemu(err, conn, path):
     if conn.is_remote() or not conn.is_qemu_system():
         return
 
@@ -997,7 +963,7 @@ def check_path_search_for_qemu(parent, conn, path):
         return
 
     logging.debug("No search access for dirs: %s", broken_paths)
-    resp, chkres = err_dial.warn_chkbox(
+    resp, chkres = err.warn_chkbox(
                     _("The emulator may not have search permissions "
                       "for the path '%s'.") % path,
                     _("Do you want to correct this now?"),
@@ -1025,16 +991,16 @@ def check_path_search_for_qemu(parent, conn, path):
 
     logging.debug("Permission errors:\n%s", details)
 
-    ignore, chkres = err_dial.err_chkbox(errmsg, details,
+    ignore, chkres = err.err_chkbox(errmsg, details,
                          _("Don't ask about these directories again."))
 
     if chkres:
         util.running_config.add_perms_fix_ignore(errors.keys())
 
+
 ######################################
 # Interface startmode widget builder #
 ######################################
-
 
 def build_startmode_combo(start_list):
     start_model = Gtk.ListStore(str)
@@ -1072,3 +1038,18 @@ def build_keycombo_menu(cb):
 
     menu.show_all()
     return menu
+
+
+#############
+# Misc bits #
+#############
+
+def spin_get_helper(widget):
+    adj = widget.get_adjustment()
+    txt = widget.get_text()
+
+    try:
+        ret = int(txt)
+    except:
+        ret = adj.get_value()
+    return ret
