@@ -135,7 +135,9 @@ class vmmConnection(vmmGObject):
     #################
 
     def _init_virtconn(self):
-        self._backend.cb_fetch_all_guests = lambda: self.vms.values()
+        self._backend.cb_fetch_all_guests = (
+            lambda: [vm.get_guest_for_virtinst_func(refresh_if_nec=False)
+                     for vm in self.vms.values()])
         self._backend.cb_fetch_all_pools = lambda: self.pools.values()
 
     def _init_netdev(self):

@@ -19,13 +19,15 @@
 import logging
 import os
 import re
+import weakref
 
 import libvirt
 
+from virtinst import Guest
+from virtinst import CapabilitiesParser
 from virtinst import pollhelpers
 from virtinst import support
 from virtinst import util
-from virtinst import CapabilitiesParser
 from virtinst.cli import parse_optstr
 
 _virtinst_uri_magic = "__virtinst_test__"
@@ -183,7 +185,8 @@ class VirtualConnection(object):
 
         ignore, ignore, ret = pollhelpers.fetch_vms(self, {},
                                                     lambda obj, ignore: obj)
-        ret = [_FetchObjWrapper(obj) for obj in ret.values()]
+        ret = [Guest(weakref.ref(self), parsexml=obj.XMLDesc(0))
+               for obj in ret.values()]
         if self.cache_object_fetch:
             self._fetch_cache[key] = ret
         return ret

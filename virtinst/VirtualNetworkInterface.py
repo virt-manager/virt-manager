@@ -316,18 +316,13 @@ class VirtualNetworkInterface(VirtualDevice):
         if searchmac is None:
             return (False, None)
 
-        def count_cb(ctx):
-            for mac in ctx.xpathEval("/domain/devices/interface/mac"):
-                macaddr = mac.xpathEval("attribute::address")[0].content
-                if macaddr and _compareMAC(searchmac, macaddr) == 0:
-                    return True
-            return False
-
-        for vm in self.conn.fetch_all_guests():
-            xml = vm.get_xml(refresh_if_nec=False)
-            if util.get_xml_path(xml, func=count_cb):
-                return (True, _("The MAC address '%s' is in use "
-                                "by another virtual machine.") % searchmac)
+        vms = self.conn.fetch_all_guests()
+        for vm in vms:
+            for nic in vm.get_devices("interface"):
+                nicmac = nic.macaddr or ""
+                if nicmac.lower() == searchmac.lower():
+                    return (True, _("The MAC address '%s' is in use "
+                                    "by another virtual machine.") % searchmac)
         return (False, None)
 
     def setup(self, meter=None):

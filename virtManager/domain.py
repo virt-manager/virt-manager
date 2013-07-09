@@ -404,6 +404,7 @@ class vmmDomain(vmmLibvirtObject):
             return self._build_guest(xml)
 
         return self._guest
+    get_guest_for_virtinst_func = _get_guest
 
     def _build_guest(self, xml):
         return virtinst.Guest(self.conn.get_backend(),
