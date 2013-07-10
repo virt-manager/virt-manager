@@ -20,57 +20,17 @@
 # MA 02110-1301 USA.
 
 import copy
-import threading
 
 import libxml2
 
 from virtinst import util
 
-_xml_refs_lock = threading.Lock()
-_xml_refs = {}
 
-
-def _unref_doc(doc):
-    if not doc:
-        return
-
-    idx = None
-
-    try:
-        _xml_refs_lock.acquire()
-
-        for n in _xml_refs:
-            if n == doc:
-                idx = n
-                break
-
-        if not idx:
-            return
-
-        _xml_refs[idx] = _xml_refs[idx] - 1
-        if _xml_refs[idx] == 0:
-            idx.freeDoc()
-    finally:
-        _xml_refs_lock.release()
-
-
-def _ref_doc(doc):
-    if not doc:
-        return
-
-    try:
-        _xml_refs_lock.acquire()
-
-        idx = doc
-        for n in _xml_refs:
-            if n == doc:
-                idx = n
-                break
-
-        refcount = _xml_refs.get(idx) or 0
-        _xml_refs[idx] = refcount + 1
-    finally:
-        _xml_refs_lock.release()
+class _DocCleanupWrapper(object):
+    def __init__(self, doc):
+        self._doc = doc
+    def __del__(self):
+        self._doc.freeDoc()
 
 
 def _tuplify_lists(*args):
@@ -402,21 +362,14 @@ class XMLBuilderDomain(object):
 
         self._xml_node = None
         self._xml_ctx = None
+        self._xml_root_doc = None
 
         if parsexml or parsexmlnode:
             self._parsexml(parsexml, parsexmlnode)
 
     def __del__(self):
-        try:
-            if self._xml_node:
-                _unref_doc(self._xml_node.doc)
-        except:
-            pass
-        try:
-            if self._xml_ctx:
-                self._xml_ctx.xpathFreeContext()
-        except:
-            pass
+        if hasattr(self, "_xml_ctx") and self._xml_ctx:
+            self._xml_ctx.xpathFreeContext()
 
     def _cache(self):
         """
@@ -476,11 +429,13 @@ class XMLBuilderDomain(object):
 
     def _parsexml(self, xml, node):
         if xml:
-            self._xml_node = libxml2.parseDoc(xml).children
+            doc = libxml2.parseDoc(xml)
+            self._xml_root_doc = _DocCleanupWrapper(doc)
+            self._xml_node = doc.children
+            self._xml_node.virtinst_root_doc = self._xml_root_doc
         else:
             self._xml_node = node
 
-        _ref_doc(self._xml_node.doc)
         self._set_xml_context()
 
     def _get_xml_config(self):

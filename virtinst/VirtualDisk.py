@@ -578,8 +578,7 @@ class VirtualDisk(VirtualDevice):
         @type sizebytes: C{int}
         """
 
-        VirtualDevice.__init__(self, conn=conn,
-                               parsexml=parsexml, parsexmlnode=parsexmlnode)
+        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self._path = None
         self._size = None

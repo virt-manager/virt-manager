@@ -666,6 +666,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
                         (x.name in device_mappings and
                          x.parent == node)]
             for devnode in children:
+                devnode.virtinst_root_doc = self._xml_root_doc
                 objclass = device_mappings.get(devnode.name)
 
                 if objclass == virtinst.VirtualCharDevice:
@@ -675,6 +676,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
                     dev = objclass(self.conn, parsexmlnode=devnode)
                 self._add_device(dev)
 
+        self._xml_node.virtinst_root_doc = self._xml_root_doc
         self._installer = virtinst.Installer.Installer(self.conn,
                                                    parsexmlnode=self._xml_node)
         self._features = DomainFeatures(self.conn,
