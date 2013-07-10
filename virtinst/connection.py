@@ -31,6 +31,28 @@ from virtinst.cli import parse_optstr
 _virtinst_uri_magic = "__virtinst_test__"
 
 
+def _fakemkstemp(prefix, *args, **kwargs):
+    ignore = args
+    ignore = kwargs
+    filename = os.path.join(".", prefix)
+    return os.open(filename, os.O_RDWR | os.O_CREAT), filename
+
+
+def _sanitize_xml(xml):
+    import difflib
+
+    orig = xml
+    xml = re.sub("arch='.*'", "arch='i686'", xml)
+    xml = re.sub("domain type='.*'", "domain type='test'", xml)
+    xml = re.sub("machine type='.*'", "", xml)
+    xml = re.sub(">exe<", ">hvm<", xml)
+
+    logging.debug("virtinst test sanitizing diff\n:%s",
+                  "\n".join(difflib.unified_diff(orig.split("\n"),
+                                                 xml.split("\n"))))
+    return xml
+
+
 class _FetchObjWrapper(object):
     """
     Wrapper to make virDomain etc. objects have a similar XML API as
@@ -185,6 +207,14 @@ class VirtualConnection(object):
 
 
     #########################
+    # Libvirt API overrides #
+    #########################
+
+    def getURI(self):
+        return self._uri
+
+
+    #########################
     # Public version checks #
     #########################
 
@@ -331,32 +361,12 @@ class VirtualConnection(object):
             return
         opts = self._test_opts.copy()
 
-        def sanitize_xml(xml):
-            import difflib
-
-            orig = xml
-            xml = re.sub("arch='.*'", "arch='i686'", xml)
-            xml = re.sub("domain type='.*'", "domain type='test'", xml)
-            xml = re.sub("machine type='.*'", "", xml)
-            xml = re.sub(">exe<", ">hvm<", xml)
-
-            logging.debug("virtinst test sanitizing diff\n:%s",
-                          "\n".join(difflib.unified_diff(orig.split("\n"),
-                                                         xml.split("\n"))))
-            return xml
-
         # Need tmpfile names to be deterministic
         if "predictable" in opts:
             opts.pop("predictable")
             import tempfile
+            tempfile.mkstemp = _fakemkstemp
             setattr(self, "_virtinst__fake_conn_predictable", True)
-
-            def fakemkstemp(prefix, *args, **kwargs):
-                ignore = args
-                ignore = kwargs
-                filename = os.path.join(".", prefix)
-                return os.open(filename, os.O_RDWR | os.O_CREAT), filename
-            tempfile.mkstemp = fakemkstemp
 
         # Fake remote status
         if "remote" in opts:
@@ -374,15 +384,14 @@ class VirtualConnection(object):
             opts.pop("lxc", None)
 
             self._fake_conn_version = 10000000000
-            conn.getURI = self._virtinst_uri_make_fake
 
             origcreate = conn.createLinux
             origdefine = conn.defineXML
             def newcreate(xml, flags):
-                xml = sanitize_xml(xml)
+                xml = _sanitize_xml(xml)
                 return origcreate(xml, flags)
             def newdefine(xml):
-                xml = sanitize_xml(xml)
+                xml = _sanitize_xml(xml)
                 return origdefine(xml)
             conn.createLinux = newcreate
             conn.defineXML = newdefine
