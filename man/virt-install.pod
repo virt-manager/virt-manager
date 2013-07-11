@@ -639,9 +639,9 @@ This parameter is deprecated in favour of C<--network NETWORK,mac=12:34...>
 
 =head2 Graphics Configuration
 
-If no graphics option is specified, C<virt-install> will default to
-'--graphics vnc' if the DISPLAY environment variable is set, otherwise
-'--graphics none' is used.
+If no graphics option is specified, C<virt-install> will try to select
+the appropriate graphics if the DISPLAY environment variable is set,
+otherwise '--graphics none' is used.
 
 =over 2
 

@@ -788,7 +788,8 @@ def digest_graphics(guest, options, default_override=None):
     if optnum == 0:
         # If no graphics specified, choose a default
         if default_override is True:
-            vnc = True
+            if cliconfig.default_graphics in ["spice", "vnc", "sdl"]:
+                return [cliconfig.default_graphics]
         elif default_override is False:
             nographics = True
         else:
@@ -796,8 +797,14 @@ def digest_graphics(guest, options, default_override=None):
                 logging.debug("Container guest, defaulting to nographics")
                 nographics = True
             elif "DISPLAY" in os.environ.keys():
-                logging.debug("DISPLAY is set: graphics defaulting to VNC.")
-                vnc = True
+                logging.debug("DISPLAY is set: looking for pre-configured graphics")
+                if cliconfig.default_graphics in ["spice", "vnc", "sdl"]:
+                    logging.debug("Defaulting graphics to pre-configured %s" %
+                                  cliconfig.default_graphics.upper())
+                    return [cliconfig.default_graphics]
+                logging.debug("No valid pre-configured graphics "
+                              "found, defaulting to VNC")
+                return ["vnc"]
             else:
                 logging.debug("DISPLAY is not set: defaulting to nographics.")
                 nographics = True
