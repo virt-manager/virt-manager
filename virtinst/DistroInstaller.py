@@ -190,21 +190,11 @@ class DistroInstaller(Installer.Installer):
 
         3) http, ftp, or nfs path for an install tree
         """
-        is_tuple = False
         validated = True
         self._location_is_path = True
         is_local = not self.conn.is_remote()
 
-        # Basic validation
-        if type(val) is not str and (type(val) is not tuple and len(val) != 2):
-            raise ValueError(_("Invalid 'location' type %s." % type(val)))
-
-        if type(val) is tuple and len(val) == 2:
-            logging.debug("DistroInstaller location is a (poolname, volname)"
-                          " tuple")
-            is_tuple = True
-
-        elif _is_url(val, is_local):
+        if _is_url(val, is_local):
             val = _sanitize_url(val)
             self._location_is_path = False
             logging.debug("DistroInstaller location is a network source.")
@@ -226,16 +216,12 @@ class DistroInstaller(Installer.Installer):
             #   connection was passed:
             # Pass the parameters off to VirtualDisk to validate, and pull
             # out the path
-            stuple = (is_tuple and val) or None
-            path = (not is_tuple and val) or None
-
             try:
                 d = VirtualDisk(self.conn,
-                                path=path,
+                                path=val,
                                 device=VirtualDisk.DEVICE_CDROM,
                                 transient=True,
-                                readOnly=True,
-                                volName=stuple)
+                                readOnly=True)
                 val = d.path
             except:
                 logging.debug("Error validating install location",

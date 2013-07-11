@@ -501,17 +501,8 @@ class VirtualDisk(VirtualDevice):
     @staticmethod
     def lookup_vol_object(conn, name_tuple):
         """
-        Return a volume instance from parameters that are passed
-        to disks volName init parameter
+        Return a volume instance from a pool name, vol name tuple
         """
-        if (type(name_tuple) is not tuple or
-            len(name_tuple) != 2 or
-            (type(name_tuple[0]) is not type(name_tuple[1]) is not str)):
-            raise ValueError(_("volName must be a tuple of the form "
-                               "('poolname', 'volname')"))
-
-        if not conn:
-            raise ValueError(_("'volName' requires a passed connection."))
         if not conn.check_conn_support(conn.SUPPORT_CONN_STORAGE):
             raise ValueError(_("Connection does not support storage lookup."))
 
@@ -524,7 +515,7 @@ class VirtualDisk(VirtualDevice):
     def __init__(self, conn, path=None, size=None, transient=False, type=None,
                  device=None, driverName=None, driverType=None,
                  readOnly=False, sparse=True, volObject=None,
-                 volInstall=None, volName=None, bus=None, shareable=False,
+                 volInstall=None, bus=None, shareable=False,
                  driverCache=None, format=None,
                  validate=True, parsexml=None, parsexmlnode=None,
                  driverIO=None, sizebytes=None, nomanaged=False):
@@ -553,9 +544,6 @@ class VirtualDisk(VirtualDevice):
         @type volObject: libvirt.virStorageVol
         @param volInstall: StorageVolume instance to build for new storage
         @type volInstall: L{StorageVolume}
-        @param volName: Existing StorageVolume lookup information,
-                        (parent pool name, volume name)
-        @type volName: C{tuple} of (C{str}, C{str})
         @param bus: Emulated bus type (ide, scsi, virtio, ...)
         @type bus: C{str}
         @param shareable: If disk can be shared among VMs
@@ -606,9 +594,6 @@ class VirtualDisk(VirtualDevice):
 
         # XXX: No property methods for these
         self.transient = transient
-
-        if volName and not volObject:
-            volObject = self.lookup_vol_object(conn, volName)
 
         if sizebytes is not None:
             size = (float(sizebytes) / float(1024 ** 3))

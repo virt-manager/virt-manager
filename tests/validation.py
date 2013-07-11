@@ -107,9 +107,6 @@ args = {
   '__init__' : {
 
    'invalid' : [
-    {'conn' : testconn, 'volName' : ("pool-noexist", "default-vol")},
-    {'conn' : testconn, 'volName' : ("default-pool", "vol-noexist")},
-    {'conn' : testconn, 'volName' : (1234, "vol-noexist")},
     {'path' : 'valid', 'size' : 1, 'driverCache' : 'invalid'},
     {'conn' : testconn, "path" : "/full-pool/newvol.img", "size" : 1,
       'sparse' : False},
@@ -118,7 +115,6 @@ args = {
  ],
 
    'valid' : [
-    {'conn' : testconn, 'volName' : ("default-pool", "default-vol")},
     {'conn' : testconn, 'path' : "/default-pool/default-vol"},
     {'conn' : testconn, 'path' : "/default-pool/vol-noexist", 'size' : 1},
     {'conn' : testconn, 'volInstall': volinst},
@@ -153,11 +149,9 @@ args = {
     'init_conns' : [testconn],
     'location'  : {
         'invalid' : ['nogood', 'http:/nogood', [], None,
-                     ("pool-noexist", "default-vol"),
-                     ("default-pool", "vol-noexist"),
                   ],
         'valid'   : ['/dev/null', 'http://web', 'ftp://ftp', 'nfs:nfsserv',
-                     '/tmp', ("default-pool", "default-vol"),
+                     '/tmp',
                   ]}
 },
 
@@ -165,10 +159,8 @@ args = {
     'init_conns' : [testconn],
     'location'  : {
         'invalid' : ['path-noexist',
-                     ("pool-noexist", "default-vol"),
-                     ("default-pool", "vol-noexist"),
                   ],
-        'valid'   : ['/dev/null', ("default-pool", "default-vol"),
+        'valid'   : ['/dev/null',
                   ]}
 },
 
