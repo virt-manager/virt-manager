@@ -334,10 +334,14 @@ class vmmSerialConsole(vmmGObject):
     def init_popup(self):
         self.serial_popup = Gtk.Menu()
 
-        self.serial_copy = Gtk.ImageMenuItem(Gtk.STOCK_COPY)
+        self.serial_copy = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_COPY,
+                                                            None)
+        self.serial_copy.connect("activate", self.serial_copy_text)
         self.serial_popup.add(self.serial_copy)
 
-        self.serial_paste = Gtk.ImageMenuItem(Gtk.STOCK_PASTE)
+        self.serial_paste = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_PASTE,
+                                                             None)
+        self.serial_paste.connect("activate", self.serial_paste_text)
         self.serial_popup.add(self.serial_paste)
 
     def init_ui(self):
@@ -427,8 +431,6 @@ class vmmSerialConsole(vmmGObject):
             return
 
         self.serial_popup.show_all()
-        self.serial_copy.connect("activate", self.serial_copy_text, src)
-        self.serial_paste.connect("activate", self.serial_paste_text, src)
 
         if src.get_has_selection():
             self.serial_copy.set_sensitive(True)
@@ -436,8 +438,8 @@ class vmmSerialConsole(vmmGObject):
             self.serial_copy.set_sensitive(False)
         self.serial_popup.popup(None, None, None, None, 0, event.time)
 
-    def serial_copy_text(self, src_ignore, terminal):
-        terminal.copy_clipboard()
+    def serial_copy_text(self, src_ignore):
+        self.terminal.copy_clipboard()
 
-    def serial_paste_text(self, src_ignore, terminal):
-        terminal.paste_clipboard()
+    def serial_paste_text(self, src_ignore):
+        self.terminal.paste_clipboard()
