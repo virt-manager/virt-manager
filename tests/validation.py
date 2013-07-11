@@ -127,10 +127,6 @@ args = {
  ]
 },
 
-  'shareable' : {
-    'invalid': [None, 1234],
-    'valid': [True, False]
-},
 },
 
 'network'   : {

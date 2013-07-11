@@ -391,15 +391,6 @@ class XMLBuilderDomain(object):
         return self._conn
     conn = property(_get_conn)
 
-    def _check_bool(self, val, name):
-        if val not in [True, False]:
-            raise ValueError(_("'%s' must be True or False" % name))
-
-    def _check_str(self, val, name):
-        if type(val) is not str:
-            raise ValueError(_("'%s' must be a string, not '%s'." %
-                                (name, type(val))))
-
     def _is_parse(self):
         return bool(self._xml_node or self._xml_ctx)
 

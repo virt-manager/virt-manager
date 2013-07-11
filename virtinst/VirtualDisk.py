@@ -653,7 +653,6 @@ class VirtualDisk(VirtualDevice):
         return retpath
     def _set_path(self, val, validate=True):
         if val is not None:
-            self._check_str(val, "path")
             val = os.path.abspath(val)
 
         if validate:
@@ -703,7 +702,6 @@ class VirtualDisk(VirtualDevice):
         return self._clone_path
     def _set_clone_path(self, val, validate=True):
         if val is not None:
-            self._check_str(val, "path")
             val = os.path.abspath(val)
 
             try:
@@ -736,7 +734,6 @@ class VirtualDisk(VirtualDevice):
         return self.__existing_storage_dev_type()
     def set_type(self, val, validate=True):
         if val is not None:
-            self._check_str(val, "type")
             if val not in self.types:
                 raise ValueError(_("Unknown storage type '%s'" % val))
         self.__validate_wrapper("_type", val, validate, self.type)
@@ -746,7 +743,6 @@ class VirtualDisk(VirtualDevice):
     def get_device(self):
         return self._device
     def set_device(self, val, validate=True):
-        self._check_str(val, "device")
         if val not in self.devices:
             raise ValueError(_("Unknown device type '%s'" % val))
 
@@ -785,14 +781,12 @@ class VirtualDisk(VirtualDevice):
     def get_sparse(self):
         return self._sparse
     def set_sparse(self, val, validate=True):
-        self._check_bool(val, "sparse")
         self.__validate_wrapper("_sparse", val, validate, self.sparse)
     sparse = property(get_sparse, set_sparse)
 
     def get_read_only(self):
         return self._readOnly
     def set_read_only(self, val, validate=True):
-        self._check_bool(val, "read_only")
         self.__validate_wrapper("_readOnly", val, validate, self.read_only)
     read_only = _xml_property(get_read_only, set_read_only,
                               xpath="./readonly", is_bool=True)
@@ -800,8 +794,6 @@ class VirtualDisk(VirtualDevice):
     def _get_bus(self):
         return self._bus
     def _set_bus(self, val, validate=True):
-        if val is not None:
-            self._check_str(val, "bus")
         self.__validate_wrapper("_bus", val, validate, self.bus)
     bus = _xml_property(_get_bus, _set_bus,
                         xpath="./target/@bus")
@@ -809,8 +801,6 @@ class VirtualDisk(VirtualDevice):
         return self._target
     def _set_target(self, val, validate=True):
         ignore = validate
-        if val is not None:
-            self._check_str(val, "target")
         self._target = val
     target = _xml_property(_get_target, _set_target,
                            xpath="./target/@dev")
@@ -818,7 +808,6 @@ class VirtualDisk(VirtualDevice):
     def _get_shareable(self):
         return self._shareable
     def _set_shareable(self, val, validate=True):
-        self._check_bool(val, "shareable")
         self.__validate_wrapper("_shareable", val, validate, self.shareable)
     shareable = _xml_property(_get_shareable, _set_shareable,
                               xpath="./shareable", is_bool=True)
@@ -827,7 +816,6 @@ class VirtualDisk(VirtualDevice):
         return self._driver_cache
     def _set_driver_cache(self, val, validate=True):
         if val is not None:
-            self._check_str(val, "cache")
             if val not in self.cache_types:
                 raise ValueError(_("Unknown cache mode '%s'" % val))
         self.__validate_wrapper("_driver_cache", val, validate,
@@ -840,7 +828,6 @@ class VirtualDisk(VirtualDevice):
         return self._driver_io
     def _set_driver_io(self, val, validate=True):
         if val is not None:
-            self._check_str(val, "driver_io")
             if val not in self.io_modes:
                 raise ValueError(_("Unknown io mode '%s'" % val))
         self.__validate_wrapper("_driver_io", val, validate,
@@ -852,7 +839,6 @@ class VirtualDisk(VirtualDevice):
         return self._error_policy
     def _set_error_policy(self, val, validate=True):
         if val is not None:
-            self._check_str(val, "error_policy")
             if val not in self.error_policies:
                 raise ValueError(_("Unknown error policy '%s'" % val))
         self.__validate_wrapper("_error_policy", val, validate,
@@ -863,8 +849,6 @@ class VirtualDisk(VirtualDevice):
     def _get_serial(self):
         return self._serial
     def _set_serial(self, val, validate=True):
-        if val is not None:
-            self._check_str(val, "serial")
         self.__validate_wrapper("_serial", val, validate,
                                 self.serial)
     serial = _xml_property(_get_serial, _set_serial,
@@ -951,8 +935,6 @@ class VirtualDisk(VirtualDevice):
     def _get_format(self):
         return self._format
     def _set_format(self, val, validate=True):
-        if val is not None:
-            self._check_str(val, "format")
         self.__validate_wrapper("_format", val, validate, self.format)
     format = property(_get_format, _set_format)
 
