@@ -516,9 +516,8 @@ class VirtualDisk(VirtualDevice):
                  device=None, driverName=None, driverType=None,
                  readOnly=False, sparse=True, volObject=None,
                  volInstall=None, bus=None, shareable=False,
-                 driverCache=None, format=None,
-                 validate=True, parsexml=None, parsexmlnode=None,
-                 driverIO=None, sizebytes=None, nomanaged=False):
+                 format=None, validate=True, parsexml=None, parsexmlnode=None,
+                 sizebytes=None, nomanaged=False):
         """
         @param path: filesystem path to the disk image.
         @type path: C{str}
@@ -548,8 +547,6 @@ class VirtualDisk(VirtualDevice):
         @type bus: C{str}
         @param shareable: If disk can be shared among VMs
         @type shareable: C{bool}
-        @param driverCache: Disk cache mode (none, writethrough, writeback)
-        @type driverCache: member of cache_types
         @param format: Storage volume format to use when creating storage
         @type format: C{str}
         @param validate: Whether to validate passed parameters against the
@@ -612,9 +609,7 @@ class VirtualDisk(VirtualDevice):
         self._set_vol_install(volInstall, validate=False)
         self._set_bus(bus, validate=False)
         self._set_shareable(shareable, validate=False)
-        self._set_driver_cache(driverCache, validate=False)
         self._set_format(format, validate=False)
-        self._set_driver_io(driverIO, validate=False)
 
         self.__change_storage(self.path,
                               self.vol_object,

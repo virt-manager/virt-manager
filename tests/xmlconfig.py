@@ -552,14 +552,17 @@ class TestXMLConfig(unittest.TestCase):
                                  bus="scsi"))
         g.add_device(VirtualDisk(g.conn, path=None,
                                  device=VirtualDisk.DEVICE_FLOPPY))
-        g.add_device(VirtualDisk(g.conn, path="/dev/loop0",
-                                 device=VirtualDisk.DEVICE_FLOPPY,
-                                 driverName="phy", driverCache="none"))
-        disk = VirtualDisk(g.conn, path="/dev/loop0",
-                           bus="virtio", driverName="qemu",
-                           driverType="qcow2", driverCache="none")
-        disk.driver_io = "threads"
-        g.add_device(disk)
+        d1 = VirtualDisk(g.conn, path="/dev/loop0",
+                         device=VirtualDisk.DEVICE_FLOPPY,
+                         driverName="phy")
+        d1.driver_cache = "none"
+        g.add_device(d1)
+        d2 = VirtualDisk(g.conn, path="/dev/loop0",
+                         bus="virtio", driverName="qemu",
+                         driverType="qcow2")
+        d2.driver_cache = "none"
+        d2.driver_io = "threads"
+        g.add_device(d2)
 
         self._compare(g, "boot-many-disks2", False)
 

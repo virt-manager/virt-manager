@@ -1311,8 +1311,8 @@ class vmmAddHardware(vmmGObjectUI):
                                         readOnly=readonly,
                                         device=device,
                                         bus=bus,
-                                        driverCache=cache,
                                         format=fmt)
+            disk.driver_cache = cache
 
             if not fmt:
                 fmt = self.config.get_storage_format()
