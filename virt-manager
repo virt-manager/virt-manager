@@ -162,13 +162,12 @@ def launch_specific_window(engine, show, uri, uuid):
         engine.show_host_summary(uri)
 
 
-def _conn_state_changed(conn, engine, show, uri, uuid):
-    if conn.state == conn.STATE_DISCONNECTED:
-        return True
-    if conn.state != conn.STATE_ACTIVE:
-        return
-
-    launch_specific_window(engine, show, uri, uuid)
+def _conn_ready(conn, engine, show, uri, uuid):
+    if uuid not in conn.vms:
+        engine.err.show_err("%s does not have VM with UUID %s" %
+                            (uri, uuid))
+    else:
+        launch_specific_window(engine, show, uri, uuid)
     return True
 
 
@@ -287,8 +286,8 @@ def main():
 
     if options.show:
         def cb(conn):
-            return _conn_state_changed(conn, engine, options.show,
-                                       options.uri, options.uuid)
+            return _conn_ready(conn, engine, options.show,
+                               options.uri, options.uuid)
         engine.uri_cb = cb
         engine.show_manager_window = False
 
