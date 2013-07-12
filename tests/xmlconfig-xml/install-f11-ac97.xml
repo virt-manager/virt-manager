@@ -1,12 +1,12 @@
-<domain type='kvm'>
+<domain type="kvm">
   <name>TestGuest</name>
   <uuid>12345678-1234-1234-1234-123456789012</uuid>
   <memory>409600</memory>
   <currentMemory>204800</currentMemory>
   <vcpu>5</vcpu>
   <os>
-    <type arch='i686'>hvm</type>
-    <boot dev='hd'/>
+    <type arch="i686">hvm</type>
+    <boot dev="hd"/>
   </os>
   <features>
     <acpi/><apic/>
@@ -17,33 +17,33 @@
   <on_crash>restart</on_crash>
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
-    <disk type='file' device='floppy'>
-      <driver name='qemu' type='qcow2'/>
-      <source file='/default-pool/testvol1.img'/>
-      <target dev='fda' bus='fdc'/>
+    <disk type="file" device="floppy">
+      <driver name="qemu" type="qcow2"/>
+      <source file="/default-pool/testvol1.img"/>
+      <target dev="fda" bus="fdc"/>
     </disk>
-    <disk type='file' device='disk'>
-      <driver name='qemu' type='raw'/>
-      <source file='/tmp/test.img'/>
-      <target dev='vda' bus='virtio'/>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="raw"/>
+      <source file="/tmp/test.img"/>
+      <target dev="vda" bus="virtio"/>
     </disk>
-    <disk type='block' device='disk'>
-      <driver name='qemu'/>
-      <source dev='/dev/loop0'/>
-      <target dev='vdb' bus='virtio'/>
+    <disk type="block" device="disk">
+      <driver name="qemu"/>
+      <source dev="/dev/loop0"/>
+      <target dev="vdb" bus="virtio"/>
     </disk>
-    <disk type='block' device='cdrom'>
-      <target dev='hdc' bus='ide'/>
+    <disk type="block" device="cdrom">
+      <target dev="hdc" bus="ide"/>
       <readonly/>
     </disk>
-    <interface type='network'>
-      <source network='default'/>
-      <mac address='22:22:33:44:55:66'/>
-      <model type='virtio'/>
+    <interface type="network">
+      <source network="default"/>
+      <mac address="22:22:33:44:55:66"/>
+      <model type="virtio"/>
     </interface>
-    <input type='tablet' bus='usb'/>
-    <graphics type='sdl' display=':3.4' xauth='/tmp/.Xauthority'/>
-    <console type='pty'/>
-    <sound model='ac97'/>
+    <input type="tablet" bus="usb"/>
+    <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
+    <console type="pty"/>
+    <sound model="ac97"/>
   </devices>
 </domain>

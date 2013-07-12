@@ -1,4 +1,4 @@
-<domain type='kvm'>
+<domain type="kvm">
   <name>foobar</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <memory>65536</memory>
@@ -12,14 +12,14 @@
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>
   <devices>
-    <interface type='network'>
-      <source network='default'/>
-      <mac address='00:11:22:33:44:55'/>
+    <interface type="network">
+      <source network="default"/>
+      <mac address="00:11:22:33:44:55"/>
     </interface>
-    <input type='mouse' bus='xen'/>
-    <graphics type='vnc' port='-1'/>
+    <input type="mouse" bus="xen"/>
+    <graphics type="vnc" port="-1"/>
     <video>
-      <model type='cirrus'/>
+      <model type="cirrus"/>
     </video>
   </devices>
 </domain>

@@ -1,12 +1,12 @@
-<domain type='qemu'>
+<domain type="qemu">
   <name>foobar</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <os>
-    <type arch='sparc' machine='SS-20'>hvm</type>
-    <boot dev='fd'/>
+    <type arch="sparc" machine="SS-20">hvm</type>
+    <boot dev="fd"/>
   </os>
   <features>
     <acpi/><apic/><pae/>
@@ -17,15 +17,15 @@
   <on_crash>restart</on_crash>
   <devices>
     <emulator>/usr/bin/qemu-system-sparc</emulator>
-    <interface type='network'>
-      <source network='default'/>
-      <mac address='00:11:22:33:44:55'/>
+    <interface type="network">
+      <source network="default"/>
+      <mac address="00:11:22:33:44:55"/>
     </interface>
-    <input type='tablet' bus='usb'/>
-    <graphics type='sdl' display=':3.4' xauth='/tmp/.Xauthority'/>
-    <console type='pty'/>
+    <input type="tablet" bus="usb"/>
+    <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
+    <console type="pty"/>
     <video>
-      <model type='cirrus'/>
+      <model type="cirrus"/>
     </video>
   </devices>
 </domain>

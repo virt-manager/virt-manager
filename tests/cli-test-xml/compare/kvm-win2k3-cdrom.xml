@@ -1,13 +1,13 @@
-<domain type='kvm'>
+<domain type="kvm">
   <name>foobar</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <os>
-    <type arch='x86_64'>hvm</type>
-    <boot dev='cdrom'/>
-    <boot dev='hd'/>
+    <type arch="x86_64">hvm</type>
+    <boot dev="cdrom"/>
+    <boot dev="hd"/>
   </os>
   <features>
     <acpi/><apic/><pae/>
@@ -18,39 +18,39 @@
   <on_crash>destroy</on_crash>
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
-    <disk type='file' device='disk'>
-      <driver name='qemu'/>
-      <source file='/tmp/__virtinst_cli_exist1.img'/>
-      <target dev='hda' bus='ide'/>
+    <disk type="file" device="disk">
+      <driver name="qemu"/>
+      <source file="/tmp/__virtinst_cli_exist1.img"/>
+      <target dev="hda" bus="ide"/>
     </disk>
-    <disk type='file' device='cdrom'>
-      <driver name='qemu'/>
-      <source file='/tmp/__virtinst_cli_exist2.img'/>
-      <target dev='hdc' bus='ide'/>
+    <disk type="file" device="cdrom">
+      <driver name="qemu"/>
+      <source file="/tmp/__virtinst_cli_exist2.img"/>
+      <target dev="hdc" bus="ide"/>
       <readonly/>
     </disk>
-    <interface type='network'>
-      <source network='default'/>
-      <mac address='00:11:22:33:44:55'/>
+    <interface type="network">
+      <source network="default"/>
+      <mac address="00:11:22:33:44:55"/>
     </interface>
-    <input type='tablet' bus='usb'/>
-    <graphics type='vnc' port='-1'/>
-    <console type='pty'/>
-    <sound model='ich6'/>
+    <input type="tablet" bus="usb"/>
+    <graphics type="vnc" port="-1"/>
+    <console type="pty"/>
+    <sound model="ich6"/>
     <video>
-      <model type='vga'/>
+      <model type="vga"/>
     </video>
   </devices>
 </domain>
-<domain type='kvm'>
+<domain type="kvm">
   <name>foobar</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <os>
-    <type arch='x86_64'>hvm</type>
-    <boot dev='hd'/>
+    <type arch="x86_64">hvm</type>
+    <boot dev="hd"/>
   </os>
   <features>
     <acpi/><apic/><pae/>
@@ -61,39 +61,39 @@
   <on_crash>destroy</on_crash>
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
-    <disk type='file' device='disk'>
-      <driver name='qemu'/>
-      <source file='/tmp/__virtinst_cli_exist1.img'/>
-      <target dev='hda' bus='ide'/>
+    <disk type="file" device="disk">
+      <driver name="qemu"/>
+      <source file="/tmp/__virtinst_cli_exist1.img"/>
+      <target dev="hda" bus="ide"/>
     </disk>
-    <disk type='file' device='cdrom'>
-      <driver name='qemu'/>
-      <source file='/tmp/__virtinst_cli_exist2.img'/>
-      <target dev='hdc' bus='ide'/>
+    <disk type="file" device="cdrom">
+      <driver name="qemu"/>
+      <source file="/tmp/__virtinst_cli_exist2.img"/>
+      <target dev="hdc" bus="ide"/>
       <readonly/>
     </disk>
-    <interface type='network'>
-      <source network='default'/>
-      <mac address='00:11:22:33:44:55'/>
+    <interface type="network">
+      <source network="default"/>
+      <mac address="00:11:22:33:44:55"/>
     </interface>
-    <input type='tablet' bus='usb'/>
-    <graphics type='vnc' port='-1'/>
-    <console type='pty'/>
-    <sound model='ich6'/>
+    <input type="tablet" bus="usb"/>
+    <graphics type="vnc" port="-1"/>
+    <console type="pty"/>
+    <sound model="ich6"/>
     <video>
-      <model type='vga'/>
+      <model type="vga"/>
     </video>
   </devices>
 </domain>
-<domain type='kvm'>
+<domain type="kvm">
   <name>foobar</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <os>
-    <type arch='x86_64'>hvm</type>
-    <boot dev='hd'/>
+    <type arch="x86_64">hvm</type>
+    <boot dev="hd"/>
   </os>
   <features>
     <acpi/><apic/><pae/>
@@ -104,27 +104,27 @@
   <on_crash>restart</on_crash>
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
-    <disk type='file' device='disk'>
-      <driver name='qemu'/>
-      <source file='/tmp/__virtinst_cli_exist1.img'/>
-      <target dev='hda' bus='ide'/>
+    <disk type="file" device="disk">
+      <driver name="qemu"/>
+      <source file="/tmp/__virtinst_cli_exist1.img"/>
+      <target dev="hda" bus="ide"/>
     </disk>
-    <disk type='file' device='cdrom'>
-      <driver name='qemu'/>
-      <source file='/tmp/__virtinst_cli_exist2.img'/>
-      <target dev='hdc' bus='ide'/>
+    <disk type="file" device="cdrom">
+      <driver name="qemu"/>
+      <source file="/tmp/__virtinst_cli_exist2.img"/>
+      <target dev="hdc" bus="ide"/>
       <readonly/>
     </disk>
-    <interface type='network'>
-      <source network='default'/>
-      <mac address='00:11:22:33:44:55'/>
+    <interface type="network">
+      <source network="default"/>
+      <mac address="00:11:22:33:44:55"/>
     </interface>
-    <input type='tablet' bus='usb'/>
-    <graphics type='vnc' port='-1'/>
-    <console type='pty'/>
-    <sound model='ich6'/>
+    <input type="tablet" bus="usb"/>
+    <graphics type="vnc" port="-1"/>
+    <console type="pty"/>
+    <sound model="ich6"/>
     <video>
-      <model type='vga'/>
+      <model type="vga"/>
     </video>
   </devices>
 </domain>

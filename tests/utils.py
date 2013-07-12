@@ -113,15 +113,12 @@ def sanitize_xml_for_define(xml):
     if not xml:
         return xml
 
-    xml = xml.replace("\"", "'")
-    xml = xml.replace("<domain type='xen'>",
-                      "<domain type='test'>")
-    xml = xml.replace("<domain type='qemu'>",
-                      "<domain type='test'>")
-    xml = xml.replace("<domain type='kvm'>",
-                      "<domain type='test'>")
     xml = xml.replace(">linux<", ">xen<")
-
+    for t in ["xen", "qemu", "kvm"]:
+        xml = xml.replace("<domain type=\"%s\">" % t,
+                          "<domain type=\"test\">")
+        xml = xml.replace("<domain type='%s'>" % t,
+                          "<domain type='test'>")
     return xml
 
 

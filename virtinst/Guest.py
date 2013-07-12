@@ -957,7 +957,11 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         xml = add(self._get_seclabel_xml())
         xml = add("</domain>\n")
 
-        return xml
+        def cb(doc, ctx):
+            ignore = ctx
+            return doc.serialize()
+        xml = util.xml_parse_wrapper(xml, cb)
+        return "\n".join(xml.splitlines()[1:]) + "\n"
 
     def get_continue_inst(self):
         """
