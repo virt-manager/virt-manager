@@ -576,8 +576,6 @@ class VirtualDisk(VirtualDevice):
         self._driverName = driverName
         self._driverType = driverType
         self._driver_io = None
-        self._error_policy = None
-        self._serial = None
         self._target = None
         self._validate = validate
         self._nomanaged = nomanaged
@@ -808,24 +806,8 @@ class VirtualDisk(VirtualDevice):
     driver_io = _xml_property(_get_driver_io, _set_driver_io,
                               xpath="./driver/@io")
 
-    def _get_error_policy(self):
-        return self._error_policy
-    def _set_error_policy(self, val, validate=True):
-        if val is not None:
-            if val not in self.error_policies:
-                raise ValueError(_("Unknown error policy '%s'" % val))
-        self.__validate_wrapper("_error_policy", val, validate,
-                                self.error_policy)
-    error_policy = _xml_property(_get_error_policy, _set_error_policy,
-                                 xpath="./driver/@error_policy")
-
-    def _get_serial(self):
-        return self._serial
-    def _set_serial(self, val, validate=True):
-        self.__validate_wrapper("_serial", val, validate,
-                                self.serial)
-    serial = _xml_property(_get_serial, _set_serial,
-                           xpath="./serial")
+    error_policy = _xml_property(xpath="./driver/@error_policy")
+    serial = _xml_property(xpath="./serial")
 
     iotune_rbs = _xml_property(xpath="./iotune/read_bytes_sec",
                                get_converter=lambda s, x: int(x or 0),
@@ -1344,8 +1326,6 @@ class VirtualDisk(VirtualDevice):
                 drvxml += " type='%s'" % self.driver_type
             if not cache is None:
                 drvxml += " cache='%s'" % cache
-            if not self.error_policy is None:
-                drvxml += " error_policy='%s'" % self.error_policy
             if not iomode is None:
                 drvxml += " io='%s'" % iomode
 
@@ -1375,10 +1355,6 @@ class VirtualDisk(VirtualDevice):
             ret += "      <shareable/>\n"
         if ro:
             ret += "      <readonly/>\n"
-
-        if self.serial:
-            ret += ("      <serial>%s</serial>\n" %
-                    util.xml_escape(self.serial))
 
         addr = self.indent(self.address.get_xml_config(), 6)
         if addr:
