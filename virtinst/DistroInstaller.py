@@ -101,7 +101,7 @@ def _upload_file(conn, meter, destpool, src):
     # Build placeholder volume
     size = os.path.getsize(src)
     basename = os.path.basename(src)
-    poolpath = util.get_xml_path(destpool.XMLDesc(0), "/pool/target/path")
+    poolpath = util.xpath(destpool.XMLDesc(0), "/pool/target/path")
     name = Storage.StorageVolume.find_free_name(basename,
                                                 pool_object=destpool)
     if name != basename:

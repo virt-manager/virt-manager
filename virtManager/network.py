@@ -17,9 +17,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 #
-from virtManager import util
+
 import ipaddr
 import libxml2
+
+from virtinst import util
+
 from virtManager.libvirtobject import vmmLibvirtObject
 
 

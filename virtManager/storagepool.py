@@ -18,11 +18,12 @@
 # MA 02110-1301 USA.
 #
 
-import virtinst
-
 # pylint: disable=E0611
 from gi.repository import GObject
 # pylint: enable=E0611
+
+import virtinst
+from virtinst.util import xpath
 
 from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
@@ -100,14 +101,14 @@ class vmmStoragePool(vmmLibvirtObject):
         return self._backend.autostart()
 
     def get_target_path(self):
-        return util.xpath(self.get_xml(), "/pool/target/path") or ""
+        return xpath(self.get_xml(), "/pool/target/path") or ""
 
     def get_allocation(self):
-        return long(util.xpath(self.get_xml(), "/pool/allocation"))
+        return long(xpath(self.get_xml(), "/pool/allocation"))
     def get_available(self):
-        return long(util.xpath(self.get_xml(), "/pool/available"))
+        return long(xpath(self.get_xml(), "/pool/available"))
     def get_capacity(self):
-        return long(util.xpath(self.get_xml(), "/pool/capacity"))
+        return long(xpath(self.get_xml(), "/pool/capacity"))
 
     def get_pretty_allocation(self):
         return util.pretty_bytes(self.get_allocation())
@@ -117,7 +118,7 @@ class vmmStoragePool(vmmLibvirtObject):
         return util.pretty_bytes(self.get_capacity())
 
     def get_type(self):
-        return util.xpath(self.get_xml(), "/pool/@type")
+        return xpath(self.get_xml(), "/pool/@type")
 
     def get_volumes(self):
         self.update_volumes()

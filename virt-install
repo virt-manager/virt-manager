@@ -84,10 +84,10 @@ def supports_pxe(guest):
 
         try:
             xml = nic.conn.networkLookupByName(nic.network).XMLDesc(0)
-            if util.get_xml_path(xml, "/network/ip/dhcp/bootp/@file"):
+            if util.xpath(xml, "/network/ip/dhcp/bootp/@file"):
                 return True
 
-            forward = util.get_xml_path(xml, "/network/forward/@mode")
+            forward = util.xpath(xml, "/network/forward/@mode")
             if forward and forward != "nat":
                 return True
         except:

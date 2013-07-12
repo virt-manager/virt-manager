@@ -18,14 +18,15 @@
 # MA 02110-1301 USA.
 #
 
-import libxml2
+import logging
+
+from virtinst import util
 
 import virtconv.formats as formats
 import virtconv.vmcfg as vmcfg
 import virtconv.diskcfg as diskcfg
 import virtconv.netdevcfg as netdevcfg
 
-import logging
 
 # Mapping of ResourceType value to device type
 # http://konkretcmpi.org/cim218/CIM_ResourceAllocationSettingData.html
@@ -93,7 +94,6 @@ def node_list(node):
 
 
 def get_child_content(parent_node, child_name):
-
     for node in node_list(parent_node):
         if node.name == child_name:
             return node.content
@@ -119,53 +119,6 @@ def convert_alloc_val(ignore, val):
         return int(val * 1024)
 
     return int(val)
-
-
-def _xml_wrapper(xml, func):
-    doc = None
-    ctx = None
-    result = None
-
-    try:
-        doc = libxml2.parseDoc(xml)
-        ctx = doc.xpathNewContext()
-        register_namespace(ctx)
-
-        result = func(ctx)
-    finally:
-        if doc:
-            doc.freeDoc()
-        if ctx:
-            ctx.xpathFreeContext()
-    return result
-
-
-def get_xml_path(xml, path=None, func=None):
-    """
-    Return the content from the passed xml xpath, or return the result
-    of a passed function (receives xpathContext as its only arg)
-    """
-    def _get_xml_path(ctx):
-        result = None
-
-        if path:
-            ret = ctx.xpathEval(path)
-            if ret is not None:
-                if type(ret) == list:
-                    if len(ret) >= 1:
-                        # result = ret[0].content
-                        result = ret
-                else:
-                    result = ret
-
-        elif func:
-            result = func(ctx)
-        else:
-            raise ValueError(_("'path' or 'func' is required."))
-
-        return result
-
-    return _xml_wrapper(xml, _get_xml_path)
 
 
 def _parse_hw_section(vm, nodes, file_refs, disk_section):
@@ -285,7 +238,9 @@ class ovf_parser(formats.parser):
         res = False
         try:
             if xml.count("</Envelope>"):
-                res = bool(get_xml_path(xml, "/ovf:Envelope"))
+                res = bool(util.xpath(xml, "/ovf:Envelope",
+                                      return_list=True,
+                                      register_namespace=register_namespace))
         except Exception, e:
             logging.debug("Error parsing OVF XML: %s", str(e))
 
@@ -303,10 +258,12 @@ class ovf_parser(formats.parser):
         infile.close()
         logging.debug("Importing OVF XML:\n%s", xml)
 
-        return _xml_wrapper(xml, ovf_parser._import_file)
+        return util.xml_parse_wrapper(xml, ovf_parser._import_file,
+                                      register_namespace=register_namespace)
 
     @staticmethod
-    def _import_file(ctx):
+    def _import_file(doc, ctx):
+        ignore = doc
         def xpath_str(path):
             ret = ctx.xpathEval(path)
             result = None

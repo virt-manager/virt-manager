@@ -1005,7 +1005,8 @@ class StorageVolume(StorageObject):
         pool_object = StorageVolume.lookup_pool_by_name(pool_object=pool_object,
                                                         pool_name=pool_name,
                                                         conn=conn)
-        return StoragePool.get_volume_for_pool(util.get_xml_path(pool_object.XMLDesc(0), "/pool/@type"))
+        return StoragePool.get_volume_for_pool(util.xpath(
+            pool_object.XMLDesc(0), "/pool/@type"))
     get_volume_for_pool = staticmethod(get_volume_for_pool)
 
     def find_free_name(name, pool_object=None, pool_name=None, conn=None,
@@ -1407,9 +1408,9 @@ class CloneVolume(StorageVolume):
         # Populate some basic info
         xml  = input_vol.XMLDesc(0)
         typ  = input_vol.info()[0]
-        cap  = int(util.get_xml_path(xml, "/volume/capacity"))
-        alc  = int(util.get_xml_path(xml, "/volume/allocation"))
-        fmt  = util.get_xml_path(xml, "/volume/target/format/@type")
+        cap  = int(util.xpath(xml, "/volume/capacity"))
+        alc  = int(util.xpath(xml, "/volume/allocation"))
+        fmt  = util.xpath(xml, "/volume/target/format/@type")
 
         StorageVolume.__init__(self, conn, name=name, pool=pool,
                                pool_name=pool.name(),

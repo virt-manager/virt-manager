@@ -306,6 +306,30 @@ def parse_node_helper(xml, root_name, callback, exec_class=ValueError):
     return ret
 
 
+def xml_parse_wrapper(xml, parse_func, *args, **kwargs):
+    """
+    Parse the passed xml string into an xpath context, which is passed
+    to parse_func, along with any extra arguments.
+    """
+    doc = None
+    ctx = None
+    ret = None
+    register_namespace = kwargs.pop("register_namespace", None)
+
+    try:
+        doc = libxml2.parseDoc(xml)
+        ctx = doc.xpathNewContext()
+        if register_namespace:
+            register_namespace(ctx)
+        ret = parse_func(doc, ctx, *args, **kwargs)
+    finally:
+        if ctx is not None:
+            ctx.xpathFreeContext()
+        if doc is not None:
+            doc.freeDoc()
+    return ret
+
+
 def generate_uuid(conn):
     for ignore in range(256):
         uuid = randomUUID(conn=conn)
@@ -387,39 +411,32 @@ def xml_escape(xml):
     return xml
 
 
-def get_xml_path(xml, path=None, func=None):
+def xpath(xml, path=None, func=None, return_list=False,
+          register_namespace=None):
     """
     Return the content from the passed xml xpath, or return the result
     of a passed function (receives xpathContext as its only arg)
     """
-    doc = None
-    ctx = None
-    result = None
+    def _getter(doc, ctx, path):
+        ignore = doc
+        if func:
+            return func(ctx)
+        if not path:
+            raise ValueError("'path' or 'func' is required.")
 
-    try:
-        doc = libxml2.parseDoc(xml)
-        ctx = doc.xpathNewContext()
-
-        if path:
-            ret = ctx.xpathEval(path)
-            if ret is not None:
-                if type(ret) == list:
-                    if len(ret) >= 1:
-                        result = ret[0].content
+        ret = ctx.xpathEval(path)
+        if type(ret) is list:
+            if len(ret) >= 1:
+                if return_list:
+                    return ret
                 else:
-                    result = ret
+                    return ret[0].content
+            else:
+                ret = None
+        return ret
 
-        elif func:
-            result = func(ctx)
-
-        else:
-            raise ValueError(_("'path' or 'func' is required."))
-    finally:
-        if doc:
-            doc.freeDoc()
-        if ctx:
-            ctx.xpathFreeContext()
-    return result
+    return xml_parse_wrapper(xml, _getter, path,
+                             register_namespace=register_namespace)
 
 
 def lookup_pool_by_path(conn, path):
@@ -434,8 +451,8 @@ def lookup_pool_by_path(conn, path):
         return None
 
     def check_pool(pool, path):
-        xml_path = get_xml_path(pool.get_xml(refresh_if_nec=False),
-                                "/pool/target/path")
+        xml_path = xpath(pool.get_xml(refresh_if_nec=False),
+                         "/pool/target/path")
         if xml_path is not None and os.path.abspath(xml_path) == path:
             return pool
 

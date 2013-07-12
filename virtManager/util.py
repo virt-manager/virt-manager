@@ -144,28 +144,6 @@ def get_default_path(conn, name, collidelist=None):
     return path
 
 
-def xml_parse_wrapper(xml, parse_func, *args, **kwargs):
-    """
-    Parse the passed xml string into an xpath context, which is passed
-    to parse_func, along with any extra arguments.
-    """
-    import libxml2
-
-    doc = None
-    ctx = None
-    ret = None
-    try:
-        doc = libxml2.parseDoc(xml)
-        ctx = doc.xpathNewContext()
-        ret = parse_func(doc, ctx, *args, **kwargs)
-    finally:
-        if ctx is not None:
-            ctx.xpathFreeContext()
-        if doc is not None:
-            doc.freeDoc()
-    return ret
-
-
 def browse_local(parent, dialog_name, conn, start_folder=None,
                  _type=None, dialog_type=None,
                  confirm_func=None, browse_reason=None,
@@ -307,8 +285,6 @@ def pretty_bytes(val):
         return "%2.2f GB" % (val / (1024.0 * 1024.0 * 1024.0))
     else:
         return "%2.2f MB" % (val / (1024.0 * 1024.0))
-
-xpath = virtinst.util.get_xml_path
 
 
 def chkbox_helper(src, getcb, setcb, text1, text2=None,

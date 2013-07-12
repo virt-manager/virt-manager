@@ -114,8 +114,7 @@ def _check_if_pool_source(conn, path):
         xml = pool.XMLDesc(0)
 
         for element in ["dir", "device", "adapter"]:
-            xml_path = util.get_xml_path(xml,
-                                          "/pool/source/%s/@path" % element)
+            xml_path = util.xpath(xml, "/pool/source/%s/@path" % element)
             if xml_path == path:
                 return pool
 
@@ -626,8 +625,8 @@ class VirtualDisk(VirtualDevice):
         if self.vol_object:
             retpath = self.vol_object.path()
         elif self.vol_install:
-            retpath = (util.get_xml_path(self.vol_install.pool.XMLDesc(0),
-                                         "/pool/target/path") + "/" +
+            retpath = (util.xpath(self.vol_install.pool.XMLDesc(0),
+                                  "/pool/target/path") + "/" +
                        self.vol_install.name)
 
         return retpath
@@ -1004,15 +1003,15 @@ class VirtualDisk(VirtualDevice):
             return
 
         if self.vol_object:
-            newsize = util.get_xml_path(self.vol_object.XMLDesc(0),
-                                         "/volume/capacity")
+            newsize = util.xpath(self.vol_object.XMLDesc(0),
+                                 "/volume/capacity")
             try:
                 newsize = float(newsize) / 1024.0 / 1024.0 / 1024.0
             except:
                 newsize = 0
         elif self._pool_object:
-            newsize = util.get_xml_path(self.vol_object.XMLDesc(0),
-                                         "/pool/capacity")
+            newsize = util.xpath(self.vol_object.XMLDesc(0),
+                                 "/pool/capacity")
             try:
                 newsize = float(newsize) / 1024.0 / 1024.0 / 1024.0
             except:
@@ -1051,7 +1050,7 @@ class VirtualDisk(VirtualDevice):
             for source, source_type in [("dir", self.TYPE_DIR),
                                         ("device", self.TYPE_BLOCK),
                                         ("adapter", self.TYPE_BLOCK)]:
-                if util.get_xml_path(xml, "/pool/source/%s/@dev" % source):
+                if util.xpath(xml, "/pool/source/%s/@dev" % source):
                     dtype = source_type
                     break
 
@@ -1090,7 +1089,7 @@ class VirtualDisk(VirtualDevice):
                                                  manual_format=True)
 
         elif self.vol_object:
-            fmt = util.get_xml_path(self.vol_object.XMLDesc(0),
+            fmt = util.xpath(self.vol_object.XMLDesc(0),
                                      "/volume/target/format/@type")
             if drvname == self.DRIVER_QEMU:
                 drvtype = _qemu_sanitize_drvtype(self.type, fmt)

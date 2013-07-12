@@ -19,8 +19,8 @@
 #
 
 from virtinst import Interface
+from virtinst import util
 
-from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 
 

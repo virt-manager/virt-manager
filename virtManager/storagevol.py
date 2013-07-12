@@ -18,6 +18,8 @@
 # MA 02110-1301 USA.
 #
 
+from virtinst.util import xpath
+
 from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 
@@ -46,15 +48,15 @@ class vmmStorageVolume(vmmLibvirtObject):
         self._backend = None
 
     def get_target_path(self):
-        return util.xpath(self.get_xml(), "/volume/target/path")
+        return xpath(self.get_xml(), "/volume/target/path")
 
     def get_format(self):
-        return util.xpath(self.get_xml(), "/volume/target/format/@type")
+        return xpath(self.get_xml(), "/volume/target/format/@type")
 
     def get_allocation(self):
-        return long(util.xpath(self.get_xml(), "/volume/allocation"))
+        return long(xpath(self.get_xml(), "/volume/allocation"))
     def get_capacity(self):
-        return long(util.xpath(self.get_xml(), "/volume/capacity"))
+        return long(xpath(self.get_xml(), "/volume/capacity"))
 
     def get_pretty_capacity(self):
         return util.pretty_bytes(self.get_capacity())
@@ -62,4 +64,4 @@ class vmmStorageVolume(vmmLibvirtObject):
         return util.pretty_bytes(self.get_allocation())
 
     def get_type(self):
-        return util.xpath(self.get_xml(), "/volume/format/@type")
+        return xpath(self.get_xml(), "/volume/format/@type")
