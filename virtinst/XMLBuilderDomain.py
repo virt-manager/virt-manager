@@ -20,10 +20,16 @@
 # MA 02110-1301 USA.
 
 import copy
+import os
 
 import libxml2
 
 from virtinst import util
+
+
+_trackprops = bool("VIRTINST_TEST_TRACKPROPS" in os.environ)
+_allprops = []
+_seenprops = []
 
 
 class _DocCleanupWrapper(object):
@@ -205,7 +211,19 @@ def _remove_xpath_node(ctx, xpath, dofree=True):
             node.freeNode()
 
 
-def _xml_property(fget=None, fset=None, fdel=None, doc=None,
+class _XMLProperty(property):
+    def __init__(self, fget, fset, doc, xpath):
+        property.__init__(self, fget=fget, fset=fset, doc=doc)
+        self._xpath = xpath
+
+    def __repr__(self):
+        ret = property.__repr__(self)
+        if self._xpath:
+            ret = "<XMLProperty %s>" % str(self._xpath)
+        return ret
+
+
+def _xml_property(fget=None, fset=None, doc=None,
                   xpath=None, get_converter=None, set_converter=None,
                   xml_get_xpath=None, xml_set_xpath=None,
                   xml_set_list=None, is_bool=False, is_multi=False,
@@ -223,7 +241,6 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
 
     @param fget: typical getter function for the property
     @param fset: typical setter function for the property
-    @param fdel: typical deleter function for the property
     @param doc: option doc string for the property
     @param xpath: xpath string which maps to the associated property
                   in a typical XML document
@@ -254,6 +271,8 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
         raise RuntimeError("Didn't find expected property")
 
     def _default_fset(self, val, *args, **kwargs):
+        if _trackprops and retprop not in _seenprops:
+            _seenprops.append(retprop)
         ignore = args
         ignore = kwargs
         propname = _findpropname(self)
@@ -267,10 +286,11 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
         ignore = kwargs
         return self._propstore.get(_findpropname(self), None)
 
+    isdefault = False
     if not fget:
         fget = _default_fget
-    if not fset:
         fset = _default_fset
+        isdefault = True
 
     def new_getter(self, *args, **kwargs):
         val = None
@@ -355,12 +375,10 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
             else:
                 _remove_xpath_node(self._xml_node, use_xpath)
 
-
-    if fdel:
-        # Not tested
-        raise RuntimeError("XML deleter not yet supported.")
-
-    retprop = property(fget=new_getter, fset=new_setter, doc=doc)
+    retprop = _XMLProperty(new_getter, new_setter, doc,
+                           (xpath or xml_set_xpath or xml_get_xpath))
+    if _trackprops and isdefault:
+        _allprops.append(retprop)
     return retprop
 
 

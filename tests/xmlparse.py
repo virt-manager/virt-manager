@@ -14,9 +14,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import unittest
 import glob
 import traceback
+import unittest
 
 import virtinst
 
@@ -88,6 +88,11 @@ class XMLParseTest(unittest.TestCase):
         guest = virtinst.Guest(kvm and kvmconn or conn,
                                parsexml=file(infile).read())
         return guest, outfile
+
+    def test000ClearProps(self):
+        # pylint: disable=W0212
+        # Access to protected member, needed to unittest stuff
+        virtinst.XMLBuilderDomain._seenprops = []
 
     def testAlterGuest(self):
         """
@@ -747,6 +752,23 @@ class XMLParseTest(unittest.TestCase):
 
         self._alter_compare(guest.get_xml_config(), outfile)
 
+
+    def testzzzzCheckProps(self):
+        # pylint: disable=W0212
+        # Access to protected member, needed to unittest stuff
+
+        # If a certain environment variable is set, XMLBuilder tracks
+        # every property registered and every one of those that is
+        # actually altered. The test suite sets that env variable.
+        #
+        # test000ClearProps resets the 'set' list, and this test
+        # ensures that every property we know about has been touched
+        # by one of the above tests.
+
+        from virtinst import XMLBuilderDomain
+        fail = [p for p in XMLBuilderDomain._allprops
+                if p not in XMLBuilderDomain._seenprops]
+        self.assertEquals(fail, [])
 
 if __name__ == "__main__":
     unittest.main()

@@ -17,6 +17,8 @@
 import logging
 import os
 
+os.environ["VIRTINST_TEST_TRACKPROPS"] = "1"
+
 import virtinst
 from tests import utils
 
