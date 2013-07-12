@@ -360,37 +360,6 @@ def is_blktap_capable(conn):
     return False
 
 
-def randomMAC(conn):
-    """Generate a random MAC address.
-
-    00-16-3E allocated to xensource
-    52-54-00 used by qemu/kvm
-
-    The OUI list is available at http://standards.ieee.org/regauth/oui/oui.txt.
-
-    The remaining 3 fields are random, with the first bit of the first
-    random field set 0.
-
-    @return: MAC address string
-    """
-    if hasattr(conn, "_virtinst__fake_conn_predictable"):
-        # Testing hack
-        return "00:11:22:33:44:55"
-
-    ouis = {'xen': [0x00, 0x16, 0x3E], 'qemu': [0x52, 0x54, 0x00]}
-
-    try:
-        oui = ouis[conn.getType().lower()]
-    except KeyError:
-        oui = ouis['xen']
-
-    mac = oui + [
-            random.randint(0x00, 0xff),
-            random.randint(0x00, 0xff),
-            random.randint(0x00, 0xff)]
-    return ':'.join(["%02x" % x for x in mac])
-
-
 def randomUUID(conn):
     if hasattr(conn, "_virtinst__fake_conn_predictable"):
         # Testing hack

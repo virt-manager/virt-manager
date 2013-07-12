@@ -18,6 +18,8 @@
 # MA 02110-1301 USA.
 
 import logging
+import random
+
 import libvirt
 
 from virtinst import util
@@ -26,24 +28,31 @@ from virtinst import XMLBuilderDomain
 from virtinst.XMLBuilderDomain import _xml_property
 
 
-def _compareMAC(p, q):
-    """Compare two MAC addresses"""
-    pa = p.split(":")
-    qa = q.split(":")
+def _random_mac(conn):
+    """Generate a random MAC address.
 
-    if len(pa) != len(qa):
-        if p > q:
-            return 1
-        else:
-            return -1
+    00-16-3E allocated to xensource
+    52-54-00 used by qemu/kvm
 
-    for i in xrange(len(pa)):
-        n = int(pa[i], 0x10) - int(qa[i], 0x10)
-        if n > 0:
-            return 1
-        elif n < 0:
-            return -1
-    return 0
+    The OUI list is available at http://standards.ieee.org/regauth/oui/oui.txt.
+
+    The remaining 3 fields are random, with the first bit of the first
+    random field set 0.
+
+    @return: MAC address string
+    """
+    ouis = {'xen': [0x00, 0x16, 0x3E], 'qemu': [0x52, 0x54, 0x00]}
+
+    try:
+        oui = ouis[conn.getType().lower()]
+    except KeyError:
+        oui = ouis['xen']
+
+    mac = oui + [
+            random.randint(0x00, 0xff),
+            random.randint(0x00, 0xff),
+            random.randint(0x00, 0xff)]
+    return ':'.join(["%02x" % x for x in mac])
 
 
 class VirtualPort(XMLBuilderDomain.XMLBuilderDomain):
@@ -109,6 +118,7 @@ class VirtualNetworkInterface(VirtualDevice):
     network_types = [TYPE_BRIDGE, TYPE_VIRTUAL, TYPE_USER, TYPE_ETHERNET,
                      TYPE_DIRECT]
 
+    @staticmethod
     def get_network_type_desc(net_type):
         """
         Return human readable description for passed network type
@@ -123,7 +133,48 @@ class VirtualNetworkInterface(VirtualDevice):
             desc = _("Usermode networking")
 
         return desc
-    get_network_type_desc = staticmethod(get_network_type_desc)
+
+    @staticmethod
+    def generate_mac(conn):
+        """
+        Generate a random MAC that doesn't conflict with any VMs on
+        the connection.
+        """
+        if hasattr(conn, "_virtinst__fake_conn_predictable"):
+            # Testing hack
+            return "00:11:22:33:44:55"
+
+        for ignore in range(256):
+            mac = _random_mac(conn)
+            ret = VirtualNetworkInterface.is_conflict_net(conn, mac)
+            if ret[1] is None:
+                return mac
+
+        logging.debug("Failed to generate non-conflicting MAC")
+        return None
+
+    @staticmethod
+    def is_conflict_net(conn, searchmac):
+        """
+        @returns: a two element tuple:
+            first element is True if fatal collision occured
+            second element is a string description of the collision.
+
+            Non fatal collisions (mac addr collides with inactive guest) will
+            return (False, "description of collision")
+        """
+        if searchmac is None:
+            return (False, None)
+
+        vms = conn.fetch_all_guests()
+        for vm in vms:
+            for nic in vm.get_devices("interface"):
+                nicmac = nic.macaddr or ""
+                if nicmac.lower() == searchmac.lower():
+                    return (True, _("The MAC address '%s' is in use "
+                                    "by another virtual machine.") % searchmac)
+        return (False, None)
+
 
     def __init__(self, conn, macaddr=None, type=TYPE_BRIDGE, bridge=None,
                  network=None, model=None,
@@ -172,21 +223,6 @@ class VirtualNetworkInterface(VirtualDevice):
         self._default_bridge = ret
         return ret or None
 
-    def _generate_random_mac(self):
-        if not self._random_mac:
-            found = False
-            for ignore in range(256):
-                self._random_mac = util.randomMAC(self.conn)
-                ret = self.is_conflict_net(self.conn, self._random_mac)
-                if ret[1] is not None:
-                    continue
-                found = True
-                break
-
-            if not found:
-                logging.debug("Failed to generate non-conflicting MAC")
-        return self._random_mac
-
     def get_source(self):
         """
         Convenince function, try to return the relevant <source> value
@@ -231,9 +267,11 @@ class VirtualNetworkInterface(VirtualDevice):
 
     def get_macaddr(self):
         # Don't generate a random MAC if parsing XML, since it can be slow
-        if not self._macaddr and not self._is_parse():
-            return self._generate_random_mac()
-        return self._macaddr
+        if self._macaddr or self._is_parse():
+            return self._macaddr
+        if not self._random_mac:
+            self._random_mac = self.generate_mac(self.conn)
+        return self._random_mac
     def set_macaddr(self, val):
         util.validate_macaddr(val)
         self._macaddr = val
@@ -303,31 +341,9 @@ class VirtualNetworkInterface(VirtualDevice):
     source_mode = _xml_property(get_source_mode, set_source_mode,
                                 xpath="./source/@mode")
 
-    def is_conflict_net(self, conn, mac=None):
-        """
-        @returns: a two element tuple:
-            first element is True if fatal collision occured
-            second element is a string description of the collision.
-
-            Non fatal collisions (mac addr collides with inactive guest) will
-            return (False, "description of collision")
-        """
-        searchmac = mac or self.macaddr
-        if searchmac is None:
-            return (False, None)
-
-        vms = self.conn.fetch_all_guests()
-        for vm in vms:
-            for nic in vm.get_devices("interface"):
-                nicmac = nic.macaddr or ""
-                if nicmac.lower() == searchmac.lower():
-                    return (True, _("The MAC address '%s' is in use "
-                                    "by another virtual machine.") % searchmac)
-        return (False, None)
-
     def setup(self, meter=None):
         if self.macaddr:
-            ret, msg = self.is_conflict_net(self.conn)
+            ret, msg = self.is_conflict_net(self.conn, self.macaddr)
             if msg is not None:
                 if ret is False:
                     logging.warning(msg)

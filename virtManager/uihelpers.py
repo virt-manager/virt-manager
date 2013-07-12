@@ -730,7 +730,7 @@ def validate_network(err, conn, nettype, devname, macaddr, model=None):
         return err.val_err(_("Error with network parameters."), e)
 
     # Make sure there is no mac address collision
-    isfatal, errmsg = net.is_conflict_net(conn.get_backend())
+    isfatal, errmsg = net.is_conflict_net(conn.get_backend(), net.macaddr)
     if isfatal:
         return err.val_err(_("Mac address collision."), errmsg)
     elif errmsg is not None:

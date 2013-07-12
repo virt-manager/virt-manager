@@ -365,14 +365,7 @@ class Cloner(object):
             if self._clone_macs:
                 mac = self._clone_macs.pop()
             else:
-                while 1:
-                    mac = util.randomMAC(self.conn)
-                    ignore, msg = self._check_mac(mac)
-                    if msg is not None:
-                        continue
-                    else:
-                        break
-
+                mac = VirtualNetworkInterface.generate_mac(self.conn)
             iface.macaddr = mac
 
         # Changing storage XML
@@ -502,11 +495,6 @@ class Cloner(object):
     ############################
     # Private helper functions #
     ############################
-
-    # Check if new mac address is valid
-    def _check_mac(self, mac):
-        nic = VirtualNetworkInterface(self.conn, macaddr=mac)
-        return nic.is_conflict_net(self.conn)
 
     # Parse disk paths that need to be cloned from the original guest's xml
     # Return a list of VirtualDisk instances pointing to the original
