@@ -579,12 +579,6 @@ class VirtualDisk(VirtualDevice):
         self._error_policy = None
         self._serial = None
         self._target = None
-        self._iotune_rbs = None
-        self._iotune_ris = None
-        self._iotune_tbs = None
-        self._iotune_tis = None
-        self._iotune_wbs = None
-        self._iotune_wis = None
         self._validate = validate
         self._nomanaged = nomanaged
 
@@ -833,81 +827,22 @@ class VirtualDisk(VirtualDevice):
     serial = _xml_property(_get_serial, _set_serial,
                            xpath="./serial")
 
-    def _get_iotune_rbs(self):
-        return self._iotune_rbs
-    def _set_iotune_rbs(self, val):
-        if not isinstance(val, int) or val < 0:
-            raise ValueError(_("IOTune read bytes per second value must be an "
-                               "integer"))
-        self._iotune_rbs = val
-    iotune_rbs = _xml_property(_get_iotune_rbs,
-                               _set_iotune_rbs,
-                               xpath="./iotune/read_bytes_sec",
+    iotune_rbs = _xml_property(xpath="./iotune/read_bytes_sec",
                                get_converter=lambda s, x: int(x or 0),
                                set_converter=lambda s, x: int(x))
-
-    def _get_iotune_ris(self):
-        return self._iotune_ris
-    def _set_iotune_ris(self, val):
-        if not isinstance(val, int) or val < 0:
-            raise ValueError(_("IOTune read iops per second value must be an "
-                               "integer"))
-        self._iotune_ris = val
-    iotune_ris = _xml_property(_get_iotune_ris,
-                               _set_iotune_ris,
-                               xpath="./iotune/read_iops_sec",
+    iotune_ris = _xml_property(xpath="./iotune/read_iops_sec",
                                get_converter=lambda s, x: int(x or 0),
                                set_converter=lambda s, x: int(x))
-
-    def _get_iotune_tbs(self):
-        return self._iotune_tbs
-    def _set_iotune_tbs(self, val):
-        if not isinstance(val, int) or val < 0:
-            raise ValueError(_("IOTune total bytes per second value must be an "
-                               "integer"))
-        self._iotune_tbs = val
-    iotune_tbs = _xml_property(_get_iotune_tbs,
-                               _set_iotune_tbs,
-                               xpath="./iotune/total_bytes_sec",
+    iotune_tbs = _xml_property(xpath="./iotune/total_bytes_sec",
                                get_converter=lambda s, x: int(x or 0),
                                set_converter=lambda s, x: int(x))
-
-    def _get_iotune_tis(self):
-        return self._iotune_tis
-    def _set_iotune_tis(self, val):
-        if not isinstance(val, int) or val < 0:
-            raise ValueError(_("IOTune total iops per second value must be an "
-                               "integer"))
-        self._iotune_tis = val
-    iotune_tis = _xml_property(_get_iotune_tis,
-                               _set_iotune_tis,
-                               xpath="./iotune/total_iops_sec",
+    iotune_tis = _xml_property(xpath="./iotune/total_iops_sec",
                                get_converter=lambda s, x: int(x or 0),
                                set_converter=lambda s, x: int(x))
-
-    def _get_iotune_wbs(self):
-        return self._iotune_wbs
-    def _set_iotune_wbs(self, val):
-        if not isinstance(val, int) or val < 0:
-            raise ValueError(_("IOTune write bytes per second value must be an "
-                               "integer"))
-        self._iotune_wbs = val
-    iotune_wbs = _xml_property(_get_iotune_wbs,
-                               _set_iotune_wbs,
-                               xpath="./iotune/write_bytes_sec",
+    iotune_wbs = _xml_property(xpath="./iotune/write_bytes_sec",
                                get_converter=lambda s, x: int(x or 0),
                                set_converter=lambda s, x: int(x))
-
-    def _get_iotune_wis(self):
-        return self._iotune_wis
-    def _set_iotune_wis(self, val):
-        if not isinstance(val, int) or val < 0:
-            raise ValueError(_("IOTune write iops per second value must be an "
-                               "integer"))
-        self._iotune_wis = val
-    iotune_wis = _xml_property(_get_iotune_wis,
-                               _set_iotune_wis,
-                               xpath="./iotune/write_iops_sec",
+    iotune_wis = _xml_property(xpath="./iotune/write_iops_sec",
                                get_converter=lambda s, x: int(x or 0),
                                set_converter=lambda s, x: int(x))
 
@@ -1445,29 +1380,11 @@ class VirtualDisk(VirtualDevice):
             ret += ("      <serial>%s</serial>\n" %
                     util.xml_escape(self.serial))
 
-        if (self.iotune_rbs or self.iotune_ris or
-            self.iotune_tbs or self.iotune_tis or
-            self.iotune_wbs or self.iotune_wis):
-            ret += "      <iotune>\n"
-            if self.iotune_rbs:
-                ret += "        <read_bytes_sec>%s</read_bytes_sec>\n" % (self.iotune_rbs)
-            if self.iotune_ris:
-                ret += "        <read_iops_sec>%s</read_iops_sec>\n" % (self.iotune_ris)
-            if self.iotune_tbs:
-                ret += "        <total_bytes_sec>%s</total_bytes_sec>\n" % (self.iotune_tbs)
-            if self.iotune_tis:
-                ret += "        <total_iops_sec>%s</total_iops_sec>\n" % (self.iotune_tis)
-            if self.iotune_wbs:
-                ret += "        <write_bytes_sec>%s</write_bytes_sec>\n" % (self.iotune_wbs)
-            if self.iotune_wis:
-                ret += "        <write_iops_sec>%s</write_iops_sec>\n" % (self.iotune_wis)
-            ret += "      </iotune>\n"
-
         addr = self.indent(self.address.get_xml_config(), 6)
         if addr:
             ret += addr
         ret += "    </disk>"
-        return ret
+        return self._add_parse_bits(ret)
 
     def is_size_conflict(self):
         """

@@ -244,10 +244,33 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
     @param default_converter: If the virtinst value is "default", use
                               this function to get the actual XML value
     """
-
     # pylint: disable=W0212
     # Accessing _xml vals of self. This should be a class method, but
     # we break it out to be more readable
+    def _findpropname(self):
+        for key, val in self.__class__.__dict__.items():
+            if val is retprop:
+                return key
+        raise RuntimeError("Didn't find expected property")
+
+    def _default_fset(self, val, *args, **kwargs):
+        ignore = args
+        ignore = kwargs
+        propname = _findpropname(self)
+        self._propstore[propname] = val
+        if propname in self._proporder:
+            self._proporder.remove(propname)
+        self._proporder.append(propname)
+
+    def _default_fget(self, *args, **kwargs):
+        ignore = args
+        ignore = kwargs
+        return self._propstore.get(_findpropname(self), None)
+
+    if not fget:
+        fget = _default_fget
+    if not fset:
+        fset = _default_fset
 
     def new_getter(self, *args, **kwargs):
         val = None
@@ -258,15 +281,14 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
         if default_converter and getval == "default":
             return getval
 
-        usexpath = xpath
+        node_xpath = xpath
         if xml_get_xpath:
-            usexpath = xml_get_xpath(self)
-
-        if usexpath is None:
+            node_xpath = xml_get_xpath(self)
+        if node_xpath is None:
             return getval
 
         nodes = util.listify(_get_xpath_node(self._xml_ctx,
-                                              usexpath, is_multi))
+                                             node_xpath, is_multi))
         if nodes:
             ret = []
             for node in nodes:
@@ -292,7 +314,6 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
     def new_setter(self, val, *args, **kwargs):
         # Do this regardless, for validation purposes
         fset(self, val, *args, **kwargs)
-
         if not self._xml_node:
             return
 
@@ -303,28 +324,28 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
         elif default_converter and val == "default":
             val = default_converter(self)
 
-        nodexpath = xpath
+        node_xpath = xpath
         if xml_set_xpath:
-            nodexpath = xml_set_xpath(self)
+            node_xpath = xml_set_xpath(self)
 
-        if nodexpath is None:
+        if node_xpath is None:
             return
 
         nodes = util.listify(_get_xpath_node(self._xml_ctx,
-                                              nodexpath, is_multi))
+                                              node_xpath, is_multi))
 
-        xpath_list = nodexpath
+        xpath_list = node_xpath
         if xml_set_list:
             xpath_list = xml_set_list(self)
 
         node_map = _tuplify_lists(nodes, val, xpath_list)
-        for node, val, usexpath in node_map:
+        for node, val, use_xpath in node_map:
             if node:
-                usexpath = node.nodePath()
+                use_xpath = node.nodePath()
 
             if val not in [None, False]:
                 if not node:
-                    node = _build_xpath_node(self._xml_node, usexpath)
+                    node = _build_xpath_node(self._xml_node, use_xpath)
 
                 if val is True:
                     # Boolean property, creating the node is enough
@@ -332,20 +353,30 @@ def _xml_property(fget=None, fset=None, fdel=None, doc=None,
                 else:
                     node.setContent(util.xml_escape(str(val)))
             else:
-                _remove_xpath_node(self._xml_node, usexpath)
+                _remove_xpath_node(self._xml_node, use_xpath)
 
 
     if fdel:
         # Not tested
         raise RuntimeError("XML deleter not yet supported.")
 
-    return property(fget=new_getter, fset=new_setter, doc=doc)
+    retprop = property(fget=new_getter, fset=new_setter, doc=doc)
+    return retprop
 
 
 class XMLBuilderDomain(object):
     """
     Base for all classes which build or parse domain XML
     """
+    @staticmethod
+    def indent(xmlstr, level):
+        xml = ""
+        if not xmlstr:
+            return xml
+
+        for l in iter(xmlstr.splitlines()):
+            xml += " " * level + l + "\n"
+        return xml
 
     _dumpxml_xpath = "."
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
@@ -363,6 +394,8 @@ class XMLBuilderDomain(object):
         self._xml_node = None
         self._xml_ctx = None
         self._xml_root_doc = None
+        self._propstore = {}
+        self._proporder = []
 
         if parsexml or parsexmlnode:
             self._parsexml(parsexml, parsexmlnode)
@@ -429,6 +462,27 @@ class XMLBuilderDomain(object):
 
         self._set_xml_context()
 
+    def _add_parse_bits(self, xml):
+        if not self._propstore or self._is_parse():
+            return xml
+
+        try:
+            self._parsexml(xml, None)
+            for key in self._proporder[:]:
+                setattr(self, key, self._propstore[key])
+            ret = self.get_xml_config()
+            for c in xml:
+                if c != " ":
+                    break
+                ret = " " + ret
+            return ret.strip("\n")
+        finally:
+            self._xml_root_doc = None
+            self._xml_node = None
+            if self._xml_ctx:
+                self._xml_ctx.xpathFreeContext()
+            self._xml_ctx = None
+
     def _get_xml_config(self):
         """
         Internal XML building function. Must be overwritten by subclass
@@ -449,13 +503,3 @@ class XMLBuilderDomain(object):
             return _sanitize_libxml_xml(node.serialize())
 
         return self._get_xml_config(*args, **kwargs)
-
-    @staticmethod
-    def indent(xmlstr, level):
-        xml = ""
-        if not xmlstr:
-            return xml
-
-        for l in iter(xmlstr.splitlines()):
-            xml += " " * level + l + "\n"
-        return xml

@@ -42,6 +42,10 @@
     </disk>
     <disk type="file" device="floppy">
       <target dev="fda" bus="fdc"/>
+      <iotune>
+        <total_iops_sec>5</total_iops_sec>
+        <total_bytes_sec>6</total_bytes_sec>
+      </iotune>
       <source file="/default-pool/default-vol"/>
       <shareable/>
       <driver cache="writeback" io="native"/>

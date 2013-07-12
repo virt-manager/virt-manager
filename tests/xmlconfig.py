@@ -550,19 +550,28 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(VirtualDisk(g.conn, path=None,
                                  device=VirtualDisk.DEVICE_CDROM,
                                  bus="scsi"))
-        g.add_device(VirtualDisk(g.conn, path=None,
-                                 device=VirtualDisk.DEVICE_FLOPPY))
-        d1 = VirtualDisk(g.conn, path="/dev/loop0",
-                         device=VirtualDisk.DEVICE_FLOPPY,
-                         driverName="phy")
-        d1.driver_cache = "none"
-        g.add_device(d1)
-        d2 = VirtualDisk(g.conn, path="/dev/loop0",
-                         bus="virtio", driverName="qemu",
-                         driverType="qcow2")
-        d2.driver_cache = "none"
-        d2.driver_io = "threads"
-        g.add_device(d2)
+        d = VirtualDisk(g.conn, path=None,
+                        device=VirtualDisk.DEVICE_FLOPPY)
+        d.iotune_tbs = 1
+        d.iotune_tis = 2
+        g.add_device(d)
+
+        d = VirtualDisk(g.conn, path="/dev/loop0",
+                        device=VirtualDisk.DEVICE_FLOPPY,
+                        driverName="phy")
+        d.driver_cache = "none"
+        d.iotune_rbs = 5555
+        d.iotune_ris = 1234
+        d.iotune_wbs = 3
+        d.iotune_wis = 4
+        g.add_device(d)
+
+        d = VirtualDisk(g.conn, path="/dev/loop0",
+                        bus="virtio", driverName="qemu",
+                        driverType="qcow2")
+        d.driver_cache = "none"
+        d.driver_io = "threads"
+        g.add_device(d)
 
         self._compare(g, "boot-many-disks2", False)
 

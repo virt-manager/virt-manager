@@ -249,10 +249,10 @@ class XMLParseTest(unittest.TestCase):
         disks = guest.get_devices("disk")
         disk1 = disks[0]
         disk1.size = 1
-        disk2 = disks[2]
-        disk2.size = 1
-        disk3 = disks[5]
+        disk3 = disks[2]
         disk3.size = 1
+        disk6 = disks[5]
+        disk6.size = 1
 
         check = self._make_checker(disk1)
         check("path", "/tmp/test.img", "/dev/loop0")
@@ -260,7 +260,7 @@ class XMLParseTest(unittest.TestCase):
         check("driver_type", None, "raw")
         check("serial", "WD-WMAP9A966149", "frob")
 
-        check = self._make_checker(disk2)
+        check = self._make_checker(disk3)
         check("path", "/dev/loop0", None)
         check("device", "cdrom", "floppy")
         check("read_only", True, False)
@@ -268,12 +268,19 @@ class XMLParseTest(unittest.TestCase):
         check("bus", None, "fdc")
         check("error_policy", "stop", None)
 
-        check = self._make_checker(disk3)
+        check = self._make_checker(disk6)
         check("path", None, "/default-pool/default-vol")
         check("shareable", False, True)
         check("driver_cache", None, "writeback")
         check("driver_io", None, "threads")
         check("driver_io", "threads", "native")
+        check("iotune_ris", 1, 0)
+        check("iotune_rbs", 2, 0)
+        check("iotune_wis", 3, 0)
+        check("iotune_wbs", 4, 0)
+        check("iotune_tis", 0, 5)
+        check("iotune_tbs", 0, 6)
+
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

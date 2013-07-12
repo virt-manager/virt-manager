@@ -43,11 +43,21 @@
     </disk>
     <disk type="block" device="floppy">
       <target dev="fda" bus="fdc"/>
+      <iotune>
+        <total_bytes_sec>1</total_bytes_sec>
+        <total_iops_sec>2</total_iops_sec>
+      </iotune>
     </disk>
     <disk type="block" device="floppy">
       <driver name="phy" cache="none"/>
       <source dev="/dev/loop0"/>
       <target dev="fdb" bus="fdc"/>
+      <iotune>
+        <read_bytes_sec>5555</read_bytes_sec>
+        <read_iops_sec>1234</read_iops_sec>
+        <write_bytes_sec>3</write_bytes_sec>
+        <write_iops_sec>4</write_iops_sec>
+      </iotune>
     </disk>
     <disk type="block" device="disk">
       <driver name="qemu" type="qcow2" cache="none" io="threads"/>

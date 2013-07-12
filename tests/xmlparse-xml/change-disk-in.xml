@@ -45,6 +45,12 @@
     </disk>
     <disk type="block" device="floppy">
       <target dev="fda" bus="fdc"/>
+      <iotune>
+        <read_iops_sec>1</read_iops_sec>
+        <read_bytes_sec>2</read_bytes_sec>
+        <write_iops_sec>3</write_iops_sec>
+        <write_bytes_sec>4</write_bytes_sec>
+      </iotune>
     </disk>
     <disk type="block" device="floppy">
       <driver name="phy" cache="none"/>
