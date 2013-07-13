@@ -25,6 +25,7 @@ from gi.repository import Gtk
 # pylint: enable=E0611
 
 import logging
+import re
 import Queue
 import threading
 
@@ -333,13 +334,16 @@ class vmmEngine(vmmGObject):
         self.windows -= 1
         logging.debug("window counter decremented to %s", self.windows)
 
-        # Don't exit if system tray is enabled
-        if (self.windows <= 0 and
-            self.systray and
-            not self.systray.is_visible()):
+        if self._can_exit():
             # Defer this to an idle callback, since we can race with
             # a vmmDetails window being deleted.
             self.idle_add(self.exit_app, src)
+
+    def _can_exit(self):
+        # Don't exit if system tray is enabled
+        return (self.windows <= 0 and
+                self.systray and
+                not self.systray.is_visible())
 
     def _cleanup(self):
         self.err = None
@@ -451,6 +455,7 @@ class vmmEngine(vmmGObject):
 
         conn.connect("vm-removed", self._do_vm_removed)
         conn.connect("state-changed", self._do_conn_changed)
+        conn.connect("connect-error", self._connect_error)
         conn.connect("priority-tick", self._schedule_priority_tick)
         self.emit("conn-added", conn)
 
@@ -520,6 +525,73 @@ class vmmEngine(vmmGObject):
         if not conn:
             raise RuntimeError(_("Unknown connection URI %s") % uri)
         return conn
+
+    def _connect_error(self, conn, errmsg, tb, warnconsole):
+        errmsg = errmsg.strip(" \n")
+        tb = tb.strip(" \n")
+        hint = ""
+        show_errmsg = True
+
+        if conn.is_remote():
+            logging.debug(conn.get_transport())
+            if re.search(r"nc: .* -- 'U'", tb):
+                hint += _("The remote host requires a version of netcat/nc\n"
+                          "which supports the -U option.")
+                show_errmsg = False
+            elif (conn.get_transport()[0] == "ssh" and
+                  re.search(r"ssh-askpass", tb)):
+
+                if self.config.askpass_package:
+                    ret = packageutils.check_packagekit(
+                                            self.err,
+                                            self.config.askpass_package,
+                                            False)
+                    if ret:
+                        conn.open()
+                        return
+
+                hint += _("You need to install openssh-askpass or "
+                          "similar\nto connect to this host.")
+                show_errmsg = False
+            else:
+                hint += _("Verify that the 'libvirtd' daemon is running\n"
+                          "on the remote host.")
+
+        elif conn.is_xen():
+            hint += _("Verify that:\n"
+                      " - A Xen host kernel was booted\n"
+                      " - The Xen service has been started")
+
+        else:
+            if warnconsole:
+                hint += _("Could not detect a local session: if you are \n"
+                          "running virt-manager over ssh -X or VNC, you \n"
+                          "may not be able to connect to libvirt as a \n"
+                          "regular user. Try running as root.")
+                show_errmsg = False
+            elif re.search(r"libvirt-sock", tb):
+                hint += _("Verify that the 'libvirtd' daemon is running.")
+                show_errmsg = False
+
+        msg = _("Unable to connect to libvirt.")
+        if show_errmsg:
+            msg += "\n\n%s" % errmsg
+        if hint:
+            msg += "\n\n%s" % hint
+
+        msg = msg.strip("\n")
+        details = msg
+        details += "\n\n"
+        details += "Libvirt URI is: %s\n\n" % conn.get_uri()
+        details += tb
+
+        title = _("Virtual Machine Manager Connection Failure")
+
+        if self._can_exit():
+            self.err.show_err(msg, details, title, async=False)
+            self.idle_add(self.exit_app, conn)
+        else:
+            self.err.show_err(msg, details, title)
 
     ####################
     # Dialog launchers #
@@ -623,6 +695,15 @@ class vmmEngine(vmmGObject):
 
     def _show_vm_helper(self, src, uri, uuid, page=None, forcepage=False):
         try:
+            if uuid not in self.conns[uri]["conn"].vms:
+                # This will only happen if --show-* option was used during
+                # virt-manager launch and an invalid UUID is passed.
+                # The error message must be sync otherwise the user will not
+                # know why the application ended.
+                self.err.show_err("%s does not have VM with UUID %s" %
+                                         (uri, uuid), async=False)
+                return
+
             details = self._get_details_dialog(uri, uuid)
 
             if forcepage or not details.is_visible():
@@ -636,9 +717,11 @@ class vmmEngine(vmmGObject):
                     details.activate_default_page()
 
             details.show()
-            return details
         except Exception, e:
             src.err.show_err(_("Error launching details: %s") % str(e))
+        finally:
+            if self._can_exit():
+                self.idle_add(self.exit_app, src)
 
     def _do_show_vm(self, src, uri, uuid):
         self._show_vm_helper(src, uri, uuid)
@@ -751,16 +834,16 @@ class vmmEngine(vmmGObject):
         self._do_show_create(self.get_manager(), uri)
 
     def show_domain_console(self, uri, uuid):
-        self._show_vm_helper(self.get_manager(), uri, uuid,
-                             page=DETAILS_CONSOLE, forcepage=True)
+        self.idle_add(self._show_vm_helper, self.get_manager(), uri, uuid,
+                      page=DETAILS_CONSOLE, forcepage=True)
 
     def show_domain_editor(self, uri, uuid):
-        self._show_vm_helper(self.get_manager(), uri, uuid,
-                             page=DETAILS_CONFIG, forcepage=True)
+        self.idle_add(self._show_vm_helper, self.get_manager(), uri, uuid,
+                      page=DETAILS_CONFIG, forcepage=True)
 
     def show_domain_performance(self, uri, uuid):
-        self._show_vm_helper(self.get_manager(), uri, uuid,
-                             page=DETAILS_PERF, forcepage=True)
+        self.idle_add(self._show_vm_helper, self.get_manager(), uri, uuid,
+                      page=DETAILS_PERF, forcepage=True)
 
 
     #######################################

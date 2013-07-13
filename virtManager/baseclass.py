@@ -141,13 +141,13 @@ class vmmGObject(GObject.GObject):
 
         self.idle_add(emitwrap, signal, *args)
 
-    def idle_add(self, func, *args):
+    def idle_add(self, func, *args, **kwargs):
         """
         Make sure idle functions are run thread safe
         """
         def cb():
             try:
-                return func(*args)
+                return func(*args, **kwargs)
             except:
                 print traceback.format_exc()
             return False

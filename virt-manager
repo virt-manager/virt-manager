@@ -277,7 +277,9 @@ def main():
 
     if options.show:
         def cb(conn):
-            launch_specific_window(engine, options.show, options.uri, options.uuid)
+            ignore = conn
+            launch_specific_window(engine,
+                                   options.show, options.uri, options.uuid)
             return True
         engine.uri_cb = cb
         engine.show_manager_window = False
