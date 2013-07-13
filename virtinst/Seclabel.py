@@ -17,11 +17,10 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtinst import XMLBuilderDomain
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
 
-class Seclabel(XMLBuilderDomain.XMLBuilderDomain):
+class Seclabel(XMLBuilder):
     """
     Class for generating <seclabel> XML
     """
@@ -43,7 +42,7 @@ class Seclabel(XMLBuilderDomain.XMLBuilderDomain):
 
     _dumpxml_xpath = "/domain/seclabel"
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
+        XMLBuilder.__init__(self, conn, parsexml,
                                                    parsexmlnode)
 
         self._type = None
@@ -100,14 +99,14 @@ class Seclabel(XMLBuilderDomain.XMLBuilderDomain):
             val != self.SECLABEL_TYPE_DEFAULT):
             raise ValueError("Unknown security type '%s'" % val)
         self._type = val
-    type = _xml_property(get_type, set_type,
+    type = XMLProperty(get_type, set_type,
                          xpath="./seclabel/@type")
 
     def get_model(self):
         return self._model
     def set_model(self, val):
         self._model = val
-    model = _xml_property(get_model, set_model,
+    model = XMLProperty(get_model, set_model,
                           xpath="./seclabel/@model",
                           default_converter=_get_default_model)
 
@@ -115,21 +114,21 @@ class Seclabel(XMLBuilderDomain.XMLBuilderDomain):
         return self._label
     def set_label(self, val):
         self._label = val
-    label = _xml_property(get_label, set_label,
+    label = XMLProperty(get_label, set_label,
                           xpath="./seclabel/label")
 
     def _get_relabel(self):
         return self._relabel
     def _set_relabel(self, val):
         self._relabel = val
-    relabel = _xml_property(_get_relabel, _set_relabel,
+    relabel = XMLProperty(_get_relabel, _set_relabel,
                             xpath="./seclabel/@relabel")
 
     def get_imagelabel(self):
         return self._imagelabel
     def set_imagelabel(self, val):
         self._imagelabel = val
-    imagelabel = _xml_property(get_imagelabel, set_imagelabel,
+    imagelabel = XMLProperty(get_imagelabel, set_imagelabel,
                                xpath="./seclabel/imagelabel")
 
     def _get_xml_config(self):

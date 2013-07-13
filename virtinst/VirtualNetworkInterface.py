@@ -24,8 +24,7 @@ import libvirt
 
 from virtinst import util
 from virtinst.VirtualDevice import VirtualDevice
-from virtinst import XMLBuilderDomain
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
 
 def _random_mac(conn):
@@ -55,10 +54,10 @@ def _random_mac(conn):
     return ':'.join(["%02x" % x for x in mac])
 
 
-class VirtualPort(XMLBuilderDomain.XMLBuilderDomain):
+class VirtualPort(XMLBuilder):
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
+        XMLBuilder.__init__(self, conn, parsexml,
                                                    parsexmlnode)
         self._type = None
         self._managerid = None
@@ -70,35 +69,35 @@ class VirtualPort(XMLBuilderDomain.XMLBuilderDomain):
         return self._type
     def set_type(self, val):
         self._type = val
-    type = _xml_property(get_type, set_type,
+    type = XMLProperty(get_type, set_type,
                                   xpath="./virtualport/@type")
 
     def get_managerid(self):
         return self._managerid
     def set_managerid(self, val):
         self._managerid = val
-    managerid = _xml_property(get_managerid, set_managerid,
+    managerid = XMLProperty(get_managerid, set_managerid,
                                   xpath="./virtualport/parameters/@managerid")
 
     def get_typeid(self):
         return self._typeid
     def set_typeid(self, val):
         self._typeid = val
-    typeid = _xml_property(get_typeid, set_typeid,
+    typeid = XMLProperty(get_typeid, set_typeid,
                                xpath="./virtualport/parameters/@typeid")
 
     def get_typeidversion(self):
         return self._typeidversion
     def set_typeidversion(self, val):
         self._typeidversion = val
-    typeidversion = _xml_property(get_typeidversion, set_typeidversion,
+    typeidversion = XMLProperty(get_typeidversion, set_typeidversion,
                                xpath="./virtualport/parameters/@typeidversion")
 
     def get_instanceid(self):
         return self._instanceid
     def set_instanceid(self, val):
         self._instanceid = val
-    instanceid = _xml_property(get_instanceid, set_instanceid,
+    instanceid = XMLProperty(get_instanceid, set_instanceid,
                                xpath="./virtualport/parameters/@instanceid")
 
     def _get_xml_config(self):
@@ -262,7 +261,7 @@ class VirtualNetworkInterface(VirtualDevice):
         if val not in self.network_types:
             raise ValueError(_("Unknown network type %s") % val)
         self._type = val
-    type = _xml_property(get_type, set_type,
+    type = XMLProperty(get_type, set_type,
                          xpath="./@type")
 
     def get_macaddr(self):
@@ -275,7 +274,7 @@ class VirtualNetworkInterface(VirtualDevice):
     def set_macaddr(self, val):
         util.validate_macaddr(val)
         self._macaddr = val
-    macaddr = _xml_property(get_macaddr, set_macaddr,
+    macaddr = XMLProperty(get_macaddr, set_macaddr,
                             xpath="./mac/@address")
 
     def get_network(self):
@@ -299,7 +298,7 @@ class VirtualNetworkInterface(VirtualDevice):
                                    "started.") % newnet)
 
         self._network = newnet
-    network = _xml_property(get_network, set_network,
+    network = XMLProperty(get_network, set_network,
                             xpath="./source/@network")
 
     def get_bridge(self):
@@ -310,35 +309,35 @@ class VirtualNetworkInterface(VirtualDevice):
         return self._bridge
     def set_bridge(self, val):
         self._bridge = val
-    bridge = _xml_property(get_bridge, set_bridge,
+    bridge = XMLProperty(get_bridge, set_bridge,
                            xpath="./source/@bridge")
 
     def get_model(self):
         return self._model
     def set_model(self, val):
         self._model = val
-    model = _xml_property(get_model, set_model,
+    model = XMLProperty(get_model, set_model,
                           xpath="./model/@type")
 
     def get_target_dev(self):
         return self._target_dev
     def set_target_dev(self, val):
         self._target_dev = val
-    target_dev = _xml_property(get_target_dev, set_target_dev,
+    target_dev = XMLProperty(get_target_dev, set_target_dev,
                                xpath="./target/@dev")
 
     def get_source_dev(self):
         return self._source_dev
     def set_source_dev(self, val):
         self._source_dev = val
-    source_dev = _xml_property(get_source_dev, set_source_dev,
+    source_dev = XMLProperty(get_source_dev, set_source_dev,
                                xpath="./source/@dev")
 
     def get_source_mode(self):
         return self._source_mode
     def set_source_mode(self, newmode):
         self._source_mode = newmode
-    source_mode = _xml_property(get_source_mode, set_source_mode,
+    source_mode = XMLProperty(get_source_mode, set_source_mode,
                                 xpath="./source/@mode")
 
     def setup(self, meter=None):

@@ -18,7 +18,7 @@
 # MA 02110-1301 USA.
 
 from virtinst.VirtualDevice import VirtualDevice
-from virtinst.XMLBuilderDomain import XMLBuilderDomain, _xml_property
+from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 import logging
 
 
@@ -94,35 +94,35 @@ class VirtualController(VirtualDevice):
 
     def get_type(self):
         return self._controller_type
-    type = _xml_property(get_type,
+    type = XMLProperty(get_type,
                          xpath="./@type")
 
     def get_model(self):
         return self._model
     def set_model(self, model):
         self._model = model
-    model = _xml_property(get_model, set_model,
+    model = XMLProperty(get_model, set_model,
                          xpath="./@model")
 
     def get_index(self):
         return self._index
     def set_index(self, val):
         self._index = int(val)
-    index = _xml_property(get_index, set_index,
+    index = XMLProperty(get_index, set_index,
                           xpath="./@index")
 
     def get_vectors(self):
         return self._vectors
     def set_vectors(self, val):
         self._vectors = val
-    vectors = _xml_property(get_vectors, set_vectors,
+    vectors = XMLProperty(get_vectors, set_vectors,
                             xpath="./@vectors")
 
     def get_ports(self):
         return self._ports
     def set_ports(self, val):
         self._ports = val
-    ports = _xml_property(get_ports, set_ports,
+    ports = XMLProperty(get_ports, set_ports,
                           xpath="./@ports")
 
     def set_master(self, masterstr):
@@ -183,9 +183,9 @@ class VirtualControllerUSB(VirtualController):
     _controller_type = VirtualController.CONTROLLER_TYPE_USB
 
 
-class VirtualDeviceMaster(XMLBuilderDomain):
+class VirtualDeviceMaster(XMLBuilder):
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        XMLBuilderDomain.__init__(self, conn, parsexml, parsexmlnode)
+        XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
 
         self._startport = None
 
@@ -201,7 +201,7 @@ class VirtualDeviceMaster(XMLBuilderDomain):
         return self._startport
     def _set_startport(self, val):
         self._startport = val
-    startport = _xml_property(_get_startport, _set_startport, xpath="./master/@startport")
+    startport = XMLProperty(_get_startport, _set_startport, xpath="./master/@startport")
 
     def _get_xml_config(self):
         if self.startport is None:

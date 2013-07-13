@@ -18,7 +18,7 @@
 # MA 02110-1301 USA.
 
 from virtinst.VirtualDevice import VirtualDevice
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualAudio(VirtualDevice):
@@ -48,7 +48,7 @@ class VirtualAudio(VirtualDevice):
         if not self.MODELS.count(new_model):
             raise ValueError(_("Unsupported sound model '%s'" % new_model))
         self._model = new_model
-    model = _xml_property(get_model, set_model,
+    model = XMLProperty(get_model, set_model,
                           xpath="./@model")
 
     def _get_xml_config(self):

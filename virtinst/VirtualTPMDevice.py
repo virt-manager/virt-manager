@@ -23,7 +23,7 @@
 # MA 02110-1301 USA.
 
 from virtinst.VirtualDevice import VirtualDevice
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualTPMDevice(VirtualDevice):
@@ -81,7 +81,7 @@ class VirtualTPMDevice(VirtualDevice):
         if val not in self.types:
             raise ValueError(_("Unknown TPM type '%s'") % val)
         self._type = val
-    type = _xml_property(get_type, set_type,
+    type = XMLProperty(get_type, set_type,
                          xpath="./backend/@type")
 
     def get_models(self):
@@ -94,14 +94,14 @@ class VirtualTPMDevice(VirtualDevice):
         if val not in self.models:
             raise ValueError(_("Unknown TPM model '%s'") % val)
         self._model = val
-    model = _xml_property(get_model, set_model,
+    model = XMLProperty(get_model, set_model,
                           xpath="./@model")
 
     def get_device_path(self):
         return self._device_path
     def set_device_path(self, val):
         self._device_path = val
-    device_path = _xml_property(get_device_path, set_device_path,
+    device_path = XMLProperty(get_device_path, set_device_path,
                                 xpath="./backend/device/@path")
 
     def supports_property(self, propname):

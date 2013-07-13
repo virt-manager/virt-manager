@@ -211,7 +211,7 @@ def _remove_xpath_node(ctx, xpath, dofree=True):
             node.freeNode()
 
 
-class _xml_property(property):
+class XMLProperty(property):
     def __init__(self, fget=None, fset=None, doc=None,
                  xpath=None, get_converter=None, set_converter=None,
                  xml_get_xpath=None, xml_set_xpath=None,
@@ -221,7 +221,7 @@ class _xml_property(property):
         Set a XMLBuilder class property that represents a value in the
         <domain> XML. For example
 
-        name = _xml_property(get_name, set_name, xpath="/domain/name")
+        name = XMLProperty(get_name, set_name, xpath="/domain/name")
 
         When building XML from scratch (virt-install), name is a regular
         class property. When parsing and editting existing guest XML, we
@@ -472,7 +472,7 @@ class _xml_property(property):
                 _remove_xpath_node(root_node, use_xpath)
 
 
-class XMLBuilderDomain(object):
+class XMLBuilder(object):
     """
     Base for all classes which build or parse domain XML
     """

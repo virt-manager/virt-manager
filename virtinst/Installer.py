@@ -26,15 +26,14 @@ import copy
 
 from virtinst import util
 import virtinst
-from virtinst import XMLBuilderDomain
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 from virtinst.Boot import Boot
 
 XEN_SCRATCH = "/var/lib/xen"
 LIBVIRT_SCRATCH = "/var/lib/libvirt/boot"
 
 
-class Installer(XMLBuilderDomain.XMLBuilderDomain):
+class Installer(XMLBuilder):
     """
     Installer classes attempt to encapsulate all the parameters needed
     to 'install' a guest: essentially, booting the guest with the correct
@@ -68,7 +67,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         # pylint: disable=W0622
         # Redefining built-in 'type', but it matches the XML so keep it
 
-        XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
+        XMLBuilder.__init__(self, conn, parsexml,
                                                    parsexmlnode)
 
         self._type = None
@@ -117,7 +116,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         return self._type
     def set_type(self, val):
         self._type = val
-    type = _xml_property(get_type, set_type,
+    type = XMLProperty(get_type, set_type,
                          xpath="./@type")
 
     # Virtualization type ('xen' == xen paravirt, or 'hvm)
@@ -131,7 +130,7 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
 
         # XXX: Need to validate this: have some whitelist based on caps?
         self._os_type = val
-    os_type = _xml_property(get_os_type, set_os_type,
+    os_type = XMLProperty(get_os_type, set_os_type,
                             xpath="./os/type")
 
     def get_arch(self):
@@ -140,28 +139,28 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
         # XXX: Sanitize to a consisten value (i368 -> i686)
         # XXX: Validate against caps
         self._arch = val
-    arch = _xml_property(get_arch, set_arch,
+    arch = XMLProperty(get_arch, set_arch,
                          xpath="./os/type/@arch")
 
     def _get_machine(self):
         return self._machine
     def _set_machine(self, val):
         self._machine = val
-    machine = _xml_property(_get_machine, _set_machine,
+    machine = XMLProperty(_get_machine, _set_machine,
                             xpath="./os/type/@machine")
 
     def _get_loader(self):
         return self._loader
     def _set_loader(self, val):
         self._loader = val
-    loader = _xml_property(_get_loader, _set_loader,
+    loader = XMLProperty(_get_loader, _set_loader,
                            xpath="./os/loader")
 
     def _get_init(self):
         return self._init
     def _set_init(self, val):
         self._init = val
-    init = _xml_property(_get_init, _set_init,
+    init = XMLProperty(_get_init, _set_init,
                          xpath="./os/init")
 
     def get_scratchdir(self):

@@ -19,8 +19,7 @@
 
 import re
 
-from virtinst import XMLBuilderDomain
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
 
 def get_phy_cpus(conn):
@@ -32,7 +31,7 @@ def get_phy_cpus(conn):
     return pcpus
 
 
-class DomainNumatune(XMLBuilderDomain.XMLBuilderDomain):
+class DomainNumatune(XMLBuilder):
     """
     Class for generating <numatune> XML
     """
@@ -101,7 +100,7 @@ class DomainNumatune(XMLBuilderDomain.XMLBuilderDomain):
         self._memory_nodeset = None
         self._memory_mode = None
 
-        XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
+        XMLBuilder.__init__(self, conn, parsexml,
                                                    parsexmlnode)
         if self._is_parse():
             return
@@ -110,7 +109,7 @@ class DomainNumatune(XMLBuilderDomain.XMLBuilderDomain):
         return self._memory_nodeset
     def _set_memory_nodeset(self, val):
         self._memory_nodeset = val
-    memory_nodeset = _xml_property(_get_memory_nodeset,
+    memory_nodeset = XMLProperty(_get_memory_nodeset,
                                    _set_memory_nodeset,
                                    xpath="./numatune/memory/@nodeset")
 
@@ -118,7 +117,7 @@ class DomainNumatune(XMLBuilderDomain.XMLBuilderDomain):
         return self._memory_mode
     def _set_memory_mode(self, val):
         self._memory_mode = val
-    memory_mode = _xml_property(_get_memory_mode,
+    memory_mode = XMLProperty(_get_memory_mode,
                                 _set_memory_mode,
                                 xpath="./numatune/memory/@mode")
 

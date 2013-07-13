@@ -19,11 +19,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtinst.XMLBuilderDomain import XMLBuilderDomain, _xml_property
+from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 import logging
 
 
-class VirtualDevice(XMLBuilderDomain):
+class VirtualDevice(XMLBuilder):
     """
     Base class for all domain xml device objects.
     """
@@ -77,7 +77,7 @@ class VirtualDevice(XMLBuilderDomain):
 
         @param conn: libvirt connection to validate device against
         """
-        XMLBuilderDomain.__init__(self, conn, parsexml, parsexmlnode)
+        XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
 
         self.alias = VirtualDeviceAlias(conn,
                                         parsexml=parsexml,
@@ -99,7 +99,7 @@ class VirtualDevice(XMLBuilderDomain):
     virtual_device_type = property(get_virtual_device_type)
 
     def _get_xml_config(self):
-        # See XMLBuilderDomain for docs
+        # See XMLBuilder for docs
         raise NotImplementedError()
 
     def setup(self, meter=None):
@@ -117,9 +117,9 @@ class VirtualDevice(XMLBuilderDomain):
         self.address = VirtualDeviceAddress(self.conn, addrstr=addrstr)
 
 
-class VirtualDeviceAlias(XMLBuilderDomain):
+class VirtualDeviceAlias(XMLBuilder):
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        XMLBuilderDomain.__init__(self, conn, parsexml, parsexmlnode)
+        XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
 
         self._name = None
 
@@ -128,13 +128,13 @@ class VirtualDeviceAlias(XMLBuilderDomain):
         return self._name
     def _set_name(self, val):
         self._name = val
-    name = _xml_property(_get_name, _set_name, xpath="./alias/@name")
+    name = XMLProperty(_get_name, _set_name, xpath="./alias/@name")
 
     def _get_xml_config(self):
         return ""
 
 
-class VirtualDeviceAddress(XMLBuilderDomain):
+class VirtualDeviceAddress(XMLBuilder):
 
     ADDRESS_TYPE_PCI           = "pci"
     ADDRESS_TYPE_DRIVE         = "drive"
@@ -148,7 +148,7 @@ class VirtualDeviceAddress(XMLBuilderDomain):
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None,
                  addrstr=None):
-        XMLBuilderDomain.__init__(self, conn, parsexml, parsexmlnode)
+        XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
 
         self._type = None
 
@@ -210,51 +210,51 @@ class VirtualDeviceAddress(XMLBuilderDomain):
         return self._type
     def _set_type(self, val):
         self._type = val
-    type = _xml_property(_get_type, _set_type, xpath="./address/@type")
+    type = XMLProperty(_get_type, _set_type, xpath="./address/@type")
 
     def _get_domain(self):
         return self._domain
     def _set_domain(self, val):
         self._domain = val
-    domain = _xml_property(_get_domain, _set_domain, xpath="./address/@domain")
+    domain = XMLProperty(_get_domain, _set_domain, xpath="./address/@domain")
 
     def _get_bus(self):
         return self._bus
     def _set_bus(self, val):
         self._bus = val
-    bus = _xml_property(_get_bus, _set_bus, xpath="./address/@bus")
+    bus = XMLProperty(_get_bus, _set_bus, xpath="./address/@bus")
 
     def _get_slot(self):
         return self._slot
     def _set_slot(self, val):
         self._slot = val
-    slot = _xml_property(_get_slot, _set_slot, xpath="./address/@slot")
+    slot = XMLProperty(_get_slot, _set_slot, xpath="./address/@slot")
 
     def _get_function(self):
         return self._function
     def _set_function(self, val):
         self._function = val
-    function = _xml_property(_get_function, _set_function,
+    function = XMLProperty(_get_function, _set_function,
                              xpath="./address/@function")
 
     def _get_controller(self):
         return self._controller
     def _set_controller(self, val):
         self._controller = val
-    controller = _xml_property(_get_controller, _set_controller,
+    controller = XMLProperty(_get_controller, _set_controller,
                                xpath="./address/@controller")
 
     def _get_unit(self):
         return self._unit
     def _set_unit(self, val):
         self._unit = val
-    unit = _xml_property(_get_unit, _set_unit, xpath="./address/@unit")
+    unit = XMLProperty(_get_unit, _set_unit, xpath="./address/@unit")
 
     def _get_port(self):
         return self._port
     def _set_port(self, val):
         self._port = val
-    port = _xml_property(_get_port, _set_port, xpath="./address/@port")
+    port = XMLProperty(_get_port, _set_port, xpath="./address/@port")
 
     def _get_xml_config(self):
         if not self.type:

@@ -17,18 +17,17 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtinst import XMLBuilderDomain
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
 
-class Clock(XMLBuilderDomain.XMLBuilderDomain):
+class Clock(XMLBuilder):
     """
     Class for generating <clock> XML
     """
 
     _dumpxml_xpath = "/domain/clock"
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
+        XMLBuilder.__init__(self, conn, parsexml,
                                                    parsexmlnode)
 
         self._offset = None
@@ -37,7 +36,7 @@ class Clock(XMLBuilderDomain.XMLBuilderDomain):
         return self._offset
     def set_offset(self, val):
         self._offset = val
-    offset = _xml_property(get_offset, set_offset,
+    offset = XMLProperty(get_offset, set_offset,
                            xpath="./clock/@offset")
 
     def _get_xml_config(self):

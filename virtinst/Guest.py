@@ -30,9 +30,8 @@ import libxml2
 
 from virtinst import util
 from virtinst import support
-from virtinst import XMLBuilderDomain
 import virtinst
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst.VirtualDisk import VirtualDisk
 from virtinst.VirtualInputDevice import VirtualInputDevice
@@ -47,7 +46,7 @@ from virtinst.DomainFeatures import DomainFeatures
 from virtinst import osdict
 
 
-class Guest(XMLBuilderDomain.XMLBuilderDomain):
+class Guest(XMLBuilder):
 
     # OS Dictionary static variables and methods
     _DEFAULTS = osdict.DEFAULTS
@@ -207,7 +206,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         self._default_input_device = None
         self._default_console_device = None
 
-        XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml)
+        XMLBuilder.__init__(self, conn, parsexml)
         if self._is_parse():
             return
 
@@ -282,7 +281,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
             raise ValueError(_("Guest name '%s' is already in use.") % val)
 
         self._name = val
-    name = _xml_property(get_name, set_name,
+    name = XMLProperty(get_name, set_name,
                          xpath="./name")
 
     # Memory allocated to the guest.  Should be given in MB
@@ -298,7 +297,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
             self.maxmemory = val
     def _xml_memory_value(self):
         return int(self.memory) * 1024
-    memory = _xml_property(get_memory, set_memory,
+    memory = XMLProperty(get_memory, set_memory,
                            xpath="./currentMemory",
                            get_converter=lambda s, x: int(x) / 1024,
                            set_converter=lambda s, x: int(x) * 1024)
@@ -313,7 +312,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         self._maxmemory = val
     def _xml_maxmemory_value(self):
         return int(self.maxmemory) * 1024
-    maxmemory = _xml_property(get_maxmemory, set_maxmemory,
+    maxmemory = XMLProperty(get_maxmemory, set_maxmemory,
                               xpath="./memory",
                               get_converter=lambda s, x: int(x) / 1024,
                               set_converter=lambda s, x: int(x) * 1024)
@@ -323,7 +322,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         if val is None:
             return val
         self._hugepage = bool(val)
-    hugepage = _xml_property(get_hugepage, set_hugepage,
+    hugepage = XMLProperty(get_hugepage, set_hugepage,
                              xpath="./memoryBacking/hugepages", is_bool=True)
 
     # UUID for the guest
@@ -332,7 +331,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
     def set_uuid(self, val):
         val = util.validate_uuid(val)
         self._uuid = val
-    uuid = _xml_property(get_uuid, set_uuid,
+    uuid = XMLProperty(get_uuid, set_uuid,
                          xpath="./uuid")
 
     def __validate_cpus(self, val):
@@ -356,7 +355,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         if not val:
             val = self.maxvcpus
         return int(val)
-    vcpus = _xml_property(get_vcpus, set_vcpus,
+    vcpus = XMLProperty(get_vcpus, set_vcpus,
                           xpath="./vcpu/@current",
                           get_converter=_vcpus_get_converter)
 
@@ -365,7 +364,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
     def _set_maxvcpus(self, val):
         val = self.__validate_cpus(val)
         self._maxvcpus = val
-    maxvcpus = _xml_property(_get_maxvcpus, _set_maxvcpus,
+    maxvcpus = XMLProperty(_get_maxvcpus, _set_maxvcpus,
                              xpath="./vcpu",
                              get_converter=lambda s, x: int(x))
 
@@ -379,7 +378,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
 
         DomainNumatune.validate_cpuset(self.conn, val)
         self._cpuset = val
-    cpuset = _xml_property(get_cpuset, set_cpuset,
+    cpuset = XMLProperty(get_cpuset, set_cpuset,
                            xpath="./vcpu/@cpuset")
 
     # GAH! - installer.os_type = "hvm" or "xen" (aka xen paravirt)
@@ -457,14 +456,14 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
         return self._description
     def _set_description(self, val):
         self._description = val
-    description = _xml_property(_get_description, _set_description,
+    description = XMLProperty(_get_description, _set_description,
                                 xpath="./description")
 
     def _get_emulator(self):
         return self._emulator
     def _set_emulator(self, val):
         self._emulator = val
-    emulator = _xml_property(_get_emulator, _set_emulator,
+    emulator = XMLProperty(_get_emulator, _set_emulator,
                              xpath="./devices/emulator")
 
     def _get_replace(self):
@@ -634,7 +633,7 @@ class Guest(XMLBuilderDomain.XMLBuilderDomain):
     ################################
 
     def _parsexml(self, xml, node):
-        XMLBuilderDomain.XMLBuilderDomain._parsexml(self, xml, node)
+        XMLBuilder._parsexml(self, xml, node)
 
         device_mappings = {
             "disk"      : virtinst.VirtualDisk,

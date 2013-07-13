@@ -20,7 +20,7 @@
 import os
 
 from virtinst.VirtualDevice import VirtualDevice
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualFilesystem(VirtualDevice):
@@ -95,7 +95,7 @@ class VirtualFilesystem(VirtualDevice):
         if val is not None and not self.TYPES.count(val):
             raise ValueError(_("Unsupported filesystem type '%s'" % val))
         self._type = val
-    type = _xml_property(_get_type, _set_type, xpath="./@type")
+    type = XMLProperty(_get_type, _set_type, xpath="./@type")
 
     def _get_mode(self):
         return self._mode
@@ -103,7 +103,7 @@ class VirtualFilesystem(VirtualDevice):
         if val is not None and not self.MOUNT_MODES.count(val):
             raise ValueError(_("Unsupported filesystem mode '%s'" % val))
         self._mode = val
-    mode = _xml_property(_get_mode, _set_mode, xpath="./@accessmode")
+    mode = XMLProperty(_get_mode, _set_mode, xpath="./@accessmode")
 
     def _get_wrpolicy(self):
         return self._wrpolicy
@@ -111,13 +111,13 @@ class VirtualFilesystem(VirtualDevice):
         if val is not None and not self.WRPOLICIES.count(val):
             raise ValueError(_("Unsupported filesystem write policy '%s'" % val))
         self._wrpolicy = val
-    wrpolicy = _xml_property(_get_wrpolicy, _set_wrpolicy, xpath="./driver/@wrpolicy")
+    wrpolicy = XMLProperty(_get_wrpolicy, _set_wrpolicy, xpath="./driver/@wrpolicy")
 
     def _get_readonly(self):
         return self._readonly
     def _set_readonly(self, val):
         self._readonly = val
-    readonly = _xml_property(_get_readonly, _set_readonly,
+    readonly = XMLProperty(_get_readonly, _set_readonly,
                              xpath="./readonly", is_bool=True)
 
     def _get_driver(self):
@@ -126,7 +126,7 @@ class VirtualFilesystem(VirtualDevice):
         if val is not None and not self.DRIVER_TYPES.count(val):
             raise ValueError(_("Unsupported filesystem driver '%s'" % val))
         self._driver = val
-    driver = _xml_property(_get_driver, _set_driver, xpath="./driver/@type")
+    driver = XMLProperty(_get_driver, _set_driver, xpath="./driver/@type")
 
     def _get_source(self):
         return self._source
@@ -146,7 +146,7 @@ class VirtualFilesystem(VirtualDevice):
     def _xml_set_source_xpath(self):
         ret = "./source/@" + self.type_to_source_prop(self.type)
         return ret
-    source = _xml_property(_get_source, _set_source,
+    source = XMLProperty(_get_source, _set_source,
                            xml_get_xpath=_xml_get_source_xpath,
                            xml_set_xpath=_xml_set_source_xpath)
 
@@ -164,7 +164,7 @@ class VirtualFilesystem(VirtualDevice):
             raise ValueError(_("Filesystem target '%s' must be an absolute "
                                "path") % val)
         self._target = val
-    target = _xml_property(_get_target, _set_target, xpath="./target/@dir")
+    target = XMLProperty(_get_target, _set_target, xpath="./target/@dir")
 
 
     def _get_xml_config(self):

@@ -92,7 +92,7 @@ class XMLParseTest(unittest.TestCase):
     def test000ClearProps(self):
         # pylint: disable=W0212
         # Access to protected member, needed to unittest stuff
-        virtinst.XMLBuilderDomain._seenprops = []
+        virtinst.xmlbuilder._seenprops = []
 
     def testAlterGuest(self):
         """
@@ -764,9 +764,8 @@ class XMLParseTest(unittest.TestCase):
         # test000ClearProps resets the 'set' list, and this test
         # ensures that every property we know about has been touched
         # by one of the above tests.
-        from virtinst import XMLBuilderDomain
-        fail = [p for p in XMLBuilderDomain._allprops
-                if p not in XMLBuilderDomain._seenprops]
+        fail = [p for p in virtinst.xmlbuilder._allprops
+                if p not in virtinst.xmlbuilder._seenprops]
         try:
             self.assertEquals([], fail)
         except AssertionError:

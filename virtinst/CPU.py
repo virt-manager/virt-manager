@@ -17,8 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtinst import XMLBuilderDomain
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
 import libxml2
 
@@ -27,7 +26,7 @@ def _int_or_none(val):
     return val and int(val) or val
 
 
-class CPUFeature(XMLBuilderDomain.XMLBuilderDomain):
+class CPUFeature(XMLBuilder):
     """
     Class for generating <cpu> child <feature> XML
     """
@@ -35,7 +34,7 @@ class CPUFeature(XMLBuilderDomain.XMLBuilderDomain):
     POLICIES = ["force", "require", "optional", "disable", "forbid"]
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
+        XMLBuilder.__init__(self, conn, parsexml,
                                                    parsexmlnode)
 
         self._name = None
@@ -48,14 +47,14 @@ class CPUFeature(XMLBuilderDomain.XMLBuilderDomain):
         return self._name
     def _set_name(self, val):
         self._name = val
-    name = _xml_property(_get_name, _set_name,
+    name = XMLProperty(_get_name, _set_name,
                          xpath="./@name")
 
     def _get_policy(self):
         return self._policy
     def _set_policy(self, val):
         self._policy = val
-    policy = _xml_property(_get_policy, _set_policy,
+    policy = XMLProperty(_get_policy, _set_policy,
                            xpath="./@policy")
 
     def _get_xml_config(self):
@@ -70,7 +69,7 @@ class CPUFeature(XMLBuilderDomain.XMLBuilderDomain):
         return xml
 
 
-class CPU(XMLBuilderDomain.XMLBuilderDomain):
+class CPU(XMLBuilder):
     """
     Class for generating <cpu> XML
     """
@@ -90,13 +89,13 @@ class CPU(XMLBuilderDomain.XMLBuilderDomain):
         self._cores = None
         self._threads = None
 
-        XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
+        XMLBuilder.__init__(self, conn, parsexml,
                                                    parsexmlnode)
         if self._is_parse():
             return
 
     def _parsexml(self, xml, node):
-        XMLBuilderDomain.XMLBuilderDomain._parsexml(self, xml, node)
+        XMLBuilder._parsexml(self, xml, node)
 
         for node in self._xml_node.children:
             if node.name != "feature":
@@ -106,7 +105,7 @@ class CPU(XMLBuilderDomain.XMLBuilderDomain):
 
     def _get_features(self):
         return self._features[:]
-    features = _xml_property(_get_features)
+    features = XMLProperty(_get_features)
 
     def add_feature(self, name, policy="require"):
         feature = CPUFeature(self.conn)
@@ -138,28 +137,28 @@ class CPU(XMLBuilderDomain.XMLBuilderDomain):
         if val and not self.match:
             self.match = "exact"
         self._model = val
-    model = _xml_property(_get_model, _set_model,
+    model = XMLProperty(_get_model, _set_model,
                           xpath="./cpu/model")
 
     def _get_match(self):
         return self._match
     def _set_match(self, val):
         self._match = val
-    match = _xml_property(_get_match, _set_match,
+    match = XMLProperty(_get_match, _set_match,
                           xpath="./cpu/@match")
 
     def _get_vendor(self):
         return self._vendor
     def _set_vendor(self, val):
         self._vendor = val
-    vendor = _xml_property(_get_vendor, _set_vendor,
+    vendor = XMLProperty(_get_vendor, _set_vendor,
                            xpath="./cpu/vendor")
 
     def _get_mode(self):
         return self._mode
     def _set_mode(self, val):
         self._mode = val
-    mode = _xml_property(_get_mode, _set_mode,
+    mode = XMLProperty(_get_mode, _set_mode,
                          xpath="./cpu/@mode")
 
     # Topology properties
@@ -167,7 +166,7 @@ class CPU(XMLBuilderDomain.XMLBuilderDomain):
         return self._sockets
     def _set_sockets(self, val):
         self._sockets = _int_or_none(val)
-    sockets = _xml_property(_get_sockets, _set_sockets,
+    sockets = XMLProperty(_get_sockets, _set_sockets,
                             get_converter=lambda s, x: _int_or_none(x),
                             xpath="./cpu/topology/@sockets")
 
@@ -175,7 +174,7 @@ class CPU(XMLBuilderDomain.XMLBuilderDomain):
         return self._cores
     def _set_cores(self, val):
         self._cores = _int_or_none(val)
-    cores = _xml_property(_get_cores, _set_cores,
+    cores = XMLProperty(_get_cores, _set_cores,
                           get_converter=lambda s, x: _int_or_none(x),
                           xpath="./cpu/topology/@cores")
 
@@ -183,7 +182,7 @@ class CPU(XMLBuilderDomain.XMLBuilderDomain):
         return self._threads
     def _set_threads(self, val):
         self._threads = _int_or_none(val)
-    threads = _xml_property(_get_threads, _set_threads,
+    threads = XMLProperty(_get_threads, _set_threads,
                             get_converter=lambda s, x: _int_or_none(x),
                             xpath="./cpu/topology/@threads")
 

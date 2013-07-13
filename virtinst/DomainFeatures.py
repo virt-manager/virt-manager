@@ -17,8 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtinst import XMLBuilderDomain
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
 
 def _none_or_bool(val):
@@ -27,14 +26,14 @@ def _none_or_bool(val):
     return bool(val)
 
 
-class DomainFeatures(XMLBuilderDomain.XMLBuilderDomain):
+class DomainFeatures(XMLBuilder):
     """
     Class for generating <features> XML
     """
 
     _dumpxml_xpath = "/domain/features"
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        XMLBuilderDomain.XMLBuilderDomain.__init__(self, conn, parsexml,
+        XMLBuilder.__init__(self, conn, parsexml,
                                                    parsexmlnode)
 
         self._acpi = None
@@ -45,21 +44,21 @@ class DomainFeatures(XMLBuilderDomain.XMLBuilderDomain):
         return self._acpi
     def set_acpi(self, val):
         self._acpi = _none_or_bool(val)
-    acpi = _xml_property(get_acpi, set_acpi,
+    acpi = XMLProperty(get_acpi, set_acpi,
                          xpath="./features/acpi", is_bool=True)
 
     def get_apic(self):
         return self._apic
     def set_apic(self, val):
         self._apic = _none_or_bool(val)
-    apic = _xml_property(get_apic, set_apic,
+    apic = XMLProperty(get_apic, set_apic,
                          xpath="./features/apic", is_bool=True)
 
     def get_pae(self):
         return self._pae
     def set_pae(self, val):
         self._pae = _none_or_bool(val)
-    pae = _xml_property(get_pae, set_pae,
+    pae = XMLProperty(get_pae, set_pae,
                         xpath="./features/pae", is_bool=True)
 
     def __setitem__(self, attr, val):

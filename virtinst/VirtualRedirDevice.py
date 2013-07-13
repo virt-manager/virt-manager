@@ -21,7 +21,7 @@
 
 from virtinst.VirtualDevice import VirtualDevice
 
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualRedirDevice(VirtualDevice):
@@ -58,7 +58,7 @@ class VirtualRedirDevice(VirtualDevice):
         if new_val not in self.buses:
             raise ValueError(_("Unsupported bus '%s'" % new_val))
         self._bus = new_val
-    bus = _xml_property(get_bus, set_bus,
+    bus = XMLProperty(get_bus, set_bus,
                         xpath="./@bus")
 
     def get_types(self):
@@ -71,7 +71,7 @@ class VirtualRedirDevice(VirtualDevice):
         if new_val not in self.types:
             raise ValueError(_("Unsupported redirection type '%s'" % new_val))
         self._type = new_val
-    type = _xml_property(get_type, set_type,
+    type = XMLProperty(get_type, set_type,
                          xpath="./@type")
 
     def get_host(self):
@@ -80,7 +80,7 @@ class VirtualRedirDevice(VirtualDevice):
         if len(val) == 0:
             raise ValueError(_("Invalid host value"))
         self._host = val
-    host = _xml_property(get_host, set_host,
+    host = XMLProperty(get_host, set_host,
                         xpath="./source/@host")
 
     def get_service(self):
@@ -88,7 +88,7 @@ class VirtualRedirDevice(VirtualDevice):
     def set_service(self, val):
         int(val)
         self._service = val
-    service = _xml_property(get_service, set_service,
+    service = XMLProperty(get_service, set_service,
                         xpath="./source/@service")
 
     def parse_friendly_server(self, serverstr):

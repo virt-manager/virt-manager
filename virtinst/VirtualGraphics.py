@@ -21,7 +21,7 @@ import re
 import os
 
 from virtinst.VirtualDevice import VirtualDevice
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLProperty
 
 
 def _get_mode_prop(channel_type):
@@ -31,7 +31,7 @@ def _get_mode_prop(channel_type):
         return s._channels.get(channel_type, None)
     def set_mode(s, val):
         s._channels[channel_type] = val
-    return _xml_property(get_mode, set_mode, xpath=xpath)
+    return XMLProperty(get_mode, set_mode, xpath=xpath)
 
 
 class VirtualGraphics(VirtualDevice):
@@ -147,21 +147,21 @@ class VirtualGraphics(VirtualDevice):
             raise ValueError(_("Unknown graphics type '%s'") % val)
 
         self._type = val
-    type = _xml_property(get_type, set_type,
+    type = XMLProperty(get_type, set_type,
                          xpath="./@type")
 
     def _get_xauth(self):
         return self._xauth
     def _set_xauth(self, val):
         self._xauth = val
-    xauth = _xml_property(_get_xauth, _set_xauth,
+    xauth = XMLProperty(_get_xauth, _set_xauth,
                           xpath="./@xauth")
 
     def _get_display(self):
         return self._display
     def _set_display(self, val):
         self._display = val
-    display = _xml_property(_get_display, _set_display,
+    display = XMLProperty(_get_display, _set_display,
                             xpath="./@display")
 
     def get_keymap(self):
@@ -191,7 +191,7 @@ class VirtualGraphics(VirtualDevice):
                                "'_', or '-' characters"))
 
         self._keymap = val
-    keymap = _xml_property(get_keymap, set_keymap,
+    keymap = XMLProperty(get_keymap, set_keymap,
                            xpath="./@keymap")
 
     def get_port(self):
@@ -210,7 +210,7 @@ class VirtualGraphics(VirtualDevice):
             raise ValueError(_("VNC port must be a number between "
                                "5900 and 65535, or -1 for auto allocation"))
         self._port = val
-    port = _xml_property(get_port, set_port,
+    port = XMLProperty(get_port, set_port,
                          get_converter=lambda s, x: int(x or -1),
                          xpath="./@port")
 
@@ -218,28 +218,28 @@ class VirtualGraphics(VirtualDevice):
         return self._listen
     def set_listen(self, val):
         self._listen = val
-    listen = _xml_property(get_listen, set_listen,
+    listen = XMLProperty(get_listen, set_listen,
                            xpath="./@listen")
 
     def get_passwd(self):
         return self._passwd
     def set_passwd(self, val):
         self._passwd = val
-    passwd = _xml_property(get_passwd, set_passwd,
+    passwd = XMLProperty(get_passwd, set_passwd,
                            xpath="./@passwd")
 
     def get_passwdValidTo(self):
         return self._passwdValidTo
     def set_passwdValidTo(self, val):
         self._passwdValidTo = val
-    passwdValidTo = _xml_property(get_passwdValidTo, set_passwdValidTo,
+    passwdValidTo = XMLProperty(get_passwdValidTo, set_passwdValidTo,
                                   xpath="./@passwdValidTo")
 
     def _get_socket(self):
         return self._socket
     def _set_socket(self, val):
         self._socket = val
-    socket = _xml_property(_get_socket, _set_socket,
+    socket = XMLProperty(_get_socket, _set_socket,
                            xpath="./@socket")
 
     def get_tlsPort(self):
@@ -258,7 +258,7 @@ class VirtualGraphics(VirtualDevice):
             raise ValueError(_("TLS port must be a number between "
                                "5900 and 65535, or -1 for auto allocation"))
         self._tlsPort = val
-    tlsPort = _xml_property(get_tlsPort, set_tlsPort,
+    tlsPort = XMLProperty(get_tlsPort, set_tlsPort,
                             get_converter=lambda s, x: int(x or -1),
                             xpath="./@tlsPort")
 

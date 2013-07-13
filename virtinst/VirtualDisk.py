@@ -32,7 +32,7 @@ import virtinst
 from virtinst import diskbackend
 from virtinst import util
 from virtinst.VirtualDevice import VirtualDevice
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLProperty
 
 
 def _qemu_sanitize_drvtype(phystype, fmt, manual_format=False):
@@ -484,7 +484,7 @@ class VirtualDisk(VirtualDevice):
         return ret
     def _xml_set_xpath(self):
         return "./source/@" + self.disk_type_to_target_prop(self.type)
-    path = _xml_property(_get_path, _set_path,
+    path = XMLProperty(_get_path, _set_path,
                          xml_get_xpath=_xml_get_xpath,
                          xml_set_xpath=_xml_set_xpath,
                          clear_first=["./source/@" + target for target in
@@ -522,7 +522,7 @@ class VirtualDisk(VirtualDevice):
     def set_type(self, val):
         if self._override_default:
             self._type = val
-    type = _xml_property(get_type, set_type,
+    type = XMLProperty(get_type, set_type,
                          xpath="./@type")
 
     def get_device(self):
@@ -535,7 +535,7 @@ class VirtualDisk(VirtualDevice):
             self.bus = None
             self.target = None
         self._device = val
-    device = _xml_property(get_device, set_device,
+    device = XMLProperty(get_device, set_device,
                            xpath="./@device")
 
     def get_driver_name(self):
@@ -545,7 +545,7 @@ class VirtualDisk(VirtualDevice):
     def set_driver_name(self, val):
         if self._override_default:
             self._driverName = val
-    driver_name = _xml_property(get_driver_name, set_driver_name,
+    driver_name = XMLProperty(get_driver_name, set_driver_name,
                                 xpath="./driver/@name")
 
     def get_driver_type(self):
@@ -555,41 +555,41 @@ class VirtualDisk(VirtualDevice):
     def set_driver_type(self, val):
         if self._override_default:
             self._driverType = val
-    driver_type = _xml_property(get_driver_type, set_driver_type,
+    driver_type = XMLProperty(get_driver_type, set_driver_type,
                                 xpath="./driver/@type")
 
     def get_read_only(self):
         return self._readOnly
     def set_read_only(self, val):
         self._readOnly = val
-    read_only = _xml_property(get_read_only, set_read_only,
+    read_only = XMLProperty(get_read_only, set_read_only,
                               xpath="./readonly", is_bool=True)
 
     def _get_bus(self):
         return self._bus
     def _set_bus(self, val):
         self._bus = val
-    bus = _xml_property(_get_bus, _set_bus,
+    bus = XMLProperty(_get_bus, _set_bus,
                         xpath="./target/@bus")
     def _get_target(self):
         return self._target
     def _set_target(self, val):
         self._target = val
-    target = _xml_property(_get_target, _set_target,
+    target = XMLProperty(_get_target, _set_target,
                            xpath="./target/@dev")
 
     def _get_shareable(self):
         return self._shareable
     def _set_shareable(self, val):
         self._shareable = val
-    shareable = _xml_property(_get_shareable, _set_shareable,
+    shareable = XMLProperty(_get_shareable, _set_shareable,
                               xpath="./shareable", is_bool=True)
 
     def _get_driver_cache(self):
         return self._driver_cache
     def _set_driver_cache(self, val):
         self._driver_cache = val
-    driver_cache = _xml_property(_get_driver_cache, _set_driver_cache,
+    driver_cache = XMLProperty(_get_driver_cache, _set_driver_cache,
                                  xpath="./driver/@cache")
 
 
@@ -597,28 +597,28 @@ class VirtualDisk(VirtualDevice):
         return self._driver_io
     def _set_driver_io(self, val):
         self._driver_io = val
-    driver_io = _xml_property(_get_driver_io, _set_driver_io,
+    driver_io = XMLProperty(_get_driver_io, _set_driver_io,
                               xpath="./driver/@io")
 
-    error_policy = _xml_property(xpath="./driver/@error_policy")
-    serial = _xml_property(xpath="./serial")
+    error_policy = XMLProperty(xpath="./driver/@error_policy")
+    serial = XMLProperty(xpath="./serial")
 
-    iotune_rbs = _xml_property(xpath="./iotune/read_bytes_sec",
+    iotune_rbs = XMLProperty(xpath="./iotune/read_bytes_sec",
                                get_converter=lambda s, x: int(x or 0),
                                set_converter=lambda s, x: int(x))
-    iotune_ris = _xml_property(xpath="./iotune/read_iops_sec",
+    iotune_ris = XMLProperty(xpath="./iotune/read_iops_sec",
                                get_converter=lambda s, x: int(x or 0),
                                set_converter=lambda s, x: int(x))
-    iotune_tbs = _xml_property(xpath="./iotune/total_bytes_sec",
+    iotune_tbs = XMLProperty(xpath="./iotune/total_bytes_sec",
                                get_converter=lambda s, x: int(x or 0),
                                set_converter=lambda s, x: int(x))
-    iotune_tis = _xml_property(xpath="./iotune/total_iops_sec",
+    iotune_tis = XMLProperty(xpath="./iotune/total_iops_sec",
                                get_converter=lambda s, x: int(x or 0),
                                set_converter=lambda s, x: int(x))
-    iotune_wbs = _xml_property(xpath="./iotune/write_bytes_sec",
+    iotune_wbs = XMLProperty(xpath="./iotune/write_bytes_sec",
                                get_converter=lambda s, x: int(x or 0),
                                set_converter=lambda s, x: int(x))
-    iotune_wis = _xml_property(xpath="./iotune/write_iops_sec",
+    iotune_wis = XMLProperty(xpath="./iotune/write_iops_sec",
                                get_converter=lambda s, x: int(x or 0),
                                set_converter=lambda s, x: int(x))
 

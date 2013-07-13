@@ -18,7 +18,7 @@
 # MA 02110-1301 USA.
 
 from virtinst.VirtualDevice import VirtualDevice
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualInputDevice(VirtualDevice):
@@ -64,7 +64,7 @@ class VirtualInputDevice(VirtualDevice):
         if val not in self.input_types:
             raise ValueError(_("Unknown input type '%s'.") % val)
         self._type = val
-    type = _xml_property(get_type, set_type,
+    type = XMLProperty(get_type, set_type,
                          xpath="./@type")
 
     def get_bus(self):
@@ -73,7 +73,7 @@ class VirtualInputDevice(VirtualDevice):
         if val not in self.input_buses:
             raise ValueError(_("Unknown input bus '%s'.") % val)
         self._bus = val
-    bus = _xml_property(get_bus, set_bus,
+    bus = XMLProperty(get_bus, set_bus,
                         xpath="./@bus")
 
     def _get_xml_config(self):

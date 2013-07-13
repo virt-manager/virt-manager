@@ -18,7 +18,7 @@
 # MA 02110-1301 USA.
 
 from virtinst.VirtualDevice import VirtualDevice
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualWatchdog(VirtualDevice):
@@ -76,7 +76,7 @@ class VirtualWatchdog(VirtualDevice):
         if not self.MODELS.count(new_model):
             raise ValueError(_("Unsupported watchdog model '%s'" % new_model))
         self._model = new_model
-    model = _xml_property(get_model, set_model,
+    model = XMLProperty(get_model, set_model,
                           xpath="./@model")
 
     def get_action(self):
@@ -85,7 +85,7 @@ class VirtualWatchdog(VirtualDevice):
         if val not in self.ACTIONS:
             raise ValueError("Unknown watchdog action '%s'." % val)
         self._action = val
-    action = _xml_property(get_action, set_action,
+    action = XMLProperty(get_action, set_action,
                            xpath="./@action")
 
     def _get_xml_config(self):

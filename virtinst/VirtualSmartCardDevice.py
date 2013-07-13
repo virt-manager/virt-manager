@@ -20,7 +20,7 @@
 # MA 02110-1301 USA.
 
 from virtinst.VirtualDevice import VirtualDevice
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualSmartCardDevice(VirtualDevice):
@@ -56,7 +56,7 @@ class VirtualSmartCardDevice(VirtualDevice):
         if val not in self.modes:
             raise ValueError(_("Unknown smartcard mode '%s'") % val)
         self._mode = val
-    mode = _xml_property(get_mode, set_mode,
+    mode = XMLProperty(get_mode, set_mode,
                          xpath="./@mode")
 
     def get_types(self):
@@ -71,7 +71,7 @@ class VirtualSmartCardDevice(VirtualDevice):
         if val not in self.types:
             raise ValueError(_("Unknown smartcard type '%s'") % val)
         self._type = val
-    type = _xml_property(get_type, set_type,
+    type = XMLProperty(get_type, set_type,
                          xpath="./@type")
 
     def _get_xml_config(self):

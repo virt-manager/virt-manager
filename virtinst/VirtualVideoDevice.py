@@ -18,7 +18,7 @@
 # MA 02110-1301 USA.
 
 from virtinst.VirtualDevice import VirtualDevice
-from virtinst.XMLBuilderDomain import _xml_property
+from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualVideoDevice(VirtualDevice):
@@ -55,16 +55,16 @@ class VirtualVideoDevice(VirtualDevice):
         return self._model_type
     def set_model_type(self, val):
         self._model_type = val
-    model_type = _xml_property(get_model_type, set_model_type,
+    model_type = XMLProperty(get_model_type, set_model_type,
                                xpath="./model/@type")
 
     def get_vram(self):
         return self._vram
     def set_vram(self, val):
         self._vram = val
-    vram = _xml_property(get_vram, set_vram,
+    vram = XMLProperty(get_vram, set_vram,
                          xpath="./model/@vram")
-    ram = _xml_property(lambda o: None, lambda o, v: None,
+    ram = XMLProperty(lambda o: None, lambda o, v: None,
                         xpath="./model/@ram")
 
 
@@ -72,7 +72,7 @@ class VirtualVideoDevice(VirtualDevice):
         return self._heads
     def set_heads(self, val):
         self._heads = val
-    heads = _xml_property(get_heads, set_heads,
+    heads = XMLProperty(get_heads, set_heads,
                           xpath="./model/@heads")
 
     def _get_xml_config(self):
