@@ -1304,28 +1304,29 @@ class vmmAddHardware(vmmGObjectUI):
                     if do_use:
                         diskpath = ideal
 
-            disk = virtinst.VirtualDisk(conn,
-                                        path=diskpath,
-                                        size=disksize,
-                                        sparse=sparse,
-                                        readOnly=readonly,
-                                        device=device,
-                                        bus=bus,
-                                        format=fmt)
+            disk = virtinst.VirtualDisk(conn)
+            disk.path = diskpath
+            disk.read_only = readonly
+            disk.device = device
+            disk.bus = bus
+            disk.set_create_storage(size=disksize, sparse=sparse,
+                                    fmt=fmt or None)
             disk.driver_cache = cache
 
             if not fmt:
                 fmt = self.config.get_storage_format()
                 if (self.is_default_storage() and
-                    disk.vol_install and
-                    fmt in disk.vol_install.formats):
+                    disk.get_vol_install() and
+                    fmt in disk.get_vol_install().formats):
                     logging.debug("Setting disk format from prefs: %s", fmt)
-                    disk.vol_install.format = fmt
+                    disk.get_vol_install().format = fmt
 
             if (disk.type == virtinst.VirtualDisk.TYPE_FILE and
                 not self.vm.is_hvm() and
                 virtinst.util.is_blktap_capable(self.conn.get_backend())):
                 disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
+
+            disk.validate()
 
         except Exception, e:
             return self.err.val_err(_("Storage parameter error."), e)

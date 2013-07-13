@@ -271,6 +271,14 @@ class Installer(XMLBuilderDomain.XMLBuilderDomain):
                 return "/sbin/init"
         return "/bin/sh"
 
+    def _make_cdrom_dev(self, path):
+        dev = virtinst.VirtualDisk(self.conn)
+        dev.path = path
+        dev.device = dev.DEVICE_CDROM
+        dev.read_only = True
+        dev.validate()
+        return dev
+
     def _get_osblob_helper(self, guest, isinstall, bootconfig):
         arch = self.arch
         machine = self.machine

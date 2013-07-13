@@ -17,9 +17,9 @@
   <on_crash>destroy</on_crash>
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
-    <disk type="block" device="disk">
+    <disk type="file" device="disk">
       <target dev="hda" bus="ide"/>
-      <source dev="/dev/loop0"/>
+      <source file="/default-pool/1234.img"/>
     </disk>
     <disk type="block" device="floppy">
       <target dev="fdb" bus="fdc"/>

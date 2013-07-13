@@ -541,36 +541,56 @@ class TestXMLConfig(unittest.TestCase):
 
         g.add_device(utils.get_filedisk())
         g.add_device(utils.get_blkdisk())
-        g.add_device(VirtualDisk(g.conn, path="/dev/loop0",
-                                 device=VirtualDisk.DEVICE_CDROM,
-                                 driverType="raw"))
-        g.add_device(VirtualDisk(g.conn, path="/dev/loop0",
-                                 device=VirtualDisk.DEVICE_DISK,
-                                 driverName="qemu", format="qcow2"))
-        g.add_device(VirtualDisk(g.conn, path=None,
-                                 device=VirtualDisk.DEVICE_CDROM,
-                                 bus="scsi"))
-        d = VirtualDisk(g.conn, path=None,
-                        device=VirtualDisk.DEVICE_FLOPPY)
-        d.iotune_tbs = 1
-        d.iotune_tis = 2
+
+        d = VirtualDisk(g.conn)
+        d.path = "/dev/loop0"
+        d.device = d.DEVICE_CDROM
+        d.driver_type = "raw"
+        d.validate()
         g.add_device(d)
 
-        d = VirtualDisk(g.conn, path="/dev/loop0",
-                        device=VirtualDisk.DEVICE_FLOPPY,
-                        driverName="phy")
+        d = VirtualDisk(g.conn)
+        d.path = "/dev/loop0"
+        d.device = d.DEVICE_DISK
+        d.driver_name = "qemu"
+        d.validate()
+        g.add_device(d)
+
+        d = VirtualDisk(g.conn)
+        d.path = None
+        d.device = d.DEVICE_CDROM
+        d.bus = "scsi"
+        d.validate()
+        g.add_device(d)
+
+        d = VirtualDisk(g.conn)
+        d.path = None
+        d.device = d.DEVICE_FLOPPY
+        d.iotune_tbs = 1
+        d.iotune_tis = 2
+        d.validate()
+        g.add_device(d)
+
+        d = VirtualDisk(g.conn)
+        d.path = "/dev/loop0"
+        d.device = d.DEVICE_FLOPPY
+        d.driver_name = "phy"
         d.driver_cache = "none"
         d.iotune_rbs = 5555
         d.iotune_ris = 1234
         d.iotune_wbs = 3
         d.iotune_wis = 4
+        d.validate()
         g.add_device(d)
 
-        d = VirtualDisk(g.conn, path="/dev/loop0",
-                        bus="virtio", driverName="qemu",
-                        driverType="qcow2")
+        d = VirtualDisk(g.conn)
+        d.path = "/dev/loop0"
+        d.bus = "virtio"
+        d.driver_name = "qemu"
+        d.driver_type = "qcow2"
         d.driver_cache = "none"
         d.driver_io = "threads"
+        d.validate()
         g.add_device(d)
 
         self._compare(g, "boot-many-disks2", False)
@@ -701,14 +721,31 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(VirtualAudio(g.conn, "es1370"))
 
         # Disk devices
-        g.add_device(VirtualDisk(g.conn, path="/dev/loop0",
-                                 device=VirtualDisk.DEVICE_FLOPPY))
-        g.add_device(VirtualDisk(g.conn, path="/dev/loop0", bus="scsi"))
-        g.add_device(VirtualDisk(g.conn, path="/tmp", device="floppy"))
-        d3 = VirtualDisk(g.conn, path="/default-pool/testvol1.img",
-                         bus="scsi", driverName="qemu")
-        d3.address.type = "spapr-vio"
-        g.add_device(d3)
+        d = VirtualDisk(g.conn)
+        d.path = "/dev/loop0"
+        d.device = d.DEVICE_FLOPPY
+        d.validate()
+        g.add_device(d)
+
+        d = VirtualDisk(g.conn)
+        d.path = "/dev/loop0"
+        d.bus = "scsi"
+        d.validate()
+        g.add_device(d)
+
+        d = VirtualDisk(g.conn)
+        d.path = "/tmp"
+        d.device = d.DEVICE_FLOPPY
+        d.validate()
+        g.add_device(d)
+
+        d = VirtualDisk(g.conn)
+        d.path = "/default-pool/testvol1.img"
+        d.bus = "scsi"
+        d.driver_name = "qemu"
+        d.address.type = "spapr-vio"
+        d.validate()
+        g.add_device(d)
 
         # Controller devices
         c1 = VirtualController.get_class_for_type(VirtualController.CONTROLLER_TYPE_IDE)(g.conn)
@@ -863,9 +900,6 @@ class TestXMLConfig(unittest.TestCase):
 
         self._compare(g, "boot-usb2", False)
 
-    #
-    # Full Install tests: try to mimic virt-install as much as possible
-    #
 
     def testFullKVMRHEL6(self):
         utils.set_conn(_plainkvm)
@@ -874,7 +908,7 @@ class TestXMLConfig(unittest.TestCase):
                                   gtype="kvm")
         g = utils.get_basic_fullyvirt_guest("kvm", installer=i)
         g.add_device(utils.get_floppy())
-        g.add_device(utils.get_filedisk("/default-pool/rhel6.img"))
+        g.add_device(utils.get_filedisk("/default-pool/rhel6.img", fake=False))
         g.add_device(utils.get_blkdisk())
         g.add_device(utils.get_virtual_network())
         g.add_device(VirtualAudio(g.conn))
@@ -893,7 +927,7 @@ class TestXMLConfig(unittest.TestCase):
 
     def testFullKVMWinxp(self):
         utils.set_conn(_plainkvm)
-        g = utils.build_win_kvm("/default-pool/winxp.img")
+        g = utils.build_win_kvm("/default-pool/winxp.img", fake=False)
         self._testInstall(g, "winxp-kvm-stage1",
                           "winxp-kvm-stage3", "winxp-kvm-stage2")
 
@@ -906,8 +940,10 @@ class TestXMLConfig(unittest.TestCase):
         sizebytes = long(sizegigs * 1024L * 1024L * 1024L)
 
         for sparse in [True, False]:
-            disk = VirtualDisk(utils.get_conn(), path=path, size=sizegigs,
-                               sparse=sparse)
+            disk = VirtualDisk(utils.get_conn())
+            disk.path = path
+            disk.set_create_storage(size=sizegigs, sparse=sparse)
+            disk.validate()
             disk.setup()
 
             actualsize = long(os.path.getsize(path))
@@ -970,8 +1006,9 @@ class TestXMLConfig(unittest.TestCase):
                           conn, "16")
 
     def testManyVirtio(self):
-        d = VirtualDisk(utils.get_conn(), bus="virtio",
-                        path="/default-pool/testvol1.img")
+        d = VirtualDisk(utils.get_conn())
+        d.bus = "virtio"
+        d.path = "/default-pool/testvol1.img"
 
         targetlist = []
         for ignore in range(0, (26 * 2) + 1):

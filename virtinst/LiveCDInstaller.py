@@ -20,20 +20,17 @@
 # MA 02110-1301 USA.
 
 from virtinst import Installer
-from virtinst.VirtualDisk import VirtualDisk
 
 
 class LiveCDInstaller(Installer.Installer):
     _has_install_phase = False
 
+
     # LiveCD specific methods/overwrites
     def _validate_location(self, val):
         if not val:
             return None
-        return VirtualDisk(self.conn,
-                           path=val,
-                           device=VirtualDisk.DEVICE_CDROM,
-                           readOnly=True)
+        return self._make_cdrom_dev(val)
     def _get_location(self):
         return self._location
     def _set_location(self, val):

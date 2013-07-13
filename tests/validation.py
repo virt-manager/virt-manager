@@ -15,7 +15,6 @@
 # MA 02110-1301 USA.
 
 import virtinst
-from virtinst import VirtualDisk
 from virtinst import Interface
 
 from tests import utils
@@ -101,29 +100,6 @@ args = {
         'valid'   : ['rhel5', 'sles10']},
 },
 
-
-'disk' : {
-  'init_conns' : [testconn, None],
-  '__init__' : {
-
-   'invalid' : [
-    {'path' : 'valid', 'size' : 1, 'driverCache' : 'invalid'},
-    {'conn' : testconn, "path" : "/full-pool/newvol.img", "size" : 1,
-      'sparse' : False},
-    # Inactive pool w/ volume
-    {'conn' : testconn, "path" : "/inactive-pool/inactive-vol"},
- ],
-
-   'valid' : [
-    {'conn' : testconn, 'path' : "/default-pool/default-vol"},
-    {'conn' : testconn, 'path' : "/default-pool/vol-noexist", 'size' : 1},
-    {'conn' : testconn, 'volInstall': volinst},
-    # Full pool, but we are nonsparse
-    {'conn' : testconn, "path" : "/full-pool/newvol.img", "size" : 1},
- ]
-},
-
-},
 
 'network'   : {
     'init_conns' : [testconn],
@@ -323,6 +299,8 @@ class TestValidation(unittest.TestCase):
                 self._runObjInit(testclass, paramvalue)
             else:
                 setattr(obj, paramname, paramvalue)
+                if hasattr(obj, "validate"):
+                    obj.validate()
 
             msg = ("Expected TypeError or ValueError: None Raised.\n"
                    "For '%s' object, paramname '%s', val '%s':" %
@@ -353,6 +331,8 @@ class TestValidation(unittest.TestCase):
                     self._runObjInit(testclass, paramvalue)
             else:
                 setattr(obj, paramname, paramvalue)
+            if hasattr(obj, "validate"):
+                obj.validate()
         except Exception, e:
             msg = ("Validation case failed, expected success.\n" +
                    "Exception received was: %s\n" % e +
@@ -389,10 +369,6 @@ class TestValidation(unittest.TestCase):
     def testGuestValidation(self):
         g = virtinst.Guest(testconn, type="xen")
         self._testArgs(g, virtinst.Guest, 'guest')
-
-    def testDiskValidation(self):
-        disk = VirtualDisk(testconn, "/dev/loop0")
-        self._testArgs(disk, VirtualDisk, 'disk')
 
     def testNetworkValidation(self):
         network = virtinst.VirtualNetworkInterface(testconn)

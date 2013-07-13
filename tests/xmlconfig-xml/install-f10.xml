@@ -24,7 +24,7 @@
       <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="block" device="disk">
-      <driver name="qemu"/>
+      <driver name="qemu" type="raw"/>
       <source dev="/dev/loop0"/>
       <target dev="vdb" bus="virtio"/>
     </disk>

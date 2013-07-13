@@ -164,7 +164,7 @@ def get_disk(diskopts, size, sparse, guest, is_file_path):
         else:
             dev, size = cli.parse_disk(guest, diskopts)
             path = dev.path
-            sparse = dev.sparse
+            sparse = dev.get_sparse()
 
         d = cli.disk_prompt(guest.conn, path, size, sparse,
                             origdev=dev)

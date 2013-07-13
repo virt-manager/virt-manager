@@ -229,11 +229,11 @@ def make_pxe_installer(gtype="xen"):
     return inst
 
 
-def build_win_kvm(path=None):
+def build_win_kvm(path=None, fake=True):
     g = get_basic_fullyvirt_guest("kvm")
     g.os_type = "windows"
     g.os_variant = "winxp"
-    g.add_device(get_filedisk(path))
+    g.add_device(get_filedisk(path, fake=fake))
     g.add_device(get_blkdisk())
     g.add_device(get_virtual_network())
     g.add_device(VirtualAudio(g.conn))
@@ -245,17 +245,31 @@ def build_win_kvm(path=None):
 def get_floppy(path=None):
     if not path:
         path = "/default-pool/testvol1.img"
-    return VirtualDisk(_conn, path, device=VirtualDisk.DEVICE_FLOPPY)
+    d = VirtualDisk(_conn)
+    d.path = path
+    d.device = d.DEVICE_FLOPPY
+    d.validate()
+    return d
 
 
-def get_filedisk(path=None):
+def get_filedisk(path=None, fake=True):
     if not path:
         path = "/tmp/test.img"
-    return VirtualDisk(_conn, path, size=.0001)
+    d = VirtualDisk(_conn)
+    d.path = path
+    size = None
+    if not fake:
+        size = .000001
+    d.set_create_storage(fake=fake, size=size)
+    d.validate()
+    return d
 
 
 def get_blkdisk(path="/dev/loop0"):
-    return VirtualDisk(_conn, path)
+    d = VirtualDisk(_conn)
+    d.path = path
+    d.validate()
+    return d
 
 
 def get_virtual_network():

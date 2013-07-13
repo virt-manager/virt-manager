@@ -465,8 +465,8 @@ def disk_prompt(conn, origpath, origsize, origsparse,
     retry_path = True
 
     no_path_needed = (origdev and
-                      (origdev.vol_install or
-                       origdev.vol_object or
+                      (origdev.get_vol_install() or
+                       origdev.get_vol_object() or
                        origdev.can_be_empty()))
 
     def prompt_path(chkpath, chksize):
@@ -578,13 +578,15 @@ def disk_prompt(conn, origpath, origsize, origsparse,
         try:
             if origdev:
                 dev = origdev
-                if path is not None:
+                if path is not None and path != dev.path:
                     dev.path = path
-                if size is not None:
-                    dev.size = size
+                if size is not None and size != dev.get_size():
+                    dev.set_create_storage(size=size, sparse=origsparse)
             else:
-                dev = VirtualDisk(conn=conn, path=path, size=size,
-                                  sparse=origsparse)
+                dev = VirtualDisk(conn)
+                dev.path = path
+                dev.set_create_storage(size=size, sparse=origsparse)
+            dev.validate()
         except ValueError, e:
             if is_prompt():
                 logging.error(e)
@@ -1485,11 +1487,12 @@ def parse_disk(guest, optstr, dev=None):
 
         return val
 
+    if not dev:
+        dev = virtinst.VirtualDisk(guest.conn)
+
     # Parse out comma separated options
     opts = parse_optstr(optstr, remove_first="path")
 
-    # We annoyingly need these params ahead of time to deal with
-    # VirtualDisk validation
     path = opt_get("path")
     pool = opt_get("pool")
     vol = opt_get("vol")
@@ -1497,36 +1500,22 @@ def parse_disk(guest, optstr, dev=None):
     fmt = opt_get("format")
     sparse = parse_sparse(opt_get("sparse"))
     ro, shared = parse_perms(opt_get("perms"))
-    device = opt_get("device")
 
     abspath, volinst, volobj = _parse_disk_source(guest, path, pool, vol,
                                                   size, fmt, sparse)
 
-    if not dev:
-        # Build a stub device that should always validate cleanly
-        dev = virtinst.VirtualDisk(conn=guest.conn,
-                                   path=abspath,
-                                   volObject=volobj,
-                                   volInstall=volinst,
-                                   size=size,
-                                   readOnly=ro,
-                                   sparse=sparse,
-                                   shareable=shared,
-                                   device=device,
-                                   format=fmt)
+    if volobj:
+        dev.set_vol_object(volobj)
+    else:
+        dev.path = abspath
+    dev.read_only = ro
+    dev.shareable = shared
+    dev.set_create_storage(size=size, fmt=fmt, sparse=sparse,
+                           vol_install=volinst)
 
     set_param = _build_set_param(dev, opts)
 
-    set_param("path", "path", abspath)
-    set_param("vol", "vol_object", volobj)
-    set_param("pool", "vol_install", volinst)
-    set_param("size", "size", size)
-    set_param("format", "format", fmt)
-    set_param("sparse", "sparse", sparse)
-    set_param("read_only", "perms", ro)
-    set_param("shareable", "perms", shared)
-    set_param("device", "device", device)
-
+    set_param("device", "device")
     set_param("bus", "bus")
     set_param("driver_cache", "cache")
     set_param("driver_name", "driver_name")
@@ -1538,12 +1527,13 @@ def parse_disk(guest, optstr, dev=None):
     if opts:
         fail(_("Unknown options %s") % opts.keys())
 
+    dev.validate()
     return dev, size
+
 
 #####################
 # --network parsing #
 #####################
-
 
 def parse_network(guest, optstring, dev=None, mac=None):
     # Handle old format of bridge:foo instead of bridge=foo

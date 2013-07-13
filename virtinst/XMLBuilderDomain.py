@@ -227,7 +227,7 @@ def _xml_property(fget=None, fset=None, doc=None,
                   xpath=None, get_converter=None, set_converter=None,
                   xml_get_xpath=None, xml_set_xpath=None,
                   xml_set_list=None, is_bool=False, is_multi=False,
-                  default_converter=None):
+                  default_converter=None, clear_first=None):
     """
     Set a XMLBuilder class property that represents a value in the
     <domain> XML. For example
@@ -260,6 +260,9 @@ def _xml_property(fget=None, fset=None, doc=None,
     @param is_multi: Whether data is coming multiple or a single node
     @param default_converter: If the virtinst value is "default", use
                               this function to get the actual XML value
+    @param clear_first: List of xpaths to unset before any 'set' operation.
+        For those weird interdependent XML props like disk source type and
+        path attribute.
     """
     # pylint: disable=W0212
     # Accessing _xml vals of self. This should be a class method, but
@@ -352,13 +355,24 @@ def _xml_property(fget=None, fset=None, doc=None,
             return
 
         nodes = util.listify(_get_xpath_node(self._xml_ctx,
-                                              node_xpath, is_multi))
+                                             node_xpath, is_multi))
+        clear_nodes = []
+        for cpath in clear_first or []:
+            cnode = _get_xpath_node(self._xml_ctx, cpath, False)
+            if not cnode:
+                continue
+            if any([(n and n.nodePath() == cnode.nodePath()) for n in nodes]):
+                continue
+            clear_nodes.append(cnode)
 
         xpath_list = node_xpath
         if xml_set_list:
             xpath_list = xml_set_list(self)
 
-        node_map = _tuplify_lists(nodes, val, xpath_list)
+        node_map = []
+        if clear_nodes:
+            node_map += _tuplify_lists(clear_nodes, None, "")
+        node_map += _tuplify_lists(nodes, val, xpath_list)
         for node, val, use_xpath in node_map:
             if node:
                 use_xpath = node.nodePath()

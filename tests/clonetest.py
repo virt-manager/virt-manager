@@ -92,7 +92,7 @@ class TestClone(unittest.TestCase):
         cloneobj.clone_macs = ["22:23:45:67:89:00", "22:23:45:67:89:01"]
 
         if disks is None:
-            disks = ["/dev/loop0", "/tmp/clone2.img",
+            disks = ["/disk-pool/disk-vol1", "/tmp/clone2.img",
                      "/tmp/clone3.img", "/tmp/clone4.img",
                      "/tmp/clone5.img", None]
 
@@ -166,7 +166,7 @@ class TestClone(unittest.TestCase):
                 # Exception expected
                 logging.debug("Received expected exception: %s", str(e))
 
-    def testCloneStorage(self):
+    def testCloneStorageManaged(self):
         base = "managed-storage"
         self._clone_helper(base, ["%s/new1.img" % POOL1,
                                   "%s/new2.img" % DISKPOOL])
@@ -179,13 +179,15 @@ class TestClone(unittest.TestCase):
     def testCloneStorageForce(self):
         base = "force"
         self._clone_helper(base,
-                           disks=["/dev/loop0", None, "/tmp/clone2.img"],
+                           disks=["/default-pool/1234.img",
+                                  None, "/tmp/clone2.img"],
                            force_list=["hda", "fdb", "sdb"])
 
     def testCloneStorageSkip(self):
         base = "skip"
         self._clone_helper(base,
-                           disks=["/dev/loop0", None, "/tmp/clone2.img"],
+                           disks=["/default-pool/1234.img",
+                                  None, "/tmp/clone2.img"],
                            skip_list=["hda", "fdb"])
 
     def testCloneFullPool(self):
@@ -206,7 +208,8 @@ class TestClone(unittest.TestCase):
         # operation (no libvirt calls), but since /default-pool doesn't exist,
         # this should fail.
         try:
-            self._clone_helper(base, ["/tmp/new1.img", "/tmp/new2.img"])
+            self._clone_helper(base, ["/tmp/new1.img", "/tmp/new2.img"],
+                               compare=False)
 
             raise AssertionError("Managed to unmanaged succeeded, expected "
                                  "failure.")

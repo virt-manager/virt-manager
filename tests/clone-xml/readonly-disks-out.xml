@@ -19,7 +19,7 @@
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="block" device="disk">
       <target dev="hda" bus="ide"/>
-      <source dev="/dev/loop0"/>
+      <source dev="/disk-pool/disk-vol1"/>
     </disk>
     <disk type="file" device="disk">
       <source file="/tmp/virtinst-test1.img"/>

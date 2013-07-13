@@ -132,10 +132,17 @@ class Cloner(object):
                 if not path:
                     device = VirtualDisk.DEVICE_CDROM
 
-                disk = VirtualDisk(self.conn, path, size=.0000001,
-                                   device=device)
+                disk = VirtualDisk(self.conn)
+                disk.path = path
+                disk.device = device
+
+                # We fake storage creation params for now, but we will
+                # update it later
+                disk.set_create_storage(fake=True)
+                disk.validate()
                 disklist.append(disk)
             except Exception, e:
+                logging.debug("Error setting clone path.", exc_info=True)
                 raise ValueError(_("Could not use path '%s' for cloning: %s") %
                                  (path, str(e)))
 
@@ -264,8 +271,7 @@ class Cloner(object):
 
         logging.debug("Original XML:\n%s", self.original_xml)
 
-        self._guest = Guest(self.conn,
-                                  parsexml=self.original_xml)
+        self._guest = Guest(self.conn, parsexml=self.original_xml)
         self._guest.replace = self.replace
 
         # Pull clonable storage info from the original xml
@@ -274,7 +280,7 @@ class Cloner(object):
         logging.debug("Original paths: %s",
                       [d.path for d in self.original_disks])
         logging.debug("Original sizes: %s",
-                      [d.size for d in self.original_disks])
+                      [d.get_size() for d in self.original_disks])
 
         # If domain has devices to clone, it must be 'off' or 'paused'
         if (not self.clone_running and
@@ -293,7 +299,7 @@ class Cloner(object):
         if self.preserve_dest_disks:
             return
 
-        if clone_disk.vol_object:
+        if clone_disk.get_vol_object():
             # XXX We could always do this with vol upload?
 
             # Special case: non remote cloning of a guest using
@@ -312,27 +318,34 @@ class Cloner(object):
                       "currently supported: '%s'") % clone_disk.path)
 
         # Sync 'size' between the two
-        if orig_disk.size:
-            clone_disk.size = orig_disk.size
+        size = orig_disk.get_size()
+        vol_install = None
+        clone_path = None
 
         # Setup proper cloning inputs for the new virtual disks
-        if orig_disk.vol_object and clone_disk.vol_install:
+        if (orig_disk.get_vol_object() and
+            clone_disk.get_vol_install()):
+            clone_vol_install = clone_disk.get_vol_install()
 
             # Source and dest are managed. If they share the same pool,
             # replace vol_install with a CloneVolume instance, otherwise
             # simply set input_vol on the dest vol_install
-            if (clone_disk.vol_install.pool.name() ==
-                orig_disk.vol_object.storagePoolLookupByVolume().name()):
-                newname = clone_disk.vol_install.name
-                clone_disk.vol_install = Storage.CloneVolume(self.conn,
-                                                    newname,
-                                                    orig_disk.vol_object)
+            if (clone_vol_install.pool.name() ==
+                orig_disk.get_vol_object().storagePoolLookupByVolume().name()):
+                newname = clone_vol_install.name
+                vol_install = Storage.CloneVolume(self.conn,
+                                                  newname,
+                                                  orig_disk.get_vol_object())
 
             else:
-                clone_disk.vol_install.input_vol = orig_disk.vol_object
-
+                clone_vol_install.input_vol = orig_disk.get_vol_object()
+                vol_install = clone_vol_install
         else:
-            clone_disk.clone_path = orig_disk.path
+            clone_path = orig_disk.path
+
+        clone_disk.set_create_storage(
+                size=size, vol_install=vol_install, clone_path=clone_path)
+        clone_disk.validate()
 
 
     def setup_clone(self):
@@ -382,8 +395,9 @@ class Cloner(object):
             # Change the XML
             xmldisk.path = None
             xmldisk.type = clone_disk.type
-            xmldisk.path = clone_disk.path
+            xmldisk.driver_name = orig_disk.driver_name
             xmldisk.driver_type = orig_disk.driver_type
+            xmldisk.path = clone_disk.path
 
         # Save altered clone xml
         self._clone_xml = self._guest.get_xml_config()
@@ -405,7 +419,6 @@ class Cloner(object):
         Actually perform the duplication: cloning disks if needed and defining
         the new clone xml.
         """
-
         logging.debug("Starting duplicate.")
 
         if not meter:
@@ -421,19 +434,7 @@ class Cloner(object):
 
             if self.preserve:
                 for dst_dev in self.clone_disks:
-                    if dst_dev.clone_path == "/dev/null":
-                        # Not really sure why this check is here,
-                        # but keeping for compat
-                        logging.debug("Source dev was /dev/null. Skipping")
-                        continue
-                    elif dst_dev.clone_path == dst_dev.path:
-                        logging.debug("Source and destination are the "
-                                      "same. Skipping.")
-                        continue
-
-                    # VirtualDisk.setup handles everything
                     dst_dev.setup(meter=meter)
-
         except Exception, e:
             logging.debug("Duplicate failed: %s", str(e))
             if dom:
@@ -513,25 +514,26 @@ class Cloner(object):
             validate = not self.preserve_dest_disks
 
             try:
-                if (disk.path and validate and
-                    not VirtualDisk.path_exists(self.conn, disk.path)):
-                    raise ValueError(_("Disk '%s' does not exist.") %
-                                     disk.path)
-
                 device = VirtualDisk.DEVICE_DISK
                 if not disk.path:
                     # Tell VirtualDisk we are a cdrom to allow empty media
                     device = VirtualDisk.DEVICE_CDROM
 
-                d = VirtualDisk(self.conn, disk.path,
-                                device=device, driverType=disk.driver_type,
-                                validate=validate)
-                d.target = disk.target
+                newd = VirtualDisk(self.conn)
+                newd.path = disk.path
+                newd.device = device
+                newd.driver_type = disk.driver_type
+                newd.target = disk.target
+                if validate:
+                    newd.set_create_storage(fake=True)
+                    if newd.creating_storage() and disk.path is not None:
+                        raise ValueError("Disk path '%s' does not exist." %
+                                         newd.path)
             except Exception, e:
                 logging.debug("", exc_info=True)
                 raise ValueError(_("Could not determine original disk "
                                    "information: %s" % str(e)))
-            retdisks.append(d)
+            retdisks.append(newd)
 
         return retdisks
 

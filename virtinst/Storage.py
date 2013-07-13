@@ -1076,7 +1076,7 @@ class StorageVolume(StorageObject):
     def get_capacity(self):
         return self._capacity
     def set_capacity(self, val):
-        if type(val) not in (int, float, long) or val <= 0:
+        if type(val) not in (int, float, long) or val < 0:
             raise ValueError(_("Capacity must be a positive number"))
         newcap = int(val)
         origcap = self.capacity

@@ -73,7 +73,6 @@ DEFAULTS = {
     "continue":         False,
     "distro":           None,
     "label":            None,
-    "pv_cdrom_install": False,
     "supported":        False,
 
     "devices" : {
@@ -699,7 +698,6 @@ OS_TYPES = {
 "solaris": {
     "label": "Solaris",
     "clock": "localtime",
-    "pv_cdrom_install": True,
     "variants": {
 
     "solaris9": {
@@ -776,7 +774,6 @@ OS_TYPES = {
    },
     "netware6": {
         "label": "Novell Netware 6",
-        "pv_cdrom_install": True,
    },
 
     "generic": {

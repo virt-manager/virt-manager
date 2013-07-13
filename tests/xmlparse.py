@@ -764,11 +764,18 @@ class XMLParseTest(unittest.TestCase):
         # test000ClearProps resets the 'set' list, and this test
         # ensures that every property we know about has been touched
         # by one of the above tests.
-
         from virtinst import XMLBuilderDomain
         fail = [p for p in XMLBuilderDomain._allprops
                 if p not in XMLBuilderDomain._seenprops]
-        self.assertEquals(fail, [])
+        try:
+            self.assertEquals([], fail)
+        except AssertionError:
+            msg = "".join(traceback.format_exc()) + "\n\n"
+            msg += ("This means that there are XML properties that are\n"
+                    "untested in tests/xmlparse.py. This could be caused\n"
+                    "by a previous test suite failure, or if you added\n"
+                    "a new property and didn't add corresponding tests!")
+            self.fail(msg)
 
 if __name__ == "__main__":
     unittest.main()

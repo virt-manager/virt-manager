@@ -699,8 +699,8 @@ class vmmDomain(vmmLibvirtObject):
             editdev.iotune_wis = val
         return self._redefine_device(change, devobj)
 
-    # Network define methods
 
+    # Network define methods
     def define_network_source(self, devobj, newtype, newsource, newmode):
         def change(editdev):
             if not newtype:

@@ -829,6 +829,8 @@ def mediadev_added(ignore_helper, newobj, widget, devtype):
 
     if newobj.get_media_type() != devtype:
         return
+    if model is None:
+        return
 
     if len(model) == 1 and model[0][OPTICAL_IS_VALID] is False:
         # Only entry is the 'No device' entry

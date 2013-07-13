@@ -107,13 +107,14 @@ def _upload_file(conn, meter, destpool, src):
     if name != basename:
         logging.debug("Generated non-colliding volume name %s", name)
 
-    disk = VirtualDisk(conn,
-                       path=os.path.join(poolpath, name),
-                       sizebytes=size,
-                       sparse=True)
+    disk = VirtualDisk(conn)
+    disk.path = os.path.join(poolpath, name)
+    disk.set_create_storage(size=(float(size) / 1024.0 / 1024.0 / 1024.0),
+                            sparse=True)
+    disk.validate()
 
     disk.setup(meter=meter)
-    vol = disk.vol_object
+    vol = disk.get_vol_object()
     if not vol:
         raise RuntimeError(_("Failed to lookup scratch media volume"))
 
@@ -217,11 +218,7 @@ class DistroInstaller(Installer.Installer):
             # Pass the parameters off to VirtualDisk to validate, and pull
             # out the path
             try:
-                d = VirtualDisk(self.conn,
-                                path=val,
-                                device=VirtualDisk.DEVICE_CDROM,
-                                transient=True,
-                                readOnly=True)
+                d = self._make_cdrom_dev(val)
                 val = d.path
             except:
                 logging.debug("Error validating install location",
@@ -255,11 +252,8 @@ class DistroInstaller(Installer.Installer):
         else:
             cdrom = self.location
 
-        disk = VirtualDisk(guest.conn,
-                           path=cdrom,
-                           device=VirtualDisk.DEVICE_CDROM,
-                           readOnly=True,
-                           transient=transient)
+        disk = self._make_cdrom_dev(cdrom)
+        disk.transient = transient
         self.install_devices.append(disk)
 
     def _perform_initrd_injections(self, initrd):
@@ -340,26 +334,13 @@ class DistroInstaller(Installer.Installer):
     def _prepare_kernel_and_initrd(self, guest, meter):
         disk = None
 
-        # If installing off a local path, map it through to a virtual CD/disk
+        # If installing off a local path, map it through to a virtual CD
         if (self.location is not None and
             self._location_is_path and
             not os.path.isdir(self.location)):
 
-            device = VirtualDisk.DEVICE_CDROM
-
-            # pylint: disable=W0212
-            # Access to protected member lookup_osdict_key
-            can_cdrom = guest._lookup_osdict_key('pv_cdrom_install')
-            # pylint: enable=W0212
-
-            if self.is_xenpv() and can_cdrom:
-                device = VirtualDisk.DEVICE_DISK
-
-            disk = VirtualDisk(guest.conn,
-                               device=device,
-                               path=self.location,
-                               readOnly=True,
-                               transient=True)
+            disk = self._make_cdrom_dev(self.location)
+            disk.transient = True
 
         # Make sure we always fetch kernel here if required
         if self._install_bootconfig.kernel and not self.scratchdir_required():

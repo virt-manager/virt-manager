@@ -18,6 +18,7 @@
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type='file' device='disk'>
+      <driver name="qemu" type="vmdk"/>
       <source file='/default-pool/testvol1.img'/>
       <target dev='hda' bus='ide'/>
     </disk>

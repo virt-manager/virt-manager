@@ -843,7 +843,7 @@ class vmmCreate(vmmGObjectUI):
         disks = self.guest.get_devices("disk")
         if disks:
             disk = disks[0]
-            storage = "%s" % self.pretty_storage(disk.size)
+            storage = "%s" % self.pretty_storage(disk.get_size())
             storage += " " + (storagetmpl % disk.path)
         elif len(self.guest.get_devices("filesystem")):
             fs = self.guest.get_devices("filesystem")[0]
@@ -1677,17 +1677,17 @@ class vmmCreate(vmmGObjectUI):
             if not diskpath:
                 return self.err.val_err(_("A storage path must be specified."))
 
-            disk = virtinst.VirtualDisk(conn,
-                                        path=diskpath,
-                                        size=disksize,
-                                        sparse=sparse)
+            disk = virtinst.VirtualDisk(conn)
+            disk.path = diskpath
+            disk.set_create_storage(size=disksize, sparse=sparse)
 
             fmt = self.config.get_storage_format()
             if (self.is_default_storage() and
-                disk.vol_install and
-                fmt in disk.vol_install.formats):
+                disk.get_vol_install() and
+                fmt in disk.get_vol_install().formats):
                 logging.debug("Setting disk format from prefs: %s", fmt)
-                disk.vol_install.format = fmt
+                disk.get_vol_install().format = fmt
+            disk.validate()
 
         except Exception, e:
             return self.err.val_err(_("Storage parameter error."), e)

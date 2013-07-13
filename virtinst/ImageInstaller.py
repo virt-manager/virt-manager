@@ -120,14 +120,13 @@ class ImageInstaller(Installer.Installer):
             if drive.disk.format == ImageParser.Disk.FORMAT_ISO:
                 device = VirtualDisk.DEVICE_CDROM
 
-
-            disk = VirtualDisk(conn=self.conn,
-                               path=path,
-                               size=size,
-                               device=device,
-                               format=drive.disk.format)
+            disk = VirtualDisk(self.conn)
+            disk.path = path
+            disk.device = device
             disk.target = drive.target
 
+            disk.set_create_storage(size=size, fmt=drive.disk.format)
+            disk.validate()
             self.install_devices.append(disk)
 
     def _abspath(self, p):

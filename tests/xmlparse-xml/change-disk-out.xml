@@ -18,10 +18,10 @@
   <vcpu>5</vcpu>
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
-    <disk type="file" device="disk">
-      <source file="/dev/loop0"/>
+    <disk type="block" device="disk">
       <target dev="hda" bus="ide"/>
       <serial>frob</serial>
+      <source dev="/dev/loop0"/>
       <driver name="test" type="raw"/>
     </disk>
     <disk type="block" device="disk">

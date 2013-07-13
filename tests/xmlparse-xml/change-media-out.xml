@@ -15,10 +15,10 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/default-pool/default-vol"/>
     </disk>
-    <disk type="file" device="cdrom">
+    <disk type="block" device="cdrom">
       <target dev="hdb" bus="ide"/>
-      <driver name="qemu" type="qcow2"/>
-      <source file="/disk-pool/diskvol1"/>
+      <driver name="qemu" type="raw"/>
+      <source dev="/disk-pool/diskvol1"/>
     </disk>
     <disk type="block" device="cdrom">
       <target dev="hdc" bus="ide"/>
