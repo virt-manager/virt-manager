@@ -974,21 +974,6 @@ class Guest(XMLBuilder):
 
         return self._lookup_osdict_key("continue")
 
-    def validate_parms(self):
-        """
-        Do some pre-install domain validation
-        """
-        if self.domain is not None:
-            raise RuntimeError(_("Domain has already been started!"))
-
-        if self.name is None or self.memory is None:
-            raise RuntimeError(_("Name and memory must be specified for "
-                                 "all guests!"))
-
-        if util.vm_uuid_collision(self.conn, self.uuid):
-            raise RuntimeError(_("The UUID you entered is already in "
-                                 "use by another guest!"))
-
     def connect_console(self, consolecb, wait=True):
         """
         Launched the passed console callback for the already defined
@@ -1088,9 +1073,10 @@ class Guest(XMLBuilder):
         Begin the guest install (stage1).
         @param return_xml: Don't create the guest, just return generated XML
         """
-        is_initial = True
+        if self.domain is not None:
+            raise RuntimeError(_("Domain has already been started!"))
 
-        self.validate_parms()
+        is_initial = True
         self._consolechild = None
 
         self._prepare_install(meter, dry)
