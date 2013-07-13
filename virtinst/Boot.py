@@ -63,14 +63,8 @@ class Boot(XMLBuilderDomain.XMLBuilderDomain):
         return self._bootorder
     def _set_bootorder(self, val):
         self._bootorder = val
-    def _bootorder_xpath_list(self):
-        l = []
-        for idx in range(len(self._get_bootorder())):
-            l.append("./os/boot[%d]/@dev" % (idx + 1))
-        return l
     bootorder = _xml_property(_get_bootorder, _set_bootorder,
                               is_multi=True,
-                              xml_set_list=_bootorder_xpath_list,
                               xpath="./os/boot/@dev")
 
     def _get_kernel(self):

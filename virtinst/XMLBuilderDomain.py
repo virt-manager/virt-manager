@@ -215,7 +215,7 @@ class _xml_property(property):
     def __init__(self, fget=None, fset=None, doc=None,
                  xpath=None, get_converter=None, set_converter=None,
                  xml_get_xpath=None, xml_set_xpath=None,
-                 xml_set_list=None, is_bool=False, is_multi=False,
+                 is_bool=False, is_multi=False,
                  default_converter=None, clear_first=None):
         """
         Set a XMLBuilder class property that represents a value in the
@@ -243,8 +243,6 @@ class _xml_property(property):
         @param xml_set_xpath: Not all props map cleanly to a static xpath.
             This allows passing functions which generate an xpath for getting
             or setting.
-        @param xml_set_list: Return a list of xpaths to set for each value
-                             in the val list
         @param is_bool: Whether this is a boolean property in the XML
         @param is_multi: Whether data is coming multiple or a single node
         @param default_converter: If the virtinst value is "default", use
@@ -261,7 +259,6 @@ class _xml_property(property):
 
         self._xpath_for_getter_cb = xml_get_xpath
         self._xpath_for_setter_cb = xml_set_xpath
-        self._xml_set_list = xml_set_list
 
         self._convert_value_for_getter_cb = get_converter
         self._convert_value_for_setter_cb = set_converter
@@ -343,6 +340,23 @@ class _xml_property(property):
         if self._xpath_for_setter_cb:
             return self._xpath_for_setter_cb(xmlbuilder)
         return self._xpath
+
+    def _xpath_list_for_setter(self, xpath, setval, nodelist):
+        if not self._is_multi:
+            return [xpath]
+
+        ret = []
+        list_length = max(len(nodelist), len(setval), 1)
+
+        # This might not generally work, but as of this writing there's
+        # only one user of is_multi and it works for that. It's probably
+        # generalizable though.
+        for i in range(list_length):
+            idxstr = "[%d]/" % (i + 1)
+            splitpath = xpath.rsplit("/", 1)
+            ret.append("%s%s%s" % (splitpath[0], idxstr, splitpath[1]))
+        return ret
+
 
     def _convert_value_for_setter(self, xmlbuilder):
         # Convert from API value to XML value
@@ -435,14 +449,12 @@ class _xml_property(property):
         nodelist = self._build_node_list(xmlbuilder, xpath)
         clearlist = self._build_clear_list(xmlbuilder, nodelist)
 
-        xpath_list = xpath
-        if self._xml_set_list:
-            xpath_list = self._xml_set_list(xmlbuilder)
-
         node_map = []
         if clearlist:
             node_map += _tuplify_lists(clearlist, None, "")
-        node_map += _tuplify_lists(nodelist, setval, xpath_list)
+        node_map += _tuplify_lists(nodelist, setval,
+                        self._xpath_list_for_setter(xpath, setval, nodelist))
+
         for node, val, use_xpath in node_map:
             if node:
                 use_xpath = node.nodePath()
