@@ -76,6 +76,7 @@ def update_host_space(conn, widget):
         max_storage = host_disk_space(conn)
     except:
         logging.exception("Error determining host disk space")
+        return
 
     def pretty_storage(size):
         return "%.1f Gb" % float(size)
