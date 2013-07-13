@@ -46,8 +46,9 @@ Don't autostart any libvirt connections when launching C<virt-manager>.
 
 =item --show-DIALOG-WINDOW
 
-Display the corresponding C<DIALOG-WINDOW> when launching C<virt-manager>. The
-manager window will not be shown at startup in this case.
+Display the corresponding C<DIALOG-WINDOW> when launching C<virt-manager>. This
+function implies --no-conn-autostart and the manager window will not be shown
+at startup in this case.
 
 The following C<DIALOG-WINDOW> options are currently available:
 
