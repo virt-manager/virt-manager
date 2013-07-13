@@ -211,10 +211,78 @@ def _remove_xpath_node(ctx, xpath, dofree=True):
             node.freeNode()
 
 
-class _XMLProperty(property):
-    def __init__(self, fget, fset, doc, xpath):
-        property.__init__(self, fget=fget, fset=fset, doc=doc)
+class _xml_property(property):
+    def __init__(self, fget=None, fset=None, doc=None,
+                 xpath=None, get_converter=None, set_converter=None,
+                 xml_get_xpath=None, xml_set_xpath=None,
+                 xml_set_list=None, is_bool=False, is_multi=False,
+                 default_converter=None, clear_first=None):
+        """
+        Set a XMLBuilder class property that represents a value in the
+        <domain> XML. For example
+
+        name = _xml_property(get_name, set_name, xpath="/domain/name")
+
+        When building XML from scratch (virt-install), name is a regular
+        class property. When parsing and editting existing guest XML, we
+        use the xpath value to map the name property to the underlying XML
+        definition.
+
+        @param fget: typical getter function for the property
+        @param fset: typical setter function for the property
+        @param doc: option doc string for the property
+        @param xpath: xpath string which maps to the associated property
+                      in a typical XML document
+        @param get_converter:
+        @param set_converter: optional function for converting the property
+            value from the virtinst API to the guest XML. For example,
+            the Guest.memory API is in MB, but the libvirt domain memory API
+            is in KB. So, if xpath is specified, on a 'get' operation we need
+            to convert the XML value with int(val) / 1024.
+        @param xml_get_xpath:
+        @param xml_set_xpath: Not all props map cleanly to a static xpath.
+            This allows passing functions which generate an xpath for getting
+            or setting.
+        @param xml_set_list: Return a list of xpaths to set for each value
+                             in the val list
+        @param is_bool: Whether this is a boolean property in the XML
+        @param is_multi: Whether data is coming multiple or a single node
+        @param default_converter: If the virtinst value is "default", use
+                                  this function to get the actual XML value
+        @param clear_first: List of xpaths to unset before any 'set' operation.
+            For those weird interdependent XML props like disk source type and
+            path attribute.
+        """
+
         self._xpath = xpath
+
+        self._is_bool = is_bool
+        self._is_multi = is_multi
+
+        self._xpath_for_getter_cb = xml_get_xpath
+        self._xpath_for_setter_cb = xml_set_xpath
+        self._xml_set_list = xml_set_list
+
+        self._convert_value_for_getter_cb = get_converter
+        self._convert_value_for_setter_cb = set_converter
+        self._default_converter = default_converter
+        self._setter_clear_these_first = clear_first or []
+
+        if not fget:
+            fget = self._default_orig_fget
+            fset = self._default_orig_fset
+            if _trackprops:
+                _allprops.append(self)
+        self._orig_fget = fget
+        self._orig_fset = fset
+
+        property.__init__(self, fget=self.new_getter, fset=self.new_setter,
+                          doc=doc)
+
+
+    ##################
+    # Public-ish API #
+    ##################
 
     def __repr__(self):
         ret = property.__repr__(self)
@@ -223,163 +291,165 @@ class _XMLProperty(property):
         return ret
 
 
-def _xml_property(fget=None, fset=None, doc=None,
-                  xpath=None, get_converter=None, set_converter=None,
-                  xml_get_xpath=None, xml_set_xpath=None,
-                  xml_set_list=None, is_bool=False, is_multi=False,
-                  default_converter=None, clear_first=None):
-    """
-    Set a XMLBuilder class property that represents a value in the
-    <domain> XML. For example
+    ####################
+    # Internal helpers #
+    ####################
 
-    name = _xml_property(get_name, set_name, xpath="/domain/name")
-
-    When building XML from scratch (virt-install), name is a regular
-    class property. When parsing and editting existing guest XML, we
-    use the xpath value to map the name property to the underlying XML
-    definition.
-
-    @param fget: typical getter function for the property
-    @param fset: typical setter function for the property
-    @param doc: option doc string for the property
-    @param xpath: xpath string which maps to the associated property
-                  in a typical XML document
-    @param get_converter:
-    @param set_converter: optional function for converting the property
-        value from the virtinst API to the guest XML. For example,
-        the Guest.memory API is in MB, but the libvirt domain memory API
-        is in KB. So, if xpath is specified, on a 'get' operation we need
-        to convert the XML value with int(val) / 1024.
-    @param xml_get_xpath:
-    @param xml_set_xpath: Not all props map cleanly to a static xpath.
-        This allows passing functions which generate an xpath for getting
-        or setting.
-    @param xml_set_list: Return a list of xpaths to set for each value
-                         in the val list
-    @param is_bool: Whether this is a boolean property in the XML
-    @param is_multi: Whether data is coming multiple or a single node
-    @param default_converter: If the virtinst value is "default", use
-                              this function to get the actual XML value
-    @param clear_first: List of xpaths to unset before any 'set' operation.
-        For those weird interdependent XML props like disk source type and
-        path attribute.
-    """
-    # pylint: disable=W0212
-    # Accessing _xml vals of self. This should be a class method, but
-    # we break it out to be more readable
-    def _findpropname(self):
-        for key, val in self.__class__.__dict__.items():
-            if val is retprop:
+    def _findpropname(self, xmlbuilder):
+        """
+        Map the raw property() instance to the param name it's exposed
+        as in the XMLBuilder class. This is just for debug purposes.
+        """
+        for key, val in xmlbuilder.__class__.__dict__.items():
+            if val is self:
                 return key
         raise RuntimeError("Didn't find expected property")
 
-    def _default_fset(self, val, *args, **kwargs):
-        if _trackprops and retprop not in _seenprops:
-            _seenprops.append(retprop)
+    def _default_orig_fset(self, xmlbuilder, val, *args, **kwargs):
+        """
+        If no fset specified, this stores the value in XMLBuilder._propstore
+        dict as propname->value. This saves us from having to explicitly
+        track every variable.
+        """
         ignore = args
         ignore = kwargs
-        propname = _findpropname(self)
-        self._propstore[propname] = val
-        if propname in self._proporder:
-            self._proporder.remove(propname)
-        self._proporder.append(propname)
+        propstore = getattr(xmlbuilder, "_propstore")
+        proporder = getattr(xmlbuilder, "_proporder")
 
-    def _default_fget(self, *args, **kwargs):
+        if _trackprops and self not in _seenprops:
+            _seenprops.append(self)
+        propname = self._findpropname(xmlbuilder)
+        propstore[propname] = val
+
+        if propname in proporder:
+            proporder.remove(propname)
+        proporder.append(propname)
+
+    def _default_orig_fget(self, xmlbuilder, *args, **kwargs):
+        """
+        The flip side to default_orig_fset, fetch the value from
+        XMLBuilder._propstore
+        """
         ignore = args
         ignore = kwargs
-        return self._propstore.get(_findpropname(self), None)
+        propstore = getattr(xmlbuilder, "_propstore")
+        return propstore.get(self._findpropname(xmlbuilder), None)
 
-    isdefault = False
-    if not fget:
-        fget = _default_fget
-        fset = _default_fset
-        isdefault = True
+    def _xpath_for_getter(self, xmlbuilder):
+        if self._xpath_for_getter_cb:
+            return self._xpath_for_getter_cb(xmlbuilder)
+        return self._xpath
+    def _xpath_for_setter(self, xmlbuilder):
+        if self._xpath_for_setter_cb:
+            return self._xpath_for_setter_cb(xmlbuilder)
+        return self._xpath
 
-    def new_getter(self, *args, **kwargs):
-        val = None
-        getval = fget(self, *args, **kwargs)
-        if not self._xml_node:
-            return getval
+    def _convert_value_for_setter(self, xmlbuilder):
+        # Convert from API value to XML value
+        val = self._orig_fget(xmlbuilder)
+        if self._convert_value_for_setter_cb:
+            val = self._convert_value_for_setter_cb(xmlbuilder, val)
+        elif self._default_converter and val == "default":
+            val = self._default_converter(xmlbuilder)
+        return val
 
-        if default_converter and getval == "default":
-            return getval
+    def _build_node_list(self, xmlbuilder, xpath):
+        """
+        Build list of nodes that the passed xpaths reference
+        """
+        root_ctx = getattr(xmlbuilder, "_xml_ctx")
+        nodes = _get_xpath_node(root_ctx, xpath, self._is_multi)
+        return util.listify(nodes)
 
-        node_xpath = xpath
-        if xml_get_xpath:
-            node_xpath = xml_get_xpath(self)
-        if node_xpath is None:
-            return getval
+    def _build_clear_list(self, xmlbuilder, setternodes):
+        """
+        Build a list of nodes that we should erase first before performing
+        a set operation. But we don't want to unset a node that we are
+        just going to 'set' on top of afterwards, so skip those ones.
+        """
+        root_ctx = getattr(xmlbuilder, "_xml_ctx")
+        clear_nodes = []
 
-        nodes = util.listify(_get_xpath_node(self._xml_ctx,
-                                             node_xpath, is_multi))
-        if nodes:
+        for cpath in self._setter_clear_these_first:
+            cnode = _get_xpath_node(root_ctx, cpath, False)
+            if not cnode:
+                continue
+            if any([(n and n.nodePath() == cnode.nodePath())
+                    for n in setternodes]):
+                continue
+            clear_nodes.append(cnode)
+        return clear_nodes
+
+
+    def new_getter(self, xmlbuilder, *args, **kwargs):
+        fgetval = self._orig_fget(xmlbuilder, *args, **kwargs)
+
+        root_node = getattr(xmlbuilder, "_xml_node")
+        if root_node is None:
+            return fgetval
+
+        xpath = self._xpath_for_getter(xmlbuilder)
+        if xpath is None:
+            return fgetval
+
+        if self._default_converter and fgetval == "default":
+            return fgetval
+
+        nodelist = self._build_node_list(xmlbuilder, xpath)
+
+        if nodelist:
             ret = []
-            for node in nodes:
+            for node in nodelist:
                 val = node.content
-                if get_converter:
-                    val = get_converter(self, val)
-                elif is_bool:
+                if self._convert_value_for_getter_cb:
+                    val = self._convert_value_for_getter_cb(xmlbuilder, val)
+                elif self._is_bool:
                     val = True
 
-                if not is_multi:
+                if not self._is_multi:
                     return val
                 # If user is querying multiple nodes, return a list of results
                 ret.append(val)
             return ret
 
-        elif is_bool:
+        elif self._is_bool:
             return False
-        elif get_converter:
-            getval = get_converter(self, None)
+        elif self._convert_value_for_getter_cb:
+            return self._convert_value_for_getter_cb(xmlbuilder, None)
+        return fgetval
 
-        return getval
 
-    def new_setter(self, val, *args, **kwargs):
+    def new_setter(self, xmlbuilder, val, *args, **kwargs):
         # Do this regardless, for validation purposes
-        fset(self, val, *args, **kwargs)
-        if not self._xml_node:
+        self._orig_fset(xmlbuilder, val, *args, **kwargs)
+
+        root_node = getattr(xmlbuilder, "_xml_node")
+        if root_node is None:
             return
 
-        # Convert from API value to XML value
-        val = fget(self)
-        if set_converter:
-            val = set_converter(self, val)
-        elif default_converter and val == "default":
-            val = default_converter(self)
-
-        node_xpath = xpath
-        if xml_set_xpath:
-            node_xpath = xml_set_xpath(self)
-
-        if node_xpath is None:
+        xpath = self._xpath_for_setter(xmlbuilder)
+        if xpath is None:
             return
 
-        nodes = util.listify(_get_xpath_node(self._xml_ctx,
-                                             node_xpath, is_multi))
-        clear_nodes = []
-        for cpath in clear_first or []:
-            cnode = _get_xpath_node(self._xml_ctx, cpath, False)
-            if not cnode:
-                continue
-            if any([(n and n.nodePath() == cnode.nodePath()) for n in nodes]):
-                continue
-            clear_nodes.append(cnode)
+        setval = self._convert_value_for_setter(xmlbuilder)
+        nodelist = self._build_node_list(xmlbuilder, xpath)
+        clearlist = self._build_clear_list(xmlbuilder, nodelist)
 
-        xpath_list = node_xpath
-        if xml_set_list:
-            xpath_list = xml_set_list(self)
+        xpath_list = xpath
+        if self._xml_set_list:
+            xpath_list = self._xml_set_list(xmlbuilder)
 
         node_map = []
-        if clear_nodes:
-            node_map += _tuplify_lists(clear_nodes, None, "")
-        node_map += _tuplify_lists(nodes, val, xpath_list)
+        if clearlist:
+            node_map += _tuplify_lists(clearlist, None, "")
+        node_map += _tuplify_lists(nodelist, setval, xpath_list)
         for node, val, use_xpath in node_map:
             if node:
                 use_xpath = node.nodePath()
 
             if val not in [None, False]:
                 if not node:
-                    node = _build_xpath_node(self._xml_node, use_xpath)
+                    node = _build_xpath_node(root_node, use_xpath)
 
                 if val is True:
                     # Boolean property, creating the node is enough
@@ -387,13 +457,7 @@ def _xml_property(fget=None, fset=None, doc=None,
                 else:
                     node.setContent(util.xml_escape(str(val)))
             else:
-                _remove_xpath_node(self._xml_node, use_xpath)
-
-    retprop = _XMLProperty(new_getter, new_setter, doc,
-                           (xpath or xml_set_xpath or xml_get_xpath))
-    if _trackprops and isdefault:
-        _allprops.append(retprop)
-    return retprop
+                _remove_xpath_node(root_node, use_xpath)
 
 
 class XMLBuilderDomain(object):
