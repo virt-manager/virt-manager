@@ -616,14 +616,14 @@ def start_install(guest, continue_inst, options):
         gdev = guest.get_devices("graphics")
         if not gdev:
             logging.debug("Connecting to text console")
-            return txt_console(dom, guest.get_uri())
+            return txt_console(dom, guest.conn.getURI())
 
         gtype = gdev[0].type
         if gtype in [virtinst.VirtualGraphics.TYPE_VNC,
                      virtinst.VirtualGraphics.TYPE_SPICE]:
             logging.debug("Launching virt-viewer for graphics type '%s'",
                           gtype)
-            return vnc_console(dom, guest.get_uri())
+            return vnc_console(dom, guest.conn.getURI())
         else:
             logging.debug("No viewer to launch for graphics type '%s'",
                           gtype)
