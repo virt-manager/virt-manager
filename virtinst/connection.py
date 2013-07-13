@@ -84,18 +84,18 @@ class VirtualConnection(object):
     - simplified API wrappers that handle new and old ways of doing things
     """
     def __init__(self, uri):
-        self._initial_uri = uri or ""
+        _initial_uri = uri or ""
 
         # virtinst unit test URI handling
-        if self._initial_uri.startswith(_virtinst_uri_magic):
-            uri = self._initial_uri.replace(_virtinst_uri_magic, "")
+        if _initial_uri.startswith(_virtinst_uri_magic):
+            uri = _initial_uri.replace(_virtinst_uri_magic, "")
             ret = uri.split(",", 1)
             self._open_uri = ret[0]
             self._test_opts = parse_optstr(len(ret) > 1 and ret[1] or "")
             self._uri = self._virtinst_uri_make_fake()
         else:
-            self._open_uri = self._initial_uri
-            self._uri = self._initial_uri
+            self._open_uri = _initial_uri
+            self._uri = _initial_uri
             self._test_opts = {}
 
         self._libvirtconn = None
@@ -175,6 +175,9 @@ class VirtualConnection(object):
 
         self._fixup_virtinst_test_uri(conn)
         self._libvirtconn = conn
+        if not self._open_uri:
+            self._uri = self._libvirtconn.getURI()
+            self._urisplits = util.uri_split(self._uri)
 
     def fetch_all_guests(self):
         # pylint: disable=E1102
