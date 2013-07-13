@@ -358,12 +358,15 @@ class configure(Command):
 class TestBaseCommand(Command):
     user_options = [
         ('debug', 'd', 'Show debug output'),
-        ('coverage', 'c', 'Show coverage report')
+        ('coverage', 'c', 'Show coverage report'),
+        ("only=", None,
+         "Run only testcases whose name contains the passed string"),
     ]
 
     def initialize_options(self):
         self.debug = 0
         self.coverage = 0
+        self.only = None
         self._testfiles = []
         self._dir = os.getcwd()
 
@@ -378,7 +381,6 @@ class TestBaseCommand(Command):
         except:
             use_cov = False
 
-
         if use_cov:
             omit = ["/usr/*", "/*/tests/*"]
             cov = coverage.coverage(omit=omit)
@@ -388,14 +390,31 @@ class TestBaseCommand(Command):
         import tests as testsmodule
         testsmodule.cov = cov
 
-        tests = unittest.TestLoader().loadTestsFromNames(self._testfiles)
-        t = unittest.TextTestRunner(verbosity=1)
-
         if hasattr(unittest, "installHandler"):
             try:
                 unittest.installHandler()
             except:
                 print "installHandler hack failed"
+
+        tests = unittest.TestLoader().loadTestsFromNames(self._testfiles)
+        if self.only:
+            newtests = []
+            for suite1 in tests:
+                for suite2 in suite1:
+                    for testcase in suite2:
+                        if self.only in str(testcase):
+                            newtests.append(testcase)
+
+            if not newtests:
+                print "--only didn't find any tests"
+                sys.exit(1)
+            tests = unittest.TestSuite(newtests)
+            print "Running only:"
+            for test in newtests:
+                print "%s" % test
+            print
+
+        t = unittest.TextTestRunner(verbosity=1)
 
         try:
             result = t.run(tests)
@@ -416,10 +435,11 @@ class TestBaseCommand(Command):
 
 class TestCommand(TestBaseCommand):
     description = "Runs a quick unit test suite"
-    user_options = TestBaseCommand.user_options + \
-                   [("testfile=", None, "Specific test file to run (e.g "
-                                        "validation, storage, ...)"),
-                    ("skipcli", None, "Skip CLI tests")]
+    user_options = TestBaseCommand.user_options + [
+        ("testfile=", None, "Specific test file to run (e.g "
+                            "validation, storage, ...)"),
+        ("skipcli", None, "Skip CLI tests"),
+    ]
 
     def initialize_options(self):
         TestBaseCommand.initialize_options(self)
