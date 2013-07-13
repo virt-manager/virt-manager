@@ -799,7 +799,7 @@ class VirtualDisk(VirtualDevice):
         cache = self.driver_cache
         iomode = self.driver_io
 
-        if virtinst.enable_rhel6_defaults:
+        if virtinst.enable_rhel_defaults:
             # Enable cache=none for non-CDROM devs
             if (self.conn.is_qemu() and
                 not cache and

@@ -15,7 +15,7 @@
 # MA 02110-1301 USA.
 
 from virtcli import cliconfig, cliutils
-enable_rhel6_defaults = not cliconfig.rhel_enable_unsupported_opts
+enable_rhel_defaults = not cliconfig.rhel_enable_unsupported_opts
 cliutils.setup_i18n()
 
 

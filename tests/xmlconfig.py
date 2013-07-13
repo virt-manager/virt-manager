@@ -347,6 +347,15 @@ class TestXMLConfig(unittest.TestCase):
         g.os_variant = "fedora11"
         self._compare(g, "install-f11", do_install)
 
+        try:
+            virtinst.enable_rhel_defaults = True
+            self._compare(g, "install-f11-rheldefaults", do_install)
+        finally:
+            virtinst.enable_rhel_defaults = False
+
+        # Verify main guest wasn't polluted
+        self._compare(g, "install-f11", do_install)
+
     def testInstallFVImport(self):
         i = utils.make_import_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
