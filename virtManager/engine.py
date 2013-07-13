@@ -744,9 +744,6 @@ class vmmEngine(vmmGObject):
     def show_manager(self):
         self._do_show_manager(None)
 
-    def show_connect(self):
-        self._do_show_connect(self.get_manager())
-
     def show_host_summary(self, uri):
         self._do_show_host(self.get_manager(), uri)
 

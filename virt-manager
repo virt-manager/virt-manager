@@ -162,15 +162,6 @@ def launch_specific_window(engine, show, uri, uuid):
         engine.show_host_summary(uri)
 
 
-def _conn_ready(conn, engine, show, uri, uuid):
-    if uuid not in conn.vms:
-        engine.err.show_err("%s does not have VM with UUID %s" %
-                            (uri, uuid))
-    else:
-        launch_specific_window(engine, show, uri, uuid)
-    return True
-
-
 def opt_show_cb(option, opt_str, value, parser):
     # Generic OptionParser callback for all --show-* options
     # This routine stores UUID to options.uuid for all --show-* options
@@ -286,8 +277,8 @@ def main():
 
     if options.show:
         def cb(conn):
-            return _conn_ready(conn, engine, options.show,
-                               options.uri, options.uuid)
+            launch_specific_window(engine, options.show, options.uri, options.uuid)
+            return True
         engine.uri_cb = cb
         engine.show_manager_window = False
 
