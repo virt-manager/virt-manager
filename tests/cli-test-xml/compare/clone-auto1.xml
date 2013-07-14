@@ -20,7 +20,7 @@
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="block" device="floppy">
-      <driver type="vmdk" name="qemu"/>
+      <driver type="vmdk"/>
       <target dev="fda" bus="fdc"/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
       <source dev="/disk-pool/diskvol1-clone"/>
@@ -47,13 +47,11 @@
     <disk type="file" device="disk">
       <target dev="hda" bus="ide"/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
-      <driver name="qemu"/>
       <source file="/default-pool/default-vol-clone"/>
     </disk>
     <disk type="file" device="disk">
       <target dev="hdb" bus="ide"/>
       <address type="drive" controller="0" bus="0" target="0" unit="1"/>
-      <driver name="qemu"/>
       <source file="/default-pool/testvol2-clone.img"/>
     </disk>
     <controller type="scsi" index="0"/>

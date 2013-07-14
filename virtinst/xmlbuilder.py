@@ -381,11 +381,22 @@ class XMLProperty(property):
         return clear_nodes
 
 
-    def _convert_raw_getter(self, val):
+    def _convert_get_value(self, xmlbuilder, val, initial=False):
+        if self._fget and initial:
+            # If user passed in an fget impl, we expect them to put things
+            # in the form they want.
+            return val
+
         if self._is_bool:
-            if self._is_tri and val is None:
+            if initial and self._is_tri and val is None:
                 return None
             return bool(val)
+        elif self._is_int and val is not None:
+            return int(val)
+        elif self._convert_value_for_getter_cb:
+            return self._convert_value_for_getter_cb(xmlbuilder, val)
+        elif self._is_multi and val is None:
+            return []
         return val
 
     def _orig_fget(self, xmlbuilder):
@@ -435,33 +446,25 @@ class XMLProperty(property):
 
         root_node = getattr(xmlbuilder, "_xml_node")
         if root_node is None:
-            return self._convert_raw_getter(fgetval)
+            return self._convert_get_value(xmlbuilder, fgetval, initial=True)
 
         xpath = self._xpath_for_getter(xmlbuilder)
         nodelist = self._build_node_list(xmlbuilder, xpath)
 
-        if nodelist:
-            ret = []
-            for node in nodelist:
-                val = node.content
-                if self._convert_value_for_getter_cb:
-                    val = self._convert_value_for_getter_cb(xmlbuilder, val)
-                elif self._is_bool:
-                    val = True
-                elif self._is_int:
-                    val = int(val)
+        if not nodelist:
+            return self._convert_get_value(xmlbuilder, None)
 
-                if not self._is_multi:
-                    return val
-                # If user is querying multiple nodes, return a list of results
-                ret.append(val)
-            return ret
-
-        elif self._is_bool:
-            return False
-        elif self._convert_value_for_getter_cb:
-            return self._convert_value_for_getter_cb(xmlbuilder, None)
-        return fgetval
+        ret = []
+        for node in nodelist:
+            content = node.content
+            if self._is_bool:
+                content = True
+            val = self._convert_get_value(xmlbuilder, content)
+            if not self._is_multi:
+                return val
+            # If user is querying multiple nodes, return a list of results
+            ret.append(val)
+        return ret
 
 
     def new_setter(self, xmlbuilder, val, local=True):
