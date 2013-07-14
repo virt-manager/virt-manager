@@ -39,6 +39,16 @@ class _DocCleanupWrapper(object):
         self._doc.freeDoc()
 
 
+class _CtxCleanupWrapper(object):
+    def __init__(self, ctx):
+        self._ctx = ctx
+    def __del__(self):
+        self._ctx.xpathFreeContext()
+        self._ctx = None
+    def __getattr__(self, attrname):
+        return getattr(self._ctx, attrname)
+
+
 def _tuplify_lists(*args):
     """
     Similar to zip(), but use None if lists aren't long enough, and
@@ -508,9 +518,6 @@ class XMLBuilder(object):
         if parsexml or parsexmlnode:
             self._parsexml(parsexml, parsexmlnode)
 
-    def __del__(self):
-        if hasattr(self, "_xml_ctx") and self._xml_ctx:
-            self._xml_ctx.xpathFreeContext()
 
     def _cache(self):
         """
@@ -522,9 +529,6 @@ class XMLBuilder(object):
 
 
     def copy(self):
-        # Otherwise we can double free XML info
-        if self._is_parse():
-            return self
         self._cache()
         return copy.copy(self)
 
@@ -553,10 +557,8 @@ class XMLBuilder(object):
 
     def _set_xml_context(self):
         doc = self._xml_node.doc
-        ctx = doc.xpathNewContext()
+        ctx = _CtxCleanupWrapper(doc.xpathNewContext())
         ctx.setContextNode(self._xml_node)
-        if self._xml_ctx:
-            self._xml_ctx.xpathFreeContext()
         self._xml_ctx = ctx
 
     def _parsexml(self, xml, node):
@@ -587,8 +589,6 @@ class XMLBuilder(object):
         finally:
             self._xml_root_doc = None
             self._xml_node = None
-            if self._xml_ctx:
-                self._xml_ctx.xpathFreeContext()
             self._xml_ctx = None
 
     def set_defaults(self):
