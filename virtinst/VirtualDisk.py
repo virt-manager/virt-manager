@@ -773,29 +773,7 @@ class VirtualDisk(VirtualDevice):
         if volobj:
             self._change_storage(vol_object=volobj)
 
-
-    def _get_xml_config(self, disknode=None):
-        """
-        @param disknode: device name in host (xvda, hdb, etc.). self.target
-                         takes precedence.
-        @type disknode: C{str}
-        """
-        # pylint: disable=W0221
-        # Argument number differs from overridden method
-
-        typeattr = self.type
-        if self.type == VirtualDisk.TYPE_BLOCK:
-            typeattr = 'dev'
-
-        if self.target:
-            disknode = self.target
-
-        path = self.path
-        if path:
-            path = util.xml_escape(path)
-
-        ret = "    <disk type='%s' device='%s'>\n" % (self.type, self.device)
-
+    def set_defaults(self):
         cache = self.driver_cache
         iomode = self.driver_io
 
@@ -813,22 +791,38 @@ class VirtualDisk(VirtualDevice):
                 self.type == self.TYPE_BLOCK):
                 iomode = self.IO_MODE_NATIVE
 
+        self.driver_cache = cache
+        self.driver_io = iomode
+
+        if ((self.driver_cache or self.driver_io or self.driver_type) and
+            self.driver_name is None and
+            self.conn.is_qemu()):
+            self.driver_name = self.DRIVER_QEMU
+
+        if self.device == self.DEVICE_CDROM:
+            self.read_only = True
+
+    def _get_xml_config(self):
+        typeattr = self.type
+        if self.type == VirtualDisk.TYPE_BLOCK:
+            typeattr = 'dev'
+        path = self.path
+        if path:
+            path = util.xml_escape(path)
+
+        ret = "    <disk type='%s' device='%s'>\n" % (self.type, self.device)
+
+
         if path:
             drvxml = ""
-            if not self.driver_type is None:
+            if self.driver_type is not None:
                 drvxml += " type='%s'" % self.driver_type
-            if not cache is None:
-                drvxml += " cache='%s'" % cache
-            if not iomode is None:
-                drvxml += " io='%s'" % iomode
-
-            if drvxml and self.driver_name is None:
-                if self.conn.is_qemu():
-                    self.driver_name = "qemu"
-
-            if not self.driver_name is None:
+            if self.driver_cache is not None:
+                drvxml += " cache='%s'" % self.driver_cache
+            if self.driver_io is not None:
+                drvxml += " io='%s'" % self.driver_io
+            if self.driver_name is not None:
                 drvxml = (" name='%s'" % self.driver_name) + drvxml
-
             if drvxml:
                 ret += "      <driver%s/>\n" % drvxml
 
@@ -838,15 +832,11 @@ class VirtualDisk(VirtualDevice):
         bus_xml = ""
         if self.bus is not None:
             bus_xml = " bus='%s'" % self.bus
-        ret += "      <target dev='%s'%s/>\n" % (disknode, bus_xml)
+        ret += "      <target dev='%s'%s/>\n" % (self.target, bus_xml)
 
-        ro = self.read_only
-
-        if self.device == self.DEVICE_CDROM:
-            ro = True
         if self.shareable:
             ret += "      <shareable/>\n"
-        if ro:
+        if self.read_only:
             ret += "      <readonly/>\n"
 
         addr = self.indent(self.address.get_xml_config(), 6)

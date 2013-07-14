@@ -591,6 +591,9 @@ class XMLBuilder(object):
                 self._xml_ctx.xpathFreeContext()
             self._xml_ctx = None
 
+    def set_defaults(self):
+        pass
+
     def _get_xml_config(self):
         """
         Internal XML building function. Must be overwritten by subclass

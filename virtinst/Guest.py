@@ -531,7 +531,7 @@ class Guest(XMLBuilder):
 
         newlist = []
         for i in devlist:
-            if i.virtual_device_type == devtype:
+            if devtype == "all" or i.virtual_device_type == devtype:
                 newlist.append(i)
         return newlist
 
@@ -1328,6 +1328,9 @@ class Guest(XMLBuilder):
         self.add_device(ctrl)
 
     def _set_defaults(self, devlist_func, remove_func, features):
+        for dev in devlist_func("all"):
+            dev.set_defaults()
+
         if self.installer.is_hvm():
             self._set_hvm_defaults(devlist_func, features)
         if self.installer.is_xenpv():
