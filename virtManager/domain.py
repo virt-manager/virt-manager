@@ -538,8 +538,8 @@ class vmmDomain(vmmLibvirtObject):
 
     def define_both_mem(self, memory, maxmem):
         def change(guest):
-            guest.memory = int(int(memory) / 1024)
-            guest.maxmemory = int(int(maxmem) / 1024)
+            guest.memory = int(memory)
+            guest.maxmemory = int(maxmem)
         return self._redefine_guest(change)
 
     # Security define methods
@@ -997,9 +997,9 @@ class vmmDomain(vmmLibvirtObject):
         return self._get_guest(inactive=True).description
 
     def get_memory(self):
-        return int(self._get_guest().memory * 1024)
+        return int(self._get_guest().memory)
     def maximum_memory(self):
-        return int(self._get_guest().maxmemory * 1024)
+        return int(self._get_guest().maxmemory)
 
     def vcpu_count(self):
         return int(self._get_guest().vcpus)

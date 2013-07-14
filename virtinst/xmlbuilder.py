@@ -248,9 +248,9 @@ class XMLProperty(property):
         @param get_converter:
         @param set_converter: optional function for converting the property
             value from the virtinst API to the guest XML. For example,
-            the Guest.memory API is in MB, but the libvirt domain memory API
-            is in KB. So, if xpath is specified, on a 'get' operation we need
-            to convert the XML value with int(val) / 1024.
+            the Guest.memory API was once in MB, but the libvirt domain
+            memory API is in KB. So, if xpath is specified, on a 'get'
+            operation we convert the XML value with int(val) / 1024.
         @param xml_get_xpath:
         @param xml_set_xpath: Not all props map cleanly to a static xpath.
             This allows passing functions which generate an xpath for getting

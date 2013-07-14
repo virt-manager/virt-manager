@@ -1823,7 +1823,7 @@ class vmmDetails(vmmGObjectUI):
         maxadj.set_range(mem, upper)
 
     def generate_cpuset(self):
-        mem = int(self.vm.get_memory()) / 1024 / 1024
+        mem = int(self.vm.get_memory()) / 1024
         return virtinst.Guest.generate_cpuset(self.conn.get_backend(), mem)
 
     # VCPUS

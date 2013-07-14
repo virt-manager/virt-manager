@@ -139,7 +139,6 @@ class Guest(XMLBuilder):
 
         cell_mem = conn.getCellsFreeMemory(0, len(cells))
         cell_id = -1
-        mem = mem * 1024
         for i in range(len(cells)):
             if cell_mem[i] < mem:
                 # Cell doesn't have enough mem to fit, skip it
@@ -288,34 +287,21 @@ class Guest(XMLBuilder):
     def get_memory(self):
         return self._memory
     def set_memory(self, val):
-        if not isinstance(val, int) or val <= 0:
-            raise ValueError(_("Memory value must be an integer greater "
-                               "than 0"))
         self._memory = val
 
         if self.maxmemory is None or self.maxmemory < val:
             self.maxmemory = val
-    def _xml_memory_value(self):
-        return int(self.memory) * 1024
-    memory = XMLProperty(get_memory, set_memory,
-                           xpath="./currentMemory",
-                           get_converter=lambda s, x: int(x) / 1024,
-                           set_converter=lambda s, x: int(x) * 1024)
+    memory = XMLProperty(get_memory, set_memory, is_int=True,
+                         xpath="./currentMemory")
 
     # Memory allocated to the guest.  Should be given in MB
     def get_maxmemory(self):
         return self._maxmemory
     def set_maxmemory(self, val):
-        if not isinstance(val, int) or val <= 0:
-            raise ValueError(_("Max Memory value must be an integer greater "
-                               "than 0"))
         self._maxmemory = val
-    def _xml_maxmemory_value(self):
-        return int(self.maxmemory) * 1024
-    maxmemory = XMLProperty(get_maxmemory, set_maxmemory,
-                              xpath="./memory",
-                              get_converter=lambda s, x: int(x) / 1024,
-                              set_converter=lambda s, x: int(x) * 1024)
+    maxmemory = XMLProperty(get_maxmemory, set_maxmemory, is_int=True,
+                            xpath="./memory")
+
     def get_hugepage(self):
         return self._hugepage
     def set_hugepage(self, val):
@@ -927,8 +913,8 @@ class Guest(XMLBuilder):
         xml = add("  <name>%s</name>" % self.name)
         xml = add("  <uuid>%s</uuid>" % self.uuid)
         xml = add(desc_xml)
-        xml = add("  <memory>%s</memory>" % (self.maxmemory * 1024))
-        xml = add("  <currentMemory>%s</currentMemory>" % (self.memory * 1024))
+        xml = add("  <memory>%s</memory>" % self.maxmemory)
+        xml = add("  <currentMemory>%s</currentMemory>" % self.memory)
 
         # <blkiotune>
         # <memtune>

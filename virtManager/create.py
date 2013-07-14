@@ -821,7 +821,7 @@ class vmmCreate(vmmGObjectUI):
 
     def populate_summary(self):
         distro, version, dlabel, vlabel = self.get_config_os_info()
-        mem = self.pretty_memory(int(self.guest.memory) * 1024)
+        mem = self.pretty_memory(int(self.guest.memory))
         cpu = str(int(self.guest.vcpus))
 
         instmethod = self.get_config_install_page()
@@ -1611,8 +1611,8 @@ class vmmCreate(vmmGObjectUI):
 
         # Memory
         try:
-            self.guest.memory = int(mem)
-            self.guest.maxmemory = int(mem)
+            self.guest.memory = int(mem) * 1024
+            self.guest.maxmemory = int(mem) * 1024
         except Exception, e:
             return self.err.val_err(_("Error setting guest memory."), e)
 

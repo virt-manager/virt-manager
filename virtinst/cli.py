@@ -636,10 +636,10 @@ def get_memory(memory, guest, image_memory=None):
         if mem < MIN_RAM:
             raise ValueError(_("Installs currently require %d megs "
                                "of RAM.") % MIN_RAM)
-        guest.memory = mem
+        guest.memory = mem * 1024
 
     if memory is None and image_memory is not None:
-        memory = int(image_memory) / 1024
+        memory = int(image_memory)
     prompt_loop(prompt_txt, err_txt, memory, guest, "memory",
                 func=check_memory)
 

@@ -170,8 +170,8 @@ def diff_compare(actual_out, filename=None, expect_out=None):
 def get_basic_paravirt_guest(installer=None):
     g = virtinst.Guest(_conn, type="xen")
     g.name = "TestGuest"
-    g.memory = int(200)
-    g.maxmemory = int(400)
+    g.memory = int(200 * 1024)
+    g.maxmemory = int(400 * 1024)
     g.uuid = "12345678-1234-1234-1234-123456789012"
     g.add_device(VirtualGraphics(_conn, "vnc", keymap="ja"))
     g.vcpus = 5
@@ -190,8 +190,8 @@ def get_basic_paravirt_guest(installer=None):
 def get_basic_fullyvirt_guest(typ="xen", installer=None):
     g = virtinst.Guest(_conn, type=typ)
     g.name = "TestGuest"
-    g.memory = int(200)
-    g.maxmemory = int(400)
+    g.memory = int(200 * 1024)
+    g.maxmemory = int(400 * 1024)
     g.uuid = "12345678-1234-1234-1234-123456789012"
     g.cdrom = "/dev/loop0"
     g.add_device(VirtualGraphics(_conn, "sdl"))

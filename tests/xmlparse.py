@@ -106,9 +106,9 @@ class XMLParseTest(unittest.TestCase):
         check("maxvcpus", 5, 12)
         check("vcpus", 12, 10)
         check("cpuset", "1-3", "1-8,^6", "1-5,15")
-        check("maxmemory", 400, 500)
-        check("memory", 200, 1000)
-        check("maxmemory", 1000, 2000)
+        check("maxmemory", 409600, 512000)
+        check("memory", 204800, 1024000)
+        check("maxmemory", 1024000, 2048000)
         check("uuid", "12345678-1234-1234-1234-123456789012",
                       "11111111-2222-3333-4444-555555555555")
         check("emulator", "/usr/lib/xen/bin/qemu-dm", "/usr/binnnn/fooemu")
