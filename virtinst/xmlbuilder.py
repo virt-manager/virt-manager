@@ -282,13 +282,11 @@ class XMLProperty(property):
         self._convert_value_for_setter_cb = set_converter
         self._setter_clear_these_first = clear_first or []
 
-        if not fget:
-            fget = self._default_orig_fget
-            fset = self._default_orig_fset
-            if _trackprops:
-                _allprops.append(self)
-        self._orig_fget = fget
-        self._orig_fset = fset
+        self._fget = fget
+        self._fset = fset
+
+        if not fget and _trackprops:
+            _allprops.append(self)
 
         property.__init__(self, fget=self.new_getter, fset=self.new_setter,
                           doc=doc)
@@ -315,32 +313,6 @@ class XMLProperty(property):
             if val is self:
                 return key
         raise RuntimeError("Didn't find expected property")
-
-    def _default_orig_fset(self, xmlbuilder, val):
-        """
-        If no fset specified, this stores the value in XMLBuilder._propstore
-        dict as propname->value. This saves us from having to explicitly
-        track every variable.
-        """
-        propstore = getattr(xmlbuilder, "_propstore")
-        proporder = getattr(xmlbuilder, "_proporder")
-
-        if _trackprops and self not in _seenprops:
-            _seenprops.append(self)
-        propname = self._findpropname(xmlbuilder)
-        propstore[propname] = val
-
-        if propname in proporder:
-            proporder.remove(propname)
-        proporder.append(propname)
-
-    def _default_orig_fget(self, xmlbuilder):
-        """
-        The flip side to default_orig_fset, fetch the value from
-        XMLBuilder._propstore
-        """
-        propstore = getattr(xmlbuilder, "_propstore")
-        return propstore.get(self._findpropname(xmlbuilder), None)
 
     def _xpath_for_getter(self, xmlbuilder):
         ret = self._xpath
@@ -376,7 +348,7 @@ class XMLProperty(property):
 
     def _convert_value_for_setter(self, xmlbuilder):
         # Convert from API value to XML value
-        val = self._orig_fget(xmlbuilder)
+        ignore, val = self._orig_fget(xmlbuilder)
         if self._convert_value_for_setter_cb:
             val = self._convert_value_for_setter_cb(xmlbuilder, val)
         return val
@@ -416,8 +388,50 @@ class XMLProperty(property):
             return bool(val)
         return val
 
+    def _orig_fget(self, xmlbuilder):
+        # Returns (is unset, fget value)
+        if self._fget:
+            # For the passed in fget callback, we have any way to
+            # tell if the value is unset or not.
+            return False, self._fget(xmlbuilder)
+
+        # The flip side to default_orig_fset, fetch the value from
+        # XMLBuilder._propstore
+        propstore = getattr(xmlbuilder, "_propstore")
+        propname = self._findpropname(xmlbuilder)
+        unset = (propname not in propstore)
+        return unset, propstore.get(propname, None)
+
+    def _orig_fset(self, xmlbuilder, val):
+        """
+        If no fset specified, this stores the value in XMLBuilder._propstore
+        dict as propname->value. This saves us from having to explicitly
+        track every variable.
+        """
+        if self._fset:
+            return self._fset(xmlbuilder, val)
+
+        propstore = getattr(xmlbuilder, "_propstore")
+        proporder = getattr(xmlbuilder, "_proporder")
+
+        if _trackprops and self not in _seenprops:
+            _seenprops.append(self)
+        propname = self._findpropname(xmlbuilder)
+        propstore[propname] = val
+
+        if propname in proporder:
+            proporder.remove(propname)
+        proporder.append(propname)
+
+
+
+    ##################################
+    # The actual getter/setter impls #
+    ##################################
+
     def new_getter(self, xmlbuilder):
-        fgetval = self._orig_fget(xmlbuilder)
+        unset, fgetval = self._orig_fget(xmlbuilder)
+        ignore = unset
 
         root_node = getattr(xmlbuilder, "_xml_node")
         if root_node is None:
