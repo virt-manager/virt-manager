@@ -521,6 +521,12 @@ class XMLBuilder(object):
             xml += " " * level + l + "\n"
         return xml
 
+    # Specify a list of tag values here and we will arrange them when
+    # outputing XML. They will be put before every other element. This
+    # is strictly to keep test suite happy.
+    _XMLELEMENTORDER = []
+    _XMLPROPORDER = []
+
     _dumpxml_xpath = "."
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
         """
@@ -596,10 +602,20 @@ class XMLBuilder(object):
         if not self._propstore or self._is_parse():
             return xml
 
+        do_order = []
+        proporder = self._proporder[:]
+        propstore = self._propstore.copy()
+
+        for key in self._XMLPROPORDER:
+            if key in proporder:
+                proporder.remove(key)
+                do_order.append(key)
+        proporder = do_order + proporder
+
         try:
             self._parsexml(xml, None)
-            for key in self._proporder[:]:
-                setattr(self, key, self._propstore[key])
+            for key in proporder:
+                setattr(self, key, propstore[key])
             ret = self.get_xml_config()
             for c in xml:
                 if c != " ":
@@ -627,6 +643,37 @@ class XMLBuilder(object):
         """
         raise NotImplementedError()
 
+    def _order_xml_elements(self, xml):
+        # This whole thing is reeeally hacky but it saves us some
+        # unittest churn.
+        if not self._XMLELEMENTORDER:
+            return xml
+
+        split = xml.splitlines()
+        if len(split) < 3:
+            return xml
+
+        head = split[0]
+        end = split[-1]
+        split = split[1:-1]
+
+        baseindent = 0
+        for i in head:
+            if i != " ":
+                break
+            baseindent += 1
+
+        neworder = []
+        for prio in reversed(self._XMLELEMENTORDER):
+            tag = "%s<%s " % ((baseindent + 2) * " ", prio)
+            for idx in range(len(split)):
+                if split[idx].startswith(tag):
+                    neworder.insert(0, split.pop(idx))
+                    break
+        neworder += split
+
+        return "\n".join([head] + neworder + [end])
+
     def get_xml_config(self, *args, **kwargs):
         """
         Construct and return object xml
@@ -637,7 +684,10 @@ class XMLBuilder(object):
         if self._xml_ctx:
             node = _get_xpath_node(self._xml_ctx, self._dumpxml_xpath)
             if not node:
-                return ""
-            return _sanitize_libxml_xml(node.serialize())
+                ret = ""
+            else:
+                ret = _sanitize_libxml_xml(node.serialize())
+        else:
+            ret = self._get_xml_config(*args, **kwargs)
 
-        return self._get_xml_config(*args, **kwargs)
+        return self._order_xml_elements(ret)

@@ -388,10 +388,14 @@ class VirtualDisk(VirtualDevice):
         except Exception, e:
             raise ValueError(_("Couldn't lookup volume object: %s" % str(e)))
 
-    _DEFAULT_SENTINEL = -1234
+
+    _XMLELEMENTORDER = ["driver", "source", "target"]
+    _XMLPROPORDER = ["target", "bus"]
+
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
         VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
+        self._DEFAULT_SENTINEL = -1234
         self._device = self.DEVICE_DISK
         self._type = self._DEFAULT_SENTINEL
         self._driverName = self._DEFAULT_SENTINEL
@@ -755,8 +759,6 @@ class VirtualDisk(VirtualDevice):
 
         if path is not None:
             ret += "      <source %s='%s'/>\n" % (typeattr, path)
-
-        ret += "      <target dev='%s'/>\n" % (self.target)
 
         addr = self.indent(self.address.get_xml_config(), 6)
         if addr:

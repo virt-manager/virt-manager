@@ -157,6 +157,7 @@ def read_file(filename):
 def diff_compare(actual_out, filename=None, expect_out=None):
     """Compare passed string output to contents of filename"""
     if not expect_out:
+        #file(filename, "w").write(actual_out)
         expect_out = read_file(filename)
 
     diff = "".join(difflib.unified_diff(expect_out.splitlines(1),
