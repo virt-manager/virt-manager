@@ -496,24 +496,12 @@ class VirtualDisk(VirtualDevice):
     error_policy = XMLProperty(xpath="./driver/@error_policy")
     serial = XMLProperty(xpath="./serial")
 
-    iotune_rbs = XMLProperty(xpath="./iotune/read_bytes_sec",
-                               get_converter=lambda s, x: int(x or 0),
-                               set_converter=lambda s, x: int(x))
-    iotune_ris = XMLProperty(xpath="./iotune/read_iops_sec",
-                               get_converter=lambda s, x: int(x or 0),
-                               set_converter=lambda s, x: int(x))
-    iotune_tbs = XMLProperty(xpath="./iotune/total_bytes_sec",
-                               get_converter=lambda s, x: int(x or 0),
-                               set_converter=lambda s, x: int(x))
-    iotune_tis = XMLProperty(xpath="./iotune/total_iops_sec",
-                               get_converter=lambda s, x: int(x or 0),
-                               set_converter=lambda s, x: int(x))
-    iotune_wbs = XMLProperty(xpath="./iotune/write_bytes_sec",
-                               get_converter=lambda s, x: int(x or 0),
-                               set_converter=lambda s, x: int(x))
-    iotune_wis = XMLProperty(xpath="./iotune/write_iops_sec",
-                               get_converter=lambda s, x: int(x or 0),
-                               set_converter=lambda s, x: int(x))
+    iotune_rbs = XMLProperty(xpath="./iotune/read_bytes_sec", is_int=True)
+    iotune_ris = XMLProperty(xpath="./iotune/read_iops_sec", is_int=True)
+    iotune_tbs = XMLProperty(xpath="./iotune/total_bytes_sec", is_int=True)
+    iotune_tis = XMLProperty(xpath="./iotune/total_iops_sec", is_int=True)
+    iotune_wbs = XMLProperty(xpath="./iotune/write_bytes_sec", is_int=True)
+    iotune_wis = XMLProperty(xpath="./iotune/write_iops_sec", is_int=True)
 
 
     #############################

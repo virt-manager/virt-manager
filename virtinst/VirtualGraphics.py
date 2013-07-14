@@ -206,9 +206,7 @@ class VirtualGraphics(VirtualDevice):
             raise ValueError(_("VNC port must be a number between "
                                "5900 and 65535, or -1 for auto allocation"))
         self._port = val
-    port = XMLProperty(get_port, set_port,
-                         get_converter=lambda s, x: int(x or -1),
-                         xpath="./@port")
+    port = XMLProperty(get_port, set_port, is_int=True, xpath="./@port")
 
     def get_listen(self):
         return self._listen
@@ -312,13 +310,19 @@ class VirtualGraphics(VirtualDevice):
         return self._build_xml(display=disp, xauth=xauth)
 
     def _spice_config(self):
-        return self._build_xml(port=self.port, keymap=self.keymap,
+        port = self.port
+        if port is None:
+            port = -1
+        return self._build_xml(port=port, keymap=self.keymap,
                                passwd=self.passwd, listen=self.listen,
                                tlsPort=self.tlsPort, canautoport=True,
                                passwdValidTo=self.passwdValidTo)
 
     def _vnc_config(self):
-        return self._build_xml(port=self.port, keymap=self.keymap,
+        port = self.port
+        if port is None:
+            port = -1
+        return self._build_xml(port=port, keymap=self.keymap,
                                passwd=self.passwd, listen=self.listen,
                                # VNC supports autoport, but use legacy
                                # syntax to not break XML tests

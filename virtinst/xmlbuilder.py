@@ -225,7 +225,7 @@ class XMLProperty(property):
     def __init__(self, fget=None, fset=None, doc=None,
                  xpath=None, get_converter=None, set_converter=None,
                  xml_get_xpath=None, xml_set_xpath=None,
-                 is_bool=False, is_tri=False, is_multi=False,
+                 is_bool=False, is_tri=False, is_int=False, is_multi=False,
                  default_converter=None, clear_first=None):
         """
         Set a XMLBuilder class property that represents a value in the
@@ -257,6 +257,7 @@ class XMLProperty(property):
         @param is_tri: Boolean XML property, but return None if there's
             no value set.
         @param is_multi: Whether data is coming multiple or a single node
+        @param is_int: Whethere this is an integer property in the XML
         @param default_converter: If the virtinst value is "default", use
                                   this function to get the actual XML value
         @param clear_first: List of xpaths to unset before any 'set' operation.
@@ -268,6 +269,7 @@ class XMLProperty(property):
 
         self._is_tri = is_tri
         self._is_bool = is_bool or is_tri
+        self._is_int = is_int
         self._is_multi = is_multi
 
         self._xpath_for_getter_cb = xml_get_xpath
@@ -439,6 +441,8 @@ class XMLProperty(property):
                     val = self._convert_value_for_getter_cb(xmlbuilder, val)
                 elif self._is_bool:
                     val = True
+                elif self._is_int:
+                    val = int(val)
 
                 if not self._is_multi:
                     return val
@@ -530,6 +534,8 @@ class XMLBuilder(object):
 
 
     def copy(self):
+        # pylint: disable=W0212
+        # Access to protected member, needed to unittest stuff
         ret = copy.copy(self)
         ret._propstore = ret._propstore.copy()
         ret._proporder = ret._proporder[:]

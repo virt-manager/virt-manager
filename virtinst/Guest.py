@@ -365,8 +365,7 @@ class Guest(XMLBuilder):
         val = self.__validate_cpus(val)
         self._maxvcpus = val
     maxvcpus = XMLProperty(_get_maxvcpus, _set_maxvcpus,
-                             xpath="./vcpu",
-                             get_converter=lambda s, x: int(x))
+                           xpath="./vcpu", is_int=True)
 
     # set phy-cpus for the guest
     def get_cpuset(self):

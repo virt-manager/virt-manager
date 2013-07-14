@@ -283,8 +283,8 @@ class XMLParseTest(unittest.TestCase):
         check("iotune_rbs", 2, 0)
         check("iotune_wis", 3, 0)
         check("iotune_wbs", 4, 0)
-        check("iotune_tis", 0, 5)
-        check("iotune_tbs", 0, 6)
+        check("iotune_tis", None, 5)
+        check("iotune_tbs", None, 6)
 
 
         self._alter_compare(guest.get_xml_config(), outfile)
