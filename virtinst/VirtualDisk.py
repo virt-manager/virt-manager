@@ -400,7 +400,6 @@ class VirtualDisk(VirtualDevice):
         self._storage_backend = diskbackend.StorageBackend(self.conn,
                                                            None, None, None)
         self._storage_creator = None
-        self._override_default = True
 
         self.nomanaged = False
         self.transient = False
@@ -443,8 +442,7 @@ class VirtualDisk(VirtualDevice):
             return self._type
         return self._get_default_type()
     def set_type(self, val):
-        if self._override_default:
-            self._type = val
+        self._type = val
     type = XMLProperty(get_type, set_type,
                          xpath="./@type")
 
@@ -466,8 +464,7 @@ class VirtualDisk(VirtualDevice):
             return self._driverName
         return self._get_default_driver()[0]
     def set_driver_name(self, val):
-        if self._override_default:
-            self._driverName = val
+        self._driverName = val
     driver_name = XMLProperty(get_driver_name, set_driver_name,
                                 xpath="./driver/@name")
 
@@ -476,8 +473,7 @@ class VirtualDisk(VirtualDevice):
             return self._driverType
         return self._get_default_driver()[1]
     def set_driver_type(self, val):
-        if self._override_default:
-            self._driverType = val
+        self._driverType = val
     driver_type = XMLProperty(get_driver_type, set_driver_type,
                                 xpath="./driver/@type")
 
@@ -599,14 +595,9 @@ class VirtualDisk(VirtualDevice):
                                 path, vol_object, None, None)
         self._storage_backend = backend
 
-        if self._is_parse():
-            try:
-                self._override_default = False
-                self.type = self.type
-                self.driver_name = self.driver_name
-                self.driver_type = self.driver_type
-            finally:
-                self._override_default = True
+        self.refresh_xml_prop("type")
+        self.refresh_xml_prop("driver_name")
+        self.refresh_xml_prop("driver_type")
 
     def _get_default_type(self):
         if self._storage_creator:

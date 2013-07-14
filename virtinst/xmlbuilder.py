@@ -316,14 +316,12 @@ class XMLProperty(property):
                 return key
         raise RuntimeError("Didn't find expected property")
 
-    def _default_orig_fset(self, xmlbuilder, val, *args, **kwargs):
+    def _default_orig_fset(self, xmlbuilder, val):
         """
         If no fset specified, this stores the value in XMLBuilder._propstore
         dict as propname->value. This saves us from having to explicitly
         track every variable.
         """
-        ignore = args
-        ignore = kwargs
         propstore = getattr(xmlbuilder, "_propstore")
         proporder = getattr(xmlbuilder, "_proporder")
 
@@ -336,13 +334,11 @@ class XMLProperty(property):
             proporder.remove(propname)
         proporder.append(propname)
 
-    def _default_orig_fget(self, xmlbuilder, *args, **kwargs):
+    def _default_orig_fget(self, xmlbuilder):
         """
         The flip side to default_orig_fset, fetch the value from
         XMLBuilder._propstore
         """
-        ignore = args
-        ignore = kwargs
         propstore = getattr(xmlbuilder, "_propstore")
         return propstore.get(self._findpropname(xmlbuilder), None)
 
@@ -420,8 +416,8 @@ class XMLProperty(property):
             return bool(val)
         return val
 
-    def new_getter(self, xmlbuilder, *args, **kwargs):
-        fgetval = self._orig_fget(xmlbuilder, *args, **kwargs)
+    def new_getter(self, xmlbuilder):
+        fgetval = self._orig_fget(xmlbuilder)
 
         root_node = getattr(xmlbuilder, "_xml_node")
         if root_node is None:
@@ -454,9 +450,9 @@ class XMLProperty(property):
         return fgetval
 
 
-    def new_setter(self, xmlbuilder, val, *args, **kwargs):
-        # Do this regardless, for validation purposes
-        self._orig_fset(xmlbuilder, val, *args, **kwargs)
+    def new_setter(self, xmlbuilder, val, local=True):
+        if local:
+            self._orig_fset(xmlbuilder, val)
 
         root_node = getattr(xmlbuilder, "_xml_node")
         if root_node is None:
@@ -488,6 +484,9 @@ class XMLProperty(property):
                     node.setContent(util.xml_escape(str(val)))
             else:
                 _remove_xpath_node(root_node, use_xpath)
+
+    def refresh_xml(self, xmlbuilder):
+        self.fset(xmlbuilder, self.fget(xmlbuilder), local=False)
 
 
 class XMLBuilder(object):
@@ -596,6 +595,13 @@ class XMLBuilder(object):
 
     def set_defaults(self):
         pass
+
+    def refresh_xml_prop(self, propname):
+        """
+        Refresh the XML for the passed class propname. Used to adjust
+        the XML when an interdependent property changes.
+        """
+        getattr(self.__class__, propname).refresh_xml(self)
 
     def _get_xml_config(self):
         """
