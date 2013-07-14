@@ -45,21 +45,21 @@ class DomainFeatures(XMLBuilder):
     def set_acpi(self, val):
         self._acpi = _none_or_bool(val)
     acpi = XMLProperty(get_acpi, set_acpi,
-                         xpath="./features/acpi", is_bool=True)
+                         xpath="./features/acpi", is_tri=True)
 
     def get_apic(self):
         return self._apic
     def set_apic(self, val):
         self._apic = _none_or_bool(val)
     apic = XMLProperty(get_apic, set_apic,
-                         xpath="./features/apic", is_bool=True)
+                         xpath="./features/apic", is_tri=True)
 
     def get_pae(self):
         return self._pae
     def set_pae(self, val):
         self._pae = _none_or_bool(val)
     pae = XMLProperty(get_pae, set_pae,
-                        xpath="./features/pae", is_bool=True)
+                        xpath="./features/pae", is_tri=True)
 
     def __setitem__(self, attr, val):
         return setattr(self, attr, val)

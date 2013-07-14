@@ -393,13 +393,6 @@ class VirtualDisk(VirtualDevice):
         VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self._device = self.DEVICE_DISK
-        self._readOnly = None
-        self._bus = None
-        self._shareable = None
-        self._driver_cache = None
-        self._driver_io = None
-        self._target = None
-
         self._type = self._DEFAULT_SENTINEL
         self._driverName = self._DEFAULT_SENTINEL
         self._driverType = self._DEFAULT_SENTINEL
@@ -412,6 +405,150 @@ class VirtualDisk(VirtualDevice):
         self.nomanaged = False
         self.transient = False
 
+
+    ##########################
+    # Complex XML properties #
+    ##########################
+
+    def _get_path(self):
+        if self._storage_creator:
+            return self._storage_creator.path
+        return self._storage_backend.path
+    def _set_path(self, val):
+        if self._storage_creator:
+            raise ValueError("Can't change disk path if storage creation info "
+                             "has been set.")
+        if val != self.path:
+            self._change_storage(path=val)
+    def _xml_get_xpath(self):
+        xpath = None
+        ret = "./source/@file"
+        for prop in _TARGET_PROPS:
+            xpath = "./source/@" + prop
+            if self._xml_ctx.xpathEval(xpath):
+                ret = xpath
+                break
+        return ret
+    def _xml_set_xpath(self):
+        return "./source/@" + self.disk_type_to_target_prop(self.type)
+    path = XMLProperty(_get_path, _set_path,
+                         xml_get_xpath=_xml_get_xpath,
+                         xml_set_xpath=_xml_set_xpath,
+                         clear_first=["./source/@" + target for target in
+                                      _TARGET_PROPS])
+
+
+    def get_type(self):
+        if self._type != self._DEFAULT_SENTINEL:
+            return self._type
+        return self._get_default_type()
+    def set_type(self, val):
+        if self._override_default:
+            self._type = val
+    type = XMLProperty(get_type, set_type,
+                         xpath="./@type")
+
+    def get_device(self):
+        return self._device
+    def set_device(self, val):
+        if val == self._device:
+            return
+
+        if self._is_parse():
+            self.bus = None
+            self.target = None
+        self._device = val
+    device = XMLProperty(get_device, set_device,
+                           xpath="./@device")
+
+    def get_driver_name(self):
+        if self._driverName != self._DEFAULT_SENTINEL:
+            return self._driverName
+        return self._get_default_driver()[0]
+    def set_driver_name(self, val):
+        if self._override_default:
+            self._driverName = val
+    driver_name = XMLProperty(get_driver_name, set_driver_name,
+                                xpath="./driver/@name")
+
+    def get_driver_type(self):
+        if self._driverType != self._DEFAULT_SENTINEL:
+            return self._driverType
+        return self._get_default_driver()[1]
+    def set_driver_type(self, val):
+        if self._override_default:
+            self._driverType = val
+    driver_type = XMLProperty(get_driver_type, set_driver_type,
+                                xpath="./driver/@type")
+
+    #########################
+    # Simple XML properties #
+    #########################
+
+    bus = XMLProperty(xpath="./target/@bus")
+    target = XMLProperty(xpath="./target/@dev")
+
+    read_only = XMLProperty(xpath="./readonly", is_bool=True)
+    shareable = XMLProperty(xpath="./shareable", is_bool=True)
+    driver_cache = XMLProperty(xpath="./driver/@cache")
+    driver_io = XMLProperty(xpath="./driver/@io")
+
+    error_policy = XMLProperty(xpath="./driver/@error_policy")
+    serial = XMLProperty(xpath="./serial")
+
+    iotune_rbs = XMLProperty(xpath="./iotune/read_bytes_sec",
+                               get_converter=lambda s, x: int(x or 0),
+                               set_converter=lambda s, x: int(x))
+    iotune_ris = XMLProperty(xpath="./iotune/read_iops_sec",
+                               get_converter=lambda s, x: int(x or 0),
+                               set_converter=lambda s, x: int(x))
+    iotune_tbs = XMLProperty(xpath="./iotune/total_bytes_sec",
+                               get_converter=lambda s, x: int(x or 0),
+                               set_converter=lambda s, x: int(x))
+    iotune_tis = XMLProperty(xpath="./iotune/total_iops_sec",
+                               get_converter=lambda s, x: int(x or 0),
+                               set_converter=lambda s, x: int(x))
+    iotune_wbs = XMLProperty(xpath="./iotune/write_bytes_sec",
+                               get_converter=lambda s, x: int(x or 0),
+                               set_converter=lambda s, x: int(x))
+    iotune_wis = XMLProperty(xpath="./iotune/write_iops_sec",
+                               get_converter=lambda s, x: int(x or 0),
+                               set_converter=lambda s, x: int(x))
+
+
+    #############################
+    # Public property-esque API #
+    #############################
+
+    def get_sparse(self):
+        if self._storage_creator:
+            return self._storage_creator.get_sparse()
+        return None
+
+    def get_vol_object(self):
+        return self._storage_backend.get_vol_object()
+    def set_vol_object(self, val):
+        if self.path:
+            raise ValueError("Can't change disk vol_object if path is set.")
+        if self._storage_creator:
+            raise ValueError("Can't change disk vol_object if storage_creator "
+                             "is set.")
+        if val != self.get_vol_object():
+            self._change_storage(vol_object=val)
+    def get_vol_install(self):
+        if not self._storage_creator:
+            return None
+        return self._storage_creator.get_vol_install()
+
+    def get_size(self):
+        if self._storage_creator:
+            return self._storage_creator.get_size()
+        return self._storage_backend.get_size()
+
+
+    #################################
+    # Validation assistance methods #
+    #################################
 
     def set_create_storage(self, size=None, sparse=True,
                            fmt=None, vol_install=None, clone_path=None,
@@ -463,169 +600,6 @@ class VirtualDisk(VirtualDevice):
         if not self._storage_creator and (vol_install or clone_path):
             raise RuntimeError("Need storage creation but it didn't happen.")
 
-    def _get_path(self):
-        if self._storage_creator:
-            return self._storage_creator.path
-        return self._storage_backend.path
-    def _set_path(self, val):
-        if self._storage_creator:
-            raise ValueError("Can't change disk path if storage creation info "
-                             "has been set.")
-        if val != self.path:
-            self._change_storage(path=val)
-    def _xml_get_xpath(self):
-        xpath = None
-        ret = "./source/@file"
-        for prop in _TARGET_PROPS:
-            xpath = "./source/@" + prop
-            if self._xml_ctx.xpathEval(xpath):
-                ret = xpath
-                break
-        return ret
-    def _xml_set_xpath(self):
-        return "./source/@" + self.disk_type_to_target_prop(self.type)
-    path = XMLProperty(_get_path, _set_path,
-                         xml_get_xpath=_xml_get_xpath,
-                         xml_set_xpath=_xml_set_xpath,
-                         clear_first=["./source/@" + target for target in
-                                      _TARGET_PROPS])
-
-    def get_sparse(self):
-        if self._storage_creator:
-            return self._storage_creator.get_sparse()
-        return None
-
-    def get_vol_object(self):
-        return self._storage_backend.get_vol_object()
-    def set_vol_object(self, val):
-        if self.path:
-            raise ValueError("Can't change disk vol_object if path is set.")
-        if self._storage_creator:
-            raise ValueError("Can't change disk vol_object if storage_creator "
-                             "is set.")
-        if val != self.get_vol_object():
-            self._change_storage(vol_object=val)
-    def get_vol_install(self):
-        if not self._storage_creator:
-            return None
-        return self._storage_creator.get_vol_install()
-
-    def get_size(self):
-        if self._storage_creator:
-            return self._storage_creator.get_size()
-        return self._storage_backend.get_size()
-
-    def get_type(self):
-        if self._type != self._DEFAULT_SENTINEL:
-            return self._type
-        return self._get_default_type()
-    def set_type(self, val):
-        if self._override_default:
-            self._type = val
-    type = XMLProperty(get_type, set_type,
-                         xpath="./@type")
-
-    def get_device(self):
-        return self._device
-    def set_device(self, val):
-        if val == self._device:
-            return
-
-        if self._is_parse():
-            self.bus = None
-            self.target = None
-        self._device = val
-    device = XMLProperty(get_device, set_device,
-                           xpath="./@device")
-
-    def get_driver_name(self):
-        if self._driverName != self._DEFAULT_SENTINEL:
-            return self._driverName
-        return self._get_default_driver()[0]
-    def set_driver_name(self, val):
-        if self._override_default:
-            self._driverName = val
-    driver_name = XMLProperty(get_driver_name, set_driver_name,
-                                xpath="./driver/@name")
-
-    def get_driver_type(self):
-        if self._driverType != self._DEFAULT_SENTINEL:
-            return self._driverType
-        return self._get_default_driver()[1]
-    def set_driver_type(self, val):
-        if self._override_default:
-            self._driverType = val
-    driver_type = XMLProperty(get_driver_type, set_driver_type,
-                                xpath="./driver/@type")
-
-    def get_read_only(self):
-        return self._readOnly
-    def set_read_only(self, val):
-        self._readOnly = val
-    read_only = XMLProperty(get_read_only, set_read_only,
-                              xpath="./readonly", is_bool=True)
-
-    def _get_bus(self):
-        return self._bus
-    def _set_bus(self, val):
-        self._bus = val
-    bus = XMLProperty(_get_bus, _set_bus,
-                        xpath="./target/@bus")
-    def _get_target(self):
-        return self._target
-    def _set_target(self, val):
-        self._target = val
-    target = XMLProperty(_get_target, _set_target,
-                           xpath="./target/@dev")
-
-    def _get_shareable(self):
-        return self._shareable
-    def _set_shareable(self, val):
-        self._shareable = val
-    shareable = XMLProperty(_get_shareable, _set_shareable,
-                              xpath="./shareable", is_bool=True)
-
-    def _get_driver_cache(self):
-        return self._driver_cache
-    def _set_driver_cache(self, val):
-        self._driver_cache = val
-    driver_cache = XMLProperty(_get_driver_cache, _set_driver_cache,
-                                 xpath="./driver/@cache")
-
-
-    def _get_driver_io(self):
-        return self._driver_io
-    def _set_driver_io(self, val):
-        self._driver_io = val
-    driver_io = XMLProperty(_get_driver_io, _set_driver_io,
-                              xpath="./driver/@io")
-
-    error_policy = XMLProperty(xpath="./driver/@error_policy")
-    serial = XMLProperty(xpath="./serial")
-
-    iotune_rbs = XMLProperty(xpath="./iotune/read_bytes_sec",
-                               get_converter=lambda s, x: int(x or 0),
-                               set_converter=lambda s, x: int(x))
-    iotune_ris = XMLProperty(xpath="./iotune/read_iops_sec",
-                               get_converter=lambda s, x: int(x or 0),
-                               set_converter=lambda s, x: int(x))
-    iotune_tbs = XMLProperty(xpath="./iotune/total_bytes_sec",
-                               get_converter=lambda s, x: int(x or 0),
-                               set_converter=lambda s, x: int(x))
-    iotune_tis = XMLProperty(xpath="./iotune/total_iops_sec",
-                               get_converter=lambda s, x: int(x or 0),
-                               set_converter=lambda s, x: int(x))
-    iotune_wbs = XMLProperty(xpath="./iotune/write_bytes_sec",
-                               get_converter=lambda s, x: int(x or 0),
-                               set_converter=lambda s, x: int(x))
-    iotune_wis = XMLProperty(xpath="./iotune/write_iops_sec",
-                               get_converter=lambda s, x: int(x or 0),
-                               set_converter=lambda s, x: int(x))
-
-
-    #################################
-    # Validation assistance methods #
-    #################################
 
     def can_be_empty(self):
         return (self.device == self.DEVICE_FLOPPY or
@@ -812,38 +786,31 @@ class VirtualDisk(VirtualDevice):
 
         ret = "    <disk type='%s' device='%s'>\n" % (self.type, self.device)
 
-
-        if path:
-            drvxml = ""
-            if self.driver_type is not None:
-                drvxml += " type='%s'" % self.driver_type
-            if self.driver_cache is not None:
-                drvxml += " cache='%s'" % self.driver_cache
-            if self.driver_io is not None:
-                drvxml += " io='%s'" % self.driver_io
-            if self.driver_name is not None:
-                drvxml = (" name='%s'" % self.driver_name) + drvxml
-            if drvxml:
-                ret += "      <driver%s/>\n" % drvxml
+        drvxml = ""
+        if self.driver_type is not None:
+            drvxml += " type='%s'" % self.driver_type
+        if self.driver_name is not None:
+            drvxml = (" name='%s'" % self.driver_name) + drvxml
+        if drvxml:
+            ret += "      <driver%s/>\n" % drvxml
 
         if path is not None:
             ret += "      <source %s='%s'/>\n" % (typeattr, path)
 
-        bus_xml = ""
-        if self.bus is not None:
-            bus_xml = " bus='%s'" % self.bus
-        ret += "      <target dev='%s'%s/>\n" % (self.target, bus_xml)
-
-        if self.shareable:
-            ret += "      <shareable/>\n"
-        if self.read_only:
-            ret += "      <readonly/>\n"
+        ret += "      <target dev='%s'/>\n" % (self.target)
 
         addr = self.indent(self.address.get_xml_config(), 6)
         if addr:
             ret += addr
         ret += "    </disk>"
-        return self._add_parse_bits(ret)
+        ret = self._add_parse_bits(ret)
+
+        # Remove <driver> block if path is None. Might not be strictly
+        # requires but it's what we've always done
+        if not self.path and "<driver" in ret:
+            ret = "\n".join([l for l in ret.splitlines()
+                             if "<driver" not in l])
+        return ret
 
     def is_size_conflict(self):
         """

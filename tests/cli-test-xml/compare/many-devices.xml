@@ -23,11 +23,11 @@
   <devices>
     <emulator>/usr/bin/test-hv</emulator>
     <disk type="file" device="disk">
-      <driver cache="writeback" io="threads"/>
       <source file="/default-pool/UPPER"/>
       <target dev="hda" bus="ide"/>
       <shareable/>
       <serial>WD-WMAP9A966149</serial>
+      <driver cache="writeback" io="threads"/>
     </disk>
     <disk type="file" device="disk">
       <source file="/tmp/__virtinst_cli_new1.img"/>
@@ -110,11 +110,11 @@
   <devices>
     <emulator>/usr/bin/test-hv</emulator>
     <disk type="file" device="disk">
-      <driver cache="writeback" io="threads"/>
       <source file="/default-pool/UPPER"/>
       <target dev="hda" bus="ide"/>
       <shareable/>
       <serial>WD-WMAP9A966149</serial>
+      <driver cache="writeback" io="threads"/>
     </disk>
     <disk type="file" device="disk">
       <source file="/tmp/__virtinst_cli_new1.img"/>

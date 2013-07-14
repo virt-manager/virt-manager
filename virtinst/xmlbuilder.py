@@ -225,7 +225,7 @@ class XMLProperty(property):
     def __init__(self, fget=None, fset=None, doc=None,
                  xpath=None, get_converter=None, set_converter=None,
                  xml_get_xpath=None, xml_set_xpath=None,
-                 is_bool=False, is_multi=False,
+                 is_bool=False, is_tri=False, is_multi=False,
                  default_converter=None, clear_first=None):
         """
         Set a XMLBuilder class property that represents a value in the
@@ -254,6 +254,8 @@ class XMLProperty(property):
             This allows passing functions which generate an xpath for getting
             or setting.
         @param is_bool: Whether this is a boolean property in the XML
+        @param is_tri: Boolean XML property, but return None if there's
+            no value set.
         @param is_multi: Whether data is coming multiple or a single node
         @param default_converter: If the virtinst value is "default", use
                                   this function to get the actual XML value
@@ -264,7 +266,8 @@ class XMLProperty(property):
 
         self._xpath = xpath
 
-        self._is_bool = is_bool
+        self._is_tri = is_tri
+        self._is_bool = is_bool or is_tri
         self._is_multi = is_multi
 
         self._xpath_for_getter_cb = xml_get_xpath
@@ -405,16 +408,23 @@ class XMLProperty(property):
         return clear_nodes
 
 
+    def _convert_raw_getter(self, val):
+        if self._is_bool:
+            if self._is_tri and val is None:
+                return None
+            return bool(val)
+        return val
+
     def new_getter(self, xmlbuilder, *args, **kwargs):
         fgetval = self._orig_fget(xmlbuilder, *args, **kwargs)
 
         root_node = getattr(xmlbuilder, "_xml_node")
         if root_node is None:
-            return fgetval
+            return self._convert_raw_getter(fgetval)
 
         xpath = self._xpath_for_getter(xmlbuilder)
         if xpath is None:
-            return fgetval
+            return self._convert_raw_getter(fgetval)
 
         if self._default_converter and fgetval == "default":
             return fgetval
@@ -520,7 +530,10 @@ class XMLBuilder(object):
 
 
     def copy(self):
-        return copy.copy(self)
+        ret = copy.copy(self)
+        ret._propstore = ret._propstore.copy()
+        ret._proporder = ret._proporder[:]
+        return ret
 
     def _get_conn(self):
         return self._conn
