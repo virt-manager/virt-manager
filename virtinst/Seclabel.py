@@ -106,9 +106,13 @@ class Seclabel(XMLBuilder):
         return self._model
     def set_model(self, val):
         self._model = val
+    def _set_model_converter(self, val):
+        if val == "default":
+            return self._get_default_model()
+        return val
     model = XMLProperty(get_model, set_model,
-                          xpath="./seclabel/@model",
-                          default_converter=_get_default_model)
+                        set_converter=_set_model_converter,
+                          xpath="./seclabel/@model")
 
     def get_label(self):
         return self._label

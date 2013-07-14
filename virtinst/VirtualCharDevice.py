@@ -275,6 +275,7 @@ class VirtualCharDevice(VirtualDevice):
             return "./source[@mode='connect']/@mode"
         return "./source/@mode"
     source_mode = XMLProperty(get_source_mode, set_source_mode,
+                              name="char sourcemode",
                                 xml_get_xpath=_sourcemode_xpath,
                                 xml_set_xpath=_sourcemode_xpath)
 
@@ -285,6 +286,7 @@ class VirtualCharDevice(VirtualDevice):
     def _sourcehost_xpath(self):
         return "./source[@mode='%s']/@host" % self.source_mode
     source_host = XMLProperty(get_source_host, set_source_host,
+                              name="char sourcehost",
                                 xml_get_xpath=_sourcehost_xpath,
                                 xml_set_xpath=_sourcehost_xpath)
 
@@ -295,6 +297,7 @@ class VirtualCharDevice(VirtualDevice):
     def _sourceport_xpath(self):
         return "./source[@mode='%s']/@service" % self.source_mode
     source_port = XMLProperty(get_source_port, set_source_port,
+                              name="char sourceport",
                                 xml_get_xpath=_sourceport_xpath,
                                 xml_set_xpath=_sourceport_xpath)
 

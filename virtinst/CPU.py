@@ -23,7 +23,9 @@ import libxml2
 
 
 def _int_or_none(val):
-    return val and int(val) or val
+    if val is None:
+        return None
+    return int(val)
 
 
 class CPUFeature(XMLBuilder):
@@ -105,7 +107,7 @@ class CPU(XMLBuilder):
 
     def _get_features(self):
         return self._features[:]
-    features = XMLProperty(_get_features)
+    features = property(_get_features)
 
     def add_feature(self, name, policy="require"):
         feature = CPUFeature(self.conn)
@@ -166,25 +168,22 @@ class CPU(XMLBuilder):
         return self._sockets
     def _set_sockets(self, val):
         self._sockets = _int_or_none(val)
-    sockets = XMLProperty(_get_sockets, _set_sockets,
-                            get_converter=lambda s, x: _int_or_none(x),
-                            xpath="./cpu/topology/@sockets")
+    sockets = XMLProperty(_get_sockets, _set_sockets, is_int=True,
+                          xpath="./cpu/topology/@sockets")
 
     def _get_cores(self):
         return self._cores
     def _set_cores(self, val):
         self._cores = _int_or_none(val)
-    cores = XMLProperty(_get_cores, _set_cores,
-                          get_converter=lambda s, x: _int_or_none(x),
-                          xpath="./cpu/topology/@cores")
+    cores = XMLProperty(_get_cores, _set_cores, is_int=True,
+                        xpath="./cpu/topology/@cores")
 
     def _get_threads(self):
         return self._threads
     def _set_threads(self, val):
         self._threads = _int_or_none(val)
-    threads = XMLProperty(_get_threads, _set_threads,
-                            get_converter=lambda s, x: _int_or_none(x),
-                            xpath="./cpu/topology/@threads")
+    threads = XMLProperty(_get_threads, _set_threads, is_int=True,
+                          xpath="./cpu/topology/@threads")
 
     def clear_attrs(self):
         self.match = None

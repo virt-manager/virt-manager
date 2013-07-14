@@ -222,11 +222,11 @@ def _remove_xpath_node(ctx, xpath, dofree=True):
 
 
 class XMLProperty(property):
-    def __init__(self, fget=None, fset=None, doc=None,
-                 xpath=None, get_converter=None, set_converter=None,
+    def __init__(self, fget=None, fset=None, doc=None, xpath=None, name=None,
+                 get_converter=None, set_converter=None,
                  xml_get_xpath=None, xml_set_xpath=None,
                  is_bool=False, is_tri=False, is_int=False, is_multi=False,
-                 default_converter=None, clear_first=None):
+                 clear_first=None):
         """
         Set a XMLBuilder class property that represents a value in the
         <domain> XML. For example
@@ -243,6 +243,8 @@ class XMLProperty(property):
         @param doc: option doc string for the property
         @param xpath: xpath string which maps to the associated property
                       in a typical XML document
+        @param name: Just a string to print for debugging, only needed
+            if xpath isn't specified.
         @param get_converter:
         @param set_converter: optional function for converting the property
             value from the virtinst API to the guest XML. For example,
@@ -258,14 +260,15 @@ class XMLProperty(property):
             no value set.
         @param is_multi: Whether data is coming multiple or a single node
         @param is_int: Whethere this is an integer property in the XML
-        @param default_converter: If the virtinst value is "default", use
-                                  this function to get the actual XML value
         @param clear_first: List of xpaths to unset before any 'set' operation.
             For those weird interdependent XML props like disk source type and
             path attribute.
         """
 
         self._xpath = xpath
+        self._name = name or xpath
+        if not self._name:
+            raise RuntimeError("XMLProperty: name or xpath must be passed.")
 
         self._is_tri = is_tri
         self._is_bool = is_bool or is_tri
@@ -277,7 +280,6 @@ class XMLProperty(property):
 
         self._convert_value_for_getter_cb = get_converter
         self._convert_value_for_setter_cb = set_converter
-        self._default_converter = default_converter
         self._setter_clear_these_first = clear_first or []
 
         if not fget:
@@ -297,10 +299,7 @@ class XMLProperty(property):
     ##################
 
     def __repr__(self):
-        ret = property.__repr__(self)
-        if self._xpath:
-            ret = "<XMLProperty %s>" % str(self._xpath)
-        return ret
+        return "<XMLProperty %s %s>" % (str(self._name), id(self))
 
 
     ####################
@@ -348,13 +347,19 @@ class XMLProperty(property):
         return propstore.get(self._findpropname(xmlbuilder), None)
 
     def _xpath_for_getter(self, xmlbuilder):
+        ret = self._xpath
         if self._xpath_for_getter_cb:
-            return self._xpath_for_getter_cb(xmlbuilder)
-        return self._xpath
+            ret = self._xpath_for_getter_cb(xmlbuilder)
+        if ret is None:
+            raise RuntimeError("%s: didn't generate any setter xpath." % self)
+        return ret
     def _xpath_for_setter(self, xmlbuilder):
+        ret = self._xpath
         if self._xpath_for_setter_cb:
-            return self._xpath_for_setter_cb(xmlbuilder)
-        return self._xpath
+            ret = self._xpath_for_setter_cb(xmlbuilder)
+        if ret is None:
+            raise RuntimeError("%s: didn't generate any setter xpath." % self)
+        return ret
 
     def _xpath_list_for_setter(self, xpath, setval, nodelist):
         if not self._is_multi:
@@ -378,8 +383,6 @@ class XMLProperty(property):
         val = self._orig_fget(xmlbuilder)
         if self._convert_value_for_setter_cb:
             val = self._convert_value_for_setter_cb(xmlbuilder, val)
-        elif self._default_converter and val == "default":
-            val = self._default_converter(xmlbuilder)
         return val
 
     def _build_node_list(self, xmlbuilder, xpath):
@@ -425,12 +428,6 @@ class XMLProperty(property):
             return self._convert_raw_getter(fgetval)
 
         xpath = self._xpath_for_getter(xmlbuilder)
-        if xpath is None:
-            return self._convert_raw_getter(fgetval)
-
-        if self._default_converter and fgetval == "default":
-            return fgetval
-
         nodelist = self._build_node_list(xmlbuilder, xpath)
 
         if nodelist:
@@ -466,9 +463,6 @@ class XMLProperty(property):
             return
 
         xpath = self._xpath_for_setter(xmlbuilder)
-        if xpath is None:
-            return
-
         setval = self._convert_value_for_setter(xmlbuilder)
         nodelist = self._build_node_list(xmlbuilder, xpath)
         clearlist = self._build_clear_list(xmlbuilder, nodelist)

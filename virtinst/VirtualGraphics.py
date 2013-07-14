@@ -252,9 +252,8 @@ class VirtualGraphics(VirtualDevice):
             raise ValueError(_("TLS port must be a number between "
                                "5900 and 65535, or -1 for auto allocation"))
         self._tlsPort = val
-    tlsPort = XMLProperty(get_tlsPort, set_tlsPort,
-                            get_converter=lambda s, x: int(x or -1),
-                            xpath="./@tlsPort")
+    tlsPort = XMLProperty(get_tlsPort, set_tlsPort, is_int=True,
+                          xpath="./@tlsPort")
 
     channel_main_mode = _get_mode_prop(CHANNEL_TYPE_MAIN)
     channel_display_mode = _get_mode_prop(CHANNEL_TYPE_DISPLAY)
@@ -313,9 +312,12 @@ class VirtualGraphics(VirtualDevice):
         port = self.port
         if port is None:
             port = -1
+        tlsport = self.tlsPort
+        if tlsport is None:
+            tlsport = -1
         return self._build_xml(port=port, keymap=self.keymap,
                                passwd=self.passwd, listen=self.listen,
-                               tlsPort=self.tlsPort, canautoport=True,
+                               tlsPort=tlsport, canautoport=True,
                                passwdValidTo=self.passwdValidTo)
 
     def _vnc_config(self):

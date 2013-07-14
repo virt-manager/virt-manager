@@ -189,7 +189,9 @@ class XMLParseTest(unittest.TestCase):
         self.assertTrue(guest.clock.get_xml_config().startswith("<clock"))
 
         check = self._make_checker(guest.seclabel)
-        check("model", None, "default")
+        check("model", None)
+        guest.seclabel.model = "default"
+        self.assertEquals(guest.seclabel.model, "testSecurity")
         check("type", None, "static")
         check("label", None, "frob")
         self.assertTrue(

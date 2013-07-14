@@ -146,7 +146,7 @@ class VirtualFilesystem(VirtualDevice):
     def _xml_set_source_xpath(self):
         ret = "./source/@" + self.type_to_source_prop(self.type)
         return ret
-    source = XMLProperty(_get_source, _set_source,
+    source = XMLProperty(_get_source, _set_source, name="filesystem source",
                            xml_get_xpath=_xml_get_source_xpath,
                            xml_set_xpath=_xml_set_source_xpath)
 

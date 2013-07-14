@@ -431,7 +431,7 @@ class VirtualDisk(VirtualDevice):
         return ret
     def _xml_set_xpath(self):
         return "./source/@" + self.disk_type_to_target_prop(self.type)
-    path = XMLProperty(_get_path, _set_path,
+    path = XMLProperty(_get_path, _set_path, name="disk path",
                          xml_get_xpath=_xml_get_xpath,
                          xml_set_xpath=_xml_set_xpath,
                          clear_first=["./source/@" + target for target in
