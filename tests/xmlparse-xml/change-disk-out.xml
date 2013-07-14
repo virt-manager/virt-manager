@@ -43,6 +43,10 @@
     <disk type="file" device="floppy">
       <target dev="fda" bus="fdc"/>
       <iotune>
+        <read_iops_sec>0</read_iops_sec>
+        <read_bytes_sec>0</read_bytes_sec>
+        <write_iops_sec>0</write_iops_sec>
+        <write_bytes_sec>0</write_bytes_sec>
         <total_iops_sec>5</total_iops_sec>
         <total_bytes_sec>6</total_bytes_sec>
       </iotune>

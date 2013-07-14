@@ -487,17 +487,18 @@ class XMLProperty(property):
             if node:
                 use_xpath = node.nodePath()
 
-            if val not in [None, False]:
-                if not node:
-                    node = _build_xpath_node(root_node, use_xpath)
-
-                if val is True:
-                    # Boolean property, creating the node is enough
-                    pass
-                else:
-                    node.setContent(util.xml_escape(str(val)))
-            else:
+            if val is None or val is False:
                 _remove_xpath_node(root_node, use_xpath)
+                continue
+
+            if not node:
+                node = _build_xpath_node(root_node, use_xpath)
+
+            if val is True:
+                # Boolean property, creating the node is enough
+                continue
+            node.setContent(util.xml_escape(str(val)))
+
 
     def refresh_xml(self, xmlbuilder):
         self.fset(xmlbuilder, self.fget(xmlbuilder), local=False)
