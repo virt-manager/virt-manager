@@ -390,14 +390,11 @@ class VirtualDisk(VirtualDevice):
 
 
     _XMLELEMENTORDER = ["driver", "source", "target"]
-    _XMLPROPORDER = ["target", "bus", "type", "device"]
+    _XMLPROPORDER = ["target", "bus", "type", "device",
+                     "driver_name", "driver_type"]
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
         VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
-
-        self._DEFAULT_SENTINEL = -1234
-        self._driverName = self._DEFAULT_SENTINEL
-        self._driverType = self._DEFAULT_SENTINEL
 
         self._storage_backend = diskbackend.StorageBackend(self.conn,
                                                            None, None, None)
@@ -439,24 +436,6 @@ class VirtualDisk(VirtualDevice):
                                       _TARGET_PROPS])
 
 
-    def get_driver_name(self):
-        if self._driverName != self._DEFAULT_SENTINEL:
-            return self._driverName
-        return self._get_default_driver()[0]
-    def set_driver_name(self, val):
-        self._driverName = val
-    driver_name = XMLProperty(get_driver_name, set_driver_name,
-                                xpath="./driver/@name")
-
-    def get_driver_type(self):
-        if self._driverType != self._DEFAULT_SENTINEL:
-            return self._driverType
-        return self._get_default_driver()[1]
-    def set_driver_type(self, val):
-        self._driverType = val
-    driver_type = XMLProperty(get_driver_type, set_driver_type,
-                                xpath="./driver/@type")
-
 
     #############################
     # Internal defaults helpers #
@@ -467,6 +446,30 @@ class VirtualDisk(VirtualDevice):
             return self._storage_creator.get_dev_type()
         return self._storage_backend.get_dev_type()
 
+    def _get_default_driver_name(self):
+        if self.conn.is_qemu():
+            return self.DRIVER_QEMU
+        return None
+
+    def _get_default_driver_type(self):
+        """
+        Set driver type from passed parameters
+
+        Where possible, we want to force /driver/@type = "raw" if installing
+        a QEMU VM. Without telling QEMU to expect a raw file, the emulator
+        is forced to autodetect, which has security implications:
+
+        http://lists.gnu.org/archive/html/qemu-devel/2008-04/msg00675.html
+        """
+        if self.driver_name != self.DRIVER_QEMU:
+            return None
+
+        if self._storage_creator:
+            drvtype = self._storage_creator.get_driver_type()
+        else:
+            drvtype = self._storage_backend.get_driver_type()
+        return _qemu_sanitize_drvtype(self.type, drvtype)
+
 
     #########################
     # Simple XML properties #
@@ -475,6 +478,11 @@ class VirtualDisk(VirtualDevice):
     device = XMLProperty(xpath="./@device",
                          default_cb=lambda s: s.DEVICE_DISK)
     type = XMLProperty(xpath="./@type", default_cb=_get_default_type)
+    driver_name = XMLProperty(xpath="./driver/@name",
+                              default_cb=_get_default_driver_name)
+    driver_type = XMLProperty(xpath="./driver/@type",
+                              default_cb=_get_default_driver_type)
+
 
     bus = XMLProperty(xpath="./target/@bus")
     target = XMLProperty(xpath="./target/@dev")
@@ -586,36 +594,6 @@ class VirtualDisk(VirtualDevice):
         self.refresh_xml_prop("type")
         self.refresh_xml_prop("driver_name")
         self.refresh_xml_prop("driver_type")
-
-
-    def _get_default_driver(self):
-        """
-        Set driverName and driverType from passed parameters
-
-        Where possible, we want to force driverName = "raw" if installing
-        a QEMU VM. Without telling QEMU to expect a raw file, the emulator
-        is forced to autodetect, which has security implications:
-
-        http://lists.gnu.org/archive/html/qemu-devel/2008-04/msg00675.html
-        """
-        drvname = self._driverName
-        if drvname == self._DEFAULT_SENTINEL:
-            drvname = None
-        drvtype = self._driverType
-        if drvtype == self._DEFAULT_SENTINEL:
-            drvtype = None
-
-        if self.conn.is_qemu() and not drvname:
-            drvname = self.DRIVER_QEMU
-
-        if drvname == self.DRIVER_QEMU:
-            if self._storage_creator:
-                drvtype = self._storage_creator.get_driver_type()
-            else:
-                drvtype = self._storage_backend.get_driver_type()
-            drvtype = _qemu_sanitize_drvtype(self.type, drvtype)
-
-        return drvname or None, drvtype or None
 
     def __managed_storage(self):
         """
@@ -740,22 +718,13 @@ class VirtualDisk(VirtualDevice):
             path = util.xml_escape(path)
 
         ret = "    <disk>\n"
-
-        drvxml = ""
-        if self.driver_type is not None:
-            drvxml += " type='%s'" % self.driver_type
-        if self.driver_name is not None:
-            drvxml = (" name='%s'" % self.driver_name) + drvxml
-        if drvxml:
-            ret += "      <driver%s/>\n" % drvxml
-
         if path is not None:
             ret += "      <source %s='%s'/>\n" % (typeattr, path)
-
         addr = self.indent(self.address.get_xml_config(), 6)
         if addr:
             ret += addr
         ret += "    </disk>"
+
         ret = self._add_parse_bits(ret)
 
         # Remove <driver> block if path is None. Might not be strictly
