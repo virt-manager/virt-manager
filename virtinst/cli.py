@@ -1504,10 +1504,7 @@ def parse_disk(guest, optstr, dev=None):
     abspath, volinst, volobj = _parse_disk_source(guest, path, pool, vol,
                                                   size, fmt, sparse)
 
-    if volobj:
-        dev.set_vol_object(volobj)
-    else:
-        dev.path = abspath
+    dev.path = volobj and volobj.path() or abspath
     dev.read_only = ro
     dev.shareable = shared
     dev.set_create_storage(size=size, fmt=fmt, sparse=sparse,

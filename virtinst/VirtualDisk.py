@@ -417,8 +417,8 @@ class VirtualDisk(VirtualDevice):
         if self._storage_creator:
             raise ValueError("Can't change disk path if storage creation info "
                              "has been set.")
-        if val != self.path:
-            self._change_storage(path=val)
+        self._change_backend(val, None)
+        self._refresh_backend_settings()
     def _xml_get_xpath(self):
         xpath = None
         ret = "./source/@file"
@@ -505,14 +505,6 @@ class VirtualDisk(VirtualDevice):
 
     def get_vol_object(self):
         return self._storage_backend.get_vol_object()
-    def set_vol_object(self, val):
-        if self.path:
-            raise ValueError("Can't change disk vol_object if path is set.")
-        if self._storage_creator:
-            raise ValueError("Can't change disk vol_object if storage_creator "
-                             "is set.")
-        if val != self.get_vol_object():
-            self._change_storage(vol_object=val)
     def get_vol_install(self):
         if not self._storage_creator:
             return None
@@ -562,36 +554,38 @@ class VirtualDisk(VirtualDevice):
         if fake and size is None:
             size = .000001
 
-        backend, creator = _distill_storage(
+        ignore, creator = _distill_storage(
             self.conn, True, self.nomanaged, path, None,
             vol_install, clone_path,
             size, sparse, fmt)
-        ignore = backend
+
         self._storage_creator = creator
-        if self._storage_creator and fake:
-            self._storage_creator.fake = True
-
-        if not self._storage_creator and fmt:
-            if self.driver_name == self.DRIVER_QEMU:
+        if self._storage_creator:
+            self._storage_creator.fake = bool(fake)
+            self._refresh_backend_settings()
+        else:
+            if (vol_install or clone_path):
+                raise RuntimeError("Need storage creation but it "
+                                   "didn't happen.")
+            if fmt and self.driver_name == self.DRIVER_QEMU:
                 self.driver_type = fmt
-
-        if not self._storage_creator and (vol_install or clone_path):
-            raise RuntimeError("Need storage creation but it didn't happen.")
 
 
     def can_be_empty(self):
         return (self.device == self.DEVICE_FLOPPY or
                 self.device == self.DEVICE_CDROM)
 
-    def _change_storage(self, path=None, vol_object=None):
+    def _change_backend(self, path, vol_object):
         backend, ignore = _distill_storage(
                                 self.conn, False, self.nomanaged,
                                 path, vol_object, None, None)
         self._storage_backend = backend
 
+    def _refresh_backend_settings(self):
         self.refresh_xml_prop("type")
         self.refresh_xml_prop("driver_name")
         self.refresh_xml_prop("driver_type")
+
 
     def _get_default_type(self):
         if self._storage_creator:
@@ -718,7 +712,7 @@ class VirtualDisk(VirtualDevice):
         volobj = self._storage_creator.create(meter)
         self._storage_creator = None
         if volobj:
-            self._change_storage(vol_object=volobj)
+            self._change_backend(None, volobj)
 
     def set_defaults(self):
         cache = self.driver_cache
