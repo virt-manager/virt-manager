@@ -397,16 +397,17 @@ class VirtualDisk(VirtualDevice):
         VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self._storage_backend = diskbackend.StorageBackend(self.conn,
-                                                           None, None, None)
+                                                           self._xmlpath,
+                                                           None, None)
         self._storage_creator = None
 
         self.nomanaged = False
         self.transient = False
 
 
-    ##########################
-    # Complex XML properties #
-    ##########################
+    #############################
+    # Public property-esque API #
+    #############################
 
     def _get_path(self):
         if self._storage_creator:
@@ -418,23 +419,25 @@ class VirtualDisk(VirtualDevice):
                              "has been set.")
         self._change_backend(val, None)
         self._refresh_backend_settings()
-    def _xml_get_xpath(self):
-        xpath = None
-        ret = "./source/@file"
-        for prop in _TARGET_PROPS:
-            xpath = "./source/@" + prop
-            if self._xml_ctx.xpathEval(xpath):
-                ret = xpath
-                break
-        return ret
-    def _xml_set_xpath(self):
-        return "./source/@" + self.disk_type_to_target_prop(self.type)
-    path = XMLProperty(_get_path, _set_path, name="disk path",
-                         xml_get_xpath=_xml_get_xpath,
-                         xml_set_xpath=_xml_set_xpath,
-                         clear_first=["./source/@" + target for target in
-                                      _TARGET_PROPS])
+    path = property(_get_path, _set_path)
 
+
+    def get_sparse(self):
+        if self._storage_creator:
+            return self._storage_creator.get_sparse()
+        return None
+
+    def get_vol_object(self):
+        return self._storage_backend.get_vol_object()
+    def get_vol_install(self):
+        if not self._storage_creator:
+            return None
+        return self._storage_creator.get_vol_install()
+
+    def get_size(self):
+        if self._storage_creator:
+            return self._storage_creator.get_size()
+        return self._storage_backend.get_size()
 
 
     #############################
@@ -471,9 +474,26 @@ class VirtualDisk(VirtualDevice):
         return _qemu_sanitize_drvtype(self.type, drvtype)
 
 
-    #########################
-    # Simple XML properties #
-    #########################
+    ##################
+    # XML properties #
+    ##################
+
+    def _xml_get_xpath(self):
+        xpath = None
+        ret = "./source/@file"
+        for prop in _TARGET_PROPS:
+            xpath = "./source/@" + prop
+            if self._xml_ctx.xpathEval(xpath):
+                ret = xpath
+                break
+        return ret
+    def _xml_set_xpath(self):
+        return "./source/@" + self.disk_type_to_target_prop(self.type)
+    _xmlpath = XMLProperty(name="disk path",
+                           xml_get_xpath=_xml_get_xpath,
+                           xml_set_xpath=_xml_set_xpath,
+                           clear_first=["./source/@" + target for target in
+                                        _TARGET_PROPS])
 
     device = XMLProperty(xpath="./@device",
                          default_cb=lambda s: s.DEVICE_DISK)
@@ -501,28 +521,6 @@ class VirtualDisk(VirtualDevice):
     iotune_tis = XMLProperty(xpath="./iotune/total_iops_sec", is_int=True)
     iotune_wbs = XMLProperty(xpath="./iotune/write_bytes_sec", is_int=True)
     iotune_wis = XMLProperty(xpath="./iotune/write_iops_sec", is_int=True)
-
-
-    #############################
-    # Public property-esque API #
-    #############################
-
-    def get_sparse(self):
-        if self._storage_creator:
-            return self._storage_creator.get_sparse()
-        return None
-
-    def get_vol_object(self):
-        return self._storage_backend.get_vol_object()
-    def get_vol_install(self):
-        if not self._storage_creator:
-            return None
-        return self._storage_creator.get_vol_install()
-
-    def get_size(self):
-        if self._storage_creator:
-            return self._storage_creator.get_size()
-        return self._storage_backend.get_size()
 
 
     #################################
@@ -594,6 +592,7 @@ class VirtualDisk(VirtualDevice):
         self.refresh_xml_prop("type")
         self.refresh_xml_prop("driver_name")
         self.refresh_xml_prop("driver_type")
+        self._xmlpath = self.path
 
     def __managed_storage(self):
         """
@@ -710,16 +709,7 @@ class VirtualDisk(VirtualDevice):
 
 
     def _get_xml_config(self):
-        typeattr = self.type
-        if self.type == VirtualDisk.TYPE_BLOCK:
-            typeattr = 'dev'
-        path = self.path
-        if path:
-            path = util.xml_escape(path)
-
         ret = "    <disk>\n"
-        if path is not None:
-            ret += "      <source %s='%s'/>\n" % (typeattr, path)
         addr = self.indent(self.address.get_xml_config(), 6)
         if addr:
             ret += addr
