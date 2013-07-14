@@ -403,6 +403,7 @@
     <disk type='block' device='floppy'>
       <source dev='/disk-pool/diskvol1'/>
       <target dev='fda' bus='fdc'/>
+      <driver type="vmdk"/>
     </disk>
     <disk type='block' device='disk'>
       <source dev='/disk-pool/diskvol2'/>
@@ -415,6 +416,7 @@
     <disk type='block' device='disk'>
       <source dev='/default-pool/collidevol1.img'/>
       <target dev='sdc' bus='scsi'/>
+      <driver type="qcow2"/>
       <readonly/>
       <shareable/>
     </disk>

@@ -522,6 +522,7 @@ class Cloner(object):
                 newd = VirtualDisk(self.conn)
                 newd.path = disk.path
                 newd.device = device
+                newd.driver_name = disk.driver_name
                 newd.driver_type = disk.driver_type
                 newd.target = disk.target
                 if validate:

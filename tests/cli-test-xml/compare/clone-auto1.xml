@@ -20,9 +20,9 @@
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="block" device="floppy">
+      <driver type="vmdk" name="qemu"/>
       <target dev="fda" bus="fdc"/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
-      <driver name="qemu" type="raw"/>
       <source dev="/disk-pool/diskvol1-clone"/>
     </disk>
     <disk type="block" device="disk">
@@ -37,6 +37,7 @@
       <address type="drive" controller="0" bus="0" target="0" unit="1"/>
     </disk>
     <disk type="block" device="disk">
+      <driver type="qcow2"/>
       <source dev="/default-pool/collidevol1.img"/>
       <target dev="sdc" bus="scsi"/>
       <readonly/>
