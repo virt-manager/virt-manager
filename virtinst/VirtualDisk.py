@@ -396,7 +396,6 @@ class VirtualDisk(VirtualDevice):
         VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self._DEFAULT_SENTINEL = -1234
-        self._device = self.DEVICE_DISK
         self._type = self._DEFAULT_SENTINEL
         self._driverName = self._DEFAULT_SENTINEL
         self._driverType = self._DEFAULT_SENTINEL
@@ -450,13 +449,6 @@ class VirtualDisk(VirtualDevice):
     type = XMLProperty(get_type, set_type,
                          xpath="./@type")
 
-    def get_device(self):
-        return self._device
-    def set_device(self, val):
-        self._device = val
-    device = XMLProperty(get_device, set_device,
-                           xpath="./@device")
-
     def get_driver_name(self):
         if self._driverName != self._DEFAULT_SENTINEL:
             return self._driverName
@@ -475,9 +467,14 @@ class VirtualDisk(VirtualDevice):
     driver_type = XMLProperty(get_driver_type, set_driver_type,
                                 xpath="./driver/@type")
 
+
+
     #########################
     # Simple XML properties #
     #########################
+
+    device = XMLProperty(xpath="./@device",
+                         default_cb=lambda s: s.DEVICE_DISK)
 
     bus = XMLProperty(xpath="./target/@bus")
     target = XMLProperty(xpath="./target/@dev")
@@ -747,7 +744,7 @@ class VirtualDisk(VirtualDevice):
         if path:
             path = util.xml_escape(path)
 
-        ret = "    <disk type='%s' device='%s'>\n" % (self.type, self.device)
+        ret = "    <disk type='%s'>\n" % self.type
 
         drvxml = ""
         if self.driver_type is not None:
