@@ -715,33 +715,25 @@ class VirtualDisk(VirtualDevice):
             self._change_backend(None, volobj)
 
     def set_defaults(self):
-        cache = self.driver_cache
-        iomode = self.driver_io
-
-        if virtinst.enable_rhel_defaults:
-            # Enable cache=none for non-CDROM devs
-            if (self.conn.is_qemu() and
-                not cache and
-                self.device != self.DEVICE_CDROM):
-                cache = self.CACHE_MODE_NONE
-
-            # Enable AIO native for block devices
-            if (self.conn.is_qemu() and
-                not iomode and
-                self.device == self.DEVICE_DISK and
-                self.type == self.TYPE_BLOCK):
-                iomode = self.IO_MODE_NATIVE
-
-        self.driver_cache = cache
-        self.driver_io = iomode
-
-        if ((self.driver_cache or self.driver_io or self.driver_type) and
-            self.driver_name is None and
-            self.conn.is_qemu()):
-            self.driver_name = self.DRIVER_QEMU
-
         if self.device == self.DEVICE_CDROM:
             self.read_only = True
+
+        if not virtinst.enable_rhel_defaults:
+            return
+
+        # Enable cache=none for non-CDROM devs
+        if (self.conn.is_qemu() and
+            not self.driver_cache and
+            self.device != self.DEVICE_CDROM):
+            self.driver_cache = self.CACHE_MODE_NONE
+
+        # Enable AIO native for block devices
+        if (self.conn.is_qemu() and
+            not self.driver_io and
+            self.device == self.DEVICE_DISK and
+            self.type == self.TYPE_BLOCK):
+            self.driver_io = self.IO_MODE_NATIVE
+
 
     def _get_xml_config(self):
         typeattr = self.type
