@@ -226,7 +226,7 @@ class XMLProperty(property):
                  get_converter=None, set_converter=None,
                  xml_get_xpath=None, xml_set_xpath=None,
                  is_bool=False, is_tri=False, is_int=False, is_multi=False,
-                 clear_first=None):
+                 clear_first=None, default_cb=None):
         """
         Set a XMLBuilder class property that represents a value in the
         <domain> XML. For example
@@ -263,6 +263,10 @@ class XMLProperty(property):
         @param clear_first: List of xpaths to unset before any 'set' operation.
             For those weird interdependent XML props like disk source type and
             path attribute.
+        @param default_cb: If building XML from scratch, and this property
+            is never explicitly altered, this function is called for setting
+            a default value in the XML, and for any 'get' call before the
+            first explicit 'set'.
         """
 
         self._xpath = xpath
@@ -281,12 +285,24 @@ class XMLProperty(property):
         self._convert_value_for_getter_cb = get_converter
         self._convert_value_for_setter_cb = set_converter
         self._setter_clear_these_first = clear_first or []
+        self._default_cb = default_cb
+
+        if sum([int(bool(i)) for i in [
+            self._is_bool, self._is_int,
+            (self._convert_value_for_getter_cb or
+             self._convert_value_for_setter_cb)]]) > 1:
+            raise RuntimeError("Conflict property converter options.")
 
         self._fget = fget
         self._fset = fset
 
-        if not fget and _trackprops:
-            _allprops.append(self)
+        if self._is_new_style_prop():
+            if _trackprops:
+                _allprops.append(self)
+        else:
+            if self._default_cb:
+                raise RuntimeError("Can't set default_cb for old style XML "
+                                   "prop.")
 
         property.__init__(self, fget=self.new_getter, fset=self.new_setter,
                           doc=doc)
@@ -299,10 +315,20 @@ class XMLProperty(property):
     def __repr__(self):
         return "<XMLProperty %s %s>" % (str(self._name), id(self))
 
+    def has_default_value(self):
+        return bool(self._default_cb)
+
 
     ####################
     # Internal helpers #
     ####################
+
+    def _is_new_style_prop(self):
+        """
+        True if this is a prop without an explicitly passed in fget/fset
+        pair.
+        """
+        return not bool(self._fget)
 
     def _findpropname(self, xmlbuilder):
         """
@@ -348,7 +374,7 @@ class XMLProperty(property):
 
     def _convert_value_for_setter(self, xmlbuilder):
         # Convert from API value to XML value
-        ignore, val = self._orig_fget(xmlbuilder)
+        val = self._orig_fget(xmlbuilder)
         if self._convert_value_for_setter_cb:
             val = self._convert_value_for_setter_cb(xmlbuilder, val)
         return val
@@ -404,14 +430,16 @@ class XMLProperty(property):
         if self._fget:
             # For the passed in fget callback, we have any way to
             # tell if the value is unset or not.
-            return False, self._fget(xmlbuilder)
+            return self._fget(xmlbuilder)
 
         # The flip side to default_orig_fset, fetch the value from
         # XMLBuilder._propstore
         propstore = getattr(xmlbuilder, "_propstore")
         propname = self._findpropname(xmlbuilder)
         unset = (propname not in propstore)
-        return unset, propstore.get(propname, None)
+        if unset and self._default_cb:
+            return self._default_cb(xmlbuilder)
+        return propstore.get(propname, None)
 
     def _orig_fset(self, xmlbuilder, val):
         """
@@ -441,8 +469,7 @@ class XMLProperty(property):
     ##################################
 
     def new_getter(self, xmlbuilder):
-        unset, fgetval = self._orig_fget(xmlbuilder)
-        ignore = unset
+        fgetval = self._orig_fget(xmlbuilder)
 
         root_node = getattr(xmlbuilder, "_xml_node")
         if root_node is None:
@@ -467,8 +494,8 @@ class XMLProperty(property):
         return ret
 
 
-    def new_setter(self, xmlbuilder, val, local=True):
-        if local:
+    def new_setter(self, xmlbuilder, val, call_fset=True):
+        if call_fset:
             self._orig_fset(xmlbuilder, val)
 
         root_node = getattr(xmlbuilder, "_xml_node")
@@ -504,7 +531,20 @@ class XMLProperty(property):
 
 
     def refresh_xml(self, xmlbuilder):
-        self.fset(xmlbuilder, self.fget(xmlbuilder), local=False)
+        call_fset = True
+        if not self._is_new_style_prop():
+            call_fset = False
+        elif getattr(xmlbuilder, "_is_parse")():
+            call_fset = False
+        self.fset(xmlbuilder, self.fget(xmlbuilder), call_fset=call_fset)
+
+    def set_default(self, xmlbuilder):
+        propstore = getattr(xmlbuilder, "_propstore")
+        propname = self._findpropname(xmlbuilder)
+        unset = (propname not in propstore)
+        if not unset:
+            return
+        self.refresh_xml(xmlbuilder)
 
 
 class XMLBuilder(object):
@@ -598,34 +638,60 @@ class XMLBuilder(object):
 
         self._set_xml_context()
 
-    def _add_parse_bits(self, xml):
-        if not self._propstore or self._is_parse():
+    def _do_add_parse_bits(self, xml):
+        # Find all properties that have default callbacks
+        defaultprops = [v for v in self.__class__.__dict__.values()
+                        if isinstance(v, XMLProperty) and
+                        v.has_default_value()]
+        for prop in defaultprops:
+            prop.set_default(self)
+
+        # Default props alter our _propstore. But at this point _propstore
+        # is empty, there's nothing for us to do, so exit early
+        if not self._propstore:
             return xml
 
-        do_order = []
-        proporder = self._proporder[:]
-        propstore = self._propstore.copy()
+        # Parse the XML into our internal state
+        self._parsexml(xml, None)
 
-        for key in self._XMLPROPORDER:
-            if key in proporder:
-                proporder.remove(key)
-                do_order.append(key)
-        proporder = do_order + proporder
+        # Set up preferred XML ordering
+        do_order = self._proporder[:]
+        for key in reversed(self._XMLPROPORDER):
+            if key in do_order:
+                do_order.remove(key)
+                do_order.insert(0, key)
 
+        # Alter the XML
+        for key in do_order:
+            setattr(self, key, self._propstore[key])
+
+        # Fix initial indentation
+        ret = self.get_xml_config()
+        for c in xml:
+            if c != " ":
+                break
+            ret = " " + ret
+        return ret.strip("\n")
+
+    def _add_parse_bits(self, xml):
+        """
+        Callback that adds the implicitly tracked XML properties to
+        the manually generated xml. This should only exist until all
+        classes are converted to all parsing all the time
+        """
+        if self._is_parse():
+            return xml
+
+        origproporder = self._proporder[:]
+        origpropstore = self._propstore.copy()
         try:
-            self._parsexml(xml, None)
-            for key in proporder:
-                setattr(self, key, propstore[key])
-            ret = self.get_xml_config()
-            for c in xml:
-                if c != " ":
-                    break
-                ret = " " + ret
-            return ret.strip("\n")
+            return self._do_add_parse_bits(xml)
         finally:
             self._xml_root_doc = None
             self._xml_node = None
             self._xml_ctx = None
+            self._proporder = origproporder
+            self._propstore = origpropstore
 
     def set_defaults(self):
         pass
