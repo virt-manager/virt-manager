@@ -519,17 +519,7 @@ class XMLBuilder(object):
             self._parsexml(parsexml, parsexmlnode)
 
 
-    def _cache(self):
-        """
-        This is a hook for classes to cache any state that is expensive
-        to lookup before we copy the object as part of Guest.get_xml_config.
-        Saves us from possibly doing the lookup over and over
-        """
-        pass
-
-
     def copy(self):
-        self._cache()
         return copy.copy(self)
 
     def _get_conn(self):

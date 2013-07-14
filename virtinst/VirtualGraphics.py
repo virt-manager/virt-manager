@@ -125,10 +125,6 @@ class VirtualGraphics(VirtualDevice):
         if channels:
             self.channels = channels
 
-    def _cache(self):
-        # Make sure we've cached the _local_keymap value before copy()
-        self._default_keymap()
-
     def _default_keymap(self, force_local=False):
         if (not force_local and
             self.conn.check_conn_support(

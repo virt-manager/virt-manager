@@ -20,6 +20,9 @@
 import logging
 import re
 
+
+_cached_keymap = None
+
 # Host keytable entry : keymap name in qemu/xen
 # Only use lower case entries: all lookups are .lower()'d
 keytable = {
@@ -130,6 +133,13 @@ def _xorg_keymap():
 
 
 def default_keymap():
+    global _cached_keymap
+    if _cached_keymap is None:
+        _cached_keymap = _default_keymap()
+    return _cached_keymap
+
+
+def _default_keymap():
     """
     Look in various config files for the host machine's keymap, and attempt
     to map it to a keymap supported by qemu
@@ -168,13 +178,10 @@ def default_keymap():
         return default
 
     kt = kt.lower()
-
     keymap = sanitize_keymap(kt)
-
     if not keymap:
         logging.debug("Didn't match keymap '%s' in keytable!", kt)
         return default
-
     return keymap
 
 
