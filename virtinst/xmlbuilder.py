@@ -596,6 +596,10 @@ class XMLBuilder(object):
             self._parsexml(parsexml, parsexmlnode)
 
 
+    ##############
+    # Public API #
+    ##############
+
     def copy(self):
         # pylint: disable=W0212
         # Access to protected member, needed to unittest stuff
@@ -608,9 +612,6 @@ class XMLBuilder(object):
         return self._conn
     conn = property(_get_conn)
 
-    def _is_parse(self):
-        return bool(self._xml_node or self._xml_ctx)
-
     def set_xml_node(self, node):
         self._parsexml(None, node)
 
@@ -618,6 +619,65 @@ class XMLBuilder(object):
         if self._xml_node:
             return self._xml_node.nodePath()
         return None
+
+    def get_xml_config(self, *args, **kwargs):
+        """
+        Construct and return object xml
+
+        @return: object xml representation as a string
+        @rtype: str
+        """
+        if self._xml_ctx:
+            node = _get_xpath_node(self._xml_ctx, self._dumpxml_xpath)
+            if not node:
+                ret = ""
+            else:
+                ret = _sanitize_libxml_xml(node.serialize())
+        else:
+            ret = self._add_parse_bits(self._get_xml_config(*args, **kwargs))
+
+        ret = self._order_xml_elements(ret)
+        return self._cleanup_xml(ret)
+
+
+    #######################
+    # Internal helper API #
+    #######################
+
+    def _is_parse(self):
+        return bool(self._xml_node or self._xml_ctx)
+
+    def _refresh_xml_prop(self, propname):
+        """
+        Refresh the XML for the passed class propname. Used to adjust
+        the XML when an interdependent property changes.
+        """
+        getattr(self.__class__, propname).refresh_xml(self)
+
+
+    ###################
+    # Child overrides #
+    ###################
+
+    def set_defaults(self):
+        pass
+
+    def _get_xml_config(self):
+        """
+        Internal XML building function. Must be overwritten by subclass
+        """
+        raise NotImplementedError()
+
+    def _cleanup_xml(self, xml):
+        """
+        Hook for classes to touch up the XML after generation.
+        """
+        return xml
+
+
+    ########################
+    # Internal XML parsers #
+    ########################
 
     def _add_child_node(self, parent_xpath, newnode):
         ret = _build_xpath_node(self._xml_ctx, parent_xpath, newnode)
@@ -699,21 +759,6 @@ class XMLBuilder(object):
             self._proporder = origproporder
             self._propstore = origpropstore
 
-    def set_defaults(self):
-        pass
-
-    def refresh_xml_prop(self, propname):
-        """
-        Refresh the XML for the passed class propname. Used to adjust
-        the XML when an interdependent property changes.
-        """
-        getattr(self.__class__, propname).refresh_xml(self)
-
-    def _get_xml_config(self):
-        """
-        Internal XML building function. Must be overwritten by subclass
-        """
-        raise NotImplementedError()
 
     def _order_xml_elements(self, xml):
         # This whole thing is reeeally hacky but it saves us some
@@ -745,21 +790,3 @@ class XMLBuilder(object):
         neworder += split
 
         return "\n".join([head] + neworder + [end])
-
-    def get_xml_config(self, *args, **kwargs):
-        """
-        Construct and return object xml
-
-        @return: object xml representation as a string
-        @rtype: str
-        """
-        if self._xml_ctx:
-            node = _get_xpath_node(self._xml_ctx, self._dumpxml_xpath)
-            if not node:
-                ret = ""
-            else:
-                ret = _sanitize_libxml_xml(node.serialize())
-        else:
-            ret = self._get_xml_config(*args, **kwargs)
-
-        return self._order_xml_elements(ret)

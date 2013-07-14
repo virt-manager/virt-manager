@@ -589,9 +589,9 @@ class VirtualDisk(VirtualDevice):
         self._storage_backend = backend
 
     def _refresh_backend_settings(self):
-        self.refresh_xml_prop("type")
-        self.refresh_xml_prop("driver_name")
-        self.refresh_xml_prop("driver_type")
+        self._refresh_xml_prop("type")
+        self._refresh_xml_prop("driver_name")
+        self._refresh_xml_prop("driver_type")
         self._xmlpath = self.path
 
     def __managed_storage(self):
@@ -707,6 +707,13 @@ class VirtualDisk(VirtualDevice):
             self.type == self.TYPE_BLOCK):
             self.driver_io = self.IO_MODE_NATIVE
 
+    def _cleanup_xml(self, xml):
+        # Remove <driver> block if path is None. Might not be strictly
+        # requires but it's what we've always done
+        if not self.path and "<driver" in xml:
+            xml = "\n".join([l for l in xml.splitlines()
+                             if "<driver" not in l])
+        return xml
 
     def _get_xml_config(self):
         ret = "    <disk>\n"
@@ -714,14 +721,6 @@ class VirtualDisk(VirtualDevice):
         if addr:
             ret += addr
         ret += "    </disk>"
-
-        ret = self._add_parse_bits(ret)
-
-        # Remove <driver> block if path is None. Might not be strictly
-        # requires but it's what we've always done
-        if not self.path and "<driver" in ret:
-            ret = "\n".join([l for l in ret.splitlines()
-                             if "<driver" not in l])
         return ret
 
     def is_size_conflict(self):
