@@ -268,6 +268,7 @@ class XMLParseTest(unittest.TestCase):
         check("serial", "WD-WMAP9A966149", "frob")
 
         check = self._make_checker(disk3)
+        check("type", "block", "dir", "file", "block")
         check("path", "/dev/loop0", None)
         check("device", "cdrom", "floppy")
         check("read_only", True, False)

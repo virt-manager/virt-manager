@@ -390,13 +390,12 @@ class VirtualDisk(VirtualDevice):
 
 
     _XMLELEMENTORDER = ["driver", "source", "target"]
-    _XMLPROPORDER = ["target", "bus"]
+    _XMLPROPORDER = ["target", "bus", "type", "device"]
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
         VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self._DEFAULT_SENTINEL = -1234
-        self._type = self._DEFAULT_SENTINEL
         self._driverName = self._DEFAULT_SENTINEL
         self._driverType = self._DEFAULT_SENTINEL
 
@@ -440,15 +439,6 @@ class VirtualDisk(VirtualDevice):
                                       _TARGET_PROPS])
 
 
-    def get_type(self):
-        if self._type != self._DEFAULT_SENTINEL:
-            return self._type
-        return self._get_default_type()
-    def set_type(self, val):
-        self._type = val
-    type = XMLProperty(get_type, set_type,
-                         xpath="./@type")
-
     def get_driver_name(self):
         if self._driverName != self._DEFAULT_SENTINEL:
             return self._driverName
@@ -468,6 +458,15 @@ class VirtualDisk(VirtualDevice):
                                 xpath="./driver/@type")
 
 
+    #############################
+    # Internal defaults helpers #
+    #############################
+
+    def _get_default_type(self):
+        if self._storage_creator:
+            return self._storage_creator.get_dev_type()
+        return self._storage_backend.get_dev_type()
+
 
     #########################
     # Simple XML properties #
@@ -475,6 +474,7 @@ class VirtualDisk(VirtualDevice):
 
     device = XMLProperty(xpath="./@device",
                          default_cb=lambda s: s.DEVICE_DISK)
+    type = XMLProperty(xpath="./@type", default_cb=_get_default_type)
 
     bus = XMLProperty(xpath="./target/@bus")
     target = XMLProperty(xpath="./target/@dev")
@@ -587,11 +587,6 @@ class VirtualDisk(VirtualDevice):
         self.refresh_xml_prop("driver_name")
         self.refresh_xml_prop("driver_type")
 
-
-    def _get_default_type(self):
-        if self._storage_creator:
-            return self._storage_creator.get_dev_type()
-        return self._storage_backend.get_dev_type()
 
     def _get_default_driver(self):
         """
@@ -744,7 +739,7 @@ class VirtualDisk(VirtualDevice):
         if path:
             path = util.xml_escape(path)
 
-        ret = "    <disk type='%s'>\n" % self.type
+        ret = "    <disk>\n"
 
         drvxml = ""
         if self.driver_type is not None:

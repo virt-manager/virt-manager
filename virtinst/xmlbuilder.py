@@ -529,22 +529,28 @@ class XMLProperty(property):
                 continue
             node.setContent(util.xml_escape(str(val)))
 
+    def _prop_is_unset(self, xmlbuilder):
+        propstore = getattr(xmlbuilder, "_propstore")
+        propname = self._findpropname(xmlbuilder)
+        return (propname not in propstore)
 
-    def refresh_xml(self, xmlbuilder):
+    def refresh_xml(self, xmlbuilder, force_call_fset=False):
         call_fset = True
         if not self._is_new_style_prop():
             call_fset = False
         elif getattr(xmlbuilder, "_is_parse")():
             call_fset = False
+        elif self._prop_is_unset(xmlbuilder) and self._default_cb:
+            call_fset = False
+
+        if force_call_fset:
+            call_fset = True
         self.fset(xmlbuilder, self.fget(xmlbuilder), call_fset=call_fset)
 
     def set_default(self, xmlbuilder):
-        propstore = getattr(xmlbuilder, "_propstore")
-        propname = self._findpropname(xmlbuilder)
-        unset = (propname not in propstore)
-        if not unset:
+        if not self._prop_is_unset(xmlbuilder) or not self._default_cb:
             return
-        self.refresh_xml(xmlbuilder)
+        self.refresh_xml(xmlbuilder, force_call_fset=True)
 
 
 class XMLBuilder(object):
