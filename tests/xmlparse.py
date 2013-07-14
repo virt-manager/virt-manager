@@ -271,8 +271,8 @@ class XMLParseTest(unittest.TestCase):
         check("path", "/dev/loop0", None)
         check("device", "cdrom", "floppy")
         check("read_only", True, False)
-        check("target", None, "fde")
-        check("bus", None, "fdc")
+        check("target", "hdc", "fde")
+        check("bus", "ide", "fdc")
         check("error_policy", "stop", None)
 
         check = self._make_checker(disk6)

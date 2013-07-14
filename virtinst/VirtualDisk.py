@@ -449,12 +449,6 @@ class VirtualDisk(VirtualDevice):
     def get_device(self):
         return self._device
     def set_device(self, val):
-        if val == self._device:
-            return
-
-        if self._is_parse():
-            self.bus = None
-            self.target = None
         self._device = val
     device = XMLProperty(get_device, set_device,
                            xpath="./@device")
