@@ -20,8 +20,6 @@
 import logging
 import random
 
-import libvirt
-
 from virtinst import util
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty
@@ -144,19 +142,9 @@ class VirtualNetworkInterface(VirtualDevice):
 
         VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
-        self._network = None
-        self._bridge = None
-        self._macaddr = None
-        self._type = None
-        self._model = None
-        self._target_dev = None
-        self._source_dev = None
-        self._source_mode = "vepa"
-
         self.virtualport = VirtualPort(conn, parsexml, parsexmlnode)
         self._XML_SUB_ELEMENTS.append("virtualport")
 
-        # Generate _random_mac
         self._random_mac = None
         self._default_bridge = None
 
@@ -164,15 +152,15 @@ class VirtualNetworkInterface(VirtualDevice):
             return
 
         self.type = type
-        self.macaddr = macaddr
-        self.bridge = bridge
-        self.source_dev = bridge
-        self.network = network
-        self.model = model
+        if macaddr:
+            self.macaddr = macaddr
+        if bridge:
+            self.bridge = bridge
+        if network:
+            self.network = network
+        if model:
+            self.model = model
 
-        if self.type == self.TYPE_VIRTUAL:
-            if network is None:
-                raise ValueError(_("A network name was not provided"))
 
     def _generate_default_bridge(self):
         ret = self._default_bridge
@@ -214,123 +202,53 @@ class VirtualNetworkInterface(VirtualDevice):
         return
     source = property(get_source, set_source)
 
-    def get_type(self):
-        return self._type
-    def set_type(self, val):
-        if val not in self.network_types:
-            raise ValueError(_("Unknown network type %s") % val)
-        self._type = val
-    type = XMLProperty(get_type, set_type,
-                         xpath="./@type")
+    def setup(self, meter=None):
+        ignore = meter
+        if not self.macaddr:
+            return
 
-    def get_macaddr(self):
-        # Don't generate a random MAC if parsing XML, since it can be slow
-        if self._macaddr or self._is_parse():
-            return self._macaddr
+        ret, msg = self.is_conflict_net(self.conn, self.macaddr)
+        if msg is None:
+            return
+        if ret is False:
+            logging.warning(msg)
+        else:
+            raise RuntimeError(msg)
+
+
+    _XML_ELEMENT_ORDER = ["source", "mac", "target", "model"]
+
+    type = XMLProperty(xpath="./@type")
+
+    def _get_default_mac(self):
+        if self._is_parse():
+            return None
         if not self._random_mac:
             self._random_mac = self.generate_mac(self.conn)
         return self._random_mac
-    def set_macaddr(self, val):
+    def _validate_mac(self, val):
         util.validate_macaddr(val)
-        self._macaddr = val
-    macaddr = XMLProperty(get_macaddr, set_macaddr,
-                            xpath="./mac/@address")
+        return val
+    macaddr = XMLProperty(xpath="./mac/@address",
+                          set_converter=_validate_mac,
+                          default_cb=_get_default_mac)
 
-    def get_network(self):
-        return self._network
-    def set_network(self, newnet):
-        def _is_net_active(netobj):
-            # Apparently the 'info' command was never hooked up for
-            # libvirt virNetwork python apis.
-            if not self.conn:
-                return True
-            return self.conn.listNetworks().count(netobj.name())
-
-        if newnet is not None and self.conn:
-            try:
-                net = self.conn.networkLookupByName(newnet)
-            except libvirt.libvirtError, e:
-                raise ValueError(_("Virtual network '%s' does not exist: %s")
-                                   % (newnet, str(e)))
-            if not _is_net_active(net):
-                raise ValueError(_("Virtual network '%s' has not been "
-                                   "started.") % newnet)
-
-        self._network = newnet
-    network = XMLProperty(get_network, set_network,
-                            xpath="./source/@network")
-
-    def get_bridge(self):
-        if (not self._is_parse() and
-            not self._bridge and
-            self.type == self.TYPE_BRIDGE):
-            return self._generate_default_bridge()
-        return self._bridge
-    def set_bridge(self, val):
-        self._bridge = val
-    bridge = XMLProperty(get_bridge, set_bridge,
-                           xpath="./source/@bridge")
-
-    def get_model(self):
-        return self._model
-    def set_model(self, val):
-        self._model = val
-    model = XMLProperty(get_model, set_model,
-                          xpath="./model/@type")
-
-    def get_target_dev(self):
-        return self._target_dev
-    def set_target_dev(self, val):
-        self._target_dev = val
-    target_dev = XMLProperty(get_target_dev, set_target_dev,
-                               xpath="./target/@dev")
-
-    def get_source_dev(self):
-        return self._source_dev
-    def set_source_dev(self, val):
-        self._source_dev = val
-    source_dev = XMLProperty(get_source_dev, set_source_dev,
-                               xpath="./source/@dev")
-
-    def get_source_mode(self):
-        return self._source_mode
-    def set_source_mode(self, newmode):
-        self._source_mode = newmode
-    source_mode = XMLProperty(get_source_mode, set_source_mode,
-                                xpath="./source/@mode")
-
-    def setup(self, meter=None):
-        if self.macaddr:
-            ret, msg = self.is_conflict_net(self.conn, self.macaddr)
-            if msg is not None:
-                if ret is False:
-                    logging.warning(msg)
-                else:
-                    raise RuntimeError(msg)
-
-    def _get_xml_config(self):
-        src_xml = ""
-        model_xml = ""
-        target_xml = ""
+    def _get_default_bridge(self):
         if self.type == self.TYPE_BRIDGE:
-            src_xml     = "      <source bridge='%s'/>\n" % self.bridge
-        elif self.type == self.TYPE_VIRTUAL:
-            src_xml     = "      <source network='%s'/>\n" % self.network
-        elif self.type == self.TYPE_ETHERNET and self.source_dev:
-            src_xml     = "      <source dev='%s'/>\n" % self.source_dev
-        elif self.type == self.TYPE_DIRECT and self.source_dev:
-            src_xml     = "      <source dev='%s' mode='%s'/>\n" % (self.source_dev, self.source_mode)
+            return self._generate_default_bridge()
+        return None
+    bridge = XMLProperty(xpath="./source/@bridge",
+                         default_cb=_get_default_bridge)
+    network = XMLProperty(xpath="./source/@network")
+    source_dev = XMLProperty(xpath="./source/@dev")
 
-        if self.model:
-            model_xml   = "      <model type='%s'/>\n" % self.model
 
-        if self.target_dev:
-            target_xml  = "      <target dev='%s'/>\n" % self.target_dev
 
-        xml  = "    <interface type='%s'>\n" % self.type
-        xml += src_xml
-        xml += "      <mac address='%s'/>\n" % self.macaddr
-        xml += target_xml
-        xml += model_xml
-        xml += "    </interface>"
-        return xml
+    def _default_source_mode(self):
+        if self.type == self.TYPE_DIRECT:
+            return "vepa"
+        return None
+    source_mode = XMLProperty(xpath="./source/@mode",
+                              default_cb=_default_source_mode)
+    model = XMLProperty(xpath="./model/@type")
+    target_dev = XMLProperty(xpath="./target/@dev")
