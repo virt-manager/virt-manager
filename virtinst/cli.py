@@ -1791,11 +1791,10 @@ def parse_memballoon(guest, optstring, dev=None):
 
     # Peel the mode off the front
     opts = parse_optstr(optstring, remove_first="model")
-    model = get_opt_param(opts, "model")
 
     if not dev:
-        dev = virtinst.VirtualMemballoon(model=model,
-                                         conn=guest.conn)
+        dev = virtinst.VirtualMemballoon(conn=guest.conn)
+    dev.model = get_opt_param(opts, "model")
 
     if opts:
         raise ValueError(_("Unknown options %s") % opts.keys())
