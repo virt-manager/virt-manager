@@ -467,12 +467,14 @@ class XMLParseTest(unittest.TestCase):
         dev3 = guest.get_devices("graphics")[2]
         dev4 = guest.get_devices("graphics")[3]
         dev5 = guest.get_devices("graphics")[4]
+        dev6 = guest.get_devices("graphics")[5]
 
         check = self._make_checker(dev1)
         check("type", "vnc")
         check("passwd", "foobar", "newpass")
         check("port", 100, 6000)
         check("listen", "0.0.0.0", "1.2.3.4")
+        check("keymap", None, "en-us")
 
         check = self._make_checker(dev2)
         check("type", "sdl")
@@ -480,7 +482,7 @@ class XMLParseTest(unittest.TestCase):
         check("display", "1:2", "6:1")
 
         check = self._make_checker(dev3)
-        check("type", "rdp")
+        check("type", "rdp", "vnc")
 
         check = self._make_checker(dev4)
         check("type", "vnc")
@@ -488,6 +490,9 @@ class XMLParseTest(unittest.TestCase):
         check("socket", "/tmp/foobar", "/var/lib/libvirt/socket/foo")
 
         check = self._make_checker(dev5)
+        check("autoport", True, False)
+
+        check = self._make_checker(dev6)
         check("type", "spice")
         check("passwd", "foobar", "newpass")
         check("port", 100, 6000)
@@ -496,6 +501,9 @@ class XMLParseTest(unittest.TestCase):
         check("channel_inputs_mode", "insecure", "secure")
         check("channel_main_mode", "secure", "any")
         check("channel_record_mode", "any", "insecure")
+        check("channel_display_mode", "any", "secure")
+        check("channel_cursor_mode", "any", "any")
+        check("channel_playback_mode", "any", "insecure")
         check("passwdValidTo", "2010-04-09T15:51:00", "2011-01-07T19:08:00")
 
         self._alter_compare(guest.get_xml_config(), outfile)
