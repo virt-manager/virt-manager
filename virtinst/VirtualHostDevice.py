@@ -18,17 +18,16 @@
 # MA 02110-1301 USA.
 
 from virtinst.VirtualDevice import VirtualDevice
-from virtinst import NodeDeviceParser
-import logging
-
 from virtinst.xmlbuilder import XMLProperty
+from virtinst import NodeDeviceParser
 
 
 class VirtualHostDevice(VirtualDevice):
-
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_HOSTDEV
 
-    def device_from_node(conn, name=None, nodedev=None, is_dup=False):
+    @staticmethod
+    def device_from_node(conn, name=None, nodedev=None, is_dup=False,
+                         dev=None):
         """
         Convert the passed device name to a VirtualHostDevice
         instance, with proper error reporting. Name can be any of the
@@ -42,9 +41,8 @@ class VirtualHostDevice(VirtualDevice):
 
         @rtype: L{virtinst.VirtualHostDevice} instance
         """
-
         if not name and not nodedev:
-            raise ValueError(_("'name' or 'nodedev' required."))
+            raise ValueError("'name' or 'nodedev' required.")
 
         if nodedev:
             nodeinst = nodedev
@@ -53,212 +51,59 @@ class VirtualHostDevice(VirtualDevice):
             if addr_type == NodeDeviceParser.HOSTDEV_ADDR_TYPE_USB_BUSADDR:
                 is_dup = True
 
-        if isinstance(nodeinst, NodeDeviceParser.PCIDevice):
-            return VirtualHostDevicePCI(conn, nodedev=nodeinst)
-        elif isinstance(nodeinst, NodeDeviceParser.USBDevice):
-            return VirtualHostDeviceUSB(conn, nodedev=nodeinst, is_dup=is_dup)
-        elif isinstance(nodeinst, NodeDeviceParser.NetDevice):
+        if isinstance(nodeinst, NodeDeviceParser.NetDevice):
             parentname = nodeinst.parent
-            try:
-                return VirtualHostDevice.device_from_node(conn,
-                                                          name=parentname)
-            except:
-                logging.exception("Fetching net parent device failed.")
+            return VirtualHostDevice.device_from_node(conn,
+                                                      name=parentname)
+        if not dev:
+            dev = VirtualHostDevice(conn)
+        dev.set_from_nodedev(nodeinst, is_dup)
+        return dev
 
-        raise ValueError(_("Node device type '%s' cannot be attached to "
-                           " guest.") % nodeinst.device_type)
-
-    device_from_node = staticmethod(device_from_node)
-
-    def __init__(self, conn, nodedev=None,
-                 parsexml=None, parsexmlnode=None):
-        """
-        @param conn: Connection the device/guest will be installed on
-        @type conn: libvirt.virConnect
-        @param nodedev: Optional NodeDevice instance for device being
-                         attached to the guest
-        @type nodedev: L{virtinst.NodeDeviceParser.NodeDevice}
-        """
-        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
-
-        self._mode = None
-        self._type = None
-        self._managed = None
-        self._nodedev = nodedev
-        self._vendor = None
-        self._product = None
-        self._bus = None
-        self._device = None
-        self._domain = "0x0"
-        self._slot = None
-        self._function = None
-
-        if self._is_parse():
-            return
-
-        self.managed = True
-        if self.conn.is_xen():
-            self.managed = False
-
-
-    def get_mode(self):
-        return self._mode
-    def set_mode(self, val):
-        self._mode = val
-    mode = XMLProperty(get_mode, set_mode,
-                         xpath="./@mode")
-
-    def get_type(self):
-        return self._type
-    def set_type(self, val):
-        self._type = val
-    type = XMLProperty(get_type, set_type,
-                         xpath="./@type")
-
-    def get_managed(self):
-        return self._managed
-    def set_managed(self, val):
-        self._managed = bool(val)
-    managed = XMLProperty(get_managed, set_managed,
-                            get_converter=lambda s, x: bool(x == "yes"),
-                            set_converter=lambda s, x: x and "yes" or "no",
-                            xpath="./@managed")
-
-    def get_vendor(self):
-        return self._vendor
-    def set_vendor(self, val):
-        self._vendor = val
-    vendor = XMLProperty(get_vendor, set_vendor,
-                           xpath="./source/vendor/@id")
-
-    def get_product(self):
-        return self._product
-    def set_product(self, val):
-        self._product = val
-    product = XMLProperty(get_product, set_product,
-                            xpath="./source/product/@id")
-
-    def get_device(self):
-        return self._device
-    def set_device(self, val):
-        self._device = val
-    device = XMLProperty(get_device, set_device,
-                           xpath="./source/address/@device")
-
-    def get_bus(self):
-        return self._bus
-    def set_bus(self, val):
-        self._bus = val
-    bus = XMLProperty(get_bus, set_bus,
-                        xpath="./source/address/@bus")
-
-    def get_function(self):
-        return self._function
-    def set_function(self, val):
-        self._function = val
-    function = XMLProperty(get_function, set_function,
-                             xpath="./source/address/@function")
-
-    def get_domain(self):
-        return self._domain
-    def set_domain(self, val):
-        self._domain = val
-    domain = XMLProperty(get_domain, set_domain,
-                             xpath="./source/address/@domain")
-
-    def get_slot(self):
-        return self._slot
-    def set_slot(self, val):
-        self._slot = val
-    slot = XMLProperty(get_slot, set_slot,
-                         xpath="./source/address/@slot")
-
-    def _get_source_xml(self):
-        raise NotImplementedError("Must be implemented in subclass")
-
-    def _get_xml_config(self):
-        xml  = ("    <hostdev mode='%s' type='%s' managed='%s'>\n" %
-                (self.mode, self.type, self.managed and "yes" or "no"))
-        xml += "      <source>\n"
-        xml += self._get_source_xml()
-        xml += "      </source>\n"
-        xml += "    </hostdev>"
-        return xml
-
-
-class VirtualHostDeviceUSB(VirtualHostDevice):
-
-    def __init__(self, conn, nodedev=None, is_dup=False):
-        VirtualHostDevice.__init__(self, conn, nodedev)
-
-        self.mode = "subsystem"
-        self.type = "usb"
-        self.is_dup = is_dup
-
-        self._set_from_nodedev(self._nodedev)
-
-
-    def _set_from_nodedev(self, nodedev):
-        if not nodedev:
-            return
-
-        if not isinstance(nodedev, NodeDeviceParser.USBDevice):
-            raise ValueError(_("'nodedev' must be a USBDevice instance."))
-
-        self.vendor = nodedev.vendor_id
-        self.product = nodedev.product_id
-
-        if self.is_dup:
+    def set_from_nodedev(self, nodedev, is_dup=False):
+        if isinstance(nodedev, NodeDeviceParser.PCIDevice):
+            self.type = "pci"
+            self.domain = nodedev.domain
             self.bus = nodedev.bus
-            self.device = nodedev.device
+            self.slot = nodedev.slot
+            self.function = nodedev.function
 
-    def _get_source_xml(self):
-        xml = ""
-        found = False
+        elif isinstance(nodedev, NodeDeviceParser.USBDevice):
+            self.type = "usb"
+            self.vendor = nodedev.vendor_id
+            self.product = nodedev.product_id
 
-        if self.vendor and self.product:
-            xml += "        <vendor id='%s'/>\n" % self.vendor
-            xml += "        <product id='%s'/>\n" % self.product
-            found = True
-
-        if self.bus and self.device:
-            xml += "        <address bus='%s' device='%s'/>\n" % (self.bus,
-                                                                  self.device)
-            found = True
-
-        if not found:
-            raise RuntimeError(_("'vendor' and 'product', or 'bus' and "
-                                 " 'device' are required."))
-        return xml
+            if is_dup:
+                self.bus = nodedev.bus
+                self.device = nodedev.device
+        else:
+            raise ValueError("Unknown node device type %s" % nodedev)
 
 
-class VirtualHostDevicePCI(VirtualHostDevice):
+    _XML_PROP_ORDER = ["mode", "type", "managed", "vendor", "product",
+                       "domain", "bus", "slot", "function"]
 
-    def __init__(self, conn, nodedev=None):
-        VirtualHostDevice.__init__(self, conn, nodedev)
+    mode = XMLProperty(xpath="./@mode", default_cb=lambda s: "subsystem")
+    type = XMLProperty(xpath="./@type")
 
-        self.mode = "subsystem"
-        self.type = "pci"
+    def _get_default_managed(self):
+        return self.conn.is_xen() and "no" or "yes"
+    managed = XMLProperty(get_converter=lambda s, x: bool(x == "yes"),
+                          set_converter=lambda s, x: x and "yes" or "no",
+                          default_cb=_get_default_managed,
+                          xpath="./@managed")
 
-        self._set_from_nodedev(self._nodedev)
+    vendor = XMLProperty(xpath="./source/vendor/@id")
+    product = XMLProperty(xpath="./source/product/@id")
 
+    device = XMLProperty(xpath="./source/address/@device")
+    bus = XMLProperty(xpath="./source/address/@bus")
 
-    def _set_from_nodedev(self, nodedev):
-        if not nodedev:
-            return
-
-        if not isinstance(nodedev, NodeDeviceParser.PCIDevice):
-            raise ValueError(_("'nodedev' must be a PCIDevice instance."))
-
-        self.domain = nodedev.domain
-        self.bus = nodedev.bus
-        self.slot = nodedev.slot
-        self.function = nodedev.function
-
-    def _get_source_xml(self):
-        if not (self.domain and self.bus and self.slot and self.function):
-            raise RuntimeError(_("'domain', 'bus', 'slot', and 'function' "
-                                 "must be specified."))
-
-        xml = "        <address domain='%s' bus='%s' slot='%s' function='%s'/>\n"
-        return xml % (self.domain, self.bus, self.slot, self.function)
+    def _get_default_domain(self):
+        if self.type == "pci":
+            return "0x0"
+        return None
+    domain = XMLProperty(xpath="./source/address/@domain",
+                         default_cb=_get_default_domain)
+    function = XMLProperty(xpath="./source/address/@function")
+    slot = XMLProperty(xpath="./source/address/@slot")

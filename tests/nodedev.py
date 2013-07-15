@@ -53,12 +53,14 @@ class TestNodeDev(unittest.TestCase):
         for attr in vals.keys():
             self.assertEqual(vals[attr], getattr(dev, attr))
 
-    def _testNode2DeviceCompare(self, nodename, devfile, nodedev=None, is_dup=False):
+    def _testNode2DeviceCompare(self, nodename, devfile,
+                                nodedev=None, is_dup=False):
         devfile = os.path.join("tests/nodedev-xml/devxml", devfile)
         if not nodedev:
             nodedev = self._nodeDevFromName(nodename)
 
-        dev = VirtualHostDevice.device_from_node(conn, nodedev=nodedev, is_dup=is_dup)
+        dev = VirtualHostDevice.device_from_node(conn, nodedev=nodedev,
+                                                 is_dup=is_dup)
         utils.diff_compare(dev.get_xml_config() + "\n", devfile)
 
     def testSystemDevice(self):
@@ -202,7 +204,8 @@ class TestNodeDev(unittest.TestCase):
         devfile = "usbdev2.xml"
         nodedev = self._nodeDevFromName(nodename)
 
-        self._testNode2DeviceCompare(nodename, devfile, nodedev=nodedev, is_dup=True)
+        self._testNode2DeviceCompare(nodename, devfile, nodedev=nodedev,
+                                     is_dup=True)
 
     def testNodeDev2PCI(self):
         nodename = "pci_1180_592"

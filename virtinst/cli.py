@@ -1951,6 +1951,6 @@ def parse_sound(guest, optstr, dev=None):
 #####################
 
 def parse_hostdev(guest, optstr, dev=None):
-    ignore = dev
-    return virtinst.VirtualHostDevice.device_from_node(conn=guest.conn,
-                                                       name=optstr)
+    return virtinst.VirtualHostDevice.device_from_node(guest.conn,
+                                                       name=optstr,
+                                                       dev=dev)

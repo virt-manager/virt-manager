@@ -24,7 +24,7 @@ import virtinst
 from virtinst import VirtualDisk
 from virtinst import VirtualAudio
 from virtinst import VirtualNetworkInterface
-from virtinst import VirtualHostDeviceUSB, VirtualHostDevicePCI
+from virtinst import VirtualHostDevice
 from virtinst import VirtualCharDevice
 from virtinst import VirtualVideoDevice
 from virtinst import VirtualController
@@ -637,11 +637,13 @@ class TestXMLConfig(unittest.TestCase):
         i = utils.make_pxe_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
-        dev1 = VirtualHostDeviceUSB(g.conn)
+        dev1 = VirtualHostDevice(g.conn)
+        dev1.type = "usb"
         dev1.product = "0x1234"
         dev1.vendor = "0x4321"
 
-        dev2 = VirtualHostDevicePCI(g.conn)
+        dev2 = VirtualHostDevice(g.conn)
+        dev2.type = "pci"
         dev2.bus = "0x11"
         dev2.slot = "0x2"
         dev2.function = "0x3"
@@ -726,9 +728,10 @@ class TestXMLConfig(unittest.TestCase):
         g.hugepage = True
 
         # Hostdevs
-        dev1 = VirtualHostDeviceUSB(g.conn)
-        dev1.product = "0x1234"
+        dev1 = VirtualHostDevice(g.conn)
+        dev1.type = "usb"
         dev1.vendor = "0x4321"
+        dev1.product = "0x1234"
         g.add_device(dev1)
 
         # Sound devices

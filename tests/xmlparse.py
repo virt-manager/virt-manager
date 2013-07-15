@@ -534,7 +534,7 @@ class XMLParseTest(unittest.TestCase):
         dev3 = guest.get_devices("hostdev")[2]
 
         check = self._make_checker(dev1)
-        check("type", "usb")
+        check("type", "usb", "foo", "usb")
         check("managed", True, False)
         check("mode", "subsystem", None)
         check("vendor", "0x4321", "0x1111")

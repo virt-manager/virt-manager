@@ -27,9 +27,7 @@ from virtinst.VirtualGraphics import VirtualGraphics
 from virtinst.VirtualAudio import VirtualAudio
 from virtinst.VirtualInputDevice import VirtualInputDevice
 from virtinst.VirtualDisk import VirtualDisk
-from virtinst.VirtualHostDevice import (VirtualHostDevice,
-                                        VirtualHostDeviceUSB,
-                                        VirtualHostDevicePCI)
+from virtinst.VirtualHostDevice import VirtualHostDevice
 from virtinst.VirtualCharDevice import VirtualCharDevice
 from virtinst.VirtualVideoDevice import VirtualVideoDevice
 from virtinst.VirtualController import VirtualController
