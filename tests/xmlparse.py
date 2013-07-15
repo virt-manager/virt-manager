@@ -508,17 +508,18 @@ class XMLParseTest(unittest.TestCase):
         dev3 = guest.get_devices("video")[2]
 
         check = self._make_checker(dev1)
-        check("model_type", "vmvga", "vga")
-        check("vram", None, "1000")
-        check("heads", None, "1")
+        check("model", "vmvga", "vga")
+        check("vram", None, 1000)
+        check("heads", None, 1)
 
         check = self._make_checker(dev2)
-        check("model_type", "cirrus", "vmvga")
-        check("vram", "10240", None)
-        check("heads", "3", "5")
+        check("model", "cirrus", "vmvga")
+        check("vram", 10240, None)
+        check("heads", 3, 5)
 
         check = self._make_checker(dev3)
-        check("model_type", "cirrus", "cirrus")
+        check("model", "cirrus", "cirrus", "qxl")
+        check("ram", None, 100)
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

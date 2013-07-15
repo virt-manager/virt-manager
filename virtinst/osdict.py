@@ -55,13 +55,13 @@ USB_TABLET = {
 }
 
 VGA_VIDEO = {
-    "model_type": [
+    "model": [
         (HV_ALL, "vga"),
    ]
 }
 
 VMVGA_VIDEO = {
-    "model_type": [
+    "model": [
         (HV_ALL, "vmvga"),
     ]
 }
@@ -108,7 +108,7 @@ DEFAULTS = {
        },
 
         VIDEO : {
-            "model_type": [
+            "model": [
                 (HV_ALL, "cirrus"),
            ]
        },

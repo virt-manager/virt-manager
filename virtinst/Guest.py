@@ -1371,11 +1371,11 @@ class Guest(XMLBuilder):
         if has_spice():
             video_model  = "qxl"
         else:
-            video_model  = self._lookup_device_param(videotype, "model_type")
+            video_model  = self._lookup_device_param(videotype, "model")
 
         for video in devlist_func(videotype):
-            if video.model_type == video.MODEL_DEFAULT:
-                video.model_type = video_model
+            if video.model == video.MODEL_DEFAULT:
+                video.model = video_model
 
         # Spice agent channel (only if we use spice)
         def has_spice_agent():

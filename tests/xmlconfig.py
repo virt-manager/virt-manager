@@ -796,16 +796,16 @@ class TestXMLConfig(unittest.TestCase):
 
         # Video Devices
         vdev1 = VirtualVideoDevice(g.conn)
-        vdev1.model_type = "vmvga"
+        vdev1.model = "vmvga"
 
         vdev2 = VirtualVideoDevice(g.conn)
-        vdev2.model_type = "cirrus"
+        vdev2.model = "cirrus"
         vdev2.vram = 10 * 1024
         vdev2.heads = 3
 
         vdev3 = VirtualVideoDevice(g.conn)
         vdev4 = VirtualVideoDevice(g.conn)
-        vdev4.model_type = "qxl"
+        vdev4.model = "qxl"
 
         g.add_device(vdev1)
         g.add_device(vdev2)

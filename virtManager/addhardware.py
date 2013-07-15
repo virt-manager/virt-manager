@@ -1518,7 +1518,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         try:
             self._dev = VirtualVideoDevice(conn)
-            self._dev.model_type = model
+            self._dev.model = model
         except Exception, e:
             return self.err.val_err(_("Video device parameter error"), e)
 

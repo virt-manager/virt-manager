@@ -27,69 +27,19 @@ class VirtualVideoDevice(VirtualDevice):
 
     # Default models list
     MODEL_DEFAULT = "default"
-    _model_types = ["cirrus", "vga", "vmvga", "xen", "qxl", MODEL_DEFAULT]
+    MODELS = ["cirrus", "vga", "vmvga", "xen", "qxl", MODEL_DEFAULT]
 
     @staticmethod
     def pretty_model(model):
-        if model in ["qxl", "vmvga"]:
+        if model in ["qxl", "vmvga", "vga"]:
             return model.upper()
         return model.capitalize()
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
-        self._model_type    = None
-        self._vram          = None
-        self._heads         = None
-
-        if self._is_parse():
-            return
-
-        self.model_type = self.MODEL_DEFAULT
-
-    def get_model_types(self):
-        return self._model_types[:]
-    model_types = property(get_model_types)
-
-    def get_model_type(self):
-        return self._model_type
-    def set_model_type(self, val):
-        self._model_type = val
-    model_type = XMLProperty(get_model_type, set_model_type,
-                               xpath="./model/@type")
-
-    def get_vram(self):
-        return self._vram
-    def set_vram(self, val):
-        self._vram = val
-    vram = XMLProperty(get_vram, set_vram,
-                         xpath="./model/@vram")
-    ram = XMLProperty(lambda o: None, lambda o, v: None,
-                        xpath="./model/@ram")
-
-
-    def get_heads(self):
-        return self._heads
-    def set_heads(self, val):
-        self._heads = val
-    heads = XMLProperty(get_heads, set_heads,
-                          xpath="./model/@heads")
-
-    def _get_xml_config(self):
-        model = self.model_type
-        if self.model_type == self.MODEL_DEFAULT:
-            model = "cirrus"
-
-        model_xml = "      <model"
-        if self.model_type:
-            model_xml += " type='%s'" % model
-        if self.vram:
-            model_xml += " vram='%s'" % self.vram
-        if self.heads:
-            model_xml += " heads='%s'" % self.heads
-        model_xml += "/>\n"
-
-        xml = ("    <video>\n" +
-               model_xml +
-               "    </video>")
-        return xml
+    _XML_PROP_ORDER = ["model", "vram", "heads"]
+    model = XMLProperty(xpath="./model/@type",
+                        default_cb=lambda s: "cirrus",
+                        default_name=MODEL_DEFAULT)
+    vram = XMLProperty(xpath="./model/@vram", is_int=True)
+    ram = XMLProperty(xpath="./model/@ram", is_int=True)
+    heads = XMLProperty(xpath="./model/@heads", is_int=True)

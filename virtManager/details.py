@@ -3343,7 +3343,7 @@ class vmmDetails(vmmGObjectUI):
                                 self.widget("video-model-combo"),
                                 no_default=no_default)
 
-        model = vid.model_type
+        model = vid.model
         ram = vid.vram
         heads = vid.heads
         try:
@@ -3352,7 +3352,7 @@ class vmmDetails(vmmGObjectUI):
             ramlabel = "-"
 
         self.widget("video-ram").set_text(ramlabel)
-        self.widget("video-heads").set_text(heads and heads or "-")
+        self.widget("video-heads").set_text(heads and str(heads) or "-")
 
         self.set_combo_label("video-model", model,
                              label=vid.pretty_model(model))
@@ -3650,7 +3650,7 @@ class vmmDetails(vmmGObjectUI):
         # Populate video devices
         for vid in self.vm.get_video_devices():
             update_hwlist(HW_LIST_TYPE_VIDEO, vid,
-                          _("Video %s") % vid.pretty_model(vid.model_type),
+                          _("Video %s") % vid.pretty_model(vid.model),
                           "video-display")
 
         # Populate watchdog devices

@@ -128,11 +128,11 @@ def populate_video_combo(vm, video_dev, no_default=None):
     has_spice = bool([g for g in vm.get_graphics_devices()
                       if g.type == g.TYPE_SPICE])
     has_qxl = bool([v for v in vm.get_video_devices()
-                    if v.model_type == "qxl"])
+                    if v.model == "qxl"])
 
     video_dev_model.clear()
     tmpdev = virtinst.VirtualVideoDevice(vm.conn.get_backend())
-    for m in tmpdev.model_types:
+    for m in tmpdev.MODELS:
         if not vm.rhel6_defaults():
             if m == "qxl" and not has_spice and not has_qxl:
                 # Only list QXL video option when VM has SPICE video

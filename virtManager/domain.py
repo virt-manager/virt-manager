@@ -40,7 +40,7 @@ def compare_device(origdev, newdev, idx):
         "interface" : ["macaddr", "vmmindex"],
         "input"     : ["bus", "type", "vmmindex"],
         "sound"     : ["model", "vmmindex"],
-        "video"     : ["model_type", "vmmindex"],
+        "video"     : ["model", "vmmindex"],
         "watchdog"  : ["vmmindex"],
         "hostdev"   : ["type", "managed", "vmmindex",
                        "product", "vendor",
@@ -776,10 +776,10 @@ class vmmDomain(vmmLibvirtObject):
 
     def define_video_model(self, devobj, newmodel):
         def change(editdev):
-            if newmodel == editdev.model_type:
+            if newmodel == editdev.model:
                 return
 
-            editdev.model_type = newmodel
+            editdev.model = newmodel
             editdev.address.clear()
 
             # Clear out heads/ram values so they reset to default. If

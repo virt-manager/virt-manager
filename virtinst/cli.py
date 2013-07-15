@@ -1922,7 +1922,7 @@ def parse_video(guest, optstr, dev=None):
 
     set_param = _build_set_param(dev, opts)
 
-    set_param("model_type", "model")
+    set_param("model", "model")
 
     if opts:
         raise ValueError(_("Unknown options %s") % opts.keys())
