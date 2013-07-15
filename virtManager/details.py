@@ -3066,9 +3066,10 @@ class vmmDetails(vmmGObjectUI):
         vport = net.virtualport
         self.widget("vport-expander").set_property("visible", show_vport)
         self.widget("vport-type").set_text(vport.type or "")
-        self.widget("vport-managerid").set_text(vport.managerid or "")
-        self.widget("vport-typeid").set_text(vport.typeid or "")
-        self.widget("vport-typeidversion").set_text(vport.typeidversion or "")
+        self.widget("vport-managerid").set_text(str(vport.managerid) or "")
+        self.widget("vport-typeid").set_text(str(vport.typeid) or "")
+        self.widget("vport-typeidversion").set_text(
+                                str(vport.typeidversion) or "")
         self.widget("vport-instanceid").set_text(vport.instanceid or "")
 
         uihelpers.populate_netmodel_combo(self.vm,

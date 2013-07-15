@@ -433,10 +433,10 @@ class XMLParseTest(unittest.TestCase):
 
         virtualport = dev5.virtualport
         check = self._make_checker(virtualport)
-        check("type", "802.1Qbg")
-        check("managerid", "12", "11")
-        check("typeid", "1193046", "1193047")
-        check("typeidversion", "1", "2")
+        check("type", "802.1Qbg", "foo", "802.1Qbg")
+        check("managerid", 12, 11)
+        check("typeid", 1193046, 1193047)
+        check("typeidversion", 1, 2)
         check("instanceid", "09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b",
                             "09b11c53-8b5c-4eeb-8f00-d84eaa0aaa4f")
 

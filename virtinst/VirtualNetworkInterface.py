@@ -55,54 +55,15 @@ def _random_mac(conn):
 
 
 class VirtualPort(XMLBuilder):
+    type = XMLProperty(xpath="./virtualport/@type")
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        XMLBuilder.__init__(self, conn, parsexml,
-                                                   parsexmlnode)
-        self._type = None
-        self._managerid = None
-        self._typeid = None
-        self._typeidversion = None
-        self._instanceid = None
+    managerid = XMLProperty(xpath="./virtualport/parameters/@managerid",
+                            is_int=True)
 
-    def get_type(self):
-        return self._type
-    def set_type(self, val):
-        self._type = val
-    type = XMLProperty(get_type, set_type,
-                                  xpath="./virtualport/@type")
-
-    def get_managerid(self):
-        return self._managerid
-    def set_managerid(self, val):
-        self._managerid = val
-    managerid = XMLProperty(get_managerid, set_managerid,
-                                  xpath="./virtualport/parameters/@managerid")
-
-    def get_typeid(self):
-        return self._typeid
-    def set_typeid(self, val):
-        self._typeid = val
-    typeid = XMLProperty(get_typeid, set_typeid,
-                               xpath="./virtualport/parameters/@typeid")
-
-    def get_typeidversion(self):
-        return self._typeidversion
-    def set_typeidversion(self, val):
-        self._typeidversion = val
-    typeidversion = XMLProperty(get_typeidversion, set_typeidversion,
-                               xpath="./virtualport/parameters/@typeidversion")
-
-    def get_instanceid(self):
-        return self._instanceid
-    def set_instanceid(self, val):
-        self._instanceid = val
-    instanceid = XMLProperty(get_instanceid, set_instanceid,
-                               xpath="./virtualport/parameters/@instanceid")
-
-    def _get_xml_config(self):
-        # FIXME: This should be implemented, currently we can only parse
-        return ""
+    typeid = XMLProperty(xpath="./virtualport/parameters/@typeid", is_int=True)
+    typeidversion = XMLProperty(
+            xpath="./virtualport/parameters/@typeidversion", is_int=True)
+    instanceid = XMLProperty(xpath="./virtualport/parameters/@instanceid")
 
 
 class VirtualNetworkInterface(VirtualDevice):
@@ -191,7 +152,9 @@ class VirtualNetworkInterface(VirtualDevice):
         self._target_dev = None
         self._source_dev = None
         self._source_mode = "vepa"
-        self._virtualport = VirtualPort(conn, parsexml, parsexmlnode)
+
+        self.virtualport = VirtualPort(conn, parsexml, parsexmlnode)
+        self._XML_SUB_ELEMENTS.append("virtualport")
 
         # Generate _random_mac
         self._random_mac = None
@@ -250,10 +213,6 @@ class VirtualNetworkInterface(VirtualDevice):
             self.source_dev = newsource
         return
     source = property(get_source, set_source)
-
-    def _get_virtualport(self):
-        return self._virtualport
-    virtualport = property(_get_virtualport)
 
     def get_type(self):
         return self._type
