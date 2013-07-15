@@ -94,6 +94,10 @@
       </source>
     </hostdev>
     <watchdog model="ib700" action="none"/>
+    <redirdev bus="usb" type="spicevmc"/>
+    <redirdev bus="usb" type="tcp">
+      <source host="foobar.com" service="1234"/>
+    </redirdev>
     <memballoon model="virtio"/>
   </devices>
   <seclabel type="static" model="selinux">

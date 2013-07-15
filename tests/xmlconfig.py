@@ -852,6 +852,15 @@ class TestXMLConfig(unittest.TestCase):
         g.seclabel.label = "foolabel"
         g.seclabel.imagelabel = "imagelabel"
 
+        redir1 = virtinst.VirtualRedirDevice(g.conn)
+        redir1.type = "spicevmc"
+
+        redir2 = virtinst.VirtualRedirDevice(g.conn)
+        redir2.type = "tcp"
+        redir2.parse_friendly_server("foobar.com:1234")
+        g.add_device(redir1)
+        g.add_device(redir2)
+
         self._compare(g, "boot-many-devices", False)
 
     def testCpuset(self):

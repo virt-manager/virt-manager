@@ -640,10 +640,6 @@ vinst.add_valid("redirdev", "--redirdev usb,type=tcp,server=127.0.0.1:4002")  # 
 vinst.add_invalid("redirdev", "--redirdev")  # Missing argument
 vinst.add_invalid("redirdev", "--redirdev pci")  # Unsupported bus
 vinst.add_invalid("redirdev", "--redirdev usb,type=spicevmc,server=foo:12")  # Invalid argument
-vinst.add_invalid("redirdev", "--redirdev usb,type=tcp,server=")  # Missing argument
-vinst.add_invalid("redirdev", "--redirdev usb,type=tcp,server=localhost:p4000")  # Invalid address
-vinst.add_invalid("redirdev", "--redirdev usb,type=tcp,server=localhost:")  # Missing address
-vinst.add_invalid("redirdev", "--redirdev usb,type=tcp,server=:399")  # Missing host
 
 
 vinst.add_category("hostdev", "--noautoconsole --nographics --nodisks --pxe")

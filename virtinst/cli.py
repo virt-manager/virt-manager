@@ -1701,26 +1701,28 @@ def parse_redirdev(guest, optstring, dev=None):
 
     # Peel the mode off the front
     opts = parse_optstr(optstring, remove_first="bus")
-    bus = get_opt_param(opts, "bus")
-    stype = get_opt_param(opts, "type")
     server = get_opt_param(opts, "server")
 
-    if bus == "none":
+    if opts.get("bus") == "none":
         return None
 
     if not dev:
-        dev = virtinst.VirtualRedirDevice(bus=bus,
-                                          stype=stype,
-                                          conn=guest.conn)
+        dev = virtinst.VirtualRedirDevice(guest.conn)
 
-    if stype == "spicevmc" and server:
-        raise ValueError(_("The server option is invalid with spicevmc redirection"))
+    set_param = _build_set_param(dev, opts)
 
-    if stype == "tcp" and not server:
-        raise ValueError(_("The server option is missing for TCP redirection"))
-
+    set_param("bus", "bus")
+    set_param("type", "type")
     if server:
         dev.parse_friendly_server(server)
+
+    if dev.type == "spicevmc" and server:
+        raise ValueError(
+                _("The server option is invalid with spicevmc redirection"))
+
+    if dev.type == "tcp" and not server:
+        raise ValueError(
+                _("The server option is missing for TCP redirection"))
 
     if opts:
         raise ValueError(_("Unknown options %s") % opts.keys())

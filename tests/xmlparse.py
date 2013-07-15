@@ -691,11 +691,12 @@ class XMLParseTest(unittest.TestCase):
         dev2 = guest.get_devices("redirdev")[1]
 
         check = self._make_checker(dev1)
+        check("bus", "usb", "baz", "usb")
         check("host", "foo", "bar")
-        check("service", "12", "42")
+        check("service", 12, 42)
 
         check = self._make_checker(dev2)
-        check("type", "spicevmc")
+        check("type", "tcp", "spicevmc")
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

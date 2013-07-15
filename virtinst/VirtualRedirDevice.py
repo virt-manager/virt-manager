@@ -28,83 +28,27 @@ class VirtualRedirDevice(VirtualDevice):
 
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_REDIRDEV
 
-    BUS_DEFAULT = "usb"
-    _buses = ["usb"]
+    BUS_DEFAULT = "default"
+    BUSES = ["usb"]
 
-    TYPE_DEFAULT = "spicevmc"
-    _types = ["tcp", "spicevmc", None]
-
-    def __init__(self, conn, bus=BUS_DEFAULT, stype=TYPE_DEFAULT,
-                 parsexml=None, parsexmlnode=None):
-        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
-
-        self._type = None
-        self._bus = None
-        self._host = None
-        self._service = None
-        if self._is_parse():
-            return
-
-        self.bus = bus
-        self.type = stype
-
-    def get_buses(self):
-        return self._buses[:]
-    buses = property(get_buses)
-
-    def get_bus(self):
-        return self._bus
-    def set_bus(self, new_val):
-        if new_val not in self.buses:
-            raise ValueError(_("Unsupported bus '%s'" % new_val))
-        self._bus = new_val
-    bus = XMLProperty(get_bus, set_bus,
-                        xpath="./@bus")
-
-    def get_types(self):
-        return self._types[:]
-    types = property(get_types)
-
-    def get_type(self):
-        return self._type
-    def set_type(self, new_val):
-        if new_val not in self.types:
-            raise ValueError(_("Unsupported redirection type '%s'" % new_val))
-        self._type = new_val
-    type = XMLProperty(get_type, set_type,
-                         xpath="./@type")
-
-    def get_host(self):
-        return self._host
-    def set_host(self, val):
-        if len(val) == 0:
-            raise ValueError(_("Invalid host value"))
-        self._host = val
-    host = XMLProperty(get_host, set_host,
-                        xpath="./source/@host")
-
-    def get_service(self):
-        return self._service
-    def set_service(self, val):
-        int(val)
-        self._service = val
-    service = XMLProperty(get_service, set_service,
-                        xpath="./source/@service")
+    TYPE_DEFAULT = "default"
+    TYPES = ["tcp", "spicevmc", TYPE_DEFAULT]
 
     def parse_friendly_server(self, serverstr):
-        if serverstr.count(":") == 1:
-            self.host, self.service = serverstr.split(":")
-        else:
-            raise ValueError(_("Could not determine or unsupported format of '%s'") % serverstr)
+        if serverstr.count(":") != 1:
+            raise ValueError(_("Could not determine or unsupported "
+                               "format of '%s'") % serverstr)
+        self.host, self.service = serverstr.split(":")
 
-    def _get_xml_config(self):
-        xml  = ("    <redirdev bus='%s' type='%s'" %
-                    (self.bus, self.type))
-        if self.type == 'spicevmc':
-            xml += "/>"
-            return xml
-        xml += ">\n"
-        xml += ("      <source mode='connect' host='%s' service='%s'/>\n" %
-                    (self.host, self.service))
-        xml += "    </redirdev>"
-        return xml
+
+    _XML_PROP_ORDER = ["bus", "type"]
+
+    bus = XMLProperty(xpath="./@bus",
+                      default_cb=lambda s: "usb",
+                      default_name=BUS_DEFAULT)
+    type = XMLProperty(xpath="./@type",
+                       default_cb=lambda s: "spicevmc",
+                       default_name=TYPE_DEFAULT)
+
+    host = XMLProperty(xpath="./source/@host")
+    service = XMLProperty(xpath="./source/@service", is_int=True)

@@ -1601,7 +1601,8 @@ class vmmAddHardware(vmmGObjectUI):
         service = self.get_config_usbredir_service()
 
         try:
-            self._dev = VirtualRedirDevice(conn, bus="usb", stype=stype)
+            self._dev = VirtualRedirDevice(conn)
+            self._dev.type = stype
             if host:
                 self._dev.host = host
             if service:
