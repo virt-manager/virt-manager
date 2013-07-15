@@ -25,15 +25,17 @@ class VirtualWatchdog(VirtualDevice):
 
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_WATCHDOG
 
+    MODEL_I6300 = "i6300esb"
+    MODEL_IB700 = "ib700"
     MODEL_DEFAULT = "default"
-    MODELS = ["i6300esb", "ib700", MODEL_DEFAULT]
+    MODELS = [MODEL_I6300, MODEL_IB700, MODEL_DEFAULT]
 
-    ACTION_DEFAULT  = "default"
     ACTION_SHUTDOWN = "shutdown"
     ACTION_RESET    = "reset"
     ACTION_POWEROFF = "poweroff"
     ACTION_PAUSE    = "pause"
     ACTION_NONE     = "none"
+    ACTION_DEFAULT  = "default"
     ACTIONS = [ACTION_RESET, ACTION_SHUTDOWN,
                ACTION_POWEROFF, ACTION_PAUSE,
                ACTION_NONE, ACTION_DEFAULT]
@@ -52,54 +54,12 @@ class VirtualWatchdog(VirtualDevice):
             return _("No action")
         if action == VirtualWatchdog.ACTION_DEFAULT:
             return _("Hypervisor default")
-        else:
-            return action
+        return action
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
-
-        self._model = None
-        self._action = None
-
-        if self._is_parse():
-            return
-
-        self.model = self.MODEL_DEFAULT
-        self.action = self.ACTION_DEFAULT
-
-    def get_model(self):
-        return self._model
-    def set_model(self, new_model):
-        if type(new_model) != str:
-            raise ValueError(_("'model' must be a string, "
-                                " was '%s'." % type(new_model)))
-        if not self.MODELS.count(new_model):
-            raise ValueError(_("Unsupported watchdog model '%s'" % new_model))
-        self._model = new_model
-    model = XMLProperty(get_model, set_model,
-                          xpath="./@model")
-
-    def get_action(self):
-        return self._action
-    def set_action(self, val):
-        if val not in self.ACTIONS:
-            raise ValueError("Unknown watchdog action '%s'." % val)
-        self._action = val
-    action = XMLProperty(get_action, set_action,
-                           xpath="./@action")
-
-    def _get_xml_config(self):
-        model = self.model
-        if model == self.MODEL_DEFAULT:
-            model = "i6300esb"
-
-        action = self.action
-        if action == self.ACTION_DEFAULT:
-            action = self.ACTION_RESET
-
-        xml = "    <watchdog model='%s'" % model
-        if action:
-            xml += " action='%s'" % action
-        xml += "/>"
-
-        return xml
+    _XML_PROP_ORDER = ["model", "action"]
+    model = XMLProperty(xpath="./@model",
+                        default_name=MODEL_DEFAULT,
+                        default_cb=lambda s: s.MODEL_I6300)
+    action = XMLProperty(xpath="./@action",
+                         default_name=ACTION_DEFAULT,
+                         default_cb=lambda s: s.ACTION_RESET)

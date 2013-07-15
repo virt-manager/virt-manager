@@ -229,7 +229,7 @@ class XMLProperty(property):
                  get_converter=None, set_converter=None,
                  xml_get_xpath=None, xml_set_xpath=None,
                  is_bool=False, is_tri=False, is_int=False, is_multi=False,
-                 clear_first=None, default_cb=None):
+                 clear_first=None, default_cb=None, default_name=None):
         """
         Set a XMLBuilder class property that represents a value in the
         <domain> XML. For example
@@ -270,6 +270,8 @@ class XMLProperty(property):
             is never explicitly altered, this function is called for setting
             a default value in the XML, and for any 'get' call before the
             first explicit 'set'.
+        @param default_name: If the user does a set and passes in this
+            value, instead use the value of default_cb()
         """
 
         self._xpath = xpath
@@ -289,12 +291,16 @@ class XMLProperty(property):
         self._convert_value_for_setter_cb = set_converter
         self._setter_clear_these_first = clear_first or []
         self._default_cb = default_cb
+        self._default_name = default_name
 
         if sum([int(bool(i)) for i in [
             self._is_bool, self._is_int,
             (self._convert_value_for_getter_cb or
              self._convert_value_for_setter_cb)]]) > 1:
             raise RuntimeError("Conflict property converter options.")
+
+        if self._default_name and not self._default_cb:
+            raise RuntimeError("default_name requires default_cb.")
 
         self._fget = fget
         self._fset = fset
@@ -389,6 +395,8 @@ class XMLProperty(property):
         val = self._orig_fget(xmlbuilder)
         if self._convert_value_for_setter_cb:
             val = self._convert_value_for_setter_cb(xmlbuilder, val)
+        elif self._default_name and val == self._default_name:
+            val = self._default_cb(xmlbuilder)
         return val
 
     def _build_node_list(self, xmlbuilder, xpath):
@@ -453,6 +461,8 @@ class XMLProperty(property):
         propname = self._findpropname(xmlbuilder)
         unset = (propname not in propstore)
         if unset and self._default_cb:
+            if self._default_name:
+                return self._default_name
             return self._default_cb(xmlbuilder)
         return propstore.get(propname, None)
 
