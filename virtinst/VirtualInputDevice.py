@@ -22,62 +22,22 @@ from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualInputDevice(VirtualDevice):
-
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_INPUT
 
-    INPUT_TYPE_MOUSE = "mouse"
-    INPUT_TYPE_TABLET = "tablet"
-    INPUT_TYPE_DEFAULT = "default"
-    input_types = [INPUT_TYPE_MOUSE, INPUT_TYPE_TABLET, INPUT_TYPE_DEFAULT]
+    TYPE_MOUSE = "mouse"
+    TYPE_TABLET = "tablet"
+    TYPE_DEFAULT = "default"
+    TYPES = [TYPE_MOUSE, TYPE_TABLET, TYPE_DEFAULT]
 
-    INPUT_BUS_PS2 = "ps2"
-    INPUT_BUS_USB = "usb"
-    INPUT_BUS_XEN = "xen"
-    INPUT_BUS_DEFAULT = "default"
-    input_buses = [INPUT_BUS_PS2, INPUT_BUS_USB, INPUT_BUS_XEN,
-                   INPUT_BUS_DEFAULT]
+    BUS_PS2 = "ps2"
+    BUS_USB = "usb"
+    BUS_XEN = "xen"
+    BUS_DEFAULT = "default"
+    BUSES = [BUS_PS2, BUS_USB, BUS_XEN, BUS_DEFAULT]
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
-
-        self._type = None
-        self._bus = None
-
-        if self._is_parse():
-            return
-
-        self.type = self.INPUT_TYPE_DEFAULT
-        self.bus = self.INPUT_BUS_DEFAULT
-
-    def _convert_default_bus(self, val):
-        if val == self.INPUT_BUS_DEFAULT:
-            return self.INPUT_BUS_XEN
-        return val
-    def _convert_default_type(self, val):
-        if val == self.INPUT_TYPE_DEFAULT:
-            return self.INPUT_TYPE_MOUSE
-        return val
-
-    def get_type(self):
-        return self._type
-    def set_type(self, val):
-        if val not in self.input_types:
-            raise ValueError(_("Unknown input type '%s'.") % val)
-        self._type = val
-    type = XMLProperty(get_type, set_type,
-                         xpath="./@type")
-
-    def get_bus(self):
-        return self._bus
-    def set_bus(self, val):
-        if val not in self.input_buses:
-            raise ValueError(_("Unknown input bus '%s'.") % val)
-        self._bus = val
-    bus = XMLProperty(get_bus, set_bus,
-                        xpath="./@bus")
-
-    def _get_xml_config(self):
-        typ = self._convert_default_type(self.type)
-        bus = self._convert_default_bus(self.bus)
-
-        return "    <input type='%s' bus='%s'/>" % (typ, bus)
+    type = XMLProperty(xpath="./@type",
+                       default_cb=lambda s: s.TYPE_MOUSE,
+                       default_name=TYPE_DEFAULT)
+    bus = XMLProperty(xpath="./@bus",
+                      default_cb=lambda s: s.BUS_XEN,
+                      default_name=BUS_DEFAULT)

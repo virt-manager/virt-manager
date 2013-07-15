@@ -1283,10 +1283,10 @@ class Guest(XMLBuilder):
                 d.driver_name = VirtualDisk.DRIVER_TAP
 
         for d in devlist_func(VirtualDevice.VIRTUAL_DEV_INPUT):
-            if d.type == d.INPUT_TYPE_DEFAULT:
-                d.type = d.INPUT_TYPE_MOUSE
-            if d.bus == d.INPUT_BUS_DEFAULT:
-                d.bus = d.INPUT_BUS_XEN
+            if d.type == d.TYPE_DEFAULT:
+                d.type = d.TYPE_MOUSE
+            if d.bus == d.BUS_DEFAULT:
+                d.bus = d.BUS_XEN
 
         for d in devlist_func(VirtualDevice.VIRTUAL_DEV_CONSOLE):
             if hasattr(d, "virtinst_default"):
@@ -1331,8 +1331,8 @@ class Guest(XMLBuilder):
         input_type = self._lookup_device_param(inputtype, "type")
         input_bus = self._lookup_device_param(inputtype, "bus")
         for inp in devlist_func(inputtype):
-            if (inp.type == inp.INPUT_TYPE_DEFAULT and
-                inp.bus  == inp.INPUT_BUS_DEFAULT):
+            if (inp.type == inp.TYPE_DEFAULT and
+                inp.bus  == inp.BUS_DEFAULT):
                 inp.type = input_type
                 inp.bus  = input_bus
 
