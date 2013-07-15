@@ -304,8 +304,8 @@ def populate_tpm_type_combo(vm, combo):
     types.clear()
 
     # [xml value, label]
-    types.append(["passthrough", "Passthrough device"])
-
+    for t in virtinst.VirtualTPMDevice.TYPES:
+        types.append([t, virtinst.VirtualTPMDevice.get_pretty_type(t)])
 
 
 def build_netmodel_combo(vm, combo):

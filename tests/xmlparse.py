@@ -705,7 +705,9 @@ class XMLParseTest(unittest.TestCase):
         dev1 = guest.get_devices("tpm")[0]
 
         check = self._make_checker(dev1)
+        check("type", "passthrough", "foo", "passthrough")
         check("model", "tpm-tis", "tpm-tis")
+        check("device_path", "/dev/tpm0", "frob")
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

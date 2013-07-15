@@ -504,9 +504,6 @@ class vmmDetails(vmmGObjectUI):
             "on_smartcard_mode_combo_changed": lambda *x: self.enable_apply(x,
                                                 EDIT_SMARTCARD_MODE),
 
-            "on_tpm_type_combo_changed": (self.enable_apply,
-                                          EDIT_TPM_TYPE),
-
             "on_config_apply_clicked": self.config_apply,
             "on_config_cancel_clicked": self.config_cancel,
 
@@ -2064,8 +2061,6 @@ class vmmDetails(vmmGObjectUI):
                 ret = self.config_smartcard_apply(key)
             elif pagetype is HW_LIST_TYPE_CONTROLLER:
                 ret = self.config_controller_apply(key)
-            elif pagetype is HW_LIST_TYPE_TPM:
-                ret = self.config_tpm_apply(key)
             else:
                 ret = False
         except Exception, e:
@@ -2377,18 +2372,6 @@ class vmmDetails(vmmGObjectUI):
             model = self.get_combo_label_value("smartcard-mode")
             if model:
                 add_define(self.vm.define_smartcard_mode, dev_id_info, model)
-
-        return self._change_config_helper(df, da, hf, ha)
-
-    # TPM options
-    def config_tpm_apply(self, dev_id_info):
-        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
-        ignore = add_hotplug
-
-        if self.editted(EDIT_TPM_TYPE):
-            typ = self.get_combo_label_value("tpm-type")
-            if typ:
-                add_define(self.vm.define_tpm_type, dev_id_info, typ)
 
         return self._change_config_helper(df, da, hf, ha)
 
@@ -3239,8 +3222,8 @@ class vmmDetails(vmmGObjectUI):
             self.widget(widgetname).set_text(val or "-")
 
         dev_type = tpmdev.type
-
-        self.widget("tpm-dev-type").set_text(dev_type)
+        self.widget("tpm-dev-type").set_text(
+                virtinst.VirtualTPMDevice.get_pretty_type(dev_type))
 
         # Device type specific properties, only show if apply to the cur dev
         show_ui("device_path")

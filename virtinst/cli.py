@@ -1742,12 +1742,12 @@ def parse_tpm(guest, optstring, dev=None):
         return None
 
     if not dev:
-        dev = virtinst.VirtualTPMDevice(guest.conn, opts.get("type"))
+        dev = virtinst.VirtualTPMDevice(guest.conn)
 
     set_param = _build_set_param(dev, opts)
 
-    set_param("model", "model")
     set_param("type", "type")
+    set_param("model", "model")
     set_param("path", "path")
 
     if opts:

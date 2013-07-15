@@ -52,7 +52,7 @@
     <console type='pty'/>
     <tpm model='tpm-tis'>
       <backend type='passthrough'>
-        <backend path='/dev/tpm0'/>
+        <device path='/dev/tpm0'/>
       </backend>
     </tpm>
   </devices>

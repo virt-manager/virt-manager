@@ -498,6 +498,9 @@ class vmmAddHardware(vmmGObjectUI):
         # Video params
         uihelpers.populate_video_combo(self.vm, self.widget("video-model"))
 
+        # TPM paams
+        self.widget("tpm-device-path").set_text("/dev/tpm0")
+
         # Hide all notebook pages, so the wizard isn't as big as the largest
         # page
         notebook = self.widget("create-pages")
@@ -1036,7 +1039,8 @@ class vmmAddHardware(vmmGObjectUI):
         devtype = src.get_model()[src.get_active()][0]
         conn = self.conn.get_backend()
 
-        self._dev = VirtualTPMDevice.get_dev_instance(conn, devtype)
+        self._dev = VirtualTPMDevice(conn)
+        self._dev.type = devtype
 
         show_something = False
         for param_name, widget_name in tpm_widget_mappings.items():
@@ -1615,14 +1619,11 @@ class vmmAddHardware(vmmGObjectUI):
         }
 
         try:
-            self._dev = VirtualTPMDevice.get_dev_instance(conn, typ)
-
+            self._dev = VirtualTPMDevice(conn)
+            self._dev.type = typ
             for param_name, val in value_mappings.items():
                 if self._dev.supports_property(param_name):
                     setattr(self._dev, param_name, val)
-
-            # Dump XML for sanity checking
-            self._dev.get_xml_config()
         except Exception, e:
             return self.err.val_err(_("TPM device parameter error"), e)
 
