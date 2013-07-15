@@ -1547,12 +1547,8 @@ def parse_network(guest, optstring, dev=None, mac=None):
     elif "bridge" in opts:
         net_type = VirtualNetworkInterface.TYPE_BRIDGE
 
-    # Build initial device
     if not dev:
-        dev = VirtualNetworkInterface(conn=guest.conn,
-                                      type=net_type,
-                                      network=opts.get("network"),
-                                      bridge=opts.get("bridge"))
+        dev = VirtualNetworkInterface(conn=guest.conn)
 
     if mac and not "mac" in opts:
         opts["mac"] = mac

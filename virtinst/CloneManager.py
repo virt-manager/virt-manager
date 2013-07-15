@@ -161,7 +161,9 @@ class Cloner(object):
     def set_clone_macs(self, mac):
         maclist = util.listify(mac)
         for m in maclist:
-            VirtualNetworkInterface(self.conn, m)
+            msg = VirtualNetworkInterface.is_conflict_net(self.conn, m)[1]
+            if msg:
+                raise RuntimeError(msg)
 
         self._clone_macs = maclist
     def get_clone_macs(self):

@@ -587,7 +587,8 @@ class vmmCreate(vmmGObjectUI):
         self.set_net_warn(self.conn.netdev_error or do_warn,
                           self.conn.netdev_error, True)
 
-        newmac = uihelpers.generate_macaddr(self.conn)
+        newmac = virtinst.VirtualNetworkInterface.generate_mac(
+                self.conn.get_backend())
         self.widget("config-set-macaddr").set_active(bool(newmac))
         self.widget("config-macaddr").set_text(newmac)
 

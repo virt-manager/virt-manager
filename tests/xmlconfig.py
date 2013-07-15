@@ -608,16 +608,22 @@ class TestXMLConfig(unittest.TestCase):
         i = utils.make_pxe_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
-        net1 = VirtualNetworkInterface(g.conn, type="user",
-                                       macaddr="22:11:11:11:11:11")
+        net1 = VirtualNetworkInterface(g.conn)
+        net1.type = "user"
+        net1.macaddr = "22:11:11:11:11:11"
+
         net2 = utils.get_virtual_network()
         net3 = utils.get_virtual_network()
         net3.model = "e1000"
-        net4 = VirtualNetworkInterface(g.conn, bridge="foobr0",
-                                       macaddr="22:22:22:22:22:22")
+
+        net4 = VirtualNetworkInterface(g.conn)
+        net4.bridge = "foobr0"
+        net4.macaddr = "22:22:22:22:22:22"
         net4.target_dev = "foo1"
-        net5 = VirtualNetworkInterface(g.conn, type="ethernet",
-                                       macaddr="00:11:00:22:00:33")
+
+        net5 = VirtualNetworkInterface(g.conn)
+        net5.type = "ethernet"
+        net5.macaddr = "00:11:00:22:00:33"
         net5.source_dev = "testeth1"
 
         g.add_device(net1)
@@ -768,11 +774,14 @@ class TestXMLConfig(unittest.TestCase):
         # Network devices
         net1 = utils.get_virtual_network()
         net1.model = "e1000"
-        net2 = VirtualNetworkInterface(g.conn, type="user",
-                                       macaddr="22:11:11:11:11:11")
-        net3 = VirtualNetworkInterface(g.conn,
-                        type=virtinst.VirtualNetworkInterface.TYPE_VIRTUAL,
-                        macaddr="22:22:22:22:22:22", network="default")
+
+        net2 = VirtualNetworkInterface(g.conn)
+        net2.type = "user"
+        net2.macaddr = "22:11:11:11:11:11"
+        net3 = VirtualNetworkInterface(g.conn)
+        net3.type = virtinst.VirtualNetworkInterface.TYPE_VIRTUAL
+        net3.macaddr = "22:22:22:22:22:22"
+        net3.network = "default"
         net3.model = "spapr-vlan"
         net3.set_address("spapr-vio")
         g.add_device(net1)

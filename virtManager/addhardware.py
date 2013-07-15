@@ -436,7 +436,8 @@ class vmmAddHardware(vmmGObjectUI):
             target_list.set_active(0)
 
         # Network init
-        newmac = uihelpers.generate_macaddr(self.conn)
+        newmac = virtinst.VirtualNetworkInterface.generate_mac(
+                self.conn.get_backend())
         self.widget("mac-address").set_active(bool(newmac))
         self.widget("create-mac-address").set_text(newmac)
         self.change_macaddr_use()

@@ -134,12 +134,7 @@ class VirtualNetworkInterface(VirtualDevice):
         return (False, None)
 
 
-    def __init__(self, conn, macaddr=None, type=TYPE_BRIDGE, bridge=None,
-                 network=None, model=None,
-                 parsexml=None, parsexmlnode=None):
-        # pylint: disable=W0622
-        # Redefining built-in 'type', but it matches the XML so keep it
-
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
         VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self.virtualport = VirtualPort(conn, parsexml, parsexmlnode)
@@ -147,19 +142,6 @@ class VirtualNetworkInterface(VirtualDevice):
 
         self._random_mac = None
         self._default_bridge = None
-
-        if self._is_parse():
-            return
-
-        self.type = type
-        if macaddr:
-            self.macaddr = macaddr
-        if bridge:
-            self.bridge = bridge
-        if network:
-            self.network = network
-        if model:
-            self.model = model
 
 
     def _generate_default_bridge(self):
@@ -218,7 +200,8 @@ class VirtualNetworkInterface(VirtualDevice):
 
     _XML_ELEMENT_ORDER = ["source", "mac", "target", "model"]
 
-    type = XMLProperty(xpath="./@type")
+    type = XMLProperty(xpath="./@type",
+                       default_cb=lambda s: s.TYPE_BRIDGE)
 
     def _get_default_mac(self):
         if self._is_parse():

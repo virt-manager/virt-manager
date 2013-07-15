@@ -727,9 +727,11 @@ class XMLParseTest(unittest.TestCase):
         rmdev = guest.get_devices("disk")[2]
         guest.remove_device(rmdev)
 
-        adddev = virtinst.VirtualNetworkInterface(conn=conn, type="network",
-                                                  network="default",
-                                                  macaddr="1A:2A:3A:4A:5A:6A")
+        adddev = virtinst.VirtualNetworkInterface(conn=conn)
+        adddev.type = "network"
+        adddev.network = "default"
+        adddev.macaddr = "1A:2A:3A:4A:5A:6A"
+
         guest.add_device(virtinst.VirtualWatchdog(conn))
         guest.add_device(adddev)
 

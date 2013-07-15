@@ -716,12 +716,12 @@ def validate_network(err, conn, nettype, devname, macaddr, model=None):
         elif nettype == virtinst.VirtualNetworkInterface.TYPE_USER:
             pass
 
-        net = virtinst.VirtualNetworkInterface(conn.get_backend(),
-                                      type=nettype,
-                                      bridge=bridge,
-                                      network=netname,
-                                      macaddr=macaddr,
-                                      model=model)
+        net = virtinst.VirtualNetworkInterface(conn.get_backend())
+        net.type = nettype
+        net.bridge = bridge
+        net.network = netname
+        net.macaddr = macaddr
+        net.model = model
         if net.model == "spapr-vlan":
             addr = "spapr-vio"
 
@@ -742,18 +742,6 @@ def validate_network(err, conn, nettype, devname, macaddr, model=None):
             return False
 
     return net
-
-
-def generate_macaddr(conn):
-    newmac = ""
-    try:
-        net = virtinst.VirtualNetworkInterface(conn.get_backend())
-        net.setup()
-        newmac = net.macaddr
-    except:
-        pass
-
-    return newmac
 
 
 ############################################
