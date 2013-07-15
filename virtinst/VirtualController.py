@@ -141,7 +141,8 @@ class VirtualController(VirtualDevice):
             xml += " model='%s'" % self.model
         xml += extra
         childxml = self.indent(self._master.get_xml_config(), 6)
-        childxml += self.indent(self.address.get_xml_config(), 6)
+        if childxml:
+            childxml += "\n"
         if len(childxml) == 0:
             return xml + "/>"
         xml += ">\n"

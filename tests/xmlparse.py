@@ -634,32 +634,37 @@ class XMLParseTest(unittest.TestCase):
         dev1 = guest.get_devices("disk")[0]
         dev2 = guest.get_devices("controller")[0]
         dev3 = guest.get_devices("channel")[0]
+        dev4 = guest.get_devices("disk")[1]
 
         check = self._make_checker(dev1.address)
         check("type", "drive", "pci")
         check("type", "pci", "drive")
-        check("controller", "3", "1")
-        check("bus", "5", "4")
-        check("unit", "33", "32")
+        check("controller", 3, 1)
+        check("bus", 5, 4)
+        check("unit", 33, 32)
         check = self._make_checker(dev1.alias)
         check("name", "foo2", None)
 
         check = self._make_checker(dev2.address)
+        dev2.address.domain = "0x0010"
+        self.assertEqual(dev2.address.domain, 16)
         check("type", "pci")
-        check("domain", "0x0000", "0x0001")
-        check("bus", "0x00", "4")
-        check("slot", "0x04", "10")
-        check("function", "0x7", "0x6")
+        check("domain", 16, 1)
+        check("bus", 0, 4)
+        check("slot", 4, 10)
+        check("function", 7, 6)
         check = self._make_checker(dev2.alias)
         check("name", None, "frob")
 
         check = self._make_checker(dev3.address)
         check("type", "virtio-serial")
-        check("controller", "0")
-        check("bus", "0")
-        check("port", "2", "4")
+        check("controller", 0)
+        check("bus", 0)
+        check("port", 2, 4)
         check = self._make_checker(dev3.alias)
         check("name", "channel0", "channel1")
+
+        dev4.address.clear()
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

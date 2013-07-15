@@ -21,8 +21,12 @@
       <target dev="hda" bus="ide"/>
       <address type="drive" controller="1" bus="4" unit="32"/>
     </disk>
+    <disk type="block" device="disk">
+      <source dev="/dev/HostVG/QEMUGuest2"/>
+      <target dev="hdb" bus="ide"/>
+    </disk>
     <controller type="scsi" index="8">
-      <address type="pci" domain="0x0001" bus="4" slot="10" function="0x6"/>
+      <address type="pci" domain="1" bus="4" slot="10" function="6"/>
       <alias name="frob"/>
     </controller>
     <channel type="pty">

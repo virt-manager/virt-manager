@@ -353,7 +353,6 @@ class VirtualNetworkInterface(VirtualDevice):
         src_xml = ""
         model_xml = ""
         target_xml = ""
-        addr_xml = ""
         if self.type == self.TYPE_BRIDGE:
             src_xml     = "      <source bridge='%s'/>\n" % self.bridge
         elif self.type == self.TYPE_VIRTUAL:
@@ -366,9 +365,6 @@ class VirtualNetworkInterface(VirtualDevice):
         if self.model:
             model_xml   = "      <model type='%s'/>\n" % self.model
 
-        if self.address:
-            addr_xml = self.indent(self.address.get_xml_config(), 6)
-
         if self.target_dev:
             target_xml  = "      <target dev='%s'/>\n" % self.target_dev
 
@@ -377,6 +373,5 @@ class VirtualNetworkInterface(VirtualDevice):
         xml += "      <mac address='%s'/>\n" % self.macaddr
         xml += target_xml
         xml += model_xml
-        xml += addr_xml
         xml += "    </interface>"
         return xml

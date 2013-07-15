@@ -26,6 +26,9 @@ import libxml2
 
 from virtinst import util
 
+# pylint: disable=W0212
+# This whole file is calling around into non-public functions that we
+# don't want regular API users to touch
 
 _trackprops = bool("VIRTINST_TEST_TRACKPROPS" in os.environ)
 _allprops = []
@@ -124,18 +127,18 @@ def _build_xpath_node(ctx, xpath, addnode=None):
             if node_is_text(prevsib):
                 sib = libxml2.newText(prevsib.content)
             else:
-                sib = libxml2.newText("")
+                sib = libxml2.newText("\n")
             parentnode.addChild(sib)
 
-        # This is case is adding a child element to an already properly
+        # This case is adding a child element to an already properly
         # spaced element. Example:
         # <features>
-        #  <acpi/>
+        #   <acpi/>
         # </features>
         # to
         # <features>
-        #  <acpi/>
-        #  <apic/>
+        #   <acpi/>
+        #   <apic/>
         # </features>
         sib = parentnode.get_last()
         content = sib.content
@@ -346,14 +349,23 @@ class XMLProperty(property):
             ret = self._xpath_for_getter_cb(xmlbuilder)
         if ret is None:
             raise RuntimeError("%s: didn't generate any setter xpath." % self)
-        return ret
+        return self._xpath_fix_relative(xmlbuilder, ret)
     def _xpath_for_setter(self, xmlbuilder):
         ret = self._xpath
         if self._xpath_for_setter_cb:
             ret = self._xpath_for_setter_cb(xmlbuilder)
         if ret is None:
             raise RuntimeError("%s: didn't generate any setter xpath." % self)
-        return ret
+        return self._xpath_fix_relative(xmlbuilder, ret)
+    def _xpath_fix_relative(self, xmlbuilder, xpath):
+        if not getattr(xmlbuilder, "_xml_fixup_relative_xpath"):
+            return xpath
+        root = "./%s" % getattr(xmlbuilder, "_XML_ROOT_NAME")
+        if not xpath.startswith(root):
+            raise RuntimeError("%s: xpath did not start with root=%s" %
+                               (str(self), root))
+        return "." + xpath[len(root):]
+
 
     def _xpath_list_for_setter(self, xpath, setval, nodelist):
         if not self._is_multi:
@@ -418,7 +430,10 @@ class XMLProperty(property):
                 return None
             return bool(val)
         elif self._is_int and val is not None:
-            return int(val)
+            base = 10
+            if "0x" in str(val):
+                base = 16
+            return int(val, base=base)
         elif self._convert_value_for_getter_cb:
             return self._convert_value_for_getter_cb(xmlbuilder, val)
         elif self._is_multi and val is None:
@@ -562,16 +577,31 @@ class XMLBuilder(object):
         xml = ""
         if not xmlstr:
             return xml
-
-        for l in iter(xmlstr.splitlines()):
-            xml += " " * level + l + "\n"
-        return xml
+        if not level:
+            return xmlstr
+        return "\n".join((" " * level + l) for l in xmlstr.splitlines())
 
     # Specify a list of tag values here and we will arrange them when
     # outputing XML. They will be put before every other element. This
     # is strictly to keep test suite happy.
-    _XMLELEMENTORDER = []
-    _XMLPROPORDER = []
+    _XML_ELEMENT_ORDER = []
+    _XML_PROP_ORDER = []
+
+    # Root element name of this function, used to populate a default
+    # _get_xml_config
+    _XML_ROOT_NAME = None
+
+    # Integer indentation level for generated XML.
+    _XML_INDENT = None
+
+    # If XML xpaths are relative to a different element, like
+    # device addresses.
+    _XML_XPATH_RELATIVE = False
+
+    # List of property names that point to a manually tracked
+    # XMLBuilder that alters our device xml, like self.address for
+    # VirtualDevice
+    _XML_SUB_ELEMENTS = []
 
     _dumpxml_xpath = "."
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
@@ -589,6 +619,7 @@ class XMLBuilder(object):
         self._xml_node = None
         self._xml_ctx = None
         self._xml_root_doc = None
+        self._xml_fixup_relative_xpath = False
         self._propstore = {}
         self._proporder = []
 
@@ -601,8 +632,6 @@ class XMLBuilder(object):
     ##############
 
     def copy(self):
-        # pylint: disable=W0212
-        # Access to protected member, needed to unittest stuff
         ret = copy.copy(self)
         ret._propstore = ret._propstore.copy()
         ret._proporder = ret._proporder[:]
@@ -634,7 +663,19 @@ class XMLBuilder(object):
             else:
                 ret = _sanitize_libxml_xml(node.serialize())
         else:
-            ret = self._add_parse_bits(self._get_xml_config(*args, **kwargs))
+            try:
+                self._xml_fixup_relative_xpath = self._XML_XPATH_RELATIVE
+                xmlstub = self._make_xml_stub(fail=False)
+                ret = self._get_xml_config(*args, **kwargs)
+                ret = self._add_parse_bits(ret)
+
+                for propname in self._XML_SUB_ELEMENTS:
+                    ret = getattr(self, propname)._add_parse_bits(ret)
+
+                if ret == xmlstub:
+                    ret = ""
+            finally:
+                self._xml_fixup_relative_xpath = False
 
         ret = self._order_xml_elements(ret)
         return self._cleanup_xml(ret)
@@ -666,7 +707,7 @@ class XMLBuilder(object):
         """
         Internal XML building function. Must be overwritten by subclass
         """
-        raise NotImplementedError()
+        return self._make_xml_stub(fail=True)
 
     def _cleanup_xml(self, xml):
         """
@@ -678,6 +719,20 @@ class XMLBuilder(object):
     ########################
     # Internal XML parsers #
     ########################
+
+    def _make_xml_stub(self, fail=True):
+        if self._XML_ROOT_NAME is None:
+            if not fail:
+                return None
+            raise RuntimeError("Must specify _XML_ROOT_NAME.")
+        if self._XML_INDENT is None:
+            if not fail:
+                return None
+            raise RuntimeError("Must specify _XML_INDENT.")
+        if self._XML_ROOT_NAME == "":
+            return ""
+
+        return self.indent("<%s/>" % (self._XML_ROOT_NAME), self._XML_INDENT)
 
     def _add_child_node(self, parent_xpath, newnode):
         ret = _build_xpath_node(self._xml_ctx, parent_xpath, newnode)
@@ -717,12 +772,20 @@ class XMLBuilder(object):
         if not self._propstore:
             return xml
 
+        # Unindent XML
+        indent = 0
+        for c in xml:
+            if c != " ":
+                break
+            indent += 1
+        xml = "\n".join([l[indent:] for l in xml.splitlines()])
+
         # Parse the XML into our internal state
         self._parsexml(xml, None)
 
         # Set up preferred XML ordering
         do_order = self._proporder[:]
-        for key in reversed(self._XMLPROPORDER):
+        for key in reversed(self._XML_PROP_ORDER):
             if key in do_order:
                 do_order.remove(key)
                 do_order.insert(0, key)
@@ -730,14 +793,7 @@ class XMLBuilder(object):
         # Alter the XML
         for key in do_order:
             setattr(self, key, self._propstore[key])
-
-        # Fix initial indentation
-        ret = self.get_xml_config()
-        for c in xml:
-            if c != " ":
-                break
-            ret = " " + ret
-        return ret.strip("\n")
+        return self.indent(self.get_xml_config().strip("\n"), indent)
 
     def _add_parse_bits(self, xml):
         """
@@ -763,7 +819,7 @@ class XMLBuilder(object):
     def _order_xml_elements(self, xml):
         # This whole thing is reeeally hacky but it saves us some
         # unittest churn.
-        if not self._XMLELEMENTORDER:
+        if not self._XML_ELEMENT_ORDER:
             return xml
 
         split = xml.splitlines()
@@ -781,7 +837,7 @@ class XMLBuilder(object):
             baseindent += 1
 
         neworder = []
-        for prio in reversed(self._XMLELEMENTORDER):
+        for prio in reversed(self._XML_ELEMENT_ORDER):
             tag = "%s<%s " % ((baseindent + 2) * " ", prio)
             for idx in range(len(split)):
                 if split[idx].startswith(tag):

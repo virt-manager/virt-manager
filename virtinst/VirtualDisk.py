@@ -389,9 +389,11 @@ class VirtualDisk(VirtualDevice):
             raise ValueError(_("Couldn't lookup volume object: %s" % str(e)))
 
 
-    _XMLELEMENTORDER = ["driver", "source", "target"]
-    _XMLPROPORDER = ["target", "bus", "type", "device",
-                     "driver_name", "driver_type"]
+
+
+    _XML_ELEMENT_ORDER = ["driver", "source", "target"]
+    _XML_PROP_ORDER = ["target", "bus", "type", "device",
+                       "driver_name", "driver_type"]
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
         VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
@@ -714,14 +716,6 @@ class VirtualDisk(VirtualDevice):
             xml = "\n".join([l for l in xml.splitlines()
                              if "<driver" not in l])
         return xml
-
-    def _get_xml_config(self):
-        ret = "    <disk>\n"
-        addr = self.indent(self.address.get_xml_config(), 6)
-        if addr:
-            ret += addr
-        ret += "    </disk>"
-        return ret
 
     def is_size_conflict(self):
         """

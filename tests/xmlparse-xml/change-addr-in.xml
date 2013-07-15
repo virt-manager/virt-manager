@@ -22,6 +22,11 @@
       <address type='drive' controller='3' bus='5' unit='33'/>
       <alias name='foo2'/>
     </disk>
+    <disk type='block' device='disk'>
+      <source dev='/dev/HostVG/QEMUGuest2'/>
+      <target dev='hdb' bus='ide'/>
+      <address type='drive' controller='4' bus='5' unit='33'/>
+    </disk>
     <controller type='scsi' index='8'>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x7'/>
     </controller>
