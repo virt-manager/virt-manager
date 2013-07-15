@@ -713,6 +713,9 @@ class XMLBuilder(object):
     def set_defaults(self):
         pass
 
+    def validate(self):
+        pass
+
     def _get_xml_config(self):
         """
         Internal XML building function. Must be overwritten by subclass

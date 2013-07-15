@@ -28,59 +28,23 @@ class VirtualSmartCardDevice(VirtualDevice):
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_SMARTCARD
 
     # Default models list
-    MODE_DEFAULT = "passthrough"
-    _modes = ["passthrough", "host-certificates", "host"]
+    MODE_DEFAULT = "default"
+    MODES = ["passthrough", "host-certificates", "host"]
 
-    TYPE_DEFAULT = "tcp"
-    _types = ["tcp", "spicevmc", None]
+    TYPE_DEFAULT = "default"
+    TYPES = ["tcp", "spicevmc", "default"]
 
-    def __init__(self, conn, mode=MODE_DEFAULT,
-                 parsexml=None, parsexmlnode=None):
-        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
-        self._mode = None
-        self._type = None
+    _XML_PROP_ORDER = ["mode", "type"]
 
-        if self._is_parse():
-            return
+    mode = XMLProperty(xpath="./@mode",
+                       default_cb=lambda s: "passthrough",
+                       default_name=MODE_DEFAULT)
 
-        self.mode = mode
-
-    def get_modes(self):
-        return self._modes[:]
-    modes = property(get_modes)
-
-    def get_mode(self):
-        return self._mode
-    def set_mode(self, val):
-        if val not in self.modes:
-            raise ValueError(_("Unknown smartcard mode '%s'") % val)
-        self._mode = val
-    mode = XMLProperty(get_mode, set_mode,
-                         xpath="./@mode")
-
-    def get_types(self):
-        return self._types[:]
-    types = property(get_types)
-
-    def get_type(self):
-        if self._type is None and self.mode == "passthrough":
+    def _default_type(self):
+        if self.mode == self.MODE_DEFAULT or self.mode == "passthrough":
             return "spicevmc"
-        return self._type
-    def set_type(self, val):
-        if val not in self.types:
-            raise ValueError(_("Unknown smartcard type '%s'") % val)
-        self._type = val
-    type = XMLProperty(get_type, set_type,
-                         xpath="./@type")
-
-    def _get_xml_config(self):
-        mode = self.mode
-
-        xml = "    <smartcard mode='%s'" % mode
-        if self.type:
-            xml += " type='%s'" % self.type
-        xml += ">\n"
-        xml += "    </smartcard>"
-
-        return xml
+        return "tcp"
+    type = XMLProperty(xpath="./@type",
+                       default_cb=_default_type,
+                       default_name=TYPE_DEFAULT)

@@ -74,8 +74,7 @@
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
-    <smartcard mode="passthrough" type="spicevmc">
-    </smartcard>
+    <smartcard mode="passthrough" type="spicevmc"/>
     <tpm model="tpm-tis">
       <backend type="passthrough">
         <device path="/dev/tpm0"/>
@@ -161,8 +160,7 @@
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
-    <smartcard mode="passthrough" type="spicevmc">
-    </smartcard>
+    <smartcard mode="passthrough" type="spicevmc"/>
     <tpm model="tpm-tis">
       <backend type="passthrough">
         <device path="/dev/tpm0"/>

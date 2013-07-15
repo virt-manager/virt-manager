@@ -1573,10 +1573,10 @@ def parse_network(guest, optstring, dev=None, mac=None):
 
     return dev
 
+
 ######################
 # --graphics parsing #
 ######################
-
 
 def parse_graphics(guest, optstring, dev=None):
     if optstring is None:
@@ -1628,10 +1628,10 @@ def parse_graphics(guest, optstring, dev=None):
 
     return dev
 
-#######################
-# --controller parsing #
-#######################
 
+########################
+# --controller parsing #
+########################
 
 def parse_controller(guest, optstring, dev=None):
     if optstring is None:
@@ -1663,10 +1663,10 @@ def parse_controller(guest, optstring, dev=None):
 
     return dev
 
+
 #######################
 # --smartcard parsing #
 #######################
-
 
 def parse_smartcard(guest, optstring, dev=None):
     if optstring is None:
@@ -1678,7 +1678,7 @@ def parse_smartcard(guest, optstring, dev=None):
         return None
 
     if not dev:
-        dev = virtinst.VirtualSmartCardDevice(guest.conn, opts.get("mode"))
+        dev = virtinst.VirtualSmartCardDevice(guest.conn)
 
     set_param = _build_set_param(dev, opts)
 
@@ -1690,10 +1690,10 @@ def parse_smartcard(guest, optstring, dev=None):
 
     return dev
 
+
 ######################
 # --redirdev parsing #
 ######################
-
 
 def parse_redirdev(guest, optstring, dev=None):
     if optstring is None:
@@ -1727,10 +1727,10 @@ def parse_redirdev(guest, optstring, dev=None):
 
     return dev
 
-#######################
-# --tpm parsing #
-#######################
 
+#################
+# --tpm parsing #
+#################
 
 def parse_tpm(guest, optstring, dev=None):
     if optstring is None:
@@ -1755,10 +1755,10 @@ def parse_tpm(guest, optstring, dev=None):
 
     return dev
 
+
 ######################
 # --watchdog parsing #
 ######################
-
 
 def parse_watchdog(guest, optstring, dev=None):
     # Peel the model type off the front
@@ -1782,10 +1782,10 @@ def parse_watchdog(guest, optstring, dev=None):
 
     return dev
 
+
 ########################
 # --memballoon parsing #
 ########################
-
 
 def parse_memballoon(guest, optstring, dev=None):
     if optstring is None:
@@ -1909,10 +1909,10 @@ def parse_filesystem(guest, optstring, dev=None):
 
     return dev
 
+
 ###################
 # --video parsing #
 ###################
-
 
 def parse_video(guest, optstr, dev=None):
     opts = {"model" : optstr}
@@ -1927,6 +1927,7 @@ def parse_video(guest, optstr, dev=None):
     if opts:
         raise ValueError(_("Unknown options %s") % opts.keys())
     return dev
+
 
 #####################
 # --soundhw parsing #
@@ -1947,10 +1948,10 @@ def parse_sound(guest, optstr, dev=None):
         raise ValueError(_("Unknown options %s") % opts.keys())
     return dev
 
+
 #####################
 # --hostdev parsing #
 #####################
-
 
 def parse_hostdev(guest, optstr, dev=None):
     ignore = dev

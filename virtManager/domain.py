@@ -809,6 +809,7 @@ class vmmDomain(vmmLibvirtObject):
     def define_smartcard_mode(self, devobj, newmodel):
         def change(editdev):
             editdev.mode = newmodel
+            editdev.type = editdev.TYPE_DEFAULT
         return self._redefine_device(change, devobj)
 
     # Controller define methods

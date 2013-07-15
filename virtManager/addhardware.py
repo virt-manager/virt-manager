@@ -1588,7 +1588,9 @@ class vmmAddHardware(vmmGObjectUI):
         mode = self.get_config_smartcard_mode()
 
         try:
-            self._dev = VirtualSmartCardDevice(conn, mode)
+            self._dev = VirtualSmartCardDevice(conn)
+            self._dev.mode = mode
+            self._dev.validate()
         except Exception, e:
             return self.err.val_err(_("Smartcard device parameter error"), e)
 
