@@ -25,56 +25,39 @@ class Seclabel(XMLBuilder):
     Class for generating <seclabel> XML
     """
 
-    SECLABEL_TYPE_DYNAMIC = "dynamic"
-    SECLABEL_TYPE_STATIC = "static"
-    SECLABEL_TYPE_DEFAULT = "default"
-    SECLABEL_TYPES = [SECLABEL_TYPE_DYNAMIC, SECLABEL_TYPE_STATIC]
+    TYPE_DYNAMIC = "dynamic"
+    TYPE_STATIC = "static"
+    TYPE_DEFAULT = "default"
+    TYPES = [TYPE_DYNAMIC, TYPE_STATIC]
 
     MODEL_DEFAULT = "default"
 
-    SECLABEL_MODEL_TEST = "testSecurity"
-    SECLABEL_MODEL_SELINUX = "selinux"
-    SECLABEL_MODEL_DAC = "dac"
-    SECLABEL_MODEL_NONE = "none"
-    SECLABEL_MODELS = [SECLABEL_MODEL_SELINUX,
-                        SECLABEL_MODEL_DAC,
-                        SECLABEL_MODEL_NONE]
+    MODEL_TEST = "testSecurity"
+    MODEL_SELINUX = "selinux"
+    MODEL_DAC = "dac"
+    MODEL_NONE = "none"
+    MODELS = [MODEL_SELINUX, MODEL_DAC, MODEL_NONE]
 
     _dumpxml_xpath = "/domain/seclabel"
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        XMLBuilder.__init__(self, conn, parsexml,
-                                                   parsexmlnode)
+    _XML_ROOT_NAME = "seclabel"
+    _XML_INDENT = 2
+    _XML_XPATH_RELATIVE = True
+    _XML_PROP_ORDER = ["type", "model", "relabel", "label", "imagelabel"]
 
-        self._type = None
-        self._model = None
-        self._label = None
-        self._imagelabel = None
-        self._relabel = None
-
-        if self._is_parse():
-            return
-
-        self.model = self.MODEL_DEFAULT
-        self.type = self.SECLABEL_TYPE_DEFAULT
-
-    def _get_default_model(self):
-        if (self.SECLABEL_MODEL_TEST in
-            [x.model for x in self.conn.caps.host.secmodels]):
-            return self.SECLABEL_MODEL_TEST
-
-        for model in self.SECLABEL_MODELS:
-            if model in [x.model for x in self.conn.caps.host.secmodels]:
-                return model
-        raise RuntimeError("No supported model found in capabilities")
-
-    def _guess_secmodel(self, label, imagelabel):
+    def _guess_secmodel(self):
         # We always want the testSecurity model when running tests
-        if (self.SECLABEL_MODEL_TEST in
+        if (self.MODEL_TEST in
             [x.model for x in self.conn.caps.host.secmodels]):
-            return self.SECLABEL_MODEL_TEST
+            return self.MODEL_TEST
+
+        label = self.label
+        imagelabel = self.imagelabel
 
         if not label and not imagelabel:
-            return self._get_default_model()
+            for model in self.MODELS:
+                if model in [x.model for x in self.conn.caps.host.secmodels]:
+                    return model
+            raise RuntimeError("No supported model found in capabilities")
 
         lab_len = imglab_len = None
         if label:
@@ -86,94 +69,29 @@ class Seclabel(XMLBuilder):
 
         lab_len = lab_len or imglab_len
         if lab_len == 3:
-            return self.SECLABEL_MODEL_SELINUX
+            return self.MODEL_SELINUX
         elif lab_len == 2:
-            return self.SECLABEL_MODEL_DAC
+            return self.MODEL_DAC
         else:
             raise ValueError("Unknown model type for label '%s'" % self.label)
+    def _get_default_model(self):
+        if self.type is None or self.type == self.TYPE_DEFAULT:
+            return None
+        return self._guess_secmodel()
+    model = XMLProperty(xpath="./seclabel/@model",
+                        default_cb=_get_default_model,
+                        default_name=MODEL_DEFAULT)
 
-    def get_type(self):
-        return self._type
-    def set_type(self, val):
-        if (val not in self.SECLABEL_TYPES and
-            val != self.SECLABEL_TYPE_DEFAULT):
-            raise ValueError("Unknown security type '%s'" % val)
-        self._type = val
-    type = XMLProperty(get_type, set_type,
-                         xpath="./seclabel/@type")
+    def _get_default_type(self):
+        if self.model is None or self.model == self.MODEL_DEFAULT:
+            return None
+        return self.TYPE_DYNAMIC
+    type = XMLProperty(xpath="./seclabel/@type",
+                       default_cb=_get_default_type,
+                       default_name=TYPE_DEFAULT)
 
-    def get_model(self):
-        return self._model
-    def set_model(self, val):
-        self._model = val
-    def _set_model_converter(self, val):
-        if val == "default":
-            return self._get_default_model()
-        return val
-    model = XMLProperty(get_model, set_model,
-                        set_converter=_set_model_converter,
-                          xpath="./seclabel/@model")
-
-    def get_label(self):
-        return self._label
-    def set_label(self, val):
-        self._label = val
-    label = XMLProperty(get_label, set_label,
-                          xpath="./seclabel/label")
-
-    def _get_relabel(self):
-        return self._relabel
-    def _set_relabel(self, val):
-        self._relabel = val
-    relabel = XMLProperty(_get_relabel, _set_relabel,
-                            xpath="./seclabel/@relabel")
-
-    def get_imagelabel(self):
-        return self._imagelabel
-    def set_imagelabel(self, val):
-        self._imagelabel = val
-    imagelabel = XMLProperty(get_imagelabel, set_imagelabel,
-                               xpath="./seclabel/imagelabel")
-
-    def _get_xml_config(self):
-        if (self.model == self.MODEL_DEFAULT and
-            self.type == self.SECLABEL_TYPE_DEFAULT):
-            return ""
-
-        model = self.model
-        typ = self.type
-        relabel = self.relabel
-
-        if typ == self.SECLABEL_TYPE_DEFAULT:
-            typ = self.SECLABEL_TYPE_DYNAMIC
-
-        if not typ:
-            raise RuntimeError("Security type and model must be specified")
-
-        if typ == self.SECLABEL_TYPE_STATIC:
-            if not self.label:
-                raise RuntimeError("A label must be specified for static "
-                                   "security type.")
-
-        if model == self.MODEL_DEFAULT:
-            model = self._guess_secmodel(self.label, self.imagelabel)
-
-        label_xml = ""
-        xml = "  <seclabel type='%s' model='%s'" % (typ, model)
-        if relabel is not None:
-            xml += " relabel='%s'" % (relabel and "yes" or "no")
-
-        if self.label:
-            label_xml += "    <label>%s</label>\n" % self.label
-        if self.imagelabel:
-            label_xml += "    <imagelabel>%s</imagelabel>\n" % self.imagelabel
-
-        if label_xml:
-            xml += ">\n"
-            xml += label_xml
-            xml += "  </seclabel>"
-        else:
-            xml += "/>"
-
-
-        return xml
+    label = XMLProperty(xpath="./seclabel/label")
+    imagelabel = XMLProperty(xpath="./seclabel/imagelabel")
+    relabel = XMLProperty(xpath="./seclabel/@relabel",
+                          get_converter=lambda s, x: bool(x == "yes"),
+                          set_converter=lambda s, x: x and "yes" or "no")

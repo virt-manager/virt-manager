@@ -575,6 +575,8 @@ class XMLProperty(property):
     def set_default(self, xmlbuilder):
         if not self._prop_is_unset(xmlbuilder) or not self._default_cb:
             return
+        if self._default_cb(xmlbuilder) is None:
+            return
         self.refresh_xml(xmlbuilder, force_call_fset=True)
 
 
@@ -667,7 +669,11 @@ class XMLBuilder(object):
         @rtype: str
         """
         if self._xml_ctx:
-            node = _get_xpath_node(self._xml_ctx, self._dumpxml_xpath)
+            dumpxml_path = self._dumpxml_xpath
+            if self._xml_fixup_relative_xpath:
+                dumpxml_path = "."
+
+            node = _get_xpath_node(self._xml_ctx, dumpxml_path)
             if not node:
                 ret = ""
             else:

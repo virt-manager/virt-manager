@@ -58,7 +58,7 @@
     <console type="pty"/>
     <memballoon model="none"/>
   </devices>
-  <seclabel type="static" model="apparmor">
+  <seclabel type="static" model="apparmor" relabel="yes">
     <label>barlabel</label>
     <imagelabel>fooimage</imagelabel>
   </seclabel>

@@ -1361,7 +1361,7 @@ def parse_security(guest, security):
     if label:
         secmodel.label = label
         if not mode:
-            mode = secmodel.SECLABEL_TYPE_STATIC
+            mode = secmodel.TYPE_STATIC
     if mode:
         secmodel.type = mode
 

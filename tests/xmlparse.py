@@ -122,6 +122,7 @@ class XMLParseTest(unittest.TestCase):
         check("model", "selinux", "apparmor")
         check("label", "foolabel", "barlabel")
         check("imagelabel", "imagelabel", "fooimage")
+        check("relabel", False, True)
 
         check = self._make_checker(guest.installer)
         check("type", "kvm", "test")
@@ -189,9 +190,7 @@ class XMLParseTest(unittest.TestCase):
         self.assertTrue(guest.clock.get_xml_config().startswith("<clock"))
 
         check = self._make_checker(guest.seclabel)
-        check("model", None)
-        guest.seclabel.model = "default"
-        self.assertEquals(guest.seclabel.model, "testSecurity")
+        check("model", None, "testSecurity")
         check("type", None, "static")
         check("label", None, "frob")
         self.assertTrue(

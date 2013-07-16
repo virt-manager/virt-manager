@@ -872,7 +872,7 @@ class TestXMLConfig(unittest.TestCase):
 
         g.clock.offset = "localtime"
 
-        g.seclabel.type = g.seclabel.SECLABEL_TYPE_STATIC
+        g.seclabel.type = g.seclabel.TYPE_STATIC
         g.seclabel.model = "selinux"
         g.seclabel.label = "foolabel"
         g.seclabel.imagelabel = "imagelabel"
