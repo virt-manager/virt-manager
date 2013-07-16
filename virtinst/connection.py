@@ -86,12 +86,19 @@ class VirtualConnection(object):
     def __init__(self, uri):
         _initial_uri = uri or ""
 
-        # virtinst unit test URI handling
+        self._fake_pretty_name = None
+        self._fake_libvirt_version = None
+        self._fake_conn_version = None
+        self._daemon_version = None
+        self._conn_version = None
+
         if _initial_uri.startswith(_virtinst_uri_magic):
+            # virtinst unit test URI handling
             uri = _initial_uri.replace(_virtinst_uri_magic, "")
             ret = uri.split(",", 1)
             self._open_uri = ret[0]
             self._test_opts = parse_optstr(len(ret) > 1 and ret[1] or "")
+            self._early_virtinst_test_uri()
             self._uri = self._virtinst_uri_make_fake()
         else:
             self._open_uri = _initial_uri
@@ -101,11 +108,6 @@ class VirtualConnection(object):
         self._libvirtconn = None
         self._urisplits = util.uri_split(self._uri)
         self._caps = None
-
-        self._fake_libvirt_version = None
-        self._fake_conn_version = None
-        self._daemon_version = None
-        self._conn_version = None
 
         self._support_cache = {}
         self._fetch_cache = {}
@@ -262,6 +264,9 @@ class VirtualConnection(object):
     # Public URI bits #
     ###################
 
+    def fake_name(self):
+        return self._fake_pretty_name
+
     def is_remote(self):
         if (hasattr(self, "_virtinst__fake_conn_remote") or
             self._urisplits[2]):
@@ -361,16 +366,12 @@ class VirtualConnection(object):
             return "lxc+abc:///"
         return self._open_uri
 
-    def _fixup_virtinst_test_uri(self, conn):
-        """
-        This hack allows us to fake various drivers via passing a magic
-        URI string to virt-*. Helps with testing
-        """
+    def _early_virtinst_test_uri(self):
+        # Need tmpfile names to be deterministic
         if not self._test_opts:
             return
-        opts = self._test_opts.copy()
+        opts = self._test_opts
 
-        # Need tmpfile names to be deterministic
         if "predictable" in opts:
             opts.pop("predictable")
             import tempfile
@@ -381,6 +382,19 @@ class VirtualConnection(object):
         if "remote" in opts:
             opts.pop("remote")
             setattr(self, "_virtinst__fake_conn_remote", True)
+
+        if "prettyname" in opts:
+            self._fake_pretty_name = opts.pop("prettyname")
+
+
+    def _fixup_virtinst_test_uri(self, conn):
+        """
+        This hack allows us to fake various drivers via passing a magic
+        URI string to virt-*. Helps with testing
+        """
+        if not self._test_opts:
+            return
+        opts = self._test_opts.copy()
 
         # Fake capabilities
         if "caps" in opts:

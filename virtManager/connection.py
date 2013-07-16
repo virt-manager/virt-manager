@@ -382,6 +382,9 @@ class vmmConnection(vmmGObject):
             else:
                 hv += " %s" % os.path.basename(path)
 
+        if self._backend.fake_name():
+            hv = self._backend.fake_name()
+
         return "%s (%s)" % (rest, hv)
 
     def get_pretty_desc_inactive(self, shorthost=True, transport=False):
