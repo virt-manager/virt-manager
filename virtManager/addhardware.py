@@ -31,7 +31,7 @@ from virtinst import (VirtualCharDevice,
                       VirtualVideoDevice, VirtualWatchdog,
                       VirtualFilesystem, VirtualSmartCardDevice,
                       VirtualRedirDevice, VirtualTPMDevice)
-from virtinst.VirtualController import VirtualControllerSCSI
+from virtinst import VirtualController
 
 import virtManager.util as util
 import virtManager.uihelpers as uihelpers
@@ -1368,8 +1368,9 @@ class vmmAddHardware(vmmGObjectUI):
         disk.vmm_controller = None
         if (controller_model == "virtio-scsi") and (bus == "scsi"):
             controllers = self.vm.get_controller_devices()
-            controller = VirtualControllerSCSI(conn)
-            controller.set_model(controller_model)
+            controller = VirtualController(conn)
+            controller.type = "scsi"
+            controller.model = controller_model
             disk.vmm_controller = controller
             for d in controllers:
                 if controller.type == d.type:

@@ -18,194 +18,48 @@
 # MA 02110-1301 USA.
 
 from virtinst.VirtualDevice import VirtualDevice
-from virtinst.xmlbuilder import XMLBuilder, XMLProperty
-import logging
+from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualController(VirtualDevice):
-
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_CONTROLLER
 
-    CONTROLLER_TYPE_IDE             = "ide"
-    CONTROLLER_TYPE_FDC             = "fdc"
-    CONTROLLER_TYPE_SCSI            = "scsi"
-    CONTROLLER_TYPE_SATA            = "sata"
-    CONTROLLER_TYPE_VIRTIOSERIAL    = "virtio-serial"
-    CONTROLLER_TYPE_USB             = "usb"
-    CONTROLLER_TYPE_PCI             = "pci"
-    CONTROLLER_TYPE_CCID            = "ccid"
-    CONTROLLER_TYPES = [CONTROLLER_TYPE_IDE, CONTROLLER_TYPE_FDC,
-                        CONTROLLER_TYPE_SCSI, CONTROLLER_TYPE_SATA,
-                        CONTROLLER_TYPE_VIRTIOSERIAL, CONTROLLER_TYPE_USB,
-                        CONTROLLER_TYPE_PCI, CONTROLLER_TYPE_CCID]
+    TYPE_IDE             = "ide"
+    TYPE_FDC             = "fdc"
+    TYPE_SCSI            = "scsi"
+    TYPE_SATA            = "sata"
+    TYPE_VIRTIOSERIAL    = "virtio-serial"
+    TYPE_USB             = "usb"
+    TYPE_PCI             = "pci"
+    TYPE_CCID            = "ccid"
+    TYPES = [TYPE_IDE, TYPE_FDC,
+             TYPE_SCSI, TYPE_SATA,
+             TYPE_VIRTIOSERIAL, TYPE_USB,
+             TYPE_PCI, TYPE_CCID]
 
     @staticmethod
     def pretty_type(ctype):
         pretty_mappings = {
-            VirtualController.CONTROLLER_TYPE_IDE           : "IDE",
-            VirtualController.CONTROLLER_TYPE_FDC           : "Floppy",
-            VirtualController.CONTROLLER_TYPE_SCSI          : "SCSI",
-            VirtualController.CONTROLLER_TYPE_SATA          : "SATA",
-            VirtualController.CONTROLLER_TYPE_VIRTIOSERIAL  : "Virtio Serial",
-            VirtualController.CONTROLLER_TYPE_USB           : "USB",
-            VirtualController.CONTROLLER_TYPE_PCI           : "PCI",
-            VirtualController.CONTROLLER_TYPE_CCID          : "CCID",
+            VirtualController.TYPE_IDE           : "IDE",
+            VirtualController.TYPE_FDC           : "Floppy",
+            VirtualController.TYPE_SCSI          : "SCSI",
+            VirtualController.TYPE_SATA          : "SATA",
+            VirtualController.TYPE_VIRTIOSERIAL  : "Virtio Serial",
+            VirtualController.TYPE_USB           : "USB",
+            VirtualController.TYPE_PCI           : "PCI",
+            VirtualController.TYPE_CCID          : "CCID",
        }
 
         if ctype not in pretty_mappings:
             return ctype
         return pretty_mappings[ctype]
 
-    @staticmethod
-    def get_class_for_type(ctype):
-        if ctype not in VirtualController.CONTROLLER_TYPES:
-            raise ValueError("Unknown controller type '%s'" % ctype)
+    _XML_PROP_ORDER = ["type", "index", "model"]
 
-        if ctype == VirtualController.CONTROLLER_TYPE_IDE:
-            return VirtualControllerIDE
-        elif ctype == VirtualController.CONTROLLER_TYPE_FDC:
-            return VirtualControllerFDC
-        elif ctype == VirtualController.CONTROLLER_TYPE_SCSI:
-            return VirtualControllerSCSI
-        elif ctype == VirtualController.CONTROLLER_TYPE_SATA:
-            return VirtualControllerSATA
-        elif ctype == VirtualController.CONTROLLER_TYPE_VIRTIOSERIAL:
-            return VirtualControllerVirtioSerial
-        elif ctype == VirtualController.CONTROLLER_TYPE_USB:
-            return VirtualControllerUSB
+    type = XMLProperty(xpath="./@type")
+    model = XMLProperty(xpath="./@model")
+    vectors = XMLProperty(xpath="./@vectors", is_int=True)
+    ports = XMLProperty(xpath="./@ports", is_int=True)
+    master_startport = XMLProperty(xpath="./master/@startport", is_int=True)
 
-    _controller_type = None
-
-    def __init__(self, conn, parsexml=None, parsexmlnode=None, model=None):
-        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
-
-        self._index = 0
-        self._ports = None
-        self._vectors = None
-        self._model = None
-        self._master = VirtualDeviceMaster(conn,
-                                           parsexml=parsexml,
-                                           parsexmlnode=parsexmlnode)
-
-        if self._is_parse():
-            return
-
-        self.model = model
-
-    def get_type(self):
-        return self._controller_type
-    type = XMLProperty(get_type,
-                         xpath="./@type")
-
-    def get_model(self):
-        return self._model
-    def set_model(self, model):
-        self._model = model
-    model = XMLProperty(get_model, set_model,
-                         xpath="./@model")
-
-    def get_index(self):
-        return self._index
-    def set_index(self, val):
-        self._index = int(val)
-    index = XMLProperty(get_index, set_index,
-                          xpath="./@index")
-
-    def get_vectors(self):
-        return self._vectors
-    def set_vectors(self, val):
-        self._vectors = val
-    vectors = XMLProperty(get_vectors, set_vectors,
-                            xpath="./@vectors")
-
-    def get_ports(self):
-        return self._ports
-    def set_ports(self, val):
-        self._ports = val
-    ports = XMLProperty(get_ports, set_ports,
-                          xpath="./@ports")
-
-    def set_master(self, masterstr):
-        self._master.parse_friendly_master(masterstr)
-    def get_master(self):
-        return self._master
-
-    def _extra_config(self):
-        return ""
-
-    def _get_xml_config(self):
-        extra = self._extra_config()
-
-        xml = "    <controller type='%s' index='%s'" % (self.type, self.index)
-        if self.model:
-            xml += " model='%s'" % self.model
-        xml += extra
-        childxml = self.indent(self._master.get_xml_config(), 6)
-        if childxml:
-            childxml += "\n"
-        if len(childxml) == 0:
-            return xml + "/>"
-        xml += ">\n"
-        xml += childxml
-        xml += "    </controller>"
-        return xml
-
-
-class VirtualControllerIDE(VirtualController):
-    _controller_type = VirtualController.CONTROLLER_TYPE_IDE
-
-
-class VirtualControllerFDC(VirtualController):
-    _controller_type = VirtualController.CONTROLLER_TYPE_FDC
-
-
-class VirtualControllerSCSI(VirtualController):
-    _controller_type = VirtualController.CONTROLLER_TYPE_SCSI
-
-
-class VirtualControllerSATA(VirtualController):
-    _controller_type = VirtualController.CONTROLLER_TYPE_SATA
-
-
-class VirtualControllerVirtioSerial(VirtualController):
-    _controller_type = VirtualController.CONTROLLER_TYPE_VIRTIOSERIAL
-
-    def _extra_config(self):
-        xml = ""
-        if self.ports is not None:
-            xml += " ports='%s'" % self.ports
-        if self.vectors is not None:
-            xml += " vectors='%s'" % self.vectors
-
-        return xml
-
-
-class VirtualControllerUSB(VirtualController):
-    _controller_type = VirtualController.CONTROLLER_TYPE_USB
-
-
-class VirtualDeviceMaster(XMLBuilder):
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
-
-        self._startport = None
-
-    def parse_friendly_master(self, masterstr):
-        try:
-            int(masterstr)
-            self._startport = masterstr
-        except:
-            logging.exception("Error parsing device master.")
-            return None
-
-    def _get_startport(self):
-        return self._startport
-    def _set_startport(self, val):
-        self._startport = val
-    startport = XMLProperty(_get_startport, _set_startport, xpath="./master/@startport")
-
-    def _get_xml_config(self):
-        if self.startport is None:
-            return
-
-        return "<master startport='%s'/>" % self.startport
+    index = XMLProperty(xpath="./@index", is_int=True, default_cb=lambda s: 0)

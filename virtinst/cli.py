@@ -1639,21 +1639,20 @@ def parse_controller(guest, optstring, dev=None):
 
     # Peel the mode off the front
     opts = parse_optstr(optstring, remove_first="type")
-    ctrltype = get_opt_param(opts, "type")
     address = get_opt_param(opts, "address")
-    master = get_opt_param(opts, "master")
 
     if not dev:
-        cl = virtinst.VirtualController.get_class_for_type(ctrltype)
-        dev = cl(guest.conn, model=opts.get("model"))
+        dev = virtinst.VirtualController(guest.conn)
 
     set_param = _build_set_param(dev, opts)
 
+    set_param("type", "type")
     set_param("model", "model")
     set_param("index", "index")
-    dev.set_address(address)
-    if master:
-        dev.set_master(master)
+    set_param("master_startport", "master")
+    if address:
+        dev.set_address(address)
+
     if opts:
         raise ValueError(_("Unknown options %s") % opts.keys())
 

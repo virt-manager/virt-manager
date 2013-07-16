@@ -36,7 +36,7 @@ from virtinst.VirtualDevice import VirtualDevice
 from virtinst.VirtualDisk import VirtualDisk
 from virtinst.VirtualInputDevice import VirtualInputDevice
 from virtinst.VirtualCharDevice import VirtualCharDevice
-from virtinst.VirtualController import VirtualControllerUSB
+from virtinst.VirtualController import VirtualController
 from virtinst.Clock import Clock
 from virtinst.Seclabel import Seclabel
 from virtinst.CPU import CPU
@@ -721,9 +721,8 @@ class Guest(XMLBuilder):
                 if origpath:
                     dev.path = origpath
         def get_vscsi_ctrl_xml():
-            vscsi_class = virtinst.VirtualController.get_class_for_type(
-                          virtinst.VirtualController.CONTROLLER_TYPE_SCSI)
-            ctrl = vscsi_class(self.conn)
+            ctrl = virtinst.VirtualController(self.conn)
+            ctrl.type = "scsi"
             ctrl.set_address("spapr-vio")
             return ctrl.get_xml_config()
 
@@ -1293,23 +1292,27 @@ class Guest(XMLBuilder):
                 remove_func(d)
 
     def add_usb_ich9_controllers(self):
-        ctrl = VirtualControllerUSB(self.conn,
-                                    model="ich9-ehci1")
+        ctrl = VirtualController(self.conn)
+        ctrl.type = "usb"
+        ctrl.model = "ich9-ehci1"
         self.add_device(ctrl)
 
-        ctrl = VirtualControllerUSB(self.conn,
-                                    model="ich9-uhci1")
-        ctrl.get_master().startport = 0
+        ctrl = VirtualController(self.conn)
+        ctrl.type = "usb"
+        ctrl.model = "ich9-uhci1"
+        ctrl.master_startport = 0
         self.add_device(ctrl)
 
-        ctrl = VirtualControllerUSB(self.conn,
-                                    model="ich9-uhci2")
-        ctrl.get_master().startport = 2
+        ctrl = VirtualController(self.conn)
+        ctrl.type = "usb"
+        ctrl.model = "ich9-uhci2"
+        ctrl.master_startport = 2
         self.add_device(ctrl)
 
-        ctrl = VirtualControllerUSB(self.conn,
-                                    model="ich9-uhci3")
-        ctrl.get_master().startport = 4
+        ctrl = VirtualController(self.conn)
+        ctrl.type = "usb"
+        ctrl.model = "ich9-uhci3"
+        ctrl.master_startport = 4
         self.add_device(ctrl)
 
     def _set_defaults(self, devlist_func, remove_func, features):

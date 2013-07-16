@@ -768,9 +768,11 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(d)
 
         # Controller devices
-        c1 = VirtualController.get_class_for_type(VirtualController.CONTROLLER_TYPE_IDE)(g.conn)
+        c1 = VirtualController(g.conn)
+        c1.type = "ide"
         c1.index = "3"
-        c2 = VirtualController.get_class_for_type(VirtualController.CONTROLLER_TYPE_VIRTIOSERIAL)(g.conn)
+        c2 = VirtualController(g.conn)
+        c2.type = "virtio-serial"
         c2.ports = "32"
         c2.vectors = "17"
         g.add_device(c1)

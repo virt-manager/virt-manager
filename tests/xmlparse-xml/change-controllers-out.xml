@@ -22,8 +22,10 @@
     <controller type="ide" index="1"/>
     <controller type="virtio-serial" index="7" ports="5"/>
     <controller type="scsi" index="2"/>
-    <controller type="usb" index="9" model="ich9-ehci1">
+    <controller type="usb" index="9" model="ich9-uhci1">
+      <master startport="2"/>
       <address type="pci" domain="0" bus="0" slot="4" function="2"/>
     </controller>
+    <controller type="usb" index="0" model="ich9-ehci1"/>
   </devices>
 </domain>

@@ -438,10 +438,10 @@ class XMLProperty(property):
                 return None
             return bool(val)
         elif self._is_int and val is not None:
-            base = 10
+            intkwargs = {}
             if "0x" in str(val):
-                base = 16
-            return int(val, base=base)
+                intkwargs["base"] = 16
+            return int(val, **intkwargs)
         elif self._convert_value_for_getter_cb:
             return self._convert_value_for_getter_cb(xmlbuilder, val)
         elif self._is_multi and val is None:

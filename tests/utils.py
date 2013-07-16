@@ -176,7 +176,7 @@ def get_basic_paravirt_guest(installer=None):
     g.uuid = "12345678-1234-1234-1234-123456789012"
     gdev = VirtualGraphics(_conn)
     gdev.type = "vnc"
-    gdev.keymap= "ja"
+    gdev.keymap = "ja"
     g.add_device(gdev)
     g.vcpus = 5
 

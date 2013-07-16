@@ -419,7 +419,6 @@ class vmmDomain(vmmLibvirtObject):
     ##############################
 
     # Rename
-
     def define_name(self, newname):
         # Do this, so that _guest_to_define has original inactive XML
         self._invalidate_xml()
@@ -480,7 +479,6 @@ class vmmDomain(vmmLibvirtObject):
         return ret
 
     # CPU define methods
-
     def define_vcpus(self, vcpus, maxvcpus):
         def change(guest):
             guest.vcpus = int(vcpus)
@@ -535,7 +533,6 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine_guest(change)
 
     # Mem define methods
-
     def define_both_mem(self, memory, maxmem):
         def change(guest):
             guest.memory = int(memory)
@@ -543,7 +540,6 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine_guest(change)
 
     # Security define methods
-
     def define_seclabel(self, model, t, label, relabel):
         def change(guest):
             seclabel = guest.seclabel
@@ -564,7 +560,6 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine_guest(change)
 
     # Machine config define methods
-
     def define_acpi(self, newvalue):
         def change(guest):
             guest.features["acpi"] = newvalue
@@ -590,7 +585,6 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine_guest(change)
 
     # Boot define methods
-
     def set_boot_device(self, boot_list):
         def change(guest):
             guest.installer.bootconfig.bootorder = boot_list
@@ -611,7 +605,6 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine_guest(change)
 
     # Disk define methods
-
     def define_storage_media(self, devobj, newpath):
         def change(editdev):
             editdev.path = newpath
@@ -730,7 +723,6 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine_device(change, devobj)
 
     # Graphics define methods
-
     def define_graphics_password(self, devobj, newval):
         def change(editdev):
             editdev.passwd = newval or None
@@ -764,7 +756,6 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine_device(change, devobj)
 
     # Sound define methods
-
     def define_sound_model(self, devobj, newmodel):
         def change(editdev):
             if editdev.model != newmodel:
@@ -772,8 +763,7 @@ class vmmDomain(vmmLibvirtObject):
             editdev.model = newmodel
         return self._redefine_device(change, devobj)
 
-    # Vide define methods
-
+    # Video define methods
     def define_video_model(self, devobj, newmodel):
         def change(editdev):
             if newmodel == editdev.model:
@@ -792,7 +782,6 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine_device(change, devobj)
 
     # Watchdog define methods
-
     def define_watchdog_model(self, devobj, newval):
         def change(editdev):
             if editdev.model != newval:
@@ -805,7 +794,6 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine_device(change, devobj)
 
     # Smartcard define methods
-
     def define_smartcard_mode(self, devobj, newmodel):
         def change(editdev):
             editdev.mode = newmodel
@@ -813,7 +801,6 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine_device(change, devobj)
 
     # Controller define methods
-
     def define_controller_model(self, devobj, newmodel):
         def change(editdev):
             ignore = editdev
@@ -821,20 +808,13 @@ class vmmDomain(vmmLibvirtObject):
             guest = self._get_guest_to_define()
             ctrls = guest.get_devices("controller")
             ctrls = [x for x in ctrls if (x.type ==
-                     virtinst.VirtualController.CONTROLLER_TYPE_USB)]
+                     virtinst.VirtualController.TYPE_USB)]
             for dev in ctrls:
                 guest.remove_device(dev)
 
             if newmodel == "ich9-ehci1":
                 guest.add_usb_ich9_controllers()
 
-        return self._redefine_device(change, devobj)
-
-    # TPM define methods
-
-    def define_tpm_type(self, devobj, newtype):
-        def change(editdev):
-            editdev.type = newtype
         return self._redefine_device(change, devobj)
 
 

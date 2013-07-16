@@ -3367,7 +3367,7 @@ class vmmDetails(vmmGObjectUI):
         combo = self.widget("controller-model-combo")
         model = combo.get_model()
         model.clear()
-        if dev.type == virtinst.VirtualController.CONTROLLER_TYPE_USB:
+        if dev.type == virtinst.VirtualController.TYPE_USB:
             model.append(["Default", "Default"])
             model.append(["ich9-ehci1", "USB 2"])
             self.widget("config-remove").set_sensitive(False)

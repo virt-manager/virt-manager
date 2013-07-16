@@ -365,25 +365,23 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(dev1)
         check("type", "ide")
-        check("index", "3", "1")
+        check("index", 3, 1)
 
         check = self._make_checker(dev2)
         check("type", "virtio-serial")
-        check("index", "0", "7")
-        check("ports", "32", "5")
-        check("vectors", "17", None)
+        check("index", 0, 7)
+        check("ports", 32, 5)
+        check("vectors", 17, None)
 
         check = self._make_checker(dev3)
         check("type", "scsi")
-        check("index", "1", "2")
+        check("index", 1, 2)
 
         check = self._make_checker(dev4)
-        check("type", "usb")
-        check("index", "3", "9")
-        check("model", "ich9-ehci1")
-
-        check = self._make_checker(dev4.get_master())
-        check("startport", "4", "2", None)
+        check("type", "usb", "foo", "usb")
+        check("index", 3, 9)
+        check("model", "ich9-ehci1", "ich9-uhci1")
+        check("master_startport", 4, 2)
 
         self._alter_compare(guest.get_xml_config(), outfile)
 
