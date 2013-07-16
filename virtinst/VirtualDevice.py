@@ -20,7 +20,6 @@
 # MA 02110-1301 USA.
 
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty
-import logging
 
 
 class VirtualDevice(XMLBuilder):
@@ -104,9 +103,6 @@ class VirtualDevice(XMLBuilder):
         ignore = meter
         return
 
-    def set_address(self, addrstr):
-        self.address.set_addrstr(addrstr)
-
 
 class VirtualDeviceAlias(XMLBuilder):
     _XML_ROOT_NAME = "alias"
@@ -140,22 +136,21 @@ class VirtualDeviceAddress(XMLBuilder):
     _XML_PROP_ORDER = ["type", "domain", "bus", "slot", "function"]
 
     def set_addrstr(self, addrstr):
-        try:
-            if addrstr.count(":") in [1, 2] and addrstr.count("."):
-                self.type = self.ADDRESS_TYPE_PCI
-                addrstr, self.function = addrstr.split(".", 1)
-                addrstr, self.slot = addrstr.rsplit(":", 1)
-                self.domain = "0"
-                if addrstr.count(":"):
-                    self.domain, self.bus = addrstr.split(":", 1)
-            elif addrstr == "spapr-vio":
-                self.type = self.ADDRESS_TYPE_SPAPR_VIO
-            else:
-                raise ValueError(_("Could not determine or unsupported "
-                                   "format of '%s'") % addrstr)
-        except:
-            logging.exception("Error parsing address.")
-            return None
+        if addrstr is None:
+            return
+
+        if addrstr.count(":") in [1, 2] and addrstr.count("."):
+            self.type = self.ADDRESS_TYPE_PCI
+            addrstr, self.function = addrstr.split(".", 1)
+            addrstr, self.slot = addrstr.rsplit(":", 1)
+            self.domain = "0"
+            if addrstr.count(":"):
+                self.domain, self.bus = addrstr.split(":", 1)
+        elif addrstr == "spapr-vio":
+            self.type = self.ADDRESS_TYPE_SPAPR_VIO
+        else:
+            raise ValueError(_("Could not determine or unsupported "
+                               "format of '%s'") % addrstr)
 
 
     def clear(self):

@@ -780,7 +780,7 @@ class TestXMLConfig(unittest.TestCase):
         net3.macaddr = "22:22:22:22:22:22"
         net3.network = "default"
         net3.model = "spapr-vlan"
-        net3.set_address("spapr-vio")
+        net3.address.set_addrstr("spapr-vio")
         g.add_device(net1)
         g.add_device(net2)
         g.add_device(net3)

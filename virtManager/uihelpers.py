@@ -673,7 +673,6 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
 
 def validate_network(err, conn, nettype, devname, macaddr, model=None):
     net = None
-    addr = None
 
     if nettype is None:
         return None
@@ -723,9 +722,8 @@ def validate_network(err, conn, nettype, devname, macaddr, model=None):
         net.macaddr = macaddr
         net.model = model
         if net.model == "spapr-vlan":
-            addr = "spapr-vio"
+            net.address.set_addrstr("spapr-vio")
 
-        net.set_address(addr)
 
     except Exception, e:
         return err.val_err(_("Error with network parameters."), e)

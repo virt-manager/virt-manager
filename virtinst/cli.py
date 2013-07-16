@@ -1657,7 +1657,7 @@ def parse_controller(guest, optstring, dev=None):
     set_param("index", "index")
     set_param("master_startport", "master")
     if address:
-        dev.set_address(address)
+        dev.address.set_addrstr(address)
 
     if opts:
         raise ValueError(_("Unknown options %s") % opts.keys())

@@ -638,7 +638,7 @@ class vmmDomain(vmmLibvirtObject):
                 return
 
             editdev.address.clear()
-            editdev.set_address(addr)
+            editdev.address.set_addrstr(addr)
 
             if oldprefix == editdev.get_target_prefix()[0]:
                 return
@@ -707,7 +707,7 @@ class vmmDomain(vmmLibvirtObject):
         def change(editdev):
             if editdev.model != newmodel:
                 editdev.address.clear()
-                editdev.set_address(addr)
+                editdev.address.set_addrstr(addr)
             editdev.model = newmodel
         return self._redefine_device(change, devobj)
 

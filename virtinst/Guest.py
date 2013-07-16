@@ -677,7 +677,7 @@ class Guest(XMLBuilder):
         def get_vscsi_ctrl_xml():
             ctrl = virtinst.VirtualController(self.conn)
             ctrl.type = "scsi"
-            ctrl.set_address("spapr-vio")
+            ctrl.address.set_addrstr("spapr-vio")
             return ctrl.get_xml_config()
 
         xml = self._get_emulator_xml()
