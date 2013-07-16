@@ -91,6 +91,10 @@ class Installer(XMLBuilder):
         self._os_type = "xen"
 
 
+    #####################
+    # XML related props #
+    #####################
+
     def _get_bootconfig(self):
         return self._bootconfig
     bootconfig = property(_get_bootconfig)
@@ -147,6 +151,11 @@ class Installer(XMLBuilder):
     init = XMLProperty(_get_init, _set_init,
                          xpath="./os/init")
 
+
+    ######################
+    # Non-XML properties #
+    ######################
+
     def get_scratchdir(self):
         if not self.scratchdir_required():
             return None
@@ -168,7 +177,7 @@ class Installer(XMLBuilder):
     def get_location(self):
         return self._location
     def set_location(self, val):
-        self._location = val
+        self._location = self._validate_location(val)
     location = property(get_location, set_location)
 
     def get_initrd_injections(self):
@@ -177,7 +186,6 @@ class Installer(XMLBuilder):
         self._initrd_injections = val
     initrd_injections = property(get_initrd_injections, set_initrd_injections)
 
-    # extra arguments to pass to the guest installer
     def get_extra_args(self):
         return self._install_bootconfig.kernel_args
     def set_extra_args(self, val):
@@ -185,23 +193,10 @@ class Installer(XMLBuilder):
     extraargs = property(get_extra_args, set_extra_args)
 
 
-    # Public helper methods
-    def scratchdir_required(self):
-        """
-        Returns true if scratchdir is needed for the passed install parameters.
-        Apps can use this to determine if they should attempt to ensure
-        scratchdir permissions are adequate
-        """
-        return False
+    ###################
+    # Private helpers #
+    ###################
 
-    def is_hvm(self):
-        return self.os_type == "hvm"
-    def is_xenpv(self):
-        return self.os_type in ["xen", "linux"]
-    def is_container(self):
-        return self.os_type == "exe"
-
-    # Private methods
     def _get_system_scratchdir(self):
         if platform.system() == "SunOS":
             return "/var/tmp"
@@ -226,9 +221,6 @@ class Installer(XMLBuilder):
                 os.makedirs(scratch, 0751)
 
         return scratch
-
-    def _get_bootdev(self, isinstall, guest):
-        raise NotImplementedError("Must be implemented in subclass")
 
     def _build_boot_order(self, isinstall, guest):
         bootorder = [self._get_bootdev(isinstall, guest)]
@@ -311,9 +303,6 @@ class Installer(XMLBuilder):
 
         return osblob
 
-
-    # Method definitions
-
     def _get_xml_config(self, guest, isinstall):
         """
         Generate the portion of the guest xml that determines boot devices
@@ -343,6 +332,41 @@ class Installer(XMLBuilder):
 
         return self._get_osblob_helper(guest, isinstall, bootconfig)
 
+
+    ##########################
+    # Internal API overrides #
+    ##########################
+
+    def _get_bootdev(self, isinstall, guest):
+        raise NotImplementedError("Must be implemented in subclass")
+
+    def _validate_location(self, val):
+        return val
+
+    def _prepare(self, guest, meter):
+        ignore = guest
+        ignore = meter
+
+
+    ##############
+    # Public API #
+    ##############
+
+    def scratchdir_required(self):
+        """
+        Returns true if scratchdir is needed for the passed install parameters.
+        Apps can use this to determine if they should attempt to ensure
+        scratchdir permissions are adequate
+        """
+        return False
+
+    def is_hvm(self):
+        return self.os_type == "hvm"
+    def is_xenpv(self):
+        return self.os_type in ["xen", "linux"]
+    def is_container(self):
+        return self.os_type == "exe"
+
     def has_install_phase(self):
         """
         Return True if the requested setup is actually installing an OS
@@ -368,14 +392,15 @@ class Installer(XMLBuilder):
         self.install_devices = []
 
     def prepare(self, guest, meter):
+        self.cleanup()
+        self._prepare(guest, meter)
+
+    def check_location(self):
         """
-        Fetch any files needed for installation.
-        @param guest: guest instance being installed
-        @type guest: L{Guest}
-        @param meter: progress meter
-        @type meter: Urlgrabber ProgressMeter
+        Validate self.location seems to work. This will might hit the
+        network so we don't want to do it on demand.
         """
-        pass
+        return True
 
     def detect_distro(self):
         """
@@ -439,33 +464,14 @@ class PXEInstaller(Installer):
 
 class LiveCDInstaller(Installer):
     _has_install_phase = False
+    cdrom = True
 
     def _validate_location(self, val):
-        if not val:
-            return None
-        return self._make_cdrom_dev(val)
-    def _get_location(self):
-        return self._location
-    def _set_location(self, val):
-        self._validate_location(val)
-        self._location = val
-        self.cdrom = True
-    location = property(_get_location, _set_location)
-
-
-    # General Installer methods
-    def prepare(self, guest, meter):
-        self.cleanup()
-
-        disk = self._validate_location(self.location)
-
-        if not disk:
-            raise ValueError(_("CDROM media must be specified for the live "
-                               "CD installer."))
-
-        self.install_devices.append(disk)
-
-    # Internal methods
+        return self._make_cdrom_dev(val).path
+    def _prepare(self, guest, meter):
+        ignore = guest
+        ignore = meter
+        self.install_devices.append(self._make_cdrom_dev(self.location))
     def _get_bootdev(self, isinstall, guest):
         return self.bootconfig.BOOT_DEVICE_CDROM
 

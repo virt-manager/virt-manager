@@ -154,6 +154,90 @@ def _upload_file(conn, meter, destpool, src):
     return vol
 
 
+def _perform_initrd_injections(initrd, injections, scratchdir):
+    """
+    Insert files into the root directory of the initial ram disk
+    """
+    if not injections:
+        return
+
+    tempdir = tempfile.mkdtemp(dir=scratchdir)
+    os.chmod(tempdir, 0775)
+
+    for filename in injections:
+        logging.debug("Copying %s to the initrd.", filename)
+        shutil.copy(filename, tempdir)
+
+    logging.debug("Appending to the initrd.")
+    find_proc = subprocess.Popen(['find', '.', '-print0'],
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 cwd=tempdir)
+    cpio_proc = subprocess.Popen(['cpio', '-o', '--null', '-Hnewc', '--quiet'],
+                                 stdin=find_proc.stdout,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE,
+                                 cwd=tempdir)
+    f = open(initrd, 'ab')
+    gzip_proc = subprocess.Popen(['gzip'], stdin=cpio_proc.stdout,
+                                 stdout=f, stderr=subprocess.PIPE)
+    cpio_proc.wait()
+    find_proc.wait()
+    gzip_proc.wait()
+    f.close()
+    shutil.rmtree(tempdir)
+
+    finderr = find_proc.stderr.read()
+    cpioerr = cpio_proc.stderr.read()
+    gziperr = gzip_proc.stderr.read()
+    if finderr:
+        logging.debug("find stderr=%s", finderr)
+    if cpioerr:
+        logging.debug("cpio stderr=%s", cpioerr)
+    if gziperr:
+        logging.debug("gzip stderr=%s", gziperr)
+
+
+def _support_remote_url_install(conn):
+    if hasattr(conn, "_virtinst__fake_conn"):
+        return False
+    return conn.check_stream_support(conn.SUPPORT_STREAM_UPLOAD)
+
+
+def _upload_media(conn, scratchdir, system_scratchdir,
+                  meter, kernel, initrd):
+    """
+    Upload kernel/initrd media to remote connection if necessary
+    """
+    tmpvols = []
+
+    if (not conn.is_remote() and
+        (conn.is_session_uri() or scratchdir == system_scratchdir)):
+        # We have access to system scratchdir, don't jump through hoops
+        logging.debug("Have access to preferred scratchdir so"
+                      " nothing to upload")
+        return kernel, initrd, tmpvols
+
+    if not _support_remote_url_install(conn):
+        logging.debug("Media upload not supported")
+        return kernel, initrd, tmpvols
+
+    # Build pool
+    logging.debug("Uploading kernel/initrd media")
+    pool = _build_pool(conn, meter, system_scratchdir)
+
+    kvol = _upload_file(conn, meter, pool, kernel)
+    newkernel = kvol.path()
+    tmpvols.append(kvol)
+
+    ivol = _upload_file(conn, meter, pool, initrd)
+    newinitrd = ivol.path()
+    tmpvols.append(ivol)
+
+    return newkernel, newinitrd, tmpvols
+
+
+
 class DistroInstaller(Installer.Installer):
     def __init__(self, *args, **kwargs):
         Installer.Installer.__init__(self, *args, **kwargs)
@@ -162,64 +246,10 @@ class DistroInstaller(Installer.Installer):
         self._location_is_path = True
 
 
-    def get_location(self):
-        return self._location
-    def set_location(self, val):
-        """
-        Valid values for location:
+    #######################
+    # Install prepartions #
+    #######################
 
-        1) it can be a local file (ex. boot.iso), directory (ex. distro
-        tree) or physical device (ex. cdrom media)
-
-        2) tuple of the form (poolname, volname) pointing to a file or
-        device which will set location as that path
-
-        3) http, ftp, or nfs path for an install tree
-        """
-        validated = True
-        self._location_is_path = True
-        is_local = not self.conn.is_remote()
-
-        if _is_url(val, is_local):
-            val = _sanitize_url(val)
-            self._location_is_path = False
-            logging.debug("DistroInstaller location is a network source.")
-
-        elif os.path.exists(os.path.abspath(val)) and is_local:
-            val = os.path.abspath(val)
-            logging.debug("DistroInstaller location is a local "
-                          "file/path: %s", val)
-
-        else:
-            # Didn't determine anything about the location
-            validated = False
-
-        if (self._location_is_path or
-            (not validated and
-             self.conn.check_conn_support(self.conn.SUPPORT_CONN_STORAGE))):
-            # If user passed a storage tuple, OR
-            # We couldn't determine the location type and a storage capable
-            #   connection was passed:
-            # Pass the parameters off to VirtualDisk to validate, and pull
-            # out the path
-            try:
-                d = self._make_cdrom_dev(val)
-                val = d.path
-            except:
-                logging.debug("Error validating install location",
-                              exc_info=True)
-                raise ValueError(_("Checking installer location failed: "
-                                   "Could not find media '%s'." % str(val)))
-        elif not validated:
-            raise ValueError(_("Install media location must be an NFS, HTTP "
-                               "or FTP network install source, or an existing "
-                               "file/device"))
-
-        self._location = val
-    location = property(get_location, set_location)
-
-
-    # Private helper methods
     def _prepare_cdrom(self, guest, meter):
         transient = not self.livecd
         if not self._location_is_path:
@@ -239,81 +269,6 @@ class DistroInstaller(Installer.Installer):
         disk = self._make_cdrom_dev(cdrom)
         disk.transient = transient
         self.install_devices.append(disk)
-
-    def _perform_initrd_injections(self, initrd):
-        """
-        Insert files into the root directory of the initial ram disk
-        """
-        tempdir = tempfile.mkdtemp(dir=self.scratchdir)
-        os.chmod(tempdir, 0775)
-
-        for filename in self._initrd_injections:
-            logging.debug("Copying %s to the initrd.", filename)
-            shutil.copy(filename, tempdir)
-
-        logging.debug("Appending to the initrd.")
-        find_proc = subprocess.Popen(['find', '.', '-print0'],
-                                     stdout=subprocess.PIPE,
-                                     stderr=subprocess.PIPE,
-                                     cwd=tempdir)
-        cpio_proc = subprocess.Popen(['cpio', '-o', '--null', '-Hnewc', '--quiet'],
-                                     stdin=find_proc.stdout,
-                                     stdout=subprocess.PIPE,
-                                     stderr=subprocess.PIPE,
-                                     cwd=tempdir)
-        f = open(initrd, 'ab')
-        gzip_proc = subprocess.Popen(['gzip'], stdin=cpio_proc.stdout,
-                                     stdout=f, stderr=subprocess.PIPE)
-        cpio_proc.wait()
-        find_proc.wait()
-        gzip_proc.wait()
-        f.close()
-        shutil.rmtree(tempdir)
-
-        finderr = find_proc.stderr.read()
-        cpioerr = cpio_proc.stderr.read()
-        gziperr = gzip_proc.stderr.read()
-        if finderr:
-            logging.debug("find stderr=%s", finderr)
-        if cpioerr:
-            logging.debug("cpio stderr=%s", cpioerr)
-        if gziperr:
-            logging.debug("gzip stderr=%s", gziperr)
-
-    def support_remote_url_install(self):
-        if hasattr(self.conn, "_virtinst__fake_conn"):
-            return False
-        return self.conn.check_stream_support(self.conn.SUPPORT_STREAM_UPLOAD)
-
-    def _upload_media(self, guest, meter, kernel, initrd):
-        conn = guest.conn
-        system_scratchdir = self._get_system_scratchdir()
-
-        if (not self.conn.is_remote() and
-            (self.conn.is_session_uri() or
-             self.scratchdir == system_scratchdir)):
-            # We have access to system scratchdir, don't jump through hoops
-            logging.debug("Have access to preferred scratchdir so"
-                          " nothing to upload")
-            return kernel, initrd
-
-        if not self.support_remote_url_install():
-            logging.debug("Media upload not supported")
-            return kernel, initrd
-
-        # Build pool
-        logging.debug("Uploading kernel/initrd media")
-        pool = _build_pool(conn, meter, system_scratchdir)
-
-        kvol = _upload_file(conn, meter, pool, kernel)
-        newkernel = kvol.path()
-        self._tmpvols.append(kvol)
-
-        ivol = _upload_file(conn, meter, pool, initrd)
-        newinitrd = ivol.path()
-        self._tmpvols.append(ivol)
-
-        return newkernel, newinitrd
 
     def _prepare_kernel_and_initrd(self, guest, meter):
         disk = None
@@ -351,12 +306,14 @@ class DistroInstaller(Installer.Installer):
         if initrdfn:
             self._tmpfiles.append(initrdfn)
 
-        if self._initrd_injections:
-            self._perform_initrd_injections(initrdfn)
+        _perform_initrd_injections(initrdfn,
+                                   self._initrd_injections,
+                                   self.scratchdir)
 
-        # If required, upload media to an accessible guest location
-        kernelfn, initrdfn = self._upload_media(guest, meter,
-                                                kernelfn, initrdfn)
+        kernelfn, initrdfn, tmpvols = _upload_media(
+                guest.conn, self.scratchdir, self._get_system_scratchdir(),
+                meter, kernelfn, initrdfn)
+        self._tmpvols += tmpvols
 
         self._install_bootconfig.kernel = kernelfn
         self._install_bootconfig.initrd = initrdfn
@@ -364,17 +321,53 @@ class DistroInstaller(Installer.Installer):
 
         return disk
 
-    def _persistent_cd(self):
-        return (self._location_is_path and self.cdrom and self.livecd)
+
+    ###########################
+    # Private installer impls #
+    ###########################
 
     def _get_bootdev(self, isinstall, guest):
-        if isinstall or self._persistent_cd():
+        persistent_cd = (self._location_is_path and
+                         self.cdrom and
+                         self.livecd)
+
+        if isinstall or persistent_cd:
             bootdev = self.bootconfig.BOOT_DEVICE_CDROM
         else:
             bootdev = self.bootconfig.BOOT_DEVICE_HARDDISK
         return bootdev
 
-    # General Installer methods
+    def _validate_location(self, val):
+        """
+        Valid values for location:
+
+        1) it can be a local file (ex. boot.iso), directory (ex. distro
+        tree) or physical device (ex. cdrom media)
+
+        2) http, ftp, or nfs path for an install tree
+        """
+        is_local = not self.conn.is_remote()
+        if _is_url(val, is_local):
+            self._location_is_path = False
+            self._location = _sanitize_url(val)
+            logging.debug("DistroInstaller location is a network source.")
+            return val
+
+        try:
+            d = self._make_cdrom_dev(val)
+            val = d.path
+        except:
+            logging.debug("Error validating install location", exc_info=True)
+            raise ValueError(_("Checking installer location failed: "
+                               "Could not find media '%s'." % str(val)))
+
+        self._location_is_path = True
+        return val
+
+
+    ##########################
+    # Public installer impls #
+    ##########################
 
     def scratchdir_required(self):
         if not self.location:
@@ -385,9 +378,7 @@ class DistroInstaller(Installer.Installer):
 
         return bool(is_url or mount_dvd)
 
-    def prepare(self, guest, meter):
-        self.cleanup()
-
+    def _prepare(self, guest, meter):
         dev = None
         if self.cdrom:
             if self.location:
@@ -405,9 +396,9 @@ class DistroInstaller(Installer.Installer):
         if self._location_is_path:
             # We already mostly validated this
             return True
-        else:
-            # This will throw an error for us
-            OSDistro.detectMediaDistro(location=self.location, arch=self.arch)
+
+        # This will throw an error for us
+        OSDistro.detectMediaDistro(location=self.location, arch=self.arch)
         return True
 
     def detect_distro(self):
