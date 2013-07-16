@@ -112,35 +112,10 @@ class VirtualGraphics(VirtualDevice):
 
         return str(gtype).capitalize()
 
-    def __init__(self, conn, type=None, port=None, listen=None, passwd=None,
-                 keymap=None, parsexml=None,
-                 parsexmlnode=None, tlsPort=None, channels=None,
-                 passwdValidTo=None):
-        # pylint: disable=W0622
-        # Redefining built-in 'type', but it matches the XML so keep it
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
         VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self._local_keymap = -1
-
-        if self._is_parse():
-            return
-
-        if type:
-            self.type = type
-        if port:
-            self.port = port
-        if tlsPort:
-            self.tlsPort = tlsPort
-        if keymap:
-            self.keymap = keymap
-        if listen:
-            self.listen = listen
-        if passwd:
-            self.passwd = passwd
-        if passwdValidTo:
-            self.passwdValidTo = passwdValidTo
-        if channels:
-            self.channels = channels
 
 
     _XML_PROP_ORDER = ["type", "port", "tlsPort", "autoport",

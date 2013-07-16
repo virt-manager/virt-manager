@@ -174,7 +174,10 @@ def get_basic_paravirt_guest(installer=None):
     g.memory = int(200 * 1024)
     g.maxmemory = int(400 * 1024)
     g.uuid = "12345678-1234-1234-1234-123456789012"
-    g.add_device(VirtualGraphics(_conn, "vnc", keymap="ja"))
+    gdev = VirtualGraphics(_conn)
+    gdev.type = "vnc"
+    gdev.keymap= "ja"
+    g.add_device(gdev)
     g.vcpus = 5
 
     if installer:
@@ -195,7 +198,9 @@ def get_basic_fullyvirt_guest(typ="xen", installer=None):
     g.maxmemory = int(400 * 1024)
     g.uuid = "12345678-1234-1234-1234-123456789012"
     g.cdrom = "/dev/loop0"
-    g.add_device(VirtualGraphics(_conn, "sdl"))
+    gdev = VirtualGraphics(_conn)
+    gdev.type = "sdl"
+    g.add_device(gdev)
     g.features['pae'] = 0
     g.vcpus = 5
     if installer:

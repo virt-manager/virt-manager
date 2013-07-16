@@ -1401,7 +1401,9 @@ class vmmCreate(vmmGObjectUI):
                           "Using VNC graphics.")
             gtype = virtinst.VirtualGraphics.TYPE_VNC
 
-        return virtinst.VirtualGraphics(guest.conn, type=gtype)
+        gdev = virtinst.VirtualGraphics(guest.conn)
+        gdev.type = gtype
+        return gdev
 
     def get_video_device(self, guest):
         if guest.installer.is_container():

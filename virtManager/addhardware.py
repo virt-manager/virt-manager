@@ -1415,19 +1415,18 @@ class vmmAddHardware(vmmGObjectUI):
         self._dev = dev
 
     def validate_page_graphics(self):
-        graphics = self.get_config_graphics()
-        _type = {"vnc": virtinst.VirtualGraphics.TYPE_VNC,
-                 "spice": virtinst.VirtualGraphics.TYPE_SPICE,
-                 "sdl": virtinst.VirtualGraphics.TYPE_SDL}[graphics]
+        gtype = self.get_config_graphics()
 
-        self._dev = virtinst.VirtualGraphics(self.conn.get_backend(),
-                                             type=_type)
         try:
-            self._dev.port   = self.get_config_graphics_port()
-            self._dev.tlsPort = self.get_config_graphics_tls_port()
-            self._dev.passwd = self.get_config_graphics_password()
-            self._dev.listen = self.get_config_graphics_address()
-            self._dev.keymap = self.get_config_keymap()
+            self._dev = virtinst.VirtualGraphics(self.conn.get_backend())
+            self._dev.type = gtype
+            if gtype != "sdl":
+                self._dev.port = self.get_config_graphics_port()
+                self._dev.passwd = self.get_config_graphics_password() or None
+                self._dev.listen = self.get_config_graphics_address()
+                self._dev.keymap = self.get_config_keymap()
+            if gtype == "spice":
+                self._dev.tlsPort = self.get_config_graphics_tls_port()
         except ValueError, e:
             self.err.val_err(_("Graphics device parameter error"), e)
 

@@ -472,11 +472,13 @@ class TestXMLConfig(unittest.TestCase):
 
     def testKVMKeymap(self):
         conn = utils.open_plainkvm(connver=10000)
-        g = virtinst.VirtualGraphics(conn, type="vnc")
+        g = virtinst.VirtualGraphics(conn)
+        g.type = "vnc"
         self.assertTrue(g.keymap is not None)
 
         conn = utils.open_plainkvm(connver=11000)
-        g = virtinst.VirtualGraphics(conn, type="vnc")
+        g = virtinst.VirtualGraphics(conn)
+        g.type = "vnc"
         self.assertTrue(g.keymap is None)
 
 
@@ -836,19 +838,24 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(mdev1)
 
         # Check keymap autoconfig
-        gdev1 = virtinst.VirtualGraphics(g.conn, type="vnc")
+        gdev1 = virtinst.VirtualGraphics(g.conn)
+        gdev1.type = "vnc"
         self.assertTrue(gdev1.keymap is not None)
         gdev1.keymap = "en-us"
 
         # Check keymap None
-        gdev2 = virtinst.VirtualGraphics(g.conn, type="vnc")
+        gdev2 = virtinst.VirtualGraphics(g.conn)
+        gdev2.type = "vnc"
         gdev2.keymap = None
 
-        gdev3 = virtinst.VirtualGraphics(g.conn, type="sdl")
-        gdev4 = virtinst.VirtualGraphics(g.conn, type="spice")
+        gdev3 = virtinst.VirtualGraphics(g.conn)
+        gdev3.type = "sdl"
+        gdev4 = virtinst.VirtualGraphics(g.conn)
+        gdev4.type = "spice"
         gdev4.passwdValidTo = "foobar"
 
-        gdev5 = virtinst.VirtualGraphics(g.conn, type="sdl")
+        gdev5 = virtinst.VirtualGraphics(g.conn)
+        gdev5.type = "sdl"
         gdev5.xauth = "fooxauth"
         gdev5.display = "foodisplay"
         g.add_device(gdev1)
