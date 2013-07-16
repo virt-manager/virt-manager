@@ -22,7 +22,7 @@ from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualController(VirtualDevice):
-    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_CONTROLLER
+    virtual_device_type = VirtualDevice.VIRTUAL_DEV_CONTROLLER
 
     TYPE_IDE             = "ide"
     TYPE_FDC             = "fdc"

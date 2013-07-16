@@ -69,7 +69,7 @@ class VirtualDevice(XMLBuilder):
                             VIRTUAL_DEV_TPM]
 
     # General device type (disk, interface, etc.)
-    _virtual_device_type = None
+    virtual_device_type = None
     _XML_INDENT = 4
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
@@ -79,23 +79,19 @@ class VirtualDevice(XMLBuilder):
         @param conn: libvirt connection to validate device against
         """
         XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
-        self._XML_ROOT_NAME = self._virtual_device_type
+        self._XML_ROOT_NAME = self.virtual_device_type
 
         self.alias = VirtualDeviceAlias(conn, parsexmlnode=parsexmlnode)
         self.address = VirtualDeviceAddress(conn, parsexmlnode=parsexmlnode)
         self._XML_SUB_ELEMENTS = ["alias", "address"]
 
-        if not self._virtual_device_type:
+        if not self.virtual_device_type:
             raise ValueError(_("Virtual device type must be set in subclass."))
 
-        if self._virtual_device_type not in self.virtual_device_types:
+        if self.virtual_device_type not in self.virtual_device_types:
             raise ValueError(_("Unknown virtual device type '%s'.") %
-                             self._virtual_device_type)
+                             self.virtual_device_type)
 
-
-    def get_virtual_device_type(self):
-        return self._virtual_device_type
-    virtual_device_type = property(get_virtual_device_type)
 
     def setup(self, meter=None):
         """

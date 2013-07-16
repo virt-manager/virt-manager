@@ -23,7 +23,7 @@ from virtinst.xmlbuilder import XMLProperty
 
 class VirtualVideoDevice(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_VIDEO
+    virtual_device_type = VirtualDevice.VIRTUAL_DEV_VIDEO
 
     # Default models list
     MODEL_DEFAULT = "default"

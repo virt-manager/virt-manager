@@ -25,7 +25,8 @@ from virtinst import VirtualDisk
 from virtinst import VirtualAudio
 from virtinst import VirtualNetworkInterface
 from virtinst import VirtualHostDevice
-from virtinst import VirtualCharDevice
+from virtinst import (VirtualChannelDevice, VirtualConsoleDevice,
+                      VirtualParallelDevice, VirtualSerialDevice)
 from virtinst import VirtualVideoDevice
 from virtinst import VirtualController
 from virtinst import VirtualWatchdog
@@ -313,9 +314,8 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(utils.get_filedisk())
 
         inp = VirtualInputDevice(g.conn)
-        cons = VirtualCharDevice.get_dev_instance(g.conn,
-                                VirtualCharDevice.DEV_CONSOLE,
-                                VirtualCharDevice.CHAR_PTY)
+        cons = VirtualConsoleDevice(g.conn)
+        cons.type = "pty"
         g.add_device(inp)
         g.add_device(cons)
 
@@ -679,46 +679,38 @@ class TestXMLConfig(unittest.TestCase):
         i = utils.make_pxe_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
-        dev1 = VirtualCharDevice.get_dev_instance(g.conn,
-                                                  VirtualCharDevice.DEV_SERIAL,
-                                                  VirtualCharDevice.CHAR_NULL)
-        dev2 = VirtualCharDevice.get_dev_instance(g.conn,
-                                                  VirtualCharDevice.DEV_PARALLEL,
-                                                  VirtualCharDevice.CHAR_UNIX)
+        dev1 = VirtualSerialDevice(g.conn)
+        dev1.type = "null"
+        dev2 = VirtualParallelDevice(g.conn)
+        dev2.type = "unix"
         dev2.source_path = "/tmp/foobar"
-        dev3 = VirtualCharDevice.get_dev_instance(g.conn,
-                                                  VirtualCharDevice.DEV_SERIAL,
-                                                  VirtualCharDevice.CHAR_TCP)
+        dev3 = VirtualSerialDevice(g.conn)
+        dev3.type = "tcp"
         dev3.protocol = "telnet"
         dev3.source_host = "my.source.host"
         dev3.source_port = "1234"
-        dev4 = VirtualCharDevice.get_dev_instance(g.conn,
-                                                  VirtualCharDevice.DEV_PARALLEL,
-                                                  VirtualCharDevice.CHAR_UDP)
+        dev4 = VirtualParallelDevice(g.conn)
+        dev4.type = "udp"
         dev4.bind_host = "my.bind.host"
         dev4.bind_port = "1111"
         dev4.source_host = "my.source.host"
         dev4.source_port = "2222"
 
-        dev5 = VirtualCharDevice.get_dev_instance(g.conn,
-                                                  VirtualCharDevice.DEV_CHANNEL,
-                                                  VirtualCharDevice.CHAR_PTY)
-        dev5.target_type = dev5.CHAR_CHANNEL_TARGET_VIRTIO
+        dev5 = VirtualChannelDevice(g.conn)
+        dev5.type = "pty"
+        dev5.target_type = dev5.CHANNEL_TARGET_VIRTIO
         dev5.target_name = "foo.bar.frob"
 
-        dev6 = VirtualCharDevice.get_dev_instance(g.conn,
-                                                  VirtualCharDevice.DEV_CONSOLE,
-                                                  VirtualCharDevice.CHAR_PTY)
+        dev6 = VirtualConsoleDevice(g.conn)
+        dev6.type = "pty"
 
-        dev7 = VirtualCharDevice.get_dev_instance(g.conn,
-                                                  VirtualCharDevice.DEV_CONSOLE,
-                                                  VirtualCharDevice.CHAR_PTY)
-        dev7.target_type = dev5.CHAR_CONSOLE_TARGET_VIRTIO
+        dev7 = VirtualConsoleDevice(g.conn)
+        dev7.type = "pty"
+        dev7.target_type = dev7.CONSOLE_TARGET_VIRTIO
 
-        dev8 = VirtualCharDevice.get_dev_instance(g.conn,
-                                                  VirtualCharDevice.DEV_CHANNEL,
-                                                  VirtualCharDevice.CHAR_PTY)
-        dev8.target_type = dev5.CHAR_CHANNEL_TARGET_GUESTFWD
+        dev8 = VirtualChannelDevice(g.conn)
+        dev8.type = "pty"
+        dev8.target_type = dev8.CHANNEL_TARGET_GUESTFWD
         dev8.target_address = "1.2.3.4"
         dev8.target_port = "4567"
 
@@ -811,16 +803,13 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(net3)
 
         # Character devices
-        cdev1 = VirtualCharDevice.get_dev_instance(g.conn,
-                                            VirtualCharDevice.DEV_SERIAL,
-                                            VirtualCharDevice.CHAR_NULL)
-        cdev2 = VirtualCharDevice.get_dev_instance(g.conn,
-                                            VirtualCharDevice.DEV_PARALLEL,
-                                            VirtualCharDevice.CHAR_UNIX)
+        cdev1 = VirtualSerialDevice(g.conn)
+        cdev1.type = "null"
+        cdev2 = VirtualParallelDevice(g.conn)
+        cdev2.type = "unix"
         cdev2.source_path = "/tmp/foobar"
-        cdev3 = VirtualCharDevice.get_dev_instance(g.conn,
-                                            VirtualCharDevice.DEV_CHANNEL,
-                                            VirtualCharDevice.CHAR_SPICEVMC)
+        cdev3 = VirtualChannelDevice(g.conn)
+        cdev3.type = "spicevmc"
         g.add_device(cdev1)
         g.add_device(cdev2)
         g.add_device(cdev3)

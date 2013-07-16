@@ -2417,8 +2417,8 @@ class vmmDetails(vmmGObjectUI):
         has_multi_spice = (len([d for d in self.vm.get_graphics_devices() if
                                 d.type == d.TYPE_SPICE]) > 1)
         has_spicevmc = bool([d for d in self.vm.get_char_devices() if
-                             (d.dev_type == d.DEV_CHANNEL and
-                              d.char_type == d.CHAR_SPICEVMC)])
+                             (d.virtual_device_type == "channel" and
+                              d.type == "spicevmc")])
         fromspice = (gdev.type == "spice")
         tospice = (newgtype == "spice")
 
@@ -3234,8 +3234,8 @@ class vmmDetails(vmmGObjectUI):
         if not chardev:
             return
 
-        show_target_type = not (chardev.dev_type in
-                                [chardev.DEV_SERIAL, chardev.DEV_PARALLEL])
+        show_target_type = not (chardev.virtual_device_type in
+                                ["serial", "parallel"])
 
         def show_ui(param, val=None):
             widgetname = "char-" + param.replace("_", "-")
@@ -3268,7 +3268,7 @@ class vmmDetails(vmmGObjectUI):
 
         char_type = chardev.virtual_device_type.capitalize()
         target_port = chardev.target_port
-        dev_type = chardev.char_type or "pty"
+        dev_type = chardev.type or "pty"
         primary = hasattr(chardev, "virtmanager_console_dup")
 
         typelabel = ""

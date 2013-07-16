@@ -264,7 +264,7 @@ class vmmSerialConsole(vmmGObject):
         """
         usable_types = ["pty"]
 
-        ctype = dev.char_type
+        ctype = dev.type
         path = dev.source_path
         is_remote = vm.conn.is_remote()
         support_tunnel = vmmSerialConsole.support_remote_console(vm)

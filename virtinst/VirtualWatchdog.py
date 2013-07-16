@@ -23,7 +23,7 @@ from virtinst.xmlbuilder import XMLProperty
 
 class VirtualWatchdog(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_WATCHDOG
+    virtual_device_type = VirtualDevice.VIRTUAL_DEV_WATCHDOG
 
     MODEL_I6300 = "i6300esb"
     MODEL_IB700 = "ib700"

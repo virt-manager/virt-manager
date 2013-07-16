@@ -22,7 +22,7 @@ from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualAudio(VirtualDevice):
-    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_AUDIO
+    virtual_device_type = VirtualDevice.VIRTUAL_DEV_AUDIO
 
     MODEL_DEFAULT = "default"
     MODELS = ["es1370", "sb16", "pcspk", "ac97", "ich6", MODEL_DEFAULT]

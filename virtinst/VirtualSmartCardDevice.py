@@ -25,7 +25,7 @@ from virtinst.xmlbuilder import XMLProperty
 
 class VirtualSmartCardDevice(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_SMARTCARD
+    virtual_device_type = VirtualDevice.VIRTUAL_DEV_SMARTCARD
 
     # Default models list
     MODE_DEFAULT = "default"

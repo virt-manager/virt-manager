@@ -26,7 +26,7 @@ from virtinst.xmlbuilder import XMLProperty
 
 class VirtualRedirDevice(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_REDIRDEV
+    virtual_device_type = VirtualDevice.VIRTUAL_DEV_REDIRDEV
 
     BUS_DEFAULT = "default"
     BUSES = ["usb"]

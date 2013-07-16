@@ -27,7 +27,8 @@ from gi.repository import Gdk
 # pylint: enable=E0611
 
 import virtinst
-from virtinst import (VirtualCharDevice,
+from virtinst import (VirtualChannelDevice, VirtualParallelDevice,
+                      VirtualSerialDevice,
                       VirtualVideoDevice, VirtualWatchdog,
                       VirtualFilesystem, VirtualSmartCardDevice,
                       VirtualRedirDevice, VirtualTPMDevice)
@@ -132,7 +133,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("char-info").set_markup(doc)
 
     def update_doc_char_type(self, *ignore):
-        return self._update_doc("char_type")
+        return self._update_doc("type")
     def update_doc_char_source_path(self, *ignore):
         return self._update_doc("source_path")
     def update_doc_char_source_mode(self, *ignore):
@@ -147,18 +148,17 @@ class vmmAddHardware(vmmGObjectUI):
         return self._update_doc("target_name")
 
     def _build_doc_str(self, param, docstr=None):
-        doc = ""
         doctmpl = "<i>%s</i>"
 
         if docstr:
-            doc = doctmpl % (docstr)
-        elif self._dev:
-            devclass = self._dev.__class__
-            paramdoc = getattr(devclass, param).__doc__
-            if paramdoc:
-                doc = doctmpl % paramdoc
+            return doctmpl % (docstr)
+        elif not self._dev:
+            return ""
 
-        return doc
+        propdoc = getattr(self._dev.all_xml_props()[param], "__doc__")
+        if propdoc:
+            return doctmpl % propdoc
+        return ""
 
     def show(self, parent):
         logging.debug("Showing addhw")
@@ -303,8 +303,8 @@ class vmmAddHardware(vmmGObjectUI):
         char_mode.pack_start(text, True)
         char_mode.add_attribute(text, 'text', 1)
         char_mode_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-        for t in VirtualCharDevice.char_modes:
-            desc = VirtualCharDevice.get_char_mode_desc(t)
+        for t in VirtualSerialDevice.MODES:
+            desc = VirtualSerialDevice.pretty_mode(t)
             char_mode_model.append([t, desc + " (%s)" % t])
 
         self.widget("char-info-box").modify_bg(Gtk.StateType.NORMAL,
@@ -833,7 +833,8 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Char device type
         char_devtype = self.widget("char-device-type")
-        dev_type = self.get_char_type()
+        char_class = self.get_char_type()
+
         # Type name, desc
         char_devtype_model = Gtk.ListStore(str, str)
         char_devtype.clear()
@@ -842,12 +843,12 @@ class vmmAddHardware(vmmGObjectUI):
         char_devtype.pack_start(text, True)
         char_devtype.add_attribute(text, 'text', 1)
 
-        for t in VirtualCharDevice.char_types_for_dev_type[dev_type]:
+        for t in char_class.TYPES:
             if (t in rhel6_blacklist and
                 not self.vm.rhel6_defaults()):
                 continue
 
-            desc = VirtualCharDevice.get_char_type_desc(t)
+            desc = char_class.pretty_type(t)
             row = [t, desc + " (%s)" % t]
             char_devtype_model.append(row)
         char_devtype.set_active(0)
@@ -988,10 +989,10 @@ class vmmAddHardware(vmmGObjectUI):
             label = row[5]
 
         if label == "parallel":
-            return VirtualCharDevice.VIRTUAL_DEV_PARALLEL
+            return VirtualParallelDevice
         elif label == "channel":
-            return VirtualCharDevice.VIRTUAL_DEV_CHANNEL
-        return VirtualCharDevice.VIRTUAL_DEV_SERIAL
+            return VirtualChannelDevice
+        return VirtualSerialDevice
 
     def dev_to_title(self, page):
         if page == PAGE_ERROR:
@@ -1020,7 +1021,8 @@ class vmmAddHardware(vmmGObjectUI):
             return _("TPM")
 
         if page == PAGE_CHAR:
-            return self.get_char_type().capitalize() + " Device"
+            char_class = self.get_char_type()
+            return char_class.virtual_device_type.capitalize() + " Device"
         if page == PAGE_HOSTDEV:
             return self.get_config_host_device_type_info()[0]
 
@@ -1056,16 +1058,17 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("tpm-param-box").set_property("visible", show_something)
 
     def change_char_device_type(self, src):
-        self._update_doc("char_type")
+        self._update_doc("type")
         idx = src.get_active()
         if idx < 0:
             return
 
-        chartype = self.get_char_type()
+        char_class = self.get_char_type()
         devtype = src.get_model()[src.get_active()][0]
         conn = self.conn.get_backend()
 
-        self._dev = VirtualCharDevice.get_dev_instance(conn, chartype, devtype)
+        self._dev = char_class(conn)
+        self._dev.type = devtype
 
         show_something = False
         for param_name, widget_name in char_widget_mappings.items():
@@ -1472,13 +1475,14 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Host device parameter error"), e)
 
     def validate_page_char(self):
-        chartype = self.get_char_type()
+        charclass = self.get_char_type()
         modebox = self.widget("char-mode")
         devbox = self.widget("char-device-type")
         devtype = devbox.get_model()[devbox.get_active()][0]
         conn = self.conn.get_backend()
 
-        devclass = VirtualCharDevice.get_dev_instance(conn, chartype, devtype)
+        devclass = charclass(conn)
+        devclass.type = devtype
 
         source_path = self.widget("char-path").get_text()
         source_mode = modebox.get_model()[modebox.get_active()][0]
@@ -1489,9 +1493,9 @@ class vmmAddHardware(vmmGObjectUI):
         target_name = self.widget("char-target-name").get_text()
 
         if self.widget("char-use-telnet").get_active():
-            protocol = VirtualCharDevice.CHAR_PROTOCOL_TELNET
+            protocol = VirtualSerialDevice.PROTOCOL_TELNET
         else:
-            protocol = VirtualCharDevice.CHAR_PROTOCOL_RAW
+            protocol = VirtualSerialDevice.PROTOCOL_RAW
 
         value_mappings = {
             "source_path" : source_path,
@@ -1514,8 +1518,9 @@ class vmmAddHardware(vmmGObjectUI):
             # Dump XML for sanity checking
             self._dev.get_xml_config()
         except Exception, e:
-            return self.err.val_err(_("%s device parameter error") %
-                                    chartype.capitalize(), e)
+            return self.err.val_err(
+                    _("%s device parameter error") %
+                    charclass.virtual_device_type.capitalize(), e)
 
     def validate_page_video(self):
         conn = self.conn.get_backend()

@@ -22,7 +22,7 @@ from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualInputDevice(VirtualDevice):
-    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_INPUT
+    virtual_device_type = VirtualDevice.VIRTUAL_DEV_INPUT
 
     TYPE_MOUSE = "mouse"
     TYPE_TABLET = "tablet"

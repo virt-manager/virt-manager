@@ -28,7 +28,10 @@ from virtinst.VirtualAudio import VirtualAudio
 from virtinst.VirtualInputDevice import VirtualInputDevice
 from virtinst.VirtualDisk import VirtualDisk
 from virtinst.VirtualHostDevice import VirtualHostDevice
-from virtinst.VirtualCharDevice import VirtualCharDevice
+from virtinst.VirtualCharDevice import (VirtualChannelDevice,
+                                        VirtualConsoleDevice,
+                                        VirtualParallelDevice,
+                                        VirtualSerialDevice)
 from virtinst.VirtualVideoDevice import VirtualVideoDevice
 from virtinst.VirtualController import VirtualController
 from virtinst.VirtualWatchdog import VirtualWatchdog

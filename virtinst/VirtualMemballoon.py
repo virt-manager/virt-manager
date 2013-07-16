@@ -22,7 +22,7 @@ from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualMemballoon(VirtualDevice):
-    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_MEMBALLOON
+    virtual_device_type = VirtualDevice.VIRTUAL_DEV_MEMBALLOON
 
     MODEL_DEFAULT = "virtio"
     MODELS = ["xen", "none", MODEL_DEFAULT]

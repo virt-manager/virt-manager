@@ -28,7 +28,6 @@ import threading
 
 import libvirt
 import virtinst
-from virtinst.VirtualCharDevice import VirtualCharSpicevmcDevice
 
 from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
@@ -45,12 +44,12 @@ def compare_device(origdev, newdev, idx):
         "hostdev"   : ["type", "managed", "vmmindex",
                        "product", "vendor",
                        "function", "domain", "slot"],
-        "serial"    : ["char_type", "target_port"],
-        "parallel"  : ["char_type", "target_port"],
-        "console"   : ["char_type", "target_type", "target_port"],
+        "serial"    : ["type", "target_port"],
+        "parallel"  : ["type", "target_port"],
+        "console"   : ["type", "target_type", "target_port"],
         "graphics"  : ["type", "vmmindex"],
         "controller" : ["type", "index"],
-        "channel"   : ["char_type", "target_name"],
+        "channel"   : ["type", "target_name"],
         "filesystem" : ["target" , "vmmindex"],
         "smartcard" : ["mode" , "vmmindex"],
         "redirdev" : ["bus" , "type", "vmmindex"],
@@ -740,12 +739,13 @@ class vmmDomain(vmmLibvirtObject):
             is_spice = (newval == virtinst.VirtualGraphics.TYPE_SPICE)
 
             if is_spice:
-                guest.add_device(VirtualCharSpicevmcDevice(guest.conn))
+                dev = virtinst.VirtualChannelDevice(guest.conn)
+                dev.type = dev.TYPE_SPICEVMC
+                guest.add_device(dev)
             else:
                 channels = guest.get_devices("channel")
-                channels = [x for x in channels if
-                            (x.char_type ==
-                             virtinst.VirtualCharDevice.CHAR_SPICEVMC)]
+                channels = [x for x in guest.get_devices("channel")
+                            if x.type == "spicevmc"]
                 for dev in channels:
                     guest.remove_device(dev)
 
@@ -1109,7 +1109,7 @@ class vmmDomain(vmmLibvirtObject):
             con = consoles[0]
             ser = serials[0]
 
-            if (con.char_type == ser.char_type and
+            if (con.type == ser.type and
                 con.target_type is None or con.target_type == "serial"):
                 ser.virtmanager_console_dup = con
                 devs.remove(con)

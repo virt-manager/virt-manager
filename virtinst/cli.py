@@ -42,7 +42,6 @@ from virtinst import VirtualNetworkInterface
 from virtinst import VirtualGraphics
 from virtinst import VirtualAudio
 from virtinst import VirtualDisk
-from virtinst import VirtualCharDevice
 
 
 DEFAULT_POOL_PATH = "/var/lib/libvirt/images"
@@ -1813,32 +1812,36 @@ def parse_memballoon(guest, optstring, dev=None):
 ######################################################
 
 def parse_serial(guest, optstring, dev=None):
-    return _parse_char(guest, optstring, "serial", dev)
+    if not dev:
+        dev = virtinst.VirtualSerialDevice(guest.conn)
+    return _parse_char(optstring, "serial", dev)
 
 
 def parse_parallel(guest, optstring, dev=None):
-    return _parse_char(guest, optstring, "parallel", dev)
+    if not dev:
+        dev = virtinst.VirtualParallelDevice(guest.conn)
+    return _parse_char(optstring, "parallel", dev)
 
 
 def parse_console(guest, optstring, dev=None):
-    return _parse_char(guest, optstring, "console", dev)
+    if not dev:
+        dev = virtinst.VirtualConsoleDevice(guest.conn)
+    return _parse_char(optstring, "console", dev)
 
 
 def parse_channel(guest, optstring, dev=None):
-    return _parse_char(guest, optstring, "channel", dev)
+    if not dev:
+        dev = virtinst.VirtualChannelDevice(guest.conn)
+    return _parse_char(optstring, "channel", dev)
 
 
-def _parse_char(guest, optstring, dev_type, dev=None):
+def _parse_char(optstring, dev_type, dev=None):
     """
     Helper to parse --serial/--parallel options
     """
     # Peel the char type off the front
     opts = parse_optstr(optstring, remove_first="char_type")
-    char_type = opts.get("char_type")
-
-    if not dev:
-        dev = VirtualCharDevice.get_dev_instance(guest.conn,
-                                                 dev_type, char_type)
+    ctype = opts.get("char_type")
 
     def set_param(paramname, dictname, val=None):
         val = get_opt_param(opts, dictname, val)
@@ -1848,7 +1851,7 @@ def _parse_char(guest, optstring, dev_type, dev=None):
         if not dev.supports_property(paramname):
             raise ValueError(_("%(devtype)s type '%(chartype)s' does not "
                                 "support '%(optname)s' option.") %
-                                {"devtype" : dev_type, "chartype": char_type,
+                                {"devtype" : dev_type, "chartype": ctype,
                                  "optname" : dictname})
         setattr(dev, paramname, val)
 
@@ -1863,7 +1866,7 @@ def _parse_char(guest, optstring, dev_type, dev=None):
     bind_host, bind_port = parse_host("bind_host")
     target_addr, target_port = parse_host("target_address")
 
-    set_param("char_type", "char_type")
+    set_param("type", "char_type")
     set_param("source_path", "path")
     set_param("source_mode", "mode")
     set_param("protocol",   "protocol")

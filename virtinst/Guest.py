@@ -35,7 +35,6 @@ from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst.VirtualDisk import VirtualDisk
 from virtinst.VirtualInputDevice import VirtualInputDevice
-from virtinst.VirtualCharDevice import VirtualCharDevice
 from virtinst.VirtualController import VirtualController
 from virtinst.Clock import Clock
 from virtinst.Seclabel import Seclabel
@@ -626,10 +625,10 @@ class Guest(XMLBuilder):
             "sound"     : virtinst.VirtualAudio,
             "hostdev"   : virtinst.VirtualHostDevice,
             "input"     : virtinst.VirtualInputDevice,
-            "serial"    : virtinst.VirtualCharDevice,
-            "parallel"  : virtinst.VirtualCharDevice,
-            "console"   : virtinst.VirtualCharDevice,
-            "channel"   : virtinst.VirtualCharDevice,
+            "serial"    : virtinst.VirtualSerialDevice,
+            "parallel"  : virtinst.VirtualParallelDevice,
+            "console"   : virtinst.VirtualConsoleDevice,
+            "channel"   : virtinst.VirtualChannelDevice,
             "graphics"  : virtinst.VirtualGraphics,
             "video"     : virtinst.VirtualVideoDevice,
             "watchdog"  : virtinst.VirtualWatchdog,
@@ -653,11 +652,7 @@ class Guest(XMLBuilder):
                 devnode.virtinst_root_doc = self._xml_root_doc
                 objclass = device_mappings.get(devnode.name)
 
-                if objclass == virtinst.VirtualCharDevice:
-                    dev = objclass(self.conn, devnode.name,
-                                   parsexmlnode=devnode)
-                else:
-                    dev = objclass(self.conn, parsexmlnode=devnode)
+                dev = objclass(self.conn, parsexmlnode=devnode)
                 self._add_device(dev)
 
         self._xml_node.virtinst_root_doc = self._xml_root_doc
@@ -681,9 +676,8 @@ class Guest(XMLBuilder):
         return dev
 
     def _get_default_console_device(self):
-        dev = VirtualCharDevice.get_dev_instance(self.conn,
-                                                 VirtualCharDevice.DEV_CONSOLE,
-                                                 VirtualCharDevice.CHAR_PTY)
+        dev = virtinst.VirtualConsoleDevice(self.conn)
+        dev.type = dev.TYPE_PTY
         return dev
 
     def _get_device_xml(self, devs, install=True):
@@ -1383,16 +1377,15 @@ class Guest(XMLBuilder):
         # Spice agent channel (only if we use spice)
         def has_spice_agent():
             for chn in devlist_func(channeltype):
-                if chn.char_type == chn.CHAR_SPICEVMC:
+                if chn.type == chn.TYPE_SPICEVMC:
                     return True
 
         if (has_spice() and
             not has_spice_agent() and
             self.conn.check_conn_support(
                                     self.conn.SUPPORT_CONN_HV_CHAR_SPICEVMC)):
-            agentdev = VirtualCharDevice.get_dev_instance(self.conn,
-                                            VirtualCharDevice.DEV_CHANNEL,
-                                            VirtualCharDevice.CHAR_SPICEVMC)
+            agentdev = virtinst.VirtualChannelDevice(self.conn)
+            agentdev.type = agentdev.TYPE_SPICEVMC
             self.add_device(agentdev)
 
         # Generate UUID

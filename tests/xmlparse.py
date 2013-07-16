@@ -312,46 +312,50 @@ class XMLParseTest(unittest.TestCase):
         channel2    = guest.get_devices("channel")[1]
 
         check = self._make_checker(serial1)
-        check("char_type", "null")
+        check("type", "null", "udp")
+        check("bind_host", None, "example.com")
+        check("bind_port", None, 66)
+        check("source_host", None, "example.com.uk")
+        check("source_port", None, 77)
 
         check = self._make_checker(serial2)
-        check("char_type", "tcp")
+        check("type", "tcp")
         check("protocol", "telnet", "raw")
         check("source_mode", "bind", "connect")
 
         check = self._make_checker(parallel1)
         check("source_mode", "bind")
         check("source_path", "/tmp/foobar", None)
-        check("char_type", "unix", "pty")
+        check("type", "unix", "pty")
 
         check = self._make_checker(parallel2)
-        check("char_type", "udp")
-        check("bind_port", "1111", "1357")
+        check("type", "udp")
+        check("bind_port", 1111, 1357)
         check("bind_host", "my.bind.host", "my.foo.host")
         check("source_mode", "connect")
-        check("source_port", "2222", "7777")
+        check("source_port", 2222, 7777)
         check("source_host", "my.source.host", "source.foo.host")
 
         check = self._make_checker(console1)
-        check("char_type", "pty")
+        check("type", "pty")
         check("target_type", None)
 
         check = self._make_checker(console2)
-        check("char_type", "file")
+        check("type", "file")
         check("source_path", "/tmp/foo.img", None)
         check("source_path", None, "/root/foo")
         check("target_type", "virtio")
 
         check = self._make_checker(channel1)
-        check("char_type", "pty")
-        check("target_type", "virtio")
+        check("type", "pty")
+        check("target_type", "virtio", "bar", "virtio")
         check("target_name", "foo.bar.frob", "test.changed")
 
         check = self._make_checker(channel2)
-        check("char_type", "unix")
+        check("type", "unix", "foo", "unix")
         check("target_type", "guestfwd")
         check("target_address", "1.2.3.4", "5.6.7.8")
-        check("target_port", "4567", "1199")
+        check("target_port", 4567, 1199)
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

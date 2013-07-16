@@ -24,7 +24,7 @@ from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualFilesystem(VirtualDevice):
-    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_FILESYSTEM
+    virtual_device_type = VirtualDevice.VIRTUAL_DEV_FILESYSTEM
 
     _target_props = ["dir", "name", "file", "dev"]
 

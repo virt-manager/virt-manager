@@ -23,7 +23,7 @@ from virtinst import NodeDeviceParser
 
 
 class VirtualHostDevice(VirtualDevice):
-    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_HOSTDEV
+    virtual_device_type = VirtualDevice.VIRTUAL_DEV_HOSTDEV
 
     @staticmethod
     def device_from_node(conn, name=None, nodedev=None, is_dup=False,

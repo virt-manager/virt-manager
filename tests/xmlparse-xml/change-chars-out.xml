@@ -20,7 +20,10 @@
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <input type="mouse" bus="ps2"/>
     <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
-    <serial type="null"/>
+    <serial type="udp">
+      <source mode="bind" host="example.com" service="66"/>
+      <source mode="connect" host="example.com.uk" service="77"/>
+    </serial>
     <serial type="tcp">
       <source mode="connect" host="my.source.host" service="1234"/>
       <protocol type="raw"/>

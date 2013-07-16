@@ -313,8 +313,8 @@ class XMLProperty(property):
                 raise RuntimeError("Can't set default_cb for old style XML "
                                    "prop.")
 
-        property.__init__(self, fget=self.new_getter, fset=self.new_setter,
-                          doc=doc)
+        property.__init__(self, fget=self.new_getter, fset=self.new_setter)
+        self.__doc__ = doc
 
 
     ##################
@@ -344,7 +344,7 @@ class XMLProperty(property):
         Map the raw property() instance to the param name it's exposed
         as in the XMLBuilder class. This is just for debug purposes.
         """
-        for key, val in xmlbuilder._all_xml_props().items():
+        for key, val in xmlbuilder.all_xml_props().items():
             if val is self:
                 return key
         raise RuntimeError("Didn't find expected property")
@@ -703,7 +703,7 @@ class XMLBuilder(object):
         Refresh the XML for the passed class propname. Used to adjust
         the XML when an interdependent property changes.
         """
-        self._all_xml_props()[propname].refresh_xml(self)
+        self.all_xml_props()[propname].refresh_xml(self)
 
 
     ###################
@@ -772,7 +772,7 @@ class XMLBuilder(object):
 
         self._set_xml_context()
 
-    def _all_xml_props(self):
+    def all_xml_props(self):
         ret = {}
         for c in reversed(type.mro(self.__class__)[:-1]):
             for key, val in c.__dict__.items():
@@ -782,7 +782,7 @@ class XMLBuilder(object):
 
     def _do_add_parse_bits(self, xml):
         # Find all properties that have default callbacks
-        xmlprops = self._all_xml_props()
+        xmlprops = self.all_xml_props()
         defaultprops = [v for v in xmlprops.values() if v.has_default_value()]
         for prop in defaultprops:
             prop.set_default(self)

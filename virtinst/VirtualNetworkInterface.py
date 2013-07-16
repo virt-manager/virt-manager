@@ -66,7 +66,7 @@ class VirtualPort(XMLBuilder):
 
 class VirtualNetworkInterface(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_NET
+    virtual_device_type = VirtualDevice.VIRTUAL_DEV_NET
 
     TYPE_BRIDGE     = "bridge"
     TYPE_VIRTUAL    = "network"

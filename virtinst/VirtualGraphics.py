@@ -58,7 +58,7 @@ def _yes_bool(val):
 
 
 class VirtualGraphics(VirtualDevice):
-    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_GRAPHICS
+    virtual_device_type = VirtualDevice.VIRTUAL_DEV_GRAPHICS
 
     TYPE_SDL = "sdl"
     TYPE_VNC = "vnc"

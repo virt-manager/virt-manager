@@ -28,7 +28,7 @@ from virtinst.xmlbuilder import XMLProperty
 
 class VirtualTPMDevice(VirtualDevice):
 
-    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_TPM
+    virtual_device_type = VirtualDevice.VIRTUAL_DEV_TPM
 
     TYPE_PASSTHROUGH = "passthrough"
     TYPE_DEFAULT = "default"

@@ -142,7 +142,7 @@ class VirtualDisk(VirtualDevice):
     # pylint: disable=W0622
     # Redefining built-in 'type', but it matches the XML so keep it
 
-    _virtual_device_type = VirtualDevice.VIRTUAL_DEV_DISK
+    virtual_device_type = VirtualDevice.VIRTUAL_DEV_DISK
 
     DRIVER_FILE = "file"
     DRIVER_PHY = "phy"
