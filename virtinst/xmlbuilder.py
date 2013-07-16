@@ -593,10 +593,8 @@ class XMLBuilder(object):
             return xmlstr
         return "\n".join((" " * level + l) for l in xmlstr.splitlines())
 
-    # Specify a list of tag values here and we will arrange them when
-    # outputing XML. They will be put before every other element. This
-    # is strictly to keep test suite happy.
-    _XML_ELEMENT_ORDER = []
+    # Order that we should apply values to the XML. Keeps XML generation
+    # consistent with what the test suite expects.
     _XML_PROP_ORDER = []
 
     # Root element name of this function, used to populate a default
@@ -693,7 +691,6 @@ class XMLBuilder(object):
             finally:
                 self._xml_fixup_relative_xpath = False
 
-        ret = self._order_xml_elements(ret)
         return self._cleanup_xml(ret)
 
 
@@ -840,35 +837,3 @@ class XMLBuilder(object):
             self._xml_ctx = None
             self._proporder = origproporder
             self._propstore = origpropstore
-
-
-    def _order_xml_elements(self, xml):
-        # This whole thing is reeeally hacky but it saves us some
-        # unittest churn.
-        if not self._XML_ELEMENT_ORDER:
-            return xml
-
-        split = xml.splitlines()
-        if len(split) < 3:
-            return xml
-
-        head = split[0]
-        end = split[-1]
-        split = split[1:-1]
-
-        baseindent = 0
-        for i in head:
-            if i != " ":
-                break
-            baseindent += 1
-
-        neworder = []
-        for prio in reversed(self._XML_ELEMENT_ORDER):
-            tag = "%s<%s " % ((baseindent + 2) * " ", prio)
-            for idx in range(len(split)):
-                if split[idx].startswith(tag):
-                    neworder.insert(0, split.pop(idx))
-                    break
-        neworder += split
-
-        return "\n".join([head] + neworder + [end])

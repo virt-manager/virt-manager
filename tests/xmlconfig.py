@@ -1011,14 +1011,14 @@ class TestXMLConfig(unittest.TestCase):
             g.add_device(dev1)
 
             dev2 = virtinst.VirtualNetworkInterface(g.conn,
-                                                parsexml=dev1.get_xml_config())
+                                    parsexml=dev1.get_xml_config().strip("\n"))
             dev2.source = None
             dev2.source = "foobr0"
             dev2.macaddr = "22:22:33:44:55:67"
             g.add_device(dev2)
 
             dev3 = virtinst.VirtualNetworkInterface(g.conn,
-                                                parsexml=dev1.get_xml_config())
+                                    parsexml=dev1.get_xml_config().strip("\n"))
             dev3.source = None
             dev3.macaddr = "22:22:33:44:55:68"
             g.add_device(dev3)

@@ -198,7 +198,9 @@ class VirtualNetworkInterface(VirtualDevice):
             raise RuntimeError(msg)
 
 
-    _XML_ELEMENT_ORDER = ["source", "mac", "target", "model"]
+    _XML_PROP_ORDER = [
+        "bridge", "network", "source_dev", "source_mode",
+        "macaddr", "target_dev", "model"]
 
     type = XMLProperty(xpath="./@type",
                        default_cb=lambda s: s.TYPE_BRIDGE)

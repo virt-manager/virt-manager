@@ -139,9 +139,6 @@ _TARGET_PROPS = ["file", "dev", "dir"]
 
 
 class VirtualDisk(VirtualDevice):
-    # pylint: disable=W0622
-    # Redefining built-in 'type', but it matches the XML so keep it
-
     virtual_device_type = VirtualDevice.VIRTUAL_DEV_DISK
 
     DRIVER_FILE = "file"
@@ -391,9 +388,12 @@ class VirtualDisk(VirtualDevice):
 
 
 
-    _XML_ELEMENT_ORDER = ["driver", "source", "target"]
-    _XML_PROP_ORDER = ["target", "bus", "type", "device",
-                       "driver_name", "driver_type"]
+    _XML_PROP_ORDER = [
+        "type", "device",
+        "driver_name", "driver_type",
+        "driver_cache", "driver_io", "error_policy",
+        "_xmlpath", "target", "bus",
+    ]
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
         VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
