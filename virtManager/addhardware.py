@@ -332,8 +332,8 @@ class vmmAddHardware(vmmGObjectUI):
         simple_store_set("fs-type-combo",
                          [VirtualFilesystem.TYPE_MOUNT,
                           VirtualFilesystem.TYPE_TEMPLATE])
-        simple_store_set("fs-mode-combo", VirtualFilesystem.MOUNT_MODES)
-        simple_store_set("fs-driver-combo", VirtualFilesystem.DRIVER_TYPES)
+        simple_store_set("fs-mode-combo", VirtualFilesystem.MODES)
+        simple_store_set("fs-driver-combo", VirtualFilesystem.DRIVERS)
         simple_store_set("fs-wrpolicy-combo", VirtualFilesystem.WRPOLICIES)
         self.show_pair_combo("fs-type", self.conn.is_openvz())
         self.show_check_button("fs-readonly", self.conn.is_qemu())
