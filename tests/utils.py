@@ -169,7 +169,8 @@ def diff_compare(actual_out, filename=None, expect_out=None):
 
 
 def get_basic_paravirt_guest(installer=None):
-    g = virtinst.Guest(_conn, type="xen")
+    g = virtinst.Guest(_conn)
+    g.type = "xen"
     g.name = "TestGuest"
     g.memory = int(200 * 1024)
     g.maxmemory = int(400 * 1024)
@@ -195,7 +196,8 @@ def get_basic_paravirt_guest(installer=None):
 
 
 def get_basic_fullyvirt_guest(typ="xen", installer=None):
-    g = virtinst.Guest(_conn, type=typ)
+    g = virtinst.Guest(_conn)
+    g.type = typ
     g.name = "TestGuest"
     g.memory = int(200 * 1024)
     g.maxmemory = int(400 * 1024)
@@ -220,24 +222,32 @@ def get_basic_fullyvirt_guest(typ="xen", installer=None):
 
 
 def make_import_installer(os_type="hvm"):
-    inst = virtinst.ImportInstaller(type="xen", os_type=os_type, conn=_conn)
+    inst = virtinst.ImportInstaller(_conn)
+    inst.type = "xen"
+    inst.os_type = os_type
     return inst
 
 
 def make_distro_installer(location="/default-pool/default-vol", gtype="xen"):
-    inst = virtinst.DistroInstaller(type=gtype, os_type="hvm", conn=_conn,
-                                    location=location)
+    inst = virtinst.DistroInstaller(_conn)
+    inst.type = gtype
+    inst.os_type = "hvm"
+    inst.location = location
     return inst
 
 
 def make_live_installer(location="/dev/loop0", gtype="xen"):
-    inst = virtinst.LiveCDInstaller(type=gtype, os_type="hvm",
-                                    conn=_conn, location=location)
+    inst = virtinst.LiveCDInstaller(_conn)
+    inst.type = gtype
+    inst.os_type = "hvm"
+    inst.location = location
     return inst
 
 
 def make_pxe_installer(gtype="xen"):
-    inst = virtinst.PXEInstaller(type=gtype, os_type="hvm", conn=_conn)
+    inst = virtinst.PXEInstaller(_conn)
+    inst.type = gtype
+    inst.os_type = "hvm"
     return inst
 
 

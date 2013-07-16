@@ -61,14 +61,8 @@ class Installer(XMLBuilder):
     _dumpxml_xpath = "/domain/os"
     _has_install_phase = True
 
-    def __init__(self, conn, type="xen", location=None,
-                 extraargs=None, os_type=None,
-                 parsexml=None, parsexmlnode=None):
-        # pylint: disable=W0622
-        # Redefining built-in 'type', but it matches the XML so keep it
-
-        XMLBuilder.__init__(self, conn, parsexml,
-                                                   parsexmlnode)
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
+        XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
 
         self._type = None
         self._location = None
@@ -86,26 +80,16 @@ class Installer(XMLBuilder):
         # Devices created/added during the prepare() stage
         self.install_devices = []
 
+        self._tmpfiles = []
+        self._tmpvols = []
+
         if self._is_parse():
             return
 
+        self._type = "xen"
         self._arch = self.conn.caps.host.arch
+        self._os_type = "xen"
 
-        if type is None:
-            type = "xen"
-        self.type = type
-
-        if not os_type is None:
-            self.os_type = os_type
-        else:
-            self.os_type = "xen"
-        if not location is None:
-            self.location = location
-
-        self.extraargs = extraargs
-
-        self._tmpfiles = []
-        self._tmpvols = []
 
     def _get_bootconfig(self):
         return self._bootconfig
@@ -422,7 +406,8 @@ class Installer(XMLBuilder):
                                                     arch=self.arch,
                                                     machine=self.machine)
 
-        gobj = virtinst.Guest(self.conn, installer=self)
+        gobj = virtinst.Guest(self.conn)
+        gobj.installer = self
         gobj.arch = guest.arch
         gobj.emulator = domain.emulator
         self.loader = domain.loader

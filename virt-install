@@ -482,7 +482,9 @@ def build_installer(options, conn, virt_type, hv_name, arch, machine):
 
     # Only set installer params here that impact the hw config, not
     # anything to do with install media
-    installer = instclass(type=hv_name, os_type=virt_type, conn=conn)
+    installer = instclass(conn)
+    installer.type = hv_name
+    installer.os_type = virt_type
     installer.arch = arch
     installer.machine = machine
 

@@ -162,10 +162,7 @@ class Guest(XMLBuilder):
 
         return cpustr
 
-    def __init__(self, conn, type=None, installer=None, parsexml=None):
-        # pylint: disable=W0622
-        # Redefining built-in 'type', but it matches the XML so keep it
-
+    def __init__(self, conn, parsexml=None, parsexmlnode=None):
         self._name = None
         self._uuid = None
         self._memory = None
@@ -181,11 +178,12 @@ class Guest(XMLBuilder):
         self._features = None
         self._replace = None
         self._emulator = None
-        self._installer = installer
 
         self._os_type = None
         self._os_variant = None
         self._os_autodetect = False
+
+        self.installer = None
 
         # General device list. Only access through API calls (even internally)
         self._devices = []
@@ -202,8 +200,7 @@ class Guest(XMLBuilder):
         if self._is_parse():
             return
 
-        if not self.installer:
-            self.installer = virtinst.DistroInstaller(conn, type)
+        self.installer = virtinst.DistroInstaller(conn)
 
         # Need to do this after all parameter init
         self._features = DomainFeatures(self.conn)
@@ -216,12 +213,6 @@ class Guest(XMLBuilder):
     ######################
     # Property accessors #
     ######################
-
-    def get_installer(self):
-        return self._installer
-    def set_installer(self, val):
-        self._installer = val
-    installer = property(get_installer, set_installer)
 
     def get_clock(self):
         return self._clock
@@ -445,9 +436,9 @@ class Guest(XMLBuilder):
     # Hypervisor name (qemu, xen, kvm, etc.)
     # Deprecated: should be pulled directly from the installer
     def get_type(self):
-        return self._installer.type
+        return self.installer.type
     def set_type(self, val):
-        self._installer.type = val
+        self.installer.type = val
     type = property(get_type, set_type)
 
     # Deprecated: should be pulled directly from the installer
@@ -459,29 +450,29 @@ class Guest(XMLBuilder):
 
     # Deprecated: Should be called from the installer directly
     def get_location(self):
-        return self._installer.location
+        return self.installer.location
     def set_location(self, val):
-        self._installer.location = val
+        self.installer.location = val
     location = property(get_location, set_location)
 
     # Deprecated: Should be called from the installer directly
     def get_scratchdir(self):
-        return self._installer.scratchdir
+        return self.installer.scratchdir
     scratchdir = property(get_scratchdir)
 
     # Deprecated: Should be called from the installer directly
     def get_extraargs(self):
-        return self._installer.extraargs
+        return self.installer.extraargs
     def set_extraargs(self, val):
-        self._installer.extraargs = val
+        self.installer.extraargs = val
     extraargs = property(get_extraargs, set_extraargs)
 
     # Deprecated: Should set the installer values directly
     def get_cdrom(self):
-        return self._installer.location
+        return self.installer.location
     def set_cdrom(self, val):
-        self._installer.location = val
-        self._installer.cdrom = True
+        self.installer.location = val
+        self.installer.cdrom = True
     cdrom = property(get_cdrom, set_cdrom)
 
 
@@ -618,8 +609,8 @@ class Guest(XMLBuilder):
                 self._track_device(dev)
 
         self._xml_node.virtinst_root_doc = self._xml_root_doc
-        self._installer = virtinst.Installer.Installer(self.conn,
-                                                   parsexmlnode=self._xml_node)
+        self.installer = virtinst.Installer.Installer(self.conn,
+                                                  parsexmlnode=self._xml_node)
         self._features = DomainFeatures(self.conn,
                                         parsexmlnode=self._xml_node)
         self._clock = Clock(self.conn, parsexmlnode=self._xml_node)
@@ -781,15 +772,15 @@ class Guest(XMLBuilder):
         ignore = dry
 
         # Fetch install media, prepare installer devices
-        self._installer.prepare(guest=self,
+        self.installer.prepare(guest=self,
                                 meter=meter)
 
         # Initialize install device list
-        for dev in self._installer.install_devices:
+        for dev in self.installer.install_devices:
             self._install_devices.append(dev)
 
     def _cleanup_install(self):
-        self._installer.cleanup()
+        self.installer.cleanup()
 
     def _create_devices(self, progresscb):
         """

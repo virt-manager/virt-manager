@@ -150,8 +150,8 @@ def main(conn=None):
 
 
     # Build the Installer instance
-    installer = virtinst.ImageInstaller(conn, boot_index=options.boot,
-                                        image=image)
+    installer = virtinst.ImageInstaller(conn, image,
+                                        boot_index=options.boot)
 
     # Get Guest instance from installer parameters.
     guest = installer.guest_from_installer()

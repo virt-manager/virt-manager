@@ -1762,9 +1762,9 @@ class vmmCreate(vmmGObjectUI):
 
     # Interesting methods
     def build_installer(self, instclass):
-        installer = instclass(self.conn.get_backend(),
-                              type=self.capsdomain.hypervisor_type,
-                              os_type=self.capsguest.os_type)
+        installer = instclass(self.conn.get_backend())
+        installer.type = self.capsdomain.hypervisor_type
+        installer.os_type = self.capsguest.os_type
         installer.arch = self.capsguest.arch
 
         return installer

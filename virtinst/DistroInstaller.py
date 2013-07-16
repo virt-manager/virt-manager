@@ -155,27 +155,12 @@ def _upload_file(conn, meter, destpool, src):
 
 
 class DistroInstaller(Installer.Installer):
-    def __init__(self, conn, type="xen", location=None,
-                 extraargs=None, os_type=None):
-        # pylint: disable=W0622
-        # Redefining built-in 'type', but it matches the XML so keep it
+    def __init__(self, *args, **kwargs):
+        Installer.Installer.__init__(self, *args, **kwargs)
 
-        Installer.Installer.__init__(self, conn, type, location, extraargs,
-                                     os_type)
-
-        self._livecd = False
-
-        # True == location is a filesystem path
-        # False == location is a url
+        self.livecd = False
         self._location_is_path = True
 
-    # DistroInstaller specific methods/overwrites
-
-    def _get_livecd(self):
-        return self._livecd
-    def _set_livecd(self, val):
-        self._livecd = bool(val)
-    livecd = property(_get_livecd, _set_livecd)
 
     def get_location(self):
         return self._location
@@ -235,7 +220,6 @@ class DistroInstaller(Installer.Installer):
 
 
     # Private helper methods
-
     def _prepare_cdrom(self, guest, meter):
         transient = not self.livecd
         if not self._location_is_path:
