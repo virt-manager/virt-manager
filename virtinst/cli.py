@@ -843,7 +843,7 @@ def get_video(guest, video_models=None):
 def get_sound(old_sound_bool, sound_opts, guest):
     if not sound_opts:
         if old_sound_bool:
-            guest.add_device(VirtualAudio(conn=guest.conn))
+            guest.add_device(VirtualAudio(guest.conn))
         return
 
     for opts in listify(sound_opts):
@@ -1929,15 +1929,13 @@ def parse_video(guest, optstr, dev=None):
 # --soundhw parsing #
 #####################
 
-
 def parse_sound(guest, optstr, dev=None):
     opts = {"model" : optstr}
 
     if not dev:
-        dev = virtinst.VirtualAudio(conn=guest.conn)
+        dev = virtinst.VirtualAudio(guest.conn)
 
     set_param = _build_set_param(dev, opts)
-
     set_param("model", "model")
 
     if opts:

@@ -658,10 +658,20 @@ class TestXMLConfig(unittest.TestCase):
         i = utils.make_pxe_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
-        g.add_device(VirtualAudio(g.conn, "sb16"))
-        g.add_device(VirtualAudio(g.conn, "es1370"))
-        g.add_device(VirtualAudio(g.conn, "pcspk"))
-        g.add_device(VirtualAudio(g.conn))
+        d = VirtualAudio(g.conn)
+        d.model = "sb16"
+        g.add_device(d)
+
+        d = VirtualAudio(g.conn)
+        d.model = "es1370"
+        g.add_device(d)
+
+        d = VirtualAudio(g.conn)
+        d.model = "pcspk"
+        g.add_device(d)
+
+        d = VirtualAudio(g.conn)
+        g.add_device(d)
 
         self._compare(g, "boot-many-sounds", False)
 
@@ -737,8 +747,13 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(dev1)
 
         # Sound devices
-        g.add_device(VirtualAudio(g.conn, "sb16"))
-        g.add_device(VirtualAudio(g.conn, "es1370"))
+        d = VirtualAudio(g.conn)
+        d.model = "sb16"
+        g.add_device(d)
+
+        d = VirtualAudio(g.conn)
+        d.model = "es1370"
+        g.add_device(d)
 
         # Disk devices
         d = VirtualDisk(g.conn)

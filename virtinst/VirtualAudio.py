@@ -22,38 +22,11 @@ from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualAudio(VirtualDevice):
-
     _virtual_device_type = VirtualDevice.VIRTUAL_DEV_AUDIO
 
     MODEL_DEFAULT = "default"
     MODELS = ["es1370", "sb16", "pcspk", "ac97", "ich6", MODEL_DEFAULT]
 
-    def __init__(self, conn, model=None, parsexml=None, parsexmlnode=None):
-        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
-
-        self._model = None
-        if self._is_parse():
-            return
-
-        if model is None:
-            model = self.MODEL_DEFAULT
-        self.model = model
-
-    def get_model(self):
-        return self._model
-    def set_model(self, new_model):
-        if type(new_model) != str:
-            raise ValueError(_("'model' must be a string, "
-                               " was '%s'." % type(new_model)))
-        if not self.MODELS.count(new_model):
-            raise ValueError(_("Unsupported sound model '%s'" % new_model))
-        self._model = new_model
-    model = XMLProperty(get_model, set_model,
-                          xpath="./@model")
-
-    def _get_xml_config(self):
-        model = self.model
-        if model == self.MODEL_DEFAULT:
-            model = "es1370"
-
-        return "    <sound model='%s'/>" % model
+    model = XMLProperty(xpath="./@model",
+                        default_cb=lambda s: "es1370",
+                        default_name=MODEL_DEFAULT)
