@@ -391,7 +391,7 @@ class Installer(XMLBuilder):
         @param meter: progress meter
         @type meter: Urlgrabber ProgressMeter
         """
-        raise NotImplementedError("Must be implemented in subclass")
+        pass
 
     def detect_distro(self):
         """
@@ -433,11 +433,74 @@ class Installer(XMLBuilder):
 class ContainerInstaller(Installer):
     _has_install_phase = False
 
-    def prepare(self, guest, meter):
-        ignore = guest
-        ignore = meter
-
     def _get_bootdev(self, isinstall, guest):
         ignore = isinstall
         ignore = guest
         return self.bootconfig.BOOT_DEVICE_HARDDISK
+
+
+class PXEInstaller(Installer):
+    def _get_bootdev(self, isinstall, guest):
+        bootdev = self.bootconfig.BOOT_DEVICE_NETWORK
+
+        if (not isinstall and
+            [d for d in guest.get_devices("disk") if
+             d.device == d.DEVICE_DISK]):
+            # If doing post-install boot and guest has an HD attached
+            bootdev = self.bootconfig.BOOT_DEVICE_HARDDISK
+
+        return bootdev
+
+
+class LiveCDInstaller(Installer):
+    _has_install_phase = False
+
+    def _validate_location(self, val):
+        if not val:
+            return None
+        return self._make_cdrom_dev(val)
+    def _get_location(self):
+        return self._location
+    def _set_location(self, val):
+        self._validate_location(val)
+        self._location = val
+        self.cdrom = True
+    location = property(_get_location, _set_location)
+
+
+    # General Installer methods
+    def prepare(self, guest, meter):
+        self.cleanup()
+
+        disk = self._validate_location(self.location)
+
+        if not disk:
+            raise ValueError(_("CDROM media must be specified for the live "
+                               "CD installer."))
+
+        self.install_devices.append(disk)
+
+    # Internal methods
+    def _get_bootdev(self, isinstall, guest):
+        return self.bootconfig.BOOT_DEVICE_CDROM
+
+
+class ImportInstaller(Installer):
+    _has_install_phase = False
+
+    # Private methods
+    def _get_bootdev(self, isinstall, guest):
+        disks = guest.get_devices("disk")
+        if not disks:
+            return self.bootconfig.BOOT_DEVICE_HARDDISK
+        return self._disk_to_bootdev(disks[0])
+
+    def _disk_to_bootdev(self, disk):
+        if disk.device == virtinst.VirtualDisk.DEVICE_DISK:
+            return self.bootconfig.BOOT_DEVICE_HARDDISK
+        elif disk.device == virtinst.VirtualDisk.DEVICE_CDROM:
+            return self.bootconfig.BOOT_DEVICE_CDROM
+        elif disk.device == virtinst.VirtualDisk.DEVICE_FLOPPY:
+            return self.bootconfig.BOOT_DEVICE_FLOPPY
+        else:
+            return self.bootconfig.BOOT_DEVICE_HARDDISK

@@ -41,11 +41,9 @@ from virtinst.VirtualRedirDevice import VirtualRedirDevice
 from virtinst.VirtualMemballoon import VirtualMemballoon
 from virtinst.VirtualTPMDevice import VirtualTPMDevice
 from virtinst.DistroInstaller import DistroInstaller
-from virtinst.PXEInstaller import PXEInstaller
-from virtinst.LiveCDInstaller import LiveCDInstaller
-from virtinst.ImportInstaller import ImportInstaller
 from virtinst.ImageInstaller import ImageInstaller
-from virtinst.Installer import ContainerInstaller
+from virtinst.Installer import (ContainerInstaller, ImportInstaller,
+                                LiveCDInstaller, PXEInstaller)
 from virtinst.CloneManager import Cloner
 from virtinst.Clock import Clock
 from virtinst.CPU import CPU, CPUFeature
