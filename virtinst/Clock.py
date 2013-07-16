@@ -21,26 +21,9 @@ from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
 
 class Clock(XMLBuilder):
-    """
-    Class for generating <clock> XML
-    """
-
     _dumpxml_xpath = "/domain/clock"
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        XMLBuilder.__init__(self, conn, parsexml,
-                                                   parsexmlnode)
+    _XML_INDENT = 2
+    _XML_ROOT_NAME = "clock"
+    _XML_XPATH_RELATIVE = True
 
-        self._offset = None
-
-    def get_offset(self):
-        return self._offset
-    def set_offset(self, val):
-        self._offset = val
-    offset = XMLProperty(get_offset, set_offset,
-                           xpath="./clock/@offset")
-
-    def _get_xml_config(self):
-        if not self.offset:
-            return ""
-
-        return """  <clock offset="%s"/>""" % self.offset
+    offset = XMLProperty(xpath="./clock/@offset")
