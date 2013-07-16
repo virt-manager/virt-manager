@@ -188,6 +188,9 @@ def get_basic_paravirt_guest(installer=None):
         instboot.initrd = "/boot/initrd"
 
     g.installer._scratchdir = scratch
+    g.add_default_input_device()
+    g.add_default_console_device()
+
     return g
 
 
@@ -210,6 +213,9 @@ def get_basic_fullyvirt_guest(typ="xen", installer=None):
     g.installer.os_type = "hvm"
 
     g.installer._scratchdir = scratch
+    g.add_default_input_device()
+    g.add_default_console_device()
+
     return g
 
 

@@ -1437,6 +1437,8 @@ class vmmCreate(vmmGObjectUI):
                 if dev:
                     guest.add_device(dev)
 
+            guest.add_default_input_device()
+            guest.add_default_console_device()
         except Exception, e:
             self.err.show_err(_("Error setting up default devices:") + str(e))
             return None

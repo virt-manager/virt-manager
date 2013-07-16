@@ -70,6 +70,7 @@
     <parallel type="unix">
       <source mode="bind" path="/tmp/foobar"/>
     </parallel>
+    <console type="pty"/>
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>

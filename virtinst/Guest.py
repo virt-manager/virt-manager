@@ -51,8 +51,6 @@ class Guest(XMLBuilder):
     _DEFAULTS = osdict.DEFAULTS
     _OS_TYPES = osdict.OS_TYPES
 
-    _default_os_type = None
-
     @staticmethod
     def pretty_os_list():
         """
@@ -164,8 +162,7 @@ class Guest(XMLBuilder):
 
         return cpustr
 
-    def __init__(self, conn, type=None,
-                 installer=None, parsexml=None):
+    def __init__(self, conn, type=None, installer=None, parsexml=None):
         # pylint: disable=W0622
         # Redefining built-in 'type', but it matches the XML so keep it
 
@@ -201,29 +198,12 @@ class Guest(XMLBuilder):
         self.domain = None
         self._consolechild = None
 
-        self._default_input_device = None
-        self._default_console_device = None
-
         XMLBuilder.__init__(self, conn, parsexml)
         if self._is_parse():
             return
 
         if not self.installer:
-            i = virtinst.DistroInstaller(conn,
-                                         type=type,
-                                         os_type=self._default_os_type)
-            self.installer = i
-
-        # Add default devices (if applicable)
-        inp = self._get_default_input_device()
-        if inp:
-            self.add_device(inp)
-        self._default_input_device = inp
-
-        con = self._get_default_console_device()
-        con.virtinst_default = True
-        self.add_device(con)
-        self._default_console_device = con
+            self.installer = virtinst.DistroInstaller(conn, type)
 
         # Need to do this after all parameter init
         self._features = DomainFeatures(self.conn)
@@ -535,34 +515,16 @@ class Guest(XMLBuilder):
             dev.set_xml_node(node)
             self._add_child_node("./devices", node)
 
-        self._add_device(dev)
+        self._track_device(dev)
         if set_defaults:
             def list_one_dev(devtype):
                 if dev.virtual_device_type == devtype:
                     return [dev][:]
                 else:
                     return []
-            self._set_defaults(list_one_dev, None, self.features)
+            self._set_defaults(list_one_dev, self.features)
 
-    def _add_device(self, dev):
-        devtype = dev.virtual_device_type
-
-        # If user adds a device conflicting with a default assigned device
-        # remove the default
-        if (devtype == VirtualDevice.VIRTUAL_DEV_INPUT and
-            self._default_input_device):
-            if self._default_input_device in self.get_all_devices():
-                self.remove_device(self._default_input_device)
-            self._default_input_device = None
-
-        if (devtype in [VirtualDevice.VIRTUAL_DEV_CONSOLE,
-                        VirtualDevice.VIRTUAL_DEV_SERIAL] and
-            self._default_console_device):
-            if self._default_console_device in self.get_all_devices():
-                self.remove_device(self._default_console_device)
-            self._default_console_device = None
-
-        # Actually add the device
+    def _track_device(self, dev):
         self._devices.append(dev)
 
 
@@ -653,7 +615,7 @@ class Guest(XMLBuilder):
                 objclass = device_mappings.get(devnode.name)
 
                 dev = objclass(self.conn, parsexmlnode=devnode)
-                self._add_device(dev)
+                self._track_device(dev)
 
         self._xml_node.virtinst_root_doc = self._xml_root_doc
         self._installer = virtinst.Installer.Installer(self.conn,
@@ -666,19 +628,17 @@ class Guest(XMLBuilder):
         self._numatune = DomainNumatune(self.conn,
                                         parsexmlnode=self._xml_node)
 
-    def _get_default_input_device(self):
-        """
-        Return a VirtualInputDevice.
-        """
-        if self.installer and self.installer.is_container():
-            return None
-        dev = VirtualInputDevice(self.conn)
-        return dev
+    def add_default_input_device(self):
+        if self.installer.is_container():
+            return
+        self.add_device(VirtualInputDevice(self.conn))
 
-    def _get_default_console_device(self):
+    def add_default_console_device(self):
+        if self.installer.is_xenpv():
+            return
         dev = virtinst.VirtualConsoleDevice(self.conn)
         dev.type = dev.TYPE_PTY
-        return dev
+        self.add_device(dev)
 
     def _get_device_xml(self, devs, install=True):
 
@@ -872,12 +832,9 @@ class Guest(XMLBuilder):
 
         def get_transient_devices(devtype):
             return self._dev_build_list(devtype, devs)
-        def remove_transient_device(device):
-            devs.remove(device)
 
         # Set device defaults so we can validly generate XML
         self._set_defaults(get_transient_devices,
-                           remove_transient_device,
                            tmpfeat)
 
         if install:
@@ -1234,8 +1191,7 @@ class Guest(XMLBuilder):
         The install process will call a non-persistent version, so calling
         this manually isn't required.
         """
-        self._set_defaults(self.get_devices, self.remove_device,
-                           self.features)
+        self._set_defaults(self.get_devices, self.features)
 
     def _set_hvm_defaults(self, devlist_func, features):
         disktype = VirtualDevice.VIRTUAL_DEV_DISK
@@ -1267,7 +1223,7 @@ class Guest(XMLBuilder):
             self.conn.caps.host.arch == "ppc64"):
             self.installer.machine = "pseries"
 
-    def _set_pv_defaults(self, devlist_func, remove_func):
+    def _set_pv_defaults(self, devlist_func):
         # Default file backed PV guests to tap driver
         for d in devlist_func(VirtualDevice.VIRTUAL_DEV_DISK):
             if (d.type == VirtualDisk.TYPE_FILE
@@ -1280,10 +1236,6 @@ class Guest(XMLBuilder):
                 d.type = d.TYPE_MOUSE
             if d.bus == d.BUS_DEFAULT:
                 d.bus = d.BUS_XEN
-
-        for d in devlist_func(VirtualDevice.VIRTUAL_DEV_CONSOLE):
-            if hasattr(d, "virtinst_default"):
-                remove_func(d)
 
     def add_usb_ich9_controllers(self):
         ctrl = VirtualController(self.conn)
@@ -1309,14 +1261,14 @@ class Guest(XMLBuilder):
         ctrl.master_startport = 4
         self.add_device(ctrl)
 
-    def _set_defaults(self, devlist_func, remove_func, features):
+    def _set_defaults(self, devlist_func, features):
         for dev in devlist_func("all"):
             dev.set_defaults()
 
         if self.installer.is_hvm():
             self._set_hvm_defaults(devlist_func, features)
         if self.installer.is_xenpv():
-            self._set_pv_defaults(devlist_func, remove_func)
+            self._set_pv_defaults(devlist_func)
 
         soundtype = VirtualDevice.VIRTUAL_DEV_AUDIO
         videotype = VirtualDevice.VIRTUAL_DEV_VIDEO

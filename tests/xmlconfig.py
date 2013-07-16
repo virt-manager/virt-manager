@@ -30,7 +30,6 @@ from virtinst import (VirtualChannelDevice, VirtualConsoleDevice,
 from virtinst import VirtualVideoDevice
 from virtinst import VirtualController
 from virtinst import VirtualWatchdog
-from virtinst import VirtualInputDevice
 from virtinst import VirtualMemballoon
 
 from tests import utils
@@ -308,21 +307,6 @@ class TestXMLConfig(unittest.TestCase):
         g = utils.get_basic_fullyvirt_guest(installer=i)
         self._compare(g, "install-fullyvirt-livecd", False)
         self._compare(g, "install-fullyvirt-livecd", False)
-
-    def testDefaultDeviceRemoval(self):
-        g = utils.get_basic_fullyvirt_guest()
-        g.add_device(utils.get_filedisk())
-
-        inp = VirtualInputDevice(g.conn)
-        cons = VirtualConsoleDevice(g.conn)
-        cons.type = "pty"
-        g.add_device(inp)
-        g.add_device(cons)
-
-        g.remove_device(inp)
-        g.remove_device(cons)
-
-        self._compare(g, "boot-default-device-removal", False)
 
     def testOSDeviceDefaultChange(self):
         """
@@ -679,49 +663,48 @@ class TestXMLConfig(unittest.TestCase):
         i = utils.make_pxe_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
-        dev1 = VirtualSerialDevice(g.conn)
-        dev1.type = "null"
-        dev2 = VirtualParallelDevice(g.conn)
-        dev2.type = "unix"
-        dev2.source_path = "/tmp/foobar"
-        dev3 = VirtualSerialDevice(g.conn)
-        dev3.type = "tcp"
-        dev3.protocol = "telnet"
-        dev3.source_host = "my.source.host"
-        dev3.source_port = "1234"
-        dev4 = VirtualParallelDevice(g.conn)
-        dev4.type = "udp"
-        dev4.bind_host = "my.bind.host"
-        dev4.bind_port = "1111"
-        dev4.source_host = "my.source.host"
-        dev4.source_port = "2222"
+        dev = VirtualSerialDevice(g.conn)
+        dev.type = "null"
+        g.add_device(dev)
 
-        dev5 = VirtualChannelDevice(g.conn)
-        dev5.type = "pty"
-        dev5.target_type = dev5.CHANNEL_TARGET_VIRTIO
-        dev5.target_name = "foo.bar.frob"
+        dev = VirtualParallelDevice(g.conn)
+        dev.type = "unix"
+        dev.source_path = "/tmp/foobar"
+        g.add_device(dev)
 
-        dev6 = VirtualConsoleDevice(g.conn)
-        dev6.type = "pty"
+        dev = VirtualSerialDevice(g.conn)
+        dev.type = "tcp"
+        dev.protocol = "telnet"
+        dev.source_host = "my.source.host"
+        dev.source_port = "1234"
+        g.add_device(dev)
 
-        dev7 = VirtualConsoleDevice(g.conn)
-        dev7.type = "pty"
-        dev7.target_type = dev7.CONSOLE_TARGET_VIRTIO
+        dev = VirtualParallelDevice(g.conn)
+        dev.type = "udp"
+        dev.bind_host = "my.bind.host"
+        dev.bind_port = "1111"
+        dev.source_host = "my.source.host"
+        dev.source_port = "2222"
+        g.add_device(dev)
 
-        dev8 = VirtualChannelDevice(g.conn)
-        dev8.type = "pty"
-        dev8.target_type = dev8.CHANNEL_TARGET_GUESTFWD
-        dev8.target_address = "1.2.3.4"
-        dev8.target_port = "4567"
+        dev = VirtualChannelDevice(g.conn)
+        dev.type = "pty"
+        dev.target_type = dev.CHANNEL_TARGET_VIRTIO
+        dev.target_name = "foo.bar.frob"
+        g.add_device(dev)
 
-        g.add_device(dev1)
-        g.add_device(dev2)
-        g.add_device(dev3)
-        g.add_device(dev4)
-        g.add_device(dev5)
-        g.add_device(dev6)
-        g.add_device(dev7)
-        g.add_device(dev8)
+        dev = VirtualConsoleDevice(g.conn)
+        dev.type = "pty"
+        dev.target_type = dev.CONSOLE_TARGET_VIRTIO
+        g.add_device(dev)
+
+        dev = VirtualChannelDevice(g.conn)
+        dev.type = "pty"
+        dev.target_type = dev.CHANNEL_TARGET_GUESTFWD
+        dev.target_address = "1.2.3.4"
+        dev.target_port = "4567"
+        g.add_device(dev)
+
         self._compare(g, "boot-many-chars", False)
 
     def testManyDevices(self):

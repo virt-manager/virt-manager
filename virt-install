@@ -535,6 +535,10 @@ def build_guest_instance(conn, options):
     cli.get_smartcard(guest, options.smartcard)
     cli.get_tpm(guest, options.tpm)
 
+    if not guest.get_devices("input"):
+        guest.add_default_input_device()
+    if not guest.get_devices("console") and not guest.get_devices("serial"):
+        guest.add_default_console_device()
 
     # Install options
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
