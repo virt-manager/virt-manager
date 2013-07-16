@@ -88,10 +88,8 @@ class VirtualHostDevice(VirtualDevice):
 
     def _get_default_managed(self):
         return self.conn.is_xen() and "no" or "yes"
-    managed = XMLProperty(get_converter=lambda s, x: bool(x == "yes"),
-                          set_converter=lambda s, x: x and "yes" or "no",
-                          default_cb=_get_default_managed,
-                          xpath="./@managed")
+    managed = XMLProperty(xpath="./@managed", is_yesno=True,
+                          default_cb=_get_default_managed)
 
     vendor = XMLProperty(xpath="./source/vendor/@id")
     product = XMLProperty(xpath="./source/product/@id")

@@ -228,7 +228,8 @@ class XMLProperty(property):
     def __init__(self, fget=None, fset=None, doc=None, xpath=None, name=None,
                  get_converter=None, set_converter=None,
                  xml_get_xpath=None, xml_set_xpath=None,
-                 is_bool=False, is_tri=False, is_int=False, is_multi=False,
+                 is_bool=False, is_tri=False, is_int=False,
+                 is_multi=False, is_yesno=False,
                  clear_first=None, default_cb=None, default_name=None):
         """
         Set a XMLBuilder class property that represents a value in the
@@ -263,6 +264,7 @@ class XMLProperty(property):
             no value set.
         @param is_multi: Whether data is coming multiple or a single node
         @param is_int: Whethere this is an integer property in the XML
+        @param is_yesno: Whethere this is a yes/no property in the XML
         @param clear_first: List of xpaths to unset before any 'set' operation.
             For those weird interdependent XML props like disk source type and
             path attribute.
@@ -283,6 +285,7 @@ class XMLProperty(property):
         self._is_bool = is_bool or is_tri
         self._is_int = is_int
         self._is_multi = is_multi
+        self._is_yesno = is_yesno
 
         self._xpath_for_getter_cb = xml_get_xpath
         self._xpath_for_setter_cb = xml_set_xpath
@@ -294,7 +297,7 @@ class XMLProperty(property):
         self._default_name = default_name
 
         if sum([int(bool(i)) for i in [
-            self._is_bool, self._is_int,
+            self._is_bool, self._is_int, self._is_yesno,
             (self._convert_value_for_getter_cb or
              self._convert_value_for_setter_cb)]]) > 1:
             raise RuntimeError("Conflict property converter options.")
@@ -397,6 +400,9 @@ class XMLProperty(property):
             val = self._convert_value_for_setter_cb(xmlbuilder, val)
         elif self._default_name and val == self._default_name:
             val = self._default_cb(xmlbuilder)
+        elif self._is_yesno:
+            if val is not None:
+                val = bool(val) and "yes" or "no"
         return val
 
     def _build_node_list(self, xmlbuilder, xpath):
@@ -442,6 +448,8 @@ class XMLProperty(property):
             if "0x" in str(val):
                 intkwargs["base"] = 16
             return int(val, **intkwargs)
+        elif self._is_yesno and val is not None:
+            return bool(val == "yes")
         elif self._convert_value_for_getter_cb:
             return self._convert_value_for_getter_cb(xmlbuilder, val)
         elif self._is_multi and val is None:

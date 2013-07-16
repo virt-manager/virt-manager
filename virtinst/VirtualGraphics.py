@@ -45,18 +45,6 @@ def _int_or_none(val):
     return int(val)
 
 
-def _yes_no_none(val):
-    if val is None:
-        return None
-    return val and "yes" or "no"
-
-
-def _yes_bool(val):
-    if val is None:
-        return None
-    return bool(val == "yes")
-
-
 class VirtualGraphics(VirtualDevice):
     virtual_device_type = VirtualDevice.VIRTUAL_DEV_GRAPHICS
 
@@ -168,10 +156,8 @@ class VirtualGraphics(VirtualDevice):
             get_converter=lambda s, v: _int_or_none(v),
             set_converter=lambda s, v: _validate_port("TLS port", v),
             default_cb=_get_default_tlsport)
-    autoport = XMLProperty(xpath="./@autoport",
-                    get_converter=lambda s, v: _yes_bool(v),
-                    set_converter=lambda s, v: _yes_no_none(v),
-                    default_cb=_get_default_autoport)
+    autoport = XMLProperty(xpath="./@autoport", is_yesno=True,
+                           default_cb=_get_default_autoport)
 
     channel_main_mode = _get_mode_prop(CHANNEL_TYPE_MAIN)
     channel_display_mode = _get_mode_prop(CHANNEL_TYPE_DISPLAY)

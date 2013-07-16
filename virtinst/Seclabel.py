@@ -92,6 +92,4 @@ class Seclabel(XMLBuilder):
 
     label = XMLProperty(xpath="./seclabel/label")
     imagelabel = XMLProperty(xpath="./seclabel/imagelabel")
-    relabel = XMLProperty(xpath="./seclabel/@relabel",
-                          get_converter=lambda s, x: bool(x == "yes"),
-                          set_converter=lambda s, x: x and "yes" or "no")
+    relabel = XMLProperty(xpath="./seclabel/@relabel", is_yesno=True)

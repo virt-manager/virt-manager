@@ -122,7 +122,7 @@ class XMLParseTest(unittest.TestCase):
         check("model", "selinux", "apparmor")
         check("label", "foolabel", "barlabel")
         check("imagelabel", "imagelabel", "fooimage")
-        check("relabel", False, True)
+        check("relabel", None, True)
 
         check = self._make_checker(guest.installer)
         check("type", "kvm", "test")
