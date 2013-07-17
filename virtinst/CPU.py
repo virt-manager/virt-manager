@@ -22,12 +22,6 @@ from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 import libxml2
 
 
-def _int_or_none(val):
-    if val is None:
-        return None
-    return int(val)
-
-
 class CPUFeature(XMLBuilder):
     """
     Class for generating <cpu> child <feature> XML
@@ -35,40 +29,35 @@ class CPUFeature(XMLBuilder):
 
     POLICIES = ["force", "require", "optional", "disable", "forbid"]
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        XMLBuilder.__init__(self, conn, parsexml,
-                                                   parsexmlnode)
+    _XML_PROP_ORDER = ["_xmlname", "policy"]
+    _XML_ROOT_NAME = "cpu"
+    _XML_XPATH_RELATIVE = True
+    _XML_INDENT = 4
 
-        self._name = None
-        self._policy = None
+    def __init__(self, conn, name, parsexml=None, parsexmlnode=None):
+        XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
 
-        if self._is_parse():
-            return
+        self._name = name
+        self._xmlname = name
 
     def _get_name(self):
-        return self._name
-    def _set_name(self, val):
-        self._name = val
-    name = XMLProperty(_get_name, _set_name,
-                         xpath="./@name")
+        return self._xmlname
+    name = property(_get_name)
 
-    def _get_policy(self):
-        return self._policy
-    def _set_policy(self, val):
-        self._policy = val
-    policy = XMLProperty(_get_policy, _set_policy,
-                           xpath="./@policy")
+    def _name_xpath(self):
+        return "./cpu/feature[@name='%s']/@name" % self._name
+    _xmlname = XMLProperty(name="feature name",
+                      xml_get_xpath=_name_xpath,
+                      xml_set_xpath=_name_xpath)
+    def _policy_xpath(self):
+        return "./cpu/feature[@name='%s']/@policy" % self._name
+    policy = XMLProperty(name="feature policy",
+                         xml_get_xpath=_policy_xpath,
+                         xml_set_xpath=_policy_xpath)
 
-    def _get_xml_config(self):
-        if not self.name:
-            return ""
-
-        xml = "    <feature"
-        if self.policy:
-            xml += " policy='%s'" % self.policy
-        xml += " name='%s'/>" % self.name
-
-        return xml
+    def clear(self):
+        self.policy = None
+        self._xmlname = None
 
 
 class CPU(XMLBuilder):
@@ -76,25 +65,19 @@ class CPU(XMLBuilder):
     Class for generating <cpu> XML
     """
 
-    _dumpxml_xpath = "/domain/cpu"
-
     MATCHS = ["minimum", "exact", "strict"]
 
+    _dumpxml_xpath = "/domain/cpu"
+    _XML_ROOT_NAME = "cpu"
+    _XML_INDENT = 2
+    _XML_XPATH_RELATIVE = True
+    _XML_PROP_ORDER = ["mode", "match", "model", "vendor",
+                       "sockets", "cores", "threads"]
+
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        self._model = None
-        self._match = None
-        self._vendor = None
-        self._mode = None
         self._features = []
-
-        self._sockets = None
-        self._cores = None
-        self._threads = None
-
-        XMLBuilder.__init__(self, conn, parsexml,
-                                                   parsexmlnode)
-        if self._is_parse():
-            return
+        self._XML_SUB_ELEMENTS = self._XML_SUB_ELEMENTS + ["_features"]
+        XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
 
     def _parsexml(self, xml, node):
         XMLBuilder._parsexml(self, xml, node)
@@ -102,88 +85,24 @@ class CPU(XMLBuilder):
         for node in self._xml_node.children:
             if node.name != "feature":
                 continue
-            feature = CPUFeature(self.conn, parsexmlnode=node)
+            if not node.prop("name"):
+                continue
+            feature = CPUFeature(self.conn, node.prop("name"),
+                                 parsexmlnode=self._xml_node)
             self._features.append(feature)
+
+    def add_feature(self, name, policy="require"):
+        feature = CPUFeature(self.conn, name, parsexmlnode=self._xml_node)
+        feature.policy = policy
+        self._features.append(feature)
+
+    def remove_feature(self, feature):
+        self._features.remove(feature)
+        feature.clear()
 
     def _get_features(self):
         return self._features[:]
     features = property(_get_features)
-
-    def add_feature(self, name, policy="require"):
-        feature = CPUFeature(self.conn)
-        feature.name = name
-        feature.policy = policy
-
-        if self._is_parse():
-            xml = feature.get_xml_config()
-            node = libxml2.parseDoc(xml).children
-            feature.set_xml_node(node)
-            self._add_child_node("./cpu", node)
-
-        self._features.append(feature)
-
-    def remove_feature(self, feature):
-        if self._is_parse() and feature in self._features:
-            xpath = feature.get_xml_node_path()
-            if xpath:
-                self._remove_child_xpath(xpath)
-
-        self._features.remove(feature)
-
-
-    def _get_model(self):
-        return self._model
-    def _set_model(self, val):
-        if val:
-            self.mode = "custom"
-        if val and not self.match:
-            self.match = "exact"
-        self._model = val
-    model = XMLProperty(_get_model, _set_model,
-                          xpath="./cpu/model")
-
-    def _get_match(self):
-        return self._match
-    def _set_match(self, val):
-        self._match = val
-    match = XMLProperty(_get_match, _set_match,
-                          xpath="./cpu/@match")
-
-    def _get_vendor(self):
-        return self._vendor
-    def _set_vendor(self, val):
-        self._vendor = val
-    vendor = XMLProperty(_get_vendor, _set_vendor,
-                           xpath="./cpu/vendor")
-
-    def _get_mode(self):
-        return self._mode
-    def _set_mode(self, val):
-        self._mode = val
-    mode = XMLProperty(_get_mode, _set_mode,
-                         xpath="./cpu/@mode")
-
-    # Topology properties
-    def _get_sockets(self):
-        return self._sockets
-    def _set_sockets(self, val):
-        self._sockets = _int_or_none(val)
-    sockets = XMLProperty(_get_sockets, _set_sockets, is_int=True,
-                          xpath="./cpu/topology/@sockets")
-
-    def _get_cores(self):
-        return self._cores
-    def _set_cores(self, val):
-        self._cores = _int_or_none(val)
-    cores = XMLProperty(_get_cores, _set_cores, is_int=True,
-                        xpath="./cpu/topology/@cores")
-
-    def _get_threads(self):
-        return self._threads
-    def _set_threads(self, val):
-        self._threads = _int_or_none(val)
-    threads = XMLProperty(_get_threads, _set_threads, is_int=True,
-                          xpath="./cpu/topology/@threads")
 
     def clear_attrs(self):
         self.match = None
@@ -259,56 +178,23 @@ class CPU(XMLBuilder):
 
         return
 
-    def _get_topology_xml(self):
-        xml = ""
-        if self.sockets:
-            xml += " sockets='%s'" % self.sockets
-        if self.cores:
-            xml += " cores='%s'" % self.cores
-        if self.threads:
-            xml += " threads='%s'" % self.threads
 
-        if not xml:
-            return ""
-        return "    <topology%s/>\n" % xml
+    ##################
+    # XML properties #
+    ##################
 
-    def _get_feature_xml(self):
-        xml = ""
-        for feature in self._features:
-            xml += feature.get_xml_config() + "\n"
-        return xml
-
-    def _get_xml_config(self):
-        top_xml = self._get_topology_xml()
-        feature_xml = self._get_feature_xml()
-        mode_xml = ""
-        match_xml = ""
-        if self.match:
-            match_xml = " match='%s'" % self.match
-        xml = ""
-
-        if self.model == "host-passthrough":
-            self.mode = "host-passthrough"
-            mode_xml = " mode='%s'" % self.mode
-            xml += "  <cpu%s/>" % mode_xml
-            return xml
-        else:
+    def _set_model(self, val):
+        if val:
             self.mode = "custom"
-            mode_xml = " mode='%s'" % self.mode
+            if not self.match:
+                self.match = "exact"
+        return val
+    model = XMLProperty(xpath="./cpu/model", set_converter=_set_model)
 
-        if not (self.model or top_xml or feature_xml):
-            return ""
+    match = XMLProperty(xpath="./cpu/@match")
+    vendor = XMLProperty(xpath="./cpu/vendor")
+    mode = XMLProperty(xpath="./cpu/@mode")
 
-        # Simple topology XML mode
-        xml += "  <cpu%s%s>\n" % (mode_xml, match_xml)
-        if self.model:
-            xml += "    <model>%s</model>\n" % self.model
-        if self.vendor:
-            xml += "    <vendor>%s</vendor>\n" % self.vendor
-        if top_xml:
-            xml += top_xml
-        if feature_xml:
-            xml += feature_xml
-
-        xml += "  </cpu>"
-        return xml
+    sockets = XMLProperty(xpath="./cpu/topology/@sockets", is_int=True)
+    cores = XMLProperty(xpath="./cpu/topology/@cores", is_int=True)
+    threads = XMLProperty(xpath="./cpu/topology/@threads", is_int=True)

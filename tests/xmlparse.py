@@ -161,7 +161,7 @@ class XMLParseTest(unittest.TestCase):
         check("sockets", 4, 4)
 
         check = self._make_checker(guest.cpu.features[0])
-        check("name", "x2apic", "foofeat")
+        check("name", "x2apic")
         check("policy", "force", "disable")
         guest.cpu.remove_feature(guest.cpu.features[1])
         guest.cpu.add_feature("addfeature")

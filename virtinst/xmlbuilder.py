@@ -378,7 +378,8 @@ class XMLProperty(property):
         if not xpath.startswith(root):
             raise RuntimeError("%s: xpath did not start with root=%s" %
                                (str(self), root))
-        return "." + xpath[len(root):]
+        ret = "." + xpath[len(root):]
+        return ret
 
 
     def _xpath_list_for_setter(self, xpath, setval, nodelist):
@@ -696,21 +697,18 @@ class XMLBuilder(object):
             else:
                 ret = _sanitize_libxml_xml(node.serialize())
         else:
-            try:
-                self._xml_fixup_relative_xpath = self._XML_XPATH_RELATIVE
-                xmlstub = self._make_xml_stub(fail=False)
-                ret = self._get_xml_config(*args, **kwargs)
-                if ret is None:
-                    return None
-                ret = self._add_parse_bits(ret)
+            xmlstub = self._make_xml_stub(fail=False)
+            ret = self._get_xml_config(*args, **kwargs)
+            if ret is None:
+                return None
+            ret = self._add_parse_bits(ret)
 
-                for propname in self._XML_SUB_ELEMENTS:
-                    ret = getattr(self, propname)._add_parse_bits(ret)
+            for propname in self._XML_SUB_ELEMENTS:
+                for prop in util.listify(getattr(self, propname)):
+                    ret = prop._add_parse_bits(ret)
 
-                if ret == xmlstub:
-                    ret = ""
-            finally:
-                self._xml_fixup_relative_xpath = False
+            if ret == xmlstub:
+                ret = ""
 
         return self._cleanup_xml(ret)
 
@@ -852,6 +850,7 @@ class XMLBuilder(object):
         origproporder = self._proporder[:]
         origpropstore = self._propstore.copy()
         try:
+            self._xml_fixup_relative_xpath = self._XML_XPATH_RELATIVE
             return self._do_add_parse_bits(xml)
         finally:
             self._xml_root_doc = None
@@ -859,3 +858,4 @@ class XMLBuilder(object):
             self._xml_ctx = None
             self._proporder = origproporder
             self._propstore = origpropstore
+            self._xml_fixup_relative_xpath = False

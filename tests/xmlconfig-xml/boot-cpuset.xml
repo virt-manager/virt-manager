@@ -12,12 +12,12 @@
   <features>
     <acpi/><apic/>
   </features>
-  <cpu mode="custom" match="minimum">
+  <cpu match="minimum" mode="custom">
     <model>footest</model>
     <vendor>Intel</vendor>
     <topology sockets="4" cores="5" threads="2"/>
-    <feature policy="force" name="x2apic"/>
-    <feature policy="forbid" name="lahf_lm"/>
+    <feature name="x2apic" policy="force"/>
+    <feature name="lahf_lm" policy="forbid"/>
   </cpu>
   <clock offset="utc"/>
   <on_poweroff>destroy</on_poweroff>

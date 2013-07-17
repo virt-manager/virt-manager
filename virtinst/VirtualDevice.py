@@ -132,7 +132,7 @@ class VirtualDeviceAddress(XMLBuilder):
 
     _XML_ROOT_NAME = "address"
     _XML_INDENT = 0
-    _XML_XPATH_RELATIVE = True
+    #_XML_XPATH_RELATIVE = True
     _XML_PROP_ORDER = ["type", "domain", "bus", "slot", "function"]
 
     def set_addrstr(self, addrstr):

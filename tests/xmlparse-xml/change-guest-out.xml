@@ -20,8 +20,8 @@
     <model>qemu64</model>
     <vendor>qemuvendor</vendor>
     <topology sockets="4" cores="3" threads="1"/>
-    <feature policy="disable" name="foofeat"/>
-    <feature policy="require" name="addfeature"/>
+    <feature policy="disable" name="x2apic"/>
+    <feature name="addfeature" policy="require"/>
   </cpu>
   <clock offset="localtime"/>
   <on_poweroff>destroy</on_poweroff>
