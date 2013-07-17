@@ -417,19 +417,13 @@ class Guest(XMLBuilder):
                        doc=_("Whether we should overwrite an existing guest "
                              "with the same name."))
 
-    def get_type(self):
-        return self.os.type
-    def set_type(self, val):
-        self.os.type = val
-    type = property(get_type, set_type)
-
 
     ########################################
     # Device Add/Remove Public API methods #
     ########################################
 
     def _dev_build_list(self, devtype, devlist=None):
-        if not devlist:
+        if devlist is None:
             devlist = self._devices
 
         newlist = []
@@ -461,7 +455,12 @@ class Guest(XMLBuilder):
                     return [dev][:]
                 else:
                     return []
-            self._set_defaults(list_one_dev, self.features)
+            origdev = self._devices
+            try:
+                self._devices = [dev]
+                self._set_defaults(self.features)
+            except:
+                self._devices = origdev
 
     def _track_device(self, dev):
         self._devices.append(dev)
@@ -512,6 +511,13 @@ class Guest(XMLBuilder):
             if xpath:
                 self._remove_child_xpath(xpath)
 
+    bootloader = XMLProperty(xpath="./bootloader")
+    type = XMLProperty(xpath="./@type", default_cb=lambda s: "xen")
+
+    def _cleanup_xml(self, xml):
+        if not xml.endswith("\n"):
+            xml += "\n"
+        return xml
 
     ################################
     # Private xml building methods #
@@ -677,16 +683,34 @@ class Guest(XMLBuilder):
 
         return xml
 
+    def _get_default_init(self):
+        for fs in self.get_devices("filesystem"):
+            if fs.target == "/":
+                return "/sbin/init"
+        return "/bin/sh"
+
     def _get_osblob(self, install):
         """
         Return os, features, and clock xml (Implemented in subclass)
         """
         oscopy = self.os.copy()
         self.installer.alter_bootconfig(self, install, oscopy)
-        osxml = oscopy._get_osblob_helper(self, install, oscopy, self.os)
-        if not osxml:
-            return None
-        return osxml
+
+        if oscopy.is_container() and not oscopy.init:
+            oscopy.init = self._get_default_init()
+        if not oscopy.loader and oscopy.is_hvm() and self.type == "xen":
+            oscopy.loader = "/usr/lib/xen/boot/hvmloader"
+        if oscopy.os_type == "xen" and self.type == "xen":
+            # Use older libvirt 'linux' value for back compat
+            oscopy.os_type = "linux"
+        if oscopy.kernel or oscopy.init:
+            oscopy.bootorder = []
+
+        return oscopy.get_xml_config() or None
+
+    def _get_osblob_helper(self, guest, isinstall,
+                           bootconfig, endbootconfig):
+        return self.get_xml_config()
 
     def _get_vcpu_xml(self):
         curvcpus_supported = self.conn.check_conn_support(
@@ -736,7 +760,19 @@ class Guest(XMLBuilder):
     # Public API #
     ##############
 
-    def _get_xml_config(self, install=True, disk_boot=False):
+    def _get_xml_config(self, *args, **kwargs):
+        # We do a shallow copy of the device list here, and set the defaults.
+        # This way, default changes aren't persistent, and we don't need
+        # to worry about when to call set_defaults
+        origdevs = self._devices
+        try:
+            self._devices = [dev.copy() for dev in self._devices]
+            return self._do_get_xml_config(*args, **kwargs)
+        finally:
+            self._devices = origdevs
+
+
+    def _do_get_xml_config(self, install=True, disk_boot=False):
         """
         Return the full Guest xml configuration.
 
@@ -754,35 +790,21 @@ class Guest(XMLBuilder):
         """
         # pylint: disable=W0221
         # Argument number differs from overridden method
-
-        # We do a shallow copy of the device list here, and set the defaults.
-        # This way, default changes aren't persistent, and we don't need
-        # to worry about when to call set_defaults
-        origdevs = self.get_all_devices()
-        devs = []
-        for dev in origdevs:
-            devs.append(dev.copy())
         tmpfeat = self.features.copy()
+        self._set_defaults(tmpfeat)
 
-        def get_transient_devices(devtype):
-            return self._dev_build_list(devtype, devs)
+        action = install and "destroy" or "restart"
+        osblob_install = install and not disk_boot
 
-        # Set device defaults so we can validly generate XML
-        self._set_defaults(get_transient_devices,
-                           tmpfeat)
-
-        if install:
-            action = "destroy"
-        else:
-            action = "restart"
-
-        osblob_install = install
-        if disk_boot:
-            osblob_install = False
-
-        osblob = self._get_osblob(osblob_install)
         if osblob_install and not self.installer.has_install_phase():
             return None
+
+        if (not install and
+            self.os.is_xenpv() and
+            not self.os.kernel):
+            osblob = "  <bootloader>/usr/bin/pygrub</bootloader>"
+        else:
+            osblob = self._get_osblob(osblob_install)
 
         desc_xml = ""
         if self.description is not None:
@@ -811,8 +833,7 @@ class Guest(XMLBuilder):
         # <cputune>
         xml = add(self.numatune.get_xml_config())
         # <sysinfo>
-        # XXX: <bootloader> goes here, not in installer XML
-        xml = add("  %s" % osblob)
+        xml = add(osblob)
         xml = add(self._get_features_xml(tmpfeat))
         xml = add(self._get_cpu_xml())
         xml = add(self._get_clock_xml())
@@ -820,7 +841,7 @@ class Guest(XMLBuilder):
         xml = add("  <on_reboot>%s</on_reboot>" % action)
         xml = add("  <on_crash>%s</on_crash>" % action)
         xml = add("  <devices>")
-        xml = add(self._get_device_xml(devs, install))
+        xml = add(self._get_device_xml(self.get_all_devices(), install))
         xml = add("  </devices>")
         xml = add(self._get_seclabel_xml())
         xml = add("</domain>\n")
@@ -1125,20 +1146,20 @@ class Guest(XMLBuilder):
         The install process will call a non-persistent version, so calling
         this manually isn't required.
         """
-        self._set_defaults(self.get_devices, self.features)
+        self._set_defaults(self.features)
 
-    def _set_hvm_defaults(self, devlist_func, features):
+    def _set_hvm_defaults(self, features):
         disktype = VirtualDevice.VIRTUAL_DEV_DISK
         nettype = VirtualDevice.VIRTUAL_DEV_NET
         disk_bus  = self._lookup_device_param(disktype, "bus")
         net_model = self._lookup_device_param(nettype, "model")
 
         # Only overwrite params if they weren't already specified
-        for net in devlist_func(nettype):
+        for net in self.get_devices(nettype):
             if net_model and not net.model:
                 net.model = net_model
 
-        for disk in devlist_func(disktype):
+        for disk in self.get_devices(disktype):
             if (disk_bus and not disk.bus and
                 disk.device == VirtualDisk.DEVICE_DISK):
                 disk.bus = disk_bus
@@ -1157,15 +1178,15 @@ class Guest(XMLBuilder):
             self.conn.caps.host.arch == "ppc64"):
             self.os.machine = "pseries"
 
-    def _set_pv_defaults(self, devlist_func):
+    def _set_pv_defaults(self):
         # Default file backed PV guests to tap driver
-        for d in devlist_func(VirtualDevice.VIRTUAL_DEV_DISK):
+        for d in self.get_devices(VirtualDevice.VIRTUAL_DEV_DISK):
             if (d.type == VirtualDisk.TYPE_FILE
                 and d.driver_name is None
                 and util.is_blktap_capable(self.conn)):
                 d.driver_name = VirtualDisk.DRIVER_TAP
 
-        for d in devlist_func(VirtualDevice.VIRTUAL_DEV_INPUT):
+        for d in self.get_devices(VirtualDevice.VIRTUAL_DEV_INPUT):
             if d.type == d.TYPE_DEFAULT:
                 d.type = d.TYPE_MOUSE
             if d.bus == d.BUS_DEFAULT:
@@ -1195,14 +1216,14 @@ class Guest(XMLBuilder):
         ctrl.master_startport = 4
         self.add_device(ctrl)
 
-    def _set_defaults(self, devlist_func, features):
-        for dev in devlist_func("all"):
+    def _set_defaults(self, features):
+        for dev in self.get_devices("all"):
             dev.set_defaults()
 
         if self.os.is_hvm():
-            self._set_hvm_defaults(devlist_func, features)
+            self._set_hvm_defaults(features)
         if self.os.is_xenpv():
-            self._set_pv_defaults(devlist_func)
+            self._set_pv_defaults()
 
         soundtype = VirtualDevice.VIRTUAL_DEV_AUDIO
         videotype = VirtualDevice.VIRTUAL_DEV_VIDEO
@@ -1213,7 +1234,7 @@ class Guest(XMLBuilder):
         # Set default input values
         input_type = self._lookup_device_param(inputtype, "type")
         input_bus = self._lookup_device_param(inputtype, "bus")
-        for inp in devlist_func(inputtype):
+        for inp in self.get_devices(inputtype):
             if (inp.type == inp.TYPE_DEFAULT and
                 inp.bus  == inp.BUS_DEFAULT):
                 inp.type = input_type
@@ -1221,13 +1242,13 @@ class Guest(XMLBuilder):
 
         # Generate disk targets, and set preferred disk bus
         used_targets = []
-        for disk in devlist_func(VirtualDevice.VIRTUAL_DEV_DISK):
+        for disk in self.get_devices(VirtualDevice.VIRTUAL_DEV_DISK):
             if not disk.bus:
                 if disk.device == disk.DEVICE_FLOPPY:
                     disk.bus = "fdc"
                 else:
                     if self.os.is_hvm():
-                        if (self.os.type == "kvm" and
+                        if (self.type == "kvm" and
                             self.os.machine == "pseries"):
                             disk.bus = "scsi"
                         else:
@@ -1241,14 +1262,14 @@ class Guest(XMLBuilder):
 
         # Set sound device model
         sound_model  = self._lookup_device_param(soundtype, "model")
-        for sound in devlist_func(soundtype):
+        for sound in self.get_devices(soundtype):
             if sound.model == sound.MODEL_DEFAULT:
                 sound.model = sound_model
 
         # Set video device model
         # QXL device (only if we use spice) - safe even if guest is VGA only
         def has_spice():
-            for gfx in devlist_func(gfxtype):
+            for gfx in self.get_devices(gfxtype):
                 if gfx.type == gfx.TYPE_SPICE:
                     return True
         if has_spice():
@@ -1256,13 +1277,13 @@ class Guest(XMLBuilder):
         else:
             video_model  = self._lookup_device_param(videotype, "model")
 
-        for video in devlist_func(videotype):
+        for video in self.get_devices(videotype):
             if video.model == video.MODEL_DEFAULT:
                 video.model = video_model
 
         # Spice agent channel (only if we use spice)
         def has_spice_agent():
-            for chn in devlist_func(channeltype):
+            for chn in self.get_devices(channeltype):
                 if chn.type == chn.TYPE_SPICEVMC:
                     return True
 

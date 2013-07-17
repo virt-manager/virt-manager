@@ -700,6 +700,8 @@ class XMLBuilder(object):
                 self._xml_fixup_relative_xpath = self._XML_XPATH_RELATIVE
                 xmlstub = self._make_xml_stub(fail=False)
                 ret = self._get_xml_config(*args, **kwargs)
+                if ret is None:
+                    return None
                 ret = self._add_parse_bits(ret)
 
                 for propname in self._XML_SUB_ELEMENTS:
@@ -822,8 +824,9 @@ class XMLBuilder(object):
             indent += 1
         xml = "\n".join([l[indent:] for l in xml.splitlines()])
 
-        # Parse the XML into our internal state
-        self._parsexml(xml, None)
+        # Parse the XML into our internal state. Use the raw
+        # _parsexml so we don't hit Guest parsing into its internal state
+        XMLBuilder._parsexml(self, xml, None)
 
         # Set up preferred XML ordering
         do_order = self._proporder[:]

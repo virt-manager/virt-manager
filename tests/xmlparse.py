@@ -113,6 +113,8 @@ class XMLParseTest(unittest.TestCase):
                       "11111111-2222-3333-4444-555555555555")
         check("emulator", "/usr/lib/xen/bin/qemu-dm", "/usr/binnnn/fooemu")
         check("hugepage", False, True)
+        check("type", "kvm", "test")
+        check("bootloader", None, "pygrub")
 
         check = self._make_checker(guest.clock)
         check("offset", "utc", "localtime")
@@ -125,7 +127,6 @@ class XMLParseTest(unittest.TestCase):
         check("relabel", None, True)
 
         check = self._make_checker(guest.os)
-        check("type", "kvm", "test")
         check("os_type", "hvm", "xen")
         check("arch", "i686", None)
         check("machine", "foobar", "pc-0.11")

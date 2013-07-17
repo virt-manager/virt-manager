@@ -88,11 +88,10 @@ class TestXMLConfig(unittest.TestCase):
         meter = None
         removeOld = None
         wait = True
-        dom = None
 
         try:
-            dom = guest.start_install(consolecb, meter, removeOld, wait)
-            dom.destroy()
+            guest.start_install(consolecb, meter, removeOld, wait)
+            guest.domain.destroy()
 
             # Replace kernel/initrd with known info
             if guest.installer._install_kernel:
@@ -114,15 +113,14 @@ class TestXMLConfig(unittest.TestCase):
                 guest.continue_install(consolecb, meter, wait)
 
         finally:
-            if dom:
-                try:
-                    dom.destroy()
-                except:
-                    pass
-                try:
-                    dom.undefine()
-                except:
-                    pass
+            try:
+                guest.domain.destroy()
+            except:
+                pass
+            try:
+                guest.domain.undefine()
+            except:
+                pass
 
 
     def testBootParavirtDiskFile(self):
@@ -321,6 +319,10 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(utils.get_virtual_network())
 
         # Call get_xml_config sets first round of defaults w/o os_variant set
+        g.get_xml_config(do_install)
+        g._prepare_install(None)
+        g.get_xml_config(do_install)
+        g._prepare_install(None)
         g.get_xml_config(do_install)
 
         g.os_variant = "fedora11"
