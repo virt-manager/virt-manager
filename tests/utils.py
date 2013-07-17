@@ -184,9 +184,8 @@ def get_basic_paravirt_guest(installer=None):
     if installer:
         g.installer = installer
     else:
-        instboot = getattr(g.installer, "_install_bootconfig")
-        instboot.kernel = "/boot/vmlinuz"
-        instboot.initrd = "/boot/initrd"
+        g.installer._install_kernel = "/boot/vmlinuz"
+        g.installer._install_initrd = "/boot/initrd"
 
     g.installer._scratchdir = scratch
     g.add_default_input_device()

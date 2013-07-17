@@ -99,10 +99,9 @@ class TestXMLConfig(unittest.TestCase):
             dom.destroy()
 
             # Replace kernel/initrd with known info
-            if (guest.installer._install_bootconfig and
-                guest.installer._install_bootconfig.kernel):
-                guest.installer._install_bootconfig.kernel = "kernel"
-                guest.installer._install_bootconfig.initrd = "initrd"
+            if guest.installer._install_kernel:
+                guest.installer._install_kernel = "kernel"
+                guest.installer._install_initrd = "initrd"
 
             xmlinst = guest.get_xml_config(True, False)
             xmlboot = guest.get_xml_config(False, False)

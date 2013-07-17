@@ -282,7 +282,7 @@ class DistroInstaller(Installer.Installer):
             disk.transient = True
 
         # Make sure we always fetch kernel here if required
-        if self._install_bootconfig.kernel and not self.scratchdir_required():
+        if self._install_kernel and not self.scratchdir_required():
             return disk
 
         # Need to fetch the kernel & initrd from a remote site, or
@@ -315,9 +315,9 @@ class DistroInstaller(Installer.Installer):
                 meter, kernelfn, initrdfn)
         self._tmpvols += tmpvols
 
-        self._install_bootconfig.kernel = kernelfn
-        self._install_bootconfig.initrd = initrdfn
-        self._install_bootconfig.kernel_args = args
+        self._install_kernel = kernelfn
+        self._install_initrd = initrdfn
+        self._install_args = args
 
         return disk
 

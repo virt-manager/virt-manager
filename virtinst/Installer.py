@@ -74,8 +74,11 @@ class Installer(XMLBuilder):
         self._machine = None
         self._loader = None
         self._init = None
-        self._install_bootconfig = Boot(self.conn)
-        self._bootconfig = Boot(self.conn, parsexml, parsexmlnode)
+        self.bootconfig = Boot(self.conn, parsexml, parsexmlnode)
+
+        self._install_kernel = None
+        self._install_initrd = None
+        self._install_args = None
 
         # Devices created/added during the prepare() stage
         self.install_devices = []
@@ -94,10 +97,6 @@ class Installer(XMLBuilder):
     #####################
     # XML related props #
     #####################
-
-    def _get_bootconfig(self):
-        return self._bootconfig
-    bootconfig = property(_get_bootconfig)
 
     # Hypervisor name (qemu, kvm, xen, lxc, etc.)
     def get_type(self):
@@ -187,9 +186,9 @@ class Installer(XMLBuilder):
     initrd_injections = property(get_initrd_injections, set_initrd_injections)
 
     def get_extra_args(self):
-        return self._install_bootconfig.kernel_args
+        return self._install_args
     def set_extra_args(self, val):
-        self._install_bootconfig.kernel_args = val
+        self._install_args = val
     extraargs = property(get_extra_args, set_extra_args)
 
 
@@ -223,7 +222,12 @@ class Installer(XMLBuilder):
         return scratch
 
     def _build_boot_order(self, isinstall, guest):
-        bootorder = [self._get_bootdev(isinstall, guest)]
+        bootdev = self._get_bootdev(isinstall, guest)
+        if bootdev is None:
+            # None here means 'kernel boot'
+            return []
+
+        bootorder = [bootdev]
 
         # If guest has an attached disk, always have 'hd' in the boot
         # list, so disks are marked as bootable/installable (needed for
@@ -316,19 +320,23 @@ class Installer(XMLBuilder):
         """
         # pylint: disable=W0221
         # Argument number differs from overridden method
-
-        if isinstall:
-            bootconfig = self._install_bootconfig
-        else:
-            bootconfig = self.bootconfig
-
         if isinstall and not self.has_install_phase():
             return
 
+        bootconfig = self.bootconfig.copy()
         bootorder = self._build_boot_order(isinstall, guest)
-        bootconfig = copy.copy(bootconfig)
+
         if not bootconfig.bootorder:
             bootconfig.bootorder = bootorder
+
+        if isinstall:
+            bootconfig = bootconfig.copy()
+            if self._install_kernel:
+                bootconfig.kernel = self._install_kernel
+            if self._install_initrd:
+                bootconfig.initrd = self._install_initrd
+            if self._install_args:
+                bootconfig.kernel_args = self._install_args
 
         return self._get_osblob_helper(guest, isinstall, bootconfig)
 
@@ -442,7 +450,6 @@ class Installer(XMLBuilder):
 
 class ContainerInstaller(Installer):
     _has_install_phase = False
-
     def _get_bootdev(self, isinstall, guest):
         ignore = isinstall
         ignore = guest
