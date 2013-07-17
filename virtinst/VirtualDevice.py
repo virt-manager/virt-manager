@@ -82,7 +82,7 @@ class VirtualDevice(XMLBuilder):
 
         self.alias = VirtualDeviceAlias(conn, parsexmlnode=parsexmlnode)
         self.address = VirtualDeviceAddress(conn, parsexmlnode=parsexmlnode)
-        self._XML_SUB_ELEMENTS = ["alias", "address"]
+        self._XML_PROP_ORDER = self._XML_PROP_ORDER + ["alias", "address"]
 
         if not self.virtual_device_type:
             raise ValueError(_("Virtual device type must be set in subclass."))
@@ -132,7 +132,6 @@ class VirtualDeviceAddress(XMLBuilder):
 
     _XML_ROOT_NAME = "address"
     _XML_INDENT = 0
-    #_XML_XPATH_RELATIVE = True
     _XML_PROP_ORDER = ["type", "domain", "bus", "slot", "function"]
 
     def set_addrstr(self, addrstr):

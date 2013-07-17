@@ -24,6 +24,5 @@ class Clock(XMLBuilder):
     _dumpxml_xpath = "/domain/clock"
     _XML_INDENT = 2
     _XML_ROOT_NAME = "clock"
-    _XML_XPATH_RELATIVE = True
 
     offset = XMLProperty(xpath="./clock/@offset")

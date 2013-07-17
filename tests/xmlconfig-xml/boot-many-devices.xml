@@ -14,7 +14,8 @@
     <boot dev="hd"/>
   </os>
   <features>
-    <acpi/><apic/>
+    <acpi/>
+    <apic/>
   </features>
   <clock offset="localtime"/>
   <on_poweroff>destroy</on_poweroff>
@@ -40,11 +41,11 @@
       <target dev="sdb" bus="scsi"/>
       <address type="spapr-vio"/>
     </disk>
+    <controller type="ide" index="3"/>
+    <controller type="virtio-serial" index="0" ports="32" vectors="17"/>
     <controller type="scsi" index="0">
       <address type="spapr-vio"/>
     </controller>
-    <controller type="ide" index="3"/>
-    <controller type="virtio-serial" index="0" ports="32" vectors="17"/>
     <interface type="network">
       <source network="default"/>
       <mac address="22:22:33:44:55:66"/>

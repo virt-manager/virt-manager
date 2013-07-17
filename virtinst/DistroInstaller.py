@@ -286,7 +286,7 @@ class DistroInstaller(Installer.Installer):
                                                 guest.os.os_type)
         (kernelfn, initrdfn, args) = media
 
-        if guest.get_os_autodetect():
+        if guest.os_autodetect:
             if os_type:
                 logging.debug("Auto detected OS type as: %s", os_type)
                 guest.os_type = os_type

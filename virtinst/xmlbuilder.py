@@ -52,6 +52,15 @@ class _CtxCleanupWrapper(object):
         return getattr(self._ctx, attrname)
 
 
+def _indent(xmlstr, level):
+    xml = ""
+    if not xmlstr:
+        return xml
+    if not level:
+        return xmlstr
+    return "\n".join((" " * level + l) for l in xmlstr.splitlines())
+
+
 def _tuplify_lists(*args):
     """
     Similar to zip(), but use None if lists aren't long enough, and
@@ -232,9 +241,9 @@ def _remove_xpath_node(ctx, xpath, dofree=True, root_name=None):
 
 
 class XMLProperty(property):
-    def __init__(self, fget=None, fset=None, doc=None, xpath=None, name=None,
-                 get_converter=None, set_converter=None,
-                 xml_get_xpath=None, xml_set_xpath=None,
+    def __init__(self, doc=None, xpath=None, name=None,
+                 set_converter=None, validate_cb=None,
+                 make_getter_xpath_cb=None, make_setter_xpath_cb=None,
                  is_bool=False, is_tri=False, is_int=False,
                  is_multi=False, is_yesno=False,
                  clear_first=None, default_cb=None, default_name=None):
@@ -249,23 +258,22 @@ class XMLProperty(property):
         use the xpath value to map the name property to the underlying XML
         definition.
 
-        @param fget: typical getter function for the property
-        @param fset: typical setter function for the property
         @param doc: option doc string for the property
         @param xpath: xpath string which maps to the associated property
                       in a typical XML document
         @param name: Just a string to print for debugging, only needed
             if xpath isn't specified.
-        @param get_converter:
         @param set_converter: optional function for converting the property
             value from the virtinst API to the guest XML. For example,
             the Guest.memory API was once in MB, but the libvirt domain
             memory API is in KB. So, if xpath is specified, on a 'get'
             operation we convert the XML value with int(val) / 1024.
-        @param xml_get_xpath:
-        @param xml_set_xpath: Not all props map cleanly to a static xpath.
-            This allows passing functions which generate an xpath for getting
-            or setting.
+        @param validate_cb: Called once when value is set, should
+            raise a RuntimeError if the value is not proper.
+        @param make_getter_xpath_cb:
+        @param make_setter_xpath_cb: Not all props map cleanly to a
+            static xpath. This allows passing functions which generate
+            an xpath for getting or setting.
         @param is_bool: Whether this is a boolean property in the XML
         @param is_tri: Boolean XML property, but return None if there's
             no value set.
@@ -294,10 +302,10 @@ class XMLProperty(property):
         self._is_multi = is_multi
         self._is_yesno = is_yesno
 
-        self._xpath_for_getter_cb = xml_get_xpath
-        self._xpath_for_setter_cb = xml_set_xpath
+        self._xpath_for_getter_cb = make_getter_xpath_cb
+        self._xpath_for_setter_cb = make_setter_xpath_cb
 
-        self._convert_value_for_getter_cb = get_converter
+        self._validate_cb = validate_cb
         self._convert_value_for_setter_cb = set_converter
         self._setter_clear_these_first = clear_first or []
         self._default_cb = default_cb
@@ -310,42 +318,20 @@ class XMLProperty(property):
         if self._default_name and not self._default_cb:
             raise RuntimeError("default_name requires default_cb.")
 
-        self._fget = fget
-        self._fset = fset
+        if _trackprops:
+            _allprops.append(self)
 
-        if self._is_new_style_prop():
-            if _trackprops:
-                _allprops.append(self)
-        else:
-            if self._default_cb:
-                raise RuntimeError("Can't set default_cb for old style XML "
-                                   "prop.")
-
-        property.__init__(self, fget=self.new_getter, fset=self.new_setter)
+        property.__init__(self, fget=self.getter, fset=self.setter)
         self.__doc__ = doc
 
 
-    ##################
-    # Public-ish API #
-    ##################
-
     def __repr__(self):
         return "<XMLProperty %s %s>" % (str(self._name), id(self))
-
-    def has_default_value(self):
-        return bool(self._default_cb)
 
 
     ####################
     # Internal helpers #
     ####################
-
-    def _is_new_style_prop(self):
-        """
-        True if this is a prop without an explicitly passed in fget/fset
-        pair.
-        """
-        return not bool(self._fget)
 
     def _findpropname(self, xmlbuilder):
         """
@@ -372,14 +358,9 @@ class XMLProperty(property):
             raise RuntimeError("%s: didn't generate any setter xpath." % self)
         return self._xpath_fix_relative(xmlbuilder, ret)
     def _xpath_fix_relative(self, xmlbuilder, xpath):
-        if not getattr(xmlbuilder, "_xml_fixup_relative_xpath"):
+        if not xmlbuilder._XML_NEW_ROOT_PATH:
             return xpath
-        root = "./%s" % getattr(xmlbuilder, "_XML_ROOT_NAME")
-        if not xpath.startswith(root):
-            raise RuntimeError("%s: xpath did not start with root=%s" %
-                               (str(self), root))
-        ret = "." + xpath[len(root):]
-        return ret
+        return "./%s%s" % (xmlbuilder._XML_NEW_ROOT_PATH, xpath.strip("."))
 
 
     def _xpath_list_for_setter(self, xpath, setval, nodelist):
@@ -401,7 +382,7 @@ class XMLProperty(property):
 
     def _convert_value_for_setter(self, xmlbuilder):
         # Convert from API value to XML value
-        val = self._orig_fget(xmlbuilder)
+        val = self._nonxml_fget(xmlbuilder)
         if self._default_name and val == self._default_name:
             val = self._default_cb(xmlbuilder)
         elif self._is_yesno:
@@ -440,12 +421,7 @@ class XMLProperty(property):
         return clear_nodes
 
 
-    def _convert_get_value(self, xmlbuilder, val, initial=False):
-        if self._fget and initial:
-            # If user passed in an fget impl, we expect them to put things
-            # in the form they want.
-            return val
-
+    def _convert_get_value(self, val, initial=False):
         if self._is_bool:
             if initial and self._is_tri and val is None:
                 ret = None
@@ -462,38 +438,36 @@ class XMLProperty(property):
             ret = []
         else:
             ret = val
-
-        if self._convert_value_for_getter_cb:
-            ret = self._convert_value_for_getter_cb(xmlbuilder, ret)
         return ret
 
-    def _orig_fget(self, xmlbuilder):
-        # Returns (is unset, fget value)
-        if self._fget:
-            # For the passed in fget callback, we have any way to
-            # tell if the value is unset or not.
-            return self._fget(xmlbuilder)
-
-        # The flip side to default_orig_fset, fetch the value from
-        # XMLBuilder._propstore
+    def _prop_is_unset(self, xmlbuilder):
         propstore = getattr(xmlbuilder, "_propstore")
         propname = self._findpropname(xmlbuilder)
-        unset = (propname not in propstore)
-        if unset and self._default_cb:
-            if self._default_name:
-                return self._default_name
-            return self._default_cb(xmlbuilder)
-        return propstore.get(propname, None)
+        return (propname not in propstore)
 
-    def _orig_fset(self, xmlbuilder, val):
+    def _set_default(self, xmlbuilder):
         """
-        If no fset specified, this stores the value in XMLBuilder._propstore
+        Encode the property default into the XML and propstore, but
+        only if a default is registered, and only if the property was
+        not already explicitly set by the API user.
+
+        This is called during the get_xml_config process and shouldn't
+        be called from outside this file.
+        """
+        if not self._prop_is_unset(xmlbuilder):
+            return
+        if not self._default_cb:
+            return
+        if self._default_cb(xmlbuilder) is None:
+            return
+        self.setter(xmlbuilder, self.getter(xmlbuilder), validate=False)
+
+    def _nonxml_fset(self, xmlbuilder, val):
+        """
+        This stores the value in XMLBuilder._propstore
         dict as propname->value. This saves us from having to explicitly
         track every variable.
         """
-        if self._fset:
-            return self._fset(xmlbuilder, val)
-
         propstore = getattr(xmlbuilder, "_propstore")
         proporder = getattr(xmlbuilder, "_proporder")
 
@@ -506,31 +480,50 @@ class XMLProperty(property):
             proporder.remove(propname)
         proporder.append(propname)
 
+    def _nonxml_fget(self, xmlbuilder):
+        """
+        The flip side to nonxml_fset, fetch the value from
+        XMLBuilder._propstore
+        """
+        propstore = getattr(xmlbuilder, "_propstore")
+        propname = self._findpropname(xmlbuilder)
+        unset = (propname not in propstore)
+        if unset and self._default_cb:
+            if self._default_name:
+                return self._default_name
+            return self._default_cb(xmlbuilder)
+        return propstore.get(propname, None)
+
+    def _clear(self, xmlbuilder):
+        val = None
+        if self._is_multi:
+            val = []
+        self.setter(xmlbuilder, val)
 
 
     ##################################
     # The actual getter/setter impls #
     ##################################
 
-    def new_getter(self, xmlbuilder):
-        fgetval = self._orig_fget(xmlbuilder)
+    def getter(self, xmlbuilder):
+        fgetval = self._nonxml_fget(xmlbuilder)
 
         root_node = getattr(xmlbuilder, "_xml_node")
         if root_node is None:
-            return self._convert_get_value(xmlbuilder, fgetval, initial=True)
+            return self._convert_get_value(fgetval, initial=True)
 
         xpath = self._xpath_for_getter(xmlbuilder)
         nodelist = self._build_node_list(xmlbuilder, xpath)
 
         if not nodelist:
-            return self._convert_get_value(xmlbuilder, None)
+            return self._convert_get_value(None)
 
         ret = []
         for node in nodelist:
             content = node.content
             if self._is_bool:
                 content = True
-            val = self._convert_get_value(xmlbuilder, content)
+            val = self._convert_get_value(content)
             if not self._is_multi:
                 return val
             # If user is querying multiple nodes, return a list of results
@@ -538,9 +531,11 @@ class XMLProperty(property):
         return ret
 
 
-    def new_setter(self, xmlbuilder, val, call_fset=True):
+    def setter(self, xmlbuilder, val, call_fset=True, validate=True):
         if call_fset:
-            self._orig_fset(xmlbuilder, val)
+            if validate and self._validate_cb:
+                self._validate_cb(xmlbuilder, val)
+            self._nonxml_fset(xmlbuilder, val)
 
         root_node = getattr(xmlbuilder, "_xml_node")
         if root_node is None:
@@ -574,45 +569,11 @@ class XMLProperty(property):
                 continue
             node.setContent(util.xml_escape(str(val)))
 
-    def _prop_is_unset(self, xmlbuilder):
-        propstore = getattr(xmlbuilder, "_propstore")
-        propname = self._findpropname(xmlbuilder)
-        return (propname not in propstore)
-
-    def refresh_xml(self, xmlbuilder, force_call_fset=False):
-        call_fset = True
-        if not self._is_new_style_prop():
-            call_fset = False
-        elif getattr(xmlbuilder, "_is_parse")():
-            call_fset = False
-        elif self._prop_is_unset(xmlbuilder) and self._default_cb:
-            call_fset = False
-
-        if force_call_fset:
-            call_fset = True
-        self.fset(xmlbuilder, self.fget(xmlbuilder), call_fset=call_fset)
-
-    def set_default(self, xmlbuilder):
-        if not self._prop_is_unset(xmlbuilder) or not self._default_cb:
-            return
-        if self._default_cb(xmlbuilder) is None:
-            return
-        self.refresh_xml(xmlbuilder, force_call_fset=True)
-
 
 class XMLBuilder(object):
     """
     Base for all classes which build or parse domain XML
     """
-    @staticmethod
-    def indent(xmlstr, level):
-        xml = ""
-        if not xmlstr:
-            return xml
-        if not level:
-            return xmlstr
-        return "\n".join((" " * level + l) for l in xmlstr.splitlines())
-
     # Order that we should apply values to the XML. Keeps XML generation
     # consistent with what the test suite expects.
     _XML_PROP_ORDER = []
@@ -624,16 +585,11 @@ class XMLBuilder(object):
     # Integer indentation level for generated XML.
     _XML_INDENT = None
 
-    # If XML xpaths are relative to a different element, like
-    # device addresses.
-    _XML_XPATH_RELATIVE = False
-
-    # List of property names that point to a manually tracked
-    # XMLBuilder that alters our device xml, like self.address for
-    # VirtualDevice
-    _XML_SUB_ELEMENTS = []
+    # This is only used to make device XML work for guest XML generating
+    _XML_NEW_ROOT_PATH = ""
 
     _dumpxml_xpath = "."
+
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
         """
         Initialize state
@@ -649,7 +605,6 @@ class XMLBuilder(object):
         self._xml_node = None
         self._xml_ctx = None
         self._xml_root_doc = None
-        self._xml_fixup_relative_xpath = False
         self._propstore = {}
         self._proporder = []
 
@@ -679,7 +634,7 @@ class XMLBuilder(object):
             return self._xml_node.nodePath()
         return None
 
-    def get_xml_config(self, *args, **kwargs):
+    def _do_get_xml_config(self, dumpxml_xpath, clean, *args, **kwargs):
         """
         Construct and return object xml
 
@@ -687,11 +642,7 @@ class XMLBuilder(object):
         @rtype: str
         """
         if self._xml_ctx:
-            dumpxml_path = self._dumpxml_xpath
-            if self._xml_fixup_relative_xpath:
-                dumpxml_path = "."
-
-            node = _get_xpath_node(self._xml_ctx, dumpxml_path)
+            node = _get_xpath_node(self._xml_ctx, dumpxml_xpath)
             if not node:
                 ret = ""
             else:
@@ -701,16 +652,26 @@ class XMLBuilder(object):
             ret = self._get_xml_config(*args, **kwargs)
             if ret is None:
                 return None
-            ret = self._add_parse_bits(ret)
 
-            for propname in self._XML_SUB_ELEMENTS:
-                for prop in util.listify(getattr(self, propname)):
-                    ret = prop._add_parse_bits(ret)
-
+            ret = self._add_parse_bits(ret, clean=False)
             if ret == xmlstub:
                 ret = ""
 
-        return self._cleanup_xml(ret)
+        if clean:
+            ret = self._cleanup_xml(ret)
+        return ret
+
+    def get_xml_config(self, *args, **kwargs):
+        data = self._prepare_get_xml()
+        try:
+            return self._do_get_xml_config(self._dumpxml_xpath, True,
+                                           *args, **kwargs)
+        finally:
+            self._finish_get_xml(data)
+
+    def clear(self):
+        for prop in self.all_xml_props().values():
+            prop._clear(self)
 
 
     #######################
@@ -719,13 +680,6 @@ class XMLBuilder(object):
 
     def _is_parse(self):
         return bool(self._xml_node or self._xml_ctx)
-
-    def _refresh_xml_prop(self, propname):
-        """
-        Refresh the XML for the passed class propname. Used to adjust
-        the XML when an interdependent property changes.
-        """
-        self.all_xml_props()[propname].refresh_xml(self)
 
 
     ###################
@@ -737,6 +691,11 @@ class XMLBuilder(object):
 
     def validate(self):
         pass
+
+    def _prepare_get_xml(self):
+        return None
+    def _finish_get_xml(self, data):
+        ignore = data
 
     def _get_xml_config(self):
         """
@@ -766,8 +725,7 @@ class XMLBuilder(object):
             raise RuntimeError("Must specify _XML_INDENT.")
         if self._XML_ROOT_NAME == "":
             return ""
-
-        return self.indent("<%s/>" % (self._XML_ROOT_NAME), self._XML_INDENT)
+        return _indent("<%s/>" % (self._XML_ROOT_NAME), self._XML_INDENT)
 
     def _add_child_node(self, parent_xpath, newnode):
         ret = _build_xpath_node(self._xml_ctx, parent_xpath, newnode)
@@ -802,12 +760,11 @@ class XMLBuilder(object):
                     ret[key] = val
         return ret
 
-    def _do_add_parse_bits(self, xml):
-        # Find all properties that have default callbacks
+    def _do_add_parse_bits(self, xml, node, clean):
+        # Set all defaults if the properties have one registered
         xmlprops = self.all_xml_props()
-        defaultprops = [v for v in xmlprops.values() if v.has_default_value()]
-        for prop in defaultprops:
-            prop.set_default(self)
+        for prop in xmlprops.values():
+            prop._set_default(self)
 
         # Default props alter our _propstore. But at this point _propstore
         # is empty, there's nothing for us to do, so exit early
@@ -816,15 +773,16 @@ class XMLBuilder(object):
 
         # Unindent XML
         indent = 0
-        for c in xml:
-            if c != " ":
-                break
-            indent += 1
-        xml = "\n".join([l[indent:] for l in xml.splitlines()])
+        if xml:
+            for c in xml:
+                if c != " ":
+                    break
+                indent += 1
+            xml = "\n".join([l[indent:] for l in xml.splitlines()])
 
         # Parse the XML into our internal state. Use the raw
         # _parsexml so we don't hit Guest parsing into its internal state
-        XMLBuilder._parsexml(self, xml, None)
+        XMLBuilder._parsexml(self, xml, node)
 
         # Set up preferred XML ordering
         do_order = self._proporder[:]
@@ -832,13 +790,24 @@ class XMLBuilder(object):
             if key in do_order:
                 do_order.remove(key)
                 do_order.insert(0, key)
+            elif key not in xmlprops:
+                do_order.insert(0, key)
 
         # Alter the XML
         for key in do_order:
-            setattr(self, key, self._propstore[key])
-        return self.indent(self.get_xml_config().strip("\n"), indent)
+            if key in xmlprops:
+                xmlprops[key].setter(self, self._propstore[key],
+                                     validate=False)
+            else:
+                for obj in util.listify(getattr(self, key)):
+                    if self._XML_NEW_ROOT_PATH and not obj._XML_NEW_ROOT_PATH:
+                        obj._XML_NEW_ROOT_PATH = self._XML_NEW_ROOT_PATH
+                    obj._add_parse_bits(xml=None, node=self._xml_node)
 
-    def _add_parse_bits(self, xml):
+        xml = self._do_get_xml_config(".", clean).strip("\n")
+        return _indent(xml, indent)
+
+    def _add_parse_bits(self, xml, node=None, clean=True):
         """
         Callback that adds the implicitly tracked XML properties to
         the manually generated xml. This should only exist until all
@@ -850,12 +819,10 @@ class XMLBuilder(object):
         origproporder = self._proporder[:]
         origpropstore = self._propstore.copy()
         try:
-            self._xml_fixup_relative_xpath = self._XML_XPATH_RELATIVE
-            return self._do_add_parse_bits(xml)
+            return self._do_add_parse_bits(xml, node, clean)
         finally:
             self._xml_root_doc = None
             self._xml_node = None
             self._xml_ctx = None
             self._proporder = origproporder
             self._propstore = origpropstore
-            self._xml_fixup_relative_xpath = False

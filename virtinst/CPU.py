@@ -19,8 +19,6 @@
 
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
-import libxml2
-
 
 class CPUFeature(XMLBuilder):
     """
@@ -31,7 +29,6 @@ class CPUFeature(XMLBuilder):
 
     _XML_PROP_ORDER = ["_xmlname", "policy"]
     _XML_ROOT_NAME = "cpu"
-    _XML_XPATH_RELATIVE = True
     _XML_INDENT = 4
 
     def __init__(self, conn, name, parsexml=None, parsexmlnode=None):
@@ -47,13 +44,13 @@ class CPUFeature(XMLBuilder):
     def _name_xpath(self):
         return "./cpu/feature[@name='%s']/@name" % self._name
     _xmlname = XMLProperty(name="feature name",
-                      xml_get_xpath=_name_xpath,
-                      xml_set_xpath=_name_xpath)
+                      make_getter_xpath_cb=_name_xpath,
+                      make_setter_xpath_cb=_name_xpath)
     def _policy_xpath(self):
         return "./cpu/feature[@name='%s']/@policy" % self._name
     policy = XMLProperty(name="feature policy",
-                         xml_get_xpath=_policy_xpath,
-                         xml_set_xpath=_policy_xpath)
+                         make_getter_xpath_cb=_policy_xpath,
+                         make_setter_xpath_cb=_policy_xpath)
 
     def clear(self):
         self.policy = None
@@ -70,13 +67,11 @@ class CPU(XMLBuilder):
     _dumpxml_xpath = "/domain/cpu"
     _XML_ROOT_NAME = "cpu"
     _XML_INDENT = 2
-    _XML_XPATH_RELATIVE = True
     _XML_PROP_ORDER = ["mode", "match", "model", "vendor",
-                       "sockets", "cores", "threads"]
+                       "sockets", "cores", "threads", "_features"]
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
         self._features = []
-        self._XML_SUB_ELEMENTS = self._XML_SUB_ELEMENTS + ["_features"]
         XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
 
     def _parsexml(self, xml, node):

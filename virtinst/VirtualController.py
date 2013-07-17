@@ -54,7 +54,35 @@ class VirtualController(VirtualDevice):
             return ctype
         return pretty_mappings[ctype]
 
-    _XML_PROP_ORDER = ["type", "index", "model"]
+    @staticmethod
+    def get_usb2_controllers(conn):
+        ret = []
+        ctrl = VirtualController(conn)
+        ctrl.type = "usb"
+        ctrl.model = "ich9-ehci1"
+        ret.append(ctrl)
+
+        ctrl = VirtualController(conn)
+        ctrl.type = "usb"
+        ctrl.model = "ich9-uhci1"
+        ctrl.master_startport = 0
+        ret.append(ctrl)
+
+        ctrl = VirtualController(conn)
+        ctrl.type = "usb"
+        ctrl.model = "ich9-uhci2"
+        ctrl.master_startport = 2
+        ret.append(ctrl)
+
+        ctrl = VirtualController(conn)
+        ctrl.type = "usb"
+        ctrl.model = "ich9-uhci3"
+        ctrl.master_startport = 4
+        ret.append(ctrl)
+        return ret
+
+
+    _XML_PROP_ORDER = ["type", "index", "model", "master_startport"]
 
     type = XMLProperty(xpath="./@type")
     model = XMLProperty(xpath="./@model")

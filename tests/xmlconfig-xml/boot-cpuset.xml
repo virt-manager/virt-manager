@@ -3,14 +3,15 @@
   <uuid>12345678-1234-1234-1234-123456789012</uuid>
   <memory>409600</memory>
   <currentMemory>204800</currentMemory>
-  <vcpu cpuset="0,1,2,3,4,5,6,7" current="5">7</vcpu>
+  <vcpu cpuset="0,1,2,3,4,5,6,7">7</vcpu>
   <os>
     <type arch="i686">hvm</type>
     <loader>/usr/lib/xen/boot/hvmloader</loader>
     <boot dev="hd"/>
   </os>
   <features>
-    <acpi/><apic/>
+    <acpi/>
+    <apic/>
   </features>
   <cpu match="minimum" mode="custom">
     <model>footest</model>

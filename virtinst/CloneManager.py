@@ -101,7 +101,7 @@ class Cloner(object):
         return self._clone_name
     def set_clone_name(self, name):
         try:
-            self._valid_guest.set_name(name)
+            self._valid_guest.name = name
         except ValueError, e:
             raise ValueError(_("Invalid name for new guest: %s") % e)
 
@@ -111,7 +111,7 @@ class Cloner(object):
 
     def set_clone_uuid(self, uuid):
         try:
-            self._valid_guest.set_uuid(uuid)
+            self._valid_guest.uuid = uuid
         except ValueError, e:
             raise ValueError(_("Invalid uuid for new guest: %s") % e)
 

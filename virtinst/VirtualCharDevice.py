@@ -151,7 +151,7 @@ class _VirtualCharDevice(VirtualDevice):
 
     def _sourcepath_get_xpath(self):
         return "./source/@path | ./@tty"
-    source_path = XMLProperty(xml_get_xpath=_sourcepath_get_xpath,
+    source_path = XMLProperty(make_getter_xpath_cb=_sourcepath_get_xpath,
                               doc=_("Host input path to attach to the guest."),
                               xpath="./source/@path")
 
@@ -167,8 +167,8 @@ class _VirtualCharDevice(VirtualDevice):
         return "./source/@mode"
     source_mode = XMLProperty(name="char sourcemode",
                               doc=_("Target connect/listen mode."),
-                              xml_get_xpath=_sourcemode_xpath,
-                              xml_set_xpath=_sourcemode_xpath,
+                              make_getter_xpath_cb=_sourcemode_xpath,
+                              make_setter_xpath_cb=_sourcemode_xpath,
                               default_cb=_get_default_source_mode)
 
     def _get_default_sourcehost(self):
@@ -188,8 +188,8 @@ class _VirtualCharDevice(VirtualDevice):
         return "./source[@mode='%s']/@host" % mode
     source_host = XMLProperty(name="char sourcehost",
                               doc=_("Address to connect/listen to."),
-                              xml_get_xpath=_sourcehost_xpath,
-                              xml_set_xpath=_sourcehost_xpath,
+                              make_getter_xpath_cb=_sourcehost_xpath,
+                              make_setter_xpath_cb=_sourcehost_xpath,
                               default_cb=_get_default_sourcehost,
                               set_converter=_set_source_validate)
 
@@ -197,8 +197,8 @@ class _VirtualCharDevice(VirtualDevice):
         return "./source[@mode='%s']/@service" % self.source_mode
     source_port = XMLProperty(name="char sourceport",
                         doc=_("Port on target host to connect/listen to."),
-                        xml_get_xpath=_sourceport_xpath,
-                        xml_set_xpath=_sourceport_xpath,
+                        make_getter_xpath_cb=_sourceport_xpath,
+                        make_setter_xpath_cb=_sourceport_xpath,
                         set_converter=_set_source_validate, is_int=True)
 
     _has_mode_connect = XMLProperty(xpath="./source[@mode='connect']/@mode")

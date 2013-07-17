@@ -99,8 +99,8 @@ class VirtualFilesystem(VirtualDevice):
         ret = "./source/@" + self.type_to_source_prop(self.type)
         return ret
     source = XMLProperty(name="filesystem source",
-                         xml_get_xpath=_xml_get_source_xpath,
-                         xml_set_xpath=_xml_set_source_xpath)
+                         make_getter_xpath_cb=_xml_get_source_xpath,
+                         make_setter_xpath_cb=_xml_set_source_xpath)
 
     def _validate_set_target(self, val):
         # In case of qemu for default fs type (mount) target is not

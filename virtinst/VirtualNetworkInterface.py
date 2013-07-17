@@ -54,10 +54,8 @@ def _random_mac(conn):
 
 class VirtualPort(XMLBuilder):
     type = XMLProperty(xpath="./virtualport/@type")
-
     managerid = XMLProperty(xpath="./virtualport/parameters/@managerid",
                             is_int=True)
-
     typeid = XMLProperty(xpath="./virtualport/parameters/@typeid", is_int=True)
     typeidversion = XMLProperty(
             xpath="./virtualport/parameters/@typeidversion", is_int=True)
@@ -65,7 +63,6 @@ class VirtualPort(XMLBuilder):
 
 
 class VirtualNetworkInterface(VirtualDevice):
-
     virtual_device_type = VirtualDevice.VIRTUAL_DEV_NET
 
     TYPE_BRIDGE     = "bridge"
@@ -138,7 +135,6 @@ class VirtualNetworkInterface(VirtualDevice):
         VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
         self.virtualport = VirtualPort(conn, parsexml, parsexmlnode)
-        self._XML_SUB_ELEMENTS.append("virtualport")
 
         self._random_mac = None
         self._default_bridge = None
@@ -200,7 +196,7 @@ class VirtualNetworkInterface(VirtualDevice):
 
     _XML_PROP_ORDER = [
         "bridge", "network", "source_dev", "source_mode",
-        "macaddr", "target_dev", "model"]
+        "macaddr", "target_dev", "model", "virtualport"]
 
     type = XMLProperty(xpath="./@type",
                        default_cb=lambda s: s.TYPE_BRIDGE)

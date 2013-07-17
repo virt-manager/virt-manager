@@ -27,7 +27,6 @@ class DomainFeatures(XMLBuilder):
     _dumpxml_xpath = "/domain/features"
     _XML_ROOT_NAME = "features"
     _XML_INDENT = 2
-    _XML_XPATH_RELATIVE = True
     _XML_PROP_ORDER = ["acpi", "apic", "pae"]
 
     acpi = XMLProperty(xpath="./features/acpi", is_tri=True)
@@ -40,9 +39,3 @@ class DomainFeatures(XMLBuilder):
         return getattr(self, attr)
     def __delitem__(self, attr):
         return setattr(self, attr, None)
-
-    def _cleanup_xml(self, xml):
-        # Format it in the old style
-        xml = xml.replace("\n    ", "")
-        xml = xml.replace("<features>", "<features>\n   ")
-        return xml

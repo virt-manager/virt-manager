@@ -35,8 +35,6 @@ from virtinst.osxml import OSXML
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst.VirtualDisk import VirtualDisk
-from virtinst.VirtualInputDevice import VirtualInputDevice
-from virtinst.VirtualController import VirtualController
 from virtinst.Clock import Clock
 from virtinst.Seclabel import Seclabel
 from virtinst.CPU import CPU
@@ -163,27 +161,22 @@ class Guest(XMLBuilder):
 
         return cpustr
 
+
+    _XML_ROOT_NAME = "domain"
+    _XML_INDENT = 0
+    _XML_PROP_ORDER = ["type", "name", "uuid", "description",
+        "maxmemory", "memory", "hugepage", "vcpus", "curvcpus",
+        "numatune", "bootloader", "os", "features", "cpu", "clock",
+        "on_poweroff", "on_reboot", "on_crash", "emulator", "all_devices",
+        "seclabel"]
+
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        self._name = None
-        self._uuid = None
-        self._memory = None
-        self._maxmemory = None
-        self._hugepage = None
-        self._vcpus = 1
-        self._maxvcpus = 1
-        self._cpuset = None
-        self._autostart = False
-        self._clock = None
-        self._seclabel = None
-        self._description = None
-        self._features = None
-        self._replace = None
-        self._emulator = None
-        self._type = None
+        self.autostart = False
+        self.replace = False
+        self.os_autodetect = False
 
         self._os_type = None
         self._os_variant = None
-        self._os_autodetect = False
 
         self.installer = None
 
@@ -204,8 +197,6 @@ class Guest(XMLBuilder):
 
         self.installer = virtinst.DistroInstaller(conn)
 
-        self._type = "xen"
-
         # Need to do this after all parameter init
         self.os = OSXML(self.conn, parsexml, parsexmlnode)
         self.features = DomainFeatures(self.conn)
@@ -219,123 +210,73 @@ class Guest(XMLBuilder):
     # Property accessors #
     ######################
 
-    # Domain name of the guest
-    def get_name(self):
-        return self._name
-    def set_name(self, val):
+    def _validate_name(self, val):
+        if val == self.name:
+            return
+
         util.validate_name(_("Guest"), val, lencheck=True)
+        if self.replace:
+            return
 
-        do_fail = False
-        if self.replace is not True:
-            try:
-                self.conn.lookupByName(val)
-                do_fail = True
-            except:
-                # Name not found
-                pass
+        try:
+            self.conn.lookupByName(val)
+        except:
+            return
+        raise ValueError(_("Guest name '%s' is already in use.") % val)
+    name = XMLProperty(xpath="./name", validate_cb=_validate_name)
 
-        if do_fail:
-            raise ValueError(_("Guest name '%s' is already in use.") % val)
-
-        self._name = val
-    name = XMLProperty(get_name, set_name,
-                         xpath="./name")
-
-    # Memory allocated to the guest.  Should be given in MB
-    def get_memory(self):
-        return self._memory
-    def set_memory(self, val):
-        self._memory = val
+    def _set_memory(self, val):
+        if val is None:
+            return None
 
         if self.maxmemory is None or self.maxmemory < val:
             self.maxmemory = val
-    memory = XMLProperty(get_memory, set_memory, is_int=True,
-                         xpath="./currentMemory")
-
-    # Memory allocated to the guest.  Should be given in MB
-    def get_maxmemory(self):
-        return self._maxmemory
-    def set_maxmemory(self, val):
-        self._maxmemory = val
-    maxmemory = XMLProperty(get_maxmemory, set_maxmemory, is_int=True,
-                            xpath="./memory")
-
-    def get_hugepage(self):
-        return self._hugepage
-    def set_hugepage(self, val):
-        if val is None:
-            return val
-        self._hugepage = bool(val)
-    hugepage = XMLProperty(get_hugepage, set_hugepage,
-                             xpath="./memoryBacking/hugepages", is_bool=True)
-
-    # UUID for the guest
-    def get_uuid(self):
-        return self._uuid
-    def set_uuid(self, val):
-        val = util.validate_uuid(val)
-        self._uuid = val
-    uuid = XMLProperty(get_uuid, set_uuid,
-                         xpath="./uuid")
-
-    def __validate_cpus(self, val):
-        val = int(val)
-        if val < 1:
-            raise ValueError(_("Number of vcpus must be a positive integer."))
         return val
+    memory = XMLProperty(xpath="./currentMemory", is_int=True,
+                         default_cb=lambda s: 1,
+                         set_converter=_set_memory)
+    maxmemory = XMLProperty(xpath="./memory", is_int=True)
 
-    # number of vcpus for the guest
-    def get_vcpus(self):
-        return self._vcpus
-    def set_vcpus(self, val):
-        val = self.__validate_cpus(val)
-        self._vcpus = val
+    def _set_vcpus(self, val):
+        if val is None:
+            return None
 
-        # Don't force set maxvcpus unless already specified
-        if self.maxvcpus is not None and self.maxvcpus < val:
-            self.maxvcpus = val
-    def _vcpus_get_converter(self, val):
-        # If no current VCPUs, return maxvcpus
-        if not val:
-            val = self.maxvcpus
-        return int(val)
-    vcpus = XMLProperty(get_vcpus, set_vcpus,
-                          xpath="./vcpu/@current",
-                          get_converter=_vcpus_get_converter)
+        # Don't force set curvcpus unless already specified
+        if self.curvcpus is not None and self.curvcpus > val:
+            self.curvcpus = val
+        return val
+    vcpus = XMLProperty(xpath="./vcpu", is_int=True,
+                        set_converter=_set_vcpus,
+                        default_cb=lambda s: 1)
+    curvcpus = XMLProperty(xpath="./vcpu/@current", is_int=True)
 
-    def _get_maxvcpus(self):
-        return self._maxvcpus
-    def _set_maxvcpus(self, val):
-        val = self.__validate_cpus(val)
-        self._maxvcpus = val
-    maxvcpus = XMLProperty(_get_maxvcpus, _set_maxvcpus,
-                           xpath="./vcpu", is_int=True)
-
-    # set phy-cpus for the guest
-    def get_cpuset(self):
-        return self._cpuset
-    def set_cpuset(self, val):
-        if val is None or val == "":
-            self._cpuset = None
-            return
-
+    def _validate_cpuset(self, val):
         DomainNumatune.validate_cpuset(self.conn, val)
-        self._cpuset = val
-    cpuset = XMLProperty(get_cpuset, set_cpuset,
-                           xpath="./vcpu/@cpuset")
+    cpuset = XMLProperty(xpath="./vcpu/@cpuset",
+                         validate_cb=_validate_cpuset)
 
-    # GAH! - installer.os_type = "hvm" or "xen" (aka xen paravirt)
-    #        guest.os_type     = "Solaris", "Windows", "Linux"
-    # FIXME: We should really rename this property to something else,
-    #        change it throughout the codebase for readability sake, but
-    #        maintain back compat.
+    type = XMLProperty(xpath="./@type", default_cb=lambda s: "xen")
+    hugepage = XMLProperty(xpath="./memoryBacking/hugepages", is_bool=True)
+    uuid = XMLProperty(xpath="./uuid",
+                       validate_cb=lambda s, v: util.validate_uuid(v))
+    bootloader = XMLProperty(xpath="./bootloader")
+    description = XMLProperty(xpath="./description")
+    emulator = XMLProperty(xpath="./devices/emulator")
+
+    on_poweroff = XMLProperty(xpath="./on_poweroff",
+                              default_cb=lambda s: "destroy")
+    on_reboot = XMLProperty(xpath="./on_reboot")
+    on_crash = XMLProperty(xpath="./on_crash")
+
+
+    ###############################
+    # Distro detection properties #
+    ###############################
+
     def get_os_type(self):
         return self._os_type
     def set_os_type(self, val):
-        if type(val) is not str:
-            raise ValueError(_("OS type must be a string."))
         val = val.lower()
-
         if val in self._OS_TYPES:
             if self._os_type != val:
                 # Invalidate variant, since it may not apply to the new os type
@@ -344,14 +285,11 @@ class Guest(XMLBuilder):
         else:
             raise ValueError(_("OS type '%s' does not exist in our "
                                 "dictionary") % val)
-
     os_type = property(get_os_type, set_os_type)
 
     def get_os_variant(self):
         return self._os_variant
     def set_os_variant(self, val):
-        if type(val) is not str:
-            raise ValueError(_("OS variant must be a string."))
         val = val.lower()
 
         if self.os_type:
@@ -374,48 +312,11 @@ class Guest(XMLBuilder):
 
             if not found:
                 raise ValueError(_("Unknown OS variant '%s'" % val))
-
     os_variant = property(get_os_variant, set_os_variant)
 
-    def set_os_autodetect(self, val):
-        self._os_autodetect = bool(val)
-    def get_os_autodetect(self):
-        return self._os_autodetect
-    os_autodetect = property(get_os_autodetect, set_os_autodetect)
-
-    # Get the current variants 'distro' tag: 'rhel', 'fedora', etc.
     def get_os_distro(self):
         return self._lookup_osdict_key("distro")
     os_distro = property(get_os_distro)
-
-    def get_autostart(self):
-        return self._autostart
-    def set_autostart(self, val):
-        self._autostart = bool(val)
-    autostart = property(get_autostart, set_autostart,
-                         doc="Have domain autostart when the host boots.")
-
-    def _get_description(self):
-        return self._description
-    def _set_description(self, val):
-        self._description = val
-    description = XMLProperty(_get_description, _set_description,
-                                xpath="./description")
-
-    def _get_emulator(self):
-        return self._emulator
-    def _set_emulator(self, val):
-        self._emulator = val
-    emulator = XMLProperty(_get_emulator, _set_emulator,
-                             xpath="./devices/emulator")
-
-    def _get_replace(self):
-        return self._replace
-    def _set_replace(self, val):
-        self._replace = bool(val)
-    replace = property(_get_replace, _set_replace,
-                       doc=_("Whether we should overwrite an existing guest "
-                             "with the same name."))
 
 
     ########################################
@@ -450,15 +351,10 @@ class Guest(XMLBuilder):
 
         self._track_device(dev)
         if set_defaults:
-            def list_one_dev(devtype):
-                if dev.virtual_device_type == devtype:
-                    return [dev][:]
-                else:
-                    return []
             origdev = self._devices
             try:
                 self._devices = [dev]
-                self._set_defaults(self.features)
+                self._set_device_defaults()
             except:
                 self._devices = origdev
 
@@ -511,13 +407,6 @@ class Guest(XMLBuilder):
             if xpath:
                 self._remove_child_xpath(xpath)
 
-    bootloader = XMLProperty(xpath="./bootloader")
-    type = XMLProperty(xpath="./@type", default_cb=lambda s: "xen")
-
-    def _cleanup_xml(self, xml):
-        if not xml.endswith("\n"):
-            xml += "\n"
-        return xml
 
     ################################
     # Private xml building methods #
@@ -575,7 +464,7 @@ class Guest(XMLBuilder):
     def add_default_input_device(self):
         if self.os.is_container():
             return
-        self.add_device(VirtualInputDevice(self.conn))
+        self.add_device(virtinst.VirtualInputDevice(self.conn))
 
     def add_default_console_device(self):
         if self.os.is_xenpv():
@@ -584,151 +473,6 @@ class Guest(XMLBuilder):
         dev.type = dev.TYPE_PTY
         self.add_device(dev)
 
-    def _get_device_xml(self, devs, install=True):
-        def do_remove_media(d):
-            # Keep cdrom around, but with no media attached,
-            # But only if we are a distro that doesn't have a multi
-            # stage install (aka not Windows)
-            return (d.virtual_device_type == VirtualDevice.VIRTUAL_DEV_DISK and
-                    d.device == VirtualDisk.DEVICE_CDROM
-                    and d.transient
-                    and not install and
-                    not self.get_continue_inst())
-
-        def do_skip_disk(d):
-            # Skip transient labeled non-media disks
-            return (d.virtual_device_type == VirtualDevice.VIRTUAL_DEV_DISK and
-                    d.device == VirtualDisk.DEVICE_DISK
-                    and d.transient
-                    and not install)
-
-        # Wrapper for building disk XML, handling transient CDROMs
-        def get_dev_xml(dev):
-            origpath = None
-            try:
-                if do_skip_disk(dev):
-                    return ""
-
-                if do_remove_media(dev):
-                    origpath = dev.path
-                    dev.path = None
-
-                return dev.get_xml_config()
-            finally:
-                if origpath:
-                    dev.path = origpath
-        def get_vscsi_ctrl_xml():
-            ctrl = virtinst.VirtualController(self.conn)
-            ctrl.type = "scsi"
-            ctrl.address.set_addrstr("spapr-vio")
-            return ctrl.get_xml_config()
-
-        xml = self._get_emulator_xml()
-        # Build XML
-        for dev in devs:
-            xml = util.xml_append(xml, get_dev_xml(dev))
-            if (dev.address.type == "spapr-vio" and
-                  dev.virtual_device_type == VirtualDevice.VIRTUAL_DEV_DISK):
-                xml = util.xml_append(xml, get_vscsi_ctrl_xml())
-
-        return xml
-
-    def _get_emulator_xml(self):
-        emulator = self.emulator
-        if self.os.is_xenpv():
-            return ""
-
-        if (not self.emulator and
-            self.os.is_hvm() and
-            self.type == "xen"):
-            if self.conn.caps.host.arch in ("x86_64"):
-                emulator = "/usr/lib64/xen/bin/qemu-dm"
-            else:
-                emulator = "/usr/lib/xen/bin/qemu-dm"
-
-        emu_xml = ""
-        if emulator is not None:
-            emu_xml = "    <emulator>%s</emulator>" % emulator
-
-        return emu_xml
-
-    def _get_features_xml(self, features):
-        """
-        Return features (pae, acpi, apic) xml
-        """
-        if self.os.is_container():
-            return ""
-        return features.get_xml_config()
-
-    def _get_cpu_xml(self):
-        """
-        Return <cpu> XML
-        """
-        self.cpu.set_topology_defaults(self.vcpus)
-        return self.cpu.get_xml_config()
-
-    def _get_clock_xml(self):
-        """
-        Return <clock/> xml
-        """
-        return self.clock.get_xml_config()
-
-    def _get_seclabel_xml(self):
-        """
-        Return <seclabel> XML
-        """
-        xml = ""
-        if self.seclabel:
-            xml = self.seclabel.get_xml_config()
-
-        return xml
-
-    def _get_default_init(self):
-        for fs in self.get_devices("filesystem"):
-            if fs.target == "/":
-                return "/sbin/init"
-        return "/bin/sh"
-
-    def _get_osblob(self, install):
-        """
-        Return os, features, and clock xml (Implemented in subclass)
-        """
-        oscopy = self.os.copy()
-        self.installer.alter_bootconfig(self, install, oscopy)
-
-        if oscopy.is_container() and not oscopy.init:
-            oscopy.init = self._get_default_init()
-        if not oscopy.loader and oscopy.is_hvm() and self.type == "xen":
-            oscopy.loader = "/usr/lib/xen/boot/hvmloader"
-        if oscopy.os_type == "xen" and self.type == "xen":
-            # Use older libvirt 'linux' value for back compat
-            oscopy.os_type = "linux"
-        if oscopy.kernel or oscopy.init:
-            oscopy.bootorder = []
-
-        return oscopy.get_xml_config() or None
-
-    def _get_osblob_helper(self, guest, isinstall,
-                           bootconfig, endbootconfig):
-        return self.get_xml_config()
-
-    def _get_vcpu_xml(self):
-        curvcpus_supported = self.conn.check_conn_support(
-                                    self.conn.SUPPORT_CONN_MAXVCPUS_XML)
-        cpuset = ""
-        if self.cpuset is not None:
-            cpuset = " cpuset='%s'" % self.cpuset
-
-        maxv = self.maxvcpus
-        curv = self.vcpus
-
-        curxml = ""
-        if maxv != curv and curvcpus_supported:
-            curxml = " current='%s'" % curv
-        else:
-            maxv = curv
-
-        return "  <vcpu%s%s>%s</vcpu>" % (cpuset, curxml, maxv)
 
     ############################
     # Install Helper functions #
@@ -756,23 +500,42 @@ class Guest(XMLBuilder):
         for dev in self.get_all_devices():
             dev.setup(progresscb)
 
+    all_devices = property(lambda s: s.get_all_devices())
+
+
     ##############
     # Public API #
     ##############
 
-    def _get_xml_config(self, *args, **kwargs):
+    def _prepare_get_xml(self):
         # We do a shallow copy of the device list here, and set the defaults.
         # This way, default changes aren't persistent, and we don't need
         # to worry about when to call set_defaults
-        origdevs = self._devices
+        data = (self._devices, self.features, self.os)
         try:
             self._devices = [dev.copy() for dev in self._devices]
-            return self._do_get_xml_config(*args, **kwargs)
-        finally:
-            self._devices = origdevs
+            self.features = self.features.copy()
+            self.os = self.os.copy()
+        except:
+            self._finish_get_xml(data)
+            raise
+        return data
 
+    def _finish_get_xml(self, data):
+        self._devices, self.features, self.os = data
 
-    def _do_get_xml_config(self, install=True, disk_boot=False):
+    def _cleanup_xml(self, xml):
+        lines = xml.splitlines()
+        newlines = []
+        for line in lines:
+            newlines.append(line)
+
+        xml = "\n".join(newlines)
+        if not xml.endswith("\n"):
+            xml += "\n"
+        return xml
+
+    def _get_xml_config(self, install=True, disk_boot=False):
         """
         Return the full Guest xml configuration.
 
@@ -790,67 +553,36 @@ class Guest(XMLBuilder):
         """
         # pylint: disable=W0221
         # Argument number differs from overridden method
-        tmpfeat = self.features.copy()
-        self._set_defaults(tmpfeat)
 
-        action = install and "destroy" or "restart"
         osblob_install = install and not disk_boot
-
         if osblob_install and not self.installer.has_install_phase():
             return None
 
+        self.installer.alter_bootconfig(self, osblob_install, self.os)
+        self.set_defaults()
+        self._set_transient_device_defaults(install)
+
+        action = install and "destroy" or "restart"
+        self.on_reboot = action
+        self.on_crash = action
+
+        self.bootloader = None
         if (not install and
             self.os.is_xenpv() and
             not self.os.kernel):
-            osblob = "  <bootloader>/usr/bin/pygrub</bootloader>"
-        else:
-            osblob = self._get_osblob(osblob_install)
+            self.bootloader = "/usr/bin/pygrub"
+            self.os.clear()
 
-        desc_xml = ""
-        if self.description is not None:
-            desc = str(self.description)
-            desc_xml = ("  <description>%s</description>" %
-                        util.xml_escape(desc))
+        count = {}
+        for dev in self.get_all_devices():
+            devtype = dev.virtual_device_type
+            if devtype not in count:
+                count[devtype] = 1
+            newpath = "./devices/%s[%d]" % (devtype, count[devtype])
+            setattr(dev, "_XML_NEW_ROOT_PATH", newpath)
+            count[devtype] += 1
 
-        xml = ""
-        add = lambda x: util.xml_append(xml, x)
-
-        xml = add("<domain type='%s'>" % self.type)
-        xml = add("  <name>%s</name>" % self.name)
-        xml = add("  <uuid>%s</uuid>" % self.uuid)
-        xml = add(desc_xml)
-        xml = add("  <memory>%s</memory>" % self.maxmemory)
-        xml = add("  <currentMemory>%s</currentMemory>" % self.memory)
-
-        # <blkiotune>
-        # <memtune>
-        if self.hugepage is True:
-            xml = add("  <memoryBacking>")
-            xml = add("    <hugepages/>")
-            xml = add("  </memoryBacking>")
-
-        xml = add(self._get_vcpu_xml())
-        # <cputune>
-        xml = add(self.numatune.get_xml_config())
-        # <sysinfo>
-        xml = add(osblob)
-        xml = add(self._get_features_xml(tmpfeat))
-        xml = add(self._get_cpu_xml())
-        xml = add(self._get_clock_xml())
-        xml = add("  <on_poweroff>destroy</on_poweroff>")
-        xml = add("  <on_reboot>%s</on_reboot>" % action)
-        xml = add("  <on_crash>%s</on_crash>" % action)
-        xml = add("  <devices>")
-        xml = add(self._get_device_xml(self.get_all_devices(), install))
-        xml = add("  </devices>")
-        xml = add(self._get_seclabel_xml())
-        xml = add("</domain>\n")
-
-        def cb(doc, ctx):
-            ignore = ctx
-            return doc.serialize()
-        xml = util.xml_parse_wrapper(xml, cb)
-        return "\n".join(xml.splitlines()[1:]) + "\n"
+        return self._make_xml_stub()
 
     def get_continue_inst(self):
         """
@@ -987,7 +719,6 @@ class Guest(XMLBuilder):
             self.domain = self._create_guest(consolecb, meter, wait,
                                              start_xml, final_xml, is_initial,
                                              noboot)
-
             # Set domain autostart flag if requested
             self._flag_autostart()
 
@@ -1139,6 +870,31 @@ class Guest(XMLBuilder):
     # Device defaults #
     ###################
 
+    def _set_transient_device_defaults(self, install):
+        def do_remove_media(d):
+            # Keep cdrom around, but with no media attached,
+            # But only if we are a distro that doesn't have a multi
+            # stage install (aka not Windows)
+            return (d.virtual_device_type == VirtualDevice.VIRTUAL_DEV_DISK and
+                    d.device == VirtualDisk.DEVICE_CDROM
+                    and d.transient
+                    and not install and
+                    not self.get_continue_inst())
+
+        def do_skip_disk(d):
+            # Skip transient labeled non-media disks
+            return (d.virtual_device_type == VirtualDevice.VIRTUAL_DEV_DISK and
+                    d.device == VirtualDisk.DEVICE_DISK
+                    and d.transient
+                    and not install)
+
+        for dev in self.get_all_devices():
+            if do_skip_disk(dev):
+                self.remove_device(dev)
+                continue
+            if do_remove_media(dev):
+                dev.path = None
+
     def set_defaults(self):
         """
         Public function to set guest defaults. Things like preferred
@@ -1146,9 +902,46 @@ class Guest(XMLBuilder):
         The install process will call a non-persistent version, so calling
         this manually isn't required.
         """
-        self._set_defaults(self.features)
+        self._set_osxml_defaults()
+        self._set_feature_defaults()
+        self._set_device_defaults()
+        self._set_emulator_defaults()
+        self._set_cpu_defaults()
 
-    def _set_hvm_defaults(self, features):
+    def _set_cpu_defaults(self):
+        self.cpu.set_topology_defaults(self.vcpus)
+
+    def _set_emulator_defaults(self):
+        if self.os.is_xenpv():
+            self.emulator = None
+            return
+
+        if self.emulator:
+            return
+
+        if self.os.is_hvm() and self.type == "xen":
+            if self.conn.caps.host.arch == "x86_64":
+                self.emulator = "/usr/lib64/xen/bin/qemu-dm"
+            else:
+                self.emulator = "/usr/lib/xen/bin/qemu-dm"
+
+    def _set_osxml_defaults(self):
+        if self.os.is_container() and not self.os.init:
+            for fs in self.get_devices("filesystem"):
+                if fs.target == "/":
+                    self.os.init = "/sbin/init"
+                    break
+            self.os.init = self.os.init or "/bin/sh"
+
+        if not self.os.loader and self.os.is_hvm() and self.type == "xen":
+            self.os.loader = "/usr/lib/xen/boot/hvmloader"
+        if self.os.os_type == "xen" and self.type == "xen":
+            # Use older libvirt 'linux' value for back compat
+            self.os.os_type = "linux"
+        if self.os.kernel or self.os.init:
+            self.os.bootorder = []
+
+    def _set_hvm_defaults(self):
         disktype = VirtualDevice.VIRTUAL_DEV_DISK
         nettype = VirtualDevice.VIRTUAL_DEV_NET
         disk_bus  = self._lookup_device_param(disktype, "bus")
@@ -1166,13 +959,6 @@ class Guest(XMLBuilder):
 
         if self.clock.offset is None:
             self.clock.offset = self._lookup_osdict_key("clock")
-
-        if features["acpi"] is None:
-            features["acpi"] = self._lookup_osdict_key("acpi")
-        if features["apic"] is None:
-            features["apic"] = self._lookup_osdict_key("apic")
-        if features["pae"] is None:
-            features["pae"] = self.conn.caps.support_pae()
 
         if (self.os.machine is None and
             self.conn.caps.host.arch == "ppc64"):
@@ -1192,36 +978,40 @@ class Guest(XMLBuilder):
             if d.bus == d.BUS_DEFAULT:
                 d.bus = d.BUS_XEN
 
-    def add_usb_ich9_controllers(self):
-        ctrl = VirtualController(self.conn)
-        ctrl.type = "usb"
-        ctrl.model = "ich9-ehci1"
-        self.add_device(ctrl)
+    def _set_feature_defaults(self):
+        if self.os.is_container():
+            self.features.acpi = None
+            self.features.apic = None
+            self.features.pae = None
+            return
 
-        ctrl = VirtualController(self.conn)
-        ctrl.type = "usb"
-        ctrl.model = "ich9-uhci1"
-        ctrl.master_startport = 0
-        self.add_device(ctrl)
+        if not self.os.is_hvm():
+            return
 
-        ctrl = VirtualController(self.conn)
-        ctrl.type = "usb"
-        ctrl.model = "ich9-uhci2"
-        ctrl.master_startport = 2
-        self.add_device(ctrl)
+        if self.features["acpi"] is None:
+            self.features["acpi"] = self._lookup_osdict_key("acpi")
+        if self.features["apic"] is None:
+            self.features["apic"] = self._lookup_osdict_key("apic")
+        if self.features["pae"] is None:
+            self.features["pae"] = self.conn.caps.support_pae()
 
-        ctrl = VirtualController(self.conn)
-        ctrl.type = "usb"
-        ctrl.model = "ich9-uhci3"
-        ctrl.master_startport = 4
-        self.add_device(ctrl)
-
-    def _set_defaults(self, features):
+    def _set_device_defaults(self):
         for dev in self.get_devices("all"):
             dev.set_defaults()
 
+            # Add spapr-vio controller if needed
+            if (dev.address.type == "spapr-vio" and
+                dev.virtual_device_type == VirtualDevice.VIRTUAL_DEV_DISK and
+                not any([cont.address.type == "spapr-vio" for cont in
+                        self.get_devices("controller")])):
+                ctrl = virtinst.VirtualController(self.conn)
+                ctrl.type = "scsi"
+                ctrl.address.set_addrstr("spapr-vio")
+                self.add_device(ctrl)
+
+
         if self.os.is_hvm():
-            self._set_hvm_defaults(features)
+            self._set_hvm_defaults()
         if self.os.is_xenpv():
             self._set_pv_defaults()
 

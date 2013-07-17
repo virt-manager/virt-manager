@@ -877,7 +877,7 @@ class TestXMLConfig(unittest.TestCase):
         # Cpuset
         cpustr = g.generate_cpuset(g.conn, g.memory)
         g.cpuset = cpustr
-        g.maxvcpus = 7
+        g.vcpus = 7
 
         g.cpu.model = "footest"
         g.cpu.vendor = "Intel"
@@ -920,7 +920,8 @@ class TestXMLConfig(unittest.TestCase):
         i = utils.make_pxe_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
-        g.add_usb_ich9_controllers()
+        for dev in virtinst.VirtualController.get_usb2_controllers(g.conn):
+            g.add_device(dev)
 
         self._compare(g, "boot-usb2", False)
 
@@ -969,35 +970,41 @@ class TestXMLConfig(unittest.TestCase):
         origfunc = None
         util = None
         try:
-            i = utils.make_pxe_installer()
-            g = utils.get_basic_fullyvirt_guest(installer=i)
             util = getattr(virtinst, "util")
             origfunc = util.default_bridge
 
             def newbridge(ignore_conn):
-                return ["bridge", "br0"]
+                return ["bridge", "bzz0"]
             util.default_bridge = newbridge
 
-            dev1 = virtinst.VirtualNetworkInterface(g.conn)
+            dev1 = virtinst.VirtualNetworkInterface(utils.get_conn())
             dev1.macaddr = "22:22:33:44:55:66"
-            g.add_device(dev1)
 
-            dev2 = virtinst.VirtualNetworkInterface(g.conn,
-                                    parsexml=dev1.get_xml_config().strip("\n"))
+            dev2 = virtinst.VirtualNetworkInterface(utils.get_conn(),
+                                    parsexml=dev1.get_xml_config())
             dev2.source = None
             dev2.source = "foobr0"
             dev2.macaddr = "22:22:33:44:55:67"
-            g.add_device(dev2)
 
-            dev3 = virtinst.VirtualNetworkInterface(g.conn,
-                                    parsexml=dev1.get_xml_config().strip("\n"))
+            dev3 = virtinst.VirtualNetworkInterface(utils.get_conn(),
+                                    parsexml=dev1.get_xml_config())
             dev3.source = None
             dev3.macaddr = "22:22:33:44:55:68"
-            g.add_device(dev3)
 
-            self._compare(g, "boot-default-bridge", False, do_create=False)
-            dev3.type = dev3.TYPE_USER
-            self._compare(g, None, False)
+            utils.diff_compare(dev1.get_xml_config(), None,
+                               "    <interface type=\"bridge\">\n"
+                               "      <source bridge=\"bzz0\"/>\n"
+                               "      <mac address=\"22:22:33:44:55:66\"/>\n"
+                               "    </interface>")
+            utils.diff_compare(dev2.get_xml_config(), None,
+                               "<interface type=\"bridge\">\n"
+                               "      <mac address=\"22:22:33:44:55:67\"/>\n"
+                               "      <source bridge=\"foobr0\"/>\n"
+                               "    </interface>\n")
+            utils.diff_compare(dev3.get_xml_config(), None,
+                               "<interface type=\"bridge\">\n"
+                               "      <mac address=\"22:22:33:44:55:68\"/>\n"
+                               "    </interface>\n")
         finally:
             if util and origfunc:
                 util.default_bridge = origfunc

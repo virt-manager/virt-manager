@@ -41,7 +41,6 @@ class Seclabel(XMLBuilder):
     _dumpxml_xpath = "/domain/seclabel"
     _XML_ROOT_NAME = "seclabel"
     _XML_INDENT = 2
-    _XML_XPATH_RELATIVE = True
     _XML_PROP_ORDER = ["type", "model", "relabel", "label", "imagelabel"]
 
     def _guess_secmodel(self):

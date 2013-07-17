@@ -452,6 +452,8 @@ class VirtualDisk(VirtualDevice):
         return self._storage_backend.get_dev_type()
 
     def _get_default_driver_name(self):
+        if not self.path:
+            return None
         if self.conn.is_qemu():
             return self.DRIVER_QEMU
         return None
@@ -480,7 +482,7 @@ class VirtualDisk(VirtualDevice):
     # XML properties #
     ##################
 
-    def _xml_get_xpath(self):
+    def _make_getter_xpath_cb(self):
         xpath = None
         ret = "./source/@file"
         for prop in _TARGET_PROPS:
@@ -489,11 +491,11 @@ class VirtualDisk(VirtualDevice):
                 ret = xpath
                 break
         return ret
-    def _xml_set_xpath(self):
+    def _make_setter_xpath_cb(self):
         return "./source/@" + self.disk_type_to_target_prop(self.type)
     _xmlpath = XMLProperty(name="disk path",
-                           xml_get_xpath=_xml_get_xpath,
-                           xml_set_xpath=_xml_set_xpath,
+                           make_getter_xpath_cb=_make_getter_xpath_cb,
+                           make_setter_xpath_cb=_make_setter_xpath_cb,
                            clear_first=["./source/@" + target for target in
                                         _TARGET_PROPS])
 
@@ -591,9 +593,21 @@ class VirtualDisk(VirtualDevice):
         self._storage_backend = backend
 
     def _refresh_backend_settings(self):
-        self._refresh_xml_prop("type")
-        self._refresh_xml_prop("driver_name")
-        self._refresh_xml_prop("driver_type")
+        def refresh_prop_xml(propname):
+            # When parsing, we can pull info from _propstore or the
+            # backing XML. The problem is that disk XML has several
+            # interdependent properties that we need to update if
+            # one or the other changes.
+            #
+            # This will update the XML value with the newly determined
+            # default value, but it won't edit propstore. This means
+            prop = self.all_xml_props()[propname]
+            val = getattr(prop, "_default_cb")(self)
+            prop.setter(self, val, call_fset=False)
+
+        refresh_prop_xml("type")
+        refresh_prop_xml("driver_name")
+        refresh_prop_xml("driver_type")
         self._xmlpath = self.path
 
     def __managed_storage(self):
@@ -708,14 +722,6 @@ class VirtualDisk(VirtualDevice):
             self.device == self.DEVICE_DISK and
             self.type == self.TYPE_BLOCK):
             self.driver_io = self.IO_MODE_NATIVE
-
-    def _cleanup_xml(self, xml):
-        # Remove <driver> block if path is None. Might not be strictly
-        # requires but it's what we've always done
-        if not self.path and "<driver" in xml:
-            xml = "\n".join([l for l in xml.splitlines()
-                             if "<driver" not in l])
-        return xml
 
     def is_size_conflict(self):
         """

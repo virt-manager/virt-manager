@@ -480,8 +480,8 @@ class vmmDomain(vmmLibvirtObject):
     # CPU define methods
     def define_vcpus(self, vcpus, maxvcpus):
         def change(guest):
-            guest.vcpus = int(vcpus)
-            guest.maxvcpus = int(maxvcpus)
+            guest.curvcpus = int(vcpus)
+            guest.vcpus = int(maxvcpus)
         return self._redefine_guest(change)
     def define_cpuset(self, cpuset):
         def change(guest):
@@ -813,7 +813,9 @@ class vmmDomain(vmmLibvirtObject):
                 guest.remove_device(dev)
 
             if newmodel == "ich9-ehci1":
-                guest.add_usb_ich9_controllers()
+                for dev in virtinst.VirtualController.get_usb2_controllers(
+                        guest.conn):
+                    guest.add_device(dev)
 
         return self._redefine_device(change, devobj)
 
@@ -986,9 +988,9 @@ class vmmDomain(vmmLibvirtObject):
         return int(self._get_guest().vcpus)
     def vcpu_max_count(self):
         guest = self._get_guest()
-        has_xml_max = (guest.vcpus != guest.maxvcpus)
+        has_xml_max = (guest.curvcpus != guest.vcpus)
         if has_xml_max or not self.is_active():
-            return guest.maxvcpus
+            return guest.vcpus
 
         if self._startup_vcpus is None:
             self._startup_vcpus = int(self.vcpu_count())

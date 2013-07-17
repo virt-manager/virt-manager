@@ -754,7 +754,7 @@ def get_networks(guest, networks, macs):
 def set_os_variant(guest, distro_type, distro_variant):
     if not distro_type and not distro_variant:
         # Default to distro autodetection
-        guest.set_os_autodetect(True)
+        guest.os_autodetect = True
         return
 
     if (distro_type and str(distro_type).lower() != "none"):
@@ -798,7 +798,7 @@ def digest_graphics(guest, options, default_override=None):
             elif "DISPLAY" in os.environ.keys():
                 logging.debug("DISPLAY is set: looking for pre-configured graphics")
                 if cliconfig.default_graphics in ["spice", "vnc", "sdl"]:
-                    logging.debug("Defaulting graphics to pre-configured %s" %
+                    logging.debug("Defaulting graphics to pre-configured %s",
                                   cliconfig.default_graphics.upper())
                     return [cliconfig.default_graphics]
                 logging.debug("No valid pre-configured graphics "
@@ -1189,10 +1189,11 @@ def parse_vcpu(guest, optstring, default_vcpus=None):
 
     set_param = _build_set_param(guest, opts)
     set_cpu_param = _build_set_param(guest.cpu, opts)
-    has_vcpus = ("vcpus" in opts or (vcpus is not None))
+    has_max = ("maxvcpus" in opts)
+    has_vcpus = ("vcpus" in opts) or has_max
 
-    set_param("vcpus", "vcpus")
-    set_param("maxvcpus", "maxvcpus")
+    set_param(has_max and "curvcpus" or "vcpus", "vcpus")
+    set_param("vcpus", "maxvcpus")
 
     set_cpu_param("sockets", "sockets")
     set_cpu_param("cores", "cores")
@@ -1637,7 +1638,8 @@ def parse_controller(guest, optstring, dev=None):
         return None
 
     if optstring == "usb2":
-        guest.add_usb_ich9_controllers()
+        for dev in virtinst.VirtualController.get_usb2_controllers(guest.conn):
+            guest.add_device(dev)
         return None
 
     # Peel the mode off the front

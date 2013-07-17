@@ -42,7 +42,6 @@ class OSXML(XMLBuilder):
     _dumpxml_xpath = "/domain/os"
     _XML_ROOT_NAME = "os"
     _XML_INDENT = 2
-    _XML_XPATH_RELATIVE = True
     _XML_PROP_ORDER = ["arch", "os_type", "loader",
                        "kernel", "initrd", "kernel_args",
                        "bootorder"]

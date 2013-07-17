@@ -98,7 +98,6 @@ class DomainNumatune(XMLBuilder):
     _dumpxml_xpath = "/domain/numatune"
     _XML_ROOT_NAME = "numatune"
     _XML_INDENT = 2
-    _XML_XPATH_RELATIVE = True
     _XML_PROP_ORDER = ["memory_mode", "memory_nodeset"]
 
     memory_nodeset = XMLProperty(xpath="./numatune/memory/@nodeset")
