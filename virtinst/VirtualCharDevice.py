@@ -195,18 +195,11 @@ class _VirtualCharDevice(VirtualDevice):
 
     def _sourceport_xpath(self):
         return "./source[@mode='%s']/@service" % self.source_mode
-    def _get_sourceport_convert(self, val):
-        if val is None:
-            return None
-        return int(val)
-    def _set_sourceport_convert(self, val):
-        return self._get_sourceport_convert(self._set_source_validate(val))
     source_port = XMLProperty(name="char sourceport",
                         doc=_("Port on target host to connect/listen to."),
                         xml_get_xpath=_sourceport_xpath,
                         xml_set_xpath=_sourceport_xpath,
-                        set_converter=_set_sourceport_convert,
-                        get_converter=_get_sourceport_convert)
+                        set_converter=_set_source_validate, is_int=True)
 
     _has_mode_connect = XMLProperty(xpath="./source[@mode='connect']/@mode")
     _has_mode_bind = XMLProperty(xpath="./source[@mode='bind']/@mode")
@@ -220,16 +213,9 @@ class _VirtualCharDevice(VirtualDevice):
     bind_host = XMLProperty(xpath="./source[@mode='bind']/@host",
                             doc=_("Host addresss to bind to."),
                             set_converter=_set_bind_validate)
-    def _get_bindport_convert(self, val):
-        if val is None:
-            return None
-        return int(val)
-    def _set_bindport_convert(self, val):
-        return self._get_bindport_convert(self._set_bind_validate(val))
     bind_port = XMLProperty(xpath="./source[@mode='bind']/@service",
                             doc=_("Host port to bind to."),
-                            get_converter=_get_bindport_convert,
-                            set_converter=_set_bindport_convert)
+                            set_converter=_set_bind_validate, is_int=True)
 
     def _get_default_protocol(self):
         if not self.supports_property("protocol"):

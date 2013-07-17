@@ -303,10 +303,8 @@ class XMLProperty(property):
         self._default_cb = default_cb
         self._default_name = default_name
 
-        if sum([int(bool(i)) for i in [
-            self._is_bool, self._is_int, self._is_yesno,
-            (self._convert_value_for_getter_cb or
-             self._convert_value_for_setter_cb)]]) > 1:
+        if sum([int(bool(i)) for i in
+               [self._is_bool, self._is_int, self._is_yesno]]) > 1:
             raise RuntimeError("Conflict property converter options.")
 
         if self._default_name and not self._default_cb:
@@ -403,13 +401,14 @@ class XMLProperty(property):
     def _convert_value_for_setter(self, xmlbuilder):
         # Convert from API value to XML value
         val = self._orig_fget(xmlbuilder)
-        if self._convert_value_for_setter_cb:
-            val = self._convert_value_for_setter_cb(xmlbuilder, val)
-        elif self._default_name and val == self._default_name:
+        if self._default_name and val == self._default_name:
             val = self._default_cb(xmlbuilder)
         elif self._is_yesno:
             if val is not None:
                 val = bool(val) and "yes" or "no"
+
+        if self._convert_value_for_setter_cb:
+            val = self._convert_value_for_setter_cb(xmlbuilder, val)
         return val
 
     def _build_node_list(self, xmlbuilder, xpath):
@@ -448,20 +447,24 @@ class XMLProperty(property):
 
         if self._is_bool:
             if initial and self._is_tri and val is None:
-                return None
-            return bool(val)
+                ret = None
+            else:
+                ret = bool(val)
         elif self._is_int and val is not None:
             intkwargs = {}
             if "0x" in str(val):
                 intkwargs["base"] = 16
-            return int(val, **intkwargs)
+            ret = int(val, **intkwargs)
         elif self._is_yesno and val is not None:
-            return bool(val == "yes")
-        elif self._convert_value_for_getter_cb:
-            return self._convert_value_for_getter_cb(xmlbuilder, val)
+            ret = bool(val == "yes")
         elif self._is_multi and val is None:
-            return []
-        return val
+            ret = []
+        else:
+            ret = val
+
+        if self._convert_value_for_getter_cb:
+            ret = self._convert_value_for_getter_cb(xmlbuilder, ret)
+        return ret
 
     def _orig_fget(self, xmlbuilder):
         # Returns (is unset, fget value)

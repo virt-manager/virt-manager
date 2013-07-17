@@ -39,12 +39,6 @@ def _validate_port(name, val):
     return val
 
 
-def _int_or_none(val):
-    if val is None:
-        return val
-    return int(val)
-
-
 class VirtualGraphics(VirtualDevice):
     virtual_device_type = VirtualDevice.VIRTUAL_DEV_GRAPHICS
 
@@ -148,12 +142,10 @@ class VirtualGraphics(VirtualDevice):
         if self.type == "spice":
             return (self.port == -1 or self.tlsPort == -1) and "yes" or "no"
         return None
-    port = XMLProperty(xpath="./@port",
-            get_converter=lambda s, v: _int_or_none(v),
+    port = XMLProperty(xpath="./@port", is_int=True,
             set_converter=lambda s, v: _validate_port("Port", v),
             default_cb=_get_default_port)
-    tlsPort = XMLProperty(xpath="./@tlsPort",
-            get_converter=lambda s, v: _int_or_none(v),
+    tlsPort = XMLProperty(xpath="./@tlsPort", is_int=True,
             set_converter=lambda s, v: _validate_port("TLS port", v),
             default_cb=_get_default_tlsport)
     autoport = XMLProperty(xpath="./@autoport", is_yesno=True,
