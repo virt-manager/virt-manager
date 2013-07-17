@@ -24,10 +24,10 @@ import platform
 import logging
 import copy
 
-from virtinst import util
 import virtinst
+from virtinst import osxml
+from virtinst import util
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty
-from virtinst.Boot import Boot
 
 XEN_SCRATCH = "/var/lib/xen"
 LIBVIRT_SCRATCH = "/var/lib/libvirt/boot"
@@ -64,17 +64,12 @@ class Installer(XMLBuilder):
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
         XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
 
-        self._type = None
         self._location = None
-        self._initrd_injections = []
         self._cdrom = False
-        self._os_type = None
         self._scratchdir = None
-        self._arch = None
-        self._machine = None
-        self._loader = None
-        self._init = None
-        self.bootconfig = Boot(self.conn, parsexml, parsexmlnode)
+
+        self.initrd_injections = []
+        self.bootconfig = osxml.OSXML(self.conn, parsexml, parsexmlnode)
 
         self._install_kernel = None
         self._install_initrd = None
@@ -86,69 +81,29 @@ class Installer(XMLBuilder):
         self._tmpfiles = []
         self._tmpvols = []
 
-        if self._is_parse():
-            return
-
-        self._type = "xen"
-        self._arch = self.conn.caps.host.arch
-        self._os_type = "xen"
-
 
     #####################
     # XML related props #
     #####################
 
-    # Hypervisor name (qemu, kvm, xen, lxc, etc.)
-    def get_type(self):
-        return self._type
-    def set_type(self, val):
-        self._type = val
-    type = XMLProperty(get_type, set_type,
-                         xpath="./@type")
-
-    # Virtualization type ('xen' == xen paravirt, or 'hvm)
-    def get_os_type(self):
-        return self._os_type
-    def set_os_type(self, val):
-        # Older libvirt back compat: if user specifies 'linux', convert
-        # internally to newer equivalent value 'xen'
-        if val == "linux":
-            val = "xen"
-
-        # XXX: Need to validate this: have some whitelist based on caps?
-        self._os_type = val
-    os_type = XMLProperty(get_os_type, set_os_type,
-                            xpath="./os/type")
-
-    def get_arch(self):
-        return self._arch
-    def set_arch(self, val):
-        # XXX: Sanitize to a consisten value (i368 -> i686)
-        # XXX: Validate against caps
-        self._arch = val
-    arch = XMLProperty(get_arch, set_arch,
-                         xpath="./os/type/@arch")
-
-    def _get_machine(self):
-        return self._machine
+    def _set_type(self, val):
+        self.bootconfig.type = val
+    type = property(lambda s: s.bootconfig.type, _set_type)
+    def _set_os_type(self, val):
+        self.bootconfig.os_type = val
+    os_type = property(lambda s: s.bootconfig.os_type, _set_os_type)
     def _set_machine(self, val):
-        self._machine = val
-    machine = XMLProperty(_get_machine, _set_machine,
-                            xpath="./os/type/@machine")
-
-    def _get_loader(self):
-        return self._loader
+        self.bootconfig.machine = val
+    machine = property(lambda s: s.bootconfig.machine, _set_machine)
+    def _set_arch(self, val):
+        self.bootconfig.arch = val
+    arch = property(lambda s: s.bootconfig.arch, _set_arch)
     def _set_loader(self, val):
-        self._loader = val
-    loader = XMLProperty(_get_loader, _set_loader,
-                           xpath="./os/loader")
-
-    def _get_init(self):
-        return self._init
+        self.bootconfig.loader = val
+    loader = property(lambda s: s.bootconfig.loader, _set_loader)
     def _set_init(self, val):
-        self._init = val
-    init = XMLProperty(_get_init, _set_init,
-                         xpath="./os/init")
+        self.bootconfig.init = val
+    init = property(lambda s: s.bootconfig.init, _set_init)
 
 
     ######################
@@ -178,12 +133,6 @@ class Installer(XMLBuilder):
     def set_location(self, val):
         self._location = self._validate_location(val)
     location = property(get_location, set_location)
-
-    def get_initrd_injections(self):
-        return self._initrd_injections
-    def set_initrd_injections(self, val):
-        self._initrd_injections = val
-    initrd_injections = property(get_initrd_injections, set_initrd_injections)
 
     def get_extra_args(self):
         return self._install_args
@@ -241,15 +190,6 @@ class Installer(XMLBuilder):
 
         return bootorder
 
-    def _get_default_init(self, guest):
-        if not self.is_container():
-            return
-
-        for fs in guest.get_devices("filesystem"):
-            if fs.target == "/":
-                return "/sbin/init"
-        return "/bin/sh"
-
     def _make_cdrom_dev(self, path):
         dev = virtinst.VirtualDisk(self.conn)
         dev.path = path
@@ -257,55 +197,6 @@ class Installer(XMLBuilder):
         dev.read_only = True
         dev.validate()
         return dev
-
-    def _get_osblob_helper(self, guest, isinstall, bootconfig):
-        arch = self.arch
-        machine = self.machine
-        hvtype = self.type
-        loader = self.loader
-        os_type = self.os_type
-        init = self.init or self._get_default_init(guest)
-
-        hvxen = (hvtype == "xen")
-
-        if not loader and self.is_hvm() and hvxen:
-            loader = "/usr/lib/xen/boot/hvmloader"
-
-        # Use older libvirt 'linux' value for back compat
-        if os_type == "xen" and hvxen:
-            os_type = "linux"
-
-        if (not isinstall and
-            self.is_xenpv() and
-            not self.bootconfig.kernel):
-            # This really should be provided by capabilites xml
-            return "<bootloader>/usr/bin/pygrub</bootloader>"
-
-        osblob = "<os>"
-
-        typexml = "    <type"
-        if arch:
-            typexml += " arch='%s'" % arch
-        if machine:
-            typexml += " machine='%s'" % machine
-        typexml += ">%s</type>" % os_type
-
-        osblob = util.xml_append(osblob, typexml)
-
-        if init:
-            osblob = util.xml_append(osblob,
-                                      "    <init>%s</init>" %
-                                      util.xml_escape(init))
-        if loader:
-            osblob = util.xml_append(osblob,
-                                      "    <loader>%s</loader>" %
-                                      util.xml_escape(loader))
-
-        if not self.is_container():
-            osblob = util.xml_append(osblob, bootconfig.get_xml_config())
-        osblob = util.xml_append(osblob, "  </os>")
-
-        return osblob
 
     def _get_xml_config(self, guest, isinstall):
         """
@@ -338,7 +229,8 @@ class Installer(XMLBuilder):
             if self._install_args:
                 bootconfig.kernel_args = self._install_args
 
-        return self._get_osblob_helper(guest, isinstall, bootconfig)
+        return self.bootconfig._get_osblob_helper(guest, isinstall,
+                                                  bootconfig, self.bootconfig)
 
 
     ##########################
@@ -368,12 +260,9 @@ class Installer(XMLBuilder):
         """
         return False
 
-    def is_hvm(self):
-        return self.os_type == "hvm"
-    def is_xenpv(self):
-        return self.os_type in ["xen", "linux"]
-    def is_container(self):
-        return self.os_type == "exe"
+    is_hvm = lambda s: s.bootconfig.is_hvm()
+    is_xenpv = lambda s: s.bootconfig.is_xenpv()
+    is_container = lambda s: s.bootconfig.is_container()
 
     def has_install_phase(self):
         """
@@ -430,10 +319,6 @@ class Installer(XMLBuilder):
         to pass it. This is a convenience method to save the API user from
         having to enter all these known details twice.
         """
-
-        if not self.conn:
-            raise ValueError(_("A connection must be specified."))
-
         guest, domain = self.conn.caps.guest_lookup(os_type=self.os_type,
                                                     typ=self.type,
                                                     arch=self.arch,

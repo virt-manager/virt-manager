@@ -21,7 +21,7 @@ from virtinst import util
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
 
-class Boot(XMLBuilder):
+class OSXML(XMLBuilder):
     """
     Class for generating boot device related XML
     """
@@ -43,6 +43,26 @@ class Boot(XMLBuilder):
         self._kernel = None
         self._initrd = None
         self._kernel_args = None
+        self._type = None
+        self._arch = None
+        self._machine = None
+        self._loader = None
+        self._init = None
+        self._os_type = None
+
+        if self._is_parse():
+            return
+
+        self._arch = self.conn.caps.host.arch
+        self._type = "xen"
+        self._os_type = "xen"
+
+    def is_hvm(self):
+        return self.os_type == "hvm"
+    def is_xenpv(self):
+        return self.os_type in ["xen", "linux"]
+    def is_container(self):
+        return self.os_type == "exe"
 
     def _get_enable_bootmenu(self):
         return self._enable_bootmenu
@@ -80,6 +100,55 @@ class Boot(XMLBuilder):
     kernel_args = XMLProperty(_get_kernel_args, _set_kernel_args,
                                 xpath="./os/cmdline")
 
+    def _get_default_init(self, guest):
+        if not self.is_container():
+            return
+
+        for fs in guest.get_devices("filesystem"):
+            if fs.target == "/":
+                return "/sbin/init"
+        return "/bin/sh"
+    def _get_init(self):
+        return self._init
+    def _set_init(self, val):
+        self._init = val
+    init = XMLProperty(_get_init, _set_init,
+                         xpath="./os/init")
+
+    def _get_loader(self):
+        return self._loader
+    def _set_loader(self, val):
+        self._loader = val
+    loader = XMLProperty(_get_loader, _set_loader,
+                           xpath="./os/loader")
+
+    def get_arch(self):
+        return self._arch
+    def set_arch(self, val):
+        self._arch = val
+    arch = XMLProperty(get_arch, set_arch,
+                         xpath="./os/type/@arch")
+
+    def _get_machine(self):
+        return self._machine
+    def _set_machine(self, val):
+        self._machine = val
+    machine = XMLProperty(_get_machine, _set_machine,
+                            xpath="./os/type/@machine")
+
+    def get_ostype(self):
+        return self._os_type
+    def set_ostype(self, val):
+        self._os_type = val
+    os_type = XMLProperty(get_ostype, set_ostype, xpath="./os/type")
+
+    def get_type(self):
+        return self._type
+    def set_type(self, val):
+        self._type = val
+    type = XMLProperty(get_type, set_type, xpath="./@type")
+
+
     def _get_xml_config(self):
         xml = ""
 
@@ -103,3 +172,53 @@ class Boot(XMLBuilder):
                                        "    <bootmenu enable='%s'/>" % val)
 
         return xml
+
+    def _get_osblob_helper(self, guest, isinstall,
+                           bootconfig, endbootconfig):
+        arch = self.arch
+        machine = self.machine
+        hvtype = self.type
+        loader = self.loader
+        os_type = self.os_type
+        init = self.init or self._get_default_init(guest)
+
+        hvxen = (hvtype == "xen")
+
+        if not loader and self.is_hvm() and hvxen:
+            loader = "/usr/lib/xen/boot/hvmloader"
+
+        # Use older libvirt 'linux' value for back compat
+        if os_type == "xen" and hvxen:
+            os_type = "linux"
+
+        if (not isinstall and
+            self.is_xenpv() and
+            not endbootconfig.kernel):
+            # This really should be provided by capabilites xml
+            return "<bootloader>/usr/bin/pygrub</bootloader>"
+
+        osblob = "<os>"
+
+        typexml = "    <type"
+        if arch:
+            typexml += " arch='%s'" % arch
+        if machine:
+            typexml += " machine='%s'" % machine
+        typexml += ">%s</type>" % os_type
+
+        osblob = util.xml_append(osblob, typexml)
+
+        if init:
+            osblob = util.xml_append(osblob,
+                                      "    <init>%s</init>" %
+                                      util.xml_escape(init))
+        if loader:
+            osblob = util.xml_append(osblob,
+                                      "    <loader>%s</loader>" %
+                                      util.xml_escape(loader))
+
+        if not self.is_container():
+            osblob = util.xml_append(osblob, bootconfig.get_xml_config())
+        osblob = util.xml_append(osblob, "  </os>")
+
+        return osblob

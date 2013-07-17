@@ -307,7 +307,7 @@ class DistroInstaller(Installer.Installer):
             self._tmpfiles.append(initrdfn)
 
         _perform_initrd_injections(initrdfn,
-                                   self._initrd_injections,
+                                   self.initrd_injections,
                                    self.scratchdir)
 
         kernelfn, initrdfn, tmpvols = _upload_media(

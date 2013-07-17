@@ -178,6 +178,7 @@ class Guest(XMLBuilder):
         self._features = None
         self._replace = None
         self._emulator = None
+        self._type = None
 
         self._os_type = None
         self._os_variant = None
@@ -201,6 +202,8 @@ class Guest(XMLBuilder):
             return
 
         self.installer = virtinst.DistroInstaller(conn)
+
+        self._type = "xen"
 
         # Need to do this after all parameter init
         self._features = DomainFeatures(self.conn)
@@ -632,7 +635,6 @@ class Guest(XMLBuilder):
         self.add_device(dev)
 
     def _get_device_xml(self, devs, install=True):
-
         def do_remove_media(d):
             # Keep cdrom around, but with no media attached,
             # But only if we are a distro that doesn't have a multi
