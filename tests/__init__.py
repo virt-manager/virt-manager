@@ -22,6 +22,9 @@ os.environ["VIRTINST_TEST_TRACKPROPS"] = "1"
 import virtinst
 virtinst.enable_rhel_defaults = False
 
+from virtcli import cliconfig
+cliconfig.default_graphics = "vnc"
+
 from tests import utils
 
 # pylint: disable=W0212
