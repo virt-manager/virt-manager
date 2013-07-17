@@ -20,74 +20,29 @@
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
 
-def _none_or_bool(val):
-    if val is None:
-        return val
-    return bool(val)
-
-
 class DomainFeatures(XMLBuilder):
     """
     Class for generating <features> XML
     """
-
     _dumpxml_xpath = "/domain/features"
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        XMLBuilder.__init__(self, conn, parsexml,
-                                                   parsexmlnode)
+    _XML_ROOT_NAME = "features"
+    _XML_INDENT = 2
+    _XML_XPATH_RELATIVE = True
+    _XML_PROP_ORDER = ["acpi", "apic", "pae"]
 
-        self._acpi = None
-        self._apic = None
-        self._pae = None
-
-    def get_acpi(self):
-        return self._acpi
-    def set_acpi(self, val):
-        self._acpi = _none_or_bool(val)
-    acpi = XMLProperty(get_acpi, set_acpi,
-                         xpath="./features/acpi", is_tri=True)
-
-    def get_apic(self):
-        return self._apic
-    def set_apic(self, val):
-        self._apic = _none_or_bool(val)
-    apic = XMLProperty(get_apic, set_apic,
-                         xpath="./features/apic", is_tri=True)
-
-    def get_pae(self):
-        return self._pae
-    def set_pae(self, val):
-        self._pae = _none_or_bool(val)
-    pae = XMLProperty(get_pae, set_pae,
-                        xpath="./features/pae", is_tri=True)
+    acpi = XMLProperty(xpath="./features/acpi", is_tri=True)
+    apic = XMLProperty(xpath="./features/apic", is_tri=True)
+    pae = XMLProperty(xpath="./features/pae", is_tri=True)
 
     def __setitem__(self, attr, val):
-        return setattr(self, attr, val)
+        return setattr(self, attr, bool(val))
     def __getitem__(self, attr):
         return getattr(self, attr)
     def __delitem__(self, attr):
         return setattr(self, attr, None)
 
-
-    def _get_xml_config(self, defaults=None):
-        # pylint: disable=W0221
-        # Argument number differs from overridden method
-
-        if not defaults:
-            defaults = {}
-        ret = ""
-
-        feature_xml = ""
-        if self.acpi or (self.acpi is None and defaults.get("acpi")):
-            feature_xml += "<acpi/>"
-        if self.apic or (self.apic is None and defaults.get("apic")):
-            feature_xml += "<apic/>"
-        if self.pae or (self.pae is None and defaults.get("pae")):
-            feature_xml += "<pae/>"
-
-        if feature_xml:
-            ret += "  <features>\n"
-            ret += "    %s\n" % feature_xml
-            ret += "  </features>"
-
-        return ret
+    def _cleanup_xml(self, xml):
+        # Format it in the old style
+        xml = xml.replace("\n    ", "")
+        xml = xml.replace("<features>", "<features>\n   ")
+        return xml
