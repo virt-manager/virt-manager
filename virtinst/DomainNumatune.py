@@ -92,53 +92,14 @@ class DomainNumatune(XMLBuilder):
 
         return tuple(pinlist)
 
-    _dumpxml_xpath = "/domain/numatune"
 
     MEMORY_MODES = ["interleave", "strict", "preferred"]
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        self._memory_nodeset = None
-        self._memory_mode = None
+    _dumpxml_xpath = "/domain/numatune"
+    _XML_ROOT_NAME = "numatune"
+    _XML_INDENT = 2
+    _XML_XPATH_RELATIVE = True
+    _XML_PROP_ORDER = ["memory_mode", "memory_nodeset"]
 
-        XMLBuilder.__init__(self, conn, parsexml,
-                                                   parsexmlnode)
-        if self._is_parse():
-            return
-
-    def _get_memory_nodeset(self):
-        return self._memory_nodeset
-    def _set_memory_nodeset(self, val):
-        self._memory_nodeset = val
-    memory_nodeset = XMLProperty(_get_memory_nodeset,
-                                   _set_memory_nodeset,
-                                   xpath="./numatune/memory/@nodeset")
-
-    def _get_memory_mode(self):
-        return self._memory_mode
-    def _set_memory_mode(self, val):
-        self._memory_mode = val
-    memory_mode = XMLProperty(_get_memory_mode,
-                                _set_memory_mode,
-                                xpath="./numatune/memory/@mode")
-
-    def _get_memory_xml(self):
-        if not self.memory_nodeset:
-            return ""
-
-        xml = "    <memory"
-        if self.memory_mode:
-            xml += " mode='%s'" % self.memory_mode
-        if self.memory_nodeset:
-            xml += " nodeset='%s'" % self.memory_nodeset
-        xml += "/>\n"
-        return xml
-
-    def _get_xml_config(self):
-        mem_xml = self._get_memory_xml()
-        if not mem_xml:
-            return ""
-
-        xml = "  <numatune>\n"
-        xml += mem_xml
-        xml += "  </numatune>"
-        return xml
+    memory_nodeset = XMLProperty(xpath="./numatune/memory/@nodeset")
+    memory_mode = XMLProperty(xpath="./numatune/memory/@mode")
