@@ -849,14 +849,14 @@ class vmmCreate(vmmGObjectUI):
         elif len(self.guest.get_devices("filesystem")):
             fs = self.guest.get_devices("filesystem")[0]
             storage = storagetmpl % fs.source
-        elif self.guest.installer.is_container():
+        elif self.guest.os.is_container():
             storage = _("Host filesystem")
         else:
             storage = _("None")
 
         osstr = ""
         have_os = True
-        if self.guest.installer.is_container():
+        if self.guest.os.is_container():
             osstr = _("Linux")
         elif not distro:
             osstr = _("Generic")
@@ -1386,7 +1386,7 @@ class vmmCreate(vmmGObjectUI):
         self.check_network_selection()
 
     def get_graphics_device(self, guest):
-        if guest.installer.is_container():
+        if guest.os.is_container():
             return
 
         support_spice = guest.conn.check_conn_support(
@@ -1406,18 +1406,21 @@ class vmmCreate(vmmGObjectUI):
         return gdev
 
     def get_video_device(self, guest):
-        if guest.installer.is_container():
+        if guest.os.is_container():
             return
         return virtinst.VirtualVideoDevice(guest.conn)
 
     def get_sound_device(self, guest):
         if (not self.config.get_new_vm_sound() or
-            guest.installer.is_container()):
+            guest.os.is_container()):
             return
         return virtinst.VirtualAudio(guest.conn)
 
     def build_guest(self, installer, name):
-        guest = installer.guest_from_installer()
+        guest = self.conn.caps.build_virtinst_guest(self.conn.get_backend(),
+                                                    self.capsguest,
+                                                    self.capsdomain)
+        guest.installer = installer
         guest.name = name
 
         # Generate UUID (makes customize dialog happy)
@@ -1534,8 +1537,8 @@ class vmmCreate(vmmGObjectUI):
 
         # Build the installer and Guest instance
         try:
-            installer = self.build_installer(instclass)
             name = self.get_config_name()
+            installer = instclass(self.conn.get_backend())
             self.guest = self.build_guest(installer, name)
             if not self.guest:
                 return False
@@ -1560,7 +1563,7 @@ class vmmCreate(vmmGObjectUI):
                 self.guest.installer.extraargs = extraargs
 
             if init:
-                self.guest.installer.init = init
+                self.guest.os.init = init
 
             if fs:
                 fsdev = virtinst.VirtualFilesystem(self.guest.conn)
@@ -1589,7 +1592,8 @@ class vmmCreate(vmmGObjectUI):
 
         if not oldguest:
             if self.guest.installer.scratchdir_required():
-                path = self.guest.installer.scratchdir
+                path = virtinst.util.make_scratchdir(self.guest.conn,
+                                                     self.guest.type)
             elif instmethod == INSTALL_PAGE_ISO:
                 path = self.guest.installer.location
             else:
@@ -1726,9 +1730,9 @@ class vmmCreate(vmmGObjectUI):
 
     def validate_final_page(self):
         # HV + Arch selection
-        self.guest.installer.type = self.capsdomain.hypervisor_type
-        self.guest.installer.os_type = self.capsguest.os_type
-        self.guest.installer.arch = self.capsguest.arch
+        self.guest.type = self.capsdomain.hypervisor_type
+        self.guest.os.os_type = self.capsguest.os_type
+        self.guest.os.arch = self.capsguest.arch
 
         nettype, devname, macaddr = self.get_config_network_info()
 
@@ -1759,15 +1763,6 @@ class vmmCreate(vmmGObjectUI):
 
         return True
 
-
-    # Interesting methods
-    def build_installer(self, instclass):
-        installer = instclass(self.conn.get_backend())
-        installer.type = self.capsdomain.hypervisor_type
-        installer.os_type = self.capsguest.os_type
-        installer.arch = self.capsguest.arch
-
-        return installer
 
     def guest_from_install_type(self):
         instmeth = self.get_config_install_page()
@@ -2064,10 +2059,10 @@ class vmmCreate(vmmGObjectUI):
 
     def actually_detect(self, media):
         try:
-            installer = self.build_installer(virtinst.DistroInstaller)
+            installer = virtinst.DistroInstaller(self.conn)
             installer.location = media
 
-            self.detectedDistro = installer.detect_distro()
+            self.detectedDistro = installer.detect_distro(self.capsguest.arch)
         except:
             logging.exception("Error detecting distro.")
             self.detectedDistro = (None, None)

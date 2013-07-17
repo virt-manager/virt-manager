@@ -22,6 +22,7 @@ cliutils.setup_i18n()
 # Public imports
 
 from virtinst.Guest import Guest
+from virtinst.osxml import OSXML
 from virtinst.VirtualNetworkInterface import VirtualNetworkInterface
 from virtinst.VirtualGraphics import VirtualGraphics
 from virtinst.VirtualAudio import VirtualAudio

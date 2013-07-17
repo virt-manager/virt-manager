@@ -254,7 +254,7 @@ def prompt_virt(caps, arch, req_virt_type, req_accel):
     return (req_virt_type, req_accel)
 
 
-def get_virt_type(conn, options):
+def get_guest(conn, options):
     # Set up all virt/hypervisor parameters
     if sum([bool(f) for f in [options.fullvirt,
                               options.paravirt,
@@ -295,6 +295,8 @@ def get_virt_type(conn, options):
                         typ=req_hv_type,
                         accelerated=req_accel,
                         machine=options.machine)
+        guest = conn.caps.build_virtinst_guest(conn, capsguest, capsdomain)
+        guest.os.machine = options.machine
     except Exception, e:
         fail(e)
 
@@ -307,7 +309,7 @@ def get_virt_type(conn, options):
         logging.warn("KVM acceleration not available, using '%s'",
                      capsdomain.hypervisor_type)
 
-    return (capsguest, capsdomain)
+    return guest
 
 
 ##################################
@@ -331,7 +333,7 @@ def get_install_media(guest, location, cdpath, need_install):
 
 
 def media_prompt(guest):
-    if guest.installer.is_hvm():
+    if guest.os.is_hvm():
         prompt_txt = _("What is the install CD-ROM/ISO or URL?")
     else:
         prompt_txt = _("What is the install URL?")
@@ -344,7 +346,7 @@ def media_prompt(guest):
         if not len(media):
             continue
 
-        if not guest.installer.is_hvm() or media.count(":/"):
+        if not guest.os.is_hvm() or media.count(":/"):
             location = media
         else:
             cdpath = media
@@ -362,7 +364,7 @@ def validate_install_media(guest, location, cdpath, cdinstall=False):
         guest.installer.cdrom = True
     if location or cdpath:
         guest.installer.location = (location or cdpath)
-    guest.installer.check_location()
+    guest.installer.check_location(guest.os.arch)
 
 
 #############################
@@ -382,13 +384,13 @@ def validate_required_options(options, guest):
     if not options.memory:
         msg += "\n" + cli.ram_missing
 
-    if (not guest.installer.is_container() and
+    if (not guest.os.is_container() and
         not storage_specified(options.file_paths, options.diskopts,
                              options.nodisks, options.filesystems)):
         msg += "\n" + disk_missing
         need_storage = True
 
-    if (not guest.installer.is_container() and
+    if (not guest.os.is_container() and
         (not install_specified(options.location, options.cdrom,
                                options.pxe, options.import_install)) and
         (not cdrom_specified(guest, options.diskopts))):
@@ -429,13 +431,13 @@ def check_option_collisions(options, guest):
         fail(_("Only one install method can be used (%(methods)s)") %
              {"methods" : install_methods})
 
-    if (guest.installer.is_container() and
+    if (guest.os.is_container() and
         install_specified(options.location, options.cdrom,
                           options.pxe, options.import_install)):
         fail(_("Install methods (%s) cannot be specified for "
                "container guests") % install_methods)
 
-    if guest.installer.is_xenpv():
+    if guest.os.is_xenpv():
         if options.pxe:
             fail(_("Network PXE boot is not supported for paravirtualized "
                    "guests"))
@@ -444,7 +446,7 @@ def check_option_collisions(options, guest):
 
     if (options.location and
         guest.conn.is_remote() and not
-        guest.installer.support_remote_url_install()):
+        virtinst.support.support_remote_url_install(guest.conn)):
         fail(_("Libvirt version does not support remote --location installs"))
 
     if not options.location and options.extra:
@@ -457,7 +459,7 @@ def check_option_collisions(options, guest):
 # Guest building helpers #
 ##########################
 
-def build_installer(options, conn, virt_type, hv_name, arch, machine):
+def build_installer(options, conn, virt_type):
     # Build the Installer instance
     if options.livecd:
         instclass = virtinst.LiveCDInstaller
@@ -481,27 +483,17 @@ def build_installer(options, conn, virt_type, hv_name, arch, machine):
     # Only set installer params here that impact the hw config, not
     # anything to do with install media
     installer = instclass(conn)
-    installer.type = hv_name
-    installer.os_type = virt_type
-    installer.arch = arch
-    installer.machine = machine
 
     return installer
 
 
 def build_guest_instance(conn, options):
-    capsguest, capsdomain = get_virt_type(conn, options)
+    guest = get_guest(conn, options)
 
-    virt_type = capsguest.os_type
-    hv_name = capsdomain.hypervisor_type
-    logging.debug("Received virt method '%s'", virt_type)
-    logging.debug("Hypervisor name is '%s'", hv_name)
+    logging.debug("Received virt method '%s'", guest.type)
+    logging.debug("Hypervisor name is '%s'", guest.os.os_type)
 
-    # Get Guest instance from installer parameters.
-    installer = build_installer(options, conn, virt_type, hv_name,
-                                capsguest.arch, options.machine)
-    guest = installer.guest_from_installer()
-
+    guest.installer = build_installer(options, conn, guest.os.os_type)
 
     # Guest configuration
     cli.get_uuid(options.uuid, guest)
@@ -542,9 +534,9 @@ def build_guest_instance(conn, options):
 
     # Install options
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
-    guest.extraargs = options.extra
+    guest.installer.extraargs = options.extra
     guest.installer.initrd_injections = options.initrd_injections
-    guest.installer.init = options.init
+    guest.os.init = options.init
 
     # Do this after setting up all optional parameters, so we report error
     # about those first.

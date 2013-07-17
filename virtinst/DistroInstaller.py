@@ -25,6 +25,7 @@ import tempfile
 
 import urlgrabber
 
+from virtinst import support
 from virtinst import Storage
 from virtinst import util
 from virtinst import Installer
@@ -198,11 +199,6 @@ def _perform_initrd_injections(initrd, injections, scratchdir):
         logging.debug("gzip stderr=%s", gziperr)
 
 
-def _support_remote_url_install(conn):
-    if hasattr(conn, "_virtinst__fake_conn"):
-        return False
-    return conn.check_stream_support(conn.SUPPORT_STREAM_UPLOAD)
-
 
 def _upload_media(conn, scratchdir, system_scratchdir,
                   meter, kernel, initrd):
@@ -218,7 +214,7 @@ def _upload_media(conn, scratchdir, system_scratchdir,
                       " nothing to upload")
         return kernel, initrd, tmpvols
 
-    if not _support_remote_url_install(conn):
+    if not support.support_remote_url_install(conn):
         logging.debug("Media upload not supported")
         return kernel, initrd, tmpvols
 
@@ -250,15 +246,14 @@ class DistroInstaller(Installer.Installer):
     # Install prepartions #
     #######################
 
-    def _prepare_cdrom(self, guest, meter):
+    def _prepare_cdrom(self, guest, meter, scratchdir):
         transient = not self.livecd
         if not self._location_is_path:
-            # Xen needs a boot.iso if its a http://, ftp://, or nfs: url
             (store_ignore, os_type_ignore,
              os_variant_ignore, media) = OSDistro.getBootDisk(guest,
                                                               self.location,
                                                               meter,
-                                                              self.scratchdir)
+                                                              scratchdir)
             cdrom = media
 
             self._tmpfiles.append(cdrom)
@@ -270,7 +265,7 @@ class DistroInstaller(Installer.Installer):
         disk.transient = transient
         self.install_devices.append(disk)
 
-    def _prepare_kernel_and_initrd(self, guest, meter):
+    def _prepare_kernel_and_initrd(self, guest, meter, scratchdir):
         disk = None
 
         # If installing off a local path, map it through to a virtual CD
@@ -281,16 +276,14 @@ class DistroInstaller(Installer.Installer):
             disk = self._make_cdrom_dev(self.location)
             disk.transient = True
 
-        # Make sure we always fetch kernel here if required
+        # Don't fetch kernel if test suite manually injected a boot kernel
         if self._install_kernel and not self.scratchdir_required():
             return disk
 
-        # Need to fetch the kernel & initrd from a remote site, or
-        # out of a loopback mounted disk image/device
         ignore, os_type, os_variant, media = OSDistro.getKernel(guest,
                                                 self.location, meter,
-                                                self.scratchdir,
-                                                self.os_type)
+                                                scratchdir,
+                                                guest.os.os_type)
         (kernelfn, initrdfn, args) = media
 
         if guest.get_os_autodetect():
@@ -308,10 +301,11 @@ class DistroInstaller(Installer.Installer):
 
         _perform_initrd_injections(initrdfn,
                                    self.initrd_injections,
-                                   self.scratchdir)
+                                   scratchdir)
 
         kernelfn, initrdfn, tmpvols = _upload_media(
-                guest.conn, self.scratchdir, self._get_system_scratchdir(),
+                guest.conn, scratchdir,
+                util.get_system_scratchdir(guest.type),
                 meter, kernelfn, initrdfn)
         self._tmpvols += tmpvols
 
@@ -332,9 +326,9 @@ class DistroInstaller(Installer.Installer):
                          self.livecd)
 
         if isinstall or persistent_cd:
-            bootdev = self.bootconfig.BOOT_DEVICE_CDROM
+            bootdev = "cdrom"
         else:
-            bootdev = self.bootconfig.BOOT_DEVICE_HARDDISK
+            bootdev = "hd"
         return bootdev
 
     def _validate_location(self, val):
@@ -378,33 +372,34 @@ class DistroInstaller(Installer.Installer):
 
         return bool(is_url or mount_dvd)
 
-    def _prepare(self, guest, meter):
+    def _prepare(self, guest, meter, scratchdir):
+        logging.debug("Using scratchdir=%s", scratchdir)
+
         dev = None
         if self.cdrom:
             if self.location:
-                dev = self._prepare_cdrom(guest, meter)
+                dev = self._prepare_cdrom(guest, meter, scratchdir)
             else:
                 # Booting from a cdrom directly allocated to the guest
                 pass
         else:
-            dev = self._prepare_kernel_and_initrd(guest, meter)
+            dev = self._prepare_kernel_and_initrd(guest, meter, scratchdir)
 
         if dev:
             self.install_devices.append(dev)
 
-    def check_location(self):
+    def check_location(self, arch):
         if self._location_is_path:
             # We already mostly validated this
             return True
 
         # This will throw an error for us
-        OSDistro.detectMediaDistro(location=self.location, arch=self.arch)
+        OSDistro.detectMediaDistro(self.location, arch)
         return True
 
-    def detect_distro(self):
+    def detect_distro(self, arch):
         try:
-            dist_info = OSDistro.detectMediaDistro(location=self.location,
-                                                   arch=self.arch)
+            dist_info = OSDistro.detectMediaDistro(self.location, arch)
         except:
             logging.exception("Error attempting to detect distro.")
             return (None, None)

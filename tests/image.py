@@ -79,13 +79,18 @@ class TestImageParser(unittest.TestCase):
         for idx in range(len(output_xmls)):
             fname = output_xmls[idx]
             inst = virtinst.ImageInstaller(conn, image, boot_index=idx)
-
-            utils.set_conn(conn)
-
-            if inst.is_hvm():
+            capsguest, capsdomain = inst.get_caps_guest()
+            if capsguest.os_type == "hvm":
                 g = utils.get_basic_fullyvirt_guest(typ=gtype)
             else:
                 g = utils.get_basic_paravirt_guest()
+
+            g.os.os_type = capsguest.os_type
+            g.type = capsdomain.hypervisor_type
+            g.os.arch = capsguest.arch
+
+            utils.set_conn(conn)
+
 
             g.installer = inst
             g._prepare_install(None)

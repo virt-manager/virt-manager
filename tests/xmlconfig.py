@@ -63,10 +63,6 @@ class TestXMLConfig(unittest.TestCase):
         utils.reset_conn()
         logging.debug("Running %s", self.id())
 
-    def tearDown(self):
-        if os.path.exists(utils.scratch):
-            os.rmdir(utils.scratch)
-
     def _compare(self, guest, filebase, do_install, do_disk_boot=False,
                  do_create=True):
         filename = filebase and build_xmlfile(filebase) or None
@@ -278,9 +274,9 @@ class TestXMLConfig(unittest.TestCase):
         g = utils.get_basic_fullyvirt_guest(installer=i)
         g.add_device(utils.get_filedisk())
 
-        g.installer.bootconfig.bootorder = [
-            g.installer.bootconfig.BOOT_DEVICE_NETWORK]
-        g.installer.bootconfig.enable_bootmenu = True
+        g.os.bootorder = [
+            g.os.BOOT_DEVICE_NETWORK]
+        g.os.enable_bootmenu = True
 
         self._compare(g, "boot-fullyvirt-pxe-always", False)
 
@@ -314,7 +310,7 @@ class TestXMLConfig(unittest.TestCase):
         """
         utils.set_conn(_plainkvm)
 
-        i = utils.make_distro_installer(gtype="kvm")
+        i = utils.make_distro_installer()
         g = utils.get_basic_fullyvirt_guest("kvm", installer=i)
 
         do_install = False
@@ -351,9 +347,9 @@ class TestXMLConfig(unittest.TestCase):
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
         g.add_device(utils.get_filedisk())
-        g.installer.bootconfig.kernel = "kernel"
-        g.installer.bootconfig.initrd = "initrd"
-        g.installer.bootconfig.kernel_args = "my kernel args"
+        g.os.kernel = "kernel"
+        g.os.initrd = "initrd"
+        g.os.kernel_args = "my kernel args"
 
         self._compare(g, "install-fullyvirt-import-kernel", False)
 
@@ -361,13 +357,13 @@ class TestXMLConfig(unittest.TestCase):
         i = utils.make_import_installer()
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
-        g.installer.bootconfig.enable_bootmenu = False
-        g.installer.bootconfig.bootorder = ["hd", "fd", "cdrom", "network"]
+        g.os.enable_bootmenu = False
+        g.os.bootorder = ["hd", "fd", "cdrom", "network"]
         g.add_device(utils.get_filedisk())
         self._compare(g, "install-fullyvirt-import-multiboot", False)
 
     def testInstallPVImport(self):
-        i = utils.make_import_installer("xen")
+        i = utils.make_import_installer()
         g = utils.get_basic_paravirt_guest(installer=i)
 
         g.add_device(utils.get_filedisk())
@@ -402,7 +398,7 @@ class TestXMLConfig(unittest.TestCase):
     # OS Type/Version configurations
     def testF10(self):
         utils.set_conn(_plainkvm)
-        i = utils.make_pxe_installer(gtype="kvm")
+        i = utils.make_pxe_installer()
         g = utils.get_basic_fullyvirt_guest("kvm", installer=i)
 
         g.os_type = "linux"
@@ -414,8 +410,9 @@ class TestXMLConfig(unittest.TestCase):
 
     def testF11(self):
         utils.set_conn(_plainkvm)
-        i = utils.make_distro_installer(gtype="kvm")
+        i = utils.make_distro_installer()
         g = utils.get_basic_fullyvirt_guest("kvm", installer=i)
+        g.os.os_type = "hvm"
 
         g.os_type = "linux"
         g.os_variant = "fedora11"
@@ -428,7 +425,7 @@ class TestXMLConfig(unittest.TestCase):
 
     def testF11AC97(self):
         def build_guest():
-            i = utils.make_distro_installer(gtype="kvm")
+            i = utils.make_distro_installer()
             g = utils.get_basic_fullyvirt_guest("kvm", installer=i)
 
             g.os_type = "linux"
@@ -467,7 +464,7 @@ class TestXMLConfig(unittest.TestCase):
 
     def testF11Qemu(self):
         utils.set_conn(_plainkvm)
-        i = utils.make_distro_installer(gtype="qemu")
+        i = utils.make_distro_installer()
         g = utils.get_basic_fullyvirt_guest("qemu", installer=i)
 
         g.os_type = "linux"
@@ -481,7 +478,7 @@ class TestXMLConfig(unittest.TestCase):
 
     def testF11Xen(self):
         utils.set_conn(_plainxen)
-        i = utils.make_distro_installer(gtype="xen")
+        i = utils.make_distro_installer()
         g = utils.get_basic_fullyvirt_guest("xen", installer=i)
 
         g.os_type = "linux"
@@ -929,8 +926,7 @@ class TestXMLConfig(unittest.TestCase):
     def testFullKVMRHEL6(self):
         utils.set_conn(_plainkvm)
         i = utils.make_distro_installer(
-                                  location="tests/cli-test-xml/fakerhel6tree",
-                                  gtype="kvm")
+                                  location="tests/cli-test-xml/fakerhel6tree")
         g = utils.get_basic_fullyvirt_guest("kvm", installer=i)
         g.add_device(utils.get_floppy())
         g.add_device(utils.get_filedisk("/default-pool/rhel6.img", fake=False))
@@ -940,15 +936,7 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(VirtualVideoDevice(g.conn))
         g.os_autodetect = True
 
-        # Do this ugly hack to make sure the test doesn't try and use vol
-        # upload
-        origscratch = getattr(i, "_get_system_scratchdir")
-        try:
-            setattr(i, "_get_system_scratchdir",
-                    lambda: i.scratchdir)
-            self._testInstall(g, "rhel6-kvm-stage1", "rhel6-kvm-stage2")
-        finally:
-            setattr(i, "_get_system_scratchdir", origscratch)
+        self._testInstall(g, "rhel6-kvm-stage1", "rhel6-kvm-stage2")
 
     def testFullKVMWinxp(self):
         utils.set_conn(_plainkvm)
@@ -1046,9 +1034,10 @@ class TestXMLConfig(unittest.TestCase):
 
     def testFedoraTreeinfo(self):
         i = utils.make_distro_installer(
-                                location="tests/cli-test-xml/fakefedoratree",
-                                gtype="kvm")
-        t, v = i.detect_distro()
+                                location="tests/cli-test-xml/fakefedoratree")
+        g = utils.get_basic_fullyvirt_guest(installer=i)
+        g.type = "kvm"
+        t, v = i.detect_distro(g)
         self.assertEquals((t, v), ("linux", "fedora17"))
 
 if __name__ == "__main__":

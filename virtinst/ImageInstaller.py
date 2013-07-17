@@ -35,7 +35,6 @@ class ImageInstaller(Installer.Installer):
     def __init__(self, conn, image, boot_index=None):
         Installer.Installer.__init__(self, conn)
 
-        self._arch = None
         self._image = image
 
         # Set boot _boot_caps/_boot_parameters
@@ -53,23 +52,17 @@ class ImageInstaller(Installer.Installer):
 
         # Set up internal caps.guest object
         self._guest = self.conn.caps.guestForOSType(self.boot_caps.type,
-                                                      self.boot_caps.arch)
+                                                    self.boot_caps.arch)
         if self._guest is None:
             raise RuntimeError(_("Unsupported virtualization type: %s %s" %
                                (self.boot_caps.type, self.boot_caps.arch)))
-
-        self.os_type = self.boot_caps.type
         self._domain = self._guest.bestDomainType()
-        self.type = self._domain.hypervisor_type
-        self.arch = self._guest.arch
+
 
 
     # Custom ImageInstaller methods
-
-    def is_hvm(self):
-        if self._boot_caps.type == "hvm":
-            return True
-        return False
+    def get_caps_guest(self):
+        return self._guest, self._domain
 
     def get_image(self):
         return self._image
@@ -81,9 +74,9 @@ class ImageInstaller(Installer.Installer):
 
 
     # General Installer methods
-
-    def prepare(self, guest, meter):
-        self.cleanup()
+    def _prepare(self, guest, meter, scratchdir):
+        ignore = scratchdir
+        ignore = meter
 
         self._make_disks()
 
@@ -93,9 +86,9 @@ class ImageInstaller(Installer.Installer):
             elif self.boot_caps.features[f] & CapabilitiesParser.FEATURE_OFF:
                 guest.features[f] = False
 
-        self.bootconfig.kernel = self.boot_caps.kernel
-        self.bootconfig.initrd = self.boot_caps.initrd
-        self.bootconfig.kernel_args = self.boot_caps.cmdline
+        guest.os.kernel = self.boot_caps.kernel
+        guest.os.initrd = self.boot_caps.initrd
+        guest.os.kernel_args = self.boot_caps.cmdline
 
     # Private methods
     def _get_bootdev(self, isinstall, guest):

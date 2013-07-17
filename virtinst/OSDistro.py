@@ -119,7 +119,7 @@ def _locationCheckWrapper(guest, baseuri, progresscb,
                           scratchdir, _type, arch, callback):
     fetcher = _fetcherForURI(baseuri, scratchdir)
     if guest:
-        arch = guest.arch
+        arch = guest.os.arch
 
     try:
         fetcher.prepareLocation()
@@ -154,17 +154,15 @@ def _acquireMedia(iskernel, guest, baseuri, progresscb,
     return _locationCheckWrapper(guest, baseuri, progresscb, scratchdir, _type,
                                  None, media_cb)
 
+
 # Helper method to lookup install media distro and fetch an install kernel
-
-
 def getKernel(guest, baseuri, progresscb, scratchdir, typ):
     iskernel = True
     return _acquireMedia(iskernel, guest, baseuri, progresscb,
                          scratchdir, typ)
 
+
 # Helper method to lookup install media distro and fetch a boot iso
-
-
 def getBootDisk(guest, baseuri, progresscb, scratchdir):
     iskernel = False
     return _acquireMedia(iskernel, guest, baseuri, progresscb,
@@ -179,9 +177,8 @@ def _check_osvariant_valid(os_type, os_variant):
     return bool(_check_ostype_valid(os_type) and
         os_variant in osdict.sort_helper(osdict.OS_TYPES[os_type]["variants"]))
 
+
 # Attempt to detect the os type + variant for the passed location
-
-
 def detectMediaDistro(location, arch):
     import urlgrabber
     progresscb = urlgrabber.progress.BaseMeter()
@@ -393,8 +390,8 @@ class Distro:
         if not fetcher.location.startswith("/"):
             args += "%s=%s" % (self.method_arg, fetcher.location)
 
-        if guest.extraargs:
-            args += " " + guest.extraargs
+        if guest.installer.extraargs:
+            args += " " + guest.installer.extraargs
 
         try:
             initrd = fetcher.acquireFile(initrdpath, progresscb)

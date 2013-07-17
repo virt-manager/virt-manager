@@ -575,7 +575,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def define_machtype(self, newvalue):
         def change(guest):
-            guest.installer.machine = newvalue
+            guest.os.machine = newvalue
         return self._redefine_guest(change)
 
     def define_description(self, newvalue):
@@ -586,21 +586,21 @@ class vmmDomain(vmmLibvirtObject):
     # Boot define methods
     def set_boot_device(self, boot_list):
         def change(guest):
-            guest.installer.bootconfig.bootorder = boot_list
+            guest.os.bootorder = boot_list
         return self._redefine_guest(change)
     def set_boot_menu(self, newval):
         def change(guest):
-            guest.installer.bootconfig.enable_bootmenu = bool(newval)
+            guest.os.enable_bootmenu = bool(newval)
         return self._redefine_guest(change)
     def set_boot_kernel(self, kernel, initrd, args):
         def change(guest):
-            guest.installer.bootconfig.kernel = kernel or None
-            guest.installer.bootconfig.initrd = initrd or None
-            guest.installer.bootconfig.kernel_args = args or None
+            guest.os.kernel = kernel or None
+            guest.os.initrd = initrd or None
+            guest.os.kernel_args = args or None
         return self._redefine_guest(change)
     def set_boot_init(self, init):
         def change(guest):
-            guest.installer.init = init
+            guest.os.init = init
         return self._redefine_guest(change)
 
     # Disk define methods
@@ -943,24 +943,24 @@ class vmmDomain(vmmLibvirtObject):
     ########################
 
     def is_container(self):
-        return self._get_guest().installer.is_container()
+        return self._get_guest().os.is_container()
     def is_xenpv(self):
-        return self._get_guest().installer.is_xenpv()
+        return self._get_guest().os.is_xenpv()
     def is_hvm(self):
-        return self._get_guest().installer.is_hvm()
+        return self._get_guest().os.is_hvm()
 
     def get_uuid(self):
         return self.uuid
     def get_abi_type(self):
-        return self._get_guest().installer.os_type
+        return self._get_guest().os.os_type
     def get_hv_type(self):
-        return self._get_guest().installer.type
+        return self._get_guest().type
     def get_pretty_hv_type(self):
         return util.pretty_hv(self.get_abi_type(), self.get_hv_type())
     def get_arch(self):
-        return self._get_guest().installer.arch
+        return self._get_guest().os.arch
     def get_init(self):
-        return self._get_guest().installer.init
+        return self._get_guest().os.init
     def get_emulator(self):
         return self._get_guest().emulator
     def get_acpi(self):
@@ -970,7 +970,7 @@ class vmmDomain(vmmLibvirtObject):
     def get_clock(self):
         return self._get_guest().clock.offset
     def get_machtype(self):
-        return self._get_guest().installer.machine
+        return self._get_guest().os.machine
 
     def get_description(self):
         # Always show the inactive <description>, let's us fake hotplug
@@ -1000,15 +1000,15 @@ class vmmDomain(vmmLibvirtObject):
         return self._get_guest().cpu
 
     def get_boot_device(self):
-        return self._get_guest().installer.bootconfig.bootorder
+        return self._get_guest().os.bootorder
     def get_boot_menu(self):
         guest = self._get_guest()
-        return bool(guest.installer.bootconfig.enable_bootmenu)
+        return bool(guest.os.enable_bootmenu)
     def get_boot_kernel_info(self):
         guest = self._get_guest()
-        kernel = guest.installer.bootconfig.kernel
-        initrd = guest.installer.bootconfig.initrd
-        args = guest.installer.bootconfig.kernel_args
+        kernel = guest.os.kernel
+        initrd = guest.os.initrd
+        args = guest.os.kernel_args
 
         return (kernel, initrd, args)
 

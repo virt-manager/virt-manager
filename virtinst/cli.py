@@ -792,7 +792,7 @@ def digest_graphics(guest, options, default_override=None):
         elif default_override is False:
             nographics = True
         else:
-            if guest.installer.is_container():
+            if guest.os.is_container():
                 logging.debug("Container guest, defaulting to nographics")
                 nographics = True
             elif "DISPLAY" in os.environ.keys():
@@ -1277,10 +1277,7 @@ def parse_boot(guest, optstring):
         if val is None:
             return
 
-        if paramname == "loader":
-            guest.installer.loader = val
-        else:
-            setattr(guest.installer.bootconfig, paramname, val)
+        setattr(guest.os, paramname, val)
 
     # Convert menu= value
     if "menu" in opts:
@@ -1307,14 +1304,14 @@ def parse_boot(guest, optstring):
     if opts:
         boot_order = []
         for boot_dev in optlist:
-            if not boot_dev in guest.installer.bootconfig.boot_devices:
+            if not boot_dev in guest.os.boot_devices:
                 continue
 
             del(opts[boot_dev])
             if boot_dev not in boot_order:
                 boot_order.append(boot_dev)
 
-        guest.installer.bootconfig.bootorder = boot_order
+        guest.os.bootorder = boot_order
 
     if opts:
         raise ValueError(_("Unknown options %s") % opts.keys())

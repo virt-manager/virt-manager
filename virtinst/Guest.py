@@ -28,9 +28,10 @@ import urlgrabber.progress as progress
 import libvirt
 import libxml2
 
+import virtinst
 from virtinst import util
 from virtinst import support
-import virtinst
+from virtinst.osxml import OSXML
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 from virtinst.VirtualDevice import VirtualDevice
 from virtinst.VirtualDisk import VirtualDisk
@@ -206,33 +207,17 @@ class Guest(XMLBuilder):
         self._type = "xen"
 
         # Need to do this after all parameter init
-        self._features = DomainFeatures(self.conn)
-        self._clock = Clock(self.conn)
-        self._seclabel = Seclabel(self.conn)
-        self._cpu = CPU(self.conn)
-        self._numatune = DomainNumatune(self.conn)
+        self.os = OSXML(self.conn, parsexml, parsexmlnode)
+        self.features = DomainFeatures(self.conn)
+        self.clock = Clock(self.conn)
+        self.seclabel = Seclabel(self.conn)
+        self.cpu = CPU(self.conn)
+        self.numatune = DomainNumatune(self.conn)
 
 
     ######################
     # Property accessors #
     ######################
-
-    def get_clock(self):
-        return self._clock
-    clock = property(get_clock)
-    def get_seclabel(self):
-        return self._seclabel
-    seclabel = property(get_seclabel)
-    def get_cpu(self):
-        return self._cpu
-    cpu = property(get_cpu)
-    def get_numatune(self):
-        return self._numatune
-    numatune = property(get_numatune)
-
-    def _get_features(self):
-        return self._features
-    features = property(_get_features)
 
     # Domain name of the guest
     def get_name(self):
@@ -432,51 +417,11 @@ class Guest(XMLBuilder):
                        doc=_("Whether we should overwrite an existing guest "
                              "with the same name."))
 
-    #########################
-    # DEPRECATED PROPERTIES #
-    #########################
-
-    # Hypervisor name (qemu, xen, kvm, etc.)
-    # Deprecated: should be pulled directly from the installer
     def get_type(self):
-        return self.installer.type
+        return self.os.type
     def set_type(self, val):
-        self.installer.type = val
+        self.os.type = val
     type = property(get_type, set_type)
-
-    # Deprecated: should be pulled directly from the installer
-    def get_arch(self):
-        return self.installer.arch
-    def set_arch(self, val):
-        self.installer.arch = val
-    arch = property(get_arch, set_arch)
-
-    # Deprecated: Should be called from the installer directly
-    def get_location(self):
-        return self.installer.location
-    def set_location(self, val):
-        self.installer.location = val
-    location = property(get_location, set_location)
-
-    # Deprecated: Should be called from the installer directly
-    def get_scratchdir(self):
-        return self.installer.scratchdir
-    scratchdir = property(get_scratchdir)
-
-    # Deprecated: Should be called from the installer directly
-    def get_extraargs(self):
-        return self.installer.extraargs
-    def set_extraargs(self, val):
-        self.installer.extraargs = val
-    extraargs = property(get_extraargs, set_extraargs)
-
-    # Deprecated: Should set the installer values directly
-    def get_cdrom(self):
-        return self.installer.location
-    def set_cdrom(self, val):
-        self.installer.location = val
-        self.installer.cdrom = True
-    cdrom = property(get_cdrom, set_cdrom)
 
 
     ########################################
@@ -612,23 +557,22 @@ class Guest(XMLBuilder):
                 self._track_device(dev)
 
         self._xml_node.virtinst_root_doc = self._xml_root_doc
-        self.installer = virtinst.Installer.Installer(self.conn,
-                                                  parsexmlnode=self._xml_node)
-        self._features = DomainFeatures(self.conn,
-                                        parsexmlnode=self._xml_node)
-        self._clock = Clock(self.conn, parsexmlnode=self._xml_node)
-        self._seclabel = Seclabel(self.conn, parsexmlnode=self._xml_node)
-        self._cpu = CPU(self.conn, parsexmlnode=self._xml_node)
-        self._numatune = DomainNumatune(self.conn,
-                                        parsexmlnode=self._xml_node)
+        self.os = OSXML(self.conn, parsexmlnode=self._xml_node)
+        self.features = DomainFeatures(self.conn,
+                                       parsexmlnode=self._xml_node)
+        self.clock = Clock(self.conn, parsexmlnode=self._xml_node)
+        self.seclabel = Seclabel(self.conn, parsexmlnode=self._xml_node)
+        self.cpu = CPU(self.conn, parsexmlnode=self._xml_node)
+        self.numatune = DomainNumatune(self.conn,
+                                       parsexmlnode=self._xml_node)
 
     def add_default_input_device(self):
-        if self.installer.is_container():
+        if self.os.is_container():
             return
         self.add_device(VirtualInputDevice(self.conn))
 
     def add_default_console_device(self):
-        if self.installer.is_xenpv():
+        if self.os.is_xenpv():
             return
         dev = virtinst.VirtualConsoleDevice(self.conn)
         dev.type = dev.TYPE_PTY
@@ -685,11 +629,11 @@ class Guest(XMLBuilder):
 
     def _get_emulator_xml(self):
         emulator = self.emulator
-        if self.installer.is_xenpv():
+        if self.os.is_xenpv():
             return ""
 
         if (not self.emulator and
-            self.installer.is_hvm() and
+            self.os.is_hvm() and
             self.type == "xen"):
             if self.conn.caps.host.arch in ("x86_64"):
                 emulator = "/usr/lib64/xen/bin/qemu-dm"
@@ -706,7 +650,7 @@ class Guest(XMLBuilder):
         """
         Return features (pae, acpi, apic) xml
         """
-        if self.installer and self.installer.is_container():
+        if self.os.is_container():
             return ""
         return features.get_xml_config()
 
@@ -737,15 +681,12 @@ class Guest(XMLBuilder):
         """
         Return os, features, and clock xml (Implemented in subclass)
         """
-        xml = ""
-
-        osxml = self.installer.get_xml_config(self, install)
+        oscopy = self.os.copy()
+        self.installer.alter_bootconfig(self, install, oscopy)
+        osxml = oscopy._get_osblob_helper(self, install, oscopy, self.os)
         if not osxml:
             return None
-
-        xml = util.xml_append(xml,
-                               self.installer.get_xml_config(self, install))
-        return xml
+        return osxml
 
     def _get_vcpu_xml(self):
         curvcpus_supported = self.conn.check_conn_support(
@@ -774,8 +715,8 @@ class Guest(XMLBuilder):
         ignore = dry
 
         # Fetch install media, prepare installer devices
-        self.installer.prepare(guest=self,
-                                meter=meter)
+        self.installer.prepare(self, meter,
+                               util.make_scratchdir(self.conn, self.type))
 
         # Initialize install device list
         for dev in self.installer.install_devices:
@@ -1212,9 +1153,9 @@ class Guest(XMLBuilder):
         if features["pae"] is None:
             features["pae"] = self.conn.caps.support_pae()
 
-        if (self.installer.machine is None and
+        if (self.os.machine is None and
             self.conn.caps.host.arch == "ppc64"):
-            self.installer.machine = "pseries"
+            self.os.machine = "pseries"
 
     def _set_pv_defaults(self, devlist_func):
         # Default file backed PV guests to tap driver
@@ -1258,9 +1199,9 @@ class Guest(XMLBuilder):
         for dev in devlist_func("all"):
             dev.set_defaults()
 
-        if self.installer.is_hvm():
+        if self.os.is_hvm():
             self._set_hvm_defaults(devlist_func, features)
-        if self.installer.is_xenpv():
+        if self.os.is_xenpv():
             self._set_pv_defaults(devlist_func)
 
         soundtype = VirtualDevice.VIRTUAL_DEV_AUDIO
@@ -1285,13 +1226,13 @@ class Guest(XMLBuilder):
                 if disk.device == disk.DEVICE_FLOPPY:
                     disk.bus = "fdc"
                 else:
-                    if self.installer.is_hvm():
-                        if (self.installer.type == "kvm" and
-                            self.installer.machine == "pseries"):
+                    if self.os.is_hvm():
+                        if (self.os.type == "kvm" and
+                            self.os.machine == "pseries"):
                             disk.bus = "scsi"
                         else:
                             disk.bus = "ide"
-                    elif self.installer.is_xenpv():
+                    elif self.os.is_xenpv():
                         disk.bus = "xen"
             if disk.target:
                 used_targets.append(disk.target)

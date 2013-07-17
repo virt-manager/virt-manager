@@ -150,12 +150,9 @@ def main(conn=None):
 
 
     # Build the Installer instance
-    installer = virtinst.ImageInstaller(conn, image,
-                                        boot_index=options.boot)
-
-    # Get Guest instance from installer parameters.
-    guest = installer.guest_from_installer()
-
+    installer = virtinst.ImageInstaller(conn, image, boot_index=options.boot)
+    guest = conn.caps.build_virtinst_guest(conn, *installer.get_caps_guest())
+    guest.installer = installer
 
     # now let's get some of the common questions out of the way
     guest.replace = options.replace
@@ -172,7 +169,7 @@ def main(conn=None):
 
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
 
-    if installer.is_hvm():
+    if guest.os.is_hvm():
         if options.noacpi:
             guest.features["acpi"] = False
         if options.noapic:

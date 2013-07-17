@@ -124,15 +124,13 @@ class XMLParseTest(unittest.TestCase):
         check("imagelabel", "imagelabel", "fooimage")
         check("relabel", None, True)
 
-        check = self._make_checker(guest.installer)
+        check = self._make_checker(guest.os)
         check("type", "kvm", "test")
         check("os_type", "hvm", "xen")
         check("arch", "i686", None)
         check("machine", "foobar", "pc-0.11")
         check("loader", None, "/foo/loader")
         check("init", None, "/sbin/init")
-
-        check = self._make_checker(guest.installer.bootconfig)
         check("bootorder", ["hd"], ["fd"])
         check("enable_bootmenu", None, False)
         check("kernel", None)
@@ -203,14 +201,14 @@ class XMLParseTest(unittest.TestCase):
         guest.cpu.set_topology_defaults(guest.vcpus)
         self.assertTrue(guest.cpu.get_xml_config().startswith("<cpu"))
 
-        self.assertTrue(guest.installer.get_xml_config().startswith("<os"))
+        self.assertTrue(guest.os.get_xml_config().startswith("<os"))
 
         self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterBootMulti(self):
         guest, outfile = self._get_test_content("change-boot-multi")
 
-        check = self._make_checker(guest.installer.bootconfig)
+        check = self._make_checker(guest.os)
         check("bootorder", ['hd', 'fd', 'cdrom', 'network'], ["cdrom"])
         check("enable_bootmenu", False, True)
         check("kernel", None, "foo.img")
@@ -222,7 +220,7 @@ class XMLParseTest(unittest.TestCase):
     def testAlterBootKernel(self):
         guest, outfile = self._get_test_content("change-boot-kernel")
 
-        check = self._make_checker(guest.installer.bootconfig)
+        check = self._make_checker(guest.os)
         check("bootorder", [], ["network", "hd", "fd"])
         check("enable_bootmenu", None)
         check("kernel", "/boot/vmlinuz", None)

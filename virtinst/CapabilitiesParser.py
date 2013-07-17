@@ -752,3 +752,14 @@ class Capabilities(object):
                                 'arch': guest.arch, 'machine': machinestr})
 
         return (guest, domain)
+
+    def build_virtinst_guest(self, conn, guest, domain):
+        import virtinst
+        gobj = virtinst.Guest(conn)
+        gobj.type = domain.hypervisor_type
+        gobj.os.os_type = guest.os_type
+        gobj.os.arch = guest.arch
+        gobj.os.loader = domain.loader
+        gobj.emulator = domain.emulator
+
+        return gobj

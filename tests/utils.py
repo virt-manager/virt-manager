@@ -35,7 +35,6 @@ os.environ["HOME"] = "/tmp"
 os.environ["DISPLAY"] = ":3.4"
 
 _cwd        = os.getcwd()
-scratch     = os.path.join(_cwd, "tests", "testscratchdir")
 _testuri    = "test:///%s/tests/testdriver.xml" % _cwd
 _fakeuri    = "__virtinst_test__" + _testuri + ",predictable"
 _remoteuri  = "__virtinst_test__" + _testuri + ",remote"
@@ -43,6 +42,8 @@ _kvmcaps    = "%s/tests/capabilities-xml/libvirt-0.7.6-qemu-caps.xml" % _cwd
 _plainkvm   = "%s,qemu" % _fakeuri
 _plainxen   = "%s,xen" % _fakeuri
 _kvmuri     = "%s,caps=%s" % (_plainkvm, _kvmcaps)
+
+os.environ["VIRTINST_TEST_SCRATCHDIR"] = _cwd
 
 
 def get_debug():
@@ -187,7 +188,6 @@ def get_basic_paravirt_guest(installer=None):
         g.installer._install_kernel = "/boot/vmlinuz"
         g.installer._install_initrd = "/boot/initrd"
 
-    g.installer._scratchdir = scratch
     g.add_default_input_device()
     g.add_default_console_device()
 
@@ -201,7 +201,8 @@ def get_basic_fullyvirt_guest(typ="xen", installer=None):
     g.memory = int(200 * 1024)
     g.maxmemory = int(400 * 1024)
     g.uuid = "12345678-1234-1234-1234-123456789012"
-    g.cdrom = "/dev/loop0"
+    g.installer.location = "/dev/loop0"
+    g.installer.cdrom = True
     gdev = VirtualGraphics(_conn)
     gdev.type = "sdl"
     g.add_device(gdev)
@@ -210,44 +211,33 @@ def get_basic_fullyvirt_guest(typ="xen", installer=None):
     if installer:
         g.installer = installer
     g.emulator = "/usr/lib/xen/bin/qemu-dm"
-    g.installer.arch = "i686"
-    g.installer.os_type = "hvm"
+    g.os.arch = "i686"
+    g.os.os_type = "hvm"
 
-    g.installer._scratchdir = scratch
     g.add_default_input_device()
     g.add_default_console_device()
 
     return g
 
 
-def make_import_installer(os_type="hvm"):
-    inst = virtinst.ImportInstaller(_conn)
-    inst.type = "xen"
-    inst.os_type = os_type
-    return inst
+def make_import_installer():
+    return virtinst.ImportInstaller(_conn)
 
 
-def make_distro_installer(location="/default-pool/default-vol", gtype="xen"):
+def make_distro_installer(location="/default-pool/default-vol"):
     inst = virtinst.DistroInstaller(_conn)
-    inst.type = gtype
-    inst.os_type = "hvm"
     inst.location = location
     return inst
 
 
-def make_live_installer(location="/dev/loop0", gtype="xen"):
+def make_live_installer(location="/dev/loop0"):
     inst = virtinst.LiveCDInstaller(_conn)
-    inst.type = gtype
-    inst.os_type = "hvm"
     inst.location = location
     return inst
 
 
-def make_pxe_installer(gtype="xen"):
-    inst = virtinst.PXEInstaller(_conn)
-    inst.type = gtype
-    inst.os_type = "hvm"
-    return inst
+def make_pxe_installer():
+    return virtinst.PXEInstaller(_conn)
 
 
 def build_win_kvm(path=None, fake=True):

@@ -537,3 +537,33 @@ def uuidstr(rawuuid):
         if i == 3 or i == 5 or i == 7 or i == 9:
             uuid.append('-')
     return "".join(uuid)
+
+
+
+
+def get_system_scratchdir(hvtype):
+    scratchdir = os.environ.get("VIRTINST_TEST_SCRATCHDIR", None)
+    if scratchdir:
+        return scratchdir
+
+    if hvtype == "test":
+        return "/tmp"
+    elif hvtype == "xen":
+        return "/var/lib/xen"
+    else:
+        return "/var/lib/libvirt/boot"
+
+
+def make_scratchdir(conn, hvtype):
+    scratch = None
+    if not conn.is_session_uri():
+        scratch = get_system_scratchdir(hvtype)
+
+    if (not scratch or
+        not os.path.exists(scratch) or
+        not os.access(scratch, os.W_OK)):
+        scratch = os.path.expanduser("~/.virtinst/boot")
+        if not os.path.exists(scratch):
+            os.makedirs(scratch, 0751)
+
+    return scratch
