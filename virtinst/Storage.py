@@ -1219,6 +1219,8 @@ class StorageVolume(StorageObject):
             else:
                 vol = self.pool.createXML(xml, 0)
 
+            self._install_finished = True
+            t.join()
             meter.end(self.capacity)
             logging.debug("Storage volume '%s' install complete.",
                           self.name)
@@ -1231,8 +1233,6 @@ class StorageVolume(StorageObject):
         except Exception, e:
             raise RuntimeError("Couldn't create storage volume "
                                "'%s': '%s'" % (self.name, str(e)))
-        finally:
-            self._install_finished = True
 
     def _progress_thread(self, meter):
         lookup_attempts = 10
