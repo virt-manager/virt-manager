@@ -53,6 +53,8 @@ def _random_mac(conn):
 
 
 class VirtualPort(XMLBuilder):
+    _XML_ROOT_XPATH = "/domain/devices/interface/virtualport"
+
     type = XMLProperty(xpath="./virtualport/@type")
     managerid = XMLProperty(xpath="./virtualport/parameters/@managerid",
                             is_int=True)

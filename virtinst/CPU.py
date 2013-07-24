@@ -27,9 +27,8 @@ class CPUFeature(XMLBuilder):
 
     POLICIES = ["force", "require", "optional", "disable", "forbid"]
 
+    _XML_ROOT_XPATH = "/domain/cpu/feature"
     _XML_PROP_ORDER = ["_xmlname", "policy"]
-    _XML_ROOT_NAME = "cpu"
-    _XML_INDENT = 4
 
     def __init__(self, conn, name, parsexml=None, parsexmlnode=None):
         XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
@@ -60,9 +59,7 @@ class CPU(XMLBuilder):
 
     MATCHS = ["minimum", "exact", "strict"]
 
-    _dumpxml_xpath = "/domain/cpu"
-    _XML_ROOT_NAME = "cpu"
-    _XML_INDENT = 2
+    _XML_ROOT_XPATH = "/domain/cpu"
     _XML_PROP_ORDER = ["mode", "match", "model", "vendor",
                        "sockets", "cores", "threads", "_features"]
 

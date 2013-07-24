@@ -574,14 +574,8 @@ class XMLBuilder(object):
     # consistent with what the test suite expects.
     _XML_PROP_ORDER = []
 
-    # Root element name of this function, used to populate a default
-    # _get_xml_config
-    _XML_ROOT_NAME = None
-
-    # Integer indentation level for generated XML.
-    _XML_INDENT = None
-
-    _dumpxml_xpath = "."
+    # Absolute xpath this object is rooted at
+    _XML_ROOT_XPATH = None
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
         """
@@ -595,7 +589,15 @@ class XMLBuilder(object):
         """
         self.conn = conn
 
+        xpath = self._XML_ROOT_XPATH
+        if xpath is None or not xpath.startswith("/"):
+            raise RuntimeError("xpath=%s must start with /" % xpath)
+
+        self._xml_root_name = xpath.split("/")[-1]
+        self._xml_indent = (xpath.count("/") - 1) * 2
+        self._xml_dump_xpath = xpath
         self._xml_root_xpath = ""
+
         self._xml_node = None
         self._xml_ctx = None
         self._xml_root_doc = None
@@ -640,7 +642,7 @@ class XMLBuilder(object):
     def get_xml_config(self):
         data = self._prepare_get_xml()
         try:
-            return self._do_get_xml_config(self._dumpxml_xpath)
+            return self._do_get_xml_config()
         finally:
             self._finish_get_xml(data)
 
@@ -648,7 +650,7 @@ class XMLBuilder(object):
         for prop in self.all_xml_props().values():
             prop._clear(self)
 
-    def _do_get_xml_config(self, dumpxml_xpath):
+    def _do_get_xml_config(self):
         """
         Construct and return object xml
 
@@ -656,22 +658,21 @@ class XMLBuilder(object):
         @rtype: str
         """
         if self._xml_ctx:
-            node = _get_xpath_node(self._xml_ctx, dumpxml_xpath)
+            node = _get_xpath_node(self._xml_ctx, self._xml_dump_xpath)
             if not node:
                 ret = ""
             else:
                 ret = _sanitize_libxml_xml(node.serialize())
         else:
-            xmlstub = self._make_xml_stub(fail=False)
-            ret = self._make_xml_stub(fail=True)
-            if ret is None:
+            xmlstub = self._make_xml_stub()
+            if xmlstub is None:
                 return None
 
-            ret = self._add_parse_bits(ret)
+            ret = self._add_parse_bits(xmlstub)
             if ret == xmlstub:
                 ret = ""
 
-        if self._XML_ROOT_NAME == "domain" and not ret.endswith("\n"):
+        if ret and self._xml_root_name == "domain" and not ret.endswith("\n"):
             ret += "\n"
         return ret
 
@@ -704,18 +705,8 @@ class XMLBuilder(object):
     # Internal XML parsers #
     ########################
 
-    def _make_xml_stub(self, fail=True):
-        if self._XML_ROOT_NAME is None:
-            if not fail:
-                return None
-            raise RuntimeError("Must specify _XML_ROOT_NAME.")
-        if self._XML_INDENT is None:
-            if not fail:
-                return None
-            raise RuntimeError("Must specify _XML_INDENT.")
-        if self._XML_ROOT_NAME == "":
-            return ""
-        return _indent("<%s/>" % (self._XML_ROOT_NAME), self._XML_INDENT)
+    def _make_xml_stub(self):
+        return _indent("<%s/>" % (self._xml_root_name), self._xml_indent)
 
     def _add_child(self, parent_xpath, dev):
         """
@@ -742,6 +733,7 @@ class XMLBuilder(object):
             doc = libxml2.parseDoc(xml)
             self._xml_root_doc = _DocCleanupWrapper(doc)
             self._xml_node = doc.children
+            self._xml_dump_xpath = "."
 
             # This just stores a reference to our root doc wrapper in
             # the root node, so when the node goes away it triggers
@@ -749,6 +741,7 @@ class XMLBuilder(object):
             self._xml_node.virtinst_root_doc = self._xml_root_doc
         else:
             self._xml_node = node
+            self._xml_dump_xpath = self._XML_ROOT_XPATH
 
         self._set_xml_context()
 
@@ -804,8 +797,7 @@ class XMLBuilder(object):
                         obj._xml_root_xpath = self._xml_root_xpath
                     obj._add_parse_bits(xml=None, node=self._xml_node)
 
-        xml = self._do_get_xml_config(".").strip("\n")
-        return _indent(xml, indent)
+        return _indent(self._do_get_xml_config(), indent)
 
     def _add_parse_bits(self, xml, node=None):
         """

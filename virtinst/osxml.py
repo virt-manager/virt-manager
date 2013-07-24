@@ -39,14 +39,10 @@ class OSXML(XMLBuilder):
     def is_container(self):
         return self.os_type == "exe"
 
-    _dumpxml_xpath = "/domain/os"
-    _XML_ROOT_NAME = "os"
-    _XML_INDENT = 2
+    _XML_ROOT_XPATH = "/domain/os"
     _XML_PROP_ORDER = ["arch", "os_type", "loader",
                        "kernel", "initrd", "kernel_args",
                        "bootorder"]
-
-    type = property(lambda s: s.snarf)
 
     enable_bootmenu = XMLProperty(xpath="./os/bootmenu/@enable", is_yesno=True)
     bootorder = XMLProperty(xpath="./os/boot/@dev", is_multi=True)

@@ -24,9 +24,7 @@ class DomainFeatures(XMLBuilder):
     """
     Class for generating <features> XML
     """
-    _dumpxml_xpath = "/domain/features"
-    _XML_ROOT_NAME = "features"
-    _XML_INDENT = 2
+    _XML_ROOT_XPATH = "/domain/features"
     _XML_PROP_ORDER = ["acpi", "apic", "pae"]
 
     acpi = XMLProperty(xpath="./features/acpi", is_tri=True)

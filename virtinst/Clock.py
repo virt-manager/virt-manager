@@ -21,8 +21,6 @@ from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
 
 class Clock(XMLBuilder):
-    _dumpxml_xpath = "/domain/clock"
-    _XML_INDENT = 2
-    _XML_ROOT_NAME = "clock"
+    _XML_ROOT_XPATH = "/domain/clock"
 
     offset = XMLProperty(xpath="./clock/@offset")

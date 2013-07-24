@@ -75,7 +75,6 @@ class VirtualDevice(XMLBuilder):
 
     # General device type (disk, interface, etc.)
     virtual_device_type = None
-    _XML_INDENT = 4
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
         """
@@ -83,8 +82,9 @@ class VirtualDevice(XMLBuilder):
 
         @param conn: libvirt connection to validate device against
         """
+        self._XML_ROOT_XPATH = "/domain/devices/%s" % self.virtual_device_type
+
         XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
-        self._XML_ROOT_NAME = self.virtual_device_type
 
         self.alias = VirtualDeviceAlias(conn, parsexmlnode=parsexmlnode)
         self.address = VirtualDeviceAddress(conn, parsexmlnode=parsexmlnode)
@@ -111,9 +111,7 @@ class VirtualDevice(XMLBuilder):
 
 
 class VirtualDeviceAlias(XMLBuilder):
-    _XML_ROOT_NAME = "alias"
-    _XML_INDENT = 0
-
+    _XML_ROOT_XPATH = "/domain/devices/device/alias"
     name = XMLProperty(xpath="./alias/@name")
 
 
@@ -136,8 +134,7 @@ class VirtualDeviceAddress(XMLBuilder):
              ADDRESS_TYPE_VIRTIO_SERIAL, ADDRESS_TYPE_CCID,
              ADDRESS_TYPE_SPAPR_VIO]
 
-    _XML_ROOT_NAME = "address"
-    _XML_INDENT = 0
+    _XML_ROOT_XPATH = "/domain/devices/device/address"
     _XML_PROP_ORDER = ["type", "domain", "bus", "slot", "function"]
 
     def set_addrstr(self, addrstr):

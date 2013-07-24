@@ -161,8 +161,7 @@ class Guest(XMLBuilder):
         return cpustr
 
 
-    _XML_ROOT_NAME = "domain"
-    _XML_INDENT = 0
+    _XML_ROOT_XPATH = "/domain"
     _XML_PROP_ORDER = ["type", "name", "uuid", "description",
         "maxmemory", "memory", "hugepage", "vcpus", "curvcpus",
         "numatune", "bootloader", "os", "features", "cpu", "clock",
