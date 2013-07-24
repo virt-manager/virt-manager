@@ -87,11 +87,9 @@ def _sanitize_libxml_xml(xml):
     return xml
 
 
-def _get_xpath_node(ctx, xpath, is_multi=False):
+def _get_xpath_node(ctx, xpath):
     node = ctx.xpathEval(xpath)
-    if not is_multi:
-        return (node and node[0] or None)
-    return node
+    return (node and node[0] or None)
 
 
 def _build_xpath_node(ctx, xpath, addnode=None):
@@ -244,8 +242,7 @@ class XMLProperty(property):
     def __init__(self, doc=None, xpath=None, name=None,
                  set_converter=None, validate_cb=None,
                  make_getter_xpath_cb=None, make_setter_xpath_cb=None,
-                 is_bool=False, is_tri=False, is_int=False,
-                 is_multi=False, is_yesno=False,
+                 is_bool=False, is_tri=False, is_int=False, is_yesno=False,
                  clear_first=None, default_cb=None, default_name=None):
         """
         Set a XMLBuilder class property that represents a value in the
@@ -277,7 +274,6 @@ class XMLProperty(property):
         @param is_bool: Whether this is a boolean property in the XML
         @param is_tri: Boolean XML property, but return None if there's
             no value set.
-        @param is_multi: Whether data is coming multiple or a single node
         @param is_int: Whethere this is an integer property in the XML
         @param is_yesno: Whethere this is a yes/no property in the XML
         @param clear_first: List of xpaths to unset before any 'set' operation.
@@ -299,7 +295,6 @@ class XMLProperty(property):
         self._is_tri = is_tri
         self._is_bool = is_bool or is_tri
         self._is_int = is_int
-        self._is_multi = is_multi
         self._is_yesno = is_yesno
 
         self._xpath_for_getter_cb = make_getter_xpath_cb
@@ -359,23 +354,6 @@ class XMLProperty(property):
         return xmlbuilder.fix_relative_xpath(ret)
 
 
-    def _xpath_list_for_setter(self, xpath, setval, nodelist):
-        if not self._is_multi:
-            return [xpath]
-
-        ret = []
-        list_length = max(len(nodelist), len(setval), 1)
-
-        # This might not generally work, but as of this writing there's
-        # only one user of is_multi and it works for that. It's probably
-        # generalizable though.
-        for i in range(list_length):
-            idxstr = "[%d]/" % (i + 1)
-            splitpath = xpath.rsplit("/", 1)
-            ret.append("%s%s%s" % (splitpath[0], idxstr, splitpath[1]))
-        return ret
-
-
     def _convert_value_for_setter(self, xmlbuilder):
         # Convert from API value to XML value
         val = self._nonxml_fget(xmlbuilder)
@@ -394,10 +372,10 @@ class XMLProperty(property):
         Build list of nodes that the passed xpaths reference
         """
         root_ctx = getattr(xmlbuilder, "_xml_ctx")
-        nodes = _get_xpath_node(root_ctx, xpath, self._is_multi)
+        nodes = _get_xpath_node(root_ctx, xpath)
         return util.listify(nodes)
 
-    def _build_clear_list(self, xmlbuilder, setternodes):
+    def _build_clear_list(self, xmlbuilder, setternode):
         """
         Build a list of nodes that we should erase first before performing
         a set operation. But we don't want to unset a node that we are
@@ -408,11 +386,10 @@ class XMLProperty(property):
 
         for cpath in self._setter_clear_these_first:
             cpath = xmlbuilder.fix_relative_xpath(cpath)
-            cnode = _get_xpath_node(root_ctx, cpath, False)
+            cnode = _get_xpath_node(root_ctx, cpath)
             if not cnode:
                 continue
-            if any([(n and n.nodePath() == cnode.nodePath())
-                    for n in setternodes]):
+            if setternode and setternode.nodePath() == cnode.nodePath():
                 continue
             clear_nodes.append(cnode)
         return clear_nodes
@@ -431,8 +408,6 @@ class XMLProperty(property):
             ret = int(val, **intkwargs)
         elif self._is_yesno and val is not None:
             ret = bool(val == "yes")
-        elif self._is_multi and val is None:
-            ret = []
         else:
             ret = val
         return ret
@@ -492,10 +467,7 @@ class XMLProperty(property):
         return propstore.get(propname, None)
 
     def _clear(self, xmlbuilder):
-        val = None
-        if self._is_multi:
-            val = []
-        self.setter(xmlbuilder, val)
+        self.setter(xmlbuilder, None)
 
 
     ##################################
@@ -503,29 +475,20 @@ class XMLProperty(property):
     ##################################
 
     def getter(self, xmlbuilder):
-        root_node = getattr(xmlbuilder, "_xml_node")
-        if root_node is None:
+        if xmlbuilder._xml_ctx is None:
             fgetval = self._nonxml_fget(xmlbuilder)
             return self._convert_get_value(fgetval, initial=True)
 
         xpath = self._xpath_for_getter(xmlbuilder)
-        nodelist = self._build_node_list(xmlbuilder, xpath)
+        node = _get_xpath_node(xmlbuilder._xml_ctx, xpath)
 
-        if not nodelist:
+        if not node:
             return self._convert_get_value(None)
 
-        ret = []
-        for node in nodelist:
-            content = node.content
-            if self._is_bool:
-                content = True
-            val = self._convert_get_value(content)
-            if not self._is_multi:
-                return val
-            # If user is querying multiple nodes, return a list of results
-            ret.append(val)
-        return ret
-
+        content = node.content
+        if self._is_bool:
+            content = True
+        return self._convert_get_value(content)
 
     def setter(self, xmlbuilder, val, call_fset=True, validate=True):
         if call_fset:
@@ -539,14 +502,13 @@ class XMLProperty(property):
 
         xpath = self._xpath_for_setter(xmlbuilder)
         setval = self._convert_value_for_setter(xmlbuilder)
-        nodelist = self._build_node_list(xmlbuilder, xpath)
-        clearlist = self._build_clear_list(xmlbuilder, nodelist)
+        node = _get_xpath_node(xmlbuilder._xml_ctx, xpath)
+        clearlist = self._build_clear_list(xmlbuilder, node)
 
         node_map = []
         if clearlist:
             node_map += _tuplify_lists(clearlist, None, "")
-        node_map += _tuplify_lists(nodelist, setval,
-                        self._xpath_list_for_setter(xpath, setval, nodelist))
+        node_map += [(node, setval, xpath)]
 
         for node, val, use_xpath in node_map:
             if node:

@@ -6,8 +6,8 @@
   <os>
     <type arch="i686">hvm</type>
     <loader>/usr/lib/xen/boot/hvmloader</loader>
-    <boot dev="cdrom"/>
     <bootmenu enable="yes"/>
+    <boot dev="cdrom"/>
     <kernel>foo.img</kernel>
     <initrd>bar.img</initrd>
     <cmdline>ks=foo.ks</cmdline>

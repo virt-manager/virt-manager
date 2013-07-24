@@ -20,17 +20,53 @@
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
 
+class BootDevice(XMLBuilder):
+    _XML_ROOT_XPATH = "/domain/os/boot"
+
+    def __init__(self, conn, dev, parsexml=None, parsexmlnode=None):
+        XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
+        self._dev = dev
+        self._xmldev = dev
+
+    def _get_dev(self):
+        return self._xmldev
+    dev = property(_get_dev)
+
+    def _dev_xpath(self):
+        return "./os/boot[@dev='%s']/@dev" % self._dev
+    _xmldev = XMLProperty(name="boot dev type",
+                make_getter_xpath_cb=_dev_xpath,
+                make_setter_xpath_cb=_dev_xpath)
+
+
 class OSXML(XMLBuilder):
     """
     Class for generating boot device related XML
     """
-
     BOOT_DEVICE_HARDDISK = "hd"
     BOOT_DEVICE_CDROM = "cdrom"
     BOOT_DEVICE_FLOPPY = "fd"
     BOOT_DEVICE_NETWORK = "network"
     boot_devices = [BOOT_DEVICE_HARDDISK, BOOT_DEVICE_CDROM,
                     BOOT_DEVICE_FLOPPY, BOOT_DEVICE_NETWORK]
+
+    def __init__(self, *args, **kwargs):
+        self._bootdevs = []
+        XMLBuilder.__init__(self, *args, **kwargs)
+
+    def _parsexml(self, xml, node):
+        XMLBuilder._parsexml(self, xml, node)
+
+        for node in self._xml_node.children or []:
+            if node.name != "boot" or not node.prop("dev"):
+                continue
+            bootdev = BootDevice(self.conn, node.prop("dev"),
+                                 parsexmlnode=self._xml_node)
+            self._bootdevs.append(bootdev)
+
+    def clear(self):
+        XMLBuilder.clear(self)
+        self.bootorder = []
 
     def is_hvm(self):
         return self.os_type == "hvm"
@@ -42,10 +78,19 @@ class OSXML(XMLBuilder):
     _XML_ROOT_XPATH = "/domain/os"
     _XML_PROP_ORDER = ["arch", "os_type", "loader",
                        "kernel", "initrd", "kernel_args",
-                       "bootorder"]
+                       "_bootdevs"]
+
+    def _get_bootorder(self):
+        return [dev.dev for dev in self._bootdevs]
+    def _set_bootorder(self, newdevs):
+        for dev in self._bootdevs:
+            dev.clear()
+        self._bootdevs = [BootDevice(self.conn, d,
+                                     parsexmlnode=self._xml_node)
+                          for d in newdevs]
+    bootorder = property(_get_bootorder, _set_bootorder)
 
     enable_bootmenu = XMLProperty(xpath="./os/bootmenu/@enable", is_yesno=True)
-    bootorder = XMLProperty(xpath="./os/boot/@dev", is_multi=True)
 
     kernel = XMLProperty(xpath="./os/kernel")
     initrd = XMLProperty(xpath="./os/initrd")
