@@ -744,8 +744,8 @@ class XMLParseTest(unittest.TestCase):
         adddev.macaddr = "1A:2A:3A:4A:5A:6A"
 
         guest.add_device(virtinst.VirtualWatchdog(conn))
-        guest.add_device(adddev)
 
+        guest.add_device(adddev)
         guest.remove_device(adddev)
         guest.add_device(adddev)
 

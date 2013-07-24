@@ -607,9 +607,12 @@ class VirtualDisk(VirtualDevice):
             #
             # This will update the XML value with the newly determined
             # default value, but it won't edit propstore. This means
+            if self.is_build():
+                return
             prop = self.all_xml_props()[propname]
-            val = getattr(prop, "_default_cb")(self)
-            prop.setter(self, val, call_fset=False)
+            candefault, val = getattr(prop, "_default_get_value")(self)
+            if candefault:
+                getattr(prop, "_set_xml")(self, val)
 
         refresh_prop_xml("type")
         refresh_prop_xml("driver_name")

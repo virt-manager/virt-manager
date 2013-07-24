@@ -337,12 +337,9 @@ class Guest(XMLBuilder):
         @param dev: VirtualDevice instance to attach to guest
         @param set_defaults: Whether to set defaults for the device
         """
-        if self._is_parse():
-            self._add_child("./devices", dev)
-
         self._track_device(dev)
-        if self._is_parse():
-            self._recalculate_device_xpaths()
+        self._add_child("./devices", dev)
+        self._recalculate_device_xpaths()
 
         if set_defaults:
             origdev = self._devices
@@ -365,7 +362,6 @@ class Guest(XMLBuilder):
                         VirtualDevice.virtual_device_types)
         """
         devlist = self._dev_build_list(devtype)
-        devlist.extend(self._install_devices)
         return self._dev_build_list(devtype, devlist)
 
     def get_all_devices(self):
@@ -384,7 +380,7 @@ class Guest(XMLBuilder):
         @param dev: VirtualDevice instance
         """
         found = False
-        for devlist in [self._devices, self._install_devices]:
+        for devlist in [self._devices]:
             if found:
                 break
 
@@ -396,11 +392,13 @@ class Guest(XMLBuilder):
         if not found:
             raise ValueError(_("Did not find device %s") % str(dev))
 
-        if self._is_parse():
-            xpath = dev.get_root_xpath()
-            if xpath:
-                self._remove_child_xpath(xpath)
-            self._recalculate_device_xpaths()
+        xpath = dev.get_root_xpath()
+        xml = dev.get_xml_config()
+        dev.set_root_xpath(None)
+        dev._parsexml(xml, None)
+        if xpath:
+            self._remove_child_xpath(xpath)
+        self._recalculate_device_xpaths()
 
 
     ################################
@@ -410,7 +408,7 @@ class Guest(XMLBuilder):
     def _parsexml(self, xml, node):
         XMLBuilder._parsexml(self, xml, node)
 
-        for node in self._xml_node.children:
+        for node in self._xml_node.children or []:
             if node.name != "devices":
                 continue
 
@@ -455,6 +453,8 @@ class Guest(XMLBuilder):
     ############################
 
     def _prepare_install(self, meter, dry=False):
+        for dev in self._install_devices:
+            self.remove_device(dev)
         self._install_devices = []
         ignore = dry
 
@@ -464,6 +464,7 @@ class Guest(XMLBuilder):
 
         # Initialize install device list
         for dev in self.installer.install_devices:
+            self.add_device(dev)
             self._install_devices.append(dev)
 
     def _cleanup_install(self):

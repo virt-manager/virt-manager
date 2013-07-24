@@ -6,12 +6,11 @@
   <os>
     <type machine="pc-0.11">xen</type>
     <loader>/foo/loader</loader>
-    <init>/sbin/init</init>
     <boot dev="fd"/>
+    <init>/sbin/init</init>
     <bootmenu enable="no"/>
   </os>
-  <features>
-    <apic/>
+  <features><apic/>
   </features>
   <numatune>
     <memory nodeset="2,4,6"/>

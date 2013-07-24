@@ -70,7 +70,7 @@ class CPU(XMLBuilder):
     def _parsexml(self, xml, node):
         XMLBuilder._parsexml(self, xml, node)
 
-        for node in self._xml_node.children:
+        for node in self._xml_node.children or []:
             if node.name != "feature":
                 continue
             if not node.prop("name"):

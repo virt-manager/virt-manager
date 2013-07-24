@@ -37,8 +37,8 @@
     </parallel>
     <console type="pty"/>
     <console type="file">
-      <target type="virtio"/>
       <source path="/root/foo"/>
+      <target type="virtio"/>
     </console>
     <channel type="pty">
       <target type="virtio" name="test.changed"/>

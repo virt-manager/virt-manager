@@ -7,10 +7,10 @@
     <type arch="i686">hvm</type>
     <loader>/usr/lib/xen/boot/hvmloader</loader>
     <bootmenu enable="yes"/>
-    <boot dev="cdrom"/>
     <kernel>foo.img</kernel>
     <initrd>bar.img</initrd>
     <cmdline>ks=foo.ks</cmdline>
+    <boot dev="cdrom"/>
   </os>
   <features>
     <acpi/><apic/>

@@ -29,8 +29,8 @@
       <readonly/>
     </disk>
     <disk type="file" device="disk">
-      <target dev="sdb" bus="scsi"/>
       <source file="/tmp/clone2.img"/>
+      <target dev="sdb" bus="scsi"/>
     </disk>
     <interface type="network">
       <mac address="22:23:45:67:89:00"/>

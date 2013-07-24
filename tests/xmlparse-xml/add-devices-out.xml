@@ -38,11 +38,11 @@
     </interface>
     <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
     <console type="pty"/>
-    <watchdog model="i6300esb" action="reset"/>
     <interface type="network">
       <source network="default"/>
       <mac address="1A:2A:3A:4A:5A:6A"/>
     </interface>
+    <watchdog model="i6300esb" action="reset"/>
   </devices>
   <seclabel type="static" model="selinux">
     <label>foolabel</label>

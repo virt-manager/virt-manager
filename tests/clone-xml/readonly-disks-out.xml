@@ -27,8 +27,8 @@
       <readonly/>
     </disk>
     <disk type="file" device="disk">
-      <target dev="sda" bus="scsi"/>
       <source file="/tmp/clone2.img"/>
+      <target dev="sda" bus="scsi"/>
     </disk>
     <disk type="block" device="cdrom">
       <target dev="sdb" bus="scsi"/>

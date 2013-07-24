@@ -139,7 +139,7 @@ class _VirtualCharDevice(VirtualDevice):
         return hasattr(self, propname)
 
 
-    _XML_PROP_ORDER = ["type",
+    _XML_PROP_ORDER = ["type", "_has_mode_bind", "_has_mode_connect",
                        "bind_host", "bind_port",
                        "source_mode", "source_path",
                        "source_host", "source_port",

@@ -18,8 +18,6 @@ import unittest
 import os
 import logging
 
-import urlgrabber.progress as progress
-
 import virtinst
 from virtinst import VirtualDisk
 from virtinst import VirtualAudio
@@ -67,7 +65,7 @@ class TestXMLConfig(unittest.TestCase):
                  do_create=True):
         filename = filebase and build_xmlfile(filebase) or None
 
-        guest._prepare_install(progress.BaseMeter())
+        guest._prepare_install(None)
         try:
             actualXML = guest.get_install_xml(install=do_install,
                                               disk_boot=do_disk_boot)
@@ -92,11 +90,6 @@ class TestXMLConfig(unittest.TestCase):
         try:
             guest.start_install(consolecb, meter, removeOld, wait)
             guest.domain.destroy()
-
-            # Replace kernel/initrd with known info
-            if guest.installer._install_kernel:
-                guest.installer._install_kernel = "kernel"
-                guest.installer._install_initrd = "initrd"
 
             xmlinst = guest.get_install_xml(True, False)
             xmlboot = guest.get_install_xml(False, False)
@@ -319,10 +312,6 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(utils.get_virtual_network())
 
         # Call get_xml_config sets first round of defaults w/o os_variant set
-        g.get_install_xml(do_install)
-        g._prepare_install(None)
-        g.get_install_xml(do_install)
-        g._prepare_install(None)
         g.get_install_xml(do_install)
 
         g.os_variant = "fedora11"
@@ -992,19 +981,19 @@ class TestXMLConfig(unittest.TestCase):
             dev3.macaddr = "22:22:33:44:55:68"
 
             utils.diff_compare(dev1.get_xml_config(), None,
-                               "    <interface type=\"bridge\">\n"
-                               "      <source bridge=\"bzz0\"/>\n"
-                               "      <mac address=\"22:22:33:44:55:66\"/>\n"
-                               "    </interface>")
+                               "<interface type=\"bridge\">\n"
+                               "  <source bridge=\"bzz0\"/>\n"
+                               "  <mac address=\"22:22:33:44:55:66\"/>\n"
+                               "</interface>\n")
             utils.diff_compare(dev2.get_xml_config(), None,
                                "<interface type=\"bridge\">\n"
-                               "      <mac address=\"22:22:33:44:55:67\"/>\n"
-                               "      <source bridge=\"foobr0\"/>\n"
-                               "    </interface>\n")
+                               "  <source bridge=\"foobr0\"/>\n"
+                               "  <mac address=\"22:22:33:44:55:67\"/>\n"
+                               "</interface>\n")
             utils.diff_compare(dev3.get_xml_config(), None,
                                "<interface type=\"bridge\">\n"
-                               "      <mac address=\"22:22:33:44:55:68\"/>\n"
-                               "    </interface>\n")
+                               "  <mac address=\"22:22:33:44:55:68\"/>\n"
+                               "</interface>\n")
         finally:
             if util and origfunc:
                 util.default_bridge = origfunc

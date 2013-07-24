@@ -20,13 +20,13 @@
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <interface type="user">
       <mac address="AA:AA:AA:AA:AA:AA"/>
-      <model type="testmodel"/>
       <source bridge="br0" network="route"/>
+      <model type="testmodel"/>
     </interface>
     <interface type="bridge">
+      <source bridge="newbr0"/>
       <mac address="22:22:33:44:55:66"/>
       <model type="virtio"/>
-      <source bridge="newbr0"/>
     </interface>
     <interface type="bridge">
       <source bridge="newfoo0" network="default"/>

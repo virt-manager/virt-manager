@@ -21,8 +21,8 @@
     <disk type="block" device="disk">
       <target dev="hda" bus="ide"/>
       <serial>frob</serial>
-      <source dev="/dev/loop0"/>
       <driver name="test" type="raw"/>
+      <source dev="/dev/loop0"/>
     </disk>
     <disk type="block" device="disk">
       <source dev="/dev/loop0"/>
@@ -50,9 +50,9 @@
         <total_iops_sec>5</total_iops_sec>
         <total_bytes_sec>6</total_bytes_sec>
       </iotune>
+      <driver cache="writeback" io="native"/>
       <source file="/default-pool/default-vol"/>
       <shareable/>
-      <driver cache="writeback" io="native"/>
     </disk>
     <disk type="block" device="floppy">
       <driver name="phy" cache="none"/>
