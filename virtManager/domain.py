@@ -379,7 +379,7 @@ class vmmDomain(vmmLibvirtObject):
             return
 
         guest = self._get_guest_to_define()
-        xml = guest.get_xml_config(install=False)
+        xml = guest.get_xml_config()
         self._redefine_xml(xml)
 
     def _get_domain_xml(self, inactive=False, refresh_if_nec=True):
@@ -390,7 +390,7 @@ class vmmDomain(vmmLibvirtObject):
     def get_xml(self, inactive=False, refresh_if_nec=True):
         guest = self._get_guest(inactive=inactive,
                                 refresh_if_nec=refresh_if_nec)
-        return guest.get_xml_config(install=False)
+        return guest.get_xml_config()
 
     def _get_guest(self, inactive=False, refresh_if_nec=True):
         xml = self._get_domain_xml(inactive, refresh_if_nec)
@@ -1780,7 +1780,7 @@ class vmmDomainVirtinst(vmmDomain):
         ignore = inactive
         ignore = refresh_if_nec
 
-        xml = self._backend.get_xml_config(install=False)
+        xml = self._backend.get_install_xml(install=False)
         if not self._orig_xml:
             self._orig_xml = xml
         return xml

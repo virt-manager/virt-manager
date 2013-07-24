@@ -69,8 +69,8 @@ class TestXMLConfig(unittest.TestCase):
 
         guest._prepare_install(progress.BaseMeter())
         try:
-            actualXML = guest.get_xml_config(install=do_install,
-                                             disk_boot=do_disk_boot)
+            actualXML = guest.get_install_xml(install=do_install,
+                                              disk_boot=do_disk_boot)
 
             if filename:
                 utils.diff_compare(actualXML, filename)
@@ -98,9 +98,9 @@ class TestXMLConfig(unittest.TestCase):
                 guest.installer._install_kernel = "kernel"
                 guest.installer._install_initrd = "initrd"
 
-            xmlinst = guest.get_xml_config(True, False)
-            xmlboot = guest.get_xml_config(False, False)
-            xmlcont = guest.get_xml_config(True, True)
+            xmlinst = guest.get_install_xml(True, False)
+            xmlboot = guest.get_install_xml(False, False)
+            xmlcont = guest.get_install_xml(True, True)
 
             if instname:
                 utils.diff_compare(xmlinst, instname)
@@ -319,11 +319,11 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(utils.get_virtual_network())
 
         # Call get_xml_config sets first round of defaults w/o os_variant set
-        g.get_xml_config(do_install)
+        g.get_install_xml(do_install)
         g._prepare_install(None)
-        g.get_xml_config(do_install)
+        g.get_install_xml(do_install)
         g._prepare_install(None)
-        g.get_xml_config(do_install)
+        g.get_install_xml(do_install)
 
         g.os_variant = "fedora11"
         self._compare(g, "install-f11", do_install)

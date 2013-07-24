@@ -19,7 +19,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import virtinst
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
 
@@ -71,8 +70,8 @@ class VirtualDevice(XMLBuilder):
     virtual_device_classes = {}
 
     @classmethod
-    def register_type(c):
-        VirtualDevice.virtual_device_classes[c.virtual_device_type] = c
+    def register_type(cls):
+        VirtualDevice.virtual_device_classes[cls.virtual_device_type] = cls
 
     # General device type (disk, interface, etc.)
     virtual_device_type = None

@@ -26,7 +26,6 @@ import signal
 
 import urlgrabber.progress as progress
 import libvirt
-import libxml2
 
 import virtinst
 from virtinst import util
@@ -502,7 +501,14 @@ class Guest(XMLBuilder):
     def _finish_get_xml(self, data):
         self._devices, self.features, self.os = data
 
-    def _get_xml_config(self, install=True, disk_boot=False):
+    def get_install_xml(self, *args, **kwargs):
+        data = self._prepare_get_xml()
+        try:
+            return self._do_get_install_xml(*args, **kwargs)
+        finally:
+            self._finish_get_xml(data)
+
+    def _do_get_install_xml(self, install=True, disk_boot=False):
         """
         Return the full Guest xml configuration.
 
@@ -518,20 +524,18 @@ class Guest(XMLBuilder):
                           this.)
         @type disk_boot: C{bool}
         """
-        # pylint: disable=W0221
-        # Argument number differs from overridden method
-
         osblob_install = install and not disk_boot
         if osblob_install and not self.installer.has_install_phase():
             return None
 
         self.installer.alter_bootconfig(self, osblob_install, self.os)
-        self.set_defaults()
         self._set_transient_device_defaults(install)
 
         action = install and "destroy" or "restart"
         self.on_reboot = action
         self.on_crash = action
+
+        self._set_defaults()
 
         self.bootloader = None
         if (not install and
@@ -541,7 +545,7 @@ class Guest(XMLBuilder):
             self.os.clear()
 
         self._recalculate_device_xpaths()
-        return self._make_xml_stub()
+        return self.get_xml_config()
 
     def get_continue_inst(self):
         """
@@ -718,8 +722,8 @@ class Guest(XMLBuilder):
         log_label = is_initial and "install" or "continue"
         disk_boot = not is_initial
 
-        start_xml = self.get_xml_config(install=True, disk_boot=disk_boot)
-        final_xml = self.get_xml_config(install=False)
+        start_xml = self.get_install_xml(install=True, disk_boot=disk_boot)
+        final_xml = self.get_install_xml(install=False)
 
         logging.debug("Generated %s XML: %s",
                       log_label,
@@ -854,13 +858,7 @@ class Guest(XMLBuilder):
             if do_remove_media(dev):
                 dev.path = None
 
-    def set_defaults(self):
-        """
-        Public function to set guest defaults. Things like preferred
-        disk bus (unless one is specified). These changes are persistent.
-        The install process will call a non-persistent version, so calling
-        this manually isn't required.
-        """
+    def _set_defaults(self):
         self._set_osxml_defaults()
         self._set_feature_defaults()
         self._set_device_defaults()

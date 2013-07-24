@@ -621,10 +621,10 @@ class XMLBuilder(object):
 
     def set_root_xpath(self, xpath):
         self._xml_root_xpath = xpath
-
         xmlprops = self.all_xml_props()
+
         for propname in self._XML_PROP_ORDER:
-            if propname in self.all_xml_props():
+            if propname in xmlprops:
                 continue
             for prop in util.listify(getattr(self, propname)):
                 prop.set_root_xpath(xpath)
@@ -637,11 +637,10 @@ class XMLBuilder(object):
             return xpath
         return "%s%s" % (self._xml_root_xpath, xpath.strip("."))
 
-    def get_xml_config(self, *args, **kwargs):
+    def get_xml_config(self):
         data = self._prepare_get_xml()
         try:
-            return self._do_get_xml_config(self._dumpxml_xpath,
-                                           *args, **kwargs)
+            return self._do_get_xml_config(self._dumpxml_xpath)
         finally:
             self._finish_get_xml(data)
 
@@ -649,7 +648,7 @@ class XMLBuilder(object):
         for prop in self.all_xml_props().values():
             prop._clear(self)
 
-    def _do_get_xml_config(self, dumpxml_xpath, *args, **kwargs):
+    def _do_get_xml_config(self, dumpxml_xpath):
         """
         Construct and return object xml
 
@@ -664,7 +663,7 @@ class XMLBuilder(object):
                 ret = _sanitize_libxml_xml(node.serialize())
         else:
             xmlstub = self._make_xml_stub(fail=False)
-            ret = self._get_xml_config(*args, **kwargs)
+            ret = self._make_xml_stub(fail=True)
             if ret is None:
                 return None
 
@@ -699,12 +698,6 @@ class XMLBuilder(object):
         return None
     def _finish_get_xml(self, data):
         ignore = data
-
-    def _get_xml_config(self):
-        """
-        Internal XML building function. Must be overwritten by subclass
-        """
-        return self._make_xml_stub(fail=True)
 
 
     ########################
