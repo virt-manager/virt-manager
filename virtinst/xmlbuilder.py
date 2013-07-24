@@ -242,7 +242,7 @@ class XMLProperty(property):
     def __init__(self, doc=None, xpath=None, name=None,
                  set_converter=None, validate_cb=None,
                  make_getter_xpath_cb=None, make_setter_xpath_cb=None,
-                 is_bool=False, is_tri=False, is_int=False, is_yesno=False,
+                 is_bool=False, is_int=False, is_yesno=False,
                  clear_first=None, default_cb=None, default_name=None):
         """
         Set a XMLBuilder class property that represents a value in the
@@ -272,8 +272,6 @@ class XMLProperty(property):
             static xpath. This allows passing functions which generate
             an xpath for getting or setting.
         @param is_bool: Whether this is a boolean property in the XML
-        @param is_tri: Boolean XML property, but return None if there's
-            no value set.
         @param is_int: Whethere this is an integer property in the XML
         @param is_yesno: Whethere this is a yes/no property in the XML
         @param clear_first: List of xpaths to unset before any 'set' operation.
@@ -292,8 +290,7 @@ class XMLProperty(property):
         if not self._name:
             raise RuntimeError("XMLProperty: name or xpath must be passed.")
 
-        self._is_tri = is_tri
-        self._is_bool = is_bool or is_tri
+        self._is_bool = is_bool
         self._is_int = is_int
         self._is_yesno = is_yesno
 
@@ -395,12 +392,11 @@ class XMLProperty(property):
         return clear_nodes
 
 
-    def _convert_get_value(self, val, initial=False):
-        if self._is_bool:
-            if initial and self._is_tri and val is None:
-                ret = None
-            else:
-                ret = bool(val)
+    def _convert_get_value(self, val):
+        if self._default_name and val == self._default_name:
+            ret = val
+        elif self._is_bool:
+            ret = bool(val)
         elif self._is_int and val is not None:
             intkwargs = {}
             if "0x" in str(val):
@@ -477,7 +473,7 @@ class XMLProperty(property):
     def getter(self, xmlbuilder):
         if xmlbuilder._xml_ctx is None:
             fgetval = self._nonxml_fget(xmlbuilder)
-            return self._convert_get_value(fgetval, initial=True)
+            return self._convert_get_value(fgetval)
 
         xpath = self._xpath_for_getter(xmlbuilder)
         node = _get_xpath_node(xmlbuilder._xml_ctx, xpath)

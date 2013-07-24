@@ -27,9 +27,15 @@ class DomainFeatures(XMLBuilder):
     _XML_ROOT_XPATH = "/domain/features"
     _XML_PROP_ORDER = ["acpi", "apic", "pae"]
 
-    acpi = XMLProperty(xpath="./features/acpi", is_tri=True)
-    apic = XMLProperty(xpath="./features/apic", is_tri=True)
-    pae = XMLProperty(xpath="./features/pae", is_tri=True)
+    acpi = XMLProperty(xpath="./features/acpi", is_bool=True,
+                       default_name="default",
+                       default_cb=lambda s: False)
+    apic = XMLProperty(xpath="./features/apic", is_bool=True,
+                       default_name="default",
+                       default_cb=lambda s: False)
+    pae = XMLProperty(xpath="./features/pae", is_bool=True,
+                       default_name="default",
+                       default_cb=lambda s: False)
 
     def __setitem__(self, attr, val):
         return setattr(self, attr, bool(val))

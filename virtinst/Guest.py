@@ -942,11 +942,11 @@ class Guest(XMLBuilder):
         if not self.os.is_hvm():
             return
 
-        if self.features["acpi"] is None:
+        if self.features["acpi"] == "default":
             self.features["acpi"] = self._lookup_osdict_key("acpi")
-        if self.features["apic"] is None:
+        if self.features["apic"] == "default":
             self.features["apic"] = self._lookup_osdict_key("apic")
-        if self.features["pae"] is None:
+        if self.features["pae"] == "default":
             self.features["pae"] = self.conn.caps.support_pae()
 
     def _set_device_defaults(self):
