@@ -159,17 +159,6 @@ class VirtualDeviceAddress(XMLBuilder):
                                "format of '%s'") % addrstr)
 
 
-    def clear(self):
-        self.type = None
-        self.bus = None
-        self.domain = None
-        self.slot = None
-        self.function = None
-        self.controller = None
-        self.unit = None
-        self.port = None
-
-
     type = XMLProperty(xpath="./address/@type")
     domain = XMLProperty(xpath="./address/@domain", is_int=True)
     bus = XMLProperty(xpath="./address/@bus", is_int=True)

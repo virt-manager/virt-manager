@@ -52,10 +52,6 @@ class CPUFeature(XMLBuilder):
                          make_getter_xpath_cb=_policy_xpath,
                          make_setter_xpath_cb=_policy_xpath)
 
-    def clear(self):
-        self.policy = None
-        self._xmlname = None
-
 
 class CPU(XMLBuilder):
     """
@@ -98,15 +94,6 @@ class CPU(XMLBuilder):
     def _get_features(self):
         return self._features[:]
     features = property(_get_features)
-
-    def clear_attrs(self):
-        self.match = None
-        self.mode = None
-        self.vendor = None
-        self.model = None
-
-        for feature in self.features:
-            self.remove_feature(feature)
 
     def copy_host_cpu(self):
         """
