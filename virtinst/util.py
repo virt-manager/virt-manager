@@ -156,46 +156,6 @@ def validate_macaddr(val):
                            "AA:BB:CC:DD:EE:FF"))
 
 
-def xml_append(orig, new):
-    """
-    Little function that helps generate consistent xml
-    """
-    if not new:
-        return orig
-    if orig:
-        orig += "\n"
-    return orig + new
-
-
-def set_xml_path(xml, path, newval):
-    """
-    Set the passed xml xpath to the new value
-    """
-    doc = None
-    ctx = None
-    result = None
-
-    try:
-        doc = libxml2.parseDoc(xml)
-        ctx = doc.xpathNewContext()
-
-        ret = ctx.xpathEval(path)
-        if ret is not None:
-            if type(ret) == list:
-                if len(ret) == 1:
-                    ret[0].setContent(newval)
-            else:
-                ret.setContent(newval)
-
-        result = doc.serialize()
-    finally:
-        if doc:
-            doc.freeDoc()
-        if ctx:
-            ctx.xpathFreeContext()
-    return result
-
-
 def generate_name(base, collision_cb, suffix="", lib_collision=True,
                   start_num=0, sep="-", force_num=False, collidelist=None):
     """
@@ -328,6 +288,34 @@ def xml_parse_wrapper(xml, parse_func, *args, **kwargs):
         if doc is not None:
             doc.freeDoc()
     return ret
+
+
+def set_xml_path(xml, path, newval):
+    """
+    Set the passed xml xpath to the new value
+    """
+    def cb(doc, ctx):
+        ret = ctx.xpathEval(path)
+        if ret is not None:
+            if type(ret) == list:
+                if len(ret) == 1:
+                    ret[0].setContent(newval)
+            else:
+                ret.setContent(newval)
+
+        return doc.serialize()
+    return xml_parse_wrapper(xml, cb)
+
+
+def xml_append(orig, new):
+    """
+    Little function that helps generate consistent xml
+    """
+    if not new:
+        return orig
+    if orig:
+        orig += "\n"
+    return orig + new
 
 
 def generate_uuid(conn):
