@@ -640,7 +640,7 @@ class XMLBuilder(object):
     def get_xml_config(self, *args, **kwargs):
         data = self._prepare_get_xml()
         try:
-            return self._do_get_xml_config(self._dumpxml_xpath, True,
+            return self._do_get_xml_config(self._dumpxml_xpath,
                                            *args, **kwargs)
         finally:
             self._finish_get_xml(data)
@@ -649,7 +649,7 @@ class XMLBuilder(object):
         for prop in self.all_xml_props().values():
             prop._clear(self)
 
-    def _do_get_xml_config(self, dumpxml_xpath, clean, *args, **kwargs):
+    def _do_get_xml_config(self, dumpxml_xpath, *args, **kwargs):
         """
         Construct and return object xml
 
@@ -668,12 +668,12 @@ class XMLBuilder(object):
             if ret is None:
                 return None
 
-            ret = self._add_parse_bits(ret, clean=False)
+            ret = self._add_parse_bits(ret)
             if ret == xmlstub:
                 ret = ""
 
-        if clean:
-            ret = self._cleanup_xml(ret)
+        if self._XML_ROOT_NAME == "domain" and not ret.endswith("\n"):
+            ret += "\n"
         return ret
 
 
@@ -705,12 +705,6 @@ class XMLBuilder(object):
         Internal XML building function. Must be overwritten by subclass
         """
         return self._make_xml_stub(fail=True)
-
-    def _cleanup_xml(self, xml):
-        """
-        Hook for classes to touch up the XML after generation.
-        """
-        return xml
 
 
     ########################
@@ -773,7 +767,7 @@ class XMLBuilder(object):
                     ret[key] = val
         return ret
 
-    def _do_add_parse_bits(self, xml, node, clean):
+    def _do_add_parse_bits(self, xml, node):
         # Set all defaults if the properties have one registered
         xmlprops = self.all_xml_props()
         for prop in xmlprops.values():
@@ -817,10 +811,10 @@ class XMLBuilder(object):
                         obj._xml_root_xpath = self._xml_root_xpath
                     obj._add_parse_bits(xml=None, node=self._xml_node)
 
-        xml = self._do_get_xml_config(".", clean).strip("\n")
+        xml = self._do_get_xml_config(".").strip("\n")
         return _indent(xml, indent)
 
-    def _add_parse_bits(self, xml, node=None, clean=True):
+    def _add_parse_bits(self, xml, node=None):
         """
         Callback that adds the implicitly tracked XML properties to
         the manually generated xml. This should only exist until all
@@ -832,7 +826,7 @@ class XMLBuilder(object):
         origproporder = self._proporder[:]
         origpropstore = self._propstore.copy()
         try:
-            return self._do_add_parse_bits(xml, node, clean)
+            return self._do_add_parse_bits(xml, node)
         finally:
             self._xml_root_doc = None
             self._xml_node = None

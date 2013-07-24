@@ -502,17 +502,6 @@ class Guest(XMLBuilder):
     def _finish_get_xml(self, data):
         self._devices, self.features, self.os = data
 
-    def _cleanup_xml(self, xml):
-        lines = xml.splitlines()
-        newlines = []
-        for line in lines:
-            newlines.append(line)
-
-        xml = "\n".join(newlines)
-        if not xml.endswith("\n"):
-            xml += "\n"
-        return xml
-
     def _get_xml_config(self, install=True, disk_boot=False):
         """
         Return the full Guest xml configuration.
