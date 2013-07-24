@@ -28,3 +28,6 @@ class VirtualMemballoon(VirtualDevice):
     MODELS = ["xen", "none", MODEL_DEFAULT]
 
     model = XMLProperty(xpath="./@model", default_cb=lambda s: s.MODEL_DEFAULT)
+
+
+VirtualMemballoon.register_type()

@@ -33,8 +33,8 @@ from virtinst import util
 from virtinst import support
 from virtinst.osxml import OSXML
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty
-from virtinst.VirtualDevice import VirtualDevice
 from virtinst.VirtualDisk import VirtualDisk
+from virtinst.VirtualDevice import VirtualDevice
 from virtinst.Clock import Clock
 from virtinst.Seclabel import Seclabel
 from virtinst.CPU import CPU
@@ -191,19 +191,18 @@ class Guest(XMLBuilder):
         self.domain = None
         self._consolechild = None
 
+        # Since we overwrite _parsexml handling, need to set up some
+        # internal state before calling __init__
         XMLBuilder.__init__(self, conn, parsexml)
-        if self._is_parse():
-            return
 
         self.installer = virtinst.DistroInstaller(conn)
 
-        # Need to do this after all parameter init
-        self.os = OSXML(self.conn, parsexml, parsexmlnode)
-        self.features = DomainFeatures(self.conn)
-        self.clock = Clock(self.conn)
-        self.seclabel = Seclabel(self.conn)
-        self.cpu = CPU(self.conn)
-        self.numatune = DomainNumatune(self.conn)
+        self.os = OSXML(self.conn, None, self._xml_node)
+        self.features = DomainFeatures(self.conn, None, self._xml_node)
+        self.clock = Clock(self.conn, None, self._xml_node)
+        self.seclabel = Seclabel(self.conn, None, self._xml_node)
+        self.cpu = CPU(self.conn, None, self._xml_node)
+        self.numatune = DomainNumatune(self.conn, None, self._xml_node)
 
 
     ######################
@@ -340,16 +339,13 @@ class Guest(XMLBuilder):
         @param dev: VirtualDevice instance to attach to guest
         @param set_defaults: Whether to set defaults for the device
         """
-        if not isinstance(dev, VirtualDevice):
-            raise ValueError(_("Must pass a VirtualDevice instance."))
-
         if self._is_parse():
-            xml = dev.get_xml_config()
-            node = libxml2.parseDoc(xml).children
-            dev.set_xml_node(node)
-            self._add_child_node("./devices", node)
+            self._add_child("./devices", dev)
 
         self._track_device(dev)
+        if self._is_parse():
+            self._recalculate_device_xpaths()
+
         if set_defaults:
             origdev = self._devices
             try:
@@ -358,9 +354,9 @@ class Guest(XMLBuilder):
             except:
                 self._devices = origdev
 
+
     def _track_device(self, dev):
         self._devices.append(dev)
-
 
     def get_devices(self, devtype):
         """
@@ -403,9 +399,10 @@ class Guest(XMLBuilder):
             raise ValueError(_("Did not find device %s") % str(dev))
 
         if self._is_parse():
-            xpath = dev.get_xml_node_path()
+            xpath = dev.get_root_xpath()
             if xpath:
                 self._remove_child_xpath(xpath)
+            self._recalculate_device_xpaths()
 
 
     ################################
@@ -415,51 +412,32 @@ class Guest(XMLBuilder):
     def _parsexml(self, xml, node):
         XMLBuilder._parsexml(self, xml, node)
 
-        device_mappings = {
-            "disk"      : virtinst.VirtualDisk,
-            "interface" : virtinst.VirtualNetworkInterface,
-            "sound"     : virtinst.VirtualAudio,
-            "hostdev"   : virtinst.VirtualHostDevice,
-            "input"     : virtinst.VirtualInputDevice,
-            "serial"    : virtinst.VirtualSerialDevice,
-            "parallel"  : virtinst.VirtualParallelDevice,
-            "console"   : virtinst.VirtualConsoleDevice,
-            "channel"   : virtinst.VirtualChannelDevice,
-            "graphics"  : virtinst.VirtualGraphics,
-            "video"     : virtinst.VirtualVideoDevice,
-            "watchdog"  : virtinst.VirtualWatchdog,
-            "controller": virtinst.VirtualController,
-            "filesystem": virtinst.VirtualFilesystem,
-            "smartcard" : virtinst.VirtualSmartCardDevice,
-            "redirdev"  : virtinst.VirtualRedirDevice,
-            "memballoon": virtinst.VirtualMemballoon,
-            "tpm"       : virtinst.VirtualTPMDevice,
-       }
-
-        # Hand off all child element parsing to relevant classes
         for node in self._xml_node.children:
             if node.name != "devices":
                 continue
 
-            children = [x for x in node.children if
-                        (x.name in device_mappings and
-                         x.parent == node)]
-            for devnode in children:
-                devnode.virtinst_root_doc = self._xml_root_doc
-                objclass = device_mappings.get(devnode.name)
-
-                dev = objclass(self.conn, parsexmlnode=devnode)
+            devnodes = [
+                x for x in node.children if
+                (x.name in VirtualDevice.virtual_device_classes and
+                 x.parent == node)
+            ]
+            for devnode in devnodes:
+                objclass = VirtualDevice.virtual_device_classes[devnode.name]
+                dev = objclass(self.conn, parsexmlnode=self._xml_node)
                 self._track_device(dev)
 
-        self._xml_node.virtinst_root_doc = self._xml_root_doc
-        self.os = OSXML(self.conn, parsexmlnode=self._xml_node)
-        self.features = DomainFeatures(self.conn,
-                                       parsexmlnode=self._xml_node)
-        self.clock = Clock(self.conn, parsexmlnode=self._xml_node)
-        self.seclabel = Seclabel(self.conn, parsexmlnode=self._xml_node)
-        self.cpu = CPU(self.conn, parsexmlnode=self._xml_node)
-        self.numatune = DomainNumatune(self.conn,
-                                       parsexmlnode=self._xml_node)
+        self._recalculate_device_xpaths()
+
+    def _recalculate_device_xpaths(self):
+        count = {}
+        for dev in self.get_all_devices():
+            devtype = dev.virtual_device_type
+            if devtype not in count:
+                count[devtype] = 1
+            newpath = "./devices/%s[%d]" % (devtype, count[devtype])
+            dev.set_root_xpath(newpath)
+            count[devtype] += 1
+
 
     def add_default_input_device(self):
         if self.os.is_container():
@@ -573,15 +551,7 @@ class Guest(XMLBuilder):
             self.bootloader = "/usr/bin/pygrub"
             self.os.clear()
 
-        count = {}
-        for dev in self.get_all_devices():
-            devtype = dev.virtual_device_type
-            if devtype not in count:
-                count[devtype] = 1
-            newpath = "./devices/%s[%d]" % (devtype, count[devtype])
-            setattr(dev, "_XML_NEW_ROOT_PATH", newpath)
-            count[devtype] += 1
-
+        self._recalculate_device_xpaths()
         return self._make_xml_stub()
 
     def get_continue_inst(self):
@@ -875,7 +845,7 @@ class Guest(XMLBuilder):
             # Keep cdrom around, but with no media attached,
             # But only if we are a distro that doesn't have a multi
             # stage install (aka not Windows)
-            return (d.virtual_device_type == VirtualDevice.VIRTUAL_DEV_DISK and
+            return (d.virtual_device_type == "disk" and
                     d.device == VirtualDisk.DEVICE_CDROM
                     and d.transient
                     and not install and
@@ -883,7 +853,7 @@ class Guest(XMLBuilder):
 
         def do_skip_disk(d):
             # Skip transient labeled non-media disks
-            return (d.virtual_device_type == VirtualDevice.VIRTUAL_DEV_DISK and
+            return (d.virtual_device_type == "disk" and
                     d.device == VirtualDisk.DEVICE_DISK
                     and d.transient
                     and not install)
@@ -942,17 +912,15 @@ class Guest(XMLBuilder):
             self.os.bootorder = []
 
     def _set_hvm_defaults(self):
-        disktype = VirtualDevice.VIRTUAL_DEV_DISK
-        nettype = VirtualDevice.VIRTUAL_DEV_NET
-        disk_bus  = self._lookup_device_param(disktype, "bus")
-        net_model = self._lookup_device_param(nettype, "model")
+        disk_bus  = self._lookup_device_param("disk", "bus")
+        net_model = self._lookup_device_param("interface", "model")
 
         # Only overwrite params if they weren't already specified
-        for net in self.get_devices(nettype):
+        for net in self.get_devices("interface"):
             if net_model and not net.model:
                 net.model = net_model
 
-        for disk in self.get_devices(disktype):
+        for disk in self.get_devices("disk"):
             if (disk_bus and not disk.bus and
                 disk.device == VirtualDisk.DEVICE_DISK):
                 disk.bus = disk_bus
@@ -966,13 +934,13 @@ class Guest(XMLBuilder):
 
     def _set_pv_defaults(self):
         # Default file backed PV guests to tap driver
-        for d in self.get_devices(VirtualDevice.VIRTUAL_DEV_DISK):
+        for d in self.get_devices("disk"):
             if (d.type == VirtualDisk.TYPE_FILE
                 and d.driver_name is None
                 and util.is_blktap_capable(self.conn)):
                 d.driver_name = VirtualDisk.DRIVER_TAP
 
-        for d in self.get_devices(VirtualDevice.VIRTUAL_DEV_INPUT):
+        for d in self.get_devices("input"):
             if d.type == d.TYPE_DEFAULT:
                 d.type = d.TYPE_MOUSE
             if d.bus == d.BUS_DEFAULT:
@@ -1001,7 +969,7 @@ class Guest(XMLBuilder):
 
             # Add spapr-vio controller if needed
             if (dev.address.type == "spapr-vio" and
-                dev.virtual_device_type == VirtualDevice.VIRTUAL_DEV_DISK and
+                dev.virtual_device_type == "disk" and
                 not any([cont.address.type == "spapr-vio" for cont in
                         self.get_devices("controller")])):
                 ctrl = virtinst.VirtualController(self.conn)
@@ -1015,16 +983,10 @@ class Guest(XMLBuilder):
         if self.os.is_xenpv():
             self._set_pv_defaults()
 
-        soundtype = VirtualDevice.VIRTUAL_DEV_AUDIO
-        videotype = VirtualDevice.VIRTUAL_DEV_VIDEO
-        inputtype = VirtualDevice.VIRTUAL_DEV_INPUT
-        gfxtype = VirtualDevice.VIRTUAL_DEV_GRAPHICS
-        channeltype = VirtualDevice.VIRTUAL_DEV_CHANNEL
-
         # Set default input values
-        input_type = self._lookup_device_param(inputtype, "type")
-        input_bus = self._lookup_device_param(inputtype, "bus")
-        for inp in self.get_devices(inputtype):
+        input_type = self._lookup_device_param("input", "type")
+        input_bus = self._lookup_device_param("input", "bus")
+        for inp in self.get_devices("input"):
             if (inp.type == inp.TYPE_DEFAULT and
                 inp.bus  == inp.BUS_DEFAULT):
                 inp.type = input_type
@@ -1032,7 +994,7 @@ class Guest(XMLBuilder):
 
         # Generate disk targets, and set preferred disk bus
         used_targets = []
-        for disk in self.get_devices(VirtualDevice.VIRTUAL_DEV_DISK):
+        for disk in self.get_devices("disk"):
             if not disk.bus:
                 if disk.device == disk.DEVICE_FLOPPY:
                     disk.bus = "fdc"
@@ -1051,29 +1013,29 @@ class Guest(XMLBuilder):
                 used_targets.append(disk.generate_target(used_targets))
 
         # Set sound device model
-        sound_model  = self._lookup_device_param(soundtype, "model")
-        for sound in self.get_devices(soundtype):
+        sound_model  = self._lookup_device_param("sound", "model")
+        for sound in self.get_devices("sound"):
             if sound.model == sound.MODEL_DEFAULT:
                 sound.model = sound_model
 
         # Set video device model
         # QXL device (only if we use spice) - safe even if guest is VGA only
         def has_spice():
-            for gfx in self.get_devices(gfxtype):
+            for gfx in self.get_devices("graphics"):
                 if gfx.type == gfx.TYPE_SPICE:
                     return True
         if has_spice():
-            video_model  = "qxl"
+            video_model = "qxl"
         else:
-            video_model  = self._lookup_device_param(videotype, "model")
+            video_model = self._lookup_device_param("video", "model")
 
-        for video in self.get_devices(videotype):
+        for video in self.get_devices("video"):
             if video.model == video.MODEL_DEFAULT:
                 video.model = video_model
 
         # Spice agent channel (only if we use spice)
         def has_spice_agent():
-            for chn in self.get_devices(channeltype):
+            for chn in self.get_devices("channel"):
                 if chn.type == chn.TYPE_SPICEVMC:
                     return True
 

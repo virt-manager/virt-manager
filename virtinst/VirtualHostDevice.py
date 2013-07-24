@@ -105,3 +105,6 @@ class VirtualHostDevice(VirtualDevice):
                          default_cb=_get_default_domain)
     function = XMLProperty(xpath="./source/address/@function")
     slot = XMLProperty(xpath="./source/address/@slot")
+
+
+VirtualHostDevice.register_type()

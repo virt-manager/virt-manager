@@ -349,18 +349,14 @@ class XMLProperty(property):
             ret = self._xpath_for_getter_cb(xmlbuilder)
         if ret is None:
             raise RuntimeError("%s: didn't generate any setter xpath." % self)
-        return self._xpath_fix_relative(xmlbuilder, ret)
+        return xmlbuilder.fix_relative_xpath(ret)
     def _xpath_for_setter(self, xmlbuilder):
         ret = self._xpath
         if self._xpath_for_setter_cb:
             ret = self._xpath_for_setter_cb(xmlbuilder)
         if ret is None:
             raise RuntimeError("%s: didn't generate any setter xpath." % self)
-        return self._xpath_fix_relative(xmlbuilder, ret)
-    def _xpath_fix_relative(self, xmlbuilder, xpath):
-        if not xmlbuilder._XML_NEW_ROOT_PATH:
-            return xpath
-        return "./%s%s" % (xmlbuilder._XML_NEW_ROOT_PATH, xpath.strip("."))
+        return xmlbuilder.fix_relative_xpath(ret)
 
 
     def _xpath_list_for_setter(self, xpath, setval, nodelist):
@@ -411,6 +407,7 @@ class XMLProperty(property):
         clear_nodes = []
 
         for cpath in self._setter_clear_these_first:
+            cpath = xmlbuilder.fix_relative_xpath(cpath)
             cnode = _get_xpath_node(root_ctx, cpath, False)
             if not cnode:
                 continue
@@ -506,10 +503,9 @@ class XMLProperty(property):
     ##################################
 
     def getter(self, xmlbuilder):
-        fgetval = self._nonxml_fget(xmlbuilder)
-
         root_node = getattr(xmlbuilder, "_xml_node")
         if root_node is None:
+            fgetval = self._nonxml_fget(xmlbuilder)
             return self._convert_get_value(fgetval, initial=True)
 
         xpath = self._xpath_for_getter(xmlbuilder)
@@ -585,9 +581,6 @@ class XMLBuilder(object):
     # Integer indentation level for generated XML.
     _XML_INDENT = None
 
-    # This is only used to make device XML work for guest XML generating
-    _XML_NEW_ROOT_PATH = ""
-
     _dumpxml_xpath = "."
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
@@ -600,8 +593,9 @@ class XMLBuilder(object):
         @type parsexml: C{str}
         @param parsexmlnode: Option xpathNode to use
         """
-        self._conn = conn
+        self.conn = conn
 
+        self._xml_root_xpath = ""
         self._xml_node = None
         self._xml_ctx = None
         self._xml_root_doc = None
@@ -622,17 +616,38 @@ class XMLBuilder(object):
         ret._proporder = ret._proporder[:]
         return ret
 
-    def _get_conn(self):
-        return self._conn
-    conn = property(_get_conn)
+    def set_new_xml(self, xml):
+        self._parsexml(xml, None)
 
-    def set_xml_node(self, node):
-        self._parsexml(None, node)
+    def set_root_xpath(self, xpath):
+        self._xml_root_xpath = xpath
 
-    def get_xml_node_path(self):
-        if self._xml_node:
-            return self._xml_node.nodePath()
-        return None
+        xmlprops = self.all_xml_props()
+        for propname in self._XML_PROP_ORDER:
+            if propname in self.all_xml_props():
+                continue
+            for prop in util.listify(getattr(self, propname)):
+                prop.set_root_xpath(xpath)
+
+    def get_root_xpath(self):
+        return self._xml_root_xpath
+
+    def fix_relative_xpath(self, xpath):
+        if not self._xml_root_xpath:
+            return xpath
+        return "%s%s" % (self._xml_root_xpath, xpath.strip("."))
+
+    def get_xml_config(self, *args, **kwargs):
+        data = self._prepare_get_xml()
+        try:
+            return self._do_get_xml_config(self._dumpxml_xpath, True,
+                                           *args, **kwargs)
+        finally:
+            self._finish_get_xml(data)
+
+    def clear(self):
+        for prop in self.all_xml_props().values():
+            prop._clear(self)
 
     def _do_get_xml_config(self, dumpxml_xpath, clean, *args, **kwargs):
         """
@@ -660,18 +675,6 @@ class XMLBuilder(object):
         if clean:
             ret = self._cleanup_xml(ret)
         return ret
-
-    def get_xml_config(self, *args, **kwargs):
-        data = self._prepare_get_xml()
-        try:
-            return self._do_get_xml_config(self._dumpxml_xpath, True,
-                                           *args, **kwargs)
-        finally:
-            self._finish_get_xml(data)
-
-    def clear(self):
-        for prop in self.all_xml_props().values():
-            prop._clear(self)
 
 
     #######################
@@ -727,7 +730,13 @@ class XMLBuilder(object):
             return ""
         return _indent("<%s/>" % (self._XML_ROOT_NAME), self._XML_INDENT)
 
-    def _add_child_node(self, parent_xpath, newnode):
+    def _add_child(self, parent_xpath, dev):
+        """
+        Insert the passed XMLBuilder object into our XML document at the
+        specified path
+        """
+        dev.set_new_xml(dev.get_xml_config())
+        newnode = dev._xml_node
         ret = _build_xpath_node(self._xml_ctx, parent_xpath, newnode)
         return ret
 
@@ -746,6 +755,10 @@ class XMLBuilder(object):
             doc = libxml2.parseDoc(xml)
             self._xml_root_doc = _DocCleanupWrapper(doc)
             self._xml_node = doc.children
+
+            # This just stores a reference to our root doc wrapper in
+            # the root node, so when the node goes away it triggers
+            # auto free'ing of the doc
             self._xml_node.virtinst_root_doc = self._xml_root_doc
         else:
             self._xml_node = node
@@ -800,8 +813,8 @@ class XMLBuilder(object):
                                      validate=False)
             else:
                 for obj in util.listify(getattr(self, key)):
-                    if self._XML_NEW_ROOT_PATH and not obj._XML_NEW_ROOT_PATH:
-                        obj._XML_NEW_ROOT_PATH = self._XML_NEW_ROOT_PATH
+                    if self._xml_root_xpath and not obj._xml_root_xpath:
+                        obj._xml_root_xpath = self._xml_root_xpath
                     obj._add_parse_bits(xml=None, node=self._xml_node)
 
         xml = self._do_get_xml_config(".", clean).strip("\n")

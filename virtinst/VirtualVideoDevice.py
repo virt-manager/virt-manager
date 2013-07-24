@@ -43,3 +43,6 @@ class VirtualVideoDevice(VirtualDevice):
     vram = XMLProperty(xpath="./model/@vram", is_int=True)
     ram = XMLProperty(xpath="./model/@ram", is_int=True)
     heads = XMLProperty(xpath="./model/@heads", is_int=True)
+
+
+VirtualVideoDevice.register_type()

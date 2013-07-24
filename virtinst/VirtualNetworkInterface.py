@@ -202,8 +202,6 @@ class VirtualNetworkInterface(VirtualDevice):
                        default_cb=lambda s: s.TYPE_BRIDGE)
 
     def _get_default_mac(self):
-        if self._is_parse():
-            return None
         if not self._random_mac:
             self._random_mac = self.generate_mac(self.conn)
         return self._random_mac
@@ -233,3 +231,6 @@ class VirtualNetworkInterface(VirtualDevice):
                               default_cb=_default_source_mode)
     model = XMLProperty(xpath="./model/@type")
     target_dev = XMLProperty(xpath="./target/@dev")
+
+
+VirtualNetworkInterface.register_type()

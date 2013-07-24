@@ -63,3 +63,6 @@ class VirtualWatchdog(VirtualDevice):
     action = XMLProperty(xpath="./@action",
                          default_name=ACTION_DEFAULT,
                          default_cb=lambda s: s.ACTION_RESET)
+
+
+VirtualWatchdog.register_type()

@@ -398,9 +398,7 @@ class VirtualDisk(VirtualDevice):
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
         VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
 
-        self._storage_backend = diskbackend.StorageBackend(self.conn,
-                                                           self._xmlpath,
-                                                           None, None)
+        self.__storage_backend = None
         self._storage_creator = None
 
         self.nomanaged = False
@@ -487,7 +485,7 @@ class VirtualDisk(VirtualDevice):
         ret = "./source/@file"
         for prop in _TARGET_PROPS:
             xpath = "./source/@" + prop
-            if self._xml_ctx.xpathEval(xpath):
+            if self._xml_ctx.xpathEval(self.fix_relative_xpath(xpath)):
                 ret = xpath
                 break
         return ret
@@ -531,6 +529,16 @@ class VirtualDisk(VirtualDevice):
     # Validation assistance methods #
     #################################
 
+    def _get_storage_backend(self):
+        if self.__storage_backend is None:
+            self.__storage_backend = diskbackend.StorageBackend(self.conn,
+                                                                self._xmlpath,
+                                                                None, None)
+        return self.__storage_backend
+    def _set_storage_backend(self, val):
+        self.__storage_backend = val
+    _storage_backend = property(_get_storage_backend, _set_storage_backend)
+
     def set_create_storage(self, size=None, sparse=True,
                            fmt=None, vol_install=None, clone_path=None,
                            fake=False):
@@ -543,8 +551,6 @@ class VirtualDisk(VirtualDevice):
         @fake: If true, make like we are creating storage but fail
             if we ever asked to do so.
         """
-        if self._is_parse():
-            raise ValueError("Cannot create storage for a parsed disk.")
         path = self.path
 
         # Validate clone_path
@@ -841,3 +847,5 @@ class VirtualDisk(VirtualDevice):
                 self.target = t
                 return self.target
         raise ValueError(_("No more space for disks of type '%s'" % prefix))
+
+VirtualDisk.register_type()

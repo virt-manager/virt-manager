@@ -150,7 +150,12 @@ class _VirtualCharDevice(VirtualDevice):
                 xpath="./@type")
 
     def _sourcepath_get_xpath(self):
-        return "./source/@path | ./@tty"
+        ret = "./source/@path"
+        for xpath in [ret, "./@tty"]:
+            if self._xml_ctx.xpathEval(self.fix_relative_xpath(xpath)):
+                ret = xpath
+                break
+        return ret
     source_path = XMLProperty(make_getter_xpath_cb=_sourcepath_get_xpath,
                               doc=_("Host input path to attach to the guest."),
                               xpath="./source/@path")
@@ -263,3 +268,9 @@ class VirtualParallelDevice(_VirtualCharDevice):
 class VirtualChannelDevice(_VirtualCharDevice):
     virtual_device_type = "channel"
     TYPES = [_VirtualCharDevice.TYPE_SPICEVMC]
+
+
+VirtualConsoleDevice.register_type()
+VirtualSerialDevice.register_type()
+VirtualParallelDevice.register_type()
+VirtualChannelDevice.register_type()

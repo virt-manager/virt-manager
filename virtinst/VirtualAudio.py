@@ -30,3 +30,5 @@ class VirtualAudio(VirtualDevice):
     model = XMLProperty(xpath="./@model",
                         default_cb=lambda s: "es1370",
                         default_name=MODEL_DEFAULT)
+
+VirtualAudio.register_type()

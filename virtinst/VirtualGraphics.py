@@ -180,3 +180,6 @@ class VirtualGraphics(VirtualDevice):
     passwd = XMLProperty(xpath="./@passwd")
     passwdValidTo = XMLProperty(xpath="./@passwdValidTo")
     socket = XMLProperty(xpath="./@socket")
+
+
+VirtualGraphics.register_type()

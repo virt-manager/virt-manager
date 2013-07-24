@@ -48,3 +48,6 @@ class VirtualSmartCardDevice(VirtualDevice):
     type = XMLProperty(xpath="./@type",
                        default_cb=_default_type,
                        default_name=TYPE_DEFAULT)
+
+
+VirtualSmartCardDevice.register_type()

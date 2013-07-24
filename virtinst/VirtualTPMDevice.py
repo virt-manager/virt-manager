@@ -63,3 +63,6 @@ class VirtualTPMDevice(VirtualDevice):
                        default_cb=lambda s: s.MODEL_TIS)
     device_path = XMLProperty(xpath="./backend/device/@path",
                               default_cb=lambda s: "/dev/tpm0")
+
+
+VirtualTPMDevice.register_type()

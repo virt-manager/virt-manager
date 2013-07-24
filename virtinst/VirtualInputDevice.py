@@ -41,3 +41,6 @@ class VirtualInputDevice(VirtualDevice):
     bus = XMLProperty(xpath="./@bus",
                       default_cb=lambda s: s.BUS_XEN,
                       default_name=BUS_DEFAULT)
+
+
+VirtualInputDevice.register_type()

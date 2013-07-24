@@ -91,3 +91,5 @@ class VirtualController(VirtualDevice):
     master_startport = XMLProperty(xpath="./master/@startport", is_int=True)
 
     index = XMLProperty(xpath="./@index", is_int=True, default_cb=lambda s: 0)
+
+VirtualController.register_type()

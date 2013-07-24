@@ -91,9 +91,8 @@ class VirtualFilesystem(VirtualDevice):
         ret = "./source/@dir"
         for prop in self._target_props:
             xpath = "./source/@" + prop
-            if self._xml_ctx.xpathEval(xpath):
+            if self._xml_ctx.xpathEval(self.fix_relative_xpath(xpath)):
                 ret = xpath
-
         return ret
     def _xml_set_source_xpath(self):
         ret = "./source/@" + self.type_to_source_prop(self.type)
@@ -116,3 +115,6 @@ class VirtualFilesystem(VirtualDevice):
         return val
     target = XMLProperty(xpath="./target/@dir",
                          set_converter=_validate_set_target)
+
+
+VirtualFilesystem.register_type()

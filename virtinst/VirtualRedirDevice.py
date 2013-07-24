@@ -52,3 +52,6 @@ class VirtualRedirDevice(VirtualDevice):
 
     host = XMLProperty(xpath="./source/@host")
     service = XMLProperty(xpath="./source/@service", is_int=True)
+
+
+VirtualRedirDevice.register_type()
