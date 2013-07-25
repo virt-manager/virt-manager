@@ -338,7 +338,7 @@ class Guest(XMLBuilder):
         @param set_defaults: Whether to set defaults for the device
         """
         self._track_device(dev)
-        self._add_child("./devices", dev)
+        self._add_child(dev)
         self._recalculate_device_xpaths()
 
         if set_defaults:
@@ -392,12 +392,7 @@ class Guest(XMLBuilder):
         if not found:
             raise ValueError(_("Did not find device %s") % str(dev))
 
-        xpath = dev.get_root_xpath()
-        xml = dev.get_xml_config()
-        dev.set_root_xpath(None)
-        dev._parsexml(xml, None)
-        if xpath:
-            self._remove_child_xpath(xpath)
+        self._remove_child(dev)
         self._recalculate_device_xpaths()
 
 

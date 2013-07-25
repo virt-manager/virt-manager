@@ -91,7 +91,8 @@ class VirtualFilesystem(VirtualDevice):
         ret = "./source/@dir"
         for prop in self._target_props:
             xpath = "./source/@" + prop
-            if self._xml_ctx.xpathEval(self.fix_relative_xpath(xpath)):
+            if self._xmlstate.xml_ctx.xpathEval(
+                    self.fix_relative_xpath(xpath)):
                 ret = xpath
         return ret
     def _xml_set_source_xpath(self):

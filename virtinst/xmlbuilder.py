@@ -61,6 +61,13 @@ def _indent(xmlstr, level):
     return "\n".join((" " * level + l) for l in xmlstr.splitlines())
 
 
+def _make_xml_context(node):
+    doc = node.doc
+    ctx = _CtxCleanupWrapper(doc.xpathNewContext())
+    ctx.setContextNode(node)
+    return ctx
+
+
 def _tuplify_lists(*args):
     """
     Similar to zip(), but use None if lists aren't long enough, and
@@ -355,8 +362,7 @@ class XMLProperty(property):
         """
         Build list of nodes that the passed xpaths reference
         """
-        root_ctx = getattr(xmlbuilder, "_xml_ctx")
-        nodes = _get_xpath_node(root_ctx, xpath)
+        nodes = _get_xpath_node(xmlbuilder._xmlstate.xml_ctx, xpath)
         return util.listify(nodes)
 
     def _build_clear_list(self, xmlbuilder, setternode):
@@ -365,12 +371,11 @@ class XMLProperty(property):
         a set operation. But we don't want to unset a node that we are
         just going to 'set' on top of afterwards, so skip those ones.
         """
-        root_ctx = getattr(xmlbuilder, "_xml_ctx")
         clear_nodes = []
 
         for cpath in self._setter_clear_these_first:
             cpath = xmlbuilder.fix_relative_xpath(cpath)
-            cnode = _get_xpath_node(root_ctx, cpath)
+            cnode = _get_xpath_node(xmlbuilder._xmlstate.xml_ctx, cpath)
             if not cnode:
                 continue
             if setternode and setternode.nodePath() == cnode.nodePath():
@@ -407,9 +412,8 @@ class XMLProperty(property):
         return val
 
     def _prop_is_unset(self, xmlbuilder):
-        propstore = getattr(xmlbuilder, "_propstore")
         propname = self._findpropname(xmlbuilder)
-        return (propname not in propstore)
+        return (propname not in xmlbuilder._propstore)
 
     def _default_get_value(self, xmlbuilder):
         """
@@ -446,8 +450,8 @@ class XMLProperty(property):
         dict as propname->value. This saves us from having to explicitly
         track every variable.
         """
-        propstore = getattr(xmlbuilder, "_propstore")
-        proporder = getattr(xmlbuilder, "_proporder")
+        propstore = xmlbuilder._propstore
+        proporder = xmlbuilder._proporder
 
         if _trackprops and self not in _seenprops:
             _seenprops.append(self)
@@ -467,9 +471,8 @@ class XMLProperty(property):
         if candefault:
             return val
 
-        propstore = getattr(xmlbuilder, "_propstore")
         propname = self._findpropname(xmlbuilder)
-        return propstore.get(propname, None)
+        return xmlbuilder._propstore.get(propname, None)
 
     def _clear(self, xmlbuilder):
         self.setter(xmlbuilder, None)
@@ -481,6 +484,11 @@ class XMLProperty(property):
     ##################################
 
     def getter(self, xmlbuilder):
+        """
+        Fetch value at user request. If we are parsing existing XML and
+        the user hasn't done a 'set' yet, return the value from the XML,
+        otherwise return the value from propstore
+        """
         if self._prop_is_unset(xmlbuilder) and not xmlbuilder.is_build():
             val = self._get_xml(xmlbuilder)
         else:
@@ -489,8 +497,11 @@ class XMLProperty(property):
         return ret
 
     def _get_xml(self, xmlbuilder):
+        """
+        Actually fetch the associated value from the backing XML
+        """
         xpath = self._xpath_for_getter(xmlbuilder)
-        node = _get_xpath_node(xmlbuilder._xml_ctx, xpath)
+        node = _get_xpath_node(xmlbuilder._xmlstate.xml_ctx, xpath)
         if not node:
             return None
 
@@ -500,6 +511,11 @@ class XMLProperty(property):
         return content
 
     def setter(self, xmlbuilder, val, validate=True):
+        """
+        Set the value at user request. This just stores the value
+        in propstore. Setting the actual XML is only done at
+        get_xml_config time.
+        """
         if validate and self._validate_cb:
             self._validate_cb(xmlbuilder, val)
         self._nonxml_fset(xmlbuilder,
@@ -510,10 +526,13 @@ class XMLProperty(property):
         self._convert_set_value(xmlbuilder, val)
 
     def _set_xml(self, xmlbuilder, setval, root_node=None):
+        """
+        Actually set the passed value in the XML document
+        """
         if root_node is None:
-            root_node = xmlbuilder._xml_node
+            root_node = xmlbuilder._xmlstate.xml_node
         xpath = self._xpath_for_setter(xmlbuilder)
-        node = _get_xpath_node(xmlbuilder._xml_ctx, xpath)
+        node = _get_xpath_node(xmlbuilder._xmlstate.xml_ctx, xpath)
         clearlist = self._build_clear_list(xmlbuilder, node)
 
         node_map = []
@@ -539,6 +558,70 @@ class XMLProperty(property):
             node.setContent(util.xml_escape(str(val)))
 
 
+class _XMLState(object):
+    def __init__(self, xpath, parsexml, parsexmlnode):
+        if xpath is None or not xpath.startswith("/"):
+            raise RuntimeError("xpath=%s must start with /" % xpath)
+
+        self.orig_root_xpath = xpath
+        self.root_name = xpath.split("/")[-1]
+        self.indent = (xpath.count("/") - 1) * 2
+        self.dump_xpath = xpath
+        self.root_xpath = ""
+
+        self.xml_ctx = None
+        self.xml_node = None
+        self.xml_root_doc = None
+
+        self.is_build = False
+        if not (parsexml or parsexmlnode):
+            parsexml = self.make_xml_stub()
+            self.is_build = True
+        self._parse(parsexml, parsexmlnode)
+
+    def _parse(self, xml, node):
+        if xml:
+            doc = libxml2.parseDoc(xml)
+            self.xml_root_doc = _DocCleanupWrapper(doc)
+            self.xml_node = doc.children
+            self.xml_node.virtinst_is_build = self.is_build
+            self.dump_xpath = "."
+
+            # This just stores a reference to our root doc wrapper in
+            # the root node, so when the node goes away it triggers
+            # auto free'ing of the doc
+            self.xml_node.virtinst_root_doc = self.xml_root_doc
+        else:
+            self.xml_node = node
+            self.is_build = (getattr(node, "virtinst_is_build", False) or
+                             self.is_build)
+            self.dump_xpath = self.orig_root_xpath
+
+        self.xml_ctx = _make_xml_context(self.xml_node)
+
+
+    def make_xml_stub(self):
+        return _indent(("<%s/>" % self.root_name), self.indent)
+
+    def set_root_xpath(self, xpath):
+        self.root_xpath = xpath or ""
+        self.dump_xpath = xpath or self.orig_root_xpath
+
+    def fix_relative_xpath(self, xpath):
+        if not self.root_xpath:
+            return xpath
+        return "%s%s" % (self.root_xpath, xpath.strip("."))
+
+    def get_node_xml(self, ctx=None):
+        if ctx is None:
+            ctx = self.xml_ctx
+
+        node = _get_xpath_node(ctx, self.dump_xpath)
+        if not node:
+            return ""
+        return _sanitize_libxml_xml(node.serialize())
+
+
 class XMLBuilder(object):
     """
     Base for all classes which build or parse domain XML
@@ -562,72 +645,46 @@ class XMLBuilder(object):
         """
         self.conn = conn
 
-        xpath = self._XML_ROOT_XPATH
-        if xpath is None or not xpath.startswith("/"):
-            raise RuntimeError("xpath=%s must start with /" % xpath)
-
-        self._xml_root_name = xpath.split("/")[-1]
-        self._xml_indent = (xpath.count("/") - 1) * 2
-        self._xml_dump_xpath = xpath
-        self._xml_root_xpath = ""
-
-        self._xml_node = None
-        self._xml_ctx = None
-        self._xml_root_doc = None
         self._propstore = {}
         self._proporder = []
-
-        self._is_build = False
-        if not (parsexml or parsexmlnode):
-            parsexml = self._make_xml_stub()
-            self._is_build = True
+        self._xmlstate = None
         self._parsexml(parsexml, parsexmlnode)
 
 
-    ##############
-    # Public API #
-    ##############
+    ########################
+    # Public XML Internals #
+    ########################
 
     def copy(self):
+        """
+        Do a shallow copy of the device
+        """
         ret = copy.copy(self)
         ret._propstore = ret._propstore.copy()
         ret._proporder = ret._proporder[:]
         return ret
 
-    def set_new_xml(self, xml):
-        self._parsexml(xml, None)
-
     def set_root_xpath(self, xpath):
-        self._xml_root_xpath = xpath or ""
-        self._xml_dump_xpath = xpath or self._XML_ROOT_XPATH
-        xmlprops = self.all_xml_props()
-
-        for propname in self._XML_PROP_ORDER:
-            if propname in xmlprops:
-                continue
-            for prop in util.listify(getattr(self, propname)):
-                prop.set_root_xpath(xpath)
+        """
+        Change the absolute root xpath that this device points to in its
+        backing node. This is used by Guest when devices are reordered,
+        for example we may need to tell the device it now points at
+        /domain/devices/disk[1] instead of ...[2]
+        """
+        self._xmlstate.set_root_xpath(xpath)
+        for p in self._all_subelement_props():
+            p.set_root_xpath(xpath)
 
     def get_root_xpath(self):
-        return self._xml_root_xpath
+        return self._xmlstate.root_xpath
 
     def fix_relative_xpath(self, xpath):
-        if not self._xml_root_xpath:
-            return xpath
-        return "%s%s" % (self._xml_root_xpath, xpath.strip("."))
-
-    def get_xml_config(self):
-        data = self._prepare_get_xml()
-        try:
-            return self._do_get_xml_config()
-        finally:
-            self._finish_get_xml(data)
-
-    def clear(self):
-        for prop in self.all_xml_props().values():
-            prop._clear(self)
+        return self._xmlstate.fix_relative_xpath(xpath)
 
     def all_xml_props(self):
+        """
+        Return a list of all XMLProperty instances that this class has.
+        """
         ret = {}
         for c in reversed(type.mro(self.__class__)[:-1]):
             for key, val in c.__dict__.items():
@@ -635,53 +692,133 @@ class XMLBuilder(object):
                     ret[key] = val
         return ret
 
-
-    #######################
-    # Internal helper API #
-    #######################
-
     def is_build(self):
-        return bool(self._is_build)
+        """
+        True if guest is building XML from scratch and not parsing
+        pre-existing XML
+        """
+        return bool(self._xmlstate.is_build)
+
+
+    ############################
+    # Public XML managing APIs #
+    ############################
+
+    def get_xml_config(self):
+        """
+        Return XML string of the object
+        """
+        data = self._prepare_get_xml()
+        try:
+            return self._do_get_xml_config()
+        finally:
+            self._finish_get_xml(data)
+
+    def clear(self):
+        """
+        Wipe out all properties of the object
+        """
+        for prop in self.all_xml_props().values():
+            prop._clear(self)
+
+    def validate(self):
+        """
+        Validate any set values and raise an exception if there's
+        a problem
+        """
+        pass
+
+    def set_defaults(self):
+        """
+        Encode any default values if needed
+        """
+        pass
 
 
     ###################
     # Child overrides #
     ###################
 
-    def set_defaults(self):
-        pass
-
-    def validate(self):
-        pass
-
     def _prepare_get_xml(self):
+        """
+        Subclasses can override this to do any pre-get_xml_config setup.
+        Returns data to pass to finish_get_xml
+        """
         return None
+
     def _finish_get_xml(self, data):
+        """
+        Called after get_xml_config. Data is whatever was returned by
+        _prepare_get_xml
+        """
         ignore = data
 
+    def _parsexml(self, xml, node):
+        """
+        Subclasses hook here to do things like parse <devices> into
+        internal state
+        """
+        self._xmlstate = _XMLState(self._XML_ROOT_XPATH, xml, node)
 
-    ########################
-    # Internal XML parsers #
-    ########################
 
-    def _get_node_xml(self, ctx=None):
-        if ctx is None:
-            ctx = self._xml_ctx
+    ################
+    # Internal API #
+    ################
 
-        node = _get_xpath_node(ctx, self._xml_dump_xpath)
-        if not node:
-            return ""
-        return _sanitize_libxml_xml(node.serialize())
+    _xml_node = property(lambda s: s._xmlstate.xml_node)
+
+    def _all_subelement_props(self):
+        """
+        Return a list of all sub element properties this class tracks.
+        A sub element is an XMLBuilder that is tracked explicitly in
+        a parent class, which alters the parent XML.
+        VirtualDevice.address is an example.
+        """
+        xmlprops = self.all_xml_props()
+        ret = []
+        for propname in self._XML_PROP_ORDER:
+            if propname not in xmlprops:
+                ret.extend(util.listify(getattr(self, propname)))
+        return ret
+
+    def _add_child(self, dev):
+        """
+        Insert the passed XMLBuilder object into our XML document at the
+        specified path
+        """
+        if not dev.is_build():
+            newnode = libxml2.parseDoc(dev.get_xml_config()).children
+            _build_xpath_node(self._xmlstate.xml_ctx,
+                              dev.get_root_xpath(), newnode)
+        dev._xmlstate._parse(None, self._xmlstate.xml_node)
+
+    def _remove_child(self, dev):
+        """
+        Remove the passed XMLBuilder object from our XML document, but
+        ensure it's data isn't altered.
+        """
+        xpath = dev.get_root_xpath()
+        xml = dev.get_xml_config()
+        dev.set_root_xpath(None)
+        dev._xmlstate._parse(xml, None)
+        if xpath:
+            _remove_xpath_node(self._xmlstate.xml_ctx, xpath, dofree=False)
+
+
+    #################################
+    # Private XML building routines #
+    #################################
 
     def _do_get_xml_config(self):
-        xmlstub = self._make_xml_stub()
+        xmlstub = self._xmlstate.make_xml_stub()
 
         try:
             node = None
             ctx = None
             if self.is_build():
-                node = self._xml_node.docCopyNodeList(self._xml_node.doc)
-                ctx = self._make_xml_context(node)
+                node = self._xmlstate.xml_node.docCopyNodeList(
+                    self._xmlstate.xml_node.doc)
+                ctx = _make_xml_context(node)
             ret = self._add_parse_bits(node, ctx)
         finally:
             if node:
@@ -690,55 +827,24 @@ class XMLBuilder(object):
         if ret == xmlstub:
             ret = ""
 
-        if ret and self._xml_root_name == "domain" and not ret.endswith("\n"):
+        if (ret and
+            self._xmlstate.root_name == "domain" and
+            not ret.endswith("\n")):
             ret += "\n"
         return ret
 
-    def _make_xml_stub(self):
-        return _indent("<%s/>" % (self._xml_root_name), self._xml_indent)
-
-    def _add_child(self, parent_xpath, dev):
+    def _add_parse_bits(self, node, ctx):
         """
-        Insert the passed XMLBuilder object into our XML document at the
-        specified path
+        Callback that adds the implicitly tracked XML properties to
+        the backing xml.
         """
-        if not dev.is_build():
-            newnode = libxml2.parseDoc(dev.get_xml_config()).children
-            _build_xpath_node(self._xml_ctx, parent_xpath, newnode)
-        dev._parsexml(None, self._xml_node)
-
-    def _remove_child_xpath(self, xpath):
-        _remove_xpath_node(self._xml_ctx, xpath, dofree=False)
-        self._set_xml_context()
-
-    def _make_xml_context(self, node):
-        doc = node.doc
-        ctx = _CtxCleanupWrapper(doc.xpathNewContext())
-        ctx.setContextNode(node)
-        return ctx
-
-    def _set_xml_context(self):
-        self._xml_ctx = self._make_xml_context(self._xml_node)
-
-    def _parsexml(self, xml, node):
-        if xml:
-            doc = libxml2.parseDoc(xml)
-            self._xml_root_doc = _DocCleanupWrapper(doc)
-            self._xml_node = doc.children
-            self._xml_node.virtinst_is_build = self._is_build
-            self._xml_dump_xpath = "."
-
-            # This just stores a reference to our root doc wrapper in
-            # the root node, so when the node goes away it triggers
-            # auto free'ing of the doc
-            self._xml_node.virtinst_root_doc = self._xml_root_doc
-        else:
-            self._xml_node = node
-            self._is_build = (getattr(node, "virtinst_is_build", False) or
-                              self._is_build)
-            self._xml_dump_xpath = self._XML_ROOT_XPATH
-
-        self._set_xml_context()
+        origproporder = self._proporder[:]
+        origpropstore = self._propstore.copy()
+        try:
+            return self._do_add_parse_bits(node, ctx)
+        finally:
+            self._proporder = origproporder
+            self._propstore = origpropstore
 
     def _do_add_parse_bits(self, node, ctx):
         # Set all defaults if the properties have one registered
@@ -764,22 +870,8 @@ class XMLBuilder(object):
                 continue
 
             for obj in util.listify(getattr(self, key)):
-                if self._xml_root_xpath and not obj._xml_root_xpath:
-                    obj._xml_root_xpath = self._xml_root_xpath
+                if self._xmlstate.root_xpath and not obj._xmlstate.root_xpath:
+                    obj._xmlstate.root_xpath = self._xmlstate.root_xpath
                 obj._add_parse_bits(node, ctx)
 
-        return self._get_node_xml(ctx)
-
-    def _add_parse_bits(self, node, ctx):
-        """
-        Callback that adds the implicitly tracked XML properties to
-        the manually generated xml. This should only exist until all
-        classes are converted to all parsing all the time
-        """
-        origproporder = self._proporder[:]
-        origpropstore = self._propstore.copy()
-        try:
-            return self._do_add_parse_bits(node, ctx)
-        finally:
-            self._proporder = origproporder
-            self._propstore = origpropstore
+        return self._xmlstate.get_node_xml(ctx)

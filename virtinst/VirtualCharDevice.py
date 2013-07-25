@@ -152,7 +152,8 @@ class _VirtualCharDevice(VirtualDevice):
     def _sourcepath_get_xpath(self):
         ret = "./source/@path"
         for xpath in [ret, "./@tty"]:
-            if self._xml_ctx.xpathEval(self.fix_relative_xpath(xpath)):
+            if self._xmlstate.xml_ctx.xpathEval(
+                    self.fix_relative_xpath(xpath)):
                 ret = xpath
                 break
         return ret

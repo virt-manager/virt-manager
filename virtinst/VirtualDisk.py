@@ -485,7 +485,8 @@ class VirtualDisk(VirtualDevice):
         ret = "./source/@file"
         for prop in _TARGET_PROPS:
             xpath = "./source/@" + prop
-            if self._xml_ctx.xpathEval(self.fix_relative_xpath(xpath)):
+            if self._xmlstate.xml_ctx.xpathEval(
+                    self.fix_relative_xpath(xpath)):
                 ret = xpath
                 break
         return ret
