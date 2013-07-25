@@ -412,7 +412,6 @@ vinst.add_valid("cpuram", "--numatune 1,2,3,5-7,^6")  # Simple --numatune
 vinst.add_invalid("cpuram", "--vcpus 32 --cpuset=969-1000")  # Bogus cpuset
 vinst.add_invalid("cpuram", "--vcpus 32 --cpuset=autofoo")  # Bogus cpuset
 vinst.add_invalid("cpuram", "--vcpus 20 --check-cpu")  # Over host vcpus w/ --check-cpu
-vinst.add_invalid("cpuram", "--vcpus 5,maxvcpus=1")  # maxvcpus less than cpus
 vinst.add_invalid("cpuram", "--vcpus foo=bar")  # vcpus unknown option
 vinst.add_invalid("cpuram", "--cpu host")  # --cpu host, but no host CPU in caps
 vinst.add_invalid("cpuram", "--numatune 1-3,4,mode=strict")  # Non-escaped numatune

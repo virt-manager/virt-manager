@@ -403,9 +403,13 @@ class XMLProperty(property):
     def _convert_set_value(self, xmlbuilder, val):
         if self._default_name and val == self._default_name:
             val = self._default_cb(xmlbuilder)
-        elif self._is_yesno:
-            if val is not None:
-                val = bool(val) and "yes" or "no"
+        elif self._is_yesno and val is not None:
+            val = bool(val) and "yes" or "no"
+        elif self._is_int and val is not None:
+            intkwargs = {}
+            if "0x" in str(val):
+                intkwargs["base"] = 16
+            val = int(val, **intkwargs)
 
         if self._convert_value_for_setter_cb:
             val = self._convert_value_for_setter_cb(xmlbuilder, val)

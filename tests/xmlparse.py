@@ -161,7 +161,8 @@ class XMLParseTest(unittest.TestCase):
         check("vendor", "Intel", "qemuvendor")
         check("threads", 2, 1)
         check("cores", 5, 3)
-        check("sockets", 4, 4)
+        guest.cpu.sockets = 4.0
+        check("sockets", 4)
 
         check = self._make_checker(guest.cpu.features[0])
         check("name", "x2apic")
