@@ -175,6 +175,7 @@ class Guest(XMLBuilder):
 
         self._os_type = None
         self._os_variant = None
+        self._random_uuid = None
 
         self.installer = None
 
@@ -252,10 +253,16 @@ class Guest(XMLBuilder):
     cpuset = XMLProperty(xpath="./vcpu/@cpuset",
                          validate_cb=_validate_cpuset)
 
+    def _get_default_uuid(self):
+        if self._random_uuid is None:
+            self._random_uuid = util.generate_uuid(self.conn)
+        return self._random_uuid
+    uuid = XMLProperty(xpath="./uuid",
+                       validate_cb=lambda s, v: util.validate_uuid(v),
+                       default_cb=_get_default_uuid)
+
     type = XMLProperty(xpath="./@type", default_cb=lambda s: "xen")
     hugepage = XMLProperty(xpath="./memoryBacking/hugepages", is_bool=True)
-    uuid = XMLProperty(xpath="./uuid",
-                       validate_cb=lambda s, v: util.validate_uuid(v))
     bootloader = XMLProperty(xpath="./bootloader")
     description = XMLProperty(xpath="./description")
     emulator = XMLProperty(xpath="./devices/emulator")
@@ -419,19 +426,6 @@ class Guest(XMLBuilder):
             newpath = "./devices/%s[%d]" % (devtype, count[devtype])
             dev.set_root_xpath(newpath)
             count[devtype] += 1
-
-
-    def add_default_input_device(self):
-        if self.os.is_container():
-            return
-        self.add_device(virtinst.VirtualInputDevice(self.conn))
-
-    def add_default_console_device(self):
-        if self.os.is_xenpv():
-            return
-        dev = virtinst.VirtualConsoleDevice(self.conn)
-        dev.type = dev.TYPE_PTY
-        self.add_device(dev)
 
 
     ############################
@@ -600,6 +594,7 @@ class Guest(XMLBuilder):
         state = dominfo[0]
 
         return state == libvirt.VIR_DOMAIN_CRASHED
+
 
     ##########################
     # Actual install methods #
@@ -819,6 +814,18 @@ class Guest(XMLBuilder):
     # Device defaults #
     ###################
 
+    def add_default_input_device(self):
+        if self.os.is_container():
+            return
+        self.add_device(virtinst.VirtualInputDevice(self.conn))
+
+    def add_default_console_device(self):
+        if self.os.is_xenpv():
+            return
+        dev = virtinst.VirtualConsoleDevice(self.conn)
+        dev.type = dev.TYPE_PTY
+        self.add_device(dev)
+
     def _set_transient_device_defaults(self, install):
         def do_remove_media(d):
             # Keep cdrom around, but with no media attached,
@@ -846,27 +853,19 @@ class Guest(XMLBuilder):
 
     def _set_defaults(self):
         self._set_osxml_defaults()
-        self._set_feature_defaults()
-        self._set_device_defaults()
+        self._set_clock_defaults()
         self._set_emulator_defaults()
         self._set_cpu_defaults()
+        self._set_feature_defaults()
 
-    def _set_cpu_defaults(self):
-        self.cpu.set_topology_defaults(self.vcpus)
-
-    def _set_emulator_defaults(self):
-        if self.os.is_xenpv():
-            self.emulator = None
-            return
-
-        if self.emulator:
-            return
-
-        if self.os.is_hvm() and self.type == "xen":
-            if self.conn.caps.host.arch == "x86_64":
-                self.emulator = "/usr/lib64/xen/bin/qemu-dm"
-            else:
-                self.emulator = "/usr/lib/xen/bin/qemu-dm"
+        for dev in self.get_all_devices():
+            dev.set_defaults()
+        self._add_implied_controllers()
+        self._set_disk_defaults()
+        self._set_net_defaults()
+        self._set_input_defaults()
+        self._set_sound_defaults()
+        self._set_video_defaults()
 
     def _set_osxml_defaults(self):
         if self.os.is_container() and not self.os.init:
@@ -884,40 +883,33 @@ class Guest(XMLBuilder):
         if self.os.kernel or self.os.init:
             self.os.bootorder = []
 
-    def _set_hvm_defaults(self):
-        disk_bus  = self._lookup_device_param("disk", "bus")
-        net_model = self._lookup_device_param("interface", "model")
-
-        # Only overwrite params if they weren't already specified
-        for net in self.get_devices("interface"):
-            if net_model and not net.model:
-                net.model = net_model
-
-        for disk in self.get_devices("disk"):
-            if (disk_bus and not disk.bus and
-                disk.device == VirtualDisk.DEVICE_DISK):
-                disk.bus = disk_bus
-
-        if self.clock.offset is None:
-            self.clock.offset = self._lookup_osdict_key("clock")
-
         if (self.os.machine is None and
             self.conn.caps.host.arch == "ppc64"):
             self.os.machine = "pseries"
 
-    def _set_pv_defaults(self):
-        # Default file backed PV guests to tap driver
-        for d in self.get_devices("disk"):
-            if (d.type == VirtualDisk.TYPE_FILE
-                and d.driver_name is None
-                and util.is_blktap_capable(self.conn)):
-                d.driver_name = VirtualDisk.DRIVER_TAP
+    def _set_clock_defaults(self):
+        if not self.os.is_hvm():
+            return
 
-        for d in self.get_devices("input"):
-            if d.type == d.TYPE_DEFAULT:
-                d.type = d.TYPE_MOUSE
-            if d.bus == d.BUS_DEFAULT:
-                d.bus = d.BUS_XEN
+        if self.clock.offset is None:
+            self.clock.offset = self._lookup_osdict_key("clock")
+
+    def _set_emulator_defaults(self):
+        if self.os.is_xenpv():
+            self.emulator = None
+            return
+
+        if self.emulator:
+            return
+
+        if self.os.is_hvm() and self.type == "xen":
+            if self.conn.caps.host.arch == "x86_64":
+                self.emulator = "/usr/lib64/xen/bin/qemu-dm"
+            else:
+                self.emulator = "/usr/lib/xen/bin/qemu-dm"
+
+    def _set_cpu_defaults(self):
+        self.cpu.set_topology_defaults(self.vcpus)
 
     def _set_feature_defaults(self):
         if self.os.is_container():
@@ -936,10 +928,8 @@ class Guest(XMLBuilder):
         if self.features["pae"] == "default":
             self.features["pae"] = self.conn.caps.support_pae()
 
-    def _set_device_defaults(self):
-        for dev in self.get_devices("all"):
-            dev.set_defaults()
-
+    def _add_implied_controllers(self):
+        for dev in self.get_all_devices():
             # Add spapr-vio controller if needed
             if (dev.address.type == "spapr-vio" and
                 dev.virtual_device_type == "disk" and
@@ -950,48 +940,72 @@ class Guest(XMLBuilder):
                 ctrl.address.set_addrstr("spapr-vio")
                 self.add_device(ctrl)
 
+    def _set_disk_defaults(self):
+        os_disk_bus  = self._lookup_device_param("disk", "bus")
 
-        if self.os.is_hvm():
-            self._set_hvm_defaults()
-        if self.os.is_xenpv():
-            self._set_pv_defaults()
+        def set_disk_bus(d):
+            if d.device == d.DEVICE_FLOPPY:
+                d.bus = "fdc"
+                return
+            if self.os.is_xenpv():
+                d.bus = "xen"
+                return
 
-        # Set default input values
+            d.bus = "ide"
+            if self.os.is_hvm():
+                if (os_disk_bus and d.device == VirtualDisk.DEVICE_DISK):
+                    d.bus = os_disk_bus
+                elif (self.type == "kvm" and
+                      self.os.machine == "pseries"):
+                    d.bus = "scsi"
+
+        used_targets = []
+        for disk in self.get_devices("disk"):
+            if not disk.bus:
+                set_disk_bus(disk)
+
+            # Default file backed PV guests to tap driver
+            if (self.os.is_xenpv() and
+                disk.type == VirtualDisk.TYPE_FILE and
+                disk.driver_name is None and
+                util.is_blktap_capable(self.conn)):
+                disk.driver_name = VirtualDisk.DRIVER_TAP
+
+            # Generate disk targets
+            if disk.target:
+                used_targets.append(disk.target)
+            else:
+                used_targets.append(disk.generate_target(used_targets))
+
+    def _set_net_defaults(self):
+        net_model = self._lookup_device_param("interface", "model")
+        if not self.os.is_hvm():
+            net_model = None
+
+        for net in self.get_devices("interface"):
+            if net_model and not net.model:
+                net.model = net_model
+
+    def _set_input_defaults(self):
         input_type = self._lookup_device_param("input", "type")
         input_bus = self._lookup_device_param("input", "bus")
+        if self.os.is_xenpv():
+            input_type = virtinst.VirtualInputDevice.TYPE_MOUSE
+            input_bus = virtinst.VirtualInputDevice.BUS_XEN
+
         for inp in self.get_devices("input"):
             if (inp.type == inp.TYPE_DEFAULT and
                 inp.bus  == inp.BUS_DEFAULT):
                 inp.type = input_type
                 inp.bus  = input_bus
 
-        # Generate disk targets, and set preferred disk bus
-        used_targets = []
-        for disk in self.get_devices("disk"):
-            if not disk.bus:
-                if disk.device == disk.DEVICE_FLOPPY:
-                    disk.bus = "fdc"
-                else:
-                    if self.os.is_hvm():
-                        if (self.type == "kvm" and
-                            self.os.machine == "pseries"):
-                            disk.bus = "scsi"
-                        else:
-                            disk.bus = "ide"
-                    elif self.os.is_xenpv():
-                        disk.bus = "xen"
-            if disk.target:
-                used_targets.append(disk.target)
-            else:
-                used_targets.append(disk.generate_target(used_targets))
-
-        # Set sound device model
-        sound_model  = self._lookup_device_param("sound", "model")
+    def _set_sound_defaults(self):
+        sound_model = self._lookup_device_param("sound", "model")
         for sound in self.get_devices("sound"):
             if sound.model == sound.MODEL_DEFAULT:
                 sound.model = sound_model
 
-        # Set video device model
+    def _set_video_defaults(self):
         # QXL device (only if we use spice) - safe even if guest is VGA only
         def has_spice():
             for gfx in self.get_devices("graphics"):
@@ -1019,10 +1033,6 @@ class Guest(XMLBuilder):
             agentdev = virtinst.VirtualChannelDevice(self.conn)
             agentdev.type = agentdev.TYPE_SPICEVMC
             self.add_device(agentdev)
-
-        # Generate UUID
-        if self.uuid is None:
-            self.uuid = util.generate_uuid(self.conn)
 
 
     ###################################
