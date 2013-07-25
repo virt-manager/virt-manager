@@ -264,6 +264,7 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(disk1)
         check("path", "/tmp/test.img", "/dev/loop0")
+        disk1.sync_path_props()
         check("driver_name", None, "test")
         check("driver_type", None, "raw")
         check("serial", "WD-WMAP9A966149", "frob")
@@ -271,6 +272,7 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(disk3)
         check("type", "block", "dir", "file", "block")
         check("path", "/dev/loop0", None)
+        disk3.sync_path_props()
         check("device", "cdrom", "floppy")
         check("read_only", True, False)
         check("target", "hdc", "fde")
@@ -279,6 +281,7 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(disk6)
         check("path", None, "/default-pool/default-vol")
+        disk6.sync_path_props()
         check("shareable", False, True)
         check("driver_cache", None, "writeback")
         check("driver_io", None, "threads")
@@ -757,23 +760,28 @@ class XMLParseTest(unittest.TestCase):
         disk = guest.get_devices("disk")[0]
         check = self._make_checker(disk)
         check("path", None, "/default-pool/default-vol")
+        disk.sync_path_props()
 
         disk = guest.get_devices("disk")[1]
         check = self._make_checker(disk)
         check("path", None, "/default-pool/default-vol")
         check("path", "/default-pool/default-vol", "/disk-pool/diskvol1")
+        disk.sync_path_props()
 
         disk = guest.get_devices("disk")[2]
         check = self._make_checker(disk)
         check("path", None, "/disk-pool/diskvol1")
+        disk.sync_path_props()
 
         disk = guest.get_devices("disk")[3]
         check = self._make_checker(disk)
         check("path", None, "/default-pool/default-vol")
+        disk.sync_path_props()
 
         disk = guest.get_devices("disk")[4]
         check = self._make_checker(disk)
         check("path", None, "/disk-pool/diskvol1")
+        disk.sync_path_props()
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

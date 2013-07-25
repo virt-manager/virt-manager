@@ -607,6 +607,7 @@ class vmmDomain(vmmLibvirtObject):
     def define_storage_media(self, devobj, newpath):
         def change(editdev):
             editdev.path = newpath
+            editdev.sync_path_props()
         return self._redefine_device(change, devobj)
     def define_disk_readonly(self, devobj, do_readonly):
         def change(editdev):

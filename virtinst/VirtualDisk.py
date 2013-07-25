@@ -418,7 +418,7 @@ class VirtualDisk(VirtualDevice):
             raise ValueError("Can't change disk path if storage creation info "
                              "has been set.")
         self._change_backend(val, None)
-        self._refresh_backend_settings()
+        self._xmlpath = self.path
     path = property(_get_path, _set_path)
 
 
@@ -580,7 +580,7 @@ class VirtualDisk(VirtualDevice):
         self._storage_creator = creator
         if self._storage_creator:
             self._storage_creator.fake = bool(fake)
-            self._refresh_backend_settings()
+            self._xmlpath = self.path
         else:
             if (vol_install or clone_path):
                 raise RuntimeError("Need storage creation but it "
@@ -599,26 +599,15 @@ class VirtualDisk(VirtualDevice):
                                 path, vol_object, None, None)
         self._storage_backend = backend
 
-    def _refresh_backend_settings(self):
-        def refresh_prop_xml(propname):
-            # When parsing, we can pull info from _propstore or the
-            # backing XML. The problem is that disk XML has several
-            # interdependent properties that we need to update if
-            # one or the other changes.
-            #
-            # This will update the XML value with the newly determined
-            # default value, but it won't edit propstore. This means
-            if self.is_build():
-                return
-            prop = self.all_xml_props()[propname]
-            candefault, val = getattr(prop, "_default_get_value")(self)
-            if candefault:
-                getattr(prop, "_set_xml")(self, val)
-
-        refresh_prop_xml("type")
-        refresh_prop_xml("driver_name")
-        refresh_prop_xml("driver_type")
-        self._xmlpath = self.path
+    def sync_path_props(self):
+        """
+        Fills in the values of type, driver_type, and driver_name for
+        the associated backing storage. This needs to be manually called
+        if changing an existing disk's media.
+        """
+        self.type = self._get_default_type()
+        self.driver_name = self._get_default_driver_name()
+        self.driver_type = self._get_default_driver_type()
 
     def __managed_storage(self):
         """

@@ -420,6 +420,8 @@ class XMLProperty(property):
         Return (can use default, default value)
         """
         ret = (False, -1)
+        if not xmlbuilder._xmlstate.is_build:
+            return ret
         if not self._prop_is_unset(xmlbuilder):
             return ret
         if not self._default_cb:
@@ -488,8 +490,13 @@ class XMLProperty(property):
         Fetch value at user request. If we are parsing existing XML and
         the user hasn't done a 'set' yet, return the value from the XML,
         otherwise return the value from propstore
+
+        If this is a built from scratch object, we never pull from XML
+        since it's known to the empty, and we may want to return
+        a 'default' value
         """
-        if self._prop_is_unset(xmlbuilder) and not xmlbuilder.is_build():
+        if (self._prop_is_unset(xmlbuilder) and
+            not xmlbuilder._xmlstate.is_build):
             val = self._get_xml(xmlbuilder)
         else:
             val = self._nonxml_fget(xmlbuilder)
@@ -520,10 +527,6 @@ class XMLProperty(property):
             self._validate_cb(xmlbuilder, val)
         self._nonxml_fset(xmlbuilder,
                           self._convert_set_value(xmlbuilder, val))
-
-        if xmlbuilder.is_build():
-            return
-        self._convert_set_value(xmlbuilder, val)
 
     def _set_xml(self, xmlbuilder, setval, root_node=None):
         """
@@ -692,13 +695,6 @@ class XMLBuilder(object):
                     ret[key] = val
         return ret
 
-    def is_build(self):
-        """
-        True if guest is building XML from scratch and not parsing
-        pre-existing XML
-        """
-        return bool(self._xmlstate.is_build)
-
 
     ############################
     # Public XML managing APIs #
@@ -786,7 +782,7 @@ class XMLBuilder(object):
         Insert the passed XMLBuilder object into our XML document at the
         specified path
         """
-        if not dev.is_build():
+        if not dev._xmlstate.is_build:
             newnode = libxml2.parseDoc(dev.get_xml_config()).children
             _build_xpath_node(self._xmlstate.xml_ctx,
                               dev.get_root_xpath(), newnode)
@@ -815,7 +811,7 @@ class XMLBuilder(object):
         try:
             node = None
             ctx = None
-            if self.is_build():
+            if self._xmlstate.is_build:
                 node = self._xmlstate.xml_node.docCopyNodeList(
                     self._xmlstate.xml_node.doc)
                 ctx = _make_xml_context(node)
@@ -850,9 +846,8 @@ class XMLBuilder(object):
         # Set all defaults if the properties have one registered
         xmlprops = self.all_xml_props()
 
-        if self.is_build():
-            for prop in xmlprops.values():
-                prop._set_default(self)
+        for prop in xmlprops.values():
+            prop._set_default(self)
 
         # Set up preferred XML ordering
         do_order = self._proporder[:]

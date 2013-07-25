@@ -20,10 +20,10 @@
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="block" device="floppy">
+      <driver type="vmdk"/>
       <source dev="/disk-pool/diskvol1-clone"/>
       <target dev="fda" bus="fdc"/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
-      <driver type="vmdk"/>
     </disk>
     <disk type="block" device="disk">
       <source dev="/disk-pool/diskvol2"/>
