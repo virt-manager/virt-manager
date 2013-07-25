@@ -134,7 +134,7 @@ def check_if_path_managed(conn, path):
     return vol, pool, path_is_pool
 
 
-def _build_vol_install(conn, path, pool, size, sparse):
+def build_vol_install(conn, path, pool, size, sparse):
     # Path wasn't a volume. See if base of path is a managed
     # pool, and if so, setup a StorageVolume object
     if size is None:
@@ -186,7 +186,7 @@ class StorageCreator(_StorageBase):
         self.fake = False
 
         if not self._vol_install and self._pool:
-            self._vol_install = _build_vol_install(conn, path, pool,
+            self._vol_install = build_vol_install(conn, path, pool,
                                                    size, sparse)
         self._set_format(fmt)
         if self._vol_install:

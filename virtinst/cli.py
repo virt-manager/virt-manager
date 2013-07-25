@@ -334,6 +334,7 @@ def build_default_pool(guest):
                                                  name=DEFAULT_POOL_NAME,
                                                  target_path=DEFAULT_POOL_PATH)
         defpool.install(build=True, create=True, autostart=True)
+        guest.conn.clear_cache()
     except Exception, e:
         raise RuntimeError(_("Couldn't create default storage pool '%s': %s") %
                              (DEFAULT_POOL_PATH, str(e)))
@@ -1405,24 +1406,22 @@ def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
             raise ValueError(_("Size must be specified with all 'pool='"))
         if pool == DEFAULT_POOL_NAME:
             build_default_pool(guest)
-        vc = virtinst.Storage.StorageVolume.get_volume_for_pool(pool_name=pool,
-                                                                conn=guest.conn)
+
+
+        poolobj = guest.conn.storagePoolLookupByName(pool)
         vname = virtinst.Storage.StorageVolume.find_free_name(conn=guest.conn,
-                                            pool_name=pool,
+                                            pool_object=poolobj,
                                             name=guest.name,
                                             suffix=".img",
                                             start_num=_disk_counter.next())
-        volinst = vc(pool_name=pool, name=vname, conn=guest.conn,
-                     allocation=0, capacity=(size and
-                                             size * 1024 * 1024 * 1024))
+
+        volinst = virtinst.VirtualDisk.build_vol_install(
+                guest.conn, vname, poolobj, size, sparse)
         if fmt:
             if not hasattr(volinst, "format"):
                 raise ValueError(_("Format attribute not supported for this "
                                    "volume type"))
             setattr(volinst, "format", fmt)
-
-        if not sparse:
-            volinst.allocation = volinst.capacity
 
     elif vol:
         if not vol.count("/"):

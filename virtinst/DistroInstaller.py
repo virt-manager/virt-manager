@@ -82,8 +82,10 @@ def _build_pool(conn, meter, path):
 
     # Explicitly don't build? since if we are creating this directory
     # we probably don't have correct perms
-    return poolbuild.install(meter=meter, create=True, build=False,
-                             autostart=True)
+    ret = poolbuild.install(meter=meter, create=True, build=False,
+                            autostart=True)
+    conn.clear_cache()
+    return ret
 
 
 def _upload_file(conn, meter, destpool, src):
@@ -108,10 +110,12 @@ def _upload_file(conn, meter, destpool, src):
     if name != basename:
         logging.debug("Generated non-colliding volume name %s", name)
 
+    vol_install = VirtualDisk.build_vol_install(conn, name, destpool,
+                    (float(size) / 1024.0 / 1024.0 / 1024.0), True)
+
     disk = VirtualDisk(conn)
     disk.path = os.path.join(poolpath, name)
-    disk.set_create_storage(size=(float(size) / 1024.0 / 1024.0 / 1024.0),
-                            sparse=True)
+    disk.set_create_storage(vol_install=vol_install)
     disk.validate()
 
     disk.setup(meter=meter)

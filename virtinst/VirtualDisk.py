@@ -385,7 +385,9 @@ class VirtualDisk(VirtualDevice):
         except Exception, e:
             raise ValueError(_("Couldn't lookup volume object: %s" % str(e)))
 
-
+    @staticmethod
+    def build_vol_install(*args, **kwargs):
+        return diskbackend.build_vol_install(*args, **kwargs)
 
 
     _XML_PROP_ORDER = [

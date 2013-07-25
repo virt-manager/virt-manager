@@ -216,6 +216,9 @@ class VirtualConnection(object):
             self._fetch_cache[key] = ret
         return ret
 
+    def clear_cache(self):
+        self._fetch_cache = {}
+
 
     #########################
     # Libvirt API overrides #
