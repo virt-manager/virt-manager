@@ -1724,7 +1724,7 @@ class vmmCreate(vmmGObjectUI):
                                                  self.conn, disk.path)
 
         self.disk = disk
-        self.guest.add_device(self.disk, set_defaults=True)
+        self.guest.add_device(self.disk)
 
         return True
 

@@ -330,7 +330,7 @@ class Guest(XMLBuilder):
                 newlist.append(i)
         return newlist
 
-    def add_device(self, dev, set_defaults=False):
+    def add_device(self, dev):
         """
         Add the passed device to the guest's device list.
 
@@ -340,15 +340,6 @@ class Guest(XMLBuilder):
         self._track_device(dev)
         self._add_child(dev)
         self._recalculate_device_xpaths()
-
-        if set_defaults:
-            origdev = self._devices
-            try:
-                self._devices = [dev]
-                self._set_device_defaults()
-            except:
-                self._devices = origdev
-
 
     def _track_device(self, dev):
         self._devices.append(dev)

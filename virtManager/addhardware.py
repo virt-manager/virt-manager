@@ -73,11 +73,12 @@ tpm_widget_mappings = {
 
 
 class vmmAddHardware(vmmGObjectUI):
-    def __init__(self, vm):
+    def __init__(self, vm, is_customize_dialog):
         vmmGObjectUI.__init__(self, "vmm-add-hardware.ui", "vmm-add-hardware")
 
         self.vm = vm
         self.conn = vm.conn
+        self.is_customize_dialog = is_customize_dialog
 
         self.storage_browser = None
 
@@ -1340,13 +1341,14 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Storage parameter error."), e)
 
         # Generate target
-        used = []
-        disks = (self.vm.get_disk_devices() +
-                 self.vm.get_disk_devices(inactive=True))
-        for d in disks:
-            used.append(d.target)
+        if not self.is_customize_dialog:
+            used = []
+            disks = (self.vm.get_disk_devices() +
+                     self.vm.get_disk_devices(inactive=True))
+            for d in disks:
+                used.append(d.target)
 
-        disk.generate_target(used)
+            disk.generate_target(used)
 
         isfatal, errmsg = disk.is_size_conflict()
         if not isfatal and errmsg:
