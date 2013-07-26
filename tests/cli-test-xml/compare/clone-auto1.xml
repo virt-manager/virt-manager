@@ -21,12 +21,12 @@
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="block" device="floppy">
       <driver type="vmdk"/>
-      <source dev="/disk-pool/diskvol1-clone"/>
+      <source dev="/dev/disk-pool/diskvol1-clone"/>
       <target dev="fda" bus="fdc"/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
     </disk>
     <disk type="block" device="disk">
-      <source dev="/disk-pool/diskvol2"/>
+      <source dev="/dev/disk-pool/diskvol2"/>
       <target dev="sda" bus="scsi"/>
       <readonly/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
@@ -38,19 +38,19 @@
     </disk>
     <disk type="block" device="disk">
       <driver type="qcow2"/>
-      <source dev="/default-pool/collidevol1.img"/>
+      <source dev="/dev/default-pool/collidevol1.img"/>
       <target dev="sdc" bus="scsi"/>
       <readonly/>
       <shareable/>
       <address type="drive" controller="0" bus="0" target="0" unit="2"/>
     </disk>
     <disk type="file" device="disk">
-      <source file="/default-pool/default-vol-clone"/>
+      <source file="/dev/default-pool/default-vol-clone"/>
       <target dev="hda" bus="ide"/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
     </disk>
     <disk type="file" device="disk">
-      <source file="/default-pool/testvol2-clone.img"/>
+      <source file="/dev/default-pool/testvol2-clone.img"/>
       <target dev="hdb" bus="ide"/>
       <address type="drive" controller="0" bus="0" target="0" unit="1"/>
     </disk>

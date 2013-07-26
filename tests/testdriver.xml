@@ -323,7 +323,7 @@
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type='file' device='disk'>
-      <source file='/default-pool/default-vol'/>
+      <source file='/dev/default-pool/default-vol'/>
       <target dev='hda' bus='ide'/>
     </disk>
     <interface type='network'>
@@ -367,7 +367,7 @@
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type='file' device='disk'>
-      <source file='/default-pool/test-clone-simple.img'/>
+      <source file='/dev/default-pool/test-clone-simple.img'/>
       <target dev='hda' bus='ide'/>
     </disk>
     <interface type='user'>
@@ -401,12 +401,12 @@
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type='block' device='floppy'>
-      <source dev='/disk-pool/diskvol1'/>
+      <source dev='/dev/disk-pool/diskvol1'/>
       <target dev='fda' bus='fdc'/>
       <driver type="vmdk"/>
     </disk>
     <disk type='block' device='disk'>
-      <source dev='/disk-pool/diskvol2'/>
+      <source dev='/dev/disk-pool/diskvol2'/>
       <target dev='sda' bus='scsi'/>
       <readonly/>
     </disk>
@@ -414,18 +414,18 @@
       <target dev='sdb' bus='scsi'/>
     </disk>
     <disk type='block' device='disk'>
-      <source dev='/default-pool/collidevol1.img'/>
+      <source dev='/dev/default-pool/collidevol1.img'/>
       <target dev='sdc' bus='scsi'/>
       <driver type="qcow2"/>
       <readonly/>
       <shareable/>
     </disk>
     <disk type='file' device='disk'>
-      <source file='/default-pool/default-vol'/>
+      <source file='/dev/default-pool/default-vol'/>
       <target dev='hda' bus='ide'/>
     </disk>
     <disk type='file' device='disk'>
-      <source file='/default-pool/testvol2.img'/>
+      <source file='/dev/default-pool/testvol2.img'/>
       <target dev='hdb' bus='ide'/>
     </disk>
     <interface type='network'>
@@ -757,7 +757,7 @@
   <source>
   </source>
   <target>
-    <path>/default-pool</path>
+    <path>/dev/default-pool</path>
     <permissions>
       <mode>0700</mode>
       <owner>10736</owner>
@@ -955,7 +955,7 @@
   <source>
   </source>
   <target>
-    <path>/cross-pool</path>
+    <path>/dev/cross-pool</path>
     <permissions>
       <mode>0700</mode>
       <owner>10736</owner>
@@ -1074,7 +1074,7 @@
   <source>
   </source>
   <target>
-    <path>/disk-pool</path>
+    <path>/dev/disk-pool</path>
     <permissions>
       <mode>0700</mode>
       <owner>10736</owner>

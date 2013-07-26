@@ -19,7 +19,7 @@
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="block" device="disk">
       <target dev="hda" bus="ide"/>
-      <source dev="/disk-pool/disk-vol1"/>
+      <source dev="/dev/disk-pool/disk-vol1"/>
     </disk>
     <disk type="file" device="floppy">
       <target dev="fdb" bus="fdc"/>

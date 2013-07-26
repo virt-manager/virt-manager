@@ -20,12 +20,12 @@
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="file" device="floppy">
       <driver name="qemu" type="qcow2"/>
-      <source file="/default-pool/testvol1.img"/>
+      <source file="/dev/default-pool/testvol1.img"/>
       <target dev="fda" bus="fdc"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="raw"/>
-      <source file="/default-pool/rhel6.img"/>
+      <source file="/dev/default-pool/rhel6.img"/>
       <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="block" device="disk">

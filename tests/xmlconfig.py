@@ -372,11 +372,11 @@ class TestXMLConfig(unittest.TestCase):
         self._compare(g, "misc-qemu-driver-type", True)
 
         g = utils.get_basic_fullyvirt_guest()
-        g.add_device(utils.get_filedisk("/default-pool/iso-vol"))
+        g.add_device(utils.get_filedisk("/dev/default-pool/iso-vol"))
         self._compare(g, "misc-qemu-iso-disk", True)
 
         g = utils.get_basic_fullyvirt_guest()
-        g.add_device(utils.get_filedisk("/default-pool/iso-vol"))
+        g.add_device(utils.get_filedisk("/dev/default-pool/iso-vol"))
         g.get_devices("disk")[0].driver_type = "qcow2"
         self._compare(g, "misc-qemu-driver-overwrite", True)
 
@@ -483,17 +483,17 @@ class TestXMLConfig(unittest.TestCase):
 
     def testInstallWindowsKVM(self):
         utils.set_conn(_plainkvm)
-        g = utils.build_win_kvm("/default-pool/winxp.img")
+        g = utils.build_win_kvm("/dev/default-pool/winxp.img")
         self._compare(g, "winxp-kvm-stage1", True)
 
     def testContinueWindowsKVM(self):
         utils.set_conn(_plainkvm)
-        g = utils.build_win_kvm("/default-pool/winxp.img")
+        g = utils.build_win_kvm("/dev/default-pool/winxp.img")
         self._compare(g, "winxp-kvm-stage2", True, True)
 
     def testBootWindowsKVM(self):
         utils.set_conn(_plainkvm)
-        g = utils.build_win_kvm("/default-pool/winxp.img")
+        g = utils.build_win_kvm("/dev/default-pool/winxp.img")
         self._compare(g, "winxp-kvm-stage3", False)
 
 
@@ -737,7 +737,7 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(d)
 
         d = VirtualDisk(g.conn)
-        d.path = "/default-pool/testvol1.img"
+        d.path = "/dev/default-pool/testvol1.img"
         d.bus = "scsi"
         d.driver_name = "qemu"
         d.address.type = "spapr-vio"
@@ -921,7 +921,7 @@ class TestXMLConfig(unittest.TestCase):
                                   location="tests/cli-test-xml/fakerhel6tree")
         g = utils.get_basic_fullyvirt_guest("kvm", installer=i)
         g.add_device(utils.get_floppy())
-        g.add_device(utils.get_filedisk("/default-pool/rhel6.img", fake=False))
+        g.add_device(utils.get_filedisk("/dev/default-pool/rhel6.img", fake=False))
         g.add_device(utils.get_blkdisk())
         g.add_device(utils.get_virtual_network())
         g.add_device(VirtualAudio(g.conn))
@@ -932,7 +932,7 @@ class TestXMLConfig(unittest.TestCase):
 
     def testFullKVMWinxp(self):
         utils.set_conn(_plainkvm)
-        g = utils.build_win_kvm("/default-pool/winxp.img", fake=False)
+        g = utils.build_win_kvm("/dev/default-pool/winxp.img", fake=False)
         self._testInstall(g, "winxp-kvm-stage1",
                           "winxp-kvm-stage3", "winxp-kvm-stage2")
 
@@ -1019,7 +1019,7 @@ class TestXMLConfig(unittest.TestCase):
     def testManyVirtio(self):
         d = VirtualDisk(utils.get_conn())
         d.bus = "virtio"
-        d.path = "/default-pool/testvol1.img"
+        d.path = "/dev/default-pool/testvol1.img"
 
         targetlist = []
         for ignore in range(0, (26 * 2) + 1):

@@ -281,7 +281,7 @@ class XMLParseTest(unittest.TestCase):
         check("error_policy", "stop", None)
 
         check = self._make_checker(disk6)
-        check("path", None, "/default-pool/default-vol")
+        check("path", None, "/dev/default-pool/default-vol")
         disk6.sync_path_props()
         check("shareable", False, True)
         check("driver_cache", None, "writeback")
@@ -760,28 +760,28 @@ class XMLParseTest(unittest.TestCase):
 
         disk = guest.get_devices("disk")[0]
         check = self._make_checker(disk)
-        check("path", None, "/default-pool/default-vol")
+        check("path", None, "/dev/default-pool/default-vol")
         disk.sync_path_props()
 
         disk = guest.get_devices("disk")[1]
         check = self._make_checker(disk)
-        check("path", None, "/default-pool/default-vol")
-        check("path", "/default-pool/default-vol", "/disk-pool/diskvol1")
+        check("path", None, "/dev/default-pool/default-vol")
+        check("path", "/dev/default-pool/default-vol", "/dev/disk-pool/diskvol1")
         disk.sync_path_props()
 
         disk = guest.get_devices("disk")[2]
         check = self._make_checker(disk)
-        check("path", None, "/disk-pool/diskvol1")
+        check("path", None, "/dev/disk-pool/diskvol1")
         disk.sync_path_props()
 
         disk = guest.get_devices("disk")[3]
         check = self._make_checker(disk)
-        check("path", None, "/default-pool/default-vol")
+        check("path", None, "/dev/default-pool/default-vol")
         disk.sync_path_props()
 
         disk = guest.get_devices("disk")[4]
         check = self._make_checker(disk)
-        check("path", None, "/disk-pool/diskvol1")
+        check("path", None, "/dev/disk-pool/diskvol1")
         disk.sync_path_props()
 
         self._alter_compare(guest.get_xml_config(), outfile)

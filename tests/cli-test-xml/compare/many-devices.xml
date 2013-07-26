@@ -26,7 +26,7 @@
     <emulator>/usr/bin/test-hv</emulator>
     <disk type="file" device="disk">
       <driver cache="writeback" io="threads"/>
-      <source file="/default-pool/UPPER"/>
+      <source file="/dev/default-pool/UPPER"/>
       <target dev="hda" bus="ide"/>
       <shareable/>
       <serial>WD-WMAP9A966149</serial>
@@ -114,7 +114,7 @@
     <emulator>/usr/bin/test-hv</emulator>
     <disk type="file" device="disk">
       <driver cache="writeback" io="threads"/>
-      <source file="/default-pool/UPPER"/>
+      <source file="/dev/default-pool/UPPER"/>
       <target dev="hda" bus="ide"/>
       <shareable/>
       <serial>WD-WMAP9A966149</serial>

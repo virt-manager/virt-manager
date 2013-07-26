@@ -224,7 +224,7 @@ def make_import_installer():
     return virtinst.ImportInstaller(_conn)
 
 
-def make_distro_installer(location="/default-pool/default-vol"):
+def make_distro_installer(location="/dev/default-pool/default-vol"):
     inst = virtinst.DistroInstaller(_conn)
     inst.location = location
     return inst
@@ -255,7 +255,7 @@ def build_win_kvm(path=None, fake=True):
 
 def get_floppy(path=None):
     if not path:
-        path = "/default-pool/testvol1.img"
+        path = "/dev/default-pool/testvol1.img"
     d = VirtualDisk(_conn)
     d.path = path
     d.device = d.DEVICE_FLOPPY

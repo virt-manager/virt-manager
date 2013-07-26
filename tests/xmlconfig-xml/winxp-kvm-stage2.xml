@@ -20,7 +20,7 @@
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="raw"/>
-      <source file="/default-pool/winxp.img"/>
+      <source file="/dev/default-pool/winxp.img"/>
       <target dev="hda" bus="ide"/>
     </disk>
     <disk type="block" device="disk">

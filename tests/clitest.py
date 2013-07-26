@@ -113,14 +113,14 @@ test_files = {
     'VOL'               : "testvol1.img",
     'DIR'               : os.getcwd(),
     'TREEDIR'           : treedir,
-    'MANAGEDEXIST1'     : "/default-pool/testvol1.img",
-    'MANAGEDEXIST2'     : "/default-pool/testvol2.img",
-    'MANAGEDEXISTUPPER' : "/default-pool/UPPER",
-    'MANAGEDNEW1'       : "/default-pool/clonevol",
-    'MANAGEDNEW2'       : "/default-pool/clonevol",
-    'MANAGEDDISKNEW1'   : "/disk-pool/newvol1.img",
-    'COLLIDE'           : "/default-pool/collidevol1.img",
-    'SHARE'             : "/default-pool/sharevol.img",
+    'MANAGEDEXIST1'     : "/dev/default-pool/testvol1.img",
+    'MANAGEDEXIST2'     : "/dev/default-pool/testvol2.img",
+    'MANAGEDEXISTUPPER' : "/dev/default-pool/UPPER",
+    'MANAGEDNEW1'       : "/dev/default-pool/clonevol",
+    'MANAGEDNEW2'       : "/dev/default-pool/clonevol",
+    'MANAGEDDISKNEW1'   : "/dev/disk-pool/newvol1.img",
+    'COLLIDE'           : "/dev/default-pool/collidevol1.img",
+    'SHARE'             : "/dev/default-pool/sharevol.img",
 
     'VIRTCONV_OUT'      : "%s/test.out" % virtconv_out,
     'VC_IMG1'           : "%s/virtimage/test1.virt-image" % vcdir,
@@ -750,7 +750,7 @@ vclon.add_valid("misc", "-o test --auto-clone")  # Auto flag, no storage
 vclon.add_valid("misc", "--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ storage,
 vclon.add_valid("misc", "--original-xml %(CLONE_STORAGE_XML)s --auto-clone")  # Auto flag w/ managed storage,
 vclon.add_valid("misc", "-o test-for-clone --auto-clone --clone-running")  # Auto flag, actual VM, skip state check
-vclon.add_valid("misc", "-o test-clone-simple -n newvm --preserve-data --file /default-pool/default-vol --clone-running --force")  # Preserve data shouldn't complain about existing volume
+vclon.add_valid("misc", "-o test-clone-simple -n newvm --preserve-data --file /dev/default-pool/default-vol --clone-running --force")  # Preserve data shouldn't complain about existing volume
 vclon.add_invalid("misc", "--auto-clone# Auto flag, actual VM, without state skip ")  # Just the auto flag
 vclon.add_invalid("misc", "-o test-for-clone --auto-clone")
 

@@ -22,7 +22,7 @@
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
-      <source file="/default-pool/iso-vol"/>
+      <source file="/dev/default-pool/iso-vol"/>
       <target dev="hda" bus="ide"/>
     </disk>
     <disk type="block" device="cdrom">

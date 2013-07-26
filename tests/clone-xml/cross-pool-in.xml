@@ -18,11 +18,11 @@
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type='file' device='disk'>
-      <source file='/default-pool/testvol1.img'/>
+      <source file='/dev/default-pool/testvol1.img'/>
       <target dev='hda' bus='ide'/>
     </disk>
     <disk type='file' device='disk'>
-      <source file='/default-pool/testvol2.img'/>
+      <source file='/dev/default-pool/testvol2.img'/>
       <target dev='hdb' bus='ide'/>
     </disk>
     <interface type='network'>

@@ -28,14 +28,14 @@ CLONE_NAME = "clone-new"
 # Create some files to use as test images
 FILE1 = "/tmp/virtinst-test1.img"
 FILE2 = "/tmp/virtinst-test2.img"
-P1_VOL1  = "/default-pool/testvol1.img"
-P1_VOL2  = "/default-pool/testvol2.img"
-P2_VOL1  = "/cross-pool/testvol1.img"
-P2_VOL2  = "/cross-pool/testvol2.img"
+P1_VOL1  = "/dev/default-pool/testvol1.img"
+P1_VOL2  = "/dev/default-pool/testvol2.img"
+P2_VOL1  = "/dev/cross-pool/testvol1.img"
+P2_VOL2  = "/dev/cross-pool/testvol2.img"
 
-POOL1 = "/default-pool"
-POOL2 = "/cross-pool"
-DISKPOOL = "/disk-pool"
+POOL1 = "/dev/default-pool"
+POOL2 = "/dev/cross-pool"
+DISKPOOL = "/dev/disk-pool"
 
 local_files = [FILE1, FILE2]
 
@@ -92,7 +92,7 @@ class TestClone(unittest.TestCase):
         cloneobj.clone_macs = ["22:23:45:67:89:00", "22:23:45:67:89:01"]
 
         if disks is None:
-            disks = ["/disk-pool/disk-vol1", "/tmp/clone2.img",
+            disks = ["/dev/disk-pool/disk-vol1", "/tmp/clone2.img",
                      "/tmp/clone3.img", "/tmp/clone4.img",
                      "/tmp/clone5.img", None]
 
@@ -179,14 +179,14 @@ class TestClone(unittest.TestCase):
     def testCloneStorageForce(self):
         base = "force"
         self._clone_helper(base,
-                           disks=["/default-pool/1234.img",
+                           disks=["/dev/default-pool/1234.img",
                                   None, "/tmp/clone2.img"],
                            force_list=["hda", "fdb", "sdb"])
 
     def testCloneStorageSkip(self):
         base = "skip"
         self._clone_helper(base,
-                           disks=["/default-pool/1234.img",
+                           disks=["/dev/default-pool/1234.img",
                                   None, "/tmp/clone2.img"],
                            skip_list=["hda", "fdb"])
 
@@ -203,9 +203,9 @@ class TestClone(unittest.TestCase):
     def testCloneManagedToUnmanaged(self):
         base = "managed-storage"
 
-        # We are trying to clone from a pool (/default-pool) to unmanaged
+        # We are trying to clone from a pool (/dev/default-pool) to unmanaged
         # storage. For this case, the cloning needs to fail back to manual
-        # operation (no libvirt calls), but since /default-pool doesn't exist,
+        # operation (no libvirt calls), but since /dev/default-pool doesn't exist,
         # this should fail.
         try:
             self._clone_helper(base, ["/tmp/new1.img", "/tmp/new2.img"],
