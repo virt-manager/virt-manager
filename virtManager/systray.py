@@ -123,7 +123,8 @@ class vmmSystray(vmmGObject):
         self.systray_menu.add(Gtk.SeparatorMenuItem())
 
         if self.systray_indicator:
-            hide_item = Gtk.MenuItem("_Show Virtual Machine Manager")
+            hide_item = Gtk.MenuItem.new_with_mnemonic(
+                    _("_Show Virtual Machine Manager"))
             hide_item.connect("activate", self.systray_activate)
             self.systray_menu.add(hide_item)
 
@@ -138,10 +139,10 @@ class vmmSystray(vmmGObject):
             return
 
         if self.systray_indicator:
-            self.systray_icon = AppIndicator3.Indicator("virt-manager",
+            self.systray_icon = AppIndicator3.Indicator.new("virt-manager",
                                 "virt-manager-icon",
-                                AppIndicator3.CATEGORY_OTHER)
-            self.systray_icon.set_status(AppIndicator3.STATUS_ACTIVE)
+                                AppIndicator3.IndicatorCategory.OTHER)
+            self.systray_icon.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
             self.systray_icon.set_menu(self.systray_menu)
 
         else:
@@ -162,9 +163,11 @@ class vmmSystray(vmmGObject):
         else:
             if self.systray_indicator:
                 if do_show:
-                    self.systray_icon.set_status(AppIndicator3.STATUS_ACTIVE)
+                    self.systray_icon.set_status(
+                            AppIndicator3.IndicatorStatus.ACTIVE)
                 else:
-                    self.systray_icon.set_status(AppIndicator3.STATUS_PASSIVE)
+                    self.systray_icon.set_status(
+                            AppIndicator3.IndicatorStatus.PASSIVE)
             else:
                 self.systray_icon.set_visible(do_show)
 
