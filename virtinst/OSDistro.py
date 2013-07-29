@@ -509,7 +509,7 @@ class FedoraDistro(RedHatDistro):
             if ret:
                 lateststr, latestnum = self._latestFedoraVariant()
                 ver = self.treeinfo.get("general", "version")
-                if ver == "development":
+                if ver == "development" or ver == "rawhide":
                     self.os_variant = self._latestFedoraVariant()
                 elif ver:
                     vernum = int(str(ver).split("-")[0])
