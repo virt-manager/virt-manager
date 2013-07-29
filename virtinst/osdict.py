@@ -743,6 +743,13 @@ OS_TYPES = {
             NET : {"model" : [(HV_ALL, "e1000")]}
        },
    },
+    "freebsd9": {
+        "label": "FreeBSD 9.x" ,
+        "supported": True,
+        "devices" : {
+            NET : {"model" : [(HV_ALL, "e1000")]}
+       },
+   },
 
     "openbsd4": {
         "label": "OpenBSD 4.x" ,
