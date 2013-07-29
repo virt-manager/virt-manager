@@ -750,6 +750,14 @@ OS_TYPES = {
             NET : {"model" : [(HV_ALL, "e1000")]}
        },
    },
+    "freebsd10": {
+        "label": "FreeBSD 10.x" ,
+        "supported": False,
+        "devices" : {
+            DISK : VIRTIO_DISK,
+            NET  : VIRTIO_NET,
+       },
+   },
 
     "openbsd4": {
         "label": "OpenBSD 4.x" ,
