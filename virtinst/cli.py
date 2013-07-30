@@ -919,10 +919,10 @@ def get_memballoon(guest, sc_opts):
         if dev:
             guest.add_device(dev)
 
+
 #############################
 # Common CLI option/group   #
 #############################
-
 
 def add_connect_option(parser):
     parser.add_option("", "--connect", metavar="URI", dest="connect",
@@ -1043,11 +1043,11 @@ def add_fs_option(devg):
                "--filesystem /my/source/dir,/dir/in/guest\n"
                "--filesystem template_name,/,type=template"))
 
+
 #############################################
 # CLI complex parsing helpers               #
 # (for options like --disk, --network, etc. #
 #############################################
-
 
 def get_opt_param(opts, dictnames, val=None):
     if type(dictnames) is not list:
@@ -1142,10 +1142,6 @@ def parse_optstr(optstr, basedict=None, remove_first=None,
 
 
 
-#######################
-# Guest param parsing #
-#######################
-
 ######################
 # --numatune parsing #
 ######################
@@ -1167,10 +1163,10 @@ def parse_numatune(guest, optstring):
     if opts:
         raise ValueError(_("Unknown options %s") % opts.keys())
 
+
 ##################
 # --vcpu parsing #
 ##################
-
 
 def parse_vcpu(guest, optstring, default_vcpus=None):
     """
@@ -1206,10 +1202,10 @@ def parse_vcpu(guest, optstring, default_vcpus=None):
     if opts:
         raise ValueError(_("Unknown options %s") % opts.keys())
 
+
 #################
 # --cpu parsing #
 #################
-
 
 def parse_cpu(guest, optstring):
     default_dict = {
@@ -1261,10 +1257,10 @@ def parse_cpu(guest, optstring):
     if opts:
         raise ValueError(_("Unknown options %s") % opts.keys())
 
+
 ##################
 # --boot parsing #
 ##################
-
 
 def parse_boot(guest, optstring):
     """
@@ -1318,10 +1314,10 @@ def parse_boot(guest, optstring):
     if opts:
         raise ValueError(_("Unknown options %s") % opts.keys())
 
+
 ######################
 # --security parsing #
 ######################
-
 
 def parse_security(guest, security):
     seclist = listify(security)
