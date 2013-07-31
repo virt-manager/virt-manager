@@ -889,7 +889,7 @@ class vmmDomain(vmmLibvirtObject):
         self.attach_device(devobj)
 
     def hotplug_graphics_password(self, devobj, newval):
-        devobj.passwd = newval or None
+        devobj.passwd = newval
         self.update_device(devobj)
 
     def hotplug_description(self, desc):

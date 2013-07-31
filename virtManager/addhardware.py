@@ -97,6 +97,7 @@ class vmmAddHardware(vmmGObjectUI):
             "on_graphics_type_changed": self.change_graphics_type,
             "on_graphics_port_auto_toggled": self.change_port_auto,
             "on_graphics_keymap_toggled": self.change_keymap,
+            "on_graphics_use_password": self.change_password_chk,
 
             "on_char_device_type_changed": self.change_char_device_type,
 
@@ -471,6 +472,8 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("graphics-address").set_active(False)
         self.widget("graphics-port-auto").set_active(True)
         self.widget("graphics-password").set_text("")
+        self.widget("graphics-password").set_sensitive(False)
+        self.widget("graphics-password-chk").set_active(False)
         self.widget("graphics-keymap").set_text("")
         self.widget("graphics-keymap-chk").set_active(True)
 
@@ -676,8 +679,9 @@ class vmmAddHardware(vmmGObjectUI):
         return "127.0.0.1"
 
     def get_config_graphics_password(self):
-        pw = self.widget("graphics-password")
-        return pw.get_text()
+        if not self.widget("graphics-password-chk").get_active():
+            return None
+        return self.widget("graphics-password").get_text()
 
     def get_config_keymap(self):
         g = self.widget("graphics-keymap")
@@ -953,7 +957,12 @@ class vmmAddHardware(vmmGObjectUI):
         if graphics in ["vnc", "spice"]:
             self.widget("graphics-port-auto").set_sensitive(True)
             self.widget("graphics-address").set_sensitive(True)
-            self.widget("graphics-password").set_sensitive(True)
+            # Skip this code if the checkbox value is not changed.  In this way
+            # the password field maintains its value.
+            if not self.widget("graphics-password-chk").get_sensitive():
+                self.widget("graphics-password").set_sensitive(False)
+                self.widget("graphics-password-chk").set_sensitive(True)
+                self.widget("graphics-password-chk").set_active(False)
             self.widget("graphics-keymap-chk").set_sensitive(True)
             self.change_port_auto()
         else:
@@ -962,6 +971,8 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("graphics-port-auto").set_sensitive(False)
             self.widget("graphics-address").set_sensitive(False)
             self.widget("graphics-password").set_sensitive(False)
+            self.widget("graphics-password-chk").set_sensitive(False)
+            self.widget("graphics-password-chk").set_active(False)
             self.widget("graphics-keymap-chk").set_sensitive(False)
             self.widget("graphics-keymap").set_sensitive(False)
 
@@ -980,6 +991,13 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("graphics-keymap").set_sensitive(False)
         else:
             self.widget("graphics-keymap").set_sensitive(True)
+
+    def change_password_chk(self, ignore=None):
+        if self.widget("graphics-password-chk").get_active():
+            self.widget("graphics-password").set_sensitive(True)
+        else:
+            self.widget("graphics-password").set_text("")
+            self.widget("graphics-password").set_sensitive(False)
 
     # Char device listeners
     def get_char_type(self):
@@ -1428,7 +1446,7 @@ class vmmAddHardware(vmmGObjectUI):
             self._dev.type = gtype
             if gtype != "sdl":
                 self._dev.port = self.get_config_graphics_port()
-                self._dev.passwd = self.get_config_graphics_password() or None
+                self._dev.passwd = self.get_config_graphics_password()
                 self._dev.listen = self.get_config_graphics_address()
                 self._dev.keymap = self.get_config_keymap()
             if gtype == "spice":

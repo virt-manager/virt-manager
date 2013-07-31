@@ -43,7 +43,7 @@ import virtinst
 
 
 # Parameters that can be editted in the details window
-EDIT_TOTAL = 38
+EDIT_TOTAL = 39
 (EDIT_NAME,
 EDIT_ACPI,
 EDIT_APIC,
@@ -83,6 +83,7 @@ EDIT_NET_VPORT,
 EDIT_NET_SOURCE,
 
 EDIT_GFX_PASSWD,
+EDIT_GFX_USE_PASSWD,
 EDIT_GFX_TYPE,
 EDIT_GFX_KEYMAP,
 
@@ -488,6 +489,8 @@ class vmmDetails(vmmGObjectUI):
             "on_gfx_type_combo_changed": lambda *x: self.enable_apply(x, EDIT_GFX_TYPE),
             "on_vnc_keymap_combo_changed": lambda *x: self.enable_apply(x,
                                             EDIT_GFX_KEYMAP),
+
+            "on_vnc_use_password_toggled": lambda *x: self.control_gfx_use_passwd(x),
             "on_vnc_password_changed": lambda *x: self.enable_apply(x, EDIT_GFX_PASSWD),
 
             "on_sound_model_combo_changed": lambda *x: self.enable_apply(x,
@@ -1564,6 +1567,14 @@ class vmmDetails(vmmGObjectUI):
                        self.vm.has_spicevmc_type_redirdev())
         self.widget("details-menu-usb-redirection").set_sensitive(can_usb)
 
+    def control_gfx_use_passwd(self, x):
+        passwd_widget = self.widget("gfx-password")
+        sensitive = self.widget("gfx-use-password").get_active()
+        if not sensitive:
+            passwd_widget.set_text("")
+        passwd_widget.set_sensitive(sensitive)
+        self.enable_apply(x, EDIT_GFX_USE_PASSWD)
+
     def control_vm_run(self, src_ignore):
         self.emit("action-run-domain",
                   self.vm.conn.get_uri(), self.vm.get_uuid())
@@ -2445,8 +2456,12 @@ class vmmDetails(vmmGObjectUI):
     def config_graphics_apply(self, dev_id_info):
         df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
 
-        if self.editted(EDIT_GFX_PASSWD):
-            passwd = self.get_text("gfx-password", strip=False) or None
+        if self.editted(EDIT_GFX_PASSWD) or self.editted(EDIT_GFX_USE_PASSWD):
+            use_passwd = self.widget("gfx-use-password").get_active()
+            if use_passwd:
+                passwd = self.get_text("gfx-password", strip=False) or ""
+            else:
+                passwd = None
             add_define(self.vm.define_graphics_password, dev_id_info, passwd)
             add_hotplug(self.vm.hotplug_graphics_password, dev_id_info,
                         passwd)
@@ -3124,9 +3139,20 @@ class vmmDetails(vmmGObjectUI):
             self.widget(base + "-title").show()
             self.widget(base + suffix).show()
 
+        def show_box(widget_name):
+            self.widget("gfx-%s-box" % widget_name).show()
+
+        def show_checkbox(widget_name, value):
+            widget = self.widget("gfx-" + widget_name)
+            widget.show()
+            widget.set_active(value)
+
         def show_text(widget_name, text):
             show_row(widget_name)
             self.widget("gfx-" + widget_name).set_text(text)
+
+        def enable_widget(widget_name, value):
+            self.widget("gfx-" + widget_name).set_sensitive(value)
 
         def port_to_string(port):
             if port is None:
@@ -3147,9 +3173,13 @@ class vmmDetails(vmmGObjectUI):
             port  = port_to_string(gfx.port)
             address = (gfx.listen or "127.0.0.1")
             keymap  = (gfx.keymap or None)
-            passwd  = gfx.passwd or ""
+            use_passwd = gfx.passwd is not None
+            passwd = gfx.passwd or ""
 
+            show_box("password")
             show_text("password", passwd)
+            show_checkbox("use-password", use_passwd)
+            enable_widget("password", use_passwd)
             show_text("port", port)
             show_text("address", address)
 
