@@ -39,6 +39,25 @@ OPTICAL_DEV_KEY = 3
 OPTICAL_MEDIA_KEY = 4
 OPTICAL_IS_VALID = 5
 
+try:
+    import gi
+    gi.check_version("3.7.4")
+    can_set_row_none = True
+except (ValueError, AttributeError):
+    can_set_row_none = False
+
+vm_status_icons = {
+    libvirt.VIR_DOMAIN_BLOCKED: "state_running",
+    libvirt.VIR_DOMAIN_CRASHED: "state_shutoff",
+    libvirt.VIR_DOMAIN_PAUSED: "state_paused",
+    libvirt.VIR_DOMAIN_RUNNING: "state_running",
+    libvirt.VIR_DOMAIN_SHUTDOWN: "state_shutoff",
+    libvirt.VIR_DOMAIN_SHUTOFF: "state_shutoff",
+    libvirt.VIR_DOMAIN_NOSTATE: "state_running",
+    # VIR_DOMAIN_PMSUSPENDED
+    7: "state_paused",
+}
+
 
 ############################################################
 # Helpers for shared storage UI between create/addhardware #

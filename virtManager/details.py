@@ -35,6 +35,7 @@ from virtManager.baseclass import vmmGObjectUI
 from virtManager.addhardware import vmmAddHardware
 from virtManager.choosecd import vmmChooseCD
 from virtManager.console import vmmConsolePages
+from virtManager.snapshots import vmmSnapshotPage
 from virtManager.serialcon import vmmSerialConsole
 from virtManager.graphwidgets import Sparkline
 
@@ -42,8 +43,7 @@ import virtinst
 from virtinst import util
 
 
-# Parameters that can be edited in the details window
-EDIT_TOTAL = 39
+# Parameters that can be editted in the details window
 (EDIT_NAME,
 EDIT_ACPI,
 EDIT_APIC,
@@ -95,36 +95,36 @@ EDIT_WATCHDOG_ACTION,
 EDIT_CONTROLLER_MODEL,
 
 EDIT_TPM_TYPE,
-) = range(EDIT_TOTAL)
+) = range(1, 40)
 
 
 # Columns in hw list model
-HW_LIST_COL_LABEL = 0
-HW_LIST_COL_ICON_NAME = 1
-HW_LIST_COL_ICON_SIZE = 2
-HW_LIST_COL_TYPE = 3
-HW_LIST_COL_DEVICE = 4
+(HW_LIST_COL_LABEL,
+ HW_LIST_COL_ICON_NAME,
+ HW_LIST_COL_ICON_SIZE,
+ HW_LIST_COL_TYPE,
+ HW_LIST_COL_DEVICE) = range(5)
 
 # Types for the hw list model: numbers specify what order they will be listed
-HW_LIST_TYPE_GENERAL = 0
-HW_LIST_TYPE_STATS = 1
-HW_LIST_TYPE_CPU = 2
-HW_LIST_TYPE_MEMORY = 3
-HW_LIST_TYPE_BOOT = 4
-HW_LIST_TYPE_DISK = 5
-HW_LIST_TYPE_NIC = 6
-HW_LIST_TYPE_INPUT = 7
-HW_LIST_TYPE_GRAPHICS = 8
-HW_LIST_TYPE_SOUND = 9
-HW_LIST_TYPE_CHAR = 10
-HW_LIST_TYPE_HOSTDEV = 11
-HW_LIST_TYPE_VIDEO = 12
-HW_LIST_TYPE_WATCHDOG = 13
-HW_LIST_TYPE_CONTROLLER = 14
-HW_LIST_TYPE_FILESYSTEM = 15
-HW_LIST_TYPE_SMARTCARD = 16
-HW_LIST_TYPE_REDIRDEV = 17
-HW_LIST_TYPE_TPM = 18
+(HW_LIST_TYPE_GENERAL,
+ HW_LIST_TYPE_STATS,
+ HW_LIST_TYPE_CPU,
+ HW_LIST_TYPE_MEMORY,
+ HW_LIST_TYPE_BOOT,
+ HW_LIST_TYPE_DISK,
+ HW_LIST_TYPE_NIC,
+ HW_LIST_TYPE_INPUT,
+ HW_LIST_TYPE_GRAPHICS,
+ HW_LIST_TYPE_SOUND,
+ HW_LIST_TYPE_CHAR,
+ HW_LIST_TYPE_HOSTDEV,
+ HW_LIST_TYPE_VIDEO,
+ HW_LIST_TYPE_WATCHDOG,
+ HW_LIST_TYPE_CONTROLLER,
+ HW_LIST_TYPE_FILESYSTEM,
+ HW_LIST_TYPE_SMARTCARD,
+ HW_LIST_TYPE_REDIRDEV,
+ HW_LIST_TYPE_TPM) = range(19)
 
 remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                 HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
@@ -134,15 +134,16 @@ remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                 HW_LIST_TYPE_REDIRDEV, HW_LIST_TYPE_TPM]
 
 # Boot device columns
-BOOT_DEV_TYPE = 0
-BOOT_LABEL = 1
-BOOT_ICON = 2
-BOOT_ACTIVE = 3
+(BOOT_DEV_TYPE,
+ BOOT_LABEL,
+ BOOT_ICON,
+ BOOT_ACTIVE) = range(4)
 
 # Main tab pages
-PAGE_CONSOLE = 0
-PAGE_DETAILS = 1
-PAGE_DYNAMIC_OFFSET = 2
+(PAGE_CONSOLE,
+ PAGE_DETAILS,
+ PAGE_SNAPSHOTS,
+ PAGE_DYNAMIC_OFFSET) = range(4)
 
 
 def prettyify_disk_bus(bus):
@@ -374,6 +375,8 @@ class vmmDetails(vmmGObjectUI):
         self._cpu_copy_host = False
 
         self.console = vmmConsolePages(self.vm, self.builder, self.topwin)
+        self.snapshots = vmmSnapshotPage(self.vm, self.builder, self.topwin)
+        self.widget("snapshot-placeholder").add(self.snapshots.top_box)
 
         # Set default window size
         w, h = self.vm.get_details_window_size()
@@ -400,6 +403,7 @@ class vmmDetails(vmmGObjectUI):
 
             "on_control_vm_details_toggled": self.details_console_changed,
             "on_control_vm_console_toggled": self.details_console_changed,
+            "on_control_snapshots_toggled": self.details_console_changed,
             "on_control_run_clicked": self.control_vm_run,
             "on_control_shutdown_clicked": self.control_vm_shutdown,
             "on_control_pause_toggled": self.control_vm_pause,
@@ -425,6 +429,7 @@ class vmmDetails(vmmGObjectUI):
             "on_details_menu_view_manager_activate": self.view_manager,
             "on_details_menu_view_details_toggled": self.details_console_changed,
             "on_details_menu_view_console_toggled": self.details_console_changed,
+            "on_details_menu_view_snapshots_toggled": self.details_console_changed,
 
             "on_details_pages_switch_page": self.switch_page,
 
@@ -576,6 +581,8 @@ class vmmDetails(vmmGObjectUI):
 
         self.console.cleanup()
         self.console = None
+        self.snapshots.cleanup()
+        self.snapshots = None
 
         self.vm = None
         self.conn = None
@@ -1369,10 +1376,10 @@ class vmmDetails(vmmGObjectUI):
         if not src.get_active():
             return
 
-        is_details = False
-        if (src == self.widget("control-vm-details") or
-            src == self.widget("details-menu-view-details")):
-            is_details = True
+        is_details = (src == self.widget("control-vm-details") or
+                      src == self.widget("details-menu-view-details"))
+        is_snapshot = (src == self.widget("control-snapshots") or
+                       src == self.widget("details-menu-view-snapshots"))
 
         pages = self.widget("details-pages")
         if pages.get_current_page() == PAGE_DETAILS:
@@ -1383,29 +1390,40 @@ class vmmDetails(vmmGObjectUI):
 
         if is_details:
             pages.set_current_page(PAGE_DETAILS)
+        elif is_snapshot:
+            self.snapshots.show_page()
+            pages.set_current_page(PAGE_SNAPSHOTS)
         else:
             pages.set_current_page(self.last_console_page)
 
-    def sync_details_console_view(self, is_details):
+    def sync_details_console_view(self, newpage):
         details = self.widget("control-vm-details")
         details_menu = self.widget("details-menu-view-details")
         console = self.widget("control-vm-console")
         console_menu = self.widget("details-menu-view-console")
+        snapshot = self.widget("control-snapshots")
+        snapshot_menu = self.widget("details-menu-view-snapshots")
+
+        is_details = newpage == PAGE_DETAILS
+        is_snapshot = newpage == PAGE_SNAPSHOTS
+        is_console = not is_details and not is_snapshot
 
         try:
             self.ignoreDetails = True
 
             details.set_active(is_details)
             details_menu.set_active(is_details)
-            console.set_active(not is_details)
-            console_menu.set_active(not is_details)
+            snapshot.set_active(is_snapshot)
+            snapshot_menu.set_active(is_snapshot)
+            console.set_active(is_console)
+            console_menu.set_active(is_console)
         finally:
             self.ignoreDetails = False
 
     def switch_page(self, ignore1=None, ignore2=None, newpage=None):
         self.page_refresh(newpage)
 
-        self.sync_details_console_view(newpage == PAGE_DETAILS)
+        self.sync_details_console_view(newpage)
         self.console.set_allow_fullscreen()
 
         if newpage == PAGE_CONSOLE or newpage >= PAGE_DYNAMIC_OFFSET:
@@ -1467,8 +1485,7 @@ class vmmDetails(vmmGObjectUI):
         if not run:
             self.activate_default_console_page()
 
-        self.widget("overview-status-text").set_text(
-                                                    self.vm.run_status())
+        self.widget("overview-status-text").set_text(self.vm.run_status())
         self.widget("overview-status-icon").set_from_icon_name(
                             self.vm.run_status_icon_name(), Gtk.IconSize.MENU)
 
@@ -1506,6 +1523,9 @@ class vmmDetails(vmmGObjectUI):
 
             self._show_serial_tab(name, serialidx)
             break
+
+
+    # activate_* are called from engine.py via CLI options
 
     def activate_default_page(self):
         pages = self.widget("details-pages")
@@ -2166,7 +2186,8 @@ class vmmDetails(vmmGObjectUI):
             if self.widget("security-type-box").get_sensitive():
                 semodel = self.get_text("security-model")
 
-            add_define(self.vm.define_seclabel, semodel, setype, selabel, relabel)
+            add_define(self.vm.define_seclabel,
+                       semodel, setype, selabel, relabel)
 
         if self.edited(EDIT_DESC):
             desc_widget = self.widget("overview-description")

@@ -189,8 +189,11 @@ class vmmGObjectUI(vmmGObject):
             self.builder.set_translation_domain("virt-manager")
             self.builder.add_from_string(file(uifile).read())
 
-            self.topwin = self.widget(windowname)
-            self.topwin.hide()
+            if not topwin:
+                self.topwin = self.widget(windowname)
+                self.topwin.hide()
+            else:
+                self.topwin = topwin
         else:
             self.builder = builder
             self.topwin = topwin

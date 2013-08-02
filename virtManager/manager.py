@@ -62,14 +62,6 @@ COL_DISK = 3
 COL_NETWORK = 4
 
 
-try:
-    import gi
-    gi.check_version("3.7.4")
-    can_set_row_none = True
-except (ValueError, AttributeError):
-    can_set_row_none = False
-
-
 def _style_get_prop(widget, propname):
     value = GObject.Value()
     value.init(GObject.TYPE_INT)
@@ -903,7 +895,7 @@ class vmmManager(vmmGObjectUI):
 
             if config_changed:
                 desc = vm.get_description()
-                if not can_set_row_none:
+                if not uihelpers.can_set_row_none:
                     desc = desc or ""
                     row[ROW_HINT] = util.xml_escape(desc)
         except libvirt.libvirtError, e:
@@ -922,7 +914,7 @@ class vmmManager(vmmGObjectUI):
 
         row = self.rows[self.vm_row_key(vm)]
         new_icon = self.get_inspection_icon_pixbuf(vm, 16, 16)
-        if not can_set_row_none:
+        if not uihelpers.can_set_row_none:
             new_icon = new_icon or ""
         row[ROW_INSPECTION_OS_ICON] = new_icon
         model.row_changed(row.path, row.iter)

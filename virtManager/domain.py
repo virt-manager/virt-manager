@@ -139,6 +139,34 @@ class vmmInspectionData(object):
         self.applications = None
 
 
+class vmmDomainSnapshot(vmmLibvirtObject):
+    """
+    Class wrapping a virDomainSnapshot object
+    """
+    def __init__(self, conn, backend):
+        vmmLibvirtObject.__init__(self, conn, backend, backend.getName())
+
+        self._xmlbackend = None
+        self.refresh_xml()
+
+    def get_name(self):
+        return self.xml.name
+    def _XMLDesc(self, flags):
+        rawxml = self._backend.getXMLDesc(flags=flags)
+        self._xmlbackend = virtinst.DomainSnapshot(self.conn.get_backend(),
+                                                   rawxml)
+        return self._xmlbackend.get_xml_config()
+
+    def _get_xml_backend(self):
+        return self._xmlbackend
+    xml = property(_get_xml_backend)
+
+    def is_current(self):
+        return self._backend.isCurrent()
+    def delete(self):
+        self._backend.delete()
+
+
 class vmmDomain(vmmLibvirtObject):
     """
     Class wrapping virDomain libvirt objects. Is also extended to be
@@ -172,6 +200,7 @@ class vmmDomain(vmmLibvirtObject):
         self._is_management_domain = None
         self._id = None
         self._name = None
+        self._snapshot_list = None
 
         self._inactive_xml_flags = 0
         self._active_xml_flags = 0
@@ -182,6 +211,7 @@ class vmmDomain(vmmLibvirtObject):
         self._getjobinfo_supported = None
         self.managedsave_supported = False
         self.remote_console_supported = False
+        self.snapshots_supported = False
 
         self._guest = None
         self._guest_to_define = None
@@ -200,6 +230,11 @@ class vmmDomain(vmmLibvirtObject):
             return
 
         self._libvirt_init()
+
+    def _cleanup(self):
+        for snap in self._snapshot_list or []:
+            snap.cleanup()
+        self._snapshot_list = None
 
     def _get_getvcpus_supported(self):
         if self._getvcpus_supported is None:
@@ -232,6 +267,9 @@ class vmmDomain(vmmLibvirtObject):
         self.remote_console_supported = self.conn.check_domain_support(
                                     self._backend,
                                     self.conn.SUPPORT_DOMAIN_CONSOLE_STREAM)
+        self.snapshots_supported = self.conn.check_domain_support(
+                                    self._backend,
+                                    self.conn.SUPPORT_DOMAIN_LIST_SNAPSHOTS)
 
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
@@ -281,6 +319,7 @@ class vmmDomain(vmmLibvirtObject):
                 if count > 1 and not (bus and device):
                     prettyname = "%s %s" % (vendor, product)
                     ret.append(error % prettyname)
+
 
     ###########################
     # Misc API getter methods #
@@ -338,6 +377,7 @@ class vmmDomain(vmmLibvirtObject):
         if i < 0:
             return "-"
         return str(i)
+
 
     #############################
     # Internal XML handling API #
@@ -448,7 +488,6 @@ class vmmDomain(vmmLibvirtObject):
         self.emit("config-changed")
 
     # Device Add/Remove
-
     def add_device(self, devobj):
         """
         Redefine guest with appended device XML 'devxml'
@@ -947,6 +986,30 @@ class vmmDomain(vmmLibvirtObject):
 
     def open_console(self, devname, stream, flags=0):
         return self._backend.openConsole(devname, stream, flags)
+
+    def refresh_snapshots(self):
+        self._snapshot_list = None
+
+    def list_snapshots(self):
+        if self._snapshot_list is None:
+            newlist = []
+            for rawsnap in self._backend.listAllSnapshots():
+                newlist.append(vmmDomainSnapshot(self.conn, rawsnap))
+            self._snapshot_list = newlist
+        return self._snapshot_list[:]
+
+    def revert_to_snapshot(self, snap):
+        self._backend.revertToSnapshot(snap.get_backend())
+        self.idle_add(self.force_update_status)
+
+    def create_snapshot(self, xml, redefine=False):
+        flags = 0
+        if redefine:
+            flags = (flags | libvirt.VIR_DOMAIN_SNAPSHOT_CREATE_REDEFINE)
+
+        logging.debug("Creating snapshot flags=%s xml=\n%s", flags, xml)
+        self._backend.snapshotCreateXML(xml, flags)
+
 
     ########################
     # XML Parsing routines #
@@ -1539,24 +1602,12 @@ class vmmDomain(vmmLibvirtObject):
         return self.status() in [libvirt.VIR_DOMAIN_PAUSED]
 
     def run_status_icon_name(self):
-        status_icons = {
-            libvirt.VIR_DOMAIN_BLOCKED: "state_running",
-            libvirt.VIR_DOMAIN_CRASHED: "state_shutoff",
-            libvirt.VIR_DOMAIN_PAUSED: "state_paused",
-            libvirt.VIR_DOMAIN_RUNNING: "state_running",
-            libvirt.VIR_DOMAIN_SHUTDOWN: "state_shutoff",
-            libvirt.VIR_DOMAIN_SHUTOFF: "state_shutoff",
-            libvirt.VIR_DOMAIN_NOSTATE: "state_running",
-            # VIR_DOMAIN_PMSUSPENDED
-            7: "state_paused",
-        }
-
         status = self.status()
-        if status not in status_icons:
+        if status not in uihelpers.vm_status_icons:
             logging.debug("Unknown status %d, using NOSTATE")
             status = libvirt.VIR_DOMAIN_NOSTATE
 
-        return status_icons[status]
+        return uihelpers.vm_status_icons[status]
 
     def force_update_status(self):
         """
