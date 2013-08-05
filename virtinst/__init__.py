@@ -61,5 +61,6 @@ from virtinst.distroinstaller import DistroInstaller
 
 from virtinst.guest import Guest
 from virtinst.cloner import Cloner
+from virtinst.snapshot import DomainSnapshot
 
 from virtinst.connection import VirtualConnection

@@ -1,0 +1,37 @@
+<domainsnapshot>
+  <name>offline-root-child1</name>
+  <state>shutoff</state>
+  <description>offline desk</description>
+  <parent>
+    <name>offline-root</name>
+  </parent>
+  <creationTime>1375905916</creationTime>
+  <memory snapshot='no'/>
+  <disks>
+    <disk name='hda' snapshot='internal'/>
+  </disks>
+  <domain type='test'>
+    <name>test-internal-snapshots</name>
+    <uuid>12345678-1234-fddf-1234-12345678ffff</uuid>
+    <memory unit='KiB'>409600</memory>
+    <currentMemory unit='KiB'>409600</currentMemory>
+    <vcpu placement='static'>1</vcpu>
+    <bootloader>/tmp/bootfoo</bootloader>
+    <os>
+      <type arch='i686'>xen</type>
+    </os>
+    <clock offset='utc'/>
+    <on_poweroff>destroy</on_poweroff>
+    <on_reboot>restart</on_reboot>
+    <on_crash>destroy</on_crash>
+    <devices>
+      <disk type='file' device='disk'>
+        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <target dev='hda' bus='ide'/>
+        <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+      </disk>
+      <controller type='ide' index='0'/>
+    </devices>
+  </domain>
+  <active>0</active>
+</domainsnapshot>

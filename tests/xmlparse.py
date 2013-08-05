@@ -787,6 +787,20 @@ class XMLParseTest(unittest.TestCase):
 
         self._alter_compare(guest.get_xml_config(), outfile)
 
+    def testChangeSnapshot(self):
+        basename = "change-snapshot"
+        infile = "tests/xmlparse-xml/%s-in.xml" % basename
+        outfile = "tests/xmlparse-xml/%s-out.xml" % basename
+        snap = virtinst.DomainSnapshot(conn, parsexml=file(infile).read())
+
+        check = self._make_checker(snap)
+        check("name", "offline-root-child1", "name-foo")
+        check("state", "shutoff", "somestate")
+        check("description", "offline desk", "foo\nnewline\n   indent")
+        check("parent", "offline-root", "newparent")
+        check("creationTime", 1375905916, 1234)
+
+        utils.diff_compare(snap.get_xml_config(), outfile)
 
     def testzzzzCheckProps(self):
         # pylint: disable=W0212
