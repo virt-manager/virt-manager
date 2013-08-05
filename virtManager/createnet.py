@@ -117,12 +117,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         fw_list.pack_start(text, True)
         fw_list.add_attribute(text, 'text', 0)
 
-        fw_model.append([_("Any physical device"), None])
-        for path in self.conn.list_net_device_paths():
-            net = self.conn.get_net_device(path)
-            fw_model.append([_("Physical device %s") % (net.get_name()),
-                             net.get_name()])
-
         mode_list = self.widget("net-forward-mode")
         # [ label, mode ]
         mode_model = Gtk.ListStore(str, str)
@@ -159,6 +153,14 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.widget("net-dhcpv6-start").set_text("")
         self.widget("net-dhcpv6-end").set_text("")
         self.widget("net-forward-none").set_active(True)
+
+        fw_model = self.widget("net-forward").get_model()
+        fw_model.clear()
+        fw_model.append([_("Any physical device"), None])
+        for path in self.conn.list_net_device_paths():
+            net = self.conn.get_net_device(path)
+            fw_model.append([_("Physical device %s") % (net.get_name()),
+                             net.get_name()])
 
         self.widget("net-forward").set_active(0)
         self.widget("net-forward-mode").set_active(0)
