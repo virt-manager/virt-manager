@@ -15,7 +15,6 @@
 # MA 02110-1301 USA.
 
 import atexit
-import imp
 import logging
 import os
 import shlex
@@ -28,6 +27,7 @@ import StringIO
 
 import virtinst.cli
 
+from tests import virtinstall, virtimage, virtclone, virtconvert
 from tests import utils
 
 os.environ["VIRTCONV_TEST_NO_DISK_CONVERSION"] = "1"
@@ -128,26 +128,6 @@ test_files = {
     'VMX_IMG1'          : "%s/vmx/test1.vmx" % vcdir,
 }
 
-
-_cleanup_imports = []
-
-
-def _import(name, path):
-    _cleanup_imports.append(path + "c")
-    return imp.load_source(name, path)
-
-
-def _cleanup_imports_cb():
-    for f in _cleanup_imports:
-        if os.path.exists(f):
-            os.unlink(f)
-
-
-atexit.register(_cleanup_imports_cb)
-virtinstall = _import("virtinstall", "virt-install")
-virtimage = _import("virtimage", "virt-image")
-virtclone = _import("virtclone", "virt-clone")
-virtconvert = _import("virtconvert", "virt-convert")
 
 
 ######################

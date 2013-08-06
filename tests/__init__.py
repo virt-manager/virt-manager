@@ -14,6 +14,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
+import atexit
+import imp
 import logging
 import os
 
@@ -46,3 +48,22 @@ if utils.get_debug():
     rootLogger.setLevel(logging.DEBUG)
 else:
     rootLogger.setLevel(logging.ERROR)
+
+_cleanup_imports = []
+
+
+def _import(name, path):
+    _cleanup_imports.append(path + "c")
+    return imp.load_source(name, path)
+
+
+def _cleanup_imports_cb():
+    for f in _cleanup_imports:
+        if os.path.exists(f):
+            os.unlink(f)
+
+atexit.register(_cleanup_imports_cb)
+virtinstall = _import("virtinstall", "virt-install")
+virtimage = _import("virtimage", "virt-image")
+virtclone = _import("virtclone", "virt-clone")
+virtconvert = _import("virtconvert", "virt-convert")
