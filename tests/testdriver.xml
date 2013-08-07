@@ -545,6 +545,246 @@ test-many-devices, like an alternate RNG.
   </devices>
 </domain>
 
+<domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
+  <name>test-state-shutoff</name>
+  <memory>1048576</memory>
+  <bootloader>/tmp/bootfoo</bootloader>
+  <test:runstate>5</test:runstate>
+</domain>
+<domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
+  <name>test-state-paused</name>
+  <memory>1048576</memory>
+  <bootloader>/tmp/bootfoo</bootloader>
+  <test:runstate>3</test:runstate>
+</domain>
+<domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
+  <name>test-state-crashed</name>
+  <memory>1048576</memory>
+  <bootloader>/tmp/bootfoo</bootloader>
+  <test:runstate>6</test:runstate>
+</domain>
+<domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
+  <name>test-state-pmsuspended</name>
+  <memory>1048576</memory>
+  <bootloader>/tmp/bootfoo</bootloader>
+  <test:runstate>7</test:runstate>
+</domain>
+<domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
+  <name>test-state-transient</name>
+  <memory>1048576</memory>
+  <bootloader>/tmp/bootfoo</bootloader>
+  <test:transient/>
+</domain>
+<domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
+  <name>test-state-managedsave</name>
+  <memory>1048576</memory>
+  <bootloader>/tmp/bootfoo</bootloader>
+  <test:runstate>5</test:runstate>
+  <test:hasmanagedsave/>
+</domain>
+
+
+
+
+
+<!-- ############ -->
+<!-- Snapshot VMs -->
+<!-- ############ -->
+
+
+<domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
+  <name>test-internal-snapshots</name>
+  <memory>409600</memory>
+  <uuid>12345678-1234-FDDF-1234-12345678FFFF</uuid>
+  <bootloader>/tmp/bootfoo</bootloader>
+  <devices>
+    <disk type='file' device='disk'>
+      <source file='/dev/default-pool/test-clone-simple.img'/>
+      <target dev='hda' bus='ide'/>
+    </disk>
+  </devices>
+
+<test:domainsnapshot>
+  <name>internal-root</name>
+  <state>running</state>
+  <creationTime>1375905080</creationTime>
+  <memory snapshot='internal'/>
+  <disks>
+    <disk name='hda' snapshot='internal'/>
+  </disks>
+  <domain type='test'>
+    <name>test-internal-snapshots</name>
+    <uuid>12345678-1234-fddf-1234-12345678ffff</uuid>
+    <memory unit='KiB'>409600</memory>
+    <currentMemory unit='KiB'>409600</currentMemory>
+    <vcpu placement='static'>1</vcpu>
+    <bootloader>/tmp/bootfoo</bootloader>
+    <os>
+      <type arch='i686'>xen</type>
+    </os>
+    <clock offset='utc'/>
+    <on_poweroff>destroy</on_poweroff>
+    <on_reboot>restart</on_reboot>
+    <on_crash>destroy</on_crash>
+    <devices>
+      <disk type='file' device='disk'>
+        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <target dev='hda' bus='ide'/>
+        <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+      </disk>
+      <controller type='ide' index='0'/>
+    </devices>
+  </domain>
+  <active>0</active>
+</test:domainsnapshot>
+
+<test:domainsnapshot>
+  <name>internal-root-child1</name>
+  <state>running</state>
+  <parent>
+    <name>internal-root</name>
+  </parent>
+  <creationTime>1375885107</creationTime>
+  <memory snapshot='internal'/>
+  <disks>
+    <disk name='hda' snapshot='internal'/>
+  </disks>
+  <domain type='test'>
+    <name>test-internal-snapshots</name>
+    <uuid>12345678-1234-fddf-1234-12345678ffff</uuid>
+    <memory unit='KiB'>409600</memory>
+    <currentMemory unit='KiB'>409600</currentMemory>
+    <vcpu placement='static'>1</vcpu>
+    <bootloader>/tmp/bootfoo</bootloader>
+    <os>
+      <type arch='i686'>xen</type>
+    </os>
+    <clock offset='utc'/>
+    <on_poweroff>destroy</on_poweroff>
+    <on_reboot>restart</on_reboot>
+    <on_crash>destroy</on_crash>
+    <devices>
+      <disk type='file' device='disk'>
+        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <target dev='hda' bus='ide'/>
+        <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+      </disk>
+      <controller type='ide' index='0'/>
+    </devices>
+  </domain>
+  <active>1</active>
+</test:domainsnapshot>
+
+<test:domainsnapshot>
+  <name>offline-root</name>
+  <state>shutoff</state>
+  <creationTime>1375905902</creationTime>
+  <memory snapshot='no'/>
+  <disks>
+    <disk name='hda' snapshot='internal'/>
+  </disks>
+  <domain type='test'>
+    <name>test-internal-snapshots</name>
+    <uuid>12345678-1234-fddf-1234-12345678ffff</uuid>
+    <memory unit='KiB'>409600</memory>
+    <currentMemory unit='KiB'>409600</currentMemory>
+    <vcpu placement='static'>1</vcpu>
+    <bootloader>/tmp/bootfoo</bootloader>
+    <os>
+      <type arch='i686'>xen</type>
+    </os>
+    <clock offset='utc'/>
+    <on_poweroff>destroy</on_poweroff>
+    <on_reboot>restart</on_reboot>
+    <on_crash>destroy</on_crash>
+    <devices>
+      <disk type='file' device='disk'>
+        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <target dev='hda' bus='ide'/>
+        <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+      </disk>
+      <controller type='ide' index='0'/>
+    </devices>
+  </domain>
+  <active>0</active>
+</test:domainsnapshot>
+
+<test:domainsnapshot>
+  <name>offline-root-child1</name>
+  <state>shutoff</state>
+  <parent>
+    <name>offline-root</name>
+  </parent>
+  <creationTime>1375905916</creationTime>
+  <memory snapshot='no'/>
+  <disks>
+    <disk name='hda' snapshot='internal'/>
+  </disks>
+  <domain type='test'>
+    <name>test-internal-snapshots</name>
+    <uuid>12345678-1234-fddf-1234-12345678ffff</uuid>
+    <memory unit='KiB'>409600</memory>
+    <currentMemory unit='KiB'>409600</currentMemory>
+    <vcpu placement='static'>1</vcpu>
+    <bootloader>/tmp/bootfoo</bootloader>
+    <os>
+      <type arch='i686'>xen</type>
+    </os>
+    <clock offset='utc'/>
+    <on_poweroff>destroy</on_poweroff>
+    <on_reboot>restart</on_reboot>
+    <on_crash>destroy</on_crash>
+    <devices>
+      <disk type='file' device='disk'>
+        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <target dev='hda' bus='ide'/>
+        <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+      </disk>
+      <controller type='ide' index='0'/>
+    </devices>
+  </domain>
+  <active>0</active>
+</test:domainsnapshot>
+
+<test:domainsnapshot>
+  <name>offline-root-child2</name>
+  <state>shutoff</state>
+  <parent>
+    <name>offline-root</name>
+  </parent>
+  <creationTime>137590600</creationTime>
+  <memory snapshot='no'/>
+  <disks>
+    <disk name='hda' snapshot='internal'/>
+  </disks>
+  <domain type='test'>
+    <name>test-internal-snapshots</name>
+    <uuid>12345678-1234-fddf-1234-12345678ffff</uuid>
+    <memory unit='KiB'>409600</memory>
+    <currentMemory unit='KiB'>409600</currentMemory>
+    <vcpu placement='static'>1</vcpu>
+    <bootloader>/tmp/bootfoo</bootloader>
+    <os>
+      <type arch='i686'>xen</type>
+    </os>
+    <clock offset='utc'/>
+    <on_poweroff>destroy</on_poweroff>
+    <on_reboot>restart</on_reboot>
+    <on_crash>destroy</on_crash>
+    <devices>
+      <disk type='file' device='disk'>
+        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <target dev='hda' bus='ide'/>
+        <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+      </disk>
+      <controller type='ide' index='0'/>
+    </devices>
+  </domain>
+  <active>0</active>
+</test:domainsnapshot>
+
+</domain>
+
 
 
 
@@ -733,7 +973,6 @@ test-many-devices, like an alternate RNG.
   </ip>
   <route family='ipv6' address='fd00:db8:ac10:fd00::' prefix='64' gateway='fd00:db8:ac10:fd01::1' />
 </network>
-
 
 
 
@@ -1162,6 +1401,7 @@ test-many-devices, like an alternate RNG.
     <name>rbd</name>
   </source>
 </pool>
+
 
 
 
@@ -2542,6 +2782,5 @@ test-many-devices, like an alternate RNG.
 
 <!-- Unused interface -->
 <interface type="ethernet" name="unusedeth0"/>
-
 
 </node>
