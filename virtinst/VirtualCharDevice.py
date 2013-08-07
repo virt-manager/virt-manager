@@ -38,9 +38,10 @@ class _VirtualCharDevice(VirtualDevice):
     TYPE_UDP      = "udp"
     TYPE_UNIX     = "unix"
     TYPE_SPICEVMC = "spicevmc"
-    TYPES  = [TYPE_PTY, TYPE_DEV, TYPE_STDIO, TYPE_FILE, TYPE_VC,
-              TYPE_PIPE, TYPE_NULL, TYPE_TCP, TYPE_UDP, TYPE_UNIX,
-              TYPE_SPICEVMC]
+    _TYPES_FOR_ALL = [TYPE_PTY, TYPE_DEV, TYPE_STDIO, TYPE_FILE, TYPE_VC,
+                      TYPE_PIPE, TYPE_NULL, TYPE_TCP, TYPE_UDP, TYPE_UNIX]
+    _TYPES_FOR_CHANNEL = [TYPE_SPICEVMC]
+    TYPES = _TYPES_FOR_ALL
 
     MODE_CONNECT = "connect"
     MODE_BIND = "bind"
@@ -232,7 +233,7 @@ class _VirtualCharDevice(VirtualDevice):
                            default_cb=_get_default_protocol)
 
     def _get_default_target_type(self):
-        if self.type == self.TYPE_SPICEVMC:
+        if self.virtual_device_type == "channel":
             return self.CHANNEL_TARGET_VIRTIO
         return None
     target_type = XMLProperty(xpath="./target/@type",
@@ -268,7 +269,8 @@ class VirtualParallelDevice(_VirtualCharDevice):
 
 class VirtualChannelDevice(_VirtualCharDevice):
     virtual_device_type = "channel"
-    TYPES = [_VirtualCharDevice.TYPE_SPICEVMC]
+    TYPES = _VirtualCharDevice._TYPES_FOR_CHANNEL + \
+            _VirtualCharDevice._TYPES_FOR_ALL
 
 
 VirtualConsoleDevice.register_type()
