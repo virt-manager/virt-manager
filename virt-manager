@@ -244,7 +244,7 @@ def main():
 
     virtManager.util.running_config = config
     config.default_qemu_user = cliconfig.default_qemu_user
-    config.rhel6_defaults = cliconfig.rhel_enable_unsupported_opts
+    config.rhel6_defaults = not cliconfig.rhel_enable_unsupported_opts
     config.preferred_distros = cliconfig.preferred_distros
 
     config.hv_packages = cliconfig.hv_packages
