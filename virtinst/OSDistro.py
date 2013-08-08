@@ -93,6 +93,8 @@ def _storeForDistro(fetcher, baseuri, typ, progresscb, arch, distro=None,
         stores.append(MandrivaDistro)
     if distro == "mageia" or distro is None:
         stores.append(MageiaDistro)
+    if distro == "altlinux" or distro is None:
+        stores.append(ALTLinuxDistro)
     if distro == "solaris" or distro is None:
         stores.append(SolarisDistro)
     if distro == "solaris" or distro is None:
@@ -1028,6 +1030,30 @@ class MandrivaDistro(Distro):
 
 class MageiaDistro(MandrivaDistro):
     name = "Mageia"
+
+class ALTLinuxDistro(Distro):
+
+    name = "ALT Linux"
+    os_type = "linux"
+    _boot_iso_paths = [ ("altinst", "live") ]
+    _hvm_kernel_paths = [ ("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
+    _xen_kernel_paths = []
+
+    def isValidStore(self, fetcher, progresscb):
+        # Don't support any paravirt installs
+        if self.type is not None and self.type != "hvm":
+            return False
+
+        if not fetcher.hasFile(".disk/info"):
+            return False
+
+        if self._fetchAndMatchRegex(fetcher, progresscb, ".disk/info",
+                                    ".*%s.*" % self.name):
+            logging.debug("Detected a %s distro" % self.name)
+            return True
+
+        return False
+
 
 # Solaris and OpenSolaris distros
 

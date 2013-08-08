@@ -476,6 +476,16 @@ OS_TYPES = {
        },
    },
 
+    "altlinux": {
+        "label": "ALT Linux",
+        "distro": "altlinux",
+        "supported": True,
+        "devices" : {
+            DISK : VIRTIO_DISK,
+            NET  : VIRTIO_NET,
+            INPUT: USB_TABLET,
+       }
+   },
 
     "debianetch": {
         "label": "Debian Etch",
