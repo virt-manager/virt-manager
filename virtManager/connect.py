@@ -111,9 +111,10 @@ class vmmConnect(vmmGObjectUI):
         self.topwin.hide()
         self.stop_browse()
 
-    def show(self, parent):
+    def show(self, parent, reset_state=True):
         logging.debug("Showing open connection")
-        self.reset_state()
+        if reset_state:
+            self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 

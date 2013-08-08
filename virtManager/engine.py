@@ -136,7 +136,8 @@ class vmmEngine(vmmGObject):
         self.application.add_window(self._appwindow)
 
         if self.uri_at_startup:
-            conn = self.add_conn_to_ui(self.uri_at_startup)
+            conn = self.make_conn(self.uri_at_startup)
+            self.register_conn(conn, skip_config=True)
             if conn and self.uri_cb:
                 conn.connect_opt_out("resources-sampled", self.uri_cb)
 
@@ -222,7 +223,8 @@ class vmmEngine(vmmGObject):
             return
         logging.debug("About to connect to uris %s", uris)
         for uri in uris:
-            self.add_conn_to_ui(uri)
+            conn = self.make_conn(uri)
+            self.register_conn(conn, skip_config=True)
 
     def autostart_conns(self):
         for uri in self.conns:
@@ -439,8 +441,7 @@ class vmmEngine(vmmGObject):
         return
 
 
-    def add_conn_to_ui(self, uri):
-        # Public method called from virt-manager.py
+    def make_conn(self, uri, probe=False):
         conn = self._check_conn(uri)
         if conn:
             return conn
@@ -451,23 +452,30 @@ class vmmEngine(vmmGObject):
             "windowHost": None,
             "windowDetails": {},
             "windowClone": None,
+            "probeConnection": probe
         }
 
         conn.connect("vm-removed", self._do_vm_removed)
         conn.connect("state-changed", self._do_conn_changed)
         conn.connect("connect-error", self._connect_error)
         conn.connect("priority-tick", self._schedule_priority_tick)
-        self.emit("conn-added", conn)
 
         return conn
 
 
-    def connect_to_uri(self, uri, autoconnect=None, do_start=True):
-        try:
-            conn = self.add_conn_to_ui(uri)
+    def register_conn(self, conn, skip_config=False):
+        # if `skip_config' then the connection is only showed in the ui and
+        # not added to the config.
+        if not skip_config and conn.get_uri() not in \
+                               (self.config.get_conn_uris() or []):
+            self.config.add_conn(conn.get_uri())
+        self.emit("conn-added", conn)
 
-            if conn.get_uri() not in (self.config.get_conn_uris() or []):
-                self.config.add_conn(conn.get_uri())
+
+    def connect_to_uri(self, uri, autoconnect=None, do_start=True, probe=False):
+        try:
+            conn = self.make_conn(uri, probe=probe)
+            self.register_conn(conn)
 
             if autoconnect is not None:
                 conn.set_autoconnect(bool(autoconnect))
@@ -573,6 +581,7 @@ class vmmEngine(vmmGObject):
                 hint += _("Verify that the 'libvirtd' daemon is running.")
                 show_errmsg = False
 
+        probe_connection = self.conns[conn.get_uri()]["probeConnection"]
         msg = _("Unable to connect to libvirt.")
         if show_errmsg:
             msg += "\n\n%s" % errmsg
@@ -585,13 +594,24 @@ class vmmEngine(vmmGObject):
         details += "Libvirt URI is: %s\n\n" % conn.get_uri()
         details += tb
 
-        title = _("Virtual Machine Manager Connection Failure")
+        if probe_connection:
+            msg += "\n\n%s" % _("Would you still like to remember this connection?")
 
-        if self._can_exit():
-            self.err.show_err(msg, details, title, async=False)
-            self.idle_add(self.exit_app, conn)
+        title = _("Virtual Machine Manager Connection Failure")
+        if probe_connection:
+            remember_connection = self.err.show_err(msg, details, title,
+                    buttons=Gtk.ButtonsType.YES_NO,
+                    dialog_type=Gtk.MessageType.QUESTION, async=False)
+            if remember_connection:
+                self.conns[conn.get_uri()]["probeConnection"] = False
+            else:
+                self.idle_add(self._do_edit_connect, self.windowManager, conn)
         else:
-            self.err.show_err(msg, details, title)
+            if self._can_exit():
+                self.err.show_err(msg, details, title, async=False)
+                self.idle_add(self.exit_app, conn)
+            else:
+                self.err.show_err(msg, details, title)
 
     ####################
     # Dialog launchers #
@@ -648,7 +668,7 @@ class vmmEngine(vmmGObject):
 
         def completed(src, uri, autoconnect):
             ignore = src
-            return self.connect_to_uri(uri, autoconnect)
+            return self.connect_to_uri(uri, autoconnect, probe=True)
 
         def cancelled(src):
             if len(self.conns.keys()) == 0:
@@ -661,11 +681,18 @@ class vmmEngine(vmmGObject):
         return self.windowConnect
 
 
-    def _do_show_connect(self, src):
+    def _do_show_connect(self, src, reset_state=True):
         try:
-            self._get_connect_dialog().show(src.topwin)
+            self._get_connect_dialog().show(src.topwin, reset_state)
         except Exception, e:
             src.err.show_err(_("Error launching connect dialog: %s") % str(e))
+
+    def _do_edit_connect(self, src, connection):
+        try:
+            self._do_show_connect(src, False)
+        finally:
+            self.remove_conn(None, connection.get_uri())
+
 
     def _get_details_dialog(self, uri, uuid):
         if uuid in self.conns[uri]["windowDetails"]:
