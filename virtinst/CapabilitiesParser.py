@@ -509,7 +509,6 @@ class Capabilities(object):
         util.parse_node_helper(self.xml, "capabilities",
                                self.parseXML,
                                RuntimeError)
-        self._fixBrokenEmulator()
 
     def _is_xen(self):
         for g in self.guests:
@@ -644,31 +643,6 @@ class Capabilities(object):
                    (a is None or g.arch == a):
                     return g
 
-    # 32-bit HVM emulator path, on a 64-bit host is wrong due
-    # to bug in libvirt capabilities. We fix by copying the
-    # 64-bit emualtor path
-    def _fixBrokenEmulator(self):
-        if self.host.arch != "x86_64":
-            return
-
-        fixEmulator = None
-        for g in self.guests:
-            if g.os_type != "hvm" or g.arch != "x86_64":
-                continue
-            for d in g.domains:
-                if d.emulator is not None and d.emulator.find("lib64") != -1:
-                    fixEmulator = d.emulator
-
-        if not fixEmulator:
-            return
-
-        for g in self.guests:
-            if g.os_type != "hvm" or g.arch != "i686":
-                continue
-            for d in g.domains:
-                if d.emulator is not None and d.emulator.find("lib64") == -1:
-                    d.emulator = fixEmulator
-
     def parseXML(self, node):
         child = node.children
         while child:
@@ -676,14 +650,7 @@ class Capabilities(object):
                 self.host = Host(child)
             elif child.name == "guest":
                 self.guests.append(Guest(child))
-            if child.name == "topology":
-                self._topology = Topology(child)
             child = child.next
-
-        # Libvirt < 0.4.1 placed topology info at the capabilities level
-        # rather than the host level. This is just for back compat
-        if self.host.topology is None:
-            self.host.topology = self._topology
 
     def get_cpu_values(self, arch):
         if not self._cpu_values:
