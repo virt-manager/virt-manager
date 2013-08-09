@@ -195,7 +195,7 @@ def main(conn=None):
         print_stdout("\n")
         print_stdout(_("Creating guest %s...") % guest.name)
 
-        guest.start_install(None, meter, noboot=options.noreboot)
+        guest.start_install(meter=meter, noboot=options.noreboot)
     except RuntimeError:
         raise
     except Exception, e:

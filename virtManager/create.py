@@ -1883,7 +1883,7 @@ class vmmCreate(vmmGObjectUI):
         meter = asyncjob.get_meter()
 
         logging.debug("Starting background install process")
-        guest.start_install(False, meter=meter)
+        guest.start_install(meter=meter)
         logging.debug("Install completed")
 
         # Make sure we pick up the domain object

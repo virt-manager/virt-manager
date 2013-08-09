@@ -82,13 +82,10 @@ class TestXMLConfig(unittest.TestCase):
         instname = build_xmlfile(instxml)
         bootname = build_xmlfile(bootxml)
         contname = build_xmlfile(contxml)
-        consolecb = None
         meter = None
-        removeOld = None
-        wait = True
 
         try:
-            guest.start_install(consolecb, meter, removeOld, wait)
+            guest.start_install(meter=meter)
             guest.domain.destroy()
 
             xmlinst = guest.get_install_xml(True, False)
@@ -103,7 +100,7 @@ class TestXMLConfig(unittest.TestCase):
                 utils.diff_compare(xmlboot, bootname)
 
             if guest.get_continue_inst():
-                guest.continue_install(consolecb, meter, wait)
+                guest.continue_install(meter=meter)
 
         finally:
             try:

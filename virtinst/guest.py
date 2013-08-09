@@ -529,16 +529,30 @@ class Guest(XMLBuilder):
 
         return self._lookup_osdict_key("continue")
 
-    def connect_console(self, consolecb, wait=True):
+    def connect_console(self, consolecb, wait):
         """
         Launched the passed console callback for the already defined
         domain. If domain isn't running, return an error.
         """
-        (self.domain,
-         self._consolechild) = self._wait_and_connect_console(consolecb)
+        self.domain = _wait_for_domain(self.conn, self.name)
+
+        child = None
+        if consolecb:
+            child = consolecb(self.domain)
+        self._consolechild = child
+
+        if not self._consolechild or not wait:
+            return
 
         # If we connected the console, wait for it to finish
-        self._waitpid_console(self._consolechild, wait)
+        try:
+            os.waitpid(self._consolechild, 0)
+        except OSError, (err_no, msg):
+            logging.debug("waitpid: %s: %s", err_no, msg)
+
+        # ensure there's time for the domain to finish destroying if the
+        # install has finished or the guest crashed
+        time.sleep(1)
 
     def terminate_console(self):
         """
@@ -623,8 +637,8 @@ class Guest(XMLBuilder):
             raise RuntimeError(_("Could not remove old vm '%s': %s") %
                                (self.name, str(e)))
 
-    def start_install(self, consolecb=None, meter=None, removeOld=None,
-                      wait=True, dry=False, return_xml=False, noboot=False):
+    def start_install(self, meter=None, removeOld=None,
+                      dry=False, return_xml=False, noboot=False):
         """
         Begin the guest install (stage1).
         @param return_xml: Don't create the guest, just return generated XML
@@ -650,7 +664,7 @@ class Guest(XMLBuilder):
             # Remove existing VM if requested
             self.remove_original_vm(removeOld)
 
-            self.domain = self._create_guest(consolecb, meter, wait,
+            self.domain = self._create_guest(meter,
                                              start_xml, final_xml, is_initial,
                                              noboot)
             # Set domain autostart flag if requested
@@ -660,7 +674,7 @@ class Guest(XMLBuilder):
         finally:
             self._cleanup_install()
 
-    def continue_install(self, consolecb=None, meter=None, wait=True,
+    def continue_install(self, meter=None,
                          dry=False, return_xml=False):
         """
         Continue with stage 2 of a guest install. Only required for
@@ -674,7 +688,7 @@ class Guest(XMLBuilder):
         if dry:
             return
 
-        return self._create_guest(consolecb, meter, wait,
+        return self._create_guest(meter,
                                   start_xml, final_xml, is_initial, False)
 
     def _build_meter(self, meter, is_initial):
@@ -703,7 +717,7 @@ class Guest(XMLBuilder):
 
         return start_xml, final_xml
 
-    def _create_guest(self, consolecb, meter, wait,
+    def _create_guest(self, meter,
                       start_xml, final_xml, is_initial, noboot):
         """
         Actually do the XML logging, guest defining/creating, console
@@ -715,8 +729,6 @@ class Guest(XMLBuilder):
         """
         meter = self._build_meter(meter, is_initial)
         doboot = not noboot or self.installer.has_install_phase()
-        if not doboot:
-            consolecb = None
 
         if is_initial and doboot:
             dom = self.conn.createLinux(start_xml or final_xml, 0)
@@ -728,11 +740,6 @@ class Guest(XMLBuilder):
         self.domain = dom
         meter.end(0)
 
-        if doboot:
-            logging.debug("Started guest, connecting to console if requested")
-            (self.domain,
-             self._consolechild) = self._wait_and_connect_console(consolecb)
-
         self.domain = self.conn.defineXML(final_xml)
         if is_initial:
             try:
@@ -741,47 +748,8 @@ class Guest(XMLBuilder):
             except Exception, e:
                 logging.debug("Error fetching XML from libvirt object: %s", e)
 
-        # if we connected the console, wait for it to finish
-        self._waitpid_console(self._consolechild, wait)
+        return self.domain
 
-        return self.conn.lookupByName(self.name)
-
-
-    def _wait_and_connect_console(self, consolecb):
-        """
-        Wait for domain to appear and be running, then connect to
-        the console if necessary
-        """
-        child = None
-        dom = _wait_for_domain(self.conn, self.name)
-
-        if dom is None:
-            raise RuntimeError(_("Domain has not existed.  You should be "
-                                 "able to find more information in the logs"))
-        elif dom.ID() == -1:
-            raise RuntimeError(_("Domain has not run yet.  You should be "
-                                 "able to find more information in the logs"))
-
-        if consolecb:
-            child = consolecb(dom)
-
-        return dom, child
-
-    def _waitpid_console(self, console_child, do_wait):
-        """
-        Wait for console to close if it was launched
-        """
-        if not console_child or not do_wait:
-            return
-
-        try:
-            os.waitpid(console_child, 0)
-        except OSError, (err_no, msg):
-            logging.debug("waitpid: %s: %s", err_no, msg)
-
-        # ensure there's time for the domain to finish destroying if the
-        # install has finished or the guest crashed
-        time.sleep(1)
 
     def _flag_autostart(self):
         """

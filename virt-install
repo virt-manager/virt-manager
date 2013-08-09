@@ -657,13 +657,14 @@ def start_install(guest, continue_inst, options):
         start_time = time.time()
 
         # Do first install phase
-        dom = guest.start_install(conscb, meter, wait=wait_on_console,
-                                  noboot=options.noreboot)
+        dom = guest.start_install(meter=meter, noboot=options.noreboot)
+        guest.connect_console(conscb, wait_on_console)
         dom = check_domain(guest, dom, conscb,
                            wait_on_install, wait_time, start_time)
 
         if continue_inst:
-            dom = guest.continue_install(conscb, meter, wait=wait_on_console)
+            dom = guest.continue_install(meter=meter)
+            guest.connect_console(conscb, wait_on_console)
             dom = check_domain(guest, dom, conscb,
                                wait_on_install, wait_time, start_time)
 
@@ -675,7 +676,7 @@ def start_install(guest, continue_inst, options):
             print_stdout(
                 _("Guest installation complete... restarting guest."))
             dom.create()
-            guest.connect_console(conscb)
+            guest.connect_console(conscb, wait=True)
 
     except KeyboardInterrupt:
         logging.debug("", exc_info=True)
