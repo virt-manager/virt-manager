@@ -160,6 +160,48 @@ class Guest(XMLBuilder):
 
         return cpustr
 
+    @staticmethod
+    def check_vm_collision(conn, name, do_remove):
+        """
+        Remove the existing VM with the same name if requested, or error
+        if there is a collision.
+        """
+        vm = None
+        try:
+            vm = conn.lookupByName(name)
+        except libvirt.libvirtError:
+            pass
+
+        if vm is None:
+            return
+
+        if not do_remove:
+            raise RuntimeError(_("Domain named %s already exists!") % name)
+
+        try:
+            logging.debug("Explicitly replacing guest '%s'", name)
+            if vm.ID() != -1:
+                logging.info("Destroying guest '%s'", name)
+                vm.destroy()
+
+            logging.info("Undefining guest '%s'", name)
+            vm.undefine()
+        except libvirt.libvirtError, e:
+            raise RuntimeError(_("Could not remove old vm '%s': %s") %
+                               (str(e)))
+
+    @staticmethod
+    def validate_name(conn, name, check_collision):
+        util.validate_name(_("Guest"), name, lencheck=True)
+        if not check_collision:
+            return
+
+        try:
+            conn.lookupByName(name)
+        except:
+            return
+        raise ValueError(_("Guest name '%s' is already in use.") % name)
+
 
     _XML_ROOT_XPATH = "/domain"
     _XML_PROP_ORDER = ["type", "name", "uuid", "description",
@@ -201,16 +243,7 @@ class Guest(XMLBuilder):
     def _validate_name(self, val):
         if val == self.name:
             return
-
-        util.validate_name(_("Guest"), val, lencheck=True)
-        if self.replace:
-            return
-
-        try:
-            self.conn.lookupByName(val)
-        except:
-            return
-        raise ValueError(_("Guest name '%s' is already in use.") % val)
+        self.validate_name(self.conn, val, check_collision=not self.replace)
     name = XMLProperty(xpath="./name", validate_cb=_validate_name)
 
     def _set_memory(self, val):
@@ -604,40 +637,7 @@ class Guest(XMLBuilder):
     # Actual install methods #
     ##########################
 
-    def remove_original_vm(self, force=None):
-        """
-        Remove the existing VM with the same name if requested, or error
-        if there is a collision.
-        """
-        if force is None:
-            force = self.replace
-
-        vm = None
-        try:
-            vm = self.conn.lookupByName(self.name)
-        except libvirt.libvirtError:
-            pass
-
-        if vm is None:
-            return
-
-        if not force:
-            raise RuntimeError(_("Domain named %s already exists!") %
-                               self.name)
-
-        try:
-            logging.debug("Explicitly replacing guest '%s'", self.name)
-            if vm.ID() != -1:
-                logging.info("Destroying guest '%s'", self.name)
-                vm.destroy()
-
-            logging.info("Undefining guest '%s'", self.name)
-            vm.undefine()
-        except libvirt.libvirtError, e:
-            raise RuntimeError(_("Could not remove old vm '%s': %s") %
-                               (self.name, str(e)))
-
-    def start_install(self, meter=None, removeOld=None,
+    def start_install(self, meter=None,
                       dry=False, return_xml=False, noboot=False):
         """
         Begin the guest install (stage1).
@@ -662,7 +662,8 @@ class Guest(XMLBuilder):
                 return
 
             # Remove existing VM if requested
-            self.remove_original_vm(removeOld)
+            self.check_vm_collision(self.conn, self.name,
+                                    do_remove=self.replace)
 
             self.domain = self._create_guest(meter,
                                              start_xml, final_xml, is_initial,

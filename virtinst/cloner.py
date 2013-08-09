@@ -62,15 +62,13 @@ class Cloner(object):
         self._skip_target = []
         self._preserve = True
         self._clone_running = False
+        self._replace = False
 
         # Default clone policy for back compat: don't clone readonly,
         # shareable, or empty disks
         self._clone_policy = [self.CLONE_POLICY_NO_READONLY,
                               self.CLONE_POLICY_NO_SHAREABLE,
                               self.CLONE_POLICY_NO_EMPTYMEDIA]
-
-        # Throwaway guest to use for easy validation
-        self._valid_guest = Guest(conn)
 
         # Generate a random UUID at the start
         self.clone_uuid = util.generate_uuid(conn)
@@ -101,7 +99,8 @@ class Cloner(object):
         return self._clone_name
     def set_clone_name(self, name):
         try:
-            self._valid_guest.name = name
+            Guest.validate_name(self.conn, name,
+                                check_collision=not self.replace)
         except ValueError, e:
             raise ValueError(_("Invalid name for new guest: %s") % e)
 
@@ -111,7 +110,7 @@ class Cloner(object):
 
     def set_clone_uuid(self, uuid):
         try:
-            self._valid_guest.uuid = uuid
+            util.validate_uuid(uuid)
         except ValueError, e:
             raise ValueError(_("Invalid uuid for new guest: %s") % e)
 
@@ -250,9 +249,9 @@ class Cloner(object):
                                  "cloning.")
 
     def _get_replace(self):
-        return self._valid_guest.replace
+        return self._replace
     def _set_replace(self, val):
-        self._valid_guest.replace = bool(val)
+        self._replace = bool(val)
     replace = property(_get_replace, _set_replace,
                        doc="If enabled, don't check for clone name collision, "
                            "simply undefine any conflicting guest.")
@@ -413,9 +412,6 @@ class Cloner(object):
         self.setup_original()
         self.setup_clone()
 
-    def remove_original_vm(self, force=None):
-        return self._valid_guest.remove_original_vm(force=force)
-
     def start_duplicate(self, meter=None):
         """
         Actually perform the duplication: cloning disks if needed and defining
@@ -429,7 +425,8 @@ class Cloner(object):
         dom = None
         try:
             # Replace orig VM if required
-            self.remove_original_vm()
+            Guest.check_vm_collision(self.conn, self.clone_name,
+                                     do_remove=self.replace)
 
             # Define domain early to catch any xml errors before duping storage
             dom = self.conn.defineXML(self.clone_xml)
