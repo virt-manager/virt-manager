@@ -21,7 +21,6 @@
 
 import ConfigParser
 import ftplib
-import gzip
 import logging
 import os
 import re
@@ -422,10 +421,11 @@ def distroFromTreeinfo(fetcher, progresscb, uri, arch, vmtype=None,
     return ob
 
 
-# An image store is a base class for retrieving either a bootable
-# ISO image, or a kernel+initrd  pair for a particular OS distribution
-class Distro:
-
+class Distro(object):
+    """
+    An image store is a base class for retrieving either a bootable
+    ISO image, or a kernel+initrd  pair for a particular OS distribution
+    """
     name = ""
 
     # osdict type and variant values
@@ -589,8 +589,10 @@ class Distro:
 
 
 class GenericDistro(Distro):
-    """Generic distro store. Check well known paths for kernel locations
-       as a last resort if we can't recognize any actual distro"""
+    """
+    Generic distro store. Check well known paths for kernel locations
+    as a last resort if we can't recognize any actual distro
+    """
 
     name = "Generic"
     os_type = "linux"
@@ -666,10 +668,11 @@ class GenericDistro(Distro):
         return fetcher.acquireFile(self._valid_iso_path, progresscb)
 
 
-# Base image store for any Red Hat related distros which have
-# a common layout
 class RedHatDistro(Distro):
-
+    """
+    Base image store for any Red Hat related distros which have
+    a common layout
+    """
     name = "Red Hat"
     os_type = "linux"
 
@@ -686,7 +689,6 @@ class RedHatDistro(Distro):
 
 # Fedora distro check
 class FedoraDistro(RedHatDistro):
-
     name = "Fedora"
 
     def isValidStore(self, fetcher, progresscb):
@@ -724,11 +726,9 @@ class FedoraDistro(RedHatDistro):
 
         return ret, int(ret[6:])
 
+
 # Red Hat Enterprise Linux distro check
-
-
 class RHELDistro(RedHatDistro):
-
     name = "Red Hat Enterprise Linux"
 
     def isValidStore(self, fetcher, progresscb):
@@ -807,7 +807,6 @@ class RHELDistro(RedHatDistro):
 
 # CentOS distro check
 class CentOSDistro(RHELDistro):
-
     name = "CentOS"
 
     def isValidStore(self, fetcher, progresscb):
@@ -825,11 +824,9 @@ class CentOSDistro(RHELDistro):
                 return True
             return False
 
+
 # Scientific Linux distro check
-
-
 class SLDistro(RHELDistro):
-
     name = "Scientific Linux"
 
     _boot_iso_paths = RHELDistro._boot_iso_paths + ["images/SL/boot.iso"]
@@ -867,7 +864,6 @@ class SLDistro(RHELDistro):
 # Suse  image store is harder - we fetch the kernel RPM and a helper
 # RPM and then munge bits together to generate a initrd
 class SuseDistro(Distro):
-
     name = "SUSE"
     os_type = "linux"
     method_arg = "install"
@@ -902,203 +898,6 @@ class SuseDistro(Distro):
             logging.debug("Detected a Suse distro.")
             return True
         return False
-
-    def acquireKernel(self, guest, fetcher, progresscb):
-        # If installing a fullvirt guest
-        if self.type is None or self.type == "hvm" or \
-           fetcher.hasFile("boot/%s/vmlinuz-xen" % self.arch):
-            return Distro.acquireKernel(self, guest, fetcher, progresscb)
-
-        # For Opensuse <= 10.2, we need to perform some heinous stuff
-        logging.debug("Trying Opensuse 10 PV rpm hacking")
-        return self._findXenRPMS(fetcher, progresscb)
-
-
-    def _findXenRPMS(self, fetcher, progresscb):
-        kernelrpm = None
-        installinitrdrpm = None
-        filelist = None
-        try:
-            # There is no predictable filename for kernel/install-initrd RPMs
-            # so we have to grok the filelist and find them
-            filelist = fetcher.acquireFile("ls-lR.gz", progresscb)
-            (kernelrpmname, initrdrpmname) = self._extractRPMNames(filelist)
-
-            # Now fetch the two RPMs we want
-            kernelrpm = fetcher.acquireFile(kernelrpmname, progresscb)
-            installinitrdrpm = fetcher.acquireFile(initrdrpmname, progresscb)
-
-            # Process the RPMs to extract the kernel & generate an initrd
-            return self._buildKernelInitrd(fetcher, kernelrpm, installinitrdrpm, progresscb)
-        finally:
-            if filelist is not None:
-                os.unlink(filelist)
-            if kernelrpm is not None:
-                os.unlink(kernelrpm)
-            if installinitrdrpm is not None:
-                os.unlink(installinitrdrpm)
-
-    # We need to parse the ls-lR.gz file, looking for the kernel &
-    # install-initrd RPM entries - capturing the directory they are
-    # in and the version'd filename.
-    def _extractRPMNames(self, filelist):
-        filelistData = gzip.GzipFile(filelist, mode="r")
-        try:
-            arches = [self.arch]
-            # On i686 arch, we also look under i585 and i386 dirs
-            # in case the RPM is built for a lesser arch. We also
-            # need the PAE variant (for Fedora dom0 at least)
-            if self.arch == "i386":
-                arches.append("i586")
-                arches.append("i686")
-                kernelname = "kernel-xenpae"
-            else:
-                kernelname = "kernel-xen"
-
-            installinitrdrpm = None
-            kernelrpm = None
-            dirname = None
-            while 1:
-                data = filelistData.readline()
-                if not data:
-                    break
-                if dirname is None:
-                    for arch in arches:
-                        wantdir = "/suse/" + arch
-                        if data == "." + wantdir + ":\n":
-                            dirname = wantdir
-                            break
-                else:
-                    if data == "\n":
-                        dirname = None
-                    else:
-                        if data[:5] != "total":
-                            filename = re.split("\s+", data)[8]
-
-                            if filename[:14] == "install-initrd":
-                                installinitrdrpm = dirname + "/" + filename
-                            elif filename[:len(kernelname)] == kernelname:
-                                kernelrpm = dirname + "/" + filename
-
-            if kernelrpm is None:
-                raise Exception(_("Unable to determine kernel RPM path"))
-            if installinitrdrpm is None:
-                raise Exception(_("Unable to determine install-initrd RPM path"))
-            return (kernelrpm, installinitrdrpm)
-        finally:
-            filelistData.close()
-
-    # We have a kernel RPM and a install-initrd RPM with a generic initrd in it
-    # Now we have to merge the two together to build an initrd capable of
-    # booting the installer.
-    #
-    # Yes, this is crazy ass stuff :-)
-    def _buildKernelInitrd(self, fetcher, kernelrpm, installinitrdrpm, progresscb):
-        progresscb.start(text=_("Building initrd"), size=11)
-        progresscb.update(1)
-        cpiodir = tempfile.mkdtemp(prefix="virtinstcpio.", dir=self.scratchdir)
-        try:
-            # Extract the kernel RPM contents
-            os.mkdir(cpiodir + "/kernel")
-            cmd = "cd " + cpiodir + "/kernel && (rpm2cpio " + kernelrpm + " | cpio --quiet -idm)"
-            logging.debug("Running " + cmd)
-            os.system(cmd)
-            progresscb.update(2)
-
-            # Determine the raw kernel version
-            kernelinfo = None
-            for f in os.listdir(cpiodir + "/kernel/boot"):
-                if f.startswith("System.map-"):
-                    kernelinfo = re.split("-", f)
-            kernel_override = kernelinfo[1] + "-override-" + kernelinfo[3]
-            kernel_version = kernelinfo[1] + "-" + kernelinfo[2] + "-" + kernelinfo[3]
-            logging.debug("Got kernel version " + str(kernelinfo))
-
-            # Build a list of all .ko files
-            modpaths = {}
-            for root, ignore, files in os.walk(cpiodir + "/kernel/lib/modules", topdown=False):
-                for name in files:
-                    if name.endswith(".ko"):
-                        modpaths[name] = os.path.join(root, name)
-            progresscb.update(3)
-
-            # Extract the install-initrd RPM contents
-            os.mkdir(cpiodir + "/installinitrd")
-            cmd = "cd " + cpiodir + "/installinitrd && (rpm2cpio " + installinitrdrpm + " | cpio --quiet -idm)"
-            logging.debug("Running " + cmd)
-            os.system(cmd)
-            progresscb.update(4)
-
-            # Read in list of mods required for initrd
-            modnames = []
-            fn = open(cpiodir + "/installinitrd/usr/lib/install-initrd/" + kernelinfo[3] + "/module.list", "r")
-            try:
-                while 1:
-                    line = fn.readline()
-                    if not line:
-                        break
-                    line = line[:len(line) - 1]
-                    modnames.append(line)
-            finally:
-                fn.close()
-            progresscb.update(5)
-
-            # Uncompress the basic initrd
-            cmd = "gunzip -c " + cpiodir + "/installinitrd/usr/lib/install-initrd/initrd-base.gz > " + cpiodir + "/initrd.img"
-            logging.debug("Running " + cmd)
-            os.system(cmd)
-            progresscb.update(6)
-
-            # Create temp tree to hold stuff we're adding to initrd
-            moddir = cpiodir + "/initrd/lib/modules/" + kernel_override + "/initrd/"
-            moddepdir = cpiodir + "/initrd/lib/modules/" + kernel_version
-            os.makedirs(moddir)
-            os.makedirs(moddepdir)
-            os.symlink("../" + kernel_override, moddepdir + "/updates")
-            os.symlink("lib/modules/" + kernel_override + "/initrd", cpiodir + "/initrd/modules")
-            cmd = "cp " + cpiodir + "/installinitrd/usr/lib/install-initrd/" + kernelinfo[3] + "/module.config" + " " + moddir
-            logging.debug("Running " + cmd)
-            os.system(cmd)
-            progresscb.update(7)
-
-            # Copy modules we need into initrd staging dir
-            for modname in modnames:
-                if modname in modpaths:
-                    src = modpaths[modname]
-                    dst = moddir + "/" + modname
-                    os.system("cp " + src + " " + dst)
-            progresscb.update(8)
-
-            # Run depmod across the staging area
-            cmd = "depmod -a -b " + cpiodir + "/initrd -F " + cpiodir + "/kernel/boot/System.map-" + kernel_version + " " + kernel_version
-            logging.debug("Running " + cmd)
-            os.system(cmd)
-            progresscb.update(9)
-
-            # Add the extra modules to the basic initrd
-            cmd = "cd " + cpiodir + "/initrd && (find . | cpio --quiet -o -H newc -A -F " + cpiodir + "/initrd.img)"
-            logging.debug("Running " + cmd)
-            os.system(cmd)
-            progresscb.update(10)
-
-            # Compress the final initrd
-            cmd = "gzip -f9N " + cpiodir + "/initrd.img"
-            logging.debug("Running " + cmd)
-            os.system(cmd)
-            progresscb.end(11)
-
-            # Save initrd & kernel to temp files for booting...
-            initrdname = fetcher.saveTemp(open(cpiodir + "/initrd.img.gz", "r"), "initrd.img")
-            logging.debug("Saved " + initrdname)
-            try:
-                kernelname = fetcher.saveTemp(open(cpiodir + "/kernel/boot/vmlinuz-" + kernel_version, "r"), "vmlinuz")
-                logging.debug("Saved " + kernelname)
-                return (kernelname, initrdname, "install=" + fetcher.location)
-            except:
-                os.unlink(initrdname)
-        finally:
-            # pass
-            os.system("rm -rf " + cpiodir)
 
 
 class DebianDistro(Distro):
@@ -1158,9 +957,8 @@ class DebianDistro(Distro):
 
 
 class UbuntuDistro(DebianDistro):
-    name = "Ubuntu"
-    # regular tree:
     # http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/
+    name = "Ubuntu"
 
     def isValidStore(self, fetcher, progresscb):
         if fetcher.hasFile("%s/MANIFEST" % self._prefix):
@@ -1186,8 +984,7 @@ class UbuntuDistro(DebianDistro):
 
 
 class MandrivaDistro(Distro):
-    # Ex. ftp://ftp.uwsg.indiana.edu/linux/mandrake/official/2007.1/x86_64/
-
+    # ftp://ftp.uwsg.indiana.edu/linux/mandrake/official/2007.1/x86_64/
     name = "Mandriva"
     os_type = "linux"
     _boot_iso_paths = ["install/images/boot.iso"]
@@ -1243,7 +1040,6 @@ class ALTLinuxDistro(Distro):
 
 # Solaris and OpenSolaris distros
 class SunDistro(Distro):
-
     name = "Solaris"
     os_type = "solaris"
 
@@ -1389,7 +1185,6 @@ class SolarisDistro(SunDistro):
 
 
 class OpenSolarisDistro(SunDistro):
-
     os_variant = "opensolaris"
 
     kernelpath = "platform/i86xpv/kernel/unix"
