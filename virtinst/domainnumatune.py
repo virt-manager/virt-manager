@@ -92,6 +92,57 @@ class DomainNumatune(XMLBuilder):
 
         return tuple(pinlist)
 
+    @staticmethod
+    def generate_cpuset(conn, mem):
+        """
+        Generates a cpu pinning string based on host NUMA configuration.
+
+        If host doesn't have a suitable NUMA configuration, a RuntimeError
+        is thrown.
+        """
+        if conn.caps.host.topology is None:
+            raise RuntimeError(_("No topology section in capabilities xml."))
+
+        cells = conn.caps.host.topology.cells
+        if len(cells) <= 1:
+            raise RuntimeError(_("Capabilities only show <= 1 cell. "
+                                 "Not NUMA capable"))
+
+        # Capabilities tells us about the available memory 'cells' on the
+        # system. Each 'cell' has associated 'cpu's.
+        #
+        # Use getCellsFreeMemory to determine which 'cell' has the smallest
+        # amount of memory which fits the requested VM memory amount, then
+        # pin the VM to that 'cell's associated 'cpu's
+
+        cell_mem = conn.getCellsFreeMemory(0, len(cells))
+        cell_id = -1
+        for i in range(len(cells)):
+            if cell_mem[i] < mem:
+                # Cell doesn't have enough mem to fit, skip it
+                continue
+
+            if len(cells[i].cpus) == 0:
+                # No cpus to use for the cell
+                continue
+
+            # Find smallest cell that fits
+            if cell_id < 0 or cell_mem[i] < cell_mem[cell_id]:
+                cell_id = i
+
+        if cell_id < 0:
+            raise RuntimeError(_("Could not find any usable NUMA "
+                                 "cell/cpu combinations."))
+
+        # Build cpuset string
+        cpustr = ""
+        for cpu in cells[cell_id].cpus:
+            if cpustr != "":
+                cpustr += ","
+            cpustr += str(cpu.id)
+
+        return cpustr
+
 
     MEMORY_MODES = ["interleave", "strict", "preferred"]
 

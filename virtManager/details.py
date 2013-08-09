@@ -1832,7 +1832,8 @@ class vmmDetails(vmmGObjectUI):
 
     def generate_cpuset(self):
         mem = int(self.vm.get_memory()) / 1024
-        return virtinst.Guest.generate_cpuset(self.conn.get_backend(), mem)
+        return virtinst.DomainNumatune.generate_cpuset(self.conn.get_backend(),
+                                                       mem)
 
     # VCPUS
     def config_get_vcpus(self):
@@ -2207,7 +2208,7 @@ class vmmDetails(vmmGObjectUI):
         try:
             new_text = new_text.strip()
             vcpu_num = int(row[0])
-            pinlist = virtinst.Guest.cpuset_str_to_tuple(
+            pinlist = virtinst.DomainNumatune.cpuset_str_to_tuple(
                                                 conn.get_backend(), new_text)
         except Exception, e:
             self.err.val_err(_("Error building pin list"), e)
@@ -2229,7 +2230,7 @@ class vmmDetails(vmmGObjectUI):
         if self.vm.vcpu_pinning() == cpuset:
             return
 
-        pinlist = virtinst.Guest.cpuset_str_to_tuple(
+        pinlist = virtinst.DomainNumatune.cpuset_str_to_tuple(
                                                 conn.get_backend(), cpuset)
         for row in vcpu_model:
             vcpu_num = row[0]

@@ -37,7 +37,6 @@ import virtinst
 from virtinst import util
 from virtinst.util import listify
 
-from virtinst import Guest
 from virtinst import VirtualNetworkInterface
 from virtinst import VirtualGraphics
 from virtinst import VirtualAudio
@@ -690,7 +689,7 @@ def get_cpuset(guest, cpuset, memory):
     elif cpuset == "auto":
         tmpset = None
         try:
-            tmpset = Guest.generate_cpuset(conn, memory)
+            tmpset = virtinst.DomainNumatune.generate_cpuset(conn, memory)
         except Exception, e:
             logging.debug("Not setting cpuset: %s", str(e))
 

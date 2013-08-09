@@ -861,7 +861,7 @@ class TestXMLConfig(unittest.TestCase):
         g = utils.get_basic_fullyvirt_guest()
 
         # Cpuset
-        cpustr = g.generate_cpuset(g.conn, g.memory)
+        cpustr = virtinst.DomainNumatune.generate_cpuset(g.conn, g.memory)
         g.cpuset = cpustr
         g.vcpus = 7
 
@@ -1002,15 +1002,16 @@ class TestXMLConfig(unittest.TestCase):
         expect = base[:]
         expect[1] = expect[2] = expect[3] = True
         self.assertEquals(tuple(expect),
-                          virtinst.Guest.cpuset_str_to_tuple(conn, "1-3"))
+                    virtinst.DomainNumatune.cpuset_str_to_tuple(conn, "1-3"))
 
         expect = base[:]
         expect[1] = expect[3] = expect[5] = expect[10] = expect[11] = True
         self.assertEquals(tuple(expect),
-                    virtinst.Guest.cpuset_str_to_tuple(conn, "1,3,5,10-11"))
+                    virtinst.DomainNumatune.cpuset_str_to_tuple(conn,
+                                                                "1,3,5,10-11"))
 
         self.assertRaises(ValueError,
-                          virtinst.Guest.cpuset_str_to_tuple,
+                          virtinst.DomainNumatune.cpuset_str_to_tuple,
                           conn, "16")
 
     def testManyVirtio(self):
