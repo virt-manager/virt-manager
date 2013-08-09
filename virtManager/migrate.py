@@ -29,9 +29,8 @@ from gi.repository import Gtk
 # pylint: enable=E0611
 
 import libvirt
-from virtinst import util as virtinstutil
+from virtinst import util
 
-from virtManager import util
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.domain import vmmDomain
@@ -275,7 +274,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         return self.edit_uri(srcuri, desthost, None)
 
     def edit_uri(self, uri, hostname, port):
-        split = list(virtinstutil.uri_split(uri))
+        split = list(util.uri_split(uri))
 
         hostname = hostname or split[2]
         if port:

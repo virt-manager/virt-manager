@@ -23,7 +23,7 @@ import os
 import sys
 import traceback
 
-import virtManager
+from virtManager import config
 
 # pylint: disable=E0611
 from gi.repository import Gdk
@@ -38,7 +38,7 @@ class vmmGObject(GObject.GObject):
 
     def __init__(self):
         GObject.GObject.__init__(self)
-        self.config = virtManager.util.running_config
+        self.config = config.running_config
 
         self._gobject_handles = []
         self._gobject_timeouts = []
@@ -195,7 +195,8 @@ class vmmGObjectUI(vmmGObject):
             self.builder = builder
             self.topwin = topwin
 
-        self.err = virtManager.error.vmmErrorDialog(self.topwin)
+        from virtManager import error
+        self.err = error.vmmErrorDialog(self.topwin)
 
     def widget(self, name):
         return self.builder.get_object(name)

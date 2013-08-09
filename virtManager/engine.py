@@ -30,10 +30,10 @@ import Queue
 import threading
 
 import libvirt
-import virtinst
+from virtinst import util
 
 from virtManager import packageutils
-from virtManager import util
+from virtManager import uihelpers
 from virtManager.about import vmmAbout
 from virtManager.baseclass import vmmGObject
 from virtManager.clone import vmmCloneVM
@@ -196,7 +196,7 @@ class vmmEngine(vmmGObject):
         if ret is not None:
             tryuri = "qemu:///system"
         else:
-            tryuri = util.default_uri(always_system=True)
+            tryuri = uihelpers.default_uri(always_system=True)
 
         if tryuri is None:
             manager.set_startup_error(msg)
@@ -888,14 +888,14 @@ class vmmEngine(vmmGObject):
                               "libvirt version or hypervisor."))
             return
 
-        if not util.chkbox_helper(src, self.config.get_confirm_poweroff,
+        if not uihelpers.chkbox_helper(src, self.config.get_confirm_poweroff,
             self.config.set_confirm_poweroff,
             text1=_("Are you sure you want to save '%s'?" % vm.get_name())):
             return
 
         path = None
         if not managed:
-            path = util.browse_local(src.topwin,
+            path = uihelpers.browse_local(src.topwin,
                                      _("Save Virtual Machine"),
                                      conn,
                                      dialog_type=Gtk.FileChooserAction.SAVE,
@@ -942,7 +942,7 @@ class vmmEngine(vmmGObject):
                               "connections is not yet supported"))
             return
 
-        path = util.browse_local(src.topwin,
+        path = uihelpers.browse_local(src.topwin,
                                  _("Restore Virtual Machine"),
                                  conn,
                                  browse_reason=self.config.CONFIG_DIR_RESTORE)
@@ -957,7 +957,8 @@ class vmmEngine(vmmGObject):
         conn = self._lookup_conn(uri)
         vm = conn.get_vm(uuid)
 
-        if not util.chkbox_helper(src, self.config.get_confirm_forcepoweroff,
+        if not uihelpers.chkbox_helper(src,
+            self.config.get_confirm_forcepoweroff,
             self.config.set_confirm_forcepoweroff,
             text1=_("Are you sure you want to force poweroff '%s'?" %
                     vm.get_name()),
@@ -973,7 +974,7 @@ class vmmEngine(vmmGObject):
         conn = self._lookup_conn(uri)
         vm = conn.get_vm(uuid)
 
-        if not util.chkbox_helper(src, self.config.get_confirm_pause,
+        if not uihelpers.chkbox_helper(src, self.config.get_confirm_pause,
             self.config.set_confirm_pause,
             text1=_("Are you sure you want to pause '%s'?" %
                     vm.get_name())):
@@ -1036,7 +1037,7 @@ class vmmEngine(vmmGObject):
         conn = self._lookup_conn(uri)
         vm = conn.get_vm(uuid)
 
-        if not util.chkbox_helper(src, self.config.get_confirm_poweroff,
+        if not uihelpers.chkbox_helper(src, self.config.get_confirm_poweroff,
             self.config.set_confirm_poweroff,
             text1=_("Are you sure you want to poweroff '%s'?" %
                     vm.get_name())):
@@ -1050,7 +1051,7 @@ class vmmEngine(vmmGObject):
         conn = self._lookup_conn(uri)
         vm = conn.get_vm(uuid)
 
-        if not util.chkbox_helper(src, self.config.get_confirm_poweroff,
+        if not uihelpers.chkbox_helper(src, self.config.get_confirm_poweroff,
             self.config.set_confirm_poweroff,
             text1=_("Are you sure you want to reboot '%s'?" %
                     vm.get_name())):
@@ -1064,7 +1065,7 @@ class vmmEngine(vmmGObject):
             try:
                 vm.reboot()
             except Exception, reboot_err:
-                no_support = virtinst.util.is_error_nosupport(reboot_err)
+                no_support = util.is_error_nosupport(reboot_err)
                 if not no_support:
                     raise RuntimeError(_("Error rebooting domain: %s" %
                                        str(reboot_err)))
@@ -1089,7 +1090,8 @@ class vmmEngine(vmmGObject):
         conn = self._lookup_conn(uri)
         vm = conn.get_vm(uuid)
 
-        if not util.chkbox_helper(src, self.config.get_confirm_forcepoweroff,
+        if not uihelpers.chkbox_helper(src,
+            self.config.get_confirm_forcepoweroff,
             self.config.set_confirm_forcepoweroff,
             text1=_("Are you sure you want to force reset '%s'?" %
                     vm.get_name()),

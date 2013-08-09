@@ -25,12 +25,12 @@ from gi.repository import GObject
 from gi.repository import Gtk
 # pylint: enable=E0611
 
-import virtinst
+from virtinst import VirtualDisk
 
-import virtManager.host
-import virtManager.util as util
+from virtManager import host
 from virtManager.createvol import vmmCreateVolume
 from virtManager.baseclass import vmmGObjectUI
+from virtManager import uihelpers
 
 
 class vmmStorageBrowser(vmmGObjectUI):
@@ -123,7 +123,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
     def set_initial_state(self):
         pool_list = self.widget("pool-list")
-        virtManager.host.init_pool_list(pool_list, self.pool_selected)
+        host.init_pool_list(pool_list, self.pool_selected)
 
         # (Key, Name, Cap, Format, Used By, sensitive)
         vol_list = self.widget("vol-list")
@@ -171,7 +171,7 @@ class vmmStorageBrowser(vmmGObjectUI):
             self.conn = conn
 
         pool_list = self.widget("pool-list")
-        virtManager.host.populate_storage_pools(pool_list, self.conn)
+        host.populate_storage_pools(pool_list, self.conn)
 
         ids = []
         ids.append(self.conn.connect("pool-added",
@@ -219,7 +219,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         return data["enable_create"]
 
     def current_pool(self):
-        row = util.get_list_selection(self.widget("pool-list"))
+        row = uihelpers.get_list_selection(self.widget("pool-list"))
         if not row:
             return
         return self.conn.get_pool(row[0])
@@ -227,7 +227,7 @@ class vmmStorageBrowser(vmmGObjectUI):
     def current_vol_row(self):
         if not self.current_pool():
             return
-        return util.get_list_selection(self.widget("vol-list"))
+        return uihelpers.get_list_selection(self.widget("vol-list"))
 
     def current_vol(self):
         pool = self.current_pool()
@@ -238,7 +238,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
     def refresh_storage_pool(self, src_ignore, uuid):
         pool_list = self.widget("pool-list")
-        virtManager.host.refresh_pool_in_list(pool_list, self.conn, uuid)
+        host.refresh_pool_in_list(pool_list, self.conn, uuid)
         curpool = self.current_pool()
         if curpool.uuid != uuid:
             return
@@ -249,7 +249,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
     def repopulate_storage_pools(self, src_ignore, uuid_ignore):
         pool_list = self.widget("pool-list")
-        virtManager.host.populate_storage_pools(pool_list, self.conn)
+        host.populate_storage_pools(pool_list, self.conn)
 
 
     # Listeners
@@ -300,9 +300,9 @@ class vmmStorageBrowser(vmmGObjectUI):
         if not self.local_args.get("dialog_name"):
             self.local_args["dialog_name"] = None
 
-        filename = util.browse_local(parent=self.topwin,
-                                     conn=self.conn,
-                                     **self.local_args)
+        filename = uihelpers.browse_local(parent=self.topwin,
+                                          conn=self.conn,
+                                          **self.local_args)
         if filename:
             self._do_finish(path=filename)
 
@@ -342,8 +342,8 @@ class vmmStorageBrowser(vmmGObjectUI):
 
             try:
                 if path:
-                    names = virtinst.VirtualDisk.path_in_use_by(
-                                                self.conn.get_backend(), path)
+                    names = VirtualDisk.path_in_use_by(self.conn.get_backend(),
+                                                       path)
                     namestr = ", ".join(names)
                     if not namestr:
                         namestr = None

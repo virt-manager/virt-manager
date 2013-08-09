@@ -28,6 +28,8 @@ from gi.repository import Gtk
 
 from virtManager.keyring import vmmKeyring, vmmSecret
 
+running_config = None
+
 
 class SettingsWrapper(object):
     def __init__(self, settings_id):

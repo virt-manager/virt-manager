@@ -27,6 +27,7 @@ from gi.repository import Gdk
 # pylint: enable=E0611
 
 import virtinst
+from virtinst import util
 from virtinst import (VirtualChannelDevice, VirtualParallelDevice,
                       VirtualSerialDevice,
                       VirtualVideoDevice, VirtualWatchdog,
@@ -34,8 +35,7 @@ from virtinst import (VirtualChannelDevice, VirtualParallelDevice,
                       VirtualRedirDevice, VirtualTPMDevice)
 from virtinst import VirtualController
 
-import virtManager.util as util
-import virtManager.uihelpers as uihelpers
+from virtManager import uihelpers
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.baseclass import vmmGObjectUI
@@ -589,7 +589,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         if len(model) == 0:
             model.append([_("No Devices Available"), None])
-        util.set_list_selection(devlist, 0)
+        uihelpers.set_list_selection(devlist, 0)
 
     ########################
     # get_config_* methods #
@@ -612,7 +612,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         if self.is_default_storage():
             pathlist = [d.path for d in self.vm.get_disk_devices()]
-            path = util.get_default_path(self.conn,
+            path = uihelpers.get_default_path(self.conn,
                                          self.vm.get_name(),
                                          collidelist=pathlist)
             logging.debug("Default storage path is: %s", path)
@@ -732,7 +732,7 @@ class vmmAddHardware(vmmGObjectUI):
         return usb_info
 
     def get_config_host_device_info(self):
-        devrow = util.get_list_selection(self.widget("host-device"))
+        devrow = uihelpers.get_list_selection(self.widget("host-device"))
         if not devrow:
             return []
         return devrow
@@ -828,10 +828,10 @@ class vmmAddHardware(vmmGObjectUI):
     ################
 
     def set_hw_selection(self, page):
-        util.set_list_selection(self.widget("hardware-list"), page)
+        uihelpers.set_list_selection(self.widget("hardware-list"), page)
 
     def get_hw_selection(self):
-        return util.get_list_selection(self.widget("hardware-list"))
+        return uihelpers.get_list_selection(self.widget("hardware-list"))
 
     def update_char_device_type_model(self):
         rhel6_blacklist = ["pipe", "udp"]
@@ -1310,8 +1310,8 @@ class vmmAddHardware(vmmGObjectUI):
             if self.is_default_storage():
                 # See if the ideal disk path (/default/pool/vmname.img)
                 # exists, and if unused, prompt the use for using it
-                ideal = util.get_ideal_path(self.conn,
-                                            self.vm.get_name())
+                ideal = uihelpers.get_ideal_path(self.conn,
+                                                 self.vm.get_name())
                 do_exist = False
                 ret = True
 
@@ -1350,7 +1350,7 @@ class vmmAddHardware(vmmGObjectUI):
 
             if (disk.type == virtinst.VirtualDisk.TYPE_FILE and
                 not self.vm.is_hvm() and
-                virtinst.util.is_blktap_capable(self.conn.get_backend())):
+                util.is_blktap_capable(self.conn.get_backend())):
                 disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
 
             disk.validate()

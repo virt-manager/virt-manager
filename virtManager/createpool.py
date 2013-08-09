@@ -26,9 +26,9 @@ from gi.repository import Gdk
 import copy
 import logging
 
-from virtManager import util
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
+from virtManager import uihelpers
 
 from virtinst import Storage
 
@@ -593,6 +593,6 @@ class vmmCreatePool(vmmGObjectUI):
         if foldermode:
             mode = Gtk.FileChooserAction.SELECT_FOLDER
 
-        return util.browse_local(self.topwin, dialog_name, self.conn,
-                                 dialog_type=mode,
-                                 start_folder=startfolder)
+        return uihelpers.browse_local(self.topwin, dialog_name, self.conn,
+                                      dialog_type=mode,
+                                      start_folder=startfolder)

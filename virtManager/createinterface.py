@@ -27,7 +27,6 @@ import logging
 
 from virtinst import Interface
 
-from virtManager import util
 from virtManager import uihelpers
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
@@ -548,8 +547,8 @@ class vmmCreateInterface(vmmGObjectUI):
 
         for row in row_dict.values():
             name = row[INTERFACE_ROW_NAME]
-            row[INTERFACE_ROW_IN_USE_BY] = util.iface_in_use_by(self.conn,
-                                                                name)
+            row[INTERFACE_ROW_IN_USE_BY] = uihelpers.iface_in_use_by(self.conn,
+                                                                     name)
 
         for row in row_dict.values():
             model.append(row)

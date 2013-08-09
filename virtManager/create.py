@@ -29,9 +29,9 @@ from gi.repository import Gdk
 # pylint: enable=E0611
 
 import virtinst
+from virtinst import util
 
-import virtManager.uihelpers as uihelpers
-from virtManager import util
+from virtManager import uihelpers
 from virtManager.mediadev import MEDIA_CDROM
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
@@ -622,7 +622,7 @@ class vmmCreate(vmmGObjectUI):
             gtype = guest.os_type
             for dom in guest.domains:
                 domtype = dom.hypervisor_type
-                label = util.pretty_hv(gtype, domtype)
+                label = uihelpers.pretty_hv(gtype, domtype)
                 sensitive = True
 
                 # Don't add multiple rows for each arch
@@ -981,7 +981,7 @@ class vmmCreate(vmmGObjectUI):
             if disks:
                 return disks[0].path
 
-        return util.get_default_path(self.conn, name)
+        return uihelpers.get_default_path(self.conn, name)
 
     def is_default_storage(self):
         usedef = self.widget("config-storage-create").get_active()
@@ -1425,7 +1425,7 @@ class vmmCreate(vmmGObjectUI):
 
         # Generate UUID (makes customize dialog happy)
         try:
-            guest.uuid = virtinst.util.randomUUID(guest.conn)
+            guest.uuid = util.randomUUID(guest.conn)
         except Exception, e:
             self.err.show_err(_("Error setting UUID: %s") % str(e))
             return None
@@ -1592,8 +1592,8 @@ class vmmCreate(vmmGObjectUI):
 
         if not oldguest:
             if self.guest.installer.scratchdir_required():
-                path = virtinst.util.make_scratchdir(self.guest.conn,
-                                                     self.guest.type)
+                path = util.make_scratchdir(self.guest.conn,
+                                            self.guest.type)
             elif instmethod == INSTALL_PAGE_ISO:
                 path = self.guest.installer.location
             else:
@@ -1663,8 +1663,8 @@ class vmmCreate(vmmGObjectUI):
             elif self.is_default_storage() and not oldguest:
                 # See if the ideal disk path (/default/pool/vmname.img)
                 # exists, and if unused, prompt the use for using it
-                ideal = util.get_ideal_path(self.conn,
-                                            self.guest.name)
+                ideal = uihelpers.get_ideal_path(self.conn,
+                                                 self.guest.name)
                 do_exist = False
                 ret = True
 

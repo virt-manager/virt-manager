@@ -27,11 +27,12 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 # pylint: enable=E0611
 
+from virtinst import util
+
 from virtManager import uihelpers
 from virtManager.connection import vmmConnection
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.graphwidgets import CellRendererSparkline
-from virtManager import util as util
 
 
 # Number of data points for performance graphs

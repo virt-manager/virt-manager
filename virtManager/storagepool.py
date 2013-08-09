@@ -22,10 +22,9 @@
 from gi.repository import GObject
 # pylint: enable=E0611
 
-import virtinst
-from virtinst.util import xpath
+from virtinst import Storage
+from virtinst import util
 
-from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 from virtManager.storagevol import vmmStorageVolume
 
@@ -68,7 +67,7 @@ class vmmStoragePool(vmmLibvirtObject):
 
     def can_change_alloc(self):
         typ = self.get_type()
-        return (typ in [virtinst.Storage.StoragePool.TYPE_LOGICAL])
+        return (typ in [Storage.StoragePool.TYPE_LOGICAL])
 
     def get_uuid(self):
         return self._uuid
@@ -101,14 +100,14 @@ class vmmStoragePool(vmmLibvirtObject):
         return self._backend.autostart()
 
     def get_target_path(self):
-        return xpath(self.get_xml(), "/pool/target/path") or ""
+        return util.xpath(self.get_xml(), "/pool/target/path") or ""
 
     def get_allocation(self):
-        return long(xpath(self.get_xml(), "/pool/allocation"))
+        return long(util.xpath(self.get_xml(), "/pool/allocation"))
     def get_available(self):
-        return long(xpath(self.get_xml(), "/pool/available"))
+        return long(util.xpath(self.get_xml(), "/pool/available"))
     def get_capacity(self):
-        return long(xpath(self.get_xml(), "/pool/capacity"))
+        return long(util.xpath(self.get_xml(), "/pool/capacity"))
 
     def get_pretty_allocation(self):
         return util.pretty_bytes(self.get_allocation())
@@ -118,7 +117,7 @@ class vmmStoragePool(vmmLibvirtObject):
         return util.pretty_bytes(self.get_capacity())
 
     def get_type(self):
-        return xpath(self.get_xml(), "/pool/@type")
+        return util.xpath(self.get_xml(), "/pool/@type")
 
     def get_volumes(self):
         self.update_volumes()

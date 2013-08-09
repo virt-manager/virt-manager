@@ -26,9 +26,11 @@ import statvfs
 from gi.repository import Gtk
 # pylint: enable=E0611
 
-import virtinst
+import libvirt
 
-from virtManager import util
+import virtinst
+from virtinst import util
+from virtManager import config
 
 OPTICAL_DEV_PATH = 0
 OPTICAL_LABEL = 1
@@ -54,15 +56,15 @@ def set_sparse_tooltip(widget):
 
 
 def host_disk_space(conn):
-    pool = util.get_default_pool(conn)
-    path = util.get_default_dir(conn)
+    pool = get_default_pool(conn)
+    path = get_default_dir(conn)
 
     avail = 0
     if pool and pool.is_active():
         # FIXME: make sure not inactive?
         # FIXME: use a conn specific function after we send pool-added
         pool.refresh()
-        avail = int(virtinst.util.xpath(pool.get_xml(), "/pool/available"))
+        avail = int(util.xpath(pool.get_xml(), "/pool/available"))
 
     elif not conn.is_remote() and os.path.exists(path):
         vfs = os.statvfs(os.path.dirname(path))
@@ -88,7 +90,7 @@ def update_host_space(conn, widget):
 
 
 def check_default_pool_active(err, conn):
-    default_pool = util.get_default_pool(conn)
+    default_pool = get_default_pool(conn)
     if default_pool and not default_pool.is_active():
         res = err.yes_no(_("Default pool is not active."),
                          _("Storage pool '%s' is not active. "
@@ -938,9 +940,9 @@ def check_path_search_for_qemu(err, conn, path):
     if conn.is_remote() or not conn.is_qemu_system():
         return
 
-    user = util.running_config.default_qemu_user
+    user = config.running_config.default_qemu_user
 
-    skip_paths = util.running_config.get_perms_fix_ignore()
+    skip_paths = config.running_config.get_perms_fix_ignore()
     broken_paths = virtinst.VirtualDisk.check_path_search_for_user(
                                                           conn.get_backend(),
                                                           path, user)
@@ -960,7 +962,7 @@ def check_path_search_for_qemu(err, conn, path):
                     buttons=Gtk.ButtonsType.YES_NO)
 
     if chkres:
-        util.running_config.add_perms_fix_ignore(broken_paths)
+        config.running_config.add_perms_fix_ignore(broken_paths)
     if not resp:
         return
 
@@ -984,7 +986,7 @@ def check_path_search_for_qemu(err, conn, path):
                          _("Don't ask about these directories again."))
 
     if chkres:
-        util.running_config.add_perms_fix_ignore(errors.keys())
+        config.running_config.add_perms_fix_ignore(errors.keys())
 
 
 ######################################
@@ -1042,3 +1044,304 @@ def spin_get_helper(widget):
     except:
         ret = adj.get_value()
     return ret
+
+
+
+def get_default_pool_path(conn):
+    if conn.is_session_uri():
+        return os.path.expanduser("~/VirtualMachines")
+    return "/var/lib/libvirt/images"
+
+
+def get_default_pool_name(conn):
+    ignore = conn
+    return "default"
+
+
+def build_default_pool(vmmconn):
+    """
+    Helper to build the 'default' storage pool
+    """
+    conn = vmmconn.get_backend()
+
+    path = get_default_pool_path(vmmconn)
+    name = get_default_pool_name(vmmconn)
+    pool = None
+    try:
+        pool = conn.storagePoolLookupByName(name)
+    except libvirt.libvirtError:
+        pass
+
+    if pool:
+        return
+
+    try:
+        logging.debug("Attempting to build default pool with target '%s'",
+                      path)
+        defpool = virtinst.Storage.DirectoryPool(conn=conn,
+                                                 name=name,
+                                                 target_path=path)
+        newpool = defpool.install(build=True, create=True)
+        newpool.setAutostart(True)
+    except Exception, e:
+        raise RuntimeError(_("Couldn't create default storage pool '%s': %s") %
+                             (path, str(e)))
+
+
+def get_ideal_path_info(conn, name):
+    path = get_default_dir(conn)
+    suffix = ".img"
+    return (path, name, suffix)
+
+
+def get_ideal_path(conn, name):
+    target, name, suffix = get_ideal_path_info(conn, name)
+    return os.path.join(target, name) + suffix
+
+
+def get_default_pool(conn):
+    pool = None
+    default_name = get_default_pool_name(conn)
+    for uuid in conn.list_pool_uuids():
+        p = conn.get_pool(uuid)
+        if p.get_name() == default_name:
+            pool = p
+
+    return pool
+
+
+def get_default_dir(conn):
+    pool = get_default_pool(conn)
+
+    if pool:
+        return pool.get_target_path()
+    else:
+        return config.running_config.get_default_image_dir(conn)
+
+
+def get_default_path(conn, name, collidelist=None):
+    collidelist = collidelist or []
+    pool = get_default_pool(conn)
+
+    default_dir = get_default_dir(conn)
+
+    def path_exists(p):
+        return os.path.exists(p) or p in collidelist
+
+    if not pool:
+        # Use old generating method
+        origf = os.path.join(default_dir, name + ".img")
+        f = origf
+
+        n = 1
+        while path_exists(f) and n < 100:
+            f = os.path.join(default_dir, name +
+                             "-" + str(n) + ".img")
+            n += 1
+
+        if path_exists(f):
+            f = origf
+
+        path = f
+    else:
+        target, ignore, suffix = get_ideal_path_info(conn, name)
+
+        # Sanitize collidelist to work with the collision checker
+        newcollidelist = []
+        for c in collidelist:
+            if c and os.path.dirname(c) == pool.get_target_path():
+                newcollidelist.append(os.path.basename(c))
+
+        path = virtinst.Storage.StorageVolume.find_free_name(name,
+                        pool_object=pool.get_backend(), suffix=suffix,
+                        collidelist=newcollidelist)
+
+        path = os.path.join(target, path)
+
+    return path
+
+
+def browse_local(parent, dialog_name, conn, start_folder=None,
+                 _type=None, dialog_type=None,
+                 confirm_func=None, browse_reason=None,
+                 choose_button=None, default_name=None):
+    """
+    Helper function for launching a filechooser
+
+    @param parent: Parent window for the filechooser
+    @param dialog_name: String to use in the title bar of the filechooser.
+    @param conn: vmmConnection used by calling class
+    @param start_folder: Folder the filechooser is viewing at startup
+    @param _type: File extension to filter by (e.g. "iso", "png")
+    @param dialog_type: Maps to FileChooserDialog 'action'
+    @param confirm_func: Optional callback function if file is chosen.
+    @param browse_reason: The vmmConfig.CONFIG_DIR* reason we are browsing.
+        If set, this will override the 'folder' parameter with the gconf
+        value, and store the user chosen path.
+
+    """
+    # Initial setup
+    overwrite_confirm = False
+
+    if dialog_type is None:
+        dialog_type = Gtk.FileChooserAction.OPEN
+    if dialog_type == Gtk.FileChooserAction.SAVE:
+        if choose_button is None:
+            choose_button = Gtk.STOCK_SAVE
+            overwrite_confirm = True
+
+    if choose_button is None:
+        choose_button = Gtk.STOCK_OPEN
+
+    fcdialog = Gtk.FileChooserDialog(title=dialog_name,
+                                parent=parent,
+                                action=dialog_type,
+                                buttons=(Gtk.STOCK_CANCEL,
+                                         Gtk.ResponseType.CANCEL,
+                                         choose_button,
+                                         Gtk.ResponseType.ACCEPT))
+    fcdialog.set_default_response(Gtk.ResponseType.ACCEPT)
+
+    if default_name:
+        fcdialog.set_current_name(default_name)
+
+    # If confirm is set, warn about a file overwrite
+    if confirm_func:
+        overwrite_confirm = True
+        fcdialog.connect("confirm-overwrite", confirm_func)
+    fcdialog.set_do_overwrite_confirmation(overwrite_confirm)
+
+    # Set file match pattern (ex. *.png)
+    if _type is not None:
+        pattern = _type
+        name = None
+        if type(_type) is tuple:
+            pattern = _type[0]
+            name = _type[1]
+
+        f = Gtk.FileFilter()
+        f.add_pattern("*." + pattern)
+        if name:
+            f.set_name(name)
+        fcdialog.set_filter(f)
+
+    # Set initial dialog folder
+    if browse_reason:
+        start_folder = config.running_config.get_default_directory(conn,
+                                                            browse_reason)
+
+    if start_folder is not None:
+        if os.access(start_folder, os.R_OK):
+            fcdialog.set_current_folder(start_folder)
+
+    # Run the dialog and parse the response
+    ret = None
+    if fcdialog.run() == Gtk.ResponseType.ACCEPT:
+        ret = fcdialog.get_filename()
+    fcdialog.destroy()
+
+    # Store the chosen directory in gconf if necessary
+    if ret and browse_reason and not ret.startswith("/dev"):
+        config.running_config.set_default_directory(os.path.dirname(ret),
+                                             browse_reason)
+    return ret
+
+
+def pretty_hv(gtype, domtype):
+    """
+    Convert XML <domain type='foo'> and <os><type>bar</type>
+    into a more human relevant string.
+    """
+
+    gtype = gtype.lower()
+    domtype = domtype.lower()
+
+    label = domtype
+    if domtype == "kvm":
+        if gtype == "xen":
+            label = "xenner"
+    elif domtype == "xen":
+        if gtype == "xen":
+            label = "xen (paravirt)"
+        elif gtype == "hvm":
+            label = "xen (fullvirt)"
+    elif domtype == "test":
+        if gtype == "xen":
+            label = "test (xen)"
+        elif gtype == "hvm":
+            label = "test (hvm)"
+
+    return label
+
+
+def iface_in_use_by(conn, name):
+    use_str = ""
+    for i in conn.list_interface_names():
+        iface = conn.get_interface(i)
+        if name in iface.get_slave_names():
+            if use_str:
+                use_str += ", "
+            use_str += iface.get_name()
+
+    return use_str
+
+
+def chkbox_helper(src, getcb, setcb, text1, text2=None,
+                  alwaysrecord=False,
+                  default=True,
+                  chktext=_("Don't ask me again")):
+    """
+    Helper to prompt user about proceeding with an operation
+    Returns True if the 'yes' or 'ok' button was selected, False otherwise
+
+    @alwaysrecord: Don't require user to select 'yes' to record chkbox value
+    @default: What value to return if getcb tells us not to prompt
+    """
+    do_prompt = getcb()
+    if not do_prompt:
+        return default
+
+    res = src.err.warn_chkbox(text1=text1, text2=text2,
+                              chktext=chktext,
+                              buttons=Gtk.ButtonsType.YES_NO)
+    response, skip_prompt = res
+    if alwaysrecord or response:
+        setcb(not skip_prompt)
+
+    return response
+
+
+def get_list_selection(widget):
+    selection = widget.get_selection()
+    active = selection.get_selected()
+
+    treestore, treeiter = active
+    if treeiter is not None:
+        return treestore[treeiter]
+    return None
+
+
+def set_list_selection(widget, rownum):
+    path = str(rownum)
+    selection = widget.get_selection()
+
+    selection.unselect_all()
+    widget.set_cursor(path)
+    selection.select_path(path)
+
+
+def default_uri(always_system=False):
+    if os.path.exists('/var/lib/xend'):
+        if (os.path.exists('/dev/xen/evtchn') or
+            os.path.exists("/proc/xen")):
+            return 'xen:///'
+
+    if (os.path.exists("/usr/bin/qemu") or
+        os.path.exists("/usr/bin/qemu-kvm") or
+        os.path.exists("/usr/bin/kvm") or
+        os.path.exists("/usr/libexec/qemu-kvm")):
+        if always_system or os.geteuid() == 0:
+            return "qemu:///system"
+        else:
+            return "qemu:///session"
+    return None

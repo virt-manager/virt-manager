@@ -32,7 +32,7 @@ from gi.repository import GObject
 from gi.repository import LibvirtGLib
 # pylint: enable=E0611
 
-from virtinst import util as virtinstutil
+from virtinst import util as util
 from virtinst import cli as virtinstcli
 from virtcli import cliutils, cliconfig
 
@@ -213,7 +213,6 @@ def main():
         leftovers = sys.argv[1:]
 
         import virtManager.config
-        import virtManager.util
     except:
         # Don't just let the exception raise here. abrt reports bugs
         # when users mess up su/sudo and DISPLAY isn't set. Printing
@@ -236,13 +235,13 @@ def main():
                                     os.path.join(cliconfig.asset_dir, "ui"),
                                     options.testfirstrun)
 
-    if not virtinstutil.local_libvirt_version() >= 6000:
+    if not util.local_libvirt_version() >= 6000:
         # We need this version for threaded virConnect access
         _show_startup_error(
                 _("virt-manager requires libvirt 0.6.0 or later."), "")
         return
 
-    virtManager.util.running_config = config
+    virtManager.config.running_config = config
     config.default_qemu_user = cliconfig.default_qemu_user
     config.rhel6_defaults = not cliconfig.rhel_enable_unsupported_opts
     config.preferred_distros = cliconfig.preferred_distros

@@ -30,7 +30,6 @@ from virtinst import Storage
 from virtinst import Interface
 
 from virtManager import uihelpers
-from virtManager import util
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.connection import vmmConnection
 from virtManager.createnet import vmmCreateNetwork
@@ -1019,7 +1018,7 @@ class vmmHost(vmmGObjectUI):
         if interface is None:
             return
 
-        if not util.chkbox_helper(self, self.config.get_confirm_interface,
+        if not uihelpers.chkbox_helper(self, self.config.get_confirm_interface,
             self.config.set_confirm_interface,
             text1=_("Are you sure you want to stop the interface "
                     "'%s'?" % interface.get_name())):
@@ -1034,7 +1033,7 @@ class vmmHost(vmmGObjectUI):
         if interface is None:
             return
 
-        if not util.chkbox_helper(self, self.config.get_confirm_interface,
+        if not uihelpers.chkbox_helper(self, self.config.get_confirm_interface,
             self.config.set_confirm_interface,
             text1=_("Are you sure you want to start the interface "
                     "'%s'?" % interface.get_name())):
@@ -1175,7 +1174,7 @@ class vmmHost(vmmGObjectUI):
         # This can fail if other interfaces are busted, so ignore errors
         used_by = None
         try:
-            used_by = util.iface_in_use_by(self.conn, name)
+            used_by = uihelpers.iface_in_use_by(self.conn, name)
         except Exception, e:
             logging.debug("Error looking up iface usage: %s", e)
         self.widget("interface-inuseby").set_text(used_by or "-")

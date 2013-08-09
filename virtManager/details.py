@@ -29,7 +29,7 @@ from gi.repository import Gdk
 
 import libvirt
 
-import virtManager.uihelpers as uihelpers
+from virtManager import uihelpers
 from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.addhardware import vmmAddHardware
@@ -37,9 +37,9 @@ from virtManager.choosecd import vmmChooseCD
 from virtManager.console import vmmConsolePages
 from virtManager.serialcon import vmmSerialConsole
 from virtManager.graphwidgets import Sparkline
-from virtManager import util as util
 
 import virtinst
+from virtinst import util
 
 
 # Parameters that can be editted in the details window
@@ -1262,7 +1262,7 @@ class vmmDetails(vmmGObjectUI):
         if not self.widget("config-apply").get_sensitive():
             return False
 
-        if not util.chkbox_helper(self,
+        if not uihelpers.chkbox_helper(self,
             self.config.get_confirm_unapplied,
             self.config.set_confirm_unapplied,
             text1=(_("There are unapplied changes. Would you like to apply "
@@ -1653,7 +1653,7 @@ class vmmDetails(vmmGObjectUI):
         now = str(datetime.datetime.now()).split(".")[0].replace(" ", "_")
         default = "Screenshot_%s_%s.png" % (self.vm.get_name(), now)
 
-        path = util.browse_local(
+        path = uihelpers.browse_local(
                         self.topwin,
                         _("Save Virtual Machine Screenshot"),
                         self.vm.conn,
@@ -2522,7 +2522,7 @@ class vmmDetails(vmmGObjectUI):
     def remove_device(self, dev_type, dev_id_info):
         logging.debug("Removing device: %s %s", dev_type, dev_id_info)
 
-        if not util.chkbox_helper(self, self.config.get_confirm_removedev,
+        if not uihelpers.chkbox_helper(self, self.config.get_confirm_removedev,
             self.config.set_confirm_removedev,
             text1=(_("Are you sure you want to remove this device?"))):
             return
@@ -2566,10 +2566,10 @@ class vmmDetails(vmmGObjectUI):
         Arguments can be a single arg or a list or appropriate arg type (e.g.
         a list of functions for define_funcs)
         """
-        define_funcs = virtinst.util.listify(define_funcs)
-        define_funcs_args = virtinst.util.listify(define_funcs_args)
-        hotplug_funcs = virtinst.util.listify(hotplug_funcs)
-        hotplug_funcs_args = virtinst.util.listify(hotplug_funcs_args)
+        define_funcs = util.listify(define_funcs)
+        define_funcs_args = util.listify(define_funcs_args)
+        hotplug_funcs = util.listify(hotplug_funcs)
+        hotplug_funcs_args = util.listify(hotplug_funcs_args)
 
         hotplug_err = []
         active = self.vm.is_active()

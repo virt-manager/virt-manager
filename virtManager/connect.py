@@ -28,7 +28,7 @@ from gi.repository import Gtk
 # pylint: enable=E0611
 
 from virtManager.baseclass import vmmGObjectUI
-from virtManager import util
+from virtManager import uihelpers
 
 HV_XEN = 0
 HV_QEMU = 1
@@ -153,7 +153,7 @@ class vmmConnect(vmmGObjectUI):
         return self.widget("connect-remote").get_active()
 
     def set_default_hypervisor(self):
-        default = util.default_uri(always_system=True)
+        default = uihelpers.default_uri(always_system=True)
         if not default or default.startswith("qemu"):
             self.widget("hypervisor").set_active(1)
         elif default.startswith("xen"):

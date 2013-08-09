@@ -33,8 +33,9 @@ import traceback
 import libvirt
 import virtinst
 from virtinst import pollhelpers
+from virtinst import util
 
-from virtManager import util
+from virtManager import uihelpers
 from virtManager import connectauth
 from virtManager.baseclass import vmmGObject
 from virtManager.domain import vmmDomain
@@ -323,7 +324,7 @@ class vmmConnection(vmmGObject):
             return match_whole_string(orig, "[0-9.]+")
 
         (scheme, username, hostname,
-         path, ignore, ignore) = virtinst.util.uri_split(self.get_uri())
+         path, ignore, ignore) = util.uri_split(self.get_uri())
 
         hv = ""
         rest = ""
@@ -430,7 +431,7 @@ class vmmConnection(vmmGObject):
             else:
                 # Try to create the default storage pool
                 try:
-                    util.build_default_pool(self)
+                    uihelpers.build_default_pool(self)
                 except Exception, e:
                     logging.debug("Building default pool failed: %s", str(e))
 

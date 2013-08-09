@@ -29,10 +29,11 @@ import traceback
 import logging
 
 import virtinst
+from virtinst import util
 
-from virtManager import util
-from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
+from virtManager.baseclass import vmmGObjectUI
+from virtManager import uihelpers
 
 STORAGE_ROW_CONFIRM = 0
 STORAGE_ROW_CANT_DELETE = 1
@@ -134,7 +135,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         devs = self.get_paths_to_delete()
 
         if devs:
-            ret = util.chkbox_helper(self,
+            ret = uihelpers.chkbox_helper(self,
                                      self.config.get_confirm_delstorage,
                                      self.config.set_confirm_delstorage,
                                      text1=_("Are you sure you want to delete "

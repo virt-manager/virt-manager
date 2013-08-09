@@ -28,8 +28,9 @@ import threading
 
 import libvirt
 import virtinst
+from virtinst import util
 
-from virtManager import util
+from virtManager import uihelpers
 from virtManager.libvirtobject import vmmLibvirtObject
 
 
@@ -206,7 +207,7 @@ class vmmDomain(vmmLibvirtObject):
             try:
                 self._backend.vcpus()
             except libvirt.libvirtError, err:
-                if virtinst.util.is_error_nosupport(err):
+                if util.is_error_nosupport(err):
                     self._getvcpus_supported = False
         return self._getvcpus_supported
     getvcpus_supported = property(_get_getvcpus_supported)
@@ -959,7 +960,7 @@ class vmmDomain(vmmLibvirtObject):
     def get_hv_type(self):
         return self._get_guest().type
     def get_pretty_hv_type(self):
-        return util.pretty_hv(self.get_abi_type(), self.get_hv_type())
+        return uihelpers.pretty_hv(self.get_abi_type(), self.get_hv_type())
     def get_arch(self):
         return self._get_guest().os.arch
     def get_init(self):
@@ -1646,7 +1647,7 @@ class vmmDomain(vmmLibvirtObject):
                     rx += io[0]
                     tx += io[4]
             except libvirt.libvirtError, err:
-                if virtinst.util.is_error_nosupport(err):
+                if util.is_error_nosupport(err):
                     logging.debug("Net stats not supported: %s", err)
                     self._stats_net_supported = False
                 else:
@@ -1683,7 +1684,7 @@ class vmmDomain(vmmLibvirtObject):
                     rd += io[1]
                     wr += io[3]
             except libvirt.libvirtError, err:
-                if virtinst.util.is_error_nosupport(err):
+                if util.is_error_nosupport(err):
                     logging.debug("Disk stats not supported: %s", err)
                     self._stats_disk_supported = False
                 else:
