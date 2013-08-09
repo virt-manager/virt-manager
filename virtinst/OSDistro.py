@@ -1218,12 +1218,12 @@ class MandrivaDistro(Distro):
 class MageiaDistro(MandrivaDistro):
     name = "Mageia"
 
-class ALTLinuxDistro(Distro):
 
+class ALTLinuxDistro(Distro):
     name = "ALT Linux"
     os_type = "linux"
-    _boot_iso_paths = [ ("altinst", "live") ]
-    _hvm_kernel_paths = [ ("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
+    _boot_iso_paths = [("altinst", "live")]
+    _hvm_kernel_paths = [("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
     _xen_kernel_paths = []
 
     def isValidStore(self, fetcher, progresscb):
@@ -1236,15 +1236,13 @@ class ALTLinuxDistro(Distro):
 
         if self._fetchAndMatchRegex(fetcher, progresscb, ".disk/info",
                                     ".*%s.*" % self.name):
-            logging.debug("Detected a %s distro" % self.name)
+            logging.debug("Detected a %s distro", self.name)
             return True
 
         return False
 
 
 # Solaris and OpenSolaris distros
-
-
 class SunDistro(Distro):
 
     name = "Solaris"
