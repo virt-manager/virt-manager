@@ -29,7 +29,7 @@ from virtinst import support
 from virtinst import Storage
 from virtinst import util
 from virtinst import Installer
-from virtinst.VirtualDisk import VirtualDisk
+from virtinst import VirtualDisk
 from virtinst import OSDistro
 
 
@@ -238,9 +238,9 @@ def _upload_media(conn, scratchdir, system_scratchdir,
 
 
 
-class DistroInstaller(Installer.Installer):
+class DistroInstaller(Installer):
     def __init__(self, *args, **kwargs):
-        Installer.Installer.__init__(self, *args, **kwargs)
+        Installer.__init__(self, *args, **kwargs)
 
         self.livecd = False
         self._location_is_path = True

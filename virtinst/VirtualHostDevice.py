@@ -17,9 +17,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtinst.VirtualDevice import VirtualDevice
-from virtinst.xmlbuilder import XMLProperty
+from virtinst import VirtualDevice
 from virtinst import NodeDeviceParser
+from virtinst.xmlbuilder import XMLProperty
 
 
 class VirtualHostDevice(VirtualDevice):

@@ -19,7 +19,7 @@
 
 import os
 
-from virtinst.VirtualDevice import VirtualDevice
+from virtinst import VirtualDevice
 from virtinst.xmlbuilder import XMLProperty
 
 

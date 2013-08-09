@@ -30,15 +30,15 @@ import libvirt
 import virtinst
 from virtinst import util
 from virtinst import support
-from virtinst.osxml import OSXML
+from virtinst import OSXML
+from virtinst import VirtualDisk
+from virtinst import VirtualDevice
+from virtinst import Clock
+from virtinst import Seclabel
+from virtinst import CPU
+from virtinst import DomainNumatune
+from virtinst import DomainFeatures
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty
-from virtinst.VirtualDisk import VirtualDisk
-from virtinst.VirtualDevice import VirtualDevice
-from virtinst.Clock import Clock
-from virtinst.Seclabel import Seclabel
-from virtinst.CPU import CPU
-from virtinst.DomainNumatune import DomainNumatune
-from virtinst.DomainFeatures import DomainFeatures
 
 from virtinst import osdict
 

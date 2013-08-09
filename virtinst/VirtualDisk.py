@@ -31,7 +31,7 @@ import urlgrabber.progress as progress
 import virtinst
 from virtinst import diskbackend
 from virtinst import util
-from virtinst.VirtualDevice import VirtualDevice
+from virtinst import VirtualDevice
 from virtinst.xmlbuilder import XMLProperty
 
 

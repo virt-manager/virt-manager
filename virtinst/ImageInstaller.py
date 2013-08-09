@@ -23,17 +23,17 @@ import os
 from virtinst import Installer
 from virtinst import ImageParser
 from virtinst import CapabilitiesParser
-from virtinst.VirtualDisk import VirtualDisk
+from virtinst import VirtualDisk
 
 
-class ImageInstaller(Installer.Installer):
+class ImageInstaller(Installer):
     """
     Installer for virt-image-based guests
     """
     _has_install_phase = False
 
     def __init__(self, conn, image, boot_index=None):
-        Installer.Installer.__init__(self, conn)
+        Installer.__init__(self, conn)
 
         self._image = image
 

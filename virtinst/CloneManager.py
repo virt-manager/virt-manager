@@ -27,8 +27,8 @@ import urlgrabber.progress as progress
 import libvirt
 
 from virtinst import Guest
-from virtinst.VirtualNetworkInterface import VirtualNetworkInterface
-from virtinst.VirtualDisk import VirtualDisk
+from virtinst import VirtualNetworkInterface
+from virtinst import VirtualDisk
 from virtinst import Storage
 from virtinst import util
 

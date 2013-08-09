@@ -17,12 +17,14 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtinst import util
-import libvirt
 import logging
 
-# class USBDevice
+import libvirt
 
+from virtinst import util
+
+
+# class USBDevice
 CAPABILITY_TYPE_SYSTEM = "system"
 CAPABILITY_TYPE_NET = "net"
 CAPABILITY_TYPE_PCI = "pci"

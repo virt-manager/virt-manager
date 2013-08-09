@@ -20,7 +20,7 @@
 # MA 02110-1301 USA.
 
 from virtinst import support
-from virtinst.VirtualDevice import VirtualDevice
+from virtinst import VirtualDevice
 
 HV_ALL = "all"
 

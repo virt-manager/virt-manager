@@ -14,9 +14,10 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import os.path
+import os
 import unittest
-import virtinst.CapabilitiesParser as capabilities
+
+from virtinst import CapabilitiesParser as capabilities
 
 
 def build_host_feature_dict(feature_list):

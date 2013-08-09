@@ -19,10 +19,17 @@ enable_rhel_defaults = not cliconfig.rhel_enable_unsupported_opts
 cliutils.setup_i18n()
 
 
-# Public imports
+from virtinst import util
+from virtinst import support
 
-from virtinst.Guest import Guest
 from virtinst.osxml import OSXML
+from virtinst.DomainFeatures import DomainFeatures
+from virtinst.DomainNumatune import DomainNumatune
+from virtinst.Clock import Clock
+from virtinst.CPU import CPU, CPUFeature
+from virtinst.Seclabel import Seclabel
+
+from virtinst.VirtualDevice import VirtualDevice
 from virtinst.VirtualNetworkInterface import VirtualNetworkInterface
 from virtinst.VirtualGraphics import VirtualGraphics
 from virtinst.VirtualAudio import VirtualAudio
@@ -41,12 +48,14 @@ from virtinst.VirtualSmartCardDevice import VirtualSmartCardDevice
 from virtinst.VirtualRedirDevice import VirtualRedirDevice
 from virtinst.VirtualMemballoon import VirtualMemballoon
 from virtinst.VirtualTPMDevice import VirtualTPMDevice
+
+from virtinst.Installer import (ContainerInstaller, ImportInstaller,
+                                LiveCDInstaller, PXEInstaller, Installer)
+
 from virtinst.DistroInstaller import DistroInstaller
 from virtinst.ImageInstaller import ImageInstaller
-from virtinst.Installer import (ContainerInstaller, ImportInstaller,
-                                LiveCDInstaller, PXEInstaller)
+
+from virtinst.Guest import Guest
 from virtinst.CloneManager import Cloner
-from virtinst.Clock import Clock
-from virtinst.CPU import CPU, CPUFeature
-from virtinst.Seclabel import Seclabel
+
 from virtinst.connection import VirtualConnection
