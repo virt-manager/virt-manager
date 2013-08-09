@@ -17,7 +17,7 @@
 import os.path
 import unittest
 
-import virtinst.NodeDeviceParser as nodeparse
+from virtinst import NodeDeviceParser as nodeparse
 from virtinst import VirtualHostDevice
 
 from tests import utils

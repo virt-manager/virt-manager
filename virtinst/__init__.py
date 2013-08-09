@@ -23,38 +23,43 @@ from virtinst import util
 from virtinst import support
 
 from virtinst.osxml import OSXML
-from virtinst.DomainFeatures import DomainFeatures
-from virtinst.DomainNumatune import DomainNumatune
-from virtinst.Clock import Clock
-from virtinst.CPU import CPU, CPUFeature
-from virtinst.Seclabel import Seclabel
+from virtinst.domainfeatures import DomainFeatures
+from virtinst.domainnumatune import DomainNumatune
+from virtinst.clock import Clock
+from virtinst.cpu import CPU, CPUFeature
+from virtinst.seclabel import Seclabel
 
-from virtinst.VirtualDevice import VirtualDevice
-from virtinst.VirtualNetworkInterface import VirtualNetworkInterface
-from virtinst.VirtualGraphics import VirtualGraphics
-from virtinst.VirtualAudio import VirtualAudio
-from virtinst.VirtualInputDevice import VirtualInputDevice
-from virtinst.VirtualDisk import VirtualDisk
-from virtinst.VirtualHostDevice import VirtualHostDevice
-from virtinst.VirtualCharDevice import (VirtualChannelDevice,
-                                        VirtualConsoleDevice,
-                                        VirtualParallelDevice,
-                                        VirtualSerialDevice)
-from virtinst.VirtualVideoDevice import VirtualVideoDevice
-from virtinst.VirtualController import VirtualController
-from virtinst.VirtualWatchdog import VirtualWatchdog
-from virtinst.VirtualFilesystem import VirtualFilesystem
-from virtinst.VirtualSmartCardDevice import VirtualSmartCardDevice
-from virtinst.VirtualRedirDevice import VirtualRedirDevice
-from virtinst.VirtualMemballoon import VirtualMemballoon
-from virtinst.VirtualTPMDevice import VirtualTPMDevice
+import virtinst.storage as Storage
+import virtinst.nodedev as NodeDeviceParser
+import virtinst.capabilities as CapabilitiesParser
+import virtinst.interface as Interface
 
-from virtinst.Installer import (ContainerInstaller, ImportInstaller,
+from virtinst.device import VirtualDevice
+from virtinst.deviceinterface import VirtualNetworkInterface
+from virtinst.devicegraphics import VirtualGraphics
+from virtinst.deviceaudio import VirtualAudio
+from virtinst.deviceinput import VirtualInputDevice
+from virtinst.devicedisk import VirtualDisk
+from virtinst.devicehostdev import VirtualHostDevice
+from virtinst.devicechar import (VirtualChannelDevice,
+                                 VirtualConsoleDevice,
+                                 VirtualParallelDevice,
+                                 VirtualSerialDevice)
+from virtinst.devicevideo import VirtualVideoDevice
+from virtinst.devicecontroller import VirtualController
+from virtinst.devicewatchdog import VirtualWatchdog
+from virtinst.devicefilesystem import VirtualFilesystem
+from virtinst.devicesmartcard import VirtualSmartCardDevice
+from virtinst.deviceredirdev import VirtualRedirDevice
+from virtinst.devicememballoon import VirtualMemballoon
+from virtinst.devicetpm import VirtualTPMDevice
+
+from virtinst.installer import (ContainerInstaller, ImportInstaller,
                                 LiveCDInstaller, PXEInstaller, Installer)
 
-from virtinst.DistroInstaller import DistroInstaller
+from virtinst.distroinstaller import DistroInstaller
 
-from virtinst.Guest import Guest
-from virtinst.CloneManager import Cloner
+from virtinst.guest import Guest
+from virtinst.cloner import Cloner
 
 from virtinst.connection import VirtualConnection

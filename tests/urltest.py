@@ -23,14 +23,14 @@ import sys
 
 from tests import utils
 import virtinst
-import virtinst.OSDistro as OSDistro
-from virtinst.OSDistro import FedoraDistro
-from virtinst.OSDistro import SuseDistro
-from virtinst.OSDistro import DebianDistro
-from virtinst.OSDistro import CentOSDistro
-from virtinst.OSDistro import SLDistro
-from virtinst.OSDistro import UbuntuDistro
-from virtinst.OSDistro import MandrivaDistro
+from virtinst import urlfetcher
+from virtinst.urlfetcher import FedoraDistro
+from virtinst.urlfetcher import SuseDistro
+from virtinst.urlfetcher import DebianDistro
+from virtinst.urlfetcher import CentOSDistro
+from virtinst.urlfetcher import SLDistro
+from virtinst.urlfetcher import UbuntuDistro
+from virtinst.urlfetcher import MandrivaDistro
 
 import urlgrabber.progress
 
@@ -238,7 +238,7 @@ class TestURLFetch(unittest.TestCase):
     def _fetchLocalMedia(self, mediapath):
         arch = platform.machine()
 
-        fetcher = OSDistro._fetcherForURI(mediapath, "/tmp")
+        fetcher = urlfetcher._fetcherForURI(mediapath, "/tmp")
 
         try:
             fetcher.prepareLocation()
@@ -254,7 +254,7 @@ class TestURLFetch(unittest.TestCase):
         logging.debug("\nDistro='%s' arch='%s' url=%s",
                       distname, arch, url)
 
-        fetcher = OSDistro._fetcherForURI(url, "/tmp")
+        fetcher = urlfetcher._fetcherForURI(url, "/tmp")
         try:
             fetcher.prepareLocation()
         except Exception, e:
@@ -377,7 +377,7 @@ class TestURLFetch(unittest.TestCase):
     def _getStore(self, fetcher, url, _type, arch):
         for ignore in range(0, 10):
             try:
-                return OSDistro._storeForDistro(fetcher=fetcher, baseuri=url,
+                return urlfetcher._storeForDistro(fetcher=fetcher, baseuri=url,
                                                 progresscb=self.meter,
                                                 arch=arch, typ=_type)
             except Exception, e:

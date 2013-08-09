@@ -18,9 +18,7 @@ import os
 import unittest
 import logging
 
-import virtinst.Interface
-from virtinst.Interface import (Interface, InterfaceProtocol,
-                                InterfaceProtocolIPAddress)
+from virtinst import Interface
 from tests import utils
 
 conn = utils.open_testdriver()
@@ -40,7 +38,7 @@ class TestInterfaces(unittest.TestCase):
         pass
 
     def build_interface(self, interface_type, name):
-        iclass  = Interface.interface_class_for_type(interface_type)
+        iclass  = Interface.Interface.interface_class_for_type(interface_type)
         iobj    = iclass(conn, name)
 
         return iobj
@@ -48,15 +46,15 @@ class TestInterfaces(unittest.TestCase):
     def set_general_params(self, iface_obj):
         iface_obj.mtu = 1501
         iface_obj.macaddr = "AA:AA:AA:AA:AA:AA"
-        iface_obj.start_mode = Interface.INTERFACE_START_MODE_ONBOOT
-        iface_obj.protocols = [virtinst.Interface.InterfaceProtocolIPv4()]
+        iface_obj.start_mode = Interface.Interface.INTERFACE_START_MODE_ONBOOT
+        iface_obj.protocols = [Interface.InterfaceProtocolIPv4()]
 
     def add_child_interfaces(self, iface_obj):
-        if iface_obj.object_type == Interface.INTERFACE_TYPE_BRIDGE:
+        if iface_obj.object_type == Interface.Interface.INTERFACE_TYPE_BRIDGE:
             iface_obj.interfaces.append(vlan_iface)
             iface_obj.interfaces.append(bond_iface)
             iface_obj.interfaces.append(eth_iface1)
-        elif iface_obj.object_type == Interface.INTERFACE_TYPE_BOND:
+        elif iface_obj.object_type == Interface.Interface.INTERFACE_TYPE_BOND:
             iface_obj.interfaces.append(eth_iface1)
             iface_obj.interfaces.append(eth_iface2)
             iface_obj.interfaces.append(eth_iface3)
@@ -79,7 +77,7 @@ class TestInterfaces(unittest.TestCase):
     # Bridge tests
     def testBridgeInterface(self):
         filename = "bridge"
-        obj = self.build_interface(Interface.INTERFACE_TYPE_BRIDGE,
+        obj = self.build_interface(Interface.Interface.INTERFACE_TYPE_BRIDGE,
                                    "test-%s" % filename)
         self.add_child_interfaces(obj)
 
@@ -90,27 +88,29 @@ class TestInterfaces(unittest.TestCase):
 
     def testBridgeInterfaceIP(self):
         filename = "bridge-ip"
-        obj = self.build_interface(Interface.INTERFACE_TYPE_BRIDGE,
+        obj = self.build_interface(Interface.Interface.INTERFACE_TYPE_BRIDGE,
                                    "test-%s" % filename)
         self.add_child_interfaces(obj)
 
         # IPv4 proto
-        iface_ip1 = InterfaceProtocolIPAddress("129.63.1.2")
-        iface_ip2 = InterfaceProtocolIPAddress("255.255.255.0")
-        iface_proto1 = InterfaceProtocol.protocol_class_for_family(
-                        InterfaceProtocol.INTERFACE_PROTOCOL_FAMILY_IPV4)()
+        iface_ip1 = Interface.InterfaceProtocolIPAddress("129.63.1.2")
+        iface_ip2 = Interface.InterfaceProtocolIPAddress("255.255.255.0")
+        iface_proto1 = Interface.InterfaceProtocol.protocol_class_for_family(
+                Interface.InterfaceProtocol.INTERFACE_PROTOCOL_FAMILY_IPV4)()
         iface_proto1.ips = [iface_ip1, iface_ip2]
         iface_proto1.gateway = "1.2.3.4"
         iface_proto1.dhcp = True
         iface_proto1.dhcp_peerdns = True
 
         # IPv6 proto
-        iface_ip3 = InterfaceProtocolIPAddress("fe99::215:58ff:fe6e:5",
+        iface_ip3 = Interface.InterfaceProtocolIPAddress(
+                                               "fe99::215:58ff:fe6e:5",
                                                prefix="32")
-        iface_ip4 = InterfaceProtocolIPAddress("fe80::215:58ff:fe6e:5",
+        iface_ip4 = Interface.InterfaceProtocolIPAddress(
+                                               "fe80::215:58ff:fe6e:5",
                                                prefix="64")
-        iface_proto2 = InterfaceProtocol.protocol_class_for_family(
-                         InterfaceProtocol.INTERFACE_PROTOCOL_FAMILY_IPV6)()
+        iface_proto2 = Interface.InterfaceProtocol.protocol_class_for_family(
+                Interface.InterfaceProtocol.INTERFACE_PROTOCOL_FAMILY_IPV6)()
 
         iface_proto2.ips = [iface_ip3, iface_ip4]
         iface_proto2.gateway = "1.2.3.4"
@@ -125,7 +125,7 @@ class TestInterfaces(unittest.TestCase):
     # Bond tests
     def testBondInterface(self):
         filename = "bond"
-        obj = self.build_interface(Interface.INTERFACE_TYPE_BOND,
+        obj = self.build_interface(Interface.Interface.INTERFACE_TYPE_BOND,
                                    "test-%s" % filename)
         self.add_child_interfaces(obj)
         self.set_general_params(obj)
@@ -134,7 +134,7 @@ class TestInterfaces(unittest.TestCase):
 
     def testBondInterfaceARP(self):
         filename = "bond-arp"
-        obj = self.build_interface(Interface.INTERFACE_TYPE_BOND,
+        obj = self.build_interface(Interface.Interface.INTERFACE_TYPE_BOND,
                                    "test-%s" % filename)
         self.add_child_interfaces(obj)
         self.set_general_params(obj)
@@ -148,7 +148,7 @@ class TestInterfaces(unittest.TestCase):
 
     def testBondInterfaceMII(self):
         filename = "bond-mii"
-        obj = self.build_interface(Interface.INTERFACE_TYPE_BOND,
+        obj = self.build_interface(Interface.Interface.INTERFACE_TYPE_BOND,
                                    "test-%s" % filename)
         self.add_child_interfaces(obj)
         self.set_general_params(obj)
@@ -164,25 +164,25 @@ class TestInterfaces(unittest.TestCase):
     # Ethernet tests
     def testEthernetInterface(self):
         filename = "ethernet"
-        obj = self.build_interface(Interface.INTERFACE_TYPE_ETHERNET,
+        obj = self.build_interface(Interface.Interface.INTERFACE_TYPE_ETHERNET,
                                    "test-%s" % filename)
         self.define_xml(obj)
 
     def testEthernetManyParam(self):
         filename = "ethernet-params"
-        obj = self.build_interface(Interface.INTERFACE_TYPE_ETHERNET,
+        obj = self.build_interface(Interface.Interface.INTERFACE_TYPE_ETHERNET,
                                     "test-%s" % filename)
 
         obj.mtu = 1234
         obj.mac = "AA:BB:FF:FF:BB:AA"
-        obj.start_mode = Interface.INTERFACE_START_MODE_HOTPLUG
+        obj.start_mode = Interface.Interface.INTERFACE_START_MODE_HOTPLUG
 
         self.define_xml(obj)
 
     # VLAN tests
     def testVLANInterface(self):
         filename = "vlan"
-        obj = self.build_interface(Interface.INTERFACE_TYPE_VLAN,
+        obj = self.build_interface(Interface.Interface.INTERFACE_TYPE_VLAN,
                                    "test-%s" % filename)
 
         obj.tag = "123"
@@ -191,7 +191,7 @@ class TestInterfaces(unittest.TestCase):
         self.define_xml(obj)
 
     def testVLANInterfaceBusted(self):
-        obj = self.build_interface(Interface.INTERFACE_TYPE_VLAN,
+        obj = self.build_interface(Interface.Interface.INTERFACE_TYPE_VLAN,
                                    "vlan1")
 
         try:
@@ -205,7 +205,7 @@ class TestInterfaces(unittest.TestCase):
     # protocol_xml test
     def testEthernetProtocolInterface(self):
         filename = "ethernet-copy-proto"
-        obj = self.build_interface(Interface.INTERFACE_TYPE_ETHERNET,
+        obj = self.build_interface(Interface.Interface.INTERFACE_TYPE_ETHERNET,
                                    "test-%s" % filename)
 
         protoxml = ("  <protocol family='ipv6'>\n"

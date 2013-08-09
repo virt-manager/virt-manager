@@ -30,7 +30,7 @@ from virtinst import Storage
 from virtinst import util
 from virtinst import Installer
 from virtinst import VirtualDisk
-from virtinst import OSDistro
+from virtinst import urlfetcher
 
 
 def _is_url(url, is_local):
@@ -254,7 +254,7 @@ class DistroInstaller(Installer):
         transient = not self.livecd
         if not self._location_is_path:
             (store_ignore, os_type_ignore,
-             os_variant_ignore, media) = OSDistro.getBootDisk(guest,
+             os_variant_ignore, media) = urlfetcher.getBootDisk(guest,
                                                               self.location,
                                                               meter,
                                                               scratchdir)
@@ -284,7 +284,7 @@ class DistroInstaller(Installer):
         if self._install_kernel and not self.scratchdir_required():
             return disk
 
-        ignore, os_type, os_variant, media = OSDistro.getKernel(guest,
+        ignore, os_type, os_variant, media = urlfetcher.getKernel(guest,
                                                 self.location, meter,
                                                 scratchdir,
                                                 guest.os.os_type)
@@ -398,12 +398,12 @@ class DistroInstaller(Installer):
             return True
 
         # This will throw an error for us
-        OSDistro.detectMediaDistro(self.location, arch)
+        urlfetcher.detectMediaDistro(self.location, arch)
         return True
 
     def detect_distro(self, arch):
         try:
-            dist_info = OSDistro.detectMediaDistro(self.location, arch)
+            dist_info = urlfetcher.detectMediaDistro(self.location, arch)
         except:
             logging.exception("Error attempting to detect distro.")
             return (None, None)

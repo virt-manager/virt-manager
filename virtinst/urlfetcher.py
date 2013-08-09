@@ -34,7 +34,6 @@ import urlparse
 
 import urlgrabber.grabber as grabber
 
-import virtinst
 from virtinst import osdict
 from virtinst import util
 
@@ -253,8 +252,8 @@ def _storeForDistro(fetcher, baseuri, typ, progresscb, arch, distro=None,
     skip_treeinfo = False
     logging.debug("Attempting to detect distro:")
 
-    dist = virtinst.OSDistro.distroFromTreeinfo(fetcher, progresscb, baseuri,
-                                                arch, typ, scratchdir)
+    dist = distroFromTreeinfo(fetcher, progresscb, baseuri,
+                              arch, typ, scratchdir)
     if dist:
         return dist
     skip_treeinfo = True

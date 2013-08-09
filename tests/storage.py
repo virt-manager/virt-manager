@@ -17,8 +17,7 @@
 import os
 import unittest
 
-import virtinst.Storage
-from virtinst.Storage import StoragePool, StorageVolume
+from virtinst import Storage
 
 from tests import utils
 
@@ -51,7 +50,8 @@ def _findFreePoolName(conn, namebase):
     while True:
         poolname = namebase + "-%d" % i
         try:
-            StorageVolume.lookup_pool_by_name(conn=conn, pool_name=poolname)
+            Storage.StorageVolume.lookup_pool_by_name(conn=conn,
+                                                      pool_name=poolname)
             i += 1
         except:
             return poolname
@@ -59,7 +59,7 @@ def _findFreePoolName(conn, namebase):
 
 def createPool(conn, ptype, poolname=None, fmt=None, target_path=None,
                source_path=None, source_name=None, uuid=None, iqn=None):
-    poolclass = StoragePool.get_pool_class(ptype)
+    poolclass = Storage.StoragePool.get_pool_class(ptype)
 
     if poolname is None:
         poolname = _findFreePoolName(conn, str(ptype) + "-pool")
@@ -97,7 +97,7 @@ def poolCompare(pool_inst):
 
 
 def createVol(conn, poolobj, volname=None, input_vol=None, clone_vol=None):
-    volclass = StorageVolume.get_volume_for_pool(pool_object=poolobj)
+    volclass = Storage.StorageVolume.get_volume_for_pool(pool_object=poolobj)
 
     if volname is None:
         volname = poolobj.name() + "-vol"
@@ -117,7 +117,7 @@ def createVol(conn, poolobj, volname=None, input_vol=None, clone_vol=None):
     if input_vol:
         vol_inst.input_vol = input_vol
     elif clone_vol:
-        vol_inst = virtinst.Storage.CloneVolume(conn, volname, clone_vol)
+        vol_inst = Storage.CloneVolume(conn, volname, clone_vol)
 
     filename = os.path.join(basepath, vol_inst.name + ".xml")
 
@@ -133,7 +133,8 @@ class TestStorage(unittest.TestCase):
         self.conn = utils.open_testdefault()
 
     def testDirPool(self):
-        poolobj = createPool(self.conn, StoragePool.TYPE_DIR, "pool-dir")
+        poolobj = createPool(self.conn,
+                             Storage.StoragePool.TYPE_DIR, "pool-dir")
         invol = createVol(self.conn, poolobj)
         createVol(self.conn, poolobj,
                   volname=invol.name() + "input", input_vol=invol)
@@ -141,7 +142,8 @@ class TestStorage(unittest.TestCase):
                   volname=invol.name() + "clone", clone_vol=invol)
 
     def testFSPool(self):
-        poolobj = createPool(self.conn, StoragePool.TYPE_FS, "pool-fs")
+        poolobj = createPool(self.conn,
+                             Storage.StoragePool.TYPE_FS, "pool-fs")
         invol = createVol(self.conn, poolobj)
         createVol(self.conn, poolobj,
                   volname=invol.name() + "input", input_vol=invol)
@@ -149,7 +151,8 @@ class TestStorage(unittest.TestCase):
                   volname=invol.name() + "clone", clone_vol=invol)
 
     def testNetFSPool(self):
-        poolobj = createPool(self.conn, StoragePool.TYPE_NETFS, "pool-netfs")
+        poolobj = createPool(self.conn,
+                             Storage.StoragePool.TYPE_NETFS, "pool-netfs")
         invol = createVol(self.conn, poolobj)
         createVol(self.conn, poolobj,
                   volname=invol.name() + "input", input_vol=invol)
@@ -157,7 +160,8 @@ class TestStorage(unittest.TestCase):
                   volname=invol.name() + "clone", clone_vol=invol)
 
     def testLVPool(self):
-        poolobj = createPool(self.conn, StoragePool.TYPE_LOGICAL,
+        poolobj = createPool(self.conn,
+                             Storage.StoragePool.TYPE_LOGICAL,
                              "pool-logical",
                              target_path="/dev/pool-logical")
         invol = createVol(self.conn, poolobj)
@@ -167,21 +171,24 @@ class TestStorage(unittest.TestCase):
                   poolobj, volname=invol.name() + "clone", clone_vol=invol)
 
         # Test parsing source name for target path
-        createPool(self.conn, StoragePool.TYPE_LOGICAL,
+        createPool(self.conn, Storage.StoragePool.TYPE_LOGICAL,
                    "pool-logical-target-srcname",
                    target_path="/dev/vgfoobar")
 
         # Test with source name
-        createPool(self.conn, StoragePool.TYPE_LOGICAL, "pool-logical-srcname",
+        createPool(self.conn,
+                   Storage.StoragePool.TYPE_LOGICAL, "pool-logical-srcname",
                    source_name="vgname")
 
         # Test creating with many devices
-        createPool(self.conn, StoragePool.TYPE_LOGICAL, "pool-logical-manydev",
+        createPool(self.conn,
+                   Storage.StoragePool.TYPE_LOGICAL, "pool-logical-manydev",
                    source_path=["/tmp/path1", "/tmp/path2", "/tmp/path3"],
                    target_path=None)
 
     def testDiskPool(self):
-        poolobj = createPool(self.conn, StoragePool.TYPE_DISK,
+        poolobj = createPool(self.conn,
+                             Storage.StoragePool.TYPE_DISK,
                              "pool-disk", fmt="dos")
         invol = createVol(self.conn, poolobj)
         createVol(self.conn, poolobj,
@@ -190,22 +197,26 @@ class TestStorage(unittest.TestCase):
                   volname=invol.name() + "clone", clone_vol=invol)
 
     def testISCSIPool(self):
-        poolobj = createPool(self.conn, StoragePool.TYPE_ISCSI, "pool-iscsi")
+        poolobj = createPool(self.conn,
+                             Storage.StoragePool.TYPE_ISCSI, "pool-iscsi")
         # Not supported
         #volobj = createVol(poolobj)
         self.assertRaises(RuntimeError, createVol, self.conn, poolobj)
 
-        createPool(self.conn, StoragePool.TYPE_ISCSI, "pool-iscsi-iqn",
+        createPool(self.conn,
+                   Storage.StoragePool.TYPE_ISCSI, "pool-iscsi-iqn",
                    iqn="foo.bar.baz.iqn")
 
     def testSCSIPool(self):
-        poolobj = createPool(self.conn, StoragePool.TYPE_SCSI, "pool-scsi")
+        poolobj = createPool(self.conn,
+                             Storage.StoragePool.TYPE_SCSI, "pool-scsi")
         # Not supported
         #volobj = createVol(poolobj)
         self.assertRaises(RuntimeError, createVol, self.conn, poolobj)
 
     def testMpathPool(self):
-        poolobj = createPool(self.conn, StoragePool.TYPE_MPATH, "pool-mpath")
+        poolobj = createPool(self.conn,
+                             Storage.StoragePool.TYPE_MPATH, "pool-mpath")
         # Not supported
         #volobj = createVol(poolobj)
         self.assertRaises(RuntimeError, createVol, self.conn, poolobj)
@@ -219,16 +230,16 @@ class TestStorage(unittest.TestCase):
     def testEnumerateLogical(self):
         name = "pool-logical-list"
 
-        lst = StoragePool.pool_list_from_sources(self.conn, name,
-                                                 StoragePool.TYPE_LOGICAL)
+        lst = Storage.StoragePool.pool_list_from_sources(self.conn, name,
+                                            Storage.StoragePool.TYPE_LOGICAL)
         self._enumerateCompare(lst)
 
     def testEnumerateNetFS(self):
         name = "pool-netfs-list"
         host = "example.com"
 
-        lst = StoragePool.pool_list_from_sources(self.conn, name,
-                                                 StoragePool.TYPE_NETFS,
+        lst = Storage.StoragePool.pool_list_from_sources(self.conn, name,
+                                            Storage.StoragePool.TYPE_NETFS,
                                                  host=host)
         self._enumerateCompare(lst)
 
@@ -236,8 +247,8 @@ class TestStorage(unittest.TestCase):
         name = "pool-iscsi-list"
         host = "example.com"
 
-        lst = StoragePool.pool_list_from_sources(self.conn, name,
-                                                 StoragePool.TYPE_ISCSI,
+        lst = Storage.StoragePool.pool_list_from_sources(self.conn, name,
+                                            Storage.StoragePool.TYPE_ISCSI,
                                                  host=host)
         self.assertTrue(len(lst) == 0)
 

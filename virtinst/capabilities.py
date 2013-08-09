@@ -721,8 +721,8 @@ class Capabilities(object):
         return (guest, domain)
 
     def build_virtinst_guest(self, conn, guest, domain):
-        import virtinst
-        gobj = virtinst.Guest(conn)
+        from virtinst import Guest as VGuest
+        gobj = VGuest(conn)
         gobj.type = domain.hypervisor_type
         gobj.os.os_type = guest.os_type
         gobj.os.arch = guest.arch
