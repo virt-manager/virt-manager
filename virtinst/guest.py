@@ -169,6 +169,10 @@ class Guest(XMLBuilder):
         "seclabel"]
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
+        self._devices = []
+        self._install_devices = []
+        XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
+
         self.autostart = False
         self.replace = False
         self.os_autodetect = False
@@ -177,25 +181,11 @@ class Guest(XMLBuilder):
         self._os_variant = None
         self._random_uuid = None
 
-        self.installer = None
-
-        # General device list. Only access through API calls (even internally)
-        self._devices = []
-
-        # Device list to use/alter during install process. Don't access
-        # directly, use internal APIs
-        self._install_devices = []
-
         # The libvirt virDomain object we 'Create'
         self.domain = None
         self._consolechild = None
 
-        # Since we overwrite _parsexml handling, need to set up some
-        # internal state before calling __init__
-        XMLBuilder.__init__(self, conn, parsexml)
-
         self.installer = virtinst.DistroInstaller(conn)
-
         self.os = OSXML(self.conn, None, self._xml_node)
         self.features = DomainFeatures(self.conn, None, self._xml_node)
         self.clock = Clock(self.conn, None, self._xml_node)
