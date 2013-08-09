@@ -23,10 +23,9 @@
 import sys
 import urlgrabber.progress as progress
 
-import virtinst
-import virtinst.ImageParser
 import virtinst.cli as cli
 from virtinst.cli import fail, print_stdout, print_stderr
+from virtinst import virtimage
 
 import optparse
 from optparse import OptionGroup
@@ -138,7 +137,7 @@ def main(conn=None):
         conn = cli.getConnection(options.connect)
 
     try:
-        image = virtinst.ImageParser.parse_file(options.image)
+        image = virtimage.parse_file(options.image)
     except RuntimeError, msg:
         fail("%s '%s': %s" % (_("Cannot parse"),  options.image, msg))
 
@@ -150,7 +149,7 @@ def main(conn=None):
 
 
     # Build the Installer instance
-    installer = virtinst.ImageInstaller(conn, image, boot_index=options.boot)
+    installer = virtimage.ImageInstaller(conn, image, boot_index=options.boot)
     guest = conn.caps.build_virtinst_guest(conn, *installer.get_caps_guest())
     guest.installer = installer
 

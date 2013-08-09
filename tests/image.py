@@ -14,11 +14,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import unittest
-import virtinst
-import virtinst.cli
-import virtinst.ImageParser
 import os
+import unittest
+
+import virtinst.cli
+from virtinst import virtimage
 
 from tests import utils
 
@@ -39,7 +39,7 @@ class TestImageParser(unittest.TestCase):
         xml = f.read()
         f.close()
 
-        img = virtinst.ImageParser.parse(xml, ".")
+        img = virtimage.parse(xml, ".")
         self.assertEqual("test-image", img.name)
         self.assertTrue(img.domain)
         self.assertEqual(5, len(img.storage))
@@ -53,14 +53,14 @@ class TestImageParser(unittest.TestCase):
         xml = f.read()
         f.close()
 
-        img = virtinst.ImageParser.parse(xml, ".")
+        img = virtimage.parse(xml, ".")
         self.assertEqual(2, img.domain.interface)
 
     def testBadArch(self):
         """Makes sure we sanitize i386->i686"""
-        image = virtinst.ImageParser.parse_file(self.basedir +
+        image = virtimage.parse_file(self.basedir +
                                                 "image-bad-arch.xml")
-        virtinst.ImageInstaller(self.conn, image, 0)
+        virtimage.ImageInstaller(self.conn, image, 0)
         self.assertTrue(True)
 
     def testStorageFormat(self):
@@ -69,7 +69,7 @@ class TestImageParser(unittest.TestCase):
 
     def _image2XMLhelper(self, image_xml, output_xmls, qemu=False):
         image2guestdir = self.basedir + "image2guest/"
-        image = virtinst.ImageParser.parse_file(self.basedir + image_xml)
+        image = virtimage.parse_file(self.basedir + image_xml)
         if type(output_xmls) is not list:
             output_xmls = [output_xmls]
 
@@ -78,7 +78,7 @@ class TestImageParser(unittest.TestCase):
 
         for idx in range(len(output_xmls)):
             fname = output_xmls[idx]
-            inst = virtinst.ImageInstaller(conn, image, boot_index=idx)
+            inst = virtimage.ImageInstaller(conn, image, boot_index=idx)
             capsguest, capsdomain = inst.get_caps_guest()
             if capsguest.os_type == "hvm":
                 g = utils.get_basic_fullyvirt_guest(typ=gtype)

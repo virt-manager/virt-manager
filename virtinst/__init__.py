@@ -53,7 +53,6 @@ from virtinst.Installer import (ContainerInstaller, ImportInstaller,
                                 LiveCDInstaller, PXEInstaller, Installer)
 
 from virtinst.DistroInstaller import DistroInstaller
-from virtinst.ImageInstaller import ImageInstaller
 
 from virtinst.Guest import Guest
 from virtinst.CloneManager import Cloner
