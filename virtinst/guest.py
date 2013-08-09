@@ -501,7 +501,7 @@ class Guest(XMLBuilder):
         if not self.installer.has_install_phase():
             return False
 
-        return self._lookup_osdict_key("continue")
+        return self._lookup_osdict_key("cont")
 
 
     ##########################
