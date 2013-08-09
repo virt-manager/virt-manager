@@ -567,7 +567,7 @@ class vmmDetails(vmmGObjectUI):
         self.media_choosers = {}
 
         for serial in self.serial_tabs:
-            self._close_serial_tab(serial)
+            serial.cleanup()
 
         self.console.cleanup()
         self.console = None
