@@ -19,10 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import os
-import time
 import logging
-import signal
 
 import urlgrabber.progress as progress
 import libvirt
@@ -225,7 +222,6 @@ class Guest(XMLBuilder):
 
         # The libvirt virDomain object we 'Create'
         self.domain = None
-        self._consolechild = None
 
         self.installer = virtinst.DistroInstaller(conn)
         self.os = OSXML(self.conn, None, self._xml_node)
@@ -562,76 +558,6 @@ class Guest(XMLBuilder):
 
         return self._lookup_osdict_key("continue")
 
-    def connect_console(self, consolecb, wait):
-        """
-        Launched the passed console callback for the already defined
-        domain. If domain isn't running, return an error.
-        """
-        self.domain = _wait_for_domain(self.conn, self.name)
-
-        child = None
-        if consolecb:
-            child = consolecb(self.domain)
-        self._consolechild = child
-
-        if not self._consolechild or not wait:
-            return
-
-        # If we connected the console, wait for it to finish
-        try:
-            os.waitpid(self._consolechild, 0)
-        except OSError, (err_no, msg):
-            logging.debug("waitpid: %s: %s", err_no, msg)
-
-        # ensure there's time for the domain to finish destroying if the
-        # install has finished or the guest crashed
-        time.sleep(1)
-
-    def terminate_console(self):
-        """
-        Kill guest console if it is open (and actually exists), otherwise
-        do nothing
-        """
-        if self._consolechild:
-            try:
-                os.kill(self._consolechild, signal.SIGKILL)
-            except:
-                pass
-
-    def domain_is_shutdown(self):
-        """
-        Return True if the created domain object is shutdown
-        """
-        dom = self.domain
-        if not dom:
-            return False
-
-        dominfo = dom.info()
-
-        state    = dominfo[0]
-        cpu_time = dominfo[4]
-
-        if state == libvirt.VIR_DOMAIN_SHUTOFF:
-            return True
-
-        # If 'wait' was specified, the dom object we have was looked up
-        # before initially shutting down, which seems to bogus up the
-        # info data (all 0's). So, if it is bogus, assume the domain is
-        # shutdown. We will catch the error later.
-        return state == libvirt.VIR_DOMAIN_NOSTATE and cpu_time == 0
-
-    def domain_is_crashed(self):
-        """
-        Return True if the created domain object is in a crashed state
-        """
-        if not self.domain:
-            return False
-
-        dominfo = self.domain.info()
-        state = dominfo[0]
-
-        return state == libvirt.VIR_DOMAIN_CRASHED
-
 
     ##########################
     # Actual install methods #
@@ -647,7 +573,6 @@ class Guest(XMLBuilder):
             raise RuntimeError(_("Domain has already been started!"))
 
         is_initial = True
-        self._consolechild = None
 
         self._prepare_install(meter, dry)
         try:
@@ -1025,21 +950,3 @@ class Guest(XMLBuilder):
                                               device_key, param)
         finally:
             support.set_rhel6(False)
-
-
-def _wait_for_domain(conn, name):
-    # sleep in .25 second increments until either a) we get running
-    # domain ID or b) it's been 5 seconds.  this is so that
-    # we can try to gracefully handle domain restarting failures
-    dom = None
-    for ignore in range(1, int(5 / .25)):  # 5 seconds, .25 second sleeps
-        try:
-            dom = conn.lookupByName(name)
-            if dom and dom.ID() != -1:
-                break
-        except libvirt.libvirtError, e:
-            logging.debug("No guest running yet: " + str(e))
-            dom = None
-        time.sleep(0.25)
-
-    return dom

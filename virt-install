@@ -28,6 +28,7 @@ import re
 import logging
 import optparse
 
+import libvirt
 import urlgrabber.progress as progress
 
 import virtinst
@@ -601,6 +602,60 @@ def txt_console(dom, uri):
     return _run_console(args)
 
 
+def domain_is_crashed(domain):
+    """
+    Return True if the created domain object is in a crashed state
+    """
+    if not domain:
+        return False
+
+    dominfo = domain.info()
+    state = dominfo[0]
+
+    return state == libvirt.VIR_DOMAIN_CRASHED
+
+
+def domain_is_shutdown(domain):
+    """
+    Return True if the created domain object is shutdown
+    """
+    if not domain:
+        return False
+
+    dominfo = domain.info()
+
+    state    = dominfo[0]
+    cpu_time = dominfo[4]
+
+    if state == libvirt.VIR_DOMAIN_SHUTOFF:
+        return True
+
+    # If 'wait' was specified, the dom object we have was looked up
+    # before initially shutting down, which seems to bogus up the
+    # info data (all 0's). So, if it is bogus, assume the domain is
+    # shutdown. We will catch the error later.
+    return state == libvirt.VIR_DOMAIN_NOSTATE and cpu_time == 0
+
+
+def connect_console(domain, consolecb, wait):
+    """
+    Launched the passed console callback for the already defined
+    domain. If domain isn't running, return an error.
+    """
+    child = None
+    if consolecb:
+        child = consolecb(domain)
+
+    if not child or not wait:
+        return
+
+    # If we connected the console, wait for it to finish
+    try:
+        os.waitpid(child, 0)
+    except OSError, (err_no, msg):
+        logging.debug("waitpid: %s: %s", err_no, msg)
+
+
 def start_install(guest, continue_inst, options):
     def show_console(dom):
         gdev = guest.get_devices("graphics")
@@ -617,7 +672,7 @@ def start_install(guest, continue_inst, options):
         else:
             logging.debug("No viewer to launch for graphics type '%s'",
                           gtype)
-            return None  # SDL needs no viewer app
+            return None
 
     # There are two main cases we care about:
     #
@@ -658,13 +713,13 @@ def start_install(guest, continue_inst, options):
 
         # Do first install phase
         dom = guest.start_install(meter=meter, noboot=options.noreboot)
-        guest.connect_console(conscb, wait_on_console)
+        connect_console(dom, conscb, wait_on_console)
         dom = check_domain(guest, dom, conscb,
                            wait_on_install, wait_time, start_time)
 
         if continue_inst:
             dom = guest.continue_install(meter=meter)
-            guest.connect_console(conscb, wait_on_console)
+            connect_console(dom, conscb, wait_on_console)
             dom = check_domain(guest, dom, conscb,
                                wait_on_install, wait_time, start_time)
 
@@ -676,11 +731,10 @@ def start_install(guest, continue_inst, options):
             print_stdout(
                 _("Guest installation complete... restarting guest."))
             dom.create()
-            guest.connect_console(conscb, wait=True)
+            connect_console(dom, conscb, wait=True)
 
     except KeyboardInterrupt:
         logging.debug("", exc_info=True)
-        guest.terminate_console()
         print_stderr(_("Domain install interrupted."))
         raise
     except RuntimeError, e:
@@ -702,10 +756,10 @@ def check_domain(guest, dom, conscb, wait_for_install, wait_time, start_time):
         dominfo = dom.info()
         state = dominfo[0]
 
-        if guest.domain_is_crashed():
+        if domain_is_crashed(guest.domain):
             fail(_("Domain has crashed."))
 
-        if guest.domain_is_shutdown():
+        if domain_is_shutdown(guest.domain):
             return dom, state
 
         return None, state
@@ -752,12 +806,12 @@ def check_domain(guest, dom, conscb, wait_for_install, wait_time, start_time):
 
     # Wait loop
     while True:
-        if guest.domain_is_shutdown():
+        if domain_is_shutdown(guest.domain):
             print_stdout(_("Domain has shutdown. Continuing."))
             try:
                 # Lookup a new domain object incase current
                 # one returned bogus data (see comment in
-                # domain_is_shutdown
+                # domain_is_shutdown)
                 dom = guest.conn.lookupByName(guest.name)
             except Exception, e:
                 raise RuntimeError(_("Could not lookup domain after "
