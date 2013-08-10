@@ -41,11 +41,6 @@ from virtinst import osdict
 
 
 class Guest(XMLBuilder):
-
-    # OS Dictionary static variables and methods
-    _DEFAULTS = osdict.DEFAULTS
-    _OS_TYPES = osdict.OS_TYPES
-
     @staticmethod
     def pretty_os_list():
         """
@@ -62,7 +57,7 @@ class Guest(XMLBuilder):
         """
         @param filtervars: List of only variants we want to show by default
         """
-        vals = osdict.sort_helper(Guest._OS_TYPES)
+        vals = osdict.sort_helper(osdict.OS_TYPES)
         for t in vals[:]:
             if not Guest.list_os_variants(t, supported=supported,
                                           filtervars=filtervars):
@@ -79,7 +74,7 @@ class Guest(XMLBuilder):
         the sorted list have all fedora distros first
         @param filtervars: List of only variants we want to show by default
         """
-        vals = osdict.sort_helper(Guest._OS_TYPES[typ]["variants"],
+        vals = osdict.sort_helper(osdict.OS_TYPES[typ]["variants"],
                                   sortpref)
         ret = []
         for v in vals:
@@ -96,11 +91,11 @@ class Guest(XMLBuilder):
 
     @staticmethod
     def get_os_type_label(typ):
-        return Guest._OS_TYPES[typ]["label"]
+        return osdict.OS_TYPES[typ]["label"]
 
     @staticmethod
     def get_os_variant_label(typ, variant):
-        return Guest._OS_TYPES[typ]["variants"][variant]["label"]
+        return osdict.OS_TYPES[typ]["variants"][variant]["label"]
 
     @staticmethod
     def check_vm_collision(conn, name, do_remove):
@@ -245,7 +240,7 @@ class Guest(XMLBuilder):
         return self._os_type
     def set_os_type(self, val):
         val = val.lower()
-        if val in self._OS_TYPES:
+        if val in osdict.OS_TYPES:
             if self._os_type != val:
                 # Invalidate variant, since it may not apply to the new os type
                 self._os_type = val
@@ -261,7 +256,7 @@ class Guest(XMLBuilder):
         val = val.lower()
 
         if self.os_type:
-            if val in self._OS_TYPES[self.os_type]["variants"]:
+            if val in osdict.OS_TYPES[self.os_type]["variants"]:
                 self._os_variant = val
             else:
                 raise ValueError(_("OS variant '%(var)s' does not exist in "
@@ -270,8 +265,8 @@ class Guest(XMLBuilder):
         else:
             found = False
             for ostype in self.list_os_types():
-                if (val in self._OS_TYPES[ostype]["variants"] and
-                    not self._OS_TYPES[ostype]["variants"][val].get("skip")):
+                if (val in osdict.OS_TYPES[ostype]["variants"] and
+                    not osdict.OS_TYPES[ostype]["variants"][val].get("skip")):
                     logging.debug("Setting os type to '%s' for variant '%s'",
                                   ostype, val)
                     self.os_type = ostype
