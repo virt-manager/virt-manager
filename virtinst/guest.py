@@ -83,7 +83,7 @@ class Guest(XMLBuilder):
                     continue
             elif supported:
                 if not osdict.lookup_osdict_key(None, None,
-                                                typ, v, "supported"):
+                                                v, "supported"):
                     continue
 
             ret.append(v)
@@ -156,7 +156,6 @@ class Guest(XMLBuilder):
         self.replace = False
         self.os_autodetect = False
 
-        self._os_type = None
         self._os_variant = None
         self._random_uuid = None
 
@@ -236,46 +235,15 @@ class Guest(XMLBuilder):
     # Distro detection properties #
     ###############################
 
-    def get_os_type(self):
-        return self._os_type
-    def set_os_type(self, val):
-        val = val.lower()
-        if val in osdict.OS_TYPES:
-            if self._os_type != val:
-                # Invalidate variant, since it may not apply to the new os type
-                self._os_type = val
-                self._os_variant = None
-        else:
-            raise ValueError(_("OS type '%s' does not exist in our "
-                                "dictionary") % val)
-    os_type = property(get_os_type, set_os_type)
-
-    def get_os_variant(self):
+    def _get_os_variant(self):
         return self._os_variant
-    def set_os_variant(self, val):
+    def _set_os_variant(self, val):
         val = val.lower()
-
-        if self.os_type:
-            if val in osdict.OS_TYPES[self.os_type]["variants"]:
-                self._os_variant = val
-            else:
-                raise ValueError(_("OS variant '%(var)s' does not exist in "
-                                   "our dictionary for OS type '%(ty)s'") %
-                                   {'var' : val, 'ty' : self._os_type})
-        else:
-            found = False
-            for ostype in self.list_os_types():
-                if (val in osdict.OS_TYPES[ostype]["variants"] and
-                    not osdict.OS_TYPES[ostype]["variants"][val].get("skip")):
-                    logging.debug("Setting os type to '%s' for variant '%s'",
-                                  ostype, val)
-                    self.os_type = ostype
-                    self._os_variant = val
-                    found = True
-
-            if not found:
-                raise ValueError(_("Unknown OS variant '%s'" % val))
-    os_variant = property(get_os_variant, set_os_variant)
+        if osdict.lookup_os(val) is None:
+            raise ValueError(_("Distro '%s' does not exist in our dictionary")
+                             % val)
+        self._os_variant = val
+    os_variant = property(_get_os_variant, _set_os_variant)
 
 
     ########################################
@@ -867,12 +835,11 @@ class Guest(XMLBuilder):
 
     def _lookup_osdict_key(self, key):
         """
-        Using self.os_type and self.os_variant to find key in OSTYPES
+        Use self.os_variant to find key in OSTYPES
         @returns: dict value, or None if os_type/variant wasn't set
         """
         return osdict.lookup_osdict_key(self.conn, self.type,
-                                        self.os_type, self.os_variant,
-                                        key)
+                                        self.os_variant, key)
 
     def _lookup_device_param(self, device_key, param):
         """
@@ -882,7 +849,7 @@ class Guest(XMLBuilder):
         try:
             support.set_rhel6(self._is_rhel6())
             return osdict.lookup_device_param(self.conn, self.type,
-                                              self.os_type, self.os_variant,
+                                              self.os_variant,
                                               device_key, param)
         finally:
             support.set_rhel6(False)

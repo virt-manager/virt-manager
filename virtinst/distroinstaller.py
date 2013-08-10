@@ -253,7 +253,7 @@ class DistroInstaller(Installer):
     def _prepare_cdrom(self, guest, meter, scratchdir):
         transient = not self.livecd
         if not self._location_is_path:
-            (store_ignore, os_type_ignore,
+            (store_ignore,
              os_variant_ignore, media) = urlfetcher.getBootDisk(guest,
                                                               self.location,
                                                               meter,
@@ -284,18 +284,14 @@ class DistroInstaller(Installer):
         if self._install_kernel and not self.scratchdir_required():
             return disk
 
-        ignore, os_type, os_variant, media = urlfetcher.getKernel(guest,
+        ignore, os_variant, media = urlfetcher.getKernel(guest,
                                                 self.location, meter,
                                                 scratchdir,
                                                 guest.os.os_type)
         (kernelfn, initrdfn, args) = media
 
         if guest.os_autodetect:
-            if os_type:
-                logging.debug("Auto detected OS type as: %s", os_type)
-                guest.os_type = os_type
-
-            if (os_variant and guest.os_type == os_type):
+            if os_variant:
                 logging.debug("Auto detected OS variant as: %s", os_variant)
                 guest.os_variant = os_variant
 
@@ -403,11 +399,7 @@ class DistroInstaller(Installer):
 
     def detect_distro(self, arch):
         try:
-            dist_info = urlfetcher.detectMediaDistro(self.location, arch)
+            return urlfetcher.detectMediaDistro(self.location, arch)
         except:
             logging.exception("Error attempting to detect distro.")
-            return (None, None)
-
-        # detectMediaDistro should only return valid values
-        dtype, dvariant = dist_info
-        return (dtype, dvariant)
+            return None

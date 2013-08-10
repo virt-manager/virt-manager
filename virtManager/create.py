@@ -85,7 +85,7 @@ class vmmCreate(vmmGObjectUI):
         self.conn_signals = []
 
         # Distro detection state variables
-        self.detectedDistro = None
+        self.detectedDistro = -1
         self.detecting = False
         self.mediaDetected = False
         self.show_all_os = False
@@ -1577,8 +1577,7 @@ class vmmCreate(vmmGObjectUI):
 
         # OS distro/variant validation
         try:
-            if distro:
-                self.guest.os_type = distro
+            variant = variant or distro
             if variant:
                 self.guest.os_variant = variant
         except ValueError, e:
@@ -2000,14 +1999,21 @@ class vmmCreate(vmmGObjectUI):
             return ret
         return _("Unknown")
 
-    def set_distro_selection(self, distro, ver):
+    def set_distro_selection(self, variant):
         # Wrapper to change OS Type/Variant values, and update the distro
         # detection labels
         if not self.is_detect_active():
             return
 
-        dl = self.set_os_val(self.widget("install-os-type"), distro)
-        vl = self.set_os_val(self.widget("install-os-version"), ver)
+        distro_type = None
+        distro_var = None
+        if variant:
+            osclass = virtinst.osdict.lookup_os(variant)
+            distro_type = osclass.typename
+            distro_var = osclass.name
+
+        dl = self.set_os_val(self.widget("install-os-type"), distro_type)
+        vl = self.set_os_val(self.widget("install-os-version"), distro_var)
         self.set_distro_labels(dl, vl)
 
     def check_detection(self, idx, forward):
@@ -2015,7 +2021,7 @@ class vmmCreate(vmmGObjectUI):
         try:
             base = _("Detecting")
 
-            if not self.detectedDistro or (idx >= (DETECT_TIMEOUT * 2)):
+            if (self.detectedDistro == -1) or (idx >= (DETECT_TIMEOUT * 2)):
                 detect_str = base + ("." * ((idx % 3) + 1))
                 self.set_distro_labels(detect_str, detect_str)
 
@@ -2027,12 +2033,13 @@ class vmmCreate(vmmGObjectUI):
         except:
             logging.exception("Error in distro detect timeout")
 
-        results = results or (None, None)
+        if results == -1:
+            results = None
         self.widget("create-forward").set_sensitive(True)
         self.mediaDetected = True
         self.detecting = False
         logging.debug("Finished OS detection.")
-        self.set_distro_selection(*results)
+        self.set_distro_selection(results)
         if forward:
             self.idle_add(self.forward, ())
 
@@ -2044,7 +2051,7 @@ class vmmCreate(vmmGObjectUI):
         if not media:
             return
 
-        self.detectedDistro = None
+        self.detectedDistro = -1
 
         logging.debug("Starting OS detection thread for media=%s", media)
         self.widget("create-forward").set_sensitive(False)
@@ -2065,7 +2072,7 @@ class vmmCreate(vmmGObjectUI):
             self.detectedDistro = installer.detect_distro(self.capsguest.arch)
         except:
             logging.exception("Error detecting distro.")
-            self.detectedDistro = (None, None)
+            self.detectedDistro = -1
 
     def _rhel6_defaults(self):
         emu = None

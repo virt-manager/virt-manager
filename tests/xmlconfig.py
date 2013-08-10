@@ -1033,8 +1033,8 @@ class TestXMLConfig(unittest.TestCase):
                                 location="tests/cli-test-xml/fakefedoratree")
         g = utils.get_basic_fullyvirt_guest(installer=i)
         g.type = "kvm"
-        t, v = i.detect_distro(g)
-        self.assertEquals((t, v), ("linux", "fedora17"))
+        v = i.detect_distro(g)
+        self.assertEquals(v, "fedora17")
 
 if __name__ == "__main__":
     unittest.main()

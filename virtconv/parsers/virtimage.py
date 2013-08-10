@@ -23,7 +23,7 @@ import virtconv.formats as formats
 import virtconv.vmcfg as vmcfg
 import virtconv.diskcfg as diskcfg
 import virtconv.netdevcfg as netdevcfg
-from virtinst import Guest
+
 from virtinst import virtimage
 
 from xml.sax.saxutils import escape
@@ -82,21 +82,14 @@ def export_os_params(vm):
     """
     Export OS-specific parameters.
     """
-    ostype = None
-    osvariant = None
-
     from virtinst import osdict
-    ostype = osdict.OS_TYPES.get(vm.os_type)
-    if ostype:
-        osvariant = ostype.get('variants').get(vm.os_variant)
+    os = osdict.lookup_os(vm.os_variant)
 
     def get_os_val(key, default):
         val = None
-        if osvariant:
-            val = osvariant.get(key)
-        if not val and ostype:
-            val = ostype.get(key)
-        if not val:
+        if os:
+            val = os.to_dict().get(key)
+        if val is None:
             val = default
         return val
 

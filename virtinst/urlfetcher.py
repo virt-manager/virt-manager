@@ -328,7 +328,7 @@ def _acquireMedia(iskernel, guest, baseuri, progresscb,
                   scratchdir="/var/tmp", _type=None):
 
     def media_cb(store, fetcher):
-        os_type, os_variant = store.get_osdict_info()
+        os_variant = store.get_osdict_info()
         media = None
 
         if iskernel:
@@ -336,7 +336,7 @@ def _acquireMedia(iskernel, guest, baseuri, progresscb,
         else:
             media = store.acquireBootDisk(guest, fetcher, progresscb)
 
-        return [store, os_type, os_variant, media]
+        return [store, os_variant, media]
 
     return _locationCheckWrapper(guest, baseuri, progresscb, scratchdir, _type,
                                  None, media_cb)
@@ -356,13 +356,8 @@ def getBootDisk(guest, baseuri, progresscb, scratchdir):
                          scratchdir)
 
 
-def _check_ostype_valid(os_type):
-    return bool(os_type in osdict.sort_helper(osdict.OS_TYPES))
-
-
-def _check_osvariant_valid(os_type, os_variant):
-    return bool(_check_ostype_valid(os_type) and
-        os_variant in osdict.sort_helper(osdict.OS_TYPES[os_type]["variants"]))
+def _check_osvariant_valid(os_variant):
+    return osdict.lookup_os(os_variant) is not None
 
 
 # Attempt to detect the os type + variant for the passed location
@@ -415,7 +410,7 @@ def distroFromTreeinfo(fetcher, progresscb, uri, arch, vmtype=None,
     ob = dclass(uri, arch, vmtype, scratchdir)
     ob.treeinfo = treeinfo
 
-    # Explictly call this, so we populate os_type/variant info
+    # Explictly call this, so we populate variant info
     ob.isValidStore(fetcher, progresscb)
 
     return ob
@@ -429,7 +424,6 @@ class Distro(object):
     name = ""
 
     # osdict type and variant values
-    os_type = None
     os_variant = None
 
     _boot_iso_paths = []
@@ -497,24 +491,15 @@ class Distro(object):
         Return (distro, variant) tuple, checking to make sure they are valid
         osdict entries
         """
-        if not self.os_type:
-            return (None, None)
-
-        if not _check_ostype_valid(self.os_type):
-            logging.debug("%s set os_type to %s, which is not in osdict.",
-                          self, self.os_type)
-            return (None, None)
-
         if not self.os_variant:
-            return (self.os_type, None)
+            return None
 
-        if not _check_osvariant_valid(self.os_type, self.os_variant):
-            logging.debug("%s set os_variant to %s, which is not in osdict"
-                          " for distro %s.",
-                          self, self.os_variant, self.os_type)
-            return (self.os_type, None)
+        if not _check_osvariant_valid(self.os_variant):
+            logging.debug("%s set os_variant to %s, which is not in osdict.",
+                          self, self.os_variant)
+            return None
 
-        return (self.os_type, self.os_variant)
+        return self.os_variant
 
     def _hasTreeinfo(self, fetcher, progresscb):
         # all Red Hat based distros should have .treeinfo, perhaps others
@@ -595,7 +580,7 @@ class GenericDistro(Distro):
     """
 
     name = "Generic"
-    os_type = "linux"
+    os_variant = "linux"
     uses_treeinfo = True
 
     _xen_paths = [("images/xen/vmlinuz",
@@ -674,7 +659,7 @@ class RedHatDistro(Distro):
     a common layout
     """
     name = "Red Hat"
-    os_type = "linux"
+    os_variant = "linux"
 
     uses_treeinfo = True
     _boot_iso_paths   = ["images/boot.iso"]
@@ -779,9 +764,6 @@ class RHELDistro(RedHatDistro):
         self._setRHELVariant(version, update)
 
     def _setRHELVariant(self, version, update):
-        if not _check_ostype_valid(self.os_type):
-            return
-
         base = "rhel" + str(version)
         if update < 0:
             update = 0
@@ -789,7 +771,7 @@ class RHELDistro(RedHatDistro):
         ret = None
         while update >= 0:
             tryvar = base + ".%s" % update
-            if not _check_osvariant_valid(self.os_type, tryvar):
+            if not _check_osvariant_valid(tryvar):
                 update -= 1
                 continue
 
@@ -798,7 +780,7 @@ class RHELDistro(RedHatDistro):
 
         if not ret:
             # Try plain rhel5, rhel6, whatev
-            if _check_osvariant_valid(self.os_type, base):
+            if _check_osvariant_valid(base):
                 ret = base
 
         if ret:
@@ -865,7 +847,7 @@ class SLDistro(RHELDistro):
 # RPM and then munge bits together to generate a initrd
 class SuseDistro(Distro):
     name = "SUSE"
-    os_type = "linux"
+    os_variant = "linux"
     method_arg = "install"
     _boot_iso_paths   = ["boot/boot.iso"]
 
@@ -905,7 +887,7 @@ class DebianDistro(Distro):
     # daily builds: http://d-i.debian.org/daily-images/amd64/
 
     name = "Debian"
-    os_type = "linux"
+    os_variant = "linux"
 
     def __init__(self, uri, arch, vmtype=None, scratchdir=None):
         Distro.__init__(self, uri, arch, vmtype, scratchdir)
@@ -986,7 +968,7 @@ class UbuntuDistro(DebianDistro):
 class MandrivaDistro(Distro):
     # ftp://ftp.uwsg.indiana.edu/linux/mandrake/official/2007.1/x86_64/
     name = "Mandriva"
-    os_type = "linux"
+    os_variant = "linux"
     _boot_iso_paths = ["install/images/boot.iso"]
     # Kernels for HVM: valid for releases 2007.1, 2008.*, 2009.0
     _hvm_kernel_paths = [("isolinux/alt0/vmlinuz", "isolinux/alt0/all.rdz")]
@@ -1017,7 +999,7 @@ class MageiaDistro(MandrivaDistro):
 
 class ALTLinuxDistro(Distro):
     name = "ALT Linux"
-    os_type = "linux"
+    os_variant = "linux"
     _boot_iso_paths = [("altinst", "live")]
     _hvm_kernel_paths = [("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
     _xen_kernel_paths = []
@@ -1041,7 +1023,7 @@ class ALTLinuxDistro(Distro):
 # Solaris and OpenSolaris distros
 class SunDistro(Distro):
     name = "Solaris"
-    os_type = "solaris"
+    os_variant = "solaris"
 
     def isValidStore(self, fetcher, progresscb):
         """Determine if uri points to a tree of the store's distro"""
@@ -1237,7 +1219,6 @@ class OpenSolarisDistro(SunDistro):
 # NetWare 6 PV
 class NetWareDistro(Distro):
     name = "NetWare"
-    os_type = "other"
     os_variant = "netware6"
 
     loaderpath = "STARTUP/XNLOADER.SYS"

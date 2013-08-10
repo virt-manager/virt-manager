@@ -93,11 +93,11 @@ urls = {
     # Fedora Distros
     "fedora15" : {
         'x86_64': FEDORA_BASEURL % ("15", "x86_64"),
-        'distro': ("linux", "fedora15")
+        'distro': "fedora15"
    },
     "fedora16" : {
         'x86_64': FEDORA_BASEURL % ("16", "x86_64"),
-        'distro': ("linux", "fedora16")
+        'distro': "fedora16"
    },
 
     # SUSE Distros
@@ -124,59 +124,59 @@ urls = {
     "debian-lenny-64" : {
         "noxen": True,
         'x86_64': DEBIAN_BASEURL % ("lenny", "amd64"),
-        'distro': ("linux", None)
+        'distro': "linux"
    },
     "debian-squeeze" : {
         'i386' : DEBIAN_BASEURL % ("squeeze", "i386"),
         'x86_64': DEBIAN_BASEURL % ("squeeze", "amd64"),
-        'distro': ("linux", None)
+        'distro': "linux"
    },
     "debian-wheezy" : {
         'x86_64': DEBIAN_BASEURL % ("wheezy", "amd64"),
-        'distro': ("linux", None)
+        'distro': "linux"
    },
     "debian-sid" : {
         'x86_64': DEBIAN_BASEURL % ("sid", "amd64"),
-        'distro': ("linux", None)
+        'distro': "linux"
    },
     "debian-daily" : {
         'i386' : "http://d-i.debian.org/daily-images/amd64/",
-        'distro': ("linux", None)
+        'distro': "linux"
    },
 
     # CentOS Distros
     "centos-5-latest" : {
         'i386' : CURCENTOS_BASEURL % ("5", "i386"),
         'x86_64' : CURCENTOS_BASEURL % ("5", "x86_64"),  # No .treeinfo
-        'distro': ("linux", "rhel5.4")
+        'distro': "linux"
    },
     "centos-4.9" : {
         'i386' : CURCENTOS_BASEURL % ("4.9", "i386"),
         'x86_64' : CURCENTOS_BASEURL % ("4.9", "x86_64"),
-        'distro': ("linux", None)
+        'distro': "linux"
    },
     "centos-5.0" : {
         'x86_64' : OLDCENTOS_BASEURL % ("5.0", "x86_64"),
-        'distro': ("linux", None)
+        'distro': "linux"
    },
     "centos-4.0" : {
         "noxen": True,
         'x86_64' : OLDCENTOS_BASEURL % ("4.0", "x86_64"),
-        'distro': ("linux", None)
+        'distro': "linux"
    },
 
     # Scientific Linux
     "scientific-5.4" : {
         'x86_64': SCIENTIFIC_BASEURL % ("54", "x86_64"),
-        'distro': ("linux", "rhel5.4")
+        'distro': "rhel5.4"
    },
     "scientific-5.2" : {
         'x86_64': SCIENTIFIC_BASEURL % ("52", "x86_64"),
-        'distro': ("linux", "rhel5")
+        'distro': "rhel5"
    },
     "scientific-5.0" : {
         'x86_64': SCIENTIFIC_BASEURL % ("50", "x86_64"),
-        'distro': ("linux", None)
+        'distro': "linux"
    },
 
     # Ubuntu
@@ -184,27 +184,27 @@ urls = {
         "noxen": True,
         'i386': UBUNTU_BASEURL % ("hardy", "i386"),
         'x86_64': UBUNTU_BASEURL % ("hardy", "amd64"),
-        'distro': ("linux", None)
+        'distro': "linux"
    },
     "ubuntu-maverick" : {
         'i386': UBUNTU_BASEURL % ("maverick", "i386"),
         'x86_64': UBUNTU_BASEURL % ("maverick", "amd64"),
-        'distro': ("linux", None)
+        'distro': "linux"
    },
     "ubuntu-natty" : {
         'i386': UBUNTU_BASEURL % ("natty", "i386"),
         'x86_64': UBUNTU_BASEURL % ("natty", "amd64"),
-        'distro': ("linux", None)
+        'distro': "linux"
    },
     "ubuntu-oneiric" : {
         'i386': UBUNTU_BASEURL % ("oneiric", "i386"),
         'x86_64': UBUNTU_BASEURL % ("oneiric", "amd64"),
-        'distro': ("linux", None)
+        'distro': "linux"
    },
     "ubuntu-precise" : {
         'i386': UBUNTU_BASEURL % ("precise", "i386"),
         'x86_64': UBUNTU_BASEURL % ("precise", "amd64"),
-        'distro': ("linux", None)
+        'distro': "linux"
    },
 
     # Mandriva
@@ -212,13 +212,13 @@ urls = {
         "noxen": True,
         'i586': MANDRIVA_BASEURL % ("2009.1", "i586"),
         'x86_64': MANDRIVA_BASEURL % ("2009.1", "x86_64"),
-        'distro': ("linux", None)
+        'distro': "linux"
    },
     "mandriva-2010.2" : {
         "noxen": True,
         'i586': MANDRIVA_BASEURL % ("2010.2", "i586"),
         'x86_64': MANDRIVA_BASEURL % ("2010.2", "x86_64"),
-        'distro': ("linux", None)
+        'distro': "linux"
    },
 }
 
@@ -274,22 +274,20 @@ class TestURLFetch(unittest.TestCase):
         if distro_info is None:
             return
 
-        dtype, dvariant = distro_info
+        dvariant = distro_info
 
         for store in stores:
             if not store:
                 continue
 
-            t, v = store.os_type, store.os_variant
+            v = store.os_variant
 
-            if dtype != t or dvariant != v:
+            if dvariant != v:
                 raise RuntimeError("Store distro/variant did not match "
-                                   "expected values: %s (%s, %s) != (%s, %s)"
-                                   % (store, t, v, dtype, dvariant))
+                                   "expected values: %s %s != %s"
+                                   % (store, v, dvariant))
 
             # Verify the values are valid
-            if t:
-                testguest.os_type = t
             if v:
                 testguest.os_variant = v
 

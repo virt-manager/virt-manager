@@ -760,10 +760,13 @@ def set_os_variant(obj, distro_type, distro_variant):
         obj.os_autodetect = True
         return
 
-    if (distro_type and str(distro_type).lower() != "none"):
-        obj.os_type = distro_type
-    if (distro_variant and str(distro_variant).lower() != "none"):
-        obj.os_variant = distro_variant
+    distro_variant = distro_variant and str(distro_variant).lower() or None
+    distro_type = distro_type and str(distro_type).lower() or None
+    distkey = distro_variant or distro_type
+    if not distkey or distkey == "none":
+        return
+
+    obj.os_variant = distkey
 
 
 def digest_graphics(guest, options, default_override=None):

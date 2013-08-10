@@ -115,6 +115,17 @@ DEFAULTS = {
    }
 }
 
+_SENTINEL = -1234
+OS_TYPES = {}
+_allvariants = {}
+
+
+def lookup_os(key):
+    ret = _allvariants.get(key)
+    if ret is None:
+        return ret
+    return ret
+
 
 def sort_helper(tosort, sortpref=None):
     """
@@ -198,20 +209,20 @@ def parse_key_entry(conn, hv_type, key_entry, defaults):
     return ret
 
 
-def lookup_osdict_key(conn, hv_type, os_type, var, key):
+def lookup_osdict_key(conn, hv_type, var, key):
     defaults = DEFAULTS[key]
     dictval = defaults
-    if os_type:
-        if var and key in OS_TYPES[os_type]["variants"][var]:
-            dictval = OS_TYPES[os_type]["variants"][var][key]
-        elif key in OS_TYPES[os_type]:
-            dictval = OS_TYPES[os_type][key]
+
+    if var is not None:
+        vardict = _allvariants[var].to_dict()
+        if key in vardict:
+            dictval = vardict[key]
 
     return parse_key_entry(conn, hv_type, dictval, defaults)
 
 
-def lookup_device_param(conn, hv_type, os_type, var, device_key, param):
-    os_devs = lookup_osdict_key(conn, hv_type, os_type, var, "devices")
+def lookup_device_param(conn, hv_type, var, device_key, param):
+    os_devs = lookup_osdict_key(conn, hv_type, var, "devices")
     defaults = DEFAULTS["devices"]
 
     for devs in [os_devs, defaults]:
@@ -225,13 +236,19 @@ def lookup_device_param(conn, hv_type, os_type, var, device_key, param):
                        (device_key, param)))
 
 
-_SENTINEL = -1234
-OS_TYPES = {}
-_allvariants = {}
+# 'types' should rarely be altered, this check will make
+# doubly sure that a new type isn't accidentally added
+_approved_types = ["linux", "windows", "unix", "solaris", "other"]
+
 
 def _add_type(*args, **kwargs):
     kwargs["is_type"] = True
     _t = _OSVariant(*args, **kwargs)
+
+    if _t.name not in _approved_types:
+        raise RuntimeError("type '%s' not in list of approved distro types %s"
+                           % (t.name, _approved_types))
+
     OS_TYPES[_t.name] = _t.to_dict()
     OS_TYPES[_t.name]["variants"] = {}
     _allvariants[_t.name] = _t
@@ -239,14 +256,17 @@ def _add_type(*args, **kwargs):
 
 
 class _OSVariant(object):
-    def __init__(self, name, label, is_type=False, sortby=None,
-                 parent=_SENTINEL,
+    def __init__(self, name, label, is_type=False,
+                 sortby=None, parent=_SENTINEL,
                  distro=_SENTINEL, cont=_SENTINEL, supported=_SENTINEL,
                  devices=_SENTINEL, acpi=_SENTINEL,
                  apic=_SENTINEL, clock=_SENTINEL):
         if parent == _SENTINEL:
             raise RuntimeError("Must specify explicit parent")
-        elif parent:
+        elif parent is None:
+            if not is_type:
+                raise RuntimeError("Only OS types can have parent=None")
+        else:
             parent = _allvariants[parent]
 
         def _get_default(name, val, default):
@@ -258,8 +278,15 @@ class _OSVariant(object):
 
         self.name = name.lower()
         self.label = label
-        self.is_type = bool(is_type)
         self.sortby = sortby
+
+        self.is_type = bool(is_type)
+        self.typename = _get_default("typename", _SENTINEL, self.name)
+
+        if self.typename not in _approved_types:
+            raise RuntimeError("type '%s' for variant '%s' not in list "
+                               "of approved distro types %s" %
+                               (self.typename, self.name, _approved_types))
 
         self.distro = _get_default("distro", distro, None)
         self.supported = bool(_get_default("supported", supported, False))
@@ -292,7 +319,7 @@ class _OSVariant(object):
 t = _add_type("linux", "Linux", parent=None)
 t.add("rhel2.1", "Red Hat Enterprise Linux 2.1", distro="rhel", parent="linux")
 t.add("rhel3", "Red Hat Enterprise Linux 3", parent="rhel2.1")
-t.add("rhel4", "Red Hat Enterprise Linux 4", supported=True, parent="rhel2.1")
+t.add("rhel4", "Red Hat Enterprise Linux 4", supported=True, parent="rhel3")
 t.add("rhel5", "Red Hat Enterprise Linux 5", supported=False, parent="rhel4")
 t.add("rhel5.4", "Red Hat Enterprise Linux 5.4 or later", supported=True, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="rhel5")
 t.add("rhel6", "Red Hat Enterprise Linux 6", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET, INPUT: USB_TABLET}, parent="rhel5.4")
