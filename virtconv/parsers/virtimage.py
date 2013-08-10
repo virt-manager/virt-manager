@@ -85,7 +85,8 @@ def export_os_params(vm):
     ostype = None
     osvariant = None
 
-    ostype = Guest._OS_TYPES.get(vm.os_type)  # pylint: disable=W0212
+    from virtinst import osdict
+    ostype = osdict.OS_TYPES.get(vm.os_type)
     if ostype:
         osvariant = ostype.get('variants').get(vm.os_variant)
 
