@@ -928,12 +928,7 @@ def parse_args():
     insg.add_option("", "--initrd-inject", dest="initrd_injections",
                     action="append",
                     help=_("Add given file to root of initrd from --location"))
-    insg.add_option("", "--os-type", dest="distro_type",
-                    help=_("The OS type being installed, e.g. "
-                           "'linux', 'unix', 'windows'"))
-    insg.add_option("", "--os-variant", dest="distro_variant",
-                    help=_("The OS variant being installed guests, "
-                           "e.g. 'fedora6', 'rhel5', 'solaris10', 'win2k'"))
+    cli.add_distro_options(insg)
     insg.add_option("", "--boot", dest="bootopts", default="",
                     help=_("Optionally configure post-install boot order, "
                            "menu, permanent kernel boot, etc."))
@@ -1002,11 +997,11 @@ def parse_args():
     virg.add_option("", "--noapic", action="store_true", dest="noapic",
                     default=False,
                     help=_("Disables APIC for fully virtualized guest "
-                           "(overrides value in os-type/os-variant db)"))
+                           "(overrides value in os-variant db)"))
     virg.add_option("", "--noacpi", action="store_true", dest="noacpi",
                     default=False,
                     help=_("Disables ACPI for fully virtualized guest "
-                           "(overrides value in os-type/os-variant db)"))
+                           "(overrides value in os-variant db)"))
     virg.add_option("-u", "--uuid", dest="uuid",
                     help=_("UUID for the guest."))
     parser.add_option_group(virg)

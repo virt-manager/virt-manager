@@ -66,12 +66,7 @@ def parse_args():
     geng.add_option("-u", "--uuid", dest="uuid",
                     help=_("UUID for the guest."))
     cli.vcpu_cli_options(geng)
-    geng.add_option("", "--os-type", dest="distro_type",
-                    help=_("The OS type being installed, e.g. "
-                           "'linux', 'unix', 'windows'"))
-    geng.add_option("", "--os-variant", dest="distro_variant",
-                      help=_("The OS variant being installed, "
-                             "e.g. 'fedora6', 'rhel5', 'solaris10', 'win2k'"))
+    cli.add_distro_options(geng)
     parser.add_option_group(geng)
 
     fulg = OptionGroup(parser, _("Full Virtualization specific options"))

@@ -751,17 +751,19 @@ def get_networks(guest, networks, macs):
             fail(_("Error in network device parameters: %s") % str(e))
 
 
-def set_os_variant(guest, distro_type, distro_variant):
-    if not distro_type and not distro_variant:
+def set_os_variant(obj, distro_type, distro_variant):
+    # This is used for both Guest and virtconv VM, so be careful
+    if (not distro_type and
+        not distro_variant and
+        hasattr(obj, "os_autodetect")):
         # Default to distro autodetection
-        guest.os_autodetect = True
+        obj.os_autodetect = True
         return
 
     if (distro_type and str(distro_type).lower() != "none"):
-        guest.set_os_type(distro_type)
-
+        obj.os_type = distro_type
     if (distro_variant and str(distro_variant).lower() != "none"):
-        guest.set_os_variant(distro_variant)
+        obj.os_variant = distro_variant
 
 
 def digest_graphics(guest, options, default_override=None):
@@ -1041,6 +1043,17 @@ def add_fs_option(devg):
         help=_("Pass host directory to the guest. Ex: \n"
                "--filesystem /my/source/dir,/dir/in/guest\n"
                "--filesystem template_name,/,type=template"))
+
+
+def add_distro_options(g):
+    # Way back when, we required specifying both --os-type and --os-variant
+    # Nowadays the distinction is pointless, so hide the less useful
+    # --os-type option.
+    g.add_option("", "--os-type", dest="distro_type",
+                help=optparse.SUPPRESS_HELP)
+    g.add_option("", "--os-variant", dest="distro_variant",
+                 help=_("The OS variant being installed guests, "
+                        "e.g. 'fedora18', 'rhel6', 'winxp', etc."))
 
 
 #############################################

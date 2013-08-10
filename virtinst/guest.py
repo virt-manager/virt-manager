@@ -277,10 +277,6 @@ class Guest(XMLBuilder):
                 raise ValueError(_("Unknown OS variant '%s'" % val))
     os_variant = property(get_os_variant, set_os_variant)
 
-    def get_os_distro(self):
-        return self._lookup_osdict_key("distro")
-    os_distro = property(get_os_distro)
-
 
     ########################################
     # Device Add/Remove Public API methods #

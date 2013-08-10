@@ -69,20 +69,15 @@ def parse_args():
     cfgg.add_option("-a", "--arch", dest="arch",
                     default=get_default_arch(),
                     help=_("Machine Architecture Type (i686/x86_64/ppc)"))
-    cfgg.add_option("", "--os-type", dest="os_type",
-                    help=_("The OS type for fully virtualized guests, e.g. "
-                           "'linux', 'unix', 'windows'"))
-    cfgg.add_option("", "--os-variant", dest="os_variant",
-                    help=_("The OS variant for fully virtualized guests, e.g. "
-                           "'fedora6', 'rhel5', 'solaris10', 'win2k', 'vista'"))
+    cli.add_distro_options(cfgg)
     cfgg.add_option("", "--noapic", action="store_true", dest="noapic",
                     default=False,
                     help=_("Disables APIC for fully virtualized guest "
-                           "(overrides value in os-type/os-variant db)"))
+                           "(overrides value in os-variant db)"))
     cfgg.add_option("", "--noacpi", action="store_true", dest="noacpi",
                     default=False,
                     help=_("Disables ACPI for fully virtualized guest "
-                           "(overrides value in os-type/os-variant db)"))
+                           "(overrides value in os-variant db)"))
     opts.add_option_group(cfgg)
 
     misc = OptionGroup(opts, "Miscellaneous Options")
@@ -204,8 +199,7 @@ def main():
         vmdef.type = vmcfg.VM_TYPE_HVM
 
     vmdef.arch = options.arch
-    vmdef.os_type = options.os_type
-    vmdef.os_variant = options.os_variant
+    cli.set_os_variant(vmdef, options.distro_type, options.distro_variant)
     vmdef.noapic = options.noapic
     vmdef.noacpi = options.noacpi
 

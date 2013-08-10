@@ -82,19 +82,13 @@ L<virt-install(1)> for more info.
 
 Check that vcpus do not exceed physical CPUs and warn if they do.
 
-=item  --os-type=OS_TYPE
-
-Optimize the guest configuration for a type of operating system (ex. 'linux',
-'windows'). This will attempt to pick the most suitable ACPI & APIC settings,
-optimally supported mouse drivers, virtio, and generally accommodate other
-operating system quirks.  See L<virt-install(1)> for valid values.
-
 =item --os-variant=OS_VARIANT
 
-Further optimize the guest configuration for a specific operating system
-variant (ex. 'fedora8', 'winxp'). This parameter is optional, and does not
-require an C<--os-type> to be specified. See L<virt-install(1)> for valid
-values.
+Optimize the guest configuration for a specific operating system (ex.
+'fedora18', 'rhel7', 'winxp'). While not requires, specifying this
+options is HIGHLY RECOMMENDED, as it can greatly increase performance
+by specifying virtio among other guest tweaks.
+See L<virt-install(1)> for valid values.
 
 =back
 

@@ -307,24 +307,12 @@ file:
 
 --initrd-inject=/path/to/my.ks --extra-args "ks=file:/my.ks"
 
-=item  --os-type=OS_TYPE
-
-Optimize the guest configuration for a type of operating system (ex. 'linux',
-'windows'). This will attempt to pick the most suitable ACPI & APIC settings,
-optimally supported mouse drivers, virtio, and generally accommodate other
-operating system quirks.
-
-By default, virt-install will attempt to auto detect this value from
-the install media (currently only supported for URL installs). Autodetection
-can be disabled with the special value 'none'
-
-See C<--os-variant> for valid options.
-
 =item --os-variant=OS_VARIANT
 
-Further optimize the guest configuration for a specific operating system
-variant (ex. 'fedora18', 'winxp'). This parameter is optional, and does not
-require an C<--os-type> to be specified.
+Optimize the guest configuration for a specific operating system (ex.
+'fedora18', 'rhel7', 'winxp'). While not requires, specifying this
+options is HIGHLY RECOMMENDED, as it can greatly increase performance
+by specifying virtio among other guest tweaks.
 
 By default, virt-install will attempt to auto detect this value from
 the install media (currently only supported for URL installs). Autodetection
