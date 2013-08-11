@@ -1059,7 +1059,9 @@ def main(conn=None):
 
     if options.distro_variant == "list":
         logging.debug("OS list requested")
-        print virtinst.Guest.pretty_os_list()
+        for t in virtinst.osdict.list_os(list_types=True):
+            for v in virtinst.osdict.list_os(typename=t.name):
+                print "%-20s : %s" % (v.name, v.label)
         return 0
 
     cli.set_force(options.force)

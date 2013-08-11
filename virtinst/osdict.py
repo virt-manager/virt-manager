@@ -127,10 +127,7 @@ def lookup_os(key):
     return ret
 
 
-def sort_helper(tosort, sortpref=None):
-    """
-    Helps properly sorting os dictionary entires
-    """
+def _sort(tosort, sortpref=None):
     sortby_mappings = {}
     distro_mappings = {}
     retlist = []
@@ -139,15 +136,10 @@ def sort_helper(tosort, sortpref=None):
     # Make sure we are sorting by 'sortby' if specified, and group distros
     # by their 'distro' tag first and foremost
     for key, osinfo in tosort.items():
-        if osinfo.get("skip"):
-            continue
-
-        sortby = osinfo.get("sortby")
-        if not sortby:
-            sortby = key
+        sortby = osinfo.sortby or key
         sortby_mappings[sortby] = key
 
-        distro = osinfo.get("distro") or "zzzzzzz"
+        distro = osinfo.distro or "zzzzzzz"
         if distro not in distro_mappings:
             distro_mappings[distro] = []
         distro_mappings[distro].append(sortby)
@@ -173,9 +165,30 @@ def sort_helper(tosort, sortpref=None):
         distro_list = distro_mappings[distro]
         for key in distro_list:
             orig_key = sortby_mappings[key]
-            retlist.append(orig_key)
+            retlist.append(tosort[orig_key])
 
     return retlist
+
+
+def list_os(list_types=False, typename=None,
+            filtervars=None, only_supported=False,
+            **kwargs):
+    sortmap = {}
+    filtervars = filtervars or []
+
+    for key, osinfo in _allvariants.items():
+        if list_types and not osinfo.is_type:
+            continue
+        if not list_types and osinfo.is_type:
+            continue
+        if typename and typename != osinfo.typename:
+            continue
+        if filtervars and osinfo.name not in filtervars:
+            continue
+        if only_supported and not osinfo.supported:
+            continue
+        sortmap[key] = osinfo
+    return _sort(sortmap, **kwargs)
 
 
 def parse_key_entry(conn, hv_type, key_entry, defaults):
@@ -236,25 +249,6 @@ def lookup_device_param(conn, hv_type, var, device_key, param):
                        (device_key, param)))
 
 
-# 'types' should rarely be altered, this check will make
-# doubly sure that a new type isn't accidentally added
-_approved_types = ["linux", "windows", "unix", "solaris", "other"]
-
-
-def _add_type(*args, **kwargs):
-    kwargs["is_type"] = True
-    _t = _OSVariant(*args, **kwargs)
-
-    if _t.name not in _approved_types:
-        raise RuntimeError("type '%s' not in list of approved distro types %s"
-                           % (t.name, _approved_types))
-
-    OS_TYPES[_t.name] = _t.to_dict()
-    OS_TYPES[_t.name]["variants"] = {}
-    _allvariants[_t.name] = _t
-    return _t
-
-
 class _OSVariant(object):
     def __init__(self, name, label, is_type=False,
                  sortby=None, parent=_SENTINEL,
@@ -311,111 +305,122 @@ class _OSVariant(object):
             ret[param] = val
         return ret
 
-    def add(self, *args, **kwargs):
-        v = _OSVariant(*args, **kwargs)
-        OS_TYPES[self.name]["variants"][v.name] = v.to_dict()
-        _allvariants[v.name] = v
 
-t = _add_type("linux", "Linux", parent=None)
-t.add("rhel2.1", "Red Hat Enterprise Linux 2.1", distro="rhel", parent="linux")
-t.add("rhel3", "Red Hat Enterprise Linux 3", parent="rhel2.1")
-t.add("rhel4", "Red Hat Enterprise Linux 4", supported=True, parent="rhel3")
-t.add("rhel5", "Red Hat Enterprise Linux 5", supported=False, parent="rhel4")
-t.add("rhel5.4", "Red Hat Enterprise Linux 5.4 or later", supported=True, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="rhel5")
-t.add("rhel6", "Red Hat Enterprise Linux 6", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET, INPUT: USB_TABLET}, parent="rhel5.4")
-t.add("rhel7", "Red Hat Enterprise Linux 7", supported=False, parent="rhel6")
+# 'types' should rarely be altered, this check will make
+# doubly sure that a new type isn't accidentally added
+_approved_types = ["linux", "windows", "unix", "solaris", "other"]
 
-t.add("fedora5", "Fedora Core 5", sortby="fedora05", distro="fedora", parent="linux")
-t.add("fedora6", "Fedora Core 6", sortby="fedora06", parent="fedora5")
-t.add("fedora7", "Fedora 7", sortby="fedora07", parent="fedora6")
-t.add("fedora8", "Fedora 8", sortby="fedora08", parent="fedora7")
+
+def _add_type(*args, **kwargs):
+    kwargs["is_type"] = True
+    _t = _OSVariant(*args, **kwargs)
+    _allvariants[_t.name] = _t
+
+
+def _add_var(*args, **kwargs):
+    v = _OSVariant(*args, **kwargs)
+    _allvariants[v.name] = v
+
+
+_add_type("linux", "Linux", parent=None)
+_add_var("rhel2.1", "Red Hat Enterprise Linux 2.1", distro="rhel", parent="linux")
+_add_var("rhel3", "Red Hat Enterprise Linux 3", parent="rhel2.1")
+_add_var("rhel4", "Red Hat Enterprise Linux 4", supported=True, parent="rhel3")
+_add_var("rhel5", "Red Hat Enterprise Linux 5", supported=False, parent="rhel4")
+_add_var("rhel5.4", "Red Hat Enterprise Linux 5.4 or later", supported=True, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="rhel5")
+_add_var("rhel6", "Red Hat Enterprise Linux 6", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET, INPUT: USB_TABLET}, parent="rhel5.4")
+_add_var("rhel7", "Red Hat Enterprise Linux 7", supported=False, parent="rhel6")
+
+_add_var("fedora5", "Fedora Core 5", sortby="fedora05", distro="fedora", parent="linux")
+_add_var("fedora6", "Fedora Core 6", sortby="fedora06", parent="fedora5")
+_add_var("fedora7", "Fedora 7", sortby="fedora07", parent="fedora6")
+_add_var("fedora8", "Fedora 8", sortby="fedora08", parent="fedora7")
 # Apparently F9 has selinux errors when installing with virtio:
 # https: //bugzilla.redhat.com/show_bug.cgi?id=470386
-t.add("fedora9", "Fedora 9", sortby="fedora09", devices={NET: VIRTIO_NET}, parent="fedora8")
-t.add("fedora10", "Fedora 10", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="fedora9")
-t.add("fedora11", "Fedora 11", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET, INPUT: USB_TABLET}, parent="fedora10")
-t.add("fedora12", "Fedora 12", parent="fedora11")
-t.add("fedora13", "Fedora 13", parent="fedora12")
-t.add("fedora14", "Fedora 14", parent="fedora13")
-t.add("fedora15", "Fedora 15", parent="fedora14")
-t.add("fedora16", "Fedora 16", parent="fedora15")
-t.add("fedora17", "Fedora 17", supported=True, parent="fedora16")
-t.add("fedora18", "Fedora 18", parent="fedora17")
-t.add("fedora19", "Fedora 19", parent="fedora18")
+_add_var("fedora9", "Fedora 9", sortby="fedora09", devices={NET: VIRTIO_NET}, parent="fedora8")
+_add_var("fedora10", "Fedora 10", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="fedora9")
+_add_var("fedora11", "Fedora 11", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET, INPUT: USB_TABLET}, parent="fedora10")
+_add_var("fedora12", "Fedora 12", parent="fedora11")
+_add_var("fedora13", "Fedora 13", parent="fedora12")
+_add_var("fedora14", "Fedora 14", parent="fedora13")
+_add_var("fedora15", "Fedora 15", parent="fedora14")
+_add_var("fedora16", "Fedora 16", parent="fedora15")
+_add_var("fedora17", "Fedora 17", supported=True, parent="fedora16")
+_add_var("fedora18", "Fedora 18", parent="fedora17")
+_add_var("fedora19", "Fedora 19", parent="fedora18")
 
-t.add("opensuse11", "openSuse 11", distro="suse", supported=True, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="linux")
-t.add("opensuse12", "openSuse 12", parent="opensuse11")
+_add_var("opensuse11", "openSuse 11", distro="suse", supported=True, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="linux")
+_add_var("opensuse12", "openSuse 12", parent="opensuse11")
 
-t.add("sles10", "Suse Linux Enterprise Server", distro="suse", supported=True, parent="linux")
-t.add("sles11", "Suse Linux Enterprise Server 11", supported=True, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="sles10")
+_add_var("sles10", "Suse Linux Enterprise Server", distro="suse", supported=True, parent="linux")
+_add_var("sles11", "Suse Linux Enterprise Server 11", supported=True, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="sles10")
 
-t.add("mandriva2009", "Mandriva Linux 2009 and earlier", distro="mandriva", parent="linux")
-t.add("mandriva2010", "Mandriva Linux 2010 and later", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="mandriva2009")
+_add_var("mandriva2009", "Mandriva Linux 2009 and earlier", distro="mandriva", parent="linux")
+_add_var("mandriva2010", "Mandriva Linux 2010 and later", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="mandriva2009")
 
-t.add("mes5", "Mandriva Enterprise Server 5.0", distro="mandriva", parent="linux")
-t.add("mes5.1", "Mandriva Enterprise Server 5.1 and later", supported=True, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="mes5")
+_add_var("mes5", "Mandriva Enterprise Server 5.0", distro="mandriva", parent="linux")
+_add_var("mes5.1", "Mandriva Enterprise Server 5.1 and later", supported=True, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="mes5")
 
-t.add("mageia1", "Mageia 1 and later", distro="mageia", supported=True, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET, INPUT: USB_TABLET}, parent="linux")
+_add_var("mageia1", "Mageia 1 and later", distro="mageia", supported=True, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET, INPUT: USB_TABLET}, parent="linux")
 
-t.add("altlinux", "ALT Linux", distro="altlinux", supported=True, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET, INPUT: USB_TABLET}, parent="linux")
+_add_var("altlinux", "ALT Linux", distro="altlinux", supported=True, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET, INPUT: USB_TABLET}, parent="linux")
 
-t.add("debianetch", "Debian Etch", distro="debian", sortby="debian4", parent="linux")
-t.add("debianlenny", "Debian Lenny", sortby="debian5", supported=True, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="debianetch")
-t.add("debiansqueeze", "Debian Squeeze", sortby="debian6", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET, INPUT: USB_TABLET}, parent="debianlenny")
-t.add("debianwheezy", "Debian Wheezy", sortby="debian7", parent="debiansqueeze")
+_add_var("debianetch", "Debian Etch", distro="debian", sortby="debian4", parent="linux")
+_add_var("debianlenny", "Debian Lenny", sortby="debian5", supported=True, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="debianetch")
+_add_var("debiansqueeze", "Debian Squeeze", sortby="debian6", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET, INPUT: USB_TABLET}, parent="debianlenny")
+_add_var("debianwheezy", "Debian Wheezy", sortby="debian7", parent="debiansqueeze")
 
-t.add("ubuntuhardy", "Ubuntu 8.04 LTS (Hardy Heron)", distro="ubuntu", devices={NET: VIRTIO_NET}, parent="linux")
-t.add("ubuntuintrepid", "Ubuntu 8.10 (Intrepid Ibex)", parent="ubuntuhardy")
-t.add("ubuntujaunty", "Ubuntu 9.04 (Jaunty Jackalope)", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="ubuntuintrepid")
-t.add("ubuntukarmic", "Ubuntu 9.10 (Karmic Koala)", parent="ubuntujaunty")
-t.add("ubuntulucid", "Ubuntu 10.04 LTS (Lucid Lynx)", supported=True, parent="ubuntukarmic")
-t.add("ubuntumaverick", "Ubuntu 10.10 (Maverick Meerkat)", supported=False, parent="ubuntulucid")
-t.add("ubuntunatty", "Ubuntu 11.04 (Natty Narwhal)", parent="ubuntumaverick")
-t.add("ubuntuoneiric", "Ubuntu 11.10 (Oneiric Ocelot)", parent="ubuntunatty")
-t.add("ubuntuprecise", "Ubuntu 12.04 LTS (Precise Pangolin)", supported=True, parent="ubuntuoneiric")
-t.add("ubuntuquantal", "Ubuntu 12.10 (Quantal Quetzal)", parent="ubuntuprecise")
-t.add("ubunturaring", "Ubuntu 13.04 (Raring Ringtail)", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET, VIDEO: VMVGA_VIDEO}, parent="ubuntuquantal")
-t.add("ubuntusaucy", "Ubuntu 13.10 (Saucy Salamander)", parent="ubunturaring")
+_add_var("ubuntuhardy", "Ubuntu 8.04 LTS (Hardy Heron)", distro="ubuntu", devices={NET: VIRTIO_NET}, parent="linux")
+_add_var("ubuntuintrepid", "Ubuntu 8.10 (Intrepid Ibex)", parent="ubuntuhardy")
+_add_var("ubuntujaunty", "Ubuntu 9.04 (Jaunty Jackalope)", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="ubuntuintrepid")
+_add_var("ubuntukarmic", "Ubuntu 9.10 (Karmic Koala)", parent="ubuntujaunty")
+_add_var("ubuntulucid", "Ubuntu 10.04 LTS (Lucid Lynx)", supported=True, parent="ubuntukarmic")
+_add_var("ubuntumaverick", "Ubuntu 10.10 (Maverick Meerkat)", supported=False, parent="ubuntulucid")
+_add_var("ubuntunatty", "Ubuntu 11.04 (Natty Narwhal)", parent="ubuntumaverick")
+_add_var("ubuntuoneiric", "Ubuntu 11.10 (Oneiric Ocelot)", parent="ubuntunatty")
+_add_var("ubuntuprecise", "Ubuntu 12.04 LTS (Precise Pangolin)", supported=True, parent="ubuntuoneiric")
+_add_var("ubuntuquantal", "Ubuntu 12.10 (Quantal Quetzal)", parent="ubuntuprecise")
+_add_var("ubunturaring", "Ubuntu 13.04 (Raring Ringtail)", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET, VIDEO: VMVGA_VIDEO}, parent="ubuntuquantal")
+_add_var("ubuntusaucy", "Ubuntu 13.10 (Saucy Salamander)", parent="ubunturaring")
 
-t.add("generic24", "Generic 2.4.x kernel", parent="linux")
-t.add("generic26", "Generic 2.6.x kernel", parent="generic24")
-t.add("virtio26", "Generic 2.6.25 or later kernel with virtio", sortby="genericvirtio26", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="generic26")
-
-
-
-t = _add_type("windows", "Windows", clock="localtime", cont=True, devices={INPUT: USB_TABLET, VIDEO: VGA_VIDEO}, parent=None)
-t.add("win2k", "Microsoft Windows 2000", sortby="mswin4",  acpi=[(support.SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI, False)], apic=[(support.SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI, False)], parent="windows")
-t.add("winxp", "Microsoft Windows XP", sortby="mswin5", supported=True, acpi=[(support.SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI, False)], apic=[(support.SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI, False)], parent="windows")
-t.add("winxp64", "Microsoft Windows XP (x86_64)", supported=True, sortby="mswin564", parent="windows")
-t.add("win2k3", "Microsoft Windows Server 2003", supported=True, sortby="mswinserv2003", parent="windows")
-t.add("win2k8", "Microsoft Windows Server 2008", supported=True, sortby="mswinserv2008", parent="windows")
-t.add("vista", "Microsoft Windows Vista", supported=True, sortby="mswin6", parent="windows")
-t.add("win7", "Microsoft Windows 7", supported=True, sortby="mswin7", parent="windows")
+_add_var("generic24", "Generic 2.4.x kernel", parent="linux")
+_add_var("generic26", "Generic 2.6.x kernel", parent="generic24")
+_add_var("virtio26", "Generic 2.6.25 or later kernel with virtio", sortby="genericvirtio26", devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="generic26")
 
 
-t = _add_type("solaris", "Solaris", clock="localtime", parent=None)
-t.add("solaris9", "Sun Solaris 9", parent="solaris")
-t.add("solaris10", "Sun Solaris 10", devices={INPUT: USB_TABLET}, parent="solaris")
-t.add("opensolaris", "Sun OpenSolaris", devices={INPUT: USB_TABLET}, parent="solaris")
+
+_add_type("windows", "Windows", clock="localtime", cont=True, devices={INPUT: USB_TABLET, VIDEO: VGA_VIDEO}, parent=None)
+_add_var("win2k", "Microsoft Windows 2000", sortby="mswin4",  acpi=[(support.SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI, False)], apic=[(support.SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI, False)], parent="windows")
+_add_var("winxp", "Microsoft Windows XP", sortby="mswin5", supported=True, acpi=[(support.SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI, False)], apic=[(support.SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI, False)], parent="windows")
+_add_var("winxp64", "Microsoft Windows XP (x86_64)", supported=True, sortby="mswin564", parent="windows")
+_add_var("win2k3", "Microsoft Windows Server 2003", supported=True, sortby="mswinserv2003", parent="windows")
+_add_var("win2k8", "Microsoft Windows Server 2008", supported=True, sortby="mswinserv2008", parent="windows")
+_add_var("vista", "Microsoft Windows Vista", supported=True, sortby="mswin6", parent="windows")
+_add_var("win7", "Microsoft Windows 7", supported=True, sortby="mswin7", parent="windows")
 
 
-t = _add_type("unix", "UNIX", parent=None)
+_add_type("solaris", "Solaris", clock="localtime", parent=None)
+_add_var("solaris9", "Sun Solaris 9", parent="solaris")
+_add_var("solaris10", "Sun Solaris 10", devices={INPUT: USB_TABLET}, parent="solaris")
+_add_var("opensolaris", "Sun OpenSolaris", devices={INPUT: USB_TABLET}, parent="solaris")
+
+
+_add_type("unix", "UNIX", parent=None)
 # http: //www.nabble.com/Re%3A-Qemu%3A-bridging-on-FreeBSD-7.0-STABLE-p15919603.html
-t.add("freebsd6", "FreeBSD 6.x", devices={NET: {"model": [(HV_ALL, "ne2k_pci")]}}, parent="unix")
-t.add("freebsd7", "FreeBSD 7.x", parent="freebsd6")
-t.add("freebsd8", "FreeBSD 8.x", supported=True, devices={NET: {"model": [(HV_ALL, "e1000")]}}, parent="freebsd7")
-t.add("freebsd9", "FreeBSD 9.x", parent="freebsd8")
-t.add("freebsd10", "FreeBSD 10.x", supported=False, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="freebsd9")
+_add_var("freebsd6", "FreeBSD 6.x", devices={NET: {"model": [(HV_ALL, "ne2k_pci")]}}, parent="unix")
+_add_var("freebsd7", "FreeBSD 7.x", parent="freebsd6")
+_add_var("freebsd8", "FreeBSD 8.x", supported=True, devices={NET: {"model": [(HV_ALL, "e1000")]}}, parent="freebsd7")
+_add_var("freebsd9", "FreeBSD 9.x", parent="freebsd8")
+_add_var("freebsd10", "FreeBSD 10.x", supported=False, devices={DISK: VIRTIO_DISK, NET: VIRTIO_NET}, parent="freebsd9")
 
 # http: //calamari.reverse-dns.net: 980/cgi-bin/moin.cgi/OpenbsdOnQemu
 # https: //www.redhat.com/archives/et-mgmt-tools/2008-June/msg00018.html
-t.add("openbsd4", "OpenBSD 4.x", devices={NET: {"model": [(HV_ALL, "pcnet")]}}, parent="unix")
+_add_var("openbsd4", "OpenBSD 4.x", devices={NET: {"model": [(HV_ALL, "pcnet")]}}, parent="unix")
 
 
-
-t = _add_type("other", "Other", parent=None)
-t.add("msdos", "MS-DOS", acpi=False, apic=False, parent="other")
-t.add("netware4", "Novell Netware 4", parent="other")
-t.add("netware5", "Novell Netware 5", parent="other")
-t.add("netware6", "Novell Netware 6", parent="other")
-t.add("generic", "Generic", supported=True, parent="other")
+_add_type("other", "Other", parent=None)
+_add_var("msdos", "MS-DOS", acpi=False, apic=False, parent="other")
+_add_var("netware4", "Novell Netware 4", parent="other")
+_add_var("netware5", "Novell Netware 5", parent="other")
+_add_var("netware6", "Novell Netware 6", parent="other")
+_add_var("generic", "Generic", supported=True, parent="other")

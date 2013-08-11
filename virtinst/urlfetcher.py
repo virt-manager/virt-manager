@@ -703,10 +703,10 @@ class FedoraDistro(RedHatDistro):
 
     def _latestFedoraVariant(self):
         ret = None
-        for var in osdict.sort_helper(osdict.OS_TYPES["linux"]["variants"]):
-            if var.startswith("fedora"):
+        for osinfo in osdict.list_os(typename="linux"):
+            if osinfo.name.startswith("fedora"):
                 # First fedora* occurence should be the newest
-                ret = var
+                ret = osinfo.name
                 break
 
         return ret, int(ret[6:])

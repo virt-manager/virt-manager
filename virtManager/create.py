@@ -735,21 +735,25 @@ class vmmCreate(vmmGObjectUI):
                       RHEL6_OS_SUPPORT or
                       None)
 
-        types = virtinst.Guest.list_os_types()
-        types.sort()
-        supportl = virtinst.Guest.list_os_types(supported=True,
-                                               filtervars=filtervars)
+        types = virtinst.osdict.list_os(list_types=True)
         if not filtervars:
             # Kind of a hack, just show linux + windows by default since
             # that's all 98% of people care about
             supportl = ["linux", "windows"]
+        else:
+            supportl = []
+            for t in types:
+                l = virtinst.osdict.list_os(typename=t.name,
+                                            only_supported=True,
+                                            filtervars=filtervars)
+                if l:
+                    supportl.append(t.name)
 
         self._add_os_row(model, None, _("Generic"), True)
 
         for t in types:
-            label = virtinst.Guest.get_os_type_label(t)
-            supported = (t in supportl)
-            self._add_os_row(model, t, label, supported)
+            supported = (t.name in supportl)
+            self._add_os_row(model, t.name, t.label, supported)
 
         # Add sep
         self._add_os_row(model, sep=True)
@@ -769,15 +773,17 @@ class vmmCreate(vmmGObjectUI):
                       RHEL6_OS_SUPPORT or
                       None)
         preferred = self.config.preferred_distros
-        variants = virtinst.Guest.list_os_variants(_type, preferred)
-        supportl = virtinst.Guest.list_os_variants(
-                                            _type, preferred, supported=True,
-                                            filtervars=filtervars)
+
+        variants = virtinst.osdict.list_os(typename=_type,
+                                           sortpref=preferred)
+        supportl = virtinst.osdict.list_os(typename=_type,
+                                           sortpref=preferred,
+                                           only_supported=True,
+                                           filtervars=filtervars)
 
         for v in variants:
-            label = virtinst.Guest.get_os_variant_label(_type, v)
             supported = v in supportl
-            self._add_os_row(model, v, label, supported)
+            self._add_os_row(model, v.name, v.label, supported)
 
         # Add sep
         self._add_os_row(model, sep=True)

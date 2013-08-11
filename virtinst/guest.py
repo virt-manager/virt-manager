@@ -42,62 +42,6 @@ from virtinst import osdict
 
 class Guest(XMLBuilder):
     @staticmethod
-    def pretty_os_list():
-        """
-        Return a strip representation of OS list for printing
-        """
-        ret = ""
-        for t in Guest.list_os_types():
-            for v in Guest.list_os_variants(t):
-                ret += "%-20s : %s\n" % (v, Guest.get_os_variant_label(t, v))
-        return ret
-
-    @staticmethod
-    def list_os_types(supported=False, filtervars=None):
-        """
-        @param filtervars: List of only variants we want to show by default
-        """
-        vals = osdict.sort_helper(osdict.OS_TYPES)
-        for t in vals[:]:
-            if not Guest.list_os_variants(t, supported=supported,
-                                          filtervars=filtervars):
-                vals.remove(t)
-        return vals
-
-    @staticmethod
-    def list_os_variants(typ, sortpref=None, supported=False, filtervars=None):
-        """
-        Return a list of sorted os variants for the passed distro type
-
-        @param sortpref: An option list of osdict 'distro' tags to
-        prioritize in the returned list, e.g. passing ["fedora"] will make
-        the sorted list have all fedora distros first
-        @param filtervars: List of only variants we want to show by default
-        """
-        vals = osdict.sort_helper(osdict.OS_TYPES[typ]["variants"],
-                                  sortpref)
-        ret = []
-        for v in vals:
-            if filtervars:
-                if v not in filtervars:
-                    continue
-            elif supported:
-                if not osdict.lookup_osdict_key(None, None,
-                                                v, "supported"):
-                    continue
-
-            ret.append(v)
-        return ret
-
-    @staticmethod
-    def get_os_type_label(typ):
-        return osdict.OS_TYPES[typ]["label"]
-
-    @staticmethod
-    def get_os_variant_label(typ, variant):
-        return osdict.OS_TYPES[typ]["variants"][variant]["label"]
-
-    @staticmethod
     def check_vm_collision(conn, name, do_remove):
         """
         Remove the existing VM with the same name if requested, or error
