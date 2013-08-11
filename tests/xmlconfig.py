@@ -296,7 +296,8 @@ class TestXMLConfig(unittest.TestCase):
         Make sure device defaults are properly changed if we change OS
         distro/variant mid process
         """
-        utils.set_conn(_plainkvm)
+        conn = utils.open_plainkvm(connver=12005)
+        utils.set_conn(conn)
 
         i = utils.make_distro_installer()
         g = utils.get_basic_fullyvirt_guest("kvm", installer=i)
@@ -307,21 +308,27 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(utils.get_filedisk())
         g.add_device(utils.get_blkdisk())
         g.add_device(utils.get_virtual_network())
+        g.add_device(VirtualAudio(g.conn))
 
         # Call get_xml_config sets first round of defaults w/o os_variant set
         g.get_install_xml(do_install)
 
         g.os_variant = "fedora11"
-        self._compare(g, "install-f11", do_install)
+        self._compare(g, "install-f11-norheldefaults", do_install)
 
         try:
             virtinst.enable_rhel_defaults = True
+            origemu = g.emulator
+            g.emulator = "/usr/libexec/qemu-kvm"
+            g.conn._support_cache = {}
             self._compare(g, "install-f11-rheldefaults", do_install)
+            g.emulator = origemu
+            g.conn._support_cache = {}
         finally:
             virtinst.enable_rhel_defaults = False
 
         # Verify main guest wasn't polluted
-        self._compare(g, "install-f11", do_install)
+        self._compare(g, "install-f11-norheldefaults", do_install)
 
     def testInstallFVImport(self):
         i = utils.make_import_installer()

@@ -17,19 +17,19 @@
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>
   <devices>
-    <emulator>/usr/libexec/qemu-kvm</emulator>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="file" device="floppy">
-      <driver name="qemu" type="qcow2" cache="none"/>
+      <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/testvol1.img"/>
       <target dev="fda" bus="fdc"/>
     </disk>
     <disk type="file" device="disk">
-      <driver name="qemu" type="raw" cache="none"/>
+      <driver name="qemu" type="raw"/>
       <source file="/tmp/test.img"/>
       <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="block" device="disk">
-      <driver name="qemu" type="raw" cache="none" io="native"/>
+      <driver name="qemu" type="raw"/>
       <source dev="/dev/loop0"/>
       <target dev="vdb" bus="virtio"/>
     </disk>
@@ -45,6 +45,6 @@
     <input type="tablet" bus="usb"/>
     <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
     <console type="pty"/>
-    <sound model="ich6"/>
+    <sound model="ac97"/>
   </devices>
 </domain>

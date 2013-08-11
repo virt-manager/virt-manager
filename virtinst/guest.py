@@ -340,6 +340,7 @@ class Guest(XMLBuilder):
             self._devices = [dev.copy() for dev in self._devices]
             self.features = self.features.copy()
             self.os = self.os.copy()
+            support.set_rhel6(self._is_rhel6())
         except:
             self._finish_get_xml(data)
             raise
@@ -347,6 +348,7 @@ class Guest(XMLBuilder):
 
     def _finish_get_xml(self, data):
         self._devices, self.features, self.os = data
+        support.set_rhel6(False)
 
     def get_install_xml(self, *args, **kwargs):
         data = self._prepare_get_xml()
@@ -404,7 +406,7 @@ class Guest(XMLBuilder):
         if not self.installer.has_install_phase():
             return False
 
-        return self._lookup_osdict_key("cont")
+        return self._lookup_osdict_key("three_stage_install", False)
 
 
     ##########################
@@ -624,7 +626,7 @@ class Guest(XMLBuilder):
             return
 
         if self.clock.offset is None:
-            self.clock.offset = self._lookup_osdict_key("clock")
+            self.clock.offset = self._lookup_osdict_key("clock", "utc")
 
     def _set_emulator_defaults(self):
         if self.os.is_xenpv():
@@ -654,9 +656,9 @@ class Guest(XMLBuilder):
             return
 
         if self.features["acpi"] == "default":
-            self.features["acpi"] = self._lookup_osdict_key("acpi")
+            self.features["acpi"] = self._lookup_osdict_key("acpi", True)
         if self.features["apic"] == "default":
-            self.features["apic"] = self._lookup_osdict_key("apic")
+            self.features["apic"] = self._lookup_osdict_key("apic", True)
         if self.features["pae"] == "default":
             self.features["pae"] = self.conn.caps.support_pae()
 
@@ -673,7 +675,7 @@ class Guest(XMLBuilder):
                 self.add_device(ctrl)
 
     def _set_disk_defaults(self):
-        os_disk_bus  = self._lookup_device_param("disk", "bus")
+        os_disk_bus  = self._lookup_osdict_key("diskbus", None)
 
         def set_disk_bus(d):
             if d.device == d.DEVICE_FLOPPY:
@@ -710,7 +712,7 @@ class Guest(XMLBuilder):
                 used_targets.append(disk.generate_target(used_targets))
 
     def _set_net_defaults(self):
-        net_model = self._lookup_device_param("interface", "model")
+        net_model = self._lookup_osdict_key("netmodel", None)
         if not self.os.is_hvm():
             net_model = None
 
@@ -719,8 +721,8 @@ class Guest(XMLBuilder):
                 net.model = net_model
 
     def _set_input_defaults(self):
-        input_type = self._lookup_device_param("input", "type")
-        input_bus = self._lookup_device_param("input", "bus")
+        input_type = self._lookup_osdict_key("inputtype", "mouse")
+        input_bus = self._lookup_osdict_key("inputbus", "ps2")
         if self.os.is_xenpv():
             input_type = virtinst.VirtualInputDevice.TYPE_MOUSE
             input_bus = virtinst.VirtualInputDevice.BUS_XEN
@@ -732,10 +734,18 @@ class Guest(XMLBuilder):
                 inp.bus  = input_bus
 
     def _set_sound_defaults(self):
-        sound_model = self._lookup_device_param("sound", "model")
+        if self.conn.check_conn_hv_support(
+                support.SUPPORT_CONN_HV_SOUND_ICH6, self.type):
+            default = "ich6"
+        elif self.conn.check_conn_hv_support(
+                support.SUPPORT_CONN_HV_SOUND_AC97, self.type):
+            default = "ac97"
+        else:
+            default = "es1370"
+
         for sound in self.get_devices("sound"):
             if sound.model == sound.MODEL_DEFAULT:
-                sound.model = sound_model
+                sound.model = default
 
     def _set_video_defaults(self):
         # QXL device (only if we use spice) - safe even if guest is VGA only
@@ -746,7 +756,7 @@ class Guest(XMLBuilder):
         if has_spice():
             video_model = "qxl"
         else:
-            video_model = self._lookup_device_param("video", "model")
+            video_model = self._lookup_osdict_key("videomodel", "cirrus")
 
         for video in self.get_devices("video"):
             if video.model == video.MODEL_DEFAULT:
@@ -777,23 +787,10 @@ class Guest(XMLBuilder):
         return (self.type in ["qemu", "kvm"] and
                 emulator.startswith("/usr/libexec/qemu"))
 
-    def _lookup_osdict_key(self, key):
+    def _lookup_osdict_key(self, key, default):
         """
         Use self.os_variant to find key in OSTYPES
         @returns: dict value, or None if os_type/variant wasn't set
         """
         return osdict.lookup_osdict_key(self.conn, self.type,
-                                        self.os_variant, key)
-
-    def _lookup_device_param(self, device_key, param):
-        """
-        Check the OS dictionary for the prefered device setting for passed
-        device type and param (bus, model, etc.)
-        """
-        try:
-            support.set_rhel6(self._is_rhel6())
-            return osdict.lookup_device_param(self.conn, self.type,
-                                              self.os_variant,
-                                              device_key, param)
-        finally:
-            support.set_rhel6(False)
+                                        self.os_variant, key, default)
