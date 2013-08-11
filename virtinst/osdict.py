@@ -419,16 +419,3 @@ t.add("netware4", "Novell Netware 4", parent="other")
 t.add("netware5", "Novell Netware 5", parent="other")
 t.add("netware6", "Novell Netware 6", parent="other")
 t.add("generic", "Generic", supported=True, parent="other")
-
-
-
-
-
-# Back compatibility entries
-solaris_compat = OS_TYPES["unix"]["variants"]
-
-solaris_compat["solaris9"] = OS_TYPES["solaris"]["variants"]["solaris9"].copy()
-solaris_compat["solaris9"]["skip"] = True
-
-solaris_compat["solaris10"] = OS_TYPES["solaris"]["variants"]["solaris10"].copy()
-solaris_compat["solaris10"]["skip"] = True
