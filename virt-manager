@@ -289,7 +289,7 @@ def main():
     if options.profile is not None:
         import hotshot
         prof = hotshot.Profile(options.profile)
-        prof.runcall(engine.application.run)
+        prof.runcall(engine.application.run, None)
         prof.close()
     else:
         engine.application.run(None)
