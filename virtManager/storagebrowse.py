@@ -272,12 +272,20 @@ class vmmStorageBrowser(vmmGObjectUI):
         canchoose = bool(vol and vol[5])
         self.widget("choose-volume").set_sensitive(canchoose)
 
-    def refresh_current_pool(self, ignore):
+    def refresh_current_pool(self, createvol):
         cp = self.current_pool()
         if cp is None:
             return
         cp.refresh()
+
         self.refresh_storage_pool(None, cp.get_uuid())
+
+        vol_list = self.widget("vol-list")
+        def select_volume(model, path, it, volume_name):
+            if model.get(it, 0)[0] == volume_name:
+                uihelpers.set_list_selection(vol_list, path)
+
+        vol_list.get_model().foreach(select_volume, createvol.vol.name)
 
     def new_volume(self, src_ignore):
         pool = self.current_pool()
