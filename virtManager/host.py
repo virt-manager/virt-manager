@@ -23,6 +23,7 @@ import logging
 # pylint: disable=E0611
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Gdk
 # pylint: enable=E0611
 
 from virtinst import VirtualDisk
@@ -966,10 +967,10 @@ class vmmHost(vmmGObjectUI):
         vol = self.current_vol()
         if not vol:
             return
-        clipboard = Gtk.Clipboard()
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         target_path = vol.get_target_path()
         if target_path:
-            clipboard.set_text(target_path)
+            clipboard.set_text(target_path, -1)
 
 
     def repopulate_storage_pools(self, src_ignore=None, uuid_ignore=None):
