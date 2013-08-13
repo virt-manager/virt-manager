@@ -98,7 +98,8 @@ class vmmCreateVolume(vmmGObjectUI):
     def set_modal(self, modal):
         self.topwin.set_modal(bool(modal))
 
-    def set_parent_pool(self, pool):
+    def set_parent_pool(self, conn, pool):
+        self.conn = conn
         self.parent_pool = pool
         self.vol_class = Storage.StoragePool.get_volume_for_pool(self.parent_pool.get_type())
 

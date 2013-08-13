@@ -289,7 +289,7 @@ class vmmStorageBrowser(vmmGObjectUI):
                 self.addvol = vmmCreateVolume(self.conn, pool)
                 self.addvol.connect("vol-created", self.refresh_current_pool)
             else:
-                self.addvol.set_parent_pool(pool)
+                self.addvol.set_parent_pool(self.conn, pool)
             self.addvol.set_modal(True)
             self.addvol.set_name_hint(self.vm_name)
             self.addvol.show(self.topwin)

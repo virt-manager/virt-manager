@@ -799,7 +799,7 @@ class vmmHost(vmmGObjectUI):
                 self.addvol = vmmCreateVolume(self.conn, pool)
                 self.addvol.connect("vol-created", self.refresh_current_pool)
             else:
-                self.addvol.set_parent_pool(pool)
+                self.addvol.set_parent_pool(self.conn, pool)
             self.addvol.show(self.topwin)
         except Exception, e:
             self.err.show_err(_("Error launching volume wizard: %s") % str(e))
