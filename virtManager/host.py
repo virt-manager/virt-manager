@@ -1305,6 +1305,8 @@ def refresh_pool_in_list(pool_list, conn, uuid):
 
 def populate_storage_pools(pool_list, conn):
     model = pool_list.get_model()
+    # Prevent events while the model is modified
+    pool_list.set_model(None)
     model.clear()
     for uuid in conn.list_pool_uuids():
         per = get_pool_size_percent(conn, uuid)
@@ -1317,6 +1319,7 @@ def populate_storage_pools(pool_list, conn):
         model.append([uuid, label, pool.is_active(), per])
 
     _iter = model.get_iter_first()
+    pool_list.set_model(model)
     if _iter:
         pool_list.get_selection().select_iter(_iter)
     pool_list.get_selection().emit("changed")
