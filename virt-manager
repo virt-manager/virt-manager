@@ -37,16 +37,12 @@ from virtinst import cli as virtinstcli
 from virtcli import cliutils, cliconfig
 
 
-logging_setup = False
-
-
 GObject.threads_init()
 
 
 def _show_startup_error(msg, details):
-    if logging_setup:
-        logging.debug("Error starting virt-manager: %s\n%s", msg, details,
-                      exc_info=True)
+    logging.debug("Error starting virt-manager: %s\n%s", msg, details,
+                  exc_info=True)
     from virtManager.error import vmmErrorDialog
     err = vmmErrorDialog()
     title = _("Error starting Virtual Machine Manager")
@@ -178,8 +174,6 @@ def main():
     (options, leftovers) = parse_commandline()
 
     virtinstcli.setupLogging("virt-manager", options.debug, False, False)
-    global logging_setup
-    logging_setup = True
 
     import virtManager
     logging.debug("virt-manager version: %s", cliconfig.__version__)
