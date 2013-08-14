@@ -237,6 +237,7 @@ class Guest(XMLBuilder):
         for devtype in VirtualDevice.virtual_device_types:
             retlist.extend(self.get_devices(devtype))
         return retlist
+    all_devices = property(lambda s: s.get_all_devices())
 
     def remove_device(self, dev):
         """
@@ -313,18 +314,6 @@ class Guest(XMLBuilder):
         for dev in self.installer.install_devices:
             self.add_device(dev)
             self._install_devices.append(dev)
-
-    def _cleanup_install(self):
-        self.installer.cleanup()
-
-    def _create_devices(self, progresscb):
-        """
-        Ensure that devices are setup
-        """
-        for dev in self.get_all_devices():
-            dev.setup(progresscb)
-
-    all_devices = property(lambda s: s.get_all_devices())
 
 
     ##############
@@ -428,7 +417,8 @@ class Guest(XMLBuilder):
         try:
             # Create devices if required (disk images, etc.)
             if not dry:
-                self._create_devices(meter)
+                for dev in self.get_all_devices():
+                    dev.setup(meter)
 
             start_xml, final_xml = self._build_xml(is_initial)
             if return_xml:
@@ -448,7 +438,7 @@ class Guest(XMLBuilder):
 
             return self.domain
         finally:
-            self._cleanup_install()
+            self.installer.cleanup()
 
     def continue_install(self, meter=None,
                          dry=False, return_xml=False):

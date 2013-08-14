@@ -65,17 +65,23 @@ class TestXMLConfig(unittest.TestCase):
                  do_create=True):
         filename = filebase and build_xmlfile(filebase) or None
 
-        guest._prepare_install(None)
-        try:
-            actualXML = guest.get_install_xml(install=do_install,
-                                              disk_boot=do_disk_boot)
+        cont_xml = None
+        inst_xml, boot_xml = guest.start_install(return_xml=True, dry=True)
+        if do_disk_boot:
+            cont_xml, boot_xml = guest.continue_install(return_xml=True,
+                                                        dry=True)
 
-            if filename:
-                utils.diff_compare(actualXML, filename)
-            if do_create:
-                utils.test_create(guest.conn, actualXML)
-        finally:
-            guest._cleanup_install()
+        if do_disk_boot:
+            actualXML = cont_xml
+        elif do_install:
+            actualXML = inst_xml
+        else:
+            actualXML = boot_xml
+
+        if filename:
+            utils.diff_compare(actualXML, filename)
+        if do_create:
+            utils.test_create(guest.conn, actualXML)
 
     def _testInstall(self, guest,
                      instxml=None, bootxml=None, contxml=None):

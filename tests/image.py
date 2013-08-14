@@ -93,7 +93,7 @@ class TestImageParser(unittest.TestCase):
 
 
             g.installer = inst
-            g._prepare_install(None)
+            ignore, actual_out = g.start_install(return_xml=True, dry=True)
 
             actual_out = g.get_install_xml(install=False)
             expect_file = os.path.join(image2guestdir + fname)
