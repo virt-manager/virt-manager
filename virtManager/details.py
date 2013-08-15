@@ -568,6 +568,7 @@ class vmmDetails(vmmGObjectUI):
 
         for serial in self.serial_tabs:
             serial.cleanup()
+        self.serial_tabs = []
 
         self.console.cleanup()
         self.console = None
