@@ -135,8 +135,8 @@ def parse_commandline():
         help="Show domain graphical console window")
     optParser.add_option("--show-host-summary", action="callback",
        callback=opt_show_cb, help="Show connection details window")
-    optParser.add_option("--spice-disable-usbredir", action="store_true",
-                        dest="usbredir", help="Disable USB redirection support")
+    optParser.add_option("--spice-disable-auto-usbredir", action="store_true",
+                        dest="usbredir", help="Disable Auto USB redirection support")
 
     return optParser.parse_args()
 
