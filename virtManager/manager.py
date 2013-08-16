@@ -34,6 +34,7 @@ from virtManager.connection import vmmConnection
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.graphwidgets import CellRendererSparkline
 
+import libvirt
 
 # Number of data points for performance graphs
 GRAPH_LEN = 40
@@ -891,18 +892,24 @@ class vmmManager(vmmGObjectUI):
         if self.vm_row_key(vm) not in self.rows:
             return
 
-        row = self.rows[self.vm_row_key(vm)]
-        row[ROW_NAME] = vm.get_name()
-        row[ROW_STATUS] = vm.run_status()
-        row[ROW_STATUS_ICON] = vm.run_status_icon_name()
-        row[ROW_IS_VM_RUNNING] = vm.is_active()
-        row[ROW_MARKUP] = self._build_vm_markup(row)
 
-        if config_changed:
-            desc = vm.get_description()
-            if not can_set_row_none:
-                desc = desc or ""
-            row[ROW_HINT] = util.xml_escape(desc)
+        try:
+            row = self.rows[self.vm_row_key(vm)]
+            row[ROW_NAME] = vm.get_name()
+            row[ROW_STATUS] = vm.run_status()
+            row[ROW_STATUS_ICON] = vm.run_status_icon_name()
+            row[ROW_IS_VM_RUNNING] = vm.is_active()
+            row[ROW_MARKUP] = self._build_vm_markup(row)
+
+            if config_changed:
+                desc = vm.get_description()
+                if not can_set_row_none:
+                    desc = desc or ""
+                    row[ROW_HINT] = util.xml_escape(desc)
+        except libvirt.libvirtError, e:
+            if uihelpers.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
+                return
+            raise
 
         model.row_changed(row.path, row.iter)
 

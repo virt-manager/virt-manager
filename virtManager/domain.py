@@ -411,7 +411,12 @@ class vmmDomain(vmmLibvirtObject):
                               parsexml=xml)
 
     def _reparse_xml(self, ignore=None):
-        self._guest = self._build_guest(self._get_domain_xml())
+        try:
+            self._guest = self._build_guest(self._get_domain_xml())
+        except libvirt.libvirtError, e:
+            if uihelpers.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
+                return
+            raise
 
 
     ##############################
@@ -1561,14 +1566,12 @@ class vmmDomain(vmmLibvirtObject):
         """
         try:
             info = self._backend.info()
+            self._update_status(info[0])
         except libvirt.libvirtError, e:
-            if (hasattr(libvirt, "VIR_ERR_NO_DOMAIN") and
-                e.get_error_code() == getattr(libvirt, "VIR_ERR_NO_DOMAIN")):
-                # Possibly a transient domain that was removed on shutdown
+            if uihelpers.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
                 return
             raise
 
-        self._update_status(info[0])
 
     def _update_status(self, status):
         """

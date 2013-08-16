@@ -2637,8 +2637,14 @@ class vmmDetails(vmmGObjectUI):
 
         # If the dialog is visible, we want to make sure the XML is always
         # up to date
-        if self.is_visible():
-            self.vm.refresh_xml()
+        try:
+            if self.is_visible():
+                self.vm.refresh_xml()
+        except libvirt.libvirtError, e:
+            if uihelpers.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
+                self.close()
+                return
+            raise
 
         # Stats page needs to be refreshed every tick
         if (page == PAGE_DETAILS and
