@@ -218,6 +218,7 @@ class XMLParseTest(unittest.TestCase):
         check("enable_bootmenu", False, True)
         check("kernel", None, "foo.img")
         check("initrd", None, "bar.img")
+        check("dtb", None, "/baz.dtb")
         check("kernel_args", None, "ks=foo.ks")
 
         self._alter_compare(guest.get_xml_config(), outfile)

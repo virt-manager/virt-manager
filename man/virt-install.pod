@@ -350,6 +350,12 @@ network PXE boot. Additionally enable BIOS boot menu prompt.
 Have guest permanently boot off a local kernel/initrd pair, with the
 specified kernel options.
 
+=item B<--boot kernel=KERNEL,initrd=INITRD,dtb=DTB
+
+Have guest permanently boot off a local kernel/initrd pair with an
+external device tree binary. DTB can be required for some non-x86
+configurations like ARM or PPC
+
 =item B<--boot loader=BIOSPATH>
 
 Use BIOSPATH as the virtual machine BIOS. Only valid for fully virtualized

@@ -1310,6 +1310,7 @@ def parse_boot(guest, optstring):
     set_param("enable_bootmenu", "menu", menu)
     set_param("kernel", "kernel")
     set_param("initrd", "initrd")
+    set_param("dtb", "dtb")
     set_param("loader", "loader")
     set_param("kernel_args", ["kernel_args", "extra_args"])
 

@@ -646,7 +646,7 @@ vinst.add_valid("install", "--hvm --cdrom %(ROIMG)s")  # Using ro path as a cd m
 vinst.add_valid("install", "--paravirt --location %(TREEDIR)s --os-variant none")  # Paravirt location with --os-variant none
 vinst.add_valid("install", "--hvm --location %(TREEDIR)s --os-variant fedora12")  # URL install with manual os-variant
 vinst.add_valid("install", "--hvm --pxe --boot menu=on")  # Boot menu
-vinst.add_valid("install", "--hvm --pxe --boot kernel=/tmp/foo1.img,initrd=/tmp/foo2.img,kernel_args='ro quiet console=/dev/ttyS0' ")  # Kernel params
+vinst.add_valid("install", "--hvm --pxe --boot kernel=/tmp/foo1.img,initrd=/tmp/foo2.img,dtb=/tmp/foo2.dtb,kernel_args='ro quiet console=/dev/ttyS0'")  # Kernel params
 vinst.add_valid("install", "--hvm --pxe --boot cdrom,fd,hd,network,menu=off")  # Boot order
 vinst.add_valid("install", "--hvm --boot network,hd,menu=on")  # Boot w/o other install option
 vinst.add_invalid("install", "--hvm --pxe --virt-type bogus")  # Bogus virt-type

@@ -77,7 +77,7 @@ class OSXML(XMLBuilder):
 
     _XML_ROOT_XPATH = "/domain/os"
     _XML_PROP_ORDER = ["arch", "os_type", "loader",
-                       "kernel", "initrd", "kernel_args",
+                       "kernel", "initrd", "kernel_args", "dtb",
                        "_bootdevs"]
 
     def _get_bootorder(self):
@@ -95,6 +95,7 @@ class OSXML(XMLBuilder):
     kernel = XMLProperty(xpath="./os/kernel")
     initrd = XMLProperty(xpath="./os/initrd")
     kernel_args = XMLProperty(xpath="./os/cmdline")
+    dtb = XMLProperty(xpath="./os/dtb")
 
     init = XMLProperty(xpath="./os/init")
     loader = XMLProperty(xpath="./os/loader")
