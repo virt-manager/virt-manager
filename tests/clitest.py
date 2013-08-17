@@ -389,10 +389,10 @@ vinst.add_valid("cpuram", "--vcpus sockets=2,threads=2")  # Topology only
 vinst.add_valid("cpuram", "--cpu somemodel")  # Simple --cpu
 vinst.add_valid("cpuram", "--cpu foobar,+x2apic,+x2apicagain,-distest,forbid=foo,forbid=bar,disable=distest2,optional=opttest,require=reqtest,match=strict,vendor=meee")  # Crazy --cpu
 vinst.add_valid("cpuram", "--numatune 1,2,3,5-7,^6")  # Simple --numatune
+vinst.add_compare("cpuram", "--connect %(DEFAULTURI)s --cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
 vinst.add_invalid("cpuram", "--vcpus 32 --cpuset=969-1000")  # Bogus cpuset
 vinst.add_invalid("cpuram", "--vcpus 32 --cpuset=autofoo")  # Bogus cpuset
 vinst.add_invalid("cpuram", "--vcpus 20 --check-cpu")  # Over host vcpus w/ --check-cpu
-vinst.add_invalid("cpuram", "--vcpus foo=bar")  # vcpus unknown option
 vinst.add_invalid("cpuram", "--cpu host")  # --cpu host, but no host CPU in caps
 vinst.add_invalid("cpuram", "--numatune 1-3,4,mode=strict")  # Non-escaped numatune
 
@@ -401,18 +401,13 @@ vinst.add_category("smartcard", "--noautoconsole --nodisks --pxe")
 vinst.add_valid("smartcard", "--smartcard host")  # --smartcard host
 vinst.add_valid("smartcard", "--smartcard none")  # --smartcard none,
 vinst.add_valid("smartcard", "--smartcard passthrough,type=spicevmc")  # --smartcard mode with type
-vinst.add_invalid("smartcard", "--smartcard")  # Missing argument
-vinst.add_invalid("smartcard", "--smartcard foo")  # Invalid argument
 vinst.add_invalid("smartcard", "--smartcard passthrough,type=foo")  # Invalid type
-vinst.add_invalid("smartcard", "--smartcard host,foobar=baz")  # --smartcard bogus
 
 
 vinst.add_category("tpm", "--noautoconsole --nodisks --pxe")
 vinst.add_valid("tpm", "--tpm passthrough")  # --tpm passthrough
 vinst.add_valid("tpm", "--tpm passthrough,model=tpm-tis")  # --tpm backend type with model
 vinst.add_valid("tpm", "--tpm passthrough,model=tpm-tis,path=/dev/tpm0")  # --tpm backend type with model and device path
-vinst.add_invalid("tpm", "--tpm")  # Missing argument
-vinst.add_invalid("tpm", "--tpm foo")  # Invalid argument
 vinst.add_invalid("tpm", "--tpm passthrough,model=foo")  # Invalid model
 
 
@@ -448,8 +443,7 @@ vinst.add_category("misc", "--nographics --noautoconsole")
 vinst.add_compare("misc", "", "noargs-fail")  # No arguments
 vinst.add_compare("misc", "--hvm --nodisks --pxe --print-step all", "simple-pxe")  # Diskless PXE install
 vinst.add_compare("misc", "--hvm --cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --vcpus cores=4", "w2k3-cdrom")  # HVM windows install with disk
-vinst.add_compare("misc", """--hvm --pxe --controller usb,model=ich9-ehci1,address=0:0:4.7,index=0 --controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0 --controller usb,model=ich9-uhci2,address=0:0:4.1,index=0,master=2 --controller usb,model=ich9-uhci3,address=0:0:4.2,index=0,master=4 --disk %(MANAGEDEXISTUPPER)s,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149 --disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace --disk device=cdrom,bus=sata --serial tcp,host=:2222,mode=bind,protocol=telnet --filesystem /source,/target,mode=squash --network user,mac=12:34:56:78:11:22 --network bridge=foobar,model=virtio --channel spicevmc --smartcard passthrough,type=spicevmc --tpm passthrough,model=tpm-tis,path=/dev/tpm0 --security type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes  --numatune \\"1-3,5\\",mode=preferred --boot loader=/foo/bar """, "many-devices")  # Lot's of devices
-vinst.add_compare("misc", "--connect %(DEFAULTURI)s --hvm --nodisks --pxe --cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
+vinst.add_compare("misc", """--hvm --pxe --controller usb,model=ich9-ehci1,address=0:0:4.7,index=0 --controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0 --controller usb,model=ich9-uhci2,address=0:0:4.1,index=0,master=2 --controller usb,model=ich9-uhci3,address=0:0:4.2,index=0,master=4 --disk %(MANAGEDEXISTUPPER)s,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149 --disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace --disk device=cdrom,bus=sata --serial tcp,host=:2222,mode=bind,protocol=telnet --filesystem /source,/target,mode=squash --network user,mac=12:34:56:78:11:22 --network bridge=foobar,model=virtio --channel spicevmc --smartcard passthrough,type=spicevmc --tpm passthrough,model=tpm-tis,path=/dev/tpm0 --security type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes  --numatune \\"1-3,5\\",mode=preferred --boot loader=/foo/bar """, "many-devices")  # Lots of devices
 vinst.add_valid("misc", "--hvm --disk path=virt-install,device=cdrom")  # Specifying cdrom media via --disk
 vinst.add_valid("misc", "--hvm --import --disk path=virt-install")  # FV Import install
 vinst.add_valid("misc", "--hvm --import --disk path=virt-install --prompt --force")  # Working scenario w/ prompt shouldn't ask anything
@@ -496,12 +490,9 @@ vinst.add_valid("char", "--channel pty,target_type=virtio,name=org.linux-kvm.por
 vinst.add_valid("char", "--channel pty,target_type=virtio")  # --channel virtio without name=
 vinst.add_valid("char", "--console pty,target_type=virtio")  # --console virtio
 vinst.add_valid("char", "--console pty,target_type=xen")  # --console xen
-vinst.add_invalid("char", "--parallel foobah")  # Bogus device type
 vinst.add_invalid("char", "--serial unix")  # Unix with no path
 vinst.add_invalid("char", "--serial null,path=/tmp/foo")  # Path where it doesn't belong
-vinst.add_invalid("char", "--serial udp,host=:1234,frob=baz")  # Nonexistent argument
 vinst.add_invalid("char", "--channel pty,target_type=guestfwd")  # --channel guestfwd without target_address
-vinst.add_invalid("char", "--console pty,target_type=abcd")  # --console unknown type
 
 
 vinst.add_category("controller", "--noautoconsole --nodisks --pxe")
@@ -509,10 +500,6 @@ vinst.add_valid("controller", "--controller usb,model=ich9-ehci1,address=0:0:4.7
 vinst.add_valid("controller", "--controller usb,model=ich9-ehci1,address=0:0:4.7,index=0")
 vinst.add_valid("controller", "--controller usb,model=ich9-ehci1,address=0:0:4.7,index=1")
 vinst.add_valid("controller", "--controller usb2")
-vinst.add_invalid("controller", "--controller")  # Missing argument
-vinst.add_invalid("controller", "--controller foo")  # Invalid argument
-vinst.add_invalid("controller", "--controller usb,model=ich9-ehci1,address=0:0:4.7,index=bar,master=foo")  # Invalid values
-vinst.add_invalid("controller", "--controller host,foobar=baz")  # --bogus
 
 
 vinst.add_category("lxc", "--connect %(LXCURI)s --noautoconsole --name foolxc --ram 64")
@@ -534,9 +521,7 @@ vinst.add_valid("graphics", "--vnc --keymap local")  # --keymap local,
 vinst.add_valid("graphics", "--vnc --keymap none")  # --keymap none
 vinst.add_invalid("graphics", "--vnc --keymap ZZZ")  # Invalid keymap
 vinst.add_invalid("graphics", "--vnc --vncport -50")  # Invalid port
-vinst.add_invalid("graphics", "--graphics spice,tlsport=-50")  # Invalid port
-vinst.add_invalid("graphics", "--vnc --video foobar")  # Invalid --video
-vinst.add_invalid("graphics", "--graphics vnc,foobar=baz")  # --graphics bogus
+vinst.add_invalid("graphics", "--graphics spice,tlsport=5")  # Invalid port
 vinst.add_invalid("graphics", "--graphics vnc --vnclisten 1.2.3.4")  # mixing old and new
 
 
@@ -552,14 +537,10 @@ vinst.add_invalid("remote", "--file %(EXISTIMG1)s --pxe")  # Trying to use unman
 
 vinst.add_category("network", "--pxe --nographics --noautoconsole --nodisks")
 vinst.add_valid("network", "--mac 22:22:33:44:55:AF")  # Just a macaddr
-vinst.add_valid("network", "--network=user")  # user networking
-vinst.add_valid("network", "--bridge mybr0")  # Old bridge option
 vinst.add_valid("network", "--bridge mybr0 --mac 22:22:33:44:55:AF")  # Old bridge w/ mac
 vinst.add_valid("network", "--network bridge:mybr0,model=e1000")  # --network bridge:
 vinst.add_valid("network", "--network network:default --mac RANDOM")  # VirtualNetwork with a random macaddr
-vinst.add_valid("network", "--network network:default --mac 00:11:22:33:44:55")  # VirtualNetwork with a random macaddr
 vinst.add_valid("network", "--network network=default,mac=22:00:11:00:11:00")  # Using '=' as the net type delimiter
-vinst.add_valid("network", "--network=user,model=e1000")  # with NIC model
 vinst.add_valid("network", "--network=network:default,model=e1000 --network=user,model=virtio,mac=22:22:33:44:55:AF")  # several networks
 vinst.add_invalid("network", "--network=FOO")  # Nonexistent network
 vinst.add_invalid("network", "--network=network:default --mac 1234")  # Invalid mac
@@ -616,9 +597,6 @@ vinst.add_category("redirdev", "--noautoconsole --nographics --nodisks --pxe")
 vinst.add_valid("redirdev", "--redirdev usb,type=spicevmc")
 vinst.add_valid("redirdev", "--redirdev usb,type=tcp,server=localhost:4000")
 vinst.add_valid("redirdev", "--redirdev usb,type=tcp,server=127.0.0.1:4002")  # Different host server
-vinst.add_invalid("redirdev", "--redirdev")  # Missing argument
-vinst.add_invalid("redirdev", "--redirdev pci")  # Unsupported bus
-vinst.add_invalid("redirdev", "--redirdev usb,type=spicevmc,server=foo:12")  # Invalid argument
 
 
 vinst.add_category("hostdev", "--noautoconsole --nographics --nodisks --pxe")
@@ -654,7 +632,7 @@ vinst.add_invalid("install", "--hvm --pxe --arch bogus")  # Bogus arch
 vinst.add_invalid("install", "--paravirt --pxe")  # PXE w/ paravirt
 vinst.add_invalid("install", "--import")  # Import with no disks
 vinst.add_invalid("install", "--livecd")  # LiveCD with no media
-vinst.add_invalid("install", "--hvm --pxe --os-variant farrrrrrrge# Boot menu w/ bogus value ")  # Bogus --os-variant
+vinst.add_invalid("install", "--hvm --pxe --os-variant farrrrrrrge")  # Bogus --os-variant
 vinst.add_invalid("install", "--hvm --pxe --boot menu=foobar")
 vinst.add_invalid("install", "--hvm --cdrom %(EXISTIMG1)s --extra-args console=ttyS0")  # cdrom fail w/ extra-args
 vinst.add_invalid("install", "--hvm --boot kernel=%(TREEDIR)s/pxeboot/vmlinuz,initrd=%(TREEDIR)s/pxeboot/initrd.img --initrd-inject virt-install")  # initrd-inject with manual kernel/initrd
