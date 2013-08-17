@@ -328,6 +328,8 @@ _add_var("win7", "Microsoft Windows 7", supported=True, sortby="mswin7", parent=
 _add_type("solaris", "Solaris", clock="localtime")
 _add_var("solaris9", "Sun Solaris 9", parent="solaris")
 _add_var("solaris10", "Sun Solaris 10", inputtype="tablet", inputbus="usb", parent="solaris")
+# https://bugzilla.redhat.com/show_bug.cgi?id=894017 claims tablet doesn't work for solaris 11
+_add_var("solaris11", "Sun Solaris 11", inputtype=None, inputbus=None, parent="solaris")
 _add_var("opensolaris", "Sun OpenSolaris", inputtype="tablet", inputbus="usb", parent="solaris")
 
 _add_type("unix", "UNIX")
