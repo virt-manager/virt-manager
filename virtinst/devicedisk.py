@@ -590,10 +590,15 @@ class VirtualDisk(VirtualDevice):
             if fmt and self.driver_name == self.DRIVER_QEMU:
                 self.driver_type = fmt
 
+    def is_cdrom(self):
+        return self.device == self.DEVICE_CDROM
+    def is_floppy(self):
+        return self.device == self.DEVICE_FLOPPY
+    def is_disk(self):
+        return self.device == self.DEVICE_DISK
 
     def can_be_empty(self):
-        return (self.device == self.DEVICE_FLOPPY or
-                self.device == self.DEVICE_CDROM)
+        return self.is_floppy() or self.is_cdrom()
 
     def _change_backend(self, path, vol_object):
         backend, ignore = _distill_storage(
@@ -667,8 +672,7 @@ class VirtualDisk(VirtualDevice):
 
             # Make sure we have access to the local path
             if not managed_storage:
-                if (os.path.isdir(self.path) and
-                    not self.device == self.DEVICE_FLOPPY):
+                if (os.path.isdir(self.path) and not self.is_floppy()):
                     raise ValueError(_("The path '%s' must be a file or a "
                                        "device, not a directory") % self.path)
 
@@ -704,25 +708,26 @@ class VirtualDisk(VirtualDevice):
         if volobj:
             self._change_backend(None, volobj)
 
-    def set_defaults(self):
-        if self.device == self.DEVICE_CDROM:
-            self.read_only = True
-
-        if not virtinst.enable_rhel_defaults:
+    def _set_rhel_defaults(self):
+        if not self.conn.is_qemu():
+            return
+        if not self.is_disk():
             return
 
-        # Enable cache=none for non-CDROM devs
-        if (self.conn.is_qemu() and
-            not self.driver_cache and
-            self.device != self.DEVICE_CDROM):
+        # Enable cache=none for disk devs
+        if not self.driver_cache:
             self.driver_cache = self.CACHE_MODE_NONE
 
         # Enable AIO native for block devices
-        if (self.conn.is_qemu() and
-            not self.driver_io and
-            self.device == self.DEVICE_DISK and
-            self.type == self.TYPE_BLOCK):
+        if (not self.driver_io and self.type == self.TYPE_BLOCK):
             self.driver_io = self.IO_MODE_NATIVE
+
+    def set_defaults(self):
+        if self.is_cdrom():
+            self.read_only = True
+
+        if virtinst.enable_rhel_defaults:
+            self._set_rhel_defaults()
 
     def is_size_conflict(self):
         """
@@ -767,16 +772,15 @@ class VirtualDisk(VirtualDevice):
         # error as appropriate.
         if self.bus == "virtio":
             return ("vd", 1024)
-        elif self.bus in ["sata", "scsi", "usb"]:
-            return ("sd", 1024)
         elif self.bus == "xen":
             return ("xvd", 1024)
-        elif self.bus == "fdc" or self.device == self.DEVICE_FLOPPY:
+        elif self.bus == "fdc" or self.is_floppy():
             return ("fd", 2)
         elif self.bus == "ide":
             return ("hd", 4)
-        else:
-            return (None, None)
+
+        # sata, scsi, usb, sd
+        return ("sd", 1024)
 
     def generate_target(self, skip_targets):
         """
@@ -799,7 +803,7 @@ class VirtualDisk(VirtualDevice):
             raise ValueError(_("Cannot determine device bus/type."))
 
         # Special case: IDE cdrom should prefer hdc for back compat
-        if self.device == self.DEVICE_CDROM and prefix == "hd":
+        if self.is_cdrom() and prefix == "hd":
             if "hdc" not in skip_targets:
                 self.target = "hdc"
                 return self.target

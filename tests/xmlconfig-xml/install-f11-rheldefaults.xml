@@ -19,7 +19,7 @@
   <devices>
     <emulator>/usr/libexec/qemu-kvm</emulator>
     <disk type="file" device="floppy">
-      <driver name="qemu" type="qcow2" cache="none"/>
+      <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/testvol1.img"/>
       <target dev="fda" bus="fdc"/>
     </disk>

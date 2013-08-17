@@ -534,6 +534,24 @@ class Guest(XMLBuilder):
                 raise e
 
 
+    ###################################
+    # Guest Dictionary Helper methods #
+    ###################################
+
+    def _is_rhel6(self):
+        emulator = self.emulator or ""
+
+        return (self.type in ["qemu", "kvm"] and
+                emulator.startswith("/usr/libexec/qemu"))
+
+    def _lookup_osdict_key(self, key, default):
+        """
+        Use self.os_variant to find key in OSTYPES
+        @returns: dict value, or None if os_type/variant wasn't set
+        """
+        return osdict.lookup_osdict_key(self.conn, self.type,
+                                        self.os_variant, key, default)
+
     ###################
     # Device defaults #
     ###################
@@ -555,24 +573,19 @@ class Guest(XMLBuilder):
             # Keep cdrom around, but with no media attached,
             # But only if we are a distro that doesn't have a multi
             # stage install (aka not Windows)
-            return (d.virtual_device_type == "disk" and
-                    d.device == VirtualDisk.DEVICE_CDROM
-                    and d.transient
-                    and not install and
+            return (d.is_cdrom() and
+                    d.transient and
+                    not install and
                     not self.get_continue_inst())
 
         def do_skip_disk(d):
             # Skip transient labeled non-media disks
-            return (d.virtual_device_type == "disk" and
-                    d.device == VirtualDisk.DEVICE_DISK
-                    and d.transient
-                    and not install)
+            return (d.is_disk() and d.transient and not install)
 
-        for dev in self.get_all_devices():
+        for dev in self.get_devices("disk"):
             if do_skip_disk(dev):
                 self.remove_device(dev)
-                continue
-            if do_remove_media(dev):
+            elif do_remove_media(dev):
                 dev.path = None
 
     def _set_defaults(self):
@@ -668,20 +681,24 @@ class Guest(XMLBuilder):
         os_disk_bus  = self._lookup_osdict_key("diskbus", None)
 
         def set_disk_bus(d):
-            if d.device == d.DEVICE_FLOPPY:
+            if d.is_floppy():
                 d.bus = "fdc"
                 return
             if self.os.is_xenpv():
                 d.bus = "xen"
                 return
+            if not self.os.is_hvm():
+                d.bus = "ide"
+                return
 
-            d.bus = "ide"
-            if self.os.is_hvm():
-                if (os_disk_bus and d.device == VirtualDisk.DEVICE_DISK):
-                    d.bus = os_disk_bus
-                elif (self.type == "kvm" and
-                      self.os.machine == "pseries"):
-                    d.bus = "scsi"
+
+            if os_disk_bus and d.is_disk():
+                d.bus = os_disk_bus
+            elif (self.type == "kvm" and
+                  self.os.machine == "pseries"):
+                d.bus = "scsi"
+            else:
+                d.bus = "ide"
 
         used_targets = []
         for disk in self.get_devices("disk"):
@@ -765,22 +782,3 @@ class Guest(XMLBuilder):
             agentdev = virtinst.VirtualChannelDevice(self.conn)
             agentdev.type = agentdev.TYPE_SPICEVMC
             self.add_device(agentdev)
-
-
-    ###################################
-    # Guest Dictionary Helper methods #
-    ###################################
-
-    def _is_rhel6(self):
-        emulator = self.emulator or ""
-
-        return (self.type in ["qemu", "kvm"] and
-                emulator.startswith("/usr/libexec/qemu"))
-
-    def _lookup_osdict_key(self, key, default):
-        """
-        Use self.os_variant to find key in OSTYPES
-        @returns: dict value, or None if os_type/variant wasn't set
-        """
-        return osdict.lookup_osdict_key(self.conn, self.type,
-                                        self.os_variant, key, default)
