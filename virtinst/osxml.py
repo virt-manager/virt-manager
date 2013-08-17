@@ -75,6 +75,15 @@ class OSXML(XMLBuilder):
     def is_container(self):
         return self.os_type == "exe"
 
+    def is_x86(self):
+        return self.arch == "x86_64" or self.arch == "i686"
+    def is_arm(self):
+        return self.arch == "armv7l"
+    def is_ppc64(self):
+        return self.arch == "ppc64"
+    def is_pseries(self):
+        return self.is_ppc64 and self.machine == "pseries"
+
     _XML_ROOT_XPATH = "/domain/os"
     _XML_PROP_ORDER = ["arch", "os_type", "loader",
                        "kernel", "initrd", "kernel_args", "dtb",

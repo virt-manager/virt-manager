@@ -19,40 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtinst import support
-
 _SENTINEL = -1234
-
-
-class _SupportCheck(object):
-    """
-    Class for encapsulating complex support checks.
-
-    Example: Fedora 18 supports virtio disks, but we only want to
-    use virtio if the HV supports it. So this is initialized like:
-
-    _SupportCheck(support.SUPPORT_CONN_HV_VIRTIO, "virtio")
-
-    And that object should be passed to the diskbus value of _OSVariant.
-    """
-    def __init__(self, key, val):
-        self._checks = []
-        self.add_check(key, val)
-
-    def add_check(self, key, val):
-        self._checks.append((key, val))
-
-    def check(self, conn, hv_type):
-        for (support_key, value) in self._checks:
-            if conn.check_conn_hv_support(support_key, hv_type):
-                return value
-        return _SENTINEL
-
-
-_DISK_BUS_VIRTIO = _SupportCheck(support.SUPPORT_CONN_HV_VIRTIO, "virtio")
-_NET_MODEL_VIRTIO = _SupportCheck(support.SUPPORT_CONN_HV_VIRTIO, "virtio")
-_ACPI_OLD_XEN = _SupportCheck(support.SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI, False)
-
 _allvariants = {}
 
 
@@ -127,13 +94,10 @@ def list_os(list_types=False, typename=None,
     return _sort(sortmap, **kwargs)
 
 
-def lookup_osdict_key(conn, hv_type, variant, key, default):
+def lookup_osdict_key(variant, key, default):
+    val = _SENTINEL
     if variant is not None:
         val = getattr(_allvariants[variant], key)
-        if isinstance(val, _SupportCheck):
-            val = val.check(conn, hv_type)
-    else:
-        val = _SENTINEL
     if val == _SENTINEL:
         val = default
     return val
@@ -168,6 +132,10 @@ class _OSVariant(object):
         distros we show in virt-manager by default, so old distros aren't
         squeezing out current ones.
     @three_stage_install: If True, this VM has a 3 stage install, AKA windows.
+    @xen_disable_acpi: If True, disable acpi/apic for this OS if on old xen.
+        This corresponds with the SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI check
+    @virtionet: If True, this OS supports virtionet out of the box
+    @virtiodisk: If True, this OS supports virtiodisk out of the box
 
     The rest of the parameters are about setting device/guest defaults
     based on the OS. They should be self explanatory. See guest.py for
@@ -180,7 +148,8 @@ class _OSVariant(object):
                  acpi=_SENTINEL, apic=_SENTINEL, clock=_SENTINEL,
                  netmodel=_SENTINEL, diskbus=_SENTINEL,
                  inputtype=_SENTINEL, inputbus=_SENTINEL,
-                 videomodel=_SENTINEL):
+                 videomodel=_SENTINEL, virtionet=_SENTINEL,
+                 virtiodisk=_SENTINEL, xen_disable_acpi=_SENTINEL):
         if is_type:
             if parent != _SENTINEL:
                 raise RuntimeError("OS types must not specify parent")
@@ -233,14 +202,16 @@ class _OSVariant(object):
         self.inputtype = _get_default("inputtype", inputtype)
         self.inputbus = _get_default("inputbus", inputbus)
 
+        self.xen_disable_acpi = _get_default("xen_disable_acpi",
+                                             xen_disable_acpi)
+        self.virtiodisk = _get_default("virtiodisk", virtiodisk)
+        self.virtionet = _get_default("virtionet", virtionet)
+
 
 def _add_type(*args, **kwargs):
     kwargs["is_type"] = True
     _t = _OSVariant(*args, **kwargs)
     _allvariants[_t.name] = _t
-
-
-
 
 
 def _add_var(*args, **kwargs):
@@ -253,8 +224,8 @@ _add_var("rhel2.1", "Red Hat Enterprise Linux 2.1", distro="rhel", parent="linux
 _add_var("rhel3", "Red Hat Enterprise Linux 3", parent="rhel2.1")
 _add_var("rhel4", "Red Hat Enterprise Linux 4", supported=True, parent="rhel3")
 _add_var("rhel5", "Red Hat Enterprise Linux 5", supported=False, parent="rhel4")
-_add_var("rhel5.4", "Red Hat Enterprise Linux 5.4 or later", supported=True, diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, parent="rhel5")
-_add_var("rhel6", "Red Hat Enterprise Linux 6", diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, inputtype="tablet", inputbus="usb", parent="rhel5.4")
+_add_var("rhel5.4", "Red Hat Enterprise Linux 5.4 or later", supported=True, virtiodisk=True, virtionet=True, parent="rhel5")
+_add_var("rhel6", "Red Hat Enterprise Linux 6", inputtype="tablet", inputbus="usb", parent="rhel5.4")
 _add_var("rhel7", "Red Hat Enterprise Linux 7", supported=False, parent="rhel6")
 
 _add_var("fedora5", "Fedora Core 5", sortby="fedora05", distro="fedora", parent="linux")
@@ -263,9 +234,9 @@ _add_var("fedora7", "Fedora 7", sortby="fedora07", parent="fedora6")
 _add_var("fedora8", "Fedora 8", sortby="fedora08", parent="fedora7")
 # Apparently F9 has selinux errors when installing with virtio:
 # https: //bugzilla.redhat.com/show_bug.cgi?id=470386
-_add_var("fedora9", "Fedora 9", sortby="fedora09", netmodel=_NET_MODEL_VIRTIO, parent="fedora8")
-_add_var("fedora10", "Fedora 10", diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, parent="fedora9")
-_add_var("fedora11", "Fedora 11", diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, inputtype="tablet", inputbus="usb", parent="fedora10")
+_add_var("fedora9", "Fedora 9", sortby="fedora09", virtionet=True, parent="fedora8")
+_add_var("fedora10", "Fedora 10", virtiodisk=True, parent="fedora9")
+_add_var("fedora11", "Fedora 11", inputtype="tablet", inputbus="usb", parent="fedora10")
 _add_var("fedora12", "Fedora 12", parent="fedora11")
 _add_var("fedora13", "Fedora 13", parent="fedora12")
 _add_var("fedora14", "Fedora 14", parent="fedora13")
@@ -276,30 +247,30 @@ _add_var("fedora18", "Fedora 18", supported=True, parent="fedora17")
 _add_var("fedora19", "Fedora 19", parent="fedora18")
 _add_var("fedora20", "Fedora 20", parent="fedora19")
 
-_add_var("opensuse11", "openSuse 11", distro="suse", supported=True, diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, parent="linux")
+_add_var("opensuse11", "openSuse 11", distro="suse", supported=True, virtiodisk=True, virtionet=True, parent="linux")
 _add_var("opensuse12", "openSuse 12", parent="opensuse11")
 
 _add_var("sles10", "Suse Linux Enterprise Server", distro="suse", supported=True, parent="linux")
-_add_var("sles11", "Suse Linux Enterprise Server 11", supported=True, diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, parent="sles10")
+_add_var("sles11", "Suse Linux Enterprise Server 11", supported=True, virtiodisk=True, virtionet=True, parent="sles10")
 
 _add_var("mandriva2009", "Mandriva Linux 2009 and earlier", distro="mandriva", parent="linux")
-_add_var("mandriva2010", "Mandriva Linux 2010 and later", diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, parent="mandriva2009")
+_add_var("mandriva2010", "Mandriva Linux 2010 and later", virtiodisk=True, virtionet=True, parent="mandriva2009")
 
 _add_var("mes5", "Mandriva Enterprise Server 5.0", distro="mandriva", parent="linux")
-_add_var("mes5.1", "Mandriva Enterprise Server 5.1 and later", supported=True, diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, parent="mes5")
+_add_var("mes5.1", "Mandriva Enterprise Server 5.1 and later", supported=True, virtiodisk=True, virtionet=True, parent="mes5")
 
-_add_var("mageia1", "Mageia 1 and later", distro="mageia", supported=True, diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, inputtype="tablet", inputbus="usb", parent="linux")
+_add_var("mageia1", "Mageia 1 and later", distro="mageia", supported=True, virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="linux")
 
-_add_var("altlinux", "ALT Linux", distro="altlinux", supported=True, diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, inputtype="tablet", inputbus="usb", parent="linux")
+_add_var("altlinux", "ALT Linux", distro="altlinux", supported=True, virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="linux")
 
 _add_var("debianetch", "Debian Etch", distro="debian", sortby="debian4", parent="linux")
-_add_var("debianlenny", "Debian Lenny", sortby="debian5", supported=True, diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, parent="debianetch")
-_add_var("debiansqueeze", "Debian Squeeze", sortby="debian6", diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, inputtype="tablet", inputbus="usb", parent="debianlenny")
+_add_var("debianlenny", "Debian Lenny", sortby="debian5", supported=True, virtiodisk=True, virtionet=True, parent="debianetch")
+_add_var("debiansqueeze", "Debian Squeeze", sortby="debian6", virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="debianlenny")
 _add_var("debianwheezy", "Debian Wheezy", sortby="debian7", parent="debiansqueeze")
 
-_add_var("ubuntuhardy", "Ubuntu 8.04 LTS (Hardy Heron)", distro="ubuntu", netmodel=_NET_MODEL_VIRTIO, parent="linux")
+_add_var("ubuntuhardy", "Ubuntu 8.04 LTS (Hardy Heron)", distro="ubuntu", virtionet=True, parent="linux")
 _add_var("ubuntuintrepid", "Ubuntu 8.10 (Intrepid Ibex)", parent="ubuntuhardy")
-_add_var("ubuntujaunty", "Ubuntu 9.04 (Jaunty Jackalope)", diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, parent="ubuntuintrepid")
+_add_var("ubuntujaunty", "Ubuntu 9.04 (Jaunty Jackalope)", virtiodisk=True, parent="ubuntuintrepid")
 _add_var("ubuntukarmic", "Ubuntu 9.10 (Karmic Koala)", parent="ubuntujaunty")
 _add_var("ubuntulucid", "Ubuntu 10.04 LTS (Lucid Lynx)", supported=True, parent="ubuntukarmic")
 _add_var("ubuntumaverick", "Ubuntu 10.10 (Maverick Meerkat)", supported=False, parent="ubuntulucid")
@@ -307,17 +278,17 @@ _add_var("ubuntunatty", "Ubuntu 11.04 (Natty Narwhal)", parent="ubuntumaverick")
 _add_var("ubuntuoneiric", "Ubuntu 11.10 (Oneiric Ocelot)", parent="ubuntunatty")
 _add_var("ubuntuprecise", "Ubuntu 12.04 LTS (Precise Pangolin)", supported=True, parent="ubuntuoneiric")
 _add_var("ubuntuquantal", "Ubuntu 12.10 (Quantal Quetzal)", parent="ubuntuprecise")
-_add_var("ubunturaring", "Ubuntu 13.04 (Raring Ringtail)", diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, videomodel="vmvga", parent="ubuntuquantal")
+_add_var("ubunturaring", "Ubuntu 13.04 (Raring Ringtail)", videomodel="vmvga", parent="ubuntuquantal")
 _add_var("ubuntusaucy", "Ubuntu 13.10 (Saucy Salamander)", parent="ubunturaring")
 
 _add_var("generic24", "Generic 2.4.x kernel", parent="linux")
 _add_var("generic26", "Generic 2.6.x kernel", parent="generic24")
-_add_var("virtio26", "Generic 2.6.25 or later kernel with virtio", sortby="genericvirtio26", diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, parent="generic26")
+_add_var("virtio26", "Generic 2.6.25 or later kernel with virtio", sortby="genericvirtio26", virtiodisk=True, virtionet=True, parent="generic26")
 
 
 _add_type("windows", "Windows", clock="localtime", three_stage_install=True, inputtype="tablet", inputbus="usb", videomodel="vga")
-_add_var("win2k", "Microsoft Windows 2000", sortby="mswin4", acpi=_ACPI_OLD_XEN, apic=_ACPI_OLD_XEN, parent="windows")
-_add_var("winxp", "Microsoft Windows XP", sortby="mswin5", supported=True, acpi=_ACPI_OLD_XEN, apic=_ACPI_OLD_XEN, parent="windows")
+_add_var("win2k", "Microsoft Windows 2000", sortby="mswin4", xen_disable_acpi=True, parent="windows")
+_add_var("winxp", "Microsoft Windows XP", sortby="mswin5", supported=True, xen_disable_acpi=True, parent="windows")
 _add_var("winxp64", "Microsoft Windows XP (x86_64)", supported=True, sortby="mswin564", parent="windows")
 _add_var("win2k3", "Microsoft Windows Server 2003", supported=True, sortby="mswinserv2003", parent="windows")
 _add_var("win2k8", "Microsoft Windows Server 2008", supported=True, sortby="mswinserv2008", parent="windows")
@@ -338,7 +309,7 @@ _add_var("freebsd6", "FreeBSD 6.x", netmodel="ne2k_pci", parent="unix")
 _add_var("freebsd7", "FreeBSD 7.x", parent="freebsd6")
 _add_var("freebsd8", "FreeBSD 8.x", supported=True, netmodel="e1000", parent="freebsd7")
 _add_var("freebsd9", "FreeBSD 9.x", parent="freebsd8")
-_add_var("freebsd10", "FreeBSD 10.x", supported=False, diskbus=_DISK_BUS_VIRTIO, netmodel=_NET_MODEL_VIRTIO, parent="freebsd9")
+_add_var("freebsd10", "FreeBSD 10.x", supported=False, virtiodisk=True, virtionet=True, parent="freebsd9")
 
 # http: //calamari.reverse-dns.net: 980/cgi-bin/moin.cgi/OpenbsdOnQemu
 # https: //www.redhat.com/archives/et-mgmt-tools/2008-June/msg00018.html

@@ -549,8 +549,8 @@ class Guest(XMLBuilder):
         Use self.os_variant to find key in OSTYPES
         @returns: dict value, or None if os_type/variant wasn't set
         """
-        return osdict.lookup_osdict_key(self.conn, self.type,
-                                        self.os_variant, key, default)
+        return osdict.lookup_osdict_key(self.os_variant, key, default)
+
 
     ###################
     # Device defaults #
@@ -620,8 +620,7 @@ class Guest(XMLBuilder):
         if self.os.kernel or self.os.init:
             self.os.bootorder = []
 
-        if (self.os.machine is None and
-            self.conn.caps.host.arch == "ppc64"):
+        if (self.os.machine is None and self.os.is_ppc64()):
             self.os.machine = "pseries"
 
     def _set_clock_defaults(self):
@@ -658,10 +657,17 @@ class Guest(XMLBuilder):
         if not self.os.is_hvm():
             return
 
+        default = True
+        if (self._lookup_osdict_key("xen_disable_acpi", False) and
+            self.conn.check_conn_hv_support(
+                support.SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI,
+                self.type)):
+            default = False
+
         if self.features["acpi"] == "default":
-            self.features["acpi"] = self._lookup_osdict_key("acpi", True)
+            self.features["acpi"] = self._lookup_osdict_key("acpi", default)
         if self.features["apic"] == "default":
-            self.features["apic"] = self._lookup_osdict_key("apic", True)
+            self.features["apic"] = self._lookup_osdict_key("apic", default)
         if self.features["pae"] == "default":
             self.features["pae"] = self.conn.caps.support_pae()
 
@@ -677,8 +683,17 @@ class Guest(XMLBuilder):
                 ctrl.address.set_addrstr("spapr-vio")
                 self.add_device(ctrl)
 
+    def _can_virtio(self, key):
+        if not self.os.is_x86():
+            return False
+        if not self.conn.is_qemu() or self.type != "kvm":
+            return False
+        if not self._lookup_osdict_key(key, False):
+            return False
+        return True
+
     def _set_disk_defaults(self):
-        os_disk_bus  = self._lookup_osdict_key("diskbus", None)
+        os_disk_bus = self._lookup_osdict_key("diskbus", None)
 
         def set_disk_bus(d):
             if d.is_floppy():
@@ -691,11 +706,11 @@ class Guest(XMLBuilder):
                 d.bus = "ide"
                 return
 
-
-            if os_disk_bus and d.is_disk():
+            if self._can_virtio("virtiodisk") and d.is_disk():
+                d.bus = "virtio"
+            elif os_disk_bus and d.is_disk():
                 d.bus = os_disk_bus
-            elif (self.type == "kvm" and
-                  self.os.machine == "pseries"):
+            elif self.os.is_pseries():
                 d.bus = "scsi"
             else:
                 d.bus = "ide"
@@ -719,9 +734,12 @@ class Guest(XMLBuilder):
                 used_targets.append(disk.generate_target(used_targets))
 
     def _set_net_defaults(self):
-        net_model = self._lookup_osdict_key("netmodel", None)
         if not self.os.is_hvm():
             net_model = None
+        elif self._can_virtio("virtionet"):
+            net_model = "virtio"
+        else:
+            net_model = self._lookup_osdict_key("netmodel", None)
 
         for net in self.get_devices("interface"):
             if net_model and not net.model:

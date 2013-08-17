@@ -360,8 +360,6 @@ SUPPORT_INTERFACE_ISACTIVE = _make(function="virInterface.isActive", args=())
 
 
 # Conn HV checks
-SUPPORT_CONN_HV_VIRTIO = _make(drv_version=[("qemu", 0)],
-                               hv_version=[("kvm", 0)])
 SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI = _make(drv_version=[("xen", -3001000)])
 SUPPORT_CONN_HV_SOUND_AC97 = _make(version=6000,
                                    force_version=True,
