@@ -33,6 +33,7 @@ from tests import utils
 os.environ["VIRTCONV_TEST_NO_DISK_CONVERSION"] = "1"
 os.environ["LANG"] = "en_US.UTF-8"
 
+_defaultconn = utils.open_testdefault()
 testuri = "test:///%s/tests/testdriver.xml" % os.getcwd()
 
 # There is a hack in virtinst/cli.py to find this magic string and
@@ -143,6 +144,7 @@ class Command(object):
         self.cmdstr = cmd % test_files
         self.check_success = True
         self.compare_file = None
+        self.support_check = None
 
         app, opts = self.cmdstr.split(" ", 1)
         self.argv = [os.path.abspath(app)] + shlex.split(opts)
@@ -206,6 +208,13 @@ class Command(object):
             return code, output
         except Exception, e:
             return (-1, "".join(traceback.format_exc()) + str(e))
+
+    def skip_msg(self):
+        if self.support_check is None:
+            return
+        if _defaultconn.check_support(self.support_check):
+            return
+        return "skipped"
 
     def run(self):
         filename = self.compare_file
@@ -359,7 +368,7 @@ class App(object):
         self.categories[catname] = default_args
         return _CategoryProxy(self, catname)
 
-    def _add(self, catname, testargs, valid, compfile):
+    def _add(self, catname, testargs, valid, compfile, support_check=None):
         args = self.categories[catname] + " " + testargs
         args = self._default_args(args, bool(compfile)) + " " + args
         cmdstr = "./%s %s" % (self.appname, args)
@@ -368,14 +377,16 @@ class App(object):
         cmd.check_success = valid
         if compfile:
             cmd.compare_file = "%s/%s.xml" % (compare_xmldir, compfile)
+        cmd.support_check = support_check
         self.cmds.append(cmd)
 
-    def add_valid(self, cat, args):
-        self._add(cat, args, True, None)
-    def add_invalid(self, cat, args):
-        self._add(cat, args, False, None)
-    def add_compare(self, cat, args, compfile):
-        self._add(cat, args, not compfile.endswith("-fail"), compfile)
+    def add_valid(self, cat, args, **kwargs):
+        self._add(cat, args, True, None, **kwargs)
+    def add_invalid(self, cat, args, **kwargs):
+        self._add(cat, args, False, None, **kwargs)
+    def add_compare(self, cat, args, compfile, **kwargs):
+        self._add(cat, args, not compfile.endswith("-fail"),
+                  compfile, **kwargs)
 
 
 
@@ -878,8 +889,12 @@ class CLITests(unittest.TestCase):
 
 
 def maketest(cmd):
-    def cmdtemplate(self, c):
-        err = c.run()
+    def cmdtemplate(self, _cmdobj):
+        skipmsg = _cmdobj.skip_msg()
+        if skipmsg:
+            self.skipTest(skipmsg)
+
+        err = _cmdobj.run()
         if err:
             self.fail(err)
     return lambda s: cmdtemplate(s, cmd)
