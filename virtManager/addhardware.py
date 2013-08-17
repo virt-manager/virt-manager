@@ -542,7 +542,7 @@ class vmmAddHardware(vmmGObjectUI):
                         _("SCSI disk"))
                 add_dev("usb", virtinst.VirtualDisk.DEVICE_DISK,
                         _("USB disk"))
-        if self.vm.get_hv_type() in ["kvm", "test"]:
+        if self.vm.get_hv_type() in ["qemu", "kvm", "test"]:
             add_dev("sata", virtinst.VirtualDisk.DEVICE_DISK,
                     _("SATA disk"))
             add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK,

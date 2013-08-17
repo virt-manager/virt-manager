@@ -26,12 +26,12 @@
     <disk type="file" device="disk">
       <driver name="qemu" type="raw"/>
       <source file="/tmp/test.img"/>
-      <target dev="hda" bus="ide"/>
+      <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="block" device="disk">
       <driver name="qemu" type="raw"/>
       <source dev="/dev/loop0"/>
-      <target dev="hdb" bus="ide"/>
+      <target dev="vdb" bus="virtio"/>
     </disk>
     <disk type="block" device="cdrom">
       <target dev="hdc" bus="ide"/>
@@ -40,6 +40,7 @@
     <interface type="network">
       <source network="default"/>
       <mac address="22:22:33:44:55:66"/>
+      <model type="virtio"/>
     </interface>
     <input type="tablet" bus="usb"/>
     <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>

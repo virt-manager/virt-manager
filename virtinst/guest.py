@@ -686,7 +686,7 @@ class Guest(XMLBuilder):
     def _can_virtio(self, key):
         if not self.os.is_x86():
             return False
-        if not self.conn.is_qemu() or self.type != "kvm":
+        if not self.conn.is_qemu():
             return False
         if not self._lookup_osdict_key(key, False):
             return False
