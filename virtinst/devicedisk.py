@@ -178,6 +178,8 @@ class VirtualDisk(VirtualDevice):
     IO_MODE_THREADS = "threads"
     io_modes = [IO_MODE_NATIVE, IO_MODE_THREADS]
 
+    error_policies = ["ignore", "stop", "enospace", "report"]
+
     @staticmethod
     def disk_type_to_xen_driver_name(disk_type):
         """
@@ -203,8 +205,6 @@ class VirtualDisk(VirtualDevice):
         elif disk_type == VirtualDisk.TYPE_DIR:
             return "dir"
         return "file"
-
-    error_policies = ["ignore", "stop", "enospace"]
 
     @staticmethod
     def path_exists(conn, path):
