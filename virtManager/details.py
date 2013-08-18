@@ -451,15 +451,19 @@ class vmmDetails(vmmGObjectUI):
             "on_config_memory_changed": self.config_memory_changed,
             "on_config_maxmem_changed": self.config_maxmem_changed,
 
+
             "on_config_boot_moveup_clicked" : lambda *x: self.config_boot_move(x, True),
             "on_config_boot_movedown_clicked" : lambda *x: self.config_boot_move(x, False),
             "on_config_autostart_changed": lambda *x: self.enable_apply(x, x, EDIT_AUTOSTART),
             "on_boot_menu_changed": lambda *x: self.enable_apply(x, EDIT_BOOTMENU),
+            "on_boot_kernel_enable_toggled": self.boot_kernel_toggled,
             "on_boot_kernel_changed": lambda *x: self.enable_apply(x, EDIT_KERNEL),
-            "on_boot_kernel_initrd_changed": lambda *x: self.enable_apply(x, EDIT_KERNEL),
+            "on_boot_initrd_changed": lambda *x: self.enable_apply(x, EDIT_KERNEL),
+            "on_boot_dtb_changed": lambda *x: self.enable_apply(x, EDIT_KERNEL),
             "on_boot_kernel_args_changed": lambda *x: self.enable_apply(x, EDIT_KERNEL),
             "on_boot_kernel_browse_clicked": self.browse_kernel,
-            "on_boot_kernel_initrd_browse_clicked": self.browse_initrd,
+            "on_boot_initrd_browse_clicked": self.browse_initrd,
+            "on_boot_dtb_browse_clicked": self.browse_dtb,
             "on_boot_init_path_changed": lambda *x: self.enable_apply(x, EDIT_INIT),
 
             "on_disk_readonly_changed": lambda *x: self.enable_apply(x, EDIT_DISK_RO),
@@ -1767,13 +1771,21 @@ class vmmDetails(vmmGObjectUI):
         self.storage_browser.set_browse_reason(reason)
         self.storage_browser.show(self.topwin, self.conn)
 
+    def boot_kernel_toggled(self, src):
+        self.widget("boot-kernel-box").set_sensitive(src.get_active())
+        self.enable_apply(EDIT_KERNEL)
+
     def browse_kernel(self, src_ignore):
         def cb(ignore, path):
             self.widget("boot-kernel").set_text(path)
         self._browse_file(cb)
     def browse_initrd(self, src_ignore):
         def cb(ignore, path):
-            self.widget("boot-kernel-initrd").set_text(path)
+            self.widget("boot-initrd").set_text(path)
+        self._browse_file(cb)
+    def browse_dtb(self, src_ignore):
+        def cb(ignore, path):
+            self.widget("boot-dtb").set_text(path)
         self._browse_file(cb)
 
     def disable_apply(self):
@@ -2083,8 +2095,13 @@ class vmmDetails(vmmGObjectUI):
             self.disable_apply()
         return True
 
-    def get_text(self, widgetname, strip=True):
-        ret = self.widget(widgetname).get_text()
+    def get_text(self, widgetname, strip=True, checksens=False):
+        widget = self.widget(widgetname)
+        if (checksens and
+            (not widget.is_sensitive() or not widget.is_visible())):
+            return ""
+
+        ret = widget.get_text()
         if strip:
             ret = ret.strip()
         return ret
@@ -2278,9 +2295,10 @@ class vmmDetails(vmmGObjectUI):
             add_define(self.vm.set_boot_menu, bootmenu)
 
         if self.edited(EDIT_KERNEL):
-            kernel = self.get_text("boot-kernel")
-            initrd = self.get_text("boot-kernel-initrd")
-            args = self.get_text("boot-kernel-args")
+            kernel = self.get_text("boot-kernel", checksens=True)
+            initrd = self.get_text("boot-initrd", checksens=True)
+            dtb = self.get_text("boot-dtb", checksens=True)
+            args = self.get_text("boot-kernel-args", checksens=True)
 
             if initrd and not kernel:
                 return self.err.val_err(
@@ -2289,7 +2307,7 @@ class vmmDetails(vmmGObjectUI):
                 return self.err.val_err(
                     _("Cannot set kernel arguments without specifying a kernel path"))
 
-            add_define(self.vm.set_boot_kernel, kernel, initrd, args)
+            add_define(self.vm.set_boot_kernel, kernel, initrd, dtb, args)
 
         if self.edited(EDIT_INIT):
             init = self.get_text("boot-init-path")
@@ -3461,13 +3479,36 @@ class vmmDetails(vmmGObjectUI):
         self.widget("boot-init-align").set_property("visible", show_init)
 
         # Kernel/initrd boot
-        kernel, initrd, args = self.vm.get_boot_kernel_info()
-        expand = bool(kernel or initrd or args)
-        self.widget("boot-kernel").set_text(kernel or "")
-        self.widget("boot-kernel-initrd").set_text(initrd or "")
-        self.widget("boot-kernel-args").set_text(args or "")
+        kernel, initrd, dtb, args = self.vm.get_boot_kernel_info()
+        expand = bool(kernel or dtb or initrd or args)
+
+        def keep_text(wname, guestval):
+            # If the user unsets kernel/initrd by unchecking the
+            # 'enable kernel boot' box, we keep the previous values cached
+            # in the text fields to allow easy switching back and forth.
+            guestval = guestval or ""
+            if self.get_text(wname) and not guestval:
+                return
+            self.widget(wname).set_text(guestval)
+
+        keep_text("boot-kernel", kernel)
+        keep_text("boot-initrd", initrd)
+        keep_text("boot-dtb", dtb)
+        keep_text("boot-kernel-args", args)
         if expand:
+            # Only 'expand' if requested, so a refresh doesn't
+            # magically unexpand the UI the user just touched
             self.widget("boot-kernel-expander").set_expanded(True)
+        self.widget("boot-kernel-enable").set_active(expand)
+        self.widget("boot-kernel-enable").toggled()
+
+        # Only show dtb if it's supported
+        arch = self.vm.get_arch() or ""
+        show_dtb = (self.get_text("boot-dtb") or
+            self.vm.get_hv_type() == "test" or
+            "arm" in arch or "microblaze" in arch or "ppc" in arch)
+        self.widget("boot-dtb-label").set_visible(show_dtb)
+        self.widget("boot-dtb-box").set_visible(show_dtb)
 
         # <init> populate
         init = self.vm.get_init()

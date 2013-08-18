@@ -598,10 +598,11 @@ class vmmDomain(vmmLibvirtObject):
         def change(guest):
             guest.os.enable_bootmenu = bool(newval)
         return self._redefine_guest(change)
-    def set_boot_kernel(self, kernel, initrd, args):
+    def set_boot_kernel(self, kernel, initrd, dtb, args):
         def change(guest):
             guest.os.kernel = kernel or None
             guest.os.initrd = initrd or None
+            guest.os.dtb = dtb or None
             guest.os.kernel_args = args or None
         return self._redefine_guest(change)
     def set_boot_init(self, init):
@@ -1015,11 +1016,8 @@ class vmmDomain(vmmLibvirtObject):
         return bool(guest.os.enable_bootmenu)
     def get_boot_kernel_info(self):
         guest = self._get_guest()
-        kernel = guest.os.kernel
-        initrd = guest.os.initrd
-        args = guest.os.kernel_args
-
-        return (kernel, initrd, args)
+        return (guest.os.kernel, guest.os.initrd,
+                guest.os.dtb, guest.os.kernel_args)
 
     def get_seclabel(self):
         seclabel = self._get_guest().seclabel
