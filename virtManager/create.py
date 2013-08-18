@@ -1411,17 +1411,6 @@ class vmmCreate(vmmGObjectUI):
         gdev.type = gtype
         return gdev
 
-    def get_video_device(self, guest):
-        if guest.os.is_container():
-            return
-        return virtinst.VirtualVideoDevice(guest.conn)
-
-    def get_sound_device(self, guest):
-        if (not self.config.get_new_vm_sound() or
-            guest.os.is_container()):
-            return
-        return virtinst.VirtualAudio(guest.conn)
-
     def build_guest(self, installer, name):
         guest = self.conn.caps.build_virtinst_guest(self.conn.get_backend(),
                                                     self.capsguest,
@@ -1438,16 +1427,16 @@ class vmmCreate(vmmGObjectUI):
 
         # Set up default devices
         try:
-            devs = []
-            devs.append(self.get_graphics_device(guest))
-            devs.append(self.get_video_device(guest))
-            devs.append(self.get_sound_device(guest))
-            for dev in devs:
-                if dev:
-                    guest.add_device(dev)
+            gdev = self.get_graphics_device(guest)
+            if gdev:
+                guest.add_device(gdev)
 
+            guest.add_default_video_device()
             guest.add_default_input_device()
             guest.add_default_console_device()
+            if self.config.get_new_vm_sound():
+                guest.add_default_sound_device()
+
         except Exception, e:
             self.err.show_err(_("Error setting up default devices:") + str(e))
             return None

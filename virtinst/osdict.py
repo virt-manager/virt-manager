@@ -136,6 +136,8 @@ class _OSVariant(object):
         This corresponds with the SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI check
     @virtionet: If True, this OS supports virtionet out of the box
     @virtiodisk: If True, this OS supports virtiodisk out of the box
+    @virtiommio: If True, this OS supports virtio-mmio out of the box,
+        which provides virtio for certain ARM configurations
 
     The rest of the parameters are about setting device/guest defaults
     based on the OS. They should be self explanatory. See guest.py for
@@ -149,7 +151,8 @@ class _OSVariant(object):
                  netmodel=_SENTINEL, diskbus=_SENTINEL,
                  inputtype=_SENTINEL, inputbus=_SENTINEL,
                  videomodel=_SENTINEL, virtionet=_SENTINEL,
-                 virtiodisk=_SENTINEL, xen_disable_acpi=_SENTINEL):
+                 virtiodisk=_SENTINEL, virtiommio=_SENTINEL,
+                 xen_disable_acpi=_SENTINEL):
         if is_type:
             if parent != _SENTINEL:
                 raise RuntimeError("OS types must not specify parent")
@@ -206,6 +209,7 @@ class _OSVariant(object):
                                              xen_disable_acpi)
         self.virtiodisk = _get_default("virtiodisk", virtiodisk)
         self.virtionet = _get_default("virtionet", virtionet)
+        self.virtiommio = _get_default("virtiommio", virtiommio)
 
 
 def _add_type(*args, **kwargs):
@@ -233,7 +237,7 @@ _add_var("fedora6", "Fedora Core 6", sortby="fedora06", parent="fedora5")
 _add_var("fedora7", "Fedora 7", sortby="fedora07", parent="fedora6")
 _add_var("fedora8", "Fedora 8", sortby="fedora08", parent="fedora7")
 # Apparently F9 has selinux errors when installing with virtio:
-# https: //bugzilla.redhat.com/show_bug.cgi?id=470386
+# https://bugzilla.redhat.com/show_bug.cgi?id=470386
 _add_var("fedora9", "Fedora 9", sortby="fedora09", virtionet=True, parent="fedora8")
 _add_var("fedora10", "Fedora 10", virtiodisk=True, parent="fedora9")
 _add_var("fedora11", "Fedora 11", inputtype="tablet", inputbus="usb", parent="fedora10")
@@ -244,7 +248,7 @@ _add_var("fedora15", "Fedora 15", parent="fedora14")
 _add_var("fedora16", "Fedora 16", parent="fedora15")
 _add_var("fedora17", "Fedora 17", parent="fedora16")
 _add_var("fedora18", "Fedora 18", supported=True, parent="fedora17")
-_add_var("fedora19", "Fedora 19", parent="fedora18")
+_add_var("fedora19", "Fedora 19", virtiommio=True, parent="fedora18")
 _add_var("fedora20", "Fedora 20", parent="fedora19")
 
 _add_var("opensuse11", "openSuse 11", distro="suse", supported=True, virtiodisk=True, virtionet=True, parent="linux")

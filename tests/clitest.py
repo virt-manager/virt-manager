@@ -130,6 +130,8 @@ class Command(object):
     """
     Instance of a single cli command to test
     """
+    SKIP = -123
+
     def __init__(self, cmd):
         self.cmdstr = cmd % test_files
         self.check_success = True
@@ -142,17 +144,21 @@ class Command(object):
     def _launch_command(self):
         logging.debug(self.cmdstr)
 
-        uri = None
-        conn = None
         app = self.argv[0]
+        conn = None
 
         for idx in reversed(range(len(self.argv))):
             if self.argv[idx] == "--connect":
-                uri = self.argv[idx + 1]
+                conn = virtinst.cli.getConnection(self.argv[idx + 1])
                 break
 
-        if uri:
-            conn = open_conn(uri)
+        if not conn and "virt-convert" not in app:
+            raise RuntimeError("couldn't parse URI from command %s" %
+                               self.argv)
+
+        skipmsg = self._skip_msg(conn)
+        if skipmsg is not None:
+            return (self.SKIP, skipmsg)
 
         oldstdout = sys.stdout
         oldstderr = sys.stderr
@@ -199,19 +205,24 @@ class Command(object):
         except Exception, e:
             return (-1, "".join(traceback.format_exc()) + str(e))
 
-    def skip_msg(self):
+    def _skip_msg(self, conn):
         if self.support_check is None:
             return
-        if _defaultconn.check_conn_support(self.support_check):
+        if conn is None:
+            raise RuntimeError("support_check is not None, but conn is None")
+        if conn.check_conn_support(self.support_check):
             return
         return "skipped"
 
-    def run(self):
+    def run(self, tests):
         filename = self.compare_file
         err = None
 
         try:
             code, output = self._get_output()
+            if code == self.SKIP:
+                tests.skipTest(output)
+                return
 
             if bool(code) == self.check_success:
                 raise AssertionError(
@@ -231,7 +242,8 @@ class Command(object):
         except AssertionError, e:
             err = self.cmdstr + "\n" + str(e)
 
-        return err
+        if err:
+            tests.fail(err)
 
 
 class PromptCheck(object):
@@ -446,6 +458,8 @@ c.add_compare("--os-variant fedora14 --nodisks --boot cdrom --virt-type qemu --c
 c.add_compare("--os-variant fedora14 --nodisks --boot network --nographics --arch i686", "qemu-32-on-64")  # 32 on 64
 c.add_compare("--os-variant fedora14 --nodisks --boot fd --graphics spice --machine pc", "kvm-machine")  # kvm machine type 'pc'
 c.add_compare("--os-variant fedora14 --nodisks --boot fd --graphics sdl --arch sparc --machine SS-20", "qemu-sparc")  # exotic arch + machine type
+c.add_compare("--arch armv7l --machine vexpress-a9 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,kernel_args=\"console=ttyAMA0 rw root=/dev/mmcblk0p3\" --disk %(EXISTIMG1)s --nographics", "arm-vexpress-plain", support_check=support.SUPPORT_CONN_DISK_SD)
+c.add_compare("--arch armv7l --machine vexpress-a15 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,kernel_args=\"console=ttyAMA0 rw root=/dev/vda3\" --disk %(EXISTIMG1)s --nographics --os-variant fedora19", "arm-vexpress-f19", support_check=support.SUPPORT_CONN_VIRTIO_MMIO)
 c.add_valid("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --sound")  # HVM windows install with disk
 c.add_valid("--os-variant fedora14 --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --sound")  # F14 Directory tree URL install with extra-args
 c.add_invalid("--nodisks --boot network --machine foobar")  # Unknown machine type
@@ -821,14 +835,6 @@ promptlist.append(p7)
 # Test runner functions #
 #########################
 
-
-def open_conn(uri):
-    #if uri not in _conns:
-    #    _conns[uri] = virtinst.cli.getConnection(uri)
-    #return _conns[uri]
-    return virtinst.cli.getConnection(uri)
-
-
 newidx = 0
 curtest = 0
 old_bridge = virtinst.util.default_bridge
@@ -880,13 +886,7 @@ class CLITests(unittest.TestCase):
 
 def maketest(cmd):
     def cmdtemplate(self, _cmdobj):
-        skipmsg = _cmdobj.skip_msg()
-        if skipmsg:
-            self.skipTest(skipmsg)
-
-        err = _cmdobj.run()
-        if err:
-            self.fail(err)
+        _cmdobj.run(self)
     return lambda s: cmdtemplate(s, cmd)
 
 _cmdlist = promptlist

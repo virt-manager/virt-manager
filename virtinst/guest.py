@@ -559,7 +559,16 @@ class Guest(XMLBuilder):
     def add_default_input_device(self):
         if self.os.is_container():
             return
+        if not self.os.is_x86():
+            return
         self.add_device(virtinst.VirtualInputDevice(self.conn))
+
+    def add_default_sound_device(self):
+        if not self.os.is_hvm():
+            return
+        if not self.os.is_x86():
+            return
+        self.add_device(virtinst.VirtualAudio(self.conn))
 
     def add_default_console_device(self):
         if self.os.is_xenpv():
@@ -567,6 +576,11 @@ class Guest(XMLBuilder):
         dev = virtinst.VirtualConsoleDevice(self.conn)
         dev.type = dev.TYPE_PTY
         self.add_device(dev)
+
+    def add_default_video_device(self):
+        if self.os.is_container():
+            return
+        self.add_device(virtinst.VirtualVideoDevice(self.conn))
 
     def _set_transient_device_defaults(self, install):
         def do_remove_media(d):
@@ -684,13 +698,20 @@ class Guest(XMLBuilder):
                 self.add_device(ctrl)
 
     def _can_virtio(self, key):
-        if not self.os.is_x86():
-            return False
         if not self.conn.is_qemu():
             return False
         if not self._lookup_osdict_key(key, False):
             return False
-        return True
+
+        if self.os.is_x86():
+            return True
+        if (self.os.is_arm_vexpress() and
+            self.os.dtb and
+            self._lookup_osdict_key("virtiommio", False) and
+            self.conn.check_conn_support(support.SUPPORT_CONN_VIRTIO_MMIO)):
+            return True
+
+        return False
 
     def _set_disk_defaults(self):
         os_disk_bus = self._lookup_osdict_key("diskbus", None)
@@ -712,6 +733,8 @@ class Guest(XMLBuilder):
                 d.bus = os_disk_bus
             elif self.os.is_pseries():
                 d.bus = "scsi"
+            elif self.os.is_arm():
+                d.bus = "sd"
             else:
                 d.bus = "ide"
 

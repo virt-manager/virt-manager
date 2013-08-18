@@ -545,6 +545,8 @@ class vmmAddHardware(vmmGObjectUI):
         if self.vm.get_hv_type() in ["qemu", "kvm", "test"]:
             add_dev("sata", virtinst.VirtualDisk.DEVICE_DISK,
                     _("SATA disk"))
+            add_dev("sd", virtinst.VirtualDisk.DEVICE_DISK,
+                    _("SD disk"))
             add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK,
                     _("Virtio disk"))
             add_dev("virtio", virtinst.VirtualDisk.DEVICE_LUN,

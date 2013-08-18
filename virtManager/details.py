@@ -146,7 +146,7 @@ PAGE_DYNAMIC_OFFSET = 2
 
 
 def prettyify_disk_bus(bus):
-    if bus in ["ide", "sata", "scsi", "usb"]:
+    if bus in ["ide", "sata", "scsi", "usb", "sd"]:
         return bus.upper()
 
     if bus in ["xen"]:

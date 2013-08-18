@@ -1,29 +1,37 @@
-<domain type="xen">
+<domain type="qemu">
   <name>foobar</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
-  <bootloader>/usr/bin/pygrub</bootloader>
+  <os>
+    <type arch="armv7l" machine="vexpress-a15">hvm</type>
+    <kernel>/f19-arm.kernel</kernel>
+    <initrd>/f19-arm.initrd</initrd>
+    <cmdline>console=ttyAMA0 rw root=/dev/vda3</cmdline>
+    <dtb>/f19-arm.dtb</dtb>
+  </os>
   <features>
     <acpi/>
     <apic/>
+    <pae/>
   </features>
+  <clock offset="utc"/>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>
   <devices>
+    <emulator>/usr/bin/qemu-system-arm</emulator>
     <disk type="file" device="disk">
+      <driver name="qemu"/>
       <source file="/tmp/__virtinst_cli_exist1.img"/>
-      <target dev="xvda" bus="xen"/>
+      <target dev="vda" bus="virtio"/>
     </disk>
     <interface type="network">
       <source network="default"/>
       <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
     </interface>
-    <graphics type="vnc" port="-1" keymap="en-us"/>
-    <video>
-      <model type="cirrus"/>
-    </video>
+    <console type="pty"/>
   </devices>
 </domain>
