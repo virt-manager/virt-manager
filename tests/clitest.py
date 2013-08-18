@@ -26,6 +26,7 @@ import unittest
 import StringIO
 
 import virtinst.cli
+from virtinst import support
 
 from tests import virtinstall, virtimage, virtclone, virtconvert
 from tests import utils
@@ -34,17 +35,6 @@ os.environ["VIRTCONV_TEST_NO_DISK_CONVERSION"] = "1"
 os.environ["LANG"] = "en_US.UTF-8"
 
 _defaultconn = utils.open_testdefault()
-testuri = "test:///%s/tests/testdriver.xml" % os.getcwd()
-
-# There is a hack in virtinst/cli.py to find this magic string and
-# convince virtinst we are using a remote connection.
-fakeuri     = "__virtinst_test__" + testuri + ",predictable"
-capsprefix  = ",caps=%s/tests/capabilities-xml/" % os.getcwd()
-remoteuri   = fakeuri + ",remote"
-kvmuri      = fakeuri + capsprefix + "libvirt-0.7.6-qemu-caps.xml,qemu"
-xenuri      = fakeuri + capsprefix + "rhel5.4-xen-caps-virt-enabled.xml,xen"
-xenia64uri  = fakeuri + capsprefix + "xen-ia64-hvm.xml,xen"
-lxcuri      = fakeuri + capsprefix + "capabilities-lxc.xml,lxc"
 
 # Location
 image_prefix = "/tmp/__virtinst_cli_"
@@ -91,13 +81,13 @@ clean_files = (new_images + exist_images +
 promptlist = []
 
 test_files = {
-    'TESTURI'           : testuri,
-    'DEFAULTURI'        : "__virtinst_test__test:///default,predictable",
-    'REMOTEURI'         : remoteuri,
-    'KVMURI'            : kvmuri,
-    'XENURI'            : xenuri,
-    'XENIA64URI'        : xenia64uri,
-    'LXCURI'            : lxcuri,
+    'TESTURI'           : utils.testuri,
+    'DEFAULTURI'        : utils.defaulturi,
+    'REMOTEURI'         : utils.uriremote,
+    'KVMURI'            : utils.urikvm,
+    'XENURI'            : utils.urixencaps,
+    'XENIA64URI'        : utils.urixenia64,
+    'LXCURI'            : utils.urilxc,
     'CLONE_DISK_XML'    : "%s/clone-disk.xml" % xmldir,
     'CLONE_STORAGE_XML' : "%s/clone-disk-managed.xml" % xmldir,
     'CLONE_NOEXIST_XML' : "%s/clone-disk-noexist.xml" % xmldir,
@@ -212,7 +202,7 @@ class Command(object):
     def skip_msg(self):
         if self.support_check is None:
             return
-        if _defaultconn.check_support(self.support_check):
+        if _defaultconn.check_conn_support(self.support_check):
             return
         return "skipped"
 
@@ -359,7 +349,7 @@ class App(object):
                     args += " --print-xml"
 
             if self.appname != "virt-convert" and not "--connect " in cli:
-                args += " --connect %s" % fakeuri
+                args += " --connect %s" % utils.fakeuri
 
         return args
 

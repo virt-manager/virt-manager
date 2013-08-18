@@ -34,16 +34,19 @@ from virtinst import VirtualVideoDevice
 os.environ["HOME"] = "/tmp"
 os.environ["DISPLAY"] = ":3.4"
 
-_cwd        = os.getcwd()
-_testuri    = "test:///%s/tests/testdriver.xml" % _cwd
-_fakeuri    = "__virtinst_test__" + _testuri + ",predictable"
-_remoteuri  = "__virtinst_test__" + _testuri + ",remote"
-_kvmcaps    = "%s/tests/capabilities-xml/libvirt-0.7.6-qemu-caps.xml" % _cwd
-_plainkvm   = "%s,qemu" % _fakeuri
-_plainxen   = "%s,xen" % _fakeuri
-_kvmuri     = "%s,caps=%s" % (_plainkvm, _kvmcaps)
+_capsprefix  = ",caps=%s/tests/capabilities-xml/" % os.getcwd()
+defaulturi = "__virtinst_test__test:///default,predictable"
+testuri    = "test:///%s/tests/testdriver.xml" % os.getcwd()
+fakeuri = "__virtinst_test__" + testuri + ",predictable"
+uriremote = fakeuri + ",remote"
+uriqemu = "%s,qemu" % fakeuri
+urixen = "%s,xen" % fakeuri
+urixencaps = fakeuri + _capsprefix + "rhel5.4-xen-caps-virt-enabled.xml,xen"
+urixenia64 = fakeuri + _capsprefix + "xen-ia64-hvm.xml,xen"
+urikvm = uriqemu + _capsprefix + "libvirt-1.1.2-qemu-caps.xml"
+urilxc = fakeuri + _capsprefix + "capabilities-lxc.xml,lxc"
 
-os.environ["VIRTINST_TEST_SCRATCHDIR"] = _cwd
+os.environ["VIRTINST_TEST_SCRATCHDIR"] = os.getcwd()
 
 
 def get_debug():
@@ -64,23 +67,23 @@ def open_testdefault():
 
 
 def open_testdriver():
-    return virtinst.cli.getConnection(_testuri)
+    return virtinst.cli.getConnection(testuri)
 
 
 def open_testkvmdriver():
-    return virtinst.cli.getConnection(_kvmuri)
+    return virtinst.cli.getConnection(urikvm)
 
 
 def open_plainkvm(connver=None, libver=None):
-    return virtinst.cli.getConnection(_make_uri(_plainkvm, connver, libver))
+    return virtinst.cli.getConnection(_make_uri(uriqemu, connver, libver))
 
 
 def open_plainxen(connver=None, libver=None):
-    return virtinst.cli.getConnection(_make_uri(_plainxen, connver, libver))
+    return virtinst.cli.getConnection(_make_uri(urixen, connver, libver))
 
 
 def open_test_remote():
-    return virtinst.cli.getConnection(_remoteuri)
+    return virtinst.cli.getConnection(uriremote)
 
 _default_conn = open_testdriver()
 _conn = None
