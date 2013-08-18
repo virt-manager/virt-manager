@@ -318,7 +318,7 @@ class vmmCreateInterface(vmmGObjectUI):
         v6_addr.append_column(txt_col)
         txt = Gtk.CellRendererText()
         txt.set_property("editable", True)
-        txt.connect("edited", self.ipv6_address_editted)
+        txt.connect("edited", self.ipv6_address_edited)
         txt_col.pack_start(txt, True)
         txt_col.add_attribute(txt, "text", 0)
         v6_addr.get_selection().connect("changed", self.ipv6_address_selected)
@@ -838,7 +838,7 @@ class vmmCreateInterface(vmmGObjectUI):
         if treepath is not None:
             del(model[treepath])
 
-    def ipv6_address_editted(self, src, path, new_text):
+    def ipv6_address_edited(self, src, path, new_text):
         src = self.widget("ipv6-address-list")
         model = src.get_model()
         row = model[path]

@@ -42,7 +42,7 @@ import virtinst
 from virtinst import util
 
 
-# Parameters that can be editted in the details window
+# Parameters that can be edited in the details window
 EDIT_TOTAL = 39
 (EDIT_NAME,
 EDIT_ACPI,
@@ -2089,9 +2089,7 @@ class vmmDetails(vmmGObjectUI):
             ret = ret.strip()
         return ret
 
-    def editted(self, pagetype):
-        if pagetype not in range(EDIT_TOTAL):
-            raise RuntimeError("crap! %s" % pagetype)
+    def edited(self, pagetype):
         return pagetype in self.active_edits
 
     def make_apply_data(self):
@@ -2115,31 +2113,31 @@ class vmmDetails(vmmGObjectUI):
         df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
         ignore = add_hotplug
 
-        if self.editted(EDIT_NAME):
+        if self.edited(EDIT_NAME):
             name = self.widget("overview-name").get_text()
             add_define(self.vm.define_name, name)
 
-        if self.editted(EDIT_ACPI):
+        if self.edited(EDIT_ACPI):
             enable_acpi = self.widget("overview-acpi").get_active()
             if self.widget("overview-acpi").get_inconsistent():
                 enable_acpi = None
             add_define(self.vm.define_acpi, enable_acpi)
 
-        if self.editted(EDIT_APIC):
+        if self.edited(EDIT_APIC):
             enable_apic = self.widget("overview-apic").get_active()
             if self.widget("overview-apic").get_inconsistent():
                 enable_apic = None
             add_define(self.vm.define_apic, enable_apic)
 
-        if self.editted(EDIT_CLOCK):
+        if self.edited(EDIT_CLOCK):
             clock = self.get_combo_label_value("overview-clock")
             add_define(self.vm.define_clock, clock)
 
-        if self.editted(EDIT_MACHTYPE):
+        if self.edited(EDIT_MACHTYPE):
             machtype = self.get_combo_label_value("machine-type")
             add_define(self.vm.define_machtype, machtype)
 
-        if self.editted(EDIT_SECURITY):
+        if self.edited(EDIT_SECURITY):
             semodel = None
             setype = "static"
             selabel = self.get_text("security-label")
@@ -2153,7 +2151,7 @@ class vmmDetails(vmmGObjectUI):
 
             add_define(self.vm.define_seclabel, semodel, setype, selabel, relabel)
 
-        if self.editted(EDIT_DESC):
+        if self.edited(EDIT_DESC):
             desc_widget = self.widget("overview-description")
             desc = desc_widget.get_buffer().get_property("text") or ""
             add_define(self.vm.define_description, desc)
@@ -2165,25 +2163,25 @@ class vmmDetails(vmmGObjectUI):
     def config_vcpus_apply(self):
         df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
 
-        if self.editted(EDIT_VCPUS):
+        if self.edited(EDIT_VCPUS):
             vcpus = self.config_get_vcpus()
             maxv = self.config_get_maxvcpus()
             add_define(self.vm.define_vcpus, vcpus, maxv)
             add_hotplug(self.vm.hotplug_vcpus, vcpus)
 
-        if self.editted(EDIT_CPUSET):
+        if self.edited(EDIT_CPUSET):
             cpuset = self.get_text("config-vcpupin")
             print cpuset
             add_define(self.vm.define_cpuset, cpuset)
             add_hotplug(self.config_vcpu_pin_cpuset, cpuset)
 
-        if self.editted(EDIT_CPU):
+        if self.edited(EDIT_CPU):
             model, vendor = self.get_config_cpu_model()
             features = self.get_config_cpu_features()
             add_define(self.vm.define_cpu,
                        model, vendor, self._cpu_copy_host, features)
 
-        if self.editted(EDIT_TOPOLOGY):
+        if self.edited(EDIT_TOPOLOGY):
             do_top = self.widget("cpu-topology-enable").get_active()
             sockets = self.widget("cpu-sockets").get_value()
             cores = self.widget("cpu-cores").get_value()
@@ -2241,7 +2239,7 @@ class vmmDetails(vmmGObjectUI):
     def config_memory_apply(self):
         df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
 
-        if self.editted(EDIT_MEM):
+        if self.edited(EDIT_MEM):
             curmem = None
             maxmem = self.config_get_maxmem()
             if self.widget("config-memory").get_sensitive():
@@ -2262,7 +2260,7 @@ class vmmDetails(vmmGObjectUI):
         df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
         ignore = add_hotplug
 
-        if self.editted(EDIT_AUTOSTART):
+        if self.edited(EDIT_AUTOSTART):
             auto = self.widget("config-autostart")
             try:
                 self.vm.set_autostart(auto.get_active())
@@ -2271,15 +2269,15 @@ class vmmDetails(vmmGObjectUI):
                     (_("Error changing autostart value: %s") % str(e)))
                 return False
 
-        if self.editted(EDIT_BOOTORDER):
+        if self.edited(EDIT_BOOTORDER):
             bootdevs = self.get_config_boot_devs()
             add_define(self.vm.set_boot_device, bootdevs)
 
-        if self.editted(EDIT_BOOTMENU):
+        if self.edited(EDIT_BOOTMENU):
             bootmenu = self.widget("boot-menu").get_active()
             add_define(self.vm.set_boot_menu, bootmenu)
 
-        if self.editted(EDIT_KERNEL):
+        if self.edited(EDIT_KERNEL):
             kernel = self.get_text("boot-kernel")
             initrd = self.get_text("boot-kernel-initrd")
             args = self.get_text("boot-kernel-args")
@@ -2293,7 +2291,7 @@ class vmmDetails(vmmGObjectUI):
 
             add_define(self.vm.set_boot_kernel, kernel, initrd, args)
 
-        if self.editted(EDIT_INIT):
+        if self.edited(EDIT_INIT):
             init = self.get_text("boot-init-path")
             if not init:
                 return self.err.val_err(_("An init path must be specified"))
@@ -2313,32 +2311,32 @@ class vmmDetails(vmmGObjectUI):
         df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
         ignore = add_hotplug
 
-        if self.editted(EDIT_DISK_RO):
+        if self.edited(EDIT_DISK_RO):
             do_readonly = self.widget("disk-readonly").get_active()
             add_define(self.vm.define_disk_readonly, dev_id_info, do_readonly)
 
-        if self.editted(EDIT_DISK_SHARE):
+        if self.edited(EDIT_DISK_SHARE):
             do_shareable = self.widget("disk-shareable").get_active()
             add_define(self.vm.define_disk_shareable,
                        dev_id_info, do_shareable)
 
-        if self.editted(EDIT_DISK_CACHE):
+        if self.edited(EDIT_DISK_CACHE):
             cache = self.get_combo_label_value("disk-cache")
             add_define(self.vm.define_disk_cache, dev_id_info, cache)
 
-        if self.editted(EDIT_DISK_IO):
+        if self.edited(EDIT_DISK_IO):
             io = self.get_combo_label_value("disk-io")
             add_define(self.vm.define_disk_io, dev_id_info, io)
 
-        if self.editted(EDIT_DISK_FORMAT):
+        if self.edited(EDIT_DISK_FORMAT):
             fmt = self.widget("disk-format").get_child().get_text().strip()
             add_define(self.vm.define_disk_driver_type, dev_id_info, fmt)
 
-        if self.editted(EDIT_DISK_SERIAL):
+        if self.edited(EDIT_DISK_SERIAL):
             serial = self.get_text("disk-serial")
             add_define(self.vm.define_disk_serial, dev_id_info, serial)
 
-        if self.editted(EDIT_DISK_IOTUNE):
+        if self.edited(EDIT_DISK_IOTUNE):
             iotune_rbs = int(self.widget("disk-iotune-rbs").get_value() * 1024)
             iotune_ris = int(self.widget("disk-iotune-ris").get_value())
             iotune_tbs = int(self.widget("disk-iotune-tbs").get_value() * 1024)
@@ -2354,7 +2352,7 @@ class vmmDetails(vmmGObjectUI):
             add_define(self.vm.define_disk_iotune_wis, dev_id_info, iotune_wis)
 
         # Do this last since it can change uniqueness info of the dev
-        if self.editted(EDIT_DISK_BUS):
+        if self.edited(EDIT_DISK_BUS):
             bus = self.get_combo_label_value("disk-bus")
             addr = None
             if bus == "spapr-vscsi":
@@ -2369,7 +2367,7 @@ class vmmDetails(vmmGObjectUI):
         df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
         ignore = add_hotplug
 
-        if self.editted(EDIT_SOUND_MODEL):
+        if self.edited(EDIT_SOUND_MODEL):
             model = self.get_combo_label_value("sound-model")
             if model:
                 add_define(self.vm.define_sound_model, dev_id_info, model)
@@ -2381,7 +2379,7 @@ class vmmDetails(vmmGObjectUI):
         df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
         ignore = add_hotplug
 
-        if self.editted(EDIT_SMARTCARD_MODE):
+        if self.edited(EDIT_SMARTCARD_MODE):
             model = self.get_combo_label_value("smartcard-mode")
             if model:
                 add_define(self.vm.define_smartcard_mode, dev_id_info, model)
@@ -2393,14 +2391,14 @@ class vmmDetails(vmmGObjectUI):
         df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
         ignore = add_hotplug
 
-        if self.editted(EDIT_NET_MODEL):
+        if self.edited(EDIT_NET_MODEL):
             model = self.get_combo_label_value("network-model")
             addr = None
             if model == "spapr-vlan":
                 addr = "spapr-vio"
             add_define(self.vm.define_network_model, dev_id_info, model, addr)
 
-        if self.editted(EDIT_NET_SOURCE):
+        if self.edited(EDIT_NET_SOURCE):
             mode = None
             net_list = self.widget("network-source-combo")
             net_bridge = self.widget("network-bridge")
@@ -2412,7 +2410,7 @@ class vmmDetails(vmmGObjectUI):
             add_define(self.vm.define_network_source, dev_id_info,
                        nettype, source, mode)
 
-        if self.editted(EDIT_NET_VPORT):
+        if self.edited(EDIT_NET_VPORT):
             vport_type = self.get_text("vport-type")
             vport_managerid = self.get_text("vport-managerid")
             vport_typeid = self.get_text("vport-typeid")
@@ -2458,7 +2456,7 @@ class vmmDetails(vmmGObjectUI):
     def config_graphics_apply(self, dev_id_info):
         df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
 
-        if self.editted(EDIT_GFX_PASSWD) or self.editted(EDIT_GFX_USE_PASSWD):
+        if self.edited(EDIT_GFX_PASSWD) or self.edited(EDIT_GFX_USE_PASSWD):
             use_passwd = self.widget("gfx-use-password").get_active()
             if use_passwd:
                 passwd = self.get_text("gfx-password", strip=False) or ""
@@ -2468,12 +2466,12 @@ class vmmDetails(vmmGObjectUI):
             add_hotplug(self.vm.hotplug_graphics_password, dev_id_info,
                         passwd)
 
-        if self.editted(EDIT_GFX_KEYMAP):
+        if self.edited(EDIT_GFX_KEYMAP):
             keymap = self.get_combo_label_value("gfx-keymap")
             add_define(self.vm.define_graphics_keymap, dev_id_info, keymap)
 
         # Do this last since it can change graphics unique ID
-        if self.editted(EDIT_GFX_TYPE):
+        if self.edited(EDIT_GFX_TYPE):
             gtype = self.get_combo_label_value("gfx-type")
             change_spicevmc = self._do_change_spicevmc(dev_id_info, gtype)
             add_define(self.vm.define_graphics_type, dev_id_info,
@@ -2486,7 +2484,7 @@ class vmmDetails(vmmGObjectUI):
         df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
         ignore = add_hotplug
 
-        if self.editted(EDIT_VIDEO_MODEL):
+        if self.edited(EDIT_VIDEO_MODEL):
             model = self.get_combo_label_value("video-model")
             if model:
                 add_define(self.vm.define_video_model, dev_id_info, model)
@@ -2498,7 +2496,7 @@ class vmmDetails(vmmGObjectUI):
         df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
         ignore = add_hotplug
 
-        if self.editted(EDIT_CONTROLLER_MODEL):
+        if self.edited(EDIT_CONTROLLER_MODEL):
             model = self.get_combo_label_value("controller-model")
             if model:
                 add_define(self.vm.define_controller_model, dev_id_info, model)
@@ -2510,11 +2508,11 @@ class vmmDetails(vmmGObjectUI):
         df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
         ignore = add_hotplug
 
-        if self.editted(EDIT_WATCHDOG_MODEL):
+        if self.edited(EDIT_WATCHDOG_MODEL):
             model = self.get_combo_label_value("watchdog-model")
             add_define(self.vm.define_watchdog_model, dev_id_info, model)
 
-        if self.editted(EDIT_WATCHDOG_ACTION):
+        if self.edited(EDIT_WATCHDOG_ACTION):
             action = self.get_combo_label_value("watchdog-action")
             add_define(self.vm.define_watchdog_action, dev_id_info, action)
 
