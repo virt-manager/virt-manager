@@ -1364,15 +1364,15 @@ the rest of the options.
        --disk /home/user/VMs/mydisk.img \
        --import
 
-Test a custom kernel/initrd using an existing disk image, manually
-specifying a serial device hooked to a PTY on the host machine.
+Start serial QEMU ARM VM, which requires specifying a manual kernel.
 
   # virt-install \
-       --name mykernel \
-       --ram 512 \
-       --disk /home/user/VMs/mydisk.img \
-       --boot kernel=/tmp/mykernel,initrd=/tmp/myinitrd,kernel_args="console=ttyS0" \
-       --serial pty
+       --name armtest \
+       --ram 1024 \
+       --arch armv7l --machine vexpress-a9 \
+       --disk /home/user/VMs/myarmdisk.img \
+       --boot kernel=/tmp/my-arm-kernel,initrd=/tmp/my-arm-initrd,dtb=/tmp/my-arm-dtb,kernel_args="console=ttyAMA0 rw root=/dev/mmcblk0p3" \
+       --nographics
 
 =head1 BUGS
 
