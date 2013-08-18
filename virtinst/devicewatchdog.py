@@ -35,10 +35,12 @@ class VirtualWatchdog(VirtualDevice):
     ACTION_POWEROFF = "poweroff"
     ACTION_PAUSE    = "pause"
     ACTION_NONE     = "none"
+    ACTION_DUMP     = "dump"
     ACTION_DEFAULT  = "default"
     ACTIONS = [ACTION_RESET, ACTION_SHUTDOWN,
                ACTION_POWEROFF, ACTION_PAUSE,
-               ACTION_NONE, ACTION_DEFAULT]
+               ACTION_NONE, ACTION_DUMP,
+               ACTION_DEFAULT]
 
     @staticmethod
     def get_action_desc(action):
