@@ -169,13 +169,17 @@ class my_build(build):
                 mantype = "5"
                 newbase = "virt-image.pod"
 
+            appname = os.path.splitext(newbase)[0]
             newpath = os.path.join(os.path.dirname(path),
-                                os.path.splitext(newbase)[0] + "." + mantype)
+                                   appname + "." + mantype)
 
             print "Generating %s" % newpath
-            ret = os.system('pod2man --release="" '
+            ret = os.system('pod2man '
                             '--center "Virtual Machine Manager" '
-                            '< %s > %s' % (path, newpath))
+                            '--release %s --name %s '
+                            '< %s > %s' % (cliconfig.__version__,
+                                           appname.upper(),
+                                           path, newpath))
             if ret != 0:
                 raise RuntimeError("Generating '%s' failed." % newpath)
 
