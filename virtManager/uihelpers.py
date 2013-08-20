@@ -419,20 +419,26 @@ def build_vnc_keymap_combo(vm, combo, no_default=False):
 # Storage format list/combo helpers #
 #####################################
 
-def build_storage_format_combo(vm, combo):
+def update_storage_format_combo(vm, combo, create):
     dev_model = Gtk.ListStore(str)
     combo.set_model(dev_model)
     combo.set_entry_text_column(0)
 
     formats = ["raw", "qcow2", "qed"]
+    no_create_formats = []
     if vm.rhel6_defaults():
         formats.append("vmdk")
-        formats.append("vdi")
+        no_create_formats.append("vdi")
 
     for m in formats:
         dev_model.append([m])
+    if not create:
+        for m in no_create_formats:
+            dev_model.append([m])
 
-    combo.set_active(0)
+    if create:
+        # TODO: make the default storage format configurable
+        combo.set_active(0)
 
 
 #######################################################################

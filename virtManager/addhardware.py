@@ -252,8 +252,7 @@ class vmmAddHardware(vmmGObjectUI):
         uihelpers.build_cache_combo(self.vm, cache_list)
 
         # Disk format mode
-        format_list = self.widget("config-storage-format")
-        uihelpers.build_storage_format_combo(self.vm, format_list)
+        self.populate_disk_format_combo(True)
 
         # Sparse tooltip
         sparse_info = self.widget("config-storage-nosparse-info")
@@ -429,9 +428,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("config-storage-size").set_value(8)
         self.widget("config-storage-entry").set_text("")
         self.widget("config-storage-nosparse").set_active(True)
-        # Don't specify by default, so we don't overwrite possibly working
-        # libvirt detection
-        self.widget("config-storage-format").get_child().set_text("")
+        self.populate_disk_format_combo(True)
         target_list = self.widget("config-storage-devtype")
         self.populate_target_device_model(target_list.get_model())
         if len(target_list.get_model()) > 0:
@@ -592,6 +589,12 @@ class vmmAddHardware(vmmGObjectUI):
         if len(model) == 0:
             model.append([_("No Devices Available"), None])
         uihelpers.set_list_selection(devlist, 0)
+
+    def populate_disk_format_combo(self, create):
+        format_list = self.widget("config-storage-format")
+        uihelpers.update_storage_format_combo(self.vm, format_list, create)
+        if not create:
+            format_list.get_child().set_text("")
 
     ########################
     # get_config_* methods #
@@ -942,6 +945,7 @@ class vmmAddHardware(vmmGObjectUI):
     def toggle_storage_select(self, src):
         act = src.get_active()
         self.widget("config-storage-browse-box").set_sensitive(act)
+        self.populate_disk_format_combo(not act)
 
     def set_disk_storage_path(self, ignore, path):
         self.widget("config-storage-entry").set_text(path)

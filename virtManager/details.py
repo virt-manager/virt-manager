@@ -960,7 +960,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Disk format combo
         format_list = self.widget("disk-format")
-        uihelpers.build_storage_format_combo(self.vm, format_list)
+        uihelpers.update_storage_format_combo(self.vm, format_list, False)
 
         # Disk bus combo
         disk_bus = self.widget("disk-bus-combo")
