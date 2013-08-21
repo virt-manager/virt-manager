@@ -1297,7 +1297,12 @@ class vmmDomain(vmmLibvirtObject):
     def hasSavedImage(self):
         if not self.managedsave_supported:
             return False
-        return self._backend.hasManagedSaveImage(0)
+        try:
+            return self._backend.hasManagedSaveImage(0)
+        except libvirt.libvirtError, e:
+            if not uihelpers.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
+                raise
+            return False
 
     def removeSavedImage(self):
         if not self.hasSavedImage():
