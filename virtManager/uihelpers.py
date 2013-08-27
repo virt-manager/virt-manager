@@ -100,7 +100,7 @@ def update_host_space(conn, widget):
         return
 
     def pretty_storage(size):
-        return "%.1f Gb" % float(size)
+        return "%.1f GB" % float(size)
 
     hd_label = ("%s available in the default location" %
                 pretty_storage(max_storage))
