@@ -410,6 +410,7 @@ class XMLParseTest(unittest.TestCase):
         check("bridge", None, "br0")
         check("network", None, "route")
         check("macaddr", "22:11:11:11:11:11", "AA:AA:AA:AA:AA:AA")
+        check("filterref", None, "foo")
         self.assertEquals(dev1.get_source(), None)
 
         check = self._make_checker(dev2)

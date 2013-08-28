@@ -993,7 +993,8 @@ def add_net_option(devg):
       help=_("Configure a guest network interface. Ex:\n"
              "--network bridge=mybr0\n"
              "--network network=my_libvirt_virtual_net\n"
-             "--network network=mynet,model=virtio,mac=00:11..."))
+             "--network network=mynet,model=virtio,mac=00:11...\n"
+             "--network network=mynet,filterref=clean-traffic,model=virtio"))
 
 
 def add_device_options(devg):
@@ -1578,6 +1579,7 @@ def parse_network(guest, optstring, dev=None, mac=None):
     set_param("bridge", "bridge")
     set_param("model", "model")
     set_param("macaddr", "mac")
+    set_param("filterref", "filterref")
 
     if opts:
         raise ValueError(_("Unknown options %s") % opts.keys())

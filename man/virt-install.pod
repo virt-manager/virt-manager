@@ -614,6 +614,12 @@ Xen virtual machines it is required that the first 3 pairs in the MAC address
 be the sequence '00:16:3e', while for QEMU or KVM virtual machines it must
 be '52:54:00'.
 
+=item B<filterref>
+
+Controlling firewall and network filtering in libvirt. Value can be any nwfilter
+defined by the C<virsh> 'nwfilter' subcommands. Available filters can be listed
+by running 'virsh nwfilter-list', e.g.: 'clean-traffic', 'no-mac-spoofing', ...
+
 =back
 
 =item --nonetworks
