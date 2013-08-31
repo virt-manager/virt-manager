@@ -612,6 +612,8 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
             if nic.target_dev and nic.target_dev not in vnet_taps:
                 vnet_taps.append(nic.target_dev)
 
+    skip_ifaces = ["lo"]
+
     # Physical devices
     hasShared = False
     brIdxLabel = None
@@ -623,7 +625,8 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
         if ((bridge_name in vnet_bridges) or
             (br.get_name() in vnet_bridges) or
             (br.get_name() in vnet_taps) or
-            (br.get_name() in [v + "-nic" for v in vnet_bridges])):
+            (br.get_name() in [v + "-nic" for v in vnet_bridges]) or
+            (br.get_name() in skip_ifaces)):
             # Don't list this, as it is basically duplicating virtual net info
             continue
 
