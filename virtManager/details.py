@@ -789,29 +789,37 @@ class vmmDetails(vmmGObjectUI):
 
         arch = self.vm.get_arch()
         caps = self.vm.conn.caps
-        machines = []
 
-        if len(caps.guests) > 0:
-            for guest in caps.guests:
-                if len(guest.domains) > 0:
-                    for domain in guest.domains:
-                        machines = list(set(machines + domain.machines))
+        # Machine type
+        machtype_combo = self.widget("machine-type-combo")
+        machtype_model = Gtk.ListStore(str)
+        machtype_combo.set_model(machtype_model)
+        text = Gtk.CellRendererText()
+        machtype_combo.pack_start(text, True)
+        machtype_combo.add_attribute(text, 'text', 0)
+        machtype_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         if arch in ["i686", "x86_64"]:
-            self.widget("label81").hide()
-            self.widget("hbox30").hide()
+            self.widget("overview-machine-label").hide()
+            self.widget("overview-machine-box").hide()
         else:
-            machtype_combo = self.widget("machine-type-combo")
-            machtype_model = Gtk.ListStore(str)
-            machtype_combo.set_model(machtype_model)
-            text = Gtk.CellRendererText()
-            machtype_combo.pack_start(text, True)
-            machtype_combo.add_attribute(text, 'text', 0)
-            machtype_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+            machines = []
 
-            if len(machines) > 0:
-                for machine in machines:
-                    machtype_model.append([machine])
+            try:
+                ignore, domain = caps.guest_lookup(
+                    os_type=self.vm.get_abi_type(),
+                    arch=self.vm.get_arch(),
+                    typ=self.vm.get_hv_type(),
+                    machine=self.vm.get_machtype())
+
+                machines = domain.machines[:]
+            except:
+                logging.exception("Error determining machine list")
+
+            for machine in machines:
+                if machine == "none":
+                    continue
+                machtype_model.append([machine])
 
         # Security info tooltips
         self.widget("security-static-info").set_tooltip_text(
