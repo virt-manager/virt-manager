@@ -513,12 +513,19 @@ class SpiceViewer(Viewer):
         return self.spice_session is not None
 
     def _main_channel_event_cb(self, channel, event):
+        if not self.console:
+            return
+
         if event == SpiceClientGLib.ChannelEvent.CLOSED:
-            if self.console:
-                self.console.disconnected()
+            self.console.disconnected()
         elif event == SpiceClientGLib.ChannelEvent.ERROR_AUTH:
-            if self.console:
-                self.console.activate_auth_page()
+            self.console.activate_auth_page()
+        elif event in [SpiceClientGLib.ChannelEvent.ERROR_CONNECT,
+                       SpiceClientGLib.ChannelEvent.ERROR_IO,
+                       SpiceClientGLib.ChannelEvent.ERROR_LINK,
+                       SpiceClientGLib.ChannelEvent.ERROR_TLS]:
+            logging.debug("Spice channel event error: %s", event)
+            self.console.disconnected()
 
     def _channel_open_fd_request(self, channel, tls_ignore):
         if not self.console.tunnels:
