@@ -41,18 +41,16 @@ GRAPH_LEN = 40
 
 # fields in the tree model data set
 (ROW_HANDLE,
-ROW_NAME,
+ROW_SORT_KEY,
 ROW_MARKUP,
-ROW_STATUS,
 ROW_STATUS_ICON,
-ROW_KEY,
 ROW_HINT,
 ROW_IS_CONN,
 ROW_IS_CONN_CONNECTED,
 ROW_IS_VM,
 ROW_IS_VM_RUNNING,
 ROW_COLOR,
-ROW_INSPECTION_OS_ICON) = range(13)
+ROW_INSPECTION_OS_ICON) = range(11)
 
 # Columns in the tree view
 COL_NAME = 0
@@ -67,6 +65,24 @@ def _style_get_prop(widget, propname):
     value.init(GObject.TYPE_INT)
     widget.style_get_property(propname, value)
     return value.get_int()
+
+
+def _get_inspection_icon_pixbuf(vm, w, h):
+    # libguestfs gives us the PNG data as a string.
+    png_data = vm.inspection.icon
+    if png_data is None:
+        return None
+
+    try:
+        pb = GdkPixbuf.PixbufLoader()
+        pb.set_size(w, h)
+        pb.write(png_data)
+        pb.close()
+        return pb.get_pixbuf()
+    except:
+        logging.exception("Error loading inspection icon data")
+        vm.inspection.icon = None
+        return None
 
 
 class vmmManager(vmmGObjectUI):
@@ -375,11 +391,9 @@ class vmmManager(vmmGObjectUI):
 
         rowtypes = []
         rowtypes.insert(ROW_HANDLE, object)  # backing object
-        rowtypes.insert(ROW_NAME, str)  # object name
+        rowtypes.insert(ROW_SORT_KEY, str)  # object name
         rowtypes.insert(ROW_MARKUP, str)  # row markup text
-        rowtypes.insert(ROW_STATUS, str)  # object status string
         rowtypes.insert(ROW_STATUS_ICON, str)  # status icon name
-        rowtypes.insert(ROW_KEY, str)  # key/uuid
         rowtypes.insert(ROW_HINT, str)  # row tooltip
         rowtypes.insert(ROW_IS_CONN, bool)  # if object is a connection
         rowtypes.insert(ROW_IS_CONN_CONNECTED, bool)  # if conn is connected
@@ -712,8 +726,8 @@ class vmmManager(vmmGObjectUI):
             hint += " (%s)" % _("Double click to connect")
         return hint
 
-    def _build_conn_markup(self, conn, row):
-        name = util.xml_escape(row[ROW_NAME])
+    def _build_conn_markup(self, conn, name):
+        name = util.xml_escape(name)
         text = name
         if conn.state == conn.STATE_DISCONNECTED:
             text += " - " + _("Not Connected")
@@ -729,31 +743,44 @@ class vmmManager(vmmGObjectUI):
             color = "#5b5b5b"
         return color
 
-    def _build_vm_markup(self, row):
+    def _build_vm_markup(self, name, status):
         domtext     = ("<span size='smaller' weight='bold'>%s</span>" %
-                       util.xml_escape(row[ROW_NAME]))
-        statetext   = "<span size='smaller'>%s</span>" % row[ROW_STATUS]
+                       util.xml_escape(name))
+        statetext   = "<span size='smaller'>%s</span>" % status
         return domtext + "\n" + statetext
 
-    def _build_vm_row(self, vm):
+    def _build_row(self, conn, vm):
+        if conn:
+            name = conn.get_pretty_desc_inactive(False)
+            markup = self._build_conn_markup(conn, name)
+            status = ("<span size='smaller'>%s</span>" %
+                      conn.get_state_text())
+            status_icon = None
+            hint = self._build_conn_hint(conn)
+            color = self._build_conn_color(conn)
+            os_icon = None
+        else:
+            name = vm.get_name()
+            status = vm.run_status()
+            markup = self._build_vm_markup(name, status)
+            status_icon = vm.run_status_icon_name()
+            hint = vm.get_description()
+            color = None
+            os_icon = _get_inspection_icon_pixbuf(vm, 16, 16)
+
         row = []
-
-        row.insert(ROW_HANDLE, vm)
-        row.insert(ROW_NAME, vm.get_name())
-        row.insert(ROW_MARKUP, "")
-        row.insert(ROW_STATUS, vm.run_status())
-        row.insert(ROW_STATUS_ICON, vm.run_status_icon_name())
-        row.insert(ROW_KEY, vm.get_uuid())
-        row.insert(ROW_HINT, util.xml_escape(vm.get_description()))
-        row.insert(ROW_IS_CONN, False)
-        row.insert(ROW_IS_CONN_CONNECTED, True)
-        row.insert(ROW_IS_VM, True)
-        row.insert(ROW_IS_VM_RUNNING, vm.is_active())
-        row.insert(ROW_COLOR, None)
-        row.insert(ROW_INSPECTION_OS_ICON,
-                   self.get_inspection_icon_pixbuf(vm, 16, 16))
-
-        row[ROW_MARKUP] = self._build_vm_markup(row)
+        row.insert(ROW_HANDLE, conn or vm)
+        row.insert(ROW_SORT_KEY, name)
+        row.insert(ROW_MARKUP, markup)
+        row.insert(ROW_STATUS_ICON, status_icon)
+        row.insert(ROW_HINT, util.xml_escape(hint))
+        row.insert(ROW_IS_CONN, bool(conn))
+        row.insert(ROW_IS_CONN_CONNECTED,
+                   bool(conn) and conn.state != conn.STATE_DISCONNECTED)
+        row.insert(ROW_IS_VM, bool(vm))
+        row.insert(ROW_IS_VM_RUNNING, bool(vm) and vm.is_active())
+        row.insert(ROW_COLOR, color)
+        row.insert(ROW_INSPECTION_OS_ICON, os_icon)
 
         return row
 
@@ -762,7 +789,7 @@ class vmmManager(vmmGObjectUI):
         if row_key in self.rows:
             return
 
-        row = self._build_vm_row(vm)
+        row = self._build_row(None, vm)
         parent = self.rows[conn.get_uri()].iter
 
         _iter = model.append(parent, row)
@@ -772,28 +799,8 @@ class vmmManager(vmmGObjectUI):
         # Expand a connection when adding a vm to it
         self.widget("vm-list").expand_row(model.get_path(parent), False)
 
-    def _build_conn_row(self, conn):
-        row = []
-        row.insert(ROW_HANDLE, conn)
-        row.insert(ROW_NAME, conn.get_pretty_desc_inactive(False))
-        row.insert(ROW_MARKUP, self._build_conn_markup(conn, row))
-        row.insert(ROW_STATUS, ("<span size='smaller'>%s</span>" %
-                                conn.get_state_text()))
-        row.insert(ROW_STATUS_ICON, None)
-        row.insert(ROW_KEY, conn.get_uri())
-        row.insert(ROW_HINT, self._build_conn_hint(conn))
-        row.insert(ROW_IS_CONN, True)
-        row.insert(ROW_IS_CONN_CONNECTED,
-                   conn.state != conn.STATE_DISCONNECTED)
-        row.insert(ROW_IS_VM, False)
-        row.insert(ROW_IS_VM_RUNNING, False)
-        row.insert(ROW_COLOR, self._build_conn_color(conn))
-        row.insert(ROW_INSPECTION_OS_ICON, None)
-
-        return row
-
     def _append_conn(self, model, conn):
-        row = self._build_conn_row(conn)
+        row = self._build_row(conn, None)
 
         _iter = model.append(None, row)
         path = model.get_path(_iter)
@@ -824,11 +831,11 @@ class vmmManager(vmmGObjectUI):
             if row[ROW_IS_CONN]:
                 connrows.append(row)
         for row in connrows:
-            descs.append(row[ROW_NAME])
+            descs.append(row[ROW_SORT_KEY])
 
         for row in connrows:
             conn = row[ROW_HANDLE]
-            name = row[ROW_NAME]
+            name = row[ROW_SORT_KEY]
             if descs.count(name) <= 1:
                 continue
 
@@ -866,7 +873,7 @@ class vmmManager(vmmGObjectUI):
         missing = True
         for row in range(model.iter_n_children(parent)):
             _iter = model.iter_nth_child(parent, row)
-            if model.get_value(_iter, ROW_KEY) == vm.get_uuid():
+            if model.get_value(_iter, ROW_HANDLE) == vm:
                 missing = False
                 break
 
@@ -878,20 +885,18 @@ class vmmManager(vmmGObjectUI):
         self.vm_resources_sampled(vm)
 
     def vm_resources_sampled(self, vm, config_changed=False):
-        vmlist = self.widget("vm-list")
-        model = vmlist.get_model()
-
-        if self.vm_row_key(vm) not in self.rows:
+        row = self.rows.get(self.vm_row_key(vm), None)
+        if row is None:
             return
 
-
         try:
-            row = self.rows[self.vm_row_key(vm)]
-            row[ROW_NAME] = vm.get_name()
-            row[ROW_STATUS] = vm.run_status()
+            name = vm.get_name()
+            status = vm.run_status()
+
+            row[ROW_SORT_KEY] = name
             row[ROW_STATUS_ICON] = vm.run_status_icon_name()
             row[ROW_IS_VM_RUNNING] = vm.is_active()
-            row[ROW_MARKUP] = self._build_vm_markup(row)
+            row[ROW_MARKUP] = self._build_vm_markup(name, status)
 
             if config_changed:
                 desc = vm.get_description()
@@ -903,53 +908,31 @@ class vmmManager(vmmGObjectUI):
                 return
             raise
 
-        model.row_changed(row.path, row.iter)
+        self.widget("vm-list").get_model().row_changed(row.path, row.iter)
 
     def vm_inspection_changed(self, vm):
-        vmlist = self.widget("vm-list")
-        model = vmlist.get_model()
-
-        if self.vm_row_key(vm) not in self.rows:
+        row = self.rows.get(self.vm_row_key(vm), None)
+        if row is None:
             return
 
-        row = self.rows[self.vm_row_key(vm)]
-        new_icon = self.get_inspection_icon_pixbuf(vm, 16, 16)
+        new_icon = _get_inspection_icon_pixbuf(vm, 16, 16)
         if not uihelpers.can_set_row_none:
             new_icon = new_icon or ""
         row[ROW_INSPECTION_OS_ICON] = new_icon
-        model.row_changed(row.path, row.iter)
 
-    def get_inspection_icon_pixbuf(self, vm, w, h):
-        # libguestfs gives us the PNG data as a string.
-        png_data = vm.inspection.icon
-        if png_data is None:
-            return None
-
-        try:
-            pb = GdkPixbuf.PixbufLoader()
-            pb.set_size(w, h)
-            pb.write(png_data)
-            pb.close()
-            return pb.get_pixbuf()
-        except:
-            logging.exception("Error loading inspection icon data")
-            vm.inspection.icon = None
-            return None
+        self.widget("vm-list").get_model().row_changed(row.path, row.iter)
 
     def conn_state_changed(self, conn):
         self.conn_resources_sampled(conn)
         self.vm_selected()
 
     def conn_resources_sampled(self, conn, newname=None):
-        vmlist = self.widget("vm-list")
-        model = vmlist.get_model()
+        model = self.widget("vm-list").get_model()
         row = self.rows[conn.get_uri()]
 
         if newname:
-            row[ROW_NAME] = newname
-        row[ROW_MARKUP] = self._build_conn_markup(conn, row)
-        row[ROW_STATUS] = ("<span size='smaller'>%s</span>" %
-                           conn.get_state_text())
+            row[ROW_SORT_KEY] = newname
+        row[ROW_MARKUP] = self._build_conn_markup(conn, row[ROW_SORT_KEY])
         row[ROW_IS_CONN_CONNECTED] = conn.state != conn.STATE_DISCONNECTED
         row[ROW_COLOR] = self._build_conn_color(conn)
         row[ROW_HINT] = self._build_conn_hint(conn)
@@ -1078,8 +1061,8 @@ class vmmManager(vmmGObjectUI):
     #################
 
     def vmlist_name_sorter(self, model, iter1, iter2, ignore):
-        return cmp(model.get_value(iter1, ROW_NAME),
-                   model.get_value(iter2, ROW_NAME))
+        return cmp(model.get_value(iter1, ROW_SORT_KEY),
+                   model.get_value(iter2, ROW_SORT_KEY))
 
     def vmlist_guest_cpu_usage_sorter(self, model, iter1, iter2, ignore):
         obj1 = model.get_value(iter1, ROW_HANDLE)
