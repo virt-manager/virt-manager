@@ -34,9 +34,7 @@ from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.addhardware import vmmAddHardware
 from virtManager.choosecd import vmmChooseCD
-from virtManager.console import vmmConsolePages
 from virtManager.snapshots import vmmSnapshotPage
-from virtManager.serialcon import vmmSerialConsole
 from virtManager.graphwidgets import Sparkline
 
 import virtinst
@@ -140,10 +138,9 @@ remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
  BOOT_ACTIVE) = range(4)
 
 # Main tab pages
-(PAGE_CONSOLE,
- PAGE_DETAILS,
- PAGE_SNAPSHOTS,
- PAGE_DYNAMIC_OFFSET) = range(4)
+(DETAILS_PAGE_DETAILS,
+ DETAILS_PAGE_CONSOLE,
+ DETAILS_PAGE_SNAPSHOTS) = range(3)
 
 
 def prettyify_disk_bus(bus):
@@ -359,13 +356,11 @@ class vmmDetails(vmmGObjectUI):
             self.widget("details-toolbar").hide()
             self.widget("details-menubar").hide()
             pages = self.widget("details-pages")
-            pages.set_current_page(PAGE_DETAILS)
+            pages.set_current_page(DETAILS_PAGE_DETAILS)
 
 
         self.active_edits = []
 
-        self.serial_tabs = []
-        self.last_console_page = PAGE_CONSOLE
         self.addhw = None
         self.media_choosers = {"cdrom": None, "floppy": None}
         self.storage_browser = None
@@ -374,6 +369,7 @@ class vmmDetails(vmmGObjectUI):
         self.ignoreDetails = False
         self._cpu_copy_host = False
 
+        from virtManager.console import vmmConsolePages
         self.console = vmmConsolePages(self.vm, self.builder, self.topwin)
         self.snapshots = vmmSnapshotPage(self.vm, self.builder, self.topwin)
         self.widget("snapshot-placeholder").add(self.snapshots.top_box)
@@ -579,10 +575,6 @@ class vmmDetails(vmmGObjectUI):
                 self.media_choosers[key].cleanup()
         self.media_choosers = {}
 
-        for serial in self.serial_tabs:
-            serial.cleanup()
-        self.serial_tabs = []
-
         self.console.cleanup()
         self.console = None
         self.snapshots.cleanup()
@@ -685,11 +677,6 @@ class vmmDetails(vmmGObjectUI):
 
         self.addhwmenu.add(addHW)
         self.addhwmenu.add(rmHW)
-
-        # Serial list menu
-        smenu = Gtk.Menu()
-        smenu.connect("show", self.populate_serial_menu)
-        self.widget("details-menu-view-serial-list").set_submenu(smenu)
 
         # Don't allowing changing network/disks for Dom0
         dom0 = self.vm.is_management_domain()
@@ -1115,106 +1102,6 @@ class vmmDetails(vmmGObjectUI):
 
         self.addhwmenu.popup(None, None, None, None, 0, event.time)
 
-    def build_serial_list(self):
-        ret = []
-
-        def add_row(text, err, sensitive, do_radio, cb, serialidx):
-            ret.append([text, err, sensitive, do_radio, cb, serialidx])
-
-        devs = self.vm.get_serial_devs()
-        if len(devs) == 0:
-            add_row(_("No text console available"),
-                    None, False, False, None, None)
-
-        def build_desc(dev):
-            if dev.virtual_device_type == "console":
-                return "Text Console %d" % (dev.vmmindex + 1)
-            return "Serial %d" % (dev.vmmindex + 1)
-
-        for dev in devs:
-            desc = build_desc(dev)
-            idx = dev.vmmindex
-
-            err = vmmSerialConsole.can_connect(self.vm, dev)
-            sensitive = not bool(err)
-
-            def cb(src):
-                return self.control_serial_tab(src, desc, idx)
-
-            add_row(desc, err, sensitive, True, cb, idx)
-
-        return ret
-
-    def current_serial_dev(self):
-        showing_serial = (self.last_console_page >= PAGE_DYNAMIC_OFFSET)
-        if not showing_serial:
-            return
-
-        serial_idx = self.last_console_page - PAGE_DYNAMIC_OFFSET
-        if len(self.serial_tabs) < serial_idx:
-            return
-
-        return self.serial_tabs[serial_idx]
-
-    def populate_serial_menu(self, src):
-        for ent in src:
-            src.remove(ent)
-
-        serial_page_dev = self.current_serial_dev()
-        showing_graphics = (self.last_console_page == PAGE_CONSOLE)
-
-        # Populate serial devices
-        group = None
-        itemlist = self.build_serial_list()
-        for msg, err, sensitive, do_radio, cb, ignore in itemlist:
-            if do_radio:
-                item = Gtk.RadioMenuItem(group)
-                item.set_label(msg)
-                if group is None:
-                    group = item
-            else:
-                item = Gtk.MenuItem(msg)
-
-            item.set_sensitive(sensitive)
-
-            if err and not sensitive:
-                item.set_tooltip_text(err)
-
-            if cb:
-                item.connect("toggled", cb)
-
-            # Tab is already open, make sure marked as such
-            if (sensitive and
-                serial_page_dev and
-                serial_page_dev.name == msg):
-                item.set_active(True)
-
-            src.add(item)
-
-        src.add(Gtk.SeparatorMenuItem())
-
-        # Populate graphical devices
-        devs = self.vm.get_graphics_devices()
-        if len(devs) == 0:
-            item = Gtk.MenuItem(_("No graphical console available"))
-            item.set_sensitive(False)
-            src.add(item)
-        else:
-            dev = devs[0]
-            item = Gtk.RadioMenuItem(group)
-            item.set_label(_("Graphical Console %s") %
-                           dev.pretty_type_simple(dev.type))
-            if group is None:
-                group = item
-
-            if showing_graphics:
-                item.set_active(True)
-            item.connect("toggled", self.control_serial_tab,
-                         dev.virtual_device_type, dev.type)
-            src.add(item)
-
-        src.show_all()
-
     def control_fullscreen(self, src):
         menu = self.widget("details-menu-view-fullscreen")
         if src.get_active() != menu.get_active():
@@ -1386,19 +1273,19 @@ class vmmDetails(vmmGObjectUI):
                        src == self.widget("details-menu-view-snapshots"))
 
         pages = self.widget("details-pages")
-        if pages.get_current_page() == PAGE_DETAILS:
+        if pages.get_current_page() == DETAILS_PAGE_DETAILS:
             if self.has_unapplied_changes(self.get_hw_row()):
                 self.sync_details_console_view(True)
                 return
             self.disable_apply()
 
         if is_details:
-            pages.set_current_page(PAGE_DETAILS)
+            pages.set_current_page(DETAILS_PAGE_DETAILS)
         elif is_snapshot:
             self.snapshots.show_page()
-            pages.set_current_page(PAGE_SNAPSHOTS)
+            pages.set_current_page(DETAILS_PAGE_SNAPSHOTS)
         else:
-            pages.set_current_page(self.last_console_page)
+            pages.set_current_page(DETAILS_PAGE_CONSOLE)
 
     def sync_details_console_view(self, newpage):
         details = self.widget("control-vm-details")
@@ -1408,8 +1295,8 @@ class vmmDetails(vmmGObjectUI):
         snapshot = self.widget("control-snapshots")
         snapshot_menu = self.widget("details-menu-view-snapshots")
 
-        is_details = newpage == PAGE_DETAILS
-        is_snapshot = newpage == PAGE_SNAPSHOTS
+        is_details = newpage == DETAILS_PAGE_DETAILS
+        is_snapshot = newpage == DETAILS_PAGE_SNAPSHOTS
         is_console = not is_details and not is_snapshot
 
         try:
@@ -1429,9 +1316,6 @@ class vmmDetails(vmmGObjectUI):
 
         self.sync_details_console_view(newpage)
         self.console.set_allow_fullscreen()
-
-        if newpage == PAGE_CONSOLE or newpage >= PAGE_DYNAMIC_OFFSET:
-            self.last_console_page = newpage
 
     def change_run_text(self, can_restore):
         if can_restore:
@@ -1511,41 +1395,27 @@ class vmmDetails(vmmGObjectUI):
         self.emit("action-exit-app")
 
     def activate_default_console_page(self):
-        if self.vm.get_graphics_devices() or not self.vm.get_serial_devs():
-            return
-
-        # Only show serial page if we are already on console view
         pages = self.widget("details-pages")
-        if pages.get_current_page() != PAGE_CONSOLE:
+        if pages.get_current_page() != DETAILS_PAGE_CONSOLE:
             return
-
-        # Show serial console
-        devs = self.build_serial_list()
-        for name, ignore, sensitive, ignore, cb, serialidx in devs:
-            if not sensitive or not cb:
-                continue
-
-            self._show_serial_tab(name, serialidx)
-            break
-
+        self.console.activate_default_console_page()
 
     # activate_* are called from engine.py via CLI options
-
     def activate_default_page(self):
         pages = self.widget("details-pages")
-        pages.set_current_page(PAGE_CONSOLE)
+        pages.set_current_page(DETAILS_PAGE_CONSOLE)
         self.activate_default_console_page()
 
     def activate_console_page(self):
         pages = self.widget("details-pages")
-        pages.set_current_page(PAGE_CONSOLE)
+        pages.set_current_page(DETAILS_PAGE_CONSOLE)
 
     def activate_performance_page(self):
-        self.widget("details-pages").set_current_page(PAGE_DETAILS)
+        self.widget("details-pages").set_current_page(DETAILS_PAGE_DETAILS)
         self.set_hw_selection(HW_LIST_TYPE_STATS)
 
     def activate_config_page(self):
-        self.widget("details-pages").set_current_page(PAGE_DETAILS)
+        self.widget("details-pages").set_current_page(DETAILS_PAGE_DETAILS)
 
     def add_hardware(self, src_ignore):
         try:
@@ -1698,49 +1568,6 @@ class vmmDetails(vmmGObjectUI):
         if not filename.endswith(".png"):
             filename += ".png"
         file(filename, "wb").write(ret)
-
-
-    #########################
-    # Serial Console pieces #
-    #########################
-
-    def control_serial_tab(self, src_ignore, name, target_port):
-        pages = self.widget("details-pages")
-        is_graphics = (name == "graphics")
-        is_serial = not is_graphics
-
-        if is_graphics:
-            pages.set_current_page(PAGE_CONSOLE)
-        elif is_serial:
-            self._show_serial_tab(name, target_port)
-
-    def _show_serial_tab(self, name, target_port):
-        serial = None
-        for s in self.serial_tabs:
-            if s.name == name:
-                serial = s
-                break
-
-        if not serial:
-            serial = vmmSerialConsole(self.vm, target_port, name)
-
-            title = Gtk.Label(label=name)
-            self.widget("details-pages").append_page(serial.box, title)
-            self.serial_tabs.append(serial)
-            serial.open_console()
-
-        page_idx = self.serial_tabs.index(serial) + PAGE_DYNAMIC_OFFSET
-        self.widget("details-pages").set_current_page(page_idx)
-
-    def _close_serial_tab(self, serial):
-        if not serial in self.serial_tabs:
-            return
-
-        page_idx = self.serial_tabs.index(serial) + PAGE_DYNAMIC_OFFSET
-        self.widget("details-pages").remove_page(page_idx)
-
-        serial.cleanup()
-        self.serial_tabs.remove(serial)
 
 
     ############################
@@ -2688,12 +2515,12 @@ class vmmDetails(vmmGObjectUI):
             raise
 
         # Stats page needs to be refreshed every tick
-        if (page == PAGE_DETAILS and
+        if (page == DETAILS_PAGE_DETAILS and
             self.get_hw_selection(HW_LIST_COL_TYPE) == HW_LIST_TYPE_STATS):
             self.refresh_stats_page()
 
     def page_refresh(self, page):
-        if page != PAGE_DETAILS:
+        if page != DETAILS_PAGE_DETAILS:
             return
 
         # This function should only be called when the VM xml actually

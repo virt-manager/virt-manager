@@ -39,11 +39,14 @@ import logging
 import virtManager.uihelpers as uihelpers
 from virtManager.autodrawer import AutoDrawer
 from virtManager.baseclass import vmmGObjectUI, vmmGObject
+from virtManager.serialcon import vmmSerialConsole
+from virtManager.details import DETAILS_PAGE_CONSOLE
 
 # Console pages
-PAGE_UNAVAILABLE = 0
-PAGE_AUTHENTICATE = 1
-PAGE_VIEWER = 2
+(CONSOLE_PAGE_UNAVAILABLE,
+ CONSOLE_PAGE_AUTHENTICATE,
+ CONSOLE_PAGE_VIEWER,
+ CONSOLE_PAGE_OFFSET) = range(4)
 
 
 def has_property(obj, setting):
@@ -713,6 +716,10 @@ class vmmConsolePages(vmmGObjectUI):
         self.widget("console-gfx-viewport").modify_bg(Gtk.StateType.NORMAL,
                                                       black)
 
+        self.serial_tabs = []
+        self.last_gfx_page = 0
+        self._init_menus()
+
         # Signals are added by vmmDetails. Don't use connect_signals here
         # or it changes will be overwritten
 
@@ -748,6 +755,11 @@ class vmmConsolePages(vmmGObjectUI):
         self.fs_drawer = None
         self.fs_toolbar.destroy()
         self.fs_toolbar = None
+
+        for serial in self.serial_tabs:
+            serial.cleanup()
+        self.serial_tabs = []
+
 
     ##########################
     # Initialization helpers #
@@ -802,6 +814,12 @@ class vmmConsolePages(vmmGObjectUI):
         self.fs_drawer.show_all()
 
         pages.add(self.fs_drawer)
+
+    def _init_menus(self):
+        # Serial list menu
+        smenu = Gtk.Menu()
+        smenu.connect("show", self.populate_serial_menu)
+        self.widget("details-menu-view-serial-list").set_submenu(smenu)
 
     def change_title(self, ignore1=None):
         title = self.vm.get_name() + " " + _("Virtual Machine")
@@ -1006,13 +1024,13 @@ class vmmConsolePages(vmmGObjectUI):
         page    = pages.get_current_page()
 
         if runable:
-            if page != PAGE_UNAVAILABLE:
-                pages.set_current_page(PAGE_UNAVAILABLE)
+            if page != CONSOLE_PAGE_UNAVAILABLE:
+                pages.set_current_page(CONSOLE_PAGE_UNAVAILABLE)
 
             self.view_vm_status()
             return
 
-        elif page in [PAGE_UNAVAILABLE, PAGE_VIEWER]:
+        elif page in [CONSOLE_PAGE_UNAVAILABLE, CONSOLE_PAGE_VIEWER]:
             if self.viewer and self.viewer.is_open():
                 self.activate_viewer_page()
             else:
@@ -1021,6 +1039,7 @@ class vmmConsolePages(vmmGObjectUI):
                 self.try_login()
 
         return
+
 
     ###################
     # Page Navigation #
@@ -1032,7 +1051,7 @@ class vmmConsolePages(vmmGObjectUI):
         with care
         """
         self.close_viewer()
-        self.widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
+        self.widget("console-pages").set_current_page(CONSOLE_PAGE_UNAVAILABLE)
         self.widget("details-menu-vm-screenshot").set_sensitive(False)
         self.widget("details-menu-usb-redirection").set_sensitive(False)
         self.widget("console-unavailable").set_label("<b>" + msg + "</b>")
@@ -1042,58 +1061,53 @@ class vmmConsolePages(vmmGObjectUI):
         self.widget("details-menu-vm-screenshot").set_sensitive(False)
         self.widget("details-menu-usb-redirection").set_sensitive(False)
 
-        if withPassword:
-            self.widget("console-auth-password").show()
-            self.widget("label-auth-password").show()
-        else:
-            self.widget("console-auth-password").hide()
-            self.widget("label-auth-password").hide()
+        self.widget("console-auth-password").set_visible(withPassword)
+        self.widget("label-auth-password").set_visible(withPassword)
 
-        if withUsername:
-            self.widget("console-auth-username").show()
-            self.widget("label-auth-username").show()
-        else:
-            self.widget("console-auth-username").hide()
-            self.widget("label-auth-username").hide()
+        self.widget("console-auth-username").set_visible(withUsername)
+        self.widget("label-auth-username").set_visible(withUsername)
 
-        self.widget("console-auth-username").set_text(username)
-        self.widget("console-auth-password").set_text(pw)
-
-        if self.config.has_keyring():
-            self.widget("console-auth-remember").set_sensitive(True)
-            if pw != "" or username != "":
-                self.widget("console-auth-remember").set_active(True)
-            else:
-                self.widget("console-auth-remember").set_active(False)
-        else:
-            self.widget("console-auth-remember").set_sensitive(False)
-        self.widget("console-pages").set_current_page(PAGE_AUTHENTICATE)
         if withUsername:
             self.widget("console-auth-username").grab_focus()
         else:
             self.widget("console-auth-password").grab_focus()
 
+        self.widget("console-auth-username").set_text(username)
+        self.widget("console-auth-password").set_text(pw)
+
+        self.widget("console-auth-remember").set_sensitive(
+                bool(self.config.has_keyring()))
+        if self.config.has_keyring():
+            self.widget("console-auth-remember").set_active(bool(pw and
+                                                                 username))
+
+        self.widget("console-pages").set_current_page(
+            CONSOLE_PAGE_AUTHENTICATE)
+
 
     def activate_viewer_page(self):
-        self.widget("console-pages").set_current_page(PAGE_VIEWER)
+        self.widget("console-pages").set_current_page(CONSOLE_PAGE_VIEWER)
         self.widget("details-menu-vm-screenshot").set_sensitive(True)
         if self.viewer and self.viewer.display:
             self.viewer.display.grab_focus()
 
-        if self.viewer.has_usb_redirection() and \
-           self.vm.has_spicevmc_type_redirdev():
+        if (self.viewer.has_usb_redirection() and
+            self.vm.has_spicevmc_type_redirdev()):
             self.widget("details-menu-usb-redirection").set_sensitive(True)
             return
 
     def page_changed(self, ignore1=None, ignore2=None, ignore3=None):
+        pagenum = self.widget("console-pages").get_current_page()
+        if pagenum < CONSOLE_PAGE_OFFSET:
+            self.last_gfx_page = pagenum
         self.set_allow_fullscreen()
 
     def set_allow_fullscreen(self):
         cpage = self.widget("console-pages").get_current_page()
         dpage = self.widget("details-pages").get_current_page()
 
-        allow_fullscreen = (dpage == 0 and
-                            cpage == PAGE_VIEWER and
+        allow_fullscreen = (dpage == DETAILS_PAGE_CONSOLE and
+                            cpage == CONSOLE_PAGE_VIEWER and
                             self.viewer_connected)
 
         self.widget("control-fullscreen").set_sensitive(allow_fullscreen)
@@ -1358,3 +1372,159 @@ class vmmConsolePages(vmmGObjectUI):
         viewer_alloc.width = desktop_w
         viewer_alloc.height = desktop_h
         self.viewer.display.size_allocate(viewer_alloc)
+
+
+    ###########################
+    # Serial console handling #
+    ###########################
+
+    def activate_default_console_page(self):
+        if self.vm.get_graphics_devices() or not self.vm.get_serial_devs():
+            return
+
+        # Show serial console
+        devs = self.build_serial_list()
+        for name, ignore, sensitive, ignore, cb, serialidx in devs:
+            if not sensitive or not cb:
+                continue
+
+            self._show_serial_tab(name, serialidx)
+            break
+
+    def build_serial_list(self):
+        ret = []
+
+        def add_row(text, err, sensitive, do_radio, cb, serialidx):
+            ret.append([text, err, sensitive, do_radio, cb, serialidx])
+
+        devs = self.vm.get_serial_devs()
+        if len(devs) == 0:
+            add_row(_("No text console available"),
+                    None, False, False, None, None)
+
+        def build_desc(dev):
+            if dev.virtual_device_type == "console":
+                return "Text Console %d" % (dev.vmmindex + 1)
+            return "Serial %d" % (dev.vmmindex + 1)
+
+        for dev in devs:
+            desc = build_desc(dev)
+            idx = dev.vmmindex
+
+            err = vmmSerialConsole.can_connect(self.vm, dev)
+            sensitive = not bool(err)
+
+            def cb(src):
+                return self.control_serial_tab(src, desc, idx)
+
+            add_row(desc, err, sensitive, True, cb, idx)
+
+        return ret
+
+    def current_serial_dev(self):
+        current_page = self.widget("console-pages").get_current_page()
+        if not current_page >= CONSOLE_PAGE_OFFSET:
+            return
+
+        serial_idx = current_page - CONSOLE_PAGE_OFFSET
+        if len(self.serial_tabs) < serial_idx:
+            return
+
+        return self.serial_tabs[serial_idx]
+
+    def control_serial_tab(self, src_ignore, name, target_port):
+        self.widget("details-pages").set_current_page(DETAILS_PAGE_CONSOLE)
+        if name == "graphics":
+            self.widget("console-pages").set_current_page(self.last_gfx_page)
+        else:
+            self._show_serial_tab(name, target_port)
+
+    def _show_serial_tab(self, name, target_port):
+        serial = None
+        for s in self.serial_tabs:
+            if s.name == name:
+                serial = s
+                break
+
+        if not serial:
+            serial = vmmSerialConsole(self.vm, target_port, name)
+
+            title = Gtk.Label(label=name)
+            self.widget("console-pages").append_page(serial.box, title)
+            self.serial_tabs.append(serial)
+            serial.open_console()
+
+        page_idx = self.serial_tabs.index(serial) + CONSOLE_PAGE_OFFSET
+        self.widget("console-pages").set_current_page(page_idx)
+
+    def _close_serial_tab(self, serial):
+        if not serial in self.serial_tabs:
+            return
+
+        page_idx = self.serial_tabs.index(serial) + CONSOLE_PAGE_OFFSET
+        self.widget("console-pages").remove_page(page_idx)
+
+        serial.cleanup()
+        self.serial_tabs.remove(serial)
+
+
+    def populate_serial_menu(self, src):
+        for ent in src:
+            src.remove(ent)
+
+        serial_page_dev = self.current_serial_dev()
+        showing_graphics = (
+            self.widget("console-pages").get_current_page() ==
+            CONSOLE_PAGE_VIEWER)
+
+        # Populate serial devices
+        group = None
+        itemlist = self.build_serial_list()
+        for msg, err, sensitive, do_radio, cb, ignore in itemlist:
+            if do_radio:
+                item = Gtk.RadioMenuItem(group)
+                item.set_label(msg)
+                if group is None:
+                    group = item
+            else:
+                item = Gtk.MenuItem(msg)
+
+            item.set_sensitive(sensitive)
+
+            if err and not sensitive:
+                item.set_tooltip_text(err)
+
+            if cb:
+                item.connect("toggled", cb)
+
+            # Tab is already open, make sure marked as such
+            if (sensitive and
+                serial_page_dev and
+                serial_page_dev.name == msg):
+                item.set_active(True)
+
+            src.add(item)
+
+        src.add(Gtk.SeparatorMenuItem())
+
+        # Populate graphical devices
+        devs = self.vm.get_graphics_devices()
+        if len(devs) == 0:
+            item = Gtk.MenuItem(_("No graphical console available"))
+            item.set_sensitive(False)
+            src.add(item)
+        else:
+            dev = devs[0]
+            item = Gtk.RadioMenuItem(group)
+            item.set_label(_("Graphical Console %s") %
+                           dev.pretty_type_simple(dev.type))
+            if group is None:
+                group = item
+
+            if showing_graphics:
+                item.set_active(True)
+            item.connect("toggled", self.control_serial_tab,
+                         dev.virtual_device_type, dev.type)
+            src.add(item)
+
+        src.show_all()
