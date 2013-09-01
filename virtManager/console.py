@@ -63,6 +63,7 @@ class ConnectionInfo(object):
         self.gport      = gdev.port and str(gdev.port) or None
         self.gsocket    = gdev.socket
         self.gaddr      = gdev.listen or "127.0.0.1"
+        self.gtlsport   = gdev.tlsPort or None
 
         self.transport, self.connuser = conn.get_transport()
         self._connhost = conn.get_uri_hostname() or "127.0.0.1"
@@ -78,7 +79,7 @@ class ConnectionInfo(object):
         return self.transport in ["ssh", "ext"]
 
     def is_bad_localhost(self):
-        host, ignore = self.get_conn_host()
+        host = self.get_conn_host()[0]
         if self.need_tunnel():
             return False
         return self.transport and host == "127.0.0.1"
@@ -86,19 +87,22 @@ class ConnectionInfo(object):
     def get_conn_host(self):
         host = self._connhost
         port = self._connport
+        tlsport = None
 
         if not self.need_tunnel():
             port = self.gport
+            tlsport = self.gtlsport
             if self.gaddr != "0.0.0.0":
                 host = self.gaddr
 
-        return host, port
+        return host, port, tlsport
 
     def logstring(self):
         return ("proto=%s trans=%s connhost=%s connuser=%s "
-                "connport=%s gaddr=%s gport=%s gsocket=%s" %
+                "connport=%s gaddr=%s gport=%s gtlsport=%s gsocket=%s" %
                 (self.gtype, self.transport, self._connhost, self.connuser,
-                 self._connport, self.gaddr, self.gport, self.gsocket))
+                 self._connport, self.gaddr, self.gport, self.gtlsport,
+                 self.gsocket))
     def console_active(self):
         if self.gsocket:
             return True
@@ -117,7 +121,7 @@ class Tunnel(object):
         if self.outfd is not None:
             return -1
 
-        host, port = ginfo.get_conn_host()
+        host, port, ignore = ginfo.get_conn_host()
 
         # Build SSH cmd
         argv = ["ssh", "ssh"]
@@ -415,7 +419,7 @@ class VNCViewer(Viewer):
         return self.display.is_open()
 
     def open_host(self, ginfo, password=None):
-        host, port = ginfo.get_conn_host()
+        host, port, ignore = ginfo.get_conn_host()
 
         if not ginfo.gsocket:
             logging.debug("VNC connection to %s:%s", host, port)
@@ -573,6 +577,7 @@ class SpiceViewer(Viewer):
 
     def _create_spice_session(self):
         self.spice_session = SpiceClientGLib.Session()
+        SpiceClientGLib.set_session_option(self.spice_session)
         gtk_session = SpiceClientGtk.GtkSession.get(self.spice_session)
         gtk_session.set_property("auto-clipboard", True)
 
@@ -588,14 +593,13 @@ class SpiceViewer(Viewer):
             gtk_session.set_property("auto-usbredir", True)
 
     def open_host(self, ginfo, password=None):
-        host, port = ginfo.get_conn_host()
-
-        uri = "spice://"
-        uri += str(host) + "?port=" + str(port)
-        logging.debug("spice uri: %s", uri)
+        host, port, tlsport = ginfo.get_conn_host()
 
         self._create_spice_session()
-        self.spice_session.set_property("uri", uri)
+        self.spice_session.set_property("host", str(host))
+        self.spice_session.set_property("port", str(port))
+        if tlsport:
+            self.spice_session.set_property("tls-port", str(tlsport))
         if password:
             self.spice_session.set_property("password", password)
         GObject.GObject.connect(self.spice_session, "channel-new",
