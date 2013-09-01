@@ -174,6 +174,9 @@ class vmmEngine(vmmGObject):
         if self.config.get_conn_uris():
             return
 
+        self.timeout_add(1000, self._add_default_conn, manager)
+
+    def _add_default_conn(self, manager):
         # Manager fail message
         msg = _("Could not detect a default hypervisor. Make\n"
                 "sure the appropriate virtualization packages\n"
@@ -189,11 +192,11 @@ class vmmEngine(vmmGObject):
             libvirt_packages = self.config.libvirt_packages
             packages = self.config.hv_packages + libvirt_packages
 
-            ret = packageutils.check_packagekit(manager.err, packages, True)
+            ret = packageutils.check_packagekit(manager, manager.err, packages)
         except:
             logging.exception("Error talking to PackageKit")
 
-        if ret is not None:
+        if ret:
             tryuri = "qemu:///system"
         else:
             tryuri = uihelpers.default_uri(always_system=True)
@@ -551,9 +554,9 @@ class vmmEngine(vmmGObject):
 
                 if self.config.askpass_package:
                     ret = packageutils.check_packagekit(
+                                            None,
                                             self.err,
-                                            self.config.askpass_package,
-                                            False)
+                                            self.config.askpass_package)
                     if ret:
                         conn.open()
                         return
