@@ -1,7 +1,7 @@
 #
 # Base class for all VM devices
 #
-# Copyright 2008  Red Hat, Inc.
+# Copyright 2008, 2013  Red Hat, Inc.
 # Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -251,7 +251,8 @@ class XMLProperty(property):
                  set_converter=None, validate_cb=None,
                  make_getter_xpath_cb=None, make_setter_xpath_cb=None,
                  is_bool=False, is_int=False, is_yesno=False,
-                 clear_first=None, default_cb=None, default_name=None):
+                 clear_first=None, default_cb=None, default_name=None,
+                 is_onoff=False):
         """
         Set a XMLBuilder class property that represents a value in the
         <domain> XML. For example
@@ -282,6 +283,7 @@ class XMLProperty(property):
         @param is_bool: Whether this is a boolean property in the XML
         @param is_int: Whethere this is an integer property in the XML
         @param is_yesno: Whethere this is a yes/no property in the XML
+        @param is_onoff: Whethere this is a on/off property in the XML
         @param clear_first: List of xpaths to unset before any 'set' operation.
             For those weird interdependent XML props like disk source type and
             path attribute.
@@ -301,6 +303,7 @@ class XMLProperty(property):
         self._is_bool = is_bool
         self._is_int = is_int
         self._is_yesno = is_yesno
+        self._is_onoff = is_onoff
 
         self._xpath_for_getter_cb = make_getter_xpath_cb
         self._xpath_for_setter_cb = make_setter_xpath_cb
@@ -312,7 +315,8 @@ class XMLProperty(property):
         self._default_name = default_name
 
         if sum([int(bool(i)) for i in
-               [self._is_bool, self._is_int, self._is_yesno]]) > 1:
+                [self._is_bool, self._is_int,
+                 self._is_yesno, self._is_onoff]]) > 1:
             raise RuntimeError("Conflict property converter options.")
 
         if self._default_name and not self._default_cb:
@@ -397,6 +401,8 @@ class XMLProperty(property):
             ret = int(val, **intkwargs)
         elif self._is_yesno and val is not None:
             ret = bool(val == "yes")
+        elif self._is_onoff and val is not None:
+            ret = bool(val == "on")
         else:
             ret = val
         return ret
@@ -404,6 +410,8 @@ class XMLProperty(property):
     def _convert_set_value(self, xmlbuilder, val):
         if self._default_name and val == self._default_name:
             val = self._default_cb(xmlbuilder)
+        elif self._is_onoff and val is not None:
+            val = bool(val) and "on" or "off"
         elif self._is_yesno and val is not None:
             val = bool(val) and "yes" or "no"
         elif self._is_int and val is not None:

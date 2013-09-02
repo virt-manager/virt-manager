@@ -136,7 +136,7 @@ class VirtualDeviceAddress(XMLBuilder):
 
     _XML_ROOT_XPATH = "/domain/devices/device/address"
     _XML_PROP_ORDER = ["type", "domain", "controller", "bus", "slot",
-                       "function", "target", "unit"]
+                       "function", "target", "unit", "multifunction"]
 
     def set_addrstr(self, addrstr):
         if addrstr is None:
@@ -165,3 +165,4 @@ class VirtualDeviceAddress(XMLBuilder):
     unit = XMLProperty(xpath="./address/@unit", is_int=True)
     port = XMLProperty(xpath="./address/@port", is_int=True)
     target = XMLProperty(xpath="./address/@target", is_int=True)
+    multifunction = XMLProperty(xpath="./address/@multifunction", is_onoff=True)
