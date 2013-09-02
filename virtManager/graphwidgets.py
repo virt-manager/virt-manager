@@ -152,11 +152,11 @@ class CellRendererSparkline(Gtk.CellRenderer):
         graph_width  = (cell_area.width - (GRAPH_PAD * 2))
         graph_height = (cell_area.height - (GRAPH_PAD * 2))
 
-        pixels_per_point = (graph_width / ((len(self.data_array) or 1) - 1))
+        pixels_per_point = (graph_width / max(1, len(self.data_array) - 1))
 
         # Graph width needs to be some multiple of the amount of data points
         # we have
-        graph_width = (pixels_per_point * ((len(self.data_array) or 1) - 1))
+        graph_width = (pixels_per_point * max(1, len(self.data_array) - 1))
 
         # Recalculate border width based on the amount we are graphing
         border_width = graph_width + (GRAPH_INDENT * 2)
