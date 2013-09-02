@@ -198,8 +198,14 @@ class vmmGObjectUI(vmmGObject):
             self.builder = builder
             self.topwin = topwin
 
-        from virtManager import error
-        self.err = error.vmmErrorDialog(self.topwin)
+        self._err = None
+
+    def _get_err(self):
+        if self._err is None:
+            from virtManager import error
+            self._err = error.vmmErrorDialog(self.topwin)
+        return self._err
+    err = property(_get_err)
 
     def widget(self, name):
         return self.builder.get_object(name)
@@ -210,7 +216,7 @@ class vmmGObjectUI(vmmGObject):
         self.builder = None
         self.topwin.destroy()
         self.topwin = None
-        self.err = None
+        self._err = None
 
     def _cleanup(self):
         raise NotImplementedError("_cleanup must be implemented in subclass")
