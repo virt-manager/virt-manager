@@ -1148,30 +1148,21 @@ class vmmAddHardware(vmmGObjectUI):
         self.show_pair_combo("fs-wrpolicy", show_wrpolicy_combo)
 
     def change_fs_driver(self, src):
-        idx = src.get_active()
         fsdriver = None
-        modecombo = self.widget("fs-mode-combo")
-        modelabel1 = self.widget("fs-mode-title")
-        wrpcombo = self.widget("fs-wrpolicy-combo")
-        wrplabel1 = self.widget("fs-wrpolicy-title")
-
+        idx = src.get_active()
         if idx >= 0 and src.get_property("visible"):
             fsdriver = src.get_model()[idx][0]
 
-        if (fsdriver == virtinst.VirtualFilesystem.DRIVER_PATH or
-            fsdriver == virtinst.VirtualFilesystem.DRIVER_DEFAULT):
-            modecombo.set_property("visible", True)
-            modelabel1.set_property("visible", True)
-        else:
-            modecombo.set_property("visible", False)
-            modelabel1.set_property("visible", False)
+        show_mode = bool(
+            fsdriver == virtinst.VirtualFilesystem.DRIVER_PATH or
+            fsdriver == virtinst.VirtualFilesystem.DRIVER_DEFAULT)
+        self.widget("fs-mode-title").set_visible(show_mode)
+        self.widget("fs-mode-box").set_visible(show_mode)
 
-        if (fsdriver == virtinst.VirtualFilesystem.DRIVER_DEFAULT):
-            wrpcombo.set_property("visible", False)
-            wrplabel1.set_property("visible", False)
-        else:
-            wrpcombo.set_property("visible", True)
-            wrplabel1.set_property("visible", True)
+        show_wrpol = bool(
+            fsdriver and fsdriver != virtinst.VirtualFilesystem.DRIVER_DEFAULT)
+        self.widget("fs-wrpolicy-title").set_visible(show_wrpol)
+        self.widget("fs-wrpolicy-box").set_visible(show_wrpol)
 
 
 
