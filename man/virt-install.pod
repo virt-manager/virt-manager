@@ -859,7 +859,7 @@ see C<http://libvirt.org/formatdomain.html#elementsControllers>.
 
 =item B<address>
 
-Controller address, current PCI of form 'bus:domain:slot:function'.
+Controller address, current PCI of form 'bus:domain:slot.function'.
 
 =item B<index>
 
@@ -876,14 +876,17 @@ Examples:
 
 =over 4
 
-=item B<--controller usb,model=ich9-ehci1,address=0:0:4.7,index=0>
+=item B<--controller usb,model=ich9-ehci1,address=0:0:4.0,index=0>
 
-Adds a ICH9 EHCI1 USB controller on PCI address 0:0:4.7
+Adds a ICH9 EHCI1 USB controller on PCI address 0:0:4.0
 
 =item B<--controller usb,model=ich9-uhci2,address=0:0:4.7,index=0,master=2>
 
 Adds a ICH9 UHCI2 USB companion controller for the previous master
 controller, ports start from port number 2.
+
+The parameter multifunction='on' will be added automatically to the
+proper device (if needed).  This applies to all PCI devices.
 
 =back
 
