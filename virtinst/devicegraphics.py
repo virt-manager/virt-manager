@@ -139,8 +139,10 @@ class VirtualGraphics(VirtualDevice):
     def _get_default_autoport(self):
         # By default, don't do this for VNC to maintain back compat with
         # old libvirt that didn't support 'autoport'
-        if self.type == "spice":
-            return (self.port == -1 or self.tlsPort == -1) and "yes" or "no"
+        if self.type != "spice":
+            return None
+        if (self.port == -1 or self.tlsPort == -1):
+            return True
         return None
     port = XMLProperty(xpath="./@port", is_int=True,
             set_converter=lambda s, v: _validate_port("Port", v),
