@@ -25,9 +25,10 @@
 # pylint: disable=E0611
 from gi.repository import Gdk
 from gi.repository import GLib
-from gi.repository import GObject
 from gi.repository import Gtk
 # pylint: enable=E0611
+
+from virtManager import uihelpers
 
 # pylint: disable=E1101
 # pylint can't detect functions we inheirit from Gtk, ex:
@@ -91,9 +92,11 @@ class OverBox(Gtk.Box):
         actual_min = self._get_actual_min()
 
         if self.overWidget:
-            expand = self.child_get_property(self.overWidget, "expand")
-            fill = self.child_get_property(self.overWidget, "fill")
-            padding = self.child_get_property(self.overWidget, "padding")
+            expand = uihelpers.child_get_property(self, self.overWidget,
+                                                  "expand")
+            fill = uihelpers.child_get_property(self, self.overWidget, "fill")
+            padding = uihelpers.child_get_property(self, self.overWidget,
+                                                   "padding")
 
         # XXX: On Fedora 19 child_get_property isn't working :(
         expand = True
@@ -128,14 +131,6 @@ class OverBox(Gtk.Box):
     ########################
     # Custom functionality #
     ########################
-
-    def child_get_property(self, widget, propname):
-        # gtk3 bindings are crappy here, make it work like
-        # gobject.get_property()
-        value = GObject.Value()
-        value.init(GObject.TYPE_INT)
-        Gtk.Box.child_get_property(self, widget, propname, value)
-        return value.get_int()
 
     def do_set_over(self, widget):
         self.set_over(widget)
@@ -264,9 +259,9 @@ class OverBox(Gtk.Box):
         self.overWidth = over.width
         self.overHeight = over.height
 
-        expand = self.child_get_property(self.overWidget, "expand")
-        fill = self.child_get_property(self.overWidget, "fill")
-        padding = self.child_get_property(self.overWidget, "padding")
+        expand = uihelpers.child_get_property(self, self.overWidget, "expand")
+        fill = uihelpers.child_get_property(self, self.overWidget, "fill")
+        padding = uihelpers.child_get_property(self, self.overWidget, "padding")
 
         if expand or fill:
             wpad = 0

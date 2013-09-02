@@ -23,6 +23,7 @@ import os
 import statvfs
 
 # pylint: disable=E0611
+from gi.repository import GObject
 from gi.repository import Gtk
 # pylint: enable=E0611
 
@@ -1356,6 +1357,32 @@ def set_list_selection(widget, rownum):
     selection.unselect_all()
     widget.set_cursor(path)
     selection.select_path(path)
+
+
+def child_get_property(parent, child, propname):
+    # Wrapper for child_get_property, which pygobject doesn't properly
+    # introspect
+    value = GObject.Value()
+    value.init(GObject.TYPE_INT)
+    parent.child_get_property(child, propname, value)
+    return value.get_int()
+
+
+def set_grid_row_visible(child, visible):
+    # For the passed widget, find its parent GtkGrid, and hide/show all
+    # elements that are in the same row as it. Simplifies having to name
+    # every element in a row when we want to dynamically hide things
+    # based on UI interraction
+
+    parent = child.get_parent()
+    if not type(parent) is Gtk.Grid:
+        raise RuntimeError("Programming error, parent must be grid, "
+                           "not %s" % type(parent))
+
+    row = child_get_property(parent, child, "top-attach")
+    for child in parent.get_children():
+        if child_get_property(parent, child, "top-attach") == row:
+            child.set_visible(visible)
 
 
 def default_uri(always_system=False):

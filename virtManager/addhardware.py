@@ -96,7 +96,6 @@ class vmmAddHardware(vmmGObjectUI):
 
             "on_graphics_type_changed": self.change_graphics_type,
             "on_graphics_port_auto_toggled": self.change_port_auto,
-            "on_graphics_keymap_toggled": self.change_keymap,
             "on_graphics_use_password": self.change_password_chk,
 
             "on_char_device_type_changed": self.change_char_device_type,
@@ -273,6 +272,13 @@ class vmmAddHardware(vmmGObjectUI):
         text = Gtk.CellRendererText()
         graphics_list.pack_start(text, True)
         graphics_list.add_attribute(text, 'text', 0)
+
+        # Graphics address
+        # [label, value]
+        self.widget("graphics-address").set_model(Gtk.ListStore(str, str))
+        text = Gtk.CellRendererText()
+        self.widget("graphics-address").pack_start(text, True)
+        self.widget("graphics-address").add_attribute(text, 'text', 0)
 
         # Sound model list
         sound_list = self.widget("sound-model")
@@ -462,17 +468,22 @@ class vmmAddHardware(vmmGObjectUI):
         input_box.set_active(0)
 
         # Graphics init
-        self.change_port_auto()
         graphics_box = self.widget("graphics-type")
         self.populate_graphics_model(graphics_box.get_model())
         graphics_box.set_active(0)
-        self.widget("graphics-address").set_active(False)
+
+        model = self.widget("graphics-address").get_model()
+        model.clear()
+        model.append([_("Hypervisor default"), None])
+        model.append([_("Localhost only"), "127.0.0.1"])
+        model.append([_("All interfaces"), "0.0.0.0"])
+        self.widget("graphics-address").set_active(0)
+
+        self.change_port_auto()
         self.widget("graphics-port-auto").set_active(True)
         self.widget("graphics-password").set_text("")
         self.widget("graphics-password").set_sensitive(False)
         self.widget("graphics-password-chk").set_active(False)
-        self.widget("graphics-keymap").set_text("")
-        self.widget("graphics-keymap-chk").set_active(True)
 
         # Sound init
         sound_box = self.widget("sound-model")
@@ -563,9 +574,8 @@ class vmmAddHardware(vmmGObjectUI):
 
     def populate_graphics_model(self, model):
         model.clear()
-        model.append([_("VNC server"), "vnc"])
         model.append([_("Spice server"), "spice"])
-        model.append([_("Local SDL window"), "sdl"])
+        model.append([_("VNC server"), "vnc"])
 
     def populate_host_device_model(self, devtype, devcap, subtype, subcap):
         devlist = self.widget("host-device")
@@ -663,37 +673,24 @@ class vmmAddHardware(vmmGObjectUI):
             return None
         return _type.get_model().get_value(_type.get_active_iter(), 1)
 
-    def get_config_graphics_port(self):
-        port = self.widget("graphics-port")
-        portAuto = self.widget("graphics-port-auto")
-        if portAuto.get_active():
-            return -1
-        return int(port.get_value())
+    def get_config_graphics_ports(self):
+        if self.widget("graphics-port-auto").get_active():
+            return -1, -1
 
-    def get_config_graphics_tls_port(self):
-        port = self.widget("graphics-tls-port")
-        portAuto = self.widget("graphics-port-auto")
-        if portAuto.get_active():
-            return -1
-        return int(port.get_value())
+        port = self.widget("graphics-port").get_value()
+        tlsport = self.widget("graphics-tls-port").get_value()
+        if not self.widget("graphics-tls-port").get_visible():
+            tlsport = -1
+        return int(port), int(tlsport)
 
     def get_config_graphics_address(self):
         addr = self.widget("graphics-address")
-        if addr.get_active():
-            return "0.0.0.0"
-        return "127.0.0.1"
+        return addr.get_model()[addr.get_active()][1]
 
     def get_config_graphics_password(self):
         if not self.widget("graphics-password-chk").get_active():
             return None
         return self.widget("graphics-password").get_text()
-
-    def get_config_keymap(self):
-        g = self.widget("graphics-keymap")
-        if g.get_sensitive() and g.get_text() != "":
-            return g.get_text()
-        else:
-            return None
 
     # Network getters
     def get_config_network(self):
@@ -959,44 +956,17 @@ class vmmAddHardware(vmmGObjectUI):
 
     # Graphics listeners
     def change_graphics_type(self, ignore=None):
-        graphics = self.get_config_graphics()
-        if graphics in ["vnc", "spice"]:
-            self.widget("graphics-port-auto").set_sensitive(True)
-            self.widget("graphics-address").set_sensitive(True)
-            # Skip this code if the checkbox value is not changed.  In this way
-            # the password field maintains its value.
-            if not self.widget("graphics-password-chk").get_sensitive():
-                self.widget("graphics-password").set_sensitive(False)
-                self.widget("graphics-password-chk").set_sensitive(True)
-                self.widget("graphics-password-chk").set_active(False)
-            self.widget("graphics-keymap-chk").set_sensitive(True)
-            self.change_port_auto()
-        else:
-            self.widget("graphics-port").set_sensitive(False)
-            self.widget("graphics-tls-port").set_sensitive(False)
-            self.widget("graphics-port-auto").set_sensitive(False)
-            self.widget("graphics-address").set_sensitive(False)
-            self.widget("graphics-password").set_sensitive(False)
-            self.widget("graphics-password-chk").set_sensitive(False)
-            self.widget("graphics-password-chk").set_active(False)
-            self.widget("graphics-keymap-chk").set_sensitive(False)
-            self.widget("graphics-keymap").set_sensitive(False)
+        self.change_port_auto()
 
     def change_port_auto(self, ignore=None):
-        graphics = self.get_config_graphics()
-        tls_enable = graphics == "spice"
-        if self.widget("graphics-port-auto").get_active():
-            self.widget("graphics-port").set_sensitive(False)
-            self.widget("graphics-tls-port").set_sensitive(False)
-        else:
-            self.widget("graphics-port").set_sensitive(True)
-            self.widget("graphics-tls-port").set_sensitive(tls_enable)
+        gtype = self.get_config_graphics()
+        is_auto = self.widget("graphics-port-auto").get_active()
+        is_spice = (gtype == "spice")
 
-    def change_keymap(self, ignore=None):
-        if self.widget("graphics-keymap-chk").get_active():
-            self.widget("graphics-keymap").set_sensitive(False)
-        else:
-            self.widget("graphics-keymap").set_sensitive(True)
+        uihelpers.set_grid_row_visible(self.widget("graphics-port-box"),
+                                       not is_auto)
+        self.widget("graphics-port-box").set_visible(not is_auto)
+        self.widget("graphics-tlsport-box").set_visible(is_spice)
 
     def change_password_chk(self, ignore=None):
         if self.widget("graphics-password-chk").get_active():
@@ -1154,13 +1124,12 @@ class vmmAddHardware(vmmGObjectUI):
         show_mode = bool(
             fsdriver == virtinst.VirtualFilesystem.DRIVER_PATH or
             fsdriver == virtinst.VirtualFilesystem.DRIVER_DEFAULT)
-        self.widget("fs-mode-title").set_visible(show_mode)
-        self.widget("fs-mode-box").set_visible(show_mode)
+        uihelpers.set_grid_row_visible(self.widget("fs-mode-box"), show_mode)
 
         show_wrpol = bool(
             fsdriver and fsdriver != virtinst.VirtualFilesystem.DRIVER_DEFAULT)
-        self.widget("fs-wrpolicy-title").set_visible(show_wrpol)
-        self.widget("fs-wrpolicy-box").set_visible(show_wrpol)
+        uihelpers.set_grid_row_visible(self.widget("fs-wrpolicy-box"),
+                                       show_wrpol)
 
 
 
@@ -1437,15 +1406,14 @@ class vmmAddHardware(vmmGObjectUI):
         gtype = self.get_config_graphics()
 
         try:
+            port, tlsport = self.get_config_graphics_ports()
             self._dev = virtinst.VirtualGraphics(self.conn.get_backend())
             self._dev.type = gtype
-            if gtype != "sdl":
-                self._dev.port = self.get_config_graphics_port()
-                self._dev.passwd = self.get_config_graphics_password()
-                self._dev.listen = self.get_config_graphics_address()
-                self._dev.keymap = self.get_config_keymap()
+            self._dev.port = port
+            self._dev.passwd = self.get_config_graphics_password()
+            self._dev.listen = self.get_config_graphics_address()
             if gtype == "spice":
-                self._dev.tlsPort = self.get_config_graphics_tls_port()
+                self._dev.tlsPort = tlsport
         except ValueError, e:
             self.err.val_err(_("Graphics device parameter error"), e)
 
