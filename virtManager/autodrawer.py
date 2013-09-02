@@ -98,8 +98,6 @@ class OverBox(Gtk.Box):
             padding = uihelpers.child_get_property(self, self.overWidget,
                                                    "padding")
 
-        # XXX: On Fedora 19 child_get_property isn't working :(
-        expand = True
         if expand and fill:
             width = boxwidth
             x = 0
