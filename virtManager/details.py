@@ -974,7 +974,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Disk iotune expander
         if not (self.conn.is_qemu() or self.conn.is_test_conn()):
-            self.widget("iotune-expander").set_property("visible", False)
+            self.widget("iotune-expander").set_visible(False)
 
         # Network source
         net_source = self.widget("network-source-combo")
@@ -1064,8 +1064,8 @@ class vmmDetails(vmmGObjectUI):
             if model_in_list:
                 idx = model_list.index(value)
 
-        model_label.set_property("visible", not model_in_list)
-        model_combo.set_property("visible", model_in_list)
+        model_label.set_visible(not model_in_list)
+        model_combo.set_visible(model_in_list)
         model_label.set_text(label or "")
 
         if model_in_list:
@@ -1264,7 +1264,7 @@ class vmmDetails(vmmGObjectUI):
 
         rem = pagetype in remove_pages
         self.disable_apply()
-        self.widget("config-remove").set_property("visible", rem)
+        self.widget("config-remove").set_visible(rem)
 
         self.widget("hw-panel").set_current_page(pagetype)
 
@@ -1732,7 +1732,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Warn about overcommit
         warn = bool(cur > host_active_count)
-        self.widget("config-vcpus-warn-box").set_property("visible", warn)
+        self.widget("config-vcpus-warn-box").set_visible(warn)
 
         maxadj = self.widget("config-maxvcpus")
         maxval = self.config_get_maxvcpus()
@@ -2708,7 +2708,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Warn about overcommit
         warn = bool(self.config_get_vcpus() > host_active_count)
-        self.widget("config-vcpus-warn-box").set_property("visible", warn)
+        self.widget("config-vcpus-warn-box").set_visible(warn)
     def _refresh_cpu_pinning(self):
         # Populate VCPU pinning
         vcpupin  = self.vm.vcpu_pinning()
@@ -2963,7 +2963,7 @@ class vmmDetails(vmmGObjectUI):
         # Virtualport config
         show_vport = (nettype == "direct")
         vport = net.virtualport
-        self.widget("vport-expander").set_property("visible", show_vport)
+        self.widget("vport-expander").set_visible(show_vport)
         self.widget("vport-type").set_text(vport.type or "")
         self.widget("vport-managerid").set_text(str(vport.managerid) or "")
         self.widget("vport-typeid").set_text(str(vport.typeid) or "")
@@ -3132,8 +3132,8 @@ class vmmDetails(vmmGObjectUI):
             if not val and doshow:
                 val = getattr(tpmdev, param)
 
-            self.widget(widgetname).set_property("visible", doshow)
-            self.widget(labelname).set_property("visible", doshow)
+            self.widget(widgetname).set_visible(doshow)
+            self.widget(labelname).set_visible(doshow)
             self.widget(widgetname).set_text(val or "-")
 
         dev_type = tpmdev.type
@@ -3163,8 +3163,8 @@ class vmmDetails(vmmGObjectUI):
             if not val and doshow:
                 val = getattr(chardev, param)
 
-            self.widget(widgetname).set_property("visible", doshow)
-            self.widget(labelname).set_property("visible", doshow)
+            self.widget(widgetname).set_visible(doshow)
+            self.widget(labelname).set_visible(doshow)
             self.widget(widgetname).set_text(val or "-")
 
         def build_host_str(base):
@@ -3334,9 +3334,9 @@ class vmmDetails(vmmGObjectUI):
         show_init = self.vm.is_container()
         show_boot = (not self.vm.is_container() and not self.vm.is_xenpv())
 
-        self.widget("boot-order-align").set_property("visible", show_boot)
-        self.widget("boot-kernel-align").set_property("visible", show_kernel)
-        self.widget("boot-init-align").set_property("visible", show_init)
+        self.widget("boot-order-align").set_visible(show_boot)
+        self.widget("boot-kernel-align").set_visible(show_kernel)
+        self.widget("boot-init-align").set_visible(show_init)
 
         # Kernel/initrd boot
         kernel, initrd, dtb, args = self.vm.get_boot_kernel_info()
@@ -3681,5 +3681,5 @@ class vmmDetails(vmmGObjectUI):
         combo = self.widget(basename)
         label = self.widget(basename + "-title")
 
-        combo.set_property("visible", show)
-        label.set_property("visible", show)
+        combo.set_visible(show)
+        label.set_visible(show)

@@ -503,10 +503,8 @@ class vmmCreate(vmmGObjectUI):
 
         # Container install options
         method_container_app.set_active(True)
-        self.widget("virt-install-box").set_property("visible",
-                                                     not is_container)
-        self.widget("container-install-box").set_property("visible",
-                                                     is_container)
+        self.widget("virt-install-box").set_visible(not is_container)
+        self.widget("container-install-box").set_visible(is_container)
 
         # Install local
         iso_option = self.widget("install-local-iso")
@@ -602,11 +600,11 @@ class vmmCreate(vmmGObjectUI):
             net_expander.set_expanded(True)
 
         if do_tooltip:
-            net_warn_icon.set_property("visible", show_warn)
+            net_warn_icon.set_visible(show_warn)
             if msg:
                 net_warn_icon.set_tooltip_text(show_warn and msg or "")
         else:
-            net_warn_box.set_property("visible", show_warn)
+            net_warn_box.set_visible(show_warn)
             markup = show_warn and ("<small>%s</small>" % msg) or ""
             net_warn_label.set_markup(markup)
 
@@ -875,7 +873,7 @@ class vmmCreate(vmmGObjectUI):
 
         title = "Ready to begin installation of <b>%s</b>" % self.guest.name
 
-        self.widget("finish-warn-os").set_property("visible", not have_os)
+        self.widget("finish-warn-os").set_visible(not have_os)
         self.widget("summary-title").set_markup(title)
         self.widget("summary-os").set_text(osstr)
         self.widget("summary-install").set_text(install)
@@ -1262,7 +1260,7 @@ class vmmCreate(vmmGObjectUI):
         # at the moment
         iscontainer = instpage in [INSTALL_PAGE_CONTAINER_APP,
                                    INSTALL_PAGE_CONTAINER_OS]
-        osbox.set_property("visible", iscontainer)
+        osbox.set_visible(iscontainer)
 
         # Detection only works/ is valid for URL,
         # FIXME: Also works for CDROM if running as root (since we need to

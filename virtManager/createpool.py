@@ -288,8 +288,8 @@ class vmmCreatePool(vmmGObjectUI):
 
     def show_options_by_pool(self):
         def show_row(base, do_show):
-            self.widget(base + "-label").set_property("visible", do_show)
-            self.widget(base + "-box").set_property("visible", do_show)
+            self.widget(base + "-label").set_visible(do_show)
+            self.widget(base + "-box").set_visible(do_show)
 
         src     = hasattr(self._pool, "source_path")
         src_b   = src and not self.conn.is_remote()

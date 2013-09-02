@@ -517,13 +517,13 @@ def net_list_changed(net_list, bridge_box,
     if source_mode_box is not None:
         show_source_mode = (row[0] ==
                             virtinst.VirtualNetworkInterface.TYPE_DIRECT)
-        source_mode_box.set_property("visible", show_source_mode)
-        source_mode_label.set_property("visible", show_source_mode)
-        vport_expander.set_property("visible", show_source_mode)
+        source_mode_box.set_visible(show_source_mode)
+        source_mode_label.set_visible(show_source_mode)
+        vport_expander.set_visible(show_source_mode)
 
     show_bridge = row[5]
 
-    bridge_box.set_property("visible", show_bridge)
+    bridge_box.set_visible(show_bridge)
 
 
 def get_network_selection(net_list, bridge_entry):

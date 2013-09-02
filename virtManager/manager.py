@@ -1029,9 +1029,9 @@ class vmmManager(vmmGObjectUI):
 
             self.vmmenu_items["run"].set_sensitive(run)
             self.vmmenu_items["shutdown"].set_sensitive(stop)
-            self.vmmenu_items["pause"].set_property("visible", not paused)
+            self.vmmenu_items["pause"].set_visible(not paused)
             self.vmmenu_items["pause"].set_sensitive(stop)
-            self.vmmenu_items["resume"].set_property("visible", paused)
+            self.vmmenu_items["resume"].set_visible(paused)
             self.vmmenu_items["resume"].set_sensitive(paused)
             self.vmmenu_items["migrate"].set_sensitive(stop)
             self.vmmenu_items["clone"].set_sensitive(not ro)

@@ -392,8 +392,8 @@ class vmmCreateInterface(vmmGObjectUI):
 
         for key, value in type_dict.items():
             do_show = (key == itype)
-            self.widget("%s-label" % value).set_property("visible", do_show)
-            self.widget("%s-box" % value).set_property("visible", do_show)
+            self.widget("%s-label" % value).set_visible(do_show)
+            self.widget("%s-box" % value).set_visible(do_show)
 
         if itype == Interface.Interface.INTERFACE_TYPE_BRIDGE:
             self.update_bridge_desc()

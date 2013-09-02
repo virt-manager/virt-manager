@@ -1181,10 +1181,8 @@ class vmmHost(vmmGObjectUI):
         self.widget("interface-inuseby").set_text(used_by or "-")
 
         # IP info
-        self.widget("interface-ipv4-expander").set_property("visible",
-                                                            bool(ipv4))
-        self.widget("interface-ipv6-expander").set_property("visible",
-                                                            bool(ipv6))
+        self.widget("interface-ipv4-expander").set_visible(bool(ipv4))
+        self.widget("interface-ipv6-expander").set_visible(bool(ipv6))
 
         if ipv4:
             mode = ipv4[0] and "DHCP" or "Static"
@@ -1216,7 +1214,7 @@ class vmmHost(vmmGObjectUI):
         show_child = (children or
                       itype in [Interface.Interface.INTERFACE_TYPE_BRIDGE,
                                 Interface.Interface.INTERFACE_TYPE_BOND])
-        self.widget("interface-child-box").set_property("visible", show_child)
+        self.widget("interface-child-box").set_visible(show_child)
         self.populate_interface_children()
 
     def refresh_interface(self, src_ignore, name):

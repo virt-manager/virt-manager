@@ -330,8 +330,8 @@ class vmmCloneVM(vmmGObjectUI):
             build_net_row(label, mac, newmac)
 
         no_net = bool(len(self.net_list.keys()) == 0)
-        self.widget("clone-network-box").set_property("visible", not no_net)
-        self.widget("clone-no-net").set_property("visible", no_net)
+        self.widget("clone-network-box").set_visible(not no_net)
+        self.widget("clone-no-net").set_visible(no_net)
 
     def check_all_storage(self):
         """
@@ -560,10 +560,8 @@ class vmmCloneVM(vmmGObjectUI):
         storage_box.show_all()
 
         no_storage = not bool(len(self.target_list))
-        self.widget("clone-storage-box").set_property("visible",
-                                                      not no_storage)
-        self.widget("clone-no-storage-pass").set_property("visible",
-                                                          no_storage)
+        self.widget("clone-storage-box").set_visible(not no_storage)
+        self.widget("clone-no-storage-pass").set_visible(no_storage)
 
         skip_targets = []
         new_disks = []

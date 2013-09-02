@@ -931,12 +931,12 @@ class vmmAddHardware(vmmGObjectUI):
         combo = self.widget(basename + "-combo")
         label = self.widget(basename + "-label")
 
-        combo.set_property("visible", show_combo)
-        label.set_property("visible", not show_combo)
+        combo.set_visible(show_combo)
+        label.set_visible(not show_combo)
 
     def show_check_button(self, basename, show):
         check = self.widget(basename)
-        check.set_property("visible", show)
+        check.set_visible(show)
 
     # Storage listeners
     def browse_storage(self, ignore1):
@@ -1076,11 +1076,10 @@ class vmmAddHardware(vmmGObjectUI):
             if make_visible:
                 show_something = True
 
-            self.widget(widget_name).set_property("visible", make_visible)
-            self.widget(widget_name + "-label").set_property("visible",
-                                                             make_visible)
+            self.widget(widget_name).set_visible(make_visible)
+            self.widget(widget_name + "-label").set_visible(make_visible)
 
-        self.widget("tpm-param-box").set_property("visible", show_something)
+        self.widget("tpm-param-box").set_visible(show_something)
 
     def change_char_device_type(self, src):
         self._update_doc("type")
@@ -1101,11 +1100,10 @@ class vmmAddHardware(vmmGObjectUI):
             if make_visible:
                 show_something = True
 
-            self.widget(widget_name).set_property("visible", make_visible)
-            self.widget(widget_name + "-label").set_property("visible",
-                                                             make_visible)
+            self.widget(widget_name).set_visible(make_visible)
+            self.widget(widget_name + "-label").set_visible(make_visible)
 
-        self.widget("char-param-box").set_property("visible", show_something)
+        self.widget("char-param-box").set_visible(show_something)
 
         has_mode = self._dev.supports_property("source_mode")
         if has_mode and self.widget("char-mode").get_active() == -1:

@@ -441,8 +441,8 @@ class vmmSystray(vmmGObject):
         actions["reset"].set_sensitive(vm.is_destroyable())
         actions["destroy"].set_sensitive(vm.is_destroyable())
 
-        actions["pause"].set_property("visible", not is_paused)
-        actions["resume"].set_property("visible", is_paused)
+        actions["pause"].set_visible(not is_paused)
+        actions["resume"].set_visible(is_paused)
 
     def run_vm_action(self, ignore, signal_name, uuid):
         uri = None
