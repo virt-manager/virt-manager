@@ -612,6 +612,7 @@ class Guest(XMLBuilder):
         for dev in self.get_all_devices():
             dev.set_defaults()
         self._add_implied_controllers()
+        self._check_address_multi()
         self._set_disk_defaults()
         self._set_net_defaults()
         self._set_input_defaults()
@@ -696,6 +697,28 @@ class Guest(XMLBuilder):
                 ctrl.type = "scsi"
                 ctrl.address.set_addrstr("spapr-vio")
                 self.add_device(ctrl)
+
+    def _check_address_multi(self):
+        addresses = {}
+        for d in self._devices:
+            if d.address.type != d.address.ADDRESS_TYPE_PCI:
+                continue
+
+            addr = d.address
+            addrstr = "%d%d%d" % (d.address.domain,
+                                  d.address.bus,
+                                  d.address.slot)
+
+            if addrstr not in addresses:
+                addresses[addrstr] = {}
+            if addr.function in addresses[addrstr]:
+                raise ValueError(_("Duplicate address for devices %s and %s") %
+                                 (str(d), str(addresses[addrstr][addr.function])))
+            addresses[addrstr][addr.function] = d
+
+        for devs in addresses.values():
+            if len(devs) > 1 and 0 in devs:
+                devs[0].address.multifunction = True
 
     def _can_virtio(self, key):
         if not self.conn.is_qemu():
