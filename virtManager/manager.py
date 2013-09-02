@@ -278,15 +278,11 @@ class vmmManager(vmmGObjectUI):
             self.config.on_stats_enable_net_poll_changed(self.enable_polling,
                                                     COL_NETWORK))
 
+        self.toggle_guest_cpu_usage_visible_widget()
+        self.toggle_host_cpu_usage_visible_widget()
+        self.toggle_disk_io_visible_widget()
+        self.toggle_network_traffic_visible_widget()
 
-        self.widget("menu_view_stats_guest_cpu").set_active(
-                            self.config.is_vmlist_guest_cpu_usage_visible())
-        self.widget("menu_view_stats_host_cpu").set_active(
-                            self.config.is_vmlist_host_cpu_usage_visible())
-        self.widget("menu_view_stats_disk").set_active(
-                            self.config.is_vmlist_disk_io_visible())
-        self.widget("menu_view_stats_network").set_active(
-                            self.config.is_vmlist_network_traffic_visible())
 
     def init_toolbar(self):
         self.widget("vm-new").set_icon_name("vm_new")
@@ -434,7 +430,7 @@ class vmmManager(vmmGObjectUI):
         nameCol.add_attribute(name_txt, 'foreground', ROW_COLOR)
         nameCol.set_sort_column_id(COL_NAME)
 
-        def make_stats_column(title, datafunc, is_visible, colnum):
+        def make_stats_column(title, colnum):
             col = Gtk.TreeViewColumn(title)
             col.set_min_width(140)
 
@@ -449,29 +445,15 @@ class vmmManager(vmmGObjectUI):
             img.set_property("reversed", True)
             col.pack_start(img, True)
             col.add_attribute(img, 'visible', ROW_IS_VM)
-            col.set_cell_data_func(img, datafunc, None)
 
-            col.set_visible(is_visible)
             col.set_sort_column_id(colnum)
             vmlist.append_column(col)
             return col
 
-        self.guestcpucol = make_stats_column(_("CPU usage"),
-                            self.guest_cpu_usage_img,
-                            self.config.is_vmlist_guest_cpu_usage_visible(),
-                            COL_GUEST_CPU)
-        self.hostcpucol = make_stats_column(_("Host CPU usage"),
-                            self.host_cpu_usage_img,
-                            self.config.is_vmlist_host_cpu_usage_visible(),
-                            COL_HOST_CPU)
-        self.diskcol = make_stats_column(_("Disk I/O"),
-                            self.disk_io_img,
-                            self.config.is_vmlist_disk_io_visible(),
-                            COL_DISK)
-        self.netcol = make_stats_column(_("Network I/O"),
-                            self.network_traffic_img,
-                            self.config.is_vmlist_network_traffic_visible(),
-                            COL_NETWORK)
+        self.guestcpucol = make_stats_column(_("CPU usage"), COL_GUEST_CPU)
+        self.hostcpucol = make_stats_column(_("Host CPU usage"), COL_HOST_CPU)
+        self.diskcol = make_stats_column(_("Disk I/O"), COL_DISK)
+        self.netcol = make_stats_column(_("Network I/O"), COL_NETWORK)
 
         model.set_sort_func(COL_NAME, self.vmlist_name_sorter)
         model.set_sort_func(COL_GUEST_CPU, self.vmlist_guest_cpu_usage_sorter)
@@ -1117,25 +1099,33 @@ class vmmManager(vmmGObjectUI):
             current_text = current_text + disabled_text
         widget.set_label(current_text)
 
+    def _toggle_graph_helper(self, do_show, col, datafunc, menu):
+        img = -1
+        for child in col.get_cells():
+            if isinstance(child, CellRendererSparkline):
+                img = child
+        datafunc = do_show and datafunc or None
+
+        col.set_cell_data_func(img, datafunc, None)
+        col.set_visible(do_show)
+        self.widget(menu).set_active(do_show)
+
     def toggle_network_traffic_visible_widget(self):
-        val = self.config.is_vmlist_network_traffic_visible()
-        self.netcol.set_visible(val)
-        self.widget("menu_view_stats_network").set_active(val)
-
+        self._toggle_graph_helper(
+            self.config.is_vmlist_network_traffic_visible(), self.netcol,
+            self.network_traffic_img, "menu_view_stats_network")
     def toggle_disk_io_visible_widget(self):
-        val = self.config.is_vmlist_disk_io_visible()
-        self.diskcol.set_visible(val)
-        self.widget("menu_view_stats_disk").set_active(val)
-
+        self._toggle_graph_helper(
+            self.config.is_vmlist_disk_io_visible(), self.diskcol,
+            self.disk_io_img, "menu_view_stats_disk")
     def toggle_guest_cpu_usage_visible_widget(self):
-        val = self.config.is_vmlist_guest_cpu_usage_visible()
-        self.guestcpucol.set_visible(val)
-        self.widget("menu_view_stats_guest_cpu").set_active(val)
-
+        self._toggle_graph_helper(
+            self.config.is_vmlist_guest_cpu_usage_visible(), self.guestcpucol,
+            self.guest_cpu_usage_img, "menu_view_stats_guest_cpu")
     def toggle_host_cpu_usage_visible_widget(self):
-        val = self.config.is_vmlist_host_cpu_usage_visible()
-        self.hostcpucol.set_visible(val)
-        self.widget("menu_view_stats_host_cpu").set_active(val)
+        self._toggle_graph_helper(
+            self.config.is_vmlist_host_cpu_usage_visible(), self.hostcpucol,
+            self.host_cpu_usage_img, "menu_view_stats_host_cpu")
 
     def toggle_stats_visible(self, src, stats_id):
         visible = src.get_active()
@@ -1157,7 +1147,7 @@ class vmmManager(vmmGObjectUI):
         self.toggle_stats_visible(src, COL_NETWORK)
 
     def guest_cpu_usage_img(self, column_ignore, cell, model, _iter, data):
-        obj = model.get_value(_iter, ROW_HANDLE)
+        obj = model[_iter][ROW_HANDLE]
         if obj is None or not hasattr(obj, "conn"):
             return
 
@@ -1165,7 +1155,7 @@ class vmmManager(vmmGObjectUI):
         cell.set_property('data_array', data)
 
     def host_cpu_usage_img(self, column_ignore, cell, model, _iter, data):
-        obj = model.get_value(_iter, ROW_HANDLE)
+        obj = model[_iter][ROW_HANDLE]
         if obj is None or not hasattr(obj, "conn"):
             return
 
@@ -1173,7 +1163,7 @@ class vmmManager(vmmGObjectUI):
         cell.set_property('data_array', data)
 
     def disk_io_img(self, column_ignore, cell, model, _iter, data):
-        obj = model.get_value(_iter, ROW_HANDLE)
+        obj = model[_iter][ROW_HANDLE]
         if obj is None or not hasattr(obj, "conn"):
             return
 
@@ -1181,7 +1171,7 @@ class vmmManager(vmmGObjectUI):
         cell.set_property('data_array', data)
 
     def network_traffic_img(self, column_ignore, cell, model, _iter, data):
-        obj = model.get_value(_iter, ROW_HANDLE)
+        obj = model[_iter][ROW_HANDLE]
         if obj is None or not hasattr(obj, "conn"):
             return
 
