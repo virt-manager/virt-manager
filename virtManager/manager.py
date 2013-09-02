@@ -53,11 +53,11 @@ ROW_COLOR,
 ROW_INSPECTION_OS_ICON) = range(11)
 
 # Columns in the tree view
-COL_NAME = 0
-COL_GUEST_CPU = 1
-COL_HOST_CPU = 2
-COL_DISK = 3
-COL_NETWORK = 4
+(COL_NAME,
+COL_GUEST_CPU,
+COL_HOST_CPU,
+COL_DISK,
+COL_NETWORK) = range(5)
 
 
 def _style_get_prop(widget, propname):
@@ -131,13 +131,6 @@ class vmmManager(vmmGObjectUI):
         self.connmenu = Gtk.Menu()
         self.connmenu_items = {}
 
-        # There seem to be ref counting issues with calling
-        # list.get_column, so avoid it
-        self.diskcol = None
-        self.netcol = None
-        self.guestcpucol = None
-        self.hostcpucol = None
-
         self.builder.connect_signals({
             "on_menu_view_guest_cpu_usage_activate":
                     self.toggle_stats_visible_guest_cpu,
@@ -171,7 +164,15 @@ class vmmManager(vmmGObjectUI):
             "on_menu_help_about_activate": self.show_about,
         })
 
+        # There seem to be ref counting issues with calling
+        # list.get_column, so avoid it
+        self.diskcol = None
+        self.netcol = None
+        self.guestcpucol = None
+        self.hostcpucol = None
+        self.spacer_txt = None
         self.init_vmlist()
+
         self.init_stats()
         self.init_toolbar()
         self.init_context_menus()
@@ -408,27 +409,31 @@ class vmmManager(vmmGObjectUI):
         nameCol = Gtk.TreeViewColumn(_("Name"))
         nameCol.set_expand(True)
         nameCol.set_spacing(6)
+        nameCol.set_sort_column_id(COL_NAME)
 
-        statusCol = nameCol
         vmlist.append_column(nameCol)
 
         status_icon = Gtk.CellRendererPixbuf()
         status_icon.set_property("stock-size", Gtk.IconSize.DND)
-        statusCol.pack_start(status_icon, False)
-        statusCol.add_attribute(status_icon, 'icon-name', ROW_STATUS_ICON)
-        statusCol.add_attribute(status_icon, 'visible', ROW_IS_VM)
+        nameCol.pack_start(status_icon, False)
+        nameCol.add_attribute(status_icon, 'icon-name', ROW_STATUS_ICON)
+        nameCol.add_attribute(status_icon, 'visible', ROW_IS_VM)
 
         inspection_os_icon = Gtk.CellRendererPixbuf()
-        statusCol.pack_start(inspection_os_icon, False)
-        statusCol.add_attribute(inspection_os_icon, 'pixbuf',
+        nameCol.pack_start(inspection_os_icon, False)
+        nameCol.add_attribute(inspection_os_icon, 'pixbuf',
                                 ROW_INSPECTION_OS_ICON)
-        statusCol.add_attribute(inspection_os_icon, 'visible', ROW_IS_VM)
+        nameCol.add_attribute(inspection_os_icon, 'visible', ROW_IS_VM)
 
         name_txt = Gtk.CellRendererText()
         nameCol.pack_start(name_txt, True)
         nameCol.add_attribute(name_txt, 'markup', ROW_MARKUP)
         nameCol.add_attribute(name_txt, 'foreground', ROW_COLOR)
-        nameCol.set_sort_column_id(COL_NAME)
+
+        self.spacer_txt = Gtk.CellRendererText()
+        self.spacer_txt.set_property("ypad", 4)
+        self.spacer_txt.set_property("visible", False)
+        nameCol.pack_end(self.spacer_txt, False)
 
         def make_stats_column(title, colnum):
             col = Gtk.TreeViewColumn(title)
@@ -1115,6 +1120,10 @@ class vmmManager(vmmGObjectUI):
         col.set_cell_data_func(img, datafunc, None)
         col.set_visible(do_show)
         self.widget(menu).set_active(do_show)
+
+        any_visible = any([col.get_visible() for col in
+            [self.netcol, self.diskcol, self.guestcpucol, self.hostcpucol]])
+        self.spacer_txt.set_property("visible", not any_visible)
 
     def toggle_network_traffic_visible_widget(self):
         self._toggle_graph_helper(
