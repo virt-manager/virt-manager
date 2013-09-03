@@ -250,9 +250,8 @@ class XMLProperty(property):
     def __init__(self, doc=None, xpath=None, name=None,
                  set_converter=None, validate_cb=None,
                  make_getter_xpath_cb=None, make_setter_xpath_cb=None,
-                 is_bool=False, is_int=False, is_yesno=False,
-                 clear_first=None, default_cb=None, default_name=None,
-                 is_onoff=False):
+                 is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
+                 clear_first=None, default_cb=None, default_name=None):
         """
         Set a XMLBuilder class property that represents a value in the
         <domain> XML. For example
@@ -281,9 +280,9 @@ class XMLProperty(property):
             static xpath. This allows passing functions which generate
             an xpath for getting or setting.
         @param is_bool: Whether this is a boolean property in the XML
-        @param is_int: Whethere this is an integer property in the XML
-        @param is_yesno: Whethere this is a yes/no property in the XML
-        @param is_onoff: Whethere this is a on/off property in the XML
+        @param is_int: Whether this is an integer property in the XML
+        @param is_yesno: Whether this is a yes/no property in the XML
+        @param is_onoff: Whether this is an on/off property in the XML
         @param clear_first: List of xpaths to unset before any 'set' operation.
             For those weird interdependent XML props like disk source type and
             path attribute.
