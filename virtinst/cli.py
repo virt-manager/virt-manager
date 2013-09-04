@@ -374,10 +374,13 @@ def yes_or_no_convert(s):
     if s is None:
         return None
 
+    tvalues = ["y", "yes", "1", "true", "t", "on"]
+    fvalues = ["n", "no", "0", "false", "f", "off"]
+
     s = s.lower()
-    if s in ("y", "yes", "1", "true", "t"):
+    if s in tvalues:
         return True
-    elif s in ("n", "no", "0", "false", "f"):
+    elif s in fvalues:
         return False
     return None
 
@@ -1284,7 +1287,6 @@ def parse_boot(guest, optstring):
     """
     opts = parse_optstr(optstring)
     optlist = [x[0] for x in parse_optstr_tuples(optstring)]
-    menu = None
 
     def set_param(paramname, dictname, val=None):
         val = get_opt_param(opts, dictname, val)
@@ -1294,20 +1296,20 @@ def parse_boot(guest, optstring):
         setattr(guest.os, paramname, val)
 
     # Convert menu= value
+    menu = None
     if "menu" in opts:
-        menustr = opts["menu"]
-        menu = None
-
-        if menustr.lower() == "on":
-            menu = True
-        elif menustr.lower() == "off":
-            menu = False
-        else:
-            menu = yes_or_no_convert(menustr)
-
+        menu = yes_or_no_convert(opts["menu"])
         if menu is None:
             fail(_("--boot menu must be 'on' or 'off'"))
 
+    # Convert useserial= value
+    useserial = None
+    if "useserial" in opts:
+        useserial = yes_or_no_convert(opts["useserial"])
+        if useserial is None:
+            fail(_("--boot useserial must be 'on' or 'off'"))
+
+    set_param("useserial", "useserial", useserial)
     set_param("enable_bootmenu", "menu", menu)
     set_param("kernel", "kernel")
     set_param("initrd", "initrd")

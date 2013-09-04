@@ -137,6 +137,7 @@ class XMLParseTest(unittest.TestCase):
         check("init", None, "/sbin/init")
         check("bootorder", ["hd"], ["fd"])
         check("enable_bootmenu", None, False)
+        check("useserial", None, True)
         check("kernel", None)
         check("initrd", None)
         check("kernel_args", None)

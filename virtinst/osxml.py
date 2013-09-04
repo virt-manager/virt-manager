@@ -102,6 +102,7 @@ class OSXML(XMLBuilder):
     bootorder = property(_get_bootorder, _set_bootorder)
 
     enable_bootmenu = XMLProperty(xpath="./os/bootmenu/@enable", is_yesno=True)
+    useserial = XMLProperty(xpath="./os/bios/@useserial", is_yesno=True)
 
     kernel = XMLProperty(xpath="./os/kernel")
     initrd = XMLProperty(xpath="./os/initrd")
