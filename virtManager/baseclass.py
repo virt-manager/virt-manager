@@ -36,6 +36,19 @@ from gi.repository import Gtk
 class vmmGObject(GObject.GObject):
     _leak_check = True
 
+    @staticmethod
+    def idle_add(func, *args, **kwargs):
+        """
+        Make sure idle functions are run thread safe
+        """
+        def cb():
+            try:
+                return func(*args, **kwargs)
+            except:
+                print traceback.format_exc()
+            return False
+        return GLib.idle_add(cb)
+
     def __init__(self):
         GObject.GObject.__init__(self)
         self.config = config.running_config
@@ -140,18 +153,6 @@ class vmmGObject(GObject.GObject):
             return False
 
         self.idle_add(emitwrap, signal, *args)
-
-    def idle_add(self, func, *args, **kwargs):
-        """
-        Make sure idle functions are run thread safe
-        """
-        def cb():
-            try:
-                return func(*args, **kwargs)
-            except:
-                print traceback.format_exc()
-            return False
-        return GLib.idle_add(cb)
 
     def timeout_add(self, timeout, func, *args):
         """
