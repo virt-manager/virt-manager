@@ -1096,9 +1096,9 @@ class vmmConsolePages(vmmGObjectUI):
         if self.viewer is None:
             return
 
-        v = self.viewer  # close_viewer() can be reentered
-        self.viewer = None
+        v = self.viewer
         w = v.display
+        self.viewer = None
 
         viewport = self.widget("console-gfx-viewport")
         if w and w in viewport.get_children():
@@ -1118,7 +1118,6 @@ class vmmConsolePages(vmmGObjectUI):
                 pages.set_current_page(CONSOLE_PAGE_UNAVAILABLE)
 
             self.view_vm_status()
-            return
 
         elif page in [CONSOLE_PAGE_UNAVAILABLE, CONSOLE_PAGE_VIEWER]:
             if self.viewer and self.viewer.is_open():
@@ -1210,14 +1209,14 @@ class vmmConsolePages(vmmGObjectUI):
             self.tunnels.close_all()
             self.tunnels = None
 
+        self.widget("console-pages").set_current_page(CONSOLE_PAGE_UNAVAILABLE)
         self.close_viewer()
         logging.debug("Viewer disconnected")
 
         # Make sure modifiers are set correctly
         self.viewer_focus_changed()
 
-        if (self.skip_connect_attempt() or
-            self.guest_not_avail()):
+        if self.guest_not_avail():
             # Exit was probably for legitimate reasons
             self.view_vm_status()
             return
