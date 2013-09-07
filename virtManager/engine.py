@@ -912,16 +912,17 @@ class vmmEngine(vmmGObject):
 
         def cb(asyncjob):
             vm.save(path, meter=asyncjob.get_meter())
+        def finish_cb(error, details):
+            if error is not None:
+                error = _("Error saving domain: %s") % error
+                src.err.show_err(error, details=details)
 
         progWin = vmmAsyncJob(cb, [],
+                    finish_cb, [],
                     _("Saving Virtual Machine"),
                     _("Saving virtual machine memory to disk "),
                     src.topwin, cancel_cb=_cancel_cb)
-        error, details = progWin.run()
-
-        if error is not None:
-            error = _("Error saving domain: %s") % error
-            src.err.show_err(error, details=details)
+        progWin.run()
 
     def _save_cancel(self, asyncjob, vm):
         logging.debug("Cancelling save job")

@@ -893,37 +893,6 @@ class vmmAddHardware(vmmGObjectUI):
         notebook.get_nth_page(page).show()
         notebook.set_current_page(page)
 
-    def finish(self, ignore=None):
-        notebook = self.widget("create-pages")
-        try:
-            if self.validate(notebook.get_current_page()) is False:
-                return
-        except Exception, e:
-            self.err.show_err(_("Uncaught error validating hardware "
-                                "input: %s") % str(e))
-            return
-
-        self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
-
-        try:
-            failure, errinfo = self.add_device()
-            error, details = errinfo or (None, None)
-        except Exception, e:
-            failure = True
-            error = _("Unable to add device: %s") % str(e)
-            details = "".join(traceback.format_exc())
-
-        if error is not None:
-            self.err.show_err(error, details=details)
-
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
-
-        self._dev = None
-        if not failure:
-            self.close()
-
     def show_pair_combo(self, basename, show_combo):
         combo = self.widget(basename + "-combo")
         label = self.widget(basename + "-label")
@@ -1137,36 +1106,12 @@ class vmmAddHardware(vmmGObjectUI):
     # Add device methods #
     ######################
 
-    def _storage_progress(self):
-        def do_file_allocate(asyncjob, disk):
-            meter = asyncjob.get_meter()
-
-            logging.debug("Starting background file allocate process")
-            disk.setup(meter=meter)
-            logging.debug("Allocation completed")
-
-        progWin = vmmAsyncJob(do_file_allocate,
-                              [self._dev],
-                              _("Creating Storage File"),
-                              _("Allocation of disk storage may take "
-                                "a few minutes to complete."),
-                              self.topwin)
-
-        return progWin.run()
-
-    def setup_device(self):
-        if (self._dev.virtual_device_type == self._dev.VIRTUAL_DEV_DISK and
-            self._dev.creating_storage()):
-            return self._storage_progress()
-
-        return self._dev.setup()
+    def setup_device(self, asyncjob):
+        logging.debug("Running setup for device=%s", self._dev)
+        self._dev.setup(meter=asyncjob.get_meter())
+        logging.debug("Setup complete")
 
     def add_device(self):
-        ret = self.setup_device()
-        if ret and ret[0]:
-            # Encountered an error
-            return (True, ret)
-
         self._dev.get_xml_config()
         logging.debug("Adding device:\n" + self._dev.get_xml_config())
 
@@ -1197,7 +1142,7 @@ class vmmAddHardware(vmmGObjectUI):
                 modal=True)
 
             if not res:
-                return (False, None)
+                return False
 
         # Alter persistent config
         try:
@@ -1206,9 +1151,52 @@ class vmmAddHardware(vmmGObjectUI):
             self.vm.add_device(self._dev)
         except Exception, e:
             self.err.show_err(_("Error adding device: %s" % str(e)))
-            return (True, None)
+            return True
 
-        return (False, None)
+        return False
+
+    def _finish_cb(self, error, details):
+        failure = True
+        if not error:
+            try:
+                failure = self.add_device()
+            except Exception, e:
+                failure = True
+                error = _("Unable to add device: %s") % str(e)
+                details = "".join(traceback.format_exc())
+
+        if error is not None:
+            self.err.show_err(error, details=details)
+
+        self.topwin.set_sensitive(True)
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+
+        self._dev = None
+        if not failure:
+            self.close()
+
+    def finish(self, ignore=None):
+        notebook = self.widget("create-pages")
+        try:
+            if self.validate(notebook.get_current_page()) is False:
+                return
+        except Exception, e:
+            self.err.show_err(_("Uncaught error validating hardware "
+                                "input: %s") % str(e))
+            return
+
+        self.topwin.set_sensitive(False)
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.WATCH))
+
+        progWin = vmmAsyncJob(self.setup_device, [],
+                              self._finish_cb, [],
+                              _("Creating device"),
+                              _("Depending on the device, this may take "
+                                "a few minutes to complete."),
+                              self.topwin)
+        progWin.run()
 
 
     ###########################

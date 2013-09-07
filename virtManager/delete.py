@@ -131,6 +131,17 @@ class vmmDeleteDialog(vmmGObjectUI):
                     paths.append(row[STORAGE_ROW_PATH])
         return paths
 
+    def _finish_cb(self, error, details):
+        self.topwin.set_sensitive(True)
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+
+        if error is not None:
+            self.err.show_err(error, details=details)
+
+        self.conn.schedule_priority_tick(pollvm=True)
+        self.close()
+
     def finish(self, src_ignore):
         devs = self.get_paths_to_delete()
 
@@ -146,7 +157,8 @@ class vmmDeleteDialog(vmmGObjectUI):
                 return
 
         self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         title = _("Deleting virtual machine '%s'") % self.vm.get_name()
         text = title
@@ -154,17 +166,9 @@ class vmmDeleteDialog(vmmGObjectUI):
             text = title + _(" and selected storage (this may take a while)")
 
         progWin = vmmAsyncJob(self._async_delete, [devs],
+                              self._finish_cb, [],
                               title, text, self.topwin)
-        error, details = progWin.run()
-
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
-
-        if error is not None:
-            self.err.show_err(error, details=details)
-
-        self.conn.schedule_priority_tick(pollvm=True)
-        self.close()
+        progWin.run()
 
     def _async_delete(self, asyncjob, paths):
         storage_errors = []

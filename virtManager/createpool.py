@@ -432,20 +432,10 @@ class vmmCreatePool(vmmGObjectUI):
         self.widget("pool-forward").show()
         self.widget("pool-pages").prev_page()
 
-    def finish(self):
-        self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
-        build = self.widget("pool-build").get_active()
-
-        progWin = vmmAsyncJob(self._async_pool_create, [build],
-                              _("Creating storage pool..."),
-                              _("Creating the storage pool may take a "
-                                "while..."),
-                              self.topwin)
-        error, details = progWin.run()
-
+    def _finish_cb(self, error, details):
         self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
 
         if error:
             error = _("Error creating pool: %s") % error
@@ -454,6 +444,20 @@ class vmmCreatePool(vmmGObjectUI):
         else:
             self.conn.schedule_priority_tick(pollpool=True)
             self.close()
+
+    def finish(self):
+        self.topwin.set_sensitive(False)
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.WATCH))
+        build = self.widget("pool-build").get_active()
+
+        progWin = vmmAsyncJob(self._async_pool_create, [build],
+                              self._finish_cb, [],
+                              _("Creating storage pool..."),
+                              _("Creating the storage pool may take a "
+                                "while..."),
+                              self.topwin)
+        progWin.run()
 
     def _async_pool_create(self, asyncjob, build):
         meter = asyncjob.get_meter()

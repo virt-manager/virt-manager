@@ -1778,6 +1778,12 @@ class vmmCreate(vmmGObjectUI):
                 break
             pagenum = self._get_next_pagenum(pagenum)
 
+    def _undo_finish_cursor(self):
+        self.topwin.set_sensitive(True)
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+
+
     def finish(self, src_ignore):
         # Validate the final page
         page = self.widget("create-pages").get_current_page()
@@ -1792,25 +1798,15 @@ class vmmCreate(vmmGObjectUI):
         self.topwin.set_sensitive(False)
         self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
-        def start_install():
-            if not self.get_config_customize():
-                self.start_install(guest)
+        if self.get_config_customize():
+            try:
+                self.customize(guest)
+            except Exception, e:
+                self._undo_finish_cursor()
+                self.err.show_err(_("Error starting installation: ") + str(e))
                 return
-
-            self.customize(guest)
-
-        self._check_start_error(start_install)
-
-    def _undo_finish(self, ignore=None):
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
-
-    def _check_start_error(self, cb, *args, **kwargs):
-        try:
-            cb(*args, **kwargs)
-        except Exception, e:
-            self._undo_finish()
-            self.err.show_err(_("Error starting installation: ") + str(e))
+        else:
+            self.start_install(guest)
 
     def customize(self, guest):
         virtinst_guest = vmmDomainVirtinst(self.conn, guest, self.guest.uuid)
@@ -1826,11 +1822,11 @@ class vmmCreate(vmmGObjectUI):
             cleanup_config_window()
             if not self.is_visible():
                 return
-            self._check_start_error(self.start_install, guest)
+            self.start_install(guest)
 
         def details_closed(ignore):
             cleanup_config_window()
-            self._undo_finish()
+            self._undo_finish_cursor()
             self.widget("summary-customize").set_active(False)
 
         cleanup_config_window()
@@ -1845,19 +1841,8 @@ class vmmCreate(vmmGObjectUI):
                                                          details_closed))
         self.config_window.show()
 
-    def start_install(self, guest):
-        progWin = vmmAsyncJob(self.do_install, [guest],
-                              _("Creating Virtual Machine"),
-                              _("The virtual machine is now being "
-                                "created. Allocation of disk storage "
-                                "and retrieval of the installation "
-                                "images may take a few minutes to "
-                                "complete."),
-                              self.topwin)
-        error, details = progWin.run()
-
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+    def _install_finished_cb(self, error, details):
+        self._undo_finish_cursor()
 
         if error:
             error = (_("Unable to complete install: '%s'") % error)
@@ -1869,7 +1854,20 @@ class vmmCreate(vmmGObjectUI):
         self.close()
 
         # Launch details dialog for new VM
-        self.emit("action-show-vm", self.conn.get_uri(), guest.uuid)
+        self.emit("action-show-vm", self.conn.get_uri(), self.guest.uuid)
+
+
+    def start_install(self, guest):
+        progWin = vmmAsyncJob(self.do_install, [guest],
+                              self._install_finished_cb, [],
+                              _("Creating Virtual Machine"),
+                              _("The virtual machine is now being "
+                                "created. Allocation of disk storage "
+                                "and retrieval of the installation "
+                                "images may take a few minutes to "
+                                "complete."),
+                              self.topwin)
+        progWin.run()
 
     def do_install(self, asyncjob, guest):
         meter = asyncjob.get_meter()

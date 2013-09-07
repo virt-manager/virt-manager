@@ -217,6 +217,20 @@ class vmmCreateVolume(vmmGObjectUI):
         if cap < alloc:
             alloc_widget.set_value(cap)
 
+    def _finish_cb(self, error, details):
+        self.topwin.set_sensitive(True)
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+
+        if error:
+            error = _("Error creating vol: %s") % error
+            self.show_err(error,
+                          details=details)
+        else:
+            # vol-created will refresh the parent pool
+            self.emit("vol-created")
+            self.close()
+
     def finish(self, src_ignore):
         try:
             if not self.validate():
@@ -229,26 +243,16 @@ class vmmCreateVolume(vmmGObjectUI):
                       self.vol.get_xml_config())
 
         self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         progWin = vmmAsyncJob(self._async_vol_create, [],
+                              self._finish_cb, [],
                               _("Creating storage volume..."),
                               _("Creating the storage volume may take a "
                                 "while..."),
                               self.topwin)
-        error, details = progWin.run()
-
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
-
-        if error:
-            error = _("Error creating vol: %s") % error
-            self.show_err(error,
-                          details=details)
-        else:
-            # vol-created will refresh the parent pool
-            self.emit("vol-created")
-            self.close()
+        progWin.run()
 
     def _async_vol_create(self, asyncjob):
         conn = self.conn.get_backend()

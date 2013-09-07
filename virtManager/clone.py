@@ -783,6 +783,19 @@ class vmmCloneVM(vmmGObjectUI):
         self.clone_design = cd
         return True
 
+    def _finish_cb(self, error, details):
+        self.topwin.set_sensitive(True)
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+
+        if error is not None:
+            error = (_("Error creating virtual machine clone '%s': %s") %
+                      (self.clone_design.clone_name, error))
+            self.err.show_err(error, details=details)
+        else:
+            self.close()
+            self.conn.schedule_priority_tick(pollvm=True)
+
     def finish(self, src_ignore):
         try:
             if not self.validate():
@@ -792,7 +805,8 @@ class vmmCloneVM(vmmGObjectUI):
             return
 
         self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         title = (_("Creating virtual machine clone '%s'") %
                  self.clone_design.clone_name)
@@ -800,19 +814,9 @@ class vmmCloneVM(vmmGObjectUI):
         if self.clone_design.clone_disks:
             text = title + _(" and selected storage (this may take a while)")
 
-        progWin = vmmAsyncJob(self._async_clone, [], title, text, self.topwin)
-        error, details = progWin.run()
-
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
-
-        if error is not None:
-            error = (_("Error creating virtual machine clone '%s': %s") %
-                      (self.clone_design.clone_name, error))
-            self.err.show_err(error, details=details)
-        else:
-            self.close()
-            self.conn.schedule_priority_tick(pollvm=True)
+        progWin = vmmAsyncJob(self._async_clone, [], self._finish_cb, [],
+                              title, text, self.topwin)
+        progWin.run()
 
     def _async_clone(self, asyncjob):
         try:

@@ -261,6 +261,18 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         # XXX refresh in place
 
+    def _finish_cb(self, error, details):
+        self.topwin.set_sensitive(True)
+        self.topwin.get_window().set_cursor(
+                Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+
+        if error is not None:
+            error = _("Error creating snapshot: %s") % error
+            self.err.show_err(error, details=details)
+            return
+
+        self._refresh_snapshots()
+
     def _on_new_ok_clicked(self, ignore):
         name = self.widget("snapshot-new-name").get_text()
 
@@ -278,21 +290,11 @@ class vmmSnapshotPage(vmmGObjectUI):
         progWin = vmmAsyncJob(
                     lambda ignore, xml: self.vm.create_snapshot(xml),
                     [newsnap.get_xml_config()],
+                    self._finish_cb, [],
                     _("Creating snapshot"),
                     _("Creating virtual machine snapshot"),
                     self.topwin)
-
-        error, details = progWin.run()
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(
-                Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
-
-        if error is not None:
-            error = _("Error creating snapshot: %s") % error
-            self.err.show_err(error, details=details)
-            return
-
-        self._refresh_snapshots()
+        progWin.run()
 
     def _on_add_clicked(self, ignore):
         snap = self._get_current_snapshot()
@@ -327,8 +329,8 @@ class vmmSnapshotPage(vmmGObjectUI):
         vmmAsyncJob.simple_async_noshow(self.vm.revert_to_snapshot,
                             [snap], self,
                             _("Error reverting to snapshot '%s'") %
-                            snap.get_name())
-        self._refresh_snapshots()
+                            snap.get_name(),
+                            finish_cb=self._refresh_snapshots)
 
     def _on_delete_clicked(self, ignore):
         snap = self._get_current_snapshot()
@@ -346,8 +348,8 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         logging.debug("Deleting snapshot '%s'", snap.get_name())
         vmmAsyncJob.simple_async_noshow(snap.delete, [], self,
-                            _("Error deleting snapshot '%s'") % snap.get_name())
-        self._refresh_snapshots()
+                        _("Error deleting snapshot '%s'") % snap.get_name(),
+                        finish_cb=self._refresh_snapshots)
 
 
     def _snapshot_selected(self, selection):

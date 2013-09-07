@@ -443,6 +443,20 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         return True
 
+    def _finish_cb(self, error, details, destconn):
+        self.topwin.set_sensitive(True)
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+
+        if error:
+            error = _("Unable to migrate guest: %s") % error
+            self.err.show_err(error,
+                              details=details)
+        else:
+            self.conn.schedule_priority_tick(pollvm=True)
+            destconn.schedule_priority_tick(pollvm=True)
+            self.close()
+
     def finish(self, src_ignore):
         try:
             if not self.validate():
@@ -467,33 +481,22 @@ class vmmMigrateDialog(vmmGObjectUI):
             return
 
         self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         cancel_cb = None
         if self.vm.getjobinfo_supported:
             cancel_cb = (self.cancel_migration, self.vm)
 
-        progWin = vmmAsyncJob(self._async_migrate,
-                              [self.vm, destconn, uri, rate, live, secure,
-                               max_downtime],
-                              _("Migrating VM '%s'" % self.vm.get_name()),
-                              (_("Migrating VM '%s' from %s to %s. "
-                                 "This may take a while.") %
-                                (self.vm.get_name(), srchost, dsthost)),
-                              self.topwin, cancel_cb=cancel_cb)
-        error, details = progWin.run()
-
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
-
-        if error:
-            error = _("Unable to migrate guest: %s") % error
-            self.err.show_err(error,
-                              details=details)
-        else:
-            self.conn.schedule_priority_tick(pollvm=True)
-            destconn.schedule_priority_tick(pollvm=True)
-            self.close()
+        progWin = vmmAsyncJob(
+            self._async_migrate,
+            [self.vm, destconn, uri, rate, live, secure, max_downtime],
+            self._finish_cb, [destconn],
+            _("Migrating VM '%s'" % self.vm.get_name()),
+            (_("Migrating VM '%s' from %s to %s. This may take a while.") %
+             (self.vm.get_name(), srchost, dsthost)),
+            self.topwin, cancel_cb=cancel_cb)
+        progWin.run()
 
     def _async_set_max_downtime(self, vm, max_downtime, migrate_thread):
         if not migrate_thread.isAlive():

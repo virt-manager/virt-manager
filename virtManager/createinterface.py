@@ -1096,8 +1096,20 @@ class vmmCreateInterface(vmmGObjectUI):
     # Creation routines #
     #####################
 
-    def finish(self, src):
+    def _finish_cb(self, error, details):
+        self.topwin.set_sensitive(True)
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
 
+        if error:
+            error = _("Error creating interface: '%s'") % error
+            self.err.show_err(error,
+                              details=details)
+        else:
+            self.conn.schedule_priority_tick(polliface=True)
+            self.close()
+
+    def finish(self, src):
         # Validate the final page
         page = self.widget("pages").get_current_page()
         if self.validate(page) is not True:
@@ -1107,24 +1119,15 @@ class vmmCreateInterface(vmmGObjectUI):
 
         # Start the install
         self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         progWin = vmmAsyncJob(self.do_install, [activate],
+                              self._finish_cb, [],
                               _("Creating virtual interface"),
                               _("The virtual interface is now being created."),
                               self.topwin)
-        error, details = progWin.run()
-
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
-
-        if error:
-            error = _("Error creating interface: '%s'") % error
-            self.err.show_err(error,
-                              details=details)
-        else:
-            self.conn.schedule_priority_tick(polliface=True)
-            self.close()
+        progWin.run()
 
     def do_install(self, asyncjob, activate):
         meter = asyncjob.get_meter()
