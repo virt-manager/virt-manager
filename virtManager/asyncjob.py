@@ -141,11 +141,11 @@ def idle_wrapper(fn):
         return self.idle_add(fn, self, *args, **kwargs)
     return wrapped
 
-# Displays a progress bar while executing the "callback" method.
-
 
 class vmmAsyncJob(vmmGObjectUI):
-
+    """
+    Displays a progress bar while executing the "callback" method.
+    """
     @staticmethod
     def simple_async(callback, args, title, text, parent, errorintro,
                      simplecb=True, errorcb=None):
@@ -160,9 +160,8 @@ class vmmAsyncJob(vmmGObjectUI):
 
 
     def __init__(self, callback, args, title, text, parent,
-                 async=True, show_progress=True, cancel_cb=None):
+                 show_progress=True, cancel_cb=None):
         """
-        @async: If False, run synchronously without a separate thread
         @show_progress: If False, don't actually show a progress dialog
         @cancel_cb: Cancel callback if operation supports it.
             (cb, arg1, arg2, ...)
@@ -170,7 +169,6 @@ class vmmAsyncJob(vmmGObjectUI):
         vmmGObjectUI.__init__(self, "vmm-progress.ui", "vmm-progress")
         self.topwin.set_transient_for(parent)
 
-        self.async = bool(async)
         self.show_progress = bool(show_progress)
 
         cancel_cb = cancel_cb or (None, [])
@@ -220,17 +218,13 @@ class vmmAsyncJob(vmmGObjectUI):
     def _hide_warning(self):
         self.widget("warning-box").hide()
 
-    def _is_thread_active(self):
-        return (self._bg_thread.isAlive() or not self.async)
-
 
     ################
     # UI listeners #
     ################
 
     def _on_window_delete(self, ignore1=None, ignore2=None):
-        thread_active = (self._bg_thread.isAlive() or not self.async)
-        if not self.cancel_cb or not thread_active:
+        if not self.cancel_cb or not self._bg_thread.is_alive():
             logging.debug("User closed progress window, but thread "
                           "still running and process isn't cancellable, "
                           "ignoring.")
@@ -247,7 +241,7 @@ class vmmAsyncJob(vmmGObjectUI):
         self._on_cancel()
 
     def _on_cancel(self, ignore1=None, ignore2=None):
-        if not self.cancel_cb or not self._is_thread_active():
+        if not self.cancel_cb or not self._bg_thread.is_alive():
             return
 
         self.cancel_cb(*self.cancel_args)
@@ -294,11 +288,8 @@ class vmmAsyncJob(vmmGObjectUI):
             self.topwin.get_window().set_cursor(
                             Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
-        if self.async:
-            self._bg_thread.start()
-            Gtk.main()
-        else:
-            self._bg_thread.run()
+        self._bg_thread.start()
+        Gtk.main()
 
         GLib.source_remove(timer)
 
@@ -314,9 +305,8 @@ class vmmAsyncJob(vmmGObjectUI):
     ####################################################################
 
     def _exit_if_necessary(self):
-        if not self._is_thread_active():
-            if self.async:
-                Gtk.main_quit()
+        if not self._bg_thread.is_alive():
+            Gtk.main_quit()
             return False
 
         if not self._is_pulsing or not self.show_progress:
