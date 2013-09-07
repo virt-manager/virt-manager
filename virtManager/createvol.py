@@ -283,15 +283,14 @@ class vmmCreateVolume(vmmGObjectUI):
         return True
 
     def show_err(self, info, details=None):
-        async = not self.topwin.get_modal()
-        self.err.show_err(info, details, async=async)
+        self.err.show_err(info, details, modal=self.topwin.get_modal())
 
     def val_err(self, info, details):
         modal = self.topwin.get_modal()
         ret = False
         try:
             self.topwin.set_modal(False)
-            ret = self.err.val_err(info, details, async=not modal)
+            ret = self.err.val_err(info, details, modal=modal)
         finally:
             self.topwin.set_modal(modal)
 

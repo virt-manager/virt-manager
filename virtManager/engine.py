@@ -604,14 +604,14 @@ class vmmEngine(vmmGObject):
         if probe_connection:
             remember_connection = self.err.show_err(msg, details, title,
                     buttons=Gtk.ButtonsType.YES_NO,
-                    dialog_type=Gtk.MessageType.QUESTION, async=False)
+                    dialog_type=Gtk.MessageType.QUESTION, modal=True)
             if remember_connection:
                 self.conns[conn.get_uri()]["probeConnection"] = False
             else:
                 self.idle_add(self._do_edit_connect, self.windowManager, conn)
         else:
             if self._can_exit():
-                self.err.show_err(msg, details, title, async=False)
+                self.err.show_err(msg, details, title, modal=True)
                 self.idle_add(self.exit_app, conn)
             else:
                 self.err.show_err(msg, details, title)
@@ -731,7 +731,7 @@ class vmmEngine(vmmGObject):
                 # The error message must be sync otherwise the user will not
                 # know why the application ended.
                 self.err.show_err("%s does not have VM with UUID %s" %
-                                         (uri, uuid), async=False)
+                                         (uri, uuid), modal=True)
                 return
 
             details = self._get_details_dialog(uri, uuid)
@@ -1013,7 +1013,7 @@ class vmmEngine(vmmGObject):
                         "start up?"),
                     dialog_type=Gtk.MessageType.WARNING,
                     buttons=Gtk.ButtonsType.YES_NO,
-                    async=False)
+                    modal=True)
 
                 if not res:
                     return

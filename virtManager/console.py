@@ -463,8 +463,7 @@ class VNCViewer(Viewer):
                           "the VNC server"),
                 details=(_("The credential type %s is not supported") %
                          (str(cred))),
-                title=_("Unable to authenticate"),
-                async=True)
+                title=_("Unable to authenticate"))
 
             # schedule_retry will error out
             self.console.viewerRetriesScheduled = 10
@@ -735,7 +734,7 @@ class SpiceViewer(Viewer):
         error = self.console.err
         error.show_err(_("USB redirection error"),
                          text2=str(errstr),
-                         async=False)
+                         modal=True)
 
     def get_usb_widget(self):
 

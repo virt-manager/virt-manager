@@ -49,7 +49,7 @@ def _show_startup_error(msg, details):
     err.show_err(title + ": " + msg,
                  details=details,
                  title=title,
-                 async=False,
+                 modal=True,
                  debug=False)
 
 

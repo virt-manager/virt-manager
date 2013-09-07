@@ -1194,7 +1194,7 @@ class vmmAddHardware(vmmGObjectUI):
                   "next guest shutdown?")),
                 dialog_type=Gtk.MessageType.WARNING,
                 buttons=Gtk.ButtonsType.YES_NO,
-                async=False)
+                modal=True)
 
             if not res:
                 return (False, None)

@@ -371,4 +371,4 @@ class vmmStorageBrowser(vmmGObjectUI):
     def show_err(self, info, details=None):
         self.err.show_err(info,
                           details=details,
-                          async=False)
+                          modal=True)
