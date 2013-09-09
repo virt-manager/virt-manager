@@ -303,50 +303,6 @@
 
 
 <domain type='test'>
-  <name>test-many-nets</name>
-  <currentMemory>204800</currentMemory>
-  <memory>409600</memory>
-  <uuid>12345678-1234-1234-1234-123456789001</uuid>
-  <os>
-    <type arch='i686'>hvm</type>
-    <loader>/usr/lib/xen/boot/hvmloader</loader>
-    <boot dev='hd'/>
-  </os>
-  <features>
-    <acpi/><apic/>
-  </features>
-  <clock offset="utc"/>
-  <on_poweroff>destroy</on_poweroff>
-  <on_reboot>restart</on_reboot>
-  <on_crash>restart</on_crash>
-  <vcpu>5</vcpu>
-  <devices>
-    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
-    <disk type='file' device='disk'>
-      <source file='/dev/default-pool/default-vol'/>
-      <target dev='hda' bus='ide'/>
-    </disk>
-    <interface type='network'>
-      <source network='default'/>
-      <mac address='22:22:33:00:00:00'/>
-      <model type='e1000'/>
-    </interface>
-    <interface type='network'>
-      <source network='nat_to_eth0'/>
-      <mac address='22:22:33:11:11:11'/>
-    </interface>
-    <interface type='network'>
-      <source network='isolated_net'/>
-      <mac address='22:22:33:22:22:33'/>
-    </interface>
-    <interface type='user'>
-      <mac address='22:11:11:11:11:11'/>
-    </interface>
-  </devices>
-</domain>
-
-
-<domain type='test'>
   <name>test-clone-simple</name>
   <currentMemory>204800</currentMemory>
   <memory>409600</memory>
