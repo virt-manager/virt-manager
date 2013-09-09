@@ -377,7 +377,7 @@ class vmmCreatePool(vmmGObjectUI):
 
     def get_config_iqn(self):
         iqn = self.widget("pool-iqn")
-        if iqn.get_sensitive() and iqn.get_property("visible"):
+        if iqn.get_sensitive() and iqn.get_visible():
             return iqn.get_text().strip()
         return None
 
@@ -537,7 +537,7 @@ class vmmCreatePool(vmmGObjectUI):
 
             buildval = self.widget("pool-build").get_active()
             buildsen = (self.widget("pool-build").get_sensitive() and
-                        self.widget("pool-build-box").get_property("visible"))
+                        self.widget("pool-build-box").get_visible())
             if buildsen and buildval:
                 ret = self.err.yes_no(_("Building a pool of this type will "
                                         "format the source device. Are you "

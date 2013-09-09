@@ -1085,7 +1085,7 @@ class vmmDetails(vmmGObjectUI):
         label = self.widget(prefix + "-label")
         value = None
 
-        if label.get_property("visible"):
+        if label.get_visible():
             value = label.get_text()
         else:
             value = self.get_combo_value(comboname, model_idx)

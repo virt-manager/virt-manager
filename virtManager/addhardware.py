@@ -756,7 +756,7 @@ class vmmAddHardware(vmmGObjectUI):
     def get_config_fs_mode(self):
         name = "fs-mode-combo"
         combo = self.widget(name)
-        if not combo.get_property("visible"):
+        if not combo.get_visible():
             return None
 
         return combo.get_model()[combo.get_active()][0]
@@ -764,7 +764,7 @@ class vmmAddHardware(vmmGObjectUI):
     def get_config_fs_wrpolicy(self):
         name = "fs-wrpolicy-combo"
         combo = self.widget(name)
-        if not combo.get_property("visible"):
+        if not combo.get_visible():
             return None
 
         return combo.get_model()[combo.get_active()][0]
@@ -772,7 +772,7 @@ class vmmAddHardware(vmmGObjectUI):
     def get_config_fs_type(self):
         name = "fs-type-combo"
         combo = self.widget(name)
-        if not combo.get_property("visible"):
+        if not combo.get_visible():
             return None
 
         return combo.get_model()[combo.get_active()][0]
@@ -780,7 +780,7 @@ class vmmAddHardware(vmmGObjectUI):
     def get_config_fs_readonly(self):
         name = "fs-readonly"
         check = self.widget(name)
-        if not check.get_property("visible"):
+        if not check.get_visible():
             return None
 
         return check.get_active()
@@ -788,7 +788,7 @@ class vmmAddHardware(vmmGObjectUI):
     def get_config_fs_driver(self):
         name = "fs-driver-combo"
         combo = self.widget(name)
-        if not combo.get_property("visible"):
+        if not combo.get_visible():
             return None
 
         return combo.get_model()[combo.get_active()][0]
@@ -1068,7 +1068,7 @@ class vmmAddHardware(vmmGObjectUI):
         show_driver_combo = False
         show_wrpolicy_combo = self.conn.is_qemu()
 
-        if idx >= 0 and src.get_property("visible"):
+        if idx >= 0 and src.get_visible():
             fstype = src.get_model()[idx][0]
 
         if fstype == virtinst.VirtualFilesystem.TYPE_TEMPLATE:
@@ -1087,7 +1087,7 @@ class vmmAddHardware(vmmGObjectUI):
     def change_fs_driver(self, src):
         fsdriver = None
         idx = src.get_active()
-        if idx >= 0 and src.get_property("visible"):
+        if idx >= 0 and src.get_visible():
             fsdriver = src.get_model()[idx][0]
 
         show_mode = bool(

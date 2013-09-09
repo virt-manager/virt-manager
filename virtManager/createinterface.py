@@ -587,7 +587,7 @@ class vmmCreateInterface(vmmGObjectUI):
         return type_list.get_model()[type_list.get_active()][0]
 
     def set_interface_name(self, name):
-        if self.widget("interface-name-entry").get_property("visible"):
+        if self.widget("interface-name-entry").get_visible():
             widget = "interface-name-entry"
         else:
             widget = "interface-name-label"
@@ -595,7 +595,7 @@ class vmmCreateInterface(vmmGObjectUI):
         self.widget(widget).set_text(name)
 
     def get_config_interface_name(self):
-        if self.widget("interface-name-entry").get_property("visible"):
+        if self.widget("interface-name-entry").get_visible():
             return self.widget("interface-name-entry").get_text()
         else:
             return self.widget("interface-name-label").get_text()
@@ -751,7 +751,7 @@ class vmmCreateInterface(vmmGObjectUI):
         self.widget("ip-config-label").set_text(label)
 
     def get_config_ip_info(self):
-        if not self.widget("ip-label").get_property("visible"):
+        if not self.widget("ip-label").get_visible():
             return [True, None, None, None, None]
 
         if not self.validate_ip_info():

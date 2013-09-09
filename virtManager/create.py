@@ -892,7 +892,7 @@ class vmmCreate(vmmGObjectUI):
         return curpage == PAGE_INSTALL
 
     def get_config_install_page(self):
-        if self.widget("virt-install-box").get_property("visible"):
+        if self.widget("virt-install-box").get_visible():
             if self.widget("method-local").get_active():
                 return INSTALL_PAGE_ISO
             elif self.widget("method-tree").get_active():
@@ -1200,7 +1200,7 @@ class vmmCreate(vmmGObjectUI):
         self.widget("install-local-browse").set_sensitive(uselocal)
 
     def detect_visibility_changed(self, src, ignore=None):
-        is_visible = src.get_property("visible")
+        is_visible = src.get_visible()
         detect_chkbox = self.widget("install-detect-os")
         nodetect_label = self.widget("install-nodetect-label")
 
