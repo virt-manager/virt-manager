@@ -59,8 +59,6 @@ char_widget_mappings = {
     "source_path" : "char-path",
     "source_mode" : "char-mode",
     "source_host" : "char-host",
-    "source_port" : "char-port",
-    "bind_port" : "char-bind-port",
     "bind_host" : "char-bind-host",
     "protocol"  : "char-use-telnet",
     "target_name" : "char-target-name",
@@ -107,16 +105,6 @@ class vmmAddHardware(vmmGObjectUI):
             "on_fs_source_browse_clicked": self.browse_fs_source,
 
             "on_usbredir_type_changed": self.change_usbredir_type,
-
-            # Char dev info signals
-            "char_device_type_focus": self.update_doc_char_type,
-            "char_path_focus_in": self.update_doc_char_source_path,
-            "char_mode_changed": self.update_doc_char_source_mode,
-            "char_mode_focus"  : self.update_doc_char_source_mode,
-            "char_host_focus_in": self.update_doc_char_source_host,
-            "char_bind_host_focus_in": self.update_doc_char_bind_host,
-            "char_telnet_focus_in": self.update_doc_char_protocol,
-            "char_name_focus_in": self.update_doc_char_target_name,
         })
         self.bind_escape_key_close()
 
@@ -128,38 +116,6 @@ class vmmAddHardware(vmmGObjectUI):
 
         hwlist = self.widget("hardware-list")
         hwlist.get_selection().connect("changed", self.hw_selected)
-
-    def _update_doc(self, param):
-        doc = self._build_doc_str(param)
-        self.widget("char-info").set_markup(doc)
-
-    def update_doc_char_type(self, *ignore):
-        return self._update_doc("type")
-    def update_doc_char_source_path(self, *ignore):
-        return self._update_doc("source_path")
-    def update_doc_char_source_mode(self, *ignore):
-        return self._update_doc("source_mode")
-    def update_doc_char_source_host(self, *ignore):
-        return self._update_doc("source_host")
-    def update_doc_char_bind_host(self, *ignore):
-        return self._update_doc("bind_host")
-    def update_doc_char_protocol(self, *ignore):
-        return self._update_doc("protocol")
-    def update_doc_char_target_name(self, *ignore):
-        return self._update_doc("target_name")
-
-    def _build_doc_str(self, param, docstr=None):
-        doctmpl = "<i>%s</i>"
-
-        if docstr:
-            return doctmpl % (docstr)
-        elif not self._dev:
-            return ""
-
-        propdoc = getattr(self._dev.all_xml_props()[param], "__doc__")
-        if propdoc:
-            return doctmpl % propdoc
-        return ""
 
     def show(self, parent):
         logging.debug("Showing addhw")
@@ -313,9 +269,6 @@ class vmmAddHardware(vmmGObjectUI):
         for t in VirtualSerialDevice.MODES:
             desc = VirtualSerialDevice.pretty_mode(t)
             char_mode_model.append([t, desc + " (%s)" % t])
-
-        self.widget("char-info-box").modify_bg(Gtk.StateType.NORMAL,
-                                               Gdk.Color.parse("grey")[1])
 
         # Watchdog widgets
         combo = self.widget("watchdog-model")
@@ -1014,7 +967,6 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("tpm-param-box").set_visible(show_something)
 
     def change_char_device_type(self, src):
-        self._update_doc("type")
         idx = src.get_active()
         if idx < 0:
             return
@@ -1026,16 +978,10 @@ class vmmAddHardware(vmmGObjectUI):
         self._dev = char_class(conn)
         self._dev.type = devtype
 
-        show_something = False
         for param_name, widget_name in char_widget_mappings.items():
             make_visible = self._dev.supports_property(param_name)
-            if make_visible:
-                show_something = True
-
-            self.widget(widget_name).set_visible(make_visible)
-            self.widget(widget_name + "-label").set_visible(make_visible)
-
-        self.widget("char-param-box").set_visible(show_something)
+            uihelpers.set_grid_row_visible(self.widget(widget_name + "-label"),
+                                           make_visible)
 
         has_mode = self._dev.supports_property("source_mode")
         if has_mode and self.widget("char-mode").get_active() == -1:
