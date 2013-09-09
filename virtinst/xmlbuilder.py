@@ -580,17 +580,18 @@ class _XMLState(object):
         self.orig_root_xpath = xpath
         self.root_name = xpath.split("/")[-1]
         self.indent = (xpath.count("/") - 1) * 2
-        self.dump_xpath = xpath
-        self.root_xpath = ""
 
         self.xml_ctx = None
         self.xml_node = None
         self.xml_root_doc = None
+        self.dump_xpath = None
+        self.root_xpath = None
 
         self.is_build = False
         if not (parsexml or parsexmlnode):
             parsexml = self.make_xml_stub()
             self.is_build = True
+
         self._parse(parsexml, parsexmlnode)
 
     def _parse(self, xml, node):
@@ -599,27 +600,27 @@ class _XMLState(object):
             self.xml_root_doc = _DocCleanupWrapper(doc)
             self.xml_node = doc.children
             self.xml_node.virtinst_is_build = self.is_build
-            self.dump_xpath = "."
 
             # This just stores a reference to our root doc wrapper in
             # the root node, so when the node goes away it triggers
             # auto free'ing of the doc
             self.xml_node.virtinst_root_doc = self.xml_root_doc
         else:
+            self.xml_root_doc = None
             self.xml_node = node
             self.is_build = (getattr(node, "virtinst_is_build", False) or
                              self.is_build)
-            self.dump_xpath = self.orig_root_xpath
 
         self.xml_ctx = _make_xml_context(self.xml_node)
-
+        self.set_root_xpath(self.root_xpath)
 
     def make_xml_stub(self):
         return _indent(("<%s/>" % self.root_name), self.indent)
 
     def set_root_xpath(self, xpath):
         self.root_xpath = xpath or ""
-        self.dump_xpath = xpath or self.orig_root_xpath
+        self.dump_xpath = xpath or (self.xml_root_doc and "." or
+                                    self.orig_root_xpath)
 
     def fix_relative_xpath(self, xpath):
         if not self.root_xpath:
