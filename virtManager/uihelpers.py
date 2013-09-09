@@ -363,7 +363,7 @@ def populate_netmodel_combo(vm, combo):
             model.append([m, m])
 
 
-def build_cache_combo(vm, combo, no_default=False):
+def build_cache_combo(vm, combo):
     ignore = vm
     dev_model = Gtk.ListStore(str, str)
     combo.set_model(dev_model)
@@ -376,9 +376,8 @@ def build_cache_combo(vm, combo, no_default=False):
     for m in virtinst.VirtualDisk.cache_types:
         dev_model.append([m, m])
 
-    if not no_default:
-        dev_model.append([None, "default"])
-    combo.set_active(0)
+    dev_model.append([None, "default"])
+    combo.set_active(len(dev_model) - 1)
 
 
 def build_io_combo(vm, combo, no_default=False):
