@@ -245,19 +245,7 @@ class Guest(XMLBuilder):
 
         @param dev: VirtualDevice instance
         """
-        found = False
-        for devlist in [self._devices]:
-            if found:
-                break
-
-            if dev in devlist:
-                devlist.remove(dev)
-                found = True
-                break
-
-        if not found:
-            raise ValueError(_("Did not find device %s") % str(dev))
-
+        self._devices.remove(dev)
         self._remove_child(dev)
         self._recalculate_device_xpaths()
 
