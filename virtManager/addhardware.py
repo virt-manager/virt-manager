@@ -802,18 +802,11 @@ class vmmAddHardware(vmmGObjectUI):
     # USB redir getters
     def get_config_usbredir_host(self):
         host = self.widget("usbredir-host")
-        if not host.props.sensitive:
-            return None
-
-        hoststr = host.get_text()
-        return hoststr
-
-    def get_config_usbredir_service(self):
         service = self.widget("usbredir-service")
-        if not service.props.sensitive:
-            return None
+        if not host.get_visible():
+            return None, None
 
-        return int(service.get_value())
+        return host.get_text(), int(service.get_value())
 
     def get_config_usbredir_type(self):
         typebox = self.widget("usbredir-list")
@@ -1053,9 +1046,9 @@ class vmmAddHardware(vmmGObjectUI):
         if idx < 0:
             return
 
-        hostdetails = src.get_model()[src.get_active()][2]
-        self.widget("usbredir-host").set_sensitive(hostdetails)
-        self.widget("usbredir-service").set_sensitive(hostdetails)
+        showhost = src.get_model()[src.get_active()][2]
+        uihelpers.set_grid_row_visible(self.widget("usbredir-host-box"),
+                                       showhost)
 
     # FS listeners
     def browse_fs_source(self, ignore1):
@@ -1574,8 +1567,7 @@ class vmmAddHardware(vmmGObjectUI):
     def validate_page_usbredir(self):
         conn = self.conn.get_backend()
         stype = self.get_config_usbredir_type()
-        host = self.get_config_usbredir_host()
-        service = self.get_config_usbredir_service()
+        host, service = self.get_config_usbredir_host()
 
         try:
             self._dev = VirtualRedirDevice(conn)

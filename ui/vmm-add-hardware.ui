@@ -585,7 +585,7 @@
                                         <property name="can_focus">False</property>
                                         <property name="n_rows">3</property>
                                         <property name="n_columns">2</property>
-                                        <property name="column_spacing">12</property>
+                                        <property name="column_spacing">6</property>
                                         <property name="row_spacing">9</property>
                                         <child>
                                           <object class="GtkLabel" id="label386">
@@ -1325,8 +1325,8 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="n_columns">2</property>
-                                        <property name="column_spacing">12</property>
-                                        <property name="row_spacing">12</property>
+                                        <property name="column_spacing">6</property>
+                                        <property name="row_spacing">6</property>
                                         <child>
                                           <object class="GtkComboBox" id="sound-model">
                                             <property name="visible">True</property>
@@ -1421,7 +1421,7 @@ to connect to the virtual machine.</property>
                                         <property name="can_focus">False</property>
                                         <property name="n_rows">2</property>
                                         <property name="n_columns">2</property>
-                                        <property name="column_spacing">12</property>
+                                        <property name="column_spacing">6</property>
                                         <property name="row_spacing">6</property>
                                         <child>
                                           <object class="GtkLabel" id="label20">
@@ -1987,8 +1987,8 @@ to connect to the virtual machine.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="n_columns">2</property>
-                                    <property name="column_spacing">12</property>
-                                    <property name="row_spacing">12</property>
+                                    <property name="column_spacing">6</property>
+                                    <property name="row_spacing">6</property>
                                     <child>
                                       <object class="GtkComboBox" id="video-model">
                                         <property name="visible">True</property>
@@ -2077,7 +2077,7 @@ and default action should be used.</property>
                                         <property name="can_focus">False</property>
                                         <property name="n_rows">2</property>
                                         <property name="n_columns">2</property>
-                                        <property name="column_spacing">12</property>
+                                        <property name="column_spacing">6</property>
                                         <property name="row_spacing">6</property>
                                         <child>
                                           <object class="GtkComboBox" id="watchdog-model">
@@ -2197,7 +2197,7 @@ access in the guest.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="row_spacing">6</property>
-                                    <property name="column_spacing">12</property>
+                                    <property name="column_spacing">6</property>
                                     <child>
                                       <object class="GtkHBox" id="fs-type-box">
                                         <property name="visible">True</property>
@@ -2585,8 +2585,8 @@ access in the guest.</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="n_columns">2</property>
-                                        <property name="column_spacing">12</property>
-                                        <property name="row_spacing">12</property>
+                                        <property name="column_spacing">6</property>
+                                        <property name="row_spacing">6</property>
                                         <child>
                                           <object class="GtkComboBox" id="smartcard-mode">
                                             <property name="visible">True</property>
@@ -2671,31 +2671,13 @@ access in the guest.</property>
                                 <property name="can_focus">False</property>
                                 <property name="left_padding">24</property>
                                 <child>
-                                  <object class="GtkTable" id="table39">
+                                  <object class="GtkGrid" id="table39">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="n_rows">2</property>
-                                    <property name="n_columns">2</property>
+                                    <property name="row_spacing">6</property>
                                     <property name="column_spacing">12</property>
-                                    <property name="row_spacing">12</property>
                                     <child>
-                                      <object class="GtkLabel" id="label438">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="xalign">1</property>
-                                        <property name="label" translatable="yes">_Host:</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="mnemonic_widget">usbredir-host</property>
-                                      </object>
-                                      <packing>
-                                        <property name="top_attach">1</property>
-                                        <property name="bottom_attach">2</property>
-                                        <property name="x_options">GTK_FILL</property>
-                                        <property name="y_options"/>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkHBox" id="hbox68">
+                                      <object class="GtkHBox" id="usbredir-host-box">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="spacing">6</property>
@@ -2744,10 +2726,9 @@ access in the guest.</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
-                                        <property name="right_attach">2</property>
                                         <property name="top_attach">1</property>
-                                        <property name="bottom_attach">2</property>
-                                        <property name="y_options">GTK_FILL</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2757,24 +2738,42 @@ access in the guest.</property>
                                         <property name="xalign">1</property>
                                         <property name="label" translatable="yes">_Type:</property>
                                         <property name="use_underline">True</property>
-                                        <property name="mnemonic_widget">usbredir-list</property>
                                       </object>
                                       <packing>
-                                        <property name="x_options">GTK_FILL</property>
-                                        <property name="y_options"/>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">0</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label438">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="xalign">1</property>
+                                        <property name="label" translatable="yes">_Host:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">usbredir-host</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
                                       <object class="GtkComboBox" id="usbredir-list">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
                                         <signal name="changed" handler="on_usbredir_type_changed" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
-                                        <property name="right_attach">2</property>
-                                        <property name="x_options">GTK_FILL</property>
-                                        <property name="y_options">GTK_FILL</property>
+                                        <property name="top_attach">0</property>
+                                        <property name="width">1</property>
+                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -2845,8 +2844,8 @@ access in the guest.</property>
                                             <property name="can_focus">False</property>
                                             <property name="n_rows">2</property>
                                             <property name="n_columns">2</property>
-                                            <property name="column_spacing">8</property>
-                                            <property name="row_spacing">12</property>
+                                            <property name="column_spacing">6</property>
+                                            <property name="row_spacing">6</property>
                                             <child>
                                               <object class="GtkComboBox" id="tpm-type">
                                                 <property name="visible">True</property>
