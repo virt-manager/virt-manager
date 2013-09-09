@@ -2364,35 +2364,41 @@ is not yet supported.&lt;/small&gt;</property>
                                                 <property name="top_padding">6</property>
                                                 <property name="left_padding">12</property>
                                                 <child>
-                                                  <object class="GtkHBox" id="config-netdev-bridge-box">
+                                                  <object class="GtkGrid" id="table8">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
-                                                    <property name="spacing">6</property>
                                                     <child>
-                                                      <object class="GtkLabel" id="label39">
+                                                      <object class="GtkHBox" id="config-netdev-bridge-box">
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
-                                                        <property name="label" translatable="yes">_Bridge name:</property>
-                                                        <property name="use_underline">True</property>
-                                                        <property name="mnemonic_widget">config-netdev-bridge</property>
+                                                        <property name="spacing">6</property>
+                                                        <child>
+                                                          <object class="GtkLabel" id="label39">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="label" translatable="yes">_Bridge name:</property>
+                                                            <property name="use_underline">True</property>
+                                                            <property name="mnemonic_widget">config-netdev-bridge</property>
+                                                          </object>
+                                                          <packing>
+                                                            <property name="expand">False</property>
+                                                            <property name="fill">True</property>
+                                                            <property name="position">0</property>
+                                                          </packing>
+                                                        </child>
+                                                        <child>
+                                                          <object class="GtkEntry" id="config-netdev-bridge">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">True</property>
+                                                            <property name="invisible_char">●</property>
+                                                          </object>
+                                                          <packing>
+                                                            <property name="expand">False</property>
+                                                            <property name="fill">True</property>
+                                                            <property name="position">1</property>
+                                                          </packing>
+                                                        </child>
                                                       </object>
-                                                      <packing>
-                                                        <property name="expand">False</property>
-                                                        <property name="fill">True</property>
-                                                        <property name="position">0</property>
-                                                      </packing>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkEntry" id="config-netdev-bridge">
-                                                        <property name="visible">True</property>
-                                                        <property name="can_focus">True</property>
-                                                        <property name="invisible_char">●</property>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="expand">False</property>
-                                                        <property name="fill">True</property>
-                                                        <property name="position">1</property>
-                                                      </packing>
                                                     </child>
                                                   </object>
                                                 </child>

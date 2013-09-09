@@ -522,8 +522,7 @@ def net_list_changed(net_list, bridge_box,
         vport_expander.set_visible(show_source_mode)
 
     show_bridge = row[5]
-
-    bridge_box.set_visible(show_bridge)
+    set_grid_row_visible(bridge_box, show_bridge)
 
 
 def get_network_selection(net_list, bridge_entry):
