@@ -958,13 +958,8 @@ class vmmAddHardware(vmmGObjectUI):
         show_something = False
         for param_name, widget_name in tpm_widget_mappings.items():
             make_visible = self._dev.supports_property(param_name)
-            if make_visible:
-                show_something = True
-
-            self.widget(widget_name).set_visible(make_visible)
-            self.widget(widget_name + "-label").set_visible(make_visible)
-
-        self.widget("tpm-param-box").set_visible(show_something)
+            uihelpers.set_grid_row_visible(self.widget(widget_name + "-label"),
+                                           make_visible)
 
     def change_char_device_type(self, src):
         idx = src.get_active()
