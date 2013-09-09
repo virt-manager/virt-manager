@@ -795,9 +795,19 @@ class XMLBuilder(object):
         specified path
         """
         if not dev._xmlstate.is_build:
-            newnode = libxml2.parseDoc(dev.get_xml_config()).children
-            _build_xpath_node(self._xmlstate.xml_ctx,
-                              dev.get_root_xpath(), newnode)
+            if not dev.get_root_xpath():
+                raise RuntimeError("programming error: must set device "
+                                   "root xpath before add_child")
+            orig_xpath = dev.get_root_xpath()
+            dev.set_root_xpath(None)
+            xml = dev.get_xml_config()
+            dev.set_root_xpath(orig_xpath)
+
+            use_xpath = orig_xpath.rsplit("/", 1)[0]
+            newnode = libxml2.parseDoc(xml).children
+            _build_xpath_node(self._xmlstate.xml_ctx, use_xpath, newnode)
+            dev.set_root_xpath(orig_xpath)
+
         dev._xmlstate._parse(None, self._xmlstate.xml_node)
 
     def _remove_child(self, dev):

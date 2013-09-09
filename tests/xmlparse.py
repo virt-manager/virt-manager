@@ -756,6 +756,9 @@ class XMLParseTest(unittest.TestCase):
         guest.remove_device(adddev)
         guest.add_device(adddev)
 
+        guest.add_device(virtinst.VirtualAudio(conn,
+            parsexml="""<sound model='pcspk'/>"""))
+
         self._alter_compare(guest.get_xml_config(), outfile)
 
     def testChangeKVMMedia(self):

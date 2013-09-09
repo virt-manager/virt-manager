@@ -212,8 +212,8 @@ class Guest(XMLBuilder):
         @param set_defaults: Whether to set defaults for the device
         """
         self._track_device(dev)
-        self._add_child(dev)
         self._recalculate_device_xpaths()
+        self._add_child(dev)
 
     def _track_device(self, dev):
         self._devices.append(dev)
