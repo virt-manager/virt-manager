@@ -126,25 +126,26 @@ def sanitize_xml_for_define(xml):
     return xml
 
 
-def test_create(testconn, xml):
+def test_create(testconn, xml, define_func="defineXML"):
     xml = sanitize_xml_for_define(xml)
 
     try:
-        dom = testconn.defineXML(xml)
+        func = getattr(testconn, define_func)
+        obj = func(xml)
     except Exception, e:
         raise RuntimeError(str(e) + "\n" + xml)
 
     try:
-        dom.create()
-        dom.destroy()
-        dom.undefine()
+        obj.create()
+        obj.destroy()
+        obj.undefine()
     except:
         try:
-            dom.destroy()
+            obj.destroy()
         except:
             pass
         try:
-            dom.undefine()
+            obj.undefine()
         except:
             pass
 

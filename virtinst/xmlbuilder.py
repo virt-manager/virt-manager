@@ -955,7 +955,8 @@ class XMLBuilder(object):
 
         if not obj._xmlstate.is_build:
             use_xpath = obj.get_root_xpath().rsplit("/", 1)[0]
-            newnode = libxml2.parseDoc(xml).children
+            indent = 2 * obj.get_root_xpath().count("/")
+            newnode = libxml2.parseDoc(_indent(xml, indent)).children
             _build_xpath_node(self._xmlstate.xml_ctx, use_xpath, newnode)
         obj._xmlstate._parse(None, self._xmlstate.xml_node)
 

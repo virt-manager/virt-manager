@@ -810,6 +810,103 @@ class XMLParseTest(unittest.TestCase):
 
         utils.diff_compare(snap.get_xml_config(), outfile)
 
+
+    ###################
+    # Interface tests #
+    ###################
+
+    def testInterfaceBridgeIP(self):
+        basename = "test-bridge-ip"
+        infile = "tests/interface-xml/%s.xml" % basename
+        outfile = "tests/xmlparse-xml/interface-%s-out.xml" % basename
+        iface = virtinst.Interface(conn, parsexml=file(infile).read())
+
+        self.assertEquals(len(iface.protocols), 2)
+        self.assertEquals(len(iface.interfaces), 3)
+
+        check = self._make_checker(iface)
+        check("type", "bridge", "foo", "bridge")
+        check("name", "test-bridge-ip", "foo-new")
+        check("stp", None, True)
+        check("delay", None, 2)
+
+        check = self._make_checker(iface.protocols[0])
+        check("family", "ipv4", "foo", "ipv4")
+        check("dhcp_peerdns", True, False)
+        check("gateway", "1.2.3.4", "5.5.5.5")
+        self.assertEquals(iface.protocols[0].ips[1].address, "255.255.255.0")
+
+        check = self._make_checker(iface.protocols[1])
+        check("dhcp", True, False)
+        check("autoconf", True, False)
+
+        check = self._make_checker(iface.protocols[1].ips[1])
+        check("address", "fe80::215:58ff:fe6e:5", "foobar")
+        check("prefix", 64, 38)
+
+        # Remove a child interface, verify it's data remains intact
+        child_iface = iface.interfaces[1]
+        iface.remove_interface(child_iface)
+
+        check = self._make_checker(child_iface)
+        check("name", "bond-brbond")
+        self.assertEquals(len(child_iface.interfaces), 2)
+
+        utils.diff_compare(iface.get_xml_config(), outfile)
+        utils.test_create(conn, iface.get_xml_config(), "interfaceDefineXML")
+
+    def testInterfaceBondArp(self):
+        basename = "test-bond-arp"
+        infile = "tests/interface-xml/%s.xml" % basename
+        outfile = "tests/xmlparse-xml/interface-%s-out.xml" % basename
+        iface = virtinst.Interface(conn, parsexml=file(infile).read())
+
+        check = self._make_checker(iface)
+        check("start_mode", "onboot", "hotplug")
+        check("macaddr", "AA:AA:AA:AA:AA:AA", "AA:AA:AA:11:AA:AA")
+        check("mtu", 1501, 1234)
+
+        check("bond_mode", None, "active-backup")
+        check("arp_interval", 100, 234)
+        check("arp_target", "192.168.100.200", "1.2.3.4")
+        check("arp_validate_mode", "backup", "active")
+
+        utils.diff_compare(iface.get_xml_config(), outfile)
+        utils.test_create(conn, iface.get_xml_config(), "interfaceDefineXML")
+
+    def testInterfaceBondMii(self):
+        basename = "test-bond-mii"
+        infile = "tests/interface-xml/%s.xml" % basename
+        outfile = "tests/xmlparse-xml/interface-%s-out.xml" % basename
+        iface = virtinst.Interface(conn, parsexml=file(infile).read())
+
+        check = self._make_checker(iface)
+        check("mii_frequency", 123, 111)
+        check("mii_downdelay", 34, 22)
+        check("mii_updelay", 12, 33)
+        check("mii_carrier_mode", "netif", "ioctl")
+
+        utils.diff_compare(iface.get_xml_config(), outfile)
+        utils.test_create(conn, iface.get_xml_config(), "interfaceDefineXML")
+
+    def testInterfaceVLAN(self):
+        basename = "test-vlan"
+        infile = "tests/interface-xml/%s.xml" % basename
+        outfile = "tests/xmlparse-xml/interface-%s-out.xml" % basename
+        iface = virtinst.Interface(conn, parsexml=file(infile).read())
+
+        check = self._make_checker(iface)
+        check("tag", 123, 456)
+        check("parent_interface", "eth2", "foonew")
+
+        utils.diff_compare(iface.get_xml_config(), outfile)
+        utils.test_create(conn, iface.get_xml_config(), "interfaceDefineXML")
+
+
+    ##############
+    # Misc tests #
+    ##############
+
     def testzzzzCheckProps(self):
         # pylint: disable=W0212
         # Access to protected member, needed to unittest stuff

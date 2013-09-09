@@ -144,22 +144,19 @@ class vmmDomainSnapshot(vmmLibvirtObject):
     Class wrapping a virDomainSnapshot object
     """
     def __init__(self, conn, backend):
-        vmmLibvirtObject.__init__(self, conn, backend, backend.getName())
+        vmmLibvirtObject.__init__(self, conn, backend, backend.getName(),
+                                  parseclass=virtinst.DomainSnapshot)
 
-        self._xmlbackend = None
         self.refresh_xml()
 
     def get_name(self):
-        return self.xml.name
+        return self.xmlobj.name
     def _XMLDesc(self, flags):
-        rawxml = self._backend.getXMLDesc(flags=flags)
-        self._xmlbackend = virtinst.DomainSnapshot(self.conn.get_backend(),
-                                                   rawxml)
-        return self._xmlbackend.get_xml_config()
+        return self._backend.getXMLDesc(flags=flags)
 
-    def _get_xml_backend(self):
-        return self._xmlbackend
-    xml = property(_get_xml_backend)
+    def _get_xmlobj_prop(self):
+        return self._get_xmlobj()
+    xmlobj = property(_get_xmlobj_prop)
 
     def is_current(self):
         return self._backend.isCurrent()
@@ -181,7 +178,8 @@ class vmmDomain(vmmLibvirtObject):
     }
 
     def __init__(self, conn, backend, key):
-        vmmLibvirtObject.__init__(self, conn, backend, key)
+        vmmLibvirtObject.__init__(self, conn, backend, key,
+                                  parseclass=virtinst.Guest)
 
         self.uuid = key
         self.cloning = False
@@ -202,9 +200,6 @@ class vmmDomain(vmmLibvirtObject):
         self._name = None
         self._snapshot_list = None
 
-        self._inactive_xml_flags = 0
-        self._active_xml_flags = 0
-
         self.lastStatus = libvirt.VIR_DOMAIN_SHUTOFF
 
         self._getvcpus_supported = None
@@ -212,9 +207,6 @@ class vmmDomain(vmmLibvirtObject):
         self.managedsave_supported = False
         self.remote_console_supported = False
         self.snapshots_supported = False
-
-        self._guest = None
-        self._guest_to_define = None
 
         self._enable_net_poll = False
         self._stats_net_supported = True
@@ -259,8 +251,6 @@ class vmmDomain(vmmLibvirtObject):
         """
         Initialization to do if backed by a libvirt virDomain
         """
-        self._reparse_xml()
-
         self.managedsave_supported = self.conn.get_dom_managedsave_supported(
                                                         self._backend)
 
@@ -290,7 +280,6 @@ class vmmDomain(vmmLibvirtObject):
                                         self.toggle_sample_disk_io))
 
         self.connect("status-changed", self._update_start_vcpus)
-        self.connect("config-changed", self._reparse_xml)
         self.connect("pre-startup", self._prestartup_nodedev_check)
 
     def _prestartup_nodedev_check(self, src, ret):
@@ -385,21 +374,11 @@ class vmmDomain(vmmLibvirtObject):
 
     def _invalidate_xml(self):
         vmmLibvirtObject._invalidate_xml(self)
-        self._guest_to_define = None
         self._name = None
         self._id = None
 
-    def _get_guest_to_define(self):
-        if not self._guest_to_define:
-            self._guest_to_define = self._get_guest(inactive=True)
-        return self._guest_to_define
-
-    def _redefine_guest(self, cb):
-        guest = self._get_guest_to_define()
-        return cb(guest)
-
     def _redefine_device(self, cb, origdev):
-        defguest = self._get_guest_to_define()
+        defguest = self._get_xmlobj_to_define()
         dev = find_device(defguest, origdev)
         if dev:
             return cb(dev)
@@ -407,56 +386,15 @@ class vmmDomain(vmmLibvirtObject):
         # If we are removing multiple dev from an active VM, a double
         # attempt may result in a lookup failure. If device is present
         # in the active XML, assume all is good.
-        if find_device(self._get_guest(), origdev):
+        if find_device(self._get_xmlobj(), origdev):
             logging.debug("Device in active config but not inactive config.")
             return
 
         raise RuntimeError(_("Could not find specified device in the "
                              "inactive VM configuration: %s") % repr(origdev))
 
-    def redefine_cached(self):
-        if not self._guest_to_define:
-            logging.debug("No cached XML to define, skipping.")
-            return
-
-        guest = self._get_guest_to_define()
-        xml = guest.get_xml_config()
-        self._redefine_xml(xml)
-
-    def _get_domain_xml(self, inactive=False, refresh_if_nec=True):
-        return vmmLibvirtObject.get_xml(self,
-                                        inactive=inactive,
-                                        refresh_if_nec=refresh_if_nec)
-
-    def get_xml(self, inactive=False, refresh_if_nec=True):
-        guest = self._get_guest(inactive=inactive,
-                                refresh_if_nec=refresh_if_nec)
-        return guest.get_xml_config()
-
-    def _get_guest(self, inactive=False, refresh_if_nec=True):
-        xml = self._get_domain_xml(inactive, refresh_if_nec)
-
-        if inactive:
-            # If inactive XML requested, always return a fresh guest even
-            # the current Guest is inactive XML (like when the domain is
-            # stopped). Callers that request inactive are basically expecting
-            # a new copy.
-            return self._build_guest(xml)
-
-        return self._guest
-    get_guest_for_virtinst_func = _get_guest
-
-    def _build_guest(self, xml):
-        return virtinst.Guest(self.conn.get_backend(),
-                              parsexml=xml)
-
-    def _reparse_xml(self, ignore=None):
-        try:
-            self._guest = self._build_guest(self._get_domain_xml())
-        except libvirt.libvirtError, e:
-            if uihelpers.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
-                return
-            raise
+    def get_guest_for_virtinst_func(self, *args, **kwargs):
+        return self._get_xmlobj(*args, **kwargs)
 
 
     ##############################
@@ -465,10 +403,10 @@ class vmmDomain(vmmLibvirtObject):
 
     # Rename
     def define_name(self, newname):
-        # Do this, so that _guest_to_define has original inactive XML
+        # Do this, so that _xmlobj_to_define has original inactive XML
         self._invalidate_xml()
 
-        guest = self._get_guest_to_define()
+        guest = self._get_xmlobj_to_define()
         if guest.name == newname:
             return
 
@@ -494,7 +432,7 @@ class vmmDomain(vmmLibvirtObject):
         """
         def change(guest):
             guest.add_device(devobj)
-        ret = self._redefine_guest(change)
+        ret = self._redefine(change)
         self.redefine_cached()
         return ret
 
@@ -518,7 +456,7 @@ class vmmDomain(vmmLibvirtObject):
                 guest.remove_device(editdev)
             return self._redefine_device(rmdev, devobj)
 
-        ret = self._redefine_guest(change)
+        ret = self._redefine(change)
         self.redefine_cached()
         return ret
 
@@ -527,11 +465,11 @@ class vmmDomain(vmmLibvirtObject):
         def change(guest):
             guest.curvcpus = int(vcpus)
             guest.vcpus = int(maxvcpus)
-        return self._redefine_guest(change)
+        return self._redefine(change)
     def define_cpuset(self, cpuset):
         def change(guest):
             guest.cpuset = cpuset
-        return self._redefine_guest(change)
+        return self._redefine(change)
 
     def define_cpu_topology(self, sockets, cores, threads):
         def change(guest):
@@ -539,7 +477,7 @@ class vmmDomain(vmmLibvirtObject):
             cpu.sockets = sockets
             cpu.cores = cores
             cpu.threads = threads
-        return self._redefine_guest(change)
+        return self._redefine(change)
     def define_cpu(self, model, vendor, from_host, featurelist):
         def change(guest):
             if from_host:
@@ -574,14 +512,14 @@ class vmmDomain(vmmLibvirtObject):
             for fname, fpol in featurelist:
                 set_feature(fname, fpol)
 
-        return self._redefine_guest(change)
+        return self._redefine(change)
 
     # Mem define methods
     def define_both_mem(self, memory, maxmem):
         def change(guest):
             guest.memory = int(memory)
             guest.maxmemory = int(maxmem)
-        return self._redefine_guest(change)
+        return self._redefine(change)
 
     # Security define methods
     def define_seclabel(self, model, t, label, relabel):
@@ -601,53 +539,53 @@ class vmmDomain(vmmLibvirtObject):
             if label:
                 seclabel.label = label
 
-        return self._redefine_guest(change)
+        return self._redefine(change)
 
     # Machine config define methods
     def define_acpi(self, newvalue):
         def change(guest):
             guest.features["acpi"] = newvalue
-        return self._redefine_guest(change)
+        return self._redefine(change)
     def define_apic(self, newvalue):
         def change(guest):
             guest.features["apic"] = newvalue
-        return self._redefine_guest(change)
+        return self._redefine(change)
 
     def define_clock(self, newvalue):
         def change(guest):
             guest.clock.offset = newvalue
-        return self._redefine_guest(change)
+        return self._redefine(change)
 
     def define_machtype(self, newvalue):
         def change(guest):
             guest.os.machine = newvalue
-        return self._redefine_guest(change)
+        return self._redefine(change)
 
     def define_description(self, newvalue):
         def change(guest):
             guest.description = newvalue or None
-        return self._redefine_guest(change)
+        return self._redefine(change)
 
     # Boot define methods
     def set_boot_device(self, boot_list):
         def change(guest):
             guest.os.bootorder = boot_list
-        return self._redefine_guest(change)
+        return self._redefine(change)
     def set_boot_menu(self, newval):
         def change(guest):
             guest.os.enable_bootmenu = bool(newval)
-        return self._redefine_guest(change)
+        return self._redefine(change)
     def set_boot_kernel(self, kernel, initrd, dtb, args):
         def change(guest):
             guest.os.kernel = kernel or None
             guest.os.initrd = initrd or None
             guest.os.dtb = dtb or None
             guest.os.kernel_args = args or None
-        return self._redefine_guest(change)
+        return self._redefine(change)
     def set_boot_init(self, init):
         def change(guest):
             guest.os.init = init
-        return self._redefine_guest(change)
+        return self._redefine(change)
 
     # Disk define methods
     def define_storage_media(self, devobj, newpath):
@@ -782,7 +720,7 @@ class vmmDomain(vmmLibvirtObject):
             if not apply_spice_defaults:
                 return
 
-            guest = self._get_guest_to_define()
+            guest = self._get_xmlobj_to_define()
             is_spice = (newval == virtinst.VirtualGraphics.TYPE_SPICE)
 
             if is_spice:
@@ -852,7 +790,7 @@ class vmmDomain(vmmLibvirtObject):
         def change(editdev):
             ignore = editdev
 
-            guest = self._get_guest_to_define()
+            guest = self._get_xmlobj_to_define()
             ctrls = guest.get_devices("controller")
             ctrls = [x for x in ctrls if (x.type ==
                      virtinst.VirtualController.TYPE_USB)]
@@ -1016,49 +954,49 @@ class vmmDomain(vmmLibvirtObject):
     ########################
 
     def is_container(self):
-        return self._get_guest().os.is_container()
+        return self._get_xmlobj().os.is_container()
     def is_xenpv(self):
-        return self._get_guest().os.is_xenpv()
+        return self._get_xmlobj().os.is_xenpv()
     def is_hvm(self):
-        return self._get_guest().os.is_hvm()
+        return self._get_xmlobj().os.is_hvm()
 
     def get_uuid(self):
         return self.uuid
     def get_abi_type(self):
-        return self._get_guest().os.os_type
+        return self._get_xmlobj().os.os_type
     def get_hv_type(self):
-        return self._get_guest().type
+        return self._get_xmlobj().type
     def get_pretty_hv_type(self):
         return uihelpers.pretty_hv(self.get_abi_type(), self.get_hv_type())
     def get_arch(self):
-        return self._get_guest().os.arch
+        return self._get_xmlobj().os.arch
     def get_init(self):
-        return self._get_guest().os.init
+        return self._get_xmlobj().os.init
     def get_emulator(self):
-        return self._get_guest().emulator
+        return self._get_xmlobj().emulator
     def get_acpi(self):
-        return self._get_guest().features["acpi"]
+        return self._get_xmlobj().features["acpi"]
     def get_apic(self):
-        return self._get_guest().features["apic"]
+        return self._get_xmlobj().features["apic"]
     def get_clock(self):
-        return self._get_guest().clock.offset
+        return self._get_xmlobj().clock.offset
     def get_machtype(self):
-        return self._get_guest().os.machine
+        return self._get_xmlobj().os.machine
 
     def get_description(self):
         # Always show the inactive <description>, let's us fake hotplug
         # for a field that's strictly metadata
-        return self._get_guest(inactive=True).description
+        return self._get_xmlobj(inactive=True).description
 
     def get_memory(self):
-        return int(self._get_guest().memory)
+        return int(self._get_xmlobj().memory)
     def maximum_memory(self):
-        return int(self._get_guest().maxmemory)
+        return int(self._get_xmlobj().maxmemory)
 
     def vcpu_count(self):
-        return int(self._get_guest().vcpus)
+        return int(self._get_xmlobj().vcpus)
     def vcpu_max_count(self):
-        guest = self._get_guest()
+        guest = self._get_xmlobj()
         has_xml_max = (guest.curvcpus != guest.vcpus)
         if has_xml_max or not self.is_active():
             return guest.vcpus
@@ -1068,22 +1006,22 @@ class vmmDomain(vmmLibvirtObject):
         return int(self._startup_vcpus)
 
     def vcpu_pinning(self):
-        return self._get_guest().cpuset or ""
+        return self._get_xmlobj().cpuset or ""
     def get_cpu_config(self):
-        return self._get_guest().cpu
+        return self._get_xmlobj().cpu
 
     def get_boot_device(self):
-        return self._get_guest().os.bootorder
+        return self._get_xmlobj().os.bootorder
     def get_boot_menu(self):
-        guest = self._get_guest()
+        guest = self._get_xmlobj()
         return bool(guest.os.enable_bootmenu)
     def get_boot_kernel_info(self):
-        guest = self._get_guest()
+        guest = self._get_xmlobj()
         return (guest.os.kernel, guest.os.initrd,
                 guest.os.dtb, guest.os.kernel_args)
 
     def get_seclabel(self):
-        seclabel = self._get_guest().seclabel
+        seclabel = self._get_xmlobj().seclabel
         model = seclabel.model
         t     = seclabel.type or "dynamic"
         label = seclabel.label or ""
@@ -1109,7 +1047,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def _build_device_list(self, device_type,
                            refresh_if_nec=True, inactive=False):
-        guest = self._get_guest(refresh_if_nec=refresh_if_nec,
+        guest = self._get_xmlobj(refresh_if_nec=refresh_if_nec,
                                 inactive=inactive)
         devs = guest.get_devices(device_type)
 
@@ -1835,9 +1773,9 @@ class vmmDomainVirtinst(vmmDomain):
     def _XMLDesc(self, flags):
         raise RuntimeError("Shouldn't be called")
 
-    def get_xml(self, inactive=False, refresh_if_nec=True):
-        ignore = inactive
-        ignore = refresh_if_nec
+    def get_xml(self, *args, **kwargs):
+        ignore = args
+        ignore = kwargs
 
         xml = self._backend.get_install_xml(install=False)
         if not self._orig_xml:
@@ -1845,10 +1783,13 @@ class vmmDomainVirtinst(vmmDomain):
         return xml
 
     # Internal XML implementations
-    def _get_guest(self, inactive=False, refresh_if_nec=True):
+    def _get_xmlobj(self, inactive=False, refresh_if_nec=True):
         # Make sure XML is up2date
         self.get_xml()
         return self._backend
+    def _reparse_xml(self, *args, **kwargs):
+        ignore = args
+        ignore = kwargs
 
     def _define(self, newxml):
         ignore = newxml
@@ -1873,4 +1814,4 @@ class vmmDomainVirtinst(vmmDomain):
     def define_name(self, newname):
         def change(guest):
             guest.name = str(newname)
-        return self._redefine_guest(change)
+        return self._redefine(change)

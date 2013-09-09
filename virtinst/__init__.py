@@ -32,7 +32,7 @@ from virtinst.seclabel import Seclabel
 import virtinst.storage as Storage
 import virtinst.nodedev as NodeDeviceParser
 import virtinst.capabilities as CapabilitiesParser
-import virtinst.interface as Interface
+from virtinst.interface import Interface, InterfaceProtocol
 
 from virtinst.device import VirtualDevice
 from virtinst.deviceinterface import VirtualNetworkInterface

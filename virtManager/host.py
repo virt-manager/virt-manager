@@ -1212,8 +1212,8 @@ class vmmHost(vmmGObjectUI):
         self.widget("interface-start").set_sensitive(not active)
 
         show_child = (children or
-                      itype in [Interface.Interface.INTERFACE_TYPE_BRIDGE,
-                                Interface.Interface.INTERFACE_TYPE_BOND])
+                      itype in [Interface.INTERFACE_TYPE_BRIDGE,
+                                Interface.INTERFACE_TYPE_BOND])
         self.widget("interface-child-box").set_visible(show_child)
         self.populate_interface_children()
 

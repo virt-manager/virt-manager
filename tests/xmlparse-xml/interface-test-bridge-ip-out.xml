@@ -1,0 +1,21 @@
+<interface type="bridge" name="foo-new">
+  <bridge stp="on" delay="2">
+    <interface type="ethernet" name="vlaneth1">
+    </interface>
+    <interface type="ethernet" name="eth0">
+      <start mode="none"/>
+      <mac address="00:FF:EE:FF:EE:FF"/>
+    </interface>
+  </bridge>
+  <protocol family="ipv4">
+    <dhcp peerdns="no"/>
+    <ip address="129.63.1.2"/>
+    <ip address="255.255.255.0"/>
+    <route gateway="5.5.5.5"/>
+  </protocol>
+  <protocol family="ipv6">
+    <ip address="fe99::215:58ff:fe6e:5" prefix="32"/>
+    <ip address="foobar" prefix="38"/>
+    <route gateway="1.2.3.4"/>
+  </protocol>
+</interface>

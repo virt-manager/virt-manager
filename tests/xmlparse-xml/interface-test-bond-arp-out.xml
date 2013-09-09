@@ -1,5 +1,5 @@
-<interface type="bond" name="test-bond-mii">
-  <bond>
+<interface type="bond" name="test-bond-arp">
+  <bond mode="active-backup">
     <interface type="ethernet" name="eth0">
       <start mode="none"/>
       <mac address="00:FF:EE:FF:EE:FF"/>
@@ -11,10 +11,10 @@
       <start mode="hotplug"/>
       <mac address="00:FF:EE:FF:EE:CD"/>
     </interface>
-    <miimon freq="123" downdelay="34" updelay="12" carrier="netif"/>
+    <arpmon interval="234" target="1.2.3.4" validate="active"/>
   </bond>
-  <start mode="onboot"/>
-  <mac address="AA:AA:AA:AA:AA:AA"/>
-  <mtu size="1501"/>
+  <start mode="hotplug"/>
+  <mac address="AA:AA:AA:11:AA:AA"/>
+  <mtu size="1234"/>
   <protocol family="ipv4"/>
 </interface>

@@ -25,7 +25,7 @@ from gi.repository import Gdk
 
 import logging
 
-from virtinst import Interface
+from virtinst import Interface, InterfaceProtocol
 
 from virtManager import uihelpers
 from virtManager.baseclass import vmmGObjectUI
@@ -188,13 +188,13 @@ class vmmCreateInterface(vmmGObjectUI):
         text = Gtk.CellRendererText()
         type_list.pack_start(text, True)
         type_list.add_attribute(text, 'text', 1)
-        type_model.append([Interface.Interface.INTERFACE_TYPE_BRIDGE,
+        type_model.append([Interface.INTERFACE_TYPE_BRIDGE,
                            _("Bridge")])
-        type_model.append([Interface.Interface.INTERFACE_TYPE_BOND,
+        type_model.append([Interface.INTERFACE_TYPE_BOND,
                            _("Bond")])
-        type_model.append([Interface.Interface.INTERFACE_TYPE_ETHERNET,
+        type_model.append([Interface.INTERFACE_TYPE_ETHERNET,
                            _("Ethernet")])
-        type_model.append([Interface.Interface.INTERFACE_TYPE_VLAN,
+        type_model.append([Interface.INTERFACE_TYPE_VLAN,
                           _("VLAN")])
 
         # Start mode
@@ -251,7 +251,7 @@ class vmmCreateInterface(vmmGObjectUI):
         mode_list.pack_start(txt, True)
         mode_list.add_attribute(txt, "text", 0)
         mode_model.append([_("System default"), None])
-        for m in Interface.InterfaceBond.INTERFACE_BOND_MODES:
+        for m in Interface.INTERFACE_BOND_MODES:
             mode_model.append([m, m])
 
         mon_list = self.widget("bond-monitor-mode")
@@ -261,7 +261,7 @@ class vmmCreateInterface(vmmGObjectUI):
         mon_list.pack_start(txt, True)
         mon_list.add_attribute(txt, "text", 0)
         mon_model.append([_("System default"), None])
-        for m in Interface.InterfaceBond.INTERFACE_BOND_MONITOR_MODES:
+        for m in Interface.INTERFACE_BOND_MONITOR_MODES:
             mon_model.append([m, m])
 
         validate_list = self.widget("arp-validate")
@@ -270,7 +270,7 @@ class vmmCreateInterface(vmmGObjectUI):
         txt = Gtk.CellRendererText()
         validate_list.pack_start(txt, True)
         validate_list.add_attribute(txt, "text", 0)
-        for m in Interface.InterfaceBond.INTERFACE_BOND_MONITOR_MODE_ARP_VALIDATE_MODES:
+        for m in Interface.INTERFACE_BOND_MONITOR_MODE_ARP_VALIDATE_MODES:
             validate_model.append([m])
 
         carrier_list = self.widget("mii-carrier")
@@ -279,7 +279,7 @@ class vmmCreateInterface(vmmGObjectUI):
         txt = Gtk.CellRendererText()
         carrier_list.pack_start(txt, True)
         carrier_list.add_attribute(txt, "text", 0)
-        for m in Interface.InterfaceBond.INTERFACE_BOND_MONITOR_MODE_MII_CARRIER_TYPES:
+        for m in Interface.INTERFACE_BOND_MONITOR_MODE_MII_CARRIER_TYPES:
             carrier_model.append([m])
 
         # IP config
@@ -364,6 +364,8 @@ class vmmCreateInterface(vmmGObjectUI):
 
         self.widget("ipv6-mode").set_active(IP_NONE)
         self.widget("ipv6-autoconf").set_active(False)
+        self.widget("ipv6-gateway").set_text("")
+        self.widget("ipv6-address-list").get_model().clear()
         self.ipv6_address_selected()
 
     def populate_details_page(self):
@@ -373,8 +375,8 @@ class vmmCreateInterface(vmmGObjectUI):
         self.widget("interface-name-entry").hide()
         self.widget("interface-name-label").hide()
 
-        if itype in [Interface.Interface.INTERFACE_TYPE_BRIDGE,
-                     Interface.Interface.INTERFACE_TYPE_BOND]:
+        if itype in [Interface.INTERFACE_TYPE_BRIDGE,
+                     Interface.INTERFACE_TYPE_BOND]:
             widget = "interface-name-entry"
         else:
             widget = "interface-name-label"
@@ -385,9 +387,9 @@ class vmmCreateInterface(vmmGObjectUI):
 
         # Make sure interface type specific fields are shown
         type_dict = {
-            Interface.Interface.INTERFACE_TYPE_BRIDGE : "bridge",
-            Interface.Interface.INTERFACE_TYPE_BOND : "bond",
-            Interface.Interface.INTERFACE_TYPE_VLAN : "vlan",
+            Interface.INTERFACE_TYPE_BRIDGE : "bridge",
+            Interface.INTERFACE_TYPE_BOND : "bond",
+            Interface.INTERFACE_TYPE_VLAN : "vlan",
         }
 
         for key, value in type_dict.items():
@@ -395,10 +397,10 @@ class vmmCreateInterface(vmmGObjectUI):
             self.widget("%s-label" % value).set_visible(do_show)
             self.widget("%s-box" % value).set_visible(do_show)
 
-        if itype == Interface.Interface.INTERFACE_TYPE_BRIDGE:
+        if itype == Interface.INTERFACE_TYPE_BRIDGE:
             self.update_bridge_desc()
 
-        elif itype == Interface.Interface.INTERFACE_TYPE_BOND:
+        elif itype == Interface.INTERFACE_TYPE_BOND:
             self.update_bond_desc()
 
         # Populate device list
@@ -417,9 +419,9 @@ class vmmCreateInterface(vmmGObjectUI):
         copy_model = copy_combo.get_model()
 
         # Only select 'copy from' option if using bridge/bond/vlan
-        enable_copy = (itype in [Interface.Interface.INTERFACE_TYPE_BRIDGE,
-                                 Interface.Interface.INTERFACE_TYPE_BOND,
-                                 Interface.Interface.INTERFACE_TYPE_VLAN])
+        enable_copy = (itype in [Interface.INTERFACE_TYPE_BRIDGE,
+                                 Interface.INTERFACE_TYPE_BOND,
+                                 Interface.INTERFACE_TYPE_VLAN])
 
         # Set defaults if required
         copy_model.clear()
@@ -489,18 +491,18 @@ class vmmCreateInterface(vmmGObjectUI):
         model = iface_list.get_model()
         model.clear()
 
-        ifilter = [Interface.Interface.INTERFACE_TYPE_ETHERNET]
+        ifilter = [Interface.INTERFACE_TYPE_ETHERNET]
         msg = None
-        if itype == Interface.Interface.INTERFACE_TYPE_BRIDGE:
-            ifilter.append(Interface.Interface.INTERFACE_TYPE_VLAN)
-            ifilter.append(Interface.Interface.INTERFACE_TYPE_BOND)
+        if itype == Interface.INTERFACE_TYPE_BRIDGE:
+            ifilter.append(Interface.INTERFACE_TYPE_VLAN)
+            ifilter.append(Interface.INTERFACE_TYPE_BOND)
             msg = _("Choose interface(s) to bridge:")
 
-        elif itype == Interface.Interface.INTERFACE_TYPE_VLAN:
+        elif itype == Interface.INTERFACE_TYPE_VLAN:
             msg = _("Choose parent interface:")
-        elif itype == Interface.Interface.INTERFACE_TYPE_BOND:
+        elif itype == Interface.INTERFACE_TYPE_BOND:
             msg = _("Choose interfaces to bond:")
-        elif itype == Interface.Interface.INTERFACE_TYPE_ETHERNET:
+        elif itype == Interface.INTERFACE_TYPE_ETHERNET:
             msg = _("Choose an unconfigured interface:")
 
         self.widget("interface-list-text").set_text(msg)
@@ -524,7 +526,7 @@ class vmmCreateInterface(vmmGObjectUI):
             if iface_type not in ifilter:
                 continue
 
-            if itype == Interface.Interface.INTERFACE_TYPE_ETHERNET:
+            if itype == Interface.INTERFACE_TYPE_ETHERNET:
                 if name in row_dict:
                     del(row_dict[name])
 
@@ -557,22 +559,22 @@ class vmmCreateInterface(vmmGObjectUI):
         itype = self.get_config_interface_type()
 
         name = _("No interface selected")
-        if itype == Interface.Interface.INTERFACE_TYPE_BRIDGE:
-            name = Interface.Interface.find_free_name(self.conn.get_backend(),
+        if itype == Interface.INTERFACE_TYPE_BRIDGE:
+            name = Interface.find_free_name(self.conn.get_backend(),
                                                       "br")
-        elif itype == Interface.Interface.INTERFACE_TYPE_BOND:
-            name = Interface.Interface.find_free_name(self.conn.get_backend(),
+        elif itype == Interface.INTERFACE_TYPE_BOND:
+            name = Interface.find_free_name(self.conn.get_backend(),
                                                       "bond")
         else:
             ifaces = self.get_config_selected_interfaces()
             if len(ifaces) > 0:
                 iface = ifaces[0][INTERFACE_ROW_NAME]
 
-                if itype == Interface.Interface.INTERFACE_TYPE_VLAN:
+                if itype == Interface.INTERFACE_TYPE_VLAN:
                     tag = uihelpers.spin_get_helper(self.widget("vlan-tag"))
                     name = "%s.%s" % (iface, int(tag))
 
-                elif itype == Interface.Interface.INTERFACE_TYPE_ETHERNET:
+                elif itype == Interface.INTERFACE_TYPE_ETHERNET:
                     name = iface
 
         return name
@@ -642,8 +644,8 @@ class vmmCreateInterface(vmmGObjectUI):
         active = src.get_active()
         model = slave_list.get_model()
 
-        if itype in [Interface.Interface.INTERFACE_TYPE_ETHERNET,
-                     Interface.Interface.INTERFACE_TYPE_VLAN]:
+        if itype in [Interface.INTERFACE_TYPE_ETHERNET,
+                     Interface.INTERFACE_TYPE_VLAN]:
             # Deselect any selected rows
             for row in model:
                 if row == model[index]:
@@ -658,8 +660,8 @@ class vmmCreateInterface(vmmGObjectUI):
 
     def update_interface_name(self, ignore1=None, ignore2=None):
         itype = self.get_config_interface_type()
-        if itype not in [Interface.Interface.INTERFACE_TYPE_VLAN,
-                         Interface.Interface.INTERFACE_TYPE_ETHERNET]:
+        if itype not in [Interface.INTERFACE_TYPE_VLAN,
+                         Interface.INTERFACE_TYPE_ETHERNET]:
             # The rest have editable name fields, so don't overwrite
             return
 
@@ -769,14 +771,13 @@ class vmmCreateInterface(vmmGObjectUI):
 
         def build_ip(addr_str):
             if not addr_str:
-                return None
-
+                return None, None
             ret = addr_str.rsplit("/", 1)
-            ip = Interface.InterfaceProtocolIPAddress(ret[0])
+            address = ret[0]
+            prefix = None
             if len(ret) > 1:
-                ip.prefix = ret[1]
-
-            return ip
+                prefix = ret[1]
+            return address, prefix
 
         is_manual = self.widget("ip-do-manual").get_active()
 
@@ -804,25 +805,28 @@ class vmmCreateInterface(vmmGObjectUI):
         else:
             # Build IPv4 Info
             if v4_mode != IP_NONE:
-                ipv4 = Interface.InterfaceProtocolIPv4()
+                ipv4 = InterfaceProtocol(self.conn.get_backend())
+                ipv4.family = "ipv4"
                 ipv4.dhcp = bool(v4_mode == IP_DHCP)
                 if not ipv4.dhcp:
-                    if v4_addr:
-                        ipv4.ips.append(build_ip(v4_addr))
-
+                    addr, prefix = build_ip(v4_addr)
+                    if addr:
+                        ipv4.add_ip(addr, prefix)
                     if v4_gate:
                         ipv4.gateway = v4_gate
 
             # Build IPv6 Info
             if v6_mode != IP_NONE:
-                ipv6 = Interface.InterfaceProtocolIPv6()
+                ipv6 = InterfaceProtocol(self.conn.get_backend())
+                ipv6.family = "ipv6"
                 ipv6.dhcp = bool(v6_mode == IP_DHCP)
                 ipv6.autoconf = bool(v6_auto)
                 if not ipv6.dhcp:
                     if v6_gate:
                         ipv6.gateway = v6_gate
-                    if v6_addrlist:
-                        ipv6.ips = [build_ip(i) for i in v6_addrlist]
+                    addr, prefix = build_ip(v4_addr)
+                    if addr:
+                        ipv6.add_ip(addr, prefix)
 
         return [is_manual, copy_name, ipv4, ipv6, proto_xml]
 
@@ -912,29 +916,34 @@ class vmmCreateInterface(vmmGObjectUI):
         name = self.get_config_interface_name()
         start = self.get_config_interface_startmode()
         ifaces = self.get_config_selected_interfaces()
-        iclass = Interface.Interface.interface_class_for_type(itype)
 
         if not name:
             return self.err.val_err(_("An interface name is required."))
 
-        if (itype != Interface.Interface.INTERFACE_TYPE_BRIDGE and
+        if (itype != Interface.INTERFACE_TYPE_BRIDGE and
             len(ifaces) == 0):
             return self.err.val_err(_("An interface must be selected"))
 
         try:
-            iobj = iclass(self.conn.get_backend(), name)
+            iobj = Interface(self.conn.get_backend())
+            iobj.type = itype
+            iobj.name = name
             iobj.start_mode = start
             check_conflict = False
 
             # Pull info from selected interfaces
-            if hasattr(iobj, "interfaces"):
-                iobj.interfaces = [x[INTERFACE_ROW_KEY] for x in ifaces]
+            if (itype == Interface.INTERFACE_TYPE_BRIDGE or
+                itype == Interface.INTERFACE_TYPE_BOND):
+                for row in ifaces:
+                    child = Interface(self.conn.get_backend(),
+                                    parsexml=row[INTERFACE_ROW_KEY].XMLDesc(0))
+                    iobj.add_interface(child)
                 check_conflict = True
 
-            elif hasattr(iobj, "parent_interface"):
-                iobj.parent_interface = ifaces[0][INTERFACE_ROW_KEY]
+            elif itype == Interface.INTERFACE_TYPE_VLAN:
+                iobj.parent_interface = ifaces[0][INTERFACE_ROW_NAME]
 
-            elif itype == Interface.Interface.INTERFACE_TYPE_ETHERNET:
+            elif itype == Interface.INTERFACE_TYPE_ETHERNET:
                 iobj.macaddr = ifaces[0][INTERFACE_ROW_MAC]
 
             # Warn about defined interfaces
@@ -963,28 +972,30 @@ class vmmCreateInterface(vmmGObjectUI):
              ipv6, proto_xml) = self.get_config_ip_info()
 
             if is_manual:
-                protos = []
                 if ipv4:
-                    protos.append(ipv4)
+                    iobj.add_protocol(ipv4)
                 if ipv6:
-                    protos.append(ipv6)
-                iobj.protocols = protos
+                    iobj.add_protocol(ipv6)
             else:
-                iobj.protocol_xml = proto_xml
+                for proto in proto_xml:
+                    iobj.add_protocol(InterfaceProtocol(
+                        self.conn.get_backend(),
+                        parsexml=proto.get_xml_config()))
 
-            if itype == Interface.Interface.INTERFACE_TYPE_BRIDGE:
+            if itype == Interface.INTERFACE_TYPE_BRIDGE:
                 ret = self.validate_bridge(iobj, ifaces)
-            elif itype == Interface.Interface.INTERFACE_TYPE_BOND:
+            elif itype == Interface.INTERFACE_TYPE_BOND:
                 ret = self.validate_bond(iobj, ifaces)
-            elif itype == Interface.Interface.INTERFACE_TYPE_VLAN:
+            elif itype == Interface.INTERFACE_TYPE_VLAN:
                 ret = self.validate_vlan(iobj, ifaces)
-            elif itype == Interface.Interface.INTERFACE_TYPE_ETHERNET:
+            elif itype == Interface.INTERFACE_TYPE_ETHERNET:
                 ret = self.validate_ethernet(iobj, ifaces)
 
             if not ret:
                 return ret
 
             iobj.get_xml_config()
+            iobj.validate()
 
             self.interface = iobj
         except Exception, e:
@@ -1030,7 +1041,6 @@ class vmmCreateInterface(vmmGObjectUI):
         mii_down = self.widget("mii-downdelay").get_value()
 
         iobj.bond_mode = mode
-        iobj.monitor_mode = mon
 
         if not mon:
             # No monitor params, just return

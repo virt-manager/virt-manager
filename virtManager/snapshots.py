@@ -177,7 +177,7 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         do_select = None
         for snap in snapshots:
-            desc = snap.xml.description
+            desc = snap.xmlobj.description
             if not uihelpers.can_set_row_none:
                 desc = desc or ""
 
@@ -202,12 +202,12 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-notebook").set_current_page(0)
 
         name = snap and snap.get_name() or ""
-        desc = snap and snap.xml.description or ""
-        state = snap and snap.xml.state or "shutoff"
+        desc = snap and snap.xmlobj.description or ""
+        state = snap and snap.xmlobj.state or "shutoff"
         timestamp = ""
         if snap:
             timestamp = str(datetime.datetime.fromtimestamp(
-                snap.xml.creationTime))
+                snap.xmlobj.creationTime))
 
         current = ""
         if snap and snap.is_current():
@@ -253,8 +253,8 @@ class vmmSnapshotPage(vmmGObjectUI):
         desc_widget = self.widget("snapshot-description")
         desc = desc_widget.get_buffer().get_property("text") or ""
 
-        snap.xml.description = desc
-        newxml = snap.xml.get_xml_config()
+        snap.xmlobj.description = desc
+        newxml = snap.xmlobj.get_xml_config()
         self.vm.create_snapshot(newxml, redefine=True)
         snap.refresh_xml()
         self._set_snapshot_state(snap)
