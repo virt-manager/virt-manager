@@ -597,7 +597,7 @@ class vmmAddHardware(vmmGObjectUI):
             model.append([prettyname, dev.name, devtype, dev])
 
         if len(model) == 0:
-            model.append([_("No Devices Available"), None])
+            model.append([_("No Devices Available"), None, None, None])
         uihelpers.set_list_selection(devlist, 0)
 
     def populate_disk_format_combo(self, create):
