@@ -17,26 +17,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtinst.xmlbuilder import XMLBuilder, XMLProperty
+from virtinst.xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 
-class BootDevice(XMLBuilder):
+class _BootDevice(XMLBuilder):
     _XML_ROOT_XPATH = "/domain/os/boot"
-
-    def __init__(self, conn, dev, parsexml=None, parsexmlnode=None):
-        XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
-        self._dev = dev
-        self._xmldev = dev
-
-    def _get_dev(self):
-        return self._xmldev
-    dev = property(_get_dev)
-
-    def _dev_xpath(self):
-        return "./os/boot[@dev='%s']/@dev" % self._dev
-    _xmldev = XMLProperty(name="boot dev type",
-                make_getter_xpath_cb=_dev_xpath,
-                make_setter_xpath_cb=_dev_xpath)
+    dev = XMLProperty("./@dev")
 
 
 class OSXML(XMLBuilder):
@@ -49,24 +35,6 @@ class OSXML(XMLBuilder):
     BOOT_DEVICE_NETWORK = "network"
     boot_devices = [BOOT_DEVICE_HARDDISK, BOOT_DEVICE_CDROM,
                     BOOT_DEVICE_FLOPPY, BOOT_DEVICE_NETWORK]
-
-    def __init__(self, *args, **kwargs):
-        self._bootdevs = []
-        XMLBuilder.__init__(self, *args, **kwargs)
-
-    def _parsexml(self, xml, node):
-        XMLBuilder._parsexml(self, xml, node)
-
-        for node in self._xml_node.children or []:
-            if node.name != "boot" or not node.prop("dev"):
-                continue
-            bootdev = BootDevice(self.conn, node.prop("dev"),
-                                 parsexmlnode=self._xml_node)
-            self._bootdevs.append(bootdev)
-
-    def clear(self):
-        XMLBuilder.clear(self)
-        self.bootorder = []
 
     def is_hvm(self):
         return self.os_type == "hvm"
@@ -95,10 +63,13 @@ class OSXML(XMLBuilder):
         return [dev.dev for dev in self._bootdevs]
     def _set_bootorder(self, newdevs):
         for dev in self._bootdevs:
-            dev.clear()
-        self._bootdevs = [BootDevice(self.conn, d,
-                                     parsexmlnode=self._xml_node)
-                          for d in newdevs]
+            self._remove_child(dev)
+
+        for d in newdevs:
+            dev = _BootDevice(self.conn)
+            dev.dev = d
+            self._add_child(dev)
+    _bootdevs = XMLChildProperty(_BootDevice)
     bootorder = property(_get_bootorder, _set_bootorder)
 
     enable_bootmenu = XMLProperty(xpath="./os/bootmenu/@enable", is_yesno=True)

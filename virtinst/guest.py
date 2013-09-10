@@ -35,7 +35,7 @@ from virtinst import Seclabel
 from virtinst import CPU
 from virtinst import DomainNumatune
 from virtinst import DomainFeatures
-from virtinst.xmlbuilder import XMLBuilder, XMLProperty
+from virtinst.xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 from virtinst import osdict
 
@@ -92,8 +92,6 @@ class Guest(XMLBuilder):
         "seclabel"]
 
     def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        self._devices = []
-        self._install_devices = []
         XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
 
         self.autostart = False
@@ -102,6 +100,7 @@ class Guest(XMLBuilder):
 
         self._os_variant = None
         self._random_uuid = None
+        self._install_devices = []
 
         # The libvirt virDomain object we 'Create'
         self.domain = None
@@ -194,16 +193,6 @@ class Guest(XMLBuilder):
     # Device Add/Remove Public API methods #
     ########################################
 
-    def _dev_build_list(self, devtype, devlist=None):
-        if devlist is None:
-            devlist = self._devices
-
-        newlist = []
-        for i in devlist:
-            if devtype == "all" or i.virtual_device_type == devtype:
-                newlist.append(i)
-        return newlist
-
     def add_device(self, dev):
         """
         Add the passed device to the guest's device list.
@@ -211,12 +200,15 @@ class Guest(XMLBuilder):
         @param dev: VirtualDevice instance to attach to guest
         @param set_defaults: Whether to set defaults for the device
         """
-        self._track_device(dev)
-        self._recalculate_device_xpaths()
         self._add_child(dev)
 
-    def _track_device(self, dev):
-        self._devices.append(dev)
+    def remove_device(self, dev):
+        """
+        Remove the passed device from the guest's device list
+
+        @param dev: VirtualDevice instance
+        """
+        self._remove_child(dev)
 
     def get_devices(self, devtype):
         """
@@ -226,8 +218,14 @@ class Guest(XMLBuilder):
         @param devtype: Device type to search for (one of
                         VirtualDevice.virtual_device_types)
         """
-        devlist = self._dev_build_list(devtype)
-        return self._dev_build_list(devtype, devlist)
+        newlist = []
+        for i in self._devices:
+            if devtype == "all" or i.virtual_device_type == devtype:
+                newlist.append(i)
+        return newlist
+    _devices = XMLChildProperty(
+        [VirtualDevice.virtual_device_classes[_n]
+         for _n in VirtualDevice.virtual_device_types])
 
     def get_all_devices(self):
         """
@@ -238,50 +236,6 @@ class Guest(XMLBuilder):
             retlist.extend(self.get_devices(devtype))
         return retlist
     all_devices = property(lambda s: s.get_all_devices())
-
-    def remove_device(self, dev):
-        """
-        Remove the passed device from the guest's device list
-
-        @param dev: VirtualDevice instance
-        """
-        self._devices.remove(dev)
-        self._remove_child(dev)
-        self._recalculate_device_xpaths()
-
-
-    ################################
-    # Private xml building methods #
-    ################################
-
-    def _parsexml(self, xml, node):
-        XMLBuilder._parsexml(self, xml, node)
-
-        for node in self._xml_node.children or []:
-            if node.name != "devices":
-                continue
-
-            devnodes = [
-                x for x in node.children if
-                (x.name in VirtualDevice.virtual_device_classes and
-                 x.parent == node)
-            ]
-            for devnode in devnodes:
-                objclass = VirtualDevice.virtual_device_classes[devnode.name]
-                dev = objclass(self.conn, parsexmlnode=self._xml_node)
-                self._track_device(dev)
-
-        self._recalculate_device_xpaths()
-
-    def _recalculate_device_xpaths(self):
-        count = {}
-        for dev in self.get_all_devices():
-            devtype = dev.virtual_device_type
-            if devtype not in count:
-                count[devtype] = 1
-            newpath = "./devices/%s[%d]" % (devtype, count[devtype])
-            dev.set_root_xpath(newpath)
-            count[devtype] += 1
 
 
     ############################
@@ -312,9 +266,9 @@ class Guest(XMLBuilder):
         # We do a shallow copy of the device list here, and set the defaults.
         # This way, default changes aren't persistent, and we don't need
         # to worry about when to call set_defaults
-        data = (self._devices, self.features, self.os)
+        data = (self._devices[:], self.features, self.os)
         try:
-            self._devices = [dev.copy() for dev in self._devices]
+            self._propstore["_devices"] = [dev.copy() for dev in self._devices]
             self.features = self.features.copy()
             self.os = self.os.copy()
             support.set_rhel6(self._is_rhel6())
@@ -324,7 +278,7 @@ class Guest(XMLBuilder):
         return data
 
     def _finish_get_xml(self, data):
-        self._devices, self.features, self.os = data
+        self._propstore["_devices"], self.features, self.os = data
         support.set_rhel6(False)
 
     def get_install_xml(self, *args, **kwargs):
@@ -370,7 +324,6 @@ class Guest(XMLBuilder):
             self.bootloader = "/usr/bin/pygrub"
             self.os.clear()
 
-        self._recalculate_device_xpaths()
         return self.get_xml_config()
 
     def get_continue_inst(self):
@@ -688,7 +641,7 @@ class Guest(XMLBuilder):
 
     def _check_address_multi(self):
         addresses = {}
-        for d in self._devices:
+        for d in self.all_devices:
             if d.address.type != d.address.ADDRESS_TYPE_PCI:
                 continue
 

@@ -168,7 +168,10 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(guest.cpu.features[0])
         check("name", "x2apic")
         check("policy", "force", "disable")
-        guest.cpu.remove_feature(guest.cpu.features[1])
+        rmfeat = guest.cpu.features[3]
+        guest.cpu.remove_feature(rmfeat)
+        self.assertEquals(rmfeat.get_xml_config(),
+                          """<feature name="foo" policy="bar"/>""")
         guest.cpu.add_feature("addfeature")
 
         check = self._make_checker(guest.numatune)

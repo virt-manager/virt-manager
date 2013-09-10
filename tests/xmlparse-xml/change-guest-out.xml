@@ -21,6 +21,8 @@
     <vendor>qemuvendor</vendor>
     <topology sockets="4" cores="3" threads="1"/>
     <feature policy="disable" name="x2apic"/>
+    <feature policy="forbid" name="lahf_lm"/>
+    <feature policy="optional" name="cr8legacy"/>
     <feature name="addfeature" policy="require"/>
   </cpu>
   <clock offset="localtime"/>

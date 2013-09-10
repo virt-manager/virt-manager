@@ -71,6 +71,7 @@ class VirtualDevice(XMLBuilder):
 
     @classmethod
     def register_type(cls):
+        cls._XML_ROOT_XPATH = "/domain/devices/%s" % cls.virtual_device_type
         VirtualDevice.virtual_device_classes[cls.virtual_device_type] = cls
 
     # General device type (disk, interface, etc.)
@@ -82,7 +83,6 @@ class VirtualDevice(XMLBuilder):
 
         @param conn: libvirt connection to validate device against
         """
-        self._XML_ROOT_XPATH = "/domain/devices/%s" % self.virtual_device_type
 
         XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
 

@@ -17,7 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtinst.xmlbuilder import XMLBuilder, XMLProperty
+from virtinst.xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 
 class CPUFeature(XMLBuilder):
@@ -28,28 +28,10 @@ class CPUFeature(XMLBuilder):
     POLICIES = ["force", "require", "optional", "disable", "forbid"]
 
     _XML_ROOT_XPATH = "/domain/cpu/feature"
-    _XML_PROP_ORDER = ["_xmlname", "policy"]
+    _XML_PROP_ORDER = ["name", "policy"]
 
-    def __init__(self, conn, name, parsexml=None, parsexmlnode=None):
-        XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
-
-        self._name = name
-        self._xmlname = name
-
-    def _get_name(self):
-        return self._xmlname
-    name = property(_get_name)
-
-    def _name_xpath(self):
-        return "./cpu/feature[@name='%s']/@name" % self._name
-    _xmlname = XMLProperty(name="feature name",
-                      make_getter_xpath_cb=_name_xpath,
-                      make_setter_xpath_cb=_name_xpath)
-    def _policy_xpath(self):
-        return "./cpu/feature[@name='%s']/@policy" % self._name
-    policy = XMLProperty(name="feature policy",
-                         make_getter_xpath_cb=_policy_xpath,
-                         make_setter_xpath_cb=_policy_xpath)
+    name = XMLProperty("./@name")
+    policy = XMLProperty("./@policy")
 
 
 class CPU(XMLBuilder):
@@ -61,36 +43,17 @@ class CPU(XMLBuilder):
 
     _XML_ROOT_XPATH = "/domain/cpu"
     _XML_PROP_ORDER = ["mode", "match", "model", "vendor",
-                       "sockets", "cores", "threads", "_features"]
-
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        self._features = []
-        XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
-
-    def _parsexml(self, xml, node):
-        XMLBuilder._parsexml(self, xml, node)
-
-        for node in self._xml_node.children or []:
-            if node.name != "feature":
-                continue
-            if not node.prop("name"):
-                continue
-            feature = CPUFeature(self.conn, node.prop("name"),
-                                 parsexmlnode=self._xml_node)
-            self._features.append(feature)
+                       "sockets", "cores", "threads", "features"]
 
     def add_feature(self, name, policy="require"):
-        feature = CPUFeature(self.conn, name, parsexmlnode=self._xml_node)
+        feature = CPUFeature(self.conn)
+        feature.name = name
         feature.policy = policy
-        self._features.append(feature)
 
+        self._add_child(feature)
     def remove_feature(self, feature):
-        self._features.remove(feature)
-        feature.clear()
-
-    def _get_features(self):
-        return self._features[:]
-    features = property(_get_features)
+        self._remove_child(feature)
+    features = XMLChildProperty(CPUFeature)
 
     def copy_host_cpu(self):
         """

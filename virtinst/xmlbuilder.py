@@ -246,8 +246,42 @@ def _remove_xpath_node(ctx, xpath, dofree=True, unlinkroot=True):
             node.freeNode()
 
 
+class XMLChildProperty(property):
+    """
+    Property that points to a class used for parsing a subsection of
+    of the parent XML. For example when we deligate parsing
+    /domain/cpu/feature of the /domain/cpu class.
+    """
+    def __init__(self, child_classes):
+        self.child_classes = util.listify(child_classes)
+        property.__init__(self, self._fget)
+
+    def __repr__(self):
+        return "<XMLChildProperty %s %s>" % (str(self.child_classes), id(self))
+
+    def _findpropname(self, xmlbuilder):
+        for key, val in xmlbuilder._all_child_props().items():
+            if val is self:
+                return key
+        raise RuntimeError("Didn't find expected property=%s" % self)
+
+    def _get_list(self, xmlbuilder):
+        propname = self._findpropname(xmlbuilder)
+        if propname not in xmlbuilder._propstore:
+            xmlbuilder._propstore[propname] = []
+        return xmlbuilder._propstore[propname]
+
+    def _fget(self, xmlbuilder):
+        return self._get_list(xmlbuilder)[:]
+
+    def append(self, xmlbuilder, obj):
+        self._get_list(xmlbuilder).append(obj)
+    def remove(self, xmlbuilder, obj):
+        self._get_list(xmlbuilder).remove(obj)
+
+
 class XMLProperty(property):
-    def __init__(self, doc=None, xpath=None, name=None,
+    def __init__(self, xpath=None, name=None, doc=None,
                  set_converter=None, validate_cb=None,
                  make_getter_xpath_cb=None, make_setter_xpath_cb=None,
                  is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
@@ -341,10 +375,10 @@ class XMLProperty(property):
         Map the raw property() instance to the param name it's exposed
         as in the XMLBuilder class. This is just for debug purposes.
         """
-        for key, val in xmlbuilder.all_xml_props().items():
+        for key, val in xmlbuilder._all_xml_props().items():
             if val is self:
                 return key
-        raise RuntimeError("Didn't find expected property")
+        raise RuntimeError("Didn't find expected property=%s" % self)
 
     def _xpath_for_getter(self, xmlbuilder):
         ret = self._xpath
@@ -586,31 +620,34 @@ class _XMLState(object):
         self.xml_root_doc = None
         self.dump_xpath = None
         self.root_xpath = None
+        self.node_top_xpath = None
 
         self.is_build = False
-        if not (parsexml or parsexmlnode):
-            parsexml = self.make_xml_stub()
+        if not parsexml and not parsexmlnode:
             self.is_build = True
-
         self._parse(parsexml, parsexmlnode)
 
     def _parse(self, xml, node):
-        if xml:
+        if node:
+            self.xml_root_doc = None
+            self.xml_node = node
+            self.is_build = (getattr(node, "virtinst_is_build", False) or
+                             self.is_build)
+        else:
+            if not xml:
+                xml = self.make_xml_stub()
             doc = libxml2.parseDoc(xml)
             self.xml_root_doc = _DocCleanupWrapper(doc)
             self.xml_node = doc.children
             self.xml_node.virtinst_is_build = self.is_build
+            self.xml_node.virtinst_node_top_xpath = self.orig_root_xpath
 
             # This just stores a reference to our root doc wrapper in
             # the root node, so when the node goes away it triggers
             # auto free'ing of the doc
             self.xml_node.virtinst_root_doc = self.xml_root_doc
-        else:
-            self.xml_root_doc = None
-            self.xml_node = node
-            self.is_build = (getattr(node, "virtinst_is_build", False) or
-                             self.is_build)
 
+        self.node_top_xpath = self.xml_node.virtinst_node_top_xpath
         self.xml_ctx = _make_xml_context(self.xml_node)
         self.set_root_xpath(self.root_xpath)
 
@@ -677,6 +714,14 @@ class XMLBuilder(object):
         ret = copy.copy(self)
         ret._propstore = ret._propstore.copy()
         ret._proporder = ret._proporder[:]
+
+        # XMLChildProperty stores a list in propstore, which dict shallow
+        # copy won't fix for us.
+        for name, value in ret._propstore.items():
+            if type(value) is not list:
+                continue
+            ret._propstore[name] = [obj.copy() for obj in ret._propstore[name]]
+
         return ret
 
     def set_root_xpath(self, xpath):
@@ -695,17 +740,6 @@ class XMLBuilder(object):
 
     def fix_relative_xpath(self, xpath):
         return self._xmlstate.fix_relative_xpath(xpath)
-
-    def all_xml_props(self):
-        """
-        Return a list of all XMLProperty instances that this class has.
-        """
-        ret = {}
-        for c in reversed(type.mro(self.__class__)[:-1]):
-            for key, val in c.__dict__.items():
-                if val.__class__ is XMLProperty:
-                    ret[key] = val
-        return ret
 
 
     ############################
@@ -726,8 +760,11 @@ class XMLBuilder(object):
         """
         Wipe out all properties of the object
         """
-        for prop in self.all_xml_props().values():
+        for prop in self._all_xml_props().values():
             prop._clear(self)
+        for prop in self._all_child_props().values():
+            for obj in prop._get_list(self)[:]:
+                self._remove_child(obj)
 
     def validate(self):
         """
@@ -761,19 +798,82 @@ class XMLBuilder(object):
         """
         ignore = data
 
-    def _parsexml(self, xml, node):
-        """
-        Subclasses hook here to do things like parse <devices> into
-        internal state
-        """
-        self._xmlstate = _XMLState(self._XML_ROOT_XPATH, xml, node)
-
 
     ################
     # Internal API #
     ################
 
     _xml_node = property(lambda s: s._xmlstate.xml_node)
+
+    def _all_xml_props(self):
+        """
+        Return a list of all XMLProperty instances that this class has.
+        """
+        ret = {}
+        for c in reversed(type.mro(self.__class__)[:-1]):
+            for key, val in c.__dict__.items():
+                if val.__class__ is XMLProperty:
+                    ret[key] = val
+        return ret
+
+    def _all_child_props(self):
+        """
+        Return a list of all XMLChildProperty instances that this class has.
+        """
+        ret = {}
+        for c in reversed(type.mro(self.__class__)[:-1]):
+            for key, val in c.__dict__.items():
+                if val.__class__ is XMLChildProperty:
+                    ret[key] = val
+        return ret
+
+    def _find_child_prop(self, child_class):
+        xmlprops = self._all_child_props()
+        for xmlprop in xmlprops.values():
+            if child_class in xmlprop.child_classes:
+                return xmlprop
+        raise RuntimeError("programming error: "
+                           "Didn't find child property for child_class=%s" %
+                           child_class)
+
+    def _add_child(self, obj):
+        """
+        Insert the passed XMLBuilder object into our XML document. The
+        object needs to have an associated mapping via XMLChildProperty
+        """
+        xmlprop = self._find_child_prop(obj.__class__)
+        xmlprop.append(self, obj)
+        self._set_child_xpaths()
+
+        if not obj._xmlstate.is_build:
+            if not obj.get_root_xpath():
+                raise RuntimeError("programming error: must set device "
+                                   "root xpath before add_child")
+            orig_xpath = obj.get_root_xpath()
+            obj.set_root_xpath(None)
+            xml = obj.get_xml_config()
+            obj.set_root_xpath(orig_xpath)
+
+            use_xpath = orig_xpath.rsplit("/", 1)[0]
+            newnode = libxml2.parseDoc(xml).children
+            _build_xpath_node(self._xmlstate.xml_ctx, use_xpath, newnode)
+            obj.set_root_xpath(orig_xpath)
+        obj._xmlstate._parse(None, self._xmlstate.xml_node)
+
+    def _remove_child(self, obj):
+        """
+        Remove the passed XMLBuilder object from our XML document, but
+        ensure it's data isn't altered.
+        """
+        xmlprop = self._find_child_prop(obj.__class__)
+        xmlprop.remove(self, obj)
+
+        xpath = obj.get_root_xpath()
+        xml = obj.get_xml_config()
+        obj.set_root_xpath(None)
+        obj._xmlstate._parse(xml, None)
+        _remove_xpath_node(self._xmlstate.xml_ctx, xpath, dofree=False)
+        self._set_child_xpaths()
 
     def _all_subelement_props(self):
         """
@@ -782,50 +882,62 @@ class XMLBuilder(object):
         a parent class, which alters the parent XML.
         VirtualDevice.address is an example.
         """
-        xmlprops = self.all_xml_props()
+        xmlprops = self._all_xml_props()
+        childprops = self._all_child_props()
         ret = []
+        propmap = {}
         for propname in self._XML_PROP_ORDER:
             if propname not in xmlprops:
-                ret.extend(util.listify(getattr(self, propname)))
+                propmap[propname] = getattr(self, propname)
+        for propname in childprops:
+            propmap[propname] = getattr(self, propname)
+
+        for objs in propmap.values():
+            ret.extend(util.listify(objs))
         return ret
-
-    def _add_child(self, dev):
-        """
-        Insert the passed XMLBuilder object into our XML document at the
-        specified path
-        """
-        if not dev._xmlstate.is_build:
-            if not dev.get_root_xpath():
-                raise RuntimeError("programming error: must set device "
-                                   "root xpath before add_child")
-            orig_xpath = dev.get_root_xpath()
-            dev.set_root_xpath(None)
-            xml = dev.get_xml_config()
-            dev.set_root_xpath(orig_xpath)
-
-            use_xpath = orig_xpath.rsplit("/", 1)[0]
-            newnode = libxml2.parseDoc(xml).children
-            _build_xpath_node(self._xmlstate.xml_ctx, use_xpath, newnode)
-            dev.set_root_xpath(orig_xpath)
-
-        dev._xmlstate._parse(None, self._xmlstate.xml_node)
-
-    def _remove_child(self, dev):
-        """
-        Remove the passed XMLBuilder object from our XML document, but
-        ensure it's data isn't altered.
-        """
-        xpath = dev.get_root_xpath()
-        xml = dev.get_xml_config()
-        dev.set_root_xpath(None)
-        dev._xmlstate._parse(xml, None)
-        if xpath:
-            _remove_xpath_node(self._xmlstate.xml_ctx, xpath, dofree=False)
 
 
     #################################
     # Private XML building routines #
     #################################
+
+    def _parsexml(self, xml, node):
+        if self._xmlstate:
+            raise RuntimeError("_parsexml can't be called twice")
+        self._xmlstate = _XMLState(self._XML_ROOT_XPATH, xml, node)
+
+        # Walk the XML tree and hand of parsing to any registered
+        # child classes
+        for xmlprop in self._all_child_props().values():
+            for child_class in xmlprop.child_classes:
+                prop_path = child_class._XML_ROOT_XPATH.replace(
+                    self._xmlstate.node_top_xpath, ".")
+
+                nodecount = int(self._xml_node.xpathEval(
+                    "count(%s)" % prop_path))
+                for ignore in range(nodecount):
+                    xmlprop.append(self,
+                        child_class(self.conn, parsexmlnode=self._xml_node))
+        self._set_child_xpaths()
+
+    def _set_child_xpaths(self):
+        """
+        Walk the list of child properties and make sure their
+        xpaths point at their particular element
+        """
+        typecount = {}
+        for propname in self._all_child_props():
+            for obj in getattr(self, propname):
+                class_type = obj.__class__
+                if class_type not in typecount:
+                    typecount[class_type] = 0
+                idx = typecount[class_type]
+
+                prop_path = obj._XML_ROOT_XPATH.replace(
+                    self._xmlstate.node_top_xpath, ".")
+                obj.set_root_xpath(prop_path + ("[%d]" % (idx + 1)))
+                typecount[class_type] += 1
+
 
     def _do_get_xml_config(self):
         xmlstub = self._xmlstate.make_xml_stub()
@@ -866,7 +978,7 @@ class XMLBuilder(object):
 
     def _do_add_parse_bits(self, node, ctx):
         # Set all defaults if the properties have one registered
-        xmlprops = self.all_xml_props()
+        xmlprops = self._all_xml_props()
 
         for prop in xmlprops.values():
             prop._set_default(self)
