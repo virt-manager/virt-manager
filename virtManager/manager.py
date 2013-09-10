@@ -408,6 +408,7 @@ class vmmManager(vmmGObjectUI):
 
         nameCol = Gtk.TreeViewColumn(_("Name"))
         nameCol.set_expand(True)
+        nameCol.set_sizing(Gtk.TreeViewColumnSizing.AUTOSIZE)
         nameCol.set_spacing(6)
         nameCol.set_sort_column_id(COL_NAME)
 
