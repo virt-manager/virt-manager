@@ -646,7 +646,7 @@ class vmmManager(vmmGObjectUI):
             color = self._build_conn_color(conn)
             os_icon = None
         else:
-            name = vm.get_name()
+            name = vm.get_name_with_title()
             status = vm.run_status()
             markup = self._build_vm_markup(name, status)
             status_icon = vm.run_status_icon_name()
@@ -761,7 +761,7 @@ class vmmManager(vmmGObjectUI):
             return
 
         try:
-            name = vm.get_name()
+            name = vm.get_name_with_title()
             status = vm.run_status()
 
             row[ROW_SORT_KEY] = name
