@@ -397,8 +397,8 @@ class VirtualDisk(VirtualDevice):
         "_xmlpath", "target", "bus",
     ]
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
+    def __init__(self, *args, **kwargs):
+        VirtualDevice.__init__(self, *args, **kwargs)
 
         self.__storage_backend = None
         self._storage_creator = None

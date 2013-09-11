@@ -24,16 +24,16 @@ class DomainFeatures(XMLBuilder):
     """
     Class for generating <features> XML
     """
-    _XML_ROOT_XPATH = "/domain/features"
+    _XML_ROOT_NAME = "features"
     _XML_PROP_ORDER = ["acpi", "apic", "pae"]
 
-    acpi = XMLProperty(xpath="./features/acpi", is_bool=True,
+    acpi = XMLProperty(xpath="./acpi", is_bool=True,
                        default_name="default",
                        default_cb=lambda s: False)
-    apic = XMLProperty(xpath="./features/apic", is_bool=True,
+    apic = XMLProperty(xpath="./apic", is_bool=True,
                        default_name="default",
                        default_cb=lambda s: False)
-    pae = XMLProperty(xpath="./features/pae", is_bool=True,
+    pae = XMLProperty(xpath="./pae", is_bool=True,
                        default_name="default",
                        default_cb=lambda s: False)
 

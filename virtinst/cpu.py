@@ -27,7 +27,7 @@ class CPUFeature(XMLBuilder):
 
     POLICIES = ["force", "require", "optional", "disable", "forbid"]
 
-    _XML_ROOT_XPATH = "/domain/cpu/feature"
+    _XML_ROOT_NAME = "feature"
     _XML_PROP_ORDER = ["name", "policy"]
 
     name = XMLProperty("./@name")
@@ -41,7 +41,7 @@ class CPU(XMLBuilder):
 
     MATCHS = ["minimum", "exact", "strict"]
 
-    _XML_ROOT_XPATH = "/domain/cpu"
+    _XML_ROOT_NAME = "cpu"
     _XML_PROP_ORDER = ["mode", "match", "model", "vendor",
                        "sockets", "cores", "threads", "features"]
 
@@ -131,12 +131,12 @@ class CPU(XMLBuilder):
             if not self.match:
                 self.match = "exact"
         return val
-    model = XMLProperty(xpath="./cpu/model", set_converter=_set_model)
+    model = XMLProperty(xpath="./model", set_converter=_set_model)
 
-    match = XMLProperty(xpath="./cpu/@match")
-    vendor = XMLProperty(xpath="./cpu/vendor")
-    mode = XMLProperty(xpath="./cpu/@mode")
+    match = XMLProperty(xpath="./@match")
+    vendor = XMLProperty(xpath="./vendor")
+    mode = XMLProperty(xpath="./@mode")
 
-    sockets = XMLProperty(xpath="./cpu/topology/@sockets", is_int=True)
-    cores = XMLProperty(xpath="./cpu/topology/@cores", is_int=True)
-    threads = XMLProperty(xpath="./cpu/topology/@threads", is_int=True)
+    sockets = XMLProperty(xpath="./topology/@sockets", is_int=True)
+    cores = XMLProperty(xpath="./topology/@cores", is_int=True)
+    threads = XMLProperty(xpath="./topology/@threads", is_int=True)

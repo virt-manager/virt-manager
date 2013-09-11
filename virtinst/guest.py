@@ -84,15 +84,15 @@ class Guest(XMLBuilder):
         raise ValueError(_("Guest name '%s' is already in use.") % name)
 
 
-    _XML_ROOT_XPATH = "/domain"
+    _XML_ROOT_NAME = "domain"
     _XML_PROP_ORDER = ["type", "name", "uuid", "description",
         "maxmemory", "memory", "hugepage", "vcpus", "curvcpus",
         "numatune", "bootloader", "os", "features", "cpu", "clock",
         "on_poweroff", "on_reboot", "on_crash", "emulator", "all_devices",
         "seclabel"]
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
+    def __init__(self, *args, **kwargs):
+        XMLBuilder.__init__(self, *args, **kwargs)
 
         self.autostart = False
         self.replace = False
@@ -105,13 +105,7 @@ class Guest(XMLBuilder):
         # The libvirt virDomain object we 'Create'
         self.domain = None
 
-        self.installer = virtinst.DistroInstaller(conn)
-        self.os = OSXML(self.conn, None, self._xml_node)
-        self.features = DomainFeatures(self.conn, None, self._xml_node)
-        self.clock = Clock(self.conn, None, self._xml_node)
-        self.seclabel = Seclabel(self.conn, None, self._xml_node)
-        self.cpu = CPU(self.conn, None, self._xml_node)
-        self.numatune = DomainNumatune(self.conn, None, self._xml_node)
+        self.installer = virtinst.DistroInstaller(self.conn)
 
 
     ######################
@@ -173,6 +167,13 @@ class Guest(XMLBuilder):
     on_reboot = XMLProperty(xpath="./on_reboot")
     on_crash = XMLProperty(xpath="./on_crash")
 
+    os = XMLChildProperty(OSXML, is_single=True)
+    features = XMLChildProperty(DomainFeatures, is_single=True)
+    clock = XMLChildProperty(Clock, is_single=True)
+    seclabel = XMLChildProperty(Seclabel, is_single=True)
+    cpu = XMLChildProperty(CPU, is_single=True)
+    numatune = XMLChildProperty(DomainNumatune, is_single=True)
+
 
     ###############################
     # Distro detection properties #
@@ -225,7 +226,8 @@ class Guest(XMLBuilder):
         return newlist
     _devices = XMLChildProperty(
         [VirtualDevice.virtual_device_classes[_n]
-         for _n in VirtualDevice.virtual_device_types])
+         for _n in VirtualDevice.virtual_device_types],
+        relative_xpath="./devices")
 
     def get_all_devices(self):
         """
@@ -266,11 +268,14 @@ class Guest(XMLBuilder):
         # We do a shallow copy of the device list here, and set the defaults.
         # This way, default changes aren't persistent, and we don't need
         # to worry about when to call set_defaults
+        #
+        # XXX: this is hacky, we should find a way to use xmlbuilder.copy(),
+        # but need to make sure it's not a massive performance hit
         data = (self._devices[:], self.features, self.os)
         try:
             self._propstore["_devices"] = [dev.copy() for dev in self._devices]
-            self.features = self.features.copy()
-            self.os = self.os.copy()
+            self._propstore["features"] = self.features.copy()
+            self._propstore["os"] = self.os.copy()
             support.set_rhel6(self._is_rhel6())
         except:
             self._finish_get_xml(data)
@@ -278,7 +283,9 @@ class Guest(XMLBuilder):
         return data
 
     def _finish_get_xml(self, data):
-        self._propstore["_devices"], self.features, self.os = data
+        (self._propstore["_devices"],
+         self._propstore["features"],
+         self._propstore["os"]) = data
         support.set_rhel6(False)
 
     def get_install_xml(self, *args, **kwargs):

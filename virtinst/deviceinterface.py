@@ -22,7 +22,7 @@ import random
 
 from virtinst import util
 from virtinst import VirtualDevice
-from virtinst.xmlbuilder import XMLBuilder, XMLProperty
+from virtinst.xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 def _random_mac(conn):
@@ -53,15 +53,13 @@ def _random_mac(conn):
 
 
 class VirtualPort(XMLBuilder):
-    _XML_ROOT_XPATH = "/domain/devices/interface/virtualport"
+    _XML_ROOT_NAME = "virtualport"
 
-    type = XMLProperty(xpath="./virtualport/@type")
-    managerid = XMLProperty(xpath="./virtualport/parameters/@managerid",
-                            is_int=True)
-    typeid = XMLProperty(xpath="./virtualport/parameters/@typeid", is_int=True)
-    typeidversion = XMLProperty(
-            xpath="./virtualport/parameters/@typeidversion", is_int=True)
-    instanceid = XMLProperty(xpath="./virtualport/parameters/@instanceid")
+    type = XMLProperty("./@type")
+    managerid = XMLProperty("./parameters/@managerid", is_int=True)
+    typeid = XMLProperty("./parameters/@typeid", is_int=True)
+    typeidversion = XMLProperty("./parameters/@typeidversion", is_int=True)
+    instanceid = XMLProperty("./parameters/@instanceid")
 
 
 class VirtualNetworkInterface(VirtualDevice):
@@ -133,14 +131,11 @@ class VirtualNetworkInterface(VirtualDevice):
         return (False, None)
 
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
-
-        self.virtualport = VirtualPort(conn, parsexml, parsexmlnode)
+    def __init__(self, *args, **kwargs):
+        VirtualDevice.__init__(self, *args, **kwargs)
 
         self._random_mac = None
         self._default_bridge = None
-
 
     def _generate_default_bridge(self):
         ret = self._default_bridge
@@ -201,6 +196,7 @@ class VirtualNetworkInterface(VirtualDevice):
         "macaddr", "target_dev", "model", "virtualport",
         "filterref"]
 
+    virtualport = XMLChildProperty(VirtualPort, is_single=True)
     type = XMLProperty(xpath="./@type",
                        default_cb=lambda s: s.TYPE_BRIDGE)
 

@@ -94,8 +94,8 @@ class VirtualGraphics(VirtualDevice):
 
         return str(gtype).capitalize()
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
-        VirtualDevice.__init__(self, conn, parsexml, parsexmlnode)
+    def __init__(self, *args, **kwargs):
+        VirtualDevice.__init__(self, *args, **kwargs)
 
         self._local_keymap = -1
 

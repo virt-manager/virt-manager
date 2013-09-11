@@ -21,7 +21,7 @@ from virtinst.xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 
 class _BootDevice(XMLBuilder):
-    _XML_ROOT_XPATH = "/domain/os/boot"
+    _XML_ROOT_NAME = "boot"
     dev = XMLProperty("./@dev")
 
 
@@ -54,7 +54,7 @@ class OSXML(XMLBuilder):
     def is_pseries(self):
         return self.is_ppc64 and self.machine == "pseries"
 
-    _XML_ROOT_XPATH = "/domain/os"
+    _XML_ROOT_NAME = "os"
     _XML_PROP_ORDER = ["arch", "os_type", "loader",
                        "kernel", "initrd", "kernel_args", "dtb",
                        "_bootdevs"]
@@ -72,17 +72,17 @@ class OSXML(XMLBuilder):
     _bootdevs = XMLChildProperty(_BootDevice)
     bootorder = property(_get_bootorder, _set_bootorder)
 
-    enable_bootmenu = XMLProperty(xpath="./os/bootmenu/@enable", is_yesno=True)
-    useserial = XMLProperty(xpath="./os/bios/@useserial", is_yesno=True)
+    enable_bootmenu = XMLProperty(xpath="./bootmenu/@enable", is_yesno=True)
+    useserial = XMLProperty(xpath="./bios/@useserial", is_yesno=True)
 
-    kernel = XMLProperty(xpath="./os/kernel")
-    initrd = XMLProperty(xpath="./os/initrd")
-    kernel_args = XMLProperty(xpath="./os/cmdline")
-    dtb = XMLProperty(xpath="./os/dtb")
+    kernel = XMLProperty(xpath="./kernel")
+    initrd = XMLProperty(xpath="./initrd")
+    kernel_args = XMLProperty(xpath="./cmdline")
+    dtb = XMLProperty(xpath="./dtb")
 
-    init = XMLProperty(xpath="./os/init")
-    loader = XMLProperty(xpath="./os/loader")
-    arch = XMLProperty(xpath="./os/type/@arch",
+    init = XMLProperty(xpath="./init")
+    loader = XMLProperty(xpath="./loader")
+    arch = XMLProperty(xpath="./type/@arch",
                        default_cb=lambda s: s.conn.caps.host.arch)
-    machine = XMLProperty(xpath="./os/type/@machine")
-    os_type = XMLProperty(xpath="./os/type", default_cb=lambda s: "xen")
+    machine = XMLProperty(xpath="./type/@machine")
+    os_type = XMLProperty(xpath="./type", default_cb=lambda s: "xen")

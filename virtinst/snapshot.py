@@ -21,7 +21,7 @@ from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
 
 class DomainSnapshot(XMLBuilder):
-    _XML_ROOT_XPATH = "/domainsnapshot"
+    _XML_ROOT_NAME = "domainsnapshot"
     _XML_PROP_ORDER = ["name", "description", "creationTime"]
 
     name = XMLProperty(xpath="./name")

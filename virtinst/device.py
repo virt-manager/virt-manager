@@ -19,7 +19,65 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtinst.xmlbuilder import XMLBuilder, XMLProperty
+from virtinst.xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+
+
+class VirtualDeviceAlias(XMLBuilder):
+    _XML_ROOT_NAME = "alias"
+    name = XMLProperty(xpath="./@name")
+
+
+class VirtualDeviceAddress(XMLBuilder):
+    """
+    Examples:
+    <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+    <address type='drive' controller='0' bus='0' unit='0'/>
+    <address type='ccid' controller='0' slot='0'/>
+    <address type='virtio-serial' controller='1' bus='0' port='4'/>
+    """
+
+    ADDRESS_TYPE_PCI           = "pci"
+    ADDRESS_TYPE_DRIVE         = "drive"
+    ADDRESS_TYPE_VIRTIO_SERIAL = "virtio-serial"
+    ADDRESS_TYPE_CCID          = "ccid"
+    ADDRESS_TYPE_SPAPR_VIO     = "spapr-vio"
+
+    TYPES = [ADDRESS_TYPE_PCI, ADDRESS_TYPE_DRIVE,
+             ADDRESS_TYPE_VIRTIO_SERIAL, ADDRESS_TYPE_CCID,
+             ADDRESS_TYPE_SPAPR_VIO]
+
+    _XML_ROOT_NAME = "address"
+    _XML_PROP_ORDER = ["type", "domain", "controller", "bus", "slot",
+                       "function", "target", "unit", "multifunction"]
+
+    def set_addrstr(self, addrstr):
+        if addrstr is None:
+            return
+
+        if addrstr.count(":") in [1, 2] and addrstr.count("."):
+            self.type = self.ADDRESS_TYPE_PCI
+            addrstr, self.function = addrstr.split(".", 1)
+            addrstr, self.slot = addrstr.rsplit(":", 1)
+            self.domain = "0"
+            if addrstr.count(":"):
+                self.domain, self.bus = addrstr.split(":", 1)
+        elif addrstr == "spapr-vio":
+            self.type = self.ADDRESS_TYPE_SPAPR_VIO
+        else:
+            raise ValueError(_("Could not determine or unsupported "
+                               "format of '%s'") % addrstr)
+
+
+    type = XMLProperty(xpath="./@type")
+    domain = XMLProperty(xpath="./@domain", is_int=True)
+    bus = XMLProperty(xpath="./@bus", is_int=True)
+    slot = XMLProperty(xpath="./@slot", is_int=True)
+    function = XMLProperty(xpath="./@function", is_int=True)
+    controller = XMLProperty(xpath="./@controller", is_int=True)
+    unit = XMLProperty(xpath="./@unit", is_int=True)
+    port = XMLProperty(xpath="./@port", is_int=True)
+    target = XMLProperty(xpath="./@target", is_int=True)
+    multifunction = XMLProperty(xpath="./@multifunction", is_onoff=True)
 
 
 class VirtualDevice(XMLBuilder):
@@ -71,23 +129,19 @@ class VirtualDevice(XMLBuilder):
 
     @classmethod
     def register_type(cls):
-        cls._XML_ROOT_XPATH = "/domain/devices/%s" % cls.virtual_device_type
+        cls._XML_ROOT_NAME = cls.virtual_device_type
         VirtualDevice.virtual_device_classes[cls.virtual_device_type] = cls
 
     # General device type (disk, interface, etc.)
     virtual_device_type = None
 
-    def __init__(self, conn, parsexml=None, parsexmlnode=None):
+    def __init__(self, *args, **kwargs):
         """
         Initialize device state
 
         @param conn: libvirt connection to validate device against
         """
-
-        XMLBuilder.__init__(self, conn, parsexml, parsexmlnode)
-
-        self.alias = VirtualDeviceAlias(conn, parsexmlnode=parsexmlnode)
-        self.address = VirtualDeviceAddress(conn, parsexmlnode=parsexmlnode)
+        XMLBuilder.__init__(self, *args, **kwargs)
         self._XML_PROP_ORDER = self._XML_PROP_ORDER + ["alias", "address"]
 
         if not self.virtual_device_type:
@@ -96,6 +150,9 @@ class VirtualDevice(XMLBuilder):
         if self.virtual_device_type not in self.virtual_device_types:
             raise ValueError(_("Unknown virtual device type '%s'.") %
                              self.virtual_device_type)
+
+    alias = XMLChildProperty(VirtualDeviceAlias, is_single=True)
+    address = XMLChildProperty(VirtualDeviceAddress, is_single=True)
 
 
     def setup(self, meter=None):
@@ -108,61 +165,3 @@ class VirtualDevice(XMLBuilder):
         # Will be overwritten by subclasses if necessary.
         ignore = meter
         return
-
-
-class VirtualDeviceAlias(XMLBuilder):
-    _XML_ROOT_XPATH = "/alias"
-    name = XMLProperty(xpath="./alias/@name")
-
-
-class VirtualDeviceAddress(XMLBuilder):
-    """
-    Examples:
-    <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
-    <address type='drive' controller='0' bus='0' unit='0'/>
-    <address type='ccid' controller='0' slot='0'/>
-    <address type='virtio-serial' controller='1' bus='0' port='4'/>
-    """
-
-    ADDRESS_TYPE_PCI           = "pci"
-    ADDRESS_TYPE_DRIVE         = "drive"
-    ADDRESS_TYPE_VIRTIO_SERIAL = "virtio-serial"
-    ADDRESS_TYPE_CCID          = "ccid"
-    ADDRESS_TYPE_SPAPR_VIO     = "spapr-vio"
-
-    TYPES = [ADDRESS_TYPE_PCI, ADDRESS_TYPE_DRIVE,
-             ADDRESS_TYPE_VIRTIO_SERIAL, ADDRESS_TYPE_CCID,
-             ADDRESS_TYPE_SPAPR_VIO]
-
-    _XML_ROOT_XPATH = "/address"
-    _XML_PROP_ORDER = ["type", "domain", "controller", "bus", "slot",
-                       "function", "target", "unit", "multifunction"]
-
-    def set_addrstr(self, addrstr):
-        if addrstr is None:
-            return
-
-        if addrstr.count(":") in [1, 2] and addrstr.count("."):
-            self.type = self.ADDRESS_TYPE_PCI
-            addrstr, self.function = addrstr.split(".", 1)
-            addrstr, self.slot = addrstr.rsplit(":", 1)
-            self.domain = "0"
-            if addrstr.count(":"):
-                self.domain, self.bus = addrstr.split(":", 1)
-        elif addrstr == "spapr-vio":
-            self.type = self.ADDRESS_TYPE_SPAPR_VIO
-        else:
-            raise ValueError(_("Could not determine or unsupported "
-                               "format of '%s'") % addrstr)
-
-
-    type = XMLProperty(xpath="./address/@type")
-    domain = XMLProperty(xpath="./address/@domain", is_int=True)
-    bus = XMLProperty(xpath="./address/@bus", is_int=True)
-    slot = XMLProperty(xpath="./address/@slot", is_int=True)
-    function = XMLProperty(xpath="./address/@function", is_int=True)
-    controller = XMLProperty(xpath="./address/@controller", is_int=True)
-    unit = XMLProperty(xpath="./address/@unit", is_int=True)
-    port = XMLProperty(xpath="./address/@port", is_int=True)
-    target = XMLProperty(xpath="./address/@target", is_int=True)
-    multifunction = XMLProperty(xpath="./address/@multifunction", is_onoff=True)
