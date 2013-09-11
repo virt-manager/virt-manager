@@ -111,7 +111,7 @@ class VirtualDevice(XMLBuilder):
 
 
 class VirtualDeviceAlias(XMLBuilder):
-    _XML_ROOT_XPATH = "/domain/devices/device/alias"
+    _XML_ROOT_XPATH = "/alias"
     name = XMLProperty(xpath="./alias/@name")
 
 
@@ -134,7 +134,7 @@ class VirtualDeviceAddress(XMLBuilder):
              ADDRESS_TYPE_VIRTIO_SERIAL, ADDRESS_TYPE_CCID,
              ADDRESS_TYPE_SPAPR_VIO]
 
-    _XML_ROOT_XPATH = "/domain/devices/device/address"
+    _XML_ROOT_XPATH = "/address"
     _XML_PROP_ORDER = ["type", "domain", "controller", "bus", "slot",
                        "function", "target", "unit", "multifunction"]
 
