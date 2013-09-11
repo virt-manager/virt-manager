@@ -955,7 +955,6 @@ class vmmAddHardware(vmmGObjectUI):
         self._dev = VirtualTPMDevice(conn)
         self._dev.type = devtype
 
-        show_something = False
         for param_name, widget_name in tpm_widget_mappings.items():
             make_visible = self._dev.supports_property(param_name)
             uihelpers.set_grid_row_visible(self.widget(widget_name + "-label"),
