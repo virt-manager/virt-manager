@@ -53,6 +53,7 @@ from virtinst.devicesmartcard import VirtualSmartCardDevice
 from virtinst.deviceredirdev import VirtualRedirDevice
 from virtinst.devicememballoon import VirtualMemballoon
 from virtinst.devicetpm import VirtualTPMDevice
+from virtinst.devicerng import VirtualRNGDevice
 
 from virtinst.installer import (ContainerInstaller, ImportInstaller,
                                 LiveCDInstaller, PXEInstaller, Installer)

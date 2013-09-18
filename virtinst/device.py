@@ -103,6 +103,7 @@ class VirtualDevice(XMLBuilder):
     VIRTUAL_DEV_REDIRDEV        = "redirdev"
     VIRTUAL_DEV_MEMBALLOON      = "memballoon"
     VIRTUAL_DEV_TPM             = "tpm"
+    VIRTUAL_DEV_RNG             = "rng"
 
     # Ordering in this list is important: it will be the order the
     # Guest class outputs XML. So changing this may upset the test suite
@@ -123,7 +124,8 @@ class VirtualDevice(XMLBuilder):
                             VIRTUAL_DEV_SMARTCARD,
                             VIRTUAL_DEV_REDIRDEV,
                             VIRTUAL_DEV_MEMBALLOON,
-                            VIRTUAL_DEV_TPM]
+                            VIRTUAL_DEV_TPM,
+                            VIRTUAL_DEV_RNG]
 
     virtual_device_classes = {}
 

@@ -733,6 +733,36 @@ class XMLParseTest(unittest.TestCase):
 
         self._alter_compare(guest.get_xml_config(), outfile)
 
+    def testAlterRNG_EGD(self):
+        guest, outfile = self._get_test_content("change-rng-egd")
+
+        dev1 = guest.get_devices("rng")[0]
+
+        check = self._make_checker(dev1)
+        check("type", "egd")
+        check("backend_type", "udp", "tcp")
+
+        check("backend_source_host", "1.2.3.4", "1.2.3.5")
+        check("backend_source_service", "1234", "1235")
+        check("backend_source_mode", "connect", "bind")
+
+        check("rate_bytes", "1234", "4321")
+        check("rate_period", "2000", "2001")
+
+        self._alter_compare(guest.get_xml_config(), outfile)
+
+    def testAlterRNG_Random(self):
+        guest, outfile = self._get_test_content("change-rng-random")
+
+        dev1 = guest.get_devices("rng")[0]
+
+        check = self._make_checker(dev1)
+        check("type", "random", "random")
+        check("model", "virtio", "virtio")
+        check("device", "/dev/random", "/dev/hwrng")
+
+        self._alter_compare(guest.get_xml_config(), outfile)
+
     def testConsoleCompat(self):
         guest, outfile = self._get_test_content("console-compat")
 
