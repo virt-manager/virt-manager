@@ -436,6 +436,12 @@ c.add_valid("--tpm passthrough,model=tpm-tis")  # --tpm backend type with model
 c.add_valid("--tpm passthrough,model=tpm-tis,path=/dev/tpm0")  # --tpm backend type with model and device path
 c.add_invalid("--tpm passthrough,model=foo")  # Invalid model
 
+c = vinst.add_category("tpm", "--noautoconsole --nodisks --pxe")
+c.add_valid("--rng random,device=/dev/random")  # random device backend
+c.add_valid("--rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp")  # egd backend
+c.add_valid("--rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp,backend_mode=bind")  # egd backend, bind mode
+c.add_invalid("--rng foo,backend_host=127.0.0.1,backend_service=8000,backend_mode=connect")  # invalid type
+
 
 c = vinst.add_category("xen", "--connect %(XENURI)s --noautoconsole")
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default

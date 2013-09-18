@@ -527,6 +527,7 @@ def build_guest_instance(conn, options):
     cli.get_hostdevs(options.hostdevs, guest)
     cli.get_smartcard(guest, options.smartcard)
     cli.get_tpm(guest, options.tpm)
+    cli.get_rng(guest, options.rng)
 
     if not guest.get_devices("input"):
         guest.add_default_input_device()

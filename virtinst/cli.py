@@ -852,6 +852,17 @@ def get_tpm(guest, tpm_opts):
             guest.add_device(dev)
 
 
+def get_rng(guest, rng_opts):
+    for rng in listify(rng_opts):
+        try:
+            dev = parse_rng(guest, rng)
+        except Exception, e:
+            fail(_("Error in RNG device parameters: %s") % str(e))
+
+        if dev:
+            guest.add_device(dev)
+
+
 def get_controller(guest, sc_opts):
     for sc in listify(sc_opts):
         try:
@@ -992,6 +1003,9 @@ def add_device_options(devg):
     devg.add_option("", "--tpm", dest="tpm", action="append",
                     help=_("Configure a guest TPM device. Ex:\n"
                            "--tpm type=passthrough"))
+    devg.add_option("", "--rng", dest="rng", action="append",
+                    help=_("Configure a guest RNG device. Ex:\n"
+                           "--rng type=egd,host=localhost,service=708"))
 
 
 def add_gfx_option(devg):
@@ -1727,6 +1741,32 @@ def parse_tpm(guest, optstring, dev=None):
 
     if opts:
         raise ValueError(_("Unknown options %s") % opts.keys())
+
+    return dev
+
+
+def parse_rng(guest, optstring, dev=None):
+    if optstring is None:
+        return None
+
+    opts = parse_optstr(optstring, remove_first="type")
+    if opts.get("type") == "none":
+        return None
+
+    if not dev:
+        dev = virtinst.VirtualRNGDevice(guest.conn)
+
+    set_param = _build_set_param(dev, opts)
+
+    set_param("type", "type")
+    set_param("backend_source_host", "backend_host")
+    set_param("backend_source_service", "backend_service")
+    set_param("backend_source_mode", "backend_mode")
+    set_param("backend_type", "backend_type")
+    set_param("device", "device")
+    set_param("model", "model")
+    set_param("rate_bytes", "rate_bytes")
+    set_param("rate_period", "rate_period")
 
     return dev
 

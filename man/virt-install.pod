@@ -1215,6 +1215,55 @@ Make the host's TPM accessible to a single guest.
 See C<http://libvirt.org/formatdomain.html#elementsTpm> for complete
 details.
 
+=item --rng=TYPE[,OPTS]
+
+Configure a virtual RNG device.
+
+Type can be B<random> or B<egd>.
+
+If the specified type is B<random> then these values must
+be specified:
+
+=over 4
+
+=item B<backend_device>
+
+The device to use as a source of entropy.
+
+=back
+
+Whereas, when the type is B<egd>, these values must be provided:
+
+=over 4
+
+=item B<backend_host>
+
+Specify the host of the Entropy Gathering Daemon to connect to.
+
+=item B<backend_service>
+
+Specify the port of the Entropy Gathering Daemon to connect to.
+
+=item B<backend_type>
+
+Specify the type of the connection: B<tcp> or B<udp>.
+
+=back
+
+An example invocation:
+
+=over 4
+
+=item B<--rng egd,backend_host=localhost,backend_service=8000,backend_type=tcp>
+
+Connect to localhost to the TCP port 8000 to get entropy data.
+
+
+See C<http://libvirt.org/formatdomain.html#elementsRng> for complete
+details.
+
+=back
+
 =back
 
 =head2 Miscellaneous Options
