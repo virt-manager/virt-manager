@@ -1018,9 +1018,9 @@ class XMLBuilder(object):
         if ret == xmlstub:
             ret = ""
 
-        if (ret and
-            self._xmlstate.root_name == "domain" and
-            not ret.endswith("\n")):
+        # Ensure top level XML object always ends with a newline, just
+        # for back compat and readability
+        if (ret and not self.get_root_xpath() and not ret.endswith("\n")):
             ret += "\n"
         return ret
 

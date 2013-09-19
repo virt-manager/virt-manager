@@ -171,7 +171,7 @@ class XMLParseTest(unittest.TestCase):
         rmfeat = guest.cpu.features[3]
         guest.cpu.remove_feature(rmfeat)
         self.assertEquals(rmfeat.get_xml_config(),
-                          """<feature name="foo" policy="bar"/>""")
+                          """<feature name="foo" policy="bar"/>\n""")
         guest.cpu.add_feature("addfeature")
 
         check = self._make_checker(guest.numatune)
@@ -303,8 +303,8 @@ class XMLParseTest(unittest.TestCase):
         self._alter_compare(guest.get_xml_config(), outfile)
 
     def testSingleDisk(self):
-        xml = ("""<disk type="file" device="disk"><source file="/a.img"/>"""
-               """<target dev="hda" bus="ide"/></disk>""")
+        xml = ("""<disk type="file" device="disk"><source file="/a.img"/>\n"""
+               """<target dev="hda" bus="ide"/></disk>\n""")
         d = virtinst.VirtualDisk(conn, parsexml=xml)
         self._set_and_check(d, "target", "hda", "hdb")
         self.assertEquals(xml.replace("hda", "hdb"), d.get_xml_config())
