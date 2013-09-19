@@ -652,8 +652,8 @@ def connect_console(domain, consolecb, wait):
     # If we connected the console, wait for it to finish
     try:
         os.waitpid(child, 0)
-    except OSError, (err_no, msg):
-        logging.debug("waitpid: %s: %s", err_no, msg)
+    except OSError, e:
+        logging.debug("waitpid: %s: %s", e.errno, e.message)
 
 
 def start_install(guest, continue_inst, options):

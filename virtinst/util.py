@@ -235,7 +235,7 @@ def parse_node_helper(xml, root_name, callback, exec_class=ValueError):
     Parse the passed XML, expecting root as root_name, and pass the
     root node to callback
     """
-    class ErrorHandler:
+    class ErrorHandler(object):
         def __init__(self):
             self.msg = ""
         def handler(self, ignore, s):
