@@ -263,6 +263,7 @@ class XMLChildProperty(property):
         self.child_classes = util.listify(child_classes)
         self.relative_xpath = relative_xpath
         self.is_single = is_single
+        self._propname = None
 
         if self.is_single and len(self.child_classes) > 1:
             raise RuntimeError("programming error: Can't specify multiple "
@@ -274,10 +275,14 @@ class XMLChildProperty(property):
         return "<XMLChildProperty %s %s>" % (str(self.child_classes), id(self))
 
     def _findpropname(self, xmlbuilder):
-        for key, val in xmlbuilder._all_child_props().items():
-            if val is self:
-                return key
-        raise RuntimeError("Didn't find expected property=%s" % self)
+        if self._propname is None:
+            for key, val in xmlbuilder._all_child_props().items():
+                if val is self:
+                    self._propname = key
+                    break
+        if self._propname is None:
+            raise RuntimeError("Didn't find expected property=%s" % self)
+        return self._propname
 
     def _get(self, xmlbuilder):
         propname = self._findpropname(xmlbuilder)
@@ -369,6 +374,7 @@ class XMLProperty(property):
         self._name = name or xpath
         if not self._name:
             raise RuntimeError("XMLProperty: name or xpath must be passed.")
+        self._propname = None
 
         self._is_bool = is_bool
         self._is_int = is_int
@@ -412,10 +418,14 @@ class XMLProperty(property):
         Map the raw property() instance to the param name it's exposed
         as in the XMLBuilder class. This is just for debug purposes.
         """
-        for key, val in xmlbuilder._all_xml_props().items():
-            if val is self:
-                return key
-        raise RuntimeError("Didn't find expected property=%s" % self)
+        if self._propname is None:
+            for key, val in xmlbuilder._all_xml_props().items():
+                if val is self:
+                    self._propname = key
+                    break
+        if self._propname is None:
+            raise RuntimeError("Didn't find expected property=%s" % self)
+        return self._propname
 
     def _xpath_for_getter(self, xmlbuilder):
         ret = self._xpath
@@ -763,6 +773,9 @@ class XMLBuilder(object):
                                    parsexml, parsexmlnode,
                                    parent_xpath, relative_object_xpath)
 
+        self._initial_child_parse()
+
+    def _initial_child_parse(self):
         # Walk the XML tree and hand of parsing to any registered
         # child classes
         for xmlprop in self._all_child_props().values():
@@ -791,6 +804,7 @@ class XMLBuilder(object):
                         parent_xpath=self.get_root_xpath(),
                         relative_object_xpath=(prop_path + idxstr))
                     xmlprop.append(self, obj)
+
         self._set_child_xpaths()
 
 
@@ -908,13 +922,15 @@ class XMLBuilder(object):
 
     def _set_parent_xpath(self, xpath):
         self._xmlstate.set_parent_xpath(xpath)
-        for p in self._all_subelement_props():
-            p._set_parent_xpath(self.get_root_xpath())
+        for propname in self._all_child_props():
+            for p in util.listify(getattr(self, propname, [])):
+                p._set_parent_xpath(self.get_root_xpath())
 
     def _set_relative_object_xpath(self, xpath):
         self._xmlstate.set_relative_object_xpath(xpath)
-        for p in self._all_subelement_props():
-            p._set_parent_xpath(self.get_root_xpath())
+        for propname in self._all_child_props():
+            for p in util.listify(getattr(self, propname, [])):
+                p._set_parent_xpath(self.get_root_xpath())
 
     def _find_child_prop(self, child_class):
         xmlprops = self._all_child_props()
@@ -958,27 +974,6 @@ class XMLBuilder(object):
         obj._xmlstate._parse(xml, None)
         _remove_xpath_node(self._xmlstate.xml_ctx, xpath, dofree=False)
         self._set_child_xpaths()
-
-    def _all_subelement_props(self):
-        """
-        Return a list of all sub element properties this class tracks.
-        A sub element is an XMLBuilder that is tracked explicitly in
-        a parent class, which alters the parent XML.
-        VirtualDevice.address is an example.
-        """
-        xmlprops = self._all_xml_props()
-        childprops = self._all_child_props()
-        ret = []
-        propmap = {}
-        for propname in self._XML_PROP_ORDER:
-            if propname not in xmlprops:
-                propmap[propname] = getattr(self, propname)
-        for propname in childprops:
-            propmap[propname] = getattr(self, propname)
-
-        for objs in propmap.values():
-            ret.extend(util.listify(objs))
-        return ret
 
 
     #################################
