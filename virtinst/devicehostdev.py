@@ -83,28 +83,28 @@ class VirtualHostDevice(VirtualDevice):
     _XML_PROP_ORDER = ["mode", "type", "managed", "vendor", "product",
                        "domain", "bus", "slot", "function"]
 
-    mode = XMLProperty(xpath="./@mode", default_cb=lambda s: "subsystem")
-    type = XMLProperty(xpath="./@type")
+    mode = XMLProperty("./@mode", default_cb=lambda s: "subsystem")
+    type = XMLProperty("./@type")
 
     def _get_default_managed(self):
         return self.conn.is_xen() and "no" or "yes"
-    managed = XMLProperty(xpath="./@managed", is_yesno=True,
+    managed = XMLProperty("./@managed", is_yesno=True,
                           default_cb=_get_default_managed)
 
-    vendor = XMLProperty(xpath="./source/vendor/@id")
-    product = XMLProperty(xpath="./source/product/@id")
+    vendor = XMLProperty("./source/vendor/@id")
+    product = XMLProperty("./source/product/@id")
 
-    device = XMLProperty(xpath="./source/address/@device")
-    bus = XMLProperty(xpath="./source/address/@bus")
+    device = XMLProperty("./source/address/@device")
+    bus = XMLProperty("./source/address/@bus")
 
     def _get_default_domain(self):
         if self.type == "pci":
             return "0x0"
         return None
-    domain = XMLProperty(xpath="./source/address/@domain",
+    domain = XMLProperty("./source/address/@domain",
                          default_cb=_get_default_domain)
-    function = XMLProperty(xpath="./source/address/@function")
-    slot = XMLProperty(xpath="./source/address/@slot")
+    function = XMLProperty("./source/address/@function")
+    slot = XMLProperty("./source/address/@slot")
 
 
 VirtualHostDevice.register_type()

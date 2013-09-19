@@ -84,12 +84,12 @@ class VirtualController(VirtualDevice):
 
     _XML_PROP_ORDER = ["type", "index", "model", "master_startport"]
 
-    type = XMLProperty(xpath="./@type")
-    model = XMLProperty(xpath="./@model")
-    vectors = XMLProperty(xpath="./@vectors", is_int=True)
-    ports = XMLProperty(xpath="./@ports", is_int=True)
-    master_startport = XMLProperty(xpath="./master/@startport", is_int=True)
+    type = XMLProperty("./@type")
+    model = XMLProperty("./@model")
+    vectors = XMLProperty("./@vectors", is_int=True)
+    ports = XMLProperty("./@ports", is_int=True)
+    master_startport = XMLProperty("./master/@startport", is_int=True)
 
-    index = XMLProperty(xpath="./@index", is_int=True, default_cb=lambda s: 0)
+    index = XMLProperty("./@index", is_int=True, default_cb=lambda s: 0)
 
 VirtualController.register_type()

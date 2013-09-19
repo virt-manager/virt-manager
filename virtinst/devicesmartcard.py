@@ -37,7 +37,7 @@ class VirtualSmartCardDevice(VirtualDevice):
 
     _XML_PROP_ORDER = ["mode", "type"]
 
-    mode = XMLProperty(xpath="./@mode",
+    mode = XMLProperty("./@mode",
                        default_cb=lambda s: "passthrough",
                        default_name=MODE_DEFAULT)
 
@@ -45,7 +45,7 @@ class VirtualSmartCardDevice(VirtualDevice):
         if self.mode == self.MODE_DEFAULT or self.mode == "passthrough":
             return "spicevmc"
         return "tcp"
-    type = XMLProperty(xpath="./@type",
+    type = XMLProperty("./@type",
                        default_cb=_default_type,
                        default_name=TYPE_DEFAULT)
 

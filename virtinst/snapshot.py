@@ -24,11 +24,11 @@ class DomainSnapshot(XMLBuilder):
     _XML_ROOT_NAME = "domainsnapshot"
     _XML_PROP_ORDER = ["name", "description", "creationTime"]
 
-    name = XMLProperty(xpath="./name")
-    description = XMLProperty(xpath="./description")
-    state = XMLProperty(xpath="./state")
-    creationTime = XMLProperty(xpath="./creationTime", is_int=True)
-    parent = XMLProperty(xpath="./parent/name")
+    name = XMLProperty("./name")
+    description = XMLProperty("./description")
+    state = XMLProperty("./state")
+    creationTime = XMLProperty("./creationTime", is_int=True)
+    parent = XMLProperty("./parent/name")
 
     # Missing bits:
     # <memory> @type and @file

@@ -24,7 +24,7 @@ from virtinst.xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 class VirtualDeviceAlias(XMLBuilder):
     _XML_ROOT_NAME = "alias"
-    name = XMLProperty(xpath="./@name")
+    name = XMLProperty("./@name")
 
 
 class VirtualDeviceAddress(XMLBuilder):
@@ -68,16 +68,16 @@ class VirtualDeviceAddress(XMLBuilder):
                                "format of '%s'") % addrstr)
 
 
-    type = XMLProperty(xpath="./@type")
-    domain = XMLProperty(xpath="./@domain", is_int=True)
-    bus = XMLProperty(xpath="./@bus", is_int=True)
-    slot = XMLProperty(xpath="./@slot", is_int=True)
-    function = XMLProperty(xpath="./@function", is_int=True)
-    controller = XMLProperty(xpath="./@controller", is_int=True)
-    unit = XMLProperty(xpath="./@unit", is_int=True)
-    port = XMLProperty(xpath="./@port", is_int=True)
-    target = XMLProperty(xpath="./@target", is_int=True)
-    multifunction = XMLProperty(xpath="./@multifunction", is_onoff=True)
+    type = XMLProperty("./@type")
+    domain = XMLProperty("./@domain", is_int=True)
+    bus = XMLProperty("./@bus", is_int=True)
+    slot = XMLProperty("./@slot", is_int=True)
+    function = XMLProperty("./@function", is_int=True)
+    controller = XMLProperty("./@controller", is_int=True)
+    unit = XMLProperty("./@unit", is_int=True)
+    port = XMLProperty("./@port", is_int=True)
+    target = XMLProperty("./@target", is_int=True)
+    multifunction = XMLProperty("./@multifunction", is_onoff=True)
 
 
 class VirtualDevice(XMLBuilder):

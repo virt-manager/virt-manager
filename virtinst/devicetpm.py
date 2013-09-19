@@ -57,11 +57,11 @@ class VirtualTPMDevice(VirtualDevice):
 
         return hasattr(self, propname)
 
-    type = XMLProperty(xpath="./backend/@type",
+    type = XMLProperty("./backend/@type",
                        default_cb=lambda s: s.TYPE_PASSTHROUGH)
-    model = XMLProperty(xpath="./@model",
+    model = XMLProperty("./@model",
                        default_cb=lambda s: s.MODEL_TIS)
-    device_path = XMLProperty(xpath="./backend/device/@path",
+    device_path = XMLProperty("./backend/device/@path",
                               default_cb=lambda s: "/dev/tpm0")
 
 

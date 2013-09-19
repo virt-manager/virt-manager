@@ -59,10 +59,10 @@ class VirtualWatchdog(VirtualDevice):
         return action
 
     _XML_PROP_ORDER = ["model", "action"]
-    model = XMLProperty(xpath="./@model",
+    model = XMLProperty("./@model",
                         default_name=MODEL_DEFAULT,
                         default_cb=lambda s: s.MODEL_I6300)
-    action = XMLProperty(xpath="./@action",
+    action = XMLProperty("./@action",
                          default_name=ACTION_DEFAULT,
                          default_cb=lambda s: s.ACTION_RESET)
 

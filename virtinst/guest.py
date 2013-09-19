@@ -116,7 +116,7 @@ class Guest(XMLBuilder):
         if val == self.name:
             return
         self.validate_name(self.conn, val, check_collision=not self.replace)
-    name = XMLProperty(xpath="./name", validate_cb=_validate_name)
+    name = XMLProperty("./name", validate_cb=_validate_name)
 
     def _set_memory(self, val):
         if val is None:
@@ -125,10 +125,10 @@ class Guest(XMLBuilder):
         if self.maxmemory is None or self.maxmemory < val:
             self.maxmemory = val
         return val
-    memory = XMLProperty(xpath="./currentMemory", is_int=True,
+    memory = XMLProperty("./currentMemory", is_int=True,
                          default_cb=lambda s: 1,
                          set_converter=_set_memory)
-    maxmemory = XMLProperty(xpath="./memory", is_int=True)
+    maxmemory = XMLProperty("./memory", is_int=True)
 
     def _set_vcpus(self, val):
         if val is None:
@@ -138,34 +138,34 @@ class Guest(XMLBuilder):
         if self.curvcpus is not None and self.curvcpus > val:
             self.curvcpus = val
         return val
-    vcpus = XMLProperty(xpath="./vcpu", is_int=True,
+    vcpus = XMLProperty("./vcpu", is_int=True,
                         set_converter=_set_vcpus,
                         default_cb=lambda s: 1)
-    curvcpus = XMLProperty(xpath="./vcpu/@current", is_int=True)
+    curvcpus = XMLProperty("./vcpu/@current", is_int=True)
 
     def _validate_cpuset(self, val):
         DomainNumatune.validate_cpuset(self.conn, val)
-    cpuset = XMLProperty(xpath="./vcpu/@cpuset",
+    cpuset = XMLProperty("./vcpu/@cpuset",
                          validate_cb=_validate_cpuset)
 
     def _get_default_uuid(self):
         if self._random_uuid is None:
             self._random_uuid = util.generate_uuid(self.conn)
         return self._random_uuid
-    uuid = XMLProperty(xpath="./uuid",
+    uuid = XMLProperty("./uuid",
                        validate_cb=lambda s, v: util.validate_uuid(v),
                        default_cb=_get_default_uuid)
 
-    type = XMLProperty(xpath="./@type", default_cb=lambda s: "xen")
-    hugepage = XMLProperty(xpath="./memoryBacking/hugepages", is_bool=True)
-    bootloader = XMLProperty(xpath="./bootloader")
-    description = XMLProperty(xpath="./description")
-    emulator = XMLProperty(xpath="./devices/emulator")
+    type = XMLProperty("./@type", default_cb=lambda s: "xen")
+    hugepage = XMLProperty("./memoryBacking/hugepages", is_bool=True)
+    bootloader = XMLProperty("./bootloader")
+    description = XMLProperty("./description")
+    emulator = XMLProperty("./devices/emulator")
 
-    on_poweroff = XMLProperty(xpath="./on_poweroff",
+    on_poweroff = XMLProperty("./on_poweroff",
                               default_cb=lambda s: "destroy")
-    on_reboot = XMLProperty(xpath="./on_reboot")
-    on_crash = XMLProperty(xpath="./on_crash")
+    on_reboot = XMLProperty("./on_reboot")
+    on_crash = XMLProperty("./on_crash")
 
     os = XMLChildProperty(OSXML, is_single=True)
     features = XMLChildProperty(DomainFeatures, is_single=True)

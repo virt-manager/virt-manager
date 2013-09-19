@@ -35,10 +35,10 @@ class VirtualInputDevice(VirtualDevice):
     BUS_DEFAULT = "default"
     BUSES = [BUS_PS2, BUS_USB, BUS_XEN, BUS_DEFAULT]
 
-    type = XMLProperty(xpath="./@type",
+    type = XMLProperty("./@type",
                        default_cb=lambda s: s.TYPE_MOUSE,
                        default_name=TYPE_DEFAULT)
-    bus = XMLProperty(xpath="./@bus",
+    bus = XMLProperty("./@bus",
                       default_cb=lambda s: s.BUS_XEN,
                       default_name=BUS_DEFAULT)
 

@@ -197,7 +197,7 @@ class VirtualNetworkInterface(VirtualDevice):
         "filterref"]
 
     virtualport = XMLChildProperty(VirtualPort, is_single=True)
-    type = XMLProperty(xpath="./@type",
+    type = XMLProperty("./@type",
                        default_cb=lambda s: s.TYPE_BRIDGE)
 
     def _get_default_mac(self):
@@ -207,7 +207,7 @@ class VirtualNetworkInterface(VirtualDevice):
     def _validate_mac(self, val):
         util.validate_macaddr(val)
         return val
-    macaddr = XMLProperty(xpath="./mac/@address",
+    macaddr = XMLProperty("./mac/@address",
                           set_converter=_validate_mac,
                           default_cb=_get_default_mac)
 
@@ -215,10 +215,10 @@ class VirtualNetworkInterface(VirtualDevice):
         if self.type == self.TYPE_BRIDGE:
             return self._generate_default_bridge()
         return None
-    bridge = XMLProperty(xpath="./source/@bridge",
+    bridge = XMLProperty("./source/@bridge",
                          default_cb=_get_default_bridge)
-    network = XMLProperty(xpath="./source/@network")
-    source_dev = XMLProperty(xpath="./source/@dev")
+    network = XMLProperty("./source/@network")
+    source_dev = XMLProperty("./source/@dev")
 
 
 
@@ -226,11 +226,11 @@ class VirtualNetworkInterface(VirtualDevice):
         if self.type == self.TYPE_DIRECT:
             return "vepa"
         return None
-    source_mode = XMLProperty(xpath="./source/@mode",
+    source_mode = XMLProperty("./source/@mode",
                               default_cb=_default_source_mode)
-    model = XMLProperty(xpath="./model/@type")
-    target_dev = XMLProperty(xpath="./target/@dev")
-    filterref = XMLProperty(xpath="./filterref/@filter")
+    model = XMLProperty("./model/@type")
+    target_dev = XMLProperty("./target/@dev")
+    filterref = XMLProperty("./filterref/@filter")
 
 
 VirtualNetworkInterface.register_type()

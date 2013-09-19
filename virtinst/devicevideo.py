@@ -37,12 +37,12 @@ class VirtualVideoDevice(VirtualDevice):
 
 
     _XML_PROP_ORDER = ["model", "vram", "heads"]
-    model = XMLProperty(xpath="./model/@type",
+    model = XMLProperty("./model/@type",
                         default_cb=lambda s: "cirrus",
                         default_name=MODEL_DEFAULT)
-    vram = XMLProperty(xpath="./model/@vram", is_int=True)
-    ram = XMLProperty(xpath="./model/@ram", is_int=True)
-    heads = XMLProperty(xpath="./model/@heads", is_int=True)
+    vram = XMLProperty("./model/@vram", is_int=True)
+    ram = XMLProperty("./model/@ram", is_int=True)
+    heads = XMLProperty("./model/@heads", is_int=True)
 
 
 VirtualVideoDevice.register_type()

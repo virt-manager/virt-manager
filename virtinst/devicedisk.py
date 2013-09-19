@@ -500,32 +500,32 @@ class VirtualDisk(VirtualDevice):
                            clear_first=["./source/@" + target for target in
                                         _TARGET_PROPS])
 
-    device = XMLProperty(xpath="./@device",
+    device = XMLProperty("./@device",
                          default_cb=lambda s: s.DEVICE_DISK)
-    type = XMLProperty(xpath="./@type", default_cb=_get_default_type)
-    driver_name = XMLProperty(xpath="./driver/@name",
+    type = XMLProperty("./@type", default_cb=_get_default_type)
+    driver_name = XMLProperty("./driver/@name",
                               default_cb=_get_default_driver_name)
-    driver_type = XMLProperty(xpath="./driver/@type",
+    driver_type = XMLProperty("./driver/@type",
                               default_cb=_get_default_driver_type)
 
 
-    bus = XMLProperty(xpath="./target/@bus")
-    target = XMLProperty(xpath="./target/@dev")
+    bus = XMLProperty("./target/@bus")
+    target = XMLProperty("./target/@dev")
 
-    read_only = XMLProperty(xpath="./readonly", is_bool=True)
-    shareable = XMLProperty(xpath="./shareable", is_bool=True)
-    driver_cache = XMLProperty(xpath="./driver/@cache")
-    driver_io = XMLProperty(xpath="./driver/@io")
+    read_only = XMLProperty("./readonly", is_bool=True)
+    shareable = XMLProperty("./shareable", is_bool=True)
+    driver_cache = XMLProperty("./driver/@cache")
+    driver_io = XMLProperty("./driver/@io")
 
-    error_policy = XMLProperty(xpath="./driver/@error_policy")
-    serial = XMLProperty(xpath="./serial")
+    error_policy = XMLProperty("./driver/@error_policy")
+    serial = XMLProperty("./serial")
 
-    iotune_rbs = XMLProperty(xpath="./iotune/read_bytes_sec", is_int=True)
-    iotune_ris = XMLProperty(xpath="./iotune/read_iops_sec", is_int=True)
-    iotune_tbs = XMLProperty(xpath="./iotune/total_bytes_sec", is_int=True)
-    iotune_tis = XMLProperty(xpath="./iotune/total_iops_sec", is_int=True)
-    iotune_wbs = XMLProperty(xpath="./iotune/write_bytes_sec", is_int=True)
-    iotune_wis = XMLProperty(xpath="./iotune/write_iops_sec", is_int=True)
+    iotune_rbs = XMLProperty("./iotune/read_bytes_sec", is_int=True)
+    iotune_ris = XMLProperty("./iotune/read_iops_sec", is_int=True)
+    iotune_tbs = XMLProperty("./iotune/total_bytes_sec", is_int=True)
+    iotune_tis = XMLProperty("./iotune/total_iops_sec", is_int=True)
+    iotune_wbs = XMLProperty("./iotune/write_bytes_sec", is_int=True)
+    iotune_wis = XMLProperty("./iotune/write_iops_sec", is_int=True)
 
 
     #################################

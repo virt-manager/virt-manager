@@ -70,20 +70,20 @@ class VirtualFilesystem(VirtualDevice):
         return "dir"
 
 
-    type = XMLProperty(xpath="./@type",
+    type = XMLProperty("./@type",
                        default_cb=lambda s: None,
                        default_name=TYPE_DEFAULT)
-    mode = XMLProperty(xpath="./@accessmode",
+    mode = XMLProperty("./@accessmode",
                        default_cb=lambda s: None,
                        default_name=MODE_DEFAULT)
-    wrpolicy = XMLProperty(xpath="./driver/@wrpolicy",
+    wrpolicy = XMLProperty("./driver/@wrpolicy",
                            default_cb=lambda s: None,
                            default_name=WRPOLICY_DEFAULT)
-    driver = XMLProperty(xpath="./driver/@type",
+    driver = XMLProperty("./driver/@type",
                          default_cb=lambda s: None,
                          default_name=DRIVER_DEFAULT)
 
-    readonly = XMLProperty(xpath="./readonly", is_bool=True)
+    readonly = XMLProperty("./readonly", is_bool=True)
 
 
     def _xml_get_source_xpath(self):
@@ -114,7 +114,7 @@ class VirtualFilesystem(VirtualDevice):
             raise ValueError(_("Filesystem target '%s' must be an absolute "
                                "path") % val)
         return val
-    target = XMLProperty(xpath="./target/@dir",
+    target = XMLProperty("./target/@dir",
                          set_converter=_validate_set_target)
 
 

@@ -72,17 +72,17 @@ class OSXML(XMLBuilder):
     _bootdevs = XMLChildProperty(_BootDevice)
     bootorder = property(_get_bootorder, _set_bootorder)
 
-    enable_bootmenu = XMLProperty(xpath="./bootmenu/@enable", is_yesno=True)
-    useserial = XMLProperty(xpath="./bios/@useserial", is_yesno=True)
+    enable_bootmenu = XMLProperty("./bootmenu/@enable", is_yesno=True)
+    useserial = XMLProperty("./bios/@useserial", is_yesno=True)
 
-    kernel = XMLProperty(xpath="./kernel")
-    initrd = XMLProperty(xpath="./initrd")
-    kernel_args = XMLProperty(xpath="./cmdline")
-    dtb = XMLProperty(xpath="./dtb")
+    kernel = XMLProperty("./kernel")
+    initrd = XMLProperty("./initrd")
+    kernel_args = XMLProperty("./cmdline")
+    dtb = XMLProperty("./dtb")
 
-    init = XMLProperty(xpath="./init")
-    loader = XMLProperty(xpath="./loader")
-    arch = XMLProperty(xpath="./type/@arch",
+    init = XMLProperty("./init")
+    loader = XMLProperty("./loader")
+    arch = XMLProperty("./type/@arch",
                        default_cb=lambda s: s.conn.caps.host.arch)
-    machine = XMLProperty(xpath="./type/@machine")
-    os_type = XMLProperty(xpath="./type", default_cb=lambda s: "xen")
+    machine = XMLProperty("./type/@machine")
+    os_type = XMLProperty("./type", default_cb=lambda s: "xen")

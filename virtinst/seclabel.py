@@ -75,7 +75,7 @@ class Seclabel(XMLBuilder):
         if self.type is None or self.type == self.TYPE_DEFAULT:
             return None
         return self._guess_secmodel()
-    model = XMLProperty(xpath="./@model",
+    model = XMLProperty("./@model",
                         default_cb=_get_default_model,
                         default_name=MODEL_DEFAULT)
 
@@ -83,10 +83,10 @@ class Seclabel(XMLBuilder):
         if self.model is None or self.model == self.MODEL_DEFAULT:
             return None
         return self.TYPE_DYNAMIC
-    type = XMLProperty(xpath="./@type",
+    type = XMLProperty("./@type",
                        default_cb=_get_default_type,
                        default_name=TYPE_DEFAULT)
 
-    label = XMLProperty(xpath="./label")
-    imagelabel = XMLProperty(xpath="./imagelabel")
-    relabel = XMLProperty(xpath="./@relabel", is_yesno=True)
+    label = XMLProperty("./label")
+    imagelabel = XMLProperty("./imagelabel")
+    relabel = XMLProperty("./@relabel", is_yesno=True)

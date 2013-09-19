@@ -27,13 +27,13 @@ class DomainFeatures(XMLBuilder):
     _XML_ROOT_NAME = "features"
     _XML_PROP_ORDER = ["acpi", "apic", "pae"]
 
-    acpi = XMLProperty(xpath="./acpi", is_bool=True,
+    acpi = XMLProperty("./acpi", is_bool=True,
                        default_name="default",
                        default_cb=lambda s: False)
-    apic = XMLProperty(xpath="./apic", is_bool=True,
+    apic = XMLProperty("./apic", is_bool=True,
                        default_name="default",
                        default_cb=lambda s: False)
-    pae = XMLProperty(xpath="./pae", is_bool=True,
+    pae = XMLProperty("./pae", is_bool=True,
                        default_name="default",
                        default_cb=lambda s: False)
 

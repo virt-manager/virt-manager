@@ -25,7 +25,7 @@ from virtinst.xmlbuilder import XMLProperty
 
 def _get_mode_prop(channel_type):
     xpath = "./channel[@name='%s']/@mode" % channel_type
-    return XMLProperty(xpath=xpath)
+    return XMLProperty(xpath)
 
 
 def _validate_port(name, val):
@@ -124,7 +124,7 @@ class VirtualGraphics(VirtualDevice):
         if val == self.KEYMAP_LOCAL:
             return self._default_keymap(force_local=True)
         return val
-    keymap = XMLProperty(xpath="./@keymap",
+    keymap = XMLProperty("./@keymap",
                          default_cb=_default_keymap,
                          set_converter=_set_keymap_converter)
 
@@ -144,13 +144,13 @@ class VirtualGraphics(VirtualDevice):
         if (self.port == -1 or self.tlsPort == -1):
             return True
         return None
-    port = XMLProperty(xpath="./@port", is_int=True,
+    port = XMLProperty("./@port", is_int=True,
             set_converter=lambda s, v: _validate_port("Port", v),
             default_cb=_get_default_port)
-    tlsPort = XMLProperty(xpath="./@tlsPort", is_int=True,
+    tlsPort = XMLProperty("./@tlsPort", is_int=True,
             set_converter=lambda s, v: _validate_port("TLS port", v),
             default_cb=_get_default_tlsport)
-    autoport = XMLProperty(xpath="./@autoport", is_yesno=True,
+    autoport = XMLProperty("./@autoport", is_yesno=True,
                            default_cb=_get_default_autoport)
 
     channel_main_mode = _get_mode_prop(CHANNEL_TYPE_MAIN)
@@ -171,17 +171,17 @@ class VirtualGraphics(VirtualDevice):
         if self.type != "sdl":
             return None
         return os.path.expanduser("~/.Xauthority")
-    xauth = XMLProperty(xpath="./@xauth",
+    xauth = XMLProperty("./@xauth",
                         default_cb=_get_default_xauth)
-    display = XMLProperty(xpath="./@display",
+    display = XMLProperty("./@display",
                           default_cb=_get_default_display)
 
 
-    type = XMLProperty(xpath="./@type", default_cb=lambda s: "vnc")
-    listen = XMLProperty(xpath="./@listen")
-    passwd = XMLProperty(xpath="./@passwd")
-    passwdValidTo = XMLProperty(xpath="./@passwdValidTo")
-    socket = XMLProperty(xpath="./@socket")
+    type = XMLProperty("./@type", default_cb=lambda s: "vnc")
+    listen = XMLProperty("./@listen")
+    passwd = XMLProperty("./@passwd")
+    passwdValidTo = XMLProperty("./@passwdValidTo")
+    socket = XMLProperty("./@socket")
 
 
 VirtualGraphics.register_type()

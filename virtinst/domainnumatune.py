@@ -149,5 +149,5 @@ class DomainNumatune(XMLBuilder):
     _XML_ROOT_NAME = "numatune"
     _XML_PROP_ORDER = ["memory_mode", "memory_nodeset"]
 
-    memory_nodeset = XMLProperty(xpath="./memory/@nodeset")
-    memory_mode = XMLProperty(xpath="./memory/@mode")
+    memory_nodeset = XMLProperty("./memory/@nodeset")
+    memory_mode = XMLProperty("./memory/@mode")

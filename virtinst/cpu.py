@@ -131,12 +131,12 @@ class CPU(XMLBuilder):
             if not self.match:
                 self.match = "exact"
         return val
-    model = XMLProperty(xpath="./model", set_converter=_set_model)
+    model = XMLProperty("./model", set_converter=_set_model)
 
-    match = XMLProperty(xpath="./@match")
-    vendor = XMLProperty(xpath="./vendor")
-    mode = XMLProperty(xpath="./@mode")
+    match = XMLProperty("./@match")
+    vendor = XMLProperty("./vendor")
+    mode = XMLProperty("./@mode")
 
-    sockets = XMLProperty(xpath="./topology/@sockets", is_int=True)
-    cores = XMLProperty(xpath="./topology/@cores", is_int=True)
-    threads = XMLProperty(xpath="./topology/@threads", is_int=True)
+    sockets = XMLProperty("./topology/@sockets", is_int=True)
+    cores = XMLProperty("./topology/@cores", is_int=True)
+    threads = XMLProperty("./topology/@threads", is_int=True)

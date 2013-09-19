@@ -42,15 +42,15 @@ class VirtualRedirDevice(VirtualDevice):
 
     _XML_PROP_ORDER = ["bus", "type"]
 
-    bus = XMLProperty(xpath="./@bus",
+    bus = XMLProperty("./@bus",
                       default_cb=lambda s: "usb",
                       default_name=BUS_DEFAULT)
-    type = XMLProperty(xpath="./@type",
+    type = XMLProperty("./@type",
                        default_cb=lambda s: "spicevmc",
                        default_name=TYPE_DEFAULT)
 
-    host = XMLProperty(xpath="./source/@host")
-    service = XMLProperty(xpath="./source/@service", is_int=True)
+    host = XMLProperty("./source/@host")
+    service = XMLProperty("./source/@service", is_int=True)
 
 
 VirtualRedirDevice.register_type()

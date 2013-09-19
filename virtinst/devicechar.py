@@ -208,8 +208,8 @@ class _VirtualCharDevice(VirtualDevice):
                         make_setter_xpath_cb=_sourceport_xpath,
                         set_converter=_set_source_validate, is_int=True)
 
-    _has_mode_connect = XMLProperty(xpath="./source[@mode='connect']/@mode")
-    _has_mode_bind = XMLProperty(xpath="./source[@mode='bind']/@mode")
+    _has_mode_connect = XMLProperty("./source[@mode='connect']/@mode")
+    _has_mode_bind = XMLProperty("./source[@mode='bind']/@mode")
 
     def _set_bind_validate(self, val):
         if val is None:
@@ -217,10 +217,10 @@ class _VirtualCharDevice(VirtualDevice):
         if not self._has_mode_bind:
             self._has_mode_bind = self.MODE_BIND
         return val
-    bind_host = XMLProperty(xpath="./source[@mode='bind']/@host",
+    bind_host = XMLProperty("./source[@mode='bind']/@host",
                             doc=_("Host addresss to bind to."),
                             set_converter=_set_bind_validate)
-    bind_port = XMLProperty(xpath="./source[@mode='bind']/@service",
+    bind_port = XMLProperty("./source[@mode='bind']/@service",
                             doc=_("Host port to bind to."),
                             set_converter=_set_bind_validate, is_int=True)
 
@@ -228,7 +228,7 @@ class _VirtualCharDevice(VirtualDevice):
         if not self.supports_property("protocol"):
             return None
         return self.PROTOCOL_RAW
-    protocol = XMLProperty(xpath="./protocol/@type",
+    protocol = XMLProperty("./protocol/@type",
                            doc=_("Format used when sending data."),
                            default_cb=_get_default_protocol)
 
@@ -236,21 +236,21 @@ class _VirtualCharDevice(VirtualDevice):
         if self.virtual_device_type == "channel":
             return self.CHANNEL_TARGET_VIRTIO
         return None
-    target_type = XMLProperty(xpath="./target/@type",
+    target_type = XMLProperty("./target/@type",
                               doc=_("Channel type as exposed in the guest."),
                               default_cb=_get_default_target_type)
 
-    target_address = XMLProperty(xpath="./target/@address",
+    target_address = XMLProperty("./target/@address",
                         doc=_("Guest forward channel address in the guest."))
 
-    target_port = XMLProperty(xpath="./target/@port", is_int=True,
+    target_port = XMLProperty("./target/@port", is_int=True,
                            doc=_("Guest forward channel port in the guest."))
 
     def _default_target_name(self):
         if self.type == self.TYPE_SPICEVMC:
             return "com.redhat.spice.0"
         return None
-    target_name = XMLProperty(xpath="./target/@name",
+    target_name = XMLProperty("./target/@name",
                            doc=_("Sysfs name of virtio port in the guest"),
                            default_cb=_default_target_name)
 

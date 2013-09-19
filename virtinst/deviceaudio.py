@@ -27,7 +27,7 @@ class VirtualAudio(VirtualDevice):
     MODEL_DEFAULT = "default"
     MODELS = ["es1370", "sb16", "pcspk", "ac97", "ich6", MODEL_DEFAULT]
 
-    model = XMLProperty(xpath="./@model",
+    model = XMLProperty("./@model",
                         default_cb=lambda s: "es1370",
                         default_name=MODEL_DEFAULT)
 
