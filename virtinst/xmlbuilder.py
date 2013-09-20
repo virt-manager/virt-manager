@@ -1047,6 +1047,7 @@ class XMLBuilder(object):
     def _do_add_parse_bits(self, node, ctx):
         # Set all defaults if the properties have one registered
         xmlprops = self._all_xml_props()
+        childprops = self._all_child_props()
 
         for prop in xmlprops.values():
             prop._set_default(self)
@@ -1054,19 +1055,25 @@ class XMLBuilder(object):
         # Set up preferred XML ordering
         do_order = self._proporder[:]
         for key in reversed(self._XML_PROP_ORDER):
+            if key not in xmlprops and key not in childprops:
+                raise RuntimeError("programming error: key '%s' must be "
+                                   "xml prop or child prop" % key)
             if key in do_order:
                 do_order.remove(key)
                 do_order.insert(0, key)
-            elif key not in xmlprops:
+            elif key in childprops:
                 do_order.insert(0, key)
+
+        for key in childprops.keys():
+            if key not in do_order:
+                do_order.append(key)
 
         # Alter the XML
         for key in do_order:
             if key in xmlprops:
                 xmlprops[key]._set_xml(self, self._propstore[key], node)
-                continue
-
-            for obj in util.listify(getattr(self, key)):
-                obj._add_parse_bits(node, ctx)
+            elif key in childprops:
+                for obj in util.listify(getattr(self, key)):
+                    obj._add_parse_bits(node, ctx)
 
         return self._xmlstate.get_node_xml(ctx)
