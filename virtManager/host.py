@@ -598,7 +598,7 @@ class vmmHost(vmmGObjectUI):
             routeVia = str(route[0]) + ", gateway=" + str(route[1])
             self.widget("net-ip4-route-label").show()
         else:
-            routeVia = _("")
+            routeVia = ""
             self.widget("net-ip4-route-label").hide()
         self.widget("net-ip4-route-via").set_text(routeVia)
 

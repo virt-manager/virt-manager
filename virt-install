@@ -801,8 +801,9 @@ def check_domain(guest, dom, conscb, wait_for_install, wait_time, start_time):
     timestr = (not wait_forever and
                _("%d minutes ") % (int(wait_time) / 60) or "")
     print_stdout(
-        _("Domain installation still in progress. Waiting %s"
-          "for installation to complete.") % timestr)
+        _("Domain installation still in progress. Waiting "
+          "%(time_string)s for installation to complete.") %
+        {"time_string": timestr})
 
     # Wait loop
     while True:
