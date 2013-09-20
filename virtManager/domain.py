@@ -1761,7 +1761,7 @@ class vmmDomainVirtinst(vmmDomain):
     def __init__(self, conn, backend, key):
         vmmDomain.__init__(self, conn, backend, key)
 
-        self._orig_xml = None
+        self._orig_xml = ""
 
     def get_name(self):
         return self._backend.name
@@ -1776,16 +1776,15 @@ class vmmDomainVirtinst(vmmDomain):
     def get_xml(self, *args, **kwargs):
         ignore = args
         ignore = kwargs
+        return self._backend.get_install_xml(install=False)
 
-        xml = self._backend.get_install_xml(install=False)
+    def _refresh_orig_xml(self):
+        # We need to cache origxml in order to have something to diff against
         if not self._orig_xml:
-            self._orig_xml = xml
-        return xml
+            self._orig_xml = self._backend.get_xml_config()
 
-    # Internal XML implementations
     def _get_xmlobj(self, inactive=False, refresh_if_nec=True):
-        # Make sure XML is up2date
-        self.get_xml()
+        self._refresh_orig_xml()
         return self._backend
     def _reparse_xml(self, *args, **kwargs):
         ignore = args
@@ -1793,13 +1792,11 @@ class vmmDomainVirtinst(vmmDomain):
 
     def _define(self, newxml):
         ignore = newxml
-        self._orig_xml = None
+        self._orig_xml = ""
         self.emit("config-changed")
 
     def _redefine_xml(self, newxml):
-        # We need to cache origxml in order to have something to diff against
-        origxml = self._orig_xml or self.get_xml(inactive=True)
-        return self._redefine_helper(origxml, newxml)
+        return self._redefine_helper(self._orig_xml, newxml)
 
     def refresh_xml(self, forcesignal=False):
         # No caching, so no refresh needed
