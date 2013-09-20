@@ -293,8 +293,23 @@ class XMLChildProperty(property):
             for obj in self._get(xmlbuilder)[:]:
                 xmlbuilder._remove_child(obj)
 
-    def append(self, xmlbuilder, obj):
-        self._get(xmlbuilder).append(obj)
+    def append(self, xmlbuilder, newobj):
+        # Keep the list ordered by the order of passed in child classes
+        objlist = self._get(xmlbuilder)
+        if len(self.child_classes) == 1:
+            objlist.append(newobj)
+            return
+
+        idx = 0
+        for idx in range(len(objlist)):
+            obj = objlist[idx]
+            if (obj.__class__ not in self.child_classes or
+                (self.child_classes.index(newobj.__class__) <
+                 self.child_classes.index(obj.__class__))):
+                break
+            idx += 1
+
+        objlist.insert(idx, newobj)
     def remove(self, xmlbuilder, obj):
         self._get(xmlbuilder).remove(obj)
     def set(self, xmlbuilder, obj):

@@ -88,7 +88,7 @@ class Guest(XMLBuilder):
     _XML_PROP_ORDER = ["type", "name", "uuid", "description",
         "maxmemory", "memory", "hugepage", "vcpus", "curvcpus",
         "numatune", "bootloader", "os", "features", "cpu", "clock",
-        "on_poweroff", "on_reboot", "on_crash", "emulator", "all_devices",
+        "on_poweroff", "on_reboot", "on_crash", "emulator", "_devices",
         "seclabel"]
 
     def __init__(self, *args, **kwargs):
@@ -237,7 +237,6 @@ class Guest(XMLBuilder):
         for devtype in VirtualDevice.virtual_device_types:
             retlist.extend(self.get_devices(devtype))
         return retlist
-    all_devices = property(lambda s: s.get_all_devices())
 
 
     ############################
@@ -648,7 +647,7 @@ class Guest(XMLBuilder):
 
     def _check_address_multi(self):
         addresses = {}
-        for d in self.all_devices:
+        for d in self.get_all_devices():
             if d.address.type != d.address.ADDRESS_TYPE_PCI:
                 continue
 
