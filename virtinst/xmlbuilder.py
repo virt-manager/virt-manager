@@ -789,7 +789,7 @@ class XMLBuilder(object):
                 child_class = xmlprop.child_classes[0]
                 prop_path = xmlprop.get_prop_xpath(self, child_class)
                 obj = child_class(self.conn,
-                    parsexmlnode=self._xml_node,
+                    parsexmlnode=self._xmlstate.xml_node,
                     parent_xpath=self.get_root_xpath(),
                     relative_object_xpath=prop_path)
                 xmlprop.set(self, obj)
@@ -801,12 +801,12 @@ class XMLBuilder(object):
             for child_class in xmlprop.child_classes:
                 prop_path = xmlprop.get_prop_xpath(self, child_class)
 
-                nodecount = int(self._xml_node.xpathEval(
+                nodecount = int(self._xmlstate.xml_node.xpathEval(
                     "count(%s)" % self.fix_relative_xpath(prop_path)))
                 for idx in range(nodecount):
                     idxstr = "[%d]" % (idx + 1)
                     obj = child_class(self.conn,
-                        parsexmlnode=self._xml_node,
+                        parsexmlnode=self._xmlstate.xml_node,
                         parent_xpath=self.get_root_xpath(),
                         relative_object_xpath=(prop_path + idxstr))
                     xmlprop.append(self, obj)
@@ -902,29 +902,32 @@ class XMLBuilder(object):
     # Internal API #
     ################
 
-    _xml_node = property(lambda s: s._xmlstate.xml_node)
-
     def _all_xml_props(self):
         """
         Return a list of all XMLProperty instances that this class has.
         """
-        ret = {}
-        for c in reversed(type.mro(self.__class__)[:-1]):
-            for key, val in c.__dict__.items():
-                if val.__class__ is XMLProperty:
-                    ret[key] = val
-        return ret
+        if not hasattr(self.__class__, "_cached_xml_props"):
+            ret = {}
+            for c in reversed(type.mro(self.__class__)[:-1]):
+                for key, val in c.__dict__.items():
+                    if val.__class__ is XMLProperty:
+                        ret[key] = val
+            self.__class__._cached_xml_props = ret
+        return self.__class__._cached_xml_props
 
     def _all_child_props(self):
         """
         Return a list of all XMLChildProperty instances that this class has.
         """
-        ret = {}
-        for c in reversed(type.mro(self.__class__)[:-1]):
-            for key, val in c.__dict__.items():
-                if val.__class__ is XMLChildProperty:
-                    ret[key] = val
-        return ret
+        if not hasattr(self.__class__, "_cached_child_props"):
+            ret = {}
+            for c in reversed(type.mro(self.__class__)[:-1]):
+                for key, val in c.__dict__.items():
+                    if val.__class__ is XMLChildProperty:
+                        ret[key] = val
+            self.__class__._cached_child_props = ret
+        return self.__class__._cached_child_props
+
 
     def _set_parent_xpath(self, xpath):
         self._xmlstate.set_parent_xpath(xpath)
