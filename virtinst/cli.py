@@ -309,18 +309,6 @@ def install_fail(guest):
     sys.exit(1)
 
 
-def partition(string, sep):
-    if not string:
-        return (None, None, None)
-
-    if string.count(sep):
-        splitres = string.split(sep, 1)
-        ret = (splitres[0], sep, splitres[1])
-    else:
-        ret = (string, None, None)
-    return ret
-
-
 #######################
 # CLI Prompting utils #
 #######################
@@ -1840,7 +1828,7 @@ def _parse_char(optstring, dev_type, dev=None):
         setattr(dev, paramname, val)
 
     def parse_host(key):
-        host, ignore, port = partition(opts.get(key), ":")
+        host, ignore, port = opts.get(key, "").partition(":")
         if key in opts:
             del(opts[key])
 
