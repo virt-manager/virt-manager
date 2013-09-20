@@ -1,0 +1,15 @@
+<pool type="dir">
+  <name>foo-new</name>
+  <uuid>10211510-2115-1021-1510-211510211999</uuid>
+  <capacity unit="bytes">200000</capacity>
+  <allocation unit="bytes">150000</allocation>
+  <available unit="bytes">50000</available>
+  <source>
+    <format type="ext3"/>
+    <device path="/dev/foo/bar"/>
+    <name>fooname</name>
+  </source>
+  <target>
+    <path>/mnt/my/foo</path>
+  </target>
+</pool>

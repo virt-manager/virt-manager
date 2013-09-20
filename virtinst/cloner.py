@@ -29,7 +29,7 @@ import libvirt
 from virtinst import Guest
 from virtinst import VirtualNetworkInterface
 from virtinst import VirtualDisk
-from virtinst import Storage
+from virtinst import StorageVolume
 from virtinst import util
 
 
@@ -333,12 +333,13 @@ class Cloner(object):
             # simply set input_vol on the dest vol_install
             if (clone_vol_install.pool.name() ==
                 orig_disk.get_vol_object().storagePoolLookupByVolume().name()):
-                newname = clone_vol_install.name
-                vol_install = Storage.CloneVolume(self.conn,
-                                                  newname,
-                                                  orig_disk.get_vol_object())
-
+                vol_install = StorageVolume(self.conn)
+                vol_install.input_vol = orig_disk.get_vol_object()
+                vol_install.sync_input_vol()
+                vol_install.name = clone_vol_install.name
             else:
+                # Cross pool cloning
+                # Deliberately don't sync input_vol params here
                 clone_vol_install.input_vol = orig_disk.get_vol_object()
                 vol_install = clone_vol_install
         else:

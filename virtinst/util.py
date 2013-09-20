@@ -37,6 +37,15 @@ def listify(l):
         return l
 
 
+def xml_indent(xmlstr, level):
+    xml = ""
+    if not xmlstr:
+        return xml
+    if not level:
+        return xmlstr
+    return "\n".join((" " * level + l) for l in xmlstr.splitlines())
+
+
 def stat_disk(path):
     """Returns the tuple (isreg, size)."""
     if not os.path.exists(path):

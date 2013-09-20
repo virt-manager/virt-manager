@@ -24,7 +24,7 @@ import statvfs
 
 import libvirt
 
-from virtinst import Storage
+from virtinst import StorageVolume
 from virtinst import util
 
 
@@ -146,15 +146,17 @@ def build_vol_install(conn, path, pool, size, sparse):
                   os.path.dirname(path), pool.name(),
                   os.path.basename(path))
 
-    volclass = Storage.StorageVolume.get_volume_for_pool(pool_object=pool)
     cap = (size * 1024 * 1024 * 1024)
     if sparse:
         alloc = 0
     else:
         alloc = cap
 
-    volinst = volclass(conn, name=os.path.basename(path),
-                       capacity=cap, allocation=alloc, pool=pool)
+    volinst = StorageVolume(conn)
+    volinst.pool = pool
+    volinst.name = os.path.basename(path)
+    volinst.capacity = cap
+    volinst.allocation = alloc
     return volinst
 
 
@@ -206,11 +208,11 @@ class StorageCreator(_StorageBase):
             return
 
         if self._vol_install:
-            if not hasattr(self._vol_install, "format"):
+            if not self._vol_install.supports_property("format"):
                 raise ValueError(_("Storage type does not support format "
                                    "parameter."))
-            if getattr(self._vol_install, "format", None) != val:
-                setattr(self._vol_install, "format", val)
+            if self._vol_install.format != val:
+                self._vol_install.format = val
 
         elif val != "raw":
             raise RuntimeError(_("Format cannot be specified for "
@@ -253,7 +255,7 @@ class StorageCreator(_StorageBase):
 
     def get_driver_type(self):
         if self._vol_install:
-            if hasattr(self._vol_install, "format"):
+            if self._vol_install.supports_property("format"):
                 return self._vol_install.format
         return "raw"
 
@@ -266,7 +268,7 @@ class StorageCreator(_StorageBase):
                                device)
 
         if self.is_managed():
-            return
+            return self._vol_install.validate()
 
         if devtype == "block":
             raise ValueError(_("Local block device path '%s' must "

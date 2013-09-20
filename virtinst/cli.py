@@ -43,9 +43,6 @@ from virtinst import VirtualAudio
 from virtinst import VirtualDisk
 
 
-DEFAULT_POOL_PATH = "/var/lib/libvirt/images"
-DEFAULT_POOL_NAME = "default"
-
 MIN_RAM = 64
 force = False
 quiet = False
@@ -310,33 +307,6 @@ def install_fail(guest):
           "  %s\n"
           "otherwise, please restart your installation.") % virshcmd)
     sys.exit(1)
-
-
-def build_default_pool(guest):
-    if not guest.conn.check_conn_support(guest.conn.SUPPORT_CONN_STORAGE):
-        # VirtualDisk will raise an error for us
-        return
-
-    pool = None
-    try:
-        pool = guest.conn.storagePoolLookupByName(DEFAULT_POOL_NAME)
-    except libvirt.libvirtError:
-        pass
-
-    if pool:
-        return
-
-    try:
-        logging.debug("Attempting to build default pool with target '%s'",
-                      DEFAULT_POOL_PATH)
-        defpool = virtinst.Storage.DirectoryPool(conn=guest.conn,
-                                                 name=DEFAULT_POOL_NAME,
-                                                 target_path=DEFAULT_POOL_PATH)
-        defpool.install(build=True, create=True, autostart=True)
-        guest.conn.clear_cache()
-    except Exception, e:
-        raise RuntimeError(_("Couldn't create default storage pool '%s': %s") %
-                             (DEFAULT_POOL_PATH, str(e)))
 
 
 def partition(string, sep):
@@ -1413,18 +1383,18 @@ def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
 
     if path:
         abspath = os.path.abspath(path)
-        if os.path.dirname(abspath) == DEFAULT_POOL_PATH:
-            build_default_pool(guest)
+        if os.path.dirname(abspath) == "/var/lib/libvirt/images":
+            virtinst.StoragePool.build_default_pool(guest.conn)
 
     elif pool:
         if not size:
             raise ValueError(_("Size must be specified with all 'pool='"))
-        if pool == DEFAULT_POOL_NAME:
-            build_default_pool(guest)
+        if pool == "default":
+            virtinst.StoragePool.build_default_pool(guest.conn)
 
 
         poolobj = guest.conn.storagePoolLookupByName(pool)
-        vname = virtinst.Storage.StorageVolume.find_free_name(conn=guest.conn,
+        vname = virtinst.StorageVolume.find_free_name(conn=guest.conn,
                                             pool_object=poolobj,
                                             name=guest.name,
                                             suffix=".img",
@@ -1433,10 +1403,10 @@ def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
         volinst = virtinst.VirtualDisk.build_vol_install(
                 guest.conn, vname, poolobj, size, sparse)
         if fmt:
-            if not hasattr(volinst, "format"):
+            if not volinst.supports_property("format"):
                 raise ValueError(_("Format attribute not supported for this "
                                    "volume type"))
-            setattr(volinst, "format", fmt)
+            volinst.format = fmt
 
     elif vol:
         if not vol.count("/"):
@@ -1446,8 +1416,8 @@ def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
         voltuple = (vollist[0], vollist[1])
         logging.debug("Parsed volume: as pool='%s' vol='%s'",
                       voltuple[0], voltuple[1])
-        if voltuple[0] == DEFAULT_POOL_NAME:
-            build_default_pool(guest)
+        if voltuple[0] == "default":
+            virtinst.StoragePool.build_default_pool(guest.conn)
 
         volobj = virtinst.VirtualDisk.lookup_vol_object(guest.conn, voltuple)
 

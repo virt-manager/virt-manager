@@ -1073,48 +1073,6 @@ def spin_get_helper(widget):
     return ret
 
 
-
-def get_default_pool_path(conn):
-    if conn.is_session_uri():
-        return os.path.expanduser("~/VirtualMachines")
-    return "/var/lib/libvirt/images"
-
-
-def get_default_pool_name(conn):
-    ignore = conn
-    return "default"
-
-
-def build_default_pool(vmmconn):
-    """
-    Helper to build the 'default' storage pool
-    """
-    conn = vmmconn.get_backend()
-
-    path = get_default_pool_path(vmmconn)
-    name = get_default_pool_name(vmmconn)
-    pool = None
-    try:
-        pool = conn.storagePoolLookupByName(name)
-    except libvirt.libvirtError:
-        pass
-
-    if pool:
-        return
-
-    try:
-        logging.debug("Attempting to build default pool with target '%s'",
-                      path)
-        defpool = virtinst.Storage.DirectoryPool(conn=conn,
-                                                 name=name,
-                                                 target_path=path)
-        newpool = defpool.install(build=True, create=True)
-        newpool.setAutostart(True)
-    except Exception, e:
-        raise RuntimeError(_("Couldn't create default storage pool '%s': %s") %
-                             (path, str(e)))
-
-
 def get_ideal_path_info(conn, name):
     path = get_default_dir(conn)
     suffix = ".img"
@@ -1128,10 +1086,9 @@ def get_ideal_path(conn, name):
 
 def get_default_pool(conn):
     pool = None
-    default_name = get_default_pool_name(conn)
     for uuid in conn.list_pool_uuids():
         p = conn.get_pool(uuid)
-        if p.get_name() == default_name:
+        if p.get_name() == "default":
             pool = p
 
     return pool
@@ -1179,7 +1136,7 @@ def get_default_path(conn, name, collidelist=None):
             if c and os.path.dirname(c) == pool.get_target_path():
                 newcollidelist.append(os.path.basename(c))
 
-        path = virtinst.Storage.StorageVolume.find_free_name(name,
+        path = virtinst.StorageVolume.find_free_name(name,
                         pool_object=pool.get_backend(), suffix=suffix,
                         collidelist=newcollidelist)
 

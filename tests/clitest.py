@@ -226,7 +226,7 @@ class Command(object):
 
             if bool(code) == self.check_success:
                 raise AssertionError(
-                    ("Expected command to %s, but failed.\n" %
+                    ("Expected command to %s, but it didn't.\n" %
                      (self.check_success and "pass" or "fail")) +
                      ("Command was: %s\n" % self.cmdstr) +
                      ("Error code : %d\n" % code) +
@@ -613,7 +613,6 @@ c.add_invalid("--disk vol=%(POOL)s/foovol")  # Specify a nonexistent volume
 c.add_invalid("--disk pool=%(POOL)s")  # Specify a pool with no size
 c.add_invalid("--disk path=%(EXISTIMG1)s,perms=ro,size=.0001,cache=FOOBAR")  # Unknown cache type
 c.add_invalid("--disk path=%(NEWIMG1)s,format=qcow2,size=.0000001")  # Unmanaged file using non-raw format
-c.add_invalid("--disk path=%(MANAGEDNEW1)s,format=frob,size=.0000001")  # Managed file using unknown format
 c.add_invalid("--disk path=%(MANAGEDDISKNEW1)s,format=raw,size=.0000001")  # Managed disk using any format
 c.add_invalid("--disk %(NEWIMG1)s")  # Not specifying path= and non existent storage w/ no size
 c.add_invalid("--disk %(COLLIDE)s")  # Colliding storage without --force

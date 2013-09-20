@@ -29,9 +29,9 @@ from virtinst.clock import Clock
 from virtinst.cpu import CPU, CPUFeature
 from virtinst.seclabel import Seclabel
 
-import virtinst.storage as Storage
 import virtinst.nodedev as NodeDeviceParser
 import virtinst.capabilities as CapabilitiesParser
+from virtinst.storage import StoragePool, StorageVolume
 from virtinst.interface import Interface, InterfaceProtocol
 
 from virtinst.device import VirtualDevice

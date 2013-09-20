@@ -29,7 +29,7 @@ from gi.repository import Gdk
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 
-from virtinst import Storage
+from virtinst import StorageVolume
 
 DEFAULT_ALLOC = 0
 DEFAULT_CAP   = 8192
@@ -47,7 +47,6 @@ class vmmCreateVolume(vmmGObjectUI):
 
         self.name_hint = None
         self.vol = None
-        self.vol_class = Storage.StoragePool.get_volume_for_pool(parent_pool.get_type())
 
         self.builder.connect_signals({
             "on_vmm_create_vol_delete_event" : self.close,
@@ -101,7 +100,6 @@ class vmmCreateVolume(vmmGObjectUI):
     def set_parent_pool(self, conn, pool):
         self.conn = conn
         self.parent_pool = pool
-        self.vol_class = Storage.StoragePool.get_volume_for_pool(self.parent_pool.get_type())
 
 
     def default_vol_name(self):
@@ -111,7 +109,7 @@ class vmmCreateVolume(vmmGObjectUI):
         suffix = self.default_suffix()
         ret = ""
         try:
-            ret = Storage.StorageVolume.find_free_name(self.name_hint,
+            ret = StorageVolume.find_free_name(self.name_hint,
                                 pool_object=self.parent_pool.get_backend(),
                                 suffix=suffix)
             ret = ret.rstrip(suffix)
@@ -122,11 +120,17 @@ class vmmCreateVolume(vmmGObjectUI):
 
     def default_suffix(self):
         suffix = ""
-        if self.vol_class == Storage.FileVolume:
+        if self.vol.file_type == self.vol.TYPE_FILE:
             suffix = ".img"
         return suffix
 
+    def _make_stub_vol(self):
+        self.vol = StorageVolume(self.conn.get_backend())
+        self.vol.pool = self.parent_pool.get_backend()
+
     def reset_state(self):
+        self._make_stub_vol()
+
         default_name = self.default_vol_name()
         self.widget("vol-name").set_text("")
         self.widget("vol-create").set_sensitive(False)
@@ -137,7 +141,7 @@ class vmmCreateVolume(vmmGObjectUI):
         self.populate_vol_format()
         self.populate_vol_suffix()
 
-        if len(self.vol_class.formats):
+        if len(self.vol.list_formats()):
             self.widget("vol-format").set_sensitive(True)
             self.widget("vol-format").set_active(0)
         else:
@@ -174,11 +178,11 @@ class vmmCreateVolume(vmmGObjectUI):
         model = self.widget("vol-format").get_model()
         model.clear()
 
-        formats = self.vol_class.formats
-        if hasattr(self.vol_class, "create_formats"):
-            formats = getattr(self.vol_class, "create_formats")
+        formats = self.vol.list_formats()
+        if self.vol.list_create_formats() is not None:
+            formats = self.vol.list_create_formats()
 
-        if (self.vol_class == Storage.FileVolume and
+        if (self.vol.file_type == self.vol.TYPE_FILE and
             not self.conn.rhel6_defaults_caps()):
             newfmts = []
             for f in rhel6_file_whitelist:
@@ -190,10 +194,7 @@ class vmmCreateVolume(vmmGObjectUI):
             model.append([f, f])
 
     def populate_vol_suffix(self):
-        suffix = self.default_suffix()
-        if self.vol_class == Storage.FileVolume:
-            suffix = ".img"
-        self.widget("vol-name-suffix").set_text(suffix)
+        self.widget("vol-name-suffix").set_text(self.default_suffix())
 
     def vol_name_changed(self, src):
         text = src.get_text()
@@ -275,13 +276,14 @@ class vmmCreateVolume(vmmGObjectUI):
         cap = self.widget("vol-capacity").get_value()
 
         try:
-            self.vol = self.vol_class(self.conn,
-                                      name=volname,
-                                      allocation=(alloc * 1024 * 1024),
-                                      capacity=(cap * 1024 * 1024),
-                                      pool=self.parent_pool.get_backend())
+            self._make_stub_vol()
+            self.vol.capacity = cap
+            self.vol.name = volname
+            self.vol.allocation = (alloc * 1024 * 1024)
+            self.vol.capacity = (cap * 1024 * 1024)
             if fmt:
                 self.vol.format = fmt
+            self.vol.validate()
         except ValueError, e:
             return self.val_err(_("Volume Parameter Error"), e)
         return True

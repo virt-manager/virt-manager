@@ -23,14 +23,13 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 # pylint: enable=E0611
 
-import copy
 import logging
 
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager import uihelpers
 
-from virtinst import Storage
+from virtinst import StoragePool
 
 PAGE_NAME   = 0
 PAGE_FORMAT = 1
@@ -44,7 +43,6 @@ class vmmCreatePool(vmmGObjectUI):
         self.conn = conn
 
         self._pool = None
-        self._pool_class = Storage.StoragePool
 
         self.builder.connect_signals({
             "on_pool_forward_clicked" : self.forward,
@@ -178,11 +176,11 @@ class vmmCreatePool(vmmGObjectUI):
     def populate_pool_type(self):
         model = self.widget("pool-type").get_model()
         model.clear()
-        types = Storage.StoragePool.get_pool_types()
+        types = StoragePool.get_pool_types()
         types.sort()
         for typ in types:
             model.append([typ, "%s: %s" %
-                         (typ, Storage.StoragePool.get_pool_type_desc(typ))])
+                         (typ, StoragePool.get_pool_type_desc(typ))])
 
     def populate_pool_format(self, formats):
         model = self.widget("pool-format").get_model()
@@ -202,24 +200,24 @@ class vmmCreatePool(vmmGObjectUI):
         use_list = source_list
         use_model = source_model
         entry_list = []
-        if self._pool.type == Storage.StoragePool.TYPE_SCSI:
+        if self._pool.type == StoragePool.TYPE_SCSI:
             entry_list = self.list_scsi_adapters()
             use_list = source_list
             use_model = source_model
 
-        elif self._pool.type == Storage.StoragePool.TYPE_LOGICAL:
+        elif self._pool.type == StoragePool.TYPE_LOGICAL:
             pool_list = self.list_pool_sources()
             entry_list = [[p.target_path, p.target_path, p]
                           for p in pool_list]
             use_list = target_list
             use_model = target_model
 
-        elif self._pool.type == Storage.StoragePool.TYPE_DISK:
+        elif self._pool.type == StoragePool.TYPE_DISK:
             entry_list = self.list_disk_devs()
             use_list = source_list
             use_model = source_model
 
-        elif self._pool.type == Storage.StoragePool.TYPE_NETFS:
+        elif self._pool.type == StoragePool.TYPE_NETFS:
             host = self.get_config_host()
             if host:
                 pool_list = self.list_pool_sources(host=host)
@@ -240,12 +238,11 @@ class vmmCreatePool(vmmGObjectUI):
 
         clean_list = []
         for h in host_list:
-            tmppool = copy.copy(self._pool)
             name = "host%s" % h
-
+            tmppool = self._make_stub_pool()
             tmppool.source_path = name
-            entry = [name, name, tmppool]
 
+            entry = [name, name, tmppool]
             if name not in [l[0] for l in clean_list]:
                 clean_list.append(entry)
 
@@ -262,7 +259,7 @@ class vmmCreatePool(vmmGObjectUI):
         devlist.sort()
         clean_list = []
         for dev in devlist:
-            tmppool = copy.copy(self._pool)
+            tmppool = self._make_stub_pool()
             tmppool.source_path = dev
 
             entry = [dev, dev, tmppool]
@@ -272,14 +269,13 @@ class vmmCreatePool(vmmGObjectUI):
         return clean_list
 
     def list_pool_sources(self, host=None):
-        name = self.get_config_name()
         pool_type = self._pool.type
 
         plist = []
         try:
-            plist = Storage.StoragePool.pool_list_from_sources(
+            plist = StoragePool.pool_list_from_sources(
                                                 self.conn.get_backend(),
-                                                name, pool_type,
+                                                pool_type,
                                                 host=host)
         except Exception:
             logging.exception("Pool enumeration failed")
@@ -291,19 +287,19 @@ class vmmCreatePool(vmmGObjectUI):
             self.widget(base + "-label").set_visible(do_show)
             self.widget(base + "-box").set_visible(do_show)
 
-        src     = hasattr(self._pool, "source_path")
-        src_b   = src and not self.conn.is_remote()
-        tgt     = hasattr(self._pool, "target_path")
-        tgt_b   = tgt and not self.conn.is_remote()
-        host    = hasattr(self._pool, "host")
-        fmt     = hasattr(self._pool, "formats")
-        iqn     = hasattr(self._pool, "iqn")
+        src = self._pool.supports_property("source_path")
+        src_b = src and not self.conn.is_remote()
+        tgt = self._pool.supports_property("target_path")
+        tgt_b = tgt and not self.conn.is_remote()
+        host = self._pool.supports_property("host")
+        fmt = self._pool.supports_property("formats")
+        iqn = self._pool.supports_property("iqn")
         builddef, buildsens = self.get_build_default()
 
         # Source path broswing is meaningless for net pools
-        if self._pool.type in [Storage.StoragePool.TYPE_NETFS,
-                               Storage.StoragePool.TYPE_ISCSI,
-                               Storage.StoragePool.TYPE_SCSI]:
+        if self._pool.type in [StoragePool.TYPE_NETFS,
+                               StoragePool.TYPE_ISCSI,
+                               StoragePool.TYPE_SCSI]:
             src_b = False
 
         show_row("pool-target", tgt)
@@ -313,14 +309,15 @@ class vmmCreatePool(vmmGObjectUI):
         show_row("pool-build", buildsens)
         show_row("pool-iqn", iqn)
 
-        self.widget("pool-target-path").get_child().set_text(self._pool.target_path)
+        self.widget("pool-target-path").get_child().set_text(
+            self._pool.target_path)
         self.widget("pool-target-button").set_sensitive(tgt_b)
         self.widget("pool-source-button").set_sensitive(src_b)
         self.widget("pool-build").set_active(builddef)
 
         self.widget("pool-format").set_active(-1)
         if fmt:
-            self.populate_pool_format(getattr(self._pool, "formats"))
+            self.populate_pool_format(self._pool.list_formats("formats"))
             self.widget("pool-format").set_active(0)
 
         self.populate_pool_sources()
@@ -385,13 +382,13 @@ class vmmCreatePool(vmmGObjectUI):
         """ Return (default value, whether build option can be changed)"""
         if not self._pool:
             return (False, False)
-        if self._pool.type in [Storage.StoragePool.TYPE_DIR,
-                               Storage.StoragePool.TYPE_FS,
-                               Storage.StoragePool.TYPE_NETFS]:
+        if self._pool.type in [StoragePool.TYPE_DIR,
+                               StoragePool.TYPE_FS,
+                               StoragePool.TYPE_NETFS]:
             # Building for these simply entails creating a directory
             return (True, False)
-        elif self._pool.type in [Storage.StoragePool.TYPE_LOGICAL,
-                                 Storage.StoragePool.TYPE_DISK]:
+        elif self._pool.type in [StoragePool.TYPE_LOGICAL,
+                                 StoragePool.TYPE_DISK]:
             # This is a dangerous operation, anything (False, True)
             # should be assumed to be one.
             return (False, True)
@@ -489,8 +486,7 @@ class vmmCreatePool(vmmGObjectUI):
         source_list = self.widget("pool-source-path")
         target_list = self.widget("pool-target-path")
 
-        pool = copy.copy(self._pool)
-
+        pool = None
         if source_list.get_active() != -1:
             pool = source_list.get_model()[source_list.get_active()][2]
         elif target_list.get_active() != -1:
@@ -498,55 +494,65 @@ class vmmCreatePool(vmmGObjectUI):
 
         return pool
 
+    def _make_stub_pool(self):
+        pool = StoragePool(self.conn.get_backend())
+        pool.type = self.get_config_type()
+        return pool
+
+    def _validate_page_name(self, usepool=None):
+        try:
+            if usepool:
+                self._pool = usepool
+            else:
+                self._pool = self._make_stub_pool()
+            self._pool.name = self.get_config_name()
+        except ValueError, e:
+            return self.err.val_err(_("Pool Parameter Error"), e)
+
+        return True
+
+    def _validate_page_format(self):
+        target = self.get_config_target_path()
+        host = self.get_config_host()
+        source = self.get_config_source_path()
+        fmt = self.get_config_format()
+        iqn = self.get_config_iqn()
+
+        if not self._validate_page_name(self.get_pool_to_validate()):
+            return
+
+        try:
+            self._pool.target_path = target
+            if host:
+                self._pool.host = host
+            if source:
+                self._pool.source_path = source
+            if fmt:
+                self._pool.format = fmt
+            if iqn:
+                self._pool.iqn = iqn
+
+            self._pool.validate()
+        except ValueError, e:
+            return self.err.val_err(_("Pool Parameter Error"), e)
+
+        buildval = self.widget("pool-build").get_active()
+        buildsen = (self.widget("pool-build").get_sensitive() and
+                    self.widget("pool-build-box").get_visible())
+        if buildsen and buildval:
+            ret = self.err.yes_no(_("Building a pool of this type will "
+                                    "format the source device. Are you "
+                                    "sure you want to 'build' this pool?"))
+            if not ret:
+                return ret
+
+        return True
+
     def validate(self, page):
         if page == PAGE_NAME:
-            typ  = self.get_config_type()
-            name = self.get_config_name()
-            conn = self.conn.get_backend()
-
-            try:
-                self._pool_class = Storage.StoragePool.get_pool_class(typ)
-                self._pool = self._pool_class(conn, name=name)
-            except ValueError, e:
-                return self.err.val_err(_("Pool Parameter Error"), e)
-
-            return True
-
+            return self._validate_page_name()
         elif page == PAGE_FORMAT:
-            target  = self.get_config_target_path()
-            host    = self.get_config_host()
-            source  = self.get_config_source_path()
-            fmt     = self.get_config_format()
-            iqn     = self.get_config_iqn()
-
-            tmppool = self.get_pool_to_validate()
-            try:
-                tmppool.target_path = target
-                if host:
-                    tmppool.host = host
-                if source:
-                    tmppool.source_path = source
-                if fmt:
-                    tmppool.format = fmt
-                if iqn:
-                    tmppool.iqn = iqn
-
-                tmppool.get_xml_config()
-            except ValueError, e:
-                return self.err.val_err(_("Pool Parameter Error"), e)
-
-            buildval = self.widget("pool-build").get_active()
-            buildsen = (self.widget("pool-build").get_sensitive() and
-                        self.widget("pool-build-box").get_visible())
-            if buildsen and buildval:
-                ret = self.err.yes_no(_("Building a pool of this type will "
-                                        "format the source device. Are you "
-                                        "sure you want to 'build' this pool?"))
-                if not ret:
-                    return ret
-
-            self._pool = tmppool
-            return True
+            return self._validate_page_format()
 
     def _update_doc(self, param, infobox):
         doc = self._build_doc_str(param)
@@ -570,9 +576,9 @@ class vmmCreatePool(vmmGObjectUI):
     def update_build_doc(self, *ignore):
         doc = ""
         docstr = ""
-        if self._pool.type == Storage.StoragePool.TYPE_DISK:
+        if self._pool.type == StoragePool.TYPE_DISK:
             docstr = _("Format the source device.")
-        elif self._pool.type == Storage.StoragePool.TYPE_LOGICAL:
+        elif self._pool.type == StoragePool.TYPE_LOGICAL:
             docstr = _("Create a logical volume group from the source device.")
 
         if docstr:
@@ -586,9 +592,9 @@ class vmmCreatePool(vmmGObjectUI):
 
         if docstr:
             doc = doctmpl % (prettyname, docstr)
-        elif hasattr(self._pool_class, param):
+        elif not self._pool or self._pool.supports_property(param):
             doc = doctmpl % (prettyname,
-                             getattr(self._pool_class, param).__doc__)
+                             getattr(StoragePool, param).__doc__)
 
         return doc
 

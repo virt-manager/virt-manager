@@ -1685,7 +1685,7 @@ class vmmCreate(vmmGObjectUI):
             fmt = self.config.get_storage_format()
             if (self.is_default_storage() and
                 disk.get_vol_install() and
-                fmt in disk.get_vol_install().formats):
+                fmt in disk.get_vol_install().list_formats()):
                 logging.debug("Setting disk format from prefs: %s", fmt)
                 disk.get_vol_install().format = fmt
             disk.validate()

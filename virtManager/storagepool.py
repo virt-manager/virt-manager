@@ -22,11 +22,58 @@
 from gi.repository import GObject
 # pylint: enable=E0611
 
-from virtinst import Storage
+from virtinst import StoragePool, StorageVolume
 from virtinst import util
 
 from virtManager.libvirtobject import vmmLibvirtObject
-from virtManager.storagevol import vmmStorageVolume
+
+
+class vmmStorageVolume(vmmLibvirtObject):
+    def __init__(self, conn, backend, key):
+        vmmLibvirtObject.__init__(self, conn, backend, key,
+                                  parseclass=StorageVolume)
+
+
+    ##########################
+    # Required class methods #
+    ##########################
+
+    def get_name(self):
+        return self._get_xmlobj().name
+    def _XMLDesc(self, flags):
+        return self._backend.XMLDesc(flags)
+
+
+    ###########
+    # Actions #
+    ###########
+
+    def get_parent_pool(self):
+        pobj = self._backend.storagePoolLookupByVolume()
+        return self.conn.get_pool_by_name(pobj.name())
+
+    def delete(self):
+        self._backend.delete(0)
+        self._backend = None
+
+
+    #################
+    # XML accessors #
+    #################
+
+    def get_target_path(self):
+        return self._get_xmlobj().target_path or ""
+    def get_format(self):
+        return self._get_xmlobj().format
+    def get_capacity(self):
+        return self._get_xmlobj().capacity
+    def get_allocation(self):
+        return self._get_xmlobj().allocation
+
+    def get_pretty_capacity(self):
+        return util.pretty_bytes(self.get_capacity())
+    def get_pretty_allocation(self):
+        return util.pretty_bytes(self.get_allocation())
 
 
 class vmmStoragePool(vmmLibvirtObject):
@@ -35,25 +82,45 @@ class vmmStoragePool(vmmLibvirtObject):
     }
 
     def __init__(self, conn, backend, key):
-        vmmLibvirtObject.__init__(self, conn, backend, key)
+        vmmLibvirtObject.__init__(self, conn, backend, key,
+                                  parseclass=StoragePool)
 
-        self._uuid = key
         self._active = True
+        self._support_isactive = None
 
         self._volumes = {}
-        self._support_isactive = None
 
         self.tick()
         self.refresh()
 
-    # Required class methods
+
+    ##########################
+    # Required class methods #
+    ##########################
+
     def get_name(self):
-        return self._backend.name()
+        return self._get_xmlobj().name
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
     def _define(self, xml):
         return self.conn.define_pool(xml)
 
+
+    ###########
+    # Actions #
+    ###########
+
+    def is_active(self):
+        return self._active
+    def _backend_get_active(self):
+        if self._support_isactive is None:
+            self._support_isactive = self.conn.check_pool_support(
+                                        self._backend,
+                                        self.conn.SUPPORT_STORAGE_ISACTIVE)
+
+        if not self._support_isactive:
+            return True
+        return bool(self._backend.isActive())
 
     def _set_active(self, state):
         if state == self._active:
@@ -62,18 +129,21 @@ class vmmStoragePool(vmmLibvirtObject):
         self._active = state
         self.refresh_xml()
 
-    def is_active(self):
-        return self._active
+    def _kick_conn(self):
+        self.conn.schedule_priority_tick(pollpool=True)
+    def tick(self):
+        self._set_active(self._backend_get_active())
+
+    def set_autostart(self, value):
+        self._backend.setAutostart(value)
+    def get_autostart(self):
+        return self._backend.autostart()
 
     def can_change_alloc(self):
         typ = self.get_type()
-        return (typ in [Storage.StoragePool.TYPE_LOGICAL])
-
-    def get_uuid(self):
-        return self._uuid
-
-    def _kick_conn(self):
-        self.conn.schedule_priority_tick(pollpool=True)
+        return (typ in [StoragePool.TYPE_LOGICAL])
+    def supports_volume_creation(self):
+        return self._get_xmlobj().supports_volume_creation()
 
     def start(self):
         self._backend.create(0)
@@ -93,52 +163,6 @@ class vmmStoragePool(vmmLibvirtObject):
         self._backend = None
         self._kick_conn()
 
-    def set_autostart(self, value):
-        self._backend.setAutostart(value)
-
-    def get_autostart(self):
-        return self._backend.autostart()
-
-    def get_target_path(self):
-        return util.xpath(self.get_xml(), "/pool/target/path") or ""
-
-    def get_allocation(self):
-        return long(util.xpath(self.get_xml(), "/pool/allocation"))
-    def get_available(self):
-        return long(util.xpath(self.get_xml(), "/pool/available"))
-    def get_capacity(self):
-        return long(util.xpath(self.get_xml(), "/pool/capacity"))
-
-    def get_pretty_allocation(self):
-        return util.pretty_bytes(self.get_allocation())
-    def get_pretty_available(self):
-        return util.pretty_bytes(self.get_available())
-    def get_pretty_capacity(self):
-        return util.pretty_bytes(self.get_capacity())
-
-    def get_type(self):
-        return util.xpath(self.get_xml(), "/pool/@type")
-
-    def get_volumes(self):
-        self.update_volumes()
-        return self._volumes
-
-    def get_volume(self, uuid):
-        return self._volumes[uuid]
-
-    def _backend_get_active(self):
-        if self._support_isactive is None:
-            self._support_isactive = self.conn.check_pool_support(
-                                        self._backend,
-                                        self.conn.SUPPORT_STORAGE_ISACTIVE)
-
-        if not self._support_isactive:
-            return True
-        return bool(self._backend.isActive())
-
-    def tick(self):
-        self._set_active(self._backend_get_active())
-
     def refresh(self):
         if not self.is_active():
             return
@@ -150,6 +174,18 @@ class vmmStoragePool(vmmLibvirtObject):
 
         self._backend.refresh(0)
         self.idle_add(cb)
+
+
+    ###################
+    # Volume handling #
+    ###################
+
+    def get_volumes(self):
+        self.update_volumes()
+        return self._volumes
+
+    def get_volume(self, uuid):
+        return self._volumes[uuid]
 
     def update_volumes(self, refresh=False):
         if not self.is_active():
@@ -169,3 +205,29 @@ class vmmStoragePool(vmmLibvirtObject):
                                 self._backend.storageVolLookupByName(volname),
                                 volname)
         self._volumes = new_vol_list
+
+
+    #################
+    # XML accessors #
+    #################
+
+    def get_type(self):
+        return self._get_xmlobj().type
+    def get_uuid(self):
+        return self._get_xmlobj().uuid
+    def get_target_path(self):
+        return self._get_xmlobj().target_path or ""
+
+    def get_allocation(self):
+        return self._get_xmlobj().allocation
+    def get_available(self):
+        return self._get_xmlobj().available
+    def get_capacity(self):
+        return self._get_xmlobj().capacity
+
+    def get_pretty_allocation(self):
+        return util.pretty_bytes(self.get_allocation())
+    def get_pretty_available(self):
+        return util.pretty_bytes(self.get_available())
+    def get_pretty_capacity(self):
+        return util.pretty_bytes(self.get_capacity())

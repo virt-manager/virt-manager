@@ -35,7 +35,6 @@ import virtinst
 from virtinst import pollhelpers
 from virtinst import util
 
-from virtManager import uihelpers
 from virtManager import connectauth
 from virtManager.baseclass import vmmGObject
 from virtManager.domain import vmmDomain
@@ -431,7 +430,7 @@ class vmmConnection(vmmGObject):
             else:
                 # Try to create the default storage pool
                 try:
-                    uihelpers.build_default_pool(self)
+                    virtinst.StoragePool.build_default_pool(self.get_backend())
                 except Exception, e:
                     logging.debug("Building default pool failed: %s", str(e))
 
@@ -699,7 +698,7 @@ class vmmConnection(vmmGObject):
     def get_vol_by_path(self, path):
         for pool in self.pools.values():
             for vol in pool.get_volumes().values():
-                if vol.get_path() == path:
+                if vol.get_target_path() == path:
                     return vol
         return None
 

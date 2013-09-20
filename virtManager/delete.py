@@ -342,8 +342,8 @@ def can_delete(conn, vol, path):
 
     if vol:
         # Managed storage
-        if (vol.get_pool().get_type() ==
-            virtinst.Storage.StoragePool.TYPE_ISCSI):
+        if (vol.get_parent_pool().get_type() ==
+            virtinst.StoragePool.TYPE_ISCSI):
             msg = _("Cannot delete iscsi share.")
     else:
         if conn.is_remote():

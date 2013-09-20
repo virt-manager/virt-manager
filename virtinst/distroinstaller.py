@@ -26,7 +26,7 @@ import tempfile
 import urlgrabber
 
 from virtinst import support
-from virtinst import Storage
+from virtinst import StoragePool, StorageVolume
 from virtinst import util
 from virtinst import Installer
 from virtinst import VirtualDisk
@@ -77,8 +77,10 @@ def _build_pool(conn, meter, path):
     name = util.generate_name("boot-scratch",
                                conn.storagePoolLookupByName)
     logging.debug("Building storage pool: path=%s name=%s", path, name)
-    poolbuild = Storage.DirectoryPool(conn, name=name,
-                                      target_path=path)
+    poolbuild = StoragePool(conn)
+    poolbuild.type = poolbuild.TYPE_DIR
+    poolbuild.name = name
+    poolbuild.target_path = path
 
     # Explicitly don't build? since if we are creating this directory
     # we probably don't have correct perms
@@ -105,8 +107,7 @@ def _upload_file(conn, meter, destpool, src):
     size = os.path.getsize(src)
     basename = os.path.basename(src)
     poolpath = util.xpath(destpool.XMLDesc(0), "/pool/target/path")
-    name = Storage.StorageVolume.find_free_name(basename,
-                                                pool_object=destpool)
+    name = StorageVolume.find_free_name(basename, pool_object=destpool)
     if name != basename:
         logging.debug("Generated non-colliding volume name %s", name)
 

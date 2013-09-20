@@ -27,7 +27,7 @@ from gi.repository import Gdk
 # pylint: enable=E0611
 
 from virtinst import VirtualDisk
-from virtinst import Storage
+from virtinst import StoragePool
 from virtinst import Interface
 
 from virtManager import uihelpers
@@ -889,7 +889,7 @@ class vmmHost(vmmGObjectUI):
                 """<span size="large">%s Free</span> / <i>%s In Use</i>""" %
                 (pool.get_pretty_available(), pool.get_pretty_allocation()))
         self.widget("pool-type").set_text(
-                Storage.StoragePool.get_pool_type_desc(pool.get_type()))
+                StoragePool.get_pool_type_desc(pool.get_type()))
         self.widget("pool-location").set_text(
                 pool.get_target_path())
         self.widget("pool-state-icon").set_from_icon_name(
@@ -908,14 +908,13 @@ class vmmHost(vmmGObjectUI):
         self.widget("pool-stop").set_sensitive(active)
         self.widget("pool-start").set_sensitive(not active)
         self.widget("vol-add").set_sensitive(active)
+        self.widget("vol-add").set_tooltip_text(_("Create new volume"))
         self.widget("vol-delete").set_sensitive(False)
 
-        if active:
-            try:
-                Storage.StoragePool.get_volume_for_pool(pool.get_type())
-            except Exception, e:
-                self.widget("vol-add").set_sensitive(False)
-                self.widget("vol-add").set_tooltip_text(str(e))
+        if active and not pool.supports_volume_creation():
+            self.widget("vol-add").set_sensitive(False)
+            self.widget("vol-add").set_tooltip_text(
+                _("Pool does not support volume creation"))
 
     def refresh_storage_pool(self, src_ignore, uuid):
         refresh_pool_in_list(self.widget("pool-list"), self.conn, uuid)
@@ -1312,7 +1311,7 @@ def populate_storage_pools(pool_list, conn):
         pool = conn.get_pool(uuid)
 
         name = pool.get_name()
-        typ = Storage.StoragePool.get_pool_type_desc(pool.get_type())
+        typ = StoragePool.get_pool_type_desc(pool.get_type())
         label = "%s\n<span size='small'>%s</span>" % (name, typ)
 
         model.append([uuid, label, pool.is_active(), per])

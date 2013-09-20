@@ -1,0 +1,15 @@
+<volume>
+  <name>pool-dir-vol</name>
+  <capacity>2000</capacity>
+  <allocation>1000</allocation>
+  <target>
+    <format type="qcow2"/>
+    <permissions>
+      <mode>0744</mode>
+      <owner>10000</owner>
+      <group>10000</group>
+      <label>foo.label</label>
+    </permissions>
+    <path>/foo/bar</path>
+  </target>
+</volume>

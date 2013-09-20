@@ -319,7 +319,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
     def _do_finish(self, path=None):
         if not path:
-            path = self.current_vol().get_path()
+            path = self.current_vol().get_target_path()
         self.emit("storage-browse-finish", path)
         self.close()
 

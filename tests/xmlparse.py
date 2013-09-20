@@ -903,6 +903,69 @@ class XMLParseTest(unittest.TestCase):
         utils.test_create(conn, iface.get_xml_config(), "interfaceDefineXML")
 
 
+    #################
+    # Storage tests #
+    #################
+
+    def testFSPool(self):
+        basename = "pool-fs"
+        infile = "tests/xmlparse-xml/%s.xml" % basename
+        outfile = "tests/xmlparse-xml/%s-out.xml" % basename
+        pool = virtinst.StoragePool(conn, parsexml=file(infile).read())
+
+        check = self._make_checker(pool)
+        check("type", "fs", "dir")
+        check("name", "pool-fs", "foo-new")
+        check("uuid", "10211510-2115-1021-1510-211510211510",
+                      "10211510-2115-1021-1510-211510211999")
+        check("capacity", 984373075968, 200000)
+        check("allocation", 756681687040, 150000)
+        check("available", 227691388928, 50000)
+
+        check("format", "auto", "ext3")
+        check("source_path", "/some/source/path", "/dev/foo/bar")
+        check("target_path", "/some/target/path", "/mnt/my/foo")
+        check("source_name", None, "fooname")
+
+        utils.diff_compare(pool.get_xml_config(), outfile)
+        utils.test_create(conn, pool.get_xml_config(), "storagePoolDefineXML")
+
+    def testISCSIPool(self):
+        basename = "pool-iscsi"
+        infile = "tests/storage-xml/%s.xml" % basename
+        outfile = "tests/xmlparse-xml/%s-out.xml" % basename
+        pool = virtinst.StoragePool(conn, parsexml=file(infile).read())
+
+        check = self._make_checker(pool)
+        check("host", "some.random.hostname", "my.host")
+        check("iqn", "foo.bar.baz.iqn", "my.iqn")
+
+        utils.diff_compare(pool.get_xml_config(), outfile)
+        utils.test_create(conn, pool.get_xml_config(), "storagePoolDefineXML")
+
+    def testVol(self):
+        basename = "pool-dir-vol"
+        infile = "tests/storage-xml/%s.xml" % basename
+        outfile = "tests/xmlparse-xml/%s-out.xml" % basename
+        vol = virtinst.StorageVolume(conn, parsexml=file(infile).read())
+
+        check = self._make_checker(vol)
+        check("capacity", 10737418240, 2000)
+        check("allocation", 5368709120, 1000)
+        check("format", "raw", "qcow2")
+        check("target_path", None, "/foo/bar")
+
+        check = self._make_checker(vol.permissions)
+        check("mode", "0700", "0744")
+        check("owner", "10736", "10000")
+        check("group", "10736", "10000")
+        check("label", None, "foo.label")
+
+        utils.diff_compare(vol.get_xml_config(), outfile)
+
+
+
+
     ##############
     # Misc tests #
     ##############
