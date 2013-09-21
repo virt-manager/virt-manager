@@ -994,6 +994,56 @@ class XMLParseTest(unittest.TestCase):
         utils.diff_compare(vol.get_xml_config(), outfile)
 
 
+    ###################
+    # <network> tests #
+    ###################
+
+    def testNetMulti(self):
+        basename = "network-multi"
+        infile = "tests/xmlparse-xml/%s-in.xml" % basename
+        outfile = "tests/xmlparse-xml/%s-out.xml" % basename
+        net = virtinst.Network(conn, parsexml=file(infile).read())
+
+        check = self._make_checker(net)
+        check("name", "ipv6_multirange", "new-foo")
+        check("uuid", "41b4afe4-87bb-8087-6724-5e208a2d483a",
+                      "41b4afe4-87bb-8087-6724-5e208a2d1111")
+        check("bridge", "virbr3", "virbr3new")
+        check("stp", True, False)
+        check("delay", 0, 2)
+        check("domain_name", "net7", "newdom")
+        check("ipv6", None, True)
+        check("macaddr", None, "52:54:00:69:eb:FF")
+
+        check = self._make_checker(net.forward)
+        check("mode", "nat", "route")
+        check("dev", None, "eth22")
+
+        self.assertEqual(len(net.ips), 4)
+        check = self._make_checker(net.ips[0])
+        check("address", "192.168.7.1", "192.168.8.1")
+        check("netmask", "255.255.255.0", "255.255.254.0")
+        check("tftp", None, "/var/lib/tftproot")
+        check("bootp_file", None, "pxeboot.img")
+        check("bootp_server", None, "1.2.3.4")
+
+        check = self._make_checker(net.ips[0].ranges[0])
+        check("start", "192.168.7.128", "192.168.8.128")
+        check("end", "192.168.7.254", "192.168.8.254")
+
+        check = self._make_checker(net.ips[0].hosts[1])
+        check("macaddr", "52:54:00:69:eb:91", "52:54:00:69:eb:92")
+        check("name", "badbob", "newname")
+        check("ip", "192.168.7.3", "192.168.8.3")
+
+        check = self._make_checker(net.ips[1])
+        check("family", "ipv6", "ipv6")
+        check("prefix", 64, 63)
+
+        net.add_route("192.168.8.0", "24", "192.168.8.10")
+
+        utils.diff_compare(net.get_xml_config(), outfile)
+        utils.test_create(conn, net.get_xml_config(), "networkDefineXML")
 
 
     ##############

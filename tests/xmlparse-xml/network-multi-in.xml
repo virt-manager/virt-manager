@@ -1,0 +1,25 @@
+<network>
+  <name>ipv6_multirange</name>
+  <uuid>41b4afe4-87bb-8087-6724-5e208a2d483a</uuid>
+  <forward mode="nat"/>
+  <bridge name="virbr3" stp="on" delay="0" />
+  <domain name="net7"/>
+  <ip address="192.168.7.1" netmask="255.255.255.0">
+    <dhcp>
+      <range start="192.168.7.128" end="192.168.7.254" />
+      <host mac="52:54:00:60:7d:5d" name="paul" ip="192.168.7.2" />
+      <host mac="52:54:00:69:eb:91" name="badbob" ip="192.168.7.3" />
+    </dhcp>
+  </ip>
+  <ip family="ipv6" address="fd00:beef:10:7::1" prefix="64">
+    <dhcp>
+      <range start="fd00:beef:10:7::1:1" end="fd00:beef:10:7::1:f1" />
+      <host id="00:03:00:01:52:54:00:60:7d:5d" name="paul" ip="fd00:beef:10:7::7:2" />
+      <host id="00:03:00:01:52:54:00:69:eb:91" name="badbob" ip="fd00:beef:10:7::7:4" />
+    </dhcp>
+  </ip>
+  <ip family="ipv6" address="fd00:beef:12::" prefix="48" via="fd00:beef:10:7::7:2">
+  </ip>
+  <ip family="ipv4" address="192.168.19.0" netmask="255.255.255.0">
+  </ip>
+</network>

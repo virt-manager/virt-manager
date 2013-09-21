@@ -548,24 +548,78 @@ class vmmHost(vmmGObjectUI):
 
         self.widget("net-apply").set_sensitive(False)
 
+    def _populate_net_ipv4_state(self, net):
+        (netstr,
+         (dhcpstart, dhcpend),
+         (routeaddr, routevia)) = net.get_ipv4_network()
+
+        self.widget("net-ipv4-expander").set_visible(bool(netstr))
+        if not netstr:
+            return
+
+        forward = net.get_ipv4_forward_mode()
+        self.widget("net-ipv4-forwarding-icon").set_from_stock(
+            forward and Gtk.STOCK_CONNECT or Gtk.STOCK_DISCONNECT,
+            Gtk.IconSize.MENU)
+        self.widget("net-ipv4-forwarding").set_text(net.pretty_forward_mode())
+
+        dhcpstr = _("Disabled")
+        if dhcpstart:
+            dhcpstr = dhcpstart + " - " + dhcpend
+        self.widget("net-ipv4-dhcp-range").set_text(dhcpstr)
+        self.widget("net-ipv4-network").set_text(netstr)
+
+        uihelpers.set_grid_row_visible(
+            self.widget("net-ipv4-route"), bool(routevia))
+        if routevia:
+            routevia = routeaddr + ", gateway=" + routevia
+            self.widget("net-ipv4-route").set_text(routevia or "")
+
+
+    def _populate_net_ipv6_state(self, net):
+        (netstr,
+         (dhcpstart, dhcpend),
+         (routeaddr, routevia)) = net.get_ipv6_network()
+
+        self.widget("net-ipv6-expander").set_visible(bool(netstr))
+        self.widget("net-ipv6-forwarding-icon").set_from_stock(
+            netstr and Gtk.STOCK_CONNECT or Gtk.STOCK_DISCONNECT,
+            Gtk.IconSize.MENU)
+
+        if netstr:
+            prettymode = _("Routed network")
+        elif net.get_ipv6_enabled():
+            prettymode = _("Isolated network, internal routing only")
+        else:
+            prettymode = _("Isolated network, routing disabled")
+        self.widget("net-ipv6-forwarding").set_text(prettymode)
+
+        dhcpstr = _("Disabled")
+        if dhcpstart:
+            dhcpstr = dhcpstart + " - " + dhcpend
+        self.widget("net-ipv6-dhcp-range").set_text(dhcpstr)
+        self.widget("net-ipv6-network").set_text(netstr or "")
+
+        uihelpers.set_grid_row_visible(
+            self.widget("net-ipv6-route"), bool(routevia))
+        if routevia:
+            routevia = routeaddr + ", gateway=" + routevia
+            self.widget("net-ipv6-route").set_text(routevia or "")
+
     def populate_net_state(self, net):
         active = net.is_active()
 
         self.widget("net-details").set_sensitive(True)
-        self.widget("net-name").set_text(net.get_name())
-        dns_name = net.get_name_domain()
-        if dns_name:
-            self.widget("net-name-domain").set_text(dns_name)
-        else:
-            self.widget("net-name-domain").set_text("")
+        self.widget("net-name").set_markup(
+            "<b>Network %s:</b>" % net.get_name())
+        self.widget("net-device").set_text(net.get_bridge_device() or "")
+        self.widget("net-name-domain").set_text(net.get_name_domain() or "")
+        uihelpers.set_grid_row_visible(self.widget("net-name-domain"),
+                                       bool(net.get_name_domain()))
 
-        dev = active and net.get_bridge_device() or ""
         state = active and _("Active") or _("Inactive")
         icon = (active and self.ICON_RUNNING or
                            self.ICON_SHUTOFF)
-
-        self.widget("net-device").set_text(dev)
-        self.widget("net-device").set_sensitive(active)
         self.widget("net-state").set_text(state)
         self.widget("net-state-icon").set_from_icon_name(icon,
                                                          Gtk.IconSize.MENU)
@@ -579,82 +633,14 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-autostart").set_active(autostart)
         self.widget("net-autostart").set_label(autolabel)
 
-        #########  IPv4  #########
-        result = net.get_ipv4_network()
-        network = result[0]
-        dhcp = result[1]
-        route = result[2]
-        if network:
-            self.widget("net-frame-ip4").show()
-        else:
-            self.widget("net-frame-ip4").hide()
-        self.widget("net-ip4-network").set_text(str(network))
-
-        start = dhcp and str(dhcp[0]) or _("Disabled")
-        end = dhcp and str(dhcp[1]) or _("Disabled")
-        self.widget("net-ip4-dhcp-start").set_text(start)
-        self.widget("net-ip4-dhcp-end").set_text(end)
-        if route and route[0] and route[1]:
-            routeVia = str(route[0]) + ", gateway=" + str(route[1])
-            self.widget("net-ip4-route-label").show()
-        else:
-            routeVia = ""
-            self.widget("net-ip4-route-label").hide()
-        self.widget("net-ip4-route-via").set_text(routeVia)
-
-        forward, ignore = net.get_ipv4_forward()
-        iconsize = Gtk.IconSize.MENU
-        icon = forward and Gtk.STOCK_CONNECT or Gtk.STOCK_DISCONNECT
-        self.widget("net-ip4-forwarding-icon").set_from_stock(icon, iconsize)
-        forward_str = net.pretty_forward_mode()
-        self.widget("net-ip4-forwarding").set_text(forward_str)
-
-        #########  IPv6  #########
-        result = net.get_ipv6_network()
-        network = result[0]
-        dhcp = result[1]
-        route = result[2]
-        if network:
-            self.widget("net-frame-ip6").show()
-            iconsize = Gtk.IconSize.MENU
-            icon = Gtk.STOCK_CONNECT
-            self.widget("net-ip6-forwarding-icon").set_from_stock(icon, iconsize)
-            self.widget("net-ip6-forwarding").set_text(_("Routed network"))
-        else:
-            self.widget("net-frame-ip6").hide()
-            iconsize = Gtk.IconSize.MENU
-            icon = Gtk.STOCK_DISCONNECT
-            self.widget("net-ip6-forwarding-icon").set_from_stock(icon, iconsize)
-            ipv6 = net.get_ipv6_routing()
-            if ipv6:
-                self.widget("net-ip6-forwarding").set_text(
-                                        _("Isolated network, internal and host routing only"))
-            elif ipv6 == 'yes':
-                self.widget("net-ip6-forwarding").set_text(
-                                        _("Isolated network, internal routing only"))
-            else:
-                self.widget("net-ip6-forwarding").set_text(
-                                        _("Isolated network, routing disabled"))
-        self.widget("net-ip6-network").set_text(str(network))
-
-        start = dhcp and str(dhcp[0]) or _("Disabled")
-        end = dhcp and str(dhcp[1]) or _("Disabled")
-        self.widget("net-ip6-dhcp-start").set_text(start)
-        self.widget("net-ip6-dhcp-end").set_text(end)
-        if route and route[0] and route[1]:
-            routeVia = str(route[0]) + ", gateway=" + str(route[1])
-            self.widget("net-ip6-route-label").show()
-        else:
-            routeVia = ""
-            self.widget("net-ip6-route-label").hide()
-        self.widget("net-ip6-route-via").set_text(routeVia)
+        self._populate_net_ipv4_state(net)
+        self._populate_net_ipv6_state(net)
 
 
     def reset_net_state(self):
         self.widget("net-details").set_sensitive(False)
         self.widget("net-name").set_text("")
         self.widget("net-device").set_text("")
-        self.widget("net-device").set_sensitive(False)
         self.widget("net-state").set_text(_("Inactive"))
         self.widget("net-state-icon").set_from_icon_name(self.ICON_SHUTOFF,
                                                          Gtk.IconSize.MENU)
@@ -663,21 +649,17 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-delete").set_sensitive(False)
         self.widget("net-autostart").set_label(_("Never"))
         self.widget("net-autostart").set_active(False)
-        self.widget("net-ip4-network").set_text("")
-        self.widget("net-ip4-dhcp-start").set_text("")
-        self.widget("net-ip4-dhcp-end").set_text("")
-        self.widget("net-ip4-route-label").hide()
-        self.widget("net-ip4-route-via").set_text("")
-        self.widget("net-ip4-forwarding-icon").set_from_stock(
+        self.widget("net-ipv4-network").set_text("")
+        self.widget("net-ipv4-dhcp-range").set_text("")
+        self.widget("net-ipv4-route").set_text("")
+        self.widget("net-ipv4-forwarding-icon").set_from_stock(
                                     Gtk.STOCK_DISCONNECT, Gtk.IconSize.MENU)
-        self.widget("net-ip4-forwarding").set_text(
+        self.widget("net-ipv4-forwarding").set_text(
                                     _("Isolated network"))
-        self.widget("net-ip6-network").set_text("")
-        self.widget("net-ip6-dhcp-start").set_text("")
-        self.widget("net-ip6-dhcp-end").set_text("")
-        self.widget("net-ip6-route-label").hide()
-        self.widget("net-ip6-route-via").set_text("")
-        self.widget("net-ip6-forwarding").set_text(
+        self.widget("net-ipv6-network").set_text("")
+        self.widget("net-ipv6-dhcp-range").set_text("")
+        self.widget("net-ipv6-route").set_text("")
+        self.widget("net-ipv6-forwarding").set_text(
                                     _("Isolated network"))
         self.widget("net-apply").set_sensitive(False)
 

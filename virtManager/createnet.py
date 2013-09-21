@@ -28,7 +28,8 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 # pylint: enable=E0611
 
-from virtManager.network import vmmNetwork
+from virtinst import Network
+
 from virtManager.baseclass import vmmGObjectUI
 
 PAGE_INTRO = 0
@@ -751,9 +752,8 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.widget("summary-routev4-network").hide()
             self.widget("summary-routev4-gateway").hide()
 
-        forward_txt = ""
         dev, mode = self.get_config_forwarding()
-        forward_txt = vmmNetwork.pretty_desc(mode, dev)
+        forward_txt = Network.pretty_forward_desc(mode, dev)
         self.widget("summary-ipv4-forwarding").set_text(forward_txt)
 
         ip = self.get_config_ip6()
