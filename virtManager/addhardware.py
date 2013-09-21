@@ -108,7 +108,7 @@ class vmmAddHardware(vmmGObjectUI):
         })
         self.bind_escape_key_close()
 
-        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
+        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_APPLY,
                                               Gtk.IconSize.BUTTON)
         self.widget("create-finish").set_image(finish_img)
 
