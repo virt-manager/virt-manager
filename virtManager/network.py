@@ -126,13 +126,7 @@ class vmmNetwork(vmmLibvirtObject):
         return self._get_xmlobj().forward.pretty_desc()
 
     def can_pxe(self):
-        forward = self.get_ipv4_forward_mode()
-        if forward and forward != "nat":
-            return True
-        for ip in self._get_xmlobj().ips:
-            if ip.bootp_file:
-                return True
-        return False
+        return self._get_xmlobj().can_pxe()
 
     def _get_static_route(self, family):
         xmlobj = self._get_xmlobj()

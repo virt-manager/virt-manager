@@ -33,7 +33,6 @@ import urlgrabber.progress as progress
 
 import virtinst
 import virtinst.cli as cli
-import virtinst.util as util
 from virtinst.cli import fail, print_stdout, print_stderr
 
 
@@ -82,12 +81,9 @@ def supports_pxe(guest):
             return True
 
         try:
-            xml = nic.conn.networkLookupByName(nic.network).XMLDesc(0)
-            if util.xpath(xml, "/network/ip/dhcp/bootp/@file"):
-                return True
-
-            forward = util.xpath(xml, "/network/forward/@mode")
-            if forward and forward != "nat":
+            netobj = nic.conn.networkLookupByName(nic.network)
+            xmlobj = virtinst.Network(nic.conn, parsexml=netobj.XMLDesc(0))
+            if xmlobj.can_pxe():
                 return True
         except:
             logging.debug("Error checking if PXE supported", exc_info=True)

@@ -106,6 +106,19 @@ class Network(XMLBuilder):
         self._random_uuid = None
 
 
+    ###################
+    # Helper routines #
+    ###################
+
+    def can_pxe(self):
+        forward = self.forward.mode
+        if forward and forward != "nat":
+            return True
+        for ip in self.ips:
+            if ip.bootp_file:
+                return True
+        return False
+
     ######################
     # Validation helpers #
     ######################
