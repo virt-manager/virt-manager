@@ -400,6 +400,8 @@ class vmmDetails(vmmGObjectUI):
             "on_vmm_details_delete_event": self.close,
             "on_vmm_details_configure_event": self.window_resized,
             "on_details_menu_quit_activate": self.exit_app,
+            "on_hw_list_changed": self.hw_changed,
+            "on_config_boot_list_changed": self.config_bootdev_selected,
 
             "on_control_vm_details_toggled": self.details_console_changed,
             "on_control_vm_console_toggled": self.details_console_changed,
@@ -543,11 +545,6 @@ class vmmDetails(vmmGObjectUI):
         self.vm.connect("status-changed", self.refresh_vm_state)
         self.vm.connect("config-changed", self.refresh_vm_state)
         self.vm.connect("resources-sampled", self.refresh_resources)
-        self.widget("hw-list").get_selection().connect("changed",
-                                                       self.hw_changed)
-        self.widget("config-boot-list").get_selection().connect(
-                                            "changed",
-                                            self.config_bootdev_selected)
 
         self.populate_hw_list()
         self.repopulate_boot_list()

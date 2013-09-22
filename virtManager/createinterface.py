@@ -107,6 +107,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
             "on_ipv6_address_add_clicked": self.ipv6_address_add,
             "on_ipv6_address_remove_clicked": self.ipv6_address_remove,
+            "on_ipv6_address_list_changed": self.ipv6_address_selected,
 
             # Bond config dialog
             "on_bond_config_delete_event": self.bond_config_finish,
@@ -310,7 +311,6 @@ class vmmCreateInterface(vmmGObjectUI):
         txt.connect("edited", self.ipv6_address_edited)
         txt_col.pack_start(txt, True)
         txt_col.add_attribute(txt, "text", 0)
-        v6_addr.get_selection().connect("changed", self.ipv6_address_selected)
 
     def reset_state(self):
 

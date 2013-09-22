@@ -364,6 +364,7 @@
                 <child internal-child="entry">
                   <object class="GtkEntry" id="combobox-entry">
                     <property name="can_focus">True</property>
+                    <signal name="changed" handler="on_hostname_changed" swapped="no"/>
                   </object>
                 </child>
               </object>

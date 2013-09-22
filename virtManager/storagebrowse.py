@@ -64,6 +64,7 @@ class vmmStorageBrowser(vmmGObjectUI):
             "on_new_volume_clicked" : self.new_volume,
             "on_choose_volume_clicked" : self.finish,
             "on_vol_list_row_activated" : self.finish,
+            "on_vol_list_changed": self.vol_selected,
         })
         self.bind_escape_key_close()
 
@@ -121,7 +122,6 @@ class vmmStorageBrowser(vmmGObjectUI):
         volListModel = Gtk.ListStore(str, str, str, str, str, bool)
         vol_list.set_model(volListModel)
 
-        vol_list.get_selection().connect("changed", self.vol_selected)
         volCol = Gtk.TreeViewColumn(_("Name"))
         vol_txt1 = Gtk.CellRendererText()
         volCol.pack_start(vol_txt1, True)

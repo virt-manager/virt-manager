@@ -130,7 +130,9 @@
                     <property name="can_focus">True</property>
                     <property name="headers_visible">False</property>
                     <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection"/>
+                      <object class="GtkTreeSelection" id="treeview-selection">
+                        <signal name="changed" handler="on_snapshot_list_changed" swapped="no"/>
+                      </object>
                     </child>
                   </object>
                 </child>

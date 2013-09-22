@@ -68,6 +68,7 @@ class vmmConnect(vmmGObjectUI):
             "on_hostname_combo_changed": self.hostname_combo_changed,
             "on_connect_remote_toggled": self.connect_remote_toggled,
             "on_username_entry_changed": self.username_changed,
+            "on_hostname_changed": self.hostname_changed,
 
             "on_cancel_clicked": self.cancel,
             "on_connect_clicked": self.open_conn,
@@ -128,7 +129,6 @@ class vmmConnect(vmmGObjectUI):
         host.set_model(hostListModel)
         host.set_entry_text_column(2)
         hostListModel.set_sort_column_id(2, Gtk.SortType.ASCENDING)
-        self.widget("hostname").get_child().connect("changed", self.hostname_changed)
 
     def reset_state(self):
         self.set_default_hypervisor()

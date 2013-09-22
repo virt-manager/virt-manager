@@ -86,6 +86,7 @@ class vmmAddHardware(vmmGObjectUI):
             "on_create_cancel_clicked" : self.close,
             "on_vmm_create_delete_event" : self.close,
             "on_create_finish_clicked" : self.finish,
+            "on_hw_list_changed": self.hw_selected,
 
             "on_config_storage_browse_clicked": self.browse_storage,
             "on_config_storage_select_toggled": self.toggle_storage_select,
@@ -107,9 +108,6 @@ class vmmAddHardware(vmmGObjectUI):
             "on_usbredir_type_changed": self.change_usbredir_type,
         })
         self.bind_escape_key_close()
-
-        hwlist = self.widget("hardware-list")
-        hwlist.get_selection().connect("changed", self.hw_selected)
 
         self.set_initial_state()
 
@@ -157,7 +155,7 @@ class vmmAddHardware(vmmGObjectUI):
         # Name, icon name, page number, is sensitive, tooltip, icon size,
         # device type (serial/parallel)...
         model = Gtk.ListStore(str, str, int, bool, str, str)
-        hw_list = self.widget("hardware-list")
+        hw_list = self.widget("hw-list")
         hw_list.set_model(model)
 
         hw_col = Gtk.TreeViewColumn("Hardware")
@@ -316,7 +314,7 @@ class vmmAddHardware(vmmGObjectUI):
             storage_tooltip = _("Connection does not support storage"
                                 " management.")
 
-        hwlist = self.widget("hardware-list")
+        hwlist = self.widget("hw-list")
         model = hwlist.get_model()
         model.clear()
 
@@ -772,10 +770,10 @@ class vmmAddHardware(vmmGObjectUI):
     ################
 
     def set_hw_selection(self, page):
-        uihelpers.set_list_selection(self.widget("hardware-list"), page)
+        uihelpers.set_list_selection(self.widget("hw-list"), page)
 
     def get_hw_selection(self):
-        return uihelpers.get_list_selection(self.widget("hardware-list"))
+        return uihelpers.get_list_selection(self.widget("hw-list"))
 
     def update_char_device_type_model(self):
         rhel6_blacklist = ["pipe", "udp"]

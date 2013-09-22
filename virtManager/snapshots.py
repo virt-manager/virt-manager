@@ -77,13 +77,12 @@ class vmmSnapshotPage(vmmGObjectUI):
             "on_snapshot_new_delete_event": self._snapshot_new_close,
             "on_snapshot_new_ok_clicked": self._on_new_ok_clicked,
             "on_snapshot_new_cancel_clicked" : self._snapshot_new_close,
+            "on_snapshot_list_changed": self._snapshot_selected,
         })
 
         self.top_box = self.widget("snapshot-top-box")
         self.widget("snapshot-top-window").remove(self.top_box)
 
-        self.widget("snapshot-list").get_selection().connect("changed",
-                                                    self._snapshot_selected)
         self._set_snapshot_state(None)
 
 

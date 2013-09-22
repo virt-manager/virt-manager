@@ -131,7 +131,9 @@
                     <property name="can_focus">True</property>
                     <signal name="row-activated" handler="on_vol_list_row_activated" swapped="no"/>
                     <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection2"/>
+                      <object class="GtkTreeSelection" id="treeview-selection2">
+                        <signal name="changed" handler="on_vol_list_changed" swapped="no"/>
+                      </object>
                     </child>
                   </object>
                 </child>

@@ -74,15 +74,6 @@ class vmmHost(vmmGObjectUI):
         self.memory_usage_graph = None
         self.init_conn_state()
 
-        # Set up signals
-        self.widget("net-list").get_selection().connect("changed",
-                                                    self.net_selected)
-        self.widget("vol-list").get_selection().connect("changed",
-                                                    self.vol_selected)
-        self.widget("interface-list").get_selection().connect("changed",
-                                                    self.interface_selected)
-
-
         self.init_net_state()
         self.init_storage_state()
         self.init_interface_state()
@@ -119,6 +110,7 @@ class vmmHost(vmmGObjectUI):
             "on_net_start_clicked": self.start_network,
             "on_net_autostart_toggled": self.net_autostart_changed,
             "on_net_apply_clicked": self.net_apply,
+            "on_net_list_changed": self.net_selected,
 
             "on_pool_add_clicked" : self.add_pool,
             "on_vol_add_clicked" : self.add_vol,
@@ -130,6 +122,7 @@ class vmmHost(vmmGObjectUI):
             "on_vol_delete_clicked": self.delete_vol,
             "on_vol_list_button_press_event": self.popup_vol_menu,
             "on_pool_apply_clicked": self.pool_apply,
+            "on_vol_list_changed": self.vol_selected,
 
             "on_interface_add_clicked" : self.add_interface,
             "on_interface_start_clicked" : self.start_interface,
@@ -137,6 +130,7 @@ class vmmHost(vmmGObjectUI):
             "on_interface_delete_clicked" : self.delete_interface,
             "on_interface_startmode_changed": self.interface_startmode_changed,
             "on_interface_apply_clicked" : self.interface_apply,
+            "on_interface_list_changed": self.interface_selected,
 
             "on_config_autoconnect_toggled": self.toggle_autoconnect,
         })
