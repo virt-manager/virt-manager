@@ -18,7 +18,7 @@
 # MA 02110-1301 USA.
 
 from virtinst import VirtualDevice
-from virtinst import NodeDeviceParser
+from virtinst import NodeDevice
 from virtinst.xmlbuilder import XMLProperty
 
 
@@ -31,7 +31,7 @@ class VirtualHostDevice(VirtualDevice):
         """
         Convert the passed device name to a VirtualHostDevice
         instance, with proper error reporting. Name can be any of the
-        values accepted by NodeDeviceParser.lookupNodeName. If a node
+        values accepted by NodeDevice.lookupNodeName. If a node
         device name is not specified, a virtinst.NodeDevice instance can
         be passed in to create a dev from.
 
@@ -47,11 +47,11 @@ class VirtualHostDevice(VirtualDevice):
         if nodedev:
             nodeinst = nodedev
         else:
-            nodeinst, addr_type = NodeDeviceParser.lookupNodeName(conn, name)
-            if addr_type == NodeDeviceParser.HOSTDEV_ADDR_TYPE_USB_BUSADDR:
+            nodeinst, addr_type = NodeDevice.lookupNodeName(conn, name)
+            if addr_type == NodeDevice.HOSTDEV_ADDR_TYPE_USB_BUSADDR:
                 is_dup = True
 
-        if isinstance(nodeinst, NodeDeviceParser.NetDevice):
+        if nodeinst.device_type == nodeinst.CAPABILITY_TYPE_NET:
             parentname = nodeinst.parent
             return VirtualHostDevice.device_from_node(conn,
                                                       name=parentname)
@@ -61,14 +61,14 @@ class VirtualHostDevice(VirtualDevice):
         return dev
 
     def set_from_nodedev(self, nodedev, is_dup=False):
-        if isinstance(nodedev, NodeDeviceParser.PCIDevice):
+        if nodedev.device_type == NodeDevice.CAPABILITY_TYPE_PCI:
             self.type = "pci"
             self.domain = nodedev.domain
             self.bus = nodedev.bus
             self.slot = nodedev.slot
             self.function = nodedev.function
 
-        elif isinstance(nodedev, NodeDeviceParser.USBDevice):
+        elif nodedev.device_type == NodeDevice.CAPABILITY_TYPE_USBDEV:
             self.type = "usb"
             self.vendor = nodedev.vendor_id
             self.product = nodedev.product_id

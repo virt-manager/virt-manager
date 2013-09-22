@@ -24,7 +24,7 @@ from gi.repository import GObject
 
 import logging
 
-import virtinst
+from virtinst import NodeDevice
 
 from virtManager.baseclass import vmmGObject
 
@@ -131,8 +131,8 @@ class vmmMediaDevice(vmmGObject):
             return
 
         try:
-            vobj = virtinst.NodeDeviceParser.parse(xml)
-            has_media = vobj.media_available
+            vobj = NodeDevice.parse(self.nodedev_obj.conn.get_backend(), xml)
+            has_media = vobj.media_available or False
         except:
             logging.exception("Node device CDROM polling failed")
             return

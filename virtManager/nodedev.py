@@ -18,7 +18,7 @@
 # MA 02110-1301 USA.
 #
 
-import virtinst
+from virtinst import NodeDevice
 
 from virtManager.libvirtobject import vmmLibvirtObject
 
@@ -41,7 +41,7 @@ class vmmNodeDevice(vmmLibvirtObject):
 
     def get_virtinst_obj(self):
         if not self._virtinst_obj:
-            self._virtinst_obj = virtinst.NodeDeviceParser.parse(
+            self._virtinst_obj = NodeDevice.parse(self.conn.get_backend(),
                 self._backend.XMLDesc(0))
         return self._virtinst_obj
 

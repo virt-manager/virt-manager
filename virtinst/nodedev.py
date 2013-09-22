@@ -21,32 +21,86 @@ import logging
 
 import libvirt
 
-from virtinst import util
+from virtinst.xmlbuilder import XMLBuilder
+from virtinst.xmlbuilder import XMLProperty as OrigXMLProperty
 
 
-# class USBDevice
-CAPABILITY_TYPE_SYSTEM = "system"
-CAPABILITY_TYPE_NET = "net"
-CAPABILITY_TYPE_PCI = "pci"
-CAPABILITY_TYPE_USBDEV = "usb_device"
-CAPABILITY_TYPE_USBBUS = "usb"
-CAPABILITY_TYPE_STORAGE = "storage"
-CAPABILITY_TYPE_SCSIBUS = "scsi_host"
-CAPABILITY_TYPE_SCSIDEV = "scsi"
-
-HOSTDEV_ADDR_TYPE_LIBVIRT = 0
-HOSTDEV_ADDR_TYPE_PCI = 1
-HOSTDEV_ADDR_TYPE_USB_BUSADDR = 2
-HOSTDEV_ADDR_TYPE_USB_VENPRO = 3
+# We had a pre-existing set of parse tests when this was converted to
+# XMLBuilder. We do this to appease the check in xmlparse.py without
+# moving all the nodedev.py tests to one file. Should find a way to
+# drop it.
+class XMLProperty(OrigXMLProperty):
+    def __init__(self, *args, **kwargs):
+        kwargs["track"] = False
+        OrigXMLProperty.__init__(self, *args, **kwargs)
 
 
-class NodeDevice(object):
-    def __init__(self, node):
-        self.name = None
-        self.parent = None
-        self.device_type = None
+def _lookupNodeName(conn, name):
+    nodedev = conn.nodeDeviceLookupByName(name)
+    xml = nodedev.XMLDesc(0)
+    return NodeDevice.parse(conn, xml)
 
-        self._parseNodeXML(node)
+
+class NodeDevice(XMLBuilder):
+    CAPABILITY_TYPE_SYSTEM = "system"
+    CAPABILITY_TYPE_NET = "net"
+    CAPABILITY_TYPE_PCI = "pci"
+    CAPABILITY_TYPE_USBDEV = "usb_device"
+    CAPABILITY_TYPE_USBBUS = "usb"
+    CAPABILITY_TYPE_STORAGE = "storage"
+    CAPABILITY_TYPE_SCSIBUS = "scsi_host"
+    CAPABILITY_TYPE_SCSIDEV = "scsi"
+
+    (HOSTDEV_ADDR_TYPE_LIBVIRT,
+    HOSTDEV_ADDR_TYPE_PCI,
+    HOSTDEV_ADDR_TYPE_USB_BUSADDR,
+    HOSTDEV_ADDR_TYPE_USB_VENPRO) = range(1, 5)
+
+    @staticmethod
+    def lookupNodeName(conn, name):
+        """
+        Convert the passed libvirt node device name to a NodeDevice
+        instance, with proper error reporting. If the name is name is not
+        found, we will attempt to parse the name as would be passed to
+        devAddressToNodeDev
+
+        @param conn: libvirt.virConnect instance to perform the lookup on
+        @param name: libvirt node device name to lookup, or address for
+                     devAddressToNodedev
+
+        @rtype: L{NodeDevice} instance
+        """
+        if not conn.check_conn_support(conn.SUPPORT_CONN_NODEDEV):
+            raise ValueError(_("Connection does not support host device "
+                               "enumeration."))
+
+        try:
+            return (_lookupNodeName(conn, name),
+                     NodeDevice.HOSTDEV_ADDR_TYPE_LIBVIRT)
+        except libvirt.libvirtError, e:
+            ret = _isAddressStr(name)
+            if not ret:
+                raise e
+
+            return devAddressToNodedev(conn, name)
+
+    @staticmethod
+    def parse(conn, xml):
+        tmpdev = NodeDevice(conn, parsexml=xml, allow_node_instantiate=True)
+        cls = _typeToDeviceClass(tmpdev.device_type)
+        return cls(conn, parsexml=xml, allow_node_instantiate=True)
+
+    def __init__(self, *args, **kwargs):
+        instantiate = kwargs.pop("allow_node_instantiate", False)
+        if self.__class__ is NodeDevice and not instantiate:
+            raise RuntimeError("Can not instantiate NodeDevice directly")
+        XMLBuilder.__init__(self, *args, **kwargs)
+
+    _XML_ROOT_NAME = "device"
+
+    name = XMLProperty("./name")
+    parent = XMLProperty("./parent")
+    device_type = XMLProperty("./capability/@type")
 
     def pretty_name(self, child_dev=None):
         """
@@ -62,66 +116,16 @@ class NodeDevice(object):
         ignore = child_dev
         return self.name
 
-    def _parseNodeXML(self, node):
-        child = node.children
-        while child:
-            if child.name == "name":
-                self.name = child.content
-            elif child.name == "parent":
-                self.parent = child.content
-            elif child.name == "capability":
-                self.device_type = child.prop("type")
-            child = child.next
-
-    def _getCapabilityNode(self, node):
-        child = node.children
-        while child:
-            if child.name == "capability":
-                return child
-            child = child.next
-        return None
-
-    def _parseValueHelper(self, node, value_map):
-        if node.name in value_map:
-            setattr(self, value_map[node.name], node.content)
-
-    def _parseHelper(self, main_node, value_map):
-        node = main_node.children
-        while node:
-            self._parseValueHelper(node, value_map)
-            node = node.next
-
 
 class SystemDevice(NodeDevice):
-    def __init__(self, node):
-        NodeDevice.__init__(self, node)
+    hw_vendor = XMLProperty("./capability/hardware/vendor")
+    hw_version = XMLProperty("./capability/hardware/version")
+    hw_serial = XMLProperty("./capability/hardware/serial")
+    hw_uuid = XMLProperty("./capability/hardware/uuid")
 
-        self.hw_vendor = None
-        self.hw_version = None
-        self.hw_serial = None
-        self.hw_uuid = None
-
-        self.fw_vendor = None
-        self.fw_version = None
-        self.fw_date = None
-
-        self.parseXML(self._getCapabilityNode(node))
-
-    def parseXML(self, node):
-        child = node.children
-        hardware_map = {"vendor": "hw_vendor",
-                        "version": "hw_version",
-                        "serial": "hw_serial",
-                        "uuid": "hw_uuid"}
-        firmware_map = {"vendor": "fw_vendor",
-                        "version": "fw_version",
-                        "release_date": "fw_date"}
-        while child:
-            if child.name == "hardware":
-                self._parseHelper(child, hardware_map)
-            elif child.name == "firmware":
-                self._parseHelper(child, firmware_map)
-            child = child.next
+    fw_vendor = XMLProperty("./capability/firmware/vendor")
+    fw_version = XMLProperty("./capability/firmware/version")
+    fw_date = XMLProperty("./capability/firmware/release_date")
 
     def pretty_name(self, child_dev=None):
         ignore = child_dev
@@ -135,25 +139,9 @@ class SystemDevice(NodeDevice):
 
 
 class NetDevice(NodeDevice):
-    def __init__(self, node):
-        NodeDevice.__init__(self, node)
-
-        self.interface = None
-        self.address = None
-        self.capability_type = None
-
-        self.parseXML(self._getCapabilityNode(node))
-
-    def parseXML(self, node):
-        value_map = {"interface" : "interface",
-                     "address" : "address"}
-        child = node.children
-        while child:
-            if child.name == "capability":
-                self.capability_type = child.prop("type")
-            else:
-                self._parseValueHelper(child, value_map)
-            child = child.next
+    interface = XMLProperty("./capability/interface")
+    address = XMLProperty("./capability/address")
+    capability_type = XMLProperty("./capability/capability/@type")
 
     def pretty_name(self, child_dev=None):
         ignore = child_dev
@@ -165,40 +153,15 @@ class NetDevice(NodeDevice):
 
 
 class PCIDevice(NodeDevice):
-    def __init__(self, node):
-        NodeDevice.__init__(self, node)
+    domain = XMLProperty("./capability/domain")
+    bus = XMLProperty("./capability/bus")
+    slot = XMLProperty("./capability/slot")
+    function = XMLProperty("./capability/function")
 
-        self.domain = None
-        self.bus = None
-        self.slot = None
-        self.function = None
-
-        self.product_id = None
-        self.product_name = None
-        self.vendor_id = None
-        self.vendor_name = None
-
-        self.parseXML(self._getCapabilityNode(node))
-
-    def parseXML(self, node):
-        val_map = {"domain" : "domain",
-                    "bus" : "bus",
-                    "slot" : "slot",
-                    "function" : "function"}
-        child = node.children
-        while child:
-            if child.name == "vendor":
-                self.vendor_name = child.content
-                self.vendor_id = child.prop("id")
-
-            elif child.name == "product":
-                self.product_name = child.content
-                self.product_id = child.prop("id")
-
-            else:
-                self._parseValueHelper(child, val_map)
-
-            child = child.next
+    product_name = XMLProperty("./capability/product")
+    product_id = XMLProperty("./capability/product/@id")
+    vendor_name = XMLProperty("./capability/vendor")
+    vendor_id = XMLProperty("./capability/vendor/@id")
 
     def pretty_name(self, child_dev=None):
         devstr = "%.2X:%.2X:%X" % (int(self.bus),
@@ -213,35 +176,13 @@ class PCIDevice(NodeDevice):
 
 
 class USBDevice(NodeDevice):
-    def __init__(self, node):
-        NodeDevice.__init__(self, node)
+    bus = XMLProperty("./capability/bus")
+    device = XMLProperty("./capability/device")
 
-        self.bus = None
-        self.device = None
-
-        self.product_id = None
-        self.product_name = None
-        self.vendor_id = None
-        self.vendor_name = None
-
-        self.parseXML(self._getCapabilityNode(node))
-
-    def parseXML(self, node):
-        val_map = {"bus": "bus", "device": "device"}
-        child = node.children
-        while child:
-            if child.name == "vendor":
-                self.vendor_name = child.content
-                self.vendor_id = child.prop("id")
-
-            elif child.name == "product":
-                self.product_name = child.content
-                self.product_id = child.prop("id")
-
-            else:
-                self._parseValueHelper(child, val_map)
-
-            child = child.next
+    product_name = XMLProperty("./capability/product")
+    product_id = XMLProperty("./capability/product/@id")
+    vendor_name = XMLProperty("./capability/vendor")
+    vendor_id = XMLProperty("./capability/vendor/@id")
 
     def pretty_name(self, child_dev=None):
         ignore = child_dev
@@ -252,56 +193,34 @@ class USBDevice(NodeDevice):
 
 
 class StorageDevice(NodeDevice):
-    def __init__(self, node):
-        NodeDevice.__init__(self, node)
+    block = XMLProperty("./capability/block")
+    bus = XMLProperty("./capability/bus")
+    drive_type = XMLProperty("./capability/drive_type")
+    size = XMLProperty("./capability/size", is_int=True)
 
-        self.block = None
-        self.bus = None
-        self.drive_type = None
-        self.size = 0
+    model = XMLProperty("./capability/model")
+    vendor = XMLProperty("./capability/vendor")
 
-        self.model = None
-        self.vendor = None
+    hotpluggable = XMLProperty(
+        "./capability/capability[@type='hotpluggable']", is_bool=True)
+    removable = XMLProperty(
+        "./capability/capability[@type='removable']", is_bool=True)
 
-        self.removable = False
-        self.media_available = False
-        self.media_size = 0
-        self.media_label = None
-
-        self.hotpluggable = False
-
-        self.parseXML(self._getCapabilityNode(node))
-
-    def parseXML(self, node):
-        val_map = {"block" : "block",
-                    "bus" : "bus",
-                    "drive_type" : "drive_type",
-                    "model" : "model",
-                    "vendor" : "vendor"}
-        child = node.children
-        while child:
-            if child.name == "size":
-                self.size = int(child.content)
-            elif child.name == "capability":
-
-                captype = child.prop("type")
-                if captype == "hotpluggable":
-                    self.hotpluggable = True
-                elif captype == "removable":
-                    self.removable = True
-                    rmchild = child.children
-                    while rmchild:
-                        if rmchild.name == "media_available":
-                            self.media_available = bool(int(rmchild.content))
-                        elif rmchild.name == "media_size":
-                            self.media_size = int(rmchild.content)
-                        elif rmchild.name == "media_label":
-                            self.media_label = rmchild.content
-                        rmchild = rmchild.next
-            else:
-                self._parseValueHelper(child, val_map)
-
-            child = child.next
+    media_size = XMLProperty(
+        "./capability/capability[@type='removable']/media_size", is_int=True)
+    media_label = XMLProperty(
+        "./capability/capability[@type='removable']/media_label")
+    _media_available = XMLProperty(
+            "./capability/capability[@type='removable']/media_available",
+            is_int=True)
+    def _get_media_available(self):
+        m = self._media_available
+        if m is None:
+            return None
+        return bool(m)
+    def _set_media_available(self, val):
+        self._media_available = val
+    media_available = property(_get_media_available, _set_media_available)
 
     def pretty_name(self, child_dev=None):
         ignore = child_dev
@@ -319,116 +238,30 @@ class StorageDevice(NodeDevice):
 
 
 class USBBus(NodeDevice):
-    def __init__(self, node):
-        NodeDevice.__init__(self, node)
-
-        self.number = None
-        self.classval = None
-        self.subclass = None
-        self.protocol = None
-
-        self.parseXML(self._getCapabilityNode(node))
-
-    def parseXML(self, node):
-        val_map = {"number" : "number",
-                    "class" : "classval",
-                    "subclass" : "subclass",
-                    "protocol" : "protocol"}
-        self._parseHelper(node, val_map)
+    number = XMLProperty("./capability/number")
+    classval = XMLProperty("./capability/class")
+    subclass = XMLProperty("./capability/subclass")
+    protocol = XMLProperty("./capability/protocol")
 
 
 class SCSIDevice(NodeDevice):
-    def __init__(self, node):
-        NodeDevice.__init__(self, node)
-
-        self.host = None
-        self.bus = None
-        self.target = None
-        self.lun = None
-        self.disk = None
-
-        self.parseXML(self._getCapabilityNode(node))
-
-    def parseXML(self, node):
-        val_map = {"host" : "host",
-                    "bus" : "bus",
-                    "target": "target",
-                    "lun" : "lun",
-                    "type" : "type"}
-        self._parseHelper(node, val_map)
+    host = XMLProperty("./capability/host")
+    bus = XMLProperty("./capability/bus")
+    target = XMLProperty("./capability/target")
+    lun = XMLProperty("./capability/lun")
+    type = XMLProperty("./capability/type")
 
 
 class SCSIBus(NodeDevice):
-    def __init__(self, node):
-        NodeDevice.__init__(self, node)
+    host = XMLProperty("./capability/host")
 
-        self.host = None
+    vport_ops = XMLProperty(
+        "./capability/capability[@type='vport_ops']", is_bool=True)
 
-        self.vport_ops = False
-
-        self.fc_host = False
-        self.wwnn = None
-        self.wwpn = None
-
-        self.parseXML(self._getCapabilityNode(node))
-
-    def parseXML(self, node):
-        val_map = {"host" : "host"}
-
-        child = node.children
-        while child:
-            if child.name == "capability":
-                captype = child.prop("type")
-
-                if captype == "vport_ops":
-                    self.vport_ops = True
-                elif captype == "fc_host":
-                    self.fc_host = True
-                    fcchild = child.children
-                    while fcchild:
-                        if fcchild.name == "wwnn":
-                            self.wwnn = fcchild.content
-                        elif fcchild.name == "wwpn":
-                            self.wwpn = fcchild.content
-                        fcchild = fcchild.next
-            else:
-                self._parseValueHelper(child, val_map)
-
-            child = child.next
-
-
-def _lookupNodeName(conn, name):
-    nodedev = conn.nodeDeviceLookupByName(name)
-    xml = nodedev.XMLDesc(0)
-    return parse(xml)
-
-
-def lookupNodeName(conn, name):
-    """
-    Convert the passed libvirt node device name to a NodeDevice
-    instance, with proper error reporting. If the name is name is not
-    found, we will attempt to parse the name as would be passed to
-    devAddressToNodeDev
-
-    @param conn: libvirt.virConnect instance to perform the lookup on
-    @param name: libvirt node device name to lookup, or address for
-                 devAddressToNodedev
-
-    @rtype: L{NodeDevice} instance
-    """
-    if not conn.check_conn_support(conn.SUPPORT_CONN_NODEDEV):
-        raise ValueError(_("Connection does not support host device "
-                           "enumeration."))
-
-    try:
-        return (_lookupNodeName(conn, name),
-                 HOSTDEV_ADDR_TYPE_LIBVIRT)
-    except libvirt.libvirtError, e:
-        ret = _isAddressStr(name)
-        if not ret:
-            raise e
-
-        return devAddressToNodedev(conn, name)
+    fc_host = XMLProperty(
+        "./capability/capability[@type='fc_host']", is_bool=True)
+    wwnn = XMLProperty("./capability/capability[@type='fc_host']/wwnn")
+    wwpn = XMLProperty("./capability/capability[@type='fc_host']/wwpn")
 
 
 def _isAddressStr(addrstr):
@@ -438,7 +271,7 @@ def _isAddressStr(addrstr):
     try:
         # Determine addrstr type
         if addrstr.count(":") in [1, 2] and addrstr.count("."):
-            devtype = CAPABILITY_TYPE_PCI
+            devtype = NodeDevice.CAPABILITY_TYPE_PCI
             addrstr, func = addrstr.split(".", 1)
             addrstr, slot = addrstr.rsplit(":", 1)
             domain = "0"
@@ -458,10 +291,10 @@ def _isAddressStr(addrstr):
                         (int(nodedev.bus) == bus) and
                         (int(nodedev.slot) == slot))
             cmp_func = pci_cmp
-            addr_type = HOSTDEV_ADDR_TYPE_PCI
+            addr_type = NodeDevice.HOSTDEV_ADDR_TYPE_PCI
 
         elif addrstr.count(":"):
-            devtype = CAPABILITY_TYPE_USBDEV
+            devtype = NodeDevice.CAPABILITY_TYPE_USBDEV
             vendor, product = addrstr.split(":")
             vendor = int(vendor, 16)
             product = int(product, 16)
@@ -470,10 +303,10 @@ def _isAddressStr(addrstr):
                 return ((int(nodedev.vendor_id, 16) == vendor) and
                         (int(nodedev.product_id, 16) == product))
             cmp_func = usbprod_cmp
-            addr_type = HOSTDEV_ADDR_TYPE_USB_VENPRO
+            addr_type = NodeDevice.HOSTDEV_ADDR_TYPE_USB_VENPRO
 
         elif addrstr.count("."):
-            devtype = CAPABILITY_TYPE_USBDEV
+            devtype = NodeDevice.CAPABILITY_TYPE_USBDEV
             bus, addr = addrstr.split(".", 1)
             bus = int(bus)
             addr = int(addr)
@@ -482,7 +315,7 @@ def _isAddressStr(addrstr):
                 return ((int(nodedev.bus) == bus) and
                         (int(nodedev.device) == addr))
             cmp_func = usbaddr_cmp
-            addr_type = HOSTDEV_ADDR_TYPE_USB_BUSADDR
+            addr_type = NodeDevice.HOSTDEV_ADDR_TYPE_USB_BUSADDR
     except:
         logging.exception("Error parsing node device string.")
         return None
@@ -533,49 +366,22 @@ def devAddressToNodedev(conn, addrstr):
                          addrstr)
 
 
-def parse(xml):
-    """
-    Convert the passed libvirt node device xml into a NodeDevice object
-
-    @param xml: libvirt node device xml
-    @type xml: C{str}
-
-    @returns: L{NodeDevice} instance
-    """
-    def _parse_func(root):
-        t = _findNodeType(root)
-        devclass = _typeToDeviceClass(t)
-        device = devclass(root)
-        return device
-
-    return util.parse_node_helper(xml, "device", _parse_func)
-
-
-def _findNodeType(node):
-    child = node.children
-    while child:
-        if child.name == "capability":
-            return child.prop("type")
-        child = child.next
-    return None
-
-
 def _typeToDeviceClass(t):
-    if t == CAPABILITY_TYPE_SYSTEM:
+    if t == NodeDevice.CAPABILITY_TYPE_SYSTEM:
         return SystemDevice
-    elif t == CAPABILITY_TYPE_NET:
+    elif t == NodeDevice.CAPABILITY_TYPE_NET:
         return NetDevice
-    elif t == CAPABILITY_TYPE_PCI:
+    elif t == NodeDevice.CAPABILITY_TYPE_PCI:
         return PCIDevice
-    elif t == CAPABILITY_TYPE_USBDEV:
+    elif t == NodeDevice.CAPABILITY_TYPE_USBDEV:
         return USBDevice
-    elif t == CAPABILITY_TYPE_USBBUS:
+    elif t == NodeDevice.CAPABILITY_TYPE_USBBUS:
         return USBBus
-    elif t == CAPABILITY_TYPE_STORAGE:
+    elif t == NodeDevice.CAPABILITY_TYPE_STORAGE:
         return StorageDevice
-    elif t == CAPABILITY_TYPE_SCSIBUS:
+    elif t == NodeDevice.CAPABILITY_TYPE_SCSIBUS:
         return SCSIBus
-    elif t == CAPABILITY_TYPE_SCSIDEV:
+    elif t == NodeDevice.CAPABILITY_TYPE_SCSIDEV:
         return SCSIDevice
     else:
         return NodeDevice

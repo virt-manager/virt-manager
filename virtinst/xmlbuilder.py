@@ -333,7 +333,8 @@ class XMLProperty(property):
                  set_converter=None, validate_cb=None,
                  make_getter_xpath_cb=None, make_setter_xpath_cb=None,
                  is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
-                 clear_first=None, default_cb=None, default_name=None):
+                 clear_first=None, default_cb=None, default_name=None,
+                 track=True):
         """
         Set a XMLBuilder class property that represents a value in the
         <domain> XML. For example
@@ -374,6 +375,8 @@ class XMLProperty(property):
             first explicit 'set'.
         @param default_name: If the user does a set and passes in this
             value, instead use the value of default_cb()
+        @param track: If False, opt out of property tracking for the
+            test suite.
         """
 
         self._xpath = xpath
@@ -404,7 +407,7 @@ class XMLProperty(property):
         if self._default_name and not self._default_cb:
             raise RuntimeError("default_name requires default_cb.")
 
-        if _trackprops:
+        if _trackprops and track:
             _allprops.append(self)
 
         property.__init__(self, fget=self.getter, fset=self.setter)
@@ -907,7 +910,7 @@ class XMLBuilder(object):
             ret = {}
             for c in reversed(type.mro(self.__class__)[:-1]):
                 for key, val in c.__dict__.items():
-                    if val.__class__ is checkclass:
+                    if isinstance(val, checkclass):
                         ret[key] = val
             setattr(self.__class__, cachename, ret)
         return getattr(self.__class__, cachename)
