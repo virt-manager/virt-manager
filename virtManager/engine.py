@@ -161,7 +161,10 @@ class vmmEngine(vmmGObject):
         self.systray.connect("action-destroy-domain", self._do_destroy_domain)
         self.systray.connect("action-reset-domain", self._do_reset_domain)
         self.systray.connect("action-save-domain", self._do_save_domain)
-        self.systray.connect("action-show-vm", self._do_show_vm)
+        self.systray.connect("action-show-domain", self._do_show_vm)
+        self.systray.connect("action-migrate-domain", self._do_show_migrate)
+        self.systray.connect("action-delete-domain", self._do_delete_domain)
+        self.systray.connect("action-clone-domain", self._do_show_clone)
         self.systray.connect("action-exit-app", self.exit_app)
 
     def system_tray_changed(self, *ignore):
@@ -773,7 +776,7 @@ class vmmEngine(vmmGObject):
         obj.connect("action-migrate-domain", self._do_show_migrate)
         obj.connect("action-delete-domain", self._do_delete_domain)
         obj.connect("action-clone-domain", self._do_show_clone)
-        obj.connect("action-show-vm", self._do_show_vm)
+        obj.connect("action-show-domain", self._do_show_vm)
         obj.connect("action-show-preferences", self._do_show_preferences)
         obj.connect("action-show-create", self._do_show_create)
         obj.connect("action-show-about", self._do_show_about)
@@ -812,7 +815,7 @@ class vmmEngine(vmmGObject):
             return self.windowCreate
 
         obj = vmmCreate(self)
-        obj.connect("action-show-vm", self._do_show_vm)
+        obj.connect("action-show-domain", self._do_show_vm)
         self.windowCreate = obj
         return self.windowCreate
 

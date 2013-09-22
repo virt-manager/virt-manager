@@ -88,7 +88,7 @@ def _get_inspection_icon_pixbuf(vm, w, h):
 class vmmManager(vmmGObjectUI):
     __gsignals__ = {
         "action-show-connect": (GObject.SignalFlags.RUN_FIRST, None, []),
-        "action-show-vm": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-show-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-show-about": (GObject.SignalFlags.RUN_FIRST, None, []),
         "action-show-host": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-show-preferences": (GObject.SignalFlags.RUN_FIRST, None, []),
@@ -124,9 +124,7 @@ class vmmManager(vmmGObjectUI):
         self.topwin.set_default_size(w or 550, h or 550)
         self.prev_position = None
 
-        self.vmmenu = Gtk.Menu()
-        self.vmmenushutdown = uihelpers.VMShutdownMenu(self, self.current_vm)
-        self.vmmenu_items = {}
+        self.vmmenu = uihelpers.VMActionMenu(self, self.current_vm)
         self.connmenu = Gtk.Menu()
         self.connmenu_items = {}
 
@@ -234,11 +232,8 @@ class vmmManager(vmmGObjectUI):
         self.hostcpucol = None
         self.netcol = None
 
-        self.vmmenu.destroy()
+        self.vmmenu.destroy()  # pylint: disable=E1101
         self.vmmenu = None
-        self.vmmenu_items = None
-        self.vmmenushutdown.destroy()  # pylint: disable=E1101
-        self.vmmenushutdown = None
         self.connmenu.destroy()
         self.connmenu = None
         self.connmenu_items = None
@@ -297,67 +292,28 @@ class vmmManager(vmmGObjectUI):
             c.set_homogeneous(False)
 
     def init_context_menus(self):
-        def build_stock(name):
-            return Gtk.Image.new_from_stock(name, Gtk.IconSize.MENU)
-
-        shutdownmenu_icon = Gtk.Image.new_from_icon_name(
-            "system-shutdown", Gtk.IconSize.MENU)
-        run_icon = build_stock(Gtk.STOCK_MEDIA_PLAY)
-        pause_icon = build_stock(Gtk.STOCK_MEDIA_PAUSE)
-        resume_icon = build_stock(Gtk.STOCK_MEDIA_PAUSE)
-        delete_icon = build_stock(Gtk.STOCK_DELETE)
-
-        def add_to_menu(menu, items, idx, text, icon, cb):
+        def add_to_menu(idx, text, icon, cb):
             if text[0:3] == 'gtk':
                 item = Gtk.ImageMenuItem.new_from_stock(text, None)
             else:
                 item = Gtk.ImageMenuItem.new_with_mnemonic(text)
             if icon:
                 item.set_image(icon)
-            item.show()
             if cb:
                 item.connect("activate", cb)
-            menu.add(item)
-            items[idx] = item
-
-        def add_vm_menu(idx, text, icon, cb):
-            add_to_menu(self.vmmenu, self.vmmenu_items, idx, text, icon, cb)
-        def add_conn_menu(idx, text, icon, cb):
-            add_to_menu(self.connmenu, self.connmenu_items,
-                        idx, text, icon, cb)
-        def add_sep(menu, items, idx):
-            sep = Gtk.SeparatorMenuItem()
-            sep.show()
-            menu.add(sep)
-            items[idx] = sep
-
-        # Build VM context menu
-        add_vm_menu("run", _("_Run"), run_icon, self.start_vm)
-        add_vm_menu("pause", _("_Pause"), pause_icon, self.pause_vm)
-        add_vm_menu("resume", _("R_esume"), resume_icon, self.resume_vm)
-
-        add_vm_menu("shutdown", _("_Shut Down"), shutdownmenu_icon, None)
-        self.vmmenu_items["shutdown"].set_submenu(self.vmmenushutdown)
-
-        add_sep(self.vmmenu, self.vmmenu_items, "hsep1")
-        add_vm_menu("clone", _("_Clone..."), None, self.open_clone_window)
-        add_vm_menu("migrate", _("_Migrate..."), None, self.migrate_vm)
-        add_vm_menu("delete", _("_Delete"), delete_icon, self.do_delete)
-
-        add_sep(self.vmmenu, self.vmmenu_items, "hsep2")
-        add_vm_menu("open", Gtk.STOCK_OPEN, None, self.show_vm)
-        self.vmmenu.show()
+            self.connmenu.add(item)
+            self.connmenu_items[idx] = item
 
         # Build connection context menu
-        add_conn_menu("create", Gtk.STOCK_NEW, None, self.new_vm)
-        add_conn_menu("connect", Gtk.STOCK_CONNECT, None, self.open_conn)
-        add_conn_menu("disconnect", Gtk.STOCK_DISCONNECT, None,
+        add_to_menu("create", Gtk.STOCK_NEW, None, self.new_vm)
+        add_to_menu("connect", Gtk.STOCK_CONNECT, None, self.open_conn)
+        add_to_menu("disconnect", Gtk.STOCK_DISCONNECT, None,
                       self.close_conn)
-        add_sep(self.connmenu, self.connmenu_items, "hsep1")
-        add_conn_menu("delete", Gtk.STOCK_DELETE, None, self.do_delete)
-        add_sep(self.connmenu, self.connmenu_items, "hsep2")
-        add_conn_menu("details", _("D_etails"), None, self.show_host)
-        self.connmenu.show()
+        self.connmenu.add(Gtk.SeparatorMenuItem())
+        add_to_menu("delete", Gtk.STOCK_DELETE, None, self.do_delete)
+        self.connmenu.add(Gtk.SeparatorMenuItem())
+        add_to_menu("details", _("D_etails"), None, self.show_host)
+        self.connmenu.show_all()
 
     def init_vmlist(self):
         vmlist = self.widget("vm-list")
@@ -536,15 +492,10 @@ class vmmManager(vmmGObjectUI):
             return
 
         if vm:
-            self.emit("action-show-vm", conn.get_uri(), vm.get_uuid())
+            self.emit("action-show-domain", conn.get_uri(), vm.get_uuid())
         else:
             if not self.open_conn():
                 self.emit("action-show-host", conn.get_uri())
-
-    def open_clone_window(self, ignore1=None, ignore2=None, ignore3=None):
-        if self.current_vmuuid():
-            self.emit("action-clone-domain", self.current_conn_uri(),
-                      self.current_vmuuid())
 
     def do_delete(self, ignore=None):
         conn = self.current_conn()
@@ -610,12 +561,6 @@ class vmmManager(vmmGObjectUI):
         vm = self.current_vm()
         if vm is not None:
             self.emit("action-resume-domain",
-                      vm.conn.get_uri(), vm.get_uuid())
-
-    def migrate_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-migrate-domain",
                       vm.conn.get_uri(), vm.get_uuid())
 
     def close_conn(self, ignore):
@@ -909,7 +854,7 @@ class vmmManager(vmmGObjectUI):
             text = _("_Run")
         strip_text = text.replace("_", "")
 
-        self.vmmenu_items["run"].get_child().set_label(text)
+        self.vmmenu.change_run_text(text)
         self.widget("vm-run").set_label(strip_text)
 
     def update_current_selection(self, ignore=None):
@@ -969,23 +914,9 @@ class vmmManager(vmmGObjectUI):
         if model.iter_parent(_iter) is not None:
             # Popup the vm menu
             vm = model.get_value(_iter, ROW_HANDLE)
-
-            run     = vm.is_runable()
-            stop    = vm.is_stoppable()
-            paused  = vm.is_paused()
-            ro      = vm.is_read_only()
-
-            self.vmmenu_items["run"].set_sensitive(run)
-            self.vmmenu_items["shutdown"].set_sensitive(stop)
-            self.vmmenu_items["pause"].set_visible(not paused)
-            self.vmmenu_items["pause"].set_sensitive(stop)
-            self.vmmenu_items["resume"].set_visible(paused)
-            self.vmmenu_items["resume"].set_sensitive(paused)
-            self.vmmenu_items["migrate"].set_sensitive(stop)
-            self.vmmenu_items["clone"].set_sensitive(not ro)
-            self.vmmenushutdown.update_widget_states(vm)
-
-            self.vmmenu.popup(None, None, None, None, 0, event.time)
+            self.vmmenu.update_widget_states(vm)
+            self.vmmenu.popup(  # pylint: disable=E1101
+                None, None, None, None, 0, event.time)
         else:
             # Pop up connection menu
             conn = model.get_value(_iter, ROW_HANDLE)

@@ -65,7 +65,7 @@ RHEL6_OS_SUPPORT = [
 
 class vmmCreate(vmmGObjectUI):
     __gsignals__ = {
-        "action-show-vm": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-show-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
     }
 
     def __init__(self, engine):
@@ -1843,7 +1843,7 @@ class vmmCreate(vmmGObjectUI):
         self.close()
 
         # Launch details dialog for new VM
-        self.emit("action-show-vm", self.conn.get_uri(), self.guest.uuid)
+        self.emit("action-show-domain", self.conn.get_uri(), self.guest.uuid)
 
 
     def start_install(self, guest):

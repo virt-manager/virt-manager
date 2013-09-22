@@ -59,8 +59,11 @@ class vmmSystray(vmmGObject):
         "action-reboot-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-destroy-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-save-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-migrate-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-delete-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-clone-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-show-host": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-        "action-show-vm": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-show-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
@@ -172,60 +175,6 @@ class vmmSystray(vmmGObject):
                             AppIndicator3.IndicatorStatus.PASSIVE)
             else:
                 self.systray_icon.set_visible(do_show)
-
-    def build_vm_menu(self, vm):
-        icon_size = Gtk.IconSize.MENU
-
-        pause_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Pause"))
-        pause_img  = Gtk.Image.new_from_stock(Gtk.STOCK_MEDIA_PAUSE, icon_size)
-        pause_item.set_image(pause_img)
-        pause_item.connect("activate", self.run_vm_action,
-                           "action-suspend-domain", vm.get_uuid())
-
-        resume_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Resume"))
-        resume_img  = Gtk.Image.new_from_stock(Gtk.STOCK_MEDIA_PAUSE,
-                                               icon_size)
-        resume_item.set_image(resume_img)
-        resume_item.connect("activate", self.run_vm_action,
-                            "action-resume-domain", vm.get_uuid())
-
-        run_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Run"))
-        run_img  = Gtk.Image.new_from_stock(Gtk.STOCK_MEDIA_PLAY, icon_size)
-        run_item.set_image(run_img)
-        run_item.connect("activate", self.run_vm_action,
-                         "action-run-domain", vm.get_uuid())
-
-        # Shutdown menu
-        shutdown_menu = uihelpers.VMShutdownMenu(self, lambda: vm)
-        shutdown_menu_item = Gtk.ImageMenuItem.new_with_mnemonic(
-            _("_Shut Down"))
-        shutdown_menu_item.set_image(Gtk.Image.new_from_icon_name(
-            "system-shutdown", icon_size))
-        shutdown_menu_item.set_submenu(shutdown_menu)
-
-        sep = Gtk.SeparatorMenuItem()
-
-        open_item = Gtk.ImageMenuItem.new_from_stock("gtk-open", None)
-        open_item.show()
-        open_item.connect("activate", self.run_vm_action,
-                          "action-show-vm", vm.get_uuid())
-
-        vm_action_dict = {}
-        vm_action_dict["run"] = run_item
-        vm_action_dict["pause"] = pause_item
-        vm_action_dict["resume"] = resume_item
-        vm_action_dict["shutdown_menu"] = shutdown_menu_item
-        vm_action_dict["sep"] = sep
-        vm_action_dict["open"] = open_item
-
-        menu = Gtk.Menu()
-
-        for key in ["run", "pause", "resume", "shutdown_menu", "sep", "open"]:
-            item = vm_action_dict[key]
-            item.show_all()
-            menu.add(vm_action_dict[key])
-
-        return menu, vm_action_dict
 
     # Helper functions
     def _get_vm_menu_item(self, vm):
@@ -354,9 +303,9 @@ class vmmSystray(vmmGObject):
         # Build VM list entry
         menu_item = build_image_menu_item(vm.get_name())
         vm_mappings[uuid] = menu_item
-        vm_action_menu, vm_action_dict = self.build_vm_menu(vm)
+        vm_action_menu = uihelpers.VMActionMenu(self, lambda: vm)
         menu_item.set_submenu(vm_action_menu)
-        self.vm_action_dict[uuid] = vm_action_dict
+        self.vm_action_dict[uuid] = vm_action_menu
 
         # Add VM to menu list
         self.populate_vm_list(conn)
@@ -393,29 +342,8 @@ class vmmSystray(vmmGObject):
         self._set_vm_status_icon(vm, menu_item)
 
         # Update action widget states
-        actions = self.vm_action_dict[vm.get_uuid()]
-
-        is_paused = vm.is_paused()
-        actions["run"].set_sensitive(vm.is_runable())
-        actions["pause"].set_sensitive(vm.is_pauseable())
-        actions["resume"].set_sensitive(vm.is_paused())
-        actions["shutdown_menu"].set_sensitive(vm.is_active())
-        actions["shutdown_menu"].get_submenu().update_widget_states(vm)
-
-        actions["pause"].set_visible(not is_paused)
-        actions["resume"].set_visible(is_paused)
-
-    def run_vm_action(self, ignore, signal_name, uuid):
-        uri = None
-        for tmpuri, vm_mappings in self.conn_vm_menuitems.items():
-            if vm_mappings.get(uuid):
-                uri = tmpuri
-                break
-
-        if not uri:
-            return
-
-        self.emit(signal_name, uri, uuid)
+        menu = self.vm_action_dict[vm.get_uuid()]
+        menu.update_widget_states(vm)
 
     def exit_app(self, ignore):
         self.emit("action-exit-app")

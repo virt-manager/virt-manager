@@ -908,7 +908,7 @@ def mediadev_set_default_selection(widget):
 # Build toolbar shutdown button menu (manager and details toolbar) #
 ####################################################################
 
-class VMShutdownMenu(Gtk.Menu):
+class _VMMenu(Gtk.Menu):
     # pylint: disable=E1101
     # pylint can't detect functions we inheirit from Gtk, ex self.add
 
@@ -918,23 +918,26 @@ class VMShutdownMenu(Gtk.Menu):
         self._current_vm_cb = current_vm_cb
         self._init_state()
 
-    def _init_state(self):
-        def _add_action(label, signal, iconname="system-shutdown"):
+    def _add_action(self, label, signal,
+                    iconname="system-shutdown", addcb=True):
+        if label.startswith("gtk-"):
+            item = Gtk.ImageMenuItem.new_from_stock(label, None)
+        else:
             item = Gtk.ImageMenuItem.new_with_mnemonic(label)
-            icon = Gtk.Image.new_from_icon_name(iconname, Gtk.IconSize.MENU)
+
+        if iconname:
+            if iconname.startswith("gtk-"):
+                icon = Gtk.Image.new_from_stock(iconname, Gtk.IconSize.MENU)
+            else:
+                icon = Gtk.Image.new_from_icon_name(iconname,
+                                                    Gtk.IconSize.MENU)
             item.set_image(icon)
+
+        item.vmm_widget_name = signal
+        if addcb:
             item.connect("activate", self._action_cb)
-            item.vmm_widget_name = signal
-            self.add(item)
-
-        _add_action(_("_Reboot"), "reboot")
-        _add_action(_("_Shut Down"), "shutdown")
-        _add_action(_("F_orce Reset"), "reset")
-        _add_action(_("_Force Off"), "destroy")
-        self.add(Gtk.SeparatorMenuItem())
-        _add_action(_("Sa_ve"), "save", iconname=Gtk.STOCK_SAVE)
-
-        self.show_all()
+        self.add(item)
+        return item
 
     def _action_cb(self, src):
         vm = self._current_vm_cb()
@@ -942,6 +945,26 @@ class VMShutdownMenu(Gtk.Menu):
             return
         self._parent.emit("action-%s-domain" % src.vmm_widget_name,
                           vm.conn.get_uri(), vm.get_uuid())
+
+    def _init_state(self):
+        raise NotImplementedError()
+    def update_widget_states(self, vm):
+        raise NotImplementedError()
+
+
+class VMShutdownMenu(_VMMenu):
+    # pylint: disable=E1101
+    # pylint can't detect functions we inheirit from Gtk, ex self.add
+
+    def _init_state(self):
+        self._add_action(_("_Reboot"), "reboot")
+        self._add_action(_("_Shut Down"), "shutdown")
+        self._add_action(_("F_orce Reset"), "reset")
+        self._add_action(_("_Force Off"), "destroy")
+        self.add(Gtk.SeparatorMenuItem())
+        self._add_action(_("Sa_ve"), "save", iconname=Gtk.STOCK_SAVE)
+
+        self.show_all()
 
     def update_widget_states(self, vm):
         statemap = {
@@ -956,6 +979,56 @@ class VMShutdownMenu(Gtk.Menu):
             name = getattr(child, "vmm_widget_name", None)
             if name in statemap:
                 child.set_sensitive(statemap[name])
+
+
+class VMActionMenu(_VMMenu):
+    # pylint: disable=E1101
+    # pylint can't detect functions we inheirit from Gtk, ex self.add
+
+    def _init_state(self):
+        self._add_action(_("_Run"), "run", Gtk.STOCK_MEDIA_PLAY)
+        self._add_action(_("_Pause"), "suspend", Gtk.STOCK_MEDIA_PAUSE)
+        self._add_action(_("R_esume"), "resume", Gtk.STOCK_MEDIA_PAUSE)
+        s = self._add_action(_("_Shut Down"), "shutdown", addcb=False)
+        s.set_submenu(VMShutdownMenu(self._parent, self._current_vm_cb))
+
+        self.add(Gtk.SeparatorMenuItem())
+        self._add_action(_("Clone..."), "clone", None)
+        self._add_action(_("Migrate..."), "migrate", None)
+        self._add_action(_("_Delete"), "delete", Gtk.STOCK_DELETE)
+
+        self.add(Gtk.SeparatorMenuItem())
+        self._add_action(Gtk.STOCK_OPEN, "show", None)
+
+        self.show_all()
+
+    def update_widget_states(self, vm):
+        statemap = {
+            "run": bool(vm and vm.is_runable()),
+            "shutdown": bool(vm and vm.is_stoppable()),
+            "suspend": bool(vm and vm.is_stoppable()),
+            "resume": bool(vm and vm.is_paused()),
+            "migrate": bool(vm and vm.is_stoppable()),
+            "clone": bool(vm and not vm.is_read_only()),
+        }
+        vismap = {
+            "suspend": bool(vm and not vm.is_paused()),
+            "resume": bool(vm and vm.is_paused()),
+        }
+
+        for child in self.get_children():
+            name = getattr(child, "vmm_widget_name", None)
+            if hasattr(child, "update_widget_states"):
+                child.update_widget_states(vm)
+            if name in statemap:
+                child.set_sensitive(statemap[name])
+            if name in vismap:
+                child.set_visible(vismap[name])
+
+    def change_run_text(self, text):
+        for child in self.get_children():
+            if getattr(child, "vmm_widget_name", None) == "run":
+                child.get_child().set_label(text)
 
 
 #####################################
