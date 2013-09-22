@@ -169,7 +169,7 @@ class vmmAsyncJob(vmmGObjectUI):
         @cancel_cb: Cancel callback if operation supports it.
             (cb, arg1, arg2, ...)
         """
-        vmmGObjectUI.__init__(self, "vmm-progress.ui", "vmm-progress")
+        vmmGObjectUI.__init__(self, "asyncjob.ui", "vmm-progress")
         self.topwin.set_transient_for(parent)
 
         self.show_progress = bool(show_progress)

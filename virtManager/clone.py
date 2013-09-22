@@ -125,7 +125,7 @@ def do_we_default(conn, vol, path, ro, shared, devtype):
 
 class vmmCloneVM(vmmGObjectUI):
     def __init__(self, orig_vm):
-        vmmGObjectUI.__init__(self, "vmm-clone.ui", "vmm-clone")
+        vmmGObjectUI.__init__(self, "clone.ui", "vmm-clone")
         self.orig_vm = orig_vm
 
         self.conn = self.orig_vm.conn

@@ -25,7 +25,7 @@ from virtManager.baseclass import vmmGObjectUI
 
 class vmmAbout(vmmGObjectUI):
     def __init__(self):
-        vmmGObjectUI.__init__(self, "vmm-about.ui", "vmm-about")
+        vmmGObjectUI.__init__(self, "about.ui", "vmm-about")
 
         self.builder.connect_signals({
             "on_vmm_about_delete_event": self.close,

@@ -72,7 +72,7 @@ tpm_widget_mappings = {
 
 class vmmAddHardware(vmmGObjectUI):
     def __init__(self, vm, is_customize_dialog):
-        vmmGObjectUI.__init__(self, "vmm-add-hardware.ui", "vmm-add-hardware")
+        vmmGObjectUI.__init__(self, "addhardware.ui", "vmm-add-hardware")
 
         self.vm = vm
         self.conn = vm.conn

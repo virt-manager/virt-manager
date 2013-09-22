@@ -39,9 +39,7 @@ class vmmStorageBrowser(vmmGObjectUI):
     }
 
     def __init__(self, conn):
-        vmmGObjectUI.__init__(self,
-                            "vmm-storage-browse.ui",
-                            "vmm-storage-browse")
+        vmmGObjectUI.__init__(self, "storagebrowse.ui", "vmm-storage-browse")
         self.conn = conn
 
         self.conn_signal_ids = []

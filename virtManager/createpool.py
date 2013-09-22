@@ -37,9 +37,7 @@ PAGE_FORMAT = 1
 
 class vmmCreatePool(vmmGObjectUI):
     def __init__(self, conn):
-        vmmGObjectUI.__init__(self,
-                              "vmm-create-pool.ui",
-                              "vmm-create-pool")
+        vmmGObjectUI.__init__(self, "createpool.ui", "vmm-create-pool")
         self.conn = conn
 
         self._pool = None

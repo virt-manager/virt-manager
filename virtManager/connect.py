@@ -60,9 +60,7 @@ class vmmConnect(vmmGObjectUI):
     }
 
     def __init__(self):
-        vmmGObjectUI.__init__(self,
-                              "vmm-open-connection.ui",
-                              "vmm-open-connection")
+        vmmGObjectUI.__init__(self, "connect.ui", "vmm-open-connection")
 
         self.builder.connect_signals({
             "on_hypervisor_changed": self.hypervisor_changed,

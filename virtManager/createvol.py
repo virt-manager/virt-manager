@@ -41,7 +41,7 @@ class vmmCreateVolume(vmmGObjectUI):
     }
 
     def __init__(self, conn, parent_pool):
-        vmmGObjectUI.__init__(self, "vmm-create-vol.ui", "vmm-create-vol")
+        vmmGObjectUI.__init__(self, "createvol.ui", "vmm-create-vol")
         self.conn = conn
         self.parent_pool = parent_pool
 

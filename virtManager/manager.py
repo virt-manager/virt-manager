@@ -112,7 +112,7 @@ class vmmManager(vmmGObjectUI):
     }
 
     def __init__(self):
-        vmmGObjectUI.__init__(self, "vmm-manager.ui", "vmm-manager")
+        vmmGObjectUI.__init__(self, "manager.ui", "vmm-manager")
 
         self.ignore_pause = False
 

@@ -339,7 +339,7 @@ class vmmDetails(vmmGObjectUI):
     }
 
     def __init__(self, vm, parent=None):
-        vmmGObjectUI.__init__(self, "vmm-details.ui", "vmm-details")
+        vmmGObjectUI.__init__(self, "details.ui", "vmm-details")
         self.vm = vm
         self.conn = self.vm.conn
 

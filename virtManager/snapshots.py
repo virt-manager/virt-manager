@@ -55,7 +55,7 @@ def _snapshot_state_icon_name(state):
 
 class vmmSnapshotPage(vmmGObjectUI):
     def __init__(self, vm, builder, topwin):
-        vmmGObjectUI.__init__(self, "vmm-snapshots.ui",
+        vmmGObjectUI.__init__(self, "snapshots.ui",
                               None, builder=builder, topwin=topwin)
 
         self.vm = vm

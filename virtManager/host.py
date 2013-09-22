@@ -54,7 +54,7 @@ class vmmHost(vmmGObjectUI):
     }
 
     def __init__(self, conn):
-        vmmGObjectUI.__init__(self, "vmm-host.ui", "vmm-host")
+        vmmGObjectUI.__init__(self, "host.ui", "vmm-host")
         self.conn = conn
 
         self.title = conn.get_short_hostname() + " " + self.topwin.get_title()

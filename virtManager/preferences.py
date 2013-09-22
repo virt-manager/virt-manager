@@ -33,7 +33,7 @@ PREFS_PAGE_VM_PREFS = 1
 
 class vmmPreferences(vmmGObjectUI):
     def __init__(self):
-        vmmGObjectUI.__init__(self, "vmm-preferences.ui", "vmm-preferences")
+        vmmGObjectUI.__init__(self, "preferences.ui", "vmm-preferences")
 
         self.refresh_view_system_tray()
         self.refresh_update_interval()

@@ -69,7 +69,7 @@ class vmmCreate(vmmGObjectUI):
     }
 
     def __init__(self, engine):
-        vmmGObjectUI.__init__(self, "vmm-create.ui", "vmm-create")
+        vmmGObjectUI.__init__(self, "create.ui", "vmm-create")
         self.engine = engine
 
         self.conn = None

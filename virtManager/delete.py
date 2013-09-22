@@ -47,7 +47,7 @@ STORAGE_ROW_TOOLTIP = 7
 
 class vmmDeleteDialog(vmmGObjectUI):
     def __init__(self):
-        vmmGObjectUI.__init__(self, "vmm-delete.ui", "vmm-delete")
+        vmmGObjectUI.__init__(self, "delete.ui", "vmm-delete")
         self.vm = None
         self.conn = None
 

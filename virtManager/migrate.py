@@ -50,7 +50,7 @@ def uri_join(uri_tuple):
 
 class vmmMigrateDialog(vmmGObjectUI):
     def __init__(self, vm, engine):
-        vmmGObjectUI.__init__(self, "vmm-migrate.ui", "vmm-migrate")
+        vmmGObjectUI.__init__(self, "migrate.ui", "vmm-migrate")
         self.vm = vm
         self.conn = vm.conn
         self.engine = engine

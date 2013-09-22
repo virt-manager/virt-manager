@@ -63,8 +63,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
     def __init__(self, conn):
         vmmGObjectUI.__init__(self,
-                              "vmm-create-interface.ui",
-                              "vmm-create-interface")
+                              "createinterface.ui", "vmm-create-interface")
         self.conn = conn
         self.interface = None
 

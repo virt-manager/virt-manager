@@ -42,7 +42,7 @@ PAGE_SUMMARY = 5
 
 class vmmCreateNetwork(vmmGObjectUI):
     def __init__(self, conn):
-        vmmGObjectUI.__init__(self, "vmm-create-net.ui", "vmm-create-net")
+        vmmGObjectUI.__init__(self, "createnet.ui", "vmm-create-net")
         self.conn = conn
 
         self.builder.connect_signals({

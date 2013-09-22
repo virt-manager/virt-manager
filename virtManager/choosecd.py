@@ -36,7 +36,7 @@ class vmmChooseCD(vmmGObjectUI):
     }
 
     def __init__(self, vm, disk):
-        vmmGObjectUI.__init__(self, "vmm-choose-cd.ui", "vmm-choose-cd")
+        vmmGObjectUI.__init__(self, "choosecd.ui", "vmm-choose-cd")
 
         self.vm = vm
         self.conn = self.vm.conn
