@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-new</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-open</property>
+  </object>
   <object class="GtkWindow" id="vmm-storage-browse">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
@@ -143,6 +153,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="image">image1</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="on_new_volume_clicked" swapped="no"/>
                   </object>
@@ -187,6 +198,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="image">image2</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="on_choose_volume_clicked" swapped="no"/>
                   </object>

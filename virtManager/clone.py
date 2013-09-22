@@ -165,10 +165,6 @@ class vmmCloneVM(vmmGObjectUI):
         })
         self.bind_escape_key_close()
 
-        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_NEW,
-                                              Gtk.IconSize.BUTTON)
-        self.widget("clone-ok").set_image(finish_img)
-
         self.set_initial_state()
 
     def show(self, parent):
@@ -225,12 +221,6 @@ class vmmCloneVM(vmmGObjectUI):
         defcolor = context.get_background_color(Gtk.StateType.NORMAL)
         self.widget("storage-viewport").override_background_color(Gtk.StateType.NORMAL,
                                                   defcolor)
-
-        box = self.widget("clone-vm-icon-box")
-        image = Gtk.Image.new_from_icon_name("vm_clone_wizard",
-                                             Gtk.IconSize.DIALOG)
-        image.show()
-        box.pack_end(image, False, False, False)
 
     # Populate state
     def reset_state(self):

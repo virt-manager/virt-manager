@@ -122,9 +122,6 @@ class vmmConnect(vmmGObjectUI):
         pass
 
     def set_initial_state(self):
-        stock_img = Gtk.Image.new_from_stock(Gtk.STOCK_CONNECT,
-                                             Gtk.IconSize.BUTTON)
-        self.widget("connect").set_image(stock_img)
         self.widget("connect").grab_default()
 
         # Hostname combo box entry

@@ -549,10 +549,6 @@ class vmmDetails(vmmGObjectUI):
                                             "changed",
                                             self.config_bootdev_selected)
 
-        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_ADD,
-                                              Gtk.IconSize.BUTTON)
-        self.widget("add-hardware-button").set_image(finish_img)
-
         self.populate_hw_list()
         self.repopulate_boot_list()
 

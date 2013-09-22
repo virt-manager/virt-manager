@@ -13,6 +13,11 @@
     <property name="step_increment">1</property>
     <property name="page_increment">1000</property>
   </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-new</property>
+  </object>
   <object class="GtkWindow" id="vmm-create-vol">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
@@ -494,6 +499,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="image">image1</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_vol_create_clicked" swapped="no"/>
               </object>

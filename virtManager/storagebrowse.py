@@ -69,13 +69,6 @@ class vmmStorageBrowser(vmmGObjectUI):
         })
         self.bind_escape_key_close()
 
-        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_NEW,
-                                              Gtk.IconSize.BUTTON)
-        self.widget("new-volume").set_image(finish_img)
-        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_OPEN,
-                                              Gtk.IconSize.BUTTON)
-        self.widget("choose-volume").set_image(finish_img)
-
         self.set_initial_state()
 
     def show(self, parent, conn=None):

@@ -78,10 +78,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         })
         self.bind_escape_key_close()
 
-        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
-                                              Gtk.IconSize.BUTTON)
-        self.widget("create-finish").set_image(finish_img)
-
         self.set_initial_state()
 
     def show(self, parent):

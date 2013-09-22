@@ -129,9 +129,6 @@ class vmmSnapshotPage(vmmGObjectUI):
         slist.set_tooltip_column(2)
         slist.append_column(col)
 
-        self.widget("snapshot-new-ok").set_image(
-            Gtk.Image.new_from_stock(Gtk.STOCK_NEW, Gtk.IconSize.BUTTON))
-
 
     ###################
     # Functional bits #

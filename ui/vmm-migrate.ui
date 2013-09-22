@@ -42,16 +42,15 @@
                 <property name="border_width">6</property>
                 <property name="spacing">10</property>
                 <child>
-                  <object class="GtkHBox" id="migrate-vm-icon-box">
+                  <object class="GtkImage" id="image1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <child>
-                      <placeholder/>
-                    </child>
+                    <property name="icon_name">vm_clone_wizard</property>
+                    <property name="icon-size">6</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
+                    <property name="fill">False</property>
                     <property name="position">0</property>
                   </packing>
                 </child>

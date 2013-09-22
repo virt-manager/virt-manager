@@ -2,6 +2,11 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-new</property>
+  </object>
   <object class="GtkWindow" id="vmm-create-net">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
@@ -3207,6 +3212,7 @@ A typical IPv6 network address will look something like:  fd00:dead:beef:55::/64
                 <property name="label" translatable="yes">_Finish</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="image">image2</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_create_finish_clicked" swapped="no"/>
               </object>

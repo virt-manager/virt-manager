@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.6 -->
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-new</property>
+  </object>
   <object class="GtkDialog" id="snapshot-new">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -37,6 +42,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="image">image2</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_snapshot_new_ok_clicked" swapped="no"/>
               </object>

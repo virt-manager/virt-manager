@@ -141,13 +141,6 @@ class vmmHost(vmmGObjectUI):
             "on_config_autoconnect_toggled": self.toggle_autoconnect,
         })
 
-        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_DELETE,
-                                              Gtk.IconSize.BUTTON)
-        self.widget("vol-delete").set_image(finish_img)
-        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_NEW,
-                                              Gtk.IconSize.BUTTON)
-        self.widget("vol-add").set_image(finish_img)
-
         self.conn.connect("resources-sampled", self.refresh_resources)
         self.reset_state()
 

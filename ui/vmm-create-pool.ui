@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkImage" id="image100">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-new</property>
+  </object>
   <object class="GtkWindow" id="vmm-create-pool">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Add a New Storage Pool</property>
@@ -806,6 +811,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="image">image100</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_pool_finish_clicked" swapped="no"/>
               </object>

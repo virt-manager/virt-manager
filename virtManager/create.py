@@ -220,19 +220,8 @@ class vmmCreate(vmmGObjectUI):
         self.widget("create-pages").set_show_tabs(False)
         self.widget("install-method-pages").set_show_tabs(False)
 
-        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
-                                              Gtk.IconSize.BUTTON)
-        self.widget("create-finish").set_image(finish_img)
-
         blue = Gdk.Color.parse("#0072A8")[1]
-        self.widget("create-header").modify_bg(Gtk.StateType.NORMAL,
-                                                          blue)
-
-        box = self.widget("create-vm-icon-box")
-        image = Gtk.Image.new_from_icon_name("vm_new_wizard",
-                                             Gtk.IconSize.DIALOG)
-        image.show()
-        box.pack_end(image, False, False, False)
+        self.widget("create-header").modify_bg(Gtk.StateType.NORMAL, blue)
 
         # Connection list
         self.widget("create-conn-label").set_text("")

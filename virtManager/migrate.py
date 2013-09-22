@@ -72,13 +72,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.bind_escape_key_close()
 
         blue = Gdk.color_parse("#0072A8")
-        self.widget("migrate-header").modify_bg(Gtk.StateType.NORMAL,
-                                                           blue)
-        image = Gtk.Image.new_from_icon_name("vm_clone_wizard",
-                                             Gtk.IconSize.DIALOG)
-        image.show()
-        self.widget("migrate-vm-icon-box").pack_end(image, False, False, False)
-
+        self.widget("migrate-header").modify_bg(Gtk.StateType.NORMAL, blue)
         self.init_state()
 
     def show(self, parent):

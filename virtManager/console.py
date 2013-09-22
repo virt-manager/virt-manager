@@ -796,10 +796,6 @@ class vmmConsolePages(vmmGObjectUI):
         self.keycombo_menu = uihelpers.build_keycombo_menu(self.send_key)
         self.init_fs_toolbar()
 
-        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_YES,
-                                              Gtk.IconSize.BUTTON)
-        self.widget("console-auth-login").set_image(finish_img)
-
         # Make viewer widget background always be black
         black = Gdk.Color(0, 0, 0)
         self.widget("console-gfx-viewport").modify_bg(Gtk.StateType.NORMAL,

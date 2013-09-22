@@ -58,20 +58,7 @@ class vmmCreateVolume(vmmGObjectUI):
         })
         self.bind_escape_key_close()
 
-        format_list = self.widget("vol-format")
-        format_model = Gtk.ListStore(str, str)
-        format_list.set_model(format_model)
-        text2 = Gtk.CellRendererText()
-        format_list.pack_start(text2, False)
-        format_list.add_attribute(text2, 'text', 1)
-
-        self.widget("vol-info-view").modify_bg(Gtk.StateType.NORMAL,
-                                               Gdk.Color.parse("grey")[1])
-
-        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
-                                              Gtk.IconSize.BUTTON)
-        self.widget("vol-create").set_image(finish_img)
-
+        self._init_state()
         self.reset_state()
 
 
@@ -123,6 +110,18 @@ class vmmCreateVolume(vmmGObjectUI):
         if self.vol.file_type == self.vol.TYPE_FILE:
             suffix = ".img"
         return suffix
+
+    def _init_state(self):
+        format_list = self.widget("vol-format")
+        format_model = Gtk.ListStore(str, str)
+        format_list.set_model(format_model)
+        text2 = Gtk.CellRendererText()
+        format_list.pack_start(text2, False)
+        format_list.add_attribute(text2, 'text', 1)
+
+        self.widget("vol-info-view").modify_bg(Gtk.StateType.NORMAL,
+                                               Gdk.Color.parse("grey")[1])
+
 
     def _make_stub_vol(self):
         self.vol = StorageVolume(self.conn.get_backend())

@@ -168,18 +168,8 @@ class vmmCreateInterface(vmmGObjectUI):
         self.widget("pages").set_show_tabs(False)
         self.widget("bond-pages").set_show_tabs(False)
 
-        finish_img = Gtk.Image.new_from_stock(Gtk.STOCK_QUIT,
-                                              Gtk.IconSize.BUTTON)
-        self.widget("finish").set_image(finish_img)
-
         blue = Gdk.Color.parse("#0072A8")[1]
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
-
-        box = self.widget("header-icon-box")
-        image = Gtk.Image.new_from_icon_name("network-idle",
-                                             Gtk.IconSize.DIALOG)
-        image.show()
-        box.pack_end(image, False, False, False)
 
         # Interface type
         type_list = self.widget("interface-type")

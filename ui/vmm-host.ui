@@ -7,6 +7,16 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-open</property>
   </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-delete</property>
+  </object>
+  <object class="GtkImage" id="image22">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-new</property>
+  </object>
   <object class="GtkWindow" id="vmm-host">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Connection Details</property>
@@ -1711,6 +1721,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="image">image22</property>
                             <property name="use_underline">True</property>
                             <signal name="clicked" handler="on_vol_add_clicked" swapped="no"/>
                           </object>
@@ -1726,6 +1737,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="image">image1</property>
                             <property name="use_underline">True</property>
                             <signal name="clicked" handler="on_vol_delete_clicked" swapped="no"/>
                           </object>

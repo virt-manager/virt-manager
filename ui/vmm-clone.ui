@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-new</property>
+  </object>
   <object class="GtkDialog" id="vmm-change-mac">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -583,16 +588,15 @@
                 <property name="border_width">6</property>
                 <property name="spacing">10</property>
                 <child>
-                  <object class="GtkHBox" id="clone-vm-icon-box">
+                  <object class="GtkImage" id="image4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <child>
-                      <placeholder/>
-                    </child>
+                    <property name="icon_name">vm_clone_wizard</property>
+                    <property name="icon-size">6</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
+                    <property name="fill">False</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -973,6 +977,7 @@ uses the existing disk image for both the original and the new machine.&lt;/span
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="image">image1</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="on_clone_ok_clicked" swapped="no"/>
                   </object>
