@@ -912,10 +912,12 @@ class _VMMenu(Gtk.Menu):
     # pylint: disable=E1101
     # pylint can't detect functions we inheirit from Gtk, ex self.add
 
-    def __init__(self, src, current_vm_cb):
+    def __init__(self, src, current_vm_cb, show_open=True):
         Gtk.Menu.__init__(self)
         self._parent = src
         self._current_vm_cb = current_vm_cb
+        self._show_open = show_open
+
         self._init_state()
 
     def _add_action(self, label, signal,
@@ -997,8 +999,9 @@ class VMActionMenu(_VMMenu):
         self._add_action(_("Migrate..."), "migrate", None)
         self._add_action(_("_Delete"), "delete", Gtk.STOCK_DELETE)
 
-        self.add(Gtk.SeparatorMenuItem())
-        self._add_action(Gtk.STOCK_OPEN, "show", None)
+        if self._show_open:
+            self.add(Gtk.SeparatorMenuItem())
+            self._add_action(Gtk.STOCK_OPEN, "show", None)
 
         self.show_all()
 

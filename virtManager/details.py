@@ -638,14 +638,15 @@ class vmmDetails(vmmGObjectUI):
         self.widget("control-shutdown").set_menu(menu)
         self.widget("control-shutdown").set_icon_name("system-shutdown")
 
-        for name in ["details-menu-shutdown",
-                     "details-menu-reboot",
-                     "details-menu-reset",
-                     "details-menu-poweroff",
-                     "details-menu-destroy"]:
-            image = Gtk.Image.new_from_icon_name("system-shutdown",
-                                                 Gtk.IconSize.MENU)
-            self.widget(name).set_image(image)
+        topmenu = self.widget("details-vm-menu")
+        submenu = topmenu.get_submenu()
+        newmenu = uihelpers.VMActionMenu(self, lambda: self.vm,
+                                         show_open=False)
+        for child in submenu.get_children():
+            submenu.remove(child)
+            newmenu.add(child)  # pylint: disable=E1101
+        topmenu.set_submenu(newmenu)
+        topmenu.show_all()
 
         # Add HW popup menu
         self.addhwmenu = Gtk.Menu()
@@ -1323,7 +1324,7 @@ class vmmDetails(vmmGObjectUI):
             text = _("_Run")
         strip_text = text.replace("_", "")
 
-        self.widget("details-menu-run").get_child().set_label(text)
+        self.widget("details-vm-menu").get_submenu().change_run_text(text)
         self.widget("control-run").set_label(strip_text)
 
     def refresh_vm_state(self, ignore1=None, ignore2=None, ignore3=None):
@@ -1332,28 +1333,21 @@ class vmmDetails(vmmGObjectUI):
 
         self.toggle_toolbar(self.widget("details-menu-view-toolbar"))
 
-        active  = vm.is_active()
-        destroy = vm.is_destroyable()
-        run     = vm.is_runable()
-        stop    = vm.is_stoppable()
-        paused  = vm.is_paused()
-        ro      = vm.is_read_only()
+        active = vm.is_active()
+        run = vm.is_runable()
+        stop = vm.is_stoppable()
+        paused = vm.is_paused()
+        ro = vm.is_read_only()
 
         if vm.managedsave_supported:
             self.change_run_text(vm.hasSavedImage())
 
-        self.widget("details-menu-destroy").set_sensitive(destroy)
         self.widget("control-run").set_sensitive(run)
-        self.widget("details-menu-run").set_sensitive(run)
-
-        self.widget("details-menu-migrate").set_sensitive(stop)
         self.widget("control-shutdown").set_sensitive(stop)
         self.widget("control-shutdown").get_menu().update_widget_states(vm)
-        self.widget("details-menu-shutdown").set_sensitive(stop)
-        self.widget("details-menu-save").set_sensitive(stop)
         self.widget("control-pause").set_sensitive(stop)
-        self.widget("details-menu-pause").set_sensitive(stop)
 
+        self.widget("details-vm-menu").get_submenu().update_widget_states(vm)
         self.set_pause_state(paused)
 
         self.widget("overview-name").set_editable(not active)
@@ -1439,8 +1433,7 @@ class vmmDetails(vmmGObjectUI):
         # Set pause widget states
         try:
             self.ignorePause = True
-            self.widget("control-pause").set_active(paused)
-            self.widget("details-menu-pause").set_active(paused)
+            self.widget("control-pause").set_property("active", paused)
         finally:
             self.ignorePause = False
 
