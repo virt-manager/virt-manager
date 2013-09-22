@@ -299,34 +299,6 @@ def xml_parse_wrapper(xml, parse_func, *args, **kwargs):
     return ret
 
 
-def set_xml_path(xml, path, newval):
-    """
-    Set the passed xml xpath to the new value
-    """
-    def cb(doc, ctx):
-        ret = ctx.xpathEval(path)
-        if ret is not None:
-            if type(ret) == list:
-                if len(ret) == 1:
-                    ret[0].setContent(newval)
-            else:
-                ret.setContent(newval)
-
-        return doc.serialize()
-    return xml_parse_wrapper(xml, cb)
-
-
-def xml_append(orig, new):
-    """
-    Little function that helps generate consistent xml
-    """
-    if not new:
-        return orig
-    if orig:
-        orig += "\n"
-    return orig + new
-
-
 def generate_uuid(conn):
     for ignore in range(256):
         uuid = randomUUID(conn=conn)
@@ -406,58 +378,6 @@ def xml_escape(xml):
     xml = xml.replace("<", "&lt;")
     xml = xml.replace(">", "&gt;")
     return xml
-
-
-def xpath(xml, path=None, func=None, return_list=False,
-          register_namespace=None):
-    """
-    Return the content from the passed xml xpath, or return the result
-    of a passed function (receives xpathContext as its only arg)
-    """
-    def _getter(doc, ctx, path):
-        ignore = doc
-        if func:
-            return func(ctx)
-        if not path:
-            raise ValueError("'path' or 'func' is required.")
-
-        ret = ctx.xpathEval(path)
-        if type(ret) is list:
-            if len(ret) >= 1:
-                if return_list:
-                    return ret
-                else:
-                    return ret[0].content
-            else:
-                ret = None
-        return ret
-
-    return xml_parse_wrapper(xml, _getter, path,
-                             register_namespace=register_namespace)
-
-
-def lookup_pool_by_path(conn, path):
-    """
-    Return the first pool with matching matching target path.
-    return the first we find, active or inactive. This iterates over
-    all pools and dumps their xml, so it is NOT quick.
-    Favor running pools over inactive pools.
-    @returns: virStoragePool object if found, None otherwise
-    """
-    if not conn.check_conn_support(conn.SUPPORT_CONN_STORAGE):
-        return None
-
-    def check_pool(pool, path):
-        xml_path = xpath(pool.get_xml(refresh_if_nec=False),
-                         "/pool/target/path")
-        if xml_path is not None and os.path.abspath(xml_path) == path:
-            return pool
-
-    for pool in conn.fetch_all_pools():
-        p = check_pool(pool, path)
-        if p:
-            return p.get_backend()
-    return None
 
 
 def uri_split(uri):

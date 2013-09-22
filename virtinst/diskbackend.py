@@ -24,7 +24,7 @@ import statvfs
 
 import libvirt
 
-from virtinst import StorageVolume
+from virtinst import StoragePool, StorageVolume
 from virtinst import util
 
 
@@ -38,12 +38,9 @@ def _check_if_pool_source(conn, path):
 
     def check_pool(poolname, path):
         pool = conn.storagePoolLookupByName(poolname)
-        xml = pool.XMLDesc(0)
-
-        for element in ["dir", "device", "adapter"]:
-            xml_path = util.xpath(xml, "/pool/source/%s/@path" % element)
-            if xml_path == path:
-                return pool
+        xmlobj = StoragePool(conn, parsexml=pool.XMLDesc(0))
+        if xmlobj.source_path == path:
+            return pool
 
     running_list = conn.listStoragePools()
     inactive_list = conn.listDefinedStoragePools()
@@ -87,7 +84,7 @@ def check_if_path_managed(conn, path):
 
     vol = lookup_vol_by_path()[0]
     if not vol:
-        pool = util.lookup_pool_by_path(conn, os.path.dirname(path))
+        pool = StoragePool.lookup_pool_by_path(conn, os.path.dirname(path))
 
         # Is pool running?
         if pool and pool.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
@@ -225,9 +222,9 @@ class StorageCreator(_StorageBase):
 
     def _get_path(self):
         if self._vol_install and not self._path:
-            self._path = (util.xpath(self._vol_install.pool.XMLDesc(0),
-                                     "/pool/target/path") + "/" +
-                                     self._vol_install.name)
+            xmlobj = StoragePool(self._conn,
+                parsexml=self._vol_install.pool.XMLDesc(0))
+            self._path = (xmlobj.target_path + "/" + self._vol_install.name)
         return self._path
     path = property(_get_path)
 
@@ -475,12 +472,14 @@ class StorageBackend(_StorageBase):
 
     def _get_pool_xml(self):
         if self._pool_xml is None:
-            self._pool_xml = self._pool_object.XMLDesc(0)
+            self._pool_xml = StoragePool(self._conn,
+                parsexml=self._pool_object.XMLDesc(0))
         return self._pool_xml
 
     def _get_vol_xml(self):
         if self._vol_xml is None:
-            self._vol_xml = self._vol_object.XMLDesc(0)
+            self._vol_xml = StorageVolume(self._conn,
+                parsexml=self._vol_object.XMLDesc(0))
         return self._vol_xml
 
 
@@ -504,9 +503,9 @@ class StorageBackend(_StorageBase):
         if self._size is None:
             ret = 0
             if self._vol_object:
-                ret = util.xpath(self._get_vol_xml(), "/volume/capacity")
+                ret = self._get_vol_xml().capacity
             elif self._pool_object:
-                ret = util.xpath(self._get_pool_xml(), "/pool/capacity")
+                ret = self._get_pool_xml().capacity
             elif self._path:
                 ignore, ret = util.stat_disk(self.path)
             self._size = (float(ret) / 1024.0 / 1024.0 / 1024.0)
@@ -539,14 +538,7 @@ class StorageBackend(_StorageBase):
                     self._dev_type = "file"
 
             elif self._pool_object:
-                xml = self._get_pool_xml()
-                for source, source_type in [
-                    ("dir", "dir"),
-                    ("device", "block"),
-                    ("adapter", "block")]:
-                    if util.xpath(xml, "/pool/source/%s/@dev" % source):
-                        self._dev_type = source_type
-                        break
+                self._dev_type = self._get_pool_xml().get_vm_disk_type()
 
             elif self._path:
                 if os.path.isdir(self._path):
@@ -562,9 +554,7 @@ class StorageBackend(_StorageBase):
 
     def get_driver_type(self):
         if self._vol_object:
-            fmt = util.xpath(self._get_vol_xml(),
-                             "/volume/target/format/@type")
-            return fmt
+            return self._get_vol_xml().format
         return None
 
     def is_managed(self):

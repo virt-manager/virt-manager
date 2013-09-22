@@ -76,7 +76,7 @@ DEVICE_GRAPHICS = "24"
 
 
 
-def register_namespace(ctx):
+def ovf_register_namespace(ctx):
     ctx.xpathRegisterNs("ovf", "http://schemas.dmtf.org/ovf/envelope/1")
     ctx.xpathRegisterNs("ovfenv", "http://schemas.dmtf.org/ovf/environment/1")
     ctx.xpathRegisterNs("rasd", "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData")
@@ -99,6 +99,34 @@ def get_child_content(parent_node, child_name):
             return node.content
 
     return None
+
+
+def _xpath(xml, path=None, func=None, return_list=False,
+           register_namespace=None):
+    """
+    Return the content from the passed xml xpath, or return the result
+    of a passed function (receives xpathContext as its only arg)
+    """
+    def _getter(doc, ctx, path):
+        ignore = doc
+        if func:
+            return func(ctx)
+        if not path:
+            raise ValueError("'path' or 'func' is required.")
+
+        ret = ctx.xpathEval(path)
+        if type(ret) is list:
+            if len(ret) >= 1:
+                if return_list:
+                    return ret
+                else:
+                    return ret[0].content
+            else:
+                ret = None
+        return ret
+
+    return util.xml_parse_wrapper(xml, _getter, path,
+                                  register_namespace=register_namespace)
 
 
 def convert_alloc_val(ignore, val):
@@ -238,9 +266,8 @@ class ovf_parser(formats.parser):
         res = False
         try:
             if xml.count("</Envelope>"):
-                res = bool(util.xpath(xml, "/ovf:Envelope",
-                                      return_list=True,
-                                      register_namespace=register_namespace))
+                res = bool(_xpath(xml, "/ovf:Envelope", return_list=True,
+                                  register_namespace=ovf_register_namespace))
         except Exception, e:
             logging.debug("Error parsing OVF XML: %s", str(e))
 
@@ -259,7 +286,7 @@ class ovf_parser(formats.parser):
         logging.debug("Importing OVF XML:\n%s", xml)
 
         return util.xml_parse_wrapper(xml, ovf_parser._import_file,
-                                      register_namespace=register_namespace)
+                                    register_namespace=ovf_register_namespace)
 
     @staticmethod
     def _import_file(doc, ctx):

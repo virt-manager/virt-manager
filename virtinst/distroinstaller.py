@@ -68,7 +68,7 @@ def _sanitize_url(url):
 
 
 def _build_pool(conn, meter, path):
-    pool = util.lookup_pool_by_path(conn, path)
+    pool = StoragePool.lookup_pool_by_path(conn, path)
     if pool:
         logging.debug("Existing pool '%s' found for %s", pool.name(), path)
         pool.refresh(0)
@@ -106,7 +106,9 @@ def _upload_file(conn, meter, destpool, src):
     # Build placeholder volume
     size = os.path.getsize(src)
     basename = os.path.basename(src)
-    poolpath = util.xpath(destpool.XMLDesc(0), "/pool/target/path")
+    xmlobj = StoragePool(conn, parsexml=destpool.XMLDesc(0))
+    poolpath = xmlobj.target_path
+
     name = StorageVolume.find_free_name(basename, pool_object=destpool)
     if name != basename:
         logging.debug("Generated non-colliding volume name %s", name)

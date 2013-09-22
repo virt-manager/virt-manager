@@ -88,8 +88,8 @@ class Cloner(object):
         if type(val) is not str:
             raise ValueError(_("Original xml must be a string."))
         self._original_xml = val
-        self._original_guest = util.xpath(self.original_xml,
-                                          "/domain/name")
+        self._original_guest = Guest(self.conn,
+                                     parsexml=self._original_xml).name
     def get_original_xml(self):
         return self._original_xml
     original_xml = property(get_original_xml, set_original_xml,

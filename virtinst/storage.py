@@ -204,6 +204,31 @@ class StoragePool(_StorageObject):
                 _("Couldn't create default storage pool '%s': %s") %
                 (path, str(e)))
 
+    @staticmethod
+    def lookup_pool_by_path(conn, path):
+        """
+        Return the first pool with matching matching target path.
+        return the first we find, active or inactive. This iterates over
+        all pools and dumps their xml, so it is NOT quick.
+        Favor running pools over inactive pools.
+        @returns: virStoragePool object if found, None otherwise
+        """
+        if not conn.check_conn_support(conn.SUPPORT_CONN_STORAGE):
+            return None
+
+        def check_pool(pool, path):
+            xml = pool.get_xml(refresh_if_nec=False)
+            xml_path = StoragePool(conn, parsexml=xml).target_path
+            if xml_path is not None and os.path.abspath(xml_path) == path:
+                return pool
+
+        for pool in conn.fetch_all_pools():
+            p = check_pool(pool, path)
+            if p:
+                return p.get_backend()
+        return None
+
+
 
     def __init__(self, *args, **kwargs):
         _StorageObject.__init__(self, *args, **kwargs)
@@ -348,6 +373,16 @@ class StoragePool(_StorageObject):
             StoragePool.TYPE_DIR, StoragePool.TYPE_FS,
             StoragePool.TYPE_NETFS, StoragePool.TYPE_LOGICAL,
             StoragePool.TYPE_DISK]
+
+    def get_vm_disk_type(self):
+        """
+        Return the /disk/@type value if the pool source is used as
+        VirtualDisk path
+        """
+        xpath = self._source_path_xpath()
+        if "/dir/" in xpath:
+            return "dir"
+        return "block"
 
 
     ##################

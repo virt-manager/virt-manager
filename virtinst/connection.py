@@ -66,6 +66,7 @@ class _FetchObjWrapper(object):
     def __init__(self, backend):
         self._backend = backend
         self._xml = None
+        self._xmlobj = None
 
     def get_xml(self, refresh_if_nec=True):
         if self._xml is None or refresh_if_nec:

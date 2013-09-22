@@ -30,7 +30,6 @@ from gi.repository import Gtk
 import libvirt
 
 import virtinst
-from virtinst import util
 from virtManager import config
 
 OPTICAL_DEV_PATH = 0
@@ -84,7 +83,7 @@ def host_disk_space(conn):
         # FIXME: make sure not inactive?
         # FIXME: use a conn specific function after we send pool-added
         pool.refresh()
-        avail = int(util.xpath(pool.get_xml(), "/pool/available"))
+        avail = int(pool.get_available())
 
     elif not conn.is_remote() and os.path.exists(path):
         vfs = os.statvfs(os.path.dirname(path))
