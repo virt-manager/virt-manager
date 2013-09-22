@@ -160,6 +160,7 @@ class vmmEngine(vmmGObject):
         self.systray.connect("action-reboot-domain", self._do_reboot_domain)
         self.systray.connect("action-destroy-domain", self._do_destroy_domain)
         self.systray.connect("action-reset-domain", self._do_reset_domain)
+        self.systray.connect("action-save-domain", self._do_save_domain)
         self.systray.connect("action-show-vm", self._do_show_vm)
         self.systray.connect("action-exit-app", self.exit_app)
 

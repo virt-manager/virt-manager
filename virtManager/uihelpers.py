@@ -908,55 +908,54 @@ def mediadev_set_default_selection(widget):
 # Build toolbar shutdown button menu (manager and details toolbar) #
 ####################################################################
 
-def build_shutdown_button_menu(widget, shutdown_cb, reboot_cb, reset_cb,
-                               destroy_cb, save_cb):
-    widget.set_icon_name("system-shutdown")
-    menu = Gtk.Menu()
-    widget.set_menu(menu)
+class VMShutdownMenu(Gtk.Menu):
+    # pylint: disable=E1101
+    # pylint can't detect functions we inheirit from Gtk, ex self.add
 
-    rebootimg = Gtk.Image.new_from_icon_name("system-shutdown",
-                                             Gtk.IconSize.MENU)
-    shutdownimg = Gtk.Image.new_from_icon_name("system-shutdown",
-                                               Gtk.IconSize.MENU)
-    destroyimg = Gtk.Image.new_from_icon_name("system-shutdown",
-                                              Gtk.IconSize.MENU)
-    resetimg = Gtk.Image.new_from_icon_name("system-shutdown",
-                                            Gtk.IconSize.MENU)
-    saveimg = Gtk.Image.new_from_icon_name(Gtk.STOCK_SAVE, Gtk.IconSize.MENU)
+    def __init__(self, src, current_vm_cb):
+        Gtk.Menu.__init__(self)
+        self._parent = src
+        self._current_vm_cb = current_vm_cb
+        self._init_state()
 
-    reboot = Gtk.ImageMenuItem.new_with_mnemonic(_("_Reboot"))
-    reboot.set_image(rebootimg)
-    reboot.show()
-    reboot.connect("activate", reboot_cb)
-    menu.add(reboot)
+    def _init_state(self):
+        def _add_action(label, signal, iconname="system-shutdown"):
+            item = Gtk.ImageMenuItem.new_with_mnemonic(label)
+            icon = Gtk.Image.new_from_icon_name(iconname, Gtk.IconSize.MENU)
+            item.set_image(icon)
+            item.connect("activate", self._action_cb)
+            item.vmm_widget_name = signal
+            self.add(item)
 
-    shutdown = Gtk.ImageMenuItem.new_with_mnemonic(_("_Shut Down"))
-    shutdown.set_image(shutdownimg)
-    shutdown.show()
-    shutdown.connect("activate", shutdown_cb)
-    menu.add(shutdown)
+        _add_action(_("_Reboot"), "reboot")
+        _add_action(_("_Shut Down"), "shutdown")
+        _add_action(_("F_orce Reset"), "reset")
+        _add_action(_("_Force Off"), "destroy")
+        self.add(Gtk.SeparatorMenuItem())
+        _add_action(_("Sa_ve"), "save", iconname=Gtk.STOCK_SAVE)
 
-    reset = Gtk.ImageMenuItem.new_with_mnemonic(_("_Force Reset"))
-    reset.set_image(resetimg)
-    reset.show()
-    reset.connect("activate", reset_cb)
-    menu.add(reset)
+        self.show_all()
 
-    destroy = Gtk.ImageMenuItem.new_with_mnemonic(_("_Force Off"))
-    destroy.set_image(destroyimg)
-    destroy.show()
-    destroy.connect("activate", destroy_cb)
-    menu.add(destroy)
+    def _action_cb(self, src):
+        vm = self._current_vm_cb()
+        if not vm:
+            return
+        self._parent.emit("action-%s-domain" % src.vmm_widget_name,
+                          vm.conn.get_uri(), vm.get_uuid())
 
-    sep = Gtk.SeparatorMenuItem()
-    sep.show()
-    menu.add(sep)
+    def update_widget_states(self, vm):
+        statemap = {
+            "reboot": bool(vm and vm.is_stoppable()),
+            "shutdown": bool(vm and vm.is_stoppable()),
+            "reset": bool(vm and vm.is_stoppable()),
+            "save": bool(vm and vm.is_destroyable()),
+            "destroy": bool(vm and vm.is_destroyable()),
+        }
 
-    save = Gtk.ImageMenuItem.new_with_mnemonic(_("Sa_ve"))
-    save.set_image(saveimg)
-    save.show()
-    save.connect("activate", save_cb)
-    menu.add(save)
+        for child in self.get_children():
+            name = getattr(child, "vmm_widget_name", None)
+            if name in statemap:
+                child.set_sensitive(statemap[name])
 
 
 #####################################

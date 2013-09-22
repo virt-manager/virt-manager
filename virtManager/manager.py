@@ -125,9 +125,8 @@ class vmmManager(vmmGObjectUI):
         self.prev_position = None
 
         self.vmmenu = Gtk.Menu()
-        self.vmmenushutdown = Gtk.Menu()
+        self.vmmenushutdown = uihelpers.VMShutdownMenu(self, self.current_vm)
         self.vmmenu_items = {}
-        self.vmmenushutdown_items = {}
         self.connmenu = Gtk.Menu()
         self.connmenu_items = {}
 
@@ -238,9 +237,8 @@ class vmmManager(vmmGObjectUI):
         self.vmmenu.destroy()
         self.vmmenu = None
         self.vmmenu_items = None
-        self.vmmenushutdown.destroy()
+        self.vmmenushutdown.destroy()  # pylint: disable=E1101
         self.vmmenushutdown = None
-        self.vmmenushutdown_items = None
         self.connmenu.destroy()
         self.connmenu = None
         self.connmenu_items = None
@@ -288,12 +286,10 @@ class vmmManager(vmmGObjectUI):
     def init_toolbar(self):
         self.widget("vm-new").set_icon_name("vm_new")
         self.widget("vm-open").set_icon_name("icon_console")
-        uihelpers.build_shutdown_button_menu(self.widget("vm-shutdown"),
-                                             self.poweroff_vm,
-                                             self.reboot_vm,
-                                             self.reset_vm,
-                                             self.destroy_vm,
-                                             self.save_vm)
+
+        menu = uihelpers.VMShutdownMenu(self, self.current_vm)
+        self.widget("vm-shutdown").set_icon_name("system-shutdown")
+        self.widget("vm-shutdown").set_menu(menu)
 
         tool = self.widget("vm-toolbar")
         tool.set_property("icon-size", Gtk.IconSize.LARGE_TOOLBAR)
@@ -301,22 +297,15 @@ class vmmManager(vmmGObjectUI):
             c.set_homogeneous(False)
 
     def init_context_menus(self):
-        def build_icon(name):
-            return Gtk.Image.new_from_icon_name(name, Gtk.IconSize.MENU)
-
         def build_stock(name):
             return Gtk.Image.new_from_stock(name, Gtk.IconSize.MENU)
 
-        shutdownmenu_icon   = build_icon("system-shutdown")
-        reboot_icon         = build_icon("system-shutdown")
-        shutdown_icon       = build_icon("system-shutdown")
-        destroy_icon        = build_icon("system-shutdown")
-        reset_icon          = build_icon("system-shutdown")
-        run_icon            = build_stock(Gtk.STOCK_MEDIA_PLAY)
-        pause_icon          = build_stock(Gtk.STOCK_MEDIA_PAUSE)
-        save_icon           = build_stock(Gtk.STOCK_SAVE)
-        resume_icon         = build_stock(Gtk.STOCK_MEDIA_PAUSE)
-        delete_icon         = build_stock(Gtk.STOCK_DELETE)
+        shutdownmenu_icon = Gtk.Image.new_from_icon_name(
+            "system-shutdown", Gtk.IconSize.MENU)
+        run_icon = build_stock(Gtk.STOCK_MEDIA_PLAY)
+        pause_icon = build_stock(Gtk.STOCK_MEDIA_PAUSE)
+        resume_icon = build_stock(Gtk.STOCK_MEDIA_PAUSE)
+        delete_icon = build_stock(Gtk.STOCK_DELETE)
 
         def add_to_menu(menu, items, idx, text, icon, cb):
             if text[0:3] == 'gtk':
@@ -333,9 +322,6 @@ class vmmManager(vmmGObjectUI):
 
         def add_vm_menu(idx, text, icon, cb):
             add_to_menu(self.vmmenu, self.vmmenu_items, idx, text, icon, cb)
-        def add_shutdown_menu(idx, text, icon, cb):
-            add_to_menu(self.vmmenushutdown, self.vmmenushutdown_items,
-                        idx, text, icon, cb)
         def add_conn_menu(idx, text, icon, cb):
             add_to_menu(self.connmenu, self.connmenu_items,
                         idx, text, icon, cb)
@@ -352,15 +338,6 @@ class vmmManager(vmmGObjectUI):
 
         add_vm_menu("shutdown", _("_Shut Down"), shutdownmenu_icon, None)
         self.vmmenu_items["shutdown"].set_submenu(self.vmmenushutdown)
-        add_shutdown_menu("reboot", _("_Reboot"), reboot_icon, self.reboot_vm)
-        add_shutdown_menu("poweroff", _("_Shut Down"), shutdown_icon,
-                          self.poweroff_vm)
-        add_shutdown_menu("forcereset", _("_Force Reset"), reset_icon,
-                          self.reset_vm)
-        add_shutdown_menu("forcepoweroff", _("_Force Off"), destroy_icon,
-                          self.destroy_vm)
-        add_sep(self.vmmenushutdown, self.vmmenushutdown_items, "sep")
-        add_shutdown_menu("save", _("Sa_ve"), save_icon, self.save_vm)
 
         add_sep(self.vmmenu, self.vmmenu_items, "hsep1")
         add_vm_menu("clone", _("_Clone..."), None, self.open_clone_window)
@@ -617,34 +594,10 @@ class vmmManager(vmmGObjectUI):
             self.emit("action-run-domain",
                       vm.conn.get_uri(), vm.get_uuid())
 
-    def reboot_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-reboot-domain",
-                      vm.conn.get_uri(), vm.get_uuid())
-
     def poweroff_vm(self, ignore):
         vm = self.current_vm()
         if vm is not None:
             self.emit("action-shutdown-domain",
-                      vm.conn.get_uri(), vm.get_uuid())
-
-    def destroy_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-destroy-domain",
-                      vm.conn.get_uri(), vm.get_uuid())
-
-    def reset_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-reset-domain",
-                      vm.conn.get_uri(), vm.get_uuid())
-
-    def save_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-save-domain",
                       vm.conn.get_uri(), vm.get_uuid())
 
     def pause_vm(self, ignore):
@@ -980,6 +933,8 @@ class vmmManager(vmmGObjectUI):
         self.widget("vm-open").set_sensitive(show_open)
         self.widget("vm-run").set_sensitive(show_run)
         self.widget("vm-shutdown").set_sensitive(show_shutdown)
+        self.widget("vm-shutdown").get_menu().update_widget_states(vm)
+
         self.set_pause_state(is_paused)
         self.widget("vm-pause").set_sensitive(show_pause)
 
@@ -1015,7 +970,6 @@ class vmmManager(vmmGObjectUI):
             # Popup the vm menu
             vm = model.get_value(_iter, ROW_HANDLE)
 
-            destroy = vm.is_destroyable()
             run     = vm.is_runable()
             stop    = vm.is_stoppable()
             paused  = vm.is_paused()
@@ -1029,11 +983,8 @@ class vmmManager(vmmGObjectUI):
             self.vmmenu_items["resume"].set_sensitive(paused)
             self.vmmenu_items["migrate"].set_sensitive(stop)
             self.vmmenu_items["clone"].set_sensitive(not ro)
+            self.vmmenushutdown.update_widget_states(vm)
 
-            self.vmmenushutdown_items["poweroff"].set_sensitive(stop)
-            self.vmmenushutdown_items["reboot"].set_sensitive(stop)
-            self.vmmenushutdown_items["forcepoweroff"].set_sensitive(destroy)
-            self.vmmenushutdown_items["save"].set_sensitive(destroy)
             self.vmmenu.popup(None, None, None, None, 0, event.time)
         else:
             # Pop up connection menu

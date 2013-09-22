@@ -346,6 +346,7 @@
                       <object class="GtkMenuItem" id="details-menu-usb-redirection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Redirect USB device attached on host to virtual machine with SPICE graphics. USB Redirection device is required for Virtual Machine to support this functionality. Auto-redirection is enabled by default</property>
                         <property name="label" translatable="yes">_Redirect USB device</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_usb_redirection" swapped="no"/>

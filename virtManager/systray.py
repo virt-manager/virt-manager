@@ -25,6 +25,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 # pylint: enable=E0611
 
+from virtManager import uihelpers
 from virtManager.baseclass import vmmGObject
 from virtManager.error import vmmErrorDialog
 
@@ -57,6 +58,7 @@ class vmmSystray(vmmGObject):
         "action-reset-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-reboot-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-destroy-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
+        "action-save-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-show-host": (GObject.SignalFlags.RUN_FIRST, None, [str]),
         "action-show-vm": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
         "action-exit-app": (GObject.SignalFlags.RUN_FIRST, None, []),
@@ -194,45 +196,11 @@ class vmmSystray(vmmGObject):
                          "action-run-domain", vm.get_uuid())
 
         # Shutdown menu
-        reboot_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Reboot"))
-        reboot_img = Gtk.Image.new_from_icon_name("system-shutdown", icon_size)
-        reboot_item.set_image(reboot_img)
-        reboot_item.connect("activate", self.run_vm_action,
-                            "action-reboot-domain", vm.get_uuid())
-        reboot_item.show()
-
-        shutdown_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Shut Down"))
-        shutdown_img = Gtk.Image.new_from_icon_name("system-shutdown",
-                                                    icon_size)
-        shutdown_item.set_image(shutdown_img)
-        shutdown_item.connect("activate", self.run_vm_action,
-                              "action-shutdown-domain", vm.get_uuid())
-        shutdown_item.show()
-
-        reset_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Force Reset"))
-        reset_img = Gtk.Image.new_from_icon_name("system-shutdown", icon_size)
-        reset_item.set_image(reset_img)
-        reset_item.show()
-        reset_item.connect("activate", self.run_vm_action,
-                           "action-reset-domain", vm.get_uuid())
-
-        destroy_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Force Off"))
-        destroy_img = Gtk.Image.new_from_icon_name("system-shutdown",
-                                                   icon_size)
-        destroy_item.set_image(destroy_img)
-        destroy_item.show()
-        destroy_item.connect("activate", self.run_vm_action,
-                             "action-destroy-domain", vm.get_uuid())
-
-        shutdown_menu = Gtk.Menu()
-        shutdown_menu.add(reboot_item)
-        shutdown_menu.add(shutdown_item)
-        shutdown_menu.add(reset_item)
-        shutdown_menu.add(destroy_item)
-        shutdown_menu_item = Gtk.ImageMenuItem.new_with_mnemonic(_("_Shut Down"))
-        shutdown_menu_img = Gtk.Image.new_from_icon_name("system-shutdown",
-                                                         icon_size)
-        shutdown_menu_item.set_image(shutdown_menu_img)
+        shutdown_menu = uihelpers.VMShutdownMenu(self, lambda: vm)
+        shutdown_menu_item = Gtk.ImageMenuItem.new_with_mnemonic(
+            _("_Shut Down"))
+        shutdown_menu_item.set_image(Gtk.Image.new_from_icon_name(
+            "system-shutdown", icon_size))
         shutdown_menu_item.set_submenu(shutdown_menu)
 
         sep = Gtk.SeparatorMenuItem()
@@ -247,10 +215,6 @@ class vmmSystray(vmmGObject):
         vm_action_dict["pause"] = pause_item
         vm_action_dict["resume"] = resume_item
         vm_action_dict["shutdown_menu"] = shutdown_menu_item
-        vm_action_dict["reboot"] = reboot_item
-        vm_action_dict["shutdown"] = shutdown_item
-        vm_action_dict["reset"] = reset_item
-        vm_action_dict["destroy"] = destroy_item
         vm_action_dict["sep"] = sep
         vm_action_dict["open"] = open_item
 
@@ -436,10 +400,7 @@ class vmmSystray(vmmGObject):
         actions["pause"].set_sensitive(vm.is_pauseable())
         actions["resume"].set_sensitive(vm.is_paused())
         actions["shutdown_menu"].set_sensitive(vm.is_active())
-        actions["shutdown"].set_sensitive(vm.is_stoppable())
-        actions["reboot"].set_sensitive(vm.is_stoppable())
-        actions["reset"].set_sensitive(vm.is_destroyable())
-        actions["destroy"].set_sensitive(vm.is_destroyable())
+        actions["shutdown_menu"].get_submenu().update_widget_states(vm)
 
         actions["pause"].set_visible(not is_paused)
         actions["resume"].set_visible(is_paused)

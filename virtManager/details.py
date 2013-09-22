@@ -634,14 +634,9 @@ class vmmDetails(vmmGObjectUI):
 
     def init_menus(self):
         # Virtual Machine menu
-        self.widget("details-menu-usb-redirection").set_tooltip_text(
-            _("Redirect USB device attached on host to virtual machine with SPICE graphics. USB Redirection device is required for Virtual Machine to support this functionality. Auto-redirection is enabled by default"))
-        uihelpers.build_shutdown_button_menu(self.widget("control-shutdown"),
-                                             self.control_vm_shutdown,
-                                             self.control_vm_reboot,
-                                             self.control_vm_reset,
-                                             self.control_vm_destroy,
-                                             self.control_vm_save)
+        menu = uihelpers.VMShutdownMenu(self, lambda: self.vm)
+        self.widget("control-shutdown").set_menu(menu)
+        self.widget("control-shutdown").set_icon_name("system-shutdown")
 
         for name in ["details-menu-shutdown",
                      "details-menu-reboot",
@@ -1353,6 +1348,7 @@ class vmmDetails(vmmGObjectUI):
 
         self.widget("details-menu-migrate").set_sensitive(stop)
         self.widget("control-shutdown").set_sensitive(stop)
+        self.widget("control-shutdown").get_menu().update_widget_states(vm)
         self.widget("details-menu-shutdown").set_sensitive(stop)
         self.widget("details-menu-save").set_sensitive(stop)
         self.widget("control-pause").set_sensitive(stop)
