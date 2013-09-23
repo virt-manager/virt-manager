@@ -54,6 +54,7 @@ PAGE_FILESYSTEM = 10
 PAGE_SMARTCARD = 11
 PAGE_USBREDIR = 12
 PAGE_TPM = 13
+PAGE_RNG = 14
 
 char_widget_mappings = {
     "source_path" : "char-path",
@@ -106,6 +107,8 @@ class vmmAddHardware(vmmGObjectUI):
             "on_fs_source_browse_clicked": self.browse_fs_source,
 
             "on_usbredir_type_changed": self.change_usbredir_type,
+
+            "on_rng_type_changed": self.change_rng_type,
         })
         self.bind_escape_key_close()
 
@@ -304,6 +307,14 @@ class vmmAddHardware(vmmGObjectUI):
         combo = self.widget("tpm-type")
         uihelpers.build_tpm_type_combo(self.vm, combo)
 
+        # RNG widgets
+        combo = self.widget("rng-type")
+        self.build_rng_type_combo(combo)
+        combo = self.widget("rng-backend-type")
+        self.build_rng_backend_type_combo(combo)
+        combo = self.widget("rng-backend-mode")
+        self.build_rng_backend_mode_combo(combo)
+
         # Available HW options
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
@@ -370,6 +381,7 @@ class vmmAddHardware(vmmGObjectUI):
                       True, None)
         add_hw_option("TPM", "device_cpu", PAGE_TPM,
                       True, None)
+        add_hw_option("RNG", "system-run", PAGE_RNG, True, None)
 
     def reset_state(self):
         # Storage init
@@ -468,6 +480,11 @@ class vmmAddHardware(vmmGObjectUI):
             widget = notebook.get_nth_page(page)
             widget.hide()
 
+        # RNG params
+        self.widget("rng-device").set_text("/dev/random")
+        self.widget("rng-host").set_text("localhost")
+        self.widget("rng-service").set_text("708")
+
         self.set_hw_selection(0)
 
     #########################
@@ -554,6 +571,62 @@ class vmmAddHardware(vmmGObjectUI):
             format_list.get_child().set_text("")
 
     ########################
+    def build_combo_with_values(self, combo, values, default=None):
+        dev_model = Gtk.ListStore(str, str)
+        combo.set_model(dev_model)
+        text = Gtk.CellRendererText()
+        combo.pack_start(text, True)
+        combo.add_attribute(text, 'text', 1)
+        dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+
+        types = combo.get_model()
+        types.clear()
+
+        # [xml value, label]
+        for t in values:
+            types.append(t[0:2])
+
+        if default:
+            idx = -1
+            for rowid in range(len(combo.get_model())):
+                idx = 0
+                row = combo.get_model()[rowid]
+                if row[0] == default:
+                    idx = rowid
+                    break
+            combo.set_active(idx)
+
+
+    def build_rng_type_combo(self, combo):
+        types = []
+        for t in virtinst.VirtualRNGDevice.TYPES:
+            types.append([t, virtinst.VirtualRNGDevice.get_pretty_type(t)])
+
+        self.build_combo_with_values(combo, types,
+                                virtinst.VirtualRNGDevice.TYPE_RANDOM)
+
+
+    def build_rng_backend_type_combo(self, combo):
+        default = virtinst.VirtualRNGDevice.BACKEND_TYPE_TCP
+
+        types = []
+        for t in virtinst.VirtualRNGDevice.BACKEND_TYPES:
+            pprint = virtinst.VirtualRNGDevice.get_pretty_backend_type(t)
+            types.append([t, pprint])
+
+        self.build_combo_with_values(combo, types, default)
+
+
+    def build_rng_backend_mode_combo(self, combo):
+        default = virtinst.VirtualRNGDevice.BACKEND_MODE_CONNECT
+
+        types = []
+        for t in virtinst.VirtualRNGDevice.BACKEND_MODES:
+            pprint = virtinst.VirtualRNGDevice.get_pretty_backend_type(t)
+            types.append([t, pprint])
+
+        self.build_combo_with_values(combo, types, default)
+
     # get_config_* methods #
     ########################
 
@@ -765,6 +838,44 @@ class vmmAddHardware(vmmGObjectUI):
         typestr = typ.get_model().get_value(typ.get_active_iter(), 0)
         return typestr
 
+    # RNG getters
+    def get_config_rng_type(self):
+        src = self.widget("rng-type")
+        idx = src.get_active()
+        if idx < 0:
+            return None
+
+        selected_type = src.get_model()[idx][0]
+        return selected_type
+
+    def get_config_rng_device(self):
+        if self.get_config_rng_type() == virtinst.VirtualRNGDevice.TYPE_RANDOM:
+            return self.widget("rng-device").get_text()
+
+        return None
+
+    def get_config_rng_host(self):
+        if self.get_config_rng_type() == virtinst.VirtualRNGDevice.TYPE_EGD:
+            return self.widget("rng-host").get_text()
+
+        return None
+
+    def get_config_rng_service(self):
+        if self.get_config_rng_type() == virtinst.VirtualRNGDevice.TYPE_EGD:
+            return self.widget("rng-service").get_text()
+
+        return None
+
+    def get_config_rng_backend_type(self):
+        active = self.widget("rng-backend-type").get_active()
+        model = self.widget("rng-backend-type").get_model()
+        return model[active][0]
+
+    def get_config_rng_backend_mode(self):
+        active = self.widget("rng-backend-mode").get_active()
+        model = self.widget("rng-backend-mode").get_model()
+        return model[active][0]
+
     ################
     # UI listeners #
     ################
@@ -923,6 +1034,8 @@ class vmmAddHardware(vmmGObjectUI):
             return _("USB Redirection")
         if page == PAGE_TPM:
             return _("TPM")
+        if page == PAGE_RNG:
+            return _("Random Number Generator")
 
         if page == PAGE_CHAR:
             char_class = self.get_char_type()
@@ -983,6 +1096,18 @@ class vmmAddHardware(vmmGObjectUI):
         showhost = src.get_model()[src.get_active()][2]
         uihelpers.set_grid_row_visible(self.widget("usbredir-host-box"),
                                        showhost)
+
+    def change_rng_type(self, ignore1):
+        model = self.get_config_rng_type()
+        if model is None:
+            return
+
+        is_egd = model == virtinst.VirtualRNGDevice.TYPE_EGD
+        uihelpers.set_grid_row_visible(self.widget("rng-device"), not is_egd)
+        uihelpers.set_grid_row_visible(self.widget("rng-host"), is_egd)
+        uihelpers.set_grid_row_visible(self.widget("rng-service"), is_egd)
+        uihelpers.set_grid_row_visible(self.widget("rng-backend-mode"), is_egd)
+        uihelpers.set_grid_row_visible(self.widget("rng-backend-type"), is_egd)
 
     # FS listeners
     def browse_fs_source(self, ignore1):
@@ -1160,6 +1285,8 @@ class vmmAddHardware(vmmGObjectUI):
             return self.validate_page_usbredir()
         elif page_num == PAGE_TPM:
             return self.validate_page_tpm()
+        elif page_num == PAGE_RNG:
+            return self.validate_page_rng()
 
     def validate_page_storage(self):
         bus, device = self.get_config_disk_target()
@@ -1532,6 +1659,45 @@ class vmmAddHardware(vmmGObjectUI):
                     setattr(self._dev, param_name, val)
         except Exception, e:
             return self.err.val_err(_("TPM device parameter error"), e)
+
+    def validate_page_rng(self):
+        conn = self.conn.get_backend()
+        model = self.get_config_rng_type()
+
+        if model == virtinst.VirtualRNGDevice.TYPE_RANDOM:
+            if not self.get_config_rng_device():
+                return self.err.val_err(_("RNG selection error."),
+                                    _("A device must be specified."))
+        elif model == virtinst.VirtualRNGDevice.TYPE_EGD:
+            if not self.get_config_rng_host():
+                return self.err.val_err(_("RNG selection error."),
+                                    _("The EGD host must be specified."))
+
+            if not self.get_config_rng_service():
+                return self.err.val_err(_("RNG selection error."),
+                                    _("The EGD service must be specified."))
+        else:
+            return self.err.val_err(_("RNG selection error."),
+                                    _("Invalid RNG type."))
+
+        value_mappings = {
+            "backend_mode" : "connect",
+            "backend_type" : self.get_config_rng_backend_type(),
+            "backend_source_mode" : self.get_config_rng_backend_mode(),
+            "backend_source_host" : self.get_config_rng_host(),
+            "backend_source_service" : self.get_config_rng_service(),
+            "device" : self.get_config_rng_device(),
+        }
+
+        try:
+            self._dev = virtinst.VirtualRNGDevice(conn)
+            self._dev.type = self.get_config_rng_type()
+            for param_name, val in value_mappings.items():
+                if self._dev.supports_property(param_name):
+                    setattr(self._dev, param_name, val)
+        except Exception, e:
+            return self.err.val_err(_("TPM device parameter error"), e)
+
 
     ####################
     # Unsorted helpers #
