@@ -40,7 +40,7 @@ def _make_addr_str(addrStr, prefix, netmaskStr):
 
 class vmmNetwork(vmmLibvirtObject):
     def __init__(self, conn, backend, key):
-        vmmLibvirtObject.__init__(self, conn, backend, key, parseclass=Network)
+        vmmLibvirtObject.__init__(self, conn, backend, key, Network)
         self._active = True
 
         self._support_isactive = None
@@ -113,23 +113,23 @@ class vmmNetwork(vmmLibvirtObject):
     ###############
 
     def get_uuid(self):
-        return self._get_xmlobj().uuid
+        return self.get_xmlobj().uuid
     def get_bridge_device(self):
-        return self._get_xmlobj().bridge
+        return self.get_xmlobj().bridge
     def get_name_domain(self):
-        return self._get_xmlobj().domain_name
+        return self.get_xmlobj().domain_name
     def get_ipv6_enabled(self):
-        return self._get_xmlobj().ipv6
+        return self.get_xmlobj().ipv6
     def get_ipv4_forward_mode(self):
-        return self._get_xmlobj().forward.mode
+        return self.get_xmlobj().forward.mode
     def pretty_forward_mode(self):
-        return self._get_xmlobj().forward.pretty_desc()
+        return self.get_xmlobj().forward.pretty_desc()
 
     def can_pxe(self):
-        return self._get_xmlobj().can_pxe()
+        return self.get_xmlobj().can_pxe()
 
     def _get_static_route(self, family):
-        xmlobj = self._get_xmlobj()
+        xmlobj = self.get_xmlobj()
         route = None
         for r in xmlobj.routes:
             if (r.family == family or (family == "ipv4" and not r.family)):
@@ -149,7 +149,7 @@ class vmmNetwork(vmmLibvirtObject):
         dhcpstart = None
         dhcpend = None
 
-        xmlobj = self._get_xmlobj()
+        xmlobj = self.get_xmlobj()
         ip = None
         for i in xmlobj.ips:
             if (i.family == family or

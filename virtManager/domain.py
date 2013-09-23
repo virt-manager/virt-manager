@@ -145,18 +145,14 @@ class vmmDomainSnapshot(vmmLibvirtObject):
     """
     def __init__(self, conn, backend):
         vmmLibvirtObject.__init__(self, conn, backend, backend.getName(),
-                                  parseclass=virtinst.DomainSnapshot)
+                                  virtinst.DomainSnapshot)
 
         self.refresh_xml()
 
     def get_name(self):
-        return self.xmlobj.name
+        return self.get_xmlobj().name
     def _XMLDesc(self, flags):
         return self._backend.getXMLDesc(flags=flags)
-
-    def _get_xmlobj_prop(self):
-        return self._get_xmlobj()
-    xmlobj = property(_get_xmlobj_prop)
 
     def is_current(self):
         return self._backend.isCurrent()
@@ -179,7 +175,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key,
-                                  parseclass=virtinst.Guest)
+                                  virtinst.Guest)
 
         self.uuid = key
         self.cloning = False
@@ -386,7 +382,7 @@ class vmmDomain(vmmLibvirtObject):
         # If we are removing multiple dev from an active VM, a double
         # attempt may result in a lookup failure. If device is present
         # in the active XML, assume all is good.
-        if find_device(self._get_xmlobj(), origdev):
+        if find_device(self.get_xmlobj(), origdev):
             logging.debug("Device in active config but not inactive config.")
             return
 
@@ -394,7 +390,7 @@ class vmmDomain(vmmLibvirtObject):
                              "inactive VM configuration: %s") % repr(origdev))
 
     def get_guest_for_virtinst_func(self, *args, **kwargs):
-        return self._get_xmlobj(*args, **kwargs)
+        return self.get_xmlobj(*args, **kwargs)
 
 
     ##############################
@@ -954,49 +950,49 @@ class vmmDomain(vmmLibvirtObject):
     ########################
 
     def is_container(self):
-        return self._get_xmlobj().os.is_container()
+        return self.get_xmlobj().os.is_container()
     def is_xenpv(self):
-        return self._get_xmlobj().os.is_xenpv()
+        return self.get_xmlobj().os.is_xenpv()
     def is_hvm(self):
-        return self._get_xmlobj().os.is_hvm()
+        return self.get_xmlobj().os.is_hvm()
 
     def get_uuid(self):
         return self.uuid
     def get_abi_type(self):
-        return self._get_xmlobj().os.os_type
+        return self.get_xmlobj().os.os_type
     def get_hv_type(self):
-        return self._get_xmlobj().type
+        return self.get_xmlobj().type
     def get_pretty_hv_type(self):
         return uihelpers.pretty_hv(self.get_abi_type(), self.get_hv_type())
     def get_arch(self):
-        return self._get_xmlobj().os.arch
+        return self.get_xmlobj().os.arch
     def get_init(self):
-        return self._get_xmlobj().os.init
+        return self.get_xmlobj().os.init
     def get_emulator(self):
-        return self._get_xmlobj().emulator
+        return self.get_xmlobj().emulator
     def get_acpi(self):
-        return self._get_xmlobj().features["acpi"]
+        return self.get_xmlobj().features["acpi"]
     def get_apic(self):
-        return self._get_xmlobj().features["apic"]
+        return self.get_xmlobj().features["apic"]
     def get_clock(self):
-        return self._get_xmlobj().clock.offset
+        return self.get_xmlobj().clock.offset
     def get_machtype(self):
-        return self._get_xmlobj().os.machine
+        return self.get_xmlobj().os.machine
 
     def get_description(self):
         # Always show the inactive <description>, let's us fake hotplug
         # for a field that's strictly metadata
-        return self._get_xmlobj(inactive=True).description
+        return self.get_xmlobj(inactive=True).description
 
     def get_memory(self):
-        return int(self._get_xmlobj().memory)
+        return int(self.get_xmlobj().memory)
     def maximum_memory(self):
-        return int(self._get_xmlobj().maxmemory)
+        return int(self.get_xmlobj().maxmemory)
 
     def vcpu_count(self):
-        return int(self._get_xmlobj().vcpus)
+        return int(self.get_xmlobj().vcpus)
     def vcpu_max_count(self):
-        guest = self._get_xmlobj()
+        guest = self.get_xmlobj()
         has_xml_max = (guest.curvcpus != guest.vcpus)
         if has_xml_max or not self.is_active():
             return guest.vcpus
@@ -1006,22 +1002,22 @@ class vmmDomain(vmmLibvirtObject):
         return int(self._startup_vcpus)
 
     def vcpu_pinning(self):
-        return self._get_xmlobj().cpuset or ""
+        return self.get_xmlobj().cpuset or ""
     def get_cpu_config(self):
-        return self._get_xmlobj().cpu
+        return self.get_xmlobj().cpu
 
     def get_boot_device(self):
-        return self._get_xmlobj().os.bootorder
+        return self.get_xmlobj().os.bootorder
     def get_boot_menu(self):
-        guest = self._get_xmlobj()
+        guest = self.get_xmlobj()
         return bool(guest.os.enable_bootmenu)
     def get_boot_kernel_info(self):
-        guest = self._get_xmlobj()
+        guest = self.get_xmlobj()
         return (guest.os.kernel, guest.os.initrd,
                 guest.os.dtb, guest.os.kernel_args)
 
     def get_seclabel(self):
-        seclabel = self._get_xmlobj().seclabel
+        seclabel = self.get_xmlobj().seclabel
         model = seclabel.model
         t     = seclabel.type or "dynamic"
         label = seclabel.label or ""
@@ -1047,7 +1043,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def _build_device_list(self, device_type,
                            refresh_if_nec=True, inactive=False):
-        guest = self._get_xmlobj(refresh_if_nec=refresh_if_nec,
+        guest = self.get_xmlobj(refresh_if_nec=refresh_if_nec,
                                 inactive=inactive)
         devs = guest.get_devices(device_type)
 
@@ -1783,7 +1779,7 @@ class vmmDomainVirtinst(vmmDomain):
         if not self._orig_xml:
             self._orig_xml = self._backend.get_xml_config()
 
-    def _get_xmlobj(self, inactive=False, refresh_if_nec=True):
+    def get_xmlobj(self, inactive=False, refresh_if_nec=True):
         self._refresh_orig_xml()
         return self._backend
     def _reparse_xml(self, *args, **kwargs):

@@ -650,7 +650,7 @@ class vmmConnection(vmmGObject):
     def get_nodedevs(self, devtype=None, devcap=None):
         retdevs = []
         for dev in self.nodedevs.values():
-            vdev = dev.get_virtinst_obj()
+            vdev = dev.get_xmlobj()
             if devtype and vdev.device_type != devtype:
                 continue
 

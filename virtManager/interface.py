@@ -25,8 +25,7 @@ from virtManager.libvirtobject import vmmLibvirtObject
 
 class vmmInterface(vmmLibvirtObject):
     def __init__(self, conn, backend, key):
-        vmmLibvirtObject.__init__(self, conn, backend, key,
-                                  parseclass=Interface)
+        vmmLibvirtObject.__init__(self, conn, backend, key, Interface)
 
         self._name = key
         self._active = True
@@ -74,7 +73,7 @@ class vmmInterface(vmmLibvirtObject):
         return self._name
 
     def get_mac(self):
-        return self._get_xmlobj().macaddr
+        return self.get_xmlobj().macaddr
 
     def _kick_conn(self):
         self.conn.schedule_priority_tick(polliface=True)
@@ -98,7 +97,7 @@ class vmmInterface(vmmLibvirtObject):
         return typ == "bridge"
 
     def get_type(self):
-        return self._get_xmlobj().type
+        return self.get_xmlobj().type
 
     def get_pretty_type(self):
         itype = self.get_type()
@@ -111,7 +110,7 @@ class vmmInterface(vmmLibvirtObject):
             return "Interface"
 
     def get_startmode(self):
-        return self._get_xmlobj().start_mode or "none"
+        return self.get_xmlobj().start_mode or "none"
 
     def set_startmode(self, newmode):
         def change(obj):
@@ -121,14 +120,14 @@ class vmmInterface(vmmLibvirtObject):
 
     def get_slaves(self):
         return [[obj.name, obj.type or "Unknown"] for obj in
-                self._get_xmlobj().interfaces]
+                self.get_xmlobj().interfaces]
 
     def get_slave_names(self):
         # Returns a list of names of all enslaved interfaces
         return [x[0] for x in self.get_slaves()]
 
     def _get_ip(self, iptype):
-        obj = self._get_xmlobj()
+        obj = self.get_xmlobj()
         found = None
         for protocol in obj.protocols:
             if protocol.family == iptype:
@@ -164,4 +163,4 @@ class vmmInterface(vmmLibvirtObject):
         return [proto.dhcp, proto.autoconf, ips]
 
     def get_protocol_xml(self):
-        return self._get_xmlobj().protocols[:]
+        return self.get_xmlobj().protocols[:]

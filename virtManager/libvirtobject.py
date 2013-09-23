@@ -47,7 +47,7 @@ class vmmLibvirtObject(vmmGObject):
         "stopped": (GObject.SignalFlags.RUN_FIRST, None, []),
     }
 
-    def __init__(self, conn, backend, key, parseclass=None):
+    def __init__(self, conn, backend, key, parseclass):
         vmmGObject.__init__(self)
         self._conn = conn
         self._backend = backend
@@ -78,13 +78,13 @@ class vmmLibvirtObject(vmmGObject):
     def get_key(self):
         return self._key
 
+
     #############################################################
     # Functions that should probably be overridden in sub class #
     #############################################################
 
     def get_name(self):
         raise NotImplementedError()
-
     def _XMLDesc(self, flags):
         raise NotImplementedError()
 
@@ -101,9 +101,21 @@ class vmmLibvirtObject(vmmGObject):
         """
         See _get_raw_xml for parameter docs
         """
-        if self._parseclass:
-            return self._get_xmlobj(*args, **kwargs).get_xml_config()
-        return self._get_raw_xml(*args, **kwargs)
+        return self.get_xmlobj(*args, **kwargs).get_xml_config()
+
+    def get_xmlobj(self, inactive=False, refresh_if_nec=True):
+        xml = self._get_raw_xml(inactive, refresh_if_nec)
+
+        if inactive:
+            # If inactive XML requested, always return a fresh object even
+            # the current object is inactive XML (like when the domain is
+            # stopped). Callers that request inactive are basically expecting
+            # a new copy.
+            return self._build_xmlobj(xml)
+
+        if not self._xmlobj:
+            self._reparse_xml()
+        return self._xmlobj
 
     def refresh_xml(self, forcesignal=False):
         # Force an xml update. Signal 'config-changed' if domain xml has
@@ -154,20 +166,6 @@ class vmmLibvirtObject(vmmGObject):
 
         return self._xml
 
-    def _get_xmlobj(self, inactive=False, refresh_if_nec=True):
-        xml = self._get_raw_xml(inactive, refresh_if_nec)
-
-        if inactive:
-            # If inactive XML requested, always return a fresh object even
-            # the current object is inactive XML (like when the domain is
-            # stopped). Callers that request inactive are basically expecting
-            # a new copy.
-            return self._build_xmlobj(xml)
-
-        if not self._xmlobj:
-            self._reparse_xml()
-        return self._xmlobj
-
     def _xml_to_redefine(self):
         return _sanitize_xml(self.get_xml(inactive=True))
 
@@ -181,8 +179,6 @@ class vmmLibvirtObject(vmmGObject):
         self._redefine_xml(xml)
 
     def _reparse_xml(self, ignore=None):
-        if not self._parseclass:
-            return
         self._xmlobj = self._build_xmlobj(self._get_raw_xml())
 
     def _build_xmlobj(self, xml):
@@ -190,7 +186,7 @@ class vmmLibvirtObject(vmmGObject):
 
     def _get_xmlobj_to_define(self):
         if not self._xmlobj_to_define:
-            self._xmlobj_to_define = self._get_xmlobj(inactive=True)
+            self._xmlobj_to_define = self.get_xmlobj(inactive=True)
         return self._xmlobj_to_define
 
     def _redefine_helper(self, origxml, newxml):

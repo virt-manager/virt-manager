@@ -30,8 +30,7 @@ from virtManager.libvirtobject import vmmLibvirtObject
 
 class vmmStorageVolume(vmmLibvirtObject):
     def __init__(self, conn, backend, key):
-        vmmLibvirtObject.__init__(self, conn, backend, key,
-                                  parseclass=StorageVolume)
+        vmmLibvirtObject.__init__(self, conn, backend, key, StorageVolume)
 
 
     ##########################
@@ -39,7 +38,7 @@ class vmmStorageVolume(vmmLibvirtObject):
     ##########################
 
     def get_name(self):
-        return self._get_xmlobj().name
+        return self.get_xmlobj().name
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
 
@@ -62,13 +61,13 @@ class vmmStorageVolume(vmmLibvirtObject):
     #################
 
     def get_target_path(self):
-        return self._get_xmlobj().target_path or ""
+        return self.get_xmlobj().target_path or ""
     def get_format(self):
-        return self._get_xmlobj().format
+        return self.get_xmlobj().format
     def get_capacity(self):
-        return self._get_xmlobj().capacity
+        return self.get_xmlobj().capacity
     def get_allocation(self):
-        return self._get_xmlobj().allocation
+        return self.get_xmlobj().allocation
 
     def get_pretty_capacity(self):
         return util.pretty_bytes(self.get_capacity())
@@ -82,8 +81,7 @@ class vmmStoragePool(vmmLibvirtObject):
     }
 
     def __init__(self, conn, backend, key):
-        vmmLibvirtObject.__init__(self, conn, backend, key,
-                                  parseclass=StoragePool)
+        vmmLibvirtObject.__init__(self, conn, backend, key, StoragePool)
 
         self._active = True
         self._support_isactive = None
@@ -99,7 +97,7 @@ class vmmStoragePool(vmmLibvirtObject):
     ##########################
 
     def get_name(self):
-        return self._get_xmlobj().name
+        return self.get_xmlobj().name
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
     def _define(self, xml):
@@ -143,7 +141,7 @@ class vmmStoragePool(vmmLibvirtObject):
         typ = self.get_type()
         return (typ in [StoragePool.TYPE_LOGICAL])
     def supports_volume_creation(self):
-        return self._get_xmlobj().supports_volume_creation()
+        return self.get_xmlobj().supports_volume_creation()
 
     def start(self):
         self._backend.create(0)
@@ -212,18 +210,18 @@ class vmmStoragePool(vmmLibvirtObject):
     #################
 
     def get_type(self):
-        return self._get_xmlobj().type
+        return self.get_xmlobj().type
     def get_uuid(self):
-        return self._get_xmlobj().uuid
+        return self.get_xmlobj().uuid
     def get_target_path(self):
-        return self._get_xmlobj().target_path or ""
+        return self.get_xmlobj().target_path or ""
 
     def get_allocation(self):
-        return self._get_xmlobj().allocation
+        return self.get_xmlobj().allocation
     def get_available(self):
-        return self._get_xmlobj().available
+        return self.get_xmlobj().available
     def get_capacity(self):
-        return self._get_xmlobj().capacity
+        return self.get_xmlobj().capacity
 
     def get_pretty_allocation(self):
         return util.pretty_bytes(self.get_allocation())
