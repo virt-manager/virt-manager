@@ -3112,14 +3112,12 @@ class vmmDetails(vmmGObjectUI):
 
         def show_ui(param, val=None):
             widgetname = "tpm-" + param.replace("_", "-")
-            labelname = widgetname + "-label"
             doshow = tpmdev.supports_property(param)
 
             if not val and doshow:
                 val = getattr(tpmdev, param)
 
-            self.widget(widgetname).set_visible(doshow)
-            self.widget(labelname).set_visible(doshow)
+            uihelpers.set_grid_row_visible(self.widget(widgetname), doshow)
             self.widget(widgetname).set_text(val or "-")
 
         dev_type = tpmdev.type
