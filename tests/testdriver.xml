@@ -308,6 +308,30 @@
   </devices>
 </domain>
 
+<domain type='test'>
+  <name>test-alternate-devs</name>
+  <uuid>4a64cc71-19c4-2fd0-2323-00aa941ea3c3</uuid>
+  <description>Test alternate devices that can't be crammed in
+test-many-devices, like an alternate RNG.
+  </description>
+  <memory>8388608</memory>
+  <currentMemory>2097152</currentMemory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch='i686'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <rng model='virtio'>
+      <rate bytes='123' period='1234'/>
+      <backend model='random'>/dev/hwrng</backend>
+    </rng>
+  </devices>
+</domain>
 
 <domain type='test'>
   <name>test-clone-simple</name>
