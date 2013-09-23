@@ -78,23 +78,6 @@ class vmmHost(vmmGObjectUI):
         self.init_storage_state()
         self.init_interface_state()
 
-        self.conn.connect("net-added", self.repopulate_networks)
-        self.conn.connect("net-removed", self.repopulate_networks)
-        self.conn.connect("net-started", self.refresh_network)
-        self.conn.connect("net-stopped", self.refresh_network)
-
-        self.conn.connect("pool-added", self.repopulate_storage_pools)
-        self.conn.connect("pool-removed", self.repopulate_storage_pools)
-        self.conn.connect("pool-started", self.refresh_storage_pool)
-        self.conn.connect("pool-stopped", self.refresh_storage_pool)
-
-        self.conn.connect("interface-added", self.repopulate_interfaces)
-        self.conn.connect("interface-removed", self.repopulate_interfaces)
-        self.conn.connect("interface-started", self.refresh_interface)
-        self.conn.connect("interface-stopped", self.refresh_interface)
-
-        self.conn.connect("state-changed", self.conn_state_changed)
-
         self.builder.connect_signals({
             "on_menu_file_view_manager_activate" : self.view_manager,
             "on_menu_file_quit_activate" : self.exit_app,
@@ -135,6 +118,26 @@ class vmmHost(vmmGObjectUI):
             "on_config_autoconnect_toggled": self.toggle_autoconnect,
         })
 
+        self.populate_networks(self.widget("net-list").get_model())
+        populate_storage_pools(self.widget("pool-list"), self.conn)
+        self.populate_interfaces(self.widget("interface-list").get_model())
+
+        self.conn.connect("net-added", self.repopulate_networks)
+        self.conn.connect("net-removed", self.repopulate_networks)
+        self.conn.connect("net-started", self.refresh_network)
+        self.conn.connect("net-stopped", self.refresh_network)
+
+        self.conn.connect("pool-added", self.repopulate_storage_pools)
+        self.conn.connect("pool-removed", self.repopulate_storage_pools)
+        self.conn.connect("pool-started", self.refresh_storage_pool)
+        self.conn.connect("pool-stopped", self.refresh_storage_pool)
+
+        self.conn.connect("interface-added", self.repopulate_interfaces)
+        self.conn.connect("interface-removed", self.repopulate_interfaces)
+        self.conn.connect("interface-started", self.refresh_interface)
+        self.conn.connect("interface-stopped", self.refresh_interface)
+
+        self.conn.connect("state-changed", self.conn_state_changed)
         self.conn.connect("resources-sampled", self.refresh_resources)
         self.reset_state()
 
@@ -158,8 +161,6 @@ class vmmHost(vmmGObjectUI):
         netCol.add_attribute(net_img, 'stock-size', 3)
         self.widget("net-list").append_column(netCol)
         netListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
-
-        self.populate_networks(netListModel)
 
     def init_storage_state(self):
         self.widget("storage-pages").set_show_tabs(False)
@@ -206,10 +207,7 @@ class vmmHost(vmmGObjectUI):
 
         volListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
-        init_pool_list(self.widget("pool-list"),
-                       self.pool_selected)
-        populate_storage_pools(self.widget("pool-list"),
-                               self.conn)
+        init_pool_list(self.widget("pool-list"), self.pool_selected)
 
     def init_interface_state(self):
         self.widget("interface-pages").set_show_tabs(False)
@@ -253,8 +251,6 @@ class vmmHost(vmmGObjectUI):
         childTypeCol.set_sort_column_id(1)
         childList.append_column(childTypeCol)
         childListModel.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-
-        self.populate_interfaces(interfaceListModel)
 
     def init_conn_state(self):
         uri = self.conn.get_uri()
@@ -512,8 +508,8 @@ class vmmHost(vmmGObjectUI):
 
     def net_selected(self, src):
         selected = src.get_selected()
-        if selected[1] is None or \
-           selected[0].get_value(selected[1], 0) is None:
+        if (selected[1] is None or
+            selected[0].get_value(selected[1], 0) is None):
             self.set_net_error_page(_("No virtual network selected."))
             return
 
@@ -828,8 +824,8 @@ class vmmHost(vmmGObjectUI):
 
     def pool_selected(self, src):
         selected = src.get_selected()
-        if selected[1] is None or \
-           selected[0].get_value(selected[1], 0) is None:
+        if (selected[1] is None or
+            selected[0].get_value(selected[1], 0) is None):
             self.set_storage_error_page(_("No storage pool selected."))
             return
 
@@ -918,8 +914,8 @@ class vmmHost(vmmGObjectUI):
 
     def vol_selected(self, src):
         selected = src.get_selected()
-        if selected[1] is None or \
-           selected[0].get_value(selected[1], 0) is None:
+        if (selected[1] is None or
+            selected[0].get_value(selected[1], 0) is None):
             self.widget("vol-delete").set_sensitive(False)
             return
 
@@ -1084,8 +1080,8 @@ class vmmHost(vmmGObjectUI):
 
     def interface_selected(self, src):
         selected = src.get_selected()
-        if selected[1] is None or \
-           selected[0].get_value(selected[1], 0) is None:
+        if (selected[1] is None or
+            selected[0].get_value(selected[1], 0) is None):
             self.set_interface_error_page(_("No interface selected."))
             return
 
