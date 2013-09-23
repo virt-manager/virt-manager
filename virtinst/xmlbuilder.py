@@ -902,31 +902,29 @@ class XMLBuilder(object):
     # Internal API #
     ################
 
+    def __get_prop_cache(self, cachename, checkclass):
+        if not hasattr(self.__class__, cachename):
+            ret = {}
+            for c in reversed(type.mro(self.__class__)[:-1]):
+                for key, val in c.__dict__.items():
+                    if val.__class__ is checkclass:
+                        ret[key] = val
+            setattr(self.__class__, cachename, ret)
+        return getattr(self.__class__, cachename)
+
     def _all_xml_props(self):
         """
         Return a list of all XMLProperty instances that this class has.
         """
-        if not hasattr(self.__class__, "_cached_xml_props"):
-            ret = {}
-            for c in reversed(type.mro(self.__class__)[:-1]):
-                for key, val in c.__dict__.items():
-                    if val.__class__ is XMLProperty:
-                        ret[key] = val
-            self.__class__._cached_xml_props = ret
-        return self.__class__._cached_xml_props
+        cachename = self.__class__.__name__ + "_cached_xml_props"
+        return self.__get_prop_cache(cachename, XMLProperty)
 
     def _all_child_props(self):
         """
         Return a list of all XMLChildProperty instances that this class has.
         """
-        if not hasattr(self.__class__, "_cached_child_props"):
-            ret = {}
-            for c in reversed(type.mro(self.__class__)[:-1]):
-                for key, val in c.__dict__.items():
-                    if val.__class__ is XMLChildProperty:
-                        ret[key] = val
-            self.__class__._cached_child_props = ret
-        return self.__class__._cached_child_props
+        cachename = self.__class__.__name__ + "_cached_child_props"
+        return self.__get_prop_cache(cachename, XMLChildProperty)
 
 
     def _set_parent_xpath(self, xpath):
