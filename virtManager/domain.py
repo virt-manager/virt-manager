@@ -55,6 +55,7 @@ def compare_device(origdev, newdev, idx):
         "smartcard" : ["mode" , "vmmindex"],
         "redirdev" : ["bus" , "type", "vmmindex"],
         "tpm"       : ["type" , "vmmindex"],
+        "rng"       : ["type" , "vmmindex"],
     }
 
     if id(origdev) == id(newdev):
@@ -1078,6 +1079,8 @@ class vmmDomain(vmmLibvirtObject):
         return self._build_device_list("redirdev")
     def get_tpm_devices(self):
         return self._build_device_list("tpm")
+    def get_rng_devices(self):
+        return self._build_device_list("rng")
 
     def get_disk_devices(self, refresh_if_nec=True, inactive=False):
         devs = self._build_device_list("disk", refresh_if_nec, inactive)

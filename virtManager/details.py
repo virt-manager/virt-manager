@@ -122,14 +122,16 @@ EDIT_TPM_TYPE,
  HW_LIST_TYPE_FILESYSTEM,
  HW_LIST_TYPE_SMARTCARD,
  HW_LIST_TYPE_REDIRDEV,
- HW_LIST_TYPE_TPM) = range(19)
+ HW_LIST_TYPE_TPM,
+ HW_LIST_TYPE_RNG) = range(20)
 
 remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                 HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
                 HW_LIST_TYPE_HOSTDEV, HW_LIST_TYPE_DISK, HW_LIST_TYPE_VIDEO,
                 HW_LIST_TYPE_WATCHDOG, HW_LIST_TYPE_CONTROLLER,
                 HW_LIST_TYPE_FILESYSTEM, HW_LIST_TYPE_SMARTCARD,
-                HW_LIST_TYPE_REDIRDEV, HW_LIST_TYPE_TPM]
+                HW_LIST_TYPE_REDIRDEV, HW_LIST_TYPE_TPM,
+                HW_LIST_TYPE_RNG]
 
 # Boot device columns
 (BOOT_DEV_TYPE,
@@ -1245,6 +1247,8 @@ class vmmDetails(vmmGObjectUI):
                 self.refresh_redir_page()
             elif pagetype == HW_LIST_TYPE_TPM:
                 self.refresh_tpm_page()
+            elif pagetype == HW_LIST_TYPE_RNG:
+                self.refresh_rng_page()
             else:
                 pagetype = -1
         except Exception, e:
@@ -3125,6 +3129,43 @@ class vmmDetails(vmmGObjectUI):
         # Device type specific properties, only show if apply to the cur dev
         show_ui("device_path")
 
+    def refresh_rng_page(self):
+        dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        values = {
+            "rng-type" : "type",
+            "rng-device" : "device",
+            "rng-host" : "backend_source_host",
+            "rng-service" : "backend_source_service",
+            "rng-mode" : "backend_source_mode",
+            "rng-backend-type" : "backend_type",
+            "rng-rate-bytes" : "rate_bytes",
+            "rng-rate-period" : "rate_period"
+        }
+        rewriter = {
+            "rng-type" : lambda x:
+            virtinst.VirtualRNGDevice.get_pretty_type(x),
+            "rng-backend-type" : lambda x:
+            virtinst.VirtualRNGDevice.get_pretty_backend_type(x),
+            "rng-mode" : lambda x:
+            virtinst.VirtualRNGDevice.get_pretty_mode(x)
+        }
+
+        is_egd = dev.type == virtinst.VirtualRNGDevice.TYPE_EGD
+        uihelpers.set_grid_row_visible(self.widget("rng-device"), not is_egd)
+        uihelpers.set_grid_row_visible(self.widget("rng-host"), is_egd)
+        uihelpers.set_grid_row_visible(self.widget("rng-service"), is_egd)
+        uihelpers.set_grid_row_visible(self.widget("rng-mode"), is_egd)
+        uihelpers.set_grid_row_visible(self.widget("rng-backend-type"), is_egd)
+
+        for k, prop in values.items():
+            val = "-"
+            if dev.supports_property(prop):
+                val = getattr(dev, prop) or "-"
+                r = rewriter.get(k)
+                if r:
+                    val = r(val)
+            self.widget(k).set_text(val)
+
     def refresh_char_page(self):
         chardev = self.get_hw_selection(HW_LIST_COL_DEVICE)
         if not chardev:
@@ -3588,6 +3629,11 @@ class vmmDetails(vmmGObjectUI):
         for tpm in self.vm.get_tpm_devices():
             update_hwlist(HW_LIST_TYPE_TPM, tpm,
                           _("TPM"), "device_cpu")
+
+        # Populate list of RNG devices
+        for rng in self.vm.get_rng_devices():
+            update_hwlist(HW_LIST_TYPE_RNG, rng,
+                          _("RNG"), "system-run")
 
         devs = range(len(hw_list_model))
         devs.reverse()
