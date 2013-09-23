@@ -698,6 +698,17 @@
   </ip>
 </network>
 
+<network ipv6='yes'>
+  <name>ipv6route</name>
+  <domain name='bar' />
+  <forward mode='route' dev='eth1'/>
+  <ip family='ipv6' address='fd00:db8:ac10:fd01::1' prefix='64'>
+    <dhcp>
+      <range start='fd00:db8:ac10:fd01::100' end='fd00:db8:ac10:fd01::1ff'/>
+    </dhcp>
+  </ip>
+  <route family='ipv6' address='fd00:db8:ac10:fd00::' prefix='64' gateway='fd00:db8:ac10:fd01::1' />
+</network>
 
 
 

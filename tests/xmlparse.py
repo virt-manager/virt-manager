@@ -1041,6 +1041,8 @@ class XMLParseTest(unittest.TestCase):
         check("prefix", 64, 63)
 
         net.add_route("192.168.8.0", "24", "192.168.8.10")
+        check = self._make_checker(net.routes[0])
+        check("netmask", None, "foo", None)
 
         utils.diff_compare(net.get_xml_config(), outfile)
         utils.test_create(conn, net.get_xml_config(), "networkDefineXML")

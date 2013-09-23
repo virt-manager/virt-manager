@@ -62,6 +62,7 @@ class _NetworkRoute(XMLBuilder):
     address = XMLProperty("./@address")
     prefix = XMLProperty("./@prefix", is_int=True)
     gateway = XMLProperty("./@gateway")
+    netmask = XMLProperty("./@netmask")
 
 
 class _NetworkForward(XMLBuilder):
