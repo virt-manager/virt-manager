@@ -28,7 +28,10 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 # pylint: enable=E0611
 
+from virtinst import Network
+
 from virtManager import uihelpers
+from virtManager.asyncjob import vmmAsyncJob
 from virtManager.baseclass import vmmGObjectUI
 
 (PAGE_NAME,
@@ -505,7 +508,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         uihelpers.set_grid_row_visible(ntwk, enabled)
         uihelpers.set_grid_row_visible(gway, enabled)
     def change_routev6_enable(self, ignore):
-        enabled = self.get_config_routev4_enable()
+        enabled = self.get_config_routev6_enable()
         ntwk = self.widget("net-routev6-network")
         gway = self.widget("net-routev6-gateway")
         uihelpers.set_grid_row_visible(ntwk, enabled)
@@ -518,7 +521,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         uihelpers.set_grid_row_visible(start, enabled)
         uihelpers.set_grid_row_visible(end, enabled)
     def change_dhcpv6_enable(self, ignore):
-        enabled = self.get_config_dhcpv4_enable()
+        enabled = self.get_config_dhcpv6_enable()
         start = self.widget("net-dhcpv6-start")
         end = self.widget("net-dhcpv6-end")
         uihelpers.set_grid_row_visible(start, enabled)
@@ -674,99 +677,97 @@ class vmmCreateNetwork(vmmGObjectUI):
     # XML build and install #
     #########################
 
-    def _build_xml(self):
-        name = self.widget("net-name").get_text()
-        dev, mode = self.get_config_forwarding()
+    def _build_xmlobj(self):
+        net = Network(self.conn.get_backend())
+
+        net.name = self.widget("net-name").get_text()
+        net.domain_name = self.widget("net-domain-name").get_text() or None
 
         if self.widget("net-enable-ipv6-networking").get_active():
-            xml = "<network ipv6='yes'>\n"
-        else:
-            xml = "<network>\n"
+            net.ipv6 = True
 
-        xml += "  <name>%s</name>\n" % name
-
-        domain_name = self.widget("net-domain-name").get_text()
-        if domain_name:
-            xml += "  <domain name='%s' />\n" % domain_name
-
+        dev, mode = self.get_config_forwarding()
         if mode:
-            if dev is not None:
-                xml += "  <forward mode='%s' dev='%s'/>\n" % (mode, dev)
-            else:
-                xml += "  <forward mode='%s'/>\n" % mode
+            net.forward.mode = mode
+            net.forward.dev = dev or None
 
         if self.get_config_ipv4_enable():
             ip = self.get_config_ip4()
-            xml += "  <ip address='%s' netmask='%s'>\n" % (str(ip.network + 1),
-                                                       str(ip.netmask))
+            ipobj = net.add_ip()
+            ipobj.address = str(ip.network + 1)
+            ipobj.netmask = str(ip.netmask)
 
             if self.get_config_dhcpv4_enable():
-                start = self.get_config_dhcpv4_start()
-                end = self.get_config_dhcpv4_end()
-                xml += "    <dhcp>\n"
-                xml += "      <range start='%s' end='%s'/>\n" % (str(start.network),
-                                                       str(end.network))
-                xml += "    </dhcp>\n"
-            xml += "  </ip>\n"
+                dhcpobj = ipobj.add_range()
+                dhcpobj.start = str(self.get_config_dhcpv4_start().network)
+                dhcpobj.end = str(self.get_config_dhcpv4_end().network)
 
         if self.get_config_ipv6_enable():
             ip = self.get_config_ip6()
-            xml += "  <ip family='ipv6' address='%s' prefix='%s'>\n" % (str(ip.network + 1),
-                                                       str(ip.prefixlen))
+            ipobj = net.add_ip()
+            ipobj.family = "ipv6"
+            ipobj.address = str(ip.network + 1)
+            ipobj.prefix = str(ip.prefixlen)
 
             if self.get_config_dhcpv6_enable():
-                start = self.get_config_dhcpv6_start()
-                end = self.get_config_dhcpv6_end()
-                xml += "    <dhcp>\n"
-                xml += "      <range start='%s' end='%s'/>\n" % (str(start.network),
-                                                                str(end.network))
-                xml += "    </dhcp>\n"
-            xml += "  </ip>\n"
+                dhcpobj = ipobj.add_range()
+                dhcpobj.start = str(self.get_config_dhcpv6_start().network)
+                dhcpobj.end = str(self.get_config_dhcpv6_end().network)
 
-        ntwk = self.get_config_routev4_network()
-        try:
-            netaddr = ipaddr.IPNetwork(ntwk)
-        except:
-            netaddr = None
-        gway = self.get_config_routev4_gateway()
-        try:
-            gwaddr = ipaddr.IPNetwork(gway)
-        except:
-            gwaddr = None
+        netaddr = _make_ipaddr(self.get_config_routev4_network())
+        gwaddr = _make_ipaddr(self.get_config_routev4_gateway())
         if netaddr and gwaddr:
-            xml += "<route family='ipv4'"
-            xml += " address='%s'" % netaddr.network
-            xml += " prefix='%s'" % netaddr.prefixlen
-            xml += " gateway='%s' />" % gwaddr.network
+            route = net.add_route()
+            route.family = "ipv4"
+            route.address = netaddr.network
+            route.prefix = netaddr.prefixlen
+            route.gateway = gwaddr.network
 
-        ntwk = self.get_config_routev6_network()
-        try:
-            netaddr = ipaddr.IPNetwork(ntwk)
-        except:
-            netaddr = None
-        gway = self.get_config_routev6_gateway()
-        try:
-            gwaddr = ipaddr.IPNetwork(gway)
-        except:
-            gwaddr = None
+        netaddr = _make_ipaddr(self.get_config_routev6_network())
+        gwaddr = _make_ipaddr(self.get_config_routev6_gateway())
         if netaddr and gwaddr:
-            xml += "<route family='ipv6'"
-            xml += " address='%s'" % netaddr.network
-            xml += " prefix='%s'" % netaddr.prefixlen
-            xml += " gateway='%s' />" % gwaddr.network
+            route = net.add_route()
+            route.family = "ipv6"
+            route.address = netaddr.network
+            route.prefix = netaddr.prefixlen
+            route.gateway = gwaddr.network
 
-        xml += "</network>\n"
-        return xml
+        return net
+
+    def _finish_cb(self, error, details):
+        self.topwin.set_sensitive(True)
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+
+        if error:
+            error = _("Error creating virtual network: %s") % str(error)
+            self.err.show_err(error, details=details)
+        else:
+            self.conn.schedule_priority_tick(pollnet=True)
+            self.close()
+
+    def _async_net_create(self, asyncjob, xml):
+        ignore = asyncjob
+        self.conn.create_network(xml)
 
     def finish(self, ignore):
-        xml = self._build_xml()
-        logging.debug("Generated network XML:\n" + xml)
-
         try:
-            self.conn.create_network(xml)
+            net = self._build_xmlobj()
+            xml = net.get_xml_config()
         except Exception, e:
-            self.err.show_err(_("Error creating virtual network: %s" % str(e)))
+            self.err.show_erro(_("Error generating network xml: %s" % str(e)))
             return
 
-        self.conn.schedule_priority_tick(pollnet=True)
-        self.close()
+        logging.debug("Generated network XML:\n" + xml)
+
+        self.topwin.set_sensitive(False)
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.WATCH))
+
+        progWin = vmmAsyncJob(self._async_net_create, [xml],
+                              self._finish_cb, [],
+                              _("Creating virtual network..."),
+                              _("Creating the virtual network may take a "
+                                "while..."),
+                              self.topwin)
+        progWin.run()

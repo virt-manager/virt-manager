@@ -1040,8 +1040,12 @@ class XMLParseTest(unittest.TestCase):
         check("family", "ipv6", "ipv6")
         check("prefix", 64, 63)
 
-        net.add_route("192.168.8.0", "24", "192.168.8.10")
-        check = self._make_checker(net.routes[0])
+        r = net.add_route()
+        r.family = "ipv4"
+        r.address = "192.168.8.0"
+        r.prefix = "24"
+        r.gateway = "192.168.8.10"
+        check = self._make_checker(r)
         check("netmask", None, "foo", None)
 
         utils.diff_compare(net.get_xml_config(), outfile)

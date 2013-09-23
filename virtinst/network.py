@@ -54,6 +54,11 @@ class _NetworkIP(XMLBuilder):
     ranges = XMLChildProperty(_NetworkDHCPRange, relative_xpath="./dhcp")
     hosts = XMLChildProperty(_NetworkDHCPHost, relative_xpath="./dhcp")
 
+    def add_range(self):
+        r = _NetworkDHCPRange(self.conn)
+        self._add_child(r)
+        return r
+
 
 class _NetworkRoute(XMLBuilder):
     _XML_ROOT_NAME = "route"
@@ -166,10 +171,11 @@ class Network(XMLBuilder):
     ips = XMLChildProperty(_NetworkIP)
     routes = XMLChildProperty(_NetworkRoute)
 
-    def add_route(self, address, prefix, gateway):
+    def add_ip(self):
+        ip = _NetworkIP(self.conn)
+        self._add_child(ip)
+        return ip
+    def add_route(self):
         route = _NetworkRoute(self.conn)
-        route.family = "ipv4"
-        route.address = address
-        route.prefix = prefix
-        route.gateway = gateway
         self._add_child(route)
+        return route
