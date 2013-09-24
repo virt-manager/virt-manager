@@ -43,6 +43,7 @@ from virtinst import util
 
 # Parameters that can be editted in the details window
 (EDIT_NAME,
+EDIT_TITLE,
 EDIT_ACPI,
 EDIT_APIC,
 EDIT_CLOCK,
@@ -93,7 +94,7 @@ EDIT_WATCHDOG_ACTION,
 EDIT_CONTROLLER_MODEL,
 
 EDIT_TPM_TYPE,
-) = range(1, 40)
+) = range(1, 41)
 
 
 # Columns in hw list model
@@ -438,6 +439,7 @@ class vmmDetails(vmmGObjectUI):
             "on_details_pages_switch_page": self.switch_page,
 
             "on_overview_name_changed": lambda *x: self.enable_apply(x, EDIT_NAME),
+            "on_overview_title_changed": lambda *x: self.enable_apply(x, EDIT_TITLE),
             "on_overview_acpi_changed": self.config_acpi_changed,
             "on_overview_apic_changed": self.config_apic_changed,
             "on_overview_clock_changed": lambda *x: self.enable_apply(x, EDIT_CLOCK),
@@ -1979,6 +1981,11 @@ class vmmDetails(vmmGObjectUI):
             name = self.widget("overview-name").get_text()
             add_define(self.vm.define_name, name)
 
+        if self.edited(EDIT_TITLE):
+            title = self.widget("overview-title").get_text()
+            add_define(self.vm.define_title, title)
+            add_hotplug(self.vm.hotplug_title, title)
+
         if self.edited(EDIT_ACPI):
             enable_acpi = self.widget("overview-acpi").get_active()
             if self.widget("overview-acpi").get_inconsistent():
@@ -2542,6 +2549,10 @@ class vmmDetails(vmmGObjectUI):
         desc = self.vm.get_description() or ""
         desc_widget = self.widget("overview-description")
         desc_widget.get_buffer().set_text(desc)
+
+        title = self.vm.get_title()
+        self.widget("overview-title").set_sensitive(self.vm.title_supported)
+        self.widget("overview-title").set_text(title or "")
 
         # Hypervisor Details
         self.widget("overview-hv").set_text(self.vm.get_pretty_hv_type())
