@@ -1394,7 +1394,7 @@ class vmmDomain(vmmLibvirtObject):
 
         return [(x + y) / 2 for x, y in zip(data[0:end], data[end:end * 2])]
 
-    def toggle_sample_network_traffic(self):
+    def toggle_sample_network_traffic(self, ignore=None):
         self._enable_net_poll = self.config.get_stats_enable_net_poll()
 
         if self._enable_net_poll and len(self.record) > 1:
@@ -1402,7 +1402,7 @@ class vmmDomain(vmmLibvirtObject):
             self.record[0]["netRxKB"] = rxBytes / 1024
             self.record[0]["netTxKB"] = txBytes / 1024
 
-    def toggle_sample_disk_io(self):
+    def toggle_sample_disk_io(self, ignore=None):
         self._enable_disk_poll = self.config.get_stats_enable_disk_poll()
 
         if self._enable_disk_poll and len(self.record) > 1:
