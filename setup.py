@@ -74,6 +74,7 @@ class my_build_i18n(build):
         # Borrowed from python-distutils-extra
         desktop_files = [
             ("share/applications", ["data/virt-manager.desktop.in"]),
+            ("share/appdata", ["data/virt-manager.appdata.xml"]),
         ]
         po_dir = "po"
 

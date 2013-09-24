@@ -62,7 +62,7 @@ BuildRequires: /usr/bin/pod2man
 
 %description
 Virtual Machine Manager provides a graphical tool for administering virtual
-machines for KVM, Xen, and QEmu. Start, stop, add or remove virtual devices,
+machines for KVM, Xen, and LXC. Start, stop, add or remove virtual devices,
 connect to a graphical or serial console, and see resource usage statistics
 for existing VMs on local or remote machines. Uses libvirt as the backend
 management API.
@@ -182,6 +182,7 @@ fi
 %{_datadir}/%{name}/icons
 %{_datadir}/icons/hicolor/*/apps/*
 
+%{_datadir}/appdata/%{name}.appdata.xml
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/glib-2.0/schemas/org.virt-manager.virt-manager.gschema.xml
 
