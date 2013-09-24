@@ -81,7 +81,7 @@ def supports_pxe(guest):
             return True
 
         try:
-            netobj = nic.conn.networkLookupByName(nic.network)
+            netobj = nic.conn.networkLookupByName(nic.source)
             xmlobj = virtinst.Network(nic.conn, parsexml=netobj.XMLDesc(0))
             if xmlobj.can_pxe():
                 return True

@@ -732,21 +732,9 @@ def validate_network(err, conn, nettype, devname, macaddr, model=None):
 
     # Create network device
     try:
-        bridge = None
-        netname = None
-        if nettype == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
-            netname = devname
-        elif nettype == virtinst.VirtualNetworkInterface.TYPE_BRIDGE:
-            bridge = devname
-        elif nettype == virtinst.VirtualNetworkInterface.TYPE_DIRECT:
-            bridge = devname
-        elif nettype == virtinst.VirtualNetworkInterface.TYPE_USER:
-            pass
-
         net = virtinst.VirtualNetworkInterface(conn.get_backend())
         net.type = nettype
-        net.bridge = bridge
-        net.network = netname
+        net.source = devname
         net.macaddr = macaddr
         net.model = model
         if net.model == "spapr-vlan":

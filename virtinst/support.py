@@ -379,7 +379,8 @@ SUPPORT_CONN_HV_GRAPHICS_SPICE = _make(version=8006,
 SUPPORT_CONN_HV_CHAR_SPICEVMC = _make(version=8008,
                                       drv_version=[("qemu", 14000)])
 SUPPORT_CONN_HV_DIRECT_INTERFACE = _make(version=8007,
-                                         drv_version=[("qemu", 0)])
+                                         drv_version=[("qemu", 0),
+                                                      ("test", 0)])
 SUPPORT_CONN_HV_FILESYSTEM = _make(
     drv_version=[("qemu", 13000), ("lxc", 0), ("openvz", 0), ("test", 0)],
     drv_libvirt_version=[("qemu", 8005), ("lxc", 0),

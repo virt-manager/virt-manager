@@ -1549,8 +1549,8 @@ def parse_network(guest, optstring, dev=None, mac=None):
     set_param = _build_set_param(dev, opts)
 
     set_param("type", "type", net_type)
-    set_param("network", "network")
-    set_param("bridge", "bridge")
+    set_param("source", "network")
+    set_param("source", "bridge")
     set_param("model", "model")
     set_param("macaddr", "mac")
     set_param("filterref", "filterref")

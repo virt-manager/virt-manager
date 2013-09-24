@@ -291,5 +291,5 @@ def get_virtual_network():
     dev = virtinst.VirtualNetworkInterface(_conn)
     dev.macaddr = "22:22:33:44:55:66"
     dev.type = virtinst.VirtualNetworkInterface.TYPE_VIRTUAL
-    dev.network = "default"
+    dev.source = "default"
     return dev

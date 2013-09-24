@@ -137,6 +137,11 @@ class VirtualNetworkInterface(VirtualDevice):
         self._random_mac = None
         self._default_bridge = None
 
+
+    ###############
+    # XML helpers #
+    ###############
+
     def _generate_default_bridge(self):
         ret = self._default_bridge
         if ret is None:
@@ -148,34 +153,87 @@ class VirtualNetworkInterface(VirtualDevice):
         self._default_bridge = ret
         return ret or None
 
-    def get_source(self):
+    def _get_default_bridge(self):
+        if self.type == self.TYPE_BRIDGE:
+            return self._generate_default_bridge()
+        return None
+
+    def _default_source_mode(self):
+        if self.type == self.TYPE_DIRECT:
+            return "vepa"
+        return None
+
+    def _get_default_mac(self):
+        if not self._random_mac:
+            self._random_mac = self.generate_mac(self.conn)
+        return self._random_mac
+    def _validate_mac(self, val):
+        util.validate_macaddr(val)
+        return val
+
+    def _get_source(self):
         """
         Convenince function, try to return the relevant <source> value
         per the network type.
         """
         if self.type == self.TYPE_VIRTUAL:
-            return self.network
+            return self._network
         if self.type == self.TYPE_BRIDGE:
-            return self.bridge
+            return self._bridge
         if self.type == self.TYPE_ETHERNET or self.type == self.TYPE_DIRECT:
-            return self.source_dev
+            return self._source_dev
         if self.type == self.TYPE_USER:
             return None
-        return self.network or self.bridge or self.source_dev
-
-    def set_source(self, newsource):
+        return self._network or self._bridge or self._source_dev
+    def _set_source(self, newsource):
         """
         Conveninece function, try to set the relevant <source> value
         per the network type
         """
+        self._bridge = None
+        self._network = None
+        self._source_dev = None
+
         if self.type == self.TYPE_VIRTUAL:
-            self.network = newsource
+            self._network = newsource
         elif self.type == self.TYPE_BRIDGE:
-            self.bridge = newsource
+            self._bridge = newsource
         elif self.type == self.TYPE_ETHERNET or self.type == self.TYPE_DIRECT:
-            self.source_dev = newsource
-        return
-    source = property(get_source, set_source)
+            self._source_dev = newsource
+    source = property(_get_source, _set_source)
+
+
+    ##################
+    # XML properties #
+    ##################
+
+    _XML_PROP_ORDER = [
+        "_bridge", "_network", "_source_dev", "source_mode",
+        "macaddr", "target_dev", "model", "virtualport",
+        "filterref"]
+
+    _bridge = XMLProperty("./source/@bridge", default_cb=_get_default_bridge)
+    _network = XMLProperty("./source/@network")
+    _source_dev = XMLProperty("./source/@dev")
+
+    virtualport = XMLChildProperty(VirtualPort, is_single=True)
+    type = XMLProperty("./@type",
+                       default_cb=lambda s: s.TYPE_BRIDGE)
+
+    macaddr = XMLProperty("./mac/@address",
+                          set_converter=_validate_mac,
+                          default_cb=_get_default_mac)
+
+    source_mode = XMLProperty("./source/@mode",
+                              default_cb=_default_source_mode)
+    model = XMLProperty("./model/@type")
+    target_dev = XMLProperty("./target/@dev")
+    filterref = XMLProperty("./filterref/@filter")
+
+
+    #############
+    # Build API #
+    #############
 
     def setup(self, meter=None):
         ignore = meter
@@ -189,48 +247,6 @@ class VirtualNetworkInterface(VirtualDevice):
             logging.warning(msg)
         else:
             raise RuntimeError(msg)
-
-
-    _XML_PROP_ORDER = [
-        "bridge", "network", "source_dev", "source_mode",
-        "macaddr", "target_dev", "model", "virtualport",
-        "filterref"]
-
-    virtualport = XMLChildProperty(VirtualPort, is_single=True)
-    type = XMLProperty("./@type",
-                       default_cb=lambda s: s.TYPE_BRIDGE)
-
-    def _get_default_mac(self):
-        if not self._random_mac:
-            self._random_mac = self.generate_mac(self.conn)
-        return self._random_mac
-    def _validate_mac(self, val):
-        util.validate_macaddr(val)
-        return val
-    macaddr = XMLProperty("./mac/@address",
-                          set_converter=_validate_mac,
-                          default_cb=_get_default_mac)
-
-    def _get_default_bridge(self):
-        if self.type == self.TYPE_BRIDGE:
-            return self._generate_default_bridge()
-        return None
-    bridge = XMLProperty("./source/@bridge",
-                         default_cb=_get_default_bridge)
-    network = XMLProperty("./source/@network")
-    source_dev = XMLProperty("./source/@dev")
-
-
-
-    def _default_source_mode(self):
-        if self.type == self.TYPE_DIRECT:
-            return "vepa"
-        return None
-    source_mode = XMLProperty("./source/@mode",
-                              default_cb=_default_source_mode)
-    model = XMLProperty("./model/@type")
-    target_dev = XMLProperty("./target/@dev")
-    filterref = XMLProperty("./filterref/@filter")
 
 
 VirtualNetworkInterface.register_type()

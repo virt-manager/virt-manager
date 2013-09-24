@@ -20,7 +20,6 @@
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <interface type="user">
       <mac address="AA:AA:AA:AA:AA:AA"/>
-      <source bridge="br0" network="route"/>
       <model type="testmodel"/>
       <filterref filter="foo"/>
     </interface>
@@ -30,7 +29,7 @@
       <model type="virtio"/>
     </interface>
     <interface type="bridge">
-      <source bridge="newfoo0" network="default"/>
+      <source bridge="newfoo0"/>
       <mac address="22:22:22:22:22:22"/>
       <target dev="test1"/>
     </interface>

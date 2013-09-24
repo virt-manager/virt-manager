@@ -2900,7 +2900,7 @@ class vmmDetails(vmmGObjectUI):
             return
 
         nettype = net.type
-        source = net.get_source()
+        source = net.source
         source_mode = net.source_mode
         model = net.model
 

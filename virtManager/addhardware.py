@@ -571,6 +571,9 @@ class vmmAddHardware(vmmGObjectUI):
             format_list.get_child().set_text("")
 
     ########################
+    # get_config_* methods #
+    ########################
+
     def build_combo_with_values(self, combo, values, default=None):
         dev_model = Gtk.ListStore(str, str)
         combo.set_model(dev_model)
@@ -626,9 +629,6 @@ class vmmAddHardware(vmmGObjectUI):
             types.append([t, pprint])
 
         self.build_combo_with_values(combo, types, default)
-
-    # get_config_* methods #
-    ########################
 
     def get_config_hardware_type(self):
         row = self.get_hw_selection()

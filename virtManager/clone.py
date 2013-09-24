@@ -288,7 +288,7 @@ class vmmCloneVM(vmmGObjectUI):
 
         for net in self.orig_vm.get_network_devices():
             mac = net.macaddr
-            net_dev = net.get_source()
+            net_dev = net.source
             net_type = net.type
 
             # Generate a new MAC

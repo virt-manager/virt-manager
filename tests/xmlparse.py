@@ -412,37 +412,31 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev1)
         check("type", "user")
         check("model", None, "testmodel")
-        check("bridge", None, "br0")
-        check("network", None, "route")
+        check("source", None, None,)
         check("macaddr", "22:11:11:11:11:11", "AA:AA:AA:AA:AA:AA")
         check("filterref", None, "foo")
-        self.assertEquals(dev1.get_source(), None)
 
         check = self._make_checker(dev2)
-        self.assertEquals(dev2.get_source(), "default")
-        check("network", "default", None)
-        check("bridge", None, "newbr0")
+        check("source", "default", None)
         check("type", "network", "bridge")
+        check("source", None, "newbr0")
         check("model", "e1000", "virtio")
 
         check = self._make_checker(dev3)
         check("type", "bridge")
-        check("bridge", "foobr0", "newfoo0")
-        check("network", None, "default")
+        check("source", "foobr0", "newfoo0")
         check("macaddr", "22:22:22:22:22:22")
         check("target_dev", None, "test1")
-        self.assertEquals(dev3.get_source(), "newfoo0")
 
         check = self._make_checker(dev4)
         check("type", "ethernet")
-        check("source_dev", "eth0", "eth1")
+        check("source", "eth0", "eth1")
         check("target_dev", "nic02", "nic03")
         check("target_dev", "nic03", None)
-        self.assertEquals(dev4.get_source(), "eth1")
 
         check = self._make_checker(dev5)
         check("type", "direct")
-        check("source_dev", "eth0.1")
+        check("source", "eth0.1")
         check("source_mode", "vepa", "bridge")
 
         virtualport = dev5.virtualport
@@ -782,7 +776,7 @@ class XMLParseTest(unittest.TestCase):
 
         adddev = virtinst.VirtualNetworkInterface(conn=conn)
         adddev.type = "network"
-        adddev.network = "default"
+        adddev.source = "default"
         adddev.macaddr = "1A:2A:3A:4A:5A:6A"
 
         guest.add_device(virtinst.VirtualWatchdog(conn))
