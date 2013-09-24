@@ -104,6 +104,7 @@ class XMLParseTest(unittest.TestCase):
         check("name", "TestGuest", "change_name")
         check("id", None, 1234)
         check("description", None, "Hey desc changed&")
+        check("title", None, "Hey title changed!")
         check("vcpus", 5, 12)
         check("curvcpus", None, 10)
         check("cpuset", "1-3", "1-8,^6", "1-5,15")

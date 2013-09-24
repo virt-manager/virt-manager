@@ -85,7 +85,7 @@ class Guest(XMLBuilder):
 
 
     _XML_ROOT_NAME = "domain"
-    _XML_PROP_ORDER = ["type", "name", "uuid", "description",
+    _XML_PROP_ORDER = ["type", "name", "uuid", "title", "description",
         "maxmemory", "memory", "hugepage", "vcpus", "curvcpus",
         "numatune", "bootloader", "os", "features", "cpu", "clock",
         "on_poweroff", "on_reboot", "on_crash", "emulator", "_devices",
@@ -161,6 +161,7 @@ class Guest(XMLBuilder):
     hugepage = XMLProperty("./memoryBacking/hugepages", is_bool=True)
     bootloader = XMLProperty("./bootloader")
     description = XMLProperty("./description")
+    title = XMLProperty("./title")
     emulator = XMLProperty("./devices/emulator")
 
     on_poweroff = XMLProperty("./on_poweroff",
