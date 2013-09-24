@@ -208,6 +208,9 @@ class _MountedImageFetcher(_LocalImageFetcher):
             else:
                 mountopt = "ro,loop"
             cmd = [mountcmd, "-o", mountopt, self.location, self.srcdir]
+
+        logging.debug("mount cmd: %s", cmd)
+
         ret = subprocess.call(cmd)
         if ret != 0:
             self.cleanupLocation()
@@ -235,7 +238,7 @@ def _fetcherForURI(uri, scratchdir=None):
         fclass = _HTTPImageFetcher
     elif uri.startswith("ftp://"):
         fclass = _FTPImageFetcher
-    elif uri.startswith("nfs://"):
+    elif uri.startswith("nfs:"):
         fclass = _MountedImageFetcher
     else:
         if os.path.isdir(uri):

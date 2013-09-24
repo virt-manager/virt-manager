@@ -404,9 +404,8 @@ class DistroInstaller(Installer):
         is_local = not self.conn.is_remote()
         if _is_url(val, is_local):
             self._location_is_path = False
-            self._location = _sanitize_url(val)
             logging.debug("DistroInstaller location is a network source.")
-            return val
+            return _sanitize_url(val)
 
         try:
             d = self._make_cdrom_dev(val)
