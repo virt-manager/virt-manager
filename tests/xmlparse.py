@@ -102,6 +102,7 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(guest)
         check("name", "TestGuest", "change_name")
+        check("id", None, 1234)
         check("description", None, "Hey desc changed&")
         check("vcpus", 5, 12)
         check("curvcpus", None, 10)

@@ -156,6 +156,7 @@ class Guest(XMLBuilder):
                        validate_cb=lambda s, v: util.validate_uuid(v),
                        default_cb=_get_default_uuid)
 
+    id = XMLProperty("./@id", is_int=True)
     type = XMLProperty("./@type", default_cb=lambda s: "xen")
     hugepage = XMLProperty("./memoryBacking/hugepages", is_bool=True)
     bootloader = XMLProperty("./bootloader")
