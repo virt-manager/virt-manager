@@ -37,7 +37,12 @@ from virtinst import cli as virtinstcli
 from virtcli import cliutils, cliconfig
 
 
-GObject.threads_init()
+try:
+    # Avoid a deprecation warning about threads_init
+    import gi
+    gi.check_version("3.9.1")
+except (ValueError, AttributeError):
+    GObject.threads_init()
 
 
 def _show_startup_error(msg, details):
