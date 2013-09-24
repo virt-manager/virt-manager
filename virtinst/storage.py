@@ -272,7 +272,7 @@ class StoragePool(_StorageObject):
             self._random_uuid = util.generate_uuid(self.conn)
         return self._random_uuid
 
-    def _source_path_xpath(self):
+    def _make_source_xpath(self):
         if self.type == self.TYPE_NETFS:
             return "./source/dir/@path"
         if self.type == self.TYPE_SCSI:
@@ -330,8 +330,7 @@ class StoragePool(_StorageObject):
     iqn = XMLProperty("./source/initiator/iqn/@name",
                       doc=_("iSCSI initiator qualified name"))
     source_path = XMLProperty(name="source path",
-                              make_getter_xpath_cb=_source_path_xpath,
-                              make_setter_xpath_cb=_source_path_xpath)
+                              make_xpath_cb=_make_source_xpath)
     source_name = XMLProperty("./source/name",
                               default_cb=_default_source_name,
                               doc=_("Name of the Volume Group"))
@@ -379,7 +378,7 @@ class StoragePool(_StorageObject):
         Return the /disk/@type value if the pool source is used as
         VirtualDisk path
         """
-        xpath = self._source_path_xpath()
+        xpath = self._make_source_xpath()
         if "/dir/" in xpath:
             return "dir"
         return "block"

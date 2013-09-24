@@ -770,6 +770,7 @@ class XMLParseTest(unittest.TestCase):
         dev1 = guest.get_devices("console")[0]
         check = self._make_checker(dev1)
         check("source_path", "/dev/pts/4")
+        check("_tty", "/dev/pts/4", "foo", "/dev/pts/4")
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

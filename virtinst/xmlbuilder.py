@@ -330,8 +330,7 @@ class XMLChildProperty(property):
 
 class XMLProperty(property):
     def __init__(self, xpath=None, name=None, doc=None,
-                 set_converter=None, validate_cb=None,
-                 make_getter_xpath_cb=None, make_setter_xpath_cb=None,
+                 set_converter=None, validate_cb=None, make_xpath_cb=None,
                  is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
                  clear_first=None, default_cb=None, default_name=None,
                  track=True):
@@ -358,10 +357,9 @@ class XMLProperty(property):
             operation we convert the XML value with int(val) / 1024.
         @param validate_cb: Called once when value is set, should
             raise a RuntimeError if the value is not proper.
-        @param make_getter_xpath_cb:
-        @param make_setter_xpath_cb: Not all props map cleanly to a
+        @param make_xpath_cb: Not all props map cleanly to a
             static xpath. This allows passing functions which generate
-            an xpath for getting or setting.
+            an xpath.
         @param is_bool: Whether this is a boolean property in the XML
         @param is_int: Whether this is an integer property in the XML
         @param is_yesno: Whether this is a yes/no property in the XML
@@ -390,9 +388,7 @@ class XMLProperty(property):
         self._is_yesno = is_yesno
         self._is_onoff = is_onoff
 
-        self._xpath_for_getter_cb = make_getter_xpath_cb
-        self._xpath_for_setter_cb = make_setter_xpath_cb
-
+        self._make_xpath_cb = make_xpath_cb
         self._validate_cb = validate_cb
         self._convert_value_for_setter_cb = set_converter
         self._setter_clear_these_first = clear_first or []
@@ -436,19 +432,12 @@ class XMLProperty(property):
             raise RuntimeError("Didn't find expected property=%s" % self)
         return self._propname
 
-    def _xpath_for_getter(self, xmlbuilder):
+    def _make_xpath(self, xmlbuilder):
         ret = self._xpath
-        if self._xpath_for_getter_cb:
-            ret = self._xpath_for_getter_cb(xmlbuilder)
+        if self._make_xpath_cb:
+            ret = self._make_xpath_cb(xmlbuilder)
         if ret is None:
-            raise RuntimeError("%s: didn't generate any setter xpath." % self)
-        return xmlbuilder.fix_relative_xpath(ret)
-    def _xpath_for_setter(self, xmlbuilder):
-        ret = self._xpath
-        if self._xpath_for_setter_cb:
-            ret = self._xpath_for_setter_cb(xmlbuilder)
-        if ret is None:
-            raise RuntimeError("%s: didn't generate any setter xpath." % self)
+            raise RuntimeError("%s: didn't generate any xpath." % self)
         return xmlbuilder.fix_relative_xpath(ret)
 
 
@@ -609,7 +598,7 @@ class XMLProperty(property):
         """
         Actually fetch the associated value from the backing XML
         """
-        xpath = self._xpath_for_getter(xmlbuilder)
+        xpath = self._make_xpath(xmlbuilder)
         node = _get_xpath_node(xmlbuilder._xmlstate.xml_ctx, xpath)
         if not node:
             return None
@@ -636,7 +625,7 @@ class XMLProperty(property):
         """
         if root_node is None:
             root_node = xmlbuilder._xmlstate.xml_node
-        xpath = self._xpath_for_setter(xmlbuilder)
+        xpath = self._make_xpath(xmlbuilder)
         node = _get_xpath_node(xmlbuilder._xmlstate.xml_ctx, xpath)
         clearlist = self._build_clear_list(xmlbuilder, node)
 

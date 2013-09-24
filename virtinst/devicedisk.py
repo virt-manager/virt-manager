@@ -482,21 +482,10 @@ class VirtualDisk(VirtualDevice):
     # XML properties #
     ##################
 
-    def _make_getter_xpath_cb(self):
-        xpath = None
-        ret = "./source/@file"
-        for prop in _TARGET_PROPS:
-            xpath = "./source/@" + prop
-            if self._xmlstate.xml_ctx.xpathEval(
-                    self.fix_relative_xpath(xpath)):
-                ret = xpath
-                break
-        return ret
-    def _make_setter_xpath_cb(self):
+    def _make_source_xpath(self):
         return "./source/@" + self.disk_type_to_target_prop(self.type)
     _xmlpath = XMLProperty(name="disk path",
-                           make_getter_xpath_cb=_make_getter_xpath_cb,
-                           make_setter_xpath_cb=_make_setter_xpath_cb,
+                           make_xpath_cb=_make_source_xpath,
                            clear_first=["./source/@" + target for target in
                                         _TARGET_PROPS])
 

@@ -86,21 +86,10 @@ class VirtualFilesystem(VirtualDevice):
     readonly = XMLProperty("./readonly", is_bool=True)
 
 
-    def _xml_get_source_xpath(self):
-        xpath = None
-        ret = "./source/@dir"
-        for prop in self._target_props:
-            xpath = "./source/@" + prop
-            if self._xmlstate.xml_ctx.xpathEval(
-                    self.fix_relative_xpath(xpath)):
-                ret = xpath
-        return ret
-    def _xml_set_source_xpath(self):
-        ret = "./source/@" + self.type_to_source_prop(self.type)
-        return ret
+    def _make_source_xpath(self):
+        return "./source/@" + self.type_to_source_prop(self.type)
     source = XMLProperty(name="filesystem source",
-                         make_getter_xpath_cb=_xml_get_source_xpath,
-                         make_setter_xpath_cb=_xml_set_source_xpath)
+                         make_xpath_cb=_make_source_xpath)
 
     def _validate_set_target(self, val):
         # In case of qemu for default fs type (mount) target is not

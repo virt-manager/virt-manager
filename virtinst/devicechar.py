@@ -142,7 +142,7 @@ class _VirtualCharDevice(VirtualDevice):
 
     _XML_PROP_ORDER = ["type", "_has_mode_bind", "_has_mode_connect",
                        "bind_host", "bind_port",
-                       "source_mode", "source_path",
+                       "source_mode", "_source_path",
                        "source_host", "source_port",
                        "target_type", "target_name"]
 
@@ -150,17 +150,18 @@ class _VirtualCharDevice(VirtualDevice):
                 doc=_("Method used to expose character device in the host."),
                 xpath="./@type")
 
-    def _sourcepath_get_xpath(self):
-        ret = "./source/@path"
-        for xpath in [ret, "./@tty"]:
-            if self._xmlstate.xml_ctx.xpathEval(
-                    self.fix_relative_xpath(xpath)):
-                ret = xpath
-                break
-        return ret
-    source_path = XMLProperty(make_getter_xpath_cb=_sourcepath_get_xpath,
-                              doc=_("Host input path to attach to the guest."),
-                              xpath="./source/@path")
+    _tty = XMLProperty("./@tty")
+    _source_path = XMLProperty(xpath="./source/@path",
+        doc=_("Host input path to attach to the guest."))
+
+    def _get_source_path(self):
+        source = self._source_path
+        if source is None and self._tty:
+            return self._tty
+        return source
+    def _set_source_path(self, val):
+        self._source_path = val
+    source_path = property(_get_source_path, _set_source_path)
 
     def _get_default_source_mode(self):
         if self.type == self.TYPE_UDP:
@@ -168,14 +169,13 @@ class _VirtualCharDevice(VirtualDevice):
         if not self.supports_property("source_mode"):
             return None
         return self.MODE_BIND
-    def _sourcemode_xpath(self):
+    def _make_sourcemode_xpath(self):
         if self.type == self.TYPE_UDP:
             return "./source[@mode='connect']/@mode"
         return "./source/@mode"
     source_mode = XMLProperty(name="char sourcemode",
                               doc=_("Target connect/listen mode."),
-                              make_getter_xpath_cb=_sourcemode_xpath,
-                              make_setter_xpath_cb=_sourcemode_xpath,
+                              make_xpath_cb=_make_sourcemode_xpath,
                               default_cb=_get_default_source_mode)
 
     def _get_default_sourcehost(self):
@@ -188,24 +188,22 @@ class _VirtualCharDevice(VirtualDevice):
         if not self._has_mode_connect:
             self._has_mode_connect = self.MODE_CONNECT
         return val
-    def _sourcehost_xpath(self):
+    def _make_sourcehost_xpath(self):
         mode = self.source_mode
         if self.type == self.TYPE_UDP:
             mode = "connect"
         return "./source[@mode='%s']/@host" % mode
     source_host = XMLProperty(name="char sourcehost",
                               doc=_("Address to connect/listen to."),
-                              make_getter_xpath_cb=_sourcehost_xpath,
-                              make_setter_xpath_cb=_sourcehost_xpath,
+                              make_xpath_cb=_make_sourcehost_xpath,
                               default_cb=_get_default_sourcehost,
                               set_converter=_set_source_validate)
 
-    def _sourceport_xpath(self):
+    def _make_sourceport_xpath(self):
         return "./source[@mode='%s']/@service" % self.source_mode
     source_port = XMLProperty(name="char sourceport",
                         doc=_("Port on target host to connect/listen to."),
-                        make_getter_xpath_cb=_sourceport_xpath,
-                        make_setter_xpath_cb=_sourceport_xpath,
+                        make_xpath_cb=_make_sourceport_xpath,
                         set_converter=_set_source_validate, is_int=True)
 
     _has_mode_connect = XMLProperty("./source[@mode='connect']/@mode")
