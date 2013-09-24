@@ -204,6 +204,7 @@ class vmmDomain(vmmLibvirtObject):
         self.managedsave_supported = False
         self.remote_console_supported = False
         self.snapshots_supported = False
+        self.title_supported = False
 
         self._enable_net_poll = False
         self._stats_net_supported = True
@@ -257,6 +258,9 @@ class vmmDomain(vmmLibvirtObject):
         self.snapshots_supported = self.conn.check_domain_support(
                                     self._backend,
                                     self.conn.SUPPORT_DOMAIN_LIST_SNAPSHOTS)
+        self.title_supported = self.conn.check_domain_support(
+                                    self._backend,
+                                    self.conn.SUPPORT_DOMAIN_GET_METADATA)
 
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
@@ -315,6 +319,17 @@ class vmmDomain(vmmLibvirtObject):
         if self._name is None:
             self._name = self._backend.name()
         return self._name
+
+    def get_name_with_title(self):
+        # When available, include the title in the name
+        name = self.get_name()
+        title = self.get_title()
+        if title:
+            return "%s - %s" % (name, title)
+        return name
+
+    def get_title(self):
+        return self.get_xmlobj(inactive=True).title
 
     def get_id(self):
         if self._id is None:
@@ -561,6 +576,11 @@ class vmmDomain(vmmLibvirtObject):
     def define_description(self, newvalue):
         def change(guest):
             guest.description = newvalue or None
+        return self._redefine(change)
+
+    def define_title(self, newvalue):
+        def change(guest):
+            guest.title = newvalue or None
         return self._redefine(change)
 
     # Boot define methods
@@ -889,6 +909,17 @@ class vmmDomain(vmmLibvirtObject):
         self._backend.setMetadata(
                 libvirt.VIR_DOMAIN_METADATA_DESCRIPTION,
                 desc, None, None, flags)
+
+    def hotplug_title(self, title):
+        if not self.conn.check_domain_support(self._backend,
+                self.conn.SUPPORT_DOMAIN_SET_METADATA):
+            return
+
+        flags = (libvirt.VIR_DOMAIN_AFFECT_LIVE |
+                libvirt.VIR_DOMAIN_AFFECT_CONFIG)
+        self._backend.setMetadata(
+                libvirt.VIR_DOMAIN_METADATA_TITLE,
+                title, None, None, flags)
 
 
     ########################
