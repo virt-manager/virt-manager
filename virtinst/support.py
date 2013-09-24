@@ -344,6 +344,8 @@ SUPPORT_DOMAIN_SET_METADATA = _make(version=9010)
 SUPPORT_DOMAIN_CPU_HOST_MODEL = _make(version=9010)
 SUPPORT_DOMAIN_LIST_SNAPSHOTS = _make(function="virDomain.listAllSnapshots",
                                       args=())
+SUPPORT_DOMAIN_GET_METADATA = _make(function="virDomain.metadata",
+            args=(getattr(libvirt, "VIR_DOMAIN_METADATA_TITLE", 1), None, 0))
 
 
 # Pool checks
