@@ -896,6 +896,9 @@ class vmmConsolePages(vmmGObjectUI):
         self.fs_drawer.set_fill(False)
         self.fs_drawer.set_overlap_pixels(1)
         self.fs_drawer.set_nooverlap_pixels(0)
+        self.fs_drawer.period = 20
+        self.fs_drawer.step = .1
+
         self.fs_drawer.show_all()
 
         pages.add(self.fs_drawer)
