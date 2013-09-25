@@ -21,8 +21,11 @@ import re
 import platform
 import sys
 
+import urlgrabber.progress
+
 from tests import utils
-import virtinst
+
+from virtinst import Guest
 from virtinst import urlfetcher
 from virtinst.urlfetcher import FedoraDistro
 from virtinst.urlfetcher import SuseDistro
@@ -32,7 +35,6 @@ from virtinst.urlfetcher import SLDistro
 from virtinst.urlfetcher import UbuntuDistro
 from virtinst.urlfetcher import MandrivaDistro
 
-import urlgrabber.progress
 
 # pylint: disable=W0212
 # Access to protected member, needed to unittest stuff
@@ -44,16 +46,15 @@ MATCH_FILTER = ".*"
 # Specified via 'python setup.py test_urls --path"
 LOCAL_MEDIA = []
 
-# GeoIP/managed URLs
 FEDORA_BASEURL = "http://download.fedoraproject.org/pub/fedora/linux/releases/%s/Fedora/%s/os/"
 OPENSUSE_BASEURL = "http://download.opensuse.org/distribution/%s/repo/oss/"
 OLD_OPENSUSE_BASEURL = "http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/%s/repo/oss"
 
-# ISO Code specific URLs
+OLDUBUNTU_BASEURL = "http://old-releases.ubuntu.com/ubuntu/dists/%s/main/installer-%s"
 UBUNTU_BASEURL = "http://us.archive.ubuntu.com/ubuntu/dists/%s/main/installer-%s"
+OLDDEBIAN_BASEURL = "http://archive.debian.org/debian/dists/%s/main/installer-%s/"
 DEBIAN_BASEURL = "http://ftp.us.debian.org/debian/dists/%s/main/installer-%s/"
 
-# Static URLs
 CURCENTOS_BASEURL = "http://ftp.linux.ncsu.edu/pub/CentOS/%s/os/%s/"
 OLDCENTOS_BASEURL = "http://vault.centos.org/%s/os/%s"
 MANDRIVA_BASEURL = "http://ftp.uwsg.indiana.edu/linux/mandrake/official/%s/%s/"
@@ -67,9 +68,8 @@ NOBOOTISO_FILTER = ".*opensuse12.*|.*opensuse11.*|.*opensuse10.3.*|.*opensuse10.
 # actually fetch anything
 EXPECT_XEN_FAIL = ".*opensuse10.2.*|.*opensuse10.0.*"
 
+
 # Return the expected Distro class for the passed distro label
-
-
 def distroClass(distname):
     if re.match(r".*fedora.*", distname):
         return FedoraDistro
@@ -87,24 +87,21 @@ def distroClass(distname):
         return SLDistro
     raise RuntimeError("distroClass: no distro registered for '%s'" % distname)
 
+
 # Dictionary with all the test data
 urls = {
 
     # Fedora Distros
     "fedora15" : {
-        'x86_64': FEDORA_BASEURL % ("15", "x86_64"),
-        'distro': "fedora15"
+        'x86_64': FEDORA_BASEURL % ("18", "x86_64"),
+        'distro': "fedora18"
    },
     "fedora16" : {
-        'x86_64': FEDORA_BASEURL % ("16", "x86_64"),
-        'distro': "fedora16"
+        'x86_64': FEDORA_BASEURL % ("19", "x86_64"),
+        'distro': "fedora19"
    },
 
     # SUSE Distros
-    "opensuse10.0" : {
-        'i386'  : "http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/10.0/",
-        'x86_64': "http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/10.0/",
-   },
     "opensuse10.2" : {
         'x86_64': OLD_OPENSUSE_BASEURL % ("10.2")
    },
@@ -112,9 +109,9 @@ urls = {
         'x86_64': OLD_OPENSUSE_BASEURL % ("10.3")
    },
     "opensuse11.4" : {
-        'i386'  : OPENSUSE_BASEURL % ("11.4"),
         'x86_64': OPENSUSE_BASEURL % ("11.4")
    },
+    # Only keep i686 for the latest
     "opensuse12.1" : {
         'i386'  : OPENSUSE_BASEURL % ("12.1"),
         'x86_64': OPENSUSE_BASEURL % ("12.1")
@@ -123,7 +120,7 @@ urls = {
     # Debian Distros
     "debian-lenny-64" : {
         "noxen": True,
-        'x86_64': DEBIAN_BASEURL % ("lenny", "amd64"),
+        'x86_64': OLDDEBIAN_BASEURL % ("lenny", "amd64"),
         'distro': "linux"
    },
     "debian-squeeze" : {
@@ -145,15 +142,15 @@ urls = {
    },
 
     # CentOS Distros
+    "centos-6-latest" : {
+        'i386' : CURCENTOS_BASEURL % ("6", "i386"),
+        'x86_64' : CURCENTOS_BASEURL % ("6", "x86_64"),
+        'distro': "rhel6"
+   },
     "centos-5-latest" : {
         'i386' : CURCENTOS_BASEURL % ("5", "i386"),
-        'x86_64' : CURCENTOS_BASEURL % ("5", "x86_64"),  # No .treeinfo
-        'distro': "linux"
-   },
-    "centos-4.9" : {
-        'i386' : CURCENTOS_BASEURL % ("4.9", "i386"),
-        'x86_64' : CURCENTOS_BASEURL % ("4.9", "x86_64"),
-        'distro': "linux"
+        'x86_64' : CURCENTOS_BASEURL % ("5", "x86_64"),
+        'distro': "rhel5.4"
    },
     "centos-5.0" : {
         'x86_64' : OLDCENTOS_BASEURL % ("5.0", "x86_64"),
@@ -162,6 +159,10 @@ urls = {
     "centos-4.0" : {
         "noxen": True,
         'x86_64' : OLDCENTOS_BASEURL % ("4.0", "x86_64"),
+        'distro': "linux"
+   },
+    "centos-4.9" : {
+        'x86_64' : OLDCENTOS_BASEURL % ("4.9", "x86_64"),
         'distro': "linux"
    },
 
@@ -182,18 +183,18 @@ urls = {
     # Ubuntu
     "ubuntu-hardy" : {
         "noxen": True,
-        'i386': UBUNTU_BASEURL % ("hardy", "i386"),
-        'x86_64': UBUNTU_BASEURL % ("hardy", "amd64"),
+        'i386': OLDUBUNTU_BASEURL % ("hardy", "i386"),
+        'x86_64': OLDUBUNTU_BASEURL % ("hardy", "amd64"),
         'distro': "linux"
    },
     "ubuntu-maverick" : {
-        'i386': UBUNTU_BASEURL % ("maverick", "i386"),
-        'x86_64': UBUNTU_BASEURL % ("maverick", "amd64"),
+        'i386': OLDUBUNTU_BASEURL % ("maverick", "i386"),
+        'x86_64': OLDUBUNTU_BASEURL % ("maverick", "amd64"),
         'distro': "linux"
    },
     "ubuntu-natty" : {
-        'i386': UBUNTU_BASEURL % ("natty", "i386"),
-        'x86_64': UBUNTU_BASEURL % ("natty", "amd64"),
+        'i386': OLDUBUNTU_BASEURL % ("natty", "i386"),
+        'x86_64': OLDUBUNTU_BASEURL % ("natty", "amd64"),
         'distro': "linux"
    },
     "ubuntu-oneiric" : {
@@ -224,12 +225,10 @@ urls = {
 
 
 testconn = utils.open_testdefault()
-testguest = virtinst.Guest(testconn, installer=virtinst.DistroInstaller())
+testguest = Guest(testconn)
 
 
 class TestURLFetch(unittest.TestCase):
-
-
     def setUp(self):
         self.meter = urlgrabber.progress.BaseMeter()
         if utils.get_debug():
@@ -262,6 +261,7 @@ class TestURLFetch(unittest.TestCase):
             logging.error("%s-%s: Couldn't access url %s: %s. Skipping.",
                           distname, arch, fetcher.location, str(e))
             fetcher.cleanupLocation()
+            self.skipTest("")
             return
 
         try:
@@ -312,7 +312,7 @@ class TestURLFetch(unittest.TestCase):
         try:
             self._checkDistroReporting([hvmstore, xenstore], distro_info)
         except:
-            logging.exception("Distro detection failed.")
+            logging.exception("\n\nDistro detection failed.")
             self.fail()
 
         def fakeAcquireFile(filename, meter):
@@ -338,7 +338,7 @@ class TestURLFetch(unittest.TestCase):
                 if boot is not True:
                     raise RuntimeError("Didn't fetch any boot iso.")
         except Exception, e:
-            logging.exception("%s-%s: bootdisk fetching: %s",
+            logging.exception("\n\n%s-%s: bootdisk fetching: %s",
                               distname, arch, str(e))
             self.fail()
 
@@ -350,7 +350,7 @@ class TestURLFetch(unittest.TestCase):
             if kern[0] is not True or kern[1] is not True:
                 raise RuntimeError("Didn't fetch any hvm kernel.")
         except Exception, e:
-            logging.exception("%s-%s: hvm kernel fetching: %s",
+            logging.exception("\n\n%s-%s: hvm kernel fetching: %s",
                               distname, arch, str(e))
             self.fail()
 
@@ -368,7 +368,7 @@ class TestURLFetch(unittest.TestCase):
             if re.match(r"%s" % EXPECT_XEN_FAIL, distname):
                 logging.debug("%s: anticipated xen failure.", distname)
             else:
-                logging.exception("%s-%s: xen kernel fetching: %s",
+                logging.exception("\n\n%s-%s: xen kernel fetching: %s",
                                   distname, arch, str(e))
                 self.fail()
 
@@ -431,7 +431,7 @@ class TestURLFetch(unittest.TestCase):
                 try:
                     self._fetchLocalMedia(p)
                 except Exception, e:
-                    logging.exception("Local path '%s' failed: %s", p, e)
+                    logging.exception("\n\nLocal path '%s' failed: %s", p, e)
                     print "Local path FAILED."
                     assertions += 1
 

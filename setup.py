@@ -461,7 +461,7 @@ class TestCommand(TestBaseCommand):
         testfiles = []
         for t in glob.glob(os.path.join(self._dir, 'tests', '*.py')):
             if (t.endswith("__init__.py") or
-                t.endswith("urltest.py")):
+                t.endswith("test_urls.py")):
                 continue
 
             base = os.path.basename(t)
@@ -507,12 +507,12 @@ class TestURLFetch(TestBaseCommand):
             self.path = origpath.split(",")
 
     def run(self):
-        import tests
-        self._testfiles = ["tests.urltest"]
-        tests.urltest.MATCH_FILTER = self.match
+        from tests import test_urls
+        self._testfiles = ["tests.test_urls"]
+        test_urls.MATCH_FILTER = self.match
         if self.path:
             for p in self.path:
-                tests.urltest.LOCAL_MEDIA.append(p)
+                test_urls.LOCAL_MEDIA.append(p)
         TestBaseCommand.run(self)
 
 
