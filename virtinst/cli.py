@@ -1005,6 +1005,7 @@ def add_device_options(devg):
                            "--tpm type=passthrough"))
     devg.add_option("", "--rng", dest="rng", action="append",
                     help=_("Configure a guest RNG device. Ex:\n"
+                           "--rng /dev/random\n"
                            "--rng type=egd,host=localhost,service=708"))
 
 
@@ -1750,7 +1751,8 @@ def parse_rng(guest, optstring, dev=None):
         return None
 
     opts = parse_optstr(optstring, remove_first="type")
-    if opts.get("type") == "none":
+    dev_type = opts.get("type")
+    if dev_type == "none":
         return None
 
     if not dev:
@@ -1758,15 +1760,21 @@ def parse_rng(guest, optstring, dev=None):
 
     set_param = _build_set_param(dev, opts)
 
-    set_param("type", "type")
-    set_param("backend_source_host", "backend_host")
-    set_param("backend_source_service", "backend_service")
-    set_param("backend_source_mode", "backend_mode")
-    set_param("backend_type", "backend_type")
-    set_param("device", "device")
-    set_param("model", "model")
-    set_param("rate_bytes", "rate_bytes")
-    set_param("rate_period", "rate_period")
+    if dev_type.startswith("/"):
+        # if the provided type begins with '/' then assume it is the name of
+        # the RNG device and that its type is "random".
+        dev.device = dev_type
+        dev.type = "random"
+    else:
+        set_param("type", "type")
+        set_param("backend_source_host", "backend_host")
+        set_param("backend_source_service", "backend_service")
+        set_param("backend_source_mode", "backend_mode")
+        set_param("backend_type", "backend_type")
+        set_param("device", "device")
+        set_param("model", "model")
+        set_param("rate_bytes", "rate_bytes")
+        set_param("rate_period", "rate_period")
 
     return dev
 

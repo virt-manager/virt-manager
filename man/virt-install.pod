@@ -1258,6 +1258,11 @@ An example invocation:
 
 Connect to localhost to the TCP port 8000 to get entropy data.
 
+=item B<--rng /dev/random>
+
+Use the /dev/random device to get entropy data, this form implicitly uses the
+"random" model.
+
 
 See C<http://libvirt.org/formatdomain.html#elementsRng> for complete
 details.

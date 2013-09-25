@@ -438,6 +438,8 @@ c.add_invalid("--tpm passthrough,model=foo")  # Invalid model
 
 c = vinst.add_category("tpm", "--noautoconsole --nodisks --pxe")
 c.add_valid("--rng random,device=/dev/random")  # random device backend
+c.add_valid("--rng /dev/random")  # random device backend, short form
+c.add_invalid("--rng /FOO/BAR")  # random device backend, short form, invalid device
 c.add_valid("--rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp")  # egd backend
 c.add_valid("--rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp,backend_mode=bind")  # egd backend, bind mode
 c.add_invalid("--rng foo,backend_host=127.0.0.1,backend_service=8000,backend_mode=connect")  # invalid type
