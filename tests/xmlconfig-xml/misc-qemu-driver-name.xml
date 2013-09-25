@@ -20,14 +20,14 @@
   <on_crash>destroy</on_crash>
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
-    <disk type="block" device="disk">
-      <driver name="qemu" type="raw"/>
-      <source dev="/dev/loop0"/>
+    <disk type="file" device="disk">
+      <driver name="qemu"/>
+      <source file="/dev/null"/>
       <target dev="hda" bus="ide"/>
     </disk>
-    <disk type="block" device="cdrom">
-      <driver name="qemu" type="raw"/>
-      <source dev="/dev/loop0"/>
+    <disk type="file" device="cdrom">
+      <driver name="qemu"/>
+      <source file="/dev/null"/>
       <target dev="hdc" bus="ide"/>
       <readonly/>
     </disk>

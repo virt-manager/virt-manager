@@ -13,9 +13,9 @@
   <on_reboot>destroy</on_reboot>
   <on_crash>destroy</on_crash>
   <devices>
-    <disk type="block" device="disk">
+    <disk type="file" device="disk">
       <driver name="phy"/>
-      <source dev="/dev/loop0"/>
+      <source file="/dev/null"/>
       <target dev="xvda" bus="xen"/>
     </disk>
     <input type="mouse" bus="xen"/>

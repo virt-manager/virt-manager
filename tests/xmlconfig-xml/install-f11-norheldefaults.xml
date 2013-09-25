@@ -28,9 +28,9 @@
       <source file="/tmp/test.img"/>
       <target dev="vda" bus="virtio"/>
     </disk>
-    <disk type="block" device="disk">
-      <driver name="qemu" type="raw"/>
-      <source dev="/dev/loop0"/>
+    <disk type="file" device="disk">
+      <driver name="qemu"/>
+      <source file="/dev/null"/>
       <target dev="vdb" bus="virtio"/>
     </disk>
     <disk type="block" device="cdrom">

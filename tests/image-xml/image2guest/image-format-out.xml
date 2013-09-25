@@ -20,17 +20,17 @@
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
-      <source file="REPLACEME/tests/image-xml/image-kernel.xml"/>
+      <source file="/home/crobinso/src/virt-manager/tests/image-xml/image-kernel.xml"/>
       <target dev="hda" bus="ide"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow"/>
-      <source file="REPLACEME/tests/image-xml/image.xml"/>
+      <source file="/home/crobinso/src/virt-manager/tests/image-xml/image.xml"/>
       <target dev="hdb" bus="ide"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="vmdk"/>
-      <source file="REPLACEME/tests/image-xml/image-format.xml"/>
+      <source file="/home/crobinso/src/virt-manager/tests/image-xml/image-format.xml"/>
       <target dev="hdc" bus="ide"/>
     </disk>
     <input type="mouse" bus="ps2"/>

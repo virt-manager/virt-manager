@@ -205,7 +205,7 @@ def get_basic_fullyvirt_guest(typ="xen", installer=None):
     g.memory = int(200 * 1024)
     g.maxmemory = int(400 * 1024)
     g.uuid = "12345678-1234-1234-1234-123456789012"
-    g.installer.location = "/dev/loop0"
+    g.installer.location = "/dev/null"
     g.installer.cdrom = True
     gdev = VirtualGraphics(_conn)
     gdev.type = "sdl"
@@ -234,7 +234,7 @@ def make_distro_installer(location="/dev/default-pool/default-vol"):
     return inst
 
 
-def make_live_installer(location="/dev/loop0"):
+def make_live_installer(location="/dev/null"):
     inst = virtinst.LiveCDInstaller(_conn)
     inst.location = location
     return inst
@@ -280,7 +280,7 @@ def get_filedisk(path=None, fake=True):
     return d
 
 
-def get_blkdisk(path="/dev/loop0"):
+def get_blkdisk(path="/dev/null"):
     d = VirtualDisk(_conn)
     d.path = path
     d.validate()

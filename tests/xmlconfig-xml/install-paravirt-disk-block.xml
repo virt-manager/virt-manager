@@ -13,8 +13,8 @@
   <on_reboot>destroy</on_reboot>
   <on_crash>destroy</on_crash>
   <devices>
-    <disk type="block" device="disk">
-      <source dev="/dev/loop0"/>
+    <disk type="file" device="disk">
+      <source file="/dev/null"/>
       <target dev="xvda" bus="xen"/>
     </disk>
     <input type="mouse" bus="xen"/>

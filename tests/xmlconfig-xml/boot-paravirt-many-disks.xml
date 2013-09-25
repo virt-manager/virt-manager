@@ -18,8 +18,8 @@
       <source file="/tmp/test2.img"/>
       <target dev="xvdb" bus="xen"/>
     </disk>
-    <disk type="block" device="disk">
-      <source dev="/dev/loop0"/>
+    <disk type="file" device="disk">
+      <source file="/dev/null"/>
       <target dev="xvdc" bus="xen"/>
     </disk>
     <input type="mouse" bus="xen"/>

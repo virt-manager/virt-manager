@@ -27,8 +27,8 @@
       <source file="/tmp/ISO&amp;'&amp;s"/>
       <target dev="hda" bus="ide"/>
     </disk>
-    <disk type="block" device="cdrom">
-      <source dev="/dev/loop0"/>
+    <disk type="file" device="cdrom">
+      <source file="/dev/null"/>
       <target dev="hdc" bus="ide"/>
       <readonly/>
     </disk>

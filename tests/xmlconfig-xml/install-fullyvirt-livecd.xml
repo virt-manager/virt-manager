@@ -19,8 +19,8 @@
   <on_crash>restart</on_crash>
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
-    <disk type="block" device="cdrom">
-      <source dev="/dev/loop0"/>
+    <disk type="file" device="cdrom">
+      <source file="/dev/null"/>
       <target dev="hdc" bus="ide"/>
       <readonly/>
     </disk>

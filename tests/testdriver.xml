@@ -87,7 +87,7 @@
 
     <!-- disk devices -->
     <disk type='block' device='floppy'>
-      <source dev='/dev/loop0'/>
+      <source dev='/dev/null'/>
       <target dev='fda' bus='fdc'/>
     </disk>
     <disk type='dir' device='floppy'>
@@ -104,7 +104,7 @@
     </disk>
     <disk type='block' device='disk'>
       <driver cache='none' type="raw"/>
-      <source dev='/dev/loop0'/>
+      <source dev='/dev/null'/>
       <target dev='hdc' bus='ide'/>
     </disk>
     <disk type='block' device='cdrom'>

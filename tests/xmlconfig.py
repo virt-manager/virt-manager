@@ -535,14 +535,16 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(utils.get_blkdisk())
 
         d = VirtualDisk(g.conn)
-        d.path = "/dev/loop0"
+        d.type = "block"
+        d.path = "/dev/null"
         d.device = d.DEVICE_CDROM
         d.driver_type = "raw"
         d.validate()
         g.add_device(d)
 
         d = VirtualDisk(g.conn)
-        d.path = "/dev/loop0"
+        d.type = "block"
+        d.path = "/dev/null"
         d.device = d.DEVICE_DISK
         d.driver_name = "qemu"
         d.validate()
@@ -564,7 +566,8 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(d)
 
         d = VirtualDisk(g.conn)
-        d.path = "/dev/loop0"
+        d.type = "block"
+        d.path = "/dev/null"
         d.device = d.DEVICE_FLOPPY
         d.driver_name = "phy"
         d.driver_cache = "none"
@@ -576,7 +579,8 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(d)
 
         d = VirtualDisk(g.conn)
-        d.path = "/dev/loop0"
+        d.type = "block"
+        d.path = "/dev/null"
         d.bus = "virtio"
         d.driver_name = "qemu"
         d.driver_type = "qcow2"
@@ -729,13 +733,15 @@ class TestXMLConfig(unittest.TestCase):
 
         # Disk devices
         d = VirtualDisk(g.conn)
-        d.path = "/dev/loop0"
+        d.type = "block"
+        d.path = "/dev/null"
         d.device = d.DEVICE_FLOPPY
         d.validate()
         g.add_device(d)
 
         d = VirtualDisk(g.conn)
-        d.path = "/dev/loop0"
+        d.type = "block"
+        d.path = "/dev/null"
         d.bus = "scsi"
         d.validate()
         g.add_device(d)
