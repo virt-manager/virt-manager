@@ -447,13 +447,13 @@ class AutoDrawer(Drawer):
 
         self.over = newover
 
-    def _update(self, do_immediate, customDelay=-1):
+    def _update(self, do_immediate, customDelay=-1, force_open=False):
         toplevel = self.get_toplevel()
         if not toplevel or not toplevel.is_toplevel():
             # The autoDrawer cannot function properly without a toplevel.
             return
 
-        self.opened = False
+        self.opened = force_open
 
         # Is the drawer pinned open?
         if self.pinned:
@@ -604,7 +604,7 @@ class AutoDrawer(Drawer):
 
     def set_active(self, active):
         self.active = active
-        self._update(True)
+        self._update(True, force_open=active)
 
     def set_pinned(self, pinned):
         self.pinned = pinned
