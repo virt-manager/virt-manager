@@ -42,7 +42,7 @@ def _sort(tosort, sortpref=None):
         sortby = osinfo.sortby or key
         sortby_mappings[sortby] = key
 
-        distro = osinfo.distro or "zzzzzzz"
+        distro = osinfo.urldistro or "zzzzzzz"
         if distro not in distro_mappings:
             distro_mappings[distro] = []
         distro_mappings[distro].append(sortby)
@@ -125,7 +125,7 @@ class _OSVariant(object):
         values.
     @sortby: A different key to use for sorting the distro list. By default
         it's 'name', so this doesn't need to be specified.
-    @distro: This is a distro class. It's wired up in urlfetcher to give
+    @urldistro: This is a distro class. It's wired up in urlfetcher to give
         us a shortcut when detecting OS type from a URL.
     @supported: If this distro is supported by it's owning organization,
         like is it still receiving updates. We use this to limit the
@@ -145,7 +145,7 @@ class _OSVariant(object):
     """
     def __init__(self, name, label, is_type=False,
                  sortby=None, parent=_SENTINEL,
-                 distro=_SENTINEL, supported=_SENTINEL,
+                 urldistro=_SENTINEL, supported=_SENTINEL,
                  three_stage_install=_SENTINEL,
                  acpi=_SENTINEL, apic=_SENTINEL, clock=_SENTINEL,
                  netmodel=_SENTINEL, diskbus=_SENTINEL,
@@ -190,7 +190,7 @@ class _OSVariant(object):
                                "of approved distro types %s" %
                                (self.typename, self.name, _approved_types))
 
-        self.distro = _get_default("distro", distro, None)
+        self.urldistro = _get_default("urldistro", urldistro, None)
         self.supported = _get_default("supported", supported, False)
         self.three_stage_install = _get_default("three_stage_install",
                                                 three_stage_install)
@@ -224,7 +224,7 @@ def _add_var(*args, **kwargs):
 
 
 _add_type("linux", "Linux")
-_add_var("rhel2.1", "Red Hat Enterprise Linux 2.1", distro="rhel", parent="linux")
+_add_var("rhel2.1", "Red Hat Enterprise Linux 2.1", urldistro="rhel", parent="linux")
 _add_var("rhel3", "Red Hat Enterprise Linux 3", parent="rhel2.1")
 _add_var("rhel4", "Red Hat Enterprise Linux 4", supported=True, parent="rhel3")
 _add_var("rhel5", "Red Hat Enterprise Linux 5", supported=False, parent="rhel4")
@@ -232,7 +232,7 @@ _add_var("rhel5.4", "Red Hat Enterprise Linux 5.4 or later", supported=True, vir
 _add_var("rhel6", "Red Hat Enterprise Linux 6", inputtype="tablet", inputbus="usb", parent="rhel5.4")
 _add_var("rhel7", "Red Hat Enterprise Linux 7", supported=False, parent="rhel6")
 
-_add_var("fedora5", "Fedora Core 5", sortby="fedora05", distro="fedora", parent="linux")
+_add_var("fedora5", "Fedora Core 5", sortby="fedora05", urldistro="fedora", parent="linux")
 _add_var("fedora6", "Fedora Core 6", sortby="fedora06", parent="fedora5")
 _add_var("fedora7", "Fedora 7", sortby="fedora07", parent="fedora6")
 _add_var("fedora8", "Fedora 8", sortby="fedora08", parent="fedora7")
@@ -251,28 +251,28 @@ _add_var("fedora18", "Fedora 18", supported=True, parent="fedora17")
 _add_var("fedora19", "Fedora 19", virtiommio=True, parent="fedora18")
 _add_var("fedora20", "Fedora 20", parent="fedora19")
 
-_add_var("opensuse11", "openSuse 11", distro="suse", supported=True, virtiodisk=True, virtionet=True, parent="linux")
+_add_var("opensuse11", "openSuse 11", urldistro="suse", supported=True, virtiodisk=True, virtionet=True, parent="linux")
 _add_var("opensuse12", "openSuse 12", parent="opensuse11")
 
-_add_var("sles10", "Suse Linux Enterprise Server", distro="suse", supported=True, parent="linux")
+_add_var("sles10", "Suse Linux Enterprise Server", urldistro="suse", supported=True, parent="linux")
 _add_var("sles11", "Suse Linux Enterprise Server 11", supported=True, virtiodisk=True, virtionet=True, parent="sles10")
 
-_add_var("mandriva2009", "Mandriva Linux 2009 and earlier", distro="mandriva", parent="linux")
+_add_var("mandriva2009", "Mandriva Linux 2009 and earlier", urldistro="mandriva", parent="linux")
 _add_var("mandriva2010", "Mandriva Linux 2010 and later", virtiodisk=True, virtionet=True, parent="mandriva2009")
 
-_add_var("mes5", "Mandriva Enterprise Server 5.0", distro="mandriva", parent="linux")
+_add_var("mes5", "Mandriva Enterprise Server 5.0", urldistro="mandriva", parent="linux")
 _add_var("mes5.1", "Mandriva Enterprise Server 5.1 and later", supported=True, virtiodisk=True, virtionet=True, parent="mes5")
 
-_add_var("mageia1", "Mageia 1 and later", distro="mageia", supported=True, virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="linux")
+_add_var("mageia1", "Mageia 1 and later", urldistro="mandriva", supported=True, virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="linux")
 
-_add_var("altlinux", "ALT Linux", distro="altlinux", supported=True, virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="linux")
+_add_var("altlinux", "ALT Linux", urldistro="altlinux", supported=True, virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="linux")
 
-_add_var("debianetch", "Debian Etch", distro="debian", sortby="debian4", parent="linux")
+_add_var("debianetch", "Debian Etch", urldistro="debian", sortby="debian4", parent="linux")
 _add_var("debianlenny", "Debian Lenny", sortby="debian5", supported=True, virtiodisk=True, virtionet=True, parent="debianetch")
 _add_var("debiansqueeze", "Debian Squeeze", sortby="debian6", virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="debianlenny")
 _add_var("debianwheezy", "Debian Wheezy", sortby="debian7", parent="debiansqueeze")
 
-_add_var("ubuntuhardy", "Ubuntu 8.04 LTS (Hardy Heron)", distro="ubuntu", virtionet=True, parent="linux")
+_add_var("ubuntuhardy", "Ubuntu 8.04 LTS (Hardy Heron)", urldistro="ubuntu", virtionet=True, parent="linux")
 _add_var("ubuntuintrepid", "Ubuntu 8.10 (Intrepid Ibex)", parent="ubuntuhardy")
 _add_var("ubuntujaunty", "Ubuntu 9.04 (Jaunty Jackalope)", virtiodisk=True, parent="ubuntuintrepid")
 _add_var("ubuntukarmic", "Ubuntu 9.10 (Karmic Koala)", parent="ubuntujaunty")

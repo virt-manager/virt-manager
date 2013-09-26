@@ -281,12 +281,16 @@ def _distroFromTreeinfo(fetcher, arch, vmtype=None):
     return ob
 
 
-def getDistroStore(guest, fetcher, distro=None):
+def getDistroStore(guest, fetcher):
     stores = []
     logging.debug("Attempting to detect distro:")
 
     arch = guest.os.arch
     _type = guest.os.os_type
+
+    urldistro = None
+    if guest.os_variant:
+        urldistro = osdict.lookup_os(guest.os_variant).urldistro
 
     dist = _distroFromTreeinfo(fetcher, arch, _type)
     if dist:
@@ -295,27 +299,20 @@ def getDistroStore(guest, fetcher, distro=None):
     # FIXME: This 'distro ==' doesn't cut it. 'distro' is from our os
     # dictionary, so would look like 'fedora9' or 'rhel5', so this needs
     # to be a bit more intelligent
-    if distro == "fedora" or distro is None:
-        stores.append(FedoraDistro)
-    if distro == "rhel" or distro is None:
-        stores.append(RHELDistro)
-    if distro == "centos" or distro is None:
-        stores.append(CentOSDistro)
-    if distro == "sl" or distro is None:
-        stores.append(SLDistro)
-    if distro == "suse" or distro is None:
-        stores.append(SuseDistro)
-    if distro == "debian" or distro is None:
-        stores.append(DebianDistro)
-    if distro == "ubuntu" or distro is None:
-        stores.append(UbuntuDistro)
-    if distro == "mandriva" or distro is None:
-        stores.append(MandrivaDistro)
-    if distro == "mageia" or distro is None:
-        stores.append(MageiaDistro)
-    if distro == "altlinux" or distro is None:
-        stores.append(ALTLinuxDistro)
+    stores = _allstores[:]
 
+    # If user manually specified an os_distro, bump it's URL class
+    # to the top of the list
+    if urldistro:
+        for store in stores:
+            if store.urldistro == urldistro:
+                logging.debug("Prioritizing distro store=%s", store)
+                stores.remove(store)
+                stores.insert(0, store)
+                break
+
+    # Always stick GenericDistro at the end, since it's a catchall
+    stores.remove(GenericDistro)
     stores.append(GenericDistro)
 
     for sclass in stores:
@@ -359,16 +356,17 @@ class Distro(object):
     An image store is a base class for retrieving either a bootable
     ISO image, or a kernel+initrd  pair for a particular OS distribution
     """
-    name = ""
+    name = None
+    urldistro = None
 
-    # osdict type and variant values
+    # osdict variant value
     os_variant = None
 
     _boot_iso_paths = []
     _hvm_kernel_paths = []
     _xen_kernel_paths = []
+    _method_arg = "method"
     uses_treeinfo = False
-    method_arg = "method"
 
     def __init__(self, fetcher, arch, vmtype):
         self.fetcher = fetcher
@@ -500,7 +498,7 @@ class Distro(object):
         args = ''
 
         if not self.fetcher.location.startswith("/"):
-            args += "%s=%s" % (self.method_arg, self.fetcher.location)
+            args += "%s=%s" % (self._method_arg, self.fetcher.location)
 
         if guest.installer.extraargs:
             args += " " + guest.installer.extraargs
@@ -599,7 +597,6 @@ class RedHatDistro(Distro):
     Base image store for any Red Hat related distros which have
     a common layout
     """
-    name = "Red Hat"
     os_variant = "linux"
 
     uses_treeinfo = True
@@ -616,6 +613,7 @@ class RedHatDistro(Distro):
 # Fedora distro check
 class FedoraDistro(RedHatDistro):
     name = "Fedora"
+    urldistro = "fedora"
 
     def isValidStore(self):
         if self._hasTreeinfo():
@@ -653,6 +651,7 @@ class FedoraDistro(RedHatDistro):
 # Red Hat Enterprise Linux distro check
 class RHELDistro(RedHatDistro):
     name = "Red Hat Enterprise Linux"
+    urldistro = "rhel"
 
     def isValidStore(self):
         if self._hasTreeinfo():
@@ -730,6 +729,7 @@ class RHELDistro(RedHatDistro):
 # CentOS distro check
 class CentOSDistro(RHELDistro):
     name = "CentOS"
+    urldistro = None
 
     def isValidStore(self):
         if self._hasTreeinfo():
@@ -746,6 +746,7 @@ class CentOSDistro(RHELDistro):
 # Scientific Linux distro check
 class SLDistro(RHELDistro):
     name = "Scientific Linux"
+    urldistro = None
 
     _boot_iso_paths = RHELDistro._boot_iso_paths + ["images/SL/boot.iso"]
     _hvm_kernel_paths = RHELDistro._hvm_kernel_paths + [
@@ -768,8 +769,10 @@ class SLDistro(RHELDistro):
 # RPM and then munge bits together to generate a initrd
 class SuseDistro(Distro):
     name = "SUSE"
+    urldistro = "suse"
     os_variant = "linux"
-    method_arg = "install"
+
+    _method_arg = "install"
     _boot_iso_paths   = ["boot/boot.iso"]
 
     def __init__(self, *args, **kwargs):
@@ -822,6 +825,7 @@ class DebianDistro(Distro):
     # ex. http://ftp.egr.msu.edu/debian/dists/sarge/main/installer-i386/
     # daily builds: http://d-i.debian.org/daily-images/amd64/
     name = "Debian"
+    urldistro = "debian"
     os_variant = "linux"
 
     def __init__(self, *args, **kwargs):
@@ -919,8 +923,10 @@ class UbuntuDistro(DebianDistro):
 
 class MandrivaDistro(Distro):
     # ftp://ftp.uwsg.indiana.edu/linux/mandrake/official/2007.1/x86_64/
-    name = "Mandriva"
+    name = "Mandriva/Mageia"
+    urldistro = "mandriva"
     os_variant = "linux"
+
     _boot_iso_paths = ["install/images/boot.iso"]
     # Kernels for HVM: valid for releases 2007.1, 2008.*, 2009.0
     _hvm_kernel_paths = [("isolinux/alt0/vmlinuz", "isolinux/alt0/all.rdz")]
@@ -937,20 +943,19 @@ class MandrivaDistro(Distro):
         if not self.fetcher.hasFile("VERSION"):
             return False
 
-        if self._fetchAndMatchRegex("VERSION", ".*%s.*" % self.name):
-            return True
+        for name in ["Mandriva", "Mageia"]:
+            if self._fetchAndMatchRegex("VERSION", ".*%s.*" % name):
+                return True
 
         logging.debug("Regex didn't match, not a %s distro", self.name)
         return False
 
 
-class MageiaDistro(MandrivaDistro):
-    name = "Mageia"
-
-
 class ALTLinuxDistro(Distro):
     name = "ALT Linux"
+    urldistro = "altlinux"
     os_variant = "linux"
+
     _boot_iso_paths = [("altinst", "live")]
     _hvm_kernel_paths = [("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
     _xen_kernel_paths = []
@@ -968,3 +973,22 @@ class ALTLinuxDistro(Distro):
 
         logging.debug("Regex didn't match, not a %s distro", self.name)
         return False
+
+
+# Build list of all *Distro classes
+def _build_distro_list():
+    allstores = []
+    for obj in globals().values():
+        if type(obj) is type and issubclass(obj, Distro) and obj.name:
+            allstores.append(obj)
+
+    seen_urldistro = []
+    for obj in allstores:
+        if obj.urldistro and obj.urldistro in seen_urldistro:
+            raise RuntimeError("programming error: duplicate urldistro=%s" %
+                               obj.urldistro)
+        seen_urldistro.append(obj.urldistro)
+
+    return allstores
+
+_allstores = _build_distro_list()

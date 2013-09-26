@@ -71,7 +71,8 @@ _distro = None
 
 class _DistroURL(object):
     def __init__(self, x86_64, detectdistro="linux", i686=None,
-                 hasxen=True, hasbootiso=True, name=None):
+                 hasxen=True, hasbootiso=True, name=None,
+                 testshortcircuit=False):
         self.x86_64 = x86_64
         self.i686 = i686
         self.detectdistro = detectdistro
@@ -79,6 +80,10 @@ class _DistroURL(object):
         self.hasbootiso = hasbootiso
         self.name = name or self.detectdistro
         self.distroclass = _distro
+
+        # If True, pass in the expected distro value to getDistroStore
+        # so it can short circuit the lookup checks
+        self.testshortcircuit = testshortcircuit
 
 
 def _set_distro(_d):
@@ -147,12 +152,13 @@ _add(OLD_OPENSUSE_URL % ("11.4"), "opensuse11", hasbootiso=False)
 # Latest 12 series
 # Only keep i686 for the latest opensuse
 _add(OPENSUSE_URL % ("12.3"), "opensuse12",
-     i686=OPENSUSE_URL % ("12.3"), hasbootiso=False)
+     i686=OPENSUSE_URL % ("12.3"), hasbootiso=False, testshortcircuit=True)
 
 
 _set_distro(DebianDistro)
 # Debian releases rarely enough that we can just do every release since lenny
-_add(OLD_DEBIAN_URL % ("lenny", "amd64"), "debianlenny", hasxen=False)
+_add(OLD_DEBIAN_URL % ("lenny", "amd64"), "debianlenny", hasxen=False,
+     testshortcircuit=True)
 _add(DEBIAN_URL % ("squeeze", "amd64"), "debiansqueeze")
 _add(DEBIAN_URL % ("wheezy", "amd64"), "debianwheezy")
 # And daily builds, since we specially handle that URL
@@ -162,7 +168,8 @@ _add(DAILY_DEBIAN_URL % ("amd64"), "debianwheezy", name="debiandaily")
 _set_distro(UbuntuDistro)
 # One old ubuntu
 _add(OLD_UBUNTU_URL % ("hardy", "amd64"), "ubuntuhardy",
-     i686=OLD_UBUNTU_URL % ("hardy", "i386"), hasxen=False)
+     i686=OLD_UBUNTU_URL % ("hardy", "i386"), hasxen=False,
+     testshortcircuit=True)
 # Latest LTS
 _add(UBUNTU_URL % ("precise", "amd64"), "ubuntuprecise")
 # Latest release
@@ -225,6 +232,9 @@ def _testURL(fetcher, distname, arch, distroobj):
     print "\nTesting %s-%s" % (distname, arch)
     hvmguest.os.arch = arch
     xenguest.os.arch = arch
+    if distroobj.testshortcircuit:
+        hvmguest.os_variant = distroobj.detectdistro
+        xenguest.os_variant = distroobj.detectdistro
 
     hvmstore = _storeForDistro(fetcher, hvmguest)
     xenstore = None
