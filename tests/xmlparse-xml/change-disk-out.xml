@@ -19,13 +19,13 @@
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="file" device="disk">
-      <source file="/dev/loop0"/>
+      <source file="/dev/null"/>
       <target dev="hda" bus="ide"/>
       <serial>frob</serial>
       <driver name="test" type="raw"/>
     </disk>
     <disk type="block" device="disk">
-      <source dev="/dev/loop0"/>
+      <source dev="/dev/null"/>
       <target dev="hdb" bus="ide"/>
     </disk>
     <disk type="block" device="floppy">
@@ -33,7 +33,7 @@
     </disk>
     <disk type="block" device="disk">
       <driver name="qemu" type="qcow2"/>
-      <source dev="/dev/loop0"/>
+      <source dev="/dev/null"/>
       <target dev="hdd" bus="ide"/>
     </disk>
     <disk type="block" device="cdrom">
@@ -56,12 +56,12 @@
     </disk>
     <disk type="block" device="floppy">
       <driver name="phy" cache="none"/>
-      <source dev="/dev/loop0"/>
+      <source dev="/dev/null"/>
       <target dev="fdb" bus="fdc"/>
     </disk>
     <disk type="block" device="disk">
       <driver name="qemu" type="qcow2" cache="none"/>
-      <source dev="/dev/loop0"/>
+      <source dev="/dev/null"/>
       <target dev="vda" bus="virtio"/>
     </disk>
     <input type="mouse" bus="ps2"/>

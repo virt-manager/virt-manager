@@ -24,12 +24,12 @@
     </disk>
     <disk type='block' device='disk'>
       <driver name='qemu'/>
-      <source dev='/dev/loop0'/>
+      <source dev='/dev/null'/>
       <target dev='hdb' bus='ide'/>
     </disk>
     <disk type='block' device='cdrom'>
       <driver name='qemu'/>
-      <source dev='/dev/loop0'/>
+      <source dev='/dev/null'/>
       <target dev='hdc' bus='ide'/>
       <readonly/>
     </disk>

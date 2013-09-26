@@ -24,19 +24,19 @@
       <serial>WD-WMAP9A966149</serial>
     </disk>
     <disk type="block" device="disk">
-      <source dev="/dev/loop0"/>
+      <source dev="/dev/null"/>
       <target dev="hdb" bus="ide"/>
     </disk>
     <disk type="block" device="cdrom">
       <driver type="raw"/>
-      <source dev="/dev/loop0"/>
+      <source dev="/dev/null"/>
       <target dev="hdc" bus="ide"/>
       <driver name='phy' error_policy='stop'/>
       <readonly/>
     </disk>
     <disk type="block" device="disk">
       <driver name="qemu" type="qcow2"/>
-      <source dev="/dev/loop0"/>
+      <source dev="/dev/null"/>
       <target dev="hdd" bus="ide"/>
     </disk>
     <disk type="block" device="cdrom">
@@ -54,12 +54,12 @@
     </disk>
     <disk type="block" device="floppy">
       <driver name="phy" cache="none"/>
-      <source dev="/dev/loop0"/>
+      <source dev="/dev/null"/>
       <target dev="fdb" bus="fdc"/>
     </disk>
     <disk type="block" device="disk">
       <driver name="qemu" type="qcow2" cache="none"/>
-      <source dev="/dev/loop0"/>
+      <source dev="/dev/null"/>
       <target dev="vda" bus="virtio"/>
     </disk>
     <input type="mouse" bus="ps2"/>

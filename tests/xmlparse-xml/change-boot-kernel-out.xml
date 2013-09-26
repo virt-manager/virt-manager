@@ -15,7 +15,7 @@
   <vcpu>5</vcpu>
   <devices>
     <disk type="block" device="disk">
-      <source dev="/dev/loop0"/>
+      <source dev="/dev/null"/>
       <target dev="xvda" bus="xen"/>
     </disk>
     <input type="mouse" bus="xen"/>
