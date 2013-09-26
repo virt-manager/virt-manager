@@ -670,6 +670,11 @@ class RHELDistro(RedHatDistro):
             return True
         return self.fetcher.hasFile("RedHat")
 
+
+    ################################
+    # osdict autodetection helpers #
+    ################################
+
     def _parseTreeinfoVersion(self, verstr):
         def _safeint(c):
             try:
@@ -790,7 +795,27 @@ class SuseDistro(Distro):
                                     "boot/%s/initrd-xen" % self.arch)]
 
     def isValidStore(self):
-        return self.fetcher.hasFile("directory.yast")
+        if not self.fetcher.hasFile("directory.yast"):
+            return False
+
+        self.os_variant = self._detect_osdict_from_url()
+        return True
+
+
+    ################################
+    # osdict autodetection helpers #
+    ################################
+
+    def _detect_osdict_from_url(self):
+        root = "opensuse"
+        our_os_vals = [n.name for n in osdict.list_os() if
+                       n.name.startswith(root)]
+
+        for name in our_os_vals:
+            codename = name[len(root):]
+            if re.search("/%s\.[1-9]/" % codename, self.uri):
+                return name
+        return self.os_variant
 
 
 class DebianDistro(Distro):
@@ -839,16 +864,36 @@ class DebianDistro(Distro):
 
         filename = "%s/MANIFEST" % self._prefix
         regex = ".*%s.*" % self._installer_name
-        if self._fetchAndMatchRegex(filename, regex):
-            return True
+        if not self._fetchAndMatchRegex(filename, regex):
+            logging.debug("Regex didn't match, not a %s distro", self.name)
+            return False
 
-        logging.debug("Regex didn't match, not a %s distro", self.name)
-        return False
+        self.os_variant = self._detect_osdict_from_url()
+        return True
+
+
+    ################################
+    # osdict autodetection helpers #
+    ################################
+
+    def _detect_osdict_from_url(self):
+        root = self.name.lower()
+        our_os_vals = [n.name for n in osdict.list_os() if
+                       n.name.startswith(root)]
+
+        if self._prefix == "daily":
+            return our_os_vals[0]
+        for name in our_os_vals:
+            codename = name[len(root):]
+            if ("/%s/" % codename) in self.uri:
+                return name
+        return self.os_variant
 
 
 class UbuntuDistro(DebianDistro):
     # http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/
     name = "Ubuntu"
+    urldistro = "ubuntu"
 
     def isValidStore(self):
         if self.fetcher.hasFile("%s/MANIFEST" % self._prefix):
@@ -864,11 +909,12 @@ class UbuntuDistro(DebianDistro):
         else:
             return False
 
-        if self._fetchAndMatchRegex(filename, regex):
-            return True
+        if not self._fetchAndMatchRegex(filename, regex):
+            logging.debug("Regex didn't match, not a %s distro", self.name)
+            return False
 
-        logging.debug("Regex didn't match, not a %s distro", self.name)
-        return False
+        self.os_variant = self._detect_osdict_from_url()
+        return True
 
 
 class MandrivaDistro(Distro):

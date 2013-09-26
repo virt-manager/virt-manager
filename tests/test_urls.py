@@ -143,31 +143,30 @@ _add(OPENSUSE10, i686=OPENSUSE10, hasxen=False, hasbootiso=False,
 # Latest 10 series
 _add(OLD_OPENSUSE_URL % ("10.3"), hasbootiso=False, name="opensuse-10.3")
 # Latest 11 series
-_add(OLD_OPENSUSE_URL % ("11.4"), hasbootiso=False, name="opensuse-11.4")
+_add(OLD_OPENSUSE_URL % ("11.4"), "opensuse11", hasbootiso=False)
 # Latest 12 series
 # Only keep i686 for the latest opensuse
-_add(OPENSUSE_URL % ("12.3"), i686=OPENSUSE_URL % ("12.3"), hasbootiso=False,
-     name="opensuse-12.3")
+_add(OPENSUSE_URL % ("12.3"), "opensuse12",
+     i686=OPENSUSE_URL % ("12.3"), hasbootiso=False)
 
 
 _set_distro(DebianDistro)
 # Debian releases rarely enough that we can just do every release since lenny
-_add(OLD_DEBIAN_URL % ("lenny", "amd64"), hasxen=False, name="debian-lenny")
-_add(DEBIAN_URL % ("squeeze", "amd64"), name="debian-squeeze")
-_add(DEBIAN_URL % ("wheezy", "amd64"), name="debian-wheezy")
+_add(OLD_DEBIAN_URL % ("lenny", "amd64"), "debianlenny", hasxen=False)
+_add(DEBIAN_URL % ("squeeze", "amd64"), "debiansqueeze")
+_add(DEBIAN_URL % ("wheezy", "amd64"), "debianwheezy")
 # And daily builds, since we specially handle that URL
-_add(DAILY_DEBIAN_URL % ("amd64"), name="debian-daily")
+_add(DAILY_DEBIAN_URL % ("amd64"), "debianwheezy", name="debiandaily")
 
 
 _set_distro(UbuntuDistro)
 # One old ubuntu
-_add(OLD_UBUNTU_URL % ("hardy", "amd64"),
-     i686=OLD_UBUNTU_URL % ("hardy", "i386"),
-     hasxen=False, name="ubuntu-hardy")
+_add(OLD_UBUNTU_URL % ("hardy", "amd64"), "ubuntuhardy",
+     i686=OLD_UBUNTU_URL % ("hardy", "i386"), hasxen=False)
 # Latest LTS
-_add(UBUNTU_URL % ("precise", "amd64"), name="ubuntu-precise")
+_add(UBUNTU_URL % ("precise", "amd64"), "ubuntuprecise")
 # Latest release
-_add(UBUNTU_URL % ("raring", "amd64"), name="ubuntu-raring")
+_add(UBUNTU_URL % ("raring", "amd64"), "ubunturaring")
 
 
 _set_distro(MandrivaDistro)
