@@ -65,24 +65,8 @@ DEBIAN_URL = "http://ftp.us.debian.org/debian/dists/%s/main/installer-%s/"
 MANDRIVA_URL = "http://ftp.uwsg.indiana.edu/linux/mandrake/official/%s/%s/"
 
 
-# Return the expected Distro class for the passed distro label
-def distroClass(distname):
-    if re.match(r".*fedora.*", distname):
-        return FedoraDistro
-    elif re.match(r".*suse.*", distname):
-        return SuseDistro
-    elif re.match(r".*debian.*", distname):
-        return DebianDistro
-    elif re.match(r".*centos.*", distname):
-        return CentOSDistro
-    elif re.match(r".*ubuntu.*", distname):
-        return UbuntuDistro
-    elif re.match(r".*mandriva.*", distname):
-        return MandrivaDistro
-    elif re.match(r".*sl-.*", distname):
-        return SLDistro
-    raise RuntimeError("distroClass: no distro registered for '%s'" % distname)
-
+urls = {}
+_distro = None
 
 class _DistroURL(object):
     def __init__(self, x86_64, detectdistro="linux", i686=None,
@@ -93,9 +77,13 @@ class _DistroURL(object):
         self.hasxen = hasxen
         self.hasbootiso = hasbootiso
         self.name = name or self.detectdistro
+        self.distroclass = _distro
 
+def _set_distro(_d):
+    # Saves us from having to pass distro class to ever _add invocation
+    global _distro
+    _distro = _d
 
-urls = {}
 def _add(*args, **kwargs):
     _d = _DistroURL(*args, **kwargs)
     if _d.name in urls:
@@ -109,7 +97,7 @@ def _add(*args, **kwargs):
 # aren't using it and it slows down the test, only use it in a couple
 # places. Follow the comments for what trees to keep around
 
-
+_set_distro(FedoraDistro)
 # One old Fedora
 _add(OLD_FEDORA_URL % ("14", "x86_64"), "fedora14",
      i686=OLD_FEDORA_URL % ("14", "i386"))
@@ -124,6 +112,7 @@ _add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora20",
      name="fedora-rawhide")
 
 
+_set_distro(CentOSDistro)
 # One old and new centos 4. No distro detection since there's no treeinfo
 _add(OLD_CENTOS_URL % ("4.0", "x86_64"), hasxen=False, name="centos-4.0")
 _add(OLD_CENTOS_URL % ("4.9", "x86_64"), name="centos-4.9")
@@ -137,6 +126,7 @@ _add(CENTOS_URL % ("6", "x86_64"), "rhel6", name="centos-6-latest",
      i686=CENTOS_URL % ("6", "i386"))
 
 
+_set_distro(SLDistro)
 # Early scientific 5
 _add(SCIENTIFIC_URL % ("50", "x86_64"), name="sl-5.0")
 # Pre-5.4 w/ treeinfo for distro detection
@@ -147,7 +137,7 @@ _add(SCIENTIFIC_URL % ("55", "x86_64"), "rhel5.4", name="sl-5latest")
 _add(SCIENTIFIC_URL % ("6", "x86_64"), "rhel6", name="sl-6latest")
 
 
-
+_set_distro(SuseDistro)
 # opensuse 10.0 uses different paths, so keep this around
 _add(OPENSUSE10, i686=OPENSUSE10, hasxen=False, hasbootiso=False,
      name="opensuse-10.0")
@@ -161,7 +151,7 @@ _add(OPENSUSE_URL % ("12.3"), i686=OPENSUSE_URL % ("12.3"), hasbootiso=False,
      name="opensuse-12.3")
 
 
-
+_set_distro(DebianDistro)
 # Debian releases rarely enough that we can just do every release since lenny
 _add(OLD_DEBIAN_URL % ("lenny", "amd64"), hasxen=False, name="debian-lenny")
 _add(DEBIAN_URL % ("squeeze", "amd64"), name="debian-squeeze")
@@ -170,6 +160,7 @@ _add(DEBIAN_URL % ("wheezy", "amd64"), name="debian-wheezy")
 _add(DAILY_DEBIAN_URL % ("amd64"), name="debian-daily")
 
 
+_set_distro(UbuntuDistro)
 # One old ubuntu
 _add(OLD_UBUNTU_URL % ("hardy", "amd64"),
      i686=OLD_UBUNTU_URL % ("hardy", "i386"),
@@ -180,6 +171,7 @@ _add(UBUNTU_URL % ("precise", "amd64"), name="ubuntu-precise")
 _add(UBUNTU_URL % ("raring", "amd64"), name="ubuntu-raring")
 
 
+_set_distro(MandrivaDistro)
 # One old mandriva
 _add(MANDRIVA_URL % ("2010.2", "x86_64"),
      i686=MANDRIVA_URL % ("2010.2", "i586"),
@@ -241,11 +233,10 @@ def _testURL(fetcher, distname, arch, distroobj):
     if distroobj.hasxen:
         xenstore = _storeForDistro(fetcher, xenguest)
 
-    exp_store = distroClass(distname)
     for s in [hvmstore, xenstore]:
-        if s and not isinstance(s, exp_store):
+        if s and not isinstance(s, distroobj.distroclass):
             raise AssertionError("(%s): expected store %s, was %s" %
-                                 (distname, exp_store, s))
+                                 (distname, distroobj.distroclass, s))
 
         # Make sure the stores are reporting correct distro name/variant
         if s and distroobj.detectdistro != s.os_variant:
