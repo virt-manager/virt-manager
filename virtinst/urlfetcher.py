@@ -234,7 +234,7 @@ class _DirectImageFetcher(_LocalImageFetcher):
 
 
 def _fetcherForURI(uri, scratchdir=None):
-    if uri.startswith("http://"):
+    if uri.startswith("http://") or uri.startswith("https://"):
         fclass = _HTTPImageFetcher
     elif uri.startswith("ftp://"):
         fclass = _FTPImageFetcher
@@ -688,7 +688,7 @@ class FedoraDistro(RedHatDistro):
                 lateststr, latestnum = self._latestFedoraVariant()
                 ver = self.treeinfo.get("general", "version")
                 if ver == "development" or ver == "rawhide":
-                    self.os_variant = self._latestFedoraVariant()
+                    self.os_variant = lateststr
                 elif ver:
                     vernum = int(str(ver).split("-")[0])
                     if vernum > latestnum:

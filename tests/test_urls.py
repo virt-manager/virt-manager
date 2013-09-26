@@ -43,22 +43,26 @@ from virtinst.urlfetcher import MandrivaDistro
 # Specified via 'python setup.py test_urls --path"
 LOCAL_MEDIA = []
 
-FEDORA_BASEURL = "http://download.fedoraproject.org/pub/fedora/linux/releases/%s/Fedora/%s/os/"
-OPENSUSE_BASEURL = "http://download.opensuse.org/distribution/%s/repo/oss/"
-OLD_OPENSUSE_BASEURL = "http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/%s/repo/oss"
+OLD_FEDORA_URL = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/%s/Fedora/%s/os/"
+DEVFEDORA_URL = "http://download.fedoraproject.org/pub/fedora/linux/development/%s/%s/os/"
+FEDORA_URL = "http://download.fedoraproject.org/pub/fedora/linux/releases/%s/Fedora/%s/os/"
 
-OLDUBUNTU_BASEURL = "http://old-releases.ubuntu.com/ubuntu/dists/%s/main/installer-%s"
-UBUNTU_BASEURL = "http://us.archive.ubuntu.com/ubuntu/dists/%s/main/installer-%s"
-OLDDEBIAN_BASEURL = "http://archive.debian.org/debian/dists/%s/main/installer-%s/"
-DEBIAN_BASEURL = "http://ftp.us.debian.org/debian/dists/%s/main/installer-%s/"
+OLD_CENTOS_URL = "http://vault.centos.org/%s/os/%s"
+CENTOS_URL = "http://ftp.linux.ncsu.edu/pub/CentOS/%s/os/%s/"
+SCIENTIFIC_URL = "http://ftp.scientificlinux.org/linux/scientific/%s/%s/"
 
-CURCENTOS_BASEURL = "http://ftp.linux.ncsu.edu/pub/CentOS/%s/os/%s/"
-OLDCENTOS_BASEURL = "http://vault.centos.org/%s/os/%s"
-MANDRIVA_BASEURL = "http://ftp.uwsg.indiana.edu/linux/mandrake/official/%s/%s/"
-SCIENTIFIC_BASEURL = "http://ftp.scientificlinux.org/linux/scientific/%s/%s/"
+OPENSUSE10 = "http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/10.0"
+OLD_OPENSUSE_URL = "http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/%s/repo/oss"
+OPENSUSE_URL = "http://download.opensuse.org/distribution/%s/repo/oss/"
 
-# Doesn't appear to be a simple boot iso in newer suse trees
-NOBOOTISO_FILTER = ".*opensuse12.*|.*opensuse11.*|.*opensuse10.3.*|.*opensuse10.0.*"
+OLD_UBUNTU_URL = "http://old-releases.ubuntu.com/ubuntu/dists/%s/main/installer-%s"
+UBUNTU_URL = "http://us.archive.ubuntu.com/ubuntu/dists/%s/main/installer-%s"
+
+OLD_DEBIAN_URL = "http://archive.debian.org/debian/dists/%s/main/installer-%s/"
+DAILY_DEBIAN_URL = "http://d-i.debian.org/daily-images/%s/"
+DEBIAN_URL = "http://ftp.us.debian.org/debian/dists/%s/main/installer-%s/"
+
+MANDRIVA_URL = "http://ftp.uwsg.indiana.edu/linux/mandrake/official/%s/%s/"
 
 
 # Return the expected Distro class for the passed distro label
@@ -75,145 +79,111 @@ def distroClass(distname):
         return UbuntuDistro
     elif re.match(r".*mandriva.*", distname):
         return MandrivaDistro
-    elif re.match(r".*scientific.*", distname):
+    elif re.match(r".*sl-.*", distname):
         return SLDistro
     raise RuntimeError("distroClass: no distro registered for '%s'" % distname)
 
 
-# Dictionary with all the test data
-urls = {
+class _DistroURL(object):
+    def __init__(self, x86_64, detectdistro="linux", i686=None,
+                 hasxen=True, hasbootiso=True, name=None):
+        self.x86_64 = x86_64
+        self.i686 = i686
+        self.detectdistro = detectdistro
+        self.hasxen = hasxen
+        self.hasbootiso = hasbootiso
+        self.name = name or self.detectdistro
 
-    # Fedora Distros
-    "fedora15" : {
-        'x86_64': FEDORA_BASEURL % ("18", "x86_64"),
-        'distro': "fedora18"
-   },
-    "fedora16" : {
-        'x86_64': FEDORA_BASEURL % ("19", "x86_64"),
-        'distro': "fedora19"
-   },
 
-    # SUSE Distros
-    "opensuse10.2" : {
-        'x86_64': OLD_OPENSUSE_BASEURL % ("10.2")
-   },
-    "opensuse10.3" : {
-        'x86_64': OLD_OPENSUSE_BASEURL % ("10.3")
-   },
-    "opensuse11.4" : {
-        'x86_64': OPENSUSE_BASEURL % ("11.4")
-   },
-    # Only keep i686 for the latest
-    "opensuse12.1" : {
-        'i386'  : OPENSUSE_BASEURL % ("12.1"),
-        'x86_64': OPENSUSE_BASEURL % ("12.1")
-   },
+urls = {}
+def _add(*args, **kwargs):
+    _d = _DistroURL(*args, **kwargs)
+    if _d.name in urls:
+        raise RuntimeError("distro=%s url=%s collides with entry in urls, "
+                           "set a unique name" % (_d.name, _d.x86_64))
+    urls[_d.name] = _d
 
-    # Debian Distros
-    "debian-lenny-64" : {
-        "noxen": True,
-        'x86_64': OLDDEBIAN_BASEURL % ("lenny", "amd64"),
-        'distro': "linux"
-   },
-    "debian-squeeze" : {
-        'i386' : DEBIAN_BASEURL % ("squeeze", "i386"),
-        'x86_64': DEBIAN_BASEURL % ("squeeze", "amd64"),
-        'distro': "linux"
-   },
-    "debian-wheezy" : {
-        'x86_64': DEBIAN_BASEURL % ("wheezy", "amd64"),
-        'distro': "linux"
-   },
-    "debian-sid" : {
-        'x86_64': DEBIAN_BASEURL % ("sid", "amd64"),
-        'distro': "linux"
-   },
-    "debian-daily" : {
-        'i386' : "http://d-i.debian.org/daily-images/amd64/",
-        'distro': "linux"
-   },
 
-    # CentOS Distros
-    "centos-6-latest" : {
-        'i386' : CURCENTOS_BASEURL % ("6", "i386"),
-        'x86_64' : CURCENTOS_BASEURL % ("6", "x86_64"),
-        'distro': "rhel6"
-   },
-    "centos-5-latest" : {
-        'i386' : CURCENTOS_BASEURL % ("5", "i386"),
-        'x86_64' : CURCENTOS_BASEURL % ("5", "x86_64"),
-        'distro': "rhel5.4"
-   },
-    "centos-5.0" : {
-        'x86_64' : OLDCENTOS_BASEURL % ("5.0", "x86_64"),
-        'distro': "linux"
-   },
-    "centos-4.0" : {
-        "noxen": True,
-        'x86_64' : OLDCENTOS_BASEURL % ("4.0", "x86_64"),
-        'distro': "linux"
-   },
-    "centos-4.9" : {
-        'x86_64' : OLDCENTOS_BASEURL % ("4.9", "x86_64"),
-        'distro': "linux"
-   },
+# Goal here is generally to cover all tree variants for each distro,
+# where feasible. Don't exhaustively test i686 trees since most people
+# aren't using it and it slows down the test, only use it in a couple
+# places. Follow the comments for what trees to keep around
 
-    # Scientific Linux
-    "scientific-5.4" : {
-        'x86_64': SCIENTIFIC_BASEURL % ("54", "x86_64"),
-        'distro': "rhel5.4"
-   },
-    "scientific-5.2" : {
-        'x86_64': SCIENTIFIC_BASEURL % ("52", "x86_64"),
-        'distro': "rhel5"
-   },
-    "scientific-5.0" : {
-        'x86_64': SCIENTIFIC_BASEURL % ("50", "x86_64"),
-        'distro': "linux"
-   },
 
-    # Ubuntu
-    "ubuntu-hardy" : {
-        "noxen": True,
-        'i386': OLDUBUNTU_BASEURL % ("hardy", "i386"),
-        'x86_64': OLDUBUNTU_BASEURL % ("hardy", "amd64"),
-        'distro': "linux"
-   },
-    "ubuntu-maverick" : {
-        'i386': OLDUBUNTU_BASEURL % ("maverick", "i386"),
-        'x86_64': OLDUBUNTU_BASEURL % ("maverick", "amd64"),
-        'distro': "linux"
-   },
-    "ubuntu-natty" : {
-        'i386': OLDUBUNTU_BASEURL % ("natty", "i386"),
-        'x86_64': OLDUBUNTU_BASEURL % ("natty", "amd64"),
-        'distro': "linux"
-   },
-    "ubuntu-oneiric" : {
-        'i386': UBUNTU_BASEURL % ("oneiric", "i386"),
-        'x86_64': UBUNTU_BASEURL % ("oneiric", "amd64"),
-        'distro': "linux"
-   },
-    "ubuntu-precise" : {
-        'i386': UBUNTU_BASEURL % ("precise", "i386"),
-        'x86_64': UBUNTU_BASEURL % ("precise", "amd64"),
-        'distro': "linux"
-   },
+# One old Fedora
+_add(OLD_FEDORA_URL % ("14", "x86_64"), "fedora14",
+     i686=OLD_FEDORA_URL % ("14", "i386"))
+# 2 Latest releases
+_add(FEDORA_URL % ("18", "x86_64"), "fedora18")
+_add(FEDORA_URL % ("19", "x86_64"), "fedora19")
+# Any Dev release
+_add(DEVFEDORA_URL % ("20", "x86_64"), "fedora20")
+# Rawhide w/ i686 test
+_add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora20",
+     i686=DEVFEDORA_URL % ("rawhide", "i386"),
+     name="fedora-rawhide")
 
-    # Mandriva
-    "mandriva-2009.1" : {
-        "noxen": True,
-        'i586': MANDRIVA_BASEURL % ("2009.1", "i586"),
-        'x86_64': MANDRIVA_BASEURL % ("2009.1", "x86_64"),
-        'distro': "linux"
-   },
-    "mandriva-2010.2" : {
-        "noxen": True,
-        'i586': MANDRIVA_BASEURL % ("2010.2", "i586"),
-        'x86_64': MANDRIVA_BASEURL % ("2010.2", "x86_64"),
-        'distro': "linux"
-   },
-}
+
+# One old and new centos 4. No distro detection since there's no treeinfo
+_add(OLD_CENTOS_URL % ("4.0", "x86_64"), hasxen=False, name="centos-4.0")
+_add(OLD_CENTOS_URL % ("4.9", "x86_64"), name="centos-4.9")
+# One old centos 5
+_add(OLD_CENTOS_URL % ("5.0", "x86_64"), name="centos-5.0")
+# Latest centos 5 w/ i686
+_add(CENTOS_URL % ("5", "x86_64"), "rhel5.4", name="centos-5-latest",
+     i686=CENTOS_URL % ("5", "i386"))
+# Latest centos 6 w/ i686
+_add(CENTOS_URL % ("6", "x86_64"), "rhel6", name="centos-6-latest",
+     i686=CENTOS_URL % ("6", "i386"))
+
+
+# Early scientific 5
+_add(SCIENTIFIC_URL % ("50", "x86_64"), name="sl-5.0")
+# Pre-5.4 w/ treeinfo for distro detection
+_add(SCIENTIFIC_URL % ("52", "x86_64"), "rhel5", name="sl-5.2")
+# Latest scientific 5
+_add(SCIENTIFIC_URL % ("55", "x86_64"), "rhel5.4", name="sl-5latest")
+# Latest scientific 6
+_add(SCIENTIFIC_URL % ("6", "x86_64"), "rhel6", name="sl-6latest")
+
+
+
+# opensuse 10.0 uses different paths, so keep this around
+_add(OPENSUSE10, i686=OPENSUSE10, hasxen=False, hasbootiso=False,
+     name="opensuse-10.0")
+# Latest 10 series
+_add(OLD_OPENSUSE_URL % ("10.3"), hasbootiso=False, name="opensuse-10.3")
+# Latest 11 series
+_add(OLD_OPENSUSE_URL % ("11.4"), hasbootiso=False, name="opensuse-11.4")
+# Latest 12 series
+# Only keep i686 for the latest opensuse
+_add(OPENSUSE_URL % ("12.3"), i686=OPENSUSE_URL % ("12.3"), hasbootiso=False,
+     name="opensuse-12.3")
+
+
+
+# Debian releases rarely enough that we can just do every release since lenny
+_add(OLD_DEBIAN_URL % ("lenny", "amd64"), hasxen=False, name="debian-lenny")
+_add(DEBIAN_URL % ("squeeze", "amd64"), name="debian-squeeze")
+_add(DEBIAN_URL % ("wheezy", "amd64"), name="debian-wheezy")
+# And daily builds, since we specially handle that URL
+_add(DAILY_DEBIAN_URL % ("amd64"), name="debian-daily")
+
+
+# One old ubuntu
+_add(OLD_UBUNTU_URL % ("hardy", "amd64"),
+     i686=OLD_UBUNTU_URL % ("hardy", "i386"),
+     hasxen=False, name="ubuntu-hardy")
+# Latest LTS
+_add(UBUNTU_URL % ("precise", "amd64"), name="ubuntu-precise")
+# Latest release
+_add(UBUNTU_URL % ("raring", "amd64"), name="ubuntu-raring")
+
+
+# One old mandriva
+_add(MANDRIVA_URL % ("2010.2", "x86_64"),
+     i686=MANDRIVA_URL % ("2010.2", "i586"),
+     hasxen=False, name="mandriva-2010.2")
 
 
 testconn = utils.open_testdefault()
@@ -254,7 +224,7 @@ def _testLocalMedia(fetcher, path):
     logging.debug("Local distro detected as: %s", hvmstore)
 
 
-def _testURL(fetcher, distname, url, arch, detect_distro, check_xen):
+def _testURL(fetcher, distname, url, arch, distroobj):
     """
     Test that our URL detection logic works for grabbing kernel, xen
     kernel, and boot.iso
@@ -263,7 +233,7 @@ def _testURL(fetcher, distname, url, arch, detect_distro, check_xen):
 
     hvmstore = _storeForDistro(fetcher, url, "hvm", arch)
     xenstore = None
-    if check_xen:
+    if distroobj:
         xenstore = _storeForDistro(fetcher, url, "xen", arch)
 
     exp_store = distroClass(distname)
@@ -273,10 +243,10 @@ def _testURL(fetcher, distname, url, arch, detect_distro, check_xen):
                                  (distname, exp_store, s))
 
         # Make sure the stores are reporting correct distro name/variant
-        if s and detect_distro and detect_distro != s.os_variant:
+        if s and distroobj.detectdistro != s.os_variant:
             raise AssertionError("Store distro/variant did not match "
                 "expected values: store=%s, found=%s expect=%s" %
-                (s, s.os_variant, detect_distro))
+                (s, s.os_variant, distroobj.detectdistro))
 
     # Do this only after the distro detection, since we actually need
     # to fetch files for that part
@@ -287,7 +257,7 @@ def _testURL(fetcher, distname, url, arch, detect_distro, check_xen):
     fetcher.acquireFile = fakeAcquireFile
 
     # Fetch boot iso
-    if re.match(r"%s" % NOBOOTISO_FILTER, distname):
+    if not distroobj.hasbootiso:
         logging.debug("Known lack of boot.iso in %s tree. Skipping.",
                       distname)
     else:
@@ -307,15 +277,15 @@ def _testURL(fetcher, distname, url, arch, detect_distro, check_xen):
                        (distname, arch))
 
     # Fetch xen kernel
-    if xenstore and check_xen:
+    if not xenstore:
+        logging.debug("acquireKernel (xen): Hardcoded skipping.")
+    else:
         kern = xenstore.acquireKernel(testguest, fetcher, meter)
         logging.debug("acquireKernel (xen): %s", str(kern))
 
         if kern[0] is not True or kern[1] is not True:
             raise AssertionError("%s-%s: xen kernel fetching" %
                                  (distname, arch))
-    else:
-        logging.debug("acquireKernel (xen): Hardcoded skipping.")
 
 
 
@@ -352,12 +322,13 @@ def _make_tests():
         keys = urls.keys()
         keys.sort()
         for key in keys:
-            distro_dict = urls[key]
-            detect_distro = distro_dict.pop("distro", "linux")
-            check_xen = not distro_dict.pop("noxen", False)
+            distroobj = urls[key]
 
-            for arch, url in distro_dict.items():
-                args = (key, url, arch, detect_distro, check_xen)
+            for arch, url in [("i686", distroobj.i686),
+                              ("x86_64", distroobj.x86_64)]:
+                if not url:
+                    continue
+                args = (key, url, arch, distroobj)
                 testfunc = _make_test_wrapper(url, _testURL, args)
                 setattr(URLTests, "testURL%s%s" % (key, arch), testfunc)
 
