@@ -24,7 +24,6 @@ import ftplib
 import logging
 import os
 import re
-import socket
 import stat
 import subprocess
 import tempfile
@@ -34,7 +33,6 @@ import urlparse
 import urlgrabber.grabber as grabber
 
 from virtinst import osdict
-from virtinst import util
 
 
 #########################################################################
@@ -317,12 +315,6 @@ def getDistroStore(guest, fetcher, distro=None):
         stores.append(MageiaDistro)
     if distro == "altlinux" or distro is None:
         stores.append(ALTLinuxDistro)
-    if distro == "solaris" or distro is None:
-        stores.append(SolarisDistro)
-    if distro == "solaris" or distro is None:
-        stores.append(OpenSolarisDistro)
-    if distro == "netware" or distro is None:
-        stores.append(NetWareDistro)
 
     stores.append(GenericDistro)
 
@@ -960,217 +952,3 @@ class ALTLinuxDistro(Distro):
             return True
 
         return False
-
-
-# Solaris and OpenSolaris distros
-class SunDistro(Distro):
-    name = "Solaris"
-    os_variant = "solaris"
-
-    def isValidStore(self):
-        """Determine if uri points to a tree of the store's distro"""
-        raise NotImplementedError
-
-    def acquireBootDisk(self, guest):
-        return self.fetcher.acquireFile("images/solarisdvd.iso")
-
-    def process_extra_args(self, argstr):
-        """Collect additional arguments."""
-        if not argstr:
-            return (None, None, None, None)
-
-        kopts = ''
-        kargs = ''
-        smfargs = ''
-        Bargs = ''
-
-        args = argstr.split()
-        i = 0
-        while i < len(args):
-            exarg = args[i]
-            if exarg == '-B':
-                i += 1
-                if i == len(args):
-                    continue
-
-                if not Bargs:
-                    Bargs = args[i]
-                else:
-                    Bargs = ','.join([Bargs, args[i]])
-
-            elif exarg == '-m':
-                i += 1
-                if i == len(args):
-                    continue
-                smfargs = args[i]
-            elif exarg.startswith('-'):
-                if kopts is None:
-                    kopts = exarg[1:]
-                else:
-                    kopts = kopts + exarg[1:]
-            else:
-                if kargs is None:
-                    kargs = exarg
-                else:
-                    kargs = kargs + ' ' + exarg
-            i += 1
-
-        return kopts, kargs, smfargs, Bargs
-
-
-class SolarisDistro(SunDistro):
-    kernelpath = 'boot/platform/i86xpv/kernel/unix'
-    initrdpath = 'boot/x86.miniroot'
-
-    def isValidStore(self):
-        if self.fetcher.hasFile(self.kernelpath):
-            logging.debug('Detected Solaris')
-            return True
-        return False
-
-    def install_args(self, guest):
-        """Construct kernel cmdline args for the installer, consisting of:
-           the pathname of the kernel (32/64) to load, kernel options
-           and args, and '-B' boot properties."""
-
-        (kopts, kargs, ignore_smfargs, kbargs) = \
-            self.process_extra_args(guest.extraargs)
-
-        args = ['']
-        if kopts:
-            args += ['-%s' % kopts]
-        if kbargs:
-            args += ['-B', kbargs]
-
-        netmask = ''
-        # Yuck. Non-default netmasks require this option to be passed.
-        # It's distinctly not-trivial to work out the netmask to be used
-        # automatically.
-        if kargs:
-            for karg in kargs.split():
-                if karg.startswith('subnet-mask'):
-                    netmask = karg.split('=')[1]
-                else:
-                    args += [kargs]
-
-        iargs = ''
-        if not guest.graphics['enabled']:
-            iargs += 'nowin '
-
-        if guest.location.startswith('nfs:'):
-            try:
-                guestIP = socket.gethostbyaddr(guest.name)[2][0]
-            except:
-                iargs += ' dhcp'
-            else:
-                iserver = guest.location.split(':')[1]
-                ipath = guest.location.split(':')[2]
-                iserverIP = socket.gethostbyaddr(iserver)[2][0]
-                iargs += ' -B install_media=' + iserverIP + ':' + ipath
-                iargs += ',host-ip=' + guestIP
-                if netmask:
-                    iargs += ',subnet-mask=%s' % netmask
-                droute = util.default_route()
-                if droute:
-                    iargs += ',router-ip=' + droute
-                if guest.nics[0].macaddr:
-                    en = guest.nics[0].macaddr.split(':')
-                    for i in range(len(en)):
-                        # remove leading '0' from mac address element
-                        if len(en[i]) > 1 and en[i][0] == '0':
-                            en[i] = en[i][1]
-                    boot_mac = ':'.join(en)
-                    iargs += ',boot-mac=' + boot_mac
-        else:
-            iargs += '-B install_media=cdrom'
-
-        args += ['-', iargs]
-        return ' '.join(args)
-
-    def acquireKernel(self, guest):
-
-        try:
-            kernel = self.fetcher.acquireFile(self.kernelpath)
-        except:
-            raise RuntimeError("Solaris PV kernel not found at %s" %
-                self.kernelpath)
-
-        # strip boot from the kernel path
-        kpath = self.kernelpath.split('/')[1:]
-        args = "/" + "/".join(kpath) + self.install_args(guest)
-
-        try:
-            initrd = self.fetcher.acquireFile(self.initrdpath)
-            return (kernel, initrd, args)
-        except:
-            os.unlink(kernel)
-            raise RuntimeError(_("Solaris miniroot not found at %s") %
-                self.initrdpath)
-
-
-class OpenSolarisDistro(SunDistro):
-    os_variant = "opensolaris"
-
-    kernelpath = "platform/i86xpv/kernel/unix"
-    initrdpaths = ["platform/i86pc/boot_archive", "boot/x86.microroot"]
-
-    def isValidStore(self):
-        if self.fetcher.hasFile(self.kernelpath):
-            logging.debug("Detected OpenSolaris")
-            return True
-        return False
-
-    def install_args(self, guest):
-        """Construct kernel cmdline args for the installer, consisting of:
-           the pathname of the kernel (32/64) to load, kernel options
-           and args, and '-B' boot properties."""
-
-        (kopts, ignore_kargs, ignore_smfargs, kbargs) = \
-            self.process_extra_args(guest.extraargs)
-
-        args = ''
-        if kopts:
-            args += ' -' + kopts
-        if kbargs:
-            args += ' -B ' + kbargs
-
-        return args
-
-    def acquireKernel(self, guest):
-
-        try:
-            kernel = self.fetcher.acquireFile(self.kernelpath)
-        except:
-            raise RuntimeError(_("OpenSolaris PV kernel not found at %s") %
-                self.kernelpath)
-
-        args = "/" + self.kernelpath + self.install_args(guest)
-
-        try:
-            initrd = self.fetcher.acquireFile(self.initrdpaths[0])
-            return (kernel, initrd, args)
-        except Exception, e:
-            try:
-                initrd = self.fetcher.acquireFile(self.initrdpaths[1])
-                return (kernel, initrd, args)
-            except:
-                os.unlink(kernel)
-                raise Exception("No OpenSolaris boot archive found: %s\n" % e)
-
-
-# NetWare 6 PV
-class NetWareDistro(Distro):
-    name = "NetWare"
-    os_variant = "netware6"
-
-    loaderpath = "STARTUP/XNLOADER.SYS"
-
-    def isValidStore(self):
-        if self.fetcher.hasFile(self.loaderpath):
-            logging.debug("Detected NetWare")
-            return True
-        return False
-
-    def acquireKernel(self, guest):
-        loader = self.fetcher.acquireFile(self.loaderpath)
-        return (loader, "", "")
