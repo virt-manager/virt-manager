@@ -393,7 +393,7 @@ class ImageInstaller(Installer):
 
     def _make_disks(self):
         for drive in self.boot_caps.drives:
-            path = self._abspath(drive.disk.file)
+            path = self.image.abspath(drive.disk.file)
             size = None
             if drive.disk.size is not None:
                 size = float(drive.disk.size) / 1024
@@ -418,9 +418,6 @@ class ImageInstaller(Installer):
             disk.set_create_storage(size=size, fmt=drive.disk.format)
             disk.validate()
             self.install_devices.append(disk)
-
-    def _abspath(self, p):
-        return self.image.abspath(p)
 
 
 def match_boots(capabilities, boots):

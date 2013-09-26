@@ -58,8 +58,7 @@ class TestImageParser(unittest.TestCase):
 
     def testBadArch(self):
         """Makes sure we sanitize i386->i686"""
-        image = virtimage.parse_file(self.basedir +
-                                                "image-bad-arch.xml")
+        image = virtimage.parse_file(self.basedir + "image-bad-arch.xml")
         virtimage.ImageInstaller(self.conn, image, 0)
         self.assertTrue(True)
 
@@ -85,12 +84,10 @@ class TestImageParser(unittest.TestCase):
             else:
                 g = utils.get_basic_paravirt_guest()
 
+            utils.set_conn(conn)
             g.os.os_type = capsguest.os_type
             g.type = capsdomain.hypervisor_type
             g.os.arch = capsguest.arch
-
-            utils.set_conn(conn)
-
 
             g.installer = inst
             ignore, actual_out = g.start_install(return_xml=True, dry=True)
@@ -98,11 +95,9 @@ class TestImageParser(unittest.TestCase):
             actual_out = g.get_install_xml(install=False)
             expect_file = os.path.join(image2guestdir + fname)
             expect_out = utils.read_file(expect_file)
-            expect_out = expect_out.replace("REPLACEME", os.getcwd())
 
-            utils.diff_compare(actual_out,
-                               expect_file,
-                               expect_out=expect_out)
+            actual_out = actual_out.replace(os.getcwd(), "/tmp")
+            utils.diff_compare(actual_out, expect_file)
 
             utils.reset_conn()
 
