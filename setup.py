@@ -484,11 +484,10 @@ class TestCommand(TestBaseCommand):
 class TestURLFetch(TestBaseCommand):
     description = "Test fetching kernels and isos from various distro trees"
 
-    user_options = TestBaseCommand.user_options + \
-                   [("match=", None, "Regular expression of dist names to "
-                                     "match [default: '.*']"),
-                    ("path=", None, "Paths to local iso or directory or check"
-                                    " for installable distro. Comma separated")]
+    user_options = TestBaseCommand.user_options + [
+        ("path=", None, "Paths to local iso or directory or check"
+                        " for installable distro. Comma separated"),
+    ]
 
     def initialize_options(self):
         TestBaseCommand.initialize_options(self)
@@ -509,7 +508,6 @@ class TestURLFetch(TestBaseCommand):
     def run(self):
         from tests import test_urls
         self._testfiles = ["tests.test_urls"]
-        test_urls.MATCH_FILTER = self.match
         if self.path:
             for p in self.path:
                 test_urls.LOCAL_MEDIA.append(p)
