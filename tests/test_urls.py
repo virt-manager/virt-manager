@@ -22,6 +22,7 @@ import sys
 
 import urlgrabber.progress
 
+from tests import URLTEST_LOCAL_MEDIA
 from tests import utils
 
 from virtinst import Guest
@@ -37,10 +38,6 @@ from virtinst.urlfetcher import MandrivaDistro
 
 # pylint: disable=W0212
 # Access to protected member, needed to unittest stuff
-
-# Variable used to store a local iso or dir path to check for a distro
-# Specified via 'python setup.py test_urls --path"
-LOCAL_MEDIA = []
 
 OLD_FEDORA_URL = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/%s/Fedora/%s/os/"
 DEVFEDORA_URL = "http://download.fedoraproject.org/pub/fedora/linux/development/%s/%s/os/"
@@ -211,19 +208,6 @@ def _storeForDistro(fetcher, guest):
     raise
 
 
-def _testLocalMedia(fetcher, path):
-    """
-    Test a local path explicitly requested by the user
-    """
-    print "\nChecking local path: %s" % path
-    arch = platform.machine()
-
-    # Make sure we detect _a_ distro
-    hvmguest.os.arch = arch
-    hvmstore = _storeForDistro(fetcher, hvmguest)
-    logging.debug("Local distro detected as: %s", hvmstore)
-
-
 def _testURL(fetcher, distname, arch, distroobj):
     """
     Test that our URL detection logic works for grabbing kernel, xen
@@ -242,12 +226,14 @@ def _testURL(fetcher, distname, arch, distroobj):
         xenstore = _storeForDistro(fetcher, xenguest)
 
     for s in [hvmstore, xenstore]:
-        if s and not isinstance(s, distroobj.distroclass):
+        if (s and distroobj.distroclass and
+            not isinstance(s, distroobj.distroclass)):
             raise AssertionError("(%s): expected store %s, was %s" %
                                  (distname, distroobj.distroclass, s))
 
         # Make sure the stores are reporting correct distro name/variant
-        if s and distroobj.detectdistro != s.os_variant:
+        if (s and distroobj.detectdistro and
+            distroobj.detectdistro != s.os_variant):
             raise AssertionError("Store distro/variant did not match "
                 "expected values: store=%s, found=%s expect=%s" %
                 (s, s.os_variant, distroobj.detectdistro))
@@ -300,9 +286,9 @@ def _fetch_wrapper(url, cb, *args):
         fetcher.cleanupLocation()
 
 
-def _make_test_wrapper(url, cb, args):
+def _make_test_wrapper(url, args):
     def cmdtemplate():
-        return _fetch_wrapper(url, cb, *args)
+        return _fetch_wrapper(url, _testURL, *args)
     return lambda _self: cmdtemplate()
 
 
@@ -313,25 +299,31 @@ class URLTests(unittest.TestCase):
 
 
 def _make_tests():
-    if LOCAL_MEDIA:
-        newidx = 0
-        for p in LOCAL_MEDIA:
-            newidx += 1
-            args = (p,)
-            testfunc = _make_test_wrapper(p, _testLocalMedia, args)
-            setattr(URLTests, "testLocalMedia%s" % newidx, testfunc)
-    else:
-        keys = urls.keys()
-        keys.sort()
-        for key in keys:
-            distroobj = urls[key]
+    global urls
 
-            for arch, url in [("i686", distroobj.i686),
-                              ("x86_64", distroobj.x86_64)]:
-                if not url:
-                    continue
-                args = (key, arch, distroobj)
-                testfunc = _make_test_wrapper(url, _testURL, args)
-                setattr(URLTests, "testURL%s%s" % (key, arch), testfunc)
+    if URLTEST_LOCAL_MEDIA:
+        urls = {}
+        newidx = 0
+        arch = platform.machine()
+        for p in URLTEST_LOCAL_MEDIA:
+            newidx += 1
+
+            d = _DistroURL(p, None, hasxen=False, hasbootiso=False,
+                           name="path%s" % newidx)
+            d.distroclass = None
+            urls[d.name] = d
+
+    keys = urls.keys()
+    keys.sort()
+    for key in keys:
+        distroobj = urls[key]
+
+        for arch, url in [("i686", distroobj.i686),
+                          ("x86_64", distroobj.x86_64)]:
+            if not url:
+                continue
+            args = (key, arch, distroobj)
+            testfunc = _make_test_wrapper(url, args)
+            setattr(URLTests, "testURL%s%s" % (key, arch), testfunc)
 
 _make_tests()

@@ -491,14 +491,10 @@ class TestURLFetch(TestBaseCommand):
 
     def initialize_options(self):
         TestBaseCommand.initialize_options(self)
-        self.match = None
         self.path = ""
 
     def finalize_options(self):
         TestBaseCommand.finalize_options(self)
-        if self.match is None:
-            self.match = ".*"
-
         origpath = str(self.path)
         if not origpath:
             self.path = []
@@ -506,11 +502,10 @@ class TestURLFetch(TestBaseCommand):
             self.path = origpath.split(",")
 
     def run(self):
-        from tests import test_urls
         self._testfiles = ["tests.test_urls"]
         if self.path:
-            for p in self.path:
-                test_urls.LOCAL_MEDIA.append(p)
+            import tests
+            tests.URLTEST_LOCAL_MEDIA += self.path
         TestBaseCommand.run(self)
 
 
