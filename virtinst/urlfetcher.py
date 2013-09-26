@@ -37,28 +37,23 @@ from virtinst import osdict
 from virtinst import util
 
 
-def safeint(c):
-    try:
-        val = int(c)
-    except:
-        val = 0
-    return val
-
+#########################################################################
+# Backends for the various URL types we support (http, ftp, nfs, local) #
+#########################################################################
 
 class _ImageFetcher(object):
     """
     This is a generic base class for fetching/extracting files from
     a media source, such as CD ISO, NFS server, or HTTP/FTP server
     """
-    def __init__(self, location, scratchdir):
+    def __init__(self, location, scratchdir, meter):
         self.location = location
         self.scratchdir = scratchdir
+        self.meter = meter
+        self.srcdir = None
 
     def _make_path(self, filename):
-        if hasattr(self, "srcdir"):
-            path = getattr(self, "srcdir")
-        else:
-            path = self.location
+        path = self.srcdir or self.location
 
         if filename:
             if not path.endswith("/"):
@@ -89,7 +84,7 @@ class _ImageFetcher(object):
     def cleanupLocation(self):
         pass
 
-    def acquireFile(self, filename, progresscb):
+    def acquireFile(self, filename):
         # URLGrabber works for all network and local cases
 
         f = None
@@ -100,7 +95,7 @@ class _ImageFetcher(object):
 
             try:
                 f = grabber.urlopen(path,
-                                    progress_obj=progresscb,
+                                    progress_obj=self.meter,
                                     text=_("Retrieving file %s...") % base)
             except Exception, e:
                 raise ValueError(_("Couldn't acquire file %s: %s") %
@@ -145,8 +140,8 @@ class _HTTPImageFetcher(_URIImageFetcher):
 
 
 class _FTPImageFetcher(_URIImageFetcher):
-    def __init__(self, location, scratchdir):
-        _URIImageFetcher.__init__(self, location, scratchdir)
+    def __init__(self, *args, **kwargs):
+        _URIImageFetcher.__init__(self, *args, **kwargs)
 
         self.ftp = None
 
@@ -175,10 +170,6 @@ class _FTPImageFetcher(_URIImageFetcher):
 
 
 class _LocalImageFetcher(_ImageFetcher):
-    def __init__(self, location, scratchdir, srcdir=None):
-        _ImageFetcher.__init__(self, location, scratchdir)
-        self.srcdir = srcdir
-
     def hasFile(self, filename):
         src = self._make_path(filename)
         if os.path.exists(src):
@@ -233,7 +224,7 @@ class _DirectImageFetcher(_LocalImageFetcher):
         self.srcdir = self.location
 
 
-def _fetcherForURI(uri, scratchdir=None):
+def fetcherForURI(uri, *args, **kwargs):
     if uri.startswith("http://") or uri.startswith("https://"):
         fclass = _HTTPImageFetcher
     elif uri.startswith("ftp://"):
@@ -245,20 +236,63 @@ def _fetcherForURI(uri, scratchdir=None):
             fclass = _DirectImageFetcher
         else:
             fclass = _MountedImageFetcher
-    return fclass(uri, scratchdir)
+    return fclass(uri, *args, **kwargs)
 
 
-def _storeForDistro(fetcher, baseuri, typ, progresscb, arch, distro=None,
-                    scratchdir=None):
+###############################################
+# Helpers for detecting distro from given URL #
+###############################################
+
+def _distroFromTreeinfo(fetcher, arch, vmtype=None):
+    """
+    Parse treeinfo 'family' field, and return the associated Distro class
+    None if no treeinfo, GenericDistro if unknown family type.
+    """
+    if not fetcher.hasFile(".treeinfo"):
+        return None
+
+    tmptreeinfo = fetcher.acquireFile(".treeinfo")
+    try:
+        treeinfo = ConfigParser.SafeConfigParser()
+        treeinfo.read(tmptreeinfo)
+    finally:
+        os.unlink(tmptreeinfo)
+
+    try:
+        fam = treeinfo.get("general", "family")
+    except ConfigParser.NoSectionError:
+        return None
+
+    if re.match(".*Fedora.*", fam):
+        dclass = FedoraDistro
+    elif re.match(".*CentOS.*", fam):
+        dclass = CentOSDistro
+    elif re.match(".*Red Hat Enterprise Linux.*", fam):
+        dclass = RHELDistro
+    elif re.match(".*Scientific Linux.*", fam):
+        dclass = SLDistro
+    else:
+        dclass = GenericDistro
+
+    ob = dclass(fetcher, arch, vmtype)
+    ob.treeinfo = treeinfo
+
+    # Explictly call this, so we populate variant info
+    ob.isValidStore()
+
+    return ob
+
+
+def getDistroStore(guest, fetcher, distro=None):
     stores = []
-    skip_treeinfo = False
     logging.debug("Attempting to detect distro:")
 
-    dist = distroFromTreeinfo(fetcher, progresscb, baseuri,
-                              arch, typ, scratchdir)
+    arch = guest.os.arch
+    _type = guest.os.os_type
+
+    dist = _distroFromTreeinfo(fetcher, arch, _type)
     if dist:
         return dist
-    skip_treeinfo = True
 
     # FIXME: This 'distro ==' doesn't cut it. 'distro' is from our os
     # dictionary, so would look like 'fedora9' or 'rhel5', so this needs
@@ -293,131 +327,38 @@ def _storeForDistro(fetcher, baseuri, typ, progresscb, arch, distro=None,
     stores.append(GenericDistro)
 
     for sclass in stores:
-        store = sclass(baseuri, arch, typ, scratchdir)
-        if skip_treeinfo:
-            store.uses_treeinfo = False
-        if store.isValidStore(fetcher, progresscb):
+        store = sclass(fetcher, arch, _type)
+        # We already tried the treeinfo short circuit, so skip it here
+        store.uses_treeinfo = False
+        if store.isValidStore():
             return store
 
     raise ValueError(
         _("Could not find an installable distribution at '%s'\n"
           "The location must be the root directory of an install tree." %
-          baseuri))
+          fetcher.location))
 
 
-def _locationCheckWrapper(guest, baseuri, progresscb,
-                          scratchdir, _type, arch, callback):
-    fetcher = _fetcherForURI(baseuri, scratchdir)
-    if guest:
-        arch = guest.os.arch
+def detectMediaDistro(guest, location):
+    """
+    Attempt to detect the os type + variant for the passed location
+    """
+    import urlgrabber
+    meter = urlgrabber.progress.BaseMeter()
+    scratchdir = "/var/tmp"
+    fetcher = fetcherForURI(location, scratchdir, meter)
 
     try:
         fetcher.prepareLocation()
-    except ValueError, e:
-        logging.exception("Error preparing install location")
-        raise ValueError(_("Invalid install location: ") + str(e))
-
-    try:
-        store = _storeForDistro(fetcher=fetcher, baseuri=baseuri, typ=_type,
-                                progresscb=progresscb, scratchdir=scratchdir,
-                                arch=arch)
-
-        return callback(store, fetcher)
+        store = getDistroStore(guest, fetcher)
+        return store.get_osdict_info()
     finally:
         fetcher.cleanupLocation()
 
 
-def _acquireMedia(iskernel, guest, baseuri, progresscb,
-                  scratchdir="/var/tmp", _type=None):
-
-    def media_cb(store, fetcher):
-        os_variant = store.get_osdict_info()
-        media = None
-
-        if iskernel:
-            media = store.acquireKernel(guest, fetcher, progresscb)
-        else:
-            media = store.acquireBootDisk(guest, fetcher, progresscb)
-
-        return [store, os_variant, media]
-
-    return _locationCheckWrapper(guest, baseuri, progresscb, scratchdir, _type,
-                                 None, media_cb)
-
-
-# Helper method to lookup install media distro and fetch an install kernel
-def getKernel(guest, baseuri, progresscb, scratchdir, typ):
-    iskernel = True
-    return _acquireMedia(iskernel, guest, baseuri, progresscb,
-                         scratchdir, typ)
-
-
-# Helper method to lookup install media distro and fetch a boot iso
-def getBootDisk(guest, baseuri, progresscb, scratchdir):
-    iskernel = False
-    return _acquireMedia(iskernel, guest, baseuri, progresscb,
-                         scratchdir)
-
-
-def _check_osvariant_valid(os_variant):
-    return osdict.lookup_os(os_variant) is not None
-
-
-# Attempt to detect the os type + variant for the passed location
-def detectMediaDistro(location, arch):
-    import urlgrabber
-    progresscb = urlgrabber.progress.BaseMeter()
-    guest = None
-    baseuri = location
-    scratchdir = "/var/tmp"
-    _type = None
-    def media_cb(store, ignore):
-        return store
-
-    store = _locationCheckWrapper(guest, baseuri, progresscb, scratchdir,
-                                  _type, arch, media_cb)
-
-    return store.get_osdict_info()
-
-
-def distroFromTreeinfo(fetcher, progresscb, uri, arch, vmtype=None,
-                       scratchdir=None):
-    # Parse treeinfo 'family' field, and return the associated Distro class
-    # None if no treeinfo, GenericDistro if unknown family type.
-    if not fetcher.hasFile(".treeinfo"):
-        return None
-
-    tmptreeinfo = fetcher.acquireFile(".treeinfo", progresscb)
-    try:
-        treeinfo = ConfigParser.SafeConfigParser()
-        treeinfo.read(tmptreeinfo)
-    finally:
-        os.unlink(tmptreeinfo)
-
-    try:
-        fam = treeinfo.get("general", "family")
-    except ConfigParser.NoSectionError:
-        return None
-
-    if re.match(".*Fedora.*", fam):
-        dclass = FedoraDistro
-    elif re.match(".*CentOS.*", fam):
-        dclass = CentOSDistro
-    elif re.match(".*Red Hat Enterprise Linux.*", fam):
-        dclass = RHELDistro
-    elif re.match(".*Scientific Linux.*", fam):
-        dclass = SLDistro
-    else:
-        dclass = GenericDistro
-
-    ob = dclass(uri, arch, vmtype, scratchdir)
-    ob.treeinfo = treeinfo
-
-    # Explictly call this, so we populate variant info
-    ob.isValidStore(fetcher, progresscb)
-
-    return ob
-
+##################
+# Distro classes #
+##################
 
 class Distro(object):
     """
@@ -435,21 +376,22 @@ class Distro(object):
     uses_treeinfo = False
     method_arg = "method"
 
-    def __init__(self, uri, arch, vmtype=None, scratchdir=None):
-        self.uri = uri
+    def __init__(self, fetcher, arch, vmtype):
+        self.fetcher = fetcher
         self.type = vmtype
-        self.scratchdir = scratchdir
         self.arch = arch
+
+        self.uri = fetcher.location
         self.treeinfo = None
 
-    def isValidStore(self, fetcher, progresscb):
+    def isValidStore(self):
         """Determine if uri points to a tree of the store's distro"""
         raise NotImplementedError
 
-    def acquireKernel(self, guest, fetcher, progresscb):
+    def acquireKernel(self, guest):
         kernelpath = None
         initrdpath = None
-        if self._hasTreeinfo(fetcher, progresscb):
+        if self._hasTreeinfo():
             try:
                 kernelpath = self._getTreeinfoMedia("kernel")
                 initrdpath = self._getTreeinfoMedia("initrd")
@@ -464,7 +406,7 @@ class Distro(object):
                 paths = self._xen_kernel_paths
 
             for kpath, ipath in paths:
-                if fetcher.hasFile(kpath) and fetcher.hasFile(ipath):
+                if self.fetcher.hasFile(kpath) and self.fetcher.hasFile(ipath):
                     kernelpath = kpath
                     initrdpath = ipath
 
@@ -473,19 +415,17 @@ class Distro(object):
                                  "%(distro)s tree.") %
                                  {"distro": self.name, "type" : self.type})
 
-        return self._kernelFetchHelper(fetcher, guest, progresscb, kernelpath,
-                                       initrdpath)
+        return self._kernelFetchHelper(guest, kernelpath, initrdpath)
 
-    def acquireBootDisk(self, guest, fetcher, progresscb):
+    def acquireBootDisk(self, guest):
         ignore = guest
 
-        if self._hasTreeinfo(fetcher, progresscb):
-            return fetcher.acquireFile(self._getTreeinfoMedia("boot.iso"),
-                                       progresscb)
+        if self._hasTreeinfo():
+            return self.fetcher.acquireFile(self._getTreeinfoMedia("boot.iso"))
         else:
             for path in self._boot_iso_paths:
-                if fetcher.hasFile(path):
-                    return fetcher.acquireFile(path, progresscb)
+                if self.fetcher.hasFile(path):
+                    return self.fetcher.acquireFile(path)
             raise RuntimeError(_("Could not find boot.iso in %s tree." %
                                self.name))
 
@@ -497,25 +437,28 @@ class Distro(object):
         if not self.os_variant:
             return None
 
-        if not _check_osvariant_valid(self.os_variant):
+        if not self._check_osvariant_valid(self.os_variant):
             logging.debug("%s set os_variant to %s, which is not in osdict.",
                           self, self.os_variant)
             return None
 
         return self.os_variant
 
-    def _hasTreeinfo(self, fetcher, progresscb):
+    def _check_osvariant_valid(self, os_variant):
+        return osdict.lookup_os(os_variant) is not None
+
+    def _hasTreeinfo(self):
         # all Red Hat based distros should have .treeinfo, perhaps others
         # will in time
         if not (self.treeinfo is None):
             return True
 
-        if not self.uses_treeinfo or not fetcher.hasFile(".treeinfo"):
+        if not self.uses_treeinfo or not self.fetcher.hasFile(".treeinfo"):
             return False
 
         logging.debug("Detected .treeinfo file")
 
-        tmptreeinfo = fetcher.acquireFile(".treeinfo", progresscb)
+        tmptreeinfo = self.fetcher.acquireFile(".treeinfo")
         try:
             self.treeinfo = ConfigParser.SafeConfigParser()
             self.treeinfo.read(tmptreeinfo)
@@ -531,12 +474,12 @@ class Distro(object):
 
         return self.treeinfo.get("images-%s" % t, mediaName)
 
-    def _fetchAndMatchRegex(self, fetcher, progresscb, filename, regex):
+    def _fetchAndMatchRegex(self, filename, regex):
         # Fetch 'filename' and return True/False if it matches the regex
         local_file = None
         try:
             try:
-                local_file = fetcher.acquireFile(filename, progresscb)
+                local_file = self.fetcher.acquireFile(filename)
             except:
                 return False
 
@@ -556,21 +499,20 @@ class Distro(object):
 
         return False
 
-    def _kernelFetchHelper(self, fetcher, guest, progresscb, kernelpath,
-                           initrdpath):
+    def _kernelFetchHelper(self, guest, kernelpath, initrdpath):
         # Simple helper for fetching kernel + initrd and performing
         # cleanup if necessary
-        kernel = fetcher.acquireFile(kernelpath, progresscb)
+        kernel = self.fetcher.acquireFile(kernelpath)
         args = ''
 
-        if not fetcher.location.startswith("/"):
-            args += "%s=%s" % (self.method_arg, fetcher.location)
+        if not self.fetcher.location.startswith("/"):
+            args += "%s=%s" % (self.method_arg, self.fetcher.location)
 
         if guest.installer.extraargs:
             args += " " + guest.installer.extraargs
 
         try:
-            initrd = fetcher.acquireFile(initrdpath, progresscb)
+            initrd = self.fetcher.acquireFile(initrdpath)
             return kernel, initrd, args
         except:
             os.unlink(kernel)
@@ -602,8 +544,8 @@ class GenericDistro(Distro):
     _valid_kernel_path = None
     _valid_iso_path = None
 
-    def isValidStore(self, fetcher, progresscb):
-        if self._hasTreeinfo(fetcher, progresscb):
+    def isValidStore(self):
+        if self._hasTreeinfo():
             # Use treeinfo to pull down media paths
             if self.type == "xen":
                 typ = "xen"
@@ -627,12 +569,12 @@ class GenericDistro(Distro):
         # list of media location paths.
         for kern, init in kern_list:
             if self._valid_kernel_path is None \
-               and fetcher.hasFile(kern) and fetcher.hasFile(init):
+               and self.fetcher.hasFile(kern) and self.fetcher.hasFile(init):
                 self._valid_kernel_path = (kern, init)
                 break
         for iso in self._iso_paths:
             if self._valid_iso_path is None \
-               and fetcher.hasFile(iso):
+               and self.fetcher.hasFile(iso):
                 self._valid_iso_path = iso
                 break
 
@@ -640,20 +582,20 @@ class GenericDistro(Distro):
             return True
         return False
 
-    def acquireKernel(self, guest, fetcher, progresscb):
+    def acquireKernel(self, guest):
         if self._valid_kernel_path is None:
             raise ValueError(_("Could not find a kernel path for virt type "
                                "'%s'" % self.type))
 
-        return self._kernelFetchHelper(fetcher, guest, progresscb,
+        return self._kernelFetchHelper(guest,
                                        self._valid_kernel_path[0],
                                        self._valid_kernel_path[1])
 
-    def acquireBootDisk(self, guest, fetcher, progresscb):
+    def acquireBootDisk(self, guest):
         if self._valid_iso_path is None:
             raise ValueError(_("Could not find a boot iso path for this tree."))
 
-        return fetcher.acquireFile(self._valid_iso_path, progresscb)
+        return self.fetcher.acquireFile(self._valid_iso_path)
 
 
 class RedHatDistro(Distro):
@@ -671,7 +613,7 @@ class RedHatDistro(Distro):
     _xen_kernel_paths = [("images/xen/vmlinuz",
                            "images/xen/initrd.img")]
 
-    def isValidStore(self, fetcher, progresscb):
+    def isValidStore(self):
         raise NotImplementedError
 
 
@@ -679,8 +621,8 @@ class RedHatDistro(Distro):
 class FedoraDistro(RedHatDistro):
     name = "Fedora"
 
-    def isValidStore(self, fetcher, progresscb):
-        if self._hasTreeinfo(fetcher, progresscb):
+    def isValidStore(self):
+        if self._hasTreeinfo():
             m = re.match(".*Fedora.*", self.treeinfo.get("general", "family"))
             ret = (m is not None)
 
@@ -699,7 +641,7 @@ class FedoraDistro(RedHatDistro):
 
             return ret
         else:
-            if fetcher.hasFile("Fedora"):
+            if self.fetcher.hasFile("Fedora"):
                 logging.debug("Detected a Fedora distro")
                 return True
             return False
@@ -719,8 +661,8 @@ class FedoraDistro(RedHatDistro):
 class RHELDistro(RedHatDistro):
     name = "Red Hat Enterprise Linux"
 
-    def isValidStore(self, fetcher, progresscb):
-        if self._hasTreeinfo(fetcher, progresscb):
+    def isValidStore(self):
+        if self._hasTreeinfo():
             m = re.match(".*Red Hat Enterprise Linux.*",
                          self.treeinfo.get("general", "family"))
             ret = (m is not None)
@@ -730,16 +672,16 @@ class RHELDistro(RedHatDistro):
             return ret
         else:
             # fall back to old code
-            if fetcher.hasFile("Server"):
+            if self.fetcher.hasFile("Server"):
                 logging.debug("Detected a RHEL 5 Server distro")
                 self.os_variant = "rhel5"
                 return True
-            if fetcher.hasFile("Client"):
+            if self.fetcher.hasFile("Client"):
                 logging.debug("Detected a RHEL 5 Client distro")
                 self.os_variant = "rhel5"
                 return True
-            if fetcher.hasFile("RedHat"):
-                if fetcher.hasFile("dosutils"):
+            if self.fetcher.hasFile("RedHat"):
+                if self.fetcher.hasFile("dosutils"):
                     self.os_variant = "rhel3"
                 else:
                     self.os_variant = "rhel4"
@@ -749,12 +691,22 @@ class RHELDistro(RedHatDistro):
             return False
 
     def _parseTreeinfoVersion(self, verstr):
-        version = safeint(verstr[0])
+        def _safeint(c):
+            try:
+                val = int(c)
+            except:
+                val = 0
+            return val
+
+        version = _safeint(verstr[0])
         update = 0
 
+        # RHEL has version=5.4, scientific linux=54
         updinfo = verstr.split(".")
         if len(updinfo) > 1:
-            update = safeint(updinfo[1])
+            update = _safeint(updinfo[1])
+        elif len(verstr) > 1:
+            update = _safeint(verstr[1])
 
         return version, update
 
@@ -774,7 +726,7 @@ class RHELDistro(RedHatDistro):
         ret = None
         while update >= 0:
             tryvar = base + ".%s" % update
-            if not _check_osvariant_valid(tryvar):
+            if not self._check_osvariant_valid(tryvar):
                 update -= 1
                 continue
 
@@ -783,7 +735,7 @@ class RHELDistro(RedHatDistro):
 
         if not ret:
             # Try plain rhel5, rhel6, whatev
-            if _check_osvariant_valid(base):
+            if self._check_osvariant_valid(base):
                 ret = base
 
         if ret:
@@ -794,8 +746,8 @@ class RHELDistro(RedHatDistro):
 class CentOSDistro(RHELDistro):
     name = "CentOS"
 
-    def isValidStore(self, fetcher, progresscb):
-        if self._hasTreeinfo(fetcher, progresscb):
+    def isValidStore(self):
+        if self._hasTreeinfo():
             m = re.match(".*CentOS.*", self.treeinfo.get("general", "family"))
             ret = (m is not None)
 
@@ -804,7 +756,7 @@ class CentOSDistro(RHELDistro):
             return ret
         else:
             # fall back to old code
-            if fetcher.hasFile("CentOS"):
+            if self.fetcher.hasFile("CentOS"):
                 logging.debug("Detected a CentOS distro")
                 return True
             return False
@@ -819,8 +771,8 @@ class SLDistro(RHELDistro):
                         [("images/SL/pxeboot/vmlinuz",
                            "images/SL/pxeboot/initrd.img")]
 
-    def isValidStore(self, fetcher, progresscb):
-        if self._hasTreeinfo(fetcher, progresscb):
+    def isValidStore(self):
+        if self._hasTreeinfo():
             m = re.match(".*Scientific Linux.*",
                          self.treeinfo.get("general", "family"))
             ret = (m is not None)
@@ -829,21 +781,10 @@ class SLDistro(RHELDistro):
                 self._variantFromVersion()
             return ret
         else:
-            if fetcher.hasFile("SL"):
+            if self.fetcher.hasFile("SL"):
                 logging.debug("Detected a Scientific Linux distro")
                 return True
             return False
-
-    def _parseTreeinfoVersion(self, verstr):
-        """
-        Overrides method in RHELDistro
-        """
-        version = safeint(verstr[0])
-        update = 0
-
-        if len(verstr) > 1:
-            update = safeint(verstr[1])
-        return version, update
 
 
 # Suse  image store is harder - we fetch the kernel RPM and a helper
@@ -854,14 +795,14 @@ class SuseDistro(Distro):
     method_arg = "install"
     _boot_iso_paths   = ["boot/boot.iso"]
 
-    def __init__(self, uri, arch, vmtype=None, scratchdir=None):
-        Distro.__init__(self, uri, arch, vmtype, scratchdir)
-        if re.match(r'i[4-9]86', arch):
+    def __init__(self, *args, **kwargs):
+        Distro.__init__(self, *args, **kwargs)
+        if re.match(r'i[4-9]86', self.arch):
             self.arch = 'i386'
 
         oldkern = "linux"
         oldinit = "initrd"
-        if arch == "x86_64":
+        if self.arch == "x86_64":
             oldkern += "64"
             oldinit += "64"
 
@@ -876,10 +817,10 @@ class SuseDistro(Distro):
         self._xen_kernel_paths = [("boot/%s/vmlinuz-xen" % self.arch,
                                     "boot/%s/initrd-xen" % self.arch)]
 
-    def isValidStore(self, fetcher, progresscb):
+    def isValidStore(self):
         # Suse distros always have a 'directory.yast' file in the top
         # level of install tree, which we use as the magic check
-        if fetcher.hasFile("directory.yast"):
+        if self.fetcher.hasFile("directory.yast"):
             logging.debug("Detected a Suse distro.")
             return True
         return False
@@ -892,16 +833,16 @@ class DebianDistro(Distro):
     name = "Debian"
     os_variant = "linux"
 
-    def __init__(self, uri, arch, vmtype=None, scratchdir=None):
-        Distro.__init__(self, uri, arch, vmtype, scratchdir)
-        if uri.count("i386"):
+    def __init__(self, *args, **kwargs):
+        Distro.__init__(self, *args, **kwargs)
+        if self.uri.count("i386"):
             self._treeArch = "i386"
-        elif uri.count("amd64"):
+        elif self.uri.count("amd64"):
             self._treeArch = "amd64"
         else:
             self._treeArch = "i386"
 
-        if re.match(r'i[4-9]86', arch):
+        if re.match(r'i[4-9]86', self.arch):
             self.arch = 'i386'
 
         self._installer_name = self.name.lower() + "-" + "installer"
@@ -919,11 +860,11 @@ class DebianDistro(Distro):
         self._xen_kernel_paths = [(xenroot + "vmlinuz",
                                     xenroot + "initrd.gz")]
 
-    def isValidStore(self, fetcher, progresscb):
-        if fetcher.hasFile("%s/MANIFEST" % self._prefix):
+    def isValidStore(self):
+        if self.fetcher.hasFile("%s/MANIFEST" % self._prefix):
             # For regular trees
             pass
-        elif fetcher.hasFile("daily/MANIFEST"):
+        elif self.fetcher.hasFile("daily/MANIFEST"):
             # For daily trees
             self._prefix = "daily"
             self._set_media_paths()
@@ -932,7 +873,7 @@ class DebianDistro(Distro):
 
         filename = "%s/MANIFEST" % self._prefix
         regex = ".*%s.*" % self._installer_name
-        if self._fetchAndMatchRegex(fetcher, progresscb, filename, regex):
+        if self._fetchAndMatchRegex(filename, regex):
             logging.debug("Detected a %s distro", self.name)
             return True
 
@@ -945,12 +886,12 @@ class UbuntuDistro(DebianDistro):
     # http://archive.ubuntu.com/ubuntu/dists/natty/main/installer-amd64/
     name = "Ubuntu"
 
-    def isValidStore(self, fetcher, progresscb):
-        if fetcher.hasFile("%s/MANIFEST" % self._prefix):
+    def isValidStore(self):
+        if self.fetcher.hasFile("%s/MANIFEST" % self._prefix):
             # For regular trees
             filename = "%s/MANIFEST" % self._prefix
             regex = ".*%s.*" % self._installer_name
-        elif fetcher.hasFile("install/netboot/version.info"):
+        elif self.fetcher.hasFile("install/netboot/version.info"):
             # For trees based on ISO's
             self._prefix = "install"
             self._set_media_paths()
@@ -960,7 +901,7 @@ class UbuntuDistro(DebianDistro):
             logging.debug("Doesn't look like an %s Distro.", self.name)
             return False
 
-        if self._fetchAndMatchRegex(fetcher, progresscb, filename, regex):
+        if self._fetchAndMatchRegex(filename, regex):
             logging.debug("Detected an %s distro", self.name)
             return True
 
@@ -977,7 +918,7 @@ class MandrivaDistro(Distro):
     _hvm_kernel_paths = [("isolinux/alt0/vmlinuz", "isolinux/alt0/all.rdz")]
     _xen_kernel_paths = []
 
-    def isValidStore(self, fetcher, progresscb):
+    def isValidStore(self):
         # Don't support any paravirt installs
         if self.type is not None and self.type != "hvm":
             return False
@@ -985,11 +926,10 @@ class MandrivaDistro(Distro):
         # Mandriva websites / media appear to have a VERSION
         # file in top level which we can use as our 'magic'
         # check for validity
-        if not fetcher.hasFile("VERSION"):
+        if not self.fetcher.hasFile("VERSION"):
             return False
 
-        if self._fetchAndMatchRegex(fetcher, progresscb, "VERSION",
-                                    ".*%s.*" % self.name):
+        if self._fetchAndMatchRegex("VERSION", ".*%s.*" % self.name):
             logging.debug("Detected a %s distro", self.name)
             return True
 
@@ -1007,16 +947,15 @@ class ALTLinuxDistro(Distro):
     _hvm_kernel_paths = [("syslinux/alt0/vmlinuz", "syslinux/alt0/full.cz")]
     _xen_kernel_paths = []
 
-    def isValidStore(self, fetcher, progresscb):
+    def isValidStore(self):
         # Don't support any paravirt installs
         if self.type is not None and self.type != "hvm":
             return False
 
-        if not fetcher.hasFile(".disk/info"):
+        if not self.fetcher.hasFile(".disk/info"):
             return False
 
-        if self._fetchAndMatchRegex(fetcher, progresscb, ".disk/info",
-                                    ".*%s.*" % self.name):
+        if self._fetchAndMatchRegex(".disk/info", ".*%s.*" % self.name):
             logging.debug("Detected a %s distro", self.name)
             return True
 
@@ -1028,12 +967,12 @@ class SunDistro(Distro):
     name = "Solaris"
     os_variant = "solaris"
 
-    def isValidStore(self, fetcher, progresscb):
+    def isValidStore(self):
         """Determine if uri points to a tree of the store's distro"""
         raise NotImplementedError
 
-    def acquireBootDisk(self, guest, fetcher, progresscb):
-        return fetcher.acquireFile("images/solarisdvd.iso", progresscb)
+    def acquireBootDisk(self, guest):
+        return self.fetcher.acquireFile("images/solarisdvd.iso")
 
     def process_extra_args(self, argstr):
         """Collect additional arguments."""
@@ -1083,8 +1022,8 @@ class SolarisDistro(SunDistro):
     kernelpath = 'boot/platform/i86xpv/kernel/unix'
     initrdpath = 'boot/x86.miniroot'
 
-    def isValidStore(self, fetcher, progresscb):
-        if fetcher.hasFile(self.kernelpath):
+    def isValidStore(self):
+        if self.fetcher.hasFile(self.kernelpath):
             logging.debug('Detected Solaris')
             return True
         return False
@@ -1148,10 +1087,10 @@ class SolarisDistro(SunDistro):
         args += ['-', iargs]
         return ' '.join(args)
 
-    def acquireKernel(self, guest, fetcher, progresscb):
+    def acquireKernel(self, guest):
 
         try:
-            kernel = fetcher.acquireFile(self.kernelpath, progresscb)
+            kernel = self.fetcher.acquireFile(self.kernelpath)
         except:
             raise RuntimeError("Solaris PV kernel not found at %s" %
                 self.kernelpath)
@@ -1161,7 +1100,7 @@ class SolarisDistro(SunDistro):
         args = "/" + "/".join(kpath) + self.install_args(guest)
 
         try:
-            initrd = fetcher.acquireFile(self.initrdpath, progresscb)
+            initrd = self.fetcher.acquireFile(self.initrdpath)
             return (kernel, initrd, args)
         except:
             os.unlink(kernel)
@@ -1175,8 +1114,8 @@ class OpenSolarisDistro(SunDistro):
     kernelpath = "platform/i86xpv/kernel/unix"
     initrdpaths = ["platform/i86pc/boot_archive", "boot/x86.microroot"]
 
-    def isValidStore(self, fetcher, progresscb):
-        if fetcher.hasFile(self.kernelpath):
+    def isValidStore(self):
+        if self.fetcher.hasFile(self.kernelpath):
             logging.debug("Detected OpenSolaris")
             return True
         return False
@@ -1197,10 +1136,10 @@ class OpenSolarisDistro(SunDistro):
 
         return args
 
-    def acquireKernel(self, guest, fetcher, progresscb):
+    def acquireKernel(self, guest):
 
         try:
-            kernel = fetcher.acquireFile(self.kernelpath, progresscb)
+            kernel = self.fetcher.acquireFile(self.kernelpath)
         except:
             raise RuntimeError(_("OpenSolaris PV kernel not found at %s") %
                 self.kernelpath)
@@ -1208,11 +1147,11 @@ class OpenSolarisDistro(SunDistro):
         args = "/" + self.kernelpath + self.install_args(guest)
 
         try:
-            initrd = fetcher.acquireFile(self.initrdpaths[0], progresscb)
+            initrd = self.fetcher.acquireFile(self.initrdpaths[0])
             return (kernel, initrd, args)
         except Exception, e:
             try:
-                initrd = fetcher.acquireFile(self.initrdpaths[1], progresscb)
+                initrd = self.fetcher.acquireFile(self.initrdpaths[1])
                 return (kernel, initrd, args)
             except:
                 os.unlink(kernel)
@@ -1226,12 +1165,12 @@ class NetWareDistro(Distro):
 
     loaderpath = "STARTUP/XNLOADER.SYS"
 
-    def isValidStore(self, fetcher, progresscb):
-        if fetcher.hasFile(self.loaderpath):
+    def isValidStore(self):
+        if self.fetcher.hasFile(self.loaderpath):
             logging.debug("Detected NetWare")
             return True
         return False
 
-    def acquireKernel(self, guest, fetcher, progresscb):
-        loader = fetcher.acquireFile(self.loaderpath, progresscb)
+    def acquireKernel(self, guest):
+        loader = self.fetcher.acquireFile(self.loaderpath)
         return (loader, "", "")

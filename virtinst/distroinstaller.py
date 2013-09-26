@@ -311,70 +311,45 @@ class DistroInstaller(Installer):
     # Install prepartions #
     #######################
 
-    def _prepare_cdrom(self, guest, meter, scratchdir):
-        transient = not self.livecd
-        if not self._location_is_path:
-            (store_ignore,
-             os_variant_ignore, media) = urlfetcher.getBootDisk(guest,
-                                                              self.location,
-                                                              meter,
-                                                              scratchdir)
-            cdrom = media
+    def _prepare_local(self):
+        transient = True
+        if self.cdrom:
+            transient = not self.livecd
+        return self._make_cdrom_dev(self.location, transient=transient)
 
-            self._tmpfiles.append(cdrom)
-            transient = True
-        else:
-            cdrom = self.location
+    def _prepare_cdrom_url(self, guest, fetcher):
+        store = urlfetcher.getDistroStore(guest, fetcher)
+        media = store.acquireBootDisk(guest)
+        self._tmpfiles.append(media)
+        return self._make_cdrom_dev(media, transient=True)
 
-        disk = self._make_cdrom_dev(cdrom)
-        disk.transient = transient
-        self.install_devices.append(disk)
-
-    def _prepare_kernel_and_initrd(self, guest, meter, scratchdir):
-        disk = None
-
-        # If installing off a local path, map it through to a virtual CD
-        if (self.location is not None and
-            self._location_is_path and
-            not os.path.isdir(self.location)):
-
-            disk = self._make_cdrom_dev(self.location)
-            disk.transient = True
-
-        # Don't fetch kernel if test suite manually injected a boot kernel
-        if self._install_kernel and not self.scratchdir_required():
-            return disk
-
-        ignore, os_variant, media = urlfetcher.getKernel(guest,
-                                                self.location, meter,
-                                                scratchdir,
-                                                guest.os.os_type)
-        (kernelfn, initrdfn, args) = media
+    def _prepare_kernel_url(self, guest, fetcher):
+        store = urlfetcher.getDistroStore(guest, fetcher)
+        kernel, initrd, args = store.acquireKernel(guest)
+        os_variant = store.get_osdict_info()
 
         if guest.os_autodetect:
             if os_variant:
                 logging.debug("Auto detected OS variant as: %s", os_variant)
                 guest.os_variant = os_variant
 
-        self._tmpfiles.append(kernelfn)
-        if initrdfn:
-            self._tmpfiles.append(initrdfn)
+        self._tmpfiles.append(kernel)
+        if initrd:
+            self._tmpfiles.append(initrd)
 
-        _perform_initrd_injections(initrdfn,
+        _perform_initrd_injections(initrd,
                                    self.initrd_injections,
-                                   scratchdir)
+                                   fetcher.scratchdir)
 
-        kernelfn, initrdfn, tmpvols = _upload_media(
-                guest.conn, scratchdir,
+        kernel, initrd, tmpvols = _upload_media(
+                guest.conn, fetcher.scratchdir,
                 util.get_system_scratchdir(guest.type),
-                meter, kernelfn, initrdfn)
+                fetcher.meter, kernel, initrd)
         self._tmpvols += tmpvols
 
-        self._install_kernel = kernelfn
-        self._install_initrd = initrdfn
+        self._install_kernel = kernel
+        self._install_initrd = initrd
         self._install_args = args
-
-        return disk
 
 
     ###########################
@@ -418,6 +393,41 @@ class DistroInstaller(Installer):
         self._location_is_path = True
         return val
 
+    def _prepare(self, guest, meter, scratchdir):
+        logging.debug("Using scratchdir=%s", scratchdir)
+
+        if self.cdrom and not self.location:
+            # Booting from a cdrom directly allocated to the guest
+            return
+
+        # Test suite manually injected a boot kernel
+        if self._install_kernel and not self.scratchdir_required():
+            return
+
+        dev = None
+        if self._location_is_path and not os.path.isdir(self.location):
+            dev = self._prepare_local()
+        else:
+            fetcher = urlfetcher.fetcherForURI(self.location,
+                                               scratchdir, meter)
+            try:
+                try:
+                    fetcher.prepareLocation()
+                except ValueError, e:
+                    logging.exception("Error preparing install location")
+                    raise ValueError(_("Invalid install location: ") + str(e))
+
+                if self.cdrom:
+                    dev = self._prepare_cdrom_url(guest, fetcher)
+                else:
+                    self._prepare_kernel_url(guest, fetcher)
+            finally:
+                fetcher.cleanupLocation()
+
+        if dev:
+            self.install_devices.append(dev)
+
+
 
     ##########################
     # Public installer impls #
@@ -432,34 +442,18 @@ class DistroInstaller(Installer):
 
         return bool(is_url or mount_dvd)
 
-    def _prepare(self, guest, meter, scratchdir):
-        logging.debug("Using scratchdir=%s", scratchdir)
-
-        dev = None
-        if self.cdrom:
-            if self.location:
-                dev = self._prepare_cdrom(guest, meter, scratchdir)
-            else:
-                # Booting from a cdrom directly allocated to the guest
-                pass
-        else:
-            dev = self._prepare_kernel_and_initrd(guest, meter, scratchdir)
-
-        if dev:
-            self.install_devices.append(dev)
-
-    def check_location(self, arch):
+    def check_location(self, guest):
         if self._location_is_path:
             # We already mostly validated this
             return True
 
         # This will throw an error for us
-        urlfetcher.detectMediaDistro(self.location, arch)
+        urlfetcher.detectMediaDistro(guest, self.location)
         return True
 
-    def detect_distro(self, arch):
+    def detect_distro(self, guest):
         try:
-            return urlfetcher.detectMediaDistro(self.location, arch)
+            return urlfetcher.detectMediaDistro(guest, self.location)
         except:
             logging.exception("Error attempting to detect distro.")
             return None

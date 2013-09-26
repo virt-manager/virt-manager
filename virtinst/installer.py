@@ -114,11 +114,13 @@ class Installer(object):
                 break
         return bootorder
 
-    def _make_cdrom_dev(self, path):
+    def _make_cdrom_dev(self, path, transient=False):
         dev = virtinst.VirtualDisk(self.conn)
         dev.path = path
         dev.device = dev.DEVICE_CDROM
         dev.read_only = True
+        dev.transient = transient
+
         dev.validate()
         return dev
 
@@ -206,17 +208,21 @@ class Installer(object):
 
     def prepare(self, guest, meter, scratchdir):
         self.cleanup()
-        self._prepare(guest, meter, scratchdir)
+        try:
+            self._prepare(guest, meter, scratchdir)
+        except:
+            self.cleanup()
+            raise
 
-    def check_location(self, arch):
+    def check_location(self, guest):
         """
         Validate self.location seems to work. This will might hit the
         network so we don't want to do it on demand.
         """
-        ignore = arch
+        ignore = guest
         return True
 
-    def detect_distro(self, arch):
+    def detect_distro(self, guest):
         """
         Attempt to detect the distro for the Installer's 'location'. If
         an error is encountered in the detection process (or if detection
@@ -224,7 +230,7 @@ class Installer(object):
 
         @returns: (distro type, distro variant) tuple
         """
-        ignore = arch
+        ignore = guest
         return (None, None)
 
 

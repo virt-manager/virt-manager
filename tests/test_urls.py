@@ -187,22 +187,24 @@ _add(MANDRIVA_URL % ("2010.2", "x86_64"),
 
 
 testconn = utils.open_testdefault()
-testguest = Guest(testconn)
+hvmguest = Guest(testconn)
+hvmguest.os.os_type = "hvm"
+xenguest = Guest(testconn)
+xenguest.os.os_type = "xen"
+
 meter = urlgrabber.progress.BaseMeter()
 if utils.get_debug():
     meter = urlgrabber.progress.TextMeter(fo=sys.stdout)
 
 
-def _storeForDistro(fetcher, url, _type, arch):
+def _storeForDistro(fetcher, guest):
     """
     Helper to lookup the Distro store object, basically detecting the
     URL. Handle occasional proxy errors
     """
     for ignore in range(0, 10):
         try:
-            return urlfetcher._storeForDistro(fetcher=fetcher, baseuri=url,
-                                            progresscb=meter,
-                                            arch=arch, typ=_type)
+            return urlfetcher.getDistroStore(guest, fetcher)
         except Exception, e:
             if str(e).count("502"):
                 logging.debug("Caught proxy error: %s", str(e))
@@ -220,21 +222,24 @@ def _testLocalMedia(fetcher, path):
     arch = platform.machine()
 
     # Make sure we detect _a_ distro
-    hvmstore = _storeForDistro(fetcher, path, "hvm", arch)
+    hvmguest.os.arch = arch
+    hvmstore = _storeForDistro(fetcher, hvmguest)
     logging.debug("Local distro detected as: %s", hvmstore)
 
 
-def _testURL(fetcher, distname, url, arch, distroobj):
+def _testURL(fetcher, distname, arch, distroobj):
     """
     Test that our URL detection logic works for grabbing kernel, xen
     kernel, and boot.iso
     """
     print "\nTesting %s-%s" % (distname, arch)
+    hvmguest.os.arch = arch
+    xenguest.os.arch = arch
 
-    hvmstore = _storeForDistro(fetcher, url, "hvm", arch)
+    hvmstore = _storeForDistro(fetcher, hvmguest)
     xenstore = None
-    if distroobj:
-        xenstore = _storeForDistro(fetcher, url, "xen", arch)
+    if distroobj.hasxen:
+        xenstore = _storeForDistro(fetcher, xenguest)
 
     exp_store = distroClass(distname)
     for s in [hvmstore, xenstore]:
@@ -250,8 +255,7 @@ def _testURL(fetcher, distname, url, arch, distroobj):
 
     # Do this only after the distro detection, since we actually need
     # to fetch files for that part
-    def fakeAcquireFile(filename, _meter):
-        ignore = _meter
+    def fakeAcquireFile(filename):
         logging.debug("Fake acquiring %s", filename)
         return fetcher.hasFile(filename)
     fetcher.acquireFile = fakeAcquireFile
@@ -261,7 +265,7 @@ def _testURL(fetcher, distname, url, arch, distroobj):
         logging.debug("Known lack of boot.iso in %s tree. Skipping.",
                       distname)
     else:
-        boot = hvmstore.acquireBootDisk(testguest, fetcher, meter)
+        boot = hvmstore.acquireBootDisk(hvmguest)
         logging.debug("acquireBootDisk: %s", str(boot))
 
         if boot is not True:
@@ -269,7 +273,7 @@ def _testURL(fetcher, distname, url, arch, distroobj):
                                  (distname, arch))
 
     # Fetch regular kernel
-    kern = hvmstore.acquireKernel(testguest, fetcher, meter)
+    kern = hvmstore.acquireKernel(hvmguest)
     logging.debug("acquireKernel (hvm): %s", str(kern))
 
     if kern[0] is not True or kern[1] is not True:
@@ -280,7 +284,7 @@ def _testURL(fetcher, distname, url, arch, distroobj):
     if not xenstore:
         logging.debug("acquireKernel (xen): Hardcoded skipping.")
     else:
-        kern = xenstore.acquireKernel(testguest, fetcher, meter)
+        kern = xenstore.acquireKernel(xenguest)
         logging.debug("acquireKernel (xen): %s", str(kern))
 
         if kern[0] is not True or kern[1] is not True:
@@ -288,9 +292,8 @@ def _testURL(fetcher, distname, url, arch, distroobj):
                                  (distname, arch))
 
 
-
 def _fetch_wrapper(url, cb, *args):
-    fetcher = urlfetcher._fetcherForURI(url, "/tmp")
+    fetcher = urlfetcher.fetcherForURI(url, "/tmp", meter)
     try:
         fetcher.prepareLocation()
         return cb(fetcher, *args)
@@ -328,7 +331,7 @@ def _make_tests():
                               ("x86_64", distroobj.x86_64)]:
                 if not url:
                     continue
-                args = (key, url, arch, distroobj)
+                args = (key, arch, distroobj)
                 testfunc = _make_test_wrapper(url, _testURL, args)
                 setattr(URLTests, "testURL%s%s" % (key, arch), testfunc)
 

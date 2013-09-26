@@ -1398,10 +1398,14 @@ class vmmCreate(vmmGObjectUI):
         gdev.type = gtype
         return gdev
 
+
+    def build_guest_stub(self):
+        return self.conn.caps.build_virtinst_guest(self.conn.get_backend(),
+                                                   self.capsguest,
+                                                   self.capsdomain)
+
     def build_guest(self, installer, name):
-        guest = self.conn.caps.build_virtinst_guest(self.conn.get_backend(),
-                                                    self.capsguest,
-                                                    self.capsdomain)
+        guest = self.build_guest_stub()
         guest.installer = installer
         guest.name = name
 
@@ -2048,8 +2052,9 @@ class vmmCreate(vmmGObjectUI):
         try:
             installer = virtinst.DistroInstaller(self.conn)
             installer.location = media
+            guest = self.guest or self.build_guest_stub()
 
-            self.detectedDistro = installer.detect_distro(self.capsguest.arch)
+            self.detectedDistro = installer.detect_distro(guest)
         except:
             logging.exception("Error detecting distro.")
             self.detectedDistro = -1

@@ -361,7 +361,7 @@ def validate_install_media(guest, location, cdpath, cdinstall=False):
         guest.installer.cdrom = True
     if location or cdpath:
         guest.installer.location = (location or cdpath)
-    guest.installer.check_location(guest.os.arch)
+    guest.installer.check_location(guest)
 
 
 #############################
