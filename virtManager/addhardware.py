@@ -1696,7 +1696,7 @@ class vmmAddHardware(vmmGObjectUI):
                 if self._dev.supports_property(param_name):
                     setattr(self._dev, param_name, val)
         except Exception, e:
-            return self.err.val_err(_("TPM device parameter error"), e)
+            return self.err.val_err(_("RNG device parameter error"), e)
 
 
     ####################
