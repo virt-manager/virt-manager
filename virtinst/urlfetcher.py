@@ -323,6 +323,8 @@ def getDistroStore(guest, fetcher, distro=None):
         # We already tried the treeinfo short circuit, so skip it here
         store.uses_treeinfo = False
         if store.isValidStore():
+            logging.debug("Detected distro name=%s osvariant=%s",
+                          store.name, store.os_variant)
             return store
 
     raise ValueError(
@@ -421,6 +423,9 @@ class Distro(object):
             raise RuntimeError(_("Could not find boot.iso in %s tree." %
                                self.name))
 
+    def _check_osvariant_valid(self, os_variant):
+        return osdict.lookup_os(os_variant) is not None
+
     def get_osdict_info(self):
         """
         Return (distro, variant) tuple, checking to make sure they are valid
@@ -435,9 +440,6 @@ class Distro(object):
             return None
 
         return self.os_variant
-
-    def _check_osvariant_valid(self, os_variant):
-        return osdict.lookup_os(os_variant) is not None
 
     def _hasTreeinfo(self):
         # all Red Hat based distros should have .treeinfo, perhaps others
@@ -560,13 +562,15 @@ class GenericDistro(Distro):
         # If validated media paths weren't found (no treeinfo), check against
         # list of media location paths.
         for kern, init in kern_list:
-            if self._valid_kernel_path is None \
-               and self.fetcher.hasFile(kern) and self.fetcher.hasFile(init):
+            if (self._valid_kernel_path is None and
+                self.fetcher.hasFile(kern) and
+                self.fetcher.hasFile(init)):
                 self._valid_kernel_path = (kern, init)
                 break
+
         for iso in self._iso_paths:
-            if self._valid_iso_path is None \
-               and self.fetcher.hasFile(iso):
+            if (self._valid_iso_path is None and
+                self.fetcher.hasFile(iso)):
                 self._valid_iso_path = iso
                 break
 
@@ -606,7 +610,7 @@ class RedHatDistro(Distro):
                            "images/xen/initrd.img")]
 
     def isValidStore(self):
-        raise NotImplementedError
+        raise NotImplementedError()
 
 
 # Fedora distro check
@@ -632,11 +636,8 @@ class FedoraDistro(RedHatDistro):
 
 
             return ret
-        else:
-            if self.fetcher.hasFile("Fedora"):
-                logging.debug("Detected a Fedora distro")
-                return True
-            return False
+
+        return self.fetcher.hasFile("Fedora")
 
     def _latestFedoraVariant(self):
         ret = None
@@ -662,25 +663,12 @@ class RHELDistro(RedHatDistro):
             if ret:
                 self._variantFromVersion()
             return ret
-        else:
-            # fall back to old code
-            if self.fetcher.hasFile("Server"):
-                logging.debug("Detected a RHEL 5 Server distro")
-                self.os_variant = "rhel5"
-                return True
-            if self.fetcher.hasFile("Client"):
-                logging.debug("Detected a RHEL 5 Client distro")
-                self.os_variant = "rhel5"
-                return True
-            if self.fetcher.hasFile("RedHat"):
-                if self.fetcher.hasFile("dosutils"):
-                    self.os_variant = "rhel3"
-                else:
-                    self.os_variant = "rhel4"
 
-                logging.debug("Detected a %s distro", self.os_variant)
-                return True
-            return False
+        if (self.fetcher.hasFile("Server") or
+            self.fetcher.hasFile("Client")):
+            self.os_variant = "rhel5"
+            return True
+        return self.fetcher.hasFile("RedHat")
 
     def _parseTreeinfoVersion(self, verstr):
         def _safeint(c):
@@ -746,12 +734,8 @@ class CentOSDistro(RHELDistro):
             if ret:
                 self._variantFromVersion()
             return ret
-        else:
-            # fall back to old code
-            if self.fetcher.hasFile("CentOS"):
-                logging.debug("Detected a CentOS distro")
-                return True
-            return False
+
+        return self.fetcher.hasFile("CentOS")
 
 
 # Scientific Linux distro check
@@ -759,9 +743,8 @@ class SLDistro(RHELDistro):
     name = "Scientific Linux"
 
     _boot_iso_paths = RHELDistro._boot_iso_paths + ["images/SL/boot.iso"]
-    _hvm_kernel_paths = RHELDistro._hvm_kernel_paths + \
-                        [("images/SL/pxeboot/vmlinuz",
-                           "images/SL/pxeboot/initrd.img")]
+    _hvm_kernel_paths = RHELDistro._hvm_kernel_paths + [
+        ("images/SL/pxeboot/vmlinuz", "images/SL/pxeboot/initrd.img")]
 
     def isValidStore(self):
         if self._hasTreeinfo():
@@ -772,11 +755,8 @@ class SLDistro(RHELDistro):
             if ret:
                 self._variantFromVersion()
             return ret
-        else:
-            if self.fetcher.hasFile("SL"):
-                logging.debug("Detected a Scientific Linux distro")
-                return True
-            return False
+
+        return self.fetcher.hasFile("SL")
 
 
 # Suse  image store is harder - we fetch the kernel RPM and a helper
@@ -810,18 +790,12 @@ class SuseDistro(Distro):
                                     "boot/%s/initrd-xen" % self.arch)]
 
     def isValidStore(self):
-        # Suse distros always have a 'directory.yast' file in the top
-        # level of install tree, which we use as the magic check
-        if self.fetcher.hasFile("directory.yast"):
-            logging.debug("Detected a Suse distro.")
-            return True
-        return False
+        return self.fetcher.hasFile("directory.yast")
 
 
 class DebianDistro(Distro):
     # ex. http://ftp.egr.msu.edu/debian/dists/sarge/main/installer-i386/
     # daily builds: http://d-i.debian.org/daily-images/amd64/
-
     name = "Debian"
     os_variant = "linux"
 
@@ -866,11 +840,9 @@ class DebianDistro(Distro):
         filename = "%s/MANIFEST" % self._prefix
         regex = ".*%s.*" % self._installer_name
         if self._fetchAndMatchRegex(filename, regex):
-            logging.debug("Detected a %s distro", self.name)
             return True
 
-        logging.debug("MANIFEST didn't match regex, not a %s distro",
-                      self.name)
+        logging.debug("Regex didn't match, not a %s distro", self.name)
         return False
 
 
@@ -890,14 +862,12 @@ class UbuntuDistro(DebianDistro):
             filename = "%s/netboot/version.info" % self._prefix
             regex = "%s*" % self.name
         else:
-            logging.debug("Doesn't look like an %s Distro.", self.name)
             return False
 
         if self._fetchAndMatchRegex(filename, regex):
-            logging.debug("Detected an %s distro", self.name)
             return True
 
-        logging.debug("Regex didn't match, not an %s distro", self.name)
+        logging.debug("Regex didn't match, not a %s distro", self.name)
         return False
 
 
@@ -922,9 +892,9 @@ class MandrivaDistro(Distro):
             return False
 
         if self._fetchAndMatchRegex("VERSION", ".*%s.*" % self.name):
-            logging.debug("Detected a %s distro", self.name)
             return True
 
+        logging.debug("Regex didn't match, not a %s distro", self.name)
         return False
 
 
@@ -948,7 +918,7 @@ class ALTLinuxDistro(Distro):
             return False
 
         if self._fetchAndMatchRegex(".disk/info", ".*%s.*" % self.name):
-            logging.debug("Detected a %s distro", self.name)
             return True
 
+        logging.debug("Regex didn't match, not a %s distro", self.name)
         return False
