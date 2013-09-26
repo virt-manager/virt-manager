@@ -17,7 +17,6 @@
 import unittest
 import time
 import logging
-import re
 import platform
 import sys
 
@@ -49,7 +48,8 @@ FEDORA_URL = "http://download.fedoraproject.org/pub/fedora/linux/releases/%s/Fed
 
 OLD_CENTOS_URL = "http://vault.centos.org/%s/os/%s"
 CENTOS_URL = "http://ftp.linux.ncsu.edu/pub/CentOS/%s/os/%s/"
-SCIENTIFIC_URL = "http://ftp.scientificlinux.org/linux/scientific/%s/%s/"
+OLD_SCIENTIFIC_URL = "http://ftp.scientificlinux.org/linux/scientific/%s/%s/"
+SCIENTIFIC_URL = "http://ftp.scientificlinux.org/linux/scientific/%s/%s/os"
 
 OPENSUSE10 = "http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/10.0"
 OLD_OPENSUSE_URL = "http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/%s/repo/oss"
@@ -68,6 +68,7 @@ MANDRIVA_URL = "http://ftp.uwsg.indiana.edu/linux/mandrake/official/%s/%s/"
 urls = {}
 _distro = None
 
+
 class _DistroURL(object):
     def __init__(self, x86_64, detectdistro="linux", i686=None,
                  hasxen=True, hasbootiso=True, name=None):
@@ -79,10 +80,12 @@ class _DistroURL(object):
         self.name = name or self.detectdistro
         self.distroclass = _distro
 
+
 def _set_distro(_d):
     # Saves us from having to pass distro class to ever _add invocation
     global _distro
     _distro = _d
+
 
 def _add(*args, **kwargs):
     _d = _DistroURL(*args, **kwargs)
@@ -127,12 +130,8 @@ _add(CENTOS_URL % ("6", "x86_64"), "rhel6", name="centos-6-latest",
 
 
 _set_distro(SLDistro)
-# Early scientific 5
-_add(SCIENTIFIC_URL % ("50", "x86_64"), name="sl-5.0")
-# Pre-5.4 w/ treeinfo for distro detection
-_add(SCIENTIFIC_URL % ("52", "x86_64"), "rhel5", name="sl-5.2")
 # Latest scientific 5
-_add(SCIENTIFIC_URL % ("55", "x86_64"), "rhel5.4", name="sl-5latest")
+_add(OLD_SCIENTIFIC_URL % ("55", "x86_64"), "rhel5.4", name="sl-5latest")
 # Latest scientific 6
 _add(SCIENTIFIC_URL % ("6", "x86_64"), "rhel6", name="sl-6latest")
 
