@@ -36,7 +36,13 @@ class XMLProperty(OrigXMLProperty):
 
 
 def _lookupNodeName(conn, name):
-    nodedev = conn.nodeDeviceLookupByName(name)
+    try:
+        nodedev = conn.nodeDeviceLookupByName(name)
+    except libvirt.libvirtError, e:
+        raise libvirt.libvirtError(
+            _("Did not find node device '%s': %s" %
+            (name, str(e))))
+
     xml = nodedev.XMLDesc(0)
     return NodeDevice.parse(conn, xml)
 
@@ -66,7 +72,7 @@ class NodeDevice(XMLBuilder):
 
         @param conn: libvirt.virConnect instance to perform the lookup on
         @param name: libvirt node device name to lookup, or address for
-                     devAddressToNodedev
+                     _devAddressToNodedev
 
         @rtype: L{NodeDevice} instance
         """
@@ -75,14 +81,13 @@ class NodeDevice(XMLBuilder):
                                "enumeration."))
 
         try:
-            return (_lookupNodeName(conn, name),
-                     NodeDevice.HOSTDEV_ADDR_TYPE_LIBVIRT)
+            return _lookupNodeName(conn, name)
         except libvirt.libvirtError, e:
             ret = _isAddressStr(name)
             if not ret:
                 raise e
 
-            return devAddressToNodedev(conn, name)
+            return _devAddressToNodedev(conn, name)
 
     @staticmethod
     def parse(conn, xml):
@@ -94,6 +99,9 @@ class NodeDevice(XMLBuilder):
         instantiate = kwargs.pop("allow_node_instantiate", False)
         if self.__class__ is NodeDevice and not instantiate:
             raise RuntimeError("Can not instantiate NodeDevice directly")
+
+        self.addr_type = None
+
         XMLBuilder.__init__(self, *args, **kwargs)
 
     _XML_ROOT_NAME = "device"
@@ -316,6 +324,8 @@ def _isAddressStr(addrstr):
                         (int(nodedev.device) == addr))
             cmp_func = usbaddr_cmp
             addr_type = NodeDevice.HOSTDEV_ADDR_TYPE_USB_BUSADDR
+        else:
+            return None
     except:
         logging.exception("Error parsing node device string.")
         return None
@@ -323,7 +333,7 @@ def _isAddressStr(addrstr):
     return cmp_func, devtype, addr_type
 
 
-def devAddressToNodedev(conn, addrstr):
+def _devAddressToNodedev(conn, addrstr):
     """
     Look up the passed host device address string as a libvirt node device,
     parse its xml, and return a NodeDevice instance.
@@ -335,10 +345,6 @@ def devAddressToNodedev(conn, addrstr):
         - (domain:)bus:slot.func (ex. 00:10.0 for a pci device)
     @param addrstr: C{str}
     """
-    if not conn.check_conn_support(conn.SUPPORT_CONN_NODEDEV):
-        raise ValueError(_("Connection does not support host device "
-                           "enumeration."))
-
     ret = _isAddressStr(addrstr)
     if not ret:
         raise ValueError(_("Could not determine format of '%s'") % addrstr)
@@ -357,7 +363,8 @@ def devAddressToNodedev(conn, addrstr):
             count += 1
 
     if count == 1:
-        return nodedev, addr_type
+        nodedev.addr_type = addr_type
+        return nodedev
     elif count > 1:
         raise ValueError(_("%s corresponds to multiple node devices") %
                          addrstr)

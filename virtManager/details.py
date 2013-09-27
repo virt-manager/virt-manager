@@ -278,8 +278,7 @@ def lookup_nodedev(vmmconn, hostdev):
     devtype = hostdev.type
     found_dev = None
 
-    vendor_id = product_id = bus = device = \
-        domain = slot = func = None
+    vendor_id = product_id = bus = device = domain = slot = func = None
 
     # For USB we want a device, not a bus
     if devtype == 'usb':

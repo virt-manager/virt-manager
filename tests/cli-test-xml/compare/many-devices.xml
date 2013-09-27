@@ -76,6 +76,11 @@
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
+    <hostdev mode="subsystem" type="pci" managed="yes">
+      <source>
+        <address domain="0" bus="0" slot="25" function="0"/>
+      </source>
+    </hostdev>
     <smartcard mode="passthrough" type="spicevmc"/>
     <tpm model="tpm-tis">
       <backend type="passthrough">
@@ -164,6 +169,11 @@
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
+    <hostdev mode="subsystem" type="pci" managed="yes">
+      <source>
+        <address domain="0" bus="0" slot="25" function="0"/>
+      </source>
+    </hostdev>
     <smartcard mode="passthrough" type="spicevmc"/>
     <tpm model="tpm-tis">
       <backend type="passthrough">

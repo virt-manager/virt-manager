@@ -25,42 +25,17 @@ from virtinst.xmlbuilder import XMLProperty
 class VirtualHostDevice(VirtualDevice):
     virtual_device_type = VirtualDevice.VIRTUAL_DEV_HOSTDEV
 
-    @staticmethod
-    def device_from_node(conn, name=None, nodedev=None, is_dup=False,
-                         dev=None):
+    def set_from_nodedev(self, nodedev, use_full_usb=None):
         """
-        Convert the passed device name to a VirtualHostDevice
-        instance, with proper error reporting. Name can be any of the
-        values accepted by NodeDevice.lookupNodeName. If a node
-        device name is not specified, a virtinst.NodeDevice instance can
-        be passed in to create a dev from.
-
-        @param conn: libvirt.virConnect instance to perform the lookup on
-        @param name: optional libvirt node device name to lookup
-        @param nodedev: optional L{virtinst.NodeDevice} instance to use
-
-        @rtype: L{virtinst.VirtualHostDevice} instance
+        @use_full_usb: If set, and nodedev is USB, specify both
+            vendor and product. Used if user requests bus/add on virt-install
+            command line, or if virt-manager detects a dup USB device
+            and we need to differentiate
         """
-        if not name and not nodedev:
-            raise ValueError("'name' or 'nodedev' required.")
+        if (use_full_usb is None and
+            nodedev.addr_type == nodedev.HOSTDEV_ADDR_TYPE_USB_BUSADDR):
+            use_full_usb = True
 
-        if nodedev:
-            nodeinst = nodedev
-        else:
-            nodeinst, addr_type = NodeDevice.lookupNodeName(conn, name)
-            if addr_type == NodeDevice.HOSTDEV_ADDR_TYPE_USB_BUSADDR:
-                is_dup = True
-
-        if nodeinst.device_type == nodeinst.CAPABILITY_TYPE_NET:
-            parentname = nodeinst.parent
-            return VirtualHostDevice.device_from_node(conn,
-                                                      name=parentname)
-        if not dev:
-            dev = VirtualHostDevice(conn)
-        dev.set_from_nodedev(nodeinst, is_dup)
-        return dev
-
-    def set_from_nodedev(self, nodedev, is_dup=False):
         if nodedev.device_type == NodeDevice.CAPABILITY_TYPE_PCI:
             self.type = "pci"
             self.domain = nodedev.domain
@@ -73,9 +48,14 @@ class VirtualHostDevice(VirtualDevice):
             self.vendor = nodedev.vendor_id
             self.product = nodedev.product_id
 
-            if is_dup:
+            if use_full_usb:
                 self.bus = nodedev.bus
                 self.device = nodedev.device
+
+        elif nodedev.device_type == nodedev.CAPABILITY_TYPE_NET:
+            parentnode = nodedev.lookupNodeName(self.conn, nodedev.parent)
+            self.set_from_nodedev(parentnode, use_full_usb=use_full_usb)
+
         else:
             raise ValueError("Unknown node device type %s" % nodedev)
 

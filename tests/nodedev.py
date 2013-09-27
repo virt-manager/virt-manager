@@ -64,8 +64,8 @@ class TestNodeDev(unittest.TestCase):
         if not nodedev:
             nodedev = self._nodeDevFromName(nodename)
 
-        dev = VirtualHostDevice.device_from_node(conn, nodedev=nodedev,
-                                                 is_dup=is_dup)
+        dev = VirtualHostDevice(conn)
+        dev.set_from_nodedev(nodedev, use_full_usb=is_dup)
         utils.diff_compare(dev.get_xml_config() + "\n", devfile)
 
     def testSystemDevice(self):

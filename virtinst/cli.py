@@ -1919,8 +1919,11 @@ def parse_sound(guest, optstr, dev=None):
 #####################
 
 def parse_hostdev(guest, optstr, dev=None):
-    return virtinst.VirtualHostDevice.device_from_node(guest.conn,
-                                                       name=optstr,
-                                                       dev=dev)
+    if not dev:
+        dev = virtinst.VirtualHostDevice(guest.conn)
+
+    nodedev = virtinst.NodeDevice.lookupNodeName(guest.conn, optstr)
+    dev.set_from_nodedev(nodedev)
+    return dev
 
 get_hostdevs = _make_handler("hostdev", parse_hostdev)

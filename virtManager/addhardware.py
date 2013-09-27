@@ -1485,16 +1485,13 @@ class vmmAddHardware(vmmGObjectUI):
                 raise RuntimeError(_("Could not find USB device "
                                      "(vendorId: %s, productId: %s) "
                                      % (vendor, product)))
-
             if count > 1:
                 is_dup = True
 
         try:
-            self._dev = virtinst.VirtualHostDevice.device_from_node(
-                            conn=self.conn.get_backend(),
-                            name=nodedev_name,
-                            nodedev=nodedev,
-                            is_dup=is_dup)
+            dev = virtinst.VirtualHostDevice(self.conn.get_backend())
+            dev.set_from_nodedev(nodedev, use_full_usb=is_dup)
+            self._dev = dev
         except Exception, e:
             return self.err.val_err(_("Host device parameter error"), e)
 
