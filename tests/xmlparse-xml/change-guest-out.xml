@@ -11,7 +11,12 @@
     <bootmenu enable="no"/>
     <bios useserial="yes"/>
   </os>
-  <features><apic/>
+  <features><apic eoi="on"/>
+    <hyperv>
+      <spinlocks state="on" retries="54321"/>
+      <relaxed state="on"/>
+    </hyperv>
+    <viridian/>
   </features>
   <numatune>
     <memory nodeset="2,4,6"/>

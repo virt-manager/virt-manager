@@ -8,7 +8,11 @@
     <boot dev="hd"/>
   </os>
   <features>
-    <acpi/><apic/>
+      <acpi/><apic/>
+    <hyperv>
+      <vapic state='off'/>
+      <spinlocks state='on' retries='12287'/>
+    </hyperv>
   </features>
   <numatune>
     <memory mode='interleave' nodeset='1-5,^3,7'/>

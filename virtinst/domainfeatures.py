@@ -28,11 +28,20 @@ class DomainFeatures(XMLBuilder):
     _XML_PROP_ORDER = ["acpi", "apic", "pae"]
 
     acpi = XMLProperty("./acpi", is_bool=True,
-                       default_name="default",
-                       default_cb=lambda s: False)
+                       default_name="default", default_cb=lambda s: False)
     apic = XMLProperty("./apic", is_bool=True,
-                       default_name="default",
-                       default_cb=lambda s: False)
+                       default_name="default", default_cb=lambda s: False)
     pae = XMLProperty("./pae", is_bool=True,
-                       default_name="default",
-                       default_cb=lambda s: False)
+                       default_name="default", default_cb=lambda s: False)
+
+    hap = XMLProperty("./hap", is_bool=True)
+    viridian = XMLProperty("./viridian", is_bool=True)
+    privnet = XMLProperty("./privnet", is_bool=True)
+
+    eoi = XMLProperty("./apic/@eoi", is_onoff=True)
+
+    hyperv_vapic = XMLProperty("./hyperv/vapic/@state", is_onoff=True)
+    hyperv_relaxed = XMLProperty("./hyperv/relaxed/@state", is_onoff=True)
+    hyperv_spinlocks = XMLProperty("./hyperv/spinlocks/@state", is_onoff=True)
+    hyperv_spinlocks_retries = XMLProperty("./hyperv/spinlocks/@retries",
+                                           is_int=True)

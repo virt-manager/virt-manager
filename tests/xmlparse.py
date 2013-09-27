@@ -146,8 +146,16 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(guest.features)
         check("acpi", True, False)
-        check("apic", True, False, True)
-        check("pae", False, True, False)
+        check("apic", True, True)
+        check("eoi", None, True)
+        check("pae", False, False)
+        check("viridian", False, True)
+        check("hap", False, False)
+        check("privnet", False, False)
+        check("hyperv_relaxed", None, True)
+        check("hyperv_vapic", False, None)
+        check("hyperv_spinlocks", True, True)
+        check("hyperv_spinlocks_retries", 12287, 54321)
 
         check = self._make_checker(guest.cpu)
         check("match", "exact", "strict")
