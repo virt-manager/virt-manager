@@ -657,12 +657,12 @@ class StorageVolume(_StorageObject):
     def list_formats(self):
         if self.file_type == self.TYPE_FILE:
             return ["raw", "bochs", "cloop", "cow", "dmg", "iso", "qcow",
-                    "qcow2", "qed", "vmdk", "vpc"]
+                    "qcow2", "qed", "vmdk", "vpc", "vdi"]
         return []
 
     def list_create_formats(self):
         if self.file_type == self.TYPE_FILE:
-            return ["raw", "cow", "qcow", "qcow2", "qed", "vmdk", "vpc"]
+            return ["raw", "cow", "qcow", "qcow2", "qed", "vmdk", "vpc", "vdi"]
         return None
 
 
