@@ -152,8 +152,8 @@ class vmmAddHardware(vmmGObjectUI):
         notebook = self.widget("create-pages")
         notebook.set_show_tabs(False)
 
-        black = Gdk.Color.parse("#000")[1]
-        self.widget("page-title-box").modify_bg(Gtk.StateType.NORMAL, black)
+        blue = Gdk.color_parse("#0072A8")
+        self.widget("page-title-box").modify_bg(Gtk.StateType.NORMAL, blue)
 
         # Name, icon name, page number, is sensitive, tooltip, icon size,
         # device type (serial/parallel)...
@@ -1047,8 +1047,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def set_page_title(self, page):
         title = self.dev_to_title(page)
-        markup = ("""<span weight="heavy" size="xx-large" """
-                  """foreground="#FFF">%s</span>""") % title
+        markup = "<span size='large' color='white'>%s</span>" % title
         self.widget("page-title-label").set_markup(markup)
 
     def change_tpm_device_type(self, src):
