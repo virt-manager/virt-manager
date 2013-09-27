@@ -688,34 +688,33 @@ class vmmDetails(vmmGObjectUI):
 
 
     def init_graphs(self):
-        graph_table = self.widget("graph-table")
+        def _make_graph():
+            g = Sparkline()
+            g.set_property("reversed", True)
+            g.show()
+            return g
 
-        self.cpu_usage_graph = Sparkline()
-        self.cpu_usage_graph.set_property("reversed", True)
-        graph_table.attach(self.cpu_usage_graph, 1, 2, 0, 1)
+        self.cpu_usage_graph = _make_graph()
+        self.widget("overview-cpu-usage-align").add(self.cpu_usage_graph)
 
-        self.memory_usage_graph = Sparkline()
-        self.memory_usage_graph.set_property("reversed", True)
-        graph_table.attach(self.memory_usage_graph, 1, 2, 1, 2)
+        self.memory_usage_graph = _make_graph()
+        self.widget("overview-memory-usage-align").add(self.memory_usage_graph)
 
-        self.disk_io_graph = Sparkline()
-        self.disk_io_graph.set_property("reversed", True)
+        self.disk_io_graph = _make_graph()
         self.disk_io_graph.set_property("filled", False)
         self.disk_io_graph.set_property("num_sets", 2)
         self.disk_io_graph.set_property("rgb", [x / 255.0 for x in
                                         [0x82, 0x00, 0x3B, 0x29, 0x5C, 0x45]])
-        graph_table.attach(self.disk_io_graph, 1, 2, 2, 3)
+        self.widget("overview-disk-usage-align").add(self.disk_io_graph)
 
-        self.network_traffic_graph = Sparkline()
-        self.network_traffic_graph.set_property("reversed", True)
+        self.network_traffic_graph = _make_graph()
         self.network_traffic_graph.set_property("filled", False)
         self.network_traffic_graph.set_property("num_sets", 2)
         self.network_traffic_graph.set_property("rgb", [x / 255.0 for x in
                                                     [0x82, 0x00, 0x3B,
                                                      0x29, 0x5C, 0x45]])
-        graph_table.attach(self.network_traffic_graph, 1, 2, 3, 4)
-
-        graph_table.show_all()
+        self.widget("overview-network-traffic-align").add(
+            self.network_traffic_graph)
 
     def init_details(self):
         # Hardware list
@@ -2648,11 +2647,11 @@ class vmmDetails(vmmGObjectUI):
 
     def refresh_stats_page(self):
         def _dsk_rx_tx_text(rx, tx, unit):
-            return ('<span color="#82003B">%(rx)d %(unit)s read</span>\n'
+            return ('<span color="#82003B">%(rx)d %(unit)s read</span> '
                     '<span color="#295C45">%(tx)d %(unit)s write</span>' %
                     {"rx": rx, "tx": tx, "unit": unit})
         def _net_rx_tx_text(rx, tx, unit):
-            return ('<span color="#82003B">%(rx)d %(unit)s in</span>\n'
+            return ('<span color="#82003B">%(rx)d %(unit)s in</span> '
                     '<span color="#295C45">%(tx)d %(unit)s out</span>' %
                     {"rx": rx, "tx": tx, "unit": unit})
 

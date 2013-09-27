@@ -271,12 +271,11 @@ class vmmHost(vmmGObjectUI):
 
         self.cpu_usage_graph = Sparkline()
         self.cpu_usage_graph.show()
-        self.widget("performance-table").attach(self.cpu_usage_graph,                                                           1, 2, 0, 1)
+        self.widget("performance-cpu-align").add(self.cpu_usage_graph)
 
         self.memory_usage_graph = Sparkline()
         self.memory_usage_graph.show()
-        self.widget("performance-table").attach(self.memory_usage_graph,
-                                                1, 2, 1, 2)
+        self.widget("performance-memory-align").add(self.memory_usage_graph)
 
 
     def show(self):
