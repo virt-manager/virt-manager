@@ -117,7 +117,8 @@ class vmmCreateNetwork(vmmGObjectUI):
         notebook = self.widget("create-pages")
         notebook.set_show_tabs(False)
 
-        self.widget("title-eventbox").modify_bg(Gtk.StateType.NORMAL, _black)
+        blue = Gdk.Color.parse("#0072A8")[1]
+        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
 
         # [ label, dev name ]
         fw_list = self.widget("net-forward")
@@ -470,6 +471,12 @@ class vmmCreateNetwork(vmmGObjectUI):
         notebook.prev_page()
 
     def page_changed(self, ignore1, ignore2, page_number):
+        page_lbl = ("<span color='#59B0E2'>%s</span>" %
+                    _("Step %(current_page)d of %(max_page)d") %
+                    {'current_page': page_number + 1,
+                     'max_page': PAGE_MISC + 1})
+        self.widget("header-pagenum").set_markup(page_lbl)
+
         if page_number == PAGE_NAME:
             name_widget = self.widget("net-name")
             name_widget.set_sensitive(True)
