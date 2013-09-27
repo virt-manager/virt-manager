@@ -262,6 +262,7 @@ _add_var("mandriva2010", "Mandriva Linux 2010 and later", virtiodisk=True, virti
 
 _add_var("mes5", "Mandriva Enterprise Server 5.0", urldistro="mandriva", parent="linux")
 _add_var("mes5.1", "Mandriva Enterprise Server 5.1 and later", supported=True, virtiodisk=True, virtionet=True, parent="mes5")
+_add_var("mbs1", "Mandriva Business Server 1 and later", supported=True, virtiodisk=True, virtionet=True, parent="linux")
 
 _add_var("mageia1", "Mageia 1 and later", urldistro="mandriva", supported=True, virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="linux")
 
