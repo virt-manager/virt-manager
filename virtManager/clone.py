@@ -215,11 +215,12 @@ class vmmCloneVM(vmmGObjectUI):
 
     def set_initial_state(self):
         blue = Gdk.Color.parse("#0072A8")[1]
-        self.widget("clone-header").modify_bg(Gtk.StateType.NORMAL, blue)
+        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
 
         context = self.topwin.get_style_context()
         defcolor = context.get_background_color(Gtk.StateType.NORMAL)
-        self.widget("storage-viewport").override_background_color(Gtk.StateType.NORMAL,
+        self.widget("storage-viewport").override_background_color(
+                                                  Gtk.StateType.NORMAL,
                                                   defcolor)
 
     # Populate state

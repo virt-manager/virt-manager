@@ -221,7 +221,7 @@ class vmmCreate(vmmGObjectUI):
         self.widget("install-method-pages").set_show_tabs(False)
 
         blue = Gdk.Color.parse("#0072A8")[1]
-        self.widget("create-header").modify_bg(Gtk.StateType.NORMAL, blue)
+        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
 
         # Connection list
         self.widget("create-conn-label").set_text("")
@@ -1336,7 +1336,7 @@ class vmmCreate(vmmGObjectUI):
                     _("Step %(current_page)d of %(max_page)d") %
                     {'current_page': cur, 'max_page': final})
 
-        self.widget("config-pagenum").set_markup(page_lbl)
+        self.widget("header-pagenum").set_markup(page_lbl)
 
     def page_changed(self, ignore1, ignore2, pagenum):
         # Update page number

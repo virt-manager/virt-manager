@@ -71,8 +71,6 @@ class vmmMigrateDialog(vmmGObjectUI):
         })
         self.bind_escape_key_close()
 
-        blue = Gdk.color_parse("#0072A8")
-        self.widget("migrate-header").modify_bg(Gtk.StateType.NORMAL, blue)
         self.init_state()
 
     def show(self, parent):
@@ -100,6 +98,9 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.widget("migrate-dest").get_model().clear()
 
     def init_state(self):
+        blue = Gdk.color_parse("#0072A8")
+        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
+
         # [hostname, conn, can_migrate, tooltip]
         dest_model = Gtk.ListStore(str, object, bool, str)
         dest_combo = self.widget("migrate-dest")
@@ -118,7 +119,7 @@ class vmmMigrateDialog(vmmGObjectUI):
     def reset_state(self):
         title_str = ("<span size='large' color='white'>%s '%s'</span>" %
                      (_("Migrate"), util.xml_escape(self.vm.get_name())))
-        self.widget("migrate-main-label").set_markup(title_str)
+        self.widget("header-label").set_markup(title_str)
 
         self.widget("migrate-cancel").grab_focus()
 
