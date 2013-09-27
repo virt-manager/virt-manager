@@ -379,9 +379,9 @@ class ImageInstaller(Installer):
 
         for f in ['pae', 'acpi', 'apic']:
             if self.boot_caps.features[f] & CapabilitiesParser.FEATURE_ON:
-                guest.features[f] = True
+                setattr(guest.features, f, True)
             elif self.boot_caps.features[f] & CapabilitiesParser.FEATURE_OFF:
-                guest.features[f] = False
+                setattr(guest.features, f, False)
 
         guest.os.kernel = self.boot_caps.kernel
         guest.os.initrd = self.boot_caps.initrd

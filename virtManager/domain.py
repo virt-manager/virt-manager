@@ -556,11 +556,11 @@ class vmmDomain(vmmLibvirtObject):
     # Machine config define methods
     def define_acpi(self, newvalue):
         def change(guest):
-            guest.features["acpi"] = newvalue
+            guest.features.acpi = newvalue
         return self._redefine(change)
     def define_apic(self, newvalue):
         def change(guest):
-            guest.features["apic"] = newvalue
+            guest.features.apic = newvalue
         return self._redefine(change)
 
     def define_clock(self, newvalue):
@@ -1003,9 +1003,9 @@ class vmmDomain(vmmLibvirtObject):
     def get_emulator(self):
         return self.get_xmlobj().emulator
     def get_acpi(self):
-        return self.get_xmlobj().features["acpi"]
+        return self.get_xmlobj().features.acpi
     def get_apic(self):
-        return self.get_xmlobj().features["apic"]
+        return self.get_xmlobj().features.apic
     def get_clock(self):
         return self.get_xmlobj().clock.offset
     def get_machtype(self):

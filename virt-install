@@ -501,8 +501,8 @@ def build_guest_instance(conn, options):
     cli.parse_boot(guest, options.bootopts)
     guest.autostart = options.autostart
     guest.description = options.description
-    guest.features["acpi"] = not options.noacpi
-    guest.features["apic"] = not options.noapic
+    guest.features.acpi = not options.noacpi
+    guest.features.apic = not options.noapic
 
 
     # Non-default devices

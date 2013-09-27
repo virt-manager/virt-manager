@@ -36,10 +36,3 @@ class DomainFeatures(XMLBuilder):
     pae = XMLProperty("./pae", is_bool=True,
                        default_name="default",
                        default_cb=lambda s: False)
-
-    def __setitem__(self, attr, val):
-        return setattr(self, attr, bool(val))
-    def __getitem__(self, attr):
-        return getattr(self, attr)
-    def __delitem__(self, attr):
-        return setattr(self, attr, None)

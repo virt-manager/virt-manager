@@ -165,9 +165,9 @@ def main(conn=None):
 
     if guest.os.is_hvm():
         if options.noacpi:
-            guest.features["acpi"] = False
+            guest.features.acpi = False
         if options.noapic:
-            guest.features["apic"] = False
+            guest.features.apic = False
 
     if not guest.get_devices("input"):
         guest.add_default_input_device()

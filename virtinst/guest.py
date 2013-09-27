@@ -628,12 +628,12 @@ class Guest(XMLBuilder):
                 self.type)):
             default = False
 
-        if self.features["acpi"] == "default":
-            self.features["acpi"] = self._lookup_osdict_key("acpi", default)
-        if self.features["apic"] == "default":
-            self.features["apic"] = self._lookup_osdict_key("apic", default)
-        if self.features["pae"] == "default":
-            self.features["pae"] = self.conn.caps.support_pae()
+        if self.features.acpi == "default":
+            self.features.acpi = self._lookup_osdict_key("acpi", default)
+        if self.features.apic == "default":
+            self.features.apic = self._lookup_osdict_key("apic", default)
+        if self.features.pae == "default":
+            self.features.pae = self.conn.caps.support_pae()
 
     def _add_implied_controllers(self):
         for dev in self.get_all_devices():

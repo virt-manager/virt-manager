@@ -210,7 +210,7 @@ def get_basic_fullyvirt_guest(typ="xen", installer=None):
     gdev = VirtualGraphics(_conn)
     gdev.type = "sdl"
     g.add_device(gdev)
-    g.features['pae'] = 0
+    g.features.pae = False
     g.vcpus = 5
     if installer:
         g.installer = installer
