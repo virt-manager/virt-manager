@@ -26,13 +26,11 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 # pylint: enable=E0611
 
+from virtManager import uihelpers
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 
 from virtinst import StorageVolume
-
-DEFAULT_ALLOC = 0
-DEFAULT_CAP   = 8192
 
 
 class vmmCreateVolume(vmmGObjectUI):
@@ -112,15 +110,15 @@ class vmmCreateVolume(vmmGObjectUI):
         return suffix
 
     def _init_state(self):
+        blue = Gdk.color_parse("#0072A8")
+        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
+
         format_list = self.widget("vol-format")
         format_model = Gtk.ListStore(str, str)
         format_list.set_model(format_model)
         text2 = Gtk.CellRendererText()
         format_list.pack_start(text2, False)
         format_list.add_attribute(text2, 'text', 1)
-
-        self.widget("vol-info-view").modify_bg(Gtk.StateType.NORMAL,
-                                               Gdk.Color.parse("grey")[1])
 
 
     def _make_stub_vol(self):
@@ -146,17 +144,23 @@ class vmmCreateVolume(vmmGObjectUI):
         else:
             self.widget("vol-format").set_sensitive(False)
 
-        alloc = DEFAULT_ALLOC
-        if self.parent_pool.get_type() == "logical":
+        default_alloc = 0
+        default_cap = 8
+        islogical = (self.parent_pool.get_type() == "logical")
+
+        alloc = default_alloc
+        if islogical:
             # Sparse LVM volumes don't auto grow, so alloc=0 is useless
-            alloc = DEFAULT_CAP
+            alloc = default_alloc
+        uihelpers.set_grid_row_visible(self.widget("vol-allocation"),
+                                       not islogical)
 
         self.widget("vol-allocation").set_range(0,
-                        int(self.parent_pool.get_available() / 1024 / 1024))
+            int(self.parent_pool.get_available() / 1024 / 1024 / 1024))
         self.widget("vol-allocation").set_value(alloc)
         self.widget("vol-capacity").set_range(1,
-                        int(self.parent_pool.get_available() / 1024 / 1024))
-        self.widget("vol-capacity").set_value(DEFAULT_CAP)
+            int(self.parent_pool.get_available() / 1024 / 1024 / 1024))
+        self.widget("vol-capacity").set_value(default_cap)
 
         self.widget("vol-parent-name").set_markup(
                         "<b>" + self.parent_pool.get_name() + "'s</b>")
@@ -273,13 +277,15 @@ class vmmCreateVolume(vmmGObjectUI):
         fmt = self.get_config_format()
         alloc = self.widget("vol-allocation").get_value()
         cap = self.widget("vol-capacity").get_value()
+        if not self.widget("vol-allocation").get_visible():
+            alloc = cap
 
         try:
             self._make_stub_vol()
             self.vol.capacity = cap
             self.vol.name = volname
-            self.vol.allocation = (alloc * 1024 * 1024)
-            self.vol.capacity = (cap * 1024 * 1024)
+            self.vol.allocation = (alloc * 1024 * 1024 * 1024)
+            self.vol.capacity = (cap * 1024 * 1024 * 1024)
             if fmt:
                 self.vol.format = fmt
             self.vol.validate()
