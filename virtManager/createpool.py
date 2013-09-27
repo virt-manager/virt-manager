@@ -49,33 +49,13 @@ class vmmCreatePool(vmmGObjectUI):
             "on_vmm_create_pool_delete_event" : self.close,
             "on_pool_finish_clicked"  : self.forward,
             "on_pool_pages_change_page" : self.page_changed,
+
             "on_pool_source_button_clicked" : self.browse_source_path,
             "on_pool_target_button_clicked" : self.browse_target_path,
 
             "on_pool_name_activate": self.forward,
             "on_pool_hostname_activate" : self.hostname_changed,
             "on_pool_iqn_chk_toggled": self.iqn_toggled,
-
-            "on_pool_name_focus_in_event": self.update_doc_name,
-
-            "on_pool_type_focus": self.update_doc_type,
-            "on_pool_type_changed": self.update_doc_type,
-
-            "on_pool_format_focus": self.update_doc_format,
-            "on_pool_format_changed": self.update_doc_format,
-
-            "on_pool_target_path_focus_in_event": self.update_doc_target_path,
-            "on_pool_target_path_focus": self.update_doc_target_path,
-            "on_pool_target_path_changed": self.update_doc_target_path,
-
-            "on_pool_source_path_focus_in_event": self.update_doc_source_path,
-            "on_pool_source_path_focus": self.update_doc_source_path,
-            "on_pool_source_path_changed": self.update_doc_source_path,
-
-            "on_pool_hostname_focus_in_event": self.update_doc_hostname,
-            "on_pool_build_focus_in_event": self.update_build_doc,
-
-            "on_pool_iqn_focus_in_event": self.update_doc_iqn,
         })
         self.bind_escape_key_close()
 
@@ -99,6 +79,9 @@ class vmmCreatePool(vmmGObjectUI):
     def set_initial_state(self):
         self.widget("pool-pages").set_show_tabs(False)
 
+        blue = Gdk.Color.parse("#0072A8")[1]
+        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
+
         type_list = self.widget("pool-type")
         type_model = Gtk.ListStore(str, str)
         type_list.set_model(type_model)
@@ -120,8 +103,6 @@ class vmmCreatePool(vmmGObjectUI):
         target_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         target_list.set_model(target_model)
         target_list.set_entry_text_column(0)
-        target_list.get_child().connect("focus-in-event",
-                                        self.update_doc_target_path)
 
         # Source path combo box entry
         source_list = self.widget("pool-source-path")
@@ -130,15 +111,8 @@ class vmmCreatePool(vmmGObjectUI):
         source_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         source_list.set_model(source_model)
         source_list.set_entry_text_column(0)
-        source_list.get_child().connect("focus-in-event",
-                                        self.update_doc_source_path)
 
         self.populate_pool_type()
-
-        self.widget("pool-info-box1").modify_bg(Gtk.StateType.NORMAL,
-                                                Gdk.Color.parse("grey")[1])
-        self.widget("pool-info-box2").modify_bg(Gtk.StateType.NORMAL,
-                                                Gdk.Color.parse("grey")[1])
 
     def reset_state(self):
         self.widget("pool-pages").set_current_page(0)
@@ -158,6 +132,7 @@ class vmmCreatePool(vmmGObjectUI):
         self.widget("pool-format").set_active(-1)
         self.widget("pool-build").set_sensitive(True)
         self.widget("pool-build").set_active(False)
+        self.widget("pool-details-grid").set_visible(False)
 
 
     def hostname_changed(self, ignore):
@@ -278,8 +253,8 @@ class vmmCreatePool(vmmGObjectUI):
 
     def show_options_by_pool(self):
         def show_row(base, do_show):
-            self.widget(base + "-label").set_visible(do_show)
-            self.widget(base + "-box").set_visible(do_show)
+            widget = self.widget(base + "-label")
+            uihelpers.set_grid_row_visible(widget, do_show)
 
         src = self._pool.supports_property("source_path")
         src_b = src and not self.conn.is_remote()
@@ -407,20 +382,17 @@ class vmmCreatePool(vmmGObjectUI):
     def forward(self, ignore=None):
         notebook = self.widget("pool-pages")
         try:
-            if(self.validate(notebook.get_current_page()) is not True):
+            if self.validate(notebook.get_current_page()) is not True:
                 return
             if notebook.get_current_page() == PAGE_FORMAT:
                 self.finish()
             else:
-                self.widget("pool-forward").grab_focus()
                 notebook.next_page()
         except Exception, e:
             self.err.show_err(_("Uncaught error validating input: %s") % str(e))
             return
 
     def back(self, ignore=None):
-        self.widget("pool-finish").hide()
-        self.widget("pool-forward").show()
         self.widget("pool-pages").prev_page()
 
     def _finish_cb(self, error, details):
@@ -459,16 +431,23 @@ class vmmCreatePool(vmmGObjectUI):
         logging.debug("Pool creation succeeded")
 
     def page_changed(self, notebook_ignore, page_ignore, page_number):
-        if page_number == PAGE_NAME:
-            self.widget("pool-back").set_sensitive(False)
-            self.widget("pool-finish").hide()
-            self.widget("pool-forward").show()
-            self.widget("pool-forward").grab_focus()
-        elif page_number == PAGE_FORMAT:
-            self.widget("pool-back").set_sensitive(True)
-            self.widget("pool-finish").show()
-            self.widget("pool-finish").grab_focus()
-            self.widget("pool-forward").hide()
+        # Update page number
+        page_lbl = ("<span color='#59B0E2'>%s</span>" %
+                    _("Step %(current_page)d of %(max_page)d") %
+                    {'current_page': page_number + 1,
+                     'max_page': PAGE_FORMAT + 1})
+        self.widget("header-pagenum").set_markup(page_lbl)
+
+        isfirst = (page_number == PAGE_NAME)
+        islast = (page_number == PAGE_FORMAT)
+
+        self.widget("pool-back").set_sensitive(not isfirst)
+        self.widget("pool-finish").set_visible(islast)
+        self.widget("pool-forward").set_visible(not islast)
+        self.widget(islast and "pool-finish" or "pool-forward").grab_focus()
+
+        self.widget("pool-details-grid").set_visible(islast)
+        if islast:
             self.show_options_by_pool()
 
     def get_pool_to_validate(self):
@@ -532,7 +511,7 @@ class vmmCreatePool(vmmGObjectUI):
 
         buildval = self.widget("pool-build").get_active()
         buildsen = (self.widget("pool-build").get_sensitive() and
-                    self.widget("pool-build-box").get_visible())
+                    self.widget("pool-build").get_visible())
         if buildsen and buildval:
             ret = self.err.yes_no(_("Building a pool of this type will "
                                     "format the source device. Are you "
@@ -547,50 +526,6 @@ class vmmCreatePool(vmmGObjectUI):
             return self._validate_page_name()
         elif page == PAGE_FORMAT:
             return self._validate_page_format()
-
-    def _update_doc(self, param, infobox):
-        doc = self._build_doc_str(param)
-        self.widget(infobox).set_markup(doc)
-
-    def update_doc_name(self, *ignore):
-        self._update_doc("name", "pool-info1")
-    def update_doc_type(self, *ignore):
-        self._update_doc("type", "pool-info1")
-    def update_doc_target_path(self, *ignore):
-        self._update_doc("target_path", "pool-info2")
-    def update_doc_source_path(self, *ignore):
-        self._update_doc("source_path", "pool-info2")
-    def update_doc_hostname(self, *ignore):
-        self._update_doc("host", "pool-info2")
-    def update_doc_format(self, *ignore):
-        self._update_doc("format", "pool-info2")
-    def update_doc_iqn(self, *ignore):
-        self._update_doc("iqn", "pool-info2")
-
-    def update_build_doc(self, *ignore):
-        doc = ""
-        docstr = ""
-        if self._pool.type == StoragePool.TYPE_DISK:
-            docstr = _("Format the source device.")
-        elif self._pool.type == StoragePool.TYPE_LOGICAL:
-            docstr = _("Create a logical volume group from the source device.")
-
-        if docstr:
-            doc = self._build_doc_str("build", docstr)
-        self.widget("pool-info2").set_markup(doc)
-
-    def _build_doc_str(self, param, docstr=None):
-        doc = ""
-        doctmpl = "<i><u>%s</u>: %s</i>"
-        prettyname = param.replace("_", " ").capitalize()
-
-        if docstr:
-            doc = doctmpl % (prettyname, docstr)
-        elif not self._pool or self._pool.supports_property(param):
-            doc = doctmpl % (prettyname,
-                             getattr(StoragePool, param).__doc__)
-
-        return doc
 
     def _browse_file(self, dialog_name, startfolder=None, foldermode=False):
         mode = Gtk.FileChooserAction.OPEN

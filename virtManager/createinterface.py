@@ -869,7 +869,6 @@ class vmmCreateInterface(vmmGObjectUI):
         page_lbl = ("<span color='#59B0E2'>%s</span>" %
                     _("Step %(current_page)d of %(max_page)d") %
                     {'current_page': next_page, 'max_page': PAGE_DETAILS + 1})
-
         self.widget("header-pagenum").set_markup(page_lbl)
 
         if pagenum == 0:
