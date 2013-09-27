@@ -59,12 +59,13 @@ class vmmDeleteDialog(vmmGObjectUI):
         })
         self.bind_escape_key_close()
 
+        self._init_state()
+
+    def _init_state(self):
+        blue = Gdk.Color.parse("#0072A8")[1]
+        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
+
         prepare_storage_list(self.widget("delete-storage-list"))
-
-    def toggle_remove_storage(self, src):
-        dodel = src.get_active()
-        self.widget("delete-storage-list").set_sensitive(dodel)
-
 
     def show(self, vm, parent):
         logging.debug("Showing delete wizard")
@@ -87,17 +88,17 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.conn = None
 
     def reset_state(self):
-
         # Set VM name in title'
-        title_str = ("<span size='x-large'>%s '%s'</span>" %
+        title_str = ("<span size='large' color='white'>%s '%s'</span>" %
                      (_("Delete"), util.xml_escape(self.vm.get_name())))
-        self.widget("delete-main-label").set_markup(title_str)
+        self.widget("header-label").set_markup(title_str)
 
         self.widget("delete-cancel").grab_focus()
 
         # Show warning message if VM is running
         vm_active = self.vm.is_active()
-        self.widget("delete-warn-running-vm-box").set_visible(vm_active)
+        uihelpers.set_grid_row_visible(
+            self.widget("delete-warn-running-vm-box"), vm_active)
 
         # Disable storage removal by default
         self.widget("delete-remove-storage").set_active(True)
@@ -105,6 +106,11 @@ class vmmDeleteDialog(vmmGObjectUI):
 
         populate_storage_list(self.widget("delete-storage-list"),
                               self.vm, self.conn)
+
+    def toggle_remove_storage(self, src):
+        dodel = src.get_active()
+        uihelpers.set_grid_row_visible(
+            self.widget("delete-storage-scroll"), dodel)
 
     def get_config_format(self):
         format_combo = self.widget("vol-format")
@@ -141,13 +147,13 @@ class vmmDeleteDialog(vmmGObjectUI):
         devs = self.get_paths_to_delete()
 
         if devs:
+            title = _("Are you sure you want to delete the storage?")
+            message = (_("The following paths will be deleted:\n\n%s") %
+                       "\n".join(devs))
             ret = uihelpers.chkbox_helper(self,
                                      self.config.get_confirm_delstorage,
                                      self.config.set_confirm_delstorage,
-                                     text1=_("Are you sure you want to delete "
-                                             "the storage?"),
-                                     text2=_("All selected storage will "
-                                             "be deleted."))
+                                     text1=title, text2=message)
             if not ret:
                 return
 
