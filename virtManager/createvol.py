@@ -97,9 +97,8 @@ class vmmCreateVolume(vmmGObjectUI):
             ret = StorageVolume.find_free_name(self.name_hint,
                                 pool_object=self.parent_pool.get_backend(),
                                 suffix=suffix)
-            ret = ret.rstrip(suffix)
         except:
-            pass
+            logging.exception("Error finding a default vol name")
 
         return ret
 
@@ -128,16 +127,11 @@ class vmmCreateVolume(vmmGObjectUI):
     def reset_state(self):
         self._make_stub_vol()
 
-        default_name = self.default_vol_name()
         self.widget("vol-name").set_text("")
-        self.widget("vol-create").set_sensitive(False)
-        if default_name:
-            self.widget("vol-name").set_text(default_name)
-
         self.widget("vol-name").grab_focus()
-        self.populate_vol_format()
-        self.populate_vol_suffix()
+        self.vol_name_changed(self.widget("vol-name"))
 
+        self.populate_vol_format()
         if len(self.vol.list_formats()):
             self.widget("vol-format").set_sensitive(True)
             self.widget("vol-format").set_active(0)
@@ -196,11 +190,13 @@ class vmmCreateVolume(vmmGObjectUI):
         for f in formats:
             model.append([f, f])
 
-    def populate_vol_suffix(self):
-        self.widget("vol-name-suffix").set_text(self.default_suffix())
-
     def vol_name_changed(self, src):
         text = src.get_text()
+
+        suffix = self.default_suffix()
+        if "." in text:
+            suffix = ""
+        self.widget("vol-name-suffix").set_text(suffix)
         self.widget("vol-create").set_sensitive(bool(text))
 
     def vol_allocation_changed(self, src):
