@@ -132,11 +132,10 @@ class vmmCreateVolume(vmmGObjectUI):
         self.vol_name_changed(self.widget("vol-name"))
 
         self.populate_vol_format()
-        if len(self.vol.list_formats()):
-            self.widget("vol-format").set_sensitive(True)
+        hasformat = bool(len(self.vol.list_formats()))
+        uihelpers.set_grid_row_visible(self.widget("vol-format"), hasformat)
+        if hasformat:
             self.widget("vol-format").set_active(0)
-        else:
-            self.widget("vol-format").set_sensitive(False)
 
         default_alloc = 0
         default_cap = 8
