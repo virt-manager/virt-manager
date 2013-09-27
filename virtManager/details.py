@@ -297,12 +297,11 @@ def lookup_nodedev(vmmconn, hostdev):
     devs = vmmconn.get_nodedevs(devtype, None)
     for dev in devs:
         # Try to match with product_id|vendor_id|bus|device
-        if (attrVal(dev, "product_id") == product_id and
-            attrVal(dev, "vendor_id") == vendor_id and
-            attrVal(dev, "bus") == bus and
-            attrVal(dev, "device") == device):
+        if ((attrVal(dev, "product_id") == product_id or product_id == -1) and
+            (attrVal(dev, "vendor_id") == vendor_id or vendor_id == -1) and
+            (attrVal(dev, "bus") == bus or bus == -1) and
+            (attrVal(dev, "device") == device or device == -1)):
             found_dev = dev
-            break
         else:
             # Try to get info from bus/addr
             dev_id = intify(attrVal(dev, "device"))
@@ -315,7 +314,9 @@ def lookup_nodedev(vmmconn, hostdev):
                 (dom_id == domain and func_id == func and
                  bus_id == bus and slot_id == slot)):
                 found_dev = dev
-                break
+
+        if found_dev:
+            break
 
     return found_dev
 
