@@ -94,7 +94,6 @@ class TestImageParser(unittest.TestCase):
 
             actual_out = g.get_install_xml(install=False)
             expect_file = os.path.join(image2guestdir + fname)
-            expect_out = utils.read_file(expect_file)
 
             actual_out = actual_out.replace(os.getcwd(), "/tmp")
             utils.diff_compare(actual_out, expect_file)
