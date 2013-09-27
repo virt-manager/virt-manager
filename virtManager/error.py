@@ -206,7 +206,7 @@ class _errorDialog (Gtk.MessageDialog):
         self.chk_vbox.set_spacing(0)
 
         self.chk_align = Gtk.Alignment()
-        self.chk_align.set_padding(0, 0, 62, 0)
+        self.chk_align.set_padding(0, 0, 0, 0)
         self.chk_align.add(self.chk_vbox)
 
         self.chk_align.show_all()
