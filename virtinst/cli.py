@@ -578,16 +578,13 @@ name_missing    = _("--name is required")
 ram_missing     = _("--ram amount in MB is required")
 
 
-def get_name(name, guest, image_name=None):
+def get_name(guest, name):
     prompt_txt = _("What is the name of your virtual machine?")
     err_txt = name_missing
-
-    if name is None:
-        name = image_name
     prompt_loop(prompt_txt, err_txt, name, guest, "name")
 
 
-def get_memory(memory, guest, image_memory=None):
+def get_memory(guest, memory):
     prompt_txt = _("How much RAM should be allocated (in megabytes)?")
     err_txt = ram_missing
 
@@ -598,51 +595,42 @@ def get_memory(memory, guest, image_memory=None):
                                "of RAM.") % MIN_RAM)
         guest.memory = mem * 1024
 
-    if memory is None and image_memory is not None:
-        memory = int(image_memory)
     prompt_loop(prompt_txt, err_txt, memory, guest, "memory",
                 func=check_memory)
 
 
-def get_uuid(uuid, guest):
-    if uuid:
-        try:
-            guest.uuid = uuid
-        except ValueError, e:
-            fail(e)
+def get_uuid(guest, uuid):
+    if not uuid:
+        return
+    try:
+        guest.uuid = uuid
+    except ValueError, e:
+        fail(e)
 
 
-def get_vcpus(guest, vcpus, check_cpu, image_vcpus=None):
-    """
-    @param vcpus: value of the option '--vcpus' (str or None)
-    @param check_cpu: Whether to check that the number virtual cpus requested
-                      does not exceed physical CPUs (bool)
-    @param guest: virtinst.Guest instance (object)
-    @param image_vcpus: ? (It's not used currently and should be None.)
-    """
+def get_vcpus(guest, vcpus, check_cpu):
     if vcpus is None:
-        if image_vcpus is not None:
-            vcpus = image_vcpus
-        else:
-            vcpus = ""
+        vcpus = ""
 
-    parse_vcpu(guest, vcpus, image_vcpus)
+    parse_vcpu(guest, vcpus)
+    if not check_cpu:
+        return
 
-    if check_cpu:
-        hostinfo = guest.conn.getInfo()
-        pcpus = hostinfo[4] * hostinfo[5] * hostinfo[6] * hostinfo[7]
+    hostinfo = guest.conn.getInfo()
+    pcpus = hostinfo[4] * hostinfo[5] * hostinfo[6] * hostinfo[7]
 
-        if guest.vcpus > pcpus:
-            msg = _("You have asked for more virtual CPUs (%d) than there "
-                    "are physical CPUs (%d) on the host. This will work, "
-                    "but performance will be poor. ") % (guest.vcpus, pcpus)
-            askmsg = _("Are you sure? (yes or no)")
+    if guest.vcpus > pcpus:
+        msg = _("You have asked for more virtual CPUs (%d) than there "
+                "are physical CPUs (%d) on the host. This will work, "
+                "but performance will be poor. ") % (guest.vcpus, pcpus)
+        askmsg = _("Are you sure? (yes or no)")
 
-            if not prompt_for_yes_or_no(msg, askmsg):
-                nice_exit()
+        if not prompt_for_yes_or_no(msg, askmsg):
+            nice_exit()
 
 
-def get_cpuset(guest, cpuset, memory):
+def get_cpuset(guest, cpuset):
+    memory = guest.memory
     conn = guest.conn
     if cpuset and cpuset != "auto":
         guest.cpuset = cpuset
@@ -672,7 +660,7 @@ def _default_network_opts(guest):
     return opts
 
 
-def digest_networks(guest, options, numnics=1):
+def _digest_networks(guest, options, numnics):
     macs     = listify(options.mac)
     networks = listify(options.network)
     bridges  = listify(options.bridge)
@@ -700,7 +688,9 @@ def digest_networks(guest, options, numnics=1):
     return networks, macs
 
 
-def get_networks(guest, networks, macs):
+def get_networks(guest, options, numnics):
+    networks, macs = _digest_networks(guest, options, numnics)
+
     for idx in range(len(networks)):
         mac = macs[idx]
         netstr = networks[idx]
@@ -730,7 +720,7 @@ def set_os_variant(obj, distro_type, distro_variant):
     obj.os_variant = distkey
 
 
-def digest_graphics(guest, options, default_override=None):
+def _digest_graphics(guest, options, default_override):
     vnc = options.vnc
     vncport = options.vncport
     vnclisten = options.vnclisten
@@ -762,7 +752,8 @@ def digest_graphics(guest, options, default_override=None):
                 logging.debug("Container guest, defaulting to nographics")
                 nographics = True
             elif "DISPLAY" in os.environ.keys():
-                logging.debug("DISPLAY is set: looking for pre-configured graphics")
+                logging.debug("DISPLAY is set: looking for "
+                              "pre-configured graphics")
                 if cliconfig.default_graphics in ["spice", "vnc", "sdl"]:
                     logging.debug("Defaulting graphics to pre-configured %s",
                                   cliconfig.default_graphics.upper())
@@ -790,7 +781,9 @@ def digest_graphics(guest, options, default_override=None):
     return [optstr]
 
 
-def get_graphics(guest, graphics):
+def get_graphics(guest, options, default_override=None):
+    graphics = _digest_graphics(guest, options, default_override)
+
     for optstr in graphics:
         try:
             dev = parse_graphics(guest, optstr)
@@ -802,98 +795,22 @@ def get_graphics(guest, graphics):
 
 
 def get_video(guest, video_models=None):
-    video_models = video_models or []
-
     if guest.get_devices(VirtualGraphics.VIRTUAL_DEV_GRAPHICS):
         if not video_models:
-            video_models.append(None)
+            video_models = [None]
 
-    for model in video_models:
+    for model in listify(video_models):
         guest.add_device(parse_video(guest, model))
 
 
-def get_sound(old_sound_bool, sound_opts, guest):
-    if not sound_opts:
+def get_sound(guest, sounds, old_sound_bool):
+    if not sounds:
         if old_sound_bool:
             guest.add_device(VirtualAudio(guest.conn))
         return
 
-    for opts in listify(sound_opts):
+    for opts in listify(sounds):
         guest.add_device(parse_sound(guest, opts))
-
-
-def get_hostdevs(hostdevs, guest):
-    if not hostdevs:
-        return
-
-    for devname in hostdevs:
-        guest.add_device(parse_hostdev(guest, devname))
-
-
-def get_smartcard(guest, sc_opts):
-    for sc in listify(sc_opts):
-        try:
-            dev = parse_smartcard(guest, sc)
-        except Exception, e:
-            fail(_("Error in smartcard device parameters: %s") % str(e))
-
-        if dev:
-            guest.add_device(dev)
-
-
-def get_tpm(guest, tpm_opts):
-    for tpm in listify(tpm_opts):
-        try:
-            dev = parse_tpm(guest, tpm)
-        except Exception, e:
-            fail(_("Error in TPM device parameters: %s") % str(e))
-
-        if dev:
-            guest.add_device(dev)
-
-
-def get_rng(guest, rng_opts):
-    for rng in listify(rng_opts):
-        try:
-            dev = parse_rng(guest, rng)
-        except Exception, e:
-            fail(_("Error in RNG device parameters: %s") % str(e))
-
-        if dev:
-            guest.add_device(dev)
-
-
-def get_controller(guest, sc_opts):
-    for sc in listify(sc_opts):
-        try:
-            dev = parse_controller(guest, sc)
-        except Exception, e:
-            fail(_("Error in controller device parameters: %s") % str(e))
-
-        if dev:
-            guest.add_device(dev)
-
-
-def get_redirdev(guest, sc_opts):
-    for sc in listify(sc_opts):
-        try:
-            dev = parse_redirdev(guest, sc)
-        except Exception, e:
-            fail(_("Error in redirdev device parameters: %s") % str(e))
-
-        if dev:
-            guest.add_device(dev)
-
-
-def get_memballoon(guest, sc_opts):
-    for sc in listify(sc_opts):
-        try:
-            dev = parse_memballoon(guest, sc)
-        except Exception, e:
-            fail(_("Error in memballoon device parameters: %s") % str(e))
-
-        if dev:
-            guest.add_device(dev)
 
 
 #############################
@@ -985,7 +902,7 @@ def add_device_options(devg):
     devg.add_option("", "--host-device", dest="hostdevs", action="append",
                     help=_("Configure physical host devices attached to the "
                            "guest"))
-    devg.add_option("", "--soundhw", dest="soundhw", action="append",
+    devg.add_option("", "--soundhw", dest="sound", action="append",
                     help=_("Configure guest sound device emulation"))
     devg.add_option("", "--watchdog", dest="watchdog", action="append",
                     help=_("Configure a guest watchdog device"))
@@ -1040,6 +957,24 @@ def add_distro_options(g):
 # CLI complex parsing helpers               #
 # (for options like --disk, --network, etc. #
 #############################################
+
+def _handle_dev_opts(devtype, cb, guest, opts):
+    for optstr in listify(opts):
+        try:
+            dev = cb(guest, optstr)
+            if dev:
+                guest.add_device(dev)
+        except Exception, e:
+            logging.debug("Exception parsing devtype=%s optstr=%s",
+                          devtype, optstr, exc_info=True)
+            fail(_("Error in %(devtype)s device parameters: %(err)s") %
+                 {"devtype": devtype, "err": str(e)})
+
+
+def _make_handler(devtype, parsefunc):
+    return lambda *args, **kwargs: _handle_dev_opts(devtype, parsefunc,
+                                                    *args, **kwargs)
+
 
 def get_opt_param(opts, dictnames, val=None):
     if type(dictnames) is not list:
@@ -1160,19 +1095,18 @@ def parse_numatune(guest, optstring):
 # --vcpu parsing #
 ##################
 
-def parse_vcpu(guest, optstring, default_vcpus=None):
+def parse_vcpu(guest, optstring):
     """
     Helper to parse --vcpu string
 
     @param  guest: virtinst.Guest instance (object)
     @param  optstring: value of the option '--vcpus' (str)
-    @param  default_vcpus: ? (it should be None at present.)
     """
     if not optstring:
         return
 
     opts = parse_optstr(optstring, remove_first="vcpus")
-    vcpus = opts.get("vcpus") or default_vcpus
+    vcpus = opts.get("vcpus")
     if vcpus is not None:
         opts["vcpus"] = vcpus
 
@@ -1567,9 +1501,6 @@ def parse_network(guest, optstring, dev=None, mac=None):
 ######################
 
 def parse_graphics(guest, optstring, dev=None):
-    if optstring is None:
-        return None
-
     def sanitize_keymap(keymap):
         from virtinst import hostkeymap
 
@@ -1622,9 +1553,6 @@ def parse_graphics(guest, optstring, dev=None):
 ########################
 
 def parse_controller(guest, optstring, dev=None):
-    if optstring is None:
-        return None
-
     if optstring == "usb2":
         for dev in virtinst.VirtualController.get_usb2_controllers(guest.conn):
             guest.add_device(dev)
@@ -1650,6 +1578,8 @@ def parse_controller(guest, optstring, dev=None):
         raise ValueError(_("Unknown options %s") % opts.keys())
 
     return dev
+
+get_controller = _make_handler("controller", parse_controller)
 
 
 #######################
@@ -1678,15 +1608,14 @@ def parse_smartcard(guest, optstring, dev=None):
 
     return dev
 
+get_smartcard = _make_handler("smartcard", parse_smartcard)
+
 
 ######################
 # --redirdev parsing #
 ######################
 
 def parse_redirdev(guest, optstring, dev=None):
-    if optstring is None:
-        return None
-
     # Peel the mode off the front
     opts = parse_optstr(optstring, remove_first="bus")
     server = get_opt_param(opts, "server")
@@ -1717,15 +1646,14 @@ def parse_redirdev(guest, optstring, dev=None):
 
     return dev
 
+get_redirdev = _make_handler("redirdev", parse_redirdev)
+
 
 #################
 # --tpm parsing #
 #################
 
 def parse_tpm(guest, optstring, dev=None):
-    if optstring is None:
-        return None
-
     # Peel the type off the front
     opts = parse_optstr(optstring, remove_first="type")
     if opts.get("type") == "none":
@@ -1745,11 +1673,14 @@ def parse_tpm(guest, optstring, dev=None):
 
     return dev
 
+get_tpm = _make_handler("tpm", parse_tpm)
+
+
+#################
+# --rng parsing #
+#################
 
 def parse_rng(guest, optstring, dev=None):
-    if optstring is None:
-        return None
-
     opts = parse_optstr(optstring, remove_first="type")
     dev_type = opts.get("type")
     if dev_type == "none":
@@ -1778,6 +1709,8 @@ def parse_rng(guest, optstring, dev=None):
 
     return dev
 
+get_rng = _make_handler("rng", parse_rng)
+
 
 ######################
 # --watchdog parsing #
@@ -1805,15 +1738,14 @@ def parse_watchdog(guest, optstring, dev=None):
 
     return dev
 
+get_watchdog = _make_handler("watchdog", parse_watchdog)
+
 
 ########################
 # --memballoon parsing #
 ########################
 
 def parse_memballoon(guest, optstring, dev=None):
-    if optstring is None:
-        return None
-
     # Peel the mode off the front
     opts = parse_optstr(optstring, remove_first="model")
 
@@ -1825,6 +1757,8 @@ def parse_memballoon(guest, optstring, dev=None):
         raise ValueError(_("Unknown options %s") % opts.keys())
 
     return dev
+
+get_memballoon = _make_handler("memballoon", parse_memballoon)
 
 
 ######################################################
@@ -1907,6 +1841,11 @@ def _parse_char(optstring, dev_type, dev=None):
 
     return dev
 
+get_serials = _make_handler("serial", parse_serial)
+get_parallels = _make_handler("parallel", parse_parallel)
+get_channels = _make_handler("channel", parse_channel)
+get_consoles = _make_handler("console", parse_console)
+
 
 ########################
 # --filesystem parsing #
@@ -1954,6 +1893,8 @@ def parse_video(guest, optstr, dev=None):
         raise ValueError(_("Unknown options %s") % opts.keys())
     return dev
 
+get_filesystems = _make_handler("filesystem", parse_filesystem)
+
 
 #####################
 # --soundhw parsing #
@@ -1981,3 +1922,5 @@ def parse_hostdev(guest, optstr, dev=None):
     return virtinst.VirtualHostDevice.device_from_node(guest.conn,
                                                        name=optstr,
                                                        dev=dev)
+
+get_hostdevs = _make_handler("hostdev", parse_hostdev)

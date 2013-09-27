@@ -117,39 +117,6 @@ def check_cdrom_option_error(options):
 # Device validation wrappers #
 ##############################
 
-def get_graphics(guest, options):
-    graphics = cli.digest_graphics(guest, options)
-    cli.get_graphics(guest, graphics)
-
-
-def get_chardevs(char_type, opts, guest, cb):
-    for optstr in cli.listify(opts):
-        try:
-            dev = cb(guest, optstr)
-            guest.add_device(dev)
-        except Exception, e:
-            fail(_("Error in %(chartype)s device parameters: %(err)s") %
-                 {"chartype": char_type, "err": str(e)})
-
-
-def get_watchdog(watchdogs, guest):
-    for optstr in cli.listify(watchdogs):
-        try:
-            dev = cli.parse_watchdog(guest, optstr)
-            guest.add_device(dev)
-        except Exception, e:
-            fail(_("Error in watchdog device parameters: %s") % str(e))
-
-
-def get_filesystems(filesystems, guest):
-    for optstr in cli.listify(filesystems):
-        try:
-            dev = cli.parse_filesystem(guest, optstr)
-            guest.add_device(dev)
-        except Exception, e:
-            fail(_("Error in filesystem device parameters: %s") % str(e))
-
-
 def get_disk(diskopts, size, sparse, guest, is_file_path):
     try:
         dev = None
@@ -186,11 +153,6 @@ def get_disks(guest, file_paths, disk_paths, size, sparse, need_storage):
 
     for idx in range(len(disklist)):
         get_disk(disklist[idx], sizelist[idx], sparse, guest, is_file_path)
-
-
-def get_networks(guest, options):
-    networks, macs = cli.digest_networks(guest, options)
-    cli.get_networks(guest, networks, macs)
 
 
 ########################
@@ -493,7 +455,7 @@ def build_guest_instance(conn, options):
     guest.installer = build_installer(options, conn, guest.os.os_type)
 
     # Guest configuration
-    cli.get_uuid(options.uuid, guest)
+    cli.get_uuid(guest, options.uuid)
     cli.get_vcpus(guest, options.vcpus, options.check_cpu)
     cli.parse_numatune(guest, options.numatune)
     cli.parse_cpu(guest, options.cpu)
@@ -504,23 +466,21 @@ def build_guest_instance(conn, options):
     guest.features.acpi = not options.noacpi
     guest.features.apic = not options.noapic
 
-
     # Non-default devices
     cli.get_controller(guest, options.controller)
     cli.get_redirdev(guest, options.redirdev)
     cli.get_memballoon(guest, options.memballoon)
-    if not options.nonetworks:
-        get_networks(guest, options)
-    get_graphics(guest, options)
+    cli.get_networks(guest, options, not options.nonetworks and 1 or 0)
+    cli.get_graphics(guest, options)
     cli.get_video(guest, options.video)
-    get_watchdog(options.watchdog, guest)
-    get_filesystems(options.filesystems, guest)
-    cli.get_sound(options.sound, options.soundhw, guest)
-    get_chardevs("serial", options.serials, guest, cli.parse_serial)
-    get_chardevs("parallel", options.parallels, guest, cli.parse_parallel)
-    get_chardevs("channel", options.channels, guest, cli.parse_channel)
-    get_chardevs("console", options.consoles, guest, cli.parse_console)
-    cli.get_hostdevs(options.hostdevs, guest)
+    cli.get_watchdog(guest, options.watchdog)
+    cli.get_filesystems(guest, options.filesystems)
+    cli.get_sound(guest, options.sound, options.oldsound)
+    cli.get_serials(guest, options.serials)
+    cli.get_parallels(guest, options.parallels)
+    cli.get_channels(guest, options.channels)
+    cli.get_consoles(guest, options.consoles)
+    cli.get_hostdevs(guest, options.hostdevs)
     cli.get_smartcard(guest, options.smartcard)
     cli.get_tpm(guest, options.tpm)
     cli.get_rng(guest, options.rng)
@@ -541,8 +501,11 @@ def build_guest_instance(conn, options):
     need_storage, need_install = validate_required_options(options, guest)
 
     # Actually set required options
-    cli.get_name(options.name, guest)
-    cli.get_memory(options.memory, guest)
+    cli.get_name(guest, options.name)
+    cli.get_memory(guest, options.memory)
+    # Needs to come after setting memory
+    cli.get_cpuset(guest, options.cpuset)
+
     if not options.nodisks:
         get_disks(guest, options.file_paths, options.diskopts,
                   options.disksize, options.sparse, need_storage)
@@ -551,9 +514,6 @@ def build_guest_instance(conn, options):
     # Various little validations about option collisions. Need to do
     # this after setting guest.installer at least
     check_option_collisions(options, guest)
-
-    # Needs to come after setting memory
-    cli.get_cpuset(guest, options.cpuset, guest.memory)
 
     # Warnings
     if options.pxe and not supports_pxe(guest):
@@ -970,9 +930,8 @@ def parse_args():
     cli.add_device_options(devg)
 
     # Deprecated
-    devg.add_option("", "--sound", action="store_true", dest="sound",
-                    default=False,
-                    help=optparse.SUPPRESS_HELP)
+    devg.add_option("", "--sound", action="store_true", dest="oldsound",
+                    default=False, help=optparse.SUPPRESS_HELP)
     parser.add_option_group(devg)
 
     virg = optparse.OptionGroup(parser, _("Virtualization Platform Options"))

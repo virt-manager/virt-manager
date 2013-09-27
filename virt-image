@@ -20,44 +20,24 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
+import optparse
 import sys
+
 import urlgrabber.progress as progress
 
 import virtinst.cli as cli
 from virtinst.cli import fail, print_stdout, print_stderr
 from virtinst import virtimage
 
-import optparse
-from optparse import OptionGroup
-
-
-### General input gathering functions
-
-def get_networks(domain, guest, options):
-    nnics = domain.interface
-    networks, macs = cli.digest_networks(guest, options, numnics=nnics)
-
-    if nnics > len(networks):
-        fail(_("The image requires %i network interface.") % nnics)
-
-    cli.get_networks(guest, networks, macs)
-
-
-def get_graphics(image, guest, options):
-    graphics = cli.digest_graphics(guest, options,
-                                   default_override=bool(image.graphics))
-    cli.get_graphics(guest, graphics)
 
 ### Option parsing
-
-
 def parse_args():
     parser = cli.setupParser(
         "%prog image.xml [OPTIONS]",
         _("Create a virtual machine from a virt-image(5) image descriptor."))
     cli.add_connect_option(parser)
 
-    geng = OptionGroup(parser, _("General Options"))
+    geng = optparse.OptionGroup(parser, _("General Options"))
     geng.add_option("-n", "--name", dest="name",
                     help=_("Name of the guest instance"))
     geng.add_option("-r", "--ram", type="int", dest="memory",
@@ -69,7 +49,8 @@ def parse_args():
     cli.add_distro_options(geng)
     parser.add_option_group(geng)
 
-    fulg = OptionGroup(parser, _("Full Virtualization specific options"))
+    fulg = optparse.OptionGroup(parser,
+                                _("Full Virtualization specific options"))
     fulg.add_option("", "--noapic", action="store_true", dest="noapic",
                     default=False,
                     help=_("Disables APIC for fully virtualized guest"))
@@ -84,7 +65,7 @@ def parse_args():
     vncg = cli.graphics_option_group(parser)
     parser.add_option_group(vncg)
 
-    misc = OptionGroup(parser, _("Miscellaneous Options"))
+    misc = optparse.OptionGroup(parser, _("Miscellaneous Options"))
     misc.add_option("-p", "--print", action="store_true", dest="print_only",
                     help=_("Print the libvirt XML, but do not start the "
                            "domain"))
@@ -150,18 +131,21 @@ def main(conn=None):
 
     # now let's get some of the common questions out of the way
     guest.replace = options.replace
-    cli.get_name(options.name, guest, image.name)
-    cli.get_memory(options.memory, guest, image.domain.memory)
-    cli.get_uuid(options.uuid, guest)
-    cli.get_vcpus(guest, options.vcpus, options.check_cpu, image.domain.vcpu)
-    cli.get_cpuset(guest, options.cpuset, guest.memory)
+    cli.get_name(guest, options.name or image.name)
+    cli.get_memory(guest, options.memory or (image.domain.memory and
+                                             int(image.domain.memory)))
+    cli.get_uuid(guest, options.uuid)
+    cli.get_vcpus(guest, options.vcpus or image.domain.vcpu or "",
+                  options.check_cpu)
+    cli.get_cpuset(guest, options.cpuset)
     cli.parse_cpu(guest, options.cpu)
-    get_networks(image.domain, guest, options)
+    cli.set_os_variant(guest, options.distro_type, options.distro_variant)
 
-    get_graphics(image.domain, guest, options)
+    cli.get_networks(guest, options, numnics=image.domain.interface)
+    cli.get_graphics(guest, options,
+                     default_override=bool(image.domain.graphics))
     cli.get_video(guest)
 
-    cli.set_os_variant(guest, options.distro_type, options.distro_variant)
 
     if guest.os.is_hvm():
         if options.noacpi:
