@@ -493,7 +493,7 @@ c.add_compare("""--hvm --pxe \
 --network bridge=foobar,model=virtio \
 --channel spicevmc \
 --smartcard passthrough,type=spicevmc \
---tpm passthrough,model=tpm-tis,path=/dev/tpm0 \
+--tpm /dev/tpm0 \
 --security type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes \
 --numatune \\"1-3,5\\",mode=preferred \
 --boot loader=/foo/bar \

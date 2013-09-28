@@ -893,7 +893,7 @@ def add_device_options(devg):
                            "--memballoon model=virtio"))
     devg.add_option("--tpm", dest="tpm", action="append",
                     help=_("Configure a guest TPM device. Ex:\n"
-                           "--tpm type=passthrough"))
+                           "--tpm /dev/tpm"))
     devg.add_option("--rng", dest="rng", action="append",
                     help=_("Configure a guest RNG device. Ex:\n"
                            "--rng /dev/random\n"
@@ -989,6 +989,9 @@ def _build_set_param(inst, opts, support_cb=None):
         if type(paramname) is not str:
             paramname(val)
         else:
+            if not hasattr(inst, paramname):
+                raise RuntimeError("programming error: obj=%s does not have "
+                                   "member=%s" % (inst, paramname))
             setattr(inst, paramname, val)
     return _set_param
 
@@ -1596,9 +1599,14 @@ def parse_tpm(guest, optstr, dev=None):
     opts = parse_optstr(optstr, remove_first="type")
     set_param = _build_set_param(dev, opts)
 
-    set_param("type", "type")
+    # Allow --tpm /dev/tpm
+    if opts.get("type", "").startswith("/"):
+        dev.device_path = opts.pop("type")
+    else:
+        set_param("type", "type")
+
     set_param("model", "model")
-    set_param("path", "path")
+    set_param("device_path", "path")
 
     _check_leftover_opts(opts)
     return dev
@@ -1618,9 +1626,8 @@ def parse_rng(guest, optstr, dev):
     opts = parse_optstr(optstr, remove_first="type")
     set_param = _build_set_param(dev, opts)
 
+    # Allow --rng /dev/random
     if opts.get("type", "").startswith("/"):
-        # if the provided type begins with '/' then assume it is the name of
-        # the RNG device and that its type is "random".
         dev.device = opts.pop("type")
         dev.type = "random"
     else:
