@@ -793,6 +793,44 @@ def add_connect_option(parser):
                       help=_("Connect to hypervisor with libvirt URI"))
 
 
+def add_misc_options(grp, prompt=False, replace=False,
+                     printxml=False, printstep=False,
+                     noreboot=False, dryrun=False):
+    if prompt:
+        grp.add_option("--prompt", action="store_true", dest="prompt",
+                        default=False, help=optparse.SUPPRESS_HELP)
+        grp.add_option("--force", action="store_true", dest="force",
+                        default=False, help=optparse.SUPPRESS_HELP)
+
+    if noreboot:
+        grp.add_option("--noreboot", action="store_true", dest="noreboot",
+                       help=_("Don't boot guest after completing install."))
+
+    if replace:
+        grp.add_option("--replace", action="store_true", dest="replace",
+            help=_("Don't check name collision, overwrite any guest "
+                   "with the same name."))
+
+    if printxml:
+        grp.add_option("--print-xml", action="store_true", dest="xmlonly",
+            help=_("Print the generated domain XML rather than define "
+                   "and clone the guest."))
+        if printstep:
+            grp.add_option("--print-step", type="str", dest="xmlstep",
+                help=_("Print XML of a specific install step "
+                       "(1, 2, 3, all) rather than define the guest."))
+
+    if dryrun:
+        grp.add_option("--dry-run", action="store_true", dest="dry",
+                       help=_("Run through install process, but do not "
+                              "create devices or define the guest."))
+
+    grp.add_option("-q", "--quiet", action="store_true", dest="quiet",
+                   help=_("Suppress non-error output"))
+    grp.add_option("-d", "--debug", action="store_true", dest="debug",
+                   help=_("Print debugging information"))
+
+
 def vcpu_cli_options(grp, backcompat=True):
     grp.add_option("--vcpus", dest="vcpus",
         help=_("Number of vcpus to configure for your guest. Ex:\n"

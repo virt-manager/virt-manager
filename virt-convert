@@ -74,13 +74,7 @@ def parse_args():
     opts.add_option_group(cfgg)
 
     misc = OptionGroup(opts, "Miscellaneous Options")
-    misc.add_option("-q", "--quiet", action="store_true", dest="quiet",
-                    help=_("Suppress non-error output"))
-    misc.add_option("-d", "--debug", action="store_true", dest="debug",
-                    help=_("Print debugging information"))
-    misc.add_option("--dry-run", action="store_false", dest="nodry",
-                    default=True,
-                    help=_("Dry run, don't make any changes"))
+    cli.add_misc_options(misc, dryrun=True)
     opts.add_option_group(misc)
 
 
@@ -149,7 +143,7 @@ def cleanup(msg, options, vmdef, paths):
     After failure, clean up anything we created.
     """
     logging.error(msg)
-    if not options.nodry:
+    if options.dry:
         return
 
     try:
@@ -204,7 +198,7 @@ def main():
         options.output_dir = unixname
     try:
         logging.debug("Creating directory %s", options.output_dir)
-        if options.nodry:
+        if not options.dry:
             os.mkdir(options.output_dir)
         clean += [options.output_dir]
     except OSError, e:
@@ -239,7 +233,7 @@ def main():
                                "%(format)s...") % {"path": d.path,
                                                    "format": dformat})
 
-            if options.nodry:
+            if not options.dry:
                 d.convert(options.input_dir, options.output_dir, dformat)
 
     except OSError, e:
@@ -252,7 +246,7 @@ def main():
         output = outp.export(vmdef)
         logging.debug("Output VM config:\n%s", output)
 
-        if options.nodry:
+        if not options.dry:
             outfile = open(options.output_file, "w")
             outfile.writelines(output)
             outfile.close()
