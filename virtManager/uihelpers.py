@@ -133,25 +133,32 @@ def check_default_pool_active(err, conn):
 # Hardware model list building (for details, addhw) #
 #####################################################
 
-def build_video_combo(vm, video_dev, no_default=None):
-    video_dev_model = Gtk.ListStore(str, str)
-    video_dev.set_model(video_dev_model)
-    text = Gtk.CellRendererText()
-    video_dev.pack_start(text, True)
-    video_dev.add_attribute(text, 'text', 1)
-    video_dev_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
-
-    populate_video_combo(vm, video_dev, no_default)
+def set_combo_text_column(combo, col):
+    if combo.get_has_entry():
+        combo.set_entry_text_column(col)
+    else:
+        text = Gtk.CellRendererText()
+        combo.pack_start(text, True)
+        combo.add_attribute(text, 'text', col)
 
 
-def populate_video_combo(vm, video_dev, no_default=None):
-    video_dev_model = video_dev.get_model()
+def build_video_combo(vm, combo, no_default=None):
+    model = Gtk.ListStore(str, str)
+    combo.set_model(model)
+    set_combo_text_column(combo, 1)
+    combo.get_model().set_sort_column_id(1, Gtk.SortType.ASCENDING)
+
+    populate_video_combo(vm, combo, no_default)
+
+
+def populate_video_combo(vm, combo, no_default=None):
+    model = combo.get_model()
     has_spice = bool([g for g in vm.get_graphics_devices()
                       if g.type == g.TYPE_SPICE])
     has_qxl = bool([v for v in vm.get_video_devices()
                     if v.model == "qxl"])
 
-    video_dev_model.clear()
+    model.clear()
     tmpdev = virtinst.VirtualVideoDevice(vm.conn.get_backend())
     for m in tmpdev.MODELS:
         if not vm.rhel6_defaults():
@@ -161,19 +168,17 @@ def populate_video_combo(vm, video_dev, no_default=None):
 
         if m == tmpdev.MODEL_DEFAULT and no_default:
             continue
-        video_dev_model.append([m, tmpdev.pretty_model(m)])
+        model.append([m, tmpdev.pretty_model(m)])
 
-    if len(video_dev_model) > 0:
-        video_dev.set_active(0)
+    if len(model) > 0:
+        combo.set_active(0)
 
 
 def build_sound_combo(vm, combo, no_default=False):
-    dev_model = Gtk.ListStore(str)
-    combo.set_model(dev_model)
-    text = Gtk.CellRendererText()
-    combo.pack_start(text, True)
-    combo.add_attribute(text, 'text', 0)
-    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+    model = Gtk.ListStore(str)
+    combo.set_model(model)
+    set_combo_text_column(combo, 0)
+    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     disable_rhel = not vm.rhel6_defaults()
     rhel_soundmodels = ["ich6", "ac97"]
@@ -185,51 +190,45 @@ def build_sound_combo(vm, combo, no_default=False):
         if (disable_rhel and m not in rhel_soundmodels):
             continue
 
-        dev_model.append([m])
-    if len(dev_model) > 0:
+        model.append([m])
+    if len(model) > 0:
         combo.set_active(0)
 
 
 def build_watchdogmodel_combo(vm, combo, no_default=False):
     ignore = vm
-    dev_model = Gtk.ListStore(str)
-    combo.set_model(dev_model)
-    text = Gtk.CellRendererText()
-    combo.pack_start(text, True)
-    combo.add_attribute(text, 'text', 0)
-    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+    model = Gtk.ListStore(str)
+    combo.set_model(model)
+    set_combo_text_column(combo, 0)
+    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     for m in virtinst.VirtualWatchdog.MODELS:
         if m == virtinst.VirtualAudio.MODEL_DEFAULT and no_default:
             continue
-        dev_model.append([m])
-    if len(dev_model) > 0:
+        model.append([m])
+    if len(model) > 0:
         combo.set_active(0)
 
 
 def build_watchdogaction_combo(vm, combo, no_default=False):
     ignore = vm
-    dev_model = Gtk.ListStore(str, str)
-    combo.set_model(dev_model)
-    text = Gtk.CellRendererText()
-    combo.pack_start(text, True)
-    combo.add_attribute(text, 'text', 1)
-    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+    model = Gtk.ListStore(str, str)
+    combo.set_model(model)
+    set_combo_text_column(combo, 1)
+    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     for m in virtinst.VirtualWatchdog.ACTIONS:
         if m == virtinst.VirtualWatchdog.ACTION_DEFAULT and no_default:
             continue
-        dev_model.append([m, virtinst.VirtualWatchdog.get_action_desc(m)])
-    if len(dev_model) > 0:
+        model.append([m, virtinst.VirtualWatchdog.get_action_desc(m)])
+    if len(model) > 0:
         combo.set_active(0)
 
 
 def build_source_mode_combo(vm, combo):
-    source_mode = Gtk.ListStore(str, str)
-    combo.set_model(source_mode)
-    text = Gtk.CellRendererText()
-    combo.pack_start(text, True)
-    combo.add_attribute(text, 'text', 1)
+    model = Gtk.ListStore(str, str)
+    combo.set_model(model)
+    set_combo_text_column(combo, 1)
 
     populate_source_mode_combo(vm, combo)
     combo.set_active(0)
@@ -249,12 +248,10 @@ def populate_source_mode_combo(vm, combo):
 
 
 def build_smartcard_mode_combo(vm, combo):
-    dev_model = Gtk.ListStore(str, str)
-    combo.set_model(dev_model)
-    text = Gtk.CellRendererText()
-    combo.pack_start(text, True)
-    combo.add_attribute(text, 'text', 1)
-    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+    model = Gtk.ListStore(str, str)
+    combo.set_model(model)
+    set_combo_text_column(combo, 1)
+    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     populate_smartcard_mode_combo(vm, combo)
 
@@ -279,11 +276,9 @@ def populate_smartcard_mode_combo(vm, combo):
 
 
 def build_redir_type_combo(vm, combo):
-    source_mode = Gtk.ListStore(str, str, bool)
-    combo.set_model(source_mode)
-    text = Gtk.CellRendererText()
-    combo.pack_start(text, True)
-    combo.add_attribute(text, 'text', 1)
+    model = Gtk.ListStore(str, str, bool)
+    combo.set_model(model)
+    set_combo_text_column(combo, 1)
 
     populate_redir_type_combo(vm, combo)
     combo.set_active(0)
@@ -300,12 +295,10 @@ def populate_redir_type_combo(vm, combo):
 
 
 def build_tpm_type_combo(vm, combo):
-    dev_model = Gtk.ListStore(str, str)
-    combo.set_model(dev_model)
-    text = Gtk.CellRendererText()
-    combo.pack_start(text, True)
-    combo.add_attribute(text, 'text', 1)
-    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+    model = Gtk.ListStore(str, str)
+    combo.set_model(model)
+    set_combo_text_column(combo, 1)
+    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     populate_tpm_type_combo(vm, combo)
 
@@ -330,12 +323,10 @@ def populate_tpm_type_combo(vm, combo):
 
 
 def build_netmodel_combo(vm, combo):
-    dev_model = Gtk.ListStore(str, str)
-    combo.set_model(dev_model)
-    text = Gtk.CellRendererText()
-    combo.pack_start(text, True)
-    combo.add_attribute(text, 'text', 1)
-    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+    model = Gtk.ListStore(str, str)
+    combo.set_model(model)
+    set_combo_text_column(combo, 1)
+    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     populate_netmodel_combo(vm, combo)
     combo.set_active(0)
@@ -364,61 +355,52 @@ def populate_netmodel_combo(vm, combo):
 
 def build_cache_combo(vm, combo):
     ignore = vm
-    dev_model = Gtk.ListStore(str, str)
-    combo.set_model(dev_model)
-    text = Gtk.CellRendererText()
-    combo.pack_start(text, True)
-    combo.add_attribute(text, 'text', 1)
-    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+    model = Gtk.ListStore(str, str)
+    combo.set_model(model)
+    set_combo_text_column(combo, 1)
+    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     combo.set_active(-1)
     for m in virtinst.VirtualDisk.cache_types:
-        dev_model.append([m, m])
+        model.append([m, m])
 
-    dev_model.append([None, "default"])
-    combo.set_active(len(dev_model) - 1)
+    model.append([None, "default"])
+    combo.set_active(len(model) - 1)
 
 
 def build_io_combo(vm, combo, no_default=False):
     ignore = vm
-    dev_model = Gtk.ListStore(str, str)
-    combo.set_model(dev_model)
-    text = Gtk.CellRendererText()
-    combo.pack_start(text, True)
-    combo.add_attribute(text, 'text', 1)
-    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+    model = Gtk.ListStore(str, str)
+    combo.set_model(model)
+    set_combo_text_column(combo, 1)
+    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     combo.set_active(-1)
     for m in virtinst.VirtualDisk.io_modes:
-        dev_model.append([m, m])
+        model.append([m, m])
 
     if not no_default:
-        dev_model.append([None, "default"])
+        model.append([None, "default"])
     combo.set_active(0)
 
 
 def build_disk_bus_combo(vm, combo, no_default=False):
     ignore = vm
-    dev_model = Gtk.ListStore(str, str)
-    combo.set_model(dev_model)
-    text = Gtk.CellRendererText()
-    combo.pack_start(text, True)
-    combo.add_attribute(text, 'text', 1)
-    dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+    model = Gtk.ListStore(str, str)
+    combo.set_model(model)
+    set_combo_text_column(combo, 1)
+    model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
     if not no_default:
-        dev_model.append([None, "default"])
+        model.append([None, "default"])
     combo.set_active(-1)
 
 
 def build_vnc_keymap_combo(vm, combo, no_default=False):
     ignore = vm
-
     model = Gtk.ListStore(str, str)
     combo.set_model(model)
-    text = Gtk.CellRendererText()
-    combo.pack_start(text, True)
-    combo.add_attribute(text, 'text', 1)
+    set_combo_text_column(combo, 1)
 
     if not no_default:
         model.append([None, "default"])
@@ -438,9 +420,9 @@ def build_vnc_keymap_combo(vm, combo, no_default=False):
 #####################################
 
 def update_storage_format_combo(vm, combo, create):
-    dev_model = Gtk.ListStore(str)
-    combo.set_model(dev_model)
-    combo.set_entry_text_column(0)
+    model = Gtk.ListStore(str)
+    combo.set_model(model)
+    set_combo_text_column(combo, 0)
 
     formats = ["raw", "qcow2", "qed"]
     no_create_formats = []
@@ -449,13 +431,12 @@ def update_storage_format_combo(vm, combo, create):
         no_create_formats.append("vdi")
 
     for m in formats:
-        dev_model.append([m])
+        model.append([m])
     if not create:
         for m in no_create_formats:
-            dev_model.append([m])
+            model.append([m])
 
     if create:
-        # TODO: make the default storage format configurable
         combo.set_active(0)
 
 
@@ -485,16 +466,15 @@ def pretty_network_desc(nettype, source=None, netobj=None):
     return ret
 
 
-def init_network_list(net_list, bridge_box,
-                      source_mode_box=None, source_mode_label=None,
+def init_network_list(net_list, bridge_box, source_mode_combo=None,
                       vport_expander=None):
     # [ network type, source name, label, sensitive?, net is active,
     #   manual bridge, net instance]
     net_model = Gtk.ListStore(str, str, str, bool, bool, bool, object)
     net_list.set_model(net_model)
 
-    net_list.connect("changed", net_list_changed, bridge_box, source_mode_box,
-                     source_mode_label, vport_expander)
+    net_list.connect("changed", net_list_changed, bridge_box,
+                     source_mode_combo, vport_expander)
 
     text = Gtk.CellRendererText()
     net_list.pack_start(text, True)
@@ -503,7 +483,7 @@ def init_network_list(net_list, bridge_box,
 
 
 def net_list_changed(net_list, bridge_box,
-                     source_mode_box, source_mode_label, vport_expander):
+                     source_mode_combo, vport_expander):
     active = net_list.get_active()
     if active < 0:
         return
@@ -513,12 +493,10 @@ def net_list_changed(net_list, bridge_box,
 
     row = net_list.get_model()[active]
 
-    if source_mode_box is not None:
-        show_source_mode = (row[0] ==
-                            virtinst.VirtualNetworkInterface.TYPE_DIRECT)
-        source_mode_box.set_visible(show_source_mode)
-        source_mode_label.set_visible(show_source_mode)
-        vport_expander.set_visible(show_source_mode)
+    if source_mode_combo is not None:
+        doshow = (row[0] == virtinst.VirtualNetworkInterface.TYPE_DIRECT)
+        set_grid_row_visible(source_mode_combo, doshow)
+        vport_expander.set_visible(doshow)
 
     show_bridge = row[5]
     set_grid_row_visible(bridge_box, show_bridge)
@@ -1082,15 +1060,14 @@ def check_path_search_for_qemu(err, conn, path):
 # Interface startmode widget builder #
 ######################################
 
-def build_startmode_combo(start_list):
-    start_model = Gtk.ListStore(str)
-    start_list.set_model(start_model)
-    text = Gtk.CellRendererText()
-    start_list.pack_start(text, True)
-    start_list.add_attribute(text, 'text', 0)
-    start_model.append(["none"])
-    start_model.append(["onboot"])
-    start_model.append(["hotplug"])
+def build_startmode_combo(combo):
+    model = Gtk.ListStore(str)
+    combo.set_model(model)
+    set_combo_text_column(combo, 0)
+
+    model.append(["none"])
+    model.append(["onboot"])
+    model.append(["hotplug"])
 
 
 #########################

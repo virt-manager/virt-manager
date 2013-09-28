@@ -769,21 +769,19 @@ class vmmDetails(vmmGObjectUI):
         summary_col.set_sort_column_id(2)
 
         # Clock combo
-        clock_combo = self.widget("overview-clock-combo")
+        clock_combo = self.widget("overview-clock")
         clock_model = Gtk.ListStore(str)
         clock_combo.set_model(clock_model)
-        text = Gtk.CellRendererText()
-        clock_combo.pack_start(text, True)
-        clock_combo.add_attribute(text, 'text', 0)
         clock_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-        for offset in ["localtime", "utc"]:
+        uihelpers.set_combo_text_column(clock_combo, 0)
+        for offset in ["localtime"]:
             clock_model.append([offset])
 
         arch = self.vm.get_arch()
         caps = self.vm.conn.caps
 
         # Machine type
-        machtype_combo = self.widget("machine-type-combo")
+        machtype_combo = self.widget("machine-type")
         machtype_model = Gtk.ListStore(str)
         machtype_combo.set_model(machtype_model)
         text = Gtk.CellRendererText()
@@ -791,10 +789,11 @@ class vmmDetails(vmmGObjectUI):
         machtype_combo.add_attribute(text, 'text', 0)
         machtype_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
-        if arch in ["i686", "x86_64"]:
-            self.widget("overview-machine-label").hide()
-            self.widget("overview-machine-box").hide()
-        else:
+        show_machine = (arch not in ["i686", "x86_64"])
+        uihelpers.set_grid_row_visible(self.widget("machine-type"),
+                                       show_machine)
+
+        if show_machine:
             machines = []
 
             try:
@@ -813,19 +812,14 @@ class vmmDetails(vmmGObjectUI):
                     continue
                 machtype_model.append([machine])
 
-        # Security info tooltips
-        self.widget("security-static-info").set_tooltip_text(
-            _("Static SELinux security type tells libvirt to always start the guest process with the specified label. Unless 'relabel' is set, the administrator is responsible for making sure the images are labeled correctly on disk."))
-        self.widget("security-dynamic-info").set_tooltip_text(
-            _("The dynamic SELinux security type tells libvirt to automatically pick a unique label for the guest process and guest image, ensuring total isolation of the guest. (Default)"))
-
         # VCPU Pinning list
         generate_cpuset = self.widget("config-vcpupin-generate")
         generate_warn = self.widget("config-vcpupin-generate-err")
         if not self.conn.caps.host.topology:
             generate_cpuset.set_sensitive(False)
             generate_warn.show()
-            generate_warn.set_tooltip_text(_("Libvirt did not detect NUMA capabilities."))
+            generate_warn.set_tooltip_text(
+                _("Libvirt did not detect NUMA capabilities."))
 
 
         # [ VCPU #, Currently running on Phys CPU #, CPU Pinning list ]
@@ -949,11 +943,11 @@ class vmmDetails(vmmGObjectUI):
             model.append([name, cpu_values.get_cpu(name)])
 
         # Disk cache combo
-        disk_cache = self.widget("disk-cache-combo")
+        disk_cache = self.widget("disk-cache")
         uihelpers.build_cache_combo(self.vm, disk_cache)
 
         # Disk io combo
-        disk_io = self.widget("disk-io-combo")
+        disk_io = self.widget("disk-io")
         uihelpers.build_io_combo(self.vm, disk_io)
 
         # Disk format combo
@@ -961,7 +955,7 @@ class vmmDetails(vmmGObjectUI):
         uihelpers.update_storage_format_combo(self.vm, format_list, False)
 
         # Disk bus combo
-        disk_bus = self.widget("disk-bus-combo")
+        disk_bus = self.widget("disk-bus")
         uihelpers.build_disk_bus_combo(self.vm, disk_bus)
 
         # Disk iotune expander
@@ -969,120 +963,90 @@ class vmmDetails(vmmGObjectUI):
             self.widget("iotune-expander").set_visible(False)
 
         # Network source
-        net_source = self.widget("network-source-combo")
+        net_source = self.widget("network-source")
         net_bridge = self.widget("network-bridge-box")
-        source_mode_box   = self.widget("network-source-mode-box")
-        source_mode_label = self.widget("network-source-mode")
+        source_mode_combo = self.widget("network-source-mode")
         vport_expander = self.widget("vport-expander")
-        uihelpers.init_network_list(net_source, net_bridge, source_mode_box,
-                                    source_mode_label, vport_expander)
+        uihelpers.init_network_list(net_source, net_bridge,
+                                    source_mode_combo, vport_expander)
 
         # source mode
-        source_mode = self.widget("network-source-mode-combo")
+        source_mode = self.widget("network-source-mode")
         uihelpers.build_source_mode_combo(self.vm, source_mode)
 
         # Network model
-        net_model = self.widget("network-model-combo")
+        net_model = self.widget("network-model")
         uihelpers.build_netmodel_combo(self.vm, net_model)
 
         # Graphics type
-        gfx_type = self.widget("gfx-type-combo")
+        gfx_type = self.widget("gfx-type")
         model = Gtk.ListStore(str, str)
         gfx_type.set_model(model)
-        text = Gtk.CellRendererText()
-        gfx_type.pack_start(text, True)
-        gfx_type.add_attribute(text, 'text', 1)
-        model.append([virtinst.VirtualGraphics.TYPE_VNC,
-                      "VNC"])
-        model.append([virtinst.VirtualGraphics.TYPE_SPICE,
-                      "Spice"])
+        uihelpers.set_combo_text_column(gfx_type, 1)
+        model.append([virtinst.VirtualGraphics.TYPE_VNC, "VNC"])
+        model.append([virtinst.VirtualGraphics.TYPE_SPICE, "Spice"])
         gfx_type.set_active(-1)
 
         # Graphics keymap
-        gfx_keymap = self.widget("gfx-keymap-combo")
+        gfx_keymap = self.widget("gfx-keymap")
         uihelpers.build_vnc_keymap_combo(self.vm, gfx_keymap,
                                          no_default=no_default)
 
         # Sound model
-        sound_dev = self.widget("sound-model-combo")
+        sound_dev = self.widget("sound-model")
         uihelpers.build_sound_combo(self.vm, sound_dev, no_default=no_default)
 
         # Video model combo
-        video_dev = self.widget("video-model-combo")
+        video_dev = self.widget("video-model")
         uihelpers.build_video_combo(self.vm, video_dev, no_default=no_default)
 
         # Watchdog model combo
-        combo = self.widget("watchdog-model-combo")
+        combo = self.widget("watchdog-model")
         uihelpers.build_watchdogmodel_combo(self.vm, combo,
                                             no_default=no_default)
 
         # Watchdog action combo
-        combo = self.widget("watchdog-action-combo")
+        combo = self.widget("watchdog-action")
         uihelpers.build_watchdogaction_combo(self.vm, combo,
                                              no_default=no_default)
 
         # Smartcard mode
-        sc_mode = self.widget("smartcard-mode-combo")
+        sc_mode = self.widget("smartcard-mode")
         uihelpers.build_smartcard_mode_combo(self.vm, sc_mode)
 
-        # Redirection type
-        combo = self.widget("redir-type-combo")
-        uihelpers.build_redir_type_combo(self.vm, combo)
-
         # Controller model
-        combo = self.widget("controller-model-combo")
+        combo = self.widget("controller-model")
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        text = Gtk.CellRendererText()
-        combo.pack_start(text, True)
-        combo.add_attribute(text, 'text', 1)
+        uihelpers.set_combo_text_column(combo, 1)
         combo.set_active(-1)
 
 
-    # Helper function to handle the combo/label pattern used for
-    # video model, sound model, network model, etc.
-    def set_combo_label(self, prefix, value, model_idx=0, label="",
-                        comparefunc=None):
+    def set_combo_entry(self, widget, value, label="", comparefunc=None):
         label = label or value
-        model_label = self.widget(prefix + "-label")
-        model_combo = self.widget(prefix + "-combo")
+        model_combo = self.widget(widget)
 
         idx = -1
         if comparefunc:
             model_in_list, idx = comparefunc(model_combo.get_model(), value)
         else:
-            model_list = [x[model_idx] for x in model_combo.get_model()]
+            model_list = [x[0] for x in model_combo.get_model()]
             model_in_list = (value in model_list)
             if model_in_list:
                 idx = model_list.index(value)
 
-        model_label.set_visible(not model_in_list)
-        model_combo.set_visible(model_in_list)
-        model_label.set_text(label or "")
+        model_combo.set_active(idx)
+        if idx == -1 and model_combo.get_has_entry():
+            model_combo.get_child().set_text(value or "")
 
-        if model_in_list:
-            model_combo.set_active(idx)
-        else:
-            model_combo.set_active(-1)
-
-    # Helper for accessing value of combo/label pattern
-    def get_combo_value(self, widgetname, model_idx=0):
+    def get_combo_entry(self, widgetname):
         combo = self.widget(widgetname)
-        if combo.get_active() < 0:
+        if combo.get_active() >= 0:
+            return combo.get_model()[combo.get_active()][0]
+        if not combo.get_has_entry():
             return None
-        return combo.get_model()[combo.get_active()][model_idx]
+        return combo.get_child().get_text().strip()
 
-    def get_combo_label_value(self, prefix, model_idx=0):
-        comboname = prefix + "-combo"
-        label = self.widget(prefix + "-label")
-        value = None
-
-        if label.get_visible():
-            value = label.get_text()
-        else:
-            value = self.get_combo_value(comboname, model_idx)
-
-        return value
 
     ##########################
     # Window state listeners #
@@ -1998,11 +1962,11 @@ class vmmDetails(vmmGObjectUI):
             add_define(self.vm.define_apic, enable_apic)
 
         if self.edited(EDIT_CLOCK):
-            clock = self.get_combo_label_value("overview-clock")
+            clock = self.get_combo_entry("overview-clock")
             add_define(self.vm.define_clock, clock)
 
         if self.edited(EDIT_MACHTYPE):
-            machtype = self.get_combo_label_value("machine-type")
+            machtype = self.get_combo_entry("machine-type")
             add_define(self.vm.define_machtype, machtype)
 
         if self.edited(EDIT_SECURITY):
@@ -2191,15 +2155,15 @@ class vmmDetails(vmmGObjectUI):
                        dev_id_info, do_shareable)
 
         if self.edited(EDIT_DISK_CACHE):
-            cache = self.get_combo_label_value("disk-cache")
+            cache = self.get_combo_entry("disk-cache")
             add_define(self.vm.define_disk_cache, dev_id_info, cache)
 
         if self.edited(EDIT_DISK_IO):
-            io = self.get_combo_label_value("disk-io")
+            io = self.get_combo_entry("disk-io")
             add_define(self.vm.define_disk_io, dev_id_info, io)
 
         if self.edited(EDIT_DISK_FORMAT):
-            fmt = self.widget("disk-format").get_child().get_text().strip()
+            fmt = self.get_combo_entry("disk-format")
             add_define(self.vm.define_disk_driver_type, dev_id_info, fmt)
 
         if self.edited(EDIT_DISK_SERIAL):
@@ -2223,7 +2187,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Do this last since it can change uniqueness info of the dev
         if self.edited(EDIT_DISK_BUS):
-            bus = self.get_combo_label_value("disk-bus")
+            bus = self.get_combo_entry("disk-bus")
             addr = None
             if bus == "spapr-vscsi":
                 bus = "scsi"
@@ -2238,7 +2202,7 @@ class vmmDetails(vmmGObjectUI):
         ignore = add_hotplug
 
         if self.edited(EDIT_SOUND_MODEL):
-            model = self.get_combo_label_value("sound-model")
+            model = self.get_combo_entry("sound-model")
             if model:
                 add_define(self.vm.define_sound_model, dev_id_info, model)
 
@@ -2250,7 +2214,7 @@ class vmmDetails(vmmGObjectUI):
         ignore = add_hotplug
 
         if self.edited(EDIT_SMARTCARD_MODE):
-            model = self.get_combo_label_value("smartcard-mode")
+            model = self.get_combo_entry("smartcard-mode")
             if model:
                 add_define(self.vm.define_smartcard_mode, dev_id_info, model)
 
@@ -2262,7 +2226,7 @@ class vmmDetails(vmmGObjectUI):
         ignore = add_hotplug
 
         if self.edited(EDIT_NET_MODEL):
-            model = self.get_combo_label_value("network-model")
+            model = self.get_combo_entry("network-model")
             addr = None
             if model == "spapr-vlan":
                 addr = "spapr-vio"
@@ -2270,12 +2234,12 @@ class vmmDetails(vmmGObjectUI):
 
         if self.edited(EDIT_NET_SOURCE):
             mode = None
-            net_list = self.widget("network-source-combo")
+            net_list = self.widget("network-source")
             net_bridge = self.widget("network-bridge")
             nettype, source = uihelpers.get_network_selection(net_list,
                                                               net_bridge)
             if nettype == "direct":
-                mode = self.get_combo_label_value("network-source-mode")
+                mode = self.get_combo_entry("network-source-mode")
 
             add_define(self.vm.define_network_source, dev_id_info,
                        nettype, source, mode)
@@ -2337,12 +2301,12 @@ class vmmDetails(vmmGObjectUI):
                         passwd)
 
         if self.edited(EDIT_GFX_KEYMAP):
-            keymap = self.get_combo_label_value("gfx-keymap")
+            keymap = self.get_combo_entry("gfx-keymap")
             add_define(self.vm.define_graphics_keymap, dev_id_info, keymap)
 
         # Do this last since it can change graphics unique ID
         if self.edited(EDIT_GFX_TYPE):
-            gtype = self.get_combo_label_value("gfx-type")
+            gtype = self.get_combo_entry("gfx-type")
             change_spicevmc = self._do_change_spicevmc(dev_id_info, gtype)
             add_define(self.vm.define_graphics_type, dev_id_info,
                        gtype, change_spicevmc)
@@ -2355,7 +2319,7 @@ class vmmDetails(vmmGObjectUI):
         ignore = add_hotplug
 
         if self.edited(EDIT_VIDEO_MODEL):
-            model = self.get_combo_label_value("video-model")
+            model = self.get_combo_entry("video-model")
             if model:
                 add_define(self.vm.define_video_model, dev_id_info, model)
 
@@ -2367,7 +2331,7 @@ class vmmDetails(vmmGObjectUI):
         ignore = add_hotplug
 
         if self.edited(EDIT_CONTROLLER_MODEL):
-            model = self.get_combo_label_value("controller-model")
+            model = self.get_combo_entry("controller-model")
             if model:
                 add_define(self.vm.define_controller_model, dev_id_info, model)
 
@@ -2379,11 +2343,11 @@ class vmmDetails(vmmGObjectUI):
         ignore = add_hotplug
 
         if self.edited(EDIT_WATCHDOG_MODEL):
-            model = self.get_combo_label_value("watchdog-model")
+            model = self.get_combo_entry("watchdog-model")
             add_define(self.vm.define_watchdog_model, dev_id_info, model)
 
         if self.edited(EDIT_WATCHDOG_ACTION):
-            action = self.get_combo_label_value("watchdog-action")
+            action = self.get_combo_entry("watchdog-action")
             add_define(self.vm.define_watchdog_action, dev_id_info, action)
 
         return self._change_config_helper(df, da, hf, ha)
@@ -2609,11 +2573,11 @@ class vmmDetails(vmmGObjectUI):
 
         if not clock:
             clock = _("Same as host")
-        self.set_combo_label("overview-clock", clock)
+        self.set_combo_entry("overview-clock", clock)
 
         if not arch in ["i686", "x86_64"]:
             if machtype is not None:
-                self.set_combo_label("machine-type", machtype)
+                self.set_combo_entry("machine-type", machtype)
 
         # Security details
         semodel, sectype, vmlabel, relabel = self.vm.get_seclabel()
@@ -2874,8 +2838,8 @@ class vmmDetails(vmmGObjectUI):
         self.widget("disk-readonly").set_sensitive(not is_cdrom)
         self.widget("disk-shareable").set_active(share)
         self.widget("disk-size").set_text(size)
-        self.set_combo_label("disk-cache", cache)
-        self.set_combo_label("disk-io", io)
+        self.set_combo_entry("disk-cache", cache)
+        self.set_combo_entry("disk-io", io)
 
         self.widget("disk-format").set_sensitive(show_format)
         self.widget("disk-format").get_child().set_text(driver_type)
@@ -2883,7 +2847,7 @@ class vmmDetails(vmmGObjectUI):
         no_default = not self.is_customize_dialog
 
         self.populate_disk_bus_combo(devtype, no_default)
-        self.set_combo_label("disk-bus", bus)
+        self.set_combo_entry("disk-bus", bus)
         self.widget("disk-serial").set_text(serial or "")
 
         self.widget("disk-iotune-rbs").set_value(iotune_rbs)
@@ -2929,9 +2893,9 @@ class vmmDetails(vmmGObjectUI):
 
         self.widget("network-mac-address").set_text(net.macaddr)
         uihelpers.populate_network_list(
-                    self.widget("network-source-combo"),
+                    self.widget("network-source"),
                     self.conn)
-        self.widget("network-source-combo").set_active(-1)
+        self.widget("network-source").set_active(-1)
 
         self.widget("network-bridge").set_text("")
         def compare_network(model, info):
@@ -2947,19 +2911,22 @@ class vmmDetails(vmmGObjectUI):
 
             return False, 0
 
-        self.set_combo_label("network-source",
+        self.set_combo_entry("network-source",
                              (nettype, source), label=desc,
                              comparefunc=compare_network)
 
+        is_direct = (nettype == "direct")
+        uihelpers.set_grid_row_visible(self.widget("network-source-mode"),
+                                       is_direct)
+        self.widget("vport-expander").set_visible(is_direct)
+
         # source mode
         uihelpers.populate_source_mode_combo(self.vm,
-                            self.widget("network-source-mode-combo"))
-        self.set_combo_label("network-source-mode", source_mode)
+                            self.widget("network-source-mode"))
+        self.set_combo_entry("network-source-mode", source_mode)
 
         # Virtualport config
-        show_vport = (nettype == "direct")
         vport = net.virtualport
-        self.widget("vport-expander").set_visible(show_vport)
         self.widget("vport-type").set_text(vport.type or "")
         self.widget("vport-managerid").set_text(str(vport.managerid) or "")
         self.widget("vport-typeid").set_text(str(vport.typeid) or "")
@@ -2968,8 +2935,8 @@ class vmmDetails(vmmGObjectUI):
         self.widget("vport-instanceid").set_text(vport.instanceid or "")
 
         uihelpers.populate_netmodel_combo(self.vm,
-                                          self.widget("network-model-combo"))
-        self.set_combo_label("network-model", model)
+                                          self.widget("network-model"))
+        self.set_combo_entry("network-model", model)
 
     def refresh_input_page(self):
         inp = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -3007,32 +2974,11 @@ class vmmDetails(vmmGObjectUI):
         if not gfx:
             return
 
-        title = self.widget("graphics-title")
         table = self.widget("graphics-table")
         table.foreach(lambda w, ignore: w.hide(), ())
 
-        def set_title(text):
-            title.set_markup("<b>%s</b>" % text)
-
-        def show_row(widget_name, suffix=""):
-            base = "gfx-%s" % widget_name
-            self.widget(base + "-title").show()
-            self.widget(base + suffix).show()
-
-        def show_box(widget_name):
-            self.widget("gfx-%s-box" % widget_name).show()
-
-        def show_checkbox(widget_name, value):
-            widget = self.widget("gfx-" + widget_name)
-            widget.show()
-            widget.set_active(value)
-
-        def show_text(widget_name, text):
-            show_row(widget_name)
-            self.widget("gfx-" + widget_name).set_text(text)
-
-        def enable_widget(widget_name, value):
-            self.widget("gfx-" + widget_name).set_sensitive(value)
+        def show_row(name):
+            uihelpers.set_grid_row_visible(self.widget(name), True)
 
         def port_to_string(port):
             if port is None:
@@ -3045,61 +2991,63 @@ class vmmDetails(vmmGObjectUI):
         is_spice = (gtype == "spice")
         is_other = not (True in [is_vnc, is_sdl, is_spice])
 
-        set_title(_("%(graphicstype)s Server") %
+        title = (_("%(graphicstype)s Server") %
                   {"graphicstype" : gfx.pretty_type_simple(gtype)})
 
         settype = ""
         if is_vnc or is_spice:
-            port  = port_to_string(gfx.port)
-            address = (gfx.listen or "127.0.0.1")
-            keymap  = (gfx.keymap or None)
             use_passwd = gfx.passwd is not None
-            passwd = gfx.passwd or ""
 
-            show_box("password")
-            show_text("password", passwd)
-            show_checkbox("use-password", use_passwd)
-            enable_widget("password", use_passwd)
-            show_text("port", port)
-            show_text("address", address)
+            show_row("gfx-password-box")
+            show_row("gfx-address")
+            show_row("gfx-port")
+            show_row("gfx-keymap")
 
-            show_row("keymap", "-box")
-            self.set_combo_label("gfx-keymap", keymap)
+            self.widget("gfx-port").set_text(port_to_string(gfx.port))
+            self.widget("gfx-address").set_text(gfx.listen or "127.0.0.1")
+            self.set_combo_entry("gfx-keymap", gfx.keymap or None)
+
+            self.widget("gfx-password").set_text(gfx.passwd or "")
+            self.widget("gfx-use-password").set_active(use_passwd)
+            self.widget("gfx-password").set_sensitive(use_passwd)
+
             settype = gtype
 
         if is_spice:
-            tlsport = port_to_string(gfx.tlsPort)
-            show_text("tlsport", tlsport)
+            show_row("gfx-tlsport")
+            self.widget("gfx-tlsport").set_text(port_to_string(gfx.tlsPort))
 
         if is_sdl:
-            set_title(_("Local SDL Window"))
+            title = _("Local SDL Window")
 
-            display = gfx.display or _("Unknown")
-            xauth   = gfx.xauth or _("Unknown")
-
-            show_text("display", display)
-            show_text("xauth", xauth)
+            show_row("gfx-display")
+            show_row("gfx-xauth")
+            self.widget("gfx-display").set_text(gfx.display or _("Unknown"))
+            self.widget("gfx-xauth").set_text(gfx.xauth or _("Unknown"))
 
         if is_other:
             settype = gfx.pretty_type_simple(gtype)
 
         if settype:
-            show_row("type", "-box")
-            self.set_combo_label("gfx-type", gtype, label=settype)
+            show_row("gfx-type")
+            self.set_combo_entry("gfx-type", gtype, label=settype)
+
+        self.widget("graphics-title").set_markup("<b>%s</b>" % title)
+
 
     def refresh_sound_page(self):
         sound = self.get_hw_selection(HW_LIST_COL_DEVICE)
         if not sound:
             return
 
-        self.set_combo_label("sound-model", sound.model)
+        self.set_combo_entry("sound-model", sound.model)
 
     def refresh_smartcard_page(self):
         sc = self.get_hw_selection(HW_LIST_COL_DEVICE)
         if not sc:
             return
 
-        self.set_combo_label("smartcard-mode", sc.mode)
+        self.set_combo_entry("smartcard-mode", sc.mode)
 
     def refresh_redir_page(self):
         rd = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -3112,8 +3060,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("redir-title").set_markup(devlabel)
         self.widget("redir-address").set_text(address)
 
-        self.widget("redir-type-label").set_text(rd.type)
-        self.widget("redir-type-combo").hide()
+        self.widget("redir-type").set_text(rd.type)
 
     def refresh_tpm_page(self):
         tpmdev = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -3184,7 +3131,6 @@ class vmmDetails(vmmGObjectUI):
 
         def show_ui(param, val=None):
             widgetname = "char-" + param.replace("_", "-")
-            labelname = widgetname + "-label"
             doshow = chardev.supports_property(param, ro=True)
 
             # Exception: don't show target type for serial/parallel
@@ -3194,8 +3140,7 @@ class vmmDetails(vmmGObjectUI):
             if not val and doshow:
                 val = getattr(chardev, param)
 
-            self.widget(widgetname).set_visible(doshow)
-            self.widget(labelname).set_visible(doshow)
+            uihelpers.set_grid_row_visible(self.widget(widgetname), doshow)
             self.widget(widgetname).set_text(val or "-")
 
         def build_host_str(base):
@@ -3269,7 +3214,7 @@ class vmmDetails(vmmGObjectUI):
 
         no_default = not self.is_customize_dialog
         uihelpers.populate_video_combo(self.vm,
-                                self.widget("video-model-combo"),
+                                self.widget("video-model"),
                                 no_default=no_default)
 
         model = vid.model
@@ -3283,7 +3228,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("video-ram").set_text(ramlabel)
         self.widget("video-heads").set_text(heads and str(heads) or "-")
 
-        self.set_combo_label("video-model", model,
+        self.set_combo_entry("video-model", model,
                              label=vid.pretty_model(model))
 
     def refresh_watchdog_page(self):
@@ -3294,8 +3239,8 @@ class vmmDetails(vmmGObjectUI):
         model = watch.model
         action = watch.action
 
-        self.set_combo_label("watchdog-model", model)
-        self.set_combo_label("watchdog-action", action)
+        self.set_combo_entry("watchdog-model", model)
+        self.set_combo_entry("watchdog-action", action)
 
     def refresh_controller_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -3309,7 +3254,7 @@ class vmmDetails(vmmGObjectUI):
 
         self.widget("controller-type").set_text(type_label)
 
-        combo = self.widget("controller-model-combo")
+        combo = self.widget("controller-model")
         model = combo.get_model()
         model.clear()
         if dev.type == virtinst.VirtualController.TYPE_USB:
@@ -3319,7 +3264,7 @@ class vmmDetails(vmmGObjectUI):
         else:
             self.widget("config-remove").set_sensitive(True)
 
-        self.set_combo_label("controller-model", model_label)
+        self.set_combo_entry("controller-model", model_label)
 
     def refresh_filesystem_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -3416,7 +3361,7 @@ class vmmDetails(vmmGObjectUI):
     ############################
 
     def populate_disk_bus_combo(self, devtype, no_default):
-        buslist     = self.widget("disk-bus-combo")
+        buslist     = self.widget("disk-bus")
         busmodel    = buslist.get_model()
         busmodel.clear()
 

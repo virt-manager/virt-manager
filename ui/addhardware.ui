@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.0 on Sat Sep 28 14:12:31 2013 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
@@ -481,7 +482,7 @@
                                     <property name="has_entry">True</property>
                                     <child internal-child="entry">
                                       <object class="GtkEntry" id="combobox-entry2">
-                                        <property name="can_focus">False</property>
+                                        <property name="can_focus">True</property>
                                       </object>
                                     </child>
                                   </object>
@@ -646,7 +647,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">●</property>
-                                    <property name="invisible_char_set">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -715,6 +715,8 @@
                               <object class="GtkAlignment" id="alignment5">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="hexpand">False</property>
+                                <property name="vexpand">False</property>
                                 <child>
                                   <placeholder/>
                                 </child>
@@ -836,7 +838,6 @@
                                     <property name="can_focus">True</property>
                                     <property name="visibility">False</property>
                                     <property name="invisible_char">●</property>
-                                    <property name="invisible_char_set">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -959,7 +960,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">●</property>
-                                    <property name="invisible_char_set">True</property>
                                     <property name="adjustment">adjustment5</property>
                                     <property name="climb_rate">1</property>
                                     <property name="snap_to_ticks">True</property>
@@ -997,7 +997,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="invisible_char">●</property>
-                                        <property name="invisible_char_set">True</property>
                                         <property name="adjustment">adjustment4</property>
                                         <property name="climb_rate">1</property>
                                         <property name="snap_to_ticks">True</property>
