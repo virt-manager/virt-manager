@@ -115,8 +115,8 @@
       <source file='/tmp/foobar2'/>
       <target dev='vdc' bus='virtio'/>
     </disk>
-    <disk type='file' device='disk'>
-      <source file='/tmp/foobar3'/>
+    <disk type='block' device='disk'>
+      <source dev='/dev/default-pool/overlay.img'/>
       <target dev='sdd' bus='usb'/>
     </disk>
     <disk type='file' device='disk'>
@@ -863,6 +863,25 @@ test-many-devices, like an alternate RNG.
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
     <target/>
+  </volume>
+  <volume>
+    <name>backing.img</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='raw'/>
+    </target>
+  </volume>
+  <volume>
+    <name>overlay.img</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='qcow2'/>
+    </target>
+    <backingStore>
+      <path>/dev/default-pool/backing.img</path>
+    </backingStore>
   </volume>
 </pool>
 

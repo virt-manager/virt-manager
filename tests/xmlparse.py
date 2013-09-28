@@ -971,7 +971,7 @@ class XMLParseTest(unittest.TestCase):
 
     def testVol(self):
         basename = "pool-dir-vol"
-        infile = "tests/storage-xml/%s.xml" % basename
+        infile = "tests/xmlparse-xml/%s-in.xml" % basename
         outfile = "tests/xmlparse-xml/%s-out.xml" % basename
         vol = virtinst.StorageVolume(conn, parsexml=file(infile).read())
 
@@ -980,6 +980,7 @@ class XMLParseTest(unittest.TestCase):
         check("allocation", 5368709120, 1000)
         check("format", "raw", "qcow2")
         check("target_path", None, "/foo/bar")
+        check("backing_store", "/foo/bar/baz", "/my/backing")
 
         check = self._make_checker(vol.permissions)
         check("mode", "0700", "0744")

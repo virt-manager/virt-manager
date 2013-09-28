@@ -332,9 +332,8 @@ class VirtualDisk(VirtualDevice):
         @param conn: virConnect to check VMs
         @param path: Path to check for
         @param check_conflict: Only return names that are truly conflicting:
-                               this will omit guests that are using the disk
-                               with the 'shareable' flag, and possible other
-                               heuristics
+            this will omit guests that are using the disk with the
+            'shareable' flag, and possible other heuristics
         """
         if not path:
             return

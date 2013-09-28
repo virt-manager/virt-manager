@@ -1,20 +1,18 @@
 <volume>
   <name>pool-dir-vol</name>
-  <capacity>2000</capacity>
-  <allocation>1000</allocation>
+  <capacity>10737418240</capacity>
+  <allocation>5368709120</allocation>
   <target>
-    <format type="qcow2"/>
+    <format type="raw"/>
     <permissions>
-      <mode>0744</mode>
-      <owner>10000</owner>
-      <group>10000</group>
-      <label>foo.label</label>
+      <mode>0700</mode>
+      <owner>10736</owner>
+      <group>10736</group>
     </permissions>
-    <path>/foo/bar</path>
   </target>
   <backingStore>
-    <path>/my/backing</path>
-    <format type="qcow2"/>
+    <path>/foo/bar/baz</path>
+    <format type='qcow2'/>
     <permissions>
       <mode>0644</mode>
       <owner>107</owner>

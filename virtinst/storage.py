@@ -639,6 +639,7 @@ class StorageVolume(_StorageObject):
                              validate_cb=_validate_allocation)
     format = XMLProperty("./target/format/@type", default_cb=_default_format)
     target_path = XMLProperty("./target/path")
+    backing_store = XMLProperty("./backingStore/path")
 
 
     ######################
