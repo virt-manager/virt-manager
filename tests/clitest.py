@@ -18,6 +18,7 @@ import atexit
 import logging
 import os
 import shlex
+import shutil
 import subprocess
 import sys
 import time
@@ -200,7 +201,10 @@ class Command(object):
     def _get_output(self):
         try:
             for i in new_files:
-                os.system("rm %s > /dev/null 2>&1" % i)
+                if os.path.isdir(i):
+                    shutil.rmtree(i)
+                elif os.path.exists(i):
+                    os.unlink(i)
 
             code, output = self._launch_command()
 
