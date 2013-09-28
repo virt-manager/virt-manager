@@ -30,10 +30,6 @@ from virtinst import VirtualVideoDevice
 # pylint: disable=W0212
 # Access to protected member, needed to unittest stuff
 
-# Used to ensure consistent SDL xml output
-os.environ["HOME"] = "/tmp"
-os.environ["DISPLAY"] = ":3.4"
-
 _capsprefix  = ",caps=%s/tests/capabilities-xml/" % os.getcwd()
 defaulturi = "__virtinst_test__test:///default,predictable"
 testuri    = "test:///%s/tests/testdriver.xml" % os.getcwd()
@@ -209,6 +205,8 @@ def get_basic_fullyvirt_guest(typ="xen", installer=None):
     g.installer.cdrom = True
     gdev = VirtualGraphics(_conn)
     gdev.type = "sdl"
+    gdev.display = ":3.4"
+    gdev.xauth = "/tmp/.Xauthority"
     g.add_device(gdev)
     g.features.pae = False
     g.vcpus = 5

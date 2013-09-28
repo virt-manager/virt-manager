@@ -25,11 +25,16 @@ to see a code coverage report.
 One useful way to manually test virt-manager's UI is using libvirt's
 unit test driver. From the source directory, Launch virt-manager like:
 
-  virt-manager --connect test://$PWD/tests/testdriver.xml
+    virt-manager --connect test://$PWD/tests/testdriver.xml
 
 This testdriver has many fake XML definitions that can be used to see
 each bit of virt-manager's UI. It also enables testing the various wizards
 without having to alter your host virt config.
+
+Also, there's a few standalone specialty tests:
+
+    python setup.py test_urls       : Test fetching media from distro URLs
+    python setup.py test_initrd_inject: Test --initrd-inject
 
 
   Submitting patches

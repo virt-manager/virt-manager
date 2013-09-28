@@ -842,6 +842,8 @@ class TestXMLConfig(unittest.TestCase):
 
         gdev3 = virtinst.VirtualGraphics(g.conn)
         gdev3.type = "sdl"
+        gdev3.xauth = "/tmp/.Xauthority"
+        gdev3.display = ":3.4"
         gdev4 = virtinst.VirtualGraphics(g.conn)
         gdev4.type = "spice"
         gdev4.passwdValidTo = "foobar"

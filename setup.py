@@ -461,7 +461,8 @@ class TestCommand(TestBaseCommand):
         testfiles = []
         for t in glob.glob(os.path.join(self._dir, 'tests', '*.py')):
             if (t.endswith("__init__.py") or
-                t.endswith("test_urls.py")):
+                t.endswith("test_urls.py") or
+                t.endswith("test_inject.py")):
                 continue
 
             base = os.path.basename(t)
@@ -506,6 +507,34 @@ class TestURLFetch(TestBaseCommand):
         if self.path:
             import tests
             tests.URLTEST_LOCAL_MEDIA += self.path
+        TestBaseCommand.run(self)
+
+
+class TestInitrdInject(TestBaseCommand):
+    description = "Test initrd inject with real kernels, fetched from URLs"
+
+    user_options = TestBaseCommand.user_options + [
+        ("distro=", None, "Comma separated list of distros to test, from "
+                          "the tests internal URL dictionary.")
+    ]
+
+    def initialize_options(self):
+        TestBaseCommand.initialize_options(self)
+        self.distro = ""
+
+    def finalize_options(self):
+        TestBaseCommand.finalize_options(self)
+        orig = str(self.distro)
+        if not orig:
+            self.distro = []
+        else:
+            self.distro = orig.split(",")
+
+    def run(self):
+        self._testfiles = ["tests.test_inject"]
+        if self.distro:
+            import tests
+            tests.INITRD_TEST_DISTROS += self.distro
         TestBaseCommand.run(self)
 
 
@@ -598,5 +627,6 @@ setup(
         'rpm': my_rpm,
         'test': TestCommand,
         'test_urls' : TestURLFetch,
+        'test_initrd_inject' : TestInitrdInject,
     }
 )

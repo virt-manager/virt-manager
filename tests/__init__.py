@@ -71,3 +71,6 @@ virtconvert = _import("virtconvert", "virt-convert")
 # Variable used to store a local iso or dir path to check for a distro
 # Specified via 'python setup.py test_urls --path"
 URLTEST_LOCAL_MEDIA = []
+
+# Used to implement test_initrd_inject --distro
+INITRD_TEST_DISTROS = []

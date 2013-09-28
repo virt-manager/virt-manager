@@ -34,6 +34,10 @@ from tests import utils
 os.environ["VIRTCONV_TEST_NO_DISK_CONVERSION"] = "1"
 os.environ["LANG"] = "en_US.UTF-8"
 
+# Used to ensure consistent SDL xml output
+os.environ["HOME"] = "/tmp"
+os.environ["DISPLAY"] = ":3.4"
+
 _defaultconn = utils.open_testdefault()
 
 # Location
@@ -895,9 +899,6 @@ def cleanup():
 
 
 class CLITests(unittest.TestCase):
-    def __init__(self, *args, **kwargs):
-        unittest.TestCase.__init__(self, *args, **kwargs)
-
     def setUp(self):
         global curtest
         curtest += 1
