@@ -323,13 +323,10 @@ def is_prompt():
 
 
 def _yes_no_convert(s):
-    if s is None:
-        return None
-
     tvalues = ["y", "yes", "1", "true", "t", "on"]
     fvalues = ["n", "no", "0", "false", "f", "off"]
 
-    s = s.lower()
+    s = (s or "").lower()
     if s in tvalues:
         return True
     elif s in fvalues:
@@ -337,11 +334,11 @@ def _yes_no_convert(s):
     return None
 
 
-def _yes_no(s):
-    ret = _yes_no_convert(s)
-    if ret is None:
-        raise ValueError(_("A yes or no response is required"))
-    return ret
+def _on_off_convert(key, val):
+    val = _yes_no_convert(val)
+    if val is not None:
+        return val
+    raise fail(_("%(key)s must be 'yes' or 'no'") % {"key": key})
 
 
 def prompt_for_input(noprompt_err, prompt="", val=None, failed=False):
@@ -375,7 +372,9 @@ def prompt_for_yes_no(warning, question):
 
         inp = prompt_for_input(errmsg, msg, None)
         try:
-            res = _yes_no(inp)
+            res = _yes_no_convert(inp)
+            if res is None:
+                raise ValueError(_("A yes or no response is required"))
             break
         except ValueError, e:
             logging.error(e)
@@ -408,8 +407,6 @@ def prompt_loop(prompt_txt, noprompt_err, passed_val, obj, param_name,
 
 
 # Specific function for disk prompting. Returns a validated VirtualDisk
-# device.
-#
 def disk_prompt(conn, origpath, origsize, origsparse,
                 prompt_txt=None,
                 warn_overwrite=False, check_size=True,
@@ -982,7 +979,7 @@ def _build_set_param(inst, opts, support_cb=None):
             support_cb(inst, paramname, keyname)
 
         if convert_cb:
-            val = convert_cb(val)
+            val = convert_cb(keyname, val)
         if val == _CLI_UNSET:
             return
 
@@ -999,7 +996,7 @@ def _build_set_param(inst, opts, support_cb=None):
 def _check_leftover_opts(opts):
     if not opts:
         return
-    raise ValueError(_("Unknown options %s") % opts.keys())
+    raise fail(_("Unknown options %s") % opts.keys())
 
 
 def parse_optstr_tuples(optstr, compress_first=False):
@@ -1179,20 +1176,8 @@ def parse_boot(guest, optstr):
     opts = parse_optstr(optstr)
     set_param = _build_set_param(guest.os, opts)
 
-    def convert_menu(val):
-        val = _yes_no_convert(val)
-        if val is not None:
-            return val
-        fail(_("--boot menu must be 'on' or 'off'"))
-
-    def convert_useserial(val):
-        val = _yes_no_convert(val)
-        if val is not None:
-            return val
-        fail(_("--boot useserial must be 'on' or 'off'"))
-
-    set_param("useserial", "useserial", convert_cb=convert_useserial)
-    set_param("enable_bootmenu", "menu", convert_cb=convert_menu)
+    set_param("useserial", "useserial", convert_cb=_on_off_convert)
+    set_param("enable_bootmenu", "menu", convert_cb=_on_off_convert)
     set_param("kernel", "kernel")
     set_param("initrd", "initrd")
     set_param("dtb", "dtb")
@@ -1277,18 +1262,18 @@ def parse_features(guest, optstr):
     opts = parse_optstr(optstr)
     set_param = _build_set_param(guest.features, opts)
 
-    set_param("acpi", "acpi", convert_cb=_yes_no_convert)
-    set_param("apic", "apic", convert_cb=_yes_no_convert)
-    set_param("pae", "pae", convert_cb=_yes_no_convert)
-    set_param("privnet", "privnet", convert_cb=_yes_no_convert)
-    set_param("hap", "hap", convert_cb=_yes_no_convert)
-    set_param("viridian", "viridian", convert_cb=_yes_no_convert)
-    set_param("eoi", "eoi", convert_cb=_yes_no_convert)
+    set_param("acpi", "acpi", convert_cb=_on_off_convert)
+    set_param("apic", "apic", convert_cb=_on_off_convert)
+    set_param("pae", "pae", convert_cb=_on_off_convert)
+    set_param("privnet", "privnet", convert_cb=_on_off_convert)
+    set_param("hap", "hap", convert_cb=_on_off_convert)
+    set_param("viridian", "viridian", convert_cb=_on_off_convert)
+    set_param("eoi", "eoi", convert_cb=_on_off_convert)
 
-    set_param("hyperv_vapic", "hyperv_vapic", convert_cb=_yes_no_convert)
-    set_param("hyperv_relaxed", "hyperv_relaxed", convert_cb=_yes_no_convert)
+    set_param("hyperv_vapic", "hyperv_vapic", convert_cb=_on_off_convert)
+    set_param("hyperv_relaxed", "hyperv_relaxed", convert_cb=_on_off_convert)
     set_param("hyperv_spinlocks", "hyperv_spinlocks",
-              convert_cb=_yes_no_convert)
+              convert_cb=_on_off_convert)
     set_param("hyperv_spinlocks_retries", "hyperv_spinlocks_retries")
 
     _check_leftover_opts(opts)
@@ -1464,7 +1449,8 @@ def parse_network(guest, optstr, dev):
         elif "bridge" in opts:
             opts["type"] = virtinst.VirtualNetworkInterface.TYPE_BRIDGE
 
-    def convert_mac(val):
+    def convert_mac(key, val):
+        ignore = key
         if val == "RANDOM":
             return None
         return val
@@ -1493,7 +1479,8 @@ def parse_graphics(guest, optstr, dev):
         return None
     set_param = _build_set_param(dev, opts)
 
-    def convert_keymap(keymap):
+    def convert_keymap(key, keymap):
+        ignore = key
         from virtinst import hostkeymap
 
         if not keymap:
@@ -1765,7 +1752,8 @@ def parse_video(guest, optstr, dev):
     opts = parse_optstr(optstr, remove_first="model")
     set_param = _build_set_param(dev, opts)
 
-    def convert_model(val):
+    def convert_model(key, val):
+        ignore = key
         if val == "default":
             return _CLI_UNSET
         return val
@@ -1787,7 +1775,8 @@ def parse_sound(guest, optstr, dev):
     opts = parse_optstr(optstr, remove_first="model")
     set_param = _build_set_param(dev, opts)
 
-    def convert_model(val):
+    def convert_model(key, val):
+        ignore = key
         if val == "default":
             return _CLI_UNSET
         return val
@@ -1809,7 +1798,8 @@ def parse_hostdev(guest, optstr, dev):
     opts = parse_optstr(optstr, remove_first="name")
     set_param = _build_set_param(dev, opts)
 
-    def convert_name(val):
+    def convert_name(key, val):
+        ignore = key
         return virtinst.NodeDevice.lookupNodeName(guest.conn, val)
 
     set_param(dev.set_from_nodedev, "name", convert_cb=convert_name)
