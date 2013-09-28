@@ -322,7 +322,7 @@ def is_prompt():
     return doprompt
 
 
-def yes_or_no_convert(s):
+def _yes_no_convert(s):
     if s is None:
         return None
 
@@ -337,8 +337,8 @@ def yes_or_no_convert(s):
     return None
 
 
-def yes_or_no(s):
-    ret = yes_or_no_convert(s)
+def _yes_no(s):
+    ret = _yes_no_convert(s)
     if ret is None:
         raise ValueError(_("A yes or no response is required"))
     return ret
@@ -360,8 +360,8 @@ def prompt_for_input(noprompt_err, prompt="", val=None, failed=False):
     return sys.stdin.readline().strip()
 
 
-def prompt_for_yes_or_no(warning, question):
-    """catches yes_or_no errors and ensures a valid bool return"""
+def prompt_for_yes_no(warning, question):
+    """catches yes_no errors and ensures a valid bool return"""
     if force:
         logging.debug("Forcing return value of True to prompt '%s'")
         return True
@@ -375,7 +375,7 @@ def prompt_for_yes_or_no(warning, question):
 
         inp = prompt_for_input(errmsg, msg, None)
         try:
-            res = yes_or_no(inp)
+            res = _yes_no(inp)
             break
         except ValueError, e:
             logging.error(e)
@@ -482,7 +482,7 @@ def disk_prompt(conn, origpath, origsize, origsparse,
             return False
 
         if warn_overwrite or is_prompt():
-            return not prompt_for_yes_or_no(msg, askmsg)
+            return not prompt_for_yes_no(msg, askmsg)
         return False
 
     def prompt_inuse_conflict(dev):
@@ -495,7 +495,7 @@ def disk_prompt(conn, origpath, origsize, origsparse,
 
         msg = (_("Disk %s is already in use by other guests %s." %
                (dev.path, names)))
-        return not prompt_for_yes_or_no(msg, askmsg)
+        return not prompt_for_yes_no(msg, askmsg)
 
     def prompt_size_conflict(dev):
         """
@@ -507,7 +507,7 @@ def disk_prompt(conn, origpath, origsize, origsparse,
             return True
 
         if errmsg:
-            return not prompt_for_yes_or_no(errmsg, askmsg)
+            return not prompt_for_yes_no(errmsg, askmsg)
 
         return False
 
@@ -619,7 +619,7 @@ def get_vcpus(guest, vcpus, check_cpu):
                 "but performance will be poor. ") % (guest.vcpus, pcpus)
         askmsg = _("Are you sure? (yes or no)")
 
-        if not prompt_for_yes_or_no(msg, askmsg):
+        if not prompt_for_yes_no(msg, askmsg):
             nice_exit()
 
 
@@ -1177,13 +1177,13 @@ def parse_boot(guest, optstr):
     set_param = _build_set_param(guest.os, opts)
 
     def convert_menu(val):
-        val = yes_or_no_convert(val)
+        val = _yes_no_convert(val)
         if val is not None:
             return val
         fail(_("--boot menu must be 'on' or 'off'"))
 
     def convert_useserial(val):
-        val = yes_or_no_convert(val)
+        val = _yes_no_convert(val)
         if val is not None:
             return val
         fail(_("--boot useserial must be 'on' or 'off'"))
@@ -1228,7 +1228,7 @@ def parse_security(guest, optstr):
     # Beware, adding boolean options here could upset label comma handling
     mode = get_opt_param(opts, "type")
     label = get_opt_param(opts, "label")
-    relabel = yes_or_no_convert(get_opt_param(opts, "relabel"))
+    relabel = _yes_no_convert(get_opt_param(opts, "relabel"))
 
     # Try to fix up label if it contained commas
     if label:
@@ -1274,18 +1274,18 @@ def parse_features(guest, optstr):
     opts = parse_optstr(optstr)
     set_param = _build_set_param(guest.features, opts)
 
-    set_param("acpi", "acpi", convert_cb=yes_or_no_convert)
-    set_param("apic", "apic", convert_cb=yes_or_no_convert)
-    set_param("pae", "pae", convert_cb=yes_or_no_convert)
-    set_param("privnet", "privnet", convert_cb=yes_or_no_convert)
-    set_param("hap", "hap", convert_cb=yes_or_no_convert)
-    set_param("viridian", "viridian", convert_cb=yes_or_no_convert)
-    set_param("eoi", "eoi", convert_cb=yes_or_no_convert)
+    set_param("acpi", "acpi", convert_cb=_yes_no_convert)
+    set_param("apic", "apic", convert_cb=_yes_no_convert)
+    set_param("pae", "pae", convert_cb=_yes_no_convert)
+    set_param("privnet", "privnet", convert_cb=_yes_no_convert)
+    set_param("hap", "hap", convert_cb=_yes_no_convert)
+    set_param("viridian", "viridian", convert_cb=_yes_no_convert)
+    set_param("eoi", "eoi", convert_cb=_yes_no_convert)
 
-    set_param("hyperv_vapic", "hyperv_vapic", convert_cb=yes_or_no_convert)
-    set_param("hyperv_relaxed", "hyperv_relaxed", convert_cb=yes_or_no_convert)
+    set_param("hyperv_vapic", "hyperv_vapic", convert_cb=_yes_no_convert)
+    set_param("hyperv_relaxed", "hyperv_relaxed", convert_cb=_yes_no_convert)
     set_param("hyperv_spinlocks", "hyperv_spinlocks",
-              convert_cb=yes_or_no_convert)
+              convert_cb=_yes_no_convert)
     set_param("hyperv_spinlocks_retries", "hyperv_spinlocks_retries")
 
     _check_leftover_opts(opts)

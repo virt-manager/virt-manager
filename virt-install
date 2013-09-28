@@ -220,7 +220,7 @@ def prompt_virt(caps, arch, req_virt_type, req_accel):
                            "(yes or no)? This will allow you to run "
                            "unmodified operating systems.")
 
-            if cli.prompt_for_yes_or_no(prompt_txt, ""):
+            if cli.prompt_for_yes_no(prompt_txt, ""):
                 req_virt_type = "hvm"
             else:
                 req_virt_type = "xen"
@@ -244,7 +244,7 @@ def prompt_virt(caps, arch, req_virt_type, req_accel):
         prompt_txt = (_("Would you like to use %s acceleration? "
                         "(yes or no)") % accel_type)
 
-        req_accel = cli.prompt_for_yes_or_no(prompt_txt, "")
+        req_accel = cli.prompt_for_yes_no(prompt_txt, "")
 
     return (req_virt_type, req_accel)
 
