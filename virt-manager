@@ -102,10 +102,6 @@ def parse_commandline():
     optParser.epilog = ("Also accepts standard GTK arguments like "
                         "--g-fatal-warnings")
 
-    # Generate runtime performance profile stats with hotshot
-    optParser.add_option("--profile", dest="profile",
-        help=optparse.SUPPRESS_HELP, metavar="FILE")
-
     # Trace every libvirt API call to debug output
     optParser.add_option("--trace-libvirt", dest="tracelibvirt",
         help=optparse.SUPPRESS_HELP, action="store_true")
@@ -289,15 +285,8 @@ def main():
         engine.show_manager_window = False
         engine.skip_autostart = True
 
-
     # Finally start the app for real
-    if options.profile is not None:
-        import hotshot
-        prof = hotshot.Profile(options.profile)
-        prof.runcall(engine.application.run, None)
-        prof.close()
-    else:
-        engine.application.run(None)
+    engine.application.run(None)
 
 
 if __name__ == "__main__":
