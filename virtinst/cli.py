@@ -755,6 +755,20 @@ def convert_old_graphics(guest, options, default_override=None):
     options.graphics = [optstr]
 
 
+def convert_old_features(options):
+    if getattr(options, "features", None):
+        return
+
+    opts = ""
+    if options.noacpi:
+        opts += "acpi=off"
+    if options.noapic:
+        if opts:
+            opts += ","
+        opts += "apic=off"
+    options.features = opts or None
+
+
 def set_os_variant(obj, distro_type, distro_variant):
     # This is used for both Guest and virtconv VM, so be careful
     if (not distro_type and
@@ -911,6 +925,13 @@ def add_distro_options(g):
     g.add_option("", "--os-variant", dest="distro_variant",
                  help=_("The OS variant being installed guests, "
                         "e.g. 'fedora18', 'rhel6', 'winxp', etc."))
+
+
+def add_old_feature_options(optg):
+    optg.add_option("", "--noapic", action="store_true", dest="noapic",
+                    default=False, help=optparse.SUPPRESS_HELP)
+    optg.add_option("", "--noacpi", action="store_true", dest="noacpi",
+                    default=False, help=optparse.SUPPRESS_HELP)
 
 
 #############################################
@@ -1101,7 +1122,7 @@ def parse_cpu(guest, optstr):
         "optional": [],
         "disable": [],
         "forbid": [],
-   }
+    }
     opts = parse_optstr(optstr,
                         basedict=default_dict,
                         remove_first="model")
@@ -1197,16 +1218,12 @@ def parse_boot(guest, optstr):
 # --security parsing #
 ######################
 
-def parse_security(guest, security):
-    seclist = util.listify(security)
-    secopts = seclist and seclist[0] or None
-    if not secopts:
+def parse_security(guest, optstr):
+    if not optstr:
         return
 
-    # Parse security opts
-    opts = parse_optstr(secopts)
-    arglist = secopts.split(",")
-    secmodel = guest.seclabel
+    opts = parse_optstr(optstr)
+    arglist = optstr.split(",")
 
     # Beware, adding boolean options here could upset label comma handling
     mode = get_opt_param(opts, "type")
@@ -1232,20 +1249,46 @@ def parse_security(guest, security):
             break
 
     if label:
-        secmodel.label = label
+        guest.seclabel.label = label
         if not mode:
-            mode = secmodel.TYPE_STATIC
+            mode = guest.seclabel.TYPE_STATIC
     if mode:
-        secmodel.type = mode
-
+        guest.seclabel.type = mode
     if relabel:
-        secmodel.relabel = relabel
+        guest.seclabel.relabel = relabel
 
     _check_leftover_opts(opts)
 
     # Run for validation purposes
-    secmodel.get_xml_config()
+    guest.seclabel.get_xml_config()
 
+
+######################
+# --features parsing #
+######################
+
+def parse_features(guest, optstr):
+    if not optstr:
+        return
+
+    opts = parse_optstr(optstr)
+    set_param = _build_set_param(guest.features, opts)
+
+    set_param("acpi", "acpi", convert_cb=yes_or_no_convert)
+    set_param("apic", "apic", convert_cb=yes_or_no_convert)
+    set_param("pae", "pae", convert_cb=yes_or_no_convert)
+    set_param("privnet", "privnet", convert_cb=yes_or_no_convert)
+    set_param("hap", "hap", convert_cb=yes_or_no_convert)
+    set_param("viridian", "viridian", convert_cb=yes_or_no_convert)
+    set_param("eoi", "eoi", convert_cb=yes_or_no_convert)
+
+    set_param("hyperv_vapic", "hyperv_vapic", convert_cb=yes_or_no_convert)
+    set_param("hyperv_relaxed", "hyperv_relaxed", convert_cb=yes_or_no_convert)
+    set_param("hyperv_spinlocks", "hyperv_spinlocks",
+              convert_cb=yes_or_no_convert)
+    set_param("hyperv_spinlocks_retries", "hyperv_spinlocks_retries")
+
+    _check_leftover_opts(opts)
 
 
 ##########################

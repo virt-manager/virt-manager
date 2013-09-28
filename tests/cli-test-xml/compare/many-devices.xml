@@ -14,9 +14,12 @@
     <boot dev="hd"/>
   </os>
   <features>
-    <acpi/>
-    <apic/>
+    <apic eoi="on"/>
     <pae/>
+    <privnet/>
+    <hyperv>
+      <spinlocks state="on" retries="1234"/>
+    </hyperv>
   </features>
   <clock offset="utc"/>
   <on_poweroff>destroy</on_poweroff>
@@ -107,9 +110,12 @@
     <boot dev="hd"/>
   </os>
   <features>
-    <acpi/>
-    <apic/>
+    <apic eoi="on"/>
     <pae/>
+    <privnet/>
+    <hyperv>
+      <spinlocks state="on" retries="1234"/>
+    </hyperv>
   </features>
   <clock offset="utc"/>
   <on_poweroff>destroy</on_poweroff>

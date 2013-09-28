@@ -70,14 +70,7 @@ def parse_args():
                     default=get_default_arch(),
                     help=_("Machine Architecture Type (i686/x86_64/ppc)"))
     cli.add_distro_options(cfgg)
-    cfgg.add_option("", "--noapic", action="store_true", dest="noapic",
-                    default=False,
-                    help=_("Disables APIC for fully virtualized guest "
-                           "(overrides value in os-variant db)"))
-    cfgg.add_option("", "--noacpi", action="store_true", dest="noacpi",
-                    default=False,
-                    help=_("Disables ACPI for fully virtualized guest "
-                           "(overrides value in os-variant db)"))
+    cli.add_old_feature_options(cfgg)
     opts.add_option_group(cfgg)
 
     misc = OptionGroup(opts, "Miscellaneous Options")

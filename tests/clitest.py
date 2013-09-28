@@ -479,7 +479,27 @@ c = vinst.add_category("misc", "--nographics --noautoconsole")
 c.add_compare("", "noargs-fail")  # No arguments
 c.add_compare("--hvm --nodisks --pxe --print-step all", "simple-pxe")  # Diskless PXE install
 c.add_compare("--hvm --cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --vcpus cores=4", "w2k3-cdrom")  # HVM windows install with disk
-c.add_compare("""--hvm --pxe --controller usb,model=ich9-ehci1,address=0:0:4.7,index=0 --controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0 --controller usb,model=ich9-uhci2,address=0:0:4.1,index=0,master=2 --controller usb,model=ich9-uhci3,address=0:0:4.2,index=0,master=4 --disk %(MANAGEDEXISTUPPER)s,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149 --disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace --disk device=cdrom,bus=sata --serial tcp,host=:2222,mode=bind,protocol=telnet --filesystem /source,/target,mode=squash --network user,mac=12:34:56:78:11:22 --network bridge=foobar,model=virtio --channel spicevmc --smartcard passthrough,type=spicevmc --tpm passthrough,model=tpm-tis,path=/dev/tpm0 --security type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes  --numatune \\"1-3,5\\",mode=preferred --boot loader=/foo/bar --host-device net_00_1c_25_10_b1_e4""", "many-devices")  # Lots of devices
+c.add_compare("""--hvm --pxe \
+--controller usb,model=ich9-ehci1,address=0:0:4.7,index=0 \
+--controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0 \
+--controller usb,model=ich9-uhci2,address=0:0:4.1,index=0,master=2 \
+--controller usb,model=ich9-uhci3,address=0:0:4.2,index=0,master=4 \
+--disk %(MANAGEDEXISTUPPER)s,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149 \
+--disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace \
+--disk device=cdrom,bus=sata \
+--serial tcp,host=:2222,mode=bind,protocol=telnet \
+--filesystem /source,/target,mode=squash \
+--network user,mac=12:34:56:78:11:22 \
+--network bridge=foobar,model=virtio \
+--channel spicevmc \
+--smartcard passthrough,type=spicevmc \
+--tpm passthrough,model=tpm-tis,path=/dev/tpm0 \
+--security type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes \
+--numatune \\"1-3,5\\",mode=preferred \
+--boot loader=/foo/bar \
+--host-device net_00_1c_25_10_b1_e4 \
+--features acpi=off,eoi=on,privnet=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=1234 \
+""", "many-devices")  # Lots of devices
 c.add_valid("--hvm --disk path=virt-install,device=cdrom")  # Specifying cdrom media via --disk
 c.add_valid("--hvm --import --disk path=virt-install")  # FV Import install
 c.add_valid("--hvm --import --disk path=virt-install --prompt --force")  # Working scenario w/ prompt shouldn't ask anything

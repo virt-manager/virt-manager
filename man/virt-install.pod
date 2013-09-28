@@ -187,6 +187,23 @@ To have libvirt automatically apply your static label, you must specify
 relabel=yes. Otherwise disk images must be manually labeled by the admin,
 including images that virt-install is asked to create.
 
+=item --features FEAT=on|off,...
+
+Set elements in the guests <features> XML on or off. Examples include acpi,
+apic, eoi, privnet, and hyperv features. Some examples:
+
+=over 2
+
+=item B<--features eoi=on>
+
+Enable APIC PV EOI
+
+=item B<--features hyperv_vapic=on,hyperv_spinlocks=off>
+
+Enable hypver VAPIC, but disable spinlocks
+
+=back
+
 =back
 
 
@@ -825,14 +842,6 @@ Available options are listed via 'virsh capabilities' in the <domain> tags.
 Prefer KVM or KQEMU (in that order) if installing a QEMU guest. This behavior
 is now the default, and this option is deprecated. To install a plain QEMU
 guest, use '--virt-type qemu'
-
-=item  --noapic
-
-Force disable APIC for the guest.
-
-=item  --noacpi
-
-Force disable ACPI for the guest.
 
 =back
 

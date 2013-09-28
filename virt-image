@@ -48,17 +48,8 @@ def parse_args():
                     help=_("UUID for the guest."))
     cli.vcpu_cli_options(geng)
     cli.add_distro_options(geng)
+    cli.add_old_feature_options(geng)
     parser.add_option_group(geng)
-
-    fulg = optparse.OptionGroup(parser,
-                                _("Full Virtualization specific options"))
-    fulg.add_option("", "--noapic", action="store_true", dest="noapic",
-                    default=False,
-                    help=_("Disables APIC for fully virtualized guest"))
-    fulg.add_option("", "--noacpi", action="store_true", dest="noacpi",
-                    default=False,
-                    help=_("Disables ACPI for fully virtualized guest"))
-    parser.add_option_group(fulg)
 
     netg = cli.network_option_group(parser)
     parser.add_option_group(netg)
@@ -133,6 +124,7 @@ def main(conn=None):
     cli.convert_old_networks(guest, options, image.domain.interface)
     cli.convert_old_graphics(guest, options,
         default_override=bool(image.domain.graphics))
+    cli.convert_old_features(options)
 
     guest.replace = options.replace
     cli.get_name(guest, options.name or image.name)
@@ -146,12 +138,7 @@ def main(conn=None):
     cli.get_networks(guest, options.network)
     cli.get_graphics(guest, options.graphics)
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
-
-    if guest.os.is_hvm():
-        if options.noacpi:
-            guest.features.acpi = False
-        if options.noapic:
-            guest.features.apic = False
+    cli.parse_features(guest, getattr(options, "features", None))
 
     if not guest.get_devices("input"):
         guest.add_default_input_device()

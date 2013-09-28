@@ -495,6 +495,7 @@ def build_guest_instance(conn, options):
     cli.convert_old_networks(guest, options, not options.nonetworks and 1 or 0)
     cli.convert_old_graphics(guest, options)
     convert_old_disks(options)
+    cli.convert_old_features(options)
 
     # Guest configuration
     cli.get_uuid(guest, options.uuid)
@@ -503,10 +504,10 @@ def build_guest_instance(conn, options):
     cli.parse_cpu(guest, options.cpu)
     cli.parse_security(guest, options.security)
     cli.parse_boot(guest, options.bootopts)
+    cli.parse_features(guest, options.features)
+
     guest.autostart = options.autostart
     guest.description = options.description
-    guest.features.acpi = not options.noacpi
-    guest.features.apic = not options.noapic
 
     # Non-default devices
     cli.get_controllers(guest, options.controller)
@@ -902,6 +903,10 @@ def parse_args():
                     help=_("Set domain security driver configuration."))
     geng.add_option("", "--numatune", dest="numatune",
                     help=_("Tune NUMA policy for the domain process."))
+    geng.add_option("", "--features", dest="features",
+                    help=_("Set domain <features> XML. Ex:\n"
+                           "--features acpi=off\n"
+                           "--features apic=on,eoi=on"))
     parser.add_option_group(geng)
 
     insg = optparse.OptionGroup(parser, _("Installation Method Options"))
@@ -993,16 +998,9 @@ def parse_args():
                     help=_("The CPU architecture to simulate"))
     virg.add_option("", "--machine", dest="machine",
                     help=_("The machine type to emulate"))
-    virg.add_option("", "--noapic", action="store_true", dest="noapic",
-                    default=False,
-                    help=_("Disables APIC for fully virtualized guest "
-                           "(overrides value in os-variant db)"))
-    virg.add_option("", "--noacpi", action="store_true", dest="noacpi",
-                    default=False,
-                    help=_("Disables ACPI for fully virtualized guest "
-                           "(overrides value in os-variant db)"))
     virg.add_option("-u", "--uuid", dest="uuid",
                     help=_("UUID for the guest."))
+    cli.add_old_feature_options(virg)
     parser.add_option_group(virg)
 
     misc = optparse.OptionGroup(parser, _("Miscellaneous Options"))
