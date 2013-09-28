@@ -83,7 +83,6 @@ def main(conn=None):
 
     options.quiet = options.xmlonly or options.quiet
     cli.setupLogging("virt-image", options.debug, options.quiet)
-    cli.set_prompt(False)
 
     if conn is None:
         conn = cli.getConnection(options.connect)

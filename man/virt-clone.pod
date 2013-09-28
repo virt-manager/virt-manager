@@ -18,9 +18,7 @@ uniqueness will be updated to avoid a clash between old and new guests.
 
 By default, virt-clone will show an error if the necessary information to
 clone the guest is not provided. The --auto-clone option will generate
-all needed input, aside from the source guest to clone. An interactive mode
-is available with the --prompt option, but this will only ask for the
-minimum required options.
+all needed input, aside from the source guest to clone.
 
 =head1 OPTIONS
 
@@ -148,16 +146,6 @@ cloning the original guest.
 Print debugging information to the terminal when running the install process.
 The debugging information is also stored in C<$HOME/.virtinst/virt-clone.log>
 even if this parameter is omitted.
-
-=item --force
-
-Prevent interactive prompts. If the intended prompt was a yes/no prompt, always
-say yes. For any other prompts, the application will exit.
-
-=item --prompt
-
-Specifically enable prompting for required information. Default prompting
-is off.
 
 =back
 

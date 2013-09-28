@@ -27,9 +27,7 @@ an existing disk image (thus skipping the install phase) are also supported.
 
 Given suitable command line arguments, C<virt-install> is capable of running
 completely unattended, with the guest 'kickstarting' itself too. This allows
-for easy automation of guest installs. An interactive mode is also available
-with the --prompt option, but this will only ask for the minimum required
-options.
+for easy automation of guest installs.
 
 =head1 OPTIONS
 
@@ -1325,22 +1323,12 @@ value will make virt-install wait indefinitely, a value of 0 triggers the
 same results as noautoconsole. If the time limit is exceeded, virt-install
 simply exits, leaving the virtual machine in its current state.
 
-=item --force
-
-Prevent interactive prompts. If the intended prompt was a yes/no prompt, always
-say yes. For any other prompts, the application will exit.
-
 =item --dry-run
 
 Proceed through the guest creation process, but do NOT create storage devices,
 change host device configuration, or actually teach libvirt about the guest.
 virt-install may still fetch install media, since this is required to
 properly detect the OS to install.
-
-=item --prompt
-
-Specifically enable prompting for required information. Default prompting
-is off (as of virtinst 0.400.0)
 
 =item --check-cpu
 

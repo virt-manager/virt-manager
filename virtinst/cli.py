@@ -312,10 +312,13 @@ def set_force(val=True):
     force = val
 
 
-def set_prompt(prompt=True):
+def set_prompt(prompt):
     # Set whether we allow prompts, or fail if a prompt pops up
     global doprompt
     doprompt = prompt
+    if prompt:
+        logging.warning("--prompt mode is barely supported and likely to "
+                        "be removed in a future release.\n")
 
 
 def is_prompt():
@@ -363,7 +366,7 @@ def prompt_for_yes_no(warning, question):
         logging.debug("Forcing return value of True to prompt '%s'")
         return True
 
-    errmsg = warning + _(" (Use --prompt or --force to override)")
+    errmsg = warning + _(" (Use --force to override)")
 
     while 1:
         msg = warning
