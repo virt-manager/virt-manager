@@ -35,12 +35,6 @@ from virtcli import cliconfig
 
 import virtinst
 from virtinst import util
-from virtinst.util import listify
-
-from virtinst import VirtualNetworkInterface
-from virtinst import VirtualGraphics
-from virtinst import VirtualAudio
-from virtinst import VirtualDisk
 
 
 MIN_RAM = 64
@@ -527,7 +521,7 @@ def disk_prompt(conn, origpath, origsize, origsparse,
 
         # Get disk path
         path = prompt_path(origpath, origsize)
-        path_exists = VirtualDisk.path_exists(conn, path)
+        path_exists = virtinst.VirtualDisk.path_exists(conn, path)
 
         # Get storage size
         didfail, size = prompt_size(path, origsize, path_exists)
@@ -543,7 +537,7 @@ def disk_prompt(conn, origpath, origsize, origsparse,
                 if size is not None and size != dev.get_size():
                     dev.set_create_storage(size=size, sparse=origsparse)
             else:
-                dev = VirtualDisk(conn)
+                dev = virtinst.VirtualDisk(conn)
                 dev.path = path
                 dev.set_create_storage(size=size, sparse=origsparse)
             dev.validate()
@@ -656,14 +650,13 @@ def _default_network_opts(guest):
     else:
         net = util.default_network(guest.conn)
         opts = "%s=%s" % (net[0], net[1])
-
     return opts
 
 
-def _digest_networks(guest, options, numnics):
-    macs     = listify(options.mac)
-    networks = listify(options.network)
-    bridges  = listify(options.bridge)
+def convert_old_networks(guest, options, number_of_default_nics):
+    macs     = util.listify(options.mac)
+    networks = util.listify(options.network)
+    bridges  = util.listify(options.bridge)
 
     if bridges and networks:
         fail(_("Cannot mix both --bridge and --network arguments"))
@@ -673,33 +666,93 @@ def _digest_networks(guest, options, numnics):
         networks = ["bridge:" + b for b in bridges]
 
     def padlist(l, padsize):
-        l = listify(l)
+        l = util.listify(l)
         l.extend((padsize - len(l)) * [None])
         return l
 
     # If a plain mac is specified, have it imply a default network
-    networks = padlist(networks, max(len(macs), numnics))
+    networks = padlist(networks, max(len(macs), number_of_default_nics))
     macs = padlist(macs, len(networks))
 
     for idx in range(len(networks)):
         if networks[idx] is None:
             networks[idx] = _default_network_opts(guest)
+        if macs[idx]:
+            networks[idx] += ",mac=%s" % macs[idx]
 
-    return networks, macs
+        # Handle old format of bridge:foo instead of bridge=foo
+        for prefix in ["network", "bridge"]:
+            if networks[idx].startswith(prefix + ":"):
+                networks[idx] = networks[idx].replace(prefix + ":",
+                                                      prefix + "=")
+
+    options.network = networks
 
 
-def get_networks(guest, options, numnics):
-    networks, macs = _digest_networks(guest, options, numnics)
+def _determine_default_graphics(guest, default_override):
+    # If no graphics specified, choose a default
+    if default_override is True:
+        return cliconfig.default_graphics
 
-    for idx in range(len(networks)):
-        mac = macs[idx]
-        netstr = networks[idx]
+    if default_override is False:
+        return "none"
 
-        try:
-            dev = parse_network(guest, netstr, mac=mac)
-            guest.add_device(dev)
-        except Exception, e:
-            fail(_("Error in network device parameters: %s") % str(e))
+    if guest.os.is_container():
+        logging.debug("Container guest, defaulting to nographics")
+        return "none"
+
+    if "DISPLAY" not in os.environ.keys():
+        logging.debug("DISPLAY is not set: defaulting to nographics.")
+        return "none"
+
+    logging.debug("DISPLAY is set: looking for pre-configured graphics")
+    if cliconfig.default_graphics:
+        logging.debug("Defaulting graphics to pre-configured %s",
+                      cliconfig.default_graphics.upper())
+        return cliconfig.default_graphics
+
+    logging.debug("No valid pre-configured graphics found, defaulting to VNC")
+    return "vnc"
+
+
+def convert_old_graphics(guest, options, default_override=None):
+    vnc = options.vnc
+    vncport = options.vncport
+    vnclisten = options.vnclisten
+    nographics = options.nographics
+    sdl = options.sdl
+    keymap = options.keymap
+    graphics = options.graphics
+
+    if graphics and (vnc or sdl or keymap or vncport or vnclisten):
+        fail(_("Cannot mix --graphics and old style graphical options"))
+
+    optnum = sum([bool(g) for g in [vnc, nographics, sdl, graphics]])
+    if optnum > 1:
+        raise ValueError(_("Can't specify more than one of VNC, SDL, "
+                           "--graphics or --nographics"))
+
+    if options.graphics:
+        return
+
+    if optnum == 0:
+        options.graphics = [_determine_default_graphics(guest,
+                                                        default_override)]
+        return
+
+    # Build a --graphics command line from old style opts
+    optstr = ((vnc and "vnc") or
+              (sdl and "sdl") or
+              (nographics and ("none")))
+    if vnclisten:
+        optstr += ",listen=%s" % vnclisten
+    if vncport:
+        optstr += ",port=%s" % vncport
+    if keymap:
+        optstr += ",keymap=%s" % keymap
+
+    logging.debug("--graphics compat generated: %s", optstr)
+    options.graphics = [optstr]
 
 
 def set_os_variant(obj, distro_type, distro_variant):
@@ -718,99 +771,6 @@ def set_os_variant(obj, distro_type, distro_variant):
         return
 
     obj.os_variant = distkey
-
-
-def _digest_graphics(guest, options, default_override):
-    vnc = options.vnc
-    vncport = options.vncport
-    vnclisten = options.vnclisten
-    nographics = options.nographics
-    sdl = options.sdl
-    keymap = options.keymap
-    graphics = options.graphics
-
-    if graphics and (vnc or sdl or keymap or vncport or vnclisten):
-        fail(_("Cannot mix --graphics and old style graphical options"))
-
-    optnum = sum([bool(g) for g in [vnc, nographics, sdl, graphics]])
-    if optnum > 1:
-        raise ValueError(_("Can't specify more than one of VNC, SDL, "
-                           "--graphics or --nographics"))
-
-    if graphics:
-        return graphics
-
-    if optnum == 0:
-        # If no graphics specified, choose a default
-        if default_override is True:
-            if cliconfig.default_graphics in ["spice", "vnc", "sdl"]:
-                return [cliconfig.default_graphics]
-        elif default_override is False:
-            nographics = True
-        else:
-            if guest.os.is_container():
-                logging.debug("Container guest, defaulting to nographics")
-                nographics = True
-            elif "DISPLAY" in os.environ.keys():
-                logging.debug("DISPLAY is set: looking for "
-                              "pre-configured graphics")
-                if cliconfig.default_graphics in ["spice", "vnc", "sdl"]:
-                    logging.debug("Defaulting graphics to pre-configured %s",
-                                  cliconfig.default_graphics.upper())
-                    return [cliconfig.default_graphics]
-                logging.debug("No valid pre-configured graphics "
-                              "found, defaulting to VNC")
-                return ["vnc"]
-            else:
-                logging.debug("DISPLAY is not set: defaulting to nographics.")
-                nographics = True
-
-
-    # Build a --graphics command line from old style opts
-    optstr = ((vnc and "vnc") or
-              (sdl and "sdl") or
-              (nographics and ("none")))
-    if vnclisten:
-        optstr += ",listen=%s" % vnclisten
-    if vncport:
-        optstr += ",port=%s" % vncport
-    if keymap:
-        optstr += ",keymap=%s" % keymap
-
-    logging.debug("--graphics compat generated: %s", optstr)
-    return [optstr]
-
-
-def get_graphics(guest, options, default_override=None):
-    graphics = _digest_graphics(guest, options, default_override)
-
-    for optstr in graphics:
-        try:
-            dev = parse_graphics(guest, optstr)
-        except Exception, e:
-            fail(_("Error in graphics device parameters: %s") % str(e))
-
-        if dev:
-            guest.add_device(dev)
-
-
-def get_video(guest, video_models=None):
-    if guest.get_devices(VirtualGraphics.VIRTUAL_DEV_GRAPHICS):
-        if not video_models:
-            video_models = [None]
-
-    for model in listify(video_models):
-        guest.add_device(parse_video(guest, model))
-
-
-def get_sound(guest, sounds, old_sound_bool):
-    if not sounds:
-        if old_sound_bool:
-            guest.add_device(VirtualAudio(guest.conn))
-        return
-
-    for opts in listify(sounds):
-        guest.add_device(parse_sound(guest, opts))
 
 
 #############################
@@ -958,11 +918,14 @@ def add_distro_options(g):
 # (for options like --disk, --network, etc. #
 #############################################
 
-def _handle_dev_opts(devtype, cb, guest, opts):
-    for optstr in listify(opts):
+def _handle_dev_opts(devclass, cb, guest, opts):
+    for optstr in util.listify(opts):
+        devtype = devclass.virtual_device_type
         try:
-            dev = cb(guest, optstr)
-            if dev:
+            dev = devclass(guest.conn)
+            devs = cb(guest, optstr, dev)
+            for dev in util.listify(devs):
+                dev.validate()
                 guest.add_device(dev)
         except Exception, e:
             logging.debug("Exception parsing devtype=%s optstr=%s",
@@ -976,27 +939,43 @@ def _make_handler(devtype, parsefunc):
                                                     *args, **kwargs)
 
 
-def get_opt_param(opts, dictnames, val=None):
-    if type(dictnames) is not list:
-        dictnames = [dictnames]
+def get_opt_param(opts, key):
+    if key not in opts:
+        return None
 
-    for key in dictnames:
-        if key in opts:
-            if val is None:
-                val = opts[key]
-            del(opts[key])
-
+    val = opts[key]
+    del(opts[key])
     return val
 
 
-def _build_set_param(inst, opts):
-    def _set_param(paramname, keyname, val=None):
-        val = get_opt_param(opts, keyname, val)
+_CLI_UNSET = "__virtinst_cli_unset__"
+
+
+def _build_set_param(inst, opts, support_cb=None):
+    def _set_param(paramname, keyname, convert_cb=None):
+        val = get_opt_param(opts, keyname)
         if val is None:
             return
-        setattr(inst, paramname, val)
 
+        if support_cb:
+            support_cb(inst, paramname, keyname)
+
+        if convert_cb:
+            val = convert_cb(val)
+        if val == _CLI_UNSET:
+            return
+
+        if type(paramname) is not str:
+            paramname(val)
+        else:
+            setattr(inst, paramname, val)
     return _set_param
+
+
+def _check_leftover_opts(opts):
+    if not opts:
+        return
+    raise ValueError(_("Unknown options %s") % opts.keys())
 
 
 def parse_optstr_tuples(optstr, compress_first=False):
@@ -1073,43 +1052,26 @@ def parse_optstr(optstr, basedict=None, remove_first=None,
 # --numatune parsing #
 ######################
 
-def parse_numatune(guest, optstring):
-    """
-    Helper to parse --numatune string
-
-    @param  guest: virtinst.Guest instanct (object)
-    @param  optstring: value of the option '--numatune' (str)
-    """
-    opts = parse_optstr(optstring, remove_first="nodeset", compress_first=True)
+def parse_numatune(guest, optstr):
+    opts = parse_optstr(optstr, remove_first="nodeset", compress_first=True)
 
     set_param = _build_set_param(guest.numatune, opts)
 
     set_param("memory_nodeset", "nodeset")
     set_param("memory_mode", "mode")
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
+    _check_leftover_opts(opts)
 
 
 ##################
 # --vcpu parsing #
 ##################
 
-def parse_vcpu(guest, optstring):
-    """
-    Helper to parse --vcpu string
-
-    @param  guest: virtinst.Guest instance (object)
-    @param  optstring: value of the option '--vcpus' (str)
-    """
-    if not optstring:
+def parse_vcpu(guest, optstr):
+    if not optstr:
         return
 
-    opts = parse_optstr(optstring, remove_first="vcpus")
-    vcpus = opts.get("vcpus")
-    if vcpus is not None:
-        opts["vcpus"] = vcpus
-
+    opts = parse_optstr(optstr, remove_first="vcpus")
     set_param = _build_set_param(guest, opts)
     set_cpu_param = _build_set_param(guest.cpu, opts)
     has_max = ("maxvcpus" in opts)
@@ -1125,15 +1087,14 @@ def parse_vcpu(guest, optstring):
     if not has_vcpus:
         guest.vcpus = guest.cpu.vcpus_from_topology()
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
+    _check_leftover_opts(opts)
 
 
 #################
 # --cpu parsing #
 #################
 
-def parse_cpu(guest, optstring):
+def parse_cpu(guest, optstr):
     default_dict = {
         "force": [],
         "require": [],
@@ -1141,7 +1102,7 @@ def parse_cpu(guest, optstring):
         "disable": [],
         "forbid": [],
    }
-    opts = parse_optstr(optstring,
+    opts = parse_optstr(optstr,
                         basedict=default_dict,
                         remove_first="model")
 
@@ -1180,52 +1141,44 @@ def parse_cpu(guest, optstring):
     set_features("disable")
     set_features("forbid")
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
+    _check_leftover_opts(opts)
 
 
 ##################
 # --boot parsing #
 ##################
 
-def parse_boot(guest, optstring):
+def parse_boot(guest, optstr):
     """
     Helper to parse --boot string
     """
-    opts = parse_optstr(optstring)
-    optlist = [x[0] for x in parse_optstr_tuples(optstring)]
+    opts = parse_optstr(optstr)
+    set_param = _build_set_param(guest.os, opts)
 
-    def set_param(paramname, dictname, val=None):
-        val = get_opt_param(opts, dictname, val)
-        if val is None:
-            return
+    def convert_menu(val):
+        val = yes_or_no_convert(val)
+        if val is not None:
+            return val
+        fail(_("--boot menu must be 'on' or 'off'"))
 
-        setattr(guest.os, paramname, val)
+    def convert_useserial(val):
+        val = yes_or_no_convert(val)
+        if val is not None:
+            return val
+        fail(_("--boot useserial must be 'on' or 'off'"))
 
-    # Convert menu= value
-    menu = None
-    if "menu" in opts:
-        menu = yes_or_no_convert(opts["menu"])
-        if menu is None:
-            fail(_("--boot menu must be 'on' or 'off'"))
-
-    # Convert useserial= value
-    useserial = None
-    if "useserial" in opts:
-        useserial = yes_or_no_convert(opts["useserial"])
-        if useserial is None:
-            fail(_("--boot useserial must be 'on' or 'off'"))
-
-    set_param("useserial", "useserial", useserial)
-    set_param("enable_bootmenu", "menu", menu)
+    set_param("useserial", "useserial", convert_cb=convert_useserial)
+    set_param("enable_bootmenu", "menu", convert_cb=convert_menu)
     set_param("kernel", "kernel")
     set_param("initrd", "initrd")
     set_param("dtb", "dtb")
     set_param("loader", "loader")
-    set_param("kernel_args", ["kernel_args", "extra_args"])
+    set_param("kernel_args", "extra_args")
+    set_param("kernel_args", "kernel_args")
 
     # Build boot order
     if opts:
+        optlist = [x[0] for x in parse_optstr_tuples(optstr)]
         boot_order = []
         for boot_dev in optlist:
             if not boot_dev in guest.os.boot_devices:
@@ -1237,8 +1190,7 @@ def parse_boot(guest, optstring):
 
         guest.os.bootorder = boot_order
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
+    _check_leftover_opts(opts)
 
 
 ######################
@@ -1246,7 +1198,7 @@ def parse_boot(guest, optstring):
 ######################
 
 def parse_security(guest, security):
-    seclist = listify(security)
+    seclist = util.listify(security)
     secopts = seclist and seclist[0] or None
     if not secopts:
         return
@@ -1289,8 +1241,7 @@ def parse_security(guest, security):
     if relabel:
         secmodel.relabel = relabel
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
+    _check_leftover_opts(opts)
 
     # Run for validation purposes
     secmodel.get_xml_config()
@@ -1361,7 +1312,7 @@ def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
     return abspath, volinst, volobj
 
 
-def parse_disk(guest, optstr, dev=None):
+def parse_disk(guest, optstr, dev=None, validate=True):
     """
     helper to properly parse --disk options
     """
@@ -1446,10 +1397,9 @@ def parse_disk(guest, optstr, dev=None):
     set_param("error_policy", "error_policy")
     set_param("serial", "serial")
 
-    if opts:
-        fail(_("Unknown options %s") % opts.keys())
-
-    dev.validate()
+    _check_leftover_opts(opts)
+    if validate:
+        dev.validate()
     return dev, size
 
 
@@ -1457,57 +1407,53 @@ def parse_disk(guest, optstr, dev=None):
 # --network parsing #
 #####################
 
-def parse_network(guest, optstring, dev=None, mac=None):
-    # Handle old format of bridge:foo instead of bridge=foo
-    for prefix in ["network", "bridge"]:
-        if optstring.startswith(prefix + ":"):
-            optstring = optstring.replace(prefix + ":", prefix + "=")
-
-    opts = parse_optstr(optstring, remove_first="type")
-
-    # Determine device type
-    net_type = opts.get("type")
-    if "network" in opts:
-        net_type = VirtualNetworkInterface.TYPE_VIRTUAL
-    elif "bridge" in opts:
-        net_type = VirtualNetworkInterface.TYPE_BRIDGE
-
-    if not dev:
-        dev = VirtualNetworkInterface(conn=guest.conn)
-
-    if mac and not "mac" in opts:
-        opts["mac"] = mac
-    if "mac" in opts:
-        if opts["mac"] == "RANDOM":
-            opts["mac"] = None
-
+def parse_network(guest, optstr, dev):
+    ignore = guest
+    opts = parse_optstr(optstr, remove_first="type")
     set_param = _build_set_param(dev, opts)
 
-    set_param("type", "type", net_type)
+    if "type" not in opts:
+        if "network" in opts:
+            opts["type"] = virtinst.VirtualNetworkInterface.TYPE_VIRTUAL
+        elif "bridge" in opts:
+            opts["type"] = virtinst.VirtualNetworkInterface.TYPE_BRIDGE
+
+    def convert_mac(val):
+        if val == "RANDOM":
+            return None
+        return val
+
+    set_param("type", "type")
     set_param("source", "network")
     set_param("source", "bridge")
     set_param("model", "model")
-    set_param("macaddr", "mac")
+    set_param("macaddr", "mac", convert_cb=convert_mac)
     set_param("filterref", "filterref")
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
-
+    _check_leftover_opts(opts)
     return dev
+
+get_networks = _make_handler(virtinst.VirtualNetworkInterface, parse_network)
 
 
 ######################
 # --graphics parsing #
 ######################
 
-def parse_graphics(guest, optstring, dev=None):
-    def sanitize_keymap(keymap):
+def parse_graphics(guest, optstr, dev):
+    ignore = guest
+    opts = parse_optstr(optstr, remove_first="type")
+    if opts.get("type") == "none":
+        return None
+    set_param = _build_set_param(dev, opts)
+
+    def convert_keymap(keymap):
         from virtinst import hostkeymap
 
         if not keymap:
             return None
         if keymap.lower() == "local":
-            return VirtualGraphics.KEYMAP_LOCAL
+            return virtinst.VirtualGraphics.KEYMAP_LOCAL
         if keymap.lower() == "none":
             return None
 
@@ -1517,413 +1463,308 @@ def parse_graphics(guest, optstring, dev=None):
                         _("Didn't match keymap '%s' in keytable!") % keymap)
         return use_keymap
 
-    # Peel the model type off the front
-    opts = parse_optstr(optstring, remove_first="type")
-    if opts.get("type") == "none":
-        return None
-
-    if not dev:
-        dev = VirtualGraphics(conn=guest.conn)
-
-    def set_param(paramname, dictname, val=None):
-        val = get_opt_param(opts, dictname, val)
-        if val is None:
-            return
-
-        if paramname == "keymap":
-            val = sanitize_keymap(val)
-        setattr(dev, paramname, val)
-
     set_param("type", "type")
     set_param("port", "port")
     set_param("tlsPort", "tlsport")
     set_param("listen", "listen")
-    set_param("keymap", "keymap")
+    set_param("keymap", "keymap", convert_cb=convert_keymap)
     set_param("passwd", "password")
     set_param("passwdValidTo", "passwordvalidto")
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
-
+    _check_leftover_opts(opts)
     return dev
+
+get_graphics = _make_handler(virtinst.VirtualGraphics, parse_graphics)
 
 
 ########################
 # --controller parsing #
 ########################
 
-def parse_controller(guest, optstring, dev=None):
-    if optstring == "usb2":
-        for dev in virtinst.VirtualController.get_usb2_controllers(guest.conn):
-            guest.add_device(dev)
-        return None
+def parse_controller(guest, optstr, dev):
+    if optstr == "usb2":
+        return virtinst.VirtualController.get_usb2_controllers(guest.conn)
 
-    # Peel the mode off the front
-    opts = parse_optstr(optstring, remove_first="type")
-    address = get_opt_param(opts, "address")
-
-    if not dev:
-        dev = virtinst.VirtualController(guest.conn)
-
+    opts = parse_optstr(optstr, remove_first="type")
     set_param = _build_set_param(dev, opts)
 
     set_param("type", "type")
     set_param("model", "model")
     set_param("index", "index")
     set_param("master_startport", "master")
-    if address:
-        dev.address.set_addrstr(address)
+    set_param(dev.address.set_addrstr, "address")
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
-
+    _check_leftover_opts(opts)
     return dev
 
-get_controller = _make_handler("controller", parse_controller)
+get_controllers = _make_handler(virtinst.VirtualController, parse_controller)
 
 
 #######################
 # --smartcard parsing #
 #######################
 
-def parse_smartcard(guest, optstring, dev=None):
-    if optstring is None:
-        return None
-
-    # Peel the mode off the front
-    opts = parse_optstr(optstring, remove_first="mode")
+def parse_smartcard(guest, optstr, dev=None):
+    ignore = guest
+    opts = parse_optstr(optstr, remove_first="mode")
     if opts.get("mode") == "none":
         return None
 
-    if not dev:
-        dev = virtinst.VirtualSmartCardDevice(guest.conn)
-
     set_param = _build_set_param(dev, opts)
-
     set_param("mode", "mode")
     set_param("type", "type")
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
-
+    _check_leftover_opts(opts)
     return dev
 
-get_smartcard = _make_handler("smartcard", parse_smartcard)
+get_smartcards = _make_handler(virtinst.VirtualSmartCardDevice, parse_smartcard)
 
 
 ######################
 # --redirdev parsing #
 ######################
 
-def parse_redirdev(guest, optstring, dev=None):
-    # Peel the mode off the front
-    opts = parse_optstr(optstring, remove_first="bus")
-    server = get_opt_param(opts, "server")
-
+def parse_redirdev(guest, optstr, dev):
+    ignore = guest
+    opts = parse_optstr(optstr, remove_first="bus")
     if opts.get("bus") == "none":
         return None
 
-    if not dev:
-        dev = virtinst.VirtualRedirDevice(guest.conn)
-
     set_param = _build_set_param(dev, opts)
-
     set_param("bus", "bus")
     set_param("type", "type")
-    if server:
-        dev.parse_friendly_server(server)
+    set_param(dev.parse_friendly_server, "server")
 
-    if dev.type == "spicevmc" and server:
-        raise ValueError(
-                _("The server option is invalid with spicevmc redirection"))
-
-    if dev.type == "tcp" and not server:
-        raise ValueError(
-                _("The server option is missing for TCP redirection"))
-
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
-
+    _check_leftover_opts(opts)
     return dev
 
-get_redirdev = _make_handler("redirdev", parse_redirdev)
+get_redirdevs = _make_handler(virtinst.VirtualRedirDevice, parse_redirdev)
 
 
 #################
 # --tpm parsing #
 #################
 
-def parse_tpm(guest, optstring, dev=None):
-    # Peel the type off the front
-    opts = parse_optstr(optstring, remove_first="type")
-    if opts.get("type") == "none":
+def parse_tpm(guest, optstr, dev=None):
+    ignore = guest
+    if optstr == "none":
         return None
 
-    if not dev:
-        dev = virtinst.VirtualTPMDevice(guest.conn)
-
+    opts = parse_optstr(optstr, remove_first="type")
     set_param = _build_set_param(dev, opts)
 
     set_param("type", "type")
     set_param("model", "model")
     set_param("path", "path")
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
-
+    _check_leftover_opts(opts)
     return dev
 
-get_tpm = _make_handler("tpm", parse_tpm)
+get_tpms = _make_handler(virtinst.VirtualTPMDevice, parse_tpm)
 
 
 #################
 # --rng parsing #
 #################
 
-def parse_rng(guest, optstring, dev=None):
-    opts = parse_optstr(optstring, remove_first="type")
-    dev_type = opts.get("type")
-    if dev_type == "none":
+def parse_rng(guest, optstr, dev):
+    ignore = guest
+    if optstr == "none":
         return None
 
-    if not dev:
-        dev = virtinst.VirtualRNGDevice(guest.conn)
-
+    opts = parse_optstr(optstr, remove_first="type")
     set_param = _build_set_param(dev, opts)
 
-    if dev_type.startswith("/"):
+    if opts.get("type", "").startswith("/"):
         # if the provided type begins with '/' then assume it is the name of
         # the RNG device and that its type is "random".
-        dev.device = dev_type
+        dev.device = opts.pop("type")
         dev.type = "random"
     else:
         set_param("type", "type")
-        set_param("backend_source_host", "backend_host")
-        set_param("backend_source_service", "backend_service")
-        set_param("backend_source_mode", "backend_mode")
-        set_param("backend_type", "backend_type")
-        set_param("device", "device")
-        set_param("model", "model")
-        set_param("rate_bytes", "rate_bytes")
-        set_param("rate_period", "rate_period")
+
+    set_param("backend_source_host", "backend_host")
+    set_param("backend_source_service", "backend_service")
+    set_param("backend_source_mode", "backend_mode")
+    set_param("backend_type", "backend_type")
+    set_param("device", "device")
+    set_param("model", "model")
+    set_param("rate_bytes", "rate_bytes")
+    set_param("rate_period", "rate_period")
 
     return dev
 
-get_rng = _make_handler("rng", parse_rng)
+get_rngs = _make_handler(virtinst.VirtualRNGDevice, parse_rng)
 
 
 ######################
 # --watchdog parsing #
 ######################
 
-def parse_watchdog(guest, optstring, dev=None):
-    # Peel the model type off the front
-    opts = parse_optstr(optstring, remove_first="model")
-
-    if not dev:
-        dev = virtinst.VirtualWatchdog(guest.conn)
-
-    def set_param(paramname, dictname, val=None):
-        val = get_opt_param(opts, dictname, val)
-        if val is None:
-            return
-
-        setattr(dev, paramname, val)
+def parse_watchdog(guest, optstr, dev):
+    ignore = guest
+    opts = parse_optstr(optstr, remove_first="model")
+    set_param = _build_set_param(dev, opts)
 
     set_param("model", "model")
     set_param("action", "action")
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
-
+    _check_leftover_opts(opts)
     return dev
 
-get_watchdog = _make_handler("watchdog", parse_watchdog)
+get_watchdogs = _make_handler(virtinst.VirtualWatchdog, parse_watchdog)
 
 
 ########################
 # --memballoon parsing #
 ########################
 
-def parse_memballoon(guest, optstring, dev=None):
-    # Peel the mode off the front
-    opts = parse_optstr(optstring, remove_first="model")
+def parse_memballoon(guest, optstr, dev):
+    ignore = guest
+    opts = parse_optstr(optstr, remove_first="model")
+    set_param = _build_set_param(dev, opts)
 
-    if not dev:
-        dev = virtinst.VirtualMemballoon(conn=guest.conn)
-    dev.model = get_opt_param(opts, "model")
+    set_param("model", "model")
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
-
+    _check_leftover_opts(opts)
     return dev
 
-get_memballoon = _make_handler("memballoon", parse_memballoon)
+get_memballoons = _make_handler(virtinst.VirtualMemballoon, parse_memballoon)
 
 
 ######################################################
 # --serial, --parallel, --channel, --console parsing #
 ######################################################
 
-def parse_serial(guest, optstring, dev=None):
-    if not dev:
-        dev = virtinst.VirtualSerialDevice(guest.conn)
-    return _parse_char(optstring, "serial", dev)
-
-
-def parse_parallel(guest, optstring, dev=None):
-    if not dev:
-        dev = virtinst.VirtualParallelDevice(guest.conn)
-    return _parse_char(optstring, "parallel", dev)
-
-
-def parse_console(guest, optstring, dev=None):
-    if not dev:
-        dev = virtinst.VirtualConsoleDevice(guest.conn)
-    return _parse_char(optstring, "console", dev)
-
-
-def parse_channel(guest, optstring, dev=None):
-    if not dev:
-        dev = virtinst.VirtualChannelDevice(guest.conn)
-    return _parse_char(optstring, "channel", dev)
-
-
-def _parse_char(optstring, dev_type, dev=None):
+def _parse_char(guest, optstr, dev):
     """
     Helper to parse --serial/--parallel options
     """
-    # Peel the char type off the front
-    opts = parse_optstr(optstring, remove_first="char_type")
+    ignore = guest
+    dev_type = dev.virtual_device_type
+    opts = parse_optstr(optstr, remove_first="char_type")
     ctype = opts.get("char_type")
 
-    def set_param(paramname, dictname, val=None):
-        val = get_opt_param(opts, dictname, val)
-        if val is None:
+    def support_check(dev, paramname, dictname):
+        if type(paramname) is not str:
             return
-
         if not dev.supports_property(paramname):
             raise ValueError(_("%(devtype)s type '%(chartype)s' does not "
-                                "support '%(optname)s' option.") %
-                                {"devtype" : dev_type, "chartype": ctype,
-                                 "optname" : dictname})
-        setattr(dev, paramname, val)
+                               "support '%(optname)s' option.") %
+                             {"devtype" : dev_type, "chartype": ctype,
+                              "optname" : dictname})
 
-    def parse_host(key):
-        host, ignore, port = opts.get(key, "").partition(":")
-        if key in opts:
-            del(opts[key])
-
+    def parse_host(val):
+        host, ignore, port = (val or "").partition(":")
         return host or None, port or None
 
-    host, port = parse_host("host")
-    bind_host, bind_port = parse_host("bind_host")
-    target_addr, target_port = parse_host("target_address")
+    def set_host(hostparam, portparam, val):
+        host, port = parse_host(val)
+        if host:
+            setattr(dev, hostparam, host)
+        if port:
+            setattr(dev, portparam, port)
 
+    set_param = _build_set_param(dev, opts, support_cb=support_check)
     set_param("type", "char_type")
     set_param("source_path", "path")
     set_param("source_mode", "mode")
     set_param("protocol",   "protocol")
-    set_param("source_host", "host", host)
-    set_param("source_port", "host", port)
-    set_param("bind_host", "bind_host", bind_host)
-    set_param("bind_port", "bind_host", bind_port)
     set_param("target_type", "target_type")
     set_param("target_name", "name")
-    set_param("target_address", "target_address", target_addr)
-    set_param("target_port", "target_address", target_port)
+    set_param(lambda v: set_host("source_host", "source_port", v), "host")
+    set_param(lambda v: set_host("bind_host", "bind_port", v), "bind_host")
+    set_param(lambda v: set_host("target_address", "target_port", v),
+              "target_address")
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
-
-    # Try to generate dev XML to perform upfront validation
-    dev.get_xml_config()
-
+    _check_leftover_opts(opts)
     return dev
 
-get_serials = _make_handler("serial", parse_serial)
-get_parallels = _make_handler("parallel", parse_parallel)
-get_channels = _make_handler("channel", parse_channel)
-get_consoles = _make_handler("console", parse_console)
+get_serials = _make_handler(virtinst.VirtualSerialDevice, _parse_char)
+get_parallels = _make_handler(virtinst.VirtualParallelDevice, _parse_char)
+get_channels = _make_handler(virtinst.VirtualChannelDevice, _parse_char)
+get_consoles = _make_handler(virtinst.VirtualConsoleDevice, _parse_char)
 
 
 ########################
 # --filesystem parsing #
 ########################
 
-def parse_filesystem(guest, optstring, dev=None):
-    opts = parse_optstr(optstring, remove_first=["source", "target"])
-
-    if not dev:
-        dev = virtinst.VirtualFilesystem(guest.conn)
-
-    def set_param(paramname, dictname, val=None):
-        val = get_opt_param(opts, dictname, val)
-        if val is None:
-            return
-
-        setattr(dev, paramname, val)
+def parse_filesystem(guest, optstr, dev):
+    ignore = guest
+    opts = parse_optstr(optstr, remove_first=["source", "target"])
+    set_param = _build_set_param(dev, opts)
 
     set_param("type", "type")
     set_param("mode", "mode")
     set_param("source", "source")
     set_param("target", "target")
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
-
+    _check_leftover_opts(opts)
     return dev
+
+get_filesystems = _make_handler(virtinst.VirtualFilesystem, parse_filesystem)
 
 
 ###################
 # --video parsing #
 ###################
 
-def parse_video(guest, optstr, dev=None):
-    opts = {"model" : optstr}
-
-    if not dev:
-        dev = virtinst.VirtualVideoDevice(conn=guest.conn)
-
+def parse_video(guest, optstr, dev):
+    ignore = guest
+    opts = parse_optstr(optstr, remove_first="model")
     set_param = _build_set_param(dev, opts)
 
-    set_param("model", "model")
+    def convert_model(val):
+        if val == "default":
+            return _CLI_UNSET
+        return val
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
+    set_param("model", "model", convert_cb=convert_model)
+
+    _check_leftover_opts(opts)
     return dev
 
-get_filesystems = _make_handler("filesystem", parse_filesystem)
+get_videos = _make_handler(virtinst.VirtualVideoDevice, parse_video)
 
 
 #####################
 # --soundhw parsing #
 #####################
 
-def parse_sound(guest, optstr, dev=None):
-    opts = {"model" : optstr}
-
-    if not dev:
-        dev = virtinst.VirtualAudio(guest.conn)
-
+def parse_sound(guest, optstr, dev):
+    ignore = guest
+    opts = parse_optstr(optstr, remove_first="model")
     set_param = _build_set_param(dev, opts)
-    set_param("model", "model")
 
-    if opts:
-        raise ValueError(_("Unknown options %s") % opts.keys())
+    def convert_model(val):
+        if val == "default":
+            return _CLI_UNSET
+        return val
+
+    set_param("model", "model", convert_cb=convert_model)
+
+    _check_leftover_opts(opts)
     return dev
+
+get_sounds = _make_handler(virtinst.VirtualAudio, parse_sound)
 
 
 #####################
 # --hostdev parsing #
 #####################
 
-def parse_hostdev(guest, optstr, dev=None):
-    if not dev:
-        dev = virtinst.VirtualHostDevice(guest.conn)
+def parse_hostdev(guest, optstr, dev):
+    ignore = guest
+    opts = parse_optstr(optstr, remove_first="name")
+    set_param = _build_set_param(dev, opts)
 
-    nodedev = virtinst.NodeDevice.lookupNodeName(guest.conn, optstr)
-    dev.set_from_nodedev(nodedev)
+    def convert_name(val):
+        return virtinst.NodeDevice.lookupNodeName(guest.conn, val)
+
+    set_param(dev.set_from_nodedev, "name", convert_cb=convert_name)
+
+    _check_leftover_opts(opts)
     return dev
 
-get_hostdevs = _make_handler("hostdev", parse_hostdev)
+get_hostdevs = _make_handler(virtinst.VirtualHostDevice, parse_hostdev)

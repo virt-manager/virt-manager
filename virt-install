@@ -66,8 +66,8 @@ def cdrom_specified(guest, diskopts=None):
     return False
 
 
-def storage_specified(files, disks, nodisks, filesystems):
-    return bool(files or disks or nodisks or filesystems)
+def storage_specified(disks, nodisks, filesystems):
+    return bool(disks or nodisks or filesystems)
 
 
 def supports_pxe(guest):
@@ -117,42 +117,79 @@ def check_cdrom_option_error(options):
 # Device validation wrappers #
 ##############################
 
-def get_disk(diskopts, size, sparse, guest, is_file_path):
-    try:
-        dev = None
-
-        if is_file_path:
-            path = diskopts
-        else:
-            dev, size = cli.parse_disk(guest, diskopts)
-            path = dev.path
-            sparse = dev.get_sparse()
-
-        d = cli.disk_prompt(guest.conn, path, size, sparse,
-                            origdev=dev)
-
-    except ValueError, e:
-        fail(_("Error with storage parameters: %s" % str(e)))
-
-    guest.add_device(d)
+def convert_old_sound(options):
+    if options.sound:
+        return
+    if not options.old_sound_bool:
+        return
+    options.sound = "default"
 
 
-def get_disks(guest, file_paths, disk_paths, size, sparse, need_storage):
-    is_file_path = (file_paths or (not disk_paths and cli.is_prompt()))
-    disks = (file_paths or disk_paths)
+def get_disks(guest, disks, nodisks, need_storage):
+    if nodisks:
+        return
+
     if not disks and need_storage and cli.is_prompt():
         disks = [None]
 
+    for diskopts in disks:
+        try:
+            if diskopts is None:
+                dev = None
+                sparse = True
+                size = None
+                path = None
+            else:
+                # We skip validation here, since we may have converted
+                # --file-size to --disk size=8 which doesn't validate on
+                # its own.
+                dev, size = cli.parse_disk(guest, diskopts, validate=False)
+                path = dev.path
+                sparse = dev.get_sparse()
+
+            d = cli.disk_prompt(guest.conn, path, size, sparse, origdev=dev)
+            d.validate()
+        except ValueError, e:
+            fail(_("Error with storage parameters: %s" % str(e)))
+
+        guest.add_device(d)
+
+
+def convert_old_disks(options):
+    if options.diskopts or options.nodisks:
+        return
+
+    paths = virtinst.util.listify(options.file_paths)
+    sizes = virtinst.util.listify(options.disksize)
+
     def padlist(l, padsize):
-        l = cli.listify(l)
+        l = virtinst.util.listify(l)
         l.extend((padsize - len(l)) * [None])
         return l
 
-    disklist = padlist(disks, 0)
-    sizelist = padlist(size, len(disklist))
+    disklist = padlist(paths, max(0, len(sizes)))
+    sizelist = padlist(sizes, len(disklist))
 
+    opts = []
     for idx in range(len(disklist)):
-        get_disk(disklist[idx], sizelist[idx], sparse, guest, is_file_path)
+        optstr = ""
+        if disklist[idx]:
+            optstr += "path=%s" % disklist[idx]
+        if sizelist[idx]:
+            if optstr:
+                optstr += ","
+            optstr += "size=%s" % sizelist[idx]
+        if options.sparse is False:
+            if optstr:
+                optstr += ","
+            optstr += "sparse=no"
+        logging.debug("Converted to new style: --disk %s", optstr)
+        opts.append(optstr)
+
+    options.diskopts = opts
+    options.file_paths = []
+    options.disksize = None
+    options.sparse = True
 
 
 ########################
@@ -160,7 +197,6 @@ def get_disks(guest, file_paths, disk_paths, size, sparse, need_storage):
 ########################
 
 def prompt_virt(caps, arch, req_virt_type, req_accel):
-
     supports_hvm   = False
     supports_pv    = False
     supports_accel = False
@@ -344,8 +380,9 @@ def validate_required_options(options, guest):
         msg += "\n" + cli.ram_missing
 
     if (not guest.os.is_container() and
-        not storage_specified(options.file_paths, options.diskopts,
-                             options.nodisks, options.filesystems)):
+        not storage_specified(options.diskopts,
+                              options.nodisks,
+                              options.filesystems)):
         msg += "\n" + disk_missing
         need_storage = True
 
@@ -454,6 +491,11 @@ def build_guest_instance(conn, options):
 
     guest.installer = build_installer(options, conn, guest.os.os_type)
 
+    convert_old_sound(options)
+    cli.convert_old_networks(guest, options, not options.nonetworks and 1 or 0)
+    cli.convert_old_graphics(guest, options)
+    convert_old_disks(options)
+
     # Guest configuration
     cli.get_uuid(guest, options.uuid)
     cli.get_vcpus(guest, options.vcpus, options.check_cpu)
@@ -467,28 +509,30 @@ def build_guest_instance(conn, options):
     guest.features.apic = not options.noapic
 
     # Non-default devices
-    cli.get_controller(guest, options.controller)
-    cli.get_redirdev(guest, options.redirdev)
-    cli.get_memballoon(guest, options.memballoon)
-    cli.get_networks(guest, options, not options.nonetworks and 1 or 0)
-    cli.get_graphics(guest, options)
-    cli.get_video(guest, options.video)
-    cli.get_watchdog(guest, options.watchdog)
+    cli.get_controllers(guest, options.controller)
+    cli.get_redirdevs(guest, options.redirdev)
+    cli.get_memballoons(guest, options.memballoon)
+    cli.get_networks(guest, options.network)
+    cli.get_graphics(guest, options.graphics)
+    cli.get_videos(guest, options.video)
+    cli.get_watchdogs(guest, options.watchdog)
     cli.get_filesystems(guest, options.filesystems)
-    cli.get_sound(guest, options.sound, options.oldsound)
+    cli.get_sounds(guest, options.sound)
     cli.get_serials(guest, options.serials)
     cli.get_parallels(guest, options.parallels)
     cli.get_channels(guest, options.channels)
     cli.get_consoles(guest, options.consoles)
     cli.get_hostdevs(guest, options.hostdevs)
-    cli.get_smartcard(guest, options.smartcard)
-    cli.get_tpm(guest, options.tpm)
-    cli.get_rng(guest, options.rng)
+    cli.get_smartcards(guest, options.smartcard)
+    cli.get_tpms(guest, options.tpm)
+    cli.get_rngs(guest, options.rng)
 
     if not guest.get_devices("input"):
         guest.add_default_input_device()
     if not guest.get_devices("console") and not guest.get_devices("serial"):
         guest.add_default_console_device()
+    if not guest.get_devices("video") and guest.get_devices("graphics"):
+        guest.add_device(virtinst.VirtualVideoDevice(guest.conn))
 
     # Install options
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
@@ -506,9 +550,7 @@ def build_guest_instance(conn, options):
     # Needs to come after setting memory
     cli.get_cpuset(guest, options.cpuset)
 
-    if not options.nodisks:
-        get_disks(guest, options.file_paths, options.diskopts,
-                  options.disksize, options.sparse, need_storage)
+    get_disks(guest, options.diskopts, options.nodisks, need_storage)
     get_install_media(guest, options.location, options.cdrom, need_install)
 
     # Various little validations about option collisions. Need to do
@@ -930,7 +972,7 @@ def parse_args():
     cli.add_device_options(devg)
 
     # Deprecated
-    devg.add_option("", "--sound", action="store_true", dest="oldsound",
+    devg.add_option("", "--sound", action="store_true", dest="old_sound_bool",
                     default=False, help=optparse.SUPPRESS_HELP)
     parser.add_option_group(devg)
 

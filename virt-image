@@ -25,6 +25,7 @@ import sys
 
 import urlgrabber.progress as progress
 
+import virtinst
 import virtinst.cli as cli
 from virtinst.cli import fail, print_stdout, print_stderr
 from virtinst import virtimage
@@ -129,7 +130,10 @@ def main(conn=None):
     guest = conn.caps.build_virtinst_guest(conn, *installer.get_caps_guest())
     guest.installer = installer
 
-    # now let's get some of the common questions out of the way
+    cli.convert_old_networks(guest, options, image.domain.interface)
+    cli.convert_old_graphics(guest, options,
+        default_override=bool(image.domain.graphics))
+
     guest.replace = options.replace
     cli.get_name(guest, options.name or image.name)
     cli.get_memory(guest, options.memory or (image.domain.memory and
@@ -139,13 +143,9 @@ def main(conn=None):
                   options.check_cpu)
     cli.get_cpuset(guest, options.cpuset)
     cli.parse_cpu(guest, options.cpu)
+    cli.get_networks(guest, options.network)
+    cli.get_graphics(guest, options.graphics)
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
-
-    cli.get_networks(guest, options, numnics=image.domain.interface)
-    cli.get_graphics(guest, options,
-                     default_override=bool(image.domain.graphics))
-    cli.get_video(guest)
-
 
     if guest.os.is_hvm():
         if options.noacpi:
@@ -157,6 +157,8 @@ def main(conn=None):
         guest.add_default_input_device()
     if not guest.get_devices("console") and not guest.get_devices("serial"):
         guest.add_default_console_device()
+    if not guest.get_devices("video") and guest.get_devices("graphics"):
+        guest.add_device(virtinst.VirtualVideoDevice(guest.conn))
 
     # we've got everything -- try to start the install
     if options.print_only:
