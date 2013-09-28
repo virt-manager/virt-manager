@@ -138,9 +138,9 @@ def parse_args():
     geng.add_option("-o", "--original", dest="original_guest",
                     help=_("Name of the original guest; "
                            "The status must be shut off or paused."))
-    geng.add_option("", "--original-xml", dest="original_xml",
+    geng.add_option("--original-xml", dest="original_xml",
                     help=_("XML file to use as the original guest."))
-    geng.add_option("", "--auto-clone", dest="auto_clone", action="store_true",
+    geng.add_option("--auto-clone", dest="auto_clone", action="store_true",
                     help=_("Auto generate clone name and storage paths from"
                            " the original guest configuration."))
     geng.add_option("-n", "--name", dest="new_name",
@@ -154,14 +154,14 @@ def parse_args():
     stog.add_option("-f", "--file", dest="new_diskfile", action="append",
                     help=_("New file to use as the disk image for the "
                            "new guest"))
-    stog.add_option("", "--force-copy", dest="target", action="append",
+    stog.add_option("--force-copy", dest="target", action="append",
                     help=_("Force to copy devices (eg, if 'hdc' is a "
                            "readonly cdrom device, --force-copy=hdc)"))
-    stog.add_option("", "--nonsparse", action="store_false", dest="sparse",
+    stog.add_option("--nonsparse", action="store_false", dest="sparse",
                     default=True,
                     help=_("Do not use a sparse file for the clone's "
                            "disk image"))
-    stog.add_option("", "--preserve-data", action="store_false",
+    stog.add_option("--preserve-data", action="store_false",
                     dest="preserve", default=True,
                     help=_("Do not clone storage, new disk images specified "
                            "via --file are preserved unchanged"))
@@ -174,25 +174,25 @@ def parse_args():
     parser.add_option_group(netg)
 
     misc = optparse.OptionGroup(parser, _("Miscellaneous Options"))
-    misc.add_option("", "--print-xml", action="store_true", dest="xmlonly",
+    misc.add_option("--print-xml", action="store_true", dest="xmlonly",
                     help=_("Print the generated domain XML rather than define "
                            "and clone the guest."))
-    misc.add_option("", "--replace", action="store_true", dest="replace",
+    misc.add_option("--replace", action="store_true", dest="replace",
                     help=_("Don't check for name collision. Allows replacing "
                            "an existing guest with the new clone"))
     misc.add_option("-d", "--debug", action="store_true", dest="debug",
                       help=_("Print debugging information"))
-    misc.add_option("", "--prompt", action="store_true", dest="prompt",
+    misc.add_option("--prompt", action="store_true", dest="prompt",
                     default=False,
                     help=_("Request user input for ambiguous situations or "
                            "required options."))
-    misc.add_option("", "--force", action="store_true", dest="force",
+    misc.add_option("--force", action="store_true", dest="force",
                     default=False,
                     help=_("Do not prompt for input. Answers yes where "
                            "applicable, terminates for all other prompts"))
     misc.add_option("-q", "--quiet", action="store_true", dest="quiet",
                     help=_("Suppress non-error output"))
-    misc.add_option("", "--clone-running", action="store_true",
+    misc.add_option("--clone-running", action="store_true",
                     dest="clone_running", default=False,
                     help=optparse.SUPPRESS_HELP)
     parser.add_option_group(misc)

@@ -78,7 +78,7 @@ def parse_args():
                     help=_("Suppress non-error output"))
     misc.add_option("-d", "--debug", action="store_true", dest="debug",
                     help=_("Print debugging information"))
-    misc.add_option("", "--dry-run", action="store_false", dest="nodry",
+    misc.add_option("--dry-run", action="store_false", dest="nodry",
                     default=True,
                     help=_("Dry run, don't make any changes"))
     opts.add_option_group(misc)
