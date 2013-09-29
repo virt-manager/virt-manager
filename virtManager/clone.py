@@ -73,7 +73,7 @@ def can_we_clone(conn, vol, path):
     elif vol:
         # Managed storage
         if not conn.check_pool_support(
-                vol.storagePoolLookupByVolume(),
+                vol.get_parent_pool().get_backend(),
                 conn.SUPPORT_POOL_CREATEVOLFROM):
             if conn.is_remote() or not os.access(path, os.R_OK):
                 msg = _("Connection does not support managed storage cloning.")
@@ -408,7 +408,7 @@ class vmmCloneVM(vmmGObjectUI):
                               path, clone_path)
 
                 cd.clone_paths = clone_path
-                size = cd.original_disks[0].size
+                size = cd.original_disks[0].get_size()
             except Exception, e:
                 logging.exception("Error setting generated path '%s'",
                                   clone_path)

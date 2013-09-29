@@ -721,13 +721,14 @@ class StorageVolume(_StorageObject):
     def _progress_thread(self, meter):
         lookup_attempts = 10
         vol = None
-
         if not meter:
             return
 
         while lookup_attempts > 0:
             try:
-                vol = self.pool.storageVolLookupByName(self.name)
+                if not vol:
+                    vol = self.pool.storageVolLookupByName(self.name)
+                vol.info()
                 break
             except:
                 lookup_attempts -= 1
