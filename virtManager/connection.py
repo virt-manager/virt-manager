@@ -779,6 +779,9 @@ class vmmConnection(vmmGObject):
     def rename_network(self, obj, origxml, newxml):
         return self._rename_helper("network", self.define_network,
                                    obj, origxml, newxml)
+    def rename_pool(self, obj, origxml, newxml):
+        return self._rename_helper("storagepool", self.define_pool,
+                                   obj, origxml, newxml)
 
 
     ####################

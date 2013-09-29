@@ -44,7 +44,11 @@ INTERFACE_PAGE_INFO = 0
 INTERFACE_PAGE_ERROR = 1
 
 (EDIT_NET_NAME,
- EDIT_NET_AUTOSTART) = range(2)
+EDIT_NET_AUTOSTART,
+
+EDIT_POOL_NAME,
+EDIT_POOL_AUTOSTART,
+) = range(4)
 
 
 class vmmHost(vmmGObjectUI):
@@ -73,7 +77,7 @@ class vmmHost(vmmGObjectUI):
         self.volmenu = None
         self._in_refresh = False
 
-        self.net_active_edits = []
+        self.active_edits = []
 
         self.cpu_usage_graph = None
         self.memory_usage_graph = None
@@ -113,6 +117,8 @@ class vmmHost(vmmGObjectUI):
             "on_vol_list_button_press_event": self.popup_vol_menu,
             "on_pool_apply_clicked": self.pool_apply,
             "on_vol_list_changed": self.vol_selected,
+            "on_pool_name_changed": (lambda *x:
+                self.enable_pool_apply(x, EDIT_POOL_NAME)),
 
             "on_interface_add_clicked" : self.add_interface,
             "on_interface_start_clicked" : self.start_interface,
@@ -469,10 +475,10 @@ class vmmHost(vmmGObjectUI):
 
         logging.debug("Applying changes for network '%s'", net.get_name())
         try:
-            if EDIT_NET_AUTOSTART in self.net_active_edits:
+            if EDIT_NET_AUTOSTART in self.active_edits:
                 auto = self.widget("net-autostart").get_active()
                 net.set_autostart(auto)
-            if EDIT_NET_NAME in self.net_active_edits:
+            if EDIT_NET_NAME in self.active_edits:
                 net.define_name(self.widget("net-name").get_text())
                 self.repopulate_networks()
         except Exception, e:
@@ -482,14 +488,14 @@ class vmmHost(vmmGObjectUI):
             self.disable_net_apply()
 
     def disable_net_apply(self):
-        self.net_active_edits = []
+        self.active_edits = []
         self.widget("net-apply").set_sensitive(False)
 
     def enable_net_apply(self, *arglist):
         edittype = arglist[-1]
         self.widget("net-apply").set_sensitive(True)
-        if edittype not in self.net_active_edits:
-            self.net_active_edits.append(edittype)
+        if edittype not in self.active_edits:
+            self.active_edits.append(edittype)
 
     def net_autostart_changed(self, src_ignore):
         auto = self.widget("net-autostart").get_active()
@@ -824,19 +830,33 @@ class vmmHost(vmmGObjectUI):
 
         logging.debug("Applying changes for pool '%s'", pool.get_name())
         try:
-            do_auto = self.widget("pool-autostart").get_active()
-            pool.set_autostart(do_auto)
+            if EDIT_POOL_AUTOSTART in self.active_edits:
+                auto = self.widget("pool-autostart").get_active()
+                pool.set_autostart(auto)
+            if EDIT_POOL_NAME in self.active_edits:
+                pool.define_name(self.widget("pool-name-entry").get_text())
+                self.repopulate_storage_pools()
         except Exception, e:
             self.err.show_err(_("Error setting pool autostart: %s") % str(e))
             return
+        self.disable_pool_apply()
+
+    def disable_pool_apply(self):
+        self.active_edits = []
         self.widget("pool-apply").set_sensitive(False)
+
+    def enable_pool_apply(self, *arglist):
+        edittype = arglist[-1]
+        self.widget("pool-apply").set_sensitive(True)
+        if edittype not in self.active_edits:
+            self.active_edits.append(edittype)
 
     def pool_autostart_changed(self, src_ignore):
         auto = self.widget("pool-autostart").get_active()
         self.widget("pool-autostart").set_label(auto and
                                                 _("On Boot") or
                                                 _("Never"))
-        self.widget("pool-apply").set_sensitive(True)
+        self.enable_pool_apply(EDIT_POOL_AUTOSTART)
 
     def set_storage_error_page(self, msg):
         self.reset_pool_state()
@@ -858,8 +878,7 @@ class vmmHost(vmmGObjectUI):
         except Exception, e:
             logging.exception(e)
             self.set_storage_error_page(_("Error selecting pool: %s") % e)
-
-        self.widget("pool-apply").set_sensitive(False)
+        self.disable_pool_apply()
 
     def populate_pool_state(self, uuid):
         pool = self.conn.get_pool(uuid)
@@ -871,6 +890,8 @@ class vmmHost(vmmGObjectUI):
         self.widget("pool-details").set_sensitive(True)
         self.widget("pool-name").set_markup("<b>%s:</b>" %
                                             pool.get_name())
+        self.widget("pool-name-entry").set_text(pool.get_name())
+        self.widget("pool-name-entry").set_editable(not active)
         self.widget("pool-sizes").set_markup(
                 """<span size="large">%s Free</span> / <i>%s In Use</i>""" %
                 (pool.get_pretty_available(), pool.get_pretty_allocation()))
@@ -915,6 +936,7 @@ class vmmHost(vmmGObjectUI):
     def reset_pool_state(self):
         self.widget("pool-details").set_sensitive(False)
         self.widget("pool-name").set_text("")
+        self.widget("pool-name-entry").set_text("")
         self.widget("pool-sizes").set_markup("""<span size="large"> </span>""")
         self.widget("pool-type").set_text("")
         self.widget("pool-location").set_text("")
@@ -928,10 +950,10 @@ class vmmHost(vmmGObjectUI):
         self.widget("pool-delete").set_sensitive(False)
         self.widget("pool-stop").set_sensitive(False)
         self.widget("pool-start").set_sensitive(False)
-        self.widget("pool-apply").set_sensitive(False)
         self.widget("vol-add").set_sensitive(False)
         self.widget("vol-delete").set_sensitive(False)
         self.widget("vol-list").set_sensitive(False)
+        self.disable_pool_apply()
 
     def vol_selected(self, src):
         selected = src.get_selected()

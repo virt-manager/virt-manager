@@ -174,6 +174,10 @@ class vmmStoragePool(vmmLibvirtObject):
         self._backend.refresh(0)
         self.idle_add(cb)
 
+    def define_name(self, newname):
+        return self._define_name_helper("storagepool",
+                                        self.conn.rename_pool,
+                                        newname)
 
     ###################
     # Volume handling #
