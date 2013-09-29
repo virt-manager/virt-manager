@@ -199,8 +199,6 @@ class vmmDomain(vmmLibvirtObject):
 
         self.lastStatus = libvirt.VIR_DOMAIN_SHUTOFF
 
-        self._getvcpus_supported = None
-        self._getjobinfo_supported = None
         self.managedsave_supported = False
         self.remote_console_supported = False
         self.snapshots_supported = False
@@ -227,31 +225,22 @@ class vmmDomain(vmmLibvirtObject):
         self._snapshot_list = None
 
     def _get_getvcpus_supported(self):
-        if self._getvcpus_supported is None:
-            self._getvcpus_supported = True
-            try:
-                self._backend.vcpus()
-            except libvirt.libvirtError, err:
-                if util.is_error_nosupport(err):
-                    self._getvcpus_supported = False
-        return self._getvcpus_supported
+        return self.conn.check_domain_support(self._backend,
+                                            self.conn.SUPPORT_DOMAIN_GETVCPUS)
     getvcpus_supported = property(_get_getvcpus_supported)
 
     def _get_getjobinfo_supported(self):
-        if self._getjobinfo_supported is None:
-            self._getjobinfo_supported = self.conn.check_domain_support(
-                                            self._backend,
+        return self.conn.check_domain_support(self._backend,
                                             self.conn.SUPPORT_DOMAIN_JOB_INFO)
-        return self._getjobinfo_supported
     getjobinfo_supported = property(_get_getjobinfo_supported)
 
     def _libvirt_init(self):
         """
         Initialization to do if backed by a libvirt virDomain
         """
-        self.managedsave_supported = self.conn.get_dom_managedsave_supported(
-                                                        self._backend)
-
+        self.managedsave_supported = self.conn.check_domain_support(
+                                    self._backend,
+                                    self.conn.SUPPORT_DOMAIN_MANAGED_SAVE)
         self.remote_console_supported = self.conn.check_domain_support(
                                     self._backend,
                                     self.conn.SUPPORT_DOMAIN_CONSOLE_STREAM)

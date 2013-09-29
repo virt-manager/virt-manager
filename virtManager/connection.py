@@ -99,7 +99,6 @@ class vmmConnection(vmmGObject):
         self._nodedev_capable = None
 
         self._xml_flags = {}
-        self._support_dict = {}
 
         # Physical network interfaces: name -> virtinst.NodeDevice
         self.nodedevs = {}
@@ -515,15 +514,6 @@ class vmmConnection(vmmGObject):
             return inact, act
 
         return self._get_flags_helper(vm, key, check_func)
-
-    def get_dom_managedsave_supported(self, vm):
-        key = self._backend.SUPPORT_DOMAIN_MANAGED_SAVE
-        if key not in self._support_dict:
-            val = self.check_domain_support(vm, key)
-            logging.debug("Connection managed save support: %s", val)
-            self._support_dict[key] = val
-
-        return self._support_dict[key]
 
     def get_interface_flags(self, iface):
         key = "interface"
