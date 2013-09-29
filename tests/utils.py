@@ -58,28 +58,75 @@ def _make_uri(base, connver=None, libver=None):
     return base
 
 
+_conn_cache = {}
+
+
+def openconn(uri):
+    """
+    Extra super caching to speed up the test suite. We basically
+    cache the first guest/pool/vol poll attempt for each URI, and save it
+    across multiple reopenings of that connection. We aren't caching
+    libvirt objects, just parsed XML objects. This works fine since
+    generally every test uses a fresh virConnect, or undoes the
+    persistent changes it makes.
+    """
+    conn = virtinst.cli.getConnection(uri)
+
+    if uri not in _conn_cache:
+        _conn_cache[uri] = {}
+    cache = _conn_cache[uri]
+
+    def cb_fetch_all_guests():
+        if "vms" not in cache:
+            cache["vms"] = conn._fetch_all_guests_cached()
+        return cache["vms"]
+
+    def cb_fetch_all_pools():
+        if "pools" not in cache:
+            cache["pools"] = conn._fetch_all_pools_cached()
+        return cache["pools"]
+
+    def cb_fetch_all_vols():
+        if "vols" not in cache:
+            cache["vols"] = conn._fetch_all_vols_cached()
+        return cache["vols"]
+
+    conn.clitest_orig_clear = conn.clear_cache
+    def clear_cache():
+        conn.clitest_orig_clear()
+        cache.clear()
+    conn.clear_cache = clear_cache
+
+    conn.cb_fetch_all_guests = cb_fetch_all_guests
+    conn.cb_fetch_all_pools = cb_fetch_all_pools
+    conn.cb_fetch_all_vols = cb_fetch_all_vols
+
+
+    return conn
+
+
 def open_testdefault():
-    return virtinst.cli.getConnection("test:///default")
+    return openconn("test:///default")
 
 
 def open_testdriver():
-    return virtinst.cli.getConnection(testuri)
+    return openconn(testuri)
 
 
 def open_testkvmdriver():
-    return virtinst.cli.getConnection(urikvm)
+    return openconn(urikvm)
 
 
 def open_plainkvm(connver=None, libver=None):
-    return virtinst.cli.getConnection(_make_uri(uriqemu, connver, libver))
+    return openconn(_make_uri(uriqemu, connver, libver))
 
 
 def open_plainxen(connver=None, libver=None):
-    return virtinst.cli.getConnection(_make_uri(urixen, connver, libver))
+    return openconn(_make_uri(urixen, connver, libver))
 
 
 def open_test_remote():
-    return virtinst.cli.getConnection(uriremote)
+    return openconn(uriremote)
 
 _default_conn = open_testdriver()
 _conn = None

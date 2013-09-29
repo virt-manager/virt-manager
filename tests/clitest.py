@@ -154,7 +154,7 @@ class Command(object):
 
         for idx in reversed(range(len(self.argv))):
             if self.argv[idx] == "--connect":
-                conn = virtinst.cli.getConnection(self.argv[idx + 1])
+                conn = utils.openconn(self.argv[idx + 1])
                 break
 
         if not conn and "virt-convert" not in app:

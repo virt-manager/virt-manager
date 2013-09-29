@@ -17,7 +17,6 @@
 import os
 import unittest
 
-import virtinst.cli
 from virtinst import virtimage
 
 from tests import utils
@@ -29,10 +28,9 @@ qemuuri = "__virtinst_test__test:///default,caps=%s/tests/capabilities-xml/capab
 # Access to protected member, needed to unittest stuff
 
 class TestImageParser(unittest.TestCase):
-
     basedir = "tests/image-xml/"
     conn = utils.open_testdefault()
-    qemuconn = virtinst.cli.getConnection(qemuuri)
+    qemuconn = utils.openconn(qemuuri)
 
     def testImageParsing(self):
         f = open(os.path.join(self.basedir, "image.xml"), "r")
