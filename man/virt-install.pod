@@ -468,6 +468,10 @@ will be usually balanced by faster install times inside the guest. Thus
 use of this option is recommended to ensure consistently high performance
 and to avoid I/O errors in the guest should the host filesystem fill up.
 
+=item B<backing_store>
+
+Path to a disk to use as the backing store for the newly created image.
+
 =item B<cache>
 
 The cache mode to be used. The host pagecache provides cache memory.

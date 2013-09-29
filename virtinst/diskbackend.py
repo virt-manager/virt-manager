@@ -171,7 +171,7 @@ class _StorageBase(object):
 
 class StorageCreator(_StorageBase):
     def __init__(self, conn, path, pool,
-                 vol_install, clone_path,
+                 vol_install, clone_path, backing_store,
                  size, sparse, fmt):
         _StorageBase.__init__(self)
 
@@ -188,6 +188,8 @@ class StorageCreator(_StorageBase):
             self._vol_install = build_vol_install(conn, path, pool,
                                                    size, sparse)
         self._set_format(fmt)
+        self._set_backing_store(backing_store)
+
         if self._vol_install:
             self._path = None
             self._size = None
@@ -214,6 +216,14 @@ class StorageCreator(_StorageBase):
         elif val != "raw":
             raise RuntimeError(_("Format cannot be specified for "
                                  "unmanaged storage."))
+
+    def _set_backing_store(self, val):
+        if val is None:
+            return
+        if not self._vol_install:
+            raise RuntimeError(_("Cannot set backing store for unmanaged "
+                                 "storage."))
+        self._vol_install.backing_store = val
 
 
     ##############

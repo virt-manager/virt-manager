@@ -99,7 +99,9 @@ def _is_dir_searchable(uid, username, path):
 
 
 def _distill_storage(conn, do_create, nomanaged,
-                     path, vol_object, vol_install, clone_path, *args):
+                     path, vol_object, vol_install,
+                     clone_path, backing_store,
+                     *args):
     """
     Validates and updates params when the backing storage is changed
     """
@@ -131,7 +133,8 @@ def _distill_storage(conn, do_create, nomanaged,
 
     if path or vol_install or pool or clone_path:
         creator = diskbackend.StorageCreator(conn, path, pool,
-                                             vol_install, clone_path, *args)
+                                             vol_install, clone_path,
+                                             backing_store, *args)
     return backend, creator
 
 
@@ -534,7 +537,8 @@ class VirtualDisk(VirtualDevice):
     _storage_backend = property(_get_storage_backend, _set_storage_backend)
 
     def set_create_storage(self, size=None, sparse=True,
-                           fmt=None, vol_install=None, clone_path=None,
+                           fmt=None, vol_install=None,
+                           clone_path=None, backing_store=None,
                            fake=False):
         """
         Function that sets storage creation parameters. If this isn't
@@ -545,29 +549,40 @@ class VirtualDisk(VirtualDevice):
         @fake: If true, make like we are creating storage but fail
             if we ever asked to do so.
         """
+        def _validate_path(p):
+            if p is None:
+                return
+            try:
+                d = VirtualDisk(self.conn)
+                d.path = p
+
+                # If this disk isn't managed, make sure we only perform
+                # non-managed lookup.
+                if (self._storage_creator or
+                    (self.path and self._storage_backend.exists())):
+                    d.nomanaged = not self.__managed_storage()
+                d.set_create_storage(fake=True)
+                d.validate()
+            except Exception, e:
+                raise ValueError(_("Error validating path %s: %s") % (p, e))
+
         path = self.path
 
         # Validate clone_path
         if clone_path is not None:
             clone_path = os.path.abspath(clone_path)
+        if backing_store is not None:
+            backing_store = os.path.abspath(backing_store)
 
-            try:
-                # If this disk isn't managed, make sure we only perform
-                # non-managed lookup
-                d = VirtualDisk(self.conn)
-                d.path = clone_path
-                d.nomanaged = not self.__managed_storage()
-                d.set_create_storage(fake=True)
-                d.validate()
-            except Exception, e:
-                raise ValueError(_("Error validating clone path: %s") % e)
+        _validate_path(clone_path)
+        _validate_path(backing_store)
 
         if fake and size is None:
             size = .000001
 
         ignore, creator = _distill_storage(
             self.conn, True, self.nomanaged, path, None,
-            vol_install, clone_path,
+            vol_install, clone_path, backing_store,
             size, sparse, fmt)
 
         self._storage_creator = creator
@@ -594,7 +609,7 @@ class VirtualDisk(VirtualDevice):
     def _change_backend(self, path, vol_object):
         backend, ignore = _distill_storage(
                                 self.conn, False, self.nomanaged,
-                                path, vol_object, None, None)
+                                path, vol_object, None, None, None)
         self._storage_backend = backend
 
     def sync_path_props(self):

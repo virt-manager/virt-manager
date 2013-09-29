@@ -1442,6 +1442,7 @@ def parse_disk(guest, optstr, dev=None, validate=True):
     opts = parse_optstr(optstr, remove_first="path")
 
     path = opt_get("path")
+    backing_store = opt_get("backing_store")
     pool = opt_get("pool")
     vol = opt_get("vol")
     size = parse_size(opt_get("size"))
@@ -1456,7 +1457,7 @@ def parse_disk(guest, optstr, dev=None, validate=True):
     dev.read_only = ro
     dev.shareable = shared
     dev.set_create_storage(size=size, fmt=fmt, sparse=sparse,
-                           vol_install=volinst)
+                           vol_install=volinst, backing_store=backing_store)
 
     set_param = _build_set_param(dev, opts)
 
