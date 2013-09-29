@@ -356,8 +356,6 @@ class VirtualConnection(object):
         return support.check_support(self, feature, dom)
     def check_pool_support(self, pool, feature):
         return support.check_support(self, feature, pool)
-    def check_nodedev_support(self, nodedev, feature):
-        return support.check_support(self, feature, nodedev)
     def check_interface_support(self, iface, feature):
         return support.check_support(self, feature, iface)
     def check_stream_support(self, feature):

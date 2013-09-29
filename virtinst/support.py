@@ -354,11 +354,6 @@ SUPPORT_STORAGE_CREATEVOLFROM = _make(function="virStoragePool.createXMLFrom",
                                       version=6004)
 SUPPORT_STORAGE_ISACTIVE = _make(function="virStoragePool.isActive", args=())
 
-# Nodedev checks
-# This can't ever require a nodedev object for back compat reasons
-SUPPORT_NODEDEV_PCI_DETACH = _make(function="virNodeDevice.dettach",
-                                   version=6001)
-
 
 # Interface checks
 SUPPORT_INTERFACE_XML_INACTIVE = _make(function="virInterface.XMLDesc",

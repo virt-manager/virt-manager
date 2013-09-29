@@ -418,8 +418,6 @@ class vmmConnection(vmmGObject):
         return self._backend.check_domain_support(*args)
     def check_pool_support(self, *args):
         return self._backend.check_pool_support(*args)
-    def check_nodedev_support(self, *args):
-        return self._backend.check_nodedev_support(*args)
     def check_interface_support(self, *args):
         return self._backend.check_interface_support(*args)
     def check_stream_support(self, *args):
