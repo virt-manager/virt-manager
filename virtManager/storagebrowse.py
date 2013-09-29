@@ -44,6 +44,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
         self.conn_signal_ids = []
         self.finish_cb_id = None
+        self.can_new_volume = True
 
         # Add Volume wizard
         self.addvol = None
@@ -199,6 +200,8 @@ class vmmStorageBrowser(vmmGObjectUI):
             self.local_args["dialog_name"] = data["local_title"]
             self.local_args["dialog_type"] = data.get("dialog_type")
             self.local_args["choose_button"] = data.get("choose_button")
+
+        self.widget("new-volume").set_visible(self.can_new_volume)
 
 
     # Convenience helpers

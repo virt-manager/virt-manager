@@ -45,14 +45,18 @@ class vmmCreateVolume(vmmGObjectUI):
 
         self.name_hint = None
         self.vol = None
+        self.storage_browser = None
 
         self.builder.connect_signals({
             "on_vmm_create_vol_delete_event" : self.close,
             "on_vol_cancel_clicked"  : self.close,
             "on_vol_create_clicked"  : self.finish,
+
             "on_vol_name_changed"    : self.vol_name_changed,
             "on_vol_allocation_value_changed" : self.vol_allocation_changed,
             "on_vol_capacity_value_changed"   : self.vol_capacity_changed,
+            "on_backing_store_changed" : self.backing_store_changed,
+            "on_backing_browse_clicked" : self.browse_backing,
         })
         self.bind_escape_key_close()
 
@@ -69,12 +73,18 @@ class vmmCreateVolume(vmmGObjectUI):
     def close(self, ignore1=None, ignore2=None):
         logging.debug("Closing new volume wizard")
         self.topwin.hide()
+        if self.storage_browser:
+            self.storage_browser.close()
         self.set_modal(False)
         return 1
 
     def _cleanup(self):
         self.conn = None
         self.parent_pool = None
+
+        if self.storage_browser:
+            self.storage_browser.cleanup()
+            self.storage_browser = None
 
     def set_name_hint(self, hint):
         self.name_hint = hint
@@ -124,6 +134,11 @@ class vmmCreateVolume(vmmGObjectUI):
         self.vol = StorageVolume(self.conn.get_backend())
         self.vol.pool = self.parent_pool.get_backend()
 
+    def _can_alloc(self):
+        # Sparse LVM volumes don't auto grow, so alloc=0 is useless
+        islogical = (self.parent_pool.get_type() == "logical")
+        return not islogical
+
     def reset_state(self):
         self._make_stub_vol()
 
@@ -139,14 +154,19 @@ class vmmCreateVolume(vmmGObjectUI):
 
         default_alloc = 0
         default_cap = 8
-        islogical = (self.parent_pool.get_type() == "logical")
 
         alloc = default_alloc
-        if islogical:
-            # Sparse LVM volumes don't auto grow, so alloc=0 is useless
-            alloc = default_alloc
+        if not self._can_alloc():
+            alloc = default_cap
         uihelpers.set_grid_row_visible(self.widget("vol-allocation"),
-                                       not islogical)
+                                       self._can_alloc())
+
+        canbacking = (self.parent_pool.get_type() == "logical"
+                      or self.vol.TYPE_FILE == self.vol.TYPE_FILE)
+        uihelpers.set_grid_row_visible(self.widget("backing-expander"),
+                                       canbacking)
+        self.widget("backing-expander").set_expanded(False)
+        self.widget("backing-store").set_text("")
 
         self.widget("vol-allocation").set_range(0,
             int(self.parent_pool.get_available() / 1024 / 1024 / 1024))
@@ -216,6 +236,16 @@ class vmmCreateVolume(vmmGObjectUI):
         if cap < alloc:
             alloc_widget.set_value(cap)
 
+    def backing_store_changed(self, src):
+        if not self._can_alloc():
+            return
+        uihelpers.set_grid_row_visible(self.widget("vol-allocation"),
+                                       not bool(src.get_text()))
+
+    def browse_backing(self, src):
+        ignore = src
+        self._browse_file()
+
     def _finish_cb(self, error, details):
         self.topwin.set_sensitive(True)
         self.topwin.get_window().set_cursor(
@@ -272,15 +302,17 @@ class vmmCreateVolume(vmmGObjectUI):
         fmt = self.get_config_format()
         alloc = self.widget("vol-allocation").get_value()
         cap = self.widget("vol-capacity").get_value()
+        backing = self.widget("backing-store").get_text()
         if not self.widget("vol-allocation").get_visible():
             alloc = cap
 
         try:
             self._make_stub_vol()
-            self.vol.capacity = cap
             self.vol.name = volname
-            self.vol.allocation = (alloc * 1024 * 1024 * 1024)
             self.vol.capacity = (cap * 1024 * 1024 * 1024)
+            self.vol.allocation = (alloc * 1024 * 1024 * 1024)
+            if backing:
+                self.vol.backing_store = backing
             if fmt:
                 self.vol.format = fmt
             self.vol.validate()
@@ -292,12 +324,20 @@ class vmmCreateVolume(vmmGObjectUI):
         self.err.show_err(info, details, modal=self.topwin.get_modal())
 
     def val_err(self, info, details):
-        modal = self.topwin.get_modal()
-        ret = False
-        try:
-            self.topwin.set_modal(False)
-            ret = self.err.val_err(info, details, modal=modal)
-        finally:
-            self.topwin.set_modal(modal)
+        return self.err.val_err(info, details, modal=self.topwin.get_modal())
 
-        return ret
+    def _browse_file(self):
+        if self.storage_browser is None:
+            def cb(src, text):
+                ignore = src
+                self.widget("backing-store").set_text(text)
+
+            from virtManager.storagebrowse import vmmStorageBrowser
+            self.storage_browser = vmmStorageBrowser(self.conn)
+            self.storage_browser.connect("storage-browse-finish", cb)
+            self.storage_browser.topwin.set_modal(self.topwin.get_modal())
+            self.storage_browser.can_new_volume = False
+            self.storage_browser.set_browse_reason(
+                self.config.CONFIG_DIR_IMAGE)
+
+        self.storage_browser.show(self.topwin, self.conn)

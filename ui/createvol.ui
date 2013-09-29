@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.15.4 on Fri Sep 27 13:04:46 2013 -->
+<!-- Generated with glade 3.16.0 on Sun Sep 29 10:15:56 2013 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
@@ -18,6 +18,11 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-new</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-open</property>
   </object>
   <object class="GtkWindow" id="vmm-create-vol">
     <property name="can_focus">False</property>
@@ -112,16 +117,16 @@
                         <property name="label" translatable="yes">Create a storage unit to be used directly by a virtual machine.</property>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
+                        <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkVBox" id="vbox4">
+                      <object class="GtkGrid" id="vbox4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">24</property>
+                        <property name="row_spacing">18</property>
                         <child>
                           <object class="GtkGrid" id="table1">
                             <property name="visible">True</property>
@@ -201,7 +206,7 @@
                               <object class="GtkLabel" id="label5">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">1</property>
+                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Format:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">vol-format</property>
@@ -215,13 +220,14 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkVBox" id="vbox5">
+                          <object class="GtkVBox" id="size-box">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="spacing">5</property>
@@ -311,9 +317,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">●</property>
+                                    <property name="text" translatable="yes">1.0</property>
                                     <property name="adjustment">adjustment2</property>
                                     <property name="climb_rate">10</property>
                                     <property name="digits">1</property>
+                                    <property name="value">1</property>
                                     <signal name="value-changed" handler="on_vol_capacity_value_changed" swapped="no"/>
                                   </object>
                                   <packing>
@@ -328,9 +336,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">●</property>
+                                    <property name="text" translatable="yes">1.0</property>
                                     <property name="adjustment">adjustment1</property>
                                     <property name="climb_rate">10</property>
                                     <property name="digits">1</property>
+                                    <property name="value">1</property>
                                     <signal name="value-changed" handler="on_vol_allocation_value_changed" swapped="no"/>
                                   </object>
                                   <packing>
@@ -409,9 +419,81 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkExpander" id="backing-expander">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="vexpand">False</property>
+                            <child>
+                              <object class="GtkGrid" id="grid1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="column_spacing">6</property>
+                                <child>
+                                  <object class="GtkLabel" id="label11">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Path:</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkEntry" id="backing-store">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="hexpand">True</property>
+                                    <signal name="changed" handler="on_backing_store_changed" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="backing-browse">
+                                    <property name="label" translatable="yes">Browse...</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="image">image2</property>
+                                    <signal name="clicked" handler="on_backing_browse_clicked" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                            <child type="label">
+                              <object class="GtkLabel" id="label2">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="hexpand">False</property>
+                                <property name="label" translatable="yes">Backing store</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
                           </packing>
                         </child>
                       </object>
