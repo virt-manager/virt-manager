@@ -144,9 +144,7 @@ def fetch_pools(backend, orig, build_func):
 def fetch_interfaces(backend, orig, build_func):
     name = "interface"
 
-    # Doesn't work on F19, not sure if a transient bug or if it has
-    # never worked: https://bugzilla.redhat.com/show_bug.cgi?id=982014
-    if False and backend.check_conn_support(
+    if backend.check_conn_support(
             backend.SUPPORT_CONN_LISTALLINTERFACES):
         return _new_poll_helper(orig, name,
                                 backend.listAllInterfaces,
