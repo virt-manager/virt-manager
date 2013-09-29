@@ -217,15 +217,13 @@ class StoragePool(_StorageObject):
             return None
 
         def check_pool(pool, path):
-            xml = pool.get_xml(refresh_if_nec=False)
-            xml_path = StoragePool(conn, parsexml=xml).target_path
+            xml_path = pool.target_path
             if xml_path is not None and os.path.abspath(xml_path) == path:
-                return pool
+                return True
 
         for pool in conn.fetch_all_pools():
-            p = check_pool(pool, path)
-            if p:
-                return p.get_backend()
+            if check_pool(pool, path):
+                return conn.storagePoolLookupByName(pool.name)
         return None
 
 

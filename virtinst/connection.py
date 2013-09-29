@@ -23,8 +23,10 @@ import weakref
 
 import libvirt
 
-from virtinst import Guest
 from virtinst import CapabilitiesParser
+from virtinst import Guest
+from virtinst import StoragePool
+from virtinst import StorageVolume
 from virtinst import pollhelpers
 from virtinst import support
 from virtinst import util
@@ -56,25 +58,6 @@ def _sanitize_xml(xml):
                   "\n".join(difflib.unified_diff(orig.split("\n"),
                                                  xml.split("\n"))))
     return xml
-
-
-class _FetchObjWrapper(object):
-    """
-    Wrapper to make virDomain etc. objects have a similar XML API as
-    virt-manager objects, so fetch_all* callers get similar results
-    """
-    def __init__(self, backend):
-        self._backend = backend
-        self._xml = None
-        self._xmlobj = None
-
-    def get_xml(self, refresh_if_nec=True):
-        if self._xml is None or refresh_if_nec:
-            self._xml = self._backend.XMLDesc(0)
-        return self._xml
-
-    def get_backend(self):
-        return self._backend
 
 
 class VirtualConnection(object):
@@ -122,6 +105,7 @@ class VirtualConnection(object):
         # own cached object lists, rather than doing fresh calls
         self.cb_fetch_all_guests = None
         self.cb_fetch_all_pools = None
+        self.cb_fetch_all_vols = None
 
 
     ##############
@@ -182,12 +166,7 @@ class VirtualConnection(object):
             self._uri = self._libvirtconn.getURI()
             self._urisplits = util.uri_split(self._uri)
 
-    def fetch_all_guests(self):
-        # pylint: disable=E1102
-        if self.cb_fetch_all_guests:
-            return self.cb_fetch_all_guests()
-        # pylint: enable=E1102
-
+    def _fetch_all_guests_cached(self):
         key = "vms"
         if key in self._fetch_cache:
             return self._fetch_cache[key]
@@ -200,22 +179,60 @@ class VirtualConnection(object):
             self._fetch_cache[key] = ret
         return ret
 
-    def fetch_all_pools(self):
-        # pylint: disable=E1102
-        if self.cb_fetch_all_pools:
-            return self.cb_fetch_all_pools()
-        # pylint: enable=E1102
+    def fetch_all_guests(self):
+        """
+        Returns a list of Guest() objects
+        """
+        if self.cb_fetch_all_guests:
+            return self.cb_fetch_all_guests()  # pylint: disable=E1102
+        return self._fetch_all_guests_cached()
 
+    def _fetch_all_pools_cached(self):
         key = "pools"
         if key in self._fetch_cache:
             return self._fetch_cache[key]
 
         ignore, ignore, ret = pollhelpers.fetch_pools(self, {},
                                                     lambda obj, ignore: obj)
-        ret = [_FetchObjWrapper(obj) for obj in ret.values()]
+        ret = [StoragePool(weakref.ref(self), parsexml=obj.XMLDesc(0))
+               for obj in ret.values()]
         if self.cache_object_fetch:
             self._fetch_cache[key] = ret
         return ret
+
+    def fetch_all_pools(self):
+        """
+        Returns a list of StoragePool objects
+        """
+        if self.cb_fetch_all_pools:
+            return self.cb_fetch_all_pools()  # pylint: disable=E1102
+        return self._fetch_all_pools_cached()
+
+    def _fetch_all_vols_cached(self):
+        key = "vols"
+        if key in self._fetch_cache:
+            return self._fetch_cache[key]
+
+        ret = []
+        for xmlobj in self.fetch_all_pools():
+            pool = self._libvirtconn.storagePoolLookupByName(xmlobj.name)
+            # XXX: Should implement pollhelpers support for listAllVolumes
+            for volname in pool.listVolumes():
+                vol = pool.storageVolLookupByName(volname)
+                ret.append(StorageVolume(weakref.ref(self),
+                                         parsexml=vol.XMLDesc(0)))
+
+        if self.cache_object_fetch:
+            self._fetch_cache[key] = ret
+        return ret
+
+    def fetch_all_vols(self):
+        """
+        Returns a list of StorageVolume objects
+        """
+        if self.cb_fetch_all_vols:
+            return self.cb_fetch_all_vols()  # pylint: disable=E1102
+        return self._fetch_all_vols_cached()
 
     def clear_cache(self):
         self._fetch_cache = {}

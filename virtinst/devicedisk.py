@@ -337,23 +337,26 @@ class VirtualDisk(VirtualDevice):
         """
         if not path:
             return
+        ret = []
+
+        vols = []
+        for vol in conn.fetch_all_vols():
+            if path == vol.backing_store:
+                vols.append(vol.target_path)
 
         vms = conn.fetch_all_guests()
-        names = []
         for vm in vms:
-            found = False
             for disk in vm.get_devices("disk"):
-                if disk.path != path:
-                    continue
-                if check_conflict:
-                    if disk.shareable:
-                        continue
-                found = True
-                break
-            if found:
-                names.append(vm.name)
+                if disk.path == path:
+                    if check_conflict:
+                        if disk.shareable:
+                            continue
+                    if vm.name not in ret:
+                        ret.append(vm.name)
 
-        return names
+                if disk.path in vols and vm.name not in ret:
+                    ret.append(vm.name)
+        return ret
 
     @staticmethod
     def stat_local_path(path):

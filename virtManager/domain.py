@@ -405,9 +405,6 @@ class vmmDomain(vmmLibvirtObject):
         raise RuntimeError(_("Could not find specified device in the "
                              "inactive VM configuration: %s") % repr(origdev))
 
-    def get_guest_for_virtinst_func(self, *args, **kwargs):
-        return self.get_xmlobj(*args, **kwargs)
-
 
     ##############################
     # Persistent XML change APIs #

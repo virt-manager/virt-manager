@@ -178,8 +178,9 @@ class vmmStoragePool(vmmLibvirtObject):
     # Volume handling #
     ###################
 
-    def get_volumes(self):
-        self.update_volumes()
+    def get_volumes(self, refresh=True):
+        if refresh:
+            self.update_volumes()
         return self._volumes
 
     def get_volume(self, uuid):

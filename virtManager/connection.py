@@ -136,9 +136,16 @@ class vmmConnection(vmmGObject):
 
     def _init_virtconn(self):
         self._backend.cb_fetch_all_guests = (
-            lambda: [vm.get_guest_for_virtinst_func(refresh_if_nec=False)
-                     for vm in self.vms.values()])
-        self._backend.cb_fetch_all_pools = lambda: self.pools.values()
+            lambda: [obj.get_xmlobj(refresh_if_nec=False)
+                     for obj in self.vms.values()])
+        self._backend.cb_fetch_all_pools = (
+            lambda: [obj.get_xmlobj(refresh_if_nec=False)
+                     for obj in self.pools.values()])
+        self._backend.cb_fetch_all_vols = (
+            lambda: [obj.get_xmlobj(refresh_if_nec=False)
+                     for pool in self.pools.values()
+                     for obj in pool.get_volumes(refresh=False).values()])
+
 
     def _init_netdev(self):
         """
