@@ -716,46 +716,12 @@ class vmmConnection(vmmGObject):
     # Libvirt object creation methods #
     ###################################
 
-    def create_network(self, xml, start=True, autostart=True):
-        # Define network
-        net = self._backend.networkDefineXML(xml)
-
+    def restore(self, frm):
+        self._backend.restore(frm)
         try:
-            if start:
-                net.create()
-            net.setAutostart(autostart)
+            os.remove(frm)
         except:
-            net.undefine()
-            raise
-
-        return net
-
-    def rename_vm(self, domainobj, origxml, newxml):
-        # Undefine old domain
-        domainobj.delete()
-
-        newobj = None
-        try:
-            try:
-                # Redefine new domain
-                newobj = self.define_domain(newxml)
-            except Exception, renameerr:
-                try:
-                    logging.exception("Error defining new name XML")
-                    newobj = self.define_domain(origxml)
-                except Exception, fixerr:
-                    logging.exception("Failed to redefine original domain!")
-                    raise RuntimeError(
-                        _("Domain rename failed. Attempting to recover also "
-                          "failed.\n\n"
-                          "Original error: %s\n\n"
-                          "Recover error: %s" %
-                          (str(renameerr), str(fixerr))))
-                raise
-        finally:
-            if newobj:
-                # Reinsert handle into new domain
-                domainobj.change_name_backend(newobj)
+            logging.debug("Couldn't remove save file '%s' for restore", frm)
 
     def define_domain(self, xml):
         return self._backend.defineXML(xml)
@@ -766,13 +732,53 @@ class vmmConnection(vmmGObject):
     def define_interface(self, xml):
         return self._backend.interfaceDefineXML(xml, 0)
 
-    def restore(self, frm):
-        self._backend.restore(frm)
+    def create_network(self, xml, start=True, autostart=True):
+        net = self.define_network(xml)
         try:
-            os.remove(frm)
+            if start:
+                net.create()
+            net.setAutostart(autostart)
         except:
-            logging.debug("Couldn't remove save file '%s' used for restore",
-                          frm)
+            net.undefine()
+            raise
+
+        return net
+
+    def _rename_helper(self, objtype, define_cb, obj, origxml, newxml):
+        # Undefine the original object
+        obj.delete()
+
+        newobj = None
+        try:
+            try:
+                # Redefine new domain
+                newobj = define_cb(newxml)
+            except Exception, renameerr:
+                try:
+                    logging.exception("Error defining new name %s XML",
+                                      objtype)
+                    newobj = define_cb(origxml)
+                except Exception, fixerr:
+                    logging.exception("Failed to redefine original %s!",
+                                      objtype)
+                    raise RuntimeError(
+                        _("%s rename failed. Attempting to recover also "
+                          "failed.\n\n"
+                          "Original error: %s\n\n"
+                          "Recover error: %s" %
+                          (objtype, str(renameerr), str(fixerr))))
+                raise
+        finally:
+            if newobj:
+                # Reinsert handle into new obj
+                obj.change_name_backend(newobj)
+
+    def rename_vm(self, obj, origxml, newxml):
+        return self._rename_helper("domain", self.define_domain,
+                                   obj, origxml, newxml)
+    def rename_network(self, obj, origxml, newxml):
+        return self._rename_helper("network", self.define_network,
+                                   obj, origxml, newxml)
 
 
     ####################

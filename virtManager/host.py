@@ -43,6 +43,9 @@ from virtManager.graphwidgets import Sparkline
 INTERFACE_PAGE_INFO = 0
 INTERFACE_PAGE_ERROR = 1
 
+(EDIT_NET_NAME,
+ EDIT_NET_AUTOSTART) = range(2)
+
 
 class vmmHost(vmmGObjectUI):
     __gsignals__ = {
@@ -70,6 +73,8 @@ class vmmHost(vmmGObjectUI):
         self.volmenu = None
         self._in_refresh = False
 
+        self.net_active_edits = []
+
         self.cpu_usage_graph = None
         self.memory_usage_graph = None
         self.init_conn_state()
@@ -91,9 +96,11 @@ class vmmHost(vmmGObjectUI):
             "on_net_delete_clicked": self.delete_network,
             "on_net_stop_clicked": self.stop_network,
             "on_net_start_clicked": self.start_network,
-            "on_net_autostart_toggled": self.net_autostart_changed,
             "on_net_apply_clicked": self.net_apply,
             "on_net_list_changed": self.net_selected,
+            "on_net_autostart_toggled": self.net_autostart_changed,
+            "on_net_name_changed": (lambda *x:
+                self.enable_net_apply(x, EDIT_NET_NAME)),
 
             "on_pool_add_clicked" : self.add_pool,
             "on_vol_add_clicked" : self.add_vol,
@@ -462,19 +469,34 @@ class vmmHost(vmmGObjectUI):
 
         logging.debug("Applying changes for network '%s'", net.get_name())
         try:
-            auto = self.widget("net-autostart").get_active()
-            net.set_autostart(auto)
+            if EDIT_NET_AUTOSTART in self.net_active_edits:
+                auto = self.widget("net-autostart").get_active()
+                net.set_autostart(auto)
+            if EDIT_NET_NAME in self.net_active_edits:
+                net.define_name(self.widget("net-name").get_text())
+                self.repopulate_networks()
         except Exception, e:
             self.err.show_err(_("Error setting net autostart: %s") % str(e))
             return
+        finally:
+            self.disable_net_apply()
+
+    def disable_net_apply(self):
+        self.net_active_edits = []
         self.widget("net-apply").set_sensitive(False)
+
+    def enable_net_apply(self, *arglist):
+        edittype = arglist[-1]
+        self.widget("net-apply").set_sensitive(True)
+        if edittype not in self.net_active_edits:
+            self.net_active_edits.append(edittype)
 
     def net_autostart_changed(self, src_ignore):
         auto = self.widget("net-autostart").get_active()
         self.widget("net-autostart").set_label(auto and
                                                _("On Boot") or
                                                _("Never"))
-        self.widget("net-apply").set_sensitive(True)
+        self.enable_net_apply(EDIT_NET_AUTOSTART)
 
     def current_network(self):
         sel = self.widget("net-list").get_selection()
@@ -516,7 +538,7 @@ class vmmHost(vmmGObjectUI):
         try:
             net = self.conn.get_net(selected[0].get_value(selected[1], 0))
         except KeyError:
-            self.widget("net-apply").set_sensitive(False)
+            self.disable_net_apply()
             return
         except Exception, e:
             logging.exception(e)
@@ -527,8 +549,8 @@ class vmmHost(vmmGObjectUI):
         except Exception, e:
             logging.exception(e)
             self.set_net_error_page(_("Error selecting network: %s") % e)
-
-        self.widget("net-apply").set_sensitive(False)
+        finally:
+            self.disable_net_apply()
 
     def _populate_net_ipv4_state(self, net):
         (netstr,
@@ -592,8 +614,8 @@ class vmmHost(vmmGObjectUI):
         active = net.is_active()
 
         self.widget("net-details").set_sensitive(True)
-        self.widget("net-name").set_markup(
-            "<b>Network %s:</b>" % net.get_name())
+        self.widget("net-name").set_text(net.get_name())
+        self.widget("net-name").set_editable(not active)
         self.widget("net-device").set_text(net.get_bridge_device() or "")
         self.widget("net-name-domain").set_text(net.get_name_domain() or "")
         uihelpers.set_grid_row_visible(self.widget("net-name-domain"),
@@ -643,7 +665,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-ipv6-route").set_text("")
         self.widget("net-ipv6-forwarding").set_text(
                                     _("Isolated network"))
-        self.widget("net-apply").set_sensitive(False)
+        self.disable_net_apply()
 
     def repopulate_networks(self, src_ignore=None, uuid_ignore=None):
         self.populate_networks(self.widget("net-list").get_model())

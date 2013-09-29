@@ -328,10 +328,6 @@ class vmmDomain(vmmLibvirtObject):
     def status(self):
         return self.lastStatus
 
-    def change_name_backend(self, newbackend):
-        # Used for changing the domain object after a rename
-        self._backend = newbackend
-
     def get_cloning(self):
         return self.cloning
     def set_cloning(self, val):
@@ -399,29 +395,10 @@ class vmmDomain(vmmLibvirtObject):
     # Persistent XML change APIs #
     ##############################
 
-    # Rename
     def define_name(self, newname):
-        # Do this, so that _xmlobj_to_define has original inactive XML
-        self._invalidate_xml()
-
-        guest = self._get_xmlobj_to_define()
-        if guest.name == newname:
-            return
-
-        if self.is_active():
-            raise RuntimeError(_("Cannot rename an active guest"))
-
-        logging.debug("Changing guest name to '%s'", newname)
-        origxml = guest.get_xml_config()
-        guest.name = newname
-        newxml = guest.get_xml_config()
-
-        try:
-            self.conn.rename_vm(self, origxml, newxml)
-        finally:
-            self._invalidate_xml()
-
-        self.emit("config-changed")
+        return self._define_name_helper("domain",
+                                        self.conn.rename_vm,
+                                        newname)
 
     # Device Add/Remove
     def add_device(self, devobj):

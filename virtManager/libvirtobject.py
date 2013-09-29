@@ -78,6 +78,30 @@ class vmmLibvirtObject(vmmGObject):
     def get_key(self):
         return self._key
 
+    def change_name_backend(self, newbackend):
+        # Used for changing the backing object after a rename
+        self._backend = newbackend
+
+    def _define_name_helper(self, objtype, rename_cb, newname):
+        oldname = self.get_xmlobj().name
+        self._invalidate_xml()
+        xmlobj = self._get_xmlobj_to_define()
+        if xmlobj.name == newname:
+            return
+
+        logging.debug("Changing %s name from %s to %s",
+                      objtype, oldname, newname)
+        origxml = xmlobj.get_xml_config()
+        xmlobj.name = newname
+        newxml = xmlobj.get_xml_config()
+
+        try:
+            rename_cb(self, origxml, newxml)
+        finally:
+            self._invalidate_xml()
+
+        self.emit("config-changed")
+
 
     #############################################################
     # Functions that should probably be overridden in sub class #

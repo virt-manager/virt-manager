@@ -107,6 +107,11 @@ class vmmNetwork(vmmLibvirtObject):
     def tick(self):
         self._set_active(self._backend_get_active())
 
+    def define_name(self, newname):
+        return self._define_name_helper("network",
+                                        self.conn.rename_network,
+                                        newname)
+
 
     ###############
     # XML parsing #
