@@ -22,7 +22,7 @@ import logging
 from virtinst import util
 
 
-def _new_poll_helper(origlist, typename, listfunc, keyfunc, buildfunc):
+def _new_poll_helper(origmap, typename, listfunc, keyfunc, buildfunc):
     """
     Helper for new style listAll* APIs
     """
@@ -38,24 +38,24 @@ def _new_poll_helper(origlist, typename, listfunc, keyfunc, buildfunc):
     for obj in objs:
         key = getattr(obj, keyfunc)()
 
-        if key not in origlist:
+        if key not in origmap:
             # Object is brand new this period
             current[key] = buildfunc(obj, key)
             new[key] = current[key]
         else:
             # Previously known object
-            current[key] = origlist[key]
-            del origlist[key]
+            current[key] = origmap[key]
+            del origmap[key]
 
-    return (origlist, new, current)
+    return (origmap, new, current)
 
 
-def _old_poll_helper(origlist, typename,
+def _old_poll_helper(origmap, typename,
                      active_list, inactive_list,
                      lookup_func, build_func):
     """
     Helper routine for old style split API libvirt polling.
-    @origlist: Pre-existing mapping of objects, with key->obj mapping
+    @origmap: Pre-existing mapping of objects, with key->obj mapping.
         objects must have an is_active and set_active API
     @typename: string describing type of objects we are polling for use
         in debug messages.
@@ -63,7 +63,7 @@ def _old_poll_helper(origlist, typename,
     @inactive_list: Function that returns the list of inactive objects
     @lookup_func: Function to get an object handle for the passed name
     @build_func: Function that builds a new object class. It is passed
-        args of (raw libvirt object, key (usually UUID), bool is_active)
+        args of (raw libvirt object, key (usually UUID))
     """
     current = {}
     new = {}
@@ -80,7 +80,7 @@ def _old_poll_helper(origlist, typename,
         logging.debug("Unable to list inactive %ss: %s", typename, e)
 
     def check_obj(key):
-        if key not in origlist:
+        if key not in origmap:
             try:
                 obj = lookup_func(key)
             except Exception, e:
@@ -93,8 +93,8 @@ def _old_poll_helper(origlist, typename,
             new[key] = current[key]
         else:
             # Previously known object
-            current[key] = origlist[key]
-            del origlist[key]
+            current[key] = origmap[key]
+            del origmap[key]
 
     for name in newActiveNames + newInactiveNames:
         try:
@@ -102,15 +102,15 @@ def _old_poll_helper(origlist, typename,
         except:
             logging.exception("Couldn't fetch %s '%s'", typename, name)
 
-    return (origlist, new, current)
+    return (origmap, new, current)
 
 
-def fetch_nets(backend, orig, build_func):
+def fetch_nets(backend, origmap, build_func):
     name = "network"
 
     if backend.check_conn_support(
             backend.SUPPORT_CONN_LISTALLNETWORKS):
-        return _new_poll_helper(orig, name,
+        return _new_poll_helper(origmap, name,
                                 backend.listAllNetworks,
                                 "UUIDString", build_func)
     else:
@@ -118,17 +118,17 @@ def fetch_nets(backend, orig, build_func):
         inactive_list = backend.listDefinedNetworks
         lookup_func = backend.networkLookupByName
 
-        return _old_poll_helper(orig, name,
+        return _old_poll_helper(origmap, name,
                                 active_list, inactive_list,
                                 lookup_func, build_func)
 
 
-def fetch_pools(backend, orig, build_func):
+def fetch_pools(backend, origmap, build_func):
     name = "pool"
 
     if backend.check_conn_support(
             backend.SUPPORT_CONN_LISTALLSTORAGEPOOLS):
-        return _new_poll_helper(orig, name,
+        return _new_poll_helper(origmap, name,
                                 backend.listAllStoragePools,
                                 "UUIDString", build_func)
     else:
@@ -136,17 +136,17 @@ def fetch_pools(backend, orig, build_func):
         inactive_list = backend.listDefinedStoragePools
         lookup_func = backend.storagePoolLookupByName
 
-        return _old_poll_helper(orig, name,
+        return _old_poll_helper(origmap, name,
                                 active_list, inactive_list,
                                 lookup_func, build_func)
 
 
-def fetch_interfaces(backend, orig, build_func):
+def fetch_interfaces(backend, origmap, build_func):
     name = "interface"
 
     if backend.check_conn_support(
             backend.SUPPORT_CONN_LISTALLINTERFACES):
-        return _new_poll_helper(orig, name,
+        return _new_poll_helper(origmap, name,
                                 backend.listAllInterfaces,
                                 "name", build_func)
     else:
@@ -154,23 +154,23 @@ def fetch_interfaces(backend, orig, build_func):
         inactive_list = backend.listDefinedInterfaces
         lookup_func = backend.interfaceLookupByName
 
-        return _old_poll_helper(orig, name,
+        return _old_poll_helper(origmap, name,
                                 active_list, inactive_list,
                                 lookup_func, build_func)
 
 
-def fetch_nodedevs(backend, orig, build_func):
+def fetch_nodedevs(backend, origmap, build_func):
     name = "nodedev"
     active_list = lambda: backend.listDevices(None, 0)
     inactive_list = lambda: []
     lookup_func = backend.nodeDeviceLookupByName
 
-    return _old_poll_helper(orig, name,
+    return _old_poll_helper(origmap, name,
                             active_list, inactive_list,
                             lookup_func, build_func)
 
 
-def _old_fetch_vms(backend, origlist, build_func):
+def _old_fetch_vms(backend, origmap, build_func):
     # We can't easily use _old_poll_helper here because the domain API
     # doesn't always return names like other objects, it returns
     # IDs for active VMs
@@ -183,8 +183,8 @@ def _old_fetch_vms(backend, origlist, build_func):
     new = {}
 
     # Build list of previous vms with proper id/name mappings
-    for uuid in origlist:
-        vm = origlist[uuid]
+    for uuid in origmap:
+        vm = origmap[uuid]
         if vm.is_active():
             oldActiveIDs[vm.get_id()] = vm
         else:
@@ -204,12 +204,12 @@ def _old_fetch_vms(backend, origlist, build_func):
         uuid = vm.get_uuid()
 
         current[uuid] = vm
-        del(origlist[uuid])
+        del(origmap[uuid])
 
     def check_new(rawvm, uuid):
-        if uuid in origlist:
-            vm = origlist[uuid]
-            del(origlist[uuid])
+        if uuid in origmap:
+            vm = origmap[uuid]
+            del(origmap[uuid])
         else:
             vm = build_func(rawvm, uuid)
             new[uuid] = vm
@@ -247,15 +247,15 @@ def _old_fetch_vms(backend, origlist, build_func):
             except:
                 logging.exception("Couldn't fetch domain '%s'", name)
 
-    return (origlist, new, current)
+    return (origmap, new, current)
 
 
-def fetch_vms(backend, origlist, build_func):
+def fetch_vms(backend, origmap, build_func):
     name = "domain"
     if backend.check_conn_support(
             backend.SUPPORT_CONN_LISTALLDOMAINS):
-        return _new_poll_helper(origlist, name,
+        return _new_poll_helper(origmap, name,
                                 backend.listAllDomains,
                                 "UUIDString", build_func)
     else:
-        return _old_fetch_vms(backend, origlist, build_func)
+        return _old_fetch_vms(backend, origmap, build_func)
