@@ -216,11 +216,10 @@ class VirtualConnection(object):
         ret = []
         for xmlobj in self.fetch_all_pools():
             pool = self._libvirtconn.storagePoolLookupByName(xmlobj.name)
-            # XXX: Should implement pollhelpers support for listAllVolumes
-            for volname in pool.listVolumes():
-                vol = pool.storageVolLookupByName(volname)
-                ret.append(StorageVolume(weakref.ref(self),
-                                         parsexml=vol.XMLDesc(0)))
+            ignore, ignore, vols = pollhelpers.fetch_volumes(
+                self, pool, {}, lambda obj, ignore: obj)
+            ret += [StorageVolume(weakref.ref(self), parsexml=obj.XMLDesc(0))
+                    for obj in vols.values()]
 
         if self.cache_object_fetch:
             self._fetch_cache[key] = ret

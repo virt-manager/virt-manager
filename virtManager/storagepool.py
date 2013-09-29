@@ -22,6 +22,7 @@
 from gi.repository import GObject
 # pylint: enable=E0611
 
+from virtinst import pollhelpers
 from virtinst import StoragePool, StorageVolume
 from virtinst import util
 
@@ -191,19 +192,14 @@ class vmmStoragePool(vmmLibvirtObject):
             self._volumes = {}
             return
 
-        vols = self._backend.listVolumes()
-        new_vol_list = {}
+        (ignore, new, allvols) = pollhelpers.fetch_volumes(
+            self.conn.get_backend(), self.get_backend(), self._volumes.copy(),
+            lambda obj, key: vmmStorageVolume(self.conn, obj, key))
 
-        for volname in vols:
-            if volname in self._volumes:
-                new_vol_list[volname] = self._volumes[volname]
-                if refresh:
-                    new_vol_list[volname].refresh_xml()
-            else:
-                new_vol_list[volname] = vmmStorageVolume(self.conn,
-                                self._backend.storageVolLookupByName(volname),
-                                volname)
-        self._volumes = new_vol_list
+        for volname in allvols:
+            if volname not in new and refresh:
+                allvols[volname].refresh_xml()
+        self._volumes = allvols
 
 
     #################

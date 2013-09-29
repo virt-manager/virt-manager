@@ -141,6 +141,23 @@ def fetch_pools(backend, origmap, build_func):
                                 lookup_func, build_func)
 
 
+def fetch_volumes(backend, pool, origmap, build_func):
+    name = "volume"
+
+    if backend.check_pool_support(pool,
+        backend.SUPPORT_POOL_LISTALLVOLUMES):
+        return _new_poll_helper(origmap, name,
+                                pool.listAllVolumes,
+                                "name", build_func)
+    else:
+        active_list = pool.listVolumes
+        inactive_list = lambda: []
+        lookup_func = pool.storageVolLookupByName
+        return _old_poll_helper(origmap, name,
+                                active_list, inactive_list,
+                                lookup_func, build_func)
+
+
 def fetch_interfaces(backend, origmap, build_func):
     name = "interface"
 

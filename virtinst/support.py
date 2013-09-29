@@ -352,6 +352,8 @@ SUPPORT_DOMAIN_GET_METADATA = _make(function="virDomain.metadata",
 SUPPORT_POOL_CREATEVOLFROM = _make(function="virStoragePool.createXMLFrom",
                                       version=6004)
 SUPPORT_POOL_ISACTIVE = _make(function="virStoragePool.isActive", args=())
+SUPPORT_POOL_LISTALLVOLUMES = _make(function="virStoragePool.listAllVolumes",
+                                    args=())
 
 
 # Interface checks
