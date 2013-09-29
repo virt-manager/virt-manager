@@ -559,8 +559,8 @@ class StorageVolume(_StorageObject):
         if not isinstance(vol, libvirt.virStorageVol):
             raise ValueError(_("input_vol must be a virStorageVol"))
 
-        if not self.conn.check_pool_support(self.conn,
-                    self.conn.SUPPORT_STORAGE_CREATEVOLFROM):
+        if not self.conn.check_pool_support(self.pool,
+                    self.conn.SUPPORT_POOL_CREATEVOLFROM):
             raise ValueError(_("Creating storage from an existing volume is"
                                " not supported by this libvirt version."))
 

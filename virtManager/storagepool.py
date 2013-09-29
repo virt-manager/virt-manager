@@ -114,7 +114,7 @@ class vmmStoragePool(vmmLibvirtObject):
         if self._support_isactive is None:
             self._support_isactive = self.conn.check_pool_support(
                                         self._backend,
-                                        self.conn.SUPPORT_STORAGE_ISACTIVE)
+                                        self.conn.SUPPORT_POOL_ISACTIVE)
 
         if not self._support_isactive:
             return True

@@ -349,10 +349,9 @@ SUPPORT_DOMAIN_GET_METADATA = _make(function="virDomain.metadata",
 
 
 # Pool checks
-# This can't ever require a pool object for back compat reasons
-SUPPORT_STORAGE_CREATEVOLFROM = _make(function="virStoragePool.createXMLFrom",
+SUPPORT_POOL_CREATEVOLFROM = _make(function="virStoragePool.createXMLFrom",
                                       version=6004)
-SUPPORT_STORAGE_ISACTIVE = _make(function="virStoragePool.isActive", args=())
+SUPPORT_POOL_ISACTIVE = _make(function="virStoragePool.isActive", args=())
 
 
 # Interface checks
