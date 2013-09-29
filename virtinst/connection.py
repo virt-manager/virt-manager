@@ -341,28 +341,30 @@ class VirtualConnection(object):
                          _supportname.startswith("SUPPORT_")]:
         locals()[_supportname] = getattr(support, _supportname)
 
-    def check_conn_support(self, feature):
+    def _check_support(self, feature, data):
         key = feature
+        if type(data) is str:
+            key = (feature, data)
         if key not in self._support_cache:
-            self._support_cache[key] = support.check_support(self,
-                                                             feature, self)
+            self._support_cache[key] = support.check_support(
+                self, feature, data)
         return self._support_cache[key]
+
+    def check_conn_support(self, feature):
+        return self._check_support(feature, self)
     def check_conn_hv_support(self, feature, hv):
-        key = (feature, hv)
-        if key not in self._support_cache:
-            self._support_cache[key] = support.check_support(self, feature, hv)
-        return self._support_cache[key]
+        return self._check_support(feature, hv)
     def check_domain_support(self, dom, feature):
-        return support.check_support(self, feature, dom)
+        return self._check_support(feature, dom)
     def check_pool_support(self, pool, feature):
-        return support.check_support(self, feature, pool)
+        return self._check_support(feature, pool)
     def check_interface_support(self, iface, feature):
-        return support.check_support(self, feature, iface)
+        return self._check_support(feature, iface)
     def check_stream_support(self, feature):
         return (self.check_conn_support(self.SUPPORT_CONN_STREAM) and
-                support.check_support(self, feature, self))
+                self._check_support(feature, self))
     def check_net_support(self, net, feature):
-        return support.check_support(self, feature, net)
+        return self._check_support(feature, net)
 
 
     ###################
