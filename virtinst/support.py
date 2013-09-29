@@ -320,6 +320,8 @@ SUPPORT_CONN_LISTALLSTORAGEPOOLS = _make(
                                 args=())
 SUPPORT_CONN_LISTALLINTERFACES = _make(function="virConnect.listAllInterfaces",
                                 args=())
+SUPPORT_CONN_LISTALLDEVICES = _make(function="virConnect.listAllDevices",
+                                    args=())
 SUPPORT_CONN_VIRTIO_MMIO = _make(version=1001002,
                                  drv_version=[("qemu", 1006000)])
 SUPPORT_CONN_DISK_SD = _make(version=1001002)

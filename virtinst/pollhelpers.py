@@ -178,13 +178,18 @@ def fetch_interfaces(backend, origmap, build_func):
 
 def fetch_nodedevs(backend, origmap, build_func):
     name = "nodedev"
-    active_list = lambda: backend.listDevices(None, 0)
-    inactive_list = lambda: []
-    lookup_func = backend.nodeDeviceLookupByName
-
-    return _old_poll_helper(origmap, name,
-                            active_list, inactive_list,
-                            lookup_func, build_func)
+    if backend.check_conn_support(
+            backend.SUPPORT_CONN_LISTALLDEVICES):
+        return _new_poll_helper(origmap, name,
+                                backend.listAllDevices,
+                                "name", build_func)
+    else:
+        active_list = lambda: backend.listDevices(None, 0)
+        inactive_list = lambda: []
+        lookup_func = backend.nodeDeviceLookupByName
+        return _old_poll_helper(origmap, name,
+                                active_list, inactive_list,
+                                lookup_func, build_func)
 
 
 def _old_fetch_vms(backend, origmap, build_func):
