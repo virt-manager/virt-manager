@@ -163,8 +163,10 @@ class VirtualDisk(VirtualDevice):
     CACHE_MODE_NONE = "none"
     CACHE_MODE_WRITETHROUGH = "writethrough"
     CACHE_MODE_WRITEBACK = "writeback"
+    CACHE_MODE_DIRECTSYNC = "directsync"
+    CACHE_MODE_UNSAFE = "unsafe"
     cache_types = [CACHE_MODE_NONE, CACHE_MODE_WRITETHROUGH,
-        CACHE_MODE_WRITEBACK]
+        CACHE_MODE_WRITEBACK, CACHE_MODE_DIRECTSYNC, CACHE_MODE_UNSAFE]
 
     DEVICE_DISK = "disk"
     DEVICE_LUN = "lun"

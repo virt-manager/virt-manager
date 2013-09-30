@@ -358,13 +358,12 @@ def build_cache_combo(vm, combo):
     model = Gtk.ListStore(str, str)
     combo.set_model(model)
     set_combo_text_column(combo, 1)
-    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
     combo.set_active(-1)
     for m in virtinst.VirtualDisk.cache_types:
         model.append([m, m])
 
-    model.append([None, "default"])
+    model.insert(0, [None, "default"])
     combo.set_active(len(model) - 1)
 
 
