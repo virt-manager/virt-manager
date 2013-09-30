@@ -155,11 +155,9 @@ class vmmStoragePool(vmmLibvirtObject):
         self._kick_conn()
         self.idle_add(self.refresh_xml)
 
-    def delete(self, nodelete=True):
-        if nodelete:
-            self._backend.undefine()
-        else:
-            self._backend.delete(0)
+    def delete(self, force=True):
+        ignore = force
+        self._backend.undefine()
         self._backend = None
         self._kick_conn()
 
