@@ -1400,7 +1400,7 @@ def exception_is_libvirt_error(e, error):
             e.get_error_code() == getattr(libvirt, error))
 
 
-def _log_redefine_xml_diff(origxml, newxml):
+def log_redefine_xml_diff(origxml, newxml):
     if origxml == newxml:
         logging.debug("Redefine requested, but XML didn't change!")
         return

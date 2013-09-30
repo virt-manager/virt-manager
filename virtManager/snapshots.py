@@ -308,7 +308,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         xmlobj.description = desc
         newxml = xmlobj.get_xml_config()
 
-        uihelpers._log_redefine_xml_diff(origxml, newxml)
+        uihelpers.log_redefine_xml_diff(origxml, newxml)
         if newxml == origxml:
             return
         self.vm.create_snapshot(newxml, redefine=True)

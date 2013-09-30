@@ -24,20 +24,8 @@ from gi.repository import GObject
 
 import logging
 
-import libxml2
-
 from virtManager import uihelpers
 from virtManager.baseclass import vmmGObject
-
-
-def _sanitize_xml(xml):
-    xml = libxml2.parseDoc(xml).serialize()
-    # Strip starting <?...> line
-    if xml.startswith("<?"):
-        ignore, xml = xml.split("\n", 1)
-    if not xml.endswith("\n") and xml.count("\n"):
-        xml += "\n"
-    return xml
 
 
 class vmmLibvirtObject(vmmGObject):
@@ -191,7 +179,7 @@ class vmmLibvirtObject(vmmGObject):
         return self._xml
 
     def _xml_to_redefine(self):
-        return _sanitize_xml(self.get_xml(inactive=True))
+        return self.get_xml(inactive=True)
 
     def redefine_cached(self):
         if not self._xmlobj_to_define:
@@ -214,9 +202,7 @@ class vmmLibvirtObject(vmmGObject):
         return self._xmlobj_to_define
 
     def _redefine_helper(self, origxml, newxml):
-        origxml = _sanitize_xml(origxml)
-        newxml = _sanitize_xml(newxml)
-        uihelpers._log_redefine_xml_diff(origxml, newxml)
+        uihelpers.log_redefine_xml_diff(origxml, newxml)
 
         if origxml != newxml:
             self._define(newxml)
