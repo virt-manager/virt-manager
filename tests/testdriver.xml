@@ -593,7 +593,7 @@ test-many-devices, like an alternate RNG.
 
 
 <domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
-  <name>test-internal-snapshots</name>
+  <name>test-snapshots</name>
   <memory>409600</memory>
   <uuid>12345678-1234-FDDF-1234-12345678FFFF</uuid>
   <bootloader>/tmp/bootfoo</bootloader>
@@ -612,6 +612,9 @@ test-many-devices, like an alternate RNG.
   <disks>
     <disk name='hda' snapshot='internal'/>
   </disks>
+  <description>FOO
+desc line #2
+ba</description>
   <domain type='test'>
     <name>test-internal-snapshots</name>
     <uuid>12345678-1234-fddf-1234-12345678ffff</uuid>
@@ -824,6 +827,77 @@ test-many-devices, like an alternate RNG.
   <memory snapshot='internal'/>
   <disks>
     <disk name='hda' snapshot='internal'/>
+  </disks>
+  <domain type='test'>
+    <name>test-internal-snapshots</name>
+    <uuid>12345678-1234-fddf-1234-12345678ffff</uuid>
+    <memory unit='KiB'>409600</memory>
+    <currentMemory unit='KiB'>409600</currentMemory>
+    <vcpu placement='static'>1</vcpu>
+    <bootloader>/tmp/bootfoo</bootloader>
+    <os>
+      <type arch='i686'>xen</type>
+    </os>
+    <clock offset='utc'/>
+    <on_poweroff>destroy</on_poweroff>
+    <on_reboot>restart</on_reboot>
+    <on_crash>destroy</on_crash>
+    <devices>
+      <disk type='file' device='disk'>
+        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <target dev='hda' bus='ide'/>
+        <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+      </disk>
+      <controller type='ide' index='0'/>
+    </devices>
+  </domain>
+  <active>0</active>
+</test:domainsnapshot>
+
+<test:domainsnapshot>
+  <name>aaa-external-mem</name>
+  <state>running</state>
+  <creationTime>1365903080</creationTime>
+  <memory snapshot='external' file='/path/to/memory/state'/>
+  <disks>
+    <disk name='hda' snapshot='external'>
+      <source file='/path/to/new'/>
+    </disk>
+  </disks>
+  <domain type='test'>
+    <name>test-internal-snapshots</name>
+    <uuid>12345678-1234-fddf-1234-12345678ffff</uuid>
+    <memory unit='KiB'>409600</memory>
+    <currentMemory unit='KiB'>409600</currentMemory>
+    <vcpu placement='static'>1</vcpu>
+    <bootloader>/tmp/bootfoo</bootloader>
+    <os>
+      <type arch='i686'>xen</type>
+    </os>
+    <clock offset='utc'/>
+    <on_poweroff>destroy</on_poweroff>
+    <on_reboot>restart</on_reboot>
+    <on_crash>destroy</on_crash>
+    <devices>
+      <disk type='file' device='disk'>
+        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <target dev='hda' bus='ide'/>
+        <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+      </disk>
+      <controller type='ide' index='0'/>
+    </devices>
+  </domain>
+  <active>0</active>
+</test:domainsnapshot>
+
+<test:domainsnapshot>
+  <name>zzz-external-diskonly</name>
+  <state>shutoff</state>
+  <creationTime>1365903080</creationTime>
+  <disks>
+    <disk name='hda' snapshot='external'>
+      <source file='/path/to/diskonly'/>
+    </disk>
   </disks>
   <domain type='test'>
     <name>test-internal-snapshots</name>

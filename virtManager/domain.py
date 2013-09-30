@@ -159,8 +159,6 @@ class vmmDomainSnapshot(vmmLibvirtObject):
     def _XMLDesc(self, flags):
         return self._backend.getXMLDesc(flags=flags)
 
-    def is_current(self):
-        return self._backend.isCurrent()
     def delete(self, force=True):
         ignore = force
         self._backend.delete()
@@ -174,6 +172,14 @@ class vmmDomainSnapshot(vmmLibvirtObject):
             logging.debug("Unknown status %d, using NOSTATE", status)
             status = libvirt.VIR_DOMAIN_NOSTATE
         return uihelpers.vm_status_icons[status]
+
+    def is_external(self):
+        if self.get_xmlobj().memory_type == "external":
+            return True
+        for disk in self.get_xmlobj().disks:
+            if disk.snapshot == "external":
+                return True
+        return False
 
 
 class vmmDomain(vmmLibvirtObject):

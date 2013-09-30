@@ -20,7 +20,13 @@
 import libvirt
 
 from virtinst import util
-from virtinst.xmlbuilder import XMLBuilder, XMLProperty
+from virtinst.xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+
+
+class _SnapshotDisk(XMLBuilder):
+    _XML_ROOT_NAME = "disk"
+    name = XMLProperty("./@name")
+    snapshot = XMLProperty("./@snapshot")
 
 
 class DomainSnapshot(XMLBuilder):
@@ -57,11 +63,9 @@ class DomainSnapshot(XMLBuilder):
     creationTime = XMLProperty("./creationTime", is_int=True)
     parent = XMLProperty("./parent/name")
 
-    # Missing bits:
-    # <memory> @type and @file
-    # <disks> block which has a psuedo VM disk device
-    # <domain> block which tracks the snapshot guest XML
-    # <active> which should list active status for an internal snapshot
+    memory_type = XMLProperty("./memory/@snapshot")
+
+    disks = XMLChildProperty(_SnapshotDisk, relative_xpath="./disks")
 
 
     ##################

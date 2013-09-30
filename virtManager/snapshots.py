@@ -92,9 +92,9 @@ class vmmSnapshotPage(vmmGObjectUI):
         buf = Gtk.TextBuffer()
         self.widget("snapshot-new-description").set_buffer(buf)
 
-        # [snap object, row label, tooltip, icon name]
-        model = Gtk.ListStore(object, str, str, str)
-        model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
+        # [snap object, row label, tooltip, icon name, sortname]
+        model = Gtk.ListStore(object, str, str, str, str)
+        model.set_sort_column_id(4, Gtk.SortType.ASCENDING)
 
         col = Gtk.TreeViewColumn("")
         col.set_min_width(150)
@@ -108,10 +108,14 @@ class vmmSnapshotPage(vmmGObjectUI):
         col.add_attribute(txt, 'markup', 1)
         col.add_attribute(img, 'icon-name', 3)
 
+        def _sep_cb(_model, _iter, ignore):
+            return not bool(_model[_iter][0])
+
         slist = self.widget("snapshot-list")
         slist.set_model(model)
         slist.set_tooltip_column(2)
         slist.append_column(col)
+        slist.set_row_separator_func(_sep_cb, None)
 
 
     ###################
@@ -156,6 +160,8 @@ class vmmSnapshotPage(vmmGObjectUI):
                                 str(e))
             return
 
+        has_external = False
+        has_internal = False
         for snap in snapshots:
             desc = snap.get_xmlobj().description
             if not uihelpers.can_set_row_none:
@@ -163,9 +169,22 @@ class vmmSnapshotPage(vmmGObjectUI):
 
             name = snap.get_name()
             state = util.xml_escape(snap.run_status())
-            label = "%s\n<span size='small'>%s: %s</span>" % (
-                (name, _("State"), state))
-            model.append([snap, label, desc, snap.run_status_icon_name()])
+            if snap.is_external():
+                has_external = True
+                sortname = "3%s" % name
+                external = " (%s)" % _("External")
+            else:
+                has_internal = True
+                external = ""
+                sortname = "1%s" % name
+
+            label = "%s\n<span size='small'>%s: %s%s</span>" % (
+                (name, _("State"), state, external))
+            model.append([snap, label, desc, snap.run_status_icon_name(),
+                          sortname])
+
+        if has_internal and has_external:
+            model.append([None, None, None, None, "2"])
 
         if len(model):
             self.widget("snapshot-list").get_selection().select_iter(
@@ -180,6 +199,8 @@ class vmmSnapshotPage(vmmGObjectUI):
         desc = snap and xmlobj.description or ""
         state = snap and snap.run_status() or ""
         icon = snap and snap.run_status_icon_name() or None
+        is_external = snap and snap.is_external() or False
+
         timestamp = ""
         if snap:
             timestamp = str(datetime.datetime.fromtimestamp(
@@ -197,6 +218,19 @@ class vmmSnapshotPage(vmmGObjectUI):
         if icon:
             self.widget("snapshot-status-icon").set_from_icon_name(
                 icon, Gtk.IconSize.MENU)
+
+        uihelpers.set_grid_row_visible(self.widget("snapshot-mode"),
+                                       is_external)
+        if is_external:
+            is_mem = xmlobj.memory_type == "external"
+            is_disk = [d.snapshot == "external" for d in xmlobj.disks]
+            if is_mem and is_disk:
+                mode = _("External disk and memory")
+            elif is_mem:
+                mode = _("External memory only")
+            else:
+                mode = _("External disk only")
+            self.widget("snapshot-mode").set_text(mode)
 
         self.widget("snapshot-add").set_sensitive(True)
         self.widget("snapshot-delete").set_sensitive(bool(snap))
@@ -314,12 +348,12 @@ class vmmSnapshotPage(vmmGObjectUI):
         snap = self._get_selected_snapshot()
         result = self.err.yes_no(_("Are you sure you want to revert to "
                                    "snapshot '%s'? All disk changes since "
-                                   "the last snapshot will be discarded.") %
-                                   snap.get_name())
+                                   "the last snapshot was created will be "
+                                   "discarded.") % snap.get_name())
         if not result:
             return
 
-        logging.debug("Revertin to snapshot '%s'", snap.get_name())
+        logging.debug("Reverting to snapshot '%s'", snap.get_name())
         vmmAsyncJob.simple_async_noshow(self.vm.revert_to_snapshot,
                             [snap], self,
                             _("Error reverting to snapshot '%s'") %

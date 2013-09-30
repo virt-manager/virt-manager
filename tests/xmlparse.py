@@ -833,6 +833,11 @@ class XMLParseTest(unittest.TestCase):
         check("description", "offline desk", "foo\nnewline\n   indent")
         check("parent", "offline-root", "newparent")
         check("creationTime", 1375905916, 1234)
+        check("memory_type", "no", "internal")
+
+        check = self._make_checker(snap.disks[0])
+        check("name", "hda", "hdb")
+        check("snapshot", "internal", "no")
 
         utils.diff_compare(snap.get_xml_config(), outfile)
 
