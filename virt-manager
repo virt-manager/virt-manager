@@ -106,11 +106,6 @@ def parse_commandline():
     optParser.add_option("--trace-libvirt", dest="tracelibvirt",
         help=optparse.SUPPRESS_HELP, action="store_true")
 
-    # Option to enable snapshot UI. This command line option will
-    # not exist for ever.
-    optParser.add_option("--experimental-snapshot-ui", dest="snapshot",
-        help=optparse.SUPPRESS_HELP, action="store_true")
-
     # Don't load any connections on startup to test first run
     # PackageKit integration
     optParser.add_option("--test-first-run", dest="testfirstrun",
@@ -245,7 +240,6 @@ def main():
     config.default_qemu_user = cliconfig.default_qemu_user
     config.rhel6_defaults = not cliconfig.rhel_enable_unsupported_opts
     config.preferred_distros = cliconfig.preferred_distros
-    config.experimental_snapshot_ui = bool(options.snapshot)
 
     config.hv_packages = cliconfig.hv_packages
     config.libvirt_packages = cliconfig.libvirt_packages

@@ -376,10 +376,6 @@ class vmmDetails(vmmGObjectUI):
         self.console = vmmConsolePages(self.vm, self.builder, self.topwin)
         self.snapshots = vmmSnapshotPage(self.vm, self.builder, self.topwin)
         self.widget("snapshot-placeholder").add(self.snapshots.top_box)
-        self.widget("control-snapshots").set_visible(
-                self.config.experimental_snapshot_ui)
-        self.widget("details-menu-view-snapshots").set_visible(
-                self.config.experimental_snapshot_ui)
 
         # Set default window size
         w, h = self.vm.get_details_window_size()

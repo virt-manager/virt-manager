@@ -168,7 +168,6 @@ class vmmConfig(object):
         self.libvirt_packages = []
         self.askpass_package = []
         self.default_graphics_from_config = "vnc"
-        self.experimental_snapshot_ui = False
 
         self._objects = []
 
