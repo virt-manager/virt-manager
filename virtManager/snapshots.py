@@ -82,8 +82,7 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         self.top_box = self.widget("snapshot-top-box")
         self.widget("snapshot-top-window").remove(self.top_box)
-
-        self._set_snapshot_state(None)
+        self.widget("snapshot-list").get_selection().emit("changed")
 
 
     ##############
@@ -187,7 +186,6 @@ class vmmSnapshotPage(vmmGObjectUI):
             if current:
                 do_select = treeiter
 
-        self._set_snapshot_state(None)
         if len(model):
             if do_select is None:
                 do_select = model.get_iter_from_string("0")
