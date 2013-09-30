@@ -217,6 +217,9 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-new-name").emit("changed")
         self.widget("snapshot-new-description").get_buffer().set_text("")
         self.widget("snapshot-new-ok").grab_focus()
+        self.widget("snapshot-new-status-text").set_text(self.vm.run_status())
+        self.widget("snapshot-new-status-icon").set_from_icon_name(
+            self.vm.run_status_icon_name(), Gtk.IconSize.MENU)
 
     def _snapshot_new_name_changed(self, src):
         self.widget("snapshot-new-ok").set_sensitive(bool(src.get_text()))
