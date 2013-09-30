@@ -157,7 +157,8 @@ class vmmDomainSnapshot(vmmLibvirtObject):
 
     def is_current(self):
         return self._backend.isCurrent()
-    def delete(self):
+    def delete(self, force=True):
+        ignore = force
         self._backend.delete()
 
 
@@ -1211,11 +1212,12 @@ class vmmDomain(vmmLibvirtObject):
         self._backend.suspend()
         self.idle_add(self.force_update_status)
 
-    def delete(self):
-        try:
-            self.removeSavedImage()
-        except:
-            logging.exception("Failed to remove managed save state")
+    def delete(self, force=True):
+        if force:
+            try:
+                self.removeSavedImage()
+            except:
+                logging.exception("Failed to remove managed save state")
         self._backend.undefine()
 
     def resume(self):

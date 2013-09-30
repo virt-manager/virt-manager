@@ -94,7 +94,8 @@ class vmmNetwork(vmmLibvirtObject):
         self._backend.destroy()
         self._kick_conn()
 
-    def delete(self):
+    def delete(self, force=True):
+        ignore = force
         self._backend.undefine()
         self._backend = None
         self._kick_conn()

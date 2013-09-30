@@ -52,7 +52,8 @@ class vmmStorageVolume(vmmLibvirtObject):
         pobj = self._backend.storagePoolLookupByVolume()
         return self.conn.get_pool_by_name(pobj.name())
 
-    def delete(self):
+    def delete(self, force=True):
+        ignore = force
         self._backend.delete(0)
         self._backend = None
 

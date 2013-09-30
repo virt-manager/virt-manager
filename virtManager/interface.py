@@ -88,7 +88,8 @@ class vmmInterface(vmmLibvirtObject):
         self.idle_add(self.refresh_xml)
         self._kick_conn()
 
-    def delete(self):
+    def delete(self, force=True):
+        ignore = force
         self._backend.undefine()
         self._kick_conn()
 

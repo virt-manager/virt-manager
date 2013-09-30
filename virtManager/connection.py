@@ -734,7 +734,7 @@ class vmmConnection(vmmGObject):
 
     def _rename_helper(self, objtype, define_cb, obj, origxml, newxml):
         # Undefine the original object
-        obj.delete()
+        obj.delete(force=False)
 
         newobj = None
         try:

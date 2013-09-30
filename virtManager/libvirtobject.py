@@ -104,6 +104,9 @@ class vmmLibvirtObject(vmmGObject):
         ignore = xml
         return
 
+    def delete(self, force=True):
+        ignore = force
+
 
     ##################
     # Public XML API #
