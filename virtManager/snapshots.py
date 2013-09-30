@@ -92,16 +92,21 @@ class vmmSnapshotPage(vmmGObjectUI):
         buf = Gtk.TextBuffer()
         self.widget("snapshot-new-description").set_buffer(buf)
 
-        model = Gtk.ListStore(object, str, str)
+        # [snap object, row label, tooltip, icon name]
+        model = Gtk.ListStore(object, str, str, str)
         model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         col = Gtk.TreeViewColumn("")
         col.set_min_width(150)
         col.set_expand(True)
         col.set_spacing(6)
+        img = Gtk.CellRendererPixbuf()
+        img.set_property("stock-size", Gtk.IconSize.LARGE_TOOLBAR)
         txt = Gtk.CellRendererText()
+        col.pack_start(img, False)
         col.pack_start(txt, False)
-        col.add_attribute(txt, 'text', 1)
+        col.add_attribute(txt, 'markup', 1)
+        col.add_attribute(img, 'icon-name', 3)
 
         slist = self.widget("snapshot-list")
         slist.set_model(model)
@@ -156,7 +161,11 @@ class vmmSnapshotPage(vmmGObjectUI):
             if not uihelpers.can_set_row_none:
                 desc = desc or ""
 
-            model.append([snap, snap.get_name(), desc])
+            name = snap.get_name()
+            state = util.xml_escape(snap.run_status())
+            label = "%s\n<span size='small'>%s: %s</span>" % (
+                (name, _("State"), state))
+            model.append([snap, label, desc, snap.run_status_icon_name()])
 
         if len(model):
             self.widget("snapshot-list").get_selection().select_iter(
