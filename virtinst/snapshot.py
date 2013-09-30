@@ -17,10 +17,17 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
+from virtinst import util
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
 
 class DomainSnapshot(XMLBuilder):
+    @staticmethod
+    def find_free_name(vm, collidelist):
+        return util.generate_name("snapshot", vm.snapshotLookupByName,
+                                  sep="", start_num=1, force_num=True,
+                                  collidelist=collidelist)
+
     _XML_ROOT_NAME = "domainsnapshot"
     _XML_PROP_ORDER = ["name", "description", "creationTime"]
 
@@ -35,6 +42,11 @@ class DomainSnapshot(XMLBuilder):
     # <disks> block which has a psuedo VM disk device
     # <domain> block which tracks the snapshot guest XML
     # <active> which should list active status for an internal snapshot
+
+
+    ##################
+    # Public helpers #
+    ##################
 
     def validate(self):
         if not self.name:

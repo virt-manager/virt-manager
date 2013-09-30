@@ -28,7 +28,7 @@ from gi.repository import Gtk
 
 import libvirt
 
-import virtinst
+from virtinst import DomainSnapshot
 from virtinst import util
 
 from virtManager import uihelpers
@@ -216,7 +216,11 @@ class vmmSnapshotPage(vmmGObjectUI):
     ##################
 
     def _reset_new_state(self):
-        self.widget("snapshot-new-name").set_text("")
+        collidelist = [s.get_xmlobj().name for s in self.vm.list_snapshots()]
+        default_name = DomainSnapshot.find_free_name(
+            self.vm.get_backend(), collidelist)
+
+        self.widget("snapshot-new-name").set_text(default_name)
         self.widget("snapshot-new-name").emit("changed")
         self.widget("snapshot-new-description").get_buffer().set_text("")
 
@@ -240,7 +244,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             ).get_buffer().get_property("text")
 
         try:
-            newsnap = virtinst.DomainSnapshot(self.vm.conn.get_backend())
+            newsnap = DomainSnapshot(self.vm.conn.get_backend())
             newsnap.name = name
             newsnap.description = desc or None
             newsnap.validate()
