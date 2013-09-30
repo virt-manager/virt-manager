@@ -92,8 +92,8 @@ class vmmSnapshotPage(vmmGObjectUI):
         buf = Gtk.TextBuffer()
         self.widget("snapshot-new-description").set_buffer(buf)
 
-        # [snap object, row label, tooltip, icon name, sortname]
-        model = Gtk.ListStore(object, str, str, str, str)
+        # [name, row label, tooltip, icon name, sortname]
+        model = Gtk.ListStore(str, str, str, str, str)
         model.set_sort_column_id(4, Gtk.SortType.ASCENDING)
 
         col = Gtk.TreeViewColumn("")
@@ -128,7 +128,14 @@ class vmmSnapshotPage(vmmGObjectUI):
         model, treepath = selection.get_selected()
         if treepath is None:
             return None
-        return model[treepath][0]
+        try:
+            name = model[treepath][0]
+            for snap in self.vm.list_snapshots():
+                if name == snap.get_name():
+                    return snap
+        except:
+            pass
+        return None
 
     def _refresh_snapshots(self):
         self.vm.refresh_snapshots()
@@ -144,6 +151,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-error-label").set_text(msg)
 
     def _populate_snapshot_list(self):
+        cursnap = self._get_selected_snapshot()
         model = self.widget("snapshot-list").get_model()
         model.clear()
 
@@ -180,15 +188,14 @@ class vmmSnapshotPage(vmmGObjectUI):
 
             label = "%s\n<span size='small'>%s: %s%s</span>" % (
                 (name, _("State"), state, external))
-            model.append([snap, label, desc, snap.run_status_icon_name(),
+            model.append([name, label, desc, snap.run_status_icon_name(),
                           sortname])
 
         if has_internal and has_external:
             model.append([None, None, None, None, "2"])
 
-        if len(model):
-            self.widget("snapshot-list").get_selection().select_iter(
-                model.get_iter_from_string("0"))
+        uihelpers.set_row_selection(self.widget("snapshot-list"),
+                                    cursnap and cursnap.get_name() or None)
         self._initial_populate = True
 
     def _set_snapshot_state(self, snap=None):
@@ -378,12 +385,11 @@ class vmmSnapshotPage(vmmGObjectUI):
 
 
     def _snapshot_selected(self, selection):
-        model, treepath = selection.get_selected()
-        if treepath is None:
+        ignore = selection
+        snap = self._get_selected_snapshot()
+        if not snap:
             self._set_error_page(_("No snapshot selected."))
             return
-
-        snap = model[treepath][0]
 
         try:
             self._set_snapshot_state(snap)

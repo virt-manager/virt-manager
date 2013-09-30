@@ -131,9 +131,9 @@ class vmmHost(vmmGObjectUI):
             "on_config_autoconnect_toggled": self.toggle_autoconnect,
         })
 
-        self.populate_networks(self.widget("net-list").get_model())
-        populate_storage_pools(self.widget("pool-list"), self.conn)
-        self.populate_interfaces(self.widget("interface-list").get_model())
+        self.repopulate_networks()
+        self.repopulate_storage_pools()
+        self.repopulate_interfaces()
 
         self.conn.connect("net-added", self.repopulate_networks)
         self.conn.connect("net-removed", self.repopulate_networks)
@@ -423,6 +423,7 @@ class vmmHost(vmmGObjectUI):
     def toggle_autoconnect(self, src):
         self.conn.set_autoconnect(src.get_active())
 
+
     # -------------------------
     # Virtual Network functions
     # -------------------------
@@ -482,7 +483,7 @@ class vmmHost(vmmGObjectUI):
                 net.define_name(self.widget("net-name").get_text())
                 self.repopulate_networks()
         except Exception, e:
-            self.err.show_err(_("Error setting net autostart: %s") % str(e))
+            self.err.show_err(_("Error changing network settings: %s") % str(e))
             return
         finally:
             self.disable_net_apply()
@@ -505,12 +506,13 @@ class vmmHost(vmmGObjectUI):
         self.enable_net_apply(EDIT_NET_AUTOSTART)
 
     def current_network(self):
-        sel = self.widget("net-list").get_selection()
-        active = sel.get_selected()
-        if active[1] is not None:
-            curruuid = active[0].get_value(active[1], 0)
-            return self.conn.get_net(curruuid)
-        return None
+        model, _iter = self.widget("net-list").get_selection().get_selected()
+        if not _iter:
+            return
+        try:
+            return self.conn.get_net(model[_iter][0])
+        except KeyError:
+            return
 
     def refresh_network(self, src_ignore, uuid):
         uilist = self.widget("net-list")
@@ -677,6 +679,8 @@ class vmmHost(vmmGObjectUI):
         self.populate_networks(self.widget("net-list").get_model())
 
     def populate_networks(self, model):
+        curnet = self.current_network()
+
         net_list = self.widget("net-list")
         model.clear()
         for uuid in self.conn.list_net_uuids():
@@ -685,10 +689,8 @@ class vmmHost(vmmGObjectUI):
                           Gtk.IconSize.LARGE_TOOLBAR,
                           bool(net.is_active())])
 
-        _iter = model.get_iter_first()
-        if _iter:
-            net_list.get_selection().select_iter(_iter)
-        net_list.get_selection().emit("changed")
+        uihelpers.set_row_selection(net_list,
+                                    curnet and curnet.get_uuid() or None)
 
 
     # ------------------------------
@@ -805,12 +807,13 @@ class vmmHost(vmmGObjectUI):
         self.refresh_storage_pool(None, cp.get_uuid())
 
     def current_pool(self):
-        sel = self.widget("pool-list").get_selection()
-        active = sel.get_selected()
-        if active[1] is not None:
-            curruuid = active[0].get_value(active[1], 0)
-            return self.conn.get_pool(curruuid)
-        return None
+        model, _iter = self.widget("pool-list").get_selection().get_selected()
+        if not _iter:
+            return
+        try:
+            return self.conn.get_pool(model[_iter][0])
+        except KeyError:
+            return
 
     def current_vol(self):
         pool = self.current_pool()
@@ -837,7 +840,7 @@ class vmmHost(vmmGObjectUI):
                 pool.define_name(self.widget("pool-name-entry").get_text())
                 self.repopulate_storage_pools()
         except Exception, e:
-            self.err.show_err(_("Error setting pool autostart: %s") % str(e))
+            self.err.show_err(_("Error changing pool settings: %s") % str(e))
             return
         self.disable_pool_apply()
 
@@ -982,7 +985,7 @@ class vmmHost(vmmGObjectUI):
 
     def repopulate_storage_pools(self, src_ignore=None, uuid_ignore=None):
         pool_list = self.widget("pool-list")
-        populate_storage_pools(pool_list, self.conn)
+        populate_storage_pools(pool_list, self.conn, self.current_pool())
 
     def populate_storage_volumes(self):
         pool = self.current_pool()
@@ -1084,13 +1087,14 @@ class vmmHost(vmmGObjectUI):
         self.refresh_interface(None, cp.get_name())
 
     def current_interface(self):
-        sel = self.widget("interface-list").get_selection()
-        active = sel.get_selected()
-        if active[1] is not None:
-            currname = active[0].get_value(active[1], 0)
-            return self.conn.get_interface(currname)
-
-        return None
+        model, _iter = self.widget("interface-list").get_selection(
+            ).get_selected()
+        if not _iter:
+            return
+        try:
+            return self.conn.get_interface(model[_iter][0])
+        except KeyError:
+            return
 
     def interface_apply(self, src_ignore):
         interface = self.current_interface()
@@ -1252,6 +1256,8 @@ class vmmHost(vmmGObjectUI):
         self.populate_interfaces(interface_list.get_model())
 
     def populate_interfaces(self, model):
+        curiface = self.current_interface()
+
         iface_list = self.widget("interface-list")
         model.clear()
         for name in self.conn.list_interface_names():
@@ -1260,10 +1266,8 @@ class vmmHost(vmmGObjectUI):
                           Gtk.IconSize.LARGE_TOOLBAR,
                           bool(iface.is_active())])
 
-        _iter = model.get_iter_first()
-        if _iter:
-            iface_list.get_selection().select_iter(_iter)
-        iface_list.get_selection().emit("changed")
+        uihelpers.set_row_selection(iface_list,
+                           curiface and curiface.get_uuid() or None)
 
     def populate_interface_children(self):
         interface = self.current_interface()
@@ -1309,7 +1313,7 @@ def refresh_pool_in_list(pool_list, conn, uuid):
             return
 
 
-def populate_storage_pools(pool_list, conn):
+def populate_storage_pools(pool_list, conn, curpool):
     model = pool_list.get_model()
     # Prevent events while the model is modified
     pool_list.set_model(None)
@@ -1324,11 +1328,9 @@ def populate_storage_pools(pool_list, conn):
 
         model.append([uuid, label, pool.is_active(), per])
 
-    _iter = model.get_iter_first()
     pool_list.set_model(model)
-    if _iter:
-        pool_list.get_selection().select_iter(_iter)
-    pool_list.get_selection().emit("changed")
+    uihelpers.set_row_selection(pool_list,
+                                curpool and curpool.get_uuid() or None)
 
 
 def get_pool_size_percent(conn, uuid):

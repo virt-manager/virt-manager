@@ -162,8 +162,7 @@ class vmmStorageBrowser(vmmGObjectUI):
             self.remove_conn()
             self.conn = conn
 
-        pool_list = self.widget("pool-list")
-        host.populate_storage_pools(pool_list, self.conn)
+        self.repopulate_storage_pools()
 
         ids = []
         ids.append(self.conn.connect("pool-added",
@@ -241,9 +240,9 @@ class vmmStorageBrowser(vmmGObjectUI):
         # update vol list
         self.pool_selected(self.widget("pool-list").get_selection())
 
-    def repopulate_storage_pools(self, src_ignore, uuid_ignore):
+    def repopulate_storage_pools(self, src_ignore=None, uuid_ignore=None):
         pool_list = self.widget("pool-list")
-        host.populate_storage_pools(pool_list, self.conn)
+        host.populate_storage_pools(pool_list, self.conn, self.current_pool())
 
 
     # Listeners

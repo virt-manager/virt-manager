@@ -1352,6 +1352,21 @@ def set_list_selection(widget, rownum):
     selection.select_path(path)
 
 
+def set_row_selection(listwidget, prevkey):
+    model = listwidget.get_model()
+    _iter = None
+    if prevkey:
+        for row in model:
+            if row[0] == prevkey:
+                _iter = row.iter
+                break
+    if not _iter:
+        _iter = model.get_iter_first()
+    if _iter:
+        listwidget.get_selection().select_iter(_iter)
+    listwidget.get_selection().emit("changed")
+
+
 def child_get_property(parent, child, propname):
     # Wrapper for child_get_property, which pygobject doesn't properly
     # introspect
