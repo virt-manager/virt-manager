@@ -66,6 +66,8 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         self._snapshot_new = self.widget("snapshot-new")
         self._snapshot_new.set_transient_for(self.topwin)
+        self.bind_escape_key_close_helper(self._snapshot_new,
+                                          self._snapshot_new_close)
 
         self.builder.connect_signals({
             "on_snapshot_add_clicked": self._on_add_clicked,
@@ -223,6 +225,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-new-name").set_text(default_name)
         self.widget("snapshot-new-name").emit("changed")
         self.widget("snapshot-new-description").get_buffer().set_text("")
+        self.widget("snapshot-new-ok").grab_focus()
 
     def _snapshot_new_name_changed(self, src):
         self.widget("snapshot-new-ok").set_sensitive(bool(src.get_text()))

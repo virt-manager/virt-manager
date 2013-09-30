@@ -180,6 +180,13 @@ class vmmGObject(GObject.GObject):
 
 
 class vmmGObjectUI(vmmGObject):
+    @staticmethod
+    def bind_escape_key_close_helper(topwin, close_cb):
+        def close_on_escape(src_ignore, event):
+            if Gdk.keyval_name(event.keyval) == "Escape":
+                close_cb()
+        topwin.connect("key-press-event", close_on_escape)
+
     def __init__(self, filename, windowname, builder=None, topwin=None):
         vmmGObject.__init__(self)
 
@@ -226,8 +233,4 @@ class vmmGObjectUI(vmmGObject):
         pass
 
     def bind_escape_key_close(self):
-        def close_on_escape(src_ignore, event):
-            if Gdk.keyval_name(event.keyval) == "Escape":
-                self.close()
-
-        self.topwin.connect("key-press-event", close_on_escape)
+        self.bind_escape_key_close_helper(self.topwin, self.close)
