@@ -1213,12 +1213,19 @@ class vmmDomain(vmmLibvirtObject):
         self.idle_add(self.force_update_status)
 
     def delete(self, force=True):
+        flags = 0
         if force:
-            try:
-                self.removeSavedImage()
-            except:
-                logging.exception("Failed to remove managed save state")
-        self._backend.undefine()
+            flags |= getattr(libvirt,
+                             "VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA", 0)
+            flags |= getattr(libvirt, "VIR_DOMAIN_UNDEFINE_MANAGED_SAVE", 0)
+        try:
+            self._backend.undefineFlags(flags)
+        except libvirt.libvirtError, err:
+            if not util.is_error_nosupport(err):
+                raise
+            logging.exception("libvirt undefineFlags not supported, "
+                              "falling back to old style")
+            self._backend.undefine()
 
     def resume(self):
         if self.get_cloning():
