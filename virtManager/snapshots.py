@@ -72,12 +72,13 @@ class vmmSnapshotPage(vmmGObjectUI):
             "on_snapshot_delete_clicked": self._on_delete_clicked,
             "on_snapshot_start_clicked": self._on_start_clicked,
             "on_snapshot_apply_clicked": self._on_apply_clicked,
+            "on_snapshot_list_changed": self._snapshot_selected,
 
             # 'Create' dialog
             "on_snapshot_new_delete_event": self._snapshot_new_close,
             "on_snapshot_new_ok_clicked": self._on_new_ok_clicked,
             "on_snapshot_new_cancel_clicked" : self._snapshot_new_close,
-            "on_snapshot_list_changed": self._snapshot_selected,
+            "on_snapshot_new_name_changed" : self._snapshot_new_name_changed,
         })
 
         self.top_box = self.widget("snapshot-top-box")
@@ -216,7 +217,11 @@ class vmmSnapshotPage(vmmGObjectUI):
 
     def _reset_new_state(self):
         self.widget("snapshot-new-name").set_text("")
+        self.widget("snapshot-new-name").emit("changed")
         self.widget("snapshot-new-description").get_buffer().set_text("")
+
+    def _snapshot_new_name_changed(self, src):
+        self.widget("snapshot-new-ok").set_sensitive(bool(src.get_text()))
 
     def _new_finish_cb(self, error, details):
         self.topwin.set_sensitive(True)
