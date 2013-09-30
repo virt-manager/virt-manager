@@ -936,7 +936,8 @@ class vmmDomain(vmmLibvirtObject):
         if redefine:
             flags = (flags | libvirt.VIR_DOMAIN_SNAPSHOT_CREATE_REDEFINE)
 
-        logging.debug("Creating snapshot flags=%s xml=\n%s", flags, xml)
+        if not redefine:
+            logging.debug("Creating snapshot flags=%s xml=\n%s", flags, xml)
         self._backend.snapshotCreateXML(xml, flags)
 
 

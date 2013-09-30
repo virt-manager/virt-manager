@@ -97,15 +97,18 @@ class vmmSnapshotPage(vmmGObjectUI):
         self._snapshot_new = None
 
     def _init_ui(self):
+        blue = Gdk.color_parse("#0072A8")
+        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
+
         self.widget("snapshot-notebook").set_show_tabs(False)
 
         buf = Gtk.TextBuffer()
         buf.connect("changed", self._description_changed)
         self.widget("snapshot-description").set_buffer(buf)
 
-        # XXX: This should be a TreeStore, heirarchy is important
-        # for external snapshots.
-        # [handle, name, tooltip, is_current]
+        buf = Gtk.TextBuffer()
+        self.widget("snapshot-new-description").set_buffer(buf)
+
         model = Gtk.ListStore(object, str, str, bool)
         model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
@@ -177,8 +180,6 @@ class vmmSnapshotPage(vmmGObjectUI):
             if not uihelpers.can_set_row_none:
                 desc = desc or ""
 
-            # XXX: For disk snapshots, this isn't sufficient for determining
-            # 'current' status
             current = bool(snap.is_current())
 
             treeiter = model.append([snap, snap.get_name(),
@@ -229,6 +230,58 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-apply").set_sensitive(False)
 
 
+    ##################
+    # 'New' handling #
+    ##################
+
+    def _reset_new_state(self):
+        self.widget("snapshot-new-name").set_text("")
+        self.widget("snapshot-new-description").get_buffer().set_text("")
+
+    def _new_finish_cb(self, error, details):
+        self.topwin.set_sensitive(True)
+        self.topwin.get_window().set_cursor(
+                Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
+
+        if error is not None:
+            error = _("Error creating snapshot: %s") % error
+            self.err.show_err(error, details=details)
+            return
+        self._refresh_snapshots()
+
+    def _validate_new_snapshot(self):
+        name = self.widget("snapshot-new-name").get_text()
+        desc = self.widget("snapshot-new-description"
+            ).get_buffer().get_property("text")
+
+        try:
+            newsnap = virtinst.DomainSnapshot(self.vm.conn.get_backend())
+            newsnap.name = name
+            newsnap.description = desc or None
+            newsnap.validate()
+            return newsnap.get_xml_config()
+        except Exception, e:
+            return self.err.val_err(_("Error validating snapshot: %s" % e))
+
+    def _create_new_snapshot(self):
+        xml = self._validate_new_snapshot()
+        if xml is False:
+            return
+
+        self.topwin.set_sensitive(False)
+        self.topwin.get_window().set_cursor(
+                Gdk.Cursor.new(Gdk.CursorType.WATCH))
+
+        self._snapshot_new_close()
+        progWin = vmmAsyncJob(
+                    lambda ignore, x: self.vm.create_snapshot(x), [xml],
+                    self._new_finish_cb, [],
+                    _("Creating snapshot"),
+                    _("Creating virtual machine snapshot"),
+                    self.topwin)
+        progWin.run()
+
+
     #############
     # Listeners #
     #############
@@ -251,71 +304,28 @@ class vmmSnapshotPage(vmmGObjectUI):
         desc = desc_widget.get_buffer().get_property("text") or ""
 
         xmlobj = snap.get_xmlobj()
+        origxml = xmlobj.get_xml_config()
         xmlobj.description = desc
         newxml = xmlobj.get_xml_config()
+
+        uihelpers._log_redefine_xml_diff(origxml, newxml)
+        if newxml == origxml:
+            return
         self.vm.create_snapshot(newxml, redefine=True)
         snap.refresh_xml()
-        self._set_snapshot_state(snap)
-
-        # XXX refresh in place
-
-    def _finish_cb(self, error, details):
-        self.topwin.set_sensitive(True)
-        self.topwin.get_window().set_cursor(
-                Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
-
-        if error is not None:
-            error = _("Error creating snapshot: %s") % error
-            self.err.show_err(error, details=details)
-            return
-
         self._refresh_snapshots()
 
     def _on_new_ok_clicked(self, ignore):
-        name = self.widget("snapshot-new-name").get_text()
-
-        newsnap = virtinst.DomainSnapshot(self.vm.conn.get_backend())
-        newsnap.name = name
-
-        # XXX: all manner of flags here: live, quiesce, atomic, etc.
-        # most aren't relevant for internal?
-
-        self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(
-                Gdk.Cursor.new(Gdk.CursorType.WATCH))
-
-        self._snapshot_new_close()
-        progWin = vmmAsyncJob(
-                    lambda ignore, xml: self.vm.create_snapshot(xml),
-                    [newsnap.get_xml_config()],
-                    self._finish_cb, [],
-                    _("Creating snapshot"),
-                    _("Creating virtual machine snapshot"),
-                    self.topwin)
-        progWin.run()
+        return self._create_new_snapshot()
 
     def _on_add_clicked(self, ignore):
-        snap = self._get_current_snapshot()
-        if not snap:
-            return
-
         if self._snapshot_new.is_visible():
             return
-
-        # XXX: generate name
-        # XXX: default focus, tab order, default action, esc key, alt
-        self.widget("snapshot-new-name").set_text("foo")
+        self._reset_new_state()
         self._snapshot_new.show()
 
     def _on_start_clicked(self, ignore):
         snap = self._get_current_snapshot()
-        if not snap:
-            return
-
-        # XXX: Not true with external disk snapshots, disk changes are
-        #          encoded in the latest snapshot
-        # XXX: Don't run current?
-        # XXX: Warn about state change?
         result = self.err.yes_no(_("Are you sure you want to revert to "
                                    "snapshot '%s'? All disk changes since "
                                    "the last snapshot will be discarded.") %
@@ -340,9 +350,6 @@ class vmmSnapshotPage(vmmGObjectUI):
                                    snap.get_name())
         if not result:
             return
-
-        # XXX: how does the work for 'current' snapshot?
-        # XXX: all sorts of flags here like 'delete children', do we care?
 
         logging.debug("Deleting snapshot '%s'", snap.get_name())
         vmmAsyncJob.simple_async_noshow(snap.delete, [], self,

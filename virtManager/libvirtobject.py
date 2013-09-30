@@ -22,11 +22,11 @@
 from gi.repository import GObject
 # pylint: enable=E0611
 
-import difflib
 import logging
 
 import libxml2
 
+from virtManager import uihelpers
 from virtManager.baseclass import vmmGObject
 
 
@@ -215,18 +215,11 @@ class vmmLibvirtObject(vmmGObject):
 
     def _redefine_helper(self, origxml, newxml):
         origxml = _sanitize_xml(origxml)
-        newxml  = _sanitize_xml(newxml)
-        if origxml != newxml:
-            diff = "".join(difflib.unified_diff(origxml.splitlines(1),
-                                                newxml.splitlines(1),
-                                                fromfile="Original XML",
-                                                tofile="New XML"))
-            logging.debug("Redefining '%s' with XML diff:\n%s",
-                          self.get_name(), diff)
+        newxml = _sanitize_xml(newxml)
+        uihelpers._log_redefine_xml_diff(origxml, newxml)
 
+        if origxml != newxml:
             self._define(newxml)
-        else:
-            logging.debug("Redefine requested, but XML didn't change!")
 
         # Make sure we have latest XML
         self.refresh_xml(forcesignal=True)

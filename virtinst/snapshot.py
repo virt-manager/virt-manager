@@ -35,3 +35,7 @@ class DomainSnapshot(XMLBuilder):
     # <disks> block which has a psuedo VM disk device
     # <domain> block which tracks the snapshot guest XML
     # <active> which should list active status for an internal snapshot
+
+    def validate(self):
+        if not self.name:
+            raise RuntimeError(_("A name must be specified."))

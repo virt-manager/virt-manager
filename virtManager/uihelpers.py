@@ -1398,3 +1398,16 @@ def default_uri(always_system=False):
 def exception_is_libvirt_error(e, error):
     return (hasattr(libvirt, error) and
             e.get_error_code() == getattr(libvirt, error))
+
+
+def _log_redefine_xml_diff(origxml, newxml):
+    if origxml == newxml:
+        logging.debug("Redefine requested, but XML didn't change!")
+        return
+
+    import difflib
+    diff = "".join(difflib.unified_diff(origxml.splitlines(1),
+                                        newxml.splitlines(1),
+                                        fromfile="Original XML",
+                                        tofile="New XML"))
+    logging.debug("Redefining with XML diff:\n%s", diff)
