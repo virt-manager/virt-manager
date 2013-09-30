@@ -109,7 +109,7 @@ def _upload_file(conn, meter, destpool, src):
     xmlobj = StoragePool(conn, parsexml=destpool.XMLDesc(0))
     poolpath = xmlobj.target_path
 
-    name = StorageVolume.find_free_name(basename, pool_object=destpool)
+    name = StorageVolume.find_free_name(destpool, basename)
     if name != basename:
         logging.debug("Generated non-colliding volume name %s", name)
 

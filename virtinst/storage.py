@@ -461,11 +461,11 @@ class StorageVolume(_StorageObject):
     Base class for building and installing libvirt storage volume xml
     """
     @staticmethod
-    def find_free_name(name, pool_object=None, pool_name=None, conn=None,
+    def find_free_name(pool_object, basename,
                        suffix="", collidelist=None, start_num=0):
         """
-        Finds a name similar (or equal) to passed 'name' that is not in use
-        by another pool
+        Finds a name similar (or equal) to passed 'basename' that is not
+        in use by another pool
 
         This function scans the list of existing Volumes on the passed or
         looked up pool object for a collision with the passed name. If the
@@ -482,42 +482,11 @@ class StorageVolume(_StorageObject):
         @rtype: C{str}
         """
         collidelist = collidelist or []
-        pool_object = StorageVolume.lookup_pool_by_name(
-                                                    pool_object=pool_object,
-                                                    pool_name=pool_name,
-                                                    conn=conn)
         pool_object.refresh(0)
 
-        return util.generate_name(name, pool_object.storageVolLookupByName,
-                                   suffix, collidelist=collidelist,
-                                   start_num=start_num)
-
-    @staticmethod
-    def lookup_pool_by_name(pool_object=None, pool_name=None, conn=None):
-        """
-        Returns pool object determined from passed parameters.
-
-        Largely a convenience function for the other static functions.
-        """
-        if pool_object is None and pool_name is None:
-            raise ValueError(_("Must specify pool_object or pool_name"))
-
-        if pool_name is not None and pool_object is None:
-            if conn is None:
-                raise ValueError(_("'conn' must be specified with 'pool_name'"))
-            if not conn.check_conn_support(conn.SUPPORT_CONN_STORAGE):
-                raise ValueError(_("Connection does not support storage "
-                                   "management."))
-            try:
-                pool_object = conn.storagePoolLookupByName(pool_name)
-            except Exception, e:
-                raise ValueError(_("Couldn't find storage pool '%s': %s" %
-                                   (pool_name, str(e))))
-
-        if not isinstance(pool_object, libvirt.virStoragePool):
-            raise ValueError(_("pool_object must be a virStoragePool"))
-
-        return pool_object
+        return util.generate_name(basename, pool_object.storageVolLookupByName,
+                                  suffix, collidelist=collidelist,
+                                  start_num=start_num)
 
     TYPE_FILE = getattr(libvirt, "VIR_STORAGE_VOL_FILE", 0)
     TYPE_BLOCK = getattr(libvirt, "VIR_STORAGE_VOL_BLOCK", 1)

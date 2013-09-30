@@ -104,9 +104,8 @@ class vmmCreateVolume(vmmGObjectUI):
         suffix = self.default_suffix()
         ret = ""
         try:
-            ret = StorageVolume.find_free_name(self.name_hint,
-                                pool_object=self.parent_pool.get_backend(),
-                                suffix=suffix)
+            ret = StorageVolume.find_free_name(
+                self.parent_pool.get_backend(), self.name_hint, suffix=suffix)
         except:
             logging.exception("Error finding a default vol name")
 

@@ -1174,9 +1174,9 @@ def get_default_path(conn, name, collidelist=None):
             if c and os.path.dirname(c) == pool.get_target_path():
                 newcollidelist.append(os.path.basename(c))
 
-        path = virtinst.StorageVolume.find_free_name(name,
-                        pool_object=pool.get_backend(), suffix=suffix,
-                        collidelist=newcollidelist)
+        path = virtinst.StorageVolume.find_free_name(
+            pool.get_backend(), name,
+            suffix=suffix, collidelist=newcollidelist)
 
         path = os.path.join(target, path)
 

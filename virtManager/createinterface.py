@@ -549,11 +549,9 @@ class vmmCreateInterface(vmmGObjectUI):
 
         name = _("No interface selected")
         if itype == Interface.INTERFACE_TYPE_BRIDGE:
-            name = Interface.find_free_name(self.conn.get_backend(),
-                                                      "br")
+            name = Interface.find_free_name(self.conn.get_backend(), "br")
         elif itype == Interface.INTERFACE_TYPE_BOND:
-            name = Interface.find_free_name(self.conn.get_backend(),
-                                                      "bond")
+            name = Interface.find_free_name(self.conn.get_backend(), "bond")
         else:
             ifaces = self.get_config_selected_interfaces()
             if len(ifaces) > 0:

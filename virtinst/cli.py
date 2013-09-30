@@ -1354,11 +1354,8 @@ def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
 
 
         poolobj = guest.conn.storagePoolLookupByName(pool)
-        vname = virtinst.StorageVolume.find_free_name(conn=guest.conn,
-                                            pool_object=poolobj,
-                                            name=guest.name,
-                                            suffix=".img",
-                                            start_num=_disk_counter.next())
+        vname = virtinst.StorageVolume.find_free_name(
+            poolobj, guest.name, suffix=".img", start_num=_disk_counter.next())
 
         volinst = virtinst.VirtualDisk.build_vol_install(
                 guest.conn, vname, poolobj, size, sparse)

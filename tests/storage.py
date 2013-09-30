@@ -47,7 +47,7 @@ def _findFreePoolName(conn, namebase):
     while True:
         poolname = namebase + "-%d" % i
         try:
-            StorageVolume.lookup_pool_by_name(conn=conn, pool_name=poolname)
+            conn.storagePoolLookupByName(poolname)
             i += 1
         except:
             return poolname
