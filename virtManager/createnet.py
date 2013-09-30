@@ -753,25 +753,22 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.conn.schedule_priority_tick(pollnet=True)
             self.close()
 
-    def _async_net_create(self, asyncjob, xml):
+    def _async_net_create(self, asyncjob, net):
         ignore = asyncjob
-        self.conn.create_network(xml)
+        net.install()
 
     def finish(self, ignore):
         try:
             net = self._build_xmlobj()
-            xml = net.get_xml_config()
         except Exception, e:
             self.err.show_erro(_("Error generating network xml: %s" % str(e)))
             return
-
-        logging.debug("Generated network XML:\n" + xml)
 
         self.topwin.set_sensitive(False)
         self.topwin.get_window().set_cursor(
             Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
-        progWin = vmmAsyncJob(self._async_net_create, [xml],
+        progWin = vmmAsyncJob(self._async_net_create, [net],
                               self._finish_cb, [],
                               _("Creating virtual network..."),
                               _("Creating the virtual network may take a "

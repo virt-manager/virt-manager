@@ -20,6 +20,8 @@
 Classes for building and installing libvirt <network> XML
 """
 
+import logging
+
 import libvirt
 
 from virtinst import util
@@ -179,3 +181,24 @@ class Network(XMLBuilder):
         route = _NetworkRoute(self.conn)
         self._add_child(route)
         return route
+
+    ##################
+    # build routines #
+    ##################
+
+    def install(self, start=True, autostart=True):
+        xml = self.get_xml_config()
+        logging.debug("Creating virtual network '%s' with xml:\n%s",
+                      self.name, xml)
+
+        net = self.conn.networkDefineXML(xml)
+        try:
+            if start:
+                net.create()
+            if autostart:
+                net.setAutostart(autostart)
+        except:
+            net.undefine()
+            raise
+
+        return net

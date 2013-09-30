@@ -732,18 +732,6 @@ class vmmConnection(vmmGObject):
     def define_interface(self, xml):
         return self._backend.interfaceDefineXML(xml, 0)
 
-    def create_network(self, xml, start=True, autostart=True):
-        net = self.define_network(xml)
-        try:
-            if start:
-                net.create()
-            net.setAutostart(autostart)
-        except:
-            net.undefine()
-            raise
-
-        return net
-
     def _rename_helper(self, objtype, define_cb, obj, origxml, newxml):
         # Undefine the original object
         obj.delete()
