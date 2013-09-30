@@ -27,8 +27,12 @@ import time
 import threading
 
 import libvirt
-import virtinst
+
+from virtinst import DomainSnapshot
+from virtinst import Guest
 from virtinst import util
+from virtinst import VirtualChannelDevice
+from virtinst import VirtualController
 
 from virtManager import uihelpers
 from virtManager.libvirtobject import vmmLibvirtObject
@@ -146,7 +150,7 @@ class vmmDomainSnapshot(vmmLibvirtObject):
     """
     def __init__(self, conn, backend):
         vmmLibvirtObject.__init__(self, conn, backend, backend.getName(),
-                                  virtinst.DomainSnapshot)
+                                  DomainSnapshot)
 
         self.refresh_xml()
 
@@ -161,13 +165,22 @@ class vmmDomainSnapshot(vmmLibvirtObject):
         ignore = force
         self._backend.delete()
 
+    def run_status(self):
+        status = DomainSnapshot.state_str_to_int(self.get_xmlobj().state)
+        return vmmDomain.pretty_run_status(status)
+    def run_status_icon_name(self):
+        status = DomainSnapshot.state_str_to_int(self.get_xmlobj().state)
+        if status not in uihelpers.vm_status_icons:
+            logging.debug("Unknown status %d, using NOSTATE", status)
+            status = libvirt.VIR_DOMAIN_NOSTATE
+        return uihelpers.vm_status_icons[status]
+
 
 class vmmDomain(vmmLibvirtObject):
     """
     Class wrapping virDomain libvirt objects. Is also extended to be
     backed by a virtinst.Guest object for new VM 'customize before install'
     """
-
     __gsignals__ = {
         "status-changed": (GObject.SignalFlags.RUN_FIRST, None, [int, int]),
         "resources-sampled": (GObject.SignalFlags.RUN_FIRST, None, []),
@@ -175,9 +188,30 @@ class vmmDomain(vmmLibvirtObject):
         "pre-startup": (GObject.SignalFlags.RUN_FIRST, None, [object]),
     }
 
+    @staticmethod
+    def pretty_run_status(status, has_saved=False):
+        if status == libvirt.VIR_DOMAIN_RUNNING:
+            return _("Running")
+        elif status == libvirt.VIR_DOMAIN_PAUSED:
+            return _("Paused")
+        elif status == libvirt.VIR_DOMAIN_SHUTDOWN:
+            return _("Shutting Down")
+        elif status == libvirt.VIR_DOMAIN_SHUTOFF:
+            if has_saved:
+                return _("Saved")
+            else:
+                return _("Shutoff")
+        elif status == libvirt.VIR_DOMAIN_CRASHED:
+            return _("Crashed")
+        elif (hasattr(libvirt, "VIR_DOMAIN_PMSUSPENDED") and
+              status == libvirt.VIR_DOMAIN_PMSUSPENDED):
+            return _("Suspended")
+
+        logging.debug("Unknown status %d, returning 'Unknown'", status)
+        return _("Unknown")
+
     def __init__(self, conn, backend, key):
-        vmmLibvirtObject.__init__(self, conn, backend, key,
-                                  virtinst.Guest)
+        vmmLibvirtObject.__init__(self, conn, backend, key, Guest)
 
         self.uuid = key
         self.cloning = False
@@ -215,7 +249,7 @@ class vmmDomain(vmmLibvirtObject):
 
         self.inspection = vmmInspectionData()
 
-        if isinstance(self._backend, virtinst.Guest):
+        if isinstance(self._backend, Guest):
             return
 
         self._libvirt_init()
@@ -702,10 +736,10 @@ class vmmDomain(vmmLibvirtObject):
                 return
 
             guest = self._get_xmlobj_to_define()
-            is_spice = (newval == virtinst.VirtualGraphics.TYPE_SPICE)
+            is_spice = (newval == "spice")
 
             if is_spice:
-                dev = virtinst.VirtualChannelDevice(guest.conn)
+                dev = VirtualChannelDevice(guest.conn)
                 dev.type = dev.TYPE_SPICEVMC
                 guest.add_device(dev)
             else:
@@ -774,12 +808,12 @@ class vmmDomain(vmmLibvirtObject):
             guest = self._get_xmlobj_to_define()
             ctrls = guest.get_devices("controller")
             ctrls = [x for x in ctrls if (x.type ==
-                     virtinst.VirtualController.TYPE_USB)]
+                     VirtualController.TYPE_USB)]
             for dev in ctrls:
                 guest.remove_device(dev)
 
             if newmodel == "ich9-ehci1":
-                for dev in virtinst.VirtualController.get_usb2_controllers(
+                for dev in VirtualController.get_usb2_controllers(
                         guest.conn):
                     guest.add_device(dev)
 
@@ -1495,29 +1529,6 @@ class vmmDomain(vmmLibvirtObject):
         self._startup_vcpus = None
         self.vcpu_max_count()
 
-    def run_status(self):
-        status = self.status()
-
-        if status == libvirt.VIR_DOMAIN_RUNNING:
-            return _("Running")
-        elif status == libvirt.VIR_DOMAIN_PAUSED:
-            return _("Paused")
-        elif status == libvirt.VIR_DOMAIN_SHUTDOWN:
-            return _("Shutting Down")
-        elif status == libvirt.VIR_DOMAIN_SHUTOFF:
-            if self.hasSavedImage():
-                return _("Saved")
-            else:
-                return _("Shutoff")
-        elif status == libvirt.VIR_DOMAIN_CRASHED:
-            return _("Crashed")
-        elif (hasattr(libvirt, "VIR_DOMAIN_PMSUSPENDED") and
-              status == libvirt.VIR_DOMAIN_PMSUSPENDED):
-            return _("Suspended")
-
-        logging.debug("Unknown status %d, returning 'Unknown'")
-        return _("Unknown")
-
     def _normalize_status(self, status):
         if status == libvirt.VIR_DOMAIN_NOSTATE:
             return libvirt.VIR_DOMAIN_RUNNING
@@ -1547,12 +1558,13 @@ class vmmDomain(vmmLibvirtObject):
     def is_paused(self):
         return self.status() in [libvirt.VIR_DOMAIN_PAUSED]
 
+    def run_status(self):
+        return self.pretty_run_status(self.status(), self.hasSavedImage())
     def run_status_icon_name(self):
         status = self.status()
         if status not in uihelpers.vm_status_icons:
-            logging.debug("Unknown status %d, using NOSTATE")
+            logging.debug("Unknown status %d, using NOSTATE", status)
             status = libvirt.VIR_DOMAIN_NOSTATE
-
         return uihelpers.vm_status_icons[status]
 
     def force_update_status(self):

@@ -17,6 +17,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
+import libvirt
+
 from virtinst import util
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty
 
@@ -27,6 +29,24 @@ class DomainSnapshot(XMLBuilder):
         return util.generate_name("snapshot", vm.snapshotLookupByName,
                                   sep="", start_num=1, force_num=True,
                                   collidelist=collidelist)
+
+    @staticmethod
+    def state_str_to_int(state):
+        statemap = {
+            "nostate": libvirt.VIR_DOMAIN_NOSTATE,
+            "running": libvirt.VIR_DOMAIN_RUNNING,
+            "blocked": libvirt.VIR_DOMAIN_BLOCKED,
+            "paused": libvirt.VIR_DOMAIN_PAUSED,
+            "shutdown": libvirt.VIR_DOMAIN_SHUTDOWN,
+            "shutoff": libvirt.VIR_DOMAIN_SHUTOFF,
+            "crashed": libvirt.VIR_DOMAIN_CRASHED,
+            "pmsuspended": 7,
+        }
+
+        if state == "disk-snapshot" or state not in statemap:
+            state = "shutoff"
+        return statemap.get(state, libvirt.VIR_DOMAIN_NOSTATE)
+
 
     _XML_ROOT_NAME = "domainsnapshot"
     _XML_PROP_ORDER = ["name", "description", "creationTime"]

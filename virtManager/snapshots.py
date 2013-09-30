@@ -26,31 +26,12 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 # pylint: enable=E0611
 
-import libvirt
-
 from virtinst import DomainSnapshot
 from virtinst import util
 
 from virtManager import uihelpers
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
-
-
-def _snapshot_state_icon_name(state):
-    statemap = {
-        "nostate": libvirt.VIR_DOMAIN_NOSTATE,
-        "running": libvirt.VIR_DOMAIN_RUNNING,
-        "blocked": libvirt.VIR_DOMAIN_BLOCKED,
-        "paused": libvirt.VIR_DOMAIN_PAUSED,
-        "shutdown": libvirt.VIR_DOMAIN_SHUTDOWN,
-        "shutoff": libvirt.VIR_DOMAIN_SHUTOFF,
-        "crashed": libvirt.VIR_DOMAIN_CRASHED,
-        "pmsuspended": 7,
-    }
-
-    if state == "disk-snapshot" or state not in statemap:
-        state = "shutoff"
-    return uihelpers.vm_status_icons[statemap[state]]
 
 
 class vmmSnapshotPage(vmmGObjectUI):
@@ -188,7 +169,8 @@ class vmmSnapshotPage(vmmGObjectUI):
         xmlobj = snap and snap.get_xmlobj() or None
         name = snap and xmlobj.name or ""
         desc = snap and xmlobj.description or ""
-        state = snap and xmlobj.state or "shutoff"
+        state = snap and snap.run_status() or ""
+        icon = snap and snap.run_status_icon_name() or None
         timestamp = ""
         if snap:
             timestamp = str(datetime.datetime.fromtimestamp(
@@ -203,9 +185,9 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-description").get_buffer().set_text(desc)
 
         self.widget("snapshot-status-text").set_text(state)
-        self.widget("snapshot-status-icon").set_from_icon_name(
-                            _snapshot_state_icon_name(state),
-                            Gtk.IconSize.MENU)
+        if icon:
+            self.widget("snapshot-status-icon").set_from_icon_name(
+                icon, Gtk.IconSize.MENU)
 
         self.widget("snapshot-add").set_sensitive(True)
         self.widget("snapshot-delete").set_sensitive(bool(snap))
