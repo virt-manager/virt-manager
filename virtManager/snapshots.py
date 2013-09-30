@@ -108,22 +108,16 @@ class vmmSnapshotPage(vmmGObjectUI):
         buf = Gtk.TextBuffer()
         self.widget("snapshot-new-description").set_buffer(buf)
 
-        model = Gtk.ListStore(object, str, str, bool)
+        model = Gtk.ListStore(object, str, str)
         model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         col = Gtk.TreeViewColumn("")
         col.set_min_width(150)
         col.set_expand(True)
         col.set_spacing(6)
-        img = Gtk.CellRendererPixbuf()
-        img.set_property("icon-name", Gtk.STOCK_YES)
-        img.set_property("stock-size", Gtk.IconSize.MENU)
-        img.set_property("xalign", 0)
         txt = Gtk.CellRendererText()
         col.pack_start(txt, False)
-        col.pack_start(img, True)
         col.add_attribute(txt, 'text', 1)
-        col.add_attribute(img, 'visible', 3)
 
         slist = self.widget("snapshot-list")
         slist.set_model(model)
@@ -135,7 +129,7 @@ class vmmSnapshotPage(vmmGObjectUI):
     # Functional bits #
     ###################
 
-    def _get_current_snapshot(self):
+    def _get_selected_snapshot(self):
         widget = self.widget("snapshot-list")
         selection = widget.get_selection()
         model, treepath = selection.get_selected()
@@ -173,24 +167,16 @@ class vmmSnapshotPage(vmmGObjectUI):
                                 str(e))
             return
 
-        do_select = None
         for snap in snapshots:
             desc = snap.get_xmlobj().description
             if not uihelpers.can_set_row_none:
                 desc = desc or ""
 
-            current = bool(snap.is_current())
-
-            treeiter = model.append([snap, snap.get_name(),
-                                     desc, current])
-            if current:
-                do_select = treeiter
+            model.append([snap, snap.get_name(), desc])
 
         if len(model):
-            if do_select is None:
-                do_select = model.get_iter_from_string("0")
-            self.widget("snapshot-list").get_selection().select_iter(do_select)
-
+            self.widget("snapshot-list").get_selection().select_iter(
+                model.get_iter_from_string("0"))
         self._initial_populate = True
 
     def _set_snapshot_state(self, snap=None):
@@ -205,13 +191,9 @@ class vmmSnapshotPage(vmmGObjectUI):
             timestamp = str(datetime.datetime.fromtimestamp(
                 xmlobj.creationTime))
 
-        current = ""
-        if snap and snap.is_current():
-            current = " (current)"
         title = ""
         if name:
-            title = "<b>Snapshot '%s'%s:</b>" % (util.xml_escape(name),
-                                                 current)
+            title = "<b>Snapshot '%s':</b>" % util.xml_escape(name)
 
         self.widget("snapshot-title").set_markup(title)
         self.widget("snapshot-timestamp").set_text(timestamp)
@@ -294,7 +276,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-apply").set_sensitive(True)
 
     def _on_apply_clicked(self, ignore):
-        snap = self._get_current_snapshot()
+        snap = self._get_selected_snapshot()
         if not snap:
             return
 
@@ -323,7 +305,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         self._snapshot_new.show()
 
     def _on_start_clicked(self, ignore):
-        snap = self._get_current_snapshot()
+        snap = self._get_selected_snapshot()
         result = self.err.yes_no(_("Are you sure you want to revert to "
                                    "snapshot '%s'? All disk changes since "
                                    "the last snapshot will be discarded.") %
@@ -339,7 +321,7 @@ class vmmSnapshotPage(vmmGObjectUI):
                             finish_cb=self._refresh_snapshots)
 
     def _on_delete_clicked(self, ignore):
-        snap = self._get_current_snapshot()
+        snap = self._get_selected_snapshot()
         if not snap:
             return
 
