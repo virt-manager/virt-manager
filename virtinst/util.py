@@ -182,12 +182,12 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
 
     @param base: The base string to use for the name (e.g. "my-orig-vm-clone")
     @param collision_cb: A callback function to check for collision,
-                         receives the generated name as its only arg
+        receives the generated name as its only arg
     @param lib_collision: If true, the collision_cb is not a boolean function,
-                          and instead throws a libvirt error on failure
+        and instead throws a libvirt error on failure
     @param start_num: The number to start at for generating non colliding names
-    @param sep: The seperator to use between the basename and the generated number
-                (default is "-")
+    @param sep: The seperator to use between the basename and the
+        generated number (default is "-")
     @param force_num: Force the generated name to always end with a number
     @param collidelist: An extra list of names to check for collision
     """
@@ -203,7 +203,7 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
 
     for i in range(start_num, start_num + 100000):
         tryname = base
-        if i != 0 or force_num:
+        if i != start_num or force_num:
             tryname += ("%s%d" % (sep, i))
         tryname += suffix
 

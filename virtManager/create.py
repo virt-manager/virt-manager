@@ -317,15 +317,13 @@ class vmmCreate(vmmGObjectUI):
 
         self.widget("create-pages").set_current_page(PAGE_NAME)
         self.page_changed(None, None, PAGE_NAME)
-        self.widget("startup-error-box").hide()
-        self.widget("install-box").show()
 
         # Name page state
         self.widget("create-vm-name").set_text("")
-        self.widget("create-vm-name").grab_focus()
         self.widget("method-local").set_active(True)
         self.widget("create-conn").set_active(-1)
         activeconn = self.populate_conn_list(urihint)
+        self.widget("arch-expander").set_expanded(False)
 
         try:
             self.set_conn(activeconn, force_validate=True)
@@ -393,6 +391,8 @@ class vmmCreate(vmmGObjectUI):
                                          pollpool=True, polliface=True,
                                          pollnodedev=True, pollmedia=True)
 
+        self.widget("install-box").show()
+        self.widget("startup-error-box").hide()
         self.widget("create-forward").set_sensitive(True)
 
         if self.conn.caps.no_install_options():
@@ -860,16 +860,12 @@ class vmmCreate(vmmGObjectUI):
         else:
             osstr = vlabel
 
-        title = "Ready to begin installation of <b>%s</b>" % self.guest.name
-
         self.widget("finish-warn-os").set_visible(not have_os)
-        self.widget("summary-title").set_markup(title)
         self.widget("summary-os").set_text(osstr)
         self.widget("summary-install").set_text(install)
         self.widget("summary-mem").set_text(mem)
         self.widget("summary-cpu").set_text(cpu)
         self.widget("summary-storage").set_markup(storage)
-
 
     # get_* methods
     def get_config_name(self):
@@ -1283,9 +1279,7 @@ class vmmCreate(vmmGObjectUI):
         curpage = notebook.get_current_page()
         next_page = curpage - 1
 
-        if curpage == PAGE_INSTALL:
-            self.reset_guest_type()
-        elif curpage == PAGE_FINISH and self.skip_disk_page():
+        if curpage == PAGE_FINISH and self.skip_disk_page():
             # Skip over storage page
             next_page -= 1
 
@@ -1312,13 +1306,11 @@ class vmmCreate(vmmGObjectUI):
             self.detect_media_os(forward=True)
             return
 
-        if self.validate(notebook.get_current_page()) is not True:
+        if self.validate(curpage) is not True:
             return
 
         if curpage == PAGE_NAME:
             self.set_install_page()
-            # See if we need to alter our default HV based on install method
-            self.guest_from_install_type()
 
         next_page = self._get_next_pagenum(curpage)
 
@@ -1369,10 +1361,6 @@ class vmmCreate(vmmGObjectUI):
         self.widget("create-finish").grab_focus()
         self.populate_summary()
 
-        # Repopulate the HV list, so we can make install method relevant
-        # changes
-        self.populate_hv()
-
         # Make sure the networking selection takes into account
         # the install method, so we can warn if trying to PXE boot with
         # insufficient network option
@@ -1404,10 +1392,9 @@ class vmmCreate(vmmGObjectUI):
                                                    self.capsguest,
                                                    self.capsdomain)
 
-    def build_guest(self, installer, name):
+    def build_guest(self, installer):
         guest = self.build_guest_stub()
         guest.installer = installer
-        guest.name = name
 
         # Generate UUID (makes customize dialog happy)
         try:
@@ -1434,36 +1421,47 @@ class vmmCreate(vmmGObjectUI):
 
         return guest
 
-    def validate(self, pagenum, oldguest=None):
+    def validate(self, pagenum):
         try:
             if pagenum == PAGE_NAME:
                 return self.validate_name_page()
             elif pagenum == PAGE_INSTALL:
-                return self.validate_install_page(oldguest=oldguest)
+                return self.validate_install_page()
             elif pagenum == PAGE_MEM:
                 return self.validate_mem_page()
             elif pagenum == PAGE_STORAGE:
-                return self.validate_storage_page(oldguest=oldguest)
+                return self.validate_storage_page()
             elif pagenum == PAGE_FINISH:
                 return self.validate_final_page()
-
         except Exception, e:
             self.err.show_err(_("Uncaught error validating install "
                                 "parameters: %s") % str(e))
             return
 
     def validate_name_page(self):
-        name = self.get_config_name()
-
-        try:
-            g = virtinst.Guest(self.conn.get_backend())
-            g.name = name
-        except Exception, e:
-            return self.err.val_err(_("Invalid System Name"), e)
-
+        self.build_guest_stub()
         return True
 
-    def validate_install_page(self, oldguest=None):
+    def _generate_default_name(self, distro, variant):
+        force_num = False
+        if self.guest.os.is_container():
+            basename = "container"
+            force_num = True
+        elif not distro:
+            basename = "vm"
+            force_num = True
+        elif not variant:
+            basename = distro
+        else:
+            basename = variant
+
+        return util.generate_name(basename,
+            self.conn.get_backend().lookupByName,
+            start_num=force_num and 1 or 2, force_num=force_num,
+            sep=not force_num and "-" or "",
+            collidelist=[vm.get_name() for vm in self.conn.vms.values()])
+
+    def validate_install_page(self):
         instmethod = self.get_config_install_page()
         installer = None
         location = None
@@ -1523,9 +1521,8 @@ class vmmCreate(vmmGObjectUI):
 
         # Build the installer and Guest instance
         try:
-            name = self.get_config_name()
             installer = instclass(self.conn.get_backend())
-            self.guest = self.build_guest(installer, name)
+            self.guest = self.build_guest(installer)
             if not self.guest:
                 return False
         except Exception, e:
@@ -1556,7 +1553,6 @@ class vmmCreate(vmmGObjectUI):
                 fsdev.target = "/"
                 fsdev.source = fs
                 self.guest.add_device(fsdev)
-
         except Exception, e:
             return self.err.val_err(
                                 _("Error setting install media location."), e)
@@ -1569,23 +1565,28 @@ class vmmCreate(vmmGObjectUI):
         except ValueError, e:
             return self.err.val_err(_("Error setting OS information."), e)
 
+        try:
+            name = self._generate_default_name(distro, variant)
+            self.widget("create-vm-name").set_text(name)
+            self.guest.name = name
+        except Exception, e:
+            return self.err.val_err(_("Error setting default name."), e)
+
         # Kind of wonky, run storage validation now, which will assign
         # the import path. Import installer skips the storage page.
         if is_import:
-            if not self.validate_storage_page(oldguest=oldguest):
+            if not self.validate_storage_page():
                 return False
 
-        if not oldguest:
-            if self.guest.installer.scratchdir_required():
-                path = util.make_scratchdir(self.guest.conn,
-                                            self.guest.type)
-            elif instmethod == INSTALL_PAGE_ISO:
-                path = self.guest.installer.location
-            else:
-                path = None
+        if self.guest.installer.scratchdir_required():
+            path = util.make_scratchdir(self.guest.conn, self.guest.type)
+        elif instmethod == INSTALL_PAGE_ISO:
+            path = self.guest.installer.location
+        else:
+            path = None
 
-            if path:
-                uihelpers.check_path_search_for_qemu(self.err, self.conn, path)
+        if path:
+            uihelpers.check_path_search_for_qemu(self.err, self.conn, path)
 
         # Validation passed, store the install path (if there is one) in
         # gconf
@@ -1612,7 +1613,7 @@ class vmmCreate(vmmGObjectUI):
 
         return True
 
-    def validate_storage_page(self, oldguest=None):
+    def validate_storage_page(self):
         use_storage = self.widget("enable-storage").get_active()
         instcd = self.get_config_install_page() == INSTALL_PAGE_ISO
         conn = self.conn.get_backend()
@@ -1620,10 +1621,6 @@ class vmmCreate(vmmGObjectUI):
         # CD/ISO install and no disks implies LiveCD
         if instcd:
             self.guest.installer.livecd = not use_storage
-
-        usepath = None
-        if oldguest and self.disk:
-            usepath = self.disk.path
 
         if self.disk and self.disk in self.guest.get_devices("disk"):
             self.guest.remove_device(self.disk)
@@ -1643,9 +1640,7 @@ class vmmCreate(vmmGObjectUI):
             # This can error out
             diskpath, disksize, sparse = self.get_storage_info()
 
-            if usepath:
-                diskpath = usepath
-            elif self.is_default_storage() and not oldguest:
+            if self.is_default_storage():
                 # See if the ideal disk path (/default/pool/vmname.img)
                 # exists, and if unused, prompt the use for using it
                 ideal = uihelpers.get_ideal_path(self.conn,
@@ -1687,26 +1682,23 @@ class vmmCreate(vmmGObjectUI):
             return self.err.val_err(_("Storage parameter error."), e)
 
         isfatal, errmsg = disk.is_size_conflict()
-        if not oldguest and not isfatal and errmsg:
+        if not isfatal and errmsg:
             # Fatal errors are reported when setting 'size'
             res = self.err.ok_cancel(_("Not Enough Free Space"), errmsg)
             if not res:
                 return False
 
         # Disk collision
-        if not oldguest:
-            names = disk.is_conflict_disk(self.guest.conn)
-            if names:
-                res = self.err.yes_no(
-                        _('Disk "%s" is already in use by other guests %s') %
-                         (disk.path, names),
-                        _("Do you really want to use the disk?"))
-                if not res:
-                    return False
+        names = disk.is_conflict_disk(self.guest.conn)
+        if names:
+            res = self.err.yes_no(
+                    _('Disk "%s" is already in use by other guests %s') %
+                     (disk.path, names),
+                    _("Do you really want to use the disk?"))
+            if not res:
+                return False
 
-        if not oldguest:
-            uihelpers.check_path_search_for_qemu(self.err,
-                                                 self.conn, disk.path)
+        uihelpers.check_path_search_for_qemu(self.err, self.conn, disk.path)
 
         self.disk = disk
         self.guest.add_device(self.disk)
@@ -1715,9 +1707,15 @@ class vmmCreate(vmmGObjectUI):
 
     def validate_final_page(self):
         # HV + Arch selection
-        self.guest.type = self.capsdomain.hypervisor_type
-        self.guest.os.os_type = self.capsguest.os_type
-        self.guest.os.arch = self.capsguest.arch
+        name = self.get_config_name()
+        if name != self.guest.name:
+            self.guest.name = name
+            if self.is_default_storage():
+                print "is_default_storage"
+                # User changed the name and we are using default storage
+                # which depends on the VM name. Revalidate things
+                if not self.validate_storage_page():
+                    return False
 
         nettype, devname, macaddr = self.get_config_network_info()
 
@@ -1748,34 +1746,10 @@ class vmmCreate(vmmGObjectUI):
 
         return True
 
-
-    def guest_from_install_type(self):
-        instmeth = self.get_config_install_page()
-
-        if not self.conn.is_xen() and not self.conn.is_test_conn():
-            return
-
-        # FIXME: some things are dependent on domain type (vcpu max)
-        if instmeth in [INSTALL_PAGE_URL, INSTALL_PAGE_IMPORT]:
-            self.change_caps(gtype="xen")
-
-    def reset_guest_type(self):
-        self.change_caps()
-
-    def rebuild_guest(self):
-        pagenum = 0
-        guest = self.guest
-        while True:
-            self.validate(pagenum, oldguest=guest)
-            if pagenum >= PAGE_FINISH:
-                break
-            pagenum = self._get_next_pagenum(pagenum)
-
     def _undo_finish_cursor(self):
         self.topwin.set_sensitive(True)
         self.topwin.get_window().set_cursor(
             Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
-
 
     def finish(self, src_ignore):
         # Validate the final page
@@ -1783,13 +1757,13 @@ class vmmCreate(vmmGObjectUI):
         if self.validate(page) is not True:
             return False
 
-        self.rebuild_guest()
         guest = self.guest
 
         # Start the install
         self.failed_guest = None
         self.topwin.set_sensitive(False)
-        self.topwin.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
+        self.topwin.get_window().set_cursor(
+            Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         if self.get_config_customize():
             try:
