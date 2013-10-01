@@ -53,9 +53,10 @@ class vmmCreateVolume(vmmGObjectUI):
             "on_vol_create_clicked"  : self.finish,
 
             "on_vol_name_changed"    : self.vol_name_changed,
+            "on_vol_format_changed"  : self.vol_format_changed,
+            "on_backing_store_changed" : self._show_alloc,
             "on_vol_allocation_value_changed" : self.vol_allocation_changed,
             "on_vol_capacity_value_changed"   : self.vol_capacity_changed,
-            "on_backing_store_changed" : self.backing_store_changed,
             "on_backing_browse_clicked" : self.browse_backing,
         })
         self.bind_escape_key_close()
@@ -134,9 +135,30 @@ class vmmCreateVolume(vmmGObjectUI):
         self.vol.pool = self.parent_pool.get_backend()
 
     def _can_alloc(self):
-        # Sparse LVM volumes don't auto grow, so alloc=0 is useless
-        islogical = (self.parent_pool.get_type() == "logical")
-        return not islogical
+        if self.parent_pool.get_type() == "logical":
+            # Sparse LVM volumes don't auto grow, so alloc=0 is useless
+            return False
+        if self.get_config_format() == "qcow2":
+            return False
+        if (self.widget("backing-store").is_visible() and
+            self.widget("backing-store").get_text()):
+            return False
+        return True
+    def _show_alloc(self, *args, **kwargs):
+        ignore = args
+        ignore = kwargs
+        uihelpers.set_grid_row_visible(
+            self.widget("vol-allocation"), self._can_alloc())
+
+    def _can_backing(self):
+        if self.parent_pool.get_type() == "logical":
+            return True
+        if self.get_config_format() == "qcow2":
+            return True
+        return False
+    def _show_backing(self):
+        uihelpers.set_grid_row_visible(
+            self.widget("backing-expander"), self._can_backing())
 
     def reset_state(self):
         self._make_stub_vol()
@@ -149,28 +171,29 @@ class vmmCreateVolume(vmmGObjectUI):
         hasformat = bool(len(self.vol.list_formats()))
         uihelpers.set_grid_row_visible(self.widget("vol-format"), hasformat)
         if hasformat:
+            # Select the default storage format
             self.widget("vol-format").set_active(0)
+            default = self.config.get_storage_format()
+            for row in self.widget("vol-format").get_model():
+                if row[0] == default:
+                    self.widget("vol-format").set_active_iter(row.iter)
+                    break
 
         default_alloc = 0
         default_cap = 8
 
+        self.widget("backing-store").set_text("")
         alloc = default_alloc
         if not self._can_alloc():
             alloc = default_cap
-        uihelpers.set_grid_row_visible(self.widget("vol-allocation"),
-                                       self._can_alloc())
-
-        canbacking = (self.parent_pool.get_type() == "logical"
-                      or self.vol.TYPE_FILE == self.vol.TYPE_FILE)
-        uihelpers.set_grid_row_visible(self.widget("backing-expander"),
-                                       canbacking)
+        self._show_alloc()
+        self._show_backing()
         self.widget("backing-expander").set_expanded(False)
-        self.widget("backing-store").set_text("")
 
         self.widget("vol-allocation").set_range(0,
             int(self.parent_pool.get_available() / 1024 / 1024 / 1024))
         self.widget("vol-allocation").set_value(alloc)
-        self.widget("vol-capacity").set_range(1,
+        self.widget("vol-capacity").set_range(0.1,
             int(self.parent_pool.get_available() / 1024 / 1024 / 1024))
         self.widget("vol-capacity").set_value(default_cap)
 
@@ -235,11 +258,10 @@ class vmmCreateVolume(vmmGObjectUI):
         if cap < alloc:
             alloc_widget.set_value(cap)
 
-    def backing_store_changed(self, src):
-        if not self._can_alloc():
-            return
-        uihelpers.set_grid_row_visible(self.widget("vol-allocation"),
-                                       not bool(src.get_text()))
+    def vol_format_changed(self, src):
+        ignore = src
+        self._show_alloc()
+        self._show_backing()
 
     def browse_backing(self, src):
         ignore = src
