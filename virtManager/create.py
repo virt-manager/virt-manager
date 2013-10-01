@@ -302,6 +302,13 @@ class vmmCreate(vmmGObjectUI):
         hyperList.add_attribute(text, 'text', 0)
         hyperList.set_model(hyperModel)
 
+        model = Gtk.ListStore(str)
+        lst = self.widget("config-machine")
+        text = Gtk.CellRendererText()
+        lst.pack_start(text, True)
+        lst.add_attribute(text, 'text', 0)
+        lst.set_model(model)
+
         # Sparse tooltip
         sparse_info = self.widget("config-storage-nosparse-info")
         uihelpers.set_sparse_tooltip(sparse_info)
@@ -414,7 +421,8 @@ class vmmCreate(vmmGObjectUI):
         self.populate_arch()
 
         show_arch = (self.widget("config-hv").get_visible() or
-                     self.widget("config-arch").get_visible())
+                     self.widget("config-arch").get_visible() or
+                     self.widget("config-machines").get_visible())
         uihelpers.set_grid_row_visible(self.widget("arch-expander"), show_arch)
 
         if self.conn.is_xen():
@@ -664,6 +672,33 @@ class vmmCreate(vmmGObjectUI):
         uihelpers.set_grid_row_visible(arch_list, show)
         arch_list.set_active(default)
 
+    def populate_machine(self):
+        lst = self.widget("config-machine")
+        model = lst.get_model()
+        model.clear()
+
+        machines = self.capsdomain.machines
+        if self.capsguest.arch in ["i686", "x86_64"]:
+            machines = []
+
+        defmachine = None
+        if self.capsguest.arch == "armv7l":
+            defmachine = "vexpress-a9"
+        elif self.capsguest.arch == "ppc64":
+            defmachine = "pseries"
+
+        default = 0
+        if defmachine in machines:
+            default = machines.index(defmachine)
+
+        for m in machines:
+            model.append([m])
+
+        show = (len(machines) > 1)
+        uihelpers.set_grid_row_visible(lst, show)
+        if show:
+            lst.set_active(default)
+
     def populate_conn_list(self, urihint=None):
         conn_list = self.widget("create-conn")
         model = conn_list.get_model()
@@ -813,6 +848,7 @@ class vmmCreate(vmmGObjectUI):
                       self.capsguest.os_type,
                       self.capsguest.arch,
                       self.capsdomain.hypervisor_type)
+        self.populate_machine()
 
     def populate_summary(self):
         distro, version, dlabel, vlabel = self.get_config_os_info()
