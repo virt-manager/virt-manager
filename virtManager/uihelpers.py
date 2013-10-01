@@ -363,8 +363,8 @@ def build_cache_combo(vm, combo):
     for m in virtinst.VirtualDisk.cache_types:
         model.append([m, m])
 
-    model.insert(0, [None, "default"])
-    combo.set_active(len(model) - 1)
+    _iter = model.insert(0, [None, "default"])
+    combo.set_active_iter(_iter)
 
 
 def build_io_combo(vm, combo, no_default=False):
