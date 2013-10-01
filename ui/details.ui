@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Mon Sep 30 20:26:08 2013 -->
+<!-- Generated with glade 3.16.0 on Mon Sep 30 20:58:45 2013 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAccelGroup" id="accelgroup1"/>
@@ -388,20 +388,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioToolButton" id="control-snapshots">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Snapshots</property>
-                    <property name="icon_name">vm_clone_wizard</property>
-                    <property name="group">control-vm-console</property>
-                    <signal name="toggled" handler="on_control_snapshots_toggled" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkSeparatorToolItem" id="toolbutton3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -466,15 +452,30 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkRadioToolButton" id="control-snapshots">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Snapshots</property>
+                    <property name="icon_name">vm_clone_wizard</property>
+                    <property name="group">control-vm-console</property>
+                    <signal name="toggled" handler="on_control_snapshots_toggled" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkToggleToolButton" id="control-fullscreen">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Switch to fullscreen view</property>
+                    <property name="halign">end</property>
                     <property name="stock_id">gtk-fullscreen</property>
                     <signal name="toggled" handler="on_control_fullscreen_toggled" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="homogeneous">True</property>
                   </packing>
                 </child>
