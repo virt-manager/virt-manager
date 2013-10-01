@@ -422,7 +422,7 @@ class vmmCreate(vmmGObjectUI):
 
         show_arch = (self.widget("config-hv").get_visible() or
                      self.widget("config-arch").get_visible() or
-                     self.widget("config-machines").get_visible())
+                     self.widget("config-machine").get_visible())
         uihelpers.set_grid_row_visible(self.widget("arch-expander"), show_arch)
 
         if self.conn.is_xen():
