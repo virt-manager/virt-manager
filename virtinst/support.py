@@ -341,7 +341,7 @@ SUPPORT_DOMAIN_MIGRATE_DOWNTIME = _make(
         # downtime value
         args=(30, 12345678))
 SUPPORT_DOMAIN_JOB_INFO = _make(function="virDomain.jobInfo", args=())
-SUPPORT_DOMAIN_CONSOLE_STREAM = _make(version=9003)
+SUPPORT_DOMAIN_CONSOLE_STREAM = _make(version=8006)
 SUPPORT_DOMAIN_SET_METADATA = _make(version=9010)
 SUPPORT_DOMAIN_CPU_HOST_MODEL = _make(version=9010)
 SUPPORT_DOMAIN_LIST_SNAPSHOTS = _make(function="virDomain.listAllSnapshots",
