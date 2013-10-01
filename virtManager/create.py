@@ -295,12 +295,11 @@ class vmmCreate(vmmGObjectUI):
         archList.add_attribute(text, 'text', 0)
         archList.set_model(archModel)
 
-        hyperModel = Gtk.ListStore(str, str, str, bool)
+        hyperModel = Gtk.ListStore(str, str)
         hyperList = self.widget("config-hv")
         text = Gtk.CellRendererText()
         hyperList.pack_start(text, True)
         hyperList.add_attribute(text, 'text', 0)
-        hyperList.add_attribute(text, 'sensitive', 3)
         hyperList.set_model(hyperModel)
 
         # Sparse tooltip
@@ -412,6 +411,11 @@ class vmmCreate(vmmGObjectUI):
         self.caps = self.conn.caps
         self.change_caps()
         self.populate_hv()
+        self.populate_arch()
+
+        show_arch = (self.widget("config-hv").get_visible() or
+                     self.widget("config-arch").get_visible())
+        uihelpers.set_grid_row_visible(self.widget("arch-expander"), show_arch)
 
         if self.conn.is_xen():
             if self.conn.caps.hw_virt_supported():
@@ -603,45 +607,37 @@ class vmmCreate(vmmGObjectUI):
         model.clear()
 
         default = 0
-        tooltip = None
-        instmethod = self.get_config_install_page()
+        guests = self.caps.guests[:]
+        if not (self.conn.is_xen() or self.conn.is_test_conn()):
+            guests = []
+
         for guest in self.caps.guests:
             gtype = guest.os_type
-            for dom in guest.domains:
-                domtype = dom.hypervisor_type
-                label = uihelpers.pretty_hv(gtype, domtype)
-                sensitive = True
+            if not guest.domains:
+                continue
+            dom = guest.domains[0]
+            domtype = dom.hypervisor_type
+            label = uihelpers.pretty_hv(gtype, domtype)
 
-                # Don't add multiple rows for each arch
-                for m in model:
-                    if m[0] == label:
-                        label = None
-                        break
-                if label is None:
-                    continue
+            # Don't add multiple rows for each arch
+            for m in model:
+                if m[0] == label:
+                    label = None
+                    break
+            if label is None:
+                continue
 
-                # Determine if this is the default given by guest_lookup
-                if (gtype == self.capsguest.os_type and
-                    self.capsdomain.hypervisor_type == domtype):
-                    default = len(model)
+            # Determine if this is the default given by guest_lookup
+            if (gtype == self.capsguest.os_type and
+                self.capsdomain.hypervisor_type == domtype):
+                default = len(model)
 
-                if gtype == "xen":
-                    if (instmethod == INSTALL_PAGE_PXE or
-                        instmethod == INSTALL_PAGE_ISO):
-                        sensitive = False
-                        tooltip = _("Only URL or import installs are supported "
-                                    "for paravirt.")
+            model.append([label, gtype])
 
-                model.append([label, gtype, domtype, sensitive])
-
-        hv_info = self.widget("config-hv-info")
-        if tooltip:
-            hv_info.show()
-            hv_info.set_tooltip_text(tooltip)
-        else:
-            hv_info.hide()
-
-        hv_list.set_active(default)
+        show = bool(guests)
+        uihelpers.set_grid_row_visible(hv_list, show)
+        if show:
+            hv_list.set_active(default)
 
     def populate_arch(self):
         arch_list = self.widget("config-arch")
@@ -649,16 +645,23 @@ class vmmCreate(vmmGObjectUI):
         model.clear()
 
         default = 0
+        archs = []
         for guest in self.caps.guests:
-            for dom in guest.domains:
-                if (guest.os_type == self.capsguest.os_type and
-                    dom.hypervisor_type == self.capsdomain.hypervisor_type):
+            if guest.os_type == self.capsguest.os_type:
+                archs.append(guest.arch)
 
-                    arch = guest.arch
-                    if arch == self.capsguest.arch:
-                        default = len(model)
-                    model.append([guest.arch])
+        # Combine x86/i686 to avoid confusion
+        if "x86_64" in archs and "i686" in archs:
+            archs.remove("i686")
 
+        default = 0
+        if self.capsguest.arch in archs:
+            default = archs.index(self.capsguest.arch)
+        for arch in archs:
+            model.append([arch])
+
+        show = not (len(archs) < 2)
+        uihelpers.set_grid_row_visible(arch_list, show)
         arch_list.set_active(default)
 
     def populate_conn_list(self, urihint=None):
@@ -784,7 +787,7 @@ class vmmCreate(vmmGObjectUI):
                 model.append([url])
 
 
-    def change_caps(self, gtype=None, dtype=None, arch=None):
+    def change_caps(self, gtype=None, arch=None):
         if gtype is None:
             # If none specified, prefer HVM. This way, the default install
             # options won't be limited because we default to PV. If hvm not
@@ -795,14 +798,12 @@ class vmmCreate(vmmGObjectUI):
                     break
 
         (newg, newdom) = self.caps.guest_lookup(os_type=gtype,
-                                                typ=dtype,
                                                 accelerated=True,
                                                 arch=arch)
 
         if (self.capsguest and self.capsdomain and
             (newg.arch == self.capsguest.arch and
-            newg.os_type == self.capsguest.os_type and
-            newdom.hypervisor_type == self.capsdomain.hypervisor_type)):
+            newg.os_type == self.capsguest.os_type)):
             # No change
             return
 
@@ -1073,7 +1074,7 @@ class vmmCreate(vmmGObjectUI):
 
         row = src.get_model()[idx]
 
-        self.change_caps(row[1], row[2])
+        self.change_caps(row[1])
         self.populate_arch()
 
     def arch_changed(self, src):
@@ -1082,9 +1083,7 @@ class vmmCreate(vmmGObjectUI):
             return
 
         arch = src.get_model()[idx][0]
-        self.change_caps(self.capsguest.os_type,
-                         self.capsdomain.hypervisor_type,
-                         arch)
+        self.change_caps(self.capsguest.os_type, arch)
 
     def url_box_changed(self, ignore):
         # If the url_entry has focus, don't fire detect_media_os, it means
