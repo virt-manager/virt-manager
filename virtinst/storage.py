@@ -661,6 +661,16 @@ class StorageVolume(_StorageObject):
         if not meter:
             meter = urlgrabber.progress.BaseMeter()
 
+        cloneflags = 0
+        createflags = 0
+        if (self.format == "qcow2" and
+            not self.backing_store and
+            not self.conn.is_test() and
+            self.conn.check_pool_support(
+                self.pool, self.conn.SUPPORT_POOL_METADATA_PREALLOC)):
+            createflags |= libvirt.VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA
+
+
         try:
             self._install_finished = False
             t.start()
@@ -668,9 +678,10 @@ class StorageVolume(_StorageObject):
                         text=_("Allocating '%s'") % self.name)
 
             if self.input_vol:
-                vol = self.pool.createXMLFrom(xml, self.input_vol, 0)
+                vol = self.pool.createXMLFrom(xml, self.input_vol, cloneflags)
             else:
-                vol = self.pool.createXML(xml, 0)
+                logging.debug("Using vol create flags=%s", createflags)
+                vol = self.pool.createXML(xml, createflags)
 
             self._install_finished = True
             t.join()

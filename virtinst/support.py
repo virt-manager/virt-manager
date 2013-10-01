@@ -356,6 +356,9 @@ SUPPORT_POOL_CREATEVOLFROM = _make(function="virStoragePool.createXMLFrom",
 SUPPORT_POOL_ISACTIVE = _make(function="virStoragePool.isActive", args=())
 SUPPORT_POOL_LISTALLVOLUMES = _make(function="virStoragePool.listAllVolumes",
                                     args=())
+SUPPORT_POOL_METADATA_PREALLOC = _make(
+    flag="VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA",
+    version="1000001")
 
 
 # Interface checks
