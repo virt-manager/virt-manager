@@ -242,7 +242,6 @@ class vmmDomain(vmmLibvirtObject):
 
         self.managedsave_supported = False
         self.remote_console_supported = False
-        self.snapshots_supported = False
         self.title_supported = False
 
         self._enable_net_poll = False
@@ -265,16 +264,6 @@ class vmmDomain(vmmLibvirtObject):
             snap.cleanup()
         self._snapshot_list = None
 
-    def _get_getvcpus_supported(self):
-        return self.conn.check_domain_support(self._backend,
-                                            self.conn.SUPPORT_DOMAIN_GETVCPUS)
-    getvcpus_supported = property(_get_getvcpus_supported)
-
-    def _get_getjobinfo_supported(self):
-        return self.conn.check_domain_support(self._backend,
-                                            self.conn.SUPPORT_DOMAIN_JOB_INFO)
-    getjobinfo_supported = property(_get_getjobinfo_supported)
-
     def _libvirt_init(self):
         """
         Initialization to do if backed by a libvirt virDomain
@@ -285,9 +274,6 @@ class vmmDomain(vmmLibvirtObject):
         self.remote_console_supported = self.conn.check_domain_support(
                                     self._backend,
                                     self.conn.SUPPORT_DOMAIN_CONSOLE_STREAM)
-        self.snapshots_supported = self.conn.check_domain_support(
-                                    self._backend,
-                                    self.conn.SUPPORT_DOMAIN_LIST_SNAPSHOTS)
         self.title_supported = self.conn.check_domain_support(
                                     self._backend,
                                     self.conn.SUPPORT_DOMAIN_GET_METADATA)
@@ -404,6 +390,44 @@ class vmmDomain(vmmLibvirtObject):
         if i < 0:
             return "-"
         return str(i)
+
+    ##################
+    # Support checks #
+    ##################
+
+    def _get_getvcpus_supported(self):
+        return self.conn.check_domain_support(self._backend,
+                                            self.conn.SUPPORT_DOMAIN_GETVCPUS)
+    getvcpus_supported = property(_get_getvcpus_supported)
+
+    def _get_getjobinfo_supported(self):
+        return self.conn.check_domain_support(self._backend,
+                                             self.conn.SUPPORT_DOMAIN_JOB_INFO)
+    getjobinfo_supported = property(_get_getjobinfo_supported)
+
+    def snapshots_supported(self):
+        if not self.conn.check_domain_support(
+            self._backend, self.conn.SUPPORT_DOMAIN_LIST_SNAPSHOTS):
+            return _("Libvirt connection does not support snapshots.")
+
+        if self.list_snapshots():
+            return
+
+        # Check if our disks are all qcow2
+        seen_qcow2 = False
+        for disk in self.get_disk_devices(refresh_if_nec=False):
+            if disk.read_only:
+                continue
+            if not disk.path:
+                continue
+            if disk.driver_type == "qcow2":
+                seen_qcow2 = True
+                continue
+            return _("Snapshots are only supported if all writeable disks "
+                     "images allocated to the guest are qcow2 format.")
+        if not seen_qcow2:
+            return _("Snapshots require at least one writeable qcow2 disk "
+                     "image allocated to the guest.")
 
 
     #############################

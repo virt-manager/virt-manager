@@ -356,6 +356,7 @@ test-many-devices, like an alternate RNG.
     <disk type='file' device='disk'>
       <source file='/dev/default-pool/test-clone-simple.img'/>
       <target dev='hda' bus='ide'/>
+      <driver type="qcow2"/>
     </disk>
     <interface type='user'>
       <mac address='22:11:11:11:11:11'/>

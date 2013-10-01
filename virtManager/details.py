@@ -1335,9 +1335,16 @@ class vmmDetails(vmmGObjectUI):
 
         details = self.widget("details-pages")
         self.page_refresh(details.get_current_page())
-
-        # This is safe to refresh, and is dependent on domain state
         self._refresh_runtime_pinning()
+
+        errmsg = self.vm.snapshots_supported()
+        cansnap = not bool(errmsg)
+        self.widget("control-snapshots").set_sensitive(cansnap)
+        self.widget("details-menu-view-snapshots").set_sensitive(cansnap)
+        tooltip = _("Manage VM snapshots")
+        if not cansnap:
+            tooltip += "\n" + errmsg
+        self.widget("control-snapshots").set_tooltip_text(tooltip)
 
 
     #############################

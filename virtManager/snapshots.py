@@ -155,11 +155,6 @@ class vmmSnapshotPage(vmmGObjectUI):
         model = self.widget("snapshot-list").get_model()
         model.clear()
 
-        if not self.vm.snapshots_supported:
-            self._set_error_page(_("Libvirt connection does not support "
-                                  "snapshots."))
-            return
-
         try:
             snapshots = self.vm.list_snapshots()
         except Exception, e:
