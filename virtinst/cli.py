@@ -147,8 +147,11 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     global quiet
     quiet = do_quiet
 
-    vi_dir = util.get_cache_dir()
-    if not os.access(vi_dir, os.W_OK):
+    vi_dir = None
+    if not "VIRTINST_TEST_SUITE" in os.environ:
+        vi_dir = util.get_cache_dir()
+
+    if vi_dir and not os.access(vi_dir, os.W_OK):
         if os.path.exists(vi_dir):
             raise RuntimeError("No write access to directory %s" % vi_dir)
 
@@ -163,7 +166,6 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     fileFormat = ("[%(asctime)s " + appname + " %(process)d] "
                   "%(levelname)s (%(module)s:%(lineno)d) %(message)s")
     streamErrorFormat = "%(levelname)-8s %(message)s"
-    filename = os.path.join(vi_dir, appname + ".log")
 
     rootLogger = logging.getLogger()
 
@@ -172,11 +174,13 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
         rootLogger.removeHandler(handler)
 
     rootLogger.setLevel(logging.DEBUG)
-    fileHandler = logging.handlers.RotatingFileHandler(filename, "ae",
-                                                       1024 * 1024, 5)
-    fileHandler.setFormatter(logging.Formatter(fileFormat,
-                                               dateFormat))
-    rootLogger.addHandler(fileHandler)
+    if vi_dir:
+        filename = os.path.join(vi_dir, appname + ".log")
+        fileHandler = logging.handlers.RotatingFileHandler(filename, "ae",
+                                                           1024 * 1024, 5)
+        fileHandler.setFormatter(logging.Formatter(fileFormat,
+                                                   dateFormat))
+        rootLogger.addHandler(fileHandler)
 
     streamHandler = VirtStreamHandler(sys.stderr)
     if debug_stdout:

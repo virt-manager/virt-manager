@@ -43,6 +43,7 @@ urikvm = uriqemu + _capsprefix + "libvirt-1.1.2-qemu-caps.xml"
 urilxc = fakeuri + _capsprefix + "capabilities-lxc.xml,lxc"
 
 os.environ["VIRTINST_TEST_SCRATCHDIR"] = os.getcwd()
+os.environ["VIRTINST_TEST_SUITE"] = "1"
 
 
 def get_debug():
