@@ -205,7 +205,7 @@ class vmmLibvirtObject(vmmGObject):
         return self._xmlobj_to_define
 
     def _redefine_helper(self, origxml, newxml):
-        uihelpers.log_redefine_xml_diff(origxml, newxml)
+        uihelpers.log_redefine_xml_diff(self, origxml, newxml)
 
         if origxml != newxml:
             self._define(newxml)

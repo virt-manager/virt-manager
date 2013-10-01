@@ -1415,9 +1415,11 @@ def exception_is_libvirt_error(e, error):
             e.get_error_code() == getattr(libvirt, error))
 
 
-def log_redefine_xml_diff(origxml, newxml):
+def log_redefine_xml_diff(obj, origxml, newxml):
+    objname = "<%s name=%s>" % (obj.__class__.__name__, obj.get_name())
     if origxml == newxml:
-        logging.debug("Redefine requested, but XML didn't change!")
+        logging.debug("Redefine requested for %s, but XML didn't change!",
+                      objname)
         return
 
     import difflib
@@ -1425,4 +1427,4 @@ def log_redefine_xml_diff(origxml, newxml):
                                         newxml.splitlines(1),
                                         fromfile="Original XML",
                                         tofile="New XML"))
-    logging.debug("Redefining with XML diff:\n%s", diff)
+    logging.debug("Redefining %s with XML diff:\n%s", objname, diff)
