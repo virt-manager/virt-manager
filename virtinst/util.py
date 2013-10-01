@@ -479,7 +479,7 @@ def make_scratchdir(conn, hvtype):
     if (not scratch or
         not os.path.exists(scratch) or
         not os.access(scratch, os.W_OK)):
-        scratch = os.path.expanduser("~/.virtinst/boot")
+        scratch = os.path.join(get_cache_dir(), "boot")
         if not os.path.exists(scratch):
             os.makedirs(scratch, 0751)
 
@@ -500,3 +500,19 @@ def pretty_bytes(val):
         return "%2.2f GB" % (val / (1024.0 * 1024.0 * 1024.0))
     else:
         return "%2.2f MB" % (val / (1024.0 * 1024.0))
+
+
+def get_cache_dir():
+    ret = ""
+    try:
+        # We don't want to depend on glib for virt-install
+        from gi.repository import GLib  # pylint: disable=E0611
+        ret = GLib.get_user_cache_dir()
+    except ImportError:
+        pass
+
+    if not ret:
+        ret = os.environ.get("XDG_CACHE_HOME")
+    if not ret:
+        ret = os.path.expanduser("~/.cache")
+    return os.path.join(ret, "virt-manager")

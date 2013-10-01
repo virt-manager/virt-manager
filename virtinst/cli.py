@@ -147,11 +147,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     global quiet
     quiet = do_quiet
 
-    dirname = "~/.virtinst"
-    if appname == "virt-manager":
-        dirname = "~/.virt-manager"
-
-    vi_dir = os.path.expanduser(dirname)
+    vi_dir = util.get_cache_dir()
     if not os.access(vi_dir, os.W_OK):
         if os.path.exists(vi_dir):
             raise RuntimeError("No write access to directory %s" % vi_dir)
