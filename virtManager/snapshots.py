@@ -19,10 +19,14 @@
 #
 
 import datetime
+import glob
 import logging
+import os
+import StringIO
 
 # pylint: disable=E0611
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 # pylint: enable=E0611
 
@@ -32,6 +36,23 @@ from virtinst import util
 from virtManager import uihelpers
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
+
+
+mimemap = {
+    "image/x-portable-pixmap": "ppm",
+    "image/png": "png",
+}
+
+
+def _mime_to_ext(val, reverse=False):
+    for m, e in mimemap.items():
+        if val == m and not reverse:
+            return e
+        if val == e and reverse:
+            return m
+    logging.debug("Don't know how to convert %s=%s to %s",
+                  reverse and "extension" or "mime", val,
+                  reverse and "mime" or "extension")
 
 
 class vmmSnapshotPage(vmmGObjectUI):
@@ -137,9 +158,9 @@ class vmmSnapshotPage(vmmGObjectUI):
             pass
         return None
 
-    def _refresh_snapshots(self):
+    def _refresh_snapshots(self, select_name=None):
         self.vm.refresh_snapshots()
-        self._populate_snapshot_list()
+        self._populate_snapshot_list(select_name)
 
     def show_page(self):
         if not self._initial_populate:
@@ -150,7 +171,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-notebook").set_current_page(1)
         self.widget("snapshot-error-label").set_text(msg)
 
-    def _populate_snapshot_list(self):
+    def _populate_snapshot_list(self, select_name=None):
         cursnap = self._get_selected_snapshot()
         model = self.widget("snapshot-list").get_model()
         model.clear()
@@ -189,9 +210,48 @@ class vmmSnapshotPage(vmmGObjectUI):
         if has_internal and has_external:
             model.append([None, None, None, None, "2"])
 
-        uihelpers.set_row_selection(self.widget("snapshot-list"),
-                                    cursnap and cursnap.get_name() or None)
+        select_name = select_name or (cursnap and cursnap.get_name() or None)
+        uihelpers.set_row_selection(self.widget("snapshot-list"), select_name)
         self._initial_populate = True
+
+    def _make_screenshot_pixbuf(self, mime, sdata):
+        loader = GdkPixbuf.PixbufLoader.new_with_mime_type(mime)
+        loader.write(sdata)
+        pixbuf = loader.get_pixbuf()
+        loader.close()
+
+        maxsize = 450
+        def _scale(big, small, maxsize):
+            if big <= maxsize:
+                return big, small
+            factor = float(maxsize) / float(big)
+            return maxsize, int(factor * float(small))
+
+        width = pixbuf.get_width()
+        height = pixbuf.get_height()
+        if width > height:
+            width, height = _scale(width, height, maxsize)
+        else:
+            height, width = _scale(height, width, maxsize)
+
+        return pixbuf.scale_simple(width, height,
+                                   GdkPixbuf.InterpType.BILINEAR)
+
+    def _read_screenshot_file(self, name):
+        if not name:
+            return
+
+        cache_dir = self.vm.get_cache_dir()
+        basename = os.path.join(cache_dir, "snap-screenshot-%s" % name)
+        files = glob.glob(basename + ".*")
+        if not files:
+            return
+
+        filename = files[0]
+        mime = _mime_to_ext(os.path.splitext(filename)[1][1:], reverse=True)
+        if not mime:
+            return
+        return self._make_screenshot_pixbuf(mime, file(filename, "rb").read())
 
     def _set_snapshot_state(self, snap=None):
         self.widget("snapshot-notebook").set_current_page(0)
@@ -234,6 +294,12 @@ class vmmSnapshotPage(vmmGObjectUI):
                 mode = _("External disk only")
             self.widget("snapshot-mode").set_text(mode)
 
+        sn = self._read_screenshot_file(name)
+        self.widget("snapshot-screenshot").set_visible(bool(sn))
+        self.widget("snapshot-screenshot-label").set_visible(not bool(sn))
+        if sn:
+            self.widget("snapshot-screenshot").set_from_pixbuf(sn)
+
         self.widget("snapshot-add").set_sensitive(True)
         self.widget("snapshot-delete").set_sensitive(bool(snap))
         self.widget("snapshot-start").set_sensitive(bool(snap))
@@ -243,6 +309,52 @@ class vmmSnapshotPage(vmmGObjectUI):
     ##################
     # 'New' handling #
     ##################
+
+    def _take_screenshot(self):
+        stream = None
+        try:
+            stream = self.vm.conn.get_backend().newStream(0)
+            screen = 0
+            flags = 0
+            mime = self.vm.get_backend().screenshot(stream, screen, flags)
+
+            ret = StringIO.StringIO()
+            def _write_cb(_stream, data, userdata):
+                ignore = stream
+                ignore = userdata
+                ret.write(data)
+
+            stream.recvAll(_write_cb, None)
+            return mime, ret.getvalue()
+        finally:
+            try:
+                if stream:
+                    stream.finish()
+            except:
+                pass
+
+    def _get_screenshot(self):
+        if not self.vm.is_active():
+            logging.debug("Skipping screenshot since VM is not active")
+            return
+        if not self.vm.get_graphics_devices():
+            logging.debug("Skipping screenshot since VM has no graphics")
+            return
+
+        try:
+            mime, sdata = self._take_screenshot()
+        except:
+            logging.exception("Error taking screenshot")
+            return
+
+        ext = _mime_to_ext(mime)
+        if not ext:
+            return
+
+        newpix = self._make_screenshot_pixbuf(mime, sdata)
+        setattr(newpix, "vmm_mimetype", mime)
+        setattr(newpix, "vmm_sndata", sdata)
+        return newpix
 
     def _reset_new_state(self):
         collidelist = [s.get_xmlobj().name for s in self.vm.list_snapshots()]
@@ -257,10 +369,17 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-new-status-icon").set_from_icon_name(
             self.vm.run_status_icon_name(), Gtk.IconSize.MENU)
 
+        sn = self._get_screenshot()
+        uihelpers.set_grid_row_visible(
+            self.widget("snapshot-new-screenshot"), bool(sn))
+        if sn:
+            self.widget("snapshot-new-screenshot").set_from_pixbuf(sn)
+
+
     def _snapshot_new_name_changed(self, src):
         self.widget("snapshot-new-ok").set_sensitive(bool(src.get_text()))
 
-    def _new_finish_cb(self, error, details):
+    def _new_finish_cb(self, error, details, newname):
         self.topwin.set_sensitive(True)
         self.topwin.get_window().set_cursor(
                 Gdk.Cursor.new(Gdk.CursorType.TOP_LEFT_ARROW))
@@ -269,7 +388,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             error = _("Error creating snapshot: %s") % error
             self.err.show_err(error, details=details)
             return
-        self._refresh_snapshots()
+        self._refresh_snapshots(newname)
 
     def _validate_new_snapshot(self):
         name = self.widget("snapshot-new-name").get_text()
@@ -281,14 +400,56 @@ class vmmSnapshotPage(vmmGObjectUI):
             newsnap.name = name
             newsnap.description = desc or None
             newsnap.validate()
-            return newsnap.get_xml_config()
+            newsnap.get_xml_config()
+            return newsnap
         except Exception, e:
             return self.err.val_err(_("Error validating snapshot: %s" % e))
 
+    def _get_screenshot_data_for_save(self):
+        snwidget = self.widget("snapshot-new-screenshot")
+        if not snwidget.is_visible():
+            return None, None
+
+        sn = snwidget.get_pixbuf()
+        if not sn:
+            return None, None
+
+        mime = getattr(sn, "vmm_mimetype", None)
+        sndata = getattr(sn, "vmm_sndata", None)
+        return mime, sndata
+
+    def _do_create_snapshot(self, asyncjob, xml, name, mime, sndata):
+        ignore = asyncjob
+
+        self.vm.create_snapshot(xml)
+
+        try:
+            cachedir = self.vm.get_cache_dir()
+            basesn = os.path.join(cachedir, "snap-screenshot-%s" % name)
+
+            # Remove any pre-existing screenshots so we don't show stale data
+            for ext in mimemap.values():
+                p = basesn + "." + ext
+                if os.path.exists(basesn + "." + ext):
+                    os.unlink(p)
+
+            if not mime or not sndata:
+                return
+
+            filename = basesn + "." + _mime_to_ext(mime)
+            logging.debug("Writing screenshot to %s", filename)
+            file(filename, "wb").write(sndata)
+        except:
+            logging.exception("Error saving screenshot")
+
     def _create_new_snapshot(self):
-        xml = self._validate_new_snapshot()
-        if xml is False:
+        snap = self._validate_new_snapshot()
+        if not snap:
             return
+
+        xml = snap.get_xml_config()
+        name = snap.name
+        mime, sndata = self._get_screenshot_data_for_save()
 
         self.topwin.set_sensitive(False)
         self.topwin.get_window().set_cursor(
@@ -296,8 +457,8 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         self._snapshot_new_close()
         progWin = vmmAsyncJob(
-                    lambda ignore, x: self.vm.create_snapshot(x), [xml],
-                    self._new_finish_cb, [],
+                    self._do_create_snapshot, [xml, name, mime, sndata],
+                    self._new_finish_cb, [name],
                     _("Creating snapshot"),
                     _("Creating virtual machine snapshot"),
                     self.topwin)

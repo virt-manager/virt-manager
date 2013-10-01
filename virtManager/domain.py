@@ -23,6 +23,7 @@ from gi.repository import GObject
 # pylint: enable=E0611
 
 import logging
+import os
 import time
 import threading
 
@@ -1659,6 +1660,12 @@ class vmmDomain(vmmLibvirtObject):
     def set_console_password(self, username, keyid):
         return self.config.set_pervm(self.uuid, "/console-password",
                                      (username, keyid))
+
+    def get_cache_dir(self):
+        ret = os.path.join(self.conn.get_cache_dir(), self.get_uuid())
+        if not os.path.exists(ret):
+            os.mkdir(ret, 0755)
+        return ret
 
 
     ###################

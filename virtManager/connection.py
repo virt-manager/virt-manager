@@ -312,6 +312,13 @@ class vmmConnection(vmmGObject):
                     return self.config.rhel6_defaults
         return True
 
+    def get_cache_dir(self):
+        uri = self.get_uri().replace("/", "_")
+        ret = os.path.join(util.get_cache_dir(), uri)
+        if not os.path.exists(ret):
+            os.mkdir(ret, 755)
+        return ret
+
 
     ####################################
     # Connection pretty print routines #
