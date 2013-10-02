@@ -133,7 +133,7 @@ class _OSVariant(object):
         squeezing out current ones.
     @three_stage_install: If True, this VM has a 3 stage install, AKA windows.
     @xen_disable_acpi: If True, disable acpi/apic for this OS if on old xen.
-        This corresponds with the SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI check
+        This corresponds with the SUPPORT_CONN_SKIP_DEFAULT_ACPI check
     @virtionet: If True, this OS supports virtionet out of the box
     @virtiodisk: If True, this OS supports virtiodisk out of the box
     @virtiommio: If True, this OS supports virtio-mmio out of the box,

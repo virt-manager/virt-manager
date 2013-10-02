@@ -1475,7 +1475,7 @@ class vmmCreate(vmmGObjectUI):
             return
 
         support_spice = guest.conn.check_conn_support(
-                            guest.conn.SUPPORT_CONN_HV_GRAPHICS_SPICE)
+                            guest.conn.SUPPORT_CONN_GRAPHICS_SPICE)
         if not self._rhel6_defaults():
             support_spice = True
 

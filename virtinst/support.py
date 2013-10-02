@@ -125,8 +125,6 @@ class _SupportCheck(object):
         If a hypervisor is not listed, it is assumed to be NOT SUPPORTED.
     @drv_libvirt_version: List of tuples, similar to drv_version, but
         the version number is minimum supported _libvirt_ version
-    @hv_version: A list of tuples of the same form as drv_version, however
-        listing the actual <domain type='%s'/> from the XML. example: 'kvm'
 
     @rhel6_version
     @rhel6_drv_version: Analog of the above params, but for versions for
@@ -136,7 +134,7 @@ class _SupportCheck(object):
     def __init__(self,
                  function=None, args=None, flag=None,
                  version=None, force_version=None,
-                 drv_version=None, drv_libvirt_version=None, hv_version=None,
+                 drv_version=None, drv_libvirt_version=None,
                  rhel6_drv_version=None, rhel6_version=None):
         self.function = function
         self.args = args
@@ -145,7 +143,6 @@ class _SupportCheck(object):
         self.force_version = bool(force_version)
         self.drv_version = drv_version or []
         self.drv_libvirt_version = drv_libvirt_version or []
-        self.hv_version = hv_version or []
 
         self.rhel6_version = rhel6_version and int(rhel6_version) or 0
         self.rhel6_drv_version = rhel6_drv_version or []
@@ -258,26 +255,6 @@ class _SupportCheck(object):
             if not found:
                 return False
 
-        if self.hv_version:
-            found = False
-            hv_type = data
-            for hv, min_hv_ver in self.hv_version:
-                if hv != hv_type:
-                    continue
-
-                # No HV specific version info, just use driver version
-                if min_hv_ver < 0:
-                    if actual_drv_ver <= -min_hv_ver:
-                        found = True
-                        break
-                else:
-                    if actual_drv_ver >= min_hv_ver:
-                        found = True
-                        break
-
-            if not found:
-                return False
-
         return True
 
 
@@ -332,6 +309,25 @@ SUPPORT_CONN_DEFAULT_QCOW2 = _make(
     version=8000, drv_version=[("qemu", 1002000), ("test", 0)])
 SUPPORT_CONN_DEFAULT_USB2 = _make(
     version=9007, drv_version=[("qemu", 1000000), ("test", 0)])
+SUPPORT_CONN_SKIP_DEFAULT_ACPI = _make(drv_version=[("xen", -3001000)])
+SUPPORT_CONN_SOUND_AC97 = _make(version=6000,
+                                force_version=True,
+                                drv_version=[("qemu", 11000)])
+SUPPORT_CONN_SOUND_ICH6 = _make(version=8008,
+                                drv_version=[("qemu", 14000)],
+                                rhel6_drv_version=[("qemu", 12001)],
+                                rhel6_version=8007)
+SUPPORT_CONN_GRAPHICS_SPICE = _make(version=8006,
+                                    drv_version=[("qemu", 14000)])
+SUPPORT_CONN_CHAR_SPICEVMC = _make(version=8008,
+                                   drv_version=[("qemu", 14000)])
+SUPPORT_CONN_DIRECT_INTERFACE = _make(version=8007,
+                                      drv_version=[("qemu", 0),
+                                                   ("test", 0)])
+SUPPORT_CONN_FILESYSTEM = _make(
+    drv_version=[("qemu", 13000), ("lxc", 0), ("openvz", 0), ("test", 0)],
+    drv_libvirt_version=[("qemu", 8005), ("lxc", 0),
+                         ("openvz", 0), ("test", 0)])
 
 # Domain checks
 SUPPORT_DOMAIN_GETVCPUS = _make(function="virDomain.vcpus", args=())
@@ -373,27 +369,6 @@ SUPPORT_INTERFACE_XML_INACTIVE = _make(function="virInterface.XMLDesc",
                                        args=())
 SUPPORT_INTERFACE_ISACTIVE = _make(function="virInterface.isActive", args=())
 
-
-# Conn HV checks
-SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI = _make(drv_version=[("xen", -3001000)])
-SUPPORT_CONN_HV_SOUND_AC97 = _make(version=6000,
-                                   force_version=True,
-                                   drv_version=[("qemu", 11000)])
-SUPPORT_CONN_HV_SOUND_ICH6 = _make(version=8008,
-                                   drv_version=[("qemu", 14000)],
-                                   rhel6_drv_version=[("qemu", 12001)],
-                                   rhel6_version=8007)
-SUPPORT_CONN_HV_GRAPHICS_SPICE = _make(version=8006,
-                                       drv_version=[("qemu", 14000)])
-SUPPORT_CONN_HV_CHAR_SPICEVMC = _make(version=8008,
-                                      drv_version=[("qemu", 14000)])
-SUPPORT_CONN_HV_DIRECT_INTERFACE = _make(version=8007,
-                                         drv_version=[("qemu", 0),
-                                                      ("test", 0)])
-SUPPORT_CONN_HV_FILESYSTEM = _make(
-    drv_version=[("qemu", 13000), ("lxc", 0), ("openvz", 0), ("test", 0)],
-    drv_libvirt_version=[("qemu", 8005), ("lxc", 0),
-                         ("openvz", 0), ("test", 0)])
 
 # Stream checks
 # Latest I tested with, and since we will use it by default

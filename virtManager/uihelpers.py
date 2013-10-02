@@ -616,7 +616,7 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
         else:
             if (show_direct_interfaces and
                 conn.check_conn_support(
-                    conn.SUPPORT_CONN_HV_DIRECT_INTERFACE)):
+                    conn.SUPPORT_CONN_DIRECT_INTERFACE)):
                 sensitive = True
                 nettype = virtinst.VirtualNetworkInterface.TYPE_DIRECT
                 bridge_name = name

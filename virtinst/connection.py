@@ -351,8 +351,6 @@ class VirtualConnection(object):
 
     def check_conn_support(self, feature):
         return self._check_support(feature, self)
-    def check_conn_hv_support(self, feature, hv):
-        return self._check_support(feature, hv)
     def check_domain_support(self, dom, feature):
         return self._check_support(feature, dom)
     def check_pool_support(self, pool, feature):

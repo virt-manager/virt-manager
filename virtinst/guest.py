@@ -634,9 +634,8 @@ class Guest(XMLBuilder):
 
         default = True
         if (self._lookup_osdict_key("xen_disable_acpi", False) and
-            self.conn.check_conn_hv_support(
-                support.SUPPORT_CONN_HV_SKIP_DEFAULT_ACPI,
-                self.type)):
+            self.conn.check_conn_support(
+                support.SUPPORT_CONN_SKIP_DEFAULT_ACPI)):
             default = False
 
         if self.features.acpi == "default":
@@ -765,11 +764,11 @@ class Guest(XMLBuilder):
                 inp.bus  = input_bus
 
     def _set_sound_defaults(self):
-        if self.conn.check_conn_hv_support(
-                support.SUPPORT_CONN_HV_SOUND_ICH6, self.type):
+        if self.conn.check_conn_support(
+                support.SUPPORT_CONN_SOUND_ICH6):
             default = "ich6"
-        elif self.conn.check_conn_hv_support(
-                support.SUPPORT_CONN_HV_SOUND_AC97, self.type):
+        elif self.conn.check_conn_support(
+                support.SUPPORT_CONN_SOUND_AC97):
             default = "ac97"
         else:
             default = "es1370"
@@ -802,7 +801,7 @@ class Guest(XMLBuilder):
         if (has_spice() and
             not has_spice_agent() and
             self.conn.check_conn_support(
-                                    self.conn.SUPPORT_CONN_HV_CHAR_SPICEVMC)):
+                                    self.conn.SUPPORT_CONN_CHAR_SPICEVMC)):
             agentdev = virtinst.VirtualChannelDevice(self.conn)
             agentdev.type = agentdev.TYPE_SPICEVMC
             self.add_device(agentdev)

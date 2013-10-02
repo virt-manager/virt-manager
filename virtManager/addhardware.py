@@ -370,9 +370,8 @@ class vmmAddHardware(vmmGObjectUI):
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."))
         add_hw_option("Filesystem", Gtk.STOCK_DIRECTORY, PAGE_FILESYSTEM,
-                      self.conn.check_conn_hv_support(
-                        self.conn.SUPPORT_CONN_HV_FILESYSTEM,
-                        self.vm.get_hv_type()),
+                      self.conn.check_conn_support(
+                        self.conn.SUPPORT_CONN_FILESYSTEM),
                       _("Not supported for this hypervisor/libvirt "
                         "combination."))
         add_hw_option("Smartcard", "device_serial", PAGE_SMARTCARD,
