@@ -112,6 +112,7 @@ class vmmCreate(vmmGObjectUI):
             "on_create_vm_name_activate": self.forward,
             "on_create_conn_changed": self.conn_changed,
             "on_method_changed": self.method_changed,
+            "on_config_machine_changed": self.machine_changed,
 
             "on_install_url_box_changed": self.url_box_changed,
             "on_install_local_cdrom_toggled": self.toggle_local_cdrom,
@@ -128,6 +129,10 @@ class vmmCreate(vmmGObjectUI):
             "on_install_local_iso_toggled": self.toggle_local_iso,
             "on_install_detect_os_box_show": self.detect_visibility_changed,
             "on_install_detect_os_box_hide": self.detect_visibility_changed,
+
+            "on_config_kernel_browse_clicked": self.browse_kernel,
+            "on_config_initrd_browse_clicked": self.browse_initrd,
+            "on_config_dtb_browse_clicked": self.browse_dtb,
 
             "on_enable_storage_toggled": self.toggle_enable_storage,
             "on_config_storage_browse_clicked": self.browse_storage,
@@ -364,6 +369,9 @@ class vmmCreate(vmmGObjectUI):
 
         # Install import
         self.widget("install-import-entry").set_text("")
+        self.widget("config-kernel").set_text("")
+        self.widget("config-initrd").set_text("")
+        self.widget("config-dtb").set_text("")
 
         # Install container app
         self.widget("install-app-entry").set_text("/bin/sh")
@@ -391,7 +399,9 @@ class vmmCreate(vmmGObjectUI):
         # Make sure window is a sane size
         self.topwin.resize(1, 1)
 
-    def _change_install_options_from_arch(self):
+    def set_caps_state(self):
+        # State that is dependent on when capsguest changes
+
         # Helper state
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
@@ -401,6 +411,9 @@ class vmmCreate(vmmGObjectUI):
         can_remote_url = self.conn.check_stream_support(
                             self.conn.SUPPORT_STREAM_UPLOAD)
 
+        installable_arch = (self.capsguest.arch in
+                            ["i686", "x86_64", "ppc64", "ia64"])
+
         # Install Options
         method_tree = self.widget("method-tree")
         method_pxe = self.widget("method-pxe")
@@ -408,9 +421,11 @@ class vmmCreate(vmmGObjectUI):
         method_import = self.widget("method-import")
         method_container_app = self.widget("method-container-app")
 
-        method_tree.set_sensitive(is_local or can_remote_url)
-        method_local.set_sensitive(not is_pv and can_storage)
-        method_pxe.set_sensitive(not is_pv)
+        method_tree.set_sensitive((is_local or can_remote_url) and
+                                  installable_arch)
+        method_local.set_sensitive(not is_pv and can_storage and
+                                   installable_arch)
+        method_pxe.set_sensitive(not is_pv and installable_arch)
         method_import.set_sensitive(can_storage)
         virt_methods = [method_local, method_tree, method_pxe, method_import]
 
@@ -432,6 +447,13 @@ class vmmCreate(vmmGObjectUI):
             pxe_tt = base % "PXE"
             local_tt = base % "CDROM/ISO"
 
+        if not installable_arch:
+            msg = (_("Architecture '%s' is not installable") %
+                   self.capsguest.arch)
+            tree_tt = msg
+            local_tt = msg
+            pxe_tt = msg
+
         for w in virt_methods:
             if w.get_sensitive():
                 w.set_active(True)
@@ -452,6 +474,13 @@ class vmmCreate(vmmGObjectUI):
         method_container_app.set_active(True)
         self.widget("virt-install-box").set_visible(not is_container)
         self.widget("container-install-box").set_visible(is_container)
+
+        show_kernel = (self.capsguest.arch not in ["x86_64", "i686"])
+        show_dtb = ("arm" in self.capsguest.arch or
+                    "microblaze" in self.capsguest.arch or
+                    "ppc" in self.capsguest.arch)
+        self.widget("config-kernel-box").set_visible(show_kernel)
+        uihelpers.set_grid_row_visible(self.widget("config-dtb"), show_dtb)
 
     def set_conn_state(self):
         # Update all state that has some dependency on the current connection
@@ -507,9 +536,6 @@ class vmmCreate(vmmGObjectUI):
                  "package is not installed, or the KVM kernel modules "
                  "are not loaded. Your virtual machines may perform poorly.")
                 self.startup_warning(error)
-
-        # Set install options
-        self._change_install_options_from_arch()
 
         # Install local
         iso_option = self.widget("install-local-iso")
@@ -705,6 +731,8 @@ class vmmCreate(vmmGObjectUI):
         uihelpers.set_grid_row_visible(lst, show)
         if show:
             lst.set_active(default)
+        else:
+            lst.emit("changed")
 
     def populate_conn_list(self, urihint=None):
         conn_list = self.widget("create-conn")
@@ -856,7 +884,7 @@ class vmmCreate(vmmGObjectUI):
                       self.capsguest.arch,
                       self.capsdomain.hypervisor_type)
         self.populate_machine()
-        self._change_install_options_from_arch()
+        self.set_caps_state()
 
     def populate_summary(self):
         distro, version, dlabel, vlabel = self.get_config_os_info()
@@ -915,6 +943,13 @@ class vmmCreate(vmmGObjectUI):
     # get_* methods
     def get_config_name(self):
         return self.widget("create-vm-name").get_text()
+
+    def get_config_machine(self):
+        lst = self.widget("config-machine")
+        idx = lst.get_active()
+        if not lst.get_visible() or idx == -1:
+            return None
+        return lst.get_model()[idx][0]
 
     def is_install_page(self):
         notebook = self.widget("create-pages")
@@ -1082,6 +1117,14 @@ class vmmCreate(vmmGObjectUI):
         ignore = src
         self.set_page_num_text(0)
 
+    def machine_changed(self, ignore):
+        machine = self.get_config_machine()
+        show_dtb_virtio = (self.capsguest.arch == "armv7l" and
+                           machine in ["vexpress-a9", "vexpress-15"])
+        print machine, show_dtb_virtio
+        uihelpers.set_grid_row_visible(
+            self.widget("config-dtb-warn-virtio"), show_dtb_virtio)
+
     def netdev_changed(self, ignore):
         self.check_network_selection()
 
@@ -1240,31 +1283,25 @@ class vmmCreate(vmmGObjectUI):
         else:
             nodetect_label.show()
 
-    def browse_oscontainer(self, ignore1=None, ignore2=None):
-        def set_path(ignore, path):
-            self.widget("install-oscontainer-fs").set_text(path)
-        self._browse_file(set_path, is_media=False, is_dir=True)
-
-    def browse_app(self, ignore1=None, ignore2=None):
-        def set_path(ignore, path):
-            self.widget("install-app-entry").set_text(path)
-        self._browse_file(set_path, is_media=False)
-
-    def browse_import(self, ignore1=None, ignore2=None):
-        def set_path(ignore, path):
-            self.widget("install-import-entry").set_text(path)
-        self._browse_file(set_path, is_media=False)
-
-    def browse_iso(self, ignore1=None, ignore2=None):
+    def browse_oscontainer(self, ignore):
+        self._browse_file("install-oscontainer-fs", is_dir=True)
+    def browse_app(self, ignore):
+        self._browse_file("install-app-entry")
+    def browse_import(self, ignore):
+        self._browse_file("install-import-entry")
+    def browse_iso(self, ignore):
         def set_path(ignore, path):
             self.widget("install-local-box").get_child().set_text(path)
-        self._browse_file(set_path, is_media=True)
+        self._browse_file(None, cb=set_path, is_media=True)
         self.widget("install-local-box").activate()
-
-    def browse_storage(self, ignore1):
-        def set_path(ignore, path):
-            self.widget("config-storage-entry").set_text(path)
-        self._browse_file(set_path, is_media=False)
+    def browse_storage(self, ignore):
+        self._browse_file("config-storage-entry")
+    def browse_kernel(self, ignore):
+        self._browse_file("config-kernel")
+    def browse_initrd(self, ignore):
+        self._browse_file("config-initrd")
+    def browse_dtb(self, ignore):
+        self._browse_file("config-dtb")
 
     def toggle_enable_storage(self, src):
         self.widget("config-storage-box").set_sensitive(src.get_active())
@@ -1429,15 +1466,10 @@ class vmmCreate(vmmGObjectUI):
         gdev.type = gtype
         return gdev
 
-
-    def build_guest_stub(self):
-        return self.conn.caps.build_virtinst_guest(self.conn.get_backend(),
-                                                   self.capsguest,
-                                                   self.capsdomain)
-
-    def build_guest(self, installer):
-        guest = self.build_guest_stub()
-        guest.installer = installer
+    def build_guest(self):
+        guest = self.conn.caps.build_virtinst_guest(
+            self.conn.get_backend(), self.capsguest, self.capsdomain)
+        guest.os.machine = self.get_config_machine()
 
         # Generate UUID (makes customize dialog happy)
         try:
@@ -1482,7 +1514,13 @@ class vmmCreate(vmmGObjectUI):
             return
 
     def validate_name_page(self):
-        self.build_guest_stub()
+        # We just set this here because it's needed soon after for distro
+        # detction. But the 'real' self.guest is created in validate_install,
+        # and it just uses build_guest, so don't ever add any other guest
+        # altering here.
+        self.guest = self.build_guest()
+        if not self.guest:
+            return False
         return True
 
     def _generate_default_name(self, distro, variant):
@@ -1564,10 +1602,12 @@ class vmmCreate(vmmGObjectUI):
 
         # Build the installer and Guest instance
         try:
+            # Overwrite the guest
             installer = instclass(self.conn.get_backend())
-            self.guest = self.build_guest(installer)
+            self.guest = self.build_guest()
             if not self.guest:
                 return False
+            self.guest.installer = installer
         except Exception, e:
             return self.err.val_err(
                         _("Error setting installer parameters."), e)
@@ -1607,6 +1647,31 @@ class vmmCreate(vmmGObjectUI):
                 self.guest.os_variant = variant
         except ValueError, e:
             return self.err.val_err(_("Error setting OS information."), e)
+
+        # Setting kernel
+        if instmethod == INSTALL_PAGE_IMPORT:
+            kernel = self.widget("config-kernel").get_text() or None
+            kargs = self.widget("config-kernel-args").get_text() or None
+            initrd = self.widget("config-initrd").get_text() or None
+            dtb = self.widget("config-dtb").get_text() or None
+
+            if not self.widget("config-dtb").get_visible():
+                dtb = None
+            if not self.widget("config-kernel").get_visible():
+                kernel = None
+                initrd = None
+                kargs = None
+
+            self.guest.os.kernel = kernel
+            self.guest.os.initrd = initrd
+            self.guest.os.dtb = dtb
+            self.guest.os.kernel_args = kargs
+
+            require_kernel = ("arm" in self.capsguest.arch)
+            if require_kernel and not kernel:
+                return self.err.val_err(
+                    _("A kernel is required for %s guests.") %
+                    self.capsguest.arch)
 
         try:
             name = self._generate_default_name(distro, variant)
@@ -2069,9 +2134,8 @@ class vmmCreate(vmmGObjectUI):
         try:
             installer = virtinst.DistroInstaller(self.conn)
             installer.location = media
-            guest = self.guest or self.build_guest_stub()
 
-            self.detectedDistro = installer.detect_distro(guest)
+            self.detectedDistro = installer.detect_distro(self.guest)
         except:
             logging.exception("Error detecting distro.")
             self.detectedDistro = -1
@@ -2086,13 +2150,19 @@ class vmmCreate(vmmGObjectUI):
         ret = self.conn.rhel6_defaults(emu)
         return ret
 
-    def _browse_file(self, callback, is_media=False, is_dir=False):
+    def _browse_file(self, cbwidget, cb=None, is_media=False, is_dir=False):
         if is_media:
             reason = self.config.CONFIG_DIR_ISO_MEDIA
         elif is_dir:
             reason = self.config.CONFIG_DIR_FS
         else:
             reason = self.config.CONFIG_DIR_IMAGE
+
+        if cb:
+            callback = cb
+        else:
+            def callback(ignore, text):
+                self.widget(cbwidget).set_text(text)
 
         if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(self.conn)

@@ -215,7 +215,10 @@ class vmmStorageBrowser(vmmGObjectUI):
         row = uihelpers.get_list_selection(self.widget("pool-list"))
         if not row:
             return
-        return self.conn.get_pool(row[0])
+        try:
+            return self.conn.get_pool(row[0])
+        except KeyError:
+            return None
 
     def current_vol_row(self):
         if not self.current_pool():
