@@ -1471,6 +1471,8 @@ class vmmCreate(vmmGObjectUI):
     def get_graphics_device(self, guest):
         if guest.os.is_container():
             return
+        if guest.os.arch not in ["x86_64", "i686", "ppc64"]:
+            return
 
         support_spice = guest.conn.check_conn_support(
                             guest.conn.SUPPORT_CONN_HV_GRAPHICS_SPICE)
@@ -1505,13 +1507,12 @@ class vmmCreate(vmmGObjectUI):
             gdev = self.get_graphics_device(guest)
             if gdev:
                 guest.add_device(gdev)
+                guest.add_default_video_device()
 
-            guest.add_default_video_device()
             guest.add_default_input_device()
             guest.add_default_console_device()
             if self.config.get_new_vm_sound():
                 guest.add_default_sound_device()
-
         except Exception, e:
             self.err.show_err(_("Error setting up default devices:") + str(e))
             return None
