@@ -63,6 +63,12 @@ RHEL6_OS_SUPPORT = [
 ]
 
 
+def pretty_arch(_a):
+    if _a == "armv7l":
+        return "arm"
+    return _a
+
+
 class vmmCreate(vmmGObjectUI):
     __gsignals__ = {
         "action-show-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
@@ -687,11 +693,6 @@ class vmmCreate(vmmGObjectUI):
         arch_list = self.widget("config-arch")
         model = arch_list.get_model()
         model.clear()
-
-        def pretty_arch(_a):
-            if _a == "armv7l":
-                return "arm"
-            return _a
 
         default = 0
         archs = []
@@ -1556,6 +1557,10 @@ class vmmCreate(vmmGObjectUI):
             basename = distro
         else:
             basename = variant
+
+        if self.guest.os.arch != self.conn.caps.host.arch:
+            basename += "-%s" % pretty_arch(self.guest.os.arch)
+            force_num = False
 
         return util.generate_name(basename,
             self.conn.get_backend().lookupByName,
