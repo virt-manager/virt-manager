@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.0 on Wed Oct  2 14:45:17 2013 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
@@ -11,54 +12,6 @@
     <property name="upper">300</property>
     <property name="step_increment">5</property>
     <property name="page_increment">5</property>
-  </object>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name item -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">VNC</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Spice</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="liststore2">
-    <columns>
-      <!-- column-name item -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Never</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Fullscreen only</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Always</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="liststore3">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0">Default</col>
-      </row>
-      <row>
-        <col id="0">Raw</col>
-      </row>
-      <row>
-        <col id="0">QCOW2</col>
-      </row>
-    </data>
   </object>
   <object class="GtkWindow" id="vmm-preferences">
     <property name="can_focus">False</property>
@@ -340,14 +293,7 @@
                               <object class="GtkComboBox" id="prefs-console-scaling">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="model">liststore2</property>
                                 <signal name="changed" handler="on_prefs_console_scaling_changed" swapped="no"/>
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderertext2"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
                               </object>
                               <packing>
                                 <property name="top_attach">1</property>
@@ -527,14 +473,7 @@
                               <object class="GtkComboBox" id="prefs-graphics-type">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="model">liststore1</property>
                                 <signal name="changed" handler="on_prefs_graphics_type_changed" swapped="no"/>
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
                               </object>
                               <packing>
                                 <property name="top_attach">3</property>
@@ -561,14 +500,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="tooltip_text" translatable="yes">Default storage format for new disk images.</property>
-                                <property name="model">liststore3</property>
                                 <signal name="changed" handler="on_prefs_storage_format_changed" swapped="no"/>
-                                <child>
-                                  <object class="GtkCellRendererText" id="cellrenderertext3"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
                               </object>
                               <packing>
                                 <property name="top_attach">5</property>

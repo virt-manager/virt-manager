@@ -1362,9 +1362,16 @@ def set_row_selection(listwidget, prevkey):
                 break
     if not _iter:
         _iter = model.get_iter_first()
+
+    if hasattr(listwidget, "get_selection"):
+        selection = listwidget.get_selection()
+        cb = selection.select_iter
+    else:
+        selection = listwidget
+        cb = selection.set_active_iter
     if _iter:
-        listwidget.get_selection().select_iter(_iter)
-    listwidget.get_selection().emit("changed")
+        cb(_iter)
+    selection.emit("changed")
 
 
 def child_get_property(parent, child, propname):

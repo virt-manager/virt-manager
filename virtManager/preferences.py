@@ -25,15 +25,15 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 # pylint: enable=E0611
 
+from virtManager import uihelpers
 from virtManager.baseclass import vmmGObjectUI
-
-PREFS_PAGE_STATS    = 0
-PREFS_PAGE_VM_PREFS = 1
 
 
 class vmmPreferences(vmmGObjectUI):
     def __init__(self):
         vmmGObjectUI.__init__(self, "preferences.ui", "vmm-preferences")
+
+        self._init_ui()
 
         self.refresh_view_system_tray()
         self.refresh_update_interval()
@@ -89,6 +89,39 @@ class vmmPreferences(vmmGObjectUI):
     def _cleanup(self):
         pass
 
+    def _init_ui(self):
+        combo = self.widget("prefs-console-scaling")
+        # [gsettings value, string]
+        model = Gtk.ListStore(int, str)
+        for row in [[0, _("Never")],
+                    [1, _("Fullscreen only")],
+                    [2, _("Always")]]:
+            model.append(row)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 1)
+
+        combo = self.widget("prefs-graphics-type")
+        # [gsettings value, string]
+        model = Gtk.ListStore(str, str)
+        for row in [["system", _("System default (%s)") %
+                     self.config.default_graphics_from_config],
+                    ["vnc", "VNC"], ["spice", "Spice"]]:
+            model.append(row)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 1)
+
+        combo = self.widget("prefs-storage-format")
+        # [gsettings value, string]
+        model = Gtk.ListStore(str, str)
+        for row in [["default", _("System default (%s)") %
+                    self.config.default_storage_format_from_config],
+                    ["raw", "Raw"],
+                    ["qcow2", "QCOW2"]]:
+            model.append(row)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 1)
+
+
     #########################
     # Config Change Options #
     #########################
@@ -105,40 +138,23 @@ class vmmPreferences(vmmGObjectUI):
         self.widget("prefs-console-accels").set_active(
             self.config.get_console_accels())
     def refresh_console_scaling(self):
+        combo = self.widget("prefs-console-scaling")
         val = self.config.get_console_scaling()
-        if val is None:
-            val = 0
-        self.widget("prefs-console-scaling").set_active(val)
+        uihelpers.set_row_selection(combo, val)
 
     def refresh_new_vm_sound(self):
         self.widget("prefs-new-vm-sound").set_active(
             self.config.get_new_vm_sound())
+
     def refresh_graphics_type(self):
         combo = self.widget("prefs-graphics-type")
-        model = combo.get_model()
-        gtype = self.config.get_graphics_type()
+        gtype = self.config.get_graphics_type(raw=True)
+        uihelpers.set_row_selection(combo, gtype)
 
-        # Default to row 0 == vnc
-        active = 0
-        for rowidx in range(len(model)):
-            if model[rowidx][0].lower() == gtype:
-                active = rowidx
-                break
-
-        self.widget("prefs-graphics-type").set_active(active)
     def refresh_storage_format(self):
         combo = self.widget("prefs-storage-format")
-        model = combo.get_model()
-        gtype = self.config.get_storage_format()
-
-        # Default to row 0 == raw
-        active = 0
-        for rowidx in range(len(model)):
-            if model[rowidx][0].lower() == gtype:
-                active = rowidx
-                break
-
-        self.widget("prefs-storage-format").set_active(active)
+        val = self.config.get_storage_format(raw=True)
+        uihelpers.set_row_selection(combo, val)
 
     def refresh_disk_poll(self):
         self.widget("prefs-stats-enable-disk").set_active(

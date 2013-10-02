@@ -168,6 +168,7 @@ class vmmConfig(object):
         self.libvirt_packages = []
         self.askpass_package = []
         self.default_graphics_from_config = "vnc"
+        self.default_storage_format_from_config = "raw"
 
         self._objects = []
 
@@ -395,20 +396,22 @@ class vmmConfig(object):
     def set_new_vm_sound(self, state):
         self.conf.set("/new-vm/add-sound", state)
 
-    def get_graphics_type(self):
+    def get_graphics_type(self, raw=False):
         ret = self.conf.get("/new-vm/graphics-type")
-        if ret == "system":
+        if ret not in ["system", "vnc", "spice"]:
+            ret = "system"
+        if ret == "system" and not raw:
             return self.default_graphics_from_config
-        if ret not in ["vnc", "spice"]:
-            return "vnc"
         return ret
     def set_graphics_type(self, gtype):
         self.conf.set("/new-vm/graphics-type", gtype.lower())
 
-    def get_storage_format(self):
+    def get_storage_format(self, raw=False):
         ret = self.conf.get("/new-vm/storage-format")
         if ret not in ["default", "raw", "qcow2"]:
-            return "default"
+            ret = "default"
+        if ret == "default" and not raw:
+            return self.default_storage_format_from_config
         return ret
     def set_storage_format(self, typ):
         self.conf.set("/new-vm/storage-format", typ.lower())
