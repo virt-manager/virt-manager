@@ -19,7 +19,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import itertools
 import locale
 import logging
 import logging.handlers
@@ -1329,9 +1328,6 @@ def parse_features(guest, optstr):
 # --disk parsing #
 ##################
 
-_disk_counter = itertools.count()
-
-
 def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
     abspath = None
     volinst = None
@@ -1352,10 +1348,15 @@ def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
         if pool == "default":
             virtinst.StoragePool.build_default_pool(guest.conn)
 
-
         poolobj = guest.conn.storagePoolLookupByName(pool)
+        collidelist = []
+        for disk in guest.get_devices("disk"):
+            if (disk.get_vol_install() and
+                disk.get_vol_install().pool.name() == poolobj.name()):
+                collidelist.append(os.path.basename(disk.path))
+
         vname = virtinst.StorageVolume.find_free_name(
-            poolobj, guest.name, suffix=".img", start_num=_disk_counter.next())
+            poolobj, guest.name, suffix=".img", collidelist=collidelist)
 
         volinst = virtinst.VirtualDisk.build_vol_install(
                 guest.conn, vname, poolobj, size, sparse)
