@@ -32,7 +32,6 @@ import libvirt
 from virtinst import DomainSnapshot
 from virtinst import Guest
 from virtinst import util
-from virtinst import VirtualChannelDevice
 from virtinst import VirtualController
 
 from virtManager import uihelpers
@@ -761,29 +760,9 @@ class vmmDomain(vmmLibvirtObject):
         def change(editdev):
             editdev.keymap = newval
         return self._redefine_device(change, devobj)
-    def define_graphics_type(self, devobj, newval, apply_spice_defaults):
-        def handle_spice():
-            if not apply_spice_defaults:
-                return
-
-            guest = self._get_xmlobj_to_define()
-            is_spice = (newval == "spice")
-
-            if is_spice:
-                dev = VirtualChannelDevice(guest.conn)
-                dev.type = dev.TYPE_SPICEVMC
-                guest.add_device(dev)
-            else:
-                channels = guest.get_devices("channel")
-                channels = [x for x in guest.get_devices("channel")
-                            if x.type == "spicevmc"]
-                for dev in channels:
-                    guest.remove_device(dev)
-
+    def define_graphics_type(self, devobj, newval):
         def change(editdev):
             editdev.type = newval
-            handle_spice()
-
         return self._redefine_device(change, devobj)
 
     # Sound define methods

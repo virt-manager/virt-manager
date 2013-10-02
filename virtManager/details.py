@@ -2261,35 +2261,6 @@ class vmmDetails(vmmGObjectUI):
         return self._change_config_helper(df, da, hf, ha)
 
     # Graphics options
-    def _do_change_spicevmc(self, gdev, newgtype):
-        has_multi_spice = (len([d for d in self.vm.get_graphics_devices() if
-                                d.type == d.TYPE_SPICE]) > 1)
-        has_spicevmc = bool([d for d in self.vm.get_char_devices() if
-                             (d.virtual_device_type == "channel" and
-                              d.type == "spicevmc")])
-        fromspice = (gdev.type == "spice")
-        tospice = (newgtype == "spice")
-
-        if fromspice and tospice:
-            return False
-        if not fromspice and not tospice:
-            return False
-
-        if tospice and has_spicevmc:
-            return False
-        if fromspice and not has_spicevmc:
-            return False
-
-        if fromspice and has_multi_spice:
-            # Don't offer to remove if there are other spice displays
-            return False
-
-        msg = (_("You are switching graphics type to %(gtype)s, "
-                 "would you like to %(action)s Spice agent channels?") %
-                {"gtype": newgtype,
-                 "action": fromspice and "remove" or "add"})
-        return self.err.yes_no(msg)
-
     def config_graphics_apply(self, dev_id_info):
         df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
 
@@ -2310,9 +2281,7 @@ class vmmDetails(vmmGObjectUI):
         # Do this last since it can change graphics unique ID
         if self.edited(EDIT_GFX_TYPE):
             gtype = self.get_combo_entry("gfx-type")
-            change_spicevmc = self._do_change_spicevmc(dev_id_info, gtype)
-            add_define(self.vm.define_graphics_type, dev_id_info,
-                       gtype, change_spicevmc)
+            add_define(self.vm.define_graphics_type, dev_id_info, gtype)
 
         return self._change_config_helper(df, da, hf, ha)
 
