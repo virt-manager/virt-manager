@@ -8,7 +8,6 @@
 %define libvirt_packages           "libvirt-daemon-kvm,libvirt-daemon-config-network"
 %define preferred_distros          "fedora,rhel"
 %define kvm_packages               "qemu-system-x86"
-%define default_graphics           "spice"
 
 %if 0%{?rhel}
 %define preferred_distros          "rhel,fedora"
@@ -129,10 +128,6 @@ machine).
 %define _disable_unsupported_rhel --hide-unsupported-rhel-options
 %endif
 
-%if %{default_graphics}
-%define _default_graphics --default-graphics=%{default_graphics}
-%endif
-
 python setup.py configure \
     --pkgversion="%{version}" \
     %{?_qemu_user} \
@@ -140,8 +135,7 @@ python setup.py configure \
     %{?_libvirt_packages} \
     %{?_askpass_package} \
     %{?_preferred_distros} \
-    %{?_disable_unsupported_rhel} \
-    %{?_default_graphics}
+    %{?_disable_unsupported_rhel}
 
 
 %install

@@ -24,9 +24,12 @@
       <mac address="00:11:22:33:44:55"/>
     </interface>
     <input type="mouse" bus="xen"/>
-    <graphics type="vnc" port="-1"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes"/>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
     <video>
-      <model type="cirrus"/>
+      <model type="qxl"/>
     </video>
   </devices>
 </domain>

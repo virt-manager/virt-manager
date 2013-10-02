@@ -59,10 +59,13 @@
       <model type="virtio"/>
     </interface>
     <input type="tablet" bus="usb"/>
-    <graphics type="vnc" port="-1"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes"/>
     <console type="pty"/>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
     <video>
-      <model type="cirrus"/>
+      <model type="qxl"/>
     </video>
   </devices>
 </domain>
@@ -125,10 +128,13 @@
       <model type="virtio"/>
     </interface>
     <input type="tablet" bus="usb"/>
-    <graphics type="vnc" port="-1"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes"/>
     <console type="pty"/>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
     <video>
-      <model type="cirrus"/>
+      <model type="qxl"/>
     </video>
   </devices>
 </domain>
