@@ -153,7 +153,7 @@ class vmmPreferences(vmmGObjectUI):
 
     def refresh_storage_format(self):
         combo = self.widget("prefs-storage-format")
-        val = self.config.get_storage_format(raw=True)
+        val = self.config.get_default_storage_format(raw=True)
         uihelpers.set_row_selection(combo, val)
 
     def refresh_disk_poll(self):

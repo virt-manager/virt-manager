@@ -173,7 +173,7 @@ class vmmCreateVolume(vmmGObjectUI):
         if hasformat:
             # Select the default storage format
             self.widget("vol-format").set_active(0)
-            default = self.config.get_storage_format()
+            default = self.conn.get_default_storage_format()
             for row in self.widget("vol-format").get_model():
                 if row[0] == default:
                     self.widget("vol-format").set_active_iter(row.iter)

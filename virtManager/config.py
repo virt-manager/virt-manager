@@ -166,7 +166,7 @@ class vmmConfig(object):
         self.libvirt_packages = cliconfig.libvirt_packages
         self.askpass_package = cliconfig.askpass_package
         self.default_graphics_from_config = cliconfig.default_graphics
-        self.default_storage_format_from_config = "raw"
+        self.default_storage_format_from_config = "qcow2"
 
         self._objects = []
 
@@ -407,7 +407,7 @@ class vmmConfig(object):
     def set_graphics_type(self, gtype):
         self.conf.set("/new-vm/graphics-type", gtype.lower())
 
-    def get_storage_format(self, raw=False):
+    def get_default_storage_format(self, raw=False):
         ret = self.conf.get("/new-vm/storage-format")
         if ret not in ["default", "raw", "qcow2"]:
             ret = "default"

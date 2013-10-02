@@ -319,6 +319,18 @@ class vmmConnection(vmmGObject):
             os.mkdir(ret, 755)
         return ret
 
+    def get_default_storage_format(self):
+        raw = self.config.get_default_storage_format(raw=True)
+        if raw != "default":
+            return raw
+
+        fmt = self.config.get_default_storage_format()
+        if fmt != "qcow2":
+            return
+
+        if self.check_conn_support(self._backend.SUPPORT_CONN_DEFAULT_QCOW2):
+            return fmt
+        return None
 
     ####################################
     # Connection pretty print routines #

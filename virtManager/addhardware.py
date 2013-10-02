@@ -1346,7 +1346,7 @@ class vmmAddHardware(vmmGObjectUI):
             disk.driver_cache = cache
 
             if not fmt:
-                fmt = self.config.get_storage_format()
+                fmt = self.conn.get_default_storage_format()
                 if (self.is_default_storage() and
                     disk.get_vol_install() and
                     fmt in disk.get_vol_install().list_formats()):

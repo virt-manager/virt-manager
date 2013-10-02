@@ -325,7 +325,11 @@ SUPPORT_CONN_LISTALLDEVICES = _make(function="virConnect.listAllDevices",
 SUPPORT_CONN_VIRTIO_MMIO = _make(version=1001002,
                                  drv_version=[("qemu", 1006000)])
 SUPPORT_CONN_DISK_SD = _make(version=1001002)
-
+# This is an arbitrary check to say whether it's a good idea to
+# default to qcow2. It might be fine for xen or qemu older than the versions
+# here, but until someone tests things I'm going to be a bit conservative.
+SUPPORT_CONN_DEFAULT_QCOW2 = _make(
+    version=8000, drv_version=[("qemu", 1002000), ("test", 0)])
 
 # Domain checks
 SUPPORT_DOMAIN_GETVCPUS = _make(function="virDomain.vcpus", args=())
