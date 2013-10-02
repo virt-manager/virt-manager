@@ -1264,10 +1264,8 @@ class vmmDomain(vmmLibvirtObject):
             flags |= getattr(libvirt, "VIR_DOMAIN_UNDEFINE_MANAGED_SAVE", 0)
         try:
             self._backend.undefineFlags(flags)
-        except libvirt.libvirtError, err:
-            if not util.is_error_nosupport(err):
-                raise
-            logging.exception("libvirt undefineFlags not supported, "
+        except libvirt.libvirtError:
+            logging.exception("libvirt undefineFlags failed, "
                               "falling back to old style")
             self._backend.undefine()
 
