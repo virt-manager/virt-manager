@@ -607,10 +607,9 @@ class vmmCreate(vmmGObjectUI):
 
         # Networking
         net_list        = self.widget("config-netdev")
-        net_expander    = self.widget("config-advanced-expander")
         net_warn_icon   = self.widget("config-netdev-warn-icon")
         net_warn_box    = self.widget("config-netdev-warn-box")
-        net_expander.hide()
+        net_expander    = self.widget("config-advanced-expander")
         net_warn_icon.hide()
         net_warn_box.hide()
         net_expander.set_expanded(False)
@@ -1414,37 +1413,22 @@ class vmmCreate(vmmGObjectUI):
         # Update page number
         self.set_page_num_text(pagenum)
 
-        if pagenum == PAGE_NAME:
-            self.widget("create-back").set_sensitive(False)
-        else:
-            self.widget("create-back").set_sensitive(True)
+        self.widget("create-back").set_sensitive(pagenum != PAGE_NAME)
+        self.widget("create-forward").set_visible(pagenum != PAGE_FINISH)
+        self.widget("create-finish").set_visible(pagenum == PAGE_FINISH)
 
         if pagenum == PAGE_INSTALL:
             self.detect_media_os()
-            self.widget("install-os-distro-box").set_property(
-                                                "visible",
-                                                not self.container_install())
+            self.widget("install-os-distro-box").set_visible(
+                not self.container_install())
+        elif pagenum == PAGE_FINISH:
+            self.widget("create-finish").grab_focus()
+            self.populate_summary()
+            self.widget("config-netdev").emit("changed")
 
-        if pagenum != PAGE_FINISH:
-            self.widget("create-forward").show()
-            self.widget("create-finish").hide()
-            return
-
-        # PAGE_FINISH
-        # This is hidden in reset_state, so that it doesn't distort
-        # the size of the wizard if it is expanded by default due to
-        # error
-        self.widget("config-advanced-expander").show()
-
-        self.widget("create-forward").hide()
-        self.widget("create-finish").show()
-        self.widget("create-finish").grab_focus()
-        self.populate_summary()
-
-        # Make sure the networking selection takes into account
-        # the install method, so we can warn if trying to PXE boot with
-        # insufficient network option
-        self.check_network_selection()
+        for nr in range(self.widget("create-pages").get_n_pages()):
+            page = self.widget("create-pages").get_nth_page(nr)
+            page.set_visible(nr == pagenum)
 
     def get_graphics_device(self, guest):
         if guest.os.is_container():
