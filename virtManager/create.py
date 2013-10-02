@@ -608,7 +608,7 @@ class vmmCreate(vmmGObjectUI):
             net_expander.set_expanded(True)
 
         if do_tooltip:
-            net_warn_icon.set_visible(show_warn)
+            net_warn_icon.set_visible(bool(show_warn))
             if msg:
                 net_warn_icon.set_tooltip_text(show_warn and msg or "")
         else:
