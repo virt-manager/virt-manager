@@ -326,7 +326,7 @@ def get_filedisk(path=None, fake=True):
     return d
 
 
-def get_blkdisk(path="/dev/null"):
+def get_blkdisk(path="/dev/disk-pool/diskvol1"):
     d = VirtualDisk(_conn)
     d.path = path
     d.validate()

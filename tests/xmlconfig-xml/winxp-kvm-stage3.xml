@@ -23,9 +23,9 @@
       <source file="/dev/default-pool/winxp.img"/>
       <target dev="hda" bus="ide"/>
     </disk>
-    <disk type="file" device="disk">
-      <driver name="qemu"/>
-      <source file="/dev/null"/>
+    <disk type="block" device="disk">
+      <driver name="qemu" type="raw"/>
+      <source dev="/dev/disk-pool/diskvol1"/>
       <target dev="hdb" bus="ide"/>
     </disk>
     <disk type="file" device="cdrom">

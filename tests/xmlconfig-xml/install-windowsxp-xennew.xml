@@ -24,8 +24,8 @@
       <source file="/tmp/test.img"/>
       <target dev="hda" bus="ide"/>
     </disk>
-    <disk type="file" device="disk">
-      <source file="/dev/null"/>
+    <disk type="block" device="disk">
+      <source dev="/dev/disk-pool/diskvol1"/>
       <target dev="hdb" bus="ide"/>
     </disk>
     <disk type="file" device="cdrom">

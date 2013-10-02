@@ -9,8 +9,8 @@
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>
   <devices>
-    <disk type="file" device="disk">
-      <source file="/dev/null"/>
+    <disk type="block" device="disk">
+      <source dev="/dev/disk-pool/diskvol1"/>
       <target dev="xvda" bus="xen"/>
     </disk>
     <input type="mouse" bus="xen"/>
