@@ -225,10 +225,8 @@ def main():
                   Gtk.get_minor_version(),
                   Gtk.get_micro_version())
 
-    config = virtManager.config.vmmConfig("virt-manager",
-                                    cliconfig.__version__,
-                                    os.path.join(cliconfig.asset_dir, "ui"),
-                                    options.testfirstrun)
+    config = virtManager.config.vmmConfig(
+        "virt-manager", cliconfig, options.testfirstrun)
 
     if not util.local_libvirt_version() >= 6000:
         # We need this version for threaded virConnect access
@@ -236,15 +234,6 @@ def main():
                 _("virt-manager requires libvirt 0.6.0 or later."), "")
         return
 
-    virtManager.config.running_config = config
-    config.default_qemu_user = cliconfig.default_qemu_user
-    config.rhel6_defaults = not cliconfig.rhel_enable_unsupported_opts
-    config.preferred_distros = cliconfig.preferred_distros
-
-    config.hv_packages = cliconfig.hv_packages
-    config.libvirt_packages = cliconfig.libvirt_packages
-    config.askpass_package = cliconfig.askpass_package
-    config.default_graphics_from_config = cliconfig.default_graphics
 
     if options.usbredir and config.get_auto_redirection():
         config.set_auto_redirection(False)

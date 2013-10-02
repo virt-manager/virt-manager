@@ -145,11 +145,11 @@ class vmmConfig(object):
     DEFAULT_VIRT_IMAGE_DIR = "/var/lib/libvirt/images"
     DEFAULT_VIRT_SAVE_DIR = "/var/lib/libvirt"
 
-    def __init__(self, appname, appversion, ui_dir, test_first_run=False):
+    def __init__(self, appname, cliconfig, test_first_run=False):
         self.appname = appname
-        self.appversion = appversion
+        self.appversion = cliconfig.__version__
         self.conf_dir = "/org/virt-manager/%s/" % self.appname
-        self.ui_dir = ui_dir
+        self.ui_dir = os.path.join(cliconfig.asset_dir, "ui")
         self.test_first_run = bool(test_first_run)
 
         self.conf = SettingsWrapper("org.virt-manager.virt-manager")
@@ -159,15 +159,13 @@ class vmmConfig(object):
         # the keyring
         self.keyring = None
 
-        self.default_qemu_user = "root"
-
-        # Use this key to disable certain features not supported on RHEL
-        self.rhel6_defaults = True
-        self.preferred_distros = []
-        self.hv_packages = []
-        self.libvirt_packages = []
-        self.askpass_package = []
-        self.default_graphics_from_config = "vnc"
+        self.default_qemu_user = cliconfig.default_qemu_user
+        self.rhel6_defaults = not cliconfig.rhel_enable_unsupported_opts
+        self.preferred_distros = cliconfig.preferred_distros
+        self.hv_packages = cliconfig.hv_packages
+        self.libvirt_packages = cliconfig.libvirt_packages
+        self.askpass_package = cliconfig.askpass_package
+        self.default_graphics_from_config = cliconfig.default_graphics
         self.default_storage_format_from_config = "raw"
 
         self._objects = []
@@ -175,6 +173,9 @@ class vmmConfig(object):
         self.support_inspection = self.check_inspection()
 
         self._spice_error = None
+
+        global running_config
+        running_config = self
 
 
     def check_inspection(self):
