@@ -24,6 +24,8 @@ import logging
 import urlgrabber.progress as progress
 import libvirt
 
+from virtcli import cliconfig
+
 import virtinst
 from virtinst import util
 from virtinst import support
@@ -97,6 +99,9 @@ class Guest(XMLBuilder):
         self.autostart = False
         self.replace = False
         self.os_autodetect = False
+
+        # Allow virt-manager to override the default graphics type
+        self.default_graphics_type = cliconfig.default_graphics
 
         self._os_variant = None
         self._random_uuid = None
@@ -577,6 +582,7 @@ class Guest(XMLBuilder):
         self._set_net_defaults()
         self._set_input_defaults()
         self._set_sound_defaults()
+        self._set_graphics_defaults()
         self._set_video_defaults()
 
     def _set_osxml_defaults(self):
@@ -777,31 +783,46 @@ class Guest(XMLBuilder):
             if sound.model == sound.MODEL_DEFAULT:
                 sound.model = default
 
+    def _set_graphics_defaults(self):
+        for gfx in self.get_devices("graphics"):
+            if gfx.type != "default":
+                continue
+
+            gtype = self.default_graphics_type
+            logging.debug("Using default_graphics=%s", gtype)
+            if (gtype == "spice" and not
+                self.conn.check_conn_support(
+                    self.conn.SUPPORT_CONN_GRAPHICS_SPICE)):
+                logging.debug("spice requested but HV doesn't support it. "
+                              "Using vnc.")
+                gtype = "vnc"
+            gfx.type = gtype
+
+    def _add_spice_channels(self):
+        def has_spice_agent():
+            for chn in self.get_devices("channel"):
+                if chn.type == chn.TYPE_SPICEVMC:
+                    return True
+
+        if (not has_spice_agent() and
+            self.conn.check_conn_support(
+                self.conn.SUPPORT_CONN_CHAR_SPICEVMC)):
+            agentdev = virtinst.VirtualChannelDevice(self.conn)
+            agentdev.type = agentdev.TYPE_SPICEVMC
+            self.add_device(agentdev)
+
     def _set_video_defaults(self):
-        # QXL device (only if we use spice) - safe even if guest is VGA only
         def has_spice():
             for gfx in self.get_devices("graphics"):
                 if gfx.type == gfx.TYPE_SPICE:
                     return True
+
         if has_spice():
             video_model = "qxl"
+            self._add_spice_channels()
         else:
             video_model = self._lookup_osdict_key("videomodel", "cirrus")
 
         for video in self.get_devices("video"):
             if video.model == video.MODEL_DEFAULT:
                 video.model = video_model
-
-        # Spice agent channel (only if we use spice)
-        def has_spice_agent():
-            for chn in self.get_devices("channel"):
-                if chn.type == chn.TYPE_SPICEVMC:
-                    return True
-
-        if (has_spice() and
-            not has_spice_agent() and
-            self.conn.check_conn_support(
-                                    self.conn.SUPPORT_CONN_CHAR_SPICEVMC)):
-            agentdev = virtinst.VirtualChannelDevice(self.conn)
-            agentdev.type = agentdev.TYPE_SPICEVMC
-            self.add_device(agentdev)

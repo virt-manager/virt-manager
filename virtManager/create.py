@@ -1123,12 +1123,8 @@ class vmmCreate(vmmGObjectUI):
 
         return net_type, net_src, macaddr.strip()
 
-    def get_config_graphics_type(self):
-        return self.config.get_graphics_type()
-
     def get_config_customize(self):
         return self.widget("summary-customize").get_active()
-
     def is_detect_active(self):
         return self.widget("install-detect-os").get_active()
 
@@ -1474,21 +1470,8 @@ class vmmCreate(vmmGObjectUI):
         if guest.os.arch not in ["x86_64", "i686", "ppc64"]:
             return
 
-        support_spice = guest.conn.check_conn_support(
-                            guest.conn.SUPPORT_CONN_GRAPHICS_SPICE)
-        if not self._rhel6_defaults():
-            support_spice = True
-
-        gtype = self.get_config_graphics_type()
-        if (gtype == virtinst.VirtualGraphics.TYPE_SPICE and
-            not support_spice):
-            logging.debug("Spice requested but HV doesn't support it. "
-                          "Using VNC graphics.")
-            gtype = virtinst.VirtualGraphics.TYPE_VNC
-
-        gdev = virtinst.VirtualGraphics(guest.conn)
-        gdev.type = gtype
-        return gdev
+        guest.default_graphics_type = self.config.get_graphics_type()
+        return virtinst.VirtualGraphics(guest.conn)
 
     def build_guest(self):
         guest = self.conn.caps.build_virtinst_guest(

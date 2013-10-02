@@ -689,11 +689,9 @@ def convert_old_networks(guest, options, number_of_default_nics):
 
 
 def _determine_default_graphics(guest, default_override):
-    # If no graphics specified, choose a default
     if default_override is True:
-        return cliconfig.default_graphics
-
-    if default_override is False:
+        return "default"
+    elif default_override is False:
         return "none"
 
     if guest.os.is_container():
@@ -704,14 +702,8 @@ def _determine_default_graphics(guest, default_override):
         logging.debug("DISPLAY is not set: defaulting to nographics.")
         return "none"
 
-    logging.debug("DISPLAY is set: looking for pre-configured graphics")
-    if cliconfig.default_graphics:
-        logging.debug("Defaulting graphics to pre-configured %s",
-                      cliconfig.default_graphics.upper())
-        return cliconfig.default_graphics
-
-    logging.debug("No valid pre-configured graphics found, defaulting to VNC")
-    return "vnc"
+    logging.debug("DISPLAY is set: using default graphics")
+    return "default"
 
 
 def convert_old_graphics(guest, options, default_override=None):
@@ -1010,7 +1002,7 @@ _CLI_UNSET = "__virtinst_cli_unset__"
 
 
 def _build_set_param(inst, opts, support_cb=None):
-    def _set_param(paramname, keyname, convert_cb=None):
+    def _set_param(paramname, keyname, convert_cb=None, ignore_default=False):
         val = get_opt_param(opts, keyname)
         if val is None:
             return
@@ -1021,6 +1013,8 @@ def _build_set_param(inst, opts, support_cb=None):
         if convert_cb:
             val = convert_cb(keyname, val)
         if val == _CLI_UNSET:
+            return
+        if val == "default" and ignore_default:
             return
 
         if type(paramname) is not str:
@@ -1536,7 +1530,7 @@ def parse_graphics(guest, optstr, dev):
                         _("Didn't match keymap '%s' in keytable!") % keymap)
         return use_keymap
 
-    set_param("type", "type")
+    set_param("type", "type", ignore_default=True)
     set_param("port", "port")
     set_param("tlsPort", "tlsport")
     set_param("listen", "listen")

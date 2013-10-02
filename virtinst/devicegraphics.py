@@ -177,7 +177,9 @@ class VirtualGraphics(VirtualDevice):
                           default_cb=_get_default_display)
 
 
-    type = XMLProperty("./@type", default_cb=lambda s: "vnc")
+    type = XMLProperty("./@type",
+                       default_cb=lambda s: "vnc",
+                       default_name="default")
     listen = XMLProperty("./@listen")
     passwd = XMLProperty("./@passwd")
     passwdValidTo = XMLProperty("./@passwdValidTo")
