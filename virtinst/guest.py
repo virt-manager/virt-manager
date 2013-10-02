@@ -531,6 +531,17 @@ class Guest(XMLBuilder):
             return
         self.add_device(virtinst.VirtualVideoDevice(self.conn))
 
+    def add_default_usb_controller(self):
+        if self.os.is_container():
+            return
+        if not self.os.is_x86():
+            return
+        if not self.conn.check_conn_support(
+            self.conn.SUPPORT_CONN_DEFAULT_USB2):
+            return
+        for dev in virtinst.VirtualController.get_usb2_controllers(self.conn):
+            self.add_device(dev)
+
     def _set_transient_device_defaults(self, install):
         def do_remove_media(d):
             # Keep cdrom around, but with no media attached,

@@ -468,7 +468,7 @@ c.add_valid("--nodisks --boot hd --paravirt --arch i686")  # 32 on 64 xen
 c = vinst.add_category("kvm", "--connect %(KVMURI)s --noautoconsole")
 c.add_compare("--os-variant fedora14 --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host", "kvm-f14-url")  # F14 Directory tree URL install with extra-args
 c.add_compare("--os-variant fedora14 --disk %(NEWIMG1)s,size=.01 --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url")  # Quiet URL install should make no noise
-c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --sound", "kvm-win2k3-cdrom")  # HVM windows install with disk
+c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--os-variant fedora14 --nodisks --boot hd --paravirt", "kvm-xenner")  # xenner
 c.add_compare("--os-variant fedora14 --nodisks --boot cdrom --virt-type qemu --cpu Penryn", "qemu-plain")  # plain qemu
 c.add_compare("--os-variant fedora14 --nodisks --boot network --nographics --arch i686", "qemu-32-on-64")  # 32 on 64
@@ -486,7 +486,7 @@ c.add_invalid("--nodisks --boot network --paravirt --arch mips")  # Invalid arch
 c = vinst.add_category("misc", "--nographics --noautoconsole")
 c.add_compare("", "noargs-fail")  # No arguments
 c.add_compare("--hvm --nodisks --pxe --print-step all", "simple-pxe")  # Diskless PXE install
-c.add_compare("--hvm --cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --vcpus cores=4", "w2k3-cdrom")  # HVM windows install with disk
+c.add_compare("--hvm --cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
 c.add_compare("""--hvm --pxe \
 --controller usb,model=ich9-ehci1,address=0:0:4.7,index=0 \
 --controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0 \
