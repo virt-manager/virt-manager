@@ -29,6 +29,7 @@ cfg = ConfigParser.ConfigParser()
 _filepath = os.path.abspath(__file__)
 _srcdir = os.path.abspath(os.path.join(os.path.dirname(_filepath), ".."))
 cfgpath = os.path.join(os.path.dirname(_filepath), "cli.cfg")
+_istest = "VIRTINST_TEST_SUITE" in os.environ
 if os.path.exists(cfgpath):
     cfg.read(cfgpath)
 
@@ -38,7 +39,7 @@ def _split_list(commastr):
 
 
 def _get_param(name, default):
-    if not cfg.sections():
+    if _istest or not cfg.sections():
         return default
     return cfg.get("config", name)
 

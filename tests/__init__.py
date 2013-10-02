@@ -20,12 +20,14 @@ import logging
 import os
 
 os.environ["VIRTINST_TEST_TRACKPROPS"] = "1"
+os.environ["VIRTINST_TEST_SUITE"] = "1"
 
 import virtinst
 virtinst.enable_rhel_defaults = False
 
 from virtcli import cliconfig
-cliconfig.default_graphics = "vnc"
+# This sets all the cli bits back to their defaults
+reload(cliconfig)
 
 from tests import utils
 
