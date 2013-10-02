@@ -305,8 +305,8 @@ class my_rpm(Command):
 
 class configure(Command):
     user_options = [
-        ("pkgversion=", None, "user specified version-id"),
         ("prefix=", None, "installation prefix"),
+        ("pkgversion=", None, "user specified version-id"),
         ("qemu-user=", None,
          "user libvirt uses to launch qemu processes (default=root)"),
         ("libvirt-package-names=", None,
@@ -317,10 +317,10 @@ class configure(Command):
          "(default=none)"),
         ("askpass-package-names=", None,
          "name of your distro's askpass package(s) (default=none)"),
-        ("hide-unsupported-rhel-options", None,
-         "Hide config bits that are not supported on RHEL (default=no)"),
         ("preferred-distros=", None,
          "Distros to list first in the New VM wizard (default=none)"),
+        ("hide-unsupported-rhel-options", None,
+         "Hide config bits that are not supported on RHEL (default=no)"),
         ("default-graphics=", None,
          "Default graphics type (spice or vnc) (default=spice)"),
 
@@ -331,30 +331,38 @@ class configure(Command):
         pass
 
     def initialize_options(self):
-        self.qemu_user = "root"
-        self.libvirt_package_names = ""
-        self.kvm_package_names = ""
-        self.askpass_package_names = ""
-        self.hide_unsupported_rhel_options = 0
-        self.preferred_distros = ""
-        self.default_graphics = "spice"
         self.prefix = sysprefix
-        self.pkgversion = ""
+        self.pkgversion = None
+        self.qemu_user = None
+        self.libvirt_package_names = None
+        self.kvm_package_names = None
+        self.askpass_package_names = None
+        self.preferred_distros = None
+        self.hide_unsupported_rhel_options = None
+        self.default_graphics = None
 
 
     def run(self):
         template = ""
         template += "[config]\n"
         template += "prefix = %s\n" % self.prefix
-        template += "pkgversion = %s\n" % self.pkgversion
-        template += "default_qemu_user = %s\n" % self.qemu_user
-        template += "libvirt_packages = %s\n" % self.libvirt_package_names
-        template += "hv_packages = %s\n" % self.kvm_package_names
-        template += "askpass_packages = %s\n" % self.askpass_package_names
-        template += "preferred_distros = %s\n" % self.preferred_distros
-        template += ("hide_unsupported_rhel_options = %s\n" %
-                     self.hide_unsupported_rhel_options)
-        template += "default_graphics = %s\n" % self.default_graphics
+        if self.pkgversion is not None:
+            template += "pkgversion = %s\n" % self.pkgversion
+        if self.qemu_user is not None:
+            template += "default_qemu_user = %s\n" % self.qemu_user
+        if self.libvirt_package_names is not None:
+            template += "libvirt_packages = %s\n" % self.libvirt_package_names
+        if self.kvm_package_names is not None:
+            template += "hv_packages = %s\n" % self.kvm_package_names
+        if self.askpass_package_names is not None:
+            template += "askpass_packages = %s\n" % self.askpass_package_names
+        if self.preferred_distros is not None:
+            template += "preferred_distros = %s\n" % self.preferred_distros
+        if self.hide_unsupported_rhel_options is not None:
+            template += ("hide_unsupported_rhel_options = %s\n" %
+                         self.hide_unsupported_rhel_options)
+        if self.default_graphics is not None:
+            template += "default_graphics = %s\n" % self.default_graphics
 
         file(cliconfig.cfgpath, "w").write(template)
         print "Generated %s" % cliconfig.cfgpath

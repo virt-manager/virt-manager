@@ -39,7 +39,7 @@ def _split_list(commastr):
 
 
 def _get_param(name, default):
-    if _istest or not cfg.sections():
+    if _istest or not name in cfg.sections():
         return default
     return cfg.get("config", name)
 
