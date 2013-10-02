@@ -293,12 +293,15 @@ class vmmCreate(vmmGObjectUI):
         uihelpers.init_network_list(net_list, bridge_box)
 
         # Archtecture
-        archModel = Gtk.ListStore(str)
+        # [value, label]
+        archModel = Gtk.ListStore(str, str)
         archList = self.widget("config-arch")
         text = Gtk.CellRendererText()
         archList.pack_start(text, True)
-        archList.add_attribute(text, 'text', 0)
+        archList.add_attribute(text, 'text', 1)
         archList.set_model(archModel)
+        archList.set_row_separator_func(
+            lambda m, i, ignore: m[i][0] is None, None)
 
         hyperModel = Gtk.ListStore(str, str)
         hyperList = self.widget("config-hv")
@@ -313,6 +316,7 @@ class vmmCreate(vmmGObjectUI):
         lst.pack_start(text, True)
         lst.add_attribute(text, 'text', 0)
         lst.set_model(model)
+        lst.set_row_separator_func(lambda m, i, ignore: m[i][0] is None, None)
 
         # Sparse tooltip
         sparse_info = self.widget("config-storage-nosparse-info")
@@ -684,6 +688,11 @@ class vmmCreate(vmmGObjectUI):
         model = arch_list.get_model()
         model.clear()
 
+        def pretty_arch(_a):
+            if _a == "armv7l":
+                return "arm"
+            return _a
+
         default = 0
         archs = []
         for guest in self.caps.guests:
@@ -691,14 +700,31 @@ class vmmCreate(vmmGObjectUI):
                 archs.append(guest.arch)
 
         # Combine x86/i686 to avoid confusion
-        if "x86_64" in archs and "i686" in archs:
+        if (self.conn.caps.host.arch == "x86_64" and
+            "x86_64" in archs and "i686" in archs):
             archs.remove("i686")
+        archs.sort()
+
+        prios = ["x86_64", "i686", "armv7l", "ppc64"]
+        if self.conn.caps.host.arch not in prios:
+            prios = []
+        else:
+            for p in prios[:]:
+                if p not in archs:
+                    prios.remove(p)
+                else:
+                    archs.remove(p)
+        if prios:
+            if archs:
+                prios += [None]
+            archs = prios + archs
 
         default = 0
         if self.capsguest.arch in archs:
             default = archs.index(self.capsguest.arch)
+
         for arch in archs:
-            model.append([arch])
+            model.append([arch, pretty_arch(arch)])
 
         show = not (len(archs) < 2)
         uihelpers.set_grid_row_visible(arch_list, show)
@@ -712,15 +738,27 @@ class vmmCreate(vmmGObjectUI):
         machines = self.capsdomain.machines
         if self.capsguest.arch in ["i686", "x86_64"]:
             machines = []
+        machines.sort()
 
         defmachine = None
+        prios = []
         if self.capsguest.arch == "armv7l":
             defmachine = "vexpress-a9"
+            prios = ["vexpress-a9", "vexpress-a15", "highbank", "midway"]
         elif self.capsguest.arch == "ppc64":
             defmachine = "pseries"
+            prios = ["pseries"]
+
+        for p in prios[:]:
+            if p not in machines:
+                prios.remove(p)
+            else:
+                machines.remove(p)
+        if prios:
+            machines = prios + [None] + machines
 
         default = 0
-        if defmachine in machines:
+        if defmachine and defmachine in machines:
             default = machines.index(defmachine)
 
         for m in machines:
@@ -1120,7 +1158,6 @@ class vmmCreate(vmmGObjectUI):
         machine = self.get_config_machine()
         show_dtb_virtio = (self.capsguest.arch == "armv7l" and
                            machine in ["vexpress-a9", "vexpress-15"])
-        print machine, show_dtb_virtio
         uihelpers.set_grid_row_visible(
             self.widget("config-dtb-warn-virtio"), show_dtb_virtio)
 
@@ -1803,7 +1840,6 @@ class vmmCreate(vmmGObjectUI):
         if name != self.guest.name:
             self.guest.name = name
             if self.is_default_storage():
-                print "is_default_storage"
                 # User changed the name and we are using default storage
                 # which depends on the VM name. Revalidate things
                 if not self.validate_storage_page():
