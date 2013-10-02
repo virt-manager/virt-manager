@@ -1854,6 +1854,9 @@ class vmmDomainVirtinst(vmmDomain):
         # No caching, so no refresh needed
         return
 
+    def snapshots_supported(self):
+        return False
+
     def get_autostart(self):
         return self._backend.autostart
     def set_autostart(self, val):
