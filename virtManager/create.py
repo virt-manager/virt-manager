@@ -391,61 +391,7 @@ class vmmCreate(vmmGObjectUI):
         # Make sure window is a sane size
         self.topwin.resize(1, 1)
 
-    def set_conn_state(self):
-        # Update all state that has some dependency on the current connection
-        self.conn.schedule_priority_tick(pollnet=True,
-                                         pollpool=True, polliface=True,
-                                         pollnodedev=True, pollmedia=True)
-
-        self.widget("install-box").show()
-        self.widget("startup-error-box").hide()
-        self.widget("create-forward").set_sensitive(True)
-
-        if self.conn.caps.no_install_options():
-            error = _("No hypervisor options were found for this "
-                      "connection.")
-
-            if self.conn.is_qemu():
-                error += "\n\n"
-                error += _("This usually means that QEMU or KVM is not "
-                           "installed on your machine, or the KVM kernel "
-                           "modules are not loaded.")
-            return self.startup_error(error)
-
-        # A bit out of order, but populate arch + hv lists so we can
-        # determine a default
-        self.conn.invalidate_caps()
-        self.caps = self.conn.caps
-        self.change_caps()
-        self.populate_hv()
-        self.populate_arch()
-
-        show_arch = (self.widget("config-hv").get_visible() or
-                     self.widget("config-arch").get_visible() or
-                     self.widget("config-machine").get_visible())
-        uihelpers.set_grid_row_visible(self.widget("arch-expander"), show_arch)
-
-        if self.conn.is_xen():
-            if self.conn.caps.hw_virt_supported():
-                if self.conn.caps.is_bios_virt_disabled():
-                    error = _("Host supports full virtualization, but "
-                              "no related install options are available. "
-                              "This may mean support is disabled in your "
-                              "system BIOS.")
-                    self.startup_warning(error)
-
-            else:
-                error = _("Host does not appear to support hardware "
-                          "virtualization. Install options may be limited.")
-                self.startup_warning(error)
-
-        elif self.conn.is_qemu():
-            if not self.conn.caps.is_kvm_available():
-                error = _("KVM is not available. This may mean the KVM "
-                 "package is not installed, or the KVM kernel modules "
-                 "are not loaded. Your virtual machines may perform poorly.")
-                self.startup_warning(error)
-
+    def _change_install_options_from_arch(self):
         # Helper state
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
@@ -507,6 +453,64 @@ class vmmCreate(vmmGObjectUI):
         self.widget("virt-install-box").set_visible(not is_container)
         self.widget("container-install-box").set_visible(is_container)
 
+    def set_conn_state(self):
+        # Update all state that has some dependency on the current connection
+        self.conn.schedule_priority_tick(pollnet=True,
+                                         pollpool=True, polliface=True,
+                                         pollnodedev=True, pollmedia=True)
+
+        self.widget("install-box").show()
+        self.widget("startup-error-box").hide()
+        self.widget("create-forward").set_sensitive(True)
+
+        if self.conn.caps.no_install_options():
+            error = _("No hypervisor options were found for this "
+                      "connection.")
+
+            if self.conn.is_qemu():
+                error += "\n\n"
+                error += _("This usually means that QEMU or KVM is not "
+                           "installed on your machine, or the KVM kernel "
+                           "modules are not loaded.")
+            return self.startup_error(error)
+
+        # A bit out of order, but populate arch + hv lists so we can
+        # determine a default
+        self.conn.invalidate_caps()
+        self.caps = self.conn.caps
+        self.change_caps()
+        self.populate_hv()
+        self.populate_arch()
+
+        show_arch = (self.widget("config-hv").get_visible() or
+                     self.widget("config-arch").get_visible() or
+                     self.widget("config-machine").get_visible())
+        uihelpers.set_grid_row_visible(self.widget("arch-expander"), show_arch)
+
+        if self.conn.is_xen():
+            if self.conn.caps.hw_virt_supported():
+                if self.conn.caps.is_bios_virt_disabled():
+                    error = _("Host supports full virtualization, but "
+                              "no related install options are available. "
+                              "This may mean support is disabled in your "
+                              "system BIOS.")
+                    self.startup_warning(error)
+
+            else:
+                error = _("Host does not appear to support hardware "
+                          "virtualization. Install options may be limited.")
+                self.startup_warning(error)
+
+        elif self.conn.is_qemu():
+            if not self.conn.caps.is_kvm_available():
+                error = _("KVM is not available. This may mean the KVM "
+                 "package is not installed, or the KVM kernel modules "
+                 "are not loaded. Your virtual machines may perform poorly.")
+                self.startup_warning(error)
+
+        # Set install options
+        self._change_install_options_from_arch()
+
         # Install local
         iso_option = self.widget("install-local-iso")
         cdrom_option = self.widget("install-local-cdrom")
@@ -532,6 +536,9 @@ class vmmCreate(vmmGObjectUI):
             iso_option.set_active(True)
 
         # Only allow ISO option for remote VM
+        is_local = not self.conn.is_remote()
+        is_storage_capable = self.conn.is_storage_capable()
+        can_storage = (is_local or is_storage_capable)
         if not is_local:
             iso_option.set_active(True)
 
@@ -849,6 +856,7 @@ class vmmCreate(vmmGObjectUI):
                       self.capsguest.arch,
                       self.capsdomain.hypervisor_type)
         self.populate_machine()
+        self._change_install_options_from_arch()
 
     def populate_summary(self):
         distro, version, dlabel, vlabel = self.get_config_os_info()
