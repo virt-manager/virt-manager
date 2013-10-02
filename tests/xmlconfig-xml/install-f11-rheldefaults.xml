@@ -24,7 +24,7 @@
       <target dev="fda" bus="fdc"/>
     </disk>
     <disk type="file" device="disk">
-      <driver name="qemu" type="raw" cache="none"/>
+      <driver name="qemu" type="raw"/>
       <source file="/tmp/test.img"/>
       <target dev="vda" bus="virtio"/>
     </disk>

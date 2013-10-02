@@ -28,7 +28,6 @@ import re
 
 import urlgrabber.progress as progress
 
-import virtinst
 from virtinst import diskbackend
 from virtinst import util
 from virtinst import VirtualDevice
@@ -716,26 +715,24 @@ class VirtualDisk(VirtualDevice):
         if volobj:
             self._change_backend(None, volobj)
 
-    def _set_rhel_defaults(self):
-        if not self.conn.is_qemu():
-            return
-        if not self.is_disk():
-            return
-
-        # Enable cache=none for disk devs
-        if not self.driver_cache:
-            self.driver_cache = self.CACHE_MODE_NONE
-
-        # Enable AIO native for block devices
-        if (not self.driver_io and self.type == self.TYPE_BLOCK):
-            self.driver_io = self.IO_MODE_NATIVE
-
     def set_defaults(self):
         if self.is_cdrom():
             self.read_only = True
 
-        if virtinst.enable_rhel_defaults:
-            self._set_rhel_defaults()
+        if not self.conn.is_qemu():
+            return
+        if not self.is_disk():
+            return
+        if not self.type == self.TYPE_BLOCK:
+            return
+
+        # Enable cache=none and io=native for block devices. Would
+        # be nice if qemu did this for us but that time has long passed.
+        if not self.driver_cache:
+            self.driver_cache = self.CACHE_MODE_NONE
+        if not self.driver_io:
+            self.driver_io = self.IO_MODE_NATIVE
+
 
     def is_size_conflict(self):
         """

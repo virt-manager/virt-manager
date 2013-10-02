@@ -29,7 +29,7 @@
       <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="block" device="disk">
-      <driver name="qemu" type="raw"/>
+      <driver name="qemu" type="raw" cache="none" io="native"/>
       <source dev="/dev/disk-pool/diskvol1"/>
       <target dev="vdb" bus="virtio"/>
     </disk>
