@@ -639,21 +639,48 @@ class vmmAddHardware(vmmGObjectUI):
     def is_default_storage(self):
         return self.widget("config-storage-create").get_active()
 
-    def get_storage_info(self):
+    def get_storage_info(self, collidelist):
         path = None
         size = self.widget("config-storage-size").get_value()
         sparse = not self.widget("config-storage-nosparse").get_active()
 
         if self.is_default_storage():
-            pathlist = [d.path for d in self.vm.get_disk_devices()]
             path = uihelpers.get_default_path(self.conn,
                                          self.vm.get_name(),
-                                         collidelist=pathlist)
+                                         collidelist=collidelist)
             logging.debug("Default storage path is: %s", path)
         else:
             path = self.widget("config-storage-entry").get_text()
 
         return (path or None, size, sparse)
+
+    def check_ideal_path(self, diskpath, collidelist):
+        # See if the ideal disk path (/default/pool/vmname.img)
+        # exists, and if unused, prompt the use for using it
+        conn = self.conn.get_backend()
+        ideal = uihelpers.get_ideal_path(self.conn, self.vm.get_name())
+        if ideal in collidelist:
+            return diskpath
+        do_exist = False
+        ret = True
+
+        try:
+            do_exist = virtinst.VirtualDisk.path_exists(conn, ideal)
+            ret = virtinst.VirtualDisk.path_in_use_by(conn, ideal)
+        except:
+            logging.exception("Error checking default path usage")
+
+        if not do_exist or ret:
+            return diskpath
+
+        do_use = self.err.yes_no(
+            _("The following storage already exists, but is not\n"
+              "in use by any virtual machine:\n\n%s\n\n"
+              "Would you like to reuse this storage?") % ideal)
+
+        if do_use:
+            return ideal
+        return diskpath
 
     def get_config_disk_target(self):
         target = self.widget("config-storage-devtype")
@@ -1309,31 +1336,10 @@ class vmmAddHardware(vmmGObjectUI):
 
         try:
             # This can error out
-            diskpath, disksize, sparse = self.get_storage_info()
-
+            collidelist = [d.path for d in self.vm.get_disk_devices()]
+            diskpath, disksize, sparse = self.get_storage_info(collidelist)
             if self.is_default_storage():
-                # See if the ideal disk path (/default/pool/vmname.img)
-                # exists, and if unused, prompt the use for using it
-                ideal = uihelpers.get_ideal_path(self.conn,
-                                                 self.vm.get_name())
-                do_exist = False
-                ret = True
-
-                try:
-                    do_exist = virtinst.VirtualDisk.path_exists(conn, ideal)
-
-                    ret = virtinst.VirtualDisk.path_in_use_by(conn, ideal)
-                except:
-                    logging.exception("Error checking default path usage")
-
-                if do_exist and not ret:
-                    do_use = self.err.yes_no(
-                        _("The following storage already exists, but is not\n"
-                          "in use by any virtual machine:\n\n%s\n\n"
-                          "Would you like to reuse this storage?") % ideal)
-
-                    if do_use:
-                        diskpath = ideal
+                diskpath = self.check_ideal_path(diskpath, collidelist)
 
             disk = virtinst.VirtualDisk(conn)
             disk.path = diskpath
