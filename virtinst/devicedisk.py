@@ -799,19 +799,9 @@ class VirtualDisk(VirtualDevice):
         @returns generated target
         @rtype C{str}
         """
-
-        # Only use these targets if there are no other options
-        except_targets = ["hdc"]
-
         prefix, maxnode = self.get_target_prefix()
         if prefix is None:
             raise ValueError(_("Cannot determine device bus/type."))
-
-        # Special case: IDE cdrom should prefer hdc for back compat
-        if self.is_cdrom() and prefix == "hd":
-            if "hdc" not in skip_targets:
-                self.target = "hdc"
-                return self.target
 
         if maxnode > (26 * 26 * 26):
             raise RuntimeError("maxnode value is too high")
@@ -839,17 +829,10 @@ class VirtualDisk(VirtualDevice):
                 seen_valid = True
                 gen_t += "%c" % (ord('a') + digit - 1)
 
-            if gen_t in except_targets:
-                continue
             if gen_t not in skip_targets:
                 self.target = gen_t
                 return self.target
 
-        # Check except_targets for any options
-        for t in except_targets:
-            if t.startswith(prefix) and t not in skip_targets:
-                self.target = t
-                return self.target
         raise ValueError(_("No more space for disks of type '%s'" % prefix))
 
 VirtualDisk.register_type()
