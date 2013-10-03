@@ -655,6 +655,8 @@ c.add_invalid("--disk %(COLLIDE)s")  # Colliding storage without --force
 c.add_invalid("--disk /dev/default-pool/backing.img")  # Colliding storage via backing store
 c.add_invalid("--disk %(DIR)s,device=cdrom")  # Dir without floppy
 c.add_invalid("--disk %(EXISTIMG1)s,driver_name=foobar,driver_type=foobaz")  # Unknown driver name and type options (as of 1.0.0)
+c.add_valid("--disk path=%(EXISTIMG1)s,startup_policy=optional")  # Existing disk, startupPolicy
+c.add_invalid("--disk path=%(EXISTIMG1)s,startup_policy=Foo")  # Existing disk, invalid startupPolicy
 
 
 c = vinst.add_category("redirdev", "--noautoconsole --nographics --nodisks --pxe")

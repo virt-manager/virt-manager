@@ -1462,6 +1462,7 @@ def parse_disk(guest, optstr, dev=None, validate=True):
     set_param("error_policy", "error_policy")
     set_param("serial", "serial")
     set_param("target", "target")
+    set_param("sourceStartupPolicy", "startup_policy")
 
     _check_leftover_opts(opts)
     if validate:

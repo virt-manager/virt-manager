@@ -517,6 +517,11 @@ Serial number of the emulated disk device. This is used in linux guests
 to set /dev/disk/by-id symlinks. An example serial number might be:
 WD-WMAP9A966149
 
+=item B<startup_policy>
+
+It defines what to do with the disk if the source file is not accessible.  See
+possible values in L<http://www.libvirt.org/formatdomain.html#elementsDisks>
+
 =back
 
 See the examples section for some uses. This option deprecates C<--file>,
