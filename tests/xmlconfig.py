@@ -1035,19 +1035,16 @@ class TestXMLConfig(unittest.TestCase):
                           virtinst.DomainNumatune.cpuset_str_to_tuple,
                           conn, "16")
 
-    def testManyVirtio(self):
-        d = VirtualDisk(utils.get_conn())
-        d.bus = "virtio"
-        d.path = "/dev/default-pool/testvol1.img"
-
-        targetlist = []
-        for ignore in range(0, (26 * 2) + 1):
-            d.target = None
-            d.generate_target(targetlist)
-            targetlist.append(d.target)
-
-        self.assertEquals("vdaa", targetlist[26])
-        self.assertEquals("vdba", targetlist[26 * 2])
+    def testDiskNumbers(self):
+        self.assertEquals("a", VirtualDisk.num_to_target(1))
+        self.assertEquals("b", VirtualDisk.num_to_target(2))
+        self.assertEquals("z", VirtualDisk.num_to_target(26))
+        self.assertEquals("aa", VirtualDisk.num_to_target(27))
+        self.assertEquals("ab", VirtualDisk.num_to_target(28))
+        self.assertEquals("az", VirtualDisk.num_to_target(52))
+        self.assertEquals("ba", VirtualDisk.num_to_target(53))
+        self.assertEquals("zz", VirtualDisk.num_to_target(27 * 26))
+        self.assertEquals("aaa", VirtualDisk.num_to_target(27 * 26 + 1))
 
     def testFedoraTreeinfo(self):
         i = utils.make_distro_installer(
