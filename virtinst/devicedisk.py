@@ -827,13 +827,28 @@ class VirtualDisk(VirtualDevice):
         @rtype C{str}
         """
         prefix, maxnode = self.get_target_prefix()
+        skip_targets = [t for t in skip_targets if t and t.startswith(prefix)]
+        skip_targets.sort()
 
-        for i in range(1, maxnode + 1):
-            gen_t = prefix + self.num_to_target(i)
-            if gen_t not in skip_targets:
-                self.target = gen_t
-                return self.target
+        def get_target():
+            first_found = None
 
+            for i in range(1, maxnode + 1):
+                gen_t = prefix + self.num_to_target(i)
+                if gen_t in skip_targets:
+                    skip_targets.remove(gen_t)
+                    continue
+                if not skip_targets:
+                    return gen_t
+                elif not first_found:
+                    first_found = gen_t
+            if first_found:
+                return first_found
+
+        ret = get_target()
+        if ret:
+            self.target = ret
+            return ret
         raise ValueError(_("No more space for disks of type '%s'" % prefix))
 
 VirtualDisk.register_type()

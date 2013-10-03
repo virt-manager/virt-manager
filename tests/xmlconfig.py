@@ -1046,6 +1046,14 @@ class TestXMLConfig(unittest.TestCase):
         self.assertEquals("zz", VirtualDisk.num_to_target(27 * 26))
         self.assertEquals("aaa", VirtualDisk.num_to_target(27 * 26 + 1))
 
+        disk = virtinst.VirtualDisk(utils.get_conn())
+        disk.bus = "ide"
+
+        self.assertEquals("hda", disk.generate_target([]))
+        self.assertEquals("hdb", disk.generate_target(["hda"]))
+        self.assertEquals("hdc", disk.generate_target(["hdb", "sda"]))
+        self.assertEquals("hdb", disk.generate_target(["hda", "hdd"]))
+
     def testFedoraTreeinfo(self):
         i = utils.make_distro_installer(
                                 location="tests/cli-test-xml/fakefedoratree")
