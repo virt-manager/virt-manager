@@ -826,6 +826,12 @@ class vmmDomain(vmmLibvirtObject):
                 for dev in VirtualController.get_usb2_controllers(
                         guest.conn):
                     guest.add_device(dev)
+            else:
+                dev = VirtualController(guest.conn)
+                dev.type = "usb"
+                if newmodel != "default":
+                    dev.model = newmodel
+                guest.add_device(dev)
 
         return self._redefine_device(change, devobj)
 

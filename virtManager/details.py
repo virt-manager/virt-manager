@@ -3221,22 +3221,25 @@ class vmmDetails(vmmGObjectUI):
 
         type_label = virtinst.VirtualController.pretty_type(dev.type)
         model_label = dev.model
+        is_usb = dev.type == virtinst.VirtualController.TYPE_USB
         if not model_label:
             model_label = _("Default")
 
         self.widget("controller-type").set_text(type_label)
-
         combo = self.widget("controller-model")
+        uihelpers.set_grid_row_visible(combo, is_usb)
+
         model = combo.get_model()
         model.clear()
         if dev.type == virtinst.VirtualController.TYPE_USB:
-            model.append(["Default", "Default"])
+            model.append(["default", "Default"])
             model.append(["ich9-ehci1", "USB 2"])
+            model.append(["nec-xhci", "USB 3"])
             self.widget("config-remove").set_sensitive(False)
         else:
             self.widget("config-remove").set_sensitive(True)
 
-        self.set_combo_entry("controller-model", model_label)
+        self.set_combo_entry("controller-model", dev.model or "default")
 
     def refresh_filesystem_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)

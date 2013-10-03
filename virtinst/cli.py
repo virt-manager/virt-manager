@@ -1553,6 +1553,10 @@ get_graphics = _make_handler(virtinst.VirtualGraphics, parse_graphics)
 def parse_controller(guest, optstr, dev):
     if optstr == "usb2":
         return virtinst.VirtualController.get_usb2_controllers(guest.conn)
+    elif optstr == "usb3":
+        dev.type = "usb"
+        dev.model = "nec-xhci"
+        return dev
 
     opts = parse_optstr(optstr, remove_first="type")
     set_param = _build_set_param(dev, opts)

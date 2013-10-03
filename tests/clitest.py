@@ -563,7 +563,7 @@ c = vinst.add_category("controller", "--noautoconsole --nodisks --pxe")
 c.add_valid("--controller usb,model=ich9-ehci1,address=0:0:4.7")
 c.add_valid("--controller usb,model=ich9-ehci1,address=0:0:4.7,index=0")
 c.add_valid("--controller usb,model=ich9-ehci1,address=0:0:4.7,index=1")
-c.add_valid("--controller usb2")
+c.add_valid("--controller usb2 --controller usb3")
 
 
 c = vinst.add_category("lxc", "--connect %(LXCURI)s --noautoconsole --name foolxc --ram 64")
