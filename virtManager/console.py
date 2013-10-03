@@ -696,7 +696,8 @@ class SpiceViewer(Viewer):
         self._create_spice_session()
 
         self.spice_session.set_property("host", str(host))
-        self.spice_session.set_property("port", str(port))
+        if port:
+            self.spice_session.set_property("port", str(port))
         if tlsport:
             self.spice_session.set_property("tls-port", str(tlsport))
 
