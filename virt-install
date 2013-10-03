@@ -663,7 +663,8 @@ def connect_console(domain, consolecb, wait):
 
 def start_install(guest, continue_inst, options):
     def show_console(dom):
-        gdev = guest.get_devices("graphics")
+        xmlobj = virtinst.Guest(guest.conn, parsexml=dom.XMLDesc(0))
+        gdev = xmlobj.get_devices("graphics")
         if not gdev:
             logging.debug("Connecting to text console")
             return txt_console(dom, guest.conn.getURI())
