@@ -96,6 +96,10 @@ def _default_keymap():
     keymap = None
 
     kt = None
+
+    if "VIRTINST_TEST_SUITE" in os.environ:
+        return default
+
     for path, cb in [
         (_ETC_VCONSOLE, _sysconfig_keyboard),
         (_KEYBOARD_DIR, _sysconfig_keyboard),
