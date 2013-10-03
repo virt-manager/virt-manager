@@ -289,6 +289,7 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(disk6)
         check("path", None, "/dev/default-pool/default-vol")
         disk6.sync_path_props()
+        check("sourceStartupPolicy", None, "optional")
         check("shareable", False, True)
         check("driver_cache", None, "writeback")
         check("driver_io", None, "threads")

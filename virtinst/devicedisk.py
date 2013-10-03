@@ -522,6 +522,7 @@ class VirtualDisk(VirtualDevice):
                            clear_first=["./source/@" + target for target in
                                         _TARGET_PROPS])
 
+    sourceStartupPolicy = XMLProperty("./source/@startupPolicy")
     device = XMLProperty("./@device",
                          default_cb=lambda s: s.DEVICE_DISK)
     type = XMLProperty("./@type", default_cb=_get_default_type)
