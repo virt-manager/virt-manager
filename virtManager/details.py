@@ -2810,6 +2810,8 @@ class vmmDetails(vmmGObjectUI):
                                          self.conn.is_test_conn()))
         if removable is None:
             removable = False
+        else:
+            can_set_removable = True
 
         if addr == "spapr-vio":
             bus = "spapr-vscsi"
