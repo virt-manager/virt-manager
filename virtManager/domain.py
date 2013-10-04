@@ -646,6 +646,10 @@ class vmmDomain(vmmLibvirtObject):
         def change(editdev):
             editdev.shareable = do_shareable
         return self._redefine_device(change, devobj)
+    def define_disk_removable(self, devobj, do_removable):
+        def change(editdev):
+            editdev.removable = do_removable
+        return self._redefine_device(change, devobj)
     def define_disk_cache(self, devobj, new_cache):
         def change(editdev):
             editdev.driver_cache = new_cache or None

@@ -66,6 +66,7 @@ EDIT_INIT,
 
 EDIT_DISK_RO,
 EDIT_DISK_SHARE,
+EDIT_DISK_REMOVABLE,
 EDIT_DISK_CACHE,
 EDIT_DISK_IO,
 EDIT_DISK_BUS,
@@ -94,7 +95,7 @@ EDIT_WATCHDOG_ACTION,
 EDIT_CONTROLLER_MODEL,
 
 EDIT_TPM_TYPE,
-) = range(1, 41)
+) = range(1, 42)
 
 
 # Columns in hw list model
@@ -475,6 +476,7 @@ class vmmDetails(vmmGObjectUI):
 
             "on_disk_readonly_changed": lambda *x: self.enable_apply(x, EDIT_DISK_RO),
             "on_disk_shareable_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SHARE),
+            "on_disk_removable_changed": lambda *x: self.enable_apply(x, EDIT_DISK_REMOVABLE),
             "on_disk_cache_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_CACHE),
             "on_disk_io_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_IO),
             "on_disk_bus_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_BUS),
@@ -2157,6 +2159,10 @@ class vmmDetails(vmmGObjectUI):
             add_define(self.vm.define_disk_shareable,
                        dev_id_info, do_shareable)
 
+        if self.edited(EDIT_DISK_REMOVABLE):
+            do_removable = bool(self.widget("disk-removable").get_active())
+            add_define(self.vm.define_disk_removable, dev_id_info, do_removable)
+
         if self.edited(EDIT_DISK_CACHE):
             cache = self.get_combo_entry("disk-cache")
             add_define(self.vm.define_disk_cache, dev_id_info, cache)
@@ -2766,6 +2772,7 @@ class vmmDetails(vmmGObjectUI):
         ro = disk.read_only
         share = disk.shareable
         bus = disk.bus
+        removable = disk.removable
         addr = disk.address.type
         idx = disk.disk_bus_index
         cache = disk.driver_cache
@@ -2797,6 +2804,12 @@ class vmmDetails(vmmGObjectUI):
 
         is_cdrom = (devtype == virtinst.VirtualDisk.DEVICE_CDROM)
         is_floppy = (devtype == virtinst.VirtualDisk.DEVICE_FLOPPY)
+        is_usb = (bus == "usb")
+
+        can_set_removable = (is_usb and (self.conn.is_qemu() or
+                                         self.conn.is_test_conn()))
+        if removable is None:
+            removable = False
 
         if addr == "spapr-vio":
             bus = "spapr-vscsi"
@@ -2809,6 +2822,9 @@ class vmmDetails(vmmGObjectUI):
         self.widget("disk-readonly").set_active(ro)
         self.widget("disk-readonly").set_sensitive(not is_cdrom)
         self.widget("disk-shareable").set_active(share)
+        self.widget("disk-removable").set_active(removable)
+        uihelpers.set_grid_row_visible(self.widget("disk-removable"),
+                                       can_set_removable)
         self.widget("disk-size").set_text(size)
         self.set_combo_entry("disk-cache", cache)
         self.set_combo_entry("disk-io", io)

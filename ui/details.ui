@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Fri Oct  4 08:00:20 2013 -->
+<!-- Generated with glade 3.16.0 on Fri Oct  4 08:04:58 2013 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAccelGroup" id="accelgroup1"/>
@@ -3630,7 +3630,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
-                                                <property name="xalign">0.5</property>
+                                                <property name="xalign">0</property>
                                                 <property name="draw_indicator">True</property>
                                                 <signal name="toggled" handler="on_disk_shareable_changed" swapped="no"/>
                                               </object>
@@ -3756,6 +3756,39 @@
                                               <packing>
                                                 <property name="left_attach">0</property>
                                                 <property name="top_attach">1</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label46">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="xalign">1</property>
+                                                <property name="label" translatable="yes">Removab_le:</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">disk-removable</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">5</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCheckButton" id="disk-removable">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="use_stock">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="draw_indicator">True</property>
+                                                <signal name="toggled" handler="on_disk_removable_changed" swapped="no"/>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">5</property>
                                                 <property name="width">1</property>
                                                 <property name="height">1</property>
                                               </packing>
