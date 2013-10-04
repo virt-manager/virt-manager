@@ -639,6 +639,9 @@ c.add_valid("--disk %(DIR)s,device=floppy")  # Dir with a floppy dev
 c.add_valid("--disk %(EXISTIMG1)s,driver_name=qemu,driver_type=qcow2")  # Driver name and type options
 c.add_valid("--disk /dev/hda")  # Using a storage pool source as a disk
 c.add_valid("--disk pool=default,size=.00001")  # Building 'default' pool
+c.add_valid("--disk path=%(EXISTIMG1)s,bus=usb") # Existing USB disk
+c.add_valid("--disk path=%(EXISTIMG1)s,bus=usb,removable=on") # Existing USB disk as removable
+c.add_valid("--disk path=%(EXISTIMG1)s,bus=usb,removable=off") # Existing USB disk as non-removable
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000 --nonsparse")  # Nonexisting file, size too big
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000")  # Huge file, sparse, but no prompting
 c.add_invalid("--file %(NEWIMG1)s")  # Nonexisting file, no size
@@ -657,6 +660,8 @@ c.add_invalid("--disk %(DIR)s,device=cdrom")  # Dir without floppy
 c.add_invalid("--disk %(EXISTIMG1)s,driver_name=foobar,driver_type=foobaz")  # Unknown driver name and type options (as of 1.0.0)
 c.add_valid("--disk path=%(EXISTIMG1)s,startup_policy=optional")  # Existing disk, startupPolicy
 c.add_invalid("--disk path=%(EXISTIMG1)s,startup_policy=Foo")  # Existing disk, invalid startupPolicy
+c.add_invalid("--disk path=%(EXISTIMG1)s,bus=ide,removable=on") # removable only supported by USB disks
+c.add_invalid("--disk path=%(EXISTIMG1)s,bus=ide,removable=off") # removable only supported by USB disks
 
 
 c = vinst.add_category("redirdev", "--noautoconsole --nographics --nodisks --pxe")

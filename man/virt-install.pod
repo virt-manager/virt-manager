@@ -448,6 +448,11 @@ Disk bus type. Value can be 'ide', 'sata', 'scsi', 'usb', 'virtio' or 'xen'.
 The default is hypervisor dependent since not all hypervisors support all
 bus types.
 
+=item B<removable>
+
+Sets the removable flag (/sys/block/$dev/removable on Linux). Only
+used with QEMU and bus=usb. Value can be 'on' or 'off'.
+
 =item B<perms>
 
 Disk permissions. Value can be 'rw' (Read/Write), 'ro' (Readonly),

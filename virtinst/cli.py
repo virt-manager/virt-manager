@@ -1455,6 +1455,7 @@ def parse_disk(guest, optstr, dev=None, validate=True):
 
     set_param("device", "device")
     set_param("bus", "bus")
+    set_param("removable", "removable", convert_cb=_on_off_convert)
     set_param("driver_cache", "cache")
     set_param("driver_name", "driver_name")
     set_param("driver_type", "driver_type")
