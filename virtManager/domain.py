@@ -336,13 +336,11 @@ class vmmDomain(vmmLibvirtObject):
             self._name = self._backend.name()
         return self._name
 
-    def get_name_with_title(self):
-        # When available, include the title in the name
-        name = self.get_name()
+    def get_name_or_title(self):
         title = self.get_title()
         if title:
-            return "%s - %s" % (name, title)
-        return name
+            return title
+        return self.get_name()
 
     def get_title(self):
         return self.get_xmlobj(inactive=True).title
