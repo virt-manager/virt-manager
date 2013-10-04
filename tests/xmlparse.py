@@ -275,6 +275,8 @@ class XMLParseTest(unittest.TestCase):
         check("driver_name", None, "test")
         check("driver_type", None, "raw")
         check("serial", "WD-WMAP9A966149", "frob")
+        check("bus", "ide", "usb")
+        check("removable", None, False, True)
 
         check = self._make_checker(disk3)
         check("type", "block", "dir", "file", "block")

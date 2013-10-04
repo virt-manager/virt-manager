@@ -20,7 +20,7 @@
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="file" device="disk">
       <source file="/dev/null"/>
-      <target dev="hda" bus="ide"/>
+      <target dev="hda" bus="usb" removable="on"/>
       <serial>frob</serial>
       <driver name="test" type="raw"/>
     </disk>

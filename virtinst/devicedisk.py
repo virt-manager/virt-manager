@@ -534,6 +534,7 @@ class VirtualDisk(VirtualDevice):
 
     bus = XMLProperty("./target/@bus")
     target = XMLProperty("./target/@dev")
+    removable = XMLProperty("./target/@removable", is_onoff=True)
 
     read_only = XMLProperty("./readonly", is_bool=True)
     shareable = XMLProperty("./shareable", is_bool=True)
