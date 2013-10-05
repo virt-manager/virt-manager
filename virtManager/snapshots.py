@@ -83,6 +83,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             "on_snapshot_new_ok_clicked": self._on_new_ok_clicked,
             "on_snapshot_new_cancel_clicked" : self._snapshot_new_close,
             "on_snapshot_new_name_changed" : self._snapshot_new_name_changed,
+            "on_snapshot_new_name_activate": self._on_new_ok_clicked,
         })
 
         self.top_box = self.widget("snapshot-top-box")
@@ -506,6 +507,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             return
         self._reset_new_state()
         self._snapshot_new.show()
+        self.widget("snapshot-new-name").grab_focus()
 
     def _on_start_clicked(self, ignore):
         snap = self._get_selected_snapshot()
