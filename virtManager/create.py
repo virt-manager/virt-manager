@@ -219,6 +219,7 @@ class vmmCreate(vmmGObjectUI):
         self.widget("create-forward").set_sensitive(False)
         if hideinstall:
             self.widget("install-box").hide()
+            self.widget("arch-expander").hide()
 
         self.widget("startup-error").set_text("Error: %s" % error)
         return False
