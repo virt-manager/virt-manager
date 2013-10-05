@@ -64,6 +64,7 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         self._initial_populate = False
 
+        self._snapmenu = None
         self._init_ui()
 
         self._snapshot_new = self.widget("snapshot-new")
@@ -77,6 +78,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             "on_snapshot_start_clicked": self._on_start_clicked,
             "on_snapshot_apply_clicked": self._on_apply_clicked,
             "on_snapshot_list_changed": self._snapshot_selected,
+            "on_snapshot_list_button_press_event": self._popup_snapshot_menu,
 
             # 'Create' dialog
             "on_snapshot_new_delete_event": self._snapshot_new_close,
@@ -138,6 +140,29 @@ class vmmSnapshotPage(vmmGObjectUI):
         slist.set_tooltip_column(2)
         slist.append_column(col)
         slist.set_row_separator_func(_sep_cb, None)
+
+        # Snapshot popup menu
+        menu = Gtk.Menu()
+
+        item = Gtk.ImageMenuItem(_("_Start snapshot"))
+        item.set_use_underline(True)
+        img = Gtk.Image()
+        img.set_from_stock(Gtk.STOCK_MEDIA_PLAY, Gtk.IconSize.MENU)
+        item.set_image(img)
+        item.show()
+        item.connect("activate", self._on_start_clicked)
+        menu.add(item)
+
+        item = Gtk.ImageMenuItem(_("_Delete snapshot"))
+        item.set_use_underline(True)
+        img = Gtk.Image()
+        img.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.MENU)
+        item.set_image(img)
+        item.show()
+        item.connect("activate", self._on_delete_clicked)
+        menu.add(item)
+
+        self._snapmenu = menu
 
 
     ###################
@@ -470,6 +495,12 @@ class vmmSnapshotPage(vmmGObjectUI):
     # Listeners #
     #############
 
+    def _popup_snapshot_menu(self, src, event):
+        ignore = src
+        if event.button != 3:
+            return
+        self._snapmenu.popup(None, None, None, None, 0, event.time)
+
     def _snapshot_new_close(self, *args, **kwargs):
         ignore = args
         ignore = kwargs
@@ -511,19 +542,19 @@ class vmmSnapshotPage(vmmGObjectUI):
 
     def _on_start_clicked(self, ignore):
         snap = self._get_selected_snapshot()
-        result = self.err.yes_no(_("Are you sure you want to revert to "
+        result = self.err.yes_no(_("Are you sure you want to run "
                                    "snapshot '%s'? All disk changes since "
                                    "the last snapshot was created will be "
                                    "discarded.") % snap.get_name())
         if not result:
             return
 
-        logging.debug("Reverting to snapshot '%s'", snap.get_name())
+        logging.debug("Running snapshot '%s'", snap.get_name())
         vmmAsyncJob.simple_async(self.vm.revert_to_snapshot,
                             [snap], self,
-                            _("Restoring snapshot"),
-                            _("Restoring snapshot '%s'") % snap.get_name(),
-                            _("Error restoring snapshot '%s'") %
+                            _("Running snapshot"),
+                            _("Running snapshot '%s'") % snap.get_name(),
+                            _("Error running snapshot '%s'") %
                             snap.get_name(),
                             finish_cb=self._refresh_snapshots)
 
