@@ -72,6 +72,16 @@ class _VirtualCharDevice(VirtualDevice):
                      CHANNEL_NAME_LIBGUESTFS]
 
     @staticmethod
+    def pretty_channel_name(val):
+        if val == _VirtualCharDevice.CHANNEL_NAME_SPICE:
+            return "spice"
+        if val == _VirtualCharDevice.CHANNEL_NAME_QEMUGA:
+            return "qemu-ga"
+        if val == _VirtualCharDevice.CHANNEL_NAME_LIBGUESTFS:
+            return "libguestfs"
+        return None
+
+    @staticmethod
     def pretty_type(ctype):
         """
         Return a human readable description of the passed char type

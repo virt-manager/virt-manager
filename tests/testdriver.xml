@@ -266,7 +266,11 @@
       <address type='virtio-serial' controller='1' bus='0' port='3'/>
     </channel>
     <channel type='pty'>
-      <target type='virtio' name='org.linux-kvm.port.0'/>
+      <target type='virtio' name='org.qemu.guest_agent.0'/>
+    </channel>
+    <channel type='unix'>
+      <source mode='bind'/>
+      <target type='virtio' name='org.libguestfs.channel.0'/>
     </channel>
 
 

@@ -3511,9 +3511,12 @@ class vmmDetails(vmmGObjectUI):
             port = chardev.target_port
 
             label = devtype.capitalize()
-            if devtype not in ["console", "channel"]:
-                # Don't show port for console
+            if devtype in ["serial", "parallel"]:
                 label += " %s" % (int(port) + 1)
+            elif devtype == "channel":
+                name = chardev.pretty_channel_name(chardev.target_name)
+                if name:
+                    label += " %s" % name
 
             update_hwlist(HW_LIST_TYPE_CHAR, chardev, label,
                           "device_serial")
