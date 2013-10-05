@@ -24,21 +24,6 @@ import libvirt
 from virtinst import util
 
 
-# RHEL6 has lots of feature backports, and since libvirt doesn't
-# really offer any XML feature introspection, we have to use hacks to
-# make sure we aren't generating bogus config on non RHEL
-_rhel6 = False
-
-
-def set_rhel6(val):
-    global _rhel6
-    _rhel6 = bool(val)
-
-
-def get_rhel6():
-    return _rhel6
-
-
 def support_remote_url_install(conn):
     if hasattr(conn, "_virtinst__fake_conn"):
         return False
@@ -125,17 +110,11 @@ class _SupportCheck(object):
         If a hypervisor is not listed, it is assumed to be NOT SUPPORTED.
     @drv_libvirt_version: List of tuples, similar to drv_version, but
         the version number is minimum supported _libvirt_ version
-
-    @rhel6_version
-    @rhel6_drv_version: Analog of the above params, but for versions for
-        RHEL6 qemu, and only if virt-manager is configured with the
-        rhel defaults switch
     """
     def __init__(self,
                  function=None, args=None, flag=None,
                  version=None, force_version=None,
-                 drv_version=None, drv_libvirt_version=None,
-                 rhel6_drv_version=None, rhel6_version=None):
+                 drv_version=None, drv_libvirt_version=None):
         self.function = function
         self.args = args
         self.flag = flag
@@ -144,22 +123,10 @@ class _SupportCheck(object):
         self.drv_version = drv_version or []
         self.drv_libvirt_version = drv_libvirt_version or []
 
-        self.rhel6_version = rhel6_version and int(rhel6_version) or 0
-        self.rhel6_drv_version = rhel6_drv_version or []
-
     def _get_min_lib_version(self):
-        ret = self.version
-        rhel6_min = self.rhel6_version or ret
-        if get_rhel6():
-            ret = rhel6_min
-        return ret
-
+        return self.version
     def _get_drv_version(self):
-        ret = self.drv_version
-        rhel6_drv_version = self.rhel6_drv_version or ret
-        if get_rhel6():
-            ret = rhel6_drv_version
-        return ret
+        return self.drv_version
 
     def check_support(self, conn, data):
         minimum_libvirt_version = self._get_min_lib_version()
@@ -314,9 +281,7 @@ SUPPORT_CONN_SOUND_AC97 = _make(version=6000,
                                 force_version=True,
                                 drv_version=[("qemu", 11000)])
 SUPPORT_CONN_SOUND_ICH6 = _make(version=8008,
-                                drv_version=[("qemu", 14000)],
-                                rhel6_drv_version=[("qemu", 12001)],
-                                rhel6_version=8007)
+                                drv_version=[("qemu", 14000)])
 SUPPORT_CONN_GRAPHICS_SPICE = _make(version=8006,
                                     drv_version=[("qemu", 14000)])
 SUPPORT_CONN_CHAR_SPICEVMC = _make(version=8008,

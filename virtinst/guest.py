@@ -282,7 +282,6 @@ class Guest(XMLBuilder):
             self._propstore["_devices"] = [dev.copy() for dev in self._devices]
             self._propstore["features"] = self.features.copy()
             self._propstore["os"] = self.os.copy()
-            support.set_rhel6(self._is_rhel6())
         except:
             self._finish_get_xml(data)
             raise
@@ -292,7 +291,6 @@ class Guest(XMLBuilder):
         (self._propstore["_devices"],
          self._propstore["features"],
          self._propstore["os"]) = data
-        support.set_rhel6(False)
 
     def get_install_xml(self, *args, **kwargs):
         data = self._prepare_get_xml()
@@ -491,12 +489,6 @@ class Guest(XMLBuilder):
     ###################################
     # Guest Dictionary Helper methods #
     ###################################
-
-    def _is_rhel6(self):
-        emulator = self.emulator or ""
-
-        return (self.type in ["qemu", "kvm"] and
-                emulator.startswith("/usr/libexec/qemu"))
 
     def _lookup_osdict_key(self, key, default):
         """
