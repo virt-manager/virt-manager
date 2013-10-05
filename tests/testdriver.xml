@@ -226,15 +226,18 @@
     </hostdev>
 
 
-    <!-- serial/parallel devices -->
+    <!-- serial devices -->
     <serial type='null'/>
-    <parallel type='file'>
-      <source path='/tmp/foo.log'/>
-    </parallel>
     <serial type='tcp'>
       <source mode='bind' host='my.source.host' service='1234'/>
       <protocol type='telnet'/>
     </serial>
+
+
+    <!-- parallel devices -->
+    <parallel type='file'>
+      <source path='/tmp/foo.log'/>
+    </parallel>
     <parallel type='unix'>
       <source mode='bind' path='/tmp/foobar'/>
     </parallel>
@@ -242,6 +245,29 @@
       <source mode='bind' host='my.bind.host' service='1111'/>
       <source mode='connect' host='my.source.host' service='2222'/>
     </parallel>
+
+
+    <!-- console devices -->
+    <console type='pty'>
+      <target type='virtio'/>
+    </console>
+    <console type='pty'>
+      <target type='uml'/>
+    </console>
+
+
+    <!-- channel devices -->
+    <channel type='pipe'>
+      <source path='/tmp/guestfwd'/>
+      <target type='guestfwd' address='10.0.2.1' port='4600'/>
+    </channel>
+    <channel type='spicevmc'>
+      <target type='virtio' name='com.redhat.spice.0'/>
+      <address type='virtio-serial' controller='1' bus='0' port='3'/>
+    </channel>
+    <channel type='pty'>
+      <target type='virtio' name='org.linux-kvm.port.0'/>
+    </channel>
 
 
     <!-- watchdog devices -->
@@ -262,20 +288,6 @@
       <source mode='bind' host='127.0.0.1' service='2001'/>
       <protocol type='raw'/>
     </smartcard>
-
-
-    <!-- channel devices -->
-    <channel type='pipe'>
-      <source path='/tmp/guestfwd'/>
-      <target type='guestfwd' address='10.0.2.1' port='4600'/>
-    </channel>
-    <channel type='spicevmc'>
-      <target type='virtio' name='com.redhat.spice.0'/>
-      <address type='virtio-serial' controller='1' bus='0' port='3'/>
-    </channel>
-    <channel type='pty'>
-      <target type='virtio' name='org.linux-kvm.port.0'/>
-    </channel>
 
 
     <!-- redir devices -->
