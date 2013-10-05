@@ -376,6 +376,7 @@ class vmmCreate(vmmGObjectUI):
         ksmodel  = self.widget("install-ks-box").get_model()
         self.populate_media_model(urlmodel, self.config.get_media_urls())
         self.populate_media_model(ksmodel, self.config.get_kickstart_urls())
+        self.set_distro_labels("-", "-", force=True)
 
         # Install import
         self.widget("install-import-entry").set_text("")
@@ -1226,18 +1227,14 @@ class vmmCreate(vmmGObjectUI):
     def toggle_detect_os(self, src):
         dodetect = src.get_active()
 
+        self.widget("install-os-type-label").set_visible(dodetect)
+        self.widget("install-os-version-label").set_visible(dodetect)
+        self.widget("install-os-type").set_visible(not dodetect)
+        self.widget("install-os-version").set_visible(not dodetect)
+
         if dodetect:
-            self.widget("install-os-type-label").show()
-            self.widget("install-os-version-label").show()
-            self.widget("install-os-type").hide()
-            self.widget("install-os-version").hide()
             self.mediaDetected = False
-            self.detect_media_os()  # Run detection
-        else:
-            self.widget("install-os-type-label").hide()
-            self.widget("install-os-version-label").hide()
-            self.widget("install-os-type").show()
-            self.widget("install-os-version").show()
+            self.detect_media_os()
 
     def _selected_os_row(self):
         box = self.widget("install-os-type")
@@ -2031,10 +2028,9 @@ class vmmCreate(vmmGObjectUI):
 
 
     # Distro detection methods
-
-    def set_distro_labels(self, distro, ver):
+    def set_distro_labels(self, distro, ver, force=False):
         # Helper to set auto detect result labels
-        if not self.is_detect_active():
+        if not force and not self.is_detect_active():
             return
 
         self.widget("install-os-type-label").set_text(distro)
