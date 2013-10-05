@@ -113,7 +113,7 @@ def _simple_async_done_cb(error, details, errorintro,
         finish_cb()
 
 
-def _simple_async(callback, args, title, text, parent, errorintro,
+def _simple_async(callback, args, parent, title, text, errorintro,
                   show_progress, simplecb, errorcb, finish_cb):
     """
     @show_progress: Whether to actually show a progress dialog
@@ -129,7 +129,7 @@ def _simple_async(callback, args, title, text, parent, errorintro,
 
     asyncjob = vmmAsyncJob(docb, args,
                            _simple_async_done_cb,
-                           (errorintro, errorcb, parent, finish_cb),
+                           (parent, errorintro, errorcb, finish_cb),
                            title, text, parent.topwin,
                            show_progress=show_progress)
     asyncjob.run()
@@ -146,17 +146,17 @@ class vmmAsyncJob(vmmGObjectUI):
     Displays a progress bar while executing the "callback" method.
     """
     @staticmethod
-    def simple_async(callback, args, title, text, parent, errorintro,
+    def simple_async(callback, args, parent, title, text, errorintro,
                      simplecb=True, errorcb=None, finish_cb=None):
-        _simple_async(callback, args,
-                      title, text, parent, errorintro, True,
+        _simple_async(callback, args, parent,
+                      title, text, errorintro, True,
                       simplecb, errorcb, finish_cb)
 
     @staticmethod
     def simple_async_noshow(callback, args, parent, errorintro,
                             simplecb=True, errorcb=None, finish_cb=None):
-        _simple_async(callback, args,
-                      "", "", parent, errorintro, False,
+        _simple_async(callback, args, parent,
+                      "", "", errorintro, False,
                       simplecb, errorcb, finish_cb)
 
 

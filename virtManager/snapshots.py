@@ -517,9 +517,11 @@ class vmmSnapshotPage(vmmGObjectUI):
             return
 
         logging.debug("Reverting to snapshot '%s'", snap.get_name())
-        vmmAsyncJob.simple_async_noshow(self.vm.revert_to_snapshot,
+        vmmAsyncJob.simple_async(self.vm.revert_to_snapshot,
                             [snap], self,
-                            _("Error reverting to snapshot '%s'") %
+                            _("Restoring snapshot"),
+                            _("Restoring snapshot '%s'") % snap.get_name(),
+                            _("Error restoring snapshot '%s'") %
                             snap.get_name(),
                             finish_cb=self._refresh_snapshots)
 
@@ -535,7 +537,9 @@ class vmmSnapshotPage(vmmGObjectUI):
             return
 
         logging.debug("Deleting snapshot '%s'", snap.get_name())
-        vmmAsyncJob.simple_async_noshow(snap.delete, [], self,
+        vmmAsyncJob.simple_async(snap.delete, [], self,
+                        _("Deleting snapshot"),
+                        _("Deleting snapshot '%s'") % snap.get_name(),
                         _("Error deleting snapshot '%s'") % snap.get_name(),
                         finish_cb=self._refresh_snapshots)
 

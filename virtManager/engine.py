@@ -1033,8 +1033,8 @@ class vmmEngine(vmmGObject):
             # VM will be restored, which can take some time, so show progress
             title = _("Restoring Virtual Machine")
             text = _("Restoring virtual machine memory from disk")
-            vmmAsyncJob.simple_async(vm.startup,
-                                     [], title, text, src, "", errorcb=errorcb)
+            vmmAsyncJob.simple_async(vm.startup, [], src,
+                                     title, text, "", errorcb=errorcb)
 
         else:
             # Regular startup
