@@ -480,7 +480,7 @@ class Cloner(object):
         basename = self.original_guest
 
         match = re.search("-clone[1-9]*$", basename)
-        start_num = 0
+        start_num = 1
         if match:
             num_match = re.search("[1-9]+$", match.group())
             if num_match:

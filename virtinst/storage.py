@@ -461,32 +461,15 @@ class StorageVolume(_StorageObject):
     Base class for building and installing libvirt storage volume xml
     """
     @staticmethod
-    def find_free_name(pool_object, basename,
-                       suffix="", collidelist=None, start_num=0):
+    def find_free_name(pool_object, basename, **kwargs):
         """
         Finds a name similar (or equal) to passed 'basename' that is not
-        in use by another pool
-
-        This function scans the list of existing Volumes on the passed or
-        looked up pool object for a collision with the passed name. If the
-        name is in use, it append "-1" to the name and tries again, then "-2",
-        continuing to 100000 (which will hopefully never be reached.") If
-        suffix is specified, attach it to the (potentially incremented) name
-        before checking for collision.
-
-        Ex name="test", suffix=".img" -> name-3.img
-
-        @param collidelist: An extra list of names to check for collision
-        @type collidelist: C{list}
-        @returns: A free name
-        @rtype: C{str}
+        in use by another pool. Extra params are passed to generate_name
         """
-        collidelist = collidelist or []
         pool_object.refresh(0)
-
-        return util.generate_name(basename, pool_object.storageVolLookupByName,
-                                  suffix, collidelist=collidelist,
-                                  start_num=start_num)
+        return util.generate_name(basename,
+                                  pool_object.storageVolLookupByName,
+                                  **kwargs)
 
     TYPE_FILE = getattr(libvirt, "VIR_STORAGE_VOL_FILE", 0)
     TYPE_BLOCK = getattr(libvirt, "VIR_STORAGE_VOL_BLOCK", 1)

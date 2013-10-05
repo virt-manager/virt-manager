@@ -166,7 +166,7 @@ def validate_macaddr(val):
 
 
 def generate_name(base, collision_cb, suffix="", lib_collision=True,
-                  start_num=0, sep="-", force_num=False, collidelist=None):
+                  start_num=1, sep="-", force_num=False, collidelist=None):
     """
     Generate a new name from the passed base string, verifying it doesn't
     collide with the collision callback.
@@ -201,9 +201,13 @@ def generate_name(base, collision_cb, suffix="", lib_collision=True,
         else:
             return collision_cb(tryname)
 
-    for i in range(start_num, start_num + 100000):
+    numrange = range(start_num, start_num + 100000)
+    if not force_num:
+        numrange = [None] + numrange
+
+    for i in numrange:
         tryname = base
-        if i != start_num or force_num:
+        if i is not None:
             tryname += ("%s%d" % (sep, i))
         tryname += suffix
 
