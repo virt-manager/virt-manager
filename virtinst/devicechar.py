@@ -135,19 +135,8 @@ class _VirtualCharDevice(VirtualDevice):
         if ro:
             users["source_path"] += [self.TYPE_PTY]
 
-        channel_users = {
-            "target_name"   : [self.CHANNEL_TARGET_VIRTIO],
-        }
-
-        console_props = ["target_type"]
-
         if users.get(propname):
             return self.type in users[propname]
-        if channel_users.get(propname):
-            return (self.virtual_device_type == "channel" and
-                    self.target_type in channel_users[propname])
-        if propname in console_props:
-            return self.virtual_device_type == "console"
         return hasattr(self, propname)
 
 

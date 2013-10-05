@@ -1131,13 +1131,13 @@ class vmmAddHardware(vmmGObjectUI):
             "source_host" : "char-host",
             "bind_host" : "char-bind-host",
             "protocol"  : "char-use-telnet",
-            "target_name" : "char-target-name",
-            "target_type" : "char-target-type",
         }
 
         char_class = self.get_char_type()
         devtype = src.get_model()[src.get_active()][0]
         conn = self.conn.get_backend()
+        ischan = char_class.virtual_device_type == "channel"
+        iscon = char_class.virtual_device_type == "console"
 
         self._dev = char_class(conn)
         self._dev.type = devtype
@@ -1146,6 +1146,11 @@ class vmmAddHardware(vmmGObjectUI):
             make_visible = self._dev.supports_property(param_name)
             uihelpers.set_grid_row_visible(self.widget(widget_name + "-label"),
                                            make_visible)
+
+        uihelpers.set_grid_row_visible(
+            self.widget("char-target-name-label"), ischan)
+        uihelpers.set_grid_row_visible(
+            self.widget("char-target-type-label"), iscon)
 
         has_mode = self._dev.supports_property("source_mode")
         if has_mode and self.widget("char-mode").get_active() == -1:

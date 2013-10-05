@@ -3118,6 +3118,7 @@ class vmmDetails(vmmGObjectUI):
 
         show_target_type = not (chardev.virtual_device_type in
                                 ["serial", "parallel"])
+        show_target_name = chardev.virtual_device_type == "channel"
 
         def show_ui(param, val=None):
             widgetname = "char-" + param.replace("_", "-")
@@ -3125,6 +3126,8 @@ class vmmDetails(vmmGObjectUI):
 
             # Exception: don't show target type for serial/parallel
             if (param == "target_type" and not show_target_type):
+                doshow = False
+            if (param == "target_name" and not show_target_name):
                 doshow = False
 
             if not val and doshow:
