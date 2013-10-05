@@ -429,6 +429,7 @@ c.add_invalid("--vcpus 32 --cpuset=autofoo")  # Bogus cpuset
 c.add_invalid("--vcpus 20 --check-cpu")  # Over host vcpus w/ --check-cpu
 c.add_invalid("--cpu host")  # --cpu host, but no host CPU in caps
 c.add_invalid("--numatune 1-3,4,mode=strict")  # Non-escaped numatune
+c.add_invalid("--clock foo_tickpolicy=merge")  # Unknown timer
 
 
 c = vinst.add_category("smartcard", "--noautoconsole --nodisks --pxe")
@@ -451,7 +452,6 @@ c.add_invalid("--rng /FOO/BAR")  # random device backend, short form, invalid de
 c.add_valid("--rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp")  # egd backend
 c.add_valid("--rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp,backend_mode=bind")  # egd backend, bind mode
 c.add_invalid("--rng foo,backend_host=127.0.0.1,backend_service=8000,backend_mode=connect")  # invalid type
-
 
 c = vinst.add_category("xen", "--connect %(XENURI)s --noautoconsole")
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
@@ -507,6 +507,7 @@ c.add_compare("""--hvm --pxe \
 --boot loader=/foo/bar \
 --host-device net_00_1c_25_10_b1_e4 \
 --features acpi=off,eoi=on,privnet=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=1234 \
+--clock offset=localtime,hpet_present=no,rtc_tickpolicy=merge \
 """, "many-devices")  # Lots of devices
 c.add_valid("--hvm --disk path=virt-install,device=cdrom")  # Specifying cdrom media via --disk
 c.add_valid("--hvm --import --disk path=virt-install")  # FV Import install

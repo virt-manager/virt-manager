@@ -1313,10 +1313,43 @@ def parse_features(guest, optstr):
     _check_leftover_opts(opts)
 
 
+###################
+# --clock parsing #
+###################
+
+def parse_clock(guest, optstr):
+    opts = parse_optstr(optstr)
+
+    set_param = _build_set_param(guest.clock, opts)
+    set_param("offset", "offset")
+
+    timer_opt_names = ["tickpolicy", "present"]
+    timer_opts = {}
+    for key in opts.keys():
+        for name in timer_opt_names:
+            if not key.endswith("_" + name):
+                continue
+            timer_name = key[:-(len(name) + 1)]
+            if timer_name not in timer_opts:
+                timer_opts[timer_name] = {}
+            timer_opts[timer_name][key] = opts.pop(key)
+
+    _check_leftover_opts(opts)
+
+    for timer_name, subopts in timer_opts.items():
+        timer = guest.clock.add_timer()
+        timer.name = timer_name
+
+        set_param = _build_set_param(timer, subopts)
+        set_param("tickpolicy", "%s_tickpolicy" % timer_name)
+        set_param("present", "%s_present" % timer_name,
+                  convert_cb=_on_off_convert)
+        _check_leftover_opts(subopts)
+
+
 ##########################
 # Guest <device> parsing #
 ##########################
-
 
 ##################
 # --disk parsing #

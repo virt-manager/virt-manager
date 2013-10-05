@@ -21,7 +21,10 @@
       <spinlocks state="on" retries="1234"/>
     </hyperv>
   </features>
-  <clock offset="utc"/>
+  <clock offset="localtime">
+    <timer name="rtc" tickpolicy="merge"/>
+    <timer name="hpet" present="no"/>
+  </clock>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>destroy</on_reboot>
   <on_crash>destroy</on_crash>
@@ -117,7 +120,10 @@
       <spinlocks state="on" retries="1234"/>
     </hyperv>
   </features>
-  <clock offset="utc"/>
+  <clock offset="localtime">
+    <timer name="rtc" tickpolicy="merge"/>
+    <timer name="hpet" present="no"/>
+  </clock>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>

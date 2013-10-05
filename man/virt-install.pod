@@ -202,11 +202,31 @@ Enable hypver VAPIC, but disable spinlocks
 
 =back
 
+=item --clock offset=OFFSET,TIMER_OPT=VAL,...
+
+Configure the guest's <clock> XML. Some supported options:
+
+=over 2
+
+=item B<--clock offset=OFFSET>
+
+Set the clock offset, ex. 'utc' or 'localtime'
+
+=item B<--clock TIMER_present=no>
+
+Disable a boolean timer. TIMER here might be hpet, kvmclock, etc.
+
+=item B<--clock TIMER_tickpolicy=VAL>
+
+Set a timer's tickpolicy value. TIMER here might be rtc, pit, etc. VAL
+might be catchup, delay, etc. Refer to the libvirt docs for all values.
+
 =back
 
 
 
 
+=back
 
 =head2 Installation Method options
 

@@ -505,6 +505,7 @@ def build_guest_instance(conn, options):
     cli.parse_security(guest, options.security)
     cli.parse_boot(guest, options.bootopts)
     cli.parse_features(guest, options.features)
+    cli.parse_clock(guest, options.clock)
 
     guest.autostart = options.autostart
     guest.description = options.description
@@ -913,6 +914,9 @@ def parse_args():
                     help=_("Set domain <features> XML. Ex:\n"
                            "--features acpi=off\n"
                            "--features apic=on,eoi=on"))
+    geng.add_option("--clock", dest="clock",
+                    help=_("Set domain <clock> XML. Ex:\n"
+                           "--clock offset=localtime,rtc_tickpolicy=catchup"))
     parser.add_option_group(geng)
 
     insg = optparse.OptionGroup(parser, _("Installation Method Options"))
