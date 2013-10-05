@@ -603,6 +603,35 @@ class Guest(XMLBuilder):
         if self.clock.offset is None:
             self.clock.offset = self._lookup_osdict_key("clock", "utc")
 
+        if self.clock.timers:
+            return
+        if not self.os.is_x86():
+            return
+        if not self.conn.check_conn_support(
+            self.conn.SUPPORT_CONN_ADVANCED_CLOCK):
+            return
+
+        # Set clock policy that maps to qemu options:
+        #   -no-hpet -no-kvm-pit-reinjection -rtc driftfix=slew
+        #
+        # hpet: Is unneeded and has a performance penalty
+        # pit: While it has no effect on windows, it doesn't hurt and
+        #   is beneficial for linux
+        #
+        # This is what has been recommended by the RH qemu guys :)
+
+        rtc = self.clock.add_timer()
+        rtc.name = "rtc"
+        rtc.tickpolicy = "catchup"
+
+        pit = self.clock.add_timer()
+        pit.name = "pit"
+        pit.tickpolicy = "delay"
+
+        hpet = self.clock.add_timer()
+        hpet.name = "hpet"
+        hpet.present = False
+
     def _set_emulator_defaults(self):
         if self.os.is_xenpv():
             self.emulator = None

@@ -294,6 +294,8 @@ SUPPORT_CONN_FILESYSTEM = _make(
     drv_libvirt_version=[("qemu", 8005), ("lxc", 0),
                          ("openvz", 0), ("test", 0)])
 SUPPORT_CONN_AUTOSOCKET = _make(drv_libvirt_version=[("qemu", 1000006)])
+SUPPORT_CONN_ADVANCED_CLOCK = _make(
+    drv_libvirt_version=[("qemu", 8000)])
 
 
 # Domain checks
