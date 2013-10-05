@@ -29,7 +29,7 @@ from gi.repository import Gdk
 import virtinst
 from virtinst import util
 from virtinst import (VirtualChannelDevice, VirtualParallelDevice,
-                      VirtualSerialDevice,
+                      VirtualSerialDevice, VirtualConsoleDevice,
                       VirtualVideoDevice, VirtualWatchdog,
                       VirtualFilesystem, VirtualSmartCardDevice,
                       VirtualRedirDevice, VirtualTPMDevice)
@@ -55,20 +55,6 @@ PAGE_SMARTCARD = 11
 PAGE_USBREDIR = 12
 PAGE_TPM = 13
 PAGE_RNG = 14
-
-char_widget_mappings = {
-    "source_path" : "char-path",
-    "source_mode" : "char-mode",
-    "source_host" : "char-host",
-    "bind_host" : "char-bind-host",
-    "protocol"  : "char-use-telnet",
-    "target_name" : "char-target-name",
-}
-
-
-tpm_widget_mappings = {
-    "device_path" : "tpm-device-path",
-}
 
 
 class vmmAddHardware(vmmGObjectUI):
@@ -267,6 +253,16 @@ class vmmAddHardware(vmmGObjectUI):
             desc = VirtualSerialDevice.pretty_mode(t)
             char_mode_model.append([t, desc + " (%s)" % t])
 
+        # Char target type
+        lst = self.widget("char-target-type")
+        model = Gtk.ListStore(str, str)
+        lst.set_model(model)
+        uihelpers.set_combo_text_column(lst, 1)
+        if self.conn.is_qemu():
+            model.append(["virtio", "virtio"])
+        else:
+            model.append([None, "default"])
+
         # Watchdog widgets
         combo = self.widget("watchdog-model")
         uihelpers.build_watchdogmodel_combo(self.vm, combo)
@@ -350,6 +346,8 @@ class vmmAddHardware(vmmGObjectUI):
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."),
                       "parallel")
+        add_hw_option("Console", Gtk.STOCK_CONNECT, PAGE_CHAR,
+                      True, None, "console")
         add_hw_option("Channel", Gtk.STOCK_CONNECT, PAGE_CHAR,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."),
@@ -449,6 +447,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Char parameters
         self.widget("char-device-type").set_active(0)
+        self.widget("char-target-type").set_active(0)
         self.widget("char-path").set_text("")
         self.widget("char-host").set_text("127.0.0.1")
         self.widget("char-port").set_value(4555)
@@ -1033,6 +1032,8 @@ class vmmAddHardware(vmmGObjectUI):
             return VirtualParallelDevice
         elif label == "channel":
             return VirtualChannelDevice
+        elif label == "console":
+            return VirtualConsoleDevice
         return VirtualSerialDevice
 
     def dev_to_title(self, page):
@@ -1081,6 +1082,10 @@ class vmmAddHardware(vmmGObjectUI):
         if idx < 0:
             return
 
+        tpm_widget_mappings = {
+            "device_path" : "tpm-device-path",
+        }
+
         devtype = src.get_model()[src.get_active()][0]
         conn = self.conn.get_backend()
 
@@ -1096,6 +1101,16 @@ class vmmAddHardware(vmmGObjectUI):
         idx = src.get_active()
         if idx < 0:
             return
+
+        char_widget_mappings = {
+            "source_path" : "char-path",
+            "source_mode" : "char-mode",
+            "source_host" : "char-host",
+            "bind_host" : "char-bind-host",
+            "protocol"  : "char-use-telnet",
+            "target_name" : "char-target-name",
+            "target_type" : "char-target-type",
+        }
 
         char_class = self.get_char_type()
         devtype = src.get_model()[src.get_active()][0]
@@ -1504,6 +1519,7 @@ class vmmAddHardware(vmmGObjectUI):
         charclass = self.get_char_type()
         modebox = self.widget("char-mode")
         devbox = self.widget("char-device-type")
+        typebox = self.widget("char-target-type")
         devtype = devbox.get_model()[devbox.get_active()][0]
         conn = self.conn.get_backend()
 
@@ -1517,6 +1533,7 @@ class vmmAddHardware(vmmGObjectUI):
         source_port = self.widget("char-port").get_value()
         bind_port = self.widget("char-bind-port").get_value()
         target_name = self.widget("char-target-name").get_text()
+        target_type = typebox.get_model()[typebox.get_active()][0]
 
         if self.widget("char-use-telnet").get_active():
             protocol = VirtualSerialDevice.PROTOCOL_TELNET
@@ -1532,6 +1549,7 @@ class vmmAddHardware(vmmGObjectUI):
             "bind_host": bind_host,
             "protocol": protocol,
             "target_name": target_name,
+            "target_type": target_type,
         }
 
         try:

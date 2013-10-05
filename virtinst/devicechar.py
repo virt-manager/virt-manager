@@ -110,7 +110,6 @@ class _VirtualCharDevice(VirtualDevice):
 
         return desc
 
-
     def supports_property(self, propname, ro=False):
         """
         Whether the character dev type supports the passed property name
@@ -124,20 +123,24 @@ class _VirtualCharDevice(VirtualDevice):
             "protocol"      : [self.TYPE_TCP],
             "bind_host"     : [self.TYPE_UDP],
             "bind_port"     : [self.TYPE_UDP],
-       }
+        }
 
         if ro:
             users["source_path"] += [self.TYPE_PTY]
 
         channel_users = {
             "target_name"   : [self.CHANNEL_TARGET_VIRTIO],
-       }
+        }
+
+        console_props = ["target_type"]
 
         if users.get(propname):
             return self.type in users[propname]
         if channel_users.get(propname):
             return (self.virtual_device_type == "channel" and
                     self.target_type in channel_users[propname])
+        if propname in console_props:
+            return self.virtual_device_type == "console"
         return hasattr(self, propname)
 
 
@@ -256,6 +259,7 @@ class _VirtualCharDevice(VirtualDevice):
 
 class VirtualConsoleDevice(_VirtualCharDevice):
     virtual_device_type = "console"
+    TYPES = [_VirtualCharDevice.TYPE_PTY]
 
 
 class VirtualSerialDevice(_VirtualCharDevice):
