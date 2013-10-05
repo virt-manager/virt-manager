@@ -86,6 +86,7 @@ class vmmAddHardware(vmmGObjectUI):
 
             "on_char_device_type_changed": self.change_char_device_type,
             "on_char_target_name_changed": self.change_char_target_name,
+            "on_char_auto_socket_toggled": self.change_char_auto_socket,
 
             "on_tpm_device_type_changed": self.change_tpm_device_type,
 
@@ -470,6 +471,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("char-bind-host").set_text("127.0.0.1")
         self.widget("char-bind-port").set_value(4556)
         self.widget("char-use-telnet").set_active(False)
+        self.widget("char-auto-socket").set_active(True)
 
         # FS params
         self.widget("fs-type-combo").set_active(0)
@@ -1107,6 +1109,14 @@ class vmmAddHardware(vmmGObjectUI):
             uihelpers.set_grid_row_visible(self.widget(widget_name + "-label"),
                                            make_visible)
 
+    def change_char_auto_socket(self, src):
+        if not src.get_visible():
+            return
+
+        doshow = not src.get_active()
+        uihelpers.set_grid_row_visible(self.widget("char-path-label"), doshow)
+        uihelpers.set_grid_row_visible(self.widget("char-mode-label"), doshow)
+
     def change_char_target_name(self, src):
         if not src.get_visible():
             return
@@ -1138,6 +1148,8 @@ class vmmAddHardware(vmmGObjectUI):
         conn = self.conn.get_backend()
         ischan = char_class.virtual_device_type == "channel"
         iscon = char_class.virtual_device_type == "console"
+        show_auto = (devtype == "unix" and ischan and
+            self.conn.check_conn_support(self.conn.SUPPORT_CONN_AUTOSOCKET))
 
         self._dev = char_class(conn)
         self._dev.type = devtype
@@ -1151,6 +1163,9 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("char-target-name-label"), ischan)
         uihelpers.set_grid_row_visible(
             self.widget("char-target-type-label"), iscon)
+        uihelpers.set_grid_row_visible(
+            self.widget("char-auto-socket-label"), show_auto)
+        self.widget("char-auto-socket").emit("toggled")
 
         has_mode = self._dev.supports_property("source_mode")
         if has_mode and self.widget("char-mode").get_active() == -1:
@@ -1567,6 +1582,11 @@ class vmmAddHardware(vmmGObjectUI):
             protocol = VirtualSerialDevice.PROTOCOL_TELNET
         else:
             protocol = VirtualSerialDevice.PROTOCOL_RAW
+
+        if (self.widget("char-auto-socket").get_visible() and
+            self.widget("char-auto-socket").get_active()):
+            source_path = None
+            source_mode = "bind"
 
         value_mappings = {
             "source_path" : source_path,

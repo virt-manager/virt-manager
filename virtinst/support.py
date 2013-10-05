@@ -328,6 +328,8 @@ SUPPORT_CONN_FILESYSTEM = _make(
     drv_version=[("qemu", 13000), ("lxc", 0), ("openvz", 0), ("test", 0)],
     drv_libvirt_version=[("qemu", 8005), ("lxc", 0),
                          ("openvz", 0), ("test", 0)])
+SUPPORT_CONN_AUTOSOCKET = _make(drv_libvirt_version=[("qemu", 1000006)])
+
 
 # Domain checks
 SUPPORT_DOMAIN_GETVCPUS = _make(function="virDomain.vcpus", args=())
