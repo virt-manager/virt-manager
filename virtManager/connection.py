@@ -662,16 +662,25 @@ class vmmConnection(vmmGObject):
     def get_nodedevs(self, devtype=None, devcap=None):
         retdevs = []
         for dev in self.nodedevs.values():
-            vdev = dev.get_xmlobj()
-            if devtype and vdev.device_type != devtype:
+            xmlobj = dev.get_xmlobj()
+            if devtype and xmlobj.device_type != devtype:
                 continue
 
             if devcap:
-                if (not hasattr(vdev, "capability_type") or
-                    vdev.capability_type != devcap):
+                if (not hasattr(xmlobj, "capability_type") or
+                    xmlobj.capability_type != devcap):
                     continue
 
-            retdevs.append(vdev)
+            if (devtype == "usb_device" and
+                (("Linux Foundation" in str(xmlobj.vendor_name) or
+                 ("Linux" in str(xmlobj.vendor_name) and
+                  xmlobj.vendor_id == "0x1d6b")) and
+                 ("root hub" in str(xmlobj.product_name) or
+                  ("host controller" in str(xmlobj.product_name).lower() and
+                   str(xmlobj.product_id).startswith("0x000"))))):
+                continue
+
+            retdevs.append(xmlobj)
 
         return retdevs
 
@@ -680,8 +689,8 @@ class vmmConnection(vmmGObject):
         devs = self.get_nodedevs(devtype)
 
         for dev in devs:
-            if vendor == dev.vendor_id and \
-                product == dev.product_id:
+            if (vendor == dev.vendor_id and
+                product == dev.product_id):
                 count += 1
 
         logging.debug("There are %d node devices with "
