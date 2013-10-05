@@ -45,6 +45,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         self.conn_signal_ids = []
         self.finish_cb_id = None
         self.can_new_volume = True
+        self._first_run = False
 
         # Add Volume wizard
         self.addvol = None
@@ -178,6 +179,11 @@ class vmmStorageBrowser(vmmGObjectUI):
         # FIXME: Need a connection specific "vol-added" function?
         #        Won't be able to pick that change up from outside?
 
+        if not self._first_run:
+            self._first_run = True
+            pool = uihelpers.get_default_pool(self.conn)
+            uihelpers.set_row_selection(
+                self.widget("pool-list"), pool and pool.get_uuid() or None)
         # Manually trigger vol_selected, so buttons are in the correct state
         self.vol_selected()
         self.pool_selected()
