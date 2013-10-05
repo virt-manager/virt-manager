@@ -38,8 +38,9 @@ class _VirtualCharDevice(VirtualDevice):
     TYPE_UDP      = "udp"
     TYPE_UNIX     = "unix"
     TYPE_SPICEVMC = "spicevmc"
-    _TYPES_FOR_ALL = [TYPE_PTY, TYPE_DEV, TYPE_STDIO, TYPE_FILE, TYPE_VC,
-                      TYPE_PIPE, TYPE_NULL, TYPE_TCP, TYPE_UDP, TYPE_UNIX]
+    # We don't list the non-UI friendly types here
+    _TYPES_FOR_ALL = [TYPE_PTY, TYPE_DEV, TYPE_FILE,
+                      TYPE_TCP, TYPE_UDP, TYPE_UNIX]
     _TYPES_FOR_CHANNEL = [TYPE_SPICEVMC]
     TYPES = _TYPES_FOR_ALL
 
@@ -267,8 +268,8 @@ class VirtualParallelDevice(_VirtualCharDevice):
 
 class VirtualChannelDevice(_VirtualCharDevice):
     virtual_device_type = "channel"
-    TYPES = _VirtualCharDevice._TYPES_FOR_CHANNEL + \
-            _VirtualCharDevice._TYPES_FOR_ALL
+    TYPES = (_VirtualCharDevice._TYPES_FOR_CHANNEL +
+             _VirtualCharDevice._TYPES_FOR_ALL)
 
 
 VirtualConsoleDevice.register_type()
