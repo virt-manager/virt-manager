@@ -123,6 +123,14 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(guest.clock)
         check("offset", "utc", "localtime")
+        guest.clock.remove_timer(guest.clock.timers[0])
+        check = self._make_checker(guest.clock.timers[0])
+        check("name", "pit", "rtc")
+        check("tickpolicy", "delay", "merge")
+        timer = guest.clock.add_timer()
+        check = self._make_checker(timer)
+        check("name", None, "hpet")
+        check("present", None, False)
 
         check = self._make_checker(guest.seclabel)
         check("type", "static", "static")

@@ -30,7 +30,10 @@
     <feature policy="optional" name="cr8legacy"/>
     <feature name="addfeature" policy="require"/>
   </cpu>
-  <clock offset="localtime"/>
+  <clock offset="localtime">
+    <timer name="rtc" tickpolicy="merge"/>
+    <timer name="hpet" present="no"/>
+  </clock>
   <on_poweroff>restart</on_poweroff>
   <on_reboot>destroy</on_reboot>
   <on_crash>destroy</on_crash>

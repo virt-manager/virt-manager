@@ -17,10 +17,26 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtinst.xmlbuilder import XMLBuilder, XMLProperty
+from virtinst.xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+
+
+class _ClockTimer(XMLBuilder):
+    _XML_ROOT_NAME = "timer"
+
+    name = XMLProperty("./@name")
+    present = XMLProperty("./@present", is_yesno=True)
+    tickpolicy = XMLProperty("./@tickpolicy")
 
 
 class Clock(XMLBuilder):
     _XML_ROOT_NAME = "clock"
 
     offset = XMLProperty("./@offset")
+    timers = XMLChildProperty(_ClockTimer)
+
+    def add_timer(self):
+        obj = _ClockTimer(self.conn)
+        self._add_child(obj)
+        return obj
+    def remove_timer(self, obj):
+        self._remove_child(obj)

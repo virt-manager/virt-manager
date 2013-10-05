@@ -26,7 +26,10 @@
     <feature policy='optional' name='cr8legacy'/>
     <feature name='foo' policy='bar'/>
   </cpu>
-  <clock offset="utc"/>
+  <clock offset="utc">
+    <timer name='rtc' tickpolicy='catchup'/>
+    <timer name='pit' tickpolicy='delay'/>
+  </clock>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>
