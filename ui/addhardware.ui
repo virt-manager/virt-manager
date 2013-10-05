@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Sat Oct  5 11:25:05 2013 -->
+<!-- Generated with glade 3.16.0 on Sat Oct  5 13:26:39 2013 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
@@ -1416,7 +1416,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
+                                <property name="top_attach">1</property>
                                 <property name="width">1</property>
                                 <property name="height">1</property>
                               </packing>
@@ -1430,36 +1430,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="char-target-name-label">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Name:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">char-target-name</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">2</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="char-target-name">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="invisible_char">●</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">2</property>
+                                <property name="top_attach">1</property>
                                 <property name="width">1</property>
                                 <property name="height">1</property>
                               </packing>
@@ -1475,7 +1446,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
+                                <property name="top_attach">2</property>
                                 <property name="width">1</property>
                                 <property name="height">1</property>
                               </packing>
@@ -1488,7 +1459,43 @@
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
+                                <property name="top_attach">2</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="char-target-name-label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">_Name:</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="char-target-name">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="has_entry">True</property>
+                                <signal name="changed" handler="on_char_target_name_changed" swapped="no"/>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry" id="combobox-entry">
+                                    <property name="can_focus">True</property>
+                                    <property name="width_chars">20</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
                                 <property name="width">1</property>
                                 <property name="height">1</property>
                               </packing>

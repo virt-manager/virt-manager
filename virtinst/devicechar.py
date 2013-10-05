@@ -64,6 +64,13 @@ class _VirtualCharDevice(VirtualDevice):
     CONSOLE_TARGETS = [CONSOLE_TARGET_SERIAL, CONSOLE_TARGET_UML,
                        CONSOLE_TARGET_XEN, CONSOLE_TARGET_VIRTIO]
 
+    CHANNEL_NAME_SPICE = "com.redhat.spice.0"
+    CHANNEL_NAME_QEMUGA = "org.qemu.guest_agent.0"
+    CHANNEL_NAME_LIBGUESTFS = "org.libguestfs.channel.0"
+    CHANNEL_NAMES = [CHANNEL_NAME_SPICE,
+                     CHANNEL_NAME_QEMUGA,
+                     CHANNEL_NAME_LIBGUESTFS]
+
     @staticmethod
     def pretty_type(ctype):
         """
@@ -250,7 +257,7 @@ class _VirtualCharDevice(VirtualDevice):
 
     def _default_target_name(self):
         if self.type == self.TYPE_SPICEVMC:
-            return "com.redhat.spice.0"
+            return self.CHANNEL_NAME_SPICE
         return None
     target_name = XMLProperty("./target/@name",
                            doc=_("Sysfs name of virtio port in the guest"),

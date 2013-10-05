@@ -85,6 +85,7 @@ class vmmAddHardware(vmmGObjectUI):
             "on_graphics_use_password": self.change_password_chk,
 
             "on_char_device_type_changed": self.change_char_device_type,
+            "on_char_target_name_changed": self.change_char_target_name,
 
             "on_tpm_device_type_changed": self.change_tpm_device_type,
 
@@ -262,6 +263,20 @@ class vmmAddHardware(vmmGObjectUI):
             model.append(["virtio", "virtio"])
         else:
             model.append([None, "default"])
+
+        # Char target name
+        lst = self.widget("char-target-name")
+        model = Gtk.ListStore(str)
+        lst.set_model(model)
+        uihelpers.set_combo_text_column(lst, 0)
+        for n in VirtualChannelDevice.CHANNEL_NAMES:
+            model.append([n])
+
+        # Char device type
+        lst = self.widget("char-device-type")
+        model = Gtk.ListStore(str, str)
+        lst.set_model(model)
+        uihelpers.set_combo_text_column(lst, 1)
 
         # Watchdog widgets
         combo = self.widget("watchdog-model")
@@ -448,13 +463,13 @@ class vmmAddHardware(vmmGObjectUI):
         # Char parameters
         self.widget("char-device-type").set_active(0)
         self.widget("char-target-type").set_active(0)
+        self.widget("char-target-name").set_active(0)
         self.widget("char-path").set_text("")
         self.widget("char-host").set_text("127.0.0.1")
         self.widget("char-port").set_value(4555)
         self.widget("char-bind-host").set_text("127.0.0.1")
         self.widget("char-bind-port").set_value(4556)
         self.widget("char-use-telnet").set_active(False)
-        self.widget("char-target-name").set_text("com.redhat.spice.0")
 
         # FS params
         self.widget("fs-type-combo").set_active(0)
@@ -916,16 +931,11 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Char device type
         char_devtype = self.widget("char-device-type")
+        char_devtype_model = char_devtype.get_model()
+        char_devtype_model.clear()
         char_class = self.get_char_type()
 
         # Type name, desc
-        char_devtype_model = Gtk.ListStore(str, str)
-        char_devtype.clear()
-        char_devtype.set_model(char_devtype_model)
-        text = Gtk.CellRendererText()
-        char_devtype.pack_start(text, True)
-        char_devtype.add_attribute(text, 'text', 1)
-
         for t in char_class.TYPES:
             if (t in rhel6_blacklist and
                 not self.vm.rhel6_defaults()):
@@ -956,8 +966,8 @@ class vmmAddHardware(vmmGObjectUI):
 
         if page == PAGE_CHAR:
             self.update_char_device_type_model()
-            devtype = self.widget("char-device-type")
-            self.change_char_device_type(devtype)
+            self.widget("char-device-type").emit("changed")
+            self.widget("char-target-name").emit("changed")
 
         if page == PAGE_HOSTDEV:
             (ignore, devtype, devcap,
@@ -1096,6 +1106,19 @@ class vmmAddHardware(vmmGObjectUI):
             make_visible = self._dev.supports_property(param_name)
             uihelpers.set_grid_row_visible(self.widget(widget_name + "-label"),
                                            make_visible)
+
+    def change_char_target_name(self, src):
+        if not src.get_visible():
+            return
+
+        text = src.get_child().get_text()
+        settype = None
+        if text == VirtualChannelDevice.CHANNEL_NAME_SPICE:
+            settype = "spicevmc"
+        elif (text == VirtualChannelDevice.CHANNEL_NAME_QEMUGA or
+              text == VirtualChannelDevice.CHANNEL_NAME_LIBGUESTFS):
+            settype = "unix"
+        uihelpers.set_row_selection(self.widget("char-device-type"), settype)
 
     def change_char_device_type(self, src):
         idx = src.get_active()
@@ -1532,7 +1555,7 @@ class vmmAddHardware(vmmGObjectUI):
         bind_host = self.widget("char-bind-host").get_text()
         source_port = self.widget("char-port").get_value()
         bind_port = self.widget("char-bind-port").get_value()
-        target_name = self.widget("char-target-name").get_text()
+        target_name = self.widget("char-target-name").get_child().get_text()
         target_type = typebox.get_model()[typebox.get_active()][0]
 
         if self.widget("char-use-telnet").get_active():
