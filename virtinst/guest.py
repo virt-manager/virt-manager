@@ -507,6 +507,8 @@ class Guest(XMLBuilder):
             return
         if not self.os.is_x86():
             return
+        if self.get_devices("input"):
+            return
         self.add_device(virtinst.VirtualInputDevice(self.conn))
 
     def add_default_sound_device(self):
@@ -519,6 +521,9 @@ class Guest(XMLBuilder):
     def add_default_console_device(self):
         if self.os.is_xenpv():
             return
+        if self.get_devices("console") or self.get_devices("serial"):
+            return
+
         dev = virtinst.VirtualConsoleDevice(self.conn)
         dev.type = dev.TYPE_PTY
         self.add_device(dev)
@@ -526,12 +531,18 @@ class Guest(XMLBuilder):
     def add_default_video_device(self):
         if self.os.is_container():
             return
+        if self.get_devices("video"):
+            return
+        if not self.get_devices("graphics"):
+            return
         self.add_device(virtinst.VirtualVideoDevice(self.conn))
 
     def add_default_usb_controller(self):
         if self.os.is_container():
             return
         if not self.os.is_x86():
+            return
+        if any([d.type == "usb" for d in self.get_devices("controller")]):
             return
         if not self.conn.check_conn_support(
             self.conn.SUPPORT_CONN_DEFAULT_USB2):

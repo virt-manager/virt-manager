@@ -1488,8 +1488,8 @@ class vmmCreate(vmmGObjectUI):
             gdev = self.get_graphics_device(guest)
             if gdev:
                 guest.add_device(gdev)
-                guest.add_default_video_device()
 
+            guest.add_default_video_device()
             guest.add_default_input_device()
             guest.add_default_console_device()
             if self.config.get_new_vm_sound():

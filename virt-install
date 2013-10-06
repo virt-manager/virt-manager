@@ -529,17 +529,10 @@ def build_guest_instance(conn, options):
     cli.get_tpms(guest, options.tpm)
     cli.get_rngs(guest, options.rng)
 
-    if not guest.get_devices("input"):
-        guest.add_default_input_device()
-    if not guest.get_devices("console") and not guest.get_devices("serial"):
-        guest.add_default_console_device()
-    if not guest.get_devices("video") and guest.get_devices("graphics"):
-        guest.add_default_video_device()
-
-    do_default_usb = all([d.type != "usb" for d in
-                          guest.get_devices("controller")])
-    if do_default_usb:
-        guest.add_default_usb_controller()
+    guest.add_default_input_device()
+    guest.add_default_console_device()
+    guest.add_default_video_device()
+    guest.add_default_usb_controller()
 
     # Install options
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
