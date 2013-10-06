@@ -111,9 +111,9 @@ class ConnectionInfo(object):
     def console_active(self):
         if self.gsocket:
             return True
-        if not self.gport:
+        if (self.gport in [None, -1] and self.gtlsport in [None, -1]):
             return False
-        return int(self.gport) == -1
+        return True
 
 
 class _TunnelScheduler(object):
@@ -1321,7 +1321,7 @@ class vmmConsolePages(vmmGObjectUI):
                           "guest's listen address." % ginfo.transport))
             return
 
-        if ginfo.console_active():
+        if not ginfo.console_active():
             self.activate_unavailable_page(
                             _("Graphical console is not yet active for guest"))
             self.schedule_retry()
