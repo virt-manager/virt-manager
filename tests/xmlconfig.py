@@ -447,7 +447,7 @@ class TestXMLConfig(unittest.TestCase):
         g = build_guest()
         self._compare(g, "install-f11-noac97", False)
 
-        utils.set_conn(utils.open_plainkvm(connver=10000))
+        utils.set_conn(utils.open_plainkvm(libver=7000, connver=7000))
         g = build_guest()
         self._compare(g, "install-f11-noac97", False)
 
