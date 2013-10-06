@@ -46,17 +46,15 @@ def _sanitize_xml(xml):
     import difflib
 
     orig = xml
-    xml = re.sub("arch='.*'", "arch='i686'", xml)
-    xml = re.sub("arch=\".*\"", "arch='i686'", xml)
-    xml = re.sub("domain type='.*'", "domain type='test'", xml)
-    xml = re.sub("domain type=\".*\"", "domain type='test'", xml)
-    xml = re.sub("machine type='.*'", "", xml)
+    xml = re.sub("arch=\".*\"", "arch=\"i686\"", xml)
+    xml = re.sub("domain type=\".*\"", "domain type=\"test\"", xml)
     xml = re.sub("machine type=\".*\"", "", xml)
     xml = re.sub(">exe<", ">hvm<", xml)
 
-    logging.debug("virtinst test sanitizing diff\n:%s",
-                  "\n".join(difflib.unified_diff(orig.split("\n"),
-                                                 xml.split("\n"))))
+    diff = "\n".join(difflib.unified_diff(orig.split("\n"),
+                                          xml.split("\n")))
+    if diff:
+        logging.debug("virtinst test sanitizing diff\n:%s", diff)
     return xml
 
 
