@@ -1587,6 +1587,10 @@ class vmmAddHardware(vmmGObjectUI):
         else:
             protocol = VirtualSerialDevice.PROTOCOL_RAW
 
+        if not self.widget("char-target-name").get_visible():
+            target_name = None
+        if not typebox.get_visible():
+            target_type = None
         if (self.widget("char-auto-socket").get_visible() and
             self.widget("char-auto-socket").get_active()):
             source_path = None
@@ -1608,7 +1612,7 @@ class vmmAddHardware(vmmGObjectUI):
             self._dev = devclass
 
             for param_name, val in value_mappings.items():
-                if self._dev.supports_property(param_name):
+                if self._dev.supports_property(param_name) and val is not None:
                     setattr(self._dev, param_name, val)
 
             # Dump XML for sanity checking
