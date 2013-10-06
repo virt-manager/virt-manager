@@ -557,6 +557,19 @@ class Guest(XMLBuilder):
         for dev in virtinst.VirtualController.get_usb2_controllers(self.conn):
             self.add_device(dev)
 
+    def add_default_channels(self):
+        if self.get_devices("channel"):
+            return
+
+        if (self.conn.is_qemu() and
+            self._lookup_osdict_key("qemu_ga", False) and
+            self.conn.check_conn_support(self.conn.SUPPORT_CONN_AUTOSOCKET)):
+            dev = virtinst.VirtualChannelDevice(self.conn)
+            dev.type = "unix"
+            dev.target_type = "virtio"
+            dev.target_name = dev.CHANNEL_NAME_QEMUGA
+            self.add_device(dev)
+
     def _set_transient_device_defaults(self, install):
         def do_remove_media(d):
             # Keep cdrom around, but with no media attached,

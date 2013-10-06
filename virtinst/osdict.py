@@ -97,6 +97,8 @@ def list_os(list_types=False, typename=None,
 def lookup_osdict_key(variant, key, default):
     val = _SENTINEL
     if variant is not None:
+        if not hasattr(_allvariants[variant], key):
+            raise ValueError("Unknown osdict property '%s'" % key)
         val = getattr(_allvariants[variant], key)
     if val == _SENTINEL:
         val = default
@@ -140,6 +142,7 @@ class _OSVariant(object):
         and we should use it as the default console.
     @xen_disable_acpi: If True, disable acpi/apic for this OS if on old xen.
         This corresponds with the SUPPORT_CONN_SKIP_DEFAULT_ACPI check
+    @qemu_ga: If True, this distro has qemu_ga available by default
 
     The rest of the parameters are about setting device/guest defaults
     based on the OS. They should be self explanatory. See guest.py for
@@ -154,7 +157,8 @@ class _OSVariant(object):
                  inputtype=_SENTINEL, inputbus=_SENTINEL,
                  videomodel=_SENTINEL, virtionet=_SENTINEL,
                  virtiodisk=_SENTINEL, virtiommio=_SENTINEL,
-                 virtioconsole=_SENTINEL, xen_disable_acpi=_SENTINEL):
+                 virtioconsole=_SENTINEL, xen_disable_acpi=_SENTINEL,
+                 qemu_ga=_SENTINEL):
         if is_type:
             if parent != _SENTINEL:
                 raise RuntimeError("OS types must not specify parent")
@@ -213,6 +217,7 @@ class _OSVariant(object):
         self.virtionet = _get_default("virtionet", virtionet)
         self.virtiommio = _get_default("virtiommio", virtiommio)
         self.virtioconsole = _get_default("virtioconsole", virtioconsole)
+        self.qemu_ga = _get_default("qemu_ga", qemu_ga)
 
 
 def _add_type(*args, **kwargs):
@@ -250,7 +255,7 @@ _add_var("fedora14", "Fedora 14", parent="fedora13")
 _add_var("fedora15", "Fedora 15", parent="fedora14")
 _add_var("fedora16", "Fedora 16", parent="fedora15")
 _add_var("fedora17", "Fedora 17", parent="fedora16")
-_add_var("fedora18", "Fedora 18", supported=True, virtioconsole=True, parent="fedora17")
+_add_var("fedora18", "Fedora 18", supported=True, virtioconsole=True, qemu_ga=True, parent="fedora17")
 _add_var("fedora19", "Fedora 19", virtiommio=True, parent="fedora18")
 _add_var("fedora20", "Fedora 20", parent="fedora19")
 

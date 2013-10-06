@@ -1495,6 +1495,7 @@ class vmmCreate(vmmGObjectUI):
             if self.config.get_new_vm_sound():
                 guest.add_default_sound_device()
             guest.add_default_usb_controller()
+            guest.add_default_channels()
         except Exception, e:
             self.err.show_err(_("Error setting up default devices:") + str(e))
             return None
