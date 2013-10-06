@@ -526,6 +526,13 @@ class Guest(XMLBuilder):
 
         dev = virtinst.VirtualConsoleDevice(self.conn)
         dev.type = dev.TYPE_PTY
+
+        if (self.os.is_x86() and
+            self._lookup_osdict_key("virtioconsole", False) and
+            self.conn.check_conn_support(
+            self.conn.SUPPORT_CONN_VIRTIO_CONSOLE)):
+            dev.target_type = "virtio"
+
         self.add_device(dev)
 
     def add_default_video_device(self):

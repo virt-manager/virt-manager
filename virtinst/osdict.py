@@ -132,12 +132,14 @@ class _OSVariant(object):
         distros we show in virt-manager by default, so old distros aren't
         squeezing out current ones.
     @three_stage_install: If True, this VM has a 3 stage install, AKA windows.
-    @xen_disable_acpi: If True, disable acpi/apic for this OS if on old xen.
-        This corresponds with the SUPPORT_CONN_SKIP_DEFAULT_ACPI check
     @virtionet: If True, this OS supports virtionet out of the box
     @virtiodisk: If True, this OS supports virtiodisk out of the box
     @virtiommio: If True, this OS supports virtio-mmio out of the box,
         which provides virtio for certain ARM configurations
+    @virtioconsole: If True, this OS supports virtio-console out of the box,
+        and we should use it as the default console.
+    @xen_disable_acpi: If True, disable acpi/apic for this OS if on old xen.
+        This corresponds with the SUPPORT_CONN_SKIP_DEFAULT_ACPI check
 
     The rest of the parameters are about setting device/guest defaults
     based on the OS. They should be self explanatory. See guest.py for
@@ -152,7 +154,7 @@ class _OSVariant(object):
                  inputtype=_SENTINEL, inputbus=_SENTINEL,
                  videomodel=_SENTINEL, virtionet=_SENTINEL,
                  virtiodisk=_SENTINEL, virtiommio=_SENTINEL,
-                 xen_disable_acpi=_SENTINEL):
+                 virtioconsole=_SENTINEL, xen_disable_acpi=_SENTINEL):
         if is_type:
             if parent != _SENTINEL:
                 raise RuntimeError("OS types must not specify parent")
@@ -210,6 +212,7 @@ class _OSVariant(object):
         self.virtiodisk = _get_default("virtiodisk", virtiodisk)
         self.virtionet = _get_default("virtionet", virtionet)
         self.virtiommio = _get_default("virtiommio", virtiommio)
+        self.virtioconsole = _get_default("virtioconsole", virtioconsole)
 
 
 def _add_type(*args, **kwargs):
@@ -247,7 +250,7 @@ _add_var("fedora14", "Fedora 14", parent="fedora13")
 _add_var("fedora15", "Fedora 15", parent="fedora14")
 _add_var("fedora16", "Fedora 16", parent="fedora15")
 _add_var("fedora17", "Fedora 17", parent="fedora16")
-_add_var("fedora18", "Fedora 18", supported=True, parent="fedora17")
+_add_var("fedora18", "Fedora 18", supported=True, virtioconsole=True, parent="fedora17")
 _add_var("fedora19", "Fedora 19", virtiommio=True, parent="fedora18")
 _add_var("fedora20", "Fedora 20", parent="fedora19")
 

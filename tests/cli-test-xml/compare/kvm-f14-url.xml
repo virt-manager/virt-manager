@@ -64,7 +64,9 @@
     </interface>
     <input type="tablet" bus="usb"/>
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes"/>
-    <console type="pty"/>
+    <console type="pty">
+      <target type="virtio"/>
+    </console>
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
@@ -137,7 +139,9 @@
     </interface>
     <input type="tablet" bus="usb"/>
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes"/>
-    <console type="pty"/>
+    <console type="pty">
+      <target type="virtio"/>
+    </console>
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>

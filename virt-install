@@ -497,6 +497,12 @@ def build_guest_instance(conn, options):
     convert_old_disks(options)
     cli.convert_old_features(options)
 
+    # Install options
+    guest.installer.extraargs = options.extra
+    guest.installer.initrd_injections = options.initrd_injections
+    cli.set_os_variant(guest, options.distro_type, options.distro_variant)
+    guest.os.init = options.init
+
     # Guest configuration
     cli.get_uuid(guest, options.uuid)
     cli.get_vcpus(guest, options.vcpus, options.check_cpu)
@@ -533,12 +539,6 @@ def build_guest_instance(conn, options):
     guest.add_default_console_device()
     guest.add_default_video_device()
     guest.add_default_usb_controller()
-
-    # Install options
-    cli.set_os_variant(guest, options.distro_type, options.distro_variant)
-    guest.installer.extraargs = options.extra
-    guest.installer.initrd_injections = options.initrd_injections
-    guest.os.init = options.init
 
     # Do this after setting up all optional parameters, so we report error
     # about those first.

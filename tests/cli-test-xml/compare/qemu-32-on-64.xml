@@ -39,6 +39,8 @@
       <model type="virtio"/>
     </interface>
     <input type="tablet" bus="usb"/>
-    <console type="pty"/>
+    <console type="pty">
+      <target type="virtio"/>
+    </console>
   </devices>
 </domain>
