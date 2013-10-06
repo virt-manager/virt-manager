@@ -103,6 +103,9 @@ class Guest(XMLBuilder):
         # Allow virt-manager to override the default graphics type
         self.default_graphics_type = cliconfig.default_graphics
 
+        self.skip_default_console = False
+        self.skip_default_channel = False
+
         self._os_variant = None
         self._random_uuid = None
         self._install_devices = []
@@ -519,6 +522,8 @@ class Guest(XMLBuilder):
         self.add_device(virtinst.VirtualAudio(self.conn))
 
     def add_default_console_device(self):
+        if self.skip_default_console:
+            return
         if self.os.is_xenpv():
             return
         if self.get_devices("console") or self.get_devices("serial"):
@@ -558,6 +563,8 @@ class Guest(XMLBuilder):
             self.add_device(dev)
 
     def add_default_channels(self):
+        if self.skip_default_channel:
+            return
         if self.get_devices("channel"):
             return
 
@@ -855,6 +862,9 @@ class Guest(XMLBuilder):
             for chn in self.get_devices("channel"):
                 if chn.type == chn.TYPE_SPICEVMC:
                     return True
+
+        if self.skip_default_channel:
+            return
 
         if (not has_spice_agent() and
             self.conn.check_conn_support(

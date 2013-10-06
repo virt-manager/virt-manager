@@ -1756,6 +1756,13 @@ def _parse_char(guest, optstr, dev):
     opts = parse_optstr(optstr, remove_first="char_type")
     ctype = opts.get("char_type")
 
+    if ctype == "none" and dev_type == "console":
+        guest.skip_default_console = True
+        return
+    if ctype == "none" and dev_type == "channel":
+        guest.skip_default_channel = True
+        return
+
     def support_check(dev, paramname, dictname):
         if type(paramname) is not str:
             return
