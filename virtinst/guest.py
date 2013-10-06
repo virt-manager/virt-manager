@@ -534,7 +534,7 @@ class Guest(XMLBuilder):
 
         if (self.os.is_x86() and
             self._lookup_osdict_key("virtioconsole", False) and
-            self.conn.check_conn_support(
+            self.conn.check_support(
             self.conn.SUPPORT_CONN_VIRTIO_CONSOLE)):
             dev.target_type = "virtio"
 
@@ -556,7 +556,7 @@ class Guest(XMLBuilder):
             return
         if any([d.type == "usb" for d in self.get_devices("controller")]):
             return
-        if not self.conn.check_conn_support(
+        if not self.conn.check_support(
             self.conn.SUPPORT_CONN_DEFAULT_USB2):
             return
         for dev in virtinst.VirtualController.get_usb2_controllers(self.conn):
@@ -570,7 +570,7 @@ class Guest(XMLBuilder):
 
         if (self.conn.is_qemu() and
             self._lookup_osdict_key("qemu_ga", False) and
-            self.conn.check_conn_support(self.conn.SUPPORT_CONN_AUTOSOCKET)):
+            self.conn.check_support(self.conn.SUPPORT_CONN_AUTOSOCKET)):
             dev = virtinst.VirtualChannelDevice(self.conn)
             dev.type = "unix"
             dev.target_type = "virtio"
@@ -645,7 +645,7 @@ class Guest(XMLBuilder):
             return
         if not self.os.is_x86():
             return
-        if not self.conn.check_conn_support(
+        if not self.conn.check_support(
             self.conn.SUPPORT_CONN_ADVANCED_CLOCK):
             return
 
@@ -699,7 +699,7 @@ class Guest(XMLBuilder):
 
         default = True
         if (self._lookup_osdict_key("xen_disable_acpi", False) and
-            self.conn.check_conn_support(
+            self.conn.check_support(
                 support.SUPPORT_CONN_SKIP_DEFAULT_ACPI)):
             default = False
 
@@ -755,7 +755,7 @@ class Guest(XMLBuilder):
         if (self.os.is_arm_vexpress() and
             self.os.dtb and
             self._lookup_osdict_key("virtiommio", False) and
-            self.conn.check_conn_support(support.SUPPORT_CONN_VIRTIO_MMIO)):
+            self.conn.check_support(support.SUPPORT_CONN_VIRTIO_MMIO)):
             return True
 
         return False
@@ -829,10 +829,10 @@ class Guest(XMLBuilder):
                 inp.bus  = input_bus
 
     def _set_sound_defaults(self):
-        if self.conn.check_conn_support(
+        if self.conn.check_support(
                 support.SUPPORT_CONN_SOUND_ICH6):
             default = "ich6"
-        elif self.conn.check_conn_support(
+        elif self.conn.check_support(
                 support.SUPPORT_CONN_SOUND_AC97):
             default = "ac97"
         else:
@@ -850,7 +850,7 @@ class Guest(XMLBuilder):
             gtype = self.default_graphics_type
             logging.debug("Using default_graphics=%s", gtype)
             if (gtype == "spice" and not
-                self.conn.check_conn_support(
+                self.conn.check_support(
                     self.conn.SUPPORT_CONN_GRAPHICS_SPICE)):
                 logging.debug("spice requested but HV doesn't support it. "
                               "Using vnc.")
@@ -867,7 +867,7 @@ class Guest(XMLBuilder):
             return
 
         if (not has_spice_agent() and
-            self.conn.check_conn_support(
+            self.conn.check_support(
                 self.conn.SUPPORT_CONN_CHAR_SPICEVMC)):
             agentdev = virtinst.VirtualChannelDevice(self.conn)
             agentdev.type = agentdev.TYPE_SPICEVMC

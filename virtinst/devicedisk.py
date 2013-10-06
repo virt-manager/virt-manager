@@ -106,7 +106,7 @@ def _distill_storage(conn, do_create, nomanaged,
     """
     pool = None
     path_is_pool = False
-    storage_capable = conn.check_conn_support(conn.SUPPORT_CONN_STORAGE)
+    storage_capable = conn.check_support(conn.SUPPORT_CONN_STORAGE)
 
     if vol_object:
         pass
@@ -382,7 +382,7 @@ class VirtualDisk(VirtualDevice):
         """
         Return a volume instance from a pool name, vol name tuple
         """
-        if not conn.check_conn_support(conn.SUPPORT_CONN_STORAGE):
+        if not conn.check_support(conn.SUPPORT_CONN_STORAGE):
             raise ValueError(_("Connection does not support storage lookup."))
 
         try:
@@ -681,7 +681,7 @@ class VirtualDisk(VirtualDevice):
 
             return True
 
-        storage_capable = self.conn.check_conn_support(
+        storage_capable = self.conn.check_support(
                                         self.conn.SUPPORT_CONN_STORAGE)
 
         if self.conn.is_remote():

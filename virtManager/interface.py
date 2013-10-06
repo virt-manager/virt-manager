@@ -55,9 +55,8 @@ class vmmInterface(vmmLibvirtObject):
     def _backend_get_active(self):
         ret = True
         if self._support_isactive is None:
-            self._support_isactive = self.conn.check_interface_support(
-                                        self._backend,
-                                        self.conn.SUPPORT_INTERFACE_ISACTIVE)
+            self._support_isactive = self.conn.check_support(
+                self.conn.SUPPORT_INTERFACE_ISACTIVE, self._backend)
 
         if not self._support_isactive:
             return True

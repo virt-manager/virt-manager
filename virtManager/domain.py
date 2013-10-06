@@ -268,15 +268,12 @@ class vmmDomain(vmmLibvirtObject):
         """
         Initialization to do if backed by a libvirt virDomain
         """
-        self.managedsave_supported = self.conn.check_domain_support(
-                                    self._backend,
-                                    self.conn.SUPPORT_DOMAIN_MANAGED_SAVE)
-        self.remote_console_supported = self.conn.check_domain_support(
-                                    self._backend,
-                                    self.conn.SUPPORT_DOMAIN_CONSOLE_STREAM)
-        self.title_supported = self.conn.check_domain_support(
-                                    self._backend,
-                                    self.conn.SUPPORT_DOMAIN_GET_METADATA)
+        self.managedsave_supported = self.conn.check_support(
+            self.conn.SUPPORT_DOMAIN_MANAGED_SAVE, self._backend)
+        self.remote_console_supported = self.conn.check_support(
+            self.conn.SUPPORT_DOMAIN_CONSOLE_STREAM, self._backend)
+        self.title_supported = self.conn.check_support(
+            self.conn.SUPPORT_DOMAIN_GET_METADATA, self._backend)
 
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
@@ -394,18 +391,18 @@ class vmmDomain(vmmLibvirtObject):
     ##################
 
     def _get_getvcpus_supported(self):
-        return self.conn.check_domain_support(self._backend,
-                                            self.conn.SUPPORT_DOMAIN_GETVCPUS)
+        return self.conn.check_support(
+            self.conn.SUPPORT_DOMAIN_GETVCPUS, self._backend)
     getvcpus_supported = property(_get_getvcpus_supported)
 
     def _get_getjobinfo_supported(self):
-        return self.conn.check_domain_support(self._backend,
-                                             self.conn.SUPPORT_DOMAIN_JOB_INFO)
+        return self.conn.check_support(
+            self.conn.SUPPORT_DOMAIN_JOB_INFO, self._backend)
     getjobinfo_supported = property(_get_getjobinfo_supported)
 
     def snapshots_supported(self):
-        if not self.conn.check_domain_support(
-            self._backend, self.conn.SUPPORT_DOMAIN_LIST_SNAPSHOTS):
+        if not self.conn.check_support(
+            self.conn.SUPPORT_DOMAIN_LIST_SNAPSHOTS, self._backend):
             return _("Libvirt connection does not support snapshots.")
 
         if self.list_snapshots():
@@ -916,8 +913,8 @@ class vmmDomain(vmmLibvirtObject):
         # libvirt since 0.9.10 provides a SetMetadata API that provides
         # actual <description> 'hotplug', and using that means checkig
         # for support, version, etc.
-        if not self.conn.check_domain_support(self._backend,
-                self.conn.SUPPORT_DOMAIN_SET_METADATA):
+        if not self.conn.check_support(
+            self.conn.SUPPORT_DOMAIN_SET_METADATA, self._backend):
             return
 
         flags = (libvirt.VIR_DOMAIN_AFFECT_LIVE |
@@ -927,8 +924,8 @@ class vmmDomain(vmmLibvirtObject):
                 desc, None, None, flags)
 
     def hotplug_title(self, title):
-        if not self.conn.check_domain_support(self._backend,
-                self.conn.SUPPORT_DOMAIN_SET_METADATA):
+        if not self.conn.check_support(
+            self.conn.SUPPORT_DOMAIN_SET_METADATA, self._backend):
             return
 
         flags = (libvirt.VIR_DOMAIN_AFFECT_LIVE |
@@ -1315,8 +1312,8 @@ class vmmDomain(vmmLibvirtObject):
 
 
     def support_downtime(self):
-        return self.conn.check_domain_support(self._backend,
-                        self.conn.SUPPORT_DOMAIN_MIGRATE_DOWNTIME)
+        return self.conn.check_support(
+            self.conn.SUPPORT_DOMAIN_MIGRATE_DOWNTIME, self._backend)
 
     def migrate_set_max_downtime(self, max_downtime, flag=0):
         self._backend.migrateSetMaxDowntime(max_downtime, flag)

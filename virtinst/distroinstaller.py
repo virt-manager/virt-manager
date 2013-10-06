@@ -25,7 +25,6 @@ import tempfile
 
 import urlgrabber
 
-from virtinst import support
 from virtinst import StoragePool, StorageVolume
 from virtinst import util
 from virtinst import Installer
@@ -279,7 +278,7 @@ def _upload_media(conn, scratchdir, system_scratchdir,
                       " nothing to upload")
         return kernel, initrd, tmpvols
 
-    if not support.support_remote_url_install(conn):
+    if not conn.support_remote_url_install():
         logging.debug("Media upload not supported")
         return kernel, initrd, tmpvols
 

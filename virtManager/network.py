@@ -66,9 +66,8 @@ class vmmNetwork(vmmLibvirtObject):
 
     def _backend_get_active(self):
         if self._support_isactive is None:
-            self._support_isactive = self.conn.check_net_support(
-                                        self._backend,
-                                        self.conn.SUPPORT_NET_ISACTIVE)
+            self._support_isactive = self.conn.check_support(
+                self.conn.SUPPORT_NET_ISACTIVE, self._backend)
 
         if not self._support_isactive:
             return True

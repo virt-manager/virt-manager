@@ -108,7 +108,7 @@ def _old_poll_helper(origmap, typename,
 def fetch_nets(backend, origmap, build_func):
     name = "network"
 
-    if backend.check_conn_support(
+    if backend.check_support(
             backend.SUPPORT_CONN_LISTALLNETWORKS):
         return _new_poll_helper(origmap, name,
                                 backend.listAllNetworks,
@@ -126,7 +126,7 @@ def fetch_nets(backend, origmap, build_func):
 def fetch_pools(backend, origmap, build_func):
     name = "pool"
 
-    if backend.check_conn_support(
+    if backend.check_support(
             backend.SUPPORT_CONN_LISTALLSTORAGEPOOLS):
         return _new_poll_helper(origmap, name,
                                 backend.listAllStoragePools,
@@ -144,8 +144,8 @@ def fetch_pools(backend, origmap, build_func):
 def fetch_volumes(backend, pool, origmap, build_func):
     name = "volume"
 
-    if backend.check_pool_support(pool,
-        backend.SUPPORT_POOL_LISTALLVOLUMES):
+    if backend.check_support(
+        backend.SUPPORT_POOL_LISTALLVOLUMES, pool):
         return _new_poll_helper(origmap, name,
                                 pool.listAllVolumes,
                                 "name", build_func)
@@ -161,7 +161,7 @@ def fetch_volumes(backend, pool, origmap, build_func):
 def fetch_interfaces(backend, origmap, build_func):
     name = "interface"
 
-    if backend.check_conn_support(
+    if backend.check_support(
             backend.SUPPORT_CONN_LISTALLINTERFACES):
         return _new_poll_helper(origmap, name,
                                 backend.listAllInterfaces,
@@ -178,7 +178,7 @@ def fetch_interfaces(backend, origmap, build_func):
 
 def fetch_nodedevs(backend, origmap, build_func):
     name = "nodedev"
-    if backend.check_conn_support(
+    if backend.check_support(
             backend.SUPPORT_CONN_LISTALLDEVICES):
         return _new_poll_helper(origmap, name,
                                 backend.listAllDevices,
@@ -274,7 +274,7 @@ def _old_fetch_vms(backend, origmap, build_func):
 
 def fetch_vms(backend, origmap, build_func):
     name = "domain"
-    if backend.check_conn_support(
+    if backend.check_support(
             backend.SUPPORT_CONN_LISTALLDOMAINS):
         return _new_poll_helper(origmap, name,
                                 backend.listAllDomains,

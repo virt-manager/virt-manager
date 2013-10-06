@@ -76,7 +76,7 @@ class NodeDevice(XMLBuilder):
 
         @rtype: L{NodeDevice} instance
         """
-        if not conn.check_conn_support(conn.SUPPORT_CONN_NODEDEV):
+        if not conn.check_support(conn.SUPPORT_CONN_NODEDEV):
             raise ValueError(_("Connection does not support host device "
                                "enumeration."))
 

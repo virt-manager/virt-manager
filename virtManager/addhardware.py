@@ -377,14 +377,14 @@ class vmmAddHardware(vmmGObjectUI):
                       _("Connection does not support host device enumeration"),
                       "pci")
         add_hw_option("Video", "video-display", PAGE_VIDEO,
-                      self.conn.check_conn_support(
+                      self.conn.check_support(
                             self.conn.SUPPORT_CONN_DOMAIN_VIDEO),
                       _("Libvirt version does not support video devices."))
         add_hw_option("Watchdog", "device_pci", PAGE_WATCHDOG,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."))
         add_hw_option("Filesystem", Gtk.STOCK_DIRECTORY, PAGE_FILESYSTEM,
-                      self.conn.check_conn_support(
+                      self.conn.check_support(
                         self.conn.SUPPORT_CONN_FILESYSTEM),
                       _("Not supported for this hypervisor/libvirt "
                         "combination."))
@@ -1149,7 +1149,7 @@ class vmmAddHardware(vmmGObjectUI):
         ischan = char_class.virtual_device_type == "channel"
         iscon = char_class.virtual_device_type == "console"
         show_auto = (devtype == "unix" and ischan and
-            self.conn.check_conn_support(self.conn.SUPPORT_CONN_AUTOSOCKET))
+            self.conn.check_support(self.conn.SUPPORT_CONN_AUTOSOCKET))
 
         self._dev = char_class(conn)
         self._dev.type = devtype

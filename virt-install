@@ -442,7 +442,7 @@ def check_option_collisions(options, guest):
 
     if (options.location and
         guest.conn.is_remote() and not
-        virtinst.support.support_remote_url_install(guest.conn)):
+        guest.conn.support_remote_url_install()):
         fail(_("Libvirt version does not support remote --location installs"))
 
     if not options.location and options.extra:

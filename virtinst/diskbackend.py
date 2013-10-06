@@ -33,7 +33,7 @@ def _check_if_pool_source(conn, path):
     If passed path is a host disk device like /dev/sda, want to let the user
     use it
     """
-    if not conn.check_conn_support(conn.SUPPORT_CONN_STORAGE):
+    if not conn.check_support(conn.SUPPORT_CONN_STORAGE):
         return None
 
     def check_pool(poolname, path):

@@ -255,7 +255,7 @@ class vmmConnection(vmmGObject):
     ##########################
 
     def get_qualified_hostname(self):
-        if self.check_conn_support(self._backend.SUPPORT_CONN_GETHOSTNAME):
+        if self.check_support(self._backend.SUPPORT_CONN_GETHOSTNAME):
             return self._backend.getHostname()
 
         uri_hostname = self.get_uri_hostname()
@@ -328,7 +328,7 @@ class vmmConnection(vmmGObject):
         if fmt != "qcow2":
             return
 
-        if self.check_conn_support(self._backend.SUPPORT_CONN_DEFAULT_QCOW2):
+        if self.check_support(self._backend.SUPPORT_CONN_DEFAULT_QCOW2):
             return fmt
         return None
 
@@ -428,22 +428,12 @@ class vmmConnection(vmmGObject):
                          _supportname.startswith("SUPPORT_")]:
         locals()[_supportname] = getattr(virtinst.VirtualConnection,
                                          _supportname)
-    def check_conn_support(self, *args):
-        return self._backend.check_conn_support(*args)
-    def check_domain_support(self, *args):
-        return self._backend.check_domain_support(*args)
-    def check_pool_support(self, *args):
-        return self._backend.check_pool_support(*args)
-    def check_interface_support(self, *args):
-        return self._backend.check_interface_support(*args)
-    def check_stream_support(self, *args):
-        return self._backend.check_stream_support(*args)
-    def check_net_support(self, *args):
-        return self._backend.check_net_support(*args)
+    def check_support(self, *args):
+        return self._backend.check_support(*args)
 
     def is_storage_capable(self):
         if self._storage_capable is None:
-            self._storage_capable = self.check_conn_support(
+            self._storage_capable = self.check_support(
                                         self._backend.SUPPORT_CONN_STORAGE)
             if self._storage_capable is False:
                 logging.debug("Connection doesn't seem to support storage "
@@ -459,7 +449,7 @@ class vmmConnection(vmmGObject):
 
     def is_network_capable(self):
         if self._network_capable is None:
-            self._network_capable = self.check_conn_support(
+            self._network_capable = self.check_support(
                                        self._backend.SUPPORT_CONN_NETWORK)
             if self._network_capable is False:
                 logging.debug("Connection doesn't seem to support network "
@@ -469,7 +459,7 @@ class vmmConnection(vmmGObject):
 
     def is_interface_capable(self):
         if self._interface_capable is None:
-            self._interface_capable = self.check_conn_support(
+            self._interface_capable = self.check_support(
                                        self._backend.SUPPORT_CONN_INTERFACE)
             if self._interface_capable is False:
                 logging.debug("Connection doesn't seem to support interface "
@@ -479,7 +469,7 @@ class vmmConnection(vmmGObject):
 
     def is_nodedev_capable(self):
         if self._nodedev_capable is None:
-            self._nodedev_capable = self.check_conn_support(
+            self._nodedev_capable = self.check_support(
                                             self._backend.SUPPORT_CONN_NODEDEV)
         return self._nodedev_capable
 
@@ -508,21 +498,21 @@ class vmmConnection(vmmGObject):
             act   = 0
             inact = 0
 
-            if self.check_domain_support(vm,
-                                self._backend.SUPPORT_DOMAIN_XML_INACTIVE):
+            if self.check_support(
+                self._backend.SUPPORT_DOMAIN_XML_INACTIVE, vm):
                 inact = libvirt.VIR_DOMAIN_XML_INACTIVE
             else:
                 logging.debug("Domain XML inactive flag not supported.")
 
-            if self.check_domain_support(vm,
-                                self._backend.SUPPORT_DOMAIN_XML_SECURE):
+            if self.check_support(
+                self._backend.SUPPORT_DOMAIN_XML_SECURE, vm):
                 inact |= libvirt.VIR_DOMAIN_XML_SECURE
                 act = libvirt.VIR_DOMAIN_XML_SECURE
             else:
                 logging.debug("Domain XML secure flag not supported.")
 
-            if self.check_domain_support(vm,
-                                self._backend.SUPPORT_DOMAIN_CPU_HOST_MODEL):
+            if self.check_support(
+                self._backend.SUPPORT_DOMAIN_CPU_HOST_MODEL, vm):
                 inact |= libvirt.VIR_DOMAIN_XML_UPDATE_CPU
                 act |= libvirt.VIR_DOMAIN_XML_UPDATE_CPU
             else:
@@ -539,8 +529,8 @@ class vmmConnection(vmmGObject):
             act   = 0
             inact = 0
 
-            if self.check_interface_support(iface,
-                            self._backend.SUPPORT_INTERFACE_XML_INACTIVE):
+            if self.check_support(
+                self._backend.SUPPORT_INTERFACE_XML_INACTIVE, iface):
                 inact = libvirt.VIR_INTERFACE_XML_INACTIVE
             else:
                 logging.debug("Interface XML inactive flag not supported.")

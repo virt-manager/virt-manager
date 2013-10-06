@@ -218,7 +218,7 @@ class Command(object):
             return
         if conn is None:
             raise RuntimeError("support_check is not None, but conn is None")
-        if conn.check_conn_support(self.support_check):
+        if conn.check_support(self.support_check):
             return
         return "skipped"
 

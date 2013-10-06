@@ -129,7 +129,7 @@ class StoragePool(_StorageObject):
         @param pool_type: Pool type string from I{Types}
         @param host: Option host string to poll for sources
         """
-        if not conn.check_conn_support(conn.SUPPORT_CONN_FINDPOOLSOURCES):
+        if not conn.check_support(conn.SUPPORT_CONN_FINDPOOLSOURCES):
             return []
 
         if host:
@@ -172,7 +172,7 @@ class StoragePool(_StorageObject):
         """
         Helper to build the 'default' storage pool
         """
-        if not conn.check_conn_support(conn.SUPPORT_CONN_STORAGE):
+        if not conn.check_support(conn.SUPPORT_CONN_STORAGE):
             return
 
         pool = None
@@ -213,7 +213,7 @@ class StoragePool(_StorageObject):
         Favor running pools over inactive pools.
         @returns: virStoragePool object if found, None otherwise
         """
-        if not conn.check_conn_support(conn.SUPPORT_CONN_STORAGE):
+        if not conn.check_support(conn.SUPPORT_CONN_STORAGE):
             return None
 
         def check_pool(pool, path):
@@ -511,8 +511,8 @@ class StorageVolume(_StorageObject):
         if not isinstance(vol, libvirt.virStorageVol):
             raise ValueError(_("input_vol must be a virStorageVol"))
 
-        if not self.conn.check_pool_support(self.pool,
-                    self.conn.SUPPORT_POOL_CREATEVOLFROM):
+        if not self.conn.check_support(
+            self.conn.SUPPORT_POOL_CREATEVOLFROM, self.pool):
             raise ValueError(_("Creating storage from an existing volume is"
                                " not supported by this libvirt version."))
 
@@ -649,8 +649,8 @@ class StorageVolume(_StorageObject):
         if (self.format == "qcow2" and
             not self.backing_store and
             not self.conn.is_test() and
-            self.conn.check_pool_support(
-                self.pool, self.conn.SUPPORT_POOL_METADATA_PREALLOC)):
+            self.conn.check_support(
+                self.conn.SUPPORT_POOL_METADATA_PREALLOC, self.pool)):
             createflags |= libvirt.VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA
 
 

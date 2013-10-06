@@ -262,7 +262,7 @@ class VirtualConnection(object):
             return self.local_libvirt_version()
 
         if not self._daemon_version:
-            if not self.check_conn_support(support.SUPPORT_CONN_LIBVERSION):
+            if not self.check_support(support.SUPPORT_CONN_LIBVERSION):
                 self._daemon_version = 0
             else:
                 self._daemon_version = self.libvirtconn.getLibVersion()
@@ -273,7 +273,7 @@ class VirtualConnection(object):
             return self._fake_conn_version
 
         if not self._conn_version:
-            if not self.check_conn_support(support.SUPPORT_CONN_GETVERSION):
+            if not self.check_support(support.SUPPORT_CONN_GETVERSION):
                 self._conn_version = 0
             else:
                 self._conn_version = self.libvirtconn.getVersion()
@@ -340,28 +340,19 @@ class VirtualConnection(object):
                          _supportname.startswith("SUPPORT_")]:
         locals()[_supportname] = getattr(support, _supportname)
 
-    def _check_support(self, feature, data):
+    def check_support(self, feature, data=None):
         key = feature
-        if type(data) is str:
-            key = (feature, data)
+        data = data or self
         if key not in self._support_cache:
             self._support_cache[key] = support.check_support(
                 self, feature, data)
         return self._support_cache[key]
 
-    def check_conn_support(self, feature):
-        return self._check_support(feature, self)
-    def check_domain_support(self, dom, feature):
-        return self._check_support(feature, dom)
-    def check_pool_support(self, pool, feature):
-        return self._check_support(feature, pool)
-    def check_interface_support(self, iface, feature):
-        return self._check_support(feature, iface)
-    def check_stream_support(self, feature):
-        return (self.check_conn_support(self.SUPPORT_CONN_STREAM) and
-                self._check_support(feature, self))
-    def check_net_support(self, net, feature):
-        return self._check_support(feature, net)
+    def support_remote_url_install(self):
+        if hasattr(self, "_virtinst__fake_conn"):
+            return False
+        return (self.check_support(self.SUPPORT_CONN_STREAM) and
+                self.check_support(self.SUPPORT_STREAM_UPLOAD))
 
 
     ###################

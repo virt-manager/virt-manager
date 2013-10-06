@@ -109,7 +109,7 @@ class VirtualGraphics(VirtualDevice):
             return None
 
         if (not force_local and
-            self.conn.check_conn_support(
+            self.conn.check_support(
                 self.conn.SUPPORT_CONN_KEYMAP_AUTODETECT)):
             return None
 

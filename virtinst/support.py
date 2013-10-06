@@ -24,12 +24,6 @@ import libvirt
 from virtinst import util
 
 
-def support_remote_url_install(conn):
-    if hasattr(conn, "_virtinst__fake_conn"):
-        return False
-    return conn.check_stream_support(conn.SUPPORT_STREAM_UPLOAD)
-
-
 # Check that command is present in the python bindings, and return the
 # the requested function
 def _get_command(funcname, objname=None, obj=None):

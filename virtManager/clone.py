@@ -72,9 +72,8 @@ def can_we_clone(conn, vol, path):
 
     elif vol:
         # Managed storage
-        if not conn.check_pool_support(
-                vol.get_parent_pool().get_backend(),
-                conn.SUPPORT_POOL_CREATEVOLFROM):
+        if not conn.check_support(conn.SUPPORT_POOL_CREATEVOLFROM,
+                                  vol.get_parent_pool().get_backend()):
             if conn.is_remote() or not os.access(path, os.R_OK):
                 msg = _("Connection does not support managed storage cloning.")
     else:

@@ -420,8 +420,7 @@ class vmmCreate(vmmGObjectUI):
         can_storage = (is_local or is_storage_capable)
         is_pv = (self.capsguest.os_type == "xen")
         is_container = self.conn.is_container()
-        can_remote_url = self.conn.check_stream_support(
-                            self.conn.SUPPORT_STREAM_UPLOAD)
+        can_remote_url = self.conn.get_backend().support_remote_url_install()
 
         installable_arch = (self.capsguest.arch in
                             ["i686", "x86_64", "ppc64", "ia64"])
