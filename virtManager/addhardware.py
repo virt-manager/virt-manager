@@ -1338,7 +1338,7 @@ class vmmAddHardware(vmmGObjectUI):
     # Page validation methods #
     ###########################
 
-    def validate(self, page_num):
+    def _validate(self, page_num):
         if page_num == PAGE_ERROR:
             self._dev = None
             return True
@@ -1370,6 +1370,13 @@ class vmmAddHardware(vmmGObjectUI):
             return self.validate_page_tpm()
         elif page_num == PAGE_RNG:
             return self.validate_page_rng()
+
+    def validate(self, page_num):
+        ret = self._validate(page_num)
+        if ret is not False and self._dev:
+            self._dev.set_defaults()
+            self._dev.validate()
+        return ret
 
     def validate_page_storage(self):
         bus, device = self.get_config_disk_target()
@@ -1420,9 +1427,6 @@ class vmmAddHardware(vmmGObjectUI):
                 not self.vm.is_hvm() and
                 util.is_blktap_capable(self.conn.get_backend())):
                 disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
-
-            disk.validate()
-
         except Exception, e:
             return self.err.val_err(_("Storage parameter error."), e)
 
@@ -1688,7 +1692,6 @@ class vmmAddHardware(vmmGObjectUI):
         try:
             self._dev = VirtualSmartCardDevice(conn)
             self._dev.mode = mode
-            self._dev.validate()
         except Exception, e:
             return self.err.val_err(_("Smartcard device parameter error"), e)
 
