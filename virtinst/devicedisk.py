@@ -744,9 +744,15 @@ class VirtualDisk(VirtualDevice):
         if volobj:
             self._change_backend(None, volobj)
 
-    def set_defaults(self):
+    def set_defaults(self, guest):
         if self.is_cdrom():
             self.read_only = True
+
+        if (guest.os.is_xenpv() and
+            self.type == VirtualDisk.TYPE_FILE and
+            self.driver_name is None and
+            util.is_blktap_capable(self.conn)):
+            self.driver_name = VirtualDisk.DRIVER_TAP
 
         if not self.conn.is_qemu():
             return

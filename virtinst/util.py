@@ -28,6 +28,9 @@ import libvirt
 import libxml2
 
 
+_host_blktap_capable = None
+
+
 def listify(l):
     if l is None:
         return []
@@ -348,13 +351,19 @@ def is_blktap_capable(conn):
     if conn.is_remote():
         return False
 
-    f = open("/proc/modules")
-    lines = f.readlines()
-    f.close()
+    global _host_blktap_capable
+    if _host_blktap_capable is not None:
+        return _host_blktap_capable
+
+    lines = file("/proc/modules").readlines()
     for line in lines:
         if line.startswith("blktap ") or line.startswith("xenblktap "):
-            return True
-    return False
+            _host_blktap_capable = True
+            break
+
+    if not _host_blktap_capable:
+        _host_blktap_capable = False
+    return _host_blktap_capable
 
 
 def randomUUID(conn):

@@ -864,11 +864,11 @@ class XMLBuilder(object):
         """
         pass
 
-    def set_defaults(self):
+    def set_defaults(self, guest):
         """
         Encode any default values if needed
         """
-        pass
+        ignore = guest
 
 
     ###################

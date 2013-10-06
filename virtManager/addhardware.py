@@ -27,7 +27,6 @@ from gi.repository import Gdk
 # pylint: enable=E0611
 
 import virtinst
-from virtinst import util
 from virtinst import (VirtualChannelDevice, VirtualParallelDevice,
                       VirtualSerialDevice, VirtualConsoleDevice,
                       VirtualVideoDevice, VirtualWatchdog,
@@ -1374,7 +1373,7 @@ class vmmAddHardware(vmmGObjectUI):
     def validate(self, page_num):
         ret = self._validate(page_num)
         if ret is not False and self._dev:
-            self._dev.set_defaults()
+            self._dev.set_defaults(self.vm.get_xmlobj())
             self._dev.validate()
         return ret
 
@@ -1413,7 +1412,8 @@ class vmmAddHardware(vmmGObjectUI):
             disk.bus = bus
             disk.set_create_storage(size=disksize, sparse=sparse,
                                     fmt=fmt or None)
-            disk.driver_cache = cache
+            if cache:
+                disk.driver_cache = cache
 
             if not fmt:
                 fmt = self.conn.get_default_storage_format()
@@ -1422,11 +1422,6 @@ class vmmAddHardware(vmmGObjectUI):
                     fmt in disk.get_vol_install().list_formats()):
                     logging.debug("Setting disk format from prefs: %s", fmt)
                     disk.get_vol_install().format = fmt
-
-            if (disk.type == virtinst.VirtualDisk.TYPE_FILE and
-                not self.vm.is_hvm() and
-                util.is_blktap_capable(self.conn.get_backend())):
-                disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
         except Exception, e:
             return self.err.val_err(_("Storage parameter error."), e)
 

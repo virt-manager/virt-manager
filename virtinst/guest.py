@@ -30,7 +30,6 @@ import virtinst
 from virtinst import util
 from virtinst import support
 from virtinst import OSXML
-from virtinst import VirtualDisk
 from virtinst import VirtualDevice
 from virtinst import Clock
 from virtinst import Seclabel
@@ -209,7 +208,6 @@ class Guest(XMLBuilder):
         Add the passed device to the guest's device list.
 
         @param dev: VirtualDevice instance to attach to guest
-        @param set_defaults: Whether to set defaults for the device
         """
         self._add_child(dev)
 
@@ -605,7 +603,7 @@ class Guest(XMLBuilder):
         self._set_feature_defaults()
 
         for dev in self.get_all_devices():
-            dev.set_defaults()
+            dev.set_defaults(self)
         self._add_implied_controllers()
         self._check_address_multi()
         self._set_disk_defaults()
@@ -789,13 +787,6 @@ class Guest(XMLBuilder):
         for disk in self.get_devices("disk"):
             if not disk.bus:
                 set_disk_bus(disk)
-
-            # Default file backed PV guests to tap driver
-            if (self.os.is_xenpv() and
-                disk.type == VirtualDisk.TYPE_FILE and
-                disk.driver_name is None and
-                util.is_blktap_capable(self.conn)):
-                disk.driver_name = VirtualDisk.DRIVER_TAP
 
             # Generate disk targets
             if disk.target:
