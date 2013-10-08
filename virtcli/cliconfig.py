@@ -39,9 +39,12 @@ def _split_list(commastr):
 
 
 def _get_param(name, default):
-    if _istest or not name in cfg.sections():
+    if _istest:
         return default
-    return cfg.get("config", name)
+    try:
+        return cfg.get("config", name)
+    except ConfigParser.NoOptionError:
+        return default
 
 
 def _setup_gsettings_path(schemadir):
