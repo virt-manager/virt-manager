@@ -72,7 +72,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
         self.set_initial_state()
 
-    def show(self, parent, conn=None):
+    def show(self, parent, conn):
         logging.debug("Showing storage browser")
         self.reset_state(conn)
         self.topwin.set_transient_for(parent)
@@ -158,10 +158,9 @@ class vmmStorageBrowser(vmmGObjectUI):
 
         volListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
-    def reset_state(self, conn=None):
-        if conn and conn != self.conn:
-            self.remove_conn()
-            self.conn = conn
+    def reset_state(self, conn):
+        self.remove_conn()
+        self.conn = conn
 
         self.repopulate_storage_pools()
 
