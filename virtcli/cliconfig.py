@@ -43,7 +43,7 @@ def _get_param(name, default):
         return default
     try:
         return cfg.get("config", name)
-    except ConfigParser.NoOptionError:
+    except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
         return default
 
 
