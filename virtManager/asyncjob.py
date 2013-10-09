@@ -99,8 +99,8 @@ def cb_wrapper(callback, asyncjob, *args, **kwargs):
         asyncjob.set_error(str(e), "".join(traceback.format_exc()))
 
 
-def _simple_async_done_cb(error, details, errorintro,
-                          errorcb, parent, finish_cb):
+def _simple_async_done_cb(error, details,
+                          parent, errorintro, errorcb, finish_cb):
     if error:
         if errorcb:
             errorcb(error, details)
