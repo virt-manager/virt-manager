@@ -171,6 +171,8 @@ class PCIDevice(NodeDevice):
     vendor_name = XMLProperty("./capability/vendor")
     vendor_id = XMLProperty("./capability/vendor/@id")
 
+    iommu_group = XMLProperty("./capability/iommuGroup/@number", is_int=True)
+
     def pretty_name(self, child_dev=None):
         devstr = "%.2X:%.2X:%X" % (int(self.bus),
                                    int(self.slot),

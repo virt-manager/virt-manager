@@ -217,6 +217,11 @@ class TestNodeDev(unittest.TestCase):
         devfile = "pcidev.xml"
         self._testNode2DeviceCompare(nodename, devfile)
 
+    def testPCIParse(self):
+        nodename = "pci_1180_476"
+        obj = self._nodeDevFromName(nodename)
+        self.assertEqual(obj.iommu_group, 3)
+
     def testNodeDevFail(self):
         nodename = "usb_device_1d6b_1_0000_00_1d_1_if0"
         devfile = ""
