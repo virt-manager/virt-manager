@@ -952,6 +952,8 @@ class MandrivaDistro(Distro):
 
 
 class ALTLinuxDistro(Distro):
+    # altlinux doesn't have installable URLs, so this is just for a
+    # mounted ISO
     name = "ALT Linux"
     urldistro = "altlinux"
     os_variant = "linux"
