@@ -217,10 +217,10 @@ class vmmEngine(vmmGObject):
         # packagekit async dialog has a chance to go away
         def idle_connect():
             do_start = packageutils.start_libvirtd()
-            if not do_start:
+            connected = self.connect_to_uri(tryuri, autoconnect=True, do_start=do_start)
+            if not connected and do_start:
                 manager.err.ok(_("Libvirt service must be started"), warnmsg)
 
-            self.connect_to_uri(tryuri, autoconnect=True, do_start=do_start)
         self.idle_add(idle_connect)
 
 
@@ -489,6 +489,11 @@ class vmmEngine(vmmGObject):
 
             if do_start:
                 conn.open()
+            else:
+                try:
+                    conn.open()
+                except:
+                    return None
             return conn
         except Exception:
             logging.exception("Error connecting to %s", uri)
