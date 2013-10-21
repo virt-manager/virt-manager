@@ -1036,7 +1036,10 @@ class vmmDomain(vmmLibvirtObject):
         return int(self.get_xmlobj().maxmemory)
 
     def vcpu_count(self):
-        return int(self.get_xmlobj().curvcpus)
+        guest = self.get_xmlobj()
+        return int(guest.curvcpus or
+                   self._startup_vcpus or
+                   guest.vcpus)
     def vcpu_max_count(self):
         guest = self.get_xmlobj()
         has_xml_max = (guest.curvcpus != guest.vcpus)
