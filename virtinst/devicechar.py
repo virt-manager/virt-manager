@@ -226,7 +226,7 @@ class _VirtualCharDevice(VirtualDevice):
             self._has_mode_bind = self.MODE_BIND
         return val
     bind_host = XMLProperty("./source[@mode='bind']/@host",
-                            doc=_("Host addresss to bind to."),
+                            doc=_("Host address to bind to."),
                             set_converter=_set_bind_validate)
     bind_port = XMLProperty("./source[@mode='bind']/@service",
                             doc=_("Host port to bind to."),
