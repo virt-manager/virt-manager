@@ -95,7 +95,9 @@ class vmmAddHardware(vmmGObjectUI):
 
             "on_usbredir_type_changed": self.change_usbredir_type,
 
-            "on_rng_type_changed": self.change_rng_type,
+            "on_rng_type_changed": self.change_rng,
+            "on_rng_backend_mode_changed": self.change_rng,
+            "on_rng_backend_type_changed": self.change_rng,
         })
         self.bind_escape_key_close()
 
@@ -496,8 +498,11 @@ class vmmAddHardware(vmmGObjectUI):
 
         # RNG params
         self.widget("rng-device").set_text("/dev/random")
-        self.widget("rng-host").set_text("localhost")
-        self.widget("rng-service").set_text("708")
+        for i in ["rng-bind-host", "rng-connect-host"]:
+            self.widget(i).set_text("localhost")
+
+        for i in ["rng-bind-service", "rng-connect-service"]:
+            self.widget(i).set_text("708")
 
         self.set_hw_selection(0)
 
@@ -895,26 +900,45 @@ class vmmAddHardware(vmmGObjectUI):
 
         return None
 
-    def get_config_rng_host(self):
-        if self.get_config_rng_type() == virtinst.VirtualRNGDevice.TYPE_EGD:
-            return self.widget("rng-host").get_text()
+    def get_config_rng_host(self, is_connect=False):
+        connect_mode = virtinst.VirtualRNGDevice.BACKEND_MODE_CONNECT in \
+                       self.get_config_rng_backend_mode()
+        is_udp = self.get_config_rng_backend_type() == \
+                 virtinst.VirtualRNGDevice.BACKEND_TYPE_UDP
+
+        if connect_mode == is_connect or is_udp:
+            widget_name = "rng-connect-host" if is_connect else "rng-bind-host"
+            return self.widget(widget_name).get_text()
 
         return None
 
-    def get_config_rng_service(self):
-        if self.get_config_rng_type() == virtinst.VirtualRNGDevice.TYPE_EGD:
-            return self.widget("rng-service").get_text()
+    def get_config_rng_service(self, is_connect=False):
+        connect_mode = virtinst.VirtualRNGDevice.BACKEND_MODE_CONNECT in \
+                       self.get_config_rng_backend_mode()
+        is_udp = self.get_config_rng_backend_type() == \
+                 virtinst.VirtualRNGDevice.BACKEND_TYPE_UDP
+
+        if connect_mode == is_connect or is_udp:
+            if is_connect:
+                widget_name = "rng-connect-service"
+            else:
+                widget_name = "rng-bind-service"
+            return self.widget(widget_name).get_text()
 
         return None
 
     def get_config_rng_backend_type(self):
         active = self.widget("rng-backend-type").get_active()
         model = self.widget("rng-backend-type").get_model()
+        if active < 0:
+            return None
         return model[active][0]
 
     def get_config_rng_backend_mode(self):
         active = self.widget("rng-backend-mode").get_active()
         model = self.widget("rng-backend-mode").get_model()
+        if active < 0:
+            return None
         return model[active][0]
 
     ################
@@ -1179,17 +1203,28 @@ class vmmAddHardware(vmmGObjectUI):
         uihelpers.set_grid_row_visible(self.widget("usbredir-host-box"),
                                        showhost)
 
-    def change_rng_type(self, ignore1):
+    def change_rng(self, ignore1):
         model = self.get_config_rng_type()
         if model is None:
             return
 
         is_egd = model == virtinst.VirtualRNGDevice.TYPE_EGD
         uihelpers.set_grid_row_visible(self.widget("rng-device"), not is_egd)
-        uihelpers.set_grid_row_visible(self.widget("rng-host"), is_egd)
-        uihelpers.set_grid_row_visible(self.widget("rng-service"), is_egd)
-        uihelpers.set_grid_row_visible(self.widget("rng-backend-mode"), is_egd)
         uihelpers.set_grid_row_visible(self.widget("rng-backend-type"), is_egd)
+
+        backend_type = self.get_config_rng_backend_type()
+        backend_mode = self.get_config_rng_backend_mode()
+        udp = backend_type == virtinst.VirtualRNGDevice.BACKEND_TYPE_UDP
+        bind = backend_mode == virtinst.VirtualRNGDevice.BACKEND_MODE_BIND
+
+        v = is_egd and (udp or bind)
+        uihelpers.set_grid_row_visible(self.widget("rng-bind-host-box"), v)
+
+        v = is_egd and (udp or not bind)
+        uihelpers.set_grid_row_visible(self.widget("rng-connect-host-box"), v)
+
+        v = is_egd and not udp
+        uihelpers.set_grid_row_visible(self.widget("rng-backend-mode"), v)
 
     # FS listeners
     def browse_fs_source(self, ignore1):
@@ -1730,31 +1765,47 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("TPM device parameter error"), e)
 
     def validate_page_rng(self):
-        conn = self.conn.get_backend()
+        conn = virtinst.VirtualRNGDevice.BACKEND_MODE_CONNECT in \
+               self.get_config_rng_backend_mode()
         model = self.get_config_rng_type()
+        is_udp = self.get_config_rng_backend_type() == \
+                 virtinst.VirtualRNGDevice.BACKEND_TYPE_UDP
 
         if model == virtinst.VirtualRNGDevice.TYPE_RANDOM:
             if not self.get_config_rng_device():
                 return self.err.val_err(_("RNG selection error."),
                                     _("A device must be specified."))
         elif model == virtinst.VirtualRNGDevice.TYPE_EGD:
-            if not self.get_config_rng_host():
-                return self.err.val_err(_("RNG selection error."),
-                                    _("The EGD host must be specified."))
+            conn = self.get_config_rng_backend_mode() == \
+                   virtinst.VirtualRNGDevice.BACKEND_MODE_CONNECT
 
-            if not self.get_config_rng_service():
-                return self.err.val_err(_("RNG selection error."),
-                                    _("The EGD service must be specified."))
+            if is_udp:
+                if not self.get_config_rng_host(is_connect=conn) or \
+                   not self.get_config_rng_host(is_connect=not conn):
+                    return self.err.val_err(_("RNG selection error."),
+                             _("Please specify both bind and connect host"))
+                if not int(self.get_config_rng_service(is_connect=conn)) or \
+                   not int(self.get_config_rng_service(is_connect=not conn)):
+                    return self.err.val_err(_("RNG selection error."),
+                          _("Please specify both bind and connect service"))
+            else:
+                if not self.get_config_rng_host(is_connect=conn):
+                    return self.err.val_err(_("RNG selection error."),
+                                        _("The EGD host must be specified."))
+                if not int(self.get_config_rng_service(is_connect=conn)):
+                    return self.err.val_err(_("RNG selection error."),
+                                     _("The EGD service must be specified."))
         else:
             return self.err.val_err(_("RNG selection error."),
                                     _("Invalid RNG type."))
 
         value_mappings = {
-            "backend_mode" : "connect",
             "backend_type" : self.get_config_rng_backend_type(),
             "backend_source_mode" : self.get_config_rng_backend_mode(),
-            "backend_source_host" : self.get_config_rng_host(),
-            "backend_source_service" : self.get_config_rng_service(),
+            "connect_host" : self.get_config_rng_host(is_connect=True),
+            "connect_service" : self.get_config_rng_service(is_connect=True),
+            "bind_host" : self.get_config_rng_host(),
+            "bind_service" : self.get_config_rng_service(),
             "device" : self.get_config_rng_device(),
         }
 
