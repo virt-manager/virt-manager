@@ -53,6 +53,7 @@
     <rng model='virtio'>
       <rate period='2000' bytes='1234'/>
       <backend model='egd' type='udp'>
+        <source mode='bind' service='1233'/>
         <source mode='connect' host='1.2.3.4' service='1234'/>
       </backend>
     </rng>

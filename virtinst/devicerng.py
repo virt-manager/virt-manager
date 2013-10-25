@@ -62,11 +62,11 @@ class VirtualRNGDevice(VirtualDevice):
         """
         users = {
             "type"                   : [self.TYPE_EGD, self.TYPE_RANDOM],
-
             "model"                  : [self.TYPE_EGD, self.TYPE_RANDOM],
-            "backend_source_host"    : [self.TYPE_EGD],
-            "backend_source_mode"    : [self.TYPE_EGD],
-            "backend_source_service" : [self.TYPE_EGD],
+            "bind_host"              : [self.TYPE_EGD],
+            "bind_service"           : [self.TYPE_EGD],
+            "connect_host"           : [self.TYPE_EGD],
+            "connect_service"        : [self.TYPE_EGD],
             "backend_type"           : [self.TYPE_EGD],
             "device"                 : [self.TYPE_RANDOM],
             "rate_bytes"             : [self.TYPE_EGD, self.TYPE_RANDOM],
@@ -77,14 +77,43 @@ class VirtualRNGDevice(VirtualDevice):
 
         return hasattr(self, propname)
 
+    def backend_mode(self):
+        ret = []
+        if self._has_mode_bind:
+            ret.append(VirtualRNGDevice.BACKEND_MODE_BIND)
+        if self._has_mode_connect:
+            ret.append(VirtualRNGDevice.BACKEND_MODE_CONNECT)
+        return ret
+
+    _XML_PROP_ORDER = ["_has_mode_bind", "_has_mode_connect"]
+
+    _has_mode_connect = XMLProperty("./backend/source[@mode='connect']/@mode")
+    def _set_connect_validate(self, val):
+        if val:
+            self._has_mode_connect = VirtualRNGDevice.BACKEND_MODE_CONNECT
+        return val
+
+    _has_mode_bind = XMLProperty("./backend/source[@mode='bind']/@mode")
+    def _set_bind_validate(self, val):
+        if val:
+            self._has_mode_bind = VirtualRNGDevice.BACKEND_MODE_BIND
+        return val
+
     type = XMLProperty(xpath="./backend/@model")
     model = XMLProperty(xpath="./@model",
                         default_cb=lambda s: "virtio")
 
     backend_type = XMLProperty(xpath="./backend/@type")
-    backend_source_host = XMLProperty(xpath="./backend/source/@host")
-    backend_source_service = XMLProperty(xpath="./backend/source/@service")
-    backend_source_mode = XMLProperty(xpath="./backend/source/@mode")
+
+    bind_host = XMLProperty(xpath="./backend/source[@mode='bind']/@host",
+                            set_converter=_set_bind_validate)
+    bind_service = XMLProperty(xpath="./backend/source[@mode='bind']/@service",
+                               set_converter=_set_bind_validate)
+
+    connect_host = XMLProperty(xpath="./backend/source[@mode='connect']/@host",
+                               set_converter=_set_connect_validate)
+    connect_service = XMLProperty(set_converter=_set_connect_validate,
+                           xpath="./backend/source[@mode='connect']/@service")
 
     rate_bytes = XMLProperty(xpath="./rate/@bytes")
     rate_period = XMLProperty(xpath="./rate/@period")

@@ -747,11 +747,12 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(dev1)
         check("type", "egd")
-        check("backend_type", "udp", "tcp")
+        check("backend_type", "udp", "udp")
 
-        check("backend_source_host", "1.2.3.4", "1.2.3.5")
-        check("backend_source_service", "1234", "1235")
-        check("backend_source_mode", "connect", "bind")
+        check("connect_host", "1.2.3.4", "1.2.3.5")
+        check("connect_service", "1234", "1235")
+        check("bind_host", None, None)
+        check("bind_service", "1233", "1236")
 
         check("rate_bytes", "1234", "4321")
         check("rate_period", "2000", "2001")

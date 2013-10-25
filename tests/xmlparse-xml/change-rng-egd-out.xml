@@ -52,8 +52,9 @@
     <console type="pty"/>
     <rng model="virtio">
       <rate period="2001" bytes="4321"/>
-      <backend model="egd" type="tcp">
-        <source mode="bind" host="1.2.3.5" service="1235"/>
+      <backend model="egd" type="udp">
+        <source mode="bind" service="1236"/>
+        <source mode="connect" host="1.2.3.5" service="1235"/>
       </backend>
     </rng>
   </devices>
