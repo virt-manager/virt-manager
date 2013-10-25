@@ -926,7 +926,7 @@ def add_device_options(devg):
     devg.add_option("--rng", dest="rng", action="append",
                     help=_("Configure a guest RNG device. Ex:\n"
                            "--rng /dev/random\n"
-                           "--rng type=egd,host=localhost,service=708"))
+     "--rng egd,backend_host=localhost,backend_service=708,backend_type=tcp"))
 
 
 def add_gfx_option(devg):
@@ -1694,10 +1694,21 @@ def parse_rng(guest, optstr, dev):
     else:
         set_param("type", "type")
 
-    set_param("backend_source_host", "backend_host")
-    set_param("backend_source_service", "backend_service")
-    set_param("backend_source_mode", "backend_mode")
     set_param("backend_type", "backend_type")
+
+    backend_mode = opts.get("backend_mode", "connect")
+    if backend_mode == "connect":
+        set_param("connect_host", "backend_host")
+        set_param("connect_service", "backend_service")
+
+    if backend_mode == "bind":
+        set_param("bind_host", "backend_host")
+        set_param("bind_service", "backend_service")
+
+        if opts.get("backend_type", "udp"):
+            set_param("connect_host", "backend_connect_host")
+            set_param("connect_service", "backend_connect_service")
+
     set_param("device", "device")
     set_param("model", "model")
     set_param("rate_bytes", "rate_bytes")

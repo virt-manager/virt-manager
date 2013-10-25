@@ -446,13 +446,18 @@ c.add_valid("--tpm passthrough,model=tpm-tis")  # --tpm backend type with model
 c.add_valid("--tpm passthrough,model=tpm-tis,path=/dev/tpm0")  # --tpm backend type with model and device path
 c.add_invalid("--tpm passthrough,model=foo")  # Invalid model
 
-c = vinst.add_category("tpm", "--noautoconsole --nodisks --pxe")
+
+c = vinst.add_category("rng", "--noautoconsole --nodisks --pxe")
 c.add_valid("--rng random,device=/dev/random")  # random device backend
 c.add_valid("--rng /dev/random")  # random device backend, short form
 c.add_invalid("--rng /FOO/BAR")  # random device backend, short form, invalid device
 c.add_valid("--rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp")  # egd backend
 c.add_valid("--rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp,backend_mode=bind")  # egd backend, bind mode
 c.add_invalid("--rng foo,backend_host=127.0.0.1,backend_service=8000,backend_mode=connect")  # invalid type
+c.add_invalid("--rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind")  # invalid only bind for udp
+c.add_valid("--rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=tcp,backend_mode=bind")  # egd backend, bind mode
+c.add_valid("--rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind,backend_connect_host=foo,backend_connect_service=708")  # egd backend, udp mode bind, bind backend mode
+
 
 c = vinst.add_category("xen", "--connect %(XENURI)s --noautoconsole")
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default

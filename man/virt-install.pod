@@ -1288,6 +1288,21 @@ Specify the port of the Entropy Gathering Daemon to connect to.
 
 Specify the type of the connection: B<tcp> or B<udp>.
 
+=item B<backend_mode>
+
+Specify the mode of the connection.  It is either 'bind' (wait for
+connections on HOST:PORT) or 'connect' (send output to HOST:PORT).
+
+=item B<backend_connect_host>
+
+Specify the remote host to connect to when the specified backend_type is B<udp>
+and backend_mode is B<bind>.
+
+=item B<backend_connect_service>
+
+Specify the remote service to connect to when the specified backend_type is
+B<udp> and backend_mode is B<bind>.
+
 =back
 
 An example invocation:
