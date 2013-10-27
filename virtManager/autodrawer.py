@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011 Red Hat, Inc.
+# Copyright (C) 2011, 2013 Red Hat, Inc.
 # Copyright (C) 2011 Cole Robinson <crobinso@redhat.com>
 #
 # Python implementation of autodrawer, originally found in vinagre sources:

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2011  Red Hat, Inc.
+# Copyright 2011, 2013 Red Hat, Inc.
 # Cole Robinson <crobinso@redhat.com>
 # Marc-André Lureau <marcandre.lureau@redhat.com>
 #

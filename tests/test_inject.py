@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Copyright (C) 2013 Red Hat, Inc.
 
 import atexit
 import os

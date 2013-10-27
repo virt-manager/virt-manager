@@ -1,7 +1,7 @@
 #
 # List of OS Specific data
 #
-# Copyright 2006-2008  Red Hat, Inc.
+# Copyright 2006-2008, 2013 Red Hat, Inc.
 # Jeremy Katz <katzj@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify

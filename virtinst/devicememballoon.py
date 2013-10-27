@@ -1,3 +1,4 @@
+# Copyright (C) 2013 Red Hat, Inc.
 #
 # Copyright 2012
 # Eiichi Tsukata  <devel@etsukata.com>

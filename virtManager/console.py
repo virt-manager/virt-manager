@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2006-2008 Red Hat, Inc.
+# Copyright (C) 2006-2008, 2013 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
 # Copyright (C) 2010 Marc-André Lureau <marcandre.lureau@redhat.com>
 #

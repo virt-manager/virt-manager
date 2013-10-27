@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# Copyright (C) 2013 Red Hat, Inc.
 
 # pylint: disable=W0201
 # Attribute defined outside __init__: custom commands require breaking this

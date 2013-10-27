@@ -1,7 +1,7 @@
 #
 # Some code for parsing libvirt's capabilities XML
 #
-# Copyright 2007, 2012  Red Hat, Inc.
+# Copyright 2007, 2012-2013 Red Hat, Inc.
 # Mark McLoughlin <markmc@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
