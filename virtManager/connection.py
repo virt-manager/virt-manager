@@ -316,7 +316,7 @@ class vmmConnection(vmmGObject):
         uri = self.get_uri().replace("/", "_")
         ret = os.path.join(util.get_cache_dir(), uri)
         if not os.path.exists(ret):
-            os.mkdir(ret, 755)
+            os.makedirs(ret, 0755)
         return ret
 
     def get_default_storage_format(self):

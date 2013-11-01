@@ -1649,7 +1649,7 @@ class vmmDomain(vmmLibvirtObject):
     def get_cache_dir(self):
         ret = os.path.join(self.conn.get_cache_dir(), self.get_uuid())
         if not os.path.exists(ret):
-            os.mkdir(ret, 0755)
+            os.makedirs(ret, 0755)
         return ret
 
 
