@@ -187,15 +187,16 @@ def main():
         virtManager.module_trace.wrap_module(libvirt)
 
     # Now we've got basic environment up & running we can fork
+    do_drop_stdio = False
     if not options.nofork and not options.debug:
         drop_tty()
-        drop_stdio()
+        do_drop_stdio = True
 
         # Ignore SIGHUP, otherwise a serial console closing drops the whole app
         signal.signal(signal.SIGHUP, signal.SIG_IGN)
 
     # The never ending fork+gconf/gsettings problems now require
-    # us to import Gtk before the fork. This creates a funny race,
+    # us to import Gtk _after_ the fork. This creates a funny race,
     # since we need to parse the command line arguments to know if
     # we need to fork, but need to import Gtk before cli processing
     # so it can handle --g-fatal-args. We strip out our flags first
@@ -204,18 +205,30 @@ def main():
     try:
         sys.argv = origargv[:1] + leftovers[:]
         from gi.repository import Gtk  # pylint: disable=E0611
-        globals()["Gtk"] = Gtk
         leftovers = sys.argv[1:]
 
+        # This will error if Gtk wasn't correctly initialized
+        Gtk.Window()
+
+        globals()["Gtk"] = Gtk
         import virtManager.config
-    except:
+    except Exception, e:
         # Don't just let the exception raise here. abrt reports bugs
         # when users mess up su/sudo and DISPLAY isn't set. Printing
         # it avoids the issue
-        print "".join(traceback.format_exc())
+        display = os.environ.get("DISPLAY", "")
+        msg = str(e)
+        if not display:
+            msg += ": Could not open display: %s" % display
+        logging.debug("".join(traceback.format_exc()))
+        print msg
         return 1
     finally:
         sys.argv = origargv
+
+    # Do this after the Gtk import so the user has a chance of seeing any error
+    if do_drop_stdio:
+        drop_stdio()
 
     if leftovers:
         raise RuntimeError("Unhandled command line options '%s'" % leftovers)
