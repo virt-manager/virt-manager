@@ -50,6 +50,8 @@ class ConsoleConnection(vmmGObject):
         self.vm = None
         self.conn = None
 
+    def is_open(self):
+        raise NotImplementedError()
     def open(self, dev, terminal):
         raise NotImplementedError()
     def close(self):
@@ -69,6 +71,9 @@ class LocalConsoleConnection(ConsoleConnection):
         self.fd = None
         self.source = None
         self.origtermios = None
+
+    def is_open(self):
+        return self.fd is not None
 
     def open(self, dev, terminal):
         if self.fd is not None:
@@ -192,6 +197,9 @@ class LibvirtConsoleConnection(ConsoleConnection):
                                             libvirt.VIR_STREAM_EVENT_HANGUP)
 
 
+    def is_open(self):
+        return self.stream is not None
+
     def open(self, dev, terminal):
         if self.stream:
             self.close()
@@ -202,10 +210,9 @@ class LibvirtConsoleConnection(ConsoleConnection):
         if not name:
             raise RuntimeError(_("Cannot open a device with no alias name"))
 
-        self.stream = self.conn.get_backend().newStream(
-                                            libvirt.VIR_STREAM_NONBLOCK)
-
-        self.vm.open_console(name, self.stream)
+        stream = self.conn.get_backend().newStream(libvirt.VIR_STREAM_NONBLOCK)
+        self.vm.open_console(name, stream)
+        self.stream = stream
 
         self.stream.eventAddCallback((libvirt.VIR_STREAM_EVENT_READABLE |
                                       libvirt.VIR_STREAM_EVENT_ERROR |
@@ -379,13 +386,18 @@ class vmmSerialConsole(vmmGObject):
         self.terminal = None
         self.box = None
 
+    def close(self):
+        if self.console:
+            self.console.close()
+
     def show_error(self, msg):
         self.error_label.set_markup("<b>%s</b>" % msg)
         self.box.set_current_page(1)
 
     def open_console(self):
         try:
-            self.console.open(self.lookup_dev(), self.terminal)
+            if not self.console.is_open():
+                self.console.open(self.lookup_dev(), self.terminal)
             self.box.set_current_page(0)
             return True
         except Exception, e:

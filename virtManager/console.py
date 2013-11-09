@@ -1107,6 +1107,9 @@ class vmmConsolePages(vmmGObjectUI):
         self.viewer_connected = False
         self.leave_fullscreen()
 
+        for serial in self.serial_tabs:
+            serial.close()
+
     def update_widget_states(self, vm, status_ignore):
         runable = vm.is_runable()
         pages   = self.widget("console-pages")
@@ -1533,21 +1536,10 @@ class vmmConsolePages(vmmGObjectUI):
             title = Gtk.Label(label=name)
             self.widget("console-pages").append_page(serial.box, title)
             self.serial_tabs.append(serial)
-            serial.open_console()
 
+        serial.open_console()
         page_idx = self.serial_tabs.index(serial) + CONSOLE_PAGE_OFFSET
         self.widget("console-pages").set_current_page(page_idx)
-
-    def _close_serial_tab(self, serial):
-        if not serial in self.serial_tabs:
-            return
-
-        page_idx = self.serial_tabs.index(serial) + CONSOLE_PAGE_OFFSET
-        self.widget("console-pages").remove_page(page_idx)
-
-        serial.cleanup()
-        self.serial_tabs.remove(serial)
-
 
     def populate_serial_menu(self, src):
         for ent in src:
