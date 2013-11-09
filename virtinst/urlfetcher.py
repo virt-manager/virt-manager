@@ -506,7 +506,7 @@ class Distro(object):
         try:
             initrd = self.fetcher.acquireFile(initrdpath)
             return kernel, initrd, args
-        except:
+        finally:
             os.unlink(kernel)
 
 
