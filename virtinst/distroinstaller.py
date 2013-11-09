@@ -452,7 +452,9 @@ class DistroInstaller(Installer):
 
     def detect_distro(self, guest):
         try:
-            return urlfetcher.detectMediaDistro(guest, self.location)
+            ret = urlfetcher.detectMediaDistro(guest, self.location)
+            logging.debug("installer.detect_distro returned=%s", ret)
+            return ret
         except:
             logging.exception("Error attempting to detect distro.")
             return None

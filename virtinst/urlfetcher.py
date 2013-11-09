@@ -283,7 +283,7 @@ def _distroFromTreeinfo(fetcher, arch, vmtype=None):
 
 def getDistroStore(guest, fetcher):
     stores = []
-    logging.debug("Attempting to detect distro:")
+    logging.debug("Finding distro store for location=%s", fetcher.location)
 
     arch = guest.os.arch
     _type = guest.os.os_type

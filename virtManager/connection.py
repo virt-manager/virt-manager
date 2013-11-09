@@ -948,6 +948,11 @@ class vmmConnection(vmmGObject):
         self.idle_emit("state-changed")
 
         if self.state == self.STATE_ACTIVE:
+            logging.debug("libvirt version=%s",
+                          self._backend.local_libvirt_version())
+            logging.debug("daemon version=%s",
+                          self._backend.daemon_version())
+            logging.debug("conn version=%s", self._backend.conn_version())
             logging.debug("%s capabilities:\n%s",
                           self.get_uri(), self.caps.xml)
             self.schedule_priority_tick(stats_update=True,
