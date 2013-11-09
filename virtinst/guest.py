@@ -191,7 +191,7 @@ class Guest(XMLBuilder):
     def _get_os_variant(self):
         return self._os_variant
     def _set_os_variant(self, val):
-        logging.debug("Guest.os_variant set to %s", val)
+        logging.debug("Setting Guest.os_variant to '%s'", val)
         val = val.lower()
         if osdict.lookup_os(val) is None:
             raise ValueError(_("Distro '%s' does not exist in our dictionary")

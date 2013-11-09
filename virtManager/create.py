@@ -1470,7 +1470,7 @@ class vmmCreate(vmmGObjectUI):
         guest.default_graphics_type = self.config.get_graphics_type()
         return virtinst.VirtualGraphics(guest.conn)
 
-    def build_guest(self):
+    def build_guest(self, variant):
         guest = self.conn.caps.build_virtinst_guest(
             self.conn.get_backend(), self.capsguest, self.capsdomain)
         guest.os.machine = self.get_config_machine()
@@ -1480,6 +1480,14 @@ class vmmCreate(vmmGObjectUI):
             guest.uuid = util.randomUUID(guest.conn)
         except Exception, e:
             self.err.show_err(_("Error setting UUID: %s") % str(e))
+            return None
+
+        # OS distro/variant validation
+        try:
+            if variant:
+                guest.os_variant = variant
+        except ValueError, e:
+            self.err.show_err(_("Error setting OS information."), e)
             return None
 
         # Set up default devices
@@ -1523,7 +1531,7 @@ class vmmCreate(vmmGObjectUI):
         # detction. But the 'real' self.guest is created in validate_install,
         # and it just uses build_guest, so don't ever add any other guest
         # altering here.
-        self.guest = self.build_guest()
+        self.guest = self.build_guest(None)
         if not self.guest:
             return False
         return True
@@ -1613,7 +1621,7 @@ class vmmCreate(vmmGObjectUI):
         try:
             # Overwrite the guest
             installer = instclass(self.conn.get_backend())
-            self.guest = self.build_guest()
+            self.guest = self.build_guest(variant or distro)
             if not self.guest:
                 return False
             self.guest.installer = installer
@@ -1648,14 +1656,6 @@ class vmmCreate(vmmGObjectUI):
         except Exception, e:
             return self.err.val_err(
                                 _("Error setting install media location."), e)
-
-        # OS distro/variant validation
-        try:
-            variant = variant or distro
-            if variant:
-                self.guest.os_variant = variant
-        except ValueError, e:
-            return self.err.val_err(_("Error setting OS information."), e)
 
         # Setting kernel
         if instmethod == INSTALL_PAGE_IMPORT:
