@@ -247,6 +247,8 @@ class VirtualDisk(VirtualDevice):
             return []
         if conn.is_remote():
             return []
+        if username == "root":
+            return []
 
         try:
             uid = _name_uid(username)
