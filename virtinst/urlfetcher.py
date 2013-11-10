@@ -506,8 +506,9 @@ class Distro(object):
         try:
             initrd = self.fetcher.acquireFile(initrdpath)
             return kernel, initrd, args
-        finally:
+        except:
             os.unlink(kernel)
+            raise
 
 
 class GenericDistro(Distro):
