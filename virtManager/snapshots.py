@@ -229,7 +229,7 @@ class vmmSnapshotPage(vmmGObjectUI):
                 sortname = "1%s" % name
 
             label = "%s\n<span size='small'>%s: %s%s</span>" % (
-                (name, _("State"), state, external))
+                (name, _("VM State"), state, external))
             model.append([name, label, desc, snap.run_status_icon_name(),
                           sortname])
 
