@@ -61,6 +61,9 @@ class TestCapabilities(unittest.TestCase):
         if secmodel:
             self.assertEqual(secmodel[0], caps.host.secmodel.model)
             self.assertEqual(secmodel[1], caps.host.secmodel.doi)
+            if secmodel[2]:
+                for k, v in secmodel[2].items():
+                    self.assertEqual(v, caps.host.secmodel.baselabels[k])
 
         for idx in range(len(guests)):
             self._compareGuest(guests[idx], caps.guests[idx])
@@ -83,7 +86,7 @@ class TestCapabilities(unittest.TestCase):
 
     def testCapabilities2(self):
         host = ('x86_64', {})
-        secmodel = ('selinux', '0')
+        secmodel = ('selinux', '0', None)
 
         guests = [
             ('x86_64', 'hvm',
@@ -123,7 +126,9 @@ class TestCapabilities(unittest.TestCase):
                ['g3bw', 'mac99', 'prep']]], {}),
        ]
 
-        self._testCapabilities("capabilities-kvm.xml", host, guests)
+        secmodel = ('dac', '0', {"kvm" : "+0:+0", "qemu" : "+0:+0"})
+
+        self._testCapabilities("capabilities-kvm.xml", host, guests, secmodel)
 
     def testCapabilities4(self):
         host = ('i686',

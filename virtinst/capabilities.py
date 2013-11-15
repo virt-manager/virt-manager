@@ -486,6 +486,7 @@ class SecurityModel(object):
     def __init__(self, node=None):
         self.model = None
         self.doi = None
+        self.baselabels = {}
 
         if not node is None:
             self.parseXML(node)
@@ -496,6 +497,9 @@ class SecurityModel(object):
                 self.model = child.content
             elif child.name == "doi":
                 self.doi = child.content
+            elif child.name == "baselabel":
+                typ = child.prop("type")
+                self.baselabels[typ] = child.content
 
 
 class Capabilities(object):
