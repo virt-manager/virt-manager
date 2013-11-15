@@ -21,6 +21,7 @@
 import logging
 import os
 import statvfs
+import pwd
 
 # pylint: disable=E0611
 from gi.repository import GObject
@@ -1007,6 +1008,15 @@ def check_path_search_for_qemu(err, conn, path):
         return
 
     user = config.running_config.default_qemu_user
+
+    for i in conn.caps.host.secmodels:
+        if i.model == "dac":
+            label = i.baselabels.get("kvm") or i.baselabels.get("qemu")
+            if not label:
+                continue
+            pwuid = pwd.getpwuid(int(label.split(":")[0].replace("+", "")))
+            if pwuid:
+                user = pwuid[0]
 
     skip_paths = config.running_config.get_perms_fix_ignore()
     broken_paths = virtinst.VirtualDisk.check_path_search_for_user(
