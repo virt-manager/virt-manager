@@ -167,16 +167,14 @@ class _SupportCheck(object):
         actual_lib_ver = conn.local_libvirt_version()
         actual_daemon_ver = conn.daemon_version()
         actual_drv_ver = conn.conn_version()
-        if (actual_daemon_ver == 0 and not self.force_version):
+        if actual_daemon_ver == 0 and not self.force_version:
             # This means the API may not be supported, but we don't care
             actual_daemon_ver = 1000000000
+        if actual_daemon_ver != 0:
+            actual_lib_ver = actual_daemon_ver
 
         # Check that local libvirt version is sufficient
         if minimum_libvirt_version > actual_lib_ver:
-            return False
-
-        # Check that daemon version is sufficient
-        if minimum_libvirt_version > actual_daemon_ver:
             return False
 
         # If driver specific version info specified, try to verify
