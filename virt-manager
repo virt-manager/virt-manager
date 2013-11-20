@@ -69,11 +69,7 @@ def drop_tty():
 
 
 def drop_stdio():
-    # We close STDIN/OUT/ERR since they're generally spewing
-    # junk to console when domains are in process of shutting
-    # down. Real errors will (hopefully) all be logged to the
-    # main log file. This is also again to stop SSH prompting
-    # for input
+    # This is part of the fork process described in drop_tty()
     for fd in range(0, 2):
         try:
             os.close(fd)
