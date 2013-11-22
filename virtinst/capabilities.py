@@ -464,11 +464,11 @@ class TopologyCell(object):
 
     def parseXML(self, node):
         self.id = int(node.prop("id"))
-        child = node.children
-        if child.name == "cpus":
-            for cpu in child.children:
-                if cpu.name == "cpu":
-                    self.cpus.append(TopologyCPU(cpu))
+        for child in node.children:
+            if child.name == "cpus":
+                for cpu in child.children:
+                    if cpu.name == "cpu":
+                        self.cpus.append(TopologyCPU(cpu))
 
 
 class TopologyCPU(object):
