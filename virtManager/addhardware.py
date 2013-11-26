@@ -306,7 +306,8 @@ class vmmAddHardware(vmmGObjectUI):
         simple_store_set("fs-driver-combo", VirtualFilesystem.DRIVERS)
         simple_store_set("fs-wrpolicy-combo", VirtualFilesystem.WRPOLICIES)
         self.show_pair_combo("fs-type", self.conn.is_openvz())
-        self.show_check_button("fs-readonly", self.conn.is_qemu())
+        self.show_check_button("fs-readonly",
+                self.conn.is_qemu() or self.conn.is_lxc())
 
         # Smartcard widgets
         combo = self.widget("smartcard-mode")
