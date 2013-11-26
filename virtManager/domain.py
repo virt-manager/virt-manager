@@ -142,6 +142,7 @@ class vmmInspectionData(object):
         self.product_variant = None
         self.icon = None
         self.applications = None
+        self.error = False
 
 
 class vmmDomainSnapshot(vmmLibvirtObject):
