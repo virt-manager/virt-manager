@@ -60,6 +60,7 @@ class vmmCreatePool(vmmGObjectUI):
         self.bind_escape_key_close()
 
         self.set_initial_state()
+        self.set_page(PAGE_NAME)
 
     def show(self, parent):
         logging.debug("Showing new pool wizard")
@@ -430,7 +431,7 @@ class vmmCreatePool(vmmGObjectUI):
         poolobj.setAutostart(True)
         logging.debug("Pool creation succeeded")
 
-    def page_changed(self, notebook_ignore, page_ignore, page_number):
+    def set_page(self, page_number):
         # Update page number
         page_lbl = ("<span color='#59B0E2'>%s</span>" %
                     _("Step %(current_page)d of %(max_page)d") %
@@ -449,6 +450,9 @@ class vmmCreatePool(vmmGObjectUI):
         self.widget("pool-details-grid").set_visible(islast)
         if islast:
             self.show_options_by_pool()
+
+    def page_changed(self, notebook_ignore, page_ignore, page_number):
+        self.set_page(page_number)
 
     def get_pool_to_validate(self):
         """
