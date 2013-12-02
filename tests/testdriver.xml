@@ -307,6 +307,29 @@
       <usbdev class='-1' vendor='-1' product='-1' version='-1' allow='no'/>
     </redirfilter>
 
+
+    <!-- filesystems -->
+    <filesystem>
+      <driver type='handle'/>
+      <source dir='/foo/bar'/>
+      <target dir='/bar/baz'/>
+    </filesystem>
+    <filesystem type='template'>
+      <source name='template_fedora'/>
+      <target dir='/bar/baz'/>
+    </filesystem>
+    <filesystem type='mount' accessmode='squash'>
+      <driver type='path' wrpolicy='immediate'/>
+      <source dir='/foo/bar'/>
+      <target dir='/bar/baz'/>
+    </filesystem>
+    <filesystem type='mount' accessmode='mapped'>
+      <driver type='path'/>
+      <source dir='/foo/bar'/>
+      <target dir='/bar/baz'/>
+    </filesystem>
+
+
     <!-- tpm devices -->
     <tpm model='tpm-tis'>
       <backend type='passthrough'>
