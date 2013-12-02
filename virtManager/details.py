@@ -3293,7 +3293,7 @@ class vmmDetails(vmmGObjectUI):
 
         self.widget("fs-wrpolicy").set_text(dev.wrpolicy or _("Default"))
 
-        self.widget("fs-source").set_text(dev.source)
+        self.widget("fs-source").set_text(dev.source or _("RAM"))
         self.widget("fs-target").set_text(dev.target)
         if dev.readonly:
             self.widget("fs-readonly").set_text("Yes")
