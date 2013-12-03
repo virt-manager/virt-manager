@@ -455,6 +455,7 @@ class vmmDetails(vmmGObjectUI):
             "on_cpu_sockets_changed": lambda *x: self.enable_apply(x, EDIT_TOPOLOGY),
             "on_cpu_threads_changed": lambda *x: self.enable_apply(x, EDIT_TOPOLOGY),
             "on_cpu_copy_host_clicked": self.config_cpu_copy_host,
+            "on_cpu_clear_clicked": self.config_cpu_clear,
             "on_cpu_topology_enable_toggled": self.config_cpu_topology_enable,
 
             "on_config_memory_changed": self.config_memory_changed,
@@ -1711,6 +1712,16 @@ class vmmDetails(vmmGObjectUI):
             self._cpu_copy_host = True
         except Exception, e:
             self.err.show_err(_("Error copying host CPU: %s") % str(e))
+            return
+
+    def config_cpu_clear(self, src_ignore):
+        try:
+            CPU = virtinst.CPU(self.vm.conn.get_backend())
+            CPU.clear()
+
+            self._refresh_cpu_config(CPU)
+        except Exception, e:
+            self.err.show_err(_("Error clear CPU config: %s") % str(e))
             return
 
     def config_cpu_topology_enable(self, src):
