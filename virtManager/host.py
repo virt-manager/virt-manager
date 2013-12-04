@@ -766,7 +766,7 @@ class vmmHost(vmmGObjectUI):
             vol.delete()
             def idlecb():
                 self.refresh_current_pool()
-                self.populate_storage_volumes()
+                self.repopulate_storage_volumes()
             self.idle_add(idlecb)
 
         logging.debug("Deleting volume '%s'", vol.get_name())
@@ -912,7 +912,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("pool-autostart").set_active(auto)
 
         self.widget("vol-list").set_sensitive(active)
-        self.populate_storage_volumes()
+        self.repopulate_storage_volumes()
 
         self.widget("pool-delete").set_sensitive(not active)
         self.widget("pool-stop").set_sensitive(active)
@@ -987,37 +987,10 @@ class vmmHost(vmmGObjectUI):
         pool_list = self.widget("pool-list")
         populate_storage_pools(pool_list, self.conn, self.current_pool())
 
-    def populate_storage_volumes(self):
+    def repopulate_storage_volumes(self):
+        list_widget = self.widget("vol-list")
         pool = self.current_pool()
-        model = self.widget("vol-list").get_model()
-        model.clear()
-        vols = pool.get_volumes()
-        for key in vols.keys():
-            vol = vols[key]
-
-            try:
-                path = vol.get_target_path()
-                name = vol.get_name()
-                cap = vol.get_pretty_capacity()
-                fmt = vol.get_format() or ""
-            except:
-                logging.debug("Error getting volume info for '%s', "
-                              "hiding it", key, exc_info=True)
-                continue
-
-            namestr = None
-            try:
-                if path:
-                    names = VirtualDisk.path_in_use_by(self.conn.get_backend(),
-                                                       path)
-                    namestr = ", ".join(names)
-                    if not namestr:
-                        namestr = None
-            except:
-                logging.exception("Failed to determine if storage volume in "
-                                  "use.")
-
-            model.append([key, name, cap, fmt, namestr])
+        populate_storage_volumes(list_widget, pool, None)
 
 
     #############################
@@ -1331,6 +1304,42 @@ def populate_storage_pools(pool_list, conn, curpool):
     pool_list.set_model(model)
     uihelpers.set_row_selection(pool_list,
                                 curpool and curpool.get_uuid() or None)
+
+
+def populate_storage_volumes(list_widget, pool, sensitive_cb):
+    vols = pool and pool.get_volumes() or {}
+    model = list_widget.get_model()
+    model.clear()
+
+    for key in vols.keys():
+        vol = vols[key]
+
+        try:
+            path = vol.get_target_path()
+            name = vol.get_name()
+            cap = vol.get_pretty_capacity()
+            fmt = vol.get_format() or ""
+        except:
+            logging.debug("Error getting volume info for '%s', "
+                          "hiding it", key, exc_info=True)
+            continue
+
+        namestr = None
+        try:
+            if path:
+                names = VirtualDisk.path_in_use_by(vol.conn.get_backend(),
+                                                   path)
+                namestr = ", ".join(names)
+                if not namestr:
+                    namestr = None
+        except:
+            logging.exception("Failed to determine if storage volume in "
+                              "use.")
+
+        row = [key, name, cap, fmt, namestr]
+        if sensitive_cb:
+            row.append(sensitive_cb(fmt))
+        model.append(row)
 
 
 def get_pool_size_percent(conn, uuid):

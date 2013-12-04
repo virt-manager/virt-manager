@@ -25,8 +25,6 @@ from gi.repository import GObject
 from gi.repository import Gtk
 # pylint: enable=E0611
 
-from virtinst import VirtualDisk
-
 from virtManager import host
 from virtManager.createvol import vmmCreateVolume
 from virtManager.baseclass import vmmGObjectUI
@@ -327,47 +325,19 @@ class vmmStorageBrowser(vmmGObjectUI):
 
     # Do stuff!
     def populate_storage_volumes(self):
-        model = self.widget("vol-list").get_model()
-        model.clear()
-        dironly = self.browse_reason == self.config.CONFIG_DIR_FS
-
+        list_widget = self.widget("vol-list")
         pool = self.current_pool()
-        if not pool:
-            return
 
-        vols = pool.get_volumes()
-        for key in vols.keys():
-            vol = vols[key]
-            sensitive = True
-            try:
-                path = vol.get_target_path()
-                fmt = vol.get_format() or ""
-            except Exception:
-                logging.exception("Failed to determine volume parameters, "
-                                  "skipping volume %s", key)
-                continue
-
-            namestr = None
-
-            try:
-                if path:
-                    names = VirtualDisk.path_in_use_by(self.conn.get_backend(),
-                                                       path)
-                    namestr = ", ".join(names)
-                    if not namestr:
-                        namestr = None
-            except:
-                logging.exception("Failed to determine if storage volume in "
-                                  "use.")
-
-            if dironly and fmt != 'dir':
-                sensitive = False
+        def sensitive_cb(fmt):
+            if ((self.browse_reason == self.config.CONFIG_DIR_FS)
+                and fmt != 'dir'):
+                return False
             elif not self.rhel6_defaults:
                 if fmt == "vmdk":
-                    sensitive = False
+                    return False
+            return True
 
-            model.append([key, vol.get_name(), vol.get_pretty_capacity(),
-                          fmt, namestr, sensitive])
+        host.populate_storage_volumes(list_widget, pool, sensitive_cb)
 
     def show_err(self, info, details=None):
         self.err.show_err(info,
