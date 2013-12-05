@@ -994,6 +994,7 @@ class XMLParseTest(unittest.TestCase):
         vol = virtinst.StorageVolume(conn, parsexml=file(infile).read())
 
         check = self._make_checker(vol)
+        check("key", None, "fookey")
         check("capacity", 10737418240, 2000)
         check("allocation", 5368709120, 1000)
         check("format", "raw", "qcow2")

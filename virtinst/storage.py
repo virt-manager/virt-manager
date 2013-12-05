@@ -580,9 +580,10 @@ class StorageVolume(_StorageObject):
     ##################
 
     _XML_ROOT_NAME = "volume"
-    _XML_PROP_ORDER = ["name", "capacity", "allocation", "format",
+    _XML_PROP_ORDER = ["name", "key", "capacity", "allocation", "format",
                        "target_path", "permissions"]
 
+    key = XMLProperty("./key")
     capacity = XMLProperty("./capacity", is_int=True,
                            validate_cb=_validate_capacity)
     allocation = XMLProperty("./allocation", is_int=True,
