@@ -1316,7 +1316,7 @@ def populate_storage_volumes(list_widget, pool, sensitive_cb):
 
         try:
             path = vol.get_target_path()
-            name = vol.get_name()
+            name = vol.get_pretty_name(pool.get_type())
             cap = vol.get_pretty_capacity()
             fmt = vol.get_format() or ""
         except:

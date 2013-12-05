@@ -62,6 +62,8 @@ class vmmStorageVolume(vmmLibvirtObject):
     # XML accessors #
     #################
 
+    def get_key(self):
+        return self.get_xmlobj().key or ""
     def get_target_path(self):
         return self.get_xmlobj().target_path or ""
     def get_format(self):
@@ -75,6 +77,16 @@ class vmmStorageVolume(vmmLibvirtObject):
         return util.pretty_bytes(self.get_capacity())
     def get_pretty_allocation(self):
         return util.pretty_bytes(self.get_allocation())
+
+    def get_pretty_name(self, pooltype):
+        name = self.get_name()
+        if pooltype != "iscsi":
+            return name
+
+        key = self.get_key()
+        if not key:
+            return name
+        return "%s (%s)" % (name, key)
 
 
 class vmmStoragePool(vmmLibvirtObject):
