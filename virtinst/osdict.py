@@ -238,7 +238,7 @@ _add_var("rhel4", "Red Hat Enterprise Linux 4", supported=True, parent="rhel3")
 _add_var("rhel5", "Red Hat Enterprise Linux 5", supported=False, parent="rhel4")
 _add_var("rhel5.4", "Red Hat Enterprise Linux 5.4 or later", supported=True, virtiodisk=True, virtionet=True, parent="rhel5")
 _add_var("rhel6", "Red Hat Enterprise Linux 6", inputtype="tablet", inputbus="usb", parent="rhel5.4")
-_add_var("rhel7", "Red Hat Enterprise Linux 7", supported=False, parent="rhel6")
+_add_var("rhel7", "Red Hat Enterprise Linux 7 (or later)", supported=False, parent="rhel6")
 
 _add_var("fedora5", "Fedora Core 5", sortby="fedora05", urldistro="fedora", parent="linux")
 _add_var("fedora6", "Fedora Core 6", sortby="fedora06", parent="fedora5")
@@ -257,29 +257,29 @@ _add_var("fedora16", "Fedora 16", parent="fedora15")
 _add_var("fedora17", "Fedora 17", parent="fedora16")
 _add_var("fedora18", "Fedora 18", supported=True, virtioconsole=True, qemu_ga=True, parent="fedora17")
 _add_var("fedora19", "Fedora 19", virtiommio=True, parent="fedora18")
-_add_var("fedora20", "Fedora 20", parent="fedora19")
+_add_var("fedora20", "Fedora 20 (or later)", parent="fedora19")
 
 _add_var("opensuse11", "openSuse 11", urldistro="suse", supported=True, virtiodisk=True, virtionet=True, parent="linux")
-_add_var("opensuse12", "openSuse 12", parent="opensuse11")
+_add_var("opensuse12", "openSuse 12 (or later)", parent="opensuse11")
 
 _add_var("sles10", "Suse Linux Enterprise Server", urldistro="suse", supported=True, parent="linux")
-_add_var("sles11", "Suse Linux Enterprise Server 11", supported=True, virtiodisk=True, virtionet=True, parent="sles10")
+_add_var("sles11", "Suse Linux Enterprise Server 11 (or later)", supported=True, virtiodisk=True, virtionet=True, parent="sles10")
 
 _add_var("mandriva2009", "Mandriva Linux 2009 and earlier", urldistro="mandriva", parent="linux")
-_add_var("mandriva2010", "Mandriva Linux 2010 and later", virtiodisk=True, virtionet=True, parent="mandriva2009")
+_add_var("mandriva2010", "Mandriva Linux 2010 (or later)", virtiodisk=True, virtionet=True, parent="mandriva2009")
 
 _add_var("mes5", "Mandriva Enterprise Server 5.0", urldistro="mandriva", parent="linux")
-_add_var("mes5.1", "Mandriva Enterprise Server 5.1 and later", supported=True, virtiodisk=True, virtionet=True, parent="mes5")
-_add_var("mbs1", "Mandriva Business Server 1 and later", supported=True, virtiodisk=True, virtionet=True, parent="linux")
+_add_var("mes5.1", "Mandriva Enterprise Server 5.1 (or later)", supported=True, virtiodisk=True, virtionet=True, parent="mes5")
+_add_var("mbs1", "Mandriva Business Server 1 (or later)", supported=True, virtiodisk=True, virtionet=True, parent="linux")
 
-_add_var("mageia1", "Mageia 1 and later", urldistro="mandriva", supported=True, virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="linux")
+_add_var("mageia1", "Mageia 1 (or later)", urldistro="mandriva", supported=True, virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="linux")
 
-_add_var("altlinux", "ALT Linux", urldistro="altlinux", supported=True, virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="linux")
+_add_var("altlinux", "ALT Linux (or later)", urldistro="altlinux", supported=True, virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="linux")
 
 _add_var("debianetch", "Debian Etch", urldistro="debian", sortby="debian4", parent="linux")
 _add_var("debianlenny", "Debian Lenny", sortby="debian5", supported=True, virtiodisk=True, virtionet=True, parent="debianetch")
 _add_var("debiansqueeze", "Debian Squeeze", sortby="debian6", virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="debianlenny")
-_add_var("debianwheezy", "Debian Wheezy", sortby="debian7", parent="debiansqueeze")
+_add_var("debianwheezy", "Debian Wheezy (or later)", sortby="debian7", parent="debiansqueeze")
 
 _add_var("ubuntuhardy", "Ubuntu 8.04 LTS (Hardy Heron)", urldistro="ubuntu", virtionet=True, parent="linux")
 _add_var("ubuntuintrepid", "Ubuntu 8.10 (Intrepid Ibex)", parent="ubuntuhardy")
@@ -292,7 +292,7 @@ _add_var("ubuntuoneiric", "Ubuntu 11.10 (Oneiric Ocelot)", parent="ubuntunatty")
 _add_var("ubuntuprecise", "Ubuntu 12.04 LTS (Precise Pangolin)", supported=True, parent="ubuntuoneiric")
 _add_var("ubuntuquantal", "Ubuntu 12.10 (Quantal Quetzal)", parent="ubuntuprecise")
 _add_var("ubunturaring", "Ubuntu 13.04 (Raring Ringtail)", videomodel="vmvga", parent="ubuntuquantal")
-_add_var("ubuntusaucy", "Ubuntu 13.10 (Saucy Salamander)", parent="ubunturaring")
+_add_var("ubuntusaucy", "Ubuntu 13.10 (Saucy Salamander) (or later)", parent="ubunturaring")
 
 _add_var("generic24", "Generic 2.4.x kernel", parent="linux")
 _add_var("generic26", "Generic 2.6.x kernel", parent="generic24")
@@ -304,17 +304,17 @@ _add_var("win2k", "Microsoft Windows 2000", sortby="mswin4", xen_disable_acpi=Tr
 _add_var("winxp", "Microsoft Windows XP", sortby="mswin5", supported=True, xen_disable_acpi=True, parent="windows")
 _add_var("winxp64", "Microsoft Windows XP (x86_64)", supported=True, sortby="mswin564", parent="windows")
 _add_var("win2k3", "Microsoft Windows Server 2003", supported=True, sortby="mswinserv2003", parent="windows")
-_add_var("win2k8", "Microsoft Windows Server 2008", supported=True, sortby="mswinserv2008", parent="windows")
+_add_var("win2k8", "Microsoft Windows Server 2008 (or later)", supported=True, sortby="mswinserv2008", parent="windows")
 _add_var("vista", "Microsoft Windows Vista", supported=True, sortby="mswin6", parent="windows")
-_add_var("win7", "Microsoft Windows 7", supported=True, sortby="mswin7", parent="windows")
+_add_var("win7", "Microsoft Windows 7 (or later)", supported=True, sortby="mswin7", parent="windows")
 
 
 _add_type("solaris", "Solaris", clock="localtime")
 _add_var("solaris9", "Sun Solaris 9", parent="solaris")
 _add_var("solaris10", "Sun Solaris 10", inputtype="tablet", inputbus="usb", parent="solaris")
 # https://bugzilla.redhat.com/show_bug.cgi?id=894017 claims tablet doesn't work for solaris 11
-_add_var("solaris11", "Sun Solaris 11", inputtype=None, inputbus=None, parent="solaris")
-_add_var("opensolaris", "Sun OpenSolaris", inputtype="tablet", inputbus="usb", parent="solaris")
+_add_var("solaris11", "Sun Solaris 11 (or later)", inputtype=None, inputbus=None, parent="solaris")
+_add_var("opensolaris", "Sun OpenSolaris (or later)", inputtype="tablet", inputbus="usb", parent="solaris")
 
 _add_type("unix", "UNIX")
 # http: //www.nabble.com/Re%3A-Qemu%3A-bridging-on-FreeBSD-7.0-STABLE-p15919603.html
@@ -322,16 +322,16 @@ _add_var("freebsd6", "FreeBSD 6.x", netmodel="ne2k_pci", parent="unix")
 _add_var("freebsd7", "FreeBSD 7.x", parent="freebsd6")
 _add_var("freebsd8", "FreeBSD 8.x", supported=True, netmodel="e1000", parent="freebsd7")
 _add_var("freebsd9", "FreeBSD 9.x", parent="freebsd8")
-_add_var("freebsd10", "FreeBSD 10.x", supported=False, virtiodisk=True, virtionet=True, parent="freebsd9")
+_add_var("freebsd10", "FreeBSD 10.x (or later)", supported=False, virtiodisk=True, virtionet=True, parent="freebsd9")
 
 # http: //calamari.reverse-dns.net: 980/cgi-bin/moin.cgi/OpenbsdOnQemu
 # https: //www.redhat.com/archives/et-mgmt-tools/2008-June/msg00018.html
-_add_var("openbsd4", "OpenBSD 4.x", netmodel="pcnet", parent="unix")
+_add_var("openbsd4", "OpenBSD 4.x (or later)", netmodel="pcnet", parent="unix")
 
 
 _add_type("other", "Other")
 _add_var("msdos", "MS-DOS", acpi=False, apic=False, parent="other")
 _add_var("netware4", "Novell Netware 4", parent="other")
 _add_var("netware5", "Novell Netware 5", parent="other")
-_add_var("netware6", "Novell Netware 6", parent="other")
+_add_var("netware6", "Novell Netware 6 (or later)", parent="other")
 _add_var("generic", "Generic", supported=True, parent="other")
