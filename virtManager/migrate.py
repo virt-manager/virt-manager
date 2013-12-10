@@ -141,6 +141,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         self.widget("migrate-rate").set_value(0)
         self.widget("migrate-secure").set_active(False)
+        self.widget("migrate-unsafe").set_active(False)
 
         downtime_box = self.widget("migrate-maxdowntime-box")
         support_downtime = self.vm.support_downtime()
@@ -167,6 +168,16 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         secure_box.set_sensitive(support_secure)
         secure_box.set_tooltip_text(secure_tooltip)
+
+        unsafe_box = self.widget("migrate-unsafe-box")
+        support_unsafe = hasattr(libvirt, "VIR_MIGRATE_UNSAFE")
+        unsafe_tooltip = ""
+        if not support_unsafe:
+            unsafe_tooltip = _("Libvirt version does not support unsafe "
+                               "migration.")
+
+        unsafe_box.set_sensitive(support_unsafe)
+        unsafe_box.set_tooltip_text(unsafe_tooltip)
 
         self.rebuild_dest_rows()
 
@@ -227,6 +238,9 @@ class vmmMigrateDialog(vmmGObjectUI):
 
     def get_config_secure(self):
         return self.widget("migrate-secure").get_active()
+
+    def get_config_unsafe(self):
+        return self.widget("migrate-unsafe").get_active()
 
     def get_config_max_downtime_enabled(self):
         return self.widget("migrate-max-downtime").get_sensitive()
@@ -464,6 +478,7 @@ class vmmMigrateDialog(vmmGObjectUI):
             max_downtime = self.get_config_max_downtime()
             live = not self.get_config_offline()
             secure = self.get_config_secure()
+            unsafe = self.get_config_unsafe()
             uri = self.build_migrate_uri(destconn, srcuri)
             rate = self.get_config_rate()
             if rate:
@@ -485,7 +500,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         progWin = vmmAsyncJob(
             self._async_migrate,
-            [self.vm, destconn, uri, rate, live, secure, max_downtime],
+            [self.vm, destconn, uri, rate, live, secure, unsafe, max_downtime],
             self._finish_cb, [destconn],
             _("Migrating VM '%s'" % self.vm.get_name()),
             (_("Migrating VM '%s' from %s to %s. This may take a while.") %
@@ -525,7 +540,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
     def _async_migrate(self, asyncjob,
                        origvm, origdconn, migrate_uri, rate, live,
-                       secure, max_downtime):
+                       secure, unsafe, max_downtime):
         meter = asyncjob.get_meter()
 
         srcconn = origvm.conn
@@ -545,6 +560,6 @@ class vmmMigrateDialog(vmmGObjectUI):
             timer = self.timeout_add(100, self._async_set_max_downtime,
                                      vm, max_downtime, current_thread)
 
-        vm.migrate(dstconn, migrate_uri, rate, live, secure, meter=meter)
+        vm.migrate(dstconn, migrate_uri, rate, live, secure, unsafe, meter=meter)
         if timer:
             self.idle_add(GLib.source_remove, timer)

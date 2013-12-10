@@ -1323,7 +1323,7 @@ class vmmDomain(vmmLibvirtObject):
         self._backend.migrateSetMaxDowntime(max_downtime, flag)
 
     def migrate(self, destconn, interface=None, rate=0,
-                live=False, secure=False, meter=None):
+                live=False, secure=False, unsafe=False, meter=None):
         self._install_abort = True
 
         newname = None
@@ -1335,6 +1335,9 @@ class vmmDomain(vmmLibvirtObject):
         if secure:
             flags |= libvirt.VIR_MIGRATE_PEER2PEER
             flags |= libvirt.VIR_MIGRATE_TUNNELLED
+
+        if unsafe:
+            flags |= libvirt.VIR_MIGRATE_UNSAFE
 
         destconn = destconn.get_backend().libvirtconn
         logging.debug("Migrating: conn=%s flags=%s dname=%s uri=%s rate=%s",
