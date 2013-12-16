@@ -182,7 +182,7 @@ class vmmConfig(object):
         try:
             # Check we can open the Python guestfs module.
             from guestfs import GuestFS  # pylint: disable=F0401
-            GuestFS()
+            GuestFS(close_on_exit = False)
             return True
         except:
             return False
