@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-16 15:53-0500\n"
+"POT-Creation-Date: 2013-12-16 19:50-0500\n"
 "PO-Revision-Date: 2013-12-02 20:00+0000\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/virt-manager/"
@@ -840,7 +840,7 @@ msgstr "TPM"
 
 #: ../virtManager/addhardware.py:1101
 msgid "Random Number Generator"
-msgstr ""
+msgstr "Zufallszahlen Generator"
 
 #: ../virtManager/addhardware.py:1245
 msgid "Te_mplate:"
@@ -990,35 +990,35 @@ msgstr "TPM Einheit Parameter Fehler"
 #: ../virtManager/addhardware.py:1790 ../virtManager/addhardware.py:1794
 #: ../virtManager/addhardware.py:1797 ../virtManager/addhardware.py:1800
 msgid "RNG selection error."
-msgstr ""
+msgstr "RNG Auswahl Fehler."
 
 #: ../virtManager/addhardware.py:1778
 msgid "A device must be specified."
-msgstr ""
+msgstr "Eine Einheit muss spezifiziert werden."
 
 #: ../virtManager/addhardware.py:1787
 msgid "Please specify both bind and connect host"
-msgstr ""
+msgstr "Bitte spezifizieren Sie den Bind- als auch den Verbindungs-Host"
 
 #: ../virtManager/addhardware.py:1791
 msgid "Please specify both bind and connect service"
-msgstr ""
+msgstr "Bitte spezifizieren Sie das Bind- als auch das Verbindungs-Service"
 
 #: ../virtManager/addhardware.py:1795
 msgid "The EGD host must be specified."
-msgstr ""
+msgstr "Der EGD Host muss angegeben werden."
 
 #: ../virtManager/addhardware.py:1798
 msgid "The EGD service must be specified."
-msgstr ""
+msgstr "Das EGD Service muss angegeben werden."
 
 #: ../virtManager/addhardware.py:1801
 msgid "Invalid RNG type."
-msgstr ""
+msgstr "Ungültiger RNG Typ."
 
 #: ../virtManager/addhardware.py:1820
 msgid "RNG device parameter error"
-msgstr ""
+msgstr "RNG Einheit Parameterfehler"
 
 #: ../virtManager/asyncjob.py:241
 msgid "Cancel the job?"
@@ -2350,7 +2350,7 @@ msgstr "Dateisystem %s"
 
 #: ../virtManager/details.py:3621
 msgid "RNG"
-msgstr ""
+msgstr "RNG"
 
 #: ../virtManager/domain.py:201
 msgid "Running"
@@ -3875,6 +3875,9 @@ msgid ""
 "--rng /dev/random\n"
 "--rng egd,backend_host=localhost,backend_service=708,backend_type=tcp"
 msgstr ""
+"Konfigurieren einer Gast RNG Einheit. Ex:\n"
+"--rng /dev/random\n"
+"--rng egd,backend_host=localhost,backend_service=708,backend_type=tcp"
 
 #: ../virtinst/cli.py:934
 msgid ""
@@ -4117,7 +4120,7 @@ msgstr "Port am Ziel-Host zu verbinden/anhören."
 
 #: ../virtinst/devicechar.py:229
 msgid "Host address to bind to."
-msgstr ""
+msgstr "Host Adresse zum anbinden."
 
 #: ../virtinst/devicechar.py:232
 msgid "Host port to bind to."
@@ -4221,11 +4224,11 @@ msgstr ""
 
 #: ../virtinst/devicerng.py:44
 msgid "Random"
-msgstr ""
+msgstr "Zufällig"
 
 #: ../virtinst/devicerng.py:46
 msgid "Entropy Gathering Daemon"
-msgstr ""
+msgstr "Entropie Sammel-Daemon"
 
 #: ../virtinst/devicetpm.py:44
 msgid "Passthrough device"
@@ -5111,19 +5114,19 @@ msgstr "_Backend:"
 
 #: ../ui/addhardware.ui.h:45
 msgid "Backend Type:"
-msgstr ""
+msgstr "Unterbau Typ:"
 
 #: ../ui/addhardware.ui.h:46
 msgid "Backend Mode:"
-msgstr ""
+msgstr "Backend Modus:"
 
 #: ../ui/addhardware.ui.h:47 ../ui/details.ui.h:179
 msgid "Host:"
-msgstr ""
+msgstr "Host:"
 
 #: ../ui/addhardware.ui.h:48 ../ui/details.ui.h:181
 msgid "Bind Host:"
-msgstr ""
+msgstr "Bind Host:"
 
 #: ../ui/addhardware.ui.h:49 ../ui/details.ui.h:159 ../ui/host.ui.h:17
 msgid "Device:"
@@ -5131,7 +5134,7 @@ msgstr "Gerät:"
 
 #: ../ui/addhardware.ui.h:50 ../ui/details.ui.h:186
 msgid "rng"
-msgstr ""
+msgstr "rng"
 
 #: ../ui/addhardware.ui.h:51 ../ui/create.ui.h:74
 #: ../ui/createinterface.ui.h:44 ../ui/createnet.ui.h:35
@@ -6690,27 +6693,27 @@ msgstr "<b>TPM Einheit</b>"
 
 #: ../ui/details.ui.h:178
 msgid "Backend type:"
-msgstr ""
+msgstr "Unterbau Typ:"
 
 #: ../ui/details.ui.h:180
 msgid "Service:"
-msgstr ""
+msgstr "Dienst:"
 
 #: ../ui/details.ui.h:182
 msgid "Bind Service:"
-msgstr ""
+msgstr "Bind Dienst:"
 
 #: ../ui/details.ui.h:183
 msgid "Rate (period):"
-msgstr ""
+msgstr "Rate (Periode):"
 
 #: ../ui/details.ui.h:184
 msgid "Rate (bytes):"
-msgstr ""
+msgstr "Rate (Bytes):"
 
 #: ../ui/details.ui.h:185
 msgid "<b>Random Number Generator</b>"
-msgstr ""
+msgstr "<b>Zufallszahlen Generator</b>"
 
 #: ../ui/details.ui.h:187
 msgid "<b>The console is currently unavailable</b>"
@@ -7218,3 +7221,1345 @@ msgstr "_Lokal durchsuchen"
 #: ../ui/storagebrowse.ui.h:4
 msgid "Choose _Volume"
 msgstr "_Datenträger wählen"
+
+#~ msgid "Error in %(chartype)s device parameters: %(err)s"
+#~ msgstr "Fehler in %(chartype)s Geräteparametern: %(err)s"
+
+#~ msgid "Error in watchdog device parameters: %s"
+#~ msgstr "Fehler in Watchdog-Geräteparametern: %s"
+
+#~ msgid "Error in filesystem device parameters: %s"
+#~ msgstr "Fehler in Dateisystem-Geräteparametern: %s"
+
+#~ msgid ""
+#~ "Domain installation still in progress. Waiting %sfor installation to "
+#~ "complete."
+#~ msgstr ""
+#~ "Domain-Installation ist noch in Arbeit. Warten %s für die Installation "
+#~ "fertig zu stellen."
+
+#~ msgid "The OS type being installed, e.g. 'linux', 'unix', 'windows'"
+#~ msgstr ""
+#~ "Der zu installierende Betriebssystemtyp, z.B. 'linux', 'unix', 'windows'"
+
+#~ msgid ""
+#~ "The OS variant being installed guests, e.g. 'fedora6', 'rhel5', "
+#~ "'solaris10', 'win2k'"
+#~ msgstr ""
+#~ "Die zu installierende Betriebssystemvariante für den Gast, z.B. "
+#~ "'fedora6', 'rhel5', 'solaris10', 'win2k'"
+
+#~ msgid ""
+#~ "Disables APIC for fully virtualized guest (overrides value in os-type/os-"
+#~ "variant db)"
+#~ msgstr ""
+#~ "Blockiert das APIC für den voll virtualisierten Gast (überschreibt Wert "
+#~ "in os-type/os-variant db)"
+
+#~ msgid ""
+#~ "Disables ACPI for fully virtualized guest (overrides value in os-type/os-"
+#~ "variant db)"
+#~ msgstr ""
+#~ "Blockiert das ACPI für den voll virtualisierten Gast (überschreibt Wert "
+#~ "in os-type/os-variant db)"
+
+#~ msgid "Print the generated domain XML rather than define the guest."
+#~ msgstr ""
+#~ "Drucken Sie die generierte Domänen-XML anstatt den Gast zu definieren."
+
+#~ msgid "Time to wait (in minutes)"
+#~ msgstr "Zu wartende Zeitspanne (in Minuten)"
+
+#~ msgid "Forces 'yes' for any applicable prompts, terminates for all others"
+#~ msgstr ""
+#~ "Erzwingt 'yes' für alle anwendbaren Meldungen, beendet für alle anderen"
+
+#~ msgid "Request user input for ambiguous situations or required options."
+#~ msgstr ""
+#~ "Benutzereingaben anfordern in nicht eindeutigen Situationen oder für "
+#~ "erforderliche Optionen."
+
+#~ msgid ""
+#~ "Don't check for name collision. Allows replacing an existing guest with "
+#~ "the new clone"
+#~ msgstr ""
+#~ "Nicht für Namenskollision überprüfen. Ermöglicht die Ersetzung eines "
+#~ "bestehenden Gastes mit dem neuen Klone"
+
+#~ msgid ""
+#~ "Do not prompt for input. Answers yes where applicable, terminates for all "
+#~ "other prompts"
+#~ msgstr ""
+#~ "Nicht zu einer Eingabe auffordern. Antwortet wenn passend mit yes, "
+#~ "beendet für alle anderen Eingabeaufforderungen"
+
+#~ msgid "Must be privileged to clone Xen guests"
+#~ msgstr "Muss privilegiert sein um Xen-Gäste zu klonen"
+
+#~ msgid "The image requires %i network interface."
+#~ msgstr "Das Abbild benötigt die %i Netzwerkschnittstelle."
+
+#~ msgid ""
+#~ "The OS variant being installed, e.g. 'fedora6', 'rhel5', 'solaris10', "
+#~ "'win2k'"
+#~ msgstr ""
+#~ "Die installierte Betriebssystem-Variante, z. B. 'fedora6', 'rhel5', "
+#~ "'solaris10', 'win2k'"
+
+#~ msgid "Full Virtualization specific options"
+#~ msgstr "Volle Virtualisierungsspezifische Optionen"
+
+#~ msgid "Disables APIC for fully virtualized guest"
+#~ msgstr "Blockiert das APIC für den voll virtualisierten Gast"
+
+#~ msgid "Disables ACPI for fully virtualized guest"
+#~ msgstr "Blockiert das ACPI für den voll virtualisierten Gast"
+
+#~ msgid "Print the libvirt XML, but do not start the domain"
+#~ msgstr "Drucken Sie die libvirt XML, aber starten Sie die Domain nicht"
+
+#~ msgid "Overwrite, or destroy, an existing image with the same name"
+#~ msgstr ""
+#~ "Ein bestehendes Abbild mit dem gleichen Namen überschreiben oder "
+#~ "zerstören "
+
+#~ msgid ""
+#~ "The OS type for fully virtualized guests, e.g. 'linux', 'unix', 'windows'"
+#~ msgstr ""
+#~ "Der Betriebssystemtyp für voll virtualisierte Gäste, z.B. 'linux', "
+#~ "'unix', 'windows'"
+
+#~ msgid ""
+#~ "The OS variant for fully virtualized guests, e.g. 'fedora6', 'rhel5', "
+#~ "'solaris10', 'win2k', 'vista'"
+#~ msgstr ""
+#~ "Die Betriebssystemvariante für voll virtualisierte Gäste, z.B. 'fedora6', "
+#~ "'rhel5', 'solaris10', 'win2k', 'vista'"
+
+#~ msgid "Dry run, don't make any changes"
+#~ msgstr "Testlauf, keine Änderungen vornehmen"
+
+#~ msgid "Local SDL window"
+#~ msgstr "Lokales SDL-Fenster"
+
+#~ msgid "Creating Storage File"
+#~ msgstr "Neue Speicherdatei anlegen"
+
+#~ msgid "Allocation of disk storage may take a few minutes to complete."
+#~ msgstr ""
+#~ "Die Zuweisung des Plattenplatzes kann einige Minuten bis zur "
+#~ "Fertigstellung dauern."
+
+#~ msgid "Disk \"%s\" is already in use by another guest!"
+#~ msgstr "Die Platte «%s» wird bereits von einem anderem Gast verwendet!"
+
+#~ msgid "Active (RO)"
+#~ msgstr "Aktiv (RO)"
+
+#~ msgid ""
+#~ "Domain rename failed. Attempting to recover also failed.\n"
+#~ "\n"
+#~ "Original error: %s\n"
+#~ "\n"
+#~ "Recover error: %s"
+#~ msgstr ""
+#~ "Domain-Umbenennung fehlgeschlagen. Wiederherstellung ebenfalls "
+#~ "fehlgeschlagen.\n"
+#~ "\n"
+#~ "Ursprünglicher Fehler: %s\n"
+#~ "\n"
+#~ "Wiederherstellungsfehler: %s"
+
+#~ msgid "Connection is read only."
+#~ msgstr "Verbindung ist schreibgeschützt."
+
+#~ msgid "Hypervisor only supports %d virtual CPUs."
+#~ msgstr "Hypervisor unterstützt nur %d virtuelle CPUs."
+
+#~ msgid "Only URL or import installs are supported for paravirt."
+#~ msgstr ""
+#~ "Nur URL- oder Import-Installationen werden für Paravirtualisierung "
+#~ "unterstützt."
+
+#~ msgid "Invalid System Name"
+#~ msgstr "Ungültiger Systemname"
+
+#~ msgid "Network Address / prefix:"
+#~ msgstr "Netzwerk-Adresse/Präfix:"
+
+#~ msgid "DHCPv4 Status:"
+#~ msgstr "DHCPv4 Status:"
+
+#~ msgid "IPV6 Network:"
+#~ msgstr "IPV6 Netzwerk:"
+
+#~ msgid "Not Defined"
+#~ msgstr "Nicht definiert"
+
+#~ msgid "DHCPv6 Status:"
+#~ msgstr "DHCPv6 Status:"
+
+#~ msgid "Invalid forwarding mode"
+#~ msgstr "Ungültiger Weiterleitungsmodus"
+
+#~ msgid "Please select where the traffic should be forwarded"
+#~ msgstr ""
+#~ "Bitte geben Sie an, wohin der Netzwerkverkehr weitergeleitet werden soll"
+
+#~ msgid "Format the source device."
+#~ msgstr "Das Quellgerät formatieren."
+
+#~ msgid "Create a logical volume group from the source device."
+#~ msgstr "Logische Datenträgergruppe vom Quellgerät erstellen."
+
+#~ msgid "All selected storage will be deleted."
+#~ msgstr "Alle ausgewählten Speicher werden gelöscht."
+
+#~ msgid ""
+#~ "Static SELinux security type tells libvirt to always start the guest "
+#~ "process with the specified label. Unless 'relabel' is set, the "
+#~ "administrator is responsible for making sure the images are labeled "
+#~ "correctly on disk."
+#~ msgstr ""
+#~ "Der statische SELinux-Sicherheitstyp veranlasst libvirt, den Gastprozess "
+#~ "immer mit der angegebenen Kennung zu starten. Sofern nicht 'relabel' "
+#~ "festgelegt wurde, ist der Administrator verantwortlich dafür "
+#~ "sicherzustellen, dass die Images auf der Festplatte korrekt "
+#~ "gekennzeichnet sind."
+
+#~ msgid ""
+#~ "You are switching graphics type to %(gtype)s, would you like to "
+#~ "%(action)s Spice agent channels?"
+#~ msgstr ""
+#~ "Sie ändern den Grafiktyp auf %(gtype)s, möchten Sie SPICE-Agent-Channels "
+#~ "%(action)s?"
+
+#~ msgid "Cannot rename an active guest"
+#~ msgstr "Aktiver Gast kann nicht umbenannt werden"
+
+#~ msgid ""
+#~ "virt-manager will connect to libvirt on the next\n"
+#~ "application start up."
+#~ msgstr ""
+#~ "virt-manager wird beim nächsten Start der Anwendung \n"
+#~ "mit libvirt verbinden."
+
+#~ msgid ""
+#~ "Libvirt was just installed, so the 'libvirtd' service will\n"
+#~ "will need to be started."
+#~ msgstr ""
+#~ "Libvirt wurde eben installiert, der «libvirtd»-Dienst muss\n"
+#~ "also gestartet werden."
+
+#~ msgid "Error setting net autostart: %s"
+#~ msgstr "Fehler beim Einrichten des automatischen Netzwerkstarts: %s"
+
+#~ msgid "Error setting pool autostart: %s"
+#~ msgstr "Fehler beim Einrichten des automatischen Pool-Starts: %s"
+
+#~ msgid "_Force Reset"
+#~ msgstr "_Forciertes Zurücksetzen"
+
+#~ msgid "_Clone..."
+#~ msgstr "_Klonen ..."
+
+#~ msgid "_Migrate..."
+#~ msgstr "_Migrieren ..."
+
+#~ msgid "Searching for available hypervisors..."
+#~ msgstr "Suche nach verfügbaren Hypervisors ..."
+
+#~ msgid "Checking for installed package '%s'"
+#~ msgstr "Suchen nach installiertem Paket «%s»"
+
+#~ msgid ""
+#~ "The following packages are not installed:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "These are required to create KVM guests locally.\n"
+#~ "Would you like to install them now?"
+#~ msgstr ""
+#~ "Die folgenden Pakete sind nicht installiert:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "Diese Pakete sind erforderlich, um KVM-Gäste lokal zu erstellen.\n"
+#~ "Möchten Sie sie jetzt installieren?"
+
+#~ msgid "Packages required for KVM usage"
+#~ msgstr "Pakete werden für die KVM-Verwendung benötigt"
+
+#~ msgid ""
+#~ "The following packages are not installed:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "Would you like to install them now?"
+#~ msgstr ""
+#~ "Die folgenden Pakete sind nicht installiert:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "Wollen Sie diese Pakete jetzt installieren?"
+
+#~ msgid "Recommended package installs"
+#~ msgstr "Empfohlene Paketinstallationen"
+
+#~ msgid "_Resume"
+#~ msgstr "_Wiederaufnehmen"
+
+#~ msgid "'path' or 'func' is required."
+#~ msgstr "'path' oder 'func' ist erforderlich."
+
+#~ msgid "Must be root to create Xen guests"
+#~ msgstr "Muss privilegiert sein um Xen-Gäste zu erstellen"
+
+#~ msgid " (Use --prompt or --force to override)"
+#~ msgstr " (Verwenden Sie --prompt oder --force zum überschreiben)"
+
+#~ msgid "Disk %s is already in use by another guest"
+#~ msgstr "Festplatte %s wird bereits von einem anderen Gast verwendet"
+
+#~ msgid "Error in network device parameters: %s"
+#~ msgstr "Fehler in Netzwerkgeräteparametern %s"
+
+#~ msgid "Error in graphics device parameters: %s"
+#~ msgstr "Fehler in Grafikgeräteparametern: %s"
+
+#~ msgid "Error in smartcard device parameters: %s"
+#~ msgstr "Fehler in Smartcard-Geräteparametern: %s"
+
+#~ msgid "Error in RNG device parameters: %s"
+#~ msgstr "Fehler in RNG-Einheit Parametern: %s"
+
+#~ msgid "Error in controller device parameters: %s"
+#~ msgstr "Fehler in Controller-Geräteparametern: %s"
+
+#~ msgid "Error in redirdev device parameters: %s"
+#~ msgstr "Fehler in redirdev-Geräteparametern: %s"
+
+#~ msgid "Error in memballoon device parameters: %s"
+#~ msgstr "Fehler in memballoon-Geräteparametern: %s"
+
+#~ msgid ""
+#~ "Configure a guest network interface. Ex:\n"
+#~ "--network bridge=mybr0\n"
+#~ "--network network=my_libvirt_virtual_net\n"
+#~ "--network network=mynet,model=virtio,mac=00:11..."
+#~ msgstr ""
+#~ "Konfigurieren Sie eine Gast-Netzwerkschnittstelle. Beispiel:\n"
+#~ "--network bridge=mybr0\n"
+#~ "--network network=my_libvirt_virtual_net\n"
+#~ "--network network=mynet,model=virtio,mac=00:11..."
+
+#~ msgid "--boot menu must be 'on' or 'off'"
+#~ msgstr "--boot Menü muss 'on' oder 'off' sein"
+
+#~ msgid "The server option is invalid with spicevmc redirection"
+#~ msgstr "Die Server-Option ist ungültig für spicevmc Umleitung"
+
+#~ msgid "The server option is missing for TCP redirection"
+#~ msgstr "Die Server-Option fehlt für TCP-Umleitung"
+
+#~ msgid "Connection must be a 'virConnect' instance."
+#~ msgstr "Verbindung muss eine 'virConnect' Instanz sein."
+
+#~ msgid "Disk '%s' does not exist."
+#~ msgstr "Festplatte '%s' existiert nicht."
+
+#~ msgid "Invalid 'location' type %s."
+#~ msgstr "Ungültiger 'location'-Typ %s."
+
+#~ msgid "'conn' must be specified if 'location' is a storage tuple."
+#~ msgstr ""
+#~ "'conn' muss angegeben werden, wenn 'location' ein Speicher-Tupel ist."
+
+#~ msgid ""
+#~ "Install media location must be an NFS, HTTP or FTP network install "
+#~ "source, or an existing file/device"
+#~ msgstr ""
+#~ "Installations-Medien-Standort muss eine NFS, HTTP oder FTP Netzwerk "
+#~ "Installations-Quelle, oder eine vorhandene Datei/Einheit sein"
+
+#~ msgid "Privilege is required for NFS installations"
+#~ msgstr "Sonderrecht ist für NFS Installationen erforderlich"
+
+#~ msgid "Unable to connect to hypervisor, aborting installation!"
+#~ msgstr ""
+#~ "Verbindung mit Hypervisor fehlgeschlagen, Installation wird abgebrochen!"
+
+#~ msgid "Memory value must be an integer greater than 0"
+#~ msgstr "Speicherwert muss ein Ganzzahlwert größer als 0 sein"
+
+#~ msgid "Max Memory value must be an integer greater than 0"
+#~ msgstr "Max. Speicherwert muss ein Ganzzahlwert größer als 0 sein"
+
+#~ msgid "Number of vcpus must be a positive integer."
+#~ msgstr "Anzahl der vcpus muss ein positiver Ganzzahlwert sein."
+
+#~ msgid "Number of vcpus must be no greater than %d for this vm type."
+#~ msgstr "Anzahl der vcpus darf nicht größer als %d für diesen VM-Typ sein."
+
+#~ msgid "OS type must be a string."
+#~ msgstr "Betriebssystem-Typ muss eine Zeichenkette sein."
+
+#~ msgid "OS type '%s' does not exist in our dictionary"
+#~ msgstr "Betriebssystem-Typ '%s' ist nicht in unserem Wörterbuch vorhanden"
+
+#~ msgid "OS variant must be a string."
+#~ msgstr "Betriebssystem-Variante muss eine Zeichenkette sein."
+
+#~ msgid ""
+#~ "OS variant '%(var)s' does not exist in our dictionary for OS type '%(ty)s'"
+#~ msgstr ""
+#~ "Betriebssystem-Variante '%(var)s' existiert nicht in unserem Wörterbuch "
+#~ "für Betriebssystem-Typ '%(ty)s'"
+
+#~ msgid "Unknown OS variant '%s'"
+#~ msgstr "Unbekannte Betriebssystem-Variante '%s'"
+
+#~ msgid "Whether we should overwrite an existing guest with the same name."
+#~ msgstr ""
+#~ "Ob wir einen existierenden Gast mit dem gleichen Namen überschreiben "
+#~ "sollen."
+
+#~ msgid "Must pass a VirtualDevice instance."
+#~ msgstr "Muss eine VirtualDevice Instanz übergeben."
+
+#~ msgid "Did not find device %s"
+#~ msgstr "Konnte Einheit %s nicht finden"
+
+#~ msgid "Name and memory must be specified for all guests!"
+#~ msgstr "Name und Speicher muss für alle Gäste angegeben werden!"
+
+#~ msgid "The UUID you entered is already in use by another guest!"
+#~ msgstr ""
+#~ "Die von Ihnen eingegebene UUID wird bereits von einem anderen Gast "
+#~ "verwendet!"
+
+#~ msgid ""
+#~ "Domain has not existed.  You should be able to find more information in "
+#~ "the logs"
+#~ msgstr ""
+#~ "Domäne hat nicht existiert. Sie sollten in der Lage sein, mehr "
+#~ "Informationen in den Logs zu finden"
+
+#~ msgid ""
+#~ "Domain has not run yet.  You should be able to find more information in "
+#~ "the logs"
+#~ msgstr ""
+#~ "Domäne ist noch nicht gelaufen. Sie sollten in der Lage sein, mehr "
+#~ "Informationen in den Logs zu finden"
+
+#~ msgid "'conn' or 'capabilities' must be specified."
+#~ msgstr "'conn' oder 'capabilities' muss angegeben sein."
+
+#~ msgid "Root element is not 'image'"
+#~ msgstr "Stamm-Element ist nicht 'image'"
+
+#~ msgid "A connection must be specified."
+#~ msgstr "Eine Verbindung muss spezifiziert werden."
+
+#~ msgid "'conn' must be a libvirt connection object."
+#~ msgstr "'conn' muss ein libvirt Verbindungs-Objekt sein."
+
+#~ msgid "Passed connection is not libvirt interface capable"
+#~ msgstr "Übergebene Verbindung ist nicht fähig für libvirt Schnittstellen"
+
+#~ msgid "Interface name"
+#~ msgstr "Schnittstellenname"
+
+#~ msgid "Unknown start mode '%s"
+#~ msgstr "Unbekannter Startmodus '%s"
+
+#~ msgid "Network protocol configuration"
+#~ msgstr "Netzwerkprotokoll-Konfiguration"
+
+#~ msgid "Availability monitoring mode for the bond device"
+#~ msgstr "Verfügbarkeits-Überwachungsmodus für die Bond-Einheit"
+
+#~ msgid "Tag and parent interface are required."
+#~ msgstr "Kennzeichen und übergeordnete Schnittstelle sind erforderlich."
+
+#~ msgid "Static IP addresses"
+#~ msgstr "Statische IP-Adresse"
+
+#~ msgid "IPv6 address prefix"
+#~ msgstr "IPv6-Adresspräfix"
+
+#~ msgid "IP address"
+#~ msgstr "IP-Adresse"
+
+#~ msgid "CDROM media must be specified for the live CD installer."
+#~ msgstr "CD-ROM Medien müssen für den Live-CD-Installer angegeben werden."
+
+#~ msgid "Invalid dictionary entry for device '%s %s'"
+#~ msgstr "Ungültige Verzeichnis-Eintragung für Einheit '%s %s'"
+
+#~ msgid "Unable to determine kernel RPM path"
+#~ msgstr "Kann Kernel RPM Pfad nicht bestimmen"
+
+#~ msgid "Unable to determine install-initrd RPM path"
+#~ msgstr "Kann install-initrd RPM Pfad nicht bestimmen"
+
+#~ msgid "Building initrd"
+#~ msgstr "Erstellen initrd"
+
+#~ msgid "Solaris miniroot not found at %s"
+#~ msgstr "Solaris Mini-Stammverzeichnis in %s nicht gefunden"
+
+#~ msgid "OpenSolaris PV kernel not found at %s"
+#~ msgstr "OpenSolaris PV Kernel in %s nicht gefunden"
+
+#~ msgid "Unknown storage object type: %s"
+#~ msgstr "Unbekannter Speicherobjekttyp: %s"
+
+#~ msgid "Passed connection is not libvirt storage capable"
+#~ msgstr "Übergebene Verbindung ist nicht fähig für libvirt Speicher"
+
+#~ msgid "Permissions must be passed as a dict object"
+#~ msgstr "Berechtigungen müssen als ein dict-Objekt übergeben werden"
+
+#~ msgid "Permissions must contain 'mode', 'owner' and 'group' keys."
+#~ msgstr ""
+#~ "Berechtigungen müssen die 'mode', 'owner' und 'group' Schlüssel enthalten."
+
+#~ msgid "'%s' is not an absolute path."
+#~ msgstr "'%s' ist kein absoluter Pfad."
+
+#~ msgid "Unknown storage pool type: %s"
+#~ msgstr "Unbekannter Speicher-Pool Typ: %s"
+
+#~ msgid "Host name must be a string"
+#~ msgstr "Host-Name muss eine Zeichenkette sein"
+
+#~ msgid "Directory to use for the storage pool."
+#~ msgstr "Verzeichnis für den Speicher-Pool."
+
+#~ msgid "The existing device to mount for the pool."
+#~ msgstr "Die vorhandene Einheit für den Pool bereitzustellen."
+
+#~ msgid "Location to mount the source device."
+#~ msgstr "Standort zur Bereitstellung der Quellen-Einheit."
+
+#~ msgid "Unknown Filesystem format: %s"
+#~ msgstr "Unbekanntes Dateisystemformat: %s"
+
+#~ msgid "Filesystem type of the source device."
+#~ msgstr "Dateisystemtyp des Quellgeräts."
+
+#~ msgid "Device path is required"
+#~ msgstr "Gerätepfad ist erforderlich"
+
+#~ msgid "Path on the host that is being shared."
+#~ msgstr "Pfad auf dem Host, der gemeinsam genutzt wird."
+
+#~ msgid "Name of the host sharing the storage."
+#~ msgstr "Name des Hosts mit dem der Speicher gemeinsam benutzt wird."
+
+#~ msgid "Unknown Network Filesystem format: %s"
+#~ msgstr "Unbekanntes Netzwerk-Dateisystemformat: %s"
+
+#~ msgid "Type of network filesystem."
+#~ msgstr "Typ des Netzwerkdateisystems."
+
+#~ msgid "Host path is required"
+#~ msgstr "Hostpfad ist erforderlich"
+
+#~ msgid "Location of the existing LVM volume group."
+#~ msgstr "Speicherort der vorhandenen LVM-Datenträgergruppe."
+
+#~ msgid "Optional device(s) to build new LVM volume on."
+#~ msgstr "Optionale Geräte zum Erstellen eines neuen LVM-Datenträgers."
+
+#~ msgid "Path to the existing disk device."
+#~ msgstr "Pfad zum vorhandenen Festplattengerät."
+
+#~ msgid "Root location for identifying new storage volumes."
+#~ msgstr "Stamm-Standort für die Identifizierung neuer Datenträger."
+
+#~ msgid "Unknown Disk format: %s"
+#~ msgstr "Unbekanntes Festplattenformat: %s"
+
+#~ msgid "Format of the source device's partition table."
+#~ msgstr "Format der Partitionstabelle des Quellgeräts"
+
+#~ msgid "iSCSI volume creation is not supported."
+#~ msgstr "Erstellung von iSCSI-Datenträgern wird nicht unterstützt."
+
+#~ msgid "SCSI volume creation is not supported."
+#~ msgstr "Erstellung von SCSI-Datenträgern wird nicht unterstützt."
+
+#~ msgid "Name of the scsi adapter (ex. host2)"
+#~ msgstr "Name des SCSI-Adapters (z.B. host2)"
+
+#~ msgid "Adapter name is required"
+#~ msgstr "Adaptername ist erforderlich"
+
+#~ msgid "Multipath volume creation is not supported."
+#~ msgstr "Erstellung von Multipath-Datenträgern wird nicht unterstützt."
+
+#~ msgid "One of pool or pool_name must be specified."
+#~ msgstr "Entweder pool oder pool_name muss angegeben werden."
+
+#~ msgid "'conn' must be specified with 'pool_name'"
+#~ msgstr "'conn' muss zusammen mit 'pool_name' angegeben werden"
+
+#~ msgid "Must specify pool_object or pool_name"
+#~ msgstr "pool_object oder pool_name muss angegeben werden"
+
+#~ msgid "Couldn't find storage pool '%s': %s"
+#~ msgstr "Speicher-Pool '%s' konnte nicht gefunden werden: %s"
+
+#~ msgid "pool_object must be a virStoragePool"
+#~ msgstr "pool_object muss ein virStoragePool sein"
+
+#~ msgid "Capacity must be a positive number"
+#~ msgstr "Kapazität muss eine positive Zahl sein"
+
+#~ msgid "Allocation must be a non-negative number"
+#~ msgstr "Zuteilung muss eine nicht-negative Zahl sein"
+
+#~ msgid "'pool' must be a virStoragePool instance."
+#~ msgstr "'pool' muss eine virStoragePool instanz sein."
+
+#~ msgid "'%s' is not a valid format."
+#~ msgstr "'%s' ist kein gültiges Format."
+
+#~ msgid "'conn' must be a virConnect instance."
+#~ msgstr "'conn' muss eine virConnect Instanz sein."
+
+#~ msgid "'model' must be a string,  was '%s'."
+#~ msgstr "'model' muss eine Zeichenkette sein, war '%s'."
+
+#~ msgid "Unsupported sound model '%s'"
+#~ msgstr "Nicht unterstütztes Sound-Modell '%s'"
+
+#~ msgid "Unknown character device type '%s'."
+#~ msgstr "Unbekannter Zeichengerätetyp '%s'."
+
+#~ msgid "Unknown character device type '%s'"
+#~ msgstr "Unbekannter Zeichengerätetyp '%s'"
+
+#~ msgid "Unknown character mode '%s'."
+#~ msgstr "Unbekannter Zeichenmodus '%s'."
+
+#~ msgid "Unknown protocol '%s'."
+#~ msgstr "Unbekanntes Protokoll '%s'."
+
+#~ msgid "Unknown target type '%s'. Must be in: "
+#~ msgstr "Unbekannter Ziel-Typ '%s. Muss sein in:"
+
+#~ msgid "Unknown address type '%s'. Must be in: "
+#~ msgstr "Unbekannter Adresstyp '%s'. Muss sein in:"
+
+#~ msgid "A source path is required for character device type '%s'"
+#~ msgstr "Ein Quellpfad ist erforderlich für Zeichengerätetyp '%s'"
+
+#~ msgid "PTY allocated to the guest."
+#~ msgstr "PTY zum Gast zugewiesen."
+
+#~ msgid "Host character device to attach to guest."
+#~ msgstr "Host zeichenorientierte Einheit zum Anhängen an den Gast."
+
+#~ msgid "Named pipe to use for input and output."
+#~ msgstr "Benannte Pipe zur Verwendung für Ein- und Ausgabe"
+
+#~ msgid "File path to record device output."
+#~ msgstr "Dateipfad zum aufzeichnen der Ausgabe der Einheit."
+
+#~ msgid "Unix socket path."
+#~ msgstr "Unix-Socket-Pfad."
+
+#~ msgid "A host and port must be specified."
+#~ msgstr "Ein Host und Port muss angegeben sein."
+
+#~ msgid "Host address to send output to."
+#~ msgstr "Host Adresse an welche die Ausgabe gesendet wird."
+
+#~ msgid "Host port to send output to."
+#~ msgstr "Host Port an welchen die Ausgabe gesendet wird."
+
+#~ msgid "A connection port must be specified."
+#~ msgstr "Ein Verbindungs-Port muss angegeben sein."
+
+#~ msgid "volName must be a tuple of the form ('poolname', 'volname')"
+#~ msgstr ""
+#~ "volName muss eine geordnete Wertesammlung in der Form ('poolname', "
+#~ "'volname') sein"
+
+#~ msgid "'volName' requires a passed connection."
+#~ msgstr "'volName' erfordert eine übergebene Verbindung."
+
+#~ msgid "vol_object must be a virStorageVol instance"
+#~ msgstr "vol_object muss eine virStorageVol Instanz sein"
+
+#~ msgid "vol_install must be a StorageVolume  instance."
+#~ msgstr "vol_install muss eine StorageVolume Instanz sein."
+
+#~ msgid "Error validating clone path: %s"
+#~ msgstr "Fehler beim Prüfen des Klone-Pfades: %s"
+
+#~ msgid "'size' must be a number greater than 0."
+#~ msgstr "'size' muss eine Nummer grösser als 0 sein."
+
+#~ msgid "Unknown storage type '%s'"
+#~ msgstr "Unbekannter Speicher-Typ '%s'"
+
+#~ msgid "Unknown device type '%s'"
+#~ msgstr "Unbekannter Einheiten-Typ '%s'"
+
+#~ msgid "Unknown cache mode '%s'"
+#~ msgstr "Unbekannter Cache-Modus '%s'"
+
+#~ msgid "Unknown io mode '%s'"
+#~ msgstr "Unbekannter I/O Modus '%s'"
+
+#~ msgid "Unknown error policy '%s'"
+#~ msgstr "Unbekannte Fehlerrichtlinie '%s'"
+
+#~ msgid "IOTune read bytes per second value must be an integer"
+#~ msgstr "IOTune Lesen Wert in Bytes pro Sekunde muss ein Integer sein"
+
+#~ msgid "IOTune read iops per second value must be an integer"
+#~ msgstr "IOTune Lesen Wert in iops pro Sekunde muss ein Integer sein"
+
+#~ msgid "IOTune total bytes per second value must be an integer"
+#~ msgstr "IOTune Total Wert in Bytes pro Sekunde muss ein Integer sein"
+
+#~ msgid "IOTune total iops per second value must be an integer"
+#~ msgstr "IOTune Total Wert in iops pro Sekunde muss ein Integer sein"
+
+#~ msgid "IOTune write bytes per second value must be an integer"
+#~ msgstr "IOTune Schreib-Wert in Bytes pro Sekunde muss ein Integer sein"
+
+#~ msgid "IOTune write iops per second value must be an integer"
+#~ msgstr "IOTune Schreib-Wert in iops pro Sekunde muss ein Integer sein"
+
+#~ msgid "copying to an existing vdisk is not supported"
+#~ msgstr "Kopieren auf eine existierende vdisk ist nicht unterstützt"
+
+#~ msgid "failed to clone disk"
+#~ msgstr "Klonen der Disk gescheitert"
+
+#~ msgid "Error creating vdisk %s"
+#~ msgstr "Fehler beim Anlegen der vdisk %s"
+
+#~ msgid "'disknode' or self.target must be set!"
+#~ msgstr "'disknode' oder self.target muss gesetzt sein!"
+
+#~ msgid "Cannot determine device bus/type."
+#~ msgstr "Kann Bus/Typ der Einheit nicht bestimmen."
+
+#~ msgid "Unsupported filesystem type '%s'"
+#~ msgstr "Nicht unterstützter Dateisystem-Typ '%s'"
+
+#~ msgid "Unsupported filesystem mode '%s'"
+#~ msgstr "Nicht unterstützter Dateisystem-Modus '%s'"
+
+#~ msgid "Unsupported filesystem write policy '%s'"
+#~ msgstr "Nicht unterstützte Dateisystem Schreib-Richtlinie '%s'"
+
+#~ msgid "Unsupported filesystem driver '%s'"
+#~ msgstr "Nicht unterstützter Dateisystem Treiber '%s'"
+
+#~ msgid "A filesystem source and target must be specified"
+#~ msgstr "Dateisystem-Quelle und -Ziel muss angegeben sein"
+
+#~ msgid "Unknown graphics type '%s'"
+#~ msgstr "Unbekannter Grafik-Typ '%s'"
+
+#~ msgid "Keymap must be a string"
+#~ msgstr "Keymap muss eine Zeichenkette sein"
+
+#~ msgid "Keymap must be less than 16 characters"
+#~ msgstr "Keymap muss aus weniger als 16 Zeichen bestehen"
+
+#~ msgid "Keymap can only contain alphanumeric, '_', or '-' characters"
+#~ msgstr "Keymap darf nur alphanumerische Zeichen, '_' oder '-' enthalten"
+
+#~ msgid ""
+#~ "VNC port must be a number between 5900 and 65535, or -1 for auto "
+#~ "allocation"
+#~ msgstr ""
+#~ "VNC Port muss eine Nummer zwischen 5900 und 65535 sein, oder -1 für "
+#~ "automatische Zuordnung"
+
+#~ msgid ""
+#~ "TLS port must be a number between 5900 and 65535, or -1 for auto "
+#~ "allocation"
+#~ msgstr ""
+#~ "TLS Port muss eine Nummer zwischen 5900 und 65535 sein, oder -1 für "
+#~ "automatische Zuordnung"
+
+#~ msgid "Unknown graphics type"
+#~ msgstr "Unbekannter Grafik-Typ"
+
+#~ msgid "'name' or 'nodedev' required."
+#~ msgstr "'name' oder 'nodedev' erforderlich."
+
+#~ msgid "Node device type '%s' cannot be attached to  guest."
+#~ msgstr ""
+#~ "Knoten-Einheiten Typ '%s' kann nicht zu einem Gast angeschlossen werden."
+
+#~ msgid "'nodedev' must be a USBDevice instance."
+#~ msgstr "'nodedev' muss eine USBDevice Instanz sein."
+
+#~ msgid "'vendor' and 'product', or 'bus' and  'device' are required."
+#~ msgstr "'vendor' und 'product', oder 'bus' und  'device' sind erforderlich."
+
+#~ msgid "'nodedev' must be a PCIDevice instance."
+#~ msgstr "'nodedev' muss eine PCIDevice Instanz sein."
+
+#~ msgid "'domain', 'bus', 'slot', and 'function' must be specified."
+#~ msgstr "'domain', 'bus', 'slot', und 'function' muss angegeben werden."
+
+#~ msgid "Unknown input type '%s'."
+#~ msgstr "Unbekannter Eingabe-Typ '%s'."
+
+#~ msgid "Unknown input bus '%s'."
+#~ msgstr "Unbekannter Eingabe-Bus '%s'."
+
+#~ msgid "Unsupported memballoon model '%s'"
+#~ msgstr "Nicht unterstütztes memballoon Modell '%s'"
+
+#~ msgid "A network name was not provided"
+#~ msgstr "Ein Netzwerk-Name wurde nicht bereitgestellt"
+
+#~ msgid "Unknown network type %s"
+#~ msgstr "Unbekannter Netzwerk-Typ %s"
+
+#~ msgid "Virtual network '%s' does not exist: %s"
+#~ msgstr "Virtuelles Netzwerk '%s existiert nicht: %s"
+
+#~ msgid "Virtual network '%s' has not been started."
+#~ msgstr "Virtuelles Netzwerk '%s' wurde nicht gestartet."
+
+#~ msgid "Unsupported bus '%s'"
+#~ msgstr "Nicht unterstützter Bus '%s'"
+
+#~ msgid "Unsupported redirection type '%s'"
+#~ msgstr "Nicht unterstützter Weiterleitungs-Typ '%s'"
+
+#~ msgid "Invalid host value"
+#~ msgstr "Ungültiger Host-Wert"
+
+#~ msgid "Unknown smartcard mode '%s'"
+#~ msgstr "Unbekannter Smartcard Modus '%s'"
+
+#~ msgid "Unknown smartcard type '%s'"
+#~ msgstr "Unbekannter Smartcard-Typ '%s'"
+
+#~ msgid "Unsupported watchdog model '%s'"
+#~ msgstr "Nicht unterstütztes Watchdog-Modell '%s'"
+
+#~ msgid "'%s' must be True or False"
+#~ msgstr "'%s' muss True oder False sein"
+
+#~ msgid "'%s' must be a string, not '%s'."
+#~ msgstr "'%s' muss eine Zeichenkette sein, nicht '%s'."
+
+#~ msgid ""
+#~ "Please indicate how you would like to assign space on the host system for "
+#~ "your virtual storage device."
+#~ msgstr ""
+#~ "Bitte geben Sie an, wie Sie den Platz für Ihr neues virtuelles "
+#~ "Speichergerät auf dem Hostsystem zuweisen möchten."
+
+#~ msgid ""
+#~ "Please indicate how you'd like to connect your new virtual network device "
+#~ "to the host network."
+#~ msgstr ""
+#~ "Bitte geben Sie an, wie Sie Ihr neues virtuelles Netzwerkgerät mit dem "
+#~ "Host-Netzwerk verbinden möchten."
+
+#~ msgid ""
+#~ "Please indicate what kind of pointer device to connect to the virtual "
+#~ "machine."
+#~ msgstr ""
+#~ "Bitte geben Sie an, welche Art von Zeigergerät mit der virtuellen "
+#~ "Maschine verbunden werden soll."
+
+#~ msgid "Please indicate how you would like to view the virtual display."
+#~ msgstr "Bitte geben Sie an, wie Sie die virtuelle Anzeige sehen möchten."
+
+#~ msgid ""
+#~ "<small><b>Tip:</b> VNC or Spice server is strongly recommended because it "
+#~ "allows the virtual display to be embedded inside this application. It may "
+#~ "also be used to allow access to the virtual display from a remote system."
+#~ "</small>"
+#~ msgstr ""
+#~ "<small><b>Tipp:</b> VNC- oder SPICE-Server werden dringend empfohlen, da "
+#~ "sie die Einbettung des Gastkonsolenfensters in diese Anwendung erlauben. "
+#~ "Sie können zudem den Zugang zur Gastkonsole von einem entfernten System "
+#~ "erlauben.</small>"
+
+#~ msgid "Listen on all public network interfaces "
+#~ msgstr "An allen öffentlichen Netzwerkschnittstellen horchen"
+
+#~ msgid "_Other:"
+#~ msgstr "_Andere:"
+
+#~ msgid ""
+#~ "Please indicate what sound device type to connect to the virtual machine."
+#~ msgstr ""
+#~ "Bitte geben Sie an, welche Art von Audiogerät mit der virtuellen Maschine "
+#~ "verbunden werden soll."
+
+#~ msgid ""
+#~ "Please indicate what physical device\n"
+#~ "to connect to the virtual machine."
+#~ msgstr ""
+#~ "Bitte geben Sie an, welches physische Gerät\n"
+#~ "mit der virtuellen Maschine verbunden werden soll."
+
+#~ msgid "<b>Character Device</b>"
+#~ msgstr "<b>Zeichengerät</b>"
+
+#~ msgid "<b>Device Parameters</b>"
+#~ msgstr "<b>Geräteparameter</b>"
+
+#~ msgid ""
+#~ "Please indicate what video device type\n"
+#~ "to connect to the virtual machine."
+#~ msgstr ""
+#~ "Bitte geben Sie an, welche Art von Videogerät\n"
+#~ "mit der virtuellen Maschine verbunden werden soll."
+
+#~ msgid ""
+#~ "Please indicate what watchdog device type\n"
+#~ "and default action should be used."
+#~ msgstr ""
+#~ "Bitte geben Sie an, welche Art von Watchdog-Gerättyp\n"
+#~ "und Standardaktion verwendet werden soll."
+
+#~ msgid ""
+#~ "Please indicate which host directory to\n"
+#~ "access in the guest."
+#~ msgstr ""
+#~ "Bitte geben Sie an, auf welches Host-Verzeichnis\n"
+#~ "im Gast zugegriffen werden soll."
+
+#~ msgid ""
+#~ "Please indicate what smartcard device mode to connect to the virtual "
+#~ "machine."
+#~ msgstr ""
+#~ "Bitte geben Sie an, welcher Smartcard-Gerätemodus mit der virtuellen "
+#~ "Maschine verbunden werden soll."
+
+#~ msgid "Please indicate the parameters of the redirected device."
+#~ msgstr "Bitte geben Sie die Parameter des umgeleiteten Geräts an."
+
+#~ msgid "Please indicate the parameters of the RNG device."
+#~ msgstr "Bitte geben Sie die Parameter der RNG Einheit an."
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a "
+#~ "new virtual network </span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Neues "
+#~ "virtuelles Netzwerk erstellen</span>"
+
+#~ msgid ""
+#~ "This assistant will guide you through creating a new virtual network. You "
+#~ "will be asked for some information about the virtual network you'd like "
+#~ "to create, such as:"
+#~ msgstr ""
+#~ "Dieser Assistent begleitet Sie durch die Erstellung eines neuen "
+#~ "virtuellen Netzwerks. Zunächst werden einige Informationen über das "
+#~ "virtuelle Netzwerk abgefragt, das Sie erstellen möchten, wie zum Beispiel:"
+
+#~ msgid "<small>●</small> A <b>name</b> for the new virtual network interface"
+#~ msgstr ""
+#~ "<small>●</small> Ein <b>Name</b> für die neue virtuelle Netzwerk-"
+#~ "Schnittstelle"
+
+#~ msgid ""
+#~ "<small>●</small> An <b>IPv4</b> and/or <b>IPv6</b> network address and "
+#~ "prefix (netmask) to assign to this network interface"
+#~ msgstr ""
+#~ "<small>●</small> Eine <b>IPv4</b> und/oder <b>IPv6</b> Netzwerk-Adresse "
+#~ "und Präfix (Netzmaske) auf diese Netzwerkschnittstelle zuzuweisen"
+
+#~ msgid ""
+#~ "<small>●</small> The network address range which the <b>DHCPv4</b> and/or "
+#~ "<b>DHCPv6</b> server will use to assign addresses to virtual machines"
+#~ msgstr ""
+#~ "<small>●</small> Der Netzwerk-Adressen Bereich den der <b>DHCPv4</b> und/"
+#~ "oder <b>DHCPv6</b> Server verwenden wird Adressen zu virtuellen Maschinen "
+#~ "zuzuweisen"
+
+#~ msgid ""
+#~ "<small>●</small> Whether to <b>forward</b> traffic to a physical network"
+#~ msgstr ""
+#~ "<small>●</small> Ob Datenverkehr zu einem physischem Netzwerk "
+#~ "<b>weitergeleitet</b> werden soll"
+
+#~ msgid ""
+#~ "<small>●</small> Optionally, to not specify any <b>IPv4</b> or <b>IPv6</"
+#~ "b> network address.  If neither is specified, this will be a valid "
+#~ "definition for an isolated network with <b>no</b> DHCP or DNS support."
+#~ msgstr ""
+#~ "<small>●</small> Optional, keine <b>IPv4</b> oder <b>IPv6</b> Netzwerk-"
+#~ "Adresse zu spezifizieren. Wenn keine angegeben wird, wird dies eine "
+#~ "gültige Definition für ein isoliertes Netzwerk mit <b>keiner</b> DHCP- "
+#~ "oder DNS-Unterstützung sein."
+
+#~ msgid ""
+#~ "<small>●</small> By default, the <b>Domain</b> name will be the same as "
+#~ "the network/interface name."
+#~ msgstr ""
+#~ "<small>●</small> Als Standard wird der <b>Domain</b> Name der gleiche wie "
+#~ "der Netzwerk/Schnittstellen-Name sein."
+
+#~ msgid ""
+#~ "<small>●</small> Optionally, a <b>static route</b> to a different network "
+#~ "can be specified.  This network traffic is routed to the specified "
+#~ "<b>gateway</b> on the primary network."
+#~ msgstr ""
+#~ "<small>●</small> Optional kann eine <b>Statische Route</b> zu einem "
+#~ "anderen Netzwerk spezifiziert werden.  Dieser Netzwerk-Verkehr wird zum "
+#~ "spezifizierten <b>Gateway</b> auf dem primären Netzwerk gesendet."
+
+#~ msgid "Intro"
+#~ msgstr "Intro"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
+#~ "virtual network </span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Virtuelles "
+#~ "Netzwerk benennen</span>"
+
+#~ msgid "Please choose a name for your virtual network:"
+#~ msgstr "Bitte wählen Sie einen Namen für das virtuelle Netzwerk:"
+
+#~ msgid "The following information may help you with defining your networks."
+#~ msgstr ""
+#~ "Die folgenden Informationen können Ihnen bei der Definition Ihrer "
+#~ "Netzwerke helfen."
+
+#~ msgid ""
+#~ "<small>●</small>  A<b> network</b> must be specified as the network "
+#~ "<b>address</b> and the <b>prefix</b> for that network."
+#~ msgstr ""
+#~ "<small>●</small>  Ein <b>Netzwerk</b> muss als Netzwerk <b>Adresse</b> "
+#~ "und das <b>Präfix</b> für dieses Netzwerk angegeben werden."
+
+#~ msgid ""
+#~ "<small>●</small>  A network mask cannot be used for the network "
+#~ "specification.  Instead, the prefix must be used."
+#~ msgstr ""
+#~ "<small>●</small>  Eine Netzwerk-Maske kann nicht für die Netzwerk-"
+#~ "Spezifikation verwendet werden. Stattdessen muss das Präfix verwendet "
+#~ "werden."
+
+#~ msgid ""
+#~ "<small>●</small>  A <b>host address</b> such as that used for the dhcp "
+#~ "start, dhcp end, and the static route gateway address should not include "
+#~ "a prefix.  If included, this prefix must be the maximum.  That is, for "
+#~ "IPv4 prefix=32 and for IPv6 prefix=128."
+#~ msgstr ""
+#~ "<small>●</small>  Eine <b>Host-Adresse</b>, wie die für dhcp Start, dhcp "
+#~ "Ende, und die Statische Route Gateway-Adresse verwendet wird, sollte "
+#~ "nicht ein Präfix enthalten. Wenn enthalten, muss dieses Präfix das "
+#~ "Maximum sein. Das heißt, für das IPv4-Präfix=32 und für das IPv6-"
+#~ "Präfix=128."
+
+#~ msgid ""
+#~ "<small>●</small>  If IPv6 is to be routed, some form of routing must be "
+#~ "specified for the interface."
+#~ msgstr ""
+#~ "<small>●</small> Wenn IPv6 weitergeleitet werden soll, muss eine Form des "
+#~ "Routings für die Schnittstelle angegeben werden."
+
+#~ msgid ""
+#~ "<small>●</small>  For the <b>primary network</b>, the prefix must be "
+#~ "<b>64</b>.  However, for the <b>static route network</b>, the prefix can "
+#~ "be <b>64 or less</b>."
+#~ msgstr ""
+#~ "<small>●</small> Für das <b>primäre Netzwerk</b> muss das Präfix <b>64</"
+#~ "b> sein. Jedoch kann für das <b>Statische Route Netzwerk</b> das Präfix "
+#~ "<b>64 oder weniger</b> sein."
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Defining "
+#~ "IPv4 addresses</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Definieren "
+#~ "von IPv4 Adressen</span>"
+
+#~ msgid ""
+#~ "You will need to choose an <b>IPv4</b> address space for the virtual "
+#~ "network."
+#~ msgstr ""
+#~ "Sie müssen einen <b>IPv4</b> Adressbereich für das virtuelle Netzwerk "
+#~ "auswählen."
+
+#~ msgid "Network Type:"
+#~ msgstr "NetzwerkTyp:"
+
+#~ msgid ""
+#~ "<b>Hint:</b> The network should be chosen from one of the IPv4 private "
+#~ "address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
+#~ msgstr ""
+#~ "<b>Tipp:</b> Das Netzwerk sollte aus einem der privaten Adressräume von "
+#~ "IPv4 gewählt werden. Beispiel: 10.0.0.0/8, 172.16.0.0/12 oder "
+#~ "192.168.0.0/16"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Defining "
+#~ "IPv6 addresses</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Definieren "
+#~ "von IPv6 Adressen</span>"
+
+#~ msgid ""
+#~ "You will need to choose an <b>IPv6</b> address space for the virtual "
+#~ "network:"
+#~ msgstr ""
+#~ "Sie müssen einen <b>IPv6</b> Adressbereich für das virtuelle Netzwerk "
+#~ "auswählen:"
+
+#~ msgid ""
+#~ "<b>Note:</b> The network could be chosen from one of the IPv6 private "
+#~ "address ranges. eg FC00::/7.  In any case, the prefix must be <b>64</b>.\n"
+#~ "A typical IPv6 network address will look something like:  fd00:dead:"
+#~ "beef:55::/64"
+#~ msgstr ""
+#~ "<b>Hinweis:</b> Das Netzwerk könnte aus einem der IPv6 privaten "
+#~ "Adressbereiche gewählt werden, z. B. FC00 :: / 7. In jedem Fall muss das "
+#~ "Präfix <b>64</b> sein.\n"
+#~ "Eine typische IPv6 Netzwerk-Adresse wird etwa so aussehen: fd00:dead:"
+#~ "beef:55::/64"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF"
+#~ "\">Miscellaneous Settings</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Verschiedene "
+#~ "Einstellungen</span>"
+
+#~ msgid ""
+#~ "Please indicate whether this virtual network should be connected to the "
+#~ "<b>physical network</b>."
+#~ msgstr ""
+#~ "Bitte geben Sie an, ob dieses virtuelle Netzwerk mit dem <b>physischen "
+#~ "Netzwerk</b> verbunden werden soll."
+
+#~ msgid "Domain Name:"
+#~ msgstr "Domain-Name:"
+
+#~ msgid ""
+#~ "Optionally, specify the DNS <b>Domain Name</b> to be used for the "
+#~ "networks on this network interface."
+#~ msgstr ""
+#~ "Optional können Sie den DNS <b>Domain Namen</b> angeben, der für die "
+#~ "Netzwerke auf dieser Netzwerk-Schnittstelle verwendet werden soll."
+
+#~ msgid "Misc"
+#~ msgstr "Verschiedenes"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to "
+#~ "create network</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Bereit zur "
+#~ "Einrichtung des Netzwerks</span>"
+
+#~ msgid "<b>IPv4 Network</b>"
+#~ msgstr "<b>IPv4 Netzwerk</b>"
+
+#~ msgid "<b>Domain</b> Name:"
+#~ msgstr "<b>Domain</b> Name:"
+
+#~ msgid "192.168.10.128"
+#~ msgstr "192.168.10.128"
+
+#~ msgid "DHCPv4 Start Address:"
+#~ msgstr "DHCPv4 Start Adresse:"
+
+#~ msgid "DHCPv4 End  Address:"
+#~ msgstr "DHCPv4 Ende  Adresse:"
+
+#~ msgid "<b>Summary</b>"
+#~ msgstr "<b>Zusammenfassung</b>"
+
+#~ msgid "<b>Network</b> Name:"
+#~ msgstr "<b>Netzwerk</b> Name:"
+
+#~ msgid "demo"
+#~ msgstr "Demo"
+
+#~ msgid "Forwarding/Connectivity:"
+#~ msgstr "Weiterleitung/Verbundenheit"
+
+#~ msgid "<b>IPv6 Network</b>"
+#~ msgstr "<b>IPv6 Netzwerk</b>"
+
+#~ msgid "DHCPv6 End Address:"
+#~ msgstr "DHCPv6 Ende  Adresse:"
+
+#~ msgid "DHCPv6 Start Address:"
+#~ msgstr "DHCPv6 Start Adresse:"
+
+#~ msgid "FD00:100::100"
+#~ msgstr "FD00:100::100"
+
+#~ msgid "FD00:100::1FF"
+#~ msgstr "FD00:100::1FF"
+
+#~ msgid "FD00:100::/64"
+#~ msgstr "FD00:100::/64"
+
+#~ msgid "FD00:100::1"
+#~ msgstr "FD00:100::1"
+
+#~ msgid "Static Route <b>to</b> network:"
+#~ msgstr "Statische Route <b>zum</b> Netzwerk:"
+
+#~ msgid "Complete"
+#~ msgstr "Abschliessen"
+
+#~ msgid "<span size='x-large'>Add Storage Pool</span>"
+#~ msgstr "<span size='x-large'>Speicher-Pool hinzufügen</span>"
+
+#~ msgid ""
+#~ "Specify a storage location to be later split into virtual machine storage."
+#~ msgstr ""
+#~ "Gibt einen Speicherbereich an, welcher später in VM-Speicher geteilt wird."
+
+#~ msgid "Step 1 of 2"
+#~ msgstr "Schritt 1 von 2"
+
+#~ msgid "Step 2 of 2"
+#~ msgstr "Schritt 2 von 2"
+
+#~ msgid "<span size='x-large'>New Storage Volume</span>"
+#~ msgstr "<span size='x-large'>Neuer Speicherdatenträger</span>"
+
+#~ msgid ""
+#~ "Create a storage unit that can be used directly by a virtual machine."
+#~ msgstr ""
+#~ "Erzeugt eine Speichereinheit, welche direkt von einer virtuellen Maschine "
+#~ "genutzt werden kann."
+
+#~ msgid "<span size='large'>Storage Volume Quota</span>"
+#~ msgstr "<span size='large'>Speicherdatenträger-Quota</span>"
+
+#~ msgid ""
+#~ "<span size='small'><i><u>Name</u>: Name of the\n"
+#~ "  volume to create. File\n"
+#~ "  extension may be\n"
+#~ "  appended\n"
+#~ "\n"
+#~ "<u>Format</u>: File/Partition\n"
+#~ "  format of the volume\n"
+#~ "\n"
+#~ "<u>Capacity</u>: Maximum\n"
+#~ "  size of the volume.\n"
+#~ "\n"
+#~ "<u>Allocation</u>: Actual size\n"
+#~ "  allocated to volume\n"
+#~ "  at this time.</i></span>"
+#~ msgstr ""
+#~ "<span size='small'><i><u>Name</u>: Name des\n"
+#~ "  zu erzeugenden Datenträgers. Datei-\n"
+#~ "  Endung kann ange-\n"
+#~ "  hängt werden\n"
+#~ "\n"
+#~ "<u>Format</u>: Datei-/Partitions-\n"
+#~ "  Format des Datenträgers\n"
+#~ "\n"
+#~ "<u>Kapazität</u>: Maximale\n"
+#~ "  Grösse des Datenträgers.\n"
+#~ "\n"
+#~ "<u>Zuweisung</u>: Derzeit\n"
+#~ "  tatsächlich zu Datenträger\n"
+#~ "  zugewiesene Grösse</i></span>"
+
+#~ msgid "Enter your virtual machine details"
+#~ msgstr "Details zur virtuellen Maschine eingeben"
+
+#~ msgid "Error message"
+#~ msgstr "Fehlermeldung"
+
+#~ msgid "Delete Confirmation"
+#~ msgstr "Bestätigung zum Löschen"
+
+#~ msgid "S_hut Down"
+#~ msgstr "_Herunterfahren"
+
+#~ msgid "_Clone"
+#~ msgstr "_Klonen"
+
+#~ msgid "_Delete..."
+#~ msgstr "_Löschen..."
+
+#~ msgid ""
+#~ "CPU\n"
+#~ "usage:"
+#~ msgstr ""
+#~ "CPU\n"
+#~ "Auslastung:"
+
+#~ msgid ""
+#~ "Memory\n"
+#~ "usage:"
+#~ msgstr ""
+#~ "Speicher\n"
+#~ "Belegung:"
+
+#~ msgid ""
+#~ "Disk\n"
+#~ "I/O:"
+#~ msgstr ""
+#~ "Festplatte\n"
+#~ "E/A:"
+
+#~ msgid ""
+#~ "Network\n"
+#~ "I/O:"
+#~ msgstr ""
+#~ "Netzwerk\n"
+#~ "E/A:"
+
+#~ msgid ""
+#~ "0 KBytes/s\n"
+#~ "0KBytes/s"
+#~ msgstr ""
+#~ "0 KBytes/s\n"
+#~ "0 KBytes/s"
+
+#~ msgid "<b>Performance</b>"
+#~ msgstr "<b>Leistung</b>"
+
+#~ msgid "Kernel arguments:"
+#~ msgstr "Kernel-Argumente:"
+
+#~ msgid "Target device:"
+#~ msgstr "Zielgerät:"
+
+#~ msgid "CPU usage:"
+#~ msgstr "CPU-Auslastung:"
+
+#~ msgid "Memory usage:"
+#~ msgstr "Speicherbelegung:"
+
+#~ msgid "IPv4 Forwarding:"
+#~ msgstr "IPv4 Weiterleitung:"
+
+#~ msgid "IPv6 Forwarding:"
+#~ msgstr "IPv6 Weiterleitung:"
+
+#~ msgid "DHCP start:"
+#~ msgstr "DHCP-Start:"
+
+#~ msgid "DHCP end:"
+#~ msgstr "DHCP-Ende:"
+
+#~ msgid "<network-addr> via <gateway-addr>"
+#~ msgstr "<network-addr> über  <gateway-addr>"
+
+#~ msgid "VNC"
+#~ msgstr "VNC"
+
+#~ msgid "Spice"
+#~ msgstr "SPICE"

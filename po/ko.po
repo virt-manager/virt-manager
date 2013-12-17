@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-16 15:53-0500\n"
+"POT-Creation-Date: 2013-12-16 19:50-0500\n"
 "PO-Revision-Date: 2013-12-02 20:00+0000\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Korean (http://www.transifex.com/projects/p/virt-manager/"
@@ -50,15 +50,17 @@ msgid ""
 "Would you like a fully virtualized guest (yes or no)? This will allow you to "
 "run unmodified operating systems."
 msgstr ""
+"완전 가상화 게스트를 하시겠습니까 (예 또는 아니요)? 이는 수정되지 않은 운영 "
+"체제를 실행할 수 있게 합니다."
 
 #: ../virt-install:240
 #, c-format
 msgid "Would you like to use %s acceleration? (yes or no)"
-msgstr ""
+msgstr "%s 가속을 사용하시겠습니까? (예 또는 아니요)"
 
 #: ../virt-install:253
 msgid "Can't do more than one of --hvm, --paravirt, or --container"
-msgstr ""
+msgstr "--hvm, --paravirt, --container 중 하나 이상을 실행할 수 없습니다 "
 
 #: ../virt-install:274 ../virt-install:275
 msgid "default"
@@ -67,25 +69,27 @@ msgstr "기본값 "
 #: ../virt-install:323
 #, c-format
 msgid "Error validating install location: %s"
-msgstr ""
+msgstr "설치 위치를 확인하는 도중 오류가 발생했습니다: %s"
 
 #: ../virt-install:328
 msgid "What is the install CD-ROM/ISO or URL?"
-msgstr ""
+msgstr "설치 CD-ROM/ISO 또는 URL은 어디에 있습니까?"
 
 #: ../virt-install:330
 msgid "What is the install URL?"
-msgstr ""
+msgstr "설치 URL은 어디에 있습니까?"
 
 #: ../virt-install:403
 msgid "Cannot specify storage and use --nodisks"
-msgstr ""
+msgstr "--nodisks 사용 및 스토리지를 지정할 수 없습니다 "
 
 #: ../virt-install:407
 msgid ""
 "Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
 "disk PATH[,size=SIZE][,sparse=yes|no]"
 msgstr ""
+"--disk 옵션과 함께 --file, --nonsparse, --file-size를 사용할 수 없습니다. 사"
+"용법 --disk PATH[,size=SIZE][,sparse=yes|no]"
 
 #: ../virt-install:413
 msgid "Cannot use --mac with --nonetworks"
@@ -110,41 +114,43 @@ msgstr "컨테이너 게스트에 대해 설치 방식 (%s)을 지정할 수 없
 
 #: ../virt-install:434
 msgid "Network PXE boot is not supported for paravirtualized guests"
-msgstr ""
+msgstr "네트워크 PXE 부팅은 반가상화 게스트에 대해 지원되지 않습니다 "
 
 #: ../virt-install:437
 msgid "Paravirtualized guests cannot install off cdrom media."
-msgstr ""
+msgstr "반가상화 게스트는 CD-ROM 미디어에서 설치 해제할 수 없습니다."
 
 #: ../virt-install:442
 msgid "Libvirt version does not support remote --location installs"
-msgstr ""
+msgstr "Libvirt 버전은 원격 --location 설치를 지원하지 않습니다 "
 
 #: ../virt-install:445
 msgid "--extra-args only work if specified with --location."
-msgstr ""
+msgstr "--extra-args는 --location과 함께 지정된 경우에만 작동합니다."
 
 #: ../virt-install:447
 msgid "--initrd-inject only works if specified with --location."
-msgstr ""
+msgstr "--initrd-inject는 --location과 함께 지정된 경우에만 작동합니다."
 
 #: ../virt-install:460
 msgid "Can't use --pxe with --nonetworks"
-msgstr ""
+msgstr "--nonetworks와 --pxe를 사용할 수 없습니다"
 
 #: ../virt-install:467
 msgid "A disk device must be specified with --import."
-msgstr ""
+msgstr "디스크 장치는 --import와 함께 지정해야 합니다."
 
 #: ../virt-install:559
 msgid "The guest's network configuration does not support PXE"
-msgstr ""
+msgstr "게스트의 네트워크 설정이 PXE를 지원하지 않습니다 "
 
 #: ../virt-install:585
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
 msgstr ""
+"그래픽 콘솔에 연결할 수 없습니다: virt-viewer가 설치되어 있지 않습니다. "
+"'virt-viewer' 패키지를 설치하십시오."
 
 #: ../virt-install:706
 msgid ""
@@ -160,29 +166,34 @@ msgid ""
 "Domain creation completed. You can restart your domain by running:\n"
 "  %s"
 msgstr ""
+"도메인 생성이 완료되었습니다. 다음을 실행하여 도메인을 다시 시작할 수 있습니"
+"다:\n"
+"  %s"
 
 #: ../virt-install:729
 msgid "Guest installation complete... restarting guest."
-msgstr ""
+msgstr "게스트 설치 완료...게스트를 다시 시작하고 있습니다. "
 
 #: ../virt-install:735
 msgid "Domain install interrupted."
-msgstr ""
+msgstr "도메인 설치가 중단되었습니다."
 
 #: ../virt-install:757
 msgid "Domain has crashed."
-msgstr ""
+msgstr "도메인이 충돌했습니다."
 
 #: ../virt-install:794
 msgid ""
 "Domain installation still in progress. You can reconnect to \n"
 "the console to complete the installation process."
 msgstr ""
+"도메인 설치가 진행 중입니다. 설치를 완료할 때 까지 콘솔에\n"
+"다시 연결할 수 있습니다."
 
 #: ../virt-install:799
 #, c-format
 msgid "%d minutes "
-msgstr ""
+msgstr "%d 분 "
 
 #: ../virt-install:801
 msgid ""
@@ -192,20 +203,20 @@ msgstr ""
 
 #: ../virt-install:808
 msgid "Domain has shutdown. Continuing."
-msgstr ""
+msgstr "도메인이 종료되었습니다. 계속 진행합니다."
 
 #: ../virt-install:815
 #, c-format
 msgid "Could not lookup domain after install: %s"
-msgstr ""
+msgstr "설치 후 도메인을 잠금할 수 없습니다: %s"
 
 #: ../virt-install:822
 msgid "Installation has exceeded specified time limit. Exiting application."
-msgstr ""
+msgstr "설치가 지정된 시간 제한을 초과했습니다. 애플리케이션을 종료합니다."
 
 #: ../virt-install:847
 msgid "Dry run completed successfully"
-msgstr ""
+msgstr "드라이 런을 성공적으로 완료했습니다"
 
 #: ../virt-install:853
 msgid ""
@@ -213,14 +224,17 @@ msgid ""
 "phase (--import, --boot, etc.). To see all generated XML, please use --print-"
 "step all."
 msgstr ""
+"--print-xml은 설치 단계 (--import, --boot, 등)를 필요로 하지 않는 게스트와 함"
+"께 사용할 수 있습니다. 생성된 XML을 모두 표시하려면 --print-step all을 사용하"
+"십시오."
 
 #: ../virt-install:863
 msgid "Requested installation does not have XML step 2"
-msgstr ""
+msgstr "요청된 설치에는 XML 2 단계가 없습니다 "
 
 #: ../virt-install:867
 msgid "Requested installation does not have XML step 3"
-msgstr ""
+msgstr "요청된 설치에는 XML 3 단계가 없습니다 "
 
 #: ../virt-install:886
 msgid "Create a new virtual machine from specified install media."
@@ -228,27 +242,27 @@ msgstr ""
 
 #: ../virt-install:889 ../virt-clone:137 ../virt-image:41
 msgid "General Options"
-msgstr ""
+msgstr "일반 옵션 "
 
 #: ../virt-install:891 ../virt-image:43
 msgid "Name of the guest instance"
-msgstr ""
+msgstr "게스트 인스턴스 이름 "
 
 #: ../virt-install:893 ../virt-image:45
 msgid "Memory to allocate for guest instance in megabytes"
-msgstr ""
+msgstr "메가바이트 단위로 게스트 인스턴스를 할당하기 위한 메모리 "
 
 #: ../virt-install:897
 msgid "Human readable description of the VM to store in the generated XML."
-msgstr ""
+msgstr "생성된 XML에 저장하기 위해 읽기 쉬운 형식의 가상 머신 설명입니다."
 
 #: ../virt-install:900
 msgid "Set domain security driver configuration."
-msgstr ""
+msgstr "도메인 보안 드라이버 구성을 설정합니다."
 
 #: ../virt-install:902
 msgid "Tune NUMA policy for the domain process."
-msgstr ""
+msgstr "도메인 프로세스의 NUMA 정책을 조정합니다."
 
 #: ../virt-install:904
 msgid ""
@@ -265,24 +279,24 @@ msgstr ""
 
 #: ../virt-install:912
 msgid "Installation Method Options"
-msgstr ""
+msgstr "설치 방식 옵션 "
 
 #: ../virt-install:915
 msgid "CD-ROM installation media"
-msgstr ""
+msgstr "CD-ROM 설치 미디어 "
 
 #: ../virt-install:917
 msgid ""
 "Installation source (eg, nfs:host:/path, http://host/path, ftp://host/path)"
-msgstr ""
+msgstr "설치 소스 (예: nfs:host:/path, http://host/path, ftp://host/path)"
 
 #: ../virt-install:920
 msgid "Boot from the network using the PXE protocol"
-msgstr ""
+msgstr "PXE를 사용하여 네트워크에서 부팅"
 
 #: ../virt-install:922
 msgid "Build guest around an existing disk image"
-msgstr ""
+msgstr "기존 디스크 이미지 주위에 게스트를 구축 "
 
 #: ../virt-install:924
 msgid ""
@@ -290,29 +304,32 @@ msgid ""
 "--init /path/to/app (to contain an application)\n"
 "--init /sbin/init (for a full OS container)"
 msgstr ""
+"컨테이너 게스트의 init 바이너리 경로입니다. 예:\n"
+"--init /path/to/app (애플리케이션 포함)\n"
+"--init /sbin/init (전체 OS 컨테이너 용)"
 
 #: ../virt-install:928
 msgid "Treat the CD-ROM media as a Live CD"
-msgstr ""
+msgstr "CD-ROM 미디어를 라이브 CD로 취급"
 
 #: ../virt-install:931
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
-msgstr ""
+msgstr "--location에서 부팅시 설치 커널에 전달할 추가 인수 "
 
 #: ../virt-install:935
 msgid "Add given file to root of initrd from --location"
-msgstr ""
+msgstr "--location에서 initrd의 root에 주어진 파일을 추가 "
 
 #: ../virt-install:938
 msgid ""
 "Optionally configure post-install boot order, menu, permanent kernel boot, "
 "etc."
-msgstr ""
+msgstr "설치 후 부팅 순서, 영구적인 커널 부팅 등의 설정은 옵션 사항입니다. "
 
 #: ../virt-install:942 ../virt-clone:153
 msgid "Storage Configuration"
-msgstr ""
+msgstr "스토리지 설정 "
 
 #: ../virt-install:944
 msgid ""
@@ -321,62 +338,66 @@ msgid ""
 "--disk path=/my/new/disk,size=5 (in gigabytes)\n"
 "--disk vol=poolname/volname,device=cdrom,bus=scsi,..."
 msgstr ""
+"다양한 옵션과 함께 스토리지를 지정합니다. 예.\n"
+"--disk path=/my/existing/disk\n"
+"--disk path=/my/new/disk,size=5 (메가바이트 단위)\n"
+"--disk vol=poolname/volname,device=cdrom,bus=scsi,..."
 
 #: ../virt-install:949
 msgid "Don't set up any disks for the guest."
-msgstr ""
+msgstr "게스트의 어떤 디스크도 설정하지 마십시오."
 
 #: ../virt-install:966
 msgid "Don't create network interfaces for the guest."
-msgstr ""
+msgstr "게스트의 네트워크 인터페이스를 생성하지 마십시오. "
 
 #: ../virt-install:972
 msgid "Don't automatically try to connect to the guest console"
-msgstr ""
+msgstr "게스트 콘솔에 자동으로 연결 시도하지 마십시오 "
 
 #: ../virt-install:976
 msgid "Device Options"
-msgstr ""
+msgstr "장치 옵션 "
 
 #: ../virt-install:984
 msgid "Virtualization Platform Options"
-msgstr ""
+msgstr "가상화 플랫폼 옵션 "
 
 #: ../virt-install:986 ../virt-convert:63
 msgid "This guest should be a fully virtualized guest"
-msgstr ""
+msgstr "이 게스트는 완전 가상화 게스트여야 합니다 "
 
 #: ../virt-install:988 ../virt-convert:65
 msgid "This guest should be a paravirtualized guest"
-msgstr ""
+msgstr "이 게스트는 반가상화 게스트여야 합니다 "
 
 #: ../virt-install:991
 msgid "This guest should be a container guest"
-msgstr ""
+msgstr "이 게스트는 컨테이너 게스트여야 합니다 "
 
 #: ../virt-install:994
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
-msgstr ""
+msgstr "사용할 하이퍼바이저 이름 (kvm, qemu, xen, ...)"
 
 #: ../virt-install:998
 msgid "The CPU architecture to simulate"
-msgstr ""
+msgstr "시뮬레이션을 수행할 CPU 아키텍처 "
 
 #: ../virt-install:1000
 msgid "The machine type to emulate"
-msgstr ""
+msgstr "에물레이션할 시스템 유형 "
 
 #: ../virt-install:1002 ../virt-image:48
 msgid "UUID for the guest."
-msgstr ""
+msgstr "게스트의 UUID입니다. "
 
 #: ../virt-install:1006 ../virt-clone:176 ../virt-image:60
 msgid "Miscellaneous Options"
-msgstr ""
+msgstr "기타 옵션"
 
 #: ../virt-install:1009
 msgid "Have domain autostart on host boot up."
-msgstr ""
+msgstr "호스트 부팅 시 도메인을 자동 시작합니다."
 
 #: ../virt-install:1011
 msgid "Minutes to wait for install to complete."
@@ -385,36 +406,36 @@ msgstr ""
 #: ../virt-install:1035 ../virt-clone:198
 #, c-format
 msgid "Unknown argument '%s'"
-msgstr ""
+msgstr "알 수 없는 인수 '%s'"
 
 #: ../virt-install:1052
 msgid "--print-step must be 1, 2, 3, or all"
-msgstr ""
+msgstr "--print-step은 1, 2, 3, 또는 all이어야 합니다 "
 
 #: ../virt-install:1074 ../virt-clone:248 ../virt-image:164
 msgid "Installation aborted at user request"
-msgstr ""
+msgstr "사용자의 요청으로 설치를 종료했습니다 "
 
 #: ../virt-clone:41
 msgid "What is the name for the cloned virtual machine?"
-msgstr ""
+msgstr "복제된 가상 머신의 이름이 무엇입니까? "
 
 #: ../virt-clone:42
 msgid "A name is required for the new virtual machine."
-msgstr ""
+msgstr "새 가상 머신에 이름이 필요합니다. "
 
 #: ../virt-clone:60
 msgid "What is the name of the original virtual machine?"
-msgstr ""
+msgstr "원래의 가상 머신의 이름이 무엇입니까? "
 
 #: ../virt-clone:61
 msgid "An original machine name or xml file is required."
-msgstr ""
+msgstr "원래 가상 머신 이름 또는 xml 파일이 필요합니다. "
 
 #: ../virt-clone:107
 #, c-format
 msgid "What would you like to use as the cloned disk (file path) for '%s'?"
-msgstr ""
+msgstr "'%s'의 복제된 디스크 (파일 경로)로 무엇을 사용하시겠습니까? "
 
 #: ../virt-clone:133
 msgid ""
@@ -424,17 +445,17 @@ msgstr ""
 
 #: ../virt-clone:139
 msgid "Name of the original guest; The status must be shut off or paused."
-msgstr ""
+msgstr "원래 게스트의 이름; 종료 또는 일시 중지 상태이어야 합니다. "
 
 #: ../virt-clone:142
 msgid "XML file to use as the original guest."
-msgstr ""
+msgstr "원래 게스트로 사용할 XML 파일입니다."
 
 #: ../virt-clone:144
 msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
-msgstr ""
+msgstr "원래의 게스트 설정에서 자동으로 생성된 복제 이름 및 저장 경로입니다. "
 
 #: ../virt-clone:147
 msgid "Name for the new guest"
@@ -442,42 +463,48 @@ msgstr "새 게스트 이름 "
 
 #: ../virt-clone:149
 msgid "New UUID for the clone guest; Default is a randomly generated UUID"
-msgstr ""
+msgstr "복제된 게스트의 새로운 UUID; 기본값은 임의로 생성된 UUID입니다 "
 
 #: ../virt-clone:155
 msgid "New file to use as the disk image for the new guest"
-msgstr ""
+msgstr "새로운 게스트의 디스크 이미지로 사용할 새 파일 "
 
 #: ../virt-clone:158
 msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
 msgstr ""
+"장치 복사를 강제합니다 (예: 'hdc'가 읽기 전용 CD-ROM 장치일 경우 --force-"
+"copy=hdc)"
 
 #: ../virt-clone:162
 msgid "Do not use a sparse file for the clone's disk image"
-msgstr ""
+msgstr "복제 디스크 이미지에 구문 분석 파일을 사용하지 않습니다 "
 
 #: ../virt-clone:166
 msgid ""
 "Do not clone storage, new disk images specified via --file are preserved "
 "unchanged"
 msgstr ""
+"저장 장치를 복제하지 않습니다, --file을 통해 지정된 새 디스크 이미지를 변경하"
+"지 않습니다."
 
 #: ../virt-clone:170 ../virtinst/cli.py:870
 msgid "Networking Configuration"
-msgstr ""
+msgstr "네트워크 설정 "
 
 #: ../virt-clone:172
 msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
 msgstr ""
+"복제된 게스트의 새로운 고정 MAC 주소입니다. 기본값은 무작위로 생성된 MAC 주소"
+"입니다. "
 
 #: ../virt-clone:238
 #, c-format
 msgid "Clone '%s' created successfully."
-msgstr ""
+msgstr "'%s' 복제에 성공했습니다. "
 
 #: ../virt-image:38
 msgid "Create a virtual machine from a virt-image(5) image descriptor."
@@ -485,29 +512,29 @@ msgstr ""
 
 #: ../virt-image:62
 msgid "The zero-based index of the boot record to use"
-msgstr ""
+msgstr "사용할 부트 레코드의 0 부터 시작하는 인덱스 "
 
 #: ../virt-image:65
 msgid "Skip disk checksum verification process"
-msgstr ""
+msgstr "디스크 체크섬 확인 처리를 생략 "
 
 #: ../virt-image:74
 msgid "You need to provide an image XML descriptor"
-msgstr ""
+msgstr "이미지 XML 설명 파일을 제공해야 함 "
 
 #: ../virt-image:93
 msgid "Cannot parse"
-msgstr ""
+msgstr "구문 분석할 수 없음 "
 
 #: ../virt-image:98
 #, c-format
 msgid "The index for --boot must be between 0 and %d"
-msgstr ""
+msgstr "--boot의 인덱스는 0와 %d 사이여야 함 "
 
 #: ../virt-image:147
 #, c-format
 msgid "Creating guest %s..."
-msgstr ""
+msgstr "게스트 %s 생성 중..."
 
 #: ../virt-convert:48
 msgid ""
@@ -517,94 +544,94 @@ msgstr ""
 
 #: ../virt-convert:53
 msgid "Input format, e.g. 'vmx'"
-msgstr ""
+msgstr "입력 형식 예: 'vmx'"
 
 #: ../virt-convert:56
 msgid "Output format, e.g. 'virt-image'"
-msgstr ""
+msgstr "출력 형식 예: 'virt-image'"
 
 #: ../virt-convert:58
 msgid "Output disk format"
-msgstr ""
+msgstr "출력 디스크 형식 "
 
 #: ../virt-convert:71
 msgid "Machine Architecture Type (i686/x86_64/ppc)"
-msgstr ""
+msgstr "아키텍처 유형 (i686/x86_64/ppc)"
 
 #: ../virt-convert:86
 msgid "You need to provide an input VM definition"
-msgstr ""
+msgstr "입력 VM 정의를 제공해야 합니다 "
 
 #: ../virt-convert:88
 msgid "Too many arguments provided"
-msgstr ""
+msgstr "주어진 인수가 너무 많습니다 "
 
 #: ../virt-convert:92
 #, c-format
 msgid "Unknown output disk format \"%s\""
-msgstr ""
+msgstr "알 수 없는 출력 디스크 형식 \"%s\""
 
 #: ../virt-convert:107
 #, c-format
 msgid "Unknown output format \"%s\")"
-msgstr ""
+msgstr "알 수 없는 출력 형식 \"%s\")"
 
 #: ../virt-convert:109
 #, c-format
 msgid "No output handler for format \"%s\")"
-msgstr ""
+msgstr "형식 \"%s\")의 출력 처리기가 없음 "
 
 #: ../virt-convert:113
 #, c-format
 msgid "Couldn't access input argument \"%s\"\n"
-msgstr ""
+msgstr "입력 인수 \"%s\"에 액세스할 수 없습니다\n"
 
 #: ../virt-convert:120
 #, c-format
 msgid "Couldn't determine input format for \"%s\": %s"
-msgstr ""
+msgstr "\"%s\"의 입력 형식을 결정할 수 없습니다: %s"
 
 #: ../virt-convert:125
 #, c-format
 msgid "Unknown input format \"%s\")"
-msgstr ""
+msgstr "알 수 없는 입력 형식 \"%s\")"
 
 #: ../virt-convert:127
 #, c-format
 msgid "No input handler for format \"%s\""
-msgstr ""
+msgstr "형식 \"%s\"의 입력 처리기가 없음 "
 
 #: ../virt-convert:160
 #, c-format
 msgid "Couldn't clean up output directory \"%s\": %s"
-msgstr ""
+msgstr "출력 디렉토리 \"%s\"를 삭제할 수 없음: %s"
 
 #: ../virt-convert:178 ../virt-convert:181
 #, c-format
 msgid "Couldn't import file \"%s\": %s"
-msgstr ""
+msgstr "파일 \"%s\"을 가져올 수 없음: %s"
 
 #: ../virt-convert:218
 msgid "Generating output in '%(format)s' format to %(dir)s/"
-msgstr ""
+msgstr "'%(format)s' 형식에서 %(dir)s/로 출력을 생성 중 "
 
 #: ../virt-convert:232
 msgid "Converting disk '%(path)s' to type %(format)s..."
-msgstr ""
+msgstr "디스크 '%(path)s'를 유형 %(format)s으로 변환 중..."
 
 #: ../virt-convert:240 ../virt-convert:243
 #, c-format
 msgid "Couldn't convert disks: %s"
-msgstr ""
+msgstr "디스크를 변환할 수 없음: %s"
 
 #: ../virt-convert:256
 #, c-format
 msgid "Couldn't export to file \"%s\": %s"
-msgstr ""
+msgstr "파일 \"%s\"에 내보내기할 수 없음: %s"
 
 #: ../virt-convert:268
 msgid "Aborted at user request"
-msgstr ""
+msgstr "사용자 요청에 의해 중지 "
 
 #: ../virtManager/addhardware.py:339 ../virtManager/create.py:453
 #: ../virtManager/create.py:614
@@ -677,7 +704,7 @@ msgstr "Virtio 디스크 "
 
 #: ../virtManager/addhardware.py:545
 msgid "Virtio lun"
-msgstr ""
+msgstr "Virtio Lun"
 
 #: ../virtManager/addhardware.py:547
 msgid "Virtio SCSI disk"
@@ -778,7 +805,7 @@ msgstr ""
 
 #: ../virtManager/addhardware.py:1101
 msgid "Random Number Generator"
-msgstr ""
+msgstr "난수 생성기 "
 
 #: ../virtManager/addhardware.py:1245
 msgid "Te_mplate:"
@@ -876,7 +903,7 @@ msgstr "장치를 선택해야 합니다."
 #: ../virtManager/addhardware.py:1583
 #, python-format
 msgid "Could not find USB device (vendorId: %s, productId: %s) "
-msgstr ""
+msgstr "USB 장치를 찾을 수 없음 (벤더 Id: %s, 제품 Id: %s) "
 
 #: ../virtManager/addhardware.py:1594
 msgid "Host device parameter error"
@@ -928,39 +955,39 @@ msgstr ""
 #: ../virtManager/addhardware.py:1790 ../virtManager/addhardware.py:1794
 #: ../virtManager/addhardware.py:1797 ../virtManager/addhardware.py:1800
 msgid "RNG selection error."
-msgstr ""
+msgstr "RNG 선택 오류 "
 
 #: ../virtManager/addhardware.py:1778
 msgid "A device must be specified."
-msgstr ""
+msgstr "장치를 지정해야 합니다. "
 
 #: ../virtManager/addhardware.py:1787
 msgid "Please specify both bind and connect host"
-msgstr ""
+msgstr "바인드 및 연결 호스트 모두를 지정해야 합니다 "
 
 #: ../virtManager/addhardware.py:1791
 msgid "Please specify both bind and connect service"
-msgstr ""
+msgstr "바인드 및 연결 서비스 모두를 지정해야 합니다 "
 
 #: ../virtManager/addhardware.py:1795
 msgid "The EGD host must be specified."
-msgstr ""
+msgstr "EGD 호스트를 지정해야 합니다. "
 
 #: ../virtManager/addhardware.py:1798
 msgid "The EGD service must be specified."
-msgstr ""
+msgstr "EGD 서비스를 지정해야 합니다."
 
 #: ../virtManager/addhardware.py:1801
 msgid "Invalid RNG type."
-msgstr ""
+msgstr "잘못된 RNG 유형입니다."
 
 #: ../virtManager/addhardware.py:1820
 msgid "RNG device parameter error"
-msgstr ""
+msgstr "RNG 장치 매개 변수 오류 "
 
 #: ../virtManager/asyncjob.py:241
 msgid "Cancel the job?"
-msgstr ""
+msgstr "작업을 취소하시겠습니까? "
 
 #: ../virtManager/asyncjob.py:257
 msgid "Cancelling job..."
@@ -1243,7 +1270,7 @@ msgstr "소켓 경로 '%s'를 여는 도중 오류 발생"
 
 #: ../virtManager/console.py:736
 msgid "USB redirection error"
-msgstr ""
+msgstr "USB 리디렉션 오류"
 
 #. The @format positional parameters are the following:
 #. 1 '%s' manufacturer
@@ -1254,7 +1281,7 @@ msgstr ""
 #: ../virtManager/console.py:749
 #, python-format
 msgid "%s %s %s at %d-%d"
-msgstr ""
+msgstr "%s %s %s at %d-%d"
 
 #: ../virtManager/console.py:866
 msgid "Leave fullscreen"
@@ -1705,7 +1732,7 @@ msgstr "네트워크는 IPv4 주소여야 함"
 
 #: ../virtManager/createnet.py:288
 msgid "The network must address at least 16 addresses."
-msgstr ""
+msgstr "네트워크는 최소 16 주소이어야 합니다. "
 
 #: ../virtManager/createnet.py:291 ../virtManager/createnet.py:370
 msgid "Check Network Address"
@@ -1745,58 +1772,58 @@ msgstr "DHCP 끝 주소가 네트워크 %s 상에 있지 않음"
 #: ../virtManager/createnet.py:345 ../virtManager/createnet.py:348
 #: ../virtManager/createnet.py:424 ../virtManager/createnet.py:427
 msgid "Invalid static route"
-msgstr ""
+msgstr "잘못된 고정 경로 "
 
 #: ../virtManager/createnet.py:346 ../virtManager/createnet.py:425
 msgid "The network address is incorrect."
-msgstr ""
+msgstr "네트워크 주소가 올바르지 않습니다. "
 
 #: ../virtManager/createnet.py:349 ../virtManager/createnet.py:428
 msgid "The gateway address is incorrect."
-msgstr ""
+msgstr "게이트웨이 주소가 올바르지 않습니다. "
 
 #: ../virtManager/createnet.py:363
 msgid "The network must be an IPv6 address"
-msgstr ""
+msgstr "네트워크는 IPv6 주소여야 합니다 "
 
 #: ../virtManager/createnet.py:367
 msgid "For libvirt, the IPv6 network prefix must be /64"
-msgstr ""
+msgstr "libvirt의 경우 IPv6 네트워크 접두어는 /64여야 합니다 "
 
 #: ../virtManager/createnet.py:381 ../virtManager/createnet.py:384
 #: ../virtManager/createnet.py:387 ../virtManager/createnet.py:391
 msgid "Invalid DHCPv6 Address"
-msgstr ""
+msgstr "잘못된 DHCPv6 주소 "
 
 #: ../virtManager/createnet.py:382
 msgid "The DHCPv6 start address could not be understood"
-msgstr ""
+msgstr "DHCPv6 시작 주소를 알 수 없습니다 "
 
 #: ../virtManager/createnet.py:385
 msgid "The DHCPv6 end address could not be understood"
-msgstr ""
+msgstr "DHCPv6 끝 주소를 알 수 없습니다 "
 
 #: ../virtManager/createnet.py:388
 #, python-format
 msgid "The DHCPv6 start address is not with the network %s"
-msgstr ""
+msgstr "DHCPv6 시작 주소는 네트워크 %s 상에 있지 않음 "
 
 #: ../virtManager/createnet.py:392
 #, python-format
 msgid "The DHCPv6 end address is not with the network %s"
-msgstr ""
+msgstr "DHCPv6 끝 주소가 네트워크 %s 상에 있지 않음"
 
 #: ../virtManager/createnet.py:436 ../virtManager/createnet.py:439
 msgid "Invalid Domain Name"
-msgstr ""
+msgstr "잘못된 도메인 이름 "
 
 #: ../virtManager/createnet.py:437
 msgid "Domain name must be less than 17 characters"
-msgstr ""
+msgstr "도메인 이름은 17 자 이하여야 함 "
 
 #: ../virtManager/createnet.py:440
 msgid "Domain name may contain alphanumeric and '_' characters only"
-msgstr ""
+msgstr "도메인 이름은 영숫자와 '_'만 사용할 수 있습니다 "
 
 #: ../virtManager/createnet.py:582 ../virtManager/createnet.py:636
 msgid "Private"
@@ -1804,7 +1831,7 @@ msgstr "비공개"
 
 #: ../virtManager/createnet.py:582 ../virtManager/createnet.py:642
 msgid "Other/Public"
-msgstr ""
+msgstr "기타/공개 "
 
 #: ../virtManager/createnet.py:638
 msgid "Reserved"
@@ -1812,7 +1839,7 @@ msgstr "예약됨"
 
 #: ../virtManager/createnet.py:640
 msgid "Unspecified"
-msgstr ""
+msgstr "지정하지 않음"
 
 #: ../virtManager/createnet.py:750
 #, python-format
@@ -1888,7 +1915,7 @@ msgstr "삭제"
 
 #: ../virtManager/delete.py:150
 msgid "Are you sure you want to delete the storage?"
-msgstr ""
+msgstr "스토리지를 삭제하시겠습니까?"
 
 #: ../virtManager/delete.py:151
 #, python-format
@@ -2034,15 +2061,15 @@ msgstr "하드웨어 대화를 시작하는 도중 오류 발생: %s"
 #: ../virtManager/details.py:1484
 #, python-format
 msgid "Error taking screenshot: %s"
-msgstr ""
+msgstr "스크린샷을 찍는 도중 오류 발생: %s"
 
 #: ../virtManager/details.py:1492
 msgid "Error initializing spice USB device widget"
-msgstr ""
+msgstr "spice USB 장치 위젯을 초기화하는 도중 오류 발생 "
 
 #: ../virtManager/details.py:1496
 msgid "Select USB devices for redirection"
-msgstr ""
+msgstr "리디렉션을 위한 USB 장치 선택 "
 
 #: ../virtManager/details.py:1523
 msgid "Save Virtual Machine Screenshot"
@@ -2266,7 +2293,7 @@ msgstr "파일 시스템 %s"
 
 #: ../virtManager/details.py:3621
 msgid "RNG"
-msgstr ""
+msgstr "RNG"
 
 #: ../virtManager/domain.py:201
 msgid "Running"
@@ -2294,7 +2321,7 @@ msgstr "충돌"
 
 #: ../virtManager/domain.py:215
 msgid "Suspended"
-msgstr ""
+msgstr "중지됨 "
 
 #: ../virtManager/domain.py:302
 #, python-format
@@ -2304,6 +2331,10 @@ msgid ""
 "To fix this, remove and reattach the USB device to your guest using the 'Add "
 "Hardware' wizard."
 msgstr ""
+"호스트에 여러개의 '%s' 장치가 연결되어 있기 때문에 게스트에 사용할 장치를 지"
+"정할 수 없습니다\n"
+"이를 해결하려면 '하드웨어 추가' 마법사를 사용하여 게스트의 USB 장치를 제거 "
+"및 다시 연결합니다. "
 
 #: ../virtManager/domain.py:407
 msgid "Libvirt connection does not support snapshots."
@@ -2609,17 +2640,19 @@ msgstr "도메인 리부팅 중 오류 발생: %s"
 #: ../virtManager/engine.py:1109
 #, python-format
 msgid "Are you sure you want to force reset '%s'?"
-msgstr ""
+msgstr "정말로 '%s' 강제로 재설정하시겠습니까? "
 
 #: ../virtManager/engine.py:1111
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
+"이는 OS를 종료하지 않고, VM의 전원을 즉시 다시 설정하게 됩니다. 이에 따라 데"
+"이터 손실이 발생할 수 있습니다."
 
 #: ../virtManager/engine.py:1117
 msgid "Error resetting domain"
-msgstr ""
+msgstr "도메인 재설정 중 오류 발생 "
 
 #: ../virtManager/error.py:116
 msgid "Input Error"
@@ -2712,11 +2745,11 @@ msgstr "라우팅 된 네트워크"
 
 #: ../virtManager/host.py:604
 msgid "Isolated network, internal routing only"
-msgstr ""
+msgstr "독립된 네트워크, 내부 라우팅 전용 "
 
 #: ../virtManager/host.py:606
 msgid "Isolated network, routing disabled"
-msgstr ""
+msgstr "독립된 네트워크, 라우팅 비활성화됨 "
 
 #: ../virtManager/host.py:670 ../virtManager/host.py:675
 msgid "Isolated network"
@@ -2974,6 +3007,7 @@ msgstr "VM '%s' 이식중"
 #, python-format
 msgid "Migrating VM '%s' from %s to %s. This may take a while."
 msgstr ""
+"VM '%s'를 %s에서 %s로 마이그레이션 중입니다. 다소 시간이 걸릴 수 있습니다. "
 
 #: ../virtManager/migrate.py:535
 #, python-format
@@ -3181,6 +3215,13 @@ msgid ""
 "\n"
 "Tip: Storage format qcow2 and qed do not support full allocation."
 msgstr ""
+"저장소를 완전히 할당하면, 지금은 시간이 더 걸리겠지만, OS 설치 단계를 더 빠르"
+"게 진행할 수 있습니다.\n"
+"\n"
+"할당을 생략하면 호스트 머신에서 저장 공간에 따른 문제가 발생할 수도 있습니"
+"다. 최대 이미지 크기가 사용 가능한 저장 공간보다 커질 경우 그렇습니다.\n"
+"\n"
+"정보: 저장 형식 qcow2 및 qed는 전체 할당을 지원하지 않습니다."
 
 #: ../virtManager/uihelpers.py:115
 msgid "Default pool is not active."
@@ -3278,7 +3319,7 @@ msgstr "종료(_S)"
 
 #: ../virtManager/uihelpers.py:929
 msgid "F_orce Reset"
-msgstr ""
+msgstr "강제로 재설정(_O)"
 
 #: ../virtManager/uihelpers.py:930
 msgid "_Force Off"
@@ -3333,31 +3374,31 @@ msgstr "다시 묻지 않음"
 #: ../virtconv/diskcfg.py:272
 #, python-format
 msgid "Cannot convert to disk format %s"
-msgstr ""
+msgstr "디스크 형식 %s으로 전환할 수 없음 "
 
 #: ../virtconv/diskcfg.py:285
 #, python-format
 msgid "Cannot convert disk with absolute path %s"
-msgstr ""
+msgstr "완전 경로 %s로 디스크를 전환할 수 없음 "
 
 #: ../virtconv/formats.py:135
 msgid "Unknown format"
-msgstr ""
+msgstr "알 수 없는 형식 "
 
 #: ../virtconv/parsers/ovf.py:198
 #, python-format
 msgid "Didn't find parent bus for disk '%s'"
-msgstr ""
+msgstr "디스크 '%s'의 부모 버스를 찾을 수 없습니다 "
 
 #: ../virtconv/parsers/ovf.py:212 ../virtconv/parsers/ovf.py:228
 #, python-format
 msgid "Unknown reference id '%s' for path %s."
-msgstr ""
+msgstr "경로 %s에 대해 알 수 없는 참조 ID '%s' "
 
 #: ../virtconv/parsers/ovf.py:221
 #, python-format
 msgid "Unknown storage path type %s."
-msgstr ""
+msgstr "알 수 없는 저장 경로 유형 %s."
 
 #: ../virtconv/parsers/ovf.py:388
 #, python-format
@@ -3365,25 +3406,27 @@ msgid ""
 "OVF section '%s' is listed as required, but parser doesn't know how to "
 "handle it."
 msgstr ""
+"OVF 섹션 '%s'이 요청에 따라 목록화되어 있지만 구문 분석기가 이를 처리하는 방"
+"법을 모릅니다."
 
 #: ../virtconv/parsers/virtimage.py:219
 #, python-format
 msgid "Couldn't import file '%s': %s"
-msgstr ""
+msgstr "파일 '%s'을 가져오기할 수 없음: %s"
 
 #: ../virtconv/parsers/virtimage.py:226
 #, python-format
 msgid "No Name defined in '%s'"
-msgstr ""
+msgstr "'%s'에 이름이 지정되어 있지 않음 "
 
 #: ../virtconv/parsers/virtimage.py:251
 #, python-format
 msgid "Unknown disk format '%s'"
-msgstr ""
+msgstr "알 수 없는 디스크 형식 '%s'"
 
 #: ../virtconv/parsers/virtimage.py:280
 msgid "VM must have a memory setting"
-msgstr ""
+msgstr "VM에 메모리 설정이 있어야 합니다 "
 
 #: ../virtconv/parsers/vmx.py:141
 #, python-format
@@ -3391,75 +3434,78 @@ msgid ""
 "Syntax error at line %d: %s\n"
 "%s"
 msgstr ""
+"%d째 줄에서 구문 오류: %s\n"
+"%s"
 
 #: ../virtconv/parsers/vmx.py:179
 msgid "Didn't detect a storage line in the VMDK descriptor file"
-msgstr ""
+msgstr "VMDK 디스크립터 파일에서 스토리지 행이 감지되지 않았습니다 "
 
 #: ../virtconv/parsers/vmx.py:182
 msgid "Don't know how to handle multistorage VMDK descriptors"
-msgstr ""
+msgstr "여러 스토리지 VMDK 디스크립터 처리 방법을 모릅니다 "
 
 #: ../virtconv/parsers/vmx.py:311
 #, python-format
 msgid "No displayName defined in '%s'"
-msgstr ""
+msgstr "displayName이 '%s'에 정의되어 있지 않음 "
 
 #: ../virtconv/vmcfg.py:69
 msgid "VM name is not set"
-msgstr ""
+msgstr "VM 이름이 설정되어 있지 않음 "
 
 #: ../virtconv/vmcfg.py:75
 msgid "VM type is not set"
-msgstr ""
+msgstr "VM 유형이 설정되어 있지 않음 "
 
 #: ../virtconv/vmcfg.py:77
 msgid "VM arch is not set"
-msgstr ""
+msgstr "VM 아키텍처가 설정되어 있지 않음 "
 
 #: ../virtconv/vmcfg.py:81
 #, python-format
 msgid "Disk %s:%s storage does not exist"
-msgstr ""
+msgstr "디스크 %s:%s 저장 장치가 존재하지 않음 "
 
 #: ../virtinst/capabilities.py:107
 #, python-format
 msgid "Unknown CPU model '%s'"
-msgstr ""
+msgstr "알 수 없는 CPU 모델 '%s'"
 
 #: ../virtinst/capabilities.py:393
 #, python-format
 msgid ", domain type '%s'"
-msgstr ""
+msgstr ", 도메인 유형 '%s'"
 
 #: ../virtinst/capabilities.py:395
 #, python-format
 msgid ", machine type '%s'"
-msgstr ""
+msgstr ", 시스템 유형 '%s'"
 
 #: ../virtinst/capabilities.py:397
 #, python-format
 msgid "No domains available for virt type '%(type)s', arch '%(arch)s'"
 msgstr ""
+"가상화 유형 '%(type)s', 아키텍처 '%(arch)s'에 대해 사용 가능한 도메인이 없음 "
 
 #: ../virtinst/capabilities.py:700
 #, python-format
 msgid "for arch '%s'"
-msgstr ""
+msgstr "아키텍처 '%s' 용 "
 
 #: ../virtinst/capabilities.py:704
 #, python-format
 msgid "virtualization type '%s'"
-msgstr ""
+msgstr "가상화 유형 '%s'"
 
 #: ../virtinst/capabilities.py:706
 msgid "any virtualization options"
-msgstr ""
+msgstr "가상화 옵션 "
 
 #: ../virtinst/capabilities.py:708
 #, python-format
 msgid "Host does not support %(virttype)s %(arch)s"
-msgstr ""
+msgstr "호스트는 %(virttype)s %(arch)s를 지원하지 않습니다 "
 
 #: ../virtinst/capabilities.py:719
 #, python-format
@@ -3467,6 +3513,8 @@ msgid ""
 "Host does not support domain type %(domain)s%(machine)s for virtualization "
 "type '%(virttype)s' arch '%(arch)s'"
 msgstr ""
+"호스트는 가상화 유형 '%(virttype)s' 아키텍처 '%(arch)s'의 도메인 유형 "
+"%(domain)s%(machine)s을 지원하지 않습니다 "
 
 #: ../virtinst/cli.py:136
 msgid "See man page for examples and full option syntax."
@@ -3474,7 +3522,7 @@ msgstr ""
 
 #: ../virtinst/cli.py:286
 msgid "Exiting at user request."
-msgstr ""
+msgstr "사용자 요청을 종료하고 있습니다. "
 
 #: ../virtinst/cli.py:298
 #, python-format
@@ -3484,6 +3532,10 @@ msgid ""
 "  %s\n"
 "otherwise, please restart your installation."
 msgstr ""
+"도메인 설치가 성공한 것처럼 보이지 않습니다.\n"
+"성공적으로 설치했을 경우, 다음을 실행하여 도메인을 다시 시작할 수 있습니다:\n"
+"   %s\n"
+"그렇지 않을 경우 설치를 다시 시작하십시오."
 
 #: ../virtinst/cli.py:343
 #, python-format
@@ -3496,11 +3548,11 @@ msgstr ""
 
 #: ../virtinst/cli.py:379
 msgid "A yes or no response is required"
-msgstr ""
+msgstr "'예' 또는 '아니요'의 응답이 필요합니다 "
 
 #: ../virtinst/cli.py:417
 msgid "Do you really want to use this disk (yes or no)"
-msgstr ""
+msgstr "정말로 이 디스크를 사용하시겠습니까 (예 또는 아니요) "
 
 #: ../virtinst/cli.py:430
 msgid "A disk path must be specified."
@@ -3509,32 +3561,32 @@ msgstr "디스크 경로를 지정해야 합니다. "
 #: ../virtinst/cli.py:432
 #, python-format
 msgid "A disk path must be specified to clone '%s'."
-msgstr ""
+msgstr "'%s'을 복제하기 위해 디스크 경로를 지정해야 합니다. "
 
 #: ../virtinst/cli.py:436
 msgid "What would you like to use as the disk (file path)?"
-msgstr ""
+msgstr "디스크 (파일 경로)로 무엇을 사용하시겠습니까? "
 
 #: ../virtinst/cli.py:438
 #, python-format
 msgid ""
 "Please enter the path to the file you would like to use for storage. It will "
 "have size %sGB."
-msgstr ""
+msgstr "스토리지로 사용할 파일로의 경로를 입력하십시오. 크기는 %sGB면 됩니다."
 
 #: ../virtinst/cli.py:452
 msgid "A size must be specified for non-existent disks."
-msgstr ""
+msgstr "존재하지 않는 디스크의 용량을 지정해야 합니다."
 
 #: ../virtinst/cli.py:453
 #, python-format
 msgid "How large would you like the disk (%s) to be (in gigabytes)?"
-msgstr ""
+msgstr "디스크 (%s) 용량을 얼마나 크게 하시겠습니까 (기가바이트 단위)?"
 
 #: ../virtinst/cli.py:478
 #, python-format
 msgid "This will overwrite the existing path '%s'"
-msgstr ""
+msgstr "기존 경로 '%s'를 덮어쓰기하게 됩니다 "
 
 #: ../virtinst/cli.py:495
 #, python-format
@@ -3546,24 +3598,24 @@ msgstr ""
 #. ######################
 #: ../virtinst/cli.py:570
 msgid "--name is required"
-msgstr ""
+msgstr "--name이 필요합니다 "
 
 #: ../virtinst/cli.py:571
 msgid "--ram amount in MB is required"
-msgstr ""
+msgstr "--ram 용량 (MB 단위)이 필요합니다 "
 
 #: ../virtinst/cli.py:575
 msgid "What is the name of your virtual machine?"
-msgstr ""
+msgstr "가상 머신의 이름이 무엇입니까? "
 
 #: ../virtinst/cli.py:581
 msgid "How much RAM should be allocated (in megabytes)?"
-msgstr ""
+msgstr "RAM 용량을 얼마나 할당하시겠습니까 (메가바이트 단위)?"
 
 #: ../virtinst/cli.py:587
 #, python-format
 msgid "Installs currently require %d megs of RAM."
-msgstr ""
+msgstr "현재 설치에 %d 메가의 RAM이 필요합니다."
 
 #: ../virtinst/cli.py:616
 #, python-format
@@ -3571,30 +3623,32 @@ msgid ""
 "You have asked for more virtual CPUs (%d) than there are physical CPUs (%d) "
 "on the host. This will work, but performance will be poor. "
 msgstr ""
+"호스트에 있는 물리적 CPU (%d)보다 많은 가상 CPU (%d)를 요청했습니다. 이는 작"
+"동은 하지만 성능이 저하됩니다. "
 
 #: ../virtinst/cli.py:619
 msgid "Are you sure? (yes or no)"
-msgstr ""
+msgstr "실행하시겠습니까? (예 또는 아니요)"
 
 #: ../virtinst/cli.py:661
 msgid "Cannot mix both --bridge and --network arguments"
-msgstr ""
+msgstr "--bridge 및 --network 인수를 혼합할 수 없음 "
 
 #: ../virtinst/cli.py:719
 msgid "Cannot mix --graphics and old style graphical options"
-msgstr ""
+msgstr "--graphics 및 이전 스타일의 그래픽 옵션을 혼합할 수 없습니다 "
 
 #: ../virtinst/cli.py:723
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
-msgstr ""
+msgstr "하나 이상의 VNC, SDL, --graphics, --nographics를 지정할 수 없습니다 "
 
 #: ../virtinst/cli.py:787
 msgid "Connect to hypervisor with libvirt URI"
-msgstr ""
+msgstr "libvirt URI로 하이퍼바이저에 연결 "
 
 #: ../virtinst/cli.py:801
 msgid "Don't boot guest after completing install."
-msgstr ""
+msgstr "설치 완료 후 게스트를 부팅하지 않습니다."
 
 #: ../virtinst/cli.py:805
 msgid "Don't check name collision, overwrite any guest with the same name."
@@ -3602,26 +3656,29 @@ msgstr ""
 
 #: ../virtinst/cli.py:810
 msgid "Print the generated domain XML rather than define and clone the guest."
-msgstr ""
+msgstr "게스트를 정의 및 복제하는 대신 생성된 도메인 XML 파일을 출력합니다. "
 
 #: ../virtinst/cli.py:814
 msgid ""
 "Print XML of a specific install step (1, 2, 3, all) rather than define the "
 "guest."
 msgstr ""
+"게스트를 정의하는 대신 특정 설치 단계 (1, 2, 3, 모두)의 XML을 출력합니다. "
 
 #: ../virtinst/cli.py:819
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
+"설치 프로세스를 실행하지만 장치를 생성하지 않거나 게스트를 정의하지 않습니"
+"다. "
 
 #: ../virtinst/cli.py:823
 msgid "Suppress non-error output"
-msgstr ""
+msgstr "비오류 출력을 제한합니다 "
 
 #: ../virtinst/cli.py:825
 msgid "Print debugging information"
-msgstr ""
+msgstr "디버깅 정보 출력 "
 
 #: ../virtinst/cli.py:830
 msgid ""
@@ -3630,18 +3687,22 @@ msgid ""
 "--vcpus 5,maxcpus=10\n"
 "--vcpus sockets=2,cores=4,threads=2"
 msgstr ""
+"게스트에 설정할 vcpus 수. 예: \n"
+"--vcpus 5\n"
+"--vcpus 5,maxcpus=10\n"
+"--vcpus sockets=2,cores=4,threads=2"
 
 #: ../virtinst/cli.py:835
 msgid "Set which physical CPUs domain can use."
-msgstr ""
+msgstr "사용할 수 있는 물리적 CPU 도메인을 설정합니다."
 
 #: ../virtinst/cli.py:837
 msgid "CPU model and features. Ex: --cpu coreduo,+x2apic"
-msgstr ""
+msgstr "CPU 모델 및 기능. 예: --cpu coreduo,+x2apic"
 
 #: ../virtinst/cli.py:849
 msgid "Graphics Configuration"
-msgstr ""
+msgstr "그래픽 설정 "
 
 #: ../virtinst/cli.py:885
 msgid ""
@@ -3657,56 +3718,64 @@ msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=ich9-ehci1"
 msgstr ""
+"게스트 컨트롤러 장치를 설정합니다. 예: \n"
+"--controller type=usb,model=ich9-ehci1"
 
 #: ../virtinst/cli.py:897
 msgid "Configure a guest serial device"
-msgstr ""
+msgstr "게스트 직렬 장치 설정 "
 
 #: ../virtinst/cli.py:899
 msgid "Configure a guest parallel device"
-msgstr ""
+msgstr "게스트 병렬 장치 설정 "
 
 #: ../virtinst/cli.py:901
 msgid "Configure a guest communication channel"
-msgstr ""
+msgstr "게스트 커뮤니케이션 채널 설정 "
 
 #: ../virtinst/cli.py:903
 msgid "Configure a text console connection between the guest and host"
-msgstr ""
+msgstr "게스트 및 호스트 간 텍스트 콘솔 연결 설정 "
 
 #: ../virtinst/cli.py:906
 msgid "Configure physical host devices attached to the guest"
-msgstr ""
+msgstr "게스트에 연결된 물리적 호스트 장치 설정 "
 
 #: ../virtinst/cli.py:909
 msgid "Configure guest sound device emulation"
-msgstr ""
+msgstr "게스트 사운드 장치 에뮬레이션 설정 "
 
 #: ../virtinst/cli.py:911
 msgid "Configure a guest watchdog device"
-msgstr ""
+msgstr "게스트 와치독 장치 설정 "
 
 #: ../virtinst/cli.py:913
 msgid "Configure guest video hardware."
-msgstr ""
+msgstr "게스트 비디오 하드웨어 설정."
 
 #: ../virtinst/cli.py:915
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
+"게스트 스마트카드 장치 설정. 예: \n"
+"--smartcard mode=passthrough"
 
 #: ../virtinst/cli.py:918
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 msgstr ""
+"게스트 리디렉션 장치 설정. 예:\n"
+"--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
 #: ../virtinst/cli.py:921
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
+"게스트 memballoon 장치 설정. 예: \n"
+"--memballoon model=virtio"
 
 #: ../virtinst/cli.py:924
 msgid ""
@@ -3720,6 +3789,9 @@ msgid ""
 "--rng /dev/random\n"
 "--rng egd,backend_host=localhost,backend_service=708,backend_type=tcp"
 msgstr ""
+"게스트 RNG 장치를 설정합니다. 예:\n"
+"--rng /dev/random\n"
+"--rng egd,backend_host=localhost,backend_service=708,backend_type=tcp"
 
 #: ../virtinst/cli.py:934
 msgid ""
@@ -3729,6 +3801,11 @@ msgid ""
 "--graphics none\n"
 "--graphics vnc,password=foobar,port=5910,keymap=ja"
 msgstr ""
+"게스트 디스플레이 설정을 구성합니다. 예: \n"
+"--graphics vnc\n"
+"--graphics spice,port=5901,tlsport=5902\n"
+"--graphics none\n"
+"--graphics vnc,password=foobar,port=5910,keymap=ja"
 
 #: ../virtinst/cli.py:943
 msgid ""
@@ -3736,6 +3813,9 @@ msgid ""
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 msgstr ""
+"게스트에 호스트 디렉토리를 전달합니다. 예:\n"
+"--filesystem /my/source/dir,/dir/in/guest\n"
+"--filesystem template_name,/,type=template"
 
 #: ../virtinst/cli.py:955
 msgid ""
@@ -3751,84 +3831,85 @@ msgstr ""
 #: ../virtinst/cli.py:1033
 #, python-format
 msgid "Unknown options %s"
-msgstr ""
+msgstr "알 수 없는 옵션 %s"
 
 #: ../virtinst/cli.py:1365
 msgid "Cannot specify more than 1 storage path"
-msgstr ""
+msgstr "1 개 이상의 저장 경로를 지정할 수 없습니다 "
 
 #: ../virtinst/cli.py:1374
 msgid "Size must be specified with all 'pool='"
-msgstr ""
+msgstr "크기는 모두 'pool='로 지정해야 합니다 "
 
 #: ../virtinst/cli.py:1392
 msgid "Format attribute not supported for this volume type"
-msgstr ""
+msgstr "포맷 속성은 이러한 볼륨 유형에 대해 지원되지 않습니다 "
 
 #: ../virtinst/cli.py:1398
 msgid "Storage volume must be specified as vol=poolname/volname"
-msgstr ""
+msgstr "스토리지 볼륨은 vol=poolname/volname로 지정해야 합니다 "
 
 #: ../virtinst/cli.py:1428 ../virtinst/cli.py:1451
 #, python-format
 msgid "Unknown '%s' value '%s'"
-msgstr ""
+msgstr "알 수 없는 '%s' 값 '%s'"
 
 #: ../virtinst/cli.py:1438
 #, python-format
 msgid "Improper value for 'size': %s"
-msgstr ""
+msgstr "'size'에 대해 잘못된 값: %s"
 
 #: ../virtinst/cli.py:1566
 #, python-format
 msgid "Didn't match keymap '%s' in keytable!"
-msgstr ""
+msgstr "키 테이블에 있는 키맵 '%s'과 일치하지 않습니다."
 
 #: ../virtinst/cli.py:1781
 #, python-format
 msgid "%(devtype)s type '%(chartype)s' does not support '%(optname)s' option."
 msgstr ""
+"%(devtype)s 유형 '%(chartype)s'은 '%(optname)s' 옵션을 지원하지 않습니다. "
 
 #: ../virtinst/cloner.py:89
 msgid "Original xml must be a string."
-msgstr ""
+msgstr "원래 XML은 문자열이어야 합니다. "
 
 #: ../virtinst/cloner.py:105
 #, python-format
 msgid "Invalid name for new guest: %s"
-msgstr ""
+msgstr "새로운 게스트의 잘못된 이름: %s"
 
 #: ../virtinst/cloner.py:115
 #, python-format
 msgid "Invalid uuid for new guest: %s"
-msgstr ""
+msgstr "새로운 게스트의 잘못된 uuid: %s"
 
 #: ../virtinst/cloner.py:118
 #, python-format
 msgid "UUID '%s' is in use by another guest."
-msgstr ""
+msgstr "UUID '%s'는 다른 게스트에 의해 사용되고 있습니다. "
 
 #: ../virtinst/cloner.py:145
 #, python-format
 msgid "Could not use path '%s' for cloning: %s"
-msgstr ""
+msgstr "복제를 위해 경로 '%s'를 사용할 수 없음: %s"
 
 #: ../virtinst/cloner.py:234
 msgid "Cloning policy must be a list of rules."
-msgstr ""
+msgstr "복제 정책은 규칙 목록이어야 합니다. "
 
 #: ../virtinst/cloner.py:267
 msgid "Original guest name or xml is required."
-msgstr ""
+msgstr "원래 게스트 이름 또는 xml이 필요합니다. "
 
 #: ../virtinst/cloner.py:294
 msgid "Domain with devices to clone must be paused or shutoff."
-msgstr ""
+msgstr "복제할 장치와 함께 도메인을 중지하거나 종료합니다. "
 
 #: ../virtinst/cloner.py:319
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
-msgstr ""
+msgstr "기존 스토리지 볼륨에 복제하는 것은 현재 지원되지 않습니다: '%s'"
 
 #: ../virtinst/cloner.py:363
 #, python-format
@@ -3836,59 +3917,61 @@ msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
 "%(need)d needed"
 msgstr ""
+"지정된 새 경로보다 복제할 디스크가 더 많습니다. (%(passed)d 개 지정, "
+"%(need)d 개 필요)"
 
 #: ../virtinst/cloner.py:375
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
-msgstr ""
+msgstr "포트 충돌을 피하기 위해 그래픽 장치 포트를 자동 포트로 설정했습니다."
 
 #: ../virtinst/cloner.py:536
 #, python-format
 msgid "Could not determine original disk information: %s"
-msgstr ""
+msgstr "본래의 디스크 정보를 지정할 수 없습니다: %s"
 
 #: ../virtinst/cloner.py:577
 #, python-format
 msgid "Domain '%s' was not found."
-msgstr ""
+msgstr "도메인 '%s'을 찾을 수 없습니다. "
 
 #: ../virtinst/cpu.py:65
 msgid "No host CPU reported in capabilities"
-msgstr ""
+msgstr "기능에서 보고된 호스트 CPU가 없음 "
 
 #: ../virtinst/device.py:67 ../virtinst/deviceredirdev.py:38
 #, python-format
 msgid "Could not determine or unsupported format of '%s'"
-msgstr ""
+msgstr "'%s'형식은 지정할 수 없거나 지원되지 않습니다 "
 
 #: ../virtinst/device.py:150
 msgid "Virtual device type must be set in subclass."
-msgstr ""
+msgstr "가상 장치 유형은 서브 클래스에서 설정해야 합니다."
 
 #: ../virtinst/device.py:153
 #, python-format
 msgid "Unknown virtual device type '%s'."
-msgstr ""
+msgstr "알 수 없는 가상 장치 유형 '%s'입니다. "
 
 #: ../virtinst/devicechar.py:92
 msgid "Pseudo TTY"
-msgstr ""
+msgstr "Pseudo TTY"
 
 #: ../virtinst/devicechar.py:94
 msgid "Physical host character device"
-msgstr ""
+msgstr "물리적 호스트 문자 장치 "
 
 #: ../virtinst/devicechar.py:96
 msgid "Standard input/output"
-msgstr ""
+msgstr "표준 입/출력 "
 
 #: ../virtinst/devicechar.py:98
 msgid "Named pipe"
-msgstr ""
+msgstr "이름이 지정된 파이프 "
 
 #: ../virtinst/devicechar.py:100
 msgid "Output to a file"
-msgstr ""
+msgstr "파일로 출력 "
 
 #: ../virtinst/devicechar.py:102
 msgid "Virtual console"
@@ -3896,15 +3979,15 @@ msgstr "가상 콘솔 "
 
 #: ../virtinst/devicechar.py:104
 msgid "Null device"
-msgstr ""
+msgstr "빈 출력 "
 
 #: ../virtinst/devicechar.py:106
 msgid "TCP net console"
-msgstr ""
+msgstr "TCP 넷 콘솔 "
 
 #: ../virtinst/devicechar.py:108
 msgid "UDP net console"
-msgstr ""
+msgstr "UDP 넷 콘솔 "
 
 #: ../virtinst/devicechar.py:110
 msgid "Unix socket"
@@ -3912,7 +3995,7 @@ msgstr "Unix 소켓 "
 
 #: ../virtinst/devicechar.py:112
 msgid "Spice agent"
-msgstr ""
+msgstr "Spice 에이전트 "
 
 #: ../virtinst/devicechar.py:124
 msgid "Client mode"
@@ -3924,7 +4007,7 @@ msgstr "서버 모드 "
 
 #: ../virtinst/devicechar.py:160
 msgid "Method used to expose character device in the host."
-msgstr ""
+msgstr "호스트에 문자 장치를 내보내기위해 사용되는 방식입니다."
 
 #: ../virtinst/devicechar.py:165
 msgid "Host input path to attach to the guest."
@@ -3932,19 +4015,19 @@ msgstr ""
 
 #: ../virtinst/devicechar.py:187
 msgid "Target connect/listen mode."
-msgstr ""
+msgstr "대상 연결/수신 모드."
 
 #: ../virtinst/devicechar.py:207
 msgid "Address to connect/listen to."
-msgstr ""
+msgstr "연결/수신을 위한 주소입니다."
 
 #: ../virtinst/devicechar.py:215
 msgid "Port on target host to connect/listen to."
-msgstr ""
+msgstr "연결/수신을 위한 대상 호스트의 포트입니다."
 
 #: ../virtinst/devicechar.py:229
 msgid "Host address to bind to."
-msgstr ""
+msgstr "바인딩할 호스트 주소입니다."
 
 #: ../virtinst/devicechar.py:232
 msgid "Host port to bind to."
@@ -3952,39 +4035,39 @@ msgstr "바인딩할 호스트 포트입니다."
 
 #: ../virtinst/devicechar.py:240
 msgid "Format used when sending data."
-msgstr ""
+msgstr "데이터를 전송할 때 사용되는 형식입니다."
 
 #: ../virtinst/devicechar.py:248
 msgid "Channel type as exposed in the guest."
-msgstr ""
+msgstr "게스트에 내보내기된 채널 유형입니다."
 
 #: ../virtinst/devicechar.py:252
 msgid "Guest forward channel address in the guest."
-msgstr ""
+msgstr "게스트에 있는 게스트 전송 채널 주소입니다."
 
 #: ../virtinst/devicechar.py:255
 msgid "Guest forward channel port in the guest."
-msgstr ""
+msgstr "게스트에 있는 게스트 전송 채널 포트입니다. "
 
 #: ../virtinst/devicechar.py:262
 msgid "Sysfs name of virtio port in the guest"
-msgstr ""
+msgstr "게스트에 있는 virtio 포트의 Sysfs 이름 "
 
 #. Trying to change perms on vfat at least doesn't work
 #. but also doesn't seem to error. Try and detect that
 #: ../virtinst/devicedisk.py:305
 #, python-format
 msgid "Permissions on '%s' did not stick"
-msgstr ""
+msgstr "'%s'에 있는 권한이 고정되지 않았습니다 "
 
 #: ../virtinst/devicedisk.py:388
 msgid "Connection does not support storage lookup."
-msgstr ""
+msgstr "연결은 저장소 검색을 지원하지 않습니다. "
 
 #: ../virtinst/devicedisk.py:394
 #, python-format
 msgid "Couldn't lookup volume object: %s"
-msgstr ""
+msgstr "볼륨 객체를 검색할 수 없음: %s"
 
 #: ../virtinst/devicedisk.py:599
 #, python-format
@@ -3994,15 +4077,15 @@ msgstr ""
 #: ../virtinst/devicedisk.py:681
 #, python-format
 msgid "Device type '%s' requires a path"
-msgstr ""
+msgstr "장치 유형 '%s'에는 경로가 필요함 "
 
 #: ../virtinst/devicedisk.py:691
 msgid "Connection doesn't support remote storage."
-msgstr ""
+msgstr "연결은 원격 스토리지를 지원하지 않습니다. "
 
 #: ../virtinst/devicedisk.py:694
 msgid "Must specify libvirt managed storage if on a remote connection"
-msgstr ""
+msgstr "원격 연결을 할 경우 libvirt 관리 스토리지를 지정해야 합니다 "
 
 #: ../virtinst/devicedisk.py:708
 #, python-format
@@ -4012,17 +4095,17 @@ msgstr ""
 #: ../virtinst/devicedisk.py:714
 #, python-format
 msgid "The path '%s' must be a file or a device, not a directory"
-msgstr ""
+msgstr "경로 '%s'는 디렉토리가 아닌 파일 또는 장치여야 합니다 "
 
 #: ../virtinst/devicedisk.py:862
 #, python-format
 msgid "No more space for disks of type '%s'"
-msgstr ""
+msgstr "디스크 유형 '%s'에 여유 공간이 없습니다 "
 
 #: ../virtinst/devicefilesystem.py:103
 #, python-format
 msgid "Filesystem target '%s' must be an absolute path"
-msgstr ""
+msgstr "파일 시스템 대상 '%s'은 절대 경로여야 함 "
 
 #: ../virtinst/devicegraphics.py:37
 #, python-format
@@ -4031,24 +4114,24 @@ msgstr ""
 
 #: ../virtinst/deviceinterface.py:84
 msgid "Shared physical device"
-msgstr ""
+msgstr "공유되는 물리 장치 "
 
 #: ../virtinst/deviceinterface.py:86
 msgid "Virtual networking"
-msgstr ""
+msgstr "가상 네트워크 "
 
 #: ../virtinst/deviceinterface.py:129
 #, python-format
 msgid "The MAC address '%s' is in use by another virtual machine."
-msgstr ""
+msgstr "MAC 주소 '%s'는 다른 가상 머신에 의해 사용되고 있습니다. "
 
 #: ../virtinst/devicerng.py:44
 msgid "Random"
-msgstr ""
+msgstr "랜덤 "
 
 #: ../virtinst/devicerng.py:46
 msgid "Entropy Gathering Daemon"
-msgstr ""
+msgstr "엔트로피 수집 데몬 "
 
 #: ../virtinst/devicetpm.py:44
 msgid "Passthrough device"
@@ -4056,15 +4139,15 @@ msgstr ""
 
 #: ../virtinst/devicewatchdog.py:48
 msgid "Forcefully reset the guest"
-msgstr ""
+msgstr "강제로 게스트를 재설정합니다 "
 
 #: ../virtinst/devicewatchdog.py:50
 msgid "Gracefully shutdown the guest"
-msgstr ""
+msgstr "게스트 종료 "
 
 #: ../virtinst/devicewatchdog.py:52
 msgid "Forcefully power off the guest"
-msgstr ""
+msgstr "강제로 게스트 전원 끄기 "
 
 #: ../virtinst/devicewatchdog.py:54
 msgid "Pause the guest"
@@ -4072,7 +4155,7 @@ msgstr "게스트 일시 중지 "
 
 #: ../virtinst/devicewatchdog.py:56
 msgid "No action"
-msgstr ""
+msgstr "동작 없음"
 
 #. Since there is no error, no pool was ever found
 #: ../virtinst/diskbackend.py:121
@@ -4081,24 +4164,26 @@ msgid ""
 "Cannot use storage '%(path)s': '%(rootdir)s' is not managed on the remote "
 "host."
 msgstr ""
+"스토리지 '%(path)s'를 사용할 수 없습니다: '%(rootdir)s'는 원격 호스트에서 관"
+"리되지 않습니다. "
 
 #: ../virtinst/diskbackend.py:126
 #, python-format
 msgid "Cannot use storage %(path)s: %(err)s"
-msgstr ""
+msgstr "스토리지 %(path)s를 사용할 수 없습니다: %(err)s"
 
 #: ../virtinst/diskbackend.py:138
 #, python-format
 msgid "Size must be specified for non existent volume path '%s'"
-msgstr ""
+msgstr "존재하지 않는 볼륨 경로 '%s'에 대해 크기를 지정해야 합니다 "
 
 #: ../virtinst/diskbackend.py:211
 msgid "Storage type does not support format parameter."
-msgstr ""
+msgstr "스토리지 유형은 포맷 매개 변수를 지원하지 않습니다. "
 
 #: ../virtinst/diskbackend.py:217
 msgid "Format cannot be specified for unmanaged storage."
-msgstr ""
+msgstr "관리되지 않는 스토리지에 대해 형식을 지정할 수 없습니다."
 
 #: ../virtinst/diskbackend.py:224
 msgid "Cannot set backing store for unmanaged storage."
@@ -4107,117 +4192,120 @@ msgstr ""
 #: ../virtinst/diskbackend.py:274
 #, python-format
 msgid "Cannot create storage for %s device."
-msgstr ""
+msgstr "%s 장치의 스토리지를 생성할 수 없습니다."
 
 #: ../virtinst/diskbackend.py:281
 #, python-format
 msgid "Local block device path '%s' must exist."
-msgstr ""
+msgstr "로컬 블럭 장치 경로 '%s'가 존재해야 합니다."
 
 #: ../virtinst/diskbackend.py:287
 #, python-format
 msgid "size is required for non-existent disk '%s'"
-msgstr ""
+msgstr "존재하지 않는 디스크 '%s'에 대해 용량을 지정해야 합니다 "
 
 #: ../virtinst/diskbackend.py:290
 #, python-format
 msgid "No write access to directory '%s'"
-msgstr ""
+msgstr "디렉토리 '%s'에 대한 쓰기 권한이 없습니다."
 
 #: ../virtinst/diskbackend.py:304
 msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
 msgstr ""
+"게스트가 실행되고 있을 때 스파스 파일을 완전히 할당하기 위해 파일 시스템에 충"
+"분한 공간이 없습니다. "
 
 #: ../virtinst/diskbackend.py:309
 msgid "There is not enough free space to create the disk."
-msgstr ""
+msgstr "디스크를 생성하기 위한 여유 공간이 충분하지 않습니다. "
 
 #: ../virtinst/diskbackend.py:313
 #, python-format
 msgid " %d M requested > %d M available"
-msgstr ""
+msgstr " %d M 요청된 용량 > %d M 사용 가능 "
 
 #: ../virtinst/diskbackend.py:333
 #, python-format
 msgid "Cloning %(srcfile)s"
-msgstr ""
+msgstr "%(srcfile)s 복제 중 "
 
 #: ../virtinst/diskbackend.py:336
 #, python-format
 msgid "Creating storage file %s"
-msgstr ""
+msgstr "스토리지 파일 %s 생성 중 "
 
 #: ../virtinst/diskbackend.py:377
 #, python-format
 msgid "Error creating diskimage %s: %s"
-msgstr ""
+msgstr "디스크 이미지 %s 생성 도중 오류 발생: %s "
 
 #: ../virtinst/diskbackend.py:441
 #, python-format
 msgid "Error cloning diskimage %s to %s: %s"
-msgstr ""
+msgstr "디스크 이미지 %s를 %s에 복제하는 도중 오류 발생: %s "
 
 #: ../virtinst/distroinstaller.py:62
 msgid "Invalid NFS format: No path specified."
-msgstr ""
+msgstr "잘못된 NFS 형식: 경로가 지정되어 있지 않습니다."
 
 #: ../virtinst/distroinstaller.py:126
 msgid "Failed to lookup scratch media volume"
-msgstr ""
+msgstr "스크래치 미디어 볼륨 검색에 실패했습니다 "
 
 #: ../virtinst/distroinstaller.py:141
 #, python-format
 msgid "Transferring %s"
-msgstr ""
+msgstr "%s 전송 중 "
 
 #: ../virtinst/distroinstaller.py:389
 #, python-format
 msgid "Checking installer location failed: Could not find media '%s'."
 msgstr ""
+"설치 프로그램 위치 확인에 실패했습니다: 미디어 '%s'를 찾을 수 없습니다. "
 
 #: ../virtinst/distroinstaller.py:417
 msgid "Invalid install location: "
-msgstr ""
+msgstr "잘못된 설치 위치: "
 
 #: ../virtinst/domainnumatune.py:45
 msgid "cpuset must be string"
-msgstr ""
+msgstr "cpuset은 문자열이어야 합니다 "
 
 #: ../virtinst/domainnumatune.py:47
 msgid "cpuset can only contain numeric, ',', '^', or '-' characters"
-msgstr ""
+msgstr "cpuset에는 숫자, ',', '^', '-', 문자만 포함될 수 있습니다 "
 
 #: ../virtinst/domainnumatune.py:61
 msgid "cpuset contains invalid format."
-msgstr ""
+msgstr "cpuset에는 잘못된 형식이 들어 있습니다. "
 
 #: ../virtinst/domainnumatune.py:63 ../virtinst/domainnumatune.py:71
 msgid "cpuset's pCPU numbers must be less than pCPUs."
-msgstr ""
+msgstr "cpuset의 물리적 CPU 번호는 물리적 CPU 수 보다 적어야 합니다 "
 
 #: ../virtinst/domainnumatune.py:104
 msgid "No topology section in capabilities xml."
-msgstr ""
+msgstr "기능 xml에 토폴로지 섹션이 없습니다."
 
 #: ../virtinst/domainnumatune.py:108
 msgid "Capabilities only show <= 1 cell. Not NUMA capable"
-msgstr ""
+msgstr "기능은 <= 1 셀만 표시됩니다. NUMA 기능이 없습니다 "
 
 #: ../virtinst/domainnumatune.py:134
 msgid "Could not find any usable NUMA cell/cpu combinations."
-msgstr ""
+msgstr "사용 가능한 NUMA 셀과 cpu 조합이 없습니다."
 
 #: ../virtinst/guest.py:61
 #, python-format
 msgid "Domain named %s already exists!"
-msgstr ""
+msgstr "도메인 이름 %s이 이미 존재합니다!"
 
 #: ../virtinst/guest.py:72
 #, python-format
 msgid "Could not remove old vm '%s': %s"
-msgstr ""
+msgstr "이전 vm '%s'을 삭제할 수 없음: %s"
 
 #: ../virtinst/guest.py:77
 msgid "Guest"
@@ -4226,7 +4314,7 @@ msgstr "게스트 "
 #: ../virtinst/guest.py:85
 #, python-format
 msgid "Guest name '%s' is already in use."
-msgstr ""
+msgstr "게스트 이름 '%s'이 이미 사용되고 있습니다. "
 
 #: ../virtinst/guest.py:197
 #, python-format
@@ -4235,7 +4323,7 @@ msgstr ""
 
 #: ../virtinst/guest.py:366
 msgid "Domain has already been started!"
-msgstr ""
+msgstr "이미 도메인이 시작되었습니다! "
 
 #: ../virtinst/guest.py:416
 msgid "Creating domain..."
@@ -4248,15 +4336,15 @@ msgstr "도메인 시작 중..."
 #: ../virtinst/guest.py:738
 #, python-format
 msgid "Duplicate address for devices %s and %s"
-msgstr ""
+msgstr "장치 %s 및 %s에 대한 주소를 중복 "
 
 #: ../virtinst/installer.py:82
 msgid "Guest.cdrom must be a boolean type"
-msgstr ""
+msgstr "Guest.cdrom은 부울 유형이어야 합니다 "
 
 #: ../virtinst/interface.py:49
 msgid "Whether to enable DHCP"
-msgstr ""
+msgstr "DHCP를 활성화할 지에 대한 여부 "
 
 #: ../virtinst/interface.py:51
 msgid "Network gateway address"
@@ -4264,24 +4352,24 @@ msgstr "네트워크 게이트웨이 주소 "
 
 #: ../virtinst/interface.py:53
 msgid "Whether to enable IPv6 autoconfiguration"
-msgstr ""
+msgstr "IPv6 자동 설정을 활성화할 지에 대한 여부 "
 
 #: ../virtinst/interface.py:155
 #, python-format
 msgid "Name '%s' already in use by another interface."
-msgstr ""
+msgstr "이름 '%s'는 다른 인터페이스에 의해 이미 사용되고 있습니다."
 
 #: ../virtinst/interface.py:169
 msgid "Maximum transmit size in bytes"
-msgstr ""
+msgstr "바이트 단위의 최대 전송 크기 "
 
 #: ../virtinst/interface.py:171
 msgid "When the interface will be auto-started."
-msgstr ""
+msgstr "시작 시 인터페이스를 자동으로 시작합니다. "
 
 #: ../virtinst/interface.py:174
 msgid "Name for the interface object."
-msgstr ""
+msgstr "인터페이스 객체의 이름입니다. "
 
 #: ../virtinst/interface.py:177
 msgid "Interface MAC address"
@@ -4289,45 +4377,47 @@ msgstr "인터페이스 MAC 주소 "
 
 #: ../virtinst/interface.py:185
 msgid "Whether STP is enabled on the bridge"
-msgstr ""
+msgstr "브리지에서 STP가 활성화되어 있는지에 대한 여부 "
 
 #: ../virtinst/interface.py:187
 msgid "Delay in seconds before forwarding begins when joining a network."
-msgstr ""
+msgstr "네트워크에 연결 시 전송을 시작하기 전 지연 시간 (초 단위)"
 
 #: ../virtinst/interface.py:195
 msgid "Mode of operation of the bonding device"
-msgstr ""
+msgstr "본딩 장치의 작동 모드 "
 
 #: ../virtinst/interface.py:198
 msgid "ARP monitoring interval in milliseconds"
-msgstr ""
+msgstr "ARP 모니터링 간격 (밀리초 단위로 지정)"
 
 #: ../virtinst/interface.py:201
 msgid "IP target used in ARP monitoring packets"
-msgstr ""
+msgstr "ARP 모니터링 패킷에서 사용하는 IP 대상 "
 
 #: ../virtinst/interface.py:203
 msgid "ARP monitor validation mode"
-msgstr ""
+msgstr "ARP 모니터 검증 모드 "
 
 #: ../virtinst/interface.py:206
 msgid "MII monitoring method."
-msgstr ""
+msgstr "MII 모니터링 방식 "
 
 #: ../virtinst/interface.py:208
 msgid "MII monitoring interval in milliseconds"
-msgstr ""
+msgstr "MII 모니터링 간격 (밀리초 단위로 지정) "
 
 #: ../virtinst/interface.py:211
 msgid ""
 "Time in milliseconds to wait before enabling a slave after link recovery "
 msgstr ""
+"링크 복구  후 슬레이브를 활성화하기 전 까지 대기 시간을 밀리초 단위로 지정 "
 
 #: ../virtinst/interface.py:214
 msgid ""
 "Time in milliseconds to wait before disabling a slave after link failure"
 msgstr ""
+"링크 실패 후 슬레이브를 활성화하기 전 까지 대기 시간을 밀리초 단위로 지정 "
 
 #: ../virtinst/interface.py:223
 msgid "VLAN device tag number"
@@ -4335,7 +4425,7 @@ msgstr "VLAN 장치 태그 번호 "
 
 #: ../virtinst/interface.py:225
 msgid "Parent interface to create VLAN on"
-msgstr ""
+msgstr "VLAN을 생성할 때 부모 인터페이스 "
 
 #: ../virtinst/interface.py:235
 msgid "VLAN Tag and parent interface are required."
@@ -4349,7 +4439,7 @@ msgstr "인터페이스를 지정할 수 없음: %s"
 #: ../virtinst/interface.py:255
 #, python-format
 msgid "Could not create interface: %s"
-msgstr ""
+msgstr "인터페이스를 생성할 수 없음: %s"
 
 #: ../virtinst/network.py:94
 #, python-format
@@ -4363,7 +4453,7 @@ msgstr "%s로 라우팅"
 
 #: ../virtinst/network.py:108
 msgid "Isolated network, internal and host routing only"
-msgstr ""
+msgstr "독립된 네트워크, 내부 및 호스트 라우팅 전용 "
 
 #: ../virtinst/network.py:139
 #, python-format
@@ -4377,7 +4467,7 @@ msgstr ""
 
 #: ../virtinst/nodedev.py:80
 msgid "Connection does not support host device enumeration."
-msgstr ""
+msgstr "연결이 호스트 장치 목록을 지원하지 않음"
 
 #: ../virtinst/nodedev.py:140
 msgid "System"
@@ -4391,17 +4481,17 @@ msgstr "인터페이스 %s"
 #: ../virtinst/nodedev.py:352
 #, python-format
 msgid "Could not determine format of '%s'"
-msgstr ""
+msgstr "'%s'의 형식을 지정할 수 없습니다 "
 
 #: ../virtinst/nodedev.py:371
 #, python-format
 msgid "%s corresponds to multiple node devices"
-msgstr ""
+msgstr "%s은 여러 노드 장치에 해당합니다 "
 
 #: ../virtinst/nodedev.py:374
 #, python-format
 msgid "Did not find a matching node device for '%s'"
-msgstr ""
+msgstr "'%s'와 일치하는 노드 장치를 찾을 수 없습니다 "
 
 #: ../virtinst/snapshot.py:77
 msgid "A name must be specified."
@@ -4409,11 +4499,11 @@ msgstr ""
 
 #: ../virtinst/storage.py:66
 msgid "Storage object"
-msgstr ""
+msgstr "스토리지 객체 "
 
 #: ../virtinst/storage.py:76
 msgid "Name for the storage object."
-msgstr ""
+msgstr "스토리지 객체의 이름입니다. "
 
 #: ../virtinst/storage.py:98
 msgid "Filesystem Directory"
@@ -4421,11 +4511,11 @@ msgstr "파일 시스템 디렉토리 "
 
 #: ../virtinst/storage.py:99
 msgid "Pre-Formatted Block Device"
-msgstr ""
+msgstr "미리 포맷된 블록 장치 "
 
 #: ../virtinst/storage.py:100
 msgid "Network Exported Directory"
-msgstr ""
+msgstr "네트워크를 통해 내보내기된 디렉토리 "
 
 #: ../virtinst/storage.py:101
 msgid "LVM Volume Group"
@@ -4433,7 +4523,7 @@ msgstr "LVM 볼륨 그룹 "
 
 #: ../virtinst/storage.py:102
 msgid "Physical Disk Device"
-msgstr ""
+msgstr "물리적 디스크 장치 "
 
 #: ../virtinst/storage.py:103
 msgid "iSCSI Target"
@@ -4445,7 +4535,7 @@ msgstr "SCSI 호스트 어댑터 "
 
 #: ../virtinst/storage.py:105
 msgid "Multipath Device Enumerator"
-msgstr ""
+msgstr "멀티패스 장치 목록 "
 
 #: ../virtinst/storage.py:204
 #, python-format
@@ -4455,23 +4545,23 @@ msgstr "저장소 풀 기본값 '%s'를 생성할 수 없음: %s"
 #: ../virtinst/storage.py:247
 #, python-format
 msgid "Name '%s' already in use by another pool."
-msgstr ""
+msgstr "이름 '%s'는 이미 다른 풀에서 사용하고 있습니다. "
 
 #: ../virtinst/storage.py:316
 msgid "Storage device type the pool will represent."
-msgstr ""
+msgstr "풀이 표시하는 스토리지 장치 유형입니다."
 
 #: ../virtinst/storage.py:329
 msgid "iSCSI initiator qualified name"
-msgstr ""
+msgstr "iSCSI 개시자의 정규화된 이름 "
 
 #: ../virtinst/storage.py:334
 msgid "Name of the Volume Group"
-msgstr ""
+msgstr "볼륨 그룹 이름 "
 
 #: ../virtinst/storage.py:391
 msgid "Hostname is required"
-msgstr ""
+msgstr "호스트 이름이 필요합니다 "
 
 #: ../virtinst/storage.py:395
 msgid "Source path is required"
@@ -4479,66 +4569,68 @@ msgstr ""
 
 #: ../virtinst/storage.py:408
 msgid "Must explicitly specify source path if building pool"
-msgstr ""
+msgstr "풀을 구축할 경우 소스 경로를 명확하게 지정해야 합니다 "
 
 #: ../virtinst/storage.py:412
 msgid "Must explicitly specify disk format if formatting disk device."
-msgstr ""
+msgstr "디스크 장치를 포맷할 경우 디스크 포맷을 명확하게 지정해야 합니다."
 
 #: ../virtinst/storage.py:425
 #, python-format
 msgid "Could not define storage pool: %s"
-msgstr ""
+msgstr "저장 풀을 지정할 수 없음: %s"
 
 #: ../virtinst/storage.py:432
 #, python-format
 msgid "Could not build storage pool: %s"
-msgstr ""
+msgstr "저장 풀을 빌드할 수 없음: %s"
 
 #: ../virtinst/storage.py:438
 #, python-format
 msgid "Could not start storage pool: %s"
-msgstr ""
+msgstr "저장 풀을 시작할 수 없음: %s"
 
 #: ../virtinst/storage.py:444
 #, python-format
 msgid "Could not set pool autostart flag: %s"
-msgstr ""
+msgstr "풀 자동 시작 플래그를 설정할 수 없음: %s"
 
 #: ../virtinst/storage.py:498
 #, python-format
 msgid "pool '%s' must be active."
-msgstr ""
+msgstr "풀 '%s'은 활성화되어야 합니다."
 
 #: ../virtinst/storage.py:512
 msgid "input_vol must be a virStorageVol"
-msgstr ""
+msgstr "input_vol은 virStorageVol이어야 합니다 "
 
 #: ../virtinst/storage.py:516
 msgid ""
 "Creating storage from an existing volume is not supported by this libvirt "
 "version."
 msgstr ""
+"기존 볼륨에서 스토리지를 생성하는 것은 libvirt 버전에 의해 지원되지 않습니"
+"다. "
 
 #: ../virtinst/storage.py:521
 msgid "virStorageVolume pointer to clone/use as input."
-msgstr ""
+msgstr "virStorageVolume 포인터는 복제나 입력으로 사용합니다."
 
 #: ../virtinst/storage.py:546
 #, python-format
 msgid "Name '%s' already in use by another volume."
-msgstr ""
+msgstr "'%s'이름은 다른 볼륨에서 이미 사용되고 있습니다. "
 
 #: ../virtinst/storage.py:628
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
-msgstr ""
+msgstr "스파스 논리 볼륨은 지원되지 않습니다. 용량 만큼의 할당을 설정합니다 "
 
 #: ../virtinst/storage.py:662
 #, python-format
 msgid "Allocating '%s'"
-msgstr ""
+msgstr "'%s' 할당 중 "
 
 #: ../virtinst/storage.py:736
 #, python-format
@@ -4546,6 +4638,8 @@ msgid ""
 "There is not enough free space on the storage pool to create the volume. (%d "
 "M requested allocation > %d M available)"
 msgstr ""
+"볼륨을 생성하기에 저장소 풀에 충분한 공간이 없습니다. (%d M 요청된 할당 > %d "
+"M 사용 가능)"
 
 #: ../virtinst/storage.py:742
 #, python-format
@@ -4553,26 +4647,28 @@ msgid ""
 "The requested volume capacity will exceed the available pool space when the "
 "volume is fully allocated. (%d M requested capacity > %d M available)"
 msgstr ""
+"요청된 볼륨 용량은 볼륨이 완전히 할당될 때 사용 가능한 풀 용량을 초과합니다. "
+"(%d M 요청된 용량 > %d M 사용 가능)"
 
 #: ../virtinst/urlfetcher.py:97
 #, python-format
 msgid "Retrieving file %s..."
-msgstr ""
+msgstr "파일 %s 검색 중..."
 
 #: ../virtinst/urlfetcher.py:99
 #, python-format
 msgid "Couldn't acquire file %s: %s"
-msgstr ""
+msgstr "파일 %s을 얻을 수 없습니다: %s"
 
 #: ../virtinst/urlfetcher.py:123
 #, python-format
 msgid "Opening URL %s failed."
-msgstr ""
+msgstr "URL %s 열기에 실패했습니다. "
 
 #: ../virtinst/urlfetcher.py:206
 #, python-format
 msgid "Mounting location '%s' failed"
-msgstr ""
+msgstr "마운트 위치 '%s'가 실패했습니다 "
 
 #: ../virtinst/urlfetcher.py:328
 #, python-format
@@ -4580,6 +4676,8 @@ msgid ""
 "Could not find an installable distribution at '%s'\n"
 "The location must be the root directory of an install tree."
 msgstr ""
+"'%s'에 설치 가능한 배포판을 찾을 수 없습니다\n"
+"위치는 설치 트리의 root 디렉토리에 있어야 합니다."
 
 #: ../virtinst/urlfetcher.py:406
 #, python-format
@@ -4609,101 +4707,103 @@ msgid ""
 "UUID must be a 32-digit hexadecimal number. It may take the form xxxxxxxx-"
 "xxxx-xxxx-xxxx-xxxxxxxxxxxx or may omit hyphens altogether."
 msgstr ""
+"UUID는 32 문자의 16 진수이어야 합니다. xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx "
+"형식 또는 하이픈 없는 형식입니다. "
 
 #: ../virtinst/util.py:144
 #, python-format
 msgid "%s name must be a string"
-msgstr ""
+msgstr "%s 이름은 문자열이어야 함 "
 
 #: ../virtinst/util.py:148
 #, python-format
 msgid "%s name must be less than 50 characters"
-msgstr ""
+msgstr "%s은 50자 이하로 지정해야 함 "
 
 #: ../virtinst/util.py:151
 #, python-format
 msgid "%s name can not be only numeric characters"
-msgstr ""
+msgstr "%s 이름은 숫자로만 설정할 수 없습니다 "
 
 #: ../virtinst/util.py:154
 #, python-format
 msgid "%s name can only contain alphanumeric, '_', '.', or '-' characters"
-msgstr ""
+msgstr "%s 이름은 영숫자, '_', '.', '-' 문자만 포함됩니다 "
 
 #: ../virtinst/util.py:163
 msgid "MAC address must be a string."
-msgstr ""
+msgstr "MAC 주소는 문자열이어야 합니다. "
 
 #: ../virtinst/util.py:167
 msgid "MAC address must be of the format AA:BB:CC:DD:EE:FF"
-msgstr ""
+msgstr "MAC 주소는 AA:BB:CC:DD:EE:FF 형식이어야 합니다 "
 
 #: ../virtinst/util.py:220
 msgid "Name generation range exceeded."
-msgstr ""
+msgstr "이름 생성 범위를 초과합니다."
 
 #. 11 = typical num of fields in the file
 #: ../virtinst/util.py:327
 #, python-format
 msgid "Invalid line length while parsing %s."
-msgstr ""
+msgstr "%s을 구문 분석하는 동안 잘못된 행의 길이 "
 
 #: ../virtinst/util.py:329
 #, python-format
 msgid "Defaulting bridge to xenbr%d"
-msgstr ""
+msgstr "xenbr%d로의 브리지를 기본값으로 함 "
 
 #: ../virtinst/virtimage.py:82
 msgid "Expected exactly one 'domain' element"
-msgstr ""
+msgstr "하나의 'domain' 요소만 필요합니다 "
 
 #: ../virtinst/virtimage.py:87
 #, python-format
 msgid "Disk entry for '%s' not found"
-msgstr ""
+msgstr "'%s'의 디스크 항목을 찾을 수 없음 "
 
 #: ../virtinst/virtimage.py:114
 #, python-format
 msgid "Memory must be an integer, but is '%s'"
-msgstr ""
+msgstr "메모리는 정수여야 합니다. 하지만 '%s'로 되어 있습니다 "
 
 #: ../virtinst/virtimage.py:245
 #, python-format
 msgid "The format for disk %s must be one of %s"
-msgstr ""
+msgstr "디스크 %s의 형식은 %s 중 하나여야 합니다 "
 
 #: ../virtinst/virtimage.py:279
 #, python-format
 msgid "Checking disk signature for %s"
-msgstr ""
+msgstr "%s의 디스크 서명 확인 중 "
 
 #: ../virtinst/virtimage.py:291
 #, python-format
 msgid "Disk signature for %s does not match Expected: %s  Received: %s"
-msgstr ""
+msgstr "%s의 디스크 서명이 일치하지 않습니다 기대 값: %s 받은값: %s"
 
 #: ../virtinst/virtimage.py:294
 #, python-format
 msgid "Disk signature for %s does not match"
-msgstr ""
+msgstr "%s의 디스크 서명이 일치하지 않습니다 "
 
 #: ../virtinst/virtimage.py:342
 msgid "Could not find suitable boot descriptor for this host"
-msgstr ""
+msgstr "이 호스트에 적합한 부트 디스크립터를 찾을 수 없습니다 "
 
 #: ../virtinst/virtimage.py:347
 msgid "boot_index out of range."
-msgstr ""
+msgstr "boot_index 범위를 초과합니다."
 
 #: ../virtinst/virtimage.py:354
 #, python-format
 msgid "Unsupported virtualization type: %s %s"
-msgstr ""
+msgstr "지원되지 않는 가상화 유형: %s %s"
 
 #: ../virtinst/virtimage.py:407
 #, python-format
 msgid "System disk %s does not exist"
-msgstr ""
+msgstr "시스템 디스크 %s가 존재하지 않습니다 "
 
 #: ../ui/about.ui.h:1
 msgid "Copyright (C) 2006-2011 Red Hat Inc."
@@ -4898,19 +4998,19 @@ msgstr ""
 
 #: ../ui/addhardware.ui.h:45
 msgid "Backend Type:"
-msgstr ""
+msgstr "백엔드 유형: "
 
 #: ../ui/addhardware.ui.h:46
 msgid "Backend Mode:"
-msgstr ""
+msgstr "백엔드 모드: "
 
 #: ../ui/addhardware.ui.h:47 ../ui/details.ui.h:179
 msgid "Host:"
-msgstr ""
+msgstr "호스트: "
 
 #: ../ui/addhardware.ui.h:48 ../ui/details.ui.h:181
 msgid "Bind Host:"
-msgstr ""
+msgstr "바인딩 호스트: "
 
 #: ../ui/addhardware.ui.h:49 ../ui/details.ui.h:159 ../ui/host.ui.h:17
 msgid "Device:"
@@ -4918,7 +5018,7 @@ msgstr "장치:"
 
 #: ../ui/addhardware.ui.h:50 ../ui/details.ui.h:186
 msgid "rng"
-msgstr ""
+msgstr "rng"
 
 #: ../ui/addhardware.ui.h:51 ../ui/create.ui.h:74
 #: ../ui/createinterface.ui.h:44 ../ui/createnet.ui.h:35
@@ -5564,7 +5664,7 @@ msgstr ""
 
 #: ../ui/createnet.ui.h:8
 msgid "Enable IPv4 network address space definition"
-msgstr ""
+msgstr "IPv4 네트워크 주소 공간 정의를 활성화 "
 
 #: ../ui/createnet.ui.h:9
 msgid "_Network:"
@@ -5594,27 +5694,27 @@ msgstr "유형:"
 
 #: ../ui/createnet.ui.h:15
 msgid "Start:"
-msgstr ""
+msgstr "시작: "
 
 #: ../ui/createnet.ui.h:16
 msgid "End:"
-msgstr ""
+msgstr "종료: "
 
 #: ../ui/createnet.ui.h:17
 msgid "Enable DHCPv4"
-msgstr ""
+msgstr "DHCPv4 활성화 "
 
 #: ../ui/createnet.ui.h:18
 msgid "Enable Static Route Definition"
-msgstr ""
+msgstr "고정 라우팅 정의를 활성화 "
 
 #: ../ui/createnet.ui.h:19
 msgid "<b>to</b> Network:"
-msgstr ""
+msgstr "네트워크<b>로</b>:"
 
 #: ../ui/createnet.ui.h:20
 msgid "<b>via</b> Gateway:"
-msgstr ""
+msgstr "게이트웨이를 <b>통해</b>:"
 
 #: ../ui/createnet.ui.h:21
 msgid "Choose <b>IPv6</b> address space for the virtual network:"
@@ -5622,7 +5722,7 @@ msgstr ""
 
 #: ../ui/createnet.ui.h:22
 msgid "Enable IPv6 network address space definition"
-msgstr ""
+msgstr "IPv6 네트워크 주소 공간 정의를 활성화 "
 
 #: ../ui/createnet.ui.h:23
 msgid ""
@@ -5637,7 +5737,7 @@ msgstr "fd00:100::1"
 
 #: ../ui/createnet.ui.h:25
 msgid "Enable DHCPv6"
-msgstr ""
+msgstr "DHCPv6 활성화 "
 
 #: ../ui/createnet.ui.h:26
 msgid "Connected to a <b>physical network</b>:"
@@ -5661,7 +5761,7 @@ msgstr "물리 네트워크"
 
 #: ../ui/createnet.ui.h:32
 msgid "Enable IPv6 internal routing/networking"
-msgstr ""
+msgstr "IPv6 내부 라우팅/네트워크 활성화 "
 
 #: ../ui/createnet.ui.h:33
 msgid ""
@@ -5669,6 +5769,8 @@ msgid ""
 "internal routing between virtual machines.  By default, IPv4 internal "
 "routing is enabled."
 msgstr ""
+"IPv6 네트워크 주소가 지정되지 <b>않은</b> 경우, 가상 머신 간의 IPv6 내부 라우"
+"팅을 활성화하게 됩니다. 기본값으로 IPv4 내부 라우팅이 활성화되어 있습니다. "
 
 #: ../ui/createnet.ui.h:34
 msgid "DNS Domain Name:"
@@ -5779,6 +5881,7 @@ msgid ""
 "<small>This VM is currently running and will be forced off before being "
 "deleted</small>"
 msgstr ""
+"<small>현재 VM이 실행되고 있으므로 삭제하기 전 강제로 종료됩니다</small>"
 
 #: ../ui/delete.ui.h:3
 msgid "Delete _associated storage files"
@@ -5806,10 +5909,13 @@ msgid ""
 "USB Redirection device is required for Virtual Machine to support this "
 "functionality. Auto-redirection is enabled by default"
 msgstr ""
+"호스트에 연결된 USB 장치를 SPICE 그래픽이 있는 가상 머신으로 리디렉션합니다. "
+"USB 리디렉션 장치에는 이 기능을 지원하는 가상 머신이 필요합니다. 자동 리디렉"
+"션은 기본값으로 활성화되어 있습니다 "
 
 #: ../ui/details.ui.h:7
 msgid "_Redirect USB device"
-msgstr ""
+msgstr "USB 장치 리디렉트(_R)"
 
 #: ../ui/details.ui.h:8 ../ui/manager.ui.h:7
 msgid "_View"
@@ -6005,7 +6111,7 @@ msgstr "레이블(_L):"
 
 #: ../ui/details.ui.h:58
 msgid "relabel"
-msgstr ""
+msgstr "다시 레이블 "
 
 #: ../ui/details.ui.h:59
 msgid "D_ynamic"
@@ -6272,27 +6378,27 @@ msgstr "성능 옵션(_P)"
 
 #: ../ui/details.ui.h:126
 msgid "Read:"
-msgstr ""
+msgstr "읽기: "
 
 #: ../ui/details.ui.h:127
 msgid "KBytes/Sec"
-msgstr ""
+msgstr "KBytes/Sec"
 
 #: ../ui/details.ui.h:128
 msgid "IOPS/Sec"
-msgstr ""
+msgstr "IOPS/Sec"
 
 #: ../ui/details.ui.h:129
 msgid "Total:"
-msgstr ""
+msgstr "합계: "
 
 #: ../ui/details.ui.h:130
 msgid "Write:"
-msgstr ""
+msgstr "쓰기: "
 
 #: ../ui/details.ui.h:131
 msgid "IO _Tuning"
-msgstr ""
+msgstr "IO 튜닝(_T)"
 
 #: ../ui/details.ui.h:132
 msgid "Advanced _options"
@@ -6464,27 +6570,27 @@ msgstr ""
 
 #: ../ui/details.ui.h:178
 msgid "Backend type:"
-msgstr ""
+msgstr "벡엔드 유형: "
 
 #: ../ui/details.ui.h:180
 msgid "Service:"
-msgstr ""
+msgstr "서비스: "
 
 #: ../ui/details.ui.h:182
 msgid "Bind Service:"
-msgstr ""
+msgstr "바인딩 서비스: "
 
 #: ../ui/details.ui.h:183
 msgid "Rate (period):"
-msgstr ""
+msgstr "전송률 (기간): "
 
 #: ../ui/details.ui.h:184
 msgid "Rate (bytes):"
-msgstr ""
+msgstr "전송률 (바이트): "
 
 #: ../ui/details.ui.h:185
 msgid "<b>Random Number Generator</b>"
-msgstr ""
+msgstr "<b>난수 생성기</b>"
 
 #: ../ui/details.ui.h:187
 msgid "<b>The console is currently unavailable</b>"
@@ -6552,7 +6658,7 @@ msgstr "이름:"
 
 #: ../ui/host.ui.h:22
 msgid "NAT to any device"
-msgstr ""
+msgstr "장치로의 NAT"
 
 #: ../ui/host.ui.h:23
 msgid "Network:"
@@ -6568,7 +6674,7 @@ msgstr ""
 
 #: ../ui/host.ui.h:26
 msgid "Static Route:"
-msgstr ""
+msgstr "고정 라우팅: "
 
 #: ../ui/host.ui.h:27
 msgid "<b>IPv4 configuration</b>"
@@ -6821,11 +6927,11 @@ msgstr "매번 상태 업데이트(_U)"
 
 #: ../ui/preferences.ui.h:7
 msgid "Poll _Disk I/O"
-msgstr ""
+msgstr "디스크 I/O 폴링(_D)"
 
 #: ../ui/preferences.ui.h:8
 msgid "Poll _Network I/O"
-msgstr ""
+msgstr "네트워크 I/O 폴링(_N)"
 
 #: ../ui/preferences.ui.h:9
 msgid "<b>Stats Options</b>"
@@ -6873,7 +6979,7 @@ msgstr "<b>그래픽 콘솔</b>"
 
 #: ../ui/preferences.ui.h:18
 msgid "Graphics type:"
-msgstr ""
+msgstr "그래픽 유형:"
 
 #: ../ui/preferences.ui.h:19
 msgid "Default storage format for new disk images."
@@ -6885,7 +6991,7 @@ msgstr "기본 저장소 형식:"
 
 #: ../ui/preferences.ui.h:21
 msgid "Inst_all sound device:"
-msgstr ""
+msgstr "사운드 장치 설치(_A):"
 
 #: ../ui/preferences.ui.h:22
 msgid "<b>New VM</b>"
@@ -6990,3 +7096,1287 @@ msgstr "로컬 검색(_B)"
 #: ../ui/storagebrowse.ui.h:4
 msgid "Choose _Volume"
 msgstr "볼륨 선택(_V)"
+
+#~ msgid "Error in %(chartype)s device parameters: %(err)s"
+#~ msgstr "%(chartype)s 장치 매개변수에서 오류 발생: %(err)s"
+
+#~ msgid "Error in watchdog device parameters: %s"
+#~ msgstr "워치독 장치 매개 변수에서 오류 발생: %s"
+
+#~ msgid "Error in filesystem device parameters: %s"
+#~ msgstr "파일 시스템 장치 매개 변수에서 오류 발생: %s"
+
+#~ msgid ""
+#~ "Domain installation still in progress. Waiting %sfor installation to "
+#~ "complete."
+#~ msgstr ""
+#~ "도메인 설치가 진행 중입니다. 설치를 완료할 때 까지 %s를 기다리고 있습니다."
+
+#~ msgid "The OS type being installed, e.g. 'linux', 'unix', 'windows'"
+#~ msgstr "설치할 OS 유형, 예: 'linux', 'unix', 'windows'"
+
+#~ msgid ""
+#~ "The OS variant being installed guests, e.g. 'fedora6', 'rhel5', "
+#~ "'solaris10', 'win2k'"
+#~ msgstr ""
+#~ "설치된 게스트의 OS 변종, 예: 'fedora6', 'rhel5', 'solaris10', 'win2k'"
+
+#~ msgid ""
+#~ "Disables APIC for fully virtualized guest (overrides value in os-type/os-"
+#~ "variant db)"
+#~ msgstr ""
+#~ "완전 가상화 게스트의 APIC를 비활성화함 (os-유형/os-변종 db에 값을 덮어쓰기"
+#~ "함) "
+
+#~ msgid ""
+#~ "Disables ACPI for fully virtualized guest (overrides value in os-type/os-"
+#~ "variant db)"
+#~ msgstr ""
+#~ "완전 가상화 게스트의 ACPI를 비활성화함 (os-유형/os-변종 db에 값을 덮어쓰기"
+#~ "함) "
+
+#~ msgid "Print the generated domain XML rather than define the guest."
+#~ msgstr "게스트를 정의하지 않고 생성된 도메인 XML을 출력합니다."
+
+#~ msgid "Time to wait (in minutes)"
+#~ msgstr "대기 시간 (분) "
+
+#~ msgid "Forces 'yes' for any applicable prompts, terminates for all others"
+#~ msgstr ""
+#~ "적용 가능한 프롬포트에서 강제로 '예'라고 대답합니다. 다른 모든 프로그램이 "
+#~ "종료됩니다 "
+
+#~ msgid "Request user input for ambiguous situations or required options."
+#~ msgstr "모호한 상황이나 필요한 옵션에 대해 사용자 입력을 요구합니다. "
+
+#~ msgid ""
+#~ "Don't check for name collision. Allows replacing an existing guest with "
+#~ "the new clone"
+#~ msgstr ""
+#~ "이름 충돌을 확인하지 않습니다. 새로운 복제로 기존 게스트를 대체합니다. "
+
+#~ msgid ""
+#~ "Do not prompt for input. Answers yes where applicable, terminates for all "
+#~ "other prompts"
+#~ msgstr ""
+#~ "입력하라는 메세지가 표시되지 않습니다. '예'라고 대답하면 모든 다른 프롬프"
+#~ "트를 종료합니다 "
+
+#~ msgid "Must be privileged to clone Xen guests"
+#~ msgstr "Xen 게스트를 복제할 권한이 있어야 합니다 "
+
+#~ msgid "The image requires %i network interface."
+#~ msgstr "이미지에는 %i 네트워크가 필요합니다. "
+
+#~ msgid ""
+#~ "The OS variant being installed, e.g. 'fedora6', 'rhel5', 'solaris10', "
+#~ "'win2k'"
+#~ msgstr "설치된 OS 변종, 예: 'fedora6', 'rhel5', 'solaris10', 'win2k'"
+
+#~ msgid "Full Virtualization specific options"
+#~ msgstr "완전 가상화 관련 옵션 "
+
+#~ msgid "Disables APIC for fully virtualized guest"
+#~ msgstr "완전 가상화 게스트의 APIC를 비활성화합니다 "
+
+#~ msgid "Disables ACPI for fully virtualized guest"
+#~ msgstr "완전 가상화 게스트의 APIC를 비활성화합니다 "
+
+#~ msgid "Print the libvirt XML, but do not start the domain"
+#~ msgstr "libvirt XML을 출력하지만 도메인을 시작하지 않습니다 "
+
+#~ msgid "Overwrite, or destroy, an existing image with the same name"
+#~ msgstr "동일한 이름으로 기존 이미지를 덮어쓰기 또는 삭제 "
+
+#~ msgid ""
+#~ "The OS type for fully virtualized guests, e.g. 'linux', 'unix', 'windows'"
+#~ msgstr "완전 가상화 게스트의 OS 유형 예: 'linux', 'unix', 'windows'"
+
+#~ msgid ""
+#~ "The OS variant for fully virtualized guests, e.g. 'fedora6', 'rhel5', "
+#~ "'solaris10', 'win2k', 'vista'"
+#~ msgstr ""
+#~ "완전 가상화 게스트의 OS 변형 예: 'fedora6', 'rhel5', 'solaris10', "
+#~ "'win2k', 'vista'"
+
+#~ msgid "Dry run, don't make any changes"
+#~ msgstr "드라이런, 변경하지 않습니다 "
+
+#~ msgid "Local SDL window"
+#~ msgstr "로컬 SDL 창"
+
+#~ msgid "Creating Storage File"
+#~ msgstr "저장소 파일 생성"
+
+#~ msgid "Allocation of disk storage may take a few minutes to complete."
+#~ msgstr "디스크 저장소의 할당을 완료하려면 몇 분이 소요될 수 있습니다."
+
+#~ msgid "Disk \"%s\" is already in use by another guest!"
+#~ msgstr "\"%s\" 디스크는 다른 게스트가 이미 사용중입니다!"
+
+#~ msgid "Active (RO)"
+#~ msgstr "활성 (RO)"
+
+#~ msgid ""
+#~ "Domain rename failed. Attempting to recover also failed.\n"
+#~ "\n"
+#~ "Original error: %s\n"
+#~ "\n"
+#~ "Recover error: %s"
+#~ msgstr ""
+#~ "도메인 이름 변경에 실패했습니다. 복구를 시도했지만 실패했습니다.\n"
+#~ "\n"
+#~ "기존 오류: %s\n"
+#~ "\n"
+#~ "복구 시 오류: %s"
+
+#~ msgid "Connection is read only."
+#~ msgstr "연결이 읽기 전용임"
+
+#~ msgid "Hypervisor only supports %d virtual CPUs."
+#~ msgstr "hypervisor는 단지 %d 개의 가상 CPU를 지원합니다."
+
+#~ msgid "Only URL or import installs are supported for paravirt."
+#~ msgstr "paravirt에서는 URL이나 가져오기 설치만 지원합니다."
+
+#~ msgid "Invalid System Name"
+#~ msgstr "잘못된 시스템 이름"
+
+#~ msgid "Network Address / prefix:"
+#~ msgstr "네트워크 주소 / 접두사: "
+
+#~ msgid "DHCPv4 Status:"
+#~ msgstr "DHCPv4 상태: "
+
+#~ msgid "IPV6 Network:"
+#~ msgstr "IPV6 네트워크: "
+
+#~ msgid "Not Defined"
+#~ msgstr "정의되지 않음 "
+
+#~ msgid "DHCPv6 Status:"
+#~ msgstr "DHCPv6 상태: "
+
+#~ msgid "Invalid forwarding mode"
+#~ msgstr "잘못된 포워딩 모드"
+
+#~ msgid "Please select where the traffic should be forwarded"
+#~ msgstr "흐름이 포워드될 위치를 선택하십시오"
+
+#~ msgid "Format the source device."
+#~ msgstr "원본 장치 포맷"
+
+#~ msgid "Create a logical volume group from the source device."
+#~ msgstr "소스 장치에서 논리 볼륨 그룹을 생성합니다."
+
+#~ msgid "All selected storage will be deleted."
+#~ msgstr "모든 선택된 스토리지가 삭제됩니다. "
+
+#~ msgid ""
+#~ "Static SELinux security type tells libvirt to always start the guest "
+#~ "process with the specified label. Unless 'relabel' is set, the "
+#~ "administrator is responsible for making sure the images are labeled "
+#~ "correctly on disk."
+#~ msgstr ""
+#~ "고정 SELinux 보안 유형 따라 libvert는 항상 지정된 레이블로 게스트 프로세스"
+#~ "를 시작하게 됩니다. '다시 레이블하기'가 설정되어 있지 않는 경우 관리자는 "
+#~ "디스크에 있는 이미지가 제대로 레이블되었는지 확인해야 합니다. "
+
+#~ msgid ""
+#~ "You are switching graphics type to %(gtype)s, would you like to "
+#~ "%(action)s Spice agent channels?"
+#~ msgstr ""
+#~ "%(gtype)s로 그래픽 유형을 전환하고 있습니다, Spice 에이전트 채널을 "
+#~ "%(action)s하게 하시겠습니까?"
+
+#~ msgid "Cannot rename an active guest"
+#~ msgstr "활성 게스트의 이름을 변경할 수 없습니다"
+
+#~ msgid ""
+#~ "virt-manager will connect to libvirt on the next\n"
+#~ "application start up."
+#~ msgstr ""
+#~ "virt-manager는 다음번 애플리케이션 시작 시 libvirt에\n"
+#~ "연결됩니다."
+
+#~ msgid ""
+#~ "Libvirt was just installed, so the 'libvirtd' service will\n"
+#~ "will need to be started."
+#~ msgstr ""
+#~ "Libvirt가 설치되었으므로 'libvirtd' 서비스를 시작해야\n"
+#~ "합니다."
+
+#~ msgid "Error setting net autostart: %s"
+#~ msgstr "네트워크 autostart 설정 중 오류 발생: %s"
+
+#~ msgid "Error setting pool autostart: %s"
+#~ msgstr "풀 autostart 설정 중 오류 발생: %s"
+
+#~ msgid "_Force Reset"
+#~ msgstr "강제로 재설정 (_F)"
+
+#~ msgid "_Clone..."
+#~ msgstr "복제(_C)..."
+
+#~ msgid "_Migrate..."
+#~ msgstr "이식...(_M)"
+
+#~ msgid "Searching for available hypervisors..."
+#~ msgstr "사용 가능한 hypervisor를 검색중..."
+
+#~ msgid "Checking for installed package '%s'"
+#~ msgstr "설치된 패키지 '%s'을(를) 확인 중"
+
+#~ msgid ""
+#~ "The following packages are not installed:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "These are required to create KVM guests locally.\n"
+#~ "Would you like to install them now?"
+#~ msgstr ""
+#~ "다음 패키지가 설치되지 않았습니다:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "이 패키지들은 KVM 게스트를 로컬에 만들기 위해 필요합니다.\n"
+#~ "지금 설치하겠습니까?"
+
+#~ msgid "Packages required for KVM usage"
+#~ msgstr "KVM 사용을 위해 필요한 패키지들"
+
+#~ msgid ""
+#~ "The following packages are not installed:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "Would you like to install them now?"
+#~ msgstr ""
+#~ "다음과 같은 패키지가 설치되어 있지 않습니다:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "지금 이를 설치하시겠습니까?"
+
+#~ msgid "Recommended package installs"
+#~ msgstr "권장 패키지 설치 "
+
+#~ msgid "_Resume"
+#~ msgstr "재개(_R)"
+
+#~ msgid "'path' or 'func' is required."
+#~ msgstr "'path' 또는 'func'이 필요합니다. "
+
+#~ msgid "Must be root to create Xen guests"
+#~ msgstr "Xen 게스트를 생성하려면 root이어야 함 "
+
+#~ msgid " (Use --prompt or --force to override)"
+#~ msgstr " (덮어쓰기를 하기 위해 --prompt 또는 --force를 사용합니다)"
+
+#~ msgid "Disk %s is already in use by another guest"
+#~ msgstr "디스크 %s는 다른 게스트가 이미 사용하고 있습니다 "
+
+#~ msgid "Error in network device parameters: %s"
+#~ msgstr "네트워크 장치 매개 변수에서 오류 발생: %s"
+
+#~ msgid "Error in graphics device parameters: %s"
+#~ msgstr "그래픽 장치 매개 변수에 오류 발생: %s"
+
+#~ msgid "Error in smartcard device parameters: %s"
+#~ msgstr "스마트 카드 장치 매개 변수에 오류 발생: %s"
+
+#~ msgid "Error in RNG device parameters: %s"
+#~ msgstr "RNG 장치 매개 변수에서 오류 발생: %s"
+
+#~ msgid "Error in controller device parameters: %s"
+#~ msgstr "컨트롤러 장치 매개 변수에 오류 발생: %s"
+
+#~ msgid "Error in redirdev device parameters: %s"
+#~ msgstr "redirdev 장치 매개 변수에 오류 발생: %s"
+
+#~ msgid "Error in memballoon device parameters: %s"
+#~ msgstr "memballoon 장치 매개 변수에 오류 발생: %s"
+
+#~ msgid ""
+#~ "Configure a guest network interface. Ex:\n"
+#~ "--network bridge=mybr0\n"
+#~ "--network network=my_libvirt_virtual_net\n"
+#~ "--network network=mynet,model=virtio,mac=00:11..."
+#~ msgstr ""
+#~ "게스트 네트워크 인터페이스를 설정합니다. 예: \n"
+#~ "--network bridge=mybr0\n"
+#~ "--network network=my_libvirt_virtual_net\n"
+#~ "--network network=mynet,model=virtio,mac=00:11..."
+
+#~ msgid "--boot menu must be 'on' or 'off'"
+#~ msgstr "--boot 메뉴는 'on' 또는 'off'이어야 함 "
+
+#~ msgid "The server option is invalid with spicevmc redirection"
+#~ msgstr "spicevmc 리디렉션과 함께 지정된 서버 옵션이 비활성화되어 있습니다."
+
+#~ msgid "The server option is missing for TCP redirection"
+#~ msgstr "TCP 리디렉션의 서버 옵션이 누락되어 있습니다 "
+
+#~ msgid "Connection must be a 'virConnect' instance."
+#~ msgstr "연결은 'virConnect' 인스턴스이어야 합니다. "
+
+#~ msgid "Disk '%s' does not exist."
+#~ msgstr "디스크 '%s'가 존재하지 않습니다. "
+
+#~ msgid "Invalid 'location' type %s."
+#~ msgstr "잘못된 'location' 유형 %s입니다."
+
+#~ msgid "'conn' must be specified if 'location' is a storage tuple."
+#~ msgstr "'location'이 스토리지 튜플일 경우 'conn'을 지정해야 합니다."
+
+#~ msgid ""
+#~ "Install media location must be an NFS, HTTP or FTP network install "
+#~ "source, or an existing file/device"
+#~ msgstr ""
+#~ "설치 미디어 위치는 NFS, HTTP, FTP 네트워크 설치 소스 또는 기존 파일이나 장"
+#~ "치여야 합니다 "
+
+#~ msgid "Privilege is required for NFS installations"
+#~ msgstr "NFS 설치를 위해 권한이 필요합니다 "
+
+#~ msgid "Unable to connect to hypervisor, aborting installation!"
+#~ msgstr "하이퍼바이저에 연결할 수 없음, 설치를 중지합니다! "
+
+#~ msgid "Memory value must be an integer greater than 0"
+#~ msgstr "메모리 값은 0 보다 큰 정수여야 합니다 "
+
+#~ msgid "Max Memory value must be an integer greater than 0"
+#~ msgstr "최대 메모리 값은 0 보다 큰 정수여야 합니다 "
+
+#~ msgid "Number of vcpus must be a positive integer."
+#~ msgstr "vcpus 수는 양의 정수여야 합니다. "
+
+#~ msgid "Number of vcpus must be no greater than %d for this vm type."
+#~ msgstr "가상 cpu 수는 vm 형식의 %d 보다 커서는 안됩니다."
+
+#~ msgid "OS type must be a string."
+#~ msgstr "OS 유형은 문자열이어야 합니다. "
+
+#~ msgid "OS type '%s' does not exist in our dictionary"
+#~ msgstr "OS 유형 '%s'은 목록에 존재하지 않습니다 "
+
+#~ msgid "OS variant must be a string."
+#~ msgstr "OS 변형은 문자열이어야 합니다. "
+
+#~ msgid ""
+#~ "OS variant '%(var)s' does not exist in our dictionary for OS type '%(ty)s'"
+#~ msgstr "OS 변형 '%(var)s'이 OS 유형 '%(ty)s'의 목록에 존재하지 않습니다 "
+
+#~ msgid "Unknown OS variant '%s'"
+#~ msgstr "알 수 없는 OS 변형 '%s'"
+
+#~ msgid "Whether we should overwrite an existing guest with the same name."
+#~ msgstr ""
+#~ "동일한 이름을 갖는 기존의 게스트를 덮어쓰기할 지에 대한 여부입니다. "
+
+#~ msgid "Must pass a VirtualDevice instance."
+#~ msgstr "VirtualDevice 인스턴스를 전달해야 합니다. "
+
+#~ msgid "Did not find device %s"
+#~ msgstr "장치 %s를 찾을 수 없음 "
+
+#~ msgid "Name and memory must be specified for all guests!"
+#~ msgstr "모든 게스트에 대해 이름 및 메모리를 지정해야 합니다! "
+
+#~ msgid "The UUID you entered is already in use by another guest!"
+#~ msgstr "입력하신 UUID는 다른 게스트에 의해 이미 사용되고 있습니다! "
+
+#~ msgid ""
+#~ "Domain has not existed.  You should be able to find more information in "
+#~ "the logs"
+#~ msgstr ""
+#~ "도메인이 존재하지 않습니다. 로그에서 보다 상세한 정보를 확인하실 수 있습니"
+#~ "다 "
+
+#~ msgid ""
+#~ "Domain has not run yet.  You should be able to find more information in "
+#~ "the logs"
+#~ msgstr ""
+#~ "도메인이 아직 실행되지 않았습니다. 로그에서 보다 상세한 정보를 확인하실 "
+#~ "수 있습니다 "
+
+#~ msgid "'conn' or 'capabilities' must be specified."
+#~ msgstr "'conn' 또는 'capabilities'를 지정해야 합니다. "
+
+#~ msgid "Root element is not 'image'"
+#~ msgstr "Root 요소는 'image'가 아닙니다 "
+
+#~ msgid "A connection must be specified."
+#~ msgstr "연결을 지정해야 합니다. "
+
+#~ msgid "'conn' must be a libvirt connection object."
+#~ msgstr "'conn'은 libvirt 연결 개체여야 합니다. "
+
+#~ msgid "Passed connection is not libvirt interface capable"
+#~ msgstr "전달된 연결은 연결 가능한 libvirt 인터페이스가 아닙니다 "
+
+#~ msgid "Interface name"
+#~ msgstr "인터페이스 이름 "
+
+#~ msgid "Unknown start mode '%s"
+#~ msgstr "알 수 없는 시작 모드 '%s"
+
+#~ msgid "Network protocol configuration"
+#~ msgstr "네트워크 프로토콜 설정 "
+
+#~ msgid "Availability monitoring mode for the bond device"
+#~ msgstr "본딩 장치에 사용할 수 있는 모니터링 모드 "
+
+#~ msgid "Tag and parent interface are required."
+#~ msgstr "태그 및 부모 인터페이스가 필요합니다. "
+
+#~ msgid "Static IP addresses"
+#~ msgstr "고정 IP 주소 "
+
+#~ msgid "IPv6 address prefix"
+#~ msgstr "IPv6 주소 접두사 "
+
+#~ msgid "IP address"
+#~ msgstr "IP 주소 "
+
+#~ msgid "CDROM media must be specified for the live CD installer."
+#~ msgstr "CDROM 미디어는 라이브 CD 설치 프로그램을 지정해야 합니다. "
+
+#~ msgid "Invalid dictionary entry for device '%s %s'"
+#~ msgstr "장치 '%s %s'에 대해 잘못된 사전 항목 "
+
+#~ msgid "Unable to determine kernel RPM path"
+#~ msgstr "커널 RPM 경로를 지정할 수 없음 "
+
+#~ msgid "Unable to determine install-initrd RPM path"
+#~ msgstr "install-initrd RPM 경로를 지정할 수 없음 "
+
+#~ msgid "Building initrd"
+#~ msgstr "initrd 구축 중 "
+
+#~ msgid "Solaris miniroot not found at %s"
+#~ msgstr "Solaris miniroot를 %s에서 찾을 수 없습니다 "
+
+#~ msgid "OpenSolaris PV kernel not found at %s"
+#~ msgstr "%s에서 OpenSolaris PV 커널을 찾을 수 없음 "
+
+#~ msgid "Unknown storage object type: %s"
+#~ msgstr "알 수 없는 스토리지 객체 유형: %s"
+
+#~ msgid "Passed connection is not libvirt storage capable"
+#~ msgstr "전달된 연결은 연결 가능한 libvirt 스토리지가 아닙니다 "
+
+#~ msgid "Permissions must be passed as a dict object"
+#~ msgstr "권한은 dict 객체로 전달해야 합니다 "
+
+#~ msgid "Permissions must contain 'mode', 'owner' and 'group' keys."
+#~ msgstr "권한에는 'mode', 'owner', 'group' 키를 포함해야 합니다."
+
+#~ msgid "'%s' is not an absolute path."
+#~ msgstr "'%s'은 절대 경로가 아닙니다. "
+
+#~ msgid "Unknown storage pool type: %s"
+#~ msgstr "알려지지 않은 저장 풀 유형: %s"
+
+#~ msgid "Host name must be a string"
+#~ msgstr "호스트 이름은 문자열이어야 함 "
+
+#~ msgid "Directory to use for the storage pool."
+#~ msgstr "저장 풀에 사용할 디렉토리입니다. "
+
+#~ msgid "The existing device to mount for the pool."
+#~ msgstr "풀을 마운트하기 위한 기존 장치입니다."
+
+#~ msgid "Location to mount the source device."
+#~ msgstr "소스 장치를 마운트하기 위한 위치입니다. "
+
+#~ msgid "Unknown Filesystem format: %s"
+#~ msgstr "알 수 없는 파일 시스템 포맷: %s"
+
+#~ msgid "Filesystem type of the source device."
+#~ msgstr "소스 장치의 파일 시스템 유형입니다."
+
+#~ msgid "Device path is required"
+#~ msgstr "장치 경로가 필요합니다 "
+
+#~ msgid "Path on the host that is being shared."
+#~ msgstr "공유되고 있는 호스트 상의 경로입니다."
+
+#~ msgid "Name of the host sharing the storage."
+#~ msgstr "스토리지를 공유하는 호스트 이름입니다. "
+
+#~ msgid "Unknown Network Filesystem format: %s"
+#~ msgstr "알 수 없는 네트워크 파일 시스템 포맷: %s"
+
+#~ msgid "Type of network filesystem."
+#~ msgstr "네트워크 파일 시스템 유형입니다."
+
+#~ msgid "Host path is required"
+#~ msgstr "호스트 경로가 필요합니다 "
+
+#~ msgid "Location of the existing LVM volume group."
+#~ msgstr "기존 LVM 볼륨 그룹의 위치입니다. "
+
+#~ msgid "Optional device(s) to build new LVM volume on."
+#~ msgstr "새로운 LVM 볼륨을 구축하기 위한 옵션 장치입니다."
+
+#~ msgid "Path to the existing disk device."
+#~ msgstr "기존 디스크 장치로의 경로입니다. "
+
+#~ msgid "Root location for identifying new storage volumes."
+#~ msgstr "새로운 스토리지 볼륨을 확인하기 위한 Root 위치입니다. "
+
+#~ msgid "Unknown Disk format: %s"
+#~ msgstr "알 수 없는 디스크 포맷: %s"
+
+#~ msgid "Format of the source device's partition table."
+#~ msgstr "소스 장치의 파티션 테이블의 포맷입니다."
+
+#~ msgid "iSCSI volume creation is not supported."
+#~ msgstr "iSCSI 볼륨 생성은 지원되지 않습니다. "
+
+#~ msgid "SCSI volume creation is not supported."
+#~ msgstr "SCSI 볼륨 생성은 지원되지 않습니다. "
+
+#~ msgid "Name of the scsi adapter (ex. host2)"
+#~ msgstr "scsi 어댑터 이름 (예: host2)"
+
+#~ msgid "Adapter name is required"
+#~ msgstr "어댑터 이름이 필요합니다 "
+
+#~ msgid "Multipath volume creation is not supported."
+#~ msgstr "여러 개의 볼륨 생성은 지원되지 않습니다. "
+
+#~ msgid "One of pool or pool_name must be specified."
+#~ msgstr "pool 또는 pool_name 중 하나를 지정해야 합니다."
+
+#~ msgid "'conn' must be specified with 'pool_name'"
+#~ msgstr "'conn'은 'pool_name'으로 지정해야 합니다 "
+
+#~ msgid "Must specify pool_object or pool_name"
+#~ msgstr "pool_object 또는 pool_name을 지정해야 합니다 "
+
+#~ msgid "Couldn't find storage pool '%s': %s"
+#~ msgstr "스토리지 풀 '%s'을 찾을 수 없습니다: %s"
+
+#~ msgid "pool_object must be a virStoragePool"
+#~ msgstr "pool_object는 virStoragePool이어야 합니다 "
+
+#~ msgid "Capacity must be a positive number"
+#~ msgstr "용량은 양의 정수여야 합니다 "
+
+#~ msgid "Allocation must be a non-negative number"
+#~ msgstr "할당은 음수가 아닌 수여야 합니다 "
+
+#~ msgid "'pool' must be a virStoragePool instance."
+#~ msgstr "'pool'은 virStoragePool 인스턴스여야 합니다."
+
+#~ msgid "'%s' is not a valid format."
+#~ msgstr "'%s'은 올바른 포맷이 아닙니다. "
+
+#~ msgid "'conn' must be a virConnect instance."
+#~ msgstr "'conn'은 virConnect 인스턴스여야 합니다. "
+
+#~ msgid "'model' must be a string,  was '%s'."
+#~ msgstr "'model'은 문자열이어야 합니다, 이전에는 '%s'였습니다. "
+
+#~ msgid "Unsupported sound model '%s'"
+#~ msgstr "지원되지 않는 사운드 모델 '%s'"
+
+#~ msgid "Unknown character device type '%s'."
+#~ msgstr "알 수 없는 문자 장치 유형 '%s'."
+
+#~ msgid "Unknown character device type '%s'"
+#~ msgstr "알 수 없는 문자 장치 유형 '%s'"
+
+#~ msgid "Unknown character mode '%s'."
+#~ msgstr "알 수 없는 문자 모드 '%s'"
+
+#~ msgid "Unknown protocol '%s'."
+#~ msgstr "알 수 없는 프로토콜 '%s'"
+
+#~ msgid "Unknown target type '%s'. Must be in: "
+#~ msgstr "알 수 없는 대상 유형 '%s'. 다음중 하나이어야 합니다: "
+
+#~ msgid "Unknown address type '%s'. Must be in: "
+#~ msgstr "알 수 없는 주소 유형 '%s'입니다. 다음중 하나이어야 합니다: "
+
+#~ msgid "A source path is required for character device type '%s'"
+#~ msgstr "소스 경로에는 문자 장치 유형 '%s'이 필요합니다 "
+
+#~ msgid "PTY allocated to the guest."
+#~ msgstr "게스트에 할당된 PTY."
+
+#~ msgid "Host character device to attach to guest."
+#~ msgstr "게스트에 연결하기 위한 호스트 캐릭터 장치입니다."
+
+#~ msgid "Named pipe to use for input and output."
+#~ msgstr "입력 및 출력에 사용할 이름이 지정된 파이프입니다."
+
+#~ msgid "File path to record device output."
+#~ msgstr "장치 출력을 기록하기 위한 파일 경로입니다."
+
+#~ msgid "Unix socket path."
+#~ msgstr "Unix 소켓 경로."
+
+#~ msgid "A host and port must be specified."
+#~ msgstr "호스트 및 포트를 지정해야 합니다."
+
+#~ msgid "Host address to send output to."
+#~ msgstr "출력을 전송하기 위한 호스트 주소입니다."
+
+#~ msgid "Host port to send output to."
+#~ msgstr "출력을 전송하기 위한 호스트 포트입니다."
+
+#~ msgid "A connection port must be specified."
+#~ msgstr "연결 포트를 지정해야 합니다. "
+
+#~ msgid "volName must be a tuple of the form ('poolname', 'volname')"
+#~ msgstr "volName은 튜플 형식이어야 합니다 ('poolname', 'volname')"
+
+#~ msgid "'volName' requires a passed connection."
+#~ msgstr "'volName'에는 유효한 연결이 필요합니다."
+
+#~ msgid "vol_object must be a virStorageVol instance"
+#~ msgstr "vol_object는 virStorageVol 인스턴스여야 합니다 "
+
+#~ msgid "vol_install must be a StorageVolume  instance."
+#~ msgstr "vol_install은 StorageVolume 인스턴스여야 합니다 "
+
+#~ msgid "Error validating clone path: %s"
+#~ msgstr "복제 경로를 확인하는 도중 오류 발생: %s"
+
+#~ msgid "'size' must be a number greater than 0."
+#~ msgstr "'size'는 0 보다 큰 숫자여야 합니다. "
+
+#~ msgid "Unknown storage type '%s'"
+#~ msgstr "알 수 없는 스토리지 유형 '%s'"
+
+#~ msgid "Unknown device type '%s'"
+#~ msgstr "알 수 없는 장치 유형 '%s'"
+
+#~ msgid "Unknown cache mode '%s'"
+#~ msgstr "알 수 없는 캐시 모드 '%s'"
+
+#~ msgid "Unknown io mode '%s'"
+#~ msgstr "알 수 없는 io 모드 '%s'"
+
+#~ msgid "Unknown error policy '%s'"
+#~ msgstr "알 수 없는 오류 정책 '%s'"
+
+#~ msgid "IOTune read bytes per second value must be an integer"
+#~ msgstr "IOTune의 초당 읽기 바이트 값은 정수여야 합니다 "
+
+#~ msgid "IOTune read iops per second value must be an integer"
+#~ msgstr "IOTune의 초당 읽기 iops 값은 정수여야 합니다 "
+
+#~ msgid "IOTune total bytes per second value must be an integer"
+#~ msgstr "IOTune의 초당 총 바이트 값은 정수여야 합니다 "
+
+#~ msgid "IOTune total iops per second value must be an integer"
+#~ msgstr "IOTune의 초당 총 iops 값은 정수여야 합니다 "
+
+#~ msgid "IOTune write bytes per second value must be an integer"
+#~ msgstr "IOTune의 초당 쓰기 바이트 값은 정수여야 합니다 "
+
+#~ msgid "IOTune write iops per second value must be an integer"
+#~ msgstr "IOTune의 초당 쓰기 iops 값은 정수여야 합니다 "
+
+#~ msgid "copying to an existing vdisk is not supported"
+#~ msgstr "기존 가상 디스크에 복사하는 것은 지원되지 않습니다 "
+
+#~ msgid "failed to clone disk"
+#~ msgstr "디스크 복제 실패 "
+
+#~ msgid "Error creating vdisk %s"
+#~ msgstr "vdisk %s 생성 중 오류 발생 "
+
+#~ msgid "'disknode' or self.target must be set!"
+#~ msgstr "'disknode' 또는 self.target을 설정해야 합니다!"
+
+#~ msgid "Cannot determine device bus/type."
+#~ msgstr "장치 버스/유형을 지정할 수 없습니다."
+
+#~ msgid "Unsupported filesystem type '%s'"
+#~ msgstr "지원되지 않는 파일 시스템 유형 '%s'"
+
+#~ msgid "Unsupported filesystem mode '%s'"
+#~ msgstr "지원되지 않는 파일 시스템 모드 '%s'"
+
+#~ msgid "Unsupported filesystem write policy '%s'"
+#~ msgstr "지원되지 않는 파일 시스템 쓰기 정책 '%s' "
+
+#~ msgid "Unsupported filesystem driver '%s'"
+#~ msgstr "지원되지 않는 파일 시스템 드라이버 '%s'"
+
+#~ msgid "A filesystem source and target must be specified"
+#~ msgstr "파일 시스템 소스 및 대상을 지정해야 함 "
+
+#~ msgid "Unknown graphics type '%s'"
+#~ msgstr "알 수 없는 그래픽 유형 '%s'"
+
+#~ msgid "Keymap must be a string"
+#~ msgstr "키맵은 문자열이어야 합니다 "
+
+#~ msgid "Keymap must be less than 16 characters"
+#~ msgstr "키 맵은 16자 미만이어야 합니다 "
+
+#~ msgid "Keymap can only contain alphanumeric, '_', or '-' characters"
+#~ msgstr "키맵은 영숫자와 '_', '-'만 사용하여 지정할 수 있습니다 "
+
+#~ msgid ""
+#~ "VNC port must be a number between 5900 and 65535, or -1 for auto "
+#~ "allocation"
+#~ msgstr ""
+#~ "VNC 포트는 5900에서 65535 사이의 숫자 또는 -1 (자동 할당의 경우)이어야 합"
+#~ "니다."
+
+#~ msgid ""
+#~ "TLS port must be a number between 5900 and 65535, or -1 for auto "
+#~ "allocation"
+#~ msgstr ""
+#~ "TLS 포트는 5900에서 65535 사이의 숫자 또는 -1 (자동 할당의 경우)이어야 합"
+#~ "니다."
+
+#~ msgid "Unknown graphics type"
+#~ msgstr "알 수 없는 그래픽 유형 "
+
+#~ msgid "'name' or 'nodedev' required."
+#~ msgstr "'name' 또는 'nodedev'가 필요합니다."
+
+#~ msgid "Node device type '%s' cannot be attached to  guest."
+#~ msgstr "노드 장치 유형 '%s'은 게스트에 연결할 수 없습니다. "
+
+#~ msgid "'nodedev' must be a USBDevice instance."
+#~ msgstr "'nodedev'는 USBDevice 인스턴스여야 합니다."
+
+#~ msgid "'vendor' and 'product', or 'bus' and  'device' are required."
+#~ msgstr "'vendor' 및 'product', 또는 'bus' 및 'device'가 필요합니다."
+
+#~ msgid "'nodedev' must be a PCIDevice instance."
+#~ msgstr "'nodedev'는 PCIDevice 인스턴스여야 합니다. "
+
+#~ msgid "'domain', 'bus', 'slot', and 'function' must be specified."
+#~ msgstr "'domain', 'bus', 'slot', 'function'을 지정해야 합니다."
+
+#~ msgid "Unknown input type '%s'."
+#~ msgstr "알 수 없는 입력 유형 '%s'."
+
+#~ msgid "Unknown input bus '%s'."
+#~ msgstr "알 수 없는 입력 버스 '%s'."
+
+#~ msgid "Unsupported memballoon model '%s'"
+#~ msgstr "지원되지 않는 memballoon 모델 '%s'"
+
+#~ msgid "A network name was not provided"
+#~ msgstr "네트워크 이름이 제공되어 있지 않습니다 "
+
+#~ msgid "Unknown network type %s"
+#~ msgstr "알 수 없는 네트워크 유형 %s"
+
+#~ msgid "Virtual network '%s' does not exist: %s"
+#~ msgstr "가상 네트워크 '%s'가 존재하지 않음: %s"
+
+#~ msgid "Virtual network '%s' has not been started."
+#~ msgstr "가상 네트워크 '%s'가 시작하지 않았습니다."
+
+#~ msgid "Unsupported bus '%s'"
+#~ msgstr "지원되지 않는 버스 '%s'"
+
+#~ msgid "Unsupported redirection type '%s'"
+#~ msgstr "지원되지 않는 리디렉션 유형 '%s'"
+
+#~ msgid "Invalid host value"
+#~ msgstr "잘못된 호스트 값 "
+
+#~ msgid "Unknown smartcard mode '%s'"
+#~ msgstr "알 수 없는 스마트 카드 모드 '%s'"
+
+#~ msgid "Unknown smartcard type '%s'"
+#~ msgstr "알 수 없는 스마트 카드 유형 '%s'"
+
+#~ msgid "Unsupported watchdog model '%s'"
+#~ msgstr "지원되지 않는 와치독 모델 '%s'"
+
+#~ msgid "'%s' must be True or False"
+#~ msgstr "'%s'는 True 또는 False이어야 합니다 "
+
+#~ msgid "'%s' must be a string, not '%s'."
+#~ msgstr "'%s'는 문자열이어야 합니다, '%s'은 안됩니다."
+
+#~ msgid ""
+#~ "Please indicate how you would like to assign space on the host system for "
+#~ "your virtual storage device."
+#~ msgstr ""
+#~ "가상 저장 장치의 호스트 시스템에 공간을 할당하는 방식을 알려주십시오. "
+
+#~ msgid ""
+#~ "Please indicate how you'd like to connect your new virtual network device "
+#~ "to the host network."
+#~ msgstr ""
+#~ "호스트 네트워크에 가상 네트워크 장치를 어떻게 연결할지를 지정해 주십시오."
+
+#~ msgid ""
+#~ "Please indicate what kind of pointer device to connect to the virtual "
+#~ "machine."
+#~ msgstr "가상 머신에 연결할 포인팅 디바이스의 종류를 결정해 주십시오."
+
+#~ msgid "Please indicate how you would like to view the virtual display."
+#~ msgstr "가상 디스플레이를 보고 싶은지 지정해 주십시오."
+
+#~ msgid ""
+#~ "<small><b>Tip:</b> VNC or Spice server is strongly recommended because it "
+#~ "allows the virtual display to be embedded inside this application. It may "
+#~ "also be used to allow access to the virtual display from a remote system."
+#~ "</small>"
+#~ msgstr ""
+#~ "<small><b>정보:</b> VNC 또는 Spice 서버 사용을 권장합니다. 이는 가상 디스"
+#~ "플레이를 애플리케이션 내부에 통합할 수 있기 때문입니다. 이는 원격 시스템에"
+#~ "서 가상 디스플레이에 액세스를 허용하는데 사용할 수 있습니다.</small>"
+
+#~ msgid "Listen on all public network interfaces "
+#~ msgstr "모든 공용 네트워크 인터페이스를 리스닝함"
+
+#~ msgid "_Other:"
+#~ msgstr "기타(_O):"
+
+#~ msgid ""
+#~ "Please indicate what sound device type to connect to the virtual machine."
+#~ msgstr "가상 머신에 연결할 사운드 장치의 종류를 결정해 주십시오."
+
+#~ msgid ""
+#~ "Please indicate what physical device\n"
+#~ "to connect to the virtual machine."
+#~ msgstr ""
+#~ "가상 머신에 어떤 물리 디바이스를\n"
+#~ "접속할지 지정해 주십시오."
+
+#~ msgid "<b>Character Device</b>"
+#~ msgstr "<b>문자 장치</b>"
+
+#~ msgid "<b>Device Parameters</b>"
+#~ msgstr "<b>장치 매개 변수</b>"
+
+#~ msgid ""
+#~ "Please indicate what video device type\n"
+#~ "to connect to the virtual machine."
+#~ msgstr ""
+#~ "가상 머신에 접속할 비디오 장치의\n"
+#~ "종류를 결정해 주십시오."
+
+#~ msgid ""
+#~ "Please indicate what watchdog device type\n"
+#~ "and default action should be used."
+#~ msgstr ""
+#~ "사용할 와치독 장치의 종류와\n"
+#~ "기본값 행동을 지정해 주십시오."
+
+#~ msgid ""
+#~ "Please indicate which host directory to\n"
+#~ "access in the guest."
+#~ msgstr ""
+#~ "게스트에 액세스하기 위한 호스트 디렉토리를\n"
+#~ "지정하십시오."
+
+#~ msgid ""
+#~ "Please indicate what smartcard device mode to connect to the virtual "
+#~ "machine."
+#~ msgstr "가상 컴퓨터에 연결하기 위한 스마트카드 장치 모드를 지정하십시오."
+
+#~ msgid "Please indicate the parameters of the redirected device."
+#~ msgstr "리디렉션 장치의 매개 변수를 표시하십시오."
+
+#~ msgid "Please indicate the parameters of the RNG device."
+#~ msgstr "RNG 장치의 매개 변수를 표시하십시오. "
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a "
+#~ "new virtual network </span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">새 가상 네트"
+#~ "워크 생성</span>"
+
+#~ msgid ""
+#~ "This assistant will guide you through creating a new virtual network. You "
+#~ "will be asked for some information about the virtual network you'd like "
+#~ "to create, such as:"
+#~ msgstr ""
+#~ "본 도우미는 여러분이 새로운 가상 네트워크를 생성하는 과정을 도울 것입니"
+#~ "다. 여러분이 생성할 가상 네트워크에 대한 여러가지 정보를 질문하게 될 것입"
+#~ "니다. 다음과 같은 예가 있습니다:"
+
+#~ msgid "<small>●</small> A <b>name</b> for the new virtual network interface"
+#~ msgstr "<small>●</small> 새 가상 네트워크 인터페이스의 <b>이름</b> "
+
+#~ msgid ""
+#~ "<small>●</small> An <b>IPv4</b> and/or <b>IPv6</b> network address and "
+#~ "prefix (netmask) to assign to this network interface"
+#~ msgstr ""
+#~ "<small>●</small> 네트워크 인터페이스에 할당하기 위한 <b>IPv4</b> 및 "
+#~ "<b>IPv6</b> 네트워크 주소 및 접두어 (netmask)"
+
+#~ msgid ""
+#~ "<small>●</small> The network address range which the <b>DHCPv4</b> and/or "
+#~ "<b>DHCPv6</b> server will use to assign addresses to virtual machines"
+#~ msgstr ""
+#~ "<small>●</small> 가상 머신에 주소를 할당하기 위해 <b>DHCPv4</b> 및 "
+#~ "<b>DHCPv6</b> 서버가 사용하는 네트워크 주소 범위 "
+
+#~ msgid ""
+#~ "<small>●</small> Whether to <b>forward</b> traffic to a physical network"
+#~ msgstr ""
+#~ "<small>●</small> 실제 네트워크에 트래픽을 <b>포워딩</b>할 지에 대한 여부"
+
+#~ msgid ""
+#~ "<small>●</small> Optionally, to not specify any <b>IPv4</b> or <b>IPv6</"
+#~ "b> network address.  If neither is specified, this will be a valid "
+#~ "definition for an isolated network with <b>no</b> DHCP or DNS support."
+#~ msgstr ""
+#~ "<small>●</small> 옵션으로 <b>IPv4</b> 또는 <b>IPv6</b> 네트워크 주소를 지"
+#~ "정하지 않습니다. 아무것도 지정하지 않으면 DHCP 또는 DNS 지원 <b>없음</b>으"
+#~ "로 고립된 네트워크의 유효한 정의가 됩니다. "
+
+#~ msgid ""
+#~ "<small>●</small> By default, the <b>Domain</b> name will be the same as "
+#~ "the network/interface name."
+#~ msgstr ""
+#~ "<small>●</small> 기본값으로 <b>도메인</b> 이름은 네트워크/인터페이스 이름"
+#~ "과 동일합니다."
+
+#~ msgid ""
+#~ "<small>●</small> Optionally, a <b>static route</b> to a different network "
+#~ "can be specified.  This network traffic is routed to the specified "
+#~ "<b>gateway</b> on the primary network."
+#~ msgstr ""
+#~ "<small>●</small> 옵션으로 다른 네트워크에 <b>고정 라우트</b>를 지정할 수 "
+#~ "있습니다. 이러한 네트워크 트래픽은 기본 네트워크에서 지정된 <b>게이트웨이"
+#~ "</b>로 라우팅됩니다."
+
+#~ msgid "Intro"
+#~ msgstr "소개"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
+#~ "virtual network </span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">가상 네트워"
+#~ "크 이름 붙이기</span>"
+
+#~ msgid "Please choose a name for your virtual network:"
+#~ msgstr "가상 네트워크의 이름을 선택하십시오:"
+
+#~ msgid "The following information may help you with defining your networks."
+#~ msgstr "네트워크를 정의할 때 다음과 같은 정보가 유용합니다."
+
+#~ msgid ""
+#~ "<small>●</small>  A<b> network</b> must be specified as the network "
+#~ "<b>address</b> and the <b>prefix</b> for that network."
+#~ msgstr ""
+#~ "<small>●</small> <b>네트워크</b>는 해당 네트워크의 네트워크 <b>주소</b> "
+#~ "및 <b>접두어</b>로 지정해야 합니다. "
+
+#~ msgid ""
+#~ "<small>●</small>  A network mask cannot be used for the network "
+#~ "specification.  Instead, the prefix must be used."
+#~ msgstr ""
+#~ "<small>●</small> 네트워크 사양에 네트워크 마스크를 사용할 수 없습니다. 대"
+#~ "신 접두사를 사용합니다. "
+
+#~ msgid ""
+#~ "<small>●</small>  A <b>host address</b> such as that used for the dhcp "
+#~ "start, dhcp end, and the static route gateway address should not include "
+#~ "a prefix.  If included, this prefix must be the maximum.  That is, for "
+#~ "IPv4 prefix=32 and for IPv6 prefix=128."
+#~ msgstr ""
+#~ "<small>●</small> dhcp 시작, dhcp 종료, 고정 라우트 게이트웨이 주소에 사용"
+#~ "되는 <b>호스트 주소</b>는 접두사에 포함시키지 않습니다. 포함시킬 경우 접두"
+#~ "사는 최대 값으로 해야 합니다. 즉 IPv4의 경우 prefix=32로 IPv6의 경우 "
+#~ "prefix=128로 합니다."
+
+#~ msgid ""
+#~ "<small>●</small>  If IPv6 is to be routed, some form of routing must be "
+#~ "specified for the interface."
+#~ msgstr ""
+#~ "<small>●</small> IPv6를 라우팅하는 경우 인터페이스에 라우팅 형식을 지정해"
+#~ "야 합니다. "
+
+#~ msgid ""
+#~ "<small>●</small>  For the <b>primary network</b>, the prefix must be "
+#~ "<b>64</b>.  However, for the <b>static route network</b>, the prefix can "
+#~ "be <b>64 or less</b>."
+#~ msgstr ""
+#~ "<small>●</small> <b>기본 네트워크</b>의 경우 접두사는 <b>64</b>이어야 합니"
+#~ "다. <b>고정 라우팅 네트워크</b>의 경우 접두사는 <b>64이하</b>도 될 수 있습"
+#~ "니다. "
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Defining "
+#~ "IPv4 addresses</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">IPv4 주소 지"
+#~ "정</span>"
+
+#~ msgid ""
+#~ "You will need to choose an <b>IPv4</b> address space for the virtual "
+#~ "network."
+#~ msgstr "가상 네트워크에 사용할 <b>IPv4</b> 주소 공간을 선택해야 합니다. "
+
+#~ msgid "Network Type:"
+#~ msgstr "네트워크 유형: "
+
+#~ msgid ""
+#~ "<b>Hint:</b> The network should be chosen from one of the IPv4 private "
+#~ "address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
+#~ msgstr ""
+#~ "<b>힌트:</b> 네트워크는 IPv4의 전용 주소 영역에서 선택해야만 합니다.예 "
+#~ "10.0.0.0/8,  172.16.0.0/12, 또는 192.168.0.0/16"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Defining "
+#~ "IPv6 addresses</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">IPv6 주소 지"
+#~ "정</span>"
+
+#~ msgid ""
+#~ "You will need to choose an <b>IPv6</b> address space for the virtual "
+#~ "network:"
+#~ msgstr "가상 네트워크의 <b>IPv6</b> 주소 공간을 선택해야 합니다: "
+
+#~ msgid ""
+#~ "<b>Note:</b> The network could be chosen from one of the IPv6 private "
+#~ "address ranges. eg FC00::/7.  In any case, the prefix must be <b>64</b>.\n"
+#~ "A typical IPv6 network address will look something like:  fd00:dead:"
+#~ "beef:55::/64"
+#~ msgstr ""
+#~ "<b>알림:</b> 네트워크는 IPv6 비공개 주소 범위 중 하나를 선택할 수 있습니"
+#~ "다. 예: FC00::/7 어떤 경우에도 접두사는 반드시 <b>64</b>이어야 합니다. \n"
+#~ "일반적인 IPv6 네트워크 주소는 다음과 같습니다: fd00:dead:beef:55::/64"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF"
+#~ "\">Miscellaneous Settings</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">기타 설정</"
+#~ "span>"
+
+#~ msgid ""
+#~ "Please indicate whether this virtual network should be connected to the "
+#~ "<b>physical network</b>."
+#~ msgstr ""
+#~ "가상 네트워크를 <b>물리적 네트워크</b>에 연결할 지에 대한 여부를 지정하십"
+#~ "시오. "
+
+#~ msgid "Domain Name:"
+#~ msgstr "도메인 이름: "
+
+#~ msgid ""
+#~ "Optionally, specify the DNS <b>Domain Name</b> to be used for the "
+#~ "networks on this network interface."
+#~ msgstr ""
+#~ "옵션으로 네트워크 인터페이스의 네트워크에 사용되는 <b>도메인 이름</b>을 지"
+#~ "정합니다."
+
+#~ msgid "Misc"
+#~ msgstr "기타 "
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to "
+#~ "create network</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">네트워크 생"
+#~ "성 준비됨</span>"
+
+#~ msgid "<b>IPv4 Network</b>"
+#~ msgstr "<b>IPv4 네트워크</b>"
+
+#~ msgid "<b>Domain</b> Name:"
+#~ msgstr "<b>도메인</b> 이름:"
+
+#~ msgid "192.168.10.128"
+#~ msgstr "192.168.10.128"
+
+#~ msgid "DHCPv4 Start Address:"
+#~ msgstr "DHCPv4 시작 주소: "
+
+#~ msgid "DHCPv4 End  Address:"
+#~ msgstr "DHCPv4 종료 주소: "
+
+#~ msgid "<b>Summary</b>"
+#~ msgstr "<b>요약</b>"
+
+#~ msgid "<b>Network</b> Name:"
+#~ msgstr "<b>네트워크</b> 이름:"
+
+#~ msgid "demo"
+#~ msgstr "데모 "
+
+#~ msgid "Forwarding/Connectivity:"
+#~ msgstr "전송/연결: "
+
+#~ msgid "<b>IPv6 Network</b>"
+#~ msgstr "<b>IPv6 네트워크</b>"
+
+#~ msgid "DHCPv6 End Address:"
+#~ msgstr "DHCPv6 종료 주소:"
+
+#~ msgid "DHCPv6 Start Address:"
+#~ msgstr "DHCPv6 시작 주소:"
+
+#~ msgid "FD00:100::100"
+#~ msgstr "FD00:100::100"
+
+#~ msgid "FD00:100::1FF"
+#~ msgstr "FD00:100::1FF"
+
+#~ msgid "FD00:100::/64"
+#~ msgstr "FD00:100::/64"
+
+#~ msgid "FD00:100::1"
+#~ msgstr "FD00:100::1"
+
+#~ msgid "Static Route <b>to</b> network:"
+#~ msgstr "네트워크 <b>로의</b> 고정 라우트: "
+
+#~ msgid "Complete"
+#~ msgstr "완료"
+
+#~ msgid "<span size='x-large'>Add Storage Pool</span>"
+#~ msgstr "<span size='x-large'>저장소 풀 추가</span>"
+
+#~ msgid ""
+#~ "Specify a storage location to be later split into virtual machine storage."
+#~ msgstr ""
+#~ "나중에 가상 머신 저장소로 나뉘어 들어가게 될 저장소 위치를 지정하십시오."
+
+#~ msgid "Step 1 of 2"
+#~ msgstr "2단계 중 1단계"
+
+#~ msgid "Step 2 of 2"
+#~ msgstr "2단계 중 2단계"
+
+#~ msgid "<span size='x-large'>New Storage Volume</span>"
+#~ msgstr "<span size='x-large'>새로운 저장소 볼륨</span>"
+
+#~ msgid ""
+#~ "Create a storage unit that can be used directly by a virtual machine."
+#~ msgstr "가상 머신에서 직접 사용할 수 있는 저장소 유니트를 생성합니다."
+
+#~ msgid "<span size='large'>Storage Volume Quota</span>"
+#~ msgstr "<span size='large'>저장소 볼륨 쿼터</span>"
+
+#~ msgid ""
+#~ "<span size='small'><i><u>Name</u>: Name of the\n"
+#~ "  volume to create. File\n"
+#~ "  extension may be\n"
+#~ "  appended\n"
+#~ "\n"
+#~ "<u>Format</u>: File/Partition\n"
+#~ "  format of the volume\n"
+#~ "\n"
+#~ "<u>Capacity</u>: Maximum\n"
+#~ "  size of the volume.\n"
+#~ "\n"
+#~ "<u>Allocation</u>: Actual size\n"
+#~ "  allocated to volume\n"
+#~ "  at this time.</i></span>"
+#~ msgstr ""
+#~ "<span size='small'><i><u>이름</u>: 생성할\n"
+#~ "  볼륨의 이름. 파일의\n"
+#~ "  확장자를 뒤에\n"
+#~ "  붙일 수 있습니다.\n"
+#~ "\n"
+#~ "<u>포맷</u>: 볼륨의 \n"
+#~ "  파일/파티션 형식\n"
+#~ "\n"
+#~ "<u>용량</u>: 볼륨의\n"
+#~ "  최대 크기.\n"
+#~ "\n"
+#~ "<u>할당용량</u>: 실제로 현재\n"
+#~ "  해당 볼륨에 \n"
+#~ "  할당된 용량.</i></span>"
+
+#~ msgid "Enter your virtual machine details"
+#~ msgstr "가상 머신 상세정보 입력"
+
+#~ msgid "Error message"
+#~ msgstr "오류 메시지"
+
+#~ msgid "Delete Confirmation"
+#~ msgstr "삭제 확인"
+
+#~ msgid "S_hut Down"
+#~ msgstr "종료(_H)"
+
+#~ msgid "_Clone"
+#~ msgstr "복제(_C)"
+
+#~ msgid "_Delete..."
+#~ msgstr "삭제(_D)..."
+
+#~ msgid ""
+#~ "CPU\n"
+#~ "usage:"
+#~ msgstr ""
+#~ "CPU\n"
+#~ "usage:"
+
+#~ msgid ""
+#~ "Memory\n"
+#~ "usage:"
+#~ msgstr ""
+#~ "메모리\n"
+#~ "사용량:"
+
+#~ msgid ""
+#~ "Disk\n"
+#~ "I/O:"
+#~ msgstr ""
+#~ "디스크\n"
+#~ "I/O:"
+
+#~ msgid ""
+#~ "Network\n"
+#~ "I/O:"
+#~ msgstr ""
+#~ "네트워크\n"
+#~ "I/O:"
+
+#~ msgid ""
+#~ "0 KBytes/s\n"
+#~ "0KBytes/s"
+#~ msgstr ""
+#~ "0 KBytes/s\n"
+#~ "0KBytes/s"
+
+#~ msgid "<b>Performance</b>"
+#~ msgstr "<b>성능</b>"
+
+#~ msgid "Kernel arguments:"
+#~ msgstr "커널 인수:"
+
+#~ msgid "Target device:"
+#~ msgstr "목적 디바이스:"
+
+#~ msgid "CPU usage:"
+#~ msgstr "CPU 사용량:"
+
+#~ msgid "Memory usage:"
+#~ msgstr "메모리 사용량:"
+
+#~ msgid "IPv4 Forwarding:"
+#~ msgstr "IPv4 포워딩: "
+
+#~ msgid "IPv6 Forwarding:"
+#~ msgstr "IPv6 포워딩: "
+
+#~ msgid "DHCP start:"
+#~ msgstr "DHCP 시작:"
+
+#~ msgid "DHCP end:"
+#~ msgstr "DHCP 끝:"
+
+#~ msgid "<network-addr> via <gateway-addr>"
+#~ msgstr "<network-addr> 통해 <gateway-addr>"
+
+#~ msgid "VNC"
+#~ msgstr "VNC"
+
+#~ msgid "Spice"
+#~ msgstr "Spice"

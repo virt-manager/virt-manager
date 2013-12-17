@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-16 15:53-0500\n"
+"POT-Creation-Date: 2013-12-16 19:50-0500\n"
 "PO-Revision-Date: 2013-12-02 20:00+0000\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Assamese (http://www.transifex.com/projects/p/virt-manager/"
@@ -974,11 +974,11 @@ msgstr "এটা ডিভাইচ ধাৰ্য্য কৰিব লা�
 
 #: ../virtManager/addhardware.py:1787
 msgid "Please specify both bind and connect host"
-msgstr ""
+msgstr "অনুগ্ৰহ কৰি দুয়ো বান্ধনী আৰু সংযোগ হস্ট ধাৰ্য্য কৰক"
 
 #: ../virtManager/addhardware.py:1791
 msgid "Please specify both bind and connect service"
-msgstr ""
+msgstr "অনুগ্ৰহ কৰি দুয়ো বান্ধনী আৰু সংযোগ সেৱা ধাৰ্য্য কৰক"
 
 #: ../virtManager/addhardware.py:1795
 msgid "The EGD host must be specified."
@@ -3820,6 +3820,9 @@ msgid ""
 "--rng /dev/random\n"
 "--rng egd,backend_host=localhost,backend_service=708,backend_type=tcp"
 msgstr ""
+"এটা অতিথি RNG ডিভাইচ সংৰূপণ কৰক। উদাহৰণস্বৰূপ:\n"
+"--rng /dev/random\n"
+"--rng egd,backend_host=localhost,backend_service=708,backend_type=tcp"
 
 #: ../virtinst/cli.py:934
 msgid ""
@@ -4057,7 +4060,7 @@ msgstr "লক্ষ্য হস্টত সংযোগ কৰিবলে/�
 
 #: ../virtinst/devicechar.py:229
 msgid "Host address to bind to."
-msgstr ""
+msgstr "বান্ধীবলে হস্ট ঠিকনা।"
 
 #: ../virtinst/devicechar.py:232
 msgid "Host port to bind to."
@@ -5040,7 +5043,7 @@ msgstr "হস্ট:"
 
 #: ../ui/addhardware.ui.h:48 ../ui/details.ui.h:181
 msgid "Bind Host:"
-msgstr ""
+msgstr "বান্ধনী হস্ট:"
 
 #: ../ui/addhardware.ui.h:49 ../ui/details.ui.h:159 ../ui/host.ui.h:17
 msgid "Device:"
@@ -6618,7 +6621,7 @@ msgstr "সেৱা:"
 
 #: ../ui/details.ui.h:182
 msgid "Bind Service:"
-msgstr ""
+msgstr "বান্ধনী সেৱা:"
 
 #: ../ui/details.ui.h:183
 msgid "Rate (period):"
@@ -7139,3 +7142,1290 @@ msgstr "স্থানীয় অৱস্থান ব্ৰাউজ কৰক
 #: ../ui/storagebrowse.ui.h:4
 msgid "Choose _Volume"
 msgstr "ভলিউম বাছক (_V)"
+
+#~ msgid "Error in %(chartype)s device parameters: %(err)s"
+#~ msgstr "%(chartype)s ডিভাইচ প্ৰাচলসমূহত ত্ৰুটি: %(err)s"
+
+#~ msgid "Error in watchdog device parameters: %s"
+#~ msgstr "watchdog ডিভাইচ প্ৰাচলসমূহত ত্ৰুটি: %s"
+
+#~ msgid "Error in filesystem device parameters: %s"
+#~ msgstr "ফাইলচিস্টেম ডিভাইচ প্ৰাচলসমূহত ত্ৰুটি: %s"
+
+#~ msgid ""
+#~ "Domain installation still in progress. Waiting %sfor installation to "
+#~ "complete."
+#~ msgstr ""
+#~ "ডমেইন ইনস্টলেষণ এতিয়াও চলি আছে। ইনস্টলেষণ সম্পূৰ্ণ হবলে %s অপেক্ষা কৰা হৈছে।"
+
+#~ msgid "The OS type being installed, e.g. 'linux', 'unix', 'windows'"
+#~ msgstr "ইনস্টল হৈ থকা OS ৰ ধৰণ, উদাহৰণ 'linux', 'unix', 'windows'"
+
+#~ msgid ""
+#~ "The OS variant being installed guests, e.g. 'fedora6', 'rhel5', "
+#~ "'solaris10', 'win2k'"
+#~ msgstr ""
+#~ "ইনস্টল্ড অতিথি হিচাপে থকা OS ৰ ধৰণ, উদাহৰণ 'fedora6', 'rhel5', "
+#~ "'solaris10','win2k'"
+
+#~ msgid ""
+#~ "Disables APIC for fully virtualized guest (overrides value in os-type/os-"
+#~ "variant db)"
+#~ msgstr ""
+#~ "সম্পূৰ্ণভাৱে ভাৰছুৱেলাইজ্ড অতিথিৰ বাবে APIC অসামৰ্থবান কৰে (মানক os-type/os-"
+#~ "variant db ত অভাৰৰাইড কৰে)"
+
+#~ msgid ""
+#~ "Disables ACPI for fully virtualized guest (overrides value in os-type/os-"
+#~ "variant db)"
+#~ msgstr ""
+#~ "সম্পূৰ্ণভাৱে ভাৰছুৱেলাইজ্ড অতিথিৰ বাবে ACPI অসামৰ্থবান কৰে (মানক os-type/os-"
+#~ "variant db ত অভাৰৰাইড কৰে)"
+
+#~ msgid "Print the generated domain XML rather than define the guest."
+#~ msgstr "অতিথিৰ বিৱৰণ দিয়াৰ পৰিৱৰ্তে সৃজন কৰা ডমেইন XML প্ৰিন্ট কৰক।"
+
+#~ msgid "Time to wait (in minutes)"
+#~ msgstr "অপেক্ষা কৰাৰ সময় (মিনিটত)"
+
+#~ msgid "Forces 'yes' for any applicable prompts, terminates for all others"
+#~ msgstr "যিকোনো প্ৰযোজ্য প্ৰমপ্টৰ বাবে 'yes' বলৱৎ কৰে, অন্য সকলোৰ বাবে অন্ত কৰে"
+
+#~ msgid "Request user input for ambiguous situations or required options."
+#~ msgstr ""
+#~ "দ্বৈৰ্থক পৰিস্থিতিবোৰ অথবা প্ৰয়োজনীয় বিকল্পসমূহৰ বাবে ব্যৱহাৰকাৰী ইনপুট অনুৰোধ কৰক।"
+
+#~ msgid ""
+#~ "Don't check for name collision. Allows replacing an existing guest with "
+#~ "the new clone"
+#~ msgstr ""
+#~ "নামৰ সংঘাতৰ বাবে নীৰিক্ষণ নকৰিব। এটা স্থায়ী অতিথিক নতুন ক্লৌনৰ সৈতে প্ৰতিস্থাপন "
+#~ "কৰাৰ অনুমতি দিয়ে"
+
+#~ msgid ""
+#~ "Do not prompt for input. Answers yes where applicable, terminates for all "
+#~ "other prompts"
+#~ msgstr ""
+#~ "ইনপুটৰ বাবে প্ৰমপ্ট নকৰিব। য'ত প্ৰযোজ্য তাত হয় বুলি উত্তৰ দিয়ে, অন্য সকলো প্ৰমপ্টৰ "
+#~ "বাবে অন্ত কৰে"
+
+#~ msgid "Must be privileged to clone Xen guests"
+#~ msgstr "Xen অতিথিসমূহ ক্লৌন কৰিবলে অব্যাহতিপ্ৰাপ্ত হব লাগিব"
+
+#~ msgid "The image requires %i network interface."
+#~ msgstr "ছবিৰ %i নেটৱাৰ্ক আন্তঃপৃষ্ঠৰ প্ৰয়োজন।"
+
+#~ msgid ""
+#~ "The OS variant being installed, e.g. 'fedora6', 'rhel5', 'solaris10', "
+#~ "'win2k'"
+#~ msgstr ""
+#~ "ইনস্টল্ড হৈ থকা OS ৰ ধৰণ, উদাহৰণ 'fedora6', 'rhel5', 'solaris10','win2k'"
+
+#~ msgid "Full Virtualization specific options"
+#~ msgstr "সম্পূৰ্ণ ভাৰছুৱেলাইজেষণ বিশেষ বিকল্পসমূহ"
+
+#~ msgid "Disables APIC for fully virtualized guest"
+#~ msgstr "সম্পূৰ্ণভাৱে ভাৰছুৱেলাইজ্ড অতিথিৰ বাবে APIC অসামৰ্থবান কৰে"
+
+#~ msgid "Disables ACPI for fully virtualized guest"
+#~ msgstr "সম্পূৰ্ণভাৱে ভাৰছুৱেলাইজ্ড অতিথিৰ বাবে ACPI অসামৰ্থবান কৰে"
+
+#~ msgid "Print the libvirt XML, but do not start the domain"
+#~ msgstr "libvirt XML প্ৰিন্ট কৰক, কিন্তু ডমেইন আৰম্ভ নকৰিব"
+
+#~ msgid "Overwrite, or destroy, an existing image with the same name"
+#~ msgstr "একেটাৰ নামৰ সৈতে এটা স্থায়ী ছবিক পুনৰ লিখক, অথবা ধ্বংস কৰক"
+
+#~ msgid ""
+#~ "The OS type for fully virtualized guests, e.g. 'linux', 'unix', 'windows'"
+#~ msgstr ""
+#~ "সম্পূৰ্ণভাৱে ভাৰছুৱেলাইজ্ড অতিথিসকলৰ বাবে OS ধৰণ, উদাহৰণস্বৰূপ 'linux', 'unix', "
+#~ "'windows' "
+
+#~ msgid ""
+#~ "The OS variant for fully virtualized guests, e.g. 'fedora6', 'rhel5', "
+#~ "'solaris10', 'win2k', 'vista'"
+#~ msgstr ""
+#~ "সম্পূৰ্ণভাৱে অতিথিসমূহৰ বাবে OS ৰ ধৰণ, উদাহৰণ 'fedora6', 'rhel5', "
+#~ "'solaris10','win2k''"
+
+#~ msgid "Dry run, don't make any changes"
+#~ msgstr "ড্ৰাই ৰান, কোনো পৰিবৰ্তন নকৰিব"
+
+#~ msgid "Local SDL window"
+#~ msgstr "স্থানীয় SDL উইন্ডো"
+
+#~ msgid "Creating Storage File"
+#~ msgstr "সংৰক্ষণৰ ফাইল নিৰ্মাণ চিস্টেম"
+
+#~ msgid "Allocation of disk storage may take a few minutes to complete."
+#~ msgstr "ডিস্কত সংৰক্ষণ বিতৰণ কৰোঁতে কিছু সময়ৰ প্ৰয়োজন হ'ব। "
+
+#~ msgid "Disk \"%s\" is already in use by another guest!"
+#~ msgstr "\"%s\" ডিষ্ক ইতিমধ্যে অন্য অতিথিৰ দ্বাৰা ব্যৱহৃত!"
+
+#~ msgid "Active (RO)"
+#~ msgstr "সক্ৰিয় (RO)"
+
+#~ msgid ""
+#~ "Domain rename failed. Attempting to recover also failed.\n"
+#~ "\n"
+#~ "Original error: %s\n"
+#~ "\n"
+#~ "Recover error: %s"
+#~ msgstr ""
+#~ "ডমেইন পুনৰনামাকৰণ ব্যৰ্থ হল। উদ্ধাৰ কৰাৰ চেষ্টাও ব্যৰ্থ হল।\n"
+#~ "\n"
+#~ "প্ৰকৃত ত্ৰুটি: %s\n"
+#~ "\n"
+#~ "উদ্ধাৰ ত্ৰুটি: %s"
+
+#~ msgid "Connection is read only."
+#~ msgstr "সংযোগক অকল পঢ়িব পাৰি।"
+
+#~ msgid "Hypervisor only supports %d virtual CPUs."
+#~ msgstr "হাইপাৰভাইছৰে অকল %d ভাৰ্চুৱেল CPU ৰহে সমৰ্থন কৰি।"
+
+#~ msgid "Only URL or import installs are supported for paravirt."
+#~ msgstr "paravirt ৰ বাবে কেৱল URL অথবা ইমপোৰ্ট ইনস্টলসমূহ সমৰ্থিত।"
+
+#~ msgid "Invalid System Name"
+#~ msgstr "চিস্টেমৰ নাম বৈধ নহয়"
+
+#~ msgid "Network Address / prefix:"
+#~ msgstr "নেটৱাৰ্ক ঠিকনা / উপসৰ্গ:"
+
+#~ msgid "DHCPv4 Status:"
+#~ msgstr "DHCPv4 অৱস্থা:"
+
+#~ msgid "IPV6 Network:"
+#~ msgstr "IPV6 নেটৱাৰ্ক:"
+
+#~ msgid "Not Defined"
+#~ msgstr "বিৱৰিত নহয়"
+
+#~ msgid "DHCPv6 Status:"
+#~ msgstr "DHCPv6 অৱস্থা:"
+
+#~ msgid "Invalid forwarding mode"
+#~ msgstr "ফৰৱাৰ্ডিং অৱস্থা অবৈধ"
+
+#~ msgid "Please select where the traffic should be forwarded"
+#~ msgstr "অনুগ্ৰহ কৰি পৰিবহন অনুবৰ্তনৰ স্থান বাছক"
+
+#~ msgid "Format the source device."
+#~ msgstr "উৎসৰ ডিভাইচ ফৰ্মেট কৰক।"
+
+#~ msgid "Create a logical volume group from the source device."
+#~ msgstr "উৎস ডিভাইচৰ পৰা এটা লজিকেল ভলিউম গ্ৰুপ নিৰ্মাণ কৰক।"
+
+#~ msgid "All selected storage will be deleted."
+#~ msgstr "সকলো নিৰ্বাচিত সংৰক্ষণ মচি পেলোৱা হব।"
+
+#~ msgid ""
+#~ "Static SELinux security type tells libvirt to always start the guest "
+#~ "process with the specified label. Unless 'relabel' is set, the "
+#~ "administrator is responsible for making sure the images are labeled "
+#~ "correctly on disk."
+#~ msgstr ""
+#~ "স্থিৰ SELinux সুৰক্ষা ধৰণে libvirt ক অতিথি প্ৰক্ৰিয়া সদায় ধাৰ্য্য লেবেলৰ সৈতে "
+#~ "আৰম্ভ কৰিবলে কয়। যদিহে 'relabel' সংহতি কৰা নাথাকে, ছবিবোৰ ডিস্কত সঠিকভাৱে "
+#~ "লেবেল কৰা হৈছে সুনিশ্চিত কৰাটো প্ৰশাসকৰ দায়িত্ব।"
+
+#~ msgid ""
+#~ "You are switching graphics type to %(gtype)s, would you like to "
+#~ "%(action)s Spice agent channels?"
+#~ msgstr ""
+#~ "আপুনি গ্ৰাফিক্স ধৰণক %(gtype)s লে সলনি কৰি আছে, আপুনি Spice সহায়ক চেনেলসমূহ "
+#~ "%(action)s কৰিব বিচাৰে নেকি?"
+
+#~ msgid "Cannot rename an active guest"
+#~ msgstr "এটা সক্ৰিয় অতিথিক পুনৰনামাকৰণ কৰিব নোৱাৰি"
+
+#~ msgid ""
+#~ "virt-manager will connect to libvirt on the next\n"
+#~ "application start up."
+#~ msgstr ""
+#~ "virt-manager এ libvirt ৰ সৈতে পৰৱৰ্তী এপ্লিকেচন আৰম্ভণিত\n"
+#~ "সংযোগ কৰিব।"
+
+#~ msgid ""
+#~ "Libvirt was just installed, so the 'libvirtd' service will\n"
+#~ "will need to be started."
+#~ msgstr ""
+#~ "Libvirt এইমাত্ৰ ইনস্টল কৰা হৈছে, সেয়েহে 'libvirtd' সেৱা আৰম্ভ\n"
+#~ "কৰিব লাগিব।"
+
+#~ msgid "Error setting net autostart: %s"
+#~ msgstr "স্বয়ংক্ৰিয় নেটৱাৰ্ক প্ৰাৰম্ভৰ চিস্টেম নিৰ্ধাৰণ কৰোঁতে সমস্যা: %s"
+
+#~ msgid "Error setting pool autostart: %s"
+#~ msgstr "স্বয়ংক্ৰিয় পুল প্ৰাৰম্ভৰ চিস্টেম নিৰ্ধাৰণ কৰোঁতে ত্ৰুটি: %s"
+
+#~ msgid "_Force Reset"
+#~ msgstr "বলৱৎভাৱে পুনৰসংহতি কৰক (_F)"
+
+#~ msgid "_Clone..."
+#~ msgstr "ক্লৌন কৰক (_C)..."
+
+#~ msgid "_Migrate..."
+#~ msgstr "প্ৰব্ৰজন... (_M)"
+
+#~ msgid "Searching for available hypervisors..."
+#~ msgstr "উপলব্ধ হাইপাৰভাইছৰসমূহৰ বাবে সন্ধান কৰা হৈ আছে..."
+
+#~ msgid "Checking for installed package '%s'"
+#~ msgstr "ইনস্টল্ড পেকেইজৰ বাবে নীৰিক্ষণ কৰা হৈছে '%s'"
+
+#~ msgid ""
+#~ "The following packages are not installed:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "These are required to create KVM guests locally.\n"
+#~ "Would you like to install them now?"
+#~ msgstr ""
+#~ "নিম্নলিখিত পেকেইজসমূহ ইনস্টল নাই:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "এই পেকেইজসমূহ KVM অতিথিসমূহক স্থানীয়ভাৱে সৃষ্টি কৰাৰ বাবে প্ৰয়োজন হয়।\n"
+#~ "আপুনি ইহতক এতিয়া ইনস্টল কৰিব বিচাৰে নে?"
+
+#~ msgid "Packages required for KVM usage"
+#~ msgstr "KVM ব্যৱহাৰৰ বাবে প্ৰয়োজনীয় পেকেইজসমূহ"
+
+#~ msgid ""
+#~ "The following packages are not installed:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "Would you like to install them now?"
+#~ msgstr ""
+#~ "নিম্নলিখিত পেকেইজসমূহ ইনস্টল নাই:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "আপুনি সিহতক এতিয়া ইনস্টল কৰিব বিচাৰে নে?"
+
+#~ msgid "Recommended package installs"
+#~ msgstr "উপদেশিত পেকেইজ ইনস্টলসমূহ"
+
+#~ msgid "_Resume"
+#~ msgstr "পুনৰাৰম্ভ (_R)"
+
+#~ msgid "'path' or 'func' is required."
+#~ msgstr "'path' অথবা 'func' ৰ প্ৰয়োজন।"
+
+#~ msgid "Must be root to create Xen guests"
+#~ msgstr "Xen অতিথিসমূহ সৃষ্টি কৰিবলে ৰুট হব লাগিব"
+
+#~ msgid " (Use --prompt or --force to override)"
+#~ msgstr " (অভাৰৰাইড কৰিবলে --prompt অথবা --force ব্যৱহাৰ কৰক)"
+
+#~ msgid "Disk %s is already in use by another guest"
+#~ msgstr "ডিস্ক %s ইতিমধ্যে অন্য অতিথি দ্বাৰা ব্যৱহৃত"
+
+#~ msgid "Error in network device parameters: %s"
+#~ msgstr "নেটৱাৰ্ক ডিভাইচ প্ৰাচলসমূহত ত্ৰুটি: %s"
+
+#~ msgid "Error in graphics device parameters: %s"
+#~ msgstr "গ্ৰাফিক্স ডিভাইচ প্ৰাচলসমূহত ত্ৰুটি: %s"
+
+#~ msgid "Error in smartcard device parameters: %s"
+#~ msgstr "স্মাৰ্টকাৰ্ড ডিভাইচ প্ৰাচলসমূহত ত্ৰুটি: %s"
+
+#~ msgid "Error in RNG device parameters: %s"
+#~ msgstr "RNG ডিভাইচ প্ৰাচলসমূহত ত্ৰুটি: %s"
+
+#~ msgid "Error in controller device parameters: %s"
+#~ msgstr "নিয়ন্ত্ৰক ডিভাইচ প্ৰাচলসমূহত ত্ৰুটি: %s"
+
+#~ msgid "Error in redirdev device parameters: %s"
+#~ msgstr "redirdev ডিভাইচ প্ৰাচলসমূহত ত্ৰুটি: %s"
+
+#~ msgid "Error in memballoon device parameters: %s"
+#~ msgstr "memballoon ডিভাইচ প্ৰাচলসমূহত ত্ৰুটি: %s"
+
+#~ msgid ""
+#~ "Configure a guest network interface. Ex:\n"
+#~ "--network bridge=mybr0\n"
+#~ "--network network=my_libvirt_virtual_net\n"
+#~ "--network network=mynet,model=virtio,mac=00:11..."
+#~ msgstr ""
+#~ "এটা অতিথি নেটৱাৰ্ক আন্তঃপৃষ্ঠ সংৰূপণ কৰক। উদাহৰণস্বৰূপ:\n"
+#~ "--network bridge=mybr0\n"
+#~ "--network network=my_libvirt_virtual_net\n"
+#~ "--network network=mynet,model=virtio,mac=00:11..."
+
+#~ msgid "--boot menu must be 'on' or 'off'"
+#~ msgstr "--boot মেনু 'on' অথবা 'off' হব লাগিব"
+
+#~ msgid "The server option is invalid with spicevmc redirection"
+#~ msgstr "চাৰ্ভাৰ বিকল্প spicevmc পুনৰনিৰ্দেশৰ সৈতে অবৈধ"
+
+#~ msgid "The server option is missing for TCP redirection"
+#~ msgstr "চাৰ্ভাৰ বিকল্প TCP পুনৰনিৰ্দেশৰ বাবে সন্ধানহিন"
+
+#~ msgid "Connection must be a 'virConnect' instance."
+#~ msgstr "সংযোগ এটা 'virConnect' উদাহৰণ হব লাগিব।"
+
+#~ msgid "Disk '%s' does not exist."
+#~ msgstr "ডিস্ক '%s' অস্তিত্ববান নহয়।"
+
+#~ msgid "Invalid 'location' type %s."
+#~ msgstr "অবৈধ 'location' ধৰণ %s।"
+
+#~ msgid "'conn' must be specified if 'location' is a storage tuple."
+#~ msgstr "'conn' ধাৰ্য্য কৰিব লাগিব যদি 'location' এটা সংৰক্ষণ টাপুল হয়।"
+
+#~ msgid ""
+#~ "Install media location must be an NFS, HTTP or FTP network install "
+#~ "source, or an existing file/device"
+#~ msgstr ""
+#~ "ইনস্টল মাধ্যম অৱস্থান এটা NFS, HTTP অথবা FTP নেটৱাৰ্ক ইনস্টল উৎস, অথবা এটা "
+#~ "স্থায়ী ফাইল/ডিভাইচ হব লাগিব"
+
+#~ msgid "Privilege is required for NFS installations"
+#~ msgstr "NFS ইনস্টলেষণৰ বাবে অব্যাহতিপ্ৰাপ্ত হব লাগিব"
+
+#~ msgid "Unable to connect to hypervisor, aborting installation!"
+#~ msgstr "হাইপাৰভাইছৰলে সংযোগ কৰিবলে অক্ষম, ইনস্টলেষণ বাদ দিয়া হৈছে!"
+
+#~ msgid "Memory value must be an integer greater than 0"
+#~ msgstr "মেমৰি মান ০ কে অধিক এটা পূৰ্ণসংখ্যা হব লাগিব"
+
+#~ msgid "Max Memory value must be an integer greater than 0"
+#~ msgstr "সৰ্বাধিক মেমৰি মান ০ কে অধিক এটা পূৰ্ণসংখ্যা হব লাগিব"
+
+#~ msgid "Number of vcpus must be a positive integer."
+#~ msgstr "vcpus ৰ সংখ্যা এটা ধনাত্মক পূৰ্ণসংখ্যা হব লাগিব।"
+
+#~ msgid "Number of vcpus must be no greater than %d for this vm type."
+#~ msgstr "vcpus ৰ সংখ্যা এই vm ধৰণৰ বাবে %d কে অধিক হব নোৱাৰিব।"
+
+#~ msgid "OS type must be a string."
+#~ msgstr "OS ধৰণ এটা স্ট্ৰিং হব লাগিব।"
+
+#~ msgid "OS type '%s' does not exist in our dictionary"
+#~ msgstr "OS ধৰণ '%s' আমাৰ শব্দকোষত অস্তিত্ববান নহয়"
+
+#~ msgid "OS variant must be a string."
+#~ msgstr "OS অপৰ এটা স্ট্ৰিং হব লাগিব।"
+
+#~ msgid ""
+#~ "OS variant '%(var)s' does not exist in our dictionary for OS type '%(ty)s'"
+#~ msgstr ""
+#~ "OS অপৰ '%(var)s',  OS type '%(ty)s' ৰ বাবে আমাৰ শব্দকোষত অস্তিত্ববান নহয়"
+
+#~ msgid "Unknown OS variant '%s'"
+#~ msgstr "অজ্ঞাত OS অপৰ '%s'"
+
+#~ msgid "Whether we should overwrite an existing guest with the same name."
+#~ msgstr "আমি একে নাম থকা এটা স্থায়ী অতিথিক পুনৰ লিখিব লাগে নে।"
+
+#~ msgid "Must pass a VirtualDevice instance."
+#~ msgstr "এটা VirtualDevice উদাহৰণ প্ৰেৰণ কৰিব লাগিব।"
+
+#~ msgid "Did not find device %s"
+#~ msgstr "ডিভাইচ %s বিচাৰি পোৱা নগল"
+
+#~ msgid "Name and memory must be specified for all guests!"
+#~ msgstr "নাম আৰু মেমৰি সকলো অতিথিৰ বাবে ধাৰ্য্য কৰিব লাগিব!"
+
+#~ msgid "The UUID you entered is already in use by another guest!"
+#~ msgstr "আপুনি সুমুৱা UUID ইতিমধ্যে অন্য অতিথি দ্বাৰা ব্যৱহৃত!"
+
+#~ msgid ""
+#~ "Domain has not existed.  You should be able to find more information in "
+#~ "the logs"
+#~ msgstr "ডমেইন অস্তিত্ববান নহয়। আপুনি অতিৰিক্ত তথ্য লগসমূহত পাব"
+
+#~ msgid ""
+#~ "Domain has not run yet.  You should be able to find more information in "
+#~ "the logs"
+#~ msgstr "ডমেইন এতিয়াও চলা নাই। আপুনি অতিৰিক্ত তথ্য লগসমূহত পাব"
+
+#~ msgid "'conn' or 'capabilities' must be specified."
+#~ msgstr "'conn' অথবা 'capabilities' ধাৰ্য্য কৰিব লাগিব।"
+
+#~ msgid "Root element is not 'image'"
+#~ msgstr "ৰুট উপাদান 'image' নহয়"
+
+#~ msgid "A connection must be specified."
+#~ msgstr "এটা সংযোগ ধাৰ্য্য কৰিব লাগিব।"
+
+#~ msgid "'conn' must be a libvirt connection object."
+#~ msgstr "'conn' এটা libvirt সংযোগ অবজেক্ট হব লাগিব।"
+
+#~ msgid "Passed connection is not libvirt interface capable"
+#~ msgstr "প্ৰেৰণ কৰা সংযোগ libvirt আন্তঃপৃষ্ঠ ক্ষমতাসম্পন্ন নহয়"
+
+#~ msgid "Interface name"
+#~ msgstr "আন্তঃপৃষ্ঠৰ নাম"
+
+#~ msgid "Unknown start mode '%s"
+#~ msgstr "অজ্ঞাত আৰম্ভণি অৱস্থা '%s"
+
+#~ msgid "Network protocol configuration"
+#~ msgstr "নেটৱাৰ্ক প্ৰটোকল সংৰূপ"
+
+#~ msgid "Availability monitoring mode for the bond device"
+#~ msgstr "বান্ধনী ডিভাইচত উপলব্ধতা পৰ্যবেক্ষণ অৱস্থা"
+
+#~ msgid "Tag and parent interface are required."
+#~ msgstr "টেগ আৰু উপধায়ক আন্তঃপৃষ্ঠৰ প্ৰয়োজন।"
+
+#~ msgid "Static IP addresses"
+#~ msgstr "স্থিৰ IP ঠিকনাসমূহ"
+
+#~ msgid "IPv6 address prefix"
+#~ msgstr "IPv6 ঠিকনা উপসৰ্গ"
+
+#~ msgid "IP address"
+#~ msgstr "IP ঠিকনা"
+
+#~ msgid "CDROM media must be specified for the live CD installer."
+#~ msgstr "জীৱন্ত CD ইনস্টলাৰৰ বাবে CDROM মাধ্যম ধাৰ্য্য কৰিব লাগিব।"
+
+#~ msgid "Invalid dictionary entry for device '%s %s'"
+#~ msgstr "ডিভাইচ '%s %s' ৰ বাবে অবৈধ শব্দকোষ প্ৰৱিষ্টি"
+
+#~ msgid "Unable to determine kernel RPM path"
+#~ msgstr "কাৰনেল RPM পথ নিৰ্ধাৰণ কৰিবলে অক্ষম"
+
+#~ msgid "Unable to determine install-initrd RPM path"
+#~ msgstr "install-initrd RPM পথ নিৰ্ধাৰণ কৰিবলে অক্ষম"
+
+#~ msgid "Building initrd"
+#~ msgstr "initrd নিৰ্মাণ কৰা হৈছে"
+
+#~ msgid "Solaris miniroot not found at %s"
+#~ msgstr "%s ত Solaris miniroot পোৱা নগল"
+
+#~ msgid "OpenSolaris PV kernel not found at %s"
+#~ msgstr "%s ত OpenSolaris PV কাৰনেল পোৱা নগল"
+
+#~ msgid "Unknown storage object type: %s"
+#~ msgstr "অজ্ঞাত সংৰক্ষণ অবজেক্ট ধৰণ: %s"
+
+#~ msgid "Passed connection is not libvirt storage capable"
+#~ msgstr "প্ৰেৰণ কৰা সংযোগ libvirt সংৰক্ষণ ক্ষমতাসম্পন্ন নহয়"
+
+#~ msgid "Permissions must be passed as a dict object"
+#~ msgstr "অনুমতিসমূহ এটা dict অবজেক্ট হিচাপে প্ৰেৰণ কৰিব লাগিব"
+
+#~ msgid "Permissions must contain 'mode', 'owner' and 'group' keys."
+#~ msgstr "অনুমতিসমূহে 'mode', 'owner' আৰু 'group' কি'সমূহ অন্তৰ্ভুক্ত কৰিব লাগিব।"
+
+#~ msgid "'%s' is not an absolute path."
+#~ msgstr "'%s' এটা প্ৰকৃত পথ নহয়।"
+
+#~ msgid "Unknown storage pool type: %s"
+#~ msgstr "অজ্ঞাত সংৰক্ষণ পুল ধৰণ: %s"
+
+#~ msgid "Host name must be a string"
+#~ msgstr "হস্ট নাম এটা স্ট্ৰিং হব লাগিব"
+
+#~ msgid "Directory to use for the storage pool."
+#~ msgstr "সংৰক্ষণ পুলৰ বাবে ব্যৱহাৰ কৰিবলে ডাইৰেকটৰি।"
+
+#~ msgid "The existing device to mount for the pool."
+#~ msgstr "পুলৰ বাবে মাউন্ট কৰিবলে স্থায়ী ডিভাইচ।"
+
+#~ msgid "Location to mount the source device."
+#~ msgstr "উৎস ডিভাইচ মাউন্ট কৰিবলে অৱস্থান।"
+
+#~ msgid "Unknown Filesystem format: %s"
+#~ msgstr "অজ্ঞাত ফাইলচিস্টেম বিন্যাস: %s"
+
+#~ msgid "Filesystem type of the source device."
+#~ msgstr "উৎস ডিভাইচৰ ফাইলচিস্টেম ধৰণ।"
+
+#~ msgid "Device path is required"
+#~ msgstr "ডিভাইচ পথৰ প্ৰয়োজন"
+
+#~ msgid "Path on the host that is being shared."
+#~ msgstr "অংশীদাৰী কৰা হস্টৰ পথ।"
+
+#~ msgid "Name of the host sharing the storage."
+#~ msgstr "সংৰক্ষণ অংশীদাৰী কৰা হস্টৰ নাম।"
+
+#~ msgid "Unknown Network Filesystem format: %s"
+#~ msgstr "অজ্ঞাত নেটৱাৰ্ক ফাইলচিস্টেম বিন্যাস: %s"
+
+#~ msgid "Type of network filesystem."
+#~ msgstr "নেটৱাৰ্ক ফাইলচিস্টেমৰ ধৰণ।"
+
+#~ msgid "Host path is required"
+#~ msgstr "হস্ট পথৰ প্ৰয়োজন"
+
+#~ msgid "Location of the existing LVM volume group."
+#~ msgstr "স্থায়ী LVM আয়তন দলৰ অৱস্থান।"
+
+#~ msgid "Optional device(s) to build new LVM volume on."
+#~ msgstr "নতুন LVM আয়তন নিৰ্মাণ কৰিবলে বিকল্প ডিভাইচ(সমূহ)।"
+
+#~ msgid "Path to the existing disk device."
+#~ msgstr "স্থায়ী ডিস্ক ডিভাইচলে পথ।"
+
+#~ msgid "Root location for identifying new storage volumes."
+#~ msgstr "নতুন সংৰক্ষণ আয়তনসমূহ চিনাক্ত কৰাৰ বাবে ৰুট অৱস্থান।"
+
+#~ msgid "Unknown Disk format: %s"
+#~ msgstr "অজ্ঞাত ডিস্ক বিন্যাস: %s"
+
+#~ msgid "Format of the source device's partition table."
+#~ msgstr "উৎস ডিভাইচৰ বিভাজন টেবুলৰ বিন্যাস।"
+
+#~ msgid "iSCSI volume creation is not supported."
+#~ msgstr "iSCSI আয়তন সৃষ্টিকৰণ সমৰ্থিত নহয়।"
+
+#~ msgid "SCSI volume creation is not supported."
+#~ msgstr "SCSI আয়তন সৃষ্টি সমৰ্থিত নহয়।"
+
+#~ msgid "Name of the scsi adapter (ex. host2)"
+#~ msgstr "scsi এডাপ্টাৰৰ নাম (উদাহৰণস্বৰূপ host2)"
+
+#~ msgid "Adapter name is required"
+#~ msgstr "এডাপ্টাৰ নামৰ প্ৰয়োজন"
+
+#~ msgid "Multipath volume creation is not supported."
+#~ msgstr "বহুপথ আয়তন সৃষ্টি সমৰ্থিত নহয়।"
+
+#~ msgid "One of pool or pool_name must be specified."
+#~ msgstr "পুল অথবা pool_name ধাৰ্য্য কৰিব লাগিব।"
+
+#~ msgid "'conn' must be specified with 'pool_name'"
+#~ msgstr "'conn' ক 'pool_name' ৰ সৈতে ধাৰ্য্য কৰিব লাগিব"
+
+#~ msgid "Must specify pool_object or pool_name"
+#~ msgstr "pool_object অথবা pool_name ধাৰ্য্য কৰিব লাগিব"
+
+#~ msgid "Couldn't find storage pool '%s': %s"
+#~ msgstr "সংৰক্ষণ পুল '%s' বিচাৰি পোৱা নগল: %s"
+
+#~ msgid "pool_object must be a virStoragePool"
+#~ msgstr "pool_object এটা virStoragePool হব লাগিব"
+
+#~ msgid "Capacity must be a positive number"
+#~ msgstr "ক্ষমতা এটা ধনাত্মক সংখ্যা হব লাগিব"
+
+#~ msgid "Allocation must be a non-negative number"
+#~ msgstr "আবন্টন এটা অ-ঋণাত্মক সংখ্যা হব লাগিব"
+
+#~ msgid "'pool' must be a virStoragePool instance."
+#~ msgstr "'pool' এটা virStoragePool উদাহৰণ হব লাগিব।"
+
+#~ msgid "'%s' is not a valid format."
+#~ msgstr "'%s' এটা বৈধ বিন্যাস নহয়।"
+
+#~ msgid "'conn' must be a virConnect instance."
+#~ msgstr "'conn' এটা virConnect উদাহৰণ হব লাগিব।"
+
+#~ msgid "'model' must be a string,  was '%s'."
+#~ msgstr "'model' এটা স্ট্ৰিং হব লাগিব,  আছিল '%s'।"
+
+#~ msgid "Unsupported sound model '%s'"
+#~ msgstr "অসমৰ্থিত শব্দ আৰ্হি '%s'"
+
+#~ msgid "Unknown character device type '%s'."
+#~ msgstr "অজ্ঞাত আখৰ ডিভাইচ ধৰণ '%s'।"
+
+#~ msgid "Unknown character device type '%s'"
+#~ msgstr "অজ্ঞাত আখৰ ডিভাইচ ধৰণ '%s'"
+
+#~ msgid "Unknown character mode '%s'."
+#~ msgstr "অজ্ঞাত আখৰ অৱস্থা '%s'।"
+
+#~ msgid "Unknown protocol '%s'."
+#~ msgstr "অজ্ঞাত প্ৰটোকল '%s'।"
+
+#~ msgid "Unknown target type '%s'. Must be in: "
+#~ msgstr "অজ্ঞাত লক্ষ্য ধৰণ '%s'। হব লাগিব:"
+
+#~ msgid "Unknown address type '%s'. Must be in: "
+#~ msgstr "অজ্ঞাত ঠিকনা ধৰণ '%s'। হব লাগিব:"
+
+#~ msgid "A source path is required for character device type '%s'"
+#~ msgstr "আখৰ ডিভাইচ ধৰণ '%s' ৰ বাবে এটা উৎস পথৰ প্ৰয়োজন"
+
+#~ msgid "PTY allocated to the guest."
+#~ msgstr "অতিথিলে আবন্টিত PTY।"
+
+#~ msgid "Host character device to attach to guest."
+#~ msgstr "অতিথিৰ সৈতে সংলগ্ন কৰিবলে হস্ট আখৰ ডিভাইচ।"
+
+#~ msgid "Named pipe to use for input and output."
+#~ msgstr "ইনপুট আৰু আউটপুটৰ বাবে ব্যৱহাৰ কৰিবলে নাম দিয়া pipe।"
+
+#~ msgid "File path to record device output."
+#~ msgstr "ডিভাইচৰ আউটপুট ৰেকৰ্ড কৰিবলে ফাইল পথ।"
+
+#~ msgid "Unix socket path."
+#~ msgstr "Unix চকেট পথ।"
+
+#~ msgid "A host and port must be specified."
+#~ msgstr "এটা হস্ট আৰু পোৰ্ট ধাৰ্য্য কৰিব লাগিব।"
+
+#~ msgid "Host address to send output to."
+#~ msgstr "আউটপুট প্ৰেৰণ কৰিবলে হস্ট ঠিকনা।"
+
+#~ msgid "Host port to send output to."
+#~ msgstr "আউটপুট প্ৰেৰণ কৰিবলে হস্ট পোৰ্ট।"
+
+#~ msgid "A connection port must be specified."
+#~ msgstr "এটা সংযোগ পোৰ্ট ধাৰ্য্য কৰিব লাগিব।"
+
+#~ msgid "volName must be a tuple of the form ('poolname', 'volname')"
+#~ msgstr "volName বিন্যাস ('poolname', 'volname') ৰ এটা tuple হব লাগিব"
+
+#~ msgid "'volName' requires a passed connection."
+#~ msgstr "'volName' ৰ এটা প্ৰেৰিত সংযোগৰ প্ৰয়োজন।"
+
+#~ msgid "vol_object must be a virStorageVol instance"
+#~ msgstr "vol_object এটা virStorageVol উদাহৰণ হব লাগিব"
+
+#~ msgid "vol_install must be a StorageVolume  instance."
+#~ msgstr "vol_install এটা StorageVolume  উদাহৰণ হব লাগিব।"
+
+#~ msgid "Error validating clone path: %s"
+#~ msgstr "ক্লৌন পথ বৈধ কৰোতে ত্ৰুটি: %s"
+
+#~ msgid "'size' must be a number greater than 0."
+#~ msgstr "'size'  0 কে ডাঙৰ এটা সংখ্যা হব লাগিব।"
+
+#~ msgid "Unknown storage type '%s'"
+#~ msgstr "অজ্ঞাত সংৰক্ষণ ধৰণ '%s'"
+
+#~ msgid "Unknown device type '%s'"
+#~ msgstr "অজ্ঞাত ডিভাইচ ধৰণ '%s'"
+
+#~ msgid "Unknown cache mode '%s'"
+#~ msgstr "অজ্ঞাত ক্যাশ অৱস্থা '%s'"
+
+#~ msgid "Unknown io mode '%s'"
+#~ msgstr "অজ্ঞাত io অৱস্থা '%s'"
+
+#~ msgid "Unknown error policy '%s'"
+#~ msgstr "অজ্ঞাত ত্ৰুটি নীতি '%s'"
+
+#~ msgid "IOTune read bytes per second value must be an integer"
+#~ msgstr "প্ৰতি ছেকেণ্ড IOTune পঢ়া বাইট এটা পূৰ্ণসংখ্যা হব লাগিব"
+
+#~ msgid "IOTune read iops per second value must be an integer"
+#~ msgstr "প্ৰতি ছেকেণ্ড IOTune পঢ়া iops এটা পূৰ্ণসংখ্যা হব লাগিব"
+
+#~ msgid "IOTune total bytes per second value must be an integer"
+#~ msgstr "প্ৰতি ছেকেণ্ড IOTune সৰ্বমুঠ বাইট এটা পূৰ্ণসংখ্যা হব লাগিব"
+
+#~ msgid "IOTune total iops per second value must be an integer"
+#~ msgstr "প্ৰতি ছেকেণ্ড IOTune সৰ্বমুঠ iops এটা পূৰ্ণসংখ্যা হব লাগিব"
+
+#~ msgid "IOTune write bytes per second value must be an integer"
+#~ msgstr "প্ৰতি ছেকেণ্ড IOTune লিখা বাইট এটা পূৰ্ণসংখ্যা হব লাগিব"
+
+#~ msgid "IOTune write iops per second value must be an integer"
+#~ msgstr "প্ৰতি ছেকেণ্ড IOTune লিখা iops এটা পূৰ্ণসংখ্যা হব লাগিব"
+
+#~ msgid "copying to an existing vdisk is not supported"
+#~ msgstr "এটা স্থায়ী vdisk লে কপি কৰাটো সমৰ্থিত নহয়"
+
+#~ msgid "failed to clone disk"
+#~ msgstr "ডিস্ক ক্লৌন কৰিবলে ব্যৰ্থ"
+
+#~ msgid "Error creating vdisk %s"
+#~ msgstr "vdisk %s সৃষ্টি কৰোতে ত্ৰুটি"
+
+#~ msgid "'disknode' or self.target must be set!"
+#~ msgstr "'disknode' অথবা self.target সংহতি কৰিব লাগিব!"
+
+#~ msgid "Cannot determine device bus/type."
+#~ msgstr "ডিভাইচ বাচ/ধৰণ নিৰ্ধাৰণ কৰিব নোৱাৰি।"
+
+#~ msgid "Unsupported filesystem type '%s'"
+#~ msgstr "অসমৰ্থিত ফাইলচিস্টেম ধৰণ '%s'"
+
+#~ msgid "Unsupported filesystem mode '%s'"
+#~ msgstr "অসমৰ্থিত ফাইলচিস্টেম অৱস্থা '%s'"
+
+#~ msgid "Unsupported filesystem write policy '%s'"
+#~ msgstr "অসমৰ্থিত ফাইলচিস্টেম লিখা নীতি '%s'"
+
+#~ msgid "Unsupported filesystem driver '%s'"
+#~ msgstr "অসমৰ্থিত ফাইলচিস্টেম ড্ৰাইভাৰ '%s'"
+
+#~ msgid "A filesystem source and target must be specified"
+#~ msgstr "এটা ফাইলচিস্টেম উৎস আৰু লক্ষ্য ধাৰ্য্য কৰিব লাগিব"
+
+#~ msgid "Unknown graphics type '%s'"
+#~ msgstr "অজ্ঞাত গ্ৰাফিক্স ধৰণ '%s'"
+
+#~ msgid "Keymap must be a string"
+#~ msgstr "কি'মেপ এটা স্ট্ৰিং হব লাগিব"
+
+#~ msgid "Keymap must be less than 16 characters"
+#~ msgstr "কি'মেপ ১৬ আখৰৰ কম হব লাগিব"
+
+#~ msgid "Keymap can only contain alphanumeric, '_', or '-' characters"
+#~ msgstr "কি'মেপে কেৱল আল্ফানিউমাৰিক, '_', অথবা '-' আখৰসমূহ অন্তৰ্ভুক্ত কৰিব পাৰিব"
+
+#~ msgid ""
+#~ "VNC port must be a number between 5900 and 65535, or -1 for auto "
+#~ "allocation"
+#~ msgstr ""
+#~ "VNC পোৰ্ট 5900 আৰু 65535 ৰ মাজৰ এটা সংখ্যা, অথবা স্বআবন্টনৰ বাবে -1 হব লাগিব"
+
+#~ msgid ""
+#~ "TLS port must be a number between 5900 and 65535, or -1 for auto "
+#~ "allocation"
+#~ msgstr ""
+#~ "TLS পোৰ্ট 5900 আৰু 65535 ৰ মাজৰ এটা সংখ্যা, অথবা স্বআবন্টনৰ বাবে -1 হব লাগিব"
+
+#~ msgid "Unknown graphics type"
+#~ msgstr "অজ্ঞাত গ্ৰাফিক্স ধৰণ"
+
+#~ msgid "'name' or 'nodedev' required."
+#~ msgstr "'name' অথবা 'nodedev' ৰ প্ৰয়োজন।"
+
+#~ msgid "Node device type '%s' cannot be attached to  guest."
+#~ msgstr "ন'ড ডিভাইচ ধৰণ '%s' অতিথিৰ সৈতে সংলগ্ন কৰিব নোৱাৰি।"
+
+#~ msgid "'nodedev' must be a USBDevice instance."
+#~ msgstr "'nodedev' এটা USBDevice উদাহৰণ হব লাগিব।"
+
+#~ msgid "'vendor' and 'product', or 'bus' and  'device' are required."
+#~ msgstr "'vendor' আৰু 'product', অথবা 'bus' আৰু  'device' ৰ প্ৰয়োজন।"
+
+#~ msgid "'nodedev' must be a PCIDevice instance."
+#~ msgstr "'nodedev' এটা PCIDevice উদাহৰণ হব লাগিব।"
+
+#~ msgid "'domain', 'bus', 'slot', and 'function' must be specified."
+#~ msgstr "'domain', 'bus', 'slot', আৰু 'function' ধাৰ্য্য কৰিব লাগিব।"
+
+#~ msgid "Unknown input type '%s'."
+#~ msgstr "অজ্ঞাত ইনপুট ধৰণ '%s'।"
+
+#~ msgid "Unknown input bus '%s'."
+#~ msgstr "অজ্ঞাত ইনপুট বাচ '%s'।"
+
+#~ msgid "Unsupported memballoon model '%s'"
+#~ msgstr "অসমৰ্থিত memballoon আৰ্হি '%s'"
+
+#~ msgid "A network name was not provided"
+#~ msgstr "এটা নেটৱাৰ্ক নাম প্ৰদান কৰা হোৱা নাছিল"
+
+#~ msgid "Unknown network type %s"
+#~ msgstr "অজ্ঞাত নেটৱাৰ্ক ধৰণ %s"
+
+#~ msgid "Virtual network '%s' does not exist: %s"
+#~ msgstr "ভাৰছুৱেল নেটৱাৰ্ক '%s' অস্তিত্ববান নহয়: %s"
+
+#~ msgid "Virtual network '%s' has not been started."
+#~ msgstr "ভাৰছুৱেল নেটৱাৰ্ক '%s' আৰম্ভ কৰা হোৱা নাই।"
+
+#~ msgid "Unsupported bus '%s'"
+#~ msgstr "অসমৰ্থিত বাচ '%s'"
+
+#~ msgid "Unsupported redirection type '%s'"
+#~ msgstr "অসমৰ্থিত পুনৰনিৰ্দেশ ধৰণ '%s'"
+
+#~ msgid "Invalid host value"
+#~ msgstr "অবৈধ হস্ট মান"
+
+#~ msgid "Unknown smartcard mode '%s'"
+#~ msgstr "অজ্ঞাত স্মাৰ্টকাৰ্ড অৱস্থা '%s'"
+
+#~ msgid "Unknown smartcard type '%s'"
+#~ msgstr "অজ্ঞাত স্মাৰ্টকাৰ্ড ধৰণ '%s'"
+
+#~ msgid "Unsupported watchdog model '%s'"
+#~ msgstr "অসমৰ্থিত ৱাচডগ আৰ্হি '%s'"
+
+#~ msgid "'%s' must be True or False"
+#~ msgstr "'%s' True অথবা False হব লাগিব"
+
+#~ msgid "'%s' must be a string, not '%s'."
+#~ msgstr "'%s' এটা স্ট্ৰিং হব লাগিব, '%s' নহয়।"
+
+#~ msgid ""
+#~ "Please indicate how you would like to assign space on the host system for "
+#~ "your virtual storage device."
+#~ msgstr ""
+#~ "অনুগ্ৰহ কৰি ইংগিত দিয়ক কিধৰণে আপোনাৰ ভাৰচুৱেল সংৰক্ষণ ডিভাইচৰ বাবে হস্ট "
+#~ "চিস্টেমত স্থান ধাৰ্য্য কৰিব।"
+
+#~ msgid ""
+#~ "Please indicate how you'd like to connect your new virtual network device "
+#~ "to the host network."
+#~ msgstr ""
+#~ "অনুগ্ৰহ কৰি নতুন ভাৰ্চুৱেল নেটৱাৰ্ক ডিভাইচ হস্ট নেটৱাৰ্কৰ সৈতে সংযোগ কৰাৰ চিস্টেম "
+#~ "চিহ্নিত কৰক।"
+
+#~ msgid ""
+#~ "Please indicate what kind of pointer device to connect to the virtual "
+#~ "machine."
+#~ msgstr ""
+#~ "অনুগ্ৰহ কৰি অতিথি চিস্টেমৰ সৈতে সংযুক্ত কৰাৰ বাবে পইন্টাৰ ডিভাইচ নিৰ্ধাৰণ কৰক।"
+
+#~ msgid "Please indicate how you would like to view the virtual display."
+#~ msgstr "অনুগ্ৰহ কৰি অতিথি চিস্টেমৰ প্ৰদৰ্শন কি ধৰণে প্ৰদৰ্শন কৰা হ'ব উল্লেখ কৰক।"
+
+#~ msgid ""
+#~ "<small><b>Tip:</b> VNC or Spice server is strongly recommended because it "
+#~ "allows the virtual display to be embedded inside this application. It may "
+#~ "also be used to allow access to the virtual display from a remote system."
+#~ "</small>"
+#~ msgstr ""
+#~ "<small><b>সহায়:</b> VNC অথবা Spice চাৰ্ভাৰ উপদেশিত কাৰণ ই  ভাৰচুৱেল প্ৰদৰ্শনক "
+#~ "এপ্লিকেচনৰ ভিতৰত অন্তৰ্ভুক্ত কৰাৰ অনুমতি দিয়ে। ইয়াক লগতে এটা দূৰৱৰ্তী চিস্টেমৰ পৰা "
+#~ "ভাৰচুৱেল প্ৰদৰ্শনলে অভিগমৰ অনুমতি দিবলে ব্যৱহাৰ কৰিব পাৰি।</small>"
+
+#~ msgid "Listen on all public network interfaces "
+#~ msgstr "সকলো সাৰ্বজনীন নেটৱাৰ্ক আন্তঃপৃষ্ঠক অপেক্ষা কৰা হ'ব "
+
+#~ msgid "_Other:"
+#~ msgstr "অন্যান্য (_O):"
+
+#~ msgid ""
+#~ "Please indicate what sound device type to connect to the virtual machine."
+#~ msgstr "অনুগ্ৰহ কৰি ভাৰ্চুৱেল ডিভাইচলৈ সংযুক্ত কৰাৰ বাবে ধ্বনি ডিভাইচ নিৰ্ধাৰণ কৰক।"
+
+#~ msgid ""
+#~ "Please indicate what physical device\n"
+#~ "to connect to the virtual machine."
+#~ msgstr ""
+#~ "অনুগ্ৰহ কৰি ভাৰ্চুৱেল ডিভাইচৰ সৈতে সংযুক্ত কৰাৰ বাবে\n"
+#~ "দৈহিক ডিভাইচ নিৰ্ধাৰণ কৰক।"
+
+#~ msgid "<b>Character Device</b>"
+#~ msgstr "<b>কেৰেক্টাৰ ডিভাইচ</b>"
+
+#~ msgid "<b>Device Parameters</b>"
+#~ msgstr "<b>ডিভাইচ সংক্ৰান্ত প্ৰাচল</b>"
+
+#~ msgid ""
+#~ "Please indicate what video device type\n"
+#~ "to connect to the virtual machine."
+#~ msgstr ""
+#~ "অনুগ্ৰহ কৰি ভাৰ্চুৱেল ডিভাইচৰ সৈতে সংযুক্ত কৰাৰ বাবে\n"
+#~ "ভিডিঅ' ডিভাইচৰ ধৰন নিৰ্ধাৰণ কৰক।।"
+
+#~ msgid ""
+#~ "Please indicate what watchdog device type\n"
+#~ "and default action should be used."
+#~ msgstr ""
+#~ "অনুগ্ৰহ কৰি কোন watchdog ডিভাইচ ধৰণ আৰু\n"
+#~ "অবিকল্পিত কাৰ্য্য ব্যৱহাৰ কৰা হব ইংগিত দিয়ক।"
+
+#~ msgid ""
+#~ "Please indicate which host directory to\n"
+#~ "access in the guest."
+#~ msgstr ""
+#~ "অনুগ্ৰহ কৰি অতিথিক কোন হস্ট ডাইৰেকটৰিয়ে অভিগম কৰিব\n"
+#~ "ইংগিত দিয়ক।"
+
+#~ msgid ""
+#~ "Please indicate what smartcard device mode to connect to the virtual "
+#~ "machine."
+#~ msgstr ""
+#~ "অনুগ্ৰহ কৰি ভাৰচুৱেল ডিভাইচক কোন স্মাৰ্টকাৰ্ড ডিভাইচ অৱস্থাৰ সৈতে সংযোগ কৰা হব "
+#~ "তাৰ ইংগিত দিয়ক।"
+
+#~ msgid "Please indicate the parameters of the redirected device."
+#~ msgstr "অনুগ্ৰহ কৰি পুনৰনিৰ্দেশিত ডিভাইচৰ প্ৰাচলসমূহৰ ইংগিত দিয়ক।"
+
+#~ msgid "Please indicate the parameters of the RNG device."
+#~ msgstr "অনুগ্ৰহ কৰি RNG ডিভাইচৰ প্ৰাচলসমূহ চিনাক্ত কৰক।"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a "
+#~ "new virtual network </span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">নতুন ভাৰ্চুৱেল "
+#~ "নেটৱাৰ্ক নিৰ্মাণ </span>"
+
+#~ msgid ""
+#~ "This assistant will guide you through creating a new virtual network. You "
+#~ "will be asked for some information about the virtual network you'd like "
+#~ "to create, such as:"
+#~ msgstr ""
+#~ "এই সহায়তা ব্যৱস্থাৰ সহায়ত আপুনি এটা নতুন ভাৰ্চুৱেল নেটৱাৰ্ক নিৰ্মাণ কৰিব পাৰে। "
+#~ "নিৰ্মাণযোগ্য ভাৰ্চুৱেল নেটৱাৰ্ক সম্পৰ্কে আপোনাক কিছু প্ৰশ্ন কৰা হ'ব যেনে:"
+
+#~ msgid "<small>●</small> A <b>name</b> for the new virtual network interface"
+#~ msgstr "নতুন ভাৰছুৱেল নেটৱাৰ্ক আন্তঃপৃষ্ঠৰ বাবে <small>●</small> এটা <b>নাম</b>"
+
+#~ msgid ""
+#~ "<small>●</small> An <b>IPv4</b> and/or <b>IPv6</b> network address and "
+#~ "prefix (netmask) to assign to this network interface"
+#~ msgstr ""
+#~ "এই নেটৱাৰ্ক আন্তঃপৃষ্ঠলৈ ধাৰ্য্য কৰিবলৈ <small>●</small> এটা <b>IPv4</b> আৰু/"
+#~ "অথবা <b>IPv6</b> নেটৱাৰ্ক ঠিকনা আৰু উপসৰ্গ (নেটমাস্ক)"
+
+#~ msgid ""
+#~ "<small>●</small> The network address range which the <b>DHCPv4</b> and/or "
+#~ "<b>DHCPv6</b> server will use to assign addresses to virtual machines"
+#~ msgstr ""
+#~ "<small>●</small> নেটৱাৰ্ক ঠিকনা বিস্তাৰ যি <b>DHCPv4</b> আৰু/অথবা <b>DHCPv6</"
+#~ "b> চাৰ্ভাৰে ভাৰছুৱেল মেচিনসমূহলৈ ঠিকনাসমূহ ধাৰ্য্য কৰাৰ বাবে ব্যৱহাৰ কৰিব"
+
+#~ msgid ""
+#~ "<small>●</small> Whether to <b>forward</b> traffic to a physical network"
+#~ msgstr "<small>●</small> এটা ভৌতিক নেটৱাৰ্কলে ট্ৰাফিক <b>আগবঢ়োৱা</b> হব নে"
+
+#~ msgid ""
+#~ "<small>●</small> Optionally, to not specify any <b>IPv4</b> or <b>IPv6</"
+#~ "b> network address.  If neither is specified, this will be a valid "
+#~ "definition for an isolated network with <b>no</b> DHCP or DNS support."
+#~ msgstr ""
+#~ "<small>●</small> বিকল্পভাৱে, কোনো <b>IPv4</b> অথবা <b>IPv6</b> নেটৱাৰ্ক "
+#~ "ঠিকনা ধাৰ্য্য নকৰিবলে। যদি এটাও ধাৰ্য্য কৰা নাথাকে, ই DHCP অথবা DNS <b>নথকা</"
+#~ "b> ৰ সৈতে এটা সূকীয়া নেটৱাৰ্কৰ বাবে এটা বৈধ বিৱৰণ হব।"
+
+#~ msgid ""
+#~ "<small>●</small> By default, the <b>Domain</b> name will be the same as "
+#~ "the network/interface name."
+#~ msgstr ""
+#~ "<small>●</small> অবিকল্পিতভাৱে, <b>ডমেইন</b> নাম নেটৱাৰ্ক/আন্তঃপৃষ্ঠ নামৰ সৈতে "
+#~ "একে হব।"
+
+#~ msgid ""
+#~ "<small>●</small> Optionally, a <b>static route</b> to a different network "
+#~ "can be specified.  This network traffic is routed to the specified "
+#~ "<b>gateway</b> on the primary network."
+#~ msgstr ""
+#~ "<small>●</small> বিকল্পভাৱে, এটা ভিন্ন নেটৱাৰ্কলৈ এটা <b>স্থিৰ পথ</b> ধাৰ্য্য "
+#~ "কৰিব পৰা যাব। এই নেটৱাৰ্ক ট্ৰাফিক প্ৰাথমিক নেটৱাৰ্কত ধাৰ্য্যত <b>গেইটৱে</b> লৈ "
+#~ "চিহ্নিত।"
+
+#~ msgid "Intro"
+#~ msgstr "ভূমিকা"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
+#~ "virtual network </span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ভাৰ্চুৱেল "
+#~ "নেটৱাৰ্কৰ নামকৰণ </span>"
+
+#~ msgid "Please choose a name for your virtual network:"
+#~ msgstr "আপোনাৰ ভাৰ্চুৱেল নেটৱাৰ্কৰ এটা নাম বাছক:"
+
+#~ msgid "The following information may help you with defining your networks."
+#~ msgstr ""
+#~ "নিম্নলিখিত তথ্যয় আপোনাক আপোনাৰ নেটৱাৰ্কসমূহৰ বিৱৰণ দিওতে সহায় কৰিব পাৰে।"
+
+#~ msgid ""
+#~ "<small>●</small>  A<b> network</b> must be specified as the network "
+#~ "<b>address</b> and the <b>prefix</b> for that network."
+#~ msgstr ""
+#~ "<small>●</small> এটা নেটৱাৰ্কৰ বাবে এটা <b> নেটৱাৰ্কক</b> নেটৱাৰ্ক <b>ঠিকনা</"
+#~ "b> আৰু <b>উপসৰ্গ</b> হিচাপে ধাৰ্য্য কৰিব লাগিব।"
+
+#~ msgid ""
+#~ "<small>●</small>  A network mask cannot be used for the network "
+#~ "specification.  Instead, the prefix must be used."
+#~ msgstr ""
+#~ "<small>●</small> নেটৱাৰ্ক ধাৰ্য্যকৰণৰ বাবে এটা নেটৱাৰ্ক মাস্ক ব্যৱহাৰ কৰিব "
+#~ "নোৱাৰি। ইয়াৰ পৰিৱৰ্তে, উপসৰ্গ ব্যৱহাৰ কৰিব লাগিব।"
+
+#~ msgid ""
+#~ "<small>●</small>  A <b>host address</b> such as that used for the dhcp "
+#~ "start, dhcp end, and the static route gateway address should not include "
+#~ "a prefix.  If included, this prefix must be the maximum.  That is, for "
+#~ "IPv4 prefix=32 and for IPv6 prefix=128."
+#~ msgstr ""
+#~ "<small>●</small> এটা <b>হস্ট ঠিকনা</b> যেনে dhcp আৰম্ভ, dhcp অন্ত, আৰু স্থিৰ "
+#~ "পথ গেইটৱে ঠিকনাত এটা উপসৰ্গ থাকিব নালাগিব। যদি থাকে, এই উপসৰ্গ সৰ্বাধিক হব "
+#~ "লাগিব। ইয়াৰ অৰ্থ, IPv4 ৰ বাবে prefix=32 আৰু IPv6 ৰ বাবে prefix=128।"
+
+#~ msgid ""
+#~ "<small>●</small>  If IPv6 is to be routed, some form of routing must be "
+#~ "specified for the interface."
+#~ msgstr ""
+#~ "<small>●</small>  যদি IPv6 ৰুট কৰিব লগিয়া হয়, আন্তঃপৃষ্ঠৰ বাবে কিছু পৰিমাণ "
+#~ "ৰুটিং ধাৰ্য্য কৰিব লাগিব।"
+
+#~ msgid ""
+#~ "<small>●</small>  For the <b>primary network</b>, the prefix must be "
+#~ "<b>64</b>.  However, for the <b>static route network</b>, the prefix can "
+#~ "be <b>64 or less</b>."
+#~ msgstr ""
+#~ "<small>●</small> <b>প্ৰাথমিক নেটৱাৰ্ক</b> ৰ বাবে, উপসৰ্গ <b>64</b> হব লাগিব, "
+#~ "যি কি নহওক, <b>স্থিৰ পথ নেটৱাৰ্ক</b> ৰ বাবে, উপসৰ্গ <b>64 অথবা কম</b> হব "
+#~ "লাগিব।"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Defining "
+#~ "IPv4 addresses</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">IPv4 "
+#~ "ঠিকনাসমূহৰ বিৱৰণ দিয়া</span>"
+
+#~ msgid ""
+#~ "You will need to choose an <b>IPv4</b> address space for the virtual "
+#~ "network."
+#~ msgstr "আপুনি ভাৰছুৱেল নেটৱাৰ্কৰ বাবে এটা <b>IPv4</b> ঠিকনা স্থান বাছিব লাগিব।"
+
+#~ msgid "Network Type:"
+#~ msgstr "নেটৱাৰ্কৰ ধৰণ:"
+
+#~ msgid ""
+#~ "<b>Hint:</b> The network should be chosen from one of the IPv4 private "
+#~ "address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
+#~ msgstr ""
+#~ "<b>ইঙ্গিত:</b> যিকোনো এটা IPv4ৰ ব্যক্তিগত ঠিকনাৰ সীমাত এটা নেটৱাৰ্ক নিৰ্বাচন "
+#~ "কৰা আৱশ্যক। যেনে, 10.0.0.0/8,  172.16.0.0/12, বা 192.168.0.0/16"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Defining "
+#~ "IPv6 addresses</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">IPv6 "
+#~ "ঠিকনাসমূহৰ বিৱৰণ দিয়া</span>"
+
+#~ msgid ""
+#~ "You will need to choose an <b>IPv6</b> address space for the virtual "
+#~ "network:"
+#~ msgstr "আপুনি ভাৰছুৱেল নেটৱাৰ্কৰ বাবে এটা <b>IPv6</b> ঠিকনা স্থান বাছিব লাগিব:"
+
+#~ msgid ""
+#~ "<b>Note:</b> The network could be chosen from one of the IPv6 private "
+#~ "address ranges. eg FC00::/7.  In any case, the prefix must be <b>64</b>.\n"
+#~ "A typical IPv6 network address will look something like:  fd00:dead:"
+#~ "beef:55::/64"
+#~ msgstr ""
+#~ "<b>টোকা:</b> IPv6 ব্যক্তিগত ঠিকনা বিস্তাৰসমূহৰ এটাৰ পৰা নেটৱাৰ্ক বাছিব পাৰি। "
+#~ "উদাহৰণস্বৰূপ FC00::/7। যি কোনো ক্ষেত্ৰত, উপসৰ্গ <b>64</b> হব লাগিব।\n"
+#~ "এটা সাধাৰণ IPv6 নেটৱাৰ্ক ঠিকনা দেখাত এনেকুৱা হব:  fd00:dead:beef:55::/64"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF"
+#~ "\">Miscellaneous Settings</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">বিভিদ "
+#~ "সংহতিসমূহ</span>"
+
+#~ msgid ""
+#~ "Please indicate whether this virtual network should be connected to the "
+#~ "<b>physical network</b>."
+#~ msgstr ""
+#~ "অনুগ্ৰহ কৰি এই ভাৰছুৱেল নেটৱাৰ্ক <b>ভৌতিক নেটৱাৰ্কৰ</b> সৈতে সংযুক্ত হব লাগে নে "
+#~ "ধাৰ্য্য কৰক।"
+
+#~ msgid "Domain Name:"
+#~ msgstr "ডমেইনৰ নাম:"
+
+#~ msgid ""
+#~ "Optionally, specify the DNS <b>Domain Name</b> to be used for the "
+#~ "networks on this network interface."
+#~ msgstr ""
+#~ "বিকল্পভাৱে, এই নেটৱাৰ্ক আন্তঃপৃষ্ঠত নেটৱাৰ্কসমূহৰ বাবে ব্যৱহাৰ হবলে DNS <b>ডমেইন "
+#~ "নাম</b> ধাৰ্য্য কৰক।"
+
+#~ msgid "Misc"
+#~ msgstr "বিভিন্ন"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to "
+#~ "create network</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">নতুন নেটৱাৰ্ক "
+#~ "নিৰ্মাণ </span>"
+
+#~ msgid "<b>IPv4 Network</b>"
+#~ msgstr "<b>IPv4 নেটৱাৰ্ক</b>"
+
+#~ msgid "<b>Domain</b> Name:"
+#~ msgstr "<b>ডমেইন</b> নাম:"
+
+#~ msgid "192.168.10.128"
+#~ msgstr "192.168.10.128"
+
+#~ msgid "DHCPv4 Start Address:"
+#~ msgstr "DHCPv4 আৰম্ভণি ঠিকনা:"
+
+#~ msgid "DHCPv4 End  Address:"
+#~ msgstr "DHCPv4 অন্ত ঠিকনা:"
+
+#~ msgid "<b>Summary</b>"
+#~ msgstr "<b>সাৰাংশ</b>"
+
+#~ msgid "<b>Network</b> Name:"
+#~ msgstr "<b>নেটৱাৰ্ক</b> নাম:"
+
+#~ msgid "demo"
+#~ msgstr "নমুনা"
+
+#~ msgid "Forwarding/Connectivity:"
+#~ msgstr "আগবঢ়োৱা/সংযোগ:"
+
+#~ msgid "<b>IPv6 Network</b>"
+#~ msgstr "<b>IPv6 নেটৱাৰ্ক</b>"
+
+#~ msgid "DHCPv6 End Address:"
+#~ msgstr "DHCPv6 অন্ত ঠিকনা:"
+
+#~ msgid "DHCPv6 Start Address:"
+#~ msgstr "DHCPv6 আৰম্ভণি ঠিকনা:"
+
+#~ msgid "FD00:100::100"
+#~ msgstr "FD00:100::100"
+
+#~ msgid "FD00:100::1FF"
+#~ msgstr "FD00:100::1FF"
+
+#~ msgid "FD00:100::/64"
+#~ msgstr "FD00:100::/64"
+
+#~ msgid "FD00:100::1"
+#~ msgstr "FD00:100::1"
+
+#~ msgid "Static Route <b>to</b> network:"
+#~ msgstr "নেটৱাৰ্ক <b>লৈ</b> স্থিৰ পথ:"
+
+#~ msgid "Complete"
+#~ msgstr "সমাপ্ত"
+
+#~ msgid "<span size='x-large'>Add Storage Pool</span>"
+#~ msgstr "<span size='x-large'>সংৰক্ষণৰ পুল যোগ কৰক</span>"
+
+#~ msgid ""
+#~ "Specify a storage location to be later split into virtual machine storage."
+#~ msgstr ""
+#~ "ভাৰ্চুৱেল ডিভাইচৰ সংৰক্ষণ ৰূপে ভবিষ্যতে বিভক্ত কৰাৰ বাবে সংৰক্ষণৰ অৱস্থান নিৰ্ধাৰণ "
+#~ "কৰক।"
+
+#~ msgid "Step 1 of 2"
+#~ msgstr "পদক্ষেপ ১ সৰ্বমোঠ ২"
+
+#~ msgid "Step 2 of 2"
+#~ msgstr "পদক্ষেপ ২, সৰ্বমোঠ ২"
+
+#~ msgid "<span size='x-large'>New Storage Volume</span>"
+#~ msgstr "<span size='x-large'>নতুন ভঁৰাল আয়তন</span>"
+
+#~ msgid ""
+#~ "Create a storage unit that can be used directly by a virtual machine."
+#~ msgstr ""
+#~ "ভাৰ্চুৱেল ডিভাইচ দ্বাৰা সম্পূৰ্ণৰূপে ব্যৱহাৰযোগ্য এটা সংৰক্ষণৰ অংশ নিৰ্মাণ কৰক।"
+
+#~ msgid "<span size='large'>Storage Volume Quota</span>"
+#~ msgstr "<span size='large'>সংৰক্ষণৰ পৰিমাণৰ সীমা</span>"
+
+#~ msgid ""
+#~ "<span size='small'><i><u>Name</u>: Name of the\n"
+#~ "  volume to create. File\n"
+#~ "  extension may be\n"
+#~ "  appended\n"
+#~ "\n"
+#~ "<u>Format</u>: File/Partition\n"
+#~ "  format of the volume\n"
+#~ "\n"
+#~ "<u>Capacity</u>: Maximum\n"
+#~ "  size of the volume.\n"
+#~ "\n"
+#~ "<u>Allocation</u>: Actual size\n"
+#~ "  allocated to volume\n"
+#~ "  at this time.</i></span>"
+#~ msgstr ""
+#~ "<span size='small'><i><u>নাম</u>: সৃষ্টি কৰিব লগা আয়তনৰ\n"
+#~ "  নাম। ফাইলৰ\n"
+#~ "  সম্প্ৰসাৰণ পিছত যোগ\n"
+#~ "  দিব পাৰি\n"
+#~ "\n"
+#~ "<u>আকৃতি</u>: আয়তনৰ ফাইল/বিভাজনৰ\n"
+#~ "  আকৃতি\n"
+#~ "\n"
+#~ "<u>ধাৰণ শক্তি</u>: আয়তনৰ সৰ্বাধিক\n"
+#~ "  আকাৰ।\n"
+#~ "\n"
+#~ "<u>বিতৰণ</u>: এই সময়ত\n"
+#~ "  আয়তনলৈ বিতৰণ কৰা\n"
+#~ "  প্ৰকৃত আকাৰ।</i></span>"
+
+#~ msgid "Enter your virtual machine details"
+#~ msgstr "আপোনাৰ ভাৰ্চুৱেল ডিভাইচৰ বিৱৰণ দিয়ক"
+
+#~ msgid "Error message"
+#~ msgstr "ভুল হোৱাৰ খবৰ"
+
+#~ msgid "Delete Confirmation"
+#~ msgstr "অপসাৰণৰ নিশ্চয়াণ"
+
+#~ msgid "S_hut Down"
+#~ msgstr "বন্ধ কৰক (_h)"
+
+#~ msgid "_Clone"
+#~ msgstr "ক্লৌন কৰক (_C)"
+
+#~ msgid "_Delete..."
+#~ msgstr "মচি পেলাওক (_D)..."
+
+#~ msgid ""
+#~ "CPU\n"
+#~ "usage:"
+#~ msgstr ""
+#~ "CPU\n"
+#~ "ব্যৱহাৰ:"
+
+#~ msgid ""
+#~ "Memory\n"
+#~ "usage:"
+#~ msgstr ""
+#~ "মেমৰি\n"
+#~ "ব্যৱহাৰ:"
+
+#~ msgid ""
+#~ "Disk\n"
+#~ "I/O:"
+#~ msgstr ""
+#~ "ডিষ্ক\n"
+#~ "I/O:"
+
+#~ msgid ""
+#~ "Network\n"
+#~ "I/O:"
+#~ msgstr ""
+#~ "নেটৱাৰ্ক\n"
+#~ "I/O:"
+
+#~ msgid ""
+#~ "0 KBytes/s\n"
+#~ "0KBytes/s"
+#~ msgstr ""
+#~ "0 KBytes/s\n"
+#~ "0KBytes/s"
+
+#~ msgid "<b>Performance</b>"
+#~ msgstr "<b>কাৰ্য্যক্ষমতা</b>"
+
+#~ msgid "Kernel arguments:"
+#~ msgstr "কাৰ্ণেলৰ তৰ্ক:"
+
+#~ msgid "Target device:"
+#~ msgstr "লক্ষ্য ডিভাইচ:"
+
+#~ msgid "CPU usage:"
+#~ msgstr "CPU ব্যৱহাৰ:"
+
+#~ msgid "Memory usage:"
+#~ msgstr "মেমৰি ব্যৱহাৰ:"
+
+#~ msgid "IPv4 Forwarding:"
+#~ msgstr "IPv4 আগবঢ়োৱা:"
+
+#~ msgid "IPv6 Forwarding:"
+#~ msgstr "IPv6 আগবঢ়োৱা:"
+
+#~ msgid "DHCP start:"
+#~ msgstr "DHCP আৰম্ভ:"
+
+#~ msgid "DHCP end:"
+#~ msgstr "DHCP সমাপ্তি:"
+
+#~ msgid "<network-addr> via <gateway-addr>"
+#~ msgstr "<network-addr> ৰে <gateway-addr>"
+
+#~ msgid "VNC"
+#~ msgstr "VNC"
+
+#~ msgid "Spice"
+#~ msgstr "Spice"

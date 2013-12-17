@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-16 15:53-0500\n"
+"POT-Creation-Date: 2013-12-16 19:50-0500\n"
 "PO-Revision-Date: 2013-12-02 20:00+0000\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Panjabi (Punjabi) (http://www.transifex.com/projects/p/virt-"
@@ -968,11 +968,11 @@ msgstr "ਇੱਕ ਯੰਤਰ ਜਰੂਰ ਦਰਸਾਇਆ ਹੋਵੇ।"
 
 #: ../virtManager/addhardware.py:1787
 msgid "Please specify both bind and connect host"
-msgstr ""
+msgstr "ਕਿਰਪਾ ਕਰ ਕੇ ਦੋਵੇਂ bind ਅਤੇ connect ਮੇਜਬਾਨ ਦਰਸਾਉ"
 
 #: ../virtManager/addhardware.py:1791
 msgid "Please specify both bind and connect service"
-msgstr ""
+msgstr "ਕਿਰਪਾ ਕਰ ਕੇ ਦੋਵੇਂ bind ਅਤੇ connect ਸੇਵਾ ਦਰਸਾਉ"
 
 #: ../virtManager/addhardware.py:1795
 msgid "The EGD host must be specified."
@@ -3808,6 +3808,9 @@ msgid ""
 "--rng /dev/random\n"
 "--rng egd,backend_host=localhost,backend_service=708,backend_type=tcp"
 msgstr ""
+"ਇੱਕ ਪ੍ਰਾਹੁਣਾ RNG ਯੰਤਰ ਸੰਰਚਿਤ ਕਰੋ। ਉਦਾਹਰਣ:\n"
+"--rng /dev/random\n"
+"--rng egd,backend_host=localhost,backend_service=708,backend_type=tcp"
 
 #: ../virtinst/cli.py:934
 msgid ""
@@ -4042,7 +4045,7 @@ msgstr "ਸੰਪਰਕ/ਸੁਣਨ ਲਈ ਟਿਕਾਣਾ ਮੇਜਬਾ�
 
 #: ../virtinst/devicechar.py:229
 msgid "Host address to bind to."
-msgstr ""
+msgstr "ਬਾਈਂਡ ਕਰਨ ਲਈ ਮੇਜਬਾਨ ਪਤਾ।"
 
 #: ../virtinst/devicechar.py:232
 msgid "Host port to bind to."
@@ -5019,7 +5022,7 @@ msgstr "ਮੇਜਬਾਨ:"
 
 #: ../ui/addhardware.ui.h:48 ../ui/details.ui.h:181
 msgid "Bind Host:"
-msgstr ""
+msgstr "ਬਾਈਂਡ ਮੇਜਬਾਨ:"
 
 #: ../ui/addhardware.ui.h:49 ../ui/details.ui.h:159 ../ui/host.ui.h:17
 msgid "Device:"
@@ -6593,7 +6596,7 @@ msgstr "ਸੇਵਾ:"
 
 #: ../ui/details.ui.h:182
 msgid "Bind Service:"
-msgstr ""
+msgstr "ਬਾਈਂਡ ਸੇਵਾ:"
 
 #: ../ui/details.ui.h:183
 msgid "Rate (period):"
@@ -7110,3 +7113,1272 @@ msgstr "ਲੋਕਲ ਝਲਕ(_B)"
 #: ../ui/storagebrowse.ui.h:4
 msgid "Choose _Volume"
 msgstr "ਵਾਲੀਅਮ ਚੁਣੋ(_V)"
+
+#~ msgid "Error in %(chartype)s device parameters: %(err)s"
+#~ msgstr "%(chartype)s ਯੰਤਰ ਪੈਰਾਮੀਟਰਾਂ ਵਿੱਚ ਗਲਤੀ: %(err)s"
+
+#~ msgid "Error in watchdog device parameters: %s"
+#~ msgstr "ਵਾਚਡੌਗ ਯੰਤਰ ਪੈਰਾਮੀਟਰਾਂ ਵਿੱਚ ਗਲਤੀ: %s"
+
+#~ msgid "Error in filesystem device parameters: %s"
+#~ msgstr "ਫਾਈਲ-ਸਿਸਟਮ ਯੰਤਰ ਪੈਰਾਮੀਟਰਾਂ ਵਿੱਚ ਗਲਤੀ: %s"
+
+#~ msgid ""
+#~ "Domain installation still in progress. Waiting %sfor installation to "
+#~ "complete."
+#~ msgstr ""
+#~ "ਡੋਮੇਨ ਇੰਸਟਾਲੇਸ਼ਨ ਅਜੇ ਵਿਕਾਸ ਅਧੀਨ ਹੈ। ਇੰਸਟਾਲੇਸ਼ਨ ਦੇ ਪੂਰਾ ਹੋਣ ਲਈ %s ਦੀ ਉਡੀਕ ਕਰ ਰਿਹਾ ਹੈ।"
+
+#~ msgid "The OS type being installed, e.g. 'linux', 'unix', 'windows'"
+#~ msgstr "ਇੰਸਟਾਲ ਕੀਤੇ ਜਾਣ ਵਾਲੇ OS ਦੀ ਕਿਸਮ, ਉਦਾਹਰਣ 'ਲੀਨਿਕਸ', 'ਯੂਨਿਕਸ', 'ਵਿੰਡੋਜ਼'"
+
+#~ msgid ""
+#~ "The OS variant being installed guests, e.g. 'fedora6', 'rhel5', "
+#~ "'solaris10', 'win2k'"
+#~ msgstr ""
+#~ "ਪ੍ਰਾਹੁਣਿਆਂ ਤੇ ਇੰਸਟਾਲ ਕੀਤੇ ਜਾਣ ਵਾਲਾ OS ਵੇਰੀਐਂਟ, ਉਦਾਹਰਣ 'ਫੈਡੋਰਾ6', 'rhel5', "
+#~ "'ਸੋਲੈਰਿਸ10', 'win2k'"
+
+#~ msgid ""
+#~ "Disables APIC for fully virtualized guest (overrides value in os-type/os-"
+#~ "variant db)"
+#~ msgstr ""
+#~ "ਪੂਰੀ ਤਰਾਂ ਆਭਾਸੀਕ੍ਰਿਤ ਪ੍ਰਾਹੁਣੇ ਲਈ APIC ਨੂੰ ਅਯੋਗ ਕਰਦਾ ਹੈ (os-type/os-variant db ਵਿੱਚ "
+#~ "ਮੁੱਲ ਨੂੰ ਮੁੜ ਲਿਖਦਾ ਹੈ)"
+
+#~ msgid ""
+#~ "Disables ACPI for fully virtualized guest (overrides value in os-type/os-"
+#~ "variant db)"
+#~ msgstr ""
+#~ "ਪੂਰੀ ਤਰਾਂ ਆਭਾਸੀਕ੍ਰਿਤ ਪ੍ਰਾਹੁਣੇ ਲਈ ACPI ਨੂੰ ਅਯੋਗ ਕਰਦਾ ਹੈ (os-type/os-variant db ਵਿੱਚ "
+#~ "ਮੁੱਲ ਨੂੰ ਮੁੜ ਲਿਖਦਾ ਹੈ)"
+
+#~ msgid "Print the generated domain XML rather than define the guest."
+#~ msgstr "ਪ੍ਰਾਹੁਣੇ ਨੂੰ ਪਰਿਭਾਸ਼ਿਤ ਕਰਨ ਦੀ ਬਜਾਏ ਪੈਦਾ ਕੀਤੇ ਡੋਮੇਨ XML ਨੂੰ ਛਾਪੋ।"
+
+#~ msgid "Time to wait (in minutes)"
+#~ msgstr "ਉਡੀਕ ਦਾ ਸਮਾਂ (ਮਿੰਨਟਾਂ ਵਿੱਚ)"
+
+#~ msgid "Forces 'yes' for any applicable prompts, terminates for all others"
+#~ msgstr ""
+#~ "ਕਿਸੇ ਵੀ ਲਾਗੂ ਹੋਣ ਯੋਗ ਚੇਤਾਉਣ ਤੇ ਜੋਰ ਨਾਲ 'ਹਾਂ' ਕਰ ਦਿੰਦਾ ਹੈ, ਬਾਕੀ ਸਾਰਿਆਂ ਲਈ ਬੰਦ ਕਰ ਦਿੰਦਾ ਹੈ"
+
+#~ msgid "Request user input for ambiguous situations or required options."
+#~ msgstr "ਅਸਪੱਸ਼ਟ ਸਥਿਤੀਆਂ ਜਾਂ ਲੋੜੀਂਦੀਆਂ ਚੋਣਾਂ ਤੇ ਯੂਜ਼ਰ ਵੱਲੋਂ ਇੰਨਪੁੱਟ ਲਈ ਬੇਨਤੀ ਕਰੋ।"
+
+#~ msgid ""
+#~ "Don't check for name collision. Allows replacing an existing guest with "
+#~ "the new clone"
+#~ msgstr "ਨਾਂ ਟਕਰਾਅ ਲਈ ਨਾ ਜਾਂਚੋ। ਕਿਸੇ ਮੌਜੂਦਾ ਪ੍ਰਾਹੁਣੇ ਨੂੰ ਨਵੇਂ ਕਲੋਨ ਨਾਲ ਵਟਾਉਣ ਦੀ ਇਜਾਜਤ ਦਿਉ"
+
+#~ msgid ""
+#~ "Do not prompt for input. Answers yes where applicable, terminates for all "
+#~ "other prompts"
+#~ msgstr ""
+#~ "ਕਿਸੇ ਇੰਨਪੁੱਟ ਲਈ ਨਾ ਚੇਤਾਓ। ਜਿੱਥੇ ਲਾਗੂ ਹੋ ਸਕੇ ਹਾਂ ਕਰਦਾ ਹੈ, ਬਾਕੀ ਸਾਰੇ ਚੇਤਾਉਣ ਤੇ ਖਤਮ ਕਰ ਦਿੰਦਾ "
+#~ "ਹੈ"
+
+#~ msgid "Must be privileged to clone Xen guests"
+#~ msgstr "Xen ਪ੍ਰਾਹੁਣਿਆਂ ਨੂੰ ਕਲੋਨ ਕਰਨ ਲਈ ਖਾਸ ਤੌਰ ਤੇ ਹੱਕ ਰੱਖਦਾ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+
+#~ msgid "The image requires %i network interface."
+#~ msgstr "ਇਮੇਜ ਨੂੰ %i ਨੈੱਟਵਰਕ ਇੰਟਰਫੇਸ ਲੋੜੀਂਦਾ ਹੈ।"
+
+#~ msgid ""
+#~ "The OS variant being installed, e.g. 'fedora6', 'rhel5', 'solaris10', "
+#~ "'win2k'"
+#~ msgstr "ਇੰਸਟਾਲ ਕੀਤੇ ਜਾਣ ਵਾਲੇ OS ਦੀ ਕਿਸਮ, ਉਦਾਹਰਣ 'ਫੈਡੋਰਾ', 'ਸੋਲੈਰਿਸ10', 'win2k'"
+
+#~ msgid "Full Virtualization specific options"
+#~ msgstr "ਪੂਰੇ ਆਭਾਸੀਕਰਣ ਨਾਲ ਸੰਬੰਧਿਤ ਚੋਣਾਂ"
+
+#~ msgid "Disables APIC for fully virtualized guest"
+#~ msgstr "ਪੂਰੀ ਤਰਾਂ ਆਭਾਸੀਕ੍ਰਿਤ ਪ੍ਰਾਹੁਣੇ ਲਈ APIC ਨੂੰ ਅਯੋਗ ਕਰਦਾ ਹੈ"
+
+#~ msgid "Disables ACPI for fully virtualized guest"
+#~ msgstr "ਪੂਰੀ ਤਰਾਂ ਆਭਾਸੀਕ੍ਰਿਤ ਪ੍ਰਾਹੁਣੇ ਲਈ ACPI ਨੂੰ ਅਯੋਗ ਕਰਦਾ ਹੈ"
+
+#~ msgid "Print the libvirt XML, but do not start the domain"
+#~ msgstr "libvirt XML ਨੂੰ ਛਾਪੋ, ਪਰ ਡੋਮੇਨ ਨੂੰ ਸ਼ੁਰੂ ਨਾ ਕਰੋ"
+
+#~ msgid "Overwrite, or destroy, an existing image with the same name"
+#~ msgstr "ਇਸੇ ਨਾਂ ਵਾਲੀ ਕਿਸੇ ਮੌਜੂਦਾ ਇਮੇਜ ਨੂੰ ਮੁੜ-ਲਿਖੋ, ਜਾਂ ਖਤਮ ਕਰ ਦਿਉ"
+
+#~ msgid ""
+#~ "The OS type for fully virtualized guests, e.g. 'linux', 'unix', 'windows'"
+#~ msgstr ""
+#~ "ਪੂਰੀ ਤਰਾਂ ਆਭਾਸੀਕ੍ਰਿਤ ਪ੍ਰਾਹੁਣੇ ਲਈ OS ਦੀ ਕਿਸਮ, ਉਦਾਹਰਣ 'ਲੀਨਿਕਸ', 'ਯੂਨਿਕਸ', 'ਵਿੰਡੋਜ਼'"
+
+#~ msgid ""
+#~ "The OS variant for fully virtualized guests, e.g. 'fedora6', 'rhel5', "
+#~ "'solaris10', 'win2k', 'vista'"
+#~ msgstr ""
+#~ "ਪੂਰੀ ਤਰਾਂ ਆਭਾਸੀਕ੍ਰਿਤ ਪ੍ਰਾਹੁਣੇ ਲਈ OS ਦੀ ਕਿਸਮ, ਉਦਾਹਰਣ  'ਫੈਡੋਰਾ', 'ਸੋਲੈਰਿਸ10', "
+#~ "'win2k', 'ਵਿਸਟਾ'"
+
+#~ msgid "Dry run, don't make any changes"
+#~ msgstr "ਖਾਲੀ ਚਲਾਉ, ਕੋਈ ਬਦਲਾਅ ਨਾ ਕਰੋ"
+
+#~ msgid "Local SDL window"
+#~ msgstr "ਲੋਕਲ SDL ਵਿੰਡੋ"
+
+#~ msgid "Creating Storage File"
+#~ msgstr "ਸਟੋਰੇਜ਼ ਫਾਇਲ ਬਣਾਈ ਜਾ ਰਹੀ ਹੈ"
+
+#~ msgid "Allocation of disk storage may take a few minutes to complete."
+#~ msgstr "ਡਿਸਕ ਸਟੋਰੇਜ਼ ਜਾਰੀ ਹੋਣ ਲਈ ਕੁਝ ਮਿੰਟ ਲੱਗ ਸਕਦੇ ਹਨ।"
+
+#~ msgid "Disk \"%s\" is already in use by another guest!"
+#~ msgstr "ਡਿਸਕ \"%s\" ਪਹਿਲਾਂ ਹੀ ਹੋਰ ਗੈੱਸਟ ਵਲੋਂ ਵਰਤੀ ਜਾ ਰਹੀ ਹੈ!"
+
+#~ msgid "Active (RO)"
+#~ msgstr "ਸਰਗਰਮ (RO)"
+
+#~ msgid ""
+#~ "Domain rename failed. Attempting to recover also failed.\n"
+#~ "\n"
+#~ "Original error: %s\n"
+#~ "\n"
+#~ "Recover error: %s"
+#~ msgstr ""
+#~ "ਡੋਮੇਨ ਮੁੜ-ਨਾਂ ਫੇਲ ਹੋਇਆ। ਰਿਕਵਰੀ ਵੀ ਫੇਲ ਹੋਈ।\n"
+#~ "\n"
+#~ "ਅਸਲੀ ਗਲਤੀ: %s\n"
+#~ "\n"
+#~ "ਰਿਕਵਰ ਗਲਤੀ: %s"
+
+#~ msgid "Connection is read only."
+#~ msgstr "ਕੁਨੈਕਸ਼ਨ ਸਿਰਫ ਪੜ੍ਹਨ ਲਈ ਹੈ।"
+
+#~ msgid "Hypervisor only supports %d virtual CPUs."
+#~ msgstr "ਹਾਈਪਰਵਾਈਸਰ ਸਿਰਫ %d ਵਰਚੁਅਲ CPUs ਲਈ ਸਹਿਯੋਗੀ ਹੈ।"
+
+#~ msgid "Only URL or import installs are supported for paravirt."
+#~ msgstr "ਸਿਰਫ URL ਜਾਂ ਇੰਪੋਰਟ ਇੰਸਟਾਲ paravirt ਲਈ ਉਪਲੱਬਧ ਹਨ।"
+
+#~ msgid "Invalid System Name"
+#~ msgstr "ਗਲਤ ਸਿਸਟਮ ਨਾਂ"
+
+#~ msgid "Network Address / prefix:"
+#~ msgstr "ਨੈੱਟਵਰਕ ਪਤਾ / ਅਗੇਤਰ:"
+
+#~ msgid "DHCPv4 Status:"
+#~ msgstr "DHCPv4 ਹਾਲਾਤ:"
+
+#~ msgid "IPV6 Network:"
+#~ msgstr "IPV6 ਨੈੱਟਵਰਕ:"
+
+#~ msgid "Not Defined"
+#~ msgstr "ਪਰਿਭਾਸ਼ਤ ਨਹੀਂ"
+
+#~ msgid "DHCPv6 Status:"
+#~ msgstr "DHCPv6 ਹਾਲਾਤ:"
+
+#~ msgid "Invalid forwarding mode"
+#~ msgstr "ਗਲਤ ਫਾਰਵਰਡਿੰਗ ਮੋਡ"
+
+#~ msgid "Please select where the traffic should be forwarded"
+#~ msgstr "ਚੁਣੋ ਕਿ ਟਰੈਫਿਕ ਅੱਗੇ ਕਿੱਥੇ ਭੇਜਣਾ ਹੈ"
+
+#~ msgid "Format the source device."
+#~ msgstr "ਸਰੋਤ ਜੰਤਰ ਫਾਰਮੈਟ ਕਰੋ"
+
+#~ msgid "Create a logical volume group from the source device."
+#~ msgstr "ਸਰੋਤ ਜੰਤਰ ਤੋਂ ਇੱਕ ਲਾਜ਼ੀਕਲ ਵਾਲੀਅਮ ਬਣਾਓ।"
+
+#~ msgid "All selected storage will be deleted."
+#~ msgstr "ਸਾਰੇ ਚੁਣੇ ਹੋਏ ਭੰਡਾਰ ਮਿਟਾ ਦਿੱਤੇ ਜਾਣਗੇ।"
+
+#~ msgid ""
+#~ "Static SELinux security type tells libvirt to always start the guest "
+#~ "process with the specified label. Unless 'relabel' is set, the "
+#~ "administrator is responsible for making sure the images are labeled "
+#~ "correctly on disk."
+#~ msgstr ""
+#~ "ਸਥਿਰ SELinux ਸੁਰੱਖਿਆ ਕਿਸਮ libvirt ਨੂੰ ਹਮੇਸ਼ਾ ਪ੍ਰਾਹੁਣੇ ਕਾਰਜ ਨੂੰ ਨਿਰਧਾਰਤ ਲੇਬਲ ਨਾਲ ਚਾਲੂ "
+#~ "ਕਰਨ ਲਈ ਦੱਸਦੀ ਹੈ। ਜਦੋਂ ਤੱਕ 'relabel' ਸੈੱਟ ਨਹੀਂ ਹੈ, ਇਹ ਪੱਕਾ ਕਰਨਾ ਪ੍ਰਸ਼ਾਸ਼ਕ ਦੀ ਜਿੰਮੇਵਾਰੀ ਹੈ "
+#~ "ਕਿ ਕੀ ਡਿਸਕ ਉੱਪਰ ਇਮੇਜ਼ਾਂ ਦੇ ਲੇਬਲ ਠੀਕ ਹਨ।"
+
+#~ msgid ""
+#~ "You are switching graphics type to %(gtype)s, would you like to "
+#~ "%(action)s Spice agent channels?"
+#~ msgstr ""
+#~ "ਤੁਸੀਂ ਗਰਾਫਿਕਸ ਕਿਸਮ ਨੂੰ %(gtype)s ਵਿੱਚ ਤਬਦੀਲ ਕਰ ਰਹੇ ਹੋ, ਕੀ ਤੁਸੀਂ %(action)s ਸਪਾਈਸ "
+#~ "ਏਜੰਟ ਚੈਨਲ ਵਿੱਚ ਤਬਦੀਲ ਹੋਣਾ ਹੈ?"
+
+#~ msgid "Cannot rename an active guest"
+#~ msgstr "ਸਰਗਰਮ ਗਿਸਟ ਦਾ ਮੁੜ-ਨਾਂ ਨਹੀਂ ਦੇ ਸਕਦਾ"
+
+#~ msgid ""
+#~ "virt-manager will connect to libvirt on the next\n"
+#~ "application start up."
+#~ msgstr ""
+#~ "virt-manager ਅਗਲੀ ਵਾਰ ਐਪਲੀਕੇਸ਼ਨ ਚਾਲੂ ਕਰਨ ਤੇ libvirt\n"
+#~ "ਨਾਲ ਜੁੜੇਗਾ।"
+
+#~ msgid ""
+#~ "Libvirt was just installed, so the 'libvirtd' service will\n"
+#~ "will need to be started."
+#~ msgstr ""
+#~ "Libvirt ਹੁਣੇ-ਹੁਣੇ ਇੰਸਟਾਲ ਕੀਤਾ ਸੀ, ਇਸ ਲਈ 'libvirtd' ਸੇਵਾ\n"
+#~ "ਚਾਲੂ ਕਰਨੀ ਪਵੇਗੀ।"
+
+#~ msgid "Error setting net autostart: %s"
+#~ msgstr "ਨੈੱਟ ਆਟੋਸਟਾਰਟ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %s"
+
+#~ msgid "Error setting pool autostart: %s"
+#~ msgstr "ਪੂਲ ਆਟੋਸਟਾਰਟ ਸੈੱਟ ਕਰਨ ਵੇਲੇ ਗਲਤੀ: %s"
+
+#~ msgid "_Force Reset"
+#~ msgstr "ਧੱਕੇ ਨਾਲ ਰੀਸੈੱਟ (_F)"
+
+#~ msgid "_Clone..."
+#~ msgstr "ਕਲੋਨ ਕਰੋ(_C)..."
+
+#~ msgid "_Migrate..."
+#~ msgstr "ਮਾਈਗਰੇਟ(_M)..."
+
+#~ msgid "Searching for available hypervisors..."
+#~ msgstr "ਉਪਲੱਬਧ ਹਾਈਪਰਵਾਈਸਰ ਦੀ ਖੋਜ ਜਾਰੀ..."
+
+#~ msgid "Checking for installed package '%s'"
+#~ msgstr "ਇੰਸਟਾਲ ਕੀਤੇ ਪੈਕੇਜ '%s' ਲਈ ਜਾਂਚ ਕਰ ਰਿਹਾ ਹੈ"
+
+#~ msgid ""
+#~ "The following packages are not installed:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "These are required to create KVM guests locally.\n"
+#~ "Would you like to install them now?"
+#~ msgstr ""
+#~ "ਹੇਠਲੇ ਪੈਕੇਜ ਇੰਸਟਾਲ ਨਹੀਂ ਹਨ:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "ਇਹ ਲੋਕਲ KVM ਗੈੱਸਟ ਬਣਾਉਣ ਲਈ ਲੋੜੀਂਦੇ ਹਨ।\n"
+#~ "ਕੀ ਤੁਸੀਂ ਹੁਣੇ ਇੰਸਟਾਲ ਕਰਨਾ ਚਾਹੋਗੇ?"
+
+#~ msgid "Packages required for KVM usage"
+#~ msgstr "KVM ਵਰਤਣ ਲਈ ਲੋੜੀਂਦੇ ਪੈਕੇਜ"
+
+#~ msgid ""
+#~ "The following packages are not installed:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "Would you like to install them now?"
+#~ msgstr ""
+#~ "ਹੇਠਲੇ ਪੈਕੇਜ ਇੰਸਟਾਲ ਨਹੀਂ ਹਨ:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "ਕੀ ਤੁਸੀਂ ਹੁਣੇ ਇੰਸਟਾਲ ਕਰਨਾ ਚਾਹੋਗੇ?"
+
+#~ msgid "Recommended package installs"
+#~ msgstr "ਸਿਫਾਰਸ਼ੀ ਪੈਕੇਜ ਇੰਸਟਾਲ"
+
+#~ msgid "_Resume"
+#~ msgstr "ਮੁੜ-ਪ੍ਰਾਪਤ(_R)"
+
+#~ msgid "'path' or 'func' is required."
+#~ msgstr "'path' ਜਾਂ 'func' ਲੋੜੀਂਦਾ ਹੈ।"
+
+#~ msgid "Must be root to create Xen guests"
+#~ msgstr " Xen ਪ੍ਰਾਹੁਣੇ ਬਣਾਉਣ ਲਈ ਰੂਟ ਯੂਜ਼ਰ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+
+#~ msgid " (Use --prompt or --force to override)"
+#~ msgstr " (ਮੁੜ ਲਿਖਣ ਲਈ --prompt ਜਾਂ --force ਵਰਤੋ)"
+
+#~ msgid "Disk %s is already in use by another guest"
+#~ msgstr "ਡਿਸਕ %s ਪਹਿਲਾਂ ਹੀ ਹੋਰ ਪ੍ਰਾਹੁਣੇ ਦੀ ਵਰਤੋਂ ਵਿੱਚ ਹੈ"
+
+#~ msgid "Error in network device parameters: %s"
+#~ msgstr "ਨੈੱਟਵਰਕ ਯੰਤਰ ਪੈਰਾਮੀਟਰਾਂ ਵਿੱਚ ਗਲਤੀ: %s"
+
+#~ msgid "Error in graphics device parameters: %s"
+#~ msgstr "ਗਰਾਫਿਕਸ ਯੰਤਰ ਪੈਰਾਮੀਟਰਾਂ ਵਿੱਚ ਗਲਤੀ: %s"
+
+#~ msgid "Error in smartcard device parameters: %s"
+#~ msgstr "ਸਮਾਰਟ-ਕਾਰਡ ਯੰਤਰ ਪੈਰਾਮੀਟਰਾਂ ਵਿੱਚ ਗਲਤੀ: %s"
+
+#~ msgid "Error in RNG device parameters: %s"
+#~ msgstr "RNG ਯੰਤਰ ਪੈਰਾਮੀਟਰਾਂ ਵਿੱਚ ਗਲਤੀ: %s"
+
+#~ msgid "Error in controller device parameters: %s"
+#~ msgstr "ਨਿਯੰਤਰਕ ਯੰਤਰ ਪੈਰਾਮੀਟਰਾਂ ਵਿੱਚ ਗਲਤੀ: %s"
+
+#~ msgid "Error in redirdev device parameters: %s"
+#~ msgstr "redirdev ਯੰਤਰ ਪੈਰਾਮੀਟਰਾਂ ਵਿੱਚ ਗਲਤੀ: %s"
+
+#~ msgid "Error in memballoon device parameters: %s"
+#~ msgstr "memballoon ਯੰਤਰ ਪੈਰਾਮੀਟਰਾਂ ਵਿੱਚ ਗਲਤੀ: %s"
+
+#~ msgid ""
+#~ "Configure a guest network interface. Ex:\n"
+#~ "--network bridge=mybr0\n"
+#~ "--network network=my_libvirt_virtual_net\n"
+#~ "--network network=mynet,model=virtio,mac=00:11..."
+#~ msgstr ""
+#~ "ਇੱਕ ਪ੍ਰਾਹੁਣਾ ਨੈੱਟਵਰਕ ਇੰਟਰਫੇਸ ਸੰਰਚਿਤ ਕਰੋ। ਉਦਹਾਰਣ:\n"
+#~ "--network bridge=mybr0\n"
+#~ "--network network=my_libvirt_virtual_net\n"
+#~ "--network network=mynet,model=virtio,mac=00:11..."
+
+#~ msgid "--boot menu must be 'on' or 'off'"
+#~ msgstr "--boot ਮੇਨੂ ਦਾ 'ਚਾਲੂ' ਜਾਂ 'ਬੰਦ' ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+
+#~ msgid "The server option is invalid with spicevmc redirection"
+#~ msgstr " spicevmc ਮੁੜ-ਨਿਰਦੇਸ਼ਨ ਨਾਲ ਸਰਵਰ ਚੋਣ ਅਯੋਗ ਹੈ"
+
+#~ msgid "The server option is missing for TCP redirection"
+#~ msgstr "TCP ਮੁੜ-ਨਿਰਦੇਸ਼ਨਾ ਲਈ ਸਰਵਰ ਚੋਣ ਗੁੰਮ ਹੈ"
+
+#~ msgid "Connection must be a 'virConnect' instance."
+#~ msgstr "ਸੰਪਰਕ ਦਾ 'virConnect' ਨਮੂਨਾ ਹੋਣਾ ਜਰੂਰੀ ਹੈ।"
+
+#~ msgid "Disk '%s' does not exist."
+#~ msgstr "ਡਿਸਕ '%s' ਮੌਜੂਦ ਨਹੀਂ ਹੈ।"
+
+#~ msgid "Invalid 'location' type %s."
+#~ msgstr "ਅਯੋਗ 'ਸਥਿਤੀ' ਕਿਸਮ %s।"
+
+#~ msgid "'conn' must be specified if 'location' is a storage tuple."
+#~ msgstr "'conn' ਦਾ ਦਰਸਾਇਆ ਜਾਣਾ ਜਰੂਰੀ ਹੈ ਜੇ 'ਸਥਿਤੀ' ਇੱਕ ਭੰਡਾਰਣ ਟੱਪਲ ਹੈ।"
+
+#~ msgid ""
+#~ "Install media location must be an NFS, HTTP or FTP network install "
+#~ "source, or an existing file/device"
+#~ msgstr ""
+#~ "ਮੀਡੀਆ ਇੰਸਟਾਲ ਸਥਿਤੀ ਇੱਕ NFS, HTTP ਜਾਂ FTP ਨੈੱਟਵਰਕ ਇੰਸਟਾਲ ਸਰੋਤ, ਜਾਂ ਮੌਜੂਦਾ ਫਾਈਲ/ਯੰਤਰ "
+#~ "ਜਰੂਰ ਹੋਵੇ"
+
+#~ msgid "Privilege is required for NFS installations"
+#~ msgstr "NFS ਇੰਸਟਾਲੇਸ਼ਨਾਂ ਲਈ ਖਾਸ ਹੱਕ ਹੋਣੇ ਲੋੜੀਂਦੇ ਹਨ"
+
+#~ msgid "Unable to connect to hypervisor, aborting installation!"
+#~ msgstr "ਹਾਇਪਰਵਾਇਜ਼ਰ ਨਾਲ ਜੁੜਨ ਲਈ ਅਸਫ਼ਲ, ਇੰਸਟਾਲੇਸ਼ਨ ਛੱਡ ਰਿਹਾ"
+
+#~ msgid "Memory value must be an integer greater than 0"
+#~ msgstr "ਮੈਮੋਰੀ ਮੁੱਲ ਦਾ 0 ਤੋਂ ਵੱਡਾ ਇੱਕ ਅੰਕ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+
+#~ msgid "Max Memory value must be an integer greater than 0"
+#~ msgstr "ਵੱਧ ਤੋਂ ਵੱਧ ਮੈਮੋਰੀ ਮੁੱਲ ਦਾ 0 ਤੋਂ ਵੱਡਾ ਇੱਕ ਅੰਕ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+
+#~ msgid "Number of vcpus must be a positive integer."
+#~ msgstr "vcpus ਦੀ ਗਿਣਤੀ ਦਾ ਇੱਕ ਧਨਾਤਮਕ ਅੰਕ ਹੋਣਾ ਜਰੂਰੀ ਹੈ।"
+
+#~ msgid "Number of vcpus must be no greater than %d for this vm type."
+#~ msgstr "ਇਸ vm ਲਈ vcpus ਦੀ ਗਿਣਤੀ ਜਰੂਰ ਹੀ %d ਤੋਂ ਵੱਡੀ ਨਹੀਂ ਹੋਣੀ ਚਾਹੀਦੀ।"
+
+#~ msgid "OS type must be a string."
+#~ msgstr "OS ਕਿਸਮ ਜਰੂਰ ਇਕ ਸਤਰ੍ਹ ਹੋਵੇ।"
+
+#~ msgid "OS type '%s' does not exist in our dictionary"
+#~ msgstr "OS ਕਿਸਮ '%s' ਸਾਡੇ ਸ਼ਬਦਕੋਸ਼ ਵਿੱਚ ਮੌਜੂਦ ਨਹੀਂ ਹੈ"
+
+#~ msgid "OS variant must be a string."
+#~ msgstr "OS ਵੇਰੀਐਂਟ ਜਰੂਰ ਇਕ ਸਤਰ੍ਹ ਹੋਵੇ।"
+
+#~ msgid ""
+#~ "OS variant '%(var)s' does not exist in our dictionary for OS type '%(ty)s'"
+#~ msgstr "OS ਵੇਰੀਐਂਟ '%(var)s' ਸਾਡੇ ਸ਼ਬਦਕੋਸ਼ ਵਿੱਚ OS ਕਿਸਮ '%(ty)s' ਲਈ ਮੌਜੂਦ ਨਹੀਂ ਹੈ।"
+
+#~ msgid "Unknown OS variant '%s'"
+#~ msgstr "ਅਣਜਾਣ OS ਵੇਰੀਐਂਟ '%s'"
+
+#~ msgid "Whether we should overwrite an existing guest with the same name."
+#~ msgstr "ਕੀ ਸਾਨੂੰ ਇਸੇ ਨਾਂ ਵਾਲੇ ਕਿਸੇ ਮੌਜੂਦਾ ਪ੍ਰਾਹੁਣੇ ਨੂੰ ਮੁੜ ਲਿਖਣਾ ਚਾਹੀਦਾ ਹੈ।"
+
+#~ msgid "Must pass a VirtualDevice instance."
+#~ msgstr "VirtualDevice ਨਮੂਨਾ ਜਰੂਰ ਗੁਜਾਰੇ।"
+
+#~ msgid "Did not find device %s"
+#~ msgstr "ਯੰਤਰ %s ਨਹੀਂ ਲੱਭਿਆ"
+
+#~ msgid "Name and memory must be specified for all guests!"
+#~ msgstr "ਸਾਰੇ ਪ੍ਰਾਹੁਣਿਆਂ ਲਈ ਨਾਂ ਤੇ ਮੈਮੋਰੀ ਦਰਸਾਈ ਜਾਣੀ ਜਰੂਰੀ ਹੈ!"
+
+#~ msgid "The UUID you entered is already in use by another guest!"
+#~ msgstr "ਜਿਹੜੀ UUID ਤੁਸੀਂ ਭਰੀ ਹੈ ਉਹ ਪਹਿਲਾਂ ਹੀ ਕਿਸੇ ਹੋਰ ਪ੍ਰਾਹੁਣੇ ਦੁਆਰਾ ਵਰਤੋਂ ਵਿੱਚ ਹੈ!"
+
+#~ msgid ""
+#~ "Domain has not existed.  You should be able to find more information in "
+#~ "the logs"
+#~ msgstr "ਡੋਮੇਨ ਬਾਹਰ ਨਹੀਂ ਆਈ ਹੈ। ਤੁਹਾਨੂੰ ਹੋਰ ਜਾਣਕਾਰੀ ਲੌਗ ਵਿੱਚ ਲੱਭ ਜਾਵੇਗੀ"
+
+#~ msgid ""
+#~ "Domain has not run yet.  You should be able to find more information in "
+#~ "the logs"
+#~ msgstr "ਡੋਮੇਨ ਅਜੇ ਚੱਲੀ ਨਹੀਂ ਹੈ। ਤੁਹਾਨੂੰ ਹੋਰ ਜਾਣਕਾਰੀ ਲੌਗ ਵਿੱਚ ਲੱਭ ਜਾਵੇਗੀ"
+
+#~ msgid "'conn' or 'capabilities' must be specified."
+#~ msgstr "'conn' ਜਾਂ 'ਯੋਗਤਾਵਾਂ' ਦਰਸਾਏ ਜਾਣੇ ਜਰੂਰੀ ਹਨ।"
+
+#~ msgid "Root element is not 'image'"
+#~ msgstr "ਰੂਟ ਤੱਤ 'image' ਨਹੀਂ ਹੈ"
+
+#~ msgid "A connection must be specified."
+#~ msgstr "ਇੱਕ ਸੰਪਰਕ ਜਰੂਰ ਦਰਸਾਇਆ ਜਾਵੇ।"
+
+#~ msgid "'conn' must be a libvirt connection object."
+#~ msgstr "'conn' ਦਾ ਇੱਕ libvirt ਸੰਪਰਕ ਆਬਜੈਕਟ ਹੋਣਾ ਜਰੂਰੀ ਹੈ।"
+
+#~ msgid "Passed connection is not libvirt interface capable"
+#~ msgstr "ਗੁਜਾਰਿਆ ਹੋਇਆ ਸੰਪਰਕ libvirt ਇੰਟਰਫੇਸ ਦੇ ਯੋਗ ਨਹੀਂ ਹੈ"
+
+#~ msgid "Interface name"
+#~ msgstr "ਇੰਟਰਫੇਸ ਨਾਂ"
+
+#~ msgid "Unknown start mode '%s"
+#~ msgstr "ਅਣਪਛਾਤਾ ਸ਼ੁਰੂਆਤ ਮੋਡ '%s'"
+
+#~ msgid "Network protocol configuration"
+#~ msgstr "ਨੈੱਟਵਰਕ ਜਾਬਤਾ ਸੰਰਚਨਾ"
+
+#~ msgid "Availability monitoring mode for the bond device"
+#~ msgstr "ਬੌਂਡ ਯੰਤਰ ਲਈ ਉਪਲੱਬਧਤਾ ਮੌਨੀਟਰਿੰਗ ਮੋਡ"
+
+#~ msgid "Tag and parent interface are required."
+#~ msgstr "ਟੈਗ ਅਤੇ ਪ੍ਰਮੁੱਖ ਇੰਟਰਫੇਸ ਲੋੜੀਂਦੇ ਹਨ।"
+
+#~ msgid "Static IP addresses"
+#~ msgstr "ਸਥਿਰ IP ਪਤੇ"
+
+#~ msgid "IPv6 address prefix"
+#~ msgstr "IPv6 ਪਤਾ ਅਗੇਤਰ"
+
+#~ msgid "IP address"
+#~ msgstr "IP ਪਤਾ"
+
+#~ msgid "CDROM media must be specified for the live CD installer."
+#~ msgstr "ਲਾਈਵ CD ਇੰਸਟਾਲਰ ਲਈ CDROM ਮੀਡੀਆ ਦਰਸਾਉਣਾ ਜਰੂਰੀ ਹੈ।"
+
+#~ msgid "Invalid dictionary entry for device '%s %s'"
+#~ msgstr "ਯੰਤਰ '%s %s' ਲਈ ਅਯੋਗ ਸ਼ਬਦਕੋਸ਼ ਇੰਦਰਾਜ"
+
+#~ msgid "Unable to determine kernel RPM path"
+#~ msgstr "ਕਰਨਲ RPM ਰਾਹ ਪਤਾ ਕਰਨ ਤੋਂ ਅਸਮਰੱਥ"
+
+#~ msgid "Unable to determine install-initrd RPM path"
+#~ msgstr "install-initrd RPM ਰਾਹ ਪਤਾ ਕਰਨ ਤੋਂ ਅਸਮਰੱਥ"
+
+#~ msgid "Building initrd"
+#~ msgstr "initrd  ਉਸਾਰ ਰਿਹਾ ਹੈ"
+
+#~ msgid "Solaris miniroot not found at %s"
+#~ msgstr "%s ਤੇ ਸੋਲੈਰਿਸ ਮਿਨੀਰੂਟ ਨਹੀਂ ਲੱਭਿਆ ਹੈ"
+
+#~ msgid "OpenSolaris PV kernel not found at %s"
+#~ msgstr "%s ਤੇ ਓਪਨਸੋਲੈਰਿਸ PV ਕਰਨਲ ਨਹੀਂ ਲੱਭਿਆ ਹੈ"
+
+#~ msgid "Unknown storage object type: %s"
+#~ msgstr "ਅਣਪਛਾਤੀ ਭੰਡਾਰਣ ਆਬਜੈਕਟ ਕਿਸਮ: %s"
+
+#~ msgid "Passed connection is not libvirt storage capable"
+#~ msgstr "ਗੁਜਾਰਿਆ ਹੋਇਆ ਸੰਪਰਕ libvirt ਭੰਡਾਰਣ ਦੇ ਯੋਗ ਨਹੀਂ ਹੈ"
+
+#~ msgid "Permissions must be passed as a dict object"
+#~ msgstr "ਮੰਨਜੂਰੀਆਂ ਇੱਕ dict ਆਬਜੈਕਟ ਵਜੋਂ ਗੁਜਾਰੀਆਂ ਜਾਣ"
+
+#~ msgid "Permissions must contain 'mode', 'owner' and 'group' keys."
+#~ msgstr "ਮੰਨਜੂਰੀਆਂ ਵਿੱਚ 'ਮੋਡ', 'ਮਾਲਕ' ਅਤੇ 'ਸਮੂਹ' ਚਾਬੀਆਂ ਜਰੂਰੀ ਹੋਣੀਆਂ ਚਾਹੀਦੀਆਂ ਹਨ।"
+
+#~ msgid "'%s' is not an absolute path."
+#~ msgstr "'%s' ਇੱਕ ਪੂਰਾ ਰਾਹ ਨਹੀਂ ਹੈ।"
+
+#~ msgid "Unknown storage pool type: %s"
+#~ msgstr "ਅਣਪਛਾਤੀ ਭੰਡਾਰਣ ਪੂਲ ਕਿਸਮ: %s"
+
+#~ msgid "Host name must be a string"
+#~ msgstr "ਮੇਜਬਾਨ ਨਾਂ ਜਰੂਰ ਇੱਕ ਸਤਰ੍ਹ ਹੋਵੇ"
+
+#~ msgid "Directory to use for the storage pool."
+#~ msgstr "ਭੰਡਾਰਣ ਪੂਲ ਲਈ ਵਰਤਿਆ ਜਾਣ ਵਾਲਾ ਭੰਡਾਰਣ ਪੂਲ।"
+
+#~ msgid "The existing device to mount for the pool."
+#~ msgstr "ਪੂਲ ਲਈ ਮਾਊਂਟ ਕਰਨ ਲਈ ਮੌਜੂਦਾ ਯੰਤਰ।"
+
+#~ msgid "Location to mount the source device."
+#~ msgstr "ਸਰੋਤ ਯੰਤਰ ਨੂੰ ਮਾਊਂਟ ਕਰਨ ਦੀ ਸਥਿਤੀ।"
+
+#~ msgid "Unknown Filesystem format: %s"
+#~ msgstr "ਅਣਪਛਾਤਾ ਫਾਈਲ ਸਿਸਟਮ ਫਾਰਮੈਟ: %s"
+
+#~ msgid "Filesystem type of the source device."
+#~ msgstr "ਸਰੋਤ ਯੰਤਰ ਦੀ ਫਾਈਲ ਸਿਸਟਮ ਕਿਸਮ।"
+
+#~ msgid "Device path is required"
+#~ msgstr "ਯੰਤਰ ਰਾਹ ਲੋੜੀਂਦਾ ਹੈ"
+
+#~ msgid "Path on the host that is being shared."
+#~ msgstr "ਸਾਂਝਾ ਕੀਤੇ ਜਾ ਰਹੇ ਮੇਜਬਾਨ ਉੱਤੇ ਰਾਹ।"
+
+#~ msgid "Name of the host sharing the storage."
+#~ msgstr "ਭੰਡਾਰਣ ਸਾਂਝਾ ਕਰ ਰਹੇ ਮੇਜਬਾਨ ਦਾ ਨਾਂ।"
+
+#~ msgid "Unknown Network Filesystem format: %s"
+#~ msgstr "ਅਣਪਛਾਤਾ ਨੈੱਟਵਰਕ ਫਾਈਲ ਸਿਸਟਮ ਫਾਰਮੈਟ: %s"
+
+#~ msgid "Type of network filesystem."
+#~ msgstr "ਨੈੱਟਵਰਕ ਫਾਈਲ ਸਿਸਟਮ ਦੀ ਕਿਸਮ।"
+
+#~ msgid "Host path is required"
+#~ msgstr "ਮੇਜਬਾਨ ਰਾਹ ਲੋੜੀਂਦਾ ਹੈ"
+
+#~ msgid "Location of the existing LVM volume group."
+#~ msgstr "ਮੌਜੂਦਾ LVM ਸਮੂਹ ਦੀ ਸਥਿਤੀ।"
+
+#~ msgid "Optional device(s) to build new LVM volume on."
+#~ msgstr "ਇੱਕ ਨਵਾਂ LVM ਆਇਤਨ ਬਣਾਉਣ ਲਈ ਚੋਣਵਾਂ (ਚੋਣਵੇਂ) ਯੰਤਰ"
+
+#~ msgid "Path to the existing disk device."
+#~ msgstr "ਮੌਜੂਦਾ ਡਿਸਕ ਯੰਤਰ ਵੱਲ ਰਾਹ।"
+
+#~ msgid "Root location for identifying new storage volumes."
+#~ msgstr "ਨਵੇਂ ਭੰਡਾਰਣ ਆਇਤਨ ਪਛਾਨਣ ਲਈ ਰੂਟ ਸਥਿਤੀ।"
+
+#~ msgid "Unknown Disk format: %s"
+#~ msgstr "ਅਣਪਛਾਤਾ ਡਿਸਕ ਫਾਰਮੈਟ: %s"
+
+#~ msgid "Format of the source device's partition table."
+#~ msgstr "ਸਰੋਤ ਯੰਤਰ ਦੀ ਵੰਡ ਸਾਰਣੀ ਦਾ ਫਾਰਮੈਟ।"
+
+#~ msgid "iSCSI volume creation is not supported."
+#~ msgstr "iSCSI ਆਇਤਨ ਬਣਾਉਣ ਦਾ ਸਮਰਥਨ ਨਹੀਂ ਹੈ।"
+
+#~ msgid "SCSI volume creation is not supported."
+#~ msgstr "SCSI ਆਇਤਨ ਬਣਾਉਣ ਦਾ ਸਮਰਥਨ ਨਹੀਂ ਹੈ।"
+
+#~ msgid "Name of the scsi adapter (ex. host2)"
+#~ msgstr "scsi ਅਡਾਪਟਰ ਦਾ ਨਾਂ (ਉਦਾਹਰਣ host2)"
+
+#~ msgid "Adapter name is required"
+#~ msgstr "ਅਡਾਪਟਰ ਦਾ ਨਾਂ ਲੋੜੀਂਦਾ ਹੈ"
+
+#~ msgid "Multipath volume creation is not supported."
+#~ msgstr "ਬਹੁ-ਰਾਹੀ ਆਇਤਨ ਬਣਾਉਣਾ ਸਮਰਥਿਤ ਨਹੀਂ ਹੈ।"
+
+#~ msgid "One of pool or pool_name must be specified."
+#~ msgstr "ਪੂਲ ਜਾਂ pool_name ਵਿੱਚੋਂ ਇੱਕ ਦਰਸਾਉਣਾ ਜਰੂਰੀ ਹੈ।"
+
+#~ msgid "'conn' must be specified with 'pool_name'"
+#~ msgstr "'conn' ਨੂੰ 'pool_name' ਨਾਲ ਹੀ ਦਰਸਾਇਆ ਜਾਵੇ"
+
+#~ msgid "Must specify pool_object or pool_name"
+#~ msgstr "pool_object ਜਾਂ pool_name ਜਰੂਰ ਦਰਸਾਉ"
+
+#~ msgid "Couldn't find storage pool '%s': %s"
+#~ msgstr "ਭੰਡਾਰਣ ਪੂਲ '%s' ਨਹੀਂ ਲੱਭ ਸਕਿਆ: %s"
+
+#~ msgid "pool_object must be a virStoragePool"
+#~ msgstr "pool_object ਜਰੂਰ ਇੱਕ virStoragePool ਹੋਵੇ"
+
+#~ msgid "Capacity must be a positive number"
+#~ msgstr "ਸਮਰੱਥਾ ਇੱਕ ਧਨਾਤਮਕ ਅੰਕ ਜਰੂਰ ਹੋਵੇ"
+
+#~ msgid "Allocation must be a non-negative number"
+#~ msgstr "ਵੰਡ ਜਰੂਰੀ ਹੀ ਇੱਕ ਗੈਰ-ਰਿਣਾਤਮਕ ਅੰਕ ਹੋਵੇ"
+
+#~ msgid "'pool' must be a virStoragePool instance."
+#~ msgstr "'ਪੂਲ' ਜਰੂਰੀ ਇੱਕ virStoragePool ਨਮੂਨਾ ਹੋਵੇ।"
+
+#~ msgid "'%s' is not a valid format."
+#~ msgstr "'%s' ਇੱਕ ਢੁਕਵਾਂ ਫਾਰਮੈਟ ਨਹੀਂ ਹੈ।"
+
+#~ msgid "'conn' must be a virConnect instance."
+#~ msgstr "'conn' ਜਰੂਰੀ ਇੱਕ virConnect ਨਮੂਨਾ ਹੋਵੇ।"
+
+#~ msgid "'model' must be a string,  was '%s'."
+#~ msgstr "'ਮਾਡਲ' ਇੱਕ ਸਤਰ ਹੋਣੀ ਜਰੂਰੀ ਹੈ, '%s' ਸੀ।"
+
+#~ msgid "Unsupported sound model '%s'"
+#~ msgstr "ਅਸਮਰਥਿਤ ਆਵਾਜ ਮਾਡਲ '%s'"
+
+#~ msgid "Unknown character device type '%s'."
+#~ msgstr "ਅਣਪਛਾਤੀ ਅੱਖਰ ਯੰਤਰ ਕਿਸਮ '%s'।"
+
+#~ msgid "Unknown character device type '%s'"
+#~ msgstr "ਅਣਪਛਾਤੀ ਅੱਖਰ ਯੰਤਰ ਕਿਸਮ '%s'"
+
+#~ msgid "Unknown character mode '%s'."
+#~ msgstr "ਅਣਪਛਾਤਾ ਅੱਖਰ ਮੋਡ '%s'।"
+
+#~ msgid "Unknown protocol '%s'."
+#~ msgstr "ਅਣਪਛਾਤਾ ਜਾਬਤਾ '%s'।"
+
+#~ msgid "Unknown target type '%s'. Must be in: "
+#~ msgstr "ਅਣਪਛਾਤੀ ਟਿਕਾਣਾ ਕਿਸਮ '%s'। ਜਰੂਰੀ ਇਸ ਵਿੱਚ ਹੋਵੇ:"
+
+#~ msgid "Unknown address type '%s'. Must be in: "
+#~ msgstr "ਅਣਪਛਾਤੀ ਪਤਾ ਕਿਸਮ '%s'। ਜਰੂਰੀ ਇਸ ਵਿੱਚ ਹੋਵੇ:"
+
+#~ msgid "A source path is required for character device type '%s'"
+#~ msgstr "ਅੱਖਰ ਯੰਤਰ ਕਿਸਮ '%s' ਲਈ ਇੱਕ ਸਰੋਤ ਰਾਹ ਲੋੜੀਂਦਾ ਹੈ"
+
+#~ msgid "PTY allocated to the guest."
+#~ msgstr "PTY ਪ੍ਰਾਹੁਣੇ ਨੂੰ ਵੰਡੀ ਗਈ।"
+
+#~ msgid "Host character device to attach to guest."
+#~ msgstr "ਪ੍ਰਾਹੁਣੇ ਨੂੰ ਨੱਥੀ ਕਰਨ ਲਈ ਮੇਜਬਾਨ ਅੱਖਰ ਯੰਤਰ।"
+
+#~ msgid "Named pipe to use for input and output."
+#~ msgstr "ਇੰਨਪੁੱਟ ਅਤੇ ਆਊਟਪੁੱਟ ਨਾਲ ਵਰਤਣ ਲਈ ਨਾਂ ਵਾਲਾ ਪਾਈਪ।"
+
+#~ msgid "File path to record device output."
+#~ msgstr "ਯੰਤਰ ਆਊਟਪੁੱਟ ਨੂੰ ਦਰਜ ਕਰਨ ਲਈ ਫਾਈਲ ਰਾਹ।"
+
+#~ msgid "Unix socket path."
+#~ msgstr "ਯੂਨਿਕਸ ਸਾਕੇਟ ਰਾਹ।"
+
+#~ msgid "A host and port must be specified."
+#~ msgstr "ਇੱਕ ਮੇਜਬਾਨ ਅਤੇ ਪੋਰਟ ਜਰੂਰ ਦਰਸਾਇਆ ਜਾਵੇ।"
+
+#~ msgid "Host address to send output to."
+#~ msgstr "ਆਊਟਪੁੱਟ ਭੇਜਣ ਲਈ ਮੇਜਬਾਨ ਪਤਾ।"
+
+#~ msgid "Host port to send output to."
+#~ msgstr "ਆਊਟਪੁੱਟ ਭੇਜਣ ਲਈ ਮੇਜਬਾਨ ਪੋਰਟ।"
+
+#~ msgid "A connection port must be specified."
+#~ msgstr "ਸੰਪਰਕ ਪੋਰਟ ਜਰੂਰੀ ਦਰਸਾਇਆ ਜਾਵੇ।"
+
+#~ msgid "volName must be a tuple of the form ('poolname', 'volname')"
+#~ msgstr "volName ਜਰੂਰ ਇੱਕ ('poolname', 'volname') ਕਿਸਮ ਦਾ ਟੱਪਲ ਹੋਵੇ"
+
+#~ msgid "'volName' requires a passed connection."
+#~ msgstr "'volName' ਨੂੰ ਇੱਕ ਗੁਜਾਰਿਆ ਸੰਪਰਕ ਲੋੜੀਂਦਾ ਹੈ।"
+
+#~ msgid "vol_object must be a virStorageVol instance"
+#~ msgstr "vol_object ਜਰੂਰ ਹੀ ਇੱਕ virStorageVol ਨਮੂਨਾ ਹੋਵੇ"
+
+#~ msgid "vol_install must be a StorageVolume  instance."
+#~ msgstr "vol_install ਜਰੂਰ ਹੀ ਇੱਕ StorageVolume ਨਮੂਨਾ ਹੋਵੇ।"
+
+#~ msgid "Error validating clone path: %s"
+#~ msgstr "ਕਲੋਨ ਰਾਹ ਨੂੰ ਜਾਇਜ ਕਰਨ ਵੇਲੇ ਗਲਤੀ: %s"
+
+#~ msgid "'size' must be a number greater than 0."
+#~ msgstr "'ਆਕਾਰ' ਦਾ 0 ਤੋਂ ਵੱਡਾ ਇੱਕ ਅੰਕ ਹੋਣਾ ਜਰੂਰੀ ਹੈ।"
+
+#~ msgid "Unknown storage type '%s'"
+#~ msgstr "ਅਣਪਛਾਤੀ ਭੰਡਾਰਣ ਕਿਸਮ '%s'"
+
+#~ msgid "Unknown device type '%s'"
+#~ msgstr "ਅਣਪਛਾਤੀ ਯੰਤਰ ਕਿਸਮ '%s'"
+
+#~ msgid "Unknown cache mode '%s'"
+#~ msgstr "ਅਣਪਛਾਤਾ ਕੈਚੇ ਮੋਡ '%s'"
+
+#~ msgid "Unknown io mode '%s'"
+#~ msgstr "ਅਣਪਛਾਤਾ io ਮੋਡ '%s'"
+
+#~ msgid "Unknown error policy '%s'"
+#~ msgstr "ਅਣਪਛਾਤੀ ਗਲਤੀ ਨੀਤੀ '%s'"
+
+#~ msgid "IOTune read bytes per second value must be an integer"
+#~ msgstr "IOTune ਦੇ ਪ੍ਰਤੀ ਸੈਕਿੰਡ ਬਾਈਟਾਂ ਪੜ੍ਹਤ ਦੇ ਮੁੱਲ ਦਾ ਇੱਕ ਅੰਕ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+
+#~ msgid "IOTune read iops per second value must be an integer"
+#~ msgstr "IOTune ਦੇ ਪ੍ਰਤੀ ਸੈਕਿੰਡ iops ਪੜ੍ਹਤ ਦੇ ਮੁੱਲ ਦਾ ਇੱਕ ਅੰਕ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+
+#~ msgid "IOTune total bytes per second value must be an integer"
+#~ msgstr "IOTune ਦੇ ਪ੍ਰਤੀ ਸੈਕਿੰਡ ਕੁੱਲ ਬਾਈਟਾਂ ਦੇ ਮੁੱਲ ਦਾ ਇੱਕ ਅੰਕ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+
+#~ msgid "IOTune total iops per second value must be an integer"
+#~ msgstr "IOTune ਦੇ ਕੁੱਲ iops ਪ੍ਰਤੀ ਸੈਕਿੰਡ ਦੇ ਮੁੱਲ ਦਾ ਇੱਕ ਅੰਕ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+
+#~ msgid "IOTune write bytes per second value must be an integer"
+#~ msgstr "IOTune ਦੇ ਪ੍ਰਤੀ ਸੈਕਿੰਡ ਬਾਈਟਾਂ ਲਿਖਣ ਦੇ ਮੁੱਲ ਦਾ ਇੱਕ ਅੰਕ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+
+#~ msgid "IOTune write iops per second value must be an integer"
+#~ msgstr "IOTune ਦੇ ਪ੍ਰਤੀ ਸੈਕਿੰਡ iops ਲਿਖਣ ਦੇ ਮੁੱਲ ਦਾ ਇੱਕ ਅੰਕ ਹੋਣਾ ਜਰੂਰੀ ਹੈ"
+
+#~ msgid "copying to an existing vdisk is not supported"
+#~ msgstr "ਕਿਸੇ ਮੌਜੂਦਾ vdisk ਉੱਤੇ ਨਕਲ ਕਰਨਾ ਸਮਰਥਿਤ ਨਹੀਂ ਹੈ"
+
+#~ msgid "failed to clone disk"
+#~ msgstr "ਡਿਸਕ ਨੂੰ ਕਲੋਨ ਕਰਨ ਵਿੱਚ ਅਸਫਲ"
+
+#~ msgid "Error creating vdisk %s"
+#~ msgstr "vdisk %s ਬਣਾਉਣ ਵਿੱਚ ਗਲਤੀ"
+
+#~ msgid "'disknode' or self.target must be set!"
+#~ msgstr "'disknode' ਜਾਂ self.target ਜਰੂਰੀ ਸੈੱਟ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ!"
+
+#~ msgid "Cannot determine device bus/type."
+#~ msgstr "ਯੰਤਰ ਬਸ/ਕਿਸਮ ਪਤਾ ਨਹੀਂ ਕਰ ਸਕਦਾ।"
+
+#~ msgid "Unsupported filesystem type '%s'"
+#~ msgstr "ਅਸਮਰਥਿਤ ਫਾਈਲ ਸਿਸਟਮ ਕਿਸਮ '%s'"
+
+#~ msgid "Unsupported filesystem mode '%s'"
+#~ msgstr "ਅਸਮਰਥਿਤ ਫਾਈਲ ਸਿਸਟਮ ਮੋਡ '%s'"
+
+#~ msgid "Unsupported filesystem write policy '%s'"
+#~ msgstr "ਅਸਮਰਥਿਤ ਫਾਈਲ ਸਿਸਟਮ ਲਿਖਣ ਨੀਤੀ '%s'"
+
+#~ msgid "Unsupported filesystem driver '%s'"
+#~ msgstr "ਅਸਮਰਥਿਤ ਫਾਈਲ ਸਿਸਟਮ ਚਾਲਕ '%s'"
+
+#~ msgid "A filesystem source and target must be specified"
+#~ msgstr "ਇੱਕ ਫਾਈਲ ਸਿਸਟਮ ਸਰੋਤ ਅਤੇ ਟਿਕਾਣਾ ਦਰਸਾਉਣਾ ਜਰੂਰੀ ਹੈ"
+
+#~ msgid "Unknown graphics type '%s'"
+#~ msgstr "ਅਣਪਛਾਤੀ ਗਰਾਫਿਕਸ ਕਿਸਮ '%s'"
+
+#~ msgid "Keymap must be a string"
+#~ msgstr "ਕੀਅ-ਮੈਪ ਜਰੂਰੀ ਹੀ ਇੱਕ ਸਤਰ੍ਹ ਹੋਵੇ"
+
+#~ msgid "Keymap must be less than 16 characters"
+#~ msgstr "ਕੀਅ-ਮੈਪ ਜਰੂਰ ਹੀ 16 ਅੱਖਰਾਂ ਤੋਂ ਘੱਟ ਹੋਵੇ"
+
+#~ msgid "Keymap can only contain alphanumeric, '_', or '-' characters"
+#~ msgstr "ਕੀਅ-ਮੈਪ ਵਿੱਚ ਸਿਰਫ਼ ਅੰਕ-ਅੱਖਰ, '_',  ਜਾਂ '-' ਅੱਖਰ ਹੋ ਸਕਦੇ ਹਨ"
+
+#~ msgid ""
+#~ "VNC port must be a number between 5900 and 65535, or -1 for auto "
+#~ "allocation"
+#~ msgstr ""
+#~ "VNC ਪੋਰਟ ਜਰੂਰ ਹੀ 5900 ਅਤੇ 65535 ਦੇ ਵਿੱਚਕਾਰ ਦਾ ਇੱਕ ਅੰਕ ਹੋਵੇ, ਜਾਂ ਸ੍ਵੈ-ਵੰਡ ਲਈ -1 ਹੋਵੇ"
+
+#~ msgid ""
+#~ "TLS port must be a number between 5900 and 65535, or -1 for auto "
+#~ "allocation"
+#~ msgstr ""
+#~ "TLS ਪੋਰਟ ਜਰੂਰ ਹੀ 5900 ਅਤੇ 65535 ਦੇ ਵਿੱਚਕਾਰ ਦਾ ਇੱਕ ਅੰਕ ਹੋਵੇ, ਜਾਂ ਸ੍ਵੈ-ਵੰਡ ਲਈ -1 ਹੋਵੇ"
+
+#~ msgid "Unknown graphics type"
+#~ msgstr "ਅਣਪਛਾਤੀ ਗਰਾਫਿਕਸ ਕਿਸਮ"
+
+#~ msgid "'name' or 'nodedev' required."
+#~ msgstr "'ਨਾਂ' ਜਾਂ 'nodedev' ਲੋੜੀਂਦਾ।"
+
+#~ msgid "Node device type '%s' cannot be attached to  guest."
+#~ msgstr "ਨੋਡ ਯੰਤਰ ਕਿਸਮ '%s' ਪ੍ਰਾਹੁਣਿਆਂ ਨਾਲ ਨੱਥੀ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕਦੀ।"
+
+#~ msgid "'nodedev' must be a USBDevice instance."
+#~ msgstr "'nodedev' ਜਰੂਰ ਹੀ ਇੱਕ USBDevice ਨਮੂਨਾ ਹੋਵੇ।"
+
+#~ msgid "'vendor' and 'product', or 'bus' and  'device' are required."
+#~ msgstr "'ਵਿਤਰਕ' ਜਾਂ 'ਉਤਪਾਦ', ਜਾਂ 'ਬਸ' ਅਤੇ  'ਯੰਤਰ' ਲੋੜੀਂਦੇ ਹਨ।"
+
+#~ msgid "'nodedev' must be a PCIDevice instance."
+#~ msgstr "'nodedev' ਜਰੂਰ ਹੀ ਇੱਕ PCIDevice ਨਮੂਨਾ ਹੋਵੇ।"
+
+#~ msgid "'domain', 'bus', 'slot', and 'function' must be specified."
+#~ msgstr "'ਡੋਮੇਨ', 'ਬਸ', 'ਸਲਾਟ', ਅਤੇ 'ਫੰਕਸ਼ਨ' ਦਰਸਾਏ ਜਾਣੇ ਜਰੂਰੀ ਹਨ।"
+
+#~ msgid "Unknown input type '%s'."
+#~ msgstr "ਅਣਪਛਾਤੀ ਇੰਨਪੁੱਟ ਕਿਸਮ '%s'।"
+
+#~ msgid "Unknown input bus '%s'."
+#~ msgstr "ਅਣਪਛਾਤੀ ਬਸ ਕਿਸਮ '%s'।"
+
+#~ msgid "Unsupported memballoon model '%s'"
+#~ msgstr "ਅਸਮਰਥਿਤ memballoon ਮਾਡਲ '%s'"
+
+#~ msgid "A network name was not provided"
+#~ msgstr "ਕੋਈ ਨੈੱਟਵਰਕ ਨਾਂ ਨਹੀਂ ਦਿੱਤਾ ਗਿਆ ਸੀ"
+
+#~ msgid "Unknown network type %s"
+#~ msgstr "ਅਣਪਛਾਤੀ ਨੈੱਟਵਰਕ ਕਿਸਮ %s"
+
+#~ msgid "Virtual network '%s' does not exist: %s"
+#~ msgstr "ਆਭਾਸੀ ਨੈੱਟਵਰਕ '%s' ਮੌਜੂਦ ਨਹੀਂ ਹੈ: %s"
+
+#~ msgid "Virtual network '%s' has not been started."
+#~ msgstr "ਆਭਾਸੀ ਨੈੱਟਵਰਕ '%s' ਸ਼ੁਰੂ ਨਹੀਂ ਹੋਇਆ ਹੈ।"
+
+#~ msgid "Unsupported bus '%s'"
+#~ msgstr "ਅਸਮਰਥਿਤ ਬਸ '%s'"
+
+#~ msgid "Unsupported redirection type '%s'"
+#~ msgstr "ਅਸਮਰਥਿਤ ਮੁੜ-ਨਿਰਦੇਸ਼ਨ ਕਿਸਮ '%s'"
+
+#~ msgid "Invalid host value"
+#~ msgstr "ਅਢੁਕਵਾਂ ਮੇਜਬਾਨ ਮੁੱਲ"
+
+#~ msgid "Unknown smartcard mode '%s'"
+#~ msgstr "ਅਣਪਛਾਤਾ ਸਮਾਰਟ-ਕਾਰਡ ਮੋਡ '%s'"
+
+#~ msgid "Unknown smartcard type '%s'"
+#~ msgstr "ਅਣਪਛਾਤੀ ਸਮਾਰਟ-ਕਾਰਡ ਕਿਸਮ '%s'"
+
+#~ msgid "Unsupported watchdog model '%s'"
+#~ msgstr "ਅਸਮਰਥਿਤ watchdog ਮਾਡਲ '%s'"
+
+#~ msgid "'%s' must be True or False"
+#~ msgstr "'%s' ਜਰੂਰ ਹੀ ਸਹੀ ਜਾਂ ਗਲਤ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ"
+
+#~ msgid "'%s' must be a string, not '%s'."
+#~ msgstr "'%s' ਜਰੂਰ ਹੀ ਇੱਕ ਸਤਰ੍ਹ ਹੋਵੇ, ਨਾ ਕਿ '%s'"
+
+#~ msgid ""
+#~ "Please indicate how you would like to assign space on the host system for "
+#~ "your virtual storage device."
+#~ msgstr ""
+#~ "ਇਹ ਦੱਸੋ ਕਿ ਤੁਸੀਂ ਹੋਸਟ ਸਿਸਟਮ ਉੱਤੇ ਆਪਣੇ ਨਵੇਂ ਵਰਚੁਅਲ ਸਟੋਰੇਜ਼ ਜੰਤਰ ਲਈ ਖਾਲੀ ਥਾਂ ਕਿਵੇਂ ਦੇਣੀ ਚਾਹੁੰਦੇ ਹੋ।"
+
+#~ msgid ""
+#~ "Please indicate how you'd like to connect your new virtual network device "
+#~ "to the host network."
+#~ msgstr "ਕਿਰਪਾ ਕਰਕੇ ਦੱਸੋ ਕਿ ਤੁਸੀਂ ਨਵੇਂ ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਜੰਤਰ ਨੂੰ ਹੋਸਟ ਨੈੱਟਵਰਕ ਨਾਲ ਕਿਵੇਂ ਜੋੜਨਾ ਹੈ।"
+
+#~ msgid ""
+#~ "Please indicate what kind of pointer device to connect to the virtual "
+#~ "machine."
+#~ msgstr "ਕਿਰਪਾ ਕਰਕੇ ਦੱਸੋ ਕਿ ਕਿਹੜੀ ਪੁਆਂਇਟਰ ਜੰਤਰ ਕਿਸਮ ਨੂੰ ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਨਾਲ ਜੋੜਨਾ ਹੈ।"
+
+#~ msgid "Please indicate how you would like to view the virtual display."
+#~ msgstr "ਦੱਸੋ ਕਿ ਤੁਸੀਂ ਵਰਚੁਅਲ ਝਲਕ ਕਿਵੇਂ ਵੇਖਣਾ ਚਾਹੁੰਦੇ ਹੋ।"
+
+#~ msgid ""
+#~ "<small><b>Tip:</b> VNC or Spice server is strongly recommended because it "
+#~ "allows the virtual display to be embedded inside this application. It may "
+#~ "also be used to allow access to the virtual display from a remote system."
+#~ "</small>"
+#~ msgstr ""
+#~ "<small><b>ਟਿੱਪਣੀ:</b> VNC ਸਰਵਰ ਦੀ ਜ਼ੋਰਦਾਰ ਸਿਫਾਰਸ਼ ਕੀਤੀ ਜਾਂਦੀ ਹੈ ਕਿਉਂਕਿ ਇਹ ਵਰਚੁਅਲ "
+#~ "ਮਸ਼ੀਨ ਨੂੰ ਇਸ ਐਪਲੀਕੇਸ਼ਨ ਵਿੱਚ ਜੋੜਨ ਲਈ ਮਨਜੂਰੀ ਦਿੰਦਾ ਹੈ। ਇਸਨੂੰ ਰਿਮੋਟ ਸਿਸਟਮ ਤੋਂ ਵਰਚੁਅਲ ਝਲਕ ਵੇਖਣ "
+#~ "ਲਈ ਵੀ ਵਰਤਿਆ ਜਾ ਸਕਦਾ ਹੈ।</small>"
+
+#~ msgid "Listen on all public network interfaces "
+#~ msgstr "ਸਭ ਪਬਲਿਕ ਨੈੱਟਵਰਕ ਇੰਟਰਫੇਸਾਂ ਤੇ ਸੁਣੋ "
+
+#~ msgid "_Other:"
+#~ msgstr "ਹੋਰ(_O):"
+
+#~ msgid ""
+#~ "Please indicate what sound device type to connect to the virtual machine."
+#~ msgstr "ਦੱਸੋ ਕਿ ਕਿਹੜੀ ਸਾਊਂਡ ਜੰਤਰ ਕਿਸਮ ਚੁਣੋ, ਜਿਸ ਨੂੰ ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਨਾਲ ਜੋੜਨਾ ਹੈ।"
+
+#~ msgid ""
+#~ "Please indicate what physical device\n"
+#~ "to connect to the virtual machine."
+#~ msgstr ""
+#~ "ਦੱਸੋ ਕਿ ਕਿਹੜੀ ਫਿਜ਼ਿਕਲ ਜੰਤਰ ਕਿਸਮ\n"
+#~ "ਚੁਣੋ, ਜਿਸ ਨੂੰ ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਨਾਲ ਜੋੜਨਾ ਹੈ।"
+
+#~ msgid "<b>Character Device</b>"
+#~ msgstr "<b>ਕਰੈਕਟਰ ਜੰਤਰ</b>"
+
+#~ msgid "<b>Device Parameters</b>"
+#~ msgstr "<b>ਜੰਤਰ ਪੈਰਾਮੀਟਰ</b>"
+
+#~ msgid ""
+#~ "Please indicate what video device type\n"
+#~ "to connect to the virtual machine."
+#~ msgstr ""
+#~ "ਦੱਸੋ ਕਿ ਕਿਹੜੇ ਵਿਡੀਓ ਜੰਤਰ ਕਿਸਮ ਚੁਣੋ,\n"
+#~ "ਜਿਸ ਨੂੰ ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਨਾਲ ਜੋੜਨਾ ਹੈ।"
+
+#~ msgid ""
+#~ "Please indicate what watchdog device type\n"
+#~ "and default action should be used."
+#~ msgstr ""
+#~ "ਦੱਸੋ ਕਿ ਕਿਹੜੀ watchdog ਜੰਤਰ ਕਿਸਮ\n"
+#~ "ਅਤੇ ਮੂਲ ਕਾਰਵਾਈ ਵਰਤਣੇ ਹਨ।"
+
+#~ msgid ""
+#~ "Please indicate which host directory to\n"
+#~ "access in the guest."
+#~ msgstr ""
+#~ "ਕਿਰਪਾ ਕਰਕੇ ਦੱਸੋ ਕਿ ਕਿਹੜੀ ਹੋਸਟ ਡਾਇਰੈਕਟਰੀ\n"
+#~ "ਗਿਸਟ ਵਿੱਚ ਵਰਤਣੀ ਹੈ।"
+
+#~ msgid ""
+#~ "Please indicate what smartcard device mode to connect to the virtual "
+#~ "machine."
+#~ msgstr "ਦੱਸੋ ਕਿ ਕਿਹੜੀ ਸਾਊਂਡ ਜੰਤਰ ਕਿਸਮ ਚੁਣੋ, ਜਿਸ ਨੂੰ ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਨਾਲ ਜੋੜਨਾ ਹੈ।"
+
+#~ msgid "Please indicate the parameters of the redirected device."
+#~ msgstr "ਰੀਡਾਇਰੈਕਟ ਜੰਤਰ ਦੇ ਪੈਰਾਮੀਟਰ ਦਿਓ ਜੀ।"
+
+#~ msgid "Please indicate the parameters of the RNG device."
+#~ msgstr "ਕਿਰਪਾ ਕਰ ਕੇ RNG ਯੰਤਰ ਦੇ ਪੈਰਾਮੀਟਰ ਦੱਸੋ।"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a "
+#~ "new virtual network </span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ਇੱਕ ਨਵਾਂ ਵਰਚੁਅਲ "
+#~ "ਨੈੱਟਵਰਕ ਬਣਾਇਆ ਜਾ ਰਿਹਾ ਹੈ</span>"
+
+#~ msgid ""
+#~ "This assistant will guide you through creating a new virtual network. You "
+#~ "will be asked for some information about the virtual network you'd like "
+#~ "to create, such as:"
+#~ msgstr ""
+#~ "ਇਹ ਸਹਾਇਕ ਇੱਕ ਨਵਾਂ ਫ਼ਰਜ਼ੀ (ਵਰਚੁਅਲ) ਸਿਸਟਮ ਬਣਾਉਣ ਲਈ ਤੁਹਾਡੀ ਅਗਵਾਈ ਕਰੇਗਾ। ਤੁਹਾਨੂੰ ਤੁਹਾਡੇ "
+#~ "ਲੋੜੀਦੇ ਨਵੇਂ ਵਰਚੁਅਲ ਸਿਸਟਮ ਬਣਾਉਣ ਲਈ ਕੁਝ ਜਾਣਕਾਰੀ ਪੁੱਛੀ ਜਾ ਸਕਦੀ ਹੈ, ਜਿਵੇਂ ਕਿ:"
+
+#~ msgid "<small>●</small> A <b>name</b> for the new virtual network interface"
+#~ msgstr "<small>●</small> ਆਭਾਸੀ ਨੈੱਟਵਰਕ ਇੰਟਰਫੇਸ ਲਈ<b>ਨਾਂ</b>"
+
+#~ msgid ""
+#~ "<small>●</small> An <b>IPv4</b> and/or <b>IPv6</b> network address and "
+#~ "prefix (netmask) to assign to this network interface"
+#~ msgstr ""
+#~ "<small>●</small> ਇਸ ਨੈੱਟਵਰਕ ਇੰਟਰਫੇਸ ਨੂੰ ਨਿਯਤ ਕਰਨ ਲਈ <b>IPv4</b> ਅਤੇ/ਜਾਂ <b>IPv6</"
+#~ "b> ਨੈੱਟਵਰਕ ਪਤਾ ਅਤੇ ਅਗੇਤਰ (ਨੈੱਟ-ਮਾਸਕ)"
+
+#~ msgid ""
+#~ "<small>●</small> The network address range which the <b>DHCPv4</b> and/or "
+#~ "<b>DHCPv6</b> server will use to assign addresses to virtual machines"
+#~ msgstr ""
+#~ "<small>●</small> ਨੈੱਟਵਰਕ ਪਤਾ ਹੱਦ ਜਿਹੜੀ ਕਿ <b>DHCPv4</b> ਅਤੇ/ਜਾਂ <b>DHCPv6</b> "
+#~ "ਸਰਵਰ ਆਭਾਸੀ ਮਸ਼ੀਨਾਂ ਨੂੰ ਪਤੇ ਨਿਯਤ ਕਰਨ ਲਈ ਵਰਤੇਗਾ"
+
+#~ msgid ""
+#~ "<small>●</small> Whether to <b>forward</b> traffic to a physical network"
+#~ msgstr "<small>●</small> ਕਿ ਜੇ ਆਵਾਜਾਈ ਨੂੰ ਕਿਸੇ ਭੌਤਿਕ ਨੈੱਟਵਰਕ ਤੇ <b>ਅੱਗੇ ਭੇਜਿਆ</b> ਜਾਵੇ"
+
+#~ msgid ""
+#~ "<small>●</small> Optionally, to not specify any <b>IPv4</b> or <b>IPv6</"
+#~ "b> network address.  If neither is specified, this will be a valid "
+#~ "definition for an isolated network with <b>no</b> DHCP or DNS support."
+#~ msgstr ""
+#~ "<small>●</small> ਬਦਲਵੇਂ ਤੌਰ ਤੇ, ਕੋਈ ਵੀ <b>IPv4</b> ਜਾਂ <b>IPv6</b> ਨੈੱਟਵਰਕ ਪਤਾ ਨਾ "
+#~ "ਦਰਸਾਉਣ ਲਈ। ਜੇ ਕੋਈ ਵੀ ਨਹੀਂ ਦਰਸਾਇਆ ਗਿਆ, ਇਹ ਇੱਕ ਵੱਖਰੇ ਕੀਤੇ ਹੋਏ<b>ਬਿਨਾਂ</b> ਕਿਸੇ DHCP "
+#~ "ਜਾਂ DNS ਸਮਰਥਨ ਵਾਲੇ ਨੈੱਟਵਰਕ ਦੀ ਢੁਕਵੀਂ ਪਰਿਭਾਸ਼ਾ ਹੋਵੇਗੀ।"
+
+#~ msgid ""
+#~ "<small>●</small> By default, the <b>Domain</b> name will be the same as "
+#~ "the network/interface name."
+#~ msgstr ""
+#~ "<small>●</small> ਮੂਲ ਤੌਰ ਤੇ, <b>ਡੋਮੇਨ</b> ਨਾਂ ਬਿਲਕੁਲ ਨੈੱਟਵਰਕ/ਇੰਟਰਫੇਸ ਨਾਂ ਵਾਲਾ ਹੀ ਹੋਵੇਗਾ।"
+
+#~ msgid ""
+#~ "<small>●</small> Optionally, a <b>static route</b> to a different network "
+#~ "can be specified.  This network traffic is routed to the specified "
+#~ "<b>gateway</b> on the primary network."
+#~ msgstr ""
+#~ "<small>●</small>  ਬਦਲਵੇਂ ਤੌਰ ਤੇ, ਕਿਸੇ ਵੱਖਰੇ ਨੈੱਟਵਰਕ ਨੂੰ ਇੱਕ <b>ਸਥਿਰ ਰਾਹ</b> ਦਰਸਾਇਆ ਜਾ "
+#~ "ਸਕਦਾ ਹੈ। ਇਹ ਨੈੱਟਵਰਕ ਆਵਾਜਾਈ ਪ੍ਰਮੁੱਖ ਨੈੱਟਵਰਕ ਤੇ ਕਿਸੇ ਦਰਸਾਏ ਗਏ <b>ਗੇਟਵੇਅ</b> ਦੇ ਰਾਹ ਪਾਈ "
+#~ "ਗਈ ਹੈ।"
+
+#~ msgid "Intro"
+#~ msgstr "ਜਾਣ ਪਛਾਣ"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
+#~ "virtual network </span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ਆਪਣੇ ਵਰਚੁਅਲ "
+#~ "ਨੈੱਟਵਰਕ ਨੂੰ ਨਾਂ ਦਿਓ</span>"
+
+#~ msgid "Please choose a name for your virtual network:"
+#~ msgstr "ਆਪਣੇ ਵਰਚੁਅਲ ਸਿਸਟਮ ਲਈ ਇੱਕ ਨਾਂ ਚੁਣੋ ਜੀ:"
+
+#~ msgid "The following information may help you with defining your networks."
+#~ msgstr "ਅਗਲੀ ਜਾਣਕਾਰੀ ਤੁਹਾਨੂੰ ਤੁਹਾਡੇ ਨੈੱਟਵਰਕਾਂ ਨੂੰ ਪਰਿਭਾਸ਼ਿਤ ਕਰਨ ਵਿੱਚ ਮਦਦ ਕਰ ਸਕਦੀ ਹੈ।"
+
+#~ msgid ""
+#~ "<small>●</small>  A<b> network</b> must be specified as the network "
+#~ "<b>address</b> and the <b>prefix</b> for that network."
+#~ msgstr ""
+#~ "<small>●</small>  ਕੋਈ<b> ਨੈੱਟਵਰਕ</b> ਜਰੂਰੀ ਹੀ ਨੈੱਟਵਰਕ ਲਈ ਇੱਕ ਨੈੱਟਵਰਕ <b>ਪਤੇ</b> ਅਤੇ "
+#~ "<b>ਅਗੇਤਰ</b> ਵਜੋਂ ਦਰਸਾਏ ਜਾਣ।"
+
+#~ msgid ""
+#~ "<small>●</small>  A network mask cannot be used for the network "
+#~ "specification.  Instead, the prefix must be used."
+#~ msgstr ""
+#~ "<small>●</small>  ਇੱਕ ਨੈੱਟਵਰਕ ਮਾਸਕ ਨੈੱਟਵਰਕ ਸਪੈਸੀਫਿਕੇਸ਼ਨਾਂ ਲਈ ਨਹੀਂ ਵਰਤਿਆ ਜਾ ਸਕਦਾ  "
+#~ "ਇਸਦੀ ਬਜਾਏ, ਅਗੇਤਰ ਜਰੂਰ ਵਰਤਿਆ ਜਾਵੇ।"
+
+#~ msgid ""
+#~ "<small>●</small>  A <b>host address</b> such as that used for the dhcp "
+#~ "start, dhcp end, and the static route gateway address should not include "
+#~ "a prefix.  If included, this prefix must be the maximum.  That is, for "
+#~ "IPv4 prefix=32 and for IPv6 prefix=128."
+#~ msgstr ""
+#~ "<small>●</small>  ਇੱਕ <b>ਮੇਜਬਾਨ ਪਤਾ</b> ਜਿਵੇਂ ਕਿ ਜਿਹੜਾ dhcp ਸ਼ੁਰੂਆਤ, dhcp ਅੰਤ, ਅਤੇ "
+#~ "ਸਥਿਰ ਰਾਹ ਗੇਟਵੇਅ ਪਤੇ ਵਿੱਚ ਕੋਈ ਅਗੇਤਰ ਸ਼ਾਮਿਲ ਨਹੀਂ ਹੋਣਾ ਚਾਹੀਦਾ।  ਜੇ ਸ਼ਾਮਿਲ ਹੋਵੇ, ਇਹ ਅਗੇਤਰ "
+#~ "ਵੱਧ ਤੋਂ ਵੱਧ ਵੱਡਾ ਹੋਵੇ।  ਜੋ ਕਿ, IPv4 ਲਈ ਅਗੇਤਰ=32 ਅਤੇ IPv6 ਲਈ ਅਗੇਤਰ=128 ਹੋਵੇ।"
+
+#~ msgid ""
+#~ "<small>●</small>  If IPv6 is to be routed, some form of routing must be "
+#~ "specified for the interface."
+#~ msgstr ""
+#~ "<small>●</small>  ਜੇ IPv6 ਦਾ ਕੋਈ ਰਾਹ ਨਹੀਂ ਦੱਸਿਆ ਗਿਆ, ਇੰਟਰਫੇਸ ਲਈ ਕਿਸੇ ਤਰ੍ਹਾਂ ਦੀ ਰਾਹ "
+#~ "ਪਾਉਣਾ ਜਰੂਰ ਦਰਸਾਇਆ ਗਿਆ ਹੋਵੇ।"
+
+#~ msgid ""
+#~ "<small>●</small>  For the <b>primary network</b>, the prefix must be "
+#~ "<b>64</b>.  However, for the <b>static route network</b>, the prefix can "
+#~ "be <b>64 or less</b>."
+#~ msgstr ""
+#~ "<small>●</small>  <b>ਪ੍ਰਮੁੱਖ ਨੈੱਟਵਰਕ ਲਈ</b>, ਅਗੇਤਰ ਜਰੂਰ ਹੀ <b>64</b> ਹੋਵੇ।  ਐਪਰ, "
+#~ "<b>ਸਥਿਰ ਰਾਹ ਨੈੱਟਵਰਕ</b> ਲਈ, ਅਗੇਤਰ <b>64 ਜਾਂ ਘੱਟ</b> ਹੋ ਸਕਦਾ ਹੈ।"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Defining "
+#~ "IPv4 addresses</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\"> IPv4 ਪਤੇ "
+#~ "ਪਰਿਭਾਸ਼ਤ ਕਰ ਰਿਹਾ</span>"
+
+#~ msgid ""
+#~ "You will need to choose an <b>IPv4</b> address space for the virtual "
+#~ "network."
+#~ msgstr "ਤੁਹਾਨੂੰ ਆਭਾਸੀ ਨੈੱਟਵਰਕ ਲਈ ਇੱਕ <b>IPv4</b> ਪਤਾ ਥਾਂ ਚੁਣਨ ਦੀ ਲੋੜ ਹੈ।"
+
+#~ msgid "Network Type:"
+#~ msgstr "ਨੈੱਟਵਰਕ ਕਿਸਮ:"
+
+#~ msgid ""
+#~ "<b>Hint:</b> The network should be chosen from one of the IPv4 private "
+#~ "address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
+#~ msgstr ""
+#~ "<b>ਇਸ਼ਾਰਾ:</b> ਨੈੱਟਵਰਕ IPv4 ਪਰਾਈਵੇਟ ਐਡਰੈੱਸ ਰੇਂਜ ਵਿੱਚੋਂ ਚੁਣਨਾ ਚਾਹੀਦਾ ਹੈ। ਜਿਵੇਂ "
+#~ "10.0.0.0/8,  172.16.0.0/12, ਜਾਂ 192.168.0.0/16"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Defining "
+#~ "IPv6 addresses</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\"> IPv6 ਪਤੇ "
+#~ "ਪਰਿਭਾਸ਼ਤ ਕਰ ਰਿਹਾ</span>"
+
+#~ msgid ""
+#~ "You will need to choose an <b>IPv6</b> address space for the virtual "
+#~ "network:"
+#~ msgstr "ਤੁਹਾਨੂੰ ਆਭਾਸੀ ਨੈੱਟਵਰਕ ਲਈ ਇੱਕ <b>IPv6</b> ਪਤਾ ਥਾਂ ਚੁਣਨ ਦੀ ਲੋੜ ਪਵੇਗੀ:"
+
+#~ msgid ""
+#~ "<b>Note:</b> The network could be chosen from one of the IPv6 private "
+#~ "address ranges. eg FC00::/7.  In any case, the prefix must be <b>64</b>.\n"
+#~ "A typical IPv6 network address will look something like:  fd00:dead:"
+#~ "beef:55::/64"
+#~ msgstr ""
+#~ "<b>ਟਿੱਪਣੀ:</b> ਨੈੱਟਵਰਕ ਕਿਸੇ IPv6 ਨਿੱਜੀ ਪਤਾ ਹੱਦਾਂ ਵਿੱਚੋਂ ਚੁਣਿਆ ਜਾ ਸਕਦਾ ਹੈ। ਉਦਾਹਰਣ ਲਈ "
+#~ "FC00::/7 ।  ਕਿਸੇ ਵੀ ਹਾਲਤ ਵਿੱਚ, ਅਗੇਤਰ ਜਰੂਰ ਹੀ <b>64</b> ਹੋਵੇ।\n"
+#~ "ਇੱਕ IPv6 ਨੈੱਟਵਰਕ ਪਤਾ ਕੁੱਝ ਇਸ ਤਰ੍ਹਾਂ ਦਾ ਵਿਖੇਗਾ:  fd00:dead:beef:55::/64"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF"
+#~ "\">Miscellaneous Settings</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ਫੁਟਕਲ ਸੈਟਿੰਗਾਂ</"
+#~ "span>"
+
+#~ msgid ""
+#~ "Please indicate whether this virtual network should be connected to the "
+#~ "<b>physical network</b>."
+#~ msgstr ""
+#~ "ਕਿਰਪਾ ਕਰਕੇ ਦੱਸੋ ਕੀ ਇਸ ਆਭਾਸੀ ਨੈੱਟਵਰਕ ਨੂੰ<b> ਭੌਤਿਕ ਨੈੱਟਵਰਕ</b> ਨਾਲ ਜੁੜਨਾ ਚਾਹੀਦਾ ਹੈ ਜਾਂ "
+#~ "ਨਹੀਂ।"
+
+#~ msgid "Domain Name:"
+#~ msgstr "ਡੋਮੇਨ ਨਾਂ:"
+
+#~ msgid ""
+#~ "Optionally, specify the DNS <b>Domain Name</b> to be used for the "
+#~ "networks on this network interface."
+#~ msgstr ""
+#~ "ਬਦਲਵੇਂ ਤੌਰ ਤੇ, ਇਸ ਨੈੱਟਵਰਕ ਇੰਟਰਫੇਸ ਤੇ ਨੈੱਟਵਰਕਾਂ ਦੇ ਵਰਤਣ ਲਈ DNS <b>ਡੋਮੇਨ ਨਾਂ</b> ਦਰਸਾਉ।"
+
+#~ msgid "Misc"
+#~ msgstr "ਫੁਟਕਲ"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to "
+#~ "create network</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ਨੈੱਟਵਰਕ ਬਣਾਉਣ "
+#~ "ਵਿੱਚ ਤਿਆਰ</span>"
+
+#~ msgid "<b>IPv4 Network</b>"
+#~ msgstr "<b>IPv4 ਨੈੱਟਵਰਕ</b>"
+
+#~ msgid "<b>Domain</b> Name:"
+#~ msgstr "<b>ਡੋਮੇਨ</b> ਨਾਂ:"
+
+#~ msgid "192.168.10.128"
+#~ msgstr "192.168.10.128"
+
+#~ msgid "DHCPv4 Start Address:"
+#~ msgstr "DHCPv4 ਸ਼ੁਰੂਆਤ ਪਤਾ:"
+
+#~ msgid "DHCPv4 End  Address:"
+#~ msgstr "DHCPv4 ਅੰਤ  ਪਤਾ:"
+
+#~ msgid "<b>Summary</b>"
+#~ msgstr "<b>ਸੰਖੇਪ</b>"
+
+#~ msgid "<b>Network</b> Name:"
+#~ msgstr "<b>ਨੈੱਟਵਰਕ</b> ਨਾਂ:"
+
+#~ msgid "demo"
+#~ msgstr "ਡੈਮੋ"
+
+#~ msgid "Forwarding/Connectivity:"
+#~ msgstr "ਫਾਰਵਰਡਿੰਗ/ਕਨੈੱਕਟਿਵਿਟੀ:"
+
+#~ msgid "<b>IPv6 Network</b>"
+#~ msgstr "<b>IPv6 ਨੈੱਟਵਰਕ</b>"
+
+#~ msgid "DHCPv6 End Address:"
+#~ msgstr "DHCPv6 ਅੰਤ ਪਤਾ:"
+
+#~ msgid "DHCPv6 Start Address:"
+#~ msgstr "DHCPv6 ਸ਼ੁਰੂਆਤ ਪਤਾ:"
+
+#~ msgid "FD00:100::100"
+#~ msgstr "FD00:100::100"
+
+#~ msgid "FD00:100::1FF"
+#~ msgstr "FD00:100::1FF"
+
+#~ msgid "FD00:100::/64"
+#~ msgstr "FD00:100::/64"
+
+#~ msgid "FD00:100::1"
+#~ msgstr "FD00:100::1"
+
+#~ msgid "Static Route <b>to</b> network:"
+#~ msgstr "ਸਥਿਰ ਰਾਹ ਇਸ ਨੈੱਟਵਰਕ <b>ਨੂੰ</b>:"
+
+#~ msgid "Complete"
+#~ msgstr "ਮੁਕੰਮਲ"
+
+#~ msgid "<span size='x-large'>Add Storage Pool</span>"
+#~ msgstr "<span size='x-large'>ਸਟੋਰੇਜ਼ ਪੂਲ ਜੋੜੋ</span>"
+
+#~ msgid ""
+#~ "Specify a storage location to be later split into virtual machine storage."
+#~ msgstr "ਇੱਕ ਸਟੋਰੇਜ਼ ਟਿਕਾਣਾ ਦਿਓ ਜਿਸ ਨੂੰ ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਸਟੋਰੇਜ਼ ਵਿੱਚ ਵੰਡਿਆ ਜਾਵੇਗਾ।"
+
+#~ msgid "Step 1 of 2"
+#~ msgstr "੨ ਵਿੱਚੋਂ ਪਗ ੧"
+
+#~ msgid "Step 2 of 2"
+#~ msgstr "੨ ਵਿੱਚੋਂ ਪਗ ੨"
+
+#~ msgid "<span size='x-large'>New Storage Volume</span>"
+#~ msgstr "<span size='x-large'>ਨਵਾਂ ਸਟੋਰੇਜ਼ ਵਾਲੀਅਮ</span>"
+
+#~ msgid ""
+#~ "Create a storage unit that can be used directly by a virtual machine."
+#~ msgstr "ਸਟੋਰੇਜ਼ ਯੂਨਿਟ ਬਣਾਓ, ਜੋ ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਵਲੋਂ ਵਰਤਿਆ ਜਾਵੇਗਾ।"
+
+#~ msgid "<span size='large'>Storage Volume Quota</span>"
+#~ msgstr "<span size='large'>ਸਟੋਰੇਜ਼ ਵਾਲੀਅਮ ਕੋਟਾ</span>"
+
+#~ msgid ""
+#~ "<span size='small'><i><u>Name</u>: Name of the\n"
+#~ "  volume to create. File\n"
+#~ "  extension may be\n"
+#~ "  appended\n"
+#~ "\n"
+#~ "<u>Format</u>: File/Partition\n"
+#~ "  format of the volume\n"
+#~ "\n"
+#~ "<u>Capacity</u>: Maximum\n"
+#~ "  size of the volume.\n"
+#~ "\n"
+#~ "<u>Allocation</u>: Actual size\n"
+#~ "  allocated to volume\n"
+#~ "  at this time.</i></span>"
+#~ msgstr ""
+#~ "<span size='small'><i><u>Name</u>: Name of the\n"
+#~ "  volume to create. File\n"
+#~ "  extension may be\n"
+#~ "  appended\n"
+#~ "\n"
+#~ "<u>Format</u>: File/Partition\n"
+#~ "  format of the volume\n"
+#~ "\n"
+#~ "<u>Capacity</u>: Maximum\n"
+#~ "  size of the volume.\n"
+#~ "\n"
+#~ "<u>Allocation</u>: Actual size\n"
+#~ "  allocated to volume\n"
+#~ "  at this time.</i></span>"
+
+#~ msgid "Enter your virtual machine details"
+#~ msgstr "ਆਪਣੀ ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਦਾ ਵੇਰਵਾ ਦਿਓ"
+
+#~ msgid "Error message"
+#~ msgstr "ਗਲਤੀ ਸੁਨੇਹਾ"
+
+#~ msgid "Delete Confirmation"
+#~ msgstr "ਪੁਸ਼ਟੀ ਹਟਾਓ"
+
+#~ msgid "S_hut Down"
+#~ msgstr "ਬੰਦ ਕਰੋ(_h)"
+
+#~ msgid "_Clone"
+#~ msgstr "ਕਲੋਨ(_C)"
+
+#~ msgid "_Delete..."
+#~ msgstr "ਮਿਟਾਓ (_D)..."
+
+#~ msgid ""
+#~ "CPU\n"
+#~ "usage:"
+#~ msgstr ""
+#~ "CPU\n"
+#~ "ਵਰਤੋਂ:"
+
+#~ msgid ""
+#~ "Memory\n"
+#~ "usage:"
+#~ msgstr ""
+#~ "ਮੈਮੋਰੀ \n"
+#~ "ਵਰਤੋਂ:"
+
+#~ msgid ""
+#~ "Disk\n"
+#~ "I/O:"
+#~ msgstr ""
+#~ "ਡਿਸਕ\n"
+#~ "I/O:"
+
+#~ msgid ""
+#~ "Network\n"
+#~ "I/O:"
+#~ msgstr ""
+#~ "ਨੈੱਟਵਰਕ\n"
+#~ "I/O:"
+
+#~ msgid ""
+#~ "0 KBytes/s\n"
+#~ "0KBytes/s"
+#~ msgstr ""
+#~ "0 KBytes/s\n"
+#~ "0KBytes/s"
+
+#~ msgid "<b>Performance</b>"
+#~ msgstr "<b>ਸਮਰੱਥਾ</b>"
+
+#~ msgid "Kernel arguments:"
+#~ msgstr "ਕਰਨਲ ਆਰਗੂਮੈਂਟ:"
+
+#~ msgid "Target device:"
+#~ msgstr "ਟਾਰਗੇਟ ਜੰਤਰ:"
+
+#~ msgid "CPU usage:"
+#~ msgstr "CPU ਵਰਤੋਂ:"
+
+#~ msgid "Memory usage:"
+#~ msgstr "ਮੈਮੋਰੀ ਵਰਤੋਂ:"
+
+#~ msgid "IPv4 Forwarding:"
+#~ msgstr "IPv4 ਫਾਰਵਰਡਿੰਗ:"
+
+#~ msgid "IPv6 Forwarding:"
+#~ msgstr "IPv6 ਫਾਰਵਰਡਿੰਗ:"
+
+#~ msgid "DHCP start:"
+#~ msgstr "DHCP ਸ਼ੁਰੂ:"
+
+#~ msgid "DHCP end:"
+#~ msgstr "DHCP ਅੰਤ:"
+
+#~ msgid "<network-addr> via <gateway-addr>"
+#~ msgstr "<network-addr> ਬਾ-ਰਸਤਾ <gateway-addr>"
+
+#~ msgid "VNC"
+#~ msgstr "VNC"
+
+#~ msgid "Spice"
+#~ msgstr "ਸਪਾਈਸ"

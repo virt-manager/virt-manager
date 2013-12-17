@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-16 15:53-0500\n"
+"POT-Creation-Date: 2013-12-16 19:50-0500\n"
 "PO-Revision-Date: 2013-12-02 20:00+0000\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/projects/p/virt-manager/"
@@ -6966,3 +6966,572 @@ msgstr "Yerele _Gözat"
 #: ../ui/storagebrowse.ui.h:4
 msgid "Choose _Volume"
 msgstr ""
+
+#~ msgid "Error in watchdog device parameters: %s"
+#~ msgstr "Gözlemci aygıt parametrelerinde hata: %s"
+
+#~ msgid "Error in filesystem device parameters: %s"
+#~ msgstr "Dosya sistemi aygıtı parametrelerinde hata: %s"
+
+#~ msgid "The OS type being installed, e.g. 'linux', 'unix', 'windows'"
+#~ msgstr "OS tipi yüklendi, ör: 'linux', 'unix', 'windows'"
+
+#~ msgid "Time to wait (in minutes)"
+#~ msgstr "Bekleme süresi(dakika)"
+
+#~ msgid "Full Virtualization specific options"
+#~ msgstr "Tam Sanallaştırmaya özgü ayarlar"
+
+#~ msgid "Local SDL window"
+#~ msgstr "Yerel SDL Penceresi"
+
+#~ msgid "Creating Storage File"
+#~ msgstr "Depolama Dosyası Yaratımı"
+
+#~ msgid "Allocation of disk storage may take a few minutes to complete."
+#~ msgstr ""
+#~ "Disk depolama tahsis etme işleminin bitmesi bir kaç dakika sürebilir."
+
+#~ msgid "Disk \"%s\" is already in use by another guest!"
+#~ msgstr ""
+#~ "Diskin \"%s\"'lik alanı başka bir istemci tarafından kullanılmaktadır"
+
+#~ msgid "Active (RO)"
+#~ msgstr "Aktif(RO)"
+
+#~ msgid "Connection is read only."
+#~ msgstr "Bağlantı salt okunur."
+
+#~ msgid "Hypervisor only supports %d virtual CPUs."
+#~ msgstr "Hipervizör sadece %d adet sanal CPU destekliyor."
+
+#~ msgid "Invalid System Name"
+#~ msgstr "Geçersiz Sistem Adı"
+
+#~ msgid "Network Address / prefix:"
+#~ msgstr "Ağ Adresi / ön ek:"
+
+#~ msgid "DHCPv4 Status:"
+#~ msgstr "DHCPv4 Durumu:"
+
+#~ msgid "IPV6 Network:"
+#~ msgstr "IPV6 Ağı:"
+
+#~ msgid "Not Defined"
+#~ msgstr "Tanımlanmamış"
+
+#~ msgid "DHCPv6 Status:"
+#~ msgstr "DHCPv6 Durumu:"
+
+#~ msgid "Invalid forwarding mode"
+#~ msgstr "Geçersiz yönlendirme modu"
+
+#~ msgid "Please select where the traffic should be forwarded"
+#~ msgstr "Lütfen trafiğin nereye yönlendirililebileceğini seçin"
+
+#~ msgid "Format the source device."
+#~ msgstr "Kaynak aygıtı biçimlendir"
+
+#, fuzzy
+#~ msgid "All selected storage will be deleted."
+#~ msgstr "Bir aygıt seçmek zorunludur."
+
+#~ msgid "Cannot rename an active guest"
+#~ msgstr "Aktif konuk makinenin adı değiştirilemez"
+
+#~ msgid "_Clone..."
+#~ msgstr "_Klonla..."
+
+#~ msgid "_Migrate..."
+#~ msgstr "_Göç Et..."
+
+#~ msgid "Searching for available hypervisors..."
+#~ msgstr "Uygun hypervizörler aranıyor..."
+
+#~ msgid "Checking for installed package '%s'"
+#~ msgstr "Yüklenmiş paketler kontrol ediliyor '%s'"
+
+#~ msgid ""
+#~ "The following packages are not installed:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "These are required to create KVM guests locally.\n"
+#~ "Would you like to install them now?"
+#~ msgstr ""
+#~ "Belirtilen paketler yüklü değil:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "Bu paketler yerel olark bir KVM konuk oluşturmak için gerekli.\n"
+#~ "Paketleri şimdi yüklemek ister misiniz?"
+
+#~ msgid "Packages required for KVM usage"
+#~ msgstr "KVM kullanımı için gerekli paketler"
+
+#~ msgid "Recommended package installs"
+#~ msgstr "Tavsiye edilen paket kurulumları"
+
+#~ msgid "'path' or 'func' is required."
+#~ msgstr "'path' ya da 'func' gereklidir."
+
+#~ msgid "Error in network device parameters: %s"
+#~ msgstr "Ağ aygıtı parametrelerinde hata: %s"
+
+#~ msgid "Error in graphics device parameters: %s"
+#~ msgstr "Grafiksel aygıt parametrelerinde hata: %s"
+
+#~ msgid "Error in smartcard device parameters: %s"
+#~ msgstr "Akıllı kart aygıtı parametrelerinde hata: %s"
+
+#~ msgid "Error in memballoon device parameters: %s"
+#~ msgstr "Bellek balonlama aygıtı parametrelerinde hata: %s"
+
+#~ msgid "Disk '%s' does not exist."
+#~ msgstr "Disk '%s' mevcut değil."
+
+#~ msgid "Invalid 'location' type %s."
+#~ msgstr "Geçesiz 'konum' tipi %s."
+
+#~ msgid "Privilege is required for NFS installations"
+#~ msgstr "NFS kurulumları için yetki gereklidir"
+
+#~ msgid "Unable to connect to hypervisor, aborting installation!"
+#~ msgstr "Hipervizöre bağlanılamıyor, kurulum iptal ediliyor!"
+
+#~ msgid "Memory value must be an integer greater than 0"
+#~ msgstr "Bellek değerinin 0 dan büyük bir tam sayı olması zorunludur"
+
+#~ msgid "Max Memory value must be an integer greater than 0"
+#~ msgstr "Max Bellek değerinin 0 dan büyük bir tam sayı olması zorunludur"
+
+#~ msgid "Number of vcpus must be a positive integer."
+#~ msgstr "VCPU sayısının pozitif bir tam sayı olması zorunludur."
+
+#~ msgid "OS type must be a string."
+#~ msgstr "Os tipi bir metin olmalıdır."
+
+#~ msgid "OS type '%s' does not exist in our dictionary"
+#~ msgstr "'%s' OS tipi sözlüğünüzde yer almıyor"
+
+#~ msgid "OS variant must be a string."
+#~ msgstr "OS varyantı metin olması zorunludur."
+
+#~ msgid "Unknown OS variant '%s'"
+#~ msgstr "Bilinmeyen OS varyantı '%s'"
+
+#~ msgid "Did not find device %s"
+#~ msgstr "Aygıt bulunamadı %s"
+
+#~ msgid "A connection must be specified."
+#~ msgstr "Bir bağlantı belirtilmesi zorunludur."
+
+#~ msgid "Interface name"
+#~ msgstr "Arayüz adı"
+
+#~ msgid "Unknown start mode '%s"
+#~ msgstr "Bilinmeyen başlatma modu '%s"
+
+#~ msgid "Network protocol configuration"
+#~ msgstr "Ağ protokolü yapılandırması"
+
+#~ msgid "Static IP addresses"
+#~ msgstr "Statik IP adresleri"
+
+#~ msgid "IPv6 address prefix"
+#~ msgstr "IPv6 adres ön eki"
+
+#~ msgid "IP address"
+#~ msgstr "IP adresi"
+
+#~ msgid "Permissions must contain 'mode', 'owner' and 'group' keys."
+#~ msgstr "İzinler 'mod', 'sahip', 'grup' anahtarlarını içermek zorundadır."
+
+#~ msgid "Unknown storage pool type: %s"
+#~ msgstr "Bilinmeyen depolama havuzu tipi: %s"
+
+#~ msgid "Host name must be a string"
+#~ msgstr "Makine adı metin olmalıdır"
+
+#~ msgid "Unknown Filesystem format: %s"
+#~ msgstr "Bilinmeyen Dosya sistemi biçemi: %s"
+
+#~ msgid "Filesystem type of the source device."
+#~ msgstr "Kaynak aygıt dosya sistemi tipi."
+
+#~ msgid "Path on the host that is being shared."
+#~ msgstr "Makine üzerindeki yol paylaşılıyor."
+
+#~ msgid "Unknown Network Filesystem format: %s"
+#~ msgstr "Bilinmeyen Ağ Dosya Sistemi biçemi: %s"
+
+#~ msgid "Type of network filesystem."
+#~ msgstr "Ağ dosya sistemi tipi."
+
+#~ msgid "Host path is required"
+#~ msgstr "Makine yolu gerekli"
+
+#~ msgid "Path to the existing disk device."
+#~ msgstr "Varolan disk aygıtına yol"
+
+#~ msgid "Unknown Disk format: %s"
+#~ msgstr "Bilinmeyen disk formatı: %s"
+
+#~ msgid "Adapter name is required"
+#~ msgstr "Bağdaştırıcı adı gerekli"
+
+#~ msgid "One of pool or pool_name must be specified."
+#~ msgstr "bir havuz yada pool_name belirtilmesi zorunludur."
+
+#~ msgid "Must specify pool_object or pool_name"
+#~ msgstr "pool_object yada pool_name belirtilmesi zorunludur"
+
+#~ msgid "Capacity must be a positive number"
+#~ msgstr "Kapasite değeri pozitif bir sayı olmalıdır"
+
+#~ msgid "'%s' is not a valid format."
+#~ msgstr "'%s' geçerli bir biçem değil."
+
+#~ msgid "'model' must be a string,  was '%s'."
+#~ msgstr "'model' bir karakter olmak zorundadır, '%s' şeklinde olamaz."
+
+#~ msgid "Unsupported sound model '%s'"
+#~ msgstr "Desteklenmeyen ses modeli '%s'"
+
+#~ msgid "Unknown character mode '%s'."
+#~ msgstr "Bilinmeyen karakter modu '%s'."
+
+#~ msgid "Unknown protocol '%s'."
+#~ msgstr "Bilinmeyen protokol '%s'."
+
+#~ msgid "A host and port must be specified."
+#~ msgstr "Bir makine ve port belirtilmesi zorunludur."
+
+#~ msgid "Host address to send output to."
+#~ msgstr "Çıktıların gönderileceği makine adresi."
+
+#~ msgid "Host port to send output to."
+#~ msgstr "Çıktıların gönderileceği makine portu."
+
+#~ msgid "A connection port must be specified."
+#~ msgstr "Bir bağlantı portu belirtilmesi zorunludur."
+
+#~ msgid "'size' must be a number greater than 0."
+#~ msgstr "'boyut' 0 dan büyük olmak zorundadır."
+
+#~ msgid "Unknown storage type '%s'"
+#~ msgstr "Bilinmeyen depolama tipi '%s'"
+
+#~ msgid "Unknown device type '%s'"
+#~ msgstr "Bilinmeyen aygıt tipi '%s'"
+
+#~ msgid "Unknown cache mode '%s'"
+#~ msgstr "Bilinmeyen ön bellek modu '%s'"
+
+#~ msgid "Unknown io mode '%s'"
+#~ msgstr "Bilinmeyen io modu '%s'"
+
+#~ msgid "copying to an existing vdisk is not supported"
+#~ msgstr "varolan bir vdiskine kopyalama desteklenmiyor"
+
+#~ msgid "failed to clone disk"
+#~ msgstr "disk klonlama işi başarısız"
+
+#~ msgid "Error creating vdisk %s"
+#~ msgstr "%s vdiski oluşturulmasında hata meydana geldi"
+
+#~ msgid "Unsupported filesystem type '%s'"
+#~ msgstr "Desteklenmeyen dosya sistemi tipi '%s'"
+
+#~ msgid "Unsupported filesystem mode '%s'"
+#~ msgstr "Desteklenmeyen dosya sistemi modu '%s'"
+
+#~ msgid "Unsupported filesystem write policy '%s'"
+#~ msgstr "Desteklenmeyen dosya sistemi yazma politikası '%s'"
+
+#~ msgid "Unsupported filesystem driver '%s'"
+#~ msgstr "Desteklenmeyen dosya sistemi sürücüsü '%s'"
+
+#~ msgid "A filesystem source and target must be specified"
+#~ msgstr "Bir dosya sistemi kaynak ve hedefi belirtmek zorunludur"
+
+#~ msgid "Unknown graphics type '%s'"
+#~ msgstr "Bilinmeyen grafik tipi '%s'"
+
+#~ msgid "Unknown graphics type"
+#~ msgstr "Bilinmeyen grafik tipi"
+
+#~ msgid "'name' or 'nodedev' required."
+#~ msgstr "'name' yada 'nodedev' gerekli."
+
+#~ msgid "Unknown input type '%s'."
+#~ msgstr "Bilinmeyen girdi tipi '%s'"
+
+#~ msgid "Unknown input bus '%s'."
+#~ msgstr "Bilinmeyen girdi veri hattı '%s'."
+
+#~ msgid "Unsupported memballoon model '%s'"
+#~ msgstr "Desteklenmeyen bellek balonlama modeli '%s'"
+
+#~ msgid "A network name was not provided"
+#~ msgstr "Bir ağ adı sağlanmadı"
+
+#~ msgid "Unknown network type %s"
+#~ msgstr "Bilinmeyen ağ tipi '%s'"
+
+#~ msgid "Virtual network '%s' does not exist: %s"
+#~ msgstr "'%s' sanal ağı mevcut değil: %s"
+
+#~ msgid "Virtual network '%s' has not been started."
+#~ msgstr "'%s' sanal ağı başlatılmamış"
+
+#~ msgid "Unsupported bus '%s'"
+#~ msgstr "Desteklenmeyen veri hattı '%s'"
+
+#~ msgid "Unsupported redirection type '%s'"
+#~ msgstr "Desteklenmeyen yönlendirme tipi '%s'"
+
+#~ msgid "Unknown smartcard mode '%s'"
+#~ msgstr "Bilinmeyen akıllı kart modu '%s'"
+
+#~ msgid "Unknown smartcard type '%s'"
+#~ msgstr "Bilinmeyen akıllı kart tipi '%s'"
+
+#~ msgid "Unsupported watchdog model '%s'"
+#~ msgstr "Desteklenmeyen gözlemci modeli '%s'"
+
+#~ msgid "Please indicate how you would like to view the virtual display."
+#~ msgstr "Lütfen sanal ekranı nasıl görmek istediğinizi belirtin."
+
+#~ msgid "_Other:"
+#~ msgstr "_Diğer:"
+
+#~ msgid ""
+#~ "Please indicate what sound device type to connect to the virtual machine."
+#~ msgstr "Lütfen sanal makineye bağlayacağınız ses aygıtının tipini belirtin."
+
+#~ msgid ""
+#~ "Please indicate what physical device\n"
+#~ "to connect to the virtual machine."
+#~ msgstr ""
+#~ "Lütfen sanal makineye bağlamak\n"
+#~ "istediğiniz fiziksel aygıtı belirtin."
+
+#~ msgid "<b>Device Parameters</b>"
+#~ msgstr "<b>Aygıt Parametreleri</b>"
+
+#~ msgid ""
+#~ "Please indicate what video device type\n"
+#~ "to connect to the virtual machine."
+#~ msgstr ""
+#~ "Lütfen sanal makineye bağlayacağınız \n"
+#~ "video aygıtının tipini belirtin."
+
+#~ msgid ""
+#~ "Please indicate what watchdog device type\n"
+#~ "and default action should be used."
+#~ msgstr ""
+#~ "Lütfen gözlemci aygıt tipini ve gerçekleştirilmesi\n"
+#~ " istenen varsayılan eylemi belirtin."
+
+#~ msgid ""
+#~ "Please indicate which host directory to\n"
+#~ "access in the guest."
+#~ msgstr ""
+#~ "Lütfen konuk makineden erişilebilecek \n"
+#~ "makinede(fiziksel sunucu) yer alan dizini belirtin."
+
+#~ msgid ""
+#~ "Please indicate what smartcard device mode to connect to the virtual "
+#~ "machine."
+#~ msgstr ""
+#~ "Lütfen sanal makineye bağlayacağınız akıllı kartı aygıtının modunu "
+#~ "belirtin."
+
+#~ msgid "Please indicate the parameters of the redirected device."
+#~ msgstr "Lütfen yönlendirilmiş aygıt için parametreleri belirtin."
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a "
+#~ "new virtual network </span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Yeni bir "
+#~ "sanal yaratma</span>"
+
+#~ msgid "<small>●</small> A <b>name</b> for the new virtual network interface"
+#~ msgstr "<small>●</small> Yeni sanal ağ arayüzü için bir <b>ad</b> "
+
+#~ msgid ""
+#~ "<small>●</small> By default, the <b>Domain</b> name will be the same as "
+#~ "the network/interface name."
+#~ msgstr ""
+#~ "<small>●</small> Varsayılan olarak,  <b>Alan</b> adı ağ/arayüz adıyla "
+#~ "aynı olacaktır."
+
+#~ msgid "Please choose a name for your virtual network:"
+#~ msgstr "Sanal ağınız için lütfen bir ad belirleyin:"
+
+#~ msgid "Network Type:"
+#~ msgstr "Ağ Tipi:"
+
+#~ msgid "Domain Name:"
+#~ msgstr "Alan Adı:"
+
+#~ msgid "Misc"
+#~ msgstr "Çeşitli"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to "
+#~ "create network</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ağ yaratmak "
+#~ "için hazır</span>"
+
+#~ msgid "<b>IPv4 Network</b>"
+#~ msgstr "<b>IPv4 Ağı</b>"
+
+#~ msgid "<b>Domain</b> Name:"
+#~ msgstr "<b>Alan</b> Adı:"
+
+#~ msgid "192.168.10.128"
+#~ msgstr "192.168.10.128"
+
+#~ msgid "DHCPv4 Start Address:"
+#~ msgstr "DHCPv4 Başlangıç Adresi:"
+
+#~ msgid "DHCPv4 End  Address:"
+#~ msgstr "DHCPv4 Bitiş Adresi:"
+
+#~ msgid "<b>Summary</b>"
+#~ msgstr "<b>Özet</b>"
+
+#~ msgid "<b>Network</b> Name:"
+#~ msgstr "<b>Ağ</b> Adı:"
+
+#~ msgid "demo"
+#~ msgstr "demo"
+
+#~ msgid "<b>IPv6 Network</b>"
+#~ msgstr "<b>IPv6 Ağı</b>"
+
+#~ msgid "DHCPv6 End Address:"
+#~ msgstr "DHCPv6 Bitiş Addresi:"
+
+#~ msgid "DHCPv6 Start Address:"
+#~ msgstr "DHCPv6 Başlangıç Addresi:"
+
+#~ msgid "FD00:100::100"
+#~ msgstr "FD00:100::100"
+
+#~ msgid "FD00:100::1FF"
+#~ msgstr "FD00:100::1FF"
+
+#~ msgid "FD00:100::/64"
+#~ msgstr "FD00:100::/64"
+
+#~ msgid "FD00:100::1"
+#~ msgstr "FD00:100::1"
+
+#~ msgid "Complete"
+#~ msgstr "Bütün"
+
+#~ msgid "Step 1 of 2"
+#~ msgstr "Adım 1/2"
+
+#~ msgid "Step 2 of 2"
+#~ msgstr "Adım 2/2"
+
+#~ msgid "Enter your virtual machine details"
+#~ msgstr "Sanal makinenizin detaylarını girin"
+
+#~ msgid "Error message"
+#~ msgstr "Hata mesajı"
+
+#~ msgid "Delete Confirmation"
+#~ msgstr "Silme Onayı"
+
+#~ msgid "S_hut Down"
+#~ msgstr "Ka_pat"
+
+#~ msgid "_Clone"
+#~ msgstr "_Klonla"
+
+#, fuzzy
+#~ msgid "_Delete..."
+#~ msgstr "_Sil"
+
+#~ msgid ""
+#~ "CPU\n"
+#~ "usage:"
+#~ msgstr ""
+#~ "CPU\n"
+#~ "kullanımı:"
+
+#~ msgid ""
+#~ "Memory\n"
+#~ "usage:"
+#~ msgstr ""
+#~ "Bellek\n"
+#~ "kullanımı:"
+
+#~ msgid ""
+#~ "Disk\n"
+#~ "I/O:"
+#~ msgstr ""
+#~ "Disk\n"
+#~ "I/O:"
+
+#~ msgid ""
+#~ "Network\n"
+#~ "I/O:"
+#~ msgstr ""
+#~ "Ağ\n"
+#~ "I/O:"
+
+#~ msgid ""
+#~ "0 KBytes/s\n"
+#~ "0KBytes/s"
+#~ msgstr ""
+#~ "0 KBytes/s⏎\n"
+#~ "0KBytes/s"
+
+#~ msgid "<b>Performance</b>"
+#~ msgstr "<b>Başarım</b>"
+
+#~ msgid "Target device:"
+#~ msgstr "Hedef aygıt:"
+
+#~ msgid "CPU usage:"
+#~ msgstr "CPU kullanımı:"
+
+#~ msgid "Memory usage:"
+#~ msgstr "Bellek kullanımı:"
+
+#~ msgid "IPv4 Forwarding:"
+#~ msgstr "IPv4 Yönlendirme:"
+
+#~ msgid "DHCP start:"
+#~ msgstr "DHCP başlangıç:"
+
+#~ msgid "DHCP end:"
+#~ msgstr "DHCP bitiş:"
+
+#~ msgid "VNC"
+#~ msgstr "VNC"
+
+#~ msgid "Spice"
+#~ msgstr "Spice"
+
+#~ msgid "Cancel the job before closing window?"
+#~ msgstr "Pencereyi kapatmadan önce işi iptal et?"
+
+#~ msgid "This will delete all selected storage data."
+#~ msgstr "Seçilen depolama alanındaki tüm veri silinecek."
+
+#~ msgid ""
+#~ "The screenshot has been saved to:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Ekran görüntüsü buraya kaydedildi:\n"
+#~ "%s"
+
+#~ msgid "Screenshot saved"
+#~ msgstr "Ekran görüntüsü kaydedildi."

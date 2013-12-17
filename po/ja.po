@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-16 15:53-0500\n"
+"POT-Creation-Date: 2013-12-16 19:50-0500\n"
 "PO-Revision-Date: 2013-12-02 20:00+0000\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/virt-manager/"
@@ -998,11 +998,11 @@ msgstr "デバイスを指定する必要があります。"
 
 #: ../virtManager/addhardware.py:1787
 msgid "Please specify both bind and connect host"
-msgstr ""
+msgstr "ホストの接続およびバインドの両方を指定してください"
 
 #: ../virtManager/addhardware.py:1791
 msgid "Please specify both bind and connect service"
-msgstr ""
+msgstr "サービスの接続およびバインドの両方を指定してください"
 
 #: ../virtManager/addhardware.py:1795
 msgid "The EGD host must be specified."
@@ -3880,6 +3880,9 @@ msgid ""
 "--rng /dev/random\n"
 "--rng egd,backend_host=localhost,backend_service=708,backend_type=tcp"
 msgstr ""
+"ゲストの RNG デバイスを設定します。例:\n"
+"--rng /dev/random\n"
+"--rng egd,backend_host=localhost,backend_service=708,backend_type=tcp"
 
 #: ../virtinst/cli.py:934
 msgid ""
@@ -5124,7 +5127,7 @@ msgstr "ホスト:"
 
 #: ../ui/addhardware.ui.h:48 ../ui/details.ui.h:181
 msgid "Bind Host:"
-msgstr ""
+msgstr "バインドホスト:"
 
 #: ../ui/addhardware.ui.h:49 ../ui/details.ui.h:159 ../ui/host.ui.h:17
 msgid "Device:"
@@ -6718,7 +6721,7 @@ msgstr "サービス:"
 
 #: ../ui/details.ui.h:182
 msgid "Bind Service:"
-msgstr ""
+msgstr "バインドサービス:"
 
 #: ../ui/details.ui.h:183
 msgid "Rate (period):"
@@ -7237,3 +7240,1309 @@ msgstr "ローカルを参照(_B)"
 #: ../ui/storagebrowse.ui.h:4
 msgid "Choose _Volume"
 msgstr "ボリュームを選択(_V)"
+
+#~ msgid "Error in %(chartype)s device parameters: %(err)s"
+#~ msgstr "%(chartype)s デバイスのパラメーターにエラーがあります: %(err)s"
+
+#~ msgid "Error in watchdog device parameters: %s"
+#~ msgstr "watchdog デバイスのパラメーターにエラーがあります: %s"
+
+#~ msgid "Error in filesystem device parameters: %s"
+#~ msgstr "ファイルシステムのデバイスパラメーターにエラーがあります: %s"
+
+#~ msgid ""
+#~ "Domain installation still in progress. Waiting %sfor installation to "
+#~ "complete."
+#~ msgstr ""
+#~ "仮想マシンのインストールが進行中です。インストールが完了するまで %s を待っ"
+#~ "ています。"
+
+#~ msgid "The OS type being installed, e.g. 'linux', 'unix', 'windows'"
+#~ msgstr "インストールする OS の種類。例: 'linux', 'unix', 'windows'"
+
+#~ msgid ""
+#~ "The OS variant being installed guests, e.g. 'fedora6', 'rhel5', "
+#~ "'solaris10', 'win2k'"
+#~ msgstr ""
+#~ "インストールする OS 種別です。例: 'fedora6', 'rhel5', 'solaris10', 'win2k'"
+
+#~ msgid ""
+#~ "Disables APIC for fully virtualized guest (overrides value in os-type/os-"
+#~ "variant db)"
+#~ msgstr ""
+#~ "完全仮想化ゲストの APIC を無効にします (os-タイプ/os-種別の db の値を上書"
+#~ "きします)"
+
+#~ msgid ""
+#~ "Disables ACPI for fully virtualized guest (overrides value in os-type/os-"
+#~ "variant db)"
+#~ msgstr ""
+#~ "完全仮想化ゲストの ACPI を無効にします (os-タイプ/os-種別の db の値を上書"
+#~ "きします)"
+
+#~ msgid "Print the generated domain XML rather than define the guest."
+#~ msgstr "仮想マシンXMLファイルを表示します。"
+
+#~ msgid "Time to wait (in minutes)"
+#~ msgstr "待ち時間（分単位）"
+
+#~ msgid "Forces 'yes' for any applicable prompts, terminates for all others"
+#~ msgstr ""
+#~ "適用可能なプロンプトに対して強制的に 'yes' を答えます、その他すべてに対し"
+#~ "て終了します。"
+
+#~ msgid "Request user input for ambiguous situations or required options."
+#~ msgstr ""
+#~ "あいまいな状況や必要なオプションに\n"
+#~ "対してユーザーからの入力を求めます"
+
+#~ msgid ""
+#~ "Don't check for name collision. Allows replacing an existing guest with "
+#~ "the new clone"
+#~ msgstr ""
+#~ "名前の衝突をチェックしません\n"
+#~ "同じ名前の仮想マシンが存在した場合、\n"
+#~ "新しい仮想マシンで置き換えます"
+
+#~ msgid ""
+#~ "Do not prompt for input. Answers yes where applicable, terminates for all "
+#~ "other prompts"
+#~ msgstr ""
+#~ "入力を求めるプロンプトが表示しません\n"
+#~ "指定した場合、すべてのプロンプトを終了させます"
+
+#~ msgid "Must be privileged to clone Xen guests"
+#~ msgstr "Xenの仮想マシンをクローンする権限が必要です。"
+
+#~ msgid "The image requires %i network interface."
+#~ msgstr "イメージは %i ネットワークインターフェースが必要です。"
+
+#~ msgid ""
+#~ "The OS variant being installed, e.g. 'fedora6', 'rhel5', 'solaris10', "
+#~ "'win2k'"
+#~ msgstr ""
+#~ "インストールする OS の種別。例: 'fedora6', 'rhel5', 'solaris10', 'win2k'"
+
+#~ msgid "Full Virtualization specific options"
+#~ msgstr "完全仮想化の固有オプション"
+
+#~ msgid "Disables APIC for fully virtualized guest"
+#~ msgstr "完全仮想化ゲストの APIC を無効化します"
+
+#~ msgid "Disables ACPI for fully virtualized guest"
+#~ msgstr "完全仮想化ゲストの ACPI を無効化します"
+
+#~ msgid "Print the libvirt XML, but do not start the domain"
+#~ msgstr "libvirt XML を表示しますが、仮想マシンを開始しません"
+
+#~ msgid "Overwrite, or destroy, an existing image with the same name"
+#~ msgstr ""
+#~ "既存の同じ名前のイメージがあった場合、上書きするか、もしくは削除する"
+
+#~ msgid ""
+#~ "The OS type for fully virtualized guests, e.g. 'linux', 'unix', 'windows'"
+#~ msgstr ""
+#~ "例えば 'linux'、'unix'、'windows'のような完全仮想化ゲストの OS タイプ"
+
+#~ msgid ""
+#~ "The OS variant for fully virtualized guests, e.g. 'fedora6', 'rhel5', "
+#~ "'solaris10', 'win2k', 'vista'"
+#~ msgstr ""
+#~ "例えば 'fedora6'、'rhel5'、'solaris'、'win2k'、'vista' のような完全仮想化"
+#~ "ゲストの OS タイプ"
+
+#~ msgid "Dry run, don't make any changes"
+#~ msgstr "ドライランは変更を加えません"
+
+#~ msgid "Local SDL window"
+#~ msgstr "ローカル SDL ウィンドウ"
+
+#~ msgid "Creating Storage File"
+#~ msgstr "ストレージファイルの作成"
+
+#~ msgid "Allocation of disk storage may take a few minutes to complete."
+#~ msgstr "ストレージ領域の割り当てが完了するまで数分かかる可能性があります。"
+
+#~ msgid "Disk \"%s\" is already in use by another guest!"
+#~ msgstr "ディスク \"%s\" はすでに他の仮想マシンから使われています!"
+
+#~ msgid "Active (RO)"
+#~ msgstr "アクティブ(RO)"
+
+#~ msgid ""
+#~ "Domain rename failed. Attempting to recover also failed.\n"
+#~ "\n"
+#~ "Original error: %s\n"
+#~ "\n"
+#~ "Recover error: %s"
+#~ msgstr ""
+#~ "仮想マシンの名前の変更に失敗しました。修復を試みましたが失敗しました。\n"
+#~ "\n"
+#~ "元のエラー: %s\n"
+#~ "\n"
+#~ "回復時のエラー: %s"
+
+#~ msgid "Connection is read only."
+#~ msgstr "この接続は読み込み専用です。"
+
+#~ msgid "Hypervisor only supports %d virtual CPUs."
+#~ msgstr "ハイパーバイザーは %d 個の仮想 CPU までサポートしています。"
+
+#~ msgid "Only URL or import installs are supported for paravirt."
+#~ msgstr ""
+#~ "準仮想化では URL インストールもしくはインポートのみサポートされています。"
+
+#~ msgid "Invalid System Name"
+#~ msgstr "無効なシステム名です"
+
+#~ msgid "Network Address / prefix:"
+#~ msgstr "ネットワークアドレス / プレフィックス:"
+
+#~ msgid "DHCPv4 Status:"
+#~ msgstr "DHCPv4 の状態:"
+
+#~ msgid "IPV6 Network:"
+#~ msgstr "IPv6 ネットワーク:"
+
+#~ msgid "Not Defined"
+#~ msgstr "未定義"
+
+#~ msgid "DHCPv6 Status:"
+#~ msgstr "DHCPv6 の状態:"
+
+#~ msgid "Invalid forwarding mode"
+#~ msgstr "無効なフォワードモードです"
+
+#~ msgid "Please select where the traffic should be forwarded"
+#~ msgstr "トラフィックのフォワード先を選択してください"
+
+#~ msgid "Format the source device."
+#~ msgstr "ソースデバイスをフォーマットします。"
+
+#~ msgid "Create a logical volume group from the source device."
+#~ msgstr "ソースデバイスから論理ボリュームグループを作成"
+
+#~ msgid "All selected storage will be deleted."
+#~ msgstr "選択したデバイスがすべて削除されます。"
+
+#~ msgid ""
+#~ "Static SELinux security type tells libvirt to always start the guest "
+#~ "process with the specified label. Unless 'relabel' is set, the "
+#~ "administrator is responsible for making sure the images are labeled "
+#~ "correctly on disk."
+#~ msgstr ""
+#~ "静的 SELinux セキュリティタイプは、libvirt に対して常に特定のラベル付きで"
+#~ "仮想マシンのプロセスを開始するよう指示します（'relabel' が設定されない限"
+#~ "り）。 管理者はディスクにあるイメージが正しくラベル付けされていることを確"
+#~ "認する責任があります。"
+
+#~ msgid ""
+#~ "You are switching graphics type to %(gtype)s, would you like to "
+#~ "%(action)s Spice agent channels?"
+#~ msgstr ""
+#~ "グラフィックの種類を %(gtype)s に変更しようとしています、Spice エージェン"
+#~ "トのチャネルを %(action)s したいですか？"
+
+#~ msgid "Cannot rename an active guest"
+#~ msgstr "稼働中の仮想マシンの名前を変更できません。"
+
+#~ msgid ""
+#~ "virt-manager will connect to libvirt on the next\n"
+#~ "application start up."
+#~ msgstr ""
+#~ "次回アプリケーション起動時、virt-manager により \n"
+#~ "libvirt へ接続されます。"
+
+#~ msgid ""
+#~ "Libvirt was just installed, so the 'libvirtd' service will\n"
+#~ "will need to be started."
+#~ msgstr ""
+#~ "libvirt がインストールされました。'libvirtd' サービスを\n"
+#~ "起動する必要があります。"
+
+#~ msgid "Error setting net autostart: %s"
+#~ msgstr "net autostart の設定中にエラーが発生しました: %s"
+
+#~ msgid "Error setting pool autostart: %s"
+#~ msgstr "pool autostart の設定中にエラーが発生しました: %s"
+
+#~ msgid "_Force Reset"
+#~ msgstr "強制的にリセット(_F)"
+
+#~ msgid "_Clone..."
+#~ msgstr "クローン(_C)..."
+
+#~ msgid "_Migrate..."
+#~ msgstr "マイグレーション(_M)..."
+
+#~ msgid "Searching for available hypervisors..."
+#~ msgstr "利用可能なハイパーバイザーを探索中..."
+
+#~ msgid "Checking for installed package '%s'"
+#~ msgstr "インストール済みパッケージ '%s' をチェックしています"
+
+#~ msgid ""
+#~ "The following packages are not installed:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "These are required to create KVM guests locally.\n"
+#~ "Would you like to install them now?"
+#~ msgstr ""
+#~ "以下のパッケージがインストールされていません:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "これらのパッケージは KVM 仮想マシンをローカルで作成するために必要です。\n"
+#~ "今すぐインストールしますか？"
+
+#~ msgid "Packages required for KVM usage"
+#~ msgstr "KVM を利用するには以下のパッケージが必要です。"
+
+#~ msgid ""
+#~ "The following packages are not installed:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "Would you like to install them now?"
+#~ msgstr ""
+#~ "以下のパッケージがインストールされていません:\n"
+#~ "%s\n"
+#~ "\n"
+#~ "今すぐインストールしますか?"
+
+#~ msgid "Recommended package installs"
+#~ msgstr "インストール推奨パッケージ"
+
+#~ msgid "_Resume"
+#~ msgstr "レジューム(_R)"
+
+#~ msgid "'path' or 'func' is required."
+#~ msgstr "'path' または 'func' が必要です。"
+
+#~ msgid "Must be root to create Xen guests"
+#~ msgstr "Xen ゲストを作成するには root でなければいけません"
+
+#~ msgid " (Use --prompt or --force to override)"
+#~ msgstr " (上書きには --prompt または --force を使用します)"
+
+#~ msgid "Disk %s is already in use by another guest"
+#~ msgstr "ディスク %s はすでに他のホストにより使用されています"
+
+#~ msgid "Error in network device parameters: %s"
+#~ msgstr "ネットワークデバイスのパラメーターにエラーがあります: %s"
+
+#~ msgid "Error in graphics device parameters: %s"
+#~ msgstr "グラフィックデバイスのパラメーターにエラーがあります: %s"
+
+#~ msgid "Error in smartcard device parameters: %s"
+#~ msgstr "スマートカードデバイスのパラメーターにエラーがあります: %s"
+
+#~ msgid "Error in RNG device parameters: %s"
+#~ msgstr "RNG デバイスパラメーターにエラーがあります: %s"
+
+#~ msgid "Error in controller device parameters: %s"
+#~ msgstr "コントローラーデバイスのパラメーターにエラーがあります: %s"
+
+#~ msgid "Error in redirdev device parameters: %s"
+#~ msgstr "リダイレクトデバイスのパラメーターにエラーがあります: %s"
+
+#~ msgid "Error in memballoon device parameters: %s"
+#~ msgstr "メモリーバルーンデバイスのパラメーターにエラーがあります: %s"
+
+#~ msgid ""
+#~ "Configure a guest network interface. Ex:\n"
+#~ "--network bridge=mybr0\n"
+#~ "--network network=my_libvirt_virtual_net\n"
+#~ "--network network=mynet,model=virtio,mac=00:11..."
+#~ msgstr ""
+#~ "ゲストのネットワークインターフェースを設定します。例:\n"
+#~ "--network bridge=mybr0\n"
+#~ "--network network=my_libvirt_virtual_net\n"
+#~ "--network network=mynet,model=virtio,mac=00:11..."
+
+#~ msgid "--boot menu must be 'on' or 'off'"
+#~ msgstr "--boot メニューは 'on' または 'off' である必要があります"
+
+#~ msgid "The server option is invalid with spicevmc redirection"
+#~ msgstr ""
+#~ "spicevmc リダイレクションと一緒に指定された server オプションは無効です。"
+
+#~ msgid "The server option is missing for TCP redirection"
+#~ msgstr ""
+#~ "TCP リダイレクションに対する server オプションの指定が欠けています。"
+
+#~ msgid "Connection must be a 'virConnect' instance."
+#~ msgstr "コネクションは 'virConnect' インスタンスでなければいけません。"
+
+#~ msgid "Disk '%s' does not exist."
+#~ msgstr "ディスク '%s' が存在しません。"
+
+#~ msgid "Invalid 'location' type %s."
+#~ msgstr "無効な 'location' 形式 %s"
+
+#~ msgid "'conn' must be specified if 'location' is a storage tuple."
+#~ msgstr ""
+#~ "'location' がストレージの組ならば、 'conn' を指定する必要があります。"
+
+#~ msgid ""
+#~ "Install media location must be an NFS, HTTP or FTP network install "
+#~ "source, or an existing file/device"
+#~ msgstr ""
+#~ "インストールメディアの場所はNFS、HTTP、FTPのネットワークソースもしくは既存"
+#~ "のファイルかデバイスを指定する必要があります。"
+
+#~ msgid "Privilege is required for NFS installations"
+#~ msgstr "NFS インストールには権限が必要です"
+
+#~ msgid "Unable to connect to hypervisor, aborting installation!"
+#~ msgstr "ハイパーバイザーに接続できませんでした、インストールを終了します!"
+
+#~ msgid "Memory value must be an integer greater than 0"
+#~ msgstr "メモリー値は 0 を越える整数でなければなりません"
+
+#~ msgid "Max Memory value must be an integer greater than 0"
+#~ msgstr "最大メモリー値は 0 を越える整数でなければなりません"
+
+#~ msgid "Number of vcpus must be a positive integer."
+#~ msgstr "vcpus の値は正の整数で指定してください。"
+
+#~ msgid "Number of vcpus must be no greater than %d for this vm type."
+#~ msgstr "仮想 CPU 数はこの仮想マシン形式に対して %d より大きくできません。"
+
+#~ msgid "OS type must be a string."
+#~ msgstr "OS 種別は文字列でなければいけません。"
+
+#~ msgid "OS type '%s' does not exist in our dictionary"
+#~ msgstr "OS の種類 '%s' が一覧に存在しません"
+
+#~ msgid "OS variant must be a string."
+#~ msgstr "OS 種別は文字列でなければいけません。"
+
+#~ msgid ""
+#~ "OS variant '%(var)s' does not exist in our dictionary for OS type '%(ty)s'"
+#~ msgstr "OS の種別 '%(var)s' が OS の種類 '%(ty)s' の一覧に存在しません"
+
+#~ msgid "Unknown OS variant '%s'"
+#~ msgstr "不明な OS 種別 '%s'"
+
+#~ msgid "Whether we should overwrite an existing guest with the same name."
+#~ msgstr "同じ名前を持つ既存の仮想マシンを上書きするかどうか。"
+
+#~ msgid "Must pass a VirtualDevice instance."
+#~ msgstr "VirtualDevice インスタンスを渡さなければいけません。"
+
+#~ msgid "Did not find device %s"
+#~ msgstr "デバイス %s が見つかりません"
+
+#~ msgid "Name and memory must be specified for all guests!"
+#~ msgstr "全てのゲストに対して名前とメモリーを指定しなければなりません!"
+
+#~ msgid "The UUID you entered is already in use by another guest!"
+#~ msgstr "入力した UUID はすでに他のゲストで使用中です!"
+
+#~ msgid ""
+#~ "Domain has not existed.  You should be able to find more information in "
+#~ "the logs"
+#~ msgstr "ドメインは存在しません。ログに詳細な情報を見つけることができます"
+
+#~ msgid ""
+#~ "Domain has not run yet.  You should be able to find more information in "
+#~ "the logs"
+#~ msgstr ""
+#~ "ドメインはまだ実行していません。ログに詳細な情報を見つけることができます"
+
+#~ msgid "'conn' or 'capabilities' must be specified."
+#~ msgstr "'conn' または 'capabilities' が指定されなければいけません。"
+
+#~ msgid "Root element is not 'image'"
+#~ msgstr "ルートエレメントが 'image' ではありません。"
+
+#~ msgid "A connection must be specified."
+#~ msgstr "コネクションが指定されなければいけません。"
+
+#~ msgid "'conn' must be a libvirt connection object."
+#~ msgstr "'conn' は libvirt の接続オブジェクトでなければいけません。"
+
+#~ msgid "Passed connection is not libvirt interface capable"
+#~ msgstr "渡されたコネクションは libvirt インターフェース互換ではありません"
+
+#~ msgid "Interface name"
+#~ msgstr "インターフェース名"
+
+#~ msgid "Unknown start mode '%s"
+#~ msgstr "未知の開始モード '%s"
+
+#~ msgid "Network protocol configuration"
+#~ msgstr "ネットワークプロトコルの設定"
+
+#~ msgid "Availability monitoring mode for the bond device"
+#~ msgstr "bond デバイスに対する利用可能なモニタリングモード"
+
+#~ msgid "Tag and parent interface are required."
+#~ msgstr "VLANタグと親インターフェースの指定が必要です。"
+
+#~ msgid "Static IP addresses"
+#~ msgstr "静的 IP アドレス"
+
+#~ msgid "IPv6 address prefix"
+#~ msgstr "IPv6 アドレスプリフィックス"
+
+#~ msgid "IP address"
+#~ msgstr "IP アドレス"
+
+#~ msgid "CDROM media must be specified for the live CD installer."
+#~ msgstr ""
+#~ "CD-ROM メディアには LiveCD のインストーラーを指定する必要があります。"
+
+#~ msgid "Invalid dictionary entry for device '%s %s'"
+#~ msgstr "デバイス '%s %s' に対する無効な辞書項目"
+
+#~ msgid "Unable to determine kernel RPM path"
+#~ msgstr "カーネル RPM のパスを決定できません"
+
+#~ msgid "Unable to determine install-initrd RPM path"
+#~ msgstr "インストール-initrd RPM のパスを決定できません"
+
+#~ msgid "Building initrd"
+#~ msgstr "initrd を構築中"
+
+#~ msgid "Solaris miniroot not found at %s"
+#~ msgstr "%s に Solaris miniroot が見つかりません"
+
+#~ msgid "OpenSolaris PV kernel not found at %s"
+#~ msgstr "%s に OpenSolaris PVカーネルが見つかりません"
+
+#~ msgid "Unknown storage object type: %s"
+#~ msgstr "未知のストレージオブジェクト形式: %s"
+
+#~ msgid "Passed connection is not libvirt storage capable"
+#~ msgstr "渡された接続は libvirt のストレージケイパビリティがありません。"
+
+#~ msgid "Permissions must be passed as a dict object"
+#~ msgstr "パーミッションは dict オブジェクトとして渡す必要があります"
+
+#~ msgid "Permissions must contain 'mode', 'owner' and 'group' keys."
+#~ msgstr ""
+#~ "パーミッションは 'mode', 'owner' および 'group' キーを含まなければいけませ"
+#~ "ん。"
+
+#~ msgid "'%s' is not an absolute path."
+#~ msgstr "'%s' は絶対パスではありません。"
+
+#~ msgid "Unknown storage pool type: %s"
+#~ msgstr "不明なストレージプールの種類: %s"
+
+#~ msgid "Host name must be a string"
+#~ msgstr "ホスト名は文字列でなければいけません"
+
+#~ msgid "Directory to use for the storage pool."
+#~ msgstr "ストレージプールのために使用するディレクトリ。"
+
+#~ msgid "The existing device to mount for the pool."
+#~ msgstr "プールのためにマウントする既存のデバイス。"
+
+#~ msgid "Location to mount the source device."
+#~ msgstr "ソースデバイスをマウントする位置。"
+
+#~ msgid "Unknown Filesystem format: %s"
+#~ msgstr "不明なファイルシステム形式: %s"
+
+#~ msgid "Filesystem type of the source device."
+#~ msgstr "ソースデバイスのファイルシステム形式。"
+
+#~ msgid "Device path is required"
+#~ msgstr "デバイスパスは必須です"
+
+#~ msgid "Path on the host that is being shared."
+#~ msgstr "共有されるホストにおけるパス。"
+
+#~ msgid "Name of the host sharing the storage."
+#~ msgstr "ストレージを共有するホストの名前"
+
+#~ msgid "Unknown Network Filesystem format: %s"
+#~ msgstr "不明なネットワークファイルシステムの種類: %s"
+
+#~ msgid "Type of network filesystem."
+#~ msgstr "ネットワークファイルシステムの形式。"
+
+#~ msgid "Host path is required"
+#~ msgstr "ホストパスは必須です"
+
+#~ msgid "Location of the existing LVM volume group."
+#~ msgstr "既存の LVM ボリュームグループの位置。"
+
+#~ msgid "Optional device(s) to build new LVM volume on."
+#~ msgstr "新しい LVM ボリュームを構築するオプションデバイス。"
+
+#~ msgid "Path to the existing disk device."
+#~ msgstr "パスは、すでに存在するディスクデバイスでなければなりません。"
+
+#~ msgid "Root location for identifying new storage volumes."
+#~ msgstr "新しいストレージボリュームを識別するためのルートの場所"
+
+#~ msgid "Unknown Disk format: %s"
+#~ msgstr "不明なディスクフォーマット: %s"
+
+#~ msgid "Format of the source device's partition table."
+#~ msgstr "ソースデバイスのパーティションテーブルの形式"
+
+#~ msgid "iSCSI volume creation is not supported."
+#~ msgstr "iSCSI ボリュームの作成はサポートされません。"
+
+#~ msgid "SCSI volume creation is not supported."
+#~ msgstr "SCSI ボリュームの作成はサポートされません。"
+
+#~ msgid "Name of the scsi adapter (ex. host2)"
+#~ msgstr "SCSI アダプターの名前 (例えば、host2)"
+
+#~ msgid "Adapter name is required"
+#~ msgstr "アダプター名は必須です。"
+
+#~ msgid "Multipath volume creation is not supported."
+#~ msgstr "マルチパスボリュームの作成はサポートされません。"
+
+#~ msgid "One of pool or pool_name must be specified."
+#~ msgstr "pool または pool_name のどちらかを指定する必要があります。"
+
+#~ msgid "'conn' must be specified with 'pool_name'"
+#~ msgstr "'conn' は 'pool_name' を一緒に指定する必要があります"
+
+#~ msgid "Must specify pool_object or pool_name"
+#~ msgstr "pool_object または pool_name を指定しなければなりません"
+
+#~ msgid "Couldn't find storage pool '%s': %s"
+#~ msgstr "ストレージプール '%s' を見つけられませんでした: %s"
+
+#~ msgid "pool_object must be a virStoragePool"
+#~ msgstr "pool_object は virStoragePool でなければなりません。"
+
+#~ msgid "Capacity must be a positive number"
+#~ msgstr "キャパシティーは整数でなければなりません"
+
+#~ msgid "Allocation must be a non-negative number"
+#~ msgstr "割り当ては非負数でなければいけません"
+
+#~ msgid "'pool' must be a virStoragePool instance."
+#~ msgstr "'pool' は virStoragePool インスタンスだけでなければいけません。"
+
+#~ msgid "'%s' is not a valid format."
+#~ msgstr "'%s' は有効な形式ではありません。"
+
+#~ msgid "'conn' must be a virConnect instance."
+#~ msgstr "'conn' は virConnect インスタンスでなければいけません。"
+
+#~ msgid "'model' must be a string,  was '%s'."
+#~ msgstr "'model' は文字列でなければいけませんが、'%s' でした。"
+
+#~ msgid "Unsupported sound model '%s'"
+#~ msgstr "サポートされないサウンドモデル '%s'"
+
+#~ msgid "Unknown character device type '%s'."
+#~ msgstr "未知のキャラクターデバイスの形式 '%s'"
+
+#~ msgid "Unknown character device type '%s'"
+#~ msgstr "未知のキャラクターデバイスの形式 '%s'"
+
+#~ msgid "Unknown character mode '%s'."
+#~ msgstr "未知のキャラクターモード '%s'。"
+
+#~ msgid "Unknown protocol '%s'."
+#~ msgstr "不明なプロトコル: '%s'"
+
+#~ msgid "Unknown target type '%s'. Must be in: "
+#~ msgstr "未知のターゲットタイプ '%s' 次のいずれかでなければなりません:"
+
+#~ msgid "Unknown address type '%s'. Must be in: "
+#~ msgstr "未知のアドレス形式 '%s'。次のどれかである必要があります: "
+
+#~ msgid "A source path is required for character device type '%s'"
+#~ msgstr "ソースパスはキャラクターデバイス形式 '%s' が必要です。"
+
+#~ msgid "PTY allocated to the guest."
+#~ msgstr "仮想マシンに割り当てられた PTY"
+
+#~ msgid "Host character device to attach to guest."
+#~ msgstr "仮想マシンに接続するホスト・キャラクターデバイス。"
+
+#~ msgid "Named pipe to use for input and output."
+#~ msgstr "入力と出力に使用する名前付きパイプ。"
+
+#~ msgid "File path to record device output."
+#~ msgstr "デバイスの出力を記録するファイルのパス。"
+
+#~ msgid "Unix socket path."
+#~ msgstr "UNIX ソケットのパス"
+
+#~ msgid "A host and port must be specified."
+#~ msgstr "ホストとポートを指定する必要があります。"
+
+#~ msgid "Host address to send output to."
+#~ msgstr "出力を送信するホストのアドレス。"
+
+#~ msgid "Host port to send output to."
+#~ msgstr "出力を送信するホストのポート。"
+
+#~ msgid "A connection port must be specified."
+#~ msgstr "接続ポートを指定する必要があります。"
+
+#~ msgid "volName must be a tuple of the form ('poolname', 'volname')"
+#~ msgstr ""
+#~ "VolName は ('poolname', 'volname') 形式のタプルでなければなりません。"
+
+#~ msgid "'volName' requires a passed connection."
+#~ msgstr "'volName' には有効な接続が必要です。"
+
+#~ msgid "vol_object must be a virStorageVol instance"
+#~ msgstr "vol_object は virStorageVol インスタンスではなればなりません。"
+
+#~ msgid "vol_install must be a StorageVolume  instance."
+#~ msgstr "vol_install は StorageVolume インスタンスでなければなりません。"
+
+#~ msgid "Error validating clone path: %s"
+#~ msgstr "クローンパスの確認中にエラー: %s"
+
+#~ msgid "'size' must be a number greater than 0."
+#~ msgstr "'size'は0を越える整数でなければなりません"
+
+#~ msgid "Unknown storage type '%s'"
+#~ msgstr "不明なストレージタイプ '%s'"
+
+#~ msgid "Unknown device type '%s'"
+#~ msgstr "不明なデバイスの種類 '%s'"
+
+#~ msgid "Unknown cache mode '%s'"
+#~ msgstr "不明なキャッシュモード '%s'"
+
+#~ msgid "Unknown io mode '%s'"
+#~ msgstr "不明な I/O モード '%s'"
+
+#~ msgid "Unknown error policy '%s'"
+#~ msgstr "不明なエラーポリシー '%s'"
+
+#~ msgid "IOTune read bytes per second value must be an integer"
+#~ msgstr "IOTune の秒あたり読み込みバイト値は整数である必要があります。"
+
+#~ msgid "IOTune read iops per second value must be an integer"
+#~ msgstr "IOTune の秒あたり読み込み IOPS 値は整数である必要があります。"
+
+#~ msgid "IOTune total bytes per second value must be an integer"
+#~ msgstr "IOTune の秒あたり合計バイト値は整数である必要があります。"
+
+#~ msgid "IOTune total iops per second value must be an integer"
+#~ msgstr "IOTune の秒あたり合計 IOPS 値は整数である必要があります。"
+
+#~ msgid "IOTune write bytes per second value must be an integer"
+#~ msgstr "IOTune の秒あたり書き込みバイト値は整数である必要があります。"
+
+#~ msgid "IOTune write iops per second value must be an integer"
+#~ msgstr "IOTune の秒あたり書き込み IOPS 値は整数である必要があります。"
+
+#~ msgid "copying to an existing vdisk is not supported"
+#~ msgstr "既存の仮想ディスクへのコピーはサポートされません"
+
+#~ msgid "failed to clone disk"
+#~ msgstr "ディスクのクローニングに失敗しました"
+
+#~ msgid "Error creating vdisk %s"
+#~ msgstr "仮想ディスク'%s'の作成中にエラー"
+
+#~ msgid "'disknode' or self.target must be set!"
+#~ msgstr "'disknode' または self.target が設定されなければいけません！"
+
+#~ msgid "Cannot determine device bus/type."
+#~ msgstr "デバイスバスおよびタイプを判別できません。"
+
+#~ msgid "Unsupported filesystem type '%s'"
+#~ msgstr "サポートされていないファイルシステムタイプ '%s'"
+
+#~ msgid "Unsupported filesystem mode '%s'"
+#~ msgstr "サポートされていないファイルシステムモード '%s'"
+
+#~ msgid "Unsupported filesystem write policy '%s'"
+#~ msgstr "サポートされないファイルシステムの書き込みポリシー '%s'"
+
+#~ msgid "Unsupported filesystem driver '%s'"
+#~ msgstr "サポートされないファイルシステムドライバー '%s'"
+
+#~ msgid "A filesystem source and target must be specified"
+#~ msgstr "ファイルシステムのソースとターゲットを指定する必要があります"
+
+#~ msgid "Unknown graphics type '%s'"
+#~ msgstr "不明なグラフィックスの種類 '%s'"
+
+#~ msgid "Keymap must be a string"
+#~ msgstr "キー配列は文字列でなければなりません"
+
+#~ msgid "Keymap must be less than 16 characters"
+#~ msgstr "キー配列は 16 文字未満でなければなりません"
+
+#~ msgid "Keymap can only contain alphanumeric, '_', or '-' characters"
+#~ msgstr "キー配列には英数字と'_'、'-' だけが指定できます"
+
+#~ msgid ""
+#~ "VNC port must be a number between 5900 and 65535, or -1 for auto "
+#~ "allocation"
+#~ msgstr ""
+#~ "VNC ポート番号は 5900 から 65535 の間の数値、または -1 (自動割り当て) であ"
+#~ "る必要があります。"
+
+#~ msgid ""
+#~ "TLS port must be a number between 5900 and 65535, or -1 for auto "
+#~ "allocation"
+#~ msgstr ""
+#~ "TLS ポートは、5900 - 65535 の数値、または自動割り当ての -1 でなければいけ"
+#~ "ません"
+
+#~ msgid "Unknown graphics type"
+#~ msgstr "不明なグラフィックのタイプ"
+
+#~ msgid "'name' or 'nodedev' required."
+#~ msgstr "'name'または'nodedev'が必要です。"
+
+#~ msgid "Node device type '%s' cannot be attached to  guest."
+#~ msgstr "ノードデバイス形式 '%s' は仮想マシンに接続できません。"
+
+#~ msgid "'nodedev' must be a USBDevice instance."
+#~ msgstr "'nodedev' は USBDevice インスタンスでなければいけません。"
+
+#~ msgid "'vendor' and 'product', or 'bus' and  'device' are required."
+#~ msgstr "'vendor'および'product'、または'bus'および'device'が必要です。"
+
+#~ msgid "'nodedev' must be a PCIDevice instance."
+#~ msgstr "'nodedev' は PCIDevice インスタンスでなければいけません。"
+
+#~ msgid "'domain', 'bus', 'slot', and 'function' must be specified."
+#~ msgstr ""
+#~ "'domain', 'bus', 'slot', および 'function' は指定されなければいけません。"
+
+#~ msgid "Unknown input type '%s'."
+#~ msgstr "不明な入力デバイスのタイプ '%s'"
+
+#~ msgid "Unknown input bus '%s'."
+#~ msgstr "不明な入力デバイスのBus '%s'"
+
+#~ msgid "Unsupported memballoon model '%s'"
+#~ msgstr "サポートされないメモリーバルーンモデル '%s'"
+
+#~ msgid "A network name was not provided"
+#~ msgstr "ネットワーク名が指定されていません"
+
+#~ msgid "Unknown network type %s"
+#~ msgstr "不明なネットワークタイプ %s"
+
+#~ msgid "Virtual network '%s' does not exist: %s"
+#~ msgstr "仮想ネットワーク '%s' が存在しません: %s"
+
+#~ msgid "Virtual network '%s' has not been started."
+#~ msgstr "仮想ネットワーク '%s' が開始されていません。"
+
+#~ msgid "Unsupported bus '%s'"
+#~ msgstr "サポートされないバス '%s'"
+
+#~ msgid "Unsupported redirection type '%s'"
+#~ msgstr "サポートされないリダイレクト種別 '%s'"
+
+#~ msgid "Invalid host value"
+#~ msgstr "無効なホスト値"
+
+#~ msgid "Unknown smartcard mode '%s'"
+#~ msgstr "未知のスマートカードのモード '%s'"
+
+#~ msgid "Unknown smartcard type '%s'"
+#~ msgstr "未知のスマートカードの形式 '%s'"
+
+#~ msgid "Unsupported watchdog model '%s'"
+#~ msgstr "サポートされない watchdog モデル '%s'"
+
+#~ msgid "'%s' must be True or False"
+#~ msgstr "'%s' は 'True' か 'False' でなければなりません"
+
+#~ msgid "'%s' must be a string, not '%s'."
+#~ msgstr "'%s' は文字列である必要があります。 '%s' は対応していません。"
+
+#~ msgid ""
+#~ "Please indicate how you would like to assign space on the host system for "
+#~ "your virtual storage device."
+#~ msgstr ""
+#~ "ホスト上の領域をどのように仮想マシンに割り当てる仮想ストレージデバイスとし"
+#~ "て割り当てるか指定してください。"
+
+#~ msgid ""
+#~ "Please indicate how you'd like to connect your new virtual network device "
+#~ "to the host network."
+#~ msgstr ""
+#~ "新しい仮想ネットワークデバイスをどのようにホストネットワークに接続するか指"
+#~ "定してください。"
+
+#~ msgid ""
+#~ "Please indicate what kind of pointer device to connect to the virtual "
+#~ "machine."
+#~ msgstr "仮想マシンに接続するポインタデバイスの種類を指定してください。"
+
+#~ msgid "Please indicate how you would like to view the virtual display."
+#~ msgstr "仮想ディスプレイをどのように表示するか指定してください。"
+
+#~ msgid ""
+#~ "<small><b>Tip:</b> VNC or Spice server is strongly recommended because it "
+#~ "allows the virtual display to be embedded inside this application. It may "
+#~ "also be used to allow access to the virtual display from a remote system."
+#~ "</small>"
+#~ msgstr ""
+#~ "<small><b>注意:</b>VNC サーバーもしくはSpiceサーバーを選ぶことを強く推奨し"
+#~ "ます。なぜならば仮想ディスプレイをアプリケーション内に組み込むことが可能だ"
+#~ "からです。リモートシステムから仮想ディスプレイにアクセスして利用することが"
+#~ "可能になります。</small>"
+
+#~ msgid "Listen on all public network interfaces "
+#~ msgstr "すべてのネットワークインターフェースをリッスン"
+
+#~ msgid "_Other:"
+#~ msgstr "その他(_O):"
+
+#~ msgid ""
+#~ "Please indicate what sound device type to connect to the virtual machine."
+#~ msgstr "仮想マシンに接続するサウンドデバイスの種類を指定してください。"
+
+#~ msgid ""
+#~ "Please indicate what physical device\n"
+#~ "to connect to the virtual machine."
+#~ msgstr ""
+#~ "仮想マシンに接続する物理デバイス\n"
+#~ "の種類を指定してください。"
+
+#~ msgid "<b>Character Device</b>"
+#~ msgstr "<b>キャラクターデバイス</b>"
+
+#~ msgid "<b>Device Parameters</b>"
+#~ msgstr "<b>デバイスのパラメーター</b>"
+
+#~ msgid ""
+#~ "Please indicate what video device type\n"
+#~ "to connect to the virtual machine."
+#~ msgstr ""
+#~ "仮想マシンに接続するビデオデバイス\n"
+#~ "の種類を指定してください。"
+
+#~ msgid ""
+#~ "Please indicate what watchdog device type\n"
+#~ "and default action should be used."
+#~ msgstr ""
+#~ "仮想マシンに接続するWatchdogデバイス\n"
+#~ "の種類を指定してください。"
+
+#~ msgid ""
+#~ "Please indicate which host directory to\n"
+#~ "access in the guest."
+#~ msgstr ""
+#~ "仮想マシンにおいてアクセスするホストの\n"
+#~ "ディレクトリを指定してください。"
+
+#~ msgid ""
+#~ "Please indicate what smartcard device mode to connect to the virtual "
+#~ "machine."
+#~ msgstr ""
+#~ "仮想マシンに接続するスマートカードデバイスのモードを指定してください。"
+
+#~ msgid "Please indicate the parameters of the redirected device."
+#~ msgstr "リダイレクトデバイスのパラメーターを指示してください。"
+
+#~ msgid "Please indicate the parameters of the RNG device."
+#~ msgstr "RNG デバイスのパラメータを指示してください。"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a "
+#~ "new virtual network </span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">新しい仮想"
+#~ "ネットワークの作成</span>"
+
+#~ msgid ""
+#~ "This assistant will guide you through creating a new virtual network. You "
+#~ "will be asked for some information about the virtual network you'd like "
+#~ "to create, such as:"
+#~ msgstr ""
+#~ "このアシスタントでは、順を追って新しい仮想ネットワークを作成していきます。"
+#~ "作成する仮想ネットワークに関して、次のような情報の入力が求められます。"
+
+#~ msgid "<small>●</small> A <b>name</b> for the new virtual network interface"
+#~ msgstr "<small>●</small> 新しい仮想ネットワークの<b>インターフェース名</b>"
+
+#~ msgid ""
+#~ "<small>●</small> An <b>IPv4</b> and/or <b>IPv6</b> network address and "
+#~ "prefix (netmask) to assign to this network interface"
+#~ msgstr ""
+#~ "<small>●</small>このネットワークインターフェースに割り当てる <b>IPv4</b> "
+#~ "と<b>IPv6</b> の両方またはいずれかのネットワークアドレスおよびプレフィック"
+#~ "ス (ネットマスク)"
+
+#~ msgid ""
+#~ "<small>●</small> The network address range which the <b>DHCPv4</b> and/or "
+#~ "<b>DHCPv6</b> server will use to assign addresses to virtual machines"
+#~ msgstr ""
+#~ "<small>●</small> 仮想マシンにアドレスを割り当てる際、 <b>DHCPv4</b> や "
+#~ "<b>DHCPv6</b> サーバーに使用させるネットワークアドレスの範囲"
+
+#~ msgid ""
+#~ "<small>●</small> Whether to <b>forward</b> traffic to a physical network"
+#~ msgstr ""
+#~ "<small>●</small> トラフィックを物理ネットワークに<b>フォワード</b>させるか"
+#~ "どうかの指定"
+
+#~ msgid ""
+#~ "<small>●</small> Optionally, to not specify any <b>IPv4</b> or <b>IPv6</"
+#~ "b> network address.  If neither is specified, this will be a valid "
+#~ "definition for an isolated network with <b>no</b> DHCP or DNS support."
+#~ msgstr ""
+#~ "<small>●</small> オプション - <b>IPv4</b>、<b>IPv6</b> などネットワークア"
+#~ "ドレスを指定しない (いずれも指定しない場合、これが <b>DHCP または DNS 未対"
+#~ "応</b>の隔離されたネットワークの有効な定義になります)"
+
+#~ msgid ""
+#~ "<small>●</small> By default, the <b>Domain</b> name will be the same as "
+#~ "the network/interface name."
+#~ msgstr ""
+#~ "<small>●</small> デフォルトでは、<b>ドメイン</b>名はネットワーク名またはイ"
+#~ "ンターフェース名と同じになります。"
+
+#~ msgid ""
+#~ "<small>●</small> Optionally, a <b>static route</b> to a different network "
+#~ "can be specified.  This network traffic is routed to the specified "
+#~ "<b>gateway</b> on the primary network."
+#~ msgstr ""
+#~ "<small>●</small> オプション - 別のネットワークへの<b>静的ルート</b>の指定"
+#~ "が可能です。このネットワークトラフィックはプライマリネットワークで指定され"
+#~ "る<b>ゲートウェイ</b>にルーティングされます。"
+
+#~ msgid "Intro"
+#~ msgstr "はじめに"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
+#~ "virtual network </span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">仮想ネット"
+#~ "ワークの名前の指定</span>"
+
+#~ msgid "Please choose a name for your virtual network:"
+#~ msgstr "仮想ネットワークの名前を選択してください:"
+
+#~ msgid "The following information may help you with defining your networks."
+#~ msgstr "ネットワークを定義する際、次のような情報が役に立ちます。"
+
+#~ msgid ""
+#~ "<small>●</small>  A<b> network</b> must be specified as the network "
+#~ "<b>address</b> and the <b>prefix</b> for that network."
+#~ msgstr ""
+#~ "<small>●</small>  <b> ネットワーク</b>はそのネットワークの<b>アドレス</b>"
+#~ "と<b>プレフィックス</b>で指定しなければなりません。"
+
+#~ msgid ""
+#~ "<small>●</small>  A network mask cannot be used for the network "
+#~ "specification.  Instead, the prefix must be used."
+#~ msgstr ""
+#~ "<small>●</small> ネットワークの仕様にネットワークマスクは使用できません。"
+#~ "代わりにプレフィックスを使用してください。"
+
+#~ msgid ""
+#~ "<small>●</small>  A <b>host address</b> such as that used for the dhcp "
+#~ "start, dhcp end, and the static route gateway address should not include "
+#~ "a prefix.  If included, this prefix must be the maximum.  That is, for "
+#~ "IPv4 prefix=32 and for IPv6 prefix=128."
+#~ msgstr ""
+#~ "<small>●</small> dhcp の開始、dhcp の終了、静的ルートのゲートウェイアドレ"
+#~ "スなどに使用される<b>ホストアドレス</b>にはプレフィックスを含ませないよう"
+#~ "にしてください。含ませる場合にはその最大値にしなければなりません (つまり、"
+#~ "IPv4 プレフィックスの場合は 32、IPv6 プレフィックスの場合は 128)。"
+
+#~ msgid ""
+#~ "<small>●</small>  If IPv6 is to be routed, some form of routing must be "
+#~ "specified for the interface."
+#~ msgstr ""
+#~ "<small>●</small> IPv6 のルーティングを行なう場合は、インターフェースに何ら"
+#~ "かのルーティング形式を指定する必要があります。"
+
+#~ msgid ""
+#~ "<small>●</small>  For the <b>primary network</b>, the prefix must be "
+#~ "<b>64</b>.  However, for the <b>static route network</b>, the prefix can "
+#~ "be <b>64 or less</b>."
+#~ msgstr ""
+#~ "<small>●</small>  <b>プライマリネットワーク</b>の場合、プレフィックスは必"
+#~ "ず <b>64</b> にしてください。ただし、<b>静的ルートネットワーク</b> の場合"
+#~ "には、<b>64 またはそれ以下</b> のプレフィックスでも構いません。"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Defining "
+#~ "IPv4 addresses</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">IPv4 アドレス"
+#~ "領域の指定</span>"
+
+#~ msgid ""
+#~ "You will need to choose an <b>IPv4</b> address space for the virtual "
+#~ "network."
+#~ msgstr ""
+#~ "仮想ネットワークで利用する <b>IPv4</b> アドレス範囲を選択してください:"
+
+#~ msgid "Network Type:"
+#~ msgstr "ネットワークの種類:"
+
+#~ msgid ""
+#~ "<b>Hint:</b> The network should be chosen from one of the IPv4 private "
+#~ "address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
+#~ msgstr ""
+#~ "<b>ヒント:</b> ネットワークは、IPv4 プライベートアドレスの範囲から選択する"
+#~ "必要があります。例 10.0.0.0/8、172.16.0.0/12、192.168.0.0/16"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Defining "
+#~ "IPv6 addresses</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">IPv6 アドレス"
+#~ "の定義</span>"
+
+#~ msgid ""
+#~ "You will need to choose an <b>IPv6</b> address space for the virtual "
+#~ "network:"
+#~ msgstr ""
+#~ "仮想ネットワークに対する <b>IPv6</b> アドレス空間を選択する必要があります:"
+
+#~ msgid ""
+#~ "<b>Note:</b> The network could be chosen from one of the IPv6 private "
+#~ "address ranges. eg FC00::/7.  In any case, the prefix must be <b>64</b>.\n"
+#~ "A typical IPv6 network address will look something like:  fd00:dead:"
+#~ "beef:55::/64"
+#~ msgstr ""
+#~ "<b>注意:</b> ネットワークは IPv6 プライベートアドレス範囲のいずれかから選"
+#~ "択することができます。いずれの場合でも、プレフィックスは必ず <b>64</b> に"
+#~ "してください。\n"
+#~ "一般的な IPv6 ネットワークアドレスを示します:「fd00:dead:beef:55::/64」"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF"
+#~ "\">Miscellaneous Settings</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">その他の設定"
+#~ "</span>"
+
+#~ msgid ""
+#~ "Please indicate whether this virtual network should be connected to the "
+#~ "<b>physical network</b>."
+#~ msgstr ""
+#~ "この仮想ネットワークを <b>物理ネットワーク</b> に接続するかどうかを明示し"
+#~ "てください。"
+
+#~ msgid "Domain Name:"
+#~ msgstr "ドメイン名:"
+
+#~ msgid ""
+#~ "Optionally, specify the DNS <b>Domain Name</b> to be used for the "
+#~ "networks on this network interface."
+#~ msgstr ""
+#~ "オプションで、このネットワークインターフェースのネットワークに使用する "
+#~ "DNS <b>ドメイン名</b> を指定します。"
+
+#~ msgid "Misc"
+#~ msgstr "その他"
+
+#~ msgid ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to "
+#~ "create network</span>"
+#~ msgstr ""
+#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ネットワーク"
+#~ "を作成する準備ができました</span>"
+
+#~ msgid "<b>IPv4 Network</b>"
+#~ msgstr "<b>IPv4 ネットワーク</b>"
+
+#~ msgid "<b>Domain</b> Name:"
+#~ msgstr "<b>ドメイン</b>名:"
+
+#~ msgid "192.168.10.128"
+#~ msgstr "192.168.10.128"
+
+#~ msgid "DHCPv4 Start Address:"
+#~ msgstr "DHCPv4 開始アドレス:"
+
+#~ msgid "DHCPv4 End  Address:"
+#~ msgstr "DHCPv4 終了アドレス:"
+
+#~ msgid "<b>Summary</b>"
+#~ msgstr "<b>サマリー</b>"
+
+#~ msgid "<b>Network</b> Name:"
+#~ msgstr "<b>ネットワーク</b>名:"
+
+#~ msgid "demo"
+#~ msgstr "demo"
+
+#~ msgid "Forwarding/Connectivity:"
+#~ msgstr "転送/接続性:"
+
+#~ msgid "<b>IPv6 Network</b>"
+#~ msgstr "<b>IPv6 ネットワーク</b>"
+
+#~ msgid "DHCPv6 End Address:"
+#~ msgstr "DHCPv6 終了アドレス:"
+
+#~ msgid "DHCPv6 Start Address:"
+#~ msgstr "DHCPv6 開始アドレス:"
+
+#~ msgid "FD00:100::100"
+#~ msgstr "FD00:100::100"
+
+#~ msgid "FD00:100::1FF"
+#~ msgstr "FD00:100::1FF"
+
+#~ msgid "FD00:100::/64"
+#~ msgstr "FD00:100::/64"
+
+#~ msgid "FD00:100::1"
+#~ msgstr "FD00:100::1"
+
+#~ msgid "Static Route <b>to</b> network:"
+#~ msgstr "ネットワークへの静的ルート:"
+
+#~ msgid "Complete"
+#~ msgstr "完了"
+
+#~ msgid "<span size='x-large'>Add Storage Pool</span>"
+#~ msgstr "<span size='x-large'>ストレージプールを追加</span>"
+
+#~ msgid ""
+#~ "Specify a storage location to be later split into virtual machine storage."
+#~ msgstr ""
+#~ "後で仮想マシンストレージに分割するストレージの場所を指定してください。"
+
+#~ msgid "Step 1 of 2"
+#~ msgstr "ステップ 1/2"
+
+#~ msgid "Step 2 of 2"
+#~ msgstr "ステップ 2/2"
+
+#~ msgid "<span size='x-large'>New Storage Volume</span>"
+#~ msgstr "<span size='x-large'>新規ストレージボリューム</span>"
+
+#~ msgid ""
+#~ "Create a storage unit that can be used directly by a virtual machine."
+#~ msgstr "仮想マシンから直接使用できるストレージユニットを作成します。"
+
+#~ msgid "<span size='large'>Storage Volume Quota</span>"
+#~ msgstr "<span size='large'>ストレージボリュームのクォータ</span>"
+
+#~ msgid ""
+#~ "<span size='small'><i><u>Name</u>: Name of the\n"
+#~ "  volume to create. File\n"
+#~ "  extension may be\n"
+#~ "  appended\n"
+#~ "\n"
+#~ "<u>Format</u>: File/Partition\n"
+#~ "  format of the volume\n"
+#~ "\n"
+#~ "<u>Capacity</u>: Maximum\n"
+#~ "  size of the volume.\n"
+#~ "\n"
+#~ "<u>Allocation</u>: Actual size\n"
+#~ "  allocated to volume\n"
+#~ "  at this time.</i></span>"
+#~ msgstr ""
+#~ "<span size='small'><i><u>Name</u>: 作成する\n"
+#~ "  ボリュームの名前。ファイルの\n"
+#~ "  拡張子を追加\n"
+#~ "  可能\n"
+#~ "\n"
+#~ "<u>Format</u>: ボリュームのファイル/パーティション\n"
+#~ "  形式\n"
+#~ "\n"
+#~ "<u>Capacity</u>: ボリュームの最大\n"
+#~ "  サイズ。\n"
+#~ "\n"
+#~ "<u>Allocation</u>: ボリュームに割り当てる\n"
+#~ "  今回の\n"
+#~ "  実際のサイズ。</i></span>"
+
+#~ msgid "Enter your virtual machine details"
+#~ msgstr "仮想マシンの情報を入力してください"
+
+#~ msgid "Error message"
+#~ msgstr "エラーメッセージ"
+
+#~ msgid "Delete Confirmation"
+#~ msgstr "削除の確認"
+
+#~ msgid "S_hut Down"
+#~ msgstr "シャットダウン(_H)"
+
+#~ msgid "_Clone"
+#~ msgstr "クローン(_C)"
+
+#~ msgid "_Delete..."
+#~ msgstr "削除...(_D)"
+
+#~ msgid ""
+#~ "CPU\n"
+#~ "usage:"
+#~ msgstr ""
+#~ "CPU\n"
+#~ "使用率:"
+
+#~ msgid ""
+#~ "Memory\n"
+#~ "usage:"
+#~ msgstr ""
+#~ "メモリー\n"
+#~ "使用量:"
+
+#~ msgid ""
+#~ "Disk\n"
+#~ "I/O:"
+#~ msgstr ""
+#~ "ディスク\n"
+#~ "I/O:"
+
+#~ msgid ""
+#~ "Network\n"
+#~ "I/O:"
+#~ msgstr ""
+#~ "ネットワーク\n"
+#~ "I/O:"
+
+#~ msgid ""
+#~ "0 KBytes/s\n"
+#~ "0KBytes/s"
+#~ msgstr ""
+#~ "0 KBytes/s\n"
+#~ "0KBytes/s"
+
+#~ msgid "<b>Performance</b>"
+#~ msgstr "<b>パフォーマンス</b>"
+
+#~ msgid "Kernel arguments:"
+#~ msgstr "カーネルオプション:"
+
+#~ msgid "Target device:"
+#~ msgstr "ターゲットデバイス:"
+
+#~ msgid "CPU usage:"
+#~ msgstr "CPU 使用率:"
+
+#~ msgid "Memory usage:"
+#~ msgstr "メモリーの使用量:"
+
+#~ msgid "IPv4 Forwarding:"
+#~ msgstr "IPv4 フォワーディング:"
+
+#~ msgid "IPv6 Forwarding:"
+#~ msgstr "IPv6 フォワーディング:"
+
+#~ msgid "DHCP start:"
+#~ msgstr "DHCP 開始アドレス:"
+
+#~ msgid "DHCP end:"
+#~ msgstr "DHCP 終了アドレス:"
+
+#~ msgid "<network-addr> via <gateway-addr>"
+#~ msgstr "<network-addr> via <gateway-addr>"
+
+#~ msgid "VNC"
+#~ msgstr "VNC"
+
+#~ msgid "Spice"
+#~ msgstr "Spice"
