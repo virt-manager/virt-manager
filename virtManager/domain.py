@@ -1525,6 +1525,9 @@ class vmmDomain(vmmLibvirtObject):
         if len(cpudata) > limit:
             cpudata = cpudata[0:limit]
         return cpudata
+    def memory_usage_vector_limit(self, limit):
+        return self.in_out_vector_limit(self.stats_memory_vector(),
+                                        limit)
     def network_traffic_vector_limit(self, limit, ceil=None):
         return self.in_out_vector_limit(self.network_traffic_vector(ceil),
                                         limit)

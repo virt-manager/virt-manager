@@ -190,6 +190,15 @@
                               </object>
                             </child>
                             <child>
+                              <object class="GtkCheckMenuItem" id="menu_view_stats_memory">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">_Memory Usage</property>
+                                <property name="use_underline">True</property>
+                                <signal name="activate" handler="on_menu_view_memory_usage_activate" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
                               <object class="GtkCheckMenuItem" id="menu_view_stats_disk">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>

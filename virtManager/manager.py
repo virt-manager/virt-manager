@@ -56,8 +56,9 @@ ROW_INSPECTION_OS_ICON) = range(11)
 (COL_NAME,
 COL_GUEST_CPU,
 COL_HOST_CPU,
+COL_MEM,
 COL_DISK,
-COL_NETWORK) = range(5)
+COL_NETWORK) = range(6)
 
 
 def _style_get_prop(widget, propname):
@@ -133,6 +134,8 @@ class vmmManager(vmmGObjectUI):
                     self.toggle_stats_visible_guest_cpu,
             "on_menu_view_host_cpu_usage_activate":
                     self.toggle_stats_visible_host_cpu,
+            "on_menu_view_memory_usage_activate":
+                    self.toggle_stats_visible_memory_usage,
             "on_menu_view_disk_io_activate" :
                     self.toggle_stats_visible_disk,
             "on_menu_view_network_traffic_activate":
@@ -165,6 +168,7 @@ class vmmManager(vmmGObjectUI):
         # list.get_column, so avoid it
         self.diskcol = None
         self.netcol = None
+        self.memcol = None
         self.guestcpucol = None
         self.hostcpucol = None
         self.spacer_txt = None
@@ -229,6 +233,7 @@ class vmmManager(vmmGObjectUI):
 
         self.diskcol = None
         self.guestcpucol = None
+        self.memcol = None
         self.hostcpucol = None
         self.netcol = None
 
@@ -257,6 +262,9 @@ class vmmManager(vmmGObjectUI):
             self.config.on_vmlist_host_cpu_usage_visible_changed(
                                 self.toggle_host_cpu_usage_visible_widget))
         self.add_gconf_handle(
+            self.config.on_vmlist_memory_usage_visible_changed(
+                                self.toggle_memory_usage_visible_widget))
+        self.add_gconf_handle(
             self.config.on_vmlist_disk_io_visible_changed(
                                 self.toggle_disk_io_visible_widget))
         self.add_gconf_handle(
@@ -274,6 +282,7 @@ class vmmManager(vmmGObjectUI):
 
         self.toggle_guest_cpu_usage_visible_widget()
         self.toggle_host_cpu_usage_visible_widget()
+        self.toggle_memory_usage_visible_widget()
         self.toggle_disk_io_visible_widget()
         self.toggle_network_traffic_visible_widget()
 
@@ -391,12 +400,14 @@ class vmmManager(vmmGObjectUI):
 
         self.guestcpucol = make_stats_column(_("CPU usage"), COL_GUEST_CPU)
         self.hostcpucol = make_stats_column(_("Host CPU usage"), COL_HOST_CPU)
+        self.memcol = make_stats_column(_("Memory usage"), COL_MEM)
         self.diskcol = make_stats_column(_("Disk I/O"), COL_DISK)
         self.netcol = make_stats_column(_("Network I/O"), COL_NETWORK)
 
         model.set_sort_func(COL_NAME, self.vmlist_name_sorter)
         model.set_sort_func(COL_GUEST_CPU, self.vmlist_guest_cpu_usage_sorter)
         model.set_sort_func(COL_HOST_CPU, self.vmlist_host_cpu_usage_sorter)
+        model.set_sort_func(COL_MEM, self.vmlist_memory_usage_sorter)
         model.set_sort_func(COL_DISK, self.vmlist_disk_io_sorter)
         model.set_sort_func(COL_NETWORK, self.vmlist_network_usage_sorter)
         model.set_sort_column_id(COL_NAME, Gtk.SortType.ASCENDING)
@@ -954,6 +965,13 @@ class vmmManager(vmmGObjectUI):
         return cmp(obj1.host_cpu_time_percentage(),
                    obj2.host_cpu_time_percentage())
 
+    def vmlist_memory_usage_sorter(self, model, iter1, iter2, ignore):
+        obj1 = model.get_value(iter1, ROW_HANDLE)
+        obj2 = model.get_value(iter2, ROW_HANDLE)
+
+        return cmp(obj1.stats_memory(),
+                   obj2.stats_memory())
+
     def vmlist_disk_io_sorter(self, model, iter1, iter2, ignore):
         obj1 = model.get_value(iter1, ROW_HANDLE)
         obj2 = model.get_value(iter2, ROW_HANDLE)
@@ -1004,8 +1022,9 @@ class vmmManager(vmmGObjectUI):
         col.set_visible(do_show)
         self.widget(menu).set_active(do_show)
 
-        any_visible = any([col.get_visible() for col in
-            [self.netcol, self.diskcol, self.guestcpucol, self.hostcpucol]])
+        any_visible = any([c.get_visible() for c in
+            [self.netcol, self.diskcol, self.memcol,
+             self.guestcpucol, self.hostcpucol]])
         self.spacer_txt.set_property("visible", not any_visible)
 
     def toggle_network_traffic_visible_widget(self):
@@ -1016,6 +1035,10 @@ class vmmManager(vmmGObjectUI):
         self._toggle_graph_helper(
             self.config.is_vmlist_disk_io_visible(), self.diskcol,
             self.disk_io_img, "menu_view_stats_disk")
+    def toggle_memory_usage_visible_widget(self):
+        self._toggle_graph_helper(
+            self.config.is_vmlist_memory_usage_visible(), self.memcol,
+            self.memory_usage_img, "menu_view_stats_memory")
     def toggle_guest_cpu_usage_visible_widget(self):
         self._toggle_graph_helper(
             self.config.is_vmlist_guest_cpu_usage_visible(), self.guestcpucol,
@@ -1030,6 +1053,7 @@ class vmmManager(vmmGObjectUI):
         set_stats = {
             COL_GUEST_CPU: self.config.set_vmlist_guest_cpu_usage_visible,
             COL_HOST_CPU: self.config.set_vmlist_host_cpu_usage_visible,
+            COL_MEM: self.config.set_vmlist_memory_usage_visible,
             COL_DISK: self.config.set_vmlist_disk_io_visible,
             COL_NETWORK: self.config.set_vmlist_network_traffic_visible,
         }
@@ -1039,6 +1063,8 @@ class vmmManager(vmmGObjectUI):
         self.toggle_stats_visible(src, COL_GUEST_CPU)
     def toggle_stats_visible_host_cpu(self, src):
         self.toggle_stats_visible(src, COL_HOST_CPU)
+    def toggle_stats_visible_memory_usage(self, src):
+        self.toggle_stats_visible(src, COL_MEM)
     def toggle_stats_visible_disk(self, src):
         self.toggle_stats_visible(src, COL_DISK)
     def toggle_stats_visible_network(self, src):
@@ -1058,6 +1084,14 @@ class vmmManager(vmmGObjectUI):
             return
 
         data = obj.host_cpu_time_vector_limit(GRAPH_LEN)
+        cell.set_property('data_array', data)
+
+    def memory_usage_img(self, column_ignore, cell, model, _iter, data):
+        obj = model[_iter][ROW_HANDLE]
+        if obj is None or not hasattr(obj, "conn"):
+            return
+
+        data = obj.memory_usage_vector_limit(GRAPH_LEN)
         cell.set_property('data_array', data)
 
     def disk_io_img(self, column_ignore, cell, model, _iter, data):

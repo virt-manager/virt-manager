@@ -241,6 +241,8 @@ class vmmConfig(object):
         return self.conf.get("/vmlist-fields/cpu-usage")
     def is_vmlist_host_cpu_usage_visible(self):
         return self.conf.get("/vmlist-fields/host-cpu-usage")
+    def is_vmlist_memory_usage_visible(self):
+        return self.conf.get("/vmlist-fields/memory-usage")
     def is_vmlist_disk_io_visible(self):
         return self.conf.get("/vmlist-fields/disk-usage")
     def is_vmlist_network_traffic_visible(self):
@@ -250,6 +252,8 @@ class vmmConfig(object):
         self.conf.set("/vmlist-fields/cpu-usage", state)
     def set_vmlist_host_cpu_usage_visible(self, state):
         self.conf.set("/vmlist-fields/host-cpu-usage", state)
+    def set_vmlist_memory_usage_visible(self, state):
+        self.conf.set("/vmlist-fields/memory-usage", state)
     def set_vmlist_disk_io_visible(self, state):
         self.conf.set("/vmlist-fields/disk-usage", state)
     def set_vmlist_network_traffic_visible(self, state):
@@ -259,6 +263,8 @@ class vmmConfig(object):
         return self.conf.notify_add("/vmlist-fields/cpu-usage", cb)
     def on_vmlist_host_cpu_usage_visible_changed(self, cb):
         return self.conf.notify_add("/vmlist-fields/host-cpu-usage", cb)
+    def on_vmlist_memory_usage_visible_changed(self, cb):
+        return self.conf.notify_add("/vmlist-fields/memory-usage", cb)
     def on_vmlist_disk_io_visible_changed(self, cb):
         return self.conf.notify_add("/vmlist-fields/disk-usage", cb)
     def on_vmlist_network_traffic_visible_changed(self, cb):
