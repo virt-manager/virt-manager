@@ -921,15 +921,24 @@ class vmmConsolePages(vmmGObjectUI):
 
         self.topwin.set_title(title)
 
+    def someone_has_focus(self):
+        if (self.viewer and
+            self.viewer.display and
+            self.viewer.display.get_property("has-focus") and
+            self.viewer_connected):
+            return True
+
+        for serial in self.serial_tabs:
+            if (serial.terminal and
+                serial.terminal.get_property("has-focus")):
+                return True
+
     def viewer_focus_changed(self, ignore1=None, ignore2=None):
-        has_focus = (self.viewer and
-                     self.viewer.display and
-                     self.viewer.display.get_property("has-focus"))
         force_accel = self.config.get_console_accels()
 
         if force_accel:
             self._enable_modifiers()
-        elif has_focus and self.viewer_connected:
+        elif self.someone_has_focus():
             self._disable_modifiers()
         else:
             self._enable_modifiers()
@@ -1532,6 +1541,10 @@ class vmmConsolePages(vmmGObjectUI):
 
         if not serial:
             serial = vmmSerialConsole(self.vm, target_port, name)
+            serial.terminal.connect("focus-in-event",
+                                    self.viewer_focus_changed)
+            serial.terminal.connect("focus-out-event",
+                                    self.viewer_focus_changed)
 
             title = Gtk.Label(label=name)
             self.widget("console-pages").append_page(serial.box, title)
