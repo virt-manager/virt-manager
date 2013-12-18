@@ -872,8 +872,12 @@ class Guest(XMLBuilder):
                     return True
 
         if has_spice():
-            video_model = "qxl"
             self._add_spice_channels()
+
+        if has_spice() and self.os.is_x86():
+            video_model = "qxl"
+        elif self.os.is_ppc64() and self.os.machine == "pseries":
+            video_model = "vga"
         else:
             video_model = self._lookup_osdict_key("videomodel", "cirrus")
 
