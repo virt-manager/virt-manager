@@ -163,7 +163,7 @@ class vmmInspection(vmmGObject):
                           vm.get_name())
             return None
 
-        g = GuestFS(close_on_exit = False)
+        g = GuestFS(close_on_exit=False)
         prettyvm = conn.get_uri() + ":" + vm.get_name()
         ignore = vmuuid
 

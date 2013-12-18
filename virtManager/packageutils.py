@@ -35,6 +35,8 @@ def check_packagekit(parent, errbox, packages):
     Returns None when we determine nothing useful.
     Returns (success, did we just install libvirt) otherwise.
     """
+    ignore = errbox
+
     if not packages:
         logging.debug("No PackageKit packages to search for.")
         return
@@ -55,8 +57,7 @@ def check_packagekit(parent, errbox, packages):
     except Exception, e:
         # PackageKit frontend should report an error for us, so just log
         # the actual error
-        logging.debug("Error talking to PackageKit: %s" % str(e),
-                      exc_info=True)
+        logging.debug("Error talking to PackageKit: %s", str(e), exc_info=True)
         return
 
     return True
