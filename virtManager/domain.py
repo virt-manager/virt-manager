@@ -245,6 +245,8 @@ class vmmDomain(vmmLibvirtObject):
         self.remote_console_supported = False
         self.title_supported = False
 
+        self._mem_stats_supported = True
+
         self._enable_net_poll = False
         self._stats_net_supported = True
         self._stats_net_skip = []
@@ -1359,12 +1361,26 @@ class vmmDomain(vmmLibvirtObject):
     # Stats helpers ###
     ###################
 
-    def _sample_mem_stats(self, info):
-        curmem = info[2]
-        if not self.is_active():
-            curmem = 0
+    def _sample_mem_stats(self):
+        curmem = 0
+        totalmem = 1
 
-        pcentCurrMem = curmem * 100.0 / self.maximum_memory()
+        if self._mem_stats_supported and self.is_active():
+            try:
+                stats = self._backend.memoryStats()
+                # did we get both required stat items back?
+                if set(['actual', 'rss']).issubset(
+                        set(stats.keys())):
+                    curmem = stats['rss']
+                    totalmem = stats['actual']
+            except libvirt.libvirtError, err:
+                if util.is_error_nosupport(err):
+                    logging.debug("Mem stats not supported: %s", err)
+                    self._mem_stats_supported = False
+                else:
+                    logging.error("Error reading mem stats: %s", err)
+
+        pcentCurrMem = curmem * 100.0 / totalmem
         pcentCurrMem = max(0.0, min(pcentCurrMem, 100.0))
 
         return pcentCurrMem, curmem
@@ -1767,7 +1783,7 @@ class vmmDomain(vmmLibvirtObject):
         now = time.time()
         (cpuTime, cpuTimeAbs,
          pcentHostCpu, pcentGuestCpu) = self._sample_cpu_stats(info, now)
-        pcentCurrMem, curmem = self._sample_mem_stats(info)
+        pcentCurrMem, curmem = self._sample_mem_stats()
         rdBytes, wrBytes = self._sample_disk_io()
         rxBytes, txBytes = self._sample_network_traffic()
 
