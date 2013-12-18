@@ -190,7 +190,11 @@ class _errorDialog (Gtk.MessageDialog):
 
     def __init__(self, *args, **kwargs):
         Gtk.MessageDialog.__init__(self, *args, **kwargs)
+
         self.set_title("")
+        for child in self.get_message_area().get_children():
+            if hasattr(child, "set_max_width_chars"):
+                child.set_max_width_chars(40)
 
         self.chk_vbox = None
         self.chk_align = None
