@@ -53,10 +53,10 @@ def check_packagekit(parent, errbox, packages):
     try:
         packagekit_install(parent, packages)
     except Exception, e:
-        if "Modify.transactionCancelled" in str(e):
-            logging.debug("PackageKit transaction cancelled.")
-            return
-        errbox.show_err(_("Error talking to PackageKit: %s") % str(e))
+        # PackageKit frontend should report an error for us, so just log
+        # the actual error
+        logging.debug("Error talking to PackageKit: %s" % str(e),
+                      exc_info=True)
         return
 
     return True
