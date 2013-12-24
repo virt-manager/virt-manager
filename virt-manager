@@ -214,7 +214,7 @@ def main():
         # it avoids the issue
         display = os.environ.get("DISPLAY", "")
         msg = str(e)
-        if not display:
+        if display:
             msg += ": Could not open display: %s" % display
         logging.debug("".join(traceback.format_exc()))
         print msg
