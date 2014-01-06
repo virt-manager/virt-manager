@@ -634,6 +634,10 @@ with a name of C<default>. Use a virtual network if the host has dynamic
 networking (eg NetworkManager), or using wireless. The guest will be
 NATed to the LAN by whichever connection is active.
 
+=item type=direct,source=IFACE[,source_mode=MODE]
+
+Direct connect to host interface IFACE using macvtap.
+
 =item user
 
 Connect to the LAN using SLIRP. Only use this if running a QEMU guest as

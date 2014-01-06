@@ -506,6 +506,7 @@ c.add_compare("""--hvm --pxe \
 --filesystem /source,/target,mode=squash \
 --network user,mac=12:34:56:78:11:22 \
 --network bridge=foobar,model=virtio \
+--network type=direct,source=eth5,source_mode=vepa,target=mytap12 \
 --channel spicevmc \
 --smartcard passthrough,type=spicevmc \
 --tpm /dev/tpm0 \

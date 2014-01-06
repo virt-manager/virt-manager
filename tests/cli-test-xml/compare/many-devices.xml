@@ -74,6 +74,11 @@
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
     </interface>
+    <interface type="direct">
+      <source dev="eth5" mode="vepa"/>
+      <mac address="00:11:22:33:44:55"/>
+      <target dev="mytap12"/>
+    </interface>
     <input type="mouse" bus="ps2"/>
     <serial type="tcp">
       <source mode="bind" host="127.0.0.1" service="2222"/>
@@ -172,6 +177,11 @@
       <source bridge="foobar"/>
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
+    </interface>
+    <interface type="direct">
+      <source dev="eth5" mode="vepa"/>
+      <mac address="00:11:22:33:44:55"/>
+      <target dev="mytap12"/>
     </interface>
     <input type="mouse" bus="ps2"/>
     <serial type="tcp">

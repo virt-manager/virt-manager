@@ -1516,8 +1516,10 @@ def parse_network(guest, optstr, dev):
     if "type" not in opts:
         if "network" in opts:
             opts["type"] = virtinst.VirtualNetworkInterface.TYPE_VIRTUAL
+            opts["source"] = opts.pop("network")
         elif "bridge" in opts:
             opts["type"] = virtinst.VirtualNetworkInterface.TYPE_BRIDGE
+            opts["source"] = opts.pop("bridge")
 
     def convert_mac(key, val):
         ignore = key
@@ -1526,8 +1528,9 @@ def parse_network(guest, optstr, dev):
         return val
 
     set_param("type", "type")
-    set_param("source", "network")
-    set_param("source", "bridge")
+    set_param("source", "source")
+    set_param("source_mode", "source_mode")
+    set_param("target_dev", "target")
     set_param("model", "model")
     set_param("macaddr", "mac", convert_cb=convert_mac)
     set_param("filterref", "filterref")
