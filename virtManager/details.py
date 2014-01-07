@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008, 2013 Red Hat, Inc.
+# Copyright (C) 2006-2008, 2013, 2014 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -1297,6 +1297,8 @@ class vmmDetails(vmmGObjectUI):
         vm = self.vm
         status = self.vm.status()
 
+        self.widget("details-menu-view-toolbar").set_active(
+            self.config.get_details_show_toolbar())
         self.toggle_toolbar(self.widget("details-menu-view-toolbar"))
 
         active = vm.is_active()
