@@ -394,6 +394,7 @@ class TestBaseCommand(Command):
             use_cov = True
         except:
             use_cov = False
+            cov = None
 
         if use_cov:
             omit = ["/usr/*", "/*/tests/*"]
