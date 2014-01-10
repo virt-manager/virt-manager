@@ -126,7 +126,8 @@ EDIT_TPM_TYPE,
  HW_LIST_TYPE_SMARTCARD,
  HW_LIST_TYPE_REDIRDEV,
  HW_LIST_TYPE_TPM,
- HW_LIST_TYPE_RNG) = range(20)
+ HW_LIST_TYPE_RNG,
+ HW_LIST_TYPE_PANIC) = range(21)
 
 remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                 HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
@@ -134,7 +135,7 @@ remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                 HW_LIST_TYPE_WATCHDOG, HW_LIST_TYPE_CONTROLLER,
                 HW_LIST_TYPE_FILESYSTEM, HW_LIST_TYPE_SMARTCARD,
                 HW_LIST_TYPE_REDIRDEV, HW_LIST_TYPE_TPM,
-                HW_LIST_TYPE_RNG]
+                HW_LIST_TYPE_RNG, HW_LIST_TYPE_PANIC]
 
 # Boot device columns
 (BOOT_DEV_TYPE,
@@ -1214,6 +1215,8 @@ class vmmDetails(vmmGObjectUI):
                 self.refresh_tpm_page()
             elif pagetype == HW_LIST_TYPE_RNG:
                 self.refresh_rng_page()
+            elif pagetype == HW_LIST_TYPE_PANIC:
+                self.refresh_panic_page()
             else:
                 pagetype = -1
         except Exception, e:
@@ -3098,6 +3101,22 @@ class vmmDetails(vmmGObjectUI):
         # Device type specific properties, only show if apply to the cur dev
         show_ui("device_path")
 
+    def refresh_panic_page(self):
+        dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not dev:
+            return
+
+        def show_ui(param, val=None):
+            widgetname = "panic-" + param.replace("_", "-")
+            if not val:
+                val = getattr(dev, param)
+
+            uihelpers.set_grid_row_visible(self.widget(widgetname), True)
+            self.widget(widgetname).set_text(val or "-")
+
+        show_ui("type")
+        show_ui("iobase")
+
     def refresh_rng_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
         values = {
@@ -3621,6 +3640,11 @@ class vmmDetails(vmmGObjectUI):
         for rng in self.vm.get_rng_devices():
             update_hwlist(HW_LIST_TYPE_RNG, rng,
                           _("RNG"), "system-run")
+
+        # Populate list of Panic devices
+        for rng in self.vm.get_panic_devices():
+            update_hwlist(HW_LIST_TYPE_PANIC, rng,
+                          _("Panic Notifier"), "system-run")
 
         devs = range(len(hw_list_model))
         devs.reverse()
