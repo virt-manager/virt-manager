@@ -31,7 +31,8 @@ from virtinst import (VirtualChannelDevice, VirtualParallelDevice,
                       VirtualSerialDevice, VirtualConsoleDevice,
                       VirtualVideoDevice, VirtualWatchdog,
                       VirtualFilesystem, VirtualSmartCardDevice,
-                      VirtualRedirDevice, VirtualTPMDevice)
+                      VirtualRedirDevice, VirtualTPMDevice,
+                      VirtualPanicDevice)
 from virtinst import VirtualController
 
 from virtManager import uihelpers
@@ -54,6 +55,7 @@ PAGE_SMARTCARD = 11
 PAGE_USBREDIR = 12
 PAGE_TPM = 13
 PAGE_RNG = 14
+PAGE_PANIC = 15
 
 
 class vmmAddHardware(vmmGObjectUI):
@@ -329,6 +331,10 @@ class vmmAddHardware(vmmGObjectUI):
         combo = self.widget("rng-backend-mode")
         self.build_rng_backend_mode_combo(combo)
 
+        # Panic widgets
+        combo = self.widget("panic-type")
+        self.build_panic_address_type(combo)
+
         # Available HW options
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
@@ -397,6 +403,7 @@ class vmmAddHardware(vmmGObjectUI):
         add_hw_option("TPM", "device_cpu", PAGE_TPM,
                       True, None)
         add_hw_option("RNG", "system-run", PAGE_RNG, True, None)
+        add_hw_option("Panic Notifier", "system-run", PAGE_PANIC, True, None)
 
     def reset_state(self):
         # Storage init
@@ -504,6 +511,9 @@ class vmmAddHardware(vmmGObjectUI):
 
         for i in ["rng-bind-service", "rng-connect-service"]:
             self.widget(i).set_text("708")
+
+        # Panic device params
+        self.widget("panic-iobase").set_text("0x505")
 
         self.set_hw_selection(0)
 
@@ -649,6 +659,14 @@ class vmmAddHardware(vmmGObjectUI):
             types.append([t, pprint])
 
         self.build_combo_with_values(combo, types, default)
+
+    def build_panic_address_type(self, combo):
+        types = []
+        for t in virtinst.VirtualPanicDevice.TYPES:
+            types.append([t, virtinst.VirtualPanicDevice.get_pretty_type(t)])
+
+        self.build_combo_with_values(combo, types,
+                virtinst.VirtualPanicDevice.ADDRESS_TYPE_ISA)
 
     def get_config_hardware_type(self):
         row = self.get_hw_selection()
@@ -1099,6 +1117,8 @@ class vmmAddHardware(vmmGObjectUI):
             return _("TPM")
         if page == PAGE_RNG:
             return _("Random Number Generator")
+        if page == PAGE_PANIC:
+            return _("Panic Notifier")
 
         if page == PAGE_CHAR:
             char_class = self.get_char_type()
@@ -1405,6 +1425,8 @@ class vmmAddHardware(vmmGObjectUI):
             return self.validate_page_tpm()
         elif page_num == PAGE_RNG:
             return self.validate_page_rng()
+        elif page_num == PAGE_PANIC:
+            return self.validate_page_panic()
 
     def validate(self, page_num):
         ret = self._validate(page_num)
@@ -1764,6 +1786,24 @@ class vmmAddHardware(vmmGObjectUI):
                     setattr(self._dev, param_name, val)
         except Exception, e:
             return self.err.val_err(_("TPM device parameter error"), e)
+
+    def validate_page_panic(self):
+        conn = self.conn.get_backend()
+
+        iobase = self.widget("panic-iobase").get_text()
+
+        value_mappings = {
+            "iobase" : iobase,
+        }
+
+        try:
+            self._dev = VirtualPanicDevice(conn)
+            if not iobase:
+                iobase = self._dev.IOBASE_DEFAULT
+            for  param_name, val in value_mappings.items():
+                setattr(self._dev, param_name, val)
+        except Exception, e:
+            return self.err.val_err(_("Panic device parameter error"), e)
 
     def validate_page_rng(self):
         conn = virtinst.VirtualRNGDevice.BACKEND_MODE_CONNECT in \
