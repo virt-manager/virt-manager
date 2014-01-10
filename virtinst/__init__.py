@@ -56,6 +56,7 @@ from virtinst.deviceredirdev import VirtualRedirDevice
 from virtinst.devicememballoon import VirtualMemballoon
 from virtinst.devicetpm import VirtualTPMDevice
 from virtinst.devicerng import VirtualRNGDevice
+from virtinst.devicepanic import VirtualPanicDevice
 
 from virtinst.installer import (ContainerInstaller, ImportInstaller,
                                 LiveCDInstaller, PXEInstaller, Installer)

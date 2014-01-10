@@ -781,6 +781,16 @@ class XMLParseTest(unittest.TestCase):
 
         self._alter_compare(guest.get_xml_config(), outfile)
 
+    def testPanicDevice(self):
+        guest, outfile = self._get_test_content("change-panic-device")
+
+        dev1 = guest.get_devices("panic")[0]
+
+        check = self._make_checker(dev1)
+        check("type", "isa", "isa")
+        check("iobase", "0x505", "0x506")
+        self._alter_compare(guest.get_xml_config(), outfile)
+
     def testAddRemoveDevices(self):
         guest, outfile = self._get_test_content("add-devices")
 

@@ -101,6 +101,9 @@
       <source host="foobar.com" service="1234"/>
     </redirdev>
     <memballoon model="virtio"/>
+    <panic>
+      <address type="isa" iobase="0x505"/>
+    </panic>
   </devices>
   <seclabel type="static" model="selinux">
     <label>foolabel</label>

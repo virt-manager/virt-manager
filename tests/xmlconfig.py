@@ -30,6 +30,7 @@ from virtinst import VirtualVideoDevice
 from virtinst import VirtualController
 from virtinst import VirtualWatchdog
 from virtinst import VirtualMemballoon
+from virtinst import VirtualPanicDevice
 
 from tests import utils
 
@@ -874,6 +875,10 @@ class TestXMLConfig(unittest.TestCase):
         redir2.parse_friendly_server("foobar.com:1234")
         g.add_device(redir1)
         g.add_device(redir2)
+
+        #Panic Notifier device
+        pdev = VirtualPanicDevice(g.conn)
+        g.add_device(pdev)
 
         self._compare(g, "boot-many-devices", False)
 

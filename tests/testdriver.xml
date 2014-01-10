@@ -344,6 +344,11 @@
         <source mode='connect' host='1.2.3.4' service='1234'/>
       </backend>
     </rng>
+
+    <!-- panic notifier devices -->
+    <panic>
+      <address type='isa' iobase='0x505'/>
+    </panic>
   </devices>
 </domain>
 
