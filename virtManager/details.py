@@ -3114,7 +3114,8 @@ class vmmDetails(vmmGObjectUI):
             uihelpers.set_grid_row_visible(self.widget(widgetname), True)
             self.widget(widgetname).set_text(val or "-")
 
-        show_ui("type")
+        ptyp = virtinst.VirtualPanicDevice.get_pretty_type(dev.type)
+        show_ui("type", ptyp)
         show_ui("iobase")
 
     def refresh_rng_page(self):
