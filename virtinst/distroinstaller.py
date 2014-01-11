@@ -32,11 +32,11 @@ from virtinst import VirtualDisk
 from virtinst import urlfetcher
 
 
-def _is_url(url, is_local):
+def _is_url(conn, url):
     """
     Check if passed string is a (pseudo) valid http, ftp, or nfs url.
     """
-    if is_local and os.path.exists(url):
+    if not conn.is_remote() and os.path.exists(url):
         if os.path.isdir(url):
             return True
         else:
@@ -298,17 +298,33 @@ def _upload_media(conn, scratchdir, system_scratchdir,
 
 
 
+# Enum of the various install media types we can have
+(MEDIA_LOCATION_PATH,
+ MEDIA_LOCATION_URL,
+ MEDIA_CDROM_PATH,
+ MEDIA_CDROM_URL,
+ MEDIA_CDROM_IMPLIED) = range(1, 6)
+
+
 class DistroInstaller(Installer):
     def __init__(self, *args, **kwargs):
         Installer.__init__(self, *args, **kwargs)
 
         self.livecd = False
-        self._location_is_path = True
 
 
     #######################
     # Install prepartions #
     #######################
+
+    def _get_media_type(self):
+        if self.cdrom and not self.location:
+            # CDROM install requested from a disk already attached to VM
+            return MEDIA_CDROM_IMPLIED
+
+        if self.location and _is_url(self.conn, self.location):
+            return self.cdrom and MEDIA_CDROM_URL or MEDIA_LOCATION_URL
+        return self.cdrom and MEDIA_CDROM_PATH or MEDIA_LOCATION_PATH
 
     def _prepare_local(self):
         transient = True
@@ -356,7 +372,10 @@ class DistroInstaller(Installer):
     ###########################
 
     def _get_bootdev(self, isinstall, guest):
-        persistent_cd = (self._location_is_path and
+        mediatype = self._get_media_type()
+        local = mediatype in [MEDIA_CDROM_PATH, MEDIA_CDROM_IMPLIED,
+                              MEDIA_LOCATION_PATH]
+        persistent_cd = (local and
                          self.cdrom and
                          self.livecd)
 
@@ -375,9 +394,7 @@ class DistroInstaller(Installer):
 
         2) http, ftp, or nfs path for an install tree
         """
-        is_local = not self.conn.is_remote()
-        if _is_url(val, is_local):
-            self._location_is_path = False
+        if _is_url(self.conn, val):
             logging.debug("DistroInstaller location is a network source.")
             return _sanitize_url(val)
 
@@ -389,22 +406,21 @@ class DistroInstaller(Installer):
             raise ValueError(_("Checking installer location failed: "
                                "Could not find media '%s'." % str(val)))
 
-        self._location_is_path = True
         return val
 
     def _prepare(self, guest, meter, scratchdir):
         logging.debug("Using scratchdir=%s", scratchdir)
-
-        if self.cdrom and not self.location:
-            # Booting from a cdrom directly allocated to the guest
-            return
+        mediatype = self._get_media_type()
 
         # Test suite manually injected a boot kernel
         if self._install_kernel and not self.scratchdir_required():
             return
 
+        if mediatype == MEDIA_CDROM_IMPLIED:
+            return
+
         dev = None
-        if self._location_is_path and not os.path.isdir(self.location):
+        if mediatype == MEDIA_CDROM_PATH:
             dev = self._prepare_local()
         else:
             fetcher = urlfetcher.fetcherForURI(self.location,
@@ -416,7 +432,7 @@ class DistroInstaller(Installer):
                     logging.exception("Error preparing install location")
                     raise ValueError(_("Invalid install location: ") + str(e))
 
-                if self.cdrom:
+                if mediatype == MEDIA_CDROM_URL:
                     dev = self._prepare_cdrom_url(guest, fetcher)
                 else:
                     self._prepare_kernel_url(guest, fetcher)
@@ -436,14 +452,13 @@ class DistroInstaller(Installer):
         if not self.location:
             return False
 
-        is_url = not self._location_is_path
-        mount_dvd = self._location_is_path and not self.cdrom
-
-        return bool(is_url or mount_dvd)
+        mediatype = self._get_media_type()
+        return mediatype in [MEDIA_CDROM_URL, MEDIA_LOCATION_URL,
+                             MEDIA_LOCATION_PATH]
 
     def check_location(self, guest):
-        if self._location_is_path:
-            # We already mostly validated this
+        mediatype = self._get_media_type()
+        if mediatype not in [MEDIA_CDROM_URL, MEDIA_LOCATION_URL]:
             return True
 
         # This will throw an error for us
