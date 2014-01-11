@@ -1800,7 +1800,7 @@ class vmmAddHardware(vmmGObjectUI):
             self._dev = VirtualPanicDevice(conn)
             if not iobase:
                 iobase = self._dev.IOBASE_DEFAULT
-            for  param_name, val in value_mappings.items():
+            for param_name, val in value_mappings.items():
                 setattr(self._dev, param_name, val)
         except Exception, e:
             return self.err.val_err(_("Panic device parameter error"), e)
