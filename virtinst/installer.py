@@ -56,13 +56,14 @@ class Installer(object):
     def __init__(self, conn):
         self.conn = conn
         self._location = None
-        self._cdrom = False
+
+        self.cdrom = False
+        self.extraargs = None
 
         self.initrd_injections = []
 
         self._install_kernel = None
         self._install_initrd = None
-        self._install_args = None
 
         # Devices created/added during the prepare() stage
         self.install_devices = []
@@ -75,25 +76,11 @@ class Installer(object):
     # Properties properties #
     #########################
 
-    def get_cdrom(self):
-        return self._cdrom
-    def set_cdrom(self, enable):
-        if enable not in [True, False]:
-            raise ValueError(_("Guest.cdrom must be a boolean type"))
-        self._cdrom = enable
-    cdrom = property(get_cdrom, set_cdrom)
-
     def get_location(self):
         return self._location
     def set_location(self, val):
         self._location = self._validate_location(val)
     location = property(get_location, set_location)
-
-    def get_extra_args(self):
-        return self._install_args
-    def set_extra_args(self, val):
-        self._install_args = val
-    extraargs = property(get_extra_args, set_extra_args)
 
 
     ###################
@@ -150,8 +137,8 @@ class Installer(object):
             bootconfig.kernel = self._install_kernel
         if self._install_initrd:
             bootconfig.initrd = self._install_initrd
-        if self._install_args:
-            bootconfig.kernel_args = self._install_args
+        if self.extraargs:
+            bootconfig.kernel_args = self.extraargs
 
 
     ##########################

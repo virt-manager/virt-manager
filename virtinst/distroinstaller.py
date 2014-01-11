@@ -348,7 +348,7 @@ class DistroInstaller(Installer):
 
         self._install_kernel = kernel
         self._install_initrd = initrd
-        self._install_args = args
+        self.extraargs = args
 
 
     ###########################
