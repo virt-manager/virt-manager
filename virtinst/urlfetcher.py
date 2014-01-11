@@ -548,10 +548,20 @@ class GenericDistro(Distro):
             isoSection = "images-%s" % self.treeinfo.get("general", "arch")
 
             if self.treeinfo.has_section(kernelSection):
-                self._valid_kernel_path = (self._getTreeinfoMedia("kernel"),
-                                           self._getTreeinfoMedia("initrd"))
+                try:
+                    self._valid_kernel_path = (
+                        self._getTreeinfoMedia("kernel"),
+                        self._getTreeinfoMedia("initrd"))
+                except (ConfigParser.NoSectionError,
+                        ConfigParser.NoOptionError), e:
+                    logging.debug(e)
+
             if self.treeinfo.has_section(isoSection):
-                self._valid_iso_path = self.treeinfo.get(isoSection, "boot.iso")
+                try:
+                    self._valid_iso_path = self.treeinfo.get(isoSection,
+                                                             "boot.iso")
+                except ConfigParser.NoOptionError, e:
+                    logging.debug(e)
 
         if self.type == "xen":
             kern_list = self._xen_paths
