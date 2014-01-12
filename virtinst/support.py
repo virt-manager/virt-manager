@@ -315,6 +315,7 @@ SUPPORT_DOMAIN_LIST_SNAPSHOTS = _make(function="virDomain.listAllSnapshots",
                                       args=())
 SUPPORT_DOMAIN_GET_METADATA = _make(function="virDomain.metadata",
             args=(getattr(libvirt, "VIR_DOMAIN_METADATA_TITLE", 1), None, 0))
+SUPPORT_DOMAIN_MEMORY_STATS = _make(function="virDomain.memoryStats", args=())
 
 
 # Pool checks

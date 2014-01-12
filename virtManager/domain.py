@@ -245,8 +245,7 @@ class vmmDomain(vmmLibvirtObject):
         self.managedsave_supported = False
         self.remote_console_supported = False
         self.title_supported = False
-
-        self._mem_stats_supported = True
+        self.mem_stats_supported = False
 
         self._enable_mem_stats = False
 
@@ -280,6 +279,8 @@ class vmmDomain(vmmLibvirtObject):
             self.conn.SUPPORT_DOMAIN_CONSOLE_STREAM, self._backend)
         self.title_supported = self.conn.check_support(
             self.conn.SUPPORT_DOMAIN_GET_METADATA, self._backend)
+        self.mem_stats_supported = self.conn.check_support(
+            self.conn.SUPPORT_DOMAIN_MEMORY_STATS, self._backend)
 
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
@@ -1743,7 +1744,7 @@ class vmmDomain(vmmLibvirtObject):
         return rd, wr
 
     def _sample_mem_stats(self):
-        if (not self._mem_stats_supported or
+        if (not self.mem_stats_supported or
             not self._enable_mem_stats or
             not self.is_active()):
             return 0, 0
@@ -1758,11 +1759,7 @@ class vmmDomain(vmmLibvirtObject):
                 curmem = stats['rss']
                 totalmem = stats['actual']
         except libvirt.libvirtError, err:
-            if util.is_error_nosupport(err):
-                logging.debug("Mem stats not supported: %s", err)
-                self._mem_stats_supported = False
-            else:
-                logging.error("Error reading mem stats: %s", err)
+            logging.error("Error reading mem stats: %s", err)
 
         pcentCurrMem = curmem * 100.0 / totalmem
         pcentCurrMem = max(0.0, min(pcentCurrMem, 100.0))
