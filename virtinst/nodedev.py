@@ -172,7 +172,7 @@ class PCIDevice(NodeDevice):
                                    int(self.slot),
                                    int(self.function))
 
-        return "%s %s %s" % (devstr, self.product_name)
+        return "%s %s %s" % (devstr, self.vendor_name, self.product_name)
 
 
 class USBDevice(NodeDevice):
