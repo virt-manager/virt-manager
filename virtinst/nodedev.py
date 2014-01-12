@@ -110,18 +110,14 @@ class NodeDevice(XMLBuilder):
     parent = XMLProperty("./parent")
     device_type = XMLProperty("./capability/@type")
 
-    def pretty_name(self, child_dev=None):
+    def pretty_name(self):
         """
         Use device information to attempt to print a human readable device
         name.
 
-        @param child_dev: Child node device to display in description
-        @type child_dev: L{NodeDevice}
-
         @returns: Device description string
         @rtype C{str}
         """
-        ignore = child_dev
         return self.name
 
 
@@ -135,8 +131,7 @@ class SystemDevice(NodeDevice):
     fw_version = XMLProperty("./capability/firmware/version")
     fw_date = XMLProperty("./capability/firmware/release_date")
 
-    def pretty_name(self, child_dev=None):
-        ignore = child_dev
+    def pretty_name(self):
         desc = _("System")
         if self.hw_vendor:
             desc += ": %s" % self.hw_vendor
@@ -151,8 +146,7 @@ class NetDevice(NodeDevice):
     address = XMLProperty("./capability/address")
     capability_type = XMLProperty("./capability/capability/@type")
 
-    def pretty_name(self, child_dev=None):
-        ignore = child_dev
+    def pretty_name(self):
         desc = self.name
         if self.interface:
             desc = _("Interface %s") % self.interface
@@ -173,16 +167,12 @@ class PCIDevice(NodeDevice):
 
     iommu_group = XMLProperty("./capability/iommuGroup/@number", is_int=True)
 
-    def pretty_name(self, child_dev=None):
+    def pretty_name(self):
         devstr = "%.2X:%.2X:%X" % (int(self.bus),
                                    int(self.slot),
                                    int(self.function))
-        if child_dev:
-            desc = "%s %s (%s)" % (devstr, child_dev.pretty_name(),
-                                   str(self.product_name))
-        else:
-            desc = "%s %s" % (devstr, str(self.product_name))
-        return desc
+
+        return "%s %s %s" % (devstr, self.product_name)
 
 
 class USBDevice(NodeDevice):
@@ -194,8 +184,7 @@ class USBDevice(NodeDevice):
     vendor_name = XMLProperty("./capability/vendor")
     vendor_id = XMLProperty("./capability/vendor/@id")
 
-    def pretty_name(self, child_dev=None):
-        ignore = child_dev
+    def pretty_name(self):
         devstr = "%.3d:%.3d" % (int(self.bus), int(self.device))
         desc = "%s %s %s" % (devstr, str(self.vendor_name),
                              str(self.product_name))
@@ -232,8 +221,7 @@ class StorageDevice(NodeDevice):
         self._media_available = val
     media_available = property(_get_media_available, _set_media_available)
 
-    def pretty_name(self, child_dev=None):
-        ignore = child_dev
+    def pretty_name(self):
         desc = ""
         if self.drive_type:
             desc = self.drive_type

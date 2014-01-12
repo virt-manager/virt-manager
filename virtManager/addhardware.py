@@ -586,7 +586,7 @@ class vmmAddHardware(vmmGObjectUI):
 
             for subdev in subdevs:
                 if dev.name == subdev.parent:
-                    prettyname = dev.pretty_name(subdev)
+                    prettyname += " (%s)" % subdev.pretty_name()
 
             model.append([prettyname, dev.name, devtype, dev])
 
