@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Sat Jan 11 15:03:54 2014 -->
+<!-- Generated with glade 3.16.0 on Sun Jan 12 14:33:40 2014 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAccelGroup" id="accelgroup1"/>
@@ -636,14 +636,12 @@
                                         <property name="top_padding">3</property>
                                         <property name="left_padding">12</property>
                                         <child>
-                                          <object class="GtkTable" id="table5">
+                                          <object class="GtkGrid" id="table5">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="border_width">3</property>
-                                            <property name="n_rows">6</property>
-                                            <property name="n_columns">2</property>
-                                            <property name="column_spacing">6</property>
                                             <property name="row_spacing">6</property>
+                                            <property name="column_spacing">6</property>
                                             <child>
                                               <object class="GtkLabel" id="label44">
                                                 <property name="visible">True</property>
@@ -652,10 +650,10 @@
                                                 <property name="label" translatable="yes">Status:</property>
                                               </object>
                                               <packing>
+                                                <property name="left_attach">0</property>
                                                 <property name="top_attach">2</property>
-                                                <property name="bottom_attach">3</property>
-                                                <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options"/>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -666,10 +664,10 @@
                                                 <property name="label" translatable="yes">UUID:</property>
                                               </object>
                                               <packing>
+                                                <property name="left_attach">0</property>
                                                 <property name="top_attach">1</property>
-                                                <property name="bottom_attach">2</property>
-                                                <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options"/>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -682,48 +680,10 @@
                                                 <property name="mnemonic_widget">overview-name</property>
                                               </object>
                                               <packing>
-                                                <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options"/>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkHBox" id="hbox8">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="spacing">3</property>
-                                                <child>
-                                                  <object class="GtkImage" id="overview-status-icon">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="stock">gtk-stop</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">True</property>
-                                                    <property name="position">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="overview-status-text">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="xalign">0</property>
-                                                    <property name="label" translatable="yes">Shut down</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">True</property>
-                                                    <property name="position">1</property>
-                                                  </packing>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
-                                                <property name="top_attach">2</property>
-                                                <property name="bottom_attach">3</property>
-                                                <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options">GTK_FILL</property>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">0</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -736,37 +696,92 @@
                                               </object>
                                               <packing>
                                                 <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
                                                 <property name="top_attach">1</property>
-                                                <property name="bottom_attach">2</property>
-                                                <property name="y_options"/>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
                                               </packing>
                                             </child>
                                             <child>
                                               <object class="GtkEntry" id="overview-name">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
+                                                <property name="hexpand">False</property>
                                                 <signal name="changed" handler="on_overview_name_changed" swapped="no"/>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
-                                                <property name="y_options">GTK_FILL</property>
+                                                <property name="top_attach">0</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkAlignment" id="alignment14">
+                                              <object class="GtkLabel" id="title-label">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
+                                                <property name="xalign">0</property>
+                                                <property name="label" translatable="yes">Title:</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">3</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkEntry" id="overview-title">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <signal name="changed" handler="on_overview_title_changed" swapped="no"/>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">3</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkGrid" id="grid1">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="column_spacing">3</property>
                                                 <child>
-                                                  <placeholder/>
+                                                  <object class="GtkLabel" id="overview-status-text">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="label" translatable="yes">Shut down</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="top_attach">0</property>
+                                                    <property name="width">1</property>
+                                                    <property name="height">1</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkImage" id="overview-status-icon">
+                                                    <property name="width_request">22</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="stock">gtk-missing-image</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="left_attach">0</property>
+                                                    <property name="top_attach">0</property>
+                                                    <property name="width">1</property>
+                                                    <property name="height">1</property>
+                                                  </packing>
                                                 </child>
                                               </object>
                                               <packing>
-                                                <property name="top_attach">5</property>
-                                                <property name="bottom_attach">6</property>
-                                                <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options">GTK_FILL</property>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -778,38 +793,10 @@
                                                 <property name="label" translatable="yes">Description:</property>
                                               </object>
                                               <packing>
+                                                <property name="left_attach">0</property>
                                                 <property name="top_attach">4</property>
-                                                <property name="bottom_attach">5</property>
-                                                <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options">GTK_FILL</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="title-label">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="xalign">0</property>
-                                                <property name="label" translatable="yes">Title:</property>
-                                              </object>
-                                              <packing>
-                                                <property name="top_attach">3</property>
-                                                <property name="bottom_attach">4</property>
-                                                <property name="x_options">GTK_FILL</property>
-                                                <property name="y_options"/>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkEntry" id="overview-title">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <signal name="changed" handler="on_overview_title_changed" swapped="no"/>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
-                                                <property name="top_attach">3</property>
-                                                <property name="bottom_attach">4</property>
-                                                <property name="y_options">GTK_FILL</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -822,16 +809,16 @@
                                                   <object class="GtkTextView" id="overview-description">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
+                                                    <property name="hexpand">True</property>
                                                     <property name="wrap_mode">word</property>
                                                   </object>
                                                 </child>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
                                                 <property name="top_attach">4</property>
-                                                <property name="bottom_attach">6</property>
-                                                <property name="y_options">GTK_FILL</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
                                               </packing>
                                             </child>
                                           </object>
