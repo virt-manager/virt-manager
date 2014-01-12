@@ -289,6 +289,9 @@ SUPPORT_CONN_AUTOSOCKET = _make(drv_libvirt_version=[("qemu", 1000006)])
 SUPPORT_CONN_ADVANCED_CLOCK = _make(
     drv_libvirt_version=[("qemu", 8000)])
 SUPPORT_CONN_VIRTIO_CONSOLE = _make(drv_libvirt_version=[("qemu", 8003)])
+SUPPORT_CONN_PANIC_DEVICE = _make(version=1002001,
+                                  drv_version=[("qemu", 1005000),
+                                               ("test", 0)])
 
 
 # Domain checks

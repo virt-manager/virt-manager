@@ -403,7 +403,9 @@ class vmmAddHardware(vmmGObjectUI):
         add_hw_option("TPM", "device_cpu", PAGE_TPM,
                       True, None)
         add_hw_option("RNG", "system-run", PAGE_RNG, True, None)
-        add_hw_option("Panic Notifier", "system-run", PAGE_PANIC, True, None)
+        add_hw_option("Panic Notifier", "system-run", PAGE_PANIC,
+            self.conn.check_support(self.conn.SUPPORT_CONN_PANIC_DEVICE),
+            _("Not supported for this hypervisor/libvirt combination."))
 
     def reset_state(self):
         # Storage init
