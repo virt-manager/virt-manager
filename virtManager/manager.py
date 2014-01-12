@@ -189,6 +189,7 @@ class vmmManager(vmmGObjectUI):
         # preferences (we want signal handlers for this)
         self.enable_polling(COL_DISK)
         self.enable_polling(COL_NETWORK)
+        self.enable_polling(COL_MEM)
 
         # Select first list entry
         vmlist = self.widget("vm-list")
@@ -279,6 +280,10 @@ class vmmManager(vmmGObjectUI):
         self.add_gconf_handle(
             self.config.on_stats_enable_net_poll_changed(self.enable_polling,
                                                     COL_NETWORK))
+        self.add_gconf_handle(
+            self.config.on_stats_enable_memory_poll_changed(
+                                                    self.enable_polling,
+                                                    COL_MEM))
 
         self.toggle_guest_cpu_usage_visible_widget()
         self.toggle_host_cpu_usage_visible_widget()
@@ -991,6 +996,9 @@ class vmmManager(vmmGObjectUI):
         elif column == COL_NETWORK:
             widgn = "menu_view_stats_network"
             do_enable = self.config.get_stats_enable_net_poll()
+        elif column == COL_MEM:
+            widgn = "menu_view_stats_memory"
+            do_enable = self.config.get_stats_enable_memory_poll()
         widget = self.widget(widgn)
 
         tool_text = ""
@@ -1002,14 +1010,7 @@ class vmmManager(vmmGObjectUI):
                 widget.set_active(False)
             widget.set_sensitive(False)
             tool_text = _("Disabled in preferences dialog.")
-
         widget.set_tooltip_text(tool_text)
-
-        disabled_text = _(" (disabled)")
-        current_text = widget.get_label().strip(disabled_text)
-        if tool_text:
-            current_text = current_text + disabled_text
-        widget.set_label(current_text)
 
     def _toggle_graph_helper(self, do_show, col, datafunc, menu):
         img = -1

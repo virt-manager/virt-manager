@@ -44,6 +44,7 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_storage_format()
         self.refresh_disk_poll()
         self.refresh_net_poll()
+        self.refresh_memory_poll()
         self.refresh_grabkeys_combination()
         self.refresh_confirm_forcepoweroff()
         self.refresh_confirm_poweroff()
@@ -63,6 +64,7 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_new_vm_sound_toggled": self.change_new_vm_sound,
             "on_prefs_stats_enable_disk_toggled": self.change_disk_poll,
             "on_prefs_stats_enable_net_toggled": self.change_net_poll,
+            "on_prefs_stats_enable_memory_toggled": self.change_memory_poll,
             "on_prefs_confirm_forcepoweroff_toggled": self.change_confirm_forcepoweroff,
             "on_prefs_confirm_poweroff_toggled": self.change_confirm_poweroff,
             "on_prefs_confirm_pause_toggled": self.change_confirm_pause,
@@ -162,6 +164,9 @@ class vmmPreferences(vmmGObjectUI):
     def refresh_net_poll(self):
         self.widget("prefs-stats-enable-net").set_active(
             self.config.get_stats_enable_net_poll())
+    def refresh_memory_poll(self):
+        self.widget("prefs-stats-enable-memory").set_active(
+            self.config.get_stats_enable_memory_poll())
 
     def refresh_grabkeys_combination(self):
         val = self.config.get_keys_combination()
@@ -281,6 +286,8 @@ class vmmPreferences(vmmGObjectUI):
         self.config.set_stats_enable_disk_poll(src.get_active())
     def change_net_poll(self, src):
         self.config.set_stats_enable_net_poll(src.get_active())
+    def change_memory_poll(self, src):
+        self.config.set_stats_enable_memory_poll(src.get_active())
 
     def change_confirm_forcepoweroff(self, src):
         self.config.set_confirm_forcepoweroff(src.get_active())

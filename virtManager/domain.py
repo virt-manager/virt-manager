@@ -248,6 +248,8 @@ class vmmDomain(vmmLibvirtObject):
 
         self._mem_stats_supported = True
 
+        self._enable_mem_stats = False
+
         self._enable_net_poll = False
         self._stats_net_supported = True
         self._stats_net_skip = []
@@ -286,6 +288,7 @@ class vmmDomain(vmmLibvirtObject):
 
         self.toggle_sample_network_traffic()
         self.toggle_sample_disk_io()
+        self.toggle_sample_mem_stats()
 
         self.force_update_status()
 
@@ -296,6 +299,9 @@ class vmmDomain(vmmLibvirtObject):
         self.add_gconf_handle(
             self.config.on_stats_enable_disk_poll_changed(
                                         self.toggle_sample_disk_io))
+        self.add_gconf_handle(
+            self.config.on_stats_enable_memory_poll_changed(
+                                        self.toggle_sample_mem_stats))
 
         self.connect("status-changed", self._update_start_vcpus)
         self.connect("pre-startup", self._prestartup_nodedev_check)
@@ -1360,33 +1366,9 @@ class vmmDomain(vmmLibvirtObject):
         # Don't schedule any conn update, migrate dialog handles it for us
 
 
-    ###################
-    # Stats helpers ###
-    ###################
-
-    def _sample_mem_stats(self):
-        curmem = 0
-        totalmem = 1
-
-        if self._mem_stats_supported and self.is_active():
-            try:
-                stats = self._backend.memoryStats()
-                # did we get both required stat items back?
-                if set(['actual', 'rss']).issubset(
-                        set(stats.keys())):
-                    curmem = stats['rss']
-                    totalmem = stats['actual']
-            except libvirt.libvirtError, err:
-                if util.is_error_nosupport(err):
-                    logging.debug("Mem stats not supported: %s", err)
-                    self._mem_stats_supported = False
-                else:
-                    logging.error("Error reading mem stats: %s", err)
-
-        pcentCurrMem = curmem * 100.0 / totalmem
-        pcentCurrMem = max(0.0, min(pcentCurrMem, 100.0))
-
-        return pcentCurrMem, curmem
+    #################
+    # Stats helpers #
+    #################
 
     def _sample_cpu_stats(self, info, now):
         prevCpuTime = 0
@@ -1486,6 +1468,9 @@ class vmmDomain(vmmLibvirtObject):
             rdBytes, wrBytes = self._sample_disk_io()
             self.record[0]["diskRdKB"] = rdBytes / 1024
             self.record[0]["diskWrKB"] = wrBytes / 1024
+
+    def toggle_sample_mem_stats(self, ignore=None):
+        self._enable_mem_stats = self.config.get_stats_enable_memory_poll()
 
 
     ###################
@@ -1756,6 +1741,34 @@ class vmmDomain(vmmLibvirtObject):
                         logging.debug("Aren't running, don't add to skiplist")
 
         return rd, wr
+
+    def _sample_mem_stats(self):
+        if (not self._mem_stats_supported or
+            not self._enable_mem_stats or
+            not self.is_active()):
+            return 0, 0
+
+        curmem = 0
+        totalmem = 1
+        try:
+            stats = self._backend.memoryStats()
+            # did we get both required stat items back?
+            if set(['actual', 'rss']).issubset(
+                    set(stats.keys())):
+                curmem = stats['rss']
+                totalmem = stats['actual']
+        except libvirt.libvirtError, err:
+            if util.is_error_nosupport(err):
+                logging.debug("Mem stats not supported: %s", err)
+                self._mem_stats_supported = False
+            else:
+                logging.error("Error reading mem stats: %s", err)
+
+        pcentCurrMem = curmem * 100.0 / totalmem
+        pcentCurrMem = max(0.0, min(pcentCurrMem, 100.0))
+
+        return pcentCurrMem, curmem
+
 
     def tick(self, stats_update=True):
         self._invalidate_xml()

@@ -345,16 +345,22 @@ class vmmConfig(object):
         return self.conf.get("/stats/enable-disk-poll")
     def get_stats_enable_net_poll(self):
         return self.conf.get("/stats/enable-net-poll")
+    def get_stats_enable_memory_poll(self):
+        return self.conf.get("/stats/enable-memory-poll")
 
     def set_stats_enable_disk_poll(self, val):
         self.conf.set("/stats/enable-disk-poll", val)
     def set_stats_enable_net_poll(self, val):
         self.conf.set("/stats/enable-net-poll", val)
+    def set_stats_enable_memory_poll(self, val):
+        self.conf.set("/stats/enable-memory-poll", val)
 
     def on_stats_enable_disk_poll_changed(self, cb, row=None):
         return self.conf.notify_add("/stats/enable-disk-poll", cb, row)
     def on_stats_enable_net_poll_changed(self, cb, row=None):
         return self.conf.notify_add("/stats/enable-net-poll", cb, row)
+    def on_stats_enable_memory_poll_changed(self, cb, row=None):
+        return self.conf.notify_add("/stats/enable-memory-poll", cb, row)
 
     # VM Console preferences
     def on_console_accels_changed(self, cb):
