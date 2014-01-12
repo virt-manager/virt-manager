@@ -305,7 +305,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-status-text").set_text(state)
         if icon:
             self.widget("snapshot-status-icon").set_from_icon_name(
-                icon, Gtk.IconSize.MENU)
+                icon, Gtk.IconSize.BUTTON)
 
         uihelpers.set_grid_row_visible(self.widget("snapshot-mode"),
                                        is_external)
@@ -393,7 +393,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-new-ok").grab_focus()
         self.widget("snapshot-new-status-text").set_text(self.vm.run_status())
         self.widget("snapshot-new-status-icon").set_from_icon_name(
-            self.vm.run_status_icon_name(), Gtk.IconSize.MENU)
+            self.vm.run_status_icon_name(), Gtk.IconSize.BUTTON)
 
         sn = self._get_screenshot()
         uihelpers.set_grid_row_visible(

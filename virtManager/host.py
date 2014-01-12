@@ -634,7 +634,7 @@ class vmmHost(vmmGObjectUI):
                            self.ICON_SHUTOFF)
         self.widget("net-state").set_text(state)
         self.widget("net-state-icon").set_from_icon_name(icon,
-                                                         Gtk.IconSize.MENU)
+                                                         Gtk.IconSize.BUTTON)
 
         self.widget("net-start").set_sensitive(not active)
         self.widget("net-stop").set_sensitive(active)
@@ -655,7 +655,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-device").set_text("")
         self.widget("net-state").set_text(_("Inactive"))
         self.widget("net-state-icon").set_from_icon_name(self.ICON_SHUTOFF,
-                                                         Gtk.IconSize.MENU)
+                                                         Gtk.IconSize.BUTTON)
         self.widget("net-start").set_sensitive(False)
         self.widget("net-stop").set_sensitive(False)
         self.widget("net-delete").set_sensitive(False)
@@ -904,7 +904,7 @@ class vmmHost(vmmGObjectUI):
                 pool.get_target_path())
         self.widget("pool-state-icon").set_from_icon_name(
                 ((active and self.ICON_RUNNING) or self.ICON_SHUTOFF),
-                Gtk.IconSize.MENU)
+                Gtk.IconSize.BUTTON)
         self.widget("pool-state").set_text(
                 (active and _("Active")) or _("Inactive"))
         self.widget("pool-autostart").set_label(
@@ -944,7 +944,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("pool-type").set_text("")
         self.widget("pool-location").set_text("")
         self.widget("pool-state-icon").set_from_icon_name(self.ICON_SHUTOFF,
-                                                          Gtk.IconSize.MENU)
+                                                          Gtk.IconSize.BUTTON)
         self.widget("pool-state").set_text(_("Inactive"))
         self.widget("vol-list").get_model().clear()
         self.widget("pool-autostart").set_label(_("Never"))
@@ -1135,7 +1135,7 @@ class vmmHost(vmmGObjectUI):
 
         self.widget("interface-state-icon").set_from_icon_name(
             ((active and self.ICON_RUNNING) or self.ICON_SHUTOFF),
-            Gtk.IconSize.MENU)
+            Gtk.IconSize.BUTTON)
         self.widget("interface-state").set_text(
                                     (active and _("Active")) or _("Inactive"))
 
