@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Sun Jan 12 16:08:50 2014 -->
+<!-- Generated with glade 3.16.0 on Sun Jan 12 16:48:36 2014 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
@@ -408,7 +408,7 @@
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
-                                    <property name="top_attach">0</property>
+                                    <property name="top_attach">1</property>
                                     <property name="width">1</property>
                                     <property name="height">1</property>
                                   </packing>
@@ -417,11 +417,42 @@
                                   <object class="GtkComboBox" id="config-storage-devtype">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="config-storage-devtype-atkobject">
                                         <property name="AtkObject::accessible-name" translatable="yes">Device Type Field</property>
                                       </object>
                                     </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label21">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">_Bus type:</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">config-storage-bustype</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="config-storage-bustype">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">start</property>
+                                    <signal name="changed" handler="on_config_storage_bustype_changed" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>

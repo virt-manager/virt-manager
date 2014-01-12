@@ -78,6 +78,7 @@ class vmmAddHardware(vmmGObjectUI):
 
             "on_config_storage_browse_clicked": self.browse_storage,
             "on_config_storage_select_toggled": self.toggle_storage_select,
+            "on_config_storage_bustype_changed": self.populate_disk_device,
 
             "on_mac_address_clicked" : self.change_macaddr_use,
 
@@ -177,18 +178,26 @@ class vmmAddHardware(vmmGObjectUI):
         netmodel_list  = self.widget("net-model")
         uihelpers.build_netmodel_combo(self.vm, netmodel_list)
 
-        # Disk device type / bus
+        # Disk bus type
+        widget = self.widget("config-storage-bustype")
+        # [bus, label]
+        model = Gtk.ListStore(str, str)
+        widget.set_model(model)
+        uihelpers.set_combo_text_column(widget, 1)
+
+        # Disk device type
         target_list = self.widget("config-storage-devtype")
-        target_model = Gtk.ListStore(str, str, str, str, int)
+        # [device, icon, label]
+        target_model = Gtk.ListStore(str, str, str)
         target_list.set_model(target_model)
         icon = Gtk.CellRendererPixbuf()
         icon.set_property("stock-size", Gtk.IconSize.BUTTON)
         target_list.pack_start(icon, False)
-        target_list.add_attribute(icon, 'icon-name', 2)
+        target_list.add_attribute(icon, 'icon-name', 1)
         text = Gtk.CellRendererText()
         text.set_property("xpad", 6)
         target_list.pack_start(text, True)
-        target_list.add_attribute(text, 'text', 3)
+        target_list.add_attribute(text, 'text', 2)
 
         # Disk cache mode
         cache_list = self.widget("config-storage-cache")
@@ -418,10 +427,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("config-storage-entry").set_text("")
         self.widget("config-storage-nosparse").set_active(True)
         self.populate_disk_format_combo(True)
-        target_list = self.widget("config-storage-devtype")
-        self.populate_target_device_model(target_list.get_model())
-        if len(target_list.get_model()) > 0:
-            target_list.set_active(0)
+        self.populate_disk_bus()
 
         # Network init
         newmac = virtinst.VirtualNetworkInterface.generate_mac(
@@ -519,49 +525,67 @@ class vmmAddHardware(vmmGObjectUI):
 
         self.set_hw_selection(0)
 
+
     #########################
     # UI population methods #
     #########################
 
-    def populate_target_device_model(self, model):
+    def populate_disk_bus(self):
+        widget = self.widget("config-storage-bustype")
+        model = widget.get_model()
         model.clear()
-        #[bus, device, icon, desc, iconsize]
-        def add_dev(bus, device, desc):
-            if device == virtinst.VirtualDisk.DEVICE_FLOPPY:
-                icon = "media-floppy"
-            elif device == virtinst.VirtualDisk.DEVICE_CDROM:
-                icon = "media-optical"
-            else:
-                icon = "drive-harddisk"
-            model.append([bus, device, icon, desc, Gtk.IconSize.BUTTON])
 
         if self.vm.is_hvm():
-            add_dev("ide", virtinst.VirtualDisk.DEVICE_DISK, _("IDE disk"))
-            add_dev("ide", virtinst.VirtualDisk.DEVICE_CDROM, _("IDE CDROM"))
-            add_dev("fdc", virtinst.VirtualDisk.DEVICE_FLOPPY,
-                    _("Floppy disk"))
+            model.append(["ide", "IDE"])
+            model.append(["fdc", "Floppy"])
 
             if self.vm.rhel6_defaults():
-                add_dev("scsi", virtinst.VirtualDisk.DEVICE_DISK,
-                        _("SCSI disk"))
-                add_dev("usb", virtinst.VirtualDisk.DEVICE_DISK,
-                        _("USB disk"))
+                model.append(["scsi", "SCSI"])
+                model.append(["usb", "USB"])
+
         if self.vm.get_hv_type() in ["qemu", "kvm", "test"]:
-            add_dev("sata", virtinst.VirtualDisk.DEVICE_DISK,
-                    _("SATA disk"))
-            add_dev("sd", virtinst.VirtualDisk.DEVICE_DISK,
-                    _("SD disk"))
-            add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK,
-                    _("Virtio disk"))
-            add_dev("virtio", virtinst.VirtualDisk.DEVICE_LUN,
-                    _("Virtio lun"))
-            add_dev("virtio-scsi", virtinst.VirtualDisk.DEVICE_DISK,
-                    _("Virtio SCSI disk"))
-            add_dev("virtio-scsi", virtinst.VirtualDisk.DEVICE_LUN,
-                    _("Virtio SCSI lun"))
+            model.append(["sata", "SATA"])
+            model.append(["sd", "SD"])
+            model.append(["virtio", "Virtio"])
+            model.append(["virtio-scsi", "Virtio SCSI"])
+
         if self.conn.is_xen() or self.conn.is_test_conn():
-            add_dev("xen", virtinst.VirtualDisk.DEVICE_DISK,
-                    _("Xen virtual disk"))
+            model.append(["xen", "Xen"])
+
+        if len(model) > 0:
+            widget.set_active(0)
+
+
+    def populate_disk_device(self, src):
+        ignore = src
+
+        bus = self.get_config_disk_bus()
+        devlist = self.widget("config-storage-devtype")
+        model = devlist.get_model()
+        model.clear()
+
+        disk_buses = ["ide", "sata", "scsi", "sd",
+                      "usb", "virtio", "virtio-scsi", "xen"]
+        floppy_buses = ["fdc"]
+        cdrom_buses = ["ide", "scsi"]
+        lun_buses = ["virtio", "virtio-scsi"]
+
+        if bus in disk_buses:
+            model.append([virtinst.VirtualDisk.DEVICE_DISK,
+                          "drive-harddisk", _("Disk device")])
+        if bus in floppy_buses:
+            model.append([virtinst.VirtualDisk.DEVICE_FLOPPY,
+                          "media-floppy", _("Floppy device")])
+        if bus in cdrom_buses:
+            model.append([virtinst.VirtualDisk.DEVICE_CDROM,
+                          "media-cdrom", _("CDROM device")])
+        if bus in lun_buses:
+            model.append([virtinst.VirtualDisk.DEVICE_LUN,
+                          "drive-harddisk", _("LUN device")])
+
+        if len(model) > 0:
+            devlist.set_active(0)
+
 
     def populate_input_model(self, model):
         model.clear()
@@ -723,23 +747,19 @@ class vmmAddHardware(vmmGObjectUI):
             return ideal
         return diskpath
 
-    def get_config_disk_target(self):
-        target = self.widget("config-storage-devtype")
-        model = target.get_model()
-        idx = target.get_active()
-        if idx == -1:
-            return None, None
+    def get_config_disk_bus(self):
+        widget = self.widget("config-storage-bustype")
+        if widget.get_active() == -1:
+            return None
+        return widget.get_model()[widget.get_active()][0]
 
-        bus = model[idx][0]
-        device = model[idx][1]
-        return bus, device
+    def get_config_disk_device(self):
+        widget = self.widget("config-storage-devtype")
+        return widget.get_model()[widget.get_active()][0]
 
-    def get_config_disk_cache(self, label=False):
-        cache = self.widget("config-storage-cache")
-        idx = 0
-        if label:
-            idx = 1
-        return cache.get_model()[cache.get_active()][idx]
+    def get_config_disk_cache(self):
+        widget = self.widget("config-storage-cache")
+        return widget.get_model()[widget.get_active()][0]
 
     def get_config_disk_format(self):
         fmt = self.widget("config-storage-format")
@@ -1438,7 +1458,8 @@ class vmmAddHardware(vmmGObjectUI):
         return ret
 
     def validate_page_storage(self):
-        bus, device = self.get_config_disk_target()
+        bus = self.get_config_disk_bus()
+        device = self.get_config_disk_device()
         cache = self.get_config_disk_cache()
         fmt = self.get_config_disk_format()
         controller_model = None
