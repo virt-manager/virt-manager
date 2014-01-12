@@ -465,10 +465,12 @@ class vmmCreate(vmmGObjectUI):
             local_tt = msg
             pxe_tt = msg
 
-        for w in virt_methods:
-            if w.get_sensitive():
-                w.set_active(True)
-                break
+        if not any([w.get_active() and w.get_sensitive()
+                    for w in virt_methods]):
+            for w in virt_methods:
+                if w.get_sensitive():
+                    w.set_active(True)
+                    break
 
         if not (is_container or
                 [w for w in virt_methods if w.get_sensitive()]):
