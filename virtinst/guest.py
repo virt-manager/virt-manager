@@ -567,7 +567,9 @@ class Guest(XMLBuilder):
         if self.get_devices("channel"):
             return
 
+        # Skip qemu-ga on ARM where virtio slots are currently limited
         if (self.conn.is_qemu() and
+            not self.os.is_arm() and
             self._lookup_osdict_key("qemu_ga", False) and
             self.conn.check_support(self.conn.SUPPORT_CONN_AUTOSOCKET)):
             dev = virtinst.VirtualChannelDevice(self.conn)
