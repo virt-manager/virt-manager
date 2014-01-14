@@ -585,6 +585,7 @@ class XMLParseTest(unittest.TestCase):
         check("bus", "0x1", "0x5")
         check("slot", "0x2", "0x6")
         check("function", "0x3", "0x7")
+        check("driver_name", None, "vfio")
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

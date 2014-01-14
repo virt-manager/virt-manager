@@ -1898,6 +1898,7 @@ def parse_hostdev(guest, optstr, dev):
         return virtinst.NodeDevice.lookupNodeName(guest.conn, val)
 
     set_param(dev.set_from_nodedev, "name", convert_cb=convert_name)
+    set_param("driver_name", "driver_name")
 
     _check_leftover_opts(opts)
     return dev

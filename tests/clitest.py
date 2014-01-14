@@ -679,7 +679,7 @@ c.add_valid("--redirdev usb,type=tcp,server=127.0.0.1:4002")  # Different host s
 
 c = vinst.add_category("hostdev", "--noautoconsole --nographics --nodisks --pxe")
 c.add_valid("--host-device usb_device_781_5151_2004453082054CA1BEEE")  # Host dev by libvirt name
-c.add_valid("--host-device 001.003 --host-device 15:0.1 --host-device 2:15:0.2 --host-device 0:15:0.3 --host-device 0x0781:0x5151")  # Many hostdev parsing types
+c.add_valid("--host-device 001.003 --host-device 15:0.1 --host-device 2:15:0.2 --host-device 0:15:0.3 --host-device 0x0781:0x5151,driver_name=vfio")  # Many hostdev parsing types
 c.add_invalid("--host-device 1d6b:2")  # multiple USB devices with identical vendorId and productId
 c.add_invalid("--host-device pci_8086_2850_scsi_host_scsi_host")  # Unsupported hostdev type
 c.add_invalid("--host-device foobarhostdev")  # Unknown hostdev

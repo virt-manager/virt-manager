@@ -86,5 +86,7 @@ class VirtualHostDevice(VirtualDevice):
     function = XMLProperty("./source/address/@function")
     slot = XMLProperty("./source/address/@slot")
 
+    driver_name = XMLProperty("./driver/@name")
+
 
 VirtualHostDevice.register_type()
