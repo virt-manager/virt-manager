@@ -112,6 +112,15 @@ class vmmChooseCD(vmmGObjectUI):
         except Exception, e:
             return self.err.val_err(_("Invalid Media Path"), e)
 
+        names = self.disk.is_conflict_disk()
+        if names:
+            res = self.err.yes_no(
+                    _('Disk "%s" is already in use by other guests %s') %
+                     (self.disk.path, names),
+                    _("Do you really want to use the disk?"))
+            if not res:
+                return False
+
         uihelpers.check_path_search_for_qemu(self.err, self.conn, path)
 
         self.emit("cdrom-chosen", self.disk, path)

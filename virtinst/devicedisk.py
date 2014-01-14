@@ -798,7 +798,7 @@ class VirtualDisk(VirtualDevice):
             return (False, None)
         return self._storage_creator.is_size_conflict()
 
-    def is_conflict_disk(self, conn):
+    def is_conflict_disk(self, conn=None):
         """
         check if specified storage is in use by any other VMs on passed
         connection.

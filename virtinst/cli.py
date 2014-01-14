@@ -488,7 +488,7 @@ def disk_prompt(conn, origpath, origsize, origsparse,
         """
         Check if disk is inuse by another guest
         """
-        names = dev.is_conflict_disk(conn)
+        names = dev.is_conflict_disk()
         if not names:
             return False
 

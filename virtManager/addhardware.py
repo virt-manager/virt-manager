@@ -1531,7 +1531,7 @@ class vmmAddHardware(vmmGObjectUI):
                 return False
 
         # Disk collision
-        names = disk.is_conflict_disk(conn)
+        names = disk.is_conflict_disk()
         if names:
             res = self.err.yes_no(
                     _('Disk "%s" is already in use by other guests %s') %
