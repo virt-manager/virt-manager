@@ -40,8 +40,10 @@ class vmmChooseCD(vmmGObjectUI):
 
         self.vm = vm
         self.conn = self.vm.conn
-        self.disk = disk
         self.storage_browser = None
+
+        # This is also overwritten from details.py when targetting a new disk
+        self.disk = disk
         self.media_type = disk.device
 
         self.builder.connect_signals({

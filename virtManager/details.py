@@ -1840,32 +1840,31 @@ class vmmDetails(vmmGObjectUI):
         if not disk:
             return
 
-        dev_id_info = disk
         curpath = disk.path
         devtype = disk.device
 
         try:
             if curpath:
                 # Disconnect cdrom
-                self.change_storage_media(dev_id_info, None)
+                self.change_storage_media(disk, None)
                 return
         except Exception, e:
             self.err.show_err((_("Error disconnecting media: %s") % e))
             return
 
         try:
-            def change_cdrom_wrapper(src_ignore, dev_id_info, newpath):
-                return self.change_storage_media(dev_id_info, newpath)
+            def change_cdrom_wrapper(src_ignore, disk, newpath):
+                return self.change_storage_media(disk, newpath)
 
             # Launch 'Choose CD' dialog
             if self.media_choosers[devtype] is None:
-                ret = vmmChooseCD(self.vm, dev_id_info)
+                ret = vmmChooseCD(self.vm, disk)
 
                 ret.connect("cdrom-chosen", change_cdrom_wrapper)
                 self.media_choosers[devtype] = ret
 
             dialog = self.media_choosers[devtype]
-            dialog.dev_id_info = dev_id_info
+            dialog.disk = disk
 
             dialog.show(self.topwin)
         except Exception, e:
