@@ -345,10 +345,17 @@ class VirtualDisk(VirtualDevice):
         if not path:
             return []
 
+        # Find all volumes that have 'path' somewhere in their backing chain
         vols = []
-        for vol in conn.fetch_all_vols():
-            if path == vol.backing_store:
-                vols.append(vol.target_path)
+        volmap = dict((vol.backing_store, vol)
+                      for vol in conn.fetch_all_vols() if vol.backing_store)
+        backpath = path
+        while backpath in volmap:
+            vol = volmap[backpath]
+            if vol in vols:
+                break
+            backpath = vol.target_path
+            vols.append(backpath)
 
         ret = []
         vms = conn.fetch_all_guests()

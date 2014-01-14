@@ -1316,12 +1316,34 @@ ba</description>
     <target/>
   </volume>
   <volume>
-    <name>backing.img</name>
+    <name>backingl3.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
     <target>
       <format type='raw'/>
     </target>
+  </volume>
+  <volume>
+    <name>backingl2.img</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='qcow2'/>
+    </target>
+    <backingStore>
+      <path>/dev/default-pool/backingl3.img</path>
+    </backingStore>
+  </volume>
+  <volume>
+    <name>backingl1.img</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='qcow2'/>
+    </target>
+    <backingStore>
+      <path>/dev/default-pool/backingl2.img</path>
+    </backingStore>
   </volume>
   <volume>
     <name>overlay.img</name>
@@ -1331,7 +1353,7 @@ ba</description>
       <format type='qcow2'/>
     </target>
     <backingStore>
-      <path>/dev/default-pool/backing.img</path>
+      <path>/dev/default-pool/backingl1.img</path>
     </backingStore>
   </volume>
 
