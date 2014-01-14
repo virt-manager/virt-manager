@@ -331,37 +331,50 @@ class VirtualDisk(VirtualDevice):
         return errdict
 
     @staticmethod
-    def path_in_use_by(conn, path, check_conflict=False):
+    def path_in_use_by(conn, path, shareable=False, read_only=False):
         """
         Return a list of VM names that are using the passed path.
 
         @param conn: virConnect to check VMs
         @param path: Path to check for
-        @param check_conflict: Only return names that are truly conflicting:
-            this will omit guests that are using the disk with the
-            'shareable' flag, and possible other heuristics
+        @param shareable: Path we are checking is marked shareable, so
+            don't warn if it conflicts with another shareable source.
+        @param read_only: Path we are checking is marked read_only, so
+            don't warn if it conflicts with another read_only source.
         """
         if not path:
-            return
-        ret = []
+            return []
 
         vols = []
         for vol in conn.fetch_all_vols():
             if path == vol.backing_store:
                 vols.append(vol.target_path)
 
+        ret = []
         vms = conn.fetch_all_guests()
         for vm in vms:
-            for disk in vm.get_devices("disk"):
-                if disk.path == path:
-                    if check_conflict:
-                        if disk.shareable:
-                            continue
-                    if vm.name not in ret:
-                        ret.append(vm.name)
-
-                if disk.path in vols and vm.name not in ret:
+            if not read_only:
+                if path in [vm.os.kernel, vm.os.initrd, vm.os.dtb]:
                     ret.append(vm.name)
+                    continue
+
+            for disk in vm.get_devices("disk"):
+                if disk.path in vols and vm.name not in ret:
+                    # VM uses the path indirectly via backing store
+                    ret.append(vm.name)
+                    break
+
+                if disk.path != path:
+                    continue
+
+                if shareable and disk.shareable:
+                    continue
+                if read_only and disk.read_only:
+                    continue
+
+                ret.append(vm.name)
+                break
+
         return ret
 
     @staticmethod
@@ -798,9 +811,9 @@ class VirtualDisk(VirtualDevice):
         if not conn:
             conn = self.conn
 
-        check_conflict = self.shareable
         ret = self.path_in_use_by(conn, self.path,
-                                  check_conflict=check_conflict)
+                                  shareable=self.shareable,
+                                  read_only=self.read_only)
         return ret
 
 

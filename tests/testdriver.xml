@@ -39,6 +39,20 @@
   </devices>
 </domain>
 
+<domain type='test'>
+  <name>test-arm-kernel</name>
+  <memory>8388608</memory>
+  <currentMemory>2097152</currentMemory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch="i686">hvm</type>
+    <kernel>/dev/default-pool/test-arm-kernel</kernel>
+    <initrd>/dev/default-pool/test-arm-initrd</initrd>
+    <dtb>/dev/default-pool/test-arm-dtb</dtb>
+    <cmdline>console=ttyAMA0 rw root=/dev/vda3</cmdline>
+  </os>
+</domain>
+
 
 <domain type='test'>
   <name>test-many-devices</name>
@@ -544,13 +558,13 @@ test-many-devices, like an alternate RNG.
 
 
 <domain type='test'>
-  <name>test_xenpv_kernel</name>
+  <name>test-xenpv-kernel</name>
   <uuid>596a5d2171f48fb2e068e2386a5c413e</uuid>
   <os>
     <type>xen</type>
     <kernel>/var/lib/xen/vmlinuz.2Dn2YT</kernel>
     <initrd>/var/lib/xen/initrd.img.0u-Vhq</initrd>
-    <cmdline> method=http://download.fedora.devel.redhat.com/pub/fedora/linux/core/test/5.91/x86_64/os  </cmdline>
+    <cmdline>method=http://download.fedora.devel.redhat.com/pub/fedora/linux/core/test/5.91/x86_64/os</cmdline>
   </os>
   <memory>430080</memory>
   <vcpu>2</vcpu>
@@ -1319,6 +1333,33 @@ ba</description>
     <backingStore>
       <path>/dev/default-pool/backing.img</path>
     </backingStore>
+  </volume>
+
+
+  <!-- fake arm media -->
+  <volume>
+    <name>test-arm-kernel</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='raw'/>
+    </target>
+  </volume>
+  <volume>
+    <name>test-arm-initrd</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='raw'/>
+    </target>
+  </volume>
+  <volume>
+    <name>test-arm-dtb</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='raw'/>
+    </target>
   </volume>
 </pool>
 
