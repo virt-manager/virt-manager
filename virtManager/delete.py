@@ -242,13 +242,16 @@ def populate_storage_list(storage_list, vm, conn):
     model = storage_list.get_model()
     model.clear()
 
-    for disk in vm.get_disk_devices():
-        vol = None
+    diskdata = [(disk.target, disk.path, disk.read_only, disk.shareable) for
+                disk in vm.get_disk_devices()]
 
-        target = disk.target
-        path = disk.path
-        ro = disk.read_only
-        shared = disk.shareable
+    diskdata.append(("kernel", vm.get_xmlobj().os.kernel, True, False))
+    diskdata.append(("initrd", vm.get_xmlobj().os.initrd, True, False))
+    diskdata.append(("dtb", vm.get_xmlobj().os.dtb, True, False))
+
+    for target, path, ro, shared in diskdata:
+        if not path:
+            continue
 
         # There are a few pieces here
         # 1) Can we even delete the storage? If not, make the checkbox
@@ -259,9 +262,6 @@ def populate_storage_list(storage_list, vm, conn):
         # 2) If we can delete, do we want to delete this storage by
         #    default? Reasons not to, are if the storage is marked
         #    readonly or sharable, or is in use by another VM.
-
-        if not path:
-            continue
 
         default = False
         definfo = None
