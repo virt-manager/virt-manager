@@ -26,6 +26,7 @@ class VirtualPanicDevice(VirtualDevice):
 
     virtual_device_type = VirtualDevice.VIRTUAL_DEV_PANIC
     ADDRESS_TYPE_ISA = "isa"
+    TYPE_DEFAULT = ADDRESS_TYPE_ISA
     TYPES = [ADDRESS_TYPE_ISA]
     IOBASE_DEFAULT = "0x505"
 

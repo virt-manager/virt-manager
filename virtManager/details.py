@@ -3110,6 +3110,9 @@ class vmmDetails(vmmGObjectUI):
             widgetname = "panic-" + param.replace("_", "-")
             if not val:
                 val = getattr(dev, param)
+                if not val:
+                    propername = param.upper() + "_DEFAULT"
+                    val = getattr(virtinst.VirtualPanicDevice, propername, "-").upper()
 
             uihelpers.set_grid_row_visible(self.widget(widgetname), True)
             self.widget(widgetname).set_text(val or "-")
