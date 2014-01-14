@@ -425,7 +425,14 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("config-storage-create").set_active(True)
         self.widget("config-storage-size").set_value(8)
         self.widget("config-storage-entry").set_text("")
-        self.widget("config-storage-nosparse").set_active(True)
+        fmt = self.conn.get_default_storage_format()
+        can_alloc = fmt in ["raw"]
+        self.widget("config-storage-nosparse").set_active(can_alloc)
+        self.widget("config-storage-nosparse").set_sensitive(can_alloc)
+        self.widget("config-storage-nosparse").set_tooltip_text(
+            not can_alloc and
+            (_("Disk format '%s' does not support full allocation.") % fmt) or
+            "")
         self.populate_disk_format_combo(True)
         self.populate_disk_bus()
 
