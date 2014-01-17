@@ -100,7 +100,8 @@ class Cloner(object):
     def set_clone_name(self, name):
         try:
             Guest.validate_name(self.conn, name,
-                                check_collision=not self.replace)
+                                check_collision=not self.replace,
+                                validate=False)
         except ValueError, e:
             raise ValueError(_("Invalid name for new guest: %s") % e)
 
