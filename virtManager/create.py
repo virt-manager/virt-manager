@@ -1510,10 +1510,30 @@ class vmmCreate(vmmGObjectUI):
             guest.add_default_video_device()
             guest.add_default_input_device()
             guest.add_default_console_device()
-            if self.config.get_new_vm_sound():
-                guest.add_default_sound_device()
             guest.add_default_usb_controller()
             guest.add_default_channels()
+
+            if self.config.get_new_vm_sound():
+                guest.add_default_sound_device()
+
+            if (guest.conn.is_qemu() and
+                guest.type == "kvm" and
+                guest.os.is_x86() and
+                guest.os.arch == guest.conn.caps.host.cpu.arch):
+                cpu_type = self.config.get_default_cpu_setting()
+
+                if cpu_type == "hv-default":
+                    pass
+                elif cpu_type == "host-cpu-model":
+                    if guest.conn.caps.host.cpu.model:
+                        guest.cpu.model = guest.conn.caps.host.cpu.model
+                elif cpu_type == "host-model":
+                    # host-model has known issues, so use our 'copy cpu'
+                    # behavior until host-model does what we need
+                    guest.cpu.copy_host_cpu()
+                else:
+                    raise RuntimeError("Unknown cpu default '%s'" % cpu_type)
+
         except Exception, e:
             self.err.show_err(_("Error setting up default devices:") + str(e))
             return None

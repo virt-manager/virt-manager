@@ -167,6 +167,7 @@ class vmmConfig(object):
         self.askpass_package = cliconfig.askpass_package
         self.default_graphics_from_config = cliconfig.default_graphics
         self.default_storage_format_from_config = "qcow2"
+        self.cpu_default_from_config = "hv-default"
 
         self._objects = []
 
@@ -403,7 +404,8 @@ class vmmConfig(object):
         self.conf.set("/details/window_width", w)
         self.conf.set("/details/window_height", h)
 
-    # Create sound device for default guest
+
+    # New VM preferences
     def get_new_vm_sound(self):
         return self.conf.get("/new-vm/add-sound")
     def set_new_vm_sound(self, state):
@@ -428,6 +430,18 @@ class vmmConfig(object):
         return ret
     def set_storage_format(self, typ):
         self.conf.set("/new-vm/storage-format", typ.lower())
+
+    def get_default_cpu_setting(self, raw=False):
+        ret = self.conf.get("/new-vm/cpu-default")
+        whitelist = ["default", "hv-default", "host-cpu-model", "host-model"]
+
+        if ret not in whitelist:
+            ret = "default"
+        if ret == "default" and not raw:
+            ret = self.cpu_default_from_config
+        return ret
+    def set_default_cpu_setting(self, val):
+        self.conf.set("/new-vm/cpu-default", val.lower())
 
 
     # URL/Media path history

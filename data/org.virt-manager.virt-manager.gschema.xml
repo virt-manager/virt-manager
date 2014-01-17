@@ -207,6 +207,13 @@
       <summary>Use selected format for new VM storage</summary>
       <description>Use selected format when creating new disk images in new VM wizard</description>
     </key>
+
+    <key name="cpu-default" type="s">
+      <default>'default'</default>
+      <summary>CPU setting to use for new VMs</summary>
+      <description>CPU setting to use for new VMs. Limited to VMs matching the host architecture. Possible values: default (virt-manager default), hv-default (qemu's default), host-cpu-model (just the model, not the additional features), host-model (libvirt's host-model setting).</description>
+    </key>
+
   </schema>
 
   <schema id="org.virt-manager.virt-manager.paths"

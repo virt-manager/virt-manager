@@ -42,6 +42,7 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_new_vm_sound()
         self.refresh_graphics_type()
         self.refresh_storage_format()
+        self.refresh_cpu_default()
         self.refresh_disk_poll()
         self.refresh_net_poll()
         self.refresh_memory_poll()
@@ -62,6 +63,9 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_close_clicked": self.close,
             "on_vmm_preferences_delete_event": self.close,
             "on_prefs_new_vm_sound_toggled": self.change_new_vm_sound,
+            "on_prefs_graphics_type_changed": self.change_graphics_type,
+            "on_prefs_storage_format_changed": self.change_storage_format,
+            "on_prefs_cpu_default_changed": self.change_cpu_default,
             "on_prefs_stats_enable_disk_toggled": self.change_disk_poll,
             "on_prefs_stats_enable_net_toggled": self.change_net_poll,
             "on_prefs_stats_enable_memory_toggled": self.change_memory_poll,
@@ -73,8 +77,6 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_confirm_unapplied_toggled": self.change_confirm_unapplied,
             "on_prefs_confirm_delstorage_toggled": self.change_confirm_delstorage,
             "on_prefs_btn_keys_define_clicked": self.change_grab_keys,
-            "on_prefs_graphics_type_changed": self.change_graphics_type,
-            "on_prefs_storage_format_changed": self.change_storage_format,
         })
         self.bind_escape_key_close()
 
@@ -123,6 +125,18 @@ class vmmPreferences(vmmGObjectUI):
         combo.set_model(model)
         uihelpers.set_combo_text_column(combo, 1)
 
+        combo = self.widget("prefs-cpu-default")
+        # [gsettings value, string]
+        model = Gtk.ListStore(str, str)
+        for row in [["default", _("System default (%s)") %
+                    self.config.cpu_default_from_config],
+                    ["hv-default", _("Hypervisor default")],
+                    ["host-cpu-model", _("Nearest host CPU model")],
+                    ["host-model", _("Copy host CPU definition")]]:
+            model.append(row)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 1)
+
 
     #########################
     # Config Change Options #
@@ -147,15 +161,17 @@ class vmmPreferences(vmmGObjectUI):
     def refresh_new_vm_sound(self):
         self.widget("prefs-new-vm-sound").set_active(
             self.config.get_new_vm_sound())
-
     def refresh_graphics_type(self):
         combo = self.widget("prefs-graphics-type")
         gtype = self.config.get_graphics_type(raw=True)
         uihelpers.set_row_selection(combo, gtype)
-
     def refresh_storage_format(self):
         combo = self.widget("prefs-storage-format")
         val = self.config.get_default_storage_format(raw=True)
+        uihelpers.set_row_selection(combo, val)
+    def refresh_cpu_default(self):
+        combo = self.widget("prefs-cpu-default")
+        val = self.config.get_default_cpu_setting(raw=True)
         uihelpers.set_row_selection(combo, val)
 
     def refresh_disk_poll(self):
@@ -281,6 +297,24 @@ class vmmPreferences(vmmGObjectUI):
 
     def change_new_vm_sound(self, src):
         self.config.set_new_vm_sound(src.get_active())
+    def change_graphics_type(self, src):
+        gtype = 'vnc'
+        idx = src.get_active()
+        if idx >= 0:
+            gtype = src.get_model()[idx][0]
+        self.config.set_graphics_type(gtype.lower())
+    def change_storage_format(self, src):
+        typ = 'default'
+        idx = src.get_active()
+        if idx >= 0:
+            typ = src.get_model()[idx][0]
+        self.config.set_storage_format(typ.lower())
+    def change_cpu_default(self, src):
+        typ = 'default'
+        idx = src.get_active()
+        if idx >= 0:
+            typ = src.get_model()[idx][0]
+        self.config.set_default_cpu_setting(typ.lower())
 
     def change_disk_poll(self, src):
         self.config.set_stats_enable_disk_poll(src.get_active())
@@ -303,16 +337,3 @@ class vmmPreferences(vmmGObjectUI):
         self.config.set_confirm_unapplied(src.get_active())
     def change_confirm_delstorage(self, src):
         self.config.set_confirm_delstorage(src.get_active())
-
-    def change_graphics_type(self, src):
-        gtype = 'vnc'
-        idx = src.get_active()
-        if idx >= 0:
-            gtype = src.get_model()[idx][0]
-        self.config.set_graphics_type(gtype.lower())
-    def change_storage_format(self, src):
-        typ = 'default'
-        idx = src.get_active()
-        if idx >= 0:
-            typ = src.get_model()[idx][0]
-        self.config.set_storage_format(typ.lower())
