@@ -167,7 +167,7 @@ class vmmConfig(object):
         self.askpass_package = cliconfig.askpass_package
         self.default_graphics_from_config = cliconfig.default_graphics
         self.default_storage_format_from_config = "qcow2"
-        self.cpu_default_from_config = "hv-default"
+        self.cpu_default_from_config = "host-cpu-model"
 
         self._objects = []
 
