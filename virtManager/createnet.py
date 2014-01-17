@@ -257,18 +257,12 @@ class vmmCreateNetwork(vmmGObjectUI):
     ###################
 
     def validate_name(self):
-        name_widget = self.widget("net-name")
-        name = name_widget.get_text()
-        if len(name) > 50 or len(name) == 0:
-            retcode = self.err.val_err(_("Invalid Network Name"),
-                        _("Network name must be non-blank and less than "
-                          "50 characters"))
-            name_widget.grab_focus()
-            return retcode
-        if re.match("^[a-zA-Z0-9_]*$", name) is None:
-            return self.err.val_err(_("Invalid Network Name"),
-                        _("Network name may contain alphanumeric and '_' "
-                          "characters only"))
+        try:
+            net = self._build_xmlstub()
+            net.name = self.widget("net-name").get_text()
+        except Exception, e:
+            return self.err.val_err(_("Invalid network name"), str(e))
+
         return True
 
     def validate_ipv4(self):
@@ -684,8 +678,11 @@ class vmmCreateNetwork(vmmGObjectUI):
     # XML build and install #
     #########################
 
+    def _build_xmlstub(self):
+        return Network(self.conn.get_backend())
+
     def _build_xmlobj(self):
-        net = Network(self.conn.get_backend())
+        net = self._build_xmlstub()
 
         net.name = self.widget("net-name").get_text()
         net.domain_name = self.widget("net-domain-name").get_text() or None

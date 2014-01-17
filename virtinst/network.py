@@ -131,7 +131,9 @@ class Network(XMLBuilder):
     # Validation helpers #
     ######################
 
-    def _check_name_collision(self, name):
+    def _validate_name(self, name):
+        util.validate_name(_("Network"), name)
+
         try:
             self.conn.networkLookupByName(name)
         except libvirt.libvirtError:
@@ -155,7 +157,7 @@ class Network(XMLBuilder):
                        "macaddr", "ips", "routes"]
 
     ipv6 = XMLProperty("./@ipv6", is_yesno=True)
-    name = XMLProperty("./name", validate_cb=_check_name_collision)
+    name = XMLProperty("./name", validate_cb=_validate_name)
     uuid = XMLProperty("./uuid",
                        validate_cb=lambda s, v: util.validate_uuid(v),
                        default_cb=_get_default_uuid)
