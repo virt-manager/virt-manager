@@ -1146,7 +1146,7 @@ class vmmDetails(vmmGObjectUI):
         newrow = self.get_hw_row()
         model = self.widget("hw-list").get_model()
 
-        if newrow[HW_LIST_COL_DEVICE] == self.oldhwkey:
+        if not newrow or newrow[HW_LIST_COL_DEVICE] == self.oldhwkey:
             return
 
         oldhwrow = None
