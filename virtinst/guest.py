@@ -74,7 +74,7 @@ class Guest(XMLBuilder):
 
     @staticmethod
     def validate_name(conn, name, check_collision):
-        util.validate_name(_("Guest"), name, lencheck=True)
+        util.validate_name(_("Guest"), name)
         if not check_collision:
             return
 
