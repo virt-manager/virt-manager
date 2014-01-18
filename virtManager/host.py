@@ -1240,7 +1240,7 @@ class vmmHost(vmmGObjectUI):
                           bool(iface.is_active())])
 
         uihelpers.set_row_selection(iface_list,
-                           curiface and curiface.get_uuid() or None)
+                           curiface and curiface.get_name() or None)
 
     def populate_interface_children(self):
         interface = self.current_interface()
