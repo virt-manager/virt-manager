@@ -145,6 +145,7 @@ class Command(object):
         self.support_check = None
 
         app, opts = self.cmdstr.split(" ", 1)
+        self.app = app
         self.argv = [os.path.abspath(app)] + shlex.split(opts)
 
     def _launch_command(self):
@@ -944,6 +945,7 @@ _cmdlist += vconv.cmds
 
 for _cmd in _cmdlist:
     newidx += 1
-    setattr(CLITests, "testCLI%d" % newidx, maketest(_cmd))
+    setattr(CLITests, "testCLI%s%d" % (_cmd.app.replace("-", ""), newidx),
+            maketest(_cmd))
 
 atexit.register(cleanup)

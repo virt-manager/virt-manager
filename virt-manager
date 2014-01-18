@@ -20,8 +20,8 @@
 # MA 02110-1301 USA.
 #
 
+import argparse
 import logging
-import optparse
 import os
 import signal
 import sys
@@ -81,61 +81,47 @@ def drop_stdio():
     os.dup2(0, 2)
 
 
-class PassThroughOptionParser(optparse.OptionParser):
-    # From http://stackoverflow.com/questions/1885161/how-can-i-get-optparses-optionparser-to-ignore-invalid-options
-    def _process_args(self, largs, rargs, values):
-        while rargs:
-            try:
-                optparse.OptionParser._process_args(self, largs, rargs, values)
-            except (optparse.BadOptionError, optparse.AmbiguousOptionError), e:
-                largs.append(e.opt_str)
-
-
 def parse_commandline():
-    optParser = PassThroughOptionParser(version=cliconfig.__version__,
-                                        usage="virt-manager [options]")
-    optParser.set_defaults(uuid=None)
-    optParser.epilog = ("Also accepts standard GTK arguments like "
-                        "--g-fatal-warnings")
+    epilog = ("Also accepts standard GTK arguments like --g-fatal-warnings")
+    parser = argparse.ArgumentParser(usage="virt-manager [options]",
+                                     epilog=epilog)
+    parser.add_argument('--version', action='version',
+                        version=cliconfig.__version__)
+    parser.set_defaults(uuid=None)
 
     # Trace every libvirt API call to debug output
-    optParser.add_option("--trace-libvirt", dest="tracelibvirt",
-        help=optparse.SUPPRESS_HELP, action="store_true")
+    parser.add_argument("--trace-libvirt", dest="tracelibvirt",
+        help=argparse.SUPPRESS, action="store_true")
 
     # Don't load any connections on startup to test first run
     # PackageKit integration
-    optParser.add_option("--test-first-run", dest="testfirstrun",
-        help=optparse.SUPPRESS_HELP, action="store_true")
+    parser.add_argument("--test-first-run", dest="testfirstrun",
+        help=argparse.SUPPRESS, action="store_true")
 
-    optParser.add_option("-c", "--connect", dest="uri",
+    parser.add_argument("-c", "--connect", dest="uri",
         help="Connect to hypervisor at URI", metavar="URI")
-    optParser.add_option("--debug", action="store_true", dest="debug",
+    parser.add_argument("--debug", action="store_true", dest="debug",
         help="Print debug output to stdout (implies --no-fork)",
         default=False)
-    optParser.add_option("--no-fork", action="store_true", dest="nofork",
+    parser.add_argument("--no-fork", action="store_true", dest="nofork",
         help="Don't fork into background on startup")
-    optParser.add_option("--no-conn-autostart", action="store_true",
-                         dest="no_conn_auto",
-                         help="Do not autostart connections")
+    parser.add_argument("--no-conn-autostart", action="store_true",
+        dest="no_conn_auto", help="Do not autostart connections")
+    parser.add_argument("--spice-disable-auto-usbredir", action="store_true",
+        dest="usbredir", help="Disable Auto USB redirection support")
 
-    optParser.add_option("--show-domain-creator", action="callback",
-        callback=opt_show_cb, dest="show",
+    parser.add_argument("--show-domain-creator", action="store_true",
         help="Show 'New VM' wizard")
-    optParser.add_option("--show-domain-editor", type="string",
-        metavar="UUID", action="callback", callback=opt_show_cb,
+    parser.add_argument("--show-domain-editor", metavar="UUID",
         help="Show domain details window")
-    optParser.add_option("--show-domain-performance", type="string",
-        metavar="UUID", action="callback", callback=opt_show_cb,
+    parser.add_argument("--show-domain-performance", metavar="UUID",
         help="Show domain performance window")
-    optParser.add_option("--show-domain-console", type="string",
-        metavar="UUID", action="callback", callback=opt_show_cb,
+    parser.add_argument("--show-domain-console", metavar="UUID",
         help="Show domain graphical console window")
-    optParser.add_option("--show-host-summary", action="callback",
-       callback=opt_show_cb, help="Show connection details window")
-    optParser.add_option("--spice-disable-auto-usbredir", action="store_true",
-                        dest="usbredir", help="Disable Auto USB redirection support")
+    parser.add_argument("--show-host-summary", action="store_true",
+        help="Show connection details window")
 
-    return optParser.parse_args()
+    return parser.parse_known_args()
 
 
 def launch_specific_window(engine, show, uri, uuid):
@@ -153,17 +139,6 @@ def launch_specific_window(engine, show, uri, uuid):
         engine.show_domain_console(uri, uuid)
     elif show == 'summary':
         engine.show_host_summary(uri)
-
-
-def opt_show_cb(option, opt_str, value, parser):
-    # Generic OptionParser callback for all --show-* options
-    # This routine stores UUID to options.uuid for all --show-* options
-    # where is metavar="UUID" and also sets options.show
-    if option.metavar == "UUID":
-        setattr(parser.values, "uuid", value)
-    s = str(option)
-    show = s[s.rindex('-') + 1:]
-    setattr(parser.values, "show", show)
 
 
 def main():
@@ -255,9 +230,26 @@ def main():
 
     Gtk.Window.set_default_icon_name("virt-manager")
 
-    if options.show and options.uri is None:
-        raise optparse.OptionValueError("can't use --show-* options "
-                                        "without --connect")
+    show = None
+    if options.show_domain_creator:
+        show = "creator"
+    elif options.show_domain_editor:
+        show = "editor"
+    elif options.show_domain_performance:
+        show = "performance"
+    elif options.show_domain_console:
+        show = "console"
+    elif options.show_host_summary:
+        show = "summary"
+
+    if show and options.uri is None:
+        raise RuntimeError("can't use --show-* options without --connect")
+    if show:
+        options.uuid = (options.uuid or options.show_domain_creator or
+                        options.show_domain_editor or
+                        options.show_domain_performance or
+                        options.show_domain_console or
+                        options.show_host_summary)
 
     # Hook libvirt events into glib main loop
     LibvirtGLib.init(None)
@@ -267,11 +259,10 @@ def main():
     engine.skip_autostart = options.no_conn_auto
     engine.uri_at_startup = options.uri
 
-    if options.show:
+    if show:
         def cb(conn):
             ignore = conn
-            launch_specific_window(engine,
-                                   options.show, options.uri, options.uuid)
+            launch_specific_window(engine, show, options.uri, options.uuid)
             return True
         engine.uri_cb = cb
         engine.show_manager_window = False

@@ -20,7 +20,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import optparse
 import sys
 
 import urlgrabber.progress as progress
@@ -34,46 +33,41 @@ from virtinst import virtimage
 ### Option parsing
 def parse_args():
     parser = cli.setupParser(
-        "%prog image.xml [OPTIONS]",
+        "%(prog)s image.xml [OPTIONS]",
         _("Create a virtual machine from a virt-image(5) image descriptor."))
     cli.add_connect_option(parser)
 
-    geng = optparse.OptionGroup(parser, _("General Options"))
-    geng.add_option("-n", "--name", dest="name",
+    parser.add_argument("image", metavar="image.xml", nargs='?',
+                        help=_("virt-image(5) image descriptor"))
+
+    geng = parser.add_argument_group(_("General Options"))
+    geng.add_argument("-n", "--name", dest="name",
                     help=_("Name of the guest instance"))
-    geng.add_option("-r", "--ram", type="int", dest="memory",
+    geng.add_argument("-r", "--ram", type=int, dest="memory",
                     help=_("Memory to allocate for guest instance in "
                            "megabytes"))
-    geng.add_option("-u", "--uuid", dest="uuid",
+    geng.add_argument("-u", "--uuid", dest="uuid",
                     help=_("UUID for the guest."))
     cli.vcpu_cli_options(geng)
     cli.add_distro_options(geng)
     cli.add_old_feature_options(geng)
-    parser.add_option_group(geng)
 
-    netg = cli.network_option_group(parser)
-    parser.add_option_group(netg)
+    cli.network_option_group(parser)
+    cli.graphics_option_group(parser)
 
-    vncg = cli.graphics_option_group(parser)
-    parser.add_option_group(vncg)
-
-    misc = optparse.OptionGroup(parser, _("Miscellaneous Options"))
-    misc.add_option("--boot", type="int", dest="boot",
+    misc = parser.add_argument_group(_("Miscellaneous Options"))
+    misc.add_argument("--boot", type=int, dest="boot",
                     help=_("The zero-based index of the boot record to use"))
-    misc.add_option("--skip-checksum", action="store_true",
+    misc.add_argument("--skip-checksum", action="store_true",
                     dest="skipchecksum",
                     help=_("Skip disk checksum verification process"))
 
     cli.add_misc_options(misc, prompt=True, replace=True, printxml=True,
                          noreboot=True)
-    parser.add_option_group(misc)
 
-    (options, args) = parser.parse_args()
-
-    if len(args) < 1:
+    options = parser.parse_args()
+    if not options.image:
         parser.error(_("You need to provide an image XML descriptor"))
-    options.image = args[0]
-
     return options
 
 

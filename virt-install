@@ -17,12 +17,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
+import argparse
+import logging
 import os
+import re
 import sys
 import time
-import re
-import logging
-import optparse
 
 import libvirt
 import urlgrabber.progress as progress
@@ -882,140 +882,131 @@ def xml_to_print(guest, continue_inst, xmlonly, xmlstep, dry):
 
 def parse_args():
     parser = cli.setupParser(
-        "%prog --name NAME --ram RAM STORAGE INSTALL [options]",
+        "%(prog)s --name NAME --ram RAM STORAGE INSTALL [options]",
         _("Create a new virtual machine from specified install media."))
     cli.add_connect_option(parser)
 
-    geng = optparse.OptionGroup(parser, _("General Options"))
-    geng.add_option("-n", "--name", dest="name",
+    geng = parser.add_argument_group(_("General Options"))
+    geng.add_argument("-n", "--name", dest="name",
                     help=_("Name of the guest instance"))
-    geng.add_option("-r", "--ram", type="int", dest="memory",
+    geng.add_argument("-r", "--ram", type=int, dest="memory",
                     help=_("Memory to allocate for guest instance in "
                            "megabytes"))
     cli.vcpu_cli_options(geng)
-    geng.add_option("--description", dest="description",
+    geng.add_argument("--description", dest="description",
                     help=_("Human readable description of the VM to store in "
                            "the generated XML."))
-    geng.add_option("--security", dest="security",
+    geng.add_argument("--security", dest="security",
                     help=_("Set domain security driver configuration."))
-    geng.add_option("--numatune", dest="numatune",
+    geng.add_argument("--numatune", dest="numatune",
                     help=_("Tune NUMA policy for the domain process."))
-    geng.add_option("--features", dest="features",
+    geng.add_argument("--features", dest="features",
                     help=_("Set domain <features> XML. Ex:\n"
                            "--features acpi=off\n"
                            "--features apic=on,eoi=on"))
-    geng.add_option("--clock", dest="clock",
+    geng.add_argument("--clock", dest="clock",
                     help=_("Set domain <clock> XML. Ex:\n"
                            "--clock offset=localtime,rtc_tickpolicy=catchup"))
-    parser.add_option_group(geng)
 
-    insg = optparse.OptionGroup(parser, _("Installation Method Options"))
-    insg.add_option("-c", dest="cdrom_short", help=optparse.SUPPRESS_HELP)
-    insg.add_option("--cdrom", dest="cdrom",
+    insg = parser.add_argument_group(_("Installation Method Options"))
+    insg.add_argument("-c", dest="cdrom_short", help=argparse.SUPPRESS)
+    insg.add_argument("--cdrom", dest="cdrom",
                     help=_("CD-ROM installation media"))
-    insg.add_option("-l", "--location", dest="location",
+    insg.add_argument("-l", "--location", dest="location",
                     help=_("Installation source (eg, nfs:host:/path, "
                            "http://host/path, ftp://host/path)"))
-    insg.add_option("--pxe", action="store_true", dest="pxe",
+    insg.add_argument("--pxe", action="store_true", dest="pxe",
                     help=_("Boot from the network using the PXE protocol"))
-    insg.add_option("--import", action="store_true", dest="import_install",
+    insg.add_argument("--import", action="store_true", dest="import_install",
                     help=_("Build guest around an existing disk image"))
-    insg.add_option("--init", dest="init",
+    insg.add_argument("--init", dest="init",
                     help=_("Path to init binary for container guest. Ex:\n"
                            "--init /path/to/app (to contain an application)\n"
                            "--init /sbin/init (for a full OS container)"))
-    insg.add_option("--livecd", action="store_true", dest="livecd",
+    insg.add_argument("--livecd", action="store_true", dest="livecd",
                     help=_("Treat the CD-ROM media as a Live CD"))
-    insg.add_option("-x", "--extra-args", dest="extra",
+    insg.add_argument("-x", "--extra-args", dest="extra",
                     default="",
                     help=_("Additional arguments to pass to the install kernel "
                            "booted from --location"))
-    insg.add_option("--initrd-inject", dest="initrd_injections",
+    insg.add_argument("--initrd-inject", dest="initrd_injections",
                     action="append",
                     help=_("Add given file to root of initrd from --location"))
     cli.add_distro_options(insg)
-    insg.add_option("--boot", dest="bootopts", default="",
+    insg.add_argument("--boot", dest="bootopts", default="",
                     help=_("Optionally configure post-install boot order, "
                            "menu, permanent kernel boot, etc."))
-    parser.add_option_group(insg)
 
-    stog = optparse.OptionGroup(parser, _("Storage Configuration"))
-    stog.add_option("--disk", dest="diskopts", action="append",
+    stog = parser.add_argument_group(_("Storage Configuration"))
+    stog.add_argument("--disk", dest="diskopts", action="append",
         help=_("Specify storage with various options. Ex.\n"
                "--disk path=/my/existing/disk\n"
                "--disk path=/my/new/disk,size=5 (in gigabytes)\n"
                "--disk vol=poolname/volname,device=cdrom,bus=scsi,..."))
-    stog.add_option("--nodisks", action="store_true",
+    stog.add_argument("--nodisks", action="store_true",
                     help=_("Don't set up any disks for the guest."))
     cli.add_fs_option(stog)
 
     # Deprecated storage options
-    stog.add_option("-f", "--file", dest="file_paths", action="append",
-                    help=optparse.SUPPRESS_HELP)
-    stog.add_option("-s", "--file-size", type="float",
+    stog.add_argument("-f", "--file", dest="file_paths", action="append",
+                    help=argparse.SUPPRESS)
+    stog.add_argument("-s", "--file-size", type=float,
                     action="append", dest="disksize",
-                    help=optparse.SUPPRESS_HELP)
-    stog.add_option("--nonsparse", action="store_false",
+                    help=argparse.SUPPRESS)
+    stog.add_argument("--nonsparse", action="store_false",
                     default=True, dest="sparse",
-                    help=optparse.SUPPRESS_HELP)
-    parser.add_option_group(stog)
+                    help=argparse.SUPPRESS)
 
     netg = cli.network_option_group(parser)
 
-    netg.add_option("--nonetworks", action="store_true",
+    netg.add_argument("--nonetworks", action="store_true",
                     help=_("Don't create network interfaces for the guest."))
-    parser.add_option_group(netg)
 
     vncg = cli.graphics_option_group(parser)
-    vncg.add_option("--noautoconsole", action="store_false",
+    vncg.add_argument("--noautoconsole", action="store_false",
                     dest="autoconsole", default=True,
                     help=_("Don't automatically try to connect to the guest "
                            "console"))
-    parser.add_option_group(vncg)
 
-    devg = optparse.OptionGroup(parser, _("Device Options"))
+    devg = parser.add_argument_group(_("Device Options"))
     cli.add_device_options(devg)
 
     # Deprecated
-    devg.add_option("--sound", action="store_true", dest="old_sound_bool",
-                    default=False, help=optparse.SUPPRESS_HELP)
-    parser.add_option_group(devg)
+    devg.add_argument("--sound", action="store_true", dest="old_sound_bool",
+                    default=False, help=argparse.SUPPRESS)
 
-    virg = optparse.OptionGroup(parser, _("Virtualization Platform Options"))
-    virg.add_option("-v", "--hvm", action="store_true", dest="fullvirt",
+    virg = parser.add_argument_group(_("Virtualization Platform Options"))
+    virg.add_argument("-v", "--hvm", action="store_true", dest="fullvirt",
                       help=_("This guest should be a fully virtualized guest"))
-    virg.add_option("-p", "--paravirt", action="store_true", dest="paravirt",
+    virg.add_argument("-p", "--paravirt", action="store_true", dest="paravirt",
                     help=_("This guest should be a paravirtualized guest"))
-    virg.add_option("--container", action="store_true", default=False,
+    virg.add_argument("--container", action="store_true", default=False,
                     dest="container",
                     help=_("This guest should be a container guest"))
-    virg.add_option("--virt-type", dest="hv_type",
+    virg.add_argument("--virt-type", dest="hv_type",
                     default="",
                     help=_("Hypervisor name to use (kvm, qemu, xen, ...)"))
-    virg.add_option("--accelerate", action="store_true", default=False,
-                    dest="accelerate", help=optparse.SUPPRESS_HELP)
-    virg.add_option("--arch", dest="arch",
+    virg.add_argument("--accelerate", action="store_true", default=False,
+                    dest="accelerate", help=argparse.SUPPRESS)
+    virg.add_argument("--arch", dest="arch",
                     help=_("The CPU architecture to simulate"))
-    virg.add_option("--machine", dest="machine",
+    virg.add_argument("--machine", dest="machine",
                     help=_("The machine type to emulate"))
-    virg.add_option("-u", "--uuid", dest="uuid",
+    virg.add_argument("-u", "--uuid", dest="uuid",
                     help=_("UUID for the guest."))
     cli.add_old_feature_options(virg)
-    parser.add_option_group(virg)
 
-    misc = optparse.OptionGroup(parser, _("Miscellaneous Options"))
-    misc.add_option("--autostart", action="store_true", dest="autostart",
+    misc = parser.add_argument_group(_("Miscellaneous Options"))
+    misc.add_argument("--autostart", action="store_true", dest="autostart",
                     default=False,
                     help=_("Have domain autostart on host boot up."))
-    misc.add_option("--wait", type="int", dest="wait",
+    misc.add_argument("--wait", type=int, dest="wait",
                     help=_("Minutes to wait for install to complete."))
 
     cli.add_misc_options(misc, prompt=True, printxml=True, printstep=True,
                          noreboot=True, dryrun=True)
-    parser.add_option_group(misc)
 
-    (options, cliargs) = parser.parse_args()
-    return options, cliargs
+    return parser.parse_args()
 
 
 ###################
@@ -1024,15 +1015,13 @@ def parse_args():
 
 def main(conn=None):
     cli.earlyLogging()
-    options, cliargs = parse_args()
+    options = parse_args()
 
     # Default setup options
     options.quiet = options.xmlstep or options.xmlonly or options.quiet
 
     cli.setupLogging("virt-install", options.debug, options.quiet)
 
-    if cliargs:
-        fail(_("Unknown argument '%s'") % cliargs[0])
     check_cdrom_option_error(options)
 
     if options.distro_variant == "list":
