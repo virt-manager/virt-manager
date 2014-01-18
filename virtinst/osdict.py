@@ -238,7 +238,7 @@ _add_var("rhel4", "Red Hat Enterprise Linux 4", supported=True, parent="rhel3")
 _add_var("rhel5", "Red Hat Enterprise Linux 5", supported=False, parent="rhel4")
 _add_var("rhel5.4", "Red Hat Enterprise Linux 5.4 or later", supported=True, virtiodisk=True, virtionet=True, parent="rhel5")
 _add_var("rhel6", "Red Hat Enterprise Linux 6", inputtype="tablet", inputbus="usb", parent="rhel5.4")
-_add_var("rhel7", "Red Hat Enterprise Linux 7 (or later)", parent="rhel6")
+_add_var("rhel7", "Red Hat Enterprise Linux 7 (or later)", parent="rhel6", qemu_ga=True, virtioconsole=True, virtiommio=True)
 
 _add_var("fedora5", "Fedora Core 5", sortby="fedora05", urldistro="fedora", parent="linux")
 _add_var("fedora6", "Fedora Core 6", sortby="fedora06", parent="fedora5")
