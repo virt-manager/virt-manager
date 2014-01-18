@@ -145,6 +145,15 @@ class vmmConnection(vmmGObject):
                      for pool in self.pools.values()
                      for obj in pool.get_volumes(refresh=False).values()])
 
+        def clear_cache(pools=False):
+            if not pools:
+                return
+
+            # We need to do this synchronously
+            self.tick(False, pollpool=True)
+
+        self._backend.cb_clear_cache = clear_cache
+
 
     def _init_netdev(self):
         """

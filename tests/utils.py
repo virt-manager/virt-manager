@@ -92,16 +92,14 @@ def openconn(uri):
             cache["vols"] = conn._fetch_all_vols_cached()
         return cache["vols"]
 
-    conn.clitest_orig_clear = conn.clear_cache
-    def clear_cache():
-        conn.clitest_orig_clear()
-        cache.clear()
-    conn.clear_cache = clear_cache
+    def cb_clear_cache(pools=False):
+        if pools:
+            cache.pop("pools", None)
 
     conn.cb_fetch_all_guests = cb_fetch_all_guests
     conn.cb_fetch_all_pools = cb_fetch_all_pools
     conn.cb_fetch_all_vols = cb_fetch_all_vols
-
+    conn.cb_clear_cache = cb_clear_cache
 
     return conn
 

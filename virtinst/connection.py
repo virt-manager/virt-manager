@@ -104,6 +104,7 @@ class VirtualConnection(object):
         self.cb_fetch_all_guests = None
         self.cb_fetch_all_pools = None
         self.cb_fetch_all_vols = None
+        self.cb_clear_cache = None
 
 
     ##############
@@ -164,8 +165,12 @@ class VirtualConnection(object):
             self._uri = self._libvirtconn.getURI()
             self._urisplits = util.uri_split(self._uri)
 
+    _FETCH_KEY_GUESTS = "vms"
+    _FETCH_KEY_POOLS = "pools"
+    _FETCH_KEY_VOLS = "vols"
+
     def _fetch_all_guests_cached(self):
-        key = "vms"
+        key = self._FETCH_KEY_GUESTS
         if key in self._fetch_cache:
             return self._fetch_cache[key]
 
@@ -186,7 +191,7 @@ class VirtualConnection(object):
         return self._fetch_all_guests_cached()
 
     def _fetch_all_pools_cached(self):
-        key = "pools"
+        key = self._FETCH_KEY_POOLS
         if key in self._fetch_cache:
             return self._fetch_cache[key]
 
@@ -207,7 +212,7 @@ class VirtualConnection(object):
         return self._fetch_all_pools_cached()
 
     def _fetch_all_vols_cached(self):
-        key = "vols"
+        key = self._FETCH_KEY_VOLS
         if key in self._fetch_cache:
             return self._fetch_cache[key]
 
@@ -231,8 +236,13 @@ class VirtualConnection(object):
             return self.cb_fetch_all_vols()  # pylint: disable=E1102
         return self._fetch_all_vols_cached()
 
-    def clear_cache(self):
-        self._fetch_cache = {}
+    def clear_cache(self, pools=False):
+        if self.cb_clear_cache:
+            self.cb_clear_cache(pools=pools)  # pylint: disable=E1102
+            return
+
+        if pools:
+            self._fetch_cache.pop(self._FETCH_KEY_POOLS, None)
 
 
     #########################
