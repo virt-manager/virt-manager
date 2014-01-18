@@ -279,19 +279,6 @@ class Host(object):
         return self.secmodels and self.secmodels[0] or None
     secmodel = property(get_secmodel)
 
-    # Back compat for CPU class
-    def get_arch(self):
-        return self.cpu.arch
-    def set_arch(self, val):
-        self.cpu.arch = val
-    arch = property(get_arch, set_arch)
-
-    def get_features(self):
-        return self.cpu.features
-    def set_features(self, val):
-        self.cpu.features = val
-    features = property(get_features, set_features)
-
     def parseXML(self, node):
         child = node.children
         while child:
@@ -550,8 +537,8 @@ class Capabilities(object):
                 break
 
         # Obvious case of feature being specified
-        if (self.host.features["vmx"] == FEATURE_ON or
-            self.host.features["svm"] == FEATURE_ON):
+        if (self.host.cpu.features["vmx"] == FEATURE_ON or
+            self.host.cpu.features["svm"] == FEATURE_ON):
             return True
 
         # Xen seems to block the vmx/svm feature bits from cpuinfo?
@@ -561,7 +548,7 @@ class Capabilities(object):
 
         # If there is other features, but no virt bit, then HW virt
         # isn't supported
-        if len(self.host.features.names()):
+        if len(self.host.cpu.features.names()):
             return False
 
         # Xen caps have always shown this info, so if we didn't find any
@@ -637,7 +624,7 @@ class Capabilities(object):
             return None
 
         if arch is None:
-            archs = [self.host.arch, None]
+            archs = [self.host.cpu.arch, None]
         else:
             archs = [arch]
 

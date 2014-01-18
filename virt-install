@@ -208,7 +208,7 @@ def prompt_virt(caps, arch, req_virt_type, req_accel):
             supports_pv = True
 
     if not arch:
-        arch = caps.host.arch
+        arch = caps.host.cpu.arch
 
     if not req_virt_type:
         if supports_hvm and supports_pv:

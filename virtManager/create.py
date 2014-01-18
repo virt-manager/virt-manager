@@ -713,13 +713,13 @@ class vmmCreate(vmmGObjectUI):
                 archs.append(guest.arch)
 
         # Combine x86/i686 to avoid confusion
-        if (self.conn.caps.host.arch == "x86_64" and
+        if (self.conn.caps.host.cpu.arch == "x86_64" and
             "x86_64" in archs and "i686" in archs):
             archs.remove("i686")
         archs.sort()
 
         prios = ["x86_64", "i686", "armv7l", "ppc64"]
-        if self.conn.caps.host.arch not in prios:
+        if self.conn.caps.host.cpu.arch not in prios:
             prios = []
         else:
             for p in prios[:]:
@@ -1580,7 +1580,7 @@ class vmmCreate(vmmGObjectUI):
         else:
             basename = variant
 
-        if self.guest.os.arch != self.conn.caps.host.arch:
+        if self.guest.os.arch != self.conn.caps.host.cpu.arch:
             basename += "-%s" % pretty_arch(self.guest.os.arch)
             force_num = False
 

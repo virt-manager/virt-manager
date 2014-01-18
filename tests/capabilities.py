@@ -54,9 +54,9 @@ class TestCapabilities(unittest.TestCase):
         caps = self._buildCaps(path)
 
         if host_arch:
-            self.assertEqual(host_arch,     caps.host.arch)
+            self.assertEqual(host_arch, caps.host.cpu.arch)
             for n in host_features:
-                self.assertEqual(host_features[n], caps.host.features[n])
+                self.assertEqual(host_features[n], caps.host.cpu.features[n])
 
         if secmodel:
             self.assertEqual(secmodel[0], caps.host.secmodel.model)
@@ -167,7 +167,7 @@ class TestCapabilities(unittest.TestCase):
 
         caps = self._buildCaps(filename)
         for f in feature_dict.keys():
-            self.assertEquals(caps.host.features[f], feature_dict[f])
+            self.assertEquals(caps.host.cpu.features[f], feature_dict[f])
 
     def testCapsCPUFeaturesOldSyntaxSVM(self):
         filename = "rhel5.4-xen-caps.xml"
@@ -176,7 +176,7 @@ class TestCapabilities(unittest.TestCase):
 
         caps = self._buildCaps(filename)
         for f in feature_dict.keys():
-            self.assertEquals(caps.host.features[f], feature_dict[f])
+            self.assertEquals(caps.host.cpu.features[f], feature_dict[f])
 
     def testCapsCPUFeaturesNewSyntax(self):
         filename = "libvirt-0.7.6-qemu-caps.xml"
@@ -186,7 +186,7 @@ class TestCapabilities(unittest.TestCase):
 
         caps = self._buildCaps(filename)
         for f in feature_dict.keys():
-            self.assertEquals(caps.host.features[f], feature_dict[f])
+            self.assertEquals(caps.host.cpu.features[f], feature_dict[f])
 
         self.assertEquals(caps.host.cpu.model, "core2duo")
         self.assertEquals(caps.host.cpu.vendor, "Intel")

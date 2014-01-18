@@ -83,6 +83,6 @@ class OSXML(XMLBuilder):
     init = XMLProperty("./init")
     loader = XMLProperty("./loader")
     arch = XMLProperty("./type/@arch",
-                       default_cb=lambda s: s.conn.caps.host.arch)
+                       default_cb=lambda s: s.conn.caps.host.cpu.arch)
     machine = XMLProperty("./type/@machine")
     os_type = XMLProperty("./type", default_cb=lambda s: "xen")

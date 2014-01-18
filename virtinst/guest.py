@@ -681,7 +681,7 @@ class Guest(XMLBuilder):
             return
 
         if self.os.is_hvm() and self.type == "xen":
-            if self.conn.caps.host.arch == "x86_64":
+            if self.conn.caps.host.cpu.arch == "x86_64":
                 self.emulator = "/usr/lib64/xen/bin/qemu-dm"
             else:
                 self.emulator = "/usr/lib/xen/bin/qemu-dm"
