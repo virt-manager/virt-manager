@@ -496,18 +496,17 @@ class vmmCreateInterface(vmmGObjectUI):
 
         self.widget("interface-list-text").set_text(msg)
 
-        iface_list = []
-        row_dict = {}
-
+        nodedevs = {}
         for phys in self.conn.get_nodedevs("net"):
-            row_dict[phys.interface] = [phys.interface,
+            nodedevs[phys.interface] = [None,
                                         False, False, phys.interface,
                                         "ethernet", False, True, None,
                                         phys.address]
 
+        row_dict = {}
         for name in self.conn.list_interface_names():
             iface = self.conn.get_interface(name)
-            key = iface.get_backend()
+            key = iface.get_xmlobj()
             iface_type = iface.get_type()
             active = iface.is_active()
             name = iface.get_name()
@@ -516,15 +515,18 @@ class vmmCreateInterface(vmmGObjectUI):
                 continue
 
             if itype == Interface.INTERFACE_TYPE_ETHERNET:
-                if name in row_dict:
-                    del(row_dict[name])
+                # When adding an ethernet definition, we only want
+                # 'unconfigured' interfaces, so stuff in nodedevs that's
+                # not in returned by the interface APIs
+                if name in nodedevs:
+                    del(nodedevs[name])
 
                 # We only want 'unconfigured' interfaces here
                 continue
 
-            if name in row_dict:
+            if name in nodedevs:
                 # Interface was listed via nodedev APIs
-                row = row_dict[name]
+                row = nodedevs.pop(name)
                 row[INTERFACE_ROW_KEY] = key
                 row[INTERFACE_ROW_IS_DEFINED] = True
                 row[INTERFACE_ROW_IS_ACTIVE] = True
@@ -534,7 +536,14 @@ class vmmCreateInterface(vmmGObjectUI):
                 row = [key, False, False,
                        iface.get_name(), iface.get_type(), True,
                        active, None, iface.get_mac()]
-                row_dict[name] = row
+            row_dict[name] = row
+
+        for name, row in nodedevs.items():
+            key = Interface(self.conn.get_backend())
+            key.type = Interface.INTERFACE_TYPE_ETHERNET
+            key.name = name
+            row[INTERFACE_ROW_KEY] = key
+            row_dict[name] = row
 
         for row in row_dict.values():
             name = row[INTERFACE_ROW_NAME]
@@ -922,7 +931,7 @@ class vmmCreateInterface(vmmGObjectUI):
                 itype == Interface.INTERFACE_TYPE_BOND):
                 for row in ifaces:
                     child = Interface(self.conn.get_backend(),
-                                    parsexml=row[INTERFACE_ROW_KEY].XMLDesc(0))
+                        parsexml=row[INTERFACE_ROW_KEY].get_xml_config())
                     iobj.add_interface(child)
                 check_conflict = True
 
