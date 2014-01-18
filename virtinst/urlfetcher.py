@@ -365,7 +365,6 @@ class Distro(object):
     _boot_iso_paths = []
     _hvm_kernel_paths = []
     _xen_kernel_paths = []
-    _method_arg = "method"
     uses_treeinfo = False
 
     def __init__(self, fetcher, arch, vmtype):
@@ -439,6 +438,9 @@ class Distro(object):
 
         return self.os_variant
 
+    def _get_method_arg(self):
+        return "method"
+
     def _hasTreeinfo(self):
         # all Red Hat based distros should have .treeinfo, perhaps others
         # will in time
@@ -498,7 +500,7 @@ class Distro(object):
         args = ''
 
         if not self.fetcher.location.startswith("/"):
-            args += "%s=%s" % (self._method_arg, self.fetcher.location)
+            args += "%s=%s" % (self._get_method_arg(), self.fetcher.location)
 
         if guest.installer.extraargs:
             args += " " + guest.installer.extraargs
@@ -609,6 +611,7 @@ class RedHatDistro(Distro):
     a common layout
     """
     os_variant = "linux"
+    _version_number = None
 
     uses_treeinfo = True
     _boot_iso_paths   = ["images/boot.iso"]
@@ -620,35 +623,23 @@ class RedHatDistro(Distro):
     def isValidStore(self):
         raise NotImplementedError()
 
+    def _get_method_arg(self):
+        if (self._version_number is not None and
+            ((self.urldistro is "rhel" and self._version_number >= 7) or
+             (self.urldistro is "fedora" and self._version_number >= 19))):
+            return "inst.repo"
+        return "method"
+
 
 # Fedora distro check
 class FedoraDistro(RedHatDistro):
     name = "Fedora"
     urldistro = "fedora"
 
-    def isValidStore(self):
-        if self._hasTreeinfo():
-            m = re.match(".*Fedora.*", self.treeinfo.get("general", "family"))
-            ret = (m is not None)
-
-            if ret:
-                lateststr, latestnum = self._latestFedoraVariant()
-                ver = self.treeinfo.get("general", "version")
-                if ver == "development" or ver == "rawhide":
-                    self.os_variant = lateststr
-                elif ver:
-                    vernum = int(str(ver).split("-")[0])
-                    if vernum > latestnum:
-                        self.os_variant = lateststr
-                    else:
-                        self.os_variant = "fedora" + str(vernum)
-
-
-            return ret
-
-        return self.fetcher.hasFile("Fedora")
-
     def _latestFedoraVariant(self):
+        """
+        Search osdict list, find newest fedora version listed
+        """
         ret = None
         for osinfo in osdict.list_os(typename="linux"):
             if osinfo.name.startswith("fedora"):
@@ -657,6 +648,28 @@ class FedoraDistro(RedHatDistro):
                 break
 
         return ret, int(ret[6:])
+
+    def isValidStore(self):
+        if not self._hasTreeinfo():
+            return self.fetcher.hasFile("Fedora")
+
+        if not re.match(".*Fedora.*", self.treeinfo.get("general", "family")):
+            return False
+
+        lateststr, latestnum = self._latestFedoraVariant()
+        ver = self.treeinfo.get("general", "version")
+        if ver == "development" or ver == "rawhide":
+            vernum = latestnum
+            self.os_variant = lateststr
+        elif ver:
+            vernum = int(str(ver).split("-")[0])
+            if vernum > latestnum:
+                self.os_variant = lateststr
+            else:
+                self.os_variant = "fedora" + str(vernum)
+
+        self._version_number = vernum
+        return True
 
 
 # Red Hat Enterprise Linux distro check
@@ -711,6 +724,7 @@ class RHELDistro(RedHatDistro):
             return
 
         version, update = self._parseTreeinfoVersion(ver)
+        self._version_number = version
         self._setRHELVariant(version, update)
 
     def _setRHELVariant(self, version, update):
@@ -776,14 +790,11 @@ class SLDistro(RHELDistro):
         return self.fetcher.hasFile("SL")
 
 
-# Suse image store is harder - we fetch the kernel RPM and a helper
-# RPM and then munge bits together to generate a initrd
 class SuseDistro(Distro):
     name = "SUSE"
     urldistro = "suse"
     os_variant = "linux"
 
-    _method_arg = "install"
     _boot_iso_paths   = ["boot/boot.iso"]
 
     def __init__(self, *args, **kwargs):
@@ -815,6 +826,8 @@ class SuseDistro(Distro):
         self.os_variant = self._detect_osdict_from_url()
         return True
 
+    def _get_method_arg(self):
+        return "install"
 
     ################################
     # osdict autodetection helpers #
