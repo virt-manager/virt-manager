@@ -1,0 +1,19 @@
+--- Original XML
++++ Altered XML
+@@ -124,11 +124,10 @@
+       <source dir="/foo/bar"/>
+       <target dir="/bar/baz"/>
+     </filesystem>
+-    <interface type="network">
+-      <mac address="22:22:33:54:32:10"/>
+-      <source network="default"/>
++    <interface type="bridge">
++      <source bridge="br0"/>
+       <target dev="testnet0"/>
+-      <model type="e1000"/>
++      <model type="virtio"/>
+     </interface>
+     <interface type="network">
+       <mac address="22:11:11:11:11:11"/>
+
+Domain 'test-many-devices' defined successfully.

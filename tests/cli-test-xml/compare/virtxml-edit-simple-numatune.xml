@@ -1,0 +1,13 @@
+--- Original XML
++++ Altered XML
+@@ -11,7 +11,7 @@
+   </memoryBacking>
+   <vcpu placement="static" cpuset="1-2,5-9,11,13-14">9</vcpu>
+   <numatune>
+-    <memory mode="interleave" placement="auto"/>
++    <memory mode="strict" placement="auto" nodeset="1-5,7"/>
+   </numatune>
+   <os>
+     <type arch="i686">hvm</type>
+
+Domain 'test-many-devices' defined successfully.

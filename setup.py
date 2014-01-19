@@ -32,7 +32,7 @@ def _generate_potfiles_in():
         return ret
 
     scripts = ["virt-manager", "virt-install",
-               "virt-clone", "virt-image", "virt-convert"]
+               "virt-clone", "virt-image", "virt-convert", "virt-xml"]
 
     potfiles = "\n".join(scripts) + "\n\n"
     potfiles += "\n".join(find("virtManager", "*.py")) + "\n\n"
@@ -145,7 +145,7 @@ class my_build(build):
 
     def _make_bin_wrappers(self):
         cmds = ["virt-manager", "virt-install", "virt-clone",
-                "virt-image", "virt-convert"]
+                "virt-image", "virt-convert", "virt-xml"]
 
         if not os.path.exists("build"):
             os.mkdir("build")
@@ -559,7 +559,7 @@ class CheckPylint(Command):
 
     def run(self):
         files = ["setup.py", "virt-install", "virt-clone", "virt-image",
-                 "virt-convert", "virt-manager",
+                 "virt-convert", "virt-xml", "virt-manager",
                  "virtcli", "virtinst", "virtconv", "virtManager",
                  "tests"]
 
@@ -590,7 +590,8 @@ setup(
         "build/virt-clone",
         "build/virt-install",
         "build/virt-image",
-        "build/virt-convert"]),
+        "build/virt-convert",
+        "build/virt-xml"]),
 
     data_files=[
         ("share/virt-manager/", [
@@ -599,6 +600,7 @@ setup(
             "virt-clone",
             "virt-image",
             "virt-convert",
+            "virt-xml",
         ]),
         ("share/glib-2.0/schemas",
          ["data/org.virt-manager.virt-manager.gschema.xml"]),
@@ -609,7 +611,8 @@ setup(
             "man/virt-install.1",
             "man/virt-clone.1",
             "man/virt-image.1",
-            "man/virt-convert.1"
+            "man/virt-convert.1",
+            "man/virt-xml.1"
         ]),
         ("share/man/man5", ["man/virt-image.5"]),
 

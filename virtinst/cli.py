@@ -974,37 +974,37 @@ class _VirtCLIArgument(object):
         self.ignore_default = ignore_default
 
 
-    def parse(self, opts, inst, support_cb=None):
+    def parse(self, opts, inst, support_cb=None, lookup=False):
         val = opts.get_opt_param(self.cliname)
         if val is None:
             return
+        if val == "":
+            val = None
 
         if support_cb:
             support_cb(inst, self.attrname, self.cliname)
         if self.is_onoff:
             val = _on_off_convert(self.cliname, val)
-        if val == "default" and self.ignore_default:
+        if val == "default" and self.ignore_default and not lookup:
             return
 
-        attr = None
+        if lookup and not self.attrname:
+            raise RuntimeError(_("Don't know how to match %s property %s") %
+                (getattr(inst, "virtual_device_type", ""), self.cliname))
+
         try:
-            if self.setter_cb:
-                attr = None
-            elif callable(self.attrname):
-                attr = self.attrname
-            else:
-                attr = eval("inst." + self.attrname)
+            if self.attrname:
+                eval("inst." + self.attrname)
         except AttributeError:
             raise RuntimeError("programming error: obj=%s does not have "
                                "member=%s" % (inst, self.attrname))
 
-        if self.setter_cb:
+        if lookup:
+            return eval("inst." + self.attrname) == val
+        elif self.setter_cb:
             self.setter_cb(opts, inst, self.cliname, val)
-        elif callable(attr):
-            attr(val)
         else:
             exec("inst." + self.attrname + " = val")  # pylint: disable=W0122
-
 
 
 class VirtOptionString(object):
@@ -1116,7 +1116,11 @@ class VirtCLIParser(object):
     A command line argument just extends this interface, implements
     _init_params, and calls set_param in the order it wants the options
     parsed on the command line. See existing impls examples of how to
-    do all sorts of crazy stuff
+    do all sorts of crazy stuff.
+
+    set_param must be set unconditionally (ex from _init_params and not
+    from overriding _parse), so that we can show all options when the
+    user requests command line introspection like --disk=?
     """
     devclass = None
 
@@ -1206,6 +1210,28 @@ class VirtCLIParser(object):
             return ret[0]
         return ret
 
+    def lookup_device_from_option_string(self, guest, optstr):
+        """
+        Given a passed option string, search the guests' device list
+        for all devices which match the passed options.
+        """
+        devlist = guest.get_devices(self.devclass.virtual_device_type)[:]
+        ret = []
+
+        for inst in devlist:
+            opts = VirtOptionString(optstr, self._params,
+                                    remove_first=self.remove_first)
+            valid = True
+            for param in self._params:
+                if param.parse(opts, inst,
+                               support_cb=None, lookup=True) is False:
+                    valid = False
+                    break
+            if valid:
+                ret.append(inst)
+
+        return ret
+
     def _parse_single_optstr(self, guest, optstr, inst):
         if not optstr:
             return None
@@ -1249,9 +1275,9 @@ class ParserNumatune(VirtCLIParser):
         self.set_param("numatune.memory_mode", "mode")
 
 
-##################
-# --vcpu parsing #
-##################
+###################
+# --vcpus parsing #
+###################
 
 class ParserVCPU(VirtCLIParser):
     def _init_params(self):
@@ -1317,7 +1343,17 @@ class ParserCPU(VirtCLIParser):
             ignore = opts
             policy = cliname
             for feature_name in util.listify(val):
-                inst.cpu.add_feature(feature_name, policy)
+                featureobj = None
+
+                for f in inst.cpu.features:
+                    if f.name == feature_name:
+                        featureobj = f
+                        break
+
+                if featureobj:
+                    featureobj.policy = policy
+                else:
+                    inst.cpu.add_feature(feature_name, policy)
 
         self.set_param(None, "model", setter_cb=set_model_cb)
         self.set_param("cpu.match", "match")
@@ -1627,7 +1663,7 @@ class ParserNetwork(VirtCLIParser):
         self.set_param("source_mode", "source_mode")
         self.set_param("target_dev", "target")
         self.set_param("model", "model")
-        self.set_param(None, "mac", setter_cb=set_mac_cb)
+        self.set_param("macaddr", "mac", setter_cb=set_mac_cb)
         self.set_param("filterref", "filterref")
 
     def _parse(self, optsobj, inst):
@@ -1701,7 +1737,11 @@ class ParserController(VirtCLIParser):
         self.set_param("model", "model")
         self.set_param("index", "index")
         self.set_param("master_startport", "master")
-        self.set_param("address.set_addrstr", "address")
+
+        def set_server_cb(opts, inst, cliname, val):
+            ignore = opts = cliname
+            inst.address.set_addrstr(val)
+        self.set_param(None, "address", setter_cb=set_server_cb)
 
     def _parse(self, opts, inst):
         if opts.fullopts == "usb2":
@@ -1739,7 +1779,12 @@ class ParserRedir(VirtCLIParser):
 
         self.set_param("bus", "bus")
         self.set_param("type", "type")
-        self.set_param("parse_friendly_server", "server")
+
+        def set_server_cb(opts, inst, cliname, val):
+            ignore = opts = cliname
+            inst.parse_friendly_server(val)
+
+        self.set_param(None, "server", setter_cb=set_server_cb)
 
 
 #################
@@ -1893,15 +1938,28 @@ class _ParserChar(VirtCLIParser):
                      "optname" : cliname})
         self.support_cb = support_check
 
+
         self.set_param("type", "char_type")
         self.set_param("source_path", "path")
         self.set_param("source_mode", "mode")
         self.set_param("protocol",   "protocol")
         self.set_param("target_type", "target_type")
         self.set_param("target_name", "name")
-        self.set_param("set_friendly_source", "host")
-        self.set_param("set_friendly_bind", "bind_host")
-        self.set_param("set_friendly_target", "target_address")
+
+        def set_host_cb(opts, inst, cliname, val):
+            ignore = opts = cliname
+            inst.set_friendly_source(val)
+        self.set_param(None, "host", setter_cb=set_host_cb)
+
+        def set_bind_cb(opts, inst, cliname, val):
+            ignore = opts = cliname
+            inst.set_friendly_bind(val)
+        self.set_param(None, "bind_host", setter_cb=set_bind_cb)
+
+        def set_target_cb(opts, inst, cliname, val):
+            ignore = opts = cliname
+            inst.set_friendly_target(val)
+        self.set_param(None, "target_address", setter_cb=set_target_cb)
 
     def _parse(self, opts, inst):
         if opts.fullopts == "none" and inst.virtual_device_type == "console":
@@ -2042,17 +2100,23 @@ def build_parser_map(options, skip=None, only=None):
     return parsermap
 
 
-def parse_option_strings(parsermap, options, guest, inst):
+def parse_option_strings(parsermap, options, guest, instlist):
     """
     Iterate over the parsermap, and launch the associated parser
     function for every value that was filled in on 'options', which
     came from argparse/the command line.
     """
+    instlist = util.listify(instlist)
+    if not instlist:
+        instlist = [None]
+
     for option_variable_name in dir(options):
         if option_variable_name not in parsermap:
             continue
-        parsermap[option_variable_name].parse(
-            guest, getattr(options, option_variable_name), inst)
+
+        for inst in util.listify(instlist):
+            parsermap[option_variable_name].parse(
+                guest, getattr(options, option_variable_name), inst)
 
 
 def check_option_introspection(options, parsermap):

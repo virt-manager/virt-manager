@@ -1,0 +1,17 @@
+--- Original XML
++++ Altered XML
+@@ -19,10 +19,9 @@
+     <boot dev="hd"/>
+   </os>
+   <features>
+-    <acpi/>
+-    <apic eoi="off"/>
++    <apic eoi="on"/>
+     <hyperv>
+-      <relaxed state="on"/>
++      <relaxed state="off"/>
+       <vapic state="on"/>
+       <spinlocks state="on" retries="12287"/>
+     </hyperv>
+
+Domain 'test-many-devices' defined successfully.

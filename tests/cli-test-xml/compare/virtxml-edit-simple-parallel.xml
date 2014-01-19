@@ -1,0 +1,15 @@
+--- Original XML
++++ Altered XML
+@@ -195,8 +195,8 @@
+       <protocol type="telnet"/>
+       <target port="1"/>
+     </serial>
+-    <parallel type="file">
+-      <source path="/tmp/foo.log"/>
++    <parallel type="unix">
++      <source path="/some/other/log"/>
+       <target port="0"/>
+     </parallel>
+     <parallel type="unix">
+
+Domain 'test-many-devices' defined successfully.

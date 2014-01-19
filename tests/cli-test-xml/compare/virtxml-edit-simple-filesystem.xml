@@ -1,0 +1,18 @@
+--- Original XML
++++ Altered XML
+@@ -105,10 +105,10 @@
+     <controller type="virtio-serial" index="1"/>
+     <controller type="virtio-serial" index="0"/>
+     <controller type="ccid" index="0"/>
+-    <filesystem type="mount" accessmode="passthrough">
++    <filesystem type="mount" accessmode="mapped">
+       <driver type="handle"/>
+-      <source dir="/foo/bar"/>
+-      <target dir="/bar/baz"/>
++      <source dir="/1/2/3"/>
++      <target dir="/4/5/6"/>
+     </filesystem>
+     <filesystem type="template" accessmode="passthrough">
+       <source name="template_fedora"/>
+
+Domain 'test-many-devices' defined successfully.

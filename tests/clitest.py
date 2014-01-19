@@ -30,8 +30,11 @@ import StringIO
 import virtinst.cli
 from virtinst import support
 
-from tests import virtinstall, virtimage, virtclone, virtconvert
+from tests import virtinstall, virtimage, virtclone, virtconvert, virtxml
 from tests import utils
+
+# Enable this to refresh test output
+REGENERATE_OUTPUT = False
 
 os.environ["VIRTCONV_TEST_NO_DISK_CONVERSION"] = "1"
 os.environ["LANG"] = "en_US.UTF-8"
@@ -185,6 +188,8 @@ class Command(object):
                     ret = virtimage.main(conn=conn)
                 elif app.count("virt-convert"):
                     ret = virtconvert.main()
+                elif app.count("virt-xml"):
+                    ret = virtxml.main()
             except SystemExit, sys_e:
                 ret = sys_e.code
 
@@ -244,7 +249,7 @@ class Command(object):
 
             if filename:
                 # Generate test files that don't exist yet
-                if not os.path.exists(filename):
+                if REGENERATE_OUTPUT or not os.path.exists(filename):
                     file(filename, "w").write(output)
 
                 utils.diff_compare(output, filename)
@@ -260,23 +265,40 @@ class PromptCheck(object):
     """
     Individual question/response pair for automated --prompt tests
     """
-    def __init__(self, prompt, response=None):
+    def __init__(self, prompt, response=None, num_lines=1):
         self.prompt = prompt
         self.response = response
         if self.response:
             self.response = self.response % test_files
+        self.num_lines = num_lines
+
+        self._output = None
 
     def check(self, proc):
-        out = proc.stdout.readline()
+        timeout = 3
+        def _set_output():
+            self._output = ""
+            for ignore in range(self.num_lines):
+                self._output += proc.stdout.readline()
 
-        if not out.count(self.prompt):
-            out += "\nContent didn't contain prompt '%s'" % (self.prompt)
-            return False, out
+        import threading
+        thread = threading.Thread(target=_set_output)
+        thread.start()
+        thread.join(timeout)
+
+        if thread.isAlive():
+            proc.terminate()
+            return False, self._output + "\nProcess hung on readline()"
+
+        if not self._output.count(self.prompt):
+            self._output += ("\nContent didn't contain prompt '%s'" %
+                             (self.prompt))
+            return False, self._output
 
         if self.response:
             proc.stdin.write(self.response + "\n")
 
-        return True, out
+        return True, self._output
 
 
 class PromptTest(Command):
@@ -725,6 +747,54 @@ c.add_invalid("--hvm --boot kernel=%(TREEDIR)s/pxeboot/vmlinuz,initrd=%(TREEDIR)
 
 
 
+vixml = App("virt-xml")
+c = vixml.add_category("misc", "")
+c.add_valid("--help")  # basic --help test
+c.add_valid("--soundhw=? --tpm=?")  # basic introspection test
+c.add_invalid("--domain test --edit --hostdev driver_name=vfio")  # Guest has no hostdev to edit
+c.add_invalid("--domain test --edit --cpu host-passthrough --boot hd,network")  # Specified more than 1 option
+c.add_invalid("--domain test --edit")  # specified no edit option
+c.add_invalid("--domain test --edit 2 --cpu host-passthrough")  # specifing --edit number where it doesn't make sense
+c.add_invalid("--domain test-many-devices --edit 5 --tpm /dev/tpm")  # device edit out of range
+c.add_compare("--domain test --print-xml --edit --vcpus 7", "virtxml-print-xml")  # test --print-xml
+
+c = vixml.add_category("simple edit diff", "--domain test-many-devices --edit --print-diff --define")
+c.add_compare("--vcpus 10,maxvcpus=20,cores=5,sockets=4,threads=1", "virtxml-edit-simple-vcpus")
+c.add_compare("--cpu model=pentium2,+x2apic,forbid=pbe", "virtxml-edit-simple-cpu")
+c.add_compare("--numatune 1-5,7,mode=strict", "virtxml-edit-simple-numatune")
+c.add_compare("--boot loader=foo.bar,network,useserial=on,init=/bin/bash", "virtxml-edit-simple-boot")
+c.add_compare("--security label=foo,bar,baz,relabel=on", "virtxml-edit-simple-security")
+c.add_compare("--features eoi=on,hyperv_relaxed=off,acpi=", "virtxml-edit-simple-features")
+c.add_compare("--clock offset=localtime,hpet_present=yes,kvmclock_present=no,rtc_tickpolicy=merge", "virtxml-edit-simple-clock")
+c.add_compare("--disk /dev/zero,perms=ro,startup_policy=optional", "virtxml-edit-simple-disk")
+c.add_compare("--network source=br0,type=bridge,model=virtio,mac=", "virtxml-edit-simple-network")
+c.add_compare("--graphics tlsport=5902,keymap=ja", "virtxml-edit-simple-graphics")
+c.add_compare("--controller index=2,model=lsilogic", "virtxml-edit-simple-controller")
+c.add_compare("--smartcard type=spicevmc", "virtxml-edit-simple-smartcard")
+c.add_compare("--redirdev type=spicevmc,server=example.com:12345", "virtxml-edit-simple-redirdev")
+c.add_compare("--tpm path=/dev/tpm", "virtxml-edit-simple-tpm")
+c.add_compare("--rng rate_bytes=3333,rate_period=4444", "virtxml-edit-simple-rng")
+c.add_compare("--watchdog action=reset", "virtxml-edit-simple-watchdog")
+c.add_compare("--memballoon model=none", "virtxml-edit-simple-memballoon")
+c.add_compare("--serial pty", "virtxml-edit-simple-serial")
+c.add_compare("--parallel unix,path=/some/other/log", "virtxml-edit-simple-parallel")
+c.add_compare("--channel null", "virtxml-edit-simple-channel")
+c.add_compare("--console target_type=serial", "virtxml-edit-simple-console")
+c.add_compare("--filesystem /1/2/3,/4/5/6,mode=mapped", "virtxml-edit-simple-filesystem")
+c.add_compare("--video cirrus", "virtxml-edit-simple-video")
+c.add_compare("--soundhw pcspk", "virtxml-edit-simple-soundhw")
+c.add_compare("--host-device 0x0781:0x5151,driver_name=vfio", "virtxml-edit-simple-host-device")
+
+c = vixml.add_category("edit selection", "--domain test-many-devices --print-diff --define")
+c.add_invalid("--edit target=vvv --disk /dev/null")  # no match found
+c.add_compare("--edit 3 --soundhw pcspk", "virtxml-edit-pos-num")
+c.add_compare("--edit -1 --video qxl", "virtxml-edit-neg-num")
+c.add_compare("--edit all --host-device driver_name=vfio", "virtxml-edit-all")
+c.add_compare("--edit ich6 --soundhw pcspk", "virtxml-edit-select-sound-model")
+c.add_compare("--edit target=hda --disk /dev/null", "virtxml-edit-select-disk-target")
+c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "virtxml-edit-select-network-mac")
+
+
 vimag = App("virt-image")
 c = vimag.add_category("graphics", "--name test-image --boot 0 %(IMAGE_XML)s")
 c.add_valid("--sdl")  # SDL
@@ -887,6 +957,10 @@ p7.add("'/root' must be a file or a device")
 p7.add("use as the cloned disk", "%(MANAGEDNEW1)s")
 promptlist.append(p7)
 
+p8 = PromptTest("virt-xml --connect %(TESTURI)s --confirm --domain test "
+    "--edit --cpu host-passthrough")
+p8.add("Define 'test' with the changed XML", "yes", num_lines=12)
+promptlist.append(p8)
 
 
 #########################
@@ -949,6 +1023,7 @@ _cmdlist += vinst.cmds
 _cmdlist += vclon.cmds
 _cmdlist += vimag.cmds
 _cmdlist += vconv.cmds
+_cmdlist += vixml.cmds
 
 for _cmd in _cmdlist:
     newidx += 1

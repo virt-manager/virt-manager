@@ -1,0 +1,24 @@
+--- Original XML
++++ Altered XML
+@@ -28,9 +28,9 @@
+     </hyperv>
+   </features>
+   <cpu mode="custom" match="exact">
+-    <model fallback="allow">core2duo</model>
++    <model fallback="allow">pentium2</model>
+     <vendor>Intel</vendor>
+-    <feature policy="require" name="pbe"/>
++    <feature policy="forbid" name="pbe"/>
+     <feature policy="require" name="tm2"/>
+     <feature policy="require" name="est"/>
+     <feature policy="require" name="ss"/>
+@@ -43,6 +43,7 @@
+     <feature policy="require" name="ds_cpl"/>
+     <feature policy="require" name="xtpr"/>
+     <feature policy="require" name="acpi"/>
++    <feature name="x2apic" policy="force"/>
+   </cpu>
+   <clock offset="utc">
+     <timer name="rtc" tickpolicy="catchup"/>
+
+Domain 'test-many-devices' defined successfully.

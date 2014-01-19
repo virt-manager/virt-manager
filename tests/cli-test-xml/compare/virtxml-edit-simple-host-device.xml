@@ -1,0 +1,17 @@
+--- Original XML
++++ Altered XML
+@@ -262,9 +262,10 @@
+     </video>
+     <hostdev mode="subsystem" type="usb" managed="yes">
+       <source>
+-        <vendor id="0x04b3"/>
+-        <product id="0x4485"/>
++        <vendor id="0x0781"/>
++        <product id="0x5151"/>
+       </source>
++      <driver name="vfio"/>
+     </hostdev>
+     <hostdev mode="subsystem" type="usb" managed="yes">
+       <source>
+
+Domain 'test-many-devices' defined successfully.

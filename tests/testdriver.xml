@@ -71,13 +71,26 @@
     yeah boii &lt; &gt; yeahfoo
   </description>
   <features>
-    <acpi/><apic/>
+    <acpi/>
+    <apic eoi='off'/>
+    <hyperv>
+      <relaxed state='on'/>
+      <vapic state='on'/>
+      <spinlocks state='on' retries='12287'/>
+    </hyperv>
   </features>
-  <clock offset="utc"/>
+  <clock offset="utc">
+    <timer name="rtc" tickpolicy="catchup"/>
+    <timer name="pit" tickpolicy="delay"/>
+    <timer name="hpet" present="no"/>
+  </clock>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>
   <vcpu cpuset="1,2,5-9,11,13-14">9</vcpu>
+  <numatune>
+    <memory mode='interleave' placement='auto'/>
+  </numatune>
   <cpu match="exact">
     <model>core2duo</model>
     <vendor>Intel</vendor>
@@ -148,14 +161,13 @@
     </interface>
     <interface type='network'>
       <source network='idontexistfool'/>
+      <mac address='22:11:11:11:11:11'/>
     </interface>
     <interface type='network'>
       <source network='dupmac'/>
       <mac address='22:22:33:54:32:11'/>
     </interface>
-    <interface type='user'>
-      <mac address='22:11:11:11:11:11'/>
-    </interface>
+    <interface type='user'/>
     <interface type='bridge'>
       <source bridge='brempty'/>
       <mac address='22:22:33:44:AA:BB'/>
@@ -166,9 +178,8 @@
       <mac address='22:00:00:44:AA:BF'/>
       <model type='e1000'/>
     </interface>
-    <controller type='usb'/>
     <interface type='ethernet'>
-        <mac address='00:11:7F:33:44:55'/>
+        <mac address='00:11:7f:33:44:55'/>
         <script path='/etc/qemu-ifup'/>
         <target dev='nic02'/>
     </interface>
@@ -200,6 +211,9 @@
       <channel name="record" mode="insecure"/>
     </graphics>
 
+    <!-- controller devices -->
+    <controller type='scsi' model='virtio-scsi'/>
+    <controller type='usb'/>
 
     <!-- sound devices -->
     <sound model='sb16'/>
@@ -363,6 +377,9 @@
     <panic>
       <address type='isa' iobase='0x505'/>
     </panic>
+
+    <!-- memballoon device -->
+    <memballoon model='virtio'/>
   </devices>
 </domain>
 

@@ -1,0 +1,13 @@
+--- Original XML
++++ Altered XML
+@@ -214,7 +214,7 @@
+     <console type="pty">
+       <target type="uml" port="1"/>
+     </console>
+-    <channel type="pipe">
++    <channel type="null">
+       <source path="/tmp/guestfwd"/>
+       <target type="guestfwd" address="10.0.2.1" port="4600"/>
+     </channel>
+
+Domain 'test-many-devices' defined successfully.

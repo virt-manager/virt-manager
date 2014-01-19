@@ -1,0 +1,17 @@
+<domain type="test" id="1">
+  <name>test</name>
+  <uuid>4a64cc71-19c4-2fd0-2323-3050941ea3c3</uuid>
+  <memory unit="KiB">8388608</memory>
+  <currentMemory unit="KiB">2097152</currentMemory>
+  <vcpu placement="static">7</vcpu>
+  <os>
+    <type arch="i686">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+  </devices>
+</domain>

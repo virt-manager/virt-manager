@@ -1,0 +1,13 @@
+--- Original XML
++++ Altered XML
+@@ -238,7 +238,7 @@
+       </backend>
+     </tpm>
+     <input type="mouse" bus="ps2"/>
+-    <graphics type="sdl" display=":3.4" xauth="/testdir/.Xauthority" fullscreen="yes"/>
++    <graphics type="sdl" display=":3.4" xauth="/testdir/.Xauthority" fullscreen="yes" tlsPort="5902" keymap="ja"/>
+     <graphics type="vnc" port="-1" autoport="yes"/>
+     <graphics type="vnc" port="-1" autoport="yes" listen="1.2.3.4" keymap="fi">
+       <listen type="address" address="1.2.3.4"/>
+
+Domain 'test-many-devices' defined successfully.

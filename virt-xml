@@ -1,0 +1,283 @@
+#!/usr/bin/python -tt
+#
+# Copyright 2013 Red Hat, Inc.
+# Cole Robinson <crobinso@redhat.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA 02110-1301 USA.
+
+import difflib
+import logging
+import os
+import sys
+
+import libvirt
+
+import virtinst
+from virtinst import cli
+from virtinst.cli import fail, print_stdout, print_stderr
+
+
+###################
+# Utility helpers #
+###################
+
+def prompt_yes_or_no(msg):
+    while 1:
+        printmsg = msg + " (y/n): "
+        if "VIRTINST_TEST_SUITE" in os.environ:
+            printmsg += "\n"
+        sys.stdout.write(printmsg)
+        sys.stdout.flush()
+
+        inp = sys.stdin.readline().lower().strip()
+        if inp in ["y", "yes"]:
+            return True
+        elif inp in ["n", "no"]:
+            return False
+        else:
+            print_stdout(_("Please enter 'yes' or 'no'."))
+
+
+def get_diff(origxml, newxml):
+    ret = "".join(difflib.unified_diff(origxml.splitlines(1),
+                                       newxml.splitlines(1),
+                                       fromfile="Original XML",
+                                       tofile="Altered XML"))
+
+    if ret:
+        logging.debug("XML diff:\n%s", ret)
+    else:
+        logging.debug("No XML diff, didn't generate any change.")
+    return ret
+
+
+def get_domain_and_guest(conn, domstr):
+    if not domstr:
+        fail("--domain must be specified")
+
+    try:
+        int(domstr)
+        isint = True
+    except ValueError:
+        isint = False
+
+    try:
+        virtinst.util.validate_uuid(domstr)
+        isuuid = True
+    except ValueError:
+        isuuid = False
+
+    try:
+        if isint:
+            domain = conn.lookupByID(int(domstr))
+        elif isuuid:
+            domain = conn.lookupByUUIDString(domstr)
+        else:
+            domain = conn.lookupByName(domstr)
+    except libvirt.libvirtError, e:
+        fail(_("Could not find domain '%s': %s") % (domstr, e))
+
+    # XXX: Require this for first pass, but it sucks for testing
+    #if domain.info()[0] != libvirt.VIR_DOMAIN_SHUTOFF:
+    #    fail(_("Domain '%s' must be shutoff.") % domain.name())
+
+    # XXX: any flags to use here? INACTIVE prob, though not secure or cpu
+    xml = domain.XMLDesc(0)
+
+    # We do this to minimize the diff, removing things like ' -> "
+    xml = virtinst.Guest(conn, parsexml=xml).get_xml_config()
+    return (domain, xml, virtinst.Guest(conn, parsexml=xml))
+
+
+################
+# Change logic #
+################
+
+def _find_devices_to_edit(guest, options, parserobj):
+    devlist = guest.get_devices(parserobj.devclass.virtual_device_type)
+    idx = None
+
+    if options.edit is None:
+        idx = 1
+    elif (options.edit.isdigit() or
+          options.edit.startswith("-") and options.edit[1:].isdigit()):
+        idx = int(options.edit)
+
+    if idx is not None:
+        if idx == 0:
+            fail(_("Invalid --edit option '%s'") % options.edit)
+
+        if not devlist:
+            fail(_("No --%s devices found in the XML") %
+                parserobj.cli_arg_name)
+        if len(devlist) < abs(idx):
+            fail(_("--edit %s requested but there's only %s "
+                   "--%s devices in the XML") %
+                (idx, len(devlist), parserobj.cli_arg_name))
+
+        if idx > 0:
+            idx -= 1
+        inst = devlist[idx]
+    elif options.edit == "all":
+        inst = devlist[:]
+    else:
+        inst = parserobj.lookup_device_from_option_string(guest, options.edit)
+        if not inst:
+            fail(_("No matching devices found for --edit %s") % options.edit)
+
+    return inst
+
+
+def change_xml(guest, options, parsermap):
+    # XXX: Make sure actions don't conflict
+    # XXX: Make sure XML options don't conflict
+    # XXX: Find a way to factor out whatever defaults there are
+    if options.edit is -1:
+        fail("--edit must be specified")
+
+    collisions = []
+    for option_variable_name, parserobj in parsermap.items():
+        if getattr(options, option_variable_name):
+            collisions.append(parserobj)
+
+    if len(collisions) == 0:
+        fail(_("No change specified."))
+    if len(collisions) != 1:
+        fail(_("Only one change operation may be specified "
+               "(conflicting options %s)") %
+               ["--" + c.cli_arg_name for c in collisions])
+    parserobj = collisions[0]
+
+    if parserobj.devclass:
+        inst = _find_devices_to_edit(guest, options, parserobj)
+    else:
+        inst = guest
+        if options.edit and options.edit != '1' and options.edit != 'all':
+            fail(_("'--edit %s' doesn't make sense with --%s, "
+                   "just use empty '--edit'") %
+            (options.edit, parserobj.cli_arg_name))
+
+    cli.parse_option_strings(parsermap, options, guest, inst)
+
+
+#######################
+# CLI option handling #
+#######################
+
+def parse_args():
+    # XXX: man page: mention introspection if it makes sense
+    # XXX: expand usage
+    # XXX: notes about the default actions, behavior, etc
+    parser = cli.setupParser(
+        "%(prog)s [options]",
+        _("Edit libvirt XML using command line options."),
+        introspection_epilog=True)
+
+    cli.add_connect_option(parser)
+
+    actg = parser.add_argument_group(_("Action Options"))
+    actg.add_argument("--domain", help=_("Domain name, id, or uuid"))
+    actg.add_argument("--edit", nargs='?', default=-1,
+                      help=_("Edit VM XML"))
+
+    g = parser.add_argument_group(_("XML options"))
+    cli.add_disk_option(g)
+    cli.add_net_option(g)
+    cli.add_gfx_option(g)
+    cli.vcpu_cli_options(g)
+    cli.add_guest_xml_options(g)
+    cli.add_boot_option(g)
+    cli.add_fs_option(g)
+    cli.add_device_options(g)
+
+    misc = parser.add_argument_group(_("Miscellaneous Options"))
+    cli.add_misc_options(misc, prompt=False, printxml=False, dryrun=False)
+    misc.add_argument("--print-diff", action="store_true",
+        help=_("Only print the requested change, in diff format"))
+    misc.add_argument("--print-xml", action="store_true",
+        help=_("Only print the requested change, in full XML format"))
+    misc.add_argument("--confirm", action="store_true",
+        help=_("Require confirmation before saving any results."))
+    misc.add_argument("--define", action="store_true",
+        help=_("Force defining the domain, only required if a --print "
+               "option was specified."))
+
+    return parser.parse_args()
+
+
+###################
+# main() handling #
+###################
+
+def main(conn=None):
+    cli.earlyLogging()
+    options = parse_args()
+
+    if options.confirm or options.print_xml or options.print_diff:
+        options.quiet = False
+    if not options.print_xml and not options.print_diff:
+        options.define = True
+    if options.confirm and not options.print_xml:
+        options.print_diff = True
+
+    cli.setupLogging("virt-xml", options.debug, options.quiet)
+
+    parsermap = cli.build_parser_map(options)
+    if cli.check_option_introspection(options, parsermap):
+        return 0
+
+    if conn is None:
+        conn = cli.getConnection(options.connect)
+
+    domain, origxml, guest = get_domain_and_guest(conn, options.domain)
+    # XXX: do we ever need the domain?
+    ignore = domain
+
+    change_xml(guest, options, parsermap)
+
+    newxml = guest.get_xml_config()
+    diff = get_diff(origxml, newxml)
+
+    if options.print_diff:
+        if diff:
+            print_stdout(diff)
+    elif options.print_xml:
+        print_stdout(newxml)
+
+    if not options.define:
+        return 0
+
+    if options.confirm:
+        # XXX: Message needs to depend on what action we will take
+        if not prompt_yes_or_no(
+            _("Define '%s' with the changed XML?" % guest.name)):
+            return 0
+
+    conn.defineXML(guest.get_xml_config())
+    print_stdout(_("Domain '%s' defined successfully." % guest.name))
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except SystemExit, sys_e:
+        sys.exit(sys_e.code)
+    except KeyboardInterrupt:
+        logging.debug("", exc_info=True)
+        print_stderr(_("Aborted at user request"))
+    except Exception, main_e:
+        fail(main_e)

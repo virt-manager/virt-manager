@@ -1,0 +1,15 @@
+--- Original XML
++++ Altered XML
+@@ -281,8 +281,8 @@
+         <address domain="0x0003" bus="0x00" slot="0x19" function="0x0"/>
+       </source>
+     </hostdev>
+-    <redirdev bus="usb" type="tcp">
+-      <source mode="connect" host="localhost" service="4000"/>
++    <redirdev bus="usb" type="spicevmc">
++      <source mode="connect" host="example.com" service="12345"/>
+       <protocol type="raw"/>
+     </redirdev>
+     <redirdev bus="usb" type="spicevmc">
+
+Domain 'test-many-devices' defined successfully.

@@ -1,0 +1,21 @@
+--- Original XML
++++ Altered XML
+@@ -9,7 +9,7 @@
+   <memoryBacking>
+     <hugepages/>
+   </memoryBacking>
+-  <vcpu placement="static" cpuset="1-2,5-9,11,13-14">9</vcpu>
++  <vcpu placement="static" cpuset="1-2,5-9,11,13-14" current="10">20</vcpu>
+   <numatune>
+     <memory mode="interleave" placement="auto"/>
+   </numatune>
+@@ -43,6 +43,7 @@
+     <feature policy="require" name="ds_cpl"/>
+     <feature policy="require" name="xtpr"/>
+     <feature policy="require" name="acpi"/>
++    <topology sockets="4" cores="5" threads="1"/>
+   </cpu>
+   <clock offset="utc">
+     <timer name="rtc" tickpolicy="catchup"/>
+
+Domain 'test-many-devices' defined successfully.
