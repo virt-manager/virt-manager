@@ -870,6 +870,7 @@ class vmmEngine(vmmGObject):
         self._do_show_host(self.get_manager(), uri)
 
     def show_domain_creator(self, uri):
+        self.show_manager()
         self._do_show_create(self.get_manager(), uri)
 
     def show_domain_console(self, uri, uuid):
