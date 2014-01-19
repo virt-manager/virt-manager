@@ -139,7 +139,9 @@ def get_disks(guest, disks, nodisks, need_storage):
                 # We skip validation here, since we may have converted
                 # --file-size to --disk size=8 which doesn't validate on
                 # its own.
-                dev, size = cli.parse_disk(guest, diskopts, validate=False)
+                dev = cli.parse_disk(guest, diskopts,
+                                     virtinst.VirtualDisk(guest.conn))
+                size = dev.cli_size
                 path = dev.path
                 sparse = dev.get_sparse()
 

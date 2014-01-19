@@ -31,6 +31,8 @@ class _ClockTimer(XMLBuilder):
 class Clock(XMLBuilder):
     _XML_ROOT_NAME = "clock"
 
+    TIMER_NAMES = ["platform", "pit", "rtc", "hpet", "tsc", "kvmclock"]
+
     offset = XMLProperty("./@offset")
     timers = XMLChildProperty(_ClockTimer)
 

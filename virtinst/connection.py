@@ -30,7 +30,7 @@ from virtinst import StorageVolume
 from virtinst import pollhelpers
 from virtinst import support
 from virtinst import util
-from virtinst.cli import parse_optstr
+from virtinst.cli import VirtOptionString
 
 _virtinst_uri_magic = "__virtinst_test__"
 
@@ -79,7 +79,8 @@ class VirtualConnection(object):
             uri = _initial_uri.replace(_virtinst_uri_magic, "")
             ret = uri.split(",", 1)
             self._open_uri = ret[0]
-            self._test_opts = parse_optstr(len(ret) > 1 and ret[1] or "")
+            self._test_opts = VirtOptionString(
+                len(ret) > 1 and ret[1] or "", []).opts
             self._early_virtinst_test_uri()
             self._uri = self._virtinst_uri_make_fake()
         else:

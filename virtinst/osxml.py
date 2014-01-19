@@ -33,7 +33,7 @@ class OSXML(XMLBuilder):
     BOOT_DEVICE_CDROM = "cdrom"
     BOOT_DEVICE_FLOPPY = "fd"
     BOOT_DEVICE_NETWORK = "network"
-    boot_devices = [BOOT_DEVICE_HARDDISK, BOOT_DEVICE_CDROM,
+    BOOT_DEVICES = [BOOT_DEVICE_HARDDISK, BOOT_DEVICE_CDROM,
                     BOOT_DEVICE_FLOPPY, BOOT_DEVICE_NETWORK]
 
     def is_hvm(self):

@@ -149,6 +149,24 @@ class _VirtualCharDevice(VirtualDevice):
             return self.type in users[propname]
         return hasattr(self, propname)
 
+    def _set_host_helper(self, hostparam, portparam, val):
+        def parse_host(val):
+            host, ignore, port = (val or "").partition(":")
+            return host or None, port or None
+
+        host, port = parse_host(val)
+        if host:
+            setattr(self, hostparam, host)
+        if port:
+            setattr(self, portparam, port)
+
+    def set_friendly_source(self, val):
+        self._set_host_helper("source_host", "source_port", val)
+    def set_friendly_bind(self, val):
+        self._set_host_helper("bind_host", "bind_port", val)
+    def set_friendly_target(self, val):
+        self._set_host_helper("target_address", "target_port", val)
+
 
     _XML_PROP_ORDER = ["type", "_has_mode_bind", "_has_mode_connect",
                        "bind_host", "bind_port",
