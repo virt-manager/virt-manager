@@ -564,15 +564,6 @@ def get_memory(guest, memory):
                 func=check_memory)
 
 
-def get_uuid(guest, uuid):
-    if not uuid:
-        return
-    try:
-        guest.uuid = uuid
-    except ValueError, e:
-        fail(e)
-
-
 def get_vcpus(guest, vcpus, check_cpu):
     if vcpus is None:
         vcpus = ""

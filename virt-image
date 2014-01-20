@@ -105,7 +105,9 @@ def main(conn=None):
     cli.get_name(guest, options.name or image.name)
     cli.get_memory(guest, options.memory or (image.domain.memory and
                                              int(image.domain.memory)))
-    cli.get_uuid(guest, options.uuid)
+
+    if options.uuid:
+        guest.uuid = options.uuid
     cli.get_vcpus(guest, options.vcpus or image.domain.vcpu or "",
                   options.check_cpu)
     cli.get_cpuset(guest, options.cpuset)

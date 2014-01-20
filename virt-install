@@ -495,14 +495,16 @@ def build_guest_instance(conn, options):
     convert_old_disks(options)
     cli.convert_old_features(options)
 
-    # Install options
+    # non-xml install options
     guest.installer.extraargs = options.extra_args or ""
     guest.installer.initrd_injections = options.initrd_inject
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
-    guest.os.init = options.init
+    guest.autostart = options.autostart
 
     # Guest configuration
-    cli.get_uuid(guest, options.uuid)
+    guest.os.init = options.init
+    if options.uuid:
+        guest.uuid = options.uuid
     cli.get_vcpus(guest, options.vcpus, options.check_cpu)
     cli.parse_numatune(guest, options.numatune)
     cli.parse_cpu(guest, options.cpu)
@@ -511,7 +513,6 @@ def build_guest_instance(conn, options):
     cli.parse_features(guest, options.features)
     cli.parse_clock(guest, options.clock)
 
-    guest.autostart = options.autostart
     guest.description = options.description
 
     # Non-default devices
