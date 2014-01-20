@@ -1,7 +1,7 @@
 # Sample code to parse an image XML description and
 # spit out libvirt XML
 #
-# Copyright 2007, 2013 Red Hat, Inc.
+# Copyright 2007, 2013, 2014 Red Hat, Inc.
 # David Lutterkort <dlutter@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -260,7 +260,7 @@ class Disk(object):
         if hashlib:
             if "sha256" in self.csum:
                 csumvalue = self.csum["sha256"]
-                m = hashlib.sha256()
+                m = hashlib.sha256()  # pylint: disable-msg=E1101
 
             elif "sha1" in self.csum:
                 csumvalue = self.csum["sha1"]

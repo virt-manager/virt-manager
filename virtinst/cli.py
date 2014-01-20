@@ -1,7 +1,7 @@
 #
 # Utility functions for the command line drivers
 #
-# Copyright 2006-2007, 2013 Red Hat, Inc.
+# Copyright 2006-2007, 2013, 2014 Red Hat, Inc.
 # Jeremy Katz <katzj@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -95,7 +95,6 @@ class VirtHelpFormatter(argparse.HelpFormatter):
 
 
 def setupParser(usage, description):
-    parse_class = argparse.ArgumentParser
     epilog = _("See man page for examples and full option syntax.")
 
     parser = argparse.ArgumentParser(
