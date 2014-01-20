@@ -505,7 +505,7 @@ def build_guest_instance(conn, options):
     guest.os.init = options.init
     if options.uuid:
         guest.uuid = options.uuid
-    cli.get_vcpus(guest, options.vcpus, options.check_cpu)
+    cli.parse_vcpus(guest, options.vcpus)
     cli.parse_numatune(guest, options.numatune)
     cli.parse_cpu(guest, options.cpu)
     cli.parse_security(guest, options.security)

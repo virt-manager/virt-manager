@@ -418,7 +418,6 @@ c.add_valid("--vcpus 4 --cpuset=1,3-5")  # Cpuset
 c.add_valid("--vcpus 4 --cpuset=1,3-5,")  # Cpuset with trailing comma
 c.add_valid("--vcpus 4 --cpuset=auto")  # Cpuset with trailing comma
 c.add_valid("--ram 100000000000")  # Ram overcommit
-c.add_valid("--vcpus 5,maxvcpus=10 --check-cpu")  # maxvcpus, --check-cpu shouldn't error
 c.add_valid("--vcpus 4,cores=2,threads=2,sockets=2")  # Topology
 c.add_valid("--vcpus 4,cores=1")  # Topology auto-fill
 c.add_valid("--vcpus sockets=2,threads=2")  # Topology only
@@ -429,7 +428,6 @@ c.add_valid("--numatune 1-3,4,mode=strict")  # More complex, parser should do th
 c.add_compare("--connect %(DEFAULTURI)s --cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
 c.add_invalid("--vcpus 32 --cpuset=969-1000")  # Bogus cpuset
 c.add_invalid("--vcpus 32 --cpuset=autofoo")  # Bogus cpuset
-c.add_invalid("--vcpus 20 --check-cpu")  # Over host vcpus w/ --check-cpu
 c.add_invalid("--cpu host")  # --cpu host, but no host CPU in caps
 c.add_invalid("--clock foo_tickpolicy=merge")  # Unknown timer
 

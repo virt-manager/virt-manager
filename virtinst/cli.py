@@ -564,27 +564,6 @@ def get_memory(guest, memory):
                 func=check_memory)
 
 
-def get_vcpus(guest, vcpus, check_cpu):
-    if vcpus is None:
-        vcpus = ""
-
-    parse_vcpu(guest, vcpus)
-    if not check_cpu:
-        return
-
-    hostinfo = guest.conn.getInfo()
-    pcpus = hostinfo[4] * hostinfo[5] * hostinfo[6] * hostinfo[7]
-
-    if guest.vcpus > pcpus:
-        msg = _("You have asked for more virtual CPUs (%d) than there "
-                "are physical CPUs (%d) on the host. This will work, "
-                "but performance will be poor. ") % (guest.vcpus, pcpus)
-        askmsg = _("Are you sure? (yes or no)")
-
-        if not prompt_for_yes_no(msg, askmsg):
-            nice_exit()
-
-
 def get_cpuset(guest, cpuset):
     memory = guest.memory
     conn = guest.conn
@@ -1236,7 +1215,7 @@ class ParserVCPU(VirtCLIParser):
             inst.vcpus = inst.cpu.vcpus_from_topology()
         return ret
 
-parse_vcpu = ParserVCPU().parse
+parse_vcpus = ParserVCPU().parse
 
 
 #################

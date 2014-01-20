@@ -108,8 +108,7 @@ def main(conn=None):
 
     if options.uuid:
         guest.uuid = options.uuid
-    cli.get_vcpus(guest, options.vcpus or image.domain.vcpu or "",
-                  options.check_cpu)
+    cli.parse_vcpus(guest, options.vcpu or image.domain.vcpu or "")
     cli.get_cpuset(guest, options.cpuset)
     cli.parse_cpu(guest, options.cpu)
     cli.get_networks(guest, options.network)
