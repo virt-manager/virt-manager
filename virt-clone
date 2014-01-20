@@ -138,16 +138,14 @@ def parse_args():
     geng.add_argument("-o", "--original", dest="original_guest",
                     help=_("Name of the original guest; "
                            "The status must be shut off or paused."))
-    geng.add_argument("--original-xml", dest="original_xml",
+    geng.add_argument("--original-xml",
                     help=_("XML file to use as the original guest."))
-    geng.add_argument("--auto-clone", dest="auto_clone", action="store_true",
+    geng.add_argument("--auto-clone", action="store_true",
                     help=_("Auto generate clone name and storage paths from"
                            " the original guest configuration."))
     geng.add_argument("-n", "--name", dest="new_name",
                     help=_("Name for the new guest"))
-    geng.add_argument("-u", "--uuid", dest="new_uuid",
-                    help=_("New UUID for the clone guest; Default is a "
-                           "randomly generated UUID"))
+    geng.add_argument("-u", "--uuid", dest="new_uuid", help=argparse.SUPPRESS)
 
     stog = parser.add_argument_group(_("Storage Configuration"))
     stog.add_argument("-f", "--file", dest="new_diskfile", action="append",
@@ -174,8 +172,7 @@ def parse_args():
 
     # Just used for clone tests
     misc.add_argument("--clone-running", action="store_true",
-                    dest="clone_running", default=False,
-                    help=argparse.SUPPRESS)
+                      default=False, help=argparse.SUPPRESS)
 
     cli.add_misc_options(misc, prompt=True, replace=True, printxml=True)
 

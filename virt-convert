@@ -56,12 +56,12 @@ def parse_args():
     add_output_arg(parser)
 
     cong = parser.add_argument_group("Conversion Options")
-    cong.add_argument("-i", "--input-format", dest="input_format",
+    cong.add_argument("-i", "--input-format",
                     help=_("Input format, e.g. 'vmx'"))
-    cong.add_argument("-o", "--output-format", dest="output_format",
+    cong.add_argument("-o", "--output-format",
                     default="virt-image",
                     help=_("Output format, e.g. 'virt-image'"))
-    cong.add_argument("-D", "--disk-format", dest="disk_format",
+    cong.add_argument("-D", "--disk-format",
                     help=_("Output disk format"))
 
     virg = parser.add_argument_group("Virtualization Type Options")
@@ -71,7 +71,7 @@ def parse_args():
                     help=_("This guest should be a paravirtualized guest"))
 
     cfgg = parser.add_argument_group("Guest Configuration Options")
-    cfgg.add_argument("-a", "--arch", dest="arch",
+    cfgg.add_argument("-a", "--arch",
                     default=get_default_arch(),
                     help=_("Machine Architecture Type (i686/x86_64/ppc)"))
     cli.add_distro_options(cfgg)

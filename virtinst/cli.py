@@ -755,7 +755,7 @@ def set_os_variant(obj, distro_type, distro_variant):
 #############################
 
 def add_connect_option(parser):
-    parser.add_argument("--connect", metavar="URI", dest="connect",
+    parser.add_argument("--connect", metavar="URI",
                       help=_("Connect to hypervisor with libvirt URI"))
 
 
@@ -763,17 +763,17 @@ def add_misc_options(grp, prompt=False, replace=False,
                      printxml=False, printstep=False,
                      noreboot=False, dryrun=False):
     if prompt:
-        grp.add_argument("--prompt", action="store_true", dest="prompt",
+        grp.add_argument("--prompt", action="store_true",
                         default=False, help=argparse.SUPPRESS)
-        grp.add_argument("--force", action="store_true", dest="force",
+        grp.add_argument("--force", action="store_true",
                         default=False, help=argparse.SUPPRESS)
 
     if noreboot:
-        grp.add_argument("--noreboot", action="store_true", dest="noreboot",
+        grp.add_argument("--noreboot", action="store_true",
                        help=_("Don't boot guest after completing install."))
 
     if replace:
-        grp.add_argument("--replace", action="store_true", dest="replace",
+        grp.add_argument("--replace", action="store_true",
             help=_("Don't check name collision, overwrite any guest "
                    "with the same name."))
 
@@ -791,26 +791,26 @@ def add_misc_options(grp, prompt=False, replace=False,
                        help=_("Run through install process, but do not "
                               "create devices or define the guest."))
 
-    grp.add_argument("-q", "--quiet", action="store_true", dest="quiet",
+    grp.add_argument("-q", "--quiet", action="store_true",
                    help=_("Suppress non-error output"))
-    grp.add_argument("-d", "--debug", action="store_true", dest="debug",
+    grp.add_argument("-d", "--debug", action="store_true",
                    help=_("Print debugging information"))
 
 
 def vcpu_cli_options(grp, backcompat=True):
-    grp.add_argument("--vcpus", dest="vcpus",
+    grp.add_argument("--vcpus",
         help=_("Number of vcpus to configure for your guest. Ex:\n"
                "--vcpus 5\n"
                "--vcpus 5,maxcpus=10\n"
                "--vcpus sockets=2,cores=4,threads=2"))
-    grp.add_argument("--cpuset", dest="cpuset",
+    grp.add_argument("--cpuset",
                    help=_("Set which physical CPUs domain can use."))
-    grp.add_argument("--cpu", dest="cpu",
+    grp.add_argument("--cpu",
         help=_("CPU model and features. Ex: --cpu coreduo,+x2apic"))
 
     if backcompat:
         grp.add_argument("--check-cpu", action="store_true",
-                       dest="check_cpu", help=argparse.SUPPRESS)
+                         help=argparse.SUPPRESS)
 
 
 def graphics_option_group(parser):
@@ -820,15 +820,15 @@ def graphics_option_group(parser):
 
     vncg = parser.add_argument_group(_("Graphics Configuration"))
     add_gfx_option(vncg)
-    vncg.add_argument("--vnc", action="store_true", dest="vnc",
+    vncg.add_argument("--vnc", action="store_true",
                     help=argparse.SUPPRESS)
-    vncg.add_argument("--vncport", type=int, dest="vncport",
+    vncg.add_argument("--vncport", type=int,
                     help=argparse.SUPPRESS)
-    vncg.add_argument("--vnclisten", dest="vnclisten",
+    vncg.add_argument("--vnclisten",
                     help=argparse.SUPPRESS)
-    vncg.add_argument("-k", "--keymap", dest="keymap",
+    vncg.add_argument("-k", "--keymap",
                     help=argparse.SUPPRESS)
-    vncg.add_argument("--sdl", action="store_true", dest="sdl",
+    vncg.add_argument("--sdl", action="store_true",
                     help=argparse.SUPPRESS)
     vncg.add_argument("--nographics", action="store_true",
                     help=argparse.SUPPRESS)
@@ -844,16 +844,16 @@ def network_option_group(parser):
     add_net_option(netg)
 
     # Deprecated net options
-    netg.add_argument("-b", "--bridge", dest="bridge", action="append",
+    netg.add_argument("-b", "--bridge", action="append",
                     help=argparse.SUPPRESS)
-    netg.add_argument("-m", "--mac", dest="mac", action="append",
+    netg.add_argument("-m", "--mac", action="append",
                     help=argparse.SUPPRESS)
 
     return netg
 
 
 def add_net_option(devg):
-    devg.add_argument("-w", "--network", dest="network", action="append",
+    devg.add_argument("-w", "--network", action="append",
       help=_("Configure a guest network interface. Ex:\n"
              "--network bridge=mybr0\n"
              "--network network=my_libvirt_virtual_net\n"
@@ -862,50 +862,50 @@ def add_net_option(devg):
 
 
 def add_device_options(devg):
-    devg.add_argument("--controller", dest="controller", action="append",
+    devg.add_argument("--controller", action="append",
                     help=_("Configure a guest controller device. Ex:\n"
                            "--controller type=usb,model=ich9-ehci1"))
-    devg.add_argument("--serial", dest="serials", action="append",
+    devg.add_argument("--serial", action="append",
                     help=_("Configure a guest serial device"))
-    devg.add_argument("--parallel", dest="parallels", action="append",
+    devg.add_argument("--parallel", action="append",
                     help=_("Configure a guest parallel device"))
-    devg.add_argument("--channel", dest="channels", action="append",
+    devg.add_argument("--channel", action="append",
                     help=_("Configure a guest communication channel"))
-    devg.add_argument("--console", dest="consoles", action="append",
+    devg.add_argument("--console", action="append",
                     help=_("Configure a text console connection between "
                            "the guest and host"))
-    devg.add_argument("--host-device", dest="hostdevs", action="append",
+    devg.add_argument("--host-device", action="append",
                     help=_("Configure physical host devices attached to the "
                            "guest"))
-    devg.add_argument("--soundhw", dest="sound", action="append",
+    devg.add_argument("--soundhw", action="append",
                     help=_("Configure guest sound device emulation"))
-    devg.add_argument("--watchdog", dest="watchdog", action="append",
+    devg.add_argument("--watchdog", action="append",
                     help=_("Configure a guest watchdog device"))
-    devg.add_argument("--video", dest="video", action="append",
+    devg.add_argument("--video", action="append",
                     help=_("Configure guest video hardware."))
-    devg.add_argument("--smartcard", dest="smartcard", action="append",
+    devg.add_argument("--smartcard", action="append",
                     help=_("Configure a guest smartcard device. Ex:\n"
                            "--smartcard mode=passthrough"))
-    devg.add_argument("--redirdev", dest="redirdev", action="append",
+    devg.add_argument("--redirdev", action="append",
                     help=_("Configure a guest redirection device. Ex:\n"
                            "--redirdev usb,type=tcp,server=192.168.1.1:4000"))
-    devg.add_argument("--memballoon", dest="memballoon", action="append",
+    devg.add_argument("--memballoon", action="append",
                     help=_("Configure a guest memballoon device. Ex:\n"
                            "--memballoon model=virtio"))
-    devg.add_argument("--tpm", dest="tpm", action="append",
+    devg.add_argument("--tpm", action="append",
                     help=_("Configure a guest TPM device. Ex:\n"
                            "--tpm /dev/tpm"))
-    devg.add_argument("--rng", dest="rng", action="append",
+    devg.add_argument("--rng", action="append",
                     help=_("Configure a guest RNG device. Ex:\n"
                            "--rng /dev/random\n"
      "--rng egd,backend_host=localhost,backend_service=708,backend_type=tcp"))
-    devg.add_argument("--panic", dest="panic", action="append",
+    devg.add_argument("--panic", action="append",
                     help=_("Configure a guest panic device. Ex:\n"
                            "--panic default"))
 
 
 def add_gfx_option(devg):
-    devg.add_argument("--graphics", dest="graphics", action="append",
+    devg.add_argument("--graphics", action="append",
       help=_("Configure guest display settings. Ex:\n"
              "--graphics vnc\n"
              "--graphics spice,port=5901,tlsport=5902\n"
@@ -914,7 +914,7 @@ def add_gfx_option(devg):
 
 
 def add_fs_option(devg):
-    devg.add_argument("--filesystem", dest="filesystems", action="append",
+    devg.add_argument("--filesystem", action="append",
         help=_("Pass host directory to the guest. Ex: \n"
                "--filesystem /my/source/dir,/dir/in/guest\n"
                "--filesystem template_name,/,type=template"))
@@ -932,9 +932,9 @@ def add_distro_options(g):
 
 
 def add_old_feature_options(optg):
-    optg.add_argument("--noapic", action="store_true", dest="noapic",
+    optg.add_argument("--noapic", action="store_true",
                     default=False, help=argparse.SUPPRESS)
-    optg.add_argument("--noacpi", action="store_true", dest="noacpi",
+    optg.add_argument("--noacpi", action="store_true",
                     default=False, help=argparse.SUPPRESS)
 
 

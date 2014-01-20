@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
+import argparse
 import sys
 
 import urlgrabber.progress as progress
@@ -41,13 +42,11 @@ def parse_args():
                         help=_("virt-image(5) image descriptor"))
 
     geng = parser.add_argument_group(_("General Options"))
-    geng.add_argument("-n", "--name", dest="name",
-                    help=_("Name of the guest instance"))
+    geng.add_argument("-n", "--name", help=_("Name of the guest instance"))
     geng.add_argument("-r", "--ram", type=int, dest="memory",
                     help=_("Memory to allocate for guest instance in "
                            "megabytes"))
-    geng.add_argument("-u", "--uuid", dest="uuid",
-                    help=_("UUID for the guest."))
+    geng.add_argument("-u", "--uuid", help=argparse.SUPPRESS)
     cli.vcpu_cli_options(geng)
     cli.add_distro_options(geng)
     cli.add_old_feature_options(geng)
@@ -56,10 +55,9 @@ def parse_args():
     cli.graphics_option_group(parser)
 
     misc = parser.add_argument_group(_("Miscellaneous Options"))
-    misc.add_argument("--boot", type=int, dest="boot",
+    misc.add_argument("--boot", type=int,
                     help=_("The zero-based index of the boot record to use"))
     misc.add_argument("--skip-checksum", action="store_true",
-                    dest="skipchecksum",
                     help=_("Skip disk checksum verification process"))
 
     cli.add_misc_options(misc, prompt=True, replace=True, printxml=True,
@@ -132,7 +130,7 @@ def main(conn=None):
 
     meter = progress.TextMeter(fo=sys.stdout)
 
-    if not options.skipchecksum:
+    if not options.skip_checksum:
         for disk in image.storage.values():
             disk.check_disk_signature(meter=meter)
 

@@ -46,7 +46,7 @@ def install_specified(location, cdpath, pxe, import_install):
     return bool(pxe or cdpath or location or import_install)
 
 
-def cdrom_specified(guest, diskopts=None):
+def cdrom_specified(guest, disk=None):
     disks = guest.get_devices("disk")
 
     for disk in disks:
@@ -54,8 +54,8 @@ def cdrom_specified(guest, diskopts=None):
             return True
 
     # Probably haven't set up disks yet
-    if not disks and diskopts:
-        for opts in diskopts:
+    if not disks and disk:
+        for opts in disk:
             if opts.count("device=cdrom"):
                 return True
 
@@ -114,11 +114,11 @@ def check_cdrom_option_error(options):
 ##############################
 
 def convert_old_sound(options):
-    if options.sound:
+    if options.soundhw:
         return
     if not options.old_sound_bool:
         return
-    options.sound = "default"
+    options.soundhw = "default"
 
 
 def get_disks(guest, disks, nodisks, need_storage):
@@ -128,9 +128,9 @@ def get_disks(guest, disks, nodisks, need_storage):
     if not disks and need_storage and cli.is_prompt():
         disks = [None]
 
-    for diskopts in disks:
+    for disk in disks:
         try:
-            if diskopts is None:
+            if disk is None:
                 dev = None
                 sparse = True
                 size = None
@@ -139,7 +139,7 @@ def get_disks(guest, disks, nodisks, need_storage):
                 # We skip validation here, since we may have converted
                 # --file-size to --disk size=8 which doesn't validate on
                 # its own.
-                dev = cli.parse_disk(guest, diskopts,
+                dev = cli.parse_disk(guest, disk,
                                      virtinst.VirtualDisk(guest.conn))
                 size = dev.cli_size
                 path = dev.path
@@ -154,7 +154,7 @@ def get_disks(guest, disks, nodisks, need_storage):
 
 
 def convert_old_disks(options):
-    if options.diskopts or options.nodisks:
+    if options.disk or options.nodisks:
         return
 
     paths = virtinst.util.listify(options.file_paths)
@@ -184,7 +184,7 @@ def convert_old_disks(options):
         logging.debug("Converted to new style: --disk %s", optstr)
         opts.append(optstr)
 
-    options.diskopts = opts
+    options.disk = opts
     options.file_paths = []
     options.disksize = None
     options.sparse = True
@@ -378,16 +378,16 @@ def validate_required_options(options, guest):
         msg += "\n" + cli.ram_missing
 
     if (not guest.os.is_container() and
-        not storage_specified(options.diskopts,
+        not storage_specified(options.disk,
                               options.nodisks,
-                              options.filesystems)):
+                              options.filesystem)):
         msg += "\n" + disk_missing
         need_storage = True
 
     if (not guest.os.is_container() and
         (not install_specified(options.location, options.cdrom,
                                options.pxe, options.import_install)) and
-        (not cdrom_specified(guest, options.diskopts))):
+        (not cdrom_specified(guest, options.disk))):
         msg += "\n" + install_missing
         need_install = True
 
@@ -400,12 +400,12 @@ def validate_required_options(options, guest):
 def check_option_collisions(options, guest):
     # Disk collisions
     if options.nodisks and (options.file_paths or
-                            options.diskopts or
+                            options.disk or
                             options.disksize):
         fail(_("Cannot specify storage and use --nodisks"))
 
     if ((options.file_paths or options.disksize or not options.sparse) and
-        options.diskopts):
+        options.disk):
         fail(_("Cannot mix --file, --nonsparse, or --file-size with --disk "
                "options. Use --disk PATH[,size=SIZE][,sparse=yes|no]"))
 
@@ -443,9 +443,9 @@ def check_option_collisions(options, guest):
         guest.conn.support_remote_url_install()):
         fail(_("Libvirt version does not support remote --location installs"))
 
-    if not options.location and options.extra:
+    if not options.location and options.extra_args:
         fail(_("--extra-args only work if specified with --location."))
-    if not options.location and options.initrd_injections:
+    if not options.location and options.initrd_inject:
         fail(_("--initrd-inject only works if specified with --location."))
 
 
@@ -464,7 +464,7 @@ def build_installer(options, conn, virt_type):
         instclass = virtinst.PXEInstaller
     elif options.cdrom or options.location:
         instclass = virtinst.DistroInstaller
-    elif options.import_install or options.bootopts:
+    elif options.import_install or options.boot:
         if options.import_install and options.nodisks:
             fail(_("A disk device must be specified with --import."))
         options.import_install = True
@@ -496,8 +496,8 @@ def build_guest_instance(conn, options):
     cli.convert_old_features(options)
 
     # Install options
-    guest.installer.extraargs = options.extra
-    guest.installer.initrd_injections = options.initrd_injections
+    guest.installer.extraargs = options.extra_args or ""
+    guest.installer.initrd_injections = options.initrd_inject
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
     guest.os.init = options.init
 
@@ -507,7 +507,7 @@ def build_guest_instance(conn, options):
     cli.parse_numatune(guest, options.numatune)
     cli.parse_cpu(guest, options.cpu)
     cli.parse_security(guest, options.security)
-    cli.parse_boot(guest, options.bootopts)
+    cli.parse_boot(guest, options.boot)
     cli.parse_features(guest, options.features)
     cli.parse_clock(guest, options.clock)
 
@@ -522,13 +522,13 @@ def build_guest_instance(conn, options):
     cli.get_graphics(guest, options.graphics)
     cli.get_videos(guest, options.video)
     cli.get_watchdogs(guest, options.watchdog)
-    cli.get_filesystems(guest, options.filesystems)
-    cli.get_sounds(guest, options.sound)
-    cli.get_serials(guest, options.serials)
-    cli.get_parallels(guest, options.parallels)
-    cli.get_channels(guest, options.channels)
-    cli.get_consoles(guest, options.consoles)
-    cli.get_hostdevs(guest, options.hostdevs)
+    cli.get_filesystems(guest, options.filesystem)
+    cli.get_sounds(guest, options.soundhw)
+    cli.get_serials(guest, options.serial)
+    cli.get_parallels(guest, options.parallel)
+    cli.get_channels(guest, options.channel)
+    cli.get_consoles(guest, options.console)
+    cli.get_hostdevs(guest, options.host_device)
     cli.get_smartcards(guest, options.smartcard)
     cli.get_tpms(guest, options.tpm)
     cli.get_rngs(guest, options.rng)
@@ -550,7 +550,7 @@ def build_guest_instance(conn, options):
     # Needs to come after setting memory
     cli.get_cpuset(guest, options.cpuset)
 
-    get_disks(guest, options.diskopts, options.nodisks, need_storage)
+    get_disks(guest, options.disk, options.nodisks, need_storage)
     get_install_media(guest, options.location, options.cdrom, need_install)
 
     # Various little validations about option collisions. Need to do
@@ -890,58 +890,55 @@ def parse_args():
     cli.add_connect_option(parser)
 
     geng = parser.add_argument_group(_("General Options"))
-    geng.add_argument("-n", "--name", dest="name",
+    geng.add_argument("-n", "--name",
                     help=_("Name of the guest instance"))
     geng.add_argument("-r", "--ram", type=int, dest="memory",
                     help=_("Memory to allocate for guest instance in "
                            "megabytes"))
     cli.vcpu_cli_options(geng)
-    geng.add_argument("--description", dest="description",
+    geng.add_argument("--description",
                     help=_("Human readable description of the VM to store in "
                            "the generated XML."))
-    geng.add_argument("--security", dest="security",
+    geng.add_argument("--security",
                     help=_("Set domain security driver configuration."))
-    geng.add_argument("--numatune", dest="numatune",
+    geng.add_argument("--numatune",
                     help=_("Tune NUMA policy for the domain process."))
-    geng.add_argument("--features", dest="features",
+    geng.add_argument("--features",
                     help=_("Set domain <features> XML. Ex:\n"
                            "--features acpi=off\n"
                            "--features apic=on,eoi=on"))
-    geng.add_argument("--clock", dest="clock",
+    geng.add_argument("--clock",
                     help=_("Set domain <clock> XML. Ex:\n"
                            "--clock offset=localtime,rtc_tickpolicy=catchup"))
 
     insg = parser.add_argument_group(_("Installation Method Options"))
     insg.add_argument("-c", dest="cdrom_short", help=argparse.SUPPRESS)
-    insg.add_argument("--cdrom", dest="cdrom",
-                    help=_("CD-ROM installation media"))
-    insg.add_argument("-l", "--location", dest="location",
+    insg.add_argument("--cdrom", help=_("CD-ROM installation media"))
+    insg.add_argument("-l", "--location",
                     help=_("Installation source (eg, nfs:host:/path, "
                            "http://host/path, ftp://host/path)"))
-    insg.add_argument("--pxe", action="store_true", dest="pxe",
+    insg.add_argument("--pxe", action="store_true",
                     help=_("Boot from the network using the PXE protocol"))
     insg.add_argument("--import", action="store_true", dest="import_install",
                     help=_("Build guest around an existing disk image"))
-    insg.add_argument("--init", dest="init",
+    insg.add_argument("--init",
                     help=_("Path to init binary for container guest. Ex:\n"
                            "--init /path/to/app (to contain an application)\n"
                            "--init /sbin/init (for a full OS container)"))
-    insg.add_argument("--livecd", action="store_true", dest="livecd",
+    insg.add_argument("--livecd", action="store_true",
                     help=_("Treat the CD-ROM media as a Live CD"))
-    insg.add_argument("-x", "--extra-args", dest="extra",
-                    default="",
+    insg.add_argument("-x", "--extra-args",
                     help=_("Additional arguments to pass to the install kernel "
                            "booted from --location"))
-    insg.add_argument("--initrd-inject", dest="initrd_injections",
-                    action="append",
+    insg.add_argument("--initrd-inject", action="append",
                     help=_("Add given file to root of initrd from --location"))
     cli.add_distro_options(insg)
-    insg.add_argument("--boot", dest="bootopts", default="",
+    insg.add_argument("--boot", default="",
                     help=_("Optionally configure post-install boot order, "
                            "menu, permanent kernel boot, etc."))
 
     stog = parser.add_argument_group(_("Storage Configuration"))
-    stog.add_argument("--disk", dest="diskopts", action="append",
+    stog.add_argument("--disk", action="append",
         help=_("Specify storage with various options. Ex.\n"
                "--disk path=/my/existing/disk\n"
                "--disk path=/my/new/disk,size=5 (in gigabytes)\n"
@@ -981,22 +978,20 @@ def parse_args():
     virg = parser.add_argument_group(_("Virtualization Platform Options"))
     virg.add_argument("-v", "--hvm", action="store_true", dest="fullvirt",
                       help=_("This guest should be a fully virtualized guest"))
-    virg.add_argument("-p", "--paravirt", action="store_true", dest="paravirt",
+    virg.add_argument("-p", "--paravirt", action="store_true",
                     help=_("This guest should be a paravirtualized guest"))
     virg.add_argument("--container", action="store_true", default=False,
-                    dest="container",
                     help=_("This guest should be a container guest"))
     virg.add_argument("--virt-type", dest="hv_type",
                     default="",
                     help=_("Hypervisor name to use (kvm, qemu, xen, ...)"))
     virg.add_argument("--accelerate", action="store_true", default=False,
-                    dest="accelerate", help=argparse.SUPPRESS)
-    virg.add_argument("--arch", dest="arch",
+                     help=argparse.SUPPRESS)
+    virg.add_argument("--arch",
                     help=_("The CPU architecture to simulate"))
-    virg.add_argument("--machine", dest="machine",
+    virg.add_argument("--machine",
                     help=_("The machine type to emulate"))
-    virg.add_argument("-u", "--uuid", dest="uuid",
-                    help=_("UUID for the guest."))
+    virg.add_argument("-u", "--uuid", help=argparse.SUPPRESS)
     cli.add_old_feature_options(virg)
 
     misc = parser.add_argument_group(_("Miscellaneous Options"))
