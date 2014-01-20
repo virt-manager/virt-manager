@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 Red Hat, Inc.
+# Copyright (C) 2013, 2014 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -81,8 +81,7 @@ else:
     icon_dir = os.path.join(asset_dir, "icons")
 
 default_qemu_user = _get_param("default_qemu_user", "root")
-rhel_enable_unsupported_opts = not bool(int(
-    _get_param("hide_unsupported_rhel_options", "0")))
+stable_defaults = bool(int(_get_param("stable_defaults", "0")))
 
 preferred_distros = _split_list(_get_param("preferred_distros", ""))
 hv_packages = _split_list(_get_param("hv_packages", ""))

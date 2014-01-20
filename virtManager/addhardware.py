@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2007, 2013 Red Hat, Inc.
+# Copyright (C) 2006-2007, 2013, 2014 Red Hat, Inc.
 # Copyright (C) 2006 Hugh O. Brock <hbrock@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -525,7 +525,7 @@ class vmmAddHardware(vmmGObjectUI):
             model.append(["ide", "IDE"])
             model.append(["fdc", "Floppy"])
 
-            if self.vm.rhel6_defaults():
+            if self.vm.stable_defaults():
                 model.append(["scsi", "SCSI"])
                 model.append(["usb", "USB"])
 
@@ -938,7 +938,7 @@ class vmmAddHardware(vmmGObjectUI):
         return uihelpers.get_list_selection(self.widget("hw-list"))
 
     def update_char_device_type_model(self):
-        rhel6_blacklist = ["pipe", "udp"]
+        stable_blacklist = ["pipe", "udp"]
 
         # Char device type
         char_devtype = self.widget("char-device-type")
@@ -948,8 +948,8 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Type name, desc
         for t in char_class.TYPES:
-            if (t in rhel6_blacklist and
-                not self.vm.rhel6_defaults()):
+            if (t in stable_blacklist and
+                self.vm.stable_defaults()):
                 continue
 
             desc = char_class.pretty_type(t)
@@ -1755,8 +1755,7 @@ class vmmAddHardware(vmmGObjectUI):
         if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(conn)
 
-        rhel6 = self.vm.rhel6_defaults()
-        self.storage_browser.rhel6_defaults = rhel6
+        self.storage_browser.stable_defaults = self.vm.stable_defaults()
 
         self.storage_browser.set_finish_cb(set_storage_cb)
         self.storage_browser.set_browse_reason(reason)

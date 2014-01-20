@@ -1,4 +1,4 @@
-# Copyright (C) 2013 Red Hat, Inc.
+# Copyright (C) 2013, 2014 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -325,7 +325,7 @@ class TestXMLConfig(unittest.TestCase):
         self._compare(g, "install-f11-norheldefaults", do_install)
 
         try:
-            virtinst.enable_rhel_defaults = True
+            virtinst.stable_defaults = True
             origemu = g.emulator
             g.emulator = "/usr/libexec/qemu-kvm"
             g.conn._support_cache = {}
@@ -333,7 +333,7 @@ class TestXMLConfig(unittest.TestCase):
             g.emulator = origemu
             g.conn._support_cache = {}
         finally:
-            virtinst.enable_rhel_defaults = False
+            virtinst.stable_defaults = False
 
         # Verify main guest wasn't polluted
         self._compare(g, "install-f11-norheldefaults", do_install)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (C) 2013 Red Hat, Inc.
+# Copyright (C) 2013, 2014 Red Hat, Inc.
 
 # pylint: disable=W0201
 # Attribute defined outside __init__: custom commands require breaking this
@@ -320,8 +320,8 @@ class configure(Command):
          "name of your distro's askpass package(s) (default=none)"),
         ("preferred-distros=", None,
          "Distros to list first in the New VM wizard (default=none)"),
-        ("hide-unsupported-rhel-options", None,
-         "Hide config bits that are not supported on RHEL (default=no)"),
+        ("stable-defaults", None,
+         "Hide config bits that are not considered stable (default=no)"),
         ("default-graphics=", None,
          "Default graphics type (spice or vnc) (default=spice)"),
 
@@ -339,7 +339,7 @@ class configure(Command):
         self.kvm_package_names = None
         self.askpass_package_names = None
         self.preferred_distros = None
-        self.hide_unsupported_rhel_options = None
+        self.stable_defaults = None
         self.default_graphics = None
 
 
@@ -359,9 +359,9 @@ class configure(Command):
             template += "askpass_packages = %s\n" % self.askpass_package_names
         if self.preferred_distros is not None:
             template += "preferred_distros = %s\n" % self.preferred_distros
-        if self.hide_unsupported_rhel_options is not None:
-            template += ("hide_unsupported_rhel_options = %s\n" %
-                         self.hide_unsupported_rhel_options)
+        if self.stable_defaults is not None:
+            template += ("stable_defaults = %s\n" %
+                         self.stable_defaults)
         if self.default_graphics is not None:
             template += "default_graphics = %s\n" % self.default_graphics
 

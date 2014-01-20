@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009, 2013 Red Hat, Inc.
+# Copyright (C) 2009, 2013, 2014 Red Hat, Inc.
 # Copyright (C) 2009 Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -162,7 +162,7 @@ def populate_video_combo(vm, combo, no_default=None):
     model.clear()
     tmpdev = virtinst.VirtualVideoDevice(vm.conn.get_backend())
     for m in tmpdev.MODELS:
-        if not vm.rhel6_defaults():
+        if vm.stable_defaults():
             if m == "qxl" and not has_spice and not has_qxl:
                 # Only list QXL video option when VM has SPICE video
                 continue
@@ -181,14 +181,14 @@ def build_sound_combo(vm, combo, no_default=False):
     set_combo_text_column(combo, 0)
     model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
-    disable_rhel = not vm.rhel6_defaults()
-    rhel_soundmodels = ["ich6", "ac97"]
+    stable_defaults = vm.stable_defaults()
+    stable_soundmodels = ["ich6", "ac97"]
 
     for m in virtinst.VirtualAudio.MODELS:
         if m == virtinst.VirtualAudio.MODEL_DEFAULT and no_default:
             continue
 
-        if (disable_rhel and m not in rhel_soundmodels):
+        if (stable_defaults and m not in stable_soundmodels):
             continue
 
         model.append([m])
@@ -426,7 +426,7 @@ def update_storage_format_combo(vm, combo, create):
 
     formats = ["raw", "qcow2", "qed"]
     no_create_formats = []
-    if vm.rhel6_defaults():
+    if not vm.stable_defaults():
         formats.append("vmdk")
         no_create_formats.append("vdi")
 

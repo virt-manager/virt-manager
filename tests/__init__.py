@@ -1,4 +1,4 @@
-# Copyright (C) 2013 Red Hat, Inc.
+# Copyright (C) 2013, 2014 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ os.environ["VIRTINST_TEST_TRACKPROPS"] = "1"
 os.environ["VIRTINST_TEST_SUITE"] = "1"
 
 import virtinst
-virtinst.enable_rhel_defaults = False
+virtinst.stable_defaults = False
 
 from virtcli import cliconfig
 # This sets all the cli bits back to their defaults

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006, 2013 Red Hat, Inc.
+# Copyright (C) 2006, 2013, 2014 Red Hat, Inc.
 # Copyright (C) 2006 Hugh O. Brock <hbrock@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -173,8 +173,7 @@ class vmmChooseCD(vmmGObjectUI):
             self.storage_browser.connect("storage-browse-finish",
                                          self.set_storage_path)
 
-        rhel6 = self.vm.rhel6_defaults()
-        self.storage_browser.rhel6_defaults = rhel6
+        self.storage_browser.stable_defaults = self.vm.stable_defaults()
 
         if self.media_type == MEDIA_FLOPPY:
             self.storage_browser.set_browse_reason(

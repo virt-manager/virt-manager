@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008, 2013 Red Hat, Inc.
+# Copyright (C) 2008, 2013, 2014 Red Hat, Inc.
 # Copyright (C) 2008 Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -57,7 +57,7 @@ INSTALL_PAGE_IMPORT = 3
 INSTALL_PAGE_CONTAINER_APP = 4
 INSTALL_PAGE_CONTAINER_OS = 5
 
-RHEL6_OS_SUPPORT = [
+STABLE_OS_SUPPORT = [
     "rhel3", "rhel4", "rhel5.4", "rhel6",
     "win2k3", "winxp", "win2k8", "vista", "win7",
 ]
@@ -841,8 +841,8 @@ class vmmCreate(vmmGObjectUI):
         widget = self.widget("install-os-type")
         model = widget.get_model()
         model.clear()
-        filtervars = (not self._rhel6_defaults() and
-                      RHEL6_OS_SUPPORT or
+        filtervars = (self._stable_defaults() and
+                      STABLE_OS_SUPPORT or
                       None)
 
         types = virtinst.osdict.list_os(list_types=True)
@@ -879,8 +879,8 @@ class vmmCreate(vmmGObjectUI):
             self._add_os_row(model, None, _("Generic"), True)
             return
 
-        filtervars = (not self._rhel6_defaults() and
-                      RHEL6_OS_SUPPORT or
+        filtervars = (not self._stable_defaults() and
+                      STABLE_OS_SUPPORT or
                       None)
         preferred = self.config.preferred_distros
 
@@ -2178,14 +2178,14 @@ class vmmCreate(vmmGObjectUI):
             logging.exception("Error detecting distro.")
             self.detectedDistro = -1
 
-    def _rhel6_defaults(self):
+    def _stable_defaults(self):
         emu = None
         if self.guest:
             emu = self.guest.emulator
         elif self.capsdomain:
             emu = self.capsdomain.emulator
 
-        ret = self.conn.rhel6_defaults(emu)
+        ret = self.conn.stable_defaults(emu)
         return ret
 
     def _browse_file(self, cbwidget, cb=None, is_media=False, is_dir=False):
@@ -2205,7 +2205,7 @@ class vmmCreate(vmmGObjectUI):
         if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(self.conn)
 
-        self.storage_browser.rhel6_defaults = self._rhel6_defaults()
+        self.storage_browser.stable_defaults = self._stable_defaults()
 
         self.storage_browser.set_vm_name(self.get_config_name())
         self.storage_browser.set_finish_cb(callback)

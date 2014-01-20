@@ -2,7 +2,7 @@
 
 
 %define with_guestfs               0
-%define disable_unsupported_rhel   0
+%define stable_defaults            0
 %define askpass_package            "openssh-askpass"
 %define qemu_user                  "qemu"
 %define libvirt_packages           "libvirt-daemon-kvm,libvirt-daemon-config-network"
@@ -12,7 +12,7 @@
 %if 0%{?rhel}
 %define preferred_distros          "rhel,fedora"
 %define kvm_packages               "qemu-kvm"
-%define disable_unsupported_rhel   1
+%define stable_defaults            1
 %endif
 
 
@@ -125,8 +125,8 @@ machine).
 %define _askpass_package --askpass-package-names=%{askpass_package}
 %endif
 
-%if %{disable_unsupported_rhel}
-%define _disable_unsupported_rhel --hide-unsupported-rhel-options
+%if %{stable_defaults}
+%define _stable_defaults --stable-defaults
 %endif
 
 python setup.py configure \
@@ -136,7 +136,7 @@ python setup.py configure \
     %{?_libvirt_packages} \
     %{?_askpass_package} \
     %{?_preferred_distros} \
-    %{?_disable_unsupported_rhel}
+    %{?_stable_defaults}
 
 
 %install

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006, 2013 Red Hat, Inc.
+# Copyright (C) 2006, 2013, 2014 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -371,8 +371,8 @@ class vmmDomain(vmmLibvirtObject):
     def get_install_abort(self):
         return bool(self._install_abort)
 
-    def rhel6_defaults(self):
-        return self.conn.rhel6_defaults(self.get_emulator())
+    def stable_defaults(self):
+        return self.conn.stable_defaults(self.get_emulator())
 
     def is_read_only(self):
         if self.is_management_domain():

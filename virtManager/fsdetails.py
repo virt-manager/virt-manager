@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2007, 2013 Red Hat, Inc.
+# Copyright (C) 2006-2007, 2013, 2014 Red Hat, Inc.
 # Copyright (C) 2006 Hugh O. Brock <hbrock@redhat.com>
 # Copyright (C) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
 #
@@ -411,8 +411,7 @@ class vmmFSDetails(vmmGObjectUI):
         if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(conn)
 
-        rhel6 = self.vm.rhel6_defaults()
-        self.storage_browser.rhel6_defaults = rhel6
+        self.storage_browser.stable_defaults = self.vm.stable_defaults()
 
         self.storage_browser.set_finish_cb(set_storage_cb)
         self.storage_browser.set_browse_reason(reason)

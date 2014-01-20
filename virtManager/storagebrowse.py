@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009, 2013 Red Hat, Inc.
+# Copyright (C) 2009, 2013, 2014 Red Hat, Inc.
 # Copyright (C) 2009 Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -54,8 +54,9 @@ class vmmStorageBrowser(vmmGObjectUI):
 
         # Arguments to pass to util.browse_local for local storage
         self.browse_reason = None
-        self.rhel6_defaults = True
         self.local_args = {}
+
+        self.stable_defaults = False
 
         self.builder.connect_signals({
             "on_vmm_storage_browse_delete_event" : self.close,
@@ -332,7 +333,7 @@ class vmmStorageBrowser(vmmGObjectUI):
             if ((self.browse_reason == self.config.CONFIG_DIR_FS)
                 and fmt != 'dir'):
                 return False
-            elif not self.rhel6_defaults:
+            elif self.stable_defaults:
                 if fmt == "vmdk":
                     return False
             return True

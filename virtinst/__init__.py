@@ -1,4 +1,4 @@
-# Copyright (C) 2013 Red Hat, Inc.
+# Copyright (C) 2013, 2014 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 # MA 02110-1301 USA.
 
 from virtcli import cliconfig, cliutils
-enable_rhel_defaults = not cliconfig.rhel_enable_unsupported_opts
+stable_defaults = cliconfig.stable_defaults
 cliutils.setup_i18n()
 
 

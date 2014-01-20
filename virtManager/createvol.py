@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008, 2013 Red Hat, Inc.
+# Copyright (C) 2008, 2013, 2014 Red Hat, Inc.
 # Copyright (C) 2008 Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -212,7 +212,7 @@ class vmmCreateVolume(vmmGObjectUI):
         return None
 
     def populate_vol_format(self):
-        rhel6_file_whitelist = ["raw", "qcow2", "qed"]
+        stable_whitelist = ["raw", "qcow2", "qed"]
         model = self.widget("vol-format").get_model()
         model.clear()
 
@@ -221,9 +221,9 @@ class vmmCreateVolume(vmmGObjectUI):
             formats = self.vol.list_create_formats()
 
         if (self.vol.file_type == self.vol.TYPE_FILE and
-            not self.conn.rhel6_defaults_caps()):
+            self.conn.stable_defaults()):
             newfmts = []
-            for f in rhel6_file_whitelist:
+            for f in stable_whitelist:
                 if f in formats:
                     newfmts.append(f)
             formats = newfmts
