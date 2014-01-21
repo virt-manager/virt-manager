@@ -109,7 +109,7 @@ specify UUID, you should use a 32-digit hexadecimal number. UUID are intended
 to be unique across the entire data center, and indeed world. Bear this in
 mind if manually specifying a UUID
 
-=item --vcpus=VCPUS[,maxvcpus=MAX][,sockets=#][,cores=#][,threads=#]
+=item --vcpus=VCPUS[,maxvcpus=MAX][,sockets=#][,cores=#][,threads=#][,cpuset=CPUSET]
 
 Number of virtual cpus to configure for the guest. If 'maxvcpus' is specified,
 the guest will be able to hotplug up to MAX vcpus while the guest is running,
@@ -119,9 +119,7 @@ CPU topology can additionally be specified with sockets, cores, and threads.
 If values are omitted, the rest will be autofilled preferring sockets over
 cores over threads.
 
-=item --cpuset=CPUSET
-
-Set which physical cpus the guest can use. C<CPUSET> is a comma separated list of numbers, which can also be specified in ranges or cpus to exclude. Example:
+'cpuset' sets which physical cpus the guest can use. C<CPUSET> is a comma separated list of numbers, which can also be specified in ranges or cpus to exclude. Example:
 
     0,2,3,5     : Use processors 0,2,3 and 5
     1-5,^3,8    : Use processors 1,2,4,5 and 8
@@ -134,14 +132,12 @@ an optimal cpu pinning using NUMA data, if available.
 Tune NUMA policy for the domain process. Example invocations
 
     --numatune 1,2,3,4-7
-    --numatune \"1-3,5\",mode=preferred
+    --numatune 1-3,5,mode=preferred
 
 Specifies the numa nodes to allocate memory from. This has the same syntax
 as C<--cpuset> option. mode can be one of 'interleave', 'preferred', or
 'strict' (the default). See 'man 8 numactl' for information about each
 mode.
-
-The nodeset string must use escaped-quotes if specifying any other option.
 
 =item --cpu MODEL[,+feature][,-feature][,match=MATCH][,vendor=VENDOR]
 

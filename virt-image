@@ -101,23 +101,22 @@ def main(conn=None):
     cli.convert_old_graphics(guest, options,
         default_override=bool(image.domain.graphics))
     cli.convert_old_features(options)
+    cli.convert_old_cpuset(options)
     if not options.vcpus:
         options.vcpus = image.domain.vcpu or ""
 
     guest.replace = options.replace
+    cli.set_os_variant(guest, options.distro_type, options.distro_variant)
 
     cli.get_name(guest, options.name or image.name)
     cli.get_memory(guest, options.memory or (image.domain.memory and
                                              int(image.domain.memory)))
     if options.uuid:
         guest.uuid = options.uuid
-    cli.set_os_variant(guest, options.distro_type, options.distro_variant)
 
     parsermap = cli.build_parser_map(options,
         only=["vcpus", "cpu", "network", "graphics", "features"])
     cli.parse_option_strings(parsermap, options, guest, None)
-
-    cli.get_cpuset(guest, options.cpuset)
 
     if not guest.get_devices("input"):
         guest.add_default_input_device()

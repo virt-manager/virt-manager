@@ -564,24 +564,13 @@ def get_memory(guest, memory):
                 func=check_memory)
 
 
-def get_cpuset(guest, cpuset):
-    memory = guest.memory
-    conn = guest.conn
-    if cpuset and cpuset != "auto":
-        guest.cpuset = cpuset
-
-    elif cpuset == "auto":
-        tmpset = None
-        try:
-            tmpset = virtinst.DomainNumatune.generate_cpuset(conn, memory)
-        except Exception, e:
-            logging.debug("Not setting cpuset: %s", str(e))
-
-        if tmpset:
-            logging.debug("Auto cpuset is: %s", tmpset)
-            guest.cpuset = tmpset
-
-    return
+def convert_old_cpuset(options):
+    if not options.cpuset:
+        return
+    if not options.vcpus:
+        options.vcpus = ""
+    options.vcpus += ",cpuset=%s" % options.cpuset
+    logging.debug("Generated compat cpuset: --vcpus %s", options.vcpus)
 
 
 def _default_network_opts(guest):
@@ -771,16 +760,15 @@ def vcpu_cli_options(grp, backcompat=True):
     grp.add_argument("--vcpus",
         help=_("Number of vcpus to configure for your guest. Ex:\n"
                "--vcpus 5\n"
-               "--vcpus 5,maxcpus=10\n"
-               "--vcpus sockets=2,cores=4,threads=2"))
-    grp.add_argument("--cpuset",
-                   help=_("Set which physical CPUs domain can use."))
+               "--vcpus 5,maxcpus=10,cpuset=1-4,6,8\n"
+               "--vcpus sockets=2,cores=4,threads=2,"))
     grp.add_argument("--cpu",
         help=_("CPU model and features. Ex: --cpu coreduo,+x2apic"))
 
     if backcompat:
         grp.add_argument("--check-cpu", action="store_true",
                          help=argparse.SUPPRESS)
+        grp.add_argument("--cpuset", help=argparse.SUPPRESS)
 
 
 def graphics_option_group(parser):
@@ -1234,6 +1222,22 @@ class ParserVCPU(VirtCLIParser):
 
         self.set_param(None, "vcpus", setter_cb=set_vcpus_cb)
         self.set_param("vcpus", "maxvcpus")
+
+        def set_cpuset_cb(opts, inst, cliname, val):
+            if val == "auto":
+                try:
+                    val = virtinst.DomainNumatune.generate_cpuset(
+                        inst.conn, inst.memory)
+                    logging.debug("Auto cpuset is: %s", val)
+                except Exception, e:
+                    logging.error("Not setting cpuset: %s", str(e))
+                    val = None
+
+            if val:
+                inst.cpuset = val
+
+        self.set_param(None, "cpuset", can_comma=True,
+                       setter_cb=set_cpuset_cb)
 
 
     def _parse(self, opts, inst):

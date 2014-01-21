@@ -495,12 +495,17 @@ def build_guest_instance(conn, options):
     cli.convert_old_graphics(guest, options)
     convert_old_disks(options)
     cli.convert_old_features(options)
+    cli.convert_old_cpuset(options)
 
     # non-xml install options
     guest.installer.extraargs = options.extra_args or ""
     guest.installer.initrd_injections = options.initrd_inject
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
     guest.autostart = options.autostart
+
+    cli.get_name(guest, options.name)
+    # Memory needs to come before the vcpu setting
+    cli.get_memory(guest, options.memory)
 
     # Guest configuration
     guest.os.init = options.init
@@ -520,12 +525,6 @@ def build_guest_instance(conn, options):
     # Do this after setting up all optional parameters, so we report error
     # about those first.
     need_storage, need_install = validate_required_options(options, guest)
-
-    # Actually set required options
-    cli.get_name(guest, options.name)
-    cli.get_memory(guest, options.memory)
-    # Needs to come after setting memory
-    cli.get_cpuset(guest, options.cpuset)
 
     get_disks(guest, options.disk, options.nodisks, need_storage)
     get_install_media(guest, options.location, options.cdrom, need_install)
