@@ -121,6 +121,15 @@ def convert_old_sound(options):
     options.soundhw = "default"
 
 
+def convert_old_init(options):
+    if not options.init:
+        return
+    if not options.boot:
+        options.boot = ""
+    options.boot += ",init=%s" % options.init
+    logging.debug("Converted old --init to --boot %s", options.boot)
+
+
 def get_disks(guest, disks, nodisks, need_storage):
     if nodisks:
         return
@@ -496,6 +505,7 @@ def build_guest_instance(conn, options):
     convert_old_disks(options)
     cli.convert_old_features(options)
     cli.convert_old_cpuset(options)
+    convert_old_init(options)
 
     # non-xml install options
     guest.installer.extraargs = options.extra_args or ""
@@ -508,7 +518,6 @@ def build_guest_instance(conn, options):
     cli.get_memory(guest, options.memory)
 
     # Guest configuration
-    guest.os.init = options.init
     if options.uuid:
         guest.uuid = options.uuid
     guest.description = options.description
@@ -897,10 +906,6 @@ def parse_args():
                     help=_("Boot from the network using the PXE protocol"))
     insg.add_argument("--import", action="store_true", dest="import_install",
                     help=_("Build guest around an existing disk image"))
-    insg.add_argument("--init",
-                    help=_("Path to init binary for container guest. Ex:\n"
-                           "--init /path/to/app (to contain an application)\n"
-                           "--init /sbin/init (for a full OS container)"))
     insg.add_argument("--livecd", action="store_true",
                     help=_("Treat the CD-ROM media as a Live CD"))
     insg.add_argument("-x", "--extra-args",
@@ -909,9 +914,12 @@ def parse_args():
     insg.add_argument("--initrd-inject", action="append",
                     help=_("Add given file to root of initrd from --location"))
     cli.add_distro_options(insg)
-    insg.add_argument("--boot", default="",
+    insg.add_argument("--boot",
                     help=_("Optionally configure post-install boot order, "
-                           "menu, permanent kernel boot, etc."))
+                           "menu, permanent kernel boot, etc. Ex:\n"
+                           "--boot hd,cdrom,menu=on\n"
+                           "--boot init=/sbin/init (for containers)"))
+    insg.add_argument("--init", help=argparse.SUPPRESS)
 
     stog = parser.add_argument_group(_("Storage Configuration"))
     stog.add_argument("--disk", action="append",

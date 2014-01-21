@@ -307,12 +307,6 @@ Skip the OS installation process, and build a guest around an existing
 disk image. The device used for booting is the first device specified via
 C<--disk> or C<--filesystem>.
 
-=item --init=INITPATH
-
-Path to a binary that the container guest will init. If a root C<--filesystem>
-is has been specified, virt-install will default to /sbin/init, otherwise
-will default to /bin/sh.
-
 =item  --livecd
 
 Specify that the installation media is a live CD and thus the guest
@@ -392,6 +386,14 @@ guests.
 
 Enable the bios boot menu, and enable sending bios text output over
 serial console.
+
+=back
+
+=item B<--boot init=INITPATH>
+
+Path to a binary that the container guest will init. If a root C<--filesystem>
+has been specified, virt-install will default to /sbin/init, otherwise
+will default to /bin/sh.
 
 =back
 
