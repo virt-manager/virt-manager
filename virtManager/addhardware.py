@@ -1546,13 +1546,19 @@ class vmmAddHardware(vmmGObjectUI):
         disk.vmm_controller = None
         if (controller_model == "virtio-scsi") and (bus == "scsi"):
             controllers = self.vm.get_controller_devices()
+            ctrls_scsi = [x for x in controllers if
+                    (x.type == VirtualController.TYPE_SCSI)]
+            if len(ctrls_scsi) > 0:
+                index_new = max([x.index for x in ctrls_scsi]) + 1
+            else:
+                index_new = 0
             controller = VirtualController(conn)
             controller.type = "scsi"
             controller.model = controller_model
             disk.vmm_controller = controller
             for d in controllers:
                 if controller.type == d.type:
-                    controller.index += 1
+                    controller.index = index_new
                 if controller_model == d.model:
                     disk.vmm_controller = None
                     controller = d
