@@ -1096,10 +1096,12 @@ class VirtCLIParser(object):
     """
     devclass = None
 
-    def __init__(self):
+    def __init__(self, cli_arg_name):
         """
         These values should be set by subclasses in _init_params
 
+        @cli_arg_name: The command line argument this maps to, so
+            "host-device" for --host-device
         @guest: Will be set parse(), the toplevel virtinst.Guest object
         @remove_first: Passed to VirtOptionString
         @check_none: If the parsed option string is just 'none', return None
@@ -1107,6 +1109,11 @@ class VirtCLIParser(object):
             Called before the virtinst object is altered. Take arguments
             (inst, attrname, cliname)
         """
+        self.cli_arg_name = cli_arg_name
+        # This is the name of the variable that argparse will set in
+        # the result of parse_args()
+        self.option_variable_name = cli_arg_name.replace("-", "_")
+
         self.guest = None
         self.remove_first = None
         self.check_none = False
@@ -1125,13 +1132,12 @@ class VirtCLIParser(object):
         self._params.append(_VirtCLIArgument(*args, **kwargs))
 
     def parse(self, guest, optlist, inst=None, validate=True):
-        # XXX: review
         optlist = util.listify(optlist)
         editting = bool(inst)
 
         if editting and optlist:
             # If an object is passed in, we are updating it in place, and
-            # only use the last command line occurence
+            # only use the last command line occurence, eg. from virt-xml
             optlist = [optlist[-1]]
 
         ret = []
@@ -1156,8 +1162,9 @@ class VirtCLIParser(object):
             except Exception, e:
                 logging.debug("Exception parsing inst=%s optstr=%s",
                               inst, optstr, exc_info=True)
-                fail(_("Error in %(options)s: %(err)s") %
-                     {"options": optstr, "err": str(e)})
+                fail(_("Error: --%(cli_arg_name)s %(options)s: %(err)s") %
+                        {"cli_arg_name": self.cli_arg_name,
+                         "options": optstr, "err": str(e)})
 
         if not ret:
             return None
@@ -1207,8 +1214,6 @@ class ParserNumatune(VirtCLIParser):
         self.set_param("numatune.memory_nodeset", "nodeset", can_comma=True)
         self.set_param("numatune.memory_mode", "mode")
 
-parse_numatune = ParserNumatune().parse
-
 
 ##################
 # --vcpu parsing #
@@ -1240,8 +1245,6 @@ class ParserVCPU(VirtCLIParser):
         if set_from_top:
             inst.vcpus = inst.cpu.vcpus_from_topology()
         return ret
-
-parse_vcpus = ParserVCPU().parse
 
 
 #################
@@ -1299,9 +1302,6 @@ class ParserCPU(VirtCLIParser):
         return VirtCLIParser._parse(self, optsobj, inst)
 
 
-parse_cpu = ParserCPU().parse
-
-
 ##################
 # --boot parsing #
 ##################
@@ -1339,8 +1339,6 @@ class ParserBoot(VirtCLIParser):
 
         VirtCLIParser._parse(self, opts, inst)
 
-parse_boot = ParserBoot().parse
-
 
 ######################
 # --security parsing #
@@ -1352,9 +1350,6 @@ class ParserSecurity(VirtCLIParser):
         self.set_param("seclabel.label", "label", can_comma=True)
         self.set_param("seclabel.relabel", "relabel",
                        is_onoff=True)
-
-
-parse_security = ParserSecurity().parse
 
 
 ######################
@@ -1382,8 +1377,6 @@ class ParserFeatures(VirtCLIParser):
             is_onoff=True)
         self.set_param("features.hyperv_spinlocks_retries",
             "hyperv_spinlocks_retries")
-
-parse_features = ParserFeatures().parse
 
 
 ###################
@@ -1415,9 +1408,6 @@ class ParserClock(VirtCLIParser):
                 is_onoff=True,
                 setter_cb=set_timer)
             self.set_param(None, tname + "_tickpolicy", setter_cb=set_timer)
-
-
-parse_clock = ParserClock().parse
 
 
 ##########################
@@ -1561,7 +1551,7 @@ class ParserDisk(VirtCLIParser):
         return inst
 
 
-parse_disk = ParserDisk().parse
+parse_disk = ParserDisk("disk").parse
 
 
 #####################
@@ -1600,9 +1590,6 @@ class ParserNetwork(VirtCLIParser):
                 opts["source"] = opts.pop("bridge")
 
         return VirtCLIParser._parse(self, optsobj, inst)
-
-
-parse_network = ParserNetwork().parse
 
 
 ######################
@@ -1649,9 +1636,6 @@ class ParserGraphics(VirtCLIParser):
         self.set_param("passwdValidTo", "passwordvalidto")
 
 
-parse_graphics = ParserGraphics().parse
-
-
 ########################
 # --controller parsing #
 ########################
@@ -1678,9 +1662,6 @@ class ParserController(VirtCLIParser):
         return VirtCLIParser._parse(self, opts, inst)
 
 
-parse_controller = ParserController().parse
-
-
 #######################
 # --smartcard parsing #
 #######################
@@ -1693,9 +1674,6 @@ class ParserSmartcard(VirtCLIParser):
 
         self.set_param("mode", "mode")
         self.set_param("type", "type")
-
-
-parse_smartcard = ParserSmartcard().parse
 
 
 ######################
@@ -1711,8 +1689,6 @@ class ParserRedir(VirtCLIParser):
         self.set_param("bus", "bus")
         self.set_param("type", "type")
         self.set_param("parse_friendly_server", "server")
-
-parse_redirdev = ParserRedir().parse
 
 
 #################
@@ -1733,9 +1709,6 @@ class ParserTPM(VirtCLIParser):
         if (opts.opts.get("type", "").startswith("/")):
             opts.opts["path"] = opts.opts.pop("type")
         return VirtCLIParser._parse(self, opts, inst)
-
-
-parse_tpm = ParserTPM().parse
 
 
 #################
@@ -1807,9 +1780,6 @@ class ParserRNG(VirtCLIParser):
         return VirtCLIParser._parse(self, optsobj, inst)
 
 
-parse_rng = ParserRNG().parse
-
-
 ######################
 # --watchdog parsing #
 ######################
@@ -1823,9 +1793,6 @@ class ParserWatchdog(VirtCLIParser):
         self.set_param("action", "action")
 
 
-parse_watchdog = ParserWatchdog().parse
-
-
 ########################
 # --memballoon parsing #
 ########################
@@ -1836,9 +1803,6 @@ class ParserMemballoon(VirtCLIParser):
         self.remove_first = "model"
 
         self.set_param("model", "model")
-
-
-parse_memballoon = ParserMemballoon().parse
 
 
 ###################
@@ -1857,9 +1821,6 @@ class ParserPanic(VirtCLIParser):
                 return
             inst.iobase = val
         self.set_param(None, "iobase", setter_cb=set_iobase_cb)
-
-
-parse_panic = ParserPanic().parse
 
 
 ######################################################
@@ -1904,22 +1865,18 @@ class _ParserChar(VirtCLIParser):
 
 class ParserSerial(_ParserChar):
     devclass = virtinst.VirtualSerialDevice
-parse_serial = ParserSerial().parse
 
 
 class ParserParallel(_ParserChar):
     devclass = virtinst.VirtualParallelDevice
-parse_parallel = ParserParallel().parse
 
 
 class ParserChannel(_ParserChar):
     devclass = virtinst.VirtualChannelDevice
-parse_channel = ParserChannel().parse
 
 
 class ParserConsole(_ParserChar):
     devclass = virtinst.VirtualConsoleDevice
-parse_console = ParserConsole().parse
 
 
 ########################
@@ -1937,9 +1894,6 @@ class ParserFilesystem(VirtCLIParser):
         self.set_param("target", "target")
 
 
-parse_filesystem = ParserFilesystem().parse
-
-
 ###################
 # --video parsing #
 ###################
@@ -1952,9 +1906,6 @@ class ParserVideo(VirtCLIParser):
         self.set_param("model", "model", ignore_default=True)
 
 
-parse_video = ParserVideo().parse
-
-
 #####################
 # --soundhw parsing #
 #####################
@@ -1965,9 +1916,6 @@ class ParserSound(VirtCLIParser):
         self.remove_first = "model"
 
         self.set_param("model", "model", ignore_default=True)
-
-
-parse_sound = ParserSound().parse
 
 
 #####################
@@ -1989,4 +1937,68 @@ class ParserHostdev(VirtCLIParser):
         self.set_param("driver_name", "driver_name")
 
 
-parse_hostdev = ParserHostdev().parse
+###########################
+# Register parser classes #
+###########################
+
+def build_parser_map(options, skip=None, only=None):
+    """
+    Build a dictionary with mapping of cli-name->parserinstance, so
+    --vcpus -> ParserVCPU object.
+    """
+    parsermap = {}
+    def register_parser(cli_arg_name, parserclass):
+        if cli_arg_name in util.listify(skip):
+            return
+        if only and cli_arg_name not in util.listify(only):
+            return
+
+        parserobj = parserclass(cli_arg_name)
+        if not hasattr(options, parserobj.option_variable_name):
+            raise RuntimeError("programming error: unknown option=%s "
+                               "cliname=%s class=%s" %
+                               (parserobj.option_variable_name,
+                                parserobj.cli_arg_name, parserclass))
+        parsermap[parserobj.option_variable_name] = parserobj
+
+    register_parser("vcpus", ParserVCPU)
+    register_parser("cpu", ParserCPU)
+    register_parser("numatune", ParserNumatune)
+    register_parser("boot", ParserBoot)
+    register_parser("security", ParserSecurity)
+    register_parser("features", ParserFeatures)
+    register_parser("clock", ParserClock)
+    register_parser("disk", ParserDisk)
+    register_parser("network", ParserNetwork)
+    register_parser("graphics", ParserGraphics)
+    register_parser("controller", ParserController)
+    register_parser("smartcard", ParserSmartcard)
+    register_parser("redirdev", ParserRedir)
+    register_parser("tpm", ParserTPM)
+    register_parser("rng", ParserRNG)
+    register_parser("watchdog", ParserWatchdog)
+    register_parser("memballoon", ParserMemballoon)
+    register_parser("serial", ParserSerial)
+    register_parser("parallel", ParserParallel)
+    register_parser("channel", ParserChannel)
+    register_parser("console", ParserConsole)
+    register_parser("filesystem", ParserFilesystem)
+    register_parser("video", ParserVideo)
+    register_parser("soundhw", ParserSound)
+    register_parser("host-device", ParserHostdev)
+    register_parser("panic", ParserPanic)
+
+    return parsermap
+
+
+def parse_option_strings(parsermap, options, guest, inst):
+    """
+    Iterate over the parsermap, and launch the associated parser
+    function for every value that was filled in on 'options', which
+    came from argparse/the command line.
+    """
+    for option_variable_name in dir(options):
+        if option_variable_name not in parsermap:
+            continue
+        parsermap[option_variable_name].parse(
+            guest, getattr(options, option_variable_name), inst)

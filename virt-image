@@ -75,6 +75,7 @@ def main(conn=None):
 
     options.quiet = options.xmlonly or options.quiet
     cli.setupLogging("virt-image", options.debug, options.quiet)
+    cli.set_prompt(False)
 
     if conn is None:
         conn = cli.getConnection(options.connect)
@@ -100,21 +101,23 @@ def main(conn=None):
     cli.convert_old_graphics(guest, options,
         default_override=bool(image.domain.graphics))
     cli.convert_old_features(options)
+    if not options.vcpus:
+        options.vcpus = image.domain.vcpu or ""
 
     guest.replace = options.replace
+
     cli.get_name(guest, options.name or image.name)
     cli.get_memory(guest, options.memory or (image.domain.memory and
                                              int(image.domain.memory)))
-
     if options.uuid:
         guest.uuid = options.uuid
-    cli.parse_vcpus(guest, options.vcpus or image.domain.vcpu or "")
-    cli.get_cpuset(guest, options.cpuset)
-    cli.parse_cpu(guest, options.cpu)
-    cli.parse_network(guest, options.network)
-    cli.parse_graphics(guest, options.graphics)
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
-    cli.parse_features(guest, getattr(options, "features", None))
+
+    parsermap = cli.build_parser_map(options,
+        only=["vcpus", "cpu", "network", "graphics", "features"])
+    cli.parse_option_strings(parsermap, options, guest, None)
+
+    cli.get_cpuset(guest, options.cpuset)
 
     if not guest.get_devices("input"):
         guest.add_default_input_device()

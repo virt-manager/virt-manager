@@ -506,35 +506,10 @@ def build_guest_instance(conn, options):
     guest.os.init = options.init
     if options.uuid:
         guest.uuid = options.uuid
-    cli.parse_vcpus(guest, options.vcpus)
-    cli.parse_numatune(guest, options.numatune)
-    cli.parse_cpu(guest, options.cpu)
-    cli.parse_security(guest, options.security)
-    cli.parse_boot(guest, options.boot)
-    cli.parse_features(guest, options.features)
-    cli.parse_clock(guest, options.clock)
-
     guest.description = options.description
 
-    # Non-default devices
-    cli.parse_controller(guest, options.controller)
-    cli.parse_redirdev(guest, options.redirdev)
-    cli.parse_memballoon(guest, options.memballoon)
-    cli.parse_network(guest, options.network)
-    cli.parse_graphics(guest, options.graphics)
-    cli.parse_video(guest, options.video)
-    cli.parse_watchdog(guest, options.watchdog)
-    cli.parse_filesystem(guest, options.filesystem)
-    cli.parse_sound(guest, options.soundhw)
-    cli.parse_serial(guest, options.serial)
-    cli.parse_parallel(guest, options.parallel)
-    cli.parse_channel(guest, options.channel)
-    cli.parse_console(guest, options.console)
-    cli.parse_hostdev(guest, options.host_device)
-    cli.parse_smartcard(guest, options.smartcard)
-    cli.parse_tpm(guest, options.tpm)
-    cli.parse_rng(guest, options.rng)
-    cli.parse_panic(guest, options.panic)
+    parsermap = cli.build_parser_map(options, skip=["disk"])
+    cli.parse_option_strings(parsermap, options, guest, None)
 
     guest.add_default_input_device()
     guest.add_default_console_device()
