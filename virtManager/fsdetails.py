@@ -1,0 +1,387 @@
+#
+# Copyright (C) 2006-2007, 2013 Red Hat, Inc.
+# Copyright (C) 2006 Hugh O. Brock <hbrock@redhat.com>
+# Copyright (C) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA 02110-1301 USA.
+#
+
+# pylint: disable=E0611
+from gi.repository import Gtk
+# pylint: enable=E0611
+
+from virtinst import VirtualFilesystem
+from virtManager import uihelpers
+from virtManager.baseclass import vmmGObjectUI
+from virtManager.storagebrowse import vmmStorageBrowser
+
+
+class vmmFSDetails(vmmGObjectUI):
+    def __init__(self, vm):
+        vmmGObjectUI.__init__(self, "fsdetails.ui", "vmm-fs-details")
+
+        self.vm = vm
+        self.conn = vm.conn
+
+        self._dev = None
+        self.storage_browser = None
+        self.units = "mb"
+
+        self.builder.connect_signals({
+            "on_fs_type_combo_changed": self.change_field,
+            "on_fs_driver_combo_changed": self.change_field,
+            "on_fs_source_browse_clicked": self.browse_fs_source,
+            "on_fs_ram_units_combo_changed": self.change_ram_units,
+        })
+
+    def _cleanup(self):
+        self.vm = None
+        self.conn = None
+        self._dev = None
+
+        if self.storage_browser:
+            self.storage_browser.cleanup()
+            self.storage_browser = None
+
+    def show_pair_combo(self, basename, show_combo):
+        combo = self.widget(basename + "-combo")
+        label = self.widget(basename + "-label")
+
+        combo.set_visible(show_combo)
+        label.set_visible(not show_combo)
+
+    def show_check_button(self, basename, show):
+        check = self.widget(basename)
+        check.set_visible(show)
+
+    ##########################
+    # Initialization methods #
+    ##########################
+
+    def set_initial_state(self):
+        def simple_store_set(comboname, values, units=False):
+            combo = self.widget(comboname)
+            model = Gtk.ListStore(str, str)
+            combo.set_model(model)
+            text = Gtk.CellRendererText()
+            combo.pack_start(text, True)
+            combo.add_attribute(text, 'text', 1)
+            if not units:
+                model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+                for val in values:
+                    model.append([val, val.capitalize()])
+            else:
+                for val in values:
+                    model.append([val.lower(), val])
+
+        # Filesystem widgets
+        if self.conn.is_openvz():
+            simple_store_set("fs-type-combo", [VirtualFilesystem.TYPE_MOUNT,
+                                               VirtualFilesystem.TYPE_TEMPLATE])
+        elif self.conn.is_lxc():
+            simple_store_set("fs-type-combo", [VirtualFilesystem.TYPE_MOUNT,
+                                               VirtualFilesystem.TYPE_FILE,
+                                               VirtualFilesystem.TYPE_BLOCK,
+                                               VirtualFilesystem.TYPE_RAM])
+        else:
+            simple_store_set("fs-type-combo", [VirtualFilesystem.TYPE_MOUNT])
+            self.widget("fs-type-label").set_text(VirtualFilesystem.TYPE_MOUNT)
+
+        simple_store_set("fs-mode-combo", VirtualFilesystem.MODES)
+        if self.conn.is_qemu():
+            simple_store_set("fs-driver-combo", [VirtualFilesystem.DRIVER_PATH,
+                                                 VirtualFilesystem.DRIVER_HANDLE,
+                                                 VirtualFilesystem.DRIVER_DEFAULT])
+        elif self.conn.is_lxc():
+            simple_store_set("fs-driver-combo", [VirtualFilesystem.DRIVER_LOOP,
+                                                 VirtualFilesystem.DRIVER_NBD,
+                                                 VirtualFilesystem.DRIVER_DEFAULT])
+        simple_store_set("fs-format-combo", VirtualFilesystem.NBD_FORMATS)
+        simple_store_set("fs-wrpolicy-combo", VirtualFilesystem.WRPOLICIES)
+        self.show_pair_combo("fs-type", self.conn.is_openvz() or self.conn.is_lxc())
+        self.show_check_button("fs-readonly",
+                self.conn.is_qemu() or self.conn.is_lxc())
+
+        simple_store_set("fs-ram-units-combo", ["B", "KB", "MB", "GB",
+                                                "TB", "PB", "EB", "KiB",
+                                                "MiB", "GiB", "TiB", "PiB",
+                                                "EiB"], True)
+
+    def reset_state(self):
+        self.widget("fs-type-combo").set_active(0)
+        self.widget("fs-mode-combo").set_active(0)
+        self.widget("fs-driver-combo").set_active(0)
+        self.widget("fs-format-combo").set_active(0)
+        self.widget("fs-wrpolicy-combo").set_active(0)
+        self.widget("fs-source").set_text("")
+        self.widget("fs-target").set_text("")
+        self.widget("fs-readonly").set_active(False)
+        self.widget("fs-ram-units-combo").set_active(2)
+
+    # Getters
+    def get_dev(self):
+        return self._dev
+
+    def get_config_fs_mode(self):
+        name = "fs-mode-combo"
+        combo = self.widget(name)
+        if not combo.get_visible():
+            return None
+
+        return combo.get_model()[combo.get_active()][0]
+
+    def get_config_fs_wrpolicy(self):
+        name = "fs-wrpolicy-combo"
+        combo = self.widget(name)
+        if not combo.get_visible():
+            return None
+
+        return combo.get_model()[combo.get_active()][0]
+
+    def get_config_fs_type(self):
+        name = "fs-type-combo"
+        combo = self.widget(name)
+        if not combo.get_visible():
+            return None
+
+        return combo.get_model()[combo.get_active()][0]
+
+    def get_config_fs_readonly(self):
+        name = "fs-readonly"
+        check = self.widget(name)
+        if not check.get_visible():
+            return None
+
+        return check.get_active()
+
+    def get_config_fs_driver(self):
+        name = "fs-driver-combo"
+        combo = self.widget(name)
+        if not combo.get_visible():
+            return None
+
+        return combo.get_model()[combo.get_active()][0]
+
+    def get_config_fs_format(self):
+        name = "fs-format-combo"
+        combo = self.widget(name)
+        if not combo.get_visible():
+            return None
+
+        return combo.get_model()[combo.get_active()][0]
+
+    def get_config_fs_units(self):
+        name = "fs-ram-units-combo"
+        combo = self.widget(name)
+        if not combo.get_visible():
+            return None
+
+        return combo.get_model()[combo.get_active()][1]
+
+    # Setters
+    def set_config_ram_usage(self, usage, units):
+        value = int(usage)
+
+        upper = self.convert_units(16, "eib", units.lower())
+        self.widget("fs-ram-source-spin").get_adjustment().set_upper(upper)
+        self.widget("fs-ram-source-spin").set_value(value)
+
+        units = units.lower()
+        if units == "bytes" or units == "byte":
+            units = "b"
+
+        self.units = units
+        self.set_config_value("fs-ram-units", units)
+
+
+    def set_config_value(self, name, value):
+        combo = self.widget("%s-combo" % name)
+        label = self.widget("%s-label" % name)
+
+        idx = -1
+        model_list = [x[0] for x in combo.get_model()]
+        model_in_list = (value in model_list)
+        if model_in_list:
+            idx = model_list.index(value)
+
+        combo.set_active(idx)
+        if label:
+            label.set_text(value)
+
+    # listeners
+    def browse_fs_source(self, ignore1):
+        self._browse_file(self.widget("fs-source"), isdir=True)
+
+    def update_fs_rows(self):
+        fstype = self.get_config_fs_type()
+        fsdriver = self.get_config_fs_driver()
+        ismount = bool(
+                fstype == VirtualFilesystem.TYPE_MOUNT or
+                self.conn.is_qemu())
+
+        show_mode = bool(ismount and
+            (fsdriver == VirtualFilesystem.DRIVER_PATH or
+            fsdriver == VirtualFilesystem.DRIVER_DEFAULT))
+        uihelpers.set_grid_row_visible(self.widget("fs-mode-box"), show_mode)
+
+        show_wrpol = bool(ismount and
+            fsdriver and (fsdriver == VirtualFilesystem.DRIVER_PATH or
+            fsdriver == VirtualFilesystem.DRIVER_HANDLE))
+        uihelpers.set_grid_row_visible(self.widget("fs-wrpolicy-box"),
+                                       show_wrpol)
+
+        show_ram_source = fstype == VirtualFilesystem.TYPE_RAM
+        uihelpers.set_grid_row_visible(self.widget("fs-ram-source-box"), show_ram_source)
+        uihelpers.set_grid_row_visible(self.widget("fs-source-box"), not show_ram_source)
+
+        show_format = bool(
+            fsdriver == VirtualFilesystem.DRIVER_NBD)
+        uihelpers.set_grid_row_visible(self.widget("fs-format-box"), show_format)
+        self.show_pair_combo("fs-format", True)
+
+        show_mode_combo = False
+        show_driver_combo = False
+        show_wrpolicy_combo = self.conn.is_qemu()
+        if fstype == VirtualFilesystem.TYPE_TEMPLATE:
+            source_text = _("Te_mplate:")
+        else:
+            source_text = _("_Source path:")
+            show_mode_combo = self.conn.is_qemu()
+            show_driver_combo = self.conn.is_qemu() or self.conn.is_lxc()
+
+        self.widget("fs-source-title").set_text(source_text)
+        self.widget("fs-source-title").set_use_underline(True)
+        self.show_pair_combo("fs-mode", show_mode_combo)
+        self.show_pair_combo("fs-driver", show_driver_combo)
+        self.show_pair_combo("fs-wrpolicy", show_wrpolicy_combo)
+
+    def change_field(self, src):
+        self.update_fs_rows()
+
+    def change_ram_units(self, ignore):
+        units = self.get_config_fs_units()
+        usage = uihelpers.spin_get_helper(self.widget("fs-ram-source-spin"))
+
+        upper = self.convert_units(16, "eib", units.lower())
+        self.widget("fs-ram-source-spin").get_adjustment().set_upper(upper)
+
+        new_value = self.convert_units(usage, self.units, units.lower())
+        self.widget("fs-ram-source-spin").set_value(new_value)
+        self.units = units.lower()
+
+    def convert_units(self, value, old_unit, new_unit):
+        def get_factor(unit):
+            factor = 1000
+            if unit[-2:] == 'ib':
+                factor = 1024
+            return factor
+
+        def get_power(unit):
+            powers = ('k', 'm', 'g', 't', 'p', 'e')
+            power = 0
+            if unit[0] in powers:
+                power = powers.index(unit[0]) + 1
+            return power
+
+        # First convert it all into bytes
+        factor = get_factor(old_unit)
+        power = get_power(old_unit)
+        in_bytes = value * pow(factor, power)
+
+        # Then convert it to the target unit
+        factor = get_factor(new_unit)
+        power = get_power(new_unit)
+
+        return in_bytes / pow(factor, power)
+
+    # Page validation method
+    def validate_page_filesystem(self):
+        conn = self.conn.get_backend()
+        source = self.widget("fs-source").get_text()
+        target = self.widget("fs-target").get_text()
+        usage = uihelpers.spin_get_helper(self.widget("fs-ram-source-spin"))
+        mode = self.get_config_fs_mode()
+        fstype = self.get_config_fs_type()
+        readonly = self.get_config_fs_readonly()
+        driver = self.get_config_fs_driver()
+        fsformat = self.get_config_fs_format()
+        wrpolicy = self.get_config_fs_wrpolicy()
+        units = self.get_config_fs_units()
+
+        if not source and fstype != VirtualFilesystem.TYPE_RAM:
+            return self.err.val_err(_("A filesystem source must be specified"))
+        elif usage == 0 and fstype == VirtualFilesystem.TYPE_RAM:
+            return self.err.val_err(_("A RAM filesystem usage must be specified"))
+        if not target:
+            return self.err.val_err(_("A filesystem target must be specified"))
+
+        if self.conn.is_qemu() and self.filesystem_target_present(target):
+            return self.err.val_err(_('Invalid target path. A filesystem with'
+                                       ' that target already exists'))
+
+        try:
+            self._dev = VirtualFilesystem(conn)
+            if fstype == VirtualFilesystem.TYPE_RAM:
+                self._dev.source = usage
+                self._dev.units = units
+            else:
+                self._dev.source = source
+            self._dev.target = target
+            if mode:
+                self._dev.mode = mode
+            if fstype:
+                self._dev.type = fstype
+            if readonly:
+                self._dev.readonly = readonly
+            if driver:
+                self._dev.driver = driver
+                if driver == VirtualFilesystem.DRIVER_LOOP:
+                    self._dev.format = "raw"
+                elif driver == VirtualFilesystem.DRIVER_NBD:
+                    self._dev.format = fsformat
+            if wrpolicy:
+                self._dev.wrpolicy = wrpolicy
+        except Exception, e:
+            return self.err.val_err(_("Filesystem parameter error"), e)
+
+    def filesystem_target_present(self, target):
+        fsdevs = self.vm.get_filesystem_devices()
+
+        for fs in fsdevs:
+            if (fs.target == target):
+                return True
+
+        return False
+
+    def _browse_file(self, textent, isdir=False):
+        def set_storage_cb(src, path):
+            if path:
+                textent.set_text(path)
+
+        conn = self.conn
+        reason = (isdir and
+                  self.config.CONFIG_DIR_FS or
+                  self.config.CONFIG_DIR_IMAGE)
+        if self.storage_browser is None:
+            self.storage_browser = vmmStorageBrowser(conn)
+
+        rhel6 = self.vm.rhel6_defaults()
+        self.storage_browser.rhel6_defaults = rhel6
+
+        self.storage_browser.set_finish_cb(set_storage_cb)
+        self.storage_browser.set_browse_reason(reason)
+
+        self.storage_browser.show(self.topwin.get_ancestor(Gtk.Window), conn)
