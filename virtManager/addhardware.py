@@ -328,7 +328,15 @@ class vmmAddHardware(vmmGObjectUI):
             simple_store_set("fs-type-combo", [VirtualFilesystem.TYPE_MOUNT])
 
         simple_store_set("fs-mode-combo", VirtualFilesystem.MODES)
-        simple_store_set("fs-driver-combo", VirtualFilesystem.DRIVERS)
+        if self.conn.is_qemu():
+            simple_store_set("fs-driver-combo", [VirtualFilesystem.DRIVER_PATH,
+                                                 VirtualFilesystem.DRIVER_HANDLE,
+                                                 VirtualFilesystem.DRIVER_DEFAULT])
+        elif self.conn.is_lxc():
+            simple_store_set("fs-driver-combo", [VirtualFilesystem.DRIVER_LOOP,
+                                                 VirtualFilesystem.DRIVER_NBD,
+                                                 VirtualFilesystem.DRIVER_DEFAULT])
+        simple_store_set("fs-format-combo", VirtualFilesystem.NBD_FORMATS)
         simple_store_set("fs-wrpolicy-combo", VirtualFilesystem.WRPOLICIES)
         self.show_pair_combo("fs-type", self.conn.is_openvz() or self.conn.is_lxc())
         self.show_check_button("fs-readonly",
@@ -520,6 +528,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("fs-type-combo").set_active(0)
         self.widget("fs-mode-combo").set_active(0)
         self.widget("fs-driver-combo").set_active(0)
+        self.widget("fs-format-combo").set_active(0)
         self.widget("fs-wrpolicy-combo").set_active(0)
         self.widget("fs-source").set_text("")
         self.widget("fs-target").set_text("")
@@ -927,6 +936,14 @@ class vmmAddHardware(vmmGObjectUI):
 
         return combo.get_model()[combo.get_active()][0]
 
+    def get_config_fs_format(self):
+        name = "fs-format-combo"
+        combo = self.widget(name)
+        if not combo.get_visible():
+            return None
+
+        return combo.get_model()[combo.get_active()][0]
+
     def get_config_fs_units(self):
         name = "fs-ram-units-combo"
         combo = self.widget(name)
@@ -1308,22 +1325,42 @@ class vmmAddHardware(vmmGObjectUI):
     def browse_fs_source(self, ignore1):
         self._browse_file(self.widget("fs-source"), isdir=True)
 
-    def change_fs_type(self, src):
-        idx = src.get_active()
-        fstype = None
+    def update_fs_rows(self):
+        fstype = self.get_config_fs_type()
+        fsdriver = self.get_config_fs_driver()
+        ismount = bool(
+                fstype == VirtualFilesystem.TYPE_MOUNT or
+                self.conn.is_qemu())
+
+        show_mode = bool(ismount and
+            (fsdriver == VirtualFilesystem.DRIVER_PATH or
+            fsdriver == VirtualFilesystem.DRIVER_DEFAULT))
+        uihelpers.set_grid_row_visible(self.widget("fs-mode-box"), show_mode)
+
+        show_wrpol = bool(ismount and
+            fsdriver and (fsdriver == VirtualFilesystem.DRIVER_PATH or
+            fsdriver == VirtualFilesystem.DRIVER_HANDLE))
+        uihelpers.set_grid_row_visible(self.widget("fs-wrpolicy-box"),
+                                       show_wrpol)
+
+        show_ram_source = fstype == VirtualFilesystem.TYPE_RAM
+        uihelpers.set_grid_row_visible(self.widget("fs-ram-source-box"), show_ram_source)
+        uihelpers.set_grid_row_visible(self.widget("fs-source-box"), not show_ram_source)
+
+        show_format = bool(
+            fsdriver == VirtualFilesystem.DRIVER_NBD)
+        uihelpers.set_grid_row_visible(self.widget("fs-format-box"), show_format)
+        self.show_pair_combo("fs-format", True)
+
         show_mode_combo = False
         show_driver_combo = False
         show_wrpolicy_combo = self.conn.is_qemu()
-
-        if idx >= 0 and src.get_visible():
-            fstype = src.get_model()[idx][0]
-
-        if fstype == virtinst.VirtualFilesystem.TYPE_TEMPLATE:
+        if fstype == VirtualFilesystem.TYPE_TEMPLATE:
             source_text = _("Te_mplate:")
         else:
             source_text = _("_Source path:")
             show_mode_combo = self.conn.is_qemu()
-            show_driver_combo = self.conn.is_qemu()
+            show_driver_combo = self.conn.is_qemu() or self.conn.is_lxc()
 
         self.widget("fs-source-title").set_text(source_text)
         self.widget("fs-source-title").set_use_underline(True)
@@ -1331,25 +1368,11 @@ class vmmAddHardware(vmmGObjectUI):
         self.show_pair_combo("fs-driver", show_driver_combo)
         self.show_pair_combo("fs-wrpolicy", show_wrpolicy_combo)
 
-        show_ram_source = fstype == VirtualFilesystem.TYPE_RAM
-        uihelpers.set_grid_row_visible(self.widget("fs-ram-source-box"), show_ram_source)
-        uihelpers.set_grid_row_visible(self.widget("fs-source-box"), not show_ram_source)
+    def change_fs_type(self, ignore):
+        self.update_fs_rows()
 
-    def change_fs_driver(self, src):
-        fsdriver = None
-        idx = src.get_active()
-        if idx >= 0 and src.get_visible():
-            fsdriver = src.get_model()[idx][0]
-
-        show_mode = bool(
-            fsdriver == virtinst.VirtualFilesystem.DRIVER_PATH or
-            fsdriver == virtinst.VirtualFilesystem.DRIVER_DEFAULT)
-        uihelpers.set_grid_row_visible(self.widget("fs-mode-box"), show_mode)
-
-        show_wrpol = bool(
-            fsdriver and fsdriver != virtinst.VirtualFilesystem.DRIVER_DEFAULT)
-        uihelpers.set_grid_row_visible(self.widget("fs-wrpolicy-box"),
-                                       show_wrpol)
+    def change_fs_driver(self, ignore):
+        self.update_fs_rows()
 
     def change_ram_units(self, ignore):
         units = self.get_config_fs_units()
@@ -1810,6 +1833,7 @@ class vmmAddHardware(vmmGObjectUI):
         fstype = self.get_config_fs_type()
         readonly = self.get_config_fs_readonly()
         driver = self.get_config_fs_driver()
+        fsformat = self.get_config_fs_format()
         wrpolicy = self.get_config_fs_wrpolicy()
         units = self.get_config_fs_units()
 
@@ -1840,6 +1864,10 @@ class vmmAddHardware(vmmGObjectUI):
                 self._dev.readonly = readonly
             if driver:
                 self._dev.driver = driver
+                if driver == VirtualFilesystem.DRIVER_LOOP:
+                    self._dev.format = "raw"
+                elif driver == VirtualFilesystem.DRIVER_NBD:
+                    self._dev.format = fsformat
             if wrpolicy:
                 self._dev.wrpolicy = wrpolicy
         except Exception, e:

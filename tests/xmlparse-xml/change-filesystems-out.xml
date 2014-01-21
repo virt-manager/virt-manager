@@ -52,5 +52,11 @@
       <target dir="/bar/baz"/>
       <readonly/>
     </filesystem>
+    <filesystem type="file">
+      <driver type="loop" format="raw"/>
+      <source file="/foo/bar.raw"/>
+      <target dir="/bar/baz"/>
+      <readonly/>
+    </filesystem>
   </devices>
 </domain>

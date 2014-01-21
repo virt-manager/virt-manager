@@ -46,9 +46,13 @@ class VirtualFilesystem(VirtualDevice):
 
     DRIVER_PATH = "path"
     DRIVER_HANDLE = "handle"
-    DRIVER_PROXY = "proxy"
+    DRIVER_LOOP = "loop"
+    DRIVER_NBD = "nbd"
     DRIVER_DEFAULT = "default"
-    DRIVERS = [DRIVER_PATH, DRIVER_HANDLE, DRIVER_PROXY, DRIVER_DEFAULT]
+    DRIVERS = [DRIVER_PATH, DRIVER_HANDLE, DRIVER_LOOP, DRIVER_NBD, DRIVER_DEFAULT]
+
+    NBD_FORMATS = ["raw", "bochs", "cloop", "cow", "dmg", "iso", "qcow",
+                   "qcow2", "qed", "vmdk", "vpc", "fat", "vhd", "vdi"]
 
     @staticmethod
     def type_to_source_prop(fs_type):
@@ -83,6 +87,7 @@ class VirtualFilesystem(VirtualDevice):
     driver = XMLProperty("./driver/@type",
                          default_cb=lambda s: None,
                          default_name=DRIVER_DEFAULT)
+    format = XMLProperty("./driver/@format")
 
     readonly = XMLProperty("./readonly", is_bool=True)
 

@@ -50,5 +50,10 @@
       <source dev='/foo/bar'/>
       <target dir='/bar/baz'/>
     </filesystem>
+    <filesystem type='file' accessmode='passthrough'>
+      <driver type='nbd' format='qcow'/>
+      <source file='/foo/bar.img'/>
+      <target dir='/bar/baz'/>
+    </filesystem>
   </devices>
 </domain>
