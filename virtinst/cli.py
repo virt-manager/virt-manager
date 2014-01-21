@@ -763,7 +763,9 @@ def vcpu_cli_options(grp, backcompat=True):
                "--vcpus 5,maxcpus=10,cpuset=1-4,6,8\n"
                "--vcpus sockets=2,cores=4,threads=2,"))
     grp.add_argument("--cpu",
-        help=_("CPU model and features. Ex: --cpu coreduo,+x2apic"))
+        help=_("CPU model and features. Ex:\n"
+               "--cpu coreduo,+x2apic\n"
+               "--cpu host"))
 
     if backcompat:
         grp.add_argument("--check-cpu", action="store_true",
