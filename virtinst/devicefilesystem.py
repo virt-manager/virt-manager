@@ -26,14 +26,13 @@ from virtinst.xmlbuilder import XMLProperty
 class VirtualFilesystem(VirtualDevice):
     virtual_device_type = VirtualDevice.VIRTUAL_DEV_FILESYSTEM
 
-    _target_props = ["dir", "name", "file", "dev"]
-
     TYPE_MOUNT = "mount"
     TYPE_TEMPLATE = "template"
     TYPE_FILE = "file"
     TYPE_BLOCK = "block"
+    TYPE_RAM = "ram"
     TYPE_DEFAULT = "default"
-    TYPES = [TYPE_MOUNT, TYPE_TEMPLATE, TYPE_FILE, TYPE_BLOCK, TYPE_DEFAULT]
+    TYPES = [TYPE_MOUNT, TYPE_TEMPLATE, TYPE_FILE, TYPE_BLOCK, TYPE_RAM, TYPE_DEFAULT]
 
     MODE_PASSTHROUGH = "passthrough"
     MODE_MAPPED = "mapped"
@@ -67,6 +66,8 @@ class VirtualFilesystem(VirtualDevice):
             return "file"
         elif fs_type == VirtualFilesystem.TYPE_BLOCK:
             return "dev"
+        elif fs_type == VirtualFilesystem.TYPE_RAM:
+            return "usage"
         return "dir"
 
 
@@ -85,6 +86,7 @@ class VirtualFilesystem(VirtualDevice):
 
     readonly = XMLProperty("./readonly", is_bool=True)
 
+    units = XMLProperty("./source/@units")
 
     def _make_source_xpath(self):
         return "./source/@" + self.type_to_source_prop(self.type)

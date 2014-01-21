@@ -43,5 +43,14 @@
       <target dir="/bar/baz"/>
       <readonly/>
     </filesystem>
+    <filesystem type="ram">
+      <source usage="123" units="KiB"/>
+      <target dir="/bar/baz"/>
+    </filesystem>
+    <filesystem type="block">
+      <source dev="/dev/new"/>
+      <target dir="/bar/baz"/>
+      <readonly/>
+    </filesystem>
   </devices>
 </domain>

@@ -67,6 +67,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.is_customize_dialog = is_customize_dialog
 
         self.storage_browser = None
+        self.fs_units = "mb"
 
         self._dev = None
 
@@ -95,6 +96,7 @@ class vmmAddHardware(vmmGObjectUI):
             "on_fs_type_combo_changed": self.change_fs_type,
             "on_fs_driver_combo_changed": self.change_fs_driver,
             "on_fs_source_browse_clicked": self.browse_fs_source,
+            "on_fs_ram_units_combo_changed": self.change_ram_units,
 
             "on_usbredir_type_changed": self.change_usbredir_type,
 
@@ -298,27 +300,44 @@ class vmmAddHardware(vmmGObjectUI):
         combo = self.widget("watchdog-action")
         uihelpers.build_watchdogaction_combo(self.vm, combo)
 
-        def simple_store_set(comboname, values):
+        def simple_store_set(comboname, values, units=False):
             combo = self.widget(comboname)
             model = Gtk.ListStore(str, str)
             combo.set_model(model)
             text = Gtk.CellRendererText()
             combo.pack_start(text, True)
             combo.add_attribute(text, 'text', 1)
-            model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-            for val in values:
-                model.append([val, val.capitalize()])
+            if not units:
+                model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+                for val in values:
+                    model.append([val, val.capitalize()])
+            else:
+                for val in values:
+                    model.append([val.lower(), val])
 
         # Filesystem widgets
-        simple_store_set("fs-type-combo",
-                         [VirtualFilesystem.TYPE_MOUNT,
-                          VirtualFilesystem.TYPE_TEMPLATE])
+        if self.conn.is_openvz():
+            simple_store_set("fs-type-combo", [VirtualFilesystem.TYPE_MOUNT,
+                                               VirtualFilesystem.TYPE_TEMPLATE])
+        elif self.conn.is_lxc():
+            simple_store_set("fs-type-combo", [VirtualFilesystem.TYPE_MOUNT,
+                                               VirtualFilesystem.TYPE_FILE,
+                                               VirtualFilesystem.TYPE_BLOCK,
+                                               VirtualFilesystem.TYPE_RAM])
+        else:
+            simple_store_set("fs-type-combo", [VirtualFilesystem.TYPE_MOUNT])
+
         simple_store_set("fs-mode-combo", VirtualFilesystem.MODES)
         simple_store_set("fs-driver-combo", VirtualFilesystem.DRIVERS)
         simple_store_set("fs-wrpolicy-combo", VirtualFilesystem.WRPOLICIES)
-        self.show_pair_combo("fs-type", self.conn.is_openvz())
+        self.show_pair_combo("fs-type", self.conn.is_openvz() or self.conn.is_lxc())
         self.show_check_button("fs-readonly",
                 self.conn.is_qemu() or self.conn.is_lxc())
+
+        simple_store_set("fs-ram-units-combo", ["B", "KB", "MB", "GB",
+                                                "TB", "PB", "EB", "KiB",
+                                                "MiB", "GiB", "TiB", "PiB",
+                                                "EiB"], True)
 
         # Smartcard widgets
         combo = self.widget("smartcard-mode")
@@ -505,6 +524,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("fs-source").set_text("")
         self.widget("fs-target").set_text("")
         self.widget("fs-readonly").set_active(False)
+        self.widget("fs-ram-units-combo").set_active(2)
 
         # Video params
         uihelpers.populate_video_combo(self.vm, self.widget("video-model"))
@@ -907,6 +927,14 @@ class vmmAddHardware(vmmGObjectUI):
 
         return combo.get_model()[combo.get_active()][0]
 
+    def get_config_fs_units(self):
+        name = "fs-ram-units-combo"
+        combo = self.widget(name)
+        if not combo.get_visible():
+            return None
+
+        return combo.get_model()[combo.get_active()][1]
+
     # Smartcard getters
     def get_config_smartcard_mode(self):
         mode = self.widget("smartcard-mode")
@@ -1303,6 +1331,10 @@ class vmmAddHardware(vmmGObjectUI):
         self.show_pair_combo("fs-driver", show_driver_combo)
         self.show_pair_combo("fs-wrpolicy", show_wrpolicy_combo)
 
+        show_ram_source = fstype == VirtualFilesystem.TYPE_RAM
+        uihelpers.set_grid_row_visible(self.widget("fs-ram-source-box"), show_ram_source)
+        uihelpers.set_grid_row_visible(self.widget("fs-source-box"), not show_ram_source)
+
     def change_fs_driver(self, src):
         fsdriver = None
         idx = src.get_active()
@@ -1318,6 +1350,42 @@ class vmmAddHardware(vmmGObjectUI):
             fsdriver and fsdriver != virtinst.VirtualFilesystem.DRIVER_DEFAULT)
         uihelpers.set_grid_row_visible(self.widget("fs-wrpolicy-box"),
                                        show_wrpol)
+
+    def change_ram_units(self, ignore):
+        units = self.get_config_fs_units()
+        usage = uihelpers.spin_get_helper(self.widget("fs-ram-source-spin"))
+
+        upper = self.convert_units(16, "eib", units.lower())
+        self.widget("fs-ram-source-spin").get_adjustment().set_upper(upper)
+
+        new_value = self.convert_units(usage, self.fs_units, units.lower())
+        self.widget("fs-ram-source-spin").set_value(new_value)
+        self.fs_units = units.lower()
+
+    def convert_units(self, value, old_unit, new_unit):
+        def get_factor(unit):
+            factor = 1000
+            if unit[-2:] == 'ib':
+                factor = 1024
+            return factor
+
+        def get_power(unit):
+            powers = ('k', 'm', 'g', 't', 'p', 'e')
+            power = 0
+            if unit[0] in powers:
+                power = powers.index(unit[0]) + 1
+            return power
+
+        # First convert it all into bytes
+        factor = get_factor(old_unit)
+        power = get_power(old_unit)
+        in_bytes = value * pow(factor, power)
+
+        # Then convert it to the target unit
+        factor = get_factor(new_unit)
+        power = get_power(new_unit)
+
+        return in_bytes / pow(factor, power)
 
 
 
@@ -1737,14 +1805,18 @@ class vmmAddHardware(vmmGObjectUI):
         conn = self.conn.get_backend()
         source = self.widget("fs-source").get_text()
         target = self.widget("fs-target").get_text()
+        usage = uihelpers.spin_get_helper(self.widget("fs-ram-source-spin"))
         mode = self.get_config_fs_mode()
         fstype = self.get_config_fs_type()
         readonly = self.get_config_fs_readonly()
         driver = self.get_config_fs_driver()
         wrpolicy = self.get_config_fs_wrpolicy()
+        units = self.get_config_fs_units()
 
-        if not source:
+        if not source and fstype != VirtualFilesystem.TYPE_RAM:
             return self.err.val_err(_("A filesystem source must be specified"))
+        elif usage == 0 and fstype == VirtualFilesystem.TYPE_RAM:
+            return self.err.val_err(_("A RAM filesystem usage must be specified"))
         if not target:
             return self.err.val_err(_("A filesystem target must be specified"))
 
@@ -1754,7 +1826,11 @@ class vmmAddHardware(vmmGObjectUI):
 
         try:
             self._dev = virtinst.VirtualFilesystem(conn)
-            self._dev.source = source
+            if fstype == VirtualFilesystem.TYPE_RAM:
+                self._dev.source = usage
+                self._dev.units = units
+            else:
+                self._dev.source = source
             self._dev.target = target
             if mode:
                 self._dev.mode = mode

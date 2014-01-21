@@ -42,5 +42,13 @@
       <source dir='/foo/bar'/>
       <target dir='/bar/baz'/>
     </filesystem>
+    <filesystem type='ram'>
+      <source usage='1024' units='MB'/>
+      <target dir='/bar/baz'/>
+    </filesystem>
+    <filesystem type='block'>
+      <source dev='/foo/bar'/>
+      <target dir='/bar/baz'/>
+    </filesystem>
   </devices>
 </domain>
