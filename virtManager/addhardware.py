@@ -575,7 +575,7 @@ class vmmAddHardware(vmmGObjectUI):
                       "usb", "virtio", "virtio-scsi", "xen"]
         floppy_buses = ["fdc"]
         cdrom_buses = ["ide", "scsi"]
-        lun_buses = ["virtio", "virtio-scsi"]
+        lun_buses = ["virtio-scsi"]
 
         if bus in disk_buses:
             model.append([virtinst.VirtualDisk.DEVICE_DISK,
