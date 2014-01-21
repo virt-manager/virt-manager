@@ -140,7 +140,8 @@ def get_disks(guest, disks, nodisks, need_storage):
                 # --file-size to --disk size=8 which doesn't validate on
                 # its own.
                 dev = cli.parse_disk(guest, disk,
-                                     virtinst.VirtualDisk(guest.conn))
+                                     virtinst.VirtualDisk(guest.conn),
+                                     validate=False)
                 size = dev.cli_size
                 path = dev.path
                 sparse = dev.get_sparse()
@@ -516,24 +517,24 @@ def build_guest_instance(conn, options):
     guest.description = options.description
 
     # Non-default devices
-    cli.get_controllers(guest, options.controller)
-    cli.get_redirdevs(guest, options.redirdev)
-    cli.get_memballoons(guest, options.memballoon)
-    cli.get_networks(guest, options.network)
-    cli.get_graphics(guest, options.graphics)
-    cli.get_videos(guest, options.video)
-    cli.get_watchdogs(guest, options.watchdog)
-    cli.get_filesystems(guest, options.filesystem)
-    cli.get_sounds(guest, options.soundhw)
-    cli.get_serials(guest, options.serial)
-    cli.get_parallels(guest, options.parallel)
-    cli.get_channels(guest, options.channel)
-    cli.get_consoles(guest, options.console)
-    cli.get_hostdevs(guest, options.host_device)
-    cli.get_smartcards(guest, options.smartcard)
-    cli.get_tpms(guest, options.tpm)
-    cli.get_rngs(guest, options.rng)
-    cli.get_panic(guest, options.panic)
+    cli.parse_controller(guest, options.controller)
+    cli.parse_redirdev(guest, options.redirdev)
+    cli.parse_memballoon(guest, options.memballoon)
+    cli.parse_network(guest, options.network)
+    cli.parse_graphics(guest, options.graphics)
+    cli.parse_video(guest, options.video)
+    cli.parse_watchdog(guest, options.watchdog)
+    cli.parse_filesystem(guest, options.filesystem)
+    cli.parse_sound(guest, options.soundhw)
+    cli.parse_serial(guest, options.serial)
+    cli.parse_parallel(guest, options.parallel)
+    cli.parse_channel(guest, options.channel)
+    cli.parse_console(guest, options.console)
+    cli.parse_hostdev(guest, options.host_device)
+    cli.parse_smartcard(guest, options.smartcard)
+    cli.parse_tpm(guest, options.tpm)
+    cli.parse_rng(guest, options.rng)
+    cli.parse_panic(guest, options.panic)
 
     guest.add_default_input_device()
     guest.add_default_console_device()

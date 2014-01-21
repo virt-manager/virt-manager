@@ -108,11 +108,11 @@ def main(conn=None):
 
     if options.uuid:
         guest.uuid = options.uuid
-    cli.parse_vcpus(guest, options.vcpu or image.domain.vcpu or "")
+    cli.parse_vcpus(guest, options.vcpus or image.domain.vcpu or "")
     cli.get_cpuset(guest, options.cpuset)
     cli.parse_cpu(guest, options.cpu)
-    cli.get_networks(guest, options.network)
-    cli.get_graphics(guest, options.graphics)
+    cli.parse_network(guest, options.network)
+    cli.parse_graphics(guest, options.graphics)
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
     cli.parse_features(guest, getattr(options, "features", None))
 

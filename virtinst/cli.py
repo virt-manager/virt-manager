@@ -1124,22 +1124,48 @@ class VirtCLIParser(object):
                                "from parse handler.")
         self._params.append(_VirtCLIArgument(*args, **kwargs))
 
-    def parse_list(self, guest, opts):
-        for optstr in util.listify(opts):
-            devtype = self.devclass.virtual_device_type
-            try:
-                dev = self.devclass(guest.conn)  # pylint: disable=E1102
-                devs = self.parse(guest, optstr, dev)
-                for dev in util.listify(devs):
-                    dev.validate()
-                    guest.add_device(dev)
-            except Exception, e:
-                logging.debug("Exception parsing devtype=%s optstr=%s",
-                              devtype, optstr, exc_info=True)
-                fail(_("Error in %(devtype)s device parameters: %(err)s") %
-                     {"devtype": devtype, "err": str(e)})
+    def parse(self, guest, optlist, inst=None, validate=True):
+        # XXX: review
+        optlist = util.listify(optlist)
+        editting = bool(inst)
 
-    def parse(self, guest, optstr, inst=None):
+        if editting and optlist:
+            # If an object is passed in, we are updating it in place, and
+            # only use the last command line occurence
+            optlist = [optlist[-1]]
+
+        ret = []
+        for optstr in optlist:
+            optinst = inst
+            if self.devclass and not inst:
+                optinst = self.devclass(guest.conn)  # pylint: disable=E1102
+
+            try:
+                devs = self._parse_single_optstr(guest, optstr, optinst)
+                for dev in util.listify(devs):
+                    if not hasattr(dev, "virtual_device_type"):
+                        continue
+
+                    if validate:
+                        dev.validate()
+                    if editting:
+                        continue
+                    guest.add_device(dev)
+
+                ret += util.listify(devs)
+            except Exception, e:
+                logging.debug("Exception parsing inst=%s optstr=%s",
+                              inst, optstr, exc_info=True)
+                fail(_("Error in %(options)s: %(err)s") %
+                     {"options": optstr, "err": str(e)})
+
+        if not ret:
+            return None
+        if len(ret) == 1:
+            return ret[0]
+        return ret
+
+    def _parse_single_optstr(self, guest, optstr, inst):
         if not optstr:
             return None
         if self.check_none and optstr == "none":
@@ -1576,7 +1602,7 @@ class ParserNetwork(VirtCLIParser):
         return VirtCLIParser._parse(self, optsobj, inst)
 
 
-get_networks = ParserNetwork().parse_list
+parse_network = ParserNetwork().parse
 
 
 ######################
@@ -1623,7 +1649,7 @@ class ParserGraphics(VirtCLIParser):
         self.set_param("passwdValidTo", "passwordvalidto")
 
 
-get_graphics = ParserGraphics().parse_list
+parse_graphics = ParserGraphics().parse
 
 
 ########################
@@ -1652,7 +1678,7 @@ class ParserController(VirtCLIParser):
         return VirtCLIParser._parse(self, opts, inst)
 
 
-get_controllers = ParserController().parse_list
+parse_controller = ParserController().parse
 
 
 #######################
@@ -1669,7 +1695,7 @@ class ParserSmartcard(VirtCLIParser):
         self.set_param("type", "type")
 
 
-get_smartcards = ParserSmartcard().parse_list
+parse_smartcard = ParserSmartcard().parse
 
 
 ######################
@@ -1686,7 +1712,7 @@ class ParserRedir(VirtCLIParser):
         self.set_param("type", "type")
         self.set_param("parse_friendly_server", "server")
 
-get_redirdevs = ParserRedir().parse_list
+parse_redirdev = ParserRedir().parse
 
 
 #################
@@ -1709,7 +1735,7 @@ class ParserTPM(VirtCLIParser):
         return VirtCLIParser._parse(self, opts, inst)
 
 
-get_tpms = ParserTPM().parse_list
+parse_tpm = ParserTPM().parse
 
 
 #################
@@ -1781,7 +1807,7 @@ class ParserRNG(VirtCLIParser):
         return VirtCLIParser._parse(self, optsobj, inst)
 
 
-get_rngs = ParserRNG().parse_list
+parse_rng = ParserRNG().parse
 
 
 ######################
@@ -1797,7 +1823,7 @@ class ParserWatchdog(VirtCLIParser):
         self.set_param("action", "action")
 
 
-get_watchdogs = ParserWatchdog().parse_list
+parse_watchdog = ParserWatchdog().parse
 
 
 ########################
@@ -1812,7 +1838,7 @@ class ParserMemballoon(VirtCLIParser):
         self.set_param("model", "model")
 
 
-get_memballoons = ParserMemballoon().parse_list
+parse_memballoon = ParserMemballoon().parse
 
 
 ###################
@@ -1833,7 +1859,7 @@ class ParserPanic(VirtCLIParser):
         self.set_param(None, "iobase", setter_cb=set_iobase_cb)
 
 
-get_panic = ParserPanic().parse_list
+parse_panic = ParserPanic().parse
 
 
 ######################################################
@@ -1878,22 +1904,22 @@ class _ParserChar(VirtCLIParser):
 
 class ParserSerial(_ParserChar):
     devclass = virtinst.VirtualSerialDevice
-get_serials = ParserSerial().parse_list
+parse_serial = ParserSerial().parse
 
 
 class ParserParallel(_ParserChar):
     devclass = virtinst.VirtualParallelDevice
-get_parallels = ParserParallel().parse_list
+parse_parallel = ParserParallel().parse
 
 
 class ParserChannel(_ParserChar):
     devclass = virtinst.VirtualChannelDevice
-get_channels = ParserChannel().parse_list
+parse_channel = ParserChannel().parse
 
 
 class ParserConsole(_ParserChar):
     devclass = virtinst.VirtualConsoleDevice
-get_consoles = ParserConsole().parse_list
+parse_console = ParserConsole().parse
 
 
 ########################
@@ -1911,7 +1937,6 @@ class ParserFilesystem(VirtCLIParser):
         self.set_param("target", "target")
 
 
-get_filesystems = ParserFilesystem().parse_list
 parse_filesystem = ParserFilesystem().parse
 
 
@@ -1927,7 +1952,7 @@ class ParserVideo(VirtCLIParser):
         self.set_param("model", "model", ignore_default=True)
 
 
-get_videos = ParserVideo().parse_list
+parse_video = ParserVideo().parse
 
 
 #####################
@@ -1942,7 +1967,7 @@ class ParserSound(VirtCLIParser):
         self.set_param("model", "model", ignore_default=True)
 
 
-get_sounds = ParserSound().parse_list
+parse_sound = ParserSound().parse
 
 
 #####################
@@ -1964,5 +1989,4 @@ class ParserHostdev(VirtCLIParser):
         self.set_param("driver_name", "driver_name")
 
 
-get_hostdevs = ParserHostdev().parse_list
 parse_hostdev = ParserHostdev().parse
