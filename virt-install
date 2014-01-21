@@ -884,17 +884,7 @@ def parse_args():
     geng.add_argument("--description",
                     help=_("Human readable description of the VM to store in "
                            "the generated XML."))
-    geng.add_argument("--security",
-                    help=_("Set domain security driver configuration."))
-    geng.add_argument("--numatune",
-                    help=_("Tune NUMA policy for the domain process."))
-    geng.add_argument("--features",
-                    help=_("Set domain <features> XML. Ex:\n"
-                           "--features acpi=off\n"
-                           "--features apic=on,eoi=on"))
-    geng.add_argument("--clock",
-                    help=_("Set domain <clock> XML. Ex:\n"
-                           "--clock offset=localtime,rtc_tickpolicy=catchup"))
+    cli.add_guest_xml_options(geng)
 
     insg = parser.add_argument_group(_("Installation Method Options"))
     insg.add_argument("-c", dest="cdrom_short", help=argparse.SUPPRESS)
@@ -914,19 +904,11 @@ def parse_args():
     insg.add_argument("--initrd-inject", action="append",
                     help=_("Add given file to root of initrd from --location"))
     cli.add_distro_options(insg)
-    insg.add_argument("--boot",
-                    help=_("Optionally configure post-install boot order, "
-                           "menu, permanent kernel boot, etc. Ex:\n"
-                           "--boot hd,cdrom,menu=on\n"
-                           "--boot init=/sbin/init (for containers)"))
+    cli.add_boot_option(insg)
     insg.add_argument("--init", help=argparse.SUPPRESS)
 
     stog = parser.add_argument_group(_("Storage Configuration"))
-    stog.add_argument("--disk", action="append",
-        help=_("Specify storage with various options. Ex.\n"
-               "--disk path=/my/existing/disk\n"
-               "--disk path=/my/new/disk,size=5 (in gigabytes)\n"
-               "--disk vol=poolname/volname,device=cdrom,bus=scsi,..."))
+    cli.add_disk_option(stog)
     stog.add_argument("--nodisks", action="store_true",
                     help=_("Don't set up any disks for the guest."))
     cli.add_fs_option(stog)

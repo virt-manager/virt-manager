@@ -771,11 +771,19 @@ def vcpu_cli_options(grp, backcompat=True):
         grp.add_argument("--cpuset", help=argparse.SUPPRESS)
 
 
+def add_gfx_option(devg):
+    devg.add_argument("--graphics", action="append",
+      help=_("Configure guest display settings. Ex:\n"
+             "--graphics vnc\n"
+             "--graphics spice,port=5901,tlsport=5902\n"
+             "--graphics none\n"
+             "--graphics vnc,password=foobar,port=5910,keymap=ja"))
+
+
 def graphics_option_group(parser):
     """
     Register vnc + sdl options for virt-install and virt-image
     """
-
     vncg = parser.add_argument_group(_("Graphics Configuration"))
     add_gfx_option(vncg)
     vncg.add_argument("--vnc", action="store_true",
@@ -862,15 +870,6 @@ def add_device_options(devg):
                            "--panic default"))
 
 
-def add_gfx_option(devg):
-    devg.add_argument("--graphics", action="append",
-      help=_("Configure guest display settings. Ex:\n"
-             "--graphics vnc\n"
-             "--graphics spice,port=5901,tlsport=5902\n"
-             "--graphics none\n"
-             "--graphics vnc,password=foobar,port=5910,keymap=ja"))
-
-
 def add_fs_option(devg):
     devg.add_argument("--filesystem", action="append",
         help=_("Pass host directory to the guest. Ex: \n"
@@ -895,6 +894,35 @@ def add_old_feature_options(optg):
     optg.add_argument("--noacpi", action="store_true",
                     default=False, help=argparse.SUPPRESS)
 
+
+def add_guest_xml_options(geng):
+    geng.add_argument("--security",
+                    help=_("Set domain security driver configuration."))
+    geng.add_argument("--numatune",
+                    help=_("Tune NUMA policy for the domain process."))
+    geng.add_argument("--features",
+                    help=_("Set domain <features> XML. Ex:\n"
+                           "--features acpi=off\n"
+                           "--features apic=on,eoi=on"))
+    geng.add_argument("--clock",
+                    help=_("Set domain <clock> XML. Ex:\n"
+                           "--clock offset=localtime,rtc_tickpolicy=catchup"))
+
+
+def add_boot_option(insg):
+    insg.add_argument("--boot",
+                    help=_("Optionally configure post-install boot order, "
+                           "menu, permanent kernel boot, etc. Ex:\n"
+                           "--boot hd,cdrom,menu=on\n"
+                           "--boot init=/sbin/init (for containers)"))
+
+
+def add_disk_option(stog):
+    stog.add_argument("--disk", action="append",
+        help=_("Specify storage with various options. Ex.\n"
+               "--disk path=/my/existing/disk\n"
+               "--disk path=/my/new/disk,size=5 (in gigabytes)\n"
+               "--disk vol=poolname/volname,device=cdrom,bus=scsi,..."))
 
 
 #############################################
