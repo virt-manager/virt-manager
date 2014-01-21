@@ -845,6 +845,19 @@ class vmmDomain(vmmLibvirtObject):
 
         return self._redefine_device(change, devobj)
 
+    def define_filesystem(self, devobj, newdev):
+        def change(editdev):
+            editdev.type = newdev.type
+            editdev.mode = newdev.mode
+            editdev.wrpolicy = newdev.wrpolicy
+            editdev.driver = newdev.driver
+            editdev.format = newdev.format
+            editdev.readonly = newdev.readonly
+            editdev.units = newdev.units
+            editdev.source = newdev.source
+            editdev.target = newdev.target
+
+        return self._redefine_device(change, devobj)
 
 
     ####################

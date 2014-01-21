@@ -36,6 +36,7 @@ from virtManager.addhardware import vmmAddHardware
 from virtManager.choosecd import vmmChooseCD
 from virtManager.snapshots import vmmSnapshotPage
 from virtManager.graphwidgets import Sparkline
+from virtManager.fsdetails import vmmFSDetails
 from virtinst import VirtualRNGDevice
 
 import virtinst
@@ -96,7 +97,9 @@ EDIT_WATCHDOG_ACTION,
 EDIT_CONTROLLER_MODEL,
 
 EDIT_TPM_TYPE,
-) = range(1, 42)
+
+EDIT_FS,
+) = range(1, 43)
 
 
 # Columns in hw list model
@@ -551,6 +554,13 @@ class vmmDetails(vmmGObjectUI):
         self.vm.connect("config-changed", self.refresh_vm_state)
         self.vm.connect("resources-sampled", self.refresh_resources)
 
+        self.fsDetails = vmmFSDetails(self.vm)
+        self.fsDetails.set_initial_state()
+        fsAlignment = self.widget("fs-alignment")
+        fsAlignment.add(self.fsDetails.topwin)
+        self.fsDetails.connect("changed", lambda *x: self.enable_apply(x,
+                                           EDIT_FS))
+
         self.populate_hw_list()
         self.repopulate_boot_list()
 
@@ -582,12 +592,16 @@ class vmmDetails(vmmGObjectUI):
         self.conn = None
         self.addhwmenu = None
 
+        self.fsDetails.cleanup()
+
     def show(self):
         logging.debug("Showing VM details: %s", self.vm)
         vis = self.is_visible()
         self.topwin.present()
         if vis:
             return
+
+        self.fsDetails.topwin.show_all()
 
         self.emit("details-opened")
         self.refresh_vm_state()
@@ -1917,6 +1931,8 @@ class vmmDetails(vmmGObjectUI):
                 ret = self.config_smartcard_apply(key)
             elif pagetype is HW_LIST_TYPE_CONTROLLER:
                 ret = self.config_controller_apply(key)
+            elif pagetype is HW_LIST_TYPE_FILESYSTEM:
+                ret = self.config_filesystem_apply(key)
             else:
                 ret = False
         except Exception, e:
@@ -2343,6 +2359,18 @@ class vmmDetails(vmmGObjectUI):
         if self.edited(EDIT_WATCHDOG_ACTION):
             action = self.get_combo_entry("watchdog-action")
             add_define(self.vm.define_watchdog_action, dev_id_info, action)
+
+        return self._change_config_helper(df, da, hf, ha)
+
+    # Filesystem options
+    def config_filesystem_apply(self, dev_id_info):
+        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
+        ignore = add_hotplug
+
+        if self.edited(EDIT_FS):
+            self.fsDetails.validate_page_filesystem()
+            add_define(self.vm.define_filesystem, dev_id_info,
+                       self.fsDetails.get_dev())
 
         return self._change_config_helper(df, da, hf, ha)
 
@@ -3324,26 +3352,8 @@ class vmmDetails(vmmGObjectUI):
         if not dev:
             return
 
-        self.widget("fs-type").set_text(dev.type)
-
-        # mode can be irrelevant depending on the fs driver type
-        # selected.
-        if dev.mode:
-            self.show_pair("fs-mode", True)
-            self.widget("fs-mode").set_text(dev.mode)
-        else:
-            self.show_pair("fs-mode", False)
-
-        self.widget("fs-driver").set_text(dev.driver or _("Default"))
-
-        self.widget("fs-wrpolicy").set_text(dev.wrpolicy or _("Default"))
-
-        self.widget("fs-source").set_text(dev.source or _("RAM"))
-        self.widget("fs-target").set_text(dev.target)
-        if dev.readonly:
-            self.widget("fs-readonly").set_text("Yes")
-        else:
-            self.widget("fs-readonly").set_text("No")
+        self.fsDetails.set_dev(dev)
+        self.fsDetails.update_fs_rows()
 
     def refresh_boot_page(self):
         # Refresh autostart

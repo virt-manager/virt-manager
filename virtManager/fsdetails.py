@@ -21,6 +21,7 @@
 
 # pylint: disable=E0611
 from gi.repository import Gtk
+from gi.repository import GObject
 # pylint: enable=E0611
 
 from virtinst import VirtualFilesystem
@@ -30,6 +31,10 @@ from virtManager.storagebrowse import vmmStorageBrowser
 
 
 class vmmFSDetails(vmmGObjectUI):
+    __gsignals__ = {
+        "changed": (GObject.SignalFlags.RUN_FIRST, None, [])
+    }
+
     def __init__(self, vm):
         vmmGObjectUI.__init__(self, "fsdetails.ui", "vmm-fs-details")
 
@@ -45,6 +50,13 @@ class vmmFSDetails(vmmGObjectUI):
             "on_fs_driver_combo_changed": self.change_field,
             "on_fs_source_browse_clicked": self.browse_fs_source,
             "on_fs_ram_units_combo_changed": self.change_ram_units,
+            "on_fs_mode_combo_changed": self.notify_change,
+            "on_fs_wrpolicy_combo_changed": self.notify_change,
+            "on_fs_readonly_toggled": self.notify_change,
+            "on_fs_format_combo_changed": self.notify_change,
+            "on_fs_source_changed": self.notify_change,
+            "on_fs_ram_source_changed": self.notify_change,
+            "on_fs_target_changed": self.notify_change,
         })
 
     def _cleanup(self):
@@ -192,6 +204,23 @@ class vmmFSDetails(vmmGObjectUI):
         return combo.get_model()[combo.get_active()][1]
 
     # Setters
+    def set_dev(self, dev):
+        self._dev = dev
+
+        self.set_config_value("fs-type", dev.type or "default")
+        self.set_config_value("fs-mode", dev.mode or "default")
+        self.set_config_value("fs-driver", dev.driver or "default")
+        self.set_config_value("fs-wrpolicy", dev.wrpolicy or "default")
+        self.set_config_value("fs-format", dev.format or "default")
+        if dev.type != VirtualFilesystem.TYPE_RAM:
+            self.widget("fs-source").set_text(dev.source)
+        else:
+            self.set_config_ram_usage(dev.source, dev.units)
+        self.widget("fs-target").set_text(dev.target or "")
+        self.widget("fs-readonly").set_active(dev.readonly)
+
+        self.show_pair_combo("fs-type", self.conn.is_openvz() or self.conn.is_lxc())
+
     def set_config_ram_usage(self, usage, units):
         value = int(usage)
 
@@ -222,6 +251,9 @@ class vmmFSDetails(vmmGObjectUI):
             label.set_text(value)
 
     # listeners
+    def notify_change(self, ignore):
+        self.emit("changed")
+
     def browse_fs_source(self, ignore1):
         self._browse_file(self.widget("fs-source"), isdir=True)
 
@@ -270,6 +302,7 @@ class vmmFSDetails(vmmGObjectUI):
 
     def change_field(self, src):
         self.update_fs_rows()
+        self.notify_change(src)
 
     def change_ram_units(self, ignore):
         units = self.get_config_fs_units()
