@@ -896,6 +896,9 @@ def add_device_options(devg):
                     help=_("Configure a guest RNG device. Ex:\n"
                            "--rng /dev/random\n"
      "--rng egd,backend_host=localhost,backend_service=708,backend_type=tcp"))
+    devg.add_argument("--panic", dest="panic", action="append",
+                    help=_("Configure a guest panic device. Ex:\n"
+                           "--panic default"))
 
 
 def add_gfx_option(devg):
@@ -1724,6 +1727,30 @@ def parse_memballoon(guest, optstr, dev):
     return dev
 
 get_memballoons = _make_handler(virtinst.VirtualMemballoon, parse_memballoon)
+
+
+###################
+# --panic parsing #
+###################
+
+def parse_panic(guest, optstr, dev):
+    ignore = guest
+    if optstr == "default":
+        return dev
+
+    opts = parse_optstr(optstr)
+    set_param = _build_set_param(dev, opts)
+
+    if (opts.get("iobase") and
+        (opts.get("iobase").startswith("0x") or
+         opts.get("iobase").isdigit())):
+        dev.type = "isa"
+        set_param("iobase", "iobase")
+
+    _check_leftover_opts(opts)
+    return dev
+
+get_panic = _make_handler(virtinst.VirtualPanicDevice, parse_panic)
 
 
 ######################################################

@@ -530,6 +530,7 @@ def build_guest_instance(conn, options):
     cli.get_smartcards(guest, options.smartcard)
     cli.get_tpms(guest, options.tpm)
     cli.get_rngs(guest, options.rng)
+    cli.get_panic(guest, options.panic)
 
     guest.add_default_input_device()
     guest.add_default_console_device()

@@ -460,6 +460,11 @@ c.add_valid("--rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=
 c.add_valid("--rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind,backend_connect_host=foo,backend_connect_service=708")  # egd backend, udp mode bind, bind backend mode
 
 
+c = vinst.add_category("panic", "--noautoconsole --nodisks --pxe")
+c.add_valid("--panic default")  # panic device with default setting
+c.add_valid("--panic iobase=0x506")  # panic device with iobase=0x506
+c.add_valid("--panic iobase=507")  # panic device with iobase=0x507
+
 c = vinst.add_category("xen", "--connect %(XENURI)s --noautoconsole")
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
 c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt", "xen-pv")  # Xen PV
@@ -511,6 +516,7 @@ c.add_compare("""--hvm --pxe \
 --channel spicevmc \
 --smartcard passthrough,type=spicevmc \
 --tpm /dev/tpm0 \
+--panic default \
 --security type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes \
 --numatune \\"1-3,5\\",mode=preferred \
 --boot loader=/foo/bar \

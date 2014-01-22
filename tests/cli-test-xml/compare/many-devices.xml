@@ -98,6 +98,9 @@
         <device path="/dev/tpm0"/>
       </backend>
     </tpm>
+    <panic>
+      <address type="isa" iobase="0x505"/>
+    </panic>
   </devices>
   <seclabel type="static" model="testSecurity" relabel="yes">
     <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>
@@ -202,6 +205,9 @@
         <device path="/dev/tpm0"/>
       </backend>
     </tpm>
+    <panic>
+      <address type="isa" iobase="0x505"/>
+    </panic>
   </devices>
   <seclabel type="static" model="testSecurity" relabel="yes">
     <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>
