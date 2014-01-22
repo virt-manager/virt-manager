@@ -35,7 +35,8 @@ from virtinst import virtimage
 def parse_args():
     parser = cli.setupParser(
         "%(prog)s image.xml [OPTIONS]",
-        _("Create a virtual machine from a virt-image(5) image descriptor."))
+        _("Create a virtual machine from a virt-image(5) image descriptor."),
+        introspection_epilog=True)
     cli.add_connect_option(parser)
 
     parser.add_argument("image", metavar="image.xml", nargs='?',
@@ -63,10 +64,7 @@ def parse_args():
     cli.add_misc_options(misc, prompt=True, replace=True, printxml=True,
                          noreboot=True)
 
-    options = parser.parse_args()
-    if not options.image:
-        parser.error(_("You need to provide an image XML descriptor"))
-    return options
+    return parser.parse_args()
 
 
 def main(conn=None):
@@ -76,6 +74,15 @@ def main(conn=None):
     options.quiet = options.xmlonly or options.quiet
     cli.setupLogging("virt-image", options.debug, options.quiet)
     cli.set_prompt(False)
+
+    cli.convert_old_features(options)
+    parsermap = cli.build_parser_map(options,
+        only=["vcpus", "cpu", "network", "graphics", "features"])
+    if cli.check_option_introspection(options, parsermap):
+        return 0
+
+    if not options.image:
+        fail(_("You need to provide an image XML descriptor"))
 
     if conn is None:
         conn = cli.getConnection(options.connect)
@@ -100,7 +107,6 @@ def main(conn=None):
     cli.convert_old_networks(guest, options, image.domain.interface)
     cli.convert_old_graphics(guest, options,
         default_override=bool(image.domain.graphics))
-    cli.convert_old_features(options)
     cli.convert_old_cpuset(options)
     if not options.vcpus:
         options.vcpus = image.domain.vcpu or ""
@@ -114,8 +120,6 @@ def main(conn=None):
     if options.uuid:
         guest.uuid = options.uuid
 
-    parsermap = cli.build_parser_map(options,
-        only=["vcpus", "cpu", "network", "graphics", "features"])
     cli.parse_option_strings(parsermap, options, guest, None)
 
     if not guest.get_devices("input"):

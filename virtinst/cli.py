@@ -69,7 +69,7 @@ class VirtStreamHandler(logging.StreamHandler):
             self.handleError(record)
 
 
-class VirtHelpFormatter(argparse.HelpFormatter):
+class VirtHelpFormatter(argparse.RawDescriptionHelpFormatter):
     '''
     Subclass the default help formatter to allow printing newline characters
     in --help output. The way we do this is a huge hack :(
@@ -80,7 +80,8 @@ class VirtHelpFormatter(argparse.HelpFormatter):
 
     def _split_lines(self, *args, **kwargs):
         def return_default():
-            return argparse.HelpFormatter._split_lines(self, *args, **kwargs)
+            return argparse.RawDescriptionHelpFormatter._split_lines(
+                self, *args, **kwargs)
 
         if len(kwargs) != 0 and len(args) != 2:
             return return_default()
@@ -94,8 +95,11 @@ class VirtHelpFormatter(argparse.HelpFormatter):
             return return_default()
 
 
-def setupParser(usage, description):
+def setupParser(usage, description, introspection_epilog=False):
     epilog = _("See man page for examples and full option syntax.")
+    if introspection_epilog:
+        epilog = _("Use --option=? to see available suboptions, example: "
+            "--network=?") + "\n" + epilog
 
     parser = argparse.ArgumentParser(
         usage=usage, description=description,
@@ -826,7 +830,8 @@ def add_net_option(devg):
              "--network bridge=mybr0\n"
              "--network network=my_libvirt_virtual_net\n"
              "--network network=mynet,model=virtio,mac=00:11...\n"
-             "--network network=mynet,filterref=clean-traffic,model=virtio"))
+             "--network network=mynet,filterref=clean-traffic\n"
+             "--network=?"))
 
 
 def add_device_options(devg):
@@ -924,7 +929,8 @@ def add_disk_option(stog):
         help=_("Specify storage with various options. Ex.\n"
                "--disk path=/my/existing/disk\n"
                "--disk path=/my/new/disk,size=5 (in gigabytes)\n"
-               "--disk vol=poolname/volname,device=cdrom,bus=scsi,..."))
+               "--disk device=cdrom,bus=scsi\n"
+               "--disk=?"))
 
 
 #############################################
@@ -1141,6 +1147,16 @@ class VirtCLIParser(object):
         self._inparse = False
 
         self._init_params()
+
+    def check_introspection(self, option):
+        for optstr in util.listify(option):
+            if optstr == "?":
+                print "--%s options:" % self.cli_arg_name
+                for arg in sorted(self._params, key=lambda p: p.cliname):
+                    print "  %s" % arg.cliname
+                print
+                return True
+        return False
 
     def set_param(self, *args, **kwargs):
         if self._inparse:
@@ -2037,3 +2053,18 @@ def parse_option_strings(parsermap, options, guest, inst):
             continue
         parsermap[option_variable_name].parse(
             guest, getattr(options, option_variable_name), inst)
+
+
+def check_option_introspection(options, parsermap):
+    """
+    Check if the user requested option introspection with ex: '--disk ?'
+    """
+    ret = False
+    for option_variable_name in dir(options):
+        if option_variable_name not in parsermap:
+            continue
+        if parsermap[option_variable_name].check_introspection(
+            getattr(options, option_variable_name)):
+            ret = True
+
+    return ret

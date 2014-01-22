@@ -491,7 +491,7 @@ def build_installer(options, conn, virt_type):
     return installer
 
 
-def build_guest_instance(conn, options):
+def build_guest_instance(conn, options, parsermap):
     guest = get_guest(conn, options)
 
     logging.debug("Received virt method '%s'", guest.type)
@@ -522,7 +522,9 @@ def build_guest_instance(conn, options):
         guest.uuid = options.uuid
     guest.description = options.description
 
-    parsermap = cli.build_parser_map(options, skip=["disk"])
+    # We don't want to auto-parse --disk, but we wanted it for earlier
+    # parameter introspection
+    del(parsermap["disk"])
     cli.parse_option_strings(parsermap, options, guest, None)
 
     guest.add_default_input_device()
@@ -871,7 +873,8 @@ def xml_to_print(guest, continue_inst, xmlonly, xmlstep, dry):
 def parse_args():
     parser = cli.setupParser(
         "%(prog)s --name NAME --ram RAM STORAGE INSTALL [options]",
-        _("Create a new virtual machine from specified install media."))
+        _("Create a new virtual machine from specified install media."),
+        introspection_epilog=True)
     cli.add_connect_option(parser)
 
     geng = parser.add_argument_group(_("General Options"))
@@ -998,13 +1001,17 @@ def main(conn=None):
     cli.set_force(options.force)
     cli.set_prompt(options.prompt)
 
+    parsermap = cli.build_parser_map(options)
+    if cli.check_option_introspection(options, parsermap):
+        return 0
+
     if conn is None:
         conn = cli.getConnection(options.connect)
 
     if options.xmlstep not in [None, "1", "2", "3", "all"]:
         fail(_("--print-step must be 1, 2, 3, or all"))
 
-    guest = build_guest_instance(conn, options)
+    guest = build_guest_instance(conn, options, parsermap)
     continue_inst = guest.get_continue_inst()
 
     if options.xmlstep or options.xmlonly or options.dry:

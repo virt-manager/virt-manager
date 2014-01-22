@@ -463,6 +463,7 @@ c.add_valid("--panic default")  # panic device with default setting
 c.add_valid("--panic iobase=0x506")  # panic device with iobase=0x506
 c.add_valid("--panic iobase=507")  # panic device with iobase=0x507
 
+
 c = vinst.add_category("xen", "--connect %(XENURI)s --noautoconsole")
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
 c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt", "xen-pv")  # Xen PV
@@ -495,6 +496,7 @@ c.add_invalid("--nodisks --boot network --paravirt --arch mips")  # Invalid arch
 
 
 c = vinst.add_category("misc", "--nographics --noautoconsole")
+c.add_valid("--panic=? --disk=?")  # Make sure introspection doesn't blow up
 c.add_compare("", "noargs-fail")  # No arguments
 c.add_compare("--hvm --nodisks --pxe --print-step all", "simple-pxe")  # Diskless PXE install
 c.add_compare("--hvm --cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
@@ -730,6 +732,7 @@ c.add_valid("--vnc --keymap ja --vncport 5950 --vnclisten 1.2.3.4")  # VNC w/ lo
 
 
 c = vimag.add_category("misc", "")
+c.add_valid("--network=?")  # Make sure introspection doesn't blow up
 c.add_compare("--name foobar --ram 64 --os-variant winxp --boot 0 %(IMAGE_XML)s", "image-boot0")
 c.add_compare("--name foobar --ram 64 --network user,model=e1000 --boot 1 %(IMAGE_XML)s", "image-boot1")
 c.add_compare("--name foobar --ram 64 --boot 0 %(IMAGE_NOGFX_XML)s", "image-nogfx")
