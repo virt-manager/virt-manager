@@ -3327,13 +3327,12 @@ class vmmDetails(vmmGObjectUI):
 
         type_label = virtinst.VirtualController.pretty_type(dev.type)
         model_label = dev.model
-        is_usb = dev.type == virtinst.VirtualController.TYPE_USB
         if not model_label:
             model_label = _("Default")
 
         self.widget("controller-type").set_text(type_label)
         combo = self.widget("controller-model")
-        uihelpers.set_grid_row_visible(combo, is_usb)
+        uihelpers.set_grid_row_visible(combo, True)
 
         model = combo.get_model()
         model.clear()
@@ -3342,6 +3341,9 @@ class vmmDetails(vmmGObjectUI):
             model.append(["ich9-ehci1", "USB 2"])
             model.append(["nec-xhci", "USB 3"])
             self.widget("config-remove").set_sensitive(False)
+        if dev.type == virtinst.VirtualController.TYPE_SCSI:
+            model.append(["default", "Default"])
+            model.append(["virtio-scsi", "Virtio SCSI"])
         else:
             self.widget("config-remove").set_sensitive(True)
 
