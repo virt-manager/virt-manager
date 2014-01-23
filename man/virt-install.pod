@@ -1487,6 +1487,20 @@ at 512 MB of ram and 2 host cpus:
         --vcpus 2 \
         --init /usr/bin/httpd
 
+Start a linux container guest(LXC) with a private root filesystem,
+using /bin/sh as init.
+Container's root will be under host dir /home/LXC.
+The host dir "/home/test" will be mounted at
+"/mnt" dir inside container:
+
+  # virt-install \
+        --connect lxc:/// \
+        --name container \
+        --ram 128 \
+        --filesystem /home/LXC,/ \
+        --filesystem /home/test,/mnt \
+        --init /bin/sh
+
 Install a paravirtualized Xen guest, 500 MB of RAM, a 5 GB of disk, and
 Fedora Core 6 from a web server, in text-only mode, with old style --file
 options:
