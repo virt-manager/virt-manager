@@ -879,7 +879,7 @@ class vmmCreate(vmmGObjectUI):
             self._add_os_row(model, None, _("Generic"), True)
             return
 
-        filtervars = (not self._stable_defaults() and
+        filtervars = (self._stable_defaults() and
                       STABLE_OS_SUPPORT or
                       None)
         preferred = self.config.preferred_distros
