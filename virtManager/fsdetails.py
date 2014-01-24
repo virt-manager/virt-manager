@@ -25,6 +25,7 @@ from gi.repository import GObject
 # pylint: enable=E0611
 
 from virtinst import VirtualFilesystem
+from virtinst import util
 from virtManager import uihelpers
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.storagebrowse import vmmStorageBrowser
@@ -224,7 +225,7 @@ class vmmFSDetails(vmmGObjectUI):
     def set_config_ram_usage(self, usage, units):
         value = int(usage)
 
-        upper = self.convert_units(16, "eib", units.lower())
+        upper = util.convert_units(16, "eib", units.lower())
         self.widget("fs-ram-source-spin").get_adjustment().set_upper(upper)
         self.widget("fs-ram-source-spin").set_value(value)
 
@@ -308,37 +309,12 @@ class vmmFSDetails(vmmGObjectUI):
         units = self.get_config_fs_units()
         usage = uihelpers.spin_get_helper(self.widget("fs-ram-source-spin"))
 
-        upper = self.convert_units(16, "eib", units.lower())
+        upper = util.convert_units(16, "eib", units.lower())
         self.widget("fs-ram-source-spin").get_adjustment().set_upper(upper)
 
-        new_value = self.convert_units(usage, self.units, units.lower())
+        new_value = util.convert_units(usage, self.units, units.lower())
         self.widget("fs-ram-source-spin").set_value(new_value)
         self.units = units.lower()
-
-    def convert_units(self, value, old_unit, new_unit):
-        def get_factor(unit):
-            factor = 1000
-            if unit[-2:] == 'ib':
-                factor = 1024
-            return factor
-
-        def get_power(unit):
-            powers = ('k', 'm', 'g', 't', 'p', 'e')
-            power = 0
-            if unit[0] in powers:
-                power = powers.index(unit[0]) + 1
-            return power
-
-        # First convert it all into bytes
-        factor = get_factor(old_unit)
-        power = get_power(old_unit)
-        in_bytes = value * pow(factor, power)
-
-        # Then convert it to the target unit
-        factor = get_factor(new_unit)
-        power = get_power(new_unit)
-
-        return in_bytes / pow(factor, power)
 
     # Page validation method
     def validate_page_filesystem(self):
