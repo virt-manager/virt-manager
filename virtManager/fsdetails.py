@@ -113,7 +113,7 @@ class vmmFSDetails(vmmGObjectUI):
             self.widget("fs-type-label").set_text(VirtualFilesystem.TYPE_MOUNT)
 
         simple_store_set("fs-mode-combo", VirtualFilesystem.MODES)
-        if self.conn.is_qemu():
+        if self.conn.is_qemu() or self.conn.is_test_conn():
             simple_store_set("fs-driver-combo", [VirtualFilesystem.DRIVER_PATH,
                                                  VirtualFilesystem.DRIVER_HANDLE,
                                                  VirtualFilesystem.DRIVER_DEFAULT])
@@ -121,6 +121,8 @@ class vmmFSDetails(vmmGObjectUI):
             simple_store_set("fs-driver-combo", [VirtualFilesystem.DRIVER_LOOP,
                                                  VirtualFilesystem.DRIVER_NBD,
                                                  VirtualFilesystem.DRIVER_DEFAULT])
+        else:
+            simple_store_set("fs-driver-combo", [VirtualFilesystem.DRIVER_DEFAULT])
         simple_store_set("fs-format-combo", StorageVolume.ALL_FORMATS, capitalize = False),
         simple_store_set("fs-wrpolicy-combo", VirtualFilesystem.WRPOLICIES)
         self.show_pair_combo("fs-type", self.conn.is_openvz() or self.conn.is_lxc())
