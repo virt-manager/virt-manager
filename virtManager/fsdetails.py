@@ -44,13 +44,11 @@ class vmmFSDetails(vmmGObjectUI):
 
         self._dev = None
         self.storage_browser = None
-        self.units = "mb"
 
         self.builder.connect_signals({
             "on_fs_type_combo_changed": self.change_field,
             "on_fs_driver_combo_changed": self.change_field,
             "on_fs_source_browse_clicked": self.browse_fs_source,
-            "on_fs_ram_units_combo_changed": self.change_ram_units,
             "on_fs_mode_combo_changed": self.notify_change,
             "on_fs_wrpolicy_combo_changed": self.notify_change,
             "on_fs_readonly_toggled": self.notify_change,
@@ -129,11 +127,6 @@ class vmmFSDetails(vmmGObjectUI):
         self.show_check_button("fs-readonly",
                 self.conn.is_qemu() or self.conn.is_lxc())
 
-        simple_store_set("fs-ram-units-combo", ["B", "KB", "MB", "GB",
-                                                "TB", "PB", "EB", "KiB",
-                                                "MiB", "GiB", "TiB", "PiB",
-                                                "EiB"], False, False)
-
     def reset_state(self):
         self.widget("fs-type-combo").set_active(0)
         self.widget("fs-mode-combo").set_active(0)
@@ -143,7 +136,6 @@ class vmmFSDetails(vmmGObjectUI):
         self.widget("fs-source").set_text("")
         self.widget("fs-target").set_text("")
         self.widget("fs-readonly").set_active(False)
-        self.widget("fs-ram-units-combo").set_active(2)
 
     # Getters
     def get_dev(self):
@@ -197,14 +189,6 @@ class vmmFSDetails(vmmGObjectUI):
 
         return combo.get_model()[combo.get_active()][0]
 
-    def get_config_fs_units(self):
-        name = "fs-ram-units-combo"
-        combo = self.widget(name)
-        if not combo.get_visible():
-            return None
-
-        return combo.get_model()[combo.get_active()][1]
-
     # Setters
     def set_dev(self, dev):
         self._dev = dev
@@ -226,17 +210,12 @@ class vmmFSDetails(vmmGObjectUI):
     def set_config_ram_usage(self, usage, units):
         value = int(usage)
 
-        upper = util.convert_units(16, "eib", units.lower())
-        self.widget("fs-ram-source-spin").get_adjustment().set_upper(upper)
-        self.widget("fs-ram-source-spin").set_value(value)
-
         units = units.lower()
         if units == "bytes" or units == "byte":
             units = "b"
 
-        self.units = units
-        self.set_config_value("fs-ram-units", units)
-
+        value = util.convert_units(value, units.lower(), 'mb')
+        self.widget("fs-ram-source-spin").set_value(value)
 
     def set_config_value(self, name, value):
         combo = self.widget("%s-combo" % name)
@@ -306,17 +285,6 @@ class vmmFSDetails(vmmGObjectUI):
         self.update_fs_rows()
         self.notify_change(src)
 
-    def change_ram_units(self, ignore):
-        units = self.get_config_fs_units()
-        usage = uihelpers.spin_get_helper(self.widget("fs-ram-source-spin"))
-
-        upper = util.convert_units(16, "eib", units.lower())
-        self.widget("fs-ram-source-spin").get_adjustment().set_upper(upper)
-
-        new_value = util.convert_units(usage, self.units, units.lower())
-        self.widget("fs-ram-source-spin").set_value(new_value)
-        self.units = units.lower()
-
     # Page validation method
     def validate_page_filesystem(self):
         conn = self.conn.get_backend()
@@ -329,7 +297,6 @@ class vmmFSDetails(vmmGObjectUI):
         driver = self.get_config_fs_driver()
         fsformat = self.get_config_fs_format()
         wrpolicy = self.get_config_fs_wrpolicy()
-        units = self.get_config_fs_units()
 
         if not source and fstype != VirtualFilesystem.TYPE_RAM:
             return self.err.val_err(_("A filesystem source must be specified"))
@@ -340,13 +307,13 @@ class vmmFSDetails(vmmGObjectUI):
 
         if self.conn.is_qemu() and self.filesystem_target_present(target):
             return self.err.val_err(_('Invalid target path. A filesystem with'
-                                       ' that target already exists'))
+                                      ' that target already exists'))
 
         try:
             self._dev = VirtualFilesystem(conn)
             if fstype == VirtualFilesystem.TYPE_RAM:
                 self._dev.source = usage
-                self._dev.units = units
+                self._dev.units = 'MB'
             else:
                 self._dev.source = source
             self._dev.target = target

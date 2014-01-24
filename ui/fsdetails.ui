@@ -2,7 +2,8 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment6">
-    <property name="upper">1000000</property>
+    <!-- 16 EiB to MB -->
+    <property name="upper">18446744073709</property>
     <property name="step_increment">100</property>
     <property name="page_increment">1000</property>
   </object>
@@ -380,10 +381,11 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBox" id="fs-ram-units-combo">
+          <object class="GtkLabel" id="fs-ram-units-label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <signal name="changed" handler="on_fs_ram_units_combo_changed" swapped="no"/>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">MB</property>
           </object>
           <packing>
             <property name="expand">False</property>
