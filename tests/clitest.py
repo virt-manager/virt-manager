@@ -763,7 +763,7 @@ c.add_compare("--vcpus 10,maxvcpus=20,cores=5,sockets=4,threads=1", "virtxml-edi
 c.add_compare("--cpu model=pentium2,+x2apic,forbid=pbe", "virtxml-edit-simple-cpu")
 c.add_compare("--numatune 1-5,7,mode=strict", "virtxml-edit-simple-numatune")
 c.add_compare("--boot loader=foo.bar,network,useserial=on,init=/bin/bash", "virtxml-edit-simple-boot")
-c.add_compare("--security label=foo,bar,baz,relabel=on", "virtxml-edit-simple-security")
+c.add_compare("--security label=foo,bar,baz,UNKNOWN=val,relabel=on", "virtxml-edit-simple-security")
 c.add_compare("--features eoi=on,hyperv_relaxed=off,acpi=", "virtxml-edit-simple-features")
 c.add_compare("--clock offset=localtime,hpet_present=yes,kvmclock_present=no,rtc_tickpolicy=merge", "virtxml-edit-simple-clock")
 c.add_compare("--disk /dev/zero,perms=ro,startup_policy=optional", "virtxml-edit-simple-disk")

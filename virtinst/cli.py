@@ -959,7 +959,7 @@ class _VirtCLIArgument(object):
             After the parser sees this option, it will iterate over the
             option string until it finds another known argument name:
             everything prior to that argument name is considered part of
-            the value of this option. Should be used sparingly.
+            the value of this option, '=' included. Should be used sparingly.
         @is_list: This value should be stored as a list, so multiple instances
             are appended.
         @is_onoff: The value expected on the cli is on/off or yes/no, convert
@@ -1086,7 +1086,9 @@ class VirtOptionString(object):
                     optlist.append(tuple(commaopt))
                     commaopt = None
                 else:
-                    commaopt[1] += "," + (val or cliname)
+                    commaopt[1] += "," + cliname
+                    if val:
+                        commaopt[1] += "=" + val
                     continue
 
             if (cliname in virtargmap and virtargmap[cliname].can_comma):
