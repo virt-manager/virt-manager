@@ -1403,6 +1403,11 @@ class ParserBoot(VirtCLIParser):
         self.set_param("os.kernel_args", "extra_args")
         self.set_param("os.kernel_args", "kernel_args")
         self.set_param("os.init", "init")
+        self.set_param("os.arch", "arch")
+        self.set_param("type", "domain_type")
+        self.set_param("os.machine", "machine")
+        self.set_param("os.os_type", "os_type")
+        self.set_param("emulator", "emulator")
 
         # Order matters for boot devices, we handle it specially in parse
         def noset_cb(val):
