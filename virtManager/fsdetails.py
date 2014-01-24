@@ -85,15 +85,16 @@ class vmmFSDetails(vmmGObjectUI):
     ##########################
 
     def set_initial_state(self):
-        def simple_store_set(comboname, values, units=False):
+        def simple_store_set(comboname, values, sort=True, capitalize=True):
             combo = self.widget(comboname)
             model = Gtk.ListStore(str, str)
             combo.set_model(model)
             text = Gtk.CellRendererText()
             combo.pack_start(text, True)
             combo.add_attribute(text, 'text', 1)
-            if not units:
+            if sort:
                 model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+            if capitalize:
                 for val in values:
                     model.append([val, val.capitalize()])
             else:
@@ -122,7 +123,7 @@ class vmmFSDetails(vmmGObjectUI):
             simple_store_set("fs-driver-combo", [VirtualFilesystem.DRIVER_LOOP,
                                                  VirtualFilesystem.DRIVER_NBD,
                                                  VirtualFilesystem.DRIVER_DEFAULT])
-        simple_store_set("fs-format-combo", StorageVolume.ALL_FORMATS),
+        simple_store_set("fs-format-combo", StorageVolume.ALL_FORMATS, capitalize = False),
         simple_store_set("fs-wrpolicy-combo", VirtualFilesystem.WRPOLICIES)
         self.show_pair_combo("fs-type", self.conn.is_openvz() or self.conn.is_lxc())
         self.show_check_button("fs-readonly",
@@ -131,7 +132,7 @@ class vmmFSDetails(vmmGObjectUI):
         simple_store_set("fs-ram-units-combo", ["B", "KB", "MB", "GB",
                                                 "TB", "PB", "EB", "KiB",
                                                 "MiB", "GiB", "TiB", "PiB",
-                                                "EiB"], True)
+                                                "EiB"], False, False)
 
     def reset_state(self):
         self.widget("fs-type-combo").set_active(0)
