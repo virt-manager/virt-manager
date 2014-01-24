@@ -460,6 +460,10 @@ class StorageVolume(_StorageObject):
     """
     Base class for building and installing libvirt storage volume xml
     """
+
+    ALL_FORMATS = ["raw", "bochs", "cloop", "cow", "dmg", "iso", "qcow",
+                   "qcow2", "qed", "vmdk", "vpc", "fat", "vhd", "vdi"]
+
     @staticmethod
     def find_free_name(pool_object, basename, **kwargs):
         """
@@ -608,8 +612,7 @@ class StorageVolume(_StorageObject):
 
     def list_formats(self):
         if self.file_type == self.TYPE_FILE:
-            return ["raw", "bochs", "cloop", "cow", "dmg", "iso", "qcow",
-                    "qcow2", "qed", "vmdk", "vpc", "vdi"]
+            return ALL_FORMATS
         return []
 
     def list_create_formats(self):

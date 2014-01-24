@@ -51,9 +51,6 @@ class VirtualFilesystem(VirtualDevice):
     DRIVER_DEFAULT = "default"
     DRIVERS = [DRIVER_PATH, DRIVER_HANDLE, DRIVER_LOOP, DRIVER_NBD, DRIVER_DEFAULT]
 
-    NBD_FORMATS = ["raw", "bochs", "cloop", "cow", "dmg", "iso", "qcow",
-                   "qcow2", "qed", "vmdk", "vpc", "fat", "vhd", "vdi"]
-
     @staticmethod
     def type_to_source_prop(fs_type):
         """

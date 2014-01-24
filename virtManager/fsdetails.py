@@ -24,7 +24,7 @@ from gi.repository import Gtk
 from gi.repository import GObject
 # pylint: enable=E0611
 
-from virtinst import VirtualFilesystem
+from virtinst import VirtualFilesystem, StorageVolume
 from virtinst import util
 from virtManager import uihelpers
 from virtManager.baseclass import vmmGObjectUI
@@ -122,7 +122,7 @@ class vmmFSDetails(vmmGObjectUI):
             simple_store_set("fs-driver-combo", [VirtualFilesystem.DRIVER_LOOP,
                                                  VirtualFilesystem.DRIVER_NBD,
                                                  VirtualFilesystem.DRIVER_DEFAULT])
-        simple_store_set("fs-format-combo", VirtualFilesystem.NBD_FORMATS)
+        simple_store_set("fs-format-combo", StorageVolume.ALL_FORMATS),
         simple_store_set("fs-wrpolicy-combo", VirtualFilesystem.WRPOLICIES)
         self.show_pair_combo("fs-type", self.conn.is_openvz() or self.conn.is_lxc())
         self.show_check_button("fs-readonly",
