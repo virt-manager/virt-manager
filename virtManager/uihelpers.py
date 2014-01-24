@@ -1411,7 +1411,7 @@ def set_grid_row_visible(child, visible):
 
 
 def default_uri(always_system=False):
-    if os.path.exists('/var/lib/xend'):
+    if os.path.exists('/var/lib/xen'):
         if (os.path.exists('/dev/xen/evtchn') or
             os.path.exists("/proc/xen")):
             return 'xen:///'
