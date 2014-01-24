@@ -385,7 +385,7 @@ def validate_required_options(options, guest):
         msg += "\n" + cli.name_missing
 
     if not options.memory:
-        msg += "\n" + cli.ram_missing
+        msg += "\n" + cli.memory_missing
 
     if (not guest.os.is_container() and
         not storage_specified(options.disk,
@@ -499,6 +499,7 @@ def build_guest_instance(conn, options, parsermap):
 
     guest.installer = build_installer(options, conn, guest.os.os_type)
 
+    cli.convert_old_memory(options)
     convert_old_sound(options)
     cli.convert_old_networks(guest, options, not options.nonetworks and 1 or 0)
     cli.convert_old_graphics(guest, options)
@@ -514,8 +515,6 @@ def build_guest_instance(conn, options, parsermap):
     guest.autostart = options.autostart
 
     cli.get_name(guest, options.name)
-    # Memory needs to come before the vcpu setting
-    cli.get_memory(guest, options.memory)
 
     # Guest configuration
     if options.uuid:
@@ -532,6 +531,9 @@ def build_guest_instance(conn, options, parsermap):
     guest.add_default_video_device()
     guest.add_default_usb_controller()
     guest.add_default_channels()
+
+    if cli.is_prompt():
+        cli.get_memory(guest, guest.memory and (guest.memory / 1024) or None)
 
     # Do this after setting up all optional parameters, so we report error
     # about those first.
@@ -880,9 +882,8 @@ def parse_args():
     geng = parser.add_argument_group(_("General Options"))
     geng.add_argument("-n", "--name",
                     help=_("Name of the guest instance"))
-    geng.add_argument("-r", "--ram", type=int, dest="memory",
-                    help=_("Memory to allocate for guest instance in "
-                           "megabytes"))
+    geng.add_argument("-u", "--uuid", help=argparse.SUPPRESS)
+    cli.add_memory_option(geng, backcompat=True)
     cli.vcpu_cli_options(geng)
     geng.add_argument("--description",
                     help=_("Human readable description of the VM to store in "
@@ -960,7 +961,6 @@ def parse_args():
                     help=_("The CPU architecture to simulate"))
     virg.add_argument("--machine",
                     help=_("The machine type to emulate"))
-    virg.add_argument("-u", "--uuid", help=argparse.SUPPRESS)
     cli.add_old_feature_options(virg)
 
     misc = parser.add_argument_group(_("Miscellaneous Options"))

@@ -1,0 +1,17 @@
+--- Original XML
++++ Altered XML
+@@ -4,10 +4,9 @@
+   <description>Foo bar baz &amp;
+     yeah boii &lt; &gt; yeahfoo
+   </description>
+-  <memory unit="KiB">409600</memory>
+-  <currentMemory unit="KiB">204800</currentMemory>
++  <memory unit="KiB">1024000</memory>
++  <currentMemory unit="KiB">512000</currentMemory>
+   <memoryBacking>
+-    <hugepages/>
+   </memoryBacking>
+   <vcpu placement="static" cpuset="1-2,5-9,11,13-14">9</vcpu>
+   <numatune>
+
+Domain 'test-many-devices' defined successfully.

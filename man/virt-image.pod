@@ -52,10 +52,11 @@ General configuration parameters that apply to all types of guest installs.
 
 Name of the guest instance
 
-=item -r MEMORY, --ram=MEMORY
+=item --memory=MEMORY
 
-Memory to allocate for guest instance in megabytes. Defaults to
-C</image/devices/memory> in the XML descriptor.
+Memory to allocate for the guest, in megabytes. Defaults to C</image/devices/memory> in the XML descriptor. This deprecates the -r/--ram option.
+
+See L<virt-install(1)> for more details.
 
 =item  -u UUID, --uuid=UUID
 

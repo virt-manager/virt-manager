@@ -604,7 +604,7 @@ c.add_valid("--controller usb,model=ich9-ehci1,address=0:0:4.7,index=1")
 c.add_valid("--controller usb2 --controller usb3")
 
 
-c = vinst.add_category("lxc", "--connect %(LXCURI)s --noautoconsole --name foolxc --ram 64")
+c = vinst.add_category("lxc", "--connect %(LXCURI)s --noautoconsole --name foolxc --memory 64")
 c.add_compare("", "default")
 c.add_compare("--filesystem /source,/", "fs-default")
 c.add_compare("--init /usr/bin/httpd", "manual-init")
@@ -759,6 +759,7 @@ c.add_invalid("--domain test-many-devices --edit 5 --tpm /dev/tpm")  # device ed
 c.add_compare("--domain test --print-xml --edit --vcpus 7", "virtxml-print-xml")  # test --print-xml
 
 c = vixml.add_category("simple edit diff", "--domain test-many-devices --edit --print-diff --define")
+c.add_compare("--memory 500,maxmemory=1000,hugepages=off", "virtxml-edit-simple-memory")
 c.add_compare("--vcpus 10,maxvcpus=20,cores=5,sockets=4,threads=1", "virtxml-edit-simple-vcpus")
 c.add_compare("--cpu model=pentium2,+x2apic,forbid=pbe", "virtxml-edit-simple-cpu")
 c.add_compare("--numatune 1-5,7,mode=strict", "virtxml-edit-simple-numatune")
@@ -803,7 +804,7 @@ c.add_valid("--vnc --keymap ja --vncport 5950 --vnclisten 1.2.3.4")  # VNC w/ lo
 
 c = vimag.add_category("misc", "")
 c.add_valid("--network=?")  # Make sure introspection doesn't blow up
-c.add_compare("--name foobar --ram 64 --os-variant winxp --boot 0 %(IMAGE_XML)s", "image-boot0")
+c.add_compare("--name foobar --memory 128,maxmemory=256 --os-variant winxp --boot 0 %(IMAGE_XML)s", "image-boot0")
 c.add_compare("--name foobar --ram 64 --network user,model=e1000 --boot 1 %(IMAGE_XML)s", "image-boot1")
 c.add_compare("--name foobar --ram 64 --boot 0 %(IMAGE_NOGFX_XML)s", "image-nogfx")
 c.add_valid("--name test --replace %(IMAGE_XML)s")  # Colliding VM name w/ --replace

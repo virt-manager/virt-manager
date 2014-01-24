@@ -35,7 +35,7 @@ argument, example: virt-install --disk=?
 
 =head1 OPTIONS
 
-Most options are not required. Minimum requirements are --name, --ram,
+Most options are not required. Minimum requirements are --name, --memory,
 guest storage (--disk, --filesystem or --nodisks), and an install option.
 
 =over 2
@@ -89,11 +89,12 @@ currently active. To re-define an existing guest, use the C<virsh(1)> tool
 to shut it down ('virsh shutdown') & delete ('virsh undefine') it prior to
 running C<virt-install>.
 
-=item -r MEMORY, --ram=MEMORY
+=item --memory=MEM[,OPT1=VAL][...]
 
-Memory to allocate for guest instance in megabytes. If the hypervisor does
-not have enough free memory, it is usual for it to automatically take memory
-away from the host operating system to satisfy this allocation.
+Memory to allocate for the guest, in megabytes. Sub options are available,
+like 'maxmemory' and 'hugepages'. This deprecates the -r/--ram option.
+
+Use --memory=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsMemoryAllocation>
 
 =item  --arch=ARCH
 
@@ -1433,7 +1434,7 @@ CDROM drive, auto launching a graphical VNC viewer
        --connect qemu:///system \
        --virt-type kvm \
        --name demo \
-       --ram 500 \
+       --memory 500 \
        --disk path=/var/lib/libvirt/images/demo.img,size=8 \
        --graphics vnc \
        --cdrom /dev/cdrom \
@@ -1445,7 +1446,7 @@ booting from PXE, using VNC server/viewer
   # virt-install \
        --connect qemu:///system \
        --name demo \
-       --ram 500 \
+       --memory 500 \
        --disk path=/dev/HostVG/DemoVM \
        --network network=default \
        --virt-type qemu
@@ -1459,7 +1460,7 @@ pair:
   # virt-install \
        --connect qemu:///system \
        --name demo \
-       --ram 500 \
+       --memory 500 \
        --disk path=/dev/hdc \
        --network bridge=eth1 \
        --arch ppc64 \
@@ -1471,7 +1472,7 @@ Run a Live CD image under Xen fullyvirt, in diskless environment
   # virt-install \
        --hvm \
        --name demo \
-       --ram 500 \
+       --memory 500 \
        --nodisks \
        --livecd \
        --graphics vnc \
@@ -1483,7 +1484,7 @@ at 512 MB of ram and 2 host cpus:
   # virt-install \
         --connect lxc:/// \
         --name httpd_guest \
-        --ram 512 \
+        --memory 512 \
         --vcpus 2 \
         --init /usr/bin/httpd
 
@@ -1496,7 +1497,7 @@ The host dir "/home/test" will be mounted at
   # virt-install \
         --connect lxc:/// \
         --name container \
-        --ram 128 \
+        --memory 128 \
         --filesystem /home/LXC,/ \
         --filesystem /home/test,/mnt \
         --init /bin/sh
@@ -1508,7 +1509,7 @@ options:
   # virt-install \
        --paravirt \
        --name demo \
-       --ram 500 \
+       --memory 500 \
        --file /var/lib/xen/images/demo.img \
        --file-size 6 \
        --graphics none \
@@ -1519,7 +1520,7 @@ the rest of the options.
 
   # virt-install \
        --name demo \
-       --ram 512 \
+       --memory 512 \
        --disk /home/user/VMs/mydisk.img \
        --import
 
@@ -1527,7 +1528,7 @@ Start serial QEMU ARM VM, which requires specifying a manual kernel.
 
   # virt-install \
        --name armtest \
-       --ram 1024 \
+       --memory 1024 \
        --arch armv7l --machine vexpress-a9 \
        --disk /home/user/VMs/myarmdisk.img \
        --boot kernel=/tmp/my-arm-kernel,initrd=/tmp/my-arm-initrd,dtb=/tmp/my-arm-dtb,kernel_args="console=ttyAMA0 rw root=/dev/mmcblk0p3" \

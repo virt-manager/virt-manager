@@ -544,7 +544,7 @@ def disk_prompt(conn, origpath, origsize, origsparse,
 #######################
 
 name_missing    = _("--name is required")
-ram_missing     = _("--ram amount in MB is required")
+memory_missing     = _("--memory amount in MB is required")
 
 
 def get_name(guest, name):
@@ -555,7 +555,7 @@ def get_name(guest, name):
 
 def get_memory(guest, memory):
     prompt_txt = _("How much RAM should be allocated (in megabytes)?")
-    err_txt = ram_missing
+    err_txt = memory_missing
 
     def check_memory(mem):
         mem = int(mem)
@@ -566,6 +566,14 @@ def get_memory(guest, memory):
 
     prompt_loop(prompt_txt, err_txt, memory, guest, "memory",
                 func=check_memory)
+
+
+def convert_old_memory(options):
+    if options.memory:
+        return
+    if not options.oldmemory:
+        return
+    options.memory = str(options.oldmemory)
 
 
 def convert_old_cpuset(options):
@@ -758,6 +766,16 @@ def add_misc_options(grp, prompt=False, replace=False,
                    help=_("Suppress non-error output"))
     grp.add_argument("-d", "--debug", action="store_true",
                    help=_("Print debugging information"))
+
+
+def add_memory_option(grp, backcompat=False):
+    grp.add_argument("--memory",
+        help=_("Configure guest memory allocation. Ex:\n"
+               "--memory 1024 (in megabytes)\n"
+               "--memory 512,maxmemory=1024,hugepages=on"))
+    if backcompat:
+        grp.add_argument("-r", "--ram", type=int, dest="oldmemory",
+            help=argparse.SUPPRESS)
 
 
 def vcpu_cli_options(grp, backcompat=True):
@@ -1285,6 +1303,22 @@ class ParserNumatune(VirtCLIParser):
 
         self.set_param("numatune.memory_nodeset", "nodeset", can_comma=True)
         self.set_param("numatune.memory_mode", "mode")
+
+
+####################
+# --memory parsing #
+####################
+
+class ParserMemory(VirtCLIParser):
+    def _init_params(self):
+        self.remove_first = "memory"
+
+        def set_memory_cb(opts, inst, cliname, val):
+            ignore = opts
+            setattr(inst, cliname, int(val) * 1024)
+        self.set_param("memory", "memory", setter_cb=set_memory_cb)
+        self.set_param("maxmemory", "maxmemory", setter_cb=set_memory_cb)
+        self.set_param("hugepage", "hugepages", is_onoff=True)
 
 
 ###################
@@ -2085,6 +2119,7 @@ def build_parser_map(options, skip=None, only=None):
                                 parserobj.cli_arg_name, parserclass))
         parsermap[parserobj.option_variable_name] = parserobj
 
+    register_parser("memory", ParserMemory)
     register_parser("vcpus", ParserVCPU)
     register_parser("cpu", ParserCPU)
     register_parser("numatune", ParserNumatune)

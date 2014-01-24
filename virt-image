@@ -44,10 +44,8 @@ def parse_args():
 
     geng = parser.add_argument_group(_("General Options"))
     geng.add_argument("-n", "--name", help=_("Name of the guest instance"))
-    geng.add_argument("-r", "--ram", type=int, dest="memory",
-                    help=_("Memory to allocate for guest instance in "
-                           "megabytes"))
     geng.add_argument("-u", "--uuid", help=argparse.SUPPRESS)
+    cli.add_memory_option(geng, backcompat=True)
     cli.vcpu_cli_options(geng)
     cli.add_distro_options(geng)
     cli.add_old_feature_options(geng)
@@ -77,7 +75,7 @@ def main(conn=None):
 
     cli.convert_old_features(options)
     parsermap = cli.build_parser_map(options,
-        only=["vcpus", "cpu", "network", "graphics", "features"])
+        only=["memory", "vcpus", "cpu", "network", "graphics", "features"])
     if cli.check_option_introspection(options, parsermap):
         return 0
 
@@ -104,19 +102,20 @@ def main(conn=None):
     guest = conn.caps.build_virtinst_guest(conn, *installer.get_caps_guest())
     guest.installer = installer
 
+    cli.convert_old_memory(options)
     cli.convert_old_networks(guest, options, image.domain.interface)
     cli.convert_old_graphics(guest, options,
         default_override=bool(image.domain.graphics))
     cli.convert_old_cpuset(options)
     if not options.vcpus:
         options.vcpus = image.domain.vcpu or ""
+    if not options.memory and image.domain.memory:
+        options.memory = image.domain.memory
 
     guest.replace = options.replace
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
 
     cli.get_name(guest, options.name or image.name)
-    cli.get_memory(guest, options.memory or (image.domain.memory and
-                                             int(image.domain.memory)))
     if options.uuid:
         guest.uuid = options.uuid
 
