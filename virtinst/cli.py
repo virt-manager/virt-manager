@@ -941,7 +941,8 @@ def add_disk_option(stog):
 class _VirtCLIArgument(object):
     def __init__(self, attrname, cliname,
                  setter_cb=None, ignore_default=False,
-                 can_comma=False, is_list=False, is_onoff=False):
+                 can_comma=False, is_list=False, is_onoff=False,
+                 aliases=None):
         """
         A single subargument passed to compound command lines like --disk,
         --network, etc.
@@ -963,6 +964,8 @@ class _VirtCLIArgument(object):
             are appended.
         @is_onoff: The value expected on the cli is on/off or yes/no, convert
             it to true/false.
+        @aliases: List of cli aliases. Useful if we want to change a property
+            name on the cli but maintain back compat.
         """
         self.attrname = attrname
         self.cliname = cliname
@@ -972,10 +975,17 @@ class _VirtCLIArgument(object):
         self.is_list = is_list
         self.is_onoff = is_onoff
         self.ignore_default = ignore_default
+        self.aliases = util.listify(aliases)
 
 
     def parse(self, opts, inst, support_cb=None, lookup=False):
-        val = opts.get_opt_param(self.cliname)
+        val = None
+        for cliname in self.aliases + [self.cliname]:
+            # We iterate over all values unconditionally, so they are
+            # removed from opts
+            foundval = opts.get_opt_param(cliname)
+            if foundval is not None:
+                val = foundval
         if val is None:
             return
         if val == "":
@@ -1400,8 +1410,7 @@ class ParserBoot(VirtCLIParser):
         self.set_param("os.initrd", "initrd")
         self.set_param("os.dtb", "dtb")
         self.set_param("os.loader", "loader")
-        self.set_param("os.kernel_args", "extra_args")
-        self.set_param("os.kernel_args", "kernel_args")
+        self.set_param("os.kernel_args", "kernel_args", aliases=["extra_args"])
         self.set_param("os.init", "init")
         self.set_param("os.arch", "arch")
         self.set_param("type", "domain_type")
