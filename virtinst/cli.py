@@ -1738,7 +1738,6 @@ class ParserController(VirtCLIParser):
         self.remove_first = "type"
 
         self.set_param("type", "type")
-        self.set_param("type", "type")
         self.set_param("model", "model")
         self.set_param("index", "index")
         self.set_param("master_startport", "master")
