@@ -123,7 +123,7 @@ class vmmFSDetails(vmmGObjectUI):
                                                  VirtualFilesystem.DRIVER_DEFAULT])
         else:
             simple_store_set("fs-driver-combo", [VirtualFilesystem.DRIVER_DEFAULT])
-        simple_store_set("fs-format-combo", StorageVolume.ALL_FORMATS, capitalize = False),
+        simple_store_set("fs-format-combo", StorageVolume.ALL_FORMATS, capitalize=False)
         simple_store_set("fs-wrpolicy-combo", VirtualFilesystem.WRPOLICIES)
         self.show_pair_combo("fs-type", self.conn.is_openvz() or self.conn.is_lxc())
         self.show_check_button("fs-readonly",

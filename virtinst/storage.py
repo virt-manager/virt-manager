@@ -460,7 +460,6 @@ class StorageVolume(_StorageObject):
     """
     Base class for building and installing libvirt storage volume xml
     """
-
     ALL_FORMATS = ["raw", "bochs", "cloop", "cow", "dmg", "iso", "qcow",
                    "qcow2", "qed", "vmdk", "vpc", "fat", "vhd", "vdi"]
 
@@ -612,7 +611,7 @@ class StorageVolume(_StorageObject):
 
     def list_formats(self):
         if self.file_type == self.TYPE_FILE:
-            return ALL_FORMATS
+            return self.ALL_FORMATS
         return []
 
     def list_create_formats(self):
