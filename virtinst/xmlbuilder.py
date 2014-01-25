@@ -195,7 +195,7 @@ def _build_xpath_node(ctx, xpath, addnode=None):
     return parentnode
 
 
-def _remove_xpath_node(ctx, xpath, dofree=True, unlinkroot=True):
+def _remove_xpath_node(ctx, xpath, dofree=True):
     """
     Remove an XML node tree if it has no content
     """
@@ -227,11 +227,9 @@ def _remove_xpath_node(ctx, xpath, dofree=True, unlinkroot=True):
             white.unlinkNode()
             white.freeNode()
 
-        if not unlinkroot and node == root_node:
-            # Don't unlink the root node. This is usually a programming error,
-            # but the error usually cascades to a different spot and is hard
-            # to pin down. With this we usually get invalid XML which is
-            # easier to debug.
+        if node == root_node:
+            # Don't unlink the root node, since it's spread out to all
+            # child objects and it ends up wreaking havoc.
             break
 
         node.unlinkNode()
@@ -642,7 +640,7 @@ class XMLProperty(property):
 
         for node, val, use_xpath in node_map:
             if val is None or val is False:
-                _remove_xpath_node(ctx, use_xpath, unlinkroot=False)
+                _remove_xpath_node(ctx, use_xpath)
                 continue
 
             if not node:
