@@ -636,12 +636,12 @@ class XMLProperty(property):
 
         node_map = []
         if clearlist:
-            node_map += _tuplify_lists(clearlist, None, "")
+            node_map += _tuplify_lists(clearlist, None,
+                                       [n.nodePath() for n in clearlist])
         node_map += [(node, setval, xpath)]
 
         for node, val, use_xpath in node_map:
             if val is None or val is False:
-                print "remove", use_xpath
                 _remove_xpath_node(ctx, use_xpath, unlinkroot=False)
                 continue
 
