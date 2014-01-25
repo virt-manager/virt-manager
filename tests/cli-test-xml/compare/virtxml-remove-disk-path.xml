@@ -1,0 +1,29 @@
+--- Original XML
++++ Altered XML
+@@ -54,11 +54,6 @@
+   <on_crash>restart</on_crash>
+   <devices>
+     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+-    <disk type="block" device="floppy">
+-      <source dev="/dev/null"/>
+-      <target dev="fda" bus="fdc"/>
+-      <address type="drive" controller="0" bus="0" target="0" unit="0"/>
+-    </disk>
+     <disk type="dir" device="floppy">
+       <source dir="/tmp"/>
+       <target dev="fdb" bus="fdc"/>
+@@ -72,12 +67,6 @@
+         <total_iops_sec>50</total_iops_sec>
+       </iotune>
+       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
+-    </disk>
+-    <disk type="block" device="disk">
+-      <driver type="raw" cache="none"/>
+-      <source dev="/dev/null"/>
+-      <target dev="hdc" bus="ide"/>
+-      <address type="drive" controller="0" bus="1" target="0" unit="0"/>
+     </disk>
+     <disk type="block" device="cdrom">
+       <target dev="sdb" bus="scsi"/>
+
+Domain 'test-many-devices' defined successfully.

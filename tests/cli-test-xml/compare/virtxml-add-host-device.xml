@@ -1,0 +1,15 @@
+--- Original XML
++++ Altered XML
+@@ -302,5 +302,10 @@
+         <protocol type="raw"/>
+       </backend>
+     </rng>
++    <hostdev mode="subsystem" type="pci" managed="yes">
++      <source>
++        <address domain="0" bus="0" slot="25" function="0"/>
++      </source>
++    </hostdev>
+   </devices>
+ </domain>
+
+Domain 'test-many-devices' defined successfully.

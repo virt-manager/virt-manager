@@ -27,6 +27,7 @@ import libvirt
 
 import virtinst
 from virtinst import cli
+from virtinst import util
 from virtinst.cli import fail, print_stdout, print_stderr
 
 
@@ -106,19 +107,19 @@ def get_domain_and_guest(conn, domstr):
 # Change logic #
 ################
 
-def _find_devices_to_edit(guest, options, parserobj):
+def _find_devices_to_edit(guest, action_name, editval, parserobj):
     devlist = guest.get_devices(parserobj.devclass.virtual_device_type)
     idx = None
 
-    if options.edit is None:
+    if editval is None:
         idx = 1
-    elif (options.edit.isdigit() or
-          options.edit.startswith("-") and options.edit[1:].isdigit()):
-        idx = int(options.edit)
+    elif (editval.isdigit() or
+          editval.startswith("-") and editval[1:].isdigit()):
+        idx = int(editval)
 
     if idx is not None:
         if idx == 0:
-            fail(_("Invalid --edit option '%s'") % options.edit)
+            fail(_("Invalid --edit option '%s'") % editval)
 
         if not devlist:
             fail(_("No --%s devices found in the XML") %
@@ -131,23 +132,35 @@ def _find_devices_to_edit(guest, options, parserobj):
         if idx > 0:
             idx -= 1
         inst = devlist[idx]
-    elif options.edit == "all":
+    elif editval == "all":
         inst = devlist[:]
     else:
-        inst = parserobj.lookup_device_from_option_string(guest, options.edit)
+        inst = parserobj.lookup_device_from_option_string(guest, editval)
         if not inst:
-            fail(_("No matching devices found for --edit %s") % options.edit)
+            fail(_("No matching devices found for --%s %s") %
+                 (action_name, editval))
 
     return inst
 
 
-def change_xml(guest, options, parsermap):
-    # XXX: Make sure actions don't conflict
-    # XXX: Make sure XML options don't conflict
-    # XXX: Find a way to factor out whatever defaults there are
-    if options.edit is -1:
-        fail("--edit must be specified")
+def check_action_collision(options):
+    actions = ["edit", "add-device", "remove-device"]
 
+    collisions = []
+    for cliname in actions:
+        optname = cliname.replace("-", "_")
+        if getattr(options, optname) not in [False, -1]:
+            collisions.append(cliname)
+
+    if len(collisions) == 0:
+        fail(_("One of %s must be specified.") %
+             ", ".join(["--" + c for c in actions]))
+    if len(collisions) > 1:
+        fail(_("Conflicting options %s") %
+             ", ".join(["--" + c for c in collisions]))
+
+
+def check_xmlopt_collision(options, parsermap):
     collisions = []
     for option_variable_name, parserobj in parsermap.items():
         if getattr(options, option_variable_name):
@@ -159,10 +172,13 @@ def change_xml(guest, options, parsermap):
         fail(_("Only one change operation may be specified "
                "(conflicting options %s)") %
                ["--" + c.cli_arg_name for c in collisions])
-    parserobj = collisions[0]
 
+    return collisions[0]
+
+
+def action_edit(guest, options, parsermap, parserobj):
     if parserobj.devclass:
-        inst = _find_devices_to_edit(guest, options, parserobj)
+        inst = _find_devices_to_edit(guest, "edit", options.edit, parserobj)
     else:
         inst = guest
         if options.edit and options.edit != '1' and options.edit != 'all':
@@ -171,6 +187,25 @@ def change_xml(guest, options, parsermap):
             (options.edit, parserobj.cli_arg_name))
 
     cli.parse_option_strings(parsermap, options, guest, inst, update=True)
+
+
+def action_add_device(guest, options, parsermap, parserobj):
+    if not parserobj.devclass:
+        fail(_("Cannot use --add-device with --%s") % parserobj.cli_arg_name)
+    cli.parse_option_strings(parsermap, options, guest, None)
+
+
+def action_remove_device(guest, options, parsermap, parserobj):
+    ignore = parsermap
+    if not parserobj.devclass:
+        fail(_("Cannot use --remove-device with --%s") %
+             parserobj.cli_arg_name)
+
+    devs = _find_devices_to_edit(guest, "remove-device",
+        getattr(options, parserobj.option_variable_name)[-1], parserobj)
+
+    for dev in util.listify(devs):
+        guest.remove_device(dev)
 
 
 #######################
@@ -191,7 +226,19 @@ def parse_args():
     actg = parser.add_argument_group(_("Action Options"))
     actg.add_argument("--domain", help=_("Domain name, id, or uuid"))
     actg.add_argument("--edit", nargs='?', default=-1,
-                      help=_("Edit VM XML"))
+        help=_("Edit VM XML. Examples:\n"
+        "--edit --disk ...     (edit first disk device)\n"
+        "--edit 2 --disk ...   (edit second disk device)\n"
+        "--edit all --disk ... (edit all disk devices)\n"
+        "--edit target=hda --disk ... (edit disk 'hda')\n"))
+    actg.add_argument("--remove-device", action="store_true",
+        help=_("Remove specified device. Examples:\n"
+        "--remove-device --disk 1 (remove first disk)\n"
+        "--remove-device --disk all (remove all disks)\n"
+        "--remove-device --disk /some/path"))
+    actg.add_argument("--add-device", action="store_true",
+        help=_("Add specified device. Example:\n"
+        "--add-device --disk ..."))
 
     g = parser.add_argument_group(_("XML options"))
     cli.add_disk_option(g)
@@ -248,7 +295,15 @@ def main(conn=None):
     # XXX: do we ever need the domain?
     ignore = domain
 
-    change_xml(guest, options, parsermap)
+    check_action_collision(options)
+    parserobj = check_xmlopt_collision(options, parsermap)
+
+    if options.edit != -1:
+        action_edit(guest, options, parsermap, parserobj)
+    elif options.add_device:
+        action_add_device(guest, options, parsermap, parserobj)
+    elif options.remove_device:
+        action_remove_device(guest, options, parsermap, parserobj)
 
     newxml = guest.get_xml_config()
     diff = get_diff(origxml, newxml)

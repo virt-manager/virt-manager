@@ -1,0 +1,14 @@
+--- Original XML
++++ Altered XML
+@@ -302,5 +302,9 @@
+         <protocol type="raw"/>
+       </backend>
+     </rng>
++    <disk type="file" device="disk">
++      <source file="/tmp/__virtinst_cli_exist1.img"/>
++      <target dev="vdf" bus="virtio"/>
++    </disk>
+   </devices>
+ </domain>
+
+Domain 'test-many-devices' defined successfully.
