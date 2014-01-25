@@ -730,10 +730,7 @@ class _XMLState(object):
         """
         return self.xml_node.virtinst_node_top_xpath
 
-    def get_node_xml(self, ctx=None):
-        if ctx is None:
-            ctx = self.xml_ctx
-
+    def get_node_xml(self, ctx):
         node = _get_xpath_node(ctx, self.fix_relative_xpath("."))
         if not node:
             return ""
@@ -1005,12 +1002,14 @@ class XMLBuilder(object):
 
         try:
             node = None
-            ctx = None
+            ctx = self._xmlstate.xml_ctx
             if self._xmlstate.is_build:
                 node = self._xmlstate.xml_node.docCopyNodeList(
                     self._xmlstate.xml_node.doc)
-                ctx = _make_xml_context(node)
-            ret = self._add_parse_bits(node, ctx)
+                ctx = node
+
+            self._add_parse_bits(node)
+            ret = self._xmlstate.get_node_xml(ctx)
         finally:
             if node:
                 node.freeNode()
@@ -1024,7 +1023,7 @@ class XMLBuilder(object):
             ret += "\n"
         return ret
 
-    def _add_parse_bits(self, node, ctx):
+    def _add_parse_bits(self, node):
         """
         Callback that adds the implicitly tracked XML properties to
         the backing xml.
@@ -1032,12 +1031,12 @@ class XMLBuilder(object):
         origproporder = self._proporder[:]
         origpropstore = self._propstore.copy()
         try:
-            return self._do_add_parse_bits(node, ctx)
+            return self._do_add_parse_bits(node)
         finally:
             self._proporder = origproporder
             self._propstore = origpropstore
 
-    def _do_add_parse_bits(self, node, ctx):
+    def _do_add_parse_bits(self, node):
         # Set all defaults if the properties have one registered
         xmlprops = self._all_xml_props()
         childprops = self._all_child_props()
@@ -1067,6 +1066,4 @@ class XMLBuilder(object):
                 xmlprops[key]._set_xml(self, self._propstore[key], node)
             elif key in childprops:
                 for obj in util.listify(getattr(self, key)):
-                    obj._add_parse_bits(node, ctx)
-
-        return self._xmlstate.get_node_xml(ctx)
+                    obj._add_parse_bits(node)
