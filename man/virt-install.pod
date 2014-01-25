@@ -107,12 +107,11 @@ The machine type to emulate. This will typically not need to be specified
 for Xen or KVM, but is useful for choosing machine types of more exotic
 architectures.
 
-=item -u UUID, --uuid=UUID
+=item --metadata OPT=VAL,[...]
 
-UUID for the guest; if none is given a random UUID will be generated. If you
-specify UUID, you should use a 32-digit hexadecimal number. UUID are intended
-to be unique across the entire data center, and indeed world. Bear this in
-mind if manually specifying a UUID
+Specify metadata values for the guest. Possible options include name, uuid, title, and description. This option deprecates -u/--uuid and --description.
+
+Use --metadata=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsMetadata>
 
 =item --vcpus=VCPUS[,maxvcpus=MAX][,sockets=#][,cores=#][,threads=#][,cpuset=CPUSET]
 
@@ -174,11 +173,6 @@ may cause issues if migrating the guest to a host without an identical CPU.
 =back
 
 Use --cpu=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsCPU>
-
-=item --description
-
-Human readable text description of the virtual machine. This will be stored
-in the guests XML configuration for access by other applications.
 
 =item --security type=TYPE[,label=LABEL][,relabel=yes|no]
 

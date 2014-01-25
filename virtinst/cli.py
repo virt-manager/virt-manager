@@ -769,6 +769,13 @@ def add_misc_options(grp, prompt=False, replace=False,
                    help=_("Print debugging information"))
 
 
+def add_metadata_option(grp):
+    grp.add_argument("--metadata",
+        help=_("Configure guest metadata. Ex:\n"
+        "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
+        "--metadata description=\"My nice long description\""))
+
+
 def add_memory_option(grp, backcompat=False):
     grp.add_argument("--memory",
         help=_("Configure guest memory allocation. Ex:\n"
@@ -1292,6 +1299,16 @@ class VirtCLIParser(object):
         raise NotImplementedError()
 
 
+######################
+# --metadata parsing #
+######################
+
+class ParserMetadata(VirtCLIParser):
+    def _init_params(self):
+        self.set_param("name", "name", can_comma=True)
+        self.set_param("title", "title", can_comma=True)
+        self.set_param("uuid", "uuid")
+        self.set_param("description", "description", can_comma=True)
 
 
 ######################
@@ -2122,6 +2139,7 @@ def build_parser_map(options, skip=None, only=None):
                                 parserobj.cli_arg_name, parserclass))
         parsermap[parserobj.option_variable_name] = parserobj
 
+    register_parser("metadata", ParserMetadata)
     register_parser("memory", ParserMemory)
     register_parser("vcpus", ParserVCPU)
     register_parser("cpu", ParserCPU)

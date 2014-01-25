@@ -759,6 +759,9 @@ c.add_invalid("--domain test-many-devices --edit 5 --tpm /dev/tpm")  # device ed
 c.add_compare("--domain test --print-xml --edit --vcpus 7", "virtxml-print-xml")  # test --print-xml
 
 c = vixml.add_category("simple edit diff", "--domain test-many-devices --edit --print-diff --define")
+c.add_compare("""--metadata name=foo-my-new-name,uuid=12345678-12F4-1234-1234-123456789AFA,description="hey this is my
+new
+very,very=new desc\\\'",title="This is my,funky=new title" """, "virtxml-edit-simple-metadata")
 c.add_compare("--memory 500,maxmemory=1000,hugepages=off", "virtxml-edit-simple-memory")
 c.add_compare("--vcpus 10,maxvcpus=20,cores=5,sockets=4,threads=1", "virtxml-edit-simple-vcpus")
 c.add_compare("--cpu model=pentium2,+x2apic,forbid=pbe", "virtxml-edit-simple-cpu")

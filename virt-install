@@ -516,10 +516,11 @@ def build_guest_instance(conn, options, parsermap):
 
     cli.get_name(guest, options.name)
 
-    # Guest configuration
     if options.uuid:
         guest.uuid = options.uuid
-    guest.description = options.description
+    # This might be difficult to convert into options.metadata
+    if options.description:
+        guest.description = options.description
 
     # We don't want to auto-parse --disk, but we wanted it for earlier
     # parameter introspection
@@ -882,12 +883,11 @@ def parse_args():
     geng = parser.add_argument_group(_("General Options"))
     geng.add_argument("-n", "--name",
                     help=_("Name of the guest instance"))
-    geng.add_argument("-u", "--uuid", help=argparse.SUPPRESS)
     cli.add_memory_option(geng, backcompat=True)
     cli.vcpu_cli_options(geng)
-    geng.add_argument("--description",
-                    help=_("Human readable description of the VM to store in "
-                           "the generated XML."))
+    cli.add_metadata_option(geng)
+    geng.add_argument("-u", "--uuid", help=argparse.SUPPRESS)
+    geng.add_argument("--description", help=argparse.SUPPRESS)
     cli.add_guest_xml_options(geng)
 
     insg = parser.add_argument_group(_("Installation Method Options"))
