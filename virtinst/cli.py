@@ -967,8 +967,8 @@ def add_disk_option(stog):
 class _VirtCLIArgument(object):
     def __init__(self, attrname, cliname,
                  setter_cb=None, ignore_default=False,
-                 can_comma=False, is_list=False, is_onoff=False,
-                 aliases=None):
+                 can_comma=False, aliases=None,
+                 is_list=False, is_onoff=False, is_bool=False):
         """
         A single subargument passed to compound command lines like --disk,
         --network, etc.
@@ -986,22 +986,25 @@ class _VirtCLIArgument(object):
             option string until it finds another known argument name:
             everything prior to that argument name is considered part of
             the value of this option, '=' included. Should be used sparingly.
+        @aliases: List of cli aliases. Useful if we want to change a property
+            name on the cli but maintain back compat.
         @is_list: This value should be stored as a list, so multiple instances
             are appended.
         @is_onoff: The value expected on the cli is on/off or yes/no, convert
             it to true/false.
-        @aliases: List of cli aliases. Useful if we want to change a property
-            name on the cli but maintain back compat.
+        @is_bool: This value shouldn't have an = component, so if it's present
+            on the command line, assume value is True
         """
         self.attrname = attrname
         self.cliname = cliname
 
         self.setter_cb = setter_cb
         self.can_comma = can_comma
-        self.is_list = is_list
-        self.is_onoff = is_onoff
         self.ignore_default = ignore_default
         self.aliases = util.listify(aliases)
+        self.is_list = is_list
+        self.is_onoff = is_onoff
+        self.is_bool = is_bool
 
 
     def parse(self, opts, inst, support_cb=None, lookup=False):
@@ -1009,7 +1012,7 @@ class _VirtCLIArgument(object):
         for cliname in self.aliases + [self.cliname]:
             # We iterate over all values unconditionally, so they are
             # removed from opts
-            foundval = opts.get_opt_param(cliname)
+            foundval = opts.get_opt_param(cliname, is_bool=self.is_bool)
             if foundval is not None:
                 val = foundval
         if val is None:
@@ -1044,7 +1047,7 @@ class _VirtCLIArgument(object):
 
 
 class VirtOptionString(object):
-    def __init__(self, optstr, virtargs, remove_first=None):
+    def __init__(self, optstr, virtargs, remove_first):
         """
         Helper class for parsing opt strings of the form
         opt1=val1,opt2=val2,...
@@ -1066,7 +1069,9 @@ class VirtOptionString(object):
         self.opts, self.orderedopts = self._parse_optstr(
             virtargmap, remove_first)
 
-    def get_opt_param(self, key):
+    def get_opt_param(self, key, is_bool=False):
+        if is_bool and key in self.opts and self.opts[key] is None:
+            self.opts[key] = True
         return self.opts.pop(key, None)
 
     def check_leftover_opts(self):
@@ -1102,6 +1107,8 @@ class VirtOptionString(object):
             val = None
             if opt.count("="):
                 cliname, val = opt.split("=", 1)
+                remove_first = []
+            elif cliname in virtargmap and virtargmap[cliname].is_bool:
                 remove_first = []
             elif remove_first:
                 val = cliname
@@ -1174,6 +1181,10 @@ class VirtCLIParser(object):
         @support_cb: An extra support check function for further validation.
             Called before the virtinst object is altered. Take arguments
             (inst, attrname, cliname)
+        @clear_attr: If the user requests to clear the XML (--disk clearxml),
+            this is the property name we grab from inst to actually clear
+            (so 'security' to get guest.security). If it's True, then
+            clear inst (in the case of devices)
         """
         self.cli_arg_name = cli_arg_name
         # This is the name of the variable that argparse will set in
@@ -1184,11 +1195,31 @@ class VirtCLIParser(object):
         self.remove_first = None
         self.check_none = False
         self.support_cb = None
+        self.clear_attr = None
 
         self._params = []
         self._inparse = False
 
+        self.__init_global_params()
         self._init_params()
+
+
+    def __init_global_params(self):
+        def set_clearxml_cb(opts, inst, cliname, val):
+            ignore = opts = cliname
+            if not self.clear_attr and not self.devclass:
+                raise RuntimeError("Don't know how to clearxml --%s" %
+                                   self.cli_arg_name)
+
+            clearobj = inst
+            if self.clear_attr:
+                clearobj = getattr(inst, self.clear_attr)
+            if val is not True:
+                return
+            clearobj.clear()
+
+        self.set_param(None, "clearxml",
+                       setter_cb=set_clearxml_cb, is_bool=True)
 
     def check_introspection(self, option):
         for optstr in util.listify(option):
@@ -1257,8 +1288,7 @@ class VirtCLIParser(object):
         ret = []
 
         for inst in devlist:
-            opts = VirtOptionString(optstr, self._params,
-                                    remove_first=self.remove_first)
+            opts = VirtOptionString(optstr, self._params, self.remove_first)
             valid = True
             for param in self._params:
                 if param.parse(opts, inst,
@@ -1282,8 +1312,7 @@ class VirtCLIParser(object):
         try:
             self.guest = guest
             self._inparse = True
-            opts = VirtOptionString(optstr, self._params,
-                                    remove_first=self.remove_first)
+            opts = VirtOptionString(optstr, self._params, self.remove_first)
             return self._parse(opts, inst)
         finally:
             self.guest = None
@@ -1317,6 +1346,7 @@ class ParserMetadata(VirtCLIParser):
 
 class ParserNumatune(VirtCLIParser):
     def _init_params(self):
+        self.clear_attr = "numatune"
         self.remove_first = "nodeset"
 
         self.set_param("numatune.memory_nodeset", "nodeset", can_comma=True)
@@ -1393,6 +1423,7 @@ class ParserVCPU(VirtCLIParser):
 
 class ParserCPU(VirtCLIParser):
     def _init_params(self):
+        self.clear_attr = "cpu"
         self.remove_first = "model"
 
         def set_model_cb(opts, inst, cliname, val):
@@ -1458,6 +1489,8 @@ class ParserCPU(VirtCLIParser):
 
 class ParserBoot(VirtCLIParser):
     def _init_params(self):
+        self.clear_attr = "os"
+
         self.set_param("os.useserial", "useserial", is_onoff=True)
         self.set_param("os.enable_bootmenu", "menu", is_onoff=True)
         self.set_param("os.kernel", "kernel")
@@ -1501,6 +1534,8 @@ class ParserBoot(VirtCLIParser):
 
 class ParserSecurity(VirtCLIParser):
     def _init_params(self):
+        self.clear_attr = "seclabel"
+
         self.set_param("seclabel.type", "type")
         self.set_param("seclabel.label", "label", can_comma=True)
         self.set_param("seclabel.relabel", "relabel",
@@ -1513,6 +1548,8 @@ class ParserSecurity(VirtCLIParser):
 
 class ParserFeatures(VirtCLIParser):
     def _init_params(self):
+        self.clear_attr = "features"
+
         self.set_param("features.acpi", "acpi", is_onoff=True)
         self.set_param("features.apic", "apic", is_onoff=True)
         self.set_param("features.pae", "pae", is_onoff=True)
@@ -1540,6 +1577,8 @@ class ParserFeatures(VirtCLIParser):
 
 class ParserClock(VirtCLIParser):
     def _init_params(self):
+        self.clear_attr = "clock"
+
         self.set_param("clock.offset", "offset")
 
         def set_timer(opts, inst, cliname, val):

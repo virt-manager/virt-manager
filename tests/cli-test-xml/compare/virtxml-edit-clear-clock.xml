@@ -1,0 +1,22 @@
+--- Original XML
++++ Altered XML
+@@ -44,11 +44,6 @@
+     <feature policy="require" name="xtpr"/>
+     <feature policy="require" name="acpi"/>
+   </cpu>
+-  <clock offset="utc">
+-    <timer name="rtc" tickpolicy="catchup"/>
+-    <timer name="pit" tickpolicy="delay"/>
+-    <timer name="hpet" present="no"/>
+-  </clock>
+   <on_poweroff>destroy</on_poweroff>
+   <on_reboot>restart</on_reboot>
+   <on_crash>restart</on_crash>
+@@ -303,4 +298,5 @@
+       </backend>
+     </rng>
+   </devices>
++  <clock offset="utc"/>
+ </domain>
+
+Domain 'test-many-devices' defined successfully.

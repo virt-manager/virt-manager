@@ -80,7 +80,7 @@ class VirtualConnection(object):
             ret = uri.split(",", 1)
             self._open_uri = ret[0]
             self._test_opts = VirtOptionString(
-                len(ret) > 1 and ret[1] or "", []).opts
+                len(ret) > 1 and ret[1] or "", [], None).opts
             self._early_virtinst_test_uri()
             self._uri = self._virtinst_uri_make_fake()
         else:
