@@ -1104,6 +1104,16 @@ class XMLParseTest(unittest.TestCase):
     # Misc tests #
     ##############
 
+    def testCPUUnknownClear(self):
+        # Make sure .clear() even removes XML elements we don't know about
+        basename = "clear-cpu-unknown-vals"
+        infile = "tests/xmlparse-xml/%s-in.xml" % basename
+        outfile = "tests/xmlparse-xml/%s-out.xml" % basename
+        guest = virtinst.Guest(conn, parsexml=file(infile).read())
+
+        guest.cpu.clear()
+        utils.diff_compare(guest.get_xml_config(), outfile)
+
     def testzzzzCheckProps(self):
         # pylint: disable=W0212
         # Access to protected member, needed to unittest stuff

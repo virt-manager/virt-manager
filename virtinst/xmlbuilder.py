@@ -855,6 +855,9 @@ class XMLBuilder(object):
         for prop in props:
             prop.clear(self)
 
+        _remove_xpath_node(self._xmlstate.xml_ctx,
+                           self.get_root_xpath())
+
     def validate(self):
         """
         Validate any set values and raise an exception if there's
