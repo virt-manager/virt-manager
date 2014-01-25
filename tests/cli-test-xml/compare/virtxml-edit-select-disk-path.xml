@@ -1,0 +1,13 @@
+--- Original XML
++++ Altered XML
+@@ -88,7 +88,7 @@
+       <driver name="qemu" type="qcow2" cache="none"/>
+       <source file="/tmp/foobar2"/>
+       <target dev="vdc" bus="virtio"/>
+-      <shareable/>
++      <readonly/>
+     </disk>
+     <disk type="block" device="disk">
+       <source dev="/dev/default-pool/overlay.img"/>
+
+Domain 'test-many-devices' defined successfully.

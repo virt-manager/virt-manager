@@ -234,6 +234,7 @@ def fail(msg, do_exit=True):
     """
     Convenience function when failing in cli app
     """
+    logging.debug("".join(traceback.format_stack()))
     logging.error(msg)
     if traceback.format_exc().strip() != "None":
         logging.debug("", exc_info=True)
@@ -1199,7 +1200,7 @@ class VirtCLIParser(object):
                                "from parse handler.")
         self._params.append(_VirtCLIArgument(*args, **kwargs))
 
-    def parse(self, guest, optlist, inst=None, validate=True):
+    def parse(self, guest, optlist, inst, validate=True):
         optlist = util.listify(optlist)
         editting = bool(inst)
 
@@ -1614,19 +1615,18 @@ class ParserDisk(VirtCLIParser):
         self.devclass = virtinst.VirtualDisk
         self.remove_first = "path"
 
-        def noset_cb(val):
-            ignore = val
+        def noset_cb(opts, inst, cliname, val):
+            ignore = opts, inst, cliname, val
 
         # These are all handled specially in _parse
-        self.set_param(noset_cb, "path")
-        self.set_param(noset_cb, "backing_store")
-        self.set_param(noset_cb, "pool")
-        self.set_param(noset_cb, "vol")
-        self.set_param(noset_cb, "size")
-        self.set_param(noset_cb, "format")
-        self.set_param(noset_cb, "sparse")
-        self.set_param(noset_cb, "perms")
+        self.set_param(None, "backing_store", setter_cb=noset_cb)
+        self.set_param(None, "pool", setter_cb=noset_cb)
+        self.set_param(None, "vol", setter_cb=noset_cb)
+        self.set_param(None, "size", setter_cb=noset_cb)
+        self.set_param(None, "format", setter_cb=noset_cb)
+        self.set_param(None, "sparse", setter_cb=noset_cb)
 
+        self.set_param("path", "path")
         self.set_param("device", "device")
         self.set_param("bus", "bus")
         self.set_param("removable", "removable", is_onoff=True)
@@ -1638,6 +1638,8 @@ class ParserDisk(VirtCLIParser):
         self.set_param("serial", "serial")
         self.set_param("target", "target")
         self.set_param("sourceStartupPolicy", "startup_policy")
+        self.set_param("read_only", "readonly", is_onoff=True)
+        self.set_param("shareable", "shareable", is_onoff=True)
 
 
     def _parse(self, opts, inst):
@@ -1649,21 +1651,19 @@ class ParserDisk(VirtCLIParser):
             except Exception, e:
                 fail(_("Improper value for 'size': %s" % str(e)))
 
-        def parse_perms(val):
-            ro = False
-            shared = False
-            if val is not None:
-                if val == "ro":
-                    ro = True
-                elif val == "sh":
-                    shared = True
-                elif val == "rw":
-                    # It's default. Nothing to do.
-                    pass
-                else:
-                    fail(_("Unknown '%s' value '%s'" % ("perms", val)))
-
-            return ro, shared
+        def convert_perms(val):
+            if val is None:
+                return
+            if val == "ro":
+                opts.opts["readonly"] = "on"
+            elif val == "sh":
+                opts.opts["shareable"] = "on"
+            elif val == "rw":
+                # It's default. Nothing to do.
+                pass
+            else:
+                fail(_("Unknown '%s' value '%s'" % ("perms", val)))
+        convert_perms(opts.get_opt_param("perms"))
 
         path = opts.get_opt_param("path")
         backing_store = opts.get_opt_param("backing_store")
@@ -1672,18 +1672,21 @@ class ParserDisk(VirtCLIParser):
         size = parse_size(opts.get_opt_param("size"))
         fmt = opts.get_opt_param("format")
         sparse = _on_off_convert("sparse", opts.get_opt_param("sparse"))
-        ro, shared = parse_perms(opts.get_opt_param("perms"))
 
         abspath, volinst, volobj = _parse_disk_source(
             self.guest, path, pool, vol, size, fmt, sparse)
 
-        inst.path = volobj and volobj.path() or abspath
-        inst.read_only = ro
-        inst.shareable = shared
-        inst.set_create_storage(size=size, fmt=fmt, sparse=sparse,
-                               vol_install=volinst, backing_store=backing_store)
+        path = volobj and volobj.path() or abspath
+        if path:
+            opts.opts["path"] = path
 
         inst = VirtCLIParser._parse(self, opts, inst)
+
+        create_kwargs = {"size": size, "fmt": fmt, "sparse": sparse,
+            "vol_install": volinst, "backing_store": backing_store}
+        if any(create_kwargs.values()):
+            inst.set_create_storage(**create_kwargs)
+
         inst.cli_size = size
         return inst
 
@@ -2150,11 +2153,13 @@ def build_parser_map(options, skip=None, only=None):
     return parsermap
 
 
-def parse_option_strings(parsermap, options, guest, instlist):
+def parse_option_strings(parsermap, options, guest, instlist, update=False):
     """
     Iterate over the parsermap, and launch the associated parser
     function for every value that was filled in on 'options', which
     came from argparse/the command line.
+
+    @update: If we are updating an existing guest, like from virt-xml
     """
     instlist = util.listify(instlist)
     if not instlist:
@@ -2166,12 +2171,13 @@ def parse_option_strings(parsermap, options, guest, instlist):
 
         for inst in util.listify(instlist):
             parsermap[option_variable_name].parse(
-                guest, getattr(options, option_variable_name), inst)
+                guest, getattr(options, option_variable_name), inst,
+                validate=not update)
 
 
 def check_option_introspection(options, parsermap):
     """
-    Check if the user requested option introspection with ex: '--disk ?'
+    Check if the user requested option introspection with ex: '--disk=?'
     """
     ret = False
     for option_variable_name in dir(options):

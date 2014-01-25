@@ -170,7 +170,7 @@ def change_xml(guest, options, parsermap):
                    "just use empty '--edit'") %
             (options.edit, parserobj.cli_arg_name))
 
-    cli.parse_option_strings(parsermap, options, guest, inst)
+    cli.parse_option_strings(parsermap, options, guest, inst, update=True)
 
 
 #######################

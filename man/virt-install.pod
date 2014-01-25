@@ -481,10 +481,13 @@ bus types.
 Sets the removable flag (/sys/block/$dev/removable on Linux). Only
 used with QEMU and bus=usb. Value can be 'on' or 'off'.
 
-=item B<perms>
+=item B<readonly>
 
-Disk permissions. Value can be 'rw' (Read/Write), 'ro' (Readonly),
-or 'sh' (Shared Read/Write). Default is 'rw'
+Set drive as readonly (takes 'on' or 'off')
+
+=item B<shareable>
+
+Set drive as shareable (takes 'on' or 'off')
 
 =item B<size>
 

@@ -793,6 +793,7 @@ c.add_compare("--edit -1 --video qxl", "virtxml-edit-neg-num")
 c.add_compare("--edit all --host-device driver_name=vfio", "virtxml-edit-all")
 c.add_compare("--edit ich6 --soundhw pcspk", "virtxml-edit-select-sound-model")
 c.add_compare("--edit target=hda --disk /dev/null", "virtxml-edit-select-disk-target")
+c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "virtxml-edit-select-disk-path")
 c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "virtxml-edit-select-network-mac")
 
 
