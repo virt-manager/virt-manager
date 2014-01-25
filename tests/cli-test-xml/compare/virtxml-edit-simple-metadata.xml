@@ -1,7 +1,7 @@
 --- Original XML
 +++ Altered XML
 @@ -1,9 +1,9 @@
- <domain type="test" id="3">
+ <domain type="test">
 -  <name>test-many-devices</name>
 -  <uuid>12345678-12f4-1234-1234-123456789012</uuid>
 -  <description>Foo bar baz &amp;
@@ -15,7 +15,7 @@
    <memory unit="KiB">409600</memory>
    <currentMemory unit="KiB">204800</currentMemory>
    <memoryBacking>
-@@ -303,4 +303,5 @@
+@@ -302,4 +302,5 @@
        </backend>
      </rng>
    </devices>
@@ -23,3 +23,4 @@
  </domain>
 
 Domain 'foo-my-new-name' defined successfully.
+Changes will take effect after the next domain shutdown.

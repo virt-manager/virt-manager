@@ -91,16 +91,20 @@ def get_domain_and_guest(conn, domstr):
     except libvirt.libvirtError, e:
         fail(_("Could not find domain '%s': %s") % (domstr, e))
 
-    # XXX: Require this for first pass, but it sucks for testing
-    #if domain.info()[0] != libvirt.VIR_DOMAIN_SHUTOFF:
-    #    fail(_("Domain '%s' must be shutoff.") % domain.name())
+    def _make_guest(xml):
+        # We do this to minimize the diff, removing things like ' -> "
+        return virtinst.Guest(conn,
+            parsexml=virtinst.Guest(conn, parsexml=xml).get_xml_config())
 
-    # XXX: any flags to use here? INACTIVE prob, though not secure or cpu
-    xml = domain.XMLDesc(0)
+    state = domain.info()[0]
+    active_xmlobj = None
+    inactive_xmlobj = _make_guest(domain.XMLDesc(0))
+    if state != libvirt.VIR_DOMAIN_SHUTOFF:
+        active_xmlobj = inactive_xmlobj
+        inactive_xmlobj = _make_guest(
+            domain.XMLDesc(libvirt.VIR_DOMAIN_XML_INACTIVE))
 
-    # We do this to minimize the diff, removing things like ' -> "
-    xml = virtinst.Guest(conn, parsexml=xml).get_xml_config()
-    return (domain, xml, virtinst.Guest(conn, parsexml=xml))
+    return (domain, inactive_xmlobj, active_xmlobj)
 
 
 ################
@@ -291,7 +295,10 @@ def main(conn=None):
     if conn is None:
         conn = cli.getConnection(options.connect)
 
-    domain, origxml, guest = get_domain_and_guest(conn, options.domain)
+    domain, inactive_xmlobj, active_xmlobj = get_domain_and_guest(
+        conn, options.domain)
+    guest = inactive_xmlobj
+    origxml = guest.get_xml_config()
     # XXX: do we ever need the domain?
     ignore = domain
 
@@ -325,6 +332,10 @@ def main(conn=None):
 
     conn.defineXML(guest.get_xml_config())
     print_stdout(_("Domain '%s' defined successfully." % guest.name))
+    if active_xmlobj:
+        print_stdout(
+            _("Changes will take effect after the next domain shutdown."))
+
     return 0
 
 
