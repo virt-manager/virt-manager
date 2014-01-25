@@ -509,7 +509,7 @@ def build_guest_instance(conn, options, parsermap):
     convert_old_init(options)
 
     # non-xml install options
-    guest.installer.extraargs = options.extra_args or ""
+    guest.installer.extraargs = options.extra_args
     guest.installer.initrd_injections = options.initrd_inject
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
     guest.autostart = options.autostart
