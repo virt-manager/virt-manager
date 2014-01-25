@@ -65,10 +65,14 @@ def get_diff(origxml, newxml):
     return ret
 
 
-def get_domain_and_guest(conn, domstr):
-    if not domstr:
-        fail("--domain must be specified")
+def _make_guest(conn, xml):
+    # We do this to minimize the diff, sanitizing XML quotes to what libxml
+    # generates
+    return virtinst.Guest(conn,
+        parsexml=virtinst.Guest(conn, parsexml=xml).get_xml_config())
 
+
+def get_domain_and_guest(conn, domstr):
     try:
         int(domstr)
         isint = True
@@ -91,17 +95,12 @@ def get_domain_and_guest(conn, domstr):
     except libvirt.libvirtError, e:
         fail(_("Could not find domain '%s': %s") % (domstr, e))
 
-    def _make_guest(xml):
-        # We do this to minimize the diff, removing things like ' -> "
-        return virtinst.Guest(conn,
-            parsexml=virtinst.Guest(conn, parsexml=xml).get_xml_config())
-
     state = domain.info()[0]
     active_xmlobj = None
-    inactive_xmlobj = _make_guest(domain.XMLDesc(0))
+    inactive_xmlobj = _make_guest(conn, domain.XMLDesc(0))
     if state != libvirt.VIR_DOMAIN_SHUTOFF:
         active_xmlobj = inactive_xmlobj
-        inactive_xmlobj = _make_guest(
+        inactive_xmlobj = _make_guest(conn,
             domain.XMLDesc(libvirt.VIR_DOMAIN_XML_INACTIVE))
 
     return (domain, inactive_xmlobj, active_xmlobj)
@@ -228,7 +227,8 @@ def parse_args():
     cli.add_connect_option(parser)
 
     actg = parser.add_argument_group(_("Action Options"))
-    actg.add_argument("--domain", help=_("Domain name, id, or uuid"))
+    actg.add_argument("domain", nargs='?',
+        help=_("Domain name, id, or uuid"))
     actg.add_argument("--edit", nargs='?', default=-1,
         help=_("Edit VM XML. Examples:\n"
         "--edit --disk ...     (edit first disk device)\n"
@@ -281,22 +281,42 @@ def main(conn=None):
 
     if options.confirm or options.print_xml or options.print_diff:
         options.quiet = False
-    if not options.print_xml and not options.print_diff:
-        options.define = True
-    if options.confirm and not options.print_xml:
-        options.print_diff = True
-
     cli.setupLogging("virt-xml", options.debug, options.quiet)
 
     parsermap = cli.build_parser_map(options)
     if cli.check_option_introspection(options, parsermap):
         return 0
 
+    options.stdinxml = None
+    if (not options.domain and
+        not sys.stdin.closed and
+        not sys.stdin.isatty()):
+        if options.confirm:
+            fail(_("Can't use --confirm is stdin is closed."))
+        options.stdinxml = sys.stdin.read()
+    elif not options.domain:
+        fail("domain must be specified")
+
+    if not options.print_xml and not options.print_diff:
+        if options.stdinxml:
+            if not options.define:
+                options.print_xml = True
+        else:
+            options.define = True
+    if options.confirm and not options.print_xml:
+        options.print_diff = True
+
     if conn is None:
         conn = cli.getConnection(options.connect)
 
-    domain, inactive_xmlobj, active_xmlobj = get_domain_and_guest(
-        conn, options.domain)
+    if options.domain:
+        domain, inactive_xmlobj, active_xmlobj = get_domain_and_guest(
+            conn, options.domain)
+    else:
+        domain = None
+        active_xmlobj = None
+        inactive_xmlobj = _make_guest(conn, options.stdinxml)
+
     guest = inactive_xmlobj
     origxml = guest.get_xml_config()
     # XXX: do we ever need the domain?

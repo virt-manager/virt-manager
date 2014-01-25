@@ -146,6 +146,7 @@ class Command(object):
         self.check_success = True
         self.compare_file = None
         self.support_check = None
+        self.input_file = None
 
         app, opts = self.cmdstr.split(" ", 1)
         self.app = app
@@ -172,12 +173,15 @@ class Command(object):
 
         oldstdout = sys.stdout
         oldstderr = sys.stderr
+        oldstdin = sys.stdin
         oldargv = sys.argv
         try:
             out = StringIO.StringIO()
             sys.stdout = out
             sys.stderr = out
             sys.argv = self.argv
+            if self.input_file:
+                sys.stdin = file(self.input_file)
 
             try:
                 if app.count("virt-install"):
@@ -202,6 +206,7 @@ class Command(object):
         finally:
             sys.stdout = oldstdout
             sys.stderr = oldstderr
+            sys.stdin = oldstdin
             sys.argv = oldargv
 
 
@@ -402,7 +407,8 @@ class App(object):
         self.categories[catname] = default_args
         return _CategoryProxy(self, catname)
 
-    def _add(self, catname, testargs, valid, compfile, support_check=None):
+    def _add(self, catname, testargs, valid, compfile, support_check=None,
+             input_file=None):
         args = self.categories[catname] + " " + testargs
         args = self._default_args(args, bool(compfile)) + " " + args
         cmdstr = "./%s %s" % (self.appname, args)
@@ -412,6 +418,7 @@ class App(object):
         if compfile:
             cmd.compare_file = "%s/%s.xml" % (compare_xmldir, compfile)
         cmd.support_check = support_check
+        cmd.input_file = input_file
         self.cmds.append(cmd)
 
     def add_valid(self, cat, args, **kwargs):
@@ -751,14 +758,16 @@ vixml = App("virt-xml")
 c = vixml.add_category("misc", "")
 c.add_valid("--help")  # basic --help test
 c.add_valid("--soundhw=? --tpm=?")  # basic introspection test
-c.add_invalid("--domain test --edit --hostdev driver_name=vfio")  # Guest has no hostdev to edit
-c.add_invalid("--domain test --edit --cpu host-passthrough --boot hd,network")  # Specified more than 1 option
-c.add_invalid("--domain test --edit")  # specified no edit option
-c.add_invalid("--domain test --edit 2 --cpu host-passthrough")  # specifing --edit number where it doesn't make sense
-c.add_invalid("--domain test-many-devices --edit 5 --tpm /dev/tpm")  # device edit out of range
-c.add_compare("--domain test --print-xml --edit --vcpus 7", "virtxml-print-xml")  # test --print-xml
+c.add_invalid("test --edit --hostdev driver_name=vfio")  # Guest has no hostdev to edit
+c.add_invalid("test --edit --cpu host-passthrough --boot hd,network")  # Specified more than 1 option
+c.add_invalid("test --edit")  # specified no edit option
+c.add_invalid("test --edit 2 --cpu host-passthrough")  # specifing --edit number where it doesn't make sense
+c.add_invalid("test-many-devices --edit 5 --tpm /dev/tpm")  # device edit out of range
+c.add_compare("test --print-xml --edit --vcpus 7", "virtxml-print-xml")  # test --print-xml
+c.add_compare("--edit --cpu host-passthrough", "virtxml-stdin-edit", input_file=(xmldir + "/virtxml-stdin-edit.xml"))  # stdin test
 
-c = vixml.add_category("simple edit diff", "--domain test-many-devices --edit --print-diff --define")
+
+c = vixml.add_category("simple edit diff", "test-many-devices --edit --print-diff --define")
 c.add_compare("""--metadata name=foo-my-new-name,uuid=12345678-12F4-1234-1234-123456789AFA,description="hey this is my
 new
 very,very=new desc\\\'",title="This is my,funky=new title" """, "virtxml-edit-simple-metadata")
@@ -789,7 +798,7 @@ c.add_compare("--video cirrus", "virtxml-edit-simple-video")
 c.add_compare("--soundhw pcspk", "virtxml-edit-simple-soundhw")
 c.add_compare("--host-device 0x0781:0x5151,driver_name=vfio", "virtxml-edit-simple-host-device")
 
-c = vixml.add_category("edit selection", "--domain test-many-devices --print-diff --define")
+c = vixml.add_category("edit selection", "test-many-devices --print-diff --define")
 c.add_invalid("--edit target=vvv --disk /dev/null")  # no match found
 c.add_compare("--edit 3 --soundhw pcspk", "virtxml-edit-pos-num")
 c.add_compare("--edit -1 --video qxl", "virtxml-edit-neg-num")
@@ -799,13 +808,13 @@ c.add_compare("--edit target=hda --disk /dev/null", "virtxml-edit-select-disk-ta
 c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "virtxml-edit-select-disk-path")
 c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "virtxml-edit-select-network-mac")
 
-c = vixml.add_category("edit clear", "--domain test-many-devices --print-diff --define")
+c = vixml.add_category("edit clear", "test-many-devices --print-diff --define")
 c.add_invalid("--edit --memory 200,clearxml")  # clear isn't wired up for memory
 c.add_compare("--edit --cpu host-passthrough,clearxml", "virtxml-edit-clear-cpu")
 c.add_compare("--edit --clock offset=utc,clearxml", "virtxml-edit-clear-clock")
 c.add_compare("--edit --disk /foo/bar,target=fda,bus=fdc,device=floppy,clearxml", "virtxml-edit-clear-disk")
 
-c = vixml.add_category("add/rm devices", "--domain test-many-devices --print-diff --define")
+c = vixml.add_category("add/rm devices", "test-many-devices --print-diff --define")
 c.add_invalid("--add-device --security foo")  # --add-device without a device
 c.add_invalid("--remove-device --clock utc")  # --remove-device without a dev
 c.add_compare("--add-device --host-device net_00_1c_25_10_b1_e4", "virtxml-add-host-device")
@@ -979,7 +988,7 @@ p7.add("'/root' must be a file or a device")
 p7.add("use as the cloned disk", "%(MANAGEDNEW1)s")
 promptlist.append(p7)
 
-p8 = PromptTest("virt-xml --connect %(TESTURI)s --confirm --domain test "
+p8 = PromptTest("virt-xml --connect %(TESTURI)s --confirm test "
     "--edit --cpu host-passthrough")
 p8.add("Define 'test' with the changed XML", "yes", num_lines=12)
 promptlist.append(p8)
