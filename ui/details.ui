@@ -1518,6 +1518,7 @@
                           <object class="GtkVBox" id="vbox14">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="valign">start</property>
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkFrame" id="CPUs">
@@ -2219,6 +2220,7 @@
                                               <object class="GtkAlignment" id="alignment24">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
+                                                <property name="hexpand">False</property>
                                                 <child>
                                                   <placeholder/>
                                                 </child>
@@ -2334,43 +2336,6 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="spacing">6</property>
-                                            <child>
-                                              <object class="GtkLabel" id="label29">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="xalign">0</property>
-                                                <property name="label" translatable="yes">R_untime pinning:</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic_widget">config-vcpu-list</property>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkScrolledWindow" id="scrolledwindow1">
-                                                <property name="height_request">100</property>
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="shadow_type">in</property>
-                                                <child>
-                                                  <object class="GtkTreeView" id="config-vcpu-list">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">True</property>
-                                                    <child internal-child="selection">
-                                                      <object class="GtkTreeSelection" id="treeview-selection4"/>
-                                                    </child>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">True</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">1</property>
-                                              </packing>
-                                            </child>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>

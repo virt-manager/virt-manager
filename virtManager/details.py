@@ -820,35 +820,6 @@ class vmmDetails(vmmGObjectUI):
                 _("Libvirt did not detect NUMA capabilities."))
 
 
-        # [ VCPU #, Currently running on Phys CPU #, CPU Pinning list ]
-        vcpu_list = self.widget("config-vcpu-list")
-        vcpu_model = Gtk.ListStore(str, str, str)
-        vcpu_list.set_model(vcpu_model)
-
-        vcpuCol = Gtk.TreeViewColumn(_("VCPU"))
-        physCol = Gtk.TreeViewColumn(_("On CPU"))
-        pinCol  = Gtk.TreeViewColumn(_("Pinning"))
-
-        vcpu_list.append_column(vcpuCol)
-        vcpu_list.append_column(physCol)
-        vcpu_list.append_column(pinCol)
-
-        vcpu_text = Gtk.CellRendererText()
-        vcpuCol.pack_start(vcpu_text, True)
-        vcpuCol.add_attribute(vcpu_text, 'text', 0)
-        vcpuCol.set_sort_column_id(0)
-
-        phys_text = Gtk.CellRendererText()
-        physCol.pack_start(phys_text, True)
-        physCol.add_attribute(phys_text, 'text', 1)
-        physCol.set_sort_column_id(1)
-
-        pin_text = Gtk.CellRendererText()
-        pin_text.set_property("editable", True)
-        pin_text.connect("edited", self.config_vcpu_pin)
-        pinCol.pack_start(pin_text, True)
-        pinCol.add_attribute(pin_text, 'text', 2)
-
         # Boot device list
         boot_list = self.widget("config-boot-list")
         # model = [ XML boot type, display name, icon name, enabled ]
@@ -1343,7 +1314,6 @@ class vmmDetails(vmmGObjectUI):
 
         details = self.widget("details-pages")
         self.page_refresh(details.get_current_page())
-        self._refresh_runtime_pinning()
 
         errmsg = self.vm.snapshots_supported()
         cansnap = not bool(errmsg)
@@ -1973,9 +1943,7 @@ class vmmDetails(vmmGObjectUI):
 
         if self.edited(EDIT_CPUSET):
             cpuset = self.get_text("config-vcpupin")
-            print cpuset
             add_define(self.vm.define_cpuset, cpuset)
-            add_hotplug(self.config_vcpu_pin_cpuset, cpuset)
 
         if self.edited(EDIT_CPU):
             model, vendor = self.get_config_cpu_model()
@@ -1999,43 +1967,6 @@ class vmmDetails(vmmGObjectUI):
         if ret:
             self._cpu_copy_host = False
         return ret
-
-    def config_vcpu_pin(self, src_ignore, path, new_text):
-        vcpu_list = self.widget("config-vcpu-list")
-        vcpu_model = vcpu_list.get_model()
-        row = vcpu_model[path]
-        conn = self.vm.conn
-
-        try:
-            new_text = new_text.strip()
-            vcpu_num = int(row[0])
-            pinlist = virtinst.DomainNumatune.cpuset_str_to_tuple(
-                                                conn.get_backend(), new_text)
-        except Exception, e:
-            self.err.val_err(_("Error building pin list"), e)
-            return
-
-        try:
-            self.vm.pin_vcpu(vcpu_num, pinlist)
-        except Exception, e:
-            self.err.show_err(_("Error pinning vcpus"), e)
-            return
-
-        self._refresh_runtime_pinning()
-
-    def config_vcpu_pin_cpuset(self, cpuset):
-        conn = self.vm.conn
-        vcpu_list = self.widget("config-vcpu-list")
-        vcpu_model = vcpu_list.get_model()
-
-        if self.vm.vcpu_pinning() == cpuset:
-            return
-
-        pinlist = virtinst.DomainNumatune.cpuset_str_to_tuple(
-                                                conn.get_backend(), cpuset)
-        for row in vcpu_model:
-            vcpu_num = row[0]
-            self.vm.pin_vcpu(int(vcpu_num), pinlist)
 
     # Memory
     def config_memory_apply(self):
@@ -2588,51 +2519,6 @@ class vmmDetails(vmmGObjectUI):
         # Warn about overcommit
         warn = bool(self.config_get_vcpus() > host_active_count)
         self.widget("config-vcpus-warn-box").set_visible(warn)
-    def _refresh_cpu_pinning(self):
-        # Populate VCPU pinning
-        vcpupin  = self.vm.vcpu_pinning()
-        self.widget("config-vcpupin").set_text(vcpupin)
-
-    def _refresh_runtime_pinning(self):
-        conn = self.vm.conn
-        host_active_count = conn.host_active_processor_count()
-
-        vcpu_list = self.widget("config-vcpu-list")
-        vcpu_model = vcpu_list.get_model()
-        vcpu_model.clear()
-
-        reason = ""
-        if not self.vm.is_active():
-            reason = _("VCPU info only available for running domain.")
-        else:
-            try:
-                vcpu_info, vcpu_pinning = self.vm.vcpu_info()
-            except Exception, e:
-                reason = _("Error getting VCPU info: %s") % str(e)
-
-            if not self.vm.getvcpus_supported:
-                reason = _("Virtual machine does not support runtime "
-                           "VPCU info.")
-
-        vcpu_list.set_sensitive(not bool(reason))
-        vcpu_list.set_tooltip_text(reason or "")
-        if reason:
-            return
-
-        def build_cpuset_str(pin_info):
-            pinstr = ""
-            for i in range(host_active_count):
-                if i < len(pin_info) and pin_info[i]:
-                    pinstr += (",%s" % str(i))
-
-            return pinstr.strip(",")
-
-        for idx in range(len(vcpu_info)):
-            vcpu = str(vcpu_info[idx][0])
-            vcpucur = str(vcpu_info[idx][3])
-            vcpupin = build_cpuset_str(vcpu_pinning[idx])
-
-            vcpu_model.append([vcpu, vcpucur, vcpupin])
 
     def _refresh_cpu_config(self, cpu):
         feature_ui = self.widget("cpu-features")
@@ -2681,8 +2567,6 @@ class vmmDetails(vmmGObjectUI):
         cpu = self.vm.get_cpu_config()
 
         self._refresh_cpu_count()
-        self._refresh_cpu_pinning()
-        self._refresh_runtime_pinning()
         self._refresh_cpu_config(cpu)
 
     def refresh_config_memory(self):

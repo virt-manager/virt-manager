@@ -941,13 +941,6 @@ class vmmDomain(vmmLibvirtObject):
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
 
-    def pin_vcpu(self, vcpu_num, pinlist):
-        self._backend.pinVcpu(vcpu_num, pinlist)
-    def vcpu_info(self):
-        if self.is_active() and self.getvcpus_supported:
-            return self._backend.vcpus()
-        return [[], []]
-
     def get_autostart(self):
         return self._backend.autostart()
     def set_autostart(self, val):
