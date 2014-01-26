@@ -160,9 +160,20 @@ class vmmCreateInterface(vmmGObjectUI):
         self.bond_config.destroy()
         self.bond_config = None
 
+
     ###########################
     # Initialization routines #
     ###########################
+
+    @staticmethod
+    def build_interface_startmode_combo(combo):
+        model = Gtk.ListStore(str)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 0)
+
+        model.append(["none"])
+        model.append(["onboot"])
+        model.append(["hotplug"])
 
     def set_initial_state(self):
         self.widget("pages").set_show_tabs(False)
@@ -188,7 +199,7 @@ class vmmCreateInterface(vmmGObjectUI):
                           _("VLAN")])
 
         # Start mode
-        uihelpers.build_startmode_combo(
+        self.build_interface_startmode_combo(
             self.widget("interface-startmode"))
 
         # Parent/slave Interface list

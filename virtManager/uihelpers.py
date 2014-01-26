@@ -47,18 +47,6 @@ try:
 except (ValueError, AttributeError):
     can_set_row_none = False
 
-vm_status_icons = {
-    libvirt.VIR_DOMAIN_BLOCKED: "state_running",
-    libvirt.VIR_DOMAIN_CRASHED: "state_shutoff",
-    libvirt.VIR_DOMAIN_PAUSED: "state_paused",
-    libvirt.VIR_DOMAIN_RUNNING: "state_running",
-    libvirt.VIR_DOMAIN_SHUTDOWN: "state_shutoff",
-    libvirt.VIR_DOMAIN_SHUTOFF: "state_shutoff",
-    libvirt.VIR_DOMAIN_NOSTATE: "state_running",
-    # VIR_DOMAIN_PMSUSPENDED
-    7: "state_paused",
-}
-
 
 ############################################################
 # Helpers for shared storage UI between create/addhardware #
@@ -130,319 +118,29 @@ def check_default_pool_active(err, conn):
     return True
 
 
-#####################################################
-# Hardware model list building (for details, addhw) #
-#####################################################
+#########################################
+# VM <interface> device listing helpers #
+#########################################
 
-def set_combo_text_column(combo, col):
-    if combo.get_has_entry():
-        combo.set_entry_text_column(col)
-    else:
-        text = Gtk.CellRendererText()
-        combo.pack_start(text, True)
-        combo.add_attribute(text, 'text', col)
+def _net_list_changed(net_list, bridge_box,
+                     source_mode_combo, vport_expander):
+    active = net_list.get_active()
+    if active < 0:
+        return
 
+    if not bridge_box:
+        return
 
-def build_video_combo(vm, combo, no_default=None):
-    model = Gtk.ListStore(str, str)
-    combo.set_model(model)
-    set_combo_text_column(combo, 1)
-    combo.get_model().set_sort_column_id(1, Gtk.SortType.ASCENDING)
+    row = net_list.get_model()[active]
 
-    populate_video_combo(vm, combo, no_default)
+    if source_mode_combo is not None:
+        doshow = (row[0] == virtinst.VirtualNetworkInterface.TYPE_DIRECT)
+        set_grid_row_visible(source_mode_combo, doshow)
+        vport_expander.set_visible(doshow)
 
+    show_bridge = row[5]
+    set_grid_row_visible(bridge_box, show_bridge)
 
-def populate_video_combo(vm, combo, no_default=None):
-    model = combo.get_model()
-    has_spice = bool([g for g in vm.get_graphics_devices()
-                      if g.type == g.TYPE_SPICE])
-    has_qxl = bool([v for v in vm.get_video_devices()
-                    if v.model == "qxl"])
-
-    model.clear()
-    tmpdev = virtinst.VirtualVideoDevice(vm.conn.get_backend())
-    for m in tmpdev.MODELS:
-        if vm.stable_defaults():
-            if m == "qxl" and not has_spice and not has_qxl:
-                # Only list QXL video option when VM has SPICE video
-                continue
-
-        if m == tmpdev.MODEL_DEFAULT and no_default:
-            continue
-        model.append([m, tmpdev.pretty_model(m)])
-
-    if len(model) > 0:
-        combo.set_active(0)
-
-
-def build_sound_combo(vm, combo, no_default=False):
-    model = Gtk.ListStore(str)
-    combo.set_model(model)
-    set_combo_text_column(combo, 0)
-    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-
-    stable_defaults = vm.stable_defaults()
-    stable_soundmodels = ["ich6", "ac97"]
-
-    for m in virtinst.VirtualAudio.MODELS:
-        if m == virtinst.VirtualAudio.MODEL_DEFAULT and no_default:
-            continue
-
-        if (stable_defaults and m not in stable_soundmodels):
-            continue
-
-        model.append([m])
-    if len(model) > 0:
-        combo.set_active(0)
-
-
-def build_watchdogmodel_combo(vm, combo, no_default=False):
-    ignore = vm
-    model = Gtk.ListStore(str)
-    combo.set_model(model)
-    set_combo_text_column(combo, 0)
-    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-
-    for m in virtinst.VirtualWatchdog.MODELS:
-        if m == virtinst.VirtualAudio.MODEL_DEFAULT and no_default:
-            continue
-        model.append([m])
-    if len(model) > 0:
-        combo.set_active(0)
-
-
-def build_watchdogaction_combo(vm, combo, no_default=False):
-    ignore = vm
-    model = Gtk.ListStore(str, str)
-    combo.set_model(model)
-    set_combo_text_column(combo, 1)
-    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-
-    for m in virtinst.VirtualWatchdog.ACTIONS:
-        if m == virtinst.VirtualWatchdog.ACTION_DEFAULT and no_default:
-            continue
-        model.append([m, virtinst.VirtualWatchdog.get_action_desc(m)])
-    if len(model) > 0:
-        combo.set_active(0)
-
-
-def build_source_mode_combo(vm, combo):
-    model = Gtk.ListStore(str, str)
-    combo.set_model(model)
-    set_combo_text_column(combo, 1)
-
-    populate_source_mode_combo(vm, combo)
-    combo.set_active(0)
-
-
-def populate_source_mode_combo(vm, combo):
-    ignore = vm
-    model = combo.get_model()
-    model.clear()
-
-    # [xml value, label]
-    model.append([None, "Default"])
-    model.append(["vepa", "VEPA"])
-    model.append(["bridge", "Bridge"])
-    model.append(["private", "Private"])
-    model.append(["passthrough", "Passthrough"])
-
-
-def build_smartcard_mode_combo(vm, combo):
-    model = Gtk.ListStore(str, str)
-    combo.set_model(model)
-    set_combo_text_column(combo, 1)
-    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-
-    populate_smartcard_mode_combo(vm, combo)
-
-    idx = -1
-    for rowid in range(len(combo.get_model())):
-        idx = 0
-        row = combo.get_model()[rowid]
-        if row[0] == virtinst.VirtualSmartCardDevice.MODE_DEFAULT:
-            idx = rowid
-            break
-    combo.set_active(idx)
-
-
-def populate_smartcard_mode_combo(vm, combo):
-    ignore = vm
-    model = combo.get_model()
-    model.clear()
-
-    # [xml value, label]
-    model.append(["passthrough", "Passthrough"])
-    model.append(["host", "Host"])
-
-
-def build_redir_type_combo(vm, combo):
-    model = Gtk.ListStore(str, str, bool)
-    combo.set_model(model)
-    set_combo_text_column(combo, 1)
-
-    populate_redir_type_combo(vm, combo)
-    combo.set_active(0)
-
-
-def populate_redir_type_combo(vm, combo):
-    ignore = vm
-    model = combo.get_model()
-    model.clear()
-
-    # [xml value, label, conn details]
-    model.append(["spicevmc", "Spice channel", False])
-    model.append(["tcp", "TCP", True])
-
-
-def build_tpm_type_combo(vm, combo):
-    model = Gtk.ListStore(str, str)
-    combo.set_model(model)
-    set_combo_text_column(combo, 1)
-    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-
-    populate_tpm_type_combo(vm, combo)
-
-    idx = -1
-    for rowid in range(len(combo.get_model())):
-        idx = 0
-        row = combo.get_model()[rowid]
-        if row[0] == virtinst.VirtualTPMDevice.TYPE_DEFAULT:
-            idx = rowid
-            break
-    combo.set_active(idx)
-
-
-def populate_tpm_type_combo(vm, combo):
-    ignore = vm
-    types = combo.get_model()
-    types.clear()
-
-    # [xml value, label]
-    for t in virtinst.VirtualTPMDevice.TYPES:
-        types.append([t, virtinst.VirtualTPMDevice.get_pretty_type(t)])
-
-
-def build_netmodel_combo(vm, combo):
-    model = Gtk.ListStore(str, str)
-    combo.set_model(model)
-    set_combo_text_column(combo, 1)
-    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-
-    populate_netmodel_combo(vm, combo)
-    combo.set_active(0)
-
-
-def populate_netmodel_combo(vm, combo):
-    model = combo.get_model()
-    model.clear()
-
-    # [xml value, label]
-    model.append([None, _("Hypervisor default")])
-    if vm.is_hvm():
-        mod_list = ["rtl8139", "ne2k_pci", "pcnet", "e1000"]
-        if vm.get_hv_type() in ["kvm", "qemu", "test"]:
-            mod_list.append("virtio")
-        if (vm.get_hv_type() == "kvm" and
-              vm.get_machtype() == "pseries"):
-            mod_list.append("spapr-vlan")
-        if vm.get_hv_type() in ["xen", "test"]:
-            mod_list.append("netfront")
-        mod_list.sort()
-
-        for m in mod_list:
-            model.append([m, m])
-
-
-def build_cache_combo(vm, combo):
-    ignore = vm
-    model = Gtk.ListStore(str, str)
-    combo.set_model(model)
-    set_combo_text_column(combo, 1)
-
-    combo.set_active(-1)
-    for m in virtinst.VirtualDisk.cache_types:
-        model.append([m, m])
-
-    _iter = model.insert(0, [None, "default"])
-    combo.set_active_iter(_iter)
-
-
-def build_io_combo(vm, combo, no_default=False):
-    ignore = vm
-    model = Gtk.ListStore(str, str)
-    combo.set_model(model)
-    set_combo_text_column(combo, 1)
-    model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-
-    combo.set_active(-1)
-    for m in virtinst.VirtualDisk.io_modes:
-        model.append([m, m])
-
-    if not no_default:
-        model.append([None, "default"])
-    combo.set_active(0)
-
-
-def build_disk_bus_combo(vm, combo, no_default=False):
-    ignore = vm
-    model = Gtk.ListStore(str, str)
-    combo.set_model(model)
-    set_combo_text_column(combo, 1)
-    model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
-
-    if not no_default:
-        model.append([None, "default"])
-    combo.set_active(-1)
-
-
-def build_vnc_keymap_combo(vm, combo, no_default=False):
-    ignore = vm
-    model = Gtk.ListStore(str, str)
-    combo.set_model(model)
-    set_combo_text_column(combo, 1)
-
-    if not no_default:
-        model.append([None, "default"])
-    else:
-        model.append([None, "Auto"])
-
-    model.append([virtinst.VirtualGraphics.KEYMAP_LOCAL,
-                  "Copy local keymap"])
-    for k in virtinst.VirtualGraphics.valid_keymaps():
-        model.append([k, k])
-
-    combo.set_active(-1)
-
-
-#####################################
-# Storage format list/combo helpers #
-#####################################
-
-def update_storage_format_combo(vm, combo, create):
-    model = Gtk.ListStore(str)
-    combo.set_model(model)
-    set_combo_text_column(combo, 0)
-
-    formats = ["raw", "qcow2", "qed"]
-    no_create_formats = []
-    if not vm.stable_defaults():
-        formats.append("vmdk")
-        no_create_formats.append("vdi")
-
-    for m in formats:
-        model.append([m])
-    if not create:
-        for m in no_create_formats:
-            model.append([m])
-
-    if create:
-        combo.set_active(0)
-
-
-#######################################################################
-# Widgets for listing network device options (in create, addhardware) #
-#######################################################################
 
 def pretty_network_desc(nettype, source=None, netobj=None):
     if nettype == virtinst.VirtualNetworkInterface.TYPE_USER:
@@ -466,40 +164,20 @@ def pretty_network_desc(nettype, source=None, netobj=None):
     return ret
 
 
-def init_network_list(net_list, bridge_box, source_mode_combo=None,
+def build_network_list(net_list, bridge_box, source_mode_combo=None,
                       vport_expander=None):
     # [ network type, source name, label, sensitive?, net is active,
     #   manual bridge, net instance]
     net_model = Gtk.ListStore(str, str, str, bool, bool, bool, object)
     net_list.set_model(net_model)
 
-    net_list.connect("changed", net_list_changed, bridge_box,
+    net_list.connect("changed", _net_list_changed, bridge_box,
                      source_mode_combo, vport_expander)
 
     text = Gtk.CellRendererText()
     net_list.pack_start(text, True)
     net_list.add_attribute(text, 'text', 2)
     net_list.add_attribute(text, 'sensitive', 3)
-
-
-def net_list_changed(net_list, bridge_box,
-                     source_mode_combo, vport_expander):
-    active = net_list.get_active()
-    if active < 0:
-        return
-
-    if not bridge_box:
-        return
-
-    row = net_list.get_model()[active]
-
-    if source_mode_combo is not None:
-        doshow = (row[0] == virtinst.VirtualNetworkInterface.TYPE_DIRECT)
-        set_grid_row_visible(source_mode_combo, doshow)
-        vport_expander.set_visible(doshow)
-
-    show_bridge = row[5]
-    set_grid_row_visible(bridge_box, show_bridge)
 
 
 def get_network_selection(net_list, bridge_entry):
@@ -740,7 +418,107 @@ def validate_network(err, conn, nettype, devname, macaddr, model=None):
 # Populate media widget (choosecd, create) #
 ############################################
 
-def init_mediadev_combo(widget):
+def _set_mediadev_default(model):
+    if len(model) == 0:
+        model.append([None, _("No device present"), False, None, None, False])
+
+
+def _set_mediadev_row_from_object(row, obj):
+    row[OPTICAL_DEV_PATH] = obj.get_path()
+    row[OPTICAL_LABEL] = obj.pretty_label()
+    row[OPTICAL_IS_MEDIA_PRESENT] = obj.has_media()
+    row[OPTICAL_DEV_KEY] = obj.get_key()
+    row[OPTICAL_MEDIA_KEY] = obj.get_media_key()
+    row[OPTICAL_IS_VALID] = True
+
+
+def _mediadev_set_default_selection(widget):
+    # Set the first active cdrom device as selected, otherwise none
+    model = widget.get_model()
+    idx = 0
+    active = widget.get_active()
+
+    if active != -1:
+        # already a selection, don't change it
+        return
+
+    for row in model:
+        if row[OPTICAL_IS_MEDIA_PRESENT] is True:
+            widget.set_active(idx)
+            return
+        idx += 1
+
+    widget.set_active(-1)
+
+
+def _mediadev_media_changed(newobj, widget):
+    model = widget.get_model()
+    active = widget.get_active()
+    idx = 0
+
+    # Search for the row with matching device node and
+    # fill in info about inserted media. If model has no current
+    # selection, select the new media.
+    for row in model:
+        if row[OPTICAL_DEV_PATH] == newobj.get_path():
+            _set_mediadev_row_from_object(row, newobj)
+            has_media = row[OPTICAL_IS_MEDIA_PRESENT]
+
+            if has_media and active == -1:
+                widget.set_active(idx)
+            elif not has_media and active == idx:
+                widget.set_active(-1)
+
+        idx = idx + 1
+
+    _mediadev_set_default_selection(widget)
+
+
+def _mediadev_added(ignore_helper, newobj, widget, devtype):
+    model = widget.get_model()
+
+    if newobj.get_media_type() != devtype:
+        return
+    if model is None:
+        return
+
+    if len(model) == 1 and model[0][OPTICAL_IS_VALID] is False:
+        # Only entry is the 'No device' entry
+        model.clear()
+
+    newobj.connect("media-added", _mediadev_media_changed, widget)
+    newobj.connect("media-removed", _mediadev_media_changed, widget)
+
+    # Brand new device
+    row = [None, None, None, None, None, None]
+    _set_mediadev_row_from_object(row, newobj)
+    model.append(row)
+
+    _mediadev_set_default_selection(widget)
+
+
+def _mediadev_removed(ignore_helper, key, widget):
+    model = widget.get_model()
+    active = widget.get_active()
+    idx = 0
+
+    for row in model:
+        if row[OPTICAL_DEV_KEY] == key:
+            # Whole device removed
+            del(model[idx])
+
+            if idx > active and active != -1:
+                widget.set_active(active - 1)
+            elif idx == active:
+                widget.set_active(-1)
+
+        idx += 1
+
+    _set_mediadev_default(model)
+    _mediadev_set_default_selection(widget)
+
+
+def build_mediadev_combo(widget):
     # [Device path, pretty label, has_media?, device key, media key,
     #  vmmMediaDevice, is valid device]
     model = Gtk.ListStore(str, str, bool, str, str, bool)
@@ -758,115 +536,16 @@ def populate_mediadev_combo(conn, widget, devtype):
 
     model = widget.get_model()
     model.clear()
-    set_mediadev_default(model)
+    _set_mediadev_default(model)
 
-    sigs.append(conn.connect("mediadev-added", mediadev_added, widget, devtype))
-    sigs.append(conn.connect("mediadev-removed", mediadev_removed, widget))
+    sigs.append(conn.connect("mediadev-added",
+        _mediadev_added, widget, devtype))
+    sigs.append(conn.connect("mediadev-removed", _mediadev_removed, widget))
 
     widget.set_active(-1)
-    mediadev_set_default_selection(widget)
+    _mediadev_set_default_selection(widget)
 
     return sigs
-
-
-def set_mediadev_default(model):
-    if len(model) == 0:
-        model.append([None, _("No device present"), False, None, None, False])
-
-
-def set_row_from_object(row, obj):
-    row[OPTICAL_DEV_PATH] = obj.get_path()
-    row[OPTICAL_LABEL] = obj.pretty_label()
-    row[OPTICAL_IS_MEDIA_PRESENT] = obj.has_media()
-    row[OPTICAL_DEV_KEY] = obj.get_key()
-    row[OPTICAL_MEDIA_KEY] = obj.get_media_key()
-    row[OPTICAL_IS_VALID] = True
-
-
-def mediadev_removed(ignore_helper, key, widget):
-    model = widget.get_model()
-    active = widget.get_active()
-    idx = 0
-
-    for row in model:
-        if row[OPTICAL_DEV_KEY] == key:
-            # Whole device removed
-            del(model[idx])
-
-            if idx > active and active != -1:
-                widget.set_active(active - 1)
-            elif idx == active:
-                widget.set_active(-1)
-
-        idx += 1
-
-    set_mediadev_default(model)
-    mediadev_set_default_selection(widget)
-
-
-def mediadev_added(ignore_helper, newobj, widget, devtype):
-    model = widget.get_model()
-
-    if newobj.get_media_type() != devtype:
-        return
-    if model is None:
-        return
-
-    if len(model) == 1 and model[0][OPTICAL_IS_VALID] is False:
-        # Only entry is the 'No device' entry
-        model.clear()
-
-    newobj.connect("media-added", mediadev_media_changed, widget)
-    newobj.connect("media-removed", mediadev_media_changed, widget)
-
-    # Brand new device
-    row = [None, None, None, None, None, None]
-    set_row_from_object(row, newobj)
-    model.append(row)
-
-    mediadev_set_default_selection(widget)
-
-
-def mediadev_media_changed(newobj, widget):
-    model = widget.get_model()
-    active = widget.get_active()
-    idx = 0
-
-    # Search for the row with matching device node and
-    # fill in info about inserted media. If model has no current
-    # selection, select the new media.
-    for row in model:
-        if row[OPTICAL_DEV_PATH] == newobj.get_path():
-            set_row_from_object(row, newobj)
-            has_media = row[OPTICAL_IS_MEDIA_PRESENT]
-
-            if has_media and active == -1:
-                widget.set_active(idx)
-            elif not has_media and active == idx:
-                widget.set_active(-1)
-
-        idx = idx + 1
-
-    mediadev_set_default_selection(widget)
-
-
-def mediadev_set_default_selection(widget):
-    # Set the first active cdrom device as selected, otherwise none
-    model = widget.get_model()
-    idx = 0
-    active = widget.get_active()
-
-    if active != -1:
-        # already a selection, don't change it
-        return
-
-    for row in model:
-        if row[OPTICAL_IS_MEDIA_PRESENT] is True:
-            widget.set_active(idx)
-            return
-        idx += 1
-
-    widget.set_active(-1)
 
 
 ####################################################################
@@ -1065,50 +744,18 @@ def check_path_search_for_qemu(err, conn, path):
         config.running_config.add_perms_fix_ignore(errors.keys())
 
 
-######################################
-# Interface startmode widget builder #
-######################################
+################
+# Misc helpers #
+################
 
-def build_startmode_combo(combo):
-    model = Gtk.ListStore(str)
-    combo.set_model(model)
-    set_combo_text_column(combo, 0)
+def set_combo_text_column(combo, col):
+    if combo.get_has_entry():
+        combo.set_entry_text_column(col)
+    else:
+        text = Gtk.CellRendererText()
+        combo.pack_start(text, True)
+        combo.add_attribute(text, 'text', col)
 
-    model.append(["none"])
-    model.append(["onboot"])
-    model.append(["hotplug"])
-
-
-#########################
-# Console keycombo menu #
-#########################
-
-def build_keycombo_menu(cb):
-    menu = Gtk.Menu()
-
-    def make_item(name, combo):
-        item = Gtk.MenuItem.new_with_mnemonic(name)
-        item.connect("activate", cb, combo)
-
-        menu.add(item)
-
-    make_item("Ctrl+Alt+_Backspace", ["Control_L", "Alt_L", "BackSpace"])
-    make_item("Ctrl+Alt+_Delete", ["Control_L", "Alt_L", "Delete"])
-    menu.add(Gtk.SeparatorMenuItem())
-
-    for i in range(1, 13):
-        make_item("Ctrl+Alt+F_%d" % i, ["Control_L", "Alt_L", "F%d" % i])
-    menu.add(Gtk.SeparatorMenuItem())
-
-    make_item("_Printscreen", ["Print"])
-
-    menu.show_all()
-    return menu
-
-
-#############
-# Misc bits #
-#############
 
 def spin_get_helper(widget):
     adj = widget.get_adjustment()

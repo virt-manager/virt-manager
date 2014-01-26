@@ -38,6 +38,18 @@ from virtManager import uihelpers
 from virtManager.libvirtobject import vmmLibvirtObject
 
 
+vm_status_icons = {
+    libvirt.VIR_DOMAIN_BLOCKED: "state_running",
+    libvirt.VIR_DOMAIN_CRASHED: "state_shutoff",
+    libvirt.VIR_DOMAIN_PAUSED: "state_paused",
+    libvirt.VIR_DOMAIN_RUNNING: "state_running",
+    libvirt.VIR_DOMAIN_SHUTDOWN: "state_shutoff",
+    libvirt.VIR_DOMAIN_SHUTOFF: "state_shutoff",
+    libvirt.VIR_DOMAIN_NOSTATE: "state_running",
+    getattr(libvirt, "VIR_DOMAIN_PMSUSPENDED", 7): "state_paused",
+}
+
+
 def compare_device(origdev, newdev, idx):
     devprops = {
         "disk"      : ["target", "bus"],
@@ -170,10 +182,10 @@ class vmmDomainSnapshot(vmmLibvirtObject):
         return vmmDomain.pretty_run_status(status)
     def run_status_icon_name(self):
         status = DomainSnapshot.state_str_to_int(self.get_xmlobj().state)
-        if status not in uihelpers.vm_status_icons:
+        if status not in vm_status_icons:
             logging.debug("Unknown status %d, using NOSTATE", status)
             status = libvirt.VIR_DOMAIN_NOSTATE
-        return uihelpers.vm_status_icons[status]
+        return vm_status_icons[status]
 
     def is_external(self):
         if self.get_xmlobj().memory_type == "external":
@@ -1548,10 +1560,10 @@ class vmmDomain(vmmLibvirtObject):
         return self.pretty_run_status(self.status(), self.hasSavedImage())
     def run_status_icon_name(self):
         status = self.status()
-        if status not in uihelpers.vm_status_icons:
+        if status not in vm_status_icons:
             logging.debug("Unknown status %d, using NOSTATE", status)
             status = libvirt.VIR_DOMAIN_NOSTATE
-        return uihelpers.vm_status_icons[status]
+        return vm_status_icons[status]
 
     def force_update_status(self):
         """

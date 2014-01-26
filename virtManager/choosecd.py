@@ -149,7 +149,7 @@ class vmmChooseCD(vmmGObjectUI):
         warn = self.widget("cd-path-warn")
 
         error = self.conn.mediadev_error
-        uihelpers.init_mediadev_combo(widget)
+        uihelpers.build_mediadev_combo(widget)
         uihelpers.populate_mediadev_combo(self.conn, widget, self.media_type)
 
         if error:

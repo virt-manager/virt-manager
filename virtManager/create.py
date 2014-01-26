@@ -291,13 +291,13 @@ class vmmCreate(vmmGObjectUI):
 
         # Physical CD-ROM model
         cd_list = self.widget("install-local-cdrom-combo")
-        uihelpers.init_mediadev_combo(cd_list)
+        uihelpers.build_mediadev_combo(cd_list)
 
         # Networking
         # [ interface type, device name, label, sensitive ]
         net_list = self.widget("config-netdev")
         bridge_box = self.widget("config-netdev-bridge-box")
-        uihelpers.init_network_list(net_list, bridge_box)
+        uihelpers.build_network_list(net_list, bridge_box)
 
         # Archtecture
         # [value, label]

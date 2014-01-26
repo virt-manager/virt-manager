@@ -243,7 +243,8 @@ class vmmHost(vmmGObjectUI):
         interfaceListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         # Starmode combo
-        uihelpers.build_startmode_combo(self.widget("interface-startmode"))
+        vmmCreateInterface.build_interface_startmode_combo(
+            self.widget("interface-startmode"))
 
         # [ name, type ]
         childListModel = Gtk.ListStore(str, str)

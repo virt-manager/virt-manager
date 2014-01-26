@@ -688,8 +688,8 @@ class vmmDetails(vmmGObjectUI):
                                     self.config.get_details_show_toolbar())
 
         # Keycombo menu (ctrl+alt+del etc.)
-        self.keycombo_menu = uihelpers.build_keycombo_menu(
-                                                    self.console.send_key)
+        self.keycombo_menu = self.console.build_keycombo_menu(
+            self.console.send_key)
         self.widget("details-menu-send-key").set_submenu(self.keycombo_menu)
 
 
@@ -913,19 +913,19 @@ class vmmDetails(vmmGObjectUI):
 
         # Disk cache combo
         disk_cache = self.widget("disk-cache")
-        uihelpers.build_cache_combo(self.vm, disk_cache)
+        vmmAddHardware.build_disk_cache_combo(self.vm, disk_cache)
 
         # Disk io combo
         disk_io = self.widget("disk-io")
-        uihelpers.build_io_combo(self.vm, disk_io)
+        vmmAddHardware.build_disk_io_combo(self.vm, disk_io)
 
         # Disk format combo
         format_list = self.widget("disk-format")
-        uihelpers.update_storage_format_combo(self.vm, format_list, False)
+        vmmAddHardware.populate_disk_format_combo(self.vm, format_list, False)
 
         # Disk bus combo
         disk_bus = self.widget("disk-bus")
-        uihelpers.build_disk_bus_combo(self.vm, disk_bus)
+        vmmAddHardware.build_disk_bus_combo(self.vm, disk_bus)
 
         # Disk iotune expander
         if not (self.conn.is_qemu() or self.conn.is_test_conn()):
@@ -936,16 +936,16 @@ class vmmDetails(vmmGObjectUI):
         net_bridge = self.widget("network-bridge-box")
         source_mode_combo = self.widget("network-source-mode")
         vport_expander = self.widget("vport-expander")
-        uihelpers.init_network_list(net_source, net_bridge,
+        uihelpers.build_network_list(net_source, net_bridge,
                                     source_mode_combo, vport_expander)
 
         # source mode
         source_mode = self.widget("network-source-mode")
-        uihelpers.build_source_mode_combo(self.vm, source_mode)
+        vmmAddHardware.build_network_source_mode_combo(self.vm, source_mode)
 
         # Network model
         net_model = self.widget("network-model")
-        uihelpers.build_netmodel_combo(self.vm, net_model)
+        vmmAddHardware.build_network_model_combo(self.vm, net_model)
 
         # Graphics type
         gfx_type = self.widget("gfx-type")
@@ -958,30 +958,32 @@ class vmmDetails(vmmGObjectUI):
 
         # Graphics keymap
         gfx_keymap = self.widget("gfx-keymap")
-        uihelpers.build_vnc_keymap_combo(self.vm, gfx_keymap,
+        vmmAddHardware.build_graphics_keymap_combo(self.vm, gfx_keymap,
                                          no_default=no_default)
 
         # Sound model
         sound_dev = self.widget("sound-model")
-        uihelpers.build_sound_combo(self.vm, sound_dev, no_default=no_default)
+        vmmAddHardware.build_sound_combo(self.vm, sound_dev,
+            no_default=no_default)
 
         # Video model combo
         video_dev = self.widget("video-model")
-        uihelpers.build_video_combo(self.vm, video_dev, no_default=no_default)
+        vmmAddHardware.build_video_combo(self.vm, video_dev,
+            no_default=no_default)
 
         # Watchdog model combo
         combo = self.widget("watchdog-model")
-        uihelpers.build_watchdogmodel_combo(self.vm, combo,
+        vmmAddHardware.build_watchdogmodel_combo(self.vm, combo,
                                             no_default=no_default)
 
         # Watchdog action combo
         combo = self.widget("watchdog-action")
-        uihelpers.build_watchdogaction_combo(self.vm, combo,
+        vmmAddHardware.build_watchdogaction_combo(self.vm, combo,
                                              no_default=no_default)
 
         # Smartcard mode
         sc_mode = self.widget("smartcard-mode")
-        uihelpers.build_smartcard_mode_combo(self.vm, sc_mode)
+        vmmAddHardware.build_smartcard_mode_combo(self.vm, sc_mode)
 
         # Controller model
         combo = self.widget("controller-model")
@@ -2736,7 +2738,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("vport-expander").set_visible(is_direct)
 
         # source mode
-        uihelpers.populate_source_mode_combo(self.vm,
+        vmmAddHardware.populate_network_source_mode_combo(self.vm,
                             self.widget("network-source-mode"))
         self.set_combo_entry("network-source-mode", source_mode)
 
@@ -2749,7 +2751,7 @@ class vmmDetails(vmmGObjectUI):
                                 str(vport.typeidversion) or "")
         self.widget("vport-instanceid").set_text(vport.instanceid or "")
 
-        uihelpers.populate_netmodel_combo(self.vm,
+        vmmAddHardware.populate_network_model_combo(self.vm,
                                           self.widget("network-model"))
         self.set_combo_entry("network-model", model)
 
@@ -3062,9 +3064,9 @@ class vmmDetails(vmmGObjectUI):
             return
 
         no_default = not self.is_customize_dialog
-        uihelpers.populate_video_combo(self.vm,
-                                self.widget("video-model"),
-                                no_default=no_default)
+        vmmAddHardware.populate_video_combo(self.vm,
+            self.widget("video-model"),
+            no_default=no_default)
 
         model = vid.model
         ram = vid.vram

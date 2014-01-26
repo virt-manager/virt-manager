@@ -38,7 +38,6 @@ import signal
 import socket
 import threading
 
-import virtManager.uihelpers as uihelpers
 from virtManager.autodrawer import AutoDrawer
 from virtManager.baseclass import vmmGObjectUI, vmmGObject
 from virtManager.serialcon import vmmSerialConsole
@@ -57,6 +56,7 @@ def has_property(obj, setting):
     except TypeError:
         return False
     return True
+
 
 
 class ConnectionInfo(object):
@@ -794,7 +794,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.send_key_button = None
         self.fs_toolbar = None
         self.fs_drawer = None
-        self.keycombo_menu = uihelpers.build_keycombo_menu(self.send_key)
+        self.keycombo_menu = self.build_keycombo_menu(self.send_key)
         self.init_fs_toolbar()
 
         # Make viewer widget background always be black
@@ -821,6 +821,7 @@ class vmmConsolePages(vmmGObjectUI):
             self.config.on_keys_combination_changed(self.grab_keys_changed))
 
         self.page_changed()
+
 
     def is_visible(self):
         if self.topwin:
@@ -850,6 +851,30 @@ class vmmConsolePages(vmmGObjectUI):
     ##########################
     # Initialization helpers #
     ##########################
+
+    @staticmethod
+    def build_keycombo_menu(cb):
+        # Shared with vmmDetails
+        menu = Gtk.Menu()
+
+        def make_item(name, combo):
+            item = Gtk.MenuItem.new_with_mnemonic(name)
+            item.connect("activate", cb, combo)
+
+            menu.add(item)
+
+        make_item("Ctrl+Alt+_Backspace", ["Control_L", "Alt_L", "BackSpace"])
+        make_item("Ctrl+Alt+_Delete", ["Control_L", "Alt_L", "Delete"])
+        menu.add(Gtk.SeparatorMenuItem())
+
+        for i in range(1, 13):
+            make_item("Ctrl+Alt+F_%d" % i, ["Control_L", "Alt_L", "F%d" % i])
+        menu.add(Gtk.SeparatorMenuItem())
+
+        make_item("_Printscreen", ["Print"])
+
+        menu.show_all()
+        return menu
 
     def init_fs_toolbar(self):
         scroll = self.widget("console-gfx-scroll")

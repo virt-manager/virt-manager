@@ -176,11 +176,11 @@ class vmmAddHardware(vmmGObjectUI):
         # Virtual network list
         net_list = self.widget("net-list")
         bridge_box = self.widget("net-bridge-box")
-        uihelpers.init_network_list(net_list, bridge_box)
+        uihelpers.build_network_list(net_list, bridge_box)
 
         # Network model list
         netmodel_list  = self.widget("net-model")
-        uihelpers.build_netmodel_combo(self.vm, netmodel_list)
+        self.build_network_model_combo(self.vm, netmodel_list)
 
         # Disk bus type
         widget = self.widget("config-storage-bustype")
@@ -205,10 +205,10 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Disk cache mode
         cache_list = self.widget("config-storage-cache")
-        uihelpers.build_cache_combo(self.vm, cache_list)
+        self.build_disk_cache_combo(self.vm, cache_list)
 
         # Disk format mode
-        self.populate_disk_format_combo(True)
+        self.populate_disk_format_combo_wrapper(True)
 
         # Sparse tooltip
         sparse_info = self.widget("config-storage-nosparse-info")
@@ -239,7 +239,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Sound model list
         sound_list = self.widget("sound-model")
-        uihelpers.build_sound_combo(self.vm, sound_list)
+        self.build_sound_combo(self.vm, sound_list)
 
         # Host device list
         # model = [ Description, nodedev name ]
@@ -256,7 +256,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Video device
         video_dev = self.widget("video-model")
-        uihelpers.build_video_combo(self.vm, video_dev)
+        self.build_video_combo(self.vm, video_dev)
 
         # Character dev mode
         char_mode = self.widget("char-mode")
@@ -297,25 +297,24 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Watchdog widgets
         combo = self.widget("watchdog-model")
-        uihelpers.build_watchdogmodel_combo(self.vm, combo)
-
+        self.build_watchdogmodel_combo(self.vm, combo)
         combo = self.widget("watchdog-action")
-        uihelpers.build_watchdogaction_combo(self.vm, combo)
+        self.build_watchdogaction_combo(self.vm, combo)
 
         # Filesystem widgets
         self.fsDetails.set_initial_state()
 
         # Smartcard widgets
         combo = self.widget("smartcard-mode")
-        uihelpers.build_smartcard_mode_combo(self.vm, combo)
+        self.build_smartcard_mode_combo(self.vm, combo)
 
         # Usbredir widgets
         combo = self.widget("usbredir-list")
-        uihelpers.build_redir_type_combo(self.vm, combo)
+        self.build_redir_type_combo(self.vm, combo)
 
         # TPM widgets
         combo = self.widget("tpm-type")
-        uihelpers.build_tpm_type_combo(self.vm, combo)
+        self.build_tpm_type_combo(self.vm, combo)
 
         # RNG widgets
         combo = self.widget("rng-type")
@@ -418,7 +417,7 @@ class vmmAddHardware(vmmGObjectUI):
             not can_alloc and
             (_("Disk format '%s' does not support full allocation.") % fmt) or
             "")
-        self.populate_disk_format_combo(True)
+        self.populate_disk_format_combo_wrapper(True)
         self.populate_disk_bus()
 
         # Network init
@@ -440,7 +439,7 @@ class vmmAddHardware(vmmGObjectUI):
             net_warn.hide()
 
         netmodel = self.widget("net-model")
-        uihelpers.populate_netmodel_combo(self.vm, netmodel)
+        self.populate_network_model_combo(self.vm, netmodel)
         netmodel.set_active(0)
 
         # Input device init
@@ -486,7 +485,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.fsDetails.reset_state()
 
         # Video params
-        uihelpers.populate_video_combo(self.vm, self.widget("video-model"))
+        self.populate_video_combo(self.vm, self.widget("video-model"))
 
         # TPM paams
         self.widget("tpm-device-path").set_text("/dev/tpm0")
@@ -510,6 +509,304 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("panic-iobase").set_text("0x505")
 
         self.set_hw_selection(0)
+
+
+    #####################
+    # Shared UI helpers #
+    #####################
+
+    @staticmethod
+    def populate_video_combo(vm, combo, no_default=None):
+        model = combo.get_model()
+        has_spice = bool([g for g in vm.get_graphics_devices()
+                          if g.type == g.TYPE_SPICE])
+        has_qxl = bool([v for v in vm.get_video_devices()
+                        if v.model == "qxl"])
+
+        model.clear()
+        tmpdev = virtinst.VirtualVideoDevice(vm.conn.get_backend())
+        for m in tmpdev.MODELS:
+            if vm.stable_defaults():
+                if m == "qxl" and not has_spice and not has_qxl:
+                    # Only list QXL video option when VM has SPICE video
+                    continue
+
+            if m == tmpdev.MODEL_DEFAULT and no_default:
+                continue
+            model.append([m, tmpdev.pretty_model(m)])
+
+        if len(model) > 0:
+            combo.set_active(0)
+
+    @staticmethod
+    def build_video_combo(vm, combo, no_default=None):
+        model = Gtk.ListStore(str, str)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 1)
+        combo.get_model().set_sort_column_id(1, Gtk.SortType.ASCENDING)
+
+        vmmAddHardware.populate_video_combo(vm, combo, no_default)
+
+    @staticmethod
+    def build_sound_combo(vm, combo, no_default=False):
+        model = Gtk.ListStore(str)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 0)
+        model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+
+        stable_defaults = vm.stable_defaults()
+        stable_soundmodels = ["ich6", "ac97"]
+
+        for m in virtinst.VirtualAudio.MODELS:
+            if m == virtinst.VirtualAudio.MODEL_DEFAULT and no_default:
+                continue
+
+            if (stable_defaults and m not in stable_soundmodels):
+                continue
+
+            model.append([m])
+        if len(model) > 0:
+            combo.set_active(0)
+
+    @staticmethod
+    def build_watchdogmodel_combo(vm, combo, no_default=False):
+        ignore = vm
+        model = Gtk.ListStore(str)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 0)
+        model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+
+        for m in virtinst.VirtualWatchdog.MODELS:
+            if m == virtinst.VirtualAudio.MODEL_DEFAULT and no_default:
+                continue
+            model.append([m])
+        if len(model) > 0:
+            combo.set_active(0)
+
+    @staticmethod
+    def build_watchdogaction_combo(vm, combo, no_default=False):
+        ignore = vm
+        model = Gtk.ListStore(str, str)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 1)
+        model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+
+        for m in virtinst.VirtualWatchdog.ACTIONS:
+            if m == virtinst.VirtualWatchdog.ACTION_DEFAULT and no_default:
+                continue
+            model.append([m, virtinst.VirtualWatchdog.get_action_desc(m)])
+        if len(model) > 0:
+            combo.set_active(0)
+
+    @staticmethod
+    def populate_network_source_mode_combo(vm, combo):
+        ignore = vm
+        model = combo.get_model()
+        model.clear()
+
+        # [xml value, label]
+        model.append([None, "Default"])
+        model.append(["vepa", "VEPA"])
+        model.append(["bridge", "Bridge"])
+        model.append(["private", "Private"])
+        model.append(["passthrough", "Passthrough"])
+
+    @staticmethod
+    def build_network_source_mode_combo(vm, combo):
+        model = Gtk.ListStore(str, str)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 1)
+
+        vmmAddHardware.populate_network_source_mode_combo(vm, combo)
+        combo.set_active(0)
+
+    @staticmethod
+    def populate_network_model_combo(vm, combo):
+        model = combo.get_model()
+        model.clear()
+
+        # [xml value, label]
+        model.append([None, _("Hypervisor default")])
+        if vm.is_hvm():
+            mod_list = ["rtl8139", "ne2k_pci", "pcnet", "e1000"]
+            if vm.get_hv_type() in ["kvm", "qemu", "test"]:
+                mod_list.append("virtio")
+            if (vm.get_hv_type() == "kvm" and
+                  vm.get_machtype() == "pseries"):
+                mod_list.append("spapr-vlan")
+            if vm.get_hv_type() in ["xen", "test"]:
+                mod_list.append("netfront")
+            mod_list.sort()
+
+            for m in mod_list:
+                model.append([m, m])
+
+    @staticmethod
+    def build_network_model_combo(vm, combo):
+        model = Gtk.ListStore(str, str)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 1)
+        model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+
+        vmmAddHardware.populate_network_model_combo(vm, combo)
+        combo.set_active(0)
+
+    @staticmethod
+    def populate_smartcard_mode_combo(vm, combo):
+        ignore = vm
+        model = combo.get_model()
+        model.clear()
+
+        # [xml value, label]
+        model.append(["passthrough", "Passthrough"])
+        model.append(["host", "Host"])
+
+    @staticmethod
+    def build_smartcard_mode_combo(vm, combo):
+        model = Gtk.ListStore(str, str)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 1)
+        model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+
+        vmmAddHardware.populate_smartcard_mode_combo(vm, combo)
+
+        idx = -1
+        for rowid in range(len(combo.get_model())):
+            idx = 0
+            row = combo.get_model()[rowid]
+            if row[0] == virtinst.VirtualSmartCardDevice.MODE_DEFAULT:
+                idx = rowid
+                break
+        combo.set_active(idx)
+
+    @staticmethod
+    def populate_redir_type_combo(vm, combo):
+        ignore = vm
+        model = combo.get_model()
+        model.clear()
+
+        # [xml value, label, conn details]
+        model.append(["spicevmc", "Spice channel", False])
+        model.append(["tcp", "TCP", True])
+
+    @staticmethod
+    def build_redir_type_combo(vm, combo):
+        model = Gtk.ListStore(str, str, bool)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 1)
+
+        vmmAddHardware.populate_redir_type_combo(vm, combo)
+        combo.set_active(0)
+
+    @staticmethod
+    def populate_tpm_type_combo(vm, combo):
+        ignore = vm
+        types = combo.get_model()
+        types.clear()
+
+        # [xml value, label]
+        for t in virtinst.VirtualTPMDevice.TYPES:
+            types.append([t, virtinst.VirtualTPMDevice.get_pretty_type(t)])
+
+    @staticmethod
+    def build_tpm_type_combo(vm, combo):
+        model = Gtk.ListStore(str, str)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 1)
+        model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+
+        vmmAddHardware.populate_tpm_type_combo(vm, combo)
+
+        idx = -1
+        for rowid in range(len(combo.get_model())):
+            idx = 0
+            row = combo.get_model()[rowid]
+            if row[0] == virtinst.VirtualTPMDevice.TYPE_DEFAULT:
+                idx = rowid
+                break
+        combo.set_active(idx)
+
+    @staticmethod
+    def build_graphics_keymap_combo(vm, combo, no_default=False):
+        ignore = vm
+        model = Gtk.ListStore(str, str)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 1)
+
+        if not no_default:
+            model.append([None, "default"])
+        else:
+            model.append([None, "Auto"])
+
+        model.append([virtinst.VirtualGraphics.KEYMAP_LOCAL,
+                      "Copy local keymap"])
+        for k in virtinst.VirtualGraphics.valid_keymaps():
+            model.append([k, k])
+
+        combo.set_active(-1)
+
+    @staticmethod
+    def build_disk_cache_combo(vm, combo):
+        ignore = vm
+        model = Gtk.ListStore(str, str)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 1)
+
+        combo.set_active(-1)
+        for m in virtinst.VirtualDisk.cache_types:
+            model.append([m, m])
+
+        _iter = model.insert(0, [None, "default"])
+        combo.set_active_iter(_iter)
+
+    @staticmethod
+    def build_disk_io_combo(vm, combo, no_default=False):
+        ignore = vm
+        model = Gtk.ListStore(str, str)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 1)
+        model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
+
+        combo.set_active(-1)
+        for m in virtinst.VirtualDisk.io_modes:
+            model.append([m, m])
+
+        if not no_default:
+            model.append([None, "default"])
+        combo.set_active(0)
+
+    @staticmethod
+    def build_disk_bus_combo(vm, combo, no_default=False):
+        ignore = vm
+        model = Gtk.ListStore(str, str)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 1)
+        model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
+
+        if not no_default:
+            model.append([None, "default"])
+        combo.set_active(-1)
+
+    @staticmethod
+    def populate_disk_format_combo(vm, combo, create):
+        model = Gtk.ListStore(str)
+        combo.set_model(model)
+        uihelpers.set_combo_text_column(combo, 0)
+
+        formats = ["raw", "qcow2", "qed"]
+        no_create_formats = []
+        if not vm.stable_defaults():
+            formats.append("vmdk")
+            no_create_formats.append("vdi")
+
+        for m in formats:
+            model.append([m])
+        if not create:
+            for m in no_create_formats:
+                model.append([m])
+
+        if create:
+            combo.set_active(0)
 
 
     #########################
@@ -606,9 +903,9 @@ class vmmAddHardware(vmmGObjectUI):
             model.append([_("No Devices Available"), None, None, None])
         uihelpers.set_list_selection(devlist, 0)
 
-    def populate_disk_format_combo(self, create):
+    def populate_disk_format_combo_wrapper(self, create):
         format_list = self.widget("config-storage-format")
-        uihelpers.update_storage_format_combo(self.vm, format_list, create)
+        self.populate_disk_format_combo(self.vm, format_list, create)
         if not create:
             format_list.get_child().set_text("")
 
@@ -998,7 +1295,7 @@ class vmmAddHardware(vmmGObjectUI):
     def toggle_storage_select(self, src):
         act = src.get_active()
         self.widget("config-storage-browse-box").set_sensitive(act)
-        self.populate_disk_format_combo(not act)
+        self.populate_disk_format_combo_wrapper(not act)
 
     def set_disk_storage_path(self, ignore, path):
         self.widget("config-storage-entry").set_text(path)
