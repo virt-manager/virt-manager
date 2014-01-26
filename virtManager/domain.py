@@ -567,41 +567,7 @@ class vmmDomain(vmmLibvirtObject):
             guest.maxmemory = int(maxmem)
         return self._redefine(change)
 
-    # Security define methods
-    def define_seclabel(self, model, t, label, relabel):
-        def change(guest):
-            seclabel = guest.seclabel
-            seclabel.model = model or None
-            if not model:
-                return
-
-            if relabel is not None:
-                if relabel:
-                    seclabel.relabel = "yes"
-                else:
-                    seclabel.relabel = "no"
-
-            seclabel.type = t
-            if label:
-                seclabel.label = label
-
-        return self._redefine(change)
-
     # Machine config define methods
-    def define_acpi(self, newvalue):
-        def change(guest):
-            guest.features.acpi = newvalue
-        return self._redefine(change)
-    def define_apic(self, newvalue):
-        def change(guest):
-            guest.features.apic = newvalue
-        return self._redefine(change)
-
-    def define_clock(self, newvalue):
-        def change(guest):
-            guest.clock.offset = newvalue
-        return self._redefine(change)
-
     def define_machtype(self, newvalue):
         def change(guest):
             guest.os.machine = newvalue
@@ -1047,12 +1013,6 @@ class vmmDomain(vmmLibvirtObject):
         return self.get_xmlobj().os.init
     def get_emulator(self):
         return self.get_xmlobj().emulator
-    def get_acpi(self):
-        return self.get_xmlobj().features.acpi
-    def get_apic(self):
-        return self.get_xmlobj().features.apic
-    def get_clock(self):
-        return self.get_xmlobj().clock.offset
     def get_machtype(self):
         return self.get_xmlobj().os.machine
 
@@ -1095,21 +1055,6 @@ class vmmDomain(vmmLibvirtObject):
         guest = self.get_xmlobj()
         return (guest.os.kernel, guest.os.initrd,
                 guest.os.dtb, guest.os.kernel_args)
-
-    def get_seclabel(self):
-        seclabel = self.get_xmlobj().seclabel
-        model = seclabel.model
-        t     = seclabel.type or "dynamic"
-        label = seclabel.label or ""
-
-        relabel = getattr(seclabel, "relabel", None)
-        if relabel is not None:
-            if relabel == "yes":
-                relabel = True
-            else:
-                relabel = False
-
-        return [model, t, label, relabel]
 
     # XML Device listing
 

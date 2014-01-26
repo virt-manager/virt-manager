@@ -46,11 +46,7 @@ from virtinst import util
 # Parameters that can be editted in the details window
 (EDIT_NAME,
 EDIT_TITLE,
-EDIT_ACPI,
-EDIT_APIC,
-EDIT_CLOCK,
 EDIT_MACHTYPE,
-EDIT_SECURITY,
 EDIT_DESC,
 
 EDIT_VCPUS,
@@ -99,7 +95,7 @@ EDIT_CONTROLLER_MODEL,
 EDIT_TPM_TYPE,
 
 EDIT_FS,
-) = range(1, 43)
+) = range(1, 39)
 
 
 # Columns in hw list model
@@ -442,13 +438,7 @@ class vmmDetails(vmmGObjectUI):
 
             "on_overview_name_changed": lambda *x: self.enable_apply(x, EDIT_NAME),
             "on_overview_title_changed": lambda *x: self.enable_apply(x, EDIT_TITLE),
-            "on_overview_acpi_changed": self.config_acpi_changed,
-            "on_overview_apic_changed": self.config_apic_changed,
-            "on_overview_clock_changed": lambda *x: self.enable_apply(x, EDIT_CLOCK),
             "on_machine_type_changed": lambda *x: self.enable_apply(x, EDIT_MACHTYPE),
-            "on_security_label_changed": lambda *x: self.enable_apply(x, EDIT_SECURITY),
-            "on_security_relabel_changed": lambda *x: self.enable_apply(x, EDIT_SECURITY),
-            "on_security_type_changed": self.security_type_changed,
 
             "on_config_vcpus_changed": self.config_vcpus_changed,
             "on_config_maxvcpus_changed": self.config_maxvcpus_changed,
@@ -782,15 +772,6 @@ class vmmDetails(vmmGObjectUI):
         summary_col.pack_start(summary_text, True)
         summary_col.add_attribute(summary_text, 'text', 2)
         summary_col.set_sort_column_id(2)
-
-        # Clock combo
-        clock_combo = self.widget("overview-clock")
-        clock_model = Gtk.ListStore(str)
-        clock_combo.set_model(clock_model)
-        clock_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-        uihelpers.set_combo_text_column(clock_combo, 0)
-        for offset in ["localtime"]:
-            clock_model.append([offset])
 
         arch = self.vm.get_arch()
         caps = self.vm.conn.caps
@@ -1636,28 +1617,6 @@ class vmmDetails(vmmGObjectUI):
         if edittype not in self.active_edits:
             self.active_edits.append(edittype)
 
-    # Overview -> Machine settings
-    def config_acpi_changed(self, ignore):
-        widget = self.widget("overview-acpi")
-        incon = widget.get_inconsistent()
-        widget.set_inconsistent(False)
-        if incon:
-            widget.set_active(True)
-        self.enable_apply(EDIT_ACPI)
-    def config_apic_changed(self, ignore):
-        widget = self.widget("overview-apic")
-        incon = widget.get_inconsistent()
-        widget.set_inconsistent(False)
-        if incon:
-            widget.set_active(True)
-        self.enable_apply(EDIT_APIC)
-
-    # Overview -> Security
-    def security_type_changed(self, button):
-        self.enable_apply(EDIT_SECURITY)
-        self.widget("security-label").set_sensitive(not button.get_active())
-        self.widget("security-relabel").set_sensitive(not button.get_active())
-
     # Memory
     def config_get_maxmem(self):
         return uihelpers.spin_get_helper(self.widget("config-maxmem"))
@@ -1986,40 +1945,9 @@ class vmmDetails(vmmGObjectUI):
             add_define(self.vm.define_title, title)
             add_hotplug(self.vm.hotplug_title, title)
 
-        if self.edited(EDIT_ACPI):
-            enable_acpi = self.widget("overview-acpi").get_active()
-            if self.widget("overview-acpi").get_inconsistent():
-                enable_acpi = None
-            add_define(self.vm.define_acpi, enable_acpi)
-
-        if self.edited(EDIT_APIC):
-            enable_apic = self.widget("overview-apic").get_active()
-            if self.widget("overview-apic").get_inconsistent():
-                enable_apic = None
-            add_define(self.vm.define_apic, enable_apic)
-
-        if self.edited(EDIT_CLOCK):
-            clock = self.get_combo_entry("overview-clock")
-            add_define(self.vm.define_clock, clock)
-
         if self.edited(EDIT_MACHTYPE):
             machtype = self.get_combo_entry("machine-type")
             add_define(self.vm.define_machtype, machtype)
-
-        if self.edited(EDIT_SECURITY):
-            semodel = None
-            setype = "static"
-            selabel = self.get_text("security-label")
-            relabel = self.widget("security-relabel").get_active()
-
-            if self.widget("security-dynamic").get_active():
-                setype = "dynamic"
-                relabel = True
-            if self.widget("security-type-box").get_sensitive():
-                semodel = self.get_text("security-model")
-
-            add_define(self.vm.define_seclabel,
-                       semodel, setype, selabel, relabel)
 
         if self.edited(EDIT_DESC):
             desc_widget = self.widget("overview-description")
@@ -2590,56 +2518,11 @@ class vmmDetails(vmmGObjectUI):
                 apps_model.append([name, version, summary])
 
         # Machine settings
-        acpi = self.vm.get_acpi()
-        apic = self.vm.get_apic()
-        clock = self.vm.get_clock()
         machtype = self.vm.get_machtype()
-
-        # Hack in a way to represent 'default' acpi/apic for customize dialog
-        self.widget("overview-acpi").set_active(bool(acpi))
-        self.widget("overview-acpi").set_inconsistent(
-                                acpi is None and self.is_customize_dialog)
-        self.widget("overview-apic").set_active(bool(apic))
-        self.widget("overview-apic").set_inconsistent(
-                                apic is None and self.is_customize_dialog)
-
-        if not clock:
-            clock = _("Same as host")
-        self.set_combo_entry("overview-clock", clock)
-
         if not arch in ["i686", "x86_64"]:
             if machtype is not None:
                 self.set_combo_entry("machine-type", machtype)
 
-        # Security details
-        semodel, sectype, vmlabel, relabel = self.vm.get_seclabel()
-        caps = self.vm.conn.caps
-
-        if caps.host.secmodel and caps.host.secmodel.model:
-            semodel = caps.host.secmodel.model
-
-        self.widget("security-model").set_text(semodel or _("None"))
-
-        if not semodel or semodel == "apparmor":
-            self.widget("security-type-box").hide()
-            self.widget("security-type-label").hide()
-        else:
-            self.widget("security-type-box").set_sensitive(bool(semodel))
-
-            if sectype == "static":
-                self.widget("security-static").set_active(True)
-                self.widget("security-relabel").set_sensitive(True)
-                # As "no" is default for relabel with 'static' label and
-                # 'dynamic' must have relabel='yes', this will work properly
-                # for both False (relabel='no') and None (relabel not
-                # specified)
-                self.widget("security-relabel").set_active(relabel)
-            else:
-                self.widget("security-dynamic").set_active(True)
-                # Dynamic label type must use resource labeling
-                self.widget("security-relabel").set_active(True)
-                self.widget("security-relabel").set_sensitive(False)
-            self.widget("security-label").set_text(vmlabel)
 
     def refresh_stats_page(self):
         def _dsk_rx_tx_text(rx, tx, unit):
