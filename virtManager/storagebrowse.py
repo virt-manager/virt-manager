@@ -28,7 +28,7 @@ from gi.repository import Gtk
 from virtManager import host
 from virtManager.createvol import vmmCreateVolume
 from virtManager.baseclass import vmmGObjectUI
-from virtManager import uihelpers
+from virtManager import uiutil
 
 
 class vmmStorageBrowser(vmmGObjectUI):
@@ -180,7 +180,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         if not self._first_run:
             self._first_run = True
             pool = self.conn.get_default_pool()
-            uihelpers.set_row_selection(
+            uiutil.set_row_selection(
                 self.widget("pool-list"), pool and pool.get_uuid() or None)
         # Manually trigger vol_selected, so buttons are in the correct state
         self.vol_selected()
@@ -216,7 +216,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         return data["enable_create"]
 
     def current_pool(self):
-        row = uihelpers.get_list_selection(self.widget("pool-list"))
+        row = uiutil.get_list_selection(self.widget("pool-list"))
         if not row:
             return
         try:
@@ -227,7 +227,7 @@ class vmmStorageBrowser(vmmGObjectUI):
     def current_vol_row(self):
         if not self.current_pool():
             return
-        return uihelpers.get_list_selection(self.widget("vol-list"))
+        return uiutil.get_list_selection(self.widget("vol-list"))
 
     def current_vol(self):
         pool = self.current_pool()
@@ -283,7 +283,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         vol_list = self.widget("vol-list")
         def select_volume(model, path, it, volume_name):
             if model.get(it, 0)[0] == volume_name:
-                uihelpers.set_list_selection(vol_list, path)
+                uiutil.set_list_selection(vol_list, path)
 
         vol_list.get_model().foreach(select_volume, createvol.vol.name)
 

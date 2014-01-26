@@ -29,7 +29,8 @@ from gi.repository import GdkPixbuf
 
 from virtinst import util
 
-from virtManager import uihelpers
+from virtManager import sharedui
+from virtManager import uiutil
 from virtManager.connection import vmmConnection
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.graphwidgets import CellRendererSparkline
@@ -125,7 +126,7 @@ class vmmManager(vmmGObjectUI):
         self.topwin.set_default_size(w or 550, h or 550)
         self.prev_position = None
 
-        self.vmmenu = uihelpers.VMActionMenu(self, self.current_vm)
+        self.vmmenu = sharedui.VMActionMenu(self, self.current_vm)
         self.connmenu = Gtk.Menu()
         self.connmenu_items = {}
 
@@ -296,7 +297,7 @@ class vmmManager(vmmGObjectUI):
         self.widget("vm-new").set_icon_name("vm_new")
         self.widget("vm-open").set_icon_name("icon_console")
 
-        menu = uihelpers.VMShutdownMenu(self, self.current_vm)
+        menu = sharedui.VMShutdownMenu(self, self.current_vm)
         self.widget("vm-shutdown").set_icon_name("system-shutdown")
         self.widget("vm-shutdown").set_menu(menu)
 
@@ -786,7 +787,7 @@ class vmmManager(vmmGObjectUI):
             row[ROW_MARKUP] = self._build_vm_markup(name, status)
 
             desc = vm.get_description()
-            if not uihelpers.can_set_row_none:
+            if not uiutil.can_set_row_none:
                 desc = desc or ""
             row[ROW_HINT] = util.xml_escape(desc)
         except libvirt.libvirtError, e:
@@ -823,7 +824,7 @@ class vmmManager(vmmGObjectUI):
             return
 
         new_icon = _get_inspection_icon_pixbuf(vm, 16, 16)
-        if not uihelpers.can_set_row_none:
+        if not uiutil.can_set_row_none:
             new_icon = new_icon or ""
         row[ROW_INSPECTION_OS_ICON] = new_icon
 

@@ -33,7 +33,7 @@ from virtinst import util
 
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.baseclass import vmmGObjectUI
-from virtManager import uihelpers
+from virtManager import uiutil
 
 STORAGE_ROW_CONFIRM = 0
 STORAGE_ROW_CANT_DELETE = 1
@@ -97,7 +97,7 @@ class vmmDeleteDialog(vmmGObjectUI):
 
         # Show warning message if VM is running
         vm_active = self.vm.is_active()
-        uihelpers.set_grid_row_visible(
+        uiutil.set_grid_row_visible(
             self.widget("delete-warn-running-vm-box"), vm_active)
 
         # Disable storage removal by default
@@ -109,7 +109,7 @@ class vmmDeleteDialog(vmmGObjectUI):
 
     def toggle_remove_storage(self, src):
         dodel = src.get_active()
-        uihelpers.set_grid_row_visible(
+        uiutil.set_grid_row_visible(
             self.widget("delete-storage-scroll"), dodel)
 
     def get_config_format(self):

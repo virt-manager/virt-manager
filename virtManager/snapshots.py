@@ -33,7 +33,7 @@ from gi.repository import Gtk
 from virtinst import DomainSnapshot
 from virtinst import util
 
-from virtManager import uihelpers
+from virtManager import uiutil
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 
@@ -214,7 +214,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         has_internal = False
         for snap in snapshots:
             desc = snap.get_xmlobj().description
-            if not uihelpers.can_set_row_none:
+            if not uiutil.can_set_row_none:
                 desc = desc or ""
 
             name = snap.get_name()
@@ -237,7 +237,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             model.append([None, None, None, None, "2"])
 
         select_name = select_name or (cursnap and cursnap.get_name() or None)
-        uihelpers.set_row_selection(self.widget("snapshot-list"), select_name)
+        uiutil.set_row_selection(self.widget("snapshot-list"), select_name)
         self._initial_populate = True
 
     def _make_screenshot_pixbuf(self, mime, sdata):
@@ -307,7 +307,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             self.widget("snapshot-status-icon").set_from_icon_name(
                 icon, Gtk.IconSize.BUTTON)
 
-        uihelpers.set_grid_row_visible(self.widget("snapshot-mode"),
+        uiutil.set_grid_row_visible(self.widget("snapshot-mode"),
                                        is_external)
         if is_external:
             is_mem = xmlobj.memory_type == "external"
@@ -396,7 +396,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             self.vm.run_status_icon_name(), Gtk.IconSize.BUTTON)
 
         sn = self._get_screenshot()
-        uihelpers.set_grid_row_visible(
+        uiutil.set_grid_row_visible(
             self.widget("snapshot-new-screenshot"), bool(sn))
         if sn:
             self.widget("snapshot-new-screenshot").set_from_pixbuf(sn)

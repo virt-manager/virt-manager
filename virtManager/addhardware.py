@@ -34,7 +34,8 @@ from virtinst import (VirtualChannelDevice, VirtualParallelDevice,
                       VirtualTPMDevice, VirtualPanicDevice)
 from virtinst import VirtualController
 
-from virtManager import uihelpers
+from virtManager import sharedui
+from virtManager import uiutil
 from virtManager.fsdetails import vmmFSDetails
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.storagebrowse import vmmStorageBrowser
@@ -176,7 +177,7 @@ class vmmAddHardware(vmmGObjectUI):
         # Virtual network list
         net_list = self.widget("net-list")
         bridge_box = self.widget("net-bridge-box")
-        uihelpers.build_network_list(net_list, bridge_box)
+        sharedui.build_network_list(net_list, bridge_box)
 
         # Network model list
         netmodel_list  = self.widget("net-model")
@@ -187,7 +188,7 @@ class vmmAddHardware(vmmGObjectUI):
         # [bus, label]
         model = Gtk.ListStore(str, str)
         widget.set_model(model)
-        uihelpers.set_combo_text_column(widget, 1)
+        uiutil.set_combo_text_column(widget, 1)
 
         # Disk device type
         target_list = self.widget("config-storage-devtype")
@@ -212,7 +213,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Sparse tooltip
         sparse_info = self.widget("config-storage-nosparse-info")
-        uihelpers.set_sparse_tooltip(sparse_info)
+        sharedui.set_sparse_tooltip(sparse_info)
 
         # Input device type
         input_list = self.widget("input-type")
@@ -275,7 +276,7 @@ class vmmAddHardware(vmmGObjectUI):
         lst = self.widget("char-target-type")
         model = Gtk.ListStore(str, str)
         lst.set_model(model)
-        uihelpers.set_combo_text_column(lst, 1)
+        uiutil.set_combo_text_column(lst, 1)
         if self.conn.is_qemu():
             model.append(["virtio", "virtio"])
         else:
@@ -285,7 +286,7 @@ class vmmAddHardware(vmmGObjectUI):
         lst = self.widget("char-target-name")
         model = Gtk.ListStore(str)
         lst.set_model(model)
-        uihelpers.set_combo_text_column(lst, 0)
+        uiutil.set_combo_text_column(lst, 0)
         for n in VirtualChannelDevice.CHANNEL_NAMES:
             model.append([n])
 
@@ -293,7 +294,7 @@ class vmmAddHardware(vmmGObjectUI):
         lst = self.widget("char-device-type")
         model = Gtk.ListStore(str, str)
         lst.set_model(model)
-        uihelpers.set_combo_text_column(lst, 1)
+        uiutil.set_combo_text_column(lst, 1)
 
         # Watchdog widgets
         combo = self.widget("watchdog-model")
@@ -404,7 +405,7 @@ class vmmAddHardware(vmmGObjectUI):
         # Storage init
         label_widget = self.widget("phys-hd-label")
         label_widget.set_markup("")
-        uihelpers.update_host_space(self.conn, label_widget)
+        sharedui.update_host_space(self.conn, label_widget)
 
         self.widget("config-storage-create").set_active(True)
         self.widget("config-storage-size").set_value(8)
@@ -429,7 +430,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         net_list = self.widget("net-list")
         net_warn = self.widget("net-list-warn")
-        uihelpers.populate_network_list(net_list, self.conn)
+        sharedui.populate_network_list(net_list, self.conn)
 
         error = self.conn.netdev_error
         if error:
@@ -542,7 +543,7 @@ class vmmAddHardware(vmmGObjectUI):
     def build_video_combo(vm, combo, no_default=None):
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
         combo.get_model().set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         vmmAddHardware.populate_video_combo(vm, combo, no_default)
@@ -551,7 +552,7 @@ class vmmAddHardware(vmmGObjectUI):
     def build_sound_combo(vm, combo, no_default=False):
         model = Gtk.ListStore(str)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 0)
+        uiutil.set_combo_text_column(combo, 0)
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         stable_defaults = vm.stable_defaults()
@@ -573,7 +574,7 @@ class vmmAddHardware(vmmGObjectUI):
         ignore = vm
         model = Gtk.ListStore(str)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 0)
+        uiutil.set_combo_text_column(combo, 0)
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         for m in virtinst.VirtualWatchdog.MODELS:
@@ -588,7 +589,7 @@ class vmmAddHardware(vmmGObjectUI):
         ignore = vm
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         for m in virtinst.VirtualWatchdog.ACTIONS:
@@ -615,7 +616,7 @@ class vmmAddHardware(vmmGObjectUI):
     def build_network_source_mode_combo(vm, combo):
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
 
         vmmAddHardware.populate_network_source_mode_combo(vm, combo)
         combo.set_active(0)
@@ -645,7 +646,7 @@ class vmmAddHardware(vmmGObjectUI):
     def build_network_model_combo(vm, combo):
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         vmmAddHardware.populate_network_model_combo(vm, combo)
@@ -665,7 +666,7 @@ class vmmAddHardware(vmmGObjectUI):
     def build_smartcard_mode_combo(vm, combo):
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         vmmAddHardware.populate_smartcard_mode_combo(vm, combo)
@@ -693,7 +694,7 @@ class vmmAddHardware(vmmGObjectUI):
     def build_redir_type_combo(vm, combo):
         model = Gtk.ListStore(str, str, bool)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
 
         vmmAddHardware.populate_redir_type_combo(vm, combo)
         combo.set_active(0)
@@ -712,7 +713,7 @@ class vmmAddHardware(vmmGObjectUI):
     def build_tpm_type_combo(vm, combo):
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         vmmAddHardware.populate_tpm_type_combo(vm, combo)
@@ -731,7 +732,7 @@ class vmmAddHardware(vmmGObjectUI):
         ignore = vm
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
 
         if not no_default:
             model.append([None, "default"])
@@ -750,7 +751,7 @@ class vmmAddHardware(vmmGObjectUI):
         ignore = vm
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
 
         combo.set_active(-1)
         for m in virtinst.VirtualDisk.cache_types:
@@ -764,7 +765,7 @@ class vmmAddHardware(vmmGObjectUI):
         ignore = vm
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         combo.set_active(-1)
@@ -780,7 +781,7 @@ class vmmAddHardware(vmmGObjectUI):
         ignore = vm
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
         model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         if not no_default:
@@ -791,7 +792,7 @@ class vmmAddHardware(vmmGObjectUI):
     def populate_disk_format_combo(vm, combo, create):
         model = Gtk.ListStore(str)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 0)
+        uiutil.set_combo_text_column(combo, 0)
 
         formats = ["raw", "qcow2", "qed"]
         no_create_formats = []
@@ -901,7 +902,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         if len(model) == 0:
             model.append([_("No Devices Available"), None, None, None])
-        uihelpers.set_list_selection(devlist, 0)
+        uiutil.set_list_selection(devlist, 0)
 
     def populate_disk_format_combo_wrapper(self, create):
         format_list = self.widget("config-storage-format")
@@ -993,7 +994,7 @@ class vmmAddHardware(vmmGObjectUI):
         sparse = not self.widget("config-storage-nosparse").get_active()
 
         if self.is_default_storage():
-            path = uihelpers.get_default_path(self.conn,
+            path = sharedui.get_default_path(self.conn,
                                          self.vm.get_name(),
                                          collidelist=collidelist)
             logging.debug("Default storage path is: %s", path)
@@ -1006,7 +1007,7 @@ class vmmAddHardware(vmmGObjectUI):
         # See if the ideal disk path (/default/pool/vmname.img)
         # exists, and if unused, prompt the use for using it
         conn = self.conn.get_backend()
-        ideal = uihelpers.get_ideal_path(self.conn, self.vm.get_name())
+        ideal = sharedui.get_ideal_path(self.conn, self.vm.get_name())
         if ideal in collidelist:
             return diskpath
         do_exist = False
@@ -1087,7 +1088,7 @@ class vmmAddHardware(vmmGObjectUI):
         net_list = self.widget("net-list")
         bridge_ent = self.widget("net-bridge")
 
-        net_type, net_src = uihelpers.get_network_selection(net_list,
+        net_type, net_src = sharedui.get_network_selection(net_list,
                                                             bridge_ent)
 
         return net_type, net_src
@@ -1124,7 +1125,7 @@ class vmmAddHardware(vmmGObjectUI):
         return usb_info
 
     def get_config_host_device_info(self):
-        devrow = uihelpers.get_list_selection(self.widget("host-device"))
+        devrow = uiutil.get_list_selection(self.widget("host-device"))
         if not devrow:
             return []
         return devrow
@@ -1229,10 +1230,10 @@ class vmmAddHardware(vmmGObjectUI):
     ################
 
     def set_hw_selection(self, page):
-        uihelpers.set_list_selection(self.widget("hw-list"), page)
+        uiutil.set_list_selection(self.widget("hw-list"), page)
 
     def get_hw_selection(self):
-        return uihelpers.get_list_selection(self.widget("hw-list"))
+        return uiutil.get_list_selection(self.widget("hw-list"))
 
     def update_char_device_type_model(self):
         stable_blacklist = ["pipe", "udp"]
@@ -1316,7 +1317,7 @@ class vmmAddHardware(vmmGObjectUI):
         is_auto = self.widget("graphics-port-auto").get_active()
         is_spice = (gtype == "spice")
 
-        uihelpers.set_grid_row_visible(self.widget("graphics-port-box"),
+        uiutil.set_grid_row_visible(self.widget("graphics-port-box"),
                                        not is_auto)
         self.widget("graphics-port-box").set_visible(not is_auto)
         self.widget("graphics-tlsport-box").set_visible(is_spice)
@@ -1404,7 +1405,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         for param_name, widget_name in tpm_widget_mappings.items():
             make_visible = self._dev.supports_property(param_name)
-            uihelpers.set_grid_row_visible(self.widget(widget_name + "-label"),
+            uiutil.set_grid_row_visible(self.widget(widget_name + "-label"),
                                            make_visible)
 
     def change_char_auto_socket(self, src):
@@ -1412,8 +1413,8 @@ class vmmAddHardware(vmmGObjectUI):
             return
 
         doshow = not src.get_active()
-        uihelpers.set_grid_row_visible(self.widget("char-path-label"), doshow)
-        uihelpers.set_grid_row_visible(self.widget("char-mode-label"), doshow)
+        uiutil.set_grid_row_visible(self.widget("char-path-label"), doshow)
+        uiutil.set_grid_row_visible(self.widget("char-mode-label"), doshow)
 
     def change_char_target_name(self, src):
         if not src.get_visible():
@@ -1426,7 +1427,7 @@ class vmmAddHardware(vmmGObjectUI):
         elif (text == VirtualChannelDevice.CHANNEL_NAME_QEMUGA or
               text == VirtualChannelDevice.CHANNEL_NAME_LIBGUESTFS):
             settype = "unix"
-        uihelpers.set_row_selection(self.widget("char-device-type"), settype)
+        uiutil.set_row_selection(self.widget("char-device-type"), settype)
 
     def change_char_device_type(self, src):
         idx = src.get_active()
@@ -1454,14 +1455,14 @@ class vmmAddHardware(vmmGObjectUI):
 
         for param_name, widget_name in char_widget_mappings.items():
             make_visible = self._dev.supports_property(param_name)
-            uihelpers.set_grid_row_visible(self.widget(widget_name + "-label"),
+            uiutil.set_grid_row_visible(self.widget(widget_name + "-label"),
                                            make_visible)
 
-        uihelpers.set_grid_row_visible(
+        uiutil.set_grid_row_visible(
             self.widget("char-target-name-label"), ischan)
-        uihelpers.set_grid_row_visible(
+        uiutil.set_grid_row_visible(
             self.widget("char-target-type-label"), iscon)
-        uihelpers.set_grid_row_visible(
+        uiutil.set_grid_row_visible(
             self.widget("char-auto-socket-label"), show_auto)
         self.widget("char-auto-socket").emit("toggled")
 
@@ -1475,7 +1476,7 @@ class vmmAddHardware(vmmGObjectUI):
             return
 
         showhost = src.get_model()[src.get_active()][2]
-        uihelpers.set_grid_row_visible(self.widget("usbredir-host-box"),
+        uiutil.set_grid_row_visible(self.widget("usbredir-host-box"),
                                        showhost)
 
     def change_rng(self, ignore1):
@@ -1484,8 +1485,8 @@ class vmmAddHardware(vmmGObjectUI):
             return
 
         is_egd = model == virtinst.VirtualRNGDevice.TYPE_EGD
-        uihelpers.set_grid_row_visible(self.widget("rng-device"), not is_egd)
-        uihelpers.set_grid_row_visible(self.widget("rng-backend-type"), is_egd)
+        uiutil.set_grid_row_visible(self.widget("rng-device"), not is_egd)
+        uiutil.set_grid_row_visible(self.widget("rng-backend-type"), is_egd)
 
         backend_type = self.get_config_rng_backend_type()
         backend_mode = self.get_config_rng_backend_mode()
@@ -1493,13 +1494,13 @@ class vmmAddHardware(vmmGObjectUI):
         bind = backend_mode == virtinst.VirtualRNGDevice.BACKEND_MODE_BIND
 
         v = is_egd and (udp or bind)
-        uihelpers.set_grid_row_visible(self.widget("rng-bind-host-box"), v)
+        uiutil.set_grid_row_visible(self.widget("rng-bind-host-box"), v)
 
         v = is_egd and (udp or not bind)
-        uihelpers.set_grid_row_visible(self.widget("rng-connect-host-box"), v)
+        uiutil.set_grid_row_visible(self.widget("rng-connect-host-box"), v)
 
         v = is_egd and not udp
-        uihelpers.set_grid_row_visible(self.widget("rng-backend-mode"), v)
+        uiutil.set_grid_row_visible(self.widget("rng-backend-mode"), v)
 
 
     ######################
@@ -1659,7 +1660,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Make sure default pool is running
         if self.is_default_storage():
-            ret = uihelpers.check_default_pool_active(self.err, self.conn)
+            ret = sharedui.check_default_pool_active(self.err, self.conn)
             if not ret:
                 return False
 
@@ -1721,7 +1722,7 @@ class vmmAddHardware(vmmGObjectUI):
             if not res:
                 return False
 
-        uihelpers.check_path_search_for_qemu(self.err, self.conn, disk.path)
+        sharedui.check_path_search_for_qemu(self.err, self.conn, disk.path)
 
         # Add a SCSI controller with model virtio-scsi if needed
         disk.vmm_controller = None
@@ -1765,7 +1766,7 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Invalid MAC address"),
                                     _("A MAC address must be entered."))
 
-        ret = uihelpers.validate_network(self.err, self.conn,
+        ret = sharedui.validate_network(self.err, self.conn,
                                          nettype, devname, mac, model)
         if ret is False:
             return False

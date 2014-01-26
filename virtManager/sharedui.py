@@ -24,26 +24,12 @@ import statvfs
 import pwd
 
 # pylint: disable=E0611
-from gi.repository import GObject
 from gi.repository import Gtk
 # pylint: enable=E0611
 
 import virtinst
 from virtManager import config
-
-OPTICAL_DEV_PATH = 0
-OPTICAL_LABEL = 1
-OPTICAL_IS_MEDIA_PRESENT = 2
-OPTICAL_DEV_KEY = 3
-OPTICAL_MEDIA_KEY = 4
-OPTICAL_IS_VALID = 5
-
-try:
-    import gi
-    gi.check_version("3.7.4")
-    can_set_row_none = True
-except (ValueError, AttributeError):
-    can_set_row_none = False
+from virtManager import uiutil
 
 
 ############################################################
@@ -255,11 +241,11 @@ def _net_list_changed(net_list, bridge_box,
 
     if source_mode_combo is not None:
         doshow = (row[0] == virtinst.VirtualNetworkInterface.TYPE_DIRECT)
-        set_grid_row_visible(source_mode_combo, doshow)
+        uiutil.set_grid_row_visible(source_mode_combo, doshow)
         vport_expander.set_visible(doshow)
 
     show_bridge = row[5]
-    set_grid_row_visible(bridge_box, show_bridge)
+    uiutil.set_grid_row_visible(bridge_box, show_bridge)
 
 
 def pretty_network_desc(nettype, source=None, netobj=None):
@@ -538,6 +524,14 @@ def validate_network(err, conn, nettype, devname, macaddr, model=None):
 # Populate media widget (choosecd, create) #
 ############################################
 
+OPTICAL_DEV_PATH = 0
+OPTICAL_LABEL = 1
+OPTICAL_IS_MEDIA_PRESENT = 2
+OPTICAL_DEV_KEY = 3
+OPTICAL_MEDIA_KEY = 4
+OPTICAL_IS_VALID = 5
+
+
 def _set_mediadev_default(model):
     if len(model) == 0:
         model.append([None, _("No device present"), False, None, None, False])
@@ -796,95 +790,3 @@ class VMActionMenu(_VMMenu):
         for child in self.get_children():
             if getattr(child, "vmm_widget_name", None) == "run":
                 child.get_child().set_label(text)
-
-
-
-
-################
-# Misc helpers #
-################
-
-def set_combo_text_column(combo, col):
-    if combo.get_has_entry():
-        combo.set_entry_text_column(col)
-    else:
-        text = Gtk.CellRendererText()
-        combo.pack_start(text, True)
-        combo.add_attribute(text, 'text', col)
-
-
-def spin_get_helper(widget):
-    adj = widget.get_adjustment()
-    txt = widget.get_text()
-
-    try:
-        return int(txt)
-    except:
-        return adj.get_value()
-
-
-def get_list_selection(widget):
-    selection = widget.get_selection()
-    active = selection.get_selected()
-
-    treestore, treeiter = active
-    if treeiter is not None:
-        return treestore[treeiter]
-    return None
-
-
-def set_list_selection(widget, rownum):
-    path = str(rownum)
-    selection = widget.get_selection()
-
-    selection.unselect_all()
-    widget.set_cursor(path)
-    selection.select_path(path)
-
-
-def set_row_selection(listwidget, prevkey):
-    model = listwidget.get_model()
-    _iter = None
-    if prevkey:
-        for row in model:
-            if row[0] == prevkey:
-                _iter = row.iter
-                break
-    if not _iter:
-        _iter = model.get_iter_first()
-
-    if hasattr(listwidget, "get_selection"):
-        selection = listwidget.get_selection()
-        cb = selection.select_iter
-    else:
-        selection = listwidget
-        cb = selection.set_active_iter
-    if _iter:
-        cb(_iter)
-    selection.emit("changed")
-
-
-def child_get_property(parent, child, propname):
-    # Wrapper for child_get_property, which pygobject doesn't properly
-    # introspect
-    value = GObject.Value()
-    value.init(GObject.TYPE_INT)
-    parent.child_get_property(child, propname, value)
-    return value.get_int()
-
-
-def set_grid_row_visible(child, visible):
-    # For the passed widget, find its parent GtkGrid, and hide/show all
-    # elements that are in the same row as it. Simplifies having to name
-    # every element in a row when we want to dynamically hide things
-    # based on UI interraction
-
-    parent = child.get_parent()
-    if not type(parent) is Gtk.Grid:
-        raise RuntimeError("Programming error, parent must be grid, "
-                           "not %s" % type(parent))
-
-    row = child_get_property(parent, child, "top-attach")
-    for child in parent.get_children():
-        if child_get_property(parent, child, "top-attach") == row:
-            child.set_visible(visible)

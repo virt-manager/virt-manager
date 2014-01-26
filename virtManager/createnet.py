@@ -30,7 +30,7 @@ from gi.repository import Gdk
 
 from virtinst import Network
 
-from virtManager import uihelpers
+from virtManager import uiutil
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.baseclass import vmmGObjectUI
 
@@ -506,27 +506,27 @@ class vmmCreateNetwork(vmmGObjectUI):
         enabled = self.get_config_routev4_enable()
         ntwk = self.widget("net-routev4-network")
         gway = self.widget("net-routev4-gateway")
-        uihelpers.set_grid_row_visible(ntwk, enabled)
-        uihelpers.set_grid_row_visible(gway, enabled)
+        uiutil.set_grid_row_visible(ntwk, enabled)
+        uiutil.set_grid_row_visible(gway, enabled)
     def change_routev6_enable(self, ignore):
         enabled = self.get_config_routev6_enable()
         ntwk = self.widget("net-routev6-network")
         gway = self.widget("net-routev6-gateway")
-        uihelpers.set_grid_row_visible(ntwk, enabled)
-        uihelpers.set_grid_row_visible(gway, enabled)
+        uiutil.set_grid_row_visible(ntwk, enabled)
+        uiutil.set_grid_row_visible(gway, enabled)
 
     def change_dhcpv4_enable(self, ignore):
         enabled = self.get_config_dhcpv4_enable()
         start = self.widget("net-dhcpv4-start")
         end = self.widget("net-dhcpv4-end")
-        uihelpers.set_grid_row_visible(start, enabled)
-        uihelpers.set_grid_row_visible(end, enabled)
+        uiutil.set_grid_row_visible(start, enabled)
+        uiutil.set_grid_row_visible(end, enabled)
     def change_dhcpv6_enable(self, ignore):
         enabled = self.get_config_dhcpv6_enable()
         start = self.widget("net-dhcpv6-start")
         end = self.widget("net-dhcpv6-end")
-        uihelpers.set_grid_row_visible(start, enabled)
-        uihelpers.set_grid_row_visible(end, enabled)
+        uiutil.set_grid_row_visible(start, enabled)
+        uiutil.set_grid_row_visible(end, enabled)
 
     def change_dhcpv4_start(self, src):
         start = self.get_config_dhcpv4_start()

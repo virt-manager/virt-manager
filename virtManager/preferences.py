@@ -25,7 +25,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 # pylint: enable=E0611
 
-from virtManager import uihelpers
+from virtManager import uiutil
 from virtManager.baseclass import vmmGObjectUI
 
 
@@ -102,7 +102,7 @@ class vmmPreferences(vmmGObjectUI):
                     [2, _("Always")]]:
             model.append(row)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
 
         combo = self.widget("prefs-graphics-type")
         # [gsettings value, string]
@@ -112,7 +112,7 @@ class vmmPreferences(vmmGObjectUI):
                     ["vnc", "VNC"], ["spice", "Spice"]]:
             model.append(row)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
 
         combo = self.widget("prefs-storage-format")
         # [gsettings value, string]
@@ -123,7 +123,7 @@ class vmmPreferences(vmmGObjectUI):
                     ["qcow2", "QCOW2"]]:
             model.append(row)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
 
         combo = self.widget("prefs-cpu-default")
         # [gsettings value, string]
@@ -135,7 +135,7 @@ class vmmPreferences(vmmGObjectUI):
                     ["host-model", _("Copy host CPU definition")]]:
             model.append(row)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
 
 
     #########################
@@ -156,7 +156,7 @@ class vmmPreferences(vmmGObjectUI):
     def refresh_console_scaling(self):
         combo = self.widget("prefs-console-scaling")
         val = self.config.get_console_scaling()
-        uihelpers.set_row_selection(combo, val)
+        uiutil.set_row_selection(combo, val)
 
     def refresh_new_vm_sound(self):
         self.widget("prefs-new-vm-sound").set_active(
@@ -164,15 +164,15 @@ class vmmPreferences(vmmGObjectUI):
     def refresh_graphics_type(self):
         combo = self.widget("prefs-graphics-type")
         gtype = self.config.get_graphics_type(raw=True)
-        uihelpers.set_row_selection(combo, gtype)
+        uiutil.set_row_selection(combo, gtype)
     def refresh_storage_format(self):
         combo = self.widget("prefs-storage-format")
         val = self.config.get_default_storage_format(raw=True)
-        uihelpers.set_row_selection(combo, val)
+        uiutil.set_row_selection(combo, val)
     def refresh_cpu_default(self):
         combo = self.widget("prefs-cpu-default")
         val = self.config.get_default_cpu_setting(raw=True)
-        uihelpers.set_row_selection(combo, val)
+        uiutil.set_row_selection(combo, val)
 
     def refresh_disk_poll(self):
         self.widget("prefs-stats-enable-disk").set_active(

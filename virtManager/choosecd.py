@@ -18,13 +18,13 @@
 # MA 02110-1301 USA.
 #
 
+import logging
+
 # pylint: disable=E0611
 from gi.repository import GObject
 # pylint: enable=E0611
 
-import logging
-
-import virtManager.uihelpers as uihelpers
+from virtManager import sharedui
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.mediadev import MEDIA_FLOPPY
 from virtManager.storagebrowse import vmmStorageBrowser
@@ -103,7 +103,7 @@ class vmmChooseCD(vmmGObjectUI):
             idx = cd.get_active()
             model = cd.get_model()
             if idx != -1:
-                path = model[idx][uihelpers.OPTICAL_DEV_PATH]
+                path = model[idx][sharedui.OPTICAL_DEV_PATH]
 
         if path == "" or path is None:
             return self.err.val_err(_("Invalid Media Path"),
@@ -123,7 +123,7 @@ class vmmChooseCD(vmmGObjectUI):
             if not res:
                 return False
 
-        uihelpers.check_path_search_for_qemu(self.err, self.conn, path)
+        sharedui.check_path_search_for_qemu(self.err, self.conn, path)
 
         self.emit("cdrom-chosen", self.disk, path)
         self.close()
@@ -149,8 +149,8 @@ class vmmChooseCD(vmmGObjectUI):
         warn = self.widget("cd-path-warn")
 
         error = self.conn.mediadev_error
-        uihelpers.build_mediadev_combo(widget)
-        uihelpers.populate_mediadev_combo(self.conn, widget, self.media_type)
+        sharedui.build_mediadev_combo(widget)
+        sharedui.populate_mediadev_combo(self.conn, widget, self.media_type)
 
         if error:
             warn.show()

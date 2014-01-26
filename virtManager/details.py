@@ -29,7 +29,8 @@ from gi.repository import Gdk
 
 import libvirt
 
-from virtManager import uihelpers
+from virtManager import sharedui
+from virtManager import uiutil
 from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.addhardware import vmmAddHardware
@@ -641,14 +642,14 @@ class vmmDetails(vmmGObjectUI):
 
     def init_menus(self):
         # Virtual Machine menu
-        menu = uihelpers.VMShutdownMenu(self, lambda: self.vm)
+        menu = sharedui.VMShutdownMenu(self, lambda: self.vm)
         self.widget("control-shutdown").set_menu(menu)
         self.widget("control-shutdown").set_icon_name("system-shutdown")
 
         topmenu = self.widget("details-vm-menu")
         submenu = topmenu.get_submenu()
-        newmenu = uihelpers.VMActionMenu(self, lambda: self.vm,
-                                         show_open=False)
+        newmenu = sharedui.VMActionMenu(self, lambda: self.vm,
+                                        show_open=False)
         for child in submenu.get_children():
             submenu.remove(child)
             newmenu.add(child)  # pylint: disable=E1101
@@ -759,7 +760,7 @@ class vmmDetails(vmmGObjectUI):
         machtype_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         show_machine = (arch not in ["i686", "x86_64"])
-        uihelpers.set_grid_row_visible(self.widget("machine-type"),
+        uiutil.set_grid_row_visible(self.widget("machine-type"),
                                        show_machine)
 
         if show_machine:
@@ -936,7 +937,7 @@ class vmmDetails(vmmGObjectUI):
         net_bridge = self.widget("network-bridge-box")
         source_mode_combo = self.widget("network-source-mode")
         vport_expander = self.widget("vport-expander")
-        uihelpers.build_network_list(net_source, net_bridge,
+        sharedui.build_network_list(net_source, net_bridge,
                                     source_mode_combo, vport_expander)
 
         # source mode
@@ -951,7 +952,7 @@ class vmmDetails(vmmGObjectUI):
         gfx_type = self.widget("gfx-type")
         model = Gtk.ListStore(str, str)
         gfx_type.set_model(model)
-        uihelpers.set_combo_text_column(gfx_type, 1)
+        uiutil.set_combo_text_column(gfx_type, 1)
         model.append([virtinst.VirtualGraphics.TYPE_VNC, "VNC"])
         model.append([virtinst.VirtualGraphics.TYPE_SPICE, "Spice"])
         gfx_type.set_active(-1)
@@ -989,7 +990,7 @@ class vmmDetails(vmmGObjectUI):
         combo = self.widget("controller-model")
         model = Gtk.ListStore(str, str)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 1)
+        uiutil.set_combo_text_column(combo, 1)
         combo.set_active(-1)
 
 
@@ -1593,9 +1594,9 @@ class vmmDetails(vmmGObjectUI):
 
     # Memory
     def config_get_maxmem(self):
-        return uihelpers.spin_get_helper(self.widget("config-maxmem"))
+        return uiutil.spin_get_helper(self.widget("config-maxmem"))
     def config_get_memory(self):
-        return uihelpers.spin_get_helper(self.widget("config-memory"))
+        return uiutil.spin_get_helper(self.widget("config-memory"))
 
     def config_maxmem_changed(self, src_ignore):
         self.enable_apply(EDIT_MEM)
@@ -1619,9 +1620,9 @@ class vmmDetails(vmmGObjectUI):
 
     # VCPUS
     def config_get_vcpus(self):
-        return uihelpers.spin_get_helper(self.widget("config-vcpus"))
+        return uiutil.spin_get_helper(self.widget("config-vcpus"))
     def config_get_maxvcpus(self):
-        return uihelpers.spin_get_helper(self.widget("config-maxvcpus"))
+        return uiutil.spin_get_helper(self.widget("config-maxvcpus"))
 
     def config_vcpupin_generate(self, ignore):
         try:
@@ -2140,8 +2141,8 @@ class vmmDetails(vmmGObjectUI):
             mode = None
             net_list = self.widget("network-source")
             net_bridge = self.widget("network-bridge")
-            nettype, source = uihelpers.get_network_selection(net_list,
-                                                              net_bridge)
+            nettype, source = sharedui.get_network_selection(net_list,
+                                                             net_bridge)
             if nettype == "direct":
                 mode = self.get_combo_entry("network-source-mode")
 
@@ -2417,7 +2418,7 @@ class vmmDetails(vmmGObjectUI):
 
     def refresh_inspection_page(self):
         inspection_supported = self.config.support_inspection
-        uihelpers.set_grid_row_visible(self.widget("details-overview-error"),
+        uiutil.set_grid_row_visible(self.widget("details-overview-error"),
                                        self.vm.inspection.error)
         if self.vm.inspection.error:
             msg = _("Error while inspecting the guest configuration")
@@ -2650,7 +2651,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("disk-readonly").set_sensitive(not is_cdrom)
         self.widget("disk-shareable").set_active(share)
         self.widget("disk-removable").set_active(removable)
-        uihelpers.set_grid_row_visible(self.widget("disk-removable"),
+        uiutil.set_grid_row_visible(self.widget("disk-removable"),
                                        can_set_removable)
         self.widget("disk-size").set_text(size)
         self.set_combo_entry("disk-cache", cache)
@@ -2704,10 +2705,10 @@ class vmmDetails(vmmGObjectUI):
             if source and source in name_dict:
                 netobj = name_dict[source]
 
-        desc = uihelpers.pretty_network_desc(nettype, source, netobj)
+        desc = sharedui.pretty_network_desc(nettype, source, netobj)
 
         self.widget("network-mac-address").set_text(net.macaddr)
-        uihelpers.populate_network_list(
+        sharedui.populate_network_list(
                     self.widget("network-source"),
                     self.conn)
         self.widget("network-source").set_active(-1)
@@ -2731,7 +2732,7 @@ class vmmDetails(vmmGObjectUI):
                              comparefunc=compare_network)
 
         is_direct = (nettype == "direct")
-        uihelpers.set_grid_row_visible(self.widget("network-source-mode"),
+        uiutil.set_grid_row_visible(self.widget("network-source-mode"),
                                        is_direct)
         self.widget("vport-expander").set_visible(is_direct)
 
@@ -2793,7 +2794,7 @@ class vmmDetails(vmmGObjectUI):
         table.foreach(lambda w, ignore: w.hide(), ())
 
         def show_row(name):
-            uihelpers.set_grid_row_visible(self.widget(name), True)
+            uiutil.set_grid_row_visible(self.widget(name), True)
 
         def port_to_string(port):
             if port is None:
@@ -2889,7 +2890,7 @@ class vmmDetails(vmmGObjectUI):
             if not val and doshow:
                 val = getattr(tpmdev, param)
 
-            uihelpers.set_grid_row_visible(self.widget(widgetname), doshow)
+            uiutil.set_grid_row_visible(self.widget(widgetname), doshow)
             self.widget(widgetname).set_text(val or "-")
 
         dev_type = tpmdev.type
@@ -2912,7 +2913,7 @@ class vmmDetails(vmmGObjectUI):
                     propername = param.upper() + "_DEFAULT"
                     val = getattr(virtinst.VirtualPanicDevice, propername, "-").upper()
 
-            uihelpers.set_grid_row_visible(self.widget(widgetname), True)
+            uiutil.set_grid_row_visible(self.widget(widgetname), True)
             self.widget(widgetname).set_text(val or "-")
 
         ptyp = virtinst.VirtualPanicDevice.get_pretty_type(dev.type)
@@ -2940,7 +2941,7 @@ class vmmDetails(vmmGObjectUI):
         }
 
         def set_visible(widget, v):
-            uihelpers.set_grid_row_visible(self.widget(widget), v)
+            uiutil.set_grid_row_visible(self.widget(widget), v)
 
         is_egd = dev.type == VirtualRNGDevice.TYPE_EGD
         udp = dev.backend_type == VirtualRNGDevice.BACKEND_TYPE_UDP
@@ -2989,7 +2990,7 @@ class vmmDetails(vmmGObjectUI):
             if not val and doshow:
                 val = getattr(chardev, param)
 
-            uihelpers.set_grid_row_visible(self.widget(widgetname), doshow)
+            uiutil.set_grid_row_visible(self.widget(widgetname), doshow)
             self.widget(widgetname).set_text(val or "-")
 
         def build_host_str(base):
@@ -3103,7 +3104,7 @@ class vmmDetails(vmmGObjectUI):
 
         self.widget("controller-type").set_text(type_label)
         combo = self.widget("controller-model")
-        uihelpers.set_grid_row_visible(combo, True)
+        uiutil.set_grid_row_visible(combo, True)
 
         model = combo.get_model()
         model.clear()

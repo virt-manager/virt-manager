@@ -31,7 +31,8 @@ from gi.repository import Gdk
 import virtinst
 from virtinst import util
 
-from virtManager import uihelpers
+from virtManager import sharedui
+from virtManager import uiutil
 from virtManager.mediadev import MEDIA_CDROM
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
@@ -291,13 +292,13 @@ class vmmCreate(vmmGObjectUI):
 
         # Physical CD-ROM model
         cd_list = self.widget("install-local-cdrom-combo")
-        uihelpers.build_mediadev_combo(cd_list)
+        sharedui.build_mediadev_combo(cd_list)
 
         # Networking
         # [ interface type, device name, label, sensitive ]
         net_list = self.widget("config-netdev")
         bridge_box = self.widget("config-netdev-bridge-box")
-        uihelpers.build_network_list(net_list, bridge_box)
+        sharedui.build_network_list(net_list, bridge_box)
 
         # Archtecture
         # [value, label]
@@ -327,7 +328,7 @@ class vmmCreate(vmmGObjectUI):
 
         # Sparse tooltip
         sparse_info = self.widget("config-storage-nosparse-info")
-        uihelpers.set_sparse_tooltip(sparse_info)
+        sharedui.set_sparse_tooltip(sparse_info)
 
     def reset_state(self, urihint=None):
         self.failed_guest = None
@@ -398,7 +399,7 @@ class vmmCreate(vmmGObjectUI):
         # Storage
         label_widget = self.widget("phys-hd-label")
         label_widget.set_markup("")
-        uihelpers.update_host_space(self.conn, label_widget)
+        sharedui.update_host_space(self.conn, label_widget)
         self.widget("enable-storage").set_active(True)
         self.widget("config-storage-create").set_active(True)
         self.widget("config-storage-size").set_value(8)
@@ -502,7 +503,7 @@ class vmmCreate(vmmGObjectUI):
                     "microblaze" in self.capsguest.arch or
                     "ppc" in self.capsguest.arch)
         self.widget("config-kernel-box").set_visible(show_kernel)
-        uihelpers.set_grid_row_visible(self.widget("config-dtb"), show_dtb)
+        uiutil.set_grid_row_visible(self.widget("config-dtb"), show_dtb)
 
     def set_conn_state(self):
         # Update all state that has some dependency on the current connection
@@ -536,7 +537,7 @@ class vmmCreate(vmmGObjectUI):
         show_arch = (self.widget("config-hv").get_visible() or
                      self.widget("config-arch").get_visible() or
                      self.widget("config-machine").get_visible())
-        uihelpers.set_grid_row_visible(self.widget("arch-expander"), show_arch)
+        uiutil.set_grid_row_visible(self.widget("arch-expander"), show_arch)
 
         if self.conn.is_xen():
             if self.conn.caps.hw_virt_supported():
@@ -565,7 +566,7 @@ class vmmCreate(vmmGObjectUI):
         cdrom_list = self.widget("install-local-cdrom-combo")
         cdrom_warn = self.widget("install-local-cdrom-warn")
 
-        sigs = uihelpers.populate_mediadev_combo(self.conn, cdrom_list,
+        sigs = sharedui.populate_mediadev_combo(self.conn, cdrom_list,
                                                  MEDIA_CDROM)
         self.conn_signals.extend(sigs)
 
@@ -636,7 +637,7 @@ class vmmCreate(vmmGObjectUI):
         net_warn_box.hide()
         net_expander.set_expanded(False)
 
-        do_warn = uihelpers.populate_network_list(net_list, self.conn, False)
+        do_warn = sharedui.populate_network_list(net_list, self.conn, False)
         self.set_net_warn(self.conn.netdev_error or do_warn,
                           self.conn.netdev_error, True)
 
@@ -697,7 +698,7 @@ class vmmCreate(vmmGObjectUI):
             model.append([label, gtype])
 
         show = bool(guests)
-        uihelpers.set_grid_row_visible(hv_list, show)
+        uiutil.set_grid_row_visible(hv_list, show)
         if show:
             hv_list.set_active(default)
 
@@ -740,7 +741,7 @@ class vmmCreate(vmmGObjectUI):
             model.append([arch, pretty_arch(arch)])
 
         show = not (len(archs) < 2)
-        uihelpers.set_grid_row_visible(arch_list, show)
+        uiutil.set_grid_row_visible(arch_list, show)
         arch_list.set_active(default)
 
     def populate_machine(self):
@@ -778,7 +779,7 @@ class vmmCreate(vmmGObjectUI):
             model.append([m])
 
         show = (len(machines) > 1)
-        uihelpers.set_grid_row_visible(lst, show)
+        uiutil.set_grid_row_visible(lst, show)
         if show:
             lst.set_active(default)
         else:
@@ -1051,7 +1052,7 @@ class vmmCreate(vmmGObjectUI):
             idx = cd.get_active()
             model = cd.get_model()
             if idx != -1:
-                return model[idx][uihelpers.OPTICAL_DEV_PATH]
+                return model[idx][sharedui.OPTICAL_DEV_PATH]
             return None
         else:
             ret = self.widget("install-local-box").get_child().get_text()
@@ -1100,7 +1101,7 @@ class vmmCreate(vmmGObjectUI):
             if disks:
                 return disks[0].path
 
-        return uihelpers.get_default_path(self.conn, name)
+        return sharedui.get_default_path(self.conn, name)
 
     def is_default_storage(self):
         usedef = self.widget("config-storage-create").get_active()
@@ -1109,7 +1110,7 @@ class vmmCreate(vmmGObjectUI):
 
     def get_storage_info(self):
         path = None
-        size = uihelpers.spin_get_helper(self.widget("config-storage-size"))
+        size = uiutil.spin_get_helper(self.widget("config-storage-size"))
         sparse = not self.widget("config-storage-nosparse").get_active()
 
         if self.get_config_install_page() == INSTALL_PAGE_IMPORT:
@@ -1130,7 +1131,7 @@ class vmmCreate(vmmGObjectUI):
         bridge_ent = self.widget("config-netdev-bridge")
         macaddr = self.widget("config-macaddr").get_text()
 
-        net_type, net_src = uihelpers.get_network_selection(net_list,
+        net_type, net_src = sharedui.get_network_selection(net_list,
                                                             bridge_ent)
 
         return net_type, net_src, macaddr.strip()
@@ -1167,7 +1168,7 @@ class vmmCreate(vmmGObjectUI):
         machine = self.get_config_machine()
         show_dtb_virtio = (self.capsguest.arch == "armv7l" and
                            machine in ["vexpress-a9", "vexpress-15"])
-        uihelpers.set_grid_row_visible(
+        uiutil.set_grid_row_visible(
             self.widget("config-dtb-warn-virtio"), show_dtb_virtio)
 
     def netdev_changed(self, ignore):
@@ -1734,7 +1735,7 @@ class vmmCreate(vmmGObjectUI):
             path = None
 
         if path:
-            uihelpers.check_path_search_for_qemu(self.err, self.conn, path)
+            sharedui.check_path_search_for_qemu(self.err, self.conn, path)
 
         # Validation passed, store the install path (if there is one) in
         # gconf
@@ -1780,7 +1781,7 @@ class vmmCreate(vmmGObjectUI):
 
         # Make sure default pool is running
         if self.is_default_storage():
-            ret = uihelpers.check_default_pool_active(self.err, self.conn)
+            ret = sharedui.check_default_pool_active(self.err, self.conn)
             if not ret:
                 return False
 
@@ -1791,7 +1792,7 @@ class vmmCreate(vmmGObjectUI):
             if self.is_default_storage():
                 # See if the ideal disk path (/default/pool/vmname.img)
                 # exists, and if unused, prompt the use for using it
-                ideal = uihelpers.get_ideal_path(self.conn,
+                ideal = sharedui.get_ideal_path(self.conn,
                                                  self.guest.name)
                 do_exist = False
                 ret = True
@@ -1846,7 +1847,7 @@ class vmmCreate(vmmGObjectUI):
             if not res:
                 return False
 
-        uihelpers.check_path_search_for_qemu(self.err, self.conn, disk.path)
+        sharedui.check_path_search_for_qemu(self.err, self.conn, disk.path)
 
         self.disk = disk
         self.guest.add_device(self.disk)
@@ -1880,7 +1881,7 @@ class vmmCreate(vmmGObjectUI):
                             _("Network device required for %s install.") %
                             methname)
 
-        nic = uihelpers.validate_network(self.err,
+        nic = sharedui.validate_network(self.err,
                                          self.conn, nettype, devname, macaddr)
         if nic is False:
             return False

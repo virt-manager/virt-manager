@@ -28,7 +28,7 @@ from gi.repository import GLib
 from gi.repository import Gtk
 # pylint: enable=E0611
 
-from virtManager import uihelpers
+from virtManager import uiutil
 
 # pylint: disable=E1101
 # pylint can't detect functions we inheirit from Gtk, ex:
@@ -92,10 +92,10 @@ class OverBox(Gtk.Box):
         actual_min = self._get_actual_min()
 
         if self.overWidget:
-            expand = uihelpers.child_get_property(self, self.overWidget,
+            expand = uiutil.child_get_property(self, self.overWidget,
                                                   "expand")
-            fill = uihelpers.child_get_property(self, self.overWidget, "fill")
-            padding = uihelpers.child_get_property(self, self.overWidget,
+            fill = uiutil.child_get_property(self, self.overWidget, "fill")
+            padding = uiutil.child_get_property(self, self.overWidget,
                                                    "padding")
 
         if expand and fill:
@@ -257,9 +257,9 @@ class OverBox(Gtk.Box):
         self.overWidth = over.width
         self.overHeight = over.height
 
-        expand = uihelpers.child_get_property(self, self.overWidget, "expand")
-        fill = uihelpers.child_get_property(self, self.overWidget, "fill")
-        padding = uihelpers.child_get_property(self, self.overWidget, "padding")
+        expand = uiutil.child_get_property(self, self.overWidget, "expand")
+        fill = uiutil.child_get_property(self, self.overWidget, "fill")
+        padding = uiutil.child_get_property(self, self.overWidget, "padding")
 
         if expand or fill:
             wpad = 0

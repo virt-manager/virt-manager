@@ -26,7 +26,7 @@ from gi.repository import GObject
 
 from virtinst import VirtualFilesystem, StorageVolume
 from virtinst import util
-from virtManager import uihelpers
+from virtManager import uiutil
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.storagebrowse import vmmStorageBrowser
 
@@ -250,21 +250,21 @@ class vmmFSDetails(vmmGObjectUI):
         show_mode = bool(ismount and
             (fsdriver == VirtualFilesystem.DRIVER_PATH or
             fsdriver == VirtualFilesystem.DRIVER_DEFAULT))
-        uihelpers.set_grid_row_visible(self.widget("fs-mode-box"), show_mode)
+        uiutil.set_grid_row_visible(self.widget("fs-mode-box"), show_mode)
 
         show_wrpol = bool(ismount and
             fsdriver and (fsdriver == VirtualFilesystem.DRIVER_PATH or
             fsdriver == VirtualFilesystem.DRIVER_HANDLE))
-        uihelpers.set_grid_row_visible(self.widget("fs-wrpolicy-box"),
+        uiutil.set_grid_row_visible(self.widget("fs-wrpolicy-box"),
                                        show_wrpol)
 
         show_ram_source = fstype == VirtualFilesystem.TYPE_RAM
-        uihelpers.set_grid_row_visible(self.widget("fs-ram-source-box"), show_ram_source)
-        uihelpers.set_grid_row_visible(self.widget("fs-source-box"), not show_ram_source)
+        uiutil.set_grid_row_visible(self.widget("fs-ram-source-box"), show_ram_source)
+        uiutil.set_grid_row_visible(self.widget("fs-source-box"), not show_ram_source)
 
         show_format = bool(
             fsdriver == VirtualFilesystem.DRIVER_NBD)
-        uihelpers.set_grid_row_visible(self.widget("fs-format-box"), show_format)
+        uiutil.set_grid_row_visible(self.widget("fs-format-box"), show_format)
         self.show_pair_combo("fs-format", True)
 
         show_mode_combo = False
@@ -292,7 +292,7 @@ class vmmFSDetails(vmmGObjectUI):
         conn = self.conn.get_backend()
         source = self.widget("fs-source").get_text()
         target = self.widget("fs-target").get_text()
-        usage = uihelpers.spin_get_helper(self.widget("fs-ram-source-spin"))
+        usage = uiutil.spin_get_helper(self.widget("fs-ram-source-spin"))
         mode = self.get_config_fs_mode()
         fstype = self.get_config_fs_type()
         readonly = self.get_config_fs_readonly()

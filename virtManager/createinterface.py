@@ -27,7 +27,7 @@ import logging
 
 from virtinst import Interface, InterfaceProtocol
 
-from virtManager import uihelpers
+from virtManager import uiutil
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 
@@ -181,7 +181,7 @@ class vmmCreateInterface(vmmGObjectUI):
     def build_interface_startmode_combo(combo):
         model = Gtk.ListStore(str)
         combo.set_model(model)
-        uihelpers.set_combo_text_column(combo, 0)
+        uiutil.set_combo_text_column(combo, 0)
 
         model.append(["none"])
         model.append(["onboot"])
@@ -590,7 +590,7 @@ class vmmCreateInterface(vmmGObjectUI):
                 iface = ifaces[0][INTERFACE_ROW_NAME]
 
                 if itype == Interface.INTERFACE_TYPE_VLAN:
-                    tag = uihelpers.spin_get_helper(self.widget("vlan-tag"))
+                    tag = uiutil.spin_get_helper(self.widget("vlan-tag"))
                     name = "%s.%s" % (iface, int(tag))
 
                 elif itype == Interface.INTERFACE_TYPE_ETHERNET:
@@ -1079,7 +1079,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
 
     def validate_vlan(self, iobj, ifaces):
-        idx = uihelpers.spin_get_helper(self.widget("vlan-tag"))
+        idx = uiutil.spin_get_helper(self.widget("vlan-tag"))
 
         iobj.tag = int(idx)
         return True

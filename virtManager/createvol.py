@@ -26,7 +26,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 # pylint: enable=E0611
 
-from virtManager import uihelpers
+from virtManager import uiutil
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 
@@ -147,7 +147,7 @@ class vmmCreateVolume(vmmGObjectUI):
     def _show_alloc(self, *args, **kwargs):
         ignore = args
         ignore = kwargs
-        uihelpers.set_grid_row_visible(
+        uiutil.set_grid_row_visible(
             self.widget("vol-allocation"), self._can_alloc())
 
     def _can_backing(self):
@@ -157,7 +157,7 @@ class vmmCreateVolume(vmmGObjectUI):
             return True
         return False
     def _show_backing(self):
-        uihelpers.set_grid_row_visible(
+        uiutil.set_grid_row_visible(
             self.widget("backing-expander"), self._can_backing())
 
     def reset_state(self):
@@ -169,7 +169,7 @@ class vmmCreateVolume(vmmGObjectUI):
 
         self.populate_vol_format()
         hasformat = bool(len(self.vol.list_formats()))
-        uihelpers.set_grid_row_visible(self.widget("vol-format"), hasformat)
+        uiutil.set_grid_row_visible(self.widget("vol-format"), hasformat)
         if hasformat:
             # Select the default storage format
             self.widget("vol-format").set_active(0)

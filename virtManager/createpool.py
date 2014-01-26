@@ -27,7 +27,7 @@ import logging
 
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
-from virtManager import uihelpers
+from virtManager import uiutil
 
 from virtinst import StoragePool
 
@@ -255,7 +255,7 @@ class vmmCreatePool(vmmGObjectUI):
     def show_options_by_pool(self):
         def show_row(base, do_show):
             widget = self.widget(base + "-label")
-            uihelpers.set_grid_row_visible(widget, do_show)
+            uiutil.set_grid_row_visible(widget, do_show)
 
         src = self._pool.supports_property("source_path")
         src_b = src and not self.conn.is_remote()

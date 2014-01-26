@@ -30,7 +30,7 @@ from virtinst import VirtualDisk
 from virtinst import StoragePool
 from virtinst import Interface
 
-from virtManager import uihelpers
+from virtManager import uiutil
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.connection import vmmConnection
 from virtManager.createnet import vmmCreateNetwork
@@ -582,7 +582,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-ipv4-dhcp-range").set_text(dhcpstr)
         self.widget("net-ipv4-network").set_text(netstr)
 
-        uihelpers.set_grid_row_visible(
+        uiutil.set_grid_row_visible(
             self.widget("net-ipv4-route"), bool(routevia))
         if routevia:
             routevia = routeaddr + ", gateway=" + routevia
@@ -613,7 +613,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-ipv6-dhcp-range").set_text(dhcpstr)
         self.widget("net-ipv6-network").set_text(netstr or "")
 
-        uihelpers.set_grid_row_visible(
+        uiutil.set_grid_row_visible(
             self.widget("net-ipv6-route"), bool(routevia))
         if routevia:
             routevia = routeaddr + ", gateway=" + routevia
@@ -627,7 +627,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("net-name").set_editable(not active)
         self.widget("net-device").set_text(net.get_bridge_device() or "")
         self.widget("net-name-domain").set_text(net.get_name_domain() or "")
-        uihelpers.set_grid_row_visible(self.widget("net-name-domain"),
+        uiutil.set_grid_row_visible(self.widget("net-name-domain"),
                                        bool(net.get_name_domain()))
 
         state = active and _("Active") or _("Inactive")
@@ -690,7 +690,7 @@ class vmmHost(vmmGObjectUI):
                           Gtk.IconSize.LARGE_TOOLBAR,
                           bool(net.is_active())])
 
-        uihelpers.set_row_selection(net_list,
+        uiutil.set_row_selection(net_list,
                                     curnet and curnet.get_uuid() or None)
 
 
@@ -1240,7 +1240,7 @@ class vmmHost(vmmGObjectUI):
                           Gtk.IconSize.LARGE_TOOLBAR,
                           bool(iface.is_active())])
 
-        uihelpers.set_row_selection(iface_list,
+        uiutil.set_row_selection(iface_list,
                            curiface and curiface.get_name() or None)
 
     def populate_interface_children(self):
@@ -1303,7 +1303,7 @@ def populate_storage_pools(pool_list, conn, curpool):
         model.append([uuid, label, pool.is_active(), per])
 
     pool_list.set_model(model)
-    uihelpers.set_row_selection(pool_list,
+    uiutil.set_row_selection(pool_list,
                                 curpool and curpool.get_uuid() or None)
 
 
