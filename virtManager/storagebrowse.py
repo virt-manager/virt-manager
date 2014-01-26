@@ -308,9 +308,8 @@ class vmmStorageBrowser(vmmGObjectUI):
         if not self.local_args.get("dialog_name"):
             self.local_args["dialog_name"] = None
 
-        filename = uihelpers.browse_local(parent=self.topwin,
-                                          conn=self.conn,
-                                          **self.local_args)
+        filename = self.err.browse_local(
+            self.conn, **self.local_args)
         if filename:
             self._do_finish(path=filename)
 

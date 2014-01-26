@@ -33,7 +33,6 @@ import libvirt
 from virtinst import util
 
 from virtManager import packageutils
-from virtManager import uihelpers
 from virtManager.about import vmmAbout
 from virtManager.baseclass import vmmGObject
 from virtManager.clone import vmmCloneVM
@@ -908,11 +907,10 @@ class vmmEngine(vmmGObject):
 
         path = None
         if not managed:
-            path = uihelpers.browse_local(src.topwin,
-                                     _("Save Virtual Machine"),
-                                     conn,
-                                     dialog_type=Gtk.FileChooserAction.SAVE,
-                                     browse_reason=self.config.CONFIG_DIR_SAVE)
+            path = src.err.browse_local(
+                conn, _("Save Virtual Machine"),
+                dialog_type=Gtk.FileChooserAction.SAVE,
+                browse_reason=self.config.CONFIG_DIR_SAVE)
             if not path:
                 return
 
@@ -956,10 +954,9 @@ class vmmEngine(vmmGObject):
                               "connections is not yet supported"))
             return
 
-        path = uihelpers.browse_local(src.topwin,
-                                 _("Restore Virtual Machine"),
-                                 conn,
-                                 browse_reason=self.config.CONFIG_DIR_RESTORE)
+        path = src.err.browse_local(
+            conn, _("Restore Virtual Machine"),
+            browse_reason=self.config.CONFIG_DIR_RESTORE)
 
         if not path:
             return

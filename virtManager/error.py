@@ -203,6 +203,91 @@ class vmmErrorDialog(vmmGObject):
 
         return response
 
+    def browse_local(self, conn, dialog_name, start_folder=None,
+                     _type=None, dialog_type=None,
+                     confirm_func=None, browse_reason=None,
+                     choose_button=None, default_name=None):
+        """
+        Helper function for launching a filechooser
+
+        @dialog_name: String to use in the title bar of the filechooser.
+        @conn: vmmConnection used by calling class
+        @start_folder: Folder the filechooser is viewing at startup
+        @_type: File extension to filter by (e.g. "iso", "png")
+        @dialog_type: Maps to FileChooserDialog 'action'
+        @confirm_func: Optional callback function if file is chosen.
+        @browse_reason: The vmmConfig.CONFIG_DIR* reason we are browsing.
+            If set, this will override the 'folder' parameter with the gconf
+            value, and store the user chosen path.
+        """
+        import os
+
+        # Initial setup
+        overwrite_confirm = False
+
+        if dialog_type is None:
+            dialog_type = Gtk.FileChooserAction.OPEN
+        if dialog_type == Gtk.FileChooserAction.SAVE:
+            if choose_button is None:
+                choose_button = Gtk.STOCK_SAVE
+                overwrite_confirm = True
+
+        if choose_button is None:
+            choose_button = Gtk.STOCK_OPEN
+
+        fcdialog = Gtk.FileChooserDialog(title=dialog_name,
+                                    parent=self._parent,
+                                    action=dialog_type,
+                                    buttons=(Gtk.STOCK_CANCEL,
+                                             Gtk.ResponseType.CANCEL,
+                                             choose_button,
+                                             Gtk.ResponseType.ACCEPT))
+        fcdialog.set_default_response(Gtk.ResponseType.ACCEPT)
+
+        if default_name:
+            fcdialog.set_current_name(default_name)
+
+        # If confirm is set, warn about a file overwrite
+        if confirm_func:
+            overwrite_confirm = True
+            fcdialog.connect("confirm-overwrite", confirm_func)
+        fcdialog.set_do_overwrite_confirmation(overwrite_confirm)
+
+        # Set file match pattern (ex. *.png)
+        if _type is not None:
+            pattern = _type
+            name = None
+            if type(_type) is tuple:
+                pattern = _type[0]
+                name = _type[1]
+
+            f = Gtk.FileFilter()
+            f.add_pattern("*." + pattern)
+            if name:
+                f.set_name(name)
+            fcdialog.set_filter(f)
+
+        # Set initial dialog folder
+        if browse_reason:
+            start_folder = self.config.get_default_directory(
+                conn, browse_reason)
+
+        if start_folder is not None:
+            if os.access(start_folder, os.R_OK):
+                fcdialog.set_current_folder(start_folder)
+
+        # Run the dialog and parse the response
+        ret = None
+        if fcdialog.run() == Gtk.ResponseType.ACCEPT:
+            ret = fcdialog.get_filename()
+        fcdialog.destroy()
+
+        # Store the chosen directory in gconf if necessary
+        if ret and browse_reason and not ret.startswith("/dev"):
+            self.config.set_default_directory(
+                os.path.dirname(ret), browse_reason)
+        return ret
+
 
 class _errorDialog (Gtk.MessageDialog):
     """

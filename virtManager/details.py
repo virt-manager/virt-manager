@@ -1494,14 +1494,12 @@ class vmmDetails(vmmGObjectUI):
         now = str(datetime.datetime.now()).split(".")[0].replace(" ", "_")
         default = "Screenshot_%s_%s.png" % (self.vm.get_name(), now)
 
-        path = uihelpers.browse_local(
-                        self.topwin,
-                        _("Save Virtual Machine Screenshot"),
-                        self.vm.conn,
-                        _type=("png", "PNG files"),
-                        dialog_type=Gtk.FileChooserAction.SAVE,
-                        browse_reason=self.config.CONFIG_DIR_SCREENSHOT,
-                        default_name=default)
+        path = self.err.browse_local(
+            self.vm.conn, _("Save Virtual Machine Screenshot"),
+            _type=("png", "PNG files"),
+            dialog_type=Gtk.FileChooserAction.SAVE,
+            browse_reason=self.config.CONFIG_DIR_SCREENSHOT,
+            default_name=default)
         if not path:
             logging.debug("No screenshot path given, skipping save.")
             return

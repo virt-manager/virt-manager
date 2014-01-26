@@ -536,6 +536,5 @@ class vmmCreatePool(vmmGObjectUI):
         if foldermode:
             mode = Gtk.FileChooserAction.SELECT_FOLDER
 
-        return uihelpers.browse_local(self.topwin, dialog_name, self.conn,
-                                      dialog_type=mode,
-                                      start_folder=startfolder)
+        return self.err.browse_local(self.conn, dialog_name,
+            dialog_type=mode, start_folder=startfolder)
