@@ -107,6 +107,7 @@ EDIT_FS,
 
 # Types for the hw list model: numbers specify what order they will be listed
 (HW_LIST_TYPE_GENERAL,
+ HW_LIST_TYPE_INSPECTION,
  HW_LIST_TYPE_STATS,
  HW_LIST_TYPE_CPU,
  HW_LIST_TYPE_MEMORY,
@@ -126,7 +127,7 @@ EDIT_FS,
  HW_LIST_TYPE_REDIRDEV,
  HW_LIST_TYPE_TPM,
  HW_LIST_TYPE_RNG,
- HW_LIST_TYPE_PANIC) = range(21)
+ HW_LIST_TYPE_PANIC) = range(22)
 
 remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                 HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
@@ -745,34 +746,6 @@ class vmmDetails(vmmGObjectUI):
         buf.connect("changed", self.enable_apply, EDIT_DESC)
         desc.set_buffer(buf)
 
-        # List of applications.
-        apps_list = self.widget("inspection-apps")
-        apps_model = Gtk.ListStore(str, str, str)
-        apps_list.set_model(apps_model)
-
-        name_col = Gtk.TreeViewColumn(_("Name"))
-        version_col = Gtk.TreeViewColumn(_("Version"))
-        summary_col = Gtk.TreeViewColumn()
-
-        apps_list.append_column(name_col)
-        apps_list.append_column(version_col)
-        apps_list.append_column(summary_col)
-
-        name_text = Gtk.CellRendererText()
-        name_col.pack_start(name_text, True)
-        name_col.add_attribute(name_text, 'text', 0)
-        name_col.set_sort_column_id(0)
-
-        version_text = Gtk.CellRendererText()
-        version_col.pack_start(version_text, True)
-        version_col.add_attribute(version_text, 'text', 1)
-        version_col.set_sort_column_id(1)
-
-        summary_text = Gtk.CellRendererText()
-        summary_col.pack_start(summary_text, True)
-        summary_col.add_attribute(summary_text, 'text', 2)
-        summary_col.set_sort_column_id(2)
-
         arch = self.vm.get_arch()
         caps = self.vm.conn.caps
 
@@ -807,6 +780,35 @@ class vmmDetails(vmmGObjectUI):
                 if machine == "none":
                     continue
                 machtype_model.append([machine])
+
+        # Inspection page
+        apps_list = self.widget("inspection-apps")
+        apps_model = Gtk.ListStore(str, str, str)
+        apps_list.set_model(apps_model)
+
+        name_col = Gtk.TreeViewColumn(_("Name"))
+        version_col = Gtk.TreeViewColumn(_("Version"))
+        summary_col = Gtk.TreeViewColumn()
+
+        apps_list.append_column(name_col)
+        apps_list.append_column(version_col)
+        apps_list.append_column(summary_col)
+
+        name_text = Gtk.CellRendererText()
+        name_col.pack_start(name_text, True)
+        name_col.add_attribute(name_text, 'text', 0)
+        name_col.set_sort_column_id(0)
+
+        version_text = Gtk.CellRendererText()
+        version_col.pack_start(version_text, True)
+        version_col.add_attribute(version_text, 'text', 1)
+        version_col.set_sort_column_id(1)
+
+        summary_text = Gtk.CellRendererText()
+        summary_col.pack_start(summary_text, True)
+        summary_col.add_attribute(summary_text, 'text', 2)
+        summary_col.set_sort_column_id(2)
+
 
         # VCPU Pinning list
         generate_cpuset = self.widget("config-vcpupin-generate")
@@ -1172,6 +1174,8 @@ class vmmDetails(vmmGObjectUI):
         try:
             if pagetype == HW_LIST_TYPE_GENERAL:
                 self.refresh_overview_page()
+            elif pagetype == HW_LIST_TYPE_INSPECTION:
+                self.refresh_inspection_page()
             elif pagetype == HW_LIST_TYPE_STATS:
                 self.refresh_stats_page()
             elif pagetype == HW_LIST_TYPE_CPU:
@@ -2474,6 +2478,13 @@ class vmmDetails(vmmGObjectUI):
         self.widget("overview-arch").set_text(arch)
         self.widget("overview-emulator").set_text(emu)
 
+        # Machine settings
+        machtype = self.vm.get_machtype()
+        if not arch in ["i686", "x86_64"]:
+            if machtype is not None:
+                self.set_combo_entry("machine-type", machtype)
+
+    def refresh_inspection_page(self):
         inspection_supported = self.config.support_inspection
         uihelpers.set_grid_row_visible(self.widget("details-overview-error"),
                                        self.vm.inspection.error)
@@ -2516,13 +2527,6 @@ class vmmDetails(vmmGObjectUI):
                     summary = app["app_summary"]
 
                 apps_model.append([name, version, summary])
-
-        # Machine settings
-        machtype = self.vm.get_machtype()
-        if not arch in ["i686", "x86_64"]:
-            if machtype is not None:
-                self.set_combo_entry("machine-type", machtype)
-
 
     def refresh_stats_page(self):
         def _dsk_rx_tx_text(rx, tx, unit):
@@ -3349,8 +3353,11 @@ class vmmDetails(vmmGObjectUI):
                                   Gtk.IconSize.LARGE_TOOLBAR,
                                   page_id, title])
 
-        add_hw_list_option("Overview", HW_LIST_TYPE_GENERAL, "computer")
+        add_hw_list_option(_("Overview"), HW_LIST_TYPE_GENERAL, "computer")
         if not self.is_customize_dialog:
+            if self.config.support_inspection:
+                add_hw_list_option(_("OS information"),
+                    HW_LIST_TYPE_INSPECTION, "computer")
             add_hw_list_option("Performance", HW_LIST_TYPE_STATS,
                                "utilities-system-monitor")
         add_hw_list_option("Processor", HW_LIST_TYPE_CPU, "device_cpu")
