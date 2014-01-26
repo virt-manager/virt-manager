@@ -827,6 +827,8 @@ c.add_invalid("--remove-device --clock utc")  # --remove-device without a dev
 c.add_compare("--add-device --host-device net_00_1c_25_10_b1_e4", "virtxml-add-host-device")
 c.add_compare("--add-device --soundhw pcspk", "virtxml-add-sound")
 c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "virtxml-add-disk-basic")
+c.add_compare("--add-device --disk %(EXISTIMG1)s", "virtxml-add-disk-notarget")  # filling in acceptable target
+c.add_compare("--add-device --disk %(NEWIMG1)s,size=.01", "virtxml-add-disk-create-storage")
 c.add_compare("--remove-device --soundhw ich6", "virtxml-remove-sound-model")
 c.add_compare("--remove-device --disk 6", "virtxml-remove-disk-index")
 c.add_compare("--remove-device --disk /dev/null", "virtxml-remove-disk-path")

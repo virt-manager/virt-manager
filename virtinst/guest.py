@@ -793,7 +793,7 @@ class Guest(XMLBuilder):
                 set_disk_bus(disk)
 
             # Generate disk targets
-            if disk.target:
+            if disk.target and not getattr(disk, "cli_set_target", False):
                 used_targets.append(disk.target)
             else:
                 used_targets.append(disk.generate_target(used_targets))

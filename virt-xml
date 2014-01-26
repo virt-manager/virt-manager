@@ -1,6 +1,6 @@
 #!/usr/bin/python -tt
 #
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2013-2014 Red Hat, Inc.
 # Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,7 @@ import os
 import sys
 
 import libvirt
+import urlgrabber.progress as progress
 
 import virtinst
 from virtinst import cli
@@ -232,11 +233,30 @@ def action_build_xml(conn, options, parsermap, parserobj):
     return ret
 
 
-def define_changes(conn, inactive_xmlobj, confirm):
+def setup_device(dev):
+    if getattr(dev, "virtual_device_type", None) != "disk":
+        return
+    if getattr(dev, "virt_xml_setup", None) is True:
+        return
+
+    logging.debug("Doing setup for disk=%s", dev)
+    meter = (cli.quiet and
+             progress.BaseMeter() or
+             progress.TextMeter(fo=sys.stdout))
+
+    dev.setup(meter)
+    dev.virt_xml_setup = True
+
+
+def define_changes(conn, inactive_xmlobj, devs, action, confirm):
     if confirm:
         if not prompt_yes_or_no(
             _("Define '%s' with the changed XML?" % inactive_xmlobj.name)):
             return
+
+    if action == "hotplug":
+        for dev in devs:
+            setup_device(dev)
 
     conn.defineXML(inactive_xmlobj.get_xml_config())
     print_stdout(_("Domain '%s' defined successfully." % inactive_xmlobj.name))
@@ -251,6 +271,9 @@ def update_changes(domain, devs, action, confirm):
                    (xml, action, domain.name()))
             if not prompt_yes_or_no(msg):
                 continue
+
+        if action == "hotplug":
+            setup_device(dev)
 
         try:
             if action == "hotplug":
@@ -422,7 +445,7 @@ def main(conn=None):
     if options.update and active_xmlobj:
         update_changes(domain, devs, action, options.confirm)
     if options.define:
-        define_changes(conn, inactive_xmlobj, options.confirm)
+        define_changes(conn, inactive_xmlobj, devs, action, options.confirm)
         if not options.update and active_xmlobj:
             print_stdout(
                 _("Changes will take effect after the next domain shutdown."))

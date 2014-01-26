@@ -824,7 +824,7 @@ class VirtualDisk(VirtualDevice):
         return ret
 
 
-    def get_target_prefix(self):
+    def get_target_prefix(self, used_targets=None):
         """
         Returns the suggested disk target prefix (hd, xvd, sd ...) for the
         disk.
@@ -832,17 +832,35 @@ class VirtualDisk(VirtualDevice):
         """
         # The upper limits here aren't necessarilly 1024, but let the HV
         # error as appropriate.
-        if self.bus == "virtio":
-            return ("vd", 1024)
-        elif self.bus == "xen":
-            return ("xvd", 1024)
-        elif self.bus == "fdc" or self.is_floppy():
-            return ("fd", 2)
-        elif self.bus == "ide":
-            return ("hd", 4)
+        def _return(prefix):
+            nummap = {
+                "vd": 1024,
+                "xvd": 1024,
+                "fd": 2,
+                "hd": 4,
+                "sd": 1024,
+            }
+            return prefix, nummap[prefix]
 
-        # sata, scsi, usb, sd
-        return ("sd", 1024)
+        if self.bus == "virtio":
+            return _return("vd")
+        elif self.bus == "xen":
+            return _return("xvd")
+        elif self.bus == "fdc" or self.is_floppy():
+            return _return("fd")
+        elif self.bus == "ide":
+            return _return("hd")
+        elif self.bus or not used_targets:
+            # sata, scsi, usb, sd
+            return _return("sd")
+
+        # If guest already has some disks defined
+        preforder = ["vd", "xvd", "sd", "hd"]
+        for pref in preforder:
+            for target in used_targets:
+                if target.startswith(pref):
+                    return _return(pref)
+        return _return("sd")
 
     def generate_target(self, skip_targets):
         """
@@ -856,7 +874,7 @@ class VirtualDisk(VirtualDevice):
         @returns generated target
         @rtype C{str}
         """
-        prefix, maxnode = self.get_target_prefix()
+        prefix, maxnode = self.get_target_prefix(skip_targets)
         skip_targets = [t for t in skip_targets if t and t.startswith(prefix)]
         skip_targets.sort()
 

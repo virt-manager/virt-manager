@@ -1743,8 +1743,13 @@ class ParserDisk(VirtCLIParser):
             "vol_install": volinst, "backing_store": backing_store}
         if any(create_kwargs.values()):
             inst.set_create_storage(**create_kwargs)
-
         inst.cli_size = size
+
+        if not inst.target:
+            skip_targets = [d.target for d in self.guest.get_devices("disk")]
+            inst.generate_target(skip_targets)
+            inst.cli_set_target = True
+
         return inst
 
 

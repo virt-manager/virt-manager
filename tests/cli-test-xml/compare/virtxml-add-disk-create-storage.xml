@@ -1,0 +1,16 @@
+--- Original XML
++++ Altered XML
+@@ -301,5 +301,9 @@
+         <protocol type="raw"/>
+       </backend>
+     </rng>
++    <disk type="file" device="disk">
++      <source file="/tmp/__virtinst_cli_new1.img"/>
++      <target dev="vdd"/>
++    </disk>
+   </devices>
+ </domain>
+
+Creating storage file __virtinst_cli_new1.img            |  10 MB     00:00     
+Domain 'test-many-devices' defined successfully.
+Changes will take effect after the next domain shutdown.
