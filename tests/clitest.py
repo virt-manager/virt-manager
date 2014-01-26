@@ -766,9 +766,12 @@ c.add_invalid("test-many-devices --edit 5 --tpm /dev/tpm")  # device edit out of
 c.add_invalid("test-many-devices --add-device --host-device 0x0781:0x5151 --update")  # test driver doesn't support attachdevice...
 c.add_invalid("test-many-devices --remove-device --host-device 1 --update")  # test driver doesn't support detachdevice...
 c.add_invalid("test-many-devices --edit --graphics password=foo --update")  # test driver doesn't support updatdevice...
+c.add_invalid("--build-xml --memory 10,maxmemory=20")  # building XML for option that doesn't support it
 c.add_compare("test --print-xml --edit --vcpus 7", "virtxml-print-xml")  # test --print-xml
 c.add_compare("test --print-xml --edit --vcpus 7", "virtxml-print-xml")  # test --print-xml
 c.add_compare("--edit --cpu host-passthrough", "virtxml-stdin-edit", input_file=(xmldir + "/virtxml-stdin-edit.xml"))  # stdin test
+c.add_compare("--build-xml --cpu pentium3,+x2apic", "virtxml-build-cpu")
+c.add_compare("--build-xml --tpm /dev/tpm", "virtxml-build-tpm")
 
 
 c = vixml.add_category("simple edit diff", "test-many-devices --edit --print-diff --define")

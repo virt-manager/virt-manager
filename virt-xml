@@ -147,7 +147,7 @@ def _find_devices_to_edit(guest, action_name, editval, parserobj):
 
 
 def check_action_collision(options):
-    actions = ["edit", "add-device", "remove-device"]
+    actions = ["edit", "add-device", "remove-device", "build-xml"]
 
     collisions = []
     for cliname in actions:
@@ -214,6 +214,24 @@ def action_remove_device(guest, options, parsermap, parserobj):
     return devs
 
 
+def action_build_xml(conn, options, parsermap, parserobj):
+    guest = virtinst.Guest(conn)
+    ret_inst = None
+    inst = None
+
+    if parserobj.devclass:
+        inst = parserobj.devclass(conn)
+    elif parserobj.clear_attr:
+        ret_inst = getattr(guest, parserobj.clear_attr)
+    else:
+        fail(_("--build-xml not supported for --%s") % parserobj.cli_arg_name)
+
+    ret = cli.parse_option_strings(parsermap, options, guest, inst)
+    if ret_inst:
+        return ret_inst
+    return ret
+
+
 def define_changes(conn, inactive_xmlobj, confirm):
     if confirm:
         if not prompt_yes_or_no(
@@ -252,9 +270,6 @@ def update_changes(domain, devs, action, confirm):
 #######################
 
 def parse_args():
-    # XXX: man page: mention introspection if it makes sense
-    # XXX: expand usage
-    # XXX: notes about the default actions, behavior, etc
     parser = cli.setupParser(
         "%(prog)s [options]",
         _("Edit libvirt XML using command line options."),
@@ -280,6 +295,8 @@ def parse_args():
     actg.add_argument("--add-device", action="store_true",
         help=_("Add specified device. Example:\n"
         "--add-device --disk ..."))
+    actg.add_argument("--build-xml", action="store_true",
+        help=_("Just output the built device XML, no domain required."))
     actg.add_argument("--update", action="store_true",
         help=_("Apply changes to the running VM.\n"
                "With --add-device, this is a hotplug operation.\n"
@@ -321,7 +338,8 @@ def main(conn=None):
     cli.earlyLogging()
     options = parse_args()
 
-    if options.confirm or options.print_xml or options.print_diff:
+    if (options.confirm or options.print_xml or
+        options.print_diff or options.build_xml):
         options.quiet = False
     cli.setupLogging("virt-xml", options.debug, options.quiet)
 
@@ -330,16 +348,15 @@ def main(conn=None):
         return 0
 
     options.stdinxml = None
-    if (not options.domain and
-        not sys.stdin.closed and
-        not sys.stdin.isatty()):
-        if options.confirm:
-            fail(_("Can't use --confirm with stdin input."))
-        if options.update:
-            fail(_("Can't use --update with stdin input."))
-        options.stdinxml = sys.stdin.read()
-    elif not options.domain:
-        fail("domain must be specified")
+    if not options.domain and not options.build_xml:
+        if not sys.stdin.closed and not sys.stdin.isatty():
+            if options.confirm:
+                fail(_("Can't use --confirm with stdin input."))
+            if options.update:
+                fail(_("Can't use --update with stdin input."))
+            options.stdinxml = sys.stdin.read()
+        else:
+            fail(_("A domain must be specified"))
 
     if not options.print_xml and not options.print_diff:
         if options.stdinxml:
@@ -353,15 +370,18 @@ def main(conn=None):
     if conn is None:
         conn = cli.getConnection(options.connect)
 
+    domain = None
+    active_xmlobj = None
+    inactive_xmlobj = None
     if options.domain:
         domain, inactive_xmlobj, active_xmlobj = get_domain_and_guest(
             conn, options.domain)
-    else:
-        domain = None
-        active_xmlobj = None
+    elif not options.build_xml:
         inactive_xmlobj = _make_guest(conn, options.stdinxml)
 
-    origxml = inactive_xmlobj.get_xml_config()
+    origxml = None
+    if inactive_xmlobj:
+        origxml = inactive_xmlobj.get_xml_config()
 
     check_action_collision(options)
     parserobj = check_xmlopt_collision(options, parsermap)
@@ -383,6 +403,12 @@ def main(conn=None):
         devs = action_remove_device(inactive_xmlobj, options,
                                     parsermap, parserobj)
         action = "hotunplug"
+
+    elif options.build_xml:
+        devs = action_build_xml(conn, options, parsermap, parserobj)
+        for dev in util.listify(devs):
+            print_stdout(dev.get_xml_config())
+        return 0
 
     newxml = inactive_xmlobj.get_xml_config()
     diff = get_diff(origxml, newxml)
