@@ -786,16 +786,19 @@ def add_memory_option(grp, backcompat=False):
             help=argparse.SUPPRESS)
 
 
-def vcpu_cli_options(grp, backcompat=True):
+def vcpu_cli_options(grp, backcompat=True, editexample=False):
     grp.add_argument("--vcpus",
         help=_("Number of vcpus to configure for your guest. Ex:\n"
                "--vcpus 5\n"
                "--vcpus 5,maxcpus=10,cpuset=1-4,6,8\n"
                "--vcpus sockets=2,cores=4,threads=2,"))
+
+    extramsg = "--cpu host"
+    if editexample:
+        extramsg = "--cpu host-model,clearxml=yes"
     grp.add_argument("--cpu",
         help=_("CPU model and features. Ex:\n"
-               "--cpu coreduo,+x2apic\n"
-               "--cpu host"))
+               "--cpu coreduo,+x2apic\n") + extramsg)
 
     if backcompat:
         grp.add_argument("--check-cpu", action="store_true",
@@ -968,7 +971,7 @@ class _VirtCLIArgument(object):
     def __init__(self, attrname, cliname,
                  setter_cb=None, ignore_default=False,
                  can_comma=False, aliases=None,
-                 is_list=False, is_onoff=False, is_bool=False):
+                 is_list=False, is_onoff=False):
         """
         A single subargument passed to compound command lines like --disk,
         --network, etc.
@@ -992,8 +995,6 @@ class _VirtCLIArgument(object):
             are appended.
         @is_onoff: The value expected on the cli is on/off or yes/no, convert
             it to true/false.
-        @is_bool: This value shouldn't have an = component, so if it's present
-            on the command line, assume value is True
         """
         self.attrname = attrname
         self.cliname = cliname
@@ -1004,7 +1005,6 @@ class _VirtCLIArgument(object):
         self.aliases = util.listify(aliases)
         self.is_list = is_list
         self.is_onoff = is_onoff
-        self.is_bool = is_bool
 
 
     def parse(self, opts, inst, support_cb=None, lookup=False):
@@ -1012,7 +1012,7 @@ class _VirtCLIArgument(object):
         for cliname in self.aliases + [self.cliname]:
             # We iterate over all values unconditionally, so they are
             # removed from opts
-            foundval = opts.get_opt_param(cliname, is_bool=self.is_bool)
+            foundval = opts.get_opt_param(cliname)
             if foundval is not None:
                 val = foundval
         if val is None:
@@ -1069,9 +1069,7 @@ class VirtOptionString(object):
         self.opts, self.orderedopts = self._parse_optstr(
             virtargmap, remove_first)
 
-    def get_opt_param(self, key, is_bool=False):
-        if is_bool and key in self.opts and self.opts[key] is None:
-            self.opts[key] = True
+    def get_opt_param(self, key):
         return self.opts.pop(key, None)
 
     def check_leftover_opts(self):
@@ -1107,8 +1105,6 @@ class VirtOptionString(object):
             val = None
             if opt.count("="):
                 cliname, val = opt.split("=", 1)
-                remove_first = []
-            elif cliname in virtargmap and virtargmap[cliname].is_bool:
                 remove_first = []
             elif remove_first:
                 val = cliname
@@ -1219,7 +1215,7 @@ class VirtCLIParser(object):
             clearobj.clear()
 
         self.set_param(None, "clearxml",
-                       setter_cb=set_clearxml_cb, is_bool=True)
+                       setter_cb=set_clearxml_cb, is_onoff=True)
 
     def check_introspection(self, option):
         for optstr in util.listify(option):

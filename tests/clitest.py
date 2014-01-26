@@ -816,10 +816,10 @@ c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "virtxml-e
 c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "virtxml-edit-select-network-mac")
 
 c = vixml.add_category("edit clear", "test-many-devices --print-diff --define")
-c.add_invalid("--edit --memory 200,clearxml")  # clear isn't wired up for memory
-c.add_compare("--edit --cpu host-passthrough,clearxml", "virtxml-edit-clear-cpu")
-c.add_compare("--edit --clock offset=utc,clearxml", "virtxml-edit-clear-clock")
-c.add_compare("--edit --disk /foo/bar,target=fda,bus=fdc,device=floppy,clearxml", "virtxml-edit-clear-disk")
+c.add_invalid("--edit --memory 200,clearxml=yes")  # clear isn't wired up for memory
+c.add_compare("--edit --cpu host-passthrough,clearxml=yes", "virtxml-edit-clear-cpu")
+c.add_compare("--edit --clock offset=utc,clearxml=yes", "virtxml-edit-clear-clock")
+c.add_compare("--edit --disk /foo/bar,target=fda,bus=fdc,device=floppy,clearxml=yes", "virtxml-edit-clear-disk")
 
 c = vixml.add_category("add/rm devices", "test-many-devices --print-diff --define")
 c.add_invalid("--add-device --security foo")  # --add-device without a device
