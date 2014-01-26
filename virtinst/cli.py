@@ -1070,7 +1070,12 @@ class VirtOptionString(object):
             virtargmap, remove_first)
 
     def get_opt_param(self, key):
-        return self.opts.pop(key, None)
+        if key not in self.opts:
+            return None
+        ret = self.opts.pop(key)
+        if ret is None:
+            raise RuntimeError("Option '%s' had no value set." % key)
+        return ret
 
     def check_leftover_opts(self):
         if not self.opts:
