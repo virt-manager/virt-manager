@@ -953,13 +953,16 @@ def add_boot_option(insg):
                            "--boot init=/sbin/init (for containers)"))
 
 
-def add_disk_option(stog):
+def add_disk_option(stog, editexample=False):
+    editmsg = ""
+    if editexample:
+        editmsg += "\n--disk cache=  (unset cache)"
     stog.add_argument("--disk", action="append",
         help=_("Specify storage with various options. Ex.\n"
                "--disk path=/my/existing/disk\n"
                "--disk path=/my/new/disk,size=5 (in gigabytes)\n"
                "--disk device=cdrom,bus=scsi\n"
-               "--disk=?"))
+               "--disk=?") + editmsg)
 
 
 #############################################

@@ -303,7 +303,7 @@ def parse_args():
     parser.add_argument("domain", nargs='?',
         help=_("Domain name, id, or uuid"))
 
-    actg = parser.add_argument_group(_("Action Options"))
+    actg = parser.add_argument_group(_("XML actions"))
     actg.add_argument("--edit", nargs='?', default=-1,
         help=_("Edit VM XML. Examples:\n"
         "--edit --disk ...     (edit first disk device)\n"
@@ -320,23 +320,25 @@ def parse_args():
         "--add-device --disk ..."))
     actg.add_argument("--build-xml", action="store_true",
         help=_("Just output the built device XML, no domain required."))
-    actg.add_argument("--update", action="store_true",
+
+    outg = parser.add_argument_group(_("Output options"))
+    outg.add_argument("--update", action="store_true",
         help=_("Apply changes to the running VM.\n"
                "With --add-device, this is a hotplug operation.\n"
                "With --remove-device, this is a hotunplug operation.\n"
                "With --edit, this is an update device operation."))
-    actg.add_argument("--define", action="store_true",
+    outg.add_argument("--define", action="store_true",
         help=_("Force defining the domain. Only required if a --print "
                "option was specified."))
-    actg.add_argument("--print-diff", action="store_true",
+    outg.add_argument("--print-diff", action="store_true",
         help=_("Only print the requested change, in diff format"))
-    actg.add_argument("--print-xml", action="store_true",
+    outg.add_argument("--print-xml", action="store_true",
         help=_("Only print the requested change, in full XML format"))
-    actg.add_argument("--confirm", action="store_true",
+    outg.add_argument("--confirm", action="store_true",
         help=_("Require confirmation before saving any results."))
 
     g = parser.add_argument_group(_("XML options"))
-    cli.add_disk_option(g)
+    cli.add_disk_option(g, editexample=True)
     cli.add_net_option(g)
     cli.add_gfx_option(g)
     cli.add_metadata_option(g)

@@ -2,15 +2,28 @@
 
 =head1 NAME
 
-virt-xml - XXX
+virt-xml - Edit libvirt XML using command line options.
 
 =head1 SYNOPSIS
 
-B<virt-xml> XXX
+B<virt-xml> DOMAIN XML-ACTION XML-OPTION [OUTPUT-OPTION] [MISC-OPTIONS] ...
 
 =head1 DESCRIPTION
 
-B<virt-xml> XXX
+B<virt-xml> is a command line tool for editing libvirt XML using explicit command line options. See the EXAMPLES section at the end of this document to jump right in.
+
+Each B<virt-xml> invocation requires 3 things: name of an existing domain to alter (or XML passed on stdin), an action to on the XML, and an XML change to make. actions are one of:
+
+--add-device: Append a new device definition to the XML
+--remove-device: Remove an existing device definition
+--edit: Edit an existing XML block
+--build-xml: Just build the requested XML block and print it (no domain or input XML are required here).
+
+An XML change is one instance of any of the XML options provided by virt-xml, for example --disk or --boot.
+
+B<virt-xml> only allows one action and XML pair per invocation. If you need to make multiple edits, invoke the command multiple times.
+
+
 
 =head1 OPTIONS
 
@@ -20,21 +33,212 @@ B<virt-xml> XXX
 
 Show the help message and exit
 
+=item --version
+
+Show program's version number and exit
+
+=item  --connect=URI
+
+Connect to a non-default hypervisor. See L<virt-install(1)> for details
+
+=item domain
+
+domain is the name, UUID, or ID of the existing VM. This can be omitted if
+using --build-xml, or if XML is passed on stdin.
+
+When a domain is specified, the default output action is --define, even if the VM is running. To update the running VM configuration, add the --update option (but not all options/devices support updating the running VM configuration).
+
+If XML is passed on stdin, the default output is --print-xml.
+
 =back
 
-=head2 BAR SECTION
+=head2 XML actions
 
 =over 2
 
-=item  FOO
+=item --edit [EDIT-OPTIONS]
 
-FOO
+Edit the specified XML block. EDIT-OPTIONS tell B<virt-xml> which block to edit. The type of XML that we are editting is decided by XML option that is passed to B<virt-xml>. So if --disk is passed, EDIT-OPTIONS select which <disk> block to edit.
 
-=item  BAR
+Certain XML options only ever map to a single XML block, like --cpu, --security, --boot, --clock, and a few others. In those cases, B<virt-xml> will not complain if a corresponding XML block does not already exist, it will create it for you.
 
-BAR
+Every XML option has a special value 'clearxml=yes'. When combined with --edit, it will completely blank out the XML block being editted before applying the requested changes. This allows completely rebuilding an XML block. See EXAMPLES for some usage.
+
+EDIT-OPTIONS examples:
+
+=over 4
+
+=item --edit
+
+--edit without any options implies 'edit the first block'. So '--edit --disk DISK-OPTIONS' means 'edit the first <disk>'.
+
+For the single XML block options mentioned above, plain '--edit' without any options is what you always want to use.
+
+=item --edit #
+
+Select the specified XML block number. So '--edit 2 --disk DISK-OPTS' means 'edit the second <disk>'. This option only really applies for device XML.
+
+=item --edit all
+
+Modify every XML block of the XML option type. So '--edit all --disk DISK-OPTS' means 'edit ever <disk> block'. This option only really applies for device XML.
+
+=item --edit DEVICE-OPTIONS
+
+Modify every XML block that matches the passed device options. The device options are in the same format as would be passed to the XML option.
+
+So '--edit path=/tmp/foo --disk DISK-OPTS' means 'edit every <disk> with path /tmp/foo'. This option only really applies for device XML.
 
 =back
+
+=item --add-device
+
+Append the specified XML options to the XML <devices> list. Example: '--add-device --disk DISK-OPTIONS' will create a new <disk> block and add it to the XML.
+
+This option will error if specified with a non-device XML option (see --edit section for a partial list).
+
+=item --remove-device
+
+Remove the specified device from the XML. The device to remove is chosen by the XML option, which takes arguments in the same format as --edit. Examples
+
+=over 4
+
+=item --remove-device --disk 2
+
+Remove the second disk device
+
+=item --remove-device --network all
+
+Remove all network devices
+
+=item --remove-device --soundhw pcspk
+
+Remove all sound devices with model='pcspk'
+
+=back
+
+This option will error if specified with a non-device XML option (see --edit section for a partial list).
+
+=item --build-xml
+
+Just build the specified XML, and print it to stdout. No input domain or input XML is required. Example: '--build-xml --disk DISK-OPTIONS' will just print the new <disk> device.
+
+This option will error if specified with an XML option that does not map cleanly to a specific XML block, like --vcpus or --memory.
+
+=back
+
+
+
+
+=head2 Output options
+
+These options decide what action to take after altering the XML. In the common case these do not need to be specified, as 'XML actions' will imply a default output action, described in detail above. These are only needed if you want to modify the default output.
+
+=over 2
+
+=item --update
+
+If the specified domain is running, attempt to alter the running VM configuration. If combined with --edit, this is an update operation. If combined with --add-device, this is a device hotplug. If combined with --remove-device, this is a device hotunplug.
+
+Keep in mind, most XML properties and devices do not support live update operations, so don't expect it to succeed in all cases.
+
+=item --define
+
+Define the requested XML change. This is typically the default if no output option is specified, but if a --print option is specified, --define is required to force the change.
+
+=item --print-diff
+
+Print the generated XML change in unified diff format. If only this output option is specified, all other output options are disabled and no persistent change is made.
+
+=item --print-xml
+
+Print the generated XML in its entirety. If only this output option is specified, all other output options are disabled and no persistent change is made.
+
+=item --confirm
+
+Before defining or updating the domain, show the generated XML diff and interactively request confirmation.
+
+=back
+
+
+
+
+=head2 XML options
+
+=over 2
+
+=item --disk
+
+=item --network
+
+=item --graphics
+
+=item --metadata
+
+=item --memory
+
+=item --vcpus
+
+=item --cpu
+
+=item --security
+
+=item --numatune
+
+=item --features
+
+=item --clock
+
+=item --boot
+
+=item --filesystem
+
+=item --controller
+
+=item --serial
+
+=item --parallel
+
+=item --channel
+
+=item --console
+
+=item --host-device
+
+=item --soundhw
+
+=item --watchdog
+
+=item --video
+
+=item --smartcard
+
+=item --redirdev
+
+=item --memballoon
+
+=item --tpm
+
+=item --rng
+
+=item --panic
+
+These options alter the XML for a single class of XML elements. More complete documentation is found in L<virt-install(1)>.
+
+Generally these options map pretty straightforwardly to the libvirt XML, documented at L<http://libvirt.org/formatdomain.html>
+
+Option strings are in the format of: --option opt=val,opt2=val2,...  example: --disk path=/tmp/foo,shareable=on. Propertys can be unsed with '--option opt=,', so to clear a disks cache setting you could use '--disk cache=,'
+
+Every XML option has a special value 'clearxml=yes'. When combined with --edit, it will completely blank out the XML block being editted before applying the requested changes. This allows completely rebuilding an XML block. See EXAMPLES for some usage.
+
+For any option, use --option=? to see a list of all available sub options, example: --disk=?  or  --boot=?
+
+--help output also lists a few general examples. See the EXAMPLES section below for some common examples.
+
+
+=back
+
+
+
 
 =head2 Miscellaneous Options
 
@@ -48,16 +252,74 @@ Avoid verbose output.
 
 Print debugging information
 
-=item --dry-run
-
-Proceed through the conversion process, but don't convert disks or actually
-write any converted files.
-
 =back
+
+
 
 =head1 EXAMPLES
 
-XXX
+See a list of all suboptions that --disk and --network take
+
+  # virt-xml --disk=? --network=?
+
+Change the <description> of domain 'example':
+
+  # virt-xml example --edit --metadata description="my new description"
+
+# Enable the boot device menu for domain 'example':
+
+  # virt-xml example --edit --boot bootmenu=on
+
+Clear the previous <cpu> definition of domain 'winxp', change it to 'host-model', but interactively confirm the diff before saving:
+
+  # virt-xml winxp --edit --cpu host-model,clearxml=yes --confirm
+
+Change the sound cards with model=ac97 to model=ich6 on 'fedora19', but only output the diff:
+
+  # virt-xml fedora19 --edit model=ac97 --soundhw model=ich6 --print-diff
+
+Update the first graphics password to 'foo' of the running VM 'rhel6':
+
+  # virt-xml rhel6 --edit --graphics password=foo --update
+
+Remove the disk path from disk device hdc:
+
+  # virt-xml rhel6 --edit target=hdc --disk path=
+
+Change all disk devices of type 'disk' to use cache=none, using XML from stdin, printing the new XML to stdout.
+
+  # cat <xmlfile> | virt-xml --edit device=disk --disk cache=none
+
+Change all host devices to use driver_name=vfio for VM 'fedora20' on the remote connection
+
+  # virt-xml --connect qemu+ssh://remotehost/system \
+             fedora20 --edit all --host-device driver_name=vfio
+
+Hotplug host USB device 001.003 to running domain 'fedora19':
+
+  # virt-xml f19 --add-device --host-device 001.003 --update
+
+Add a spicevmc channel to the domain 'winxp', that will be available after the next VM shutdown.
+
+  # virt-xml winxp --add-device --channel spicevmc
+
+Create a 10G qcow2 disk image and attach it to 'fedora18' for the next VM startup:
+
+  # virt-xml fedora18 --add-device \
+    --disk /var/lib/libvirt/images/newimage.qcow2,format=qcow2,size=10
+
+Remove the disk vdb from the running domain 'rhel7':
+
+  # virt-xml rhel7 --remove-device --disk target=vdb
+
+Remove all graphics devices from the VM 'rhel7' after the next shutdown:
+
+  # virt-xml rhel7 --remove-device --graphics all
+
+Generate XML for a virtio console device and print it to stdout:
+
+  # virt-xml --build-xml --console pty,target_type=virtio
+
 
 =head1 BUGS
 
