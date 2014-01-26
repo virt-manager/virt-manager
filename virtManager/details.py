@@ -1220,10 +1220,10 @@ class vmmDetails(vmmGObjectUI):
                 pagetype = -1
         except Exception, e:
             self.err.show_err(_("Error refreshing hardware page: %s") % str(e))
-            return
+            # Don't return, we want the rest of the bits to run regardless
 
-        rem = pagetype in remove_pages
         self.disable_apply()
+        rem = pagetype in remove_pages
         self.widget("config-remove").set_visible(rem)
 
         self.widget("hw-panel").set_current_page(pagetype)
