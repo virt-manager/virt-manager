@@ -787,6 +787,7 @@ c.add_compare("--security label=foo,bar,baz,UNKNOWN=val,relabel=on", "virtxml-ed
 c.add_compare("--features eoi=on,hyperv_relaxed=off,acpi=", "virtxml-edit-simple-features")
 c.add_compare("--clock offset=localtime,hpet_present=yes,kvmclock_present=no,rtc_tickpolicy=merge", "virtxml-edit-simple-clock")
 c.add_compare("--disk /dev/zero,perms=ro,startup_policy=optional", "virtxml-edit-simple-disk")
+c.add_compare("--disk path=", "virtxml-edit-simple-disk-remove-path")
 c.add_compare("--network source=br0,type=bridge,model=virtio,mac=", "virtxml-edit-simple-network")
 c.add_compare("--graphics tlsport=5902,keymap=ja", "virtxml-edit-simple-graphics")
 c.add_compare("--controller index=2,model=lsilogic", "virtxml-edit-simple-controller")

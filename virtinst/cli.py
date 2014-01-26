@@ -1723,6 +1723,7 @@ class ParserDisk(VirtCLIParser):
         convert_perms(opts.get_opt_param("perms"))
 
         path = opts.get_opt_param("path")
+        had_path = path is not None
         backing_store = opts.get_opt_param("backing_store")
         pool = opts.get_opt_param("pool")
         vol = opts.get_opt_param("vol")
@@ -1734,8 +1735,8 @@ class ParserDisk(VirtCLIParser):
             self.guest, path, pool, vol, size, fmt, sparse)
 
         path = volobj and volobj.path() or abspath
-        if path:
-            opts.opts["path"] = path
+        if had_path or path:
+            opts.opts["path"] = path or ""
 
         inst = VirtCLIParser._parse(self, opts, inst)
 
