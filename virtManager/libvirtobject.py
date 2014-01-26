@@ -24,7 +24,6 @@ from gi.repository import GObject
 
 import logging
 
-from virtManager import uihelpers
 from virtManager.baseclass import vmmGObject
 
 
@@ -53,6 +52,21 @@ class vmmLibvirtObject(vmmGObject):
         self._active_xml_flags = 0
 
         self.connect("config-changed", self._reparse_xml)
+
+    @staticmethod
+    def log_redefine_xml_diff(obj, origxml, newxml):
+        objname = "<%s name=%s>" % (obj.__class__.__name__, obj.get_name())
+        if origxml == newxml:
+            logging.debug("Redefine requested for %s, but XML didn't change!",
+                          objname)
+            return
+
+        import difflib
+        diff = "".join(difflib.unified_diff(origxml.splitlines(1),
+                                            newxml.splitlines(1),
+                                            fromfile="Original XML",
+                                            tofile="New XML"))
+        logging.debug("Redefining %s with XML diff:\n%s", objname, diff)
 
     def _cleanup(self):
         pass
@@ -205,7 +219,7 @@ class vmmLibvirtObject(vmmGObject):
         return self._xmlobj_to_define
 
     def _redefine_helper(self, origxml, newxml):
-        uihelpers.log_redefine_xml_diff(self, origxml, newxml)
+        self.log_redefine_xml_diff(self, origxml, newxml)
 
         if origxml != newxml:
             self._define(newxml)

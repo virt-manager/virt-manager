@@ -679,7 +679,7 @@ class vmmCreate(vmmGObjectUI):
                 continue
             dom = guest.domains[0]
             domtype = dom.hypervisor_type
-            label = uihelpers.pretty_hv(gtype, domtype)
+            label = self.conn.pretty_hv(gtype, domtype)
 
             # Don't add multiple rows for each arch
             for m in model:

@@ -150,10 +150,10 @@ class vmmDeleteDialog(vmmGObjectUI):
             title = _("Are you sure you want to delete the storage?")
             message = (_("The following paths will be deleted:\n\n%s") %
                        "\n".join(devs))
-            ret = uihelpers.chkbox_helper(self,
-                                     self.config.get_confirm_delstorage,
-                                     self.config.set_confirm_delstorage,
-                                     text1=title, text2=message)
+            ret = self.err.chkbox_helper(
+                self.config.get_confirm_delstorage,
+                self.config.set_confirm_delstorage,
+                text1=title, text2=message)
             if not ret:
                 return
 

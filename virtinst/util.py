@@ -442,6 +442,11 @@ def is_error_nosupport(err):
     return False
 
 
+def exception_is_libvirt_error(e, error):
+    return (hasattr(libvirt, error) and
+            e.get_error_code() == getattr(libvirt, error))
+
+
 def local_libvirt_version():
     """
     Lookup the local libvirt library version, but cache the value since

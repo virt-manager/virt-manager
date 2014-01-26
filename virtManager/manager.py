@@ -790,7 +790,7 @@ class vmmManager(vmmGObjectUI):
                 desc = desc or ""
             row[ROW_HINT] = util.xml_escape(desc)
         except libvirt.libvirtError, e:
-            if uihelpers.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
+            if util.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
                 return
             raise
 

@@ -28,8 +28,6 @@ from gi.repository import GObject
 from gi.repository import Gtk
 # pylint: enable=E0611
 
-import libvirt
-
 import virtinst
 from virtManager import config
 
@@ -63,9 +61,16 @@ def set_sparse_tooltip(widget):
     widget.set_tooltip_text(sparse_str)
 
 
+def _get_default_dir(conn):
+    pool = conn.get_default_pool()
+    if pool:
+        return pool.get_target_path()
+    return config.running_config.get_default_image_dir(conn)
+
+
 def host_disk_space(conn):
-    pool = get_default_pool(conn)
-    path = get_default_dir(conn)
+    pool = conn.get_default_pool()
+    path = _get_default_dir(conn)
 
     avail = 0
     if pool and pool.is_active():
@@ -98,7 +103,7 @@ def update_host_space(conn, widget):
 
 
 def check_default_pool_active(err, conn):
-    default_pool = get_default_pool(conn)
+    default_pool = conn.get_default_pool()
     if default_pool and not default_pool.is_active():
         res = err.yes_no(_("Default pool is not active."),
                          _("Storage pool '%s' is not active. "
@@ -116,6 +121,121 @@ def check_default_pool_active(err, conn):
                                   "'%s': %s") %
                                 (default_pool.get_name(), str(e)))
     return True
+
+
+def _get_ideal_path_info(conn, name):
+    path = _get_default_dir(conn)
+    suffix = ".img"
+    return (path, name, suffix)
+
+
+def get_ideal_path(conn, name):
+    target, name, suffix = _get_ideal_path_info(conn, name)
+    return os.path.join(target, name) + suffix
+
+
+def get_default_path(conn, name, collidelist=None):
+    collidelist = collidelist or []
+    pool = conn.get_default_pool()
+
+    default_dir = _get_default_dir(conn)
+
+    def path_exists(p):
+        return os.path.exists(p) or p in collidelist
+
+    if not pool:
+        # Use old generating method
+        origf = os.path.join(default_dir, name + ".img")
+        f = origf
+
+        n = 1
+        while path_exists(f) and n < 100:
+            f = os.path.join(default_dir, name +
+                             "-" + str(n) + ".img")
+            n += 1
+
+        if path_exists(f):
+            f = origf
+
+        path = f
+    else:
+        target, ignore, suffix = _get_ideal_path_info(conn, name)
+
+        # Sanitize collidelist to work with the collision checker
+        newcollidelist = []
+        for c in collidelist:
+            if c and os.path.dirname(c) == pool.get_target_path():
+                newcollidelist.append(os.path.basename(c))
+
+        path = virtinst.StorageVolume.find_free_name(
+            pool.get_backend(), name,
+            suffix=suffix, collidelist=newcollidelist)
+
+        path = os.path.join(target, path)
+
+    return path
+
+
+def check_path_search_for_qemu(err, conn, path):
+    if conn.is_remote() or not conn.is_qemu_system():
+        return
+
+    user = config.running_config.default_qemu_user
+
+    for i in conn.caps.host.secmodels:
+        if i.model == "dac":
+            label = i.baselabels.get("kvm") or i.baselabels.get("qemu")
+            if not label:
+                continue
+            pwuid = pwd.getpwuid(int(label.split(":")[0].replace("+", "")))
+            if pwuid:
+                user = pwuid[0]
+
+    skip_paths = config.running_config.get_perms_fix_ignore()
+    broken_paths = virtinst.VirtualDisk.check_path_search_for_user(
+                                                          conn.get_backend(),
+                                                          path, user)
+    for p in broken_paths:
+        if p in skip_paths:
+            broken_paths.remove(p)
+
+    if not broken_paths:
+        return
+
+    logging.debug("No search access for dirs: %s", broken_paths)
+    resp, chkres = err.warn_chkbox(
+                    _("The emulator may not have search permissions "
+                      "for the path '%s'.") % path,
+                    _("Do you want to correct this now?"),
+                    _("Don't ask about these directories again."),
+                    buttons=Gtk.ButtonsType.YES_NO)
+
+    if chkres:
+        config.running_config.add_perms_fix_ignore(broken_paths)
+    if not resp:
+        return
+
+    logging.debug("Attempting to correct permission issues.")
+    errors = virtinst.VirtualDisk.fix_path_search_for_user(conn.get_backend(),
+                                                           path, user)
+    if not errors:
+        return
+
+    errmsg = _("Errors were encountered changing permissions for the "
+               "following directories:")
+    details = ""
+    for path, error in errors.items():
+        if path not in broken_paths:
+            continue
+        details += "%s : %s\n" % (path, error)
+
+    logging.debug("Permission errors:\n%s", details)
+
+    ignore, chkres = err.err_chkbox(errmsg, details,
+                         _("Don't ask about these directories again."))
+
+    if chkres:
+        config.running_config.add_perms_fix_ignore(errors.keys())
 
 
 #########################################
@@ -678,70 +798,6 @@ class VMActionMenu(_VMMenu):
                 child.get_child().set_label(text)
 
 
-#####################################
-# Path permissions checker for qemu #
-#####################################
-
-def check_path_search_for_qemu(err, conn, path):
-    if conn.is_remote() or not conn.is_qemu_system():
-        return
-
-    user = config.running_config.default_qemu_user
-
-    for i in conn.caps.host.secmodels:
-        if i.model == "dac":
-            label = i.baselabels.get("kvm") or i.baselabels.get("qemu")
-            if not label:
-                continue
-            pwuid = pwd.getpwuid(int(label.split(":")[0].replace("+", "")))
-            if pwuid:
-                user = pwuid[0]
-
-    skip_paths = config.running_config.get_perms_fix_ignore()
-    broken_paths = virtinst.VirtualDisk.check_path_search_for_user(
-                                                          conn.get_backend(),
-                                                          path, user)
-    for p in broken_paths:
-        if p in skip_paths:
-            broken_paths.remove(p)
-
-    if not broken_paths:
-        return
-
-    logging.debug("No search access for dirs: %s", broken_paths)
-    resp, chkres = err.warn_chkbox(
-                    _("The emulator may not have search permissions "
-                      "for the path '%s'.") % path,
-                    _("Do you want to correct this now?"),
-                    _("Don't ask about these directories again."),
-                    buttons=Gtk.ButtonsType.YES_NO)
-
-    if chkres:
-        config.running_config.add_perms_fix_ignore(broken_paths)
-    if not resp:
-        return
-
-    logging.debug("Attempting to correct permission issues.")
-    errors = virtinst.VirtualDisk.fix_path_search_for_user(conn.get_backend(),
-                                                           path, user)
-    if not errors:
-        return
-
-    errmsg = _("Errors were encountered changing permissions for the "
-               "following directories:")
-    details = ""
-    for path, error in errors.items():
-        if path not in broken_paths:
-            continue
-        details += "%s : %s\n" % (path, error)
-
-    logging.debug("Permission errors:\n%s", details)
-
-    ignore, chkres = err.err_chkbox(errmsg, details,
-                         _("Don't ask about these directories again."))
-
-    if chkres:
-        config.running_config.add_perms_fix_ignore(errors.keys())
 
 
 ################
@@ -762,82 +818,10 @@ def spin_get_helper(widget):
     txt = widget.get_text()
 
     try:
-        ret = int(txt)
+        return int(txt)
     except:
-        ret = adj.get_value()
-    return ret
+        return adj.get_value()
 
-
-def get_ideal_path_info(conn, name):
-    path = get_default_dir(conn)
-    suffix = ".img"
-    return (path, name, suffix)
-
-
-def get_ideal_path(conn, name):
-    target, name, suffix = get_ideal_path_info(conn, name)
-    return os.path.join(target, name) + suffix
-
-
-def get_default_pool(conn):
-    pool = None
-    for uuid in conn.list_pool_uuids():
-        p = conn.get_pool(uuid)
-        if p.get_name() == "default":
-            pool = p
-
-    return pool
-
-
-def get_default_dir(conn):
-    pool = get_default_pool(conn)
-
-    if pool:
-        return pool.get_target_path()
-    else:
-        return config.running_config.get_default_image_dir(conn)
-
-
-def get_default_path(conn, name, collidelist=None):
-    collidelist = collidelist or []
-    pool = get_default_pool(conn)
-
-    default_dir = get_default_dir(conn)
-
-    def path_exists(p):
-        return os.path.exists(p) or p in collidelist
-
-    if not pool:
-        # Use old generating method
-        origf = os.path.join(default_dir, name + ".img")
-        f = origf
-
-        n = 1
-        while path_exists(f) and n < 100:
-            f = os.path.join(default_dir, name +
-                             "-" + str(n) + ".img")
-            n += 1
-
-        if path_exists(f):
-            f = origf
-
-        path = f
-    else:
-        target, ignore, suffix = get_ideal_path_info(conn, name)
-
-        # Sanitize collidelist to work with the collision checker
-        newcollidelist = []
-        for c in collidelist:
-            if c and os.path.dirname(c) == pool.get_target_path():
-                newcollidelist.append(os.path.basename(c))
-
-        path = virtinst.StorageVolume.find_free_name(
-            pool.get_backend(), name,
-            suffix=suffix, collidelist=newcollidelist)
-
-        path = os.path.join(target, path)
-
-    return path
 
 
 def browse_local(parent, dialog_name, conn, start_folder=None,
@@ -926,70 +910,6 @@ def browse_local(parent, dialog_name, conn, start_folder=None,
     return ret
 
 
-def pretty_hv(gtype, domtype):
-    """
-    Convert XML <domain type='foo'> and <os><type>bar</type>
-    into a more human relevant string.
-    """
-
-    gtype = gtype.lower()
-    domtype = domtype.lower()
-
-    label = domtype
-    if domtype == "kvm":
-        if gtype == "xen":
-            label = "xenner"
-    elif domtype == "xen":
-        if gtype == "xen":
-            label = "xen (paravirt)"
-        elif gtype == "hvm":
-            label = "xen (fullvirt)"
-    elif domtype == "test":
-        if gtype == "xen":
-            label = "test (xen)"
-        elif gtype == "hvm":
-            label = "test (hvm)"
-
-    return label
-
-
-def iface_in_use_by(conn, name):
-    use_str = ""
-    for i in conn.list_interface_names():
-        iface = conn.get_interface(i)
-        if name in iface.get_slave_names():
-            if use_str:
-                use_str += ", "
-            use_str += iface.get_name()
-
-    return use_str
-
-
-def chkbox_helper(src, getcb, setcb, text1, text2=None,
-                  alwaysrecord=False,
-                  default=True,
-                  chktext=_("Don't ask me again")):
-    """
-    Helper to prompt user about proceeding with an operation
-    Returns True if the 'yes' or 'ok' button was selected, False otherwise
-
-    @alwaysrecord: Don't require user to select 'yes' to record chkbox value
-    @default: What value to return if getcb tells us not to prompt
-    """
-    do_prompt = getcb()
-    if not do_prompt:
-        return default
-
-    res = src.err.warn_chkbox(text1=text1, text2=text2,
-                              chktext=chktext,
-                              buttons=Gtk.ButtonsType.YES_NO)
-    response, skip_prompt = res
-    if alwaysrecord or response:
-        setcb(not skip_prompt)
-
-    return response
-
-
 def get_list_selection(widget):
     selection = widget.get_selection()
     active = selection.get_selected()
@@ -1055,40 +975,3 @@ def set_grid_row_visible(child, visible):
     for child in parent.get_children():
         if child_get_property(parent, child, "top-attach") == row:
             child.set_visible(visible)
-
-
-def default_uri(always_system=False):
-    if os.path.exists('/var/lib/xen'):
-        if (os.path.exists('/dev/xen/evtchn') or
-            os.path.exists("/proc/xen")):
-            return 'xen:///'
-
-    if (os.path.exists("/usr/bin/qemu") or
-        os.path.exists("/usr/bin/qemu-kvm") or
-        os.path.exists("/usr/bin/kvm") or
-        os.path.exists("/usr/libexec/qemu-kvm")):
-        if always_system or os.geteuid() == 0:
-            return "qemu:///system"
-        else:
-            return "qemu:///session"
-    return None
-
-
-def exception_is_libvirt_error(e, error):
-    return (hasattr(libvirt, error) and
-            e.get_error_code() == getattr(libvirt, error))
-
-
-def log_redefine_xml_diff(obj, origxml, newxml):
-    objname = "<%s name=%s>" % (obj.__class__.__name__, obj.get_name())
-    if origxml == newxml:
-        logging.debug("Redefine requested for %s, but XML didn't change!",
-                      objname)
-        return
-
-    import difflib
-    diff = "".join(difflib.unified_diff(origxml.splitlines(1),
-                                        newxml.splitlines(1),
-                                        fromfile="Original XML",
-                                        tofile="New XML"))
-    logging.debug("Redefining %s with XML diff:\n%s", objname, diff)

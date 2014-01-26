@@ -179,7 +179,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
         if not self._first_run:
             self._first_run = True
-            pool = uihelpers.get_default_pool(self.conn)
+            pool = self.conn.get_default_pool()
             uihelpers.set_row_selection(
                 self.widget("pool-list"), pool and pool.get_uuid() or None)
         # Manually trigger vol_selected, so buttons are in the correct state

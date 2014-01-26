@@ -179,6 +179,30 @@ class vmmErrorDialog(vmmGObject):
                                   secondary_text=text2,
                                   chktext=chktext)
 
+    def chkbox_helper(self, getcb, setcb, text1, text2=None,
+                      alwaysrecord=False,
+                      default=True,
+                      chktext=_("Don't ask me again")):
+        """
+        Helper to prompt user about proceeding with an operation
+        Returns True if the 'yes' or 'ok' button was selected, False otherwise
+
+        @alwaysrecord: Don't require user to select 'yes' to record chkbox value
+        @default: What value to return if getcb tells us not to prompt
+        """
+        do_prompt = getcb()
+        if not do_prompt:
+            return default
+
+        res = self.warn_chkbox(text1=text1, text2=text2,
+                               chktext=chktext,
+                               buttons=Gtk.ButtonsType.YES_NO)
+        response, skip_prompt = res
+        if alwaysrecord or response:
+            setcb(not skip_prompt)
+
+        return response
+
 
 class _errorDialog (Gtk.MessageDialog):
     """

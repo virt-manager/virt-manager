@@ -18,6 +18,7 @@
 # MA 02110-1301 USA.
 #
 
+import os
 import logging
 import socket
 
@@ -28,7 +29,6 @@ from gi.repository import Gtk
 # pylint: enable=E0611
 
 from virtManager.baseclass import vmmGObjectUI
-from virtManager import uihelpers
 
 HV_XEN = 0
 HV_QEMU = 1
@@ -99,6 +99,23 @@ class vmmConnect(vmmGObjectUI):
 
         self.reset_state()
 
+    @staticmethod
+    def default_uri(always_system=False):
+        if os.path.exists('/var/lib/xen'):
+            if (os.path.exists('/dev/xen/evtchn') or
+                os.path.exists("/proc/xen")):
+                return 'xen:///'
+
+        if (os.path.exists("/usr/bin/qemu") or
+            os.path.exists("/usr/bin/qemu-kvm") or
+            os.path.exists("/usr/bin/kvm") or
+            os.path.exists("/usr/libexec/qemu-kvm")):
+            if always_system or os.geteuid() == 0:
+                return "qemu:///system"
+            else:
+                return "qemu:///session"
+        return None
+
     def cancel(self, ignore1=None, ignore2=None):
         logging.debug("Cancelling open connection")
         self.close()
@@ -148,7 +165,7 @@ class vmmConnect(vmmGObjectUI):
         return self.widget("connect-remote").get_active()
 
     def set_default_hypervisor(self):
-        default = uihelpers.default_uri(always_system=True)
+        default = self.default_uri(always_system=True)
         if not default or default.startswith("qemu"):
             self.widget("hypervisor").set_active(1)
         elif default.startswith("xen"):

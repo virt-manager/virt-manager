@@ -34,7 +34,6 @@ from virtinst import Guest
 from virtinst import util
 from virtinst import VirtualController
 
-from virtManager import uihelpers
 from virtManager.libvirtobject import vmmLibvirtObject
 
 
@@ -1011,7 +1010,7 @@ class vmmDomain(vmmLibvirtObject):
     def get_hv_type(self):
         return self.get_xmlobj().type
     def get_pretty_hv_type(self):
-        return uihelpers.pretty_hv(self.get_abi_type(), self.get_hv_type())
+        return self.conn.pretty_hv(self.get_abi_type(), self.get_hv_type())
     def get_arch(self):
         return self.get_xmlobj().os.arch
     def get_init(self):
@@ -1274,7 +1273,7 @@ class vmmDomain(vmmLibvirtObject):
         try:
             return self._backend.hasManagedSaveImage(0)
         except libvirt.libvirtError, e:
-            if not uihelpers.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
+            if not util.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
                 raise
             return False
 
@@ -1573,7 +1572,7 @@ class vmmDomain(vmmLibvirtObject):
             info = self._backend.info()
             self._update_status(info[0])
         except libvirt.libvirtError, e:
-            if uihelpers.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
+            if util.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
                 return
             raise
 

@@ -166,6 +166,18 @@ class vmmCreateInterface(vmmGObjectUI):
     ###########################
 
     @staticmethod
+    def iface_in_use_by(conn, name):
+        use_str = ""
+        for i in conn.list_interface_names():
+            iface = conn.get_interface(i)
+            if name in iface.get_slave_names():
+                if use_str:
+                    use_str += ", "
+                use_str += iface.get_name()
+
+        return use_str
+
+    @staticmethod
     def build_interface_startmode_combo(combo):
         model = Gtk.ListStore(str)
         combo.set_model(model)
@@ -558,8 +570,8 @@ class vmmCreateInterface(vmmGObjectUI):
 
         for row in row_dict.values():
             name = row[INTERFACE_ROW_NAME]
-            row[INTERFACE_ROW_IN_USE_BY] = uihelpers.iface_in_use_by(self.conn,
-                                                                     name)
+            row[INTERFACE_ROW_IN_USE_BY] = self.iface_in_use_by(self.conn,
+                                                                name)
 
         for row in row_dict.values():
             model.append(row)

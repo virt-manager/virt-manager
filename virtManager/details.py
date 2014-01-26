@@ -1100,7 +1100,7 @@ class vmmDetails(vmmGObjectUI):
         if not self.widget("config-apply").get_sensitive():
             return False
 
-        if not uihelpers.chkbox_helper(self,
+        if not self.err.chkbox_helper(
             self.config.get_confirm_unapplied,
             self.config.set_confirm_unapplied,
             text1=(_("There are unapplied changes. Would you like to apply "
@@ -2243,7 +2243,7 @@ class vmmDetails(vmmGObjectUI):
     def remove_device(self, dev_type, dev_id_info):
         logging.debug("Removing device: %s %s", dev_type, dev_id_info)
 
-        if not uihelpers.chkbox_helper(self, self.config.get_confirm_removedev,
+        if not self.err.chkbox_helper(self.config.get_confirm_removedev,
             self.config.set_confirm_removedev,
             text1=(_("Are you sure you want to remove this device?"))):
             return
@@ -2360,7 +2360,7 @@ class vmmDetails(vmmGObjectUI):
             if self.is_visible():
                 self.vm.refresh_xml()
         except libvirt.libvirtError, e:
-            if uihelpers.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
+            if util.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
                 self.close()
                 return
             raise
