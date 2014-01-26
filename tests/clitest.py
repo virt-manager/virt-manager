@@ -763,6 +763,10 @@ c.add_invalid("test --edit --cpu host-passthrough --boot hd,network")  # Specifi
 c.add_invalid("test --edit")  # specified no edit option
 c.add_invalid("test --edit 2 --cpu host-passthrough")  # specifing --edit number where it doesn't make sense
 c.add_invalid("test-many-devices --edit 5 --tpm /dev/tpm")  # device edit out of range
+c.add_invalid("test-many-devices --add-device --host-device 0x0781:0x5151 --update")  # test driver doesn't support attachdevice...
+c.add_invalid("test-many-devices --remove-device --host-device 1 --update")  # test driver doesn't support detachdevice...
+c.add_invalid("test-many-devices --edit --graphics password=foo --update")  # test driver doesn't support updatdevice...
+c.add_compare("test --print-xml --edit --vcpus 7", "virtxml-print-xml")  # test --print-xml
 c.add_compare("test --print-xml --edit --vcpus 7", "virtxml-print-xml")  # test --print-xml
 c.add_compare("--edit --cpu host-passthrough", "virtxml-stdin-edit", input_file=(xmldir + "/virtxml-stdin-edit.xml"))  # stdin test
 

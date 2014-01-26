@@ -2222,14 +2222,18 @@ def parse_option_strings(parsermap, options, guest, instlist, update=False):
     if not instlist:
         instlist = [None]
 
+    ret = []
     for option_variable_name in dir(options):
         if option_variable_name not in parsermap:
             continue
 
         for inst in util.listify(instlist):
-            parsermap[option_variable_name].parse(
+            parseret = parsermap[option_variable_name].parse(
                 guest, getattr(options, option_variable_name), inst,
                 validate=not update)
+            ret += util.listify(parseret)
+
+    return ret
 
 
 def check_option_introspection(options, parsermap):
