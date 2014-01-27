@@ -86,16 +86,12 @@ class vmmCreatePool(vmmGObjectUI):
         type_list = self.widget("pool-type")
         type_model = Gtk.ListStore(str, str)
         type_list.set_model(type_model)
-        text1 = Gtk.CellRendererText()
-        type_list.pack_start(text1, True)
-        type_list.add_attribute(text1, 'text', 1)
+        uiutil.set_combo_text_column(type_list, 1)
 
         format_list = self.widget("pool-format")
         format_model = Gtk.ListStore(str, str)
         format_list.set_model(format_model)
-        text2 = Gtk.CellRendererText()
-        format_list.pack_start(text2, False)
-        format_list.add_attribute(text2, 'text', 1)
+        uiutil.set_combo_text_column(format_list, 1)
 
         # Target path combo box entry
         target_list = self.widget("pool-target-path")

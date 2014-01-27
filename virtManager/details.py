@@ -754,9 +754,7 @@ class vmmDetails(vmmGObjectUI):
         machtype_combo = self.widget("machine-type")
         machtype_model = Gtk.ListStore(str)
         machtype_combo.set_model(machtype_model)
-        text = Gtk.CellRendererText()
-        machtype_combo.pack_start(text, True)
-        machtype_combo.add_attribute(text, 'text', 0)
+        uiutil.set_combo_text_column(machtype_combo, 0)
         machtype_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         show_machine = (arch not in ["i686", "x86_64"])

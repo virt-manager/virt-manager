@@ -32,6 +32,11 @@ except (ValueError, AttributeError):
 
 
 def set_combo_text_column(combo, col):
+    """
+    Set the text column of the passed combo to 'col'. Does the
+    right thing whether it's a plain combo or a comboboxentry. Saves
+    some typing.
+    """
     if combo.get_has_entry():
         combo.set_entry_text_column(col)
     else:

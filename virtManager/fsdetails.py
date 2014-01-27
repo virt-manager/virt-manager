@@ -87,9 +87,7 @@ class vmmFSDetails(vmmGObjectUI):
             combo = self.widget(comboname)
             model = Gtk.ListStore(str, str)
             combo.set_model(model)
-            text = Gtk.CellRendererText()
-            combo.pack_start(text, True)
-            combo.add_attribute(text, 'text', 1)
+            uiutil.set_combo_text_column(combo, 1)
             if sort:
                 model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
             if capitalize:

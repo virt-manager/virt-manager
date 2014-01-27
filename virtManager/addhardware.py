@@ -219,24 +219,18 @@ class vmmAddHardware(vmmGObjectUI):
         input_list = self.widget("input-type")
         input_model = Gtk.ListStore(str, str, str)
         input_list.set_model(input_model)
-        text = Gtk.CellRendererText()
-        input_list.pack_start(text, True)
-        input_list.add_attribute(text, 'text', 0)
+        uiutil.set_combo_text_column(input_list, 0)
 
         # Graphics type
         graphics_list = self.widget("graphics-type")
         graphics_model = Gtk.ListStore(str, str)
         graphics_list.set_model(graphics_model)
-        text = Gtk.CellRendererText()
-        graphics_list.pack_start(text, True)
-        graphics_list.add_attribute(text, 'text', 0)
+        uiutil.set_combo_text_column(graphics_list, 0)
 
         # Graphics address
         # [label, value]
         self.widget("graphics-address").set_model(Gtk.ListStore(str, str))
-        text = Gtk.CellRendererText()
-        self.widget("graphics-address").pack_start(text, True)
-        self.widget("graphics-address").add_attribute(text, 'text', 0)
+        uiutil.set_combo_text_column(self.widget("graphics-address"), 0)
 
         # Sound model list
         sound_list = self.widget("sound-model")
@@ -264,9 +258,7 @@ class vmmAddHardware(vmmGObjectUI):
         # Mode name, desc
         char_mode_model = Gtk.ListStore(str, str)
         char_mode.set_model(char_mode_model)
-        text = Gtk.CellRendererText()
-        char_mode.pack_start(text, True)
-        char_mode.add_attribute(text, 'text', 1)
+        uiutil.set_combo_text_column(char_mode, 1)
         char_mode_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         for t in VirtualSerialDevice.MODES:
             desc = VirtualSerialDevice.pretty_mode(t)
@@ -917,9 +909,7 @@ class vmmAddHardware(vmmGObjectUI):
     def build_combo_with_values(self, combo, values, default=None):
         dev_model = Gtk.ListStore(str, str)
         combo.set_model(dev_model)
-        text = Gtk.CellRendererText()
-        combo.pack_start(text, True)
-        combo.add_attribute(text, 'text', 1)
+        uiutil.set_combo_text_column(combo, 1)
         dev_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         types = combo.get_model()
