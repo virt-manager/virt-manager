@@ -230,14 +230,12 @@ def check_path_search_for_qemu(err, conn, path):
 
 def _net_list_changed(net_list, bridge_box,
                      source_mode_combo, vport_expander):
-    active = net_list.get_active()
-    if active < 0:
-        return
-
     if not bridge_box:
         return
 
-    row = net_list.get_model()[active]
+    row = uiutil.get_list_selection(net_list)
+    if not row:
+        return
 
     if source_mode_combo is not None:
         doshow = (row[0] == virtinst.VirtualNetworkInterface.TYPE_DIRECT)
@@ -287,11 +285,10 @@ def build_network_list(net_list, bridge_box, source_mode_combo=None,
 
 
 def get_network_selection(net_list, bridge_entry):
-    idx = net_list.get_active()
-    if idx == -1:
+    row = uiutil.get_list_selection(net_list)
+    if not row:
         return None, None
 
-    row = net_list.get_model()[net_list.get_active()]
     net_type = row[0]
     net_src = row[1]
     net_check_bridge = row[5]

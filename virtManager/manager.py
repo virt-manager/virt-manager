@@ -196,7 +196,7 @@ class vmmManager(vmmGObjectUI):
         vmlist = self.widget("vm-list")
         if len(vmlist.get_model()) != 0:
             vmlist.get_selection().select_iter(
-                                        vmlist.get_model().get_iter_first())
+                vmlist.get_model().get_iter_first())
 
         # Queue up the default connection detector
         self.idle_emit("add-default-conn")
@@ -423,14 +423,7 @@ class vmmManager(vmmGObjectUI):
     ##################
 
     def current_row(self):
-        vmlist = self.widget("vm-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-
-        treestore, treeiter = active
-        if treeiter is not None:
-            return treestore[treeiter]
-        return None
+        return uiutil.get_list_selection(self.widget("vm-list"))
 
     def current_vm(self):
         row = self.current_row()
@@ -617,7 +610,7 @@ class vmmManager(vmmGObjectUI):
 
         parent = self.rows[conn.get_uri()].iter
         for row in range(model.iter_n_children(parent)):
-            vm = model.get_value(model.iter_nth_child(parent, row), ROW_HANDLE)
+            vm = model[model.iter_nth_child(parent, row)][ROW_HANDLE]
             if vm.get_uuid() == vmuuid:
                 model.remove(model.iter_nth_child(parent, row))
                 del self.rows[self.vm_row_key(vm)]
@@ -754,7 +747,7 @@ class vmmManager(vmmGObjectUI):
 
         child = model.iter_children(parent)
         while child is not None:
-            del self.rows[self.vm_row_key(model.get_value(child, ROW_HANDLE))]
+            del self.rows[self.vm_row_key(model[child][ROW_HANDLE])]
             model.remove(child)
             child = model.iter_children(parent)
         model.remove(parent)
@@ -807,7 +800,7 @@ class vmmManager(vmmGObjectUI):
         missing = True
         for row in range(model.iter_n_children(parent)):
             _iter = model.iter_nth_child(parent, row)
-            if model.get_value(_iter, ROW_HANDLE) == vm:
+            if model[_iter][ROW_HANDLE] == vm:
                 missing = False
                 break
 
@@ -907,10 +900,8 @@ class vmmManager(vmmGObjectUI):
         if Gdk.keyval_name(event.keyval) != "Menu":
             return False
 
-        vmlist = self.widget("vm-list")
-        treeselection = vmlist.get_selection()
-        model, _iter = treeselection.get_selected()
-        self.popup_vm_menu(model, _iter, event)
+        model, treeiter = self.widget("vm-list").get_selection().get_selected()
+        self.popup_vm_menu(model, treeiter, event)
         return True
 
     def popup_vm_menu_button(self, widget, event):
@@ -930,13 +921,13 @@ class vmmManager(vmmGObjectUI):
     def popup_vm_menu(self, model, _iter, event):
         if model.iter_parent(_iter) is not None:
             # Popup the vm menu
-            vm = model.get_value(_iter, ROW_HANDLE)
+            vm = model[_iter][ROW_HANDLE]
             self.vmmenu.update_widget_states(vm)
             self.vmmenu.popup(  # pylint: disable=E1101
                 None, None, None, None, 0, event.time)
         else:
             # Pop up connection menu
-            conn = model.get_value(_iter, ROW_HANDLE)
+            conn = model[_iter][ROW_HANDLE]
             disconn = (conn.get_state() == vmmConnection.STATE_DISCONNECTED)
             conning = (conn.get_state() == vmmConnection.STATE_CONNECTING)
 
@@ -954,39 +945,38 @@ class vmmManager(vmmGObjectUI):
     #################
 
     def vmlist_name_sorter(self, model, iter1, iter2, ignore):
-        return cmp(model.get_value(iter1, ROW_SORT_KEY),
-                   model.get_value(iter2, ROW_SORT_KEY))
+        return cmp(model[iter1][ROW_SORT_KEY], model[iter2][ROW_SORT_KEY])
 
     def vmlist_guest_cpu_usage_sorter(self, model, iter1, iter2, ignore):
-        obj1 = model.get_value(iter1, ROW_HANDLE)
-        obj2 = model.get_value(iter2, ROW_HANDLE)
+        obj1 = model[iter1][ROW_HANDLE]
+        obj2 = model[iter2][ROW_HANDLE]
 
         return cmp(obj1.guest_cpu_time_percentage(),
                    obj2.guest_cpu_time_percentage())
 
     def vmlist_host_cpu_usage_sorter(self, model, iter1, iter2, ignore):
-        obj1 = model.get_value(iter1, ROW_HANDLE)
-        obj2 = model.get_value(iter2, ROW_HANDLE)
+        obj1 = model[iter1][ROW_HANDLE]
+        obj2 = model[iter2][ROW_HANDLE]
 
         return cmp(obj1.host_cpu_time_percentage(),
                    obj2.host_cpu_time_percentage())
 
     def vmlist_memory_usage_sorter(self, model, iter1, iter2, ignore):
-        obj1 = model.get_value(iter1, ROW_HANDLE)
-        obj2 = model.get_value(iter2, ROW_HANDLE)
+        obj1 = model[iter1][ROW_HANDLE]
+        obj2 = model[iter2][ROW_HANDLE]
 
         return cmp(obj1.stats_memory(),
                    obj2.stats_memory())
 
     def vmlist_disk_io_sorter(self, model, iter1, iter2, ignore):
-        obj1 = model.get_value(iter1, ROW_HANDLE)
-        obj2 = model.get_value(iter2, ROW_HANDLE)
+        obj1 = model[iter1][ROW_HANDLE]
+        obj2 = model[iter2][ROW_HANDLE]
 
         return cmp(obj1.disk_io_rate(), obj2.disk_io_rate())
 
     def vmlist_network_usage_sorter(self, model, iter1, iter2, ignore):
-        obj1 = model.get_value(iter1, ROW_HANDLE)
-        obj2 = model.get_value(iter2, ROW_HANDLE)
+        obj1 = model[iter1][ROW_HANDLE]
+        obj2 = model[iter2][ROW_HANDLE]
 
         return cmp(obj1.network_traffic_rate(), obj2.network_traffic_rate())
 

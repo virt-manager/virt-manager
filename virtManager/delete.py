@@ -112,14 +112,6 @@ class vmmDeleteDialog(vmmGObjectUI):
         uiutil.set_grid_row_visible(
             self.widget("delete-storage-scroll"), dodel)
 
-    def get_config_format(self):
-        format_combo = self.widget("vol-format")
-        model = format_combo.get_model()
-        if format_combo.get_active_iter() is not None:
-            model = format_combo.get_model()
-            return model.get_value(format_combo.get_active_iter(), 0)
-        return None
-
     def get_paths_to_delete(self):
         del_list = self.widget("delete-storage-list")
         model = del_list.get_model()

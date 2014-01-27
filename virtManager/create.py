@@ -984,11 +984,8 @@ class vmmCreate(vmmGObjectUI):
         return self.widget("create-vm-name").get_text()
 
     def get_config_machine(self):
-        lst = self.widget("config-machine")
-        idx = lst.get_active()
-        if not lst.get_visible() or idx == -1:
-            return None
-        return lst.get_model()[idx][0]
+        return uiutil.get_list_selection(self.widget("config-machine"),
+            rowindex=0, check_visible=True)
 
     def is_install_page(self):
         notebook = self.widget("create-pages")
@@ -1012,23 +1009,19 @@ class vmmCreate(vmmGObjectUI):
                 return INSTALL_PAGE_CONTAINER_OS
 
     def get_config_os_info(self):
-        d_list = self.widget("install-os-type")
-        d_idx = d_list.get_active()
-        v_list = self.widget("install-os-version")
-        v_idx = v_list.get_active()
+        drow = uiutil.get_list_selection(self.widget("install-os-type"))
+        vrow = uiutil.get_list_selection(self.widget("install-os-version"))
         distro = None
         dlabel = None
         variant = None
         vlabel = None
 
-        if d_idx >= 0:
-            row = d_list.get_model()[d_idx]
-            distro = row[0]
-            dlabel = row[1]
-        if v_idx >= 0:
-            row = v_list.get_model()[v_idx]
-            variant = row[0]
-            vlabel = row[1]
+        if drow:
+            distro = drow[0]
+            dlabel = drow[1]
+        if vrow:
+            variant = vrow[0]
+            vlabel = vrow[1]
 
         return (distro and str(distro),
                 variant and str(variant),
@@ -1036,12 +1029,9 @@ class vmmCreate(vmmGObjectUI):
 
     def get_config_local_media(self, store_media=False):
         if self.widget("install-local-cdrom").get_active():
-            cd = self.widget("install-local-cdrom-combo")
-            idx = cd.get_active()
-            model = cd.get_model()
-            if idx != -1:
-                return model[idx][sharedui.OPTICAL_DEV_PATH]
-            return None
+            return uiutil.get_list_selection(
+                self.widget("install-local-cdrom-combo"),
+                sharedui.OPTICAL_DEV_PATH)
         else:
             ret = self.widget("install-local-box").get_child().get_text()
             if ret and store_media:
@@ -1132,13 +1122,9 @@ class vmmCreate(vmmGObjectUI):
 
     # Listeners
     def conn_changed(self, src):
-        idx = src.get_active()
-        model = src.get_model()
-
-        if idx < 0:
-            conn = None
-        else:
-            uri = model[idx][0]
+        uri = uiutil.get_list_selection(src, 0)
+        conn = None
+        if uri:
             conn = self.engine.conns[uri]["conn"]
 
         # If we aren't visible, let reset_state handle this for us, which
@@ -1163,13 +1149,11 @@ class vmmCreate(vmmGObjectUI):
         self.check_network_selection()
 
     def check_network_selection(self):
-        src = self.widget("config-netdev")
-        idx = src.get_active()
+        row = uiutil.get_list_selection(self.widget("config-netdev"))
         show_pxe_warn = True
         pxe_install = (self.get_config_install_page() == INSTALL_PAGE_PXE)
 
-        if not idx < 0:
-            row = src.get_model()[idx]
+        if row:
             ntype = row[0]
             key = row[6]
 
@@ -1189,21 +1173,18 @@ class vmmCreate(vmmGObjectUI):
                           _("Network selection does not support PXE"), False)
 
     def hv_changed(self, src):
-        idx = src.get_active()
-        if idx < 0:
+        hv = uiutil.get_list_selection(src, 1)
+        if not hv:
             return
 
-        row = src.get_model()[idx]
-
-        self.change_caps(row[1])
+        self.change_caps(hv)
         self.populate_arch()
 
     def arch_changed(self, src):
-        idx = src.get_active()
-        if idx < 0:
+        arch = uiutil.get_list_selection(src, 0)
+        if not arch:
             return
 
-        arch = src.get_model()[idx][0]
         self.change_caps(self.capsguest.os_type, arch)
 
     def url_box_changed(self, ignore):
@@ -1237,13 +1218,7 @@ class vmmCreate(vmmGObjectUI):
             self.detect_media_os()
 
     def _selected_os_row(self):
-        box = self.widget("install-os-type")
-        model = box.get_model()
-        idx = box.get_active()
-        if idx == -1:
-            return None
-
-        return model[idx]
+        return uiutil.get_list_selection(self.widget("install-os-type"))
 
     def change_os_type(self, box):
         ignore = box
@@ -1260,28 +1235,22 @@ class vmmCreate(vmmGObjectUI):
         variant.set_active(0)
 
     def change_os_version(self, box):
-        model = box.get_model()
-        idx = box.get_active()
-        if idx == -1:
+        show_all = uiutil.get_list_selection(box, 3)
+        if not show_all:
             return
 
         # Get previous
-        os_type_list = self.widget("install-os-type")
-        os_type_model = os_type_list.get_model()
         type_row = self._selected_os_row()
         if not type_row:
-            return
-        os_type = type_row[0]
-
-        show_all = model[idx][3]
-        if not show_all:
             return
 
         self.show_all_os = True
         self.populate_os_type_model()
 
+        os_type_list = self.widget("install-os-type")
+        os_type_model = os_type_list.get_model()
         for idx in range(len(os_type_model)):
-            if os_type_model[idx][0] == os_type:
+            if os_type_model[idx][0] == type_row[0]:
                 os_type_list.set_active(idx)
                 break
 

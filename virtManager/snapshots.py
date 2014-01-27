@@ -170,13 +170,11 @@ class vmmSnapshotPage(vmmGObjectUI):
     ###################
 
     def _get_selected_snapshot(self):
-        widget = self.widget("snapshot-list")
-        selection = widget.get_selection()
-        model, treepath = selection.get_selected()
-        if treepath is None:
+        name = uiutil.get_list_selection(self.widget("snapshot-list"), 0)
+        if not name:
             return None
+
         try:
-            name = model[treepath][0]
             for snap in self.vm.list_snapshots():
                 if name == snap.get_name():
                     return snap

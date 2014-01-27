@@ -507,18 +507,16 @@ class vmmHost(vmmGObjectUI):
         self.enable_net_apply(EDIT_NET_AUTOSTART)
 
     def current_network(self):
-        model, _iter = self.widget("net-list").get_selection().get_selected()
-        if not _iter:
-            return
+        key = uiutil.get_list_selection(self.widget("net-list"), 0)
         try:
-            return self.conn.get_net(model[_iter][0])
+            return key and self.conn.get_net(key)
         except KeyError:
-            return
+            return None
 
     def refresh_network(self, src_ignore, uuid):
         uilist = self.widget("net-list")
         sel = uilist.get_selection()
-        active = sel.get_selected()
+        model, treeiter = sel.get_selected()
         net = self.conn.get_net(uuid)
         net.tick()
 
@@ -526,9 +524,8 @@ class vmmHost(vmmGObjectUI):
             if row[0] == uuid:
                 row[4] = net.is_active()
 
-        if active[1] is not None:
-            currname = active[0].get_value(active[1], 0)
-            if currname == uuid:
+        if treeiter is not None:
+            if model[treeiter][0] == uuid:
                 self.net_selected(sel)
 
     def set_net_error_page(self, msg):
@@ -537,15 +534,14 @@ class vmmHost(vmmGObjectUI):
         self.widget("network-error-label").set_text(msg)
 
     def net_selected(self, src):
-        selected = src.get_selected()
-        if (selected[1] is None or
-            selected[0].get_value(selected[1], 0) is None):
+        model, treeiter = src.get_selected()
+        if treeiter is None:
             self.set_net_error_page(_("No virtual network selected."))
             return
 
         self.widget("network-pages").set_current_page(0)
         try:
-            net = self.conn.get_net(selected[0].get_value(selected[1], 0))
+            net = self.conn.get_net(model[treeiter][0])
         except KeyError:
             self.disable_net_apply()
             return
@@ -808,24 +804,22 @@ class vmmHost(vmmGObjectUI):
         self.refresh_storage_pool(None, cp.get_uuid())
 
     def current_pool(self):
-        model, _iter = self.widget("pool-list").get_selection().get_selected()
-        if not _iter:
-            return
+        key = uiutil.get_list_selection(self.widget("pool-list"), 0)
         try:
-            return self.conn.get_pool(model[_iter][0])
+            return key and self.conn.get_pool(key)
         except KeyError:
-            return
+            return None
 
     def current_vol(self):
         pool = self.current_pool()
         if not pool:
             return None
-        sel = self.widget("vol-list").get_selection()
-        active = sel.get_selected()
-        if active[1] is not None:
-            curruuid = active[0].get_value(active[1], 0)
-            return pool.get_volume(curruuid)
-        return None
+
+        key = uiutil.get_list_selection(self.widget("vol-list"), 0)
+        try:
+            return key and pool.get_volume(key)
+        except KeyError:
+            return None
 
     def pool_apply(self, src_ignore):
         pool = self.current_pool()
@@ -868,14 +862,13 @@ class vmmHost(vmmGObjectUI):
         self.widget("storage-error-label").set_text(msg)
 
     def pool_selected(self, src):
-        selected = src.get_selected()
-        if (selected[1] is None or
-            selected[0].get_value(selected[1], 0) is None):
+        model, treeiter = src.get_selected()
+        if treeiter is None:
             self.set_storage_error_page(_("No storage pool selected."))
             return
 
         self.widget("storage-pages").set_current_page(0)
-        uuid = selected[0].get_value(selected[1], 0)
+        uuid = model[treeiter][0]
 
         try:
             self.populate_pool_state(uuid)
@@ -960,9 +953,9 @@ class vmmHost(vmmGObjectUI):
         self.disable_pool_apply()
 
     def vol_selected(self, src):
-        selected = src.get_selected()
-        if (selected[1] is None or
-            selected[0].get_value(selected[1], 0) is None):
+        model, treeiter = src.get_selected()
+        ignore = model
+        if treeiter is None:
             self.widget("vol-delete").set_sensitive(False)
             return
 
@@ -1061,23 +1054,19 @@ class vmmHost(vmmGObjectUI):
         self.refresh_interface(None, cp.get_name())
 
     def current_interface(self):
-        model, _iter = self.widget("interface-list").get_selection(
-            ).get_selected()
-        if not _iter:
-            return
+        key = uiutil.get_list_selection(self.widget("interface-list"), 0)
         try:
-            return self.conn.get_interface(model[_iter][0])
+            return key and self.conn.get_interface(key)
         except KeyError:
-            return
+            return None
 
     def interface_apply(self, src_ignore):
         interface = self.current_interface()
         if interface is None:
             return
 
-        start_list = self.widget("interface-startmode")
-        model = start_list.get_model()
-        newmode = model[start_list.get_active()][0]
+        newmode = uiutil.get_list_selection(
+            self.widget("interface-startmode"), 0)
 
         logging.debug("Applying changes for interface '%s'",
                       interface.get_name())
@@ -1100,14 +1089,13 @@ class vmmHost(vmmGObjectUI):
         self.widget("interface-error-label").set_text(msg)
 
     def interface_selected(self, src):
-        selected = src.get_selected()
-        if (selected[1] is None or
-            selected[0].get_value(selected[1], 0) is None):
+        model, treeiter = src.get_selected()
+        if treeiter is None:
             self.set_interface_error_page(_("No interface selected."))
             return
 
         self.widget("interface-pages").set_current_page(INTERFACE_PAGE_INFO)
-        name = selected[0].get_value(selected[1], 0)
+        name = model[treeiter][0]
 
         try:
             self.populate_interface_state(name)
@@ -1205,7 +1193,7 @@ class vmmHost(vmmGObjectUI):
     def refresh_interface(self, src_ignore, name):
         iface_list = self.widget("interface-list")
         sel = iface_list.get_selection()
-        active = sel.get_selected()
+        model, treeiter = sel.get_selected()
         iface = self.conn.get_interface(name)
         iface.tick()
 
@@ -1213,9 +1201,8 @@ class vmmHost(vmmGObjectUI):
             if row[0] == name:
                 row[4] = iface.is_active()
 
-        if active[1] is not None:
-            currname = active[0].get_value(active[1], 0)
-            if currname == name:
+        if treeiter is not None:
+            if model[treeiter][0] == name:
                 self.interface_selected(sel)
 
 

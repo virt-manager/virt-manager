@@ -1011,8 +1011,9 @@ class vmmDetails(vmmGObjectUI):
 
     def get_combo_entry(self, widgetname):
         combo = self.widget(widgetname)
-        if combo.get_active() >= 0:
-            return combo.get_model()[combo.get_active()][0]
+        ret = uiutil.get_list_selection(combo, 0)
+        if ret:
+            return ret
         if not combo.get_has_entry():
             return None
         return combo.get_child().get_text().strip()
@@ -1054,26 +1055,16 @@ class vmmDetails(vmmGObjectUI):
         else:
             self.widget("toolbar-box").hide()
 
-    def get_selected_row(self, widget):
-        selection = widget.get_selection()
-        model, treepath = selection.get_selected()
-        if treepath is None:
-            return None
-        return model[treepath]
-
     def get_boot_selection(self):
-        return self.get_selected_row(self.widget("config-boot-list"))
+        return uiutil.get_list_selection(self.widget("config-boot-list"))
 
     def set_hw_selection(self, page, disable_apply=True):
         if disable_apply:
             self.disable_apply()
-
-        hwlist = self.widget("hw-list")
-        selection = hwlist.get_selection()
-        selection.select_path(str(page))
+        uiutil.set_list_selection(self.widget("hw-list"), page)
 
     def get_hw_row(self):
-        return self.get_selected_row(self.widget("hw-list"))
+        return uiutil.get_list_selection(self.widget("hw-list"))
 
     def get_hw_selection(self, field):
         row = self.get_hw_row()

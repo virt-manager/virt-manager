@@ -290,10 +290,7 @@ class vmmCreatePool(vmmGObjectUI):
 
 
     def get_config_type(self):
-        typ = self.widget("pool-type")
-        if typ.get_active_iter() is not None:
-            return typ.get_model().get_value(typ.get_active_iter(), 0)
-        return None
+        return uiutil.get_list_selection(self.widget("pool-type"), 0)
 
     def get_config_name(self):
         return self.widget("pool-name").get_text()
@@ -303,12 +300,9 @@ class vmmCreatePool(vmmGObjectUI):
         if not src.get_sensitive():
             return None
 
-        # If we provide the user with a drop down
-        model = src.get_model()
-        selection = src.get_active()
-        if selection != -1:
-            return model[selection][1]
-
+        ret = uiutil.get_list_selection(src, 1)
+        if ret is not None:
+            return ret
         return src.get_child().get_text()
 
     def get_config_source_path(self):
@@ -316,12 +310,9 @@ class vmmCreatePool(vmmGObjectUI):
         if not src.get_sensitive():
             return None
 
-        # If we provide the user with a drop down
-        model = src.get_model()
-        selection = src.get_active()
-        if selection != -1:
-            return model[selection][1]
-
+        ret = uiutil.get_list_selection(src, 1)
+        if ret is not None:
+            return ret
         return src.get_child().get_text().strip()
 
     def get_config_host(self):
@@ -331,12 +322,7 @@ class vmmCreatePool(vmmGObjectUI):
         return None
 
     def get_config_format(self):
-        format_combo = self.widget("pool-format")
-        model = format_combo.get_model()
-        if format_combo.get_active_iter() is not None:
-            model = format_combo.get_model()
-            return model.get_value(format_combo.get_active_iter(), 0)
-        return None
+        return uiutil.get_list_selection(self.widget("pool-format"), 0)
 
     def get_config_iqn(self):
         iqn = self.widget("pool-iqn")
@@ -459,11 +445,9 @@ class vmmCreatePool(vmmGObjectUI):
         source_list = self.widget("pool-source-path")
         target_list = self.widget("pool-target-path")
 
-        pool = None
-        if source_list.get_active() != -1:
-            pool = source_list.get_model()[source_list.get_active()][2]
-        elif target_list.get_active() != -1:
-            pool = target_list.get_model()[target_list.get_active()][2]
+        pool = uiutil.get_list_selection(source_list, 2)
+        if pool is None:
+            pool = uiutil.get_list_selection(target_list, 2)
 
         return pool
 

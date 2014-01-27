@@ -31,6 +31,7 @@ from gi.repository import Gtk
 import libvirt
 from virtinst import util
 
+from virtManager import uiutil
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.domain import vmmDomain
@@ -187,12 +188,12 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.reset_state()
 
     def destconn_changed(self, src):
-        active = src.get_active()
+        row = uiutil.get_list_selection(src)
         tooltip = ""
-        if active == -1:
+        if row:
             tooltip = _("A valid destination connection must be selected.")
 
-        self.widget("migrate-finish").set_sensitive(active != -1)
+        self.widget("migrate-finish").set_sensitive(bool(row))
         self.widget("migrate-finish").set_tooltip_text(tooltip)
 
     def toggle_set_rate(self, src):
@@ -215,17 +216,9 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.widget("migrate-port").set_sensitive(enable)
 
     def get_config_destconn(self):
-        combo = self.widget("migrate-dest")
-        model = combo.get_model()
-
-        idx = combo.get_active()
-        if idx == -1:
+        row = uiutil.get_list_selection(self.widget("migrate-dest"))
+        if not row or not row[2]:
             return None
-
-        row = model[idx]
-        if not row[2]:
-            return None
-
         return row[1]
 
     def get_config_offline(self):

@@ -142,52 +142,28 @@ class vmmFSDetails(vmmGObjectUI):
         return self._dev
 
     def get_config_fs_mode(self):
-        name = "fs-mode-combo"
-        combo = self.widget(name)
-        if not combo.get_visible():
-            return None
-
-        return combo.get_model()[combo.get_active()][0]
+        return uiutil.get_list_selection(self.widget("fs-mode-combo"),
+                                         rowindex=0, check_visible=True)
 
     def get_config_fs_wrpolicy(self):
-        name = "fs-wrpolicy-combo"
-        combo = self.widget(name)
-        if not combo.get_visible():
-            return None
-
-        return combo.get_model()[combo.get_active()][0]
+        return uiutil.get_list_selection(self.widget("fs-wrpolicy-combo"),
+                                         rowindex=0, check_visible=True)
 
     def get_config_fs_type(self):
-        name = "fs-type-combo"
-        combo = self.widget(name)
-        if not combo.get_visible():
-            return None
-
-        return combo.get_model()[combo.get_active()][0]
+        return uiutil.get_list_selection(self.widget("fs-type-combo"),
+                                         rowindex=0, check_visible=True)
 
     def get_config_fs_readonly(self):
-        name = "fs-readonly"
-        check = self.widget(name)
-        if not check.get_visible():
-            return None
-
-        return check.get_active()
+        return uiutil.get_list_selection(self.widget("fs-readonly"),
+                                         rowindex=0, check_visible=True)
 
     def get_config_fs_driver(self):
-        name = "fs-driver-combo"
-        combo = self.widget(name)
-        if not combo.get_visible():
-            return None
-
-        return combo.get_model()[combo.get_active()][0]
+        return uiutil.get_list_selection(self.widget("fs-driver-combo"),
+                                         rowindex=0, check_visible=True)
 
     def get_config_fs_format(self):
-        name = "fs-format-combo"
-        combo = self.widget(name)
-        if not combo.get_visible():
-            return None
-
-        return combo.get_model()[combo.get_active()][0]
+        return uiutil.get_list_selection(self.widget("fs-format-combo"),
+                                         rowindex=0, check_visible=True)
 
     # Setters
     def set_dev(self, dev):

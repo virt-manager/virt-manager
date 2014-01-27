@@ -46,6 +46,9 @@ def set_combo_text_column(combo, col):
 
 
 def spin_get_helper(widget):
+    """
+    Safely get spin button contents, converting to int if possible
+    """
     adj = widget.get_adjustment()
     txt = widget.get_text()
 
@@ -55,17 +58,36 @@ def spin_get_helper(widget):
         return adj.get_value()
 
 
-def get_list_selection(widget):
-    selection = widget.get_selection()
-    active = selection.get_selected()
+def get_list_selection(widget, rowindex=None, check_visible=False):
+    """
+    Helper to simplify getting the selected row in a list/tree/combo
+    """
+    if check_visible and not widget.get_visible():
+        return None
 
-    treestore, treeiter = active
-    if treeiter is not None:
-        return treestore[treeiter]
-    return None
+    if hasattr(widget, "get_selection"):
+        selection = widget.get_selection()
+        model, treeiter = selection.get_selected()
+        if treeiter is None:
+            return None
+
+        row = model[treeiter]
+    else:
+        idx = widget.get_active()
+        if idx == -1:
+            return None
+
+        row = widget.get_model()[idx]
+
+    if rowindex is None:
+        return row
+    return row[rowindex]
 
 
 def set_list_selection(widget, rownum):
+    """
+    Helper to set list selection from the passed row number
+    """
     path = str(rownum)
     selection = widget.get_selection()
 
@@ -75,6 +97,10 @@ def set_list_selection(widget, rownum):
 
 
 def set_row_selection(listwidget, prevkey):
+    """
+    Set a list or tree selection given the passed key. The key is
+    expected to be element 0 in the list rows.
+    """
     model = listwidget.get_model()
     _iter = None
     if prevkey:
@@ -97,8 +123,10 @@ def set_row_selection(listwidget, prevkey):
 
 
 def child_get_property(parent, child, propname):
-    # Wrapper for child_get_property, which pygobject doesn't properly
-    # introspect
+    """
+    Wrapper for child_get_property, which pygobject doesn't properly
+    introspect
+    """
     value = GObject.Value()
     value.init(GObject.TYPE_INT)
     parent.child_get_property(child, propname, value)
@@ -106,11 +134,12 @@ def child_get_property(parent, child, propname):
 
 
 def set_grid_row_visible(child, visible):
-    # For the passed widget, find its parent GtkGrid, and hide/show all
-    # elements that are in the same row as it. Simplifies having to name
-    # every element in a row when we want to dynamically hide things
-    # based on UI interraction
-
+    """
+    For the passed widget, find its parent GtkGrid, and hide/show all
+    elements that are in the same row as it. Simplifies having to name
+    every element in a row when we want to dynamically hide things
+    based on UI interraction
+    """
     parent = child.get_parent()
     if not type(parent) is Gtk.Grid:
         raise RuntimeError("Programming error, parent must be grid, "

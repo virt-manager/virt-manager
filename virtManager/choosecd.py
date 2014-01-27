@@ -24,6 +24,7 @@ import logging
 from gi.repository import GObject
 # pylint: enable=E0611
 
+from virtManager import uiutil
 from virtManager import sharedui
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.mediadev import MEDIA_FLOPPY
@@ -94,16 +95,11 @@ class vmmChooseCD(vmmGObjectUI):
             self.widget("iso-image").set_active(True)
 
     def ok(self, ignore1=None, ignore2=None):
-        path = None
-
         if self.widget("iso-image").get_active():
             path = self.widget("iso-path").get_text()
         else:
-            cd = self.widget("cd-path")
-            idx = cd.get_active()
-            model = cd.get_model()
-            if idx != -1:
-                path = model[idx][sharedui.OPTICAL_DEV_PATH]
+            path = uiutil.get_list_selection(self.widget("cd-path"),
+                                             sharedui.OPTICAL_DEV_PATH)
 
         if path == "" or path is None:
             return self.err.val_err(_("Invalid Media Path"),

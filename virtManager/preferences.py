@@ -298,22 +298,13 @@ class vmmPreferences(vmmGObjectUI):
     def change_new_vm_sound(self, src):
         self.config.set_new_vm_sound(src.get_active())
     def change_graphics_type(self, src):
-        gtype = 'vnc'
-        idx = src.get_active()
-        if idx >= 0:
-            gtype = src.get_model()[idx][0]
-        self.config.set_graphics_type(gtype.lower())
+        typ = uiutil.get_list_selection(src, 0) or "vnc"
+        self.config.set_graphics_type(typ.lower())
     def change_storage_format(self, src):
-        typ = 'default'
-        idx = src.get_active()
-        if idx >= 0:
-            typ = src.get_model()[idx][0]
+        typ = uiutil.get_list_selection(src, 0) or "default"
         self.config.set_storage_format(typ.lower())
     def change_cpu_default(self, src):
-        typ = 'default'
-        idx = src.get_active()
-        if idx >= 0:
-            typ = src.get_model()[idx][0]
+        typ = uiutil.get_list_selection(src, 0) or "default"
         self.config.set_default_cpu_setting(typ.lower())
 
     def change_disk_poll(self, src):

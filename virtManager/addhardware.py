@@ -1022,18 +1022,16 @@ class vmmAddHardware(vmmGObjectUI):
         return diskpath
 
     def get_config_disk_bus(self):
-        widget = self.widget("config-storage-bustype")
-        if widget.get_active() == -1:
-            return None
-        return widget.get_model()[widget.get_active()][0]
+        return uiutil.get_list_selection(
+            self.widget("config-storage-bustype"), 0)
 
     def get_config_disk_device(self):
-        widget = self.widget("config-storage-devtype")
-        return widget.get_model()[widget.get_active()][0]
+        return uiutil.get_list_selection(
+            self.widget("config-storage-devtype"), 0)
 
     def get_config_disk_cache(self):
-        widget = self.widget("config-storage-cache")
-        return widget.get_model()[widget.get_active()][0]
+        return uiutil.get_list_selection(
+            self.widget("config-storage-cache"), 0)
 
     def get_config_disk_format(self):
         fmt = self.widget("config-storage-format")
@@ -1041,18 +1039,12 @@ class vmmAddHardware(vmmGObjectUI):
 
     # Input getters
     def get_config_input(self):
-        target = self.widget("input-type")
-        label = target.get_model().get_value(target.get_active_iter(), 0)
-        _type = target.get_model().get_value(target.get_active_iter(), 1)
-        bus = target.get_model().get_value(target.get_active_iter(), 2)
-        return label, _type, bus
+        row = uiutil.get_list_selection(self.widget("input-type"))
+        return row[1], row[2]
 
     # Graphics getters
     def get_config_graphics(self):
-        _type = self.widget("graphics-type")
-        if _type.get_active_iter() is None:
-            return None
-        return _type.get_model().get_value(_type.get_active_iter(), 1)
+        return uiutil.get_list_selection(self.widget("graphics-type"), 1)
 
     def get_config_graphics_ports(self):
         if self.widget("graphics-port-auto").get_active():
@@ -1065,8 +1057,7 @@ class vmmAddHardware(vmmGObjectUI):
         return int(port), int(tlsport)
 
     def get_config_graphics_address(self):
-        addr = self.widget("graphics-address")
-        return addr.get_model()[addr.get_active()][1]
+        return uiutil.get_list_selection(self.widget("graphics-address"), 1)
 
     def get_config_graphics_password(self):
         if not self.widget("graphics-password-chk").get_active():
@@ -1084,13 +1075,7 @@ class vmmAddHardware(vmmGObjectUI):
         return net_type, net_src
 
     def get_config_net_model(self):
-        model = self.widget("net-model")
-        if model.get_active_iter():
-            modelxml = model.get_model().get_value(model.get_active_iter(), 0)
-            modelstr = model.get_model().get_value(model.get_active_iter(), 1)
-        else:
-            modelxml = modelstr = None
-        return modelxml, modelstr
+        return uiutil.get_list_selection(self.widget("net-model"))[0]
 
     def get_config_macaddr(self):
         macaddr = None
@@ -1100,9 +1085,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     # Sound getters
     def get_config_sound_model(self):
-        model = self.widget("sound-model")
-        modelstr = model.get_model().get_value(model.get_active_iter(), 0)
-        return modelstr
+        return uiutil.get_list_selection(self.widget("sound-model"), 0)
 
     # Host device getters
     def get_config_host_device_type_info(self):
@@ -1115,29 +1098,21 @@ class vmmAddHardware(vmmGObjectUI):
         return usb_info
 
     def get_config_host_device_info(self):
-        devrow = uiutil.get_list_selection(self.widget("host-device"))
-        if not devrow:
-            return []
-        return devrow
+        return uiutil.get_list_selection(self.widget("host-device"))
 
     # Video Getters
     def get_config_video_model(self):
-        modbox = self.widget("video-model")
-        return modbox.get_model()[modbox.get_active()][0]
+        return uiutil.get_list_selection(self.widget("video-model"), 0)
 
     # Watchdog getters
     def get_config_watchdog_model(self):
-        modbox = self.widget("watchdog-model")
-        return modbox.get_model()[modbox.get_active()][0]
+        return uiutil.get_list_selection(self.widget("watchdog-model"), 0)
     def get_config_watchdog_action(self):
-        modbox = self.widget("watchdog-action")
-        return modbox.get_model()[modbox.get_active()][0]
+        return uiutil.get_list_selection(self.widget("watchdog-action"), 0)
 
     # Smartcard getters
     def get_config_smartcard_mode(self):
-        mode = self.widget("smartcard-mode")
-        modestr = mode.get_model().get_value(mode.get_active_iter(), 0)
-        return modestr
+        return uiutil.get_list_selection(self.widget("smartcard-mode"), 0)
 
     # USB redir getters
     def get_config_usbredir_host(self):
@@ -1149,24 +1124,15 @@ class vmmAddHardware(vmmGObjectUI):
         return host.get_text(), int(service.get_value())
 
     def get_config_usbredir_type(self):
-        typebox = self.widget("usbredir-list")
-        return typebox.get_model()[typebox.get_active()][0]
+        return uiutil.get_list_selection(self.widget("usbredir-list"), 0)
 
     # TPM getters
     def get_config_tpm_type(self):
-        typ = self.widget("tpm-type")
-        typestr = typ.get_model().get_value(typ.get_active_iter(), 0)
-        return typestr
+        return uiutil.get_list_selection(self.widget("tpm-type"), 0)
 
     # RNG getters
     def get_config_rng_type(self):
-        src = self.widget("rng-type")
-        idx = src.get_active()
-        if idx < 0:
-            return None
-
-        selected_type = src.get_model()[idx][0]
-        return selected_type
+        return uiutil.get_list_selection(self.widget("rng-type"), 0)
 
     def get_config_rng_device(self):
         if self.get_config_rng_type() == virtinst.VirtualRNGDevice.TYPE_RANDOM:
@@ -1202,18 +1168,10 @@ class vmmAddHardware(vmmGObjectUI):
         return None
 
     def get_config_rng_backend_type(self):
-        active = self.widget("rng-backend-type").get_active()
-        model = self.widget("rng-backend-type").get_model()
-        if active < 0:
-            return None
-        return model[active][0]
+        return uiutil.get_list_selection(self.widget("rng-backend-type"), 0)
 
     def get_config_rng_backend_mode(self):
-        active = self.widget("rng-backend-mode").get_active()
-        model = self.widget("rng-backend-mode").get_model()
-        if active < 0:
-            return None
-        return model[active][0]
+        return uiutil.get_list_selection(self.widget("rng-backend-mode"), 0)
 
     ################
     # UI listeners #
@@ -1379,18 +1337,15 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("page-title-label").set_markup(markup)
 
     def change_tpm_device_type(self, src):
-        idx = src.get_active()
-        if idx < 0:
+        devtype = uiutil.get_list_selection(src, 0)
+        if devtype is None:
             return
 
         tpm_widget_mappings = {
             "device_path" : "tpm-device-path",
         }
 
-        devtype = src.get_model()[src.get_active()][0]
-        conn = self.conn.get_backend()
-
-        self._dev = VirtualTPMDevice(conn)
+        self._dev = VirtualTPMDevice(self.conn.get_backend())
         self._dev.type = devtype
 
         for param_name, widget_name in tpm_widget_mappings.items():
@@ -1420,8 +1375,8 @@ class vmmAddHardware(vmmGObjectUI):
         uiutil.set_row_selection(self.widget("char-device-type"), settype)
 
     def change_char_device_type(self, src):
-        idx = src.get_active()
-        if idx < 0:
+        devtype = uiutil.get_list_selection(src, 0)
+        if devtype is None:
             return
 
         char_widget_mappings = {
@@ -1433,14 +1388,12 @@ class vmmAddHardware(vmmGObjectUI):
         }
 
         char_class = self.get_char_type()
-        devtype = src.get_model()[src.get_active()][0]
-        conn = self.conn.get_backend()
         ischan = char_class.virtual_device_type == "channel"
         iscon = char_class.virtual_device_type == "console"
         show_auto = (devtype == "unix" and ischan and
             self.conn.check_support(self.conn.SUPPORT_CONN_AUTOSOCKET))
 
-        self._dev = char_class(conn)
+        self._dev = char_class(self.conn.get_backend())
         self._dev.type = devtype
 
         for param_name, widget_name in char_widget_mappings.items():
@@ -1461,11 +1414,9 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("char-mode").set_active(0)
 
     def change_usbredir_type(self, src):
-        idx = src.get_active()
-        if idx < 0:
+        showhost = uiutil.get_list_selection(src, 2)
+        if showhost is None:
             return
-
-        showhost = src.get_model()[src.get_active()][2]
         uiutil.set_grid_row_visible(self.widget("usbredir-host-box"),
                                        showhost)
 
@@ -1746,7 +1697,7 @@ class vmmAddHardware(vmmGObjectUI):
     def validate_page_network(self):
         nettype, devname = self.get_config_network()
         mac = self.get_config_macaddr()
-        model = self.get_config_net_model()[0]
+        model = self.get_config_net_model()
 
         if not nettype:
             return self.err.val_err(_("Network selection error."),
@@ -1764,7 +1715,7 @@ class vmmAddHardware(vmmGObjectUI):
         self._dev = ret
 
     def validate_page_input(self):
-        ignore, inp_type, inp_bus = self.get_config_input()
+        inp_type, inp_bus = self.get_config_input()
         dev = virtinst.VirtualInputDevice(self.conn.get_backend())
         dev.type = inp_type
         dev.bus = inp_bus
@@ -1795,16 +1746,15 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Sound device parameter error"), e)
 
     def validate_page_hostdev(self):
-        ret = self.get_config_host_device_info()
-        nodedev_name = ret and ret[1] or None
+        row = self.get_config_host_device_info()
         is_dup = False
 
-        if nodedev_name is None:
+        if row is None:
             return self.err.val_err(_("Physical Device Required"),
                                     _("A device must be selected."))
 
-        devtype = ret[2]
-        nodedev = ret[3]
+        devtype = row[2]
+        nodedev = row[3]
         if devtype == "usb_device":
             vendor = nodedev.vendor_id
             product = nodedev.product_id
@@ -1828,20 +1778,20 @@ class vmmAddHardware(vmmGObjectUI):
         modebox = self.widget("char-mode")
         devbox = self.widget("char-device-type")
         typebox = self.widget("char-target-type")
-        devtype = devbox.get_model()[devbox.get_active()][0]
+        devtype = uiutil.get_list_selection(devbox, 0)
         conn = self.conn.get_backend()
 
         devclass = charclass(conn)
         devclass.type = devtype
 
         source_path = self.widget("char-path").get_text()
-        source_mode = modebox.get_model()[modebox.get_active()][0]
+        source_mode = uiutil.get_list_selection(modebox, 0)
         source_host = self.widget("char-host").get_text()
         bind_host = self.widget("char-bind-host").get_text()
         source_port = self.widget("char-port").get_value()
         bind_port = self.widget("char-bind-port").get_value()
         target_name = self.widget("char-target-name").get_child().get_text()
-        target_type = typebox.get_model()[typebox.get_active()][0]
+        target_type = uiutil.get_list_selection(typebox, 0)
 
         if self.widget("char-use-telnet").get_active():
             protocol = VirtualSerialDevice.PROTOCOL_TELNET

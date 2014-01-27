@@ -588,8 +588,7 @@ class vmmCreateInterface(vmmGObjectUI):
     #########################
 
     def get_config_interface_type(self):
-        type_list = self.widget("interface-type")
-        return type_list.get_model()[type_list.get_active()][0]
+        return uiutil.get_list_selection(self.widget("interface-type"), 0)
 
     def set_interface_name(self, name):
         if self.widget("interface-name-entry").get_visible():
@@ -606,8 +605,7 @@ class vmmCreateInterface(vmmGObjectUI):
             return self.widget("interface-name-label").get_text()
 
     def get_config_interface_startmode(self):
-        start_list = self.widget("interface-startmode")
-        return start_list.get_model()[start_list.get_active()][0]
+        return uiutil.get_list_selection(self.widget("interface-startmode"), 0)
 
     def get_config_selected_interfaces(self):
         iface_list = self.widget("interface-list")
@@ -672,8 +670,7 @@ class vmmCreateInterface(vmmGObjectUI):
         self.set_interface_name(name)
 
     def bond_monitor_mode_changed(self, src):
-        model = src.get_model()
-        value = model[src.get_active()][1]
+        value = uiutil.get_list_selection(src, 1)
         bond_pages = self.widget("bond-pages")
 
         if value == "arpmon":
@@ -707,13 +704,8 @@ class vmmCreateInterface(vmmGObjectUI):
         self.widget("bridge-config-label").set_text(txt)
 
     def update_bond_desc(self):
-        mode_list = self.widget("bond-mode")
-        model = mode_list.get_model()
-        mode = model[mode_list.get_active()][0]
-
-        mon_list = self.widget("bond-monitor-mode")
-        model = mon_list.get_model()
-        mon = model[mon_list.get_active()][1]
+        mode = uiutil.get_list_selection(self.widget("bond-mode"), 0)
+        mon = uiutil.get_list_selection(self.widget("bond-monitor-mode"), 1)
 
         txt = mode
         if mon:
@@ -765,13 +757,6 @@ class vmmCreateInterface(vmmGObjectUI):
         return self.build_ip_info()
 
     def build_ip_info(self):
-        def get_row(widget):
-            combo = widget.get_model()
-            active = widget.get_active()
-            if active == -1:
-                return None
-            return combo[active]
-
         def build_ip(addr_str):
             if not addr_str:
                 return None, None
@@ -784,7 +769,8 @@ class vmmCreateInterface(vmmGObjectUI):
 
         is_manual = self.widget("ip-do-manual").get_active()
 
-        copy_row = get_row(self.widget("ip-copy-interface-combo"))
+        copy_row = uiutil.get_list_selection(
+            self.widget("ip-copy-interface-combo"))
 
         v4_mode = self.widget("ipv4-mode").get_active()
         v4_addr = self.widget("ipv4-address").get_text()
@@ -1017,21 +1003,10 @@ class vmmCreateInterface(vmmGObjectUI):
 
 
     def validate_bond(self, iobj, ifaces):
-        mode_list = self.widget("bond-mode")
-        model = mode_list.get_model()
-        mode = model[mode_list.get_active()][1]
-
-        mon_list = self.widget("bond-monitor-mode")
-        model = mon_list.get_model()
-        mon = model[mon_list.get_active()][1]
-
-        val_list = self.widget("arp-validate")
-        val_model = val_list.get_model()
-        arp_val = val_model[val_list.get_active()][0]
-
-        car_list = self.widget("mii-carrier")
-        car_model = car_list.get_model()
-        mii_car = car_model[car_list.get_active()][0]
+        mode = uiutil.get_list_selection(self.widget("bond-mode"), 1)
+        mon = uiutil.get_list_selection(self.widget("bond-monitor-mode"), 1)
+        arp_val = uiutil.get_list_selection(self.widget("arp-validate"), 0)
+        mii_car = uiutil.get_list_selection(self.widget("mii-carrier"), 0)
 
         # ARP params
         arp_int = self.widget("arp-interval").get_value()
