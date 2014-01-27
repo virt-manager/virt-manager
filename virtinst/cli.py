@@ -98,8 +98,8 @@ class VirtHelpFormatter(argparse.RawDescriptionHelpFormatter):
 def setupParser(usage, description, introspection_epilog=False):
     epilog = _("See man page for examples and full option syntax.")
     if introspection_epilog:
-        epilog = _("Use --option=? to see available suboptions, example: "
-            "--network=?") + "\n" + epilog
+        epilog = _("Use '--option=?' or '--option help' to see "
+            "available suboptions") + "\n" + epilog
 
     parser = argparse.ArgumentParser(
         usage=usage, description=description,
@@ -860,7 +860,7 @@ def add_net_option(devg):
              "--network network=my_libvirt_virtual_net\n"
              "--network network=mynet,model=virtio,mac=00:11...\n"
              "--network network=mynet,filterref=clean-traffic\n"
-             "--network=?"))
+             "--network help"))
 
 
 def add_device_options(devg):
@@ -1227,7 +1227,7 @@ class VirtCLIParser(object):
 
     def check_introspection(self, option):
         for optstr in util.listify(option):
-            if optstr == "?":
+            if optstr == "?" or optstr == "help":
                 print "--%s options:" % self.cli_arg_name
                 for arg in sorted(self._params, key=lambda p: p.cliname):
                     print "  %s" % arg.cliname

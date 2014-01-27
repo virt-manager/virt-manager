@@ -525,7 +525,7 @@ c.add_invalid("--nodisks --boot network --paravirt --arch mips")  # Invalid arch
 
 
 c = vinst.add_category("misc", "--nographics --noautoconsole")
-c.add_valid("--panic=? --disk=?")  # Make sure introspection doesn't blow up
+c.add_valid("--panic help --disk=?")  # Make sure introspection doesn't blow up
 c.add_compare("", "noargs-fail")  # No arguments
 c.add_compare("--hvm --nodisks --pxe --print-step all", "simple-pxe")  # Diskless PXE install
 c.add_compare("--hvm --cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
