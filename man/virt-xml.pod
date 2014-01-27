@@ -274,13 +274,13 @@ Clear the previous <cpu> definition of domain 'winxp', change it to 'host-model'
 
   # virt-xml winxp --edit --cpu host-model,clearxml=yes --confirm
 
-Change the sound cards with model=ac97 to model=ich6 on 'fedora19', but only output the diff:
+Change the second sound card to model=ich6 on 'fedora19', but only output the diff:
 
-  # virt-xml fedora19 --edit model=ac97 --soundhw model=ich6 --print-diff
+  # virt-xml fedora19 --edit 2 --soundhw model=ich6 --print-diff
 
-Update the first graphics password to 'foo' of the running VM 'rhel6':
+Update the every graphics device password to 'foo' of the running VM 'rhel6':
 
-  # virt-xml rhel6 --edit --graphics password=foo --update
+  # virt-xml rhel6 --edit all --graphics password=foo --update
 
 Remove the disk path from disk device hdc:
 
