@@ -381,6 +381,11 @@ class vmmDetails(vmmGObjectUI):
         self.snapshots = vmmSnapshotPage(self.vm, self.builder, self.topwin)
         self.widget("snapshot-placeholder").add(self.snapshots.top_box)
 
+        self.fsDetails = vmmFSDetails(self.vm, self.builder, self.topwin)
+        self.widget("fs-alignment").add(self.fsDetails.top_box)
+        self.fsDetails.connect("changed",
+                               lambda *x: self.enable_apply(x, EDIT_FS))
+
         # Set default window size
         w, h = self.vm.get_details_window_size()
         self.topwin.set_default_size(w or 800, h or 600)
@@ -546,13 +551,6 @@ class vmmDetails(vmmGObjectUI):
         self.vm.connect("config-changed", self.refresh_vm_state)
         self.vm.connect("resources-sampled", self.refresh_resources)
 
-        self.fsDetails = vmmFSDetails(self.vm)
-        self.fsDetails.set_initial_state()
-        fsAlignment = self.widget("fs-alignment")
-        fsAlignment.add(self.fsDetails.topwin)
-        self.fsDetails.connect("changed", lambda *x: self.enable_apply(x,
-                                           EDIT_FS))
-
         self.populate_hw_list()
         self.repopulate_boot_list()
 
@@ -592,8 +590,6 @@ class vmmDetails(vmmGObjectUI):
         self.topwin.present()
         if vis:
             return
-
-        self.fsDetails.topwin.show_all()
 
         self.emit("details-opened")
         self.refresh_vm_state()
@@ -2221,7 +2217,8 @@ class vmmDetails(vmmGObjectUI):
         ignore = add_hotplug
 
         if self.edited(EDIT_FS):
-            self.fsDetails.validate_page_filesystem()
+            if self.fsDetails.validate_page_filesystem() is False:
+                return False
             add_define(self.vm.define_filesystem, dev_id_info,
                        self.fsDetails.get_dev())
 

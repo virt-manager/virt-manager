@@ -36,8 +36,9 @@ class vmmFSDetails(vmmGObjectUI):
         "changed": (GObject.SignalFlags.RUN_FIRST, None, [])
     }
 
-    def __init__(self, vm):
-        vmmGObjectUI.__init__(self, "fsdetails.ui", "vmm-fs-details")
+    def __init__(self, vm, builder, topwin):
+        vmmGObjectUI.__init__(self, "fsdetails.ui",
+                              None, builder=builder, topwin=topwin)
 
         self.vm = vm
         self.conn = vm.conn
@@ -57,6 +58,9 @@ class vmmFSDetails(vmmGObjectUI):
             "on_fs_ram_source_changed": self.notify_change,
             "on_fs_target_changed": self.notify_change,
         })
+
+        self.set_initial_state()
+        self.top_box = self.widget("vmm-fs-details")
 
     def _cleanup(self):
         self.vm = None

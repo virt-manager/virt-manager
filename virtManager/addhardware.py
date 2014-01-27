@@ -72,6 +72,9 @@ class vmmAddHardware(vmmGObjectUI):
 
         self._dev = None
 
+        self.fsDetails = vmmFSDetails(vm, self.builder, self.topwin)
+        self.widget("fs-box").add(self.fsDetails.top_box)
+
         self.builder.connect_signals({
             "on_create_cancel_clicked" : self.close,
             "on_vmm_create_delete_event" : self.close,
@@ -101,11 +104,6 @@ class vmmAddHardware(vmmGObjectUI):
             "on_rng_backend_type_changed": self.change_rng,
         })
         self.bind_escape_key_close()
-
-        self.fsDetails = vmmFSDetails(vm)
-        fsbox = self.widget("fs-box")
-        fsbox.add(self.fsDetails.topwin)
-        self.fsDetails.topwin.show_all()
 
         self.set_initial_state()
 
@@ -293,9 +291,6 @@ class vmmAddHardware(vmmGObjectUI):
         self.build_watchdogmodel_combo(self.vm, combo)
         combo = self.widget("watchdog-action")
         self.build_watchdogaction_combo(self.vm, combo)
-
-        # Filesystem widgets
-        self.fsDetails.set_initial_state()
 
         # Smartcard widgets
         combo = self.widget("smartcard-mode")
@@ -1856,7 +1851,8 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Watchdog parameter error"), e)
 
     def validate_page_filesystem(self):
-        self.fsDetails.validate_page_filesystem()
+        if self.fsDetails.validate_page_filesystem() is False:
+            return False
         self._dev = self.fsDetails.get_dev()
 
     def validate_page_smartcard(self):
