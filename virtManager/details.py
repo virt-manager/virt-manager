@@ -2730,10 +2730,10 @@ class vmmDetails(vmmGObjectUI):
         # Virtualport config
         vport = net.virtualport
         self.widget("vport-type").set_text(vport.type or "")
-        self.widget("vport-managerid").set_text(str(vport.managerid) or "")
-        self.widget("vport-typeid").set_text(str(vport.typeid) or "")
+        self.widget("vport-managerid").set_text(str(vport.managerid or ""))
+        self.widget("vport-typeid").set_text(str(vport.typeid or ""))
         self.widget("vport-typeidversion").set_text(
-                                str(vport.typeidversion) or "")
+            str(vport.typeidversion or ""))
         self.widget("vport-instanceid").set_text(vport.instanceid or "")
 
         vmmAddHardware.populate_network_model_combo(self.vm,
