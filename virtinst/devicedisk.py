@@ -897,6 +897,7 @@ class VirtualDisk(VirtualDevice):
         if ret:
             self.target = ret
             return ret
-        raise ValueError(_("No more space for disks of type '%s'" % prefix))
+        raise ValueError(_("Only %s disks of type '%s' are supported"
+            % (maxnode, prefix)))
 
 VirtualDisk.register_type()
