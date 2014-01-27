@@ -37,6 +37,7 @@ from virtinst import VirtualController
 from virtManager import sharedui
 from virtManager import uiutil
 from virtManager.fsdetails import vmmFSDetails
+from virtManager.netlist import vmmNetworkList
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.baseclass import vmmGObjectUI
@@ -68,12 +69,15 @@ class vmmAddHardware(vmmGObjectUI):
         self.is_customize_dialog = is_customize_dialog
 
         self.storage_browser = None
-        self.fs_units = "mb"
 
         self._dev = None
 
         self.fsDetails = vmmFSDetails(vm, self.builder, self.topwin)
         self.widget("fs-box").add(self.fsDetails.top_box)
+        self.netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
+        self.widget("network-source-label-align").add(self.netlist.top_label)
+        self.widget("network-source-ui-align").add(self.netlist.top_box)
+        self.widget("network-vport-align").add(self.netlist.top_vport)
 
         self.builder.connect_signals({
             "on_create_cancel_clicked" : self.close,
@@ -134,6 +138,9 @@ class vmmAddHardware(vmmGObjectUI):
             self.storage_browser = None
 
         self.fsDetails.cleanup()
+        self.fsDetails = None
+        self.netlist.cleanup()
+        self.netlist = None
 
     def is_visible(self):
         return self.topwin.get_visible()
@@ -172,13 +179,8 @@ class vmmAddHardware(vmmGObjectUI):
         hw_col.add_attribute(text, 'sensitive', 3)
         hw_list.append_column(hw_col)
 
-        # Virtual network list
-        net_list = self.widget("net-list")
-        bridge_box = self.widget("net-bridge-box")
-        sharedui.build_network_list(net_list, bridge_box)
-
         # Network model list
-        netmodel_list  = self.widget("net-model")
+        netmodel_list = self.widget("net-model")
         self.build_network_model_combo(self.vm, netmodel_list)
 
         # Disk bus type
@@ -415,16 +417,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("create-mac-address").set_text(newmac)
         self.change_macaddr_use()
 
-        net_list = self.widget("net-list")
-        net_warn = self.widget("net-list-warn")
-        sharedui.populate_network_list(net_list, self.conn)
-
-        error = self.conn.netdev_error
-        if error:
-            net_warn.show()
-            net_warn.set_tooltip_text(error)
-        else:
-            net_warn.hide()
+        self.netlist.reset_state()
 
         netmodel = self.widget("net-model")
         self.populate_network_model_combo(self.vm, netmodel)
@@ -585,27 +578,6 @@ class vmmAddHardware(vmmGObjectUI):
             model.append([m, virtinst.VirtualWatchdog.get_action_desc(m)])
         if len(model) > 0:
             combo.set_active(0)
-
-    @staticmethod
-    def populate_network_source_mode_combo(vm, combo):
-        ignore = vm
-        model = combo.get_model()
-        model.clear()
-
-        # [xml value, label]
-        model.append(["bridge", "Bridge"])
-        model.append(["vepa", "VEPA"])
-        model.append(["private", "Private"])
-        model.append(["passthrough", "Passthrough"])
-
-    @staticmethod
-    def build_network_source_mode_combo(vm, combo):
-        model = Gtk.ListStore(str, str)
-        combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
-
-        vmmAddHardware.populate_network_source_mode_combo(vm, combo)
-        combo.set_active(0)
 
     @staticmethod
     def populate_network_model_combo(vm, combo):
@@ -1059,15 +1031,6 @@ class vmmAddHardware(vmmGObjectUI):
         return self.widget("graphics-password").get_text()
 
     # Network getters
-    def get_config_network(self):
-        net_list = self.widget("net-list")
-        bridge_ent = self.widget("net-bridge")
-
-        net_type, net_src = sharedui.get_network_selection(net_list,
-                                                            bridge_ent)
-
-        return net_type, net_src
-
     def get_config_net_model(self):
         return uiutil.get_list_selection(self.widget("net-model"))[0]
 
@@ -1689,7 +1652,7 @@ class vmmAddHardware(vmmGObjectUI):
 
 
     def validate_page_network(self):
-        nettype, devname = self.get_config_network()
+        nettype = self.netlist.get_network_selection()[0]
         mac = self.get_config_macaddr()
         model = self.get_config_net_model()
 
@@ -1701,8 +1664,7 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Invalid MAC address"),
                                     _("A MAC address must be entered."))
 
-        ret = sharedui.validate_network(self.err, self.conn,
-                                         nettype, devname, mac, model)
+        ret = self.netlist.validate_network(mac, model)
         if ret is False:
             return False
 

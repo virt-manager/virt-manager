@@ -122,6 +122,37 @@ def set_row_selection(listwidget, prevkey):
     selection.emit("changed")
 
 
+def set_combo_entry(combo, value):
+    """
+    Search the passed combobox for value, comparing against the
+    first item in each row. If found, select it. If not found, and
+    the combobox has a text entry, stick the value in their and
+    select it.
+    """
+    idx = -1
+    model_list = [x[0] for x in combo.get_model()]
+    model_in_list = (value in model_list)
+    if model_in_list:
+        idx = model_list.index(value)
+
+    combo.set_active(idx)
+    if idx == -1 and combo.get_has_entry():
+        combo.get_child().set_text(value or "")
+
+
+def get_combo_entry(combo):
+    """
+    Helper to get the value specified in a combo box, with or
+    without and entry
+    """
+    ret = get_list_selection(combo, 0)
+    if ret:
+        return ret
+    if not combo.get_has_entry():
+        return None
+    return combo.get_child().get_text().strip()
+
+
 def child_get_property(parent, child, propname):
     """
     Wrapper for child_get_property, which pygobject doesn't properly

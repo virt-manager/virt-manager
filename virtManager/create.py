@@ -39,6 +39,7 @@ from virtManager.asyncjob import vmmAsyncJob
 from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.details import vmmDetails
 from virtManager.domain import vmmDomainVirtinst
+from virtManager.netlist import vmmNetworkList
 
 # Number of seconds to wait for media detection
 DETECT_TIMEOUT = 20
@@ -107,6 +108,10 @@ class vmmCreate(vmmGObjectUI):
         self.config_window = None
         self.config_window_signals = []
 
+        self.netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
+        self.widget("config-netdev-ui-align").add(self.netlist.top_box)
+        self.netlist.connect("changed", self.netdev_changed)
+
         self.builder.connect_signals({
             "on_vmm_newcreate_delete_event" : self.close,
 
@@ -145,7 +150,6 @@ class vmmCreate(vmmGObjectUI):
             "on_config_storage_browse_clicked": self.browse_storage,
             "on_config_storage_select_toggled": self.toggle_storage_select,
 
-            "on_config_netdev_changed": self.netdev_changed,
             "on_config_set_macaddr_toggled": self.toggle_macaddr,
 
             "on_config_hv_changed": self.hv_changed,
@@ -209,6 +213,7 @@ class vmmCreate(vmmGObjectUI):
 
         self.remove_conn()
         self.conn = newconn
+        self.netlist.conn = self.conn
         if self.conn:
             self.set_conn_state()
 
@@ -287,12 +292,6 @@ class vmmCreate(vmmGObjectUI):
         # Physical CD-ROM model
         cd_list = self.widget("install-local-cdrom-combo")
         sharedui.build_mediadev_combo(cd_list)
-
-        # Networking
-        # [ interface type, device name, label, sensitive ]
-        net_list = self.widget("config-netdev")
-        bridge_box = self.widget("config-netdev-bridge-box")
-        sharedui.build_network_list(net_list, bridge_box)
 
         # Archtecture
         # [value, label]
@@ -617,40 +616,13 @@ class vmmCreate(vmmGObjectUI):
         storage_area.set_tooltip_text(storage_tooltip or "")
 
         # Networking
-        net_list        = self.widget("config-netdev")
-        net_warn_icon   = self.widget("config-netdev-warn-icon")
-        net_warn_box    = self.widget("config-netdev-warn-box")
-        net_expander    = self.widget("config-advanced-expander")
-        net_warn_icon.hide()
-        net_warn_box.hide()
-        net_expander.set_expanded(False)
-
-        do_warn = sharedui.populate_network_list(net_list, self.conn, False)
-        self.set_net_warn(self.conn.netdev_error or do_warn,
-                          self.conn.netdev_error, True)
-
         newmac = virtinst.VirtualNetworkInterface.generate_mac(
                 self.conn.get_backend())
         self.widget("config-set-macaddr").set_active(bool(newmac))
         self.widget("config-macaddr").set_text(newmac)
 
-    def set_net_warn(self, show_warn, msg, do_tooltip):
-        net_warn_icon   = self.widget("config-netdev-warn-icon")
-        net_warn_box    = self.widget("config-netdev-warn-box")
-        net_warn_label  = self.widget("config-netdev-warn-label")
-        net_expander    = self.widget("config-advanced-expander")
-
-        if show_warn:
-            net_expander.set_expanded(True)
-
-        if do_tooltip:
-            net_warn_icon.set_visible(bool(show_warn))
-            if msg:
-                net_warn_icon.set_tooltip_text(show_warn and msg or "")
-        else:
-            net_warn_box.set_visible(show_warn)
-            markup = show_warn and ("<small>%s</small>" % msg) or ""
-            net_warn_label.set_markup(markup)
+        self.widget("config-advanced-expander").set_expanded(False)
+        self.netlist.reset_state()
 
     def populate_hv(self):
         hv_list = self.widget("config-hv")
@@ -979,6 +951,8 @@ class vmmCreate(vmmGObjectUI):
         self.widget("summary-cpu").set_text(cpu)
         self.widget("summary-storage").set_markup(storage)
 
+        self.netdev_changed(None)
+
     # get_* methods
     def get_config_name(self):
         return self.widget("create-vm-name").get_text()
@@ -1104,16 +1078,6 @@ class vmmCreate(vmmGObjectUI):
 
         return (path, size, sparse)
 
-    def get_config_network_info(self):
-        net_list = self.widget("config-netdev")
-        bridge_ent = self.widget("config-netdev-bridge")
-        macaddr = self.widget("config-macaddr").get_text()
-
-        net_type, net_src = sharedui.get_network_selection(net_list,
-                                                            bridge_ent)
-
-        return net_type, net_src, macaddr.strip()
-
     def get_config_customize(self):
         return self.widget("summary-customize").get_active()
     def is_detect_active(self):
@@ -1146,17 +1110,16 @@ class vmmCreate(vmmGObjectUI):
             self.widget("config-dtb-warn-virtio"), show_dtb_virtio)
 
     def netdev_changed(self, ignore):
-        self.check_network_selection()
-
-    def check_network_selection(self):
-        row = uiutil.get_list_selection(self.widget("config-netdev"))
+        row = self.netlist.get_network_row()
         show_pxe_warn = True
         pxe_install = (self.get_config_install_page() == INSTALL_PAGE_PXE)
+        expand = False
 
         if row:
             ntype = row[0]
             key = row[6]
 
+            expand = (ntype != "network" and ntype != "bridge")
             if (ntype is None or
                 ntype == virtinst.VirtualNetworkInterface.TYPE_USER):
                 show_pxe_warn = True
@@ -1166,11 +1129,13 @@ class vmmCreate(vmmGObjectUI):
                 obj = self.conn.get_net(key)
                 show_pxe_warn = not obj.can_pxe()
 
-        if not (show_pxe_warn and pxe_install):
-            return
+        show_warn = (show_pxe_warn and pxe_install)
 
-        self.set_net_warn(True,
-                          _("Network selection does not support PXE"), False)
+        if expand or show_warn:
+            self.widget("config-advanced-expander").set_expanded(True)
+        self.widget("config-netdev-warn-box").set_visible(show_warn)
+        self.widget("config-netdev-warn-label").set_markup(
+            "<small>%s</small>" % _("Network selection does not support PXE"))
 
     def hv_changed(self, src):
         hv = uiutil.get_list_selection(src, 1)
@@ -1424,7 +1389,6 @@ class vmmCreate(vmmGObjectUI):
         elif pagenum == PAGE_FINISH:
             self.widget("create-finish").grab_focus()
             self.populate_summary()
-            self.widget("config-netdev").emit("changed")
 
         for nr in range(self.widget("create-pages").get_n_pages()):
             page = self.widget("create-pages").get_nth_page(nr)
@@ -1822,7 +1786,8 @@ class vmmCreate(vmmGObjectUI):
                 if not self.validate_storage_page():
                     return False
 
-        nettype, devname, macaddr = self.get_config_network_info()
+        macaddr = self.widget("config-macaddr").get_text().strip()
+        nettype = self.netlist.get_network_selection()[0]
 
         if nettype is None:
             # No network device available
@@ -1838,8 +1803,7 @@ class vmmCreate(vmmGObjectUI):
                             _("Network device required for %s install.") %
                             methname)
 
-        nic = sharedui.validate_network(self.err,
-                                         self.conn, nettype, devname, macaddr)
+        nic = self.netlist.validate_network(macaddr)
         if nic is False:
             return False
 

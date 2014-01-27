@@ -31,17 +31,18 @@ import libvirt
 
 from virtManager import sharedui
 from virtManager import uiutil
-from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.addhardware import vmmAddHardware
 from virtManager.choosecd import vmmChooseCD
-from virtManager.snapshots import vmmSnapshotPage
-from virtManager.graphwidgets import Sparkline
 from virtManager.fsdetails import vmmFSDetails
-from virtinst import VirtualRNGDevice
+from virtManager.netlist import vmmNetworkList
+from virtManager.snapshots import vmmSnapshotPage
+from virtManager.storagebrowse import vmmStorageBrowser
+from virtManager.graphwidgets import Sparkline
 
 import virtinst
 from virtinst import util
+from virtinst import VirtualRNGDevice
 
 
 # Parameters that can be editted in the details window
@@ -386,6 +387,15 @@ class vmmDetails(vmmGObjectUI):
         self.fsDetails.connect("changed",
                                lambda *x: self.enable_apply(x, EDIT_FS))
 
+        self.netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
+        self.widget("network-source-label-align").add(self.netlist.top_label)
+        self.widget("network-source-ui-align").add(self.netlist.top_box)
+        self.widget("network-vport-align").add(self.netlist.top_vport)
+        self.netlist.connect("changed",
+            lambda x: self.enable_apply(x, EDIT_NET_SOURCE))
+        self.netlist.connect("changed-vport",
+            lambda x: self.enable_apply(x, EDIT_NET_VPORT))
+
         # Set default window size
         w, h = self.vm.get_details_window_size()
         self.topwin.set_default_size(w or 800, h or 600)
@@ -487,20 +497,7 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_serial_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SERIAL),
             "on_disk_iotune_changed": self.iotune_changed,
 
-            "on_network_source_combo_changed": lambda *x: self.enable_apply(x, EDIT_NET_SOURCE),
-            "on_network_bridge_changed": lambda *x: self.enable_apply(x, EDIT_NET_SOURCE),
-            "on_network-source-mode-combo_changed": lambda *x: self.enable_apply(x, EDIT_NET_SOURCE),
             "on_network_model_combo_changed": lambda *x: self.enable_apply(x, EDIT_NET_MODEL),
-
-            "on_vport_type_changed": lambda *x: self.enable_apply(x, EDIT_NET_VPORT),
-            "on_vport_managerid_changed": lambda *x: self.enable_apply(x,
-                                           EDIT_NET_VPORT),
-            "on_vport_typeid_changed": lambda *x: self.enable_apply(x,
-                                        EDIT_NET_VPORT),
-            "on_vport_typeidversion_changed": lambda *x: self.enable_apply(x,
-                                               EDIT_NET_VPORT),
-            "on_vport_instanceid_changed": lambda *x: self.enable_apply(x,
-                                            EDIT_NET_VPORT),
 
             "on_gfx_type_combo_changed": lambda *x: self.enable_apply(x, EDIT_GFX_TYPE),
             "on_vnc_keymap_combo_changed": lambda *x: self.enable_apply(x,
@@ -583,6 +580,9 @@ class vmmDetails(vmmGObjectUI):
         self.addhwmenu = None
 
         self.fsDetails.cleanup()
+        self.fsDetails = None
+        self.netlist.cleanup()
+        self.netlist = None
 
     def show(self):
         logging.debug("Showing VM details: %s", self.vm)
@@ -926,18 +926,6 @@ class vmmDetails(vmmGObjectUI):
         if not (self.conn.is_qemu() or self.conn.is_test_conn()):
             self.widget("iotune-expander").set_visible(False)
 
-        # Network source
-        net_source = self.widget("network-source")
-        net_bridge = self.widget("network-bridge-box")
-        source_mode_combo = self.widget("network-source-mode")
-        vport_expander = self.widget("vport-expander")
-        sharedui.build_network_list(net_source, net_bridge,
-                                    source_mode_combo, vport_expander)
-
-        # source mode
-        source_mode = self.widget("network-source-mode")
-        vmmAddHardware.build_network_source_mode_combo(self.vm, source_mode)
-
         # Network model
         net_model = self.widget("network-model")
         vmmAddHardware.build_network_model_combo(self.vm, net_model)
@@ -986,33 +974,6 @@ class vmmDetails(vmmGObjectUI):
         combo.set_model(model)
         uiutil.set_combo_text_column(combo, 1)
         combo.set_active(-1)
-
-
-    def set_combo_entry(self, widget, value, label="", comparefunc=None):
-        label = label or value
-        model_combo = self.widget(widget)
-
-        idx = -1
-        if comparefunc:
-            model_in_list, idx = comparefunc(model_combo.get_model(), value)
-        else:
-            model_list = [x[0] for x in model_combo.get_model()]
-            model_in_list = (value in model_list)
-            if model_in_list:
-                idx = model_list.index(value)
-
-        model_combo.set_active(idx)
-        if idx == -1 and model_combo.get_has_entry():
-            model_combo.get_child().set_text(value or "")
-
-    def get_combo_entry(self, widgetname):
-        combo = self.widget(widgetname)
-        ret = uiutil.get_list_selection(combo, 0)
-        if ret:
-            return ret
-        if not combo.get_has_entry():
-            return None
-        return combo.get_child().get_text().strip()
 
 
     ##########################
@@ -1906,7 +1867,7 @@ class vmmDetails(vmmGObjectUI):
             add_hotplug(self.vm.hotplug_title, title)
 
         if self.edited(EDIT_MACHTYPE):
-            machtype = self.get_combo_entry("machine-type")
+            machtype = uiutil.get_combo_entry(self.widget("machine-type"))
             add_define(self.vm.define_machtype, machtype)
 
         if self.edited(EDIT_DESC):
@@ -2045,15 +2006,15 @@ class vmmDetails(vmmGObjectUI):
             add_define(self.vm.define_disk_removable, dev_id_info, do_removable)
 
         if self.edited(EDIT_DISK_CACHE):
-            cache = self.get_combo_entry("disk-cache")
+            cache = uiutil.get_combo_entry(self.widget("disk-cache"))
             add_define(self.vm.define_disk_cache, dev_id_info, cache)
 
         if self.edited(EDIT_DISK_IO):
-            io = self.get_combo_entry("disk-io")
+            io = uiutil.get_combo_entry(self.widget("disk-io"))
             add_define(self.vm.define_disk_io, dev_id_info, io)
 
         if self.edited(EDIT_DISK_FORMAT):
-            fmt = self.get_combo_entry("disk-format")
+            fmt = uiutil.get_combo_entry(self.widget("disk-format"))
             add_define(self.vm.define_disk_driver_type, dev_id_info, fmt)
 
         if self.edited(EDIT_DISK_SERIAL):
@@ -2077,7 +2038,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Do this last since it can change uniqueness info of the dev
         if self.edited(EDIT_DISK_BUS):
-            bus = self.get_combo_entry("disk-bus")
+            bus = uiutil.get_combo_entry(self.widget("disk-bus"))
             addr = None
             if bus == "spapr-vscsi":
                 bus = "scsi"
@@ -2092,7 +2053,7 @@ class vmmDetails(vmmGObjectUI):
         ignore = add_hotplug
 
         if self.edited(EDIT_SOUND_MODEL):
-            model = self.get_combo_entry("sound-model")
+            model = uiutil.get_combo_entry(self.widget("sound-model"))
             if model:
                 add_define(self.vm.define_sound_model, dev_id_info, model)
 
@@ -2104,7 +2065,7 @@ class vmmDetails(vmmGObjectUI):
         ignore = add_hotplug
 
         if self.edited(EDIT_SMARTCARD_MODE):
-            model = self.get_combo_entry("smartcard-mode")
+            model = uiutil.get_combo_entry(self.widget("smartcard-mode"))
             if model:
                 add_define(self.vm.define_smartcard_mode, dev_id_info, model)
 
@@ -2116,30 +2077,20 @@ class vmmDetails(vmmGObjectUI):
         ignore = add_hotplug
 
         if self.edited(EDIT_NET_MODEL):
-            model = self.get_combo_entry("network-model")
+            model = uiutil.get_combo_entry(self.widget("network-model"))
             addr = None
             if model == "spapr-vlan":
                 addr = "spapr-vio"
             add_define(self.vm.define_network_model, dev_id_info, model, addr)
 
         if self.edited(EDIT_NET_SOURCE):
-            mode = None
-            net_list = self.widget("network-source")
-            net_bridge = self.widget("network-bridge")
-            nettype, source = sharedui.get_network_selection(net_list,
-                                                             net_bridge)
-            if nettype == "direct":
-                mode = self.get_combo_entry("network-source-mode")
-
+            nettype, source, mode = self.netlist.get_network_selection()
             add_define(self.vm.define_network_source, dev_id_info,
                        nettype, source, mode)
 
         if self.edited(EDIT_NET_VPORT):
-            vport_type = self.get_text("vport-type")
-            vport_managerid = self.get_text("vport-managerid")
-            vport_typeid = self.get_text("vport-typeid")
-            vport_idver = self.get_text("vport-typeidversion")
-            vport_instid = self.get_text("vport-instanceid")
+            (vport_type, vport_managerid, vport_typeid,
+             vport_idver, vport_instid) = self.netlist.get_vport()
 
             add_define(self.vm.define_virtualport, dev_id_info,
                        vport_type, vport_managerid, vport_typeid,
@@ -2162,12 +2113,12 @@ class vmmDetails(vmmGObjectUI):
                         passwd)
 
         if self.edited(EDIT_GFX_KEYMAP):
-            keymap = self.get_combo_entry("gfx-keymap")
+            keymap = uiutil.get_combo_entry(self.widget("gfx-keymap"))
             add_define(self.vm.define_graphics_keymap, dev_id_info, keymap)
 
         # Do this last since it can change graphics unique ID
         if self.edited(EDIT_GFX_TYPE):
-            gtype = self.get_combo_entry("gfx-type")
+            gtype = uiutil.get_combo_entry(self.widget("gfx-type"))
             add_define(self.vm.define_graphics_type, dev_id_info, gtype)
 
         return self._change_config_helper(df, da, hf, ha)
@@ -2178,7 +2129,7 @@ class vmmDetails(vmmGObjectUI):
         ignore = add_hotplug
 
         if self.edited(EDIT_VIDEO_MODEL):
-            model = self.get_combo_entry("video-model")
+            model = uiutil.get_combo_entry(self.widget("video-model"))
             if model:
                 add_define(self.vm.define_video_model, dev_id_info, model)
 
@@ -2190,7 +2141,7 @@ class vmmDetails(vmmGObjectUI):
         ignore = add_hotplug
 
         if self.edited(EDIT_CONTROLLER_MODEL):
-            model = self.get_combo_entry("controller-model")
+            model = uiutil.get_combo_entry(self.widget("controller-model"))
             if model:
                 add_define(self.vm.define_controller_model, dev_id_info, model)
 
@@ -2202,11 +2153,11 @@ class vmmDetails(vmmGObjectUI):
         ignore = add_hotplug
 
         if self.edited(EDIT_WATCHDOG_MODEL):
-            model = self.get_combo_entry("watchdog-model")
+            model = uiutil.get_combo_entry(self.widget("watchdog-model"))
             add_define(self.vm.define_watchdog_model, dev_id_info, model)
 
         if self.edited(EDIT_WATCHDOG_ACTION):
-            action = self.get_combo_entry("watchdog-action")
+            action = uiutil.get_combo_entry(self.widget("watchdog-action"))
             add_define(self.vm.define_watchdog_action, dev_id_info, action)
 
         return self._change_config_helper(df, da, hf, ha)
@@ -2400,7 +2351,7 @@ class vmmDetails(vmmGObjectUI):
         machtype = self.vm.get_machtype()
         if not arch in ["i686", "x86_64"]:
             if machtype is not None:
-                self.set_combo_entry("machine-type", machtype)
+                uiutil.set_combo_entry(self.widget("machine-type"), machtype)
 
     def refresh_inspection_page(self):
         inspection_supported = self.config.support_inspection
@@ -2640,8 +2591,8 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_grid_row_visible(self.widget("disk-removable"),
                                        can_set_removable)
         self.widget("disk-size").set_text(size)
-        self.set_combo_entry("disk-cache", cache)
-        self.set_combo_entry("disk-io", io)
+        uiutil.set_combo_entry(self.widget("disk-cache"), cache)
+        uiutil.set_combo_entry(self.widget("disk-io"), io)
 
         self.widget("disk-format").set_sensitive(show_format)
         self.widget("disk-format").get_child().set_text(driver_type)
@@ -2649,7 +2600,7 @@ class vmmDetails(vmmGObjectUI):
         no_default = not self.is_customize_dialog
 
         self.populate_disk_bus_combo(devtype, no_default)
-        self.set_combo_entry("disk-bus", bus)
+        uiutil.set_combo_entry(self.widget("disk-bus"), bus)
         self.widget("disk-serial").set_text(serial or "")
 
         self.widget("disk-iotune-rbs").set_value(iotune_rbs)
@@ -2675,70 +2626,12 @@ class vmmDetails(vmmGObjectUI):
         if not net:
             return
 
-        nettype = net.type
-        source = net.source
-        source_mode = net.source_mode
-        model = net.model
-
-        netobj = None
-        if nettype == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
-            name_dict = {}
-            for uuid in self.conn.list_net_uuids():
-                vnet = self.conn.get_net(uuid)
-                name = vnet.get_name()
-                name_dict[name] = vnet
-
-            if source and source in name_dict:
-                netobj = name_dict[source]
-
-        desc = sharedui.pretty_network_desc(nettype, source, netobj)
-
+        vmmAddHardware.populate_network_model_combo(
+            self.vm, self.widget("network-model"))
+        uiutil.set_combo_entry(self.widget("network-model"), net.model)
         self.widget("network-mac-address").set_text(net.macaddr)
-        sharedui.populate_network_list(
-                    self.widget("network-source"),
-                    self.conn)
-        self.widget("network-source").set_active(-1)
 
-        self.widget("network-bridge").set_text("")
-        def compare_network(model, info):
-            for idx in range(len(model)):
-                row = model[idx]
-                if row[0] == info[0] and row[1] == info[1]:
-                    return True, idx
-
-            if info[0] == virtinst.VirtualNetworkInterface.TYPE_BRIDGE:
-                idx = (len(model) - 1)
-                self.widget("network-bridge").set_text(str(info[1]))
-                return True, idx
-
-            return False, 0
-
-        self.set_combo_entry("network-source",
-                             (nettype, source), label=desc,
-                             comparefunc=compare_network)
-
-        is_direct = (nettype == "direct")
-        uiutil.set_grid_row_visible(self.widget("network-source-mode"),
-                                       is_direct)
-        self.widget("vport-expander").set_visible(is_direct)
-
-        # source mode
-        vmmAddHardware.populate_network_source_mode_combo(self.vm,
-                            self.widget("network-source-mode"))
-        self.set_combo_entry("network-source-mode", source_mode)
-
-        # Virtualport config
-        vport = net.virtualport
-        self.widget("vport-type").set_text(vport.type or "")
-        self.widget("vport-managerid").set_text(str(vport.managerid or ""))
-        self.widget("vport-typeid").set_text(str(vport.typeid or ""))
-        self.widget("vport-typeidversion").set_text(
-            str(vport.typeidversion or ""))
-        self.widget("vport-instanceid").set_text(vport.instanceid or "")
-
-        vmmAddHardware.populate_network_model_combo(self.vm,
-                                          self.widget("network-model"))
-        self.set_combo_entry("network-model", model)
+        self.netlist.set_dev(net)
 
     def refresh_input_page(self):
         inp = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -2807,7 +2700,7 @@ class vmmDetails(vmmGObjectUI):
 
             self.widget("gfx-port").set_text(port_to_string(gfx.port))
             self.widget("gfx-address").set_text(gfx.listen or "127.0.0.1")
-            self.set_combo_entry("gfx-keymap", gfx.keymap or None)
+            uiutil.set_combo_entry(self.widget("gfx-keymap"), gfx.keymap or None)
 
             self.widget("gfx-password").set_text(gfx.passwd or "")
             self.widget("gfx-use-password").set_active(use_passwd)
@@ -2832,7 +2725,7 @@ class vmmDetails(vmmGObjectUI):
 
         if settype:
             show_row("gfx-type")
-            self.set_combo_entry("gfx-type", gtype, label=settype)
+            uiutil.set_combo_entry(self.widget("gfx-type"), gtype)
 
         self.widget("graphics-title").set_markup("<b>%s</b>" % title)
 
@@ -2842,14 +2735,14 @@ class vmmDetails(vmmGObjectUI):
         if not sound:
             return
 
-        self.set_combo_entry("sound-model", sound.model)
+        uiutil.set_combo_entry(self.widget("sound-model"), sound.model)
 
     def refresh_smartcard_page(self):
         sc = self.get_hw_selection(HW_LIST_COL_DEVICE)
         if not sc:
             return
 
-        self.set_combo_entry("smartcard-mode", sc.mode)
+        uiutil.set_combo_entry(self.widget("smartcard-mode"), sc.mode)
 
     def refresh_redir_page(self):
         rd = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -3064,8 +2957,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("video-ram").set_text(ramlabel)
         self.widget("video-heads").set_text(heads and str(heads) or "-")
 
-        self.set_combo_entry("video-model", model,
-                             label=vid.pretty_model(model))
+        uiutil.set_combo_entry(self.widget("video-model"), model)
 
     def refresh_watchdog_page(self):
         watch = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -3075,8 +2967,8 @@ class vmmDetails(vmmGObjectUI):
         model = watch.model
         action = watch.action
 
-        self.set_combo_entry("watchdog-model", model)
-        self.set_combo_entry("watchdog-action", action)
+        uiutil.set_combo_entry(self.widget("watchdog-model"), model)
+        uiutil.set_combo_entry(self.widget("watchdog-action"), action)
 
     def refresh_controller_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -3105,7 +2997,8 @@ class vmmDetails(vmmGObjectUI):
         else:
             self.widget("config-remove").set_sensitive(True)
 
-        self.set_combo_entry("controller-model", dev.model or "default")
+        uiutil.set_combo_entry(self.widget("controller-model"),
+                             dev.model or "default")
 
     def refresh_filesystem_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
