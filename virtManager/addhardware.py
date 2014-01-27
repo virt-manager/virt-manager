@@ -593,9 +593,8 @@ class vmmAddHardware(vmmGObjectUI):
         model.clear()
 
         # [xml value, label]
-        model.append([None, "Default"])
-        model.append(["vepa", "VEPA"])
         model.append(["bridge", "Bridge"])
+        model.append(["vepa", "VEPA"])
         model.append(["private", "Private"])
         model.append(["passthrough", "Passthrough"])
 
