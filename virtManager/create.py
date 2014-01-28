@@ -40,6 +40,7 @@ from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.details import vmmDetails
 from virtManager.domain import vmmDomainVirtinst
 from virtManager.netlist import vmmNetworkList
+from virtManager.mediacombo import vmmMediaCombo
 
 # Number of seconds to wait for media detection
 DETECT_TIMEOUT = 20
@@ -109,6 +110,7 @@ class vmmCreate(vmmGObjectUI):
         self.config_window_signals = []
 
         self.netlist = None
+        self.mediacombo = None
 
         self.builder.connect_signals({
             "on_vmm_newcreate_delete_event" : self.close,
@@ -199,6 +201,13 @@ class vmmCreate(vmmGObjectUI):
             self.netlist.cleanup()
             self.netlist = None
 
+        if self.netlist:
+            self.netlist.cleanup()
+            self.netlist = None
+        if self.mediacombo:
+            self.mediacombo.cleanup()
+            self.mediacombo = None
+
     def remove_conn(self):
         if not self.conn:
             return
@@ -287,11 +296,6 @@ class vmmCreate(vmmGObjectUI):
         os_variant_list.set_model(os_variant_model)
         uiutil.set_combo_text_column(os_variant_list, 1)
         os_variant_list.set_row_separator_func(sep_func, os_variant_list)
-
-
-        # Physical CD-ROM model
-        cd_list = self.widget("install-local-cdrom-combo")
-        sharedui.build_mediadev_combo(cd_list)
 
         # Archtecture
         # [value, label]
@@ -550,26 +554,22 @@ class vmmCreate(vmmGObjectUI):
         # Install local
         iso_option = self.widget("install-local-iso")
         cdrom_option = self.widget("install-local-cdrom")
-        cdrom_list = self.widget("install-local-cdrom-combo")
-        cdrom_warn = self.widget("install-local-cdrom-warn")
 
-        sigs = sharedui.populate_mediadev_combo(self.conn, cdrom_list,
-                                                 MEDIA_CDROM)
-        self.conn_signals.extend(sigs)
+        if self.mediacombo:
+            self.widget("install-local-cdrom-align").remove(
+                self.mediacombo.top_box)
+            self.mediacombo.cleanup()
+            self.mediacombo = None
 
-        if self.conn.mediadev_error:
-            cdrom_warn.show()
-            cdrom_option.set_sensitive(False)
-            cdrom_warn.set_tooltip_text(self.conn.mediadev_error)
-        else:
-            cdrom_warn.hide()
+        self.mediacombo = vmmMediaCombo(self.conn, self.builder, self.topwin,
+                                        MEDIA_CDROM)
+        self.mediacombo.reset_state()
+        self.widget("install-local-cdrom-align").add(
+            self.mediacombo.top_box)
 
         # Don't select physical CDROM if no valid media is present
-        use_cd = (cdrom_list.get_active() >= 0)
-        if use_cd:
-            cdrom_option.set_active(True)
-        else:
-            iso_option.set_active(True)
+        cdrom_option.set_active(self.mediacombo.has_media())
+        iso_option.set_active(not self.mediacombo.has_media())
 
         # Only allow ISO option for remote VM
         is_local = not self.conn.is_remote()
@@ -1012,9 +1012,7 @@ class vmmCreate(vmmGObjectUI):
 
     def get_config_local_media(self, store_media=False):
         if self.widget("install-local-cdrom").get_active():
-            return uiutil.get_list_selection(
-                self.widget("install-local-cdrom-combo"),
-                sharedui.OPTICAL_DEV_PATH)
+            return self.mediacombo.get_path()
         else:
             ret = self.widget("install-local-box").get_child().get_text()
             if ret and store_media:
@@ -1229,14 +1227,12 @@ class vmmCreate(vmmGObjectUI):
                 break
 
     def toggle_local_cdrom(self, src):
-        combo = self.widget("install-local-cdrom-combo")
         is_active = src.get_active()
-        if is_active:
-            if combo.get_active() != -1:
-                # Local CDROM was selected with media preset, detect distro
-                self.detect_media_os()
+        if is_active and self.mediacombo.get_path():
+            # Local CDROM was selected with media preset, detect distro
+            self.detect_media_os()
 
-        self.widget("install-local-cdrom-combo").set_sensitive(is_active)
+        self.widget("install-local-cdrom-align").set_sensitive(is_active)
 
     def toggle_local_iso(self, src):
         uselocal = src.get_active()

@@ -93,6 +93,10 @@ class vmmGObject(GObject.GObject):
         ret = GObject.GObject.disconnect(self, handle)
         self._gobject_handles.remove(handle)
         return ret
+    def disconnect_by_func(self, *args, **kwargs):
+        handle = GObject.GObject.disconnect_by_func(*args, **kwargs)
+        self._gobject_handles.remove(handle)
+        return handle
 
     def add_gconf_handle(self, handle):
         self._gconf_handles.append(handle)
