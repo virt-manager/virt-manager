@@ -34,13 +34,13 @@ from virtinst import (VirtualChannelDevice, VirtualParallelDevice,
                       VirtualTPMDevice, VirtualPanicDevice)
 from virtinst import VirtualController
 
-from virtManager import sharedui
 from virtManager import uiutil
 from virtManager.fsdetails import vmmFSDetails
 from virtManager.netlist import vmmNetworkList
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.baseclass import vmmGObjectUI
+from virtManager.addstorage import vmmAddStorage
 
 PAGE_ERROR = 0
 PAGE_DISK = 1
@@ -74,10 +74,16 @@ class vmmAddHardware(vmmGObjectUI):
 
         self.fsDetails = vmmFSDetails(vm, self.builder, self.topwin)
         self.widget("fs-box").add(self.fsDetails.top_box)
+
         self.netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
         self.widget("network-source-label-align").add(self.netlist.top_label)
         self.widget("network-source-ui-align").add(self.netlist.top_box)
         self.widget("network-vport-align").add(self.netlist.top_vport)
+
+        self.addstorage = vmmAddStorage(self.conn, self.builder, self.topwin)
+        self.widget("config-storage-align").add(self.addstorage.top_box)
+        self.addstorage.connect("browse-clicked", self._browse_storage_cb)
+        self.addstorage.connect("storage-toggled", self.toggle_storage_select)
 
         self.builder.connect_signals({
             "on_create_cancel_clicked" : self.close,
@@ -85,8 +91,6 @@ class vmmAddHardware(vmmGObjectUI):
             "on_create_finish_clicked" : self.finish,
             "on_hw_list_changed": self.hw_selected,
 
-            "on_config_storage_browse_clicked": self.browse_storage,
-            "on_config_storage_select_toggled": self.toggle_storage_select,
             "on_config_storage_bustype_changed": self.populate_disk_device,
 
             "on_mac_address_clicked" : self.change_macaddr_use,
@@ -141,6 +145,8 @@ class vmmAddHardware(vmmGObjectUI):
         self.fsDetails = None
         self.netlist.cleanup()
         self.netlist = None
+        self.addstorage.cleanup()
+        self.addstorage = None
 
     def is_visible(self):
         return self.topwin.get_visible()
@@ -210,10 +216,6 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Disk format mode
         self.populate_disk_format_combo_wrapper(True)
-
-        # Sparse tooltip
-        sparse_info = self.widget("config-storage-nosparse-info")
-        sharedui.set_sparse_tooltip(sparse_info)
 
         # Input device type
         input_list = self.widget("input-type")
@@ -392,23 +394,9 @@ class vmmAddHardware(vmmGObjectUI):
 
     def reset_state(self):
         # Storage init
-        label_widget = self.widget("phys-hd-label")
-        label_widget.set_markup("")
-        sharedui.update_host_space(self.conn, label_widget)
-
-        self.widget("config-storage-create").set_active(True)
-        self.widget("config-storage-size").set_value(8)
-        self.widget("config-storage-entry").set_text("")
-        fmt = self.conn.get_default_storage_format()
-        can_alloc = fmt in ["raw"]
-        self.widget("config-storage-nosparse").set_active(can_alloc)
-        self.widget("config-storage-nosparse").set_sensitive(can_alloc)
-        self.widget("config-storage-nosparse").set_tooltip_text(
-            not can_alloc and
-            (_("Disk format '%s' does not support full allocation.") % fmt) or
-            "")
         self.populate_disk_format_combo_wrapper(True)
         self.populate_disk_bus()
+        self.addstorage.reset_state()
 
         # Network init
         newmac = virtinst.VirtualNetworkInterface.generate_mac(
@@ -765,7 +753,12 @@ class vmmAddHardware(vmmGObjectUI):
                 model.append([m])
 
         if create:
+            fmt = vm.conn.get_default_storage_format()
             combo.set_active(0)
+            for row in model:
+                if row[0] == fmt:
+                    combo.set_active_iter(row.iter)
+                    break
 
 
     #########################
@@ -868,6 +861,7 @@ class vmmAddHardware(vmmGObjectUI):
         if not create:
             format_list.get_child().set_text("")
 
+
     ########################
     # get_config_* methods #
     ########################
@@ -941,52 +935,6 @@ class vmmAddHardware(vmmGObjectUI):
         return row[2]
 
     # Disk getters
-    def is_default_storage(self):
-        return self.widget("config-storage-create").get_active()
-
-    def get_storage_info(self, collidelist):
-        path = None
-        size = self.widget("config-storage-size").get_value()
-        sparse = not self.widget("config-storage-nosparse").get_active()
-
-        if self.is_default_storage():
-            path = sharedui.get_default_path(self.conn,
-                                         self.vm.get_name(),
-                                         collidelist=collidelist)
-            logging.debug("Default storage path is: %s", path)
-        else:
-            path = self.widget("config-storage-entry").get_text()
-
-        return (path or None, size, sparse)
-
-    def check_ideal_path(self, diskpath, collidelist):
-        # See if the ideal disk path (/default/pool/vmname.img)
-        # exists, and if unused, prompt the use for using it
-        conn = self.conn.get_backend()
-        ideal = sharedui.get_ideal_path(self.conn, self.vm.get_name())
-        if ideal in collidelist:
-            return diskpath
-        do_exist = False
-        ret = True
-
-        try:
-            do_exist = virtinst.VirtualDisk.path_exists(conn, ideal)
-            ret = virtinst.VirtualDisk.path_in_use_by(conn, ideal)
-        except:
-            logging.exception("Error checking default path usage")
-
-        if not do_exist or ret:
-            return diskpath
-
-        do_use = self.err.yes_no(
-            _("The following storage already exists, but is not\n"
-              "in use by any virtual machine:\n\n%s\n\n"
-              "Would you like to reuse this storage?") % ideal)
-
-        if do_use:
-            return ideal
-        return diskpath
-
     def get_config_disk_bus(self):
         return uiutil.get_list_selection(
             self.widget("config-storage-bustype"), 0)
@@ -1195,16 +1143,9 @@ class vmmAddHardware(vmmGObjectUI):
 
 
     # Storage listeners
-    def browse_storage(self, ignore1):
-        self._browse_file(self.widget("config-storage-entry"))
-
-    def toggle_storage_select(self, src):
+    def toggle_storage_select(self, ignore, src):
         act = src.get_active()
-        self.widget("config-storage-browse-box").set_sensitive(act)
         self.populate_disk_format_combo_wrapper(not act)
-
-    def set_disk_storage_path(self, ignore, path):
-        self.widget("config-storage-entry").set_text(path)
 
     # Network listeners
     def change_macaddr_use(self, ignore=None):
@@ -1417,12 +1358,12 @@ class vmmAddHardware(vmmGObjectUI):
         controller = getattr(self._dev, "vmm_controller", None)
         if controller is not None:
             logging.debug("Adding controller:\n%s",
-                          self._dev.vmm_controller.get_xml_config())
+                          controller.get_xml_config())
         # Hotplug device
         attach_err = False
         try:
             if controller is not None:
-                self.vm.attach_device(self._dev.vmm_controller)
+                self.vm.attach_device(controller)
             self.vm.attach_device(self._dev)
         except Exception, e:
             logging.debug("Device could not be hotplugged: %s", str(e))
@@ -1446,7 +1387,7 @@ class vmmAddHardware(vmmGObjectUI):
         # Alter persistent config
         try:
             if controller is not None:
-                self.vm.add_device(self._dev.vmm_controller)
+                self.vm.add_device(controller)
             self.vm.add_device(self._dev)
         except Exception, e:
             self.err.show_err(_("Error adding device: %s" % str(e)))
@@ -1544,108 +1485,73 @@ class vmmAddHardware(vmmGObjectUI):
             self._dev.validate()
         return ret
 
+    def _set_disk_controller(self, disk, controller_model):
+        # Add a SCSI controller with model virtio-scsi if needed
+        disk.vmm_controller = None
+        if controller_model != "virtio-scsi":
+            return
+
+        controllers = self.vm.get_controller_devices()
+        ctrls_scsi = [x for x in controllers if
+                (x.type == VirtualController.TYPE_SCSI)]
+        if len(ctrls_scsi) > 0:
+            index_new = max([x.index for x in ctrls_scsi]) + 1
+        else:
+            index_new = 0
+
+        controller = VirtualController(self.conn.get_backend())
+        controller.type = "scsi"
+        controller.model = controller_model
+        disk.vmm_controller = controller
+        for d in controllers:
+            if controller.type == d.type:
+                controller.index = index_new
+            if controller_model == d.model:
+                disk.vmm_controller = None
+                controller = d
+                break
+
+        disk.address.type = disk.address.ADDRESS_TYPE_DRIVE
+        disk.address.controller = controller.index
+
     def validate_page_storage(self):
         bus = self.get_config_disk_bus()
         device = self.get_config_disk_device()
         cache = self.get_config_disk_cache()
         fmt = self.get_config_disk_format()
-        controller_model = None
-        conn = self.conn.get_backend()
 
+        controller_model = None
         if bus == "virtio-scsi":
             bus = "scsi"
             controller_model = "virtio-scsi"
 
-        # Make sure default pool is running
-        if self.is_default_storage():
-            ret = sharedui.check_default_pool_active(self.err, self.conn)
-            if not ret:
-                return False
-
-        readonly = False
-        if device == virtinst.VirtualDisk.DEVICE_CDROM:
-            readonly = True
+        collidelist = [d.path for d in self.vm.get_disk_devices()]
+        disk = self.addstorage.validate_storage(self.vm.get_name(),
+            collidelist=collidelist, device=device, fmt=fmt)
+        if disk in [True, False]:
+            return disk
 
         try:
-            # This can error out
-            collidelist = [d.path for d in self.vm.get_disk_devices()]
-            diskpath, disksize, sparse = self.get_storage_info(collidelist)
-            if self.is_default_storage():
-                diskpath = self.check_ideal_path(diskpath, collidelist)
-
-            disk = virtinst.VirtualDisk(conn)
-            disk.path = diskpath
-            disk.read_only = readonly
-            disk.device = device
             disk.bus = bus
-            disk.set_create_storage(size=disksize, sparse=sparse,
-                                    fmt=fmt or None)
             if cache:
                 disk.driver_cache = cache
 
-            if not fmt:
-                fmt = self.conn.get_default_storage_format()
-                if (self.is_default_storage() and
-                    disk.get_vol_install() and
-                    fmt in disk.get_vol_install().list_formats()):
-                    logging.debug("Setting disk format from prefs: %s", fmt)
-                    disk.get_vol_install().format = fmt
+            # Generate target
+            if not self.is_customize_dialog:
+                used = []
+                disks = (self.vm.get_disk_devices() +
+                         self.vm.get_disk_devices(inactive=True))
+                for d in disks:
+                    used.append(d.target)
+
+                disk.generate_target(used)
+
+            self._set_disk_controller(disk, controller_model)
         except Exception, e:
             return self.err.val_err(_("Storage parameter error."), e)
 
-        # Generate target
-        if not self.is_customize_dialog:
-            used = []
-            disks = (self.vm.get_disk_devices() +
-                     self.vm.get_disk_devices(inactive=True))
-            for d in disks:
-                used.append(d.target)
-
-            disk.generate_target(used)
-
-        isfatal, errmsg = disk.is_size_conflict()
-        if not isfatal and errmsg:
-            # Fatal errors are reported when setting 'size'
-            res = self.err.ok_cancel(_("Not Enough Free Space"), errmsg)
-            if not res:
-                return False
-
-        # Disk collision
-        names = disk.is_conflict_disk()
-        if names:
-            res = self.err.yes_no(
-                    _('Disk "%s" is already in use by other guests %s') %
-                     (disk.path, names),
-                    _("Do you really want to use the disk?"))
-            if not res:
-                return False
-
-        sharedui.check_path_search_for_qemu(self.err, self.conn, disk.path)
-
-        # Add a SCSI controller with model virtio-scsi if needed
-        disk.vmm_controller = None
-        if (controller_model == "virtio-scsi") and (bus == "scsi"):
-            controllers = self.vm.get_controller_devices()
-            ctrls_scsi = [x for x in controllers if
-                    (x.type == VirtualController.TYPE_SCSI)]
-            if len(ctrls_scsi) > 0:
-                index_new = max([x.index for x in ctrls_scsi]) + 1
-            else:
-                index_new = 0
-            controller = VirtualController(conn)
-            controller.type = "scsi"
-            controller.model = controller_model
-            disk.vmm_controller = controller
-            for d in controllers:
-                if controller.type == d.type:
-                    controller.index = index_new
-                if controller_model == d.model:
-                    disk.vmm_controller = None
-                    controller = d
-                    break
-
-            disk.address.type = disk.address.ADDRESS_TYPE_DRIVE
-            disk.address.controller = controller.index
+        if self.addstorage.validate_disk_object(disk) is False:
+            return False
 
         self._dev = disk
         return True
@@ -1937,6 +1843,9 @@ class vmmAddHardware(vmmGObjectUI):
     ####################
     # Unsorted helpers #
     ####################
+
+    def _browse_storage_cb(self, ignore, widget):
+        self._browse_file(widget)
 
     def _browse_file(self, textent, isdir=False):
         def set_storage_cb(src, path):

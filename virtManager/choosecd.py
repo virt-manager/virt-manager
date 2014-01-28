@@ -24,11 +24,11 @@ import logging
 from gi.repository import GObject
 # pylint: enable=E0611
 
-from virtManager import sharedui
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.mediadev import MEDIA_FLOPPY
 from virtManager.mediacombo import vmmMediaCombo
 from virtManager.storagebrowse import vmmStorageBrowser
+from virtManager.addstorage import vmmAddStorage
 
 
 class vmmChooseCD(vmmGObjectUI):
@@ -125,7 +125,7 @@ class vmmChooseCD(vmmGObjectUI):
             if not res:
                 return False
 
-        sharedui.check_path_search_for_qemu(self.err, self.conn, path)
+        vmmAddStorage.check_path_search_for_qemu(self, self.conn, path)
 
         self.emit("cdrom-chosen", self.disk, path)
         self.close()

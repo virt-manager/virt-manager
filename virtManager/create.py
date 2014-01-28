@@ -31,7 +31,6 @@ from gi.repository import Gdk
 import virtinst
 from virtinst import util
 
-from virtManager import sharedui
 from virtManager import uiutil
 from virtManager.mediadev import MEDIA_CDROM
 from virtManager.baseclass import vmmGObjectUI
@@ -41,6 +40,7 @@ from virtManager.details import vmmDetails
 from virtManager.domain import vmmDomainVirtinst
 from virtManager.netlist import vmmNetworkList
 from virtManager.mediacombo import vmmMediaCombo
+from virtManager.addstorage import vmmAddStorage
 
 # Number of seconds to wait for media detection
 DETECT_TIMEOUT = 20
@@ -112,6 +112,10 @@ class vmmCreate(vmmGObjectUI):
         self.netlist = None
         self.mediacombo = None
 
+        self.addstorage = vmmAddStorage(self.conn, self.builder, self.topwin)
+        self.widget("config-storage-align").add(self.addstorage.top_box)
+        self.addstorage.connect("browse-clicked", self._browse_file_cb)
+
         self.builder.connect_signals({
             "on_vmm_newcreate_delete_event" : self.close,
 
@@ -147,8 +151,6 @@ class vmmCreate(vmmGObjectUI):
             "on_config_dtb_browse_clicked": self.browse_dtb,
 
             "on_enable_storage_toggled": self.toggle_enable_storage,
-            "on_config_storage_browse_clicked": self.browse_storage,
-            "on_config_storage_select_toggled": self.toggle_storage_select,
 
             "on_config_set_macaddr_toggled": self.toggle_macaddr,
 
@@ -207,6 +209,9 @@ class vmmCreate(vmmGObjectUI):
         if self.mediacombo:
             self.mediacombo.cleanup()
             self.mediacombo = None
+        if self.addstorage:
+            self.addstorage.cleanup()
+            self.addstorage = None
 
     def remove_conn(self):
         if not self.conn:
@@ -317,10 +322,6 @@ class vmmCreate(vmmGObjectUI):
         uiutil.set_combo_text_column(lst, 0)
         lst.set_row_separator_func(lambda m, i, ignore: m[i][0] is None, None)
 
-        # Sparse tooltip
-        sparse_info = self.widget("config-storage-nosparse-info")
-        sharedui.set_sparse_tooltip(sparse_info)
-
     def reset_state(self, urihint=None):
         self.failed_guest = None
         self.have_startup_error = False
@@ -388,23 +389,8 @@ class vmmCreate(vmmGObjectUI):
         self.widget("config-cpus").set_value(1)
 
         # Storage
-        label_widget = self.widget("phys-hd-label")
-        label_widget.set_markup("")
-        sharedui.update_host_space(self.conn, label_widget)
         self.widget("enable-storage").set_active(True)
-        self.widget("config-storage-create").set_active(True)
-        self.widget("config-storage-size").set_value(8)
-        self.widget("config-storage-entry").set_text("")
-        self.widget("config-storage-nosparse").set_active(True)
-
-        fmt = self.conn.get_default_storage_format()
-        can_alloc = fmt in ["raw"]
-        self.widget("config-storage-nosparse").set_active(can_alloc)
-        self.widget("config-storage-nosparse").set_sensitive(can_alloc)
-        self.widget("config-storage-nosparse").set_tooltip_text(
-            not can_alloc and
-            (_("Disk format '%s' does not support full allocation.") % fmt) or
-            "")
+        self.addstorage.reset_state()
 
         # Final page
         self.widget("summary-customize").set_active(False)
@@ -573,8 +559,6 @@ class vmmCreate(vmmGObjectUI):
 
         # Only allow ISO option for remote VM
         is_local = not self.conn.is_remote()
-        is_storage_capable = self.conn.is_storage_capable()
-        can_storage = (is_local or is_storage_capable)
         if not is_local:
             iso_option.set_active(True)
 
@@ -603,17 +587,8 @@ class vmmCreate(vmmGObjectUI):
         self.widget("phys-cpu-label").set_markup(cpu_label)
 
         # Storage
-        storage_tooltip = None
-
-        use_storage = self.widget("config-storage-select")
-        storage_area = self.widget("config-storage-area")
-
-        storage_area.set_sensitive(can_storage)
-        if not can_storage:
-            storage_tooltip = _("Connection does not support storage"
-                                " management.")
-            use_storage.set_sensitive(True)
-        storage_area.set_tooltip_text(storage_tooltip or "")
+        self.addstorage.conn = self.conn
+        self.addstorage.reset_state()
 
         # Networking
         newmac = virtinst.VirtualNetworkInterface.generate_mac(
@@ -1060,30 +1035,12 @@ class vmmCreate(vmmGObjectUI):
             if disks:
                 return disks[0].path
 
-        return sharedui.get_default_path(self.conn, name)
+        return self.addstorage.get_default_path(name)
 
     def is_default_storage(self):
-        usedef = self.widget("config-storage-create").get_active()
+        usedef = self.addstorage.is_default_storage()
         isimport = (self.get_config_install_page() == INSTALL_PAGE_IMPORT)
         return usedef and not isimport
-
-    def get_storage_info(self):
-        path = None
-        size = uiutil.spin_get_helper(self.widget("config-storage-size"))
-        sparse = not self.widget("config-storage-nosparse").get_active()
-
-        if self.get_config_install_page() == INSTALL_PAGE_IMPORT:
-            path = self.get_config_import_path()
-            size = None
-            sparse = False
-
-        elif self.is_default_storage():
-            path = self.get_default_path(self.guest.name)
-            logging.debug("Default storage path is: %s", path)
-        else:
-            path = self.widget("config-storage-entry").get_text()
-
-        return (path, size, sparse)
 
     def get_config_customize(self):
         return self.widget("summary-customize").get_active()
@@ -1263,8 +1220,6 @@ class vmmCreate(vmmGObjectUI):
             self.widget("install-local-box").get_child().set_text(path)
         self._browse_file(None, cb=set_path, is_media=True)
         self.widget("install-local-box").activate()
-    def browse_storage(self, ignore):
-        self._browse_file("config-storage-entry")
     def browse_kernel(self, ignore):
         self._browse_file("config-kernel")
     def browse_initrd(self, ignore):
@@ -1273,12 +1228,7 @@ class vmmCreate(vmmGObjectUI):
         self._browse_file("config-dtb")
 
     def toggle_enable_storage(self, src):
-        self.widget("config-storage-box").set_sensitive(src.get_active())
-
-
-    def toggle_storage_select(self, src):
-        act = src.get_active()
-        self.widget("config-storage-browse-box").set_sensitive(act)
+        self.widget("config-storage-align").set_sensitive(src.get_active())
 
     def toggle_macaddr(self, src):
         self.widget("config-macaddr").set_sensitive(src.get_active())
@@ -1661,7 +1611,8 @@ class vmmCreate(vmmGObjectUI):
             path = None
 
         if path:
-            sharedui.check_path_search_for_qemu(self.err, self.conn, path)
+            self.addstorage.check_path_search_for_qemu(
+                self, self.conn, path)
 
         # Validation passed, store the install path (if there is one) in
         # gconf
@@ -1689,93 +1640,37 @@ class vmmCreate(vmmGObjectUI):
         return True
 
     def validate_storage_page(self):
-        use_storage = self.widget("enable-storage").get_active()
-        instcd = self.get_config_install_page() == INSTALL_PAGE_ISO
-        conn = self.conn.get_backend()
-
-        # CD/ISO install and no disks implies LiveCD
-        if instcd:
-            self.guest.installer.livecd = not use_storage
-
         if self.disk and self.disk in self.guest.get_devices("disk"):
             self.guest.remove_device(self.disk)
         self.disk = None
 
-        # Validate storage
-        if not use_storage:
-            return True
+        path = None
+        size = None
+        sparse = None
 
-        # Make sure default pool is running
-        if self.is_default_storage():
-            ret = sharedui.check_default_pool_active(self.err, self.conn)
-            if not ret:
-                return False
+        if self.get_config_install_page() == INSTALL_PAGE_IMPORT:
+            path = self.get_config_import_path()
+            size = None
+            sparse = False
+        elif self.is_default_storage():
+            path = self.get_default_path(self.guest.name)
+            logging.debug("Default storage path is: %s", path)
 
-        try:
-            # This can error out
-            diskpath, disksize, sparse = self.get_storage_info()
+        ret = self.addstorage.validate_storage(
+            self.guest.name, path=path, size=size, sparse=sparse)
+        no_storage = (ret is True)
 
-            if self.is_default_storage():
-                # See if the ideal disk path (/default/pool/vmname.img)
-                # exists, and if unused, prompt the use for using it
-                ideal = sharedui.get_ideal_path(self.conn,
-                                                 self.guest.name)
-                do_exist = False
-                ret = True
+        if self.get_config_install_page() == INSTALL_PAGE_ISO:
+            # CD/ISO install and no disks implies LiveCD
+            self.guest.installer.livecd = no_storage
 
-                try:
-                    do_exist = virtinst.VirtualDisk.path_exists(conn, ideal)
-                    ret = virtinst.VirtualDisk.path_in_use_by(conn, ideal)
-                except:
-                    logging.exception("Error checking default path usage")
+        if ret in [True, False]:
+            return ret
 
-                if do_exist and not ret:
-                    do_use = self.err.yes_no(
-                        _("The following storage already exists, but is not\n"
-                          "in use by any virtual machine:\n\n%s\n\n"
-                          "Would you like to reuse this storage?") % ideal)
+        if self.addstorage.validate_disk_object(ret) is False:
+            return False
 
-                    if do_use:
-                        diskpath = ideal
-
-            if not diskpath:
-                return self.err.val_err(_("A storage path must be specified."))
-
-            disk = virtinst.VirtualDisk(conn)
-            disk.path = diskpath
-            disk.set_create_storage(size=disksize, sparse=sparse)
-
-            fmt = self.conn.get_default_storage_format()
-            if (self.is_default_storage() and
-                disk.get_vol_install() and
-                fmt in disk.get_vol_install().list_formats()):
-                logging.debug("Setting disk format from prefs: %s", fmt)
-                disk.get_vol_install().format = fmt
-            disk.validate()
-
-        except Exception, e:
-            return self.err.val_err(_("Storage parameter error."), e)
-
-        isfatal, errmsg = disk.is_size_conflict()
-        if not isfatal and errmsg:
-            # Fatal errors are reported when setting 'size'
-            res = self.err.ok_cancel(_("Not Enough Free Space"), errmsg)
-            if not res:
-                return False
-
-        # Disk collision
-        names = disk.is_conflict_disk()
-        if names:
-            res = self.err.yes_no(
-                    _('Disk "%s" is already in use by other guests %s') %
-                     (disk.path, names),
-                    _("Do you really want to use the disk?"))
-            if not res:
-                return False
-
-        sharedui.check_path_search_for_qemu(self.err, self.conn, disk.path)
-
-        self.disk = disk
+        self.disk = ret
         self.guest.add_device(self.disk)
 
         return True
@@ -2105,6 +2000,9 @@ class vmmCreate(vmmGObjectUI):
             logging.exception("Error detecting distro.")
             self.detectedDistro = -1
 
+    def _browse_file_cb(self, ignore, widget):
+        self._browse_file(widget)
+
     def _stable_defaults(self):
         emu = None
         if self.guest:
@@ -2127,7 +2025,10 @@ class vmmCreate(vmmGObjectUI):
             callback = cb
         else:
             def callback(ignore, text):
-                self.widget(cbwidget).set_text(text)
+                widget = cbwidget
+                if type(cbwidget) is str:
+                    widget = self.widget(cbwidget)
+                widget.set_text(text)
 
         if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(self.conn)
