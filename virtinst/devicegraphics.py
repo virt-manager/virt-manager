@@ -149,7 +149,7 @@ class VirtualGraphics(VirtualDevice):
         # old libvirt that didn't support 'autoport'
         if self.type != "spice":
             return None
-        if (self.port == -1 or self.tlsPort == -1):
+        if (self.port == -1 and self.tlsPort == -1):
             return True
         return None
     port = XMLProperty("./@port", is_int=True,

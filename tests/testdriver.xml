@@ -205,7 +205,7 @@
     <graphics type='vnc' listen="1.2.3.4" keymap="fi"/>
     <graphics type='vnc' port="5903" passwd="foobar"/>
     <graphics type='rdp'/>
-    <graphics type='spice'/>
+    <graphics type='spice' autoport='yes' passwd=''/>
     <graphics type="spice" passwd="newpass" port="6000" tlsPort="6001" listen="1.2.3.4">
       <channel name="inputs" mode="secure"/>
       <channel name="main" mode="any"/>

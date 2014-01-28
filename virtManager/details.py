@@ -35,6 +35,7 @@ from virtManager.baseclass import vmmGObjectUI
 from virtManager.addhardware import vmmAddHardware
 from virtManager.choosecd import vmmChooseCD
 from virtManager.fsdetails import vmmFSDetails
+from virtManager.gfxdetails import vmmGraphicsDetails
 from virtManager.netlist import vmmNetworkList
 from virtManager.snapshots import vmmSnapshotPage
 from virtManager.storagebrowse import vmmStorageBrowser
@@ -83,9 +84,11 @@ EDIT_NET_VPORT,
 EDIT_NET_SOURCE,
 
 EDIT_GFX_PASSWD,
-EDIT_GFX_USE_PASSWD,
 EDIT_GFX_TYPE,
 EDIT_GFX_KEYMAP,
+EDIT_GFX_ADDRESS,
+EDIT_GFX_TLSPORT,
+EDIT_GFX_PORT,
 
 EDIT_VIDEO_MODEL,
 
@@ -97,7 +100,7 @@ EDIT_CONTROLLER_MODEL,
 EDIT_TPM_TYPE,
 
 EDIT_FS,
-) = range(1, 39)
+) = range(1, 41)
 
 
 # Columns in hw list model
@@ -387,6 +390,22 @@ class vmmDetails(vmmGObjectUI):
         self.fsDetails.connect("changed",
                                lambda *x: self.enable_apply(x, EDIT_FS))
 
+        self.gfxdetails = vmmGraphicsDetails(
+            self.vm, self.builder, self.topwin)
+        self.widget("graphics-align").add(self.gfxdetails.top_box)
+        self.gfxdetails.connect("changed-type",
+            lambda *x: self.enable_apply(x, EDIT_GFX_TYPE))
+        self.gfxdetails.connect("changed-port",
+            lambda *x: self.enable_apply(x, EDIT_GFX_PORT))
+        self.gfxdetails.connect("changed-tlsport",
+            lambda *x: self.enable_apply(x, EDIT_GFX_TLSPORT))
+        self.gfxdetails.connect("changed-address",
+            lambda *x: self.enable_apply(x, EDIT_GFX_ADDRESS))
+        self.gfxdetails.connect("changed-keymap",
+            lambda *x: self.enable_apply(x, EDIT_GFX_KEYMAP))
+        self.gfxdetails.connect("changed-password",
+            lambda *x: self.enable_apply(x, EDIT_GFX_PASSWD))
+
         self.netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
         self.widget("network-source-label-align").add(self.netlist.top_label)
         self.widget("network-source-ui-align").add(self.netlist.top_box)
@@ -499,13 +518,6 @@ class vmmDetails(vmmGObjectUI):
 
             "on_network_model_combo_changed": lambda *x: self.enable_apply(x, EDIT_NET_MODEL),
 
-            "on_gfx_type_combo_changed": lambda *x: self.enable_apply(x, EDIT_GFX_TYPE),
-            "on_vnc_keymap_combo_changed": lambda *x: self.enable_apply(x,
-                                            EDIT_GFX_KEYMAP),
-
-            "on_vnc_use_password_toggled": lambda *x: self.control_gfx_use_passwd(x),
-            "on_vnc_password_changed": lambda *x: self.enable_apply(x, EDIT_GFX_PASSWD),
-
             "on_sound_model_combo_changed": lambda *x: self.enable_apply(x,
                                              EDIT_SOUND_MODEL),
 
@@ -579,6 +591,8 @@ class vmmDetails(vmmGObjectUI):
         self.conn = None
         self.addhwmenu = None
 
+        self.gfxdetails.cleanup()
+        self.gfxdetails = None
         self.fsDetails.cleanup()
         self.fsDetails = None
         self.netlist.cleanup()
@@ -929,20 +943,6 @@ class vmmDetails(vmmGObjectUI):
         # Network model
         net_model = self.widget("network-model")
         vmmAddHardware.build_network_model_combo(self.vm, net_model)
-
-        # Graphics type
-        gfx_type = self.widget("gfx-type")
-        model = Gtk.ListStore(str, str)
-        gfx_type.set_model(model)
-        uiutil.set_combo_text_column(gfx_type, 1)
-        model.append([virtinst.VirtualGraphics.TYPE_VNC, "VNC"])
-        model.append([virtinst.VirtualGraphics.TYPE_SPICE, "Spice"])
-        gfx_type.set_active(-1)
-
-        # Graphics keymap
-        gfx_keymap = self.widget("gfx-keymap")
-        vmmAddHardware.build_graphics_keymap_combo(self.vm, gfx_keymap,
-                                         no_default=no_default)
 
         # Sound model
         sound_dev = self.widget("sound-model")
@@ -1354,14 +1354,6 @@ class vmmDetails(vmmGObjectUI):
                        self.console.viewer.has_usb_redirection() and
                        self.vm.has_spicevmc_type_redirdev())
         self.widget("details-menu-usb-redirection").set_sensitive(can_usb)
-
-    def control_gfx_use_passwd(self, x):
-        passwd_widget = self.widget("gfx-password")
-        sensitive = self.widget("gfx-use-password").get_active()
-        if not sensitive:
-            passwd_widget.set_text("")
-        passwd_widget.set_sensitive(sensitive)
-        self.enable_apply(x, EDIT_GFX_USE_PASSWD)
 
     def control_vm_run(self, src_ignore):
         self.emit("action-run-domain",
@@ -2102,23 +2094,25 @@ class vmmDetails(vmmGObjectUI):
     def config_graphics_apply(self, dev_id_info):
         df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
 
-        if self.edited(EDIT_GFX_PASSWD) or self.edited(EDIT_GFX_USE_PASSWD):
-            use_passwd = self.widget("gfx-use-password").get_active()
-            if use_passwd:
-                passwd = self.get_text("gfx-password", strip=False) or ""
-            else:
-                passwd = None
+        (gtype, port,
+         tlsport, addr, passwd, keymap) = self.gfxdetails.get_values()
+
+        if self.edited(EDIT_GFX_PASSWD):
             add_define(self.vm.define_graphics_password, dev_id_info, passwd)
             add_hotplug(self.vm.hotplug_graphics_password, dev_id_info,
                         passwd)
 
+        if self.edited(EDIT_GFX_ADDRESS):
+            add_define(self.vm.define_graphics_address, dev_id_info, addr)
         if self.edited(EDIT_GFX_KEYMAP):
-            keymap = uiutil.get_combo_entry(self.widget("gfx-keymap"))
             add_define(self.vm.define_graphics_keymap, dev_id_info, keymap)
+        if self.edited(EDIT_GFX_PORT):
+            add_define(self.vm.define_graphics_port, dev_id_info, port)
+        if self.edited(EDIT_GFX_TLSPORT):
+            add_define(self.vm.define_graphics_tlsport, dev_id_info, tlsport)
 
         # Do this last since it can change graphics unique ID
         if self.edited(EDIT_GFX_TYPE):
-            gtype = uiutil.get_combo_entry(self.widget("gfx-type"))
             add_define(self.vm.define_graphics_type, dev_id_info, gtype)
 
         return self._change_config_helper(df, da, hf, ha)
@@ -2669,66 +2663,8 @@ class vmmDetails(vmmGObjectUI):
         if not gfx:
             return
 
-        table = self.widget("graphics-table")
-        table.foreach(lambda w, ignore: w.hide(), ())
-
-        def show_row(name):
-            uiutil.set_grid_row_visible(self.widget(name), True)
-
-        def port_to_string(port):
-            if port is None:
-                return "-"
-            return (port == -1 and _("Automatically allocated") or str(port))
-
-        gtype = gfx.type
-        is_vnc = (gtype == "vnc")
-        is_sdl = (gtype == "sdl")
-        is_spice = (gtype == "spice")
-        is_other = not (True in [is_vnc, is_sdl, is_spice])
-
-        title = (_("%(graphicstype)s Server") %
-                  {"graphicstype" : gfx.pretty_type_simple(gtype)})
-
-        settype = ""
-        if is_vnc or is_spice:
-            use_passwd = gfx.passwd is not None
-
-            show_row("gfx-password-box")
-            show_row("gfx-address")
-            show_row("gfx-port")
-            show_row("gfx-keymap")
-
-            self.widget("gfx-port").set_text(port_to_string(gfx.port))
-            self.widget("gfx-address").set_text(gfx.listen or "127.0.0.1")
-            uiutil.set_combo_entry(self.widget("gfx-keymap"), gfx.keymap or None)
-
-            self.widget("gfx-password").set_text(gfx.passwd or "")
-            self.widget("gfx-use-password").set_active(use_passwd)
-            self.widget("gfx-password").set_sensitive(use_passwd)
-
-            settype = gtype
-
-        if is_spice:
-            show_row("gfx-tlsport")
-            self.widget("gfx-tlsport").set_text(port_to_string(gfx.tlsPort))
-
-        if is_sdl:
-            title = _("Local SDL Window")
-
-            show_row("gfx-display")
-            show_row("gfx-xauth")
-            self.widget("gfx-display").set_text(gfx.display or _("Unknown"))
-            self.widget("gfx-xauth").set_text(gfx.xauth or _("Unknown"))
-
-        if is_other:
-            settype = gfx.pretty_type_simple(gtype)
-
-        if settype:
-            show_row("gfx-type")
-            uiutil.set_combo_entry(self.widget("gfx-type"), gtype)
-
+        title = self.gfxdetails.set_dev(gfx)
         self.widget("graphics-title").set_markup("<b>%s</b>" % title)
-
 
     def refresh_sound_page(self):
         sound = self.get_hw_selection(HW_LIST_COL_DEVICE)

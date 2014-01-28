@@ -36,6 +36,7 @@ from virtinst import VirtualController
 
 from virtManager import uiutil
 from virtManager.fsdetails import vmmFSDetails
+from virtManager.gfxdetails import vmmGraphicsDetails
 from virtManager.netlist import vmmNetworkList
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.storagebrowse import vmmStorageBrowser
@@ -72,7 +73,11 @@ class vmmAddHardware(vmmGObjectUI):
 
         self._dev = None
 
-        self.fsDetails = vmmFSDetails(vm, self.builder, self.topwin)
+        self.gfxdetails = vmmGraphicsDetails(
+            self.vm, self.builder, self.topwin)
+        self.widget("graphics-align").add(self.gfxdetails.top_box)
+
+        self.fsDetails = vmmFSDetails(self.vm, self.builder, self.topwin)
         self.widget("fs-box").add(self.fsDetails.top_box)
 
         self.netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
@@ -94,10 +99,6 @@ class vmmAddHardware(vmmGObjectUI):
             "on_config_storage_bustype_changed": self.populate_disk_device,
 
             "on_mac_address_clicked" : self.change_macaddr_use,
-
-            "on_graphics_type_changed": self.change_graphics_type,
-            "on_graphics_port_auto_toggled": self.change_port_auto,
-            "on_graphics_use_password": self.change_password_chk,
 
             "on_char_device_type_changed": self.change_char_device_type,
             "on_char_target_name_changed": self.change_char_target_name,
@@ -141,6 +142,8 @@ class vmmAddHardware(vmmGObjectUI):
             self.storage_browser.cleanup()
             self.storage_browser = None
 
+        self.gfxdetails.cleanup()
+        self.gfxdetails = None
         self.fsDetails.cleanup()
         self.fsDetails = None
         self.netlist.cleanup()
@@ -222,17 +225,6 @@ class vmmAddHardware(vmmGObjectUI):
         input_model = Gtk.ListStore(str, str, str)
         input_list.set_model(input_model)
         uiutil.set_combo_text_column(input_list, 0)
-
-        # Graphics type
-        graphics_list = self.widget("graphics-type")
-        graphics_model = Gtk.ListStore(str, str)
-        graphics_list.set_model(graphics_model)
-        uiutil.set_combo_text_column(graphics_list, 0)
-
-        # Graphics address
-        # [label, value]
-        self.widget("graphics-address").set_model(Gtk.ListStore(str, str))
-        uiutil.set_combo_text_column(self.widget("graphics-address"), 0)
 
         # Sound model list
         sound_list = self.widget("sound-model")
@@ -417,22 +409,7 @@ class vmmAddHardware(vmmGObjectUI):
         input_box.set_active(0)
 
         # Graphics init
-        graphics_box = self.widget("graphics-type")
-        self.populate_graphics_model(graphics_box.get_model())
-        graphics_box.set_active(0)
-
-        model = self.widget("graphics-address").get_model()
-        model.clear()
-        model.append([_("Hypervisor default"), None])
-        model.append([_("Localhost only"), "127.0.0.1"])
-        model.append([_("All interfaces"), "0.0.0.0"])
-        self.widget("graphics-address").set_active(0)
-
-        self.change_port_auto()
-        self.widget("graphics-port-auto").set_active(True)
-        self.widget("graphics-password").set_text("")
-        self.widget("graphics-password").set_sensitive(False)
-        self.widget("graphics-password-chk").set_active(False)
+        self.gfxdetails.reset_state()
 
         # Sound init
         sound_box = self.widget("sound-model")
@@ -827,11 +804,6 @@ class vmmAddHardware(vmmGObjectUI):
         model.append([_("EvTouch USB Graphics Tablet"), "tablet", "usb"])
         model.append([_("Generic USB Mouse"), "mouse", "usb"])
 
-    def populate_graphics_model(self, model):
-        model.clear()
-        model.append([_("Spice server"), "spice"])
-        model.append([_("VNC server"), "vnc"])
-
     def populate_host_device_model(self, devtype, devcap, subtype, subcap):
         devlist = self.widget("host-device")
         model = devlist.get_model()
@@ -955,28 +927,6 @@ class vmmAddHardware(vmmGObjectUI):
     def get_config_input(self):
         row = uiutil.get_list_selection(self.widget("input-type"))
         return row[1], row[2]
-
-    # Graphics getters
-    def get_config_graphics(self):
-        return uiutil.get_list_selection(self.widget("graphics-type"), 1)
-
-    def get_config_graphics_ports(self):
-        if self.widget("graphics-port-auto").get_active():
-            return -1, -1
-
-        port = self.widget("graphics-port").get_value()
-        tlsport = self.widget("graphics-tls-port").get_value()
-        if not self.widget("graphics-tls-port").get_visible():
-            tlsport = -1
-        return int(port), int(tlsport)
-
-    def get_config_graphics_address(self):
-        return uiutil.get_list_selection(self.widget("graphics-address"), 1)
-
-    def get_config_graphics_password(self):
-        if not self.widget("graphics-password-chk").get_active():
-            return None
-        return self.widget("graphics-password").get_text()
 
     # Network getters
     def get_config_net_model(self):
@@ -1153,27 +1103,6 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("create-mac-address").set_sensitive(True)
         else:
             self.widget("create-mac-address").set_sensitive(False)
-
-    # Graphics listeners
-    def change_graphics_type(self, ignore=None):
-        self.change_port_auto()
-
-    def change_port_auto(self, ignore=None):
-        gtype = self.get_config_graphics()
-        is_auto = self.widget("graphics-port-auto").get_active()
-        is_spice = (gtype == "spice")
-
-        uiutil.set_grid_row_visible(self.widget("graphics-port-box"),
-                                       not is_auto)
-        self.widget("graphics-port-box").set_visible(not is_auto)
-        self.widget("graphics-tlsport-box").set_visible(is_spice)
-
-    def change_password_chk(self, ignore=None):
-        if self.widget("graphics-password-chk").get_active():
-            self.widget("graphics-password").set_sensitive(True)
-        else:
-            self.widget("graphics-password").set_text("")
-            self.widget("graphics-password").set_sensitive(False)
 
     # Char device listeners
     def get_char_type(self):
@@ -1585,17 +1514,18 @@ class vmmAddHardware(vmmGObjectUI):
         self._dev = dev
 
     def validate_page_graphics(self):
-        gtype = self.get_config_graphics()
-
         try:
-            port, tlsport = self.get_config_graphics_ports()
+            (gtype, port,
+             tlsport, addr, passwd, keymap) = self.gfxdetails.get_values()
+
             self._dev = virtinst.VirtualGraphics(self.conn.get_backend())
             self._dev.type = gtype
             self._dev.port = port
-            self._dev.passwd = self.get_config_graphics_password()
-            self._dev.listen = self.get_config_graphics_address()
-            if gtype == "spice":
-                self._dev.tlsPort = tlsport
+            self._dev.passwd = passwd
+            self._dev.listen = addr
+            self._dev.tlsPort = tlsport
+            if keymap:
+                self._dev.keymap = keymap
         except ValueError, e:
             self.err.val_err(_("Graphics device parameter error"), e)
 

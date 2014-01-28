@@ -122,15 +122,15 @@ def set_row_selection(listwidget, prevkey):
     selection.emit("changed")
 
 
-def set_combo_entry(combo, value):
+def set_combo_entry(combo, value, rowidx=0):
     """
-    Search the passed combobox for value, comparing against the
-    first item in each row. If found, select it. If not found, and
+    Search the passed combobox for value, comparing againt
+    rowidx. If found, select it. If not found, and
     the combobox has a text entry, stick the value in their and
     select it.
     """
     idx = -1
-    model_list = [x[0] for x in combo.get_model()]
+    model_list = [x[rowidx] for x in combo.get_model()]
     model_in_list = (value in model_list)
     if model_in_list:
         idx = model_list.index(value)
@@ -140,12 +140,12 @@ def set_combo_entry(combo, value):
         combo.get_child().set_text(value or "")
 
 
-def get_combo_entry(combo):
+def get_combo_entry(combo, rowidx=0):
     """
     Helper to get the value specified in a combo box, with or
     without and entry
     """
-    ret = get_list_selection(combo, 0)
+    ret = get_list_selection(combo, rowidx)
     if ret:
         return ret
     if not combo.get_has_entry():

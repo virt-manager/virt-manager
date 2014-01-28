@@ -739,9 +739,21 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine_device(change, devobj)
 
     # Graphics define methods
+    def define_graphics_address(self, devobj, newval):
+        def change(editdev):
+            editdev.listen = newval
+        return self._redefine_device(change, devobj)
+    def define_graphics_port(self, devobj, newval):
+        def change(editdev):
+            editdev.port = newval
+        return self._redefine_device(change, devobj)
+    def define_graphics_tlsport(self, devobj, newval):
+        def change(editdev):
+            editdev.tlsPort = newval
+        return self._redefine_device(change, devobj)
     def define_graphics_password(self, devobj, newval):
         def change(editdev):
-            editdev.passwd = newval or None
+            editdev.passwd = newval
         return self._redefine_device(change, devobj)
     def define_graphics_keymap(self, devobj, newval):
         def change(editdev):
