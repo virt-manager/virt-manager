@@ -189,6 +189,7 @@ class vmmGObjectUI(vmmGObject):
 
     def __init__(self, filename, windowname, builder=None, topwin=None):
         vmmGObject.__init__(self)
+        self._external_topwin = bool(topwin)
 
         if filename:
             uifile = os.path.join(self.config.get_ui_dir(), filename)
@@ -222,7 +223,8 @@ class vmmGObjectUI(vmmGObject):
         self.close()
         vmmGObject.cleanup(self)
         self.builder = None
-        self.topwin.destroy()
+        if not self._external_topwin:
+            self.topwin.destroy()
         self.topwin = None
         self._err = None
 

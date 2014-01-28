@@ -108,9 +108,7 @@ class vmmCreate(vmmGObjectUI):
         self.config_window = None
         self.config_window_signals = []
 
-        self.netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
-        self.widget("config-netdev-ui-align").add(self.netlist.top_box)
-        self.netlist.connect("changed", self.netdev_changed)
+        self.netlist = None
 
         self.builder.connect_signals({
             "on_vmm_newcreate_delete_event" : self.close,
@@ -197,6 +195,9 @@ class vmmCreate(vmmGObjectUI):
         if self.storage_browser:
             self.storage_browser.cleanup()
             self.storage_browser = None
+        if self.netlist:
+            self.netlist.cleanup()
+            self.netlist = None
 
     def remove_conn(self):
         if not self.conn:
@@ -213,7 +214,6 @@ class vmmCreate(vmmGObjectUI):
 
         self.remove_conn()
         self.conn = newconn
-        self.netlist.conn = self.conn
         if self.conn:
             self.set_conn_state()
 
@@ -622,6 +622,15 @@ class vmmCreate(vmmGObjectUI):
         self.widget("config-macaddr").set_text(newmac)
 
         self.widget("config-advanced-expander").set_expanded(False)
+
+        if self.netlist:
+            self.widget("config-netdev-ui-align").remove(self.netlist.top_box)
+            self.netlist.cleanup()
+            self.netlist = None
+
+        self.netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
+        self.widget("config-netdev-ui-align").add(self.netlist.top_box)
+        self.netlist.connect("changed", self.netdev_changed)
         self.netlist.reset_state()
 
     def populate_hv(self):
