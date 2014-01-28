@@ -943,6 +943,15 @@ class XMLBuilder(object):
                            "Didn't find child property for child_class=%s" %
                            child_class)
 
+    def _parse_with_children(self, *args, **kwargs):
+        """
+        Set new backing XML objects in ourselves and all our child props
+        """
+        self._xmlstate._parse(*args, **kwargs)
+        for propname in self._all_child_props():
+            for p in util.listify(getattr(self, propname, [])):
+                p._xmlstate._parse(None, self._xmlstate.xml_node)
+
     def _add_child(self, obj):
         """
         Insert the passed XMLBuilder object into our XML document. The
@@ -958,7 +967,7 @@ class XMLBuilder(object):
             indent = 2 * obj.get_root_xpath().count("/")
             newnode = libxml2.parseDoc(util.xml_indent(xml, indent)).children
             _build_xpath_node(self._xmlstate.xml_ctx, use_xpath, newnode)
-        obj._xmlstate._parse(None, self._xmlstate.xml_node)
+        obj._parse_with_children(None, self._xmlstate.xml_node)
 
     def _remove_child(self, obj):
         """
@@ -972,7 +981,7 @@ class XMLBuilder(object):
         xml = obj.get_xml_config()
         obj._set_parent_xpath(None)
         obj._set_relative_object_xpath(None)
-        obj._xmlstate._parse(xml, None)
+        obj._parse_with_children(xml, None)
         _remove_xpath_node(self._xmlstate.xml_ctx, xpath, dofree=False)
         self._set_child_xpaths()
 

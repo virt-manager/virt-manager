@@ -823,6 +823,7 @@ class XMLParseTest(unittest.TestCase):
         adddev.type = "network"
         adddev.source = "default"
         adddev.macaddr = "1A:2A:3A:4A:5A:6A"
+        adddev.address.set_addrstr("spapr-vio")
 
         guest.add_device(virtinst.VirtualWatchdog(conn))
 
