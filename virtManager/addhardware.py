@@ -809,7 +809,7 @@ class vmmAddHardware(vmmGObjectUI):
             model.append(["ide", "IDE"])
             model.append(["fdc", "Floppy"])
 
-            if self.vm.stable_defaults():
+            if not self.vm.stable_defaults():
                 model.append(["scsi", "SCSI"])
                 model.append(["usb", "USB"])
 
