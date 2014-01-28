@@ -29,7 +29,7 @@ from gi.repository import GdkPixbuf
 
 from virtinst import util
 
-from virtManager import sharedui
+from virtManager import vmmenu
 from virtManager import uiutil
 from virtManager.connection import vmmConnection
 from virtManager.baseclass import vmmGObjectUI
@@ -126,7 +126,7 @@ class vmmManager(vmmGObjectUI):
         self.topwin.set_default_size(w or 550, h or 550)
         self.prev_position = None
 
-        self.vmmenu = sharedui.VMActionMenu(self, self.current_vm)
+        self.vmmenu = vmmenu.VMActionMenu(self, self.current_vm)
         self.connmenu = Gtk.Menu()
         self.connmenu_items = {}
 
@@ -297,7 +297,7 @@ class vmmManager(vmmGObjectUI):
         self.widget("vm-new").set_icon_name("vm_new")
         self.widget("vm-open").set_icon_name("icon_console")
 
-        menu = sharedui.VMShutdownMenu(self, self.current_vm)
+        menu = vmmenu.VMShutdownMenu(self, self.current_vm)
         self.widget("vm-shutdown").set_icon_name("system-shutdown")
         self.widget("vm-shutdown").set_menu(menu)
 

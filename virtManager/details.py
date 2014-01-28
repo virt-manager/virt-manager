@@ -29,7 +29,7 @@ from gi.repository import Gdk
 
 import libvirt
 
-from virtManager import sharedui
+from virtManager import vmmenu
 from virtManager import uiutil
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.addhardware import vmmAddHardware
@@ -638,13 +638,13 @@ class vmmDetails(vmmGObjectUI):
 
     def init_menus(self):
         # Virtual Machine menu
-        menu = sharedui.VMShutdownMenu(self, lambda: self.vm)
+        menu = vmmenu.VMShutdownMenu(self, lambda: self.vm)
         self.widget("control-shutdown").set_menu(menu)
         self.widget("control-shutdown").set_icon_name("system-shutdown")
 
         topmenu = self.widget("details-vm-menu")
         submenu = topmenu.get_submenu()
-        newmenu = sharedui.VMActionMenu(self, lambda: self.vm,
+        newmenu = vmmenu.VMActionMenu(self, lambda: self.vm,
                                         show_open=False)
         for child in submenu.get_children():
             submenu.remove(child)

@@ -25,7 +25,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 # pylint: enable=E0611
 
-from virtManager import sharedui
+from virtManager import vmmenu
 from virtManager.baseclass import vmmGObject
 from virtManager.error import vmmErrorDialog
 
@@ -303,7 +303,7 @@ class vmmSystray(vmmGObject):
         # Build VM list entry
         menu_item = build_image_menu_item(vm.get_name())
         vm_mappings[uuid] = menu_item
-        vm_action_menu = sharedui.VMActionMenu(self, lambda: vm)
+        vm_action_menu = vmmenu.VMActionMenu(self, lambda: vm)
         menu_item.set_submenu(vm_action_menu)
         self.vm_action_dict[uuid] = vm_action_menu
 
