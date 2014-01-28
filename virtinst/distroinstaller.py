@@ -130,7 +130,7 @@ def _upload_file(conn, meter, destpool, src):
         offset = 0
         length = size
         flags = 0
-        stream.upload(vol, offset, length, flags)
+        vol.upload(stream, offset, length, flags)
 
         # Open source file
         fileobj = file(src, "r")
