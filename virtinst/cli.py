@@ -1435,6 +1435,9 @@ class ParserCPU(VirtCLIParser):
             ignore = cliname
             if val == "host":
                 inst.cpu.copy_host_cpu()
+            elif (val == "host-model-only" and
+                  self.guest.conn.caps.host.cpu.model):
+                inst.cpu.model = self.guest.conn.caps.host.cpu.model
             else:
                 inst.cpu.model = val
 
