@@ -58,6 +58,11 @@ class vmmNetworkList(vmmGObjectUI):
         self.top_vport = self.widget("vport-expander")
 
     def _cleanup(self):
+        try:
+            self.conn.disconnect_by_func(self._repopulate_network_list)
+        except:
+            pass
+
         self.conn = None
 
 
@@ -89,6 +94,11 @@ class vmmNetworkList(vmmGObjectUI):
         model.append(["passthrough", "Passthrough"])
 
         combo.set_active(0)
+
+        self.conn.connect("net-added", self._repopulate_network_list)
+        self.conn.connect("net-removed", self._repopulate_network_list)
+        self.conn.connect("interface-added", self._repopulate_network_list)
+        self.conn.connect("interface-removed", self._repopulate_network_list)
 
     def _pretty_network_desc(self, nettype, source=None, netobj=None):
         if nettype == virtinst.VirtualNetworkInterface.TYPE_USER:
@@ -444,6 +454,19 @@ class vmmNetworkList(vmmGObjectUI):
         ignore = args
         ignore = kwargs
         self.emit("changed-vport")
+
+    def _repopulate_network_list(self, *args, **kwargs):
+        ignore = args
+        ignore = kwargs
+
+        netlist = self.widget("net-source")
+        label = uiutil.get_list_selection(netlist, 2)
+        self._populate_network_list()
+
+        for row in netlist.get_model():
+            if label and row[2] == label:
+                netlist.set_active_iter(row.iter)
+                return
 
     def _on_net_source_changed(self, src):
         self._emit_changed()
