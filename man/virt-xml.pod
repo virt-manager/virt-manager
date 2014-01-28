@@ -58,11 +58,11 @@ If XML is passed on stdin, the default output is --print-xml.
 
 =item --edit [EDIT-OPTIONS]
 
-Edit the specified XML block. EDIT-OPTIONS tell B<virt-xml> which block to edit. The type of XML that we are editting is decided by XML option that is passed to B<virt-xml>. So if --disk is passed, EDIT-OPTIONS select which <disk> block to edit.
+Edit the specified XML block. EDIT-OPTIONS tell B<virt-xml> which block to edit. The type of XML that we are editing is decided by XML option that is passed to B<virt-xml>. So if --disk is passed, EDIT-OPTIONS select which <disk> block to edit.
 
 Certain XML options only ever map to a single XML block, like --cpu, --security, --boot, --clock, and a few others. In those cases, B<virt-xml> will not complain if a corresponding XML block does not already exist, it will create it for you.
 
-Every XML option has a special value 'clearxml=yes'. When combined with --edit, it will completely blank out the XML block being editted before applying the requested changes. This allows completely rebuilding an XML block. See EXAMPLES for some usage.
+Every XML option has a special value 'clearxml=yes'. When combined with --edit, it will completely blank out the XML block being edited before applying the requested changes. This allows completely rebuilding an XML block. See EXAMPLES for some usage.
 
 EDIT-OPTIONS examples:
 
@@ -228,7 +228,7 @@ Generally these options map pretty straightforwardly to the libvirt XML, documen
 
 Option strings are in the format of: --option opt=val,opt2=val2,...  example: --disk path=/tmp/foo,shareable=on. Propertys can be unsed with '--option opt=,', so to clear a disks cache setting you could use '--disk cache=,'
 
-Every XML option has a special value 'clearxml=yes'. When combined with --edit, it will completely blank out the XML block being editted before applying the requested changes. This allows completely rebuilding an XML block. See EXAMPLES for some usage.
+Every XML option has a special value 'clearxml=yes'. When combined with --edit, it will completely blank out the XML block being edited before applying the requested changes. This allows completely rebuilding an XML block. See EXAMPLES for some usage.
 
 For any option, use --option=? to see a list of all available sub options, example: --disk=?  or  --boot=?
 
