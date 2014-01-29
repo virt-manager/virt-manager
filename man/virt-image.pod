@@ -92,15 +92,7 @@ See L<virt-install(1)> for valid values.
 
 =item -w NETWORK, --network=NETWORK
 
-Connect the guest to the host network. See L<virt-install(1)> for details
-
-=item -m MAC, --mac=MAC
-
-This is deprecated in favor of C<--network ...,mac=MAC,...>
-
-=item -b BRIDGE, --bridge=BRIDGE
-
-This is deprecated in favor of C<--network bridge=BRIDGE>
+Connect the guest to the host network. This deprecates the -m/--mac and -b/--bridge options. See L<virt-install(1)> for details.
 
 =back
 
@@ -120,31 +112,12 @@ Specifies the graphical display configuration. This does not configure any
 virtual hardware, just how the guest's graphical display can be accessed.
 See L<virt-install(1)> for details usage info.
 
-=item  --vnc
-
-This option is deprecated in favor of C<--graphics vnc,...>
-
-=item  --vncport=VNCPORT
-
-This option is deprecated in favor of C<--graphics vnc,port=PORT,...>
-
-=item --vnclisten=VNCLISTEN
-
-This option is deprecated in favor of C<--graphics vnc,listen=LISTEN,...>
-
-=item  -k KEYMAP, --keymap=KEYMAP
-
-This option is deprecated in favor of C<--graphics vnc,keymap=KEYMAP,...>
-
-=item  --sdl
-
-This option is deprecated in favor of C<--graphics sdl,...>
-
-=item  --nographics
-
-This option is deprecated in favor of C<--graphics none>
+This deprecates the following options: --vnc, --vncport, --vnclisten, -k/--keymap, --sdl, --nographics
 
 =back
+
+
+
 
 =head2 Miscellaneous Options
 

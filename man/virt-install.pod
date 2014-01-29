@@ -563,8 +563,8 @@ possible values in L<http://www.libvirt.org/formatdomain.html#elementsDisks>
 
 =back
 
-See the examples section for some uses. This option deprecates C<--file>,
-C<--file-size>, and C<--nonsparse>.
+See the examples section for some uses. This option deprecates -f/--file,
+-s/--file-size, and --nonsparse.
 
 Use --disk=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsDisks>
 
@@ -610,18 +610,6 @@ Use --filesystem=? to see a list of all available sub options. Complete details 
 
 Request a virtual machine without any local disk storage, typically used for
 running 'Live CD' images or installing to network storage (iSCSI or NFS root).
-
-=item -f DISKFILE, --file=DISKFILE
-
-This option is deprecated in favor of C<--disk path=DISKFILE>.
-
-=item -s DISKSIZE, --file-size=DISKSIZE
-
-This option is deprecated in favor of C<--disk ...,size=DISKSIZE,...>
-
-=item --nonsparse
-
-This option is deprecated in favor of C<--disk ...,sparse=false,...>
 
 =back
 
@@ -700,18 +688,11 @@ by running 'virsh nwfilter-list', e.g.: 'clean-traffic', 'no-mac-spoofing', ...
 
 Use --network=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsNICS>
 
+This option deprecates -m/--mac and -b/--bridge
+
 =item --nonetworks
 
 Request a virtual machine without any network interfaces.
-
-=item -b BRIDGE, --bridge=BRIDGE
-
-This parameter is deprecated in favour of
-C<--network bridge=bridge_name>.
-
-=item -m MAC, --mac=MAC
-
-This parameter is deprecated in favour of C<--network NETWORK,mac=12:34...>
 
 =back
 
@@ -819,29 +800,7 @@ is used by 'vnc' and 'spice'
 
 Use --graphics=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsGraphics>
 
-=item  --vnc
-
-This option is deprecated in favor of C<--graphics vnc,...>
-
-=item  --vncport=VNCPORT
-
-This option is deprecated in favor of C<--graphics vnc,port=PORT,...>
-
-=item --vnclisten=VNCLISTEN
-
-This option is deprecated in favor of C<--graphics vnc,listen=LISTEN,...>
-
-=item  -k KEYMAP, --keymap=KEYMAP
-
-This option is deprecated in favor of C<--graphics vnc,keymap=KEYMAP,...>
-
-=item  --sdl
-
-This option is deprecated in favor of C<--graphics sdl,...>
-
-=item  --nographics
-
-This option is deprecated in favor of C<--graphics none>
+This deprecates the following options: --vnc, --vncport, --vnclisten, -k/--keymap, --sdl, --nographics
 
 =item  --noautoconsole
 
@@ -886,11 +845,7 @@ completeness).
 The hypervisor to install on. Example choices are kvm, qemu, xen, or kqemu.
 Available options are listed via 'virsh capabilities' in the <domain> tags.
 
-=item  --accelerate
-
-Prefer KVM or KQEMU (in that order) if installing a QEMU guest. This behavior
-is now the default, and this option is deprecated. To install a plain QEMU
-guest, use '--virt-type qemu'
+This deprecates the --accelerate option, which is now the default behavior. To install a plain QEMU guest, use '--virt-type qemu'
 
 =back
 
