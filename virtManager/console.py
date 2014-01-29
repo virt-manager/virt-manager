@@ -71,23 +71,32 @@ class ConnectionInfo(object):
         self.gtlsport   = gdev.tlsPort or None
 
         self.transport, self.connuser = conn.get_transport()
-        self._connhost = conn.get_uri_hostname() or "127.0.0.1"
 
-        self._connport = None
-        if self._connhost.count(":"):
-            self._connhost, self._connport = self._connhost.split(":", 1)
+        (self._connhost,
+         self._connport) = conn.get_backend().get_uri_host_port()
+        if self._connhost == "localhost":
+            self._connhost = "127.0.0.1"
+
+    def _is_listen_localhost(self, host=None):
+        return (host or self.gaddr) in ["127.0.0.1", "::1"]
+
+    def _is_listen_any(self):
+        return self.gaddr in ["0.0.0.0", "::"]
 
     def need_tunnel(self):
-        if self.gaddr != "127.0.0.1":
+        if not self._is_listen_localhost():
             return False
-
         return self.transport in ["ssh", "ext"]
 
     def is_bad_localhost(self):
+        """
+        Return True if the guest is listening on localhost, but the libvirt
+        URI doesn't give us any way to tunnel the connection
+        """
         host = self.get_conn_host()[0]
         if self.need_tunnel():
             return False
-        return self.transport and host == "127.0.0.1"
+        return self.transport and self._is_listen_localhost(host)
 
     def get_conn_host(self):
         host = self._connhost
@@ -97,7 +106,7 @@ class ConnectionInfo(object):
         if not self.need_tunnel():
             port = self.gport
             tlsport = self.gtlsport
-            if self.gaddr != "0.0.0.0":
+            if not self._is_listen_any():
                 host = self.gaddr
 
         return host, port, tlsport
@@ -1353,7 +1362,7 @@ class vmmConsolePages(vmmGObjectUI):
         if ginfo.is_bad_localhost():
             self.activate_unavailable_page(
                         _("Guest is on a remote host with transport '%s'\n"
-                          "but is only configured to listen on 127.0.0.1.\n"
+                          "but is only configured to listen on locally.\n"
                           "Connect using 'ssh' transport or change the\n"
                           "guest's listen address." % ginfo.transport))
             return

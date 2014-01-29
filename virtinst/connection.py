@@ -304,6 +304,18 @@ class VirtualConnection(object):
     def get_uri_hostname(self):
         return self._urisplits[2] or "localhost"
 
+    def get_uri_host_port(self):
+        hostname = self.get_uri_hostname()
+        port = None
+
+        if hostname.startswith("[") and "]" in hostname:
+            if "]:" in hostname:
+                hostname, port = hostname.rsplit(":", 1)
+            hostname = "".join(hostname[1:].split("]", 1))
+        elif ":" in hostname:
+            hostname, port = hostname.split(":", 1)
+        return hostname, port
+
     def get_uri_transport(self):
         scheme = self._urisplits[0]
         username = self._urisplits[1]

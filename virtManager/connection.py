@@ -384,6 +384,8 @@ class vmmConnection(vmmGObject):
 
         (scheme, username, hostname,
          path, ignore, ignore) = util.uri_split(self.get_uri())
+        hostname, port = self.get_backend().get_uri_host_port()
+        port = port or ""
 
         hv = ""
         rest = ""
