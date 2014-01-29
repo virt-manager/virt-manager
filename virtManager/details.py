@@ -2902,6 +2902,9 @@ class vmmDetails(vmmGObjectUI):
         else:
             typelabel = _("%s Device") % char_type.capitalize()
 
+        if (target_port is not None and
+                chardev.virtual_device_type == "console"):
+            typelabel += " %s" % (int(target_port) + 1)
         if target_port is not None and not show_target_type:
             typelabel += " %s" % (int(target_port) + 1)
         if primary:
