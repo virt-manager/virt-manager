@@ -170,7 +170,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
         title = (_("%(graphicstype)s Server") %
                   {"graphicstype" : gfx.pretty_type_simple(gtype)})
 
-        settype = ""
         if is_vnc or is_spice:
             use_passwd = gfx.passwd is not None
 
