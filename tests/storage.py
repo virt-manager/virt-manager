@@ -102,7 +102,7 @@ def createVol(conn, poolobj, volname=None, input_vol=None, clone_vol=None):
 
     # Format here depends on libvirt-1.2.0 and later
     if clone_vol and conn.local_libvirt_version() < 1002000:
-        print "\nskip clone compare"
+        logging.debug("skip clone compare")
         return
 
     alloc = 5 * 1024 * 1024 * 1024
