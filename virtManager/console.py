@@ -1017,7 +1017,8 @@ class vmmConsolePages(vmmGObjectUI):
             self.topwin.add_accel_group(g)
 
     def grab_keys_changed(self):
-        self.viewer.set_grab_keys()
+        if self.viewer:
+            self.viewer.set_grab_keys()
 
     def set_enable_accel(self):
         # Make sure modifiers are up to date
