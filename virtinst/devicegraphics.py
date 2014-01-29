@@ -203,6 +203,7 @@ class VirtualGraphics(VirtualDevice):
     passwd = XMLProperty("./@passwd")
     passwdValidTo = XMLProperty("./@passwdValidTo")
     socket = XMLProperty("./@socket")
+    connected = XMLProperty("./@connected")
 
     listens = XMLChildProperty(_GraphicsListen)
     def remove_listen(self, obj):

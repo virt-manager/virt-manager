@@ -522,6 +522,7 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev6)
         check("type", "spice")
         check("passwd", "foobar", "newpass")
+        check("connected", None, "disconnect")
         check("port", 100, 6000)
         check("tlsPort", 101, 6001)
         check("listen", "0.0.0.0", "1.2.3.4")

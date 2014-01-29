@@ -1843,6 +1843,7 @@ class ParserGraphics(VirtCLIParser):
         self.set_param(None, "keymap", setter_cb=set_keymap_cb)
         self.set_param("passwd", "password")
         self.set_param("passwdValidTo", "passwordvalidto")
+        self.set_param("connected", "connected")
 
 
 ########################
