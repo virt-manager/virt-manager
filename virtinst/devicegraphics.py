@@ -20,7 +20,7 @@
 import os
 
 from virtinst import VirtualDevice
-from virtinst.xmlbuilder import XMLProperty
+from virtinst.xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 def _get_mode_prop(channel_type):
@@ -37,6 +37,14 @@ def _validate_port(name, val):
         raise ValueError(_("%s must be above 5900, or "
                            "-1 for auto allocation") % name)
     return val
+
+
+class _GraphicsListen(XMLBuilder):
+    _XML_ROOT_NAME = "listen"
+
+    type = XMLProperty("./@type")
+    address = XMLProperty("./@address")
+    network = XMLProperty("./@network")
 
 
 class VirtualGraphics(VirtualDevice):
@@ -177,13 +185,28 @@ class VirtualGraphics(VirtualDevice):
                           default_cb=_get_default_display)
 
 
+    def _set_listen(self, val):
+        # Update the corresponding <listen> block
+        find_listen = [l for l in self.listens if
+                       (l.type == "address" and l.address == self.listen)]
+        if find_listen:
+            if val is None:
+                self.remove_listen(find_listen[0])
+            else:
+                find_listen[0].address = val
+        return val
+    listen = XMLProperty("./@listen", set_converter=_set_listen)
+
     type = XMLProperty("./@type",
                        default_cb=lambda s: "vnc",
                        default_name="default")
-    listen = XMLProperty("./@listen")
     passwd = XMLProperty("./@passwd")
     passwdValidTo = XMLProperty("./@passwdValidTo")
     socket = XMLProperty("./@socket")
+
+    listens = XMLChildProperty(_GraphicsListen)
+    def remove_listen(self, obj):
+        self._remove_child(obj)
 
 
 VirtualGraphics.register_type()

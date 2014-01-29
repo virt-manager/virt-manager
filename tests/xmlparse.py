@@ -503,6 +503,7 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(dev3)
         check("type", "rdp", "vnc")
+        check("listen", "1.1.2.3", None)
 
         check = self._make_checker(dev4)
         check("type", "vnc")
@@ -511,7 +512,13 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(dev5)
         check("autoport", True, False)
+        check = self._make_checker(dev5.listens[0])
+        check("type", "network", "foo", "network")
+        check("network", "Bobsnetwork", "mynewnet")
 
+        check = self._make_checker(dev6.listens[0])
+        check("type", "address")
+        check("address", "0.0.0.0")
         check = self._make_checker(dev6)
         check("type", "spice")
         check("passwd", "foobar", "newpass")
