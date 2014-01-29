@@ -397,6 +397,9 @@ class VNCViewer(Viewer):
         self.display.set_keyboard_grab(True)
         self.display.set_pointer_grab(True)
 
+        self.display.connect("size-allocate",
+                             self.console.viewer_allocate_cb)
+
         self.display.connect("vnc-pointer-grab", self.console.pointer_grabbed)
         self.display.connect("vnc-pointer-ungrab",
                              self.console.pointer_ungrabbed)
@@ -559,6 +562,10 @@ class SpiceViewer(Viewer):
         self.console.refresh_scaling()
 
         self.display.realize()
+
+        self.display.connect("size-allocate",
+                             self.console.viewer_allocate_cb)
+
         self.display.connect("mouse-grab",
             lambda src, g: g and self.console.pointer_grabbed(src))
         self.display.connect("mouse-grab",
@@ -784,6 +791,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.pointer_is_grabbed = False
         self.change_title()
         self.vm.connect("config-changed", self.change_title)
+        self.force_resize = False
 
         # State for disabling modifiers when keyboard is grabbed
         self.accel_groups = Gtk.accel_groups_from_object(self.topwin)
@@ -1055,7 +1063,6 @@ class vmmConsolePages(vmmGObjectUI):
 
         curscale = self.viewer.get_scaling()
         fs = self.widget("control-fullscreen").get_active()
-        vnc_scroll = self.widget("console-gfx-scroll")
 
         if (self.scale_type == self.config.CONSOLE_SCALE_NEVER
             and curscale is True):
@@ -1068,7 +1075,7 @@ class vmmConsolePages(vmmGObjectUI):
             self.viewer.set_scaling(fs)
 
         # Refresh viewer size
-        vnc_scroll.queue_resize()
+        self.widget("console-gfx-scroll").queue_resize()
 
     def auth_login(self, ignore):
         self.set_credentials()
@@ -1101,6 +1108,9 @@ class vmmConsolePages(vmmGObjectUI):
 
         self.update_scaling()
 
+    def viewer_allocate_cb(self, src, req):
+        self.widget("console-gfx-scroll").queue_resize()
+
     def size_to_vm(self, src_ignore):
         # Resize the console to best fit the VM resolution
         if not self.viewer:
@@ -1108,10 +1118,10 @@ class vmmConsolePages(vmmGObjectUI):
         if not self.viewer.get_desktop_resolution():
             return
 
-        w, h = self.viewer.get_desktop_resolution()
         self.topwin.unmaximize()
         self.topwin.resize(1, 1)
-        self.queue_scroll_resize_helper(w, h)
+        self.force_resize = True
+        self.widget("console-gfx-scroll").queue_resize()
 
     def send_key(self, src, keys):
         ignore = src
@@ -1408,52 +1418,6 @@ class vmmConsolePages(vmmGObjectUI):
             self.config.set_console_password(self.vm, passwd.get_text(),
                                              username.get_text())
 
-    def queue_scroll_resize_helper(self, w, h):
-        """
-        Resize the VNC container widget to the requested size. The new size
-        isn't a hard requirment so the user can still shrink the window
-        again, as opposed to set_size_request
-        """
-        widget = self.widget("console-gfx-scroll")
-        signal_holder = []
-
-        def restore_scroll(src):
-            is_scale = self.viewer.get_scaling()
-
-            if is_scale:
-                w_policy = Gtk.PolicyType.NEVER
-                h_policy = Gtk.PolicyType.NEVER
-            else:
-                w_policy = Gtk.PolicyType.AUTOMATIC
-                h_policy = Gtk.PolicyType.AUTOMATIC
-
-            src.set_policy(w_policy, h_policy)
-            return False
-
-        def unset_cb(src):
-            src.queue_resize_no_redraw()
-            self.idle_add(restore_scroll, src)
-            return False
-
-        def request_cb(src, req):
-            signal_id = signal_holder[0]
-            req.width = w
-            req.height = h
-
-            src.disconnect(signal_id)
-
-            self.idle_add(unset_cb, widget)
-            return False
-
-        # Disable scroll bars while we resize, since resizing to the VM's
-        # dimensions can erroneously show scroll bars when they aren't needed
-        widget.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
-
-        signal_id = widget.connect("size-allocate", request_cb)
-        signal_holder.append(signal_id)
-
-        widget.queue_resize()
-
     def scroll_size_allocate(self, src_ignore, req):
         if not self.viewer or not self.viewer.get_desktop_resolution():
             return
@@ -1470,15 +1434,19 @@ class vmmConsolePages(vmmGObjectUI):
             return
         desktop_ratio = float(desktop_w) / float(desktop_h)
 
-        if not is_scale:
+        if is_scale or self.force_resize:
+            # Make sure we never show scrollbars when scaling
+            scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
+        else:
+            scroll.set_policy(Gtk.PolicyType.AUTOMATIC,
+                              Gtk.PolicyType.AUTOMATIC)
+
+        if not is_scale or self.force_resize:
             # Scaling disabled is easy, just force the VNC widget size. Since
             # we are inside a scrollwindow, it shouldn't cause issues.
-            scroll.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+            self.force_resize = False
             self.viewer.display.set_size_request(desktop_w, desktop_h)
             return
-
-        # Make sure we never show scrollbars when scaling
-        scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
 
         # Make sure there is no hard size requirement so we can scale down
         self.viewer.display.set_size_request(-1, -1)
