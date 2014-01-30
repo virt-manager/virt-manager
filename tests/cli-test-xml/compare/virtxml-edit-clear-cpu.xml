@@ -24,9 +24,9 @@
    <clock offset="utc">
      <timer name="rtc" tickpolicy="catchup"/>
      <timer name="pit" tickpolicy="delay"/>
-@@ -302,4 +285,7 @@
-       </backend>
-     </rng>
+@@ -305,4 +288,7 @@
+       <address type="isa" iobase="0x505"/>
+     </panic>
    </devices>
 +  <cpu mode="custom" match="exact">
 +    <model>host-passthrough</model>

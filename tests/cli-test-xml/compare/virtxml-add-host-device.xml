@@ -1,9 +1,9 @@
 --- Original XML
 +++ Altered XML
-@@ -301,5 +301,10 @@
-         <protocol type="raw"/>
-       </backend>
-     </rng>
+@@ -304,5 +304,10 @@
+     <panic>
+       <address type="isa" iobase="0x505"/>
+     </panic>
 +    <hostdev mode="subsystem" type="pci" managed="yes">
 +      <source>
 +        <address domain="0" bus="0" slot="25" function="0"/>

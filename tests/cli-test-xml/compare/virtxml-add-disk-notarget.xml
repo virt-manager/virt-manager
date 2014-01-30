@@ -1,9 +1,9 @@
 --- Original XML
 +++ Altered XML
-@@ -301,5 +301,9 @@
-         <protocol type="raw"/>
-       </backend>
-     </rng>
+@@ -304,5 +304,9 @@
+     <panic>
+       <address type="isa" iobase="0x505"/>
+     </panic>
 +    <disk type="file" device="disk">
 +      <source file="/tmp/__virtinst_cli_exist1.img"/>
 +      <target dev="vdd"/>
