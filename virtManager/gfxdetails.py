@@ -165,8 +165,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
         is_vnc = (gtype == "vnc")
         is_sdl = (gtype == "sdl")
         is_spice = (gtype == "spice")
-        is_other = not (True in [is_vnc, is_sdl, is_spice])
-
         title = (_("%(graphicstype)s Server") %
                   {"graphicstype" : gfx.pretty_type_simple(gtype)})
 
@@ -183,8 +181,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
             self.widget("graphics-password-chk").set_active(use_passwd)
             self.widget("graphics-password").set_sensitive(use_passwd)
 
-            settype = gtype
-
         if is_spice:
             set_port("graphics-tlsport", gfx.tlsPort)
 
@@ -195,9 +191,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
                 gfx.display or _("Unknown"))
             self.widget("graphics-xauth").set_text(
                 gfx.xauth or _("Unknown"))
-
-        if is_other:
-            settype = gfx.pretty_type_simple(gtype)
 
         uiutil.set_combo_entry(self.widget("graphics-type"), gtype, 0)
         return title
