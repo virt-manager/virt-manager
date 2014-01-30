@@ -139,37 +139,23 @@ class Command(object):
     """
     Instance of a single cli command to test
     """
-    SKIP = -123
-
     def __init__(self, cmd):
         self.cmdstr = cmd % test_files
         self.check_success = True
         self.compare_file = None
-        self.support_check = None
         self.input_file = None
+
+        self.skip_check = None
+        self.compare_check = None
 
         app, opts = self.cmdstr.split(" ", 1)
         self.app = app
         self.argv = [os.path.abspath(app)] + shlex.split(opts)
 
-    def _launch_command(self):
+    def _launch_command(self, conn):
         logging.debug(self.cmdstr)
 
         app = self.argv[0]
-        conn = None
-
-        for idx in reversed(range(len(self.argv))):
-            if self.argv[idx] == "--connect":
-                conn = utils.openconn(self.argv[idx + 1])
-                break
-
-        if not conn and "virt-convert" not in app:
-            raise RuntimeError("couldn't parse URI from command %s" %
-                               self.argv)
-
-        skipmsg = self._skip_msg(conn)
-        if skipmsg is not None:
-            return (self.SKIP, skipmsg)
 
         oldstdout = sys.stdout
         oldstderr = sys.stderr
@@ -210,7 +196,7 @@ class Command(object):
             sys.argv = oldargv
 
 
-    def _get_output(self):
+    def _get_output(self, conn):
         try:
             for i in new_files:
                 if os.path.isdir(i):
@@ -218,7 +204,7 @@ class Command(object):
                 elif os.path.exists(i):
                     os.unlink(i)
 
-            code, output = self._launch_command()
+            code, output = self._launch_command(conn)
 
             logging.debug(output + "\n")
             return code, output
@@ -226,23 +212,40 @@ class Command(object):
             return (-1, "".join(traceback.format_exc()) + str(e))
 
     def _skip_msg(self, conn):
-        if self.support_check is None:
+        if self.skip_check is None:
             return
         if conn is None:
-            raise RuntimeError("support_check is not None, but conn is None")
-        if conn.check_support(self.support_check):
+            raise RuntimeError("skip_check is not None, but conn is None")
+        if conn.check_support(self.skip_check):
             return
         return "skipped"
 
     def run(self, tests):
-        filename = self.compare_file
         err = None
 
         try:
-            code, output = self._get_output()
-            if code == self.SKIP:
-                tests.skipTest(output)
+            conn = None
+            for idx in reversed(range(len(self.argv))):
+                if self.argv[idx] == "--connect":
+                    conn = utils.openconn(self.argv[idx + 1])
+                    break
+
+            if not conn and "virt-convert" not in self.argv[0]:
+                raise RuntimeError("couldn't parse URI from command %s" %
+                                   self.argv)
+
+            skipmsg = self._skip_msg(conn)
+            if skipmsg is not None:
+                tests.skipTest(skipmsg)
                 return
+
+            filename = self.compare_file
+            if (self.compare_check and conn and not
+                conn.check_support(self.compare_check)):
+                logging.debug("Skipping compare check due to lack of support")
+                filename = None
+
+            code, output = self._get_output(conn)
 
             if bool(code) == self.check_success:
                 raise AssertionError(
@@ -318,7 +321,9 @@ class PromptTest(Command):
     def add(self, *args, **kwargs):
         self.prompt_list.append(PromptCheck(*args, **kwargs))
 
-    def _launch_command(self):
+    def _launch_command(self, conn):
+        ignore = conn
+
         proc = subprocess.Popen(self.argv,
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
@@ -349,9 +354,13 @@ class PromptTest(Command):
 
 
 class _CategoryProxy(object):
-    def __init__(self, app, name):
+    def __init__(self, app, name, default_args, skip_check, compare_check):
         self._app = app
         self._name = name
+
+        self.default_args = default_args
+        self.skip_check = skip_check
+        self.compare_check = compare_check
 
     def add_valid(self, *args, **kwargs):
         return self._app.add_valid(self._name, *args, **kwargs)
@@ -403,13 +412,18 @@ class App(object):
         return args
 
 
-    def add_category(self, catname, default_args):
-        self.categories[catname] = default_args
-        return _CategoryProxy(self, catname)
+    def add_category(self, catname, default_args,
+                     skip_check=None, compare_check=None):
+        obj = _CategoryProxy(self, catname, default_args,
+                             skip_check, compare_check)
+        self.categories[catname] = obj
+        return obj
 
-    def _add(self, catname, testargs, valid, compfile, support_check=None,
-             input_file=None):
-        args = self.categories[catname] + " " + testargs
+    def _add(self, catname, testargs, valid, compfile,
+             skip_check=None, compare_check=None, input_file=None):
+
+        category = self.categories[catname]
+        args = category.default_args + " " + testargs
         args = self._default_args(args, bool(compfile)) + " " + args
         cmdstr = "./%s %s" % (self.appname, args)
 
@@ -417,7 +431,8 @@ class App(object):
         cmd.check_success = valid
         if compfile:
             cmd.compare_file = "%s/%s.xml" % (compare_xmldir, compfile)
-        cmd.support_check = support_check
+        cmd.skip_check = skip_check or category.skip_check
+        cmd.compare_check = compare_check or category.compare_check
         cmd.input_file = input_file
         self.cmds.append(cmd)
 
@@ -514,8 +529,8 @@ c.add_compare("--os-variant fedora20 --nodisks --boot cdrom --virt-type qemu --c
 c.add_compare("--os-variant fedora20 --nodisks --boot network --nographics --arch i686", "qemu-32-on-64")  # 32 on 64
 c.add_compare("--os-variant fedora20 --nodisks --boot fd --graphics spice --machine pc", "kvm-machine")  # kvm machine type 'pc'
 c.add_compare("--os-variant fedora20 --nodisks --boot fd --graphics sdl --arch sparc --machine SS-20", "qemu-sparc")  # exotic arch + machine type
-c.add_compare("--arch armv7l --machine vexpress-a9 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,extra_args=\"console=ttyAMA0 rw root=/dev/mmcblk0p3\" --disk %(EXISTIMG1)s --nographics", "arm-vexpress-plain", support_check=support.SUPPORT_CONN_DISK_SD)
-c.add_compare("--arch armv7l --machine vexpress-a15 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,kernel_args=\"console=ttyAMA0 rw root=/dev/vda3\",extra_args=foo --disk %(EXISTIMG1)s --nographics --os-variant fedora19", "arm-vexpress-f19", support_check=support.SUPPORT_CONN_VIRTIO_MMIO)
+c.add_compare("--arch armv7l --machine vexpress-a9 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,extra_args=\"console=ttyAMA0 rw root=/dev/mmcblk0p3\" --disk %(EXISTIMG1)s --nographics", "arm-vexpress-plain", skip_check=support.SUPPORT_CONN_DISK_SD)
+c.add_compare("--arch armv7l --machine vexpress-a15 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,kernel_args=\"console=ttyAMA0 rw root=/dev/vda3\",extra_args=foo --disk %(EXISTIMG1)s --nographics --os-variant fedora19", "arm-vexpress-f19", skip_check=support.SUPPORT_CONN_VIRTIO_MMIO)
 c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --os-variant fedora20", "ppc64-pseries-f20")
 c.add_valid("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --sound")  # HVM windows install with disk
 c.add_valid("--os-variant fedora20 --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --sound")  # F14 Directory tree URL install with extra-args
@@ -774,7 +789,7 @@ c.add_compare("--build-xml --cpu pentium3,+x2apic", "virtxml-build-cpu")
 c.add_compare("--build-xml --tpm /dev/tpm", "virtxml-build-tpm")
 
 
-c = vixml.add_category("simple edit diff", "test-many-devices --edit --print-diff --define")
+c = vixml.add_category("simple edit diff", "test-many-devices --edit --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
 c.add_compare("""--metadata name=foo-my-new-name,uuid=12345678-12F4-1234-1234-123456789AFA,description="hey this is my
 new
 very,very=new desc\\\'",title="This is my,funky=new title" """, "virtxml-edit-simple-metadata")
@@ -806,7 +821,7 @@ c.add_compare("--video cirrus", "virtxml-edit-simple-video")
 c.add_compare("--soundhw pcspk", "virtxml-edit-simple-soundhw")
 c.add_compare("--host-device 0x0781:0x5151,driver_name=vfio", "virtxml-edit-simple-host-device")
 
-c = vixml.add_category("edit selection", "test-many-devices --print-diff --define")
+c = vixml.add_category("edit selection", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
 c.add_invalid("--edit target=vvv --disk /dev/null")  # no match found
 c.add_compare("--edit 3 --soundhw pcspk", "virtxml-edit-pos-num")
 c.add_compare("--edit -1 --video qxl", "virtxml-edit-neg-num")
@@ -816,13 +831,13 @@ c.add_compare("--edit target=hda --disk /dev/null", "virtxml-edit-select-disk-ta
 c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "virtxml-edit-select-disk-path")
 c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "virtxml-edit-select-network-mac")
 
-c = vixml.add_category("edit clear", "test-many-devices --print-diff --define")
+c = vixml.add_category("edit clear", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
 c.add_invalid("--edit --memory 200,clearxml=yes")  # clear isn't wired up for memory
 c.add_compare("--edit --cpu host-passthrough,clearxml=yes", "virtxml-edit-clear-cpu")
 c.add_compare("--edit --clock offset=utc,clearxml=yes", "virtxml-edit-clear-clock")
 c.add_compare("--edit --disk /foo/bar,target=fda,bus=fdc,device=floppy,clearxml=yes", "virtxml-edit-clear-disk")
 
-c = vixml.add_category("add/rm devices", "test-many-devices --print-diff --define")
+c = vixml.add_category("add/rm devices", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
 c.add_invalid("--add-device --security foo")  # --add-device without a device
 c.add_invalid("--remove-device --clock utc")  # --remove-device without a dev
 c.add_compare("--add-device --host-device net_00_1c_25_10_b1_e4", "virtxml-add-host-device")
