@@ -731,15 +731,27 @@ class vmmEngine(vmmGObject):
         self.conns[uri]["windowDetails"][uuid] = obj
         return self.conns[uri]["windowDetails"][uuid]
 
-    def _show_vm_helper(self, src, uri, uuid, page=None, forcepage=False):
+    def _find_vm_by_id(self, uri, domstr):
+        vms = self.conns[uri]["conn"].vms
+        if domstr in vms:
+            return domstr
+        for vm in vms.values():
+            if domstr.isdigit():
+                if int(domstr) == vm.get_id():
+                    return vm.get_uuid()
+            elif domstr == vm.get_name():
+                return vm.get_uuid()
+
+    def _show_vm_helper(self, src, uri, domstr, page=None, forcepage=False):
         try:
-            if uuid not in self.conns[uri]["conn"].vms:
+            uuid = self._find_vm_by_id(uri, domstr)
+            if not uuid:
                 # This will only happen if --show-* option was used during
                 # virt-manager launch and an invalid UUID is passed.
                 # The error message must be sync otherwise the user will not
                 # know why the application ended.
-                self.err.show_err("%s does not have VM with UUID %s" %
-                                         (uri, uuid), modal=True)
+                self.err.show_err("%s does not have VM '%s'" %
+                    (uri, domstr), modal=True)
                 return
 
             details = self._get_details_dialog(uri, uuid)

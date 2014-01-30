@@ -112,11 +112,11 @@ def parse_commandline():
 
     parser.add_argument("--show-domain-creator", action="store_true",
         help="Show 'New VM' wizard")
-    parser.add_argument("--show-domain-editor", metavar="UUID",
+    parser.add_argument("--show-domain-editor", metavar="NAME|ID|UUID",
         help="Show domain details window")
-    parser.add_argument("--show-domain-performance", metavar="UUID",
+    parser.add_argument("--show-domain-performance", metavar="NAME|ID|UUID",
         help="Show domain performance window")
-    parser.add_argument("--show-domain-console", metavar="UUID",
+    parser.add_argument("--show-domain-console", metavar="NAME|ID|UUID",
         help="Show domain graphical console window")
     parser.add_argument("--show-host-summary", action="store_true",
         help="Show connection details window")
