@@ -544,9 +544,9 @@ class vmmDetails(vmmGObjectUI):
             # Listeners stored in vmmConsolePages
             "on_details_menu_view_fullscreen_activate": self.console.toggle_fullscreen,
             "on_details_menu_view_size_to_vm_activate": self.console.size_to_vm,
-            "on_details_menu_view_scale_always_toggled": self.console.set_scale_type,
-            "on_details_menu_view_scale_fullscreen_toggled": self.console.set_scale_type,
-            "on_details_menu_view_scale_never_toggled": self.console.set_scale_type,
+            "on_details_menu_view_scale_always_toggled": self.console.scaling_ui_changed_cb,
+            "on_details_menu_view_scale_fullscreen_toggled": self.console.scaling_ui_changed_cb,
+            "on_details_menu_view_scale_never_toggled": self.console.scaling_ui_changed_cb,
 
             "on_console_pages_switch_page": self.console.page_changed,
             "on_console_auth_password_activate": self.console.auth_login,

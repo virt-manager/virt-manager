@@ -392,7 +392,7 @@ class VNCViewer(Viewer):
         # Make sure viewer doesn't force resize itself
         self.display.set_force_size(False)
 
-        self.console.refresh_scaling()
+        self.console.sync_scaling_with_display()
 
         self.display.set_keyboard_grab(True)
         self.display.set_pointer_grab(True)
@@ -559,7 +559,7 @@ class SpiceViewer(Viewer):
 
     def _init_widget(self):
         self.set_grab_keys()
-        self.console.refresh_scaling()
+        self.console.sync_scaling_with_display()
 
         self.display.realize()
 
@@ -805,7 +805,6 @@ class vmmConsolePages(vmmGObjectUI):
         self.viewerRetryDelay = 125
         self._viewer_connected = False
         self.viewer_connecting = False
-        self.scale_type = self.vm.get_console_scaling()
 
         # Fullscreen toolbar
         self.send_key_button = None
@@ -826,9 +825,10 @@ class vmmConsolePages(vmmGObjectUI):
         # Signals are added by vmmDetails. Don't use connect_signals here
         # or it changes will be overwritten
 
-        self.refresh_scaling()
+        self.refresh_scaling_from_settings()
         self.add_gconf_handle(
-            self.vm.on_console_scaling_changed(self.refresh_scaling))
+            self.vm.on_console_scaling_changed(
+                self.refresh_scaling_from_settings))
 
         scroll = self.widget("console-gfx-scroll")
         scroll.connect("size-allocate", self.scroll_size_allocate)
@@ -1032,45 +1032,48 @@ class vmmConsolePages(vmmGObjectUI):
         # Make sure modifiers are up to date
         self.viewer_focus_changed()
 
-    def refresh_scaling(self):
-        self.scale_type = self.vm.get_console_scaling()
+    def refresh_scaling_from_settings(self):
+        scale_type = self.vm.get_console_scaling()
         self.widget("details-menu-view-scale-always").set_active(
-            self.scale_type == self.config.CONSOLE_SCALE_ALWAYS)
+            scale_type == self.config.CONSOLE_SCALE_ALWAYS)
         self.widget("details-menu-view-scale-never").set_active(
-            self.scale_type == self.config.CONSOLE_SCALE_NEVER)
+            scale_type == self.config.CONSOLE_SCALE_NEVER)
         self.widget("details-menu-view-scale-fullscreen").set_active(
-            self.scale_type == self.config.CONSOLE_SCALE_FULLSCREEN)
+            scale_type == self.config.CONSOLE_SCALE_FULLSCREEN)
 
-        self.update_scaling()
+        self.sync_scaling_with_display()
 
-    def set_scale_type(self, src):
+    def scaling_ui_changed_cb(self, src):
+        # Called from details.py
         if not src.get_active():
             return
 
+        scale_type = 0
         if src == self.widget("details-menu-view-scale-always"):
-            self.scale_type = self.config.CONSOLE_SCALE_ALWAYS
+            scale_type = self.config.CONSOLE_SCALE_ALWAYS
         elif src == self.widget("details-menu-view-scale-fullscreen"):
-            self.scale_type = self.config.CONSOLE_SCALE_FULLSCREEN
+            scale_type = self.config.CONSOLE_SCALE_FULLSCREEN
         elif src == self.widget("details-menu-view-scale-never"):
-            self.scale_type = self.config.CONSOLE_SCALE_NEVER
+            scale_type = self.config.CONSOLE_SCALE_NEVER
 
-        self.vm.set_console_scaling(self.scale_type)
-        self.update_scaling()
+        self.vm.set_console_scaling(scale_type)
+        self.sync_scaling_with_display()
 
-    def update_scaling(self):
+    def sync_scaling_with_display(self):
         if not self.viewer:
             return
 
         curscale = self.viewer.get_scaling()
         fs = self.widget("control-fullscreen").get_active()
+        scale_type = self.vm.get_console_scaling()
 
-        if (self.scale_type == self.config.CONSOLE_SCALE_NEVER
+        if (scale_type == self.config.CONSOLE_SCALE_NEVER
             and curscale is True):
             self.viewer.set_scaling(False)
-        elif (self.scale_type == self.config.CONSOLE_SCALE_ALWAYS
+        elif (scale_type == self.config.CONSOLE_SCALE_ALWAYS
               and curscale is False):
             self.viewer.set_scaling(True)
-        elif (self.scale_type == self.config.CONSOLE_SCALE_FULLSCREEN
+        elif (scale_type == self.config.CONSOLE_SCALE_FULLSCREEN
               and curscale != fs):
             self.viewer.set_scaling(fs)
 
@@ -1106,7 +1109,7 @@ class vmmConsolePages(vmmGObjectUI):
                 self.widget("toolbar-box").show()
             self.widget("details-menubar").show()
 
-        self.update_scaling()
+        self.sync_scaling_with_display()
 
     def viewer_allocate_cb(self, src, req):
         self.widget("console-gfx-scroll").queue_resize()
