@@ -45,6 +45,14 @@
     </disk>
     <disk type="block" device="cdrom">
       <target dev="sda" bus="sata"/>
+      <iotune>
+        <read_bytes_sec>1</read_bytes_sec>
+        <write_bytes_sec>5</write_bytes_sec>
+        <total_bytes_sec>10</total_bytes_sec>
+        <read_iops_sec>2</read_iops_sec>
+        <write_iops_sec>6</write_iops_sec>
+        <total_iops_sec>20</total_iops_sec>
+      </iotune>
       <readonly/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
@@ -152,6 +160,14 @@
     </disk>
     <disk type="block" device="cdrom">
       <target dev="sda" bus="sata"/>
+      <iotune>
+        <read_bytes_sec>1</read_bytes_sec>
+        <write_bytes_sec>5</write_bytes_sec>
+        <total_bytes_sec>10</total_bytes_sec>
+        <read_iops_sec>2</read_iops_sec>
+        <write_iops_sec>6</write_iops_sec>
+        <total_iops_sec>20</total_iops_sec>
+      </iotune>
       <readonly/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1">

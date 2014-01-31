@@ -1704,6 +1704,13 @@ class ParserDisk(VirtCLIParser):
         self.set_param("read_only", "readonly", is_onoff=True)
         self.set_param("shareable", "shareable", is_onoff=True)
 
+        self.set_param("iotune_rbs", "read_bytes_sec")
+        self.set_param("iotune_wbs", "write_bytes_sec")
+        self.set_param("iotune_tbs", "total_bytes_sec")
+        self.set_param("iotune_ris", "read_iops_sec")
+        self.set_param("iotune_wis", "write_iops_sec")
+        self.set_param("iotune_tis", "total_iops_sec")
+
 
     def _parse(self, opts, inst):
         def parse_size(val):
