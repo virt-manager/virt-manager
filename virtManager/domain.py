@@ -535,7 +535,7 @@ class vmmDomain(vmmLibvirtObject):
             cpu.cores = cores
             cpu.threads = threads
         return self._redefine(change)
-    def define_cpu(self, model, vendor, from_host, featurelist):
+    def define_cpu(self, model, vendor, from_host):
         def change(guest):
             if from_host:
                 guest.cpu.copy_host_cpu()
@@ -549,25 +549,6 @@ class vmmDomain(vmmLibvirtObject):
                 for f in guest.cpu.features:
                     guest.cpu.remove_feature(f)
                 return
-
-            origfeatures = guest.cpu.features
-            def set_feature(fname, fpol):
-                for f in origfeatures:
-                    if f.name != fname:
-                        continue
-                    if f.policy != fpol:
-                        if fpol == "default":
-                            guest.cpu.remove_feature(f)
-                        else:
-                            f.policy = fpol
-                    return
-
-                if fpol != "default":
-                    guest.cpu.add_feature(fname, fpol)
-
-            # Sync feature lists
-            for fname, fpol in featurelist:
-                set_feature(fname, fpol)
 
         return self._redefine(change)
 
