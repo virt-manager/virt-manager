@@ -548,13 +548,6 @@ class vmmConnection(vmmGObject):
             else:
                 logging.debug("Domain XML secure flag not supported.")
 
-            if self.check_support(
-                self._backend.SUPPORT_DOMAIN_CPU_HOST_MODEL, vm):
-                inact |= libvirt.VIR_DOMAIN_XML_UPDATE_CPU
-                act |= libvirt.VIR_DOMAIN_XML_UPDATE_CPU
-            else:
-                logging.debug("Domain XML update flag not supported.")
-
             return inact, act
 
         return self._get_flags_helper(vm, key, check_func)
