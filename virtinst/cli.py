@@ -1795,6 +1795,13 @@ class ParserNetwork(VirtCLIParser):
         self.set_param("macaddr", "mac", setter_cb=set_mac_cb)
         self.set_param("filterref", "filterref")
 
+        self.set_param("virtualport.type", "virtualport_type")
+        self.set_param("virtualport.managerid", "virtualport_managerid")
+        self.set_param("virtualport.typeid", "virtualport_typeid")
+        self.set_param("virtualport.typeidversion",
+            "virtualport_typeidversion")
+        self.set_param("virtualport.instanceid", "virtualport_instanceid")
+
     def _parse(self, optsobj, inst):
         opts = optsobj.opts
         if "type" not in opts:

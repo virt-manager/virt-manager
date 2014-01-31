@@ -553,7 +553,7 @@ c.add_compare("""--hvm --pxe \
 --filesystem /source,/target,mode=squash \
 --network user,mac=12:34:56:78:11:22 \
 --network bridge=foobar,model=virtio \
---network type=direct,source=eth5,source_mode=vepa,target=mytap12 \
+--network type=direct,source=eth5,source_mode=vepa,target=mytap12,virtualport_type=802.1Qbg,virtualport_managerid=12,virtualport_typeid=1193046,virtualport_typeidversion=1,virtualport_instanceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b \
 --channel spicevmc \
 --smartcard passthrough,type=spicevmc \
 --tpm /dev/tpm0 \
