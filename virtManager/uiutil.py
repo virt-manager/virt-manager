@@ -103,7 +103,7 @@ def set_row_selection(listwidget, prevkey):
     """
     model = listwidget.get_model()
     _iter = None
-    if prevkey:
+    if prevkey is not None:
         for row in model:
             if row[0] == prevkey:
                 _iter = row.iter

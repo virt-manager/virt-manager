@@ -135,10 +135,6 @@ class vmmConfig(object):
     CONSOLE_SCALE_FULLSCREEN = 1
     CONSOLE_SCALE_ALWAYS = 2
 
-    _PEROBJ_FUNC_SET    = 0
-    _PEROBJ_FUNC_GET    = 1
-    _PEROBJ_FUNC_LISTEN = 2
-
     DEFAULT_XEN_IMAGE_DIR = "/var/lib/xen/images"
     DEFAULT_XEN_SAVE_DIR = "/var/lib/xen/dump"
 
@@ -166,8 +162,10 @@ class vmmConfig(object):
         self.libvirt_packages = cliconfig.libvirt_packages
         self.askpass_package = cliconfig.askpass_package
         self.default_graphics_from_config = cliconfig.default_graphics
+
         self.default_storage_format_from_config = "qcow2"
         self.cpu_default_from_config = "host-cpu-model"
+        self.default_console_resizeguest = 0
 
         self._objects = []
 
@@ -380,6 +378,16 @@ class vmmConfig(object):
         return self.conf.get("/console/scaling")
     def set_console_scaling(self, pref):
         self.conf.set("/console/scaling", pref)
+
+    def on_console_resizeguest_changed(self, cb):
+        return self.conf.notify_add("/console/resize-guest", cb)
+    def get_console_resizeguest(self):
+        val = self.conf.get("/console/resize-guest")
+        if val == -1:
+            val = self.default_console_resizeguest
+        return val
+    def set_console_resizeguest(self, pref):
+        self.conf.set("/console/resize-guest", pref)
 
     def get_auto_redirection(self):
         return self.conf.get("/console/auto-redirect")

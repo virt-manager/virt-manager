@@ -547,6 +547,7 @@ class vmmDetails(vmmGObjectUI):
             "on_details_menu_view_scale_always_toggled": self.console.scaling_ui_changed_cb,
             "on_details_menu_view_scale_fullscreen_toggled": self.console.scaling_ui_changed_cb,
             "on_details_menu_view_scale_never_toggled": self.console.scaling_ui_changed_cb,
+            "on_details_menu_view_resizeguest_toggled": self.console.resizeguest_ui_changed_cb,
 
             "on_console_pages_switch_page": self.console.page_changed,
             "on_console_auth_password_activate": self.console.auth_login,

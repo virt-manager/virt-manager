@@ -19,6 +19,12 @@
       <summary>Username and secrets ID for graphical password</summary>
       <description>Username and secrets ID for graphical password</description>
     </key>
+
+    <key name="resize-guest" type="i">
+      <default>-1</default>
+      <summary>Automatically resize guest when window size changes</summary>
+      <description>Automatically change guest resolution along with virt-manager window. Only works with spice with a vdagent set up. -1 = global default, 0 = off, 1 = on.</description>
+    </key>
   </schema>
 
   <schema id="org.virt-manager.virt-manager"
@@ -164,6 +170,12 @@
       <default>1</default>
       <summary>When to scale the VM graphical console</summary>
       <description>When to scale the VM graphical console. 0 = never, 1 = only when in full screen mode, 2 = Always</description>
+    </key>
+
+    <key name="resize-guest" type="i">
+      <default>-1</default>
+      <summary>Automatically resize guest when window size changes</summary>
+      <description>Automatically change guest resolution along with virt-manager window. Only works with spice with a vdagent set up. -1 = global default, 0 = off, 1 = on.</description>
     </key>
 
     <key name="grab-keys" type="s">

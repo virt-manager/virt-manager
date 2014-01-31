@@ -371,9 +371,15 @@ class Viewer(vmmGObject):
 
     def has_usb_redirection(self):
         return False
+    def has_agent(self):
+        return False
+    def set_resizeguest(self, val):
+        ignore = val
 
 
 class VNCViewer(Viewer):
+    viewer_type = "vnc"
+
     def __init__(self, console):
         Viewer.__init__(self, console)
         self.display = GtkVnc.Display.new()
@@ -393,6 +399,7 @@ class VNCViewer(Viewer):
         self.display.set_force_size(False)
 
         self.console.sync_scaling_with_display()
+        self.console.refresh_resizeguest_from_settings()
 
         self.display.set_keyboard_grab(True)
         self.display.set_pointer_grab(True)
@@ -549,17 +556,21 @@ class VNCViewer(Viewer):
 
 
 class SpiceViewer(Viewer):
+    viewer_type = "spice"
+
     def __init__(self, console):
         Viewer.__init__(self, console)
         self.spice_session = None
         self.display = None
         self.audio = None
+        self.main_channel = None
         self.display_channel = None
         self.usbdev_manager = None
 
     def _init_widget(self):
         self.set_grab_keys()
         self.console.sync_scaling_with_display()
+        self.console.refresh_resizeguest_from_settings()
 
         self.display.realize()
 
@@ -613,6 +624,7 @@ class SpiceViewer(Viewer):
             self.display.destroy()
         self.display = None
         self.display_channel = None
+        self.main_channel = None
         self.usbdev_manager = None
 
     def is_open(self):
@@ -653,13 +665,17 @@ class SpiceViewer(Viewer):
         GObject.GObject.connect(channel, "open-fd",
                                 self._channel_open_fd_request)
 
-        if type(channel) == SpiceClientGLib.MainChannel:
+        if (type(channel) == SpiceClientGLib.MainChannel and
+            not self.main_channel):
             if self.console.tunnels:
                 self.console.tunnels.unlock()
-            channel.connect_after("channel-event", self._main_channel_event_cb)
-            return
+            self.main_channel = channel
+            self.main_channel.connect_after("channel-event",
+                self._main_channel_event_cb)
+            self.main_channel.connect_after("notify::agent-connected",
+                self._agent_connected_cb)
 
-        if (type(channel) == SpiceClientGLib.DisplayChannel and
+        elif (type(channel) == SpiceClientGLib.DisplayChannel and
             not self.display):
             channel_id = channel.get_property("channel-id")
 
@@ -673,19 +689,27 @@ class SpiceViewer(Viewer):
             self.console.widget("console-gfx-viewport").add(self.display)
             self._init_widget()
             self.console.connected()
-            return
 
-        if (type(channel) in [SpiceClientGLib.PlaybackChannel,
-                              SpiceClientGLib.RecordChannel] and
+        elif (type(channel) in [SpiceClientGLib.PlaybackChannel,
+                                SpiceClientGLib.RecordChannel] and
             not self.audio):
             self.audio = SpiceClientGLib.Audio.get(self.spice_session, None)
-            return
 
     def get_desktop_resolution(self):
         if (not self.display_channel or
             not has_property(self.display_channel, "width")):
             return None
         return self.display_channel.get_properties("width", "height")
+
+    def has_agent(self):
+        if (not self.main_channel or
+            not has_property(self.main_channel, "agent-connected")):
+            return False
+        ret = self.main_channel.get_property("agent-connected")
+        return ret
+
+    def _agent_connected_cb(self, src, val):
+        self.console.refresh_resizeguest_from_settings()
 
     def _create_spice_session(self):
         self.spice_session = SpiceClientGLib.Session()
@@ -741,6 +765,10 @@ class SpiceViewer(Viewer):
             logging.debug("Spice version doesn't support scaling.")
             return
         self.display.set_property("scaling", scaling)
+
+    def set_resizeguest(self, val):
+        if self.display:
+            self.display.set_property("resize-guest", val)
 
     def _usbdev_redirect_error(self,
                              spice_usbdev_widget, spice_usb_device,
@@ -829,6 +857,10 @@ class vmmConsolePages(vmmGObjectUI):
         self.add_gconf_handle(
             self.vm.on_console_scaling_changed(
                 self.refresh_scaling_from_settings))
+        self.refresh_resizeguest_from_settings()
+        self.add_gconf_handle(
+            self.vm.on_console_resizeguest_changed(
+                self.refresh_resizeguest_from_settings))
 
         scroll = self.widget("console-gfx-scroll")
         scroll.connect("size-allocate", self.scroll_size_allocate)
@@ -1031,6 +1063,42 @@ class vmmConsolePages(vmmGObjectUI):
     def set_enable_accel(self):
         # Make sure modifiers are up to date
         self.viewer_focus_changed()
+
+    def refresh_resizeguest_from_settings(self):
+        tooltip = ""
+        if self.viewer:
+            if self.viewer.viewer_type != "spice":
+                tooltip = (
+                    _("Graphics type '%s' does not support auto resize.") %
+                    self.viewer.viewer_type)
+            elif not self.viewer.has_agent():
+                tooltip = _("Guest agent is not available.")
+
+        val = self.vm.get_console_resizeguest()
+        widget = self.widget("details-menu-view-resizeguest")
+        widget.set_tooltip_text(tooltip)
+        widget.set_sensitive(not bool(tooltip))
+        if not tooltip:
+            self.widget("details-menu-view-resizeguest").set_active(bool(val))
+
+        self.sync_resizeguest_with_display()
+
+    def resizeguest_ui_changed_cb(self, src):
+        # Called from details.py
+        if not src.get_active():
+            return
+
+        val = int(self.widget("details-menu-view-resizeguest").get_active())
+        self.vm.set_console_resizeguest(val)
+        self.sync_resizeguest_with_display()
+
+    def sync_resizeguest_with_display(self):
+        if not self.viewer:
+            return
+
+        val = bool(self.vm.get_console_resizeguest())
+        self.viewer.set_resizeguest(val)
+        self.widget("console-gfx-scroll").queue_resize()
 
     def refresh_scaling_from_settings(self):
         scale_type = self.vm.get_console_scaling()
@@ -1287,6 +1355,7 @@ class vmmConsolePages(vmmGObjectUI):
             error += "\n\nError: %s" % errout
 
         self.activate_unavailable_page(error)
+        self.refresh_resizeguest_from_settings()
 
     def _set_viewer_connected(self, val):
         self._viewer_connected = val

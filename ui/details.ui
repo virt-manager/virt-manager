@@ -301,6 +301,21 @@
                                 <signal name="toggled" handler="on_details_menu_view_scale_never_toggled" swapped="no"/>
                               </object>
                             </child>
+                            <child>
+                              <object class="GtkSeparatorMenuItem" id="menuitem3">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkCheckMenuItem" id="details-menu-view-resizeguest">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Auto _resize VM with window</property>
+                                <property name="use_underline">True</property>
+                                <signal name="toggled" handler="on_details_menu_view_resizeguest_toggled" swapped="no"/>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>

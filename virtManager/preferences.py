@@ -39,6 +39,7 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_update_interval()
         self.refresh_console_accels()
         self.refresh_console_scaling()
+        self.refresh_console_resizeguest()
         self.refresh_new_vm_sound()
         self.refresh_graphics_type()
         self.refresh_storage_format()
@@ -60,6 +61,7 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_stats_update_interval_changed": self.change_update_interval,
             "on_prefs_console_accels_toggled": self.change_console_accels,
             "on_prefs_console_scaling_changed": self.change_console_scaling,
+            "on_prefs_console_resizeguest_changed": self.change_console_resizeguest,
             "on_prefs_close_clicked": self.close,
             "on_vmm_preferences_delete_event": self.close,
             "on_prefs_new_vm_sound_toggled": self.change_new_vm_sound,
@@ -101,6 +103,20 @@ class vmmPreferences(vmmGObjectUI):
                     [1, _("Fullscreen only")],
                     [2, _("Always")]]:
             model.append(row)
+        combo.set_model(model)
+        uiutil.set_combo_text_column(combo, 1)
+
+        combo = self.widget("prefs-console-resizeguest")
+        # [gsettings value, string]
+        model = Gtk.ListStore(int, str)
+        vals = {
+            0: _("Off"),
+            1: _("On"),
+        }
+        model.append([-1, _("System default (%s)") %
+            vals[self.config.default_console_resizeguest]])
+        for key, val in vals.items():
+            model.append([key, val])
         combo.set_model(model)
         uiutil.set_combo_text_column(combo, 1)
 
@@ -156,6 +172,10 @@ class vmmPreferences(vmmGObjectUI):
     def refresh_console_scaling(self):
         combo = self.widget("prefs-console-scaling")
         val = self.config.get_console_scaling()
+        uiutil.set_row_selection(combo, val)
+    def refresh_console_resizeguest(self):
+        combo = self.widget("prefs-console-resizeguest")
+        val = self.config.get_console_resizeguest()
         uiutil.set_row_selection(combo, val)
 
     def refresh_new_vm_sound(self):
@@ -294,6 +314,9 @@ class vmmPreferences(vmmGObjectUI):
         self.config.set_console_accels(src.get_active())
     def change_console_scaling(self, box):
         self.config.set_console_scaling(box.get_active())
+    def change_console_resizeguest(self, box):
+        val = uiutil.get_list_selection(box, 0)
+        self.config.set_console_resizeguest(val)
 
     def change_new_vm_sound(self, src):
         self.config.set_new_vm_sound(src.get_active())

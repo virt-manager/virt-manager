@@ -1627,6 +1627,17 @@ class vmmDomain(vmmLibvirtObject):
             return self.config.get_console_scaling()
         return ret
 
+    def on_console_resizeguest_changed(self, *args, **kwargs):
+        return self.config.listen_pervm(self.uuid, "/resize-guest",
+                                        *args, **kwargs)
+    def set_console_resizeguest(self, value):
+        self.config.set_pervm(self.uuid, "/resize-guest", value)
+    def get_console_resizeguest(self):
+        ret = self.config.get_pervm(self.uuid, "/resize-guest")
+        if ret == -1:
+            return self.config.get_console_resizeguest()
+        return ret
+
     def set_details_window_size(self, w, h):
         self.config.set_pervm(self.uuid, "/vm-window-size", (w, h))
     def get_details_window_size(self):
