@@ -124,7 +124,7 @@ def set_row_selection(listwidget, prevkey):
 
 def set_combo_entry(combo, value, rowidx=0):
     """
-    Search the passed combobox for value, comparing againt
+    Search the passed combobox for value, comparing against
     rowidx. If found, select it. If not found, and
     the combobox has a text entry, stick the value in their and
     select it.

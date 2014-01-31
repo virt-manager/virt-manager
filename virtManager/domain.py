@@ -535,21 +535,18 @@ class vmmDomain(vmmLibvirtObject):
             cpu.cores = cores
             cpu.threads = threads
         return self._redefine(change)
-    def define_cpu(self, model, vendor, from_host):
+    def define_cpu(self, model, mode, copy_host):
         def change(guest):
-            if from_host:
+            if copy_host:
                 guest.cpu.copy_host_cpu()
-            elif guest.cpu.model != model:
-                # Since we don't expose this in the UI, have host value trump
-                # caps value
-                guest.cpu.vendor = vendor
-
-            guest.cpu.model = model or None
-            if guest.cpu.model is None:
-                for f in guest.cpu.features:
-                    guest.cpu.remove_feature(f)
-                return
-
+            elif mode:
+                guest.cpu.clear()
+                guest.cpu.mode = mode
+            elif model:
+                guest.cpu.model = model
+                guest.cpu.vendor = None
+            else:
+                guest.cpu.clear()
         return self._redefine(change)
 
     # Mem define methods

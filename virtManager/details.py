@@ -378,7 +378,6 @@ class vmmDetails(vmmGObjectUI):
 
         self.ignorePause = False
         self.ignoreDetails = False
-        self._cpu_copy_host = False
 
         from virtManager.console import vmmConsolePages
         self.console = vmmConsolePages(self.vm, self.builder, self.topwin)
@@ -481,11 +480,10 @@ class vmmDetails(vmmGObjectUI):
             "on_config_vcpupin_changed": lambda *x: self.enable_apply(x, EDIT_CPUSET),
             "on_config_vcpupin_generate_clicked": self.config_vcpupin_generate,
             "on_cpu_model_changed": lambda *x: self.enable_apply(x, EDIT_CPU),
+            "on_cpu_copy_host_clicked": self.on_cpu_copy_host_clicked,
             "on_cpu_cores_changed": lambda *x: self.enable_apply(x, EDIT_TOPOLOGY),
             "on_cpu_sockets_changed": lambda *x: self.enable_apply(x, EDIT_TOPOLOGY),
             "on_cpu_threads_changed": lambda *x: self.enable_apply(x, EDIT_TOPOLOGY),
-            "on_cpu_copy_host_clicked": self.config_cpu_copy_host,
-            "on_cpu_clear_clicked": self.config_cpu_clear,
             "on_cpu_topology_enable_toggled": self.config_cpu_topology_enable,
 
             "on_config_memory_changed": self.config_memory_changed,
@@ -860,20 +858,27 @@ class vmmDetails(vmmGObjectUI):
 
         try:
             cpu_values = caps.get_cpu_values(self.vm.get_arch())
-            cpu_names = sorted([c.model for c in cpu_values.cpus],
-                               key=str.lower)
         except:
             logging.exception("Error populating CPU model list")
 
         # CPU model combo
         cpu_model = self.widget("cpu-model")
 
-        model = Gtk.ListStore(str, object)
+        def sep_func(model, it, ignore):
+            return model[it][3]
+
+        # [label, sortkey, idstring, is sep]
+        model = Gtk.ListStore(str, str, str, bool)
         cpu_model.set_model(model)
         cpu_model.set_entry_text_column(0)
-        model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-        for name in cpu_names:
-            model.append([name, cpu_values.get_cpu(name)])
+        cpu_model.set_row_separator_func(sep_func, None)
+        model.set_sort_column_id(2, Gtk.SortType.ASCENDING)
+        model.append([_("Application Default"), "1", "appdefault", False])
+        model.append([_("Hypervisor Default"), "2", "hypdefault", False])
+        model.append([_("Clear CPU configuration"), "3", "clearcpu", False])
+        model.append([None, None, None, True])
+        for name in [c.model for c in cpu_values.cpus]:
+            model.append([name, name, name, False])
 
         # Disk cache combo
         disk_cache = self.widget("disk-cache")
@@ -1420,13 +1425,45 @@ class vmmDetails(vmmGObjectUI):
 
     def get_config_cpu_model(self):
         cpu_list = self.widget("cpu-model")
-        model = cpu_list.get_child().get_text()
+        text = cpu_list.get_child().get_text()
+        model = None
+        mode = None
+        copy_host = bool(self.widget("cpu-copy-host").get_active())
+        key = None
 
-        for row in cpu_list.get_model():
-            if model == row[0]:
-                return model, row[1].vendor
+        row = None
+        for r in cpu_list.get_model():
+            if text == r[0]:
+                row = r
+                break
 
-        return model, None
+        if row:
+            key = row[2]
+        elif text == "host-model" or text == "host-passthrough":
+            mode = text
+        else:
+            model = text
+
+        if key == "hypdefault" or key == "clearcpu":
+            # Clear the whole CPU
+            pass
+        elif key == "appdefault":
+            cpu_type = self.config.get_default_cpu_setting()
+
+            if cpu_type == "hv-default":
+                pass
+            elif cpu_type == "host-cpu-model":
+                if self.vm.conn.caps.host.cpu.model:
+                    model = self.vm.conn.caps.host.cpu.model
+            elif cpu_type == "host-model":
+                copy_host = True
+            else:
+                raise RuntimeError("Unknown cpu default '%s'" % cpu_type)
+        elif key:
+            model = key
+
+        return model, mode, copy_host
+
 
     ##############################
     # Details/Hardware listeners #
@@ -1537,27 +1574,10 @@ class vmmDetails(vmmGObjectUI):
     def config_maxvcpus_changed(self, ignore):
         self.enable_apply(EDIT_VCPUS)
 
-    def config_cpu_copy_host(self, src_ignore):
-        # Update UI with output copied from host
-        try:
-            CPU = virtinst.CPU(self.vm.conn.get_backend())
-            CPU.copy_host_cpu()
-
-            self._refresh_cpu_config(CPU)
-            self._cpu_copy_host = True
-        except Exception, e:
-            self.err.show_err(_("Error copying host CPU: %s") % str(e))
-            return
-
-    def config_cpu_clear(self, src_ignore):
-        try:
-            CPU = virtinst.CPU(self.vm.conn.get_backend())
-            CPU.clear()
-
-            self._refresh_cpu_config(CPU)
-        except Exception, e:
-            self.err.show_err(_("Error clear CPU config: %s") % str(e))
-            return
+    def on_cpu_copy_host_clicked(self, src):
+        uiutil.set_grid_row_visible(
+            self.widget("cpu-model"), not src.get_active())
+        self.enable_apply(EDIT_CPU)
 
     def config_cpu_topology_enable(self, src):
         do_enable = src.get_active()
@@ -1829,9 +1849,9 @@ class vmmDetails(vmmGObjectUI):
             add_define(self.vm.define_cpuset, cpuset)
 
         if self.edited(EDIT_CPU):
-            model, vendor = self.get_config_cpu_model()
+            model, mode, copy_host = self.get_config_cpu_model()
             add_define(self.vm.define_cpu,
-                       model, vendor, self._cpu_copy_host)
+                       model, mode, copy_host)
 
         if self.edited(EDIT_TOPOLOGY):
             do_top = self.widget("cpu-topology-enable").get_active()
@@ -1845,10 +1865,7 @@ class vmmDetails(vmmGObjectUI):
 
             add_define(self.vm.define_cpu_topology, sockets, cores, threads)
 
-        ret = self._change_config_helper(df, da, hf, ha)
-        if ret:
-            self._cpu_copy_host = False
-        return ret
+        return self._change_config_helper(df, da, hf, ha)
 
     # Memory
     def config_memory_apply(self):
@@ -2376,9 +2393,9 @@ class vmmDetails(vmmGObjectUI):
         self.disk_io_graph.set_property("data_array",
                                         self.vm.disk_io_vector())
         self.network_traffic_graph.set_property("data_array",
-                                                self.vm.network_traffic_vector())
+                                        self.vm.network_traffic_vector())
 
-    def _refresh_cpu_count(self):
+    def refresh_config_cpu(self):
         conn = self.vm.conn
         host_active_count = conn.host_active_processor_count()
         maxvcpus = self.vm.vcpu_max_count()
@@ -2395,39 +2412,44 @@ class vmmDetails(vmmGObjectUI):
         warn = bool(self.config_get_vcpus() > host_active_count)
         self.widget("config-vcpus-warn-box").set_visible(warn)
 
-    def _refresh_cpu_config(self, cpu):
-        model = cpu.model or ""
-        caps = self.vm.conn.caps
-
-        capscpu = None
-        try:
-            arch = self.vm.get_arch()
-            if arch:
-                cpu_values = caps.get_cpu_values(arch)
-                for c in cpu_values.cpus:
-                    if model and c.model == model:
-                        capscpu = c
-                        break
-        except:
-            pass
-
+        # CPU model config
+        cpu = self.vm.get_cpu_config()
         show_top = bool(cpu.sockets or cpu.cores or cpu.threads)
         sockets = cpu.sockets or 1
         cores = cpu.cores or 1
         threads = cpu.threads or 1
 
         self.widget("cpu-topology-enable").set_active(show_top)
-        self.widget("cpu-model").get_child().set_text(model)
         self.widget("cpu-sockets").set_value(sockets)
         self.widget("cpu-cores").set_value(cores)
         self.widget("cpu-threads").set_value(threads)
 
-    def refresh_config_cpu(self):
-        self._cpu_copy_host = False
-        cpu = self.vm.get_cpu_config()
+        model = cpu.model or None
+        if not model:
+            if cpu.mode == "host-model" or cpu.mode == "host-passthrough":
+                model = cpu.mode
 
-        self._refresh_cpu_count()
-        self._refresh_cpu_config(cpu)
+        if model:
+            self.widget("cpu-model").get_child().set_text(model)
+        else:
+            uiutil.set_combo_entry(
+                self.widget("cpu-model"), "hypdefault", 2)
+
+        # Determine if CPU definition is just the host copy
+        hostcpu = self.conn.caps.host.cpu
+        is_host = False
+        if (hostcpu.model and
+            cpu.model == hostcpu.model and
+            len(cpu.features) == len(hostcpu.features.names())):
+            is_host = True
+            for feature in cpu.features:
+                if (feature.policy != "require" or
+                    feature.name not in hostcpu.features.names()):
+                    is_host = False
+                    break
+
+        self.widget("cpu-copy-host").set_active(bool(is_host))
+        self.on_cpu_copy_host_clicked(self.widget("cpu-copy-host"))
 
     def refresh_config_memory(self):
         host_mem_widget = self.widget("state-host-memory")

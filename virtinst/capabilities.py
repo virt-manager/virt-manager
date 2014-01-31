@@ -132,6 +132,8 @@ class CPUValues(object):
             child = child.next
 
     def get_arch(self, arch):
+        if not arch:
+            return None
         if re.match(r'i[4-9]86', arch):
             arch = "x86"
         elif arch == "x86_64":
