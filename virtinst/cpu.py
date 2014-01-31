@@ -28,7 +28,7 @@ class CPUFeature(XMLBuilder):
     POLICIES = ["force", "require", "optional", "disable", "forbid"]
 
     _XML_ROOT_NAME = "feature"
-    _XML_PROP_ORDER = ["name", "policy"]
+    _XML_PROP_ORDER = ["policy", "name"]
 
     name = XMLProperty("./@name")
     policy = XMLProperty("./@policy")

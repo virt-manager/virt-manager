@@ -33,9 +33,6 @@ from virtinst import support
 from tests import virtinstall, virtimage, virtclone, virtconvert, virtxml
 from tests import utils
 
-# Enable this to refresh test output
-REGENERATE_OUTPUT = False
-
 os.environ["VIRTCONV_TEST_NO_DISK_CONVERSION"] = "1"
 os.environ["LANG"] = "en_US.UTF-8"
 
@@ -257,7 +254,7 @@ class Command(object):
 
             if filename:
                 # Generate test files that don't exist yet
-                if REGENERATE_OUTPUT or not os.path.exists(filename):
+                if utils.REGENERATE_OUTPUT or not os.path.exists(filename):
                     file(filename, "w").write(output)
 
                 utils.diff_compare(output, filename)

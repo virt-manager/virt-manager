@@ -28,6 +28,9 @@ from virtinst import VirtualDisk
 from virtinst import VirtualGraphics
 from virtinst import VirtualVideoDevice
 
+# Enable this to refresh test output
+REGENERATE_OUTPUT = False
+
 # pylint: disable=W0212
 # Access to protected member, needed to unittest stuff
 
@@ -204,8 +207,8 @@ def read_file(filename):
 def diff_compare(actual_out, filename=None, expect_out=None):
     """Compare passed string output to contents of filename"""
     if not expect_out:
-        #if filename:
-        #    file(filename, "w").write(actual_out)
+        if not os.path.exists(filename) or REGENERATE_OUTPUT:
+            file(filename, "w").write(actual_out)
         expect_out = read_file(filename)
 
     diff = "".join(difflib.unified_diff(expect_out.splitlines(1),

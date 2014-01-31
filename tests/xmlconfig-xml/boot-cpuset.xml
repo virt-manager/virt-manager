@@ -17,8 +17,8 @@
     <model>footest</model>
     <vendor>Intel</vendor>
     <topology sockets="4" cores="5" threads="2"/>
-    <feature name="x2apic" policy="force"/>
-    <feature name="lahf_lm" policy="forbid"/>
+    <feature policy="force" name="x2apic"/>
+    <feature policy="forbid" name="lahf_lm"/>
   </cpu>
   <clock offset="utc"/>
   <on_poweroff>destroy</on_poweroff>

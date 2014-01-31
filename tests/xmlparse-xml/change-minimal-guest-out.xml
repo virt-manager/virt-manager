@@ -25,6 +25,6 @@
   <cpu mode="custom" match="exact">
     <model>foobar</model>
     <topology sockets="1" cores="4" threads="1"/>
-    <feature name="x2apic" policy="forbid"/>
+    <feature policy="forbid" name="x2apic"/>
   </cpu>
 </domain>
