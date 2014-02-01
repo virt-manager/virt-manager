@@ -145,6 +145,7 @@ class vmmManager(vmmGObjectUI):
             "on_vm_manager_delete_event": self.close,
             "on_vmm_manager_configure_event": self.window_resized,
             "on_menu_file_add_connection_activate": self.new_conn,
+            "on_menu_new_vm_activate": self.new_vm,
             "on_menu_file_quit_activate": self.exit_app,
             "on_menu_file_close_activate": self.close,
             "on_vmm_close_clicked": self.close,
