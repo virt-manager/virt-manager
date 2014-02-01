@@ -152,6 +152,10 @@
       <source file='/tmp/foobar4'/>
       <target dev='xvdc' bus='xen'/>
     </disk>
+    <disk type='file' device='cdrom'>
+      <source startupPolicy='requisite'/>
+      <target dev='hdb' bus='ide'/>
+    </disk>
 
 
     <!-- interfaces -->
