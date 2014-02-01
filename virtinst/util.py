@@ -140,15 +140,16 @@ def validate_uuid(val):
 
 
 def validate_name(name_type, val):
-    if type(val) is not str or len(val) == 0:
-        raise ValueError(_("%s name must be a string") % name_type)
-
     if re.match("^[0-9]+$", val):
         raise ValueError(_("%s name can not be only numeric characters") %
                           name_type)
-    if re.match("^[a-zA-Z0-9._-]+$", val) is None:
-        raise ValueError(_("%s name can only contain alphanumeric, '_', '.', "
-                           "or '-' characters") % name_type)
+
+    # Rather than try and match libvirt's regex, just forbid things we
+    # know don't work
+    forbid = [" "]
+    for c in forbid:
+        if c in val:
+            raise ValueError(_("%s name can not contain '%s' character.") % c)
 
 
 def validate_macaddr(val):
