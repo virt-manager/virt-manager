@@ -125,7 +125,13 @@ class vmmConnect(vmmGObjectUI):
     def close(self, ignore1=None, ignore2=None):
         logging.debug("Closing open connection")
         self.topwin.hide()
-        self.stop_browse()
+
+        if self.browser:
+            for obj, sig in self.browser_sigs:
+                obj.disconnect(sig)
+            self.browser_sigs = []
+            self.browser = None
+
 
     def show(self, parent, reset_state=True):
         logging.debug("Showing open connection")
@@ -133,6 +139,7 @@ class vmmConnect(vmmGObjectUI):
             self.reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
+        self.start_browse()
 
     def _cleanup(self):
         pass
@@ -156,7 +163,6 @@ class vmmConnect(vmmGObjectUI):
         self.widget("hostname").get_child().set_text("")
         self.widget("connect-remote").set_active(False)
         self.widget("username-entry").set_text("")
-        self.stop_browse()
         self.connect_remote_toggled(self.widget("connect-remote"))
         self.populate_uri()
 
@@ -263,13 +269,6 @@ class vmmConnect(vmmGObjectUI):
         self.browser_sigs.append((self.browser,
                                   self.browser.connect("g-signal", cb)))
 
-    def stop_browse(self):
-        if self.browser:
-            for obj, sig in self.browser_sigs:
-                obj.disconnect(sig)
-            self.browser_sigs = []
-            self.browser = None
-
     def hostname_combo_changed(self, src):
         model = src.get_model()
         txt = src.get_child().get_text()
@@ -306,10 +305,6 @@ class vmmConnect(vmmGObjectUI):
         self.widget("connection").set_sensitive(is_remote)
         self.widget("autoconnect").set_active(not is_remote)
         self.widget("username-entry").set_sensitive(is_remote)
-        if is_remote and self.avahiserver:
-            self.start_browse()
-        else:
-            self.stop_browse()
 
         self.populate_default_user()
         self.populate_uri()
