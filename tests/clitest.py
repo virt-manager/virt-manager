@@ -1071,7 +1071,7 @@ def maketest(cmd):
         _cmdobj.run(self)
     return lambda s: cmdtemplate(s, cmd)
 
-_cmdlist = promptlist
+_cmdlist = promptlist[:]
 _cmdlist += vinst.cmds
 _cmdlist += vclon.cmds
 _cmdlist += vimag.cmds
@@ -1080,7 +1080,10 @@ _cmdlist += vixml.cmds
 
 for _cmd in _cmdlist:
     newidx += 1
-    setattr(CLITests, "testCLI%s%.4d" % (_cmd.app.replace("-", ""), newidx),
-            maketest(_cmd))
+    _name = "testCLI"
+    if _cmd in promptlist:
+        _name += "prompt"
+    _name += "%s%.4d" % (os.path.basename(_cmd.app.replace("-", "")), newidx)
+    setattr(CLITests, _name, maketest(_cmd))
 
 atexit.register(cleanup)
