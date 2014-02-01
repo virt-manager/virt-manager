@@ -872,7 +872,7 @@ class vmmDetails(vmmGObjectUI):
         cpu_model.set_model(model)
         cpu_model.set_entry_text_column(0)
         cpu_model.set_row_separator_func(sep_func, None)
-        model.set_sort_column_id(2, Gtk.SortType.ASCENDING)
+        model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
         model.append([_("Application Default"), "1", "appdefault", False])
         model.append([_("Hypervisor Default"), "2", "hypdefault", False])
         model.append([_("Clear CPU configuration"), "3", "clearcpu", False])
