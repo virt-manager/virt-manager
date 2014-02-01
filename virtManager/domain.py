@@ -186,6 +186,8 @@ class vmmDomainSnapshot(vmmLibvirtObject):
             status = libvirt.VIR_DOMAIN_NOSTATE
         return vm_status_icons[status]
 
+    def is_current(self):
+        return self._backend.isCurrent()
     def is_external(self):
         if self.get_xmlobj().memory_type == "external":
             return True

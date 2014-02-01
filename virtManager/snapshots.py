@@ -116,21 +116,29 @@ class vmmSnapshotPage(vmmGObjectUI):
         buf = Gtk.TextBuffer()
         self.widget("snapshot-new-description").set_buffer(buf)
 
-        # [name, row label, tooltip, icon name, sortname]
-        model = Gtk.ListStore(str, str, str, str, str)
+        # [name, row label, tooltip, icon name, sortname, current]
+        model = Gtk.ListStore(str, str, str, str, str, bool)
         model.set_sort_column_id(4, Gtk.SortType.ASCENDING)
 
         col = Gtk.TreeViewColumn("")
         col.set_min_width(150)
         col.set_expand(True)
         col.set_spacing(6)
+
         img = Gtk.CellRendererPixbuf()
         img.set_property("stock-size", Gtk.IconSize.LARGE_TOOLBAR)
-        txt = Gtk.CellRendererText()
         col.pack_start(img, False)
+        col.add_attribute(img, 'icon-name', 3)
+
+        txt = Gtk.CellRendererText()
         col.pack_start(txt, False)
         col.add_attribute(txt, 'markup', 1)
-        col.add_attribute(img, 'icon-name', 3)
+
+        img = Gtk.CellRendererPixbuf()
+        img.set_property("stock-size", Gtk.IconSize.MENU)
+        img.set_property("icon-name", Gtk.STOCK_APPLY)
+        col.pack_start(img, True)
+        col.add_attribute(img, "visible", 5)
 
         def _sep_cb(_model, _iter, ignore):
             return not bool(_model[_iter][0])
@@ -229,10 +237,10 @@ class vmmSnapshotPage(vmmGObjectUI):
             label = "%s\n<span size='small'>%s: %s%s</span>" % (
                 (name, _("VM State"), state, external))
             model.append([name, label, desc, snap.run_status_icon_name(),
-                          sortname])
+                          sortname, snap.is_current()])
 
         if has_internal and has_external:
-            model.append([None, None, None, None, "2"])
+            model.append([None, None, None, None, "2", False])
 
         select_name = select_name or (cursnap and cursnap.get_name() or None)
         uiutil.set_row_selection(self.widget("snapshot-list"), select_name)
@@ -286,6 +294,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         state = snap and snap.run_status() or ""
         icon = snap and snap.run_status_icon_name() or None
         is_external = snap and snap.is_external() or False
+        is_current = snap and snap.is_current() or False
 
         timestamp = ""
         if snap:
@@ -296,6 +305,8 @@ class vmmSnapshotPage(vmmGObjectUI):
         if name:
             title = "<b>Snapshot '%s':</b>" % util.xml_escape(name)
 
+        uiutil.set_grid_row_visible(
+            self.widget("snapshot-is-current"), is_current)
         self.widget("snapshot-title").set_markup(title)
         self.widget("snapshot-timestamp").set_text(timestamp)
         self.widget("snapshot-description").get_buffer().set_text(desc)
