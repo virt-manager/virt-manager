@@ -308,8 +308,7 @@ class vmmConnection(vmmGObject):
             return hostname[0:offset]
         return hostname
 
-    def get_hostname(self, resolveLocal=False):
-        ignore = resolveLocal
+    def get_hostname(self):
         try:
             return self.get_qualified_hostname()
         except:

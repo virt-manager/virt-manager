@@ -26,6 +26,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 # pylint: enable=E0611
 
+from virtManager import uiutil
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.storagebrowse import vmmStorageBrowser
@@ -233,6 +234,10 @@ class vmmCloneVM(vmmGObjectUI):
         cd = self.clone_design
         self.widget("clone-orig-name").set_text(cd.original_guest)
         self.widget("clone-new-name").set_text(cd.clone_name)
+
+        uiutil.set_grid_row_visible(
+            self.widget("clone-dest-host"), self.conn.is_remote())
+        self.widget("clone-dest-host").set_text(self.conn.get_hostname())
 
         # We need to determine which disks fail (and why).
         self.storage_list, self.target_list = self.check_all_storage()

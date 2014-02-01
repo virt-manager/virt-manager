@@ -297,9 +297,8 @@ class VirtualConnection(object):
         return self._fake_pretty_name
 
     def is_remote(self):
-        if (hasattr(self, "_virtinst__fake_conn_remote") or
-            self._urisplits[2]):
-            return True
+        return (hasattr(self, "_virtinst__fake_conn_remote") or
+            self._urisplits[2])
 
     def get_uri_hostname(self):
         return self._urisplits[2] or "localhost"
