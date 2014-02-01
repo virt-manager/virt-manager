@@ -216,7 +216,8 @@ class vmmEngine(vmmGObject):
         # packagekit async dialog has a chance to go away
         def idle_connect():
             do_start = packageutils.start_libvirtd()
-            connected = self.connect_to_uri(tryuri, autoconnect=True, do_start=do_start)
+            connected = self.connect_to_uri(tryuri,
+                autoconnect=True, do_start=do_start)
             if not connected and do_start:
                 manager.err.ok(_("Libvirt service must be started"), warnmsg)
 
@@ -233,10 +234,46 @@ class vmmEngine(vmmGObject):
             self.register_conn(conn, skip_config=True)
 
     def autostart_conns(self):
-        for uri in self.conns:
-            conn = self.conns[uri]["conn"]
-            if conn.get_autoconnect():
-                self.connect_to_uri(uri)
+        """
+        We serialize conn autostart, so polkit/ssh-askpass doesn't spam
+        """
+        queue = Queue.Queue()
+        auto_conns = [uri for uri in self.conns
+                      if self.conns[uri]["conn"].get_autoconnect()]
+
+        def add_next_to_queue():
+            if not auto_conns:
+                queue.put(None)
+            else:
+                queue.put(auto_conns.pop(0))
+
+        def state_change_cb(conn):
+            if (conn.get_state() == conn.STATE_ACTIVE or
+                conn.get_state() == conn.STATE_INACTIVE):
+                add_next_to_queue()
+                conn.disconnect_by_func(state_change_cb)
+
+        def connect(uri):
+            self.connect_to_uri(uri)
+
+        def handle_queue():
+            while True:
+                uri = queue.get()
+                if uri is None:
+                    return
+                if uri not in self.conns:
+                    add_next_to_queue()
+                    continue
+
+                conn = self.conns[uri]["conn"]
+                conn.connect("state-changed", state_change_cb)
+                self.idle_add(connect, uri)
+
+        add_next_to_queue()
+        thread = threading.Thread(name="Autostart thread",
+            target=handle_queue, args=())
+        thread.daemon = True
+        thread.start()
 
 
     def _do_vm_removed(self, conn, vmuuid):
