@@ -1022,7 +1022,6 @@ promptlist.append(p8)
 
 newidx = 0
 curtest = 0
-old_bridge = virtinst.util.default_bridge
 
 
 def setup():
@@ -1038,8 +1037,6 @@ def setup():
     os.system("chmod 444 %s" % ro_img)
     os.system("chmod 555 %s" % ro_dir)
 
-    virtinst.util.default_bridge = lambda ignore: None
-
 
 def cleanup():
     """
@@ -1048,8 +1045,6 @@ def cleanup():
     for i in clean_files:
         os.system("chmod 777 %s > /dev/null 2>&1" % i)
         os.system("rm -rf %s > /dev/null 2>&1" % i)
-
-    virtinst.util.default_bridge = old_bridge
 
 
 class CLITests(unittest.TestCase):

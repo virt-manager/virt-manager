@@ -25,8 +25,8 @@
       <source file="/tmp/__virtinst_cli_exist1.img"/>
       <target dev="hda" bus="ide"/>
     </disk>
-    <interface type="network">
-      <source network="default"/>
+    <interface type="bridge">
+      <source bridge="eth0"/>
       <mac address="00:11:22:33:44:55"/>
     </interface>
     <graphics type="vnc" port="-1" keymap="en-us"/>
@@ -61,8 +61,8 @@
       <source file="/tmp/__virtinst_cli_exist1.img"/>
       <target dev="hda" bus="ide"/>
     </disk>
-    <interface type="network">
-      <source network="default"/>
+    <interface type="bridge">
+      <source bridge="eth0"/>
       <mac address="00:11:22:33:44:55"/>
     </interface>
     <graphics type="vnc" port="-1" keymap="en-us"/>

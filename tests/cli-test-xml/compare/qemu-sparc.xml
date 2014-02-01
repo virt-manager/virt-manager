@@ -19,8 +19,8 @@
   <on_crash>restart</on_crash>
   <devices>
     <emulator>/usr/bin/qemu-system-sparc</emulator>
-    <interface type="network">
-      <source network="default"/>
+    <interface type="bridge">
+      <source bridge="eth0"/>
       <mac address="00:11:22:33:44:55"/>
     </interface>
     <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
