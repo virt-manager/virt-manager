@@ -26,6 +26,7 @@ from gi.repository import Gtk
 # pylint: enable=E0611
 
 from virtManager import host
+from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createvol import vmmCreateVolume
 from virtManager.baseclass import vmmGObjectUI
 from virtManager import uiutil
@@ -57,6 +58,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         self.local_args = {}
 
         self.stable_defaults = False
+        self._in_refresh = False
 
         self.builder.connect_signals({
             "on_vmm_storage_browse_delete_event" : self.close,
@@ -64,6 +66,8 @@ class vmmStorageBrowser(vmmGObjectUI):
             "on_browse_local_clicked" : self.browse_local,
             "on_new_volume_clicked" : self.new_volume,
             "on_choose_volume_clicked" : self.finish,
+            "on_pool_refresh_clicked": self.pool_refresh,
+            "on_vol_delete_clicked": self.delete_vol,
             "on_vol_list_row_activated" : self.finish,
             "on_vol_list_changed": self.vol_selected,
         })
@@ -251,9 +255,50 @@ class vmmStorageBrowser(vmmGObjectUI):
         pool_list = self.widget("pool-list")
         host.populate_storage_pools(pool_list, self.conn, self.current_pool())
 
+    def delete_vol(self, src_ignore):
+        vol = self.current_vol()
+        if vol is None:
+            return
+
+        result = self.err.yes_no(_("Are you sure you want to permanently "
+                                   "delete the volume %s?") % vol.get_name())
+        if not result:
+            return
+
+        def cb():
+            vol.delete()
+            def idlecb():
+                self.refresh_current_pool()
+                self.populate_storage_volumes()
+            self.idle_add(idlecb)
+
+        logging.debug("Deleting volume '%s'", vol.get_name())
+        vmmAsyncJob.simple_async_noshow(cb, [], self,
+                        _("Error refreshing volume '%s'") % vol.get_name())
+
+    def pool_refresh(self, src_ignore):
+        if self._in_refresh:
+            logging.debug("Already refreshing the pool, skipping")
+            return
+
+        pool = self.current_pool()
+        if pool is None:
+            return
+
+        self._in_refresh = True
+
+        def cb():
+            try:
+                pool.refresh()
+                self.idle_add(self.refresh_current_pool)
+            finally:
+                self._in_refresh = False
+
+        logging.debug("Refresh pool '%s'", pool.get_name())
+        vmmAsyncJob.simple_async_noshow(cb, [], self,
+                            _("Error refreshing pool '%s'") % pool.get_name())
 
     # Listeners
-
     def pool_selected(self, src_ignore=None):
         pool = self.current_pool()
 
@@ -271,21 +316,23 @@ class vmmStorageBrowser(vmmGObjectUI):
         vol = self.current_vol_row()
         canchoose = bool(vol and vol[5])
         self.widget("choose-volume").set_sensitive(canchoose)
+        self.widget("vol-delete").set_sensitive(canchoose)
 
-    def refresh_current_pool(self, createvol):
+    def refresh_current_pool(self, createvol=None):
         cp = self.current_pool()
         if cp is None:
             return
         cp.refresh()
 
         self.refresh_storage_pool(None, cp.get_uuid())
+        name = createvol and createvol.vol.name or None
 
         vol_list = self.widget("vol-list")
         def select_volume(model, path, it, volume_name):
             if model.get(it, 0)[0] == volume_name:
                 uiutil.set_list_selection(vol_list, path)
 
-        vol_list.get_model().foreach(select_volume, createvol.vol.name)
+        vol_list.get_model().foreach(select_volume, name)
 
     def new_volume(self, src_ignore):
         pool = self.current_pool()
