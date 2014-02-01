@@ -20,6 +20,8 @@ By default, virt-clone will show an error if the necessary information to
 clone the guest is not provided. The --auto-clone option will generate
 all needed input, aside from the source guest to clone.
 
+Please note, virt-clone does not change anything _inside_ the guest OS, it only duplicates disks and does host side changes. So things like changing passwords, changing static IP address, etc are outside the scope of this tool. For these types of changes, please see B<virt-sysprep>.
+
 =head1 OPTIONS
 
 Most options are not required. Minimum requirements are --original or
@@ -203,7 +205,7 @@ There is NO WARRANTY, to the extent permitted by law.
 
 =head1 SEE ALSO
 
-C<virsh(1)>, C<virt-install(1)>, C<virt-manager(1)>, the project website C<http://virt-manager.org>
+C<virt-sysprep(1)>, C<virsh(1)>, C<virt-install(1)>, C<virt-manager(1)>, the project website C<http://virt-manager.org>
 
 =cut
 

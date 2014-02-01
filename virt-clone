@@ -128,10 +128,14 @@ def get_force_target(target, design):
 
 
 def parse_args():
-    parser = cli.setupParser(
-        "%(prog)s --original [NAME] ...",
-        _("Duplicate a virtual machine, changing all unique configuration "
-          "like MAC address, name, etc. The VM contents are not altered."))
+    desc = _("Duplicate a virtual machine, changing all the unique "
+        "host sizeconfiguration like MAC address, name, etc. \n\n"
+        "The VM contents are NOT altered: virt-clone does not change "
+        "anything _inside_ the guest OS, it only duplicates disks and "
+        "does host side changes. So things like changing passwords, "
+        "changing static IP address, etc are outside the scope of "
+        "this tool. For these types of changes, please see virt-sysprep(1).")
+    parser = cli.setupParser("%(prog)s --original [NAME] ...", desc)
     cli.add_connect_option(parser)
 
     geng = parser.add_argument_group(_("General Options"))
