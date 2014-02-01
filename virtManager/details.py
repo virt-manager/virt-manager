@@ -481,9 +481,9 @@ class vmmDetails(vmmGObjectUI):
             "on_config_vcpupin_generate_clicked": self.config_vcpupin_generate,
             "on_cpu_model_changed": lambda *x: self.enable_apply(x, EDIT_CPU),
             "on_cpu_copy_host_clicked": self.on_cpu_copy_host_clicked,
-            "on_cpu_cores_changed": lambda *x: self.enable_apply(x, EDIT_TOPOLOGY),
-            "on_cpu_sockets_changed": lambda *x: self.enable_apply(x, EDIT_TOPOLOGY),
-            "on_cpu_threads_changed": lambda *x: self.enable_apply(x, EDIT_TOPOLOGY),
+            "on_cpu_cores_changed": self.config_cpu_topology_changed,
+            "on_cpu_sockets_changed": self.config_cpu_topology_changed,
+            "on_cpu_threads_changed": self.config_cpu_topology_changed,
             "on_cpu_topology_enable_toggled": self.config_cpu_topology_enable,
 
             "on_config_memory_changed": self.config_memory_changed,
@@ -1553,7 +1553,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("config-vcpupin").set_text("")
         self.widget("config-vcpupin").set_text(pinstr)
 
-    def config_vcpus_changed(self, ignore):
+    def config_vcpus_changed(self, src):
         self.enable_apply(EDIT_VCPUS)
 
         conn = self.vm.conn
@@ -1567,11 +1567,17 @@ class vmmDetails(vmmGObjectUI):
         maxadj = self.widget("config-maxvcpus")
         maxval = self.config_get_maxvcpus()
         if maxval < cur:
-            maxadj.set_value(cur)
+            if maxadj.get_sensitive():
+                maxadj.set_value(cur)
+            else:
+                src.set_value(maxval)
+                cur = maxval
         ignore, upper = maxadj.get_range()
         maxadj.set_range(cur, upper)
 
     def config_maxvcpus_changed(self, ignore):
+        if self.widget("config-maxvcpus").get_sensitive():
+            self.config_cpu_topology_changed()
         self.enable_apply(EDIT_VCPUS)
 
     def on_cpu_copy_host_clicked(self, src):
@@ -1579,10 +1585,30 @@ class vmmDetails(vmmGObjectUI):
             self.widget("cpu-model"), not src.get_active())
         self.enable_apply(EDIT_CPU)
 
+    def config_cpu_topology_changed(self, ignore=None):
+        manual_top = self.widget("cpu-topology-table").is_sensitive()
+        self.widget("config-maxvcpus").set_sensitive(not manual_top)
+
+        if manual_top:
+            cores = uiutil.spin_get_helper(self.widget("cpu-cores")) or 1
+            sockets = uiutil.spin_get_helper(self.widget("cpu-sockets")) or 1
+            threads = uiutil.spin_get_helper(self.widget("cpu-threads")) or 1
+            total = cores * sockets * threads
+            if uiutil.spin_get_helper(self.widget("config-vcpus")) > total:
+                self.widget("config-vcpus").set_value(total)
+            self.widget("config-maxvcpus").set_value(total)
+        else:
+            maxvcpus = uiutil.spin_get_helper(self.widget("config-maxvcpus"))
+            self.widget("cpu-sockets").set_value(maxvcpus or 1)
+            self.widget("cpu-cores").set_value(1)
+            self.widget("cpu-threads").set_value(1)
+
+        self.enable_apply(EDIT_TOPOLOGY)
+
     def config_cpu_topology_enable(self, src):
         do_enable = src.get_active()
         self.widget("cpu-topology-table").set_sensitive(do_enable)
-        self.enable_apply(EDIT_TOPOLOGY)
+        self.config_cpu_topology_changed()
 
     # Boot device / Autostart
     def config_bootdev_selected(self, ignore):
@@ -2423,6 +2449,8 @@ class vmmDetails(vmmGObjectUI):
         self.widget("cpu-sockets").set_value(sockets)
         self.widget("cpu-cores").set_value(cores)
         self.widget("cpu-threads").set_value(threads)
+        if show_top:
+            self.widget("cpu-topology-expander").set_expanded(True)
 
         model = cpu.model or None
         if not model:
