@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.15.4 on Fri Sep 27 09:56:20 2013 -->
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">70000</property>
     <property name="step_increment">1</property>
@@ -93,7 +93,7 @@
                   <object class="GtkTable" id="table2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="n_rows">4</property>
+                    <property name="n_rows">3</property>
                     <property name="n_columns">2</property>
                     <property name="column_spacing">6</property>
                     <property name="row_spacing">6</property>
@@ -163,59 +163,6 @@
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
                         <property name="x_options">GTK_FILL</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label10">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
-                        <property name="label" translatable="yes">&lt;span color='#484848'&gt;Migrate _offline:&lt;/span&gt;</property>
-                        <property name="use_markup">True</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">migrate-offline</property>
-                      </object>
-                      <packing>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
-                        <property name="x_options">GTK_FILL</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkHBox" id="hbox3">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <child>
-                          <object class="GtkCheckButton" id="migrate-offline">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="xalign">1</property>
-                            <property name="draw_indicator">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="label13">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
                       </packing>
                     </child>
                     <child>
@@ -321,10 +268,11 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="migrate-unsafe">
+                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
+                                    <property name="xalign">0.5</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>

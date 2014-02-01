@@ -1302,7 +1302,7 @@ class vmmDomain(vmmLibvirtObject):
         newname = None
 
         flags = 0
-        if self.status() == libvirt.VIR_DOMAIN_RUNNING and live:
+        if live:
             flags |= libvirt.VIR_MIGRATE_LIVE
 
         if secure:

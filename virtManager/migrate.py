@@ -136,10 +136,6 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.widget("migrate-set-maxdowntime").set_active(False)
         self.widget("migrate-max-downtime").set_value(30)
 
-        running = self.vm.is_active()
-        self.widget("migrate-offline").set_active(not running)
-        self.widget("migrate-offline").set_sensitive(running)
-
         self.widget("migrate-rate").set_value(0)
         self.widget("migrate-secure").set_active(False)
         self.widget("migrate-unsafe").set_active(False)
@@ -220,9 +216,6 @@ class vmmMigrateDialog(vmmGObjectUI):
         if not row or not row[2]:
             return None
         return row[1]
-
-    def get_config_offline(self):
-        return self.widget("migrate-offline").get_active()
 
     def get_config_max_downtime(self):
         if not self.get_config_max_downtime_enabled():
@@ -464,12 +457,12 @@ class vmmMigrateDialog(vmmGObjectUI):
             if not self.validate():
                 return
 
+            live = True
             destconn = self.get_config_destconn()
             srcuri = self.vm.conn.get_uri()
             srchost = self.vm.conn.get_hostname()
             dsthost = destconn.get_qualified_hostname()
             max_downtime = self.get_config_max_downtime()
-            live = not self.get_config_offline()
             secure = self.get_config_secure()
             unsafe = self.get_config_unsafe()
             uri = self.build_migrate_uri(destconn, srcuri)
