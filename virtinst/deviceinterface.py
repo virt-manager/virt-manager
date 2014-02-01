@@ -230,6 +230,8 @@ class VirtualNetworkInterface(VirtualDevice):
     target_dev = XMLProperty("./target/@dev")
     filterref = XMLProperty("./filterref/@filter")
 
+    driver_name = XMLProperty("./driver/@name")
+    driver_queues = XMLProperty("./driver/@queues", is_int=True)
 
     #############
     # Build API #

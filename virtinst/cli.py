@@ -1795,6 +1795,9 @@ class ParserNetwork(VirtCLIParser):
         self.set_param("macaddr", "mac", setter_cb=set_mac_cb)
         self.set_param("filterref", "filterref")
 
+        self.set_param("driver_name", "driver_name")
+        self.set_param("driver_queues", "driver_queues")
+
         self.set_param("virtualport.type", "virtualport_type")
         self.set_param("virtualport.managerid", "virtualport_managerid")
         self.set_param("virtualport.typeid", "virtualport_typeid")

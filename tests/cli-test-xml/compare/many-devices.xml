@@ -81,6 +81,7 @@
       <source bridge="foobar"/>
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
+      <driver name="qemu" queues="3"/>
     </interface>
     <interface type="direct">
       <source dev="eth5" mode="vepa"/>
@@ -199,6 +200,7 @@
       <source bridge="foobar"/>
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
+      <driver name="qemu" queues="3"/>
     </interface>
     <interface type="direct">
       <source dev="eth5" mode="vepa"/>

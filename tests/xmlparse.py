@@ -450,6 +450,8 @@ class XMLParseTest(unittest.TestCase):
         check("type", "direct")
         check("source", "eth0.1")
         check("source_mode", "vepa", "bridge")
+        check("driver_name", None, "vhost")
+        check("driver_queues", None, 5)
 
         virtualport = dev5.virtualport
         check = self._make_checker(virtualport)
