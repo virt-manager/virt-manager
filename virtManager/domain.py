@@ -1645,6 +1645,7 @@ class vmmDomain(vmmLibvirtObject):
         if (not self._stats_net_supported or
             not self._enable_net_poll or
             not self.is_active()):
+            self._stats_net_skip = []
             return rx, tx
 
         for netdev in self.get_network_devices(refresh_if_nec=False):
@@ -1682,6 +1683,7 @@ class vmmDomain(vmmLibvirtObject):
         if (not self._stats_disk_supported or
             not self._enable_disk_poll or
             not self.is_active()):
+            self._stats_disk_skip = []
             return rd, wr
 
         for disk in self.get_disk_devices(refresh_if_nec=False):
