@@ -27,7 +27,6 @@ import traceback
 import unittest
 import StringIO
 
-import virtinst.cli
 from virtinst import support
 
 from tests import virtinstall, virtimage, virtclone, virtconvert, virtxml
