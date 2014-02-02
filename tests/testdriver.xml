@@ -108,6 +108,11 @@
     <feature policy="require" name="xtpr"/>
     <feature policy="require" name="acpi"/>
   </cpu>
+
+  <pm>
+    <suspend-to-mem enabled='no'/>
+  </pm>
+
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
 

@@ -133,6 +133,10 @@ class XMLParseTest(unittest.TestCase):
         check("name", None, "hpet")
         check("present", None, False)
 
+        check = self._make_checker(guest.pm)
+        check("suspend_to_mem", False, True)
+        check("suspend_to_disk", None, False)
+
         check = self._make_checker(guest.seclabel)
         check("type", "static", "static")
         check("model", "selinux", "apparmor")

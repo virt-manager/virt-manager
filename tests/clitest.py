@@ -566,6 +566,7 @@ c.add_compare("""--hvm --pxe \
 --host-device net_00_1c_25_10_b1_e4 \
 --features acpi=off,eoi=on,privnet=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=1234 \
 --clock offset=localtime,hpet_present=no,rtc_tickpolicy=merge \
+--pm suspend_to_mem=yes,suspend_to_disk=no \
 """, "many-devices")  # Lots of devices
 c.add_valid("--hvm --disk path=virt-install,device=cdrom")  # Specifying cdrom media via --disk
 c.add_valid("--hvm --import --disk path=virt-install")  # FV Import install
@@ -800,6 +801,7 @@ c.add_compare("--boot loader=foo.bar,network,useserial=on,init=/bin/bash", "virt
 c.add_compare("--security label=foo,bar,baz,UNKNOWN=val,relabel=on", "virtxml-edit-simple-security")
 c.add_compare("--features eoi=on,hyperv_relaxed=off,acpi=", "virtxml-edit-simple-features")
 c.add_compare("--clock offset=localtime,hpet_present=yes,kvmclock_present=no,rtc_tickpolicy=merge", "virtxml-edit-simple-clock")
+c.add_compare("--pm suspend_to_mem=yes,suspend_to_disk=no", "virtxml-edit-simple-pm")
 c.add_compare("--disk /dev/zero,perms=ro,startup_policy=optional", "virtxml-edit-simple-disk")
 c.add_compare("--disk path=", "virtxml-edit-simple-disk-remove-path")
 c.add_compare("--network source=br0,type=bridge,model=virtio,mac=", "virtxml-edit-simple-network")

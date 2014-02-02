@@ -1,0 +1,12 @@
+   <on_reboot>restart</on_reboot>
+   <on_crash>restart</on_crash>
+   <pm>
+-    <suspend-to-mem enabled="no"/>
++    <suspend-to-mem enabled="yes"/>
++    <suspend-to-disk enabled="no"/>
+   </pm>
+   <devices>
+     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+
+Domain 'test-many-devices' defined successfully.
+Changes will take effect after the next domain shutdown.

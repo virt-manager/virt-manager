@@ -29,6 +29,7 @@ from virtinst.domainnumatune import DomainNumatune
 from virtinst.clock import Clock
 from virtinst.cpu import CPU, CPUFeature
 from virtinst.seclabel import Seclabel
+from virtinst.pm import PM
 
 import virtinst.capabilities as CapabilitiesParser
 from virtinst.interface import Interface, InterfaceProtocol

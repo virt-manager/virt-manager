@@ -29,7 +29,7 @@ from virtinst import VirtualGraphics
 from virtinst import VirtualVideoDevice
 
 # Enable this to refresh test output
-REGENERATE_OUTPUT = False
+REGENERATE_OUTPUT = True
 
 # pylint: disable=W0212
 # Access to protected member, needed to unittest stuff

@@ -943,6 +943,7 @@ def add_guest_xml_options(geng):
     geng.add_argument("--clock",
                     help=_("Set domain <clock> XML. Ex:\n"
                            "--clock offset=localtime,rtc_tickpolicy=catchup"))
+    geng.add_argument("--pm", help=_("Config power management features"))
 
 
 def add_boot_option(insg):
@@ -1615,6 +1616,18 @@ class ParserClock(VirtCLIParser):
             self.set_param(None, tname + "_tickpolicy", setter_cb=set_timer)
 
 
+################
+# --pm parsing #
+################
+
+class ParserPM(VirtCLIParser):
+    def _init_params(self):
+        self.clear_attr = "pm"
+
+        self.set_param("pm.suspend_to_mem", "suspend_to_mem", is_onoff=True)
+        self.set_param("pm.suspend_to_disk", "suspend_to_disk", is_onoff=True)
+
+
 ##########################
 # Guest <device> parsing #
 ##########################
@@ -2222,6 +2235,8 @@ def build_parser_map(options, skip=None, only=None):
     register_parser("security", ParserSecurity)
     register_parser("features", ParserFeatures)
     register_parser("clock", ParserClock)
+    register_parser("pm", ParserPM)
+    register_parser("features", ParserFeatures)
     register_parser("disk", ParserDisk)
     register_parser("network", ParserNetwork)
     register_parser("graphics", ParserGraphics)
