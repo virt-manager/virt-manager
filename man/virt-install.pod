@@ -265,25 +265,37 @@ virt-install will download kernel/initrd to the local machine, and then
 upload the media to the remote host. This option requires the URL to
 be accessible by both the local and remote host.
 
+--location allows things like --extra-args for kernel arguments, and using --initrd-inject. If you want to use those options with CDROM media, you have a few options:
+
+* Run virt-install as root and do --location ISO
+
+* Mount the ISO at a local directory, and do --location DIRECTORY
+
+* Mount the ISO at a local directory, export that directory over local http, and do --location http://localhost/DIRECTORY
+
 The C<LOCATION> can take one of the following forms:
 
 =over 4
 
-=item DIRECTORY
-
-Path to a local directory containing an installable distribution image
-
-=item nfs:host:/path or nfs://host/path
-
-An NFS server location containing an installable distribution image
-
 =item http://host/path
 
-An HTTP server location containing an installable distribution image
+An HTTP server location containing an installable distribution image.
 
 =item ftp://host/path
 
-An FTP server location containing an installable distribution image
+An FTP server location containing an installable distribution image.
+
+=item nfs:host:/path or nfs://host/path
+
+An NFS server location containing an installable distribution image. This requires running virt-install as root.
+
+=item DIRECTORY
+
+Path to a local directory containing an installable distribution image. Note that the directory will not be accessible by the guest after initial boot, so the OS installer will need another way to access the rest of the install media.
+
+=item ISO
+
+Mount the ISO and probe the directory. This requires running virt-install as root, and has the same VM access caveat as DIRECTORY.
 
 =back
 

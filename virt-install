@@ -453,10 +453,77 @@ def check_option_collisions(options, guest):
         guest.conn.support_remote_url_install()):
         fail(_("Libvirt version does not support remote --location installs"))
 
+    cdrom_err = ""
+    if guest.installer.cdrom:
+        cdrom_err = " " + _("See the man page for examples of "
+            "using --location with CDROM media")
     if not options.location and options.extra_args:
-        fail(_("--extra-args only work if specified with --location."))
+        fail(_("--extra-args only work if specified with --location.") +
+             cdrom_err)
     if not options.location and options.initrd_inject:
-        fail(_("--initrd-inject only works if specified with --location."))
+        fail(_("--initrd-inject only works if specified with --location.") +
+             cdrom_err)
+
+
+def _show_nographics_warnings(options, guest):
+    if guest.get_devices("graphics"):
+        return
+    if not options.autoconsole:
+        return
+
+    if guest.installer.cdrom:
+        logging.warn(_("CDROM media does not print to the text console "
+            "by default, so you likely will not see text install output. "
+            "You might want to use --location."))
+        return
+
+    if not options.location:
+        return
+
+    # Trying --location --nographics with console connect. Warn if
+    # they likely won't see any output.
+
+    if not guest.get_devices("console"):
+        logging.warn(_("No --console device added, you likely will not "
+            "see text install output from the guest."))
+        return
+
+    serial_arg = "console=ttyS0"
+    virtio_arg = "console=hvc0"
+    console_type = None
+    if guest.conn.is_test() or guest.conn.is_qemu():
+        console_type = serial_arg
+        if guest.get_devices("console")[0].target_type == "virtio":
+            console_type = virtio_arg
+
+    if not options.extra_args or "console=" not in options.extra_args:
+        logging.warn(_("No 'console' seen in --extra-args, a '%s' kernel "
+            "argument is likely required to see text install output from "
+            "the guest."), console_type or "console=")
+        return
+
+    if console_type in options.extra_args:
+        return
+    if (serial_arg not in options.extra_args and
+        virtio_arg not in options.extra_args):
+        return
+
+    has = (serial_arg in options.extra_args) and serial_arg or virtio_arg
+    need = (serial_arg in options.extra_args) and virtio_arg or serial_arg
+    logging.warn(_("'%s' found in --extra-args, but the device attached "
+        "to the guest likely requires '%s'. You may not see text install "
+        "output from the guest."), has, need)
+    if has == serial_arg:
+        logging.warn(_("To make '--extra-args %s' work, you can force a "
+            "plain serial device with '--console pty'"), serial_arg)
+
+
+def show_warnings(options, guest):
+    if options.pxe and not supports_pxe(guest):
+        logging.warn(_("The guest's network configuration does not support "
+                       "PXE"))
+
+    _show_nographics_warnings(options, guest)
 
 
 ##########################
@@ -547,10 +614,7 @@ def build_guest_instance(conn, options, parsermap):
     # this after setting guest.installer at least
     check_option_collisions(options, guest)
 
-    # Warnings
-    if options.pxe and not supports_pxe(guest):
-        logging.warn(_("The guest's network configuration does not support "
-                       "PXE"))
+    show_warnings(options, guest)
 
     return guest
 
