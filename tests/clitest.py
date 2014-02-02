@@ -256,6 +256,9 @@ class Command(object):
                 if utils.REGENERATE_OUTPUT or not os.path.exists(filename):
                     file(filename, "w").write(output)
 
+                if "--print-diff" in self.argv and output.count("\n") > 3:
+                    output = "\n".join(output.splitlines()[3:])
+
                 utils.diff_compare(output, filename)
 
         except AssertionError, e:

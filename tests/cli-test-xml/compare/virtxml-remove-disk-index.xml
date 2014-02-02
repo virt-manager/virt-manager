@@ -1,18 +1,14 @@
---- Original XML
-+++ Altered XML
-@@ -83,12 +83,6 @@
-       <target dev="sdb" bus="scsi"/>
-       <readonly/>
-       <address type="drive" controller="0" bus="0" target="0" unit="1"/>
+       <source dev="/dev/null"/>
+       <target dev="hdc" bus="ide"/>
+       <address type="drive" controller="0" bus="1" target="0" unit="0"/>
 -    </disk>
--    <disk type="file" device="disk">
--      <driver name="qemu" type="qcow2" cache="none"/>
--      <source file="/tmp/foobar2"/>
--      <target dev="vdc" bus="virtio"/>
--      <shareable/>
+-    <disk type="block" device="cdrom">
+-      <target dev="sdb" bus="scsi"/>
+-      <readonly/>
+-      <address type="drive" controller="0" bus="0" target="0" unit="1"/>
      </disk>
-     <disk type="block" device="disk">
-       <source dev="/dev/default-pool/overlay.img"/>
+     <disk type="file" device="disk">
+       <driver name="qemu" type="qcow2" cache="none"/>
 
 Domain 'test-many-devices' defined successfully.
 Changes will take effect after the next domain shutdown.

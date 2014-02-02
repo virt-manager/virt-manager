@@ -1,6 +1,3 @@
---- Original XML
-+++ Altered XML
-@@ -54,11 +54,6 @@
    <on_crash>restart</on_crash>
    <devices>
      <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
@@ -12,10 +9,10 @@
      <disk type="dir" device="floppy">
        <source dir="/tmp"/>
        <target dev="fdb" bus="fdc"/>
-@@ -72,12 +67,6 @@
-         <total_iops_sec>50</total_iops_sec>
-       </iotune>
-       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
+@@ -78,12 +73,6 @@
+       <target dev="hdb" bus="ide"/>
+       <readonly/>
+       <address type="drive" controller="0" bus="0" target="0" unit="1"/>
 -    </disk>
 -    <disk type="block" device="disk">
 -      <driver type="raw" cache="none"/>

@@ -1,6 +1,3 @@
---- Original XML
-+++ Altered XML
-@@ -28,9 +28,9 @@
      </hyperv>
    </features>
    <cpu mode="custom" match="exact">
@@ -16,7 +13,7 @@
      <feature policy="require" name="ds_cpl"/>
      <feature policy="require" name="xtpr"/>
      <feature policy="require" name="acpi"/>
-+    <feature name="x2apic" policy="force"/>
++    <feature policy="force" name="x2apic"/>
    </cpu>
    <clock offset="utc">
      <timer name="rtc" tickpolicy="catchup"/>
