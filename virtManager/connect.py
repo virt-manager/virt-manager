@@ -28,15 +28,17 @@ from gi.repository import GObject
 from gi.repository import Gtk
 # pylint: enable=E0611
 
+from virtManager import uiutil
 from virtManager.baseclass import vmmGObjectUI
 
-HV_XEN = 0
-HV_QEMU = 1
-HV_LXC = 2
+(HV_QEMU,
+HV_XEN,
+HV_LXC,
+HV_QEMU_SESSION) = range(4)
 
-CONN_SSH = 0
-CONN_TCP = 1
-CONN_TLS = 2
+(CONN_SSH,
+CONN_TCP,
+CONN_TLS) = range(3)
 
 
 def current_user():
@@ -64,7 +66,7 @@ class vmmConnect(vmmGObjectUI):
 
         self.builder.connect_signals({
             "on_hypervisor_changed": self.hypervisor_changed,
-            "on_connection_changed": self.conn_changed,
+            "on_transport_changed": self.transport_changed,
             "on_hostname_combo_changed": self.hostname_combo_changed,
             "on_connect_remote_toggled": self.connect_remote_toggled,
             "on_username_entry_changed": self.username_changed,
@@ -147,6 +149,23 @@ class vmmConnect(vmmGObjectUI):
     def set_initial_state(self):
         self.widget("connect").grab_default()
 
+        combo = self.widget("hypervisor")
+        model = Gtk.ListStore(str)
+        model.append(["QEMU/KVM"])
+        model.append(["Xen"])
+        model.append(["LXC (Linux Containers)"])
+        model.append(["QEMU/KVM user session"])
+        combo.set_model(model)
+        uiutil.set_combo_text_column(combo, 0)
+
+        combo = self.widget("transport")
+        model = Gtk.ListStore(str)
+        model.append(["SSH"])
+        model.append(["TCP (SASL, Kerberos)"])
+        model.append(["SSL/TLS with certificates"])
+        combo.set_model(model)
+        uiutil.set_combo_text_column(combo, 0)
+
         # Hostname combo box entry
         hostListModel = Gtk.ListStore(str, str, str)
         host = self.widget("hostname")
@@ -156,7 +175,7 @@ class vmmConnect(vmmGObjectUI):
 
     def reset_state(self):
         self.set_default_hypervisor()
-        self.widget("connection").set_active(0)
+        self.widget("transport").set_active(0)
         self.widget("autoconnect").set_sensitive(True)
         self.widget("autoconnect").set_active(True)
         self.widget("hostname").get_model().clear()
@@ -173,9 +192,9 @@ class vmmConnect(vmmGObjectUI):
     def set_default_hypervisor(self):
         default = self.default_uri(always_system=True)
         if not default or default.startswith("qemu"):
-            self.widget("hypervisor").set_active(1)
+            self.widget("hypervisor").set_active(HV_QEMU)
         elif default.startswith("xen"):
-            self.widget("hypervisor").set_active(0)
+            self.widget("hypervisor").set_active(HV_XEN)
 
     def add_service(self, interface, protocol, name, typ, domain, flags):
         ignore = flags
@@ -293,7 +312,20 @@ class vmmConnect(vmmGObjectUI):
     def hostname_changed(self, src_ignore):
         self.populate_uri()
 
-    def hypervisor_changed(self, src_ignore):
+    def hypervisor_changed(self, src):
+        is_session = (src.get_active() == HV_QEMU_SESSION)
+        uiutil.set_grid_row_visible(
+            self.widget("session-warning-box"), is_session)
+        uiutil.set_grid_row_visible(
+            self.widget("connect-remote"), not is_session)
+        uiutil.set_grid_row_visible(
+            self.widget("username-entry"), not is_session)
+        uiutil.set_grid_row_visible(
+            self.widget("hostname"), not is_session)
+        uiutil.set_grid_row_visible(
+            self.widget("transport"), not is_session)
+        if is_session:
+            self.widget("connect-remote").set_active(False)
         self.populate_uri()
 
     def username_changed(self, src_ignore):
@@ -302,14 +334,14 @@ class vmmConnect(vmmGObjectUI):
     def connect_remote_toggled(self, src_ignore):
         is_remote = self.is_remote()
         self.widget("hostname").set_sensitive(is_remote)
-        self.widget("connection").set_sensitive(is_remote)
+        self.widget("transport").set_sensitive(is_remote)
         self.widget("autoconnect").set_active(not is_remote)
         self.widget("username-entry").set_sensitive(is_remote)
 
         self.populate_default_user()
         self.populate_uri()
 
-    def conn_changed(self, src_ignore):
+    def transport_changed(self, src_ignore):
         self.populate_default_user()
         self.populate_uri()
 
@@ -318,13 +350,13 @@ class vmmConnect(vmmGObjectUI):
         self.widget("uri-entry").set_text(uri)
 
     def populate_default_user(self):
-        conn = self.widget("connection").get_active()
+        conn = self.widget("transport").get_active()
         default_user = default_conn_user(conn)
         self.widget("username-entry").set_text(default_user)
 
     def generate_uri(self):
         hv = self.widget("hypervisor").get_active()
-        conn = self.widget("connection").get_active()
+        conn = self.widget("transport").get_active()
         host = self.widget("hostname").get_child().get_text().strip()
         user = self.widget("username-entry").get_text()
         is_remote = self.is_remote()
@@ -332,7 +364,7 @@ class vmmConnect(vmmGObjectUI):
         hvstr = ""
         if hv == HV_XEN:
             hvstr = "xen"
-        elif hv == HV_QEMU:
+        elif hv == HV_QEMU or HV_QEMU_SESSION:
             hvstr = "qemu"
         else:
             hvstr = "lxc"
@@ -357,6 +389,8 @@ class vmmConnect(vmmGObjectUI):
         uri = hvstr + hoststr
         if hv == HV_QEMU:
             uri += "system"
+        elif hv == HV_QEMU_SESSION:
+            uri += "session"
 
         return uri
 
