@@ -1438,6 +1438,9 @@ class ParserCPU(VirtCLIParser):
             elif (val == "host-model-only" and
                   self.guest.conn.caps.host.cpu.model):
                 inst.cpu.model = self.guest.conn.caps.host.cpu.model
+            elif val == "host-model" or val == "host-passthrough":
+                inst.cpu.model = None
+                inst.cpu.mode = val
             else:
                 inst.cpu.model = val
 
@@ -1458,6 +1461,7 @@ class ParserCPU(VirtCLIParser):
                     inst.cpu.add_feature(feature_name, policy)
 
         self.set_param(None, "model", setter_cb=set_model_cb)
+        self.set_param("cpu.mode", "mode")
         self.set_param("cpu.match", "match")
         self.set_param("cpu.vendor", "vendor")
 

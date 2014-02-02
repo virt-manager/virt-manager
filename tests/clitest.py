@@ -1014,7 +1014,7 @@ promptlist.append(p7)
 
 p8 = PromptTest("virt-xml --connect %(TESTURI)s --confirm test "
     "--edit --cpu host-passthrough")
-p8.add("Define 'test' with the changed XML", "yes", num_lines=12)
+p8.add("Define 'test' with the changed XML", "yes", num_lines=10)
 promptlist.append(p8)
 
 
