@@ -21,13 +21,11 @@
    <clock offset="utc">
      <timer name="rtc" tickpolicy="catchup"/>
      <timer name="pit" tickpolicy="delay"/>
-@@ -311,4 +294,7 @@
+@@ -314,4 +297,5 @@
        <address type="isa" iobase="0x505"/>
      </panic>
    </devices>
-+  <cpu mode="custom" match="exact">
-+    <model>host-passthrough</model>
-+  </cpu>
++  <cpu mode="host-passthrough"/>
  </domain>
 
 Domain 'test-many-devices' defined successfully.
