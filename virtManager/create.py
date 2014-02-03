@@ -1393,8 +1393,8 @@ class vmmCreate(vmmGObjectUI):
             if self.config.get_new_vm_sound():
                 guest.add_default_sound_device()
 
-            if (guest.conn.is_qemu() and
-                guest.type == "kvm" and
+            if (((guest.conn.is_qemu() and guest.type == "kvm") or
+                 guest.conn.is_test()) and
                 guest.os.is_x86() and
                 guest.os.arch == guest.conn.caps.host.cpu.arch):
                 cpu_type = self.config.get_default_cpu_setting()
@@ -1410,6 +1410,10 @@ class vmmCreate(vmmGObjectUI):
                     guest.cpu.copy_host_cpu()
                 else:
                     raise RuntimeError("Unknown cpu default '%s'" % cpu_type)
+
+            if self.conn.check_support(self.conn.SUPPORT_CONN_PM_DISABLE):
+                guest.pm.suspend_to_mem = False
+                guest.pm.suspend_to_disk = False
 
         except Exception, e:
             self.err.show_err(_("Error setting up default devices:") + str(e))
