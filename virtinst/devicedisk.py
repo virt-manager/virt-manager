@@ -215,6 +215,9 @@ class VirtualDisk(VirtualDevice):
         """
         Check if path exists. If we can't determine, return False
         """
+        if path is None:
+            return False
+
         try:
             vol = None
             path_is_pool = False
