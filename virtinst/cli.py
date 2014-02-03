@@ -1032,8 +1032,11 @@ class _VirtCLIArgument(object):
             return
 
         if lookup and not self.attrname:
-            raise RuntimeError(_("Don't know how to match %s property %s") %
-                (getattr(inst, "virtual_device_type", ""), self.cliname))
+            raise RuntimeError(
+                _("Don't know how to match %(device_type)s "
+                  "property %(property_name)s") %
+                {"device_type": getattr(inst, "virtual_device_type", ""),
+                 "property_name": self.cliname})
 
         try:
             if self.attrname:
