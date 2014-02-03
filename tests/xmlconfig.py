@@ -404,7 +404,6 @@ class TestXMLConfig(unittest.TestCase):
         i = utils.make_pxe_installer()
         g = utils.get_basic_fullyvirt_guest("kvm", installer=i)
 
-        g.os_type = "linux"
         g.os_variant = "fedora10"
         g.add_device(utils.get_filedisk())
         g.add_device(utils.get_blkdisk())
@@ -417,7 +416,6 @@ class TestXMLConfig(unittest.TestCase):
         g = utils.get_basic_fullyvirt_guest("kvm", installer=i)
         g.os.os_type = "hvm"
 
-        g.os_type = "linux"
         g.os_variant = "fedora11"
         g.installer.cdrom = True
         g.add_device(utils.get_floppy())
@@ -431,7 +429,6 @@ class TestXMLConfig(unittest.TestCase):
             i = utils.make_distro_installer()
             g = utils.get_basic_fullyvirt_guest("kvm", installer=i)
 
-            g.os_type = "linux"
             g.os_variant = "fedora11"
             g.installer.cdrom = True
             g.add_device(utils.get_floppy())
@@ -470,7 +467,6 @@ class TestXMLConfig(unittest.TestCase):
         i = utils.make_distro_installer()
         g = utils.get_basic_fullyvirt_guest("qemu", installer=i)
 
-        g.os_type = "linux"
         g.os_variant = "fedora11"
         g.installer.cdrom = True
         g.add_device(utils.get_floppy())
@@ -484,7 +480,6 @@ class TestXMLConfig(unittest.TestCase):
         i = utils.make_distro_installer()
         g = utils.get_basic_fullyvirt_guest("xen", installer=i)
 
-        g.os_type = "linux"
         g.os_variant = "fedora11"
         g.installer.cdrom = True
         g.add_device(utils.get_floppy())
@@ -512,7 +507,6 @@ class TestXMLConfig(unittest.TestCase):
     def testInstallWindowsXenNew(self):
         def make_guest():
             g = utils.get_basic_fullyvirt_guest("xen")
-            g.os_type = "windows"
             g.os_variant = "winxp"
             g.add_device(utils.get_filedisk())
             g.add_device(utils.get_blkdisk())

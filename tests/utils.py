@@ -294,7 +294,6 @@ def make_pxe_installer():
 
 def build_win_kvm(path=None, fake=True):
     g = get_basic_fullyvirt_guest("kvm")
-    g.os_type = "windows"
     g.os_variant = "winxp"
     g.add_device(get_filedisk(path, fake=fake))
     g.add_device(get_blkdisk())
