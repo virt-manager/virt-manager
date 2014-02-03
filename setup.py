@@ -373,12 +373,14 @@ class TestBaseCommand(Command):
     user_options = [
         ('debug', 'd', 'Show debug output'),
         ('coverage', 'c', 'Show coverage report'),
+        ('regenerate-output', None, 'Regenerate test output'),
         ("only=", None,
          "Run only testcases whose name contains the passed string"),
     ]
 
     def initialize_options(self):
         self.debug = 0
+        self.regenerate_output = 0
         self.coverage = 0
         self.only = None
         self._testfiles = []
@@ -404,6 +406,7 @@ class TestBaseCommand(Command):
 
         import tests as testsmodule
         testsmodule.cov = cov
+        testsmodule.utils.REGENERATE_OUTPUT = bool(self.regenerate_output)
 
         if hasattr(unittest, "installHandler"):
             try:

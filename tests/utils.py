@@ -28,8 +28,8 @@ from virtinst import VirtualDisk
 from virtinst import VirtualGraphics
 from virtinst import VirtualVideoDevice
 
-# Enable this to refresh test output
-REGENERATE_OUTPUT = True
+# DON'T EDIT THIS. Use 'setup.py test --regenerate-output'
+REGENERATE_OUTPUT = False
 
 # pylint: disable=W0212
 # Access to protected member, needed to unittest stuff
