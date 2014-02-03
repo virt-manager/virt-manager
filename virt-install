@@ -541,13 +541,13 @@ def build_installer(options, conn, virt_type):
         instclass = virtinst.PXEInstaller
     elif options.cdrom or options.location:
         instclass = virtinst.DistroInstaller
+    elif virt_type == "exe":
+        instclass = virtinst.ContainerInstaller
     elif options.import_install or options.boot:
         if options.import_install and options.nodisks:
             fail(_("A disk device must be specified with --import."))
         options.import_install = True
         instclass = virtinst.ImportInstaller
-    elif virt_type == "exe":
-        instclass = virtinst.ContainerInstaller
     else:
         instclass = virtinst.DistroInstaller
 
