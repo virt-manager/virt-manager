@@ -1047,6 +1047,7 @@ class XMLParseTest(unittest.TestCase):
         check("format", "raw", "qcow2")
         check("target_path", None, "/foo/bar")
         check("backing_store", "/foo/bar/baz", "/my/backing")
+        check("lazy_refcounts", False, True)
 
         check = self._make_checker(vol.permissions)
         check("mode", "0700", "0744")

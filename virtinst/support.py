@@ -292,8 +292,10 @@ SUPPORT_CONN_VIRTIO_CONSOLE = _make(drv_libvirt_version=[("qemu", 8003)])
 SUPPORT_CONN_PANIC_DEVICE = _make(version=1002001,
                                   drv_version=[("qemu", 1005000),
                                                ("test", 0)])
-SUPPORT_CONN_PM_DISABLE = _make(version="10002", drv_version=[
-    ("qemu", 1002000), ("test", 0)])
+SUPPORT_CONN_PM_DISABLE = _make(version="10002",
+    drv_version=[("qemu", 1002000), ("test", 0)])
+SUPPORT_CONN_QCOW2_LAZY_REFCOUNTS = _make(version="1001000",
+    drv_version=[("qemu", 1002000), ("test", 0)])
 
 
 # Domain checks

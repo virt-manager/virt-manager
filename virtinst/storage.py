@@ -595,6 +595,12 @@ class StorageVolume(_StorageObject):
     target_path = XMLProperty("./target/path")
     backing_store = XMLProperty("./backingStore/path")
 
+    def _lazy_refcounts_default_cb(self):
+        return self.conn.check_support(
+            self.conn.SUPPORT_CONN_QCOW2_LAZY_REFCOUNTS)
+    lazy_refcounts = XMLProperty("./target/features/lazy_refcounts",
+        is_bool=True, default_cb=_lazy_refcounts_default_cb)
+
 
     ######################
     # Public API helpers #
