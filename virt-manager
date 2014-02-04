@@ -220,7 +220,7 @@ def main():
 
 
     if options.usbredir and config.get_auto_redirection():
-        config.set_auto_redirection(False)
+        config.cli_usbredir = False
 
     # Add our icon dir to icon theme
     icon_theme = Gtk.IconTheme.get_default()

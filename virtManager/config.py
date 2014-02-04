@@ -162,6 +162,7 @@ class vmmConfig(object):
         self.libvirt_packages = cliconfig.libvirt_packages
         self.askpass_package = cliconfig.askpass_package
         self.default_graphics_from_config = cliconfig.default_graphics
+        self.cli_usbredir = None
 
         self.default_storage_format_from_config = "qcow2"
         self.cpu_default_from_config = "host-cpu-model"
@@ -390,6 +391,8 @@ class vmmConfig(object):
         self.conf.set("/console/resize-guest", pref)
 
     def get_auto_redirection(self):
+        if self.cli_usbredir is not None:
+            return self.cli_usbredir
         return self.conf.get("/console/auto-redirect")
     def set_auto_redirection(self, state):
         self.conf.set("/console/auto-redirect", state)
