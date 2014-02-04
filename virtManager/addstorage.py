@@ -273,11 +273,10 @@ class vmmAddStorage(vmmGObjectUI):
     def is_default_storage(self):
         return self.widget("config-storage-create").get_active()
 
-    def _check_ideal_path(self, path, vmname, collidelist=None):
+    def _check_ideal_path(self, path, vmname, collidelist):
         # See if the ideal disk path (/default/pool/vmname.img)
         # exists, and if unused, prompt the use for using it
         conn = self.conn.get_backend()
-        collidelist = collidelist or []
         ideal = self._get_ideal_path(vmname)
         if ideal in collidelist:
             return path
@@ -305,6 +304,7 @@ class vmmAddStorage(vmmGObjectUI):
     def validate_storage(self, vmname,
                          path=None, size=None, sparse=None,
                          device="disk", fmt=None, collidelist=None):
+        collidelist = collidelist or []
         use_storage = self.widget("config-storage-box").is_sensitive()
         is_default = self.is_default_storage()
         conn = self.conn.get_backend()
@@ -331,7 +331,7 @@ class vmmAddStorage(vmmGObjectUI):
                     not self.widget("config-storage-nosparse").get_active())
             if path is None:
                 if is_default:
-                    path = self.get_default_path(vmname)
+                    path = self.get_default_path(vmname, collidelist)
                 else:
                     path = self.widget("config-storage-entry").get_text()
 
