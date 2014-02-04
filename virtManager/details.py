@@ -3152,7 +3152,8 @@ class vmmDetails(vmmGObjectUI):
 
             label = devtype.capitalize()
             if devtype in ["serial", "parallel", "console"]:
-                label += " %s" % (int(port) + 1)
+                if port is not None:
+                    label += " %s" % (int(port) + 1)
             elif devtype == "channel":
                 name = chardev.pretty_channel_name(chardev.target_name)
                 if name:
