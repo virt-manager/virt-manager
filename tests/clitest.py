@@ -702,6 +702,7 @@ c.add_valid("--disk pool=default,size=.00001")  # Building 'default' pool
 c.add_valid("--disk path=%(EXISTIMG1)s,bus=usb")  # Existing USB disk
 c.add_valid("--disk path=%(EXISTIMG1)s,bus=usb,removable=on")  # Existing USB disk as removable
 c.add_valid("--disk path=%(EXISTIMG1)s,bus=usb,removable=off")  # Existing USB disk as non-removable
+c.add_invalid("--disk %(NEWIMG1)s,sparse=true,size=100000000000 --force")  # Don't warn about fully allocated file exceeding disk space
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000 --nonsparse")  # Nonexisting file, size too big
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000")  # Huge file, sparse, but no prompting
 c.add_invalid("--file %(NEWIMG1)s")  # Nonexisting file, no size
@@ -714,7 +715,9 @@ c.add_invalid("--disk path=%(EXISTIMG1)s,perms=ro,size=.0001,cache=FOOBAR")  # U
 c.add_invalid("--disk path=%(NEWIMG1)s,format=qcow2,size=.0000001")  # Unmanaged file using non-raw format
 c.add_invalid("--disk path=%(MANAGEDDISKNEW1)s,format=raw,size=.0000001")  # Managed disk using any format
 c.add_invalid("--disk %(NEWIMG1)s")  # Not specifying path= and non existent storage w/ no size
+c.add_invalid("--disk %(NEWIMG1)s,sparse=true,size=100000000000")  # Fail if fully allocated file would exceed disk space
 c.add_invalid("--disk %(COLLIDE)s")  # Colliding storage without --force
+c.add_invalid("--disk %(COLLIDE)s --prompt")  # Colliding storage with --prompt should still fail
 c.add_invalid("--disk /dev/default-pool/backingl3.img")  # Colliding storage via backing store
 c.add_invalid("--disk %(DIR)s,device=cdrom")  # Dir without floppy
 c.add_invalid("--disk %(EXISTIMG1)s,driver_name=foobar,driver_type=foobaz")  # Unknown driver name and type options (as of 1.0.0)
@@ -957,67 +960,10 @@ c.add_invalid("--original-xml %(CLONE_DISK_XML)s --file %(ROIMG)s --file %(ROIMG
 # Automated prompt tests #
 ##########################
 
-# Basic virt-install prompting
-p1 = PromptTest("virt-install --connect %(TESTURI)s --prompt --quiet "
-               "--noautoconsole")
-p1.add("fully virtualized", "yes")
-p1.add("What is the name", "foo")
-p1.add("How much RAM", "64")
-p1.add("use as the disk", "%(NEWIMG1)s")
-p1.add("large would you like the disk", ".00001")
-p1.add("CD-ROM/ISO or URL", "%(EXISTIMG1)s")
-promptlist.append(p1)
-
-# Basic virt-install kvm prompting, existing disk
-p2 = PromptTest("virt-install --connect %(KVMURI)s --prompt --quiet "
-               "--noautoconsole --name foo --ram 64 --pxe --hvm")
-p2.add("use as the disk", "%(EXISTIMG1)s")
-p2.add("overwrite the existing path")
-p2.add("want to use this disk", "yes")
-promptlist.append(p2)
-
-# virt-install with install and --file-size and --hvm specified
-p3 = PromptTest("virt-install --connect %(TESTURI)s --prompt --quiet "
-               "--noautoconsole --pxe --file-size .00001 --hvm")
-p3.add("What is the name", "foo")
-p3.add("How much RAM", "64")
-p3.add("enter the path to the file", "%(NEWIMG1)s")
-promptlist.append(p3)
-
-# Basic virt-image prompting
-p4 = PromptTest("virt-image --connect %(TESTURI)s %(IMAGE_XML)s "
-               "--prompt --quiet --noautoconsole")
-# prompting for virt-image currently disabled
-#promptlist.append(p4)
-
-# Basic virt-clone prompting
-p5 = PromptTest("virt-clone --connect %(TESTURI)s --prompt --quiet "
-               "--clone-running")
-p5.add("original virtual machine", "test-clone-simple")
-p5.add("cloned virtual machine", "test-clone-new")
-p5.add("use as the cloned disk", "%(MANAGEDNEW1)s")
-promptlist.append(p5)
-
-# virt-clone prompt with input XML
-p6 = PromptTest("virt-clone --connect %(TESTURI)s --prompt --quiet "
-               "--original-xml %(CLONE_DISK_XML)s --clone-running")
-p6.add("cloned virtual machine", "test-clone-new")
-p6.add("use as the cloned disk", "%(NEWIMG1)s")
-p6.add("use as the cloned disk", "%(NEWIMG2)s")
-promptlist.append(p6)
-
-# Basic virt-clone prompting with disk failure handling
-p7 = PromptTest("virt-clone --connect %(TESTURI)s --prompt --quiet "
-               "--clone-running -o test-clone-simple -n test-clone-new")
-p7.add("use as the cloned disk", "/root")
-p7.add("'/root' must be a file or a device")
-p7.add("use as the cloned disk", "%(MANAGEDNEW1)s")
-promptlist.append(p7)
-
-p8 = PromptTest("virt-xml --connect %(TESTURI)s --confirm test "
+_p = PromptTest("virt-xml --connect %(TESTURI)s --confirm test "
     "--edit --cpu host-passthrough")
-p8.add("Define 'test' with the changed XML", "yes", num_lines=10)
-promptlist.append(p8)
+_p.add("Define 'test' with the changed XML", "yes", num_lines=10)
+promptlist.append(_p)
 
 
 #########################

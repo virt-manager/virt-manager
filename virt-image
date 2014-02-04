@@ -71,7 +71,7 @@ def main(conn=None):
 
     options.quiet = options.xmlonly or options.quiet
     cli.setupLogging("virt-image", options.debug, options.quiet)
-    cli.set_prompt(False)
+    cli.set_prompt(options.prompt)
 
     cli.convert_old_features(options)
     parsermap = cli.build_parser_map(options,
@@ -115,7 +115,10 @@ def main(conn=None):
     guest.replace = options.replace
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
 
-    cli.get_name(guest, options.name or image.name)
+    name = options.name or image.name
+    if not name:
+        fail(cli.name_missing)
+    guest.name = name
     if options.uuid:
         guest.uuid = options.uuid
 

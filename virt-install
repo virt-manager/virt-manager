@@ -130,39 +130,6 @@ def convert_old_init(options):
     logging.debug("Converted old --init to --boot %s", options.boot)
 
 
-def get_disks(guest, disks, nodisks, need_storage):
-    if nodisks:
-        return
-
-    if not disks and need_storage and cli.is_prompt():
-        disks = [None]
-
-    for disk in disks:
-        try:
-            if disk is None:
-                dev = None
-                sparse = True
-                size = None
-                path = None
-            else:
-                # We skip validation here, since we may have converted
-                # --file-size to --disk size=8 which doesn't validate on
-                # its own.
-                dev = cli.parse_disk(guest, disk,
-                                     virtinst.VirtualDisk(guest.conn),
-                                     validate=False)
-                size = dev.cli_size
-                path = dev.path
-                sparse = dev.get_sparse()
-
-            d = cli.disk_prompt(guest.conn, path, size, sparse, origdev=dev)
-            d.validate()
-        except ValueError, e:
-            fail(_("Error with storage parameters: %s" % str(e)))
-
-        guest.add_device(d)
-
-
 def convert_old_disks(options):
     if options.disk or options.nodisks:
         return
@@ -204,59 +171,6 @@ def convert_old_disks(options):
 # Virt type validation #
 ########################
 
-def prompt_virt(caps, arch, req_virt_type, req_accel):
-    supports_hvm   = False
-    supports_pv    = False
-    supports_accel = False
-    for guest in caps.guests:
-        if guest.os_type == "hvm":
-            supports_hvm = True
-
-        elif guest.os_type == "xen":
-            if (len(guest.domains) and
-                guest.domains[0].hypervisor_type == "kvm"):
-                # Don't prompt user for PV w/ xenner
-                continue
-            supports_pv = True
-
-    if not arch:
-        arch = caps.host.cpu.arch
-
-    if not req_virt_type:
-        if supports_hvm and supports_pv:
-            prompt_txt = _("Would you like a fully virtualized guest "
-                           "(yes or no)? This will allow you to run "
-                           "unmodified operating systems.")
-
-            if cli.prompt_for_yes_no(prompt_txt, ""):
-                req_virt_type = "hvm"
-            else:
-                req_virt_type = "xen"
-
-        elif supports_hvm:
-            req_virt_type = "hvm"
-
-        elif supports_pv:
-            req_virt_type = "xen"
-
-    # See if that domain supports acceleration
-    accel_type = ""
-    for guest in caps.guests:
-        if guest.os_type == req_virt_type and guest.arch == arch:
-            for dom in guest.domains:
-                if dom.is_accelerated():
-                    supports_accel = True
-                    accel_type = dom.hypervisor_type.upper()
-
-    if supports_accel and not req_accel:
-        prompt_txt = (_("Would you like to use %s acceleration? "
-                        "(yes or no)") % accel_type)
-
-        req_accel = cli.prompt_for_yes_no(prompt_txt, "")
-
-    return (req_virt_type, req_accel)
-
-
 def get_guest(conn, options):
     # Set up all virt/hypervisor parameters
     if sum([bool(f) for f in [options.fullvirt,
@@ -275,12 +189,6 @@ def get_guest(conn, options):
     else:
         # This should force capabilities to give us the most sensible default
         req_virt_type = None
-
-    if cli.is_prompt():
-        # User requested prompting but passed no virt type flag, ask for
-        # needed info
-        req_virt_type, req_accel = prompt_virt(conn.caps, options.arch,
-                                               req_virt_type, req_accel)
 
     logging.debug("Requesting virt method '%s', hv type '%s'.",
                   (req_virt_type and req_virt_type or _("default")),
@@ -319,47 +227,17 @@ def get_guest(conn, options):
 # Install media setup/validation #
 ##################################
 
-def get_install_media(guest, location, cdpath, need_install):
+def get_install_media(guest, location, cdpath):
     manual_cdrom = cdrom_specified(guest)
     cdinstall = bool(not location and (cdpath or cdrom_specified(guest)))
 
-    if not (location or cdpath or manual_cdrom or need_install):
+    if not (location or cdpath or manual_cdrom):
         return
 
     try:
-        if not location and not cdinstall and cli.is_prompt():
-            media_prompt(guest)
-        else:
-            validate_install_media(guest, location, cdpath, cdinstall)
+        validate_install_media(guest, location, cdpath, cdinstall)
     except ValueError, e:
         fail(_("Error validating install location: %s" % str(e)))
-
-
-def media_prompt(guest):
-    if guest.os.is_hvm():
-        prompt_txt = _("What is the install CD-ROM/ISO or URL?")
-    else:
-        prompt_txt = _("What is the install URL?")
-
-    while 1:
-        location = None
-        cdpath = None
-        media = cli.prompt_for_input("", prompt_txt, None)
-
-        if not len(media):
-            continue
-
-        if not guest.os.is_hvm() or media.count(":/"):
-            location = media
-        else:
-            cdpath = media
-
-        try:
-            validate_install_media(guest, location, cdpath)
-        except Exception, e:
-            logging.error(str(e))
-            continue
-        break
 
 
 def validate_install_media(guest, location, cdpath, cdinstall=False):
@@ -378,33 +256,27 @@ def validate_required_options(options, guest):
     # Required config. Don't error right away if nothing is specified,
     # aggregate the errors to help first time users get it right
     msg = ""
-    need_storage = False
-    need_install = False
 
     if not options.name:
         msg += "\n" + cli.name_missing
 
     if not options.memory:
-        msg += "\n" + cli.memory_missing
+        msg += "\n" + _("--memory amount in MB is required")
 
     if (not guest.os.is_container() and
         not storage_specified(options.disk,
                               options.nodisks,
                               options.filesystem)):
         msg += "\n" + disk_missing
-        need_storage = True
 
     if (not guest.os.is_container() and
         (not install_specified(options.location, options.cdrom,
                                options.pxe, options.import_install)) and
         (not cdrom_specified(guest, options.disk))):
         msg += "\n" + install_missing
-        need_install = True
 
-    if msg and not cli.is_prompt():
+    if msg:
         fail(msg)
-
-    return need_storage, need_install
 
 
 def check_option_collisions(options, guest):
@@ -581,18 +453,22 @@ def build_guest_instance(conn, options, parsermap):
     cli.set_os_variant(guest, options.distro_type, options.distro_variant)
     guest.autostart = options.autostart
 
-    cli.get_name(guest, options.name)
-
+    if options.name:
+        guest.name = options.name
     if options.uuid:
         guest.uuid = options.uuid
-    # This might be difficult to convert into options.metadata
     if options.description:
         guest.description = options.description
 
+    validate_required_options(options, guest)
+
     # We don't want to auto-parse --disk, but we wanted it for earlier
     # parameter introspection
-    del(parsermap["disk"])
     cli.parse_option_strings(parsermap, options, guest, None)
+
+    # Extra disk validation
+    for disk in guest.get_devices("disk"):
+        cli.validate_disk(disk)
 
     guest.add_default_input_device()
     guest.add_default_console_device()
@@ -600,15 +476,7 @@ def build_guest_instance(conn, options, parsermap):
     guest.add_default_usb_controller()
     guest.add_default_channels()
 
-    if cli.is_prompt():
-        cli.get_memory(guest, guest.memory and (guest.memory / 1024) or None)
-
-    # Do this after setting up all optional parameters, so we report error
-    # about those first.
-    need_storage, need_install = validate_required_options(options, guest)
-
-    get_disks(guest, options.disk, options.nodisks, need_storage)
-    get_install_media(guest, options.location, options.cdrom, need_install)
+    get_install_media(guest, options.location, options.cdrom)
 
     # Various little validations about option collisions. Need to do
     # this after setting guest.installer at least

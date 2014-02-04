@@ -35,10 +35,8 @@ import virtinst
 from virtinst import util
 
 
-MIN_RAM = 64
 force = False
 quiet = False
-doprompt = True
 
 
 ####################
@@ -46,7 +44,6 @@ doprompt = True
 ####################
 
 class VirtStreamHandler(logging.StreamHandler):
-
     def emit(self, record):
         """
         Based on the StreamHandler code from python 2.6: ripping out all
@@ -276,10 +273,6 @@ def install_fail(guest):
     sys.exit(1)
 
 
-#######################
-# CLI Prompting utils #
-#######################
-
 def set_force(val=True):
     global force
     force = val
@@ -287,287 +280,60 @@ def set_force(val=True):
 
 def set_prompt(prompt):
     # Set whether we allow prompts, or fail if a prompt pops up
-    global doprompt
-    doprompt = prompt
     if prompt:
-        logging.warning("--prompt mode is barely supported and likely to "
-                        "be removed in a future release.\n")
+        logging.warning("--prompt mode is no longer supported.")
 
 
-def is_prompt():
-    return doprompt
+name_missing    = _("--name is required")
 
 
-def _yes_no_convert(s):
-    tvalues = ["y", "yes", "1", "true", "t", "on"]
-    fvalues = ["n", "no", "0", "false", "f", "off"]
-
-    s = (s or "").lower()
-    if s in tvalues:
-        return True
-    elif s in fvalues:
-        return False
-    return None
-
-
-def _on_off_convert(key, val):
-    if val is None:
-        return None
-
-    val = _yes_no_convert(val)
-    if val is not None:
-        return val
-    raise fail(_("%(key)s must be 'yes' or 'no'") % {"key": key})
-
-
-def prompt_for_input(noprompt_err, prompt="", val=None, failed=False):
-    if val is not None:
-        return val
-
-    if force or not is_prompt():
-        if failed:
-            # We already failed validation in a previous function, just exit
-            _fail_exit()
-
-        fail(noprompt_err)
-
-    print_stdout(prompt + " ", do_force=True)
-    sys.stdout.flush()
-    return sys.stdin.readline().strip()
-
-
-def prompt_for_yes_no(warning, question):
-    """catches yes_no errors and ensures a valid bool return"""
-    if force:
-        logging.debug("Forcing return value of True to prompt '%s'")
-        return True
-
-    errmsg = warning + _(" (Use --force to override)")
-
-    while 1:
-        msg = warning
-        if question:
-            msg += ("\n" + question)
-
-        inp = prompt_for_input(errmsg, msg, None)
-        try:
-            res = _yes_no_convert(inp)
-            if res is None:
-                raise ValueError(_("A yes or no response is required"))
-            break
-        except ValueError, e:
-            logging.error(e)
-            continue
-    return res
-
-
-def prompt_loop(prompt_txt, noprompt_err, passed_val, obj, param_name,
-                err_txt="%s", func=None):
-    """
-    Prompt the user with 'prompt_txt' for a value. Set 'obj'.'param_name'
-    to the entered value. If it errors, use 'err_txt' to print a error
-    message, and then re prompt.
-    """
-
-    failed = False
-    while True:
-        passed_val = prompt_for_input(noprompt_err, prompt_txt, passed_val,
-                                      failed)
-        try:
-            if func:
-                return func(passed_val)
-            setattr(obj, param_name, passed_val)
-            break
-        except (ValueError, RuntimeError), e:
-            logging.error(err_txt, e)
-            passed_val = None
-            failed = True
-
-
-
-# Specific function for disk prompting. Returns a validated VirtualDisk
-def disk_prompt(conn, origpath, origsize, origsparse,
-                prompt_txt=None,
-                warn_overwrite=False, check_size=True,
-                path_to_clone=None, origdev=None):
-
-    askmsg = _("Do you really want to use this disk (yes or no)")
-    retry_path = True
-
-    no_path_needed = (origdev and
-                      (origdev.get_vol_install() or
-                       origdev.get_vol_object() or
-                       origdev.can_be_empty()))
-
-    def prompt_path(chkpath, chksize):
-        """
-        Prompt for disk path if nec
-        """
-        msg = None
-        patherr = _("A disk path must be specified.")
-        if path_to_clone:
-            patherr = (_("A disk path must be specified to clone '%s'.") %
-                       path_to_clone)
-
-        if not prompt_txt:
-            msg = _("What would you like to use as the disk (file path)?")
-            if not chksize is None:
-                msg = _("Please enter the path to the file you would like to "
-                        "use for storage. It will have size %sGB.") % chksize
-
-        if not no_path_needed:
-            path = prompt_for_input(patherr, prompt_txt or msg, chkpath)
+def validate_disk(dev, warn_overwrite=False):
+    def _optional_fail(msg):
+        if force:
+            logging.debug("--force skipping error condition '%s'", msg)
+            logging.warn(msg)
         else:
-            path = None
+            fail(msg + _(" (Use --force to override)"))
 
-        return path
-
-    def prompt_size(chkpath, chksize, path_exists):
-        """
-        Prompt for disk size if nec.
-        """
-        sizeerr = _("A size must be specified for non-existent disks.")
-        size_prompt = _("How large would you like the disk (%s) to "
-                        "be (in gigabytes)?") % chkpath
-
-        if (not chkpath or
-            path_exists or
-            chksize is not None or
-            not check_size):
-            return False, chksize
-
-        try:
-            chksize = prompt_loop(size_prompt, sizeerr, chksize, None, None,
-                               func=float)
-            return False, chksize
-        except Exception, e:
-            # Path is probably bogus, raise the error
-            fail(str(e), do_exit=not is_prompt())
-            return True, chksize
-
-    def prompt_path_exists(dev):
+    def check_path_exists(dev):
         """
         Prompt if disk file already exists and preserve mode is not used
         """
-        does_collide = (path_exists and
-                        dev.type == dev.TYPE_FILE and
-                        dev.device == dev.DEVICE_DISK)
-        msg = (_("This will overwrite the existing path '%s'" % dev.path))
+        if not warn_overwrite:
+            return
+        if virtinst.VirtualDisk.path_exists(dev.conn, dev.path):
+            _optional_fail(
+                _("This will overwrite the existing path '%s'" % dev.path))
 
-        if not does_collide:
-            return False
 
-        if warn_overwrite or is_prompt():
-            return not prompt_for_yes_no(msg, askmsg)
-        return False
-
-    def prompt_inuse_conflict(dev):
+    def check_inuse_conflict(dev):
         """
         Check if disk is inuse by another guest
         """
         names = dev.is_conflict_disk()
         if not names:
-            return False
+            return
 
-        msg = (_("Disk %s is already in use by other guests %s." %
-               (dev.path, names)))
-        return not prompt_for_yes_no(msg, askmsg)
+        _optional_fail(_("Disk %s is already in use by other guests %s." %
+            (dev.path, names)))
 
-    def prompt_size_conflict(dev):
+    def check_size_conflict(dev):
         """
         Check if specified size exceeds available storage
         """
         isfatal, errmsg = dev.is_size_conflict()
-        if isfatal:
-            fail(errmsg, do_exit=not is_prompt())
-            return True
+        # The isfatal case should have already caused us to fail
+        if not isfatal and errmsg:
+            _optional_fail(errmsg)
 
-        if errmsg:
-            return not prompt_for_yes_no(errmsg, askmsg)
-
-        return False
-
-    while 1:
-        # If we fail within the loop, reprompt for size and path
-        if not retry_path:
-            origpath = None
-            if not path_to_clone:
-                origsize = None
-        retry_path = False
-
-        # Get disk path
-        path = prompt_path(origpath, origsize)
-        path_exists = virtinst.VirtualDisk.path_exists(conn, path)
-
-        # Get storage size
-        didfail, size = prompt_size(path, origsize, path_exists)
-        if didfail:
-            continue
-
-        # Build disk object for validation
-        try:
-            if origdev:
-                dev = origdev
-                if path is not None and path != dev.path:
-                    dev.path = path
-                if size is not None and size != dev.get_size():
-                    dev.set_create_storage(size=size, sparse=origsparse)
-            else:
-                dev = virtinst.VirtualDisk(conn)
-                dev.path = path
-                dev.set_create_storage(size=size, sparse=origsparse)
-            dev.validate()
-        except ValueError, e:
-            if is_prompt():
-                logging.error(e)
-                continue
-            else:
-                fail(_("Error with storage parameters: %s" % str(e)))
-
-        # Check if path exists
-        if prompt_path_exists(dev):
-            continue
-
-        # Check disk in use by other guests
-        if prompt_inuse_conflict(dev):
-            continue
-
-        # Check if disk exceeds available storage
-        if prompt_size_conflict(dev):
-            continue
-
-        # Passed all validation, return disk instance
-        return dev
+    check_path_exists(dev)
+    check_inuse_conflict(dev)
+    check_size_conflict(dev)
 
 
-#######################
-# Validation wrappers #
-#######################
-
-name_missing    = _("--name is required")
-memory_missing     = _("--memory amount in MB is required")
-
-
-def get_name(guest, name):
-    prompt_txt = _("What is the name of your virtual machine?")
-    err_txt = name_missing
-    prompt_loop(prompt_txt, err_txt, name, guest, "name")
-
-
-def get_memory(guest, memory):
-    prompt_txt = _("How much RAM should be allocated (in megabytes)?")
-    err_txt = memory_missing
-
-    def check_memory(mem):
-        mem = int(mem)
-        if mem < MIN_RAM:
-            raise ValueError(_("Installs currently require %d megs "
-                               "of RAM.") % MIN_RAM)
-        guest.memory = mem * 1024
-
-    prompt_loop(prompt_txt, err_txt, memory, guest, "memory",
-                func=check_memory)
-
+###########################
+# CLI back compat helpers #
+###########################
 
 def convert_old_memory(options):
     if options.memory:
@@ -970,6 +736,27 @@ def add_disk_option(stog, editexample=False):
 # CLI complex parsing helpers               #
 # (for options like --disk, --network, etc. #
 #############################################
+
+def _on_off_convert(key, val):
+    if val is None:
+        return None
+
+    def _yes_no_convert(s):
+        tvalues = ["y", "yes", "1", "true", "t", "on"]
+        fvalues = ["n", "no", "0", "false", "f", "off"]
+
+        s = (s or "").lower()
+        if s in tvalues:
+            return True
+        elif s in fvalues:
+            return False
+        return None
+
+    val = _yes_no_convert(val)
+    if val is not None:
+        return val
+    raise fail(_("%(key)s must be 'yes' or 'no'") % {"key": key})
+
 
 class _VirtCLIArgument(object):
     def __init__(self, attrname, cliname,

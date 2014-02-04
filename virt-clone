@@ -27,7 +27,7 @@ import sys
 import urlgrabber.progress as progress
 
 import virtinst.cli as cli
-from virtinst import Cloner
+from virtinst import Cloner, VirtualDisk
 from virtinst.cli import fail, print_stdout, print_stderr
 
 
@@ -38,13 +38,12 @@ def get_clone_name(new_name, auto_clone, design):
         new_name = design.generate_clone_name()
         logging.debug("Auto-generated clone name '%s'", new_name)
 
-    prompt_txt = _("What is the name for the cloned virtual machine?")
-    err_txt = _("A name is required for the new virtual machine.")
-    cli.prompt_loop(prompt_txt, err_txt, new_name, design, "clone_name")
+    if not new_name:
+        fail(_("A name is required for the new virtual machine."))
+    design.clone_name = new_name
 
 
 def get_original_guest(guest_name, origfile, design):
-
     origxml = None
     if origfile:
         f = open(origfile, "r")
@@ -57,10 +56,9 @@ def get_original_guest(guest_name, origfile, design):
         except (ValueError, RuntimeError), e:
             fail(e)
 
-    prompt_txt = _("What is the name of the original virtual machine?")
-    err_txt = _("An original machine name or xml file is required.")
-    cli.prompt_loop(prompt_txt, err_txt,
-                    guest_name, design, "original_guest")
+    if not guest_name:
+        fail(_("An original machine name or xml file is required."))
+    design.original_guest = guest_name
 
 
 def get_clone_macaddr(new_mac, design):
@@ -72,6 +70,22 @@ def get_clone_macaddr(new_mac, design):
 def get_clone_uuid(new_uuid, design):
     if new_uuid is not None:
         design.clone_uuid = new_uuid
+
+
+def _build_disk(conn, new_path, orig_path, preserve):
+    if not new_path:
+        fail(_("A disk path must be specified to clone '%s'.") % orig_path)
+
+    try:
+        dev = VirtualDisk(conn)
+        dev.path = new_path
+        dev.set_create_storage(size=.0001, sparse=False)
+        dev.validate()
+    except ValueError, e:
+        fail(_("Error with storage parameters: %s" % str(e)))
+
+    cli.validate_disk(dev, warn_overwrite=not preserve)
+    return dev
 
 
 def get_clone_diskfile(new_diskfiles, design, preserve=False,
@@ -94,24 +108,12 @@ def get_clone_diskfile(new_diskfiles, design, preserve=False,
         if origpath is None:
             devpath = None
         else:
-            dev = _check_disk(design.conn, disk, origpath, preserve)
+            dev = _build_disk(design.conn, disk, origpath, preserve)
             devpath = dev.path
 
         clonepaths.append(devpath)
         newidx += 1
     design.clone_paths = clonepaths
-
-
-def _check_disk(conn, clone_path, orig_path, preserve):
-
-    prompt_txt = (_("What would you like to use as the cloned disk "
-                    "(file path) for '%s'?") % orig_path)
-
-    return cli.disk_prompt(conn, clone_path, .00001, False,
-                           prompt_txt,
-                           warn_overwrite=not preserve,
-                           check_size=False,
-                           path_to_clone=orig_path)
 
 
 def get_clone_sparse(sparse, design):
