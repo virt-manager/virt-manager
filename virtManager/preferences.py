@@ -42,6 +42,7 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_console_resizeguest()
         self.refresh_new_vm_sound()
         self.refresh_graphics_type()
+        self.refresh_add_spice_usbredir()
         self.refresh_storage_format()
         self.refresh_cpu_default()
         self.refresh_disk_poll()
@@ -57,15 +58,17 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_confirm_delstorage()
 
         self.builder.connect_signals({
+            "on_vmm_preferences_delete_event": self.close,
+            "on_prefs_close_clicked": self.close,
+
             "on_prefs_system_tray_toggled" : self.change_view_system_tray,
             "on_prefs_stats_update_interval_changed": self.change_update_interval,
             "on_prefs_console_accels_toggled": self.change_console_accels,
             "on_prefs_console_scaling_changed": self.change_console_scaling,
             "on_prefs_console_resizeguest_changed": self.change_console_resizeguest,
-            "on_prefs_close_clicked": self.close,
-            "on_vmm_preferences_delete_event": self.close,
             "on_prefs_new_vm_sound_toggled": self.change_new_vm_sound,
             "on_prefs_graphics_type_changed": self.change_graphics_type,
+            "on_prefs_add_spice_usbredir_changed": self.change_add_spice_usbredir,
             "on_prefs_storage_format_changed": self.change_storage_format,
             "on_prefs_cpu_default_changed": self.change_cpu_default,
             "on_prefs_stats_enable_disk_toggled": self.change_disk_poll,
@@ -80,6 +83,9 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_confirm_delstorage_toggled": self.change_confirm_delstorage,
             "on_prefs_btn_keys_define_clicked": self.change_grab_keys,
         })
+
+        self.widget("prefs-graphics-type").emit("changed")
+
         self.bind_escape_key_close()
 
     def close(self, ignore1=None, ignore2=None):
@@ -126,6 +132,16 @@ class vmmPreferences(vmmGObjectUI):
         for row in [["system", _("System default (%s)") %
                      self.config.default_graphics_from_config],
                     ["vnc", "VNC"], ["spice", "Spice"]]:
+            model.append(row)
+        combo.set_model(model)
+        uiutil.set_combo_text_column(combo, 1)
+
+        combo = self.widget("prefs-add-spice-usbredir")
+        # [gsettings value, string]
+        model = Gtk.ListStore(str, str)
+        for row in [["system", _("System default (%s)") %
+                     self.config.default_add_spice_usbredir],
+                    ["yes", "Yes"], ["Yes", "no"]]:
             model.append(row)
         combo.set_model(model)
         uiutil.set_combo_text_column(combo, 1)
@@ -185,6 +201,10 @@ class vmmPreferences(vmmGObjectUI):
         combo = self.widget("prefs-graphics-type")
         gtype = self.config.get_graphics_type(raw=True)
         uiutil.set_row_selection(combo, gtype)
+    def refresh_add_spice_usbredir(self):
+        combo = self.widget("prefs-add-spice-usbredir")
+        val = self.config.get_add_spice_usbredir(raw=True)
+        uiutil.set_row_selection(combo, val)
     def refresh_storage_format(self):
         combo = self.widget("prefs-storage-format")
         val = self.config.get_default_storage_format(raw=True)
@@ -321,8 +341,13 @@ class vmmPreferences(vmmGObjectUI):
     def change_new_vm_sound(self, src):
         self.config.set_new_vm_sound(src.get_active())
     def change_graphics_type(self, src):
-        typ = uiutil.get_list_selection(src, 0) or "vnc"
-        self.config.set_graphics_type(typ.lower())
+        val = uiutil.get_list_selection(src, 0)
+        self.config.set_graphics_type(val)
+        uiutil.set_grid_row_visible(
+            self.widget("prefs-add-spice-usbredir"),
+            self.config.get_graphics_type() == "spice")
+    def change_add_spice_usbredir(self, src):
+        self.config.set_add_spice_usbredir(uiutil.get_list_selection(src, 0))
     def change_storage_format(self, src):
         typ = uiutil.get_list_selection(src, 0) or "default"
         self.config.set_storage_format(typ.lower())

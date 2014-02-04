@@ -296,6 +296,8 @@ SUPPORT_CONN_PM_DISABLE = _make(version="10002",
     drv_version=[("qemu", 1002000), ("test", 0)])
 SUPPORT_CONN_QCOW2_LAZY_REFCOUNTS = _make(version="1001000",
     drv_version=[("qemu", 1002000), ("test", 0)])
+SUPPORT_CONN_USBREDIR = _make(version="9005",
+    drv_version=[("qemu", 1003000), ("test", 0)])
 
 
 # Domain checks

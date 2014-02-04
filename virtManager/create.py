@@ -1393,6 +1393,15 @@ class vmmCreate(vmmGObjectUI):
             if self.config.get_new_vm_sound():
                 guest.add_default_sound_device()
 
+            if (gdev and
+                self.config.get_add_spice_usbredir() == "yes" and
+                self.conn.check_support(self.conn.SUPPORT_CONN_USBREDIR)):
+                for ignore in range(4):
+                    dev = virtinst.VirtualRedirDevice(guest.conn)
+                    dev.bus = "usb"
+                    dev.type = "spicevmc"
+                    guest.add_device(dev)
+
             if (((guest.conn.is_qemu() and guest.type == "kvm") or
                  guest.conn.is_test()) and
                 guest.os.is_x86() and
