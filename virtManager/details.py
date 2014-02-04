@@ -46,7 +46,7 @@ from virtinst import util
 from virtinst import VirtualRNGDevice
 
 
-# Parameters that can be editted in the details window
+# Parameters that can be edited in the details window
 (EDIT_NAME,
 EDIT_TITLE,
 EDIT_MACHTYPE,
