@@ -464,6 +464,14 @@ class StorageVolume(_StorageObject):
                    "qcow2", "qed", "vmdk", "vpc", "fat", "vhd", "vdi"]
 
     @staticmethod
+    def get_file_extension_for_format(fmt):
+        if not fmt:
+            return ""
+        if fmt == "raw":
+            return ".img"
+        return "." + fmt
+
+    @staticmethod
     def find_free_name(pool_object, basename, **kwargs):
         """
         Finds a name similar (or equal) to passed 'basename' that is not

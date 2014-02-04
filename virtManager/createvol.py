@@ -113,10 +113,10 @@ class vmmCreateVolume(vmmGObjectUI):
         return ret
 
     def default_suffix(self):
-        suffix = ""
-        if self.vol.file_type == self.vol.TYPE_FILE:
-            suffix = ".img"
-        return suffix
+        if self.vol.file_type != self.vol.TYPE_FILE:
+            return ""
+        return StorageVolume.get_file_extension_for_format(
+            self.get_config_format())
 
     def _init_state(self):
         blue = Gdk.color_parse("#0072A8")
@@ -255,6 +255,7 @@ class vmmCreateVolume(vmmGObjectUI):
         ignore = src
         self._show_alloc()
         self._show_backing()
+        self.widget("vol-name").emit("changed")
 
     def browse_backing(self, src):
         ignore = src

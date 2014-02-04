@@ -67,8 +67,9 @@ class vmmAddStorage(vmmGObjectUI):
 
     def _get_ideal_path_info(self, name):
         path = self._get_default_dir()
-        suffix = ".img"
-        return (path, name, suffix)
+        fmt = self.conn.get_default_storage_format()
+        suffix = virtinst.StorageVolume.get_file_extension_for_format(fmt)
+        return (path, name, suffix or ".img")
 
     def _get_ideal_path(self, name):
         target, name, suffix = self._get_ideal_path_info(name)
