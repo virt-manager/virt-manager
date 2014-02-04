@@ -292,6 +292,10 @@ Change all disk devices of type 'disk' to use cache=none, using XML from stdin, 
 
   # cat <xmlfile> | virt-xml --edit device=disk --disk cache=none
 
+Change disk 'hda' IO to native and use startup policy as 'optional'.
+
+  # virt-xml fedora20 --edit target=hda --disk io=native,startup_policy=optional
+
 Change all host devices to use driver_name=vfio for VM 'fedora20' on the remote connection
 
   # virt-xml --connect qemu+ssh://remotehost/system \
