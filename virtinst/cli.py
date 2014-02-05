@@ -629,7 +629,7 @@ def add_net_option(devg):
              "--network help"))
 
 
-def add_device_options(devg):
+def add_device_options(devg, sound_back_compat=False):
     devg.add_argument("--controller", action="append",
                     help=_("Configure a guest controller device. Ex:\n"
                            "--controller type=usb,model=ich9-ehci1"))
@@ -645,8 +645,19 @@ def add_device_options(devg):
     devg.add_argument("--host-device", action="append",
                     help=_("Configure physical host devices attached to the "
                            "guest"))
-    devg.add_argument("--soundhw", action="append",
-                    help=_("Configure guest sound device emulation"))
+
+    # --sound used to be a boolean option, hence the nargs handling
+    sound_kwargs = {
+        "action": "append",
+        "help": _("Configure guest sound device emulation"),
+    }
+    if sound_back_compat:
+        sound_kwargs["nargs"] = '?'
+    devg.add_argument("--sound", **sound_kwargs)
+    if sound_back_compat:
+        devg.add_argument("--soundhw", action="append", dest="sound",
+            help=argparse.SUPPRESS)
+
     devg.add_argument("--watchdog", action="append",
                     help=_("Configure a guest watchdog device"))
     devg.add_argument("--video", action="append",
@@ -1963,7 +1974,7 @@ class ParserVideo(VirtCLIParser):
 
 
 #####################
-# --soundhw parsing #
+# --sound parsing #
 #####################
 
 class ParserSound(VirtCLIParser):
@@ -2044,7 +2055,7 @@ def build_parser_map(options, skip=None, only=None):
     register_parser("console", ParserConsole)
     register_parser("filesystem", ParserFilesystem)
     register_parser("video", ParserVideo)
-    register_parser("soundhw", ParserSound)
+    register_parser("sound", ParserSound)
     register_parser("host-device", ParserHostdev)
     register_parser("panic", ParserPanic)
 

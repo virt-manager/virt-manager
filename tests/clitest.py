@@ -580,8 +580,8 @@ c.add_valid("--hvm --cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k
 c.add_valid("--hvm --cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --print-step 3")  # HVM windows install, print 3rd stage XML
 c.add_valid("--hvm --nodisks --pxe --watchdog default")  # --watchdog dev default
 c.add_valid("--hvm --nodisks --pxe --watchdog ib700,action=pause")  # --watchdog opts
-c.add_valid("--hvm --nodisks --pxe --sound")  # --sound option
-c.add_valid("--hvm --nodisks --pxe --soundhw default --soundhw ac97")  # --soundhw option
+c.add_valid("--hvm --nodisks --pxe --sound")  # --sound with no option back compat
+c.add_valid("--hvm --nodisks --pxe --soundhw default --sound ac97")  # --soundhw option
 c.add_valid("--hvm --nodisks --pxe --security type=dynamic")  # --security dynamic
 c.add_valid("--hvm --nodisks --pxe --security label=foobar.label,relabel=yes")  # --security implicit static
 c.add_valid("--hvm --nodisks --pxe --security label=foobar.label,a1,z2,b3,type=static,relabel=no")  # --security static with commas 1
@@ -775,7 +775,7 @@ c.add_invalid("--hvm --boot kernel=%(TREEDIR)s/pxeboot/vmlinuz,initrd=%(TREEDIR)
 vixml = App("virt-xml")
 c = vixml.add_category("misc", "")
 c.add_valid("--help")  # basic --help test
-c.add_valid("--soundhw=? --tpm=?")  # basic introspection test
+c.add_valid("--sound=? --tpm=?")  # basic introspection test
 c.add_invalid("test --edit --hostdev driver_name=vfio")  # Guest has no hostdev to edit
 c.add_invalid("test --edit --cpu host-passthrough --boot hd,network")  # Specified more than 1 option
 c.add_invalid("test --edit")  # specified no edit option
@@ -822,15 +822,15 @@ c.add_compare("--channel null", "virtxml-edit-simple-channel")
 c.add_compare("--console target_type=serial", "virtxml-edit-simple-console")
 c.add_compare("--filesystem /1/2/3,/4/5/6,mode=mapped", "virtxml-edit-simple-filesystem")
 c.add_compare("--video cirrus", "virtxml-edit-simple-video")
-c.add_compare("--soundhw pcspk", "virtxml-edit-simple-soundhw")
+c.add_compare("--sound pcspk", "virtxml-edit-simple-soundhw")
 c.add_compare("--host-device 0x0781:0x5151,driver_name=vfio", "virtxml-edit-simple-host-device")
 
 c = vixml.add_category("edit selection", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
 c.add_invalid("--edit target=vvv --disk /dev/null")  # no match found
-c.add_compare("--edit 3 --soundhw pcspk", "virtxml-edit-pos-num")
+c.add_compare("--edit 3 --sound pcspk", "virtxml-edit-pos-num")
 c.add_compare("--edit -1 --video qxl", "virtxml-edit-neg-num")
 c.add_compare("--edit all --host-device driver_name=vfio", "virtxml-edit-all")
-c.add_compare("--edit ich6 --soundhw pcspk", "virtxml-edit-select-sound-model")
+c.add_compare("--edit ich6 --sound pcspk", "virtxml-edit-select-sound-model")
 c.add_compare("--edit target=hda --disk /dev/null", "virtxml-edit-select-disk-target")
 c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "virtxml-edit-select-disk-path")
 c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "virtxml-edit-select-network-mac")
@@ -845,11 +845,11 @@ c = vixml.add_category("add/rm devices", "test-many-devices --print-diff --defin
 c.add_invalid("--add-device --security foo")  # --add-device without a device
 c.add_invalid("--remove-device --clock utc")  # --remove-device without a dev
 c.add_compare("--add-device --host-device net_00_1c_25_10_b1_e4", "virtxml-add-host-device")
-c.add_compare("--add-device --soundhw pcspk", "virtxml-add-sound")
+c.add_compare("--add-device --sound pcspk", "virtxml-add-sound")
 c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "virtxml-add-disk-basic")
 c.add_compare("--add-device --disk %(EXISTIMG1)s", "virtxml-add-disk-notarget")  # filling in acceptable target
 c.add_compare("--add-device --disk %(NEWIMG1)s,size=.01", "virtxml-add-disk-create-storage")
-c.add_compare("--remove-device --soundhw ich6", "virtxml-remove-sound-model")
+c.add_compare("--remove-device --sound ich6", "virtxml-remove-sound-model")
 c.add_compare("--remove-device --disk 6", "virtxml-remove-disk-index")
 c.add_compare("--remove-device --disk /dev/null", "virtxml-remove-disk-path")
 c.add_compare("--remove-device --video all", "virtxml-remove-video-all")

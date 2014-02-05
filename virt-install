@@ -114,11 +114,11 @@ def check_cdrom_option_error(options):
 ##############################
 
 def convert_old_sound(options):
-    if options.soundhw:
+    if not options.sound:
         return
-    if not options.old_sound_bool:
-        return
-    options.soundhw = "default"
+    for idx in range(len(options.sound)):
+        if options.sound[idx] is None:
+            options.sound[idx] = "default"
 
 
 def convert_old_init(options):
@@ -871,11 +871,7 @@ def parse_args():
                            "console"))
 
     devg = parser.add_argument_group(_("Device Options"))
-    cli.add_device_options(devg)
-
-    # Deprecated
-    devg.add_argument("--sound", action="store_true", dest="old_sound_bool",
-                    default=False, help=argparse.SUPPRESS)
+    cli.add_device_options(devg, sound_back_compat=True)
 
     virg = parser.add_argument_group(_("Virtualization Platform Options"))
     virg.add_argument("-v", "--hvm", action="store_true", dest="fullvirt",

@@ -110,7 +110,7 @@ Remove the second disk device
 
 Remove all network devices
 
-=item --remove-device --soundhw pcspk
+=item --remove-device --sound pcspk
 
 Remove all sound devices with model='pcspk'
 
@@ -206,7 +206,7 @@ Before defining or updating the domain, show the generated XML diff and interact
 
 =item --host-device
 
-=item --soundhw
+=item --sound
 
 =item --watchdog
 
@@ -278,7 +278,7 @@ Clear the previous <cpu> definition of domain 'winxp', change it to 'host-model'
 
 Change the second sound card to model=ich6 on 'fedora19', but only output the diff:
 
-  # virt-xml fedora19 --edit 2 --soundhw model=ich6 --print-diff
+  # virt-xml fedora19 --edit 2 --sound model=ich6 --print-diff
 
 Update the every graphics device password to 'foo' of the running VM 'rhel6':
 
