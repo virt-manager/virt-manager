@@ -60,6 +60,9 @@ class vmmNetworkList(vmmGObjectUI):
     def _cleanup(self):
         try:
             self.conn.disconnect_by_func(self._repopulate_network_list)
+            self.conn.disconnect_by_func(self._repopulate_network_list)
+            self.conn.disconnect_by_func(self._repopulate_network_list)
+            self.conn.disconnect_by_func(self._repopulate_network_list)
         except:
             pass
 
