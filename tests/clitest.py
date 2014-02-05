@@ -380,7 +380,7 @@ class App(object):
         if not iscompare:
             args = "--debug"
 
-        if self.appname != "virt-convert" and not iscompare:
+        if self.appname != "virt-convert":
             if "--connect " not in cli:
                 args += " --connect %(TESTURI)s"
 
@@ -404,9 +404,6 @@ class App(object):
             elif self.appname == "virt-clone":
                 if not cli.count("--print-xml"):
                     args += " --print-xml"
-
-            if self.appname != "virt-convert" and not "--connect " in cli:
-                args += " --connect %s" % utils.fakeuri
 
         return args
 
