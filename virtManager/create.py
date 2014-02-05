@@ -1391,30 +1391,14 @@ class vmmCreate(vmmGObjectUI):
 
             guest.skip_default_usbredir = (
                 self.config.get_add_spice_usbredir() == "no")
+            guest.x86_cpu_default = self.config.get_default_cpu_setting(
+                for_cpu=True)
 
             guest.add_default_video_device()
             guest.add_default_input_device()
             guest.add_default_console_device()
             guest.add_default_usb_controller()
             guest.add_default_channels()
-
-            if (((guest.conn.is_qemu() and guest.type == "kvm") or
-                 guest.conn.is_test()) and
-                guest.os.is_x86() and
-                guest.os.arch == guest.conn.caps.host.cpu.arch):
-                cpu_type = self.config.get_default_cpu_setting()
-
-                if cpu_type == "hv-default":
-                    pass
-                elif cpu_type == "host-cpu-model":
-                    if guest.conn.caps.host.cpu.model:
-                        guest.cpu.model = guest.conn.caps.host.cpu.model
-                elif cpu_type == "host-model":
-                    # host-model has known issues, so use our 'copy cpu'
-                    # behavior until host-model does what we need
-                    guest.cpu.copy_host_cpu()
-                else:
-                    raise RuntimeError("Unknown cpu default '%s'" % cpu_type)
 
             if self.conn.check_support(self.conn.SUPPORT_CONN_PM_DISABLE):
                 guest.pm.suspend_to_mem = False

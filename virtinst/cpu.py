@@ -38,12 +38,41 @@ class CPU(XMLBuilder):
     """
     Class for generating <cpu> XML
     """
-
     MATCHS = ["minimum", "exact", "strict"]
 
     _XML_ROOT_NAME = "cpu"
     _XML_PROP_ORDER = ["mode", "match", "model", "vendor",
                        "sockets", "cores", "threads", "features"]
+
+    special_mode_was_set = False
+    # These values are exposed on the command line, so are stable API
+    SPECIAL_MODE_HOST_MODEL_ONLY = "host-model-only"
+    SPECIAL_MODE_HV_DEFAULT = "hv-default"
+    SPECIAL_MODE_HOST_COPY = "host-copy"
+    SPECIAL_MODE_HOST_MODEL = "host-model"
+    SPECIAL_MODE_HOST_PASSTHROUGH = "host-passthrough"
+    SPECIAL_MODE_CLEAR = "clear"
+    SPECIAL_MODES = [SPECIAL_MODE_HOST_MODEL_ONLY, SPECIAL_MODE_HV_DEFAULT,
+                     SPECIAL_MODE_HOST_COPY, SPECIAL_MODE_HOST_MODEL,
+                     SPECIAL_MODE_HOST_PASSTHROUGH, SPECIAL_MODE_CLEAR]
+    def set_special_mode(self, val):
+        if (val == self.SPECIAL_MODE_HOST_MODEL or
+            val == self.SPECIAL_MODE_HOST_PASSTHROUGH):
+            self.model = None
+            self.mode = val
+        elif val == self.SPECIAL_MODE_HOST_COPY:
+            self.copy_host_cpu()
+        elif (val == self.SPECIAL_MODE_HV_DEFAULT or
+              val == self.SPECIAL_MODE_CLEAR):
+            self.clear()
+        elif val == self.SPECIAL_MODE_HOST_MODEL_ONLY:
+            if self.conn.caps.host.cpu.model:
+                self.model = self.conn.caps.host.cpu.model
+        else:
+            raise RuntimeError("programming error: unknown "
+                "special cpu mode '%s'" % val)
+
+        self.special_mode_was_set = True
 
     def add_feature(self, name, policy="require"):
         feature = CPUFeature(self.conn)

@@ -1236,13 +1236,12 @@ class ParserCPU(VirtCLIParser):
             ignore = opts
             ignore = cliname
             if val == "host":
-                inst.cpu.copy_host_cpu()
-            elif (val == "host-model-only" and
-                  self.guest.conn.caps.host.cpu.model):
-                inst.cpu.model = self.guest.conn.caps.host.cpu.model
-            elif val == "host-model" or val == "host-passthrough":
-                inst.cpu.model = None
-                inst.cpu.mode = val
+                val = inst.cpu.SPECIAL_MODE_HOST_COPY
+            if val == "none":
+                val = inst.cpu.SPECIAL_MODE_CLEAR
+
+            if val in inst.cpu.SPECIAL_MODES:
+                inst.cpu.set_special_mode(val)
             else:
                 inst.cpu.model = val
 

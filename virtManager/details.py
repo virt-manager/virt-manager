@@ -874,8 +874,10 @@ class vmmDetails(vmmGObjectUI):
         cpu_model.set_row_separator_func(sep_func, None)
         model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
         model.append([_("Application Default"), "1", "appdefault", False])
-        model.append([_("Hypervisor Default"), "2", "hypdefault", False])
-        model.append([_("Clear CPU configuration"), "3", "clearcpu", False])
+        model.append([_("Hypervisor Default"), "2",
+            virtinst.CPU.SPECIAL_MODE_HV_DEFAULT, False])
+        model.append([_("Clear CPU configuration"), "3",
+            virtinst.CPU.SPECIAL_MODE_CLEAR, False])
         model.append([None, None, None, True])
         for name in [c.model for c in cpu_values.cpus]:
             model.append([name, name, name, False])
@@ -1426,43 +1428,22 @@ class vmmDetails(vmmGObjectUI):
     def get_config_cpu_model(self):
         cpu_list = self.widget("cpu-model")
         text = cpu_list.get_child().get_text()
-        model = None
-        mode = None
-        copy_host = bool(self.widget("cpu-copy-host").get_active())
-        key = None
 
-        row = None
-        for r in cpu_list.get_model():
-            if text == r[0]:
-                row = r
+        if self.widget("cpu-copy-host").get_active():
+            return virtinst.CPU.SPECIAL_MODE_HOST_COPY
+
+        key = None
+        for row in cpu_list.get_model():
+            if text == row[0]:
+                key = row[2]
                 break
 
-        if row:
-            key = row[2]
-        elif text == "host-model" or text == "host-passthrough":
-            mode = text
-        else:
-            model = text
+        if not key:
+            return text
 
-        if key == "hypdefault" or key == "clearcpu":
-            # Clear the whole CPU
-            pass
-        elif key == "appdefault":
-            cpu_type = self.config.get_default_cpu_setting()
-
-            if cpu_type == "hv-default":
-                pass
-            elif cpu_type == "host-cpu-model":
-                if self.vm.conn.caps.host.cpu.model:
-                    model = self.vm.conn.caps.host.cpu.model
-            elif cpu_type == "host-model":
-                copy_host = True
-            else:
-                raise RuntimeError("Unknown cpu default '%s'" % cpu_type)
-        elif key:
-            model = key
-
-        return model, mode, copy_host
+        if key == "appdefault":
+            return self.config.get_default_cpu_setting(for_cpu=True)
+        return key
 
 
     ##############################
@@ -1875,9 +1856,8 @@ class vmmDetails(vmmGObjectUI):
             add_define(self.vm.define_cpuset, cpuset)
 
         if self.edited(EDIT_CPU):
-            model, mode, copy_host = self.get_config_cpu_model()
-            add_define(self.vm.define_cpu,
-                       model, mode, copy_host)
+            val = self.get_config_cpu_model()
+            add_define(self.vm.define_cpu, val)
 
         if self.edited(EDIT_TOPOLOGY):
             do_top = self.widget("cpu-topology-enable").get_active()
@@ -2461,7 +2441,8 @@ class vmmDetails(vmmGObjectUI):
             self.widget("cpu-model").get_child().set_text(model)
         else:
             uiutil.set_combo_entry(
-                self.widget("cpu-model"), "hypdefault", 2)
+                self.widget("cpu-model"),
+                virtinst.CPU.SPECIAL_MODE_HV_DEFAULT, 2)
 
         # Determine if CPU definition is just the host copy
         hostcpu = self.conn.caps.host.cpu

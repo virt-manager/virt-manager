@@ -26,6 +26,7 @@ from gi.repository import GLib
 from gi.repository import Gtk
 # pylint: enable=E0611
 
+from virtinst import CPU
 from virtManager.keyring import vmmKeyring, vmmSecret
 
 running_config = None
@@ -455,14 +456,24 @@ class vmmConfig(object):
     def set_storage_format(self, typ):
         self.conf.set("/new-vm/storage-format", typ.lower())
 
-    def get_default_cpu_setting(self, raw=False):
+    def get_default_cpu_setting(self, raw=False, for_cpu=False):
         ret = self.conf.get("/new-vm/cpu-default")
-        whitelist = ["default", "hv-default", "host-cpu-model", "host-model"]
+        whitelist = [CPU.SPECIAL_MODE_HOST_MODEL_ONLY,
+                     CPU.SPECIAL_MODE_HOST_MODEL,
+                     CPU.SPECIAL_MODE_HV_DEFAULT]
 
         if ret not in whitelist:
             ret = "default"
         if ret == "default" and not raw:
             ret = self.cpu_default_from_config
+            if ret not in whitelist:
+                ret = whitelist[0]
+
+        if for_cpu and ret == CPU.SPECIAL_MODE_HOST_MODEL:
+            # host-model has known issues, so use our 'copy cpu'
+            # behavior until host-model does what we need
+            ret = CPU.SPECIAL_MODE_HOST_COPY
+
         return ret
     def set_default_cpu_setting(self, val):
         self.conf.set("/new-vm/cpu-default", val.lower())

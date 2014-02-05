@@ -108,6 +108,7 @@ class Guest(XMLBuilder):
         self.skip_default_channel = False
         self.skip_default_sound = False
         self.skip_default_usbredir = False
+        self.x86_cpu_default = self.cpu.SPECIAL_MODE_HOST_MODEL_ONLY
 
         self._os_variant = None
         self._random_uuid = None
@@ -692,6 +693,20 @@ class Guest(XMLBuilder):
 
     def _set_cpu_defaults(self):
         self.cpu.set_topology_defaults(self.vcpus)
+
+        if (not self.conn.is_test() and not
+            (self.conn.is_qemu() and self.type == "kvm")):
+            return
+        if not self.os.is_x86():
+            return
+        if self.os.arch != self.conn.caps.host.cpu.arch:
+            return
+        if self.cpu.special_mode_was_set:
+            return
+        if self.cpu.get_xml_config().strip():
+            return
+
+        self.cpu.set_special_mode(self.x86_cpu_default)
 
     def _set_feature_defaults(self):
         if self.os.is_container():

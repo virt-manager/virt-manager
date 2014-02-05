@@ -5,6 +5,9 @@
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <bootloader>/usr/bin/pygrub</bootloader>
+  <cpu mode="custom" match="exact">
+    <model>pentium2</model>
+  </cpu>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>

@@ -537,18 +537,12 @@ class vmmDomain(vmmLibvirtObject):
             cpu.cores = cores
             cpu.threads = threads
         return self._redefine(change)
-    def define_cpu(self, model, mode, copy_host):
+    def define_cpu(self, val):
         def change(guest):
-            if copy_host:
-                guest.cpu.copy_host_cpu()
-            elif mode:
-                guest.cpu.clear()
-                guest.cpu.mode = mode
-            elif model:
-                guest.cpu.model = model
-                guest.cpu.vendor = None
+            if val in guest.cpu.SPECIAL_MODES:
+                guest.cpu.set_special_mode(val)
             else:
-                guest.cpu.clear()
+                guest.cpu.model = val
         return self._redefine(change)
 
     # Mem define methods
