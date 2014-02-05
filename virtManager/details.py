@@ -217,7 +217,7 @@ def build_redir_label(redirdev):
     else:
         raise RuntimeError("unhandled redirection kind: %s" % redirdev.type)
 
-    hwlabel = _("Redirected %s") % redirdev.bus.upper()
+    hwlabel = _("%s Redirector") % redirdev.bus.upper()
 
     return addrlabel, hwlabel
 
@@ -2646,7 +2646,7 @@ class vmmDetails(vmmGObjectUI):
 
         address = build_redir_label(rd)[0] or "-"
 
-        devlabel = "<b>Redirected %s Device</b>" % rd.bus.upper()
+        devlabel = "<b>%s Redirector</b>" % rd.bus.upper()
         self.widget("redir-title").set_markup(devlabel)
         self.widget("redir-address").set_text(address)
 
