@@ -375,6 +375,8 @@ class Viewer(vmmGObject):
         return False
     def set_resizeguest(self, val):
         ignore = val
+    def get_resizeguest(self):
+        return False
 
 
 class VNCViewer(Viewer):
@@ -769,6 +771,11 @@ class SpiceViewer(Viewer):
     def set_resizeguest(self, val):
         if self.display:
             self.display.set_property("resize-guest", val)
+
+    def get_resizeguest(self):
+        if self.display:
+            return self.display.get_property("resize-guest")
+        return False
 
     def _usbdev_redirect_error(self,
                              spice_usbdev_widget, spice_usb_device,
@@ -1496,6 +1503,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         scroll = self.widget("console-gfx-scroll")
         is_scale = self.viewer.get_scaling()
+        is_resizeguest = self.viewer.get_resizeguest()
 
         dx = 0
         dy = 0
@@ -1512,6 +1520,12 @@ class vmmConsolePages(vmmGObjectUI):
         else:
             scroll.set_policy(Gtk.PolicyType.AUTOMATIC,
                               Gtk.PolicyType.AUTOMATIC)
+
+        if not self.force_resize and is_resizeguest:
+            # With resize guest, we don't want to maintain aspect ratio,
+            # since the guest can resize to arbitray resolutions.
+            self.viewer.display.set_size_request(req.width, req.height)
+            return
 
         if not is_scale or self.force_resize:
             # Scaling disabled is easy, just force the VNC widget size. Since
