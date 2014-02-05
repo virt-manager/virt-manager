@@ -1384,14 +1384,16 @@ class vmmCreate(vmmGObjectUI):
             if gdev:
                 guest.add_device(gdev)
 
+            if self.config.get_new_vm_sound():
+                guest.add_default_sound_device()
+            else:
+                guest.skip_default_sound = True
+
             guest.add_default_video_device()
             guest.add_default_input_device()
             guest.add_default_console_device()
             guest.add_default_usb_controller()
             guest.add_default_channels()
-
-            if self.config.get_new_vm_sound():
-                guest.add_default_sound_device()
 
             if (gdev and
                 self.config.get_add_spice_usbredir() == "yes" and

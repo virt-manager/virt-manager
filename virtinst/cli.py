@@ -1973,9 +1973,9 @@ class ParserVideo(VirtCLIParser):
         self.set_param("model", "model", ignore_default=True)
 
 
-#####################
+###################
 # --sound parsing #
-#####################
+###################
 
 class ParserSound(VirtCLIParser):
     def _init_params(self):
@@ -1983,6 +1983,12 @@ class ParserSound(VirtCLIParser):
         self.remove_first = "model"
 
         self.set_param("model", "model", ignore_default=True)
+
+    def _parse(self, opts, inst):
+        if opts.fullopts == "none":
+            self.guest.skip_default_sound = True
+            return
+        return VirtCLIParser._parse(self, opts, inst)
 
 
 #####################

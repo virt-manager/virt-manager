@@ -106,6 +106,7 @@ class Guest(XMLBuilder):
 
         self.skip_default_console = False
         self.skip_default_channel = False
+        self.skip_default_sound = False
 
         self._os_variant = None
         self._random_uuid = None
@@ -615,9 +616,9 @@ class Guest(XMLBuilder):
         self._set_disk_defaults()
         self._set_net_defaults()
         self._set_input_defaults()
-        self._set_sound_defaults()
         self._set_graphics_defaults()
         self._set_video_defaults()
+        self._set_sound_defaults()
 
     def _set_osxml_defaults(self):
         if self.os.is_container() and not self.os.init:
@@ -855,20 +856,24 @@ class Guest(XMLBuilder):
             gfx.type = gtype
 
     def _add_spice_channels(self):
-        def has_spice_agent():
-            for chn in self.get_devices("channel"):
-                if chn.type == chn.TYPE_SPICEVMC:
-                    return True
-
         if self.skip_default_channel:
             return
 
-        if (not has_spice_agent() and
-            self.conn.check_support(
-                self.conn.SUPPORT_CONN_CHAR_SPICEVMC)):
+        for chn in self.get_devices("channel"):
+            if chn.type == chn.TYPE_SPICEVMC:
+                return
+
+        if self.conn.check_support(self.conn.SUPPORT_CONN_CHAR_SPICEVMC):
             agentdev = virtinst.VirtualChannelDevice(self.conn)
             agentdev.type = agentdev.TYPE_SPICEVMC
             self.add_device(agentdev)
+
+    def _add_spice_sound(self):
+        if self.skip_default_sound:
+            return
+        if self.get_devices("sound"):
+            return
+        self.add_default_sound_device()
 
     def _set_video_defaults(self):
         def has_spice():
@@ -878,6 +883,7 @@ class Guest(XMLBuilder):
 
         if has_spice():
             self._add_spice_channels()
+            self._add_spice_sound()
 
         if has_spice() and self.os.is_x86():
             video_model = "qxl"
