@@ -91,7 +91,6 @@ class vmmCreate(vmmGObjectUI):
         self.nic = None
 
         self.storage_browser = None
-        self.conn_signals = []
 
         # Distro detection state variables
         self.detectedDistro = -1
@@ -216,10 +215,6 @@ class vmmCreate(vmmGObjectUI):
     def remove_conn(self):
         if not self.conn:
             return
-
-        for signal in self.conn_signals:
-            self.conn.disconnect(signal)
-        self.conn_signals = []
         self.conn = None
 
     def set_conn(self, newconn, force_validate=False):
