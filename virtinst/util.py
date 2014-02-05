@@ -148,8 +148,11 @@ def validate_name(name_type, val):
     # know don't work
     forbid = [" "]
     for c in forbid:
-        if c in val:
-            raise ValueError(_("%s name can not contain '%s' character.") % c)
+        if c not in val:
+            continue
+        raise ValueError(
+            _("%s name '%s' can not contain '%s' character.") %
+            (name_type, val, c))
 
 
 def validate_macaddr(val):
