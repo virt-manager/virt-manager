@@ -1733,7 +1733,6 @@ class ParserRedir(VirtCLIParser):
     def _init_params(self):
         self.devclass = virtinst.VirtualRedirDevice
         self.remove_first = "bus"
-        self.check_none = True
 
         self.set_param("bus", "bus")
         self.set_param("type", "type")
@@ -1743,6 +1742,12 @@ class ParserRedir(VirtCLIParser):
             inst.parse_friendly_server(val)
 
         self.set_param(None, "server", setter_cb=set_server_cb)
+
+    def _parse(self, opts, inst):
+        if opts.fullopts == "none":
+            self.guest.skip_default_usbredir = True
+            return
+        return VirtCLIParser._parse(self, opts, inst)
 
 
 #################

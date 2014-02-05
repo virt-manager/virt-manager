@@ -1389,20 +1389,14 @@ class vmmCreate(vmmGObjectUI):
             else:
                 guest.skip_default_sound = True
 
+            guest.skip_default_usbredir = (
+                self.config.get_add_spice_usbredir() == "no")
+
             guest.add_default_video_device()
             guest.add_default_input_device()
             guest.add_default_console_device()
             guest.add_default_usb_controller()
             guest.add_default_channels()
-
-            if (gdev and
-                self.config.get_add_spice_usbredir() == "yes" and
-                self.conn.check_support(self.conn.SUPPORT_CONN_USBREDIR)):
-                for ignore in range(4):
-                    dev = virtinst.VirtualRedirDevice(guest.conn)
-                    dev.bus = "usb"
-                    dev.type = "spicevmc"
-                    guest.add_device(dev)
 
             if (((guest.conn.is_qemu() and guest.type == "kvm") or
                  guest.conn.is_test()) and

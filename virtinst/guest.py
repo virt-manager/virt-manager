@@ -107,6 +107,7 @@ class Guest(XMLBuilder):
         self.skip_default_console = False
         self.skip_default_channel = False
         self.skip_default_sound = False
+        self.skip_default_usbredir = False
 
         self._os_variant = None
         self._random_uuid = None
@@ -875,6 +876,20 @@ class Guest(XMLBuilder):
             return
         self.add_default_sound_device()
 
+    def _add_spice_usbredir(self):
+        if self.skip_default_usbredir:
+            return
+        if self.get_devices("redirdev"):
+            return
+        if not self.conn.check_support(self.conn.SUPPORT_CONN_USBREDIR):
+            return
+
+        for ignore in range(4):
+            dev = virtinst.VirtualRedirDevice(self.conn)
+            dev.bus = "usb"
+            dev.type = "spicevmc"
+            self.add_device(dev)
+
     def _set_video_defaults(self):
         def has_spice():
             for gfx in self.get_devices("graphics"):
@@ -884,6 +899,7 @@ class Guest(XMLBuilder):
         if has_spice():
             self._add_spice_channels()
             self._add_spice_sound()
+            self._add_spice_usbredir()
 
         if has_spice() and self.os.is_x86():
             video_model = "qxl"
