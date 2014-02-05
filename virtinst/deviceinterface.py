@@ -250,5 +250,11 @@ class VirtualNetworkInterface(VirtualDevice):
         else:
             raise RuntimeError(msg)
 
+    def set_default_source(self):
+        if (self.conn.is_qemu_session() or self.conn.is_test()):
+            self.type = self.TYPE_USER
+        else:
+            self.type, self.source = util.default_network(self.conn)
+
 
 VirtualNetworkInterface.register_type()

@@ -352,16 +352,6 @@ def convert_old_cpuset(options):
     logging.debug("Generated compat cpuset: --vcpus %s", options.vcpus)
 
 
-def _default_network_opts(guest):
-    opts = ""
-    if (guest.conn.is_qemu_session() or guest.conn.is_test()):
-        opts = "user"
-    else:
-        net = util.default_network(guest.conn)
-        opts = "%s=%s" % (net[0], net[1])
-    return opts
-
-
 def convert_old_networks(guest, options, number_of_default_nics):
     macs     = util.listify(options.mac)
     networks = util.listify(options.network)
@@ -385,7 +375,7 @@ def convert_old_networks(guest, options, number_of_default_nics):
 
     for idx in range(len(networks)):
         if networks[idx] is None:
-            networks[idx] = _default_network_opts(guest)
+            networks[idx] = "default"
         if macs[idx]:
             networks[idx] += ",mac=%s" % macs[idx]
 
@@ -1605,7 +1595,15 @@ class ParserNetwork(VirtCLIParser):
             inst.macaddr = val
             return val
 
-        self.set_param("type", "type")
+        def set_type_cb(opts, inst, cliname, val):
+            ignore = opts
+            ignore = cliname
+            if val == "default":
+                inst.set_default_source()
+            else:
+                inst.type = val
+
+        self.set_param("type", "type", setter_cb=set_type_cb)
         self.set_param("source", "source")
         self.set_param("source_mode", "source_mode")
         self.set_param("target_dev", "target")
