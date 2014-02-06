@@ -1,0 +1,69 @@
+Copying test.ovf-disk1.vmdk to /tmp/test.ovf-disk1
+Copying testfile to /tmp/testfile
+<domain type="qemu">
+  <name>test.ovf</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <description>This is the description, created by RWMJ.</description>
+  <memory>795648</memory>
+  <currentMemory>795648</currentMemory>
+  <vcpu>3</vcpu>
+  <os>
+    <type arch="x86_64">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <clock offset="utc">
+    <timer name="rtc" tickpolicy="catchup"/>
+    <timer name="pit" tickpolicy="delay"/>
+    <timer name="hpet" present="no"/>
+  </clock>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type="file" device="disk">
+      <driver name="qemu"/>
+      <source file="/tmp/test.ovf-disk1"/>
+      <target dev="sda" bus="scsi"/>
+    </disk>
+    <disk type="file" device="disk">
+      <driver name="qemu"/>
+      <source file="/tmp/testfile"/>
+      <target dev="hda" bus="ide"/>
+    </disk>
+    <controller type="usb" index="0" model="ich9-ehci1"/>
+    <controller type="usb" index="0" model="ich9-uhci1">
+      <master startport="0"/>
+    </controller>
+    <controller type="usb" index="0" model="ich9-uhci2">
+      <master startport="2"/>
+    </controller>
+    <controller type="usb" index="0" model="ich9-uhci3">
+      <master startport="4"/>
+    </controller>
+    <interface type="bridge">
+      <source bridge="eth0"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="e1000"/>
+    </interface>
+    <input type="mouse" bus="ps2"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes"/>
+    <console type="pty"/>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
+    <sound model="ich6"/>
+    <video>
+      <model type="qxl"/>
+    </video>
+    <redirdev bus="usb" type="spicevmc"/>
+    <redirdev bus="usb" type="spicevmc"/>
+    <redirdev bus="usb" type="spicevmc"/>
+    <redirdev bus="usb" type="spicevmc"/>
+  </devices>
+</domain>

@@ -1,7 +1,8 @@
 #!/usr/bin/python
 #
-# Copyright 2008, 2013  Red Hat, Inc.
+# Copyright 2008, 2013, 2014  Red Hat, Inc.
 # Joey Boggs <jboggs@redhat.com>
+# Cole Robinson <crobinso@redhat.com>
 #
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
@@ -21,260 +22,103 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-import argparse
-import errno
-import logging
-import os
 import sys
 
 from virtinst import cli
-from virtinst.cli import fail, print_stdout, print_stderr
-import virtconv.formats as formats
-import virtconv.vmcfg as vmcfg
-import virtconv.diskcfg as diskcfg
+from virtinst.cli import fail, print_stderr, print_stdout
+
+from virtconv import VirtConverter
+
+# Example appliances:
+#
+# OVF/OVA:
+#   http://virtualboxes.org/tag/ova/
+# VMX, but they are all multipart which is current unsupported
+#   http://www.thoughtpolice.co.uk/vmware/
+# Minix VMX:
+#   http://download.minix3.org/iso/minix3_1_2a_vmware.zip
 
 
-def get_default_arch():
-    arch = os.uname()[4]
-    if arch == "x86_64":
-        return "x86_64"
-    return "i686"
-
+#####################
+# Argument handling #
+#####################
 
 def parse_args():
-    """Parse and verify command line."""
+    desc =_(
+"Convert an OVF or VMX appliance to native libvirt XML, and run "
+"the guest.\nThe VM contents are not altered. Disk images are "
+"copied to the hypervisor\ndefault storage location.\n\n"
+"Examples:\n"
+"  virt-convert fedora18.ova\n"
+"  virt-convert centos6.zip --disk-format qcow2"
+)
     parser = cli.setupParser(
-        "%(prog)s inputdir|input.vmx [outputdir|output.xml] [options]",
-        _("Convert from virtual machine descriptor format to another. The "
-          "VM contents are not altered."))
+        "%(prog)s inputconfig [options]", desc)
 
     parser.add_argument("input", metavar="inputconfig", nargs=1,
-                        help=_("Conversion input: flat file or directory."))
-    def add_output_arg(p):
-        p.add_argument("output", metavar="outputconfig", nargs='?',
-                        help=_("Conversion destination"))
-    add_output_arg(parser)
+        help=_("Conversion input. Can be a ovf/vmx file, a directory "
+               "containing a config and disk images, or a zip/ova/7z/etc "
+               "archive."))
+    cli.add_connect_option(parser)
 
     cong = parser.add_argument_group("Conversion Options")
     cong.add_argument("-i", "--input-format",
-                    help=_("Input format, e.g. 'vmx'"))
-    cong.add_argument("-o", "--output-format",
-                    default="virt-image",
-                    help=_("Output format, e.g. 'virt-image'"))
-    cong.add_argument("-D", "--disk-format",
-                    help=_("Output disk format"))
-
-    virg = parser.add_argument_group("Virtualization Type Options")
-    virg.add_argument("-v", "--hvm", action="store_true", dest="fullvirt",
-                    help=_("This guest should be a fully virtualized guest"))
-    virg.add_argument("-p", "--paravirt", action="store_true", dest="paravirt",
-                    help=_("This guest should be a paravirtualized guest"))
-
-    cfgg = parser.add_argument_group("Guest Configuration Options")
-    cfgg.add_argument("-a", "--arch",
-                    default=get_default_arch(),
-                    help=_("Machine Architecture Type (i686/x86_64/ppc)"))
-    cli.add_distro_options(cfgg)
-    cli.add_old_feature_options(cfgg)
+                    help=_("Force the input format. 'vmx' or 'ovf'"))
+    cong.add_argument("-D", "--disk-format", default='raw',
+                    help=_("Output disk format. default is 'raw'. "
+                           "Disable conversion with 'none'"))
+    cong.add_argument("--destination", default=None,
+                    help=_("Destination directory the disk images should be "
+                           "converted/copied to. Defaults to the default "
+                           "libvirt directory."))
 
     misc = parser.add_argument_group("Miscellaneous Options")
-    cli.add_misc_options(misc, dryrun=True)
+    cli.add_misc_options(misc, dryrun=True, printxml=True, noautoconsole=True)
 
-    options, leftovers = parser.parse_known_args()
-    if options.input:
-        options.input = options.input[0]
-
-    # argparse does not allow interspersed positional arguments, which we
-    # used to allow with optparse. All this crazyness is to keep old
-    # cli working
-    parser2 = argparse.ArgumentParser()
-    add_output_arg(parser2)
-    if not options.output:
-        opt2, leftovers = parser2.parse_known_args(leftovers)
-        options.output = opt2.output
-    if leftovers:
-        leftovers = sys.argv[:]
-        if options.output in leftovers:
-            leftovers.pop(leftovers.index(options.output))
-        if options.input in leftovers:
-            leftovers.pop(leftovers.index(options.input))
-        parser.parse_args(leftovers)
-
-    cli.setupLogging("virt-convert", options.debug, options.quiet)
-
-    if (options.disk_format and
-        options.disk_format not in diskcfg.disk_formats()):
-        parser.error(_("Unknown output disk format \"%s\"") %
-                     options.disk_format)
-
-    if not options.output:
-        options.output_file = None
-        options.output_dir = None
-        if os.path.isdir(options.input):
-            options.output_dir = options.input
-    elif os.path.isdir(options.output) or options.output.endswith("/"):
-        options.output_file = None
-        options.output_dir = options.output
-    else:
-        options.output_file = options.output
-        options.output_dir = os.path.dirname(os.path.realpath(options.output))
-
-    if options.output_format not in formats.formats():
-        parser.error(_("Unknown output format \"%s\")" %
-                     options.output_format))
-    if options.output_format not in formats.output_formats():
-        parser.error(_("No output handler for format \"%s\")"
-            % options.output_format))
-
-    if not os.access(options.input, os.R_OK):
-        parser.error(_("Couldn't access input argument \"%s\"\n") % options.input)
-        sys.exit(1)
-
-    if not options.input_format:
-        try:
-            (options.input, options.input_format) = formats.find_input(options.input)
-        except StandardError, e:
-            parser.error(_("Couldn't determine input format for \"%s\": %s") %
-                (options.input, e))
-            sys.exit(1)
-
-    if options.input_format not in formats.formats():
-        parser.error(_("Unknown input format \"%s\")" % options.input_format))
-    if options.input_format not in formats.input_formats():
-        parser.error(_("No input handler for format \"%s\"")
-            % options.input_format)
-
-    if os.path.isdir(options.input):
-        (options.input_file, ignore) = formats.find_input(options.input,
-            options.input_format)
-        options.input_dir = options.input
-    else:
-        options.input_file = options.input
-        options.input_dir = os.path.dirname(os.path.realpath(options.input))
+    options = parser.parse_args()
+    options.input = options.input[0]
 
     return options
 
 
-def cleanup(msg, options, vmdef, paths):
-    """
-    After failure, clean up anything we created.
-    """
-    logging.error(msg)
-    if options.dry:
-        return
+#######################
+# Functional handlers #
+#######################
 
-    try:
-        for disk in vmdef.disks.values():
-            disk.cleanup()
-
-        paths.reverse()
-        for path in paths:
-            if os.path.isdir(path):
-                os.rmdir(path)
-            elif os.path.isfile(path):
-                os.remove(path)
-    except OSError, e:
-        fail(_("Couldn't clean up output directory \"%s\": %s") %
-               (options.output_dir, e.strerror))
-
-    sys.exit(1)
-
-
-def main():
+def main(conn=None):
     cli.earlyLogging()
     options = parse_args()
+    cli.setupLogging("virt-convert", options.debug, options.quiet)
 
-    inp = formats.parser_by_name(options.input_format)
-    outp = formats.parser_by_name(options.output_format)
+    if conn is None:
+        conn = cli.getConnection(options.connect)
+    if options.xmlonly:
+        options.dry = True
+        options.quiet = True
 
-    vmdef = None
+    conscb = options.autoconsole and cli.show_console_for_guest or None
 
+    converter = VirtConverter(conn, options.input,
+        input_name=options.input_format, print_cb=print_stdout)
     try:
-        vmdef = inp.import_file(options.input_file)
-    except IOError, e:
-        fail(_("Couldn't import file \"%s\": %s") %
-            (options.input_file, e.strerror))
-    except Exception, e:
-        fail(_("Couldn't import file \"%s\": %s") % (options.input_file, e))
+        converter.convert_disks(options.disk_format or "none",
+            destdir=options.destination, dry=options.dry)
 
-    if options.paravirt:
-        vmdef.type = vmcfg.VM_TYPE_PV
-    else:
-        vmdef.type = vmcfg.VM_TYPE_HVM
+        guest = converter.get_guest()
 
-    vmdef.arch = options.arch
-    cli.set_os_variant(vmdef, options.distro_type, options.distro_variant)
-    vmdef.noapic = options.noapic
-    vmdef.noacpi = options.noacpi
+        if options.xmlonly:
+            print_stdout(guest.start_install(return_xml=True)[1],
+                do_force=True)
+        elif not options.dry:
+            print_stdout(_("Creating guest '%s'.") % guest.name)
+            guest.start_install()
+            cli.connect_console(guest, conscb, True)
+    except:
+        converter.cleanup()
+        raise
 
-    clean = []
-
-    unixname = vmdef.name.replace(" ", "-")
-
-    if not options.output_dir:
-        options.output_dir = unixname
-    try:
-        logging.debug("Creating directory %s", options.output_dir)
-        if not options.dry:
-            os.mkdir(options.output_dir)
-        clean += [options.output_dir]
-    except OSError, e:
-        if (e.errno != errno.EEXIST):
-            fail("Could not create directory %s: %s" %
-                 (options.output_dir, e.strerror))
-
-    if not options.output_file:
-        options.output_file = os.path.join(options.output_dir,
-           "%s%s" % (unixname, outp.suffix))
-
-    logging.debug("input_file: %s", options.input_file)
-    logging.debug("input_dir: %s", options.input_dir)
-    logging.debug("output_file: %s", options.output_file)
-    logging.debug("output_dir: %s", options.output_dir)
-
-    print_stdout(_("Generating output in '%(format)s' format to %(dir)s/") %
-        {"format": options.output_format, "dir": options.output_dir})
-
-    try:
-        for d in vmdef.disks.values():
-            dformat = options.disk_format
-
-            if not dformat:
-                if options.output_format == "vmx":
-                    dformat = "vmdk"
-                else:
-                    dformat = "raw"
-
-            if d.path and dformat != "none":
-                print_stdout(_("Converting disk '%(path)s' to type "
-                               "%(format)s...") % {"path": d.path,
-                                                   "format": dformat})
-
-            if not options.dry:
-                d.convert(options.input_dir, options.output_dir, dformat)
-
-    except OSError, e:
-        cleanup(_("Couldn't convert disks: %s") % e.strerror,
-            options, vmdef, clean)
-    except RuntimeError, e:
-        cleanup(_("Couldn't convert disks: %s") % e, options, vmdef, clean)
-
-    try:
-        output = outp.export(vmdef)
-        logging.debug("Output VM config:\n%s", output)
-
-        if not options.dry:
-            outfile = open(options.output_file, "w")
-            outfile.writelines(output)
-            outfile.close()
-
-        clean += [options.output_file]
-    except ValueError, e:
-        cleanup(_("Couldn't export to file \"%s\": %s") %
-            (options.output_file, e), options, vmdef, clean)
-
-    print_stdout("Done.")
     return 0
+
 
 if __name__ == "__main__":
     try:

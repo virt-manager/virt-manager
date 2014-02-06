@@ -2,35 +2,28 @@
 
 =head1 NAME
 
-virt-convert - convert virtual machines between formats
+virt-convert - convert ovf/vmx to native libvirt guests
 
 =head1 SYNOPSIS
 
-B<virt-convert> [OPTION]... INPUT.VMX|INPUT-DIR [OUTPUT.XML|OUTPUT-DIR]
+B<virt-convert> INPUT.vmx|INPUT.ovf|INPUT-DIR|INPUT.zip [OPTIONS]
 
 =head1 DESCRIPTION
 
-B<virt-convert> is a command line tool for converting virtual machines
-from one format to another. Pass in either a VM definition file (such
-as VMWare vmx format) or a directory containing a VM. By default, a new
-VM definition file, and converted disk images, will be placed in a new
-output directory.
+B<virt-convert> is a command line tool for converting VMX of OVF virtual
+machines to native libvirt XML. Disk format conversion can also be done
+at the same time.
 
-If an output directory is specified, it will be created if necessary,
-and the output VM definition placed within, along with any disk images
-as needed.
+The simplest invocation is simply: virt-convert INPUT. INPUT might be
+a .vmx or .ovf file, a directory containing a .vmx or .ovf file (and
+likely 1 or more disk images), or an appliance archive like .zip, .tar.gz,
+or .ova. virt-convert will try to do the right thing in each case.
 
-If an output VM definition file is specified, it will be created
-alongside any disks in the same directory.
+By default, the virt-convert will convert all encountered disk images
+to 'raw' format, sending the output to a new directory location. So the
+original disk images are _not_ altered in place.
 
 =head1 OPTIONS
-
-Any of the options can be omitted, in which case B<virt-convert> will
-use defaults when required. An input VM definition or containing directory
-must be provided. By default, an output directory is generated based upon
-the name of the VM. The default input format is VMWare vmx, and the
-default output format is a libvirt "image" XML definition
-(see L<virt-image(5)>).
 
 =over 4
 
@@ -42,68 +35,50 @@ Show the help message and exit
 
 Show program's version number and exit
 
+=item  --connect=URI
+
+Connect to a non-default hypervisor. See L<virt-install(1)> for details
+
 =back
 
 =head2 Conversion Options
 
 =over 2
 
-=item  -i format
+=item  -i/--input-format FORMAT
 
-Input format. Currently, C<vmx>, C<virt-image>, and C<ovf> are supported.
+Input format. This should be auto-detected, but can be forced if necessary. Currently C<vmx> and C<ovf> are supported.
 
-=item  -o format
+=item  -D/--disk-format DISK-FORMAT
 
-Output format. Currently, C<vmx>  and C<virt-image> are supported.
+Output disk format. The default is 'raw', so any encountered disk images will be converted to 'raw' format using L<qemu-img(1)>. Pass C<none> if no conversion should be performed: in this case the images will just be copied to the specified --destination.
 
-=item  -D format
+=item --destination DIRECTORY
 
-Output disk format, or C<none> if no conversion should be performed. See
-L<qemu-img(1)>.
-
-=back
-
-=head2 Virtualization Type options
-
-Options to override the default virtualization type choices.
-
-=over 2
-
-=item  -v, --hvm      Create  a fully virtualized guest image
-
-Convert machine to a hvm/qemu based image (this is the default if paravirt
-is not specified)
-
-=item  -p, --paravirt      Create  a paravirtualized guest image
-
-Convert machine to a paravirt xen based image
-
-=back
-
-=head2 General Options
-
-General configuration parameters that apply to all types of guest installs.
-
-=over 2
-
-=item -a ARCH, --arch=ARCH
-
-Architecture of the virtual machine (i686, x86_64, ppc). Defaults to
-that of the host machine.
-
-=item --os-variant=OS_VARIANT
-
-Optimize the guest configuration for a specific operating system (ex.
-'fedora18', 'rhel7', 'winxp'). While not requires, specifying this
-options is HIGHLY RECOMMENDED, as it can greatly increase performance
-by specifying virtio among other guest tweaks.
-See L<virt-install(1)> for valid values.
+The directory to send converted/copied disk images. If not specified, the hypervisor default is used, typically /var/lib/libvirt/images.
 
 =back
 
 =head2 Miscellaneous Options
 
 =over 2
+
+=item  --noautoconsole
+
+Don't automatically try to connect to the guest console. The default behaviour
+is to launch L<virt-viewer(1)> to display the graphical console, or to run the
+C<virsh> C<console> command to display the text console. Use of this parameter
+will disable this behaviour.
+
+=item --print-xml
+
+Print the generated libvirt XML, but do not perform any disk conversions or
+install/start the guest. This option implies --dry-run.
+
+=item --dry-run
+
+Proceed through the conversion process, but don't convert disks or actually
+write any converted files.
 
 =item -q, --quiet
 
@@ -113,22 +88,21 @@ Avoid verbose output.
 
 Print debugging information
 
-=item --dry-run
-
-Proceed through the conversion process, but don't convert disks or actually
-write any converted files.
-
 =back
 
 =head1 EXAMPLES
 
-Convert a paravirt guest from C<image.vmx>:
+Run a fedora18 OVA archive:
 
-  # virt-convert --arch=i686 --paravirt image.vmx
+  # virt-convert fedora18.ova
 
-Convert a 64-bit hvm guest:
+Run an extracted zip archive containing a centos6 .vmx and .vmdk file, converting the images to qcow2 format
 
-  # virt-convert --arch=x86_64 vmx-appliance/ hvm-appliance/
+  # virt-convert centos6/ --disk-format qcow2
+
+Convert the specified .vmx file. Any references disk images must be in the same directory. Don't change the disk format. Move the disk images to /tmp
+
+  # virt-convert foo.vmx --disk-format none --destination /tmp
 
 =head1 BUGS
 
@@ -143,7 +117,7 @@ There is NO WARRANTY, to the extent permitted by law.
 
 =head1 SEE ALSO
 
-L<virt-image(5)>, the project website C<http://virt-manager.org>
+L<virt-install(1)>, the project website C<http://virt-manager.org>
 
 =cut
 

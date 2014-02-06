@@ -449,8 +449,7 @@ class Guest(XMLBuilder):
     def _create_guest(self, meter,
                       start_xml, final_xml, is_initial, noboot):
         """
-        Actually do the XML logging, guest defining/creating, console
-        launching and waiting
+        Actually do the XML logging, guest defining/creating
 
         @param is_initial: If running initial guest creation, else we
                            are continuing the install

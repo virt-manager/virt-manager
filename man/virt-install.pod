@@ -827,7 +827,7 @@ This deprecates the following options: --vnc, --vncport, --vnclisten, -k/--keyma
 =item  --noautoconsole
 
 Don't automatically try to connect to the guest console. The default behaviour
-is to launch a VNC client to display the graphical console, or to run the
+is to launch L<virt-viewer(1)> to display the graphical console, or to run the
 C<virsh> C<console> command to display the text console. Use of this parameter
 will disable this behaviour.
 

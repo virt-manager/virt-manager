@@ -331,6 +331,74 @@ def validate_disk(dev, warn_overwrite=False):
     check_size_conflict(dev)
 
 
+def _run_console(args):
+    logging.debug("Running: %s", " ".join(args))
+    child = os.fork()
+    if child:
+        return child
+
+    os.execvp(args[0], args)
+    os._exit(1)  # pylint: disable=W0212
+
+
+def _gfx_console(guest):
+    args = ["/usr/bin/virt-viewer",
+            "--connect", guest.conn.uri,
+            "--wait", guest.name]
+
+    if not os.path.exists(args[0]):
+        logging.warn(_("Unable to connect to graphical console: "
+                       "virt-viewer not installed. Please install "
+                       "the 'virt-viewer' package."))
+        return None
+
+    return _run_console(args)
+
+
+def _txt_console(guest):
+    args = ["/usr/bin/virsh",
+            "--connect", guest.conn.uri,
+            "console", guest.name]
+
+    return _run_console(args)
+
+
+def connect_console(guest, consolecb, wait):
+    """
+    Launched the passed console callback for the already defined
+    domain. If domain isn't running, return an error.
+    """
+    child = None
+    if consolecb:
+        child = consolecb(guest)
+
+    if not child or not wait:
+        return
+
+    # If we connected the console, wait for it to finish
+    try:
+        os.waitpid(child, 0)
+    except OSError, e:
+        logging.debug("waitpid: %s: %s", e.errno, e.message)
+
+
+def show_console_for_guest(guest):
+    gdev = guest.get_devices("graphics")
+    if not gdev:
+        logging.debug("Connecting to text console")
+        return _txt_console(guest)
+
+    gtype = gdev[0].type
+    if gtype in ["default",
+                 virtinst.VirtualGraphics.TYPE_VNC,
+                 virtinst.VirtualGraphics.TYPE_SPICE]:
+        logging.debug("Launching virt-viewer for graphics type '%s'", gtype)
+        return _gfx_console(guest)
+    else:
+        logging.debug("No viewer to launch for graphics type '%s'", gtype)
+        return None
+
+
 ###########################
 # CLI back compat helpers #
 ###########################
@@ -482,12 +550,18 @@ def add_connect_option(parser):
 
 def add_misc_options(grp, prompt=False, replace=False,
                      printxml=False, printstep=False,
-                     noreboot=False, dryrun=False):
+                     noreboot=False, dryrun=False,
+                     noautoconsole=False):
     if prompt:
         grp.add_argument("--prompt", action="store_true",
                         default=False, help=argparse.SUPPRESS)
         grp.add_argument("--force", action="store_true",
                         default=False, help=argparse.SUPPRESS)
+
+    if noautoconsole:
+        grp.add_argument("--noautoconsole", action="store_false",
+            dest="autoconsole", default=True,
+            help=_("Don't automatically try to connect to the guest console"))
 
     if noreboot:
         grp.add_argument("--noreboot", action="store_true",
@@ -500,8 +574,8 @@ def add_misc_options(grp, prompt=False, replace=False,
 
     if printxml:
         grp.add_argument("--print-xml", action="store_true", dest="xmlonly",
-            help=_("Print the generated domain XML rather than define "
-                   "and clone the guest."))
+            help=_("Print the generated domain XML rather than create "
+                   "the guest."))
         if printstep:
             grp.add_argument("--print-step", dest="xmlstep",
                 help=_("Print XML of a specific install step "

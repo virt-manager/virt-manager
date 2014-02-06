@@ -79,6 +79,13 @@ class _StorageObject(XMLBuilder):
                                    is_single=True)
 
 
+def _get_default_pool_path(conn):
+    path = "/var/lib/libvirt/images"
+    if conn.is_session_uri():
+        path = os.path.expanduser("~/VirtualMachines")
+    return path
+
+
 class StoragePool(_StorageObject):
     """
     Base class for building and installing libvirt storage pool xml
@@ -177,9 +184,7 @@ class StoragePool(_StorageObject):
 
         pool = None
         name = "default"
-        path = "/var/lib/libvirt/images"
-        if conn.is_session_uri():
-            path = os.path.expanduser("~/VirtualMachines")
+        path = _get_default_pool_path(conn)
 
         try:
             pool = conn.storagePoolLookupByName(name)
@@ -196,13 +201,35 @@ class StoragePool(_StorageObject):
             defpool.type = defpool.TYPE_DIR
             defpool.name = name
             defpool.target_path = path
-            newpool = defpool.install(build=True, create=True, autostart=True)
+            defpool.install(build=True, create=True, autostart=True)
             conn.clear_cache(pools=True)
-            return newpool
+            return defpool
         except Exception, e:
             raise RuntimeError(
                 _("Couldn't create default storage pool '%s': %s") %
                 (path, str(e)))
+
+
+    @staticmethod
+    def get_default_path(conn):
+        """
+        Return the default storage path. If there's a 'default' pool,
+        report that. If there's no default pool, return the path we would
+        use for the default.
+        """
+        path = _get_default_pool_path(conn)
+        if not conn.check_support(conn.SUPPORT_CONN_STORAGE):
+            os.makedirs(path)
+            return path
+
+        try:
+            poolobj = conn.storagePoolLookupByName("default")
+            return StoragePool(conn, parsexml=poolobj.XMLDesc(0)).target_path
+        except:
+            pass
+
+        return StoragePool.build_default_pool(conn).target_path
+
 
     @staticmethod
     def lookup_pool_by_path(conn, path):

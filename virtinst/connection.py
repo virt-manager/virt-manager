@@ -66,7 +66,7 @@ class VirtualConnection(object):
     - simplified API wrappers that handle new and old ways of doing things
     """
     def __init__(self, uri):
-        _initial_uri = uri or ""
+        self._initial_uri = uri or ""
 
         self._fake_pretty_name = None
         self._fake_libvirt_version = None
@@ -74,9 +74,9 @@ class VirtualConnection(object):
         self._daemon_version = None
         self._conn_version = None
 
-        if _initial_uri.startswith(_virtinst_uri_magic):
+        if self._initial_uri.startswith(_virtinst_uri_magic):
             # virtinst unit test URI handling
-            uri = _initial_uri.replace(_virtinst_uri_magic, "")
+            uri = self._initial_uri.replace(_virtinst_uri_magic, "")
             ret = uri.split(",", 1)
             self._open_uri = ret[0]
             self._test_opts = VirtOptionString(
@@ -84,8 +84,8 @@ class VirtualConnection(object):
             self._early_virtinst_test_uri()
             self._uri = self._virtinst_uri_make_fake()
         else:
-            self._open_uri = _initial_uri
-            self._uri = _initial_uri
+            self._open_uri = self._initial_uri
+            self._uri = self._initial_uri
             self._test_opts = {}
 
         self._libvirtconn = None

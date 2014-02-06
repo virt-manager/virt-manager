@@ -32,7 +32,6 @@ from virtinst import support
 from tests import virtinstall, virtimage, virtclone, virtconvert, virtxml
 from tests import utils
 
-os.environ["VIRTCONV_TEST_NO_DISK_CONVERSION"] = "1"
 os.environ["LANG"] = "en_US.UTF-8"
 
 # Used to ensure consistent SDL xml output
@@ -75,13 +74,10 @@ virtimage_exist = ["/tmp/__virtinst__cli_root.raw"]
 # Images created by virt-image
 virtimage_new = ["/tmp/__virtinst__cli_scratch.raw"]
 
-# virt-convert output dirs
-virtconv_dirs = [virtconv_out]
-
 exist_files = exist_images + virtimage_exist
-new_files   = new_images + virtimage_new + virtconv_dirs
+new_files   = new_images + virtimage_new
 clean_files = (new_images + exist_images +
-               virtimage_exist + virtimage_new + virtconv_dirs + [ro_dir])
+               virtimage_exist + virtimage_new + [ro_dir])
 
 promptlist = []
 
@@ -118,10 +114,8 @@ test_files = {
     'COLLIDE'           : "/dev/default-pool/collidevol1.img",
     'SHARE'             : "/dev/default-pool/sharevol.img",
 
-    'VIRTCONV_OUT'      : "%s/test.out" % virtconv_out,
-    'VC_IMG1'           : "%s/virtimage/test1.virt-image" % vcdir,
-    'VC_IMG2'           : "tests/image-xml/image-format.xml",
-    'VMX_IMG1'          : "%s/vmx/test1.vmx" % vcdir,
+    'OVF_IMG1'           : "%s/tests/virtconv-files/ovf_input/test1.ovf" % os.getcwd(),
+    'VMX_IMG1'          : "%s/tests/virtconv-files/vmx_input/test1.vmx" % os.getcwd(),
 }
 
 
@@ -173,9 +167,9 @@ class Command(object):
                 elif app.count("virt-image"):
                     ret = virtimage.main(conn=conn)
                 elif app.count("virt-convert"):
-                    ret = virtconvert.main()
+                    ret = virtconvert.main(conn=conn)
                 elif app.count("virt-xml"):
-                    ret = virtxml.main()
+                    ret = virtxml.main(conn=conn)
             except SystemExit, sys_e:
                 ret = sys_e.code
 
@@ -226,7 +220,7 @@ class Command(object):
                     conn = utils.openconn(self.argv[idx + 1])
                     break
 
-            if not conn and "virt-convert" not in self.argv[0]:
+            if not conn:
                 raise RuntimeError("couldn't parse URI from command %s" %
                                    self.argv)
 
@@ -380,9 +374,8 @@ class App(object):
         if not iscompare:
             args = "--debug"
 
-        if self.appname != "virt-convert":
-            if "--connect " not in cli:
-                args += " --connect %(TESTURI)s"
+        if "--connect " not in cli:
+            args += " --connect %(TESTURI)s"
 
         if self.appname in ["virt-install"]:
             if "--name " not in cli:
@@ -426,6 +419,7 @@ class App(object):
         cmd = Command(cmdstr)
         cmd.check_success = valid
         if compfile:
+            compfile = os.path.basename(self.appname) + "-" + compfile
             cmd.compare_file = "%s/%s.xml" % (compare_xmldir, compfile)
         cmd.skip_check = skip_check or category.skip_check
         cmd.compare_check = compare_check or category.compare_check
@@ -784,76 +778,75 @@ c.add_invalid("test-many-devices --add-device --host-device 0x0781:0x5151 --upda
 c.add_invalid("test-many-devices --remove-device --host-device 1 --update")  # test driver doesn't support detachdevice...
 c.add_invalid("test-many-devices --edit --graphics password=foo --update")  # test driver doesn't support updatdevice...
 c.add_invalid("--build-xml --memory 10,maxmemory=20")  # building XML for option that doesn't support it
-c.add_compare("test --print-xml --edit --vcpus 7", "virtxml-print-xml")  # test --print-xml
-c.add_compare("test --print-xml --edit --vcpus 7", "virtxml-print-xml")  # test --print-xml
-c.add_compare("--edit --cpu host-passthrough", "virtxml-stdin-edit", input_file=(xmldir + "/virtxml-stdin-edit.xml"))  # stdin test
-c.add_compare("--build-xml --cpu pentium3,+x2apic", "virtxml-build-cpu")
-c.add_compare("--build-xml --tpm /dev/tpm", "virtxml-build-tpm")
-c.add_compare("--build-xml --blkiotune weight=100,device_path=/dev/sdf,device_weight=200", "virtxml-build-blkiotune")
+c.add_compare("test --print-xml --edit --vcpus 7", "print-xml")  # test --print-xml
+c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(xmldir + "/virtxml-stdin-edit.xml"))  # stdin test
+c.add_compare("--build-xml --cpu pentium3,+x2apic", "build-cpu")
+c.add_compare("--build-xml --tpm /dev/tpm", "build-tpm")
+c.add_compare("--build-xml --blkiotune weight=100,device_path=/dev/sdf,device_weight=200", "build-blkiotune")
 
 
 c = vixml.add_category("simple edit diff", "test-many-devices --edit --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
 c.add_compare("""--metadata name=foo-my-new-name,uuid=12345678-12F4-1234-1234-123456789AFA,description="hey this is my
 new
-very,very=new desc\\\'",title="This is my,funky=new title" """, "virtxml-edit-simple-metadata")
-c.add_compare("--memory 500,maxmemory=1000,hugepages=off", "virtxml-edit-simple-memory")
-c.add_compare("--vcpus 10,maxvcpus=20,cores=5,sockets=4,threads=1", "virtxml-edit-simple-vcpus")
-c.add_compare("--cpu model=pentium2,+x2apic,forbid=pbe", "virtxml-edit-simple-cpu")
-c.add_compare("--numatune 1-5,7,mode=strict", "virtxml-edit-simple-numatune")
-c.add_compare("--blkiotune weight=500,device_path=/dev/sdf,device_weight=600", "virtxml-edit-simple-blkiotune")
-c.add_compare("--boot loader=foo.bar,network,useserial=on,init=/bin/bash", "virtxml-edit-simple-boot")
-c.add_compare("--security label=foo,bar,baz,UNKNOWN=val,relabel=on", "virtxml-edit-simple-security")
-c.add_compare("--features eoi=on,hyperv_relaxed=off,acpi=", "virtxml-edit-simple-features")
-c.add_compare("--clock offset=localtime,hpet_present=yes,kvmclock_present=no,rtc_tickpolicy=merge", "virtxml-edit-simple-clock")
-c.add_compare("--pm suspend_to_mem=yes,suspend_to_disk=no", "virtxml-edit-simple-pm")
-c.add_compare("--disk /dev/zero,perms=ro,startup_policy=optional", "virtxml-edit-simple-disk")
-c.add_compare("--disk path=", "virtxml-edit-simple-disk-remove-path")
-c.add_compare("--network source=br0,type=bridge,model=virtio,mac=", "virtxml-edit-simple-network")
-c.add_compare("--graphics tlsport=5902,keymap=ja", "virtxml-edit-simple-graphics")
-c.add_compare("--controller index=2,model=lsilogic", "virtxml-edit-simple-controller")
-c.add_compare("--smartcard type=spicevmc", "virtxml-edit-simple-smartcard")
-c.add_compare("--redirdev type=spicevmc,server=example.com:12345", "virtxml-edit-simple-redirdev")
-c.add_compare("--tpm path=/dev/tpm", "virtxml-edit-simple-tpm")
-c.add_compare("--rng rate_bytes=3333,rate_period=4444", "virtxml-edit-simple-rng")
-c.add_compare("--watchdog action=reset", "virtxml-edit-simple-watchdog")
-c.add_compare("--memballoon model=none", "virtxml-edit-simple-memballoon")
-c.add_compare("--serial pty", "virtxml-edit-simple-serial")
-c.add_compare("--parallel unix,path=/some/other/log", "virtxml-edit-simple-parallel")
-c.add_compare("--channel null", "virtxml-edit-simple-channel")
-c.add_compare("--console target_type=serial", "virtxml-edit-simple-console")
-c.add_compare("--filesystem /1/2/3,/4/5/6,mode=mapped", "virtxml-edit-simple-filesystem")
-c.add_compare("--video cirrus", "virtxml-edit-simple-video")
-c.add_compare("--sound pcspk", "virtxml-edit-simple-soundhw")
-c.add_compare("--host-device 0x0781:0x5151,driver_name=vfio", "virtxml-edit-simple-host-device")
+very,very=new desc\\\'",title="This is my,funky=new title" """, "edit-simple-metadata")
+c.add_compare("--memory 500,maxmemory=1000,hugepages=off", "edit-simple-memory")
+c.add_compare("--vcpus 10,maxvcpus=20,cores=5,sockets=4,threads=1", "edit-simple-vcpus")
+c.add_compare("--cpu model=pentium2,+x2apic,forbid=pbe", "edit-simple-cpu")
+c.add_compare("--numatune 1-5,7,mode=strict", "edit-simple-numatune")
+c.add_compare("--blkiotune weight=500,device_path=/dev/sdf,device_weight=600", "edit-simple-blkiotune")
+c.add_compare("--boot loader=foo.bar,network,useserial=on,init=/bin/bash", "edit-simple-boot")
+c.add_compare("--security label=foo,bar,baz,UNKNOWN=val,relabel=on", "edit-simple-security")
+c.add_compare("--features eoi=on,hyperv_relaxed=off,acpi=", "edit-simple-features")
+c.add_compare("--clock offset=localtime,hpet_present=yes,kvmclock_present=no,rtc_tickpolicy=merge", "edit-simple-clock")
+c.add_compare("--pm suspend_to_mem=yes,suspend_to_disk=no", "edit-simple-pm")
+c.add_compare("--disk /dev/zero,perms=ro,startup_policy=optional", "edit-simple-disk")
+c.add_compare("--disk path=", "edit-simple-disk-remove-path")
+c.add_compare("--network source=br0,type=bridge,model=virtio,mac=", "edit-simple-network")
+c.add_compare("--graphics tlsport=5902,keymap=ja", "edit-simple-graphics")
+c.add_compare("--controller index=2,model=lsilogic", "edit-simple-controller")
+c.add_compare("--smartcard type=spicevmc", "edit-simple-smartcard")
+c.add_compare("--redirdev type=spicevmc,server=example.com:12345", "edit-simple-redirdev")
+c.add_compare("--tpm path=/dev/tpm", "edit-simple-tpm")
+c.add_compare("--rng rate_bytes=3333,rate_period=4444", "edit-simple-rng")
+c.add_compare("--watchdog action=reset", "edit-simple-watchdog")
+c.add_compare("--memballoon model=none", "edit-simple-memballoon")
+c.add_compare("--serial pty", "edit-simple-serial")
+c.add_compare("--parallel unix,path=/some/other/log", "edit-simple-parallel")
+c.add_compare("--channel null", "edit-simple-channel")
+c.add_compare("--console target_type=serial", "edit-simple-console")
+c.add_compare("--filesystem /1/2/3,/4/5/6,mode=mapped", "edit-simple-filesystem")
+c.add_compare("--video cirrus", "edit-simple-video")
+c.add_compare("--sound pcspk", "edit-simple-soundhw")
+c.add_compare("--host-device 0x0781:0x5151,driver_name=vfio", "edit-simple-host-device")
 
 c = vixml.add_category("edit selection", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
 c.add_invalid("--edit target=vvv --disk /dev/null")  # no match found
-c.add_compare("--edit 3 --sound pcspk", "virtxml-edit-pos-num")
-c.add_compare("--edit -1 --video qxl", "virtxml-edit-neg-num")
-c.add_compare("--edit all --host-device driver_name=vfio", "virtxml-edit-all")
-c.add_compare("--edit ich6 --sound pcspk", "virtxml-edit-select-sound-model")
-c.add_compare("--edit target=hda --disk /dev/null", "virtxml-edit-select-disk-target")
-c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "virtxml-edit-select-disk-path")
-c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "virtxml-edit-select-network-mac")
+c.add_compare("--edit 3 --sound pcspk", "edit-pos-num")
+c.add_compare("--edit -1 --video qxl", "edit-neg-num")
+c.add_compare("--edit all --host-device driver_name=vfio", "edit-all")
+c.add_compare("--edit ich6 --sound pcspk", "edit-select-sound-model")
+c.add_compare("--edit target=hda --disk /dev/null", "edit-select-disk-target")
+c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "edit-select-disk-path")
+c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "edit-select-network-mac")
 
 c = vixml.add_category("edit clear", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
 c.add_invalid("--edit --memory 200,clearxml=yes")  # clear isn't wired up for memory
-c.add_compare("--edit --cpu host-passthrough,clearxml=yes", "virtxml-edit-clear-cpu")
-c.add_compare("--edit --clock offset=utc,clearxml=yes", "virtxml-edit-clear-clock")
-c.add_compare("--edit --disk /foo/bar,target=fda,bus=fdc,device=floppy,clearxml=yes", "virtxml-edit-clear-disk")
+c.add_compare("--edit --cpu host-passthrough,clearxml=yes", "edit-clear-cpu")
+c.add_compare("--edit --clock offset=utc,clearxml=yes", "edit-clear-clock")
+c.add_compare("--edit --disk /foo/bar,target=fda,bus=fdc,device=floppy,clearxml=yes", "edit-clear-disk")
 
 c = vixml.add_category("add/rm devices", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
 c.add_invalid("--add-device --security foo")  # --add-device without a device
 c.add_invalid("--remove-device --clock utc")  # --remove-device without a dev
-c.add_compare("--add-device --host-device net_00_1c_25_10_b1_e4", "virtxml-add-host-device")
-c.add_compare("--add-device --sound pcspk", "virtxml-add-sound")
-c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "virtxml-add-disk-basic")
-c.add_compare("--add-device --disk %(EXISTIMG1)s", "virtxml-add-disk-notarget")  # filling in acceptable target
-c.add_compare("--add-device --disk %(NEWIMG1)s,size=.01", "virtxml-add-disk-create-storage")
-c.add_compare("--remove-device --sound ich6", "virtxml-remove-sound-model")
-c.add_compare("--remove-device --disk 6", "virtxml-remove-disk-index")
-c.add_compare("--remove-device --disk /dev/null", "virtxml-remove-disk-path")
-c.add_compare("--remove-device --video all", "virtxml-remove-video-all")
+c.add_compare("--add-device --host-device net_00_1c_25_10_b1_e4", "add-host-device")
+c.add_compare("--add-device --sound pcspk", "add-sound")
+c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "add-disk-basic")
+c.add_compare("--add-device --disk %(EXISTIMG1)s", "add-disk-notarget")  # filling in acceptable target
+c.add_compare("--add-device --disk %(NEWIMG1)s,size=.01", "add-disk-create-storage")
+c.add_compare("--remove-device --sound ich6", "remove-sound-model")
+c.add_compare("--remove-device --disk 6", "remove-disk-index")
+c.add_compare("--remove-device --disk /dev/null", "remove-disk-path")
+c.add_compare("--remove-device --video all", "remove-video-all")
 
 
 vimag = App("virt-image")
@@ -895,18 +888,12 @@ c.add_invalid("--boot 10")  # Out of bounds index
 
 
 vconv = App("virt-convert")
-c = vconv.add_category("misc", "")
-c.add_compare("%(VC_IMG1)s %(VIRTCONV_OUT)s", "convert-default")  # virt-image to default (virt-image) w/ no convert
-c.add_valid("%(VC_IMG1)s -D none %(VIRTCONV_OUT)s")  # virt-image to default (virt-image) w/ no convert
-c.add_valid("%(VC_IMG1)s -o virt-image -D none %(VIRTCONV_OUT)s")  # virt-image to virt-image w/ no convert
-c.add_valid("%(VC_IMG1)s -o vmx -D none %(VIRTCONV_OUT)s")  # virt-image to vmx w/ no convert
-c.add_valid("%(VC_IMG1)s -o vmx -D raw %(VIRTCONV_OUT)s")  # virt-image to vmx w/ raw
-c.add_valid("%(VC_IMG1)s -o vmx -D vmdk %(VIRTCONV_OUT)s")  # virt-image to vmx w/ vmdk
-c.add_valid("%(VC_IMG1)s -o vmx -D qcow2 %(VIRTCONV_OUT)s")  # virt-image to vmx w/ qcow2
-c.add_valid("%(VMX_IMG1)s -o vmx -D none %(VIRTCONV_OUT)s")  # vmx to vmx no convert
-c.add_valid("%(VC_IMG2)s -o vmx -D vmdk %(VIRTCONV_OUT)s")  # virt-image with exotic formats specified
-c.add_invalid("%(VC_IMG1)s -o virt-image -D foobarfmt %(VIRTCONV_OUT)s")  # virt-image to virt-image with invalid format
-c.add_invalid("%(VC_IMG1)s -o ovf %(VIRTCONV_OUT)s")  # virt-image to ovf (has no output formatter)
+c = vconv.add_category("misc", "--connect %(KVMURI)s --dry")
+c.add_invalid("%(VMX_IMG1)s --input-format foo")  # invalid input format
+c.add_invalid("%(EXISTIMG1)s")  # invalid input file
+
+c.add_compare("%(VMX_IMG1)s --disk-format qcow2 --print-xml", "vmx-compare")
+c.add_compare("%(OVF_IMG1)s --disk-format none --destination /tmp --print-xml", "ovf-compare")
 
 
 
