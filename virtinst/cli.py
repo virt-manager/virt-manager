@@ -352,7 +352,7 @@ def convert_old_cpuset(options):
     logging.debug("Generated compat cpuset: --vcpus %s", options.vcpus)
 
 
-def convert_old_networks(guest, options, number_of_default_nics):
+def convert_old_networks(options, number_of_default_nics):
     macs     = util.listify(options.mac)
     networks = util.listify(options.network)
     bridges  = util.listify(options.bridge)

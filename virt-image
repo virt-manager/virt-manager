@@ -103,7 +103,7 @@ def main(conn=None):
     guest.installer = installer
 
     cli.convert_old_memory(options)
-    cli.convert_old_networks(guest, options, image.domain.interface)
+    cli.convert_old_networks(options, image.domain.interface)
     cli.convert_old_graphics(guest, options,
         default_override=bool(image.domain.graphics))
     cli.convert_old_cpuset(options)

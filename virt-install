@@ -440,7 +440,7 @@ def build_guest_instance(conn, options, parsermap):
 
     cli.convert_old_memory(options)
     convert_old_sound(options)
-    cli.convert_old_networks(guest, options, not options.nonetworks and 1 or 0)
+    cli.convert_old_networks(options, not options.nonetworks and 1 or 0)
     cli.convert_old_graphics(guest, options)
     convert_old_disks(options)
     cli.convert_old_features(options)
