@@ -703,6 +703,8 @@ def add_guest_xml_options(geng):
                     help=_("Set domain security driver configuration."))
     geng.add_argument("--numatune",
                     help=_("Tune NUMA policy for the domain process."))
+    geng.add_argument("--blkiotune", action="append",
+                    help=_("Tune blkio policy for the domain process."))
     geng.add_argument("--features",
                     help=_("Set domain <features> XML. Ex:\n"
                            "--features acpi=off\n"
@@ -1879,6 +1881,17 @@ class ParserPanic(VirtCLIParser):
         self.set_param(None, "iobase", setter_cb=set_iobase_cb)
 
 
+#######################
+# --blkiotune parsing #
+#######################
+
+class ParserBlkiotune(VirtCLIParser):
+    def _init_params(self):
+        self.set_param("blkiotune.weight", "weight")
+        self.set_param("blkiotune.device_path", "device_path")
+        self.set_param("blkiotune.device_weight", "device_weight")
+
+
 ######################################################
 # --serial, --parallel, --channel, --console parsing #
 ######################################################
@@ -2041,6 +2054,7 @@ def build_parser_map(options, skip=None, only=None):
     register_parser("vcpus", ParserVCPU)
     register_parser("cpu", ParserCPU)
     register_parser("numatune", ParserNumatune)
+    register_parser("blkiotune", ParserBlkiotune)
     register_parser("boot", ParserBoot)
     register_parser("security", ParserSecurity)
     register_parser("features", ParserFeatures)

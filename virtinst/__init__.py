@@ -26,6 +26,7 @@ from virtinst import support
 from virtinst.osxml import OSXML
 from virtinst.domainfeatures import DomainFeatures
 from virtinst.domainnumatune import DomainNumatune
+from virtinst.domainblkiotune import DomainBlkiotune
 from virtinst.clock import Clock
 from virtinst.cpu import CPU, CPUFeature
 from virtinst.seclabel import Seclabel

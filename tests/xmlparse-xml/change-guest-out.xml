@@ -81,5 +81,12 @@
   <memoryBacking>
     <hugepages/>
   </memoryBacking>
+  <blkiotune>
+    <weight>200</weight>
+    <device>
+      <path>/home/1.img</path>
+      <weight>300</weight>
+    </device>
+  </blkiotune>
   <bootloader>pygrub</bootloader>
 </domain>

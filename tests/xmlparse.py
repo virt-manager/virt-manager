@@ -192,6 +192,11 @@ class XMLParseTest(unittest.TestCase):
         check("memory_mode", "interleave", "strict", None)
         check("memory_nodeset", "1-5,^3,7", "2,4,6")
 
+        check = self._make_checker(guest.blkiotune)
+        check("weight", None, 100, 200)
+        check("device_weight", None, 300)
+        check("device_path", None, "/home/1.img")
+
         check = self._make_checker(guest.get_devices("memballoon")[0])
         check("model", "virtio", "none")
 
