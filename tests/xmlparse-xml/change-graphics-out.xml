@@ -24,7 +24,7 @@
       <target dev="fda" bus="fdc"/>
     </disk>
     <graphics type="vnc" passwd="newpass" port="6000" listen="1.2.3.4" keymap="en-us"/>
-    <graphics type="sdl" xauth="fooauth" display="6:1"/>
+    <graphics type="vnc" xauth="fooauth" display="6:1"/>
     <graphics type="vnc">
     </graphics>
     <graphics type="vnc" port="-1" socket="/var/lib/libvirt/socket/foo"/>

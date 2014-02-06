@@ -1,4 +1,4 @@
-# Copyright (C) 2013 Red Hat, Inc.
+# Copyright (C) 2013, 2014 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -508,7 +508,7 @@ class XMLParseTest(unittest.TestCase):
         check("keymap", None, "en-us")
 
         check = self._make_checker(dev2)
-        check("type", "sdl")
+        check("type", "vnc")
         check("xauth", "/tmp/.Xauthority", "fooauth")
         check("display", "1:2", "6:1")
 

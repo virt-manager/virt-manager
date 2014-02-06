@@ -24,7 +24,7 @@
       <target dev="fda" bus="fdc"/>
     </disk>
     <graphics type="vnc" passwd="foobar" port="100" listen="0.0.0.0"/>
-    <graphics type="sdl" xauth="/tmp/.Xauthority" display="1:2"/>
+    <graphics type="vnc" xauth="/tmp/.Xauthority" display="1:2"/>
     <graphics type="rdp" listen='1.1.2.3'>
       <listen type='address' address='1.1.2.3'/>
     </graphics>

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (C) 2013 Red Hat, Inc.
+# Copyright (C) 2013, 2014 Red Hat, Inc.
 
 import atexit
 import os
@@ -107,7 +107,7 @@ def _test_distro(distro):
     append = "-append \"ks=file:/%s\"" % os.path.basename(injectfile)
     print os.environ["DISPLAY"]
     cmd = ("sudo qemu-kvm -enable-kvm -name %s "
-           "-cpu host -m 1500 -sdl "
+           "-cpu host -m 1500 -vnc "
            "-net bridge,br=virbr0 -net nic,model=%s "
            "-kernel %s -initrd %s %s" %
            (distro.name, nic, kernel, newinitrd, append))

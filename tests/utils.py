@@ -1,4 +1,4 @@
-# Copyright (C) 2013 Red Hat, Inc.
+# Copyright (C) 2013, 2014 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -253,9 +253,8 @@ def get_basic_fullyvirt_guest(typ="xen", installer=None):
     g.installer.location = "/dev/null"
     g.installer.cdrom = True
     gdev = VirtualGraphics(_conn)
-    gdev.type = "sdl"
-    gdev.display = ":3.4"
-    gdev.xauth = "/tmp/.Xauthority"
+    gdev.type = "vnc"
+    gdev.keymap = "ja"
     g.add_device(gdev)
     g.features.pae = False
     g.vcpus = 5

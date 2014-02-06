@@ -768,12 +768,6 @@ actual VNC display allocated can be obtained using the C<vncdisplay>
 command to C<virsh> (or L<virt-viewer(1)> can be used which handles this
 detail for the use).
 
-sdl
-
-Setup a virtual console in the guest and display an SDL window in the
-host to render the output. If the SDL window is closed the guest may
-be unconditionally terminated.
-
 spice
 
 Export the guest's console using the Spice protocol. Spice allows advanced
@@ -1441,20 +1435,6 @@ booting from PXE, using VNC server/viewer
        --virt-type qemu
        --graphics vnc \
        --os-variant fedora9
-
-Install a guest with a real partition, with the default QEMU hypervisor for
-a different architecture using SDL graphics, using a remote kernel and initrd
-pair:
-
-  # virt-install \
-       --connect qemu:///system \
-       --name demo \
-       --memory 500 \
-       --disk path=/dev/hdc \
-       --network bridge=eth1 \
-       --arch ppc64 \
-       --graphics sdl \
-       --location http://download.fedora.redhat.com/pub/fedora/linux/core/6/x86_64/os/
 
 Run a Live CD image under Xen fullyvirt, in diskless environment
 

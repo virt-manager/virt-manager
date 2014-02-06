@@ -19,7 +19,7 @@
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <input type="mouse" bus="ps2"/>
-    <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
+    <graphics type="vnc" display=":3.4" xauth="/tmp/.Xauthority"/>
     <serial type="udp">
       <source mode="bind" host="example.com" service="66"/>
       <source mode="connect" host="example.com.uk" service="77"/>
