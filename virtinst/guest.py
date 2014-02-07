@@ -109,6 +109,7 @@ class Guest(XMLBuilder):
         self.skip_default_channel = False
         self.skip_default_sound = False
         self.skip_default_usbredir = False
+        self.skip_default_graphics = False
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_HOST_MODEL_ONLY
 
         self._os_variant = None
@@ -585,6 +586,25 @@ class Guest(XMLBuilder):
             dev.target_type = "virtio"
             dev.target_name = dev.CHANNEL_NAME_QEMUGA
             self.add_device(dev)
+
+    def add_default_graphics(self):
+        if self.skip_default_graphics:
+            return
+        if self.get_devices("graphics"):
+            return
+        if self.os.is_container():
+            return
+        if self.os.arch not in ["x86_64", "i686", "ppc64", "ia64"]:
+            return
+        self.add_device(virtinst.VirtualGraphics(self.conn))
+
+    def add_default_devices(self):
+        self.add_default_graphics()
+        self.add_default_video_device()
+        self.add_default_input_device()
+        self.add_default_console_device()
+        self.add_default_usb_controller()
+        self.add_default_channels()
 
     def _set_transient_device_defaults(self, install):
         def do_remove_media(d):

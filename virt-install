@@ -470,11 +470,7 @@ def build_guest_instance(conn, options, parsermap):
     for disk in guest.get_devices("disk"):
         cli.validate_disk(disk)
 
-    guest.add_default_input_device()
-    guest.add_default_console_device()
-    guest.add_default_video_device()
-    guest.add_default_usb_controller()
-    guest.add_default_channels()
+    guest.add_default_devices()
 
     get_install_media(guest, options.location, options.cdrom)
 

@@ -1345,15 +1345,6 @@ class vmmCreate(vmmGObjectUI):
             page = self.widget("create-pages").get_nth_page(nr)
             page.set_visible(nr == pagenum)
 
-    def get_graphics_device(self, guest):
-        if guest.os.is_container():
-            return
-        if guest.os.arch not in ["x86_64", "i686", "ppc64"]:
-            return
-
-        guest.default_graphics_type = self.config.get_graphics_type()
-        return virtinst.VirtualGraphics(guest.conn)
-
     def build_guest(self, variant):
         guest = self.conn.caps.build_virtinst_guest(
             self.conn.get_backend(), self.capsguest, self.capsdomain)
@@ -1376,25 +1367,14 @@ class vmmCreate(vmmGObjectUI):
 
         # Set up default devices
         try:
-            gdev = self.get_graphics_device(guest)
-            if gdev:
-                guest.add_device(gdev)
-
-            if self.config.get_new_vm_sound():
-                guest.add_default_sound_device()
-            else:
-                guest.skip_default_sound = True
-
+            guest.default_graphics_type = self.config.get_graphics_type()
+            guest.skip_default_sound = not self.config.get_new_vm_sound()
             guest.skip_default_usbredir = (
                 self.config.get_add_spice_usbredir() == "no")
             guest.x86_cpu_default = self.config.get_default_cpu_setting(
                 for_cpu=True)
 
-            guest.add_default_video_device()
-            guest.add_default_input_device()
-            guest.add_default_console_device()
-            guest.add_default_usb_controller()
-            guest.add_default_channels()
+            guest.add_default_devices()
 
             if self.conn.check_support(self.conn.SUPPORT_CONN_PM_DISABLE):
                 guest.pm.suspend_to_mem = False

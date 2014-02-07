@@ -390,20 +390,14 @@ def convert_old_networks(options, number_of_default_nics):
 
 def _determine_default_graphics(guest, default_override):
     if default_override is True:
-        return "default"
+        return
     elif default_override is False:
-        return "none"
-
-    if guest.os.is_container():
-        logging.debug("Container guest, defaulting to nographics")
-        return "none"
+        guest.skip_default_graphics = True
+        return
 
     if "DISPLAY" not in os.environ.keys():
         logging.debug("DISPLAY is not set: defaulting to nographics.")
-        return "none"
-
-    logging.debug("DISPLAY is set: using default graphics")
-    return "default"
+        guest.skip_default_graphics = True
 
 
 def convert_old_graphics(guest, options, default_override=None):
@@ -427,8 +421,7 @@ def convert_old_graphics(guest, options, default_override=None):
         return
 
     if optnum == 0:
-        options.graphics = [_determine_default_graphics(guest,
-                                                        default_override)]
+        _determine_default_graphics(guest, default_override)
         return
 
     # Build a --graphics command line from old style opts
@@ -1644,7 +1637,6 @@ class ParserGraphics(VirtCLIParser):
     def _init_params(self):
         self.devclass = virtinst.VirtualGraphics
         self.remove_first = "type"
-        self.check_none = True
 
         def set_keymap_cb(opts, inst, cliname, val):
             ignore = opts
@@ -1679,6 +1671,12 @@ class ParserGraphics(VirtCLIParser):
         self.set_param("passwd", "password")
         self.set_param("passwdValidTo", "passwordvalidto")
         self.set_param("connected", "connected")
+
+    def _parse(self, opts, inst):
+        if opts.fullopts == "none":
+            self.guest.skip_default_graphics = True
+            return
+        return VirtCLIParser._parse(self, opts, inst)
 
 
 ########################

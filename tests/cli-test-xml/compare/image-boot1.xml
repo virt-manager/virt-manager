@@ -23,6 +23,16 @@
       <source file="/tmp/__virtinst__cli_root.raw"/>
       <target dev="hda" bus="ide"/>
     </disk>
+    <controller type="usb" index="0" model="ich9-ehci1"/>
+    <controller type="usb" index="0" model="ich9-uhci1">
+      <master startport="0"/>
+    </controller>
+    <controller type="usb" index="0" model="ich9-uhci2">
+      <master startport="2"/>
+    </controller>
+    <controller type="usb" index="0" model="ich9-uhci3">
+      <master startport="4"/>
+    </controller>
     <interface type="user">
       <mac address="00:11:22:33:44:55"/>
       <model type="e1000"/>
