@@ -240,9 +240,13 @@ def setup_device(dev):
         return
 
     logging.debug("Doing setup for disk=%s", dev)
-    meter = (cli.quiet and
-             progress.BaseMeter() or
-             progress.TextMeter(fo=sys.stdout))
+
+    if "VIRTINST_TEST_CLI_VIRTXML" in os.environ:
+        meter = progress.BaseMeter()
+    else:
+        meter = (cli.quiet and
+                 progress.BaseMeter() or
+                 progress.TextMeter(fo=sys.stdout))
 
     dev.setup(meter)
     dev.virt_xml_setup = True
