@@ -1,0 +1,16 @@
+   <memory unit="KiB">409600</memory>
+   <currentMemory unit="KiB">204800</currentMemory>
+   <blkiotune>
+-    <weight>100</weight>
++    <weight>500</weight>
+     <device>
+-      <path>/dev/sdd</path>
+-      <weight>200</weight>
++      <path>/dev/sdf</path>
++      <weight>600</weight>
+     </device>
+   </blkiotune>
+   <memoryBacking>
+
+Domain 'test-many-devices' defined successfully.
+Changes will take effect after the next domain shutdown.

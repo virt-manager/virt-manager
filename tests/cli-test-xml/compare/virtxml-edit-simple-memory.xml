@@ -5,6 +5,12 @@
 -  <currentMemory unit="KiB">204800</currentMemory>
 +  <memory unit="KiB">1024000</memory>
 +  <currentMemory unit="KiB">512000</currentMemory>
+   <blkiotune>
+     <weight>100</weight>
+     <device>
+@@ -14,7 +14,6 @@
+     </device>
+   </blkiotune>
    <memoryBacking>
 -    <hugepages/>
    </memoryBacking>

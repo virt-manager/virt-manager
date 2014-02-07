@@ -560,6 +560,7 @@ c.add_compare("""--hvm --pxe \
 --panic default \
 --security type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes \
 --numatune \\"1-3,5\\",mode=preferred \
+--blkiotune weight=200,device_path=/dev/sdc,device_weight=300 \
 --boot loader=/foo/bar \
 --host-device net_00_1c_25_10_b1_e4 \
 --features acpi=off,eoi=on,privnet=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=1234 \
@@ -788,6 +789,7 @@ c.add_compare("test --print-xml --edit --vcpus 7", "virtxml-print-xml")  # test 
 c.add_compare("--edit --cpu host-passthrough", "virtxml-stdin-edit", input_file=(xmldir + "/virtxml-stdin-edit.xml"))  # stdin test
 c.add_compare("--build-xml --cpu pentium3,+x2apic", "virtxml-build-cpu")
 c.add_compare("--build-xml --tpm /dev/tpm", "virtxml-build-tpm")
+c.add_compare("--build-xml --blkiotune weight=100,device_path=/dev/sdf,device_weight=200", "virtxml-build-blkiotune")
 
 
 c = vixml.add_category("simple edit diff", "test-many-devices --edit --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
@@ -798,6 +800,7 @@ c.add_compare("--memory 500,maxmemory=1000,hugepages=off", "virtxml-edit-simple-
 c.add_compare("--vcpus 10,maxvcpus=20,cores=5,sockets=4,threads=1", "virtxml-edit-simple-vcpus")
 c.add_compare("--cpu model=pentium2,+x2apic,forbid=pbe", "virtxml-edit-simple-cpu")
 c.add_compare("--numatune 1-5,7,mode=strict", "virtxml-edit-simple-numatune")
+c.add_compare("--blkiotune weight=500,device_path=/dev/sdf,device_weight=600", "virtxml-edit-simple-blkiotune")
 c.add_compare("--boot loader=foo.bar,network,useserial=on,init=/bin/bash", "virtxml-edit-simple-boot")
 c.add_compare("--security label=foo,bar,baz,UNKNOWN=val,relabel=on", "virtxml-edit-simple-security")
 c.add_compare("--features eoi=on,hyperv_relaxed=off,acpi=", "virtxml-edit-simple-features")

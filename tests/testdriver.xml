@@ -58,6 +58,13 @@
   <name>test-many-devices</name>
   <currentMemory>204800</currentMemory>
   <memory>409600</memory>
+  <blkiotune>
+    <weight>100</weight>
+    <device>
+      <path>/dev/sdd</path>
+      <weight>200</weight>
+    </device>
+  </blkiotune>
   <memoryBacking>
     <hugepages/>
   </memoryBacking>
