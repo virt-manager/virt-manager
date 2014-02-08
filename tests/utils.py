@@ -77,11 +77,12 @@ def openconn(uri):
 
     if uri not in _conn_cache:
         _conn_cache[uri] = {}
-    cache = _conn_cache[uri]
+        _conn_cache[uri]["vms"] = conn._fetch_all_guests_cached()
+        _conn_cache[uri]["pools"] = conn._fetch_all_pools_cached()
+        _conn_cache[uri]["vols"] = conn._fetch_all_vols_cached()
+    cache = _conn_cache[uri].copy()
 
     def cb_fetch_all_guests():
-        if "vms" not in cache:
-            cache["vms"] = conn._fetch_all_guests_cached()
         return cache["vms"]
 
     def cb_fetch_all_pools():
@@ -97,6 +98,7 @@ def openconn(uri):
     def cb_clear_cache(pools=False):
         if pools:
             cache.pop("pools", None)
+            cache.pop("vols", None)
 
     conn.cb_fetch_all_guests = cb_fetch_all_guests
     conn.cb_fetch_all_pools = cb_fetch_all_pools

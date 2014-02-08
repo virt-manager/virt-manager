@@ -136,9 +136,12 @@ class Cloner(object):
                 disk.path = path
                 disk.device = device
 
-                # We fake storage creation params for now, but we will
-                # update it later
-                disk.set_create_storage(fake=True)
+                if path and not self.preserve_dest_disks:
+                    # We fake storage creation params for now, but we will
+                    # update it later. Just use any clone_path to make sure
+                    # validation doesn't trip up
+                    clone_path = "/foo/bar"
+                    disk.set_create_storage(fake=True, clone_path=clone_path)
                 disk.validate()
                 disklist.append(disk)
             except Exception, e:
@@ -533,7 +536,8 @@ class Cloner(object):
                         raise ValueError("Disk path '%s' does not exist." %
                                          newd.path)
             except Exception, e:
-                logging.debug("", exc_info=True)
+                logging.debug("Exception creating clone disk objects",
+                    exc_info=True)
                 raise ValueError(_("Could not determine original disk "
                                    "information: %s" % str(e)))
             retdisks.append(newd)

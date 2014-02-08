@@ -94,9 +94,12 @@ test_files = {
     'CLONE_NOEXIST_XML' : "%s/clone-disk-noexist.xml" % xmldir,
     'IMAGE_XML'         : "%s/image.xml" % xmldir,
     'IMAGE_NOGFX_XML'   : "%s/image-nogfx.xml" % xmldir,
-    'NEWIMG1'           : new_images[0],
-    'NEWIMG2'           : new_images[1],
-    'NEWIMG3'           : new_images[2],
+    'NEWIMG1'           : "/dev/default-pool/new1.img",
+    'NEWIMG2'           : "/dev/default-pool/new2.img",
+    'NEWCLONEIMG1'      : new_images[0],
+    'NEWCLONEIMG2'      : new_images[1],
+    'NEWCLONEIMG3'      : new_images[2],
+    'AUTOMANAGEIMG'     : "/some/new/pool/dir/new.img",
     'EXISTIMG1'         : exist_images[0],
     'EXISTIMG2'         : exist_images[1],
     'ROIMG'             : ro_img,
@@ -159,6 +162,7 @@ class Command(object):
             if self.input_file:
                 sys.stdin = file(self.input_file)
 
+            exc = ""
             try:
                 if app.count("virt-install"):
                     ret = virtinstall.main(conn=conn)
@@ -172,10 +176,13 @@ class Command(object):
                     ret = virtxml.main(conn=conn)
             except SystemExit, sys_e:
                 ret = sys_e.code
+            except Exception:
+                ret = -1
+                exc = "\n" + "".join(traceback.format_exc())
 
             if ret != 0:
                 ret = -1
-            outt = out.getvalue()
+            outt = out.getvalue() + exc
             if outt.endswith("\n"):
                 outt = outt[:-1]
             return (ret, outt)
@@ -648,6 +655,9 @@ c.add_valid("--nodisks --cdrom %(MANAGEDEXIST1)s")  # Managed CDROM install
 c.add_valid("--pxe --file %(MANAGEDEXIST1)s")  # Using existing managed storage
 c.add_valid("--pxe --disk vol=%(POOL)s/%(VOL)s")  # Using existing managed storage 2
 c.add_valid("--pxe --disk pool=%(POOL)s,size=.04")  # Creating storage on managed pool
+c.add_valid("--pxe --disk /foo/bar/baz,size=.01")  # Creating any random path on the remote host
+c.add_valid("--pxe --disk /dev/zde")  # /dev file that we just pass through to the remote VM
+c.add_invalid("--pxe --disk /foo/bar/baz")  # File that doesn't exist after auto storage setup
 c.add_invalid("--nodisks --location /tmp")  # Use of --location
 c.add_invalid("--file %(EXISTIMG1)s --pxe")  # Trying to use unmanaged storage
 
@@ -695,6 +705,7 @@ c.add_valid("--disk pool=default,size=.00001")  # Building 'default' pool
 c.add_valid("--disk path=%(EXISTIMG1)s,bus=usb")  # Existing USB disk
 c.add_valid("--disk path=%(EXISTIMG1)s,bus=usb,removable=on")  # Existing USB disk as removable
 c.add_valid("--disk path=%(EXISTIMG1)s,bus=usb,removable=off")  # Existing USB disk as non-removable
+c.add_valid("--disk %(AUTOMANAGEIMG)s,size=.1")  # autocreate the pool
 c.add_invalid("--disk %(NEWIMG1)s,sparse=true,size=100000000000 --force")  # Don't warn about fully allocated file exceeding disk space
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000 --nonsparse")  # Nonexisting file, size too big
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000")  # Huge file, sparse, but no prompting
@@ -705,7 +716,7 @@ c.add_invalid("--disk pool=foopool,size=.0001")  # Specify a nonexistent pool
 c.add_invalid("--disk vol=%(POOL)s/foovol")  # Specify a nonexistent volume
 c.add_invalid("--disk pool=%(POOL)s")  # Specify a pool with no size
 c.add_invalid("--disk path=%(EXISTIMG1)s,perms=ro,size=.0001,cache=FOOBAR")  # Unknown cache type
-c.add_invalid("--disk path=%(NEWIMG1)s,format=qcow2,size=.0000001")  # Unmanaged file using non-raw format
+c.add_invalid("--disk path=/dev/foo/bar/baz,format=qcow2,size=.0000001")  # Unmanaged file using non-raw format
 c.add_invalid("--disk path=%(MANAGEDDISKNEW1)s,format=raw,size=.0000001")  # Managed disk using any format
 c.add_invalid("--disk %(NEWIMG1)s")  # Not specifying path= and non existent storage w/ no size
 c.add_invalid("--disk %(NEWIMG1)s,sparse=true,size=100000000000")  # Fail if fully allocated file would exceed disk space
@@ -919,12 +930,12 @@ c.add_invalid("-o test-for-clone --auto-clone")
 
 c = vclon.add_category("general", "-n clonetest")
 c.add_valid("-o test")  # Nodisk guest
-c.add_valid("-o test --file %(NEWIMG1)s --file %(NEWIMG2)s")  # Nodisk, but with spurious files passed
-c.add_valid("-o test --file %(NEWIMG1)s --file %(NEWIMG2)s --prompt")  # Working scenario w/ prompt shouldn't ask anything
-c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWIMG1)s --file %(NEWIMG2)s")  # XML File with 2 disks
+c.add_valid("-o test --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s")  # Nodisk, but with spurious files passed
+c.add_valid("-o test --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --prompt")  # Working scenario w/ prompt shouldn't ask anything
+c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s")  # XML File with 2 disks
 c.add_valid("--original-xml %(CLONE_DISK_XML)s --file virt-install --file %(EXISTIMG1)s --preserve")  # XML w/ disks, overwriting existing files with --preserve
-c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWIMG1)s --file %(NEWIMG2)s --file %(NEWIMG3)s --force-copy=hdc")  # XML w/ disks, force copy a readonly target
-c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWIMG1)s --file %(NEWIMG2)s --force-copy=fda")  # XML w/ disks, force copy a target with no media
+c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --file %(NEWCLONEIMG3)s --force-copy=hdc")  # XML w/ disks, force copy a readonly target
+c.add_valid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=fda")  # XML w/ disks, force copy a target with no media
 c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --file %(MANAGEDNEW1)s")  # XML w/ managed storage, specify managed path
 c.add_valid("--original-xml %(CLONE_NOEXIST_XML)s --file %(EXISTIMG1)s --preserve")  # XML w/ managed storage, specify managed path across pools# Libvirt test driver doesn't support cloning across pools# XML w/ non-existent storage, with --preserve
 c.add_valid("-o test -n test-many-devices --replace")  # Overwriting existing VM
@@ -934,7 +945,7 @@ c.add_invalid("-o idontexist --auto-clone")  # Non-existent vm name with auto fl
 c.add_invalid("-o test -n test")  # Colliding new name
 c.add_invalid("--original-xml %(CLONE_DISK_XML)s")  # XML file with several disks, but non specified
 c.add_invalid("--original-xml %(CLONE_DISK_XML)s --file virt-install --file %(EXISTIMG1)s")  # XML w/ disks, overwriting existing files with no --preserve
-c.add_invalid("--original-xml %(CLONE_DISK_XML)s --file %(NEWIMG1)s --file %(NEWIMG2)s --force-copy=hdc")  # XML w/ disks, force copy but not enough disks passed
+c.add_invalid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=hdc")  # XML w/ disks, force copy but not enough disks passed
 c.add_invalid("--original-xml %(CLONE_STORAGE_XML)s --file /tmp/clonevol")  # XML w/ managed storage, specify unmanaged path (should fail)
 c.add_invalid("--original-xml %(CLONE_NOEXIST_XML)s --file %(EXISTIMG1)s")  # XML w/ non-existent storage, WITHOUT --preserve
 c.add_invalid("--original-xml %(CLONE_DISK_XML)s --file %(ROIMG)s --file %(ROIMG)s --force")  # XML w/ managed storage, specify RO image without preserve

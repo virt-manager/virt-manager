@@ -27,7 +27,7 @@ import sys
 import urlgrabber.progress as progress
 
 import virtinst.cli as cli
-from virtinst import Cloner, VirtualDisk
+from virtinst import Cloner
 from virtinst.cli import fail, print_stdout, print_stderr
 
 
@@ -67,29 +67,8 @@ def get_clone_macaddr(new_mac, design):
     design.clone_macs = new_mac
 
 
-def get_clone_uuid(new_uuid, design):
-    if new_uuid is not None:
-        design.clone_uuid = new_uuid
 
-
-def _build_disk(conn, new_path, orig_path, preserve):
-    if not new_path:
-        fail(_("A disk path must be specified to clone '%s'.") % orig_path)
-
-    try:
-        dev = VirtualDisk(conn)
-        dev.path = new_path
-        dev.set_create_storage(size=.0001, sparse=False)
-        dev.validate()
-    except ValueError, e:
-        fail(_("Error with storage parameters: %s" % str(e)))
-
-    cli.validate_disk(dev, warn_overwrite=not preserve)
-    return dev
-
-
-def get_clone_diskfile(new_diskfiles, design, preserve=False,
-                       auto_clone=False):
+def get_clone_diskfile(new_diskfiles, design, preserve, auto_clone):
     if new_diskfiles is None:
         new_diskfiles = [None]
 
@@ -100,33 +79,20 @@ def get_clone_diskfile(new_diskfiles, design, preserve=False,
             # Extend the new/passed paths list with None if it's not
             # long enough
             new_diskfiles.append(None)
-        disk = new_diskfiles[newidx]
+        newpath = new_diskfiles[newidx]
 
-        if disk is None and auto_clone:
-            disk = design.generate_clone_disk_path(origpath)
+        if newpath is None and auto_clone:
+            newpath = design.generate_clone_disk_path(origpath)
 
         if origpath is None:
-            devpath = None
-        else:
-            dev = _build_disk(design.conn, disk, origpath, preserve)
-            devpath = dev.path
+            newpath = None
 
-        clonepaths.append(devpath)
+        clonepaths.append(newpath)
         newidx += 1
     design.clone_paths = clonepaths
 
-
-def get_clone_sparse(sparse, design):
-    design.clone_sparse = sparse
-
-
-def get_preserve(preserve, design):
-    design.preserve = preserve
-
-
-def get_force_target(target, design):
-    for i in target or []:
-        design.force_target = i
+    for disk in design.clone_disks:
+        cli.validate_disk(disk, warn_overwrite=not preserve)
 
 
 def parse_args():
@@ -208,10 +174,12 @@ def main(conn=None):
     get_clone_name(options.new_name, options.auto_clone, design)
 
     get_clone_macaddr(options.new_mac, design)
-    get_clone_uuid(options.new_uuid, design)
-    get_clone_sparse(options.sparse, design)
-    get_force_target(options.target, design)
-    get_preserve(options.preserve, design)
+    if options.new_uuid is not None:
+        design.clone_uuid = options.new_uuid
+    for i in options.target or []:
+        design.force_target = i
+    design.clone_sparse = options.sparse
+    design.preserve = options.preserve
 
     # This determines the devices that need to be cloned, so that
     # get_clone_diskfile knows how many new disk paths it needs

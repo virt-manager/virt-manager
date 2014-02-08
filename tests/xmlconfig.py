@@ -954,25 +954,6 @@ class TestXMLConfig(unittest.TestCase):
         self._testInstall(g, "winxp-kvm-stage1",
                           "winxp-kvm-stage3", "winxp-kvm-stage2")
 
-    def testCreateDisk(self):
-        """
-        Doesn't really belong here, but what the hell :)
-        """
-        path = "/tmp/__virtinst_create_test__.img"
-        sizegigs = .001
-        sizebytes = long(sizegigs * 1024L * 1024L * 1024L)
-
-        for sparse in [True, False]:
-            disk = VirtualDisk(utils.get_conn())
-            disk.path = path
-            disk.set_create_storage(size=sizegigs, sparse=sparse)
-            disk.validate()
-            disk.setup()
-
-            actualsize = long(os.path.getsize(path))
-            os.unlink(path)
-            self.assertEquals(sizebytes, actualsize)
-
     def testDefaultBridge(self):
         origfunc = None
         util = None

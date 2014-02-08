@@ -114,8 +114,8 @@ def _distill_storage(conn, do_create, nomanaged,
         pass
     elif path and not nomanaged:
         path = os.path.abspath(path)
-        vol_object, pool, path_is_pool = diskbackend.check_if_path_managed(
-                                                            conn, path)
+        (vol_object, pool, path_is_pool) = diskbackend.manage_path(conn, path)
+
 
     creator = None
     backend = diskbackend.StorageBackend(conn, path, vol_object,
@@ -123,12 +123,14 @@ def _distill_storage(conn, do_create, nomanaged,
     if not do_create:
         return backend, None
 
-    if backend.exists() and path is not None:
-        if vol_install:
-            raise ValueError("vol_install specified but %s exists." %
-                             backend.path)
-        elif not clone_path:
+    if backend.exists(auto_check=False) and path is not None:
+        if not clone_path:
             return backend, None
+
+    if path and not (vol_install or pool or clone_path):
+        raise RuntimeError(_("Don't know how to create storage for "
+            "path '%s'. Use libvirt APIs to manage the parent directory "
+            "as a pool first.") % path)
 
     if path or vol_install or pool or clone_path:
         creator = diskbackend.StorageCreator(conn, path, pool,
@@ -219,13 +221,9 @@ class VirtualDisk(VirtualDevice):
             return False
 
         try:
-            vol = None
-            path_is_pool = False
-            try:
-                vol, ignore, path_is_pool = diskbackend.check_if_path_managed(
-                                                            conn, path)
-            except:
-                pass
+            (vol, pool, path_is_pool) = diskbackend.check_if_path_managed(
+                conn, path)
+            ignore = pool
 
             if vol or path_is_pool:
                 return True
@@ -629,8 +627,9 @@ class VirtualDisk(VirtualDevice):
         if backing_store is not None:
             backing_store = os.path.abspath(backing_store)
 
-        _validate_path(clone_path)
-        _validate_path(backing_store)
+        if not fake:
+            _validate_path(clone_path)
+            _validate_path(backing_store)
 
         if fake and size is None:
             size = .000001
@@ -692,7 +691,6 @@ class VirtualDisk(VirtualDevice):
         """
         return bool(self._storage_creator)
 
-
     def validate(self):
         """
         function to validate all the complex interaction between the various
@@ -713,9 +711,6 @@ class VirtualDisk(VirtualDevice):
             if not storage_capable:
                 raise ValueError(_("Connection doesn't support remote "
                                    "storage."))
-            if not self.__managed_storage():
-                raise ValueError(_("Must specify libvirt managed storage "
-                                   "if on a remote connection"))
 
         # The main distinctions from this point forward:
         # - Are we doing storage API operations or local media checks?

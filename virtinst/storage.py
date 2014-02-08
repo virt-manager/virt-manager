@@ -253,6 +253,15 @@ class StoragePool(_StorageObject):
                 return conn.storagePoolLookupByName(pool.name)
         return None
 
+    @staticmethod
+    def find_free_name(conn, basename, **kwargs):
+        """
+        Finds a name similar (or equal) to passed 'basename' that is not
+        in use by another pool. Extra params are passed to generate_name
+        """
+        return util.generate_name(basename,
+                                  conn.storagePoolLookupByName,
+                                  **kwargs)
 
 
     def __init__(self, *args, **kwargs):
@@ -502,7 +511,7 @@ class StorageVolume(_StorageObject):
     def find_free_name(pool_object, basename, **kwargs):
         """
         Finds a name similar (or equal) to passed 'basename' that is not
-        in use by another pool. Extra params are passed to generate_name
+        in use by another volume. Extra params are passed to generate_name
         """
         pool_object.refresh(0)
         return util.generate_name(basename,

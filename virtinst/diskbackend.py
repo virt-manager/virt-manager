@@ -104,6 +104,10 @@ def check_if_path_managed(conn, path):
             pool = None
             verr = str(e)
 
+    if not vol and not pool and verr:
+        raise ValueError(_("Cannot use storage %(path)s: %(err)s") %
+            {'path' : path, 'err' : verr})
+
     if not vol:
         # See if path is a pool source, and allow it through
         trypool = _check_if_pool_source(conn, path)
@@ -111,24 +115,47 @@ def check_if_path_managed(conn, path):
             path_is_pool = True
             pool = trypool
 
-    if not vol and not pool:
-        if not conn.is_remote():
-            # Building local disk
-            return None, None, False
-
-        if not verr:
-            # Since there is no error, no pool was ever found
-            err = (_("Cannot use storage '%(path)s': '%(rootdir)s' is "
-                     "not managed on the remote host.") %
-                      {'path' : path,
-                        'rootdir' : os.path.dirname(path)})
-        else:
-            err = (_("Cannot use storage %(path)s: %(err)s") %
-                    {'path' : path, 'err' : verr})
-
-        raise ValueError(err)
-
     return vol, pool, path_is_pool
+
+
+def _can_auto_manage(path):
+    path = path or ""
+    skip_prefixes = ["/dev", "/sys", "/proc"]
+
+    for prefix in skip_prefixes:
+        if path.startswith(prefix + "/") or path == prefix:
+            return False
+    return True
+
+
+def manage_path(conn, path):
+    """
+    If path is not managed, try to create a storage pool to probe the path
+    """
+    vol, pool, path_is_pool = check_if_path_managed(conn, path)
+    if vol or pool or not _can_auto_manage(path):
+        return vol, pool, path_is_pool
+
+    dirname = os.path.dirname(path)
+    poolname = StoragePool.find_free_name(
+        conn, os.path.basename(dirname) or "pool")
+    logging.debug("Attempting to build pool=%s target=%s", poolname, dirname)
+
+    poolxml = StoragePool(conn)
+    poolxml.name = poolxml.find_free_name(
+        conn, os.path.basename(dirname) or "dirpool")
+    poolxml.type = poolxml.TYPE_DIR
+    poolxml.target_path = dirname
+    pool = poolxml.install(build=False, create=True, autostart=True)
+    conn.clear_cache(pools=True)
+
+    vol = None
+    for checkvol in pool.listVolumes():
+        if checkvol == os.path.basename(path):
+            vol = pool.storageVolLookupByName(checkvol)
+            break
+
+    return vol, pool, False
 
 
 def build_vol_install(conn, path, pool, size, sparse):
@@ -244,7 +271,7 @@ class StorageCreator(_StorageBase):
         return self._sparse
 
     def get_size(self):
-        if not self._size:
+        if self._size is None:
             self._size = (float(self._vol_install.capacity) /
                           1024.0 / 1024.0 / 1024.0)
         return self._size
@@ -276,19 +303,12 @@ class StorageCreator(_StorageBase):
 
         if self.is_managed():
             return self._vol_install.validate()
-
         if devtype == "block":
             raise ValueError(_("Local block device path '%s' must "
                                "exist.") % self.path)
-        if not os.access(os.path.dirname(self.path), os.R_OK):
-            raise ValueError("No read access to directory '%s'" %
-                             os.path.dirname(self.path))
         if self._size is None:
             raise ValueError(_("size is required for non-existent disk "
                                "'%s'" % self.path))
-        if not os.access(os.path.dirname(self.path), os.W_OK):
-            raise ValueError(_("No write access to directory '%s'") %
-                               os.path.dirname(self.path))
 
     def is_size_conflict(self):
         if self._vol_install:
@@ -323,63 +343,26 @@ class StorageCreator(_StorageBase):
         if self.fake:
             raise RuntimeError("Storage creator is fake but creation "
                                "requested.")
+
         # If a clone_path is specified, but not vol_install.input_vol,
         # that means we are cloning unmanaged -> managed, so skip this
         if (self._vol_install and
             (not self._clone_path or self._vol_install.input_vol)):
             return self._vol_install.install(meter=progresscb)
 
-        if self._clone_path:
-            text = (_("Cloning %(srcfile)s") %
-                    {'srcfile' : os.path.basename(self._clone_path)})
-        else:
-            text = _("Creating storage file %s") % os.path.basename(self._path)
+        if not self._clone_path:
+            raise RuntimeError("Local storage creation requested, "
+                "this shouldn't happen.")
 
-        size_bytes = long(self._size * 1024L * 1024L * 1024L)
+        text = (_("Cloning %(srcfile)s") %
+                {'srcfile' : os.path.basename(self._clone_path)})
+
+        size_bytes = long(self.get_size() * 1024L * 1024L * 1024L)
         progresscb.start(filename=self._path, size=long(size_bytes),
                          text=text)
 
-        if self._clone_path:
-            # Plain file clone
-            self._clone_local(progresscb, size_bytes)
-        else:
-            # Plain file creation
-            self._create_local_file(progresscb, size_bytes)
-
-    def _create_local_file(self, progresscb, size_bytes):
-        """
-        Helper function which attempts to build self.path
-        """
-        fd = None
-        path = self._path
-        sparse = self._sparse
-
-        try:
-            try:
-                fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_DSYNC)
-
-                if sparse:
-                    os.ftruncate(fd, size_bytes)
-                else:
-                    # 1 meg of nulls
-                    mb = 1024 * 1024
-                    buf = '\x00' * mb
-
-                    left = size_bytes
-                    while left > 0:
-                        if left < mb:
-                            buf = '\x00' * left
-                        left = max(left - mb, 0)
-
-                        os.write(fd, buf)
-                        progresscb.update(size_bytes - left)
-            except OSError, e:
-                raise RuntimeError(_("Error creating diskimage %s: %s") %
-                                   (path, str(e)))
-        finally:
-            if fd is not None:
-                os.close(fd)
-            progresscb.end(size_bytes)
+        # Plain file clone
+        self._clone_local(progresscb, size_bytes)
 
     def _clone_local(self, meter, size_bytes):
         if self._clone_path == "/dev/null":
@@ -521,13 +504,21 @@ class StorageBackend(_StorageBase):
             self._size = (float(ret) / 1024.0 / 1024.0 / 1024.0)
         return self._size
 
-    def exists(self):
+    def exists(self, auto_check=True):
         if self._exists is None:
             if self.path is None:
                 self._exists = True
             elif self._vol_object or self._pool_object:
                 self._exists = True
             elif not self._conn.is_remote() and os.path.exists(self._path):
+                self._exists = True
+            elif (auto_check and
+                  self._conn.is_remote() and
+                  not _can_auto_manage(self._path)):
+                # This allows users to pass /dev/sdX and we don't try to
+                # validate it exists on the remote connection, since
+                # autopooling /dev is perilous. Libvirt will error if
+                # the device doesn't exist.
                 self._exists = True
             else:
                 self._exists = False
@@ -550,7 +541,7 @@ class StorageBackend(_StorageBase):
             elif self._pool_object:
                 self._dev_type = self._get_pool_xml().get_vm_disk_type()
 
-            elif self._path:
+            elif self._path and not self._conn.is_remote():
                 if os.path.isdir(self._path):
                     self._dev_type = "dir"
                 elif util.stat_disk(self._path)[0]:

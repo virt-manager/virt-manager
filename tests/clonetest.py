@@ -200,19 +200,3 @@ class TestClone(unittest.TestCase):
             return
 
         raise AssertionError("Expected exception, but none raised.")
-
-    def testCloneManagedToUnmanaged(self):
-        base = "managed-storage"
-
-        # We are trying to clone from a pool (/dev/default-pool) to unmanaged
-        # storage. For this case, the cloning needs to fail back to manual
-        # operation (no libvirt calls), but since /dev/default-pool doesn't exist,
-        # this should fail.
-        try:
-            self._clone_helper(base, ["/tmp/new1.img", "/tmp/new2.img"],
-                               compare=False)
-
-            raise AssertionError("Managed to unmanaged succeeded, expected "
-                                 "failure.")
-        except (ValueError, RuntimeError), e:
-            logging.debug("Received expected exception: %s", str(e))
