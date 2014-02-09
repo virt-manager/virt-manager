@@ -93,7 +93,7 @@ def compare_device(origdev, newdev, idx):
     return True
 
 
-def find_device(guest, origdev):
+def _find_device(guest, origdev):
     devlist = guest.get_devices(origdev.virtual_device_type)
     for idx in range(len(devlist)):
         dev = devlist[idx]
@@ -458,21 +458,28 @@ class vmmDomain(vmmLibvirtObject):
         self._name = None
         self._id = None
 
-    def _redefine_device(self, cb, origdev):
-        defguest = self._get_xmlobj_to_define()
-        dev = find_device(defguest, origdev)
+    def _lookup_device_to_define(self, origdev, guest=None):
+        if guest is None:
+            guest = self._get_xmlobj_to_define()
+
+        dev = _find_device(guest, origdev)
         if dev:
-            return cb(dev)
+            return dev
 
         # If we are removing multiple dev from an active VM, a double
         # attempt may result in a lookup failure. If device is present
         # in the active XML, assume all is good.
-        if find_device(self.get_xmlobj(), origdev):
+        if _find_device(self.get_xmlobj(), origdev):
             logging.debug("Device in active config but not inactive config.")
             return
 
         raise RuntimeError(_("Could not find specified device in the "
                              "inactive VM configuration: %s") % repr(origdev))
+
+    def _redefine_device(self, cb, origdev):
+        dev = self._lookup_device_to_define(origdev)
+        if dev:
+            return cb(dev)
 
 
     ##############################
@@ -508,7 +515,7 @@ class vmmDomain(vmmLibvirtObject):
         def change(guest):
             def rmdev(editdev):
                 if con:
-                    rmcon = find_device(guest, con)
+                    rmcon = _find_device(guest, con)
                     if rmcon:
                         guest.remove_device(rmcon)
 
@@ -569,7 +576,50 @@ class vmmDomain(vmmLibvirtObject):
         return self._redefine(change)
 
     # Boot define methods
-    def set_boot_device(self, boot_list):
+    def can_use_device_boot_order(self):
+        # Return 'True' if guest can use new style boot device ordering
+        return self.conn.check_support(
+            self.conn.SUPPORT_CONN_DEVICE_BOOTORDER)
+
+    def get_bootable_devices(self):
+        devs = self.get_disk_devices()
+        devs += self.get_network_devices()
+        devs += self.get_hostdev_devices()
+
+        # redirdev can also be marked bootable, but it should be rarely
+        # used and clutters the UI
+        return devs
+
+    def _set_device_boot_order(self, boot_list):
+        boot_dev_order = []
+        devmap = dict((dev.vmmidstr, dev) for dev in
+                      self.get_bootable_devices())
+        for b in boot_list:
+            if b in devmap:
+                boot_dev_order.append(devmap[b])
+
+        def change(guest):
+            # Unset the traditional boot order
+            guest.os.bootorder = []
+
+            # Unset standard boot order
+            for dev in guest.get_all_devices():
+                dev.boot.order = None
+
+            count = 1
+            for origdev in boot_dev_order:
+                dev = self._lookup_device_to_define(origdev, guest=guest)
+                if not dev:
+                    continue
+                dev.boot.order = count
+                count += 1
+
+        return self._redefine(change)
+
+    def set_boot_order(self, boot_list):
+        if self.can_use_device_boot_order():
+            return self._set_device_boot_order(boot_list)
+
         def change(guest):
             guest.os.bootorder = boot_list
         return self._redefine(change)
@@ -1036,8 +1086,46 @@ class vmmDomain(vmmLibvirtObject):
     def get_cpu_config(self):
         return self.get_xmlobj().cpu
 
-    def get_boot_device(self):
+    def _convert_old_boot_order(self):
+        boot_order = self._get_old_boot_order()
+        ret = []
+        disks = self.get_disk_devices()
+        nets = self.get_network_devices()
+
+        for b in boot_order:
+            if b == "network":
+                ret += [n.vmmidstr for n in nets]
+            if b == "hd":
+                ret += [d.vmmidstr for d in disks if
+                        d.device not in ["cdrom", "floppy"]]
+            if b == "cdrom":
+                ret += [d.vmmidstr for d in disks if d.device == "cdrom"]
+            if b == "floppy":
+                ret += [d.vmmidstr for d in disks if d.device == "floppy"]
+        return ret
+
+    def _get_device_boot_order(self):
+        devs = self.get_bootable_devices()
+        order = []
+        for dev in devs:
+            if not dev.boot.order:
+                continue
+            order.append((dev.vmmidstr, dev.boot.order))
+
+        if not order:
+            # No devices individually marked bootable, convert traditional
+            # boot XML to fine grained, for the UI.
+            return self._convert_old_boot_order()
+
+        order.sort(key=lambda p: p[1])
+        return [p[0] for p in order]
+
+    def _get_old_boot_order(self):
         return self.get_xmlobj().os.bootorder
+    def get_boot_order(self):
+        if self.can_use_device_boot_order():
+            return self._get_device_boot_order()
+        return self._get_old_boot_order()
     def get_boot_menu(self):
         guest = self.get_xmlobj()
         return bool(guest.os.enable_bootmenu)
@@ -1062,10 +1150,9 @@ class vmmDomain(vmmLibvirtObject):
                                 inactive=inactive)
         devs = guest.get_devices(device_type)
 
-        count = 0
-        for dev in devs:
-            dev.vmmindex = count
-            count += 1
+        for idx in range(len(devs)):
+            devs[idx].vmmindex = idx
+            devs[idx].vmmidstr = devs[idx].virtual_device_type + ("%.3d" % idx)
 
         return devs
 

@@ -143,10 +143,11 @@ remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                 HW_LIST_TYPE_RNG, HW_LIST_TYPE_PANIC]
 
 # Boot device columns
-(BOOT_DEV_TYPE,
+(BOOT_KEY,
  BOOT_LABEL,
  BOOT_ICON,
- BOOT_ACTIVE) = range(4)
+ BOOT_ACTIVE,
+ BOOT_CAN_SELECT) = range(5)
 
 # Main tab pages
 (DETAILS_PAGE_DETAILS,
@@ -198,7 +199,8 @@ def _build_redir_label(redirdev):
     else:
         raise RuntimeError("unhandled redirection kind: %s" % redirdev.type)
 
-    hwlabel = _("%s Redirector") % redirdev.bus.upper()
+    hwlabel = _("%s Redirector %s") % (redirdev.bus.upper(),
+        redirdev.vmmindex + 1)
 
     return addrlabel, hwlabel
 
@@ -660,7 +662,6 @@ class vmmDetails(vmmGObjectUI):
         self.vm.connect("resources-sampled", self.refresh_resources)
 
         self.populate_hw_list()
-        self.repopulate_boot_list()
 
         self.hw_selected()
         self.refresh_vm_state()
@@ -930,8 +931,8 @@ class vmmDetails(vmmGObjectUI):
 
         # Boot device list
         boot_list = self.widget("config-boot-list")
-        # model = [ XML boot type, display name, icon name, enabled ]
-        boot_list_model = Gtk.ListStore(str, str, str, bool)
+        # [XML boot type, display name, icon name, enabled, can select]
+        boot_list_model = Gtk.ListStore(str, str, str, bool, bool)
         boot_list.set_model(boot_list_model)
 
         chkCol = Gtk.TreeViewColumn()
@@ -944,6 +945,7 @@ class vmmDetails(vmmGObjectUI):
         chk.connect("toggled", self.config_boot_toggled)
         chkCol.pack_start(chk, False)
         chkCol.add_attribute(chk, 'active', BOOT_ACTIVE)
+        chkCol.add_attribute(chk, 'visible', BOOT_CAN_SELECT)
 
         icon = Gtk.CellRendererPixbuf()
         txtCol.pack_start(icon, False)
@@ -1515,13 +1517,13 @@ class vmmDetails(vmmGObjectUI):
     # Details/Hardware getters #
     ############################
 
-    def get_config_boot_devs(self):
+    def get_config_boot_order(self):
         boot_model = self.widget("config-boot-list").get_model()
         devs = []
 
         for row in boot_model:
             if row[BOOT_ACTIVE]:
-                devs.append(row[BOOT_DEV_TYPE])
+                devs.append(row[BOOT_KEY])
 
         return devs
 
@@ -1694,8 +1696,8 @@ class vmmDetails(vmmGObjectUI):
     # Boot device / Autostart
     def config_bootdev_selected(self, ignore):
         boot_row = self.get_boot_selection()
-        boot_selection = boot_row and boot_row[BOOT_DEV_TYPE]
-        boot_devs = self.get_config_boot_devs()
+        boot_selection = boot_row and boot_row[BOOT_KEY]
+        boot_devs = self.get_config_boot_order()
         up_widget = self.widget("config-boot-moveup")
         down_widget = self.widget("config-boot-movedown")
 
@@ -1708,39 +1710,45 @@ class vmmDetails(vmmGObjectUI):
                                      boot_selection != boot_devs[0]))
 
     def config_boot_toggled(self, ignore, index):
-        boot_model = self.widget("config-boot-list").get_model()
-        boot_row = boot_model[index]
-        is_active = boot_row[BOOT_ACTIVE]
+        model = self.widget("config-boot-list").get_model()
+        row = model[index]
 
-        boot_row[BOOT_ACTIVE] = not is_active
-
-        self.repopulate_boot_list(self.get_config_boot_devs(),
-                                  boot_row[BOOT_DEV_TYPE])
+        row[BOOT_ACTIVE] = not row[BOOT_ACTIVE]
         self.enable_apply(EDIT_BOOTORDER)
 
     def config_boot_move(self, src, move_up):
         ignore = src
-        boot_row = self.get_boot_selection()
-        if not boot_row:
+        row = self.get_boot_selection()
+        if not row:
             return
 
-        boot_selection = boot_row[BOOT_DEV_TYPE]
-        boot_devs = self.get_config_boot_devs()
-        boot_idx = boot_devs.index(boot_selection)
+        row_key = row[BOOT_KEY]
+        boot_order = self.get_config_boot_order()
+        key_idx = boot_order.index(row_key)
         if move_up:
-            new_idx = boot_idx - 1
+            new_idx = key_idx - 1
         else:
-            new_idx = boot_idx + 1
+            new_idx = key_idx + 1
 
-        if new_idx < 0 or new_idx >= len(boot_devs):
-            # Somehow we got out of bounds
+        if new_idx < 0 or new_idx >= len(boot_order):
+            # Somehow we went out of bounds
             return
 
-        swap_dev = boot_devs[new_idx]
-        boot_devs[new_idx] = boot_selection
-        boot_devs[boot_idx] = swap_dev
+        boot_list = self.widget("config-boot-list")
+        model = boot_list.get_model()
+        prev_row = None
+        for row in model:
+            if prev_row and prev_row[BOOT_KEY] == row_key:
+                model.swap(prev_row.iter, row.iter)
+                break
 
-        self.repopulate_boot_list(boot_devs, boot_selection)
+            if row[BOOT_KEY] == row_key and prev_row and move_up:
+                model.swap(prev_row.iter, row.iter)
+                break
+
+            prev_row = row
+
+        boot_list.get_selection().emit("changed")
         self.enable_apply(EDIT_BOOTORDER)
 
     # IO Tuning
@@ -2008,8 +2016,8 @@ class vmmDetails(vmmGObjectUI):
                 return False
 
         if self.edited(EDIT_BOOTORDER):
-            bootdevs = self.get_config_boot_devs()
-            add_define(self.vm.set_boot_device, bootdevs)
+            bootdevs = self.get_config_boot_order()
+            add_define(self.vm.set_boot_order, bootdevs)
 
         if self.edited(EDIT_BOOTMENU):
             bootmenu = self.widget("boot-menu").get_active()
@@ -3023,9 +3031,12 @@ class vmmDetails(vmmGObjectUI):
         show_init = self.vm.is_container()
         show_boot = (not self.vm.is_container() and not self.vm.is_xenpv())
 
-        self.widget("boot-order-align").set_visible(show_boot)
-        self.widget("boot-kernel-align").set_visible(show_kernel)
-        self.widget("boot-init-align").set_visible(show_init)
+        uiutil.set_grid_row_visible(
+            self.widget("boot-order-frame"), show_boot)
+        uiutil.set_grid_row_visible(
+            self.widget("boot-kernel-expander"), show_kernel)
+        uiutil.set_grid_row_visible(
+            self.widget("boot-init-frame"), show_init)
 
         # Kernel/initrd boot
         kernel, initrd, dtb, args = self.vm.get_boot_kernel_info()
@@ -3066,7 +3077,7 @@ class vmmDetails(vmmGObjectUI):
         # Boot menu populate
         menu = self.vm.get_boot_menu() or False
         self.widget("boot-menu").set_active(menu)
-        self.repopulate_boot_list()
+        self.repopulate_boot_order()
 
 
     ############################
@@ -3228,63 +3239,45 @@ class vmmDetails(vmmGObjectUI):
 
             hw_list_model.remove(_iter)
 
-    def repopulate_boot_list(self, bootdevs=None, dev_select=None):
+    def _make_boot_rows(self):
+        if not self.vm.can_use_device_boot_order():
+            return [
+                ["hd", "Hard Disk", "drive-harddisk", False, True],
+                ["cdrom", "CDROM", "media-optical", False, True],
+                ["network", "Network (PXE)", "network-idle", False, True],
+                ["fd", "Floppy", "media-floppy", False, True],
+            ]
+
+        ret = []
+        for dev in self.vm.get_bootable_devices():
+            icon = _icon_for_device(dev)
+            label = _label_for_device(dev)
+
+            ret.append([dev.vmmidstr, label, icon, False, True])
+
+        if not ret:
+            ret.append([None, _("No bootable devices"), None, False, False])
+        return ret
+
+    def repopulate_boot_order(self):
         boot_list = self.widget("config-boot-list")
         boot_model = boot_list.get_model()
-        old_order = [x[BOOT_DEV_TYPE] for x in boot_model]
         boot_model.clear()
+        boot_rows = self._make_boot_rows()
+        boot_order = self.vm.get_boot_order()
 
-        if bootdevs is None:
-            bootdevs = self.vm.get_boot_device()
+        for key in boot_order:
+            for row in boot_rows[:]:
+                if key != row[BOOT_KEY]:
+                    continue
 
-        boot_rows = {
-            "hd" : ["hd", "Hard Disk", "drive-harddisk", False],
-            "cdrom" : ["cdrom", "CDROM", "media-optical", False],
-            "network" : ["network", "Network (PXE)", "network-idle", False],
-            "fd" : ["fd", "Floppy", "media-floppy", False],
-        }
+                row[BOOT_ACTIVE] = True
+                boot_model.append(row)
+                boot_rows.remove(row)
+                break
 
-        for dev in bootdevs:
-            foundrow = None
-
-            for key, row in boot_rows.items():
-                if key == dev:
-                    foundrow = row
-                    del(boot_rows[key])
-                    break
-
-            if not foundrow:
-                # Some boot device listed that we don't know about.
-                foundrow = [dev, "Boot type '%s'" % dev,
-                            "drive-harddisk", True]
-
-            foundrow[BOOT_ACTIVE] = True
-            boot_model.append(foundrow)
-
-        # Append all remaining boot_rows that aren't enabled
-        for dev in old_order:
-            if dev in boot_rows:
-                boot_model.append(boot_rows[dev])
-                del(boot_rows[dev])
-
-        for row in boot_rows.values():
+        for row in boot_rows:
             boot_model.append(row)
-
-        boot_list.set_model(boot_model)
-        selection = boot_list.get_selection()
-
-        if dev_select:
-            idx = 0
-            for row in boot_model:
-                if row[BOOT_DEV_TYPE] == dev_select:
-                    break
-                idx += 1
-
-            boot_list.get_selection().select_path(str(idx))
-
-        elif not selection.get_selected()[1]:
-            # Set a default selection
-            selection.select_path("0")
 
     def show_pair(self, basename, show):
         combo = self.widget(basename)

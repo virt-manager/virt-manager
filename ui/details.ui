@@ -2398,193 +2398,200 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkVBox" id="vbox3">
+                          <object class="GtkGrid" id="vbox4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="row_spacing">24</property>
                             <child>
-                              <object class="GtkVBox" id="vbox4">
+                              <object class="GtkFrame" id="frame4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="label_xalign">0</property>
+                                <property name="shadow_type">none</property>
                                 <child>
-                                  <object class="GtkFrame" id="frame4">
+                                  <object class="GtkAlignment" id="alignment2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label_xalign">0</property>
-                                    <property name="shadow_type">none</property>
+                                    <property name="top_padding">3</property>
+                                    <property name="left_padding">12</property>
                                     <child>
-                                      <object class="GtkAlignment" id="alignment2">
+                                      <object class="GtkCheckButton" id="config-autostart">
+                                        <property name="label" translatable="yes">Start virt_ual machine on host boot up</property>
                                         <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="top_padding">3</property>
-                                        <property name="left_padding">12</property>
-                                        <child>
-                                          <object class="GtkCheckButton" id="config-autostart">
-                                            <property name="label" translatable="yes">Start virt_ual machine on host boot up</property>
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <property name="use_underline">True</property>
-                                            <property name="xalign">0.5</property>
-                                            <property name="draw_indicator">True</property>
-                                            <signal name="toggled" handler="on_config_autostart_changed" swapped="no"/>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
-                                    <child type="label">
-                                      <object class="GtkLabel" id="label2">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">&lt;b&gt;Autostart&lt;/b&gt;</property>
-                                        <property name="use_markup">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="xalign">0.5</property>
+                                        <property name="draw_indicator">True</property>
+                                        <signal name="toggled" handler="on_config_autostart_changed" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
                                 </child>
-                                <child>
-                                  <object class="GtkAlignment" id="boot-order-align">
+                                <child type="label">
+                                  <object class="GtkLabel" id="label2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="top_padding">24</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Autostart&lt;/b&gt;</property>
+                                    <property name="use_markup">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkFrame" id="boot-init-frame">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label_xalign">0</property>
+                                <property name="shadow_type">none</property>
+                                <child>
+                                  <object class="GtkAlignment" id="alignment36">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="top_padding">3</property>
+                                    <property name="left_padding">12</property>
                                     <child>
-                                      <object class="GtkFrame" id="frame1">
+                                      <object class="GtkHBox" id="boot-init-path-box">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label_xalign">0</property>
-                                        <property name="shadow_type">none</property>
+                                        <property name="spacing">12</property>
                                         <child>
-                                          <object class="GtkAlignment" id="bootalign">
+                                          <object class="GtkLabel" id="label69">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="top_padding">3</property>
-                                            <property name="left_padding">12</property>
+                                            <property name="label" translatable="yes">Init path:</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkEntry" id="boot-init-path">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="invisible_char">●</property>
+                                            <property name="width_chars">25</property>
+                                            <signal name="changed" handler="on_boot_init_path_changed" swapped="no"/>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child type="label">
+                                  <object class="GtkLabel" id="labelll">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Container init&lt;/b&gt;</property>
+                                    <property name="use_markup">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">3</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkExpander" id="boot-kernel-expander">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="valign">start</property>
+                                <property name="vexpand">False</property>
+                                <child>
+                                  <object class="GtkAlignment" id="alignment20">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="top_padding">3</property>
+                                    <property name="left_padding">12</property>
+                                    <child>
+                                      <object class="GtkBox" id="box1">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <object class="GtkCheckButton" id="boot-kernel-enable">
+                                            <property name="label" translatable="yes">Enable direct kernel boot</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="on_boot_kernel_enable_toggled" swapped="no"/>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkBox" id="boot-kernel-box">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="spacing">6</property>
                                             <child>
-                                              <object class="GtkVBox" id="bootvbox">
+                                              <object class="GtkTable" id="table13">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="spacing">6</property>
+                                                <property name="n_rows">4</property>
+                                                <property name="n_columns">2</property>
+                                                <property name="column_spacing">6</property>
                                                 <child>
-                                                  <object class="GtkCheckButton" id="boot-menu">
-                                                    <property name="label" translatable="yes">Enable boot me_nu</property>
+                                                  <object class="GtkLabel" id="label38">
                                                     <property name="visible">True</property>
-                                                    <property name="can_focus">True</property>
-                                                    <property name="receives_default">False</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="xalign">0.5</property>
-                                                    <property name="draw_indicator">True</property>
-                                                    <signal name="toggled" handler="on_boot_menu_changed" swapped="no"/>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="ypad">8</property>
+                                                    <property name="label" translatable="yes">Kernel path:</property>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">True</property>
-                                                    <property name="position">0</property>
+                                                    <property name="x_options">GTK_FILL</property>
+                                                    <property name="y_options">GTK_FILL</property>
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkHBox" id="boothbox">
+                                                  <object class="GtkLabel" id="label39">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="ypad">8</property>
+                                                    <property name="label" translatable="yes">Initrd path:</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="top_attach">1</property>
+                                                    <property name="bottom_attach">2</property>
+                                                    <property name="x_options">GTK_FILL</property>
+                                                    <property name="y_options">GTK_FILL</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkBox" id="box3">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="spacing">6</property>
                                                     <child>
-                                                      <object class="GtkTable" id="table2">
+                                                      <object class="GtkEntry" id="boot-initrd">
                                                         <property name="visible">True</property>
-                                                        <property name="can_focus">False</property>
-                                                        <property name="n_rows">3</property>
-                                                        <property name="n_columns">2</property>
-                                                        <property name="column_spacing">6</property>
-                                                        <property name="row_spacing">6</property>
-                                                        <child>
-                                                          <object class="GtkScrolledWindow" id="scrolledwindow3">
-                                                            <property name="width_request">20</property>
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">True</property>
-                                                            <property name="hscrollbar_policy">never</property>
-                                                            <property name="vscrollbar_policy">never</property>
-                                                            <property name="shadow_type">in</property>
-                                                            <child>
-                                                            <object class="GtkTreeView" id="config-boot-list">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">True</property>
-                                                            <property name="headers_visible">False</property>
-                                                            <child internal-child="selection">
-                                                            <object class="GtkTreeSelection" id="treeview-selection5">
-                                                            <signal name="changed" handler="on_config_boot_list_changed" swapped="no"/>
-                                                            </object>
-                                                            </child>
-                                                            </object>
-                                                            </child>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="bottom_attach">3</property>
-                                                            <property name="y_options">GTK_FILL</property>
-                                                          </packing>
-                                                        </child>
-                                                        <child>
-                                                          <object class="GtkButton" id="config-boot-moveup">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">True</property>
-                                                            <property name="receives_default">True</property>
-                                                            <signal name="clicked" handler="on_config_boot_moveup_clicked" swapped="no"/>
-                                                            <child>
-                                                            <object class="GtkImage" id="image7">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">False</property>
-                                                            <property name="stock">gtk-go-up</property>
-                                                            </object>
-                                                            </child>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="left_attach">1</property>
-                                                            <property name="right_attach">2</property>
-                                                            <property name="x_options">GTK_FILL</property>
-                                                            <property name="y_options">GTK_FILL</property>
-                                                          </packing>
-                                                        </child>
-                                                        <child>
-                                                          <object class="GtkButton" id="config-boot-movedown">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">True</property>
-                                                            <property name="receives_default">True</property>
-                                                            <signal name="clicked" handler="on_config_boot_movedown_clicked" swapped="no"/>
-                                                            <child>
-                                                            <object class="GtkImage" id="image8">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">False</property>
-                                                            <property name="stock">gtk-go-down</property>
-                                                            </object>
-                                                            </child>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="left_attach">1</property>
-                                                            <property name="right_attach">2</property>
-                                                            <property name="top_attach">1</property>
-                                                            <property name="bottom_attach">2</property>
-                                                            <property name="x_options">GTK_FILL</property>
-                                                            <property name="y_options">GTK_FILL</property>
-                                                          </packing>
-                                                        </child>
-                                                        <child>
-                                                          <object class="GtkAlignment" id="alignment21">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">False</property>
-                                                            <child>
-                                                            <placeholder/>
-                                                            </child>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="left_attach">1</property>
-                                                            <property name="right_attach">2</property>
-                                                            <property name="top_attach">2</property>
-                                                            <property name="bottom_attach">3</property>
-                                                            <property name="x_options">GTK_FILL</property>
-                                                            <property name="y_options">GTK_FILL</property>
-                                                          </packing>
-                                                        </child>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="invisible_char">●</property>
+                                                        <signal name="changed" handler="on_boot_initrd_changed" swapped="no"/>
                                                       </object>
                                                       <packing>
                                                         <property name="expand">True</property>
@@ -2593,77 +2600,293 @@
                                                       </packing>
                                                     </child>
                                                     <child>
-                                                      <object class="GtkAlignment" id="alignment1">
+                                                      <object class="GtkButton" id="boot-initrd-browse">
+                                                        <property name="label" translatable="yes">Browse</property>
                                                         <property name="visible">True</property>
-                                                        <property name="can_focus">False</property>
-                                                        <child>
-                                                          <placeholder/>
-                                                        </child>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="receives_default">True</property>
+                                                        <signal name="clicked" handler="on_boot_initrd_browse_clicked" swapped="no"/>
                                                       </object>
                                                       <packing>
-                                                        <property name="expand">True</property>
+                                                        <property name="expand">False</property>
                                                         <property name="fill">True</property>
                                                         <property name="position">1</property>
                                                       </packing>
                                                     </child>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">True</property>
-                                                    <property name="position">1</property>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="top_attach">1</property>
+                                                    <property name="bottom_attach">2</property>
+                                                    <property name="y_options"/>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkBox" id="box4">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="spacing">6</property>
+                                                    <child>
+                                                      <object class="GtkEntry" id="boot-kernel">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="invisible_char">●</property>
+                                                        <signal name="changed" handler="on_boot_kernel_changed" swapped="no"/>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">True</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkButton" id="boot-kernel-browse">
+                                                        <property name="label" translatable="yes">Browse</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="receives_default">True</property>
+                                                        <signal name="clicked" handler="on_boot_kernel_browse_clicked" swapped="no"/>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">1</property>
+                                                      </packing>
+                                                    </child>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="y_options"/>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLabel" id="label40">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="ypad">8</property>
+                                                    <property name="label" translatable="yes">Kernel args:</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="top_attach">3</property>
+                                                    <property name="bottom_attach">4</property>
+                                                    <property name="x_options">GTK_FILL</property>
+                                                    <property name="y_options">GTK_FILL</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkEntry" id="boot-kernel-args">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="invisible_char">●</property>
+                                                    <property name="width_chars">40</property>
+                                                    <signal name="changed" handler="on_boot_kernel_args_changed" swapped="no"/>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="top_attach">3</property>
+                                                    <property name="bottom_attach">4</property>
+                                                    <property name="y_options">GTK_FILL</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLabel" id="boot-dtb-label">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="ypad">8</property>
+                                                    <property name="label" translatable="yes">DTB Path:</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="top_attach">2</property>
+                                                    <property name="bottom_attach">3</property>
+                                                    <property name="x_options">GTK_FILL</property>
+                                                    <property name="y_options">GTK_FILL</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkBox" id="boot-dtb-box">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="spacing">6</property>
+                                                    <child>
+                                                      <object class="GtkEntry" id="boot-dtb">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="invisible_char">●</property>
+                                                        <signal name="changed" handler="on_boot_dtb_changed" swapped="no"/>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">True</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkButton" id="boot-dtb-browse">
+                                                        <property name="label" translatable="yes">Browse</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="receives_default">True</property>
+                                                        <signal name="clicked" handler="on_boot_dtb_browse_clicked" swapped="no"/>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">1</property>
+                                                      </packing>
+                                                    </child>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="top_attach">2</property>
+                                                    <property name="bottom_attach">3</property>
+                                                    <property name="y_options"/>
                                                   </packing>
                                                 </child>
                                               </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkAlignment" id="alignment12">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">True</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">1</property>
+                                              </packing>
                                             </child>
                                           </object>
-                                        </child>
-                                        <child type="label">
-                                          <object class="GtkLabel" id="label1">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="label" translatable="yes">&lt;b&gt;Boot device order&lt;/b&gt;</property>
-                                            <property name="use_markup">True</property>
-                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
                                         </child>
                                       </object>
                                     </child>
                                   </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
                                 </child>
-                                <child>
-                                  <object class="GtkAlignment" id="boot-kernel-align">
+                                <child type="label">
+                                  <object class="GtkLabel" id="label37">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="top_padding">24</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Direct kernel boot&lt;/b&gt;</property>
+                                    <property name="use_markup">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">2</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkFrame" id="boot-order-frame">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label_xalign">0</property>
+                                <property name="shadow_type">none</property>
+                                <child>
+                                  <object class="GtkAlignment" id="bootalign">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="top_padding">3</property>
+                                    <property name="left_padding">12</property>
                                     <child>
-                                      <object class="GtkExpander" id="boot-kernel-expander">
+                                      <object class="GtkVBox" id="bootvbox">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="spacing">6</property>
                                         <child>
-                                          <object class="GtkAlignment" id="alignment20">
+                                          <object class="GtkCheckButton" id="boot-menu">
+                                            <property name="label" translatable="yes">Enable boot me_nu</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="xalign">0</property>
+                                            <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="on_boot_menu_changed" swapped="no"/>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkGrid" id="table2">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="top_padding">3</property>
-                                            <property name="left_padding">12</property>
+                                            <property name="halign">start</property>
+                                            <property name="hexpand">False</property>
+                                            <property name="row_spacing">6</property>
+                                            <property name="column_spacing">6</property>
                                             <child>
-                                              <object class="GtkBox" id="box1">
+                                              <object class="GtkScrolledWindow" id="scrolledwindow3">
+                                                <property name="width_request">125</property>
+                                                <property name="height_request">125</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="hscrollbar_policy">never</property>
+                                                <property name="shadow_type">in</property>
+                                                <child>
+                                                  <object class="GtkTreeView" id="config-boot-list">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="headers_visible">False</property>
+                                                    <child internal-child="selection">
+                                                      <object class="GtkTreeSelection" id="treeview-selection4">
+                                                        <signal name="changed" handler="on_config_boot_list_changed" swapped="no"/>
+                                                      </object>
+                                                    </child>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">0</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkBox" id="box13">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="orientation">vertical</property>
                                                 <property name="spacing">6</property>
                                                 <child>
-                                                  <object class="GtkCheckButton" id="boot-kernel-enable">
-                                                    <property name="label" translatable="yes">Enable direct kernel boot</property>
+                                                  <object class="GtkButton" id="config-boot-moveup">
                                                     <property name="visible">True</property>
+                                                    <property name="sensitive">False</property>
                                                     <property name="can_focus">True</property>
-                                                    <property name="receives_default">False</property>
-                                                    <property name="xalign">0</property>
-                                                    <property name="draw_indicator">True</property>
-                                                    <signal name="toggled" handler="on_boot_kernel_enable_toggled" swapped="no"/>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="valign">start</property>
+                                                    <signal name="clicked" handler="on_config_boot_moveup_clicked" swapped="no"/>
+                                                    <child>
+                                                      <object class="GtkImage" id="image7">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="stock">gtk-go-up</property>
+                                                      </object>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -2672,232 +2895,20 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkBox" id="boot-kernel-box">
+                                                  <object class="GtkButton" id="config-boot-movedown">
                                                     <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="spacing">6</property>
+                                                    <property name="sensitive">False</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="valign">start</property>
+                                                    <property name="vexpand">False</property>
+                                                    <signal name="clicked" handler="on_config_boot_movedown_clicked" swapped="no"/>
                                                     <child>
-                                                      <object class="GtkTable" id="table13">
+                                                      <object class="GtkImage" id="image8">
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
-                                                        <property name="n_rows">4</property>
-                                                        <property name="n_columns">2</property>
-                                                        <property name="column_spacing">6</property>
-                                                        <child>
-                                                          <object class="GtkLabel" id="label38">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">False</property>
-                                                            <property name="xalign">0</property>
-                                                            <property name="ypad">8</property>
-                                                            <property name="label" translatable="yes">Kernel path:</property>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="x_options">GTK_FILL</property>
-                                                            <property name="y_options">GTK_FILL</property>
-                                                          </packing>
-                                                        </child>
-                                                        <child>
-                                                          <object class="GtkLabel" id="label39">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">False</property>
-                                                            <property name="xalign">0</property>
-                                                            <property name="ypad">8</property>
-                                                            <property name="label" translatable="yes">Initrd path:</property>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="top_attach">1</property>
-                                                            <property name="bottom_attach">2</property>
-                                                            <property name="x_options">GTK_FILL</property>
-                                                            <property name="y_options">GTK_FILL</property>
-                                                          </packing>
-                                                        </child>
-                                                        <child>
-                                                          <object class="GtkBox" id="box3">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">False</property>
-                                                            <property name="spacing">6</property>
-                                                            <child>
-                                                            <object class="GtkEntry" id="boot-initrd">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">True</property>
-                                                            <property name="invisible_char">●</property>
-                                                            <signal name="changed" handler="on_boot_initrd_changed" swapped="no"/>
-                                                            </object>
-                                                            <packing>
-                                                            <property name="expand">True</property>
-                                                            <property name="fill">True</property>
-                                                            <property name="position">0</property>
-                                                            </packing>
-                                                            </child>
-                                                            <child>
-                                                            <object class="GtkButton" id="boot-initrd-browse">
-                                                            <property name="label" translatable="yes">Browse</property>
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">True</property>
-                                                            <property name="receives_default">True</property>
-                                                            <signal name="clicked" handler="on_boot_initrd_browse_clicked" swapped="no"/>
-                                                            </object>
-                                                            <packing>
-                                                            <property name="expand">False</property>
-                                                            <property name="fill">True</property>
-                                                            <property name="position">1</property>
-                                                            </packing>
-                                                            </child>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="left_attach">1</property>
-                                                            <property name="right_attach">2</property>
-                                                            <property name="top_attach">1</property>
-                                                            <property name="bottom_attach">2</property>
-                                                            <property name="y_options"/>
-                                                          </packing>
-                                                        </child>
-                                                        <child>
-                                                          <object class="GtkBox" id="box4">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">False</property>
-                                                            <property name="spacing">6</property>
-                                                            <child>
-                                                            <object class="GtkEntry" id="boot-kernel">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">True</property>
-                                                            <property name="invisible_char">●</property>
-                                                            <signal name="changed" handler="on_boot_kernel_changed" swapped="no"/>
-                                                            </object>
-                                                            <packing>
-                                                            <property name="expand">True</property>
-                                                            <property name="fill">True</property>
-                                                            <property name="position">0</property>
-                                                            </packing>
-                                                            </child>
-                                                            <child>
-                                                            <object class="GtkButton" id="boot-kernel-browse">
-                                                            <property name="label" translatable="yes">Browse</property>
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">True</property>
-                                                            <property name="receives_default">True</property>
-                                                            <signal name="clicked" handler="on_boot_kernel_browse_clicked" swapped="no"/>
-                                                            </object>
-                                                            <packing>
-                                                            <property name="expand">False</property>
-                                                            <property name="fill">True</property>
-                                                            <property name="position">1</property>
-                                                            </packing>
-                                                            </child>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="left_attach">1</property>
-                                                            <property name="right_attach">2</property>
-                                                            <property name="y_options"/>
-                                                          </packing>
-                                                        </child>
-                                                        <child>
-                                                          <object class="GtkLabel" id="label40">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">False</property>
-                                                            <property name="xalign">0</property>
-                                                            <property name="ypad">8</property>
-                                                            <property name="label" translatable="yes">Kernel args:</property>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="top_attach">3</property>
-                                                            <property name="bottom_attach">4</property>
-                                                            <property name="x_options">GTK_FILL</property>
-                                                            <property name="y_options">GTK_FILL</property>
-                                                          </packing>
-                                                        </child>
-                                                        <child>
-                                                          <object class="GtkEntry" id="boot-kernel-args">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">True</property>
-                                                            <property name="invisible_char">●</property>
-                                                            <property name="width_chars">40</property>
-                                                            <signal name="changed" handler="on_boot_kernel_args_changed" swapped="no"/>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="left_attach">1</property>
-                                                            <property name="right_attach">2</property>
-                                                            <property name="top_attach">3</property>
-                                                            <property name="bottom_attach">4</property>
-                                                            <property name="y_options">GTK_FILL</property>
-                                                          </packing>
-                                                        </child>
-                                                        <child>
-                                                          <object class="GtkLabel" id="boot-dtb-label">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">False</property>
-                                                            <property name="xalign">0</property>
-                                                            <property name="ypad">8</property>
-                                                            <property name="label" translatable="yes">DTB Path:</property>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="top_attach">2</property>
-                                                            <property name="bottom_attach">3</property>
-                                                            <property name="x_options">GTK_FILL</property>
-                                                            <property name="y_options">GTK_FILL</property>
-                                                          </packing>
-                                                        </child>
-                                                        <child>
-                                                          <object class="GtkBox" id="boot-dtb-box">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">False</property>
-                                                            <property name="spacing">6</property>
-                                                            <child>
-                                                            <object class="GtkEntry" id="boot-dtb">
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">True</property>
-                                                            <property name="invisible_char">●</property>
-                                                            <signal name="changed" handler="on_boot_dtb_changed" swapped="no"/>
-                                                            </object>
-                                                            <packing>
-                                                            <property name="expand">True</property>
-                                                            <property name="fill">True</property>
-                                                            <property name="position">0</property>
-                                                            </packing>
-                                                            </child>
-                                                            <child>
-                                                            <object class="GtkButton" id="boot-dtb-browse">
-                                                            <property name="label" translatable="yes">Browse</property>
-                                                            <property name="visible">True</property>
-                                                            <property name="can_focus">True</property>
-                                                            <property name="receives_default">True</property>
-                                                            <signal name="clicked" handler="on_boot_dtb_browse_clicked" swapped="no"/>
-                                                            </object>
-                                                            <packing>
-                                                            <property name="expand">False</property>
-                                                            <property name="fill">True</property>
-                                                            <property name="position">1</property>
-                                                            </packing>
-                                                            </child>
-                                                          </object>
-                                                          <packing>
-                                                            <property name="left_attach">1</property>
-                                                            <property name="right_attach">2</property>
-                                                            <property name="top_attach">2</property>
-                                                            <property name="bottom_attach">3</property>
-                                                            <property name="y_options"/>
-                                                          </packing>
-                                                        </child>
+                                                        <property name="stock">gtk-go-down</property>
                                                       </object>
-                                                      <packing>
-                                                        <property name="expand">False</property>
-                                                        <property name="fill">True</property>
-                                                        <property name="position">0</property>
-                                                      </packing>
-                                                    </child>
-                                                    <child>
-                                                      <object class="GtkAlignment" id="alignment12">
-                                                        <property name="visible">True</property>
-                                                        <property name="can_focus">False</property>
-                                                        <child>
-                                                          <placeholder/>
-                                                        </child>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="expand">True</property>
-                                                        <property name="fill">True</property>
-                                                        <property name="position">1</property>
-                                                      </packing>
                                                     </child>
                                                   </object>
                                                   <packing>
@@ -2907,100 +2918,38 @@
                                                   </packing>
                                                 </child>
                                               </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">0</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
                                             </child>
                                           </object>
-                                        </child>
-                                        <child type="label">
-                                          <object class="GtkLabel" id="label37">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="label" translatable="yes">&lt;b&gt;Direct kernel boot&lt;/b&gt;</property>
-                                            <property name="use_markup">True</property>
-                                          </object>
+                                          <packing>
+                                            <property name="expand">True</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
                                         </child>
                                       </object>
                                     </child>
                                   </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">2</property>
-                                  </packing>
                                 </child>
-                                <child>
-                                  <object class="GtkAlignment" id="boot-init-align">
+                                <child type="label">
+                                  <object class="GtkLabel" id="label1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="top_padding">24</property>
-                                    <child>
-                                      <object class="GtkFrame" id="boot-init-frame">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="label_xalign">0</property>
-                                        <property name="shadow_type">none</property>
-                                        <child>
-                                          <object class="GtkAlignment" id="alignment36">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="top_padding">3</property>
-                                            <property name="left_padding">12</property>
-                                            <child>
-                                              <object class="GtkHBox" id="boot-init-path-box">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="spacing">12</property>
-                                                <child>
-                                                  <object class="GtkLabel" id="label69">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="label" translatable="yes">Init path:</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">True</property>
-                                                    <property name="position">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkEntry" id="boot-init-path">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">True</property>
-                                                    <property name="invisible_char">●</property>
-                                                    <property name="width_chars">25</property>
-                                                    <signal name="changed" handler="on_boot_init_path_changed" swapped="no"/>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">True</property>
-                                                    <property name="position">1</property>
-                                                  </packing>
-                                                </child>
-                                              </object>
-                                            </child>
-                                          </object>
-                                        </child>
-                                        <child type="label">
-                                          <object class="GtkLabel" id="labelll">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="label" translatable="yes">&lt;b&gt;Container init&lt;/b&gt;</property>
-                                            <property name="use_markup">True</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
+                                    <property name="label" translatable="yes">&lt;b&gt;Boot device order&lt;/b&gt;</property>
+                                    <property name="use_markup">True</property>
                                   </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">3</property>
-                                  </packing>
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
                               </packing>
                             </child>
                           </object>
