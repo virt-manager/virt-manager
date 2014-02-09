@@ -228,7 +228,7 @@ These options alter the XML for a single class of XML elements. More complete do
 
 Generally these options map pretty straightforwardly to the libvirt XML, documented at L<http://libvirt.org/formatdomain.html>
 
-Option strings are in the format of: --option opt=val,opt2=val2,...  example: --disk path=/tmp/foo,shareable=on. Propertys can be unsed with '--option opt=,', so to clear a disks cache setting you could use '--disk cache=,'
+Option strings are in the format of: --option opt=val,opt2=val2,...  example: --disk path=/tmp/foo,shareable=on. Properties can be used with '--option opt=,', so to clear a disks cache setting you could use '--disk cache=,'
 
 Every XML option has a special value 'clearxml=yes'. When combined with --edit, it will completely blank out the XML block being edited before applying the requested changes. This allows completely rebuilding an XML block. See EXAMPLES for some usage.
 
