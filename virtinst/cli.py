@@ -802,6 +802,12 @@ def add_disk_option(stog, editexample=False):
                "--disk=?") + editmsg)
 
 
+def add_idmap_option(insg):
+    insg.add_argument("--idmap",
+            help=_("Enable user namespace for LXC container. Ex.\n"
+                "--idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10"))
+
+
 #############################################
 # CLI complex parsing helpers               #
 # (for options like --disk, --network, etc. #
@@ -1397,6 +1403,23 @@ class ParserBoot(VirtCLIParser):
             inst.os.bootorder = boot_order
 
         VirtCLIParser._parse(self, opts, inst)
+
+
+######################
+# --idmap parsing    #
+######################
+
+class ParserIdmap(VirtCLIParser):
+    def _init_params(self):
+        self.clear_attr = "idmap"
+
+        self.set_param("idmap.uid_start", "uid_start")
+        self.set_param("idmap.uid_target", "uid_target")
+        self.set_param("idmap.uid_count", "uid_count")
+
+        self.set_param("idmap.gid_start", "gid_start")
+        self.set_param("idmap.gid_target", "gid_target")
+        self.set_param("idmap.gid_count", "gid_count")
 
 
 ######################
@@ -2129,6 +2152,7 @@ def build_parser_map(options, skip=None, only=None):
     register_parser("cpu", ParserCPU)
     register_parser("numatune", ParserNumatune)
     register_parser("blkiotune", ParserBlkiotune)
+    register_parser("idmap", ParserIdmap)
     register_parser("boot", ParserBoot)
     register_parser("security", ParserSecurity)
     register_parser("features", ParserFeatures)

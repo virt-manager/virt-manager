@@ -20,6 +20,10 @@
     <boot dev="network"/>
     <boot dev="hd"/>
   </os>
+  <idmap>
+    <uid start="0" target="1000" count="10"/>
+    <gid start="0" target="1000" count="10"/>
+  </idmap>
   <features>
     <apic eoi="on"/>
     <pae/>
@@ -150,6 +154,10 @@
     <loader>/foo/bar</loader>
     <boot dev="hd"/>
   </os>
+  <idmap>
+    <uid start="0" target="1000" count="10"/>
+    <gid start="0" target="1000" count="10"/>
+  </idmap>
   <features>
     <apic eoi="on"/>
     <pae/>

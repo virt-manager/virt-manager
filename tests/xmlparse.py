@@ -197,6 +197,14 @@ class XMLParseTest(unittest.TestCase):
         check("device_weight", None, 300)
         check("device_path", None, "/home/1.img")
 
+        check = self._make_checker(guest.idmap)
+        check("uid_start", None, 0)
+        check("uid_target", None, 1000)
+        check("uid_count", None, 10)
+        check("gid_start", None, 0)
+        check("gid_target", None, 1000)
+        check("gid_count", None, 10)
+
         check = self._make_checker(guest.get_devices("memballoon")[0])
         check("model", "virtio", "none")
 

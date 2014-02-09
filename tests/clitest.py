@@ -464,6 +464,7 @@ c.add_valid("--cpu foobar,+x2apic,+x2apicagain,-distest,forbid=foo,forbid=bar,di
 c.add_valid("--numatune 1,2,3,5-7,^6")  # Simple --numatune
 c.add_valid("--numatune 1-3,4,mode=strict")  # More complex, parser should do the right thing here
 c.add_valid("--blkiotune weight=100,device_path=/home/test/1.img,device_weight=200")  # --blkiotune
+c.add_valid("--idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10")  # --idmap
 c.add_compare("--connect %(DEFAULTURI)s --cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
 c.add_invalid("--vcpus 32 --cpuset=969-1000")  # Bogus cpuset
 c.add_invalid("--vcpus 32 --cpuset=autofoo")  # Bogus cpuset
@@ -559,6 +560,7 @@ c.add_compare("""--hvm --pxe \
 --security type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes \
 --numatune \\"1-3,5\\",mode=preferred \
 --blkiotune weight=200,device_path=/dev/sdc,device_weight=300 \
+--idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10 \
 --boot loader=/foo/bar \
 --host-device net_00_1c_25_10_b1_e4 \
 --features acpi=off,eoi=on,privnet=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=1234 \
@@ -785,6 +787,7 @@ c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(xmldir 
 c.add_compare("--build-xml --cpu pentium3,+x2apic", "build-cpu")
 c.add_compare("--build-xml --tpm /dev/tpm", "build-tpm")
 c.add_compare("--build-xml --blkiotune weight=100,device_path=/dev/sdf,device_weight=200", "build-blkiotune")
+c.add_compare("--build-xml --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10", "build-idmap")
 
 
 c = vixml.add_category("simple edit diff", "test-many-devices --edit --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
@@ -796,6 +799,7 @@ c.add_compare("--vcpus 10,maxvcpus=20,cores=5,sockets=4,threads=1", "edit-simple
 c.add_compare("--cpu model=pentium2,+x2apic,forbid=pbe", "edit-simple-cpu")
 c.add_compare("--numatune 1-5,7,mode=strict", "edit-simple-numatune")
 c.add_compare("--blkiotune weight=500,device_path=/dev/sdf,device_weight=600", "edit-simple-blkiotune")
+c.add_compare("--idmap uid_start=0,uid_target=2000,uid_count=30,gid_start=0,gid_target=3000,gid_count=40", "edit-simple-idmap")
 c.add_compare("--boot loader=foo.bar,network,useserial=on,init=/bin/bash", "edit-simple-boot")
 c.add_compare("--security label=foo,bar,baz,UNKNOWN=val,relabel=on", "edit-simple-security")
 c.add_compare("--features eoi=on,hyperv_relaxed=off,acpi=", "edit-simple-features")

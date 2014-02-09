@@ -74,6 +74,10 @@
     <loader>/usr/lib/xen/boot/hvmloader</loader>
     <boot dev='hd'/>
   </os>
+  <idmap>
+    <uid start='0' target='1000' count='10'/>
+    <gid start='0' target='1000' count='10'/>
+  </idmap>
   <description>Foo bar baz &amp;
     yeah boii &lt; &gt; yeahfoo
   </description>

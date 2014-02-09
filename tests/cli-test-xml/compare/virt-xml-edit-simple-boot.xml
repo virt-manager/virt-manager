@@ -8,8 +8,8 @@
 +    <bios useserial="yes"/>
 +    <init>/bin/bash</init>
    </os>
-   <features>
-     <acpi/>
+   <idmap>
+     <uid start="0" target="1000" count="10"/>
 
 Domain 'test-many-devices' defined successfully.
 Changes will take effect after the next domain shutdown.

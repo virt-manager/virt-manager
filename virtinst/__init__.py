@@ -31,6 +31,7 @@ from virtinst.clock import Clock
 from virtinst.cpu import CPU, CPUFeature
 from virtinst.seclabel import Seclabel
 from virtinst.pm import PM
+from virtinst.idmap import IdMap
 
 import virtinst.capabilities as CapabilitiesParser
 from virtinst.interface import Interface, InterfaceProtocol
