@@ -2,7 +2,7 @@
        <address type="isa" iobase="0x505"/>
      </panic>
 +    <disk type="file" device="disk">
-+      <source file="/tmp/__virtinst_cli_exist1.img"/>
++      <source file="/dev/default-pool/testvol1.img"/>
 +      <target dev="vdf" bus="virtio"/>
 +    </disk>
    </devices>
