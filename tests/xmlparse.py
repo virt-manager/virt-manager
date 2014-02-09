@@ -34,7 +34,6 @@ def sanitize_file_xml(xml):
 
 
 class XMLParseTest(unittest.TestCase):
-
     def _roundtrip_compare(self, filename):
         expectXML = sanitize_file_xml(file(filename).read())
         guest = virtinst.Guest(conn, parsexml=expectXML)
@@ -329,6 +328,8 @@ class XMLParseTest(unittest.TestCase):
         check("iotune_tis", None, 5)
         check("iotune_tbs", None, 6)
 
+        check = self._make_checker(disk6.boot)
+        check("order", None, 7, None)
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

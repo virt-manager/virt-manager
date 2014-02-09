@@ -7,6 +7,7 @@
        <source>
          <address bus="3" device="2"/>
        </source>
+       <boot order="9"/>
 +      <driver name="vfio"/>
      </hostdev>
      <hostdev mode="subsystem" type="pci" managed="yes">
@@ -19,6 +20,7 @@
        <source>
          <address domain="0x0003" bus="0x00" slot="0x19" function="0x0"/>
        </source>
+       <boot order="6"/>
 +      <driver name="vfio"/>
      </hostdev>
      <redirdev bus="usb" type="tcp">

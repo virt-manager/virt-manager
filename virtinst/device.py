@@ -27,6 +27,11 @@ class VirtualDeviceAlias(XMLBuilder):
     name = XMLProperty("./@name")
 
 
+class VirtualDeviceBoot(XMLBuilder):
+    _XML_ROOT_NAME = "boot"
+    order = XMLProperty("./@order", is_int=True)
+
+
 class VirtualDeviceAddress(XMLBuilder):
     """
     Examples:
@@ -157,6 +162,7 @@ class VirtualDevice(XMLBuilder):
 
     alias = XMLChildProperty(VirtualDeviceAlias, is_single=True)
     address = XMLChildProperty(VirtualDeviceAddress, is_single=True)
+    boot = XMLChildProperty(VirtualDeviceBoot, is_single=True)
 
 
     def setup(self, meter=None):

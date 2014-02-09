@@ -17,8 +17,6 @@
   <os>
     <type arch="i686">hvm</type>
     <loader>/foo/bar</loader>
-    <boot dev="network"/>
-    <boot dev="hd"/>
   </os>
   <idmap>
     <uid start="0" target="1000" count="10"/>
@@ -51,6 +49,7 @@
       <target dev="hda" bus="ide"/>
       <serial>WD-WMAP9A966149</serial>
       <shareable/>
+      <boot order="2"/>
     </disk>
     <disk type="file" device="disk">
       <driver error_policy="enospace"/>
@@ -105,6 +104,7 @@
       <virtualport type="802.1Qbg">
         <parameters managerid="12" typeid="1193046" typeidversion="1" instanceid="09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b"/>
       </virtualport>
+      <boot order="1"/>
     </interface>
     <input type="mouse" bus="ps2"/>
     <serial type="tcp">
@@ -118,8 +118,12 @@
       <source>
         <address domain="0" bus="0" slot="25" function="0"/>
       </source>
+      <boot order="4"/>
     </hostdev>
     <smartcard mode="passthrough" type="spicevmc"/>
+    <redirdev bus="spicevmc" type="spicevmc">
+      <boot order="3"/>
+    </redirdev>
     <tpm model="tpm-tis">
       <backend type="passthrough">
         <device path="/dev/tpm0"/>
@@ -152,7 +156,6 @@
   <os>
     <type arch="i686">hvm</type>
     <loader>/foo/bar</loader>
-    <boot dev="hd"/>
   </os>
   <idmap>
     <uid start="0" target="1000" count="10"/>
@@ -185,6 +188,7 @@
       <target dev="hda" bus="ide"/>
       <serial>WD-WMAP9A966149</serial>
       <shareable/>
+      <boot order="2"/>
     </disk>
     <disk type="file" device="disk">
       <driver error_policy="enospace"/>
@@ -239,6 +243,7 @@
       <virtualport type="802.1Qbg">
         <parameters managerid="12" typeid="1193046" typeidversion="1" instanceid="09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b"/>
       </virtualport>
+      <boot order="1"/>
     </interface>
     <input type="mouse" bus="ps2"/>
     <serial type="tcp">
@@ -252,8 +257,12 @@
       <source>
         <address domain="0" bus="0" slot="25" function="0"/>
       </source>
+      <boot order="4"/>
     </hostdev>
     <smartcard mode="passthrough" type="spicevmc"/>
+    <redirdev bus="spicevmc" type="spicevmc">
+      <boot order="3"/>
+    </redirdev>
     <tpm model="tpm-tis">
       <backend type="passthrough">
         <device path="/dev/tpm0"/>

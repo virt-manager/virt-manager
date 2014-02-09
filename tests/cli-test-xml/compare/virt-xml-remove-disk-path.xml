@@ -4,12 +4,13 @@
 -    <disk type="block" device="floppy">
 -      <source dev="/dev/null"/>
 -      <target dev="fda" bus="fdc"/>
+-      <boot order="5"/>
 -      <address type="drive" controller="0" bus="0" target="0" unit="0"/>
 -    </disk>
      <disk type="dir" device="floppy">
        <source dir="/tmp"/>
        <target dev="fdb" bus="fdc"/>
-@@ -92,12 +87,6 @@
+@@ -92,12 +86,6 @@
        <target dev="hdb" bus="ide"/>
        <readonly/>
        <address type="drive" controller="0" bus="0" target="0" unit="1"/>

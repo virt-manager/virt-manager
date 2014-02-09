@@ -1603,6 +1603,7 @@ class ParserDisk(VirtCLIParser):
         self.set_param("sourceStartupPolicy", "startup_policy")
         self.set_param("read_only", "readonly", is_onoff=True)
         self.set_param("shareable", "shareable", is_onoff=True)
+        self.set_param("boot.order", "boot_order")
 
         self.set_param("iotune_rbs", "read_bytes_sec")
         self.set_param("iotune_wbs", "write_bytes_sec")
@@ -1702,6 +1703,7 @@ class ParserNetwork(VirtCLIParser):
         self.set_param("model", "model")
         self.set_param("macaddr", "mac", setter_cb=set_mac_cb)
         self.set_param("filterref", "filterref")
+        self.set_param("boot.order", "boot_order")
 
         self.set_param("driver_name", "driver_name")
         self.set_param("driver_queues", "driver_queues")
@@ -1830,6 +1832,7 @@ class ParserRedir(VirtCLIParser):
 
         self.set_param("bus", "bus")
         self.set_param("type", "type")
+        self.set_param("boot.order", "boot_order")
 
         def set_server_cb(opts, inst, cliname, val):
             ignore = opts = cliname
@@ -2120,6 +2123,7 @@ class ParserHostdev(VirtCLIParser):
 
         self.set_param(None, "name", setter_cb=set_name_cb)
         self.set_param("driver_name", "driver_name")
+        self.set_param("boot.order", "boot_order")
 
 
 ###########################

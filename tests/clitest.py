@@ -545,15 +545,16 @@ c.add_compare("""--hvm --pxe \
 --controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0 \
 --controller usb,model=ich9-uhci2,address=0:0:4.1,index=0,master=2 \
 --controller usb,model=ich9-uhci3,address=0:0:4.2,index=0,master=4 \
---disk %(EXISTUPPER)s,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149 \
+--disk %(EXISTUPPER)s,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,boot_order=2 \
 --disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace \
 --disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,total_bytes_sec=10,total_iops_sec=20,write_bytes_sec=5,write_iops_sec=6 \
 --serial tcp,host=:2222,mode=bind,protocol=telnet \
 --filesystem /source,/target,mode=squash \
 --network user,mac=12:34:56:78:11:22 \
 --network bridge=foobar,model=virtio,driver_name=qemu,driver_queues=3 \
---network type=direct,source=eth5,source_mode=vepa,target=mytap12,virtualport_type=802.1Qbg,virtualport_managerid=12,virtualport_typeid=1193046,virtualport_typeidversion=1,virtualport_instanceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b \
+--network type=direct,source=eth5,source_mode=vepa,target=mytap12,virtualport_type=802.1Qbg,virtualport_managerid=12,virtualport_typeid=1193046,virtualport_typeidversion=1,virtualport_instanceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b,boot_order=1 \
 --channel spicevmc \
+--redirdev spicevmc,boot_order=3
 --smartcard passthrough,type=spicevmc \
 --tpm /dev/tpm0 \
 --panic default \
@@ -562,7 +563,7 @@ c.add_compare("""--hvm --pxe \
 --blkiotune weight=200,device_path=/dev/sdc,device_weight=300 \
 --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10 \
 --boot loader=/foo/bar \
---host-device net_00_1c_25_10_b1_e4 \
+--host-device net_00_1c_25_10_b1_e4,boot_order=4 \
 --features acpi=off,eoi=on,privnet=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=1234 \
 --clock offset=localtime,hpet_present=no,rtc_tickpolicy=merge \
 --pm suspend_to_mem=yes,suspend_to_disk=no \
@@ -788,6 +789,7 @@ c.add_compare("--build-xml --cpu pentium3,+x2apic", "build-cpu")
 c.add_compare("--build-xml --tpm /dev/tpm", "build-tpm")
 c.add_compare("--build-xml --blkiotune weight=100,device_path=/dev/sdf,device_weight=200", "build-blkiotune")
 c.add_compare("--build-xml --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10", "build-idmap")
+c.add_compare("test --edit --boot network,cdrom", "edit-bootorder")
 
 
 c = vixml.add_category("simple edit diff", "test-many-devices --edit --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
@@ -800,7 +802,7 @@ c.add_compare("--cpu model=pentium2,+x2apic,forbid=pbe", "edit-simple-cpu")
 c.add_compare("--numatune 1-5,7,mode=strict", "edit-simple-numatune")
 c.add_compare("--blkiotune weight=500,device_path=/dev/sdf,device_weight=600", "edit-simple-blkiotune")
 c.add_compare("--idmap uid_start=0,uid_target=2000,uid_count=30,gid_start=0,gid_target=3000,gid_count=40", "edit-simple-idmap")
-c.add_compare("--boot loader=foo.bar,network,useserial=on,init=/bin/bash", "edit-simple-boot")
+c.add_compare("--boot loader=foo.bar,useserial=on,init=/bin/bash", "edit-simple-boot")
 c.add_compare("--security label=foo,bar,baz,UNKNOWN=val,relabel=on", "edit-simple-security")
 c.add_compare("--features eoi=on,hyperv_relaxed=off,acpi=", "edit-simple-features")
 c.add_compare("--clock offset=localtime,hpet_present=yes,kvmclock_present=no,rtc_tickpolicy=merge", "edit-simple-clock")

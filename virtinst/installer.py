@@ -128,7 +128,9 @@ class Installer(object):
         bootorder = self._build_boot_order(isinstall, guest)
 
         if not bootconfig.bootorder:
-            bootconfig.bootorder = bootorder
+            # Per device <boot order> is not compatible with os/boot.
+            if not any(d.boot.order for d in guest.get_all_devices()):
+                bootconfig.bootorder = bootorder
 
         if not isinstall:
             return
