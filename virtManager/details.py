@@ -154,7 +154,7 @@ remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
  DETAILS_PAGE_SNAPSHOTS) = range(3)
 
 
-def prettyify_disk_bus(bus):
+def _prettyify_disk_bus(bus):
     if bus in ["ide", "sata", "scsi", "usb", "sd"]:
         return bus.upper()
 
@@ -168,25 +168,6 @@ def prettyify_disk_bus(bus):
         return "vSCSI"
 
     return bus
-
-
-def prettyify_disk(devtype, bus, idx):
-    busstr = prettyify_disk_bus(bus) or ""
-
-    if devtype == "floppy":
-        devstr = "Floppy"
-        busstr = ""
-    elif devtype == "cdrom":
-        devstr = "CDROM"
-    else:
-        devstr = devtype.capitalize()
-
-    if busstr:
-        ret = "%s %s" % (busstr, devstr)
-    else:
-        ret = devstr
-
-    return "%s %s" % (ret, idx)
 
 
 def safeint(val, fmt="%.3d"):
@@ -204,7 +185,7 @@ def prettyify_bytes(val):
         return "%2.2f MB" % (val / (1024.0 * 1024.0))
 
 
-def build_redir_label(redirdev):
+def _build_redir_label(redirdev):
     # String shown in the devices details section
     addrlabel = ""
     # String shown in the VMs hardware list
@@ -222,7 +203,7 @@ def build_redir_label(redirdev):
     return addrlabel, hwlabel
 
 
-def build_hostdev_label(hostdev):
+def _build_hostdev_label(hostdev):
     # String shown in the devices details section
     srclabel = ""
     # String shown in the VMs hardware list
@@ -327,6 +308,125 @@ def lookup_nodedev(vmmconn, hostdev):
             break
 
     return found_dev
+
+
+def _label_for_device(dev):
+    devtype = dev.virtual_device_type
+
+    if devtype == "disk":
+        bus = dev.bus
+        if dev.address.type == "spapr-vio":
+            bus = "spapr-vscsi"
+
+        busstr = _prettyify_disk_bus(bus) or ""
+
+        if dev.device == "floppy":
+            devstr = "Floppy"
+            busstr = ""
+        elif dev.device == "cdrom":
+            devstr = "CDROM"
+        else:
+            devstr = dev.device.capitalize()
+
+        if busstr:
+            ret = "%s %s" % (busstr, devstr)
+        else:
+            ret = devstr
+
+        return "%s %s" % (ret, dev.disk_bus_index)
+
+    if devtype == "interface":
+        return "NIC %s" % dev.macaddr[-9:]
+
+    if devtype == "input":
+        if dev.type == "tablet":
+            return _("Tablet")
+        elif dev.type == "mouse":
+            return _("Mouse")
+        return _("Input")
+
+    if devtype in ["serial", "parallel", "console"]:
+        label = devtype.capitalize()
+        if dev.target_port is not None:
+            label += " %s" % (int(dev.target_port) + 1)
+        return label
+
+    if devtype == "channel":
+        label = devtype.capitalize()
+        name = dev.pretty_channel_name(dev.target_name)
+        if name:
+            label += " %s" % name
+        return label
+
+    if devtype == "graphics":
+        return _("Display %s") % dev.pretty_type_simple(dev.type)
+    if devtype == "redirdev":
+        return _build_redir_label(dev)[1]
+    if devtype == "hostdev":
+        return _build_hostdev_label(dev)[1]
+    if devtype == "sound":
+        return _("Sound: %s" % dev.model)
+    if devtype == "video":
+        return _("Video %s") % dev.pretty_model(dev.model)
+    if devtype == "filesystem":
+        return _("Filesystem %s") % dev.target[:8]
+    if devtype == "controller":
+        pretty_type = virtinst.VirtualController.pretty_type(dev.type)
+        return _("Controller %s") % pretty_type
+
+    devmap = {
+        "rng": _("RNG"),
+        "tpm": _("TPM"),
+        "panic": _("Panic Notifier"),
+        "smartcard": _("Smartcard"),
+        "watchdog": _("Watchdog"),
+    }
+    return devmap[devtype]
+
+
+def _icon_for_device(dev):
+    devtype = dev.virtual_device_type
+
+    if devtype == "disk":
+        if dev.device == "cdrom":
+            return "media-optical"
+        elif dev.device == "floppy":
+            return "media-floppy"
+        return "drive-harddisk"
+
+    if devtype == "input":
+        if dev.type == "tablet":
+            return "input-tablet"
+        return "input-mouse"
+
+    if devtype == "redirdev":
+        if dev.bus == "usb":
+            return "device_usb"
+        return "device_pci"
+
+    if devtype == "hostdev":
+        if dev.type == "usb":
+            return "device_usb"
+        return "device_pci"
+
+    typemap = {
+        "interface": "network-idle",
+        "graphics": "video-display",
+        "serial": "device_serial",
+        "parallel": "device_serial",
+        "console": "device_serial",
+        "channel": "device_serial",
+        "video": "video-display",
+        "watchdog": "device_pci",
+        "sound": "audio-card",
+        "rng": "system-run",
+        "tpm": "device_cpu",
+        "smartcard": "device_serial",
+        "filesystem": Gtk.STOCK_DIRECTORY,
+        "controller": "device_pci",
+        "panic": "system-run",
+    }
+    return typemap[devtype]
 
 
 class vmmDetails(vmmGObjectUI):
@@ -2490,7 +2590,6 @@ class vmmDetails(vmmGObjectUI):
         bus = disk.bus
         removable = disk.removable
         addr = disk.address.type
-        idx = disk.disk_bus_index
         cache = disk.driver_cache
         io = disk.driver_io
         driver_type = disk.driver_type or ""
@@ -2532,7 +2631,7 @@ class vmmDetails(vmmGObjectUI):
         if addr == "spapr-vio":
             bus = "spapr-vscsi"
 
-        pretty_name = prettyify_disk(devtype, bus, idx)
+        pretty_name = _label_for_device(disk)
 
         self.widget("disk-source-path").set_text(path or "-")
         self.widget("disk-target-type").set_text(pretty_name)
@@ -2644,7 +2743,7 @@ class vmmDetails(vmmGObjectUI):
         if not rd:
             return
 
-        address = build_redir_label(rd)[0] or "-"
+        address = _build_redir_label(rd)[0] or "-"
 
         devlabel = "<b>%s Redirector</b>" % rd.bus.upper()
         self.widget("redir-title").set_markup(devlabel)
@@ -2828,7 +2927,7 @@ class vmmDetails(vmmGObjectUI):
             pretty_name = nodedev.pretty_name()
 
         if not pretty_name:
-            pretty_name = build_hostdev_label(hostdev)[0] or "-"
+            pretty_name = _build_hostdev_label(hostdev)[0] or "-"
 
         devlabel = "<b>Physical %s Device</b>" % devtype.upper()
         self.widget("hostdev-title").set_markup(devlabel)
@@ -3051,168 +3150,71 @@ class vmmDetails(vmmGObjectUI):
                                        Gtk.IconSize.LARGE_TOOLBAR,
                                        page_id, info])
 
-        def update_hwlist(hwtype, info, name, icon_name):
+        def update_hwlist(hwtype, dev):
             """
             See if passed hw is already in list, and if so, update info.
             If not in list, add it!
             """
-            currentDevices.append(info)
+            label = _label_for_device(dev)
+            icon = _icon_for_device(dev)
+
+            currentDevices.append(dev)
 
             insertAt = 0
             for row in hw_list_model:
                 rowdev = row[HW_LIST_COL_DEVICE]
-                if dev_cmp(rowdev, info):
+                if dev_cmp(rowdev, dev):
                     # Update existing HW info
-                    row[HW_LIST_COL_DEVICE] = info
-                    row[HW_LIST_COL_LABEL] = name
-                    row[HW_LIST_COL_ICON_NAME] = icon_name
+                    row[HW_LIST_COL_DEVICE] = dev
+                    row[HW_LIST_COL_LABEL] = label
+                    row[HW_LIST_COL_ICON_NAME] = icon
                     return
 
                 if row[HW_LIST_COL_TYPE] <= hwtype:
                     insertAt += 1
 
             # Add the new HW row
-            add_hw_list_option(insertAt, name, hwtype, info, icon_name)
+            add_hw_list_option(insertAt, label, hwtype, dev, icon)
 
-        # Populate list of disks
-        for disk in self.vm.get_disk_devices():
-            devtype = disk.device
-            bus = disk.bus
-            idx = disk.disk_bus_index
 
-            icon = "drive-harddisk"
-            if devtype == "cdrom":
-                icon = "media-optical"
-            elif devtype == "floppy":
-                icon = "media-floppy"
+        for dev in self.vm.get_disk_devices():
+            update_hwlist(HW_LIST_TYPE_DISK, dev)
+        for dev in self.vm.get_network_devices():
+            update_hwlist(HW_LIST_TYPE_NIC, dev)
+        for dev in self.vm.get_input_devices():
+            update_hwlist(HW_LIST_TYPE_INPUT, dev)
+        for dev in self.vm.get_graphics_devices():
+            update_hwlist(HW_LIST_TYPE_GRAPHICS, dev)
+        for dev in self.vm.get_sound_devices():
+            update_hwlist(HW_LIST_TYPE_SOUND, dev)
+        for dev in self.vm.get_char_devices():
+            update_hwlist(HW_LIST_TYPE_CHAR, dev)
+        for dev in self.vm.get_hostdev_devices():
+            update_hwlist(HW_LIST_TYPE_HOSTDEV, dev)
+        for dev in self.vm.get_redirdev_devices():
+            update_hwlist(HW_LIST_TYPE_REDIRDEV, dev)
+        for dev in self.vm.get_video_devices():
+            update_hwlist(HW_LIST_TYPE_VIDEO, dev)
+        for dev in self.vm.get_watchdog_devices():
+            update_hwlist(HW_LIST_TYPE_WATCHDOG, dev)
 
-            if disk.address.type == "spapr-vio":
-                bus = "spapr-vscsi"
-
-            label = prettyify_disk(devtype, bus, idx)
-
-            update_hwlist(HW_LIST_TYPE_DISK, disk, label, icon)
-
-        # Populate list of NICs
-        for net in self.vm.get_network_devices():
-            mac = net.macaddr
-
-            update_hwlist(HW_LIST_TYPE_NIC, net,
-                          "NIC %s" % mac[-9:], "network-idle")
-
-        # Populate list of input devices
-        for inp in self.vm.get_input_devices():
-            inptype = inp.type
-
-            icon = "input-mouse"
-            if inptype == "tablet":
-                label = _("Tablet")
-                icon = "input-tablet"
-            elif inptype == "mouse":
-                label = _("Mouse")
-            else:
-                label = _("Input")
-
-            update_hwlist(HW_LIST_TYPE_INPUT, inp, label, icon)
-
-        # Populate list of graphics devices
-        for gfx in self.vm.get_graphics_devices():
-            update_hwlist(HW_LIST_TYPE_GRAPHICS, gfx,
-                          _("Display %s") % gfx.pretty_type_simple(gfx.type),
-                          "video-display")
-
-        # Populate list of sound devices
-        for sound in self.vm.get_sound_devices():
-            update_hwlist(HW_LIST_TYPE_SOUND, sound,
-                          _("Sound: %s" % sound.model), "audio-card")
-
-        # Populate list of char devices
-        for chardev in self.vm.get_char_devices():
-            devtype = chardev.virtual_device_type
-            port = chardev.target_port
-
-            label = devtype.capitalize()
-            if devtype in ["serial", "parallel", "console"]:
-                if port is not None:
-                    label += " %s" % (int(port) + 1)
-            elif devtype == "channel":
-                name = chardev.pretty_channel_name(chardev.target_name)
-                if name:
-                    label += " %s" % name
-
-            update_hwlist(HW_LIST_TYPE_CHAR, chardev, label,
-                          "device_serial")
-
-        # Populate host devices
-        for hostdev in self.vm.get_hostdev_devices():
-            devtype = hostdev.type
-            label = build_hostdev_label(hostdev)[1]
-
-            if devtype == "usb":
-                icon = "device_usb"
-            else:
-                icon = "device_pci"
-            update_hwlist(HW_LIST_TYPE_HOSTDEV, hostdev, label, icon)
-
-        # Populate redir devices
-        for redirdev in self.vm.get_redirdev_devices():
-            bus = redirdev.bus
-            label = build_redir_label(redirdev)[1]
-
-            if bus == "usb":
-                icon = "device_usb"
-            else:
-                icon = "device_pci"
-            update_hwlist(HW_LIST_TYPE_REDIRDEV, redirdev, label, icon)
-
-        # Populate video devices
-        for vid in self.vm.get_video_devices():
-            update_hwlist(HW_LIST_TYPE_VIDEO, vid,
-                          _("Video %s") % vid.pretty_model(vid.model),
-                          "video-display")
-
-        # Populate watchdog devices
-        for watch in self.vm.get_watchdog_devices():
-            update_hwlist(HW_LIST_TYPE_WATCHDOG, watch, _("Watchdog"),
-                          "device_pci")
-
-        # Populate controller devices
-        for cont in self.vm.get_controller_devices():
+        for dev in self.vm.get_controller_devices():
             # skip USB2 ICH9 companion controllers
-            if cont.model in ["ich9-uhci1", "ich9-uhci2", "ich9-uhci3"]:
+            if dev.model in ["ich9-uhci1", "ich9-uhci2", "ich9-uhci3"]:
                 continue
 
-            pretty_type = virtinst.VirtualController.pretty_type(cont.type)
-            update_hwlist(HW_LIST_TYPE_CONTROLLER, cont,
-                          _("Controller %s") % pretty_type,
-                          "device_pci")
+            update_hwlist(HW_LIST_TYPE_CONTROLLER, dev)
 
-        # Populate filesystem devices
-        for fs in self.vm.get_filesystem_devices():
-            target = fs.target[:8]
-            update_hwlist(HW_LIST_TYPE_FILESYSTEM, fs,
-                          _("Filesystem %s") % target,
-                          Gtk.STOCK_DIRECTORY)
-
-        # Populate list of smartcard devices
-        for sc in self.vm.get_smartcard_devices():
-            update_hwlist(HW_LIST_TYPE_SMARTCARD, sc,
-                          _("Smartcard"), "device_serial")
-
-        # Populate list of TPM devices
-        for tpm in self.vm.get_tpm_devices():
-            update_hwlist(HW_LIST_TYPE_TPM, tpm,
-                          _("TPM"), "device_cpu")
-
-        # Populate list of RNG devices
-        for rng in self.vm.get_rng_devices():
-            update_hwlist(HW_LIST_TYPE_RNG, rng,
-                          _("RNG"), "system-run")
-
-        # Populate list of Panic devices
-        for rng in self.vm.get_panic_devices():
-            update_hwlist(HW_LIST_TYPE_PANIC, rng,
-                          _("Panic Notifier"), "system-run")
+        for dev in self.vm.get_filesystem_devices():
+            update_hwlist(HW_LIST_TYPE_FILESYSTEM, dev)
+        for dev in self.vm.get_smartcard_devices():
+            update_hwlist(HW_LIST_TYPE_SMARTCARD, dev)
+        for dev in self.vm.get_tpm_devices():
+            update_hwlist(HW_LIST_TYPE_TPM, dev)
+        for dev in self.vm.get_rng_devices():
+            update_hwlist(HW_LIST_TYPE_RNG, dev)
+        for dev in self.vm.get_panic_devices():
+            update_hwlist(HW_LIST_TYPE_PANIC, dev)
 
         devs = range(len(hw_list_model))
         devs.reverse()
