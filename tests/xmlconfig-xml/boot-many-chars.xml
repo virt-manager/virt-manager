@@ -27,7 +27,7 @@
       <protocol type="telnet"/>
     </serial>
     <parallel type="unix">
-      <source mode="bind" path="/tmp/foobar"/>
+      <source mode="bind" path="/dev/default-pool/foobar"/>
     </parallel>
     <parallel type="udp">
       <source mode="bind" host="my.bind.host" service="1111"/>

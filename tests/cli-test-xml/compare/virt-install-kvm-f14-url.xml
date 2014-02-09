@@ -43,8 +43,8 @@
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="disk">
-      <driver name="qemu"/>
-      <source file="/tmp/__virtinst_cli_exist1.img"/>
+      <driver name="qemu" type="qcow2"/>
+      <source file="/dev/default-pool/testvol1.img"/>
       <target dev="vda" bus="virtio"/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1"/>
@@ -112,8 +112,8 @@
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="disk">
-      <driver name="qemu"/>
-      <source file="/tmp/__virtinst_cli_exist1.img"/>
+      <driver name="qemu" type="qcow2"/>
+      <source file="/dev/default-pool/testvol1.img"/>
       <target dev="vda" bus="virtio"/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1"/>

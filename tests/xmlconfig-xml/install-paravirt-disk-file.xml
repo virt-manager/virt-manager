@@ -14,7 +14,7 @@
   <on_crash>destroy</on_crash>
   <devices>
     <disk type="file" device="disk">
-      <source file="/tmp/test.img"/>
+      <source file="/dev/default-pool/new-test-suite.img"/>
       <target dev="xvda" bus="xen"/>
     </disk>
     <input type="mouse" bus="xen"/>

@@ -21,7 +21,7 @@
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="file" device="disk">
-      <source file="/tmp/test.img"/>
+      <source file="/dev/default-pool/new-test-suite.img"/>
       <target dev="hda" bus="ide"/>
     </disk>
     <input type="mouse" bus="ps2"/>

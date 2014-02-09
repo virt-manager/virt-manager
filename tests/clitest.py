@@ -99,20 +99,17 @@ test_files = {
     'NEWCLONEIMG1'      : new_images[0],
     'NEWCLONEIMG2'      : new_images[1],
     'NEWCLONEIMG3'      : new_images[2],
-    'AUTOMANAGEIMG'     : "/some/new/pool/dir/new.img",
-    'EXISTIMG1'         : exist_images[0],
-    'EXISTIMG2'         : exist_images[1],
+    'AUTOMANAGEIMG'     : "/some/new/pool/dir/new",
+    'EXISTIMG1'         : "/dev/default-pool/testvol1.img",
+    'EXISTIMG2'         : "/dev/default-pool/testvol2.img",
+    'EXISTUPPER'        : "/dev/default-pool/UPPER",
     'ROIMG'             : ro_img,
     'ROIMGNOEXIST'      : ro_noexist_img,
     'POOL'              : "default-pool",
     'VOL'               : "testvol1.img",
     'DIR'               : os.getcwd(),
     'TREEDIR'           : treedir,
-    'MANAGEDEXIST1'     : "/dev/default-pool/testvol1.img",
-    'MANAGEDEXIST2'     : "/dev/default-pool/testvol2.img",
-    'MANAGEDEXISTUPPER' : "/dev/default-pool/UPPER",
     'MANAGEDNEW1'       : "/dev/default-pool/clonevol",
-    'MANAGEDNEW2'       : "/dev/default-pool/clonevol",
     'MANAGEDDISKNEW1'   : "/dev/disk-pool/newvol1.img",
     'COLLIDE'           : "/dev/default-pool/collidevol1.img",
     'SHARE'             : "/dev/default-pool/sharevol.img",
@@ -547,7 +544,7 @@ c.add_compare("""--hvm --pxe \
 --controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0 \
 --controller usb,model=ich9-uhci2,address=0:0:4.1,index=0,master=2 \
 --controller usb,model=ich9-uhci3,address=0:0:4.2,index=0,master=4 \
---disk %(MANAGEDEXISTUPPER)s,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149 \
+--disk %(EXISTUPPER)s,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149 \
 --disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace \
 --disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,total_bytes_sec=10,total_iops_sec=20,write_bytes_sec=5,write_iops_sec=6 \
 --serial tcp,host=:2222,mode=bind,protocol=telnet \
@@ -568,12 +565,12 @@ c.add_compare("""--hvm --pxe \
 --clock offset=localtime,hpet_present=no,rtc_tickpolicy=merge \
 --pm suspend_to_mem=yes,suspend_to_disk=no \
 """, "many-devices")  # Lots of devices
-c.add_valid("--hvm --disk path=virt-install,device=cdrom")  # Specifying cdrom media via --disk
-c.add_valid("--hvm --import --disk path=virt-install")  # FV Import install
-c.add_valid("--hvm --import --disk path=virt-install --prompt --force")  # Working scenario w/ prompt shouldn't ask anything
-c.add_valid("--paravirt --import --disk path=virt-install")  # PV Import install
-c.add_valid("--paravirt --import --disk path=virt-install --print-xml")  # PV Import install, print single XML
-c.add_valid("--hvm --import --disk path=virt-install,device=floppy")  # Import a floppy disk
+c.add_valid("--hvm --disk path=%(EXISTIMG1)s,device=cdrom")  # Specifying cdrom media via --disk
+c.add_valid("--hvm --import --disk path=%(EXISTIMG1)s")  # FV Import install
+c.add_valid("--hvm --import --disk path=%(EXISTIMG1)s --prompt --force")  # Working scenario w/ prompt shouldn't ask anything
+c.add_valid("--paravirt --import --disk path=%(EXISTIMG1)s")  # PV Import install
+c.add_valid("--paravirt --import --disk path=%(EXISTIMG1)s --print-xml")  # PV Import install, print single XML
+c.add_valid("--hvm --import --disk path=%(EXISTIMG1)s,device=floppy")  # Import a floppy disk
 c.add_valid("--hvm --nodisks --pxe --autostart")  # --autostart flag
 c.add_valid("--hvm --nodisks --pxe --description \"foobar & baz\"")  # --description
 c.add_valid("--hvm --cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0")  # HVM windows install with disk
@@ -597,7 +594,7 @@ c.add_invalid("--nodisks --pxe --name test")  # Colliding name
 c.add_invalid("--hvm --nodisks --pxe --watchdog default,action=foobar")  # Busted --watchdog
 c.add_invalid("--hvm --nodisks --pxe --soundhw default --soundhw foobar")  # Busted --soundhw
 c.add_invalid("--hvm --nodisks --pxe --security type=foobar")  # Busted --security
-c.add_invalid("--paravirt --import --disk path=virt-install --print-step 2")  # PV Import install, no second XML step
+c.add_invalid("--paravirt --import --disk path=%(EXISTIMG1)s --print-step 2")  # PV Import install, no second XML step
 c.add_invalid("--hvm --nodisks --pxe --print-xml")  # 2 stage install with --print-xml
 c.add_invalid("--hvm --nodisks --pxe --memballoon foobar")  # Busted --memballoon
 
@@ -651,15 +648,13 @@ c.add_invalid("--graphics vnc --vnclisten 1.2.3.4")  # mixing old and new
 
 c = vinst.add_category("remote", "--connect %(REMOTEURI)s --nographics --noautoconsole")
 c.add_valid("--nodisks --pxe")  # Simple pxe nodisks
-c.add_valid("--nodisks --cdrom %(MANAGEDEXIST1)s")  # Managed CDROM install
-c.add_valid("--pxe --file %(MANAGEDEXIST1)s")  # Using existing managed storage
 c.add_valid("--pxe --disk vol=%(POOL)s/%(VOL)s")  # Using existing managed storage 2
 c.add_valid("--pxe --disk pool=%(POOL)s,size=.04")  # Creating storage on managed pool
 c.add_valid("--pxe --disk /foo/bar/baz,size=.01")  # Creating any random path on the remote host
 c.add_valid("--pxe --disk /dev/zde")  # /dev file that we just pass through to the remote VM
 c.add_invalid("--pxe --disk /foo/bar/baz")  # File that doesn't exist after auto storage setup
 c.add_invalid("--nodisks --location /tmp")  # Use of --location
-c.add_invalid("--file %(EXISTIMG1)s --pxe")  # Trying to use unmanaged storage
+c.add_invalid("--file /foo/bar/baz --pxe")  # Trying to use unmanaged storage without size argument
 
 
 c = vinst.add_category("network", "--pxe --nographics --noautoconsole --nodisks")
@@ -691,8 +686,6 @@ c.add_valid(" --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=s
 c.add_valid("--disk path=%(NEWIMG1)s,format=raw,size=.0000001")  # Unmanaged file using format 'raw'
 c.add_valid("--disk path=%(MANAGEDNEW1)s,format=raw,size=.0000001")  # Managed file using format raw
 c.add_valid("--disk path=%(MANAGEDNEW1)s,format=qcow2,size=.0000001")  # Managed file using format qcow2
-c.add_valid("--disk path=%(ROIMG)s,perms=ro")  # Using ro path as a disk with readonly flag
-c.add_valid("--disk path=%(ROIMG)s,device=cdrom")  # Using RO path with cdrom dev
 c.add_valid("--disk %(EXISTIMG1)s")  # Not specifying path=
 c.add_valid("--disk %(NEWIMG1)s,format=raw,size=.0000001")  # Not specifying path= but creating storage
 c.add_valid("--disk %(COLLIDE)s --force")  # Colliding storage with --force
@@ -746,7 +739,6 @@ c.add_invalid("--host-device 300:400")  # Parseable hostdev, but unknown digits
 
 c = vinst.add_category("install", "--nographics --noautoconsole --nodisks")
 c.add_valid("--hvm --cdrom %(EXISTIMG1)s")  # Simple cdrom install
-c.add_valid("--hvm --cdrom %(MANAGEDEXIST1)s")  # Cdrom install with managed storage
 c.add_valid("--hvm --wait 0 --os-variant winxp --cdrom %(EXISTIMG1)s")  # Windows (2 stage) install
 c.add_valid("--hvm --pxe --virt-type test")  # Explicit virt-type
 c.add_valid("--arch i686 --pxe")  # Explicity fullvirt + arch
@@ -756,7 +748,6 @@ c.add_valid("--hvm --location %(TREEDIR)s --initrd-inject virt-install --extra-a
 c.add_valid("--hvm --location %(TREEDIR)s --extra-args console=ttyS0")  # Directory tree URL install with extra-args
 c.add_valid("--hvm --cdrom %(TREEDIR)s")  # Directory tree CDROM install
 c.add_valid("--paravirt --location %(TREEDIR)s")  # Paravirt location
-c.add_valid("--hvm --cdrom %(ROIMG)s")  # Using ro path as a cd media
 c.add_valid("--paravirt --location %(TREEDIR)s --os-variant none")  # Paravirt location with --os-variant none
 c.add_valid("--hvm --location %(TREEDIR)s --os-variant fedora12")  # URL install with manual os-variant
 c.add_valid("--hvm --pxe --boot menu=on")  # Boot menu

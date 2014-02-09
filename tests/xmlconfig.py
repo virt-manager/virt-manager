@@ -123,7 +123,7 @@ class TestXMLConfig(unittest.TestCase):
 
     def testBootParavirtDiskFile(self):
         g = utils.get_basic_paravirt_guest()
-        g.add_device(utils.get_filedisk("/tmp/somerandomfilename.img"))
+        g.add_device(utils.get_filedisk("/dev/default-pool/somerandomfilename.img"))
         self._compare(g, "boot-paravirt-disk-file", False)
 
     def testBootParavirtDiskFileBlktapCapable(self):
@@ -172,11 +172,11 @@ class TestXMLConfig(unittest.TestCase):
 
     def testBootParavirtManyDisks(self):
         g = utils.get_basic_paravirt_guest()
-        disk = utils.get_filedisk("/tmp/test2.img")
+        disk = utils.get_filedisk("/dev/default-pool/test2.img")
         disk.driver_name = VirtualDisk.DRIVER_TAP
         disk.driver_type = VirtualDisk.DRIVER_TAP_QCOW
 
-        g.add_device(utils.get_filedisk("/tmp/test1.img"))
+        g.add_device(utils.get_filedisk("/dev/default-pool/test1.img"))
         g.add_device(disk)
         g.add_device(utils.get_blkdisk())
         self._compare(g, "boot-paravirt-many-disks", False)
@@ -234,11 +234,11 @@ class TestXMLConfig(unittest.TestCase):
 
     def testInstallParavirtManyDisks(self):
         g = utils.get_basic_paravirt_guest()
-        disk = utils.get_filedisk("/tmp/test2.img")
+        disk = utils.get_filedisk("/dev/default-pool/test2.img")
         disk.driver_name = VirtualDisk.DRIVER_TAP
         disk.driver_type = VirtualDisk.DRIVER_TAP_QCOW
 
-        g.add_device(utils.get_filedisk("/tmp/test1.img"))
+        g.add_device(utils.get_filedisk("/dev/default-pool/test1.img"))
         g.add_device(disk)
         g.add_device(utils.get_blkdisk())
         self._compare(g, "install-paravirt-many-disks", True)
@@ -395,7 +395,7 @@ class TestXMLConfig(unittest.TestCase):
     def testXMLEscaping(self):
         g = utils.get_basic_fullyvirt_guest()
         g.description = "foooo barrrr \n baz && snarf. '' \"\" @@$\n"
-        g.add_device(utils.get_filedisk("/tmp/ISO&'&s"))
+        g.add_device(utils.get_filedisk("/dev/default-pool/ISO&'&s"))
         self._compare(g, "misc-xml-escaping", True)
 
     # OS Type/Version configurations
@@ -666,7 +666,7 @@ class TestXMLConfig(unittest.TestCase):
 
         dev = VirtualParallelDevice(g.conn)
         dev.type = "unix"
-        dev.source_path = "/tmp/foobar"
+        dev.source_path = "/dev/default-pool/foobar"
         g.add_device(dev)
 
         dev = VirtualSerialDevice(g.conn)
@@ -789,7 +789,7 @@ class TestXMLConfig(unittest.TestCase):
         cdev1.type = "null"
         cdev2 = VirtualParallelDevice(g.conn)
         cdev2.type = "unix"
-        cdev2.source_path = "/tmp/foobar"
+        cdev2.source_path = "/dev/default-pool/foobar"
         cdev3 = VirtualChannelDevice(g.conn)
         cdev3.type = "spicevmc"
         g.add_device(cdev1)
@@ -838,7 +838,7 @@ class TestXMLConfig(unittest.TestCase):
 
         gdev3 = virtinst.VirtualGraphics(g.conn)
         gdev3.type = "sdl"
-        gdev3.xauth = "/tmp/.Xauthority"
+        gdev3.xauth = "/dev/default-pool/.Xauthority"
         gdev3.display = ":3.4"
         gdev4 = virtinst.VirtualGraphics(g.conn)
         gdev4.type = "spice"

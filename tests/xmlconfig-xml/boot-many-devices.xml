@@ -64,12 +64,12 @@
     <graphics type="vnc" port="-1" keymap="ja"/>
     <graphics type="vnc" port="-1" keymap="en-us"/>
     <graphics type="vnc" port="-1"/>
-    <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
+    <graphics type="sdl" display=":3.4" xauth="/dev/default-pool/.Xauthority"/>
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes" keymap="en-us" passwdValidTo="foobar"/>
     <graphics type="sdl" display="foodisplay" xauth="fooxauth"/>
     <serial type="null"/>
     <parallel type="unix">
-      <source mode="bind" path="/tmp/foobar"/>
+      <source mode="bind" path="/dev/default-pool/foobar"/>
     </parallel>
     <console type="pty"/>
     <channel type="spicevmc">

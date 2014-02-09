@@ -316,7 +316,7 @@ def get_floppy(path=None):
 
 def get_filedisk(path=None, fake=True):
     if not path:
-        path = "/tmp/test.img"
+        path = "/dev/default-pool/new-test-suite.img"
     d = VirtualDisk(_conn)
     d.path = path
     size = None

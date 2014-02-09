@@ -28,13 +28,13 @@
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="disk">
-      <driver name="qemu"/>
-      <source file="/tmp/__virtinst_cli_exist1.img"/>
+      <driver name="qemu" type="qcow2"/>
+      <source file="/dev/default-pool/testvol1.img"/>
       <target dev="hda" bus="ide"/>
     </disk>
     <disk type="file" device="cdrom">
-      <driver name="qemu"/>
-      <source file="/tmp/__virtinst_cli_exist2.img"/>
+      <driver name="qemu" type="qcow2"/>
+      <source file="/dev/default-pool/testvol2.img"/>
       <target dev="hdb" bus="ide"/>
       <readonly/>
     </disk>
@@ -88,13 +88,13 @@
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="disk">
-      <driver name="qemu"/>
-      <source file="/tmp/__virtinst_cli_exist1.img"/>
+      <driver name="qemu" type="qcow2"/>
+      <source file="/dev/default-pool/testvol1.img"/>
       <target dev="hda" bus="ide"/>
     </disk>
     <disk type="file" device="cdrom">
-      <driver name="qemu"/>
-      <source file="/tmp/__virtinst_cli_exist2.img"/>
+      <driver name="qemu" type="qcow2"/>
+      <source file="/dev/default-pool/testvol2.img"/>
       <target dev="hdb" bus="ide"/>
       <readonly/>
     </disk>
@@ -148,13 +148,13 @@
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="disk">
-      <driver name="qemu"/>
-      <source file="/tmp/__virtinst_cli_exist1.img"/>
+      <driver name="qemu" type="qcow2"/>
+      <source file="/dev/default-pool/testvol1.img"/>
       <target dev="hda" bus="ide"/>
     </disk>
     <disk type="file" device="cdrom">
-      <driver name="qemu"/>
-      <source file="/tmp/__virtinst_cli_exist2.img"/>
+      <driver name="qemu" type="qcow2"/>
+      <source file="/dev/default-pool/testvol2.img"/>
       <target dev="hdb" bus="ide"/>
       <readonly/>
     </disk>
