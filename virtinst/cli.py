@@ -1549,6 +1549,11 @@ def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
                 disk.get_vol_install().pool.name() == poolobj.name()):
                 collidelist.append(os.path.basename(disk.path))
 
+        tmpvol = virtinst.StorageVolume(guest.conn)
+        tmpvol.pool = poolobj
+        if fmt is None and tmpvol.file_type == tmpvol.TYPE_FILE:
+            fmt = "raw"
+
         ext = virtinst.StorageVolume.get_file_extension_for_format(fmt)
         vname = virtinst.StorageVolume.find_free_name(
             poolobj, guest.name, suffix=ext, collidelist=collidelist)
