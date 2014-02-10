@@ -473,9 +473,13 @@ general format of a disk string is
 
     --disk opt1=val1,opt2=val2,...
 
-To specify media, the command can either be:
+The simplest invocation to create a new 10G disk image and associated disk device:
 
-    --disk /some/storage/path,opt1=val1
+    --disk size=10
+
+virt-install will generate a path name, and place it in the default image location for the hypervisor. To specify media, the command can either be:
+
+    --disk /some/storage/path[,opt1=val1]...
 
 or explicitly specify one of the following arguments:
 
@@ -1422,7 +1426,7 @@ CDROM drive, auto launching a graphical VNC viewer
        --virt-type kvm \
        --name demo \
        --memory 500 \
-       --disk path=/var/lib/libvirt/images/demo.img,size=8 \
+       --disk size=8 \
        --graphics vnc \
        --cdrom /dev/cdrom \
        --os-variant fedora13

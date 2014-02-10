@@ -806,8 +806,8 @@ def add_disk_option(stog, editexample=False):
         editmsg += "\n--disk cache=  (unset cache)"
     stog.add_argument("--disk", action="append",
         help=_("Specify storage with various options. Ex.\n"
-               "--disk path=/my/existing/disk\n"
-               "--disk path=/my/new/disk,size=5 (in gigabytes)\n"
+               "--disk size=10 (new 10GB image in default location)\n"
+               "--disk path=/my/existing/disk,cache=none\n"
                "--disk device=cdrom,bus=scsi\n"
                "--disk=?") + editmsg)
 
@@ -1528,8 +1528,12 @@ def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
     volobj = None
 
     # Strip media type
-    if sum([bool(p) for p in [path, pool, vol]]) > 1:
+    optcount = sum([bool(p) for p in [path, pool, vol]])
+    if optcount > 1:
         fail(_("Cannot specify more than 1 storage path"))
+    if optcount == 0 and size:
+        # Saw something like --disk size=X, have it imply pool=default
+        pool = "default"
 
     if path:
         abspath = os.path.abspath(path)

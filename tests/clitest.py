@@ -653,6 +653,7 @@ c = vinst.add_category("remote", "--connect %(REMOTEURI)s --nographics --noautoc
 c.add_valid("--nodisks --pxe")  # Simple pxe nodisks
 c.add_valid("--pxe --disk vol=%(POOL)s/%(VOL)s")  # Using existing managed storage 2
 c.add_valid("--pxe --disk pool=%(POOL)s,size=.04")  # Creating storage on managed pool
+c.add_valid("--pxe --disk size=.04")  # Creating storage on implied pool=default
 c.add_valid("--pxe --disk /foo/bar/baz,size=.01")  # Creating any random path on the remote host
 c.add_valid("--pxe --disk /dev/zde")  # /dev file that we just pass through to the remote VM
 c.add_invalid("--pxe --disk /foo/bar/baz")  # File that doesn't exist after auto storage setup
@@ -707,7 +708,6 @@ c.add_invalid("--file %(NEWIMG1)s --file-size 100000 --nonsparse")  # Nonexistin
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000")  # Huge file, sparse, but no prompting
 c.add_invalid("--file %(NEWIMG1)s")  # Nonexisting file, no size
 c.add_invalid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s")  # Too many IDE
-c.add_invalid("--file-size .0001")  # Size, no file
 c.add_invalid("--disk pool=foopool,size=.0001")  # Specify a nonexistent pool
 c.add_invalid("--disk vol=%(POOL)s/foovol")  # Specify a nonexistent volume
 c.add_invalid("--disk pool=%(POOL)s")  # Specify a pool with no size
