@@ -19,7 +19,6 @@
 
 import logging
 import os
-import pwd
 import statvfs
 
 # pylint: disable=E0611
@@ -139,25 +138,12 @@ class vmmAddStorage(vmmGObjectUI):
     ##############
 
     @staticmethod
-    def check_path_search_for_qemu(src, conn, path):
-        if conn.is_remote() or not conn.is_qemu_system():
-            return
-
-        user = src.config.default_qemu_user
-
-        for i in conn.caps.host.secmodels:
-            if i.model == "dac":
-                label = i.baselabels.get("kvm") or i.baselabels.get("qemu")
-                if not label:
-                    continue
-                pwuid = pwd.getpwuid(int(label.split(":")[0].replace("+", "")))
-                if pwuid:
-                    user = pwuid[0]
-
+    def check_path_search(src, conn, path):
         skip_paths = src.config.get_perms_fix_ignore()
-        broken_paths = virtinst.VirtualDisk.check_path_search_for_user(
-            conn.get_backend(), path, user)
-        for p in broken_paths:
+        user, broken_paths = virtinst.VirtualDisk.check_path_search(
+            conn.get_backend(), path)
+
+        for p in broken_paths[:]:
             if p in skip_paths:
                 broken_paths.remove(p)
 
@@ -178,8 +164,8 @@ class vmmAddStorage(vmmGObjectUI):
             return
 
         logging.debug("Attempting to correct permission issues.")
-        errors = virtinst.VirtualDisk.fix_path_search_for_user(conn.get_backend(),
-                                                               path, user)
+        errors = virtinst.VirtualDisk.fix_path_search_for_user(
+            conn.get_backend(), path, user)
         if not errors:
             return
 
@@ -380,7 +366,7 @@ class vmmAddStorage(vmmGObjectUI):
             if not res:
                 return False
 
-        self.check_path_search_for_qemu(self, self.conn, disk.path)
+        self.check_path_search(self, self.conn, disk.path)
 
 
     #############

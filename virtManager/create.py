@@ -1580,7 +1580,7 @@ class vmmCreate(vmmGObjectUI):
             path = None
 
         if path:
-            self.addstorage.check_path_search_for_qemu(
+            self.addstorage.check_path_search(
                 self, self.conn, path)
 
         # Validation passed, store the install path (if there is one) in

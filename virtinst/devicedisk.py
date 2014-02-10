@@ -274,6 +274,34 @@ class VirtualDisk(VirtualDevice):
         return fixlist
 
     @staticmethod
+    def check_path_search(conn, path):
+        # Only works for qemu and DAC
+        if conn.is_remote() or not conn.is_qemu_system():
+            return None, []
+
+        from virtcli import cliconfig
+        user = cliconfig.default_qemu_user
+        try:
+            for i in conn.caps.host.secmodels:
+                if i.model != "dac":
+                    continue
+
+                label = (i.baselabels.get("kvm") or
+                         i.baselabels.get("qemu"))
+                if not label:
+                    continue
+
+                pwuid = pwd.getpwuid(
+                    int(label.split(":")[0].replace("+", "")))
+                if pwuid:
+                    user = pwuid[0]
+        except:
+            logging.debug("Exception grabbing qemu DAC user", exc_info=True)
+            return None, []
+
+        return user, VirtualDisk.check_path_search_for_user(conn, path, user)
+
+    @staticmethod
     def fix_path_search_for_user(conn, path, username):
         """
         Try to fix any permission problems found by check_path_search_for_user

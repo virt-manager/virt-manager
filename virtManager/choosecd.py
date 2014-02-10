@@ -125,7 +125,7 @@ class vmmChooseCD(vmmGObjectUI):
             if not res:
                 return False
 
-        vmmAddStorage.check_path_search_for_qemu(self, self.conn, path)
+        vmmAddStorage.check_path_search(self, self.conn, path)
 
         self.emit("cdrom-chosen", self.disk, path)
         self.close()
