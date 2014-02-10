@@ -114,17 +114,11 @@ class _SupportCheck(object):
         self.flag = flag
         self.version = version and int(version) or 0
         self.force_version = bool(force_version)
-        self.drv_version = drv_version or []
-        self.drv_libvirt_version = drv_libvirt_version or []
-
-    def _get_min_lib_version(self):
-        return self.version
-    def _get_drv_version(self):
-        return self.drv_version
+        self.drv_version = drv_version or {}
+        self.drv_libvirt_version = drv_libvirt_version or {}
 
     def check_support(self, conn, data):
-        minimum_libvirt_version = self._get_min_lib_version()
-        drv_version = self._get_drv_version()
+        minimum_libvirt_version = self.version
 
         object_name, function_name = _split_function_name(self.function)
 
@@ -178,39 +172,33 @@ class _SupportCheck(object):
             return False
 
         # If driver specific version info specified, try to verify
-        if drv_version:
+        if self.drv_version:
+            if drv_type not in self.drv_version:
+                return False
+
+            min_drv_ver = self.drv_version[drv_type]
             found = False
-            for drv, min_drv_ver in drv_version:
-                if drv != drv_type:
-                    continue
-
-                if min_drv_ver < 0:
-                    if actual_drv_ver <= -min_drv_ver:
-                        found = True
-                        break
-                else:
-                    if actual_drv_ver >= min_drv_ver:
-                        found = True
-                        break
-
+            if min_drv_ver < 0:
+                if actual_drv_ver <= -min_drv_ver:
+                    found = True
+            else:
+                if actual_drv_ver >= min_drv_ver:
+                    found = True
             if not found:
                 return False
 
         if self.drv_libvirt_version:
+            if drv_type not in self.drv_libvirt_version:
+                return False
+
+            min_lib_ver = self.drv_libvirt_version[drv_type]
             found = False
-            for drv, min_lib_ver in self.drv_libvirt_version:
-                if drv != drv_type:
-                    continue
-
-                if min_lib_ver < 0:
-                    if actual_lib_ver <= -min_lib_ver:
-                        found = True
-                        break
-                else:
-                    if actual_lib_ver >= min_lib_ver:
-                        found = True
-                        break
-
+            if min_lib_ver < 0:
+                if actual_lib_ver <= -min_lib_ver:
+                    found = True
+            else:
+                if actual_lib_ver >= min_lib_ver:
+                    found = True
             if not found:
                 return False
 
@@ -235,7 +223,7 @@ SUPPORT_CONN_STORAGE = _make(function="virConnect.listStoragePools",
 SUPPORT_CONN_NODEDEV = _make(function="virConnect.listDevices", args=(None, 0))
 SUPPORT_CONN_FINDPOOLSOURCES = _make(
                         function="virConnect.findStoragePoolSources")
-SUPPORT_CONN_KEYMAP_AUTODETECT = _make(drv_version=[("qemu", 11000)])
+SUPPORT_CONN_KEYMAP_AUTODETECT = _make(drv_version={"qemu": 11000})
 SUPPORT_CONN_GETHOSTNAME = _make(function="virConnect.getHostname", args=())
 SUPPORT_CONN_DOMAIN_VIDEO = _make(version=6005)
 SUPPORT_CONN_NETWORK = _make(function="virConnect.listNetworks", args=())
@@ -259,47 +247,40 @@ SUPPORT_CONN_LISTALLINTERFACES = _make(function="virConnect.listAllInterfaces",
 SUPPORT_CONN_LISTALLDEVICES = _make(function="virConnect.listAllDevices",
                                     args=())
 SUPPORT_CONN_VIRTIO_MMIO = _make(version=1001002,
-                                 drv_version=[("qemu", 1006000)])
+    drv_version={"qemu": 1006000})
 SUPPORT_CONN_DISK_SD = _make(version=1001002)
 # This is an arbitrary check to say whether it's a good idea to
 # default to qcow2. It might be fine for xen or qemu older than the versions
 # here, but until someone tests things I'm going to be a bit conservative.
-SUPPORT_CONN_DEFAULT_QCOW2 = _make(
-    version=8000, drv_version=[("qemu", 1002000), ("test", 0)])
-SUPPORT_CONN_DEFAULT_USB2 = _make(
-    version=9007, drv_version=[("qemu", 1000000), ("test", 0)])
-SUPPORT_CONN_SKIP_DEFAULT_ACPI = _make(drv_version=[("xen", -3001000)])
-SUPPORT_CONN_SOUND_AC97 = _make(version=6000,
-                                force_version=True,
-                                drv_version=[("qemu", 11000)])
-SUPPORT_CONN_SOUND_ICH6 = _make(version=8008,
-                                drv_version=[("qemu", 14000)])
-SUPPORT_CONN_GRAPHICS_SPICE = _make(version=8006,
-                                    drv_version=[("qemu", 14000)])
-SUPPORT_CONN_CHAR_SPICEVMC = _make(version=8008,
-                                   drv_version=[("qemu", 14000)])
+SUPPORT_CONN_DEFAULT_QCOW2 = _make(version=8000,
+    drv_version={"qemu": 1002000, "test": 0})
+SUPPORT_CONN_DEFAULT_USB2 = _make(version=9007,
+    drv_version={"qemu": 1000000, "test": 0})
+SUPPORT_CONN_SKIP_DEFAULT_ACPI = _make(drv_version={"xen": -3001000})
+SUPPORT_CONN_SOUND_AC97 = _make(version=6000, force_version=True,
+    drv_version={"qemu": 11000})
+SUPPORT_CONN_SOUND_ICH6 = _make(version=8008, drv_version={"qemu": 14000})
+SUPPORT_CONN_GRAPHICS_SPICE = _make(version=8006, drv_version={"qemu": 14000})
+SUPPORT_CONN_CHAR_SPICEVMC = _make(version=8008, drv_version={"qemu": 14000})
 SUPPORT_CONN_DIRECT_INTERFACE = _make(version=8007,
-                                      drv_version=[("qemu", 0),
-                                                   ("test", 0)])
+    drv_version={"qemu": 0, "test": 0})
 SUPPORT_CONN_FILESYSTEM = _make(
-    drv_version=[("qemu", 13000), ("lxc", 0), ("openvz", 0), ("test", 0)],
-    drv_libvirt_version=[("qemu", 8005), ("lxc", 0),
-                         ("openvz", 0), ("test", 0)])
-SUPPORT_CONN_AUTOSOCKET = _make(drv_libvirt_version=[("qemu", 1000006)])
+    drv_version={"qemu": 13000, "lxc": 0, "openvz": 0, "test": 0},
+    drv_libvirt_version={"qemu": 8005, "lxc": 0, "openvz": 0, "test": 0})
+SUPPORT_CONN_AUTOSOCKET = _make(drv_libvirt_version={"qemu": 1000006})
 SUPPORT_CONN_ADVANCED_CLOCK = _make(
-    drv_libvirt_version=[("qemu", 8000)])
-SUPPORT_CONN_VIRTIO_CONSOLE = _make(drv_libvirt_version=[("qemu", 8003)])
+    drv_libvirt_version={"qemu": 8000})
+SUPPORT_CONN_VIRTIO_CONSOLE = _make(drv_libvirt_version={"qemu": 8003})
 SUPPORT_CONN_PANIC_DEVICE = _make(version=1002001,
-                                  drv_version=[("qemu", 1005000),
-                                               ("test", 0)])
+    drv_version={"qemu": 1005000, "test": 0})
 SUPPORT_CONN_PM_DISABLE = _make(version="10002",
-    drv_version=[("qemu", 1002000), ("test", 0)])
+    drv_version={"qemu": 1002000, "test": 0})
 SUPPORT_CONN_QCOW2_LAZY_REFCOUNTS = _make(version="1001000",
-    drv_version=[("qemu", 1002000), ("test", 0)])
+    drv_version={"qemu": 1002000, "test": 0})
 SUPPORT_CONN_USBREDIR = _make(version="9005",
-    drv_version=[("qemu", 1003000), ("test", 0)])
+    drv_version={"qemu": 1003000, "test": 0})
 SUPPORT_CONN_DEVICE_BOOTORDER = _make(version="8008",
-    drv_version=[("qemu", 0), ("test", 0)])
+    drv_version={"qemu": 0, "test": 0})
 
 
 # Domain checks
