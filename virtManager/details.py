@@ -2500,10 +2500,11 @@ class vmmDetails(vmmGObjectUI):
 
         cpu_txt = "%d %%" % self.vm.guest_cpu_time_percentage()
 
-        cur_vm_memory = self.vm.stats_memory()
-        vm_memory = self.vm.maximum_memory()
-        mem_txt = "%s of %s" % (util.pretty_mem(cur_vm_memory),
-                                util.pretty_mem(vm_memory))
+        if self.config.get_stats_enable_memory_poll():
+            cur_vm_memory = self.vm.stats_memory()
+            vm_memory = self.vm.maximum_memory()
+            mem_txt = "%s of %s" % (util.pretty_mem(cur_vm_memory),
+                                    util.pretty_mem(vm_memory))
 
         if self.config.get_stats_enable_disk_poll():
             dsk_txt = _dsk_rx_tx_text(self.vm.disk_read_rate(),
