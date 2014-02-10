@@ -21,7 +21,10 @@
 # MA 02110-1301 USA.
 
 import argparse
+import logging
+import os
 import sys
+import time
 
 import urlgrabber.progress as progress
 
@@ -95,7 +98,6 @@ def main(conn=None):
             fail(_("The index for --boot must be between 0 and %d") %
                  (nboots - 1))
 
-
     # Build the Installer instance
     installer = virtimage.ImageInstaller(conn, image, boot_index=options.boot)
     guest = conn.caps.build_virtinst_guest(conn, *installer.get_caps_guest())
@@ -124,6 +126,15 @@ def main(conn=None):
     cli.parse_option_strings(parsermap, options, guest, None)
 
     guest.add_default_devices()
+
+    msg = _("\nvirt-image is planned for removal in the near future. "
+        "If you are depending on this tool, please contact the developers "
+        "at virt-tools-list@redhat.com\n")
+    logging.warning(msg)
+    if "VIRTINST_TEST_SUITE" not in os.environ:
+        if options.quiet:
+            print msg
+        time.sleep(3)
 
     # we've got everything -- try to start the install
     if options.xmlonly:
