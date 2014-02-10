@@ -563,7 +563,7 @@ c.add_compare("""--hvm --pxe \
 --blkiotune weight=200,device_path=/dev/sdc,device_weight=300 \
 --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10 \
 --boot loader=/foo/bar \
---host-device net_00_1c_25_10_b1_e4,boot_order=4 \
+--host-device net_00_1c_25_10_b1_e4,boot_order=4,rom_bar=off \
 --features acpi=off,eoi=on,privnet=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=1234 \
 --clock offset=localtime,hpet_present=no,rtc_tickpolicy=merge \
 --pm suspend_to_mem=yes,suspend_to_disk=no \

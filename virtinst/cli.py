@@ -2107,7 +2107,7 @@ class ParserSound(VirtCLIParser):
 
 
 #####################
-# --hostdev parsing #
+# --host-device parsing #
 #####################
 
 class ParserHostdev(VirtCLIParser):
@@ -2124,6 +2124,7 @@ class ParserHostdev(VirtCLIParser):
         self.set_param(None, "name", setter_cb=set_name_cb)
         self.set_param("driver_name", "driver_name")
         self.set_param("boot.order", "boot_order")
+        self.set_param("rom_bar", "rom_bar", is_onoff=True)
 
 
 ###########################

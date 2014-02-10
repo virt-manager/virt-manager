@@ -879,6 +879,11 @@ class vmmDomain(vmmLibvirtObject):
 
         return self._redefine_device(change, devobj)
 
+    def define_hostdev_rombar(self, devobj, val):
+        def change(editdev):
+            editdev.rom_bar = val
+        return self._redefine_device(change, devobj)
+
 
     ####################
     # Hotplug routines #

@@ -87,6 +87,7 @@ class VirtualHostDevice(VirtualDevice):
     slot = XMLProperty("./source/address/@slot")
 
     driver_name = XMLProperty("./driver/@name")
+    rom_bar = XMLProperty("./rom/@bar", is_onoff=True)
 
 
 VirtualHostDevice.register_type()

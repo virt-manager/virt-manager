@@ -100,7 +100,10 @@ EDIT_CONTROLLER_MODEL,
 EDIT_TPM_TYPE,
 
 EDIT_FS,
-) = range(1, 41)
+
+EDIT_HOSTDEV_ROMBAR,
+
+) = range(1, 42)
 
 
 # Columns in hw list model
@@ -631,6 +634,9 @@ class vmmDetails(vmmGObjectUI):
 
             "on_smartcard_mode_combo_changed": lambda *x: self.enable_apply(x,
                                                 EDIT_SMARTCARD_MODE),
+
+            "on_hostdev_rombar_toggled": lambda *x: self.enable_apply(
+                x, EDIT_HOSTDEV_ROMBAR),
 
             "on_config_apply_clicked": self.config_apply,
             "on_config_cancel_clicked": self.config_cancel,
@@ -1884,6 +1890,8 @@ class vmmDetails(vmmGObjectUI):
                 ret = self.config_controller_apply(key)
             elif pagetype is HW_LIST_TYPE_FILESYSTEM:
                 ret = self.config_filesystem_apply(key)
+            elif pagetype is HW_LIST_TYPE_HOSTDEV:
+                ret = self.config_hostdev_apply(key)
             else:
                 ret = False
         except Exception, e:
@@ -2240,6 +2248,16 @@ class vmmDetails(vmmGObjectUI):
                 return False
             add_define(self.vm.define_filesystem, dev_id_info,
                        self.fsDetails.get_dev())
+
+        return self._change_config_helper(df, da, hf, ha)
+
+    def config_hostdev_apply(self, dev_id_info):
+        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
+        ignore = add_hotplug
+
+        if self.edited(EDIT_HOSTDEV_ROMBAR):
+            add_define(self.vm.define_hostdev_rombar, dev_id_info,
+                       self.widget("hostdev-rombar").get_active())
 
         return self._change_config_helper(df, da, hf, ha)
 
@@ -2928,18 +2946,24 @@ class vmmDetails(vmmGObjectUI):
         if not hostdev:
             return
 
-        devtype = hostdev.type
+        rom_bar = hostdev.rom_bar
+        if rom_bar is None:
+            rom_bar = True
+
         pretty_name = None
         nodedev = lookup_nodedev(self.vm.conn, hostdev)
         if nodedev:
             pretty_name = nodedev.pretty_name()
-
         if not pretty_name:
             pretty_name = _build_hostdev_label(hostdev)[0] or "-"
 
-        devlabel = "<b>Physical %s Device</b>" % devtype.upper()
+        uiutil.set_grid_row_visible(
+            self.widget("hostdev-rombar"), hostdev.type == "pci")
+
+        devlabel = "<b>Physical %s Device</b>" % hostdev.type.upper()
         self.widget("hostdev-title").set_markup(devlabel)
         self.widget("hostdev-source").set_text(pretty_name)
+        self.widget("hostdev-rombar").set_active(rom_bar)
 
     def refresh_video_page(self):
         vid = self.get_hw_selection(HW_LIST_COL_DEVICE)

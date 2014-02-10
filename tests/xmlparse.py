@@ -614,6 +614,7 @@ class XMLParseTest(unittest.TestCase):
         check("slot", "0x2", "0x6")
         check("function", "0x3", "0x7")
         check("driver_name", None, "vfio")
+        check("rom_bar", None, True)
 
         self._alter_compare(guest.get_xml_config(), outfile)
 
