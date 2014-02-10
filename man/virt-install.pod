@@ -484,14 +484,11 @@ or explicitly specify one of the following arguments:
 =item B<path>
 
 A path to some storage media to use, existing or not. Existing media can be
-a file or block device. If installing on a remote host, the existing media
-must be shared as a libvirt storage volume.
+a file or block device.
 
 Specifying a non-existent path implies attempting to create the new storage,
-and will require specifying a 'size' value. If the base directory of the path
-is a libvirt storage pool on the host, the new storage will be created as a
-libvirt storage volume. For remote hosts, the base directory is required to be
-a storage pool if using this method.
+and will require specifying a 'size' value. Even for remote hosts, virt-install
+will try to use libvirt storage APIs to automatically create the given path.
 
 =item B<pool>
 
@@ -562,16 +559,9 @@ read and write caching.
 
 =item B<format>
 
-Image format to be used if creating managed storage. For file volumes, this
-can be 'raw', 'qcow2', 'vmdk', etc. See format types in
-L<http://libvirt.org/storage.html> for possible values. This is often
-mapped to the B<driver_type> value as well.
+Disk image format. For file volumes, this can be 'raw', 'qcow2', 'vmdk', etc. See format types in L<http://libvirt.org/storage.html> for possible values. This is often mapped to the B<driver_type> value as well.
 
-With libvirt 0.8.3 and later, this option should be specified if reusing
-an existing disk image, since libvirt does not autodetect storage format
-as it is a potential security issue. For example, if reusing an existing
-qcow2 image, you will want to specify format=qcow2, otherwise the hypervisor
-may not be able to read your disk image.
+If creating storage, this will be the format of the new image. If using an existing image, this overrides libvirt's format auto-detection.
 
 =item B<driver_name>
 
