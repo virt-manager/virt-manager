@@ -1522,6 +1522,12 @@ class ParserPM(VirtCLIParser):
 # --disk parsing #
 ##################
 
+def _default_image_file_format(conn):
+    if conn.check_support(conn.SUPPORT_CONN_DEFAULT_QCOW2):
+        return "qcow2"
+    return "raw"
+
+
 def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
     abspath = None
     volinst = None
@@ -1556,7 +1562,7 @@ def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
         tmpvol = virtinst.StorageVolume(guest.conn)
         tmpvol.pool = poolobj
         if fmt is None and tmpvol.file_type == tmpvol.TYPE_FILE:
-            fmt = "raw"
+            fmt = _default_image_file_format(guest.conn)
 
         ext = virtinst.StorageVolume.get_file_extension_for_format(fmt)
         vname = virtinst.StorageVolume.find_free_name(

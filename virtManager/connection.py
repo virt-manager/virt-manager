@@ -360,11 +360,12 @@ class vmmConnection(vmmGObject):
 
         fmt = self.config.get_default_storage_format()
         if fmt != "qcow2":
-            return
+            return fmt
 
         if self.check_support(self._backend.SUPPORT_CONN_DEFAULT_QCOW2):
             return fmt
         return None
+
 
     ####################################
     # Connection pretty print routines #

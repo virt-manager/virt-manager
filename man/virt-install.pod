@@ -565,6 +565,8 @@ read and write caching.
 
 Disk image format. For file volumes, this can be 'raw', 'qcow2', 'vmdk', etc. See format types in L<http://libvirt.org/storage.html> for possible values. This is often mapped to the B<driver_type> value as well.
 
+If not specified when creating file images, this will default to 'qcow2'.
+
 If creating storage, this will be the format of the new image. If using an existing image, this overrides libvirt's format auto-detection.
 
 =item B<driver_name>
@@ -1417,17 +1419,17 @@ C<~/.cache/virt-manager/virt-install.log> even if this parameter is omitted.
 
 =head1 EXAMPLES
 
-Install a Fedora 13 KVM guest with virtio accelerated disk/network,
-creating a new 8GB storage file, installing from media in the hosts
-CDROM drive, auto launching a graphical VNC viewer
+Install a Fedora 20 KVM guest with virtio accelerated disk/network,
+creating a new 10GB qcow2 file, installing from media in the hosts
+CDROM drive. This will use Spice graphics by default, and launch autolaunch
+a graphical client.
 
   # virt-install \
        --connect qemu:///system \
        --virt-type kvm \
        --name demo \
        --memory 500 \
-       --disk size=8 \
-       --graphics vnc \
+       --disk size=10 \
        --cdrom /dev/cdrom \
        --os-variant fedora13
 
