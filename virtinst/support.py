@@ -80,6 +80,43 @@ def _split_function_name(function):
         return (output[0], output[1])
 
 
+def _check_function(function, flag, args, conn, data):
+    object_name, function_name = _split_function_name(function)
+    if not function_name:
+        return None
+
+    # Make sure function is present in either libvirt module or
+    # object_name class
+    flag_tuple = ()
+
+    if not _has_command(function_name, objname=object_name):
+        return False
+
+    if flag:
+        found_flag = _get_flag(flag)
+        if not bool(found_flag):
+            return False
+        flag_tuple = (found_flag,)
+
+    if args is None:
+        return None
+
+    # If function requires an object, make sure the passed obj
+    # is of the correct type
+    if object_name:
+        classobj = _get_command(object_name)
+        if not isinstance(data, classobj):
+            raise ValueError(
+                "Passed obj %s with args must be of type %s, was %s" %
+                (data, str(classobj), type(data)))
+
+    cmd = _get_command(function_name, obj=data)
+
+    # Function with args specified is all the proof we need
+    return _try_command(cmd, args + flag_tuple,
+                        check_all_error=bool(flag_tuple))
+
+
 def _version_str_to_int(verstr):
     if verstr is None:
         return None
@@ -131,40 +168,9 @@ class _SupportCheck(object):
                     "since required APIs were not available. ver=%s" % vstr)
 
     def check_support(self, conn, data):
-        object_name, function_name = _split_function_name(self.function)
-
-        if function_name:
-            # Make sure function is present in either libvirt module or
-            # object_name class
-            flag_tuple = ()
-
-            if not _has_command(function_name, objname=object_name):
-                return False
-
-            if self.flag:
-                found_flag = _get_flag(self.flag)
-                if not bool(found_flag):
-                    return False
-                flag_tuple = (found_flag,)
-
-            if self.args is not None:
-                classobj = None
-
-                # If function requires an object, make sure the passed obj
-                # is of the correct type
-                if object_name:
-                    classobj = _get_command(object_name)
-                    if not isinstance(data, classobj):
-                        raise ValueError(
-                            "Passed obj %s with args must be of type %s, was %s" %
-                            (data, str(classobj), type(data)))
-
-                cmd = _get_command(function_name, obj=data)
-
-                # Function with args specified is all the proof we need
-                ret = _try_command(cmd, self.args + flag_tuple,
-                                   check_all_error=bool(flag_tuple))
-                return ret
+        ret = _check_function(self.function, self.flag, self.args, conn, data)
+        if ret is not None:
+            return ret
 
         # Do this after the function check, since there's an ordering issue
         # with VirtualConnection
