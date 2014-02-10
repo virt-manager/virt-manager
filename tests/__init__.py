@@ -20,9 +20,7 @@ import imp
 import logging
 import os
 
-os.environ["VIRTINST_TEST_TRACKPROPS"] = "1"
 os.environ["VIRTINST_TEST_SUITE"] = "1"
-os.environ["VIRTINST_TEST_CLI_VIRTXML"] = "1"
 
 import virtinst
 virtinst.stable_defaults = False

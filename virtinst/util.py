@@ -453,9 +453,8 @@ def uuidstr(rawuuid):
 
 
 def get_system_scratchdir(hvtype):
-    scratchdir = os.environ.get("VIRTINST_TEST_SCRATCHDIR", None)
-    if scratchdir:
-        return scratchdir
+    if "VIRTINST_TEST_SUITE" in os.environ:
+        return os.getcwd()
 
     if hvtype == "test":
         return "/tmp"

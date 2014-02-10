@@ -45,8 +45,6 @@ urixenia64 = testuri + _capsprefix + "xen-ia64-hvm.xml,xen"
 urikvm = uriqemu + _capsprefix + "libvirt-1.1.2-qemu-caps.xml"
 urilxc = testuri + _capsprefix + "capabilities-lxc.xml,lxc"
 
-os.environ["VIRTINST_TEST_SCRATCHDIR"] = os.getcwd()
-
 
 def get_debug():
     return ("DEBUG_TESTS" in os.environ and

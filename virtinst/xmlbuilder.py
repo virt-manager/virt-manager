@@ -32,7 +32,7 @@ from virtinst import util
 # This whole file is calling around into non-public functions that we
 # don't want regular API users to touch
 
-_trackprops = bool("VIRTINST_TEST_TRACKPROPS" in os.environ)
+_trackprops = bool("VIRTINST_TEST_SUITE" in os.environ)
 _allprops = []
 _seenprops = []
 
