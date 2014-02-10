@@ -84,15 +84,6 @@ class _SupportCheck(object):
     """
     @version: Minimum libvirt version required for this feature. Not used
         if 'args' provided
-    @force_version: Demand that version check is met for the checked
-        libvirt version. Normally we will make a best effort
-        attempt, because determining the daemon version depends
-        on an api call from 2010. So for things like
-        testing API availability (e.g. createXMLFrom) we won't
-        force the check, but for things like XML options (AC97)
-        we want to be ABSOLUTELY SURE it is supported so we
-        don't enable it by default and break guest creation.
-        This isn't required for versions after >= 0.7.3
     @function: Function name to check exists. If object not specified,
         function is checked against libvirt module.
     @args: Argument tuple to actually test object.function with.
@@ -109,15 +100,20 @@ class _SupportCheck(object):
     """
     def __init__(self,
                  function=None, args=None, flag=None,
-                 version=None, force_version=None,
-                 drv_version=None, drv_libvirt_version=None):
+                 version=None, drv_version=None, drv_libvirt_version=None):
         self.function = function
         self.args = args
         self.flag = flag
         self.version = version and int(version) or 0
-        self.force_version = bool(force_version)
         self.drv_version = drv_version or {}
         self.drv_libvirt_version = drv_libvirt_version or {}
+
+        versions = ([self.version] + self.drv_libvirt_version.values())
+        for v in versions:
+            if v != 0 and v < 7009:
+                raise RuntimeError("programming error: Cannot enforce "
+                    "support checks for libvirt versions less than 0.7.9, "
+                    "since required APIs were not available. ver=%s" % v)
 
     def check_support(self, conn, data):
         minimum_libvirt_version = self.version
@@ -160,14 +156,8 @@ class _SupportCheck(object):
         # Do this after the function check, since there's an ordering issue
         # with VirtualConnection
         drv_type = conn.get_uri_driver()
-        actual_lib_ver = conn.local_libvirt_version()
-        actual_daemon_ver = conn.daemon_version()
+        actual_lib_ver = conn.daemon_version()
         actual_drv_ver = conn.conn_version()
-        if actual_daemon_ver == 0 and not self.force_version:
-            # This means the API may not be supported, but we don't care
-            actual_daemon_ver = 1000000000
-        if actual_daemon_ver != 0:
-            actual_lib_ver = actual_daemon_ver
 
         # Check that local libvirt version is sufficient
         if minimum_libvirt_version > actual_lib_ver:
@@ -210,7 +200,6 @@ SUPPORT_CONN_FINDPOOLSOURCES = _make(
                         function="virConnect.findStoragePoolSources")
 SUPPORT_CONN_KEYMAP_AUTODETECT = _make(drv_version={"qemu": 11000})
 SUPPORT_CONN_GETHOSTNAME = _make(function="virConnect.getHostname", args=())
-SUPPORT_CONN_DOMAIN_VIDEO = _make(version=6005)
 SUPPORT_CONN_NETWORK = _make(function="virConnect.listNetworks", args=())
 SUPPORT_CONN_INTERFACE = _make(function="virConnect.listInterfaces", args=())
 SUPPORT_CONN_MAXVCPUS_XML = _make(version=8005)
@@ -242,8 +231,7 @@ SUPPORT_CONN_DEFAULT_QCOW2 = _make(version=8000,
 SUPPORT_CONN_DEFAULT_USB2 = _make(version=9007,
     drv_version={"qemu": 1000000, "test": 0})
 SUPPORT_CONN_CAN_ACPI = _make(drv_version={"xen": 3001000, "all": 0})
-SUPPORT_CONN_SOUND_AC97 = _make(version=6000, force_version=True,
-    drv_version={"qemu": 11000})
+SUPPORT_CONN_SOUND_AC97 = _make(version=8000, drv_version={"qemu": 11000})
 SUPPORT_CONN_SOUND_ICH6 = _make(version=8008, drv_version={"qemu": 14000})
 SUPPORT_CONN_GRAPHICS_SPICE = _make(version=8006, drv_version={"qemu": 14000})
 SUPPORT_CONN_CHAR_SPICEVMC = _make(version=8008, drv_version={"qemu": 14000})
@@ -271,33 +259,34 @@ SUPPORT_CONN_DEVICE_BOOTORDER = _make(version="8008",
 # Domain checks
 SUPPORT_DOMAIN_GETVCPUS = _make(function="virDomain.vcpus", args=())
 SUPPORT_DOMAIN_XML_INACTIVE = _make(function="virDomain.XMLDesc", args=(),
-                                    flag="VIR_DOMAIN_XML_INACTIVE")
+    flag="VIR_DOMAIN_XML_INACTIVE")
 SUPPORT_DOMAIN_XML_SECURE = _make(function="virDomain.XMLDesc", args=(),
-                                  flag="VIR_DOMAIN_XML_SECURE")
-SUPPORT_DOMAIN_MANAGED_SAVE = _make(function="virDomain.hasManagedSaveImage",
-                                    args=(0,))
+    flag="VIR_DOMAIN_XML_SECURE")
+SUPPORT_DOMAIN_MANAGED_SAVE = _make(
+    function="virDomain.hasManagedSaveImage",
+    args=(0,))
 SUPPORT_DOMAIN_MIGRATE_DOWNTIME = _make(
-        function="virDomain.migrateSetMaxDowntime",
-        # Use a bogus flags value, so that we don't overwrite existing
-        # downtime value
-        args=(30, 12345678))
+    function="virDomain.migrateSetMaxDowntime",
+    # Use a bogus flags value, so that we don't overwrite existing
+    # downtime value
+    args=(30, 12345678))
 SUPPORT_DOMAIN_JOB_INFO = _make(function="virDomain.jobInfo", args=())
 SUPPORT_DOMAIN_CONSOLE_STREAM = _make(version=8006)
 SUPPORT_DOMAIN_SET_METADATA = _make(version=9010)
 SUPPORT_DOMAIN_CPU_HOST_MODEL = _make(version=9010)
-SUPPORT_DOMAIN_LIST_SNAPSHOTS = _make(function="virDomain.listAllSnapshots",
-                                      args=())
+SUPPORT_DOMAIN_LIST_SNAPSHOTS = _make(
+    function="virDomain.listAllSnapshots", args=())
 SUPPORT_DOMAIN_GET_METADATA = _make(function="virDomain.metadata",
-            args=(getattr(libvirt, "VIR_DOMAIN_METADATA_TITLE", 1), None, 0))
+    args=(getattr(libvirt, "VIR_DOMAIN_METADATA_TITLE", 1), None, 0))
 SUPPORT_DOMAIN_MEMORY_STATS = _make(function="virDomain.memoryStats", args=())
 
 
 # Pool checks
 SUPPORT_POOL_CREATEVOLFROM = _make(function="virStoragePool.createXMLFrom",
-                                      version=6004)
+    version=8000)
 SUPPORT_POOL_ISACTIVE = _make(function="virStoragePool.isActive", args=())
-SUPPORT_POOL_LISTALLVOLUMES = _make(function="virStoragePool.listAllVolumes",
-                                    args=())
+SUPPORT_POOL_LISTALLVOLUMES = _make(
+    function="virStoragePool.listAllVolumes", args=())
 SUPPORT_POOL_METADATA_PREALLOC = _make(
     flag="VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA",
     version="1000001")
@@ -305,8 +294,8 @@ SUPPORT_POOL_METADATA_PREALLOC = _make(
 
 # Interface checks
 SUPPORT_INTERFACE_XML_INACTIVE = _make(function="virInterface.XMLDesc",
-                                       flag="VIR_INTERFACE_XML_INACTIVE",
-                                       args=())
+    flag="VIR_INTERFACE_XML_INACTIVE",
+    args=())
 SUPPORT_INTERFACE_ISACTIVE = _make(function="virInterface.isActive", args=())
 
 
