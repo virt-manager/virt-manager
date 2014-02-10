@@ -742,8 +742,7 @@ def add_device_options(devg, sound_back_compat=False):
                            "--tpm /dev/tpm"))
     devg.add_argument("--rng", action="append",
                     help=_("Configure a guest RNG device. Ex:\n"
-                           "--rng /dev/random\n"
-     "--rng egd,backend_host=localhost,backend_service=708,backend_type=tcp"))
+                           "--rng /dev/random"))
     devg.add_argument("--panic", action="append",
                     help=_("Configure a guest panic device. Ex:\n"
                            "--panic default"))
@@ -791,12 +790,14 @@ def add_guest_xml_options(geng):
     geng.add_argument("--pm", help=_("Config power management features"))
 
 
-def add_boot_option(insg):
+def add_boot_options(insg):
     insg.add_argument("--boot",
-                    help=_("Optionally configure post-install boot order, "
-                           "menu, permanent kernel boot, etc. Ex:\n"
-                           "--boot hd,cdrom,menu=on\n"
-                           "--boot init=/sbin/init (for containers)"))
+        help=_("Configure guest boot settings. Ex:\n"
+               "--boot hd,cdrom,menu=on\n"
+               "--boot init=/sbin/init (for containers)"))
+    insg.add_argument("--idmap",
+        help=_("Enable user namespace for LXC container. Ex.\n"
+               "--idmap uid_start=0,uid_target=1000,uid_count=10"))
 
 
 def add_disk_option(stog, editexample=False):
@@ -809,12 +810,6 @@ def add_disk_option(stog, editexample=False):
                "--disk path=/my/new/disk,size=5 (in gigabytes)\n"
                "--disk device=cdrom,bus=scsi\n"
                "--disk=?") + editmsg)
-
-
-def add_idmap_option(insg):
-    insg.add_argument("--idmap",
-            help=_("Enable user namespace for LXC container. Ex.\n"
-                "--idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10"))
 
 
 #############################################

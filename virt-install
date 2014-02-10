@@ -766,9 +766,8 @@ def parse_args():
     insg.add_argument("--initrd-inject", action="append",
                     help=_("Add given file to root of initrd from --location"))
     cli.add_distro_options(insg)
-    cli.add_boot_option(insg)
+    cli.add_boot_options(insg)
     insg.add_argument("--init", help=argparse.SUPPRESS)
-    cli.add_idmap_option(insg)
 
     stog = parser.add_argument_group(_("Storage Configuration"))
     cli.add_disk_option(stog)
