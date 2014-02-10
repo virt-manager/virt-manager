@@ -743,8 +743,7 @@ class Guest(XMLBuilder):
 
         default = True
         if (self._lookup_osdict_key("xen_disable_acpi", False) and
-            self.conn.check_support(
-                support.SUPPORT_CONN_SKIP_DEFAULT_ACPI)):
+            not self.conn.check_support(support.SUPPORT_CONN_CAN_ACPI)):
             default = False
 
         if self.features.acpi == "default":

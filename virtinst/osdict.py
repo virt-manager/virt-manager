@@ -141,7 +141,7 @@ class _OSVariant(object):
     @virtioconsole: If True, this OS supports virtio-console out of the box,
         and we should use it as the default console.
     @xen_disable_acpi: If True, disable acpi/apic for this OS if on old xen.
-        This corresponds with the SUPPORT_CONN_SKIP_DEFAULT_ACPI check
+        This corresponds with the SUPPORT_CONN_CAN_DEFAULT_ACPI check
     @qemu_ga: If True, this distro has qemu_ga available by default
 
     The rest of the parameters are about setting device/guest defaults

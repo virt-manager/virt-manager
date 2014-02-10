@@ -102,6 +102,8 @@ class _SupportCheck(object):
     @drv_version: A list of tuples of the form
         (driver name (e.g qemu, xen, lxc), minimum supported version)
         If a hypervisor is not listed, it is assumed to be NOT SUPPORTED.
+        If the special value 'all' is a key, assume any driver not listed
+        is explicitly supported.
     @drv_libvirt_version: List of tuples, similar to drv_version, but
         the version number is minimum supported _libvirt_ version
     """
@@ -171,35 +173,18 @@ class _SupportCheck(object):
         if minimum_libvirt_version > actual_lib_ver:
             return False
 
-        # If driver specific version info specified, try to verify
         if self.drv_version:
             if drv_type not in self.drv_version:
-                return False
-
-            min_drv_ver = self.drv_version[drv_type]
-            found = False
-            if min_drv_ver < 0:
-                if actual_drv_ver <= -min_drv_ver:
-                    found = True
-            else:
-                if actual_drv_ver >= min_drv_ver:
-                    found = True
-            if not found:
+                if "all" not in self.drv_version:
+                    return False
+            elif actual_drv_ver < self.drv_version[drv_type]:
                 return False
 
         if self.drv_libvirt_version:
             if drv_type not in self.drv_libvirt_version:
-                return False
-
-            min_lib_ver = self.drv_libvirt_version[drv_type]
-            found = False
-            if min_lib_ver < 0:
-                if actual_lib_ver <= -min_lib_ver:
-                    found = True
-            else:
-                if actual_lib_ver >= min_lib_ver:
-                    found = True
-            if not found:
+                if "all" not in self.drv_version:
+                    return False
+            elif actual_lib_ver < self.drv_libvirt_version[drv_type]:
                 return False
 
         return True
@@ -256,7 +241,7 @@ SUPPORT_CONN_DEFAULT_QCOW2 = _make(version=8000,
     drv_version={"qemu": 1002000, "test": 0})
 SUPPORT_CONN_DEFAULT_USB2 = _make(version=9007,
     drv_version={"qemu": 1000000, "test": 0})
-SUPPORT_CONN_SKIP_DEFAULT_ACPI = _make(drv_version={"xen": -3001000})
+SUPPORT_CONN_CAN_ACPI = _make(drv_version={"xen": 3001000, "all": 0})
 SUPPORT_CONN_SOUND_AC97 = _make(version=6000, force_version=True,
     drv_version={"qemu": 11000})
 SUPPORT_CONN_SOUND_ICH6 = _make(version=8008, drv_version={"qemu": 14000})
