@@ -99,7 +99,9 @@ class vmmConnection(vmmGObject):
         self._nodedev_capable = None
 
         self.using_domain_events = False
+        self._domain_cb_id = None
         self.using_network_events = False
+        self._network_cb_id = None
 
         self._xml_flags = {}
 
@@ -863,19 +865,21 @@ class vmmConnection(vmmGObject):
 
     def _add_conn_events(self):
         try:
-            self.get_backend().domainEventRegisterAny(None,
-                libvirt.VIR_DOMAIN_EVENT_ID_LIFECYCLE,
+            self._domain_cb_id = self.get_backend().domainEventRegisterAny(
+                None, libvirt.VIR_DOMAIN_EVENT_ID_LIFECYCLE,
                 self._domain_lifecycle_event, None)
             self.using_domain_events = True
+            logging.debug("Using domain events")
         except Exception, e:
             self.using_domain_events = False
             logging.debug("Error registering domain events: %s", e)
 
         try:
-            self.get_backend().networkEventRegisterAny(None,
-                libvirt.VIR_NETWORK_EVENT_ID_LIFECYCLE,
+            self._network_cb_id = self.get_backend().networkEventRegisterAny(
+                None, libvirt.VIR_NETWORK_EVENT_ID_LIFECYCLE,
                 self._network_lifecycle_event, None)
             self.using_network_events = True
+            logging.debug("Using network events")
         except Exception, e:
             self.using_network_events = False
             logging.debug("Error registering network events: %s", e)
@@ -919,6 +923,15 @@ class vmmConnection(vmmGObject):
         def cleanup(devs):
             for dev in devs.values():
                 dev.cleanup()
+
+        if self._backend:
+            if self._domain_cb_id is None:
+                self._backend.domainEventDeregisterAny(self._domain_cb_id)
+            self._domain_cb_id = None
+
+            if self._network_cb_id is None:
+                self._backend.networkEventDeregisterAny(self._network_cb_id)
+            self._network_cb_id = None
 
         self._backend.close()
         self.record = []
