@@ -304,7 +304,7 @@ class vmmDomain(vmmLibvirtObject):
         self.toggle_sample_disk_io()
         self.toggle_sample_mem_stats()
 
-        self.force_update_status()
+        self.force_update_status(from_event=True)
 
         # Hook up listeners that need to be cleaned up
         self.add_gconf_handle(
@@ -351,6 +351,9 @@ class vmmDomain(vmmLibvirtObject):
     ###########################
     # Misc API getter methods #
     ###########################
+
+    def _using_events(self):
+        return self.conn.using_domain_events
 
     def get_name(self):
         if self._name is None:
@@ -1642,18 +1645,22 @@ class vmmDomain(vmmLibvirtObject):
             status = libvirt.VIR_DOMAIN_NOSTATE
         return vm_status_icons[status]
 
-    def force_update_status(self):
+    def force_update_status(self, from_event=False):
         """
         Fetch current domain state and clear status cache
         """
+        if not from_event and self._using_events():
+            return
+
         try:
             info = self._backend.info()
             self._update_status(info[0])
-        except libvirt.libvirtError, e:
-            if util.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
-                return
-            raise
-
+        except libvirt.libvirtError:
+            # Transient domain might have disappeared, tell the connection
+            # to update the domain list
+            logging.debug("force_update_status: Triggering domain "
+                "list refresh")
+            self.conn.schedule_priority_tick(pollvm=True, force=True)
 
     def _update_status(self, status):
         """
@@ -1828,13 +1835,16 @@ class vmmDomain(vmmLibvirtObject):
 
 
     def tick(self, stats_update=True):
-        self._invalidate_xml()
+        if not self._using_events():
+            self._invalidate_xml()
+
         info = self._backend.info()
 
         if stats_update:
             self._tick_stats(info)
 
-        self._update_status(info[0])
+        if not self._using_events():
+            self._update_status(info[0])
 
         if stats_update:
             self.idle_emit("resources-sampled")

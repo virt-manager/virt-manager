@@ -113,6 +113,8 @@ class vmmLibvirtObject(vmmGObject):
         raise NotImplementedError()
     def _XMLDesc(self, flags):
         raise NotImplementedError()
+    def _using_events(self):
+        return False
 
     def _define(self, xml):
         ignore = xml
@@ -224,9 +226,9 @@ class vmmLibvirtObject(vmmGObject):
         if origxml != newxml:
             self._define(newxml)
 
-        # Make sure we have latest XML
-        self.refresh_xml(forcesignal=True)
-        return
+        if not self._using_events():
+            # Make sure we have latest XML
+            self.refresh_xml(forcesignal=True)
 
     def _redefine_xml(self, newxml):
         origxml = self._xml_to_redefine()

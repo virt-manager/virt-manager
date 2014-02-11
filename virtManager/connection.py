@@ -97,6 +97,7 @@ class vmmConnection(vmmGObject):
         self._storage_capable = None
         self._interface_capable = None
         self._nodedev_capable = None
+        self.using_domain_events = False
 
         self._xml_flags = {}
 
@@ -819,6 +820,42 @@ class vmmConnection(vmmGObject):
         return self._rename_helper("storagepool", self.define_pool,
                                    obj, origxml, newxml)
 
+    #########################
+    # Domain event handling #
+    #########################
+
+    # Our strategy here isn't the most efficient: since we need to keep the
+    # poll helpers around for compat with old libvirt, switching to a fully
+    # event driven setup is hard, so we end up doing more polling than
+    # necessary on most events.
+
+    def _domain_lifecycle_event(self, conn, domain, event, reason, userdata):
+        ignore = conn
+        ignore = reason
+        ignore = userdata
+        domobj = self.vms.get(domain.UUIDString(), None)
+
+        if domobj:
+            # If the domain disappeared, this will catch it and trigger
+            # a domain list refresh
+            self.idle_add(domobj.force_update_status, True)
+
+            if event == libvirt.VIR_DOMAIN_EVENT_DEFINED:
+                self.idle_add(domobj.refresh_xml)
+        else:
+            self.schedule_priority_tick(pollvm=True, force=True)
+
+
+    def _add_conn_domain_event(self):
+        try:
+            self.get_backend().domainEventRegisterAny(None,
+                libvirt.VIR_DOMAIN_EVENT_ID_LIFECYCLE,
+                self._domain_lifecycle_event, None)
+            self.using_domain_events = True
+        except Exception, e:
+            self.using_domain_events = False
+            logging.debug("Error registering domain events: %s", e)
+
 
     ####################
     # Update listeners #
@@ -883,6 +920,7 @@ class vmmConnection(vmmGObject):
         cleanup(self.vms)
         self.vms = {}
 
+        self.using_domain_events = False
         self._change_state(self.STATE_DISCONNECTED)
 
     def _cleanup(self):
@@ -987,10 +1025,12 @@ class vmmConnection(vmmGObject):
             logging.debug("conn version=%s", self._backend.conn_version())
             logging.debug("%s capabilities:\n%s",
                           self.get_uri(), self.caps.xml)
+            self._add_conn_domain_event()
             self.schedule_priority_tick(stats_update=True,
                                         pollvm=True, pollnet=True,
                                         pollpool=True, polliface=True,
-                                        pollnodedev=True, pollmedia=True)
+                                        pollnodedev=True, pollmedia=True,
+                                        force=True)
 
         if self.state == self.STATE_DISCONNECTED:
             if self.connectError:
@@ -1047,13 +1087,19 @@ class vmmConnection(vmmGObject):
     def tick(self, stats_update,
              pollvm=False, pollnet=False,
              pollpool=False, polliface=False,
-             pollnodedev=False, pollmedia=False):
-        """ main update function: polls for new objects, updates stats, ..."""
+             pollnodedev=False, pollmedia=False,
+             force=False):
+        """
+        main update function: polls for new objects, updates stats, ...
+        @force: Perform the requested polling even if async events are in use
+        """
         if self.state != self.STATE_ACTIVE:
             return
 
         if not pollvm:
             stats_update = False
+        if self.using_domain_events and not force:
+            pollvm = False
 
         self.hostinfo = self._backend.getInfo()
 
@@ -1146,7 +1192,7 @@ class vmmConnection(vmmGObject):
         if stats_update:
             updateVMs = vms
 
-        if pollvm:
+        if stats_update:
             for key in vms:
                 if key in updateVMs:
                     add_to_ticklist([vms[key]], (True,))
