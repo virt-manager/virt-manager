@@ -2498,7 +2498,8 @@ class vmmDetails(vmmGObjectUI):
         dsk_txt = _("Disabled")
         net_txt = _("Disabled")
 
-        cpu_txt = "%d %%" % self.vm.guest_cpu_time_percentage()
+        if self.config.get_stats_enable_cpu_poll():
+            cpu_txt = "%d %%" % self.vm.guest_cpu_time_percentage()
 
         if self.config.get_stats_enable_memory_poll():
             cur_vm_memory = self.vm.stats_memory()

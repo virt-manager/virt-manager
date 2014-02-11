@@ -189,6 +189,7 @@ class vmmManager(vmmGObjectUI):
 
         # Initialize stat polling columns based on global polling
         # preferences (we want signal handlers for this)
+        self.enable_polling(COL_GUEST_CPU)
         self.enable_polling(COL_DISK)
         self.enable_polling(COL_NETWORK)
         self.enable_polling(COL_MEM)
@@ -277,15 +278,17 @@ class vmmManager(vmmGObjectUI):
         # Register callbacks with the global stats enable/disable values
         # that disable the associated vmlist widgets if reporting is disabled
         self.add_gconf_handle(
-            self.config.on_stats_enable_disk_poll_changed(self.enable_polling,
-                                                    COL_DISK))
+            self.config.on_stats_enable_cpu_poll_changed(
+                self.enable_polling, COL_GUEST_CPU))
         self.add_gconf_handle(
-            self.config.on_stats_enable_net_poll_changed(self.enable_polling,
-                                                    COL_NETWORK))
+            self.config.on_stats_enable_disk_poll_changed(
+                self.enable_polling, COL_DISK))
+        self.add_gconf_handle(
+            self.config.on_stats_enable_net_poll_changed(
+                self.enable_polling, COL_NETWORK))
         self.add_gconf_handle(
             self.config.on_stats_enable_memory_poll_changed(
-                                                    self.enable_polling,
-                                                    COL_MEM))
+                self.enable_polling, COL_MEM))
 
         self.toggle_guest_cpu_usage_visible_widget()
         self.toggle_host_cpu_usage_visible_widget()
@@ -982,6 +985,9 @@ class vmmManager(vmmGObjectUI):
         return cmp(obj1.network_traffic_rate(), obj2.network_traffic_rate())
 
     def enable_polling(self, column):
+        if column == COL_GUEST_CPU:
+            widgn = ["menu_view_stats_guest_cpu", "menu_view_stats_host_cpu"]
+            do_enable = self.config.get_stats_enable_cpu_poll()
         if column == COL_DISK:
             widgn = "menu_view_stats_disk"
             do_enable = self.config.get_stats_enable_disk_poll()
@@ -991,18 +997,19 @@ class vmmManager(vmmGObjectUI):
         elif column == COL_MEM:
             widgn = "menu_view_stats_memory"
             do_enable = self.config.get_stats_enable_memory_poll()
-        widget = self.widget(widgn)
 
-        tool_text = ""
+        for w in util.listify(widgn):
+            widget = self.widget(w)
+            tool_text = ""
 
-        if do_enable:
-            widget.set_sensitive(True)
-        else:
-            if widget.get_active():
-                widget.set_active(False)
-            widget.set_sensitive(False)
-            tool_text = _("Disabled in preferences dialog.")
-        widget.set_tooltip_text(tool_text)
+            if do_enable:
+                widget.set_sensitive(True)
+            else:
+                if widget.get_active():
+                    widget.set_active(False)
+                widget.set_sensitive(False)
+                tool_text = _("Disabled in preferences dialog.")
+            widget.set_tooltip_text(tool_text)
 
     def _toggle_graph_helper(self, do_show, col, datafunc, menu):
         img = -1

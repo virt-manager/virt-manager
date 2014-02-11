@@ -116,11 +116,15 @@
       <description>The statistics update interval in seconds</description>
     </key>
 
+    <key name="enable-cpu-poll" type="b">
+      <default>true</default>
+      <summary>Poll VM CPU stats</summary>
+      <description>Whether or not the app will poll VM CPU statistics</description>
+    </key>
     <key name="enable-disk-poll" type="b">
       <default>false</default>
       <summary>Poll disk i/o stats</summary>
       <description>Whether or not the app will poll VM disk i/o statistics</description>
-
     </key>
     <key name="enable-net-poll" type="b">
       <default>false</default>

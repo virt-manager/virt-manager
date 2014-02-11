@@ -45,6 +45,7 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_add_spice_usbredir()
         self.refresh_storage_format()
         self.refresh_cpu_default()
+        self.refresh_cpu_poll()
         self.refresh_disk_poll()
         self.refresh_net_poll()
         self.refresh_memory_poll()
@@ -71,6 +72,7 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_add_spice_usbredir_changed": self.change_add_spice_usbredir,
             "on_prefs_storage_format_changed": self.change_storage_format,
             "on_prefs_cpu_default_changed": self.change_cpu_default,
+            "on_prefs_stats_enable_cpu_toggled": self.change_cpu_poll,
             "on_prefs_stats_enable_disk_toggled": self.change_disk_poll,
             "on_prefs_stats_enable_net_toggled": self.change_net_poll,
             "on_prefs_stats_enable_memory_toggled": self.change_memory_poll,
@@ -214,6 +216,9 @@ class vmmPreferences(vmmGObjectUI):
         val = self.config.get_default_cpu_setting(raw=True)
         uiutil.set_row_selection(combo, val)
 
+    def refresh_cpu_poll(self):
+        self.widget("prefs-stats-enable-cpu").set_active(
+            self.config.get_stats_enable_cpu_poll())
     def refresh_disk_poll(self):
         self.widget("prefs-stats-enable-disk").set_active(
             self.config.get_stats_enable_disk_poll())
@@ -355,6 +360,8 @@ class vmmPreferences(vmmGObjectUI):
         typ = uiutil.get_list_selection(src, 0) or "default"
         self.config.set_default_cpu_setting(typ.lower())
 
+    def change_cpu_poll(self, src):
+        self.config.set_stats_enable_cpu_poll(src.get_active())
     def change_disk_poll(self, src):
         self.config.set_stats_enable_disk_poll(src.get_active())
     def change_net_poll(self, src):

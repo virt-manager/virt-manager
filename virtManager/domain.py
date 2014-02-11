@@ -261,6 +261,7 @@ class vmmDomain(vmmLibvirtObject):
         self.mem_stats_supported = False
 
         self._enable_mem_stats = False
+        self._enable_cpu_stats = False
 
         self._enable_net_poll = False
         self._stats_net_supported = True
@@ -303,19 +304,23 @@ class vmmDomain(vmmLibvirtObject):
         self.toggle_sample_network_traffic()
         self.toggle_sample_disk_io()
         self.toggle_sample_mem_stats()
+        self.toggle_sample_cpu_stats()
 
         self.force_update_status(from_event=True)
 
         # Hook up listeners that need to be cleaned up
         self.add_gconf_handle(
+            self.config.on_stats_enable_cpu_poll_changed(
+                self.toggle_sample_cpu_stats))
+        self.add_gconf_handle(
             self.config.on_stats_enable_net_poll_changed(
-                                        self.toggle_sample_network_traffic))
+                self.toggle_sample_network_traffic))
         self.add_gconf_handle(
             self.config.on_stats_enable_disk_poll_changed(
-                                        self.toggle_sample_disk_io))
+                self.toggle_sample_disk_io))
         self.add_gconf_handle(
             self.config.on_stats_enable_memory_poll_changed(
-                                        self.toggle_sample_mem_stats))
+                self.toggle_sample_mem_stats))
 
         self.connect("status-changed", self._update_start_vcpus)
         self.connect("pre-startup", self._prestartup_nodedev_check)
@@ -1422,6 +1427,9 @@ class vmmDomain(vmmLibvirtObject):
     #################
 
     def _sample_cpu_stats(self, info, now):
+        if not self._enable_cpu_stats:
+            return 0, 0, 0, 0
+
         prevCpuTime = 0
         prevTimestamp = 0
         cpuTime = 0
@@ -1522,6 +1530,9 @@ class vmmDomain(vmmLibvirtObject):
 
     def toggle_sample_mem_stats(self, ignore=None):
         self._enable_mem_stats = self.config.get_stats_enable_memory_poll()
+
+    def toggle_sample_cpu_stats(self, ignore=None):
+        self._enable_cpu_stats = self.config.get_stats_enable_cpu_poll()
 
 
     ###################
@@ -1838,7 +1849,9 @@ class vmmDomain(vmmLibvirtObject):
         if not self._using_events():
             self._invalidate_xml()
 
-        info = self._backend.info()
+        info = []
+        if not self._using_events() or self._enable_cpu_stats:
+            info = self._backend.info()
 
         if stats_update:
             self._tick_stats(info)

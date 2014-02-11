@@ -343,6 +343,8 @@ class vmmConfig(object):
 
 
     # Disable/Enable different stats polling
+    def get_stats_enable_cpu_poll(self):
+        return self.conf.get("/stats/enable-cpu-poll")
     def get_stats_enable_disk_poll(self):
         return self.conf.get("/stats/enable-disk-poll")
     def get_stats_enable_net_poll(self):
@@ -350,6 +352,8 @@ class vmmConfig(object):
     def get_stats_enable_memory_poll(self):
         return self.conf.get("/stats/enable-memory-poll")
 
+    def set_stats_enable_cpu_poll(self, val):
+        self.conf.set("/stats/enable-cpu-poll", val)
     def set_stats_enable_disk_poll(self, val):
         self.conf.set("/stats/enable-disk-poll", val)
     def set_stats_enable_net_poll(self, val):
@@ -357,6 +361,8 @@ class vmmConfig(object):
     def set_stats_enable_memory_poll(self, val):
         self.conf.set("/stats/enable-memory-poll", val)
 
+    def on_stats_enable_cpu_poll_changed(self, cb, row=None):
+        return self.conf.notify_add("/stats/enable-cpu-poll", cb, row)
     def on_stats_enable_disk_poll_changed(self, cb, row=None):
         return self.conf.notify_add("/stats/enable-disk-poll", cb, row)
     def on_stats_enable_net_poll_changed(self, cb, row=None):
