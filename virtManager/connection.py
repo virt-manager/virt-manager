@@ -97,7 +97,9 @@ class vmmConnection(vmmGObject):
         self._storage_capable = None
         self._interface_capable = None
         self._nodedev_capable = None
+
         self.using_domain_events = False
+        self.using_network_events = False
 
         self._xml_flags = {}
 
@@ -833,20 +835,33 @@ class vmmConnection(vmmGObject):
         ignore = conn
         ignore = reason
         ignore = userdata
-        domobj = self.vms.get(domain.UUIDString(), None)
+        obj = self.vms.get(domain.UUIDString(), None)
 
-        if domobj:
+        if obj:
             # If the domain disappeared, this will catch it and trigger
             # a domain list refresh
-            self.idle_add(domobj.force_update_status, True)
+            self.idle_add(obj.force_update_status, True)
 
             if event == libvirt.VIR_DOMAIN_EVENT_DEFINED:
-                self.idle_add(domobj.refresh_xml)
+                self.idle_add(obj.refresh_xml)
         else:
             self.schedule_priority_tick(pollvm=True, force=True)
 
+    def _network_lifecycle_event(self, conn, network, event, reason, userdata):
+        ignore = conn
+        ignore = reason
+        ignore = userdata
+        obj = self.nets.get(network.UUIDString(), None)
 
-    def _add_conn_domain_event(self):
+        if obj:
+            self.idle_add(obj.force_update_status, True)
+
+            if event == libvirt.VIR_NETWORK_EVENT_DEFINED:
+                self.idle_add(obj.refresh_xml)
+        else:
+            self.schedule_priority_tick(pollnet=True, force=True)
+
+    def _add_conn_events(self):
         try:
             self.get_backend().domainEventRegisterAny(None,
                 libvirt.VIR_DOMAIN_EVENT_ID_LIFECYCLE,
@@ -855,6 +870,15 @@ class vmmConnection(vmmGObject):
         except Exception, e:
             self.using_domain_events = False
             logging.debug("Error registering domain events: %s", e)
+
+        try:
+            self.get_backend().networkEventRegisterAny(None,
+                libvirt.VIR_NETWORK_EVENT_ID_LIFECYCLE,
+                self._network_lifecycle_event, None)
+            self.using_network_events = True
+        except Exception, e:
+            self.using_network_events = False
+            logging.debug("Error registering network events: %s", e)
 
 
     ####################
@@ -920,7 +944,6 @@ class vmmConnection(vmmGObject):
         cleanup(self.vms)
         self.vms = {}
 
-        self.using_domain_events = False
         self._change_state(self.STATE_DISCONNECTED)
 
     def _cleanup(self):
@@ -1025,7 +1048,7 @@ class vmmConnection(vmmGObject):
             logging.debug("conn version=%s", self._backend.conn_version())
             logging.debug("%s capabilities:\n%s",
                           self.get_uri(), self.caps.xml)
-            self._add_conn_domain_event()
+            self._add_conn_events()
             self.schedule_priority_tick(stats_update=True,
                                         pollvm=True, pollnet=True,
                                         pollpool=True, polliface=True,
@@ -1098,8 +1121,11 @@ class vmmConnection(vmmGObject):
 
         if not pollvm:
             stats_update = False
+
         if self.using_domain_events and not force:
             pollvm = False
+        if self.using_network_events and not force:
+            pollnet = False
 
         self.hostinfo = self._backend.getInfo()
 

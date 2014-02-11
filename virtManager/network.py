@@ -18,7 +18,10 @@
 # MA 02110-1301 USA.
 #
 
+import logging
+
 import ipaddr
+import libvirt
 
 from virtinst import Network
 
@@ -45,7 +48,7 @@ class vmmNetwork(vmmLibvirtObject):
 
         self._support_isactive = None
 
-        self.tick()
+        self.force_update_status(from_event=True)
 
 
     ##########################
@@ -58,6 +61,8 @@ class vmmNetwork(vmmLibvirtObject):
         return self._backend.XMLDesc(flags)
     def _define(self, xml):
         return self.conn.define_network(xml)
+    def _using_events(self):
+        return self.conn.using_network_events
 
 
     ###########
@@ -78,6 +83,17 @@ class vmmNetwork(vmmLibvirtObject):
             return
         self.idle_emit(state and "started" or "stopped")
         self._active = state
+
+    def force_update_status(self, from_event=False):
+        if self._using_events() and not from_event:
+            return
+
+        try:
+            self._set_active(self._backend_get_active())
+        except libvirt.libvirtError:
+            logging.debug("force_update_status: Triggering network "
+                "list refresh")
+            self.conn.schedule_priority_tick(pollnet=True, force=True)
 
     def is_active(self):
         return self._active
@@ -105,7 +121,7 @@ class vmmNetwork(vmmLibvirtObject):
         self._backend.setAutostart(value)
 
     def tick(self):
-        self._set_active(self._backend_get_active())
+        self.force_update_status()
 
     def define_name(self, newname):
         return self._define_name_helper("network",

@@ -123,6 +123,9 @@ class vmmLibvirtObject(vmmGObject):
     def delete(self, force=True):
         ignore = force
 
+    def force_update_status(self, from_event=False):
+        ignore = from_event
+
 
     ##################
     # Public XML API #
