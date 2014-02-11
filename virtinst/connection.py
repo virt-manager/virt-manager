@@ -137,6 +137,9 @@ class VirtualConnection(object):
     # Public API #
     ##############
 
+    def is_closed(self):
+        return not bool(self._libvirtconn)
+
     def close(self):
         self._libvirtconn = None
         self._uri = None
