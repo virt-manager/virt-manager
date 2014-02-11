@@ -360,15 +360,6 @@ class vmmDomain(vmmLibvirtObject):
             self._name = self._backend.name()
         return self._name
 
-    def get_name_or_title(self):
-        title = self.get_title()
-        if title:
-            return title
-        return self.get_name()
-
-    def get_title(self):
-        return self.get_xmlobj(inactive=True).title
-
     def get_id(self):
         if self._id is None:
             self._id = self._backend.ID()
@@ -1063,6 +1054,15 @@ class vmmDomain(vmmLibvirtObject):
         return self.get_xmlobj().emulator
     def get_machtype(self):
         return self.get_xmlobj().os.machine
+
+    def get_name_or_title(self):
+        title = self.get_title()
+        if title:
+            return title
+        return self.get_name()
+
+    def get_title(self):
+        return self.get_xmlobj(inactive=True).title
 
     def get_description(self):
         # Always show the inactive <description>, let's us fake hotplug
