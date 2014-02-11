@@ -247,7 +247,6 @@ class vmmDomain(vmmLibvirtObject):
 
         self._install_abort = False
         self.reboot_listener = None
-        self._startup_vcpus = None
         self._is_management_domain = None
         self._id = None
         self._name = None
@@ -322,7 +321,6 @@ class vmmDomain(vmmLibvirtObject):
             self.config.on_stats_enable_memory_poll_changed(
                 self.toggle_sample_mem_stats))
 
-        self.connect("status-changed", self._update_start_vcpus)
         self.connect("pre-startup", self._prestartup_nodedev_check)
 
     def _prestartup_nodedev_check(self, src, ret):
@@ -1080,19 +1078,9 @@ class vmmDomain(vmmLibvirtObject):
         return int(self.get_xmlobj().maxmemory)
 
     def vcpu_count(self):
-        guest = self.get_xmlobj()
-        return int(guest.curvcpus or
-                   self._startup_vcpus or
-                   guest.vcpus)
+        return int(self.get_xmlobj().curvcpus or self.get_xmlobj().vcpus)
     def vcpu_max_count(self):
-        guest = self.get_xmlobj()
-        has_xml_max = (guest.curvcpus != guest.vcpus)
-        if has_xml_max or not self.is_active():
-            return guest.vcpus
-
-        if self._startup_vcpus is None:
-            self._startup_vcpus = int(self.vcpu_count())
-        return int(self._startup_vcpus)
+        return int(self.get_xmlobj().vcpus)
 
     def vcpu_pinning(self):
         return self.get_xmlobj().cpuset or ""
@@ -1604,19 +1592,6 @@ class vmmDomain(vmmLibvirtObject):
     ###################
     # Status helpers ##
     ###################
-
-    def _update_start_vcpus(self, ignore, oldstatus, status):
-        ignore = status
-
-        if oldstatus not in [libvirt.VIR_DOMAIN_SHUTDOWN,
-                             libvirt.VIR_DOMAIN_SHUTOFF,
-                             libvirt.VIR_DOMAIN_CRASHED]:
-            return
-
-        # Want to track the startup vcpu amount, which is the
-        # cap of how many VCPUs can be added
-        self._startup_vcpus = None
-        self.vcpu_max_count()
 
     def _normalize_status(self, status):
         if status == libvirt.VIR_DOMAIN_NOSTATE:
