@@ -36,6 +36,8 @@ from virtinst import VirtualController
 
 from virtManager.libvirtobject import vmmLibvirtObject
 
+if not hasattr(libvirt, "VIR_DOMAIN_PMSUSPENDED"):
+    setattr(libvirt, "VIR_DOMAIN_PMSUSPENDED", 7)
 
 vm_status_icons = {
     libvirt.VIR_DOMAIN_BLOCKED: "state_running",
@@ -45,7 +47,7 @@ vm_status_icons = {
     libvirt.VIR_DOMAIN_SHUTDOWN: "state_shutoff",
     libvirt.VIR_DOMAIN_SHUTOFF: "state_shutoff",
     libvirt.VIR_DOMAIN_NOSTATE: "state_running",
-    getattr(libvirt, "VIR_DOMAIN_PMSUSPENDED", 7): "state_paused",
+    libvirt.VIR_DOMAIN_PMSUSPENDED: "state_paused",
 }
 
 
@@ -224,8 +226,7 @@ class vmmDomain(vmmLibvirtObject):
                 return _("Shutoff")
         elif status == libvirt.VIR_DOMAIN_CRASHED:
             return _("Crashed")
-        elif (hasattr(libvirt, "VIR_DOMAIN_PMSUSPENDED") and
-              status == libvirt.VIR_DOMAIN_PMSUSPENDED):
+        elif status == libvirt.VIR_DOMAIN_PMSUSPENDED:
             return _("Suspended")
 
         logging.debug("Unknown status %d, returning 'Unknown'", status)
@@ -1608,7 +1609,8 @@ class vmmDomain(vmmLibvirtObject):
         return self.status() == libvirt.VIR_DOMAIN_CRASHED
     def is_stoppable(self):
         return self.status() in [libvirt.VIR_DOMAIN_RUNNING,
-                                 libvirt.VIR_DOMAIN_PAUSED]
+                                 libvirt.VIR_DOMAIN_PAUSED,
+                                 libvirt.VIR_DOMAIN_PMSUSPENDED]
     def is_destroyable(self):
         return (self.is_stoppable() or
                 self.status() in [libvirt.VIR_DOMAIN_CRASHED])
