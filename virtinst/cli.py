@@ -796,7 +796,7 @@ def add_boot_options(insg):
                "--boot hd,cdrom,menu=on\n"
                "--boot init=/sbin/init (for containers)"))
     insg.add_argument("--idmap",
-        help=_("Enable user namespace for LXC container. Ex.\n"
+        help=_("Enable user namespace for LXC container. Ex:\n"
                "--idmap uid_start=0,uid_target=1000,uid_count=10"))
 
 
