@@ -348,7 +348,7 @@ class StoragePool(_StorageObject):
                        "capacity", "allocation", "available",
                        "format", "host",
                        "source_path", "source_name", "target_path",
-                       "permissions"]
+                       "source_dir", "permissions"]
 
     type = XMLProperty("./@type",
         doc=_("Storage device type the pool will represent."))
@@ -373,6 +373,7 @@ class StoragePool(_StorageObject):
 
     target_path = XMLProperty("./target/path",
                               default_cb=_get_default_target_path)
+    source_dir = XMLProperty("./source/dir/@path")
 
 
     ######################
@@ -385,6 +386,7 @@ class StoragePool(_StorageObject):
                             self.TYPE_DISK, self.TYPE_ISCSI, self.TYPE_SCSI],
             "source_name": [self.TYPE_LOGICAL],
             "host": [self.TYPE_NETFS, self.TYPE_ISCSI],
+            "source_dir" : [self.TYPE_NETFS],
             "format": [self.TYPE_FS, self.TYPE_NETFS, self.TYPE_DISK],
             "iqn": [self.TYPE_ISCSI],
             "target_path" : [self.TYPE_DIR, self.TYPE_FS, self.TYPE_NETFS,

@@ -1027,6 +1027,7 @@ class XMLParseTest(unittest.TestCase):
         check("capacity", 984373075968, 200000)
         check("allocation", 756681687040, 150000)
         check("available", 227691388928, 50000)
+        check("source_dir", None, None)
 
         check("format", "auto", "ext3")
         check("source_path", "/some/source/path", "/dev/foo/bar")
