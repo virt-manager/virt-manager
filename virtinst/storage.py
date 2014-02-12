@@ -284,6 +284,8 @@ class StoragePool(_StorageObject):
                                 name))
 
     def _get_default_target_path(self):
+        if not self.supports_property("target_path"):
+            return None
         if (self.type == self.TYPE_DIR or
             self.type == self.TYPE_NETFS or
             self.type == self.TYPE_FS):
@@ -385,6 +387,9 @@ class StoragePool(_StorageObject):
             "host": [self.TYPE_NETFS, self.TYPE_ISCSI],
             "format": [self.TYPE_FS, self.TYPE_NETFS, self.TYPE_DISK],
             "iqn": [self.TYPE_ISCSI],
+            "target_path" : [self.TYPE_DIR, self.TYPE_FS, self.TYPE_NETFS,
+                             self.TYPE_LOGICAL, self.TYPE_DISK, self.TYPE_ISCSI,
+                             self.TYPE_SCSI, self.TYPE_MPATH]
         }
 
         if users.get(propname):
