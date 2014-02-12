@@ -902,14 +902,18 @@ class VirtualDisk(VirtualDevice):
                     return _return(pref)
         return _return("sd")
 
-    def generate_target(self, skip_targets):
+    def generate_target(self, skip_targets, pref_ctrl=None):
         """
         Generate target device ('hda', 'sdb', etc..) for disk, excluding
-        any targets in 'skip_targets'. Sets self.target, and returns the
-        generated value
+        any targets in 'skip_targets'.  If given the 'pref_ctrl'
+        parameter, it tries to select the target so that the disk is
+        mapped onto that controller.
+        Sets self.target, and returns the generated value.
 
         @param skip_targets: list of targets to exclude
         @type skip_targets: C{list}
+        @param pref_ctrl: preferred controller to connect the disk to
+        @type pref_ctrl: C{int}
         @raise ValueError: can't determine target type, no targets available
         @returns generated target
         @rtype C{str}
@@ -921,7 +925,13 @@ class VirtualDisk(VirtualDevice):
         def get_target():
             first_found = None
 
-            for i in range(1, maxnode + 1):
+            ran = range(1, maxnode + 1)
+            if pref_ctrl:
+                # We assume narrow SCSI bus and libvirt assigning 7
+                # (0-6, 7-13, etc.) devices per controller
+                ran = range(pref_ctrl * 7, (pref_ctrl + 1) * 7)
+
+            for i in ran:
                 gen_t = prefix + self.num_to_target(i)
                 if gen_t in skip_targets:
                     skip_targets.remove(gen_t)
@@ -937,7 +947,14 @@ class VirtualDisk(VirtualDevice):
         if ret:
             self.target = ret
             return ret
-        raise ValueError(_("Only %s disks of type '%s' are supported"
-            % (maxnode, prefix)))
+
+        if pref_ctrl:
+            # This basically means that we either chose full
+            # controller or didn't add any
+            raise ValueError(_("Controller number %d for disk of type %s has "
+                               "no empty slot to use" % (pref_ctrl, prefix)))
+        else:
+            raise ValueError(_("Only %s disks of type '%s' are supported"
+                               % (maxnode, prefix)))
 
 VirtualDisk.register_type()
