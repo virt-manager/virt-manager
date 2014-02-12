@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2007, 2013, 2014 Red Hat, Inc.
+# Copyright (C) 2006-2007, 2012-2014 Red Hat, Inc.
 # Copyright (C) 2006 Hugh O. Brock <hbrock@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,7 @@
 
 import logging
 import traceback
+import collections
 
 # pylint: disable=E0611
 from gi.repository import Gtk
@@ -1412,34 +1413,45 @@ class vmmAddHardware(vmmGObjectUI):
             self._dev.validate()
         return ret
 
-    def _set_disk_controller(self, disk, controller_model):
+    def _set_disk_controller(self, disk, controller_model, used_disks):
         # Add a SCSI controller with model virtio-scsi if needed
         disk.vmm_controller = None
         if controller_model != "virtio-scsi":
-            return
+            return None
 
+        # Get SCSI controllers
         controllers = self.vm.get_controller_devices()
         ctrls_scsi = [x for x in controllers if
                 (x.type == VirtualController.TYPE_SCSI)]
-        if len(ctrls_scsi) > 0:
-            index_new = max([x.index for x in ctrls_scsi]) + 1
-        else:
-            index_new = 0
 
+        # Create possible new controller
         controller = VirtualController(self.conn.get_backend())
         controller.type = "scsi"
         controller.model = controller_model
-        disk.vmm_controller = controller
-        for d in controllers:
-            if controller.type == d.type:
-                controller.index = index_new
-            if controller_model == d.model:
-                disk.vmm_controller = None
-                controller = d
-                break
 
-        disk.address.type = disk.address.ADDRESS_TYPE_DRIVE
-        disk.address.controller = controller.index
+        # And set its index
+        controller.index = 0
+        if ctrls_scsi:
+            controller.index = max([x.index for x in ctrls_scsi]) + 1
+
+        # Take only virtio-scsi ones
+        ctrls_scsi = [x for x in ctrls_scsi
+                      if x.model == controller_model]
+
+        # Save occupied places per controller
+        occupied = collections.defaultdict(int)
+        for d in used_disks:
+            if d.bus == disk.bus:
+                num = virtinst.VirtualDisk.target_to_num(d.target)
+                occupied[num / 7] += 1
+        for c in ctrls_scsi:
+            if occupied[c.index] < 7:
+                controller = c
+                break
+        else:
+            disk.vmm_controller = controller
+
+        return controller.index
 
     def validate_page_storage(self):
         bus = self.get_config_disk_bus()
@@ -1471,9 +1483,9 @@ class vmmAddHardware(vmmGObjectUI):
                 for d in disks:
                     used.append(d.target)
 
-                disk.generate_target(used)
+            prefer_ctrl = self._set_disk_controller(disk, controller_model, disks)
+            disk.generate_target(used, prefer_ctrl)
 
-            self._set_disk_controller(disk, controller_model)
         except Exception, e:
             return self.err.val_err(_("Storage parameter error."), e)
 
