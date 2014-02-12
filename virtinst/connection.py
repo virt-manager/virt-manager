@@ -225,8 +225,13 @@ class VirtualConnection(object):
             pool = self._libvirtconn.storagePoolLookupByName(xmlobj.name)
             ignore, ignore, vols = pollhelpers.fetch_volumes(
                 self, pool, {}, lambda obj, ignore: obj)
-            ret += [StorageVolume(weakref.ref(self), parsexml=obj.XMLDesc(0))
-                    for obj in vols.values()]
+
+            for vol in vols.values():
+                try:
+                    xml = vol.XMLDesc(0)
+                    ret.append(StorageVolume(weakref.ref(self), parsexml=xml))
+                except libvirt.libvirtError, e:
+                    logging.debug("Fetching volume XML failed: %s", e)
 
         if self.cache_object_fetch:
             self._fetch_cache[key] = ret
