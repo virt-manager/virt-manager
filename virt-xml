@@ -299,7 +299,7 @@ def parse_args():
         _("Edit libvirt XML using command line options."),
         introspection_epilog=True)
 
-    cli.add_connect_option(parser)
+    cli.add_connect_option(parser, "virt-xml")
 
     parser.add_argument("domain", nargs='?',
         help=_("Domain name, id, or uuid"))

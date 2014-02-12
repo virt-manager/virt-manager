@@ -552,9 +552,13 @@ def set_os_variant(obj, distro_type, distro_variant):
 # Common CLI option/group   #
 #############################
 
-def add_connect_option(parser):
-    parser.add_argument("--connect", metavar="URI",
-                      help=_("Connect to hypervisor with libvirt URI"))
+def add_connect_option(parser, invoker=None):
+    if invoker == "virt-xml":
+        parser.add_argument("-c", "--connect", metavar="URI",
+                help=_("Connect to hypervisor with libvirt URI"))
+    else:
+        parser.add_argument("--connect", metavar="URI",
+                help=_("Connect to hypervisor with libvirt URI"))
 
 
 def add_misc_options(grp, prompt=False, replace=False,
