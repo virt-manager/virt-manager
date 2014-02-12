@@ -255,6 +255,7 @@ class vmmCreatePool(vmmGObjectUI):
 
         src = self._pool.supports_property("source_path")
         src_b = src and not self.conn.is_remote()
+        src_name = self._pool.type == StoragePool.TYPE_GLUSTER
         tgt = self._pool.supports_property("target_path")
         tgt_b = tgt and not self.conn.is_remote()
         host = self._pool.supports_property("host")
@@ -274,6 +275,7 @@ class vmmCreatePool(vmmGObjectUI):
         show_row("pool-format", fmt)
         show_row("pool-build", buildsens)
         show_row("pool-iqn", iqn)
+        show_row("pool-source-name", src_name)
 
         if tgt:
             self.widget("pool-target-path").get_child().set_text(
@@ -282,6 +284,10 @@ class vmmCreatePool(vmmGObjectUI):
         self.widget("pool-target-button").set_sensitive(tgt_b)
         self.widget("pool-source-button").set_sensitive(src_b)
         self.widget("pool-build").set_active(builddef)
+
+        if src_name:
+            self.widget("pool-source-name").get_child().set_text(
+                self._pool.source_name)
 
         self.widget("pool-format").set_active(-1)
         if fmt:
@@ -321,6 +327,12 @@ class vmmCreatePool(vmmGObjectUI):
         host = self.widget("pool-hostname")
         if host.get_sensitive():
             return host.get_text().strip()
+        return None
+
+    def get_config_source_name(self):
+        name = self.widget("pool-source-name")
+        if name.get_sensitive():
+            return name.get_text().strip()
         return None
 
     def get_config_format(self):
@@ -476,6 +488,7 @@ class vmmCreatePool(vmmGObjectUI):
         source = self.get_config_source_path()
         fmt = self.get_config_format()
         iqn = self.get_config_iqn()
+        source_name = self.get_config_source_name()
 
         if not self._validate_page_name(self.get_pool_to_validate()):
             return
@@ -490,6 +503,8 @@ class vmmCreatePool(vmmGObjectUI):
                 self._pool.format = fmt
             if iqn:
                 self._pool.iqn = iqn
+            if source_name:
+                self._pool.source_name = source_name
 
             self._pool.validate()
         except ValueError, e:
