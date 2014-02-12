@@ -3024,7 +3024,7 @@ class vmmDetails(vmmGObjectUI):
             self.widget("config-remove").set_sensitive(False)
         if dev.type == virtinst.VirtualController.TYPE_SCSI:
             model.append(["default", "Default"])
-            model.append(["virtio-scsi", "Virtio SCSI"])
+            model.append(["virtio-scsi", "VirtIO SCSI"])
         else:
             self.widget("config-remove").set_sensitive(True)
 
@@ -3130,7 +3130,7 @@ class vmmDetails(vmmGObjectUI):
                     buses.append(["usb", "USB"])
             if self.vm.get_hv_type() in ["kvm", "test"]:
                 buses.append(["sata", "SATA"])
-                buses.append(["virtio", "Virtio"])
+                buses.append(["virtio", "VirtIO"])
             if (self.vm.get_hv_type() == "kvm" and
                     self.vm.get_machtype() == "pseries"):
                 buses.append(["spapr-vscsi", "sPAPR-vSCSI"])

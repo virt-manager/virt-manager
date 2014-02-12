@@ -1,5 +1,5 @@
 #
-# Copyright 2010, 2013 Red Hat, Inc.
+# Copyright 2010, 2013, 2014 Red Hat, Inc.
 # Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -44,7 +44,7 @@ class VirtualController(VirtualDevice):
             VirtualController.TYPE_FDC           : "Floppy",
             VirtualController.TYPE_SCSI          : "SCSI",
             VirtualController.TYPE_SATA          : "SATA",
-            VirtualController.TYPE_VIRTIOSERIAL  : "Virtio Serial",
+            VirtualController.TYPE_VIRTIOSERIAL  : "VirtIO Serial",
             VirtualController.TYPE_USB           : "USB",
             VirtualController.TYPE_PCI           : "PCI",
             VirtualController.TYPE_CCID          : "CCID",

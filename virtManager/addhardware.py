@@ -756,8 +756,8 @@ class vmmAddHardware(vmmGObjectUI):
         if self.vm.get_hv_type() in ["qemu", "kvm", "test"]:
             model.append(["sata", "SATA"])
             model.append(["sd", "SD"])
-            model.append(["virtio", "Virtio"])
-            model.append(["virtio-scsi", "Virtio SCSI"])
+            model.append(["virtio", "VirtIO"])
+            model.append(["virtio-scsi", "VirtIO SCSI"])
 
         if self.conn.is_xen() or self.conn.is_test_conn():
             model.append(["xen", "Xen"])
