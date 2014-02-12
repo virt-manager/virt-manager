@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011, 2013 Red Hat, Inc.
+# Copyright (C) 2011, 2013, 2014 Red Hat, Inc.
 # Copyright (C) 2011 Cole Robinson <crobinso@redhat.com>
 #
 # Python implementation of autodrawer, originally found in vinagre sources:
@@ -37,8 +37,8 @@ from virtManager import uiutil
 
 def rect_print(name, rect):
     # For debugging
-    print ("%s: height=%d, width=%d, x=%d, y=%d" %
-           (name, rect.height, rect.width, rect.x, rect.y))
+    print("%s: height=%d, width=%d, x=%d, y=%d" %
+          (name, rect.height, rect.width, rect.x, rect.y))
 
 
 class OverBox(Gtk.Box):

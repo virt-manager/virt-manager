@@ -1,4 +1,4 @@
-# Copyright (C) 2013 Red Hat, Inc.
+# Copyright (C) 2013, 2014 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,8 +28,8 @@ from gi.repository import Gtk
 
 def rect_print(name, rect):
     # For debugging
-    print ("%s: height=%d, width=%d, x=%d, y=%d" %
-           (name, rect.height, rect.width, rect.x, rect.y))
+    print("%s: height=%d, width=%d, x=%d, y=%d" %
+          (name, rect.height, rect.width, rect.x, rect.y))
 
 
 def _line_helper(cairo_ct, x, y, w, h, points, for_fill=False):

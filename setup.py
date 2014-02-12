@@ -234,9 +234,9 @@ class my_install(install):
                 print "Using prefix from 'configure': %s" % cliconfig.prefix
                 self.prefix = cliconfig.prefix
         elif self.prefix != cliconfig.prefix:
-            print ("Install prefix=%s doesn't match configure prefix=%s\n"
-                   "Pass matching --prefix to 'setup.py configure'" %
-                   (self.prefix, cliconfig.prefix))
+            print("Install prefix=%s doesn't match configure prefix=%s\n"
+                  "Pass matching --prefix to 'setup.py configure'" %
+                  (self.prefix, cliconfig.prefix))
             sys.exit(1)
 
         install.finalize_options(self)
