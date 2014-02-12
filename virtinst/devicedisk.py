@@ -1,7 +1,7 @@
 #
 # Classes for building disk device xml
 #
-# Copyright 2006-2008, 2012-2013 Red Hat, Inc.
+# Copyright 2006-2008, 2012-2014 Red Hat, Inc.
 # Jeremy Katz <katzj@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -472,6 +472,20 @@ class VirtualDisk(VirtualDevice):
             gen_t += "%c" % (ord('a') + digit - 1)
 
         return gen_t
+
+
+    @staticmethod
+    def target_to_num(tgt):
+        """
+        Convert disk /dev number (like hda, hdb, hdaa, etc.) to an index
+        """
+        num = 0
+        if tgt[0] == 'x':
+            # This case is here for 'xvda'
+            tgt = tgt[1:]
+        for i, c in enumerate(reversed(tgt[2:])):
+            num += (ord(c) - ord('a') + 1) * (26 ** i)
+        return num
 
 
     _XML_PROP_ORDER = [
