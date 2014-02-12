@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2 -tt
 # Copyright (C) 2013, 2014 Red Hat, Inc.
 
 import atexit
