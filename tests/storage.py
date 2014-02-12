@@ -214,6 +214,9 @@ class TestStorage(unittest.TestCase):
     def testMpathPool(self):
         createPool(self.conn, StoragePool.TYPE_MPATH, "pool-mpath")
 
+    def testGlusterPool(self):
+        createPool(self.conn, StoragePool.TYPE_GLUSTER, "pool-gluster")
+
     def _enumerateCompare(self, name, pool_list):
         for pool in pool_list:
             pool.name = name + str(pool_list.index(pool))

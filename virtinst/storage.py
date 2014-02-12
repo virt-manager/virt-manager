@@ -99,6 +99,7 @@ class StoragePool(_StorageObject):
     TYPE_ISCSI   = "iscsi"
     TYPE_SCSI    = "scsi"
     TYPE_MPATH   = "mpath"
+    TYPE_GLUSTER = "gluster"
 
     # Pool type descriptions for use in higher level programs
     _descs = {}
@@ -110,6 +111,7 @@ class StoragePool(_StorageObject):
     _descs[TYPE_ISCSI]   = _("iSCSI Target")
     _descs[TYPE_SCSI]    = _("SCSI Host Adapter")
     _descs[TYPE_MPATH]   = _("Multipath Device Enumerator")
+    _descs[TYPE_GLUSTER] = _("Gluster Filesystem")
 
     @staticmethod
     def get_pool_types():
@@ -384,9 +386,9 @@ class StoragePool(_StorageObject):
         users = {
             "source_path": [self.TYPE_FS, self.TYPE_NETFS, self.TYPE_LOGICAL,
                             self.TYPE_DISK, self.TYPE_ISCSI, self.TYPE_SCSI],
-            "source_name": [self.TYPE_LOGICAL],
-            "host": [self.TYPE_NETFS, self.TYPE_ISCSI],
-            "source_dir" : [self.TYPE_NETFS],
+            "source_name": [self.TYPE_LOGICAL, self.TYPE_GLUSTER],
+            "source_dir" : [self.TYPE_GLUSTER, self.TYPE_NETFS],
+            "host": [self.TYPE_NETFS, self.TYPE_ISCSI, self.TYPE_GLUSTER],
             "format": [self.TYPE_FS, self.TYPE_NETFS, self.TYPE_DISK],
             "iqn": [self.TYPE_ISCSI],
             "target_path" : [self.TYPE_DIR, self.TYPE_FS, self.TYPE_NETFS,
@@ -412,7 +414,7 @@ class StoragePool(_StorageObject):
         return self.type in [
             StoragePool.TYPE_DIR, StoragePool.TYPE_FS,
             StoragePool.TYPE_NETFS, StoragePool.TYPE_LOGICAL,
-            StoragePool.TYPE_DISK]
+            StoragePool.TYPE_DISK, StoragePool.TYPE_GLUSTER]
 
     def get_vm_disk_type(self):
         """

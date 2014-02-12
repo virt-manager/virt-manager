@@ -1050,6 +1050,19 @@ class XMLParseTest(unittest.TestCase):
         utils.diff_compare(pool.get_xml_config(), outfile)
         utils.test_create(conn, pool.get_xml_config(), "storagePoolDefineXML")
 
+    def testGlusterPool(self):
+        basename = "pool-gluster"
+        infile = "tests/storage-xml/%s.xml" % basename
+        outfile = "tests/xmlparse-xml/%s-out.xml" % basename
+        pool = virtinst.StoragePool(conn, parsexml=file(infile).read())
+
+        check = self._make_checker(pool)
+        check("host", "some.random.hostname", "my.host")
+        check("source_dir", None, "/foo")
+
+        utils.diff_compare(pool.get_xml_config(), outfile)
+        utils.test_create(conn, pool.get_xml_config(), "storagePoolDefineXML")
+
     def testVol(self):
         basename = "pool-dir-vol"
         infile = "tests/xmlparse-xml/%s-in.xml" % basename
