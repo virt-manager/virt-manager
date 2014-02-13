@@ -1160,11 +1160,16 @@ class vmmConnection(vmmGObject):
             if not self._backend.is_open():
                 return
 
-            self.vms = vms
-            self.nodedevs = nodedevs
-            self.interfaces = interfaces
-            self.pools = pools
-            self.nets = nets
+            if pollvm:
+                self.vms = vms
+            if pollnet:
+                self.nets = nets
+            if polliface:
+                self.interfaces = interfaces
+            if pollpool:
+                self.pools = pools
+            if pollnodedev:
+                self.nodedevs = nodedevs
 
             # Make sure device polling is setup
             if not self.netdev_initialized:
