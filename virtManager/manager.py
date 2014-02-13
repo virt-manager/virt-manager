@@ -598,6 +598,9 @@ class vmmManager(vmmGObjectUI):
 
     def vm_added(self, conn, vmuuid):
         vm = conn.get_vm(vmuuid)
+        if self.vm_row_key(vm) in self.rows:
+            return
+
         vm.connect("config-changed", self.vm_config_changed)
         vm.connect("status-changed", self.vm_status_changed)
         vm.connect("resources-sampled", self.vm_row_updated)
