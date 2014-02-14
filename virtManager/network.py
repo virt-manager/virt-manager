@@ -90,7 +90,7 @@ class vmmNetwork(vmmLibvirtObject):
 
         try:
             self._set_active(self._backend_get_active())
-        except libvirt.libvirtError:
+        except:
             logging.debug("force_update_status: Triggering network "
                 "list refresh")
             self.conn.schedule_priority_tick(pollnet=True, force=True)
