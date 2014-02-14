@@ -28,6 +28,7 @@ import StringIO
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
+from gi.repository import Pango
 # pylint: enable=E0611
 
 from virtinst import DomainSnapshot
@@ -122,7 +123,6 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         col = Gtk.TreeViewColumn("")
         col.set_min_width(150)
-        col.set_expand(True)
         col.set_spacing(6)
 
         img = Gtk.CellRendererPixbuf()
@@ -131,13 +131,15 @@ class vmmSnapshotPage(vmmGObjectUI):
         col.add_attribute(img, 'icon-name', 3)
 
         txt = Gtk.CellRendererText()
+        txt.set_property("ellipsize", Pango.EllipsizeMode.END)
         col.pack_start(txt, False)
         col.add_attribute(txt, 'markup', 1)
 
         img = Gtk.CellRendererPixbuf()
         img.set_property("stock-size", Gtk.IconSize.MENU)
         img.set_property("icon-name", Gtk.STOCK_APPLY)
-        col.pack_start(img, True)
+        img.set_property("xalign", 0.0)
+        col.pack_start(img, False)
         col.add_attribute(img, "visible", 5)
 
         def _sep_cb(_model, _iter, ignore):
