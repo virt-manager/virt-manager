@@ -546,9 +546,14 @@ class vmmCreateInterface(vmmGObjectUI):
             row_dict[name] = row
 
         for name, row in nodedevs.items():
-            key = Interface(self.conn.get_backend())
-            key.type = Interface.INTERFACE_TYPE_ETHERNET
-            key.name = name
+            try:
+                key = Interface(self.conn.get_backend())
+                key.type = Interface.INTERFACE_TYPE_ETHERNET
+                key.name = name
+            except Exception, e:
+                logging.debug("Error creating stub interface '%s': %s",
+                    name, e)
+                continue
             row[INTERFACE_ROW_KEY] = key
             row_dict[name] = row
 
