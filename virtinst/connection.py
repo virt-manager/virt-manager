@@ -35,13 +35,6 @@ from virtinst.cli import VirtOptionString
 _virtinst_uri_magic = "__virtinst_test__"
 
 
-def _fakemkstemp(prefix, *args, **kwargs):
-    ignore = args
-    ignore = kwargs
-    filename = os.path.join(".", prefix)
-    return os.open(filename, os.O_RDWR | os.O_CREAT), filename
-
-
 def _sanitize_xml(xml):
     import difflib
 
@@ -411,8 +404,6 @@ class VirtualConnection(object):
 
         if "predictable" in opts:
             opts.pop("predictable")
-            import tempfile
-            tempfile.mkstemp = _fakemkstemp
             setattr(self, "_virtinst__fake_conn_predictable", True)
 
         # Fake remote status
