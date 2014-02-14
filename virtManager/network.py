@@ -21,7 +21,6 @@
 import logging
 
 import ipaddr
-import libvirt
 
 from virtinst import Network
 

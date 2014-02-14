@@ -17,7 +17,6 @@
 # MA 02110-1301 USA.
 
 import logging
-import os
 import re
 import weakref
 
