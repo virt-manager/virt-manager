@@ -1,6 +1,28 @@
  Virtual Machine Manager News
  ============================
 
+Release 1.0.0 (February 14, 2014)
+---------------------------------
+- virt-manager: Snapshot support
+- New tool virt-xml: Edit libvirt XML in one shot from the command line
+- Improved defaults: qcow2, USB2, host CPU model, guest agent channel,
+  ...
+- Introspect command line options like --disk=? or --network=help
+- The virt-image tool will be removed before the next release, speak up
+  if you have a good reason not to remove it.
+- virt-manager: Support arm vexpress VM creation
+- virt-manager: Add guest memory usage graphs (Thorsten Behrens)
+- virt-manager: UI for editing <filesystem> devices (Cédric Bosdonnat)
+- Spice USB redirection support (Guannan Ren)
+- <tpm> UI and command line support (Stefan Berger)
+- <rng> UI and command line support (Giuseppe Scrivano)
+- <panic> UI and command line support (Chen Hanxiao)
+- <blkiotune> command line support (Chen Hanxiao)
+- virt-manager: support for glusterfs storage pools (Giuseppe Scrivano)
+- cli: New options --memory, --features, --clock, --metadata, --pm
+- Greatly improve app responsiveness when connecting to remote hosts
+- Lots of UI cleanup and improvements
+
 Release 0.10.0 (June 19, 2013)
 ------------------------------
 - Merged code with python-virtinst. virtinst is no longer public
