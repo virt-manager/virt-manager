@@ -925,11 +925,11 @@ class vmmConnection(vmmGObject):
                 dev.cleanup()
 
         if not self._backend.is_closed():
-            if self._domain_cb_id is None:
+            if self._domain_cb_id is not None:
                 self._backend.domainEventDeregisterAny(self._domain_cb_id)
             self._domain_cb_id = None
 
-            if self._network_cb_id is None:
+            if self._network_cb_id is not None:
                 self._backend.networkEventDeregisterAny(self._network_cb_id)
             self._network_cb_id = None
 
