@@ -81,6 +81,7 @@ def _fetch_distro(distro):
     print "Fetching distro=%s" % distro.name
 
     fetcher = urlfetcher.fetcherForURI(distro.url, "/tmp", meter)
+    origenv = os.environ.pop("VIRTINST_TEST_SUITE")
     try:
         fetcher.prepareLocation()
         store = urlfetcher.getDistroStore(guest, fetcher)
@@ -91,6 +92,8 @@ def _fetch_distro(distro):
         distro.initrd = initrd
     finally:
         fetcher.cleanupLocation()
+        if origenv:
+            os.environ["VIRTINST_TEST_SUITE"] = origenv
 
 
 def _test_distro(distro):
@@ -105,9 +108,8 @@ def _test_distro(distro):
 
     nic = distro.virtio and "virtio" or "rtl8139"
     append = "-append \"ks=file:/%s\"" % os.path.basename(injectfile)
-    print os.environ["DISPLAY"]
     cmd = ("sudo qemu-kvm -enable-kvm -name %s "
-           "-cpu host -m 1500 -vnc "
+           "-cpu host -m 1500 -sdl "
            "-net bridge,br=virbr0 -net nic,model=%s "
            "-kernel %s -initrd %s %s" %
            (distro.name, nic, kernel, newinitrd, append))
