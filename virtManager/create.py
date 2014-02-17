@@ -379,13 +379,21 @@ class vmmCreate(vmmGObjectUI):
         # Install container OS
         self.widget("install-oscontainer-fs").set_text("")
 
-        # Mem / CPUs
-        self.widget("config-mem").set_value(DEFAULT_MEM)
-        self.widget("config-cpus").set_value(1)
-
         # Storage
         self.widget("enable-storage").set_active(True)
         self.addstorage.reset_state()
+        self.addstorage.widget("config-storage-create").set_active(True)
+        self.addstorage.widget("config-storage-entry").set_text("")
+        self.addstorage.widget("config-storage-nosparse").set_active(True)
+
+        fmt = self.conn.get_default_storage_format()
+        can_alloc = fmt in ["raw"]
+        self.addstorage.widget("config-storage-nosparse").set_active(can_alloc)
+        self.addstorage.widget("config-storage-nosparse").set_sensitive(can_alloc)
+        self.addstorage.widget("config-storage-nosparse").set_tooltip_text(
+            not can_alloc and
+            (_("Disk format '%s' does not support full allocation.") % fmt) or
+            "")
 
         # Final page
         self.widget("summary-customize").set_active(False)
@@ -1582,6 +1590,24 @@ class vmmCreate(vmmGObjectUI):
         if path:
             self.addstorage.check_path_search(
                 self, self.conn, path)
+
+        res = virtinst.osdict.get_recommended_resources(variant, self.capsguest.arch)
+
+        # Change the default values suggested to the user.
+        ram_size = DEFAULT_MEM
+        if res and res.get("ram") > 0:
+            ram_size = res["ram"] / (1024 ** 2)
+        self.widget("config-mem").set_value(ram_size)
+
+        n_cpus = 1
+        if res and res.get("n-cpus") > 0:
+            n_cpus = res["n-cpus"]
+        self.widget("config-cpus").set_value(n_cpus)
+
+        storage_size = 8
+        if res and res.get("storage"):
+            storage_size = int(res["storage"]) / (1024 ** 3)
+        self.addstorage.widget("config-storage-size").set_value(storage_size)
 
         # Validation passed, store the install path (if there is one) in
         # gconf
