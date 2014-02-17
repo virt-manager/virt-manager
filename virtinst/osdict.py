@@ -125,6 +125,7 @@ class _OSVariant(object):
     @parent: Name of a pre-created variant that we want to extend. So
         fedoraFOO would have parent fedoraFOO-1. It's used for inheiriting
         values.
+    @typename: The family of the OS, e.g. "linux", "windows", "unix".
     @sortby: A different key to use for sorting the distro list. By default
         it's 'name', so this doesn't need to be specified.
     @urldistro: This is a distro class. It's wired up in urlfetcher to give
@@ -149,7 +150,7 @@ class _OSVariant(object):
     their usage.
     """
     def __init__(self, name, label, is_type=False,
-                 sortby=None, parent=_SENTINEL,
+                 sortby=None, parent=_SENTINEL, typename=_SENTINEL,
                  urldistro=_SENTINEL, supported=_SENTINEL,
                  three_stage_install=_SENTINEL,
                  acpi=_SENTINEL, apic=_SENTINEL, clock=_SENTINEL,
@@ -184,7 +185,10 @@ class _OSVariant(object):
         self.sortby = sortby
 
         self.is_type = bool(is_type)
-        self.typename = _get_default("typename",
+
+        self.typename = typename
+        if typename == _SENTINEL:
+            self.typename = _get_default("typename",
                                      self.is_type and self.name or _SENTINEL)
 
         # 'types' should rarely be altered, this check will make
