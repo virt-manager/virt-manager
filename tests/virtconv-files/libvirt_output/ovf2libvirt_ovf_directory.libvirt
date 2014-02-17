@@ -1,4 +1,4 @@
-<domain type="qemu">
+<domain type="kvm">
   <name>CentOS-6.4-i386-Gnome.ovf</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <memory>524288</memory>
@@ -13,6 +13,9 @@
     <apic/>
     <pae/>
   </features>
+  <cpu mode="custom" match="exact">
+    <model>core2duo</model>
+  </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
@@ -22,7 +25,7 @@
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>
   <devices>
-    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="disk">
       <driver name="qemu"/>
       <source file="/var/lib/libvirt/images/CentOS-6.4-i386-Gnome-disk1"/>

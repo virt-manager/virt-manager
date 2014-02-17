@@ -858,9 +858,7 @@ class vmmCreate(vmmGObjectUI):
                     gtype = "hvm"
                     break
 
-        (newg, newdom) = self.caps.guest_lookup(os_type=gtype,
-                                                accelerated=True,
-                                                arch=arch)
+        (newg, newdom) = self.caps.guest_lookup(os_type=gtype, arch=arch)
 
         if (self.capsguest and self.capsdomain and
             (newg.arch == self.capsguest.arch and

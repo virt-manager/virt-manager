@@ -177,7 +177,6 @@ def get_guest(conn, options):
                               options.container]]) > 1:
         fail(_("Can't do more than one of --hvm, --paravirt, or --container"))
 
-    req_accel = True
     req_hv_type = options.hv_type and options.hv_type.lower() or None
     if options.fullvirt:
         req_virt_type = "hvm"
@@ -203,7 +202,6 @@ def get_guest(conn, options):
                         os_type=req_virt_type,
                         arch=arch,
                         typ=req_hv_type,
-                        accelerated=req_accel,
                         machine=options.machine)
         guest = conn.caps.build_virtinst_guest(conn, capsguest, capsdomain)
         guest.os.machine = options.machine
@@ -212,7 +210,6 @@ def get_guest(conn, options):
 
     if (not req_virt_type and
         not req_hv_type and
-        req_accel and
         conn.is_qemu() and
         capsguest.arch in ["i686", "x86_64"] and
         not capsdomain.is_accelerated()):

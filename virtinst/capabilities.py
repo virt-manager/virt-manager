@@ -345,18 +345,15 @@ class Guest(object):
 
             child = child.next
 
-    def _favoredDomain(self, accelerated, domains):
+    def _favoredDomain(self, domains):
         """
         Return the recommended domain for use if the user does not explicitly
         request one.
         """
-        if accelerated is None:
-            # Picking last in list so we favour KVM/KQEMU over QEMU
-            return domains[-1]
+        if not domains:
+            return None
 
         priority = ["kvm", "xen", "kqemu", "qemu"]
-        if not accelerated:
-            priority.reverse()
 
         for t in priority:
             for d in domains:
@@ -366,7 +363,7 @@ class Guest(object):
         # Fallback, just return last item in list
         return domains[-1]
 
-    def bestDomainType(self, accelerated=None, dtype=None, machine=None):
+    def bestDomainType(self, dtype=None, machine=None):
         domains = []
         for d in self.domains:
             if dtype and d.hypervisor_type != dtype.lower():
@@ -375,22 +372,7 @@ class Guest(object):
                 continue
             domains.append(d)
 
-        if len(domains) == 0:
-            domainerr = ""
-            machineerr = ""
-            if dtype:
-                domainerr = _(", domain type '%s'") % dtype
-            if machine:
-                machineerr = _(", machine type '%s'") % machine
-
-            error = (_("No domains available for virt type '%(type)s', "
-                      "arch '%(arch)s'") %
-                      {'type': self.os_type, 'arch': self.arch})
-            error += domainerr
-            error += machineerr
-            raise RuntimeError(error)
-
-        return self._favoredDomain(accelerated, domains)
+        return self._favoredDomain(domains)
 
 
 class Domain(object):
@@ -621,7 +603,7 @@ class Capabilities(object):
                 return True
         return False
 
-    def guestForOSType(self, typ=None, arch=None):
+    def _guestForOSType(self, typ=None, arch=None):
         if self.host is None:
             return None
 
@@ -652,8 +634,7 @@ class Capabilities(object):
         return self._cpu_values.get_arch(arch)
 
 
-    def guest_lookup(self, os_type=None, arch=None, typ=None,
-                     accelerated=False, machine=None):
+    def guest_lookup(self, os_type=None, arch=None, typ=None, machine=None):
         """
         Simple virtualization availability lookup
 
@@ -671,20 +652,13 @@ class Capabilities(object):
         not found.
 
         @param typ: Virtualization type ('hvm', 'xen', ...)
-        @type typ: C{str}
         @param arch: Guest architecture ('x86_64', 'i686' ...)
-        @type arch: C{str}
         @param os_type: Hypervisor name ('qemu', 'kvm', 'xen', ...)
-        @type os_type: C{str}
-        @param accelerated: Whether to look for accelerated domain if none is
-                            specifically requested
-        @type accelerated: C{bool}
         @param machine: Optional machine type to emulate
-        @type machine: C{str}
 
         @returns: A (Capabilities Guest, Capabilities Domain) tuple
         """
-        guest = self.guestForOSType(os_type, arch)
+        guest = self._guestForOSType(os_type, arch)
         if not guest:
             archstr = _("for arch '%s'") % arch
             if not arch:
@@ -697,12 +671,9 @@ class Capabilities(object):
             raise ValueError(_("Host does not support %(virttype)s %(arch)s") %
                                {'virttype' : osstr, 'arch' : archstr})
 
-        domain = guest.bestDomainType(accelerated=accelerated,
-                                      dtype=typ,
-                                      machine=machine)
-
+        domain = guest.bestDomainType(dtype=typ, machine=machine)
         if domain is None:
-            machinestr = "with machine '%s'" % machine
+            machinestr = " with machine '%s'" % machine
             if not machine:
                 machinestr = ""
             raise ValueError(_("Host does not support domain type %(domain)s"

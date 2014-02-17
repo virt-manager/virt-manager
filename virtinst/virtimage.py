@@ -348,13 +348,8 @@ class ImageInstaller(Installer):
             self._boot_caps = image.domain.boots[boot_index]
 
         # Set up internal caps.guest object
-        self._guest = self.conn.caps.guestForOSType(self.boot_caps.type,
-                                                    self.boot_caps.arch)
-        if self._guest is None:
-            raise RuntimeError(_("Unsupported virtualization type: %s %s" %
-                               (self.boot_caps.type, self.boot_caps.arch)))
-        self._domain = self._guest.bestDomainType()
-
+        self._guest, self._domain = self.conn.caps.guest_lookup(
+            os_type=self.boot_caps.type, arch=self.boot_caps.arch)
 
 
     # Custom ImageInstaller methods

@@ -1,5 +1,5 @@
 Running /usr/bin/qemu-img convert -O qcow2 fedora.vmdk /var/lib/libvirt/images/fedora.qcow2
-<domain type="qemu">
+<domain type="kvm">
   <name>fedora</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <memory>524288</memory>
@@ -14,6 +14,9 @@ Running /usr/bin/qemu-img convert -O qcow2 fedora.vmdk /var/lib/libvirt/images/f
     <apic/>
     <pae/>
   </features>
+  <cpu mode="custom" match="exact">
+    <model>core2duo</model>
+  </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
@@ -23,7 +26,7 @@ Running /usr/bin/qemu-img convert -O qcow2 fedora.vmdk /var/lib/libvirt/images/f
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>
   <devices>
-    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/var/lib/libvirt/images/fedora.qcow2"/>
