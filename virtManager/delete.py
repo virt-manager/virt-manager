@@ -100,7 +100,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         uiutil.set_grid_row_visible(
             self.widget("delete-warn-running-vm-box"), vm_active)
 
-        # Disable storage removal by default
+        # Enable storage removal by default
         self.widget("delete-remove-storage").set_active(True)
         self.widget("delete-remove-storage").toggled()
 
