@@ -364,7 +364,7 @@ class vmmConnect(vmmGObjectUI):
         hvstr = ""
         if hv == HV_XEN:
             hvstr = "xen"
-        elif hv == HV_QEMU or HV_QEMU_SESSION:
+        elif hv == HV_QEMU or hv == HV_QEMU_SESSION:
             hvstr = "qemu"
         else:
             hvstr = "lxc"
