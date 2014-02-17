@@ -925,14 +925,14 @@ class VirtualDisk(VirtualDevice):
         def get_target():
             first_found = None
 
-            ran = range(1, maxnode + 1)
-            if pref_ctrl:
+            ran = range(maxnode)
+            if pref_ctrl is not None:
                 # We assume narrow SCSI bus and libvirt assigning 7
-                # (0-6, 7-13, etc.) devices per controller
+                # (1-7, 8-14, etc.) devices per controller
                 ran = range(pref_ctrl * 7, (pref_ctrl + 1) * 7)
 
             for i in ran:
-                gen_t = prefix + self.num_to_target(i)
+                gen_t = prefix + self.num_to_target(i + 1)
                 if gen_t in skip_targets:
                     skip_targets.remove(gen_t)
                     continue
@@ -948,7 +948,7 @@ class VirtualDisk(VirtualDevice):
             self.target = ret
             return ret
 
-        if pref_ctrl:
+        if pref_ctrl is not None:
             # This basically means that we either chose full
             # controller or didn't add any
             raise ValueError(_("Controller number %d for disk of type %s has "

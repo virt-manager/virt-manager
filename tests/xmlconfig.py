@@ -1045,7 +1045,8 @@ class TestXMLConfig(unittest.TestCase):
         self.assertEquals("hdc", disk.generate_target(["hdb", "sda"]))
         self.assertEquals("hdb", disk.generate_target(["hda", "hdd"]))
 
-        disk.bus = "scsi"
+        disk.bus = "virtio-scsi"
+        self.assertEquals("sdb", disk.generate_target(["sda", "sdg", "sdi"], 0))
         self.assertEquals("sdh", disk.generate_target(["sda", "sdg"], 1))
 
     def testFedoraTreeinfo(self):
