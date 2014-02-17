@@ -154,6 +154,14 @@ def lookup_osdict_key(variant, key, default):
     return val
 
 
+def get_recommended_resources(variant, arch):
+    v = _allvariants.get(variant)
+    if v is None:
+        return None
+
+    return v.get_recommended_resources(arch)
+
+
 class _OSVariant(object):
     """
     Object tracking guest OS specific configuration bits.
@@ -271,6 +279,10 @@ class _OSVariant(object):
         self.virtiommio = _get_default("virtiommio", virtiommio)
         self.virtioconsole = _get_default("virtioconsole", virtioconsole)
         self.qemu_ga = _get_default("qemu_ga", qemu_ga)
+
+    def get_recommended_resources(self, arch):
+        ignore1 = arch
+        return None
 
 
 def _add_type(*args, **kwargs):
@@ -522,6 +534,23 @@ class _OsVariantOsInfo(_OSVariant):
                 virtionet=virtionet, virtiodisk=virtiodisk,
                 virtiommio=virtiommio, virtioconsole=virtioconsole,
                 xen_disable_acpi=xen_disable_acpi, qemu_ga=qemu_ga)
+
+    def get_recommended_resources(self, arch):
+        ret = {}
+        def read_resource(resources, arch):
+            for i in range(resources.get_length()):
+                r = resources.get_nth(i)
+                if r.get_architecture() == arch:
+                    ret["ram"] = r.get_ram()
+                    ret["cpu"] = r.get_cpu()
+                    ret["n-cpus"] = r.get_n_cpus()
+                    ret["storage"] = r.get_storage()
+                    break
+
+        read_resource(self._os.get_recommended_resources(), "all")
+        read_resource(self._os.get_recommended_resources(), arch)
+
+        return ret
 
 _add_type("linux", "Linux")
 _add_type("windows", "Windows", clock="localtime", three_stage_install=True, inputtype="tablet", inputbus="usb", videomodel="vga")
