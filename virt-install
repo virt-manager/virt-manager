@@ -838,13 +838,6 @@ def main(conn=None):
 
     check_cdrom_option_error(options)
 
-    if options.distro_variant == "list":
-        logging.debug("OS list requested")
-        for t in virtinst.osdict.list_os(list_types=True):
-            for v in virtinst.osdict.list_os(typename=t.name):
-                print "%-20s : %s" % (v.name, v.label)
-        return 0
-
     cli.set_force(options.force)
     cli.set_prompt(options.prompt)
 
