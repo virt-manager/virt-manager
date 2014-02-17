@@ -25,7 +25,48 @@ from datetime import datetime
 from gi.repository import Libosinfo as libosinfo
 
 
+_aliases = {
+    "altlinux" : "altlinux1.0",
+    "debianetch" : "debian4",
+    "debianlenny" : "debian5",
+    "debiansqueeze" : "debian6",
+    "debianwheezy" : "debian7",
+    "freebsd10" : "freebsd10.0",
+    "freebsd6" : "freebsd6.0",
+    "freebsd7" : "freebsd7.0",
+    "freebsd8" : "freebsd8.0",
+    "freebsd9" : "freebsd9.0",
+    "mandriva2009" : "mandriva2009.0",
+    "mandriva2010" : "mandriva2010.0",
+    "mbs1" : "mbs1.0",
+    "msdos" : "msdos6.22",
+    "openbsd4" : "openbsd4.2",
+    "opensolaris" : "opensolaris2009.06",
+    "opensuse11" : "opensuse11.4",
+    "opensuse12" : "opensuse12.3",
+    "rhel4" : "rhel4.0",
+    "rhel5" : "rhel5.0",
+    "rhel6" : "rhel6.0",
+    "rhel7" : "rhel7.0",
+    "ubuntuhardy" : "ubuntu8.04",
+    "ubuntuintrepid" : "ubuntu8.10",
+    "ubuntujaunty" : "ubuntu9.04",
+    "ubuntukarmic" : "ubuntu9.10",
+    "ubuntulucid" : "ubuntu10.04",
+    "ubuntumaverick" : "ubuntu10.10",
+    "ubuntunatty" : "ubuntu11.04",
+    "ubuntuoneiric" : "ubuntu11.10",
+    "ubuntuprecise" : "ubuntu12.04",
+    "ubuntuquantal" : "ubuntu12.10",
+    "ubunturaring" : "ubuntu13.04",
+    "ubuntusaucy" : "ubuntu13.10",
+    "vista" : "winvista",
+    "winxp64" : "winxp",
+}
+
+
 def lookup_os(key):
+    key = _aliases.get(key) or key
     ret = _allvariants.get(key)
     if ret is None:
         return ret
@@ -92,8 +133,10 @@ def list_os(list_types=False, typename=None,
             continue
         if typename and typename != osinfo.typename:
             continue
-        if filtervars and osinfo.name not in filtervars:
-            continue
+        if filtervars:
+            filtervars = [lookup_os(x).name for x in filtervars]
+            if osinfo.name not in filtervars:
+                continue
         if only_supported and not osinfo.supported:
             continue
         sortmap[key] = osinfo
@@ -103,9 +146,9 @@ def list_os(list_types=False, typename=None,
 def lookup_osdict_key(variant, key, default):
     val = _SENTINEL
     if variant is not None:
-        if not hasattr(_allvariants[variant], key):
+        if not hasattr(lookup_os(variant), key):
             raise ValueError("Unknown osdict property '%s'" % key)
-        val = getattr(_allvariants[variant], key)
+        val = getattr(lookup_os(variant), key)
     if val == _SENTINEL:
         val = default
     return val
@@ -269,6 +312,9 @@ class _OsVariantOsInfo(_OSVariant):
         return _SENTINEL
 
     def _get_netmodel(self):
+        if self._os.get_distro() == "fedora":
+            return _SENTINEL
+
         fltr = libosinfo.Filter()
         fltr.add_constraint("class", "net")
         devs = self._os.get_all_devices(fltr)
@@ -277,6 +323,15 @@ class _OsVariantOsInfo(_OSVariant):
         return _SENTINEL
 
     def _get_videomodel(self):
+        if self._os.get_short_id() in {"ubuntu13.10", "ubuntu13.04"}:
+            return "vmvga"
+
+        if _OsVariantOsInfo.is_windows(self._os):
+            return "vga"
+
+        if self._os.get_distro() == "fedora":
+            return _SENTINEL
+
         fltr = libosinfo.Filter()
         fltr.add_constraint("class", "video")
         devs = self._os.get_all_devices(fltr)
@@ -322,6 +377,11 @@ class _OsVariantOsInfo(_OSVariant):
         return _SENTINEL
 
     def _is_virtiodisk(self):
+        if self._os.get_distro() == "fedora":
+            if self._os.get_version() == "unknown":
+                return _SENTINEL
+            return int(self._os.get_version() >= 10) or _SENTINEL
+
         fltr = libosinfo.Filter()
         fltr.add_constraint("class", "block")
         devs = self._os.get_all_devices(fltr)
@@ -333,6 +393,11 @@ class _OsVariantOsInfo(_OSVariant):
         return _SENTINEL
 
     def _is_virtionet(self):
+        if self._os.get_distro() == "fedora":
+            if self._os.get_version() == "unknown":
+                return _SENTINEL
+            return int(self._os.get_version() >= 9) or _SENTINEL
+
         fltr = libosinfo.Filter()
         fltr.add_constraint("class", "net")
         devs = self._os.get_all_devices(fltr)
@@ -343,6 +408,11 @@ class _OsVariantOsInfo(_OSVariant):
         return _SENTINEL
 
     def _is_virtioconsole(self):
+        if self._os.get_distro() == "fedora":
+            if self._os.get_version() == "unknown":
+                return _SENTINEL
+            return int(self._os.get_version()) >= 18 or _SENTINEL
+
         fltr = libosinfo.Filter()
         fltr.add_constraint("class", "console")
         devs = self._os.get_all_devices(fltr)
@@ -358,8 +428,10 @@ class _OsVariantOsInfo(_OSVariant):
         return _SENTINEL
 
     def _is_qemu_ga(self):
-        if _OsVariantOsInfo.is_os_related_to(self._os, ["fedora18"]):
-            return True
+        if self._os.get_distro() == "fedora":
+            if self._os.get_version() == "unknown":
+                return _SENTINEL
+            return int(self._os.get_version()) >= 18 or _SENTINEL
         return _SENTINEL
 
     def _get_typename(self):
@@ -394,15 +466,25 @@ class _OsVariantOsInfo(_OSVariant):
 
     def _get_supported(self):
         d = self._os.get_eol_date_string()
+        if self._os.get_distro() == "msdos":
+            return False
         return d is None or datetime.strptime(d, "%Y-%m-%d") > datetime.now()
 
     def _get_urldistro(self):
         urldistro = self._os.get_distro()
+        remap = {
+            "opensuse" : "suse",
+            "sles" : "suse",
+            "mes" : "mandriva"
+        }
+
+        if remap.get(urldistro):
+            return remap[urldistro]
+
         return urldistro
 
     def _get_name(self):
-        name = self._os.get_short_id()
-        return name
+        return self._os.get_short_id()
 
     def get_label(self):
         return self._os.get_name()
