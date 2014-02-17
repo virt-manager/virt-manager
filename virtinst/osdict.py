@@ -21,6 +21,8 @@
 
 _SENTINEL = -1234
 _allvariants = {}
+from datetime import datetime
+from gi.repository import Libosinfo as libosinfo
 
 
 def lookup_os(key):
@@ -40,6 +42,10 @@ def _sort(tosort, sortpref=None):
     # by their 'distro' tag first and foremost
     for key, osinfo in tosort.items():
         sortby = osinfo.sortby or key
+        # Hack to allow "sortby" duplicates.  Remove when this never happens
+        # with libosinfo
+        while sortby_mappings.get(sortby):
+            sortby = sortby + ".1"
         sortby_mappings[sortby] = key
 
         distro = osinfo.urldistro or "zzzzzzz"
@@ -235,107 +241,218 @@ def _add_var(*args, **kwargs):
     _allvariants[v.name] = v
 
 
+class _OsVariantOsInfo(_OSVariant):
+
+    @staticmethod
+    def is_windows(o):
+        return o.get_family() in ['win9x', 'winnt', 'win16']
+
+    def _is_three_stage_install(self):
+        if _OsVariantOsInfo.is_windows(self._os):
+            return True
+        return _SENTINEL
+
+    def _get_clock(self):
+        if _OsVariantOsInfo.is_windows(self._os) or \
+           self._os.get_family() in ['solaris']:
+            return "localtime"
+        return _SENTINEL
+
+    def _is_acpi(self):
+        if self._os.get_family() in ['msdos']:
+            return False
+        return _SENTINEL
+
+    def _is_apic(self):
+        if self._os.get_family() in ['msdos']:
+            return False
+        return _SENTINEL
+
+    def _get_netmodel(self):
+        fltr = libosinfo.Filter()
+        fltr.add_constraint("class", "net")
+        devs = self._os.get_all_devices(fltr)
+        if devs.get_length():
+            return devs.get_nth(0).get_name()
+        return _SENTINEL
+
+    def _get_videomodel(self):
+        fltr = libosinfo.Filter()
+        fltr.add_constraint("class", "video")
+        devs = self._os.get_all_devices(fltr)
+        if devs.get_length():
+            return devs.get_nth(0).get_name()
+        return _SENTINEL
+
+    def _get_inputtype(self):
+        fltr = libosinfo.Filter()
+        fltr.add_constraint("class", "input")
+        devs = self._os.get_all_devices(fltr)
+        if devs.get_length():
+            return devs.get_nth(0).get_name()
+        return _SENTINEL
+
+    def get_inputbus(self):
+        fltr = libosinfo.Filter()
+        fltr.add_constraint("class", "input")
+        devs = self._os.get_all_devices(fltr)
+        if devs.get_length():
+            return devs.get_nth(0).get_bus_type()
+        return _SENTINEL
+
+    def _get_diskbus(self):
+        return _SENTINEL
+
+    @staticmethod
+    def is_os_related_to(o, related_os_list):
+        if o.get_short_id() in related_os_list:
+            return True
+        related = o.get_related(libosinfo.ProductRelationship.DERIVES_FROM)
+        clones = o.get_related(libosinfo.ProductRelationship.CLONES)
+        for r in related.get_elements() + clones.get_elements():
+            if r.get_short_id() in related_os_list or \
+               _OsVariantOsInfo.is_os_related_to(r, related_os_list):
+                return True
+
+        return False
+
+    def _get_xen_disable_acpi(self):
+        if _OsVariantOsInfo.is_os_related_to(self._os, ["winxp", "win2k"]):
+            return True
+        return _SENTINEL
+
+    def _is_virtiodisk(self):
+        fltr = libosinfo.Filter()
+        fltr.add_constraint("class", "block")
+        devs = self._os.get_all_devices(fltr)
+        for dev in range(devs.get_length()):
+            d = devs.get_nth(dev)
+            if d.get_name() == "virtio-block":
+                return True
+
+        return _SENTINEL
+
+    def _is_virtionet(self):
+        fltr = libosinfo.Filter()
+        fltr.add_constraint("class", "net")
+        devs = self._os.get_all_devices(fltr)
+        for dev in range(devs.get_length()):
+            d = devs.get_nth(dev)
+            if d.get_name() == "virtio-net":
+                return True
+        return _SENTINEL
+
+    def _is_virtioconsole(self):
+        fltr = libosinfo.Filter()
+        fltr.add_constraint("class", "console")
+        devs = self._os.get_all_devices(fltr)
+        for dev in range(devs.get_length()):
+            d = devs.get_nth(dev)
+            if d.get_name() == "virtio-console":
+                return True
+        return _SENTINEL
+
+    def _is_virtiommio(self):
+        if _OsVariantOsInfo.is_os_related_to(self._os, ["fedora19"]):
+            return True
+        return _SENTINEL
+
+    def _is_qemu_ga(self):
+        if _OsVariantOsInfo.is_os_related_to(self._os, ["fedora18"]):
+            return True
+        return _SENTINEL
+
+    def _get_typename(self):
+        if self._os.get_family() in ['linux']:
+            return "linux"
+
+        if self._os.get_family() in ['win9x', 'winnt', 'win16']:
+            return "windows"
+
+        if self._os.get_family() in ['solaris']:
+            return "solaris"
+
+        if self._os.get_family() in ['openbsd', 'freebsd', 'netbsd']:
+            return "unix"
+
+        return "other"
+
+    def _get_sortby(self):
+        version = self._os.get_version()
+        try:
+            t = version.split(".")
+            t = t[:min(4, len(t))] + [0] * (4 - min(4, len(t)))
+            new_version = ""
+            for n in t:
+                new_version = new_version + ("%.4i" % int(n))
+            version = new_version
+        except:
+            pass
+
+        distro = self._os.get_distro()
+        return "%s-%s" % (distro, version)
+
+    def _get_supported(self):
+        d = self._os.get_eol_date_string()
+        return d is None or datetime.strptime(d, "%Y-%m-%d") > datetime.now()
+
+    def _get_urldistro(self):
+        urldistro = self._os.get_distro()
+        return urldistro
+
+    def _get_name(self):
+        name = self._os.get_short_id()
+        return name
+
+    def get_label(self):
+        return self._os.get_name()
+
+    def __init__(self, o):
+        self._os = o
+        name = self._get_name()
+        label = self.get_label()
+        sortby = self._get_sortby()
+        is_type = False
+        typename = self._get_typename()
+        urldistro = self._get_urldistro()
+        supported = self._get_supported()
+        three_stage_install = self._is_three_stage_install()
+        acpi = self._is_acpi()
+        apic = self._is_apic()
+        clock = self._get_clock()
+        netmodel = self._get_netmodel()
+        videomodel = self._get_videomodel()
+        diskbus = self._get_diskbus()
+        inputtype = self._get_inputtype()
+        inputbus = self.get_inputbus()
+        xen_disable_acpi = self._get_xen_disable_acpi()
+        virtiodisk = self._is_virtiodisk()
+        virtionet = self._is_virtionet()
+        virtiommio = self._is_virtiommio()
+        virtioconsole = self._is_virtioconsole()
+        qemu_ga = self._is_qemu_ga()
+        _OSVariant.__init__(self, name=name, label=label, is_type=is_type,
+                typename=typename, sortby=sortby, parent="generic",
+                urldistro=urldistro, supported=supported,
+                three_stage_install=three_stage_install, acpi=acpi, apic=apic,
+                clock=clock, netmodel=netmodel, diskbus=diskbus,
+                inputtype=inputtype, inputbus=inputbus, videomodel=videomodel,
+                virtionet=virtionet, virtiodisk=virtiodisk,
+                virtiommio=virtiommio, virtioconsole=virtioconsole,
+                xen_disable_acpi=xen_disable_acpi, qemu_ga=qemu_ga)
+
 _add_type("linux", "Linux")
-_add_var("rhel2.1", "Red Hat Enterprise Linux 2.1", urldistro="rhel", parent="linux")
-_add_var("rhel3", "Red Hat Enterprise Linux 3", parent="rhel2.1")
-_add_var("rhel4", "Red Hat Enterprise Linux 4", supported=True, parent="rhel3")
-_add_var("rhel5", "Red Hat Enterprise Linux 5", supported=False, parent="rhel4")
-_add_var("rhel5.4", "Red Hat Enterprise Linux 5.4 or later", supported=True, virtiodisk=True, virtionet=True, parent="rhel5")
-_add_var("rhel6", "Red Hat Enterprise Linux 6", inputtype="tablet", inputbus="usb", parent="rhel5.4")
-_add_var("rhel7", "Red Hat Enterprise Linux 7 (or later)", parent="rhel6", qemu_ga=True, virtioconsole=True, virtiommio=True)
-
-_add_var("fedora5", "Fedora Core 5", sortby="fedora05", urldistro="fedora", parent="linux")
-_add_var("fedora6", "Fedora Core 6", sortby="fedora06", parent="fedora5")
-_add_var("fedora7", "Fedora 7", sortby="fedora07", parent="fedora6")
-_add_var("fedora8", "Fedora 8", sortby="fedora08", parent="fedora7")
-# Apparently F9 has selinux errors when installing with virtio:
-# https://bugzilla.redhat.com/show_bug.cgi?id=470386
-_add_var("fedora9", "Fedora 9", sortby="fedora09", virtionet=True, parent="fedora8")
-_add_var("fedora10", "Fedora 10", virtiodisk=True, parent="fedora9")
-_add_var("fedora11", "Fedora 11", inputtype="tablet", inputbus="usb", parent="fedora10")
-_add_var("fedora12", "Fedora 12", parent="fedora11")
-_add_var("fedora13", "Fedora 13", parent="fedora12")
-_add_var("fedora14", "Fedora 14", parent="fedora13")
-_add_var("fedora15", "Fedora 15", parent="fedora14")
-_add_var("fedora16", "Fedora 16", parent="fedora15")
-_add_var("fedora17", "Fedora 17", parent="fedora16")
-_add_var("fedora18", "Fedora 18", supported=True, virtioconsole=True, qemu_ga=True, parent="fedora17")
-_add_var("fedora19", "Fedora 19", virtiommio=True, parent="fedora18")
-_add_var("fedora20", "Fedora 20 (or later)", parent="fedora19")
-
-_add_var("opensuse11", "openSuse 11", urldistro="suse", supported=True, virtiodisk=True, virtionet=True, parent="linux")
-_add_var("opensuse12", "openSuse 12 (or later)", parent="opensuse11")
-
-_add_var("sles10", "Suse Linux Enterprise Server", urldistro="suse", supported=True, parent="linux")
-_add_var("sles11", "Suse Linux Enterprise Server 11 (or later)", supported=True, virtiodisk=True, virtionet=True, parent="sles10")
-
-_add_var("mandriva2009", "Mandriva Linux 2009 and earlier", urldistro="mandriva", parent="linux")
-_add_var("mandriva2010", "Mandriva Linux 2010 (or later)", virtiodisk=True, virtionet=True, parent="mandriva2009")
-
-_add_var("mes5", "Mandriva Enterprise Server 5.0", urldistro="mandriva", parent="linux")
-_add_var("mes5.1", "Mandriva Enterprise Server 5.1 (or later)", supported=True, virtiodisk=True, virtionet=True, parent="mes5")
-_add_var("mbs1", "Mandriva Business Server 1 (or later)", supported=True, virtiodisk=True, virtionet=True, parent="linux")
-
-_add_var("mageia1", "Mageia 1 (or later)", urldistro="mandriva", supported=True, virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="linux")
-
-_add_var("altlinux", "ALT Linux (or later)", urldistro="altlinux", supported=True, virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="linux")
-
-_add_var("debianetch", "Debian Etch", urldistro="debian", sortby="debian4", parent="linux")
-_add_var("debianlenny", "Debian Lenny", sortby="debian5", supported=True, virtiodisk=True, virtionet=True, parent="debianetch")
-_add_var("debiansqueeze", "Debian Squeeze", sortby="debian6", virtiodisk=True, virtionet=True, inputtype="tablet", inputbus="usb", parent="debianlenny")
-_add_var("debianwheezy", "Debian Wheezy (or later)", sortby="debian7", parent="debiansqueeze")
-
-_add_var("ubuntuhardy", "Ubuntu 8.04 LTS (Hardy Heron)", urldistro="ubuntu", virtionet=True, parent="linux")
-_add_var("ubuntuintrepid", "Ubuntu 8.10 (Intrepid Ibex)", parent="ubuntuhardy")
-_add_var("ubuntujaunty", "Ubuntu 9.04 (Jaunty Jackalope)", virtiodisk=True, parent="ubuntuintrepid")
-_add_var("ubuntukarmic", "Ubuntu 9.10 (Karmic Koala)", parent="ubuntujaunty")
-_add_var("ubuntulucid", "Ubuntu 10.04 LTS (Lucid Lynx)", supported=True, parent="ubuntukarmic")
-_add_var("ubuntumaverick", "Ubuntu 10.10 (Maverick Meerkat)", supported=False, parent="ubuntulucid")
-_add_var("ubuntunatty", "Ubuntu 11.04 (Natty Narwhal)", parent="ubuntumaverick")
-_add_var("ubuntuoneiric", "Ubuntu 11.10 (Oneiric Ocelot)", parent="ubuntunatty")
-_add_var("ubuntuprecise", "Ubuntu 12.04 LTS (Precise Pangolin)", supported=True, parent="ubuntuoneiric")
-_add_var("ubuntuquantal", "Ubuntu 12.10 (Quantal Quetzal)", parent="ubuntuprecise")
-_add_var("ubunturaring", "Ubuntu 13.04 (Raring Ringtail)", videomodel="vmvga", parent="ubuntuquantal")
-_add_var("ubuntusaucy", "Ubuntu 13.10 (Saucy Salamander) (or later)", parent="ubunturaring")
-
-_add_var("generic24", "Generic 2.4.x kernel", parent="linux")
-_add_var("generic26", "Generic 2.6.x kernel", parent="generic24")
-_add_var("virtio26", "Generic 2.6.25 or later kernel with virtio", sortby="genericvirtio26", virtiodisk=True, virtionet=True, parent="generic26")
-
-
 _add_type("windows", "Windows", clock="localtime", three_stage_install=True, inputtype="tablet", inputbus="usb", videomodel="vga")
-_add_var("win2k", "Microsoft Windows 2000", sortby="mswin4", xen_disable_acpi=True, parent="windows")
-_add_var("winxp", "Microsoft Windows XP", sortby="mswin5", supported=True, xen_disable_acpi=True, parent="windows")
-_add_var("winxp64", "Microsoft Windows XP (x86_64)", supported=True, sortby="mswin564", parent="windows")
-_add_var("win2k3", "Microsoft Windows Server 2003", supported=True, sortby="mswinserv2003", parent="windows")
-_add_var("win2k8", "Microsoft Windows Server 2008 (or later)", supported=True, sortby="mswinserv2008", parent="windows")
-_add_var("vista", "Microsoft Windows Vista", supported=True, sortby="mswin6", parent="windows")
-_add_var("win7", "Microsoft Windows 7 (or later)", supported=True, sortby="mswin7", parent="windows")
-
-
 _add_type("solaris", "Solaris", clock="localtime")
-_add_var("solaris9", "Sun Solaris 9", parent="solaris")
-_add_var("solaris10", "Sun Solaris 10", inputtype="tablet", inputbus="usb", parent="solaris")
-# https://bugzilla.redhat.com/show_bug.cgi?id=894017 claims tablet doesn't work for solaris 11
-_add_var("solaris11", "Sun Solaris 11 (or later)", inputtype=None, inputbus=None, parent="solaris")
-_add_var("opensolaris", "Sun OpenSolaris (or later)", inputtype="tablet", inputbus="usb", parent="solaris")
-
 _add_type("unix", "UNIX")
-# http: //www.nabble.com/Re%3A-Qemu%3A-bridging-on-FreeBSD-7.0-STABLE-p15919603.html
-_add_var("freebsd6", "FreeBSD 6.x", netmodel="ne2k_pci", parent="unix")
-_add_var("freebsd7", "FreeBSD 7.x", parent="freebsd6")
-_add_var("freebsd8", "FreeBSD 8.x", supported=True, netmodel="e1000", parent="freebsd7")
-_add_var("freebsd9", "FreeBSD 9.x", parent="freebsd8")
-_add_var("freebsd10", "FreeBSD 10.x (or later)", supported=False, virtiodisk=True, virtionet=True, parent="freebsd9")
-
-# http: //calamari.reverse-dns.net: 980/cgi-bin/moin.cgi/OpenbsdOnQemu
-# https: //www.redhat.com/archives/et-mgmt-tools/2008-June/msg00018.html
-_add_var("openbsd4", "OpenBSD 4.x (or later)", netmodel="pcnet", parent="unix")
-
-
 _add_type("other", "Other")
-_add_var("msdos", "MS-DOS", acpi=False, apic=False, parent="other")
-_add_var("netware4", "Novell Netware 4", parent="other")
-_add_var("netware5", "Novell Netware 5", parent="other")
-_add_var("netware6", "Novell Netware 6 (or later)", parent="other")
 _add_var("generic", "Generic", supported=True, parent="other")
+
+loader = libosinfo.Loader()
+loader.process_default_path()
+db = loader.get_db()
+
+oslist = db.get_os_list()
+for os in range(oslist.get_length()):
+    osi = _OsVariantOsInfo(oslist.get_nth(os))
+    _allvariants[osi.name] = osi
