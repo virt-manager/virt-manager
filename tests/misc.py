@@ -22,8 +22,7 @@ import os
 import sys
 import unittest
 
-_badmodules = ["gi.repository.Gtk", "gi.repository.GObject",
-              "gi.repository.Gdk", "gi.repository.GLib"]
+_badmodules = ["gi.repository.Gtk", "gi.repository.Gdk"]
 
 
 def _restore_modules(fn):

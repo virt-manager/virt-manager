@@ -658,7 +658,7 @@ class FedoraDistro(RedHatDistro):
         """
         ret = None
         for osinfo in osdict.list_os(typename="linux"):
-            if osinfo.name.startswith("fedora"):
+            if osinfo.name.startswith("fedora") and "unknown" not in osinfo.name:
                 # First fedora* occurence should be the newest
                 ret = osinfo.name
                 break
