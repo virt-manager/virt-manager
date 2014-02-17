@@ -1376,7 +1376,8 @@ class vmmCreate(vmmGObjectUI):
 
             guest.add_default_devices()
 
-            if self.conn.check_support(self.conn.SUPPORT_CONN_PM_DISABLE):
+            if (guest.os.is_x86() and
+                self.conn.check_support(self.conn.SUPPORT_CONN_PM_DISABLE)):
                 guest.pm.suspend_to_mem = False
                 guest.pm.suspend_to_disk = False
 
