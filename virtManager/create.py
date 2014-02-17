@@ -689,7 +689,7 @@ class vmmCreate(vmmGObjectUI):
         model = lst.get_model()
         model.clear()
 
-        machines = self.capsdomain.machines
+        machines = self.capsdomain.machines[:]
         if self.capsguest.arch in ["i686", "x86_64"]:
             machines = []
         machines.sort()
