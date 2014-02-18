@@ -1441,7 +1441,7 @@ class vmmAddHardware(vmmGObjectUI):
         # Save occupied places per controller
         occupied = collections.defaultdict(int)
         for d in used_disks:
-            if d.bus == disk.bus:
+            if d.get_target_prefix() == disk.get_target_prefix():
                 num = virtinst.VirtualDisk.target_to_num(d.target)
                 occupied[num / 7] += 1
         for c in ctrls_scsi:
