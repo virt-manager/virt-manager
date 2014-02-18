@@ -187,9 +187,9 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     logging.debug("Launched with command line: %s", " ".join(sys.argv))
 
 
-#######################################
-# Libvirt connection helpers          #
-#######################################
+##############################
+# Libvirt connection helpers #
+##############################
 
 def getConnection(uri):
     logging.debug("Requesting libvirt URI %s", (uri or "default"))
@@ -548,9 +548,9 @@ def set_os_variant(obj, distro_type, distro_variant):
     obj.os_variant = distkey
 
 
-#############################
-# Common CLI option/group   #
-#############################
+###########################
+# Common CLI option/group #
+###########################
 
 def add_connect_option(parser, invoker=None):
     if invoker == "virt-xml":
@@ -1413,9 +1413,9 @@ class ParserBoot(VirtCLIParser):
         VirtCLIParser._parse(self, opts, inst)
 
 
-######################
-# --idmap parsing    #
-######################
+###################
+# --idmap parsing #
+###################
 
 class ParserIdmap(VirtCLIParser):
     def _init_params(self):
@@ -2129,9 +2129,9 @@ class ParserSound(VirtCLIParser):
         return VirtCLIParser._parse(self, opts, inst)
 
 
-#####################
+#########################
 # --host-device parsing #
-#####################
+#########################
 
 class ParserHostdev(VirtCLIParser):
     def _init_params(self):
