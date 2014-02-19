@@ -1481,7 +1481,8 @@ class vmmAddHardware(vmmGObjectUI):
                 disks = (self.vm.get_disk_devices() +
                          self.vm.get_disk_devices(inactive=True))
                 for d in disks:
-                    used.append(d.target)
+                    if d.target not in used:
+                        used.append(d.target)
 
             prefer_ctrl = self._set_disk_controller(disk, controller_model, disks)
 
