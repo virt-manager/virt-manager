@@ -484,7 +484,7 @@ class VirtualDisk(VirtualDevice):
             # This case is here for 'xvda'
             tgt = tgt[1:]
         for i, c in enumerate(reversed(tgt[2:])):
-            num += (ord(c) - ord('a') + 1) * (26 ** i)
+            num += (ord(c) - ord('a')) * (26 ** i)
         return num
 
 
