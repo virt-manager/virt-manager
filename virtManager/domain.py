@@ -573,6 +573,24 @@ class vmmDomain(vmmLibvirtObject):
             guest.title = newvalue or None
         return self._redefine(change)
 
+    # Idmap config define methods
+    def define_idmap(self, idmap_list):
+        def change(guest):
+            guest.idmap.uid_start = uid_start
+            guest.idmap.uid_target = uid_target
+            guest.idmap.uid_count = uid_count
+            guest.idmap.gid_start = gid_start
+            guest.idmap.gid_target = gid_target
+            guest.idmap.gid_count = gid_count
+        def clear(guest):
+            guest.idmap.clear()
+        if idmap_list is not None:
+            (uid_start, uid_target, uid_count, gid_start,
+                    gid_target, gid_count) = idmap_list
+            return self._redefine(change)
+        else:
+            return self._redefine(clear)
+
     # Boot define methods
     def can_use_device_boot_order(self):
         # Return 'True' if guest can use new style boot device ordering
@@ -1058,6 +1076,8 @@ class vmmDomain(vmmLibvirtObject):
         return self.get_xmlobj().emulator
     def get_machtype(self):
         return self.get_xmlobj().os.machine
+    def get_idmap(self):
+        return self.get_xmlobj().idmap
 
     def get_name_or_title(self):
         title = self.get_title()
