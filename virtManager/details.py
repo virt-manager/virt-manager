@@ -51,6 +51,7 @@ from virtinst import VirtualRNGDevice
 EDIT_TITLE,
 EDIT_MACHTYPE,
 EDIT_DESC,
+EDIT_IDMAP,
 
 EDIT_VCPUS,
 EDIT_CPUSET,
@@ -103,7 +104,7 @@ EDIT_FS,
 
 EDIT_HOSTDEV_ROMBAR,
 
-) = range(1, 42)
+) = range(1, 43)
 
 
 # Columns in hw list model
@@ -579,6 +580,13 @@ class vmmDetails(vmmGObjectUI):
             "on_overview_name_changed": lambda *x: self.enable_apply(x, EDIT_NAME),
             "on_overview_title_changed": lambda *x: self.enable_apply(x, EDIT_TITLE),
             "on_machine_type_changed": lambda *x: self.enable_apply(x, EDIT_MACHTYPE),
+            "on_idmap_uid_start_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
+            "on_idmap_uid_target_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
+            "on_idmap_uid_count_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
+            "on_idmap_gid_start_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
+            "on_idmap_gid_target_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
+            "on_idmap_gid_count_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
+            "on_config_idmap_check_toggled": self.config_idmap_enable,
 
             "on_config_vcpus_changed": self.config_vcpus_changed,
             "on_config_maxvcpus_changed": self.config_maxvcpus_changed,
@@ -1600,6 +1608,16 @@ class vmmDetails(vmmGObjectUI):
         if edittype not in self.active_edits:
             self.active_edits.append(edittype)
 
+    # Idmap
+    def config_idmap_enable(self, src):
+        do_enable = src.get_active()
+        self.widget("idmap-spin-grid").set_sensitive(do_enable)
+        self.config_idmap_changed()
+
+    def config_idmap_changed(self, ignore=None):
+        self.enable_apply(EDIT_IDMAP)
+
+
     # Memory
     def config_get_maxmem(self):
         return uiutil.spin_get_helper(self.widget("config-maxmem"))
@@ -1954,6 +1972,23 @@ class vmmDetails(vmmGObjectUI):
             desc = desc_widget.get_buffer().get_property("text") or ""
             add_define(self.vm.define_description, desc)
             add_hotplug(self.vm.hotplug_description, desc)
+
+        if self.edited(EDIT_IDMAP):
+            enable_idmap = self.widget("config-idmap-checkbutton").get_active()
+            if enable_idmap:
+                uid_start = self.widget("uid-start").get_text().strip()
+                uid_target = self.widget("uid-target").get_text().strip()
+                uid_count = self.widget("uid-count").get_text().strip()
+                gid_start = self.widget("gid-start").get_text().strip()
+                gid_target = self.widget("gid-target").get_text().strip()
+                gid_count = self.widget("gid-count").get_text().strip()
+
+                idmap_list = [uid_start, uid_target, uid_count, gid_start,
+                        gid_target, gid_count]
+            else:
+                idmap_list = None
+
+            add_define(self.vm.define_idmap, idmap_list)
 
         return self._change_config_helper(df, da, hf, ha)
 
@@ -2438,6 +2473,29 @@ class vmmDetails(vmmGObjectUI):
         if not arch in ["i686", "x86_64"]:
             if machtype is not None:
                 uiutil.set_combo_entry(self.widget("machine-type"), machtype)
+
+        # User namespace idmap setting
+        is_container = self.vm.is_container()
+        self.widget("config-idmap-expander").set_visible(is_container)
+
+        self.widget("uid-start").set_text('0')
+        self.widget("uid-target").set_text('1000')
+        self.widget("uid-count").set_text('10')
+        self.widget("gid-start").set_text('0')
+        self.widget("gid-target").set_text('1000')
+        self.widget("gid-count").set_text('10')
+
+        IdMap = self.vm.get_idmap()
+        show_config = IdMap.uid_start is not None
+
+        self.widget("config-idmap-checkbutton").set_active(show_config)
+        self.widget("idmap-spin-grid").set_sensitive(show_config)
+        if show_config:
+            Name = ["uid-start", "uid-target", "uid-count",
+                    "gid-start", "gid-target", "gid-count"]
+            for name in Name:
+                IdMap_proper = getattr(IdMap, name.replace("-", "_"))
+                self.widget(name).set_value(int(IdMap_proper))
 
     def refresh_inspection_page(self):
         inspection_supported = self.config.support_inspection

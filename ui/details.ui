@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.16.0 on Thu Feb 20 08:33:46 2014 -->
 <interface>
-  <requires lib="gtk+" version="3.0"/>
+  <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAccelGroup" id="accelgroup1"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -25,6 +25,40 @@
   <object class="GtkAdjustment" id="adjustment13">
     <property name="upper">1000000000</property>
     <property name="step_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment14">
+    <property name="upper">65536</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">25</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment15">
+    <property name="upper">65536</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">25</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment16">
+    <property name="upper">65536</property>
+    <property name="value">1000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">25</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment17">
+    <property name="upper">65536</property>
+    <property name="value">1000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">25</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment18">
+    <property name="upper">65536</property>
+    <property name="value">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">25</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment19">
+    <property name="upper">65536</property>
+    <property name="value">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">25</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
     <property name="lower">1</property>
@@ -1004,6 +1038,250 @@
                                 <property name="position">1</property>
                               </packing>
                             </child>
+                            <child>
+                              <object class="GtkExpander" id="config-idmap-expander">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <child>
+                                  <object class="GtkAlignment" id="alignment1">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="top_padding">3</property>
+                                    <property name="left_padding">12</property>
+                                    <child>
+                                      <object class="GtkGrid" id="config-idmap-grid">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="row_spacing">6</property>
+                                        <property name="column_spacing">6</property>
+                                        <child>
+                                          <object class="GtkCheckButton" id="config-idmap-checkbutton">
+                                            <property name="label" translatable="yes">Enable User Namespace</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="on_config_idmap_check_toggled" swapped="no"/>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">0</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkGrid" id="idmap-spin-grid">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="row_spacing">6</property>
+                                            <property name="column_spacing">6</property>
+                                            <child>
+                                              <object class="GtkLabel" id="label19">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="xalign">1</property>
+                                                <property name="label" translatable="yes">User ID: </property>
+                                                <property name="max_width_chars">15</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label20">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="xalign">1</property>
+                                                <property name="label" translatable="yes">  Group ID: </property>
+                                                <property name="max_width_chars">15</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label21">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="label" translatable="yes">Start</property>
+                                                <property name="max_width_chars">20</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">0</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label22">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="label" translatable="yes">Target</property>
+                                                <property name="max_width_chars">20</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="top_attach">0</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label29">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="label" translatable="yes">Count</property>
+                                                <property name="max_width_chars">20</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">3</property>
+                                                <property name="top_attach">0</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label33">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="max_width_chars">15</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">0</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSpinButton" id="uid-start">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="width_chars">6</property>
+                                                <property name="adjustment">adjustment14</property>
+                                                <property name="climb_rate">1</property>
+                                                <signal name="changed" handler="on_idmap_uid_start_changed" swapped="no"/>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSpinButton" id="gid-start">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="adjustment">adjustment15</property>
+                                                <property name="climb_rate">1</property>
+                                                <signal name="changed" handler="on_idmap_uid_target_changed" swapped="no"/>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSpinButton" id="uid-target">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="width_chars">6</property>
+                                                <property name="adjustment">adjustment16</property>
+                                                <signal name="changed" handler="on_idmap_uid_target_changed" swapped="no"/>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSpinButton" id="gid-target">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="adjustment">adjustment17</property>
+                                                <signal name="changed" handler="on_idmap_gid_target_changed" swapped="no"/>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSpinButton" id="uid-count">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="width_chars">6</property>
+                                                <property name="adjustment">adjustment18</property>
+                                                <signal name="changed" handler="on_idmap_uid_count_changed" swapped="no"/>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">3</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSpinButton" id="gid-count">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="adjustment">adjustment19</property>
+                                                <signal name="changed" handler="on_idmap_gid_count_changed" swapped="no"/>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">3</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="width">1</property>
+                                            <property name="height">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child type="label">
+                                  <object class="GtkLabel" id="label8">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;User Namespace&lt;/b&gt;</property>
+                                    <property name="use_markup">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
                           </object>
                         </child>
                         <child type="tab">
@@ -1646,12 +1924,12 @@
                                                 <property name="climb_rate">1</property>
                                                 <property name="numeric">True</property>
                                                 <property name="update_policy">if-valid</property>
-                                                <signal name="changed" handler="on_config_vcpus_changed" swapped="no"/>
                                                 <child internal-child="accessible">
                                                   <object class="AtkObject" id="config-vcpus-atkobject">
                                                     <property name="AtkObject::accessible-name" translatable="yes">Virtual CPU Select</property>
                                                   </object>
                                                 </child>
+                                                <signal name="changed" handler="on_config_vcpus_changed" swapped="no"/>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">1</property>
@@ -2046,12 +2324,12 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="invisible_char">●</property>
-                                                    <signal name="changed" handler="on_config_vcpupin_changed" swapped="no"/>
                                                     <child internal-child="accessible">
                                                       <object class="AtkObject" id="config-vcpupin-atkobject">
                                                         <property name="AtkObject::accessible-name" translatable="yes">Virtual CPU Affinity Select</property>
                                                       </object>
                                                     </child>
+                                                    <signal name="changed" handler="on_config_vcpupin_changed" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -2280,12 +2558,12 @@
                                                 <property name="climb_rate">2</property>
                                                 <property name="numeric">True</property>
                                                 <property name="update_policy">if-valid</property>
-                                                <signal name="changed" handler="on_config_memory_changed" swapped="no"/>
                                                 <child internal-child="accessible">
                                                   <object class="AtkObject" id="config-memory-atkobject">
                                                     <property name="AtkObject::accessible-name" translatable="yes">Memory Select</property>
                                                   </object>
                                                 </child>
+                                                <signal name="changed" handler="on_config_memory_changed" swapped="no"/>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -2329,12 +2607,12 @@
                                                 <property name="climb_rate">2</property>
                                                 <property name="numeric">True</property>
                                                 <property name="update_policy">if-valid</property>
-                                                <signal name="changed" handler="on_config_maxmem_changed" swapped="no"/>
                                                 <child internal-child="accessible">
                                                   <object class="AtkObject" id="config-maxmem-atkobject">
                                                     <property name="AtkObject::accessible-name" translatable="yes">Max Memory Select</property>
                                                   </object>
                                                 </child>
+                                                <signal name="changed" handler="on_config_maxmem_changed" swapped="no"/>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
