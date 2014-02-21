@@ -270,6 +270,7 @@ class vmmDomain(vmmLibvirtObject):
         self._enable_disk_poll = False
         self._stats_disk_supported = True
         self._stats_disk_skip = []
+        self._summary_disk_stats_skip = False
 
         self.inspection = vmmInspectionData()
 
@@ -1789,6 +1790,18 @@ class vmmDomain(vmmLibvirtObject):
             self._stats_disk_skip = []
             return rd, wr
 
+        # Some drivers support this method for getting all usage at once
+        if not self._summary_disk_stats_skip:
+            try:
+                io = self._backend.blockStats('')
+                if io:
+                    rd = io[1]
+                    wr = io[3]
+                    return rd, wr
+            except libvirt.libvirtError:
+                self._summary_disk_stats_skip = True
+
+        # did not work, iterate over all disks
         for disk in self.get_disk_devices(refresh_if_nec=False):
             dev = disk.target
             if not dev:
