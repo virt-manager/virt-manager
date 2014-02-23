@@ -480,11 +480,14 @@ class VirtualDisk(VirtualDevice):
         Convert disk /dev number (like hda, hdb, hdaa, etc.) to an index
         """
         num = 0
+        k = 0
         if tgt[0] == 'x':
             # This case is here for 'xvda'
             tgt = tgt[1:]
         for i, c in enumerate(reversed(tgt[2:])):
-            num += (ord(c) - ord('a')) * (26 ** i)
+            if i != 0:
+                k = 1
+            num += (ord(c) - ord('a') + k) * (26 ** i)
         return num
 
 
