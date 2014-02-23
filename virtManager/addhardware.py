@@ -432,7 +432,7 @@ class vmmAddHardware(vmmGObjectUI):
         # Video params
         self.populate_video_combo(self.vm, self.widget("video-model"))
 
-        # TPM paams
+        # TPM params
         self.widget("tpm-device-path").set_text("/dev/tpm0")
 
         # Hide all notebook pages, so the wizard isn't as big as the largest
