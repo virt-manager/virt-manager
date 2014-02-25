@@ -20,6 +20,7 @@
 # MA 02110-1301 USA.
 
 import copy
+import logging
 import os
 import re
 
