@@ -151,6 +151,15 @@ mode.
 
 Use --numatune=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsNUMATuning>
 
+=item --memtune=SOFT_LIMIT,[hard_limit=HARD_LIMIT,swap_hard_limit=SW_HARD_LIMIT,min_guarantee=MIN_GUARANTEE]
+
+Tune memory policy for the domain process. Example invocations
+
+    --memtune 1000
+    --memtune hard_limit=100,soft_limit=60,swap_hard_limit=150,min_guarantee=80
+
+Use --memtune=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsMemoryTuning>
+
 =item --blkiotune=WEIGHT,[device_path=DEVICE_PATH,device_weight=DEVICE_WEIGHT]
 
 Tune blkio policy for the domain process. Example invocations

@@ -782,6 +782,8 @@ def add_guest_xml_options(geng):
                     help=_("Set domain security driver configuration."))
     geng.add_argument("--numatune",
                     help=_("Tune NUMA policy for the domain process."))
+    geng.add_argument("--memtune", action="append",
+                    help=_("Tune memory policy for the domain process."))
     geng.add_argument("--blkiotune", action="append",
                     help=_("Tune blkio policy for the domain process."))
     geng.add_argument("--features",
@@ -1246,6 +1248,21 @@ class ParserMemory(VirtCLIParser):
         self.set_param("memory", "memory", setter_cb=set_memory_cb)
         self.set_param("maxmemory", "maxmemory", setter_cb=set_memory_cb)
         self.set_param("hugepage", "hugepages", is_onoff=True)
+
+
+#####################
+# --memtune parsing #
+#####################
+
+class ParserMemorytune(VirtCLIParser):
+    def _init_params(self):
+        self.remove_first = "soft_limit"
+        self.clear_attr = "memtune"
+
+        self.set_param("memtune.hard_limit", "hard_limit")
+        self.set_param("memtune.soft_limit", "soft_limit")
+        self.set_param("memtune.swap_hard_limit", "swap_hard_limit")
+        self.set_param("memtune.min_guarantee", "min_guarantee")
 
 
 ###################
@@ -2176,6 +2193,7 @@ def build_parser_map(options, skip=None, only=None):
 
     register_parser("metadata", ParserMetadata)
     register_parser("memory", ParserMemory)
+    register_parser("memtune", ParserMemorytune)
     register_parser("vcpus", ParserVCPU)
     register_parser("cpu", ParserCPU)
     register_parser("numatune", ParserNumatune)

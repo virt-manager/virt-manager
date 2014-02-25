@@ -191,6 +191,12 @@ class XMLParseTest(unittest.TestCase):
         check("memory_mode", "interleave", "strict", None)
         check("memory_nodeset", "1-5,^3,7", "2,4,6")
 
+        check = self._make_checker(guest.memtune)
+        check("hard_limit", None, 1024, 2048)
+        check("soft_limit", None, 100, 200)
+        check("swap_hard_limit", None, 300, 400)
+        check("min_guarantee", None, 400, 500)
+
         check = self._make_checker(guest.blkiotune)
         check("weight", None, 100, 200)
         check("device_weight", None, 300)

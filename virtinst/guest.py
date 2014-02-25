@@ -35,6 +35,7 @@ from virtinst import Clock
 from virtinst import Seclabel
 from virtinst import CPU
 from virtinst import DomainNumatune
+from virtinst import DomainMemorytune
 from virtinst import DomainBlkiotune
 from virtinst import DomainFeatures
 from virtinst import PM
@@ -91,7 +92,7 @@ class Guest(XMLBuilder):
 
     _XML_ROOT_NAME = "domain"
     _XML_PROP_ORDER = ["type", "name", "uuid", "title", "description",
-        "maxmemory", "memory", "hugepage", "vcpus", "curvcpus",
+        "maxmemory", "memory", "hugepage", "vcpus", "curvcpus", "memtune",
         "numatune", "blkiotune", "bootloader", "os", "idmap", "features", "cpu",
         "clock", "on_poweroff", "on_reboot", "on_crash", "pm", "emulator", "_devices",
         "seclabel"]
@@ -192,6 +193,7 @@ class Guest(XMLBuilder):
     numatune = XMLChildProperty(DomainNumatune, is_single=True)
     pm = XMLChildProperty(PM, is_single=True)
     blkiotune = XMLChildProperty(DomainBlkiotune, is_single=True)
+    memtune = XMLChildProperty(DomainMemorytune, is_single=True)
     idmap = XMLChildProperty(IdMap, is_single=True)
 
 

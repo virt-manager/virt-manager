@@ -81,6 +81,12 @@
   <memoryBacking>
     <hugepages/>
   </memoryBacking>
+  <memtune>
+    <hard_limit>2048</hard_limit>
+    <soft_limit>200</soft_limit>
+    <swap_hard_limit>400</swap_hard_limit>
+    <min_guarantee>500</min_guarantee>
+  </memtune>
   <blkiotune>
     <weight>200</weight>
     <device>
