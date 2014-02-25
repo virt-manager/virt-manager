@@ -140,10 +140,6 @@ def validate_uuid(val):
 
 
 def validate_name(name_type, val):
-    if re.match("^[0-9]+$", val):
-        raise ValueError(_("%s name can not be only numeric characters") %
-                          name_type)
-
     # Rather than try and match libvirt's regex, just forbid things we
     # know don't work
     forbid = [" "]
