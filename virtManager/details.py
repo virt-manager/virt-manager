@@ -783,7 +783,7 @@ class vmmDetails(vmmGObjectUI):
         # Add HW popup menu
         self.addhwmenu = Gtk.Menu()
 
-        addHW = Gtk.ImageMenuItem(_("_Add Hardware"))
+        addHW = Gtk.ImageMenuItem.new_with_label(_("_Add Hardware"))
         addHW.set_use_underline(True)
         addHWImg = Gtk.Image()
         addHWImg.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.MENU)
@@ -791,7 +791,7 @@ class vmmDetails(vmmGObjectUI):
         addHW.show()
         addHW.connect("activate", self.add_hardware)
 
-        rmHW = Gtk.ImageMenuItem(_("_Remove Hardware"))
+        rmHW = Gtk.ImageMenuItem.new_with_label(_("_Remove Hardware"))
         rmHW.set_use_underline(True)
         rmHWImg = Gtk.Image()
         rmHWImg.set_from_stock(Gtk.STOCK_REMOVE, Gtk.IconSize.MENU)

@@ -179,7 +179,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("storage-pages").set_show_tabs(False)
 
         self.volmenu = Gtk.Menu()
-        volCopyPath = Gtk.ImageMenuItem(_("Copy Volume Path"))
+        volCopyPath = Gtk.ImageMenuItem.new_with_label(_("Copy Volume Path"))
         volCopyImage = Gtk.Image()
         volCopyImage.set_from_stock(Gtk.STOCK_COPY, Gtk.IconSize.MENU)
         volCopyPath.set_image(volCopyImage)

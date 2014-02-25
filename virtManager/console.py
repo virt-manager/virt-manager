@@ -1662,7 +1662,7 @@ class vmmConsolePages(vmmGObjectUI):
                 if group is None:
                     group = item
             else:
-                item = Gtk.MenuItem(msg)
+                item = Gtk.MenuItem.new_with_label(msg)
 
             item.set_sensitive(sensitive)
 
@@ -1685,7 +1685,8 @@ class vmmConsolePages(vmmGObjectUI):
         # Populate graphical devices
         devs = self.vm.get_graphics_devices()
         if len(devs) == 0:
-            item = Gtk.MenuItem(_("No graphical console available"))
+            item = Gtk.MenuItem.new_with_label(
+                _("No graphical console available"))
             item.set_sensitive(False)
             src.add(item)
         else:

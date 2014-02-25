@@ -154,7 +154,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         # Snapshot popup menu
         menu = Gtk.Menu()
 
-        item = Gtk.ImageMenuItem(_("_Start snapshot"))
+        item = Gtk.ImageMenuItem.new_with_label(_("_Start snapshot"))
         item.set_use_underline(True)
         img = Gtk.Image()
         img.set_from_stock(Gtk.STOCK_MEDIA_PLAY, Gtk.IconSize.MENU)
@@ -163,7 +163,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         item.connect("activate", self._on_start_clicked)
         menu.add(item)
 
-        item = Gtk.ImageMenuItem(_("_Delete snapshot"))
+        item = Gtk.ImageMenuItem.new_with_label(_("_Delete snapshot"))
         item.set_use_underline(True)
         img = Gtk.Image()
         img.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.MENU)
