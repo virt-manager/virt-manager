@@ -233,12 +233,6 @@ class Command(object):
                 tests.skipTest(skipmsg)
                 return
 
-            filename = self.compare_file
-            if (self.compare_check and conn and not
-                conn.check_support(self.compare_check)):
-                logging.debug("Skipping compare check due to lack of support")
-                filename = None
-
             code, output = self._get_output(conn)
 
             if bool(code) == self.check_success:
@@ -249,8 +243,15 @@ class Command(object):
                      ("Error code : %d\n" % code) +
                      ("Output was:\n%s" % output))
 
-            if filename:
+            if self.compare_file:
+                if (self.compare_check and not
+                    conn.check_support(self.compare_check)):
+                    tests.skipTest(
+                        "Skipping compare check due to lack of support")
+                    return
+
                 # Generate test files that don't exist yet
+                filename = self.compare_file
                 if utils.REGENERATE_OUTPUT or not os.path.exists(filename):
                     file(filename, "w").write(output)
 
@@ -794,7 +795,7 @@ c.add_compare("--build-xml --idmap uid_start=0,uid_target=1000,uid_count=10,gid_
 c.add_compare("test --edit --boot network,cdrom", "edit-bootorder")
 
 
-c = vixml.add_category("simple edit diff", "test-many-devices --edit --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
+c = vixml.add_category("simple edit diff", "test-many-devices --edit --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
 c.add_compare("""--metadata name=foo-my-new-name,uuid=12345678-12F4-1234-1234-123456789AFA,description="hey this is my
 new
 very,very=new desc\\\'",title="This is my,funky=new title" """, "edit-simple-metadata")
@@ -829,7 +830,7 @@ c.add_compare("--video cirrus", "edit-simple-video")
 c.add_compare("--sound pcspk", "edit-simple-soundhw")
 c.add_compare("--host-device 0x0781:0x5151,driver_name=vfio", "edit-simple-host-device")
 
-c = vixml.add_category("edit selection", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
+c = vixml.add_category("edit selection", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
 c.add_invalid("--edit target=vvv --disk /dev/null")  # no match found
 c.add_compare("--edit 3 --sound pcspk", "edit-pos-num")
 c.add_compare("--edit -1 --video qxl", "edit-neg-num")
@@ -839,13 +840,13 @@ c.add_compare("--edit target=hda --disk /dev/null", "edit-select-disk-target")
 c.add_compare("--edit /tmp/foobar2 --disk shareable=off,readonly=on", "edit-select-disk-path")
 c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "edit-select-network-mac")
 
-c = vixml.add_category("edit clear", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
+c = vixml.add_category("edit clear", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
 c.add_invalid("--edit --memory 200,clearxml=yes")  # clear isn't wired up for memory
 c.add_compare("--edit --cpu host-passthrough,clearxml=yes", "edit-clear-cpu")
 c.add_compare("--edit --clock offset=utc,clearxml=yes", "edit-clear-clock")
 c.add_compare("--edit --disk /foo/bar,target=fda,bus=fdc,device=floppy,clearxml=yes", "edit-clear-disk")
 
-c = vixml.add_category("add/rm devices", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_PANIC_DEVICE)
+c = vixml.add_category("add/rm devices", "test-many-devices --print-diff --define", compare_check=support.SUPPORT_CONN_INPUT_KEYBOARD)
 c.add_invalid("--add-device --security foo")  # --add-device without a device
 c.add_invalid("--remove-device --clock utc")  # --remove-device without a dev
 c.add_compare("--add-device --host-device net_00_1c_25_10_b1_e4", "add-host-device")
