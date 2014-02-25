@@ -686,7 +686,13 @@ class _XMLState(object):
         else:
             if not xml:
                 xml = self.make_xml_stub()
-            doc = libxml2.parseDoc(xml)
+
+            try:
+                doc = libxml2.parseDoc(xml)
+            except:
+                logging.debug("Error parsing xml=\n%s", xml)
+                raise
+
             self.xml_root_doc = _DocCleanupWrapper(doc)
             self.xml_node = doc.children
             self.xml_node.virtinst_is_build = self.is_build
