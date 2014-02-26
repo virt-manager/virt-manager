@@ -2026,6 +2026,7 @@ class ParserPanic(VirtCLIParser):
 class ParserBlkiotune(VirtCLIParser):
     def _init_params(self):
         self.clear_attr = "blkiotune"
+        self.remove_first = "weight"
 
         self.set_param("blkiotune.weight", "weight")
         self.set_param("blkiotune.device_path", "device_path")
