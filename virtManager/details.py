@@ -580,10 +580,8 @@ class vmmDetails(vmmGObjectUI):
             "on_overview_name_changed": lambda *x: self.enable_apply(x, EDIT_NAME),
             "on_overview_title_changed": lambda *x: self.enable_apply(x, EDIT_TITLE),
             "on_machine_type_changed": lambda *x: self.enable_apply(x, EDIT_MACHTYPE),
-            "on_idmap_uid_start_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
             "on_idmap_uid_target_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
             "on_idmap_uid_count_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
-            "on_idmap_gid_start_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
             "on_idmap_gid_target_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
             "on_idmap_gid_count_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
             "on_config_idmap_check_toggled": self.config_idmap_enable,
@@ -1976,15 +1974,12 @@ class vmmDetails(vmmGObjectUI):
         if self.edited(EDIT_IDMAP):
             enable_idmap = self.widget("config-idmap-checkbutton").get_active()
             if enable_idmap:
-                uid_start = self.widget("uid-start").get_text().strip()
                 uid_target = self.widget("uid-target").get_text().strip()
                 uid_count = self.widget("uid-count").get_text().strip()
-                gid_start = self.widget("gid-start").get_text().strip()
                 gid_target = self.widget("gid-target").get_text().strip()
                 gid_count = self.widget("gid-count").get_text().strip()
 
-                idmap_list = [uid_start, uid_target, uid_count, gid_start,
-                        gid_target, gid_count]
+                idmap_list = [uid_target, uid_count, gid_target, gid_count]
             else:
                 idmap_list = None
 
@@ -2478,10 +2473,8 @@ class vmmDetails(vmmGObjectUI):
         is_container = self.vm.is_container()
         self.widget("config-idmap-expander").set_visible(is_container)
 
-        self.widget("uid-start").set_text('0')
         self.widget("uid-target").set_text('1000')
         self.widget("uid-count").set_text('10')
-        self.widget("gid-start").set_text('0')
         self.widget("gid-target").set_text('1000')
         self.widget("gid-count").set_text('10')
 
@@ -2491,8 +2484,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("config-idmap-checkbutton").set_active(show_config)
         self.widget("idmap-spin-grid").set_sensitive(show_config)
         if show_config:
-            Name = ["uid-start", "uid-target", "uid-count",
-                    "gid-start", "gid-target", "gid-count"]
+            Name = ["uid-target", "uid-count", "gid-target", "gid-count"]
             for name in Name:
                 IdMap_proper = getattr(IdMap, name.replace("-", "_"))
                 self.widget(name).set_value(int(IdMap_proper))

@@ -577,17 +577,17 @@ class vmmDomain(vmmLibvirtObject):
     # Idmap config define methods
     def define_idmap(self, idmap_list):
         def change(guest):
-            guest.idmap.uid_start = uid_start
+            guest.idmap.uid_start = 0
             guest.idmap.uid_target = uid_target
             guest.idmap.uid_count = uid_count
-            guest.idmap.gid_start = gid_start
+            guest.idmap.gid_start = 0
             guest.idmap.gid_target = gid_target
             guest.idmap.gid_count = gid_count
         def clear(guest):
             guest.idmap.clear()
         if idmap_list is not None:
-            (uid_start, uid_target, uid_count, gid_start,
-                    gid_target, gid_count) = idmap_list
+            (uid_target, uid_count, gid_target,
+                    gid_count) = idmap_list
             return self._redefine(change)
         else:
             return self._redefine(clear)
