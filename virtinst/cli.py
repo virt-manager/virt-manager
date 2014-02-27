@@ -1810,6 +1810,7 @@ class ParserGraphics(VirtCLIParser):
         self.set_param("passwd", "password")
         self.set_param("passwdValidTo", "passwordvalidto")
         self.set_param("connected", "connected")
+        self.set_param("defaultMode", "defaultMode")
 
     def _parse(self, opts, inst):
         if opts.fullopts == "none":

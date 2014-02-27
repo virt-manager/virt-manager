@@ -31,7 +31,7 @@
     <graphics type="vnc" autoport="no">
       <listen type="network" network="mynewnet"/>
     </graphics>
-    <graphics type="spice" passwd="newpass" port="6000" tlsPort="6001" listen="1.2.3.4" passwdValidTo="2011-01-07T19:08:00" connected="disconnect">
+    <graphics type="spice" passwd="newpass" port="6000" tlsPort="6001" listen="1.2.3.4" passwdValidTo="2011-01-07T19:08:00" connected="disconnect" defaultMode="secure">
       <listen type="address" address="1.2.3.4"/>
       <channel name="inputs" mode="secure"/>
       <channel name="main" mode="any"/>
