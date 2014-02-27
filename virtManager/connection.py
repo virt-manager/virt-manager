@@ -172,10 +172,17 @@ class vmmConnection(vmmGObject):
         self._backend.cb_fetch_all_pools = (
             lambda: [obj.get_xmlobj(refresh_if_nec=False)
                      for obj in self.pools.values()])
-        self._backend.cb_fetch_all_vols = (
-            lambda: [obj.get_xmlobj(refresh_if_nec=False)
-                     for pool in self.pools.values()
-                     for obj in pool.get_volumes(refresh=False).values()])
+
+        def fetch_all_vols():
+            ret = []
+            for pool in self.pools.values():
+                for vol in pool.get_volumes(refresh=False).values():
+                    try:
+                        ret.append(vol.get_xmlobj(refresh_if_nec=False))
+                    except libvirt.libvirtError, e:
+                        logging.debug("Fetching volume XML failed: %s", e)
+            return ret
+        self._backend.cb_fetch_all_vols = fetch_all_vols
 
         def clear_cache(pools=False):
             if not pools:
