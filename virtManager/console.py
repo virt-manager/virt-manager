@@ -1319,8 +1319,13 @@ class vmmConsolePages(vmmGObjectUI):
             self.widget("details-menu-usb-redirection").set_sensitive(True)
             return
 
-    def page_changed(self, ignore1=None, ignore2=None, ignore3=None):
+    def page_changed(self, ignore1=None, ignore2=None, newpage=None):
         pagenum = self.widget("console-pages").get_current_page()
+
+        for i in range(self.widget("console-pages").get_n_pages()):
+          w = self.widget("console-pages").get_nth_page(i)
+          w.set_visible(i == newpage)
+
         if pagenum < CONSOLE_PAGE_OFFSET:
             self.last_gfx_page = pagenum
         self.set_allow_fullscreen()
