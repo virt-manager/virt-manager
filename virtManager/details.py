@@ -1275,7 +1275,11 @@ class vmmDetails(vmmGObjectUI):
         finally:
             self.ignoreDetails = False
 
-    def switch_page(self, ignore1=None, ignore2=None, newpage=None):
+    def switch_page(self, notebook=None, ignore2=None, newpage=None):
+        for i in range(notebook.get_n_pages()):
+          w = notebook.get_nth_page(i)
+          w.set_visible(i == newpage)
+
         self.page_refresh(newpage)
 
         self.sync_details_console_view(newpage)
