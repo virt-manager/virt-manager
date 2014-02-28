@@ -522,7 +522,11 @@ class vmmDetails(vmmGObjectUI):
 
         # Set default window size
         w, h = self.vm.get_details_window_size()
-        self.topwin.set_default_size(w or 800, h or 600)
+        if w <= 0:
+            w = 800
+        if h <= 0:
+            h = 600
+        self.topwin.set_default_size(w, h)
 
         self.oldhwkey = None
         self.addhwmenu = None
