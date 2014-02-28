@@ -1092,7 +1092,7 @@ class vmmConsolePages(vmmGObjectUI):
 
     def resizeguest_ui_changed_cb(self, src):
         # Called from details.py
-        if not src.get_active():
+        if not src.get_sensitive():
             return
 
         val = int(self.widget("details-menu-view-resizeguest").get_active())
