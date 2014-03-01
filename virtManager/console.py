@@ -1323,8 +1323,8 @@ class vmmConsolePages(vmmGObjectUI):
         pagenum = self.widget("console-pages").get_current_page()
 
         for i in range(self.widget("console-pages").get_n_pages()):
-          w = self.widget("console-pages").get_nth_page(i)
-          w.set_visible(i == newpage)
+            w = self.widget("console-pages").get_nth_page(i)
+            w.set_visible(i == newpage)
 
         if pagenum < CONSOLE_PAGE_OFFSET:
             self.last_gfx_page = pagenum
