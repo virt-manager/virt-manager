@@ -132,6 +132,15 @@ def _find_input(input_file, parser, print_cb):
                     prefix="virt-convert-tmp", dir=basedir)
 
             base = os.path.basename(input_file)
+
+            # check if 'unar' command existed.
+            if not find_executable("unar"):
+                raise RuntimeError(_("%s appears to be an archive, "
+                    "but 'unar' is not installed. "
+                    "Please either install 'unar', or extract the archive "
+                    "yourself and point virt-convert at "
+                    "the extracted directory.") % base)
+
             cmd = ["unar", "-o", tempdir, base]
             print_cb(_("%s appears to be an archive, running: %s") %
                 (base, " ".join(cmd)))
