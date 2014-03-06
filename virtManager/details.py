@@ -975,8 +975,9 @@ class vmmDetails(vmmGObjectUI):
         no_default = not self.is_customize_dialog
 
         try:
-            cpu_values = caps.get_cpu_values(self.vm.get_arch())
+            cpu_names = caps.get_cpu_values(self.vm.get_arch()).cpus
         except:
+            cpu_names = []
             logging.exception("Error populating CPU model list")
 
         # CPU model combo
@@ -997,7 +998,7 @@ class vmmDetails(vmmGObjectUI):
         model.append([_("Clear CPU configuration"), "3",
             virtinst.CPU.SPECIAL_MODE_CLEAR, False])
         model.append([None, None, None, True])
-        for name in [c.model for c in cpu_values.cpus]:
+        for name in [c.model for c in cpu_names]:
             model.append([name, name, name, False])
 
         # Disk cache combo
