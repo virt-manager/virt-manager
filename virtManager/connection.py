@@ -179,7 +179,7 @@ class vmmConnection(vmmGObject):
                 for vol in pool.get_volumes(refresh=False).values():
                     try:
                         ret.append(vol.get_xmlobj(refresh_if_nec=False))
-                    except libvirt.libvirtError, e:
+                    except Exception, e:
                         logging.debug("Fetching volume XML failed: %s", e)
             return ret
         self._backend.cb_fetch_all_vols = fetch_all_vols
