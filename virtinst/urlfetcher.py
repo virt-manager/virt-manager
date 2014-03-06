@@ -189,10 +189,16 @@ class _MountedImageFetcher(_LocalImageFetcher):
     Fetcher capable of extracting files from a NFS server
     or loopback mounted file, or local CDROM device
     """
+    _in_test_suite = bool("VIRTINST_TEST_SUITE" in os.environ)
+
     def prepareLocation(self):
         cmd = None
-        self.srcdir = tempfile.mkdtemp(prefix="virtinstmnt.",
-                                       dir=self.scratchdir)
+
+        if self._in_test_suite:
+            self.srcdir = os.environ["VIRTINST_TEST_URL_DIR"]
+        else:
+            self.srcdir = tempfile.mkdtemp(prefix="virtinstmnt.",
+                                           dir=self.scratchdir)
         mountcmd = "/bin/mount"
 
         logging.debug("Preparing mount at " + self.srcdir)
@@ -207,21 +213,24 @@ class _MountedImageFetcher(_LocalImageFetcher):
 
         logging.debug("mount cmd: %s", cmd)
 
-        ret = subprocess.call(cmd)
-        if ret != 0:
-            self.cleanupLocation()
-            raise ValueError(_("Mounting location '%s' failed") %
-                             (self.location))
+        if not self._in_test_suite:
+            ret = subprocess.call(cmd)
+            if ret != 0:
+                self.cleanupLocation()
+                raise ValueError(_("Mounting location '%s' failed") %
+                                 (self.location))
         return True
 
     def cleanupLocation(self):
         logging.debug("Cleaning up mount at " + self.srcdir)
-        cmd = ["/bin/umount", self.srcdir]
-        subprocess.call(cmd)
-        try:
-            os.rmdir(self.srcdir)
-        except:
-            pass
+
+        if not self._in_test_suite:
+            cmd = ["/bin/umount", self.srcdir]
+            subprocess.call(cmd)
+            try:
+                os.rmdir(self.srcdir)
+            except:
+                pass
 
 
 class _DirectImageFetcher(_LocalImageFetcher):

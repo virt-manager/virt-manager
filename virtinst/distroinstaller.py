@@ -299,11 +299,12 @@ def _upload_media(conn, scratchdir, system_scratchdir,
 
 
 # Enum of the various install media types we can have
-(MEDIA_LOCATION_PATH,
+(MEDIA_LOCATION_DIR,
+ MEDIA_LOCATION_CDROM,
  MEDIA_LOCATION_URL,
  MEDIA_CDROM_PATH,
  MEDIA_CDROM_URL,
- MEDIA_CDROM_IMPLIED) = range(1, 6)
+ MEDIA_CDROM_IMPLIED) = range(1, 7)
 
 
 class DistroInstaller(Installer):
@@ -324,7 +325,11 @@ class DistroInstaller(Installer):
 
         if self.location and _is_url(self.conn, self.location):
             return self.cdrom and MEDIA_CDROM_URL or MEDIA_LOCATION_URL
-        return self.cdrom and MEDIA_CDROM_PATH or MEDIA_LOCATION_PATH
+        if self.cdrom:
+            return MEDIA_CDROM_PATH
+        if self.location and os.path.isdir(self.location):
+            return MEDIA_LOCATION_DIR
+        return MEDIA_LOCATION_CDROM
 
     def _prepare_local(self):
         transient = True
@@ -374,7 +379,7 @@ class DistroInstaller(Installer):
     def _get_bootdev(self, isinstall, guest):
         mediatype = self._get_media_type()
         local = mediatype in [MEDIA_CDROM_PATH, MEDIA_CDROM_IMPLIED,
-                              MEDIA_LOCATION_PATH]
+                              MEDIA_LOCATION_DIR, MEDIA_LOCATION_CDROM]
         persistent_cd = (local and
                          self.cdrom and
                          self.livecd)
@@ -420,9 +425,10 @@ class DistroInstaller(Installer):
             return
 
         dev = None
-        if mediatype == MEDIA_CDROM_PATH:
+        if mediatype == MEDIA_CDROM_PATH or mediatype == MEDIA_LOCATION_CDROM:
             dev = self._prepare_local()
-        else:
+
+        if mediatype != MEDIA_CDROM_PATH:
             fetcher = urlfetcher.fetcherForURI(self.location,
                                                scratchdir, meter)
             try:
@@ -454,7 +460,7 @@ class DistroInstaller(Installer):
 
         mediatype = self._get_media_type()
         return mediatype in [MEDIA_CDROM_URL, MEDIA_LOCATION_URL,
-                             MEDIA_LOCATION_PATH]
+                             MEDIA_LOCATION_DIR, MEDIA_LOCATION_CDROM]
 
     def check_location(self, guest):
         mediatype = self._get_media_type()
