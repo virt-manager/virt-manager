@@ -1058,6 +1058,10 @@ class XMLParseTest(unittest.TestCase):
         utils.test_create(conn, pool.get_xml_config(), "storagePoolDefineXML")
 
     def testGlusterPool(self):
+        if not conn.check_support(conn.SUPPORT_CONN_POOL_GLUSTERFS):
+            raise unittest.SkipTest("Gluster pools not supported with this "
+                "libvirt version.")
+
         basename = "pool-gluster"
         infile = "tests/storage-xml/%s.xml" % basename
         outfile = "tests/xmlparse-xml/%s-out.xml" % basename

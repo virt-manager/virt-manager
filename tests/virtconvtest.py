@@ -15,6 +15,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
+from distutils.spawn import find_executable
 import glob
 import os
 import StringIO
@@ -61,6 +62,10 @@ class TestVirtConv(unittest.TestCase):
         out_path = "%s/%s_%s.%s" % (out_dir, base, in_base, "libvirt")
         if disk_format:
             out_path += ".disk_%s" % disk_format
+
+        if (os.path.splitext(in_path)[1] in [".zip"] and
+            not find_executable("unar")):
+            return
 
         try:
             os.chdir(os.path.dirname(in_path))

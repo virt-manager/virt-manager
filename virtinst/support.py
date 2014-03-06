@@ -290,6 +290,7 @@ SUPPORT_CONN_DEVICE_BOOTORDER = _make(
     version="0.8.8", hv_version={"qemu": 0, "test": 0})
 SUPPORT_CONN_INPUT_KEYBOARD = _make(
     version="1.2.2", hv_version={"qemu": 0, "test": 0})
+SUPPORT_CONN_POOL_GLUSTERFS = _make(version="1.2.0")
 
 
 # Domain checks

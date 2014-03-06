@@ -215,6 +215,10 @@ class TestStorage(unittest.TestCase):
         createPool(self.conn, StoragePool.TYPE_MPATH, "pool-mpath")
 
     def testGlusterPool(self):
+        if not self.conn.check_support(self.conn.SUPPORT_CONN_POOL_GLUSTERFS):
+            raise unittest.SkipTest("Gluster pools not supported with this "
+                "libvirt version.")
+
         createPool(self.conn, StoragePool.TYPE_GLUSTER, "pool-gluster")
 
     def _enumerateCompare(self, name, pool_list):
