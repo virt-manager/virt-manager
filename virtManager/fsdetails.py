@@ -167,8 +167,9 @@ class vmmFSDetails(vmmGObjectUI):
                                          rowindex=0, check_visible=True)
 
     def get_config_fs_readonly(self):
-        return uiutil.get_list_selection(self.widget("fs-readonly"),
-                                         rowindex=0, check_visible=True)
+        if not self.widget("fs-readonly").is_visible():
+            return None
+        return self.widget("fs-readonly").get_active()
 
     def get_config_fs_driver(self):
         return uiutil.get_list_selection(self.widget("fs-driver-combo"),
