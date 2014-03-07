@@ -19,10 +19,6 @@
 # End local config
 
 
-%define _version @VERSION@
-%define _release 1
-
-
 # This macro is used for the continuous automated builds. It just
 # allows an extra fragment based on the timestamp to be appended
 # to the release. This distinguishes automated builds, from formal
@@ -30,8 +26,8 @@
 %define _extra_release %{?dist:%{dist}}%{?extra_release:%{extra_release}}
 
 Name: virt-manager
-Version: %{_version}
-Release: %{_release}%{_extra_release}
+Version: @VERSION@
+Release: 1%{_extra_release}
 %define verrel %{version}-%{release}
 
 Summary: Virtual Machine Manager
