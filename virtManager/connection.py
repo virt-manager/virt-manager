@@ -929,16 +929,25 @@ class vmmConnection(vmmGObject):
     def close(self):
         def cleanup(devs):
             for dev in devs.values():
-                dev.cleanup()
+                try:
+                    dev.cleanup()
+                except:
+                    logging.debug("Failed to cleanup %s", exc_info=True)
 
-        if not self._backend.is_closed():
-            if self._domain_cb_id is not None:
-                self._backend.domainEventDeregisterAny(self._domain_cb_id)
-            self._domain_cb_id = None
+        try:
+            if not self._backend.is_closed():
+                if self._domain_cb_id is not None:
+                    self._backend.domainEventDeregisterAny(
+                        self._domain_cb_id)
+                self._domain_cb_id = None
 
-            if self._network_cb_id is not None:
-                self._backend.networkEventDeregisterAny(self._network_cb_id)
-            self._network_cb_id = None
+                if self._network_cb_id is not None:
+                    self._backend.networkEventDeregisterAny(
+                        self._network_cb_id)
+                self._network_cb_id = None
+        except:
+            logging.debug("Failed to deregister events in conn cleanup",
+                exc_info=True)
 
         self._backend.close()
         self.record = []
