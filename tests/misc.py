@@ -89,3 +89,27 @@ class TestMisc(unittest.TestCase):
         files += _find_py("virtcli")
 
         self._check_modules(files)
+
+
+    def test_ui_minimum_version(self):
+        import glob
+        import xml.etree.ElementTree as ET
+        failures = []
+        for filename in glob.glob("ui/*.ui"):
+            root = ET.parse(filename).getroot()
+
+            req = root[0]
+            if req.tag != "requires":
+                continue
+
+            if req.attrib.get("lib") != "gtk+":
+                continue
+            version = req.attrib["version"]
+            if (int(version.split(".")[0]) > 3 or
+                int(version.split(".")[1]) > 8):
+                failures.append((filename, req.attrib["version"]))
+
+        if failures:
+            raise AssertionError("The following files require a gtk version "
+                "higher than our target of gtk-3.8:\n" +
+                "\n".join([("%s version=%s" % tup) for tup in failures]))
