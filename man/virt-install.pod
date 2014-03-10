@@ -458,7 +458,7 @@ the 'user' namespace will be enabled to apply these.
 A suitably configured UID/GID mapping is a pre-requisite to
 make containers secure, in the absence of sVirt confinement.
 
---idmap can be sepicified to enable user namespace for LXC containers
+--idmap can be specified to enable user namespace for LXC containers
 
 Example:
     --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10
