@@ -1,7 +1,7 @@
 #
 # Common code for all guests
 #
-# Copyright 2006-2009, 2013 Red Hat, Inc.
+# Copyright 2006-2009, 2013, 2014 Red Hat, Inc.
 # Jeremy Katz <katzj@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -647,12 +647,18 @@ class Guest(XMLBuilder):
         self._set_video_defaults()
         self._set_sound_defaults()
 
+    def _is_os_container(self):
+        if not self.os.is_container():
+            return False
+        for fs in self.get_devices("filesystem"):
+            if fs.target == "/":
+                return True
+        return False
+
     def _set_osxml_defaults(self):
         if self.os.is_container() and not self.os.init:
-            for fs in self.get_devices("filesystem"):
-                if fs.target == "/":
-                    self.os.init = "/sbin/init"
-                    break
+            if self._is_os_container():
+                self.os.init = "/sbin/init"
             self.os.init = self.os.init or "/bin/sh"
 
         if not self.os.loader and self.os.is_hvm() and self.type == "xen":
@@ -738,6 +744,8 @@ class Guest(XMLBuilder):
             self.features.acpi = None
             self.features.apic = None
             self.features.pae = None
+            if self._is_os_container():
+                self.features.privnet = True
             return
 
         if not self.os.is_hvm():
