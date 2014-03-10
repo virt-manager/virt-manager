@@ -360,6 +360,9 @@ class Viewer(vmmGObject):
     def send_keys(self, keys):
         raise NotImplementedError()
 
+    def set_grab_keyboard(self):
+        raise NotImplementedError()
+
     def open_host(self, ginfo):
         raise NotImplementedError()
 
@@ -394,6 +397,7 @@ class VNCViewer(Viewer):
 
     def init_widget(self):
         self.set_grab_keys()
+        self.set_grab_keyboard()
 
         self.display.realize()
 
@@ -403,7 +407,6 @@ class VNCViewer(Viewer):
         self.console.sync_scaling_with_display()
         self.console.refresh_resizeguest_from_settings()
 
-        self.display.set_keyboard_grab(True)
         self.display.set_pointer_grab(True)
 
         self.display.connect("size-allocate",
@@ -460,6 +463,10 @@ class VNCViewer(Viewer):
 
     def send_keys(self, keys):
         return self.display.send_keys([Gdk.keyval_from_name(k) for k in keys])
+
+    def set_grab_keyboard(self):
+        self.display.set_keyboard_grab(self.config.get_grab_keyboard())
+        self.display.force_grab(self.config.get_grab_keyboard())
 
     def _desktop_resize(self, src_ignore, w, h):
         self.desktop_resolution = (w, h)
@@ -571,6 +578,7 @@ class SpiceViewer(Viewer):
 
     def _init_widget(self):
         self.set_grab_keys()
+        self.set_grab_keyboard()
         self.console.sync_scaling_with_display()
         self.console.refresh_resizeguest_from_settings()
 
@@ -616,6 +624,9 @@ class SpiceViewer(Viewer):
     def send_keys(self, keys):
         return self.display.send_keys([Gdk.keyval_from_name(k) for k in keys],
                                       SpiceClientGtk.DisplayKeyEvent.CLICK)
+
+    def set_grab_keyboard(self):
+        self.display.set_property("grab-keyboard", self.config.get_grab_keyboard())
 
     def close(self):
         if self.spice_session is not None:
@@ -875,6 +886,8 @@ class vmmConsolePages(vmmGObjectUI):
             self.config.on_console_accels_changed(self.set_enable_accel))
         self.add_gconf_handle(
             self.config.on_keys_combination_changed(self.grab_keys_changed))
+        self.add_gconf_handle(
+            self.config.on_grab_keyboard_changed(self.grab_keyboard_changed))
 
         self.page_changed()
 
@@ -1027,6 +1040,9 @@ class vmmConsolePages(vmmGObjectUI):
     def pointer_grabbed(self, src_ignore):
         self.pointer_is_grabbed = True
         self.change_title()
+        if not self.config.get_grab_keyboard():
+            self.viewer.display.force_grab(False)
+            self.viewer.display.set_keyboard_grab(self.config.get_grab_keyboard())
 
     def pointer_ungrabbed(self, src_ignore):
         self.pointer_is_grabbed = False
@@ -1066,6 +1082,10 @@ class vmmConsolePages(vmmGObjectUI):
     def grab_keys_changed(self):
         if self.viewer:
             self.viewer.set_grab_keys()
+
+    def grab_keyboard_changed(self):
+        if self.viewer:
+            self.viewer.set_grab_keyboard()
 
     def set_enable_accel(self):
         # Make sure modifiers are up to date

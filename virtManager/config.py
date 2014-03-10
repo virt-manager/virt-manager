@@ -286,6 +286,14 @@ class vmmConfig(object):
     def on_keys_combination_changed(self, cb):
         return self.conf.notify_add("/console/grab-keys", cb)
 
+    # This key is not intended to be exposed in the UI yet
+    def get_grab_keyboard(self):
+        return self.conf.get("/console/grab-keyboard")
+    def set_grab_keyboard(self, val):
+        self.conf.set("/console/grab-keyboard", val)
+    def on_grab_keyboard_changed(self, cb):
+        return self.conf.notify_add("/console/grab-keyboard", cb)
+
     # Confirmation preferences
     def get_confirm_forcepoweroff(self):
         return self.conf.get("/confirm/forcepoweroff")
