@@ -208,7 +208,8 @@ class vmmStorageBrowser(vmmGObjectUI):
             self.local_args["dialog_type"] = data.get("dialog_type")
             self.local_args["choose_button"] = data.get("choose_button")
 
-        self.widget("new-volume").set_visible(self.can_new_volume)
+        self.widget("new-volume").set_visible(
+            self.can_new_volume and self.allow_create())
 
 
     # Convenience helpers
@@ -302,13 +303,17 @@ class vmmStorageBrowser(vmmGObjectUI):
     def pool_selected(self, src_ignore=None):
         pool = self.current_pool()
 
-        newvol = bool(pool)
+        can_new_vol = False
+        tt = ""
         if pool:
             pool.tick()
-            newvol = pool.is_active()
+            can_new_vol = (pool.is_active() and
+                pool.supports_volume_creation())
+            if not can_new_vol:
+                tt = _("Pool does not support volume creation")
 
-        newvol = newvol and self.allow_create()
-        self.widget("new-volume").set_sensitive(newvol)
+        self.widget("new-volume").set_sensitive(can_new_vol)
+        self.widget("new-volume").set_tooltip_text(tt)
 
         self.populate_storage_volumes()
 
