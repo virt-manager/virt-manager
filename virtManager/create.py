@@ -847,9 +847,8 @@ class vmmCreate(vmmGObjectUI):
 
     def change_caps(self, gtype=None, arch=None):
         if gtype is None:
-            # If none specified, prefer HVM. This way, the default install
-            # options won't be limited because we default to PV. If hvm not
-            # supported, differ to guest_lookup
+            # If none specified, prefer HVM so install options aren't limited
+            # with a default PV choice.
             for g in self.conn.caps.guests:
                 if g.os_type == "hvm":
                     gtype = "hvm"
@@ -857,10 +856,7 @@ class vmmCreate(vmmGObjectUI):
 
         (newg, newdom) = self.conn.caps.guest_lookup(os_type=gtype, arch=arch)
 
-        if (self.capsguest and self.capsdomain and
-            (newg.arch == self.capsguest.arch and
-            newg.os_type == self.capsguest.os_type)):
-            # No change
+        if self.capsguest == newg and self.capsdomain and newdom:
             return
 
         self.capsguest = newg
