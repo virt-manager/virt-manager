@@ -977,7 +977,7 @@ class vmmDomain(vmmLibvirtObject):
         # description from the inactive XML from a running VM
         #
         # libvirt since 0.9.10 provides a SetMetadata API that provides
-        # actual <description> 'hotplug', and using that means checkig
+        # actual <description> 'hotplug', and using that means checking
         # for support, version, etc.
         if not self.conn.check_support(
             self.conn.SUPPORT_DOMAIN_SET_METADATA, self._backend):
