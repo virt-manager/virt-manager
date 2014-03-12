@@ -214,9 +214,9 @@ class vmmCreate(vmmGObjectUI):
             self.addstorage = None
 
     def remove_conn(self):
-        if not self.conn:
-            return
         self.conn = None
+        self.capsguest = None
+        self.capsdomain = None
 
     def set_conn(self, newconn, force_validate=False):
         if self.conn == newconn and not force_validate:
