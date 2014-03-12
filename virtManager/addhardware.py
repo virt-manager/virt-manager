@@ -98,6 +98,7 @@ class vmmAddHardware(vmmGObjectUI):
             "on_hw_list_changed": self.hw_selected,
 
             "on_config_storage_bustype_changed": self.populate_disk_device,
+            "on_config_storage_devtype_changed": self.change_storage_devtype,
 
             "on_mac_address_clicked" : self.change_macaddr_use,
 
@@ -766,7 +767,6 @@ class vmmAddHardware(vmmGObjectUI):
         if len(model) > 0:
             widget.set_active(0)
 
-
     def populate_disk_device(self, src):
         ignore = src
 
@@ -796,7 +796,6 @@ class vmmAddHardware(vmmGObjectUI):
 
         if len(model) > 0:
             devlist.set_active(0)
-
 
     def populate_input_model(self, model):
         model.clear()
@@ -1095,6 +1094,14 @@ class vmmAddHardware(vmmGObjectUI):
     def toggle_storage_select(self, ignore, src):
         act = src.get_active()
         self.populate_disk_format_combo_wrapper(not act)
+
+    def change_storage_devtype(self, ignore):
+        devtype = self.get_config_disk_device()
+        allow_create = devtype not in ["cdrom", "floppy"]
+        self.addstorage.widget("config-storage-create-box").set_sensitive(
+            allow_create)
+        if not allow_create:
+            self.addstorage.widget("config-storage-select").set_active(True)
 
     # Network listeners
     def change_macaddr_use(self, ignore=None):

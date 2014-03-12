@@ -191,6 +191,7 @@ class vmmAddStorage(vmmGObjectUI):
         self.widget("config-storage-size").set_value(8)
         self.widget("config-storage-entry").set_text("")
         self.widget("config-storage-nosparse").set_active(True)
+        self.widget("config-storage-create-box").set_sensitive(True)
 
         fmt = self.conn.get_default_storage_format()
         can_alloc = fmt in ["raw"]
