@@ -324,11 +324,11 @@ class vmmAddStorage(vmmGObjectUI):
             if is_default:
                 path = self._check_ideal_path(path, vmname, collidelist)
 
-            if not path and device != "disk":
+            if not path and device in ["disk", "lun"]:
                 return self.err.val_err(_("A storage path must be specified."))
 
             disk = virtinst.VirtualDisk(conn)
-            disk.path = path
+            disk.path = path or None
             disk.read_only = readonly
             disk.device = device
             disk.set_create_storage(size=size, sparse=sparse,
