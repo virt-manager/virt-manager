@@ -82,7 +82,6 @@ class vmmCreate(vmmGObjectUI):
         self.engine = engine
 
         self.conn = None
-        self.caps = None
         self.capsguest = None
         self.capsdomain = None
 
@@ -188,7 +187,6 @@ class vmmCreate(vmmGObjectUI):
         self.remove_conn()
 
         self.conn = None
-        self.caps = None
         self.capsguest = None
         self.capsdomain = None
 
@@ -502,7 +500,6 @@ class vmmCreate(vmmGObjectUI):
         # A bit out of order, but populate arch + hv lists so we can
         # determine a default
         self.conn.invalidate_caps()
-        self.caps = self.conn.caps
         self.change_caps()
         self.populate_hv()
         self.populate_arch()
@@ -610,11 +607,11 @@ class vmmCreate(vmmGObjectUI):
         model.clear()
 
         default = 0
-        guests = self.caps.guests[:]
+        guests = self.conn.caps.guests[:]
         if not (self.conn.is_xen() or self.conn.is_test_conn()):
             guests = []
 
-        for guest in self.caps.guests:
+        for guest in self.conn.caps.guests:
             gtype = guest.os_type
             if not guest.domains:
                 continue
@@ -649,7 +646,7 @@ class vmmCreate(vmmGObjectUI):
 
         default = 0
         archs = []
-        for guest in self.caps.guests:
+        for guest in self.conn.caps.guests:
             if guest.os_type == self.capsguest.os_type:
                 archs.append(guest.arch)
 
@@ -853,12 +850,12 @@ class vmmCreate(vmmGObjectUI):
             # If none specified, prefer HVM. This way, the default install
             # options won't be limited because we default to PV. If hvm not
             # supported, differ to guest_lookup
-            for g in self.caps.guests:
+            for g in self.conn.caps.guests:
                 if g.os_type == "hvm":
                     gtype = "hvm"
                     break
 
-        (newg, newdom) = self.caps.guest_lookup(os_type=gtype, arch=arch)
+        (newg, newdom) = self.conn.caps.guest_lookup(os_type=gtype, arch=arch)
 
         if (self.capsguest and self.capsdomain and
             (newg.arch == self.capsguest.arch and
