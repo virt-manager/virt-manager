@@ -37,34 +37,10 @@ def xpathString(node, path, default=None):
 
 class CPUValuesModel(object):
     """
-    Single <model> definition from cpu_map
+    Single CPU model
     """
-    def __init__(self, node):
-        self.model = node.prop("name")
-        self.features = []
-        self.parent = None
-        self.vendor = None
-
-        self._parseXML(node)
-
-    def _parseXML(self, node):
-        child = node.children
-        while child:
-            if child.name == "model":
-                self.parent = child.prop("name")
-            if child.name == "vendor":
-                self.vendor = child.prop("name")
-            if child.name == "feature":
-                self.features.append(child.prop("name"))
-
-            child = child.next
-
-        self.features.sort()
-
-    def inheritParent(self, parentcpu):
-        self.vendor = parentcpu.vendor or self.vendor
-        self.features += parentcpu.features
-        self.features.sort()
+    def __init__(self, model):
+        self.model = model
 
 
 class CPUValuesArch(object):
@@ -85,11 +61,7 @@ class CPUValuesArch(object):
             if child.name == "vendor":
                 self.vendors.append(child.prop("name"))
             if child.name == "model":
-                newcpu = CPUValuesModel(child)
-                if newcpu.parent:
-                    for chkcpu in self.cpus:
-                        if chkcpu.model == newcpu.parent:
-                            newcpu.inheritParent(chkcpu)
+                newcpu = CPUValuesModel(child.prop("name"))
                 self.cpus.append(newcpu)
 
             child = child.next

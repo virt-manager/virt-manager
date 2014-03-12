@@ -225,37 +225,23 @@ class TestCapabilities(unittest.TestCase):
         cpu_32 = caps.get_cpu_values("i486")
         cpu_random = caps.get_cpu_values("mips")
 
-        def test_cpu_map(cpumap, vendors, cpus):
+        def test_cpu_map(cpumap, cpus):
             cpunames = sorted([c.model for c in cpumap.cpus],
                               key=str.lower)
 
-            for v in vendors:
-                self.assertTrue(v in cpumap.vendors)
             for c in cpus:
                 self.assertTrue(c in cpunames)
 
-        def test_single_cpu(cpumap, model, vendor, features):
-            cpu = cpumap.get_cpu(model)
-            self.assertEquals(cpu.vendor, vendor)
-            self.assertEquals(cpu.features, features)
-
         self.assertEquals(cpu_64, cpu_32)
 
-        x86_vendors = ["AMD", "Intel"]
         x86_cpunames = [
             '486', 'athlon', 'Conroe', 'core2duo', 'coreduo', 'n270',
             'Nehalem', 'Opteron_G1', 'Opteron_G2', 'Opteron_G3', 'Penryn',
             'pentium', 'pentium2', 'pentium3', 'pentiumpro', 'phenom',
             'qemu32', 'qemu64']
 
-        test_cpu_map(cpu_64, x86_vendors, x86_cpunames)
-        test_cpu_map(cpu_random, [], [])
-
-        athlon_features = [
-            '3dnow', '3dnowext', 'apic', 'cmov', 'cx8', 'de', 'fpu', 'fxsr',
-            'mce', 'mmx', 'mmxext', 'msr', 'mtrr', 'pae', 'pat', 'pge', 'pse',
-            'pse36', 'sep', 'sse', 'sse2', 'tsc', 'vme']
-        test_single_cpu(cpu_64, "athlon", "AMD", athlon_features)
+        test_cpu_map(cpu_64, x86_cpunames)
+        test_cpu_map(cpu_random, [])
 
 if __name__ == "__main__":
     unittest.main()
