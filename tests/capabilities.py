@@ -1,4 +1,4 @@
-# Copyright (C) 2013 Red Hat, Inc.
+# Copyright (C) 2013, 2014 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -225,14 +225,12 @@ class TestCapabilities(unittest.TestCase):
         cpu_32 = caps.get_cpu_values("i486")
         cpu_random = caps.get_cpu_values("mips")
 
-        def test_cpu_map(cpumap, vendors, features, cpus):
+        def test_cpu_map(cpumap, vendors, cpus):
             cpunames = sorted([c.model for c in cpumap.cpus],
                               key=str.lower)
 
             for v in vendors:
                 self.assertTrue(v in cpumap.vendors)
-            for f in features:
-                self.assertTrue(f in cpumap.features)
             for c in cpus:
                 self.assertTrue(c in cpunames)
 
@@ -244,25 +242,14 @@ class TestCapabilities(unittest.TestCase):
         self.assertEquals(cpu_64, cpu_32)
 
         x86_vendors = ["AMD", "Intel"]
-        x86_features = [
-            '3dnow', '3dnowext', '3dnowprefetch', 'abm', 'acpi', 'apic',
-            'cid', 'clflush', 'cmov', 'cmp_legacy', 'cr8legacy', 'cx16',
-            'cx8', 'dca', 'de', 'ds', 'ds_cpl', 'est', 'extapic', 'fpu',
-            'fxsr', 'fxsr_opt', 'ht', 'hypervisor', 'ia64', 'lahf_lm', 'lm',
-            'mca', 'mce', 'misalignsse', 'mmx', 'mmxext', 'monitor', 'msr',
-            'mtrr', 'nx', 'osvw', 'pae', 'pat', 'pbe', 'pdpe1gb', 'pge', 'pn',
-            'pni', 'popcnt', 'pse', 'pse36', 'rdtscp', 'sep', 'skinit', 'ss',
-            'sse', 'sse2', 'sse4.1', 'sse4.2', 'sse4a', 'ssse3', 'svm',
-            'syscall', 'tm', 'tm2', 'tsc', 'vme', 'vmx', 'wdt', 'x2apic',
-            'xtpr']
         x86_cpunames = [
             '486', 'athlon', 'Conroe', 'core2duo', 'coreduo', 'n270',
             'Nehalem', 'Opteron_G1', 'Opteron_G2', 'Opteron_G3', 'Penryn',
             'pentium', 'pentium2', 'pentium3', 'pentiumpro', 'phenom',
             'qemu32', 'qemu64']
 
-        test_cpu_map(cpu_64, x86_vendors, x86_features, x86_cpunames)
-        test_cpu_map(cpu_random, [], [], [])
+        test_cpu_map(cpu_64, x86_vendors, x86_cpunames)
+        test_cpu_map(cpu_random, [], [])
 
         athlon_features = [
             '3dnow', '3dnowext', 'apic', 'cmov', 'cx8', 'de', 'fpu', 'fxsr',

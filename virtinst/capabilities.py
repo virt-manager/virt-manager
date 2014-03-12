@@ -1,7 +1,7 @@
 #
 # Some code for parsing libvirt's capabilities XML
 #
-# Copyright 2007, 2012-2013 Red Hat, Inc.
+# Copyright 2007, 2012-2014 Red Hat, Inc.
 # Mark McLoughlin <markmc@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -75,7 +75,6 @@ class CPUValuesArch(object):
         self.arch = arch
         self.vendors = []
         self.cpus = []
-        self.features = []
 
         if node:
             self._parseXML(node)
@@ -85,8 +84,6 @@ class CPUValuesArch(object):
         while child:
             if child.name == "vendor":
                 self.vendors.append(child.prop("name"))
-            if child.name == "feature":
-                self.features.append(child.prop("name"))
             if child.name == "model":
                 newcpu = CPUValuesModel(child)
                 if newcpu.parent:
@@ -98,7 +95,6 @@ class CPUValuesArch(object):
             child = child.next
 
         self.vendors.sort()
-        self.features.sort()
 
     def get_cpu(self, model):
         for c in self.cpus:
