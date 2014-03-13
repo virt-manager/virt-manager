@@ -975,7 +975,8 @@ class vmmDetails(vmmGObjectUI):
         no_default = not self.is_customize_dialog
 
         try:
-            cpu_names = caps.get_cpu_values(self.vm.get_arch()).cpus
+            cpu_names = caps.get_cpu_values(self.conn.get_backend(),
+                                            self.vm.get_arch())
         except:
             cpu_names = []
             logging.exception("Error populating CPU model list")

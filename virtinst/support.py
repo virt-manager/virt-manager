@@ -1,7 +1,7 @@
 #
 # Helper functions for determining if libvirt supports certain features
 #
-# Copyright 2009, 2013 Red Hat, Inc.
+# Copyright 2009, 2013, 2014 Red Hat, Inc.
 # Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -291,6 +291,8 @@ SUPPORT_CONN_DEVICE_BOOTORDER = _make(
 SUPPORT_CONN_INPUT_KEYBOARD = _make(
     version="1.2.2", hv_version={"qemu": 0, "test": 0})
 SUPPORT_CONN_POOL_GLUSTERFS = _make(version="1.2.0")
+SUPPORT_CONN_CPU_MODEL_NAMES = _make(function="virConnect.getCPUModelNames",
+                                     run_args=("x86_64", 0))
 
 
 # Domain checks

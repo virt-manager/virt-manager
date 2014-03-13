@@ -18,6 +18,7 @@
 import os
 import unittest
 
+from tests import utils
 from virtinst import CapabilitiesParser as capabilities
 
 
@@ -221,13 +222,12 @@ class TestCapabilities(unittest.TestCase):
 
     def testCPUMap(self):
         caps = self._buildCaps("libvirt-0.7.6-qemu-caps.xml")
-        cpu_64 = caps.get_cpu_values("x86_64")
-        cpu_32 = caps.get_cpu_values("i486")
-        cpu_random = caps.get_cpu_values("mips")
+        cpu_64 = caps.get_cpu_values(None, "x86_64")
+        cpu_32 = caps.get_cpu_values(None, "i486")
+        cpu_random = caps.get_cpu_values(None, "mips")
 
         def test_cpu_map(cpumap, cpus):
-            cpunames = sorted([c.model for c in cpumap.cpus],
-                              key=str.lower)
+            cpunames = sorted([c.model for c in cpumap], key=str.lower)
 
             for c in cpus:
                 self.assertTrue(c in cpunames)
@@ -242,6 +242,11 @@ class TestCapabilities(unittest.TestCase):
 
         test_cpu_map(cpu_64, x86_cpunames)
         test_cpu_map(cpu_random, [])
+
+        conn = utils.open_testdriver()
+        cpu_64 = caps.get_cpu_values(conn, "x86_64")
+        self.assertTrue(len(cpu_64) > 0)
+
 
 if __name__ == "__main__":
     unittest.main()

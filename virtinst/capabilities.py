@@ -77,13 +77,33 @@ class CPUValuesArch(object):
 
 class CPUValues(object):
     """
-    Lists valid values for domain <cpu> parameters, parsed from libvirt's
-    local cpu_map.xml
+    Lists valid values for cpu models obtained trough libvirt's getCPUModelNames
     """
-    def __init__(self, cpu_filename=None):
+    def __init__(self):
+        self._cpus = None
+
+    def get_cpus(self, arch, conn):
+        if self._cpus is not None:
+            return self._cpus
+
+        if (conn and
+            conn.check_support(conn.SUPPORT_CONN_CPU_MODEL_NAMES)):
+            self._cpus = [CPUValuesModel(i) for i in
+                          conn.libvirtconn.getCPUModelNames(arch, 0)]
+            return self._cpus
+
+        return []
+
+
+class CPUMapFileValues(CPUValues):
+    """
+    Fallback method to lists cpu models, parsed directly from libvirt's local
+    cpu_map.xml
+    """
+    def __init__(self):
+        CPUValues.__init__(self)
         self.archmap = {}
-        if not cpu_filename:
-            cpu_filename = "/usr/share/libvirt/cpu_map.xml"
+        cpu_filename = "/usr/share/libvirt/cpu_map.xml"
         xml = file(cpu_filename).read()
 
         util.parse_node_helper(xml, "cpus",
@@ -99,7 +119,8 @@ class CPUValues(object):
 
             child = child.next
 
-    def get_arch(self, arch):
+    def get_cpus(self, arch, conn):
+        ignore = conn
         if not arch:
             return None
         if re.match(r'i[4-9]86', arch):
@@ -112,7 +133,7 @@ class CPUValues(object):
             cpumap = CPUValuesArch(arch)
             self.archmap[arch] = cpumap
 
-        return cpumap
+        return cpumap.cpus
 
 
 class Features(object):
@@ -595,12 +616,19 @@ class Capabilities(object):
                 self.guests.append(Guest(child))
             child = child.next
 
-    def get_cpu_values(self, arch):
-        if not self._cpu_values:
-            self._cpu_values = CPUValues()
+    def get_cpu_values(self, conn, arch):
+        if self._cpu_values:
+            return self._cpu_values.get_cpus(arch, conn)
 
-        return self._cpu_values.get_arch(arch)
+        # Iterate over the available methods until a set of CPU models is found
+        for mode in (CPUValues, CPUMapFileValues):
+            cpu_values = mode()
+            cpus = cpu_values.get_cpus(arch, conn)
+            if cpus and len(cpus) > 0:
+                self._cpu_values = cpu_values
+                return cpus
 
+        return []
 
     def guest_lookup(self, os_type=None, arch=None, typ=None, machine=None):
         """
