@@ -175,6 +175,8 @@ class Guest(XMLBuilder):
     id = XMLProperty("./@id", is_int=True)
     type = XMLProperty("./@type", default_cb=lambda s: "xen")
     hugepage = XMLProperty("./memoryBacking/hugepages", is_bool=True)
+    nosharepages = XMLProperty("./memoryBacking/nosharepages", is_bool=True)
+    locked = XMLProperty("./memoryBacking/locked", is_bool=True)
     bootloader = XMLProperty("./bootloader")
     description = XMLProperty("./description")
     title = XMLProperty("./title")
