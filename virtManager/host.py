@@ -679,6 +679,7 @@ class vmmHost(vmmGObjectUI):
         curnet = self.current_network()
 
         net_list = self.widget("net-list")
+        net_list.get_selection().unselect_all()
         model.clear()
         for uuid in self.conn.list_net_uuids():
             net = self.conn.get_net(uuid)
@@ -1220,6 +1221,7 @@ class vmmHost(vmmGObjectUI):
         curiface = self.current_interface()
 
         iface_list = self.widget("interface-list")
+        iface_list.get_selection().unselect_all()
         model.clear()
         for name in self.conn.list_interface_names():
             iface = self.conn.get_interface(name)
@@ -1234,6 +1236,7 @@ class vmmHost(vmmGObjectUI):
         interface = self.current_interface()
         child_list = self.widget("interface-child-list")
         model = child_list.get_model()
+        child_list.get_selection().unselect_all()
         model.clear()
 
         if not interface:
@@ -1278,6 +1281,7 @@ def populate_storage_pools(pool_list, conn, curpool):
     model = pool_list.get_model()
     # Prevent events while the model is modified
     pool_list.set_model(None)
+    pool_list.get_selection().unselect_all()
     model.clear()
     for uuid in conn.list_pool_uuids():
         per = get_pool_size_percent(conn, uuid)
@@ -1297,6 +1301,7 @@ def populate_storage_pools(pool_list, conn, curpool):
 def populate_storage_volumes(list_widget, pool, sensitive_cb):
     vols = pool and pool.get_volumes() or {}
     model = list_widget.get_model()
+    list_widget.get_selection().unselect_all()
     model.clear()
 
     for key in vols.keys():
