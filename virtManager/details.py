@@ -1343,7 +1343,12 @@ class vmmDetails(vmmGObjectUI):
         if not run:
             self.activate_default_console_page()
 
-        self.widget("overview-status-text").set_text(self.vm.run_status())
+        reason = self.vm.run_status_reason()
+        if reason:
+            status = "%s (%s)" % (self.vm.run_status(), reason)
+        else:
+            status = self.vm.run_status()
+        self.widget("overview-status-text").set_text(status)
         self.widget("overview-status-icon").set_from_icon_name(
                             self.vm.run_status_icon_name(), Gtk.IconSize.BUTTON)
 
