@@ -319,6 +319,7 @@ SUPPORT_DOMAIN_GET_METADATA = _make(function="virDomain.metadata",
     run_args=(getattr(libvirt, "VIR_DOMAIN_METADATA_TITLE", 1), None, 0))
 SUPPORT_DOMAIN_MEMORY_STATS = _make(
     function="virDomain.memoryStats", run_args=())
+SUPPORT_DOMAIN_STATE = _make(function="virDomain.state", run_args=())
 
 
 # Pool checks

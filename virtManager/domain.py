@@ -232,6 +232,51 @@ class vmmDomain(vmmLibvirtObject):
         logging.debug("Unknown status %d, returning 'Unknown'", status)
         return _("Unknown")
 
+    @staticmethod
+    def pretty_status_reason(status, reason):
+        key = lambda x, y: getattr(libvirt, "VIR_DOMAIN_" + x, y)
+        reasons = {
+            libvirt.VIR_DOMAIN_RUNNING : {
+                key("RUNNING_BOOTED", 1) : _("Booted"),
+                key("RUNNING_MIGRATED", 2) : _("Migrated"),
+                key("RUNNING_RESTORED", 3) : _("Restored"),
+                key("RUNNING_FROM_SNAPSHOT", 4) : _("From snapshot"),
+                key("RUNNING_UNPAUSED", 5) : _("Unpaused"),
+                key("RUNNING_MIGRATION_CANCELED", 6) : _("Migration canceled"),
+                key("RUNNING_SAVE_CANCELED", 7) : _("Save canceled"),
+                key("RUNNING_WAKEUP", 8) : _("Event wakeup"),
+                key("RUNNING_CRASHED", 9) : _("Crashed"),
+            },
+            libvirt.VIR_DOMAIN_PAUSED : {
+                key("PAUSED_USER", 1) : _("User"),
+                key("PAUSED_MIGRATION", 2) : _("Migrating"),
+                key("PAUSED_SAVE", 3) : _("Saving"),
+                key("PAUSED_DUMP", 4) : _("Dumping"),
+                key("PAUSED_IOERROR", 5) : _("I/O error"),
+                key("PAUSED_WATCHDOG", 6) : _("Watchdog"),
+                key("PAUSED_FROM_SNAPSHOT", 7) : _("From snapshot"),
+                key("PAUSED_SHUTTING_DOWN", 8) : _("Shutting down"),
+                key("PAUSED_SNAPSHOT", 9) : _("Creating snapshot"),
+                key("PAUSED_CRASHED", 10) : _("Crashed"),
+            },
+            libvirt.VIR_DOMAIN_SHUTDOWN : {
+                key("SHUTDOWN_USER", 1) : _("User"),
+            },
+            libvirt.VIR_DOMAIN_SHUTOFF : {
+                key("SHUTOFF_SHUTDOWN", 1) : _("Shutdown"),
+                key("SHUTOFF_DESTROYED", 2) : _("Destroyed"),
+                key("SHUTOFF_CRASHED", 3) : _("Crashed"),
+                key("SHUTOFF_MIGRATED", 4) : _("Migrated"),
+                key("SHUTOFF_SAVED", 5) : _("Saved"),
+                key("SHUTOFF_FAILED", 6) : _("Failed"),
+                key("SHUTOFF_FROM_SNAPSHOT", 7) : _("From snapshot"),
+            },
+            libvirt.VIR_DOMAIN_CRASHED : {
+                key("CRASHED_PANICKED", 1) : _("Panicked"),
+            }
+        }
+        return reasons.get(status) and reasons[status].get(reason)
+
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, Guest)
 
@@ -254,11 +299,14 @@ class vmmDomain(vmmLibvirtObject):
         self._snapshot_list = None
 
         self.lastStatus = libvirt.VIR_DOMAIN_SHUTOFF
+        self._lastStatusReason = getattr(libvirt, "VIR_DOMAIN_SHUTOFF_SHUTDOWN",
+                                         1)
 
         self.managedsave_supported = False
         self.remote_console_supported = False
         self.title_supported = False
         self.mem_stats_supported = False
+        self.domain_state_supported = False
 
         self._enable_mem_stats = False
         self._enable_cpu_stats = False
@@ -296,6 +344,8 @@ class vmmDomain(vmmLibvirtObject):
             self.conn.SUPPORT_DOMAIN_GET_METADATA, self._backend)
         self.mem_stats_supported = self.conn.check_support(
             self.conn.SUPPORT_DOMAIN_MEMORY_STATS, self._backend)
+        self.domain_state_supported = self.conn.check_support(
+            self.conn.SUPPORT_DOMAIN_STATE, self._backend)
 
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
@@ -372,6 +422,9 @@ class vmmDomain(vmmLibvirtObject):
 
     def status(self):
         return self.lastStatus
+
+    def status_reason(self):
+        return self._lastStatusReason
 
     def get_cloning(self):
         return self.cloning
@@ -1647,6 +1700,10 @@ class vmmDomain(vmmLibvirtObject):
 
     def run_status(self):
         return self.pretty_run_status(self.status(), self.hasSavedImage())
+
+    def run_status_reason(self):
+        return self.pretty_status_reason(self.status(), self.status_reason())
+
     def run_status_icon_name(self):
         status = self.status()
         if status not in vm_status_icons:
@@ -1683,6 +1740,8 @@ class vmmDomain(vmmLibvirtObject):
 
         oldstatus = self.lastStatus
         self.lastStatus = status
+        if self.domain_state_supported:
+            self._lastStatusReason = self._backend.state()[1]
 
         # Send 'config-changed' before a status-update, so users
         # are operating with fresh XML
