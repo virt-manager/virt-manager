@@ -1908,7 +1908,7 @@ class vmmCreate(vmmGObjectUI):
         try:
             base = _("Detecting")
 
-            if (self.detectedDistro == -1) or (idx >= (DETECT_TIMEOUT * 2)):
+            if (self.detectedDistro == -1) and (idx < (DETECT_TIMEOUT * 2)):
                 detect_str = base + ("." * ((idx % 3) + 1))
                 self.set_distro_labels(detect_str, detect_str)
 
