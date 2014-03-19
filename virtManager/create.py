@@ -551,9 +551,14 @@ class vmmCreate(vmmGObjectUI):
         cdrom_option.set_active(self.mediacombo.has_media())
         iso_option.set_active(not self.mediacombo.has_media())
 
+        enable_phys = not self._stable_defaults()
+        cdrom_option.set_sensitive(enable_phys)
+        cdrom_option.set_tooltip_text("" if enable_phys else
+            _("Physical CDROM passthrough not supported with this hypervisor"))
+
         # Only allow ISO option for remote VM
         is_local = not self.conn.is_remote()
-        if not is_local:
+        if not is_local or not enable_phys:
             iso_option.set_active(True)
 
         self.toggle_local_cdrom(cdrom_option)
