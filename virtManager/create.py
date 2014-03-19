@@ -1953,7 +1953,7 @@ class vmmCreate(vmmGObjectUI):
 
     def actually_detect(self, media):
         try:
-            installer = virtinst.DistroInstaller(self.conn)
+            installer = virtinst.DistroInstaller(self.conn.get_backend())
             installer.location = media
 
             self.detectedDistro = installer.detect_distro(self.guest)
