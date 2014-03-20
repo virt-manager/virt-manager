@@ -883,7 +883,8 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_combo_text_column(machtype_combo, 0)
         machtype_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
-        show_machine = (arch not in ["i686", "x86_64"])
+        show_machine = (arch not in ["i686", "x86_64"] and
+                        not self.vm.is_management_domain())
         uiutil.set_grid_row_visible(self.widget("machine-type"),
                                        show_machine)
 
