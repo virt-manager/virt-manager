@@ -75,7 +75,7 @@ class CPUValuesArch(object):
         raise ValueError(_("Unknown CPU model '%s'") % model)
 
 
-class CPUValues(object):
+class _CPUAPIValues(object):
     """
     Lists valid values for cpu models obtained trough libvirt's getCPUModelNames
     """
@@ -97,13 +97,13 @@ class CPUValues(object):
         return []
 
 
-class CPUMapFileValues(CPUValues):
+class _CPUMapFileValues(_CPUAPIValues):
     """
     Fallback method to lists cpu models, parsed directly from libvirt's local
     cpu_map.xml
     """
     def __init__(self):
-        CPUValues.__init__(self)
+        _CPUAPIValues.__init__(self)
         self.archmap = {}
         cpu_filename = "/usr/share/libvirt/cpu_map.xml"
         xml = file(cpu_filename).read()
@@ -123,8 +123,6 @@ class CPUMapFileValues(CPUValues):
 
     def get_cpus(self, arch, conn):
         ignore = conn
-        if not arch:
-            return None
         if re.match(r'i[4-9]86', arch):
             arch = "x86"
         elif arch == "x86_64":
@@ -619,14 +617,16 @@ class Capabilities(object):
             child = child.next
 
     def get_cpu_values(self, conn, arch):
+        if not arch:
+            return []
         if self._cpu_values:
             return self._cpu_values.get_cpus(arch, conn)
 
         # Iterate over the available methods until a set of CPU models is found
-        for mode in (CPUValues, CPUMapFileValues):
+        for mode in (_CPUAPIValues, _CPUMapFileValues):
             cpu_values = mode()
             cpus = cpu_values.get_cpus(arch, conn)
-            if cpus and len(cpus) > 0:
+            if len(cpus) > 0:
                 self._cpu_values = cpu_values
                 return cpus
 
