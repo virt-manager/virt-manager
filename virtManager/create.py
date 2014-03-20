@@ -1695,6 +1695,7 @@ class vmmCreate(vmmGObjectUI):
         if self.validate(page) is not True:
             return False
 
+        logging.debug("Starting create finish() sequence")
         guest = self.guest
 
         # Start the install
@@ -1704,6 +1705,7 @@ class vmmCreate(vmmGObjectUI):
             Gdk.Cursor.new(Gdk.CursorType.WATCH))
 
         if self.get_config_customize():
+            logging.debug("User requested 'customize', launching dialog")
             try:
                 self.customize(guest)
             except Exception, e:
@@ -1727,9 +1729,11 @@ class vmmCreate(vmmGObjectUI):
             cleanup_config_window()
             if not self.is_visible():
                 return
+            logging.debug("User finished customize dialog, starting install")
             self.start_install(guest)
 
         def details_closed(ignore):
+            logging.debug("User closed customize window, back to wizard")
             cleanup_config_window()
             self._undo_finish_cursor()
             self.widget("summary-customize").set_active(False)
@@ -1737,13 +1741,12 @@ class vmmCreate(vmmGObjectUI):
         cleanup_config_window()
         self.config_window = vmmDetails(virtinst_guest, self.topwin)
         self.config_window_signals = []
-        self.config_window_signals.append(self.config_window.connect(
-                                                        "customize-finished",
-                                                        start_install_wrapper,
-                                                        guest))
-        self.config_window_signals.append(self.config_window.connect(
-                                                        "details-closed",
-                                                         details_closed))
+        self.config_window_signals.append(
+            self.config_window.connect("customize-finished",
+                                       start_install_wrapper,
+                                       guest))
+        self.config_window_signals.append(
+            self.config_window.connect("details-closed", details_closed))
         self.config_window.show()
 
     def _install_finished_cb(self, error, details):
