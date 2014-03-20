@@ -446,7 +446,8 @@ class vmmDomain(vmmLibvirtObject):
 
     def is_management_domain(self):
         if self._is_management_domain is None:
-            self._is_management_domain = (self.get_id() == 0)
+            self._is_management_domain = (self.conn.is_xen() and
+                                          self.get_id() == 0)
         return self._is_management_domain
 
     def has_spicevmc_type_redirdev(self):
@@ -1941,8 +1942,7 @@ class vmmDomain(vmmLibvirtObject):
         # (ie MAX_LONG) so lets clamp it to the actual
         # physical RAM in machine which is the effective
         # real world limit
-        if (self.conn.is_xen() and
-            self.is_management_domain()):
+        if self.is_management_domain() and info:
             info[1] = self.conn.host_memory_size()
 
         now = time.time()
