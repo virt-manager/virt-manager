@@ -365,7 +365,7 @@ def check_support(virtconn, feature, data=None):
     @returns: True if feature is supported, False otherwise
     """
     if "VirtualConnection" in repr(data):
-        data = data.libvirtconn
+        data = data.get_conn_for_api_arg()
 
     sobj = _support_objs[feature - 1]
     return sobj.check_support(virtconn, data)

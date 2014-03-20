@@ -104,10 +104,11 @@ class VirtualConnection(object):
     # Properties #
     ##############
 
-    # Proxy virConnect API calls
     def __getattr__(self, attr):
         if attr in self.__dict__:
             return self.__dict__[attr]
+
+        # Proxy virConnect API calls
         libvirtconn = self.__dict__.get("_libvirtconn")
         return getattr(libvirtconn, attr)
 
@@ -115,14 +116,15 @@ class VirtualConnection(object):
         return self._uri or self._open_uri
     uri = property(_get_uri)
 
-    libvirtconn = property(lambda self: getattr(self, "_libvirtconn"))
-
     def _get_caps(self):
         if not self._caps:
             self._caps = CapabilitiesParser.Capabilities(
-                                        self.libvirtconn.getCapabilities())
+                                        self._libvirtconn.getCapabilities())
         return self._caps
     caps = property(_get_caps)
+
+    def get_conn_for_api_arg(self):
+        return self._libvirtconn
 
 
     ##############
@@ -274,7 +276,7 @@ class VirtualConnection(object):
             if not self.check_support(support.SUPPORT_CONN_LIBVERSION):
                 self._daemon_version = 0
             else:
-                self._daemon_version = self.libvirtconn.getLibVersion()
+                self._daemon_version = self._libvirtconn.getLibVersion()
         return self._daemon_version
 
     def conn_version(self):
@@ -285,7 +287,7 @@ class VirtualConnection(object):
             if not self.check_support(support.SUPPORT_CONN_GETVERSION):
                 self._conn_version = 0
             else:
-                self._conn_version = self.libvirtconn.getVersion()
+                self._conn_version = self._libvirtconn.getVersion()
         return self._conn_version
 
 

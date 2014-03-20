@@ -89,7 +89,7 @@ class CPUValues(object):
         if (conn and
             conn.check_support(conn.SUPPORT_CONN_CPU_MODEL_NAMES)):
             self._cpus = [CPUValuesModel(i) for i in
-                          conn.libvirtconn.getCPUModelNames(arch, 0)]
+                          conn.getCPUModelNames(arch, 0)]
             return self._cpus
 
         return []

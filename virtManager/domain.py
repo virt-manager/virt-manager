@@ -1470,7 +1470,7 @@ class vmmDomain(vmmLibvirtObject):
         if unsafe:
             flags |= libvirt.VIR_MIGRATE_UNSAFE
 
-        destconn = destconn.get_backend().libvirtconn
+        destconn = destconn.get_backend().get_conn_for_api_arg()
         logging.debug("Migrating: conn=%s flags=%s dname=%s uri=%s rate=%s",
                       destconn, flags, newname, interface, rate)
 
