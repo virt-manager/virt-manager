@@ -44,6 +44,8 @@ from virtManager.addstorage import vmmAddStorage
 
 # Number of seconds to wait for media detection
 DETECT_TIMEOUT = 20
+DETECT_INPROGRESS = -1
+DETECT_FAILED = -2
 
 DEFAULT_MEM = 1024
 
@@ -92,8 +94,7 @@ class vmmCreate(vmmGObjectUI):
         self.storage_browser = None
 
         # Distro detection state variables
-        self.detectedDistro = -1
-        self.detecting = False
+        self.detectedDistro = None
         self.mediaDetected = False
         self.show_all_os = False
 
@@ -1104,11 +1105,13 @@ class vmmCreate(vmmGObjectUI):
         self.change_caps(self.capsguest.os_type, arch)
 
     def url_box_changed(self, ignore):
+        self.mediaDetected = False
+
         # If the url_entry has focus, don't fire detect_media_os, it means
         # the user is probably typing
-        self.mediaDetected = False
         if self.widget("install-url-box").get_child().has_focus():
             return
+
         self.detect_media_os()
 
     def should_detect_media(self):
@@ -1908,7 +1911,8 @@ class vmmCreate(vmmGObjectUI):
         try:
             base = _("Detecting")
 
-            if (self.detectedDistro == -1) and (idx < (DETECT_TIMEOUT * 2)):
+            if (self.detectedDistro == DETECT_INPROGRESS and
+                (idx < (DETECT_TIMEOUT * 2))):
                 detect_str = base + ("." * ((idx % 3) + 1))
                 self.set_distro_labels(detect_str, detect_str)
 
@@ -1920,25 +1924,25 @@ class vmmCreate(vmmGObjectUI):
         except:
             logging.exception("Error in distro detect timeout")
 
-        if results == -1:
+        if results in [DETECT_INPROGRESS, DETECT_FAILED]:
             results = None
+
         self.widget("create-forward").set_sensitive(True)
         self.mediaDetected = True
-        self.detecting = False
         logging.debug("Finished OS detection.")
         self.set_distro_selection(results)
         if forward:
             self.idle_add(self.forward, ())
 
     def start_detection(self, forward):
-        if self.detecting:
+        if self.detectedDistro == DETECT_INPROGRESS:
             return
 
         media = self.get_config_detectable_media()
         if not media:
             return
 
-        self.detectedDistro = -1
+        self.detectedDistro = DETECT_INPROGRESS
 
         logging.debug("Starting OS detection thread for media=%s", media)
         self.widget("create-forward").set_sensitive(False)
@@ -1959,7 +1963,7 @@ class vmmCreate(vmmGObjectUI):
             self.detectedDistro = installer.detect_distro(self.guest)
         except:
             logging.exception("Error detecting distro.")
-            self.detectedDistro = -1
+            self.detectedDistro = DETECT_FAILED
 
     def _browse_file_cb(self, ignore, widget):
         self._browse_file(widget)
