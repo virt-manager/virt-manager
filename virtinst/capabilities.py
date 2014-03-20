@@ -86,11 +86,13 @@ class CPUValues(object):
         if self._cpus is not None:
             return self._cpus
 
-        if (conn and
-            conn.check_support(conn.SUPPORT_CONN_CPU_MODEL_NAMES)):
-            self._cpus = [CPUValuesModel(i) for i in
-                          conn.getCPUModelNames(arch, 0)]
-            return self._cpus
+        if (conn and conn.check_support(conn.SUPPORT_CONN_CPU_MODEL_NAMES)):
+            names = conn.getCPUModelNames(arch, 0)
+
+            # Bindings were broke for a long time, so catch -1
+            if names != -1:
+                self._cpus = [CPUValuesModel(i) for i in names]
+                return self._cpus
 
         return []
 
