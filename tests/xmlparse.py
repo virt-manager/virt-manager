@@ -213,6 +213,11 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(guest.get_devices("memballoon")[0])
         check("model", "virtio", "none")
 
+        check = self._make_checker(guest.memoryBacking)
+        check("hugepages", False, True)
+        check("nosharepages", False, True)
+        check("locked", False, True)
+
         self._alter_compare(guest.get_xml_config(), outfile)
 
     def testAlterMinimalGuest(self):

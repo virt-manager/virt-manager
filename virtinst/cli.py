@@ -786,6 +786,8 @@ def add_guest_xml_options(geng):
                     help=_("Tune memory policy for the domain process."))
     geng.add_argument("--blkiotune", action="append",
                     help=_("Tune blkio policy for the domain process."))
+    geng.add_argument("--membacking", action="append",
+                    help=_("Set memory backing policy for the domain process."))
     geng.add_argument("--features",
                     help=_("Set domain <features> XML. Ex:\n"
                            "--features acpi=off\n"
@@ -2034,6 +2036,19 @@ class ParserBlkiotune(VirtCLIParser):
         self.set_param("blkiotune.device_weight", "device_weight")
 
 
+########################
+# --membacking parsing #
+########################
+
+class ParserMemorybacking(VirtCLIParser):
+    def _init_params(self):
+        self.clear_attr = "memoryBacking"
+
+        self.set_param("memoryBacking.hugepages", "hugepages", is_onoff=True)
+        self.set_param("memoryBacking.nosharepages", "nosharepages", is_onoff=True)
+        self.set_param("memoryBacking.locked", "locked", is_onoff=True)
+
+
 ######################################################
 # --serial, --parallel, --channel, --console parsing #
 ######################################################
@@ -2200,6 +2215,7 @@ def build_parser_map(options, skip=None, only=None):
     register_parser("cpu", ParserCPU)
     register_parser("numatune", ParserNumatune)
     register_parser("blkiotune", ParserBlkiotune)
+    register_parser("membacking", ParserMemorybacking)
     register_parser("idmap", ParserIdmap)
     register_parser("boot", ParserBoot)
     register_parser("security", ParserSecurity)

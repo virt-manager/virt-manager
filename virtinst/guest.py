@@ -36,6 +36,7 @@ from virtinst import Seclabel
 from virtinst import CPU
 from virtinst import DomainNumatune
 from virtinst import DomainMemorytune
+from virtinst import DomainMemorybacking
 from virtinst import DomainBlkiotune
 from virtinst import DomainFeatures
 from virtinst import PM
@@ -194,6 +195,7 @@ class Guest(XMLBuilder):
     pm = XMLChildProperty(PM, is_single=True)
     blkiotune = XMLChildProperty(DomainBlkiotune, is_single=True)
     memtune = XMLChildProperty(DomainMemorytune, is_single=True)
+    memoryBacking = XMLChildProperty(DomainMemorybacking, is_single=True)
     idmap = XMLChildProperty(IdMap, is_single=True)
 
 
