@@ -865,7 +865,7 @@ class vmmConnection(vmmGObject):
         if obj:
             self.idle_add(obj.force_update_status, True)
 
-            if event == libvirt.VIR_NETWORK_EVENT_DEFINED:
+            if event == getattr(libvirt, "VIR_NETWORK_EVENT_DEFINED", 0):
                 self.idle_add(obj.refresh_xml)
         else:
             self.schedule_priority_tick(pollnet=True, force=True)
@@ -882,9 +882,9 @@ class vmmConnection(vmmGObject):
             logging.debug("Error registering domain events: %s", e)
 
         try:
+            eventid = getattr(libvirt, "VIR_NETWORK_EVENT_ID_LIFECYCLE", 0)
             self._network_cb_id = self.get_backend().networkEventRegisterAny(
-                None, libvirt.VIR_NETWORK_EVENT_ID_LIFECYCLE,
-                self._network_lifecycle_event, None)
+                None, eventid, self._network_lifecycle_event, None)
             self.using_network_events = True
             logging.debug("Using network events")
         except Exception, e:

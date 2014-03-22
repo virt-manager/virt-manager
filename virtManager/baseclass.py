@@ -85,6 +85,9 @@ class vmmGObject(GObject.GObject):
     def _cleanup(self):
         raise NotImplementedError("_cleanup must be implemented in subclass")
 
+    # pylint: disable=arguments-differ
+    # Newer pylint can detect, but warns that overridden arguments are wrong
+
     def connect(self, name, callback, *args):
         ret = GObject.GObject.connect(self, name, callback, *args)
         self._gobject_handles.append(ret)

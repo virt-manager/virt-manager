@@ -132,6 +132,7 @@ class vmmSystray(vmmGObject):
             return
 
         if self.systray_indicator:
+            # pylint: disable=maybe-no-member
             self.systray_icon = AppIndicator3.Indicator.new("virt-manager",
                                 "virt-manager-icon",
                                 AppIndicator3.IndicatorCategory.OTHER)
@@ -155,12 +156,11 @@ class vmmSystray(vmmGObject):
                 self.init_systray()
         else:
             if self.systray_indicator:
+                # pylint: disable=maybe-no-member
+                status = AppIndicator3.IndicatorStatus.PASSIVE
                 if do_show:
-                    self.systray_icon.set_status(
-                            AppIndicator3.IndicatorStatus.ACTIVE)
-                else:
-                    self.systray_icon.set_status(
-                            AppIndicator3.IndicatorStatus.PASSIVE)
+                    status = AppIndicator3.IndicatorStatus.ACTIVE
+                self.systray_icon.set_status(status)
             else:
                 self.systray_icon.set_visible(do_show)
 

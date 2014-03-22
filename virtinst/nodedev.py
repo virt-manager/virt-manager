@@ -83,8 +83,9 @@ class NodeDevice(XMLBuilder):
         try:
             return _lookupNodeName(conn, name)
         except libvirt.libvirtError, e:
-            ret = _isAddressStr(name)
-            if not ret:
+            try:
+                _isAddressStr(name)
+            except:
                 raise e
 
             return _devAddressToNodedev(conn, name)
@@ -315,10 +316,10 @@ def _isAddressStr(addrstr):
             cmp_func = usbaddr_cmp
             addr_type = NodeDevice.HOSTDEV_ADDR_TYPE_USB_BUSADDR
         else:
-            return None
+            raise RuntimeError("Unknown address type")
     except:
         logging.exception("Error parsing node device string.")
-        return None
+        raise
 
     return cmp_func, devtype, addr_type
 
@@ -335,8 +336,9 @@ def _devAddressToNodedev(conn, addrstr):
         - (domain:)bus:slot.func (ex. 00:10.0 for a pci device)
     @param addrstr: C{str}
     """
-    ret = _isAddressStr(addrstr)
-    if not ret:
+    try:
+        ret = _isAddressStr(addrstr)
+    except:
         raise ValueError(_("Could not determine format of '%s'") % addrstr)
 
     cmp_func, devtype, addr_type = ret

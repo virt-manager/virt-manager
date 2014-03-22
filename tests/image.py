@@ -89,6 +89,7 @@ class TestImageParser(unittest.TestCase):
             g.os.arch = capsguest.arch
 
             g.installer = inst
+            # pylint: disable=unpacking-non-sequence
             ignore, actual_out = g.start_install(return_xml=True, dry=True)
 
             actual_out = g.get_install_xml(install=False)

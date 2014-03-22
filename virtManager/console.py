@@ -1534,6 +1534,7 @@ class vmmConsolePages(vmmGObjectUI):
         dy = 0
         align_ratio = float(req.width) / float(req.height)
 
+        # pylint: disable=unpacking-non-sequence
         desktop_w, desktop_h = self.viewer.get_desktop_resolution()
         if desktop_h == 0:
             return

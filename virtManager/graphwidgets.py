@@ -25,6 +25,9 @@ from gi.repository import Gtk
 # pylint can't detect functions we inheirit from Gtk, ex:
 # Instance of 'Sparkline' has no 'get_style_context' member
 
+# pylint: disable=arguments-differ
+# Newer pylint can detect, but warns that overridden arguments are wrong
+
 
 def rect_print(name, rect):
     # For debugging

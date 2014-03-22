@@ -194,6 +194,7 @@ class vmmErrorDialog(vmmGObject):
         if not do_prompt:
             return default
 
+        # pylint: disable=unpacking-non-sequence
         res = self.warn_chkbox(text1=text1, text2=text2,
                                chktext=chktext,
                                buttons=Gtk.ButtonsType.YES_NO)

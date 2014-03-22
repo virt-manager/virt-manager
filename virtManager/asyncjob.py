@@ -293,6 +293,7 @@ class vmmAsyncJob(vmmGObjectUI):
         error = None
         details = None
         if self._error_info:
+            # pylint: disable=unpacking-non-sequence
             error, details = self._error_info
         self._finish_cb(error, details, *self._finish_args)
 

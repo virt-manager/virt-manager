@@ -34,6 +34,9 @@ from virtManager import uiutil
 # pylint can't detect functions we inheirit from Gtk, ex:
 # OverBox.set_over: Instance of 'OverBox' has no 'remove' member
 
+# pylint: disable=arguments-differ
+# Newer pylint can detect, but warns that overridden arguments are wrong
+
 
 def rect_print(name, rect):
     # For debugging
