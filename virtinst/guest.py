@@ -93,10 +93,10 @@ class Guest(XMLBuilder):
 
     _XML_ROOT_NAME = "domain"
     _XML_PROP_ORDER = ["type", "name", "uuid", "title", "description",
-        "maxmemory", "memory", "hugepage", "vcpus", "curvcpus", "memtune",
-        "numatune", "blkiotune", "bootloader", "os", "idmap", "features", "cpu",
-        "clock", "on_poweroff", "on_reboot", "on_crash", "pm", "emulator", "_devices",
-        "seclabel"]
+        "maxmemory", "memory", "memoryBacking", "vcpus", "curvcpus", "memtune",
+        "numatune", "blkiotune", "bootloader", "os", "idmap", "features",
+        "cpu", "clock", "on_poweroff", "on_reboot", "on_crash", "pm",
+        "emulator", "_devices", "seclabel"]
 
     def __init__(self, *args, **kwargs):
         XMLBuilder.__init__(self, *args, **kwargs)
@@ -175,7 +175,6 @@ class Guest(XMLBuilder):
 
     id = XMLProperty("./@id", is_int=True)
     type = XMLProperty("./@type", default_cb=lambda s: "xen")
-    hugepage = XMLProperty("./memoryBacking/hugepages", is_bool=True)
     bootloader = XMLProperty("./bootloader")
     description = XMLProperty("./description")
     title = XMLProperty("./title")

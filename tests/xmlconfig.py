@@ -709,7 +709,7 @@ class TestXMLConfig(unittest.TestCase):
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
         g.description = "foooo barrrr somedesc"
-        g.hugepage = True
+        g.memoryBacking.hugepages = True
 
         # Hostdevs
         dev1 = VirtualHostDevice(g.conn)
