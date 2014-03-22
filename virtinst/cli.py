@@ -786,9 +786,9 @@ def add_guest_xml_options(geng):
                     help=_("Tune memory policy for the domain process."))
     geng.add_argument("--blkiotune", action="append",
                     help=_("Tune blkio policy for the domain process."))
-    geng.add_argument("--membacking", action="append",
+    geng.add_argument("--memorybacking", action="append",
         help=_("Set memory backing policy for the domain process. Ex:\n"
-               "--membacking hugepages=on"))
+               "--memorybacking hugepages=on"))
     geng.add_argument("--features",
                     help=_("Set domain <features> XML. Ex:\n"
                            "--features acpi=off\n"
@@ -2038,7 +2038,7 @@ class ParserBlkiotune(VirtCLIParser):
 
 
 ########################
-# --membacking parsing #
+# --memorybacking parsing #
 ########################
 
 class ParserMemorybacking(VirtCLIParser):
@@ -2216,7 +2216,7 @@ def build_parser_map(options, skip=None, only=None):
     register_parser("cpu", ParserCPU)
     register_parser("numatune", ParserNumatune)
     register_parser("blkiotune", ParserBlkiotune)
-    register_parser("membacking", ParserMemorybacking)
+    register_parser("memorybacking", ParserMemorybacking)
     register_parser("idmap", ParserIdmap)
     register_parser("boot", ParserBoot)
     register_parser("security", ParserSecurity)
