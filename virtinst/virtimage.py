@@ -260,7 +260,7 @@ class Disk(object):
         if hashlib:
             if "sha256" in self.csum:
                 csumvalue = self.csum["sha256"]
-                m = hashlib.sha256()  # pylint: disable-msg=E1101
+                m = hashlib.sha256()  # pylint: disable=E1101
 
             elif "sha1" in self.csum:
                 csumvalue = self.csum["sha1"]
