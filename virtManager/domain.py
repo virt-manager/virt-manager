@@ -51,6 +51,10 @@ vm_status_icons = {
 }
 
 
+class _SENTINEL(object):
+    pass
+
+
 def compare_device(origdev, newdev, idx):
     devprops = {
         "disk"      : ["target", "bus"],
@@ -529,20 +533,19 @@ class vmmDomain(vmmLibvirtObject):
         raise RuntimeError(_("Could not find specified device in the "
                              "inactive VM configuration: %s") % repr(origdev))
 
-    def _redefine_device(self, cb, origdev):
-        dev = self._lookup_device_to_define(origdev)
+    def _redefine_device(self, cb, origdev, use_live_device):
+        if not use_live_device:
+            dev = self._lookup_device_to_define(origdev)
+        else:
+            dev = origdev
         if dev:
-            return cb(dev)
+            cb(dev)
+        return dev
 
 
     ##############################
     # Persistent XML change APIs #
     ##############################
-
-    def define_name(self, newname):
-        return self._define_name_helper("domain",
-                                        self.conn.rename_vm,
-                                        newname)
 
     # Device Add/Remove
     def add_device(self, devobj):
@@ -573,107 +576,89 @@ class vmmDomain(vmmLibvirtObject):
                         guest.remove_device(rmcon)
 
                 guest.remove_device(editdev)
-            return self._redefine_device(rmdev, devobj)
+            return self._redefine_device(rmdev, devobj, False)
 
         ret = self._redefine(change)
         self.redefine_cached()
         return ret
 
-    # CPU define methods
-    def define_vcpus(self, vcpus, maxvcpus):
+    def define_cpu(self, vcpus=_SENTINEL, maxvcpus=_SENTINEL,
+        cpuset=_SENTINEL, model=_SENTINEL, sockets=_SENTINEL,
+        cores=_SENTINEL, threads=_SENTINEL):
         def change(guest):
-            guest.curvcpus = int(vcpus)
-            guest.vcpus = int(maxvcpus)
-        return self._redefine(change)
-    def define_cpuset(self, cpuset):
-        def change(guest):
-            guest.cpuset = cpuset
-        return self._redefine(change)
+            if vcpus != _SENTINEL:
+                guest.curvcpus = int(vcpus)
+            if maxvcpus != _SENTINEL:
+                guest.vcpus = int(maxvcpus)
+            if cpuset != _SENTINEL:
+                guest.cpuset = cpuset
 
-    def define_cpu_topology(self, sockets, cores, threads):
-        def change(guest):
-            cpu = guest.cpu
-            cpu.sockets = sockets
-            cpu.cores = cores
-            cpu.threads = threads
-        return self._redefine(change)
-    def define_cpu(self, val):
-        def change(guest):
-            if val in guest.cpu.SPECIAL_MODES:
-                guest.cpu.set_special_mode(val)
-            else:
-                guest.cpu.model = val
+            if sockets != _SENTINEL:
+                guest.cpu.sockets = sockets
+                guest.cpu.cores = cores
+                guest.cpu.threads = threads
+
+            if model != _SENTINEL:
+                if model in guest.cpu.SPECIAL_MODES:
+                    guest.cpu.set_special_mode(model)
+                else:
+                    guest.cpu.model = model
         return self._redefine(change)
 
-    # Mem define methods
-    def define_both_mem(self, memory, maxmem):
+    def define_memory(self, memory=_SENTINEL, maxmem=_SENTINEL):
         def change(guest):
-            guest.memory = int(memory)
-            guest.maxmemory = int(maxmem)
+            if memory != _SENTINEL:
+                guest.memory = int(memory)
+            if maxmem != _SENTINEL:
+                guest.maxmemory = int(maxmem)
         return self._redefine(change)
 
-    # Machine config define methods
-    def define_machtype(self, newvalue):
+    def define_name(self, newname):
+        return self._define_name_helper("domain",
+                                        self.conn.rename_vm,
+                                        newname)
+
+    def define_overview(self, machine=_SENTINEL, description=_SENTINEL,
+        title=_SENTINEL, idmap_list=_SENTINEL):
         def change(guest):
-            guest.os.machine = newvalue
+            if machine != _SENTINEL:
+                guest.os.machine = machine
+            if description != _SENTINEL:
+                guest.description = description or None
+            if title != _SENTINEL:
+                guest.title = title or None
+
+            if idmap_list != _SENTINEL:
+                if idmap_list is not None:
+                    # pylint: disable=unpacking-non-sequence
+                    (uid_target, uid_count, gid_target, gid_count) = idmap_list
+                    guest.idmap.uid_start = 0
+                    guest.idmap.uid_target = uid_target
+                    guest.idmap.uid_count = uid_count
+                    guest.idmap.gid_start = 0
+                    guest.idmap.gid_target = gid_target
+                    guest.idmap.gid_count = gid_count
+                else:
+                    guest.idmap.clear()
+
         return self._redefine(change)
 
-    def define_description(self, newvalue):
-        def change(guest):
-            guest.description = newvalue or None
-        return self._redefine(change)
+    def define_boot(self, boot_order=_SENTINEL, boot_menu=_SENTINEL,
+        kernel=_SENTINEL, initrd=_SENTINEL, dtb=_SENTINEL,
+        kernel_args=_SENTINEL, init=_SENTINEL):
 
-    def define_title(self, newvalue):
-        def change(guest):
-            guest.title = newvalue or None
-        return self._redefine(change)
+        def _change_boot_order(guest):
+            boot_dev_order = []
+            devmap = dict((dev.vmmidstr, dev) for dev in
+                          self.get_bootable_devices())
+            for b in boot_order:
+                if b in devmap:
+                    boot_dev_order.append(devmap[b])
 
-    # Idmap config define methods
-    def define_idmap(self, idmap_list):
-        def change(guest):
-            guest.idmap.uid_start = 0
-            guest.idmap.uid_target = uid_target
-            guest.idmap.uid_count = uid_count
-            guest.idmap.gid_start = 0
-            guest.idmap.gid_target = gid_target
-            guest.idmap.gid_count = gid_count
-        def clear(guest):
-            guest.idmap.clear()
-        if idmap_list is not None:
-            (uid_target, uid_count, gid_target,
-                    gid_count) = idmap_list
-            return self._redefine(change)
-        else:
-            return self._redefine(clear)
-
-    # Boot define methods
-    def can_use_device_boot_order(self):
-        # Return 'True' if guest can use new style boot device ordering
-        return self.conn.check_support(
-            self.conn.SUPPORT_CONN_DEVICE_BOOTORDER)
-
-    def get_bootable_devices(self):
-        devs = self.get_disk_devices()
-        devs += self.get_network_devices()
-        devs += self.get_hostdev_devices()
-
-        # redirdev can also be marked bootable, but it should be rarely
-        # used and clutters the UI
-        return devs
-
-    def _set_device_boot_order(self, boot_list):
-        boot_dev_order = []
-        devmap = dict((dev.vmmidstr, dev) for dev in
-                      self.get_bootable_devices())
-        for b in boot_list:
-            if b in devmap:
-                boot_dev_order.append(devmap[b])
-
-        def change(guest):
             # Unset the traditional boot order
             guest.os.bootorder = []
 
-            # Unset standard boot order
+            # Unset device boot order
             for dev in guest.get_all_devices():
                 dev.boot.order = None
 
@@ -685,72 +670,44 @@ class vmmDomain(vmmLibvirtObject):
                 dev.boot.order = count
                 count += 1
 
+        def change(guest):
+            if boot_order != _SENTINEL:
+                if self.can_use_device_boot_order():
+                    _change_boot_order(guest)
+                else:
+                    guest.os.bootorder = boot_order
+
+            if boot_menu != _SENTINEL:
+                guest.os.enable_bootmenu = bool(boot_menu)
+            if init != _SENTINEL:
+                guest.os.init = init
+
+            if kernel != _SENTINEL:
+                guest.os.kernel = kernel or None
+            if initrd != _SENTINEL:
+                guest.os.initrd = initrd or None
+            if dtb != _SENTINEL:
+                guest.os.dtb = dtb or None
+            if kernel_args != _SENTINEL:
+                guest.os.kernel_args = kernel_args or None
         return self._redefine(change)
 
-    def set_boot_order(self, boot_list):
-        if self.can_use_device_boot_order():
-            return self._set_device_boot_order(boot_list)
-
-        def change(guest):
-            guest.os.bootorder = boot_list
-        return self._redefine(change)
-    def set_boot_menu(self, newval):
-        def change(guest):
-            guest.os.enable_bootmenu = bool(newval)
-        return self._redefine(change)
-    def set_boot_kernel(self, kernel, initrd, dtb, args):
-        def change(guest):
-            guest.os.kernel = kernel or None
-            guest.os.initrd = initrd or None
-            guest.os.dtb = dtb or None
-            guest.os.kernel_args = args or None
-        return self._redefine(change)
-    def set_boot_init(self, init):
-        def change(guest):
-            guest.os.init = init
-        return self._redefine(change)
-
-    # Disk define methods
-    def define_storage_media(self, devobj, newpath):
-        def change(editdev):
-            editdev.path = newpath
-            editdev.sync_path_props()
-        return self._redefine_device(change, devobj)
-    def define_disk_readonly(self, devobj, do_readonly):
-        def change(editdev):
-            editdev.read_only = do_readonly
-        return self._redefine_device(change, devobj)
-    def define_disk_shareable(self, devobj, do_shareable):
-        def change(editdev):
-            editdev.shareable = do_shareable
-        return self._redefine_device(change, devobj)
-    def define_disk_removable(self, devobj, do_removable):
-        def change(editdev):
-            editdev.removable = do_removable
-        return self._redefine_device(change, devobj)
-    def define_disk_cache(self, devobj, new_cache):
-        def change(editdev):
-            editdev.driver_cache = new_cache or None
-        return self._redefine_device(change, devobj)
-    def define_disk_io(self, devobj, val):
-        def change(editdev):
-            editdev.driver_io = val or None
-        return self._redefine_device(change, devobj)
-    def define_disk_driver_type(self, devobj, new_driver_type):
-        def change(editdev):
-            editdev.driver_type = new_driver_type or None
-        return self._redefine_device(change, devobj)
-    def define_disk_bus(self, devobj, newval, addr):
-        def change(editdev):
+    def define_disk(self, devobj, use_live_device,
+        path=_SENTINEL, readonly=_SENTINEL, serial=_SENTINEL,
+        shareable=_SENTINEL, removable=_SENTINEL, cache=_SENTINEL,
+        io=_SENTINEL, driver_type=_SENTINEL, bus=_SENTINEL, addrstr=_SENTINEL,
+        iotune_rbs=_SENTINEL, iotune_ris=_SENTINEL, iotune_tbs=_SENTINEL,
+        iotune_tis=_SENTINEL, iotune_wbs=_SENTINEL, iotune_wis=_SENTINEL):
+        def _change_bus(editdev):
             oldprefix = editdev.get_target_prefix()[0]
             oldbus = editdev.bus
-            editdev.bus = newval
+            editdev.bus = bus
 
-            if oldbus == newval:
+            if oldbus == bus:
                 return
 
             editdev.address.clear()
-            editdev.address.set_addrstr(addr)
+            editdev.address.set_addrstr(addrstr)
 
             if oldprefix == editdev.get_target_prefix()[0]:
                 return
@@ -766,114 +723,107 @@ class vmmDomain(vmmLibvirtObject):
 
             editdev.target = None
             editdev.generate_target(used)
-        return self._redefine_device(change, devobj)
-    def define_disk_serial(self, devobj, val):
-        def change(editdev):
-            if val != editdev.serial:
-                editdev.serial = val or None
-        return self._redefine_device(change, devobj)
 
-    def define_disk_iotune_rbs(self, devobj, val):
         def change(editdev):
-            editdev.iotune_rbs = val
-        return self._redefine_device(change, devobj)
+            if path != _SENTINEL:
+                editdev.path = path
+                if not use_live_device:
+                    editdev.sync_path_props()
 
-    def define_disk_iotune_ris(self, devobj, val):
-        def change(editdev):
-            editdev.iotune_ris = val
-        return self._redefine_device(change, devobj)
+            if readonly != _SENTINEL:
+                editdev.read_only = readonly
+            if shareable != _SENTINEL:
+                editdev.shareable = shareable
+            if removable != _SENTINEL:
+                editdev.removable = removable
 
-    def define_disk_iotune_tbs(self, devobj, val):
-        def change(editdev):
-            editdev.iotune_tbs = val
-        return self._redefine_device(change, devobj)
+            if cache != _SENTINEL:
+                editdev.driver_cache = cache or None
+            if io != _SENTINEL:
+                editdev.driver_io = io or None
+            if driver_type != _SENTINEL:
+                editdev.driver_type = driver_type or None
+            if serial != _SENTINEL:
+                editdev.serial = serial or None
 
-    def define_disk_iotune_tis(self, devobj, val):
-        def change(editdev):
-            editdev.iotune_tis = val
-        return self._redefine_device(change, devobj)
+            if iotune_rbs != _SENTINEL:
+                editdev.iotune_rbs = iotune_rbs
+            if iotune_ris != _SENTINEL:
+                editdev.iotune_ris = iotune_ris
+            if iotune_tbs != _SENTINEL:
+                editdev.iotune_tbs = iotune_tbs
+            if iotune_tis != _SENTINEL:
+                editdev.iotune_tis = iotune_tis
+            if iotune_wbs != _SENTINEL:
+                editdev.iotune_wbs = iotune_wbs
+            if iotune_wis != _SENTINEL:
+                editdev.iotune_wis = iotune_wis
 
-    def define_disk_iotune_wbs(self, devobj, val):
-        def change(editdev):
-            editdev.iotune_wbs = val
-        return self._redefine_device(change, devobj)
+            if bus != _SENTINEL:
+                _change_bus(editdev)
 
-    def define_disk_iotune_wis(self, devobj, val):
-        def change(editdev):
-            editdev.iotune_wis = val
-        return self._redefine_device(change, devobj)
+        return self._redefine_device(change, devobj, use_live_device)
 
+    def define_network(self, devobj, use_live_device,
+        ntype=_SENTINEL, source=_SENTINEL,
+        mode=_SENTINEL, model=_SENTINEL, addrstr=_SENTINEL,
+        vtype=_SENTINEL, managerid=_SENTINEL, typeid=_SENTINEL,
+        typeidversion=_SENTINEL, instanceid=_SENTINEL):
 
-    # Network define methods
-    def define_network_source(self, devobj, newtype, newsource, newmode):
         def change(editdev):
-            if not newtype:
-                return
-            editdev.source = None
+            if ntype != _SENTINEL:
+                editdev.source = None
 
-            editdev.type = newtype
-            editdev.source = newsource
-            editdev.source_mode = newmode or None
-        return self._redefine_device(change, devobj)
-    def define_network_model(self, devobj, newmodel, addr):
-        def change(editdev):
-            if editdev.model != newmodel:
-                editdev.address.clear()
-                editdev.address.set_addrstr(addr)
-            editdev.model = newmodel
-        return self._redefine_device(change, devobj)
+                editdev.type = ntype
+                editdev.source = source
+                editdev.source_mode = mode or None
 
-    def define_virtualport(self, devobj, newtype, newmanagerid,
-                           newtypeid, newtypeidversion, newinstanceid):
-        def change(editdev):
-            editdev.virtualport.type = newtype or None
-            editdev.virtualport.managerid = newmanagerid or None
-            editdev.virtualport.typeid = newtypeid or None
-            editdev.virtualport.typeidversion = newtypeidversion or None
-            editdev.virtualport.instanceid = newinstanceid or None
-        return self._redefine_device(change, devobj)
+            if model != _SENTINEL:
+                if editdev.model != model:
+                    editdev.address.clear()
+                    editdev.address.set_addrstr(addrstr)
+                editdev.model = model
 
-    # Graphics define methods
-    def define_graphics_address(self, devobj, newval):
-        def change(editdev):
-            editdev.listen = newval
-        return self._redefine_device(change, devobj)
-    def define_graphics_port(self, devobj, newval):
-        def change(editdev):
-            editdev.port = newval
-        return self._redefine_device(change, devobj)
-    def define_graphics_tlsport(self, devobj, newval):
-        def change(editdev):
-            editdev.tlsPort = newval
-        return self._redefine_device(change, devobj)
-    def define_graphics_password(self, devobj, newval):
-        def change(editdev):
-            editdev.passwd = newval
-        return self._redefine_device(change, devobj)
-    def define_graphics_keymap(self, devobj, newval):
-        def change(editdev):
-            editdev.keymap = newval
-        return self._redefine_device(change, devobj)
-    def define_graphics_type(self, devobj, newval):
-        def change(editdev):
-            editdev.type = newval
-        return self._redefine_device(change, devobj)
+            if vtype != _SENTINEL:
+                editdev.virtualport.type = vtype or None
+                editdev.virtualport.managerid = managerid or None
+                editdev.virtualport.typeid = typeid or None
+                editdev.virtualport.typeidversion = typeidversion or None
+                editdev.virtualport.instanceid = instanceid or None
+        return self._redefine_device(change, devobj, use_live_device)
 
-    # Sound define methods
-    def define_sound_model(self, devobj, newmodel):
+    def define_graphics(self, devobj, use_live_device,
+        listen=_SENTINEL, port=_SENTINEL, tlsport=_SENTINEL,
+        passwd=_SENTINEL, keymap=_SENTINEL, gtype=_SENTINEL):
         def change(editdev):
-            if editdev.model != newmodel:
-                editdev.address.clear()
-            editdev.model = newmodel
-        return self._redefine_device(change, devobj)
+            if listen != _SENTINEL:
+                editdev.listen = listen
+            if port != _SENTINEL:
+                editdev.port = port
+            if tlsport != _SENTINEL:
+                editdev.tlsPort = tlsport
+            if passwd != _SENTINEL:
+                editdev.passwd = passwd
+            if keymap != _SENTINEL:
+                editdev.keymap = keymap
+            if gtype != _SENTINEL:
+                editdev.type = gtype
+        return self._redefine_device(change, devobj, use_live_device)
 
-    # Video define methods
-    def define_video_model(self, devobj, newmodel):
+    def define_sound(self, devobj, use_live_device, model=_SENTINEL):
         def change(editdev):
-            if newmodel == editdev.model:
+            if model != _SENTINEL:
+                if editdev.model != model:
+                    editdev.address.clear()
+                editdev.model = model
+        return self._redefine_device(change, devobj, use_live_device)
+
+    def define_video(self, devobj, use_live_device, model=_SENTINEL):
+        def change(editdev):
+            if model == _SENTINEL or model == editdev.model:
                 return
 
-            editdev.model = newmodel
+            editdev.model = model
             editdev.address.clear()
 
             # Clear out heads/ram values so they reset to default. If
@@ -883,32 +833,29 @@ class vmmDomain(vmmLibvirtObject):
             editdev.heads = None
             editdev.ram = None
 
-        return self._redefine_device(change, devobj)
+        return self._redefine_device(change, devobj, use_live_device)
 
-    # Watchdog define methods
-    def define_watchdog_model(self, devobj, newval):
+    def define_watchdog(self, devobj, use_live_device,
+        model=_SENTINEL, action=_SENTINEL):
         def change(editdev):
-            if editdev.model != newval:
-                editdev.address.clear()
-            editdev.model = newval
-        return self._redefine_device(change, devobj)
-    def define_watchdog_action(self, devobj, newval):
-        def change(editdev):
-            editdev.action = newval
-        return self._redefine_device(change, devobj)
+            if model != _SENTINEL:
+                if editdev.model != model:
+                    editdev.address.clear()
+                editdev.model = model
 
-    # Smartcard define methods
-    def define_smartcard_mode(self, devobj, newmodel):
-        def change(editdev):
-            editdev.mode = newmodel
-            editdev.type = editdev.TYPE_DEFAULT
-        return self._redefine_device(change, devobj)
+            if action != _SENTINEL:
+                editdev.action = action
+        return self._redefine_device(change, devobj, use_live_device)
 
-    # Controller define methods
-    def define_controller_model(self, devobj, newmodel):
+    def define_smartcard(self, devobj, use_live_device, model=_SENTINEL):
         def change(editdev):
-            ignore = editdev
+            if model != _SENTINEL:
+                editdev.mode = model
+                editdev.type = editdev.TYPE_DEFAULT
+        return self._redefine_device(change, devobj, use_live_device)
 
+    def define_controller(self, devobj, use_live_device, model=_SENTINEL):
+        def _change_model(editdev):
             if editdev.type == "usb":
                 guest = self._get_xmlobj_to_define()
                 ctrls = guest.get_devices("controller")
@@ -917,27 +864,36 @@ class vmmDomain(vmmLibvirtObject):
                 for dev in ctrls:
                     guest.remove_device(dev)
 
-                if newmodel == "ich9-ehci1":
+                if model == "ich9-ehci1":
                     for dev in VirtualController.get_usb2_controllers(
                             guest.conn):
                         guest.add_device(dev)
                 else:
                     dev = VirtualController(guest.conn)
                     dev.type = "usb"
-                    if newmodel != "default":
-                        dev.model = newmodel
+                    if model != "default":
+                        dev.model = model
                     guest.add_device(dev)
+
             elif editdev.type == "scsi":
-                if newmodel == "default":
+                if model == "default":
                     editdev.model = None
                 else:
-                    editdev.model = newmodel
-                self.update_device(editdev)
+                    editdev.model = model
+                self.hotplug(device=editdev)
 
-        return self._redefine_device(change, devobj)
-
-    def define_filesystem(self, devobj, newdev):
         def change(editdev):
+            if model != _SENTINEL:
+                _change_model(editdev)
+
+        return self._redefine_device(change, devobj, use_live_device)
+
+    def define_filesystem(self, devobj, use_live_device, newdev=_SENTINEL):
+        def change(editdev):
+            if newdev == _SENTINEL:
+                return
+
+            # pylint: disable=maybe-no-member
             editdev.type = newdev.type
             editdev.mode = newdev.mode
             editdev.wrpolicy = newdev.wrpolicy
@@ -948,12 +904,14 @@ class vmmDomain(vmmLibvirtObject):
             editdev.source = newdev.source
             editdev.target = newdev.target
 
-        return self._redefine_device(change, devobj)
+        return self._redefine_device(change, devobj, use_live_device)
 
-    def define_hostdev_rombar(self, devobj, val):
+
+    def define_hostdev(self, devobj, use_live_device, rom_bar=_SENTINEL):
         def change(editdev):
-            editdev.rom_bar = val
-        return self._redefine_device(change, devobj)
+            if rom_bar != _SENTINEL:
+                editdev.rom_bar = rom_bar
+        return self._redefine_device(change, devobj, use_live_device)
 
 
     ####################
@@ -980,79 +938,70 @@ class vmmDomain(vmmLibvirtObject):
         xml = devobj.get_xml_config()
         self._backend.detachDevice(xml)
 
-    def update_device(self, devobj, flags=1):
+    def _update_device(self, devobj, flags=None):
+        if flags is None:
+            flags = getattr(libvirt, "VIR_DOMAIN_DEVICE_MODIFY_LIVE", 1)
+
+        xml = devobj.get_xml_config()
+        logging.debug("Calling update_device with xml=\n%s", xml)
+        self._backend.updateDeviceFlags(xml, flags)
+
+    def hotplug(self, vcpus=_SENTINEL, memory=_SENTINEL, maxmem=_SENTINEL,
+        description=_SENTINEL, title=_SENTINEL, storage_path=_SENTINEL,
+        device=_SENTINEL):
         if not self.is_active():
             return
 
-        # Default flag is VIR_DOMAIN_DEVICE_MODIFY_LIVE
-        xml = devobj.get_xml_config()
-        self._backend.updateDeviceFlags(xml, flags)
+        def _hotplug_memory(val):
+            if val != self.get_memory():
+                self._backend.setMemory(val)
+        def _hotplug_maxmem(val):
+            if val != self.maximum_memory():
+                self._backend.setMaxMemory(val)
 
-    def hotplug_vcpus(self, vcpus):
-        vcpus = int(vcpus)
-        if vcpus != self.vcpu_count():
-            self._backend.setVcpus(vcpus)
+        def _hotplug_metadata(val, mtype):
+            if not self.conn.check_support(
+                self.conn.SUPPORT_DOMAIN_SET_METADATA, self._backend):
+                return
+            flags = (libvirt.VIR_DOMAIN_AFFECT_LIVE |
+                     libvirt.VIR_DOMAIN_AFFECT_CONFIG)
+            self._backend.setMetadata(mtype, val, None, None, flags)
 
-    def hotplug_memory(self, memory):
-        if memory != self.get_memory():
-            self._backend.setMemory(memory)
+        if vcpus != _SENTINEL:
+            vcpus = int(vcpus)
+            if vcpus != self.vcpu_count():
+                self._backend.setVcpus(vcpus)
 
-    def hotplug_maxmem(self, maxmem):
-        if maxmem != self.maximum_memory():
-            self._backend.setMaxMemory(maxmem)
+        if memory != _SENTINEL:
+            logging.info("Hotplugging curmem=%s maxmem=%s for VM '%s'",
+                         memory, maxmem, self.get_name())
 
-    def hotplug_both_mem(self, memory, maxmem):
-        logging.info("Hotplugging curmem=%s maxmem=%s for VM '%s'",
-                     memory, maxmem, self.get_name())
-
-        if self.is_active():
             actual_cur = self.get_memory()
             if memory:
                 if maxmem < actual_cur:
                     # Set current first to avoid error
-                    self.hotplug_memory(memory)
-                    self.hotplug_maxmem(maxmem)
+                    _hotplug_memory(memory)
+                    _hotplug_maxmem(maxmem)
                 else:
-                    self.hotplug_maxmem(maxmem)
-                    self.hotplug_memory(memory)
+                    _hotplug_maxmem(maxmem)
+                    _hotplug_memory(memory)
             else:
-                self.hotplug_maxmem(maxmem)
+                _hotplug_maxmem(maxmem)
 
-    def hotplug_storage_media(self, devobj, newpath):
-        devobj.path = newpath
-        self.attach_device(devobj)
+        if description != _SENTINEL:
+            _hotplug_metadata(description,
+                libvirt.VIR_DOMAIN_METADATA_DESCRIPTION)
+        if title != _SENTINEL:
+            _hotplug_metadata(title, libvirt.VIR_DOMAIN_METADATA_TITLE)
 
-    def hotplug_graphics_password(self, devobj, newval):
-        devobj.passwd = newval
-        self.update_device(devobj)
+        if storage_path != _SENTINEL:
+            # qemu originally only supported attach_device for updating
+            # a device's path. Stick with that. We may need to differentiate
+            # for other drivers that don't maintain back compat though
+            self.attach_device(device)
 
-    def hotplug_description(self, desc):
-        # We already fake hotplug like behavior, by reading the
-        # description from the inactive XML from a running VM
-        #
-        # libvirt since 0.9.10 provides a SetMetadata API that provides
-        # actual <description> 'hotplug', and using that means checking
-        # for support, version, etc.
-        if not self.conn.check_support(
-            self.conn.SUPPORT_DOMAIN_SET_METADATA, self._backend):
-            return
-
-        flags = (libvirt.VIR_DOMAIN_AFFECT_LIVE |
-                libvirt.VIR_DOMAIN_AFFECT_CONFIG)
-        self._backend.setMetadata(
-                libvirt.VIR_DOMAIN_METADATA_DESCRIPTION,
-                desc, None, None, flags)
-
-    def hotplug_title(self, title):
-        if not self.conn.check_support(
-            self.conn.SUPPORT_DOMAIN_SET_METADATA, self._backend):
-            return
-
-        flags = (libvirt.VIR_DOMAIN_AFFECT_LIVE |
-                libvirt.VIR_DOMAIN_AFFECT_CONFIG)
-        self._backend.setMetadata(
-                libvirt.VIR_DOMAIN_METADATA_TITLE,
-                title, None, None, flags)
+        elif device != _SENTINEL:
+            self._update_device(device)
 
 
     ########################
@@ -1301,6 +1250,20 @@ class vmmDomain(vmmLibvirtObject):
                 ser.virtmanager_console_dup = con
                 devs.remove(con)
 
+        return devs
+
+    def can_use_device_boot_order(self):
+        # Return 'True' if guest can use new style boot device ordering
+        return self.conn.check_support(
+            self.conn.SUPPORT_CONN_DEVICE_BOOTORDER)
+
+    def get_bootable_devices(self):
+        devs = self.get_disk_devices()
+        devs += self.get_network_devices()
+        devs += self.get_hostdev_devices()
+
+        # redirdev can also be marked bootable, but it should be rarely
+        # used and clutters the UI
         return devs
 
 

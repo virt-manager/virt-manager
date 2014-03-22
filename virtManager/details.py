@@ -1410,12 +1410,10 @@ class vmmDetails(vmmGObjectUI):
                                str(e)))
 
     def remove_xml_dev(self, src_ignore):
-        info = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not info:
+        devobj = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not devobj:
             return
-
-        devtype = info.virtual_device_type
-        self.remove_device(devtype, info)
+        self.remove_device(devobj)
 
     def set_pause_state(self, paused):
         # Set pause widget states
@@ -1947,45 +1945,27 @@ class vmmDetails(vmmGObjectUI):
     def edited(self, pagetype):
         return pagetype in self.active_edits
 
-    def make_apply_data(self):
-        definefuncs = []
-        defineargs = []
-        hotplugfuncs = []
-        hotplugargs = []
-
-        def add_define(func, *args):
-            definefuncs.append(func)
-            defineargs.append(args)
-        def add_hotplug(func, *args):
-            hotplugfuncs.append(func)
-            hotplugargs.append(args)
-
-        return (definefuncs, defineargs, add_define,
-                hotplugfuncs, hotplugargs, add_hotplug)
-
-    # Overview section
     def config_overview_apply(self):
-        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
-        ignore = add_hotplug
+        kwargs = {}
+        hotplug_args = {}
 
         if self.edited(EDIT_NAME):
-            name = self.widget("overview-name").get_text()
-            add_define(self.vm.define_name, name)
+            # Renaming is pretty convoluted, so do it here synchronously
+            self.vm.define_name(self.widget("overview-name").get_text())
 
         if self.edited(EDIT_TITLE):
-            title = self.widget("overview-title").get_text()
-            add_define(self.vm.define_title, title)
-            add_hotplug(self.vm.hotplug_title, title)
+            kwargs["title"] = self.widget("overview-title").get_text()
+            hotplug_args["title"] = kwargs["title"]
 
         if self.edited(EDIT_MACHTYPE):
-            machtype = uiutil.get_combo_entry(self.widget("machine-type"))
-            add_define(self.vm.define_machtype, machtype)
+            kwargs["machine"] = uiutil.get_combo_entry(
+                self.widget("machine-type"))
 
         if self.edited(EDIT_DESC):
             desc_widget = self.widget("overview-description")
-            desc = desc_widget.get_buffer().get_property("text") or ""
-            add_define(self.vm.define_description, desc)
-            add_hotplug(self.vm.hotplug_description, desc)
+            kwargs["description"] = (
+                desc_widget.get_buffer().get_property("text") or "")
+            hotplug_args["description"] = kwargs["description"]
 
         if self.edited(EDIT_IDMAP):
             enable_idmap = self.widget("config-idmap-checkbutton").get_active()
@@ -1998,46 +1978,42 @@ class vmmDetails(vmmGObjectUI):
                 idmap_list = [uid_target, uid_count, gid_target, gid_count]
             else:
                 idmap_list = None
+            kwargs["idmap_list"] = idmap_list
 
-            add_define(self.vm.define_idmap, idmap_list)
+        return self._change_config_helper(self.vm.define_overview, kwargs,
+                                          hotplug_args=hotplug_args)
 
-        return self._change_config_helper(df, da, hf, ha)
-
-    # CPUs
     def config_vcpus_apply(self):
-        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
+        kwargs = {}
+        hotplug_args = {}
 
         if self.edited(EDIT_VCPUS):
-            vcpus = self.config_get_vcpus()
-            maxv = self.config_get_maxvcpus()
-            add_define(self.vm.define_vcpus, vcpus, maxv)
-            add_hotplug(self.vm.hotplug_vcpus, vcpus)
+            kwargs["vcpus"] = self.config_get_vcpus()
+            kwargs["maxvcpus"] = self.config_get_maxvcpus()
+            hotplug_args["vcpus"] = kwargs["vcpus"]
 
         if self.edited(EDIT_CPUSET):
-            cpuset = self.get_text("config-vcpupin")
-            add_define(self.vm.define_cpuset, cpuset)
+            kwargs["cpuset"] = self.get_text("config-vcpupin")
 
         if self.edited(EDIT_CPU):
-            val = self.get_config_cpu_model()
-            add_define(self.vm.define_cpu, val)
+            kwargs["model"] = self.get_config_cpu_model()
 
         if self.edited(EDIT_TOPOLOGY):
             do_top = self.widget("cpu-topology-enable").get_active()
-            sockets = self.widget("cpu-sockets").get_value()
-            cores = self.widget("cpu-cores").get_value()
-            threads = self.widget("cpu-threads").get_value()
+            kwargs["sockets"] = self.widget("cpu-sockets").get_value()
+            kwargs["cores"] = self.widget("cpu-cores").get_value()
+            kwargs["threads"] = self.widget("cpu-threads").get_value()
             if not do_top:
-                sockets = None
-                cores = None
-                threads = None
+                kwargs["sockets"] = None
+                kwargs["cores"] = None
+                kwargs["threads"] = None
 
-            add_define(self.vm.define_cpu_topology, sockets, cores, threads)
+        return self._change_config_helper(self.vm.define_cpu, kwargs,
+                                          hotplug_args=hotplug_args)
 
-        return self._change_config_helper(df, da, hf, ha)
-
-    # Memory
     def config_memory_apply(self):
-        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
+        kwargs = {}
+        hotplug_args = {}
 
         if self.edited(EDIT_MEM):
             curmem = None
@@ -2050,15 +2026,16 @@ class vmmDetails(vmmGObjectUI):
             if maxmem:
                 maxmem = int(maxmem) * 1024
 
-            add_define(self.vm.define_both_mem, curmem, maxmem)
-            add_hotplug(self.vm.hotplug_both_mem, curmem, maxmem)
+            kwargs["memory"] = curmem
+            kwargs["maxmem"] = maxmem
+            hotplug_args["memory"] = kwargs["memory"]
+            hotplug_args["maxmem"] = kwargs["maxmem"]
 
-        return self._change_config_helper(df, da, hf, ha)
+        return self._change_config_helper(self.vm.define_memory, kwargs,
+                                          hotplug_args=hotplug_args)
 
-    # Boot device / Autostart
     def config_boot_options_apply(self):
-        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
-        ignore = add_hotplug
+        kwargs = {}
 
         if self.edited(EDIT_AUTOSTART):
             auto = self.widget("config-autostart")
@@ -2070,246 +2047,221 @@ class vmmDetails(vmmGObjectUI):
                 return False
 
         if self.edited(EDIT_BOOTORDER):
-            bootdevs = self.get_config_boot_order()
-            add_define(self.vm.set_boot_order, bootdevs)
+            kwargs["boot_order"] = self.get_config_boot_order()
 
         if self.edited(EDIT_BOOTMENU):
-            bootmenu = self.widget("boot-menu").get_active()
-            add_define(self.vm.set_boot_menu, bootmenu)
+            kwargs["boot_menu"] = self.widget("boot-menu").get_active()
 
         if self.edited(EDIT_KERNEL):
-            kernel = self.get_text("boot-kernel", checksens=True)
-            initrd = self.get_text("boot-initrd", checksens=True)
-            dtb = self.get_text("boot-dtb", checksens=True)
-            args = self.get_text("boot-kernel-args", checksens=True)
+            kwargs["kernel"] = self.get_text("boot-kernel", checksens=True)
+            kwargs["initrd"] = self.get_text("boot-initrd", checksens=True)
+            kwargs["dtb"] = self.get_text("boot-dtb", checksens=True)
+            kwargs["kernel_args"] = self.get_text("boot-kernel-args",
+                checksens=True)
 
-            if initrd and not kernel:
+            if kwargs["initrd"] and not kwargs["kernel"]:
                 return self.err.val_err(
                     _("Cannot set initrd without specifying a kernel path"))
-            if args and not kernel:
+            if kwargs["kernel_args"] and not kwargs["kernel"]:
                 return self.err.val_err(
                     _("Cannot set kernel arguments without specifying a kernel path"))
 
-            add_define(self.vm.set_boot_kernel, kernel, initrd, dtb, args)
-
         if self.edited(EDIT_INIT):
-            init = self.get_text("boot-init-path")
-            if not init:
+            kwargs["init"] = self.get_text("boot-init-path")
+            if not kwargs["init"]:
                 return self.err.val_err(_("An init path must be specified"))
-            add_define(self.vm.set_boot_init, init)
 
-        return self._change_config_helper(df, da, hf, ha)
+        return self._change_config_helper(self.vm.define_boot, kwargs)
 
-    # CDROM
-    def change_storage_media(self, dev_id_info, newpath):
-        return self._change_config_helper(self.vm.define_storage_media,
-                                          (dev_id_info, newpath),
-                                          self.vm.hotplug_storage_media,
-                                          (dev_id_info, newpath))
+    # <device> defining
+    def change_storage_media(self, devobj, newpath):
+        kwargs = {"path": newpath}
+        hotplug_args = {"storage_path": True}
 
-    # Disk options
-    def config_disk_apply(self, dev_id_info):
-        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
-        ignore = add_hotplug
+        return self._change_config_helper(self.vm.define_disk, kwargs,
+                                          devobj=devobj,
+                                          hotplug_args=hotplug_args)
+
+    def config_disk_apply(self, devobj):
+        kwargs = {}
 
         if self.edited(EDIT_DISK_RO):
-            do_readonly = self.widget("disk-readonly").get_active()
-            add_define(self.vm.define_disk_readonly, dev_id_info, do_readonly)
+            kwargs["readonly"] = self.widget("disk-readonly").get_active()
 
         if self.edited(EDIT_DISK_SHARE):
-            do_shareable = self.widget("disk-shareable").get_active()
-            add_define(self.vm.define_disk_shareable,
-                       dev_id_info, do_shareable)
+            kwargs["shareable"] = self.widget("disk-shareable").get_active()
 
         if self.edited(EDIT_DISK_REMOVABLE):
-            do_removable = bool(self.widget("disk-removable").get_active())
-            add_define(self.vm.define_disk_removable, dev_id_info, do_removable)
+            kwargs["removeable"] = bool(
+                self.widget("disk-removable").get_active())
 
         if self.edited(EDIT_DISK_CACHE):
-            cache = uiutil.get_combo_entry(self.widget("disk-cache"))
-            add_define(self.vm.define_disk_cache, dev_id_info, cache)
+            kwargs["cache"] = uiutil.get_combo_entry(self.widget("disk-cache"))
 
         if self.edited(EDIT_DISK_IO):
-            io = uiutil.get_combo_entry(self.widget("disk-io"))
-            add_define(self.vm.define_disk_io, dev_id_info, io)
+            kwargs["io"] = uiutil.get_combo_entry(self.widget("disk-io"))
 
         if self.edited(EDIT_DISK_FORMAT):
-            fmt = uiutil.get_combo_entry(self.widget("disk-format"))
-            add_define(self.vm.define_disk_driver_type, dev_id_info, fmt)
+            kwargs["driver_type"] = uiutil.get_combo_entry(
+                self.widget("disk-format"))
 
         if self.edited(EDIT_DISK_SERIAL):
-            serial = self.get_text("disk-serial")
-            add_define(self.vm.define_disk_serial, dev_id_info, serial)
+            kwargs["serial"] = self.get_text("disk-serial")
 
         if self.edited(EDIT_DISK_IOTUNE):
-            iotune_rbs = int(self.widget("disk-iotune-rbs").get_value() * 1024)
-            iotune_ris = int(self.widget("disk-iotune-ris").get_value())
-            iotune_tbs = int(self.widget("disk-iotune-tbs").get_value() * 1024)
-            iotune_tis = int(self.widget("disk-iotune-tis").get_value())
-            iotune_wbs = int(self.widget("disk-iotune-wbs").get_value() * 1024)
-            iotune_wis = int(self.widget("disk-iotune-wis").get_value())
+            kwargs["iotune_rbs"] = int(
+                self.widget("disk-iotune-rbs").get_value() * 1024)
+            kwargs["iotune_ris"] = int(
+                self.widget("disk-iotune-ris").get_value())
+            kwargs["iotune_tbs"] = int(
+                self.widget("disk-iotune-tbs").get_value() * 1024)
+            kwargs["iotune_tis"] = int(
+                self.widget("disk-iotune-tis").get_value())
+            kwargs["iotune_wbs"] = int(
+                self.widget("disk-iotune-wbs").get_value() * 1024)
+            kwargs["iotune_wis"] = int(
+                self.widget("disk-iotune-wis").get_value())
 
-            add_define(self.vm.define_disk_iotune_rbs, dev_id_info, iotune_rbs)
-            add_define(self.vm.define_disk_iotune_ris, dev_id_info, iotune_ris)
-            add_define(self.vm.define_disk_iotune_tbs, dev_id_info, iotune_tbs)
-            add_define(self.vm.define_disk_iotune_tis, dev_id_info, iotune_tis)
-            add_define(self.vm.define_disk_iotune_wbs, dev_id_info, iotune_wbs)
-            add_define(self.vm.define_disk_iotune_wis, dev_id_info, iotune_wis)
-
-        # Do this last since it can change uniqueness info of the dev
         if self.edited(EDIT_DISK_BUS):
             bus = uiutil.get_combo_entry(self.widget("disk-bus"))
             addr = None
             if bus == "spapr-vscsi":
                 bus = "scsi"
                 addr = "spapr-vio"
-            add_define(self.vm.define_disk_bus, dev_id_info, bus, addr)
 
-        return self._change_config_helper(df, da, hf, ha)
+            kwargs["bus"] = bus
+            kwargs["addrstr"] = addr
 
-    # Audio options
-    def config_sound_apply(self, dev_id_info):
-        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
-        ignore = add_hotplug
+        return self._change_config_helper(self.vm.define_disk, kwargs,
+                                          devobj=devobj)
+
+    def config_sound_apply(self, devobj):
+        kwargs = {}
 
         if self.edited(EDIT_SOUND_MODEL):
             model = uiutil.get_combo_entry(self.widget("sound-model"))
             if model:
-                add_define(self.vm.define_sound_model, dev_id_info, model)
+                kwargs["model"] = model
 
-        return self._change_config_helper(df, da, hf, ha)
+        return self._change_config_helper(self.vm.define_sound, kwargs,
+                                          devobj=devobj)
 
-    # Smartcard options
-    def config_smartcard_apply(self, dev_id_info):
-        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
-        ignore = add_hotplug
+    def config_smartcard_apply(self, devobj):
+        kwargs = {}
 
         if self.edited(EDIT_SMARTCARD_MODE):
             model = uiutil.get_combo_entry(self.widget("smartcard-mode"))
             if model:
-                add_define(self.vm.define_smartcard_mode, dev_id_info, model)
+                kwargs["model"] = model
 
-        return self._change_config_helper(df, da, hf, ha)
+        return self._change_config_helper(self.vm.define_smartcard, kwargs,
+                                          devobj=devobj)
 
-    # Network options
-    def config_network_apply(self, dev_id_info):
-        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
-        ignore = add_hotplug
+    def config_network_apply(self, devobj):
+        kwargs = {}
 
         if self.edited(EDIT_NET_MODEL):
             model = uiutil.get_combo_entry(self.widget("network-model"))
-            addr = None
+            addrstr = None
             if model == "spapr-vlan":
-                addr = "spapr-vio"
-            add_define(self.vm.define_network_model, dev_id_info, model, addr)
+                addrstr = "spapr-vio"
+            kwargs["model"] = model
+            kwargs["addrstr"] = addrstr
 
         if self.edited(EDIT_NET_SOURCE):
-            nettype, source, mode = self.netlist.get_network_selection()
-            add_define(self.vm.define_network_source, dev_id_info,
-                       nettype, source, mode)
+            kwargs["ntype"], kwargs["source"], kwargs["mode"] = (
+                self.netlist.get_network_selection())
 
         if self.edited(EDIT_NET_VPORT):
-            (vport_type, vport_managerid, vport_typeid,
-             vport_idver, vport_instid) = self.netlist.get_vport()
+            (kwargs["vtype"], kwargs["managerid"],
+             kwargs["typeid"], kwargs["typeidversion"],
+             kwargs["instanceid"]) = self.netlist.get_vport()
 
-            add_define(self.vm.define_virtualport, dev_id_info,
-                       vport_type, vport_managerid, vport_typeid,
-                       vport_idver, vport_instid)
+        return self._change_config_helper(self.vm.define_network, kwargs,
+                                          devobj)
 
-        return self._change_config_helper(df, da, hf, ha)
-
-    # Graphics options
-    def config_graphics_apply(self, dev_id_info):
-        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
-
+    def config_graphics_apply(self, devobj):
         (gtype, port,
          tlsport, addr, passwd, keymap) = self.gfxdetails.get_values()
 
+        kwargs = {}
+
         if self.edited(EDIT_GFX_PASSWD):
-            add_define(self.vm.define_graphics_password, dev_id_info, passwd)
-            add_hotplug(self.vm.hotplug_graphics_password, dev_id_info,
-                        passwd)
-
+            kwargs["passwd"] = passwd
         if self.edited(EDIT_GFX_ADDRESS):
-            add_define(self.vm.define_graphics_address, dev_id_info, addr)
+            kwargs["listen"] = addr
         if self.edited(EDIT_GFX_KEYMAP):
-            add_define(self.vm.define_graphics_keymap, dev_id_info, keymap)
+            kwargs["keymap"] = keymap
         if self.edited(EDIT_GFX_PORT):
-            add_define(self.vm.define_graphics_port, dev_id_info, port)
+            kwargs["port"] = port
         if self.edited(EDIT_GFX_TLSPORT):
-            add_define(self.vm.define_graphics_tlsport, dev_id_info, tlsport)
-
-        # Do this last since it can change graphics unique ID
+            kwargs["tlsport"] = tlsport
         if self.edited(EDIT_GFX_TYPE):
-            add_define(self.vm.define_graphics_type, dev_id_info, gtype)
+            kwargs["gtype"] = gtype
 
-        return self._change_config_helper(df, da, hf, ha)
+        return self._change_config_helper(self.vm.define_graphics, kwargs,
+                                          devobj=devobj)
 
-    # Video options
-    def config_video_apply(self, dev_id_info):
-        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
-        ignore = add_hotplug
+    def config_video_apply(self, devobj):
+        kwargs = {}
 
         if self.edited(EDIT_VIDEO_MODEL):
             model = uiutil.get_combo_entry(self.widget("video-model"))
             if model:
-                add_define(self.vm.define_video_model, dev_id_info, model)
+                kwargs["model"] = model
 
-        return self._change_config_helper(df, da, hf, ha)
+        return self._change_config_helper(self.vm.define_video, kwargs,
+                                          devobj=devobj)
 
-    # Controller options
-    def config_controller_apply(self, dev_id_info):
-        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
-        ignore = add_hotplug
+    def config_controller_apply(self, devobj):
+        kwargs = {}
 
         if self.edited(EDIT_CONTROLLER_MODEL):
             model = uiutil.get_combo_entry(self.widget("controller-model"))
             if model:
-                add_define(self.vm.define_controller_model, dev_id_info, model)
+                kwargs["model"] = model
 
-        return self._change_config_helper(df, da, hf, ha)
+        return self._change_config_helper(self.vm.define_controller,
+                                          kwargs, devobj=devobj)
 
-    # Watchdog options
-    def config_watchdog_apply(self, dev_id_info):
-        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
-        ignore = add_hotplug
+    def config_watchdog_apply(self, devobj):
+        kwargs = {}
 
         if self.edited(EDIT_WATCHDOG_MODEL):
-            model = uiutil.get_combo_entry(self.widget("watchdog-model"))
-            add_define(self.vm.define_watchdog_model, dev_id_info, model)
+            kwargs["model"] = uiutil.get_combo_entry(
+                self.widget("watchdog-model"))
 
         if self.edited(EDIT_WATCHDOG_ACTION):
-            action = uiutil.get_combo_entry(self.widget("watchdog-action"))
-            add_define(self.vm.define_watchdog_action, dev_id_info, action)
+            kwargs["action"] = uiutil.get_combo_entry(
+                self.widget("watchdog-action"))
 
-        return self._change_config_helper(df, da, hf, ha)
+        return self._change_config_helper(self.vm.define_watchdog, kwargs,
+                                          devobj=devobj)
 
-    # Filesystem options
-    def config_filesystem_apply(self, dev_id_info):
-        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
-        ignore = add_hotplug
+    def config_filesystem_apply(self, devobj):
+        kwargs = {}
 
         if self.edited(EDIT_FS):
             if self.fsDetails.validate_page_filesystem() is False:
                 return False
-            add_define(self.vm.define_filesystem, dev_id_info,
-                       self.fsDetails.get_dev())
+            kwargs["newdev"] = self.fsDetails.get_dev()
 
-        return self._change_config_helper(df, da, hf, ha)
+        return self._change_config_helper(self.vm.define_filesystem,
+                                          kwargs, devobj=devobj)
 
-    def config_hostdev_apply(self, dev_id_info):
-        df, da, add_define, hf, ha, add_hotplug = self.make_apply_data()
-        ignore = add_hotplug
+    def config_hostdev_apply(self, devobj):
+        kwargs = {}
 
         if self.edited(EDIT_HOSTDEV_ROMBAR):
-            add_define(self.vm.define_hostdev_rombar, dev_id_info,
-                       self.widget("hostdev-rombar").get_active())
+            kwargs["rom_bar"] = self.widget("hostdev-rombar").get_active()
 
-        return self._change_config_helper(df, da, hf, ha)
+        return self._change_config_helper(self.vm.define_hostdev, kwargs,
+                                          devobj=devobj)
+
 
     # Device removal
-    def remove_device(self, dev_type, dev_id_info):
-        logging.debug("Removing device: %s %s", dev_type, dev_id_info)
+    def remove_device(self, devobj):
+        logging.debug("Removing device: %s", devobj)
 
         if not self.err.chkbox_helper(self.config.get_confirm_removedev,
             self.config.set_confirm_removedev,
@@ -2318,7 +2270,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Define the change
         try:
-            self.vm.remove_device(dev_id_info)
+            self.vm.remove_device(devobj)
         except Exception, e:
             self.err.show_err(_("Error Removing Device: %s" % str(e)))
             return
@@ -2327,7 +2279,7 @@ class vmmDetails(vmmGObjectUI):
         detach_err = False
         try:
             if self.vm.is_active():
-                self.vm.detach_device(dev_id_info)
+                self.vm.detach_device(devobj)
         except Exception, e:
             logging.debug("Device could not be hotUNplugged: %s", str(e))
             detach_err = (str(e), "".join(traceback.format_exc()))
@@ -2344,47 +2296,18 @@ class vmmDetails(vmmGObjectUI):
             buttons=Gtk.ButtonsType.OK,
             dialog_type=Gtk.MessageType.INFO)
 
-    # Generic config change helpers
-    def _change_config_helper(self,
-                              define_funcs, define_funcs_args,
-                              hotplug_funcs=None, hotplug_funcs_args=None):
-        """
-        Requires at least a 'define' function and arglist to be specified
-        (a function where we change the inactive guest config).
-
-        Arguments can be a single arg or a list or appropriate arg type (e.g.
-        a list of functions for define_funcs)
-        """
-        define_funcs = util.listify(define_funcs)
-        define_funcs_args = util.listify(define_funcs_args)
-        hotplug_funcs = util.listify(hotplug_funcs)
-        hotplug_funcs_args = util.listify(hotplug_funcs_args)
-
-        hotplug_err = []
-        active = self.vm.is_active()
-
-        # Hotplug change
-        func = None
-        if active and hotplug_funcs:
-            for idx in range(len(hotplug_funcs)):
-                func = hotplug_funcs[idx]
-                args = hotplug_funcs_args[idx]
-                try:
-                    func(*args)
-                except Exception, e:
-                    logging.debug("Hotplug failed: func=%s: %s",
-                                  func, str(e))
-                    hotplug_err.append((str(e),
-                                        "".join(traceback.format_exc())))
+    def _change_config_helper(self, define_func, define_args,
+                              devobj=None,
+                              hotplug_args=None):
+        hotplug_args = hotplug_args or {}
 
         # Persistent config change
         try:
-            for idx in range(len(define_funcs)):
-                func = define_funcs[idx]
-                args = define_funcs_args[idx]
-                func(*args)
-            if define_funcs:
-                self.vm.redefine_cached()
+            if devobj:
+                define_func(devobj, False, **define_args)
+            else:
+                define_func(**define_args)
+            self.vm.redefine_cached()
         except Exception, e:
             self.err.show_err((_("Error changing VM configuration: %s") %
                               str(e)))
@@ -2392,20 +2315,33 @@ class vmmDetails(vmmGObjectUI):
             self.vm.refresh_xml()
             return False
 
+        # Hotplug change
+        hotplug_err = None
+        if self.vm.is_active():
+            try:
+                if devobj:
+                    hotplug_args["device"] = define_func(
+                        devobj, True, **define_args)
+                if hotplug_args:
+                    self.vm.hotplug(**hotplug_args)
+            except Exception, e:
+                logging.debug("Hotplug failed: %s", str(e))
+                hotplug_err = ((str(e), "".join(traceback.format_exc())))
 
-        if (hotplug_err or
-            (active and not len(hotplug_funcs) == len(define_funcs))):
-            if len(define_funcs) > 1:
+        if (hotplug_err or (self.vm.is_active() and not hotplug_args)):
+            if len(define_args) > 1:
                 msg = _("Some changes may require a guest shutdown "
                         "to take effect.")
             else:
                 msg = _("These changes will take effect after "
                         "the next guest shutdown.")
 
-            dtype = hotplug_err and Gtk.MessageType.WARNING or Gtk.MessageType.INFO
+            dtype = (hotplug_err and
+                     Gtk.MessageType.WARNING or Gtk.MessageType.INFO)
             hotplug_msg = ""
-            for err1, tb in hotplug_err:
-                hotplug_msg += (err1 + "\n\n" + tb + "\n")
+            if hotplug_err:
+                hotplug_msg += (hotplug_err[0] + "\n\n" +
+                                hotplug_err[1] + "\n")
 
             self.err.show_err(msg,
                               details=hotplug_msg,
@@ -2413,6 +2349,7 @@ class vmmDetails(vmmGObjectUI):
                               dialog_type=dtype)
 
         return True
+
 
     ########################
     # Details page refresh #
