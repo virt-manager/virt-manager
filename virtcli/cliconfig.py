@@ -60,7 +60,7 @@ def _setup_gsettings_path(schemadir):
         raise RuntimeError("Failed to compile local gsettings schemas")
 
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 __snapshot__ = 0
 
