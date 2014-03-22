@@ -616,7 +616,7 @@ def add_memory_option(grp, backcompat=False):
     grp.add_argument("--memory",
         help=_("Configure guest memory allocation. Ex:\n"
                "--memory 1024 (in megabytes)\n"
-               "--memory 512,maxmemory=1024,hugepages=on"))
+               "--memory 512,maxmemory=1024"))
     if backcompat:
         grp.add_argument("-r", "--ram", type=int, dest="oldmemory",
             help=argparse.SUPPRESS)
@@ -787,7 +787,8 @@ def add_guest_xml_options(geng):
     geng.add_argument("--blkiotune", action="append",
                     help=_("Tune blkio policy for the domain process."))
     geng.add_argument("--membacking", action="append",
-                    help=_("Set memory backing policy for the domain process."))
+        help=_("Set memory backing policy for the domain process. Ex:\n"
+               "--membacking hugepages=on"))
     geng.add_argument("--features",
                     help=_("Set domain <features> XML. Ex:\n"
                            "--features acpi=off\n"
