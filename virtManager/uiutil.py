@@ -145,9 +145,9 @@ def get_combo_entry(combo, rowidx=0):
     Helper to get the value specified in a combo box, with or
     without and entry
     """
-    ret = get_list_selection(combo, rowidx)
-    if ret:
-        return ret
+    row = get_list_selection(combo)
+    if row:
+        return row[rowidx]
     if not combo.get_has_entry():
         return None
     return combo.get_child().get_text().strip()
