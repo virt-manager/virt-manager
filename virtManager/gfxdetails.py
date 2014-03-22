@@ -153,6 +153,8 @@ class vmmGraphicsDetails(vmmGObjectUI):
         def set_port(basename, val):
             auto = self.widget(basename + "-auto")
             widget = self.widget(basename)
+            auto.set_inconsistent(False)
+
             if val == -1 or gfx.autoport:
                 auto.set_active(True)
             elif val is None:
@@ -227,10 +229,12 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.emit("changed-type")
 
     def _change_port_auto(self, ignore):
+        self.widget("graphics-port-auto").set_inconsistent(False)
         self._change_ports()
         self.emit("changed-port")
 
     def _change_tlsport_auto(self, ignore):
+        self.widget("graphics-tlsport-auto").set_inconsistent(False)
         self._change_ports()
         self.emit("changed-tlsport")
 

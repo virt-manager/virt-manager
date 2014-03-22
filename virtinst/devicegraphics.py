@@ -136,6 +136,14 @@ class VirtualGraphics(VirtualDevice):
                          default_cb=_default_keymap,
                          set_converter=_set_keymap_converter)
 
+    def _set_port_converter(self, val):
+        val = _validate_port("Port", val)
+        self.autoport = self._get_default_autoport()
+        return val
+    def _set_tlsport_converter(self, val):
+        val = _validate_port("TLS Port", val)
+        self.autoport = self._get_default_autoport()
+        return val
     def _get_default_port(self):
         if self.type == "vnc" or self.type == "spice":
             return -1
@@ -153,10 +161,10 @@ class VirtualGraphics(VirtualDevice):
             return True
         return None
     port = XMLProperty("./@port", is_int=True,
-            set_converter=lambda s, v: _validate_port("Port", v),
+            set_converter=_set_port_converter,
             default_cb=_get_default_port)
     tlsPort = XMLProperty("./@tlsPort", is_int=True,
-            set_converter=lambda s, v: _validate_port("TLS port", v),
+            set_converter=_set_tlsport_converter,
             default_cb=_get_default_tlsport)
     autoport = XMLProperty("./@autoport", is_yesno=True,
                            default_cb=_get_default_autoport)
