@@ -652,25 +652,6 @@ class vmmAddHardware(vmmGObjectUI):
         combo.set_active(idx)
 
     @staticmethod
-    def build_graphics_keymap_combo(vm, combo, no_default=False):
-        ignore = vm
-        model = Gtk.ListStore(str, str)
-        combo.set_model(model)
-        uiutil.set_combo_text_column(combo, 1)
-
-        if not no_default:
-            model.append([None, "default"])
-        else:
-            model.append([None, "Auto"])
-
-        model.append([virtinst.VirtualGraphics.KEYMAP_LOCAL,
-                      "Copy local keymap"])
-        for k in virtinst.VirtualGraphics.valid_keymaps():
-            model.append([k, k])
-
-        combo.set_active(-1)
-
-    @staticmethod
     def build_disk_cache_combo(vm, combo):
         ignore = vm
         model = Gtk.ListStore(str, str)
