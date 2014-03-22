@@ -115,8 +115,6 @@ class XMLParseTest(unittest.TestCase):
                       "11111111-2222-3333-4444-555555555555")
         check("emulator", "/usr/lib/xen/bin/qemu-dm", "/usr/binnnn/fooemu")
         check("hugepage", False, True)
-        check("nosharepages", False, True)
-        check("locked", False, True)
         check("type", "kvm", "test")
         check("bootloader", None, "pygrub")
         check("on_poweroff", "destroy", "restart")

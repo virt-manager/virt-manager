@@ -1248,8 +1248,6 @@ class ParserMemory(VirtCLIParser):
         self.set_param("memory", "memory", setter_cb=set_memory_cb)
         self.set_param("maxmemory", "maxmemory", setter_cb=set_memory_cb)
         self.set_param("hugepage", "hugepages", is_onoff=True)
-        self.set_param("nosharepages", "nosharepages", is_onoff=True)
-        self.set_param("locked", "locked", is_onoff=True)
 
 
 #####################
