@@ -852,7 +852,7 @@ class vmmConnection(vmmGObject):
             self.idle_add(obj.force_update_status, True)
 
             if event == libvirt.VIR_DOMAIN_EVENT_DEFINED:
-                self.idle_add(obj.refresh_xml)
+                self.idle_add(obj.refresh_xml, True)
         else:
             self.schedule_priority_tick(pollvm=True, force=True)
 
@@ -866,7 +866,7 @@ class vmmConnection(vmmGObject):
             self.idle_add(obj.force_update_status, True)
 
             if event == getattr(libvirt, "VIR_NETWORK_EVENT_DEFINED", 0):
-                self.idle_add(obj.refresh_xml)
+                self.idle_add(obj.refresh_xml, True)
         else:
             self.schedule_priority_tick(pollnet=True, force=True)
 
