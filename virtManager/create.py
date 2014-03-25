@@ -132,7 +132,7 @@ class vmmCreate(vmmGObjectUI):
             "on_install_url_box_changed": self.url_box_changed,
             "on_install_local_cdrom_toggled": self.toggle_local_cdrom,
             "on_install_local_cdrom_combo_changed": self.detect_media_os,
-            "on_install_local_box_changed": self.detect_media_os,
+            "on_install_local_box_changed": self.local_box_changed,
             "on_install_local_browse_clicked": self.browse_iso,
             "on_install_import_browse_clicked": self.browse_import,
             "on_install_app_browse_clicked": self.browse_app,
@@ -551,6 +551,11 @@ class vmmCreate(vmmGObjectUI):
 
         self.mediacombo = vmmMediaCombo(self.conn, self.builder, self.topwin,
                                         MEDIA_CDROM)
+        def mediacombo_changed(src):
+            ignore = src
+            self.mediaDetected = False
+            self.detect_media_os()
+        self.mediacombo.combo.connect("changed", mediacombo_changed)
         self.mediacombo.reset_state()
         self.widget("install-local-cdrom-align").add(
             self.mediacombo.top_box)
@@ -1117,15 +1122,21 @@ class vmmCreate(vmmGObjectUI):
 
         self.change_caps(self.capsguest.os_type, arch)
 
-    def url_box_changed(self, ignore):
+    def media_box_changed(self, widget):
         self.mediaDetected = False
 
-        # If the url_entry has focus, don't fire detect_media_os, it means
+        # If the widget has focus, don't fire detect_media_os, it means
         # the user is probably typing
-        if self.widget("install-url-box").get_child().has_focus():
+        if self.widget(widget).get_child().has_focus():
             return
 
         self.detect_media_os()
+
+    def url_box_changed(self, ignore):
+        self.media_box_changed("install-url-box")
+
+    def local_box_changed(self, ignore):
+        self.media_box_changed("install-local-box")
 
     def should_detect_media(self):
         return (self.is_detect_active() and not self.mediaDetected)
@@ -1190,6 +1201,7 @@ class vmmCreate(vmmGObjectUI):
         is_active = src.get_active()
         if is_active and self.mediacombo.get_path():
             # Local CDROM was selected with media preset, detect distro
+            self.mediaDetected = False
             self.detect_media_os()
 
         self.widget("install-local-cdrom-align").set_sensitive(is_active)
@@ -1198,6 +1210,8 @@ class vmmCreate(vmmGObjectUI):
         uselocal = src.get_active()
         self.widget("install-local-box").set_sensitive(uselocal)
         self.widget("install-local-browse").set_sensitive(uselocal)
+        self.mediaDetected = False
+        self.detect_media_os()
 
     def detect_visibility_changed(self, src, ignore=None):
         is_visible = src.get_visible()
@@ -1249,11 +1263,7 @@ class vmmCreate(vmmGObjectUI):
                                    INSTALL_PAGE_CONTAINER_OS]
         osbox.set_visible(iscontainer)
 
-        # Detection only works/ is valid for URL,
-        # FIXME: Also works for CDROM if running as root (since we need to
-        # mount the iso/cdrom), but we should probably make this work for
-        # more distros (like windows) before we enable it
-        if (instpage == INSTALL_PAGE_URL):
+        if instpage in (INSTALL_PAGE_ISO, INSTALL_PAGE_URL):
             detectbox.show()
         else:
             detectbox.hide()
