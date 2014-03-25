@@ -180,7 +180,7 @@ class _OSVariant(object):
         it is still pretty useful, so we fake it here. New types should
         not be added often.
     @parent: Name of a pre-created variant that we want to extend. So
-        fedoraFOO would have parent fedoraFOO-1. It's used for inheiriting
+        fedoraFOO would have parent fedoraFOO-1. It's used for inheriting
         values.
     @typename: The family of the OS, e.g. "linux", "windows", "unix".
     @sortby: A different key to use for sorting the distro list. By default
