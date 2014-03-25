@@ -421,6 +421,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("char-target-type").set_active(0)
         self.widget("char-target-name").set_active(0)
         self.widget("char-path").set_text("")
+        self.widget("char-channel").set_text("")
         self.widget("char-host").set_text("127.0.0.1")
         self.widget("char-port").set_value(4555)
         self.widget("char-bind-host").set_text("127.0.0.1")
@@ -1184,6 +1185,9 @@ class vmmAddHardware(vmmGObjectUI):
         settype = None
         if text == VirtualChannelDevice.CHANNEL_NAME_SPICE:
             settype = "spicevmc"
+        elif text == VirtualChannelDevice.CHANNEL_NAME_SPICE_WEBDAV:
+            settype = "spiceport"
+            self.widget("char-channel").set_text(text)
         elif (text == VirtualChannelDevice.CHANNEL_NAME_QEMUGA or
               text == VirtualChannelDevice.CHANNEL_NAME_LIBGUESTFS):
             settype = "unix"
@@ -1196,6 +1200,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         char_widget_mappings = {
             "source_path" : "char-path",
+            "source_channel" : "char-channel",
             "source_mode" : "char-mode",
             "source_host" : "char-host",
             "bind_host" : "char-bind-host",
@@ -1581,6 +1586,7 @@ class vmmAddHardware(vmmGObjectUI):
         devclass.type = devtype
 
         source_path = self.widget("char-path").get_text()
+        source_channel = self.widget("char-channel").get_text()
         source_mode = uiutil.get_list_selection(modebox, 0)
         source_host = self.widget("char-host").get_text()
         bind_host = self.widget("char-bind-host").get_text()
@@ -1605,6 +1611,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         value_mappings = {
             "source_path" : source_path,
+            "source_channel" : source_channel,
             "source_mode" : source_mode,
             "source_host" : source_host,
             "source_port" : source_port,
