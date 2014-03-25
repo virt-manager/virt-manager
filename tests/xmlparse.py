@@ -361,6 +361,7 @@ class XMLParseTest(unittest.TestCase):
         console2    = guest.get_devices("console")[1]
         channel1    = guest.get_devices("channel")[0]
         channel2    = guest.get_devices("channel")[1]
+        channel3    = guest.get_devices("channel")[2]
 
         check = self._make_checker(serial1)
         check("type", "null", "udp")
@@ -407,6 +408,12 @@ class XMLParseTest(unittest.TestCase):
         check("target_type", "guestfwd")
         check("target_address", "1.2.3.4", "5.6.7.8")
         check("target_port", 4567, 1199)
+
+        check = self._make_checker(channel3)
+        check("type", "spiceport")
+        check("source_channel", "org.spice-space.webdav.0", "test.1")
+        check("target_type", "virtio")
+        check("target_name", "org.spice-space.webdav.0", "test.2")
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

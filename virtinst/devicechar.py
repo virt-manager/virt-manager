@@ -170,7 +170,7 @@ class _VirtualCharDevice(VirtualDevice):
 
     _XML_PROP_ORDER = ["type", "_has_mode_bind", "_has_mode_connect",
                        "bind_host", "bind_port",
-                       "source_mode", "_source_path",
+                       "source_mode", "_source_path", "source_channel",
                        "source_host", "source_port",
                        "target_type", "target_name"]
 
@@ -190,6 +190,9 @@ class _VirtualCharDevice(VirtualDevice):
     def _set_source_path(self, val):
         self._source_path = val
     source_path = property(_get_source_path, _set_source_path)
+
+    source_channel = XMLProperty(xpath="./source/@channel",
+                                 doc=_("Source channel name."))
 
     def _get_default_source_mode(self):
         if self.type == self.TYPE_UDP:

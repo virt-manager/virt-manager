@@ -47,5 +47,9 @@
       <source mode="bind" path="/tmp/foobar"/>
       <target type="guestfwd" address="5.6.7.8" port="1199"/>
     </channel>
+    <channel type="spiceport">
+      <source channel="test.1"/>
+      <target type="virtio" name="test.2"/>
+    </channel>
   </devices>
 </domain>

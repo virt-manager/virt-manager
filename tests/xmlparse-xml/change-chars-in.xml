@@ -44,5 +44,9 @@
       <source mode="bind" path="/tmp/foobar"/>
       <target type="guestfwd" address="1.2.3.4" port="4567"/>
     </channel>
+    <channel type="spiceport">
+      <source channel="org.spice-space.webdav.0"/>
+      <target type="virtio" name="org.spice-space.webdav.0"/>
+    </channel>
   </devices>
 </domain>
