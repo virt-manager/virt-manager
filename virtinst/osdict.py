@@ -24,6 +24,8 @@ _allvariants = {}
 from datetime import datetime
 from gi.repository import Libosinfo as libosinfo  # pylint: disable=E0611
 
+loader = libosinfo.Loader()
+loader.process_default_path()
 
 _aliases = {
     "altlinux" : "altlinux1.0",
@@ -160,6 +162,14 @@ def get_recommended_resources(variant, arch):
         return None
 
     return v.get_recommended_resources(arch)
+
+
+def lookup_os_by_media(location):
+    media = libosinfo.Media.create_from_location(location, None)
+    ret = loader.get_db().guess_os_from_media(media)
+    if len(ret) > 0:
+        return ret[0].get_short_id()
+    return None
 
 
 class _OSVariant(object):
@@ -559,8 +569,6 @@ _add_type("unix", "UNIX")
 _add_type("other", "Other")
 _add_var("generic", "Generic", supported=True, parent="other")
 
-loader = libosinfo.Loader()
-loader.process_default_path()
 db = loader.get_db()
 
 oslist = db.get_os_list()
