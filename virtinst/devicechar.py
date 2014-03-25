@@ -38,10 +38,12 @@ class _VirtualCharDevice(VirtualDevice):
     TYPE_UDP      = "udp"
     TYPE_UNIX     = "unix"
     TYPE_SPICEVMC = "spicevmc"
+    TYPE_SPICEPORT = "spiceport"
+
     # We don't list the non-UI friendly types here
     _TYPES_FOR_ALL = [TYPE_PTY, TYPE_DEV, TYPE_FILE,
                       TYPE_TCP, TYPE_UDP, TYPE_UNIX]
-    _TYPES_FOR_CHANNEL = [TYPE_SPICEVMC]
+    _TYPES_FOR_CHANNEL = [TYPE_SPICEVMC, TYPE_SPICEPORT]
     TYPES = _TYPES_FOR_ALL
 
     MODE_CONNECT = "connect"
@@ -67,9 +69,11 @@ class _VirtualCharDevice(VirtualDevice):
     CHANNEL_NAME_SPICE = "com.redhat.spice.0"
     CHANNEL_NAME_QEMUGA = "org.qemu.guest_agent.0"
     CHANNEL_NAME_LIBGUESTFS = "org.libguestfs.channel.0"
+    CHANNEL_NAME_SPICE_WEBDAV = "org.spice-space.webdav.0"
     CHANNEL_NAMES = [CHANNEL_NAME_SPICE,
                      CHANNEL_NAME_QEMUGA,
-                     CHANNEL_NAME_LIBGUESTFS]
+                     CHANNEL_NAME_LIBGUESTFS,
+                     CHANNEL_NAME_SPICE_WEBDAV]
 
     @staticmethod
     def pretty_channel_name(val):
@@ -79,6 +83,8 @@ class _VirtualCharDevice(VirtualDevice):
             return "qemu-ga"
         if val == _VirtualCharDevice.CHANNEL_NAME_LIBGUESTFS:
             return "libguestfs"
+        if val == _VirtualCharDevice.CHANNEL_NAME_SPICE_WEBDAV:
+            return "spice-webdav"
         return None
 
     @staticmethod
@@ -110,6 +116,8 @@ class _VirtualCharDevice(VirtualDevice):
             desc = _("Unix socket")
         elif ctype == _VirtualCharDevice.TYPE_SPICEVMC:
             desc = _("Spice agent")
+        elif ctype == _VirtualCharDevice.TYPE_SPICEPORT:
+            desc = _("Spice port")
 
         return desc
 
@@ -137,6 +145,7 @@ class _VirtualCharDevice(VirtualDevice):
             "source_mode"   : [self.TYPE_UNIX, self.TYPE_TCP],
             "source_host"   : [self.TYPE_TCP, self.TYPE_UDP],
             "source_port"   : [self.TYPE_TCP, self.TYPE_UDP],
+            "source_channel": [self.TYPE_SPICEPORT],
             "protocol"      : [self.TYPE_TCP],
             "bind_host"     : [self.TYPE_UDP],
             "bind_port"     : [self.TYPE_UDP],
