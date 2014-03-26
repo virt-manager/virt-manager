@@ -167,7 +167,7 @@ def get_recommended_resources(variant, arch):
 def lookup_os_by_media(location):
     media = libosinfo.Media.create_from_location(location, None)
     ret = loader.get_db().guess_os_from_media(media)
-    if len(ret) > 0:
+    if ret and len(ret) > 0:
         return ret[0].get_short_id()
     return None
 
