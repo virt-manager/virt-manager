@@ -553,10 +553,15 @@ class vmmSnapshotPage(vmmGObjectUI):
 
     def _on_start_clicked(self, ignore):
         snap = self._get_selected_snapshot()
-        result = self.err.yes_no(_("Are you sure you want to run "
-                                   "snapshot '%s'? All disk changes since "
-                                   "the last snapshot was created will be "
-                                   "discarded.") % snap.get_name())
+        msg = _("Are you sure you want to run snapshot '%s'? "
+            "All %s changes since the last snapshot was created will be "
+            "discarded.")
+        if self.vm.is_active():
+            msg = msg % (snap.get_name(), _("disk"))
+        else:
+            msg = msg % (snap.get_name(), _("disk and configuration"))
+
+        result = self.err.yes_no(msg)
         if not result:
             return
 
