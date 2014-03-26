@@ -1,5 +1,5 @@
 #
-# Copyright 2006-2009, 2013 Red Hat, Inc.
+# Copyright 2006-2009, 2013, 2014 Red Hat, Inc.
 # Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -30,6 +30,7 @@ from virtinst import util
 from virtinst import Installer
 from virtinst import VirtualDisk
 from virtinst import urlfetcher
+from virtinst import osdict
 
 
 def _is_url(conn, url):
@@ -472,6 +473,15 @@ class DistroInstaller(Installer):
         return True
 
     def detect_distro(self, guest):
+        try:
+            if not _is_url(self.conn, self.location):
+                name = osdict.lookup_os_by_media(self.location)
+                if name:
+                    logging.debug("installer.detect_distro returned=%s", name)
+                    return name
+        except:
+            logging.debug("libosinfo detect failed", exc_info=True)
+
         try:
             ret = urlfetcher.detectMediaDistro(guest, self.location)
             logging.debug("installer.detect_distro returned=%s", ret)
