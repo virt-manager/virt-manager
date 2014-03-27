@@ -818,9 +818,10 @@ class vmmCreateInterface(vmmGObjectUI):
                 if not ipv6.dhcp:
                     if v6_gate:
                         ipv6.gateway = v6_gate
-                    addr, prefix = build_ip(v4_addr)
-                    if addr:
-                        ipv6.add_ip(addr, prefix)
+                    for v6_addr in v6_addrlist:
+                        addr, prefix = build_ip(v6_addr)
+                        if addr:
+                            ipv6.add_ip(addr, prefix)
 
         return [is_manual, copy_name, ipv4, ipv6, proto_xml]
 
