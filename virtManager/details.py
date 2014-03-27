@@ -530,6 +530,7 @@ class vmmDetails(vmmGObjectUI):
 
         self.oldhwkey = None
         self.addhwmenu = None
+        self._addhwmenuitems = None
         self.keycombo_menu = None
         self.init_menus()
         self.init_details()
@@ -706,6 +707,7 @@ class vmmDetails(vmmGObjectUI):
         self.vm = None
         self.conn = None
         self.addhwmenu = None
+        self._addhwmenuitems = None
 
         self.gfxdetails.cleanup()
         self.gfxdetails = None
@@ -801,8 +803,9 @@ class vmmDetails(vmmGObjectUI):
         rmHW.show()
         rmHW.connect("activate", self.remove_xml_dev)
 
-        self.addhwmenu.add(addHW)
-        self.addhwmenu.add(rmHW)
+        self._addhwmenuitems = {"add" : addHW, "remove" : rmHW}
+        for i in self._addhwmenuitems.values():
+            self.addhwmenu.add(i)
 
         # Don't allowing changing network/disks for Dom0
         dom0 = self.vm.is_management_domain()
@@ -1074,6 +1077,16 @@ class vmmDetails(vmmGObjectUI):
         ignore = widget
         if event.button != 3:
             return
+
+        devobj = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not devobj:
+            return
+
+        rmdev = self._addhwmenuitems["remove"]
+        if hasattr(devobj, "virtual_device_type"):
+            rmdev.show()
+        else:
+            rmdev.hide()
 
         self.addhwmenu.popup(None, None, None, None, 0, event.time)
 
