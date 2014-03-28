@@ -24,9 +24,6 @@ _allvariants = {}
 from datetime import datetime
 from gi.repository import Libosinfo as libosinfo  # pylint: disable=E0611
 
-loader = libosinfo.Loader()
-loader.process_default_path()
-
 _aliases = {
     "altlinux" : "altlinux1.0",
     "debianetch" : "debian4",
@@ -65,14 +62,6 @@ _aliases = {
     "vista" : "winvista",
     "winxp64" : "winxp",
 }
-
-
-def lookup_os(key):
-    key = _aliases.get(key) or key
-    ret = _allvariants.get(key)
-    if ret is None:
-        return ret
-    return ret
 
 
 def _sort(tosort, sortpref=None):
@@ -120,56 +109,6 @@ def _sort(tosort, sortpref=None):
             retlist.append(tosort[orig_key])
 
     return retlist
-
-
-def list_os(list_types=False, typename=None,
-            filtervars=None, only_supported=False,
-            **kwargs):
-    sortmap = {}
-    filtervars = filtervars or []
-
-    for key, osinfo in _allvariants.items():
-        if list_types and not osinfo.is_type:
-            continue
-        if not list_types and osinfo.is_type:
-            continue
-        if typename and typename != osinfo.typename:
-            continue
-        if filtervars:
-            filtervars = [lookup_os(x).name for x in filtervars]
-            if osinfo.name not in filtervars:
-                continue
-        if only_supported and not osinfo.supported:
-            continue
-        sortmap[key] = osinfo
-    return _sort(sortmap, **kwargs)
-
-
-def lookup_osdict_key(variant, key, default):
-    val = _SENTINEL
-    if variant is not None:
-        if not hasattr(lookup_os(variant), key):
-            raise ValueError("Unknown osdict property '%s'" % key)
-        val = getattr(lookup_os(variant), key)
-    if val == _SENTINEL:
-        val = default
-    return val
-
-
-def get_recommended_resources(variant, arch):
-    v = _allvariants.get(variant)
-    if v is None:
-        return None
-
-    return v.get_recommended_resources(arch)
-
-
-def lookup_os_by_media(location):
-    media = libosinfo.Media.create_from_location(location, None)
-    ret = loader.get_db().guess_os_from_media(media)
-    if ret and len(ret) > 0:
-        return ret[0].get_short_id()
-    return None
 
 
 class _OSVariant(object):
@@ -569,9 +508,91 @@ _add_type("unix", "UNIX")
 _add_type("other", "Other")
 _add_var("generic", "Generic", supported=True, parent="other")
 
-db = loader.get_db()
 
-oslist = db.get_os_list()
-for os in range(oslist.get_length()):
-    osi = _OsVariantOsInfo(oslist.get_nth(os))
-    _allvariants[osi.name] = osi
+_os_data_loaded = False
+_os_loader = None
+
+
+def _get_os_loader():
+    global _os_loader
+    if _os_loader:
+        return _os_loader
+    _os_loader = libosinfo.Loader()
+    _os_loader.process_default_path()
+    return _os_loader
+
+
+def _load_os_data():
+    global _os_data_loaded
+    if _os_data_loaded:
+        return
+    loader = _get_os_loader()
+    db = loader.get_db()
+    oslist = db.get_os_list()
+    for os in range(oslist.get_length()):
+        osi = _OsVariantOsInfo(oslist.get_nth(os))
+        _allvariants[osi.name] = osi
+    _os_data_loaded = True
+
+
+def lookup_os(key):
+    _load_os_data()
+    key = _aliases.get(key) or key
+    ret = _allvariants.get(key)
+    if ret is None:
+        return ret
+    return ret
+
+
+def list_os(list_types=False, typename=None,
+            filtervars=None, only_supported=False,
+            **kwargs):
+    _load_os_data()
+    sortmap = {}
+    filtervars = filtervars or []
+
+    for key, osinfo in _allvariants.items():
+        if list_types and not osinfo.is_type:
+            continue
+        if not list_types and osinfo.is_type:
+            continue
+        if typename and typename != osinfo.typename:
+            continue
+        if filtervars:
+            filtervars = [lookup_os(x).name for x in filtervars]
+            if osinfo.name not in filtervars:
+                continue
+        if only_supported and not osinfo.supported:
+            continue
+        sortmap[key] = osinfo
+    return _sort(sortmap, **kwargs)
+
+
+def lookup_osdict_key(variant, key, default):
+    _load_os_data()
+    val = _SENTINEL
+    if variant is not None:
+        if not hasattr(lookup_os(variant), key):
+            raise ValueError("Unknown osdict property '%s'" % key)
+        val = getattr(lookup_os(variant), key)
+    if val == _SENTINEL:
+        val = default
+    return val
+
+
+def get_recommended_resources(variant, arch):
+    _load_os_data()
+    v = _allvariants.get(variant)
+    if v is None:
+        return None
+
+    return v.get_recommended_resources(arch)
+
+
+def lookup_os_by_media(location):
+    loader = _get_os_loader()
+    media = libosinfo.Media.create_from_location(location, None)
+    ret = loader.get_db().guess_os_from_media(media)
+    if ret and len(ret) > 0:
+        return ret[0].get_short_id()
+    return None
