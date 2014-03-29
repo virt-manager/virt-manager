@@ -764,7 +764,7 @@ class vmmCreateInterface(vmmGObjectUI):
     def build_ip_info(self):
         def build_ip(addr_str):
             if not addr_str:
-                return None, None
+                raise ValueError(_("Please enter an IP address"))
             ret = addr_str.rsplit("/", 1)
             address = ret[0]
             prefix = None
