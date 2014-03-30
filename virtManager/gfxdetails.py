@@ -154,14 +154,19 @@ class vmmGraphicsDetails(vmmGObjectUI):
             auto = self.widget(basename + "-auto")
             widget = self.widget(basename)
             auto.set_inconsistent(False)
+            label = auto.get_label().split(" (")[0]
 
             if val == -1 or gfx.autoport:
                 auto.set_active(True)
+                if val and val != -1:
+                    label += " (%s %s)" % (_("Port"), val)
             elif val is None:
                 auto.set_inconsistent(True)
             else:
                 auto.set_active(False)
                 widget.set_value(val)
+
+            auto.set_label(label)
 
         gtype = gfx.type
         is_vnc = (gtype == "vnc")
