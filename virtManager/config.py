@@ -152,7 +152,7 @@ class vmmConfig(object):
         self.conf = SettingsWrapper("org.virt-manager.virt-manager")
 
         # We don't create it straight away, since we don't want
-        # to block the app pending user authorizaation to access
+        # to block the app pending user authorization to access
         # the keyring
         self.keyring = None
 
