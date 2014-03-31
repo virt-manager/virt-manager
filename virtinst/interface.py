@@ -23,6 +23,7 @@ Classes for building and installing libvirt interface xml
 import logging
 
 import libvirt
+import ipaddr
 
 from virtinst import util
 from virtinst.xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
@@ -32,7 +33,15 @@ class _IPAddress(XMLBuilder):
     _XML_PROP_ORDER = ["address", "prefix"]
     _XML_ROOT_NAME = "ip"
 
-    address = XMLProperty("./@address")
+    ######################
+    # Validation helpers #
+    ######################
+
+    def _validate_ipaddr(self, addr):
+        ipaddr.IPAddress(addr)
+        return addr
+
+    address = XMLProperty("./@address", validate_cb=_validate_ipaddr)
     prefix = XMLProperty("./@prefix", is_int=True)
 
 

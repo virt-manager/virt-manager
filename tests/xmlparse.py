@@ -965,7 +965,7 @@ class XMLParseTest(unittest.TestCase):
         check("autoconf", True, False)
 
         check = self._make_checker(iface.protocols[1].ips[1])
-        check("address", "fe80::215:58ff:fe6e:5", "foobar")
+        check("address", "fe80::215:58ff:fe6e:5", "2002::")
         check("prefix", 64, 38)
 
         # Remove a child interface, verify it's data remains intact
