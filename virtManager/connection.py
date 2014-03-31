@@ -99,9 +99,9 @@ class vmmConnection(vmmGObject):
         self._nodedev_capable = None
 
         self.using_domain_events = False
-        self._domain_cb_id = None
+        self._domain_cb_ids = []
         self.using_network_events = False
-        self._network_cb_id = None
+        self._network_cb_ids = []
 
         self._xml_flags = {}
 
@@ -840,6 +840,16 @@ class vmmConnection(vmmGObject):
     # event driven setup is hard, so we end up doing more polling than
     # necessary on most events.
 
+    def _domain_xml_misc_event(self, conn, domain, *args):
+        # Just trigger a domain XML refresh for hotplug type events
+        ignore = conn
+        ignore = args
+
+        obj = self.vms.get(domain.UUIDString(), None)
+        if not obj:
+            return
+        self.idle_add(obj.refresh_xml, True)
+
     def _domain_lifecycle_event(self, conn, domain, event, reason, userdata):
         ignore = conn
         ignore = reason
@@ -872,19 +882,41 @@ class vmmConnection(vmmGObject):
 
     def _add_conn_events(self):
         try:
-            self._domain_cb_id = self.get_backend().domainEventRegisterAny(
+            self._domain_cb_ids.append(
+                self.get_backend().domainEventRegisterAny(
                 None, libvirt.VIR_DOMAIN_EVENT_ID_LIFECYCLE,
-                self._domain_lifecycle_event, None)
+                self._domain_lifecycle_event, None))
             self.using_domain_events = True
             logging.debug("Using domain events")
         except Exception, e:
             self.using_domain_events = False
             logging.debug("Error registering domain events: %s", e)
 
+        def _add_domain_xml_event(eventid, typestr):
+            if not self.using_domain_events:
+                return
+            try:
+                self._domain_cb_ids.append(
+                    self.get_backend().domainEventRegisterAny(
+                    None, eventid, self._domain_xml_misc_event, None))
+            except Exception, e:
+                logging.debug("Error registering domain %s event: %s",
+                    typestr, e)
+
+        _add_domain_xml_event(
+            getattr(libvirt, "VIR_DOMAIN_EVENT_ID_BALLOON_CHANGE", 13),
+            "balloon")
+        _add_domain_xml_event(
+            getattr(libvirt, "VIR_DOMAIN_EVENT_ID_TRAY_CHANGE", 10), "tray")
+        _add_domain_xml_event(
+            getattr(libvirt, "VIR_DOMAIN_EVENT_ID_DEVICE_REMOVED", 15),
+            "device removed")
+
         try:
             eventid = getattr(libvirt, "VIR_NETWORK_EVENT_ID_LIFECYCLE", 0)
-            self._network_cb_id = self.get_backend().networkEventRegisterAny(
-                None, eventid, self._network_lifecycle_event, None)
+            self._network_cb_ids.append(
+                self.get_backend().networkEventRegisterAny(
+                None, eventid, self._network_lifecycle_event, None))
             self.using_network_events = True
             logging.debug("Using network events")
         except Exception, e:
@@ -936,15 +968,13 @@ class vmmConnection(vmmGObject):
 
         try:
             if not self._backend.is_closed():
-                if self._domain_cb_id is not None:
-                    self._backend.domainEventDeregisterAny(
-                        self._domain_cb_id)
-                self._domain_cb_id = None
+                for eid in self._domain_cb_ids:
+                    self._backend.domainEventDeregisterAny(eid)
+                self._domain_cb_ids = []
 
-                if self._network_cb_id is not None:
-                    self._backend.networkEventDeregisterAny(
-                        self._network_cb_id)
-                self._network_cb_id = None
+                for eid in self._network_cb_ids:
+                    self._backend.networkEventDeregisterAny(eid)
+                self._network_cb_ids = []
         except:
             logging.debug("Failed to deregister events in conn cleanup",
                 exc_info=True)
