@@ -22,7 +22,7 @@
 _SENTINEL = -1234
 _allvariants = {}
 from datetime import datetime
-from gi.repository import Libosinfo as libosinfo  # pylint: disable=E0611
+from gi.repository import Libosinfo as libosinfo
 
 _aliases = {
     "altlinux" : "altlinux1.0",

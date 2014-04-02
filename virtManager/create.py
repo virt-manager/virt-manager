@@ -22,11 +22,9 @@ import logging
 import threading
 import time
 
-# pylint: disable=E0611
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
-# pylint: enable=E0611
 
 import virtinst
 from virtinst import util

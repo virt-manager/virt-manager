@@ -20,11 +20,9 @@
 
 import logging
 
-# pylint: disable=E0611
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
-# pylint: enable=E0611
 
 from virtManager import uiutil
 from virtManager.baseclass import vmmGObjectUI

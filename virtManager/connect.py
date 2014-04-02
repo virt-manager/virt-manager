@@ -22,11 +22,9 @@ import os
 import logging
 import socket
 
-# pylint: disable=E0611
 from gi.repository import Gio
 from gi.repository import GObject
 from gi.repository import Gtk
-# pylint: enable=E0611
 
 from virtManager import uiutil
 from virtManager.baseclass import vmmGObjectUI

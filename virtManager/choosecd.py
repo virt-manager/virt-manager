@@ -20,9 +20,7 @@
 
 import logging
 
-# pylint: disable=E0611
 from gi.repository import GObject
-# pylint: enable=E0611
 
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.mediadev import MEDIA_FLOPPY

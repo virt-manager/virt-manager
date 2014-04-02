@@ -495,7 +495,7 @@ def get_cache_dir():
     ret = ""
     try:
         # We don't want to depend on glib for virt-install
-        from gi.repository import GLib  # pylint: disable=E0611
+        from gi.repository import GLib
         ret = GLib.get_user_cache_dir()
     except ImportError:
         pass

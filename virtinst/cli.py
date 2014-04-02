@@ -347,7 +347,7 @@ def _run_console(args):
         return child
 
     os.execvp(args[0], args)
-    os._exit(1)  # pylint: disable=W0212
+    os._exit(1)  # pylint: disable=protected-access
 
 
 def _gfx_console(guest):
@@ -926,7 +926,8 @@ class _VirtCLIArgument(object):
         elif self.setter_cb:
             self.setter_cb(opts, inst, self.cliname, val)
         else:
-            exec("inst." + self.attrname + " = val")  # pylint: disable=W0122
+            exec(  # pylint: disable=exec-used
+                "inst." + self.attrname + " = val")
 
 
 class VirtOptionString(object):
@@ -1135,7 +1136,7 @@ class VirtCLIParser(object):
         for optstr in optlist:
             optinst = inst
             if self.devclass and not inst:
-                optinst = self.devclass(guest.conn)  # pylint: disable=E1102
+                optinst = self.devclass(guest.conn)  # pylint: disable=not-callable
 
             try:
                 devs = self._parse_single_optstr(guest, optstr, optinst)
@@ -1966,11 +1967,11 @@ class ParserRNG(VirtCLIParser):
     def _parse(self, optsobj, inst):
         opts = optsobj.opts
 
-        # pylint: disable=W0201
+        # pylint: disable=attribute-defined-outside-init
         # Defined outside init, but its easier this way
         self._cli_backend_mode = "connect"
         self._cli_backend_type = "udp"
-        # pylint: enable=W0201
+        # pylint: enable=attribute-defined-outside-init
 
         if opts.get("type", "").startswith("/"):
             # Allow --rng /dev/random

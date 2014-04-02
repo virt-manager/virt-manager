@@ -185,7 +185,7 @@ class VirtualConnection(object):
         Returns a list of Guest() objects
         """
         if self.cb_fetch_all_guests:
-            return self.cb_fetch_all_guests()  # pylint: disable=E1102
+            return self.cb_fetch_all_guests()  # pylint: disable=not-callable
         return self._fetch_all_guests_cached()
 
     def _fetch_all_pools_cached(self):
@@ -206,7 +206,7 @@ class VirtualConnection(object):
         Returns a list of StoragePool objects
         """
         if self.cb_fetch_all_pools:
-            return self.cb_fetch_all_pools()  # pylint: disable=E1102
+            return self.cb_fetch_all_pools()  # pylint: disable=not-callable
         return self._fetch_all_pools_cached()
 
     def _fetch_all_vols_cached(self):
@@ -236,12 +236,12 @@ class VirtualConnection(object):
         Returns a list of StorageVolume objects
         """
         if self.cb_fetch_all_vols:
-            return self.cb_fetch_all_vols()  # pylint: disable=E1102
+            return self.cb_fetch_all_vols()  # pylint: disable=not-callable
         return self._fetch_all_vols_cached()
 
     def clear_cache(self, pools=False):
         if self.cb_clear_cache:
-            self.cb_clear_cache(pools=pools)  # pylint: disable=E1102
+            self.cb_clear_cache(pools=pools)  # pylint: disable=not-callable
             return
 
         if pools:

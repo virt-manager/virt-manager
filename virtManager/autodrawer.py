@@ -22,17 +22,11 @@
 # MA 02110-1301 USA.
 #
 
-# pylint: disable=E0611
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
-# pylint: enable=E0611
 
 from virtManager import uiutil
-
-# pylint: disable=E1101
-# pylint can't detect functions we inheirit from Gtk, ex:
-# OverBox.set_over: Instance of 'OverBox' has no 'remove' member
 
 # pylint: disable=arguments-differ
 # Newer pylint can detect, but warns that overridden arguments are wrong

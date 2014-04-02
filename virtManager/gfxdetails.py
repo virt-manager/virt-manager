@@ -19,10 +19,8 @@
 # MA 02110-1301 USA.
 #
 
-# pylint: disable=E0611
 from gi.repository import Gtk
 from gi.repository import GObject
-# pylint: enable=E0611
 
 import virtinst
 from virtManager import uiutil

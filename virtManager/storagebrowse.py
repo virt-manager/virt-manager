@@ -20,10 +20,8 @@
 
 import logging
 
-# pylint: disable=E0611
 from gi.repository import GObject
 from gi.repository import Gtk
-# pylint: enable=E0611
 
 from virtManager import host
 from virtManager.asyncjob import vmmAsyncJob

@@ -18,9 +18,7 @@
 # MA 02110-1301 USA.
 #
 
-# pylint: disable=E0611
 from gi.repository import Gtk
-# pylint: enable=E0611
 
 
 ####################################################################
@@ -28,9 +26,6 @@ from gi.repository import Gtk
 ####################################################################
 
 class _VMMenu(Gtk.Menu):
-    # pylint: disable=E1101
-    # pylint can't detect functions we inheirit from Gtk, ex self.add
-
     def __init__(self, src, current_vm_cb, show_open=True):
         Gtk.Menu.__init__(self)
         self._parent = src
@@ -74,9 +69,6 @@ class _VMMenu(Gtk.Menu):
 
 
 class VMShutdownMenu(_VMMenu):
-    # pylint: disable=E1101
-    # pylint can't detect functions we inheirit from Gtk, ex self.add
-
     def _init_state(self):
         self._add_action(_("_Reboot"), "reboot")
         self._add_action(_("_Shut Down"), "shutdown")
@@ -103,9 +95,6 @@ class VMShutdownMenu(_VMMenu):
 
 
 class VMActionMenu(_VMMenu):
-    # pylint: disable=E1101
-    # pylint can't detect functions we inheirit from Gtk, ex self.add
-
     def _init_state(self):
         self._add_action(_("_Run"), "run", Gtk.STOCK_MEDIA_PLAY)
         self._add_action(_("_Pause"), "suspend", Gtk.STOCK_MEDIA_PAUSE)

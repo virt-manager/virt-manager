@@ -18,9 +18,7 @@
 # MA 02110-1301 USA.
 #
 
-# pylint: disable=E0611
 from gi.repository import Gio
-# pylint: enable=E0611
 
 import logging
 import time
@@ -74,7 +72,7 @@ def packagekit_install(parent, package_list):
     try:
         # Need to import GdkX11 just to get access to get_xid function
         # This will likely fail on wayland in the future, so ignore errors
-        from gi.repository import GdkX11  # pylint: disable=E0611
+        from gi.repository import GdkX11  # pylint: disable=no-name-in-module
         ignore = GdkX11
 
         if parent and parent.topwin.get_window():

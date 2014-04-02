@@ -18,9 +18,7 @@
 # MA 02110-1301 USA.
 #
 
-# pylint: disable=E0611
 from gi.repository import GObject
-# pylint: enable=E0611
 
 from virtinst import pollhelpers
 from virtinst import StoragePool, StorageVolume

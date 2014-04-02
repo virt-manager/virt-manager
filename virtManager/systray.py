@@ -20,17 +20,15 @@
 
 import logging
 
-# pylint: disable=E0611
 from gi.repository import GObject
 from gi.repository import Gtk
-# pylint: enable=E0611
 
 from virtManager import vmmenu
 from virtManager.baseclass import vmmGObject
 from virtManager.error import vmmErrorDialog
 
 try:
-    from gi.repository import AppIndicator3  # pylint: disable=E0611
+    from gi.repository import AppIndicator3  # pylint: disable=no-name-in-module
 except:
     AppIndicator3 = None
 

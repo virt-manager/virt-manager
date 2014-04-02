@@ -22,11 +22,9 @@ import logging
 import threading
 import traceback
 
-# pylint: disable=E0611
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
-# pylint: enable=E0611
 
 import libvirt
 import urlgrabber

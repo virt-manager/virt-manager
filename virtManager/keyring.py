@@ -20,10 +20,8 @@
 
 import logging
 
-# pylint: disable=E0611
 from gi.repository import Gio
 from gi.repository import GLib
-# pylint: enable=E0611
 
 
 class vmmSecret(object):

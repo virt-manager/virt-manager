@@ -22,10 +22,8 @@ import logging
 import traceback
 import collections
 
-# pylint: disable=E0611
 from gi.repository import Gtk
 from gi.repository import Gdk
-# pylint: enable=E0611
 
 import virtinst
 from virtinst import (VirtualChannelDevice, VirtualParallelDevice,

@@ -24,12 +24,10 @@ import logging
 import os
 import StringIO
 
-# pylint: disable=E0611
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 from gi.repository import Pango
-# pylint: enable=E0611
 
 from virtinst import DomainSnapshot
 from virtinst import util

@@ -25,7 +25,7 @@ from tests import utils
 qemuuri = "__virtinst_test__test:///default,caps=%s/tests/capabilities-xml/capabilities-kvm.xml,qemu,predictable" % os.getcwd()
 
 
-# pylint: disable=W0212
+# pylint: disable=protected-access
 # Access to protected member, needed to unittest stuff
 
 class TestImageParser(unittest.TestCase):

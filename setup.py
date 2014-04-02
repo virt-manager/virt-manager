@@ -1,8 +1,6 @@
 #!/usr/bin/env python2
 # Copyright (C) 2013, 2014 Red Hat, Inc.
 
-# pylint: disable=W0201
-# Attribute defined outside __init__: custom commands require breaking this
 
 import datetime
 import glob
@@ -21,6 +19,8 @@ sysprefix = get_config_var("prefix")
 
 from virtcli import cliconfig
 
+
+# pylint: disable=attribute-defined-outside-init
 
 def _generate_potfiles_in():
     def find(dirname, ext):

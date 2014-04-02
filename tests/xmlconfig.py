@@ -34,7 +34,7 @@ from virtinst import VirtualPanicDevice
 
 from tests import utils
 
-# pylint: disable=W0212
+# pylint: disable=protected-access
 # Access to protected member, needed to unittest stuff
 
 _testconn = utils.open_testdriver()

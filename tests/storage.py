@@ -23,7 +23,7 @@ from virtinst import StoragePool, StorageVolume
 
 from tests import utils
 
-# pylint: disable=W0212
+# pylint: disable=protected-access
 # Access to protected member, needed to unittest stuff
 
 basepath = os.path.join(os.getcwd(), "tests", "storage-xml")

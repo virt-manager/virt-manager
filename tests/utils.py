@@ -31,7 +31,7 @@ from virtinst import VirtualVideoDevice
 # DON'T EDIT THIS. Use 'setup.py test --regenerate-output'
 REGENERATE_OUTPUT = False
 
-# pylint: disable=W0212
+# pylint: disable=protected-access
 # Access to protected member, needed to unittest stuff
 
 _capsprefix  = ",caps=%s/tests/capabilities-xml/" % os.getcwd()

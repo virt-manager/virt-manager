@@ -29,7 +29,7 @@ import libxml2
 from virtinst import util
 
 
-# pylint: disable=W0212
+# pylint: disable=protected-access
 # This whole file is calling around into non-public functions that we
 # don't want regular API users to touch
 

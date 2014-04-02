@@ -23,7 +23,7 @@ import logging
 import os
 import re
 
-from guestfs import GuestFS  # pylint: disable=F0401
+from guestfs import GuestFS  # pylint: disable=import-error
 
 from virtManager.baseclass import vmmGObject
 from virtManager.domain import vmmInspectionData

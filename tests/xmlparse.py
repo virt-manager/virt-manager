@@ -90,7 +90,7 @@ class XMLParseTest(unittest.TestCase):
         return guest, outfile
 
     def test000ClearProps(self):
-        # pylint: disable=W0212
+        # pylint: disable=protected-access
         # Access to protected member, needed to unittest stuff
         virtinst.xmlbuilder._seenprops = []
 
@@ -1182,7 +1182,7 @@ class XMLParseTest(unittest.TestCase):
         utils.diff_compare(guest.get_xml_config(), outfile)
 
     def testzzzzCheckProps(self):
-        # pylint: disable=W0212
+        # pylint: disable=protected-access
         # Access to protected member, needed to unittest stuff
 
         # If a certain environment variable is set, XMLBuilder tracks

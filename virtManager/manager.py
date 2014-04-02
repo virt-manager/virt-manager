@@ -20,12 +20,10 @@
 
 import logging
 
-# pylint: disable=E0611
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
-# pylint: enable=E0611
 
 from virtinst import util
 
@@ -241,7 +239,7 @@ class vmmManager(vmmGObjectUI):
         self.hostcpucol = None
         self.netcol = None
 
-        self.vmmenu.destroy()  # pylint: disable=E1101
+        self.vmmenu.destroy()
         self.vmmenu = None
         self.connmenu.destroy()
         self.connmenu = None
@@ -930,8 +928,7 @@ class vmmManager(vmmGObjectUI):
             # Popup the vm menu
             vm = model[_iter][ROW_HANDLE]
             self.vmmenu.update_widget_states(vm)
-            self.vmmenu.popup(  # pylint: disable=E1101
-                None, None, None, None, 0, event.time)
+            self.vmmenu.popup(None, None, None, None, 0, event.time)
         else:
             # Pop up connection menu
             conn = model[_iter][ROW_HANDLE]

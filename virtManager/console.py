@@ -20,14 +20,12 @@
 # MA 02110-1301 USA.
 #
 
-# pylint: disable=E0611
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GtkVnc
 from gi.repository import SpiceClientGtk
 from gi.repository import SpiceClientGLib
-# pylint: enable=E0611
 
 import libvirt
 
@@ -282,7 +280,7 @@ class _Tunnel(object):
             os.dup(self._outfds[1].fileno())
             os.dup(self._errfds[1].fileno())
             os.execlp(*argv)
-            os._exit(1)  # pylint: disable=W0212
+            os._exit(1)  # pylint: disable=protected-access
         else:
             self._outfds[1].close()
             self._errfds[1].close()

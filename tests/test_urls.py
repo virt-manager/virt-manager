@@ -37,7 +37,7 @@ from virtinst.urlfetcher import UbuntuDistro
 from virtinst.urlfetcher import MandrivaDistro
 
 
-# pylint: disable=W0212
+# pylint: disable=protected-access
 # Access to protected member, needed to unittest stuff
 
 OLD_FEDORA_URL = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/%s/Fedora/%s/os/"

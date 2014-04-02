@@ -18,10 +18,8 @@
 # MA 02110-1301 USA.
 #
 
-# pylint: disable=E0611
 from gi.repository import GLib
 from gi.repository import Gio
-# pylint: enable=E0611
 
 import logging
 import os
@@ -81,7 +79,7 @@ def creds_dialog_main(creds):
     """
     Libvirt openAuth callback for username/password credentials
     """
-    from gi.repository import Gtk  # pylint: disable=E0611
+    from gi.repository import Gtk
 
     dialog = Gtk.Dialog("Authentication required", None, 0,
                         (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,

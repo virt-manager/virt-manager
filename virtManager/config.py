@@ -20,11 +20,9 @@
 import os
 import logging
 
-# pylint: disable=E0611
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
-# pylint: enable=E0611
 
 from virtinst import CPU
 from virtManager.keyring import vmmKeyring, vmmSecret
@@ -183,7 +181,7 @@ class vmmConfig(object):
     def check_inspection(self):
         try:
             # Check we can open the Python guestfs module.
-            from guestfs import GuestFS  # pylint: disable=F0401
+            from guestfs import GuestFS  # pylint: disable=import-error
             GuestFS(close_on_exit=False)
             return True
         except:

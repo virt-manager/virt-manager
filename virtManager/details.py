@@ -21,11 +21,9 @@
 import logging
 import traceback
 
-# pylint: disable=E0611
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
-# pylint: enable=E0611
 
 import libvirt
 
@@ -780,7 +778,7 @@ class vmmDetails(vmmGObjectUI):
                                         show_open=False)
         for child in submenu.get_children():
             submenu.remove(child)
-            newmenu.add(child)  # pylint: disable=E1101
+            newmenu.add(child)
         topmenu.set_submenu(newmenu)
         topmenu.show_all()
 

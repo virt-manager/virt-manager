@@ -17,9 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-# pylint: disable=E0611
 from gi.repository import Gtk
-# pylint: enable=E0611
 
 import logging
 import traceback
@@ -294,10 +292,6 @@ class _errorDialog (Gtk.MessageDialog):
     """
     Custom error dialog with optional check boxes or details drop down
     """
-    # pylint: disable=E1101
-    # pylint can't detect functions we inheirit from Gtk, ex:
-    # Instance of '_errorDialog' has no 'set_title' member
-
     def __init__(self, *args, **kwargs):
         Gtk.MessageDialog.__init__(self, *args, **kwargs)
 
@@ -324,7 +318,8 @@ class _errorDialog (Gtk.MessageDialog):
         self.chk_align.add(self.chk_vbox)
 
         self.chk_align.show_all()
-        self.vbox.pack_start(self.chk_align, False, False, 0)
+        self.vbox.pack_start(  # pylint: disable=no-member
+            self.chk_align, False, False, 0)
 
     def init_details(self):
         # Init details buffer
@@ -342,7 +337,8 @@ class _errorDialog (Gtk.MessageDialog):
         details.set_border_width(6)
         sw.add(details)
         self.buf_expander.add(sw)
-        self.vbox.pack_start(self.buf_expander, False, False, 0)
+        self.vbox.pack_start(  # pylint: disable=no-member
+            self.buf_expander, False, False, 0)
         self.buf_expander.show_all()
 
     def show_dialog(self, primary_text, secondary_text="",
