@@ -2544,6 +2544,12 @@ class vmmDetails(vmmGObjectUI):
                                         self.vm.network_traffic_vector())
 
     def refresh_config_cpu(self):
+        # This bit needs to come first, since CPU values can be affected
+        # by whether topology is enabled
+        cpu = self.vm.get_cpu_config()
+        show_top = bool(cpu.sockets or cpu.cores or cpu.threads)
+        self.widget("cpu-topology-enable").set_active(show_top)
+
         conn = self.vm.conn
         host_active_count = conn.host_active_processor_count()
         maxvcpus = self.vm.vcpu_max_count()
@@ -2561,13 +2567,10 @@ class vmmDetails(vmmGObjectUI):
         self.widget("config-vcpus-warn-box").set_visible(warn)
 
         # CPU model config
-        cpu = self.vm.get_cpu_config()
-        show_top = bool(cpu.sockets or cpu.cores or cpu.threads)
         sockets = cpu.sockets or 1
         cores = cpu.cores or 1
         threads = cpu.threads or 1
 
-        self.widget("cpu-topology-enable").set_active(show_top)
         self.widget("cpu-sockets").set_value(sockets)
         self.widget("cpu-cores").set_value(cores)
         self.widget("cpu-threads").set_value(threads)
