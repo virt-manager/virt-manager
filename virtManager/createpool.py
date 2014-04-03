@@ -275,6 +275,11 @@ class vmmCreatePool(vmmGObjectUI):
         show_row("pool-iqn", iqn)
         show_row("pool-source-name", src_name)
 
+        if iqn:
+            self.widget("pool-source-label").set_label(_("_Source IQN:"))
+        else:
+            self.widget("pool-source-label").set_label(_("_Source Path:"))
+
         if tgt:
             self.widget("pool-target-path").get_child().set_text(
                 self._pool.target_path)
