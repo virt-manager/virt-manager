@@ -219,7 +219,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         return data["enable_create"]
 
     def current_pool(self):
-        row = uiutil.get_list_selection(self.widget("pool-list"))
+        row = uiutil.get_list_selection(self.widget("pool-list"), None)
         if not row:
             return
         try:
@@ -230,7 +230,7 @@ class vmmStorageBrowser(vmmGObjectUI):
     def current_vol_row(self):
         if not self.current_pool():
             return
-        return uiutil.get_list_selection(self.widget("vol-list"))
+        return uiutil.get_list_selection(self.widget("vol-list"), None)
 
     def current_vol(self):
         pool = self.current_pool()

@@ -946,8 +946,8 @@ class vmmCreate(vmmGObjectUI):
         return self.widget("create-vm-name").get_text()
 
     def get_config_machine(self):
-        return uiutil.get_list_selection(self.widget("config-machine"),
-            rowindex=0, check_visible=True)
+        return uiutil.get_list_selection(self.widget("config-machine"), 0,
+            check_visible=True)
 
     def is_install_page(self):
         notebook = self.widget("create-pages")
@@ -971,8 +971,10 @@ class vmmCreate(vmmGObjectUI):
                 return INSTALL_PAGE_CONTAINER_OS
 
     def get_config_os_info(self):
-        drow = uiutil.get_list_selection(self.widget("install-os-type"))
-        vrow = uiutil.get_list_selection(self.widget("install-os-version"))
+        drow = uiutil.get_list_selection(
+            self.widget("install-os-type"), None)
+        vrow = uiutil.get_list_selection(
+            self.widget("install-os-version"), None)
         distro = None
         dlabel = None
         variant = None
@@ -1159,7 +1161,8 @@ class vmmCreate(vmmGObjectUI):
             self.detect_media_os()
 
     def _selected_os_row(self):
-        return uiutil.get_list_selection(self.widget("install-os-type"))
+        return uiutil.get_list_selection(
+            self.widget("install-os-type"), None)
 
     def change_os_type(self, box):
         ignore = box

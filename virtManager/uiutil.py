@@ -56,9 +56,11 @@ def spin_get_helper(widget):
         return adj.get_value()
 
 
-def get_list_selection(widget, rowindex=None, check_visible=False):
+def get_list_selection(widget, rowindex, check_visible=False):
     """
-    Helper to simplify getting the selected row in a list/tree/combo
+    Helper to simplify getting the selected row and value in a list/tree/combo
+
+    If rowindex is None, return the whole row.
     """
     if check_visible and not widget.get_visible():
         return None
@@ -143,7 +145,7 @@ def get_combo_entry(combo, rowidx=0):
     Helper to get the value specified in a combo box, with or
     without and entry
     """
-    row = get_list_selection(combo)
+    row = get_list_selection(combo, None)
     if row:
         return row[rowidx]
     if not combo.get_has_entry():

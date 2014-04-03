@@ -904,12 +904,12 @@ class vmmAddHardware(vmmGObjectUI):
 
     # Input getters
     def get_config_input(self):
-        row = uiutil.get_list_selection(self.widget("input-type"))
+        row = uiutil.get_list_selection(self.widget("input-type"), None)
         return row[1], row[2]
 
     # Network getters
     def get_config_net_model(self):
-        return uiutil.get_list_selection(self.widget("net-model"))[0]
+        return uiutil.get_list_selection(self.widget("net-model"), 0)
 
     def get_config_macaddr(self):
         macaddr = None
@@ -932,7 +932,7 @@ class vmmAddHardware(vmmGObjectUI):
         return usb_info
 
     def get_config_host_device_info(self):
-        return uiutil.get_list_selection(self.widget("host-device"))
+        return uiutil.get_list_selection(self.widget("host-device"), None)
 
     # Video Getters
     def get_config_video_model(self):
@@ -1015,7 +1015,7 @@ class vmmAddHardware(vmmGObjectUI):
         uiutil.set_list_selection(self.widget("hw-list"), page)
 
     def get_hw_selection(self):
-        return uiutil.get_list_selection(self.widget("hw-list"))
+        return uiutil.get_list_selection(self.widget("hw-list"), None)
 
     def update_char_device_type_model(self):
         stable_blacklist = ["pipe", "udp"]

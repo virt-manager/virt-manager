@@ -182,7 +182,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.reset_state()
 
     def destconn_changed(self, src):
-        row = uiutil.get_list_selection(src)
+        row = uiutil.get_list_selection(src, None)
         tooltip = ""
         if row:
             tooltip = _("A valid destination connection must be selected.")
@@ -210,7 +210,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.widget("migrate-port").set_sensitive(enable)
 
     def get_config_destconn(self):
-        row = uiutil.get_list_selection(self.widget("migrate-dest"))
+        row = uiutil.get_list_selection(self.widget("migrate-dest"), None)
         if not row or not row[2]:
             return None
         return row[1]

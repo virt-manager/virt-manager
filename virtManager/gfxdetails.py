@@ -132,9 +132,9 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.widget("graphics-password-chk").set_active(False)
 
     def get_values(self):
-        gtype = uiutil.get_list_selection(self.widget("graphics-type"))
+        gtype = uiutil.get_list_selection(self.widget("graphics-type"), 0)
         port, tlsport = self._get_config_graphics_ports()
-        addr = uiutil.get_list_selection(self.widget("graphics-address"))
+        addr = uiutil.get_list_selection(self.widget("graphics-address"), 0)
         keymap = uiutil.get_combo_entry(self.widget("graphics-keymap"))
         if keymap == "auto":
             keymap = None

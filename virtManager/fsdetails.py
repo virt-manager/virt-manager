@@ -153,16 +153,16 @@ class vmmFSDetails(vmmGObjectUI):
         return self._dev
 
     def get_config_fs_mode(self):
-        return uiutil.get_list_selection(self.widget("fs-mode-combo"),
-                                         rowindex=0, check_visible=True)
+        return uiutil.get_list_selection(self.widget("fs-mode-combo"), 0,
+                                         check_visible=True)
 
     def get_config_fs_wrpolicy(self):
-        return uiutil.get_list_selection(self.widget("fs-wrpolicy-combo"),
-                                         rowindex=0, check_visible=True)
+        return uiutil.get_list_selection(self.widget("fs-wrpolicy-combo"), 0,
+                                         check_visible=True)
 
     def get_config_fs_type(self):
-        return uiutil.get_list_selection(self.widget("fs-type-combo"),
-                                         rowindex=0, check_visible=True)
+        return uiutil.get_list_selection(self.widget("fs-type-combo"), 0,
+                                         check_visible=True)
 
     def get_config_fs_readonly(self):
         if not self.widget("fs-readonly").is_visible():
@@ -170,12 +170,12 @@ class vmmFSDetails(vmmGObjectUI):
         return self.widget("fs-readonly").get_active()
 
     def get_config_fs_driver(self):
-        return uiutil.get_list_selection(self.widget("fs-driver-combo"),
-                                         rowindex=0, check_visible=True)
+        return uiutil.get_list_selection(self.widget("fs-driver-combo"), 0,
+                                         check_visible=True)
 
     def get_config_fs_format(self):
-        return uiutil.get_list_selection(self.widget("fs-format-combo"),
-                                         rowindex=0, check_visible=True)
+        return uiutil.get_list_selection(self.widget("fs-format-combo"), 0,
+                                         check_visible=True)
 
     # Setters
     def set_dev(self, dev):

@@ -1107,7 +1107,7 @@ class vmmDetails(vmmGObjectUI):
             self.widget("toolbar-box").hide()
 
     def get_boot_selection(self):
-        return uiutil.get_list_selection(self.widget("config-boot-list"))
+        return uiutil.get_list_selection(self.widget("config-boot-list"), None)
 
     def set_hw_selection(self, page, disable_apply=True):
         if disable_apply:
@@ -1115,7 +1115,7 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_list_selection(self.widget("hw-list"), page)
 
     def get_hw_row(self):
-        return uiutil.get_list_selection(self.widget("hw-list"))
+        return uiutil.get_list_selection(self.widget("hw-list"), None)
 
     def get_hw_selection(self, field):
         row = self.get_hw_row()

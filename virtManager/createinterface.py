@@ -773,7 +773,7 @@ class vmmCreateInterface(vmmGObjectUI):
         is_manual = self.widget("ip-do-manual").get_active()
 
         copy_row = uiutil.get_list_selection(
-            self.widget("ip-copy-interface-combo"))
+            self.widget("ip-copy-interface-combo"), None)
 
         v4_mode = self.widget("ipv4-mode").get_active()
         v4_addr = self.widget("ipv4-address").get_text()
