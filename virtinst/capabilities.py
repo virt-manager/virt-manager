@@ -102,11 +102,12 @@ class _CPUMapFileValues(_CPUAPIValues):
     Fallback method to lists cpu models, parsed directly from libvirt's local
     cpu_map.xml
     """
+    _cpu_filename = "/usr/share/libvirt/cpu_map.xml"
+
     def __init__(self):
         _CPUAPIValues.__init__(self)
         self.archmap = {}
-        cpu_filename = "/usr/share/libvirt/cpu_map.xml"
-        xml = file(cpu_filename).read()
+        xml = file(self._cpu_filename).read()
 
         util.parse_node_helper(xml, "cpus",
                                 self._parseXML,
