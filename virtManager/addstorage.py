@@ -318,7 +318,7 @@ class vmmAddStorage(vmmGObjectUI):
                 if is_default:
                     path = self.get_default_path(vmname, collidelist)
                 else:
-                    path = self.widget("config-storage-entry").get_text()
+                    path = self.widget("config-storage-entry").get_text().strip()
 
             if is_default:
                 path = self._check_ideal_path(path, vmname, collidelist)
