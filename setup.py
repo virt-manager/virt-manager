@@ -324,6 +324,8 @@ class configure(Command):
          "Hide config bits that are not considered stable (default=no)"),
         ("default-graphics=", None,
          "Default graphics type (spice or vnc) (default=spice)"),
+        ("with-bhyve=", None,
+         "whether enable Bhyve connection support (default=no)"),
 
     ]
     description = "Configure the build, similar to ./configure"
@@ -341,6 +343,7 @@ class configure(Command):
         self.preferred_distros = None
         self.stable_defaults = None
         self.default_graphics = None
+        self.with_bhyve = None
 
 
     def run(self):
@@ -364,6 +367,8 @@ class configure(Command):
                          self.stable_defaults)
         if self.default_graphics is not None:
             template += "default_graphics = %s\n" % self.default_graphics
+        if self.with_bhyve is not None:
+            template += "with_bhyve = %s\n" % self.with_bhyve
 
         file(cliconfig.cfgpath, "w").write(template)
         print "Generated %s" % cliconfig.cfgpath

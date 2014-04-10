@@ -32,7 +32,8 @@ from virtManager.baseclass import vmmGObjectUI
 (HV_QEMU,
 HV_XEN,
 HV_LXC,
-HV_QEMU_SESSION) = range(4)
+HV_QEMU_SESSION,
+HV_BHYVE) = range(5)
 
 (CONN_SSH,
 CONN_TCP,
@@ -153,6 +154,8 @@ class vmmConnect(vmmGObjectUI):
         model.append(["Xen"])
         model.append(["LXC (Linux Containers)"])
         model.append(["QEMU/KVM user session"])
+        if self.config.with_bhyve:
+            model.append(["Bhyve"])
         combo.set_model(model)
         uiutil.set_combo_text_column(combo, 0)
 
@@ -364,6 +367,8 @@ class vmmConnect(vmmGObjectUI):
             hvstr = "xen"
         elif hv == HV_QEMU or hv == HV_QEMU_SESSION:
             hvstr = "qemu"
+        elif hv == HV_BHYVE:
+            hvstr = "bhyve"
         else:
             hvstr = "lxc"
 
@@ -385,7 +390,7 @@ class vmmConnect(vmmGObjectUI):
             hoststr += addrstr + "/"
 
         uri = hvstr + hoststr
-        if hv == HV_QEMU:
+        if hv in (HV_QEMU, HV_BHYVE):
             uri += "system"
         elif hv == HV_QEMU_SESSION:
             uri += "session"

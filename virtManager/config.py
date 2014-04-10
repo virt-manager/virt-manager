@@ -161,6 +161,7 @@ class vmmConfig(object):
         self.libvirt_packages = cliconfig.libvirt_packages
         self.askpass_package = cliconfig.askpass_package
         self.default_graphics_from_config = cliconfig.default_graphics
+        self.with_bhyve = cliconfig.with_bhyve
         self.cli_usbredir = None
 
         self.default_storage_format_from_config = "qcow2"
