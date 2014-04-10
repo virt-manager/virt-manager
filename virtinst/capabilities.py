@@ -113,6 +113,10 @@ class _CPUMapFileValues(_CPUAPIValues):
                                 self._parseXML,
                                 RuntimeError)
 
+    @staticmethod
+    def update_cpu_filename(name):
+        _CPUMapFileValues._cpu_filename = name
+
     def _parseXML(self, node):
         child = node.children
         while child:

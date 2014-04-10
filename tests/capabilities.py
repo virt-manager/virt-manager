@@ -222,7 +222,7 @@ class TestCapabilities(unittest.TestCase):
         test_utils(new_caps_no_kvm, False, True, False, False, False)
 
     def testCPUMap(self):
-        _CPUMapFileValues._cpu_filename = "tests/capabilities-xml/cpu_map.xml"
+        _CPUMapFileValues.update_cpu_filename("tests/capabilities-xml/cpu_map.xml")
         caps = self._buildCaps("libvirt-0.7.6-qemu-caps.xml")
         cpu_64 = caps.get_cpu_values(None, "x86_64")
         cpu_32 = caps.get_cpu_values(None, "i486")
