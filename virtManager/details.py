@@ -3046,7 +3046,7 @@ class vmmDetails(vmmGObjectUI):
             self.widget("config-remove").set_sensitive(True)
 
         uiutil.set_combo_entry(self.widget("controller-model"),
-                             dev.model or "default")
+                             dev.model or "Default")
 
     def refresh_filesystem_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
