@@ -151,9 +151,16 @@ class _FTPImageFetcher(_URIImageFetcher):
         self.ftp = None
 
     def prepareLocation(self):
-        url = urlparse.urlparse(self._make_path(""))
-        self.ftp = ftplib.FTP(url[1])
-        self.ftp.login()
+        try:
+            url = urlparse.urlparse(self._make_path(""))
+            if not url[1]:
+                raise ValueError(_("Invalid install location"))
+            self.ftp = ftplib.FTP(url[1])
+            self.ftp.login()
+        except Exception, e:
+            raise ValueError(_("Opening URL %s failed: %s.") %
+                              (self.location, str(e)))
+
 
     def hasFile(self, filename):
         path = self._make_path(filename)
