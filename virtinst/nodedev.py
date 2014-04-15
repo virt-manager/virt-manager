@@ -169,9 +169,10 @@ class PCIDevice(NodeDevice):
     iommu_group = XMLProperty("./capability/iommuGroup/@number", is_int=True)
 
     def pretty_name(self):
-        devstr = "%.2X:%.2X:%X" % (int(self.bus),
-                                   int(self.slot),
-                                   int(self.function))
+        devstr = "%.4X:%.2X:%.2X:%X" % (int(self.domain),
+                                        int(self.bus),
+                                        int(self.slot),
+                                        int(self.function))
 
         return "%s %s %s" % (devstr, self.vendor_name, self.product_name)
 
