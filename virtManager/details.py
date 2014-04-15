@@ -3039,7 +3039,7 @@ class vmmDetails(vmmGObjectUI):
             model.append(["ich9-ehci1", "USB 2"])
             model.append(["nec-xhci", "USB 3"])
             self.widget("config-remove").set_sensitive(False)
-        if dev.type == virtinst.VirtualController.TYPE_SCSI:
+        elif dev.type == virtinst.VirtualController.TYPE_SCSI:
             model.append(["default", "Default"])
             model.append(["virtio-scsi", "VirtIO SCSI"])
         else:
