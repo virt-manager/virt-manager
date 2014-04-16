@@ -73,13 +73,15 @@ class vmmErrorDialog(vmmGObject):
             if tb != "None":
                 details += "\n\n" + tb
 
+        if debug:
+            debugmsg = "error dialog message:\nsummary=%s" % summary
+            if details and details != summary:
+                debugmsg += "\ndetails=%s" % details
+            logging.debug(debugmsg)
+
         # Make sure we have consistent details for error dialogs
         if (dialog_type == Gtk.MessageType.ERROR and not summary in details):
             details = summary + "\n\n" + details
-
-        if debug:
-            logging.debug("error dialog message:\nsummary=%s\ndetails=%s",
-                          summary, details)
 
         dialog = _errorDialog(parent=self.get_parent(),
                               flags=0,
