@@ -84,8 +84,8 @@ class vmmConnection(vmmGObject):
             self._uri = "xen:///"
 
         self.state = self.STATE_DISCONNECTED
-        self.connectThread = None
-        self.connectError = None
+        self._connectThread = None
+        self._connectError = None
         self._backend = virtinst.VirtualConnection(self._uri)
         self._closing = False
 
@@ -1011,13 +1011,13 @@ class vmmConnection(vmmGObject):
 
     def _cleanup(self):
         self.close()
-        self.connectError = None
+        self._connectError = None
 
     def open(self, sync=False):
         if self.state != self.STATE_DISCONNECTED:
             return
 
-        self.connectError = None
+        self._connectError = None
         self._change_state(self.STATE_CONNECTING)
 
         if sync:
@@ -1027,17 +1027,17 @@ class vmmConnection(vmmGObject):
         else:
             logging.debug("Scheduling background open thread for " +
                          self.get_uri())
-            self.connectThread = threading.Thread(target=self._open_thread,
+            self._connectThread = threading.Thread(target=self._open_thread,
                                             name="Connect %s" % self.get_uri())
-            self.connectThread.setDaemon(True)
-            self.connectThread.start()
+            self._connectThread.setDaemon(True)
+            self._connectThread.start()
 
     def _do_creds_password(self, creds):
         try:
             return connectauth.creds_dialog(creds)
         except Exception, e:
             # Detailed error message, in English so it can be Googled.
-            self.connectError = (
+            self._connectError = (
                 "Failed to get credentials for '%s':\n%s\n%s" %
                 (self.get_uri(), str(e), "".join(traceback.format_exc())))
             return -1
@@ -1089,14 +1089,14 @@ class vmmConnection(vmmGObject):
                 if connectauth.acquire_tgt():
                     continue
 
-            self.connectError = (str(exc), tb, warnconsole)
+            self._connectError = (str(exc), tb, warnconsole)
             break
 
         # We want to kill off this thread asap, so schedule an
         # idle event to inform the UI of result
         logging.debug("Background open thread complete, scheduling notify")
         self.idle_add(self._open_notify)
-        self.connectThread = None
+        self._connectThread = None
 
     def _open_notify(self):
         logging.debug("Notifying open result")
@@ -1119,9 +1119,9 @@ class vmmConnection(vmmGObject):
                                         force=True)
 
         if self.state == self.STATE_DISCONNECTED:
-            if self.connectError:
-                self.idle_emit("connect-error", *self.connectError)
-            self.connectError = None
+            if self._connectError:
+                self.idle_emit("connect-error", *self._connectError)
+            self._connectError = None
 
 
     #######################
