@@ -973,14 +973,14 @@ class vmmConnection(vmmGObject):
             if not self._backend.is_closed():
                 for eid in self._domain_cb_ids:
                     self._backend.domainEventDeregisterAny(eid)
-                self._domain_cb_ids = []
-
                 for eid in self._network_cb_ids:
                     self._backend.networkEventDeregisterAny(eid)
-                self._network_cb_ids = []
         except:
             logging.debug("Failed to deregister events in conn cleanup",
                 exc_info=True)
+        finally:
+            self._domain_cb_ids = []
+            self._network_cb_ids = []
 
         self._backend.close()
         self.record = []
