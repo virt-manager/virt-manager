@@ -26,8 +26,8 @@ import logging
 import re
 import Queue
 import threading
+import traceback
 
-import libvirt
 from virtinst import util
 
 from virtManager import packageutils
@@ -336,45 +336,18 @@ class vmmEngine(vmmGObject):
 
     def _handle_tick_queue(self):
         while True:
-            ignore1, ignore2, obj, kwargs = self._tick_queue.get()
-            self._tick_single_conn(obj, kwargs)
+            ignore1, ignore2, conn, kwargs = self._tick_queue.get()
+            try:
+                conn.tick(**kwargs)
+            except Exception, e:
+                tb = "".join(traceback.format_exc())
+                error_msg = (_("Error polling connection '%s': %s")
+                    % (conn.get_uri(), e))
+                self.idle_add(lambda: self.err.show_err(error_msg,
+                    details=tb))
+
             self._tick_queue.task_done()
         return 1
-
-    def _tick_single_conn(self, conn, kwargs):
-        e = None
-        try:
-            conn.tick(**kwargs)
-        except KeyboardInterrupt:
-            raise
-        except Exception, e:
-            pass
-
-        if e is None:
-            return
-
-        from_remote = getattr(libvirt, "VIR_FROM_REMOTE", None)
-        from_rpc = getattr(libvirt, "VIR_FROM_RPC", None)
-        sys_error = getattr(libvirt, "VIR_ERR_SYSTEM_ERROR", None)
-
-        dom = -1
-        code = -1
-        if isinstance(e, libvirt.libvirtError):
-            dom = e.get_error_domain()
-            code = e.get_error_code()
-
-        if (dom in [from_remote, from_rpc] and
-            code in [sys_error]):
-            logging.exception("Could not refresh connection %s",
-                              conn.get_uri())
-            logging.debug("Closing connection since libvirtd "
-                          "appears to have stopped")
-        else:
-            error_msg = _("Error polling connection '%s': %s") \
-                % (conn.get_uri(), e)
-            self.idle_add(lambda: self.err.show_err(error_msg))
-
-        self.idle_add(conn.close)
 
 
     def increment_window_counter(self, src):

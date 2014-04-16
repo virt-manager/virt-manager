@@ -87,6 +87,7 @@ class vmmConnection(vmmGObject):
         self.connectThread = None
         self.connectError = None
         self._backend = virtinst.VirtualConnection(self._uri)
+        self._closing = False
 
         self._caps = None
         self._caps_xml = None
@@ -957,6 +958,10 @@ class vmmConnection(vmmGObject):
         self.config.set_conn_autoconnect(self.get_uri(), val)
 
     def close(self):
+        if self.state != self.STATE_DISCONNECTED:
+            logging.debug("conn.close() uri=%s", self.get_uri())
+        self._closing = True
+
         def cleanup(devs):
             for dev in devs.values():
                 try:
@@ -1002,6 +1007,7 @@ class vmmConnection(vmmGObject):
         self.vms = {}
 
         self._change_state(self.STATE_DISCONNECTED)
+        self._closing = False
 
     def _cleanup(self):
         self.close()
@@ -1164,7 +1170,43 @@ class vmmConnection(vmmGObject):
             kwargs["stats_update"] = False
         self.idle_emit("priority-tick", kwargs)
 
-    def tick(self, stats_update,
+    def tick(self, *args, **kwargs):
+        e = None
+        try:
+            self._tick(*args, **kwargs)
+        except KeyboardInterrupt:
+            raise
+        except Exception, e:
+            pass
+
+        if e is None:
+            return
+
+        from_remote = getattr(libvirt, "VIR_FROM_REMOTE", None)
+        from_rpc = getattr(libvirt, "VIR_FROM_RPC", None)
+        sys_error = getattr(libvirt, "VIR_ERR_SYSTEM_ERROR", None)
+
+        dom = -1
+        code = -1
+        if isinstance(e, libvirt.libvirtError):
+            dom = e.get_error_domain()
+            code = e.get_error_code()
+
+        logging.debug("Error polling connection %s",
+            self.get_uri(), exc_info=True)
+
+        if (dom in [from_remote, from_rpc] and
+            code in [sys_error]):
+            e = None
+            logging.debug("Not showing user error since libvirtd "
+                "appears to have stopped.")
+
+        self._closing = True
+        self.idle_add(self.close)
+        if e:
+            raise e  # pylint: disable=raising-bad-type
+
+    def _tick(self, stats_update,
              pollvm=False, pollnet=False,
              pollpool=False, polliface=False,
              pollnodedev=False, pollmedia=False,
@@ -1173,7 +1215,7 @@ class vmmConnection(vmmGObject):
         main update function: polls for new objects, updates stats, ...
         @force: Perform the requested polling even if async events are in use
         """
-        if self.state != self.STATE_ACTIVE:
+        if self.state != self.STATE_ACTIVE or self._closing:
             return
 
         if not pollvm:
