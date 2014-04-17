@@ -1052,6 +1052,8 @@ class vmmAddHardware(vmmGObjectUI):
         sens = row[3]
         msg = row[4] or ""
 
+        self.widget("create-finish").set_sensitive(sens)
+
         if not sens:
             page = PAGE_ERROR
             self.widget("hardware-info").set_text(msg)
