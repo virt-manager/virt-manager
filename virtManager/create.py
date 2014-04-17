@@ -1314,7 +1314,8 @@ class vmmCreate(vmmGObjectUI):
         if self.have_startup_error:
             return
 
-        if curpage == PAGE_INSTALL and self.should_detect_media():
+        if (curpage == PAGE_INSTALL and self.should_detect_media()
+            and self.get_config_detectable_media()):
             # Make sure we have detected the OS before validating the page
             self.detect_media_os(forward=True)
             return
