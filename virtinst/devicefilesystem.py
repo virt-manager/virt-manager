@@ -100,7 +100,8 @@ class VirtualFilesystem(VirtualDevice):
         # actually a directory, it is merely a arbitrary string tag
         # that is exported to the guest as a hint for where to mount
         if (self.conn.is_qemu() and
-            (self.type == self.TYPE_DEFAULT or
+            (self.type is None or
+             self.type == self.TYPE_DEFAULT or
              self.type == self.TYPE_MOUNT)):
             pass
         elif not os.path.isabs(val):
