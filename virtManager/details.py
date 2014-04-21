@@ -1081,10 +1081,8 @@ class vmmDetails(vmmGObjectUI):
             return
 
         rmdev = self._addhwmenuitems["remove"]
-        if hasattr(devobj, "virtual_device_type"):
-            rmdev.show()
-        else:
-            rmdev.hide()
+        rmdev.set_visible(self.widget("config-remove").get_visible())
+        rmdev.set_sensitive(self.widget("config-remove").get_sensitive())
 
         self.addhwmenu.popup(None, None, None, None, 0, event.time)
 
