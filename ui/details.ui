@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Mon Feb 24 22:09:46 2014 -->
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
@@ -1919,12 +1919,12 @@
                                                 <property name="climb_rate">1</property>
                                                 <property name="numeric">True</property>
                                                 <property name="update_policy">if-valid</property>
+                                                <signal name="changed" handler="on_config_vcpus_changed" swapped="no"/>
                                                 <child internal-child="accessible">
                                                   <object class="AtkObject" id="config-vcpus-atkobject">
                                                     <property name="AtkObject::accessible-name" translatable="yes">Virtual CPU Select</property>
                                                   </object>
                                                 </child>
-                                                <signal name="changed" handler="on_config_vcpus_changed" swapped="no"/>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">1</property>
@@ -2319,12 +2319,12 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="invisible_char">●</property>
+                                                    <signal name="changed" handler="on_config_vcpupin_changed" swapped="no"/>
                                                     <child internal-child="accessible">
                                                       <object class="AtkObject" id="config-vcpupin-atkobject">
                                                         <property name="AtkObject::accessible-name" translatable="yes">Virtual CPU Affinity Select</property>
                                                       </object>
                                                     </child>
-                                                    <signal name="changed" handler="on_config_vcpupin_changed" swapped="no"/>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -2553,12 +2553,12 @@
                                                 <property name="climb_rate">2</property>
                                                 <property name="numeric">True</property>
                                                 <property name="update_policy">if-valid</property>
+                                                <signal name="changed" handler="on_config_memory_changed" swapped="no"/>
                                                 <child internal-child="accessible">
                                                   <object class="AtkObject" id="config-memory-atkobject">
                                                     <property name="AtkObject::accessible-name" translatable="yes">Memory Select</property>
                                                   </object>
                                                 </child>
-                                                <signal name="changed" handler="on_config_memory_changed" swapped="no"/>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -2602,12 +2602,12 @@
                                                 <property name="climb_rate">2</property>
                                                 <property name="numeric">True</property>
                                                 <property name="update_policy">if-valid</property>
+                                                <signal name="changed" handler="on_config_maxmem_changed" swapped="no"/>
                                                 <child internal-child="accessible">
                                                   <object class="AtkObject" id="config-maxmem-atkobject">
                                                     <property name="AtkObject::accessible-name" translatable="yes">Max Memory Select</property>
                                                   </object>
                                                 </child>
-                                                <signal name="changed" handler="on_config_maxmem_changed" swapped="no"/>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -3517,6 +3517,8 @@
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
                                                         <property name="xalign">1</property>
+                                                        <property name="yalign">0</property>
+                                                        <property name="ypad">4</property>
                                                         <property name="label" translatable="yes">Storage forma_t:</property>
                                                         <property name="use_underline">True</property>
                                                       </object>
@@ -3558,25 +3560,6 @@
                                                       </packing>
                                                     </child>
                                                     <child>
-                                                      <object class="GtkComboBox" id="disk-format">
-                                                        <property name="visible">True</property>
-                                                        <property name="can_focus">False</property>
-                                                        <property name="has_entry">True</property>
-                                                        <signal name="changed" handler="on_disk_format_changed" swapped="no"/>
-                                                        <child internal-child="entry">
-                                                          <object class="GtkEntry" id="combobox-entry9">
-                                                            <property name="can_focus">True</property>
-                                                          </object>
-                                                        </child>
-                                                      </object>
-                                                      <packing>
-                                                        <property name="left_attach">1</property>
-                                                        <property name="top_attach">2</property>
-                                                        <property name="width">1</property>
-                                                        <property name="height">1</property>
-                                                      </packing>
-                                                    </child>
-                                                    <child>
                                                       <object class="GtkComboBox" id="disk-bus">
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
@@ -3606,6 +3589,77 @@
                                                       <packing>
                                                         <property name="left_attach">0</property>
                                                         <property name="top_attach">1</property>
+                                                        <property name="width">1</property>
+                                                        <property name="height">1</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkBox" id="box15">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="orientation">vertical</property>
+                                                        <property name="spacing">6</property>
+                                                        <child>
+                                                          <object class="GtkComboBox" id="disk-format">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="has_entry">True</property>
+                                                            <signal name="changed" handler="on_disk_format_changed" swapped="no"/>
+                                                            <child internal-child="entry">
+                                                            <object class="GtkEntry" id="combobox-entry9">
+                                                            <property name="can_focus">True</property>
+                                                            </object>
+                                                            </child>
+                                                          </object>
+                                                          <packing>
+                                                            <property name="expand">False</property>
+                                                            <property name="fill">True</property>
+                                                            <property name="position">0</property>
+                                                          </packing>
+                                                        </child>
+                                                        <child>
+                                                          <object class="GtkBox" id="disk-format-warn">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="spacing">3</property>
+                                                            <child>
+                                                            <object class="GtkImage" id="image2">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="stock">gtk-dialog-warning</property>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="expand">False</property>
+                                                            <property name="fill">True</property>
+                                                            <property name="position">0</property>
+                                                            </packing>
+                                                            </child>
+                                                            <child>
+                                                            <object class="GtkLabel" id="label34">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">False</property>
+                                                            <property name="label" translatable="yes">&lt;small&gt;Changing this will not change the disk image format, it only tells libvirt about the existing image format. &lt;/small&gt;</property>
+                                                            <property name="use_markup">True</property>
+                                                            <property name="wrap">True</property>
+                                                            <property name="max_width_chars">30</property>
+                                                            </object>
+                                                            <packing>
+                                                            <property name="expand">False</property>
+                                                            <property name="fill">False</property>
+                                                            <property name="position">1</property>
+                                                            </packing>
+                                                            </child>
+                                                          </object>
+                                                          <packing>
+                                                            <property name="expand">False</property>
+                                                            <property name="fill">True</property>
+                                                            <property name="position">1</property>
+                                                          </packing>
+                                                        </child>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="left_attach">1</property>
+                                                        <property name="top_attach">2</property>
                                                         <property name="width">1</property>
                                                         <property name="height">1</property>
                                                       </packing>

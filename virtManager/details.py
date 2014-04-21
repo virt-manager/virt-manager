@@ -624,7 +624,7 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_cache_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_CACHE),
             "on_disk_io_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_IO),
             "on_disk_bus_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_BUS),
-            "on_disk_format_changed": lambda *x: self.enable_apply(x, EDIT_DISK_FORMAT),
+            "on_disk_format_changed": self.disk_format_changed,
             "on_disk_serial_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SERIAL),
             "on_disk_iotune_changed": self.iotune_changed,
 
@@ -1798,6 +1798,10 @@ class vmmDetails(vmmGObjectUI):
         boot_list.get_selection().emit("changed")
         self.enable_apply(EDIT_BOOTORDER)
 
+    def disk_format_changed(self, ignore):
+        self.widget("disk-format-warn").show()
+        self.enable_apply(EDIT_DISK_FORMAT)
+
     # IO Tuning
     def iotune_changed(self, ignore):
         iotune_rbs = int(self.get_text("disk-iotune-rbs") or 0)
@@ -2693,6 +2697,7 @@ class vmmDetails(vmmGObjectUI):
 
         self.widget("disk-format").set_sensitive(show_format)
         self.widget("disk-format").get_child().set_text(driver_type)
+        self.widget("disk-format-warn").hide()
 
         no_default = not self.is_customize_dialog
 
