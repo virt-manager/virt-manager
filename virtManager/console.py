@@ -1399,7 +1399,7 @@ class vmmConsolePages(vmmGObjectUI):
         logging.debug("Viewer connected")
         self.activate_viewer_page()
 
-        # Had a succesfull connect, so reset counters now
+        # Had a successful connect, so reset counters now
         self.viewerRetriesScheduled = 0
         self.viewerRetryDelay = 125
 
