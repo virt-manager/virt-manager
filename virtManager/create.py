@@ -295,6 +295,12 @@ class vmmCreate(vmmGObjectUI):
         uiutil.set_combo_text_column(os_variant_list, 1)
         os_variant_list.set_row_separator_func(sep_func, os_variant_list)
 
+        entry = self.widget("install-os-version-entry")
+        completion = Gtk.EntryCompletion()
+        entry.set_completion(completion)
+        completion.set_text_column(1)
+        completion.set_inline_completion(True)
+
         # Archtecture
         # [value, label]
         archList = self.widget("config-arch")
@@ -855,6 +861,9 @@ class vmmCreate(vmmGObjectUI):
         # Add action option
         self._add_os_row(model, label=_("Show all OS options"), action=True)
 
+        completion = self.widget("install-os-version-entry").get_completion()
+        completion.set_model(model)
+
     def populate_media_model(self, model, urls):
         model.clear()
         if urls is not None:
@@ -886,7 +895,7 @@ class vmmCreate(vmmGObjectUI):
         self.set_caps_state()
 
     def populate_summary(self):
-        distro, version, dlabel, vlabel = self.get_config_os_info()
+        distro, version, ignore1, dlabel, vlabel = self.get_config_os_info()
         mem = self.pretty_memory(int(self.guest.memory))
         cpu = str(int(self.guest.vcpus))
 
@@ -978,7 +987,15 @@ class vmmCreate(vmmGObjectUI):
         distro = None
         dlabel = None
         variant = None
-        vlabel = None
+        vlabel = self.widget("install-os-version-entry").get_text()
+
+        for i in self.widget("install-os-version").get_model():
+            if not i[2] and not i[3] and i[1] == vlabel:
+                variant = i[0]
+                break
+
+        if vlabel and not variant:
+            return (None, None, False, None, None)
 
         if drow:
             distro = drow[0]
@@ -989,6 +1006,7 @@ class vmmCreate(vmmGObjectUI):
 
         return (distro and str(distro),
                 variant and str(variant),
+                True,
                 str(dlabel), str(vlabel))
 
     def get_config_local_media(self, store_media=False):
@@ -1157,6 +1175,7 @@ class vmmCreate(vmmGObjectUI):
         self.widget("install-os-version").set_visible(not dodetect)
 
         if dodetect:
+            self.widget("install-os-version-entry").set_text("")
             self.mediaDetected = False
             self.detect_media_os()
 
@@ -1175,8 +1194,8 @@ class vmmCreate(vmmGObjectUI):
                 self.populate_os_type_model()
                 return
 
-        variant = self.widget("install-os-version")
-        variant.set_active(0)
+        self.widget("install-os-version-entry").set_text("")
+        self.widget("install-os-version-entry").grab_focus()
 
     def change_os_version(self, box):
         show_all = uiutil.get_list_selection(box, 3)
@@ -1466,7 +1485,10 @@ class vmmCreate(vmmGObjectUI):
         is_import = False
         init = None
         fs = None
-        distro, variant, ignore1, ignore2 = self.get_config_os_info()
+        distro, variant, valid, ignore1, ignore2 = self.get_config_os_info()
+
+        if not valid:
+            return self.err.val_err(_("Please specify a valid OS variant."))
 
         if instmethod == INSTALL_PAGE_ISO:
             instclass = virtinst.DistroInstaller

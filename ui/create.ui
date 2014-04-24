@@ -1676,21 +1676,6 @@ is not yet supported.&lt;/small&gt;</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBox" id="install-os-version">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <signal name="changed" handler="on_install_os_version_changed" swapped="no"/>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="right_attach">2</property>
-                                        <property name="top_attach">1</property>
-                                        <property name="bottom_attach">2</property>
-                                        <property name="x_options">GTK_FILL</property>
-                                        <property name="y_options"/>
-                                      </packing>
-                                    </child>
-                                    <child>
                                       <object class="GtkComboBox" id="install-os-type">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
@@ -1729,6 +1714,27 @@ is not yet supported.&lt;/small&gt;</property>
                                         <property name="mnemonic_widget">install-os-type</property>
                                       </object>
                                       <packing>
+                                        <property name="x_options">GTK_FILL</property>
+                                        <property name="y_options"/>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="install-os-version">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="has_entry">True</property>
+                                        <signal name="changed" handler="on_install_os_version_changed" swapped="no"/>
+                                        <child internal-child="entry">
+                                          <object class="GtkEntry" id="install-os-version-entry">
+                                            <property name="can_focus">True</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
                                         <property name="x_options">GTK_FILL</property>
                                         <property name="y_options"/>
                                       </packing>
