@@ -593,6 +593,6 @@ def lookup_os_by_media(location):
     loader = _get_os_loader()
     media = libosinfo.Media.create_from_location(location, None)
     ret = loader.get_db().guess_os_from_media(media)
-    if ret and len(ret) > 0:
+    if ret and len(ret) > 0 and ret[0]:
         return ret[0].get_short_id()
     return None
