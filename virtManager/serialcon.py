@@ -376,6 +376,14 @@ class vmmSerialConsole(vmmGObject):
         self.box.append_page(self.error_label, Gtk.Label(""))
         self.box.show_all()
 
+        scrollbar.hide()
+        scrollbar.get_adjustment().connect(
+            "changed", self._scrollbar_adjustment_changed, scrollbar)
+
+    def _scrollbar_adjustment_changed(self, adjustment, scrollbar):
+        scrollbar.set_visible(
+            adjustment.get_upper() > adjustment.get_page_size())
+
     def _cleanup(self):
         self.console.cleanup()
         self.console = None
