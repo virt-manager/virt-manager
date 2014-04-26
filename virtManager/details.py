@@ -3035,18 +3035,8 @@ class vmmDetails(vmmGObjectUI):
         combo = self.widget("controller-model")
         uiutil.set_grid_row_visible(combo, True)
 
-        model = combo.get_model()
-        model.clear()
-        if dev.type == virtinst.VirtualController.TYPE_USB:
-            model.append(["default", "Default"])
-            model.append(["ich9-ehci1", "USB 2"])
-            model.append(["nec-xhci", "USB 3"])
-            self.widget("config-remove").set_sensitive(False)
-        elif dev.type == virtinst.VirtualController.TYPE_SCSI:
-            model.append(["default", "Default"])
-            model.append(["virtio-scsi", "VirtIO SCSI"])
-        else:
-            self.widget("config-remove").set_sensitive(True)
+        vmmAddHardware.populate_controller_model_combo(combo, dev.type,
+                self.widget("config-remove"), False)
 
         uiutil.set_combo_entry(self.widget("controller-model"),
                              dev.model or "Default")

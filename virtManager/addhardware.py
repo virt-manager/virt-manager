@@ -113,6 +113,8 @@ class vmmAddHardware(vmmGObjectUI):
             "on_rng_type_changed": self.change_rng,
             "on_rng_backend_mode_changed": self.change_rng,
             "on_rng_backend_type_changed": self.change_rng,
+
+            "on_controller_type_changed": self.populate_controller_model,
         })
         self.bind_escape_key_close()
 
@@ -737,6 +739,27 @@ class vmmAddHardware(vmmGObjectUI):
                     combo.set_active_iter(row.iter)
                     break
 
+    @staticmethod
+    def populate_controller_model_combo(combo, controller_type, widget_name, add_default=False):
+        model = combo.get_model()
+        model.clear()
+
+        if controller_type == virtinst.VirtualController.TYPE_USB:
+            model.append(["default", "Default"])
+            model.append(["ich9-ehci1", "USB 2"])
+            model.append(["nec-xhci", "USB 3"])
+            if widget_name is not None:
+                widget_name.set_sensitive(False)
+        elif controller_type == virtinst.VirtualController.TYPE_SCSI:
+            model.append(["default", "Default"])
+            model.append(["virtio-scsi", "VirtIO SCSI"])
+        else:
+            if add_default:
+                model.append([None, "Default"])
+                combo.set_sensitive(False)
+            if widget_name is not None:
+                widget_name.set_sensitive(True)
+
 
     #########################
     # UI population methods #
@@ -843,6 +866,17 @@ class vmmAddHardware(vmmGObjectUI):
 
         if len(model) > 0:
             widget.set_active(0)
+
+    def populate_controller_model(self, src):
+        ignore = src
+
+        controller_type = self.get_config_controller_type()
+        modellist = self.widget("controller-model")
+        modellist.set_sensitive(True)
+        self.populate_controller_model_combo(modellist, controller_type, None, True)
+
+        if len(modellist.get_model()) > 0:
+            modellist.set_active(0)
 
 
     ########################
