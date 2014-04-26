@@ -44,6 +44,7 @@ from virtManager.addstorage import vmmAddStorage
 
 (PAGE_ERROR,
 PAGE_DISK,
+PAGE_CONTROLLER,
 PAGE_NETWORK,
 PAGE_INPUT,
 PAGE_GRAPHICS,
@@ -58,7 +59,7 @@ PAGE_USBREDIR,
 PAGE_TPM,
 PAGE_RNG,
 PAGE_PANIC,
-) = range(0, 16)
+) = range(0, 17)
 
 
 class vmmAddHardware(vmmGObjectUI):
@@ -313,6 +314,19 @@ class vmmAddHardware(vmmGObjectUI):
         combo = self.widget("panic-type")
         self.build_panic_address_type(combo)
 
+        # Controller widgets
+        combo = self.widget("controller-type")
+        target_model = Gtk.ListStore(str, str)
+        combo.set_model(target_model)
+        uiutil.set_combo_text_column(combo, 1)
+        combo = self.widget("controller-model")
+        target_model = Gtk.ListStore(str, str)
+        combo.set_model(target_model)
+        uiutil.set_combo_text_column(combo, 1)
+        # FIXME: we should deal with controller model
+        combo.set_visible(False)
+        self.widget("controller-model-label").set_visible(False)
+
         # Available HW options
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
@@ -332,6 +346,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         add_hw_option("Storage", "drive-harddisk", PAGE_DISK, have_storage,
                       have_storage and storage_tooltip or None)
+        add_hw_option("Controller", "device_pci", PAGE_CONTROLLER, True, None)
         add_hw_option("Network", "network-idle", PAGE_NETWORK, True, None)
         add_hw_option("Input", "input-mouse", PAGE_INPUT, self.vm.is_hvm(),
                       _("Not supported for this guest type."))
@@ -454,6 +469,9 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Panic device params
         self.widget("panic-iobase").set_text("0x505")
+
+        # Controller device params
+        self.populate_controller_type()
 
         self.set_hw_selection(0)
 
@@ -813,6 +831,19 @@ class vmmAddHardware(vmmGObjectUI):
         if not create:
             format_list.get_child().set_text("")
 
+    def populate_controller_type(self):
+        widget = self.widget("controller-type")
+        model = widget.get_model()
+        model.clear()
+
+        for t in VirtualController.TYPES:
+            if t == VirtualController.TYPE_PCI:
+                continue
+            model.append([t, VirtualController.pretty_type(t)])
+
+        if len(model) > 0:
+            widget.set_active(0)
+
 
     ########################
     # get_config_* methods #
@@ -1008,6 +1039,13 @@ class vmmAddHardware(vmmGObjectUI):
     def get_config_rng_backend_mode(self):
         return uiutil.get_list_selection(self.widget("rng-backend-mode"), 0)
 
+    # CONTROLLER getters
+    def get_config_controller_type(self):
+        return uiutil.get_list_selection(self.widget("controller-type"), 0)
+
+    def get_config_controller_model(self):
+        return uiutil.get_list_selection(self.widget("controller-model"), 0)
+
     ################
     # UI listeners #
     ################
@@ -1115,6 +1153,8 @@ class vmmAddHardware(vmmGObjectUI):
             return _("Error")
         if page == PAGE_DISK:
             return _("Storage")
+        if page == PAGE_CONTROLLER:
+            return _("Controller")
         if page == PAGE_NETWORK:
             return _("Network")
         if page == PAGE_INPUT:
@@ -1372,6 +1412,8 @@ class vmmAddHardware(vmmGObjectUI):
             return True
         elif page_num == PAGE_DISK:
             return self.validate_page_storage()
+        elif page_num == PAGE_CONTROLLER:
+            return self.validate_page_controller()
         elif page_num == PAGE_NETWORK:
             return self.validate_page_network()
         elif page_num == PAGE_INPUT:
@@ -1726,6 +1768,20 @@ class vmmAddHardware(vmmGObjectUI):
                 setattr(self._dev, param_name, val)
         except Exception, e:
             return self.err.val_err(_("Panic device parameter error"), e)
+
+    def validate_page_controller(self):
+        conn = self.conn.get_backend()
+        controller_type = self.get_config_controller_type()
+        self._dev = VirtualController(conn)
+
+        controllers = self.vm.get_controller_devices()
+        controller_num = [x for x in controllers if
+                (x.type == controller_type)]
+        if len(controller_num) > 0:
+            index_new = max([x.index for x in controller_num]) + 1
+            self._dev.index = index_new
+
+        self._dev.type = controller_type
 
     def validate_page_rng(self):
         conn = virtinst.VirtualRNGDevice.BACKEND_MODE_CONNECT in \
