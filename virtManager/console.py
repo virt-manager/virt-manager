@@ -1547,7 +1547,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         if not self.force_resize and is_resizeguest:
             # With resize guest, we don't want to maintain aspect ratio,
-            # since the guest can resize to arbitray resolutions.
+            # since the guest can resize to arbitrary resolutions.
             self.viewer.display.set_size_request(req.width, req.height)
             return
 
