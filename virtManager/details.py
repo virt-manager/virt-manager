@@ -1080,6 +1080,14 @@ class vmmDetails(vmmGObjectUI):
         if not devobj:
             return
 
+        # force select the list entry before showing popup_menu
+        path_tuple = widget.get_path_at_pos(int(event.x), int(event.y))
+        if path_tuple is None:
+            return False
+        path = path_tuple[0]
+        _iter = widget.get_model().get_iter(path)
+        widget.get_selection().select_iter(_iter)
+
         rmdev = self._addhwmenuitems["remove"]
         rmdev.set_visible(self.widget("config-remove").get_visible())
         rmdev.set_sensitive(self.widget("config-remove").get_sensitive())
