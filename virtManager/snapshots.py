@@ -377,6 +377,11 @@ class vmmSnapshotPage(vmmGObjectUI):
             return
 
         try:
+            # Perform two screenshots, because qemu + qxl has a bug where
+            # screenshot generally only shows the data from the previous
+            # screenshot request:
+            # https://bugs.launchpad.net/qemu/+bug/1314293
+            self._take_screenshot()
             mime, sdata = self._take_screenshot()
         except:
             logging.exception("Error taking screenshot")
