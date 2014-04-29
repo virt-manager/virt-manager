@@ -51,7 +51,12 @@ def check_packagekit(parent, errbox, packages):
         return
 
     try:
-        packagekit_install(parent, packages)
+        for package in packages[:]:
+            if packagekit_isinstalled(package):
+                packages.remove(package)
+
+        if packages:
+            packagekit_install(parent, packages)
     except Exception, e:
         # PackageKit frontend should report an error for us, so just log
         # the actual error
@@ -59,6 +64,16 @@ def check_packagekit(parent, errbox, packages):
         return
 
     return True
+
+
+def packagekit_isinstalled(package):
+    bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+    pk_control = Gio.DBusProxy.new_sync(bus, 0, None,
+                            "org.freedesktop.PackageKit",
+                            "/org/freedesktop/PackageKit",
+                            "org.freedesktop.PackageKit.Query", None)
+
+    return pk_control.IsInstalled("(ss)", package, "")
 
 
 def packagekit_install(parent, package_list):
