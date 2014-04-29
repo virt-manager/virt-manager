@@ -169,6 +169,10 @@ class VirtualDisk(VirtualDevice):
     cache_types = [CACHE_MODE_NONE, CACHE_MODE_WRITETHROUGH,
         CACHE_MODE_WRITEBACK, CACHE_MODE_DIRECTSYNC, CACHE_MODE_UNSAFE]
 
+    DISCARD_MODE_IGNORE = "ignore"
+    DISCARD_MODE_UNMAP = "unmap"
+    discard_types = [DISCARD_MODE_IGNORE, DISCARD_MODE_UNMAP]
+
     DEVICE_DISK = "disk"
     DEVICE_LUN = "lun"
     DEVICE_CDROM = "cdrom"
@@ -494,7 +498,7 @@ class VirtualDisk(VirtualDevice):
     _XML_PROP_ORDER = [
         "type", "device",
         "driver_name", "driver_type",
-        "driver_cache", "driver_io", "error_policy",
+        "driver_cache", "driver_discard", "driver_io", "error_policy",
         "_xmlpath", "target", "bus",
     ]
 
@@ -607,6 +611,7 @@ class VirtualDisk(VirtualDevice):
     read_only = XMLProperty("./readonly", is_bool=True)
     shareable = XMLProperty("./shareable", is_bool=True)
     driver_cache = XMLProperty("./driver/@cache")
+    driver_discard = XMLProperty("./driver/@discard")
     driver_io = XMLProperty("./driver/@io")
 
     error_policy = XMLProperty("./driver/@error_policy")

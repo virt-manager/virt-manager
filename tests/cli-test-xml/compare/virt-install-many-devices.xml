@@ -52,7 +52,7 @@
       <boot order="2"/>
     </disk>
     <disk type="file" device="disk">
-      <driver error_policy="enospace"/>
+      <driver discard="unmap" error_policy="enospace"/>
       <source file="/dev/default-pool/new1.img"/>
       <target dev="hdb" bus="ide"/>
       <readonly/>
@@ -196,7 +196,7 @@
       <boot order="2"/>
     </disk>
     <disk type="file" device="disk">
-      <driver error_policy="enospace"/>
+      <driver discard="unmap" error_policy="enospace"/>
       <source file="/dev/default-pool/new1.img"/>
       <target dev="hdb" bus="ide"/>
       <readonly/>

@@ -554,7 +554,7 @@ c.add_compare("""--hvm --pxe \
 --controller usb,model=ich9-uhci2,address=0:0:4.1,index=0,master=2 \
 --controller usb,model=ich9-uhci3,address=0:0:4.2,index=0,master=4 \
 --disk %(EXISTUPPER)s,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,boot_order=2 \
---disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace \
+--disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace,discard=unmap \
 --disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,total_bytes_sec=10,total_iops_sec=20,write_bytes_sec=5,write_iops_sec=6 \
 --disk size=1 \
 --serial tcp,host=:2222,mode=bind,protocol=telnet \

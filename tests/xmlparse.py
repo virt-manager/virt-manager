@@ -331,6 +331,7 @@ class XMLParseTest(unittest.TestCase):
         check("driver_cache", None, "writeback")
         check("driver_io", None, "threads")
         check("driver_io", "threads", "native")
+        check("driver_discard", None, "unmap")
         check("iotune_ris", 1, 0)
         check("iotune_rbs", 2, 0)
         check("iotune_wis", 3, 0)

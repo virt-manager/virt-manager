@@ -1638,6 +1638,7 @@ class ParserDisk(VirtCLIParser):
         self.set_param("bus", "bus")
         self.set_param("removable", "removable", is_onoff=True)
         self.set_param("driver_cache", "cache")
+        self.set_param("driver_discard", "discard")
         self.set_param("driver_name", "driver_name")
         self.set_param("driver_type", "driver_type")
         self.set_param("driver_io", "io")

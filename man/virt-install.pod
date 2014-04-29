@@ -573,6 +573,13 @@ The cache value can be 'none', 'writethrough', or 'writeback'.
 'writethrough' provides read caching. 'writeback' provides
 read and write caching.
 
+=item B<discard>
+
+Whether discard (also known as "trim" or "unmap") requests are ignored
+or passed to the filesystem. The value can be either "unmap" (allow
+the discard request to be passed) or "ignore" (ignore the discard
+request). Since 1.0.6 (QEMU and KVM only)
+
 =item B<format>
 
 Disk image format. For file volumes, this can be 'raw', 'qcow2', 'vmdk', etc. See format types in L<http://libvirt.org/storage.html> for possible values. This is often mapped to the B<driver_type> value as well.
