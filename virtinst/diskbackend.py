@@ -137,13 +137,14 @@ def manage_path(conn, path):
         return vol, pool, path_is_pool
 
     dirname = os.path.dirname(path)
-    poolname = StoragePool.find_free_name(
-        conn, os.path.basename(dirname) or "pool")
+    poolname = os.path.basename(dirname).replace(" ", "_")
+    if not poolname:
+        poolname = "dirpool"
+    poolname = StoragePool.find_free_name(conn, poolname)
     logging.debug("Attempting to build pool=%s target=%s", poolname, dirname)
 
     poolxml = StoragePool(conn)
-    poolxml.name = poolxml.find_free_name(
-        conn, os.path.basename(dirname) or "dirpool")
+    poolxml.name = poolname
     poolxml.type = poolxml.TYPE_DIR
     poolxml.target_path = dirname
     pool = poolxml.install(build=False, create=True, autostart=True)
