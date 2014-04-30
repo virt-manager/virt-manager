@@ -1147,6 +1147,9 @@ class vmmEngine(vmmGObject):
         conn = self._lookup_conn(uri)
         vm = conn.get_vm(uuid)
 
-        if not self.delete_dialog:
-            self.delete_dialog = vmmDeleteDialog()
-        self.delete_dialog.show(vm, src.topwin)
+        try:
+            if not self.delete_dialog:
+                self.delete_dialog = vmmDeleteDialog()
+            self.delete_dialog.show(vm, src.topwin)
+        except Exception, e:
+            src.err.show_err(_("Error launching delete dialog: %s") % str(e))
