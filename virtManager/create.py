@@ -1926,36 +1926,19 @@ class vmmCreate(vmmGObjectUI):
         # Helper method to set the OS Type/Variant selections to the passed
         # values, or -1 if not present.
         model = os_widget.get_model()
-
         def set_val():
-            idx = 0
-            for idx in range(0, len(model)):
+            for idx in range(len(model)):
                 row = model[idx]
                 if value and row[0] == value:
-                    break
-
-                if idx == len(os_widget.get_model()) - 1:
-                    idx = -1
-
-            os_widget.set_active(idx)
-            if idx == -1:
-                os_widget.set_active(0)
-
-            if idx >= 0:
-                return row[1]
-            if self.show_all_os:
-                return None
+                    os_widget.set_active(idx)
+                    return row[1]
+            os_widget.set_active(0)
 
         ret = set_val()
-        if ret:
-            return ret
-
-        # Trigger the last element in the list, which turns on show_all_os
-        os_widget.set_active(len(model) - 1)
-        ret = set_val()
-        if ret:
-            return ret
-        return _("Unknown")
+        if not ret and not self.show_all_os:
+            os_widget.set_active(len(model) - 1)
+            ret = set_val()
+        return ret or _("Unknown")
 
     def set_distro_selection(self, variant):
         # Wrapper to change OS Type/Variant values, and update the distro
