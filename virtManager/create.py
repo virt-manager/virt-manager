@@ -1206,6 +1206,7 @@ class vmmCreate(vmmGObjectUI):
         type_row = self._selected_os_row()
         if not type_row:
             return
+        old_type = type_row[0]
 
         self.show_all_os = True
         self.populate_os_type_model()
@@ -1213,7 +1214,7 @@ class vmmCreate(vmmGObjectUI):
         os_type_list = self.widget("install-os-type")
         os_type_model = os_type_list.get_model()
         for idx in range(len(os_type_model)):
-            if os_type_model[idx][0] == type_row[0]:
+            if os_type_model[idx][0] == old_type:
                 os_type_list.set_active(idx)
                 break
 
