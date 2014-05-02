@@ -1682,6 +1682,9 @@ class vmmDomain(vmmLibvirtObject):
 
         try:
             info = self._backend.info()
+            logging.debug("domain=%s status changed to %d=%s",
+                self.get_name(), info[0], self.pretty_run_status(info[0]))
+
             self._update_status(info[0])
         except libvirt.libvirtError:
             # Transient domain might have disappeared, tell the connection
