@@ -189,7 +189,6 @@ class vmmAsyncJob(vmmGObjectUI):
         self._bg_thread = threading.Thread(target=cb_wrapper,
                                            args=[callback, self] + args)
         self._bg_thread.daemon = True
-        logging.debug("Creating async job for function cb=%s", callback)
 
         self.builder.connect_signals({
             "on_async_job_delete_event" : self._on_window_delete,
