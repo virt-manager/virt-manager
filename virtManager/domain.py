@@ -1686,11 +1686,11 @@ class vmmDomain(vmmLibvirtObject):
                 self.get_name(), info[0], self.pretty_run_status(info[0]))
 
             self._update_status(info[0])
-        except libvirt.libvirtError:
+        except libvirt.libvirtError, e:
             # Transient domain might have disappeared, tell the connection
             # to update the domain list
-            logging.debug("force_update_status: Triggering domain "
-                "list refresh")
+            logging.debug("Error setting domain status: %s\nDomain might "
+                "have disappeared, triggering connection tick", e)
             self.conn.schedule_priority_tick(pollvm=True, force=True)
 
     def _update_status(self, status):
