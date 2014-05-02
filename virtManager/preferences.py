@@ -301,10 +301,10 @@ class vmmPreferences(vmmGObjectUI):
         dialog.set_default_size(325, 160)
         dialog.set_border_width(6)
 
-        infolabel = Gtk.Label(label=
-                    _("You can now define grab keys by pressing them.\n"
-                      "To confirm your selection please click OK button\n"
-                      "while you have desired keys pressed."))
+        infolabel = Gtk.Label(
+            label=_("You can now define grab keys by pressing them.\n"
+                    "To confirm your selection please click OK button\n"
+                    "while you have desired keys pressed."))
         keylabel = Gtk.Label(label=_("Please press desired grab key combination"))
 
         vbox = Gtk.VBox()

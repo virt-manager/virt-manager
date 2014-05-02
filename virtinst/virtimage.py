@@ -53,7 +53,7 @@ class Image(object):
         self.descr = None
         self.version = None
         self.release = None
-        if not node is None:
+        if node is not None:
             self.parseXML(node)
 
     def abspath(self, p):
@@ -97,7 +97,7 @@ class Domain(object):
         self.memory = None
         self.interface = 0
         self.graphics = None
-        if not node is None:
+        if node is not None:
             self.parseXML(node)
 
     def parseXML(self, node):
@@ -151,7 +151,7 @@ class Boot(object):
         self.drives = []
         self.arch = None
         self.features = ImageFeatures()
-        if not node is None:
+        if node is not None:
             self.parseXML(node)
 
     def parseXML(self, node):
@@ -221,7 +221,7 @@ class Disk(object):
         self.size = None
         self.use = None
         self.csum = {}
-        if not node is None:
+        if node is not None:
             self.parseXML(node)
 
     def parseXML(self, node):

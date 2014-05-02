@@ -188,10 +188,10 @@ class TestStorage(unittest.TestCase):
 
         # Test creating with many devices
         # XXX: Need to wire this up
-        #createPool(self.conn,
-        #           StoragePool.TYPE_LOGICAL, "pool-logical-manydev",
-        #           source_path=["/tmp/path1", "/tmp/path2", "/tmp/path3"],
-        #           target_path=None)
+        # createPool(self.conn,
+        #            StoragePool.TYPE_LOGICAL, "pool-logical-manydev",
+        #            source_path=["/tmp/path1", "/tmp/path2", "/tmp/path3"],
+        #            target_path=None)
 
     def testDiskPool(self):
         poolobj = createPool(self.conn,

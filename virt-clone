@@ -31,7 +31,7 @@ from virtinst import Cloner
 from virtinst.cli import fail, print_stdout, print_stderr
 
 
-### General input gathering functions
+# General input gathering functions
 def get_clone_name(new_name, auto_clone, design):
     if not new_name and auto_clone:
         # Generate a name to use

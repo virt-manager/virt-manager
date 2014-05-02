@@ -167,7 +167,7 @@ def _rhel4_initrd_inject(initrd, injections):
         file_proc = subprocess.Popen(["file", "-z", initrd],
                                      stdout=subprocess.PIPE,
                                      stderr=subprocess.PIPE)
-        if not "ext2 filesystem" in file_proc.communicate()[0]:
+        if "ext2 filesystem" not in file_proc.communicate()[0]:
             return False
     except:
         logging.exception("Failed to file command for rhel4 initrd detection")

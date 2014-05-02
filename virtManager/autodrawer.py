@@ -241,8 +241,8 @@ class OverBox(Gtk.Box):
         # There's something weird here with destroying this gdk window,
         # then destroying the over/under widgets. Error seems harmless
         # but lets shut it up anyways.
-        #self.underWin.destroy()
-        #self.overWin.destroy()
+        # self.underWin.destroy()
+        # self.overWin.destroy()
 
         self.underWin = None
         self.overWin = None

@@ -285,7 +285,7 @@ def _import_file(doc, ctx, conn, input_file):
     ifaces = []
     for node in ctx.xpathEval(vhbase % DEVICE_ETHERNET):
         iface = virtinst.VirtualNetworkInterface(conn)
-            # XXX: Just ignore 'source' info and choose the default
+        # XXX: Just ignore 'source' info and choose the default
         net_model = _get_child_content(node, "ResourceSubType")
         if net_model and not net_model.isdigit():
             iface.model = net_model.lower()

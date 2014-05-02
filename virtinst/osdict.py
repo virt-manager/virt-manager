@@ -97,7 +97,7 @@ def _sort(tosort, sortpref=None):
     sorted_distro_list.sort()
     sortpref.reverse()
     for prefer in sortpref:
-        if not prefer in sorted_distro_list:
+        if prefer not in sorted_distro_list:
             continue
         sorted_distro_list.remove(prefer)
         sorted_distro_list.insert(0, prefer)

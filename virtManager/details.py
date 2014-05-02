@@ -2439,7 +2439,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Machine settings
         machtype = self.vm.get_machtype()
-        if not arch in ["i686", "x86_64"]:
+        if arch not in ["i686", "x86_64"]:
             if machtype is not None:
                 uiutil.set_combo_entry(self.widget("machine-type"), machtype)
 

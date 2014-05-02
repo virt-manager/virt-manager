@@ -870,7 +870,7 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(redir1)
         g.add_device(redir2)
 
-        #Panic Notifier device
+        # Panic Notifier device
         pdev = VirtualPanicDevice(g.conn)
         g.add_device(pdev)
 

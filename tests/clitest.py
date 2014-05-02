@@ -123,11 +123,9 @@ test_files = {
 }
 
 
-
 ######################
 # Test class helpers #
 ######################
-
 
 class Command(object):
     """

@@ -282,7 +282,7 @@ class vmmSerialConsole(vmmGObject):
                         "connection")
         elif not vm.is_active():
             err = _("Serial console not available for inactive guest")
-        elif not ctype in usable_types:
+        elif ctype not in usable_types:
             err = (_("Console for device type '%s' not yet supported") %
                      ctype)
         elif (not is_remote and

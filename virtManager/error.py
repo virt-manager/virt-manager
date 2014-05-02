@@ -80,7 +80,7 @@ class vmmErrorDialog(vmmGObject):
             logging.debug(debugmsg)
 
         # Make sure we have consistent details for error dialogs
-        if (dialog_type == Gtk.MessageType.ERROR and not summary in details):
+        if (dialog_type == Gtk.MessageType.ERROR and summary not in details):
             details = summary + "\n\n" + details
 
         dialog = _errorDialog(parent=self.get_parent(),

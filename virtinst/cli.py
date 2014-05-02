@@ -117,7 +117,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     quiet = do_quiet
 
     vi_dir = None
-    if not "VIRTINST_TEST_SUITE" in os.environ:
+    if "VIRTINST_TEST_SUITE" not in os.environ:
         vi_dir = util.get_cache_dir()
 
     if vi_dir and not os.access(vi_dir, os.W_OK):
@@ -1421,7 +1421,7 @@ class ParserBoot(VirtCLIParser):
         # Build boot order
         boot_order = []
         for cliname, ignore in opts.orderedopts:
-            if not cliname in inst.os.BOOT_DEVICES:
+            if cliname not in inst.os.BOOT_DEVICES:
                 continue
 
             del(opts.opts[cliname])

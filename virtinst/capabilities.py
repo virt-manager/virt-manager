@@ -226,7 +226,7 @@ class CPU(object):
         self.threads = 1
         self.features = CapabilityFeatures()
 
-        if not node is None:
+        if node is not None:
             self.parseXML(node)
 
     def parseXML(self, node):
@@ -268,7 +268,7 @@ class Host(object):
         self.topology = None
         self.secmodels = []
 
-        if not node is None:
+        if node is not None:
             self.parseXML(node)
 
     def get_secmodel(self):
@@ -301,7 +301,7 @@ class Guest(object):
 
         self.features = CapabilityFeatures()
 
-        if not node is None:
+        if node is not None:
             self.parseXML(node)
 
     def parseXML(self, node):
@@ -408,7 +408,7 @@ class Topology(object):
     def __init__(self, node=None):
         self.cells = []
 
-        if not node is None:
+        if node is not None:
             self.parseXML(node)
 
     def parseXML(self, node):
@@ -424,7 +424,7 @@ class TopologyCell(object):
         self.id = None
         self.cpus = []
 
-        if not node is None:
+        if node is not None:
             self.parseXML(node)
 
     def parseXML(self, node):
@@ -440,7 +440,7 @@ class TopologyCPU(object):
     def __init__(self, node=None):
         self.id = None
 
-        if not node is None:
+        if node is not None:
             self.parseXML(node)
 
     def parseXML(self, node):
@@ -453,7 +453,7 @@ class SecurityModel(object):
         self.doi = None
         self.baselabels = {}
 
-        if not node is None:
+        if node is not None:
             self.parseXML(node)
 
     def parseXML(self, node):
