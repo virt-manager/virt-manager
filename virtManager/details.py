@@ -347,6 +347,8 @@ def _label_for_device(dev):
             return _("Tablet")
         elif dev.type == "mouse":
             return _("Mouse")
+        elif dev.type == "keyboard":
+            return _("Keyboard")
         return _("Input")
 
     if devtype in ["serial", "parallel", "console"]:
@@ -2755,19 +2757,24 @@ class vmmDetails(vmmGObjectUI):
             dev = _("Xen Mouse")
         elif ident == "mouse:ps2":
             dev = _("PS/2 Mouse")
+        elif ident == "keyboard:ps2":
+            dev = _("PS/2 Keyboard")
         else:
             dev = inp.bus + " " + inp.type
 
+        mode = None
         if inp.type == "tablet":
             mode = _("Absolute Movement")
-        else:
+        elif inp.type == "mouse":
             mode = _("Relative Movement")
 
         self.widget("input-dev-type").set_text(dev)
-        self.widget("input-dev-mode").set_text(mode)
+        self.widget("input-dev-mode").set_text(mode or "")
+        uiutil.set_grid_row_visible(self.widget("input-dev-mode"), bool(mode))
 
         # Can't remove primary Xen or PS/2 mice
-        if inp.type == "mouse" and inp.bus in ("xen", "ps2"):
+        if ((inp.type == "mouse" and inp.bus in ("xen", "ps2")) or
+            (inp.type == "keyboard" and inp.bus == "ps2")):
             self.widget("config-remove").set_sensitive(False)
         else:
             self.widget("config-remove").set_sensitive(True)
