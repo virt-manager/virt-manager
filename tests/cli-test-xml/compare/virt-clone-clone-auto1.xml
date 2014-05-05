@@ -22,16 +22,19 @@
     <disk type="block" device="floppy">
       <driver type="vmdk"/>
       <source dev="/dev/disk-pool/diskvol1-clone"/>
+      <backingStore/>
       <target dev="fda" bus="fdc"/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
     </disk>
     <disk type="block" device="disk">
       <source dev="/dev/disk-pool/diskvol2"/>
+      <backingStore/>
       <target dev="sda" bus="scsi"/>
       <readonly/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
     </disk>
     <disk type="block" device="cdrom">
+      <backingStore/>
       <target dev="sdb" bus="scsi"/>
       <readonly/>
       <address type="drive" controller="0" bus="0" target="0" unit="1"/>
@@ -39,6 +42,7 @@
     <disk type="block" device="disk">
       <driver type="qcow2"/>
       <source dev="/dev/default-pool/collidevol1.img"/>
+      <backingStore/>
       <target dev="sdc" bus="scsi"/>
       <readonly/>
       <shareable/>
@@ -46,11 +50,13 @@
     </disk>
     <disk type="file" device="disk">
       <source file="/dev/default-pool/default-vol-clone"/>
+      <backingStore/>
       <target dev="hda" bus="ide"/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
     </disk>
     <disk type="file" device="disk">
       <source file="/dev/default-pool/testvol2-clone.img"/>
+      <backingStore/>
       <target dev="hdb" bus="ide"/>
       <address type="drive" controller="0" bus="0" target="0" unit="1"/>
     </disk>
