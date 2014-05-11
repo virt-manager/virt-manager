@@ -376,7 +376,7 @@ class App(object):
         self.categories = {}
         self.cmds = []
 
-    def _default_args(self, cli, iscompare):
+    def _default_args(self, cli, iscompare, auto_printarg):
         args = ""
         if not iscompare:
             args = "--debug"
@@ -390,7 +390,7 @@ class App(object):
             if "--ram " not in cli:
                 args += " --ram 64"
 
-        if iscompare:
+        if iscompare and auto_printarg:
             if self.appname == "virt-install":
                 if (not cli.count("--print-xml") and
                     not cli.count("--print-step") and
@@ -416,11 +416,13 @@ class App(object):
         return obj
 
     def _add(self, catname, testargs, valid, compfile,
-             skip_check=None, compare_check=None, input_file=None):
+             skip_check=None, compare_check=None, input_file=None,
+             auto_printarg=True):
 
         category = self.categories[catname]
         args = category.default_args + " " + testargs
-        args = self._default_args(args, bool(compfile)) + " " + args
+        args = (self._default_args(args, bool(compfile), auto_printarg) +
+            " " + args)
         cmdstr = "./%s %s" % (self.appname, args)
 
         cmd = Command(cmdstr)
@@ -543,7 +545,7 @@ c.add_invalid("--nodisks --boot network --paravirt --arch mips")  # Invalid arch
 
 c = vinst.add_category("misc", "--nographics --noautoconsole")
 c.add_valid("--panic help --disk=?")  # Make sure introspection doesn't blow up
-c.add_compare("", "noargs-fail")  # No arguments
+c.add_compare("", "noargs-fail", auto_printarg=False)  # No arguments
 c.add_compare("--hvm --nodisks --pxe --print-step all", "simple-pxe")  # Diskless PXE install
 c.add_compare("--hvm --cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
 c.add_compare("""--hvm --pxe \
@@ -579,7 +581,7 @@ c.add_valid("--hvm --disk path=%(EXISTIMG1)s,device=cdrom")  # Specifying cdrom 
 c.add_valid("--hvm --import --disk path=%(EXISTIMG1)s")  # FV Import install
 c.add_valid("--hvm --import --disk path=%(EXISTIMG1)s --prompt --force")  # Working scenario w/ prompt shouldn't ask anything
 c.add_valid("--paravirt --import --disk path=%(EXISTIMG1)s")  # PV Import install
-c.add_valid("--paravirt --import --disk path=%(EXISTIMG1)s --print-xml")  # PV Import install, print single XML
+c.add_valid("--paravirt --disk path=%(EXISTIMG1)s --print-xml")  # print single XML, implied import install
 c.add_valid("--hvm --import --disk path=%(EXISTIMG1)s,device=floppy")  # Import a floppy disk
 c.add_valid("--hvm --nodisks --pxe --autostart")  # --autostart flag
 c.add_valid("--hvm --nodisks --pxe --description \"foobar & baz\"")  # --description
