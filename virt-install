@@ -36,9 +36,6 @@ from virtinst.cli import fail, print_stdout, print_stderr
 ##############################
 
 install_methods = "--location URL, --cdrom CD/ISO, --pxe, --import, --boot hd|cdrom|..."
-install_missing = (_("An install method must be specified\n(%(methods)s)") %
-                   {"methods" : install_methods})
-disk_missing = _("--disk storage must be specified (override with --nodisks)")
 
 
 def install_specified(location, cdpath, pxe, import_install):
@@ -263,13 +260,16 @@ def validate_required_options(options, guest):
         not storage_specified(options.disk,
                               options.nodisks,
                               options.filesystem)):
-        msg += "\n" + disk_missing
+        msg += "\n" + (
+            _("--disk storage must be specified (override with --nodisks)"))
 
     if (not guest.os.is_container() and
         (not install_specified(options.location, options.cdrom,
                                options.pxe, options.import_install)) and
         (not cdrom_specified(guest, options.disk))):
-        msg += "\n" + install_missing
+        msg += "\n" + (
+            _("An install method must be specified\n(%(methods)s)") %
+             {"methods" : install_methods})
 
     if msg:
         fail(msg)
