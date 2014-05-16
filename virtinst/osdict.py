@@ -23,6 +23,7 @@ _SENTINEL = -1234
 _allvariants = {}
 from datetime import datetime
 from gi.repository import Libosinfo as libosinfo
+from inspect import isfunction
 
 _aliases = {
     "altlinux" : "altlinux1.0",
@@ -463,17 +464,17 @@ class _OsVariantOsInfo(_OSVariant):
         acpi = self._is_acpi()
         apic = self._is_apic()
         clock = self._get_clock()
-        netmodel = self._get_netmodel()
-        videomodel = self._get_videomodel()
-        diskbus = self._get_diskbus()
-        inputtype = self._get_inputtype()
-        inputbus = self.get_inputbus()
         xen_disable_acpi = self._get_xen_disable_acpi()
-        virtiodisk = self._is_virtiodisk()
-        virtionet = self._is_virtionet()
         virtiommio = self._is_virtiommio()
-        virtioconsole = self._is_virtioconsole()
         qemu_ga = self._is_qemu_ga()
+        virtioconsole = lambda: self._is_virtioconsole()
+        netmodel = lambda: self._get_netmodel()
+        videomodel = lambda: self._get_videomodel()
+        diskbus = lambda: self._get_diskbus()
+        inputtype = lambda: self._get_inputtype()
+        inputbus = lambda: self.get_inputbus()
+        virtiodisk = lambda: self._is_virtiodisk()
+        virtionet = lambda: self._is_virtionet()
         _OSVariant.__init__(self, name=name, label=label, is_type=is_type,
                 typename=typename, sortby=sortby, parent="generic",
                 urldistro=urldistro, supported=supported,
@@ -572,9 +573,12 @@ def lookup_osdict_key(variant, key, default):
     _load_os_data()
     val = _SENTINEL
     if variant is not None:
-        if not hasattr(lookup_os(variant), key):
+        os = lookup_os(variant)
+        if not hasattr(os, key):
             raise ValueError("Unknown osdict property '%s'" % key)
-        val = getattr(lookup_os(variant), key)
+        val = getattr(os, key)
+        if isfunction(val):
+            return val()
     if val == _SENTINEL:
         val = default
     return val
