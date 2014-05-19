@@ -270,6 +270,10 @@ class vmmCreateNetwork(vmmGObjectUI):
             return self.err.val_err(_("Invalid Network Address"),
                     _("The network must address at least 16 addresses."))
 
+        if ip.prefixlen < 15:
+            return self.err.val_err(_("Invalid Network Address"),
+                    _("The network prefix must be >= 15"))
+
         if not ip.is_private:
             res = self.err.yes_no(_("Check Network Address"),
                     _("The network should normally use a private IPv4 "
