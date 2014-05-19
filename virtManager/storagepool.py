@@ -18,6 +18,8 @@
 # MA 02110-1301 USA.
 #
 
+import logging
+
 from gi.repository import GObject
 
 from virtinst import pollhelpers
@@ -39,7 +41,12 @@ class vmmStorageVolume(vmmLibvirtObject):
     def get_name(self):
         return self.get_xmlobj().name
     def _XMLDesc(self, flags):
-        return self._backend.XMLDesc(flags)
+        try:
+            return self._backend.XMLDesc(flags)
+        except Exception, e:
+            logging.debug("XMLDesc for vol=%s failed: %s",
+                self._backend.key(), e)
+            raise
 
 
     ###########
