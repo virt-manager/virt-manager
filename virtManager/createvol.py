@@ -281,9 +281,6 @@ class vmmCreateVolume(vmmGObjectUI):
             self.show_err(_("Uncaught error validating input: %s") % str(e))
             return
 
-        logging.debug("Creating volume with xml:\n%s",
-                      self.vol.get_xml_config())
-
         self.topwin.set_sensitive(False)
         self.topwin.get_window().set_cursor(
             Gdk.Cursor.new(Gdk.CursorType.WATCH))
