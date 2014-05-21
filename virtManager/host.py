@@ -240,7 +240,7 @@ class vmmHost(vmmGObjectUI):
         self.widget("interface-list").append_column(interfaceCol)
         interfaceListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
-        # Starmode combo
+        # Startmode combo
         vmmCreateInterface.build_interface_startmode_combo(
             self.widget("interface-startmode"))
 
