@@ -578,7 +578,7 @@ def lookup_osdict_key(variant, key, default):
             raise ValueError("Unknown osdict property '%s'" % key)
         val = getattr(os, key)
         if isfunction(val):
-            return val()
+            val = val()
     if val == _SENTINEL:
         val = default
     return val
