@@ -256,7 +256,8 @@ class vmmAddStorage(vmmGObjectUI):
         return path
 
     def is_default_storage(self):
-        return self.widget("config-storage-create").get_active()
+        return self.widget("config-storage-create").is_visible() and \
+               self.widget("config-storage-create").get_active()
 
     def _check_ideal_path(self, path, vmname, collidelist):
         # See if the ideal disk path (/default/pool/vmname.img)
