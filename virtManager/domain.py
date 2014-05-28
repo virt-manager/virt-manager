@@ -359,7 +359,7 @@ class vmmDomain(vmmLibvirtObject):
         self.toggle_sample_mem_stats()
         self.toggle_sample_cpu_stats()
 
-        self.force_update_status(from_event=True)
+        self.force_update_status(from_event=True, log=False)
 
         # Hook up listeners that need to be cleaned up
         self.add_gconf_handle(
@@ -1673,7 +1673,7 @@ class vmmDomain(vmmLibvirtObject):
             status = libvirt.VIR_DOMAIN_NOSTATE
         return vm_status_icons[status]
 
-    def force_update_status(self, from_event=False):
+    def force_update_status(self, from_event=False, log=True):
         """
         Fetch current domain state and clear status cache
         """
@@ -1682,8 +1682,9 @@ class vmmDomain(vmmLibvirtObject):
 
         try:
             info = self._backend.info()
-            logging.debug("domain=%s status changed to %d=%s",
-                self.get_name(), info[0], self.pretty_run_status(info[0]))
+            if log:
+                logging.debug("domain=%s status changed to %d=%s",
+                    self.get_name(), info[0], self.pretty_run_status(info[0]))
 
             self._update_status(info[0])
         except libvirt.libvirtError, e:

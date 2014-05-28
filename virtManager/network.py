@@ -83,7 +83,8 @@ class vmmNetwork(vmmLibvirtObject):
         self.idle_emit(state and "started" or "stopped")
         self._active = state
 
-    def force_update_status(self, from_event=False):
+    def force_update_status(self, from_event=False, log=True):
+        ignore = log
         if self._using_events() and not from_event:
             return
 

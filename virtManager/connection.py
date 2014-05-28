@@ -941,6 +941,7 @@ class vmmConnection(vmmGObject):
             return
 
         self.mediadevs[name] = mediadev
+        logging.debug("mediadev=%s added", name)
         self.emit("mediadev-added", mediadev)
 
     def _nodedev_mediadev_removed(self, ignore1, name):
@@ -949,6 +950,7 @@ class vmmConnection(vmmGObject):
 
         self.mediadevs[name].cleanup()
         del(self.mediadevs[name])
+        logging.debug("mediadev=%s removed", name)
         self.emit("mediadev-removed", name)
 
 
@@ -1270,17 +1272,21 @@ class vmmConnection(vmmGObject):
 
             # Update VM states
             for uuid, obj in goneVMs.items():
+                logging.debug("domain=%s removed", obj.get_name())
                 self.emit("vm-removed", uuid)
                 obj.cleanup()
             for uuid, obj in newVMs.items():
-                ignore = obj
+                logging.debug("domain=%s status=%s added",
+                    obj.get_name(), obj.run_status())
                 self.emit("vm-added", uuid)
 
             # Update virtual network states
             for uuid, obj in goneNets.items():
+                logging.debug("network=%s removed", obj.get_name())
                 self.emit("net-removed", uuid)
                 obj.cleanup()
             for uuid, obj in newNets.items():
+                logging.debug("network=%s added", obj.get_name())
                 obj.connect("started", self._obj_signal_proxy,
                             "net-started", uuid)
                 obj.connect("stopped", self._obj_signal_proxy,
@@ -1289,9 +1295,11 @@ class vmmConnection(vmmGObject):
 
             # Update storage pool states
             for uuid, obj in gonePools.items():
+                logging.debug("pool=%s removed", obj.get_name())
                 self.emit("pool-removed", uuid)
                 obj.cleanup()
             for uuid, obj in newPools.items():
+                logging.debug("pool=%s added", obj.get_name())
                 obj.connect("started", self._obj_signal_proxy,
                             "pool-started", uuid)
                 obj.connect("stopped", self._obj_signal_proxy,
@@ -1300,9 +1308,11 @@ class vmmConnection(vmmGObject):
 
             # Update interface states
             for name, obj in goneInterfaces.items():
+                logging.debug("interface=%s removed", obj.get_name())
                 self.emit("interface-removed", name)
                 obj.cleanup()
             for name, obj in newInterfaces.items():
+                logging.debug("interface=%s added", obj.get_name())
                 obj.connect("started", self._obj_signal_proxy,
                             "interface-started", name)
                 obj.connect("stopped", self._obj_signal_proxy,
