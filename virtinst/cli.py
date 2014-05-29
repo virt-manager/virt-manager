@@ -787,8 +787,9 @@ def add_guest_xml_options(geng):
     geng.add_argument("--blkiotune", action="append",
                     help=_("Tune blkio policy for the domain process."))
     geng.add_argument("--memorybacking", action="append",
-        help=_("Set memory backing policy for the domain process. Ex:\n"
-               "--memorybacking hugepages=on"))
+                    help=_("Set memory backing policy for "
+                        "the domain process. Ex:\n"
+                        "--memorybacking hugepages=on"))
     geng.add_argument("--features",
                     help=_("Set domain <features> XML. Ex:\n"
                            "--features acpi=off\n"
@@ -797,7 +798,8 @@ def add_guest_xml_options(geng):
                     help=_("Set domain <clock> XML. Ex:\n"
                            "--clock offset=localtime,rtc_tickpolicy=catchup"))
     geng.add_argument("--pm", help=_("Config power management features"))
-    geng.add_argument("--events", help=_("Config OS lifecycle operation management features"))
+    geng.add_argument("--events",
+                    help=_("Config OS lifecycle operation management features"))
 
 
 def add_boot_options(insg):
@@ -1226,9 +1228,9 @@ class ParserMetadata(VirtCLIParser):
         self.set_param("description", "description", can_comma=True)
 
 
-######################
-# --events parsing   #
-######################
+####################
+# --events parsing #
+####################
 
 class ParserEvents(VirtCLIParser):
     def _init_params(self):
