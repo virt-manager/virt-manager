@@ -797,6 +797,7 @@ def add_guest_xml_options(geng):
                     help=_("Set domain <clock> XML. Ex:\n"
                            "--clock offset=localtime,rtc_tickpolicy=catchup"))
     geng.add_argument("--pm", help=_("Config power management features"))
+    geng.add_argument("--events", help=_("Config OS lifecycle operation management features"))
 
 
 def add_boot_options(insg):
@@ -1223,6 +1224,17 @@ class ParserMetadata(VirtCLIParser):
         self.set_param("title", "title", can_comma=True)
         self.set_param("uuid", "uuid")
         self.set_param("description", "description", can_comma=True)
+
+
+######################
+# --events parsing   #
+######################
+
+class ParserEvents(VirtCLIParser):
+    def _init_params(self):
+        self.set_param("on_poweroff", "on_poweroff")
+        self.set_param("on_reboot", "on_reboot")
+        self.set_param("on_crash", "on_crash")
 
 
 ######################
@@ -2212,6 +2224,7 @@ def build_parser_map(options, skip=None, only=None):
         parsermap[parserobj.option_variable_name] = parserobj
 
     register_parser("metadata", ParserMetadata)
+    register_parser("events", ParserEvents)
     register_parser("memory", ParserMemory)
     register_parser("memtune", ParserMemorytune)
     register_parser("vcpus", ParserVCPU)

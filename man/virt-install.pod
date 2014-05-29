@@ -123,6 +123,12 @@ Specify metadata values for the guest. Possible options include name, uuid, titl
 
 Use --metadata=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsMetadata>
 
+=item --events OPT=VAL,[...]
+
+Specify events values for the guest. Possible options include on_poweroff, on_reboot, and on_crash.
+
+Use --events=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsEvents>
+
 =item --vcpus=VCPUS[,maxvcpus=MAX][,sockets=#][,cores=#][,threads=#][,cpuset=CPUSET]
 
 Number of virtual cpus to configure for the guest. If 'maxvcpus' is specified,
