@@ -213,7 +213,7 @@ class StoragePool(_StorageObject):
 
 
     @staticmethod
-    def get_default_path(conn):
+    def get_default_path(conn, build=True):
         """
         Return the default storage path. If there's a 'default' pool,
         report that. If there's no default pool, return the path we would
@@ -230,7 +230,9 @@ class StoragePool(_StorageObject):
         except:
             pass
 
-        return StoragePool.build_default_pool(conn).target_path
+        if build:
+            return StoragePool.build_default_pool(conn).target_path
+        return _get_default_pool_path(conn)
 
 
     @staticmethod
