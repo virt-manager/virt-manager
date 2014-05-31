@@ -2192,7 +2192,8 @@ class vmmDetails(vmmGObjectUI):
             kwargs["addrstr"] = addrstr
 
         if self.edited(EDIT_NET_SOURCE):
-            kwargs["ntype"], kwargs["source"], kwargs["mode"] = (
+            (kwargs["ntype"], kwargs["source"],
+             kwargs["mode"], kwargs["portgroup"]) = (
                 self.netlist.get_network_selection())
 
         if self.edited(EDIT_NET_VPORT):

@@ -766,7 +766,8 @@ class vmmDomain(vmmLibvirtObject):
         ntype=_SENTINEL, source=_SENTINEL,
         mode=_SENTINEL, model=_SENTINEL, addrstr=_SENTINEL,
         vtype=_SENTINEL, managerid=_SENTINEL, typeid=_SENTINEL,
-        typeidversion=_SENTINEL, instanceid=_SENTINEL):
+        typeidversion=_SENTINEL, instanceid=_SENTINEL,
+        portgroup=_SENTINEL):
 
         def change(editdev):
             if ntype != _SENTINEL:
@@ -775,6 +776,7 @@ class vmmDomain(vmmLibvirtObject):
                 editdev.type = ntype
                 editdev.source = source
                 editdev.source_mode = mode or None
+                editdev.portgroup = portgroup or None
 
             if model != _SENTINEL:
                 if editdev.model != model:

@@ -96,7 +96,7 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">3</property>
+        <property name="top_attach">4</property>
         <property name="width">2</property>
         <property name="height">1</property>
       </packing>
@@ -111,7 +111,7 @@
         <signal name="changed" handler="on_net_source_mode_changed" swapped="no"/>
         <child internal-child="entry">
           <object class="GtkEntry" id="combobox-entry">
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
           </object>
         </child>
       </object>
@@ -158,6 +158,45 @@
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
         <property name="width">2</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="hexpand">False</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">_Portgroup:</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">net-portgroup</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">3</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkComboBox" id="net-portgroup">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="hexpand">True</property>
+        <property name="has_entry">True</property>
+        <signal name="changed" handler="on_net_portgroup_changed" swapped="no"/>
+        <child internal-child="entry">
+          <object class="GtkEntry" id="combobox-entry2">
+            <property name="can_focus">True</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">3</property>
+        <property name="width">1</property>
         <property name="height">1</property>
       </packing>
     </child>

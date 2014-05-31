@@ -41,6 +41,7 @@ class vmmNetworkList(vmmGObjectUI):
         self.builder.connect_signals({
             "on_net_source_changed": self._on_net_source_changed,
             "on_net_source_mode_changed": self._emit_changed,
+            "on_net_portgroup_changed": self._emit_changed,
             "on_net_bridge_name_changed": self._emit_changed,
 
             "on_vport_type_changed": self._emit_vport_changed,
@@ -93,8 +94,13 @@ class vmmNetworkList(vmmGObjectUI):
         model.append(["vepa", "VEPA"])
         model.append(["private", "Private"])
         model.append(["passthrough", "Passthrough"])
-
         combo.set_active(0)
+
+        combo = self.widget("net-portgroup")
+        # [xml value, label]
+        model = Gtk.ListStore(str, str)
+        combo.set_model(model)
+        uiutil.set_combo_text_column(combo, 1)
 
         self.conn.connect("net-added", self._repopulate_network_list)
         self.conn.connect("net-removed", self._repopulate_network_list)
@@ -288,7 +294,7 @@ class vmmNetworkList(vmmGObjectUI):
         bridge_entry = self.widget("net-bridge-name")
         row = self.get_network_row()
         if not row:
-            return None, None, None
+            return None, None, None, None
 
         net_type = row[0]
         net_src = row[1]
@@ -300,9 +306,13 @@ class vmmNetworkList(vmmGObjectUI):
 
         mode = None
         if self.widget("net-source-mode").is_visible():
-            mode = uiutil.get_list_selection(self.widget("net-source-mode"), 0)
+            mode = uiutil.get_combo_entry(self.widget("net-source-mode"), 0)
 
-        return net_type, net_src, mode
+        portgroup = None
+        if self.widget("net-portgroup").is_visible():
+            portgroup = uiutil.get_combo_entry(self.widget("net-portgroup"), 0)
+
+        return net_type, net_src, mode, portgroup
 
     def get_vport(self):
         vport_type = self.widget("vport-type").get_text()
@@ -315,7 +325,7 @@ class vmmNetworkList(vmmGObjectUI):
          vport_idver, vport_instid)
 
     def validate_network(self, macaddr, model=None):
-        nettype, devname, mode = self.get_network_selection()
+        nettype, devname, mode, portgroup = self.get_network_selection()
         if nettype is None:
             return None
 
@@ -354,6 +364,7 @@ class vmmNetworkList(vmmGObjectUI):
             net.macaddr = macaddr
             net.model = model
             net.source_mode = mode
+            net.portgroup = portgroup
             if net.model == "spapr-vlan":
                 net.address.set_addrstr("spapr-vio")
 
@@ -391,6 +402,7 @@ class vmmNetworkList(vmmGObjectUI):
 
         self.widget("net-bridge-name").set_text("")
         self.widget("net-source-mode").set_active(0)
+        self.widget("net-portgroup").get_child().set_text("")
 
         self.widget("vport-type").set_text("")
         self.widget("vport-managerid").set_text("")
@@ -439,6 +451,9 @@ class vmmNetworkList(vmmGObjectUI):
         combo.set_active_iter(rowiter)
         combo.emit("changed")
 
+        if net.portgroup:
+            uiutil.set_combo_entry(self.widget("net-portgroup"), net.portgroup)
+
 
     #############
     # Listeners #
@@ -467,6 +482,19 @@ class vmmNetworkList(vmmGObjectUI):
                 netlist.set_active_iter(row.iter)
                 return
 
+    def _populate_portgroups(self, portgroups):
+        combo = self.widget("net-portgroup")
+        model = combo.get_model()
+        model.clear()
+
+        default = None
+        for p in portgroups:
+            model.append([p.name, p.name])
+            if p.default:
+                default = p.name
+
+        uiutil.set_combo_entry(combo, default)
+
     def _on_net_source_changed(self, src):
         ignore = src
         self._emit_changed()
@@ -475,7 +503,6 @@ class vmmNetworkList(vmmGObjectUI):
             return
 
         is_direct = (row[0] == virtinst.VirtualNetworkInterface.TYPE_DIRECT)
-
         self.widget("vport-expander").set_visible(is_direct)
         uiutil.set_grid_row_visible(self.widget("net-source-mode"), is_direct)
         uiutil.set_grid_row_visible(
@@ -486,3 +513,12 @@ class vmmNetworkList(vmmGObjectUI):
         show_bridge = row[5]
         uiutil.set_grid_row_visible(
             self.widget("net-bridge-name"), show_bridge)
+
+        portgroups = []
+        key = row[6]
+        if key and row[0] == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
+            portgroups = self.conn.get_net(key).get_xmlobj().portgroups
+
+        uiutil.set_grid_row_visible(
+            self.widget("net-portgroup"), bool(portgroups))
+        self._populate_portgroups(portgroups)
