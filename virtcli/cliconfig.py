@@ -53,9 +53,15 @@ def _setup_gsettings_path(schemadir):
     schema and use it directly
     """
     import subprocess
+    from distutils.spawn import find_executable
+
+    exe = find_executable("glib-compile-schemas")
+    if not exe:
+        raise RuntimeError("You must install glib-compile-schemas to run "
+            "virt-manager from git.")
 
     os.environ["GSETTINGS_SCHEMA_DIR"] = schemadir
-    ret = subprocess.call(["glib-compile-schemas", "--strict", schemadir])
+    ret = subprocess.call([exe, "--strict", schemadir])
     if ret != 0:
         raise RuntimeError("Failed to compile local gsettings schemas")
 
