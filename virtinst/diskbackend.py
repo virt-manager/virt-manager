@@ -86,9 +86,9 @@ def check_if_path_managed(conn, path):
     if not vol:
         pool = StoragePool.lookup_pool_by_path(conn, os.path.dirname(path))
 
-        # Is pool running?
+        # Ensure pool is running
         if pool and pool.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
-            pool = None
+            pool.start()
 
     # Attempt to lookup path as a storage volume
     if pool and not vol:
