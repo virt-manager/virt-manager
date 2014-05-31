@@ -195,7 +195,7 @@ class VirtConverter(object):
         (self._input_file,
          self.parser,
          self._force_clean) = _find_input(input_file, parser, self.print_cb)
-        self._top_dir = os.path.dirname(self._input_file)
+        self._top_dir = os.path.dirname(os.path.abspath(self._input_file))
 
         logging.debug("converter not input_file=%s parser=%s",
             self._input_file, self.parser)
