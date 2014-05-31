@@ -155,6 +155,10 @@ class XMLParseTest(unittest.TestCase):
         check("initrd", None)
         check("kernel_args", None)
 
+        guest.os.set_initargs_string("foo 'bar baz' frib")
+        self.assertEqual([i.val for i in guest.os.initargs],
+            ["foo", "bar baz", "frib"])
+
         check = self._make_checker(guest.features)
         check("acpi", True, False)
         check("apic", True, True)

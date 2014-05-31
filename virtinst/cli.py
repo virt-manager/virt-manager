@@ -1425,6 +1425,12 @@ class ParserBoot(VirtCLIParser):
         self.set_param("os.os_type", "os_type")
         self.set_param("emulator", "emulator")
 
+        def set_initargs_cb(opts, inst, cliname, val):
+            ignore = opts
+            ignore = cliname
+            inst.os.set_initargs_string(val)
+        self.set_param("os.initargs", "initargs", setter_cb=set_initargs_cb)
+
         # Order matters for boot devices, we handle it specially in parse
         def noset_cb(val):
             ignore = val

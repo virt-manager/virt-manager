@@ -20,6 +20,11 @@
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 
+class _InitArg(XMLBuilder):
+    _XML_ROOT_NAME = "initarg"
+    val = XMLProperty(".")
+
+
 class _BootDevice(XMLBuilder):
     _XML_ROOT_NAME = "boot"
     dev = XMLProperty("./@dev")
@@ -71,6 +76,18 @@ class OSXML(XMLBuilder):
             self._add_child(dev)
     _bootdevs = XMLChildProperty(_BootDevice)
     bootorder = property(_get_bootorder, _set_bootorder)
+
+    initargs = XMLChildProperty(_InitArg)
+    def add_initarg(self, val):
+        obj = _InitArg(self.conn)
+        obj.val = val
+        self._add_child(obj)
+    def set_initargs_string(self, argstring):
+        import shlex
+        for obj in self.initargs:
+            self._remove_child(obj)
+        for val in shlex.split(argstring):
+            self.add_initarg(val)
 
     enable_bootmenu = XMLProperty("./bootmenu/@enable", is_yesno=True)
     useserial = XMLProperty("./bios/@useserial", is_yesno=True)
