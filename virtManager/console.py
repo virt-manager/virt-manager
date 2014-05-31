@@ -464,7 +464,6 @@ class VNCViewer(Viewer):
 
     def set_grab_keyboard(self):
         self.display.set_keyboard_grab(self.config.get_grab_keyboard())
-        self.display.force_grab(self.config.get_grab_keyboard())
 
     def _desktop_resize(self, src_ignore, w, h):
         self.desktop_resolution = (w, h)
