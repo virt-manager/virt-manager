@@ -1365,20 +1365,24 @@ class vmmCreate(vmmGObjectUI):
         self.widget("header-pagenum").set_markup(page_lbl)
 
     def page_changed(self, ignore1, ignore2, pagenum):
-        # Update page number
-        self.set_page_num_text(pagenum)
-
-        self.widget("create-back").set_sensitive(pagenum != PAGE_NAME)
-        self.widget("create-forward").set_visible(pagenum != PAGE_FINISH)
-        self.widget("create-finish").set_visible(pagenum == PAGE_FINISH)
-
         if pagenum == PAGE_INSTALL:
             self.detect_media_os()
             self.widget("install-os-distro-box").set_visible(
                 not self.container_install())
         elif pagenum == PAGE_FINISH:
+            try:
+                self.populate_summary()
+            except Exception, e:
+                self.err.show_err(_("Error populating summary page: %s") %
+                    str(e))
+                return
+
             self.widget("create-finish").grab_focus()
-            self.populate_summary()
+
+        self.set_page_num_text(pagenum)
+        self.widget("create-back").set_sensitive(pagenum != PAGE_NAME)
+        self.widget("create-forward").set_visible(pagenum != PAGE_FINISH)
+        self.widget("create-finish").set_visible(pagenum == PAGE_FINISH)
 
         for nr in range(self.widget("create-pages").get_n_pages()):
             page = self.widget("create-pages").get_nth_page(nr)
