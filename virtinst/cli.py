@@ -1758,6 +1758,7 @@ class ParserNetwork(VirtCLIParser):
         self.set_param("type", "type", setter_cb=set_type_cb)
         self.set_param("source", "source")
         self.set_param("source_mode", "source_mode")
+        self.set_param("portgroup", "portgroup")
         self.set_param("target_dev", "target")
         self.set_param("model", "model")
         self.set_param("macaddr", "mac", setter_cb=set_mac_cb)

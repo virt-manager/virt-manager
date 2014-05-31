@@ -486,6 +486,7 @@ class XMLParseTest(unittest.TestCase):
         check("type", "direct")
         check("source", "eth0.1")
         check("source_mode", "vepa", "bridge")
+        check("portgroup", None, "sales")
         check("driver_name", None, "vhost")
         check("driver_queues", None, 5)
 

@@ -208,7 +208,7 @@ class VirtualNetworkInterface(VirtualDevice):
     ##################
 
     _XML_PROP_ORDER = [
-        "_bridge", "_network", "_source_dev", "source_mode",
+        "_bridge", "_network", "_source_dev", "source_mode", "portgroup",
         "macaddr", "target_dev", "model", "virtualport",
         "filterref"]
 
@@ -226,6 +226,7 @@ class VirtualNetworkInterface(VirtualDevice):
 
     source_mode = XMLProperty("./source/@mode",
                               default_cb=_default_source_mode)
+    portgroup = XMLProperty("./source/@portgroup")
     model = XMLProperty("./model/@type")
     target_dev = XMLProperty("./target/@dev")
     filterref = XMLProperty("./filterref/@filter")
