@@ -174,14 +174,19 @@ class VirtConverter(object):
     """
     Public interface for actually performing the conversion
     """
-    def __init__(self, conn, input_file, print_cb=None, input_name=None):
+    def __init__(self, conn, input_file, print_cb=-1, input_name=None):
         self.conn = conn
         self._err_clean = []
         self._force_clean = []
 
-        if print_cb is None:
+        if print_cb == -1:
             def cb(msg):
                 print msg
+            print_cb = cb
+        if print_cb is None:
+            def cb(msg):
+                ignore = msg
+                pass
             print_cb = cb
         self.print_cb = print_cb
 
