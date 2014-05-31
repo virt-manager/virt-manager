@@ -82,6 +82,13 @@ class _NetworkForward(XMLBuilder):
         return Network.pretty_forward_desc(self.mode, self.dev)
 
 
+class _NetworkPortgroup(XMLBuilder):
+    _XML_ROOT_NAME = "portgroup"
+
+    name = XMLProperty("./@name")
+    default = XMLProperty("./@default", is_yesno=True)
+
+
 class Network(XMLBuilder):
     """
     Top level class for <network> object XML
@@ -172,6 +179,7 @@ class Network(XMLBuilder):
     delay = XMLProperty("./bridge/@delay", is_int=True)
     macaddr = XMLProperty("./mac/@address")
 
+    portgroups = XMLChildProperty(_NetworkPortgroup)
     ips = XMLChildProperty(_NetworkIP)
     routes = XMLChildProperty(_NetworkRoute)
 
@@ -183,6 +191,7 @@ class Network(XMLBuilder):
         route = _NetworkRoute(self.conn)
         self._add_child(route)
         return route
+
 
     ##################
     # build routines #

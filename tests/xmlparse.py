@@ -1135,6 +1135,11 @@ class XMLParseTest(unittest.TestCase):
         check("mode", "nat", "route")
         check("dev", None, "eth22")
 
+        self.assertEquals(len(net.portgroups), 2)
+        check = self._make_checker(net.portgroups[0])
+        check("name", "engineering", "foo")
+        check("default", True, False)
+
         self.assertEqual(len(net.ips), 4)
         check = self._make_checker(net.ips[0])
         check("address", "192.168.7.1", "192.168.8.1")

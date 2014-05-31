@@ -22,4 +22,22 @@
   </ip>
   <ip family="ipv4" address="192.168.19.0" netmask="255.255.255.0">
   </ip>
+  <portgroup name='engineering' default='yes'>
+    <virtualport type='802.1Qbh'>
+      <parameters profileid='test'/>
+    </virtualport>
+    <bandwidth>
+      <inbound average='1000' peak='5000' burst='5120'/>
+      <outbound average='1000' peak='5000' burst='5120'/>
+    </bandwidth>
+  </portgroup>
+  <portgroup name='sales'>
+    <virtualport type='802.1Qbh'>
+      <parameters profileid='salestest'/>
+    </virtualport>
+    <bandwidth>
+      <inbound average='500' peak='2000' burst='2560'/>
+      <outbound average='128' peak='256' burst='256'/>
+    </bandwidth>
+  </portgroup>
 </network>
