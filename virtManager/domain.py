@@ -643,7 +643,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def define_boot(self, boot_order=_SENTINEL, boot_menu=_SENTINEL,
         kernel=_SENTINEL, initrd=_SENTINEL, dtb=_SENTINEL,
-        kernel_args=_SENTINEL, init=_SENTINEL):
+        kernel_args=_SENTINEL, init=_SENTINEL, initargs=_SENTINEL):
 
         def _change_boot_order(guest):
             boot_dev_order = []
@@ -679,6 +679,7 @@ class vmmDomain(vmmLibvirtObject):
                 guest.os.enable_bootmenu = bool(boot_menu)
             if init != _SENTINEL:
                 guest.os.init = init
+                guest.os.set_initargs_string(initargs)
 
             if kernel != _SENTINEL:
                 guest.os.kernel = kernel or None
@@ -1075,7 +1076,12 @@ class vmmDomain(vmmLibvirtObject):
     def get_arch(self):
         return self.get_xmlobj().os.arch
     def get_init(self):
-        return self.get_xmlobj().os.init
+        import pipes
+        init = self.get_xmlobj().os.init
+        initargs = " ".join(
+            [pipes.quote(i.val) for i in self.get_xmlobj().os.initargs])
+        return init, initargs
+
     def get_emulator(self):
         return self.get_xmlobj().emulator
     def get_machtype(self):

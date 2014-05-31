@@ -619,6 +619,7 @@ class vmmDetails(vmmGObjectUI):
             "on_boot_initrd_browse_clicked": self.browse_initrd,
             "on_boot_dtb_browse_clicked": self.browse_dtb,
             "on_boot_init_path_changed": lambda *x: self.enable_apply(x, EDIT_INIT),
+            "on_boot_init_args_changed": lambda *x: self.enable_apply(x, EDIT_INIT),
 
             "on_disk_readonly_changed": lambda *x: self.enable_apply(x, EDIT_DISK_RO),
             "on_disk_shareable_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SHARE),
@@ -2091,6 +2092,7 @@ class vmmDetails(vmmGObjectUI):
 
         if self.edited(EDIT_INIT):
             kwargs["init"] = self.get_text("boot-init-path")
+            kwargs["initargs"] = self.get_text("boot-init-args") or ""
             if not kwargs["init"]:
                 return self.err.val_err(_("An init path must be specified"))
 
@@ -3123,8 +3125,9 @@ class vmmDetails(vmmGObjectUI):
         self.widget("boot-dtb-box").set_visible(show_dtb)
 
         # <init> populate
-        init = self.vm.get_init()
+        init, initargs = self.vm.get_init()
         self.widget("boot-init-path").set_text(init or "")
+        self.widget("boot-init-args").set_text(initargs or "")
 
         # Boot menu populate
         menu = self.vm.get_boot_menu() or False
