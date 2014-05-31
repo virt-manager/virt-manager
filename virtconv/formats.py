@@ -179,16 +179,13 @@ class VirtConverter(object):
         self._err_clean = []
         self._force_clean = []
 
-        if print_cb == -1:
+        if print_cb == -1 or print_cb is None:
             def cb(msg):
-                print msg
-            print_cb = cb
-        if print_cb is None:
-            def cb(msg):
-                ignore = msg
-                pass
-            print_cb = cb
-        self.print_cb = print_cb
+                if print_cb == -1:
+                    print msg
+            self.print_cb = cb
+        else:
+            self.print_cb = print_cb
 
         parser = None
         if input_name:
