@@ -435,6 +435,12 @@ def _icon_for_device(dev):
     return typemap[devtype]
 
 
+def _chipset_label_from_machine(machine):
+    if machine and "q35" in machine:
+        return "Q35"
+    return "i440FX"
+
+
 class vmmDetails(vmmGObjectUI):
     __gsignals__ = {
         "action-save-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
@@ -585,6 +591,7 @@ class vmmDetails(vmmGObjectUI):
             "on_overview_name_changed": lambda *x: self.enable_apply(x, EDIT_NAME),
             "on_overview_title_changed": lambda *x: self.enable_apply(x, EDIT_TITLE),
             "on_machine_type_changed": lambda *x: self.enable_apply(x, EDIT_MACHTYPE),
+            "on_overview_chipset_changed": lambda *x: self.enable_apply(x, EDIT_MACHTYPE),
             "on_idmap_uid_target_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
             "on_idmap_uid_count_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
             "on_idmap_gid_target_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
@@ -887,29 +894,55 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_combo_text_column(machtype_combo, 0)
         machtype_model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
+        machines = []
+        try:
+            ignore, domain = caps.guest_lookup(
+                os_type=self.vm.get_abi_type(),
+                arch=self.vm.get_arch(),
+                typ=self.vm.get_hv_type(),
+                machine=self.vm.get_machtype())
+
+            machines = domain.machines[:]
+        except:
+            logging.exception("Error determining machine list")
+
         show_machine = (arch not in ["i686", "x86_64"] and
                         not self.vm.is_management_domain())
-        uiutil.set_grid_row_visible(self.widget("machine-type"),
-                                       show_machine)
+        uiutil.set_grid_row_visible(self.widget("machine-type"), show_machine)
 
         if show_machine:
-            machines = []
-
-            try:
-                ignore, domain = caps.guest_lookup(
-                    os_type=self.vm.get_abi_type(),
-                    arch=self.vm.get_arch(),
-                    typ=self.vm.get_hv_type(),
-                    machine=self.vm.get_machtype())
-
-                machines = domain.machines[:]
-            except:
-                logging.exception("Error determining machine list")
-
             for machine in machines:
                 if machine == "none":
                     continue
                 machtype_model.append([machine])
+
+        # Chipset
+        combo = self.widget("overview-chipset")
+        model = Gtk.ListStore(str, str)
+        combo.set_model(model)
+        model.append([_chipset_label_from_machine("pc"), "pc"])
+        if "q35" in machines:
+            model.append([_chipset_label_from_machine("q35"), "q35"])
+        combo.set_active(0)
+
+        def chipset_changed(*args):
+            ignore = args
+            combo = self.widget("overview-chipset")
+            model = combo.get_model()
+            show_warn = (combo.get_active() >= 0 and
+                model[combo.get_active()][1] == "q35")
+            uiutil.set_grid_row_visible(
+                self.widget("overview-chipset-warn-box"), show_warn)
+        combo.connect("changed", chipset_changed)
+
+        self.widget("overview-chipset").set_visible(self.is_customize_dialog)
+        self.widget("overview-chipset-label").set_visible(
+            not self.is_customize_dialog)
+        show_chipset = ((self.conn.is_qemu() or self.conn.is_test_conn()) and
+                        arch in ["i686", "x86_64"] and
+                        not self.vm.is_management_domain())
+        uiutil.set_grid_row_visible(
+            self.widget("overview-chipset-title"), show_chipset)
 
         # Inspection page
         apps_list = self.widget("inspection-apps")
@@ -1982,8 +2015,12 @@ class vmmDetails(vmmGObjectUI):
             hotplug_args["title"] = kwargs["title"]
 
         if self.edited(EDIT_MACHTYPE):
-            kwargs["machine"] = uiutil.get_combo_entry(
-                self.widget("machine-type"))
+            if self.widget("overview-chipset").is_visible():
+                kwargs["machine"] = uiutil.get_list_selection(
+                    self.widget("overview-chipset"), 1)
+            else:
+                kwargs["machine"] = uiutil.get_combo_entry(
+                    self.widget("machine-type"))
 
         if self.edited(EDIT_DESC):
             desc_widget = self.widget("overview-description")
@@ -2447,6 +2484,13 @@ class vmmDetails(vmmGObjectUI):
         if arch not in ["i686", "x86_64"]:
             if machtype is not None:
                 uiutil.set_combo_entry(self.widget("machine-type"), machtype)
+
+        chipset = _chipset_label_from_machine(machtype)
+        if self.widget("overview-chipset").is_visible():
+            uiutil.set_combo_entry(
+                self.widget("overview-chipset"), chipset)
+        elif self.widget("overview-chipset-label").is_visible():
+            self.widget("overview-chipset-label").set_text(chipset)
 
         # User namespace idmap setting
         is_container = self.vm.is_container()
