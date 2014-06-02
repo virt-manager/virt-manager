@@ -56,7 +56,8 @@ def _new_poll_helper(origmap, typename, listfunc, keyfunc, buildfunc):
 
 def _old_poll_helper(origmap, typename,
                      active_list, inactive_list,
-                     lookup_func, build_func):
+                     lookup_func, build_func,
+                     key_is_uuid=False):
     """
     Helper routine for old style split API libvirt polling.
     @origmap: Pre-existing mapping of objects, with key->obj mapping.
@@ -68,6 +69,8 @@ def _old_poll_helper(origmap, typename,
     @lookup_func: Function to get an object handle for the passed name
     @build_func: Function that builds a new object class. It is passed
         args of (raw libvirt object, key (usually UUID))
+    @key_is_uuid: If True, we use the object UUID as the returned dictionary
+        keys
     """
     current = {}
     new = {}
@@ -83,8 +86,10 @@ def _old_poll_helper(origmap, typename,
     except Exception, e:
         logging.debug("Unable to list inactive %ss: %s", typename, e)
 
-    def check_obj(key):
-        if key not in origmap:
+    def check_obj(name):
+        obj = None
+        key = name
+        if key not in origmap or key_is_uuid:
             try:
                 obj = lookup_func(key)
             except Exception, e:
@@ -92,6 +97,10 @@ def _old_poll_helper(origmap, typename,
                               typename, key, e)
                 return
 
+        if key_is_uuid:
+            key = obj.UUIDString()
+
+        if key not in origmap:
             # Object is brand new this period
             current[key] = build_func(obj, key)
             new[key] = current[key]
@@ -124,7 +133,8 @@ def fetch_nets(backend, origmap, build_func):
 
         return _old_poll_helper(origmap, name,
                                 active_list, inactive_list,
-                                lookup_func, build_func)
+                                lookup_func, build_func,
+                                key_is_uuid=True)
 
 
 def fetch_pools(backend, origmap, build_func):
@@ -142,7 +152,8 @@ def fetch_pools(backend, origmap, build_func):
 
         return _old_poll_helper(origmap, name,
                                 active_list, inactive_list,
-                                lookup_func, build_func)
+                                lookup_func, build_func,
+                                key_is_uuid=True)
 
 
 def fetch_volumes(backend, pool, origmap, build_func):
