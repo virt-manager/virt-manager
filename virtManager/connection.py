@@ -109,19 +109,19 @@ class vmmConnection(vmmGObject):
         self._xml_flags = {}
 
         # Physical network interfaces: name -> virtinst.NodeDevice
-        self.nodedevs = {}
+        self._nodedevs = {}
         # Physical network interfaces: name (eth0) -> vmmNetDevice
-        self.netdevs = {}
+        self._netdevs = {}
         # Physical media devices: vmmMediaDevice.key -> vmmMediaDevice
-        self.mediadevs = {}
+        self._mediadevs = {}
         # Connection Storage pools: name -> vmmInterface
-        self.interfaces = {}
-        # Connection Storage pools: UUID -> vmmStoragePool
-        self.pools = {}
-        # Virtual networks UUUID -> vmmNetwork object
-        self.nets = {}
-        # Virtual machines. UUID -> vmmDomain object
-        self.vms = {}
+        self._interfaces = {}
+        # Connection Storage pools: name -> vmmStoragePool
+        self._pools = {}
+        # Virtual networks: name -> vmmNetwork object
+        self._nets = {}
+        # Virtual machines: name -> vmmDomain object
+        self._vms = {}
         # Resource utilization statistics
         self.record = []
         self.hostinfo = None
@@ -171,14 +171,14 @@ class vmmConnection(vmmGObject):
     def _init_virtconn(self):
         self._backend.cb_fetch_all_guests = (
             lambda: [obj.get_xmlobj(refresh_if_nec=False)
-                     for obj in self.vms.values()])
+                     for obj in self._vms.values()])
         self._backend.cb_fetch_all_pools = (
             lambda: [obj.get_xmlobj(refresh_if_nec=False)
-                     for obj in self.pools.values()])
+                     for obj in self._pools.values()])
 
         def fetch_all_vols():
             ret = []
-            for pool in self.pools.values():
+            for pool in self._pools.values():
                 for vol in pool.get_volumes(refresh=False).values():
                     try:
                         ret.append(vol.get_xmlobj(refresh_if_nec=False))
@@ -290,14 +290,14 @@ class vmmConnection(vmmGObject):
         handle_id = vmmGObject.connect(self, name, callback, *args)
 
         if name == "vm-added":
-            for uuid in self.vms.keys():
-                self.emit("vm-added", uuid)
+            for connkey in self._vms.keys():
+                self.emit("vm-added", connkey)
         elif name == "mediadev-added":
-            for dev in self.mediadevs.values():
+            for dev in self._mediadevs.values():
                 self.emit("mediadev-added", dev)
         elif name == "nodedev-added":
-            for key in self.nodedevs.keys():
-                self.emit("nodedev-added", key)
+            for connkey in self._nodedevs.keys():
+                self.emit("nodedev-added", connkey)
 
         return handle_id
 
@@ -584,6 +584,23 @@ class vmmConnection(vmmGObject):
 
         return self._get_flags_helper(iface, key, check_func)
 
+    def get_default_pool(self):
+        for p in self._pools.values():
+            if p.get_name() == "default":
+                return p
+        return None
+
+    def get_vol_by_path(self, path):
+        # path_exists will handle stuff like refreshing a busted pool
+        if not virtinst.VirtualDisk.path_exists(self.get_backend(), path):
+            return None
+
+        for pool in self._pools.values():
+            for vol in pool.get_volumes().values():
+                if vol.get_target_path() == path:
+                    return vol
+        return None
+
 
     ###################################
     # Connection state getter/setters #
@@ -631,6 +648,7 @@ class vmmConnection(vmmGObject):
     def is_connecting(self):
         return self.state == self.STATE_CONNECTING
 
+
     #################################
     # Libvirt object lookup methods #
     #################################
@@ -662,7 +680,7 @@ class vmmConnection(vmmGObject):
                 if mac:
                     netdev_list[name].mac = mac
 
-        for name, iface in self.interfaces.items():
+        for name, iface in self._interfaces.items():
             interface_to_netdev(iface)
 
         for nodedev in self.get_nodedevs("net"):
@@ -682,21 +700,37 @@ class vmmConnection(vmmGObject):
         # XXX: How to handle added/removed signals to clients?
         return netdev_list
 
-    def get_vm(self, uuid):
-        return self.vms[uuid]
-    def get_net(self, uuid):
-        return self.nets[uuid]
-    def get_net_device(self, path):
-        return self.netdevs[path]
-    def get_pool(self, uuid):
-        return self.pools[uuid]
-    def get_interface(self, name):
-        return self.interfaces[name]
-    def get_nodedev(self, name):
-        return self.nodedevs[name]
+    def list_netdevs(self):
+        # Update netdev list
+        if self.netdev_use_libvirt:
+            self._netdevs = self._build_libvirt_netdev_list()
+        return self._netdevs.values()
+
+    def get_vm(self, connkey):
+        return self._vms[connkey]
+    def list_vms(self):
+        return self._vms.values()
+
+    def get_net(self, connkey):
+        return self._nets[connkey]
+    def list_nets(self):
+        return self._nets.values()
+
+    def get_pool(self, connkey):
+        return self._pools[connkey]
+    def list_pools(self):
+        return self._pools.values()
+
+    def get_interface(self, connkey):
+        return self._interfaces[connkey]
+    def list_interfaces(self):
+        return self._interfaces.values()
+
+    def get_nodedev(self, connkey):
+        return self._nodedevs[connkey]
     def get_nodedevs(self, devtype=None, devcap=None):
         retdevs = []
-        for dev in self.nodedevs.values():
+        for dev in self._nodedevs.values():
             xmlobj = dev.get_xmlobj()
             if devtype and xmlobj.device_type != devtype:
                 continue
@@ -733,50 +767,6 @@ class vmmConnection(vmmGObject):
                        count, vendor, product)
 
         return count
-
-    def get_net_by_name(self, name):
-        for net in self.nets.values():
-            if net.get_name() == name:
-                return net
-
-    def get_pool_by_path(self, path):
-        for pool in self.pools.values():
-            if pool.get_target_path() == path:
-                return pool
-        return None
-
-    def get_pool_by_name(self, name):
-        for p in self.pools.values():
-            if p.get_name() == name:
-                return p
-        return None
-    def get_default_pool(self):
-        return self.get_pool_by_name("default")
-
-    def get_vol_by_path(self, path):
-        # path_exists will handle stuff like refreshing a busted pool
-        if not virtinst.VirtualDisk.path_exists(self.get_backend(), path):
-            return None
-
-        for pool in self.pools.values():
-            for vol in pool.get_volumes().values():
-                if vol.get_target_path() == path:
-                    return vol
-        return None
-
-    def list_vm_uuids(self):
-        return self.vms.keys()
-    def list_net_uuids(self):
-        return self.nets.keys()
-    def list_net_device_paths(self):
-        # Update netdev list
-        if self.netdev_use_libvirt:
-            self.netdevs = self._build_libvirt_netdev_list()
-        return self.netdevs.keys()
-    def list_pool_uuids(self):
-        return self.pools.keys()
-    def list_interface_names(self):
-        return self.interfaces.keys()
 
 
     ###################################
@@ -852,7 +842,7 @@ class vmmConnection(vmmGObject):
         ignore = conn
         ignore = args
 
-        obj = self.vms.get(domain.UUIDString(), None)
+        obj = self._vms.get(domain.name(), None)
         if not obj:
             return
         self.idle_add(obj.refresh_xml, True)
@@ -861,7 +851,7 @@ class vmmConnection(vmmGObject):
         ignore = conn
         ignore = reason
         ignore = userdata
-        obj = self.vms.get(domain.UUIDString(), None)
+        obj = self._vms.get(domain.name(), None)
 
         if obj:
             # If the domain disappeared, this will catch it and trigger
@@ -877,7 +867,7 @@ class vmmConnection(vmmGObject):
         ignore = conn
         ignore = reason
         ignore = userdata
-        obj = self.nets.get(network.UUIDString(), None)
+        obj = self._nets.get(network.name(), None)
 
         if obj:
             self.idle_add(obj.force_update_status, True)
@@ -942,7 +932,7 @@ class vmmConnection(vmmGObject):
     ####################
 
     def _nodedev_mediadev_added(self, ignore1, name):
-        if name in self.mediadevs:
+        if name in self._mediadevs:
             return
 
         vobj = self.get_nodedev(name)
@@ -950,16 +940,16 @@ class vmmConnection(vmmGObject):
         if not mediadev:
             return
 
-        self.mediadevs[name] = mediadev
+        self._mediadevs[name] = mediadev
         logging.debug("mediadev=%s added", name)
         self.emit("mediadev-added", mediadev)
 
     def _nodedev_mediadev_removed(self, ignore1, name):
-        if name not in self.mediadevs:
+        if name not in self._mediadevs:
             return
 
-        self.mediadevs[name].cleanup()
-        del(self.mediadevs[name])
+        self._mediadevs[name].cleanup()
+        del(self._mediadevs[name])
         logging.debug("mediadev=%s removed", name)
         self.emit("mediadev-removed", name)
 
@@ -1001,26 +991,26 @@ class vmmConnection(vmmGObject):
         self._backend.close()
         self.record = []
 
-        cleanup(self.nodedevs)
-        self.nodedevs = {}
+        cleanup(self._nodedevs)
+        self._nodedevs = {}
 
-        cleanup(self.netdevs)
-        self.netdevs = {}
+        cleanup(self._netdevs)
+        self._netdevs = {}
 
-        cleanup(self.mediadevs)
-        self.mediadevs = {}
+        cleanup(self._mediadevs)
+        self._mediadevs = {}
 
-        cleanup(self.interfaces)
-        self.interfaces = {}
+        cleanup(self._interfaces)
+        self._interfaces = {}
 
-        cleanup(self.pools)
-        self.pools = {}
+        cleanup(self._pools)
+        self._pools = {}
 
-        cleanup(self.nets)
-        self.nets = {}
+        cleanup(self._nets)
+        self._nets = {}
 
-        cleanup(self.vms)
-        self.vms = {}
+        cleanup(self._vms)
+        self._vms = {}
 
         self._change_state(self.STATE_DISCONNECTED)
         self._closing = False
@@ -1146,33 +1136,33 @@ class vmmConnection(vmmGObject):
 
     def _update_nets(self, dopoll):
         if not dopoll or not self.is_network_capable():
-            return {}, {}, self.nets
-        return pollhelpers.fetch_nets(self._backend, self.nets.copy(),
+            return {}, {}, self._nets
+        return pollhelpers.fetch_nets(self._backend, self._nets.copy(),
                     (lambda obj, key: vmmNetwork(self, obj, key)))
 
     def _update_pools(self, dopoll):
         if not dopoll or not self.is_storage_capable():
-            return {}, {}, self.pools
-        return pollhelpers.fetch_pools(self._backend, self.pools.copy(),
+            return {}, {}, self._pools
+        return pollhelpers.fetch_pools(self._backend, self._pools.copy(),
                     (lambda obj, key: vmmStoragePool(self, obj, key)))
 
     def _update_interfaces(self, dopoll):
         if not dopoll or not self.is_interface_capable():
-            return {}, {}, self.interfaces
+            return {}, {}, self._interfaces
         return pollhelpers.fetch_interfaces(self._backend,
-                    self.interfaces.copy(),
+                    self._interfaces.copy(),
                     (lambda obj, key: vmmInterface(self, obj, key)))
 
     def _update_nodedevs(self, dopoll):
         if not dopoll or not self.is_nodedev_capable():
-            return {}, {}, self.nodedevs
-        return pollhelpers.fetch_nodedevs(self._backend, self.nodedevs.copy(),
+            return {}, {}, self._nodedevs
+        return pollhelpers.fetch_nodedevs(self._backend, self._nodedevs.copy(),
                     (lambda obj, key: vmmNodeDevice(self, obj, key)))
 
     def _update_vms(self, dopoll):
         if not dopoll:
-            return {}, {}, self.vms
-        return pollhelpers.fetch_vms(self._backend, self.vms.copy(),
+            return {}, {}, self._vms
+        return pollhelpers.fetch_vms(self._backend, self._vms.copy(),
                     (lambda obj, key: vmmDomain(self, obj, key)))
 
 
@@ -1263,15 +1253,15 @@ class vmmConnection(vmmGObject):
                 return
 
             if pollvm:
-                self.vms = vms
+                self._vms = vms
             if pollnet:
-                self.nets = nets
+                self._nets = nets
             if polliface:
-                self.interfaces = interfaces
+                self._interfaces = interfaces
             if pollpool:
-                self.pools = pools
+                self._pools = pools
             if pollnodedev:
-                self.nodedevs = nodedevs
+                self._nodedevs = nodedevs
 
             # Make sure device polling is setup
             if not self.netdev_initialized:
@@ -1281,40 +1271,40 @@ class vmmConnection(vmmGObject):
                 self._init_mediadev()
 
             # Update VM states
-            for uuid, obj in goneVMs.items():
+            for connkey, obj in goneVMs.items():
                 logging.debug("domain=%s removed", obj.get_name())
-                self.emit("vm-removed", uuid)
+                self.emit("vm-removed", connkey)
                 obj.cleanup()
-            for uuid, obj in newVMs.items():
+            for connkey, obj in newVMs.items():
                 logging.debug("domain=%s status=%s added",
                     obj.get_name(), obj.run_status())
-                self.emit("vm-added", uuid)
+                self.emit("vm-added", connkey)
 
             # Update virtual network states
-            for uuid, obj in goneNets.items():
+            for connkey, obj in goneNets.items():
                 logging.debug("network=%s removed", obj.get_name())
-                self.emit("net-removed", uuid)
+                self.emit("net-removed", connkey)
                 obj.cleanup()
-            for uuid, obj in newNets.items():
+            for connkey, obj in newNets.items():
                 logging.debug("network=%s added", obj.get_name())
                 obj.connect("started", self._obj_signal_proxy,
-                            "net-started", uuid)
+                            "net-started", connkey)
                 obj.connect("stopped", self._obj_signal_proxy,
-                            "net-stopped", uuid)
-                self.emit("net-added", uuid)
+                            "net-stopped", connkey)
+                self.emit("net-added", connkey)
 
             # Update storage pool states
-            for uuid, obj in gonePools.items():
+            for connkey, obj in gonePools.items():
                 logging.debug("pool=%s removed", obj.get_name())
-                self.emit("pool-removed", uuid)
+                self.emit("pool-removed", connkey)
                 obj.cleanup()
-            for uuid, obj in newPools.items():
+            for connkey, obj in newPools.items():
                 logging.debug("pool=%s added", obj.get_name())
                 obj.connect("started", self._obj_signal_proxy,
-                            "pool-started", uuid)
+                            "pool-started", connkey)
                 obj.connect("stopped", self._obj_signal_proxy,
-                            "pool-stopped", uuid)
-                self.emit("pool-added", uuid)
+                            "pool-stopped", connkey)
+                self.emit("pool-added", connkey)
 
             # Update interface states
             for name, obj in goneInterfaces.items():
@@ -1361,7 +1351,7 @@ class vmmConnection(vmmGObject):
         if pollnodedev:
             add_to_ticklist(nodedevs.values())
         if pollmedia:
-            add_to_ticklist(self.mediadevs.values())
+            add_to_ticklist(self._mediadevs.values())
 
         for obj, args in ticklist:
             try:

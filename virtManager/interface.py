@@ -27,7 +27,6 @@ class vmmInterface(vmmLibvirtObject):
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, Interface)
 
-        self._name = key
         self._active = True
 
         (self._inactive_xml_flags,
@@ -67,9 +66,6 @@ class vmmInterface(vmmLibvirtObject):
 
     def is_active(self):
         return self._active
-
-    def get_name(self):
-        return self._name
 
     def get_mac(self):
         return self.get_xmlobj().macaddr

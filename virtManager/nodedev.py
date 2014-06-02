@@ -34,8 +34,6 @@ class vmmNodeDevice(vmmLibvirtObject):
 
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
-    def get_name(self):
-        return self._name
     def is_active(self):
         return True
 

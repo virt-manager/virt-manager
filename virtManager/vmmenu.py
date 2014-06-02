@@ -60,7 +60,7 @@ class _VMMenu(Gtk.Menu):
         if not vm:
             return
         self._parent.emit("action-%s-domain" % src.vmm_widget_name,
-                          vm.conn.get_uri(), vm.get_uuid())
+                          vm.conn.get_uri(), vm.get_connkey())
 
     def _init_state(self):
         raise NotImplementedError()

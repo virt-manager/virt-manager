@@ -1105,7 +1105,7 @@ class vmmCreate(vmmGObjectUI):
 
         if row:
             ntype = row[0]
-            key = row[6]
+            connkey = row[6]
 
             expand = (ntype != "network" and ntype != "bridge")
             if (ntype is None or
@@ -1114,7 +1114,7 @@ class vmmCreate(vmmGObjectUI):
             elif ntype != virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
                 show_pxe_warn = False
             else:
-                obj = self.conn.get_net(key)
+                obj = self.conn.get_net(connkey)
                 show_pxe_warn = not obj.can_pxe()
 
         show_warn = (show_pxe_warn and pxe_install)
@@ -1478,7 +1478,7 @@ class vmmCreate(vmmGObjectUI):
             self.conn.get_backend().lookupByName,
             start_num=force_num and 1 or 2, force_num=force_num,
             sep=not force_num and "-" or "",
-            collidelist=[vm.get_name() for vm in self.conn.vms.values()])
+            collidelist=[vm.get_name() for vm in self.conn.list_vms()])
 
     def validate_install_page(self):
         instmethod = self.get_config_install_page()
@@ -1827,7 +1827,7 @@ class vmmCreate(vmmGObjectUI):
         self.close()
 
         # Launch details dialog for new VM
-        self.emit("action-show-domain", self.conn.get_uri(), self.guest.uuid)
+        self.emit("action-show-domain", self.conn.get_uri(), self.guest.name)
 
 
     def start_install(self, guest):
@@ -1854,11 +1854,20 @@ class vmmCreate(vmmGObjectUI):
         # Wait for VM to show up
         self.conn.schedule_priority_tick(pollvm=True)
         count = 0
-        while (guest.uuid not in self.conn.vms) and (count < 100):
+        foundvm = None
+        while count < 100:
+            for vm in self.conn.list_vms():
+                if vm.get_uuid() == guest.uuid:
+                    foundvm = vm
+            if foundvm:
+                break
             count += 1
             time.sleep(.1)
 
-        vm = self.conn.get_vm(guest.uuid)
+        if not foundvm:
+            raise RuntimeError(
+                _("VM '%s' didn't show up after expected time.") % guest.name)
+        vm = foundvm
         vm.tick()
 
         if vm.is_shutoff():

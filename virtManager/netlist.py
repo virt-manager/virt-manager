@@ -140,8 +140,7 @@ class vmmNetworkList(vmmGObjectUI):
         hasNet = False
         netIdxLabel = None
 
-        for uuid in self.conn.list_net_uuids():
-            net = self.conn.get_net(uuid)
+        for net in self.conn.list_nets():
             nettype = virtinst.VirtualNetworkInterface.TYPE_VIRTUAL
 
             label = self._pretty_network_desc(nettype, net.get_name(), net)
@@ -156,7 +155,7 @@ class vmmNetworkList(vmmGObjectUI):
 
             vnet_dict[label] = self._build_source_row(
                 nettype, net.get_name(), label, True,
-                net.is_active(), key=net.get_uuid())
+                net.is_active(), key=net.get_connkey())
 
             # Build a list of vnet bridges, so we know not to list them
             # in the physical interface list
@@ -173,7 +172,7 @@ class vmmNetworkList(vmmGObjectUI):
 
     def _find_physical_devices(self, vnet_bridges):
         vnet_taps = []
-        for vm in self.conn.vms.values():
+        for vm in self.conn.list_vms():
             for nic in vm.get_network_devices(refresh_if_nec=False):
                 if nic.target_dev and nic.target_dev not in vnet_taps:
                     vnet_taps.append(nic.target_dev)
@@ -184,8 +183,8 @@ class vmmNetworkList(vmmGObjectUI):
         brIdxLabel = None
         skip_ifaces = ["lo"]
 
-        for name in self.conn.list_net_device_paths():
-            br = self.conn.get_net_device(name)
+        for br in self.conn.list_netdevs():
+            name = br.name
             bridge_name = br.get_bridge()
             nettype = virtinst.VirtualNetworkInterface.TYPE_BRIDGE
 
@@ -334,7 +333,7 @@ class vmmNetworkList(vmmGObjectUI):
         # Make sure VirtualNetwork is running
         netobj = None
         if nettype == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
-            for net in self.conn.nets.values():
+            for net in self.conn.list_nets():
                 if net.get_name() == devname:
                     netobj = net
                     break
@@ -515,9 +514,9 @@ class vmmNetworkList(vmmGObjectUI):
             self.widget("net-bridge-name"), show_bridge)
 
         portgroups = []
-        key = row[6]
-        if key and row[0] == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
-            portgroups = self.conn.get_net(key).get_xmlobj().portgroups
+        connkey = row[6]
+        if connkey and row[0] == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
+            portgroups = self.conn.get_net(connkey).get_xmlobj().portgroups
 
         uiutil.set_grid_row_visible(
             self.widget("net-portgroup"), bool(portgroups))

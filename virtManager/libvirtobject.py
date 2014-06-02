@@ -49,6 +49,10 @@ class vmmLibvirtObject(vmmGObject):
         self._inactive_xml_flags = 0
         self._active_xml_flags = 0
 
+        # Cache object name
+        self._name = None
+        self.get_name()
+
         self.connect("config-changed", self._reparse_xml)
 
     @staticmethod
@@ -75,7 +79,7 @@ class vmmLibvirtObject(vmmGObject):
 
     def get_backend(self):
         return self._backend
-    def get_key(self):
+    def get_connkey(self):
         return self._key
 
     def change_name_backend(self, newbackend):
@@ -107,8 +111,6 @@ class vmmLibvirtObject(vmmGObject):
     # Functions that should probably be overridden in sub class #
     #############################################################
 
-    def get_name(self):
-        raise NotImplementedError()
     def _XMLDesc(self, flags):
         raise NotImplementedError()
     def _using_events(self):
@@ -124,6 +126,14 @@ class vmmLibvirtObject(vmmGObject):
     def force_update_status(self, from_event=False, log=True):
         ignore = from_event
         ignore = log
+
+    def get_name(self):
+        if self._name is None:
+            self._name = self._backend_get_name()
+        return self._name
+
+    def _backend_get_name(self):
+        return self._backend.name()
 
 
     ##################

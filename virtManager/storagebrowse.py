@@ -182,8 +182,9 @@ class vmmStorageBrowser(vmmGObjectUI):
         if not self._first_run:
             self._first_run = True
             pool = self.conn.get_default_pool()
-            uiutil.set_row_selection(
-                self.widget("pool-list"), pool and pool.get_uuid() or None)
+            uiutil.set_row_selection(self.widget("pool-list"),
+                pool and pool.get_connkey() or None)
+
         # Manually trigger vol_selected, so buttons are in the correct state
         self.vol_selected()
         self.pool_selected()
@@ -222,8 +223,10 @@ class vmmStorageBrowser(vmmGObjectUI):
         row = uiutil.get_list_selection(self.widget("pool-list"), None)
         if not row:
             return
+
+        connkey = row[0]
         try:
-            return self.conn.get_pool(row[0])
+            return self.conn.get_pool(connkey)
         except KeyError:
             return None
 
@@ -239,18 +242,22 @@ class vmmStorageBrowser(vmmGObjectUI):
             return
         return pool.get_volume(row[0])
 
-    def refresh_storage_pool(self, src_ignore, uuid):
+    def refresh_storage_pool(self, src, connkey):
+        ignore = src
+
         pool_list = self.widget("pool-list")
-        host.refresh_pool_in_list(pool_list, self.conn, uuid)
+        host.refresh_pool_in_list(pool_list, self.conn, connkey)
         curpool = self.current_pool()
-        if curpool.get_uuid() != uuid:
+        if curpool.get_connkey() != connkey:
             return
 
         # Currently selected pool changed state: force a 'pool_selected' to
         # update vol list
         self.pool_selected(self.widget("pool-list").get_selection())
 
-    def repopulate_storage_pools(self, src_ignore=None, uuid_ignore=None):
+    def repopulate_storage_pools(self, src=None, connkey=None):
+        ignore = src
+        ignore = connkey
         pool_list = self.widget("pool-list")
         host.populate_storage_pools(pool_list, self.conn, self.current_pool())
 
@@ -327,7 +334,7 @@ class vmmStorageBrowser(vmmGObjectUI):
             return
         cp.refresh()
 
-        self.refresh_storage_pool(None, cp.get_uuid())
+        self.refresh_storage_pool(None, cp.get_connkey())
         name = createvol and createvol.vol.name or None
 
         vol_list = self.widget("vol-list")

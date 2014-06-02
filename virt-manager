@@ -121,7 +121,7 @@ def parse_commandline():
     return parser.parse_known_args()
 
 
-def launch_specific_window(engine, show, uri, uuid):
+def launch_specific_window(engine, show, uri, clistr):
     if not show:
         return
 
@@ -129,11 +129,11 @@ def launch_specific_window(engine, show, uri, uuid):
     if show == 'creator':
         engine.show_domain_creator(uri)
     elif show == 'editor':
-        engine.show_domain_editor(uri, uuid)
+        engine.show_domain_editor(uri, clistr)
     elif show == 'performance':
-        engine.show_domain_performance(uri, uuid)
+        engine.show_domain_performance(uri, clistr)
     elif show == 'console':
-        engine.show_domain_console(uri, uuid)
+        engine.show_domain_console(uri, clistr)
     elif show == 'summary':
         engine.show_host_summary(uri)
 

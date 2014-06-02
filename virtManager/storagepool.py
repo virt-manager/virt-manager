@@ -38,8 +38,6 @@ class vmmStorageVolume(vmmLibvirtObject):
     # Required class methods #
     ##########################
 
-    def get_name(self):
-        return self.get_xmlobj().name
     def _XMLDesc(self, flags):
         try:
             return self._backend.XMLDesc(flags)
@@ -54,8 +52,10 @@ class vmmStorageVolume(vmmLibvirtObject):
     ###########
 
     def get_parent_pool(self):
-        pobj = self._backend.storagePoolLookupByVolume()
-        return self.conn.get_pool_by_name(pobj.name())
+        name = self._backend.storagePoolLookupByVolume().name()
+        for pool in self.conn.list_pools():
+            if pool.get_name() == name:
+                return pool
 
     def delete(self, force=True):
         ignore = force
@@ -115,8 +115,6 @@ class vmmStoragePool(vmmLibvirtObject):
     # Required class methods #
     ##########################
 
-    def get_name(self):
-        return self.get_xmlobj().name
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
     def _define(self, xml):
@@ -203,8 +201,8 @@ class vmmStoragePool(vmmLibvirtObject):
             self.update_volumes()
         return self._volumes
 
-    def get_volume(self, uuid):
-        return self._volumes[uuid]
+    def get_volume(self, key):
+        return self._volumes[key]
 
     def update_volumes(self, refresh=False):
         if not self.is_active():

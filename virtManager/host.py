@@ -505,25 +505,25 @@ class vmmHost(vmmGObjectUI):
         self.enable_net_apply(EDIT_NET_AUTOSTART)
 
     def current_network(self):
-        key = uiutil.get_list_selection(self.widget("net-list"), 0)
+        connkey = uiutil.get_list_selection(self.widget("net-list"), 0)
         try:
-            return key and self.conn.get_net(key)
+            return connkey and self.conn.get_net(connkey)
         except KeyError:
             return None
 
-    def refresh_network(self, src_ignore, uuid):
+    def refresh_network(self, src_ignore, connkey):
         uilist = self.widget("net-list")
         sel = uilist.get_selection()
         model, treeiter = sel.get_selected()
-        net = self.conn.get_net(uuid)
+        net = self.conn.get_net(connkey)
         net.tick()
 
         for row in uilist.get_model():
-            if row[0] == uuid:
+            if row[0] == connkey:
                 row[4] = net.is_active()
 
         if treeiter is not None:
-            if model[treeiter][0] == uuid:
+            if model[treeiter][0] == connkey:
                 self.net_selected(sel)
 
     def set_net_error_page(self, msg):
@@ -538,8 +538,10 @@ class vmmHost(vmmGObjectUI):
             return
 
         self.widget("network-pages").set_current_page(0)
+        connkey = model[treeiter][0]
+
         try:
-            net = self.conn.get_net(model[treeiter][0])
+            net = self.conn.get_net(connkey)
         except KeyError:
             self.disable_net_apply()
             return
@@ -670,7 +672,9 @@ class vmmHost(vmmGObjectUI):
                                     _("Isolated network"))
         self.disable_net_apply()
 
-    def repopulate_networks(self, src_ignore=None, uuid_ignore=None):
+    def repopulate_networks(self, src=None, connkey=None):
+        ignore = src
+        ignore = connkey
         self.populate_networks(self.widget("net-list").get_model())
 
     def populate_networks(self, model):
@@ -679,14 +683,13 @@ class vmmHost(vmmGObjectUI):
         net_list = self.widget("net-list")
         net_list.get_selection().unselect_all()
         model.clear()
-        for uuid in self.conn.list_net_uuids():
-            net = self.conn.get_net(uuid)
-            model.append([uuid, net.get_name(), "network-idle",
+        for net in self.conn.list_nets():
+            model.append([net.get_connkey(), net.get_name(), "network-idle",
                           Gtk.IconSize.LARGE_TOOLBAR,
                           bool(net.is_active())])
 
         uiutil.set_row_selection(net_list,
-                                    curnet and curnet.get_uuid() or None)
+            curnet and curnet.get_connkey() or None)
 
 
     # ------------------------------
@@ -800,12 +803,12 @@ class vmmHost(vmmGObjectUI):
         if cp is None:
             return
         cp.refresh()
-        self.refresh_storage_pool(None, cp.get_uuid())
+        self.refresh_storage_pool(None, cp.get_connkey())
 
     def current_pool(self):
-        key = uiutil.get_list_selection(self.widget("pool-list"), 0)
+        connkey = uiutil.get_list_selection(self.widget("pool-list"), 0)
         try:
-            return key and self.conn.get_pool(key)
+            return connkey and self.conn.get_pool(connkey)
         except KeyError:
             return None
 
@@ -814,9 +817,9 @@ class vmmHost(vmmGObjectUI):
         if not pool:
             return None
 
-        key = uiutil.get_list_selection(self.widget("vol-list"), 0)
+        connkey = uiutil.get_list_selection(self.widget("vol-list"), 0)
         try:
-            return key and pool.get_volume(key)
+            return connkey and pool.get_volume(connkey)
         except KeyError:
             return None
 
@@ -867,17 +870,17 @@ class vmmHost(vmmGObjectUI):
             return
 
         self.widget("storage-pages").set_current_page(0)
-        uuid = model[treeiter][0]
+        connkey = model[treeiter][0]
 
         try:
-            self.populate_pool_state(uuid)
+            self.populate_pool_state(connkey)
         except Exception, e:
             logging.exception(e)
             self.set_storage_error_page(_("Error selecting pool: %s") % e)
         self.disable_pool_apply()
 
-    def populate_pool_state(self, uuid):
-        pool = self.conn.get_pool(uuid)
+    def populate_pool_state(self, connkey):
+        pool = self.conn.get_pool(connkey)
         pool.tick()
         auto = pool.get_autostart()
         active = pool.is_active()
@@ -919,10 +922,11 @@ class vmmHost(vmmGObjectUI):
             self.widget("vol-add").set_tooltip_text(
                 _("Pool does not support volume creation"))
 
-    def refresh_storage_pool(self, src_ignore, uuid):
-        refresh_pool_in_list(self.widget("pool-list"), self.conn, uuid)
+    def refresh_storage_pool(self, src, connkey):
+        ignore = src
+        refresh_pool_in_list(self.widget("pool-list"), self.conn, connkey)
         curpool = self.current_pool()
-        if curpool.get_uuid() != uuid:
+        if curpool.get_connkey() != connkey:
             return
 
         # Currently selected pool changed state: force a 'pool_selected' to
@@ -976,7 +980,9 @@ class vmmHost(vmmGObjectUI):
             clipboard.set_text(target_path, -1)
 
 
-    def repopulate_storage_pools(self, src_ignore=None, uuid_ignore=None):
+    def repopulate_storage_pools(self, src=None, connkey=None):
+        ignore = src
+        ignore = connkey
         pool_list = self.widget("pool-list")
         populate_storage_pools(pool_list, self.conn, self.current_pool())
 
@@ -1053,9 +1059,9 @@ class vmmHost(vmmGObjectUI):
         self.refresh_interface(None, cp.get_name())
 
     def current_interface(self):
-        key = uiutil.get_list_selection(self.widget("interface-list"), 0)
+        connkey = uiutil.get_list_selection(self.widget("interface-list"), 0)
         try:
-            return key and self.conn.get_interface(key)
+            return connkey and self.conn.get_interface(connkey)
         except KeyError:
             return None
 
@@ -1094,10 +1100,10 @@ class vmmHost(vmmGObjectUI):
             return
 
         self.widget("interface-pages").set_current_page(INTERFACE_PAGE_INFO)
-        name = model[treeiter][0]
+        connkey = model[treeiter][0]
 
         try:
-            self.populate_interface_state(name)
+            self.populate_interface_state(connkey)
         except Exception, e:
             logging.exception(e)
             self.set_interface_error_page(_("Error selecting interface: %s") %
@@ -1105,8 +1111,9 @@ class vmmHost(vmmGObjectUI):
 
         self.widget("interface-apply").set_sensitive(False)
 
-    def populate_interface_state(self, name):
-        interface = self.conn.get_interface(name)
+    def populate_interface_state(self, connkey):
+        interface = self.conn.get_interface(connkey)
+        name = interface.get_name()
         children = interface.get_slaves()
         itype = interface.get_type()
         mac = interface.get_mac()
@@ -1189,11 +1196,14 @@ class vmmHost(vmmGObjectUI):
         self.widget("interface-child-box").set_visible(show_child)
         self.populate_interface_children()
 
-    def refresh_interface(self, src_ignore, name):
+    def refresh_interface(self, src, connkey):
+        ignore = src
+
         iface_list = self.widget("interface-list")
         sel = iface_list.get_selection()
         model, treeiter = sel.get_selected()
-        iface = self.conn.get_interface(name)
+        iface = self.conn.get_interface(connkey)
+        name = iface.get_name()
         iface.tick()
 
         for row in iface_list.get_model():
@@ -1211,7 +1221,9 @@ class vmmHost(vmmGObjectUI):
         self.widget("interface-start").set_sensitive(False)
         self.widget("interface-apply").set_sensitive(False)
 
-    def repopulate_interfaces(self, src_ignore=None, name_ignore=None):
+    def repopulate_interfaces(self, src=None, connkey=None):
+        ignore = src
+        ignore = connkey
         interface_list = self.widget("interface-list")
         self.populate_interfaces(interface_list.get_model())
 
@@ -1221,14 +1233,13 @@ class vmmHost(vmmGObjectUI):
         iface_list = self.widget("interface-list")
         iface_list.get_selection().unselect_all()
         model.clear()
-        for name in self.conn.list_interface_names():
-            iface = self.conn.get_interface(name)
-            model.append([name, iface.get_name(), "network-idle",
-                          Gtk.IconSize.LARGE_TOOLBAR,
+        for iface in self.conn.list_interfaces():
+            model.append([iface.get_connkey(), iface.get_name(),
+                          "network-idle", Gtk.IconSize.LARGE_TOOLBAR,
                           bool(iface.is_active())])
 
         uiutil.set_row_selection(iface_list,
-                           curiface and curiface.get_name() or None)
+            curiface and curiface.get_connkey() or None)
 
     def populate_interface_children(self):
         interface = self.current_interface()
@@ -1266,13 +1277,15 @@ def init_pool_list(pool_list, changed_func):
     poolListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
 
-def refresh_pool_in_list(pool_list, conn, uuid):
+def refresh_pool_in_list(pool_list, conn, connkey):
     for row in pool_list.get_model():
-        if row[0] == uuid:
-            # Update active sensitivity and percent available for passed uuid
-            row[3] = get_pool_size_percent(conn, uuid)
-            row[2] = conn.get_pool(uuid).is_active()
-            return
+        if row[0] != connkey:
+            continue
+
+        # Update active sensitivity and percent available for passed key
+        row[3] = get_pool_size_percent(conn, connkey)
+        row[2] = conn.get_pool(connkey).is_active()
+        return
 
 
 def populate_storage_pools(pool_list, conn, curpool):
@@ -1281,19 +1294,20 @@ def populate_storage_pools(pool_list, conn, curpool):
     pool_list.set_model(None)
     pool_list.get_selection().unselect_all()
     model.clear()
-    for uuid in conn.list_pool_uuids():
-        per = get_pool_size_percent(conn, uuid)
-        pool = conn.get_pool(uuid)
+    for pool in conn.list_pools():
+        connkey = pool.get_connkey()
+        per = get_pool_size_percent(conn, connkey)
+        pool = conn.get_pool(connkey)
 
         name = pool.get_name()
         typ = StoragePool.get_pool_type_desc(pool.get_type())
         label = "%s\n<span size='small'>%s</span>" % (name, typ)
 
-        model.append([uuid, label, pool.is_active(), per])
+        model.append([connkey, label, pool.is_active(), per])
 
     pool_list.set_model(model)
     uiutil.set_row_selection(pool_list,
-                                curpool and curpool.get_uuid() or None)
+        curpool and curpool.get_connkey() or None)
 
 
 def populate_storage_volumes(list_widget, pool, sensitive_cb):
@@ -1333,8 +1347,8 @@ def populate_storage_volumes(list_widget, pool, sensitive_cb):
         model.append(row)
 
 
-def get_pool_size_percent(conn, uuid):
-    pool = conn.get_pool(uuid)
+def get_pool_size_percent(conn, connkey):
+    pool = conn.get_pool(connkey)
     cap = pool.get_capacity()
     alloc = pool.get_allocation()
     if not cap or alloc is None:

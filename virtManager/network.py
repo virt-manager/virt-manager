@@ -54,8 +54,6 @@ class vmmNetwork(vmmLibvirtObject):
     # Required class methods #
     ##########################
 
-    def get_name(self):
-        return self._backend.name()
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
     def _define(self, xml):

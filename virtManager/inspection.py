@@ -64,9 +64,9 @@ class vmmInspection(vmmGObject):
         self._q.put(obj)
 
     # Called by the main thread whenever a VM is added to vmlist.
-    def vm_added(self, conn, uuid):
+    def vm_added(self, conn, connkey):
         ignore = conn
-        ignore = uuid
+        ignore = connkey
         obj = ("vm_added")
         self._q.put(obj)
 
@@ -118,7 +118,7 @@ class vmmInspection(vmmGObject):
     # Any VMs we've not seen yet?  If so, process them.
     def _process_vms(self):
         for conn in self._conns.itervalues():
-            for vmuuid in conn.list_vm_uuids():
+            for vm in conn.list_vms():
                 if not conn.is_active():
                     break
 
@@ -127,9 +127,9 @@ class vmmInspection(vmmGObject):
                     data.error = True
                     self._set_vm_inspection_data(vm, data)
 
+                vmuuid = vm.get_uuid()
                 prettyvm = vmuuid
                 try:
-                    vm = conn.get_vm(vmuuid)
                     prettyvm = conn.get_uri() + ":" + vm.get_name()
 
                     if vmuuid in self._vmseen:

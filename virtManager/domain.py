@@ -171,8 +171,9 @@ class vmmDomainSnapshot(vmmLibvirtObject):
 
         self.refresh_xml()
 
-    def get_name(self):
-        return self.get_xmlobj().name
+    def _backend_get_name(self):
+        return self._backend.getName()
+
     def _XMLDesc(self, flags):
         return self._backend.getXMLDesc(flags=flags)
 
@@ -282,7 +283,6 @@ class vmmDomain(vmmLibvirtObject):
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, Guest)
 
-        self.uuid = key
         self.cloning = False
 
         self.record = []
@@ -297,7 +297,7 @@ class vmmDomain(vmmLibvirtObject):
         self.reboot_listener = None
         self._is_management_domain = None
         self._id = None
-        self._name = None
+        self._uuid = None
         self._snapshot_list = None
 
         self.lastStatus = libvirt.VIR_DOMAIN_SHUTOFF
@@ -411,11 +411,6 @@ class vmmDomain(vmmLibvirtObject):
 
     def _using_events(self):
         return self.conn.using_domain_events
-
-    def get_name(self):
-        if self._name is None:
-            self._name = self._backend.name()
-        return self._name
 
     def get_id(self):
         if self._id is None:
@@ -1066,7 +1061,9 @@ class vmmDomain(vmmLibvirtObject):
         return self.get_xmlobj().os.is_hvm()
 
     def get_uuid(self):
-        return self.uuid
+        if self._uuid is None:
+            self._uuid = self._backend.UUIDString()
+        return self._uuid
     def get_abi_type(self):
         return self.get_xmlobj().os.os_type
     def get_hv_type(self):
@@ -1732,37 +1729,37 @@ class vmmDomain(vmmLibvirtObject):
     ##################
 
     def on_console_scaling_changed(self, *args, **kwargs):
-        return self.config.listen_pervm(self.uuid, "/scaling",
+        return self.config.listen_pervm(self.get_uuid(), "/scaling",
                                         *args, **kwargs)
     def set_console_scaling(self, value):
-        self.config.set_pervm(self.uuid, "/scaling", value)
+        self.config.set_pervm(self.get_uuid(), "/scaling", value)
     def get_console_scaling(self):
-        ret = self.config.get_pervm(self.uuid, "/scaling")
+        ret = self.config.get_pervm(self.get_uuid(), "/scaling")
         if ret == -1:
             return self.config.get_console_scaling()
         return ret
 
     def on_console_resizeguest_changed(self, *args, **kwargs):
-        return self.config.listen_pervm(self.uuid, "/resize-guest",
+        return self.config.listen_pervm(self.get_uuid(), "/resize-guest",
                                         *args, **kwargs)
     def set_console_resizeguest(self, value):
-        self.config.set_pervm(self.uuid, "/resize-guest", value)
+        self.config.set_pervm(self.get_uuid(), "/resize-guest", value)
     def get_console_resizeguest(self):
-        ret = self.config.get_pervm(self.uuid, "/resize-guest")
+        ret = self.config.get_pervm(self.get_uuid(), "/resize-guest")
         if ret == -1:
             return self.config.get_console_resizeguest()
         return ret
 
     def set_details_window_size(self, w, h):
-        self.config.set_pervm(self.uuid, "/vm-window-size", (w, h))
+        self.config.set_pervm(self.get_uuid(), "/vm-window-size", (w, h))
     def get_details_window_size(self):
-        ret = self.config.get_pervm(self.uuid, "/vm-window-size")
+        ret = self.config.get_pervm(self.get_uuid(), "/vm-window-size")
         return ret
 
     def get_console_password(self):
-        return self.config.get_pervm(self.uuid, "/console-password")
+        return self.config.get_pervm(self.get_uuid(), "/console-password")
     def set_console_password(self, username, keyid):
-        return self.config.set_pervm(self.uuid, "/console-password",
+        return self.config.set_pervm(self.get_uuid(), "/console-password",
                                      (username, keyid))
 
     def get_cache_dir(self):
@@ -1963,6 +1960,8 @@ class vmmDomainVirtinst(vmmDomain):
 
     def get_name(self):
         return self._backend.name
+    def get_uuid(self):
+        return self._backend.uuid
     def get_id(self):
         return -1
     def hasSavedImage(self):

@@ -164,12 +164,12 @@ class vmmSystray(vmmGObject):
 
     # Helper functions
     def _get_vm_menu_item(self, vm):
-        uuid = vm.get_uuid()
+        connkey = vm.get_connkey()
         uri = vm.conn.get_uri()
 
         if uri in self.conn_vm_menuitems:
-            if uuid in self.conn_vm_menuitems[uri]:
-                return self.conn_vm_menuitems[uri][uuid]
+            if connkey in self.conn_vm_menuitems[uri]:
+                return self.conn_vm_menuitems[uri][connkey]
         return None
 
     def _set_vm_status_icon(self, vm, menu_item):
@@ -256,8 +256,8 @@ class vmmSystray(vmmGObject):
             vm_submenu.remove(c)
 
         vm_mappings = {}
-        for vm in conn.vms.values():
-            vm_mappings[vm.get_name()] = vm.get_uuid()
+        for vm in conn.list_vms():
+            vm_mappings[vm.get_name()] = vm.get_connkey()
 
         vm_names = vm_mappings.keys()
         vm_names.sort()
@@ -270,30 +270,30 @@ class vmmSystray(vmmGObject):
 
         for i in range(0, len(vm_names)):
             name = vm_names[i]
-            uuid = vm_mappings[name]
-            if uuid in self.conn_vm_menuitems[uri]:
-                vm_item = self.conn_vm_menuitems[uri][uuid]
+            connkey = vm_mappings[name]
+            if connkey in self.conn_vm_menuitems[uri]:
+                vm_item = self.conn_vm_menuitems[uri][connkey]
                 vm_submenu.insert(vm_item, i)
 
-    def vm_added(self, conn, uuid):
+    def vm_added(self, conn, connkey):
         uri = conn.get_uri()
-        vm = conn.get_vm(uuid)
+        vm = conn.get_vm(connkey)
         if not vm:
             return
         vm.connect("status-changed", self.vm_state_changed)
 
         vm_mappings = self.conn_vm_menuitems[uri]
-        if uuid in vm_mappings:
+        if connkey in vm_mappings:
             return
 
         # Build VM list entry
         menu_item = Gtk.ImageMenuItem.new_with_label(vm.get_name())
         menu_item.set_use_underline(False)
 
-        vm_mappings[uuid] = menu_item
+        vm_mappings[connkey] = menu_item
         vm_action_menu = vmmenu.VMActionMenu(self, lambda: vm)
         menu_item.set_submenu(vm_action_menu)
-        self.vm_action_dict[uuid] = vm_action_menu
+        self.vm_action_dict[connkey] = vm_action_menu
 
         # Add VM to menu list
         self.populate_vm_list(conn)
@@ -302,26 +302,28 @@ class vmmSystray(vmmGObject):
         self.vm_state_changed(vm)
         menu_item.show()
 
-    def vm_removed(self, conn, uuid):
+    def vm_removed(self, conn, connkey):
         uri = conn.get_uri()
         vm_mappings = self.conn_vm_menuitems[uri]
         if not vm_mappings:
             return
 
-        if uuid in vm_mappings:
-            conn_item = self.conn_menuitems[uri]
-            vm_menu_item = vm_mappings[uuid]
-            vm_menu = conn_item.get_submenu()
-            vm_menu.remove(vm_menu_item)
-            vm_menu_item.destroy()
-            del(vm_mappings[uuid])
+        if connkey not in vm_mappings:
+            return
 
-            if len(vm_menu.get_children()) == 0:
-                placeholder = Gtk.MenuItem.new_with_label(
-                    _("No virtual machines"))
-                placeholder.show()
-                placeholder.set_sensitive(False)
-                vm_menu.add(placeholder)
+        conn_item = self.conn_menuitems[uri]
+        vm_menu_item = vm_mappings[connkey]
+        vm_menu = conn_item.get_submenu()
+        vm_menu.remove(vm_menu_item)
+        vm_menu_item.destroy()
+        del(vm_mappings[connkey])
+
+        if len(vm_menu.get_children()) == 0:
+            placeholder = Gtk.MenuItem.new_with_label(
+                _("No virtual machines"))
+            placeholder.show()
+            placeholder.set_sensitive(False)
+            vm_menu.add(placeholder)
 
     def vm_state_changed(self, vm, ignore=None, ignore2=None):
         menu_item = self._get_vm_menu_item(vm)
@@ -331,7 +333,7 @@ class vmmSystray(vmmGObject):
         self._set_vm_status_icon(vm, menu_item)
 
         # Update action widget states
-        menu = self.vm_action_dict[vm.get_uuid()]
+        menu = self.vm_action_dict[vm.get_connkey()]
         menu.update_widget_states(vm)
 
     def exit_app(self, ignore):

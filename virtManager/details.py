@@ -1453,11 +1453,11 @@ class vmmDetails(vmmGObjectUI):
         if not self.vm.is_paused():
             self.emit("action-suspend-domain",
                       self.vm.conn.get_uri(),
-                      self.vm.get_uuid())
+                      self.vm.get_connkey())
         else:
             self.emit("action-resume-domain",
                       self.vm.conn.get_uri(),
-                      self.vm.get_uuid())
+                      self.vm.get_connkey())
 
     def control_vm_menu(self, src_ignore):
         can_usb = bool(self.console.viewer and
@@ -1467,39 +1467,39 @@ class vmmDetails(vmmGObjectUI):
 
     def control_vm_run(self, src_ignore):
         self.emit("action-run-domain",
-                  self.vm.conn.get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_connkey())
 
     def control_vm_shutdown(self, src_ignore):
         self.emit("action-shutdown-domain",
-                  self.vm.conn.get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_connkey())
 
     def control_vm_reboot(self, src_ignore):
         self.emit("action-reboot-domain",
-                  self.vm.conn.get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_connkey())
 
     def control_vm_save(self, src_ignore):
         self.emit("action-save-domain",
-                  self.vm.conn.get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_connkey())
 
     def control_vm_reset(self, src_ignore):
         self.emit("action-reset-domain",
-                  self.vm.conn.get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_connkey())
 
     def control_vm_destroy(self, src_ignore):
         self.emit("action-destroy-domain",
-                  self.vm.conn.get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_connkey())
 
     def control_vm_clone(self, src_ignore):
         self.emit("action-clone-domain",
-                  self.vm.conn.get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_connkey())
 
     def control_vm_migrate(self, src_ignore):
         self.emit("action-migrate-domain",
-                  self.vm.conn.get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_connkey())
 
     def control_vm_delete(self, src_ignore):
         self.emit("action-delete-domain",
-                  self.vm.conn.get_uri(), self.vm.get_uuid())
+                  self.vm.conn.get_uri(), self.vm.get_connkey())
 
     def control_vm_screenshot(self, src):
         ignore = src

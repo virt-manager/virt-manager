@@ -304,7 +304,11 @@ class vmmCloneVM(vmmGObjectUI):
                 label = _("Usermode")
 
             elif net_type == VirtualNetworkInterface.TYPE_VIRTUAL:
-                net = self.orig_vm.conn.get_net_by_name(net_dev)
+                net = None
+                for netobj in self.orig_vm.conn.list_nets():
+                    if netobj.get_name() == net_dev:
+                        net = netobj
+                        break
 
                 if net:
                     label = ""

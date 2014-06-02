@@ -166,8 +166,7 @@ class vmmCreateInterface(vmmGObjectUI):
     @staticmethod
     def iface_in_use_by(conn, name):
         use_str = ""
-        for i in conn.list_interface_names():
-            iface = conn.get_interface(i)
+        for iface in conn.list_interfaces():
             if name in iface.get_slave_names():
                 if use_str:
                     use_str += ", "
@@ -509,8 +508,8 @@ class vmmCreateInterface(vmmGObjectUI):
                                         phys.address]
 
         row_dict = {}
-        for name in self.conn.list_interface_names():
-            iface = self.conn.get_interface(name)
+        for iface in self.conn.list_interfaces():
+            name = iface.get_name()
             key = iface.get_xmlobj()
             iface_type = iface.get_type()
             active = iface.is_active()

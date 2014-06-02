@@ -116,7 +116,7 @@ class vmmManager(vmmGObjectUI):
 
         self.ignore_pause = False
 
-        # Mapping of VM UUID -> tree model rows to
+        # Mapping of rowkey -> tree model rows to
         # allow O(1) access instead of O(n)
         self.rows = {}
 
@@ -445,12 +445,6 @@ class vmmManager(vmmGObjectUI):
         else:
             return handle.conn
 
-    def current_vmuuid(self):
-        vm = self.current_vm()
-        if vm is None:
-            return None
-        return vm.get_uuid()
-
     def current_conn_uri(self, default_selection=False):
         vmlist = self.widget("vm-list")
         model = vmlist.get_model()
@@ -504,7 +498,7 @@ class vmmManager(vmmGObjectUI):
             return
 
         if vm:
-            self.emit("action-show-domain", conn.get_uri(), vm.get_uuid())
+            self.emit("action-show-domain", conn.get_uri(), vm.get_connkey())
         else:
             if not self.open_conn():
                 self.emit("action-show-host", conn.get_uri())
@@ -515,7 +509,7 @@ class vmmManager(vmmGObjectUI):
         if vm is None:
             self._do_delete_conn(conn)
         else:
-            self.emit("action-delete-domain", conn.get_uri(), vm.get_uuid())
+            self.emit("action-delete-domain", conn.get_uri(), vm.get_connkey())
 
     def _do_delete_conn(self, conn):
         if conn is None:
@@ -553,27 +547,28 @@ class vmmManager(vmmGObjectUI):
 
     def start_vm(self, ignore):
         vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-run-domain",
-                      vm.conn.get_uri(), vm.get_uuid())
+        if vm is None:
+            return
+        self.emit("action-run-domain", vm.conn.get_uri(), vm.get_connkey())
 
     def poweroff_vm(self, ignore):
         vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-shutdown-domain",
-                      vm.conn.get_uri(), vm.get_uuid())
+        if vm is None:
+            return
+        self.emit("action-shutdown-domain",
+            vm.conn.get_uri(), vm.get_connkey())
 
     def pause_vm(self, ignore):
         vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-suspend-domain",
-                      vm.conn.get_uri(), vm.get_uuid())
+        if vm is None:
+            return
+        self.emit("action-suspend-domain", vm.conn.get_uri(), vm.get_connkey())
 
     def resume_vm(self, ignore):
         vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-resume-domain",
-                      vm.conn.get_uri(), vm.get_uuid())
+        if vm is None:
+            return
+        self.emit("action-resume-domain", vm.conn.get_uri(), vm.get_connkey())
 
     def close_conn(self, ignore):
         conn = self.current_conn()
@@ -594,8 +589,8 @@ class vmmManager(vmmGObjectUI):
     def vm_row_key(self, vm):
         return vm.get_uuid() + ":" + vm.conn.get_uri()
 
-    def vm_added(self, conn, vmuuid):
-        vm = conn.get_vm(vmuuid)
+    def vm_added(self, conn, connkey):
+        vm = conn.get_vm(connkey)
         if self.vm_row_key(vm) in self.rows:
             return
 
@@ -609,14 +604,14 @@ class vmmManager(vmmGObjectUI):
 
         self._append_vm(model, vm, conn)
 
-    def vm_removed(self, conn, vmuuid):
+    def vm_removed(self, conn, connkey):
         vmlist = self.widget("vm-list")
         model = vmlist.get_model()
 
         parent = self.rows[conn.get_uri()].iter
         for row in range(model.iter_n_children(parent)):
             vm = model[model.iter_nth_child(parent, row)][ROW_HANDLE]
-            if vm.get_uuid() == vmuuid:
+            if vm.get_connkey() == connkey:
                 model.remove(model.iter_nth_child(parent, row))
                 del self.rows[self.vm_row_key(vm)]
                 break
