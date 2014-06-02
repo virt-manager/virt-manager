@@ -22,6 +22,10 @@ import logging
 from virtinst import util
 
 
+# Debugging helper to force old style polling
+_force_old_poll = False
+
+
 def _new_poll_helper(origmap, typename, listfunc, keyfunc, buildfunc):
     """
     Helper for new style listAll* APIs
@@ -109,7 +113,7 @@ def fetch_nets(backend, origmap, build_func):
     name = "network"
 
     if backend.check_support(
-            backend.SUPPORT_CONN_LISTALLNETWORKS):
+        backend.SUPPORT_CONN_LISTALLNETWORKS) and not _force_old_poll:
         return _new_poll_helper(origmap, name,
                                 backend.listAllNetworks,
                                 "UUIDString", build_func)
@@ -127,7 +131,7 @@ def fetch_pools(backend, origmap, build_func):
     name = "pool"
 
     if backend.check_support(
-            backend.SUPPORT_CONN_LISTALLSTORAGEPOOLS):
+        backend.SUPPORT_CONN_LISTALLSTORAGEPOOLS) and not _force_old_poll:
         return _new_poll_helper(origmap, name,
                                 backend.listAllStoragePools,
                                 "UUIDString", build_func)
@@ -145,7 +149,7 @@ def fetch_volumes(backend, pool, origmap, build_func):
     name = "volume"
 
     if backend.check_support(
-        backend.SUPPORT_POOL_LISTALLVOLUMES, pool):
+        backend.SUPPORT_POOL_LISTALLVOLUMES, pool) and not _force_old_poll:
         return _new_poll_helper(origmap, name,
                                 pool.listAllVolumes,
                                 "name", build_func)
@@ -162,7 +166,7 @@ def fetch_interfaces(backend, origmap, build_func):
     name = "interface"
 
     if backend.check_support(
-            backend.SUPPORT_CONN_LISTALLINTERFACES):
+        backend.SUPPORT_CONN_LISTALLINTERFACES) and not _force_old_poll:
         return _new_poll_helper(origmap, name,
                                 backend.listAllInterfaces,
                                 "name", build_func)
@@ -179,7 +183,7 @@ def fetch_interfaces(backend, origmap, build_func):
 def fetch_nodedevs(backend, origmap, build_func):
     name = "nodedev"
     if backend.check_support(
-            backend.SUPPORT_CONN_LISTALLDEVICES):
+        backend.SUPPORT_CONN_LISTALLDEVICES) and not _force_old_poll:
         return _new_poll_helper(origmap, name,
                                 backend.listAllDevices,
                                 "name", build_func)
