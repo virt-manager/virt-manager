@@ -2777,7 +2777,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Can't remove primary Xen or PS/2 mice
         if ((inp.type == "mouse" and inp.bus in ("xen", "ps2")) or
-            (inp.type == "keyboard" and inp.bus == "ps2")):
+            (inp.type == "keyboard" and inp.bus in ("xen", "ps2"))):
             self.widget("config-remove").set_sensitive(False)
         else:
             self.widget("config-remove").set_sensitive(True)
