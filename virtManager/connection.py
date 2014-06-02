@@ -44,6 +44,10 @@ from virtManager.nodedev import vmmNodeDevice
 from virtManager.storagepool import vmmStoragePool
 
 
+# debugging helper to turn off events
+_disable_libvirt_events = False
+
+
 class vmmConnection(vmmGObject):
     __gsignals__ = {
         "vm-added": (GObject.SignalFlags.RUN_FIRST, None, [str]),
@@ -885,6 +889,9 @@ class vmmConnection(vmmGObject):
 
     def _add_conn_events(self):
         try:
+            if _disable_libvirt_events:
+                raise RuntimeError("_disable_libvirt_events = True")
+
             self._domain_cb_ids.append(
                 self.get_backend().domainEventRegisterAny(
                 None, libvirt.VIR_DOMAIN_EVENT_ID_LIFECYCLE,
@@ -916,6 +923,9 @@ class vmmConnection(vmmGObject):
             "device removed")
 
         try:
+            if _disable_libvirt_events:
+                raise RuntimeError("_disable_libvirt_events = True")
+
             eventid = getattr(libvirt, "VIR_NETWORK_EVENT_ID_LIFECYCLE", 0)
             self._network_cb_ids.append(
                 self.get_backend().networkEventRegisterAny(
