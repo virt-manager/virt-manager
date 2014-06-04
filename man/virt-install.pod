@@ -129,6 +129,12 @@ Specify events values for the guest. Possible options include on_poweroff, on_re
 
 Use --events=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsEvents>
 
+=item --resource OPT=VAL,[...]
+
+Specify resource partitioning for the guest.
+
+Use --resource=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#resPartition>
+
 =item --vcpus=VCPUS[,maxvcpus=MAX][,sockets=#][,cores=#][,threads=#][,cpuset=CPUSET]
 
 Number of virtual cpus to configure for the guest. If 'maxvcpus' is specified,

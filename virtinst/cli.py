@@ -800,6 +800,8 @@ def add_guest_xml_options(geng):
     geng.add_argument("--pm", help=_("Config power management features"))
     geng.add_argument("--events",
                     help=_("Config OS lifecycle operation management features"))
+    geng.add_argument("--resource", action="append",
+                    help=_("Config OS resource management features"))
 
 
 def add_boot_options(insg):
@@ -1237,6 +1239,18 @@ class ParserEvents(VirtCLIParser):
         self.set_param("on_poweroff", "on_poweroff")
         self.set_param("on_reboot", "on_reboot")
         self.set_param("on_crash", "on_crash")
+
+
+######################
+# --resource parsing #
+######################
+
+class ParserResource(VirtCLIParser):
+    def _init_params(self):
+        self.remove_first = "partition"
+        self.clear_attr = "resource"
+
+        self.set_param("resource.partition", "partition")
 
 
 ######################
@@ -2234,6 +2248,7 @@ def build_parser_map(options, skip=None, only=None):
 
     register_parser("metadata", ParserMetadata)
     register_parser("events", ParserEvents)
+    register_parser("resource", ParserResource)
     register_parser("memory", ParserMemory)
     register_parser("memtune", ParserMemorytune)
     register_parser("vcpus", ParserVCPU)

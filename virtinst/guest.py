@@ -39,6 +39,7 @@ from virtinst import DomainMemorytune
 from virtinst import DomainMemorybacking
 from virtinst import DomainBlkiotune
 from virtinst import DomainFeatures
+from virtinst import DomainResource
 from virtinst import PM
 from virtinst import IdMap
 from virtinst.xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
@@ -93,9 +94,9 @@ class Guest(XMLBuilder):
 
     _XML_ROOT_NAME = "domain"
     _XML_PROP_ORDER = ["type", "name", "uuid", "title", "description",
-        "maxmemory", "memory", "memoryBacking", "vcpus", "curvcpus", "memtune",
-        "numatune", "blkiotune", "bootloader", "os", "idmap", "features",
-        "cpu", "clock", "on_poweroff", "on_reboot", "on_crash", "pm",
+        "maxmemory", "memory", "memoryBacking", "vcpus", "resource", "curvcpus",
+        "memtune", "numatune", "blkiotune", "bootloader", "os", "idmap",
+        "features", "cpu", "clock", "on_poweroff", "on_reboot", "on_crash", "pm",
         "emulator", "_devices", "seclabel"]
 
     def __init__(self, *args, **kwargs):
@@ -196,6 +197,7 @@ class Guest(XMLBuilder):
     memtune = XMLChildProperty(DomainMemorytune, is_single=True)
     memoryBacking = XMLChildProperty(DomainMemorybacking, is_single=True)
     idmap = XMLChildProperty(IdMap, is_single=True)
+    resource = XMLChildProperty(DomainResource, is_single=True)
 
 
     ###############################

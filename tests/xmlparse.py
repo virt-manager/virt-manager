@@ -213,6 +213,9 @@ class XMLParseTest(unittest.TestCase):
         check("gid_target", None, 1000)
         check("gid_count", None, 10)
 
+        check = self._make_checker(guest.resource)
+        check("partition", None, "/virtualmachines/production")
+
         check = self._make_checker(guest.get_devices("memballoon")[0])
         check("model", "virtio", "none")
 

@@ -29,6 +29,7 @@ from virtinst.domainnumatune import DomainNumatune
 from virtinst.domainblkiotune import DomainBlkiotune
 from virtinst.domainmemorytune import DomainMemorytune
 from virtinst.domainmemorybacking import DomainMemorybacking
+from virtinst.domainresource import DomainResource
 from virtinst.clock import Clock
 from virtinst.cpu import CPU, CPUFeature
 from virtinst.seclabel import Seclabel
