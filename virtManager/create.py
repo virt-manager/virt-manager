@@ -987,14 +987,16 @@ class vmmCreate(vmmGObjectUI):
         distro = None
         dlabel = None
         variant = None
+        variant_found = False
         vlabel = self.widget("install-os-version-entry").get_text()
 
         for i in self.widget("install-os-version").get_model():
             if not i[2] and not i[3] and i[1] == vlabel:
                 variant = i[0]
+                variant_found = True
                 break
 
-        if vlabel and not variant:
+        if vlabel and not variant_found:
             return (None, None, False, None, None)
 
         if drow:
