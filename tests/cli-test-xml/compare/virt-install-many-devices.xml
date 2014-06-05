@@ -3,10 +3,6 @@
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
-  <vcpu>1</vcpu>
-  <numatune>
-    <memory mode="preferred" nodeset="1-3,5"/>
-  </numatune>
   <blkiotune>
     <weight>200</weight>
     <device>
@@ -14,6 +10,10 @@
       <weight>300</weight>
     </device>
   </blkiotune>
+  <vcpu>1</vcpu>
+  <numatune>
+    <memory mode="preferred" nodeset="1-3,5"/>
+  </numatune>
   <os>
     <type arch="i686">hvm</type>
     <loader>/foo/bar</loader>
@@ -148,10 +148,6 @@
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
-  <vcpu>1</vcpu>
-  <numatune>
-    <memory mode="preferred" nodeset="1-3,5"/>
-  </numatune>
   <blkiotune>
     <weight>200</weight>
     <device>
@@ -159,6 +155,10 @@
       <weight>300</weight>
     </device>
   </blkiotune>
+  <vcpu>1</vcpu>
+  <numatune>
+    <memory mode="preferred" nodeset="1-3,5"/>
+  </numatune>
   <os>
     <type arch="i686">hvm</type>
     <loader>/foo/bar</loader>

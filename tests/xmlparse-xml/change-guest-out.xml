@@ -81,20 +81,6 @@
   </seclabel>
   <title>Hey title changed!</title>
   <description>Hey desc changed&amp;</description>
-  <memoryBacking>
-    <hugepages/>
-    <nosharepages/>
-    <locked/>
-  </memoryBacking>
-  <resource>
-    <partition>/virtualmachines/production</partition>
-  </resource>
-  <memtune>
-    <hard_limit>2048</hard_limit>
-    <soft_limit>200</soft_limit>
-    <swap_hard_limit>400</swap_hard_limit>
-    <min_guarantee>500</min_guarantee>
-  </memtune>
   <blkiotune>
     <weight>200</weight>
     <device>
@@ -102,9 +88,23 @@
       <weight>300</weight>
     </device>
   </blkiotune>
+  <memtune>
+    <hard_limit>2048</hard_limit>
+    <soft_limit>200</soft_limit>
+    <swap_hard_limit>400</swap_hard_limit>
+    <min_guarantee>500</min_guarantee>
+  </memtune>
+  <memoryBacking>
+    <hugepages/>
+    <nosharepages/>
+    <locked/>
+  </memoryBacking>
   <bootloader>pygrub</bootloader>
   <idmap>
     <uid start="0" target="1000" count="10"/>
     <gid start="0" target="1000" count="10"/>
   </idmap>
+  <resource>
+    <partition>/virtualmachines/production</partition>
+  </resource>
 </domain>
