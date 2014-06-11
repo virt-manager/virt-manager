@@ -265,9 +265,9 @@ class vmmCreateNetwork(vmmGObjectUI):
             return self.err.val_err(_("Invalid Network Address"),
                     _("The network must be an IPv4 address"))
 
-        if ip.numhosts < 16:
+        if ip.numhosts < 8:
             return self.err.val_err(_("Invalid Network Address"),
-                    _("The network must address at least 16 addresses."))
+                    _("The network must address at least 8 addresses."))
 
         if ip.prefixlen < 15:
             return self.err.val_err(_("Invalid Network Address"),
@@ -563,7 +563,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             src.modify_bg(Gtk.StateType.NORMAL, _red)
             return
 
-        valid_ip = (ip.numhosts >= 16 and ip.is_private)
+        valid_ip = (ip.numhosts >= 8 and ip.is_private)
         gateway = (ip.prefixlen != 32 and str(ip.network + 1) or "")
         info = (ip.is_private and _("Private") or _("Other/Public"))
         start = int(ip.numhosts / 2)
