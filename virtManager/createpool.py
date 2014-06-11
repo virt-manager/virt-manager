@@ -289,8 +289,7 @@ class vmmCreatePool(vmmGObjectUI):
         self.widget("pool-build").set_active(builddef)
 
         if src_name:
-            self.widget("pool-source-name").get_child().set_text(
-                self._pool.source_name)
+            self.widget("pool-source-name").set_text(self._pool.source_name)
 
         self.widget("pool-format").set_active(-1)
         if fmt:
