@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008, 2013 Red Hat, Inc.
+# Copyright (C) 2008, 2013, 2014 Red Hat, Inc.
 # Copyright (C) 2008 Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -261,7 +261,7 @@ class vmmCreatePool(vmmGObjectUI):
         iqn = self._pool.supports_property("iqn")
         builddef, buildsens = self.get_build_default()
 
-        # Source path broswing is meaningless for net pools
+        # Source path browsing is meaningless for net pools
         if self._pool.type in [StoragePool.TYPE_NETFS,
                                StoragePool.TYPE_ISCSI,
                                StoragePool.TYPE_SCSI]:
