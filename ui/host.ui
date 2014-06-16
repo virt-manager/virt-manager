@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Sun Sep 29 12:24:13 2013 -->
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
@@ -53,8 +53,8 @@
                         <property name="use_underline">True</property>
                         <property name="image">image3</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="r" signal="activate" modifiers="GDK_MOD1_MASK"/>
                         <signal name="activate" handler="on_menu_restore_saved_activate" swapped="no"/>
+                        <accelerator key="r" signal="activate" modifiers="GDK_MOD1_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -519,7 +519,8 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Overview</property>
+                <property name="label" translatable="yes">_Overview</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -1284,7 +1285,8 @@
               <object class="GtkLabel" id="label12">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Virtual Networks</property>
+                <property name="label" translatable="yes">_Virtual Networks</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -1861,7 +1863,8 @@
               <object class="GtkLabel" id="label13">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Storage</property>
+                <property name="label" translatable="yes">_Storage</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -2527,7 +2530,8 @@ here</property>
               <object class="GtkLabel" id="label30">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Network Interfaces</property>
+                <property name="label" translatable="yes">N_etwork Interfaces</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="position">3</property>
