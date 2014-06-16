@@ -869,9 +869,20 @@ class vmmAddHardware(vmmGObjectUI):
     def populate_controller_model(self, src):
         ignore = src
 
+        def show_tooltip(model_tooltip, show):
+            vmname = self.vm.get_name()
+            tooltip = (_("%s already has a USB controller attached.\n"
+            "Adding more than one USB controller is not supported.\n"
+            "You can change the USB controller type in the VM details screen.")
+            % vmname)
+            model_tooltip.set_visible(show)
+            model_tooltip.set_tooltip_text(tooltip)
+
         controller_type = self.get_config_controller_type()
         modellist = self.widget("controller-model")
         modellist.set_sensitive(True)
+        model_tooltip = self.widget("controller-tooltip")
+        show_tooltip(model_tooltip, False)
 
         controllers = self.vm.get_controller_devices()
         if controller_type == VirtualController.TYPE_USB:
@@ -883,6 +894,7 @@ class vmmAddHardware(vmmGObjectUI):
                 self._remove_usb_controller = usb_controllers[0]
                 self.widget("create-finish").set_sensitive(True)
             else:
+                show_tooltip(model_tooltip, True)
                 self.widget("create-finish").set_sensitive(False)
         else:
             self.widget("create-finish").set_sensitive(True)
