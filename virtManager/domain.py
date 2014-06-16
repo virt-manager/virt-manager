@@ -1547,16 +1547,16 @@ class vmmDomain(vmmLibvirtObject):
 
         if self._enable_net_poll and len(self.record) > 1:
             rxBytes, txBytes = self._sample_network_traffic()
-            self.record[0]["netRxKB"] = rxBytes / 1024
-            self.record[0]["netTxKB"] = txBytes / 1024
+            self.record[0]["netRxKiB"] = rxBytes / 1024
+            self.record[0]["netTxKiB"] = txBytes / 1024
 
     def toggle_sample_disk_io(self, ignore=None):
         self._enable_disk_poll = self.config.get_stats_enable_disk_poll()
 
         if self._enable_disk_poll and len(self.record) > 1:
             rdBytes, wrBytes = self._sample_disk_io()
-            self.record[0]["diskRdKB"] = rdBytes / 1024
-            self.record[0]["diskWrKB"] = wrBytes / 1024
+            self.record[0]["diskRdKiB"] = rdBytes / 1024
+            self.record[0]["diskWrKiB"] = wrBytes / 1024
 
     def toggle_sample_mem_stats(self, ignore=None):
         self._enable_mem_stats = self.config.get_stats_enable_memory_poll()
@@ -1930,14 +1930,14 @@ class vmmDomain(vmmLibvirtObject):
             "cpuGuestPercent": pcentGuestCpu,
             "curmem": curmem,
             "currMemPercent": pcentCurrMem,
-            "diskRdKB": rdBytes / 1024,
-            "diskWrKB": wrBytes / 1024,
-            "netRxKB": rxBytes / 1024,
-            "netTxKB": txBytes / 1024,
+            "diskRdKiB": rdBytes / 1024,
+            "diskWrKiB": wrBytes / 1024,
+            "netRxKiB": rxBytes / 1024,
+            "netTxKiB": txBytes / 1024,
         }
 
         for r in ["diskRd", "diskWr", "netRx", "netTx"]:
-            newStats[r + "Rate"] = self._get_cur_rate(r + "KB")
+            newStats[r + "Rate"] = self._get_cur_rate(r + "KiB")
             self._set_max_rate(newStats, r + "Rate")
 
         self.record.insert(0, newStats)

@@ -307,7 +307,7 @@ class vmmFSDetails(vmmGObjectUI):
             self._dev = VirtualFilesystem(conn)
             if fstype == VirtualFilesystem.TYPE_RAM:
                 self._dev.source = usage
-                self._dev.units = 'MB'
+                self._dev.units = 'MiB'
             else:
                 self._dev.source = source
             self._dev.target = target

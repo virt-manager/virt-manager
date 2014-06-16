@@ -1923,10 +1923,10 @@ class vmmCreate(vmmGObjectUI):
         return True
 
     def pretty_storage(self, size):
-        return "%.1f GB" % float(size)
+        return "%.1f GiB" % float(size)
 
     def pretty_memory(self, mem):
-        return "%d MB" % (mem / 1024.0)
+        return "%d MiB" % (mem / 1024.0)
 
 
     # Distro detection methods

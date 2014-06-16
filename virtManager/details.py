@@ -183,9 +183,9 @@ def safeint(val, fmt="%.3d"):
 
 def prettyify_bytes(val):
     if val > (1024 * 1024 * 1024):
-        return "%2.2f GB" % (val / (1024.0 * 1024.0 * 1024.0))
+        return "%2.2f GiB" % (val / (1024.0 * 1024.0 * 1024.0))
     else:
-        return "%2.2f MB" % (val / (1024.0 * 1024.0))
+        return "%2.2f MiB" % (val / (1024.0 * 1024.0))
 
 
 def _build_redir_label(redirdev):
@@ -2543,11 +2543,11 @@ class vmmDetails(vmmGObjectUI):
 
         if self.config.get_stats_enable_disk_poll():
             dsk_txt = _dsk_rx_tx_text(self.vm.disk_read_rate(),
-                                      self.vm.disk_write_rate(), "KB/s")
+                                      self.vm.disk_write_rate(), "KiB/s")
 
         if self.config.get_stats_enable_net_poll():
             net_txt = _net_rx_tx_text(self.vm.network_rx_rate(),
-                                      self.vm.network_tx_rate(), "KB/s")
+                                      self.vm.network_tx_rate(), "KiB/s")
 
         self.widget("overview-cpu-usage-text").set_text(cpu_txt)
         self.widget("overview-memory-usage-text").set_text(mem_txt)
@@ -2631,7 +2631,7 @@ class vmmDetails(vmmGObjectUI):
         vm_cur_mem = self.vm.get_memory() / 1024.0
         vm_max_mem = self.vm.maximum_memory() / 1024.0
 
-        host_mem_widget.set_text("%d MB" % (int(round(host_mem))))
+        host_mem_widget.set_text("%d MiB" % (int(round(host_mem))))
 
         curmem = self.widget("config-memory")
         maxmem = self.widget("config-maxmem")
@@ -3024,7 +3024,7 @@ class vmmDetails(vmmGObjectUI):
         ram = vid.vram
         heads = vid.heads
         try:
-            ramlabel = ram and "%d MB" % (int(ram) / 1024) or "-"
+            ramlabel = ram and "%d MiB" % (int(ram) / 1024) or "-"
         except:
             ramlabel = "-"
 

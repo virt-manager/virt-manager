@@ -100,7 +100,7 @@ class vmmAddStorage(vmmGObjectUI):
             return
 
         def pretty_storage(size):
-            return "%.1f GB" % float(size)
+            return "%.1f GiB" % float(size)
 
         hd_label = ("%s available in the default location" %
                     pretty_storage(max_storage))

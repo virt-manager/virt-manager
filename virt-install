@@ -254,7 +254,7 @@ def validate_required_options(options, guest):
         msg += "\n" + cli.name_missing
 
     if not options.memory:
-        msg += "\n" + _("--memory amount in MB is required")
+        msg += "\n" + _("--memory amount in MiB is required")
 
     if (not guest.os.is_container() and
         not storage_specified(options.disk,

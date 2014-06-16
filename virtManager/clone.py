@@ -723,7 +723,7 @@ class vmmCloneVM(vmmGObjectUI):
     def pretty_storage(self, size):
         if not size:
             return ""
-        return "%.1f GB" % float(size)
+        return "%.1f GiB" % float(size)
 
     # Listeners
     def validate(self):
