@@ -1343,6 +1343,61 @@ class vmmAddHardware(vmmGObjectUI):
     # Add device methods #
     ######################
 
+    @staticmethod
+    def change_config_helper(define_func, define_args, vm, err,
+                              devobj=None,
+                              hotplug_args=None):
+        hotplug_args = hotplug_args or {}
+
+        # Persistent config change
+        try:
+            if devobj:
+                define_func(devobj, False, **define_args)
+            else:
+                define_func(**define_args)
+            vm.redefine_cached()
+        except Exception, e:
+            err.show_err((_("Error changing VM configuration: %s") %
+                              str(e)))
+            # If we fail, make sure we flush the cache
+            vm.refresh_xml()
+            return False
+
+        # Hotplug change
+        hotplug_err = None
+        if vm.is_active():
+            try:
+                if devobj:
+                    hotplug_args["device"] = define_func(
+                        devobj, True, **define_args)
+                if hotplug_args:
+                    vm.hotplug(**hotplug_args)
+            except Exception, e:
+                logging.debug("Hotplug failed: %s", str(e))
+                hotplug_err = ((str(e), "".join(traceback.format_exc())))
+
+        if (hotplug_err or (vm.is_active() and not hotplug_args)):
+            if len(define_args) > 1:
+                msg = _("Some changes may require a guest shutdown "
+                        "to take effect.")
+            else:
+                msg = _("These changes will take effect after "
+                        "the next guest shutdown.")
+
+            dtype = (hotplug_err and
+                     Gtk.MessageType.WARNING or Gtk.MessageType.INFO)
+            hotplug_msg = ""
+            if hotplug_err:
+                hotplug_msg += (hotplug_err[0] + "\n\n" +
+                                hotplug_err[1] + "\n")
+
+            err.show_err(msg,
+                              details=hotplug_msg,
+                              buttons=Gtk.ButtonsType.OK,
+                              dialog_type=dtype)
+
+        return True
+
     def setup_device(self, asyncjob):
         logging.debug("Running setup for device=%s", self._dev)
         self._dev.setup(meter=asyncjob.get_meter())

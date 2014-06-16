@@ -2041,7 +2041,8 @@ class vmmDetails(vmmGObjectUI):
                 idmap_list = None
             kwargs["idmap_list"] = idmap_list
 
-        return self._change_config_helper(self.vm.define_overview, kwargs,
+        return vmmAddHardware.change_config_helper(self.vm.define_overview,
+                                          kwargs, self.vm, self.err,
                                           hotplug_args=hotplug_args)
 
     def config_vcpus_apply(self):
@@ -2069,7 +2070,8 @@ class vmmDetails(vmmGObjectUI):
                 kwargs["cores"] = None
                 kwargs["threads"] = None
 
-        return self._change_config_helper(self.vm.define_cpu, kwargs,
+        return vmmAddHardware.change_config_helper(self.vm.define_cpu,
+                                          kwargs, self.vm, self.err,
                                           hotplug_args=hotplug_args)
 
     def config_memory_apply(self):
@@ -2092,7 +2094,8 @@ class vmmDetails(vmmGObjectUI):
             hotplug_args["memory"] = kwargs["memory"]
             hotplug_args["maxmem"] = kwargs["maxmem"]
 
-        return self._change_config_helper(self.vm.define_memory, kwargs,
+        return vmmAddHardware.change_config_helper(self.vm.define_memory,
+                                          kwargs, self.vm, self.err,
                                           hotplug_args=hotplug_args)
 
     def config_boot_options_apply(self):
@@ -2133,14 +2136,16 @@ class vmmDetails(vmmGObjectUI):
             if not kwargs["init"]:
                 return self.err.val_err(_("An init path must be specified"))
 
-        return self._change_config_helper(self.vm.define_boot, kwargs)
+        return vmmAddHardware.change_config_helper(self.vm.define_boot,
+                                          kwargs, self.vm, self.err)
 
     # <device> defining
     def change_storage_media(self, devobj, newpath):
         kwargs = {"path": newpath}
         hotplug_args = {"storage_path": True}
 
-        return self._change_config_helper(self.vm.define_disk, kwargs,
+        return vmmAddHardware.change_config_helper(self.vm.define_disk,
+                                          kwargs, self.vm, self.err,
                                           devobj=devobj,
                                           hotplug_args=hotplug_args)
 
@@ -2194,7 +2199,8 @@ class vmmDetails(vmmGObjectUI):
             kwargs["bus"] = bus
             kwargs["addrstr"] = addr
 
-        return self._change_config_helper(self.vm.define_disk, kwargs,
+        return vmmAddHardware.change_config_helper(self.vm.define_disk,
+                                          kwargs, self.vm, self.err,
                                           devobj=devobj)
 
     def config_sound_apply(self, devobj):
@@ -2205,7 +2211,8 @@ class vmmDetails(vmmGObjectUI):
             if model:
                 kwargs["model"] = model
 
-        return self._change_config_helper(self.vm.define_sound, kwargs,
+        return vmmAddHardware.change_config_helper(self.vm.define_sound,
+                                          kwargs, self.vm, self.err,
                                           devobj=devobj)
 
     def config_smartcard_apply(self, devobj):
@@ -2216,7 +2223,8 @@ class vmmDetails(vmmGObjectUI):
             if model:
                 kwargs["model"] = model
 
-        return self._change_config_helper(self.vm.define_smartcard, kwargs,
+        return vmmAddHardware.change_config_helper(self.vm.define_smartcard,
+                                          kwargs, self.vm, self.err,
                                           devobj=devobj)
 
     def config_network_apply(self, devobj):
@@ -2240,8 +2248,9 @@ class vmmDetails(vmmGObjectUI):
              kwargs["typeid"], kwargs["typeidversion"],
              kwargs["instanceid"]) = self.netlist.get_vport()
 
-        return self._change_config_helper(self.vm.define_network, kwargs,
-                                          devobj)
+        return vmmAddHardware.change_config_helper(self.vm.define_network,
+                                          kwargs, self.vm, self.err,
+                                          devobj=devobj)
 
     def config_graphics_apply(self, devobj):
         (gtype, port,
@@ -2262,7 +2271,8 @@ class vmmDetails(vmmGObjectUI):
         if self.edited(EDIT_GFX_TYPE):
             kwargs["gtype"] = gtype
 
-        return self._change_config_helper(self.vm.define_graphics, kwargs,
+        return vmmAddHardware.change_config_helper(self.vm.define_graphics,
+                                          kwargs, self.vm, self.err,
                                           devobj=devobj)
 
     def config_video_apply(self, devobj):
@@ -2273,7 +2283,8 @@ class vmmDetails(vmmGObjectUI):
             if model:
                 kwargs["model"] = model
 
-        return self._change_config_helper(self.vm.define_video, kwargs,
+        return vmmAddHardware.change_config_helper(self.vm.define_video,
+                                          kwargs, self.vm, self.err,
                                           devobj=devobj)
 
     def config_controller_apply(self, devobj):
@@ -2284,8 +2295,9 @@ class vmmDetails(vmmGObjectUI):
             if model:
                 kwargs["model"] = model
 
-        return self._change_config_helper(self.vm.define_controller,
-                                          kwargs, devobj=devobj)
+        return vmmAddHardware.change_config_helper(self.vm.define_controller,
+                                          kwargs, self.vm, self.err,
+                                          devobj=devobj)
 
     def config_watchdog_apply(self, devobj):
         kwargs = {}
@@ -2298,7 +2310,8 @@ class vmmDetails(vmmGObjectUI):
             kwargs["action"] = uiutil.get_combo_entry(
                 self.widget("watchdog-action"))
 
-        return self._change_config_helper(self.vm.define_watchdog, kwargs,
+        return vmmAddHardware.change_config_helper(self.vm.define_watchdog,
+                                          kwargs, self.vm, self.err,
                                           devobj=devobj)
 
     def config_filesystem_apply(self, devobj):
@@ -2309,8 +2322,9 @@ class vmmDetails(vmmGObjectUI):
                 return False
             kwargs["newdev"] = self.fsDetails.get_dev()
 
-        return self._change_config_helper(self.vm.define_filesystem,
-                                          kwargs, devobj=devobj)
+        return vmmAddHardware.change_config_helper(self.vm.define_filesystem,
+                                          kwargs, self.vm, self.err,
+                                          devobj=devobj)
 
     def config_hostdev_apply(self, devobj):
         kwargs = {}
@@ -2318,7 +2332,8 @@ class vmmDetails(vmmGObjectUI):
         if self.edited(EDIT_HOSTDEV_ROMBAR):
             kwargs["rom_bar"] = self.widget("hostdev-rombar").get_active()
 
-        return self._change_config_helper(self.vm.define_hostdev, kwargs,
+        return vmmAddHardware.change_config_helper(self.vm.define_hostdev,
+                                          kwargs, self.vm, self.err,
                                           devobj=devobj)
 
 
@@ -2358,60 +2373,6 @@ class vmmDetails(vmmGObjectUI):
                     "shutdown."),
             buttons=Gtk.ButtonsType.OK,
             dialog_type=Gtk.MessageType.INFO)
-
-    def _change_config_helper(self, define_func, define_args,
-                              devobj=None,
-                              hotplug_args=None):
-        hotplug_args = hotplug_args or {}
-
-        # Persistent config change
-        try:
-            if devobj:
-                define_func(devobj, False, **define_args)
-            else:
-                define_func(**define_args)
-            self.vm.redefine_cached()
-        except Exception, e:
-            self.err.show_err((_("Error changing VM configuration: %s") %
-                              str(e)))
-            # If we fail, make sure we flush the cache
-            self.vm.refresh_xml()
-            return False
-
-        # Hotplug change
-        hotplug_err = None
-        if self.vm.is_active():
-            try:
-                if devobj:
-                    hotplug_args["device"] = define_func(
-                        devobj, True, **define_args)
-                if hotplug_args:
-                    self.vm.hotplug(**hotplug_args)
-            except Exception, e:
-                logging.debug("Hotplug failed: %s", str(e))
-                hotplug_err = ((str(e), "".join(traceback.format_exc())))
-
-        if (hotplug_err or (self.vm.is_active() and not hotplug_args)):
-            if len(define_args) > 1:
-                msg = _("Some changes may require a guest shutdown "
-                        "to take effect.")
-            else:
-                msg = _("These changes will take effect after "
-                        "the next guest shutdown.")
-
-            dtype = (hotplug_err and
-                     Gtk.MessageType.WARNING or Gtk.MessageType.INFO)
-            hotplug_msg = ""
-            if hotplug_err:
-                hotplug_msg += (hotplug_err[0] + "\n\n" +
-                                hotplug_err[1] + "\n")
-
-            self.err.show_err(msg,
-                              details=hotplug_msg,
-                              buttons=Gtk.ButtonsType.OK,
-                              dialog_type=dtype)
-
-        return True
 
 
     ########################
