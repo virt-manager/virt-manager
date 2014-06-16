@@ -73,6 +73,8 @@ class vmmAddHardware(vmmGObjectUI):
         self.storage_browser = None
 
         self._dev = None
+        self._remove_usb_controller = None
+        self._selected_model = None
 
         self.gfxdetails = vmmGraphicsDetails(
             self.vm, self.builder, self.topwin)
@@ -325,9 +327,6 @@ class vmmAddHardware(vmmGObjectUI):
         target_model = Gtk.ListStore(str, str)
         combo.set_model(target_model)
         uiutil.set_combo_text_column(combo, 1)
-        # FIXME: we should deal with controller model
-        combo.set_visible(False)
-        self.widget("controller-model-label").set_visible(False)
 
         # Available HW options
         is_local = not self.conn.is_remote()
@@ -756,7 +755,7 @@ class vmmAddHardware(vmmGObjectUI):
         else:
             if add_default:
                 model.append([None, "Default"])
-                combo.set_sensitive(False)
+                uiutil.set_grid_row_visible(combo, False)
             if widget_name is not None:
                 widget_name.set_sensitive(True)
 
@@ -873,6 +872,21 @@ class vmmAddHardware(vmmGObjectUI):
         controller_type = self.get_config_controller_type()
         modellist = self.widget("controller-model")
         modellist.set_sensitive(True)
+
+        controllers = self.vm.get_controller_devices()
+        if controller_type == VirtualController.TYPE_USB:
+            usb_controllers = [x for x in controllers if
+                    (x.type == VirtualController.TYPE_USB)]
+            if (len(usb_controllers) == 0):
+                self.widget("create-finish").set_sensitive(True)
+            elif (len(usb_controllers) == 1 and usb_controllers[0].model == "none"):
+                self._remove_usb_controller = usb_controllers[0]
+                self.widget("create-finish").set_sensitive(True)
+            else:
+                self.widget("create-finish").set_sensitive(False)
+        else:
+            self.widget("create-finish").set_sensitive(True)
+        uiutil.set_grid_row_visible(modellist, True)
         self.populate_controller_model_combo(modellist, controller_type, None, True)
 
         if len(modellist.get_model()) > 0:
@@ -1407,6 +1421,18 @@ class vmmAddHardware(vmmGObjectUI):
         self._dev.get_xml_config()
         logging.debug("Adding device:\n" + self._dev.get_xml_config())
 
+        if self._remove_usb_controller:
+            kwargs = {}
+            kwargs["model"] = self._selected_model
+
+            self.change_config_helper(self.vm.define_controller,
+                    kwargs, self.vm, self.err, self._remove_usb_controller)
+
+            self._remove_usb_controller = None
+            self._selected_model = None
+
+            return
+
         controller = getattr(self._dev, "vmm_controller", None)
         if controller is not None:
             logging.debug("Adding controller:\n%s",
@@ -1861,7 +1887,9 @@ class vmmAddHardware(vmmGObjectUI):
     def validate_page_controller(self):
         conn = self.conn.get_backend()
         controller_type = self.get_config_controller_type()
+        model = self.get_config_controller_model()
         self._dev = VirtualController(conn)
+        self._selected_model = model
 
         controllers = self.vm.get_controller_devices()
         controller_num = [x for x in controllers if
@@ -1871,6 +1899,11 @@ class vmmAddHardware(vmmGObjectUI):
             self._dev.index = index_new
 
         self._dev.type = controller_type
+
+        if model != "none":
+            if model == "default":
+                model = None
+            self._dev.model = model
 
     def validate_page_rng(self):
         conn = virtinst.VirtualRNGDevice.BACKEND_MODE_CONNECT in \
