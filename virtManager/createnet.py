@@ -169,9 +169,16 @@ class vmmCreateNetwork(vmmGObjectUI):
         fw_model = self.widget("net-forward").get_model()
         fw_model.clear()
         fw_model.append([_("Any physical device"), None])
-        for netdev in self.conn.list_netdevs():
-            fw_model.append([_("Physical device %s") % (netdev.get_name()),
-                             netdev.get_name()])
+
+        devnames = []
+        for nodedev in self.conn.get_nodedevs("net"):
+            devnames.append(nodedev.name)
+        for iface in self.conn.list_interfaces():
+            if iface.name not in devnames:
+                devnames.append(iface.name)
+
+        for name in devnames:
+            fw_model.append([_("Physical device %s") % name, name])
 
         self.widget("net-forward").set_active(0)
         self.widget("net-forward-mode").set_active(0)

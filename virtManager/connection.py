@@ -38,7 +38,6 @@ from virtManager.baseclass import vmmGObject
 from virtManager.domain import vmmDomain
 from virtManager.interface import vmmInterface
 from virtManager.mediadev import vmmMediaDevice
-from virtManager.netdev import vmmNetDevice
 from virtManager.network import vmmNetwork
 from virtManager.nodedev import vmmNodeDevice
 from virtManager.storagepool import vmmStoragePool
@@ -110,8 +109,6 @@ class vmmConnection(vmmGObject):
 
         # Physical network interfaces: name -> virtinst.NodeDevice
         self._nodedevs = {}
-        # Physical network interfaces: name (eth0) -> vmmNetDevice
-        self._netdevs = {}
         # Physical media devices: vmmMediaDevice.key -> vmmMediaDevice
         self._mediadevs = {}
         # Connection Storage pools: name -> vmmInterface
@@ -125,10 +122,6 @@ class vmmConnection(vmmGObject):
         # Resource utilization statistics
         self.record = []
         self.hostinfo = None
-
-        self.netdev_initialized = False
-        self.netdev_error = ""
-        self.netdev_use_libvirt = False
 
         self.mediadev_initialized = False
         self.mediadev_error = ""
@@ -195,31 +188,6 @@ class vmmConnection(vmmGObject):
             self.tick(False, pollpool=True)
 
         self._backend.cb_clear_cache = clear_cache
-
-
-    def _init_netdev(self):
-        """
-        Determine how we will be polling for net devices (HAL or libvirt)
-        """
-        if self.is_nodedev_capable() and self.is_interface_capable():
-            try:
-                self._build_libvirt_netdev_list()
-                self.netdev_use_libvirt = True
-            except Exception, e:
-                self.netdev_error = _("Could not build physical interface "
-                                      "list via libvirt: %s") % str(e)
-        else:
-            self.netdev_error = _("Libvirt version does not support "
-                                  "physical interface listing.")
-
-        self.netdev_initialized = True
-        if self.netdev_error:
-            logging.debug(self.netdev_error)
-        else:
-            if self.netdev_use_libvirt:
-                logging.debug("Using libvirt API for netdev enumeration")
-            else:
-                logging.debug("Using HAL for netdev enumeration")
 
     def _init_mediadev(self):
         if self.is_nodedev_capable():
@@ -653,59 +621,6 @@ class vmmConnection(vmmGObject):
     # Libvirt object lookup methods #
     #################################
 
-    def _build_libvirt_netdev_list(self):
-        bridges = []
-        netdev_list = {}
-
-        def interface_to_netdev(interface):
-            name = interface.get_name()
-            mac = interface.get_mac()
-            is_bridge = interface.is_bridge()
-            slave_names = interface.get_slave_names()
-
-            if is_bridge and slave_names:
-                bridges.append((name, slave_names))
-            else:
-                netdev_list[name] = vmmNetDevice(name, mac, is_bridge, None)
-
-        def nodedev_to_netdev(nodedev):
-            name = nodedev.interface
-            mac = nodedev.address
-
-            if name not in netdev_list.keys():
-                netdev_list[name] = vmmNetDevice(name, mac, False, None)
-            else:
-                # Believe this info over libvirt interface APIs, since
-                # this comes from the hardware
-                if mac:
-                    netdev_list[name].mac = mac
-
-        for name, iface in self._interfaces.items():
-            interface_to_netdev(iface)
-
-        for nodedev in self.get_nodedevs("net"):
-            nodedev_to_netdev(nodedev)
-
-        # Mark NetDevices as bridged where appropriate
-        for bridge_name, slave_names in bridges:
-            for name, netdev in netdev_list.items():
-                if name not in slave_names:
-                    continue
-
-                # XXX: Can a physical device be in two bridges?
-                netdev.bridge = bridge_name
-                netdev.shared = True
-                break
-
-        # XXX: How to handle added/removed signals to clients?
-        return netdev_list
-
-    def list_netdevs(self):
-        # Update netdev list
-        if self.netdev_use_libvirt:
-            self._netdevs = self._build_libvirt_netdev_list()
-        return self._netdevs.values()
-
     def get_vm(self, connkey):
         return self._vms[connkey]
     def list_vms(self):
@@ -994,9 +909,6 @@ class vmmConnection(vmmGObject):
         cleanup(self._nodedevs)
         self._nodedevs = {}
 
-        cleanup(self._netdevs)
-        self._netdevs = {}
-
         cleanup(self._mediadevs)
         self._mediadevs = {}
 
@@ -1262,10 +1174,6 @@ class vmmConnection(vmmGObject):
                 self._pools = pools
             if pollnodedev:
                 self._nodedevs = nodedevs
-
-            # Make sure device polling is setup
-            if not self.netdev_initialized:
-                self._init_netdev()
 
             if not self.mediadev_initialized:
                 self._init_mediadev()

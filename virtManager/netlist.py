@@ -128,17 +128,16 @@ class vmmNetworkList(vmmGObjectUI):
 
         return ret
 
-    def _build_source_row(self, nettype, name,
+    def _build_source_row(self, nettype, source_name,
         label, is_sensitive, is_running, manual_bridge=False, key=None):
-        return [nettype, name, label,
+        return [nettype, source_name, label,
                 is_sensitive, is_running, manual_bridge,
                 key]
 
     def _find_virtual_networks(self):
-        vnet_dict = {}
+        rows = []
         vnet_bridges = []
-        hasNet = False
-        netIdxLabel = None
+        default_label = None
 
         for net in self.conn.list_nets():
             nettype = virtinst.VirtualNetworkInterface.TYPE_VIRTUAL
@@ -147,15 +146,12 @@ class vmmNetworkList(vmmGObjectUI):
             if not net.is_active():
                 label += " (%s)" % _("Inactive")
 
-            hasNet = True
-            # FIXME: Should we use 'default' even if it's inactive?
-            # FIXME: This preference should be configurable
             if net.get_name() == "default":
-                netIdxLabel = label
+                default_label = label
 
-            vnet_dict[label] = self._build_source_row(
+            rows.append(self._build_source_row(
                 nettype, net.get_name(), label, True,
-                net.is_active(), key=net.get_connkey())
+                net.is_active(), key=net.get_connkey()))
 
             # Build a list of vnet bridges, so we know not to list them
             # in the physical interface list
@@ -163,74 +159,80 @@ class vmmNetworkList(vmmGObjectUI):
             if vnet_bridge:
                 vnet_bridges.append(vnet_bridge)
 
-        if not hasNet:
+        if not rows:
             label = _("No virtual networks available")
-            vnet_dict[label] = self._build_source_row(
-                None, None, label, False, False)
+            rows.append(self._build_source_row(
+                None, None, label, False, False))
 
-        return vnet_dict, vnet_bridges, netIdxLabel
+        return rows, vnet_bridges, default_label
 
     def _find_physical_devices(self, vnet_bridges):
+        rows = []
+        can_default = False
+        default_label = None
+        skip_ifaces = ["lo"]
+
         vnet_taps = []
         for vm in self.conn.list_vms():
             for nic in vm.get_network_devices(refresh_if_nec=False):
                 if nic.target_dev and nic.target_dev not in vnet_taps:
                     vnet_taps.append(nic.target_dev)
 
-        bridge_dict = {}
-        iface_dict = {}
-        hasShared = False
-        brIdxLabel = None
-        skip_ifaces = ["lo"]
+        netdevs = {}
+        for iface in self.conn.list_interfaces():
+            netdevs[iface.get_name()] = [
+                iface.get_name(), iface.is_bridge(), iface.get_slave_names()]
+        for nodedev in self.conn.get_nodedevs("net"):
+            if nodedev.interface not in netdevs:
+                netdevs[nodedev.interface] = [nodedev.interface, False, []]
 
-        for br in self.conn.list_netdevs():
-            name = br.name
-            bridge_name = br.get_bridge()
-            nettype = virtinst.VirtualNetworkInterface.TYPE_BRIDGE
+        # For every bridge used by a virtual network, and any slaves of
+        # those devices, don't list them.
+        for vnet_bridge in vnet_bridges:
+            slave_names = netdevs.pop(vnet_bridge, [None, None, []])[2]
+            for slave in slave_names:
+                netdevs.pop(slave, None)
 
-            if ((bridge_name in vnet_bridges) or
-                (br.get_name() in vnet_bridges) or
-                (br.get_name() in vnet_taps) or
-                (br.get_name() in [v + "-nic" for v in vnet_bridges]) or
-                (br.get_name() in skip_ifaces)):
+        for name, is_bridge, slave_names in netdevs.values():
+            if ((name in vnet_taps) or
+                (name in [v + "-nic" for v in vnet_bridges]) or
+                (name in skip_ifaces)):
                 # Don't list this, as it is basically duplicating
                 # virtual net info
                 continue
 
-            if br.is_shared():
-                sensitive = True
-                if br.get_bridge():
-                    hasShared = True
-                    brlabel = "(%s)" % self._pretty_network_desc(nettype,
-                                                                 bridge_name)
+            sensitive = True
+            source_name = name
+
+            label = _("Host device %s") % (name)
+            if is_bridge:
+                nettype = virtinst.VirtualNetworkInterface.TYPE_BRIDGE
+                if slave_names:
+                    extra = ("(%s)" % _("Host device %s") % slave_names[0])
+                    can_default = True
                 else:
-                    bridge_name = name
-                    brlabel = _("(Empty bridge)")
-            else:
-                if self.conn.check_support(
+                    extra = _("(Empty bridge)")
+                label = _("Bridge %s %s") % (name, extra)
+
+            elif self.conn.check_support(
                     self.conn.SUPPORT_CONN_DIRECT_INTERFACE):
-                    sensitive = True
-                    nettype = virtinst.VirtualNetworkInterface.TYPE_DIRECT
-                    bridge_name = name
-                    brlabel = ": %s" % _("macvtap")
-                else:
-                    sensitive = False
-                    brlabel = "(%s)" % _("Not bridged")
+                nettype = virtinst.VirtualNetworkInterface.TYPE_DIRECT
+                label += (": %s" % _("macvtap"))
 
-            label = _("Host device %s %s") % (br.get_name(), brlabel)
-            if hasShared and not brIdxLabel:
-                brIdxLabel = label
-
-            row = self._build_source_row(
-                nettype, bridge_name, label, sensitive, True,
-                key=br.get_name())
-
-            if sensitive:
-                bridge_dict[label] = row
             else:
-                iface_dict[label] = row
+                nettype = None
+                sensitive = False
+                source_name = None
+                label += (" (%s)" % _("Not bridged"))
 
-        return bridge_dict, iface_dict, brIdxLabel
+            if can_default and not default_label:
+                default_label = label
+
+            rows.append(self._build_source_row(
+                nettype, source_name, label, sensitive, True,
+                key=name))
+
+        return rows, default_label
 
     def _populate_network_list(self):
         net_list = self.widget("net-source")
@@ -246,22 +248,30 @@ class vmmNetworkList(vmmGObjectUI):
             net_list.set_active(0)
             return
 
-        (vnet_dict, vnet_bridges, netIdxLabel) = self._find_virtual_networks()
-        (bridge_dict, iface_dict, brIdxLabel) = self._find_physical_devices(
+        (vnets, vnet_bridges, default_net) = self._find_virtual_networks()
+        (iface_rows, default_bridge) = self._find_physical_devices(
             vnet_bridges)
 
-        for indict in [bridge_dict, vnet_dict, iface_dict]:
-            keylist = indict.keys()
-            keylist.sort()
-            rowlist = [indict[k] for k in keylist]
-            for row in rowlist:
+        # Sorting is:
+        # 1) Bridges
+        # 2) Virtual networks
+        # 3) direct/macvtap
+        # 4) Disabled list entries
+        # Each category sorted alphabetically
+        bridges = [row for row in iface_rows if row[0] == "bridge"]
+        direct = [row for row in iface_rows if row[0] == "direct"]
+        disabled = [row for row in iface_rows if row[0] is None]
+
+        for rows in [bridges, vnets, direct, disabled]:
+            rows.sort(key=lambda r: r[2])
+            for row in rows:
                 model.append(row)
 
         # If there is a bridge device, default to that
         # If not, use 'default' network
         # If not present, use first list entry
         # If list empty, use no network devices
-        label = brIdxLabel or netIdxLabel
+        label = default_bridge or default_net
 
         default = 0
         if not len(model):
@@ -394,8 +404,13 @@ class vmmNetworkList(vmmGObjectUI):
     def reset_state(self):
         self._populate_network_list()
 
+        net_err = None
+        if (not self.conn.is_nodedev_capable() or
+            not self.conn.is_interface_capable()):
+            net_err = _("Libvirt version does not support "
+                        "physical interface listing.")
+
         net_warn = self.widget("net-source-warn")
-        net_err = self.conn.netdev_error
         net_warn.set_visible(bool(net_err))
         net_warn.set_tooltip_text(net_err or "")
 
