@@ -139,7 +139,7 @@ def _convert_alloc_val(ignore, val):
         return int(round(val / 1024.0))
 
     elif val < 32:
-        # Assume GB
+        # Assume GiB
         return int(val * 1024)
 
     return int(val)

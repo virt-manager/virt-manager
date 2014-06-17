@@ -352,8 +352,8 @@ class XMLProperty(property):
             if xpath isn't specified.
         @param set_converter: optional function for converting the property
             value from the virtinst API to the guest XML. For example,
-            the Guest.memory API was once in MB, but the libvirt domain
-            memory API is in KB. So, if xpath is specified, on a 'get'
+            the Guest.memory API was once in MiB, but the libvirt domain
+            memory API is in KiB. So, if xpath is specified, on a 'get'
             operation we convert the XML value with int(val) / 1024.
         @param validate_cb: Called once when value is set, should
             raise a RuntimeError if the value is not proper.

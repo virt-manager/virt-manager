@@ -820,7 +820,7 @@ def add_disk_option(stog, editexample=False):
         editmsg += "\n--disk cache=  (unset cache)"
     stog.add_argument("--disk", action="append",
         help=_("Specify storage with various options. Ex.\n"
-               "--disk size=10 (new 10GB image in default location)\n"
+               "--disk size=10 (new 10GiB image in default location)\n"
                "--disk path=/my/existing/disk,cache=none\n"
                "--disk device=cdrom,bus=scsi\n"
                "--disk=?") + editmsg)
