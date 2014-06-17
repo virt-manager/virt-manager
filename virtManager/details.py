@@ -52,6 +52,7 @@ EDIT_DESC,
 EDIT_IDMAP,
 
 EDIT_VCPUS,
+EDIT_MAXVCPUS,
 EDIT_CPUSET,
 EDIT_CPU,
 EDIT_TOPOLOGY,
@@ -102,7 +103,7 @@ EDIT_FS,
 
 EDIT_HOSTDEV_ROMBAR,
 
-) = range(1, 43)
+) = range(1, 44)
 
 
 # Columns in hw list model
@@ -1750,7 +1751,11 @@ class vmmDetails(vmmGObjectUI):
     def config_maxvcpus_changed(self, ignore):
         if self.widget("config-maxvcpus").get_sensitive():
             self.config_cpu_topology_changed()
-        self.enable_apply(EDIT_VCPUS)
+
+        # As this callback can be triggered by other events, set EDIT_MAXVCPUS
+        # only when the value is changed.
+        if self.config_get_maxvcpus() != self.vm.vcpu_max_count():
+            self.enable_apply(EDIT_MAXVCPUS)
 
     def on_cpu_copy_host_clicked(self, src):
         uiutil.set_grid_row_visible(
@@ -2051,8 +2056,10 @@ class vmmDetails(vmmGObjectUI):
 
         if self.edited(EDIT_VCPUS):
             kwargs["vcpus"] = self.config_get_vcpus()
-            kwargs["maxvcpus"] = self.config_get_maxvcpus()
             hotplug_args["vcpus"] = kwargs["vcpus"]
+
+        if self.edited(EDIT_MAXVCPUS):
+            kwargs["maxvcpus"] = self.config_get_maxvcpus()
 
         if self.edited(EDIT_CPUSET):
             kwargs["cpuset"] = self.get_text("config-vcpupin")
