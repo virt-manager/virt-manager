@@ -2166,7 +2166,7 @@ class vmmDetails(vmmGObjectUI):
             kwargs["shareable"] = self.widget("disk-shareable").get_active()
 
         if self.edited(EDIT_DISK_REMOVABLE):
-            kwargs["removeable"] = bool(
+            kwargs["removable"] = bool(
                 self.widget("disk-removable").get_active())
 
         if self.edited(EDIT_DISK_CACHE):
