@@ -174,8 +174,8 @@ class vmmCreateNetwork(vmmGObjectUI):
         for nodedev in self.conn.get_nodedevs("net"):
             devnames.append(nodedev.name)
         for iface in self.conn.list_interfaces():
-            if iface.name not in devnames:
-                devnames.append(iface.name)
+            if iface.get_name() not in devnames:
+                devnames.append(iface.get_name())
 
         for name in devnames:
             fw_model.append([_("Physical device %s") % name, name])
