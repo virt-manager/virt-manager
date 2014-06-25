@@ -82,6 +82,58 @@ class _NetworkForward(XMLBuilder):
         return Network.pretty_forward_desc(self.mode, self.dev)
 
 
+class _NetworkBandwidth(XMLBuilder):
+    _XML_ROOT_NAME = "bandwidth"
+
+    inbound_average = XMLProperty("./inbound/@average")
+    inbound_peak = XMLProperty("./inbound/@peak")
+    inbound_burst = XMLProperty("./inbound/@burst")
+    inbound_floor = XMLProperty("./inbound/@floor")
+
+    outbound_average = XMLProperty("./outbound/@average")
+    outbound_peak = XMLProperty("./outbound/@peak")
+    outbound_burst = XMLProperty("./outbound/@burst")
+
+    def is_inbound(self):
+        return bool(self.inbound_average or self.inbound_peak
+                    or self.inbound_burst or self.inbound_floor)
+
+    def is_outbound(self):
+        return bool(self.outbound_average or self.outbound_peak
+                    or self.outbound_burst)
+
+    def pretty_desc(self, inbound=True, outbound=True):
+        items_in = [(self.inbound_average, _("Average"), "KiB/s"),
+                    (self.inbound_peak, _("Peak"), "KiB"),
+                    (self.inbound_burst, _("Burst"), "KiB/s"),
+                    (self.inbound_floor, _("Floor"), "KiB/s")]
+
+        items_out = [(self.outbound_average, _("Average"), "KiB/s"),
+                     (self.outbound_peak, _("Peak"), "KiB"),
+                     (self.outbound_burst, _("Burst"), "KiB/s")]
+
+        def stringify_items(items):
+            return ", ".join(["%s: %s %s" % (desc, val, unit)
+                              for val, desc, unit in items if val])
+
+        ret = ""
+        show_name = inbound and outbound
+
+        if inbound:
+            if show_name:
+                ret += _("Inbound: ")
+            ret += stringify_items(items_in)
+
+        if outbound:
+            if ret:
+                ret += "\n"
+            if show_name:
+                ret += _("Outbound: ")
+            ret += stringify_items(items_out)
+
+        return ret
+
+
 class _NetworkPortgroup(XMLBuilder):
     _XML_ROOT_NAME = "portgroup"
 
@@ -161,7 +213,7 @@ class Network(XMLBuilder):
     _XML_ROOT_NAME = "network"
     _XML_PROP_ORDER = ["ipv6", "name", "uuid", "forward",
                        "bridge", "stp", "delay", "domain_name",
-                       "macaddr", "ips", "routes"]
+                       "macaddr", "ips", "routes", "bandwidth"]
 
     ipv6 = XMLProperty("./@ipv6", is_yesno=True)
     name = XMLProperty("./name", validate_cb=_validate_name)
@@ -182,6 +234,7 @@ class Network(XMLBuilder):
     portgroups = XMLChildProperty(_NetworkPortgroup)
     ips = XMLChildProperty(_NetworkIP)
     routes = XMLChildProperty(_NetworkRoute)
+    bandwidth = XMLChildProperty(_NetworkBandwidth, is_single=True)
 
     def add_ip(self):
         ip = _NetworkIP(self.conn)

@@ -1143,6 +1143,15 @@ class XMLParseTest(unittest.TestCase):
         check("mode", "nat", "route")
         check("dev", None, "eth22")
 
+        check = self._make_checker(net.bandwidth)
+        check("inbound_average", "1000", "3000")
+        check("inbound_peak", "5000", "4000")
+        check("inbound_burst", "5120", "5220")
+        check("inbound_floor", None, None)
+        check("outbound_average", "1000", "2000")
+        check("outbound_peak", "5000", "3000")
+        check("outbound_burst", "5120", "5120")
+
         self.assertEquals(len(net.portgroups), 2)
         check = self._make_checker(net.portgroups[0])
         check("name", "engineering", "foo")
