@@ -757,7 +757,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         try:
             net = self._build_xmlobj()
         except Exception, e:
-            self.err.show_erro(_("Error generating network xml: %s" % str(e)))
+            self.err.show_err(_("Error generating network xml: %s" % str(e)))
             return
 
         self.topwin.set_sensitive(False)
