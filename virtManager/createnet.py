@@ -754,6 +754,9 @@ class vmmCreateNetwork(vmmGObjectUI):
         net.install()
 
     def finish(self, ignore):
+        if not self.validate(PAGE_MAX):
+            return
+
         try:
             net = self._build_xmlobj()
         except Exception, e:
