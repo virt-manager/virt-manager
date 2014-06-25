@@ -43,10 +43,11 @@ INTERFACE_PAGE_ERROR = 1
 
 (EDIT_NET_NAME,
 EDIT_NET_AUTOSTART,
+EDIT_NET_QOS,
 
 EDIT_POOL_NAME,
 EDIT_POOL_AUTOSTART,
-) = range(4)
+) = range(5)
 
 
 class vmmHost(vmmGObjectUI):
@@ -127,6 +128,22 @@ class vmmHost(vmmGObjectUI):
             "on_interface_list_changed": self.interface_selected,
 
             "on_config_autoconnect_toggled": self.toggle_autoconnect,
+
+            "on_qos_inbound_average_changed":  (lambda *x:
+                self.enable_net_apply(x, EDIT_NET_QOS)),
+            "on_qos_inbound_peak_changed":  (lambda *x:
+                self.enable_net_apply(x, EDIT_NET_QOS)),
+            "on_qos_inbound_burst_changed":  (lambda *x:
+                self.enable_net_apply(x, EDIT_NET_QOS)),
+            "on_qos_outbound_average_changed":  (lambda *x:
+                self.enable_net_apply(x, EDIT_NET_QOS)),
+            "on_qos_outbound_peak_changed":  (lambda *x:
+                self.enable_net_apply(x, EDIT_NET_QOS)),
+            "on_qos_outbound_burst_changed":  (lambda *x:
+                self.enable_net_apply(x, EDIT_NET_QOS)),
+
+            "on_net_qos_inbound_enable_toggled": self.change_qos_in_enable,
+            "on_net_qos_outbound_enable_toggled": self.change_qos_out_enable,
         })
 
         self.repopulate_networks()
@@ -481,6 +498,33 @@ class vmmHost(vmmGObjectUI):
             if EDIT_NET_NAME in self.active_edits:
                 net.define_name(self.widget("net-name").get_text())
                 self.repopulate_networks()
+            if EDIT_NET_QOS in self.active_edits:
+                in_qos = self.widget("net-qos-inbound-enable").get_active()
+                out_qos = self.widget("net-qos-outbound-enable").get_active()
+
+                def get_value(name, enabled):
+                    if not enabled:
+                        return None
+                    return self.widget(name).get_text() or None
+
+                args = {}
+                args['inbound_average'] = get_value("qos-inbound-average", in_qos)
+                args['inbound_peak'] = get_value("qos-inbound-peak", in_qos)
+                args['inbound_burst'] = get_value("qos-inbound-burst", in_qos)
+
+                args['outbound_average'] = get_value("qos-outbound-average", out_qos)
+                args['outbound_peak'] = get_value("qos-outbound-peak", out_qos)
+                args['outbound_burst'] = get_value("qos-outbound-burst", out_qos)
+
+                if net.set_qos(**args):
+                    self.err.show_err(
+                        _("Network could not be updated"),
+                        text2=_("This change will take effect when the "
+                                "network is restarted"),
+                        buttons=Gtk.ButtonsType.OK,
+                        dialog_type=Gtk.MessageType.INFO)
+
+
         except Exception, e:
             self.err.show_err(_("Error changing network settings: %s") % str(e))
             return
@@ -615,6 +659,37 @@ class vmmHost(vmmGObjectUI):
             routevia = routeaddr + ", gateway=" + routevia
             self.widget("net-ipv6-route").set_text(routevia or "")
 
+    def update_qos_widgets(self):
+        enabled = self.widget("net-qos-inbound-enable").get_active()
+        self.widget("net-qos-inbound-grid").set_visible(enabled)
+
+        enabled = self.widget("net-qos-outbound-enable").get_active()
+        self.widget("net-qos-outbound-grid").set_visible(enabled)
+
+    def change_qos_in_enable(self, ignore):
+        self.enable_net_apply(EDIT_NET_QOS)
+        self.update_qos_widgets()
+
+    def change_qos_out_enable(self, ignore):
+        self.enable_net_apply(EDIT_NET_QOS)
+        self.update_qos_widgets()
+
+    def _populate_qos_state(self, net):
+        qos = net.get_qos()
+
+        self.widget("net-qos-inbound-enable").set_active(qos.is_inbound())
+        self.widget("net-qos-outbound-enable").set_active(qos.is_outbound())
+
+        self.update_qos_widgets()
+
+        self.widget("qos-inbound-average").set_text(qos.inbound_average or "")
+        self.widget("qos-inbound-peak").set_text(qos.inbound_peak or "")
+        self.widget("qos-inbound-burst").set_text(qos.inbound_burst or "")
+
+        self.widget("qos-outbound-average").set_text(qos.outbound_average or "")
+        self.widget("qos-outbound-peak").set_text(qos.outbound_peak or "")
+        self.widget("qos-outbound-burst").set_text(qos.outbound_burst or "")
+
     def populate_net_state(self, net):
         active = net.is_active()
 
@@ -644,6 +719,7 @@ class vmmHost(vmmGObjectUI):
 
         self._populate_net_ipv4_state(net)
         self._populate_net_ipv6_state(net)
+        self._populate_qos_state(net)
 
 
     def reset_net_state(self):

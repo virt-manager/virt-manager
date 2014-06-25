@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006, 2013 Red Hat, Inc.
+# Copyright (C) 2006, 2013-2014 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -121,6 +121,17 @@ class vmmNetwork(vmmLibvirtObject):
     def tick(self):
         self.force_update_status()
 
+    def set_qos(self, **kwargs):
+        q = self.get_qos()
+        for key, val in kwargs.items():
+            setattr(q, key, val)
+
+        xml = self.get_xml()
+
+        self._redefine_xml(xml)
+        return self.is_active()
+
+
     def define_name(self, newname):
         return self._define_name_helper("network",
                                         self.conn.rename_network,
@@ -143,6 +154,8 @@ class vmmNetwork(vmmLibvirtObject):
         return self.get_xmlobj().forward.mode
     def pretty_forward_mode(self):
         return self.get_xmlobj().forward.pretty_desc()
+    def get_qos(self):
+        return self.get_xmlobj().bandwidth
 
     def can_pxe(self):
         return self.get_xmlobj().can_pxe()
