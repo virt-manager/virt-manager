@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006, 2013 Red Hat, Inc.
+# Copyright (C) 2006, 2013-2014 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -804,6 +804,8 @@ class vmmEngine(vmmGObject):
 
         self.connect("conn-added", obj.add_conn)
         self.connect("conn-removed", obj.remove_conn)
+
+        obj.set_initial_selection(self.uri_at_startup)
 
         self.windowManager = obj
         return self.windowManager

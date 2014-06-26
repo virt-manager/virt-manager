@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2008, 2013 Red Hat, Inc.
+# Copyright (C) 2006-2008, 2013-2014 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -191,12 +191,6 @@ class vmmManager(vmmGObjectUI):
         self.enable_polling(COL_DISK)
         self.enable_polling(COL_NETWORK)
         self.enable_polling(COL_MEM)
-
-        # Select first list entry
-        vmlist = self.widget("vm-list")
-        if len(vmlist.get_model()) != 0:
-            vmlist.get_selection().select_iter(
-                vmlist.get_model().get_iter_first())
 
         # Queue up the default connection detector
         self.idle_emit("add-default-conn")
@@ -720,7 +714,6 @@ class vmmManager(vmmGObjectUI):
         # add the connection to the treeModel
         vmlist = self.widget("vm-list")
         row = self._append_conn(vmlist.get_model(), conn)
-        vmlist.get_selection().select_iter(row)
 
         # Try to make sure that 2 row descriptions don't collide
         connrows = []
@@ -826,6 +819,29 @@ class vmmManager(vmmGObjectUI):
         row[ROW_INSPECTION_OS_ICON] = new_icon
 
         self.vm_row_updated(vm)
+
+    def set_initial_selection(self, uri):
+        vmlist = self.widget("vm-list")
+        model = vmlist.get_model()
+        it = model.get_iter_first()
+        selected = None
+        while it:
+            key = model.get_value(it, ROW_HANDLE)
+
+            if key.get_uri() == uri:
+                vmlist.get_selection().select_iter(it)
+                return
+
+            if not selected:
+                vmlist.get_selection().select_iter(it)
+                selected = key
+            elif key.get_autoconnect() and not selected.get_autoconnect():
+                vmlist.get_selection().select_iter(it)
+                selected = key
+                if not uri:
+                    return
+
+            it = model.iter_next(it)
 
     def conn_state_changed(self, conn, newname=None):
         row = self.rows[conn.get_uri()]
