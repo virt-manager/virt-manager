@@ -704,6 +704,8 @@ class vmmManager(vmmGObjectUI):
         return _iter
 
     def add_conn(self, engine_ignore, conn):
+        # Called from engine.py signal conn-added
+
         # Make sure error page isn't showing
         self.widget("vm-notebook").set_current_page(0)
 
@@ -739,6 +741,8 @@ class vmmManager(vmmGObjectUI):
             self.conn_state_changed(conn, newname=newname)
 
     def remove_conn(self, engine_ignore, uri):
+        # Called from engine.py signal conn-removed
+
         model = self.widget("vm-list").get_model()
         parent = self.rows[uri].iter
 
