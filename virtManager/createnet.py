@@ -37,6 +37,8 @@ PAGE_IPV4,
 PAGE_IPV6,
 PAGE_MISC) = range(4)
 
+PAGE_MAX = PAGE_MISC
+
 _green = Gdk.Color.parse("#c0ffc0")[1]
 _red = Gdk.Color.parse("#ffc0c0")[1]
 _black = Gdk.Color.parse("#000000")[1]
