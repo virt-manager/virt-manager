@@ -1451,7 +1451,7 @@ class vmmCreate(vmmGObjectUI):
 
     def validate_name_page(self):
         # We just set this here because it's needed soon after for distro
-        # detction. But the 'real' self.guest is created in validate_install,
+        # detection. But the 'real' self.guest is created in validate_install,
         # and it just uses build_guest, so don't ever add any other guest
         # altering here.
         self.guest = self.build_guest(None)
