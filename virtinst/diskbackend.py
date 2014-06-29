@@ -383,7 +383,7 @@ class StorageCreator(_StorageBase):
             sparse = True
             fd = None
             try:
-                fd = os.open(self._path, os.O_WRONLY | os.O_CREAT)
+                fd = os.open(self._path, os.O_WRONLY | os.O_CREAT, 0640)
                 os.ftruncate(fd, size_bytes)
             finally:
                 if fd:
@@ -401,7 +401,7 @@ class StorageCreator(_StorageBase):
         try:
             try:
                 src_fd = os.open(self._clone_path, os.O_RDONLY)
-                dst_fd = os.open(self._path, os.O_WRONLY | os.O_CREAT)
+                dst_fd = os.open(self._path, os.O_WRONLY | os.O_CREAT, 0640)
 
                 i = 0
                 while 1:
