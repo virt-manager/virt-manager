@@ -323,7 +323,7 @@ class StoragePool(_StorageObject):
         if not self.supports_property("source_name"):
             return None
 
-        # If a source name isn't explictly set, try to determine it from
+        # If a source name isn't explicitly set, try to determine it from
         # existing parameters
         srcname = self.name
 
