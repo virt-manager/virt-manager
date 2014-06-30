@@ -298,7 +298,7 @@ def _distroFromTreeinfo(fetcher, arch, vmtype=None):
     ob = dclass(fetcher, arch, vmtype)
     ob.treeinfo = treeinfo
 
-    # Explictly call this, so we populate variant info
+    # Explicitly call this, so we populate variant info
     ob.isValidStore()
 
     return ob
