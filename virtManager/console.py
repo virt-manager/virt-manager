@@ -570,6 +570,7 @@ class SpiceViewer(Viewer):
         self.display = None
         self.audio = None
         self.main_channel = None
+        self._main_channel_hids = []
         self.display_channel = None
         self.usbdev_manager = None
 
@@ -634,6 +635,11 @@ class SpiceViewer(Viewer):
             self.display.destroy()
         self.display = None
         self.display_channel = None
+
+        for i in self._main_channel_hids:
+            self.main_channel.handler_disconnect(i)
+        self._main_channel_hids = []
+
         self.main_channel = None
         self.usbdev_manager = None
 
@@ -680,10 +686,12 @@ class SpiceViewer(Viewer):
             if self.console.tunnels:
                 self.console.tunnels.unlock()
             self.main_channel = channel
-            self.main_channel.connect_after("channel-event",
+            hid = self.main_channel.connect_after("channel-event",
                 self._main_channel_event_cb)
-            self.main_channel.connect_after("notify::agent-connected",
+            self._main_channel_hids.append(hid)
+            hid = self.main_channel.connect_after("notify::agent-connected",
                 self._agent_connected_cb)
+            self._main_channel_hids.append(hid)
 
         elif (type(channel) == SpiceClientGLib.DisplayChannel and
             not self.display):
