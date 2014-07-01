@@ -1030,6 +1030,7 @@ class vmmConnection(vmmGObject):
             logging.debug("%s capabilities:\n%s",
                           self.get_uri(), self.caps.xml)
             self._add_conn_events()
+            self._backend.setKeepAlive(20, 1)
             self.schedule_priority_tick(stats_update=True,
                                         pollvm=True, pollnet=True,
                                         pollpool=True, polliface=True,
