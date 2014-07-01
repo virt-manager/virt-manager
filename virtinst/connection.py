@@ -1,5 +1,5 @@
 #
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2013, 2014 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -200,6 +200,10 @@ class VirtualConnection(object):
         if self.cache_object_fetch:
             self._fetch_cache[key] = ret
         return ret
+
+    def set_keep_alive(self, interval, count):
+        if hasattr(self._libvirtconn, "setKeepAlive"):
+            self._libvirtconn.setKeepAlive(interval, count)
 
     def fetch_all_pools(self):
         """
