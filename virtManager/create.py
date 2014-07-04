@@ -1197,7 +1197,8 @@ class vmmCreate(vmmGObjectUI):
                 return
 
         self.widget("install-os-version-entry").set_text("")
-        self.widget("install-os-version-entry").grab_focus()
+        if self.widget("install-os-version").get_visible():
+            self.widget("install-os-version-entry").grab_focus()
 
     def change_os_version(self, box):
         show_all = uiutil.get_list_selection(box, 3)
