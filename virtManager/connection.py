@@ -1027,7 +1027,16 @@ class vmmConnection(vmmGObject):
                 logging.debug("%s capabilities:\n%s",
                               self.get_uri(), self.caps.xml)
                 self._add_conn_events()
-                self._backend.setKeepAlive(20, 1)
+
+                try:
+                    self._backend.setKeepAlive(20, 1)
+                except Exception, e:
+                    if (type(e) is not AttributeError and
+                        not util.is_error_nosupport(e)):
+                        raise
+                    logging.debug("Connection doesn't support KeepAlive, "
+                        "skipping")
+
                 self.schedule_priority_tick(stats_update=True,
                                             pollvm=True, pollnet=True,
                                             pollpool=True, polliface=True,
