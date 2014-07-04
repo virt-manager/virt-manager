@@ -953,11 +953,8 @@ class vmmConnection(vmmGObject):
     def _do_creds_password(self, creds):
         try:
             return connectauth.creds_dialog(creds)
-        except Exception, e:
-            # Detailed error message, in English so it can be Googled.
-            self._connectError = (
-                "Failed to get credentials for '%s':\n%s\n%s" %
-                (self.get_uri(), str(e), "".join(traceback.format_exc())))
+        except:
+            logging.debug("Launching creds dialog failed", exc_info=True)
             return -1
 
     def _open_thread(self):
