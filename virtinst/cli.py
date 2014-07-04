@@ -615,7 +615,7 @@ def add_metadata_option(grp):
 def add_memory_option(grp, backcompat=False):
     grp.add_argument("--memory",
         help=_("Configure guest memory allocation. Ex:\n"
-               "--memory 1024 (in megabytes)\n"
+               "--memory 1024 (in MiB)\n"
                "--memory 512,maxmemory=1024"))
     if backcompat:
         grp.add_argument("-r", "--ram", type=int, dest="oldmemory",
