@@ -641,7 +641,7 @@ class vmmManager(vmmGObjectUI):
 
     def _build_row(self, conn, vm):
         if conn:
-            name = conn.get_pretty_desc_inactive(False)
+            name = conn.get_pretty_desc(shorthost=False)
             markup = self._build_conn_markup(conn, name)
             status = ("<span size='smaller'>%s</span>" %
                       conn.get_state_text())
@@ -697,6 +697,40 @@ class vmmManager(vmmGObjectUI):
         self.rows[conn.get_uri()] = model[path]
         return _iter
 
+    def _ensure_conn_descs_dont_collide(self):
+        # By default we only show hostname + hypervisor in the conn label.
+        # So if we have two URIs like qemu+ssh://host and qemu+tcp://host,
+        # we want to add the transport in the description to differentiate
+        connrows = [row for row in self.rows.values() if row[ROW_IS_CONN]]
+        for row in connrows:
+            conn = row[ROW_HANDLE]
+            connsplit = util.uri_split(conn.get_uri())
+            scheme = connsplit[0]
+
+            show_transport = False
+            show_user = False
+
+            for checkrow in connrows:
+                checkconn = checkrow[ROW_HANDLE]
+                if conn is checkconn:
+                    continue
+                checkconnsplit = util.uri_split(checkconn.get_uri())
+                checkscheme = checkconnsplit[0]
+
+                if ((scheme.split("+")[0] == checkscheme.split("+")[0]) and
+                    connsplit[2] == checkconnsplit[2] and
+                    connsplit[3] == checkconnsplit[3]):
+                    show_transport = True
+                    if ("+" in scheme and "+" in checkscheme and
+                        scheme.split("+")[1] == checkscheme.split("+")[1]):
+                        show_user = True
+
+            newname = conn.get_pretty_desc(
+                shorthost=False, show_transport=show_transport,
+                show_user=show_user)
+            if newname != row[ROW_SORT_KEY]:
+                self.conn_state_changed(conn, newname=newname)
+
     def add_conn(self, engine_ignore, conn):
         # Called from engine.py signal conn-added
 
@@ -711,27 +745,9 @@ class vmmManager(vmmGObjectUI):
         conn.connect("resources-sampled", self.conn_row_updated)
         conn.connect("state-changed", self.conn_state_changed)
 
-        # add the connection to the treeModel
         vmlist = self.widget("vm-list")
-        row = self._append_conn(vmlist.get_model(), conn)
-
-        # Try to make sure that 2 row descriptions don't collide
-        connrows = []
-        descs = []
-        for row in self.rows.values():
-            if row[ROW_IS_CONN]:
-                connrows.append(row)
-        for row in connrows:
-            descs.append(row[ROW_SORT_KEY])
-
-        for row in connrows:
-            conn = row[ROW_HANDLE]
-            name = row[ROW_SORT_KEY]
-            if descs.count(name) <= 1:
-                continue
-
-            newname = conn.get_pretty_desc_inactive(False, True)
-            self.conn_state_changed(conn, newname=newname)
+        self._append_conn(vmlist.get_model(), conn)
+        self._ensure_conn_descs_dont_collide()
 
     def remove_conn(self, engine_ignore, uri):
         # Called from engine.py signal conn-removed

@@ -215,7 +215,7 @@ class vmmSystray(vmmGObject):
         if conn.get_uri() in self.conn_menuitems:
             return
 
-        menu_item = Gtk.MenuItem.new_with_label(conn.get_pretty_desc_inactive())
+        menu_item = Gtk.MenuItem.new_with_label(conn.get_pretty_desc())
         menu_item.show()
         vm_submenu = Gtk.Menu()
         vm_submenu.show()

@@ -354,7 +354,8 @@ class vmmConnection(vmmGObject):
     # Connection pretty print routines #
     ####################################
 
-    def _get_pretty_desc(self, active, shorthost, show_trans):
+    def get_pretty_desc(self, shorthost=True, show_transport=False,
+        show_user=False):
         def match_whole_string(orig, reg):
             match = re.match(reg, orig)
             if not match:
@@ -383,6 +384,11 @@ class vmmConnection(vmmGObject):
             hostname = hostname.split(":")[0]
 
         if hostname:
+            if show_user and username:
+                hostname = username + "@" + hostname
+            if port:
+                hostname += ":" + port
+
             if shorthost and not is_ip_addr(hostname):
                 rest = hostname.split(".")[0]
             else:
@@ -410,16 +416,8 @@ class vmmConnection(vmmGObject):
         if scheme in pretty_map:
             hv = pretty_map[scheme]
 
-        if hv == "QEMU" and active and self.caps.is_kvm_available():
-            hv += "/KVM"
-
-        if show_trans:
-            if transport:
-                hv += "+" + transport
-            if username:
-                hostname = username + "@" + hostname
-            if port:
-                hostname += ":" + port
+        if show_transport and transport:
+            hv += "+" + transport
 
         if path and path != "/system" and path != "/":
             if path == "/session":
@@ -431,12 +429,6 @@ class vmmConnection(vmmGObject):
             hv = self._backend.fake_name()
 
         return "%s (%s)" % (rest, hv)
-
-    def get_pretty_desc_inactive(self, shorthost=True, transport=False):
-        return self._get_pretty_desc(False, shorthost, transport)
-
-    def get_pretty_desc_active(self, shorthost=True, transport=False):
-        return self._get_pretty_desc(True, shorthost, transport)
 
 
     #######################

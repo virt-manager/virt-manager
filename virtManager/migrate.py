@@ -397,7 +397,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         origuri = self.conn.get_uri()
 
         can_migrate = False
-        desc = destconn.get_pretty_desc_inactive()
+        desc = destconn.get_pretty_desc()
         reason = ""
         desturi = destconn.get_uri()
 
