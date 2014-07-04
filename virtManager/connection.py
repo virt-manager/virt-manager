@@ -1016,23 +1016,27 @@ class vmmConnection(vmmGObject):
     def _open_notify(self):
         logging.debug("Notifying open result")
 
-        self.idle_emit("state-changed")
-
-        if self.state == self.STATE_ACTIVE:
-            logging.debug("libvirt version=%s",
-                          self._backend.local_libvirt_version())
-            logging.debug("daemon version=%s",
-                          self._backend.daemon_version())
-            logging.debug("conn version=%s", self._backend.conn_version())
-            logging.debug("%s capabilities:\n%s",
-                          self.get_uri(), self.caps.xml)
-            self._add_conn_events()
-            self._backend.setKeepAlive(20, 1)
-            self.schedule_priority_tick(stats_update=True,
-                                        pollvm=True, pollnet=True,
-                                        pollpool=True, polliface=True,
-                                        pollnodedev=True, pollmedia=True,
-                                        force=True)
+        try:
+            self.idle_emit("state-changed")
+            if self.state == self.STATE_ACTIVE:
+                logging.debug("libvirt version=%s",
+                              self._backend.local_libvirt_version())
+                logging.debug("daemon version=%s",
+                              self._backend.daemon_version())
+                logging.debug("conn version=%s", self._backend.conn_version())
+                logging.debug("%s capabilities:\n%s",
+                              self.get_uri(), self.caps.xml)
+                self._add_conn_events()
+                self._backend.setKeepAlive(20, 1)
+                self.schedule_priority_tick(stats_update=True,
+                                            pollvm=True, pollnet=True,
+                                            pollpool=True, polliface=True,
+                                            pollnodedev=True, pollmedia=True,
+                                            force=True)
+        except Exception, e:
+            self.close()
+            self._connectError = (str(e),
+                "".join(traceback.format_exc()), False)
 
         if self.state == self.STATE_DISCONNECTED:
             if self._connectError:
