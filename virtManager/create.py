@@ -300,6 +300,7 @@ class vmmCreate(vmmGObjectUI):
         entry.set_completion(completion)
         completion.set_text_column(1)
         completion.set_inline_completion(True)
+        completion.set_model(os_variant_model)
 
         # Archtecture
         # [value, label]
@@ -860,9 +861,6 @@ class vmmCreate(vmmGObjectUI):
         self._add_os_row(model, sep=True)
         # Add action option
         self._add_os_row(model, label=_("Show all OS options"), action=True)
-
-        completion = self.widget("install-os-version-entry").get_completion()
-        completion.set_model(model)
 
     def populate_media_model(self, model, urls):
         model.clear()
