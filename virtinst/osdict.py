@@ -151,6 +151,7 @@ class _OSVariant(object):
     @xen_disable_acpi: If True, disable acpi/apic for this OS if on old xen.
         This corresponds with the SUPPORT_CONN_CAN_DEFAULT_ACPI check
     @qemu_ga: If True, this distro has qemu_ga available by default
+    @hyperv_features: If True, this distro prefers Hyper-V enlightenments
 
     The rest of the parameters are about setting device/guest defaults
     based on the OS. They should be self explanatory. See guest.py for
@@ -166,7 +167,7 @@ class _OSVariant(object):
                  videomodel=_SENTINEL, virtionet=_SENTINEL,
                  virtiodisk=_SENTINEL, virtiommio=_SENTINEL,
                  virtioconsole=_SENTINEL, xen_disable_acpi=_SENTINEL,
-                 qemu_ga=_SENTINEL):
+                 qemu_ga=_SENTINEL, hyperv_features=_SENTINEL):
         if is_type:
             if parent != _SENTINEL:
                 raise RuntimeError("OS types must not specify parent")
@@ -229,6 +230,7 @@ class _OSVariant(object):
         self.virtiommio = _get_default("virtiommio", virtiommio)
         self.virtioconsole = _get_default("virtioconsole", virtioconsole)
         self.qemu_ga = _get_default("qemu_ga", qemu_ga)
+        self.hyperv_features = _get_default("hyperv_features", hyperv_features)
 
     def get_recommended_resources(self, arch):
         ignore1 = arch
@@ -396,6 +398,11 @@ class _OsVariantOsInfo(_OSVariant):
             return int(self._os.get_version()) >= 18 or _SENTINEL
         return _SENTINEL
 
+    def _is_hyperv_features(self):
+        if _OsVariantOsInfo.is_windows(self._os):
+            return True
+        return _SENTINEL
+
     def _get_typename(self):
         if self._os.get_family() in ['linux']:
             return "linux"
@@ -467,6 +474,7 @@ class _OsVariantOsInfo(_OSVariant):
         xen_disable_acpi = self._get_xen_disable_acpi()
         virtiommio = self._is_virtiommio()
         qemu_ga = self._is_qemu_ga()
+        hyperv_features = self._is_hyperv_features()
         virtioconsole = lambda: self._is_virtioconsole()
         netmodel = lambda: self._get_netmodel()
         videomodel = lambda: self._get_videomodel()
@@ -483,7 +491,8 @@ class _OsVariantOsInfo(_OSVariant):
                 inputtype=inputtype, inputbus=inputbus, videomodel=videomodel,
                 virtionet=virtionet, virtiodisk=virtiodisk,
                 virtiommio=virtiommio, virtioconsole=virtioconsole,
-                xen_disable_acpi=xen_disable_acpi, qemu_ga=qemu_ga)
+                xen_disable_acpi=xen_disable_acpi, qemu_ga=qemu_ga,
+                hyperv_features=hyperv_features)
 
     def get_recommended_resources(self, arch):
         ret = {}

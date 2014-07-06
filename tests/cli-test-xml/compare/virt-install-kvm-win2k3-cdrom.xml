@@ -13,6 +13,11 @@
     <acpi/>
     <apic/>
     <pae/>
+    <hyperv>
+      <relaxed state="on"/>
+      <vapic state="on"/>
+      <spinlocks state="on" retries="8191"/>
+    </hyperv>
   </features>
   <cpu mode="custom" match="exact">
     <model>core2duo</model>
@@ -21,6 +26,7 @@
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
     <timer name="hpet" present="no"/>
+    <timer name="hypervclock" present="yes"/>
   </clock>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>destroy</on_reboot>
@@ -73,6 +79,11 @@
     <acpi/>
     <apic/>
     <pae/>
+    <hyperv>
+      <relaxed state="on"/>
+      <vapic state="on"/>
+      <spinlocks state="on" retries="8191"/>
+    </hyperv>
   </features>
   <cpu mode="custom" match="exact">
     <model>core2duo</model>
@@ -81,6 +92,7 @@
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
     <timer name="hpet" present="no"/>
+    <timer name="hypervclock" present="yes"/>
   </clock>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>destroy</on_reboot>
@@ -133,6 +145,11 @@
     <acpi/>
     <apic/>
     <pae/>
+    <hyperv>
+      <relaxed state="on"/>
+      <vapic state="on"/>
+      <spinlocks state="on" retries="8191"/>
+    </hyperv>
   </features>
   <cpu mode="custom" match="exact">
     <model>core2duo</model>
@@ -141,6 +158,7 @@
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
     <timer name="hpet" present="no"/>
+    <timer name="hypervclock" present="yes"/>
   </clock>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>restart</on_reboot>

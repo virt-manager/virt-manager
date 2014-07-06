@@ -697,6 +697,9 @@ class Guest(XMLBuilder):
         # pit: While it has no effect on windows, it doesn't hurt and
         #   is beneficial for linux
         #
+        # If libvirt/qemu supports it and using a windows VM, also
+        # specify hypervclock.
+        #
         # This is what has been recommended by the RH qemu guys :)
 
         rtc = self.clock.add_timer()
@@ -710,6 +713,12 @@ class Guest(XMLBuilder):
         hpet = self.clock.add_timer()
         hpet.name = "hpet"
         hpet.present = False
+
+        if (self._lookup_osdict_key("hyperv_features", False) and
+            self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK)):
+            hyperv = self.clock.add_timer()
+            hyperv.name = "hypervclock"
+            hyperv.present = True
 
     def _set_emulator_defaults(self):
         if self.os.is_xenpv():
@@ -765,6 +774,17 @@ class Guest(XMLBuilder):
             self.features.apic = self._lookup_osdict_key("apic", default)
         if self.features.pae == "default":
             self.features.pae = self.conn.caps.support_pae()
+
+        if (self._lookup_osdict_key("hyperv_features", False) and
+            self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_VAPIC)):
+            if self.features.hyperv_relaxed is None:
+                self.features.hyperv_relaxed = True
+            if self.features.hyperv_vapic is None:
+                self.features.hyperv_vapic = True
+            if self.features.hyperv_spinlocks is None:
+                self.features.hyperv_spinlocks = True
+            if self.features.hyperv_spinlocks_retries is None:
+                self.features.hyperv_spinlocks_retries = 8191
 
     def _add_implied_controllers(self):
         for dev in self.get_all_devices():
