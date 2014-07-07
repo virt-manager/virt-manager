@@ -355,7 +355,11 @@ class vmmConnection(vmmGObject):
     ####################################
 
     def get_pretty_desc(self, shorthost=True, show_transport=False,
-        show_user=False):
+        show_user=False, show_kvm=False):
+        """
+        @show_kvm: Show hv as QEMU/KVM. Only works if connection is
+            active though
+        """
         def match_whole_string(orig, reg):
             match = re.match(reg, orig)
             if not match:
@@ -415,6 +419,9 @@ class vmmConnection(vmmGObject):
         hv = scheme
         if scheme in pretty_map:
             hv = pretty_map[scheme]
+
+        if hv == "QEMU" and show_kvm and self.caps.is_kvm_available():
+            hv += "/KVM"
 
         if show_transport and transport:
             hv += "+" + transport
