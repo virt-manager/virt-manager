@@ -763,7 +763,7 @@ class vmmCreate(vmmGObjectUI):
                 # Favor local connections over remote connections
                 default = len(model)
 
-            model.append([connobj.get_uri(), connobj.get_pretty_desc_active()])
+            model.append([connobj.get_uri(), connobj.get_pretty_desc()])
 
         no_conns = (len(model) == 0)
 
