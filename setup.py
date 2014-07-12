@@ -630,8 +630,6 @@ setup(
          glob.glob("virtcli/*.py") + glob.glob("virtcli/cli.cfg")),
         ("share/virt-manager/virtinst", glob.glob("virtinst/*.py")),
         ("share/virt-manager/virtconv", glob.glob("virtconv/*.py")),
-        ("share/virt-manager/virtconv/parsers",
-         glob.glob("virtconv/parsers/*.py")),
     ],
 
     cmdclass={
