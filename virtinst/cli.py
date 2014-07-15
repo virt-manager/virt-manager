@@ -779,29 +779,29 @@ def add_old_feature_options(optg):
 
 def add_guest_xml_options(geng):
     geng.add_argument("--security",
-                    help=_("Set domain security driver configuration."))
+        help=_("Set domain security driver configuration."))
     geng.add_argument("--numatune",
-                    help=_("Tune NUMA policy for the domain process."))
+        help=_("Tune NUMA policy for the domain process."))
     geng.add_argument("--memtune", action="append",
-                    help=_("Tune memory policy for the domain process."))
+        help=_("Tune memory policy for the domain process."))
     geng.add_argument("--blkiotune", action="append",
-                    help=_("Tune blkio policy for the domain process."))
+        help=_("Tune blkio policy for the domain process."))
     geng.add_argument("--memorybacking", action="append",
-                    help=_("Set memory backing policy for "
-                        "the domain process. Ex:\n"
-                        "--memorybacking hugepages=on"))
+        help=_("Set memory backing policy for the domain process. Ex:\n"
+               "--memorybacking hugepages=on"))
     geng.add_argument("--features",
-                    help=_("Set domain <features> XML. Ex:\n"
-                           "--features acpi=off\n"
-                           "--features apic=on,eoi=on"))
+        help=_("Set domain <features> XML. Ex:\n"
+               "--features acpi=off\n"
+               "--features apic=on,eoi=on"))
     geng.add_argument("--clock",
-                    help=_("Set domain <clock> XML. Ex:\n"
-                           "--clock offset=localtime,rtc_tickpolicy=catchup"))
-    geng.add_argument("--pm", help=_("Config power management features"))
+        help=_("Set domain <clock> XML. Ex:\n"
+               "--clock offset=localtime,rtc_tickpolicy=catchup"))
+    geng.add_argument("--pm",
+        help=_("Configure VM power management features"))
     geng.add_argument("--events",
-                    help=_("Config OS lifecycle operation management features"))
+        help=_("Configure VM lifecycle management policy"))
     geng.add_argument("--resource", action="append",
-                    help=_("Config OS resource management features"))
+        help=_("Configure VM resource partitioning (cgroups)"))
 
 
 def add_boot_options(insg):
