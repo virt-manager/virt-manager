@@ -379,11 +379,13 @@ class Cloner(object):
                 logging.warn(_("Setting the graphics device port to autoport, "
                                "in order to avoid conflicting."))
                 dev.port = -1
+
+        clone_macs = self._clone_macs[:]
         for iface in self._guest.get_devices("interface"):
             iface.target_dev = None
 
-            if self._clone_macs:
-                mac = self._clone_macs.pop()
+            if clone_macs:
+                mac = clone_macs.pop()
             else:
                 mac = VirtualNetworkInterface.generate_mac(self.conn)
             iface.macaddr = mac
