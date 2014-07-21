@@ -1722,7 +1722,9 @@ class vmmCreate(vmmGObjectUI):
                 if not self.validate_storage_page():
                     return False
 
-        macaddr = self.widget("config-macaddr").get_text().strip()
+        macaddr = None
+        if self.widget("config-macaddr").get_sensitive():
+            macaddr = self.widget("config-macaddr").get_text().strip()
         nettype = self.netlist.get_network_selection()[0]
 
         if nettype is None:
