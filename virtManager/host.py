@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007, 2013 Red Hat, Inc.
+# Copyright (C) 2007, 2013-2014 Red Hat, Inc.
 # Copyright (C) 2007 Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -41,13 +41,20 @@ from virtManager.graphwidgets import Sparkline
 INTERFACE_PAGE_INFO = 0
 INTERFACE_PAGE_ERROR = 1
 
-(EDIT_NET_NAME,
+EDIT_NET_IDS = (
+EDIT_NET_NAME,
 EDIT_NET_AUTOSTART,
 EDIT_NET_QOS,
+) = range(3)
 
+EDIT_POOL_IDS = (
 EDIT_POOL_NAME,
 EDIT_POOL_AUTOSTART,
-) = range(5)
+) = range(100, 102)
+
+EDIT_INTERFACE_IDS = (
+EDIT_INTERFACE_STARTMODE,
+) = range(200, 201)
 
 
 class vmmHost(vmmGObjectUI):
@@ -99,7 +106,7 @@ class vmmHost(vmmGObjectUI):
             "on_net_delete_clicked": self.delete_network,
             "on_net_stop_clicked": self.stop_network,
             "on_net_start_clicked": self.start_network,
-            "on_net_apply_clicked": self.net_apply,
+            "on_net_apply_clicked": (lambda *x: self.net_apply()),
             "on_net_list_changed": self.net_selected,
             "on_net_autostart_toggled": self.net_autostart_changed,
             "on_net_name_changed": (lambda *x:
@@ -114,7 +121,7 @@ class vmmHost(vmmGObjectUI):
             "on_pool_autostart_toggled": self.pool_autostart_changed,
             "on_vol_delete_clicked": self.delete_vol,
             "on_vol_list_button_press_event": self.popup_vol_menu,
-            "on_pool_apply_clicked": self.pool_apply,
+            "on_pool_apply_clicked": (lambda *x: self.pool_apply()),
             "on_vol_list_changed": self.vol_selected,
             "on_pool_name_changed": (lambda *x:
                 self.enable_pool_apply(x, EDIT_POOL_NAME)),
@@ -124,7 +131,7 @@ class vmmHost(vmmGObjectUI):
             "on_interface_stop_clicked" : self.stop_interface,
             "on_interface_delete_clicked" : self.delete_interface,
             "on_interface_startmode_changed": self.interface_startmode_changed,
-            "on_interface_apply_clicked" : self.interface_apply,
+            "on_interface_apply_clicked" : (lambda *x: self.interface_apply()),
             "on_interface_list_changed": self.interface_selected,
 
             "on_config_autoconnect_toggled": self.toggle_autoconnect,
@@ -176,6 +183,9 @@ class vmmHost(vmmGObjectUI):
         # [ unique, label, icon name, icon size, is_active ]
         netListModel = Gtk.ListStore(str, str, str, int, bool)
         self.widget("net-list").set_model(netListModel)
+
+        sel = self.widget("net-list").get_selection()
+        sel.set_select_function((lambda *x: self.confirm_changes()), None)
 
         netCol = Gtk.TreeViewColumn("Networks")
         netCol.set_spacing(6)
@@ -235,7 +245,7 @@ class vmmHost(vmmGObjectUI):
 
         volListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
-        init_pool_list(self.widget("pool-list"), self.pool_selected)
+        self.init_pool_list()
 
     def init_interface_state(self):
         self.widget("interface-pages").set_show_tabs(False)
@@ -243,6 +253,9 @@ class vmmHost(vmmGObjectUI):
         # [ unique, label, icon name, icon size, is_active ]
         interfaceListModel = Gtk.ListStore(str, str, str, int, bool)
         self.widget("interface-list").set_model(interfaceListModel)
+
+        sel = self.widget("interface-list").get_selection()
+        sel.set_select_function((lambda *x: self.confirm_changes()), None)
 
         interfaceCol = Gtk.TreeViewColumn("Interfaces")
         interfaceCol.set_spacing(6)
@@ -324,6 +337,8 @@ class vmmHost(vmmGObjectUI):
         if not self.is_visible():
             return
 
+        self.confirm_changes()
+
         self.topwin.hide()
         self.emit("host-closed")
 
@@ -377,11 +392,15 @@ class vmmHost(vmmGObjectUI):
     def page_changed(self, src, child, pagenum):
         ignore = src
         ignore = child
+        self.confirm_changes()
         if pagenum == 1:
+            self.repopulate_networks()
             self.conn.schedule_priority_tick(pollnet=True)
         elif pagenum == 2:
+            self.repopulate_storage_volumes()
             self.conn.schedule_priority_tick(pollpool=True)
         elif pagenum == 3:
+            self.repopulate_interfaces()
             self.conn.schedule_priority_tick(polliface=True)
 
     def refresh_resources(self, ignore=None):
@@ -485,7 +504,7 @@ class vmmHost(vmmGObjectUI):
         except Exception, e:
             self.err.show_err(_("Error launching network wizard: %s") % str(e))
 
-    def net_apply(self, src_ignore):
+    def net_apply(self):
         net = self.current_network()
         if net is None:
             return
@@ -532,12 +551,26 @@ class vmmHost(vmmGObjectUI):
             self.disable_net_apply()
 
     def disable_net_apply(self):
-        self.active_edits = []
+        for i in EDIT_NET_IDS:
+            if i in self.active_edits:
+                self.active_edits.remove(i)
         self.widget("net-apply").set_sensitive(False)
+
+    def disable_interface_apply(self):
+        for i in EDIT_INTERFACE_IDS:
+            if i in self.active_edits:
+                self.active_edits.remove(i)
+        self.widget("interface-apply").set_sensitive(False)
 
     def enable_net_apply(self, *arglist):
         edittype = arglist[-1]
         self.widget("net-apply").set_sensitive(True)
+        if edittype not in self.active_edits:
+            self.active_edits.append(edittype)
+
+    def enable_interface_apply(self, *arglist):
+        edittype = arglist[-1]
+        self.widget("interface-apply").set_sensitive(True)
         if edittype not in self.active_edits:
             self.active_edits.append(edittype)
 
@@ -810,6 +843,9 @@ class vmmHost(vmmGObjectUI):
             logging.debug("Already refreshing the pool, skipping")
             return
 
+        if not self.confirm_changes():
+            return
+
         pool = self.current_pool()
         if pool is None:
             return
@@ -899,7 +935,7 @@ class vmmHost(vmmGObjectUI):
         except KeyError:
             return None
 
-    def pool_apply(self, src_ignore):
+    def pool_apply(self):
         pool = self.current_pool()
         if pool is None:
             return
@@ -911,14 +947,19 @@ class vmmHost(vmmGObjectUI):
                 pool.set_autostart(auto)
             if EDIT_POOL_NAME in self.active_edits:
                 pool.define_name(self.widget("pool-name-entry").get_text())
+                self.disable_pool_apply()
                 self.repopulate_storage_pools()
         except Exception, e:
             self.err.show_err(_("Error changing pool settings: %s") % str(e))
             return
+
         self.disable_pool_apply()
 
     def disable_pool_apply(self):
-        self.active_edits = []
+        for i in EDIT_POOL_IDS:
+            if i in self.active_edits:
+                self.active_edits.remove(i)
+
         self.widget("pool-apply").set_sensitive(False)
 
     def enable_pool_apply(self, *arglist):
@@ -1141,9 +1182,12 @@ class vmmHost(vmmGObjectUI):
         except KeyError:
             return None
 
-    def interface_apply(self, src_ignore):
+    def interface_apply(self):
         interface = self.current_interface()
         if interface is None:
+            return
+
+        if EDIT_INTERFACE_STARTMODE not in self.active_edits:
             return
 
         newmode = uiutil.get_list_selection(
@@ -1159,10 +1203,10 @@ class vmmHost(vmmGObjectUI):
             return
 
         # XXX: This will require an interface restart
-        self.widget("interface-apply").set_sensitive(False)
+        self.disable_interface_apply()
 
     def interface_startmode_changed(self, src_ignore):
-        self.widget("interface-apply").set_sensitive(True)
+        self.enable_interface_apply(EDIT_INTERFACE_STARTMODE)
 
     def set_interface_error_page(self, msg):
         self.reset_interface_state()
@@ -1185,7 +1229,8 @@ class vmmHost(vmmGObjectUI):
             self.set_interface_error_page(_("Error selecting interface: %s") %
                                           e)
 
-        self.widget("interface-apply").set_sensitive(False)
+        self.disable_interface_apply()
+
 
     def populate_interface_state(self, connkey):
         interface = self.conn.get_interface(connkey)
@@ -1330,6 +1375,33 @@ class vmmHost(vmmGObjectUI):
         for name, itype in interface.get_slaves():
             row = [name, itype]
             model.append(row)
+
+    def confirm_changes(self):
+        if not self.active_edits:
+            return True
+
+        if self.err.chkbox_helper(
+                self.config.get_confirm_unapplied,
+                self.config.set_confirm_unapplied,
+                text1=(_("There are unapplied changes. "
+                         "Would you like to apply them now?")),
+                chktext=_("Don't warn me again."),
+                alwaysrecord=True,
+                default=False):
+            self.pool_apply()
+            self.net_apply()
+            self.interface_apply()
+
+        self.active_edits = []
+        return True
+
+    def init_pool_list(self):
+        pool_list = self.widget("pool-list")
+        init_pool_list(pool_list, self.pool_selected)
+
+        sel = pool_list.get_selection()
+        sel.set_select_function((lambda *x: self.confirm_changes()),
+                                None)
 
 
 # These functions are broken out, since they are used by storage browser
