@@ -1190,7 +1190,6 @@ class vmmDetails(vmmGObjectUI):
             text1=(_("There are unapplied changes. Would you like to apply "
                      "them now?")),
             chktext=_("Don't warn me again."),
-            alwaysrecord=True,
             default=False):
             return False
 

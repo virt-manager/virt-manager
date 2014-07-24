@@ -1386,7 +1386,6 @@ class vmmHost(vmmGObjectUI):
                 text1=(_("There are unapplied changes. "
                          "Would you like to apply them now?")),
                 chktext=_("Don't warn me again."),
-                alwaysrecord=True,
                 default=False):
             self.pool_apply()
             self.net_apply()

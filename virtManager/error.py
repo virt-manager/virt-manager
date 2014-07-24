@@ -1,6 +1,6 @@
 # Error dialog with extensible "details" button.
 #
-# Copyright (C) 2007, 2013 Red Hat, Inc.
+# Copyright (C) 2007, 2013-2014 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -180,14 +180,12 @@ class vmmErrorDialog(vmmGObject):
                                   chktext=chktext)
 
     def chkbox_helper(self, getcb, setcb, text1, text2=None,
-                      alwaysrecord=False,
                       default=True,
                       chktext=_("Don't ask me again")):
         """
         Helper to prompt user about proceeding with an operation
         Returns True if the 'yes' or 'ok' button was selected, False otherwise
 
-        @alwaysrecord: Don't require user to select 'yes' to record chkbox value
         @default: What value to return if getcb tells us not to prompt
         """
         do_prompt = getcb()
@@ -199,8 +197,7 @@ class vmmErrorDialog(vmmGObject):
                                chktext=chktext,
                                buttons=Gtk.ButtonsType.YES_NO)
         response, skip_prompt = res
-        if alwaysrecord or response:
-            setcb(not skip_prompt)
+        setcb(not skip_prompt)
 
         return response
 
