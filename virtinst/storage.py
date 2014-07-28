@@ -580,7 +580,7 @@ class StorageVolume(_StorageObject):
                                "input."))
 
     def sync_input_vol(self):
-        # Pull paramaters from input vol into this class
+        # Pull parameters from input vol into this class
         parsevol = StorageVolume(self.conn,
                                  parsexml=self._input_vol.XMLDesc(0))
 
