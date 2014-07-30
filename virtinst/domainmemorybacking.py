@@ -29,5 +29,8 @@ class DomainMemorybacking(XMLBuilder):
     _XML_PROP_ORDER = ["hugepages", "nosharepages", "locked"]
 
     hugepages = XMLProperty("./hugepages", is_bool=True)
+    page_size = XMLProperty("./hugepages/page/@size")
+    page_unit = XMLProperty("./hugepages/page/@unit")
+    page_nodeset = XMLProperty("./hugepages/page/@nodeset")
     nosharepages = XMLProperty("./nosharepages", is_bool=True)
     locked = XMLProperty("./locked", is_bool=True)

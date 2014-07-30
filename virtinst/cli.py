@@ -2082,8 +2082,14 @@ class ParserMemorybacking(VirtCLIParser):
     def _init_params(self):
         self.clear_attr = "memoryBacking"
 
-        self.set_param("memoryBacking.hugepages", "hugepages", is_onoff=True)
-        self.set_param("memoryBacking.nosharepages", "nosharepages", is_onoff=True)
+        self.set_param("memoryBacking.hugepages",
+                "hugepages", is_onoff=True)
+        self.set_param("memoryBacking.page_size", "size")
+        self.set_param("memoryBacking.page_unit", "unit")
+        self.set_param("memoryBacking.page_nodeset",
+                "nodeset", can_comma=True)
+        self.set_param("memoryBacking.nosharepages",
+                "nosharepages", is_onoff=True)
         self.set_param("memoryBacking.locked", "locked", is_onoff=True)
 
 

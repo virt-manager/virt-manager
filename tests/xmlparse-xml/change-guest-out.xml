@@ -95,7 +95,9 @@
     <min_guarantee>500</min_guarantee>
   </memtune>
   <memoryBacking>
-    <hugepages/>
+    <hugepages>
+      <page size="1" unit="G" nodeset="1,5-8"/>
+    </hugepages>
     <nosharepages/>
     <locked/>
   </memoryBacking>
