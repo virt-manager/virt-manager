@@ -62,6 +62,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.vm = vm
 
         self._initial_populate = False
+        self._unapplied_changes = False
 
         self._snapmenu = None
         self._init_ui()
@@ -93,6 +94,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         selection = self.widget("snapshot-list").get_selection()
         selection.emit("changed")
         selection.set_mode(Gtk.SelectionMode.MULTIPLE)
+        selection.set_select_function(self._confirm_changes, None)
 
     ##############
     # Init stuff #
@@ -358,7 +360,27 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-delete").set_sensitive(bool(snap))
         self.widget("snapshot-start").set_sensitive(bool(snap))
         self.widget("snapshot-apply").set_sensitive(False)
+        self._unapplied_changes = False
 
+    def _confirm_changes(self, sel, model, path, path_selected, user_data):
+        ignore1 = sel
+        ignore2 = path
+        ignore3 = model
+        ignore4 = user_data
+
+        if not self._unapplied_changes or not path_selected:
+            return True
+
+        if self.err.chkbox_helper(
+                self.config.get_confirm_unapplied,
+                self.config.set_confirm_unapplied,
+                text1=(_("There are unapplied changes. "
+                         "Would you like to apply them now?")),
+                chktext=_("Don't warn me again."),
+                default=False):
+            self._apply()
+
+        return True
 
     ##################
     # 'New' handling #
@@ -523,6 +545,27 @@ class vmmSnapshotPage(vmmGObjectUI):
                     self.topwin)
         progWin.run()
 
+    def _apply(self):
+        snaps = self._get_selected_snapshots()
+        if not snaps or len(snaps) > 1:
+            return False
+
+        snap = snaps[0]
+        desc_widget = self.widget("snapshot-description")
+        desc = desc_widget.get_buffer().get_property("text") or ""
+
+        xmlobj = snap.get_xmlobj()
+        origxml = xmlobj.get_xml_config()
+        xmlobj.description = desc
+        newxml = xmlobj.get_xml_config()
+
+        self.vm.log_redefine_xml_diff(snap, origxml, newxml)
+        if newxml == origxml:
+            return True
+        self.vm.create_snapshot(newxml, redefine=True)
+        snap.refresh_xml()
+        return True
+
 
     #############
     # Listeners #
@@ -541,26 +584,17 @@ class vmmSnapshotPage(vmmGObjectUI):
         return 1
 
     def _description_changed(self, ignore):
-        self.widget("snapshot-apply").set_sensitive(True)
-
-    def _on_apply_clicked(self, ignore):
-        snap = self._get_selected_snapshots()[0]
-        if not snap:
-            return
-
+        snaps = self._get_selected_snapshots()
         desc_widget = self.widget("snapshot-description")
         desc = desc_widget.get_buffer().get_property("text") or ""
 
-        xmlobj = snap.get_xmlobj()
-        origxml = xmlobj.get_xml_config()
-        xmlobj.description = desc
-        newxml = xmlobj.get_xml_config()
+        if len(snaps) == 1 and snaps[0].get_xmlobj().description != desc:
+            self._unapplied_changes = True
 
-        self.vm.log_redefine_xml_diff(snap, origxml, newxml)
-        if newxml == origxml:
-            return
-        self.vm.create_snapshot(newxml, redefine=True)
-        snap.refresh_xml()
+        self.widget("snapshot-apply").set_sensitive(True)
+
+    def _on_apply_clicked(self, ignore):
+        self._apply()
         self._refresh_snapshots()
 
     def _on_new_ok_clicked(self, ignore):
