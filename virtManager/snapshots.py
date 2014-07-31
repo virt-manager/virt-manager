@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 Red Hat, Inc.
+# Copyright (C) 2013-2014 Red Hat, Inc.
 # Copyright (C) 2013 Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -78,6 +78,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             "on_snapshot_apply_clicked": self._on_apply_clicked,
             "on_snapshot_list_changed": self._snapshot_selected,
             "on_snapshot_list_button_press_event": self._popup_snapshot_menu,
+            "on_snapshot_refresh_clicked": self._refresh_snapshots,
 
             # 'Create' dialog
             "on_snapshot_new_delete_event": self._snapshot_new_close,
