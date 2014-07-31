@@ -1,5 +1,5 @@
 #
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2013-2014 Red Hat, Inc.
 # Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -46,7 +46,7 @@ class DomainSnapshot(XMLBuilder):
             "shutdown": libvirt.VIR_DOMAIN_SHUTDOWN,
             "shutoff": libvirt.VIR_DOMAIN_SHUTOFF,
             "crashed": libvirt.VIR_DOMAIN_CRASHED,
-            "pmsuspended": 7,
+            "pmsuspended": getattr(libvirt, "VIR_DOMAIN_PMSUSPENDED", 7)
         }
 
         if state == "disk-snapshot" or state not in statemap:
