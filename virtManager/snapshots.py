@@ -90,8 +90,9 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         self.top_box = self.widget("snapshot-top-box")
         self.widget("snapshot-top-window").remove(self.top_box)
-        self.widget("snapshot-list").get_selection().emit("changed")
-
+        selection = self.widget("snapshot-list").get_selection()
+        selection.emit("changed")
+        selection.set_mode(Gtk.SelectionMode.MULTIPLE)
 
     ##############
     # Init stuff #
@@ -178,18 +179,21 @@ class vmmSnapshotPage(vmmGObjectUI):
     # Functional bits #
     ###################
 
-    def _get_selected_snapshot(self):
-        name = uiutil.get_list_selection(self.widget("snapshot-list"), 0)
-        if not name:
-            return None
+    def _get_selected_snapshots(self):
+        selection = self.widget("snapshot-list").get_selection()
+        def add_snap(treemodel, path, it, snaps):
+            ignore = path
+            try:
+                name = treemodel[it][0]
+                for snap in self.vm.list_snapshots():
+                    if name == snap.get_name():
+                        snaps.append(snap)
+            except:
+                pass
 
-        try:
-            for snap in self.vm.list_snapshots():
-                if name == snap.get_name():
-                    return snap
-        except:
-            pass
-        return None
+        snaps = []
+        selection.selected_foreach(add_snap, snaps)
+        return snaps
 
     def _refresh_snapshots(self, select_name=None):
         self.vm.refresh_snapshots()
@@ -205,7 +209,10 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-error-label").set_text(msg)
 
     def _populate_snapshot_list(self, select_name=None):
-        cursnap = self._get_selected_snapshot()
+        cursnaps = []
+        for i in self._get_selected_snapshots():
+            cursnaps.append(i.get_name())
+
         model = self.widget("snapshot-list").get_model()
         model.clear()
 
@@ -243,8 +250,19 @@ class vmmSnapshotPage(vmmGObjectUI):
         if has_internal and has_external:
             model.append([None, None, None, None, "2", False])
 
-        select_name = select_name or (cursnap and cursnap.get_name() or None)
-        uiutil.set_row_selection(self.widget("snapshot-list"), select_name)
+
+        def check_selection(treemodel, path, it, snaps):
+            if select_name:
+                if treemodel[it][0] == select_name:
+                    selection.select_path(path)
+            elif treemodel[it][0] in snaps:
+                selection.select_path(path)
+
+        selection = self.widget("snapshot-list").get_selection()
+        model = self.widget("snapshot-list").get_model()
+        selection.unselect_all()
+        model.foreach(check_selection, cursnaps)
+
         self._initial_populate = True
 
     def _make_screenshot_pixbuf(self, mime, sdata):
@@ -526,7 +544,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-apply").set_sensitive(True)
 
     def _on_apply_clicked(self, ignore):
-        snap = self._get_selected_snapshot()
+        snap = self._get_selected_snapshots()[0]
         if not snap:
             return
 
@@ -556,7 +574,11 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-new-name").grab_focus()
 
     def _on_start_clicked(self, ignore):
-        snap = self._get_selected_snapshot()
+        snaps = self._get_selected_snapshots()
+        if not snaps or len(snaps) > 1:
+            return
+
+        snap = snaps[0]
         msg = _("Are you sure you want to run snapshot '%s'? "
             "All %s changes since the last snapshot was created will be "
             "discarded.")
@@ -579,33 +601,39 @@ class vmmSnapshotPage(vmmGObjectUI):
                             finish_cb=self._refresh_snapshots)
 
     def _on_delete_clicked(self, ignore):
-        snap = self._get_selected_snapshot()
-        if not snap:
+        snaps = self._get_selected_snapshots()
+        if not snaps:
             return
 
         result = self.err.yes_no(_("Are you sure you want to permanently "
-                                   "delete the snapshot '%s'?") %
-                                   snap.get_name())
+                                   "delete the selected snapshots?"))
         if not result:
             return
 
-        logging.debug("Deleting snapshot '%s'", snap.get_name())
-        vmmAsyncJob.simple_async(snap.delete, [], self,
-                        _("Deleting snapshot"),
-                        _("Deleting snapshot '%s'") % snap.get_name(),
-                        _("Error deleting snapshot '%s'") % snap.get_name(),
-                        finish_cb=self._refresh_snapshots)
+        for snap in snaps:
+            logging.debug("Deleting snapshot '%s'", snap.get_name())
+            vmmAsyncJob.simple_async(snap.delete, [], self,
+                            _("Deleting snapshot"),
+                            _("Deleting snapshot '%s'") % snap.get_name(),
+                            _("Error deleting snapshot '%s'") % snap.get_name(),
+                            finish_cb=self._refresh_snapshots)
 
 
     def _snapshot_selected(self, selection):
         ignore = selection
-        snap = self._get_selected_snapshot()
+        snap = self._get_selected_snapshots()
         if not snap:
             self._set_error_page(_("No snapshot selected."))
             return
+        if len(snap) > 1:
+            self._set_error_page(_("Multiple snapshots selected."))
+            self.widget("snapshot-start").set_sensitive(False)
+            self.widget("snapshot-apply").set_sensitive(False)
+            self.widget("snapshot-delete").set_sensitive(True)
+            return
 
         try:
-            self._set_snapshot_state(snap)
+            self._set_snapshot_state(snap[0])
         except Exception, e:
             logging.exception(e)
             self._set_error_page(_("Error selecting snapshot: %s") % str(e))
