@@ -358,10 +358,13 @@ def _show_nographics_warnings(options, guest):
         return
 
     serial_arg = "console=ttyS0"
+    serial_arm_arg = "console=ttyAMA0"
     virtio_arg = "console=hvc0"
     console_type = None
     if guest.conn.is_test() or guest.conn.is_qemu():
         console_type = serial_arg
+        if guest.os.arch.startswith("arm") or guest.os.arch == "aarch64":
+            console_type = serial_arm_arg
         if guest.get_devices("console")[0].target_type == "virtio":
             console_type = virtio_arg
 
