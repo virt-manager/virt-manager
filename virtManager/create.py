@@ -1168,7 +1168,9 @@ class vmmCreate(vmmGObjectUI):
         self.start_detection(forward=forward)
 
     def toggle_detect_os(self, src):
-        dodetect = src.get_active()
+        dodetect = not self.conn.is_remote()
+        src.set_active(dodetect)
+        src.set_visible(dodetect)
 
         self.widget("install-os-type-label").set_visible(dodetect)
         self.widget("install-os-version-label").set_visible(dodetect)
