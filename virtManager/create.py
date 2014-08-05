@@ -1168,9 +1168,7 @@ class vmmCreate(vmmGObjectUI):
         self.start_detection(forward=forward)
 
     def toggle_detect_os(self, src):
-        dodetect = not self.conn.is_remote()
-        src.set_active(dodetect)
-        src.set_visible(dodetect)
+        dodetect = src.get_active()
 
         self.widget("install-os-type-label").set_visible(dodetect)
         self.widget("install-os-version-label").set_visible(dodetect)
@@ -1288,10 +1286,12 @@ class vmmCreate(vmmGObjectUI):
                                    INSTALL_PAGE_CONTAINER_OS]
         osbox.set_visible(iscontainer)
 
-        if instpage in (INSTALL_PAGE_ISO, INSTALL_PAGE_URL):
-            detectbox.show()
-        else:
-            detectbox.hide()
+        enabledetect = (instpage == INSTALL_PAGE_ISO and
+                        self.conn and
+                        not self.conn.is_remote() or
+                        self.get_config_install_page() == INSTALL_PAGE_URL)
+
+        detectbox.set_visible(enabledetect)
 
         if instpage == INSTALL_PAGE_PXE:
             # Hide the install notebook for pxe, since there isn't anything
