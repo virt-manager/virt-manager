@@ -1763,7 +1763,7 @@ class ParserNetwork(VirtCLIParser):
             ignore = opts
             ignore = cliname
             if val == "RANDOM":
-                val = None
+                return None
             inst.macaddr = val
             return val
 
