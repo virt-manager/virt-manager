@@ -979,7 +979,7 @@ class Guest(XMLBuilder):
             self._add_spice_sound()
             self._add_spice_usbredir()
 
-        video_model = self._os_object.get_videomodel(self) or "cirrus"
+        video_model = self._os_object.get_videomodel(self)
         for video in self.get_devices("video"):
             if video.model == video.MODEL_DEFAULT:
                 video.model = video_model
