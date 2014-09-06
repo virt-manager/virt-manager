@@ -238,16 +238,23 @@ class _OSVariant(object):
         return None
 
     def get_videomodel(self, guest):
-        if guest.has_spice() and guest.os.is_x86():
-            return "qxl"
         if guest.os.is_ppc64() and guest.os.machine == "pseries":
             return "vga"
 
-        if self._os:
-            if self._os.get_short_id() in {"ubuntu13.10", "ubuntu13.04"}:
-                return "vmvga"
-            if _OsVariantOsInfo.is_windows(self._os):
-                return "vga"
+        # Marc Deslauriers of canonical had previously patched us
+        # to use vmvga for ubuntu, see fb76c4e5. And Fedora users report
+        # issues with ubuntu + qxl for as late as 14.04, so carry the vmvga
+        # default forward until someone says otherwise. In 2014-09 I contacted
+        # Marc offlist and he said this was fine for now.
+        if self._os and self._os.get_distro() == "ubuntu":
+            return "vmvga"
+
+        if guest.has_spice() and guest.os.is_x86():
+            return "qxl"
+
+        if self._os and _OsVariantOsInfo.is_windows(self._os):
+            return "vga"
+
         return None
 
 
