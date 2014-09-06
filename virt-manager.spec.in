@@ -88,7 +88,6 @@ Requires: virt-manager-common = %{verrel}
 
 Provides: virt-install
 Provides: virt-clone
-Provides: virt-image
 Provides: virt-convert
 Provides: virt-xml
 Obsoletes: python-virtinst
@@ -193,18 +192,14 @@ fi
 %{_mandir}/man1/virt-clone.1*
 %{_mandir}/man1/virt-convert.1*
 %{_mandir}/man1/virt-xml.1*
-%{_mandir}/man1/virt-image.1*
-%{_mandir}/man5/virt-image.5*
 
 %{_datadir}/%{name}/virt-install
 %{_datadir}/%{name}/virt-clone
-%{_datadir}/%{name}/virt-image
 %{_datadir}/%{name}/virt-convert
 %{_datadir}/%{name}/virt-xml
 
 %{_bindir}/virt-install
 %{_bindir}/virt-clone
-%{_bindir}/virt-image
 %{_bindir}/virt-convert
 %{_bindir}/virt-xml
 

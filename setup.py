@@ -32,7 +32,7 @@ def _generate_potfiles_in():
         return ret
 
     scripts = ["virt-manager", "virt-install",
-               "virt-clone", "virt-image", "virt-convert", "virt-xml"]
+               "virt-clone", "virt-convert", "virt-xml"]
 
     potfiles = "\n".join(scripts) + "\n\n"
     potfiles += "\n".join(find("virtManager", "*.py")) + "\n\n"
@@ -145,7 +145,7 @@ class my_build(build):
 
     def _make_bin_wrappers(self):
         cmds = ["virt-manager", "virt-install", "virt-clone",
-                "virt-image", "virt-convert", "virt-xml"]
+                "virt-convert", "virt-xml"]
 
         if not os.path.exists("build"):
             os.mkdir("build")
@@ -164,16 +164,9 @@ class my_build(build):
     def _make_man_pages(self):
         for path in glob.glob("man/*.pod"):
             base = os.path.basename(path)
-
-            mantype = "1"
-            newbase = base
-            if base == "virt-image-xml.pod":
-                mantype = "5"
-                newbase = "virt-image.pod"
-
-            appname = os.path.splitext(newbase)[0]
+            appname = os.path.splitext(base)[0]
             newpath = os.path.join(os.path.dirname(path),
-                                   appname + "." + mantype)
+                                   appname + ".1")
 
             print "Generating %s" % newpath
             ret = os.system('pod2man '
@@ -566,7 +559,7 @@ class CheckPylint(Command):
         pass
 
     def run(self):
-        files = ["setup.py", "virt-install", "virt-clone", "virt-image",
+        files = ["setup.py", "virt-install", "virt-clone",
                  "virt-convert", "virt-xml", "virt-manager",
                  "virtcli", "virtinst", "virtconv", "virtManager",
                  "tests"]
@@ -597,7 +590,6 @@ setup(
         "build/virt-manager",
         "build/virt-clone",
         "build/virt-install",
-        "build/virt-image",
         "build/virt-convert",
         "build/virt-xml"]),
 
@@ -606,7 +598,6 @@ setup(
             "virt-manager",
             "virt-install",
             "virt-clone",
-            "virt-image",
             "virt-convert",
             "virt-xml",
         ]),
@@ -618,11 +609,9 @@ setup(
             "man/virt-manager.1",
             "man/virt-install.1",
             "man/virt-clone.1",
-            "man/virt-image.1",
             "man/virt-convert.1",
             "man/virt-xml.1"
         ]),
-        ("share/man/man5", ["man/virt-image.5"]),
 
         ("share/virt-manager/virtManager", glob.glob("virtManager/*.py")),
 

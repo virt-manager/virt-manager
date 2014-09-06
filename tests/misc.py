@@ -82,7 +82,7 @@ class TestMisc(unittest.TestCase):
         """
         Make sure virtinst doesn't pull in any gnome modules
         """
-        files = ["virt-install", "virt-clone", "virt-convert", "virt-image"]
+        files = ["virt-install", "virt-clone", "virt-convert"]
         files += _find_py("virtinst")
         files += _find_py("virtconv")
         files += _find_py("virtcli")

@@ -29,7 +29,7 @@ import StringIO
 
 from virtinst import support
 
-from tests import virtinstall, virtimage, virtclone, virtconvert, virtxml
+from tests import virtinstall, virtclone, virtconvert, virtxml
 from tests import utils
 
 os.environ["LANG"] = "en_US.UTF-8"
@@ -68,20 +68,12 @@ exist_images = [
     ro_img,
 ]
 
-# Images that need to exist ahead of time for virt-image
-virtimage_exist = ["/tmp/__virtinst__cli_root.raw"]
-
-# Images created by virt-image
-virtimage_new = ["/tmp/__virtinst__cli_scratch.raw"]
-
 # Fake iso for --location iso mounting
 fake_iso = ["/tmp/fake.iso"]
 
-exist_files = exist_images + virtimage_exist + fake_iso
-new_files   = new_images + virtimage_new
-clean_files = (new_images + exist_images +
-               virtimage_exist + virtimage_new + [ro_dir]
-               + fake_iso)
+exist_files = exist_images + fake_iso
+new_files   = new_images
+clean_files = (new_images + exist_images + [ro_dir] + fake_iso)
 
 promptlist = []
 
@@ -167,8 +159,6 @@ class Command(object):
                     ret = virtinstall.main(conn=conn)
                 elif app.count("virt-clone"):
                     ret = virtclone.main(conn=conn)
-                elif app.count("virt-image"):
-                    ret = virtimage.main(conn=conn)
                 elif app.count("virt-convert"):
                     ret = virtconvert.main(conn=conn)
                 elif app.count("virt-xml"):
@@ -396,10 +386,6 @@ class App(object):
                     not cli.count("--print-step") and
                     not cli.count("--quiet")):
                     args += " --print-step all"
-
-            elif self.appname == "virt-image":
-                if not cli.count("--print"):
-                    args += " --print"
 
             elif self.appname == "virt-clone":
                 if not cli.count("--print-xml"):
@@ -687,7 +673,7 @@ c.add_invalid("--mac 22:22:33:12:34:AB")  # Colliding macaddr
 c = vinst.add_category("storage", "--pxe --nographics --noautoconsole --hvm")
 c.add_valid("--file %(EXISTIMG1)s --nonsparse --file-size 4")  # Existing file, other opts
 c.add_valid("--file %(EXISTIMG1)s")  # Existing file, no opts
-c.add_valid("--file %(EXISTIMG1)s --file virt-image --file virt-clone")  # Multiple existing files
+c.add_valid("--file %(EXISTIMG1)s --file virt-clone --file virt-clone")  # Multiple existing files
 c.add_valid("--file %(NEWIMG1)s --file-size .00001 --nonsparse")  # Nonexistent file
 c.add_valid("--disk path=%(EXISTIMG1)s,perms=ro,size=.0001,cache=writethrough,io=threads")  # Existing disk, lots of opts
 c.add_valid("--disk path=%(EXISTIMG1)s,perms=rw")  # Existing disk, rw perms
@@ -868,42 +854,6 @@ c.add_compare("--remove-device --disk /dev/null", "remove-disk-path")
 c.add_compare("--remove-device --video all", "remove-video-all")
 
 
-vimag = App("virt-image")
-c = vimag.add_category("graphics", "--name test-image --boot 0 %(IMAGE_XML)s")
-c.add_valid("--sdl")  # SDL
-c.add_valid("--vnc --keymap ja --vncport 5950 --vnclisten 1.2.3.4")  # VNC w/ lots of options
-
-
-c = vimag.add_category("misc", "")
-c.add_valid("--network=?")  # Make sure introspection doesn't blow up
-c.add_compare("--name foobar --memory 128,maxmemory=256 --os-variant winxp --boot 0 %(IMAGE_XML)s", "image-boot0")
-c.add_compare("--name foobar --ram 64 --network user,model=e1000 --boot 1 %(IMAGE_XML)s", "image-boot1")
-c.add_compare("--name foobar --ram 64 --boot 0 %(IMAGE_NOGFX_XML)s", "image-nogfx")
-c.add_valid("--name test --replace %(IMAGE_XML)s")  # Colliding VM name w/ --replace
-c.add_invalid("%(IMAGE_XML)s")  # No name specified, and no prompt flag
-c.add_invalid("--name test %(IMAGE_XML)s")  # Colliding VM name without --replace
-
-
-c = vimag.add_category("network", "--name test-image --boot 0 --nographics %(IMAGE_XML)s")
-c.add_valid("--network=user")  # user networking
-c.add_valid("--network network:default --mac RANDOM")  # VirtualNetwork with a random macaddr
-c.add_valid("--network network:default --mac 00:11:22:33:44:55")  # VirtualNetwork with a random macaddr
-c.add_valid("--network=user,model=e1000")  # with NIC model
-c.add_valid("--network=network:default,model=e1000 --network=user,model=virtio")  # several networks
-c.add_invalid("--network=FOO")  # Nonexistent network
-c.add_invalid("--network=network:default --mac 1234")  # Invalid mac
-
-
-c = vimag.add_category("general", "--name test-image %(IMAGE_XML)s")
-c.add_valid("")  # All default values
-c.add_valid("--print")  # Print default
-c.add_valid("--boot 0")  # Manual boot idx 0
-c.add_valid("--boot 1")  # Manual boot idx 1
-c.add_valid("--name foobar --ram 64 --os-variant winxp")  # Lots of options
-c.add_valid("--name foobar --ram 64 --os-variant none")  # OS variant 'none'
-c.add_invalid("--boot 10")  # Out of bounds index
-
-
 
 
 vconv = App("virt-convert")
@@ -1026,7 +976,6 @@ def maketest(cmd):
 _cmdlist = promptlist[:]
 _cmdlist += vinst.cmds
 _cmdlist += vclon.cmds
-_cmdlist += vimag.cmds
 _cmdlist += vconv.cmds
 _cmdlist += vixml.cmds
 

@@ -68,7 +68,6 @@ def _cleanup_imports_cb():
 
 atexit.register(_cleanup_imports_cb)
 virtinstall = _import("virtinstall", "virt-install")
-virtimage = _import("virtimage", "virt-image")
 virtclone = _import("virtclone", "virt-clone")
 virtconvert = _import("virtconvert", "virt-convert")
 virtxml = _import("virtxml", "virt-xml")

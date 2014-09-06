@@ -653,7 +653,7 @@ def add_gfx_option(devg):
 
 def graphics_option_group(parser):
     """
-    Register vnc + sdl options for virt-install and virt-image
+    Register vnc + sdl options for virt-install
     """
     vncg = parser.add_argument_group(_("Graphics Configuration"))
     add_gfx_option(vncg)
@@ -674,7 +674,7 @@ def graphics_option_group(parser):
 
 def network_option_group(parser):
     """
-    Register common network options for virt-install and virt-image
+    Register common network options for virt-install
     """
     netg = parser.add_argument_group(_("Networking Configuration"))
 
