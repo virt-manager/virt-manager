@@ -41,11 +41,11 @@ from virtinst.urlfetcher import MandrivaDistro
 # Access to protected member, needed to unittest stuff
 
 OLD_FEDORA_URL = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/%s/Fedora/%s/os/"
-DEVFEDORA_URL = "http://download.fedoraproject.org/pub/fedora/linux/development/%s/%s/os/"
-FEDORA_URL = "http://download.fedoraproject.org/pub/fedora/linux/releases/%s/Fedora/%s/os/"
+DEVFEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/development/%s/%s/os/"
+FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Fedora/%s/os/"
 
 OLD_CENTOS_URL = "http://vault.centos.org/%s/os/%s"
-CENTOS_URL = "http://ftp.linux.ncsu.edu/pub/CentOS/%s/os/%s/"
+CENTOS_URL = "http://mirrors.mit.edu/centos/%s/os/%s/"
 OLD_SCIENTIFIC_URL = "http://ftp.scientificlinux.org/linux/scientific/%s/%s/"
 SCIENTIFIC_URL = "http://ftp.scientificlinux.org/linux/scientific/%s/%s/os"
 
@@ -60,7 +60,7 @@ OLD_DEBIAN_URL = "http://archive.debian.org/debian/dists/%s/main/installer-%s/"
 DAILY_DEBIAN_URL = "http://d-i.debian.org/daily-images/%s/"
 DEBIAN_URL = "http://ftp.us.debian.org/debian/dists/%s/main/installer-%s/"
 
-MANDRIVA_URL = "http://ftp.uwsg.indiana.edu/linux/mandrake/official/%s/%s/"
+MANDRIVA_URL = "ftp://mirror.cc.columbia.edu/pub/linux/mandriva/official/%s/%s"
 
 
 urls = {}
@@ -108,14 +108,18 @@ _set_distro(FedoraDistro)
 _add(OLD_FEDORA_URL % ("14", "x86_64"), "fedora14",
      i686=OLD_FEDORA_URL % ("14", "i386"))
 # 2 Latest releases
-_add(FEDORA_URL % ("18", "x86_64"), "fedora18")
 _add(FEDORA_URL % ("19", "x86_64"), "fedora19")
+_add(FEDORA_URL % ("20", "x86_64"), "fedora20")
 # Any Dev release
-_add(DEVFEDORA_URL % ("20", "x86_64"), "fedora20")
+_add(DEVFEDORA_URL % ("21", "x86_64"), "fedora20", name="fedora21")
+_add(
+"https://dl.fedoraproject.org/pub/alt/stage/21_Alpha_TC6/Server/x86_64/os/",
+"fedora20", name="fedora21-tc")
 # Rawhide w/ i686 test
-_add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora20",
-     i686=DEVFEDORA_URL % ("rawhide", "i386"),
-     name="fedora-rawhide")
+# XXX: Nowadays rawhide isn't a full install tree
+# _add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora20",
+#     i686=DEVFEDORA_URL % ("rawhide", "i386"),
+#     name="fedora-rawhide")
 
 
 _set_distro(CentOSDistro)
@@ -125,53 +129,52 @@ _add(OLD_CENTOS_URL % ("4.9", "x86_64"), name="centos-4.9")
 # One old centos 5
 _add(OLD_CENTOS_URL % ("5.0", "x86_64"), name="centos-5.0")
 # Latest centos 5 w/ i686
-_add(CENTOS_URL % ("5", "x86_64"), "rhel5.4", name="centos-5-latest",
+_add(CENTOS_URL % ("5", "x86_64"), "rhel5.8", name="centos-5-latest",
      i686=CENTOS_URL % ("5", "i386"))
 # Latest centos 6 w/ i686
-_add(CENTOS_URL % ("6", "x86_64"), "rhel6", name="centos-6-latest",
+_add(CENTOS_URL % ("6", "x86_64"), "rhel6.5", name="centos-6-latest",
      i686=CENTOS_URL % ("6", "i386"))
+# Latest centos 7, but no i686 as of 2014-09-06
+_add(CENTOS_URL % ("7", "x86_64"), "rhel7.0", name="centos-7-latest")
 
 
 _set_distro(SLDistro)
-# Latest scientific 5
-_add(OLD_SCIENTIFIC_URL % ("55", "x86_64"), "rhel5.4", name="sl-5latest")
+# scientific 5
+_add(OLD_SCIENTIFIC_URL % ("55", "x86_64"), "rhel5.5", name="sl-5latest")
 # Latest scientific 6
-_add(SCIENTIFIC_URL % ("6", "x86_64"), "rhel6", name="sl-6latest")
+_add(SCIENTIFIC_URL % ("6", "x86_64"), "rhel6.1", name="sl-6latest")
 
 
 _set_distro(SuseDistro)
-# opensuse 10.0 uses different paths, so keep this around
-_add(OPENSUSE10, i686=OPENSUSE10, hasxen=False, hasbootiso=False,
-     name="opensuse-10.0")
 # Latest 10 series
-_add(OLD_OPENSUSE_URL % ("10.3"), hasbootiso=False, name="opensuse-10.3")
+_add(OLD_OPENSUSE_URL % ("10.3"), "opensuse10.3", hasbootiso=False)
 # Latest 11 series
-_add(OLD_OPENSUSE_URL % ("11.4"), "opensuse11", hasbootiso=False)
+_add(OLD_OPENSUSE_URL % ("11.4"), "opensuse11.4", hasbootiso=False)
 # Latest 12 series
 # Only keep i686 for the latest opensuse
-_add(OPENSUSE_URL % ("12.3"), "opensuse12",
+_add(OPENSUSE_URL % ("12.3"), "opensuse12.3",
      i686=OPENSUSE_URL % ("12.3"), hasbootiso=False, testshortcircuit=True)
 
 
 _set_distro(DebianDistro)
 # Debian releases rarely enough that we can just do every release since lenny
-_add(OLD_DEBIAN_URL % ("lenny", "amd64"), "debianlenny", hasxen=False,
+_add(OLD_DEBIAN_URL % ("lenny", "amd64"), "debian5", hasxen=False,
      testshortcircuit=True)
-_add(DEBIAN_URL % ("squeeze", "amd64"), "debiansqueeze")
-_add(DEBIAN_URL % ("wheezy", "amd64"), "debianwheezy")
+_add(DEBIAN_URL % ("squeeze", "amd64"), "debian6")
+_add(DEBIAN_URL % ("wheezy", "amd64"), "debian7")
 # And daily builds, since we specially handle that URL
-_add(DAILY_DEBIAN_URL % ("amd64"), "debianwheezy", name="debiandaily")
+_add(DAILY_DEBIAN_URL % ("amd64"), "debian7", name="debiandaily")
 
 
 _set_distro(UbuntuDistro)
 # One old ubuntu
-_add(OLD_UBUNTU_URL % ("hardy", "amd64"), "ubuntuhardy",
+_add(OLD_UBUNTU_URL % ("hardy", "amd64"), "ubuntu8.04",
      i686=OLD_UBUNTU_URL % ("hardy", "i386"), hasxen=False,
      testshortcircuit=True)
 # Latest LTS
-_add(UBUNTU_URL % ("precise", "amd64"), "ubuntuprecise")
+_add(UBUNTU_URL % ("precise", "amd64"), "ubuntu12.04")
 # Latest release
-_add(UBUNTU_URL % ("raring", "amd64"), "ubunturaring")
+_add(OLD_UBUNTU_URL % ("raring", "amd64"), "ubuntu13.04")
 
 
 _set_distro(MandrivaDistro)

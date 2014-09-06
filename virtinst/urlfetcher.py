@@ -681,15 +681,21 @@ class FedoraDistro(RedHatDistro):
 
         lateststr, latestnum = self._latestFedoraVariant()
         ver = self.treeinfo.get("general", "version")
+        if not ver:
+            return False
+
         if ver == "development" or ver == "rawhide":
-            vernum = latestnum
+            self._version_number = latestnum
             self.os_variant = lateststr
-        elif ver:
-            vernum = int(str(ver).split("-")[0])
-            if vernum > latestnum:
-                self.os_variant = lateststr
-            else:
-                self.os_variant = "fedora" + str(vernum)
+            return
+
+        if "_" in ver:
+            ver = ver.split("_")[0]
+        vernum = int(str(ver).split("-")[0])
+        if vernum > latestnum:
+            self.os_variant = lateststr
+        else:
+            self.os_variant = "fedora" + str(vernum)
 
         self._version_number = vernum
         return True
@@ -780,15 +786,14 @@ class CentOSDistro(RHELDistro):
     urldistro = None
 
     def isValidStore(self):
-        if self._hasTreeinfo():
-            m = re.match(".*CentOS.*", self.treeinfo.get("general", "family"))
-            ret = (m is not None)
+        if not self._hasTreeinfo():
+            return self.fetcher.hasFile("CentOS")
 
-            if ret:
-                self._variantFromVersion()
-            return ret
-
-        return self.fetcher.hasFile("CentOS")
+        m = re.match(".*CentOS.*", self.treeinfo.get("general", "family"))
+        ret = (m is not None)
+        if ret:
+            self._variantFromVersion()
+        return ret
 
 
 # Scientific Linux distro check
@@ -825,18 +830,9 @@ class SuseDistro(Distro):
         if re.match(r'i[4-9]86', self.arch):
             self.arch = 'i386'
 
-        oldkern = "linux"
-        oldinit = "initrd"
-        if self.arch == "x86_64":
-            oldkern += "64"
-            oldinit += "64"
-
         # Tested with Opensuse >= 10.2, 11, and sles 10
         self._hvm_kernel_paths = [("boot/%s/loader/linux" % self.arch,
                                     "boot/%s/loader/initrd" % self.arch)]
-        # Tested with Opensuse 10.0
-        self._hvm_kernel_paths.append(("boot/loader/%s" % oldkern,
-                                       "boot/loader/%s" % oldinit))
 
         # Matches Opensuse > 10.2 and sles 10
         self._xen_kernel_paths = [("boot/%s/vmlinuz-xen" % self.arch,
@@ -858,13 +854,12 @@ class SuseDistro(Distro):
 
     def _detect_osdict_from_url(self):
         root = "opensuse"
-        our_os_vals = [n.name for n in osdict.list_os() if
-                       n.name.startswith(root)]
+        oses = [n for n in osdict.list_os() if n.name.startswith(root)]
 
-        for name in our_os_vals:
-            codename = name[len(root):]
-            if re.search("/%s\.[1-9]/" % codename, self.uri):
-                return name
+        for osobj in oses:
+            codename = osobj.name[len(root):]
+            if re.search("/%s/" % codename, self.uri):
+                return osobj.name
         return self.os_variant
 
 
@@ -929,15 +924,19 @@ class DebianDistro(Distro):
 
     def _detect_osdict_from_url(self):
         root = self.name.lower()
-        our_os_vals = [n.name for n in osdict.list_os() if
-                       n.name.startswith(root)]
+        oses = [n for n in osdict.list_os() if n.name.startswith(root)]
 
         if self._prefix == "daily":
-            return our_os_vals[0]
-        for name in our_os_vals:
-            codename = name[len(root):]
+            return oses[0].name
+
+        for osobj in oses:
+            # name looks like 'Debian Sarge'
+            if " " not in osobj.label:
+                continue
+
+            codename = osobj.label.lower().split()[1]
             if ("/%s/" % codename) in self.uri:
-                return name
+                return osobj.name
         return self.os_variant
 
 
