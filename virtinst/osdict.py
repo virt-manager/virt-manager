@@ -376,18 +376,13 @@ class _OsVariantOsInfo(_OSVariant):
         return _SENTINEL
 
     def _is_virtioconsole(self):
-        if self._os.get_distro() == "fedora":
-            if self._os.get_version() == "unknown":
-                return _SENTINEL
-            return int(self._os.get_version()) >= 18 or _SENTINEL
-
-        fltr = libosinfo.Filter()
-        fltr.add_constraint("class", "console")
-        devs = self._os.get_all_devices(fltr)
-        for dev in range(devs.get_length()):
-            d = devs.get_nth(dev)
-            if d.get_name() == "virtio-console":
-                return True
+        # We used to enable this for Fedora 18+, because systemd would
+        # autostart a getty on /dev/hvc0 which made 'virsh console' work
+        # out of the box for a login prompt. However now in Fedora
+        # virtio-console is compiled as a module, and systemd doesn't
+        # detect it in time to start a getty. So the benefit of using
+        # it as the default is erased, and we reverted to this.
+        # https://bugzilla.redhat.com/show_bug.cgi?id=1039742
         return _SENTINEL
 
     def _is_virtiommio(self):
