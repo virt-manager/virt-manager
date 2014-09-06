@@ -157,6 +157,8 @@ class _OSVariant(object):
     based on the OS. They should be self explanatory. See guest.py for
     their usage.
     """
+    _os = None
+
     def __init__(self, name, label, is_type=False,
                  sortby=None, parent=_SENTINEL, typename=_SENTINEL,
                  urldistro=_SENTINEL, supported=_SENTINEL,
@@ -164,7 +166,7 @@ class _OSVariant(object):
                  acpi=_SENTINEL, apic=_SENTINEL, clock=_SENTINEL,
                  netmodel=_SENTINEL, diskbus=_SENTINEL,
                  inputtype=_SENTINEL, inputbus=_SENTINEL,
-                 videomodel=_SENTINEL, virtionet=_SENTINEL,
+                 virtionet=_SENTINEL,
                  virtiodisk=_SENTINEL, virtiommio=_SENTINEL,
                  virtioconsole=_SENTINEL, xen_disable_acpi=_SENTINEL,
                  qemu_ga=_SENTINEL, hyperv_features=_SENTINEL):
@@ -218,7 +220,6 @@ class _OSVariant(object):
         self.clock = _get_default("clock", clock)
 
         self.netmodel = _get_default("netmodel", netmodel)
-        self.videomodel = _get_default("videomodel", videomodel)
         self.diskbus = _get_default("diskbus", diskbus)
         self.inputtype = _get_default("inputtype", inputtype)
         self.inputbus = _get_default("inputbus", inputbus)
@@ -234,6 +235,19 @@ class _OSVariant(object):
 
     def get_recommended_resources(self, arch):
         ignore1 = arch
+        return None
+
+    def get_videomodel(self, guest):
+        if guest.has_spice() and guest.os.is_x86():
+            return "qxl"
+        if guest.os.is_ppc64() and guest.os.machine == "pseries":
+            return "vga"
+
+        if self._os:
+            if self._os.get_short_id() in {"ubuntu13.10", "ubuntu13.04"}:
+                return "vmvga"
+            if _OsVariantOsInfo.is_windows(self._os):
+                return "vga"
         return None
 
 
@@ -281,23 +295,6 @@ class _OsVariantOsInfo(_OSVariant):
 
         fltr = libosinfo.Filter()
         fltr.add_constraint("class", "net")
-        devs = self._os.get_all_devices(fltr)
-        if devs.get_length():
-            return devs.get_nth(0).get_name()
-        return _SENTINEL
-
-    def _get_videomodel(self):
-        if self._os.get_short_id() in {"ubuntu13.10", "ubuntu13.04"}:
-            return "vmvga"
-
-        if _OsVariantOsInfo.is_windows(self._os):
-            return "vga"
-
-        if self._os.get_distro() == "fedora":
-            return _SENTINEL
-
-        fltr = libosinfo.Filter()
-        fltr.add_constraint("class", "video")
         devs = self._os.get_all_devices(fltr)
         if devs.get_length():
             return devs.get_nth(0).get_name()
@@ -477,7 +474,6 @@ class _OsVariantOsInfo(_OSVariant):
         hyperv_features = self._is_hyperv_features()
         virtioconsole = lambda: self._is_virtioconsole()
         netmodel = lambda: self._get_netmodel()
-        videomodel = lambda: self._get_videomodel()
         diskbus = lambda: self._get_diskbus()
         inputtype = lambda: self._get_inputtype()
         inputbus = lambda: self.get_inputbus()
@@ -488,7 +484,7 @@ class _OsVariantOsInfo(_OSVariant):
                 urldistro=urldistro, supported=supported,
                 three_stage_install=three_stage_install, acpi=acpi, apic=apic,
                 clock=clock, netmodel=netmodel, diskbus=diskbus,
-                inputtype=inputtype, inputbus=inputbus, videomodel=videomodel,
+                inputtype=inputtype, inputbus=inputbus,
                 virtionet=virtionet, virtiodisk=virtiodisk,
                 virtiommio=virtiommio, virtioconsole=virtioconsole,
                 xen_disable_acpi=xen_disable_acpi, qemu_ga=qemu_ga,
@@ -511,8 +507,9 @@ class _OsVariantOsInfo(_OSVariant):
 
         return ret
 
+
 _add_type("linux", "Linux")
-_add_type("windows", "Windows", clock="localtime", three_stage_install=True, inputtype="tablet", inputbus="usb", videomodel="vga")
+_add_type("windows", "Windows", clock="localtime", three_stage_install=True, inputtype="tablet", inputbus="usb")
 _add_type("solaris", "Solaris", clock="localtime")
 _add_type("unix", "UNIX")
 _add_type("other", "Other")

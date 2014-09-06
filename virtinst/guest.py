@@ -507,6 +507,14 @@ class Guest(XMLBuilder):
     # Guest Dictionary Helper methods #
     ###################################
 
+    def _get_os_object(self):
+        ret = osdict.lookup_os(self.os_variant)
+        if ret is None:
+            ret = osdict.lookup_os("generic")
+        return ret
+    _os_object = property(_get_os_object)
+
+
     def _lookup_osdict_key(self, key, default):
         """
         Use self.os_variant to find key in OSTYPES
@@ -960,24 +968,18 @@ class Guest(XMLBuilder):
             dev.type = "spicevmc"
             self.add_device(dev)
 
-    def _set_video_defaults(self):
-        def has_spice():
-            for gfx in self.get_devices("graphics"):
-                if gfx.type == gfx.TYPE_SPICE:
-                    return True
+    def has_spice(self):
+        for gfx in self.get_devices("graphics"):
+            if gfx.type == gfx.TYPE_SPICE:
+                return True
 
-        if has_spice():
+    def _set_video_defaults(self):
+        if self.has_spice():
             self._add_spice_channels()
             self._add_spice_sound()
             self._add_spice_usbredir()
 
-        if has_spice() and self.os.is_x86():
-            video_model = "qxl"
-        elif self.os.is_ppc64() and self.os.machine == "pseries":
-            video_model = "vga"
-        else:
-            video_model = self._lookup_osdict_key("videomodel", "cirrus")
-
+        video_model = self._os_object.get_videomodel(self) or "cirrus"
         for video in self.get_devices("video"):
             if video.model == video.MODEL_DEFAULT:
                 video.model = video_model
