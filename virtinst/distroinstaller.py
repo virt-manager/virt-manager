@@ -43,8 +43,8 @@ def _is_url(conn, url):
         else:
             return False
 
-    return (url.startswith("http://") or url.startswith("ftp://") or
-            url.startswith("nfs:"))
+    return (url.startswith("http://") or url.startswith("https://") or
+            url.startswith("ftp://") or url.startswith("nfs:"))
 
 
 def _sanitize_url(url):
