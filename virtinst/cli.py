@@ -921,13 +921,15 @@ class _VirtCLIArgument(object):
 
         try:
             if self.attrname:
-                eval("inst." + self.attrname)
+                eval("inst." + self.attrname)  # pylint: disable=eval-used
         except AttributeError:
             raise RuntimeError("programming error: obj=%s does not have "
                                "member=%s" % (inst, self.attrname))
 
         if lookup:
+            # pylint: disable=eval-used
             return eval("inst." + self.attrname) == val
+            # pylint: enable=eval-used
         elif self.setter_cb:
             self.setter_cb(opts, inst, self.cliname, val)
         else:
