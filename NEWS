@@ -1,6 +1,26 @@
  Virtual Machine Manager News
  ============================
 
+Release 1.1.0 (September 07, 2014)
+----------------------------------
+- Switch to libosinfo as OS metadata database (Giuseppe Scrivano)
+- Use libosinfo for OS detection from CDROM media labels (Giuseppe
+  Scrivano)
+- Use libosinfo for improved OS defaults, like recommended disk size
+  (Giuseppe Scrivano)
+- virt-image tool has been removed, as previously announced
+- Enable Hyper-V enlightenments for Windows VMs
+- Revert virtio-console default, back to plain serial console
+- Experimental q35 option in new VM 'customize' dialog
+- UI for virtual network QoS settings (Giuseppe Scrivano)
+- virt-install: --disk discard= support (Jim Minter)
+- addhardware: Add spiceport UI (Marc-André Lureau)
+- virt-install: --events on_poweroff etc. support (Chen Hanxiao)
+- cli --network portgroup= support and UI support
+- cli --boot initargs= and UI support
+- addhardware: allow setting controller model (Chen Hanxiao)
+- virt-install: support setting hugepage options (Chen Hanxiao)
+
 Release 1.0.1 (March 22, 2014)
 ------------------------------
 - virt-install/virt-xml: New --memorybacking option (Chen Hanxiao)
