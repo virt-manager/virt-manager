@@ -319,9 +319,6 @@ def getDistroStore(guest, fetcher):
     if dist:
         return dist
 
-    # FIXME: This 'distro ==' doesn't cut it. 'distro' is from our os
-    # dictionary, so would look like 'fedora9' or 'rhel5', so this needs
-    # to be a bit more intelligent
     stores = _allstores[:]
 
     # If user manually specified an os_distro, bump it's URL class
