@@ -347,13 +347,6 @@ class DistroInstaller(Installer):
     def _prepare_kernel_url(self, guest, fetcher):
         store = urlfetcher.getDistroStore(guest, fetcher)
         kernel, initrd, args = store.acquireKernel(guest)
-        os_variant = store.get_osdict_info()
-
-        if guest.os_autodetect:
-            if os_variant:
-                logging.debug("Auto detected OS variant as: %s", os_variant)
-                guest.os_variant = os_variant
-
         self._tmpfiles.append(kernel)
         if initrd:
             self._tmpfiles.append(initrd)
@@ -473,19 +466,14 @@ class DistroInstaller(Installer):
         return True
 
     def detect_distro(self, guest):
+        distro = None
         try:
-            if not _is_url(self.conn, self.location):
-                name = osdict.lookup_os_by_media(self.location)
-                if name:
-                    logging.debug("installer.detect_distro returned=%s", name)
-                    return name
+            if _is_url(self.conn, self.location):
+                distro = urlfetcher.detectMediaDistro(guest, self.location)
+            else:
+                distro = osdict.lookup_os_by_media(self.location)
         except:
-            logging.debug("libosinfo detect failed", exc_info=True)
+            logging.debug("Error attempting to detect distro.", exc_info=True)
 
-        try:
-            ret = urlfetcher.detectMediaDistro(guest, self.location)
-            logging.debug("installer.detect_distro returned=%s", ret)
-            return ret
-        except:
-            logging.exception("Error attempting to detect distro.")
-            return None
+        logging.debug("installer.detect_distro returned=%s", distro)
+        return distro

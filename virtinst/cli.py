@@ -530,24 +530,6 @@ def convert_old_features(options):
     options.features = opts or None
 
 
-def set_os_variant(obj, distro_type, distro_variant):
-    # This is used for both Guest and virtconv VM, so be careful
-    if (not distro_type and
-        not distro_variant and
-        hasattr(obj, "os_autodetect")):
-        # Default to distro autodetection
-        obj.os_autodetect = True
-        return
-
-    distro_variant = distro_variant and str(distro_variant).lower() or None
-    distro_type = distro_type and str(distro_type).lower() or None
-    distkey = distro_variant or distro_type
-    if not distkey or distkey == "none":
-        return
-
-    obj.os_variant = distkey
-
-
 ###########################
 # Common CLI option/group #
 ###########################
@@ -757,17 +739,6 @@ def add_fs_option(devg):
         help=_("Pass host directory to the guest. Ex: \n"
                "--filesystem /my/source/dir,/dir/in/guest\n"
                "--filesystem template_name,/,type=template"))
-
-
-def add_distro_options(g):
-    # Way back when, we required specifying both --os-type and --os-variant
-    # Nowadays the distinction is pointless, so hide the less useful
-    # --os-type option.
-    g.add_argument("--os-type", dest="distro_type",
-                help=argparse.SUPPRESS)
-    g.add_argument("--os-variant", dest="distro_variant",
-                 help=_("The OS variant being installed guests, "
-                        "e.g. 'fedora18', 'rhel6', 'winxp', etc."))
 
 
 def add_old_feature_options(optg):

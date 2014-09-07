@@ -104,7 +104,6 @@ class Guest(XMLBuilder):
 
         self.autostart = False
         self.replace = False
-        self.os_autodetect = False
 
         # Allow virt-manager to override the default graphics type
         self.default_graphics_type = cliconfig.default_graphics
@@ -207,11 +206,13 @@ class Guest(XMLBuilder):
     def _get_os_variant(self):
         return self._os_variant
     def _set_os_variant(self, val):
+        if val:
+            val = val.lower()
+            if osdict.lookup_os(val) is None:
+                raise ValueError(
+                    _("Distro '%s' does not exist in our dictionary") % val)
+
         logging.debug("Setting Guest.os_variant to '%s'", val)
-        val = val.lower()
-        if osdict.lookup_os(val) is None:
-            raise ValueError(_("Distro '%s' does not exist in our dictionary")
-                             % val)
         self._os_variant = val
     os_variant = property(_get_os_variant, _set_os_variant)
 

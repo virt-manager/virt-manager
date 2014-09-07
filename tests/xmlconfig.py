@@ -86,13 +86,17 @@ class TestXMLConfig(unittest.TestCase):
             utils.test_create(guest.conn, actualXML)
 
     def _testInstall(self, guest,
-                     instxml=None, bootxml=None, contxml=None):
+                     instxml=None, bootxml=None, contxml=None,
+                     detect_distro=False):
         instname = build_xmlfile(instxml)
         bootname = build_xmlfile(bootxml)
         contname = build_xmlfile(contxml)
         meter = None
 
         try:
+            if detect_distro:
+                guest.os_variant = guest.installer.detect_distro(guest)
+
             guest.start_install(meter=meter)
             guest.domain.destroy()
 
@@ -944,9 +948,9 @@ class TestXMLConfig(unittest.TestCase):
         g.add_device(utils.get_virtual_network())
         g.add_device(VirtualAudio(g.conn))
         g.add_device(VirtualVideoDevice(g.conn))
-        g.os_autodetect = True
 
-        self._testInstall(g, "rhel6-kvm-stage1", "rhel6-kvm-stage2")
+        self._testInstall(g, "rhel6-kvm-stage1", "rhel6-kvm-stage2",
+            detect_distro=True)
 
     def testFullKVMWinxp(self):
         utils.set_conn(_plainkvm)

@@ -163,6 +163,23 @@ def convert_old_disks(options):
     options.sparse = True
 
 
+def convert_old_os_options(options):
+    distro_variant = options.distro_variant
+    distro_type = options.distro_type
+    if not distro_type and not distro_variant:
+        # Default to distro autodetection
+        options.distro_variant = "auto"
+        return
+
+    distro_variant = distro_variant and str(distro_variant).lower() or None
+    distro_type = distro_type and str(distro_type).lower() or None
+    distkey = distro_variant or distro_type
+    if not distkey or distkey == "none":
+        options.distro_variant = "none"
+    else:
+        options.distro_variant = distkey
+
+
 ########################
 # Virt type validation #
 ########################
@@ -220,25 +237,23 @@ def get_guest(conn, options):
 # Install media setup/validation #
 ##################################
 
-def get_install_media(guest, location, cdpath):
-    manual_cdrom = cdrom_specified(guest)
-    cdinstall = bool(not location and (cdpath or cdrom_specified(guest)))
-
-    if not (location or cdpath or manual_cdrom):
-        return
-
+def set_install_media(guest, location, cdpath, distro_variant):
     try:
-        validate_install_media(guest, location, cdpath, cdinstall)
+        cdinstall = bool(not location and (cdpath or cdrom_specified(guest)))
+
+        if cdinstall or cdpath:
+            guest.installer.cdrom = True
+        if location or cdpath:
+            guest.installer.location = (location or cdpath)
+
+        guest.installer.check_location(guest)
+
+        if distro_variant == "auto":
+            guest.os_variant = guest.installer.detect_distro(guest)
+        elif distro_variant != "none":
+            guest.os_variant = distro_variant
     except ValueError, e:
         fail(_("Error validating install location: %s" % str(e)))
-
-
-def validate_install_media(guest, location, cdpath, cdinstall=False):
-    if cdinstall or cdpath:
-        guest.installer.cdrom = True
-    if location or cdpath:
-        guest.installer.location = (location or cdpath)
-    guest.installer.check_location(guest)
 
 
 #############################
@@ -448,11 +463,11 @@ def build_guest_instance(conn, options, parsermap):
     cli.convert_old_features(options)
     cli.convert_old_cpuset(options)
     convert_old_init(options)
+    convert_old_os_options(options)
 
     # non-xml install options
     guest.installer.extraargs = options.extra_args
     guest.installer.initrd_injections = options.initrd_inject
-    cli.set_os_variant(guest, options.distro_type, options.distro_variant)
     guest.autostart = options.autostart
 
     if options.name:
@@ -472,9 +487,10 @@ def build_guest_instance(conn, options, parsermap):
     for disk in guest.get_devices("disk"):
         cli.validate_disk(disk)
 
-    guest.add_default_devices()
+    set_install_media(guest, options.location, options.cdrom,
+        options.distro_variant)
 
-    get_install_media(guest, options.location, options.cdrom)
+    guest.add_default_devices()
 
     # Various little validations about option collisions. Need to do
     # this after setting guest.installer at least
@@ -768,7 +784,15 @@ def parse_args():
                            "booted from --location"))
     insg.add_argument("--initrd-inject", action="append",
                     help=_("Add given file to root of initrd from --location"))
-    cli.add_distro_options(insg)
+
+    # Way back when, we required specifying both --os-type and --os-variant
+    # Nowadays the distinction is pointless, so hide the less useful
+    # --os-type option.
+    insg.add_argument("--os-type", dest="distro_type", help=argparse.SUPPRESS)
+    insg.add_argument("--os-variant", dest="distro_variant",
+        help=_("The OS variant being installed guests, "
+               "e.g. 'fedora18', 'rhel6', 'winxp', etc."))
+
     cli.add_boot_options(insg)
     insg.add_argument("--init", help=argparse.SUPPRESS)
 

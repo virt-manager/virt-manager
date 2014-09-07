@@ -215,12 +215,13 @@ class Installer(object):
         """
         Attempt to detect the distro for the Installer's 'location'. If
         an error is encountered in the detection process (or if detection
-        is not relevant for the Installer type), (None, None) is returned
+        is not relevant for the Installer type), None is returned.
 
-        @returns: (distro type, distro variant) tuple
+        @returns: distro variant string, or None
         """
         ignore = guest
-        return (None, None)
+        logging.debug("distro detection not available for this installer.")
+        return None
 
 
 class ContainerInstaller(Installer):
