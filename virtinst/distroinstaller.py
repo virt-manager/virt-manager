@@ -509,6 +509,9 @@ class DistroInstaller(Installer):
                     distro = store.get_osdict_info()
                 finally:
                     fetcher.cleanupLocation()
+            elif self.conn.is_remote():
+                logging.debug("Can't detect distro for media on "
+                    "remote connection.")
             else:
                 distro = osdict.lookup_os_by_media(self.location)
         except:
