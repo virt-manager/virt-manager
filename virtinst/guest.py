@@ -276,8 +276,7 @@ class Guest(XMLBuilder):
         ignore = dry
 
         # Fetch install media, prepare installer devices
-        self.installer.prepare(self, meter,
-                               util.make_scratchdir(self.conn, self.type))
+        self.installer.prepare(self, meter)
 
         # Initialize install device list
         for dev in self.installer.install_devices:

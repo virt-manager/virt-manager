@@ -153,10 +153,9 @@ class Installer(object):
     def _validate_location(self, val):
         return val
 
-    def _prepare(self, guest, meter, scratchdir):
+    def _prepare(self, guest, meter):
         ignore = guest
         ignore = meter
-        ignore = scratchdir
 
 
     ##############
@@ -195,10 +194,10 @@ class Installer(object):
         self._tmpfiles = []
         self.install_devices = []
 
-    def prepare(self, guest, meter, scratchdir):
+    def prepare(self, guest, meter):
         self.cleanup()
         try:
-            self._prepare(guest, meter, scratchdir)
+            self._prepare(guest, meter)
         except:
             self.cleanup()
             raise
@@ -251,10 +250,9 @@ class LiveCDInstaller(Installer):
 
     def _validate_location(self, val):
         return self._make_cdrom_dev(val).path
-    def _prepare(self, guest, meter, scratchdir):
+    def _prepare(self, guest, meter):
         ignore = guest
         ignore = meter
-        ignore = scratchdir
         self.install_devices.append(self._make_cdrom_dev(self.location))
     def _get_bootdev(self, isinstall, guest):
         return OSXML.BOOT_DEVICE_CDROM

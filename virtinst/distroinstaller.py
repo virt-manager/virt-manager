@@ -407,9 +407,10 @@ class DistroInstaller(Installer):
 
         return val
 
-    def _prepare(self, guest, meter, scratchdir):
-        logging.debug("Using scratchdir=%s", scratchdir)
+    def _prepare(self, guest, meter):
         mediatype = self._get_media_type()
+        scratchdir = util.make_scratchdir(guest.conn, guest.type)
+        logging.debug("Using scratchdir=%s", scratchdir)
 
         # Test suite manually injected a boot kernel
         if self._install_kernel and not self.scratchdir_required():
@@ -423,8 +424,8 @@ class DistroInstaller(Installer):
             dev = self._prepare_local()
 
         if mediatype != MEDIA_CDROM_PATH:
-            fetcher = urlfetcher.fetcherForURI(self.location,
-                                               scratchdir, meter)
+            fetcher = urlfetcher.fetcherForURI(self.location, scratchdir,
+                                               meter)
             try:
                 try:
                     fetcher.prepareLocation()
