@@ -291,6 +291,10 @@ def validate_required_options(options, guest):
         fail(msg)
 
 
+_cdrom_location_man_page = _("See the man page for examples of "
+    "using --location with CDROM media")
+
+
 def check_option_collisions(options, guest):
     # Disk collisions
     if options.nodisks and (options.file_paths or
@@ -339,8 +343,7 @@ def check_option_collisions(options, guest):
 
     cdrom_err = ""
     if guest.installer.cdrom:
-        cdrom_err = " " + _("See the man page for examples of "
-            "using --location with CDROM media")
+        cdrom_err = _cdrom_location_man_page
     if not options.location and options.extra_args:
         fail(_("--extra-args only work if specified with --location.") +
              cdrom_err)
@@ -358,7 +361,7 @@ def _show_nographics_warnings(options, guest):
     if guest.installer.cdrom:
         logging.warn(_("CDROM media does not print to the text console "
             "by default, so you likely will not see text install output. "
-            "You might want to use --location."))
+            "You might want to use --location.") + _cdrom_location_man_page)
         return
 
     if not options.location:
