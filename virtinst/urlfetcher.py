@@ -84,7 +84,7 @@ class _ImageFetcher(object):
         return fn
 
     def prepareLocation(self):
-        return True
+        pass
 
     def cleanupLocation(self):
         pass
@@ -145,12 +145,12 @@ class _HTTPImageFetcher(_URIImageFetcher):
 
 
 class _FTPImageFetcher(_URIImageFetcher):
-    def __init__(self, *args, **kwargs):
-        _URIImageFetcher.__init__(self, *args, **kwargs)
-
-        self.ftp = None
+    ftp = None
 
     def prepareLocation(self):
+        if self.ftp:
+            return
+
         try:
             url = urlparse.urlparse(self._make_path(""))
             if not url[1]:
@@ -160,6 +160,15 @@ class _FTPImageFetcher(_URIImageFetcher):
         except Exception, e:
             raise ValueError(_("Opening URL %s failed: %s.") %
                               (self.location, str(e)))
+
+    def cleanupLocation(self):
+        if not self.ftp:
+            return
+
+        try:
+            self.ftp.quit()
+        except:
+            logging.debug("Error quitting ftp connection", exc_info=True)
 
 
     def hasFile(self, filename):
@@ -197,9 +206,11 @@ class _MountedImageFetcher(_LocalImageFetcher):
     or loopback mounted file, or local CDROM device
     """
     _in_test_suite = bool("VIRTINST_TEST_SUITE" in os.environ)
+    _mounted = False
 
     def prepareLocation(self):
-        cmd = None
+        if self._mounted:
+            return
 
         if self._in_test_suite:
             self.srcdir = os.environ["VIRTINST_TEST_URL_DIR"]
@@ -219,25 +230,30 @@ class _MountedImageFetcher(_LocalImageFetcher):
             cmd = [mountcmd, "-o", mountopt, self.location, self.srcdir]
 
         logging.debug("mount cmd: %s", cmd)
-
         if not self._in_test_suite:
             ret = subprocess.call(cmd)
             if ret != 0:
                 self.cleanupLocation()
                 raise ValueError(_("Mounting location '%s' failed") %
                                  (self.location))
-        return True
+
+        self._mounted = True
 
     def cleanupLocation(self):
-        logging.debug("Cleaning up mount at " + self.srcdir)
+        if not self._mounted:
+            return
 
-        if not self._in_test_suite:
-            cmd = ["/bin/umount", self.srcdir]
-            subprocess.call(cmd)
-            try:
-                os.rmdir(self.srcdir)
-            except:
-                pass
+        logging.debug("Cleaning up mount at " + self.srcdir)
+        try:
+            if not self._in_test_suite:
+                cmd = ["/bin/umount", self.srcdir]
+                subprocess.call(cmd)
+                try:
+                    os.rmdir(self.srcdir)
+                except:
+                    pass
+        finally:
+            self._mounted = False
 
 
 class _DirectImageFetcher(_LocalImageFetcher):
