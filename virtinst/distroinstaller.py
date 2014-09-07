@@ -313,6 +313,8 @@ class DistroInstaller(Installer):
         Installer.__init__(self, *args, **kwargs)
 
         self.livecd = False
+        self._cached_fetcher = None
+        self._cached_store = None
 
 
     #######################
@@ -332,6 +334,25 @@ class DistroInstaller(Installer):
             return MEDIA_LOCATION_DIR
         return MEDIA_LOCATION_CDROM
 
+    def _get_fetcher(self, guest, meter):
+        if not meter:
+            meter = urlgrabber.progress.BaseMeter()
+
+        if not self._cached_fetcher:
+            scratchdir = util.make_scratchdir(guest.conn, guest.type)
+
+            self._cached_fetcher = urlfetcher.fetcherForURI(
+                self.location, scratchdir, meter)
+
+        self._cached_fetcher.meter = meter
+        return self._cached_fetcher
+
+    def _get_store(self, guest, fetcher):
+        # Caller is responsible for calling fetcher prepare/cleanup if needed
+        if not self._cached_store:
+            self._cached_store = urlfetcher.getDistroStore(guest, fetcher)
+        return self._cached_store
+
     def _prepare_local(self):
         transient = True
         if self.cdrom:
@@ -339,13 +360,13 @@ class DistroInstaller(Installer):
         return self._make_cdrom_dev(self.location, transient=transient)
 
     def _prepare_cdrom_url(self, guest, fetcher):
-        store = urlfetcher.getDistroStore(guest, fetcher)
+        store = self._get_store(guest, fetcher)
         media = store.acquireBootDisk(guest)
         self._tmpfiles.append(media)
         return self._make_cdrom_dev(media, transient=True)
 
     def _prepare_kernel_url(self, guest, fetcher):
-        store = urlfetcher.getDistroStore(guest, fetcher)
+        store = self._get_store(guest, fetcher)
         kernel, initrd, args = store.acquireKernel(guest)
         self._tmpfiles.append(kernel)
         if initrd:
@@ -393,6 +414,9 @@ class DistroInstaller(Installer):
 
         2) http, ftp, or nfs path for an install tree
         """
+        self._cached_store = None
+        self._cached_fetcher = None
+
         if _is_url(self.conn, val):
             logging.debug("DistroInstaller location is a network source.")
             return _sanitize_url(val)
@@ -409,8 +433,6 @@ class DistroInstaller(Installer):
 
     def _prepare(self, guest, meter):
         mediatype = self._get_media_type()
-        scratchdir = util.make_scratchdir(guest.conn, guest.type)
-        logging.debug("Using scratchdir=%s", scratchdir)
 
         # Test suite manually injected a boot kernel
         if self._install_kernel and not self.scratchdir_required():
@@ -424,13 +446,13 @@ class DistroInstaller(Installer):
             dev = self._prepare_local()
 
         if mediatype != MEDIA_CDROM_PATH:
-            fetcher = urlfetcher.fetcherForURI(self.location, scratchdir,
-                                               meter)
+            fetcher = self._get_fetcher(guest, meter)
             try:
                 try:
                     fetcher.prepareLocation()
                 except ValueError, e:
-                    logging.exception("Error preparing install location")
+                    logging.debug("Error preparing install location",
+                        exc_info=True)
                     raise ValueError(_("Invalid install location: ") + str(e))
 
                 if mediatype == MEDIA_CDROM_URL:
@@ -465,15 +487,28 @@ class DistroInstaller(Installer):
         if mediatype not in [MEDIA_CDROM_URL, MEDIA_LOCATION_URL]:
             return True
 
-        # This will throw an error for us
-        urlfetcher.detectMediaDistro(guest, self.location)
+        try:
+            fetcher = self._get_fetcher(guest, None)
+            fetcher.prepareLocation()
+
+            # This will throw an error for us
+            ignore = self._get_store(guest, fetcher)
+        finally:
+            fetcher.cleanupLocation()
         return True
 
     def detect_distro(self, guest):
         distro = None
         try:
             if _is_url(self.conn, self.location):
-                distro = urlfetcher.detectMediaDistro(guest, self.location)
+                try:
+                    fetcher = self._get_fetcher(guest, None)
+                    fetcher.prepareLocation()
+
+                    store = self._get_store(guest, fetcher)
+                    distro = store.get_osdict_info()
+                finally:
+                    fetcher.cleanupLocation()
             else:
                 distro = osdict.lookup_os_by_media(self.location)
         except:

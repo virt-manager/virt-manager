@@ -50,6 +50,8 @@ class _ImageFetcher(object):
         self.meter = meter
         self.srcdir = None
 
+        logging.debug("Using scratchdir=%s", scratchdir)
+
     def _make_path(self, filename):
         path = self.srcdir or self.location
 
@@ -365,23 +367,6 @@ def getDistroStore(guest, fetcher):
           "The location must be the root directory of an install tree.\n"
           "See virt-install man page for various distro examples." %
           fetcher.location))
-
-
-def detectMediaDistro(guest, location):
-    """
-    Attempt to detect the os type + variant for the passed location
-    """
-    import urlgrabber
-    meter = urlgrabber.progress.BaseMeter()
-    scratchdir = "/var/tmp"
-    fetcher = fetcherForURI(location, scratchdir, meter)
-
-    try:
-        fetcher.prepareLocation()
-        store = getDistroStore(guest, fetcher)
-        return store.get_osdict_info()
-    finally:
-        fetcher.cleanupLocation()
 
 
 ##################
