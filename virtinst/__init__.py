@@ -65,7 +65,7 @@ from virtinst.devicerng import VirtualRNGDevice
 from virtinst.devicepanic import VirtualPanicDevice
 
 from virtinst.installer import (ContainerInstaller, ImportInstaller,
-                                LiveCDInstaller, PXEInstaller, Installer)
+                                PXEInstaller, Installer)
 
 from virtinst.distroinstaller import DistroInstaller
 

@@ -281,8 +281,10 @@ def make_distro_installer(location="/dev/default-pool/default-vol"):
 
 
 def make_live_installer(location="/dev/null"):
-    inst = virtinst.LiveCDInstaller(_conn)
+    inst = virtinst.DistroInstaller(_conn)
     inst.location = location
+    inst.livecd = True
+    inst.cdrom = True
     return inst
 
 

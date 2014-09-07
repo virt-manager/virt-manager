@@ -322,8 +322,8 @@ class Guest(XMLBuilder):
         Return the full Guest xml configuration.
 
         @param install: Whether we want the 'OS install' configuration or
-                        the 'post-install' configuration. (Some Installers,
-                        like the LiveCDInstaller may not have an 'install'
+                        the 'post-install' configuration. (Some installs,
+                        like an import or livecd may not have an 'install'
                         config.)
         @type install: C{bool}
         @param disk_boot: Whether we should boot off the harddisk, regardless

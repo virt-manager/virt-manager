@@ -419,14 +419,12 @@ def show_warnings(options, guest):
 
 def build_installer(options, conn, virt_type):
     # Build the Installer instance
-    if options.livecd:
-        instclass = virtinst.LiveCDInstaller
-    elif options.pxe:
+    if options.pxe:
         if options.nonetworks:
             fail(_("Can't use --pxe with --nonetworks"))
 
         instclass = virtinst.PXEInstaller
-    elif options.cdrom or options.location:
+    elif options.cdrom or options.location or options.livecd:
         instclass = virtinst.DistroInstaller
     elif virt_type == "exe":
         instclass = virtinst.ContainerInstaller
@@ -440,9 +438,9 @@ def build_installer(options, conn, virt_type):
     else:
         instclass = virtinst.DistroInstaller
 
-    # Only set installer params here that impact the hw config, not
-    # anything to do with install media
     installer = instclass(conn)
+    if options.livecd:
+        installer.livecd = True
 
     return installer
 

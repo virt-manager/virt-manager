@@ -449,6 +449,9 @@ class DistroInstaller(Installer):
     # Public installer impls #
     ##########################
 
+    def has_install_phase(self):
+        return not self.livecd
+
     def scratchdir_required(self):
         if not self.location:
             return False

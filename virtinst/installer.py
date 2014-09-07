@@ -244,20 +244,6 @@ class PXEInstaller(Installer):
         return bootdev
 
 
-class LiveCDInstaller(Installer):
-    _has_install_phase = False
-    cdrom = True
-
-    def _validate_location(self, val):
-        return self._make_cdrom_dev(val).path
-    def _prepare(self, guest, meter):
-        ignore = guest
-        ignore = meter
-        self.install_devices.append(self._make_cdrom_dev(self.location))
-    def _get_bootdev(self, isinstall, guest):
-        return OSXML.BOOT_DEVICE_CDROM
-
-
 class ImportInstaller(Installer):
     _has_install_phase = False
 
