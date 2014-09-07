@@ -434,9 +434,20 @@ class _OsVariantOsInfo(_OSVariant):
 
     def _get_supported(self):
         d = self._os.get_eol_date_string()
-        if self._os.get_distro() == "msdos":
-            return False
-        return d is None or datetime.strptime(d, "%Y-%m-%d") > datetime.now()
+        name = self._os.get_short_id()
+
+        if d:
+            return datetime.strptime(d, "%Y-%m-%d") > datetime.now()
+
+        # As of libosinfo 2.11, many clearly EOL distros don't have an
+        # EOL date. So assume None == EOL, add some manual work arounds.
+        # We should fix this in a new libosinfo version, and then drop
+        # this hack
+        if name in ["rhel7.0", "rhel7.1", "fedora19", "fedora20", "fedora21",
+            "debian6", "debian7", "ubuntu13.04", "ubuntu13.10", "ubuntu14.04",
+            "ubuntu14.10", "win8", "win8.1", "win2k12", "win2k12r2"]:
+            return True
+        return False
 
     def _get_urldistro(self):
         urldistro = self._os.get_distro()
