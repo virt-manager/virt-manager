@@ -346,7 +346,8 @@ def getDistroStore(guest, fetcher):
 
     raise ValueError(
         _("Could not find an installable distribution at '%s'\n"
-          "The location must be the root directory of an install tree." %
+          "The location must be the root directory of an install tree.\n"
+          "See virt-install man page for various distro examples." %
           fetcher.location))
 
 
