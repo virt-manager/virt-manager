@@ -31,7 +31,7 @@ from gi.repository import LibvirtGLib
 
 from virtinst import util as util
 from virtinst import cli as virtinstcli
-from virtcli import cliutils, cliconfig
+from virtcli import cliconfig
 
 
 try:
@@ -139,7 +139,6 @@ def launch_specific_window(engine, show, uri, clistr):
 
 
 def main():
-    cliutils.setup_i18n()
     (options, leftovers) = parse_commandline()
 
     virtinstcli.setupLogging("virt-manager", options.debug, False, False)
