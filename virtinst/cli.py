@@ -117,18 +117,29 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     quiet = do_quiet
 
     vi_dir = None
+    logfile = None
     if "VIRTINST_TEST_SUITE" not in os.environ:
         vi_dir = util.get_cache_dir()
+        logfile = os.path.join(vi_dir, appname + ".log")
 
-    if vi_dir and not os.access(vi_dir, os.W_OK):
-        if os.path.exists(vi_dir):
-            raise RuntimeError("No write access to directory %s" % vi_dir)
+    try:
+        if vi_dir and not os.access(vi_dir, os.W_OK):
+            if os.path.exists(vi_dir):
+                raise RuntimeError("No write access to directory %s" % vi_dir)
 
-        try:
-            os.makedirs(vi_dir, 0751)
-        except IOError, e:
-            raise RuntimeError("Could not create directory %s: %s" %
-                               (vi_dir, e))
+            try:
+                os.makedirs(vi_dir, 0751)
+            except IOError, e:
+                raise RuntimeError("Could not create directory %s: %s" %
+                                   (vi_dir, e))
+
+        if (logfile and
+            os.path.exists(logfile) and
+            not os.access(logfile, os.W_OK)):
+            raise RuntimeError("No write access to logfile %s" % logfile)
+    except Exception, e:
+        logging.warning("Error setting up logfile: %s", e)
+        logfile = None
 
 
     dateFormat = "%a, %d %b %Y %H:%M:%S"
@@ -143,12 +154,11 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
         rootLogger.removeHandler(handler)
 
     rootLogger.setLevel(logging.DEBUG)
-    if vi_dir:
-        filename = os.path.join(vi_dir, appname + ".log")
-        fileHandler = logging.handlers.RotatingFileHandler(filename, "ae",
-                                                           1024 * 1024, 5)
-        fileHandler.setFormatter(logging.Formatter(fileFormat,
-                                                   dateFormat))
+    if logfile:
+        fileHandler = logging.handlers.RotatingFileHandler(
+            logfile, "ae", 1024 * 1024, 5)
+        fileHandler.setFormatter(
+            logging.Formatter(fileFormat, dateFormat))
         rootLogger.addHandler(fileHandler)
 
     streamHandler = VirtStreamHandler(sys.stderr)
