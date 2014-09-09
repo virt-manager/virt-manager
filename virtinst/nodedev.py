@@ -187,9 +187,36 @@ class USBDevice(NodeDevice):
     vendor_id = XMLProperty("./capability/vendor/@id")
 
     def pretty_name(self):
-        devstr = "%.3d:%.3d" % (int(self.bus), int(self.device))
-        desc = "%s %s %s" % (devstr, str(self.vendor_name),
-                             str(self.product_name))
+        # Hypervisor may return a rather sparse structure, missing
+        # some ol all stringular descriptions of the device altogether.
+        # Do our best to help user identify the device.
+
+        # Certain devices pad their vendor with trailing spaces,
+        # such as "LENOVO       ". It does not look well.
+        product = str(self.product_name).strip()
+        vendor = str(self.vendor_name).strip()
+
+        if product == "":
+            product = str(self.product_id)
+            if vendor == "":
+                # No stringular descriptions altogether
+                vendor = str(self.vendor_id)
+                devstr = "%s:%s" % (vendor, product)
+            else:
+                # Only the vendor is known
+                devstr = "%s %s" % (vendor, product)
+        else:
+            if vendor == "":
+                # Sometimes vendor is left out empty, but product is
+                # already descriptive enough or contains the vendor string:
+                # "Lenovo USB Laser Mouse"
+                devstr = product
+            else:
+                # We know everything. Perfect.
+                devstr = "%s %s" % (vendor, product)
+
+        busstr = "%.3d:%.3d" % (int(self.bus), int(self.device))
+        desc = "%s %s" % (busstr, devstr)
         return desc
 
 
