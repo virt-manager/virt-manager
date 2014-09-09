@@ -62,6 +62,10 @@ _aliases = {
     "ubuntusaucy" : "ubuntu13.10",
     "vista" : "winvista",
     "winxp64" : "winxp",
+
+    "linux" : "generic",
+    "windows" : "winxp",
+    "solaris" : "solaris10",
 }
 
 
@@ -112,174 +116,59 @@ def _sort(tosort, sortpref=None):
     return retlist
 
 
-class _OSVariant(object):
-    """
-    Object tracking guest OS specific configuration bits.
+class _OsVariantType(object):
 
-    @name: name of the object. This must be lowercase. This becomes part of
-        the virt-install command line API so we cannot remove any existing
-        name (we could probably add aliases though)
-    @label: Pretty printed label. This is used in the virt-manager UI.
-        We can tweak this.
-    @is_type: virt-install historically had a distinction between an
-        os 'type' (windows, linux, etc), and an os 'variant' (fedora18,
-        winxp, etc). Back in 2009 we actually required the user to
-        specify --os-type if specifying an --os-variant even though we
-        could figure it out easily. This distinction isn't needed any
-        more, though it's still baked into the virt-manager UI where
-        it is still pretty useful, so we fake it here. New types should
-        not be added often.
-    @typename: The family of the OS, e.g. "linux", "windows", "unix".
-    @sortby: A different key to use for sorting the distro list. By default
-        it's 'name', so this doesn't need to be specified.
-    @urldistro: This is a distro class. It's wired up in urlfetcher to give
-        us a shortcut when detecting OS type from a URL.
-    @supported: If this distro is supported by it's owning organization,
-        like is it still receiving updates. We use this to limit the
-        distros we show in virt-manager by default, so old distros aren't
-        squeezing out current ones.
-    @three_stage_install: If True, this VM has a 3 stage install, AKA windows.
-    @virtionet: If True, this OS supports virtionet out of the box
-    @virtiodisk: If True, this OS supports virtiodisk out of the box
-    @virtiommio: If True, this OS supports virtio-mmio out of the box,
-        which provides virtio for certain ARM configurations
-    @virtioconsole: If True, this OS supports virtio-console out of the box,
-        and we should use it as the default console.
-    @xen_disable_acpi: If True, disable acpi/apic for this OS if on old xen.
-        This corresponds with the SUPPORT_CONN_CAN_DEFAULT_ACPI check
-    @qemu_ga: If True, this distro has qemu_ga available by default
-    @hyperv_features: If True, this distro prefers Hyper-V enlightenments
-
-    The rest of the parameters are about setting device/guest defaults
-    based on the OS. They should be self explanatory. See guest.py for
-    their usage.
-    """
-    _os = None
-
-    def __init__(self, name, label, is_type=False,
-                 sortby=None, typename=_SENTINEL,
-                 urldistro=_SENTINEL, supported=_SENTINEL,
-                 three_stage_install=_SENTINEL,
-                 acpi=_SENTINEL, apic=_SENTINEL, clock=_SENTINEL,
-                 netmodel=_SENTINEL, diskbus=_SENTINEL,
-                 inputtype=_SENTINEL, inputbus=_SENTINEL,
-                 virtionet=_SENTINEL,
-                 virtiodisk=_SENTINEL, virtiommio=_SENTINEL,
-                 virtioconsole=_SENTINEL, xen_disable_acpi=_SENTINEL,
-                 qemu_ga=_SENTINEL, hyperv_features=_SENTINEL):
-
-        def _get_default(name, val, default=_SENTINEL):
-            if val == _SENTINEL:
-                return default
-            return val
-
+    def __init__(self, name, label, urldistro, sortby):
         self.name = name
         self.label = label
+        self.urldistro = urldistro
         self.sortby = sortby
 
-        self.is_type = bool(is_type)
-        if typename == _SENTINEL and self.is_type:
-            self.typename = self.name
-        else:
-            self.typename = typename
+    def is_type(self):
+        return self.__class__ == _OsVariantType
 
 
-        # 'types' should rarely be altered, this check will make
-        # doubly sure that a new type isn't accidentally added
-        _approved_types = ["linux", "windows", "unix",
-                           "solaris", "other"]
-        if self.typename not in _approved_types:
-            raise RuntimeError("type '%s' for variant '%s' not in list "
-                               "of approved distro types %s" %
-                               (self.typename, self.name, _approved_types))
-
-        self.urldistro = _get_default("urldistro", urldistro, None)
-        self.supported = _get_default("supported", supported, False)
-        self.three_stage_install = _get_default("three_stage_install",
-                                                three_stage_install)
-
-        self.acpi = _get_default("acpi", acpi)
-        self.apic = _get_default("apic", apic)
-        self.clock = _get_default("clock", clock)
-
-        self.netmodel = _get_default("netmodel", netmodel)
-        self.diskbus = _get_default("diskbus", diskbus)
-        self.inputtype = _get_default("inputtype", inputtype)
-        self.inputbus = _get_default("inputbus", inputbus)
-
-        self.xen_disable_acpi = _get_default("xen_disable_acpi",
-                                             xen_disable_acpi)
-        self.virtiodisk = _get_default("virtiodisk", virtiodisk)
-        self.virtionet = _get_default("virtionet", virtionet)
-        self.virtiommio = _get_default("virtiommio", virtiommio)
-        self.virtioconsole = _get_default("virtioconsole", virtioconsole)
-        self.qemu_ga = _get_default("qemu_ga", qemu_ga)
-        self.hyperv_features = _get_default("hyperv_features", hyperv_features)
-
-    def get_recommended_resources(self, arch):
-        ignore1 = arch
-        return None
-
-    def get_videomodel(self, guest):
-        if guest.os.is_ppc64() and guest.os.machine == "pseries":
-            return "vga"
-
-        # Marc Deslauriers of canonical had previously patched us
-        # to use vmvga for ubuntu, see fb76c4e5. And Fedora users report
-        # issues with ubuntu + qxl for as late as 14.04, so carry the vmvga
-        # default forward until someone says otherwise. In 2014-09 I contacted
-        # Marc offlist and he said this was fine for now.
-        if self._os and self._os.get_distro() == "ubuntu":
-            return "vmvga"
-
-        if guest.has_spice() and guest.os.is_x86():
-            return "qxl"
-
-        if self._os and _OsVariantOsInfo.is_windows(self._os):
-            return "vga"
-
-        return None
-
-
-def _add_type(*args, **kwargs):
-    kwargs["is_type"] = True
-    _t = _OSVariant(*args, **kwargs)
-    _allvariants[_t.name] = _t
-
-
-def _add_var(*args, **kwargs):
-    v = _OSVariant(*args, **kwargs)
-    _allvariants[v.name] = v
-
-
-class _OsVariantOsInfo(_OSVariant):
+class _OsVariant(_OsVariantType):
 
     @staticmethod
     def is_windows(o):
+        if o is None:
+            return False
         return o.get_family() in ['win9x', 'winnt', 'win16']
 
     def _is_three_stage_install(self):
-        if _OsVariantOsInfo.is_windows(self._os):
+        if _OsVariant.is_windows(self._os):
             return True
         return _SENTINEL
 
     def _get_clock(self):
-        if _OsVariantOsInfo.is_windows(self._os) or \
+        if not self._os:
+            return _SENTINEL
+
+        if _OsVariant.is_windows(self._os) or \
            self._os.get_family() in ['solaris']:
             return "localtime"
         return _SENTINEL
 
     def _is_acpi(self):
+        if not self._os:
+            return _SENTINEL
         if self._os.get_family() in ['msdos']:
             return False
         return _SENTINEL
 
     def _is_apic(self):
+        if not self._os:
+            return _SENTINEL
+
         if self._os.get_family() in ['msdos']:
             return False
         return _SENTINEL
 
     def _get_netmodel(self):
+        if not self._os:
+            return _SENTINEL
+
         if self._os.get_distro() == "fedora":
             return _SENTINEL
 
@@ -291,6 +180,8 @@ class _OsVariantOsInfo(_OSVariant):
         return _SENTINEL
 
     def _get_inputtype(self):
+        if not self._os:
+            return _SENTINEL
         fltr = libosinfo.Filter()
         fltr.add_constraint("class", "input")
         devs = self._os.get_all_devices(fltr)
@@ -299,6 +190,8 @@ class _OsVariantOsInfo(_OSVariant):
         return _SENTINEL
 
     def get_inputbus(self):
+        if not self._os:
+            return _SENTINEL
         fltr = libosinfo.Filter()
         fltr.add_constraint("class", "input")
         devs = self._os.get_all_devices(fltr)
@@ -317,17 +210,21 @@ class _OsVariantOsInfo(_OSVariant):
         clones = o.get_related(libosinfo.ProductRelationship.CLONES)
         for r in related.get_elements() + clones.get_elements():
             if r.get_short_id() in related_os_list or \
-               _OsVariantOsInfo.is_os_related_to(r, related_os_list):
+               _OsVariant.is_os_related_to(r, related_os_list):
                 return True
 
         return False
 
     def _get_xen_disable_acpi(self):
-        if _OsVariantOsInfo.is_os_related_to(self._os, ["winxp", "win2k"]):
+        if not self._os:
+            return _SENTINEL
+        if _OsVariant.is_os_related_to(self._os, ["winxp", "win2k"]):
             return True
         return _SENTINEL
 
     def _is_virtiodisk(self):
+        if not self._os:
+            return _SENTINEL
         if self._os.get_distro() == "fedora":
             if self._os.get_version() == "unknown":
                 return _SENTINEL
@@ -344,6 +241,8 @@ class _OsVariantOsInfo(_OSVariant):
         return _SENTINEL
 
     def _is_virtionet(self):
+        if not self._os:
+            return _SENTINEL
         if self._os.get_distro() == "fedora":
             if self._os.get_version() == "unknown":
                 return _SENTINEL
@@ -369,11 +268,17 @@ class _OsVariantOsInfo(_OSVariant):
         return _SENTINEL
 
     def _is_virtiommio(self):
-        if _OsVariantOsInfo.is_os_related_to(self._os, ["fedora19"]):
+        if not self._os:
+            return _SENTINEL
+
+        if _OsVariant.is_os_related_to(self._os, ["fedora19"]):
             return True
         return _SENTINEL
 
     def _is_qemu_ga(self):
+        if not self._os:
+            return _SENTINEL
+
         if self._os.get_distro() == "fedora":
             if self._os.get_version() == "unknown":
                 return _SENTINEL
@@ -381,11 +286,17 @@ class _OsVariantOsInfo(_OSVariant):
         return _SENTINEL
 
     def _is_hyperv_features(self):
-        if _OsVariantOsInfo.is_windows(self._os):
+        if not self._os:
+            return _SENTINEL
+
+        if _OsVariant.is_windows(self._os):
             return True
         return _SENTINEL
 
     def _get_typename(self):
+        if not self._os:
+            return "generic"
+
         if self._os.get_family() in ['linux']:
             return "linux"
 
@@ -401,6 +312,9 @@ class _OsVariantOsInfo(_OSVariant):
         return "other"
 
     def _get_sortby(self):
+        if not self._os:
+            return "1"
+
         version = self._os.get_version()
         try:
             t = version.split(".")
@@ -416,6 +330,8 @@ class _OsVariantOsInfo(_OSVariant):
         return "%s-%s" % (distro, version)
 
     def _get_supported(self):
+        if not self._os:
+            return True
         d = self._os.get_eol_date_string()
         name = self._os.get_short_id()
 
@@ -433,6 +349,8 @@ class _OsVariantOsInfo(_OSVariant):
         return False
 
     def _get_urldistro(self):
+        if not self._os:
+            return None
         urldistro = self._os.get_distro()
         remap = {
             "opensuse" : "suse",
@@ -446,37 +364,39 @@ class _OsVariantOsInfo(_OSVariant):
         return urldistro
 
     def _get_name(self):
+        if not self._os:
+            return "generic"
         return self._os.get_short_id()
 
     def get_label(self):
+        if not self._os:
+            return "Generic"
         return self._os.get_name()
 
     def __init__(self, o):
         self._os = o
-
-        self.name = self._get_name()
-        if self.name != self.name.lower():
+        name = self._get_name()
+        if name != name.lower():
             raise RuntimeError("OS dictionary wants lowercase name, not "
                                "'%s'" % self.name)
-        self.is_type = False
         self.typename = self._get_typename()
-
-        if self.typename == _SENTINEL and self.is_type:
-            self.typename = self.name
 
         # 'types' should rarely be altered, this check will make
         # doubly sure that a new type isn't accidentally added
         _approved_types = ["linux", "windows", "unix",
-                           "solaris", "other"]
+                           "solaris", "other", "generic"]
         if self.typename not in _approved_types:
             raise RuntimeError("type '%s' for variant '%s' not in list "
                                "of approved distro types %s" %
                                (self.typename, self.name, _approved_types))
 
 
-        self.label = self.get_label()
-        self.sortby = self._get_sortby()
-        self.urldistro = self._get_urldistro()
+        label = self.get_label()
+        sortby = self._get_sortby()
+        urldistro = self._get_urldistro()
+
+        _OsVariantType.__init__(self, name, label, urldistro, sortby)
+
         self.supported = self._get_supported()
         self.three_stage_install = self._is_three_stage_install()
         self.acpi = self._is_acpi()
@@ -493,6 +413,26 @@ class _OsVariantOsInfo(_OSVariant):
         self.inputbus = lambda: self.get_inputbus()
         self.virtiodisk = lambda: self._is_virtiodisk()
         self.virtionet = lambda: self._is_virtionet()
+
+    def get_videomodel(self, guest):
+        if guest.os.is_ppc64() and guest.os.machine == "pseries":
+            return "vga"
+
+        # Marc Deslauriers of canonical had previously patched us
+        # to use vmvga for ubuntu, see fb76c4e5. And Fedora users report
+        # issues with ubuntu + qxl for as late as 14.04, so carry the vmvga
+        # default forward until someone says otherwise. In 2014-09 I contacted
+        # Marc offlist and he said this was fine for now.
+        if self._os and self._os.get_distro() == "ubuntu":
+            return "vmvga"
+
+        if guest.has_spice() and guest.os.is_x86():
+            return "qxl"
+
+        if self._os and _OsVariant.is_windows(self._os):
+            return "vga"
+
+        return None
 
     def get_recommended_resources(self, arch):
         ret = {}
@@ -512,12 +452,22 @@ class _OsVariantOsInfo(_OSVariant):
         return ret
 
 
+def _add_type(name, label, urldistro=None, sortby=None):
+    t = _OsVariantType(name, label, urldistro, sortby)
+    _allvariants[name] = t
+
+
+def _add_generic_variant():
+    v = _OsVariant(None)
+    _allvariants[v.name] = v
+
+
 _add_type("linux", "Linux")
-_add_type("windows", "Windows", clock="localtime", three_stage_install=True, inputtype="tablet", inputbus="usb")
-_add_type("solaris", "Solaris", clock="localtime")
+_add_type("windows", "Windows")
+_add_type("solaris", "Solaris")
 _add_type("unix", "UNIX")
 _add_type("other", "Other")
-_add_var("generic", "Generic", supported=True, typename="other")
+_add_generic_variant()
 
 
 _os_data_loaded = False
@@ -541,7 +491,7 @@ def _load_os_data():
     db = loader.get_db()
     oslist = db.get_os_list()
     for os in range(oslist.get_length()):
-        osi = _OsVariantOsInfo(oslist.get_nth(os))
+        osi = _OsVariant(oslist.get_nth(os))
         _allvariants[osi.name] = osi
     _os_data_loaded = True
 
@@ -550,8 +500,8 @@ def lookup_os(key):
     _load_os_data()
     key = _aliases.get(key) or key
     ret = _allvariants.get(key)
-    if ret is None:
-        return ret
+    if ret is None or ret.is_type():
+        return None
     return ret
 
 
@@ -563,9 +513,10 @@ def list_os(list_types=False, typename=None,
     filtervars = filtervars or []
 
     for key, osinfo in _allvariants.items():
-        if list_types and not osinfo.is_type:
+        is_type = osinfo.is_type()
+        if list_types and not is_type:
             continue
-        if not list_types and osinfo.is_type:
+        if not list_types and is_type:
             continue
         if typename and typename != osinfo.typename:
             continue
