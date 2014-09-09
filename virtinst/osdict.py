@@ -173,20 +173,16 @@ class _OSVariant(object):
                 return default
             return val
 
-        if name != name.lower():
-            raise RuntimeError("OS dictionary wants lowercase name, not "
-                               "'%s'" % name)
-
         self.name = name
         self.label = label
         self.sortby = sortby
 
         self.is_type = bool(is_type)
+        if typename == _SENTINEL and self.is_type:
+            self.typename = self.name
+        else:
+            self.typename = typename
 
-        self.typename = typename
-        if typename == _SENTINEL:
-            self.typename = _get_default("typename",
-                                     self.is_type and self.name or _SENTINEL)
 
         # 'types' should rarely be altered, this check will make
         # doubly sure that a new type isn't accidentally added
@@ -457,38 +453,46 @@ class _OsVariantOsInfo(_OSVariant):
 
     def __init__(self, o):
         self._os = o
-        name = self._get_name()
-        label = self.get_label()
-        sortby = self._get_sortby()
-        is_type = False
-        typename = self._get_typename()
-        urldistro = self._get_urldistro()
-        supported = self._get_supported()
-        three_stage_install = self._is_three_stage_install()
-        acpi = self._is_acpi()
-        apic = self._is_apic()
-        clock = self._get_clock()
-        xen_disable_acpi = self._get_xen_disable_acpi()
-        virtiommio = self._is_virtiommio()
-        qemu_ga = self._is_qemu_ga()
-        hyperv_features = self._is_hyperv_features()
-        virtioconsole = lambda: self._is_virtioconsole()
-        netmodel = lambda: self._get_netmodel()
-        diskbus = lambda: self._get_diskbus()
-        inputtype = lambda: self._get_inputtype()
-        inputbus = lambda: self.get_inputbus()
-        virtiodisk = lambda: self._is_virtiodisk()
-        virtionet = lambda: self._is_virtionet()
-        _OSVariant.__init__(self, name=name, label=label, is_type=is_type,
-                typename=typename, sortby=sortby,
-                urldistro=urldistro, supported=supported,
-                three_stage_install=three_stage_install, acpi=acpi, apic=apic,
-                clock=clock, netmodel=netmodel, diskbus=diskbus,
-                inputtype=inputtype, inputbus=inputbus,
-                virtionet=virtionet, virtiodisk=virtiodisk,
-                virtiommio=virtiommio, virtioconsole=virtioconsole,
-                xen_disable_acpi=xen_disable_acpi, qemu_ga=qemu_ga,
-                hyperv_features=hyperv_features)
+
+        self.name = self._get_name()
+        if self.name != self.name.lower():
+            raise RuntimeError("OS dictionary wants lowercase name, not "
+                               "'%s'" % self.name)
+        self.is_type = False
+        self.typename = self._get_typename()
+
+        if self.typename == _SENTINEL and self.is_type:
+            self.typename = self.name
+
+        # 'types' should rarely be altered, this check will make
+        # doubly sure that a new type isn't accidentally added
+        _approved_types = ["linux", "windows", "unix",
+                           "solaris", "other"]
+        if self.typename not in _approved_types:
+            raise RuntimeError("type '%s' for variant '%s' not in list "
+                               "of approved distro types %s" %
+                               (self.typename, self.name, _approved_types))
+
+
+        self.label = self.get_label()
+        self.sortby = self._get_sortby()
+        self.urldistro = self._get_urldistro()
+        self.supported = self._get_supported()
+        self.three_stage_install = self._is_three_stage_install()
+        self.acpi = self._is_acpi()
+        self.apic = self._is_apic()
+        self.clock = self._get_clock()
+        self.xen_disable_acpi = self._get_xen_disable_acpi()
+        self.virtiommio = self._is_virtiommio()
+        self.qemu_ga = self._is_qemu_ga()
+        self.hyperv_features = self._is_hyperv_features()
+        self.virtioconsole = lambda: self._is_virtioconsole()
+        self.netmodel = lambda: self._get_netmodel()
+        self.diskbus = lambda: self._get_diskbus()
+        self.inputtype = lambda: self._get_inputtype()
+        self.inputbus = lambda: self.get_inputbus()
+        self.virtiodisk = lambda: self._is_virtiodisk()
+        self.virtionet = lambda: self._is_virtionet()
 
     def get_recommended_resources(self, arch):
         ret = {}
