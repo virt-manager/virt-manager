@@ -1,7 +1,7 @@
 #
 # List of OS Specific data
 #
-# Copyright 2006-2008, 2013 Red Hat, Inc.
+# Copyright 2006-2008, 2013-2014 Red Hat, Inc.
 # Jeremy Katz <katzj@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -129,9 +129,6 @@ class _OSVariant(object):
         more, though it's still baked into the virt-manager UI where
         it is still pretty useful, so we fake it here. New types should
         not be added often.
-    @parent: Name of a pre-created variant that we want to extend. So
-        fedoraFOO would have parent fedoraFOO-1. It's used for inheriting
-        values.
     @typename: The family of the OS, e.g. "linux", "windows", "unix".
     @sortby: A different key to use for sorting the distro list. By default
         it's 'name', so this doesn't need to be specified.
@@ -160,7 +157,7 @@ class _OSVariant(object):
     _os = None
 
     def __init__(self, name, label, is_type=False,
-                 sortby=None, parent=_SENTINEL, typename=_SENTINEL,
+                 sortby=None, typename=_SENTINEL,
                  urldistro=_SENTINEL, supported=_SENTINEL,
                  three_stage_install=_SENTINEL,
                  acpi=_SENTINEL, apic=_SENTINEL, clock=_SENTINEL,
@@ -170,20 +167,10 @@ class _OSVariant(object):
                  virtiodisk=_SENTINEL, virtiommio=_SENTINEL,
                  virtioconsole=_SENTINEL, xen_disable_acpi=_SENTINEL,
                  qemu_ga=_SENTINEL, hyperv_features=_SENTINEL):
-        if is_type:
-            if parent != _SENTINEL:
-                raise RuntimeError("OS types must not specify parent")
-            parent = None
-        elif parent == _SENTINEL:
-            raise RuntimeError("Must specify explicit parent")
-        else:
-            parent = _allvariants[parent]
 
         def _get_default(name, val, default=_SENTINEL):
             if val == _SENTINEL:
-                if not parent:
-                    return default
-                return getattr(parent, name)
+                return default
             return val
 
         if name != name.lower():
@@ -493,7 +480,7 @@ class _OsVariantOsInfo(_OSVariant):
         virtiodisk = lambda: self._is_virtiodisk()
         virtionet = lambda: self._is_virtionet()
         _OSVariant.__init__(self, name=name, label=label, is_type=is_type,
-                typename=typename, sortby=sortby, parent="generic",
+                typename=typename, sortby=sortby,
                 urldistro=urldistro, supported=supported,
                 three_stage_install=three_stage_install, acpi=acpi, apic=apic,
                 clock=clock, netmodel=netmodel, diskbus=diskbus,
@@ -526,7 +513,7 @@ _add_type("windows", "Windows", clock="localtime", three_stage_install=True, inp
 _add_type("solaris", "Solaris", clock="localtime")
 _add_type("unix", "UNIX")
 _add_type("other", "Other")
-_add_var("generic", "Generic", supported=True, parent="other")
+_add_var("generic", "Generic", supported=True, typename="other")
 
 
 _os_data_loaded = False
