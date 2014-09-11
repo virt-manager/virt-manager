@@ -1046,7 +1046,7 @@ class vmmEngine(vmmGObject):
 
         logging.debug("Starting vm '%s'", vm.get_name())
 
-        if vm.hasSavedImage():
+        if vm.has_managed_save():
             def errorcb(error, details):
                 # This is run from the main thread
                 res = src.err.show_err(
@@ -1064,7 +1064,7 @@ class vmmEngine(vmmGObject):
                     return
 
                 try:
-                    vm.removeSavedImage()
+                    vm.remove_saved_image()
                     self._do_run_domain(src, uri, connkey)
                 except Exception, e:
                     src.err.show_err(_("Error removing domain state: %s")

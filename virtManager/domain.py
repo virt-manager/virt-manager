@@ -298,6 +298,7 @@ class vmmDomain(vmmLibvirtObject):
         self._is_management_domain = None
         self._id = None
         self._uuid = None
+        self._has_managed_save = None
         self._snapshot_list = None
 
         self.lastStatus = libvirt.VIR_DOMAIN_SHUTOFF
@@ -360,6 +361,9 @@ class vmmDomain(vmmLibvirtObject):
         self.toggle_sample_cpu_stats()
 
         self.force_update_status(from_event=True, log=False)
+
+        # Cache managed save value
+        self.has_managed_save()
 
         # Hook up listeners that need to be cleaned up
         self.add_gconf_handle(
@@ -1383,20 +1387,25 @@ class vmmDomain(vmmLibvirtObject):
         self._backend.resume()
         self.idle_add(self.force_update_status)
 
-    def hasSavedImage(self):
+    def has_managed_save(self):
         if not self.managedsave_supported:
             return False
-        try:
-            return self._backend.hasManagedSaveImage(0)
-        except libvirt.libvirtError, e:
-            if not util.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
-                raise
-            return False
 
-    def removeSavedImage(self):
-        if not self.hasSavedImage():
+        if self._has_managed_save is None:
+            try:
+                self._has_managed_save = self._backend.hasManagedSaveImage(0)
+            except libvirt.libvirtError, e:
+                if not util.exception_is_libvirt_error(e, "VIR_ERR_NO_DOMAIN"):
+                    raise
+                return False
+
+        return self._has_managed_save
+
+    def remove_saved_image(self):
+        if not self.has_managed_save():
             return
         self._backend.managedSaveRemove(0)
+        self._has_managed_save = None
 
     def save(self, filename=None, meter=None):
         self._install_abort = True
@@ -1666,7 +1675,7 @@ class vmmDomain(vmmLibvirtObject):
         return self.status() in [libvirt.VIR_DOMAIN_PAUSED]
 
     def run_status(self):
-        return self.pretty_run_status(self.status(), self.hasSavedImage())
+        return self.pretty_run_status(self.status(), self.has_managed_save())
 
     def run_status_reason(self):
         return self.pretty_status_reason(self.status(), self.status_reason())
@@ -1713,6 +1722,7 @@ class vmmDomain(vmmLibvirtObject):
         self.lastStatus = status
         if self.domain_state_supported:
             self._lastStatusReason = self._backend.state()[1]
+        self._has_managed_save = None
 
         # Send 'config-changed' before a status-update, so users
         # are operating with fresh XML
@@ -1964,7 +1974,7 @@ class vmmDomainVirtinst(vmmDomain):
         return self._backend.uuid
     def get_id(self):
         return -1
-    def hasSavedImage(self):
+    def has_managed_save(self):
         return False
 
     def _XMLDesc(self, flags):

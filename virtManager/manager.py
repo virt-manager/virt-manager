@@ -919,7 +919,7 @@ class vmmManager(vmmGObjectUI):
         show_shutdown = bool(vm and vm.is_stoppable())
 
         if vm and vm.managedsave_supported:
-            self.change_run_text(vm.hasSavedImage())
+            self.change_run_text(vm.has_managed_save())
 
         self.widget("vm-open").set_sensitive(show_open)
         self.widget("vm-run").set_sensitive(show_run)

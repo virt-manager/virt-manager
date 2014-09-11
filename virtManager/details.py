@@ -1370,7 +1370,7 @@ class vmmDetails(vmmGObjectUI):
         ro = vm.is_read_only()
 
         if vm.managedsave_supported:
-            self.change_run_text(vm.hasSavedImage())
+            self.change_run_text(vm.has_managed_save())
 
         self.widget("control-run").set_sensitive(run)
         self.widget("control-shutdown").set_sensitive(stop)
