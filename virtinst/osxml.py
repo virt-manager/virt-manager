@@ -60,9 +60,9 @@ class OSXML(XMLBuilder):
         return self.is_ppc64 and self.machine == "pseries"
 
     _XML_ROOT_NAME = "os"
-    _XML_PROP_ORDER = ["arch", "os_type", "loader",
-                       "kernel", "initrd", "kernel_args", "dtb",
-                       "_bootdevs"]
+    _XML_PROP_ORDER = ["arch", "os_type", "loader", "loader_ro", "loader_type",
+                       "nvram", "nvram_template", "kernel", "initrd",
+                       "kernel_args", "dtb", "_bootdevs"]
 
     def _get_bootorder(self):
         return [dev.dev for dev in self._bootdevs]
@@ -99,6 +99,10 @@ class OSXML(XMLBuilder):
 
     init = XMLProperty("./init")
     loader = XMLProperty("./loader")
+    loader_ro = XMLProperty("./loader/@readonly", is_yesno=True)
+    loader_type = XMLProperty("./loader/@type")
+    nvram = XMLProperty("./nvram")
+    nvram_template = XMLProperty("./nvram/@template")
     arch = XMLProperty("./type/@arch",
                        default_cb=lambda s: s.conn.caps.host.cpu.arch)
     machine = XMLProperty("./type/@machine")

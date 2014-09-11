@@ -452,6 +452,34 @@ configurations like ARM or PPC
 Use BIOSPATH as the virtual machine BIOS. Only valid for fully virtualized
 guests.
 
+=item B<--boot loader=/usr/share/OVMF/OVMF_CODE.fd,loader_ro=yes,loader_type=pflash>
+
+Specify that the virtual machine use the system-wide installed OVMF binary as
+boot firmware, mapped as a virtual flash chip. This form requests that libvirt
+instantiate the VM-specific UEFI varstore from the varstore template that is
+assigned to "/usr/share/OVMF/OVMF_CODE.fd" in libvirtd's "qemu.conf", in the
+"nvram" stanza.
+
+Only valid for fully virtualized guests.
+
+=item B<--boot loader=/.../OVMF_CODE.fd,loader_ro=yes,loader_type=pflash,nvram_template=/.../OVMF_VARS.fd>
+
+Specify that the virtual machine use the custom OVMF binary as boot firmware,
+mapped as a virtual flash chip. In addition, request that libvirt instantiate
+the VM-specific UEFI varstore from the custom "/.../OVMF_VARS.fd" varstore
+template.
+
+Only valid for fully virtualized guests.
+
+=item B<--boot loader=/.../OVMF_CODE.fd,loader_ro=yes,loader_type=pflash,nvram=/.../guest_VARS.fd>
+
+Specify that the virtual machine use the custom OVMF binary as boot firmware,
+mapped as a virtual flash chip. In addition, the VM-specific UEFI varstore is
+directly the preexistent file "/.../guest_VARS.fd"; it is not instantiated from
+any template.
+
+Only valid for fully virtualized guests.
+
 =item B<--boot menu=on,useserial=on>
 
 Enable the bios boot menu, and enable sending bios text output over
