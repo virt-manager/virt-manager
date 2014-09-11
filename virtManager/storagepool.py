@@ -179,13 +179,10 @@ class vmmStoragePool(vmmLibvirtObject):
         if not self.is_active():
             return
 
-        def cb():
-            self.refresh_xml()
-            self.update_volumes(refresh=True)
-            self.emit("refreshed")
-
         self._backend.refresh(0)
-        self.idle_add(cb)
+        self.refresh_xml()
+        self.update_volumes(refresh=True)
+        self.idle_emit("refreshed")
 
     def define_name(self, newname):
         return self._define_name_helper("storagepool",
