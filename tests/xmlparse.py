@@ -286,6 +286,24 @@ class XMLParseTest(unittest.TestCase):
 
         self._alter_compare(guest.get_xml_config(), outfile)
 
+    def testAlterBootUEFI(self):
+        guest, outfile = self._get_test_content("change-boot-uefi")
+
+        check = self._make_checker(guest.os)
+        check("bootorder", [], ["network", "hd", "fd"])
+        check("loader_ro", None, True)
+        check("loader_type", None, "pflash")
+        check("nvram", None, "/tmp/nvram_store")
+        check("nvram_template", None, "/tmp/template")
+        check("loader", None, "OVMF_CODE.fd")
+
+        check("kernel", "/boot/vmlinuz", None)
+
+        check("initrd", "/boot/initrd", None)
+        check("kernel_args", "location", None)
+
+        self._alter_compare(guest.get_xml_config(), outfile)
+
     def testAlterCpuMode(self):
         guest, outfile = self._get_test_content("change-cpumode")
 
