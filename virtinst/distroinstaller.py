@@ -317,9 +317,9 @@ class DistroInstaller(Installer):
         self._cached_store = None
 
 
-    #######################
-    # Install prepartions #
-    #######################
+    ########################
+    # Install preparations #
+    ########################
 
     def _get_media_type(self):
         if self.cdrom and not self.location:
