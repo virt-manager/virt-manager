@@ -74,10 +74,9 @@ class vmmConnection(vmmGObject):
         "priority-tick": (GObject.SignalFlags.RUN_FIRST, None, [object]),
     }
 
-    STATE_DISCONNECTED = 0
-    STATE_CONNECTING = 1
-    STATE_ACTIVE = 2
-    STATE_INACTIVE = 3
+    (_STATE_DISCONNECTED,
+     _STATE_CONNECTING,
+     _STATE_ACTIVE) = range(1, 4)
 
     def __init__(self, uri):
         vmmGObject.__init__(self)
@@ -86,7 +85,7 @@ class vmmConnection(vmmGObject):
         if self._uri is None or self._uri.lower() == "xen":
             self._uri = "xen:///"
 
-        self.state = self.STATE_DISCONNECTED
+        self._state = self._STATE_DISCONNECTED
         self._connectThread = None
         self._connectError = None
         self._backend = virtinst.VirtualConnection(self._uri)
@@ -574,46 +573,26 @@ class vmmConnection(vmmGObject):
     ###################################
 
     def _change_state(self, newstate):
-        if self.state != newstate:
-            self.state = newstate
+        if self._state != newstate:
+            self._state = newstate
             self.emit("state-changed")
 
-    def get_state(self):
-        return self.state
+    def is_active(self):
+        return self._state == self._STATE_ACTIVE
+    def is_disconnected(self):
+        return self._state == self._STATE_DISCONNECTED
+    def is_connecting(self):
+        return self._state == self._STATE_CONNECTING
 
     def get_state_text(self):
-        if self.state == self.STATE_DISCONNECTED:
+        if self.is_disconnected():
             return _("Disconnected")
-        elif self.state == self.STATE_CONNECTING:
+        elif self.is_connecting():
             return _("Connecting")
-        elif self.state == self.STATE_ACTIVE:
+        elif self.is_active():
             return _("Active")
-        elif self.state == self.STATE_INACTIVE:
-            return _("Inactive")
         else:
             return _("Unknown")
-
-    def pause(self):
-        if self.state != self.STATE_ACTIVE:
-            return
-        self._change_state(self.STATE_INACTIVE)
-
-    def resume(self):
-        if self.state != self.STATE_INACTIVE:
-            return
-        self._change_state(self.STATE_ACTIVE)
-
-    def is_active(self):
-        return self.state == self.STATE_ACTIVE
-
-    def is_paused(self):
-        return self.state == self.STATE_INACTIVE
-
-    def is_disconnected(self):
-        return self.state == self.STATE_DISCONNECTED
-
-    def is_connecting(self):
-        return self.state == self.STATE_CONNECTING
 
 
     #################################
@@ -883,7 +862,7 @@ class vmmConnection(vmmGObject):
         self.config.set_conn_autoconnect(self.get_uri(), val)
 
     def close(self):
-        if self.state != self.STATE_DISCONNECTED:
+        if not self.is_disconnected():
             logging.debug("conn.close() uri=%s", self.get_uri())
         self._closing = True
 
@@ -928,7 +907,7 @@ class vmmConnection(vmmGObject):
         cleanup(self._vms)
         self._vms = {}
 
-        self._change_state(self.STATE_DISCONNECTED)
+        self._change_state(self._STATE_DISCONNECTED)
         self._closing = False
 
     def _cleanup(self):
@@ -936,11 +915,11 @@ class vmmConnection(vmmGObject):
         self._connectError = None
 
     def open(self, sync=False):
-        if self.state != self.STATE_DISCONNECTED:
+        if not self.is_disconnected():
             return
 
         self._connectError = None
-        self._change_state(self.STATE_CONNECTING)
+        self._change_state(self._STATE_CONNECTING)
 
         if sync:
             logging.debug("Opening connection synchronously: %s",
@@ -980,10 +959,10 @@ class vmmConnection(vmmGObject):
                 exc = libexc
 
             if not exc:
-                self.state = self.STATE_ACTIVE
+                self._state = self._STATE_ACTIVE
                 break
 
-            self.state = self.STATE_DISCONNECTED
+            self._state = self._STATE_DISCONNECTED
 
             if (libexc and
                 (libexc.get_error_code() ==
@@ -1022,7 +1001,7 @@ class vmmConnection(vmmGObject):
 
         try:
             self.idle_emit("state-changed")
-            if self.state == self.STATE_ACTIVE:
+            if self.is_active():
                 logging.debug("libvirt version=%s",
                               self._backend.local_libvirt_version())
                 logging.debug("daemon version=%s",
@@ -1051,7 +1030,7 @@ class vmmConnection(vmmGObject):
             self._connectError = (str(e),
                 "".join(traceback.format_exc()), False)
 
-        if self.state == self.STATE_DISCONNECTED:
+        if self.is_disconnected():
             if self._connectError:
                 self.idle_emit("connect-error", *self._connectError)
             self._connectError = None
@@ -1148,7 +1127,7 @@ class vmmConnection(vmmGObject):
         main update function: polls for new objects, updates stats, ...
         @force: Perform the requested polling even if async events are in use
         """
-        if self.state != self.STATE_ACTIVE or self._closing:
+        if not self.is_active() or self._closing:
             return
 
         if not pollvm:

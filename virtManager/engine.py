@@ -246,8 +246,7 @@ class vmmEngine(vmmGObject):
                 queue.put(auto_conns.pop(0))
 
         def state_change_cb(conn):
-            if (conn.get_state() == conn.STATE_ACTIVE or
-                conn.get_state() == conn.STATE_INACTIVE):
+            if conn.is_active():
                 add_next_to_queue()
                 conn.disconnect_by_func(state_change_cb)
 
@@ -283,8 +282,7 @@ class vmmEngine(vmmGObject):
         del(self.conns[hvuri]["windowDetails"][connkey])
 
     def _do_conn_changed(self, conn):
-        if (conn.get_state() == conn.STATE_ACTIVE or
-            conn.get_state() == conn.STATE_CONNECTING):
+        if conn.is_active() or conn.is_connecting():
             return
 
         hvuri = conn.get_uri()

@@ -30,7 +30,6 @@ from virtinst import Interface
 
 from virtManager import uiutil
 from virtManager.asyncjob import vmmAsyncJob
-from virtManager.connection import vmmConnection
 from virtManager.createnet import vmmCreateNetwork
 from virtManager.createpool import vmmCreatePool
 from virtManager.createvol import vmmCreateVolume
@@ -422,7 +421,7 @@ class vmmHost(vmmGObjectUI):
         self.memory_usage_graph.set_property("data_array", memory_vector)
 
     def conn_state_changed(self, ignore1=None):
-        conn_active = (self.conn.get_state() == vmmConnection.STATE_ACTIVE)
+        conn_active = self.conn.is_active()
         self.widget("menu_file_restore_saved").set_sensitive(conn_active)
         self.widget("net-add").set_sensitive(conn_active and
             self.conn.is_network_capable())

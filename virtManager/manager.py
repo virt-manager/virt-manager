@@ -29,7 +29,6 @@ from virtinst import util
 
 from virtManager import vmmenu
 from virtManager import uiutil
-from virtManager.connection import vmmConnection
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.graphwidgets import CellRendererSparkline
 
@@ -566,12 +565,12 @@ class vmmManager(vmmGObjectUI):
 
     def close_conn(self, ignore):
         conn = self.current_conn()
-        if conn.get_state() != vmmConnection.STATE_DISCONNECTED:
+        if not conn.is_disconnected():
             conn.close()
 
     def open_conn(self, ignore=None):
         conn = self.current_conn()
-        if conn.get_state() == vmmConnection.STATE_DISCONNECTED:
+        if conn.is_disconnected():
             conn.open()
             return True
 
@@ -612,16 +611,16 @@ class vmmManager(vmmGObjectUI):
 
     def _build_conn_hint(self, conn):
         hint = conn.get_uri()
-        if conn.state == conn.STATE_DISCONNECTED:
+        if conn.is_disconnected():
             hint += " (%s)" % _("Double click to connect")
         return hint
 
     def _build_conn_markup(self, conn, name):
         name = util.xml_escape(name)
         text = name
-        if conn.state == conn.STATE_DISCONNECTED:
+        if conn.is_disconnected():
             text += " - " + _("Not Connected")
-        elif conn.state == conn.STATE_CONNECTING:
+        elif conn.is_connecting():
             text += " - " + _("Connecting...")
 
         markup = "<span size='smaller'>%s</span>" % text
@@ -629,7 +628,7 @@ class vmmManager(vmmGObjectUI):
 
     def _build_conn_color(self, conn):
         color = "#000000"
-        if conn.state == conn.STATE_DISCONNECTED:
+        if conn.is_disconnected():
             color = "#5b5b5b"
         return color
 
@@ -666,7 +665,7 @@ class vmmManager(vmmGObjectUI):
         row.insert(ROW_HINT, util.xml_escape(hint))
         row.insert(ROW_IS_CONN, bool(conn))
         row.insert(ROW_IS_CONN_CONNECTED,
-                   bool(conn) and conn.state != conn.STATE_DISCONNECTED)
+                   bool(conn) and not conn.is_disconnected())
         row.insert(ROW_IS_VM, bool(vm))
         row.insert(ROW_IS_VM_RUNNING, bool(vm) and vm.is_active())
         row.insert(ROW_COLOR, color)
@@ -864,12 +863,11 @@ class vmmManager(vmmGObjectUI):
         if newname:
             row[ROW_SORT_KEY] = newname
         row[ROW_MARKUP] = self._build_conn_markup(conn, row[ROW_SORT_KEY])
-        row[ROW_IS_CONN_CONNECTED] = conn.state != conn.STATE_DISCONNECTED
+        row[ROW_IS_CONN_CONNECTED] = not conn.is_disconnected()
         row[ROW_COLOR] = self._build_conn_color(conn)
         row[ROW_HINT] = self._build_conn_hint(conn)
 
-        if conn.get_state() in [vmmConnection.STATE_DISCONNECTED,
-                                vmmConnection.STATE_CONNECTING]:
+        if not conn.is_active():
             # Connection went inactive, delete any VM child nodes
             parent = row.iter
             if parent is not None:
@@ -963,8 +961,8 @@ class vmmManager(vmmGObjectUI):
         else:
             # Pop up connection menu
             conn = model[_iter][ROW_HANDLE]
-            disconn = (conn.get_state() == vmmConnection.STATE_DISCONNECTED)
-            conning = (conn.get_state() == vmmConnection.STATE_CONNECTING)
+            disconn = conn.is_disconnected()
+            conning = conn.is_connecting()
 
             self.connmenu_items["create"].set_sensitive(not disconn)
             self.connmenu_items["disconnect"].set_sensitive(not (disconn or

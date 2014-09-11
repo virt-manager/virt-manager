@@ -403,12 +403,12 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         if destconn.get_driver() != driver:
             reason = _("Connection hypervisors do not match.")
-        elif destconn.get_state() == destconn.STATE_DISCONNECTED:
+        elif destconn.is_disconnected():
             reason = _("Connection is disconnected.")
         elif destconn.get_uri() == origuri:
             # Same connection
             pass
-        elif destconn.get_state() == destconn.STATE_ACTIVE:
+        elif destconn.is_active():
             # Assumably we can migrate to this connection
             can_migrate = True
             reason = desturi
