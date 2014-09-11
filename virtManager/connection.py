@@ -1007,9 +1007,8 @@ class vmmConnection(vmmGObject):
             is_active = self._do_open()
             if is_active:
                 self._populate_initial_state()
-
-            self.idle_add(self._change_state,
-                is_active and self._STATE_ACTIVE or self._STATE_DISCONNECTED)
+            else:
+                self.idle_add(self._change_state, self._STATE_DISCONNECTED)
 
             if is_active:
                 self.schedule_priority_tick(stats_update=True,
@@ -1119,8 +1118,18 @@ class vmmConnection(vmmGObject):
         main update function: polls for new objects, updates stats, ...
         @force: Perform the requested polling even if async events are in use
         """
-        if not self.is_active() or self._closing:
+        finish_connecting = False
+
+        if self._closing:
             return
+        if self.is_disconnected():
+            return
+        if self.is_connecting():
+            # If in 'connecting' state, and force requested, this means
+            # we are performing the initial poll.
+            if not force:
+                return
+            finish_connecting = True
 
         if not pollvm:
             stats_update = False
@@ -1219,6 +1228,9 @@ class vmmConnection(vmmGObject):
                 goneNodedevs[name].cleanup()
             for name in newNodedevs:
                 self.emit("nodedev-added", name)
+
+            if finish_connecting:
+                self._change_state(self._STATE_ACTIVE)
 
         self.idle_add(tick_send_signals)
 
