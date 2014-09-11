@@ -575,6 +575,8 @@ class vmmConnection(vmmGObject):
     def _change_state(self, newstate):
         if self._state != newstate:
             self._state = newstate
+            logging.debug("conn=%s changed to state=%s",
+                self.get_uri(), self.get_state_text())
             self.emit("state-changed")
 
     def is_active(self):
@@ -861,6 +863,10 @@ class vmmConnection(vmmGObject):
     def set_autoconnect(self, val):
         self.config.set_conn_autoconnect(self.get_uri(), val)
 
+    def _schedule_close(self):
+        self._closing = True
+        self.idle_add(self.close)
+
     def close(self):
         if not self.is_disconnected():
             logging.debug("conn.close() uri=%s", self.get_uri())
@@ -940,97 +946,84 @@ class vmmConnection(vmmGObject):
             logging.debug("Launching creds dialog failed", exc_info=True)
             return -1
 
-    def _open_thread(self):
-        logging.debug("Background 'open connection' thread is running")
-
-        while True:
-            libexc = None
-            exc = None
-            tb = None
-            warnconsole = False
-            try:
-                self._backend.open(self._do_creds_password)
-            except libvirt.libvirtError, libexc:
-                tb = "".join(traceback.format_exc())
-            except Exception, exc:
-                tb = "".join(traceback.format_exc())
-
-            if libexc:
-                exc = libexc
-
-            if not exc:
-                self._state = self._STATE_ACTIVE
-                break
-
-            self._state = self._STATE_DISCONNECTED
-
-            if (libexc and
-                (libexc.get_error_code() ==
-                 getattr(libvirt, "VIR_ERR_AUTH_CANCELLED", None))):
-                logging.debug("User cancelled auth, not raising any error.")
-                break
-
-            if (libexc and
-                libexc.get_error_code() == libvirt.VIR_ERR_AUTH_FAILED and
-                "not authorized" in libexc.get_error_message().lower()):
-                logging.debug("Looks like we might have failed policykit "
-                              "auth. Checking to see if we have a valid "
-                              "console session")
-                if (not self.is_remote() and
-                    not connectauth.do_we_have_session()):
-                    warnconsole = True
-
-            if (libexc and
-                libexc.get_error_code() == libvirt.VIR_ERR_AUTH_FAILED and
-                "GSSAPI Error" in libexc.get_error_message() and
-                "No credentials cache found" in libexc.get_error_message()):
-                if connectauth.acquire_tgt():
-                    continue
-
-            self._connectError = (str(exc), tb, warnconsole)
-            break
-
-        # We want to kill off this thread asap, so schedule an
-        # idle event to inform the UI of result
-        logging.debug("Background open thread complete, scheduling notify")
-        self.idle_add(self._open_notify)
-        self._connectThread = None
-
-    def _open_notify(self):
-        logging.debug("Notifying open result")
+    def _do_open(self, retry_for_tgt=True):
+        warnconsole = False
+        libvirt_error_code = None
+        libvirt_error_message = None
 
         try:
-            self.idle_emit("state-changed")
-            if self.is_active():
-                logging.debug("libvirt version=%s",
-                              self._backend.local_libvirt_version())
-                logging.debug("daemon version=%s",
-                              self._backend.daemon_version())
-                logging.debug("conn version=%s", self._backend.conn_version())
-                logging.debug("%s capabilities:\n%s",
-                              self.get_uri(), self.caps.xml)
-                self._add_conn_events()
+            self._backend.open(self._do_creds_password)
+            return True
+        except Exception, exc:
+            tb = "".join(traceback.format_exc())
+            if type(exc) is libvirt.libvirtError:
+                libvirt_error_code = exc.get_error_code()
+                libvirt_error_message = exc.get_error_message()
 
-                try:
-                    self._backend.setKeepAlive(20, 1)
-                except Exception, e:
-                    if (type(e) is not AttributeError and
-                        not util.is_error_nosupport(e)):
-                        raise
-                    logging.debug("Connection doesn't support KeepAlive, "
-                        "skipping")
+        if (libvirt_error_code ==
+            getattr(libvirt, "VIR_ERR_AUTH_CANCELLED", None)):
+            logging.debug("User cancelled auth, not raising any error.")
+            return
 
+        if (libvirt_error_code == libvirt.VIR_ERR_AUTH_FAILED and
+            "not authorized" in libvirt_error_message.lower()):
+            logging.debug("Looks like we might have failed policykit "
+                          "auth. Checking to see if we have a valid "
+                          "console session")
+            if (not self.is_remote() and
+                not connectauth.do_we_have_session()):
+                warnconsole = True
+
+        if (libvirt_error_code == libvirt.VIR_ERR_AUTH_FAILED and
+            "GSSAPI Error" in libvirt_error_message and
+            "No credentials cache found" in libvirt_error_message):
+            if retry_for_tgt and connectauth.acquire_tgt():
+                self._do_open(retry_for_tgt=False)
+
+        self._connectError = (str(exc), tb, warnconsole)
+
+    def _populate_initial_state(self):
+        logging.debug("libvirt version=%s",
+                      self._backend.local_libvirt_version())
+        logging.debug("daemon version=%s",
+                      self._backend.daemon_version())
+        logging.debug("conn version=%s", self._backend.conn_version())
+        logging.debug("%s capabilities:\n%s",
+                      self.get_uri(), self.caps.xml)
+        self._add_conn_events()
+
+        try:
+            self._backend.setKeepAlive(20, 1)
+        except Exception, e:
+            if (type(e) is not AttributeError and
+                not util.is_error_nosupport(e)):
+                raise
+            logging.debug("Connection doesn't support KeepAlive, "
+                "skipping")
+
+    def _open_thread(self):
+        is_active = False
+        try:
+            is_active = self._do_open()
+            if is_active:
+                self._populate_initial_state()
+
+            self.idle_add(self._change_state,
+                is_active and self._STATE_ACTIVE or self._STATE_DISCONNECTED)
+
+            if is_active:
                 self.schedule_priority_tick(stats_update=True,
                                             pollvm=True, pollnet=True,
                                             pollpool=True, polliface=True,
                                             pollnodedev=True, pollmedia=True,
                                             force=True)
         except Exception, e:
-            self.close()
+            is_active = False
+            self._schedule_close()
             self._connectError = (str(e),
                 "".join(traceback.format_exc()), False)
 
-        if self.is_disconnected():
+        if not is_active:
             if self._connectError:
                 self.idle_emit("connect-error", *self._connectError)
             self._connectError = None
@@ -1113,8 +1106,7 @@ class vmmConnection(vmmGObject):
             logging.debug("Not showing user error since libvirtd "
                 "appears to have stopped.")
 
-        self._closing = True
-        self.idle_add(self.close)
+        self._schedule_close()
         if e:
             raise e  # pylint: disable=raising-bad-type
 
