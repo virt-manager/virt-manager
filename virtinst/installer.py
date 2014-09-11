@@ -58,6 +58,7 @@ class Installer(object):
         self._location = None
 
         self.cdrom = False
+        self.livecd = False
         self.extraargs = None
 
         self.initrd_injections = []
