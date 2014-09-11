@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009, 2012-2013 Red Hat, Inc.
+# Copyright (C) 2009, 2012-2014 Red Hat, Inc.
 # Copyright (C) 2009 Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -238,6 +238,7 @@ def populate_storage_list(storage_list, vm, conn):
     diskdata.append(("kernel", vm.get_xmlobj().os.kernel, True, False))
     diskdata.append(("initrd", vm.get_xmlobj().os.initrd, True, False))
     diskdata.append(("dtb", vm.get_xmlobj().os.dtb, True, False))
+    diskdata.append(("nvram", vm.get_xmlobj().os.nvram, True, False))
 
     for target, path, ro, shared in diskdata:
         if not path:
