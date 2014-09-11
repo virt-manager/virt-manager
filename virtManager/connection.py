@@ -846,17 +846,22 @@ class vmmConnection(vmmGObject):
     ####################
 
     def _nodedev_mediadev_added(self, ignore1, name):
-        if name in self._mediadevs:
-            return
+        def _add_thread():
+            if name in self._mediadevs:
+                return
 
-        vobj = self.get_nodedev(name)
-        mediadev = vmmMediaDevice.mediadev_from_nodedev(vobj)
-        if not mediadev:
-            return
+            vobj = self.get_nodedev(name)
+            mediadev = vmmMediaDevice.mediadev_from_nodedev(vobj)
+            if not mediadev:
+                return
 
-        self._mediadevs[name] = mediadev
-        logging.debug("mediadev=%s added", name)
-        self.emit("mediadev-added", mediadev)
+            def _add_idle():
+                self._mediadevs[name] = mediadev
+                logging.debug("mediadev=%s added", name)
+                self.emit("mediadev-added", mediadev)
+            self.idle_add(_add_idle)
+
+        threading.Thread(target=_add_thread, name="AddMediadev").start()
 
     def _nodedev_mediadev_removed(self, ignore1, name):
         if name not in self._mediadevs:
