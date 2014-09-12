@@ -85,7 +85,6 @@ class vmmConnection(vmmGObject):
             self._uri = "xen:///"
 
         self._state = self._STATE_DISCONNECTED
-        self._connectError = None
         self._backend = virtinst.VirtualConnection(self._uri)
         self._closing = False
 
@@ -916,13 +915,11 @@ class vmmConnection(vmmGObject):
 
     def _cleanup(self):
         self.close()
-        self._connectError = None
 
     def open(self, sync=False):
         if not self.is_disconnected():
             return
 
-        self._connectError = None
         self._change_state(self._STATE_CONNECTING)
 
         if sync:
@@ -949,7 +946,7 @@ class vmmConnection(vmmGObject):
 
         try:
             self._backend.open(self._do_creds_password)
-            return True
+            return True, None
         except Exception, exc:
             tb = "".join(traceback.format_exc())
             if type(exc) is libvirt.libvirtError:
@@ -959,7 +956,7 @@ class vmmConnection(vmmGObject):
         if (libvirt_error_code ==
             getattr(libvirt, "VIR_ERR_AUTH_CANCELLED", None)):
             logging.debug("User cancelled auth, not raising any error.")
-            return
+            return False, None
 
         if (libvirt_error_code == libvirt.VIR_ERR_AUTH_FAILED and
             "not authorized" in libvirt_error_message.lower()):
@@ -976,7 +973,8 @@ class vmmConnection(vmmGObject):
             if retry_for_tgt and connectauth.acquire_tgt():
                 self._do_open(retry_for_tgt=False)
 
-        self._connectError = (str(exc), tb, warnconsole)
+        connectError = (str(exc), tb, warnconsole)
+        return False, connectError
 
     def _populate_initial_state(self):
         logging.debug("libvirt version=%s",
@@ -1001,9 +999,8 @@ class vmmConnection(vmmGObject):
                 "skipping")
 
     def _open_thread(self):
-        is_active = False
         try:
-            is_active = self._do_open()
+            is_active, connectError = self._do_open()
             if is_active:
                 self._populate_initial_state()
             else:
@@ -1018,13 +1015,11 @@ class vmmConnection(vmmGObject):
         except Exception, e:
             is_active = False
             self._schedule_close()
-            self._connectError = (str(e),
-                "".join(traceback.format_exc()), False)
+            connectError = (str(e), "".join(traceback.format_exc()), False)
 
         if not is_active:
-            if self._connectError:
-                self.idle_emit("connect-error", *self._connectError)
-            self._connectError = None
+            if connectError:
+                self.idle_emit("connect-error", *connectError)
 
 
     #######################
