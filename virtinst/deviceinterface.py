@@ -38,12 +38,12 @@ def _random_mac(conn):
 
     @return: MAC address string
     """
-    ouis = {'xen': [0x00, 0x16, 0x3E], 'qemu': [0x52, 0x54, 0x00]}
 
-    try:
-        oui = ouis[conn.getType().lower()]
-    except KeyError:
-        oui = ouis['xen']
+    if conn.is_qemu():
+        oui = [0x52, 0x54, 0x00]
+    else:
+        # Xen
+        oui = [0x00, 0x16, 0x3E]
 
     mac = oui + [
             random.randint(0x00, 0xff),
