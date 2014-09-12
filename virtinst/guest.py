@@ -26,25 +26,31 @@ import libvirt
 
 from virtcli import cliconfig
 
-import virtinst
-from virtinst import util
-from virtinst import support
-from virtinst import OSXML
-from virtinst import VirtualDevice
-from virtinst import Clock
-from virtinst import Seclabel
-from virtinst import CPU
-from virtinst import DomainNumatune
-from virtinst import DomainMemorytune
-from virtinst import DomainMemorybacking
-from virtinst import DomainBlkiotune
-from virtinst import DomainFeatures
-from virtinst import DomainResource
-from virtinst import PM
-from virtinst import IdMap
-from virtinst.xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
-
-from virtinst import osdict
+from . import osdict
+from . import util
+from . import support
+from .clock import Clock
+from .cpu import CPU
+from .device import VirtualDevice
+from .deviceaudio import VirtualAudio
+from .devicechar import VirtualChannelDevice, VirtualConsoleDevice
+from .devicecontroller import VirtualController
+from .devicegraphics import VirtualGraphics
+from .deviceinput import VirtualInputDevice
+from .deviceredirdev import VirtualRedirDevice
+from .devicevideo import VirtualVideoDevice
+from .distroinstaller import DistroInstaller
+from .domainblkiotune import DomainBlkiotune
+from .domainfeatures import DomainFeatures
+from .domainmemorybacking import DomainMemorybacking
+from .domainmemorytune import DomainMemorytune
+from .domainnumatune import DomainNumatune
+from .domainresource import DomainResource
+from .idmap import IdMap
+from .osxml import OSXML
+from .pm import PM
+from .seclabel import Seclabel
+from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 
 class Guest(XMLBuilder):
@@ -122,7 +128,7 @@ class Guest(XMLBuilder):
         # The libvirt virDomain object we 'Create'
         self.domain = None
 
-        self.installer = virtinst.DistroInstaller(self.conn)
+        self.installer = DistroInstaller(self.conn)
 
 
     ######################
@@ -534,14 +540,14 @@ class Guest(XMLBuilder):
             return
         if self.get_devices("input"):
             return
-        self.add_device(virtinst.VirtualInputDevice(self.conn))
+        self.add_device(VirtualInputDevice(self.conn))
 
     def add_default_sound_device(self):
         if not self.os.is_hvm():
             return
         if not self.os.is_x86():
             return
-        self.add_device(virtinst.VirtualAudio(self.conn))
+        self.add_device(VirtualAudio(self.conn))
 
     def add_default_console_device(self):
         if self.skip_default_console:
@@ -551,7 +557,7 @@ class Guest(XMLBuilder):
         if self.get_devices("console") or self.get_devices("serial"):
             return
 
-        dev = virtinst.VirtualConsoleDevice(self.conn)
+        dev = VirtualConsoleDevice(self.conn)
         dev.type = dev.TYPE_PTY
 
         if (self.os.is_x86() and
@@ -569,7 +575,7 @@ class Guest(XMLBuilder):
             return
         if not self.get_devices("graphics"):
             return
-        self.add_device(virtinst.VirtualVideoDevice(self.conn))
+        self.add_device(VirtualVideoDevice(self.conn))
 
     def add_default_usb_controller(self):
         if self.os.is_container():
@@ -581,7 +587,7 @@ class Guest(XMLBuilder):
         if not self.conn.check_support(
             self.conn.SUPPORT_CONN_DEFAULT_USB2):
             return
-        for dev in virtinst.VirtualController.get_usb2_controllers(self.conn):
+        for dev in VirtualController.get_usb2_controllers(self.conn):
             self.add_device(dev)
 
     def add_default_channels(self):
@@ -595,7 +601,7 @@ class Guest(XMLBuilder):
             not self.os.is_arm() and
             self._lookup_osdict_key("qemu_ga", False) and
             self.conn.check_support(self.conn.SUPPORT_CONN_AUTOSOCKET)):
-            dev = virtinst.VirtualChannelDevice(self.conn)
+            dev = VirtualChannelDevice(self.conn)
             dev.type = "unix"
             dev.target_type = "virtio"
             dev.target_name = dev.CHANNEL_NAME_QEMUGA
@@ -610,7 +616,7 @@ class Guest(XMLBuilder):
             return
         if self.os.arch not in ["x86_64", "i686", "ppc64", "ia64"]:
             return
-        self.add_device(virtinst.VirtualGraphics(self.conn))
+        self.add_device(VirtualGraphics(self.conn))
 
     def add_default_devices(self):
         self.add_default_graphics()
@@ -801,7 +807,7 @@ class Guest(XMLBuilder):
                 dev.virtual_device_type == "disk" and
                 not any([cont.address.type == "spapr-vio" for cont in
                         self.get_devices("controller")])):
-                ctrl = virtinst.VirtualController(self.conn)
+                ctrl = VirtualController(self.conn)
                 ctrl.type = "scsi"
                 ctrl.address.set_addrstr("spapr-vio")
                 self.add_device(ctrl)
@@ -896,8 +902,8 @@ class Guest(XMLBuilder):
         input_type = self._lookup_osdict_key("inputtype", "mouse")
         input_bus = self._lookup_osdict_key("inputbus", "ps2")
         if self.os.is_xenpv():
-            input_type = virtinst.VirtualInputDevice.TYPE_MOUSE
-            input_bus = virtinst.VirtualInputDevice.BUS_XEN
+            input_type = VirtualInputDevice.TYPE_MOUSE
+            input_bus = VirtualInputDevice.BUS_XEN
 
         for inp in self.get_devices("input"):
             if (inp.type == inp.TYPE_DEFAULT and
@@ -943,7 +949,7 @@ class Guest(XMLBuilder):
                 return
 
         if self.conn.check_support(self.conn.SUPPORT_CONN_CHAR_SPICEVMC):
-            agentdev = virtinst.VirtualChannelDevice(self.conn)
+            agentdev = VirtualChannelDevice(self.conn)
             agentdev.type = agentdev.TYPE_SPICEVMC
             self.add_device(agentdev)
 
@@ -963,7 +969,7 @@ class Guest(XMLBuilder):
             return
 
         for ignore in range(4):
-            dev = virtinst.VirtualRedirDevice(self.conn)
+            dev = VirtualRedirDevice(self.conn)
             dev.bus = "usb"
             dev.type = "spicevmc"
             self.add_device(dev)

@@ -21,8 +21,8 @@ import logging
 
 import libvirt
 
-from virtinst.xmlbuilder import XMLBuilder
-from virtinst.xmlbuilder import XMLProperty as OrigXMLProperty
+from .xmlbuilder import XMLBuilder
+from .xmlbuilder import XMLProperty as OrigXMLProperty
 
 
 # We had a pre-existing set of parse tests when this was converted to

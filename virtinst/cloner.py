@@ -26,11 +26,11 @@ import os
 import urlgrabber.progress as progress
 import libvirt
 
-from virtinst import Guest
-from virtinst import VirtualNetworkInterface
-from virtinst import VirtualDisk
-from virtinst import StorageVolume
-from virtinst import util
+from . import util
+from .guest import Guest
+from .deviceinterface import VirtualNetworkInterface
+from .devicedisk import VirtualDisk
+from .storage import StorageVolume
 
 
 class Cloner(object):

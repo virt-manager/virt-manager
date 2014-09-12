@@ -22,8 +22,8 @@
 import os
 import logging
 
-import virtinst
-from virtinst import OSXML
+from .devicedisk import VirtualDisk
+from .osxml import OSXML
 
 
 class Installer(object):
@@ -103,7 +103,7 @@ class Installer(object):
         return bootorder
 
     def _make_cdrom_dev(self, path, transient=False):
-        dev = virtinst.VirtualDisk(self.conn)
+        dev = VirtualDisk(self.conn)
         dev.path = path
         dev.device = dev.DEVICE_CDROM
         dev.read_only = True
@@ -256,11 +256,11 @@ class ImportInstaller(Installer):
         return self._disk_to_bootdev(disks[0])
 
     def _disk_to_bootdev(self, disk):
-        if disk.device == virtinst.VirtualDisk.DEVICE_DISK:
+        if disk.device == VirtualDisk.DEVICE_DISK:
             return OSXML.BOOT_DEVICE_HARDDISK
-        elif disk.device == virtinst.VirtualDisk.DEVICE_CDROM:
+        elif disk.device == VirtualDisk.DEVICE_CDROM:
             return OSXML.BOOT_DEVICE_CDROM
-        elif disk.device == virtinst.VirtualDisk.DEVICE_FLOPPY:
+        elif disk.device == VirtualDisk.DEVICE_FLOPPY:
             return OSXML.BOOT_DEVICE_FLOPPY
         else:
             return OSXML.BOOT_DEVICE_HARDDISK

@@ -20,9 +20,9 @@
 import logging
 import random
 
-from virtinst import util
-from virtinst import VirtualDevice
-from virtinst.xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+from . import util
+from .device import VirtualDevice
+from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 def _random_mac(conn):

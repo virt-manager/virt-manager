@@ -25,8 +25,8 @@ import logging
 import libvirt
 import urlgrabber
 
-from virtinst.xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
-from virtinst import util
+from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+from . import util
 
 
 DEFAULT_DEV_TARGET = "/dev"

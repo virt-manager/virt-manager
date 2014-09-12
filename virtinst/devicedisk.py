@@ -28,10 +28,10 @@ import re
 
 import urlgrabber.progress as progress
 
-from virtinst import diskbackend
-from virtinst import util
-from virtinst import VirtualDevice
-from virtinst.xmlbuilder import XMLProperty
+from . import diskbackend
+from . import util
+from .device import VirtualDevice
+from .xmlbuilder import XMLProperty
 
 
 def _qemu_sanitize_drvtype(phystype, fmt, manual_format=False):

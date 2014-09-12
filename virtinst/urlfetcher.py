@@ -32,7 +32,7 @@ import urlparse
 
 import urlgrabber.grabber as grabber
 
-from virtinst import osdict
+from . import osdict
 
 
 #########################################################################

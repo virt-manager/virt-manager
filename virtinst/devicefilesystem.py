@@ -19,8 +19,8 @@
 
 import os
 
-from virtinst import VirtualDevice
-from virtinst.xmlbuilder import XMLProperty
+from .device import VirtualDevice
+from .xmlbuilder import XMLProperty
 
 
 class VirtualFilesystem(VirtualDevice):

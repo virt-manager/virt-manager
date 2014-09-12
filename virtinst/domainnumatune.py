@@ -19,7 +19,7 @@
 
 import re
 
-from virtinst.xmlbuilder import XMLBuilder, XMLProperty
+from .xmlbuilder import XMLBuilder, XMLProperty
 
 
 def get_phy_cpus(conn):

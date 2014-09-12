@@ -31,8 +31,29 @@ import libvirt
 
 from virtcli import cliconfig
 
-import virtinst
-from virtinst import util
+from . import util
+from .clock import Clock
+from .deviceaudio import VirtualAudio
+from .devicechar import (VirtualChannelDevice, VirtualConsoleDevice,
+                         VirtualSerialDevice, VirtualParallelDevice)
+from .devicecontroller import VirtualController
+from .devicedisk import VirtualDisk
+from .devicefilesystem import VirtualFilesystem
+from .devicegraphics import VirtualGraphics
+from .devicehostdev import VirtualHostDevice
+from .deviceinterface import VirtualNetworkInterface
+from .devicememballoon import VirtualMemballoon
+from .devicepanic import VirtualPanicDevice
+from .deviceredirdev import VirtualRedirDevice
+from .devicerng import VirtualRNGDevice
+from .devicesmartcard import VirtualSmartCardDevice
+from .devicetpm import VirtualTPMDevice
+from .devicevideo import VirtualVideoDevice
+from .devicewatchdog import VirtualWatchdog
+from .domainnumatune import DomainNumatune
+from .nodedev import NodeDevice
+from .osxml import OSXML
+from .storage import StoragePool, StorageVolume
 
 
 force = False
@@ -202,8 +223,10 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
 ##############################
 
 def getConnection(uri):
+    from .connection import VirtualConnection
+
     logging.debug("Requesting libvirt URI %s", (uri or "default"))
-    conn = virtinst.VirtualConnection(uri)
+    conn = VirtualConnection(uri)
     conn.open(_do_creds_authname)
     conn.cache_object_fetch = True
     logging.debug("Received libvirt URI %s", conn.uri)
@@ -311,7 +334,7 @@ def validate_disk(dev, warn_overwrite=False):
         """
         if not warn_overwrite:
             return
-        if virtinst.VirtualDisk.path_exists(dev.conn, dev.path):
+        if VirtualDisk.path_exists(dev.conn, dev.path):
             _optional_fail(
                 _("This will overwrite the existing path '%s'" % dev.path))
 
@@ -409,8 +432,8 @@ def show_console_for_guest(guest):
 
     gtype = gdev[0].type
     if gtype in ["default",
-                 virtinst.VirtualGraphics.TYPE_VNC,
-                 virtinst.VirtualGraphics.TYPE_SPICE]:
+                 VirtualGraphics.TYPE_VNC,
+                 VirtualGraphics.TYPE_SPICE]:
         logging.debug("Launching virt-viewer for graphics type '%s'", gtype)
         return _gfx_console(guest)
     else:
@@ -1048,7 +1071,7 @@ class VirtCLIParser(object):
 
         @cli_arg_name: The command line argument this maps to, so
             "host-device" for --host-device
-        @guest: Will be set parse(), the toplevel virtinst.Guest object
+        @guest: Will be set parse(), the toplevel Guest object
         @remove_first: Passed to VirtOptionString
         @check_none: If the parsed option string is just 'none', return None
         @support_cb: An extra support check function for further validation.
@@ -1303,7 +1326,7 @@ class ParserVCPU(VirtCLIParser):
         def set_cpuset_cb(opts, inst, cliname, val):
             if val == "auto":
                 try:
-                    val = virtinst.DomainNumatune.generate_cpuset(
+                    val = DomainNumatune.generate_cpuset(
                         inst.conn, inst.memory)
                     logging.debug("Auto cpuset is: %s", val)
                 except Exception, e:
@@ -1431,7 +1454,7 @@ class ParserBoot(VirtCLIParser):
         # Order matters for boot devices, we handle it specially in parse
         def noset_cb(val):
             ignore = val
-        for b in virtinst.OSXML.BOOT_DEVICES:
+        for b in OSXML.BOOT_DEVICES:
             self.set_param(noset_cb, b)
 
     def _parse(self, opts, inst):
@@ -1537,7 +1560,7 @@ class ParserClock(VirtCLIParser):
 
             setattr(timerobj, attrname, val)
 
-        for tname in virtinst.Clock.TIMER_NAMES:
+        for tname in Clock.TIMER_NAMES:
             self.set_param(None, tname + "_present",
                 is_onoff=True,
                 setter_cb=set_timer)
@@ -1586,13 +1609,13 @@ def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
     if path:
         abspath = os.path.abspath(path)
         if os.path.dirname(abspath) == "/var/lib/libvirt/images":
-            virtinst.StoragePool.build_default_pool(guest.conn)
+            StoragePool.build_default_pool(guest.conn)
 
     elif pool:
         if not size:
             raise ValueError(_("Size must be specified with all 'pool='"))
         if pool == "default":
-            virtinst.StoragePool.build_default_pool(guest.conn)
+            StoragePool.build_default_pool(guest.conn)
 
         poolobj = guest.conn.storagePoolLookupByName(pool)
         collidelist = []
@@ -1601,16 +1624,16 @@ def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
                 disk.get_vol_install().pool.name() == poolobj.name()):
                 collidelist.append(os.path.basename(disk.path))
 
-        tmpvol = virtinst.StorageVolume(guest.conn)
+        tmpvol = StorageVolume(guest.conn)
         tmpvol.pool = poolobj
         if fmt is None and tmpvol.file_type == tmpvol.TYPE_FILE:
             fmt = _default_image_file_format(guest.conn)
 
-        ext = virtinst.StorageVolume.get_file_extension_for_format(fmt)
-        vname = virtinst.StorageVolume.find_free_name(
+        ext = StorageVolume.get_file_extension_for_format(fmt)
+        vname = StorageVolume.find_free_name(
             poolobj, guest.name, suffix=ext, collidelist=collidelist)
 
-        volinst = virtinst.VirtualDisk.build_vol_install(
+        volinst = VirtualDisk.build_vol_install(
                 guest.conn, vname, poolobj, size, sparse)
         if fmt:
             if not volinst.supports_property("format"):
@@ -1627,16 +1650,16 @@ def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
         logging.debug("Parsed volume: as pool='%s' vol='%s'",
                       voltuple[0], voltuple[1])
         if voltuple[0] == "default":
-            virtinst.StoragePool.build_default_pool(guest.conn)
+            StoragePool.build_default_pool(guest.conn)
 
-        volobj = virtinst.VirtualDisk.lookup_vol_object(guest.conn, voltuple)
+        volobj = VirtualDisk.lookup_vol_object(guest.conn, voltuple)
 
     return abspath, volinst, volobj
 
 
 class ParserDisk(VirtCLIParser):
     def _init_params(self):
-        self.devclass = virtinst.VirtualDisk
+        self.devclass = VirtualDisk
         self.remove_first = "path"
 
         def noset_cb(opts, inst, cliname, val):
@@ -1739,7 +1762,7 @@ parse_disk = ParserDisk("disk").parse
 
 class ParserNetwork(VirtCLIParser):
     def _init_params(self):
-        self.devclass = virtinst.VirtualNetworkInterface
+        self.devclass = VirtualNetworkInterface
         self.remove_first = "type"
 
         def set_mac_cb(opts, inst, cliname, val):
@@ -1782,10 +1805,10 @@ class ParserNetwork(VirtCLIParser):
         opts = optsobj.opts
         if "type" not in opts:
             if "network" in opts:
-                opts["type"] = virtinst.VirtualNetworkInterface.TYPE_VIRTUAL
+                opts["type"] = VirtualNetworkInterface.TYPE_VIRTUAL
                 opts["source"] = opts.pop("network")
             elif "bridge" in opts:
-                opts["type"] = virtinst.VirtualNetworkInterface.TYPE_BRIDGE
+                opts["type"] = VirtualNetworkInterface.TYPE_BRIDGE
                 opts["source"] = opts.pop("bridge")
 
         return VirtCLIParser._parse(self, optsobj, inst)
@@ -1797,18 +1820,18 @@ class ParserNetwork(VirtCLIParser):
 
 class ParserGraphics(VirtCLIParser):
     def _init_params(self):
-        self.devclass = virtinst.VirtualGraphics
+        self.devclass = VirtualGraphics
         self.remove_first = "type"
 
         def set_keymap_cb(opts, inst, cliname, val):
             ignore = opts
             ignore = cliname
-            from virtinst import hostkeymap
+            from . import hostkeymap
 
             if not val:
                 val = None
             elif val.lower() == "local":
-                val = virtinst.VirtualGraphics.KEYMAP_LOCAL
+                val = VirtualGraphics.KEYMAP_LOCAL
             elif val.lower() == "none":
                 val = None
             else:
@@ -1848,7 +1871,7 @@ class ParserGraphics(VirtCLIParser):
 
 class ParserController(VirtCLIParser):
     def _init_params(self):
-        self.devclass = virtinst.VirtualController
+        self.devclass = VirtualController
         self.remove_first = "type"
 
         self.set_param("type", "type")
@@ -1863,7 +1886,7 @@ class ParserController(VirtCLIParser):
 
     def _parse(self, opts, inst):
         if opts.fullopts == "usb2":
-            return virtinst.VirtualController.get_usb2_controllers(inst.conn)
+            return VirtualController.get_usb2_controllers(inst.conn)
         elif opts.fullopts == "usb3":
             inst.type = "usb"
             inst.model = "nec-xhci"
@@ -1877,7 +1900,7 @@ class ParserController(VirtCLIParser):
 
 class ParserSmartcard(VirtCLIParser):
     def _init_params(self):
-        self.devclass = virtinst.VirtualSmartCardDevice
+        self.devclass = VirtualSmartCardDevice
         self.remove_first = "mode"
         self.check_none = True
 
@@ -1891,7 +1914,7 @@ class ParserSmartcard(VirtCLIParser):
 
 class ParserRedir(VirtCLIParser):
     def _init_params(self):
-        self.devclass = virtinst.VirtualRedirDevice
+        self.devclass = VirtualRedirDevice
         self.remove_first = "bus"
 
         self.set_param("bus", "bus")
@@ -1917,7 +1940,7 @@ class ParserRedir(VirtCLIParser):
 
 class ParserTPM(VirtCLIParser):
     def _init_params(self):
-        self.devclass = virtinst.VirtualTPMDevice
+        self.devclass = VirtualTPMDevice
         self.remove_first = "type"
         self.check_none = True
 
@@ -1937,7 +1960,7 @@ class ParserTPM(VirtCLIParser):
 
 class ParserRNG(VirtCLIParser):
     def _init_params(self):
-        self.devclass = virtinst.VirtualRNGDevice
+        self.devclass = VirtualRNGDevice
         self.remove_first = "type"
         self.check_none = True
 
@@ -2006,7 +2029,7 @@ class ParserRNG(VirtCLIParser):
 
 class ParserWatchdog(VirtCLIParser):
     def _init_params(self):
-        self.devclass = virtinst.VirtualWatchdog
+        self.devclass = VirtualWatchdog
         self.remove_first = "model"
 
         self.set_param("model", "model")
@@ -2019,7 +2042,7 @@ class ParserWatchdog(VirtCLIParser):
 
 class ParserMemballoon(VirtCLIParser):
     def _init_params(self):
-        self.devclass = virtinst.VirtualMemballoon
+        self.devclass = VirtualMemballoon
         self.remove_first = "model"
 
         self.set_param("model", "model")
@@ -2031,7 +2054,7 @@ class ParserMemballoon(VirtCLIParser):
 
 class ParserPanic(VirtCLIParser):
     def _init_params(self):
-        self.devclass = virtinst.VirtualPanicDevice
+        self.devclass = VirtualPanicDevice
         self.remove_first = "iobase"
 
         def set_iobase_cb(opts, inst, cliname, val):
@@ -2130,19 +2153,19 @@ class _ParserChar(VirtCLIParser):
 
 
 class ParserSerial(_ParserChar):
-    devclass = virtinst.VirtualSerialDevice
+    devclass = VirtualSerialDevice
 
 
 class ParserParallel(_ParserChar):
-    devclass = virtinst.VirtualParallelDevice
+    devclass = VirtualParallelDevice
 
 
 class ParserChannel(_ParserChar):
-    devclass = virtinst.VirtualChannelDevice
+    devclass = VirtualChannelDevice
 
 
 class ParserConsole(_ParserChar):
-    devclass = virtinst.VirtualConsoleDevice
+    devclass = VirtualConsoleDevice
 
 
 ########################
@@ -2151,7 +2174,7 @@ class ParserConsole(_ParserChar):
 
 class ParserFilesystem(VirtCLIParser):
     def _init_params(self):
-        self.devclass = virtinst.VirtualFilesystem
+        self.devclass = VirtualFilesystem
         self.remove_first = ["source", "target"]
 
         self.set_param("type", "type")
@@ -2166,7 +2189,7 @@ class ParserFilesystem(VirtCLIParser):
 
 class ParserVideo(VirtCLIParser):
     def _init_params(self):
-        self.devclass = virtinst.VirtualVideoDevice
+        self.devclass = VirtualVideoDevice
         self.remove_first = "model"
 
         self.set_param("model", "model", ignore_default=True)
@@ -2178,7 +2201,7 @@ class ParserVideo(VirtCLIParser):
 
 class ParserSound(VirtCLIParser):
     def _init_params(self):
-        self.devclass = virtinst.VirtualAudio
+        self.devclass = VirtualAudio
         self.remove_first = "model"
 
         self.set_param("model", "model", ignore_default=True)
@@ -2196,13 +2219,13 @@ class ParserSound(VirtCLIParser):
 
 class ParserHostdev(VirtCLIParser):
     def _init_params(self):
-        self.devclass = virtinst.VirtualHostDevice
+        self.devclass = VirtualHostDevice
         self.remove_first = "name"
 
         def set_name_cb(opts, inst, cliname, val):
             ignore = opts
             ignore = cliname
-            val = virtinst.NodeDevice.lookupNodeName(inst.conn, val)
+            val = NodeDevice.lookupNodeName(inst.conn, val)
             inst.set_from_nodedev(val)
 
         self.set_param(None, "name", setter_cb=set_name_cb)

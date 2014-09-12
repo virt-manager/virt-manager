@@ -25,7 +25,7 @@ import libxml2
 
 import virtinst
 
-from virtconv.formats import parser_class
+from .formats import parser_class
 
 
 # Mapping of ResourceType value to device type

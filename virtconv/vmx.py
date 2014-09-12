@@ -27,7 +27,7 @@ import shlex
 import virtinst
 from virtinst import util
 
-from virtconv.formats import parser_class
+from .formats import parser_class
 
 
 class _VMXLine(object):

@@ -25,12 +25,12 @@ import tempfile
 
 import urlgrabber
 
-from virtinst import StoragePool, StorageVolume
-from virtinst import util
-from virtinst import Installer
-from virtinst import VirtualDisk
-from virtinst import urlfetcher
-from virtinst import osdict
+from . import osdict
+from . import urlfetcher
+from . import util
+from .devicedisk import VirtualDisk
+from .installer import Installer
+from .storage import StoragePool, StorageVolume
 
 
 def _is_url(conn, url):

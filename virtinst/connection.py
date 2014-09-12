@@ -22,14 +22,13 @@ import weakref
 
 import libvirt
 
-from virtinst import CapabilitiesParser
-from virtinst import Guest
-from virtinst import StoragePool
-from virtinst import StorageVolume
-from virtinst import pollhelpers
-from virtinst import support
-from virtinst import util
-from virtinst.cli import VirtOptionString
+from . import pollhelpers
+from . import support
+from . import util
+from . import capabilities as CapabilitiesParser
+from .cli import VirtOptionString
+from .guest import Guest
+from .storage import StoragePool, StorageVolume
 
 _virtinst_uri_magic = "__virtinst_test__"
 

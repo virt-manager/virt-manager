@@ -24,8 +24,8 @@ import statvfs
 
 import libvirt
 
-from virtinst import StoragePool, StorageVolume
-from virtinst import util
+from . import util
+from .storage import StoragePool, StorageVolume
 
 
 def check_if_path_managed(conn, path):

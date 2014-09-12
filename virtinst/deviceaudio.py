@@ -17,8 +17,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtinst import VirtualDevice
-from virtinst.xmlbuilder import XMLProperty
+from .device import VirtualDevice
+from .xmlbuilder import XMLProperty
 
 
 class VirtualAudio(VirtualDevice):

@@ -21,7 +21,7 @@
 
 import re
 
-from virtinst import util
+from . import util
 
 # Whether a guest can be created with a certain feature on resp. off
 FEATURE_ON      = 0x01
@@ -688,8 +688,8 @@ class Capabilities(object):
         return (guest, domain)
 
     def build_virtinst_guest(self, conn, guest, domain):
-        from virtinst import Guest as VGuest
-        gobj = VGuest(conn)
+        from .guest import Guest as VMGuest
+        gobj = VMGuest(conn)
         gobj.type = domain.hypervisor_type
         gobj.os.os_type = guest.os_type
         gobj.os.arch = guest.arch

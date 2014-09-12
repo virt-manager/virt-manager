@@ -21,7 +21,7 @@
 
 import libvirt
 
-from virtinst import util
+from . import util
 
 
 # Check that command is present in the python bindings, and return the

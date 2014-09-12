@@ -26,7 +26,7 @@ import re
 
 import libxml2
 
-from virtinst import util
+from . import util
 
 
 # pylint: disable=protected-access

@@ -53,14 +53,10 @@ class parser_class(object):
         raise NotImplementedError
 
 
-from virtconv.vmx import vmx_parser as _vmx_parser
-from virtconv.ovf import ovf_parser as _ovf_parser
-
-
-_parsers = [
-    _vmx_parser,
-    _ovf_parser,
-]
+def _get_parsers():
+    from .vmx import vmx_parser
+    from .ovf import ovf_parser
+    return [vmx_parser, ovf_parser]
 
 
 def _is_test():
@@ -71,7 +67,7 @@ def _find_parser_by_name(input_name):
     """
     Return the parser of the given name.
     """
-    parsers = [p for p in _parsers if p.name == input_name]
+    parsers = [p for p in _get_parsers() if p.name == input_name]
     if len(parsers):
         return parsers[0]
     raise RuntimeError(_("No parser found for type '%s'") % input_name)
@@ -81,7 +77,7 @@ def _find_parser_by_file(input_file):
     """
     Return the parser that is capable of comprehending the given file.
     """
-    for p in _parsers:
+    for p in _get_parsers():
         if p.identify_file(input_file):
             return p
     raise RuntimeError(_("Don't know how to parse file %s") % input_file)
@@ -155,7 +151,7 @@ def _find_input(input_file, parser, print_cb):
                 parser = _find_parser_by_file(input_file)
             return input_file, parser, force_clean
 
-        parsers = parser and [parser] or _parsers
+        parsers = parser and [parser] or _get_parsers()
         for root, ignore, files in os.walk(input_file):
             for p in parsers:
                 for f in [f for f in files if f.endswith(p.suffix)]:

@@ -34,7 +34,7 @@ def _setup_i18n():
 _setup_i18n()
 stable_defaults = _cliconfig.stable_defaults
 
-from virtinst import util
+from . import util
 from virtinst import support
 
 from virtinst.osxml import OSXML
@@ -50,7 +50,7 @@ from virtinst.seclabel import Seclabel
 from virtinst.pm import PM
 from virtinst.idmap import IdMap
 
-import virtinst.capabilities as CapabilitiesParser
+from virtinst import capabilities as CapabilitiesParser
 from virtinst.interface import Interface, InterfaceProtocol
 from virtinst.network import Network
 from virtinst.nodedev import NodeDevice

@@ -17,7 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-from virtinst.xmlbuilder import XMLBuilder, XMLProperty
+from .xmlbuilder import XMLBuilder, XMLProperty
 
 
 class IdMap(XMLBuilder):

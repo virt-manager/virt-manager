@@ -19,8 +19,8 @@
 
 import libvirt
 
-from virtinst import util
-from virtinst.xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+from . import util
+from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
 class _SnapshotDisk(XMLBuilder):
