@@ -20,6 +20,7 @@
 import logging
 import os
 import statvfs
+import time
 
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -78,9 +79,9 @@ class vmmAddStorage(vmmGObjectUI):
 
         avail = 0
         if pool and pool.is_active():
-            # FIXME: make sure not inactive?
-            # FIXME: use a conn specific function after we send pool-added
-            pool.refresh()
+            # Rate limit this, since it can be spammed at dialog startup time
+            if ((time.time() - pool.get_last_refresh_time()) > 10):
+                pool.refresh()
             avail = int(pool.get_available())
 
         elif not self.conn.is_remote() and os.path.exists(path):

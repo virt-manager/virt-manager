@@ -19,6 +19,7 @@
 #
 
 import logging
+import time
 
 from gi.repository import GObject
 
@@ -104,6 +105,7 @@ class vmmStoragePool(vmmLibvirtObject):
 
         self._active = True
         self._support_isactive = None
+        self._last_refresh_time = 0
 
         self._volumes = {}
 
@@ -182,6 +184,10 @@ class vmmStoragePool(vmmLibvirtObject):
         self.refresh_xml()
         self._update_volumes()
         self.idle_emit("refreshed")
+        self._last_refresh_time = time.time()
+
+    def get_last_refresh_time(self):
+        return self._last_refresh_time
 
     def define_name(self, newname):
         return self._define_name_helper("storagepool",
