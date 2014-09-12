@@ -181,7 +181,7 @@ class vmmStoragePool(vmmLibvirtObject):
 
         self._backend.refresh(0)
         self.refresh_xml()
-        self.update_volumes(refresh=True)
+        self._update_volumes()
         self.idle_emit("refreshed")
 
     def define_name(self, newname):
@@ -193,15 +193,13 @@ class vmmStoragePool(vmmLibvirtObject):
     # Volume handling #
     ###################
 
-    def get_volumes(self, refresh=True):
-        if refresh:
-            self.update_volumes()
+    def get_volumes(self):
         return self._volumes
 
     def get_volume(self, key):
         return self._volumes[key]
 
-    def update_volumes(self, refresh=False):
+    def _update_volumes(self):
         if not self.is_active():
             self._volumes = {}
             return
@@ -211,7 +209,7 @@ class vmmStoragePool(vmmLibvirtObject):
             lambda obj, key: vmmStorageVolume(self.conn, obj, key))
 
         for volname in allvols:
-            if volname not in new and refresh:
+            if volname not in new:
                 allvols[volname].refresh_xml()
         self._volumes = allvols
 

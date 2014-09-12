@@ -171,7 +171,7 @@ class vmmConnection(vmmGObject):
         def fetch_all_vols():
             ret = []
             for pool in self._pools.values():
-                for vol in pool.get_volumes(refresh=False).values():
+                for vol in pool.get_volumes().values():
                     try:
                         ret.append(vol.get_xmlobj(refresh_if_nec=False))
                     except Exception, e:
