@@ -436,18 +436,28 @@ class _OsVariant(_OsVariantType):
 
     def get_recommended_resources(self, arch):
         ret = {}
-        def read_resource(resources, arch):
+        def read_resource(resources, minimum, arch):
+            # If we are reading the "minimum" block, allocate more
+            # resources.
+            ram_scale = minimum and 2 or 1
+            n_cpus_scale = minimum and 2 or 1
+            storage_scale = minimum and 2 or 1
             for i in range(resources.get_length()):
                 r = resources.get_nth(i)
                 if r.get_architecture() == arch:
-                    ret["ram"] = r.get_ram()
+                    ret["ram"] = r.get_ram() * ram_scale
                     ret["cpu"] = r.get_cpu()
-                    ret["n-cpus"] = r.get_n_cpus()
-                    ret["storage"] = r.get_storage()
+                    ret["n-cpus"] = r.get_n_cpus() * n_cpus_scale
+                    ret["storage"] = r.get_storage() * storage_scale
                     break
 
-        read_resource(self._os.get_recommended_resources(), "all")
-        read_resource(self._os.get_recommended_resources(), arch)
+        # libosinfo may miss the recommended resources block for some OS,
+        # in this case read first the minimum resources (if present)
+        # and use them.
+        read_resource(self._os.get_minimum_resources(), True, "all")
+        read_resource(self._os.get_minimum_resources(), True, arch)
+        read_resource(self._os.get_recommended_resources(), False, "all")
+        read_resource(self._os.get_recommended_resources(), False, arch)
 
         return ret
 
