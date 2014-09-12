@@ -992,6 +992,9 @@ class vmmConnection(vmmGObject):
                       self.get_uri(), self.caps.xml)
         self._add_conn_events()
 
+        # Prime CPU cache
+        self.caps.get_cpu_values(self.get_backend(), "x86_64")
+
         try:
             self._backend.setKeepAlive(20, 1)
         except Exception, e:
