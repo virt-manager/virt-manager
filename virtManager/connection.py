@@ -24,7 +24,6 @@ import logging
 import os
 import re
 import socket
-import threading
 import time
 import traceback
 
@@ -86,7 +85,6 @@ class vmmConnection(vmmGObject):
             self._uri = "xen:///"
 
         self._state = self._STATE_DISCONNECTED
-        self._connectThread = None
         self._connectError = None
         self._backend = virtinst.VirtualConnection(self._uri)
         self._closing = False
@@ -842,7 +840,7 @@ class vmmConnection(vmmGObject):
                 self.emit("mediadev-added", mediadev)
             self.idle_add(_add_idle)
 
-        threading.Thread(target=_add_thread, name="AddMediadev").start()
+        self._start_thread(_add_thread, "nodedev=%s AddMediadev" % name)
 
     def _nodedev_mediadev_removed(self, ignore1, name):
         if name not in self._mediadevs:
@@ -934,10 +932,8 @@ class vmmConnection(vmmGObject):
         else:
             logging.debug("Scheduling background open thread for " +
                          self.get_uri())
-            self._connectThread = threading.Thread(target=self._open_thread,
-                                            name="Connect %s" % self.get_uri())
-            self._connectThread.setDaemon(True)
-            self._connectThread.start()
+            self._start_thread(self._open_thread,
+                "Connect %s" % self.get_uri())
 
     def _do_creds_password(self, creds):
         try:
@@ -1065,7 +1061,6 @@ class vmmConnection(vmmGObject):
             return {}, {}, self._vms
         return pollhelpers.fetch_vms(self._backend, self._vms.copy(),
                     (lambda obj, key: vmmDomain(self, obj, key)))
-
 
     def _obj_signal_proxy(self, obj, signal, key):
         ignore = obj

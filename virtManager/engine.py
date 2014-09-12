@@ -267,10 +267,7 @@ class vmmEngine(vmmGObject):
                 self.idle_add(connect, uri)
 
         add_next_to_queue()
-        thread = threading.Thread(name="Autostart thread",
-            target=handle_queue, args=())
-        thread.daemon = True
-        thread.start()
+        self._start_thread(handle_queue, "Conn autostart thread")
 
 
     def _do_vm_removed(self, conn, connkey):

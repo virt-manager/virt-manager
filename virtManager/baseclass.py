@@ -21,6 +21,7 @@
 import logging
 import os
 import sys
+import threading
 import traceback
 
 from virtManager import config
@@ -118,6 +119,13 @@ class vmmGObject(GObject.GObject):
     def _refcount(self):
         # Function generates 2 temporary refs, so adjust total accordingly
         return (sys.getrefcount(self) - 2)
+
+    def _start_thread(self, target=None, name=None, args=None, kwargs=None):
+        # Helper for starting a daemonized thread
+        t = threading.Thread(target=target, name=name,
+            args=args or [], kwargs=kwargs or {})
+        t.daemon = True
+        t.start()
 
     def connect_once(self, signal, func, *args):
         id_list = []
