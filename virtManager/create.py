@@ -29,16 +29,16 @@ from gi.repository import Gdk
 import virtinst
 from virtinst import util
 
-from virtManager import uiutil
-from virtManager.mediadev import MEDIA_CDROM
-from virtManager.baseclass import vmmGObjectUI
-from virtManager.asyncjob import vmmAsyncJob
-from virtManager.storagebrowse import vmmStorageBrowser
-from virtManager.details import vmmDetails
-from virtManager.domain import vmmDomainVirtinst
-from virtManager.netlist import vmmNetworkList
-from virtManager.mediacombo import vmmMediaCombo
-from virtManager.addstorage import vmmAddStorage
+from . import uiutil
+from .mediadev import MEDIA_CDROM
+from .baseclass import vmmGObjectUI
+from .asyncjob import vmmAsyncJob
+from .storagebrowse import vmmStorageBrowser
+from .details import vmmDetails
+from .domain import vmmDomainVirtinst
+from .netlist import vmmNetworkList
+from .mediacombo import vmmMediaCombo
+from .addstorage import vmmAddStorage
 
 # Number of seconds to wait for media detection
 DETECT_TIMEOUT = 20

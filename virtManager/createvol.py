@@ -24,9 +24,9 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Gdk
 
-from virtManager import uiutil
-from virtManager.baseclass import vmmGObjectUI
-from virtManager.asyncjob import vmmAsyncJob
+from . import uiutil
+from .baseclass import vmmGObjectUI
+from .asyncjob import vmmAsyncJob
 
 from virtinst import StorageVolume
 
@@ -342,7 +342,7 @@ class vmmCreateVolume(vmmGObjectUI):
                 ignore = src
                 self.widget("backing-store").set_text(text)
 
-            from virtManager.storagebrowse import vmmStorageBrowser
+            from .storagebrowse import vmmStorageBrowser
             self.storage_browser = vmmStorageBrowser(self.conn)
             self.storage_browser.connect("storage-browse-finish", cb)
             self.storage_browser.topwin.set_modal(self.topwin.get_modal())

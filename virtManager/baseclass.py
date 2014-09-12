@@ -24,7 +24,7 @@ import sys
 import threading
 import traceback
 
-from virtManager import config
+from . import config
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -221,7 +221,7 @@ class vmmGObjectUI(vmmGObject):
 
     def _get_err(self):
         if self._err is None:
-            from virtManager import error
+            from . import error
             self._err = error.vmmErrorDialog(self.topwin)
         return self._err
     err = property(_get_err)

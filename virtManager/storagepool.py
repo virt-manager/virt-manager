@@ -27,7 +27,7 @@ from virtinst import pollhelpers
 from virtinst import StoragePool, StorageVolume
 from virtinst import util
 
-from virtManager.libvirtobject import vmmLibvirtObject
+from .libvirtobject import vmmLibvirtObject
 
 
 class vmmStorageVolume(vmmLibvirtObject):

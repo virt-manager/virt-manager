@@ -22,7 +22,7 @@ from gi.repository import GObject
 
 import logging
 
-from virtManager.baseclass import vmmGObject
+from .baseclass import vmmGObject
 
 
 class vmmLibvirtObject(vmmGObject):

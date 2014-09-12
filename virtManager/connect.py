@@ -26,8 +26,8 @@ from gi.repository import Gio
 from gi.repository import GObject
 from gi.repository import Gtk
 
-from virtManager import uiutil
-from virtManager.baseclass import vmmGObjectUI
+from . import uiutil
+from .baseclass import vmmGObjectUI
 
 (HV_QEMU,
 HV_XEN,

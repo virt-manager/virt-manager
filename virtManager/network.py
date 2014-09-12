@@ -24,7 +24,7 @@ import ipaddr
 
 from virtinst import Network
 
-from virtManager.libvirtobject import vmmLibvirtObject
+from .libvirtobject import vmmLibvirtObject
 
 
 def _make_addr_str(addrStr, prefix, netmaskStr):

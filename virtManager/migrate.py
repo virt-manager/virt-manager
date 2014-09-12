@@ -29,10 +29,10 @@ from gi.repository import Gtk
 import libvirt
 from virtinst import util
 
-from virtManager import uiutil
-from virtManager.baseclass import vmmGObjectUI
-from virtManager.asyncjob import vmmAsyncJob
-from virtManager.domain import vmmDomain
+from . import uiutil
+from .baseclass import vmmGObjectUI
+from .asyncjob import vmmAsyncJob
+from .domain import vmmDomain
 
 
 def uri_join(uri_tuple):

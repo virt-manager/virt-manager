@@ -29,9 +29,9 @@ import logging
 import virtinst
 from virtinst import util
 
-from virtManager.asyncjob import vmmAsyncJob
-from virtManager.baseclass import vmmGObjectUI
-from virtManager import uiutil
+from .asyncjob import vmmAsyncJob
+from .baseclass import vmmGObjectUI
+from . import uiutil
 
 STORAGE_ROW_CONFIRM = 0
 STORAGE_ROW_CANT_DELETE = 1

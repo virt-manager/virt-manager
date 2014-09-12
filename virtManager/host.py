@@ -28,14 +28,14 @@ from virtinst import VirtualDisk
 from virtinst import StoragePool
 from virtinst import Interface
 
-from virtManager import uiutil
-from virtManager.asyncjob import vmmAsyncJob
-from virtManager.createnet import vmmCreateNetwork
-from virtManager.createpool import vmmCreatePool
-from virtManager.createvol import vmmCreateVolume
-from virtManager.createinterface import vmmCreateInterface
-from virtManager.baseclass import vmmGObjectUI
-from virtManager.graphwidgets import Sparkline
+from . import uiutil
+from .asyncjob import vmmAsyncJob
+from .createnet import vmmCreateNetwork
+from .createpool import vmmCreatePool
+from .createvol import vmmCreateVolume
+from .createinterface import vmmCreateInterface
+from .baseclass import vmmGObjectUI
+from .graphwidgets import Sparkline
 
 INTERFACE_PAGE_INFO = 0
 INTERFACE_PAGE_ERROR = 1

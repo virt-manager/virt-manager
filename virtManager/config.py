@@ -25,7 +25,7 @@ from gi.repository import GLib
 from gi.repository import Gtk
 
 from virtinst import CPU
-from virtManager.keyring import vmmKeyring, vmmSecret
+from .keyring import vmmKeyring, vmmSecret
 
 running_config = None
 

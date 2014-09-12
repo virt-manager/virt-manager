@@ -20,7 +20,7 @@
 
 import logging
 
-from virtManager.baseclass import vmmGObjectUI
+from .baseclass import vmmGObjectUI
 
 
 class vmmAbout(vmmGObjectUI):

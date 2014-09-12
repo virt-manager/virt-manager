@@ -22,11 +22,11 @@ import logging
 
 from gi.repository import GObject
 
-from virtManager.baseclass import vmmGObjectUI
-from virtManager.mediadev import MEDIA_FLOPPY
-from virtManager.mediacombo import vmmMediaCombo
-from virtManager.storagebrowse import vmmStorageBrowser
-from virtManager.addstorage import vmmAddStorage
+from .baseclass import vmmGObjectUI
+from .mediadev import MEDIA_FLOPPY
+from .mediacombo import vmmMediaCombo
+from .storagebrowse import vmmStorageBrowser
+from .addstorage import vmmAddStorage
 
 
 class vmmChooseCD(vmmGObjectUI):

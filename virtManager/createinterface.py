@@ -25,9 +25,9 @@ import logging
 
 from virtinst import Interface, InterfaceProtocol
 
-from virtManager import uiutil
-from virtManager.baseclass import vmmGObjectUI
-from virtManager.asyncjob import vmmAsyncJob
+from . import uiutil
+from .baseclass import vmmGObjectUI
+from .asyncjob import vmmAsyncJob
 
 PAGE_TYPE = 0
 PAGE_DETAILS = 1

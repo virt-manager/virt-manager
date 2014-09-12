@@ -22,7 +22,7 @@ from gi.repository import Gtk
 import logging
 import traceback
 
-from virtManager.baseclass import vmmGObject
+from .baseclass import vmmGObject
 
 
 def _launch_dialog(dialog, primary_text, secondary_text, title,

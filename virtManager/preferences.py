@@ -23,8 +23,8 @@ import logging
 from gi.repository import Gtk
 from gi.repository import Gdk
 
-from virtManager import uiutil
-from virtManager.baseclass import vmmGObjectUI
+from . import uiutil
+from .baseclass import vmmGObjectUI
 
 
 class vmmPreferences(vmmGObjectUI):

@@ -24,7 +24,7 @@ import logging
 
 from virtinst import NodeDevice
 
-from virtManager.baseclass import vmmGObject
+from .baseclass import vmmGObject
 
 MEDIA_FLOPPY = "floppy"
 MEDIA_CDROM = "cdrom"

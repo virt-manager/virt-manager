@@ -20,7 +20,7 @@
 
 from virtinst import NodeDevice
 
-from virtManager.libvirtobject import vmmLibvirtObject
+from .libvirtobject import vmmLibvirtObject
 
 
 def _parse_convert(conn, parsexml=None):

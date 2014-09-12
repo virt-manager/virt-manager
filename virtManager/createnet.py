@@ -28,9 +28,9 @@ from gi.repository import Gdk
 
 from virtinst import Network
 
-from virtManager import uiutil
-from virtManager.asyncjob import vmmAsyncJob
-from virtManager.baseclass import vmmGObjectUI
+from . import uiutil
+from .asyncjob import vmmAsyncJob
+from .baseclass import vmmGObjectUI
 
 (PAGE_NAME,
 PAGE_IPV4,

@@ -23,9 +23,9 @@ import logging
 from gi.repository import GObject
 from gi.repository import Gtk
 
-from virtManager import vmmenu
-from virtManager.baseclass import vmmGObject
-from virtManager.error import vmmErrorDialog
+from . import vmmenu
+from .baseclass import vmmGObject
+from .error import vmmErrorDialog
 
 try:
     from gi.repository import AppIndicator3  # pylint: disable=no-name-in-module

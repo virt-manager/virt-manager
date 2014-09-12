@@ -27,10 +27,10 @@ from gi.repository import GdkPixbuf
 
 from virtinst import util
 
-from virtManager import vmmenu
-from virtManager import uiutil
-from virtManager.baseclass import vmmGObjectUI
-from virtManager.graphwidgets import CellRendererSparkline
+from . import vmmenu
+from . import uiutil
+from .baseclass import vmmGObjectUI
+from .graphwidgets import CellRendererSparkline
 
 import libvirt
 

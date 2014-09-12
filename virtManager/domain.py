@@ -32,7 +32,7 @@ from virtinst import Guest
 from virtinst import util
 from virtinst import VirtualController
 
-from virtManager.libvirtobject import vmmLibvirtObject
+from .libvirtobject import vmmLibvirtObject
 
 if not hasattr(libvirt, "VIR_DOMAIN_PMSUSPENDED"):
     setattr(libvirt, "VIR_DOMAIN_PMSUSPENDED", 7)

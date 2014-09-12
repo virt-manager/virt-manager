@@ -32,9 +32,9 @@ from gi.repository import Pango
 from virtinst import DomainSnapshot
 from virtinst import util
 
-from virtManager import uiutil
-from virtManager.baseclass import vmmGObjectUI
-from virtManager.asyncjob import vmmAsyncJob
+from . import uiutil
+from .baseclass import vmmGObjectUI
+from .asyncjob import vmmAsyncJob
 
 
 mimemap = {

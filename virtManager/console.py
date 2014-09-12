@@ -36,10 +36,10 @@ import signal
 import socket
 import threading
 
-from virtManager.autodrawer import AutoDrawer
-from virtManager.baseclass import vmmGObjectUI, vmmGObject
-from virtManager.serialcon import vmmSerialConsole
-from virtManager.details import DETAILS_PAGE_CONSOLE
+from .autodrawer import AutoDrawer
+from .baseclass import vmmGObjectUI, vmmGObject
+from .serialcon import vmmSerialConsole
+from .details import DETAILS_PAGE_CONSOLE
 
 # Console pages
 (CONSOLE_PAGE_UNAVAILABLE,

@@ -24,9 +24,9 @@ from gi.repository import GObject
 
 from virtinst import VirtualFilesystem, StorageVolume
 from virtinst import util
-from virtManager import uiutil
-from virtManager.baseclass import vmmGObjectUI
-from virtManager.storagebrowse import vmmStorageBrowser
+from . import uiutil
+from .baseclass import vmmGObjectUI
+from .storagebrowse import vmmStorageBrowser
 
 
 class vmmFSDetails(vmmGObjectUI):

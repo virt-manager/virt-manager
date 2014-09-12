@@ -30,22 +30,22 @@ import traceback
 
 from virtinst import util
 
-from virtManager import packageutils
-from virtManager.about import vmmAbout
-from virtManager.baseclass import vmmGObject
-from virtManager.clone import vmmCloneVM
-from virtManager.connect import vmmConnect
-from virtManager.connection import vmmConnection
-from virtManager.preferences import vmmPreferences
-from virtManager.manager import vmmManager
-from virtManager.migrate import vmmMigrateDialog
-from virtManager.details import vmmDetails
-from virtManager.asyncjob import vmmAsyncJob
-from virtManager.create import vmmCreate
-from virtManager.host import vmmHost
-from virtManager.error import vmmErrorDialog
-from virtManager.systray import vmmSystray
-from virtManager.delete import vmmDeleteDialog
+from . import packageutils
+from .about import vmmAbout
+from .baseclass import vmmGObject
+from .clone import vmmCloneVM
+from .connect import vmmConnect
+from .connection import vmmConnection
+from .preferences import vmmPreferences
+from .manager import vmmManager
+from .migrate import vmmMigrateDialog
+from .details import vmmDetails
+from .asyncjob import vmmAsyncJob
+from .create import vmmCreate
+from .host import vmmHost
+from .error import vmmErrorDialog
+from .systray import vmmSystray
+from .delete import vmmDeleteDialog
 
 # Enable this to get a report of leaked objects on app shutdown
 # gtk3/pygobject has issues here as of Fedora 18
@@ -451,7 +451,7 @@ class vmmEngine(vmmGObject):
         if not self.config.support_inspection:
             return
 
-        from virtManager.inspection import vmmInspection
+        from .inspection import vmmInspection
         self.inspection = vmmInspection()
         self.inspection.start()
         self.connect("conn-added", self.inspection.conn_added)

@@ -29,7 +29,7 @@ from gi.repository import Gtk
 import libvirt
 import urlgrabber
 
-from virtManager.baseclass import vmmGObjectUI
+from .baseclass import vmmGObjectUI
 
 
 class vmmMeter(urlgrabber.progress.BaseMeter):

@@ -32,14 +32,14 @@ import virtinst
 from virtinst import pollhelpers
 from virtinst import util
 
-from virtManager import connectauth
-from virtManager.baseclass import vmmGObject
-from virtManager.domain import vmmDomain
-from virtManager.interface import vmmInterface
-from virtManager.mediadev import vmmMediaDevice
-from virtManager.network import vmmNetwork
-from virtManager.nodedev import vmmNodeDevice
-from virtManager.storagepool import vmmStoragePool
+from . import connectauth
+from .baseclass import vmmGObject
+from .domain import vmmDomain
+from .interface import vmmInterface
+from .mediadev import vmmMediaDevice
+from .network import vmmNetwork
+from .nodedev import vmmNodeDevice
+from .storagepool import vmmStoragePool
 
 
 # debugging helper to turn off events

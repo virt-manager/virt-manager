@@ -23,8 +23,8 @@ from gi.repository import Gtk
 from gi.repository import GObject
 
 import virtinst
-from virtManager import uiutil
-from virtManager.baseclass import vmmGObjectUI
+from . import uiutil
+from .baseclass import vmmGObjectUI
 
 
 class vmmGraphicsDetails(vmmGObjectUI):

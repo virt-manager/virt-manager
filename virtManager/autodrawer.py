@@ -26,7 +26,7 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 
-from virtManager import uiutil
+from . import uiutil
 
 # pylint: disable=arguments-differ
 # Newer pylint can detect, but warns that overridden arguments are wrong

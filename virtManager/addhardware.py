@@ -33,14 +33,14 @@ from virtinst import (VirtualChannelDevice, VirtualParallelDevice,
                       VirtualTPMDevice, VirtualPanicDevice)
 from virtinst import VirtualController
 
-from virtManager import uiutil
-from virtManager.fsdetails import vmmFSDetails
-from virtManager.gfxdetails import vmmGraphicsDetails
-from virtManager.netlist import vmmNetworkList
-from virtManager.asyncjob import vmmAsyncJob
-from virtManager.storagebrowse import vmmStorageBrowser
-from virtManager.baseclass import vmmGObjectUI
-from virtManager.addstorage import vmmAddStorage
+from . import uiutil
+from .fsdetails import vmmFSDetails
+from .gfxdetails import vmmGraphicsDetails
+from .netlist import vmmNetworkList
+from .asyncjob import vmmAsyncJob
+from .storagebrowse import vmmStorageBrowser
+from .baseclass import vmmGObjectUI
+from .addstorage import vmmAddStorage
 
 (PAGE_ERROR,
 PAGE_DISK,

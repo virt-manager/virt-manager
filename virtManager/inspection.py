@@ -25,8 +25,8 @@ import re
 
 from guestfs import GuestFS  # pylint: disable=import-error
 
-from virtManager.baseclass import vmmGObject
-from virtManager.domain import vmmInspectionData
+from .baseclass import vmmGObject
+from .domain import vmmInspectionData
 
 
 class vmmInspection(vmmGObject):

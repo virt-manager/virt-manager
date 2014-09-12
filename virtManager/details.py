@@ -27,17 +27,17 @@ from gi.repository import Gdk
 
 import libvirt
 
-from virtManager import vmmenu
-from virtManager import uiutil
-from virtManager.baseclass import vmmGObjectUI
-from virtManager.addhardware import vmmAddHardware
-from virtManager.choosecd import vmmChooseCD
-from virtManager.fsdetails import vmmFSDetails
-from virtManager.gfxdetails import vmmGraphicsDetails
-from virtManager.netlist import vmmNetworkList
-from virtManager.snapshots import vmmSnapshotPage
-from virtManager.storagebrowse import vmmStorageBrowser
-from virtManager.graphwidgets import Sparkline
+from . import vmmenu
+from . import uiutil
+from .baseclass import vmmGObjectUI
+from .addhardware import vmmAddHardware
+from .choosecd import vmmChooseCD
+from .fsdetails import vmmFSDetails
+from .gfxdetails import vmmGraphicsDetails
+from .netlist import vmmNetworkList
+from .snapshots import vmmSnapshotPage
+from .storagebrowse import vmmStorageBrowser
+from .graphwidgets import Sparkline
 
 import virtinst
 from virtinst import util
@@ -492,7 +492,7 @@ class vmmDetails(vmmGObjectUI):
         self.ignorePause = False
         self.ignoreDetails = False
 
-        from virtManager.console import vmmConsolePages
+        from .console import vmmConsolePages
         self.console = vmmConsolePages(self.vm, self.builder, self.topwin)
         self.snapshots = vmmSnapshotPage(self.vm, self.builder, self.topwin)
         self.widget("snapshot-placeholder").add(self.snapshots.top_box)

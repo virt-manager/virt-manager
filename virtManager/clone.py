@@ -24,10 +24,10 @@ import os
 from gi.repository import Gtk
 from gi.repository import Gdk
 
-from virtManager import uiutil
-from virtManager.baseclass import vmmGObjectUI
-from virtManager.asyncjob import vmmAsyncJob
-from virtManager.storagebrowse import vmmStorageBrowser
+from . import uiutil
+from .baseclass import vmmGObjectUI
+from .asyncjob import vmmAsyncJob
+from .storagebrowse import vmmStorageBrowser
 
 import virtinst
 from virtinst import Cloner

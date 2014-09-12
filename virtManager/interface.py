@@ -20,7 +20,7 @@
 
 from virtinst import Interface
 
-from virtManager.libvirtobject import vmmLibvirtObject
+from .libvirtobject import vmmLibvirtObject
 
 
 class vmmInterface(vmmLibvirtObject):

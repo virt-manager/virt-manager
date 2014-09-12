@@ -23,11 +23,11 @@ import logging
 from gi.repository import GObject
 from gi.repository import Gtk
 
-from virtManager import host
-from virtManager.asyncjob import vmmAsyncJob
-from virtManager.createvol import vmmCreateVolume
-from virtManager.baseclass import vmmGObjectUI
-from virtManager import uiutil
+from . import host
+from .asyncjob import vmmAsyncJob
+from .createvol import vmmCreateVolume
+from .baseclass import vmmGObjectUI
+from . import uiutil
 
 
 class vmmStorageBrowser(vmmGObjectUI):

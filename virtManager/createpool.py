@@ -23,9 +23,9 @@ from gi.repository import Gdk
 
 import logging
 
-from virtManager.baseclass import vmmGObjectUI
-from virtManager.asyncjob import vmmAsyncJob
-from virtManager import uiutil
+from .baseclass import vmmGObjectUI
+from .asyncjob import vmmAsyncJob
+from . import uiutil
 
 from virtinst import StoragePool
 
