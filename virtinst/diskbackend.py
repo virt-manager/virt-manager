@@ -28,30 +28,6 @@ from virtinst import StoragePool, StorageVolume
 from virtinst import util
 
 
-def _check_if_pool_source(conn, path):
-    """
-    If passed path is a host disk device like /dev/sda, want to let the user
-    use it
-    """
-    if not conn.check_support(conn.SUPPORT_CONN_STORAGE):
-        return None
-
-    def check_pool(poolname, path):
-        pool = conn.storagePoolLookupByName(poolname)
-        xmlobj = StoragePool(conn, parsexml=pool.XMLDesc(0))
-        if xmlobj.source_path == path:
-            return pool
-
-    running_list = conn.listStoragePools()
-    inactive_list = conn.listDefinedStoragePools()
-    for plist in [running_list, inactive_list]:
-        for name in plist:
-            p = check_pool(name, path)
-            if p:
-                return p
-    return None
-
-
 def check_if_path_managed(conn, path):
     """
     Determine if we can use libvirt storage APIs to create or lookup
@@ -110,7 +86,8 @@ def check_if_path_managed(conn, path):
 
     if not vol:
         # See if path is a pool source, and allow it through
-        trypool = _check_if_pool_source(conn, path)
+        trypool = StoragePool.lookup_pool_by_path(
+            conn, path, use_source=True)
         if trypool:
             path_is_pool = True
             pool = trypool
