@@ -365,6 +365,7 @@ class vmmDomain(vmmLibvirtObject):
         # Prime caches
         self.refresh_xml()
         self.has_managed_save()
+        self.snapshots_supported()
 
         # Hook up listeners that need to be cleaned up
         self.add_gconf_handle(
