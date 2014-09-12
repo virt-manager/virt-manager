@@ -300,6 +300,7 @@ class vmmDomain(vmmLibvirtObject):
         self._uuid = None
         self._has_managed_save = None
         self._snapshot_list = None
+        self._autostart = None
 
         self.lastStatus = libvirt.VIR_DOMAIN_SHUTOFF
         self._lastStatusReason = getattr(libvirt, "VIR_DOMAIN_SHUTOFF_SHUTDOWN",
@@ -1013,11 +1014,15 @@ class vmmDomain(vmmLibvirtObject):
         return self._backend.XMLDesc(flags)
 
     def get_autostart(self):
-        return self._backend.autostart()
+        if self._autostart is None:
+            self._autostart = self._backend.autostart()
+        return self._autostart
     def set_autostart(self, val):
-        if self.get_autostart() == val:
-            return
         self._backend.setAutostart(val)
+
+        # Recache value
+        self._autostart = None
+        self.get_autostart()
 
     def job_info(self):
         return self._backend.jobInfo()
