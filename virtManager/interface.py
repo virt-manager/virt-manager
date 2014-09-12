@@ -35,7 +35,6 @@ class vmmInterface(vmmLibvirtObject):
         self._support_isactive = None
 
         self.tick()
-        self.refresh_xml()
 
     # Routines from vmmLibvirtObject
     def _XMLDesc(self, flags):

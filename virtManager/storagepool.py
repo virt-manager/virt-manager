@@ -108,7 +108,6 @@ class vmmStoragePool(vmmLibvirtObject):
         self._volumes = {}
 
         self.tick()
-        self.refresh()
 
 
     ##########################
@@ -204,13 +203,9 @@ class vmmStoragePool(vmmLibvirtObject):
             self._volumes = {}
             return
 
-        (ignore, new, allvols) = pollhelpers.fetch_volumes(
+        (ignore, ignore, allvols) = pollhelpers.fetch_volumes(
             self.conn.get_backend(), self.get_backend(), self._volumes.copy(),
             lambda obj, key: vmmStorageVolume(self.conn, obj, key))
-
-        for volname in allvols:
-            if volname not in new:
-                allvols[volname].refresh_xml()
         self._volumes = allvols
 
 

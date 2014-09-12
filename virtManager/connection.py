@@ -1102,6 +1102,31 @@ class vmmConnection(vmmGObject):
         if e:
             raise e  # pylint: disable=raising-bad-type
 
+    def _refresh_new_objects(self, newlist):
+        if not newlist:
+            return
+
+        def _refresh_generic():
+            for obj in newlist:
+                obj.refresh_xml()
+
+        def _refresh_pool():
+            for pool in newlist:
+                pool.refresh()
+
+                def _refresh_volumes(p):
+                    for vol in p.get_volumes().values():
+                        vol.refresh_xml()
+                self._start_thread(_refresh_volumes,
+                    "pool=%s refreshing xml for volumes" % pool.get_name(),
+                    (pool,))
+
+        cb = _refresh_generic
+        if hasattr(newlist[0], "get_volumes"):
+            cb = _refresh_pool
+        self._start_thread(cb,
+            "refreshing xml for new %s" % newlist[0].__class__)
+
     def _tick(self, stats_update,
              pollvm=False, pollnet=False,
              pollpool=False, polliface=False,
@@ -1135,11 +1160,19 @@ class vmmConnection(vmmGObject):
         self.hostinfo = self._backend.getInfo()
 
         (goneNets, newNets, nets) = self._update_nets(pollnet)
+        self._refresh_new_objects(newNets.values())
         (gonePools, newPools, pools) = self._update_pools(pollpool)
+        self._refresh_new_objects(newPools.values())
         (goneInterfaces,
          newInterfaces, interfaces) = self._update_interfaces(polliface)
+        self._refresh_new_objects(newInterfaces.values())
+
+        # Refreshing these is handled by the mediadev callback
         (goneNodedevs,
          newNodedevs, nodedevs) = self._update_nodedevs(pollnodedev)
+
+        # These are refreshing in their __init__ method, because the
+        # data is wanted immediately
         (goneVMs, newVMs, vms) = self._update_vms(pollvm)
 
         def tick_send_signals():
