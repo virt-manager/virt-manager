@@ -460,7 +460,7 @@ class StorageBackend(_StorageBase):
 
     def _get_path(self):
         if self._vol_object:
-            return self._vol_object.path()
+            return self._get_vol_xml().target_path
         return self._path
     path = property(_get_path)
 
