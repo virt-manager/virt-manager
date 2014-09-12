@@ -960,9 +960,6 @@ class vmmDomain(vmmLibvirtObject):
                 self._backend.setMaxMemory(val)
 
         def _hotplug_metadata(val, mtype):
-            if not self.conn.check_support(
-                self.conn.SUPPORT_DOMAIN_SET_METADATA, self._backend):
-                return
             flags = (libvirt.VIR_DOMAIN_AFFECT_LIVE |
                      libvirt.VIR_DOMAIN_AFFECT_CONFIG)
             self._backend.setMetadata(mtype, val, None, None, flags)
@@ -1097,12 +1094,9 @@ class vmmDomain(vmmLibvirtObject):
         return self.get_name()
 
     def get_title(self):
-        return self.get_xmlobj(inactive=True).title
-
+        return self.get_xmlobj().title
     def get_description(self):
-        # Always show the inactive <description>, let's us fake hotplug
-        # for a field that's strictly metadata
-        return self.get_xmlobj(inactive=True).description
+        return self.get_xmlobj().description
 
     def get_memory(self):
         return int(self.get_xmlobj().memory)
