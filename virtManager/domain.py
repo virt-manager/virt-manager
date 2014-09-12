@@ -362,7 +362,8 @@ class vmmDomain(vmmLibvirtObject):
 
         self.force_update_status(from_event=True, log=False)
 
-        # Cache managed save value
+        # Prime caches
+        self.refresh_xml()
         self.has_managed_save()
 
         # Hook up listeners that need to be cleaned up
