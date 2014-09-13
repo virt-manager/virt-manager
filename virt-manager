@@ -151,7 +151,7 @@ def main():
         logging.debug("Libvirt tracing requested")
         import virtManager.module_trace
         import libvirt
-        virtManager.module_trace.wrap_module(libvirt)
+        virtManager.module_trace.wrap_module(libvirt, regex=None)
 
     # Now we've got basic environment up & running we can fork
     do_drop_stdio = False

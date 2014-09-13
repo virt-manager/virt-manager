@@ -23,8 +23,9 @@
 # logging infrastructure. Invoke this with virt-manager --trace-libvirt
 
 import logging
-import time
 import re
+import threading
+import time
 import traceback
 
 from types import FunctionType
@@ -32,48 +33,66 @@ from types import ClassType
 from types import MethodType
 
 
-def generate_wrapper(origfunc, name, do_tb):
+def generate_wrapper(origfunc, name):
+    # This could be used as generic infrastructure, but it has hacks for
+    # identifying places where libvirt hits the network from the main thread,
+    # which causes UI blocking on slow network connections.
+
     def newfunc(*args, **kwargs):
-        tb = do_tb and ("\n%s" % "".join(traceback.format_stack())) or ""
-        logging.debug("TRACE %s: %s %s %s%s",
-                      time.time(), name, args, kwargs, tb)
+        threadname = threading.current_thread().name
+        is_main_thread = (threading.current_thread().name == "MainThread")
+
+        # These APIs don't hit the network, so we might not want to see them.
+        is_non_network_libvirt_call = (name.endswith(".name") or
+            name.endswith(".UUIDString") or
+            name.endswith(".__init__") or
+            name.endswith(".__del__") or
+            name.endswith(".connect") or
+            name.startswith("libvirtError"))
+
+        if not is_non_network_libvirt_call:
+            tb = ""
+            if is_main_thread:
+                tb = "\n%s" % "".join(traceback.format_stack())
+            logging.debug("TRACE %s: thread=%s: %s %s %s%s",
+                          time.time(), threadname, name, args, kwargs, tb)
         return origfunc(*args, **kwargs)
 
     return newfunc
 
 
-def wrap_func(module, funcobj, tb):
+def wrap_func(module, funcobj):
     name = funcobj.__name__
     logging.debug("wrapfunc %s %s", funcobj, name)
 
-    newfunc = generate_wrapper(funcobj, name, tb)
+    newfunc = generate_wrapper(funcobj, name)
     setattr(module, name, newfunc)
 
 
-def wrap_method(classobj, methodobj, tb):
+def wrap_method(classobj, methodobj):
     name = methodobj.__name__
     fullname = classobj.__name__ + "." + name
     logging.debug("wrapmeth %s", fullname)
 
-    newfunc = generate_wrapper(methodobj, fullname, tb)
+    newfunc = generate_wrapper(methodobj, fullname)
     setattr(classobj, name, newfunc)
 
 
-def wrap_class(classobj, tb):
+def wrap_class(classobj):
     logging.debug("wrapclas %s %s", classobj, classobj.__name__)
 
     for name in dir(classobj):
         obj = getattr(classobj, name)
         if type(obj) is MethodType:
-            wrap_method(classobj, obj, tb)
+            wrap_method(classobj, obj)
 
 
-def wrap_module(module, regex=None, tb=False):
+def wrap_module(module, regex=None):
     for name in dir(module):
         if regex and not re.match(regex, name):
             continue
         obj = getattr(module, name)
         if type(obj) is FunctionType:
-            wrap_func(module, obj, tb)
+            wrap_func(module, obj)
         if type(obj) is ClassType or type(obj) is type:
-            wrap_class(obj, tb)
+            wrap_class(obj)
