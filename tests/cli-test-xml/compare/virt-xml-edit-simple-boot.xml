@@ -1,8 +1,8 @@
    </numatune>
    <os>
      <type arch="i686">hvm</type>
--    <loader>/usr/lib/xen/boot/hvmloader</loader>
-+    <loader>foo.bar</loader>
+-    <loader type="rom">/usr/lib/xen/boot/hvmloader</loader>
++    <loader type="rom">foo.bar</loader>
 +    <bios useserial="yes"/>
 +    <init>/bin/bash</init>
    </os>
