@@ -1,5 +1,5 @@
 #
-# Copyright 2008-2009, 2013 Red Hat, Inc.
+# Copyright 2008-2009, 2013-2014 Red Hat, Inc.
 # Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ class VirtualAudio(VirtualDevice):
     virtual_device_type = VirtualDevice.VIRTUAL_DEV_AUDIO
 
     MODEL_DEFAULT = "default"
-    MODELS = ["es1370", "sb16", "pcspk", "ac97", "ich6", MODEL_DEFAULT]
+    MODELS = ["es1370", "sb16", "pcspk", "ac97", "ich6", "ich9", MODEL_DEFAULT]
 
     model = XMLProperty("./@model",
                         default_cb=lambda s: "es1370",
