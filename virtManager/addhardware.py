@@ -521,7 +521,7 @@ class vmmAddHardware(vmmGObjectUI):
         model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
         stable_defaults = vm.stable_defaults()
-        stable_soundmodels = ["ich6", "ac97"]
+        stable_soundmodels = ["ich6", "ich9", "ac97"]
 
         for m in virtinst.VirtualAudio.MODELS:
             if m == virtinst.VirtualAudio.MODEL_DEFAULT and no_default:
