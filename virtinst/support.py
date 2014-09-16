@@ -293,7 +293,6 @@ SUPPORT_CONN_INPUT_KEYBOARD = _make(
 SUPPORT_CONN_POOL_GLUSTERFS = _make(version="1.2.0")
 SUPPORT_CONN_CPU_MODEL_NAMES = _make(function="virConnect.getCPUModelNames",
                                      run_args=("x86_64", 0))
-SUPPORT_CONN_BARE_BACKINGSTORE = _make(version="1.2.4")
 SUPPORT_CONN_HYPERV_VAPIC = _make(
     version="1.1.0", hv_version={"qemu": "1.1.0", "test": 0})
 SUPPORT_CONN_HYPERV_CLOCK = _make(

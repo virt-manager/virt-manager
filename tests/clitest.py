@@ -875,8 +875,8 @@ c.add_invalid("--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ 
 
 
 c = vclon.add_category("misc", "")
-c.add_compare("--connect %(KVMURI)s -o test-for-clone --auto-clone --clone-running", "clone-auto1", compare_check=support.SUPPORT_CONN_BARE_BACKINGSTORE)
-c.add_compare("-o test-clone-simple --name newvm --auto-clone --clone-running", "clone-auto2", compare_check=support.SUPPORT_CONN_BARE_BACKINGSTORE)
+c.add_compare("--connect %(KVMURI)s -o test-for-clone --auto-clone --clone-running", "clone-auto1", compare_check=support.SUPPORT_CONN_LOADER_ROM)
+c.add_compare("-o test-clone-simple --name newvm --auto-clone --clone-running", "clone-auto2", compare_check=support.SUPPORT_CONN_LOADER_ROM)
 c.add_valid("-o test --auto-clone")  # Auto flag, no storage
 c.add_valid("--original-xml %(CLONE_DISK_XML)s --auto-clone")  # Auto flag w/ storage,
 c.add_valid("--original-xml %(CLONE_STORAGE_XML)s --auto-clone")  # Auto flag w/ managed storage,
