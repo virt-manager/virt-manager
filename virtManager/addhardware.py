@@ -1739,6 +1739,20 @@ class vmmAddHardware(vmmGObjectUI):
 
         try:
             dev = virtinst.VirtualHostDevice(self.conn.get_backend())
+            # Hostdev collision
+            names  = []
+            vms = self.conn.get_backend().fetch_all_guests()
+            for vm in vms:
+                for hostdev in vm.get_devices("hostdev"):
+                    if nodedev.compare_to_hostdev(hostdev):
+                        names.append(vm.name)
+            if names:
+                res = self.err.yes_no(
+                        _('The device is already in use by other guests %s') %
+                         (names),
+                        _("Do you really want to use the device?"))
+                if not res:
+                    return False
             dev.set_from_nodedev(nodedev, use_full_usb=is_dup)
             self._dev = dev
         except Exception, e:
