@@ -255,61 +255,17 @@ def _build_hostdev_label(hostdev):
 
 
 def lookup_nodedev(vmmconn, hostdev):
-    def intify(val, do_hex=False):
-        try:
-            if do_hex:
-                return int(val or '0x00', 16)
-            else:
-                return int(val)
-        except:
-            return -1
-
-    def attrVal(node, attr):
-        if not hasattr(node, attr):
-            return None
-        return getattr(node, attr)
-
     devtype = hostdev.type
     found_dev = None
-
-    vendor_id = product_id = bus = device = domain = slot = func = None
 
     # For USB we want a device, not a bus
     if devtype == 'usb':
         devtype    = 'usb_device'
-        vendor_id  = hostdev.vendor or -1
-        product_id = hostdev.product or -1
-        bus        = intify(hostdev.bus)
-        device     = intify(hostdev.device)
-
-    elif devtype == 'pci':
-        domain     = intify(hostdev.domain, True)
-        bus        = intify(hostdev.bus, True)
-        slot       = intify(hostdev.slot, True)
-        func       = intify(hostdev.function, True)
 
     devs = vmmconn.get_nodedevs(devtype, None)
     for dev in devs:
-        # Try to match with product_id|vendor_id|bus|device
-        if ((attrVal(dev, "product_id") == product_id or product_id == -1) and
-            (attrVal(dev, "vendor_id") == vendor_id or vendor_id == -1) and
-            (attrVal(dev, "bus") == bus or bus == -1) and
-            (attrVal(dev, "device") == device or device == -1)):
+        if dev.compare_to_hostdev(hostdev):
             found_dev = dev
-        else:
-            # Try to get info from bus/addr
-            dev_id = intify(attrVal(dev, "device"))
-            bus_id = intify(attrVal(dev, "bus"))
-            dom_id = intify(attrVal(dev, "domain"))
-            func_id = intify(attrVal(dev, "function"))
-            slot_id = intify(attrVal(dev, "slot"))
-
-            if ((dev_id == device and bus_id == bus) or
-                (dom_id == domain and func_id == func and
-                 bus_id == bus and slot_id == slot)):
-                found_dev = dev
-
-        if found_dev:
             break
 
     return found_dev

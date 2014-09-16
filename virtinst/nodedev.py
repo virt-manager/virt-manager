@@ -47,6 +47,22 @@ def _lookupNodeName(conn, name):
     return NodeDevice.parse(conn, xml)
 
 
+def _intify(val, do_hex=False):
+    try:
+        if do_hex:
+            return int(val or '0x00', 16)
+        else:
+            return int(val)
+    except:
+        return -1
+
+
+def _attrVal(node, attr):
+    if not hasattr(node, attr):
+        return None
+    return getattr(node, attr)
+
+
 class NodeDevice(XMLBuilder):
     CAPABILITY_TYPE_SYSTEM = "system"
     CAPABILITY_TYPE_NET = "net"
@@ -121,6 +137,10 @@ class NodeDevice(XMLBuilder):
         """
         return self.name
 
+    def compare_to_hostdev(self, hostdev):
+        ignore = hostdev
+        return False
+
 
 class SystemDevice(NodeDevice):
     hw_vendor = XMLProperty("./capability/hardware/vendor")
@@ -176,6 +196,27 @@ class PCIDevice(NodeDevice):
 
         return "%s %s %s" % (devstr, self.vendor_name, self.product_name)
 
+    def compare_to_hostdev(self, hostdev):
+        if hostdev.type != self.device_type:
+            return False
+
+        h_bus = h_dev = h_dom = h_slot = h_func = None
+
+        h_dom = _intify(hostdev.domain, True)
+        h_bus = _intify(hostdev.bus, True)
+        h_slot = _intify(hostdev.slot, True)
+        h_func = _intify(hostdev.function, True)
+        n_dev = _intify(_attrVal(self, "device"))
+        n_bus = _intify(_attrVal(self, "bus"))
+        n_dom = _intify(_attrVal(self, "domain"))
+        n_func = _intify(_attrVal(self, "function"))
+        n_slot = _intify(_attrVal(self, "slot"))
+
+        if ((n_dev == h_dev and n_bus == h_bus) or
+            (n_dom == h_dom and n_func == h_func and
+             n_bus == h_bus and n_slot == h_slot)):
+            return True
+
 
 class USBDevice(NodeDevice):
     bus = XMLProperty("./capability/bus")
@@ -218,6 +259,26 @@ class USBDevice(NodeDevice):
         busstr = "%.3d:%.3d" % (int(self.bus), int(self.device))
         desc = "%s %s" % (busstr, devstr)
         return desc
+
+    def compare_to_hostdev(self, hostdev):
+        devtype = hostdev.type
+        if devtype == "usb":
+            devtype = "usb_device"
+        if devtype != self.device_type:
+            return False
+
+        h_vid = h_pid = h_bus = h_dev = None
+
+        h_vid = hostdev.vendor or -1
+        h_pid = hostdev.product or -1
+        h_bus = _intify(hostdev.bus)
+        h_dev = _intify(hostdev.device)
+
+        if ((_attrVal(self, "product_id") == h_pid or h_pid == -1) and
+            (_attrVal(self, "vendor_id") == h_vid or h_vid == -1) and
+            (_intify(_attrVal(self, "bus")) == h_bus or h_bus == -1) and
+            (_intify(_attrVal(self, "device")) == h_dev or h_dev == -1)):
+            return True
 
 
 class StorageDevice(NodeDevice):
