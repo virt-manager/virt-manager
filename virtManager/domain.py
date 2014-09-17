@@ -27,6 +27,7 @@ import threading
 
 import libvirt
 
+from virtinst import DomainCapabilities
 from virtinst import DomainSnapshot
 from virtinst import Guest
 from virtinst import util
@@ -301,6 +302,7 @@ class vmmDomain(vmmLibvirtObject):
         self._has_managed_save = None
         self._snapshot_list = None
         self._autostart = None
+        self._domain_caps = None
 
         self.lastStatus = libvirt.VIR_DOMAIN_SHUTOFF
         self._lastStatusReason = getattr(libvirt, "VIR_DOMAIN_SHUTOFF_SHUTDOWN",
@@ -505,6 +507,20 @@ class vmmDomain(vmmLibvirtObject):
             return _("Snapshots require at least one writeable qcow2 disk "
                      "image allocated to the guest.")
 
+    def get_domain_capabilities(self):
+        if not self.conn.check_support(
+            self.conn.SUPPORT_CONN_DOMAIN_CAPABILITIES):
+            self._domain_caps = DomainCapabilities(self.conn.get_backend())
+
+        if not self._domain_caps:
+            xml = self.conn.get_backend().getDomainCapabilities(
+                self.get_xmlobj().emulator, self.get_xmlobj().os.arch,
+                self.get_xmlobj().os.machine, self.get_xmlobj().type)
+            self._domain_caps = DomainCapabilities(self.conn.get_backend(),
+                parsexml=xml)
+
+        return self._domain_caps
+
 
     #############################
     # Internal XML handling API #
@@ -619,7 +635,7 @@ class vmmDomain(vmmLibvirtObject):
                                         newname)
 
     def define_overview(self, machine=_SENTINEL, description=_SENTINEL,
-        title=_SENTINEL, idmap_list=_SENTINEL):
+        title=_SENTINEL, idmap_list=_SENTINEL, loader=_SENTINEL):
         def change(guest):
             if machine != _SENTINEL:
                 guest.os.machine = machine
@@ -627,6 +643,20 @@ class vmmDomain(vmmLibvirtObject):
                 guest.description = description or None
             if title != _SENTINEL:
                 guest.title = title or None
+
+            if loader != _SENTINEL:
+                if loader is None:
+                    # Implies seabios, aka the default, so clear everything
+                    guest.os.loader = None
+                    guest.os.loader_ro = None
+                    guest.os.loader_type = None
+                    guest.os.nvram = None
+                    guest.os.nvram_template = None
+                else:
+                    # Implies UEFI
+                    guest.os.loader = loader
+                    guest.os.loader_type = "pflash"
+                    guest.os.loader_ro = True
 
             if idmap_list != _SENTINEL:
                 if idmap_list is not None:

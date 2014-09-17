@@ -48,6 +48,7 @@ from virtinst import VirtualRNGDevice
 (EDIT_NAME,
 EDIT_TITLE,
 EDIT_MACHTYPE,
+EDIT_FIRMWARE,
 EDIT_DESC,
 EDIT_IDMAP,
 
@@ -103,7 +104,7 @@ EDIT_FS,
 
 EDIT_HOSTDEV_ROMBAR,
 
-) = range(1, 44)
+) = range(1, 45)
 
 
 # Columns in hw list model
@@ -398,6 +399,18 @@ def _chipset_label_from_machine(machine):
     return "i440FX"
 
 
+def _firmware_label_from_loader(vm, loader, force_uefi=False):
+    domcaps = vm.get_domain_capabilities()
+    if (domcaps.os.loader.values and
+        loader == domcaps.os.loader.values[0].value) or force_uefi:
+        return "UEFI"
+
+    if loader is None:
+        return "BIOS"
+
+    return "Custom"
+
+
 class vmmDetails(vmmGObjectUI):
     __gsignals__ = {
         "action-save-domain": (GObject.SignalFlags.RUN_FIRST, None, [str, str]),
@@ -548,6 +561,7 @@ class vmmDetails(vmmGObjectUI):
             "on_overview_name_changed": lambda *x: self.enable_apply(x, EDIT_NAME),
             "on_overview_title_changed": lambda *x: self.enable_apply(x, EDIT_TITLE),
             "on_machine_type_changed": lambda *x: self.enable_apply(x, EDIT_MACHTYPE),
+            "on_overview_firmware_changed": lambda *x: self.enable_apply(x, EDIT_FIRMWARE),
             "on_overview_chipset_changed": lambda *x: self.enable_apply(x, EDIT_MACHTYPE),
             "on_idmap_uid_target_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
             "on_idmap_uid_count_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
@@ -872,6 +886,49 @@ class vmmDetails(vmmGObjectUI):
                 if machine == "none":
                     continue
                 machtype_model.append([machine])
+
+        # Firmware
+        combo = self.widget("overview-firmware")
+        model = Gtk.ListStore(str, str, bool)
+        combo.set_model(model)
+        text = Gtk.CellRendererText()
+        combo.pack_start(text, True)
+        combo.add_attribute(text, "text", 0)
+        combo.add_attribute(text, "sensitive", 2)
+
+        domcaps = self.vm.get_domain_capabilities()
+        uefipath = None
+        if domcaps.os.loader.values:
+            uefipath = domcaps.os.loader.values[0].value
+
+        warn_icon = self.widget("overview-firmware-warn")
+        hv_supports_uefi = ("readonly" in domcaps.os.loader.enum_names() and
+            "yes" in domcaps.os.loader.get_enum("readonly").get_values())
+        if not hv_supports_uefi:
+            warn_icon.set_tooltip_text(
+                _("Libvirt or hypervisor does not support UEFI."))
+        elif not uefipath:
+            warn_icon.set_tooltip_text(
+                _("Libvirt did not detect any UEFI/OVMF firmware image "
+                  "installed on the host."))
+
+        model.append([_firmware_label_from_loader(self.vm, None),
+            None, True])
+        model.append([_firmware_label_from_loader(
+            self.vm, uefipath, force_uefi=True), uefipath,
+            bool(uefipath and hv_supports_uefi)])
+        combo.set_active(0)
+
+        self.widget("overview-firmware-warn").set_visible(
+            not (uefipath and hv_supports_uefi) and self.is_customize_dialog)
+        self.widget("overview-firmware").set_visible(self.is_customize_dialog)
+        self.widget("overview-firmware-label").set_visible(
+            not self.is_customize_dialog)
+        show_firmware = ((self.conn.is_qemu() or self.conn.is_test_conn()) and
+            arch in ["i686", "x86_64"] and
+            not self.vm.is_management_domain())
+        uiutil.set_grid_row_visible(
+            self.widget("overview-firmware-title"), show_firmware)
 
         # Chipset
         combo = self.widget("overview-chipset")
@@ -1974,6 +2031,10 @@ class vmmDetails(vmmGObjectUI):
             kwargs["title"] = self.widget("overview-title").get_text()
             hotplug_args["title"] = kwargs["title"]
 
+        if self.edited(EDIT_FIRMWARE):
+            kwargs["loader"] = uiutil.get_list_selection(
+                self.widget("overview-firmware"), 1)
+
         if self.edited(EDIT_MACHTYPE):
             if self.widget("overview-chipset").is_visible():
                 kwargs["machine"] = uiutil.get_list_selection(
@@ -2401,6 +2462,15 @@ class vmmDetails(vmmGObjectUI):
         emu = self.vm.get_emulator() or _("None")
         self.widget("overview-arch").set_text(arch)
         self.widget("overview-emulator").set_text(emu)
+
+        # Firmware
+        firmware = _firmware_label_from_loader(self.vm,
+            self.vm.get_xmlobj().os.loader)
+        if self.widget("overview-firmware").is_visible():
+            uiutil.set_combo_entry(
+                self.widget("overview-firmware"), firmware)
+        elif self.widget("overview-firmware-label").is_visible():
+            self.widget("overview-firmware-label").set_text(firmware)
 
         # Machine settings
         machtype = self.vm.get_machtype()

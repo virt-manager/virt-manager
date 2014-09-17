@@ -957,6 +957,7 @@
                                           <object class="GtkLabel" id="overview-machine-label">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="valign">start</property>
                                             <property name="xalign">1</property>
                                             <property name="label" translatable="yes">Machine _Type: </property>
                                             <property name="use_underline">True</property>
@@ -982,16 +983,15 @@
                                           <object class="GtkLabel" id="overview-chipset-title">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="margin_top">2</property>
+                                            <property name="valign">start</property>
                                             <property name="xalign">1</property>
-                                            <property name="yalign">0</property>
                                             <property name="label" translatable="yes">Chipse_t:</property>
                                             <property name="use_underline">True</property>
                                             <property name="ellipsize">middle</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
-                                            <property name="top_attach">4</property>
+                                            <property name="top_attach">5</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -1061,6 +1061,8 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                   <object class="GtkLabel" id="overview-chipset-label">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
+                                                    <property name="valign">start</property>
+                                                    <property name="vexpand">True</property>
                                                     <property name="xalign">0</property>
                                                     <property name="label">label</property>
                                                   </object>
@@ -1074,6 +1076,79 @@ if you know what you are doing.&lt;/small&gt;</property>
                                               <packing>
                                                 <property name="left_attach">0</property>
                                                 <property name="top_attach">0</property>
+                                              </packing>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="top_attach">5</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="overview-firmware-title">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="valign">start</property>
+                                            <property name="xalign">1</property>
+                                            <property name="label" translatable="yes">Firmware:</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">4</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkBox" id="box11">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="spacing">3</property>
+                                            <child>
+                                              <object class="GtkBox" id="box16">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <child>
+                                                  <object class="GtkComboBox" id="overview-firmware">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <signal name="changed" handler="on_overview_firmware_changed" swapped="no"/>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkLabel" id="overview-firmware-label">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="valign">start</property>
+                                                    <property name="vexpand">False</property>
+                                                    <property name="label">label</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkImage" id="overview-firmware-warn">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="stock">gtk-dialog-warning</property>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">1</property>
                                               </packing>
                                             </child>
                                           </object>
@@ -1309,9 +1384,6 @@ if you know what you are doing.&lt;/small&gt;</property>
                                 <property name="fill">True</property>
                                 <property name="position">2</property>
                               </packing>
-                            </child>
-                            <child>
-                              <placeholder/>
                             </child>
                           </object>
                         </child>

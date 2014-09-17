@@ -298,6 +298,9 @@ SUPPORT_CONN_HYPERV_VAPIC = _make(
 SUPPORT_CONN_HYPERV_CLOCK = _make(
     version="1.2.2", hv_version={"qemu": "2.0.0", "test": 0})
 SUPPORT_CONN_LOADER_ROM = _make(version="1.2.9")
+SUPPORT_CONN_DOMAIN_CAPABILITIES = _make(
+    function="virConnect.getDomainCapabilities",
+    run_args=(None, None, None, None))
 
 
 # Domain checks
