@@ -1373,6 +1373,8 @@ class vmmDomain(vmmLibvirtObject):
             flags |= getattr(libvirt,
                              "VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA", 0)
             flags |= getattr(libvirt, "VIR_DOMAIN_UNDEFINE_MANAGED_SAVE", 0)
+            if self.get_xmlobj().os.nvram:
+                flags |= getattr(libvirt, "VIR_DOMAIN_UNDEFINE_NVRAM", 0)
         try:
             self._backend.undefineFlags(flags)
         except libvirt.libvirtError:
