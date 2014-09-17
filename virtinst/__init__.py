@@ -51,6 +51,7 @@ from virtinst.pm import PM
 from virtinst.idmap import IdMap
 
 from virtinst import capabilities as CapabilitiesParser
+from virtinst.domcapabilities import DomainCapabilities
 from virtinst.interface import Interface, InterfaceProtocol
 from virtinst.network import Network
 from virtinst.nodedev import NodeDevice

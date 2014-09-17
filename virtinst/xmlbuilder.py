@@ -329,11 +329,12 @@ class XMLChildProperty(property):
 
 
 class XMLProperty(property):
+    _track = True
+
     def __init__(self, xpath=None, name=None, doc=None,
                  set_converter=None, validate_cb=None, make_xpath_cb=None,
                  is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
-                 clear_first=None, default_cb=None, default_name=None,
-                 track=True):
+                 clear_first=None, default_cb=None, default_name=None):
         """
         Set a XMLBuilder class property that represents a value in the
         <domain> XML. For example
@@ -373,8 +374,6 @@ class XMLProperty(property):
             first explicit 'set'.
         @param default_name: If the user does a set and passes in this
             value, instead use the value of default_cb()
-        @param track: If False, opt out of property tracking for the
-            test suite.
         """
 
         self._xpath = xpath
@@ -403,7 +402,7 @@ class XMLProperty(property):
         if self._default_name and not self._default_cb:
             raise RuntimeError("default_name requires default_cb.")
 
-        if _trackprops and track:
+        if _trackprops and self._track:
             _allprops.append(self)
 
         property.__init__(self, fget=self.getter, fset=self.setter)

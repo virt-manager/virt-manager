@@ -1,0 +1,71 @@
+<domainCapabilities>
+  <path>/bin/emulatorbin</path>
+  <domain>kvm</domain>
+  <machine>my-machine-type</machine>
+  <arch>x86_64</arch>
+  <vcpu max='255'/>
+  <os supported='yes'>
+    <loader supported='yes'>
+      <value>/foo/bar</value>
+      <value>/tmp/my_path</value>
+      <enum name='type'>
+        <value>rom</value>
+        <value>pflash</value>
+      </enum>
+      <enum name='readonly'>
+        <value>default</value>
+        <value>yes</value>
+        <value>no</value>
+      </enum>
+    </loader>
+  </os>
+  <devices>
+    <disk supported='yes'>
+      <enum name='diskDevice'>
+        <value>disk</value>
+        <value>cdrom</value>
+        <value>floppy</value>
+        <value>lun</value>
+      </enum>
+      <enum name='bus'>
+        <value>ide</value>
+        <value>fdc</value>
+        <value>scsi</value>
+        <value>virtio</value>
+        <value>xen</value>
+        <value>usb</value>
+        <value>uml</value>
+        <value>sata</value>
+        <value>sd</value>
+      </enum>
+    </disk>
+    <hostdev supported='yes'>
+      <enum name='mode'>
+        <value>subsystem</value>
+        <value>capabilities</value>
+      </enum>
+      <enum name='startupPolicy'>
+        <value>default</value>
+        <value>mandatory</value>
+        <value>requisite</value>
+        <value>optional</value>
+      </enum>
+      <enum name='subsysType'>
+        <value>usb</value>
+        <value>pci</value>
+        <value>scsi</value>
+      </enum>
+      <enum name='capsType'>
+        <value>storage</value>
+        <value>misc</value>
+        <value>net</value>
+      </enum>
+      <enum name='pciBackend'>
+        <value>default</value>
+        <value>kvm</value>
+        <value>vfio</value>
+        <value>xen</value>
+      </enum>
+    </hostdev>
+  </devices>
+</domainCapabilities>

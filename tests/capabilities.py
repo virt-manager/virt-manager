@@ -21,6 +21,7 @@ import unittest
 from tests import utils
 from virtinst import CapabilitiesParser as capabilities
 from virtinst.capabilities import _CPUMapFileValues
+from virtinst import DomainCapabilities
 
 
 def build_host_feature_dict(feature_list):
@@ -248,6 +249,17 @@ class TestCapabilities(unittest.TestCase):
         conn = utils.open_testdriver()
         cpu_64 = caps.get_cpu_values(conn, "x86_64")
         self.assertTrue(len(cpu_64) > 0)
+
+    def testDomainCapabilities(self):
+        xml = file("tests/capabilities-xml/domain-capabilities.xml").read()
+        caps = DomainCapabilities(utils.open_testdriver(), xml)
+
+        self.assertEqual(caps.os.loader.supported, True)
+        self.assertEquals(caps.os.loader.get_values(),
+            ["/foo/bar", "/tmp/my_path"])
+        self.assertEquals(caps.os.loader.enum_names(), ["type", "readonly"])
+        self.assertEquals(caps.os.loader.get_enum("type").get_values(),
+            ["rom", "pflash"])
 
 
 if __name__ == "__main__":

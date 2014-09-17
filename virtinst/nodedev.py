@@ -22,17 +22,11 @@ import logging
 import libvirt
 
 from .xmlbuilder import XMLBuilder
-from .xmlbuilder import XMLProperty as OrigXMLProperty
+from .xmlbuilder import XMLProperty as _XMLProperty
 
 
-# We had a pre-existing set of parse tests when this was converted to
-# XMLBuilder. We do this to appease the check in xmlparse.py without
-# moving all the nodedev.py tests to one file. Should find a way to
-# drop it.
-class XMLProperty(OrigXMLProperty):
-    def __init__(self, *args, **kwargs):
-        kwargs["track"] = False
-        OrigXMLProperty.__init__(self, *args, **kwargs)
+class XMLProperty(_XMLProperty):
+    _track = False
 
 
 def _lookupNodeName(conn, name):
