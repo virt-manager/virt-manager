@@ -268,8 +268,15 @@ def update_changes(domain, devs, action, confirm):
         xml = dev.get_xml_config()
 
         if confirm:
-            msg = ("%s\n\n%s this device on guest '%s'?" %
-                   (xml, action, domain.name()))
+            if action == "hotplug":
+                prep = "to"
+            elif action == "hotunplug":
+                prep = "from"
+            else:
+                prep = "for"
+
+            msg = ("%s\n\n%s this device %s guest '%s'?" %
+                   (xml, action.capitalize(), prep, domain.name()))
             if not prompt_yes_or_no(msg):
                 continue
 
@@ -287,6 +294,8 @@ def update_changes(domain, devs, action, confirm):
             fail(_("Error attempting device %s: %s") % (action, e))
 
         print_stdout(_("Device %s successful.") % action)
+        if confirm:
+            print_stdout("")
 
 
 #######################
