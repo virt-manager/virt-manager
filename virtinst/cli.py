@@ -200,12 +200,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     if streamHandler:
         rootLogger.addHandler(streamHandler)
 
-    # Register libvirt handler
-    def libvirt_callback(ignore, err):
-        if err[3] != libvirt.VIR_ERR_ERROR:
-            # Don't log libvirt errors: global error handler will do that
-            logging.warn("Non-error from libvirt: '%s'", err[2])
-    libvirt.registerErrorHandler(f=libvirt_callback, ctx=None)
+    util.register_libvirt_error_handler()
 
     # Log uncaught exceptions
     def exception_log(typ, val, tb):

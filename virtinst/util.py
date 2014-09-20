@@ -517,3 +517,13 @@ def convert_units(value, old_unit, new_unit):
     power = get_power(new_unit)
 
     return in_bytes / pow(factor, power)
+
+
+def register_libvirt_error_handler():
+    """
+    Ignore libvirt error reporting, we just use exceptions
+    """
+    def libvirt_callback(userdata, err):
+        ignore = userdata
+        ignore = err
+    libvirt.registerErrorHandler(f=libvirt_callback, ctx=None)

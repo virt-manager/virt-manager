@@ -71,6 +71,7 @@ def openconn(uri):
     generally every test uses a fresh virConnect, or undoes the
     persistent changes it makes.
     """
+    virtinst.util.register_libvirt_error_handler()
     conn = virtinst.cli.getConnection(uri)
 
     if uri not in _conn_cache:
