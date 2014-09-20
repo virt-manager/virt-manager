@@ -238,7 +238,6 @@ def populate_storage_list(storage_list, vm, conn):
     diskdata.append(("kernel", vm.get_xmlobj().os.kernel, True, False))
     diskdata.append(("initrd", vm.get_xmlobj().os.initrd, True, False))
     diskdata.append(("dtb", vm.get_xmlobj().os.dtb, True, False))
-    diskdata.append(("nvram", vm.get_xmlobj().os.nvram, True, False))
 
     for target, path, ro, shared in diskdata:
         if not path:
