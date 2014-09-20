@@ -551,7 +551,7 @@ def add_net_option(devg):
              "--network bridge=mybr0\n"
              "--network network=my_libvirt_virtual_net\n"
              "--network network=mynet,model=virtio,mac=00:11...\n"
-             "--network network=mynet,filterref=clean-traffic\n"
+             "--network none\n"
              "--network help"))
 
 
@@ -1657,6 +1657,9 @@ class ParserNetwork(VirtCLIParser):
         self.set_param("virtualport.instanceid", "virtualport_instanceid")
 
     def _parse(self, optsobj, inst):
+        if optsobj.fullopts == "none":
+            return
+
         opts = optsobj.opts
         if "type" not in opts:
             if "network" in opts:

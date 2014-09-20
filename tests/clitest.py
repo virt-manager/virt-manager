@@ -521,8 +521,8 @@ c.add_compare("--os-variant fedora20 --boot fd --graphics spice --machine pc --c
 c.add_compare("--os-variant fedora20 --nodisks --boot fd --graphics sdl --arch sparc --machine SS-20", "qemu-sparc")  # exotic arch + machine type
 c.add_compare("--arch armv7l --machine vexpress-a9 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,extra_args=\"console=ttyAMA0 rw root=/dev/mmcblk0p3\" --disk %(EXISTIMG1)s --nographics", "arm-vexpress-plain", skip_check=support.SUPPORT_CONN_DISK_SD)
 c.add_compare("--arch armv7l --machine vexpress-a15 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,kernel_args=\"console=ttyAMA0 rw root=/dev/vda3\",extra_args=foo --disk %(EXISTIMG1)s --nographics --os-variant fedora19", "arm-vexpress-f19", skip_check=support.SUPPORT_CONN_VIRTIO_MMIO)
-c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --os-variant fedora20", "ppc64-pseries-f20")
-c.add_compare("--nodisks --location /tmp/fake.iso", "location-iso")  # Using --location iso mounting
+c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none", "ppc64-pseries-f20")
+c.add_compare("--nodisks --location /tmp/fake.iso --nonetworks", "location-iso")  # Using --location iso mounting
 c.add_valid("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --sound")  # HVM windows install with disk
 c.add_valid("--os-variant fedora20 --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --sound")  # F14 Directory tree URL install with extra-args
 c.add_invalid("--nodisks --boot network --machine foobar")  # Unknown machine type
@@ -588,7 +588,6 @@ c.add_valid("--hvm --nodisks --nonetworks --cdrom %(EXISTIMG1)s")  # no networks
 c.add_valid("--hvm --nodisks --pxe --memballoon virtio")  # --memballoon use virtio
 c.add_valid("--hvm --nodisks --pxe --memballoon none")  # --memballoon disabled
 c.add_invalid("--hvm --nodisks --pxe foobar")  # Positional arguments error
-c.add_invalid("--nodisks --pxe --nonetworks")  # pxe and nonetworks
 c.add_invalid("--nodisks --pxe --name test")  # Colliding name
 c.add_invalid("--hvm --nodisks --pxe --watchdog default,action=foobar")  # Busted --watchdog
 c.add_invalid("--hvm --nodisks --pxe --soundhw default --soundhw foobar")  # Busted --soundhw

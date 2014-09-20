@@ -197,10 +197,19 @@ def convert_old_cpuset(options):
     logging.debug("Generated compat cpuset: --vcpus %s", options.vcpus)
 
 
-def convert_old_networks(options, number_of_default_nics):
-    macs     = virtinst.util.listify(options.mac)
+def convert_old_networks(options):
+    if options.nonetworks:
+        if options.mac:
+            fail(_("Cannot use --mac with --nonetworks"))
+        if options.bridge:
+            fail(_("Cannot use --bridge with --nonetworks"))
+        if options.network:
+            fail(_("Cannot use --nonetworks with --network"))
+        options.network = ["none"]
+
+    macs = virtinst.util.listify(options.mac)
     networks = virtinst.util.listify(options.network)
-    bridges  = virtinst.util.listify(options.bridge)
+    bridges = virtinst.util.listify(options.bridge)
 
     if bridges and networks:
         fail(_("Cannot mix both --bridge and --network arguments"))
@@ -215,7 +224,7 @@ def convert_old_networks(options, number_of_default_nics):
         return l
 
     # If a plain mac is specified, have it imply a default network
-    networks = padlist(networks, max(len(macs), number_of_default_nics))
+    networks = padlist(networks, max(len(macs), 1))
     macs = padlist(macs, len(networks))
 
     for idx in range(len(networks)):
@@ -230,7 +239,12 @@ def convert_old_networks(options, number_of_default_nics):
                 networks[idx] = networks[idx].replace(prefix + ":",
                                                       prefix + "=")
 
+    del(options.mac)
+    del(options.bridge)
+    del(options.nonetworks)
+
     options.network = networks
+    logging.debug("Distilled --network options: %s", options.network)
 
 
 def _determine_default_graphics(guest, default_override):
@@ -421,16 +435,6 @@ def check_option_collisions(options, guest):
         fail(_("Cannot mix --file, --nonsparse, or --file-size with --disk "
                "options. Use --disk PATH[,size=SIZE][,sparse=yes|no]"))
 
-    # Network collisions
-    if options.nonetworks:
-        if options.mac:
-            fail(_("Cannot use --mac with --nonetworks"))
-        if options.bridge:
-            fail(_("Cannot use --bridge with --nonetworks"))
-        if options.network:
-            fail(_("Cannot use --network with --nonetworks"))
-        return
-
     # Install collisions
     if sum([bool(l) for l in [options.pxe, options.location,
                       options.cdrom, options.import_install]]) > 1:
@@ -541,9 +545,6 @@ def show_warnings(options, guest):
 def build_installer(options, conn, virt_type):
     # Build the Installer instance
     if options.pxe:
-        if options.nonetworks:
-            fail(_("Can't use --pxe with --nonetworks"))
-
         instclass = virtinst.PXEInstaller
     elif options.cdrom or options.location or options.livecd:
         instclass = virtinst.DistroInstaller
@@ -576,7 +577,7 @@ def build_guest_instance(conn, options, parsermap):
 
     convert_old_memory(options)
     convert_old_sound(options)
-    convert_old_networks(options, not options.nonetworks and 1 or 0)
+    convert_old_networks(options)
     convert_old_graphics(guest, options)
     convert_old_disks(options)
     convert_old_features(options)
@@ -960,7 +961,7 @@ def parse_args():
     netg = parser.add_argument_group(_("Networking Configuration"))
     cli.add_net_option(netg)
     netg.add_argument("--nonetworks", action="store_true",
-        help=_("Don't create network interfaces for the guest."))
+        help=argparse.SUPPRESS)
     netg.add_argument("-b", "--bridge", action="append",
         help=argparse.SUPPRESS)
     netg.add_argument("-m", "--mac", action="append",

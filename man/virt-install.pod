@@ -744,6 +744,10 @@ Direct connect to host interface IFACE using macvtap.
 Connect to the LAN using SLIRP. Only use this if running a QEMU guest as
 an unprivileged user. This provides a very limited form of NAT.
 
+=item none
+
+Tell virt-install not to add any default network interface.
+
 =back
 
 If this option is omitted a single NIC will be created in the guest. If
@@ -779,11 +783,7 @@ by running 'virsh nwfilter-list', e.g.: 'clean-traffic', 'no-mac-spoofing', ...
 
 Use --network=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsNICS>
 
-This option deprecates -m/--mac and -b/--bridge
-
-=item --nonetworks
-
-Request a virtual machine without any network interfaces.
+This option deprecates -m/--mac, -b/--bridge, and --nonetworks
 
 =back
 
@@ -1564,7 +1564,7 @@ Start serial QEMU ARM VM, which requires specifying a manual kernel.
        --arch armv7l --machine vexpress-a9 \
        --disk /home/user/VMs/myarmdisk.img \
        --boot kernel=/tmp/my-arm-kernel,initrd=/tmp/my-arm-initrd,dtb=/tmp/my-arm-dtb,kernel_args="console=ttyAMA0 rw root=/dev/mmcblk0p3" \
-       --nographics
+       --graphics none
 
 =head1 BUGS
 
