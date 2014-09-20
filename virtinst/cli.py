@@ -571,6 +571,11 @@ def add_device_options(devg, sound_back_compat=False):
     devg.add_argument("--hostdev", action="append",
                     help=_("Configure physical USB/PCI/etc host devices "
                            "to be shared with the guest"))
+    devg.add_argument("--filesystem", action="append",
+        help=_("Pass host directory to the guest. Ex: \n"
+               "--filesystem /my/source/dir,/dir/in/guest\n"
+               "--filesystem template_name,/,type=template"))
+
     # Back compat name
     devg.add_argument("--host-device", action="append", dest="hostdev",
                     help=argparse.SUPPRESS)
@@ -609,13 +614,6 @@ def add_device_options(devg, sound_back_compat=False):
     devg.add_argument("--panic", action="append",
                     help=_("Configure a guest panic device. Ex:\n"
                            "--panic default"))
-
-
-def add_fs_option(devg):
-    devg.add_argument("--filesystem", action="append",
-        help=_("Pass host directory to the guest. Ex: \n"
-               "--filesystem /my/source/dir,/dir/in/guest\n"
-               "--filesystem template_name,/,type=template"))
 
 
 def add_guest_xml_options(geng):

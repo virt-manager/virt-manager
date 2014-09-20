@@ -356,7 +356,6 @@ def parse_args():
     cli.vcpu_cli_options(g, editexample=True)
     cli.add_guest_xml_options(g)
     cli.add_boot_options(g)
-    cli.add_fs_option(g)
     cli.add_device_options(g)
 
     misc = parser.add_argument_group(_("Miscellaneous Options"))

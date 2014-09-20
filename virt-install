@@ -902,7 +902,6 @@ def parse_args():
     cli.add_metadata_option(geng)
     geng.add_argument("-u", "--uuid", help=argparse.SUPPRESS)
     geng.add_argument("--description", help=argparse.SUPPRESS)
-    cli.add_guest_xml_options(geng)
 
     insg = parser.add_argument_group(_("Installation Method Options"))
     insg.add_argument("-c", dest="cdrom_short", help=argparse.SUPPRESS)
@@ -922,9 +921,6 @@ def parse_args():
     insg.add_argument("--initrd-inject", action="append",
                     help=_("Add given file to root of initrd from --location"))
 
-    # Way back when, we required specifying both --os-type and --os-variant
-    # Nowadays the distinction is pointless, so hide the less useful
-    # --os-type option.
     insg.add_argument("--os-type", dest="distro_type", help=argparse.SUPPRESS)
     insg.add_argument("--os-variant", dest="distro_variant",
         help=_("The OS variant being installed guests, "
@@ -933,42 +929,40 @@ def parse_args():
     cli.add_boot_options(insg)
     insg.add_argument("--init", help=argparse.SUPPRESS)
 
-    stog = parser.add_argument_group(_("Storage Configuration"))
-    cli.add_disk_option(stog)
-    stog.add_argument("--nodisks", action="store_true", help=argparse.SUPPRESS)
-    cli.add_fs_option(stog)
-
-    # Deprecated storage options
-    stog.add_argument("-f", "--file", dest="file_paths", action="append",
-                    help=argparse.SUPPRESS)
-    stog.add_argument("-s", "--file-size", type=float,
-                    action="append", dest="disksize",
-                    help=argparse.SUPPRESS)
-    stog.add_argument("--nonsparse", action="store_false",
-                    default=True, dest="sparse",
-                    help=argparse.SUPPRESS)
-
-    vncg = parser.add_argument_group(_("Graphics Configuration"))
-    cli.add_gfx_option(vncg)
-    vncg.add_argument("--vnc", action="store_true", help=argparse.SUPPRESS)
-    vncg.add_argument("--vncport", type=int, help=argparse.SUPPRESS)
-    vncg.add_argument("--vnclisten", help=argparse.SUPPRESS)
-    vncg.add_argument("-k", "--keymap", help=argparse.SUPPRESS)
-    vncg.add_argument("--sdl", action="store_true", help=argparse.SUPPRESS)
-    vncg.add_argument("--nographics", action="store_true",
-        help=argparse.SUPPRESS)
-
-    netg = parser.add_argument_group(_("Networking Configuration"))
-    cli.add_net_option(netg)
-    netg.add_argument("--nonetworks", action="store_true",
-        help=argparse.SUPPRESS)
-    netg.add_argument("-b", "--bridge", action="append",
-        help=argparse.SUPPRESS)
-    netg.add_argument("-m", "--mac", action="append",
-        help=argparse.SUPPRESS)
 
     devg = parser.add_argument_group(_("Device Options"))
+    cli.add_disk_option(devg)
+    cli.add_net_option(devg)
+    cli.add_gfx_option(devg)
     cli.add_device_options(devg, sound_back_compat=True)
+
+    # Deprecated device options
+    devg.add_argument("-f", "--file", dest="file_paths", action="append",
+                    help=argparse.SUPPRESS)
+    devg.add_argument("-s", "--file-size", type=float,
+                    action="append", dest="disksize",
+                    help=argparse.SUPPRESS)
+    devg.add_argument("--nonsparse", action="store_false",
+                    default=True, dest="sparse",
+                    help=argparse.SUPPRESS)
+    devg.add_argument("--nodisks", action="store_true", help=argparse.SUPPRESS)
+    devg.add_argument("--nonetworks", action="store_true",
+        help=argparse.SUPPRESS)
+    devg.add_argument("-b", "--bridge", action="append",
+        help=argparse.SUPPRESS)
+    devg.add_argument("-m", "--mac", action="append", help=argparse.SUPPRESS)
+    devg.add_argument("--vnc", action="store_true", help=argparse.SUPPRESS)
+    devg.add_argument("--vncport", type=int, help=argparse.SUPPRESS)
+    devg.add_argument("--vnclisten", help=argparse.SUPPRESS)
+    devg.add_argument("-k", "--keymap", help=argparse.SUPPRESS)
+    devg.add_argument("--sdl", action="store_true", help=argparse.SUPPRESS)
+    devg.add_argument("--nographics", action="store_true",
+        help=argparse.SUPPRESS)
+
+
+    gxmlg = parser.add_argument_group(_("Guest Configuration Options"))
+    cli.add_guest_xml_options(gxmlg)
+
 
     virg = parser.add_argument_group(_("Virtualization Platform Options"))
     virg.add_argument("-v", "--hvm", action="store_true", dest="fullvirt",
