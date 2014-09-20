@@ -688,7 +688,8 @@ class _VirtCLIArgument(object):
     def __init__(self, attrname, cliname,
                  setter_cb=None, ignore_default=False,
                  can_comma=False, aliases=None,
-                 is_list=False, is_onoff=False):
+                 is_list=False, is_onoff=False,
+                 lookup_cb=None):
         """
         A single subargument passed to compound command lines like --disk,
         --network, etc.
@@ -712,6 +713,8 @@ class _VirtCLIArgument(object):
             are appended.
         @is_onoff: The value expected on the cli is on/off or yes/no, convert
             it to true/false.
+        @lookup_cb: If specified, use this function for performing match
+            lookups.
         """
         self.attrname = attrname
         self.cliname = cliname
@@ -722,6 +725,7 @@ class _VirtCLIArgument(object):
         self.aliases = util.listify(aliases)
         self.is_list = is_list
         self.is_onoff = is_onoff
+        self.lookup_cb = lookup_cb
 
 
     def parse(self, opts, inst, support_cb=None, lookup=False):
@@ -744,10 +748,10 @@ class _VirtCLIArgument(object):
         if val == "default" and self.ignore_default and not lookup:
             return
 
-        if lookup and not self.attrname:
+        if lookup and not self.attrname and not self.lookup_cb:
             raise RuntimeError(
-                _("Don't know how to match %(device_type)s "
-                  "property %(property_name)s") %
+                _("Don't know how to match device type '%(device_type)s' "
+                  "property '%(property_name)s'") %
                 {"device_type": getattr(inst, "virtual_device_type", ""),
                  "property_name": self.cliname})
 
@@ -759,9 +763,12 @@ class _VirtCLIArgument(object):
                                "member=%s" % (inst, self.attrname))
 
         if lookup:
-            # pylint: disable=eval-used
-            return eval("inst." + self.attrname) == val
-            # pylint: enable=eval-used
+            if self.lookup_cb:
+                return self.lookup_cb(opts, inst, self.cliname, val)
+            else:
+                # pylint: disable=eval-used
+                return eval("inst." + self.attrname) == val
+                # pylint: enable=eval-used
         elif self.setter_cb:
             self.setter_cb(opts, inst, self.cliname, val)
         else:
@@ -2062,13 +2069,27 @@ class ParserHostdev(VirtCLIParser):
         self.devclass = VirtualHostDevice
         self.remove_first = "name"
 
+        # If using the name_lookup_cb, this saves us repeatedly trying to
+        # lookup the nodedev
+        _nodedev_lookup_cache = {}
+
         def set_name_cb(opts, inst, cliname, val):
             ignore = opts
             ignore = cliname
             val = NodeDevice.lookupNodedevFromString(inst.conn, val)
             inst.set_from_nodedev(val)
+        def name_lookup_cb(opts, inst, cliname, val):
+            ignore = opts
+            ignore = cliname
 
-        self.set_param(None, "name", setter_cb=set_name_cb)
+            if val not in _nodedev_lookup_cache:
+                _nodedev_lookup_cache[val] = \
+                    NodeDevice.lookupNodedevFromString(inst.conn, val)
+            nodedev = _nodedev_lookup_cache[val]
+            return nodedev.compare_to_hostdev(inst)
+
+        self.set_param(None, "name",
+                       setter_cb=set_name_cb, lookup_cb=name_lookup_cb)
         self.set_param("driver_name", "driver_name")
         self.set_param("boot.order", "boot_order")
         self.set_param("rom_bar", "rom_bar", is_onoff=True)
