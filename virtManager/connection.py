@@ -1072,9 +1072,8 @@ class vmmConnection(vmmGObject):
         return pollhelpers.fetch_vms(self._backend, self._vms.copy(),
                     (lambda obj, key: vmmDomain(self, obj, key)))
 
-    def _obj_signal_proxy(self, obj, signal, key):
-        ignore = obj
-        self.emit(signal, key)
+    def _obj_signal_proxy(self, obj, signal):
+        self.emit(signal, obj.get_connkey())
 
     def schedule_priority_tick(self, **kwargs):
         # args/kwargs are what is passed to def tick()
@@ -1231,10 +1230,8 @@ class vmmConnection(vmmGObject):
                 obj.cleanup()
             for connkey, obj in newNets.items():
                 logging.debug("network=%s added", obj.get_name())
-                obj.connect("started", self._obj_signal_proxy,
-                            "net-started", connkey)
-                obj.connect("stopped", self._obj_signal_proxy,
-                            "net-stopped", connkey)
+                obj.connect("started", self._obj_signal_proxy, "net-started")
+                obj.connect("stopped", self._obj_signal_proxy, "net-stopped")
                 self.emit("net-added", connkey)
 
             # Update storage pool states
@@ -1244,10 +1241,8 @@ class vmmConnection(vmmGObject):
                 obj.cleanup()
             for connkey, obj in newPools.items():
                 logging.debug("pool=%s added", obj.get_name())
-                obj.connect("started", self._obj_signal_proxy,
-                            "pool-started", connkey)
-                obj.connect("stopped", self._obj_signal_proxy,
-                            "pool-stopped", connkey)
+                obj.connect("started", self._obj_signal_proxy, "pool-started")
+                obj.connect("stopped", self._obj_signal_proxy, "pool-stopped")
                 self.emit("pool-added", connkey)
 
             # Update interface states
@@ -1258,9 +1253,9 @@ class vmmConnection(vmmGObject):
             for name, obj in newInterfaces.items():
                 logging.debug("interface=%s added", obj.get_name())
                 obj.connect("started", self._obj_signal_proxy,
-                            "interface-started", name)
+                    "interface-started")
                 obj.connect("stopped", self._obj_signal_proxy,
-                            "interface-stopped", name)
+                    "interface-stopped")
                 self.emit("interface-added", name)
 
             # Update nodedev list

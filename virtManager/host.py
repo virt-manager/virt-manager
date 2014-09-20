@@ -515,7 +515,7 @@ class vmmHost(vmmGObjectUI):
                 net.set_autostart(auto)
             if EDIT_NET_NAME in self.active_edits:
                 net.define_name(self.widget("net-name").get_text())
-                self.repopulate_networks()
+                self.idle_add(self.repopulate_networks)
             if EDIT_NET_QOS in self.active_edits:
                 in_qos = self.widget("net-qos-inbound-enable").get_active()
                 out_qos = self.widget("net-qos-outbound-enable").get_active()
@@ -946,8 +946,7 @@ class vmmHost(vmmGObjectUI):
                 pool.set_autostart(auto)
             if EDIT_POOL_NAME in self.active_edits:
                 pool.define_name(self.widget("pool-name-entry").get_text())
-                self.disable_pool_apply()
-                self.repopulate_storage_pools()
+                self.idle_add(self.repopulate_storage_pools)
         except Exception, e:
             self.err.show_err(_("Error changing pool settings: %s") % str(e))
             return

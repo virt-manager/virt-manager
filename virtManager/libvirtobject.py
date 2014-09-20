@@ -185,6 +185,7 @@ class vmmLibvirtObject(vmmGObject):
         # Mark cached xml as invalid
         self._is_xml_valid = False
         self._xmlobj_to_define = None
+        self._name = None
 
 
     ##########################
