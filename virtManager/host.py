@@ -1185,9 +1185,6 @@ class vmmHost(vmmGObjectUI):
         if interface is None:
             return
 
-        if EDIT_INTERFACE_STARTMODE not in self.active_edits:
-            return
-
         newmode = uiutil.get_list_selection(
             self.widget("interface-startmode"), 0)
 
@@ -1200,7 +1197,6 @@ class vmmHost(vmmGObjectUI):
                               str(e))
             return
 
-        # XXX: This will require an interface restart
         self.disable_interface_apply()
 
     def interface_startmode_changed(self, src_ignore):
@@ -1385,9 +1381,14 @@ class vmmHost(vmmGObjectUI):
                          "Would you like to apply them now?")),
                 chktext=_("Don't warn me again."),
                 default=False):
-            self.pool_apply()
-            self.net_apply()
-            self.interface_apply()
+
+            if all([edit in EDIT_POOL_IDS for edit in self.active_edits]):
+                self.pool_apply()
+            elif all([edit in EDIT_NET_IDS for edit in self.active_edits]):
+                self.net_apply()
+            elif all([edit in EDIT_INTERFACE_IDS
+                      for edit in self.active_edits]):
+                self.interface_apply()
 
         self.active_edits = []
         return True
