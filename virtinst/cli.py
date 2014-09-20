@@ -442,128 +442,6 @@ def show_console_for_guest(guest):
 
 
 ###########################
-# CLI back compat helpers #
-###########################
-
-def convert_old_memory(options):
-    if options.memory:
-        return
-    if not options.oldmemory:
-        return
-    options.memory = str(options.oldmemory)
-
-
-def convert_old_cpuset(options):
-    if not options.cpuset:
-        return
-    if not options.vcpus:
-        options.vcpus = ""
-    options.vcpus += ",cpuset=%s" % options.cpuset
-    logging.debug("Generated compat cpuset: --vcpus %s", options.vcpus)
-
-
-def convert_old_networks(options, number_of_default_nics):
-    macs     = util.listify(options.mac)
-    networks = util.listify(options.network)
-    bridges  = util.listify(options.bridge)
-
-    if bridges and networks:
-        fail(_("Cannot mix both --bridge and --network arguments"))
-
-    if bridges:
-        # Convert old --bridges to --networks
-        networks = ["bridge:" + b for b in bridges]
-
-    def padlist(l, padsize):
-        l = util.listify(l)
-        l.extend((padsize - len(l)) * [None])
-        return l
-
-    # If a plain mac is specified, have it imply a default network
-    networks = padlist(networks, max(len(macs), number_of_default_nics))
-    macs = padlist(macs, len(networks))
-
-    for idx in range(len(networks)):
-        if networks[idx] is None:
-            networks[idx] = "default"
-        if macs[idx]:
-            networks[idx] += ",mac=%s" % macs[idx]
-
-        # Handle old format of bridge:foo instead of bridge=foo
-        for prefix in ["network", "bridge"]:
-            if networks[idx].startswith(prefix + ":"):
-                networks[idx] = networks[idx].replace(prefix + ":",
-                                                      prefix + "=")
-
-    options.network = networks
-
-
-def _determine_default_graphics(guest, default_override):
-    if default_override is True:
-        return
-    elif default_override is False:
-        guest.skip_default_graphics = True
-        return
-
-    if "DISPLAY" not in os.environ.keys():
-        logging.debug("DISPLAY is not set: defaulting to nographics.")
-        guest.skip_default_graphics = True
-
-
-def convert_old_graphics(guest, options, default_override=None):
-    vnc = options.vnc
-    vncport = options.vncport
-    vnclisten = options.vnclisten
-    nographics = options.nographics
-    sdl = options.sdl
-    keymap = options.keymap
-    graphics = options.graphics
-
-    if graphics and (vnc or sdl or keymap or vncport or vnclisten):
-        fail(_("Cannot mix --graphics and old style graphical options"))
-
-    optnum = sum([bool(g) for g in [vnc, nographics, sdl, graphics]])
-    if optnum > 1:
-        raise ValueError(_("Can't specify more than one of VNC, SDL, "
-                           "--graphics or --nographics"))
-
-    if options.graphics:
-        return
-
-    if optnum == 0:
-        _determine_default_graphics(guest, default_override)
-        return
-
-    # Build a --graphics command line from old style opts
-    optstr = ((vnc and "vnc") or
-              (sdl and "sdl") or
-              (nographics and ("none")))
-    if vnclisten:
-        optstr += ",listen=%s" % vnclisten
-    if vncport:
-        optstr += ",port=%s" % vncport
-    if keymap:
-        optstr += ",keymap=%s" % keymap
-
-    logging.debug("--graphics compat generated: %s", optstr)
-    options.graphics = [optstr]
-
-
-def convert_old_features(options):
-    if getattr(options, "features", None):
-        return
-
-    opts = ""
-    if options.noacpi:
-        opts += "acpi=off"
-    if options.noapic:
-        if opts:
-            opts += ","
-        opts += "apic=off"
-    options.features = opts or None
-
-
-###########################
 # Common CLI option/group #
 ###########################
 
@@ -666,44 +544,6 @@ def add_gfx_option(devg):
              "--graphics vnc,password=foobar,port=5910,keymap=ja"))
 
 
-def graphics_option_group(parser):
-    """
-    Register vnc + sdl options for virt-install
-    """
-    vncg = parser.add_argument_group(_("Graphics Configuration"))
-    add_gfx_option(vncg)
-    vncg.add_argument("--vnc", action="store_true",
-                    help=argparse.SUPPRESS)
-    vncg.add_argument("--vncport", type=int,
-                    help=argparse.SUPPRESS)
-    vncg.add_argument("--vnclisten",
-                    help=argparse.SUPPRESS)
-    vncg.add_argument("-k", "--keymap",
-                    help=argparse.SUPPRESS)
-    vncg.add_argument("--sdl", action="store_true",
-                    help=argparse.SUPPRESS)
-    vncg.add_argument("--nographics", action="store_true",
-                    help=argparse.SUPPRESS)
-    return vncg
-
-
-def network_option_group(parser):
-    """
-    Register common network options for virt-install
-    """
-    netg = parser.add_argument_group(_("Networking Configuration"))
-
-    add_net_option(netg)
-
-    # Deprecated net options
-    netg.add_argument("-b", "--bridge", action="append",
-                    help=argparse.SUPPRESS)
-    netg.add_argument("-m", "--mac", action="append",
-                    help=argparse.SUPPRESS)
-
-    return netg
-
-
 def add_net_option(devg):
     devg.add_argument("-w", "--network", action="append",
       help=_("Configure a guest network interface. Ex:\n"
@@ -772,13 +612,6 @@ def add_fs_option(devg):
         help=_("Pass host directory to the guest. Ex: \n"
                "--filesystem /my/source/dir,/dir/in/guest\n"
                "--filesystem template_name,/,type=template"))
-
-
-def add_old_feature_options(optg):
-    optg.add_argument("--noapic", action="store_true",
-                    default=False, help=argparse.SUPPRESS)
-    optg.add_argument("--noacpi", action="store_true",
-                    default=False, help=argparse.SUPPRESS)
 
 
 def add_guest_xml_options(geng):

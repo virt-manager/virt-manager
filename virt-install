@@ -19,6 +19,7 @@
 
 import argparse
 import logging
+import os
 import re
 import sys
 import time
@@ -27,7 +28,7 @@ import libvirt
 import urlgrabber.progress as progress
 
 import virtinst
-import virtinst.cli as cli
+from virtinst import cli
 from virtinst.cli import fail, print_stdout, print_stderr
 
 
@@ -178,6 +179,124 @@ def convert_old_os_options(options):
         options.distro_variant = "none"
     else:
         options.distro_variant = distkey
+
+
+def convert_old_memory(options):
+    if options.memory:
+        return
+    if not options.oldmemory:
+        return
+    options.memory = str(options.oldmemory)
+
+
+def convert_old_cpuset(options):
+    if not options.cpuset:
+        return
+    if not options.vcpus:
+        options.vcpus = ""
+    options.vcpus += ",cpuset=%s" % options.cpuset
+    logging.debug("Generated compat cpuset: --vcpus %s", options.vcpus)
+
+
+def convert_old_networks(options, number_of_default_nics):
+    macs     = virtinst.util.listify(options.mac)
+    networks = virtinst.util.listify(options.network)
+    bridges  = virtinst.util.listify(options.bridge)
+
+    if bridges and networks:
+        fail(_("Cannot mix both --bridge and --network arguments"))
+
+    if bridges:
+        # Convert old --bridges to --networks
+        networks = ["bridge:" + b for b in bridges]
+
+    def padlist(l, padsize):
+        l = virtinst.util.listify(l)
+        l.extend((padsize - len(l)) * [None])
+        return l
+
+    # If a plain mac is specified, have it imply a default network
+    networks = padlist(networks, max(len(macs), number_of_default_nics))
+    macs = padlist(macs, len(networks))
+
+    for idx in range(len(networks)):
+        if networks[idx] is None:
+            networks[idx] = "default"
+        if macs[idx]:
+            networks[idx] += ",mac=%s" % macs[idx]
+
+        # Handle old format of bridge:foo instead of bridge=foo
+        for prefix in ["network", "bridge"]:
+            if networks[idx].startswith(prefix + ":"):
+                networks[idx] = networks[idx].replace(prefix + ":",
+                                                      prefix + "=")
+
+    options.network = networks
+
+
+def _determine_default_graphics(guest, default_override):
+    if default_override is True:
+        return
+    elif default_override is False:
+        guest.skip_default_graphics = True
+        return
+
+    if "DISPLAY" not in os.environ.keys():
+        logging.debug("DISPLAY is not set: defaulting to nographics.")
+        guest.skip_default_graphics = True
+
+
+def convert_old_graphics(guest, options, default_override=None):
+    vnc = options.vnc
+    vncport = options.vncport
+    vnclisten = options.vnclisten
+    nographics = options.nographics
+    sdl = options.sdl
+    keymap = options.keymap
+    graphics = options.graphics
+
+    if graphics and (vnc or sdl or keymap or vncport or vnclisten):
+        fail(_("Cannot mix --graphics and old style graphical options"))
+
+    optnum = sum([bool(g) for g in [vnc, nographics, sdl, graphics]])
+    if optnum > 1:
+        raise ValueError(_("Can't specify more than one of VNC, SDL, "
+                           "--graphics or --nographics"))
+
+    if options.graphics:
+        return
+
+    if optnum == 0:
+        _determine_default_graphics(guest, default_override)
+        return
+
+    # Build a --graphics command line from old style opts
+    optstr = ((vnc and "vnc") or
+              (sdl and "sdl") or
+              (nographics and ("none")))
+    if vnclisten:
+        optstr += ",listen=%s" % vnclisten
+    if vncport:
+        optstr += ",port=%s" % vncport
+    if keymap:
+        optstr += ",keymap=%s" % keymap
+
+    logging.debug("--graphics compat generated: %s", optstr)
+    options.graphics = [optstr]
+
+
+def convert_old_features(options):
+    if getattr(options, "features", None):
+        return
+
+    opts = ""
+    if options.noacpi:
+        opts += "acpi=off"
+    if options.noapic:
+        if opts:
+            opts += ","
+        opts += "apic=off"
+    options.features = opts or None
 
 
 ########################
@@ -460,13 +579,13 @@ def build_guest_instance(conn, options, parsermap):
 
     guest.installer = build_installer(options, conn, guest.os.os_type)
 
-    cli.convert_old_memory(options)
+    convert_old_memory(options)
     convert_old_sound(options)
-    cli.convert_old_networks(options, not options.nonetworks and 1 or 0)
-    cli.convert_old_graphics(guest, options)
+    convert_old_networks(options, not options.nonetworks and 1 or 0)
+    convert_old_graphics(guest, options)
     convert_old_disks(options)
-    cli.convert_old_features(options)
-    cli.convert_old_cpuset(options)
+    convert_old_features(options)
+    convert_old_cpuset(options)
     convert_old_init(options)
     convert_old_os_options(options)
 
@@ -817,12 +936,24 @@ def parse_args():
                     default=True, dest="sparse",
                     help=argparse.SUPPRESS)
 
-    netg = cli.network_option_group(parser)
+    vncg = parser.add_argument_group(_("Graphics Configuration"))
+    cli.add_gfx_option(vncg)
+    vncg.add_argument("--vnc", action="store_true", help=argparse.SUPPRESS)
+    vncg.add_argument("--vncport", type=int, help=argparse.SUPPRESS)
+    vncg.add_argument("--vnclisten", help=argparse.SUPPRESS)
+    vncg.add_argument("-k", "--keymap", help=argparse.SUPPRESS)
+    vncg.add_argument("--sdl", action="store_true", help=argparse.SUPPRESS)
+    vncg.add_argument("--nographics", action="store_true",
+        help=argparse.SUPPRESS)
 
+    netg = parser.add_argument_group(_("Networking Configuration"))
+    cli.add_net_option(netg)
     netg.add_argument("--nonetworks", action="store_true",
-                    help=_("Don't create network interfaces for the guest."))
-
-    cli.graphics_option_group(parser)
+        help=_("Don't create network interfaces for the guest."))
+    netg.add_argument("-b", "--bridge", action="append",
+        help=argparse.SUPPRESS)
+    netg.add_argument("-m", "--mac", action="append",
+        help=argparse.SUPPRESS)
 
     devg = parser.add_argument_group(_("Device Options"))
     cli.add_device_options(devg, sound_back_compat=True)
@@ -843,7 +974,11 @@ def parse_args():
                     help=_("The CPU architecture to simulate"))
     virg.add_argument("--machine",
                     help=_("The machine type to emulate"))
-    cli.add_old_feature_options(virg)
+    virg.add_argument("--noapic", action="store_true",
+        default=False, help=argparse.SUPPRESS)
+    virg.add_argument("--noacpi", action="store_true",
+        default=False, help=argparse.SUPPRESS)
+
 
     misc = parser.add_argument_group(_("Miscellaneous Options"))
     misc.add_argument("--autostart", action="store_true", dest="autostart",
