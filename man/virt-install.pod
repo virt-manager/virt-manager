@@ -290,7 +290,7 @@ Use --pm=? to see a list of all available sub options. Complete details at L<htt
 
 =item  --cdrom=CDROM
 
-File or device used as a virtual CD-ROM device for fully virtualized guests.
+File or device used as a virtual CD-ROM device.
 It can be path to an ISO image, or to a CDROM device. It can also be a URL
 from which to fetch/access a minimal boot ISO image. The URLs take the same
 format as described for the C<--location> argument. If a cdrom has been
@@ -449,8 +449,7 @@ configurations like ARM or PPC
 
 =item B<--boot loader=BIOSPATH>
 
-Use BIOSPATH as the virtual machine BIOS. Only valid for fully virtualized
-guests.
+Use BIOSPATH as the virtual machine BIOS.
 
 =item B<--boot loader=/usr/share/OVMF/OVMF_CODE.fd,loader_ro=yes,loader_type=pflash>
 
@@ -460,8 +459,6 @@ instantiate the VM-specific UEFI varstore from the varstore template that is
 assigned to "/usr/share/OVMF/OVMF_CODE.fd" in libvirtd's "qemu.conf", in the
 "nvram" stanza.
 
-Only valid for fully virtualized guests.
-
 =item B<--boot loader=/.../OVMF_CODE.fd,loader_ro=yes,loader_type=pflash,nvram_template=/.../OVMF_VARS.fd>
 
 Specify that the virtual machine use the custom OVMF binary as boot firmware,
@@ -469,16 +466,12 @@ mapped as a virtual flash chip. In addition, request that libvirt instantiate
 the VM-specific UEFI varstore from the custom "/.../OVMF_VARS.fd" varstore
 template.
 
-Only valid for fully virtualized guests.
-
 =item B<--boot loader=/.../OVMF_CODE.fd,loader_ro=yes,loader_type=pflash,nvram=/.../guest_VARS.fd>
 
 Specify that the virtual machine use the custom OVMF binary as boot firmware,
 mapped as a virtual flash chip. In addition, the VM-specific UEFI varstore is
 directly the preexistent file "/.../guest_VARS.fd"; it is not instantiated from
 any template.
-
-Only valid for fully virtualized guests.
 
 =item B<--boot menu=on,useserial=on>
 
@@ -850,11 +843,10 @@ Using spice graphic type will work as if those arguments were given:
 
 none
 
-No graphical console will be allocated for the guest. Fully virtualized guests
-(Xen FV or QEmu/KVM) will need to have a text console configured on the first
-serial port in the guest (this can be done via the --extra-args option). Xen
-PV will set this up automatically. The command 'virsh console NAME' can be
-used to connect to the serial device.
+No graphical console will be allocated for the guest. Guests will likely
+need to have a text console configured on the first
+serial port in the guest (this can be done via the --extra-args option). The
+command 'virsh console NAME' can be used to connect to the serial device.
 
 =item B<port>
 
