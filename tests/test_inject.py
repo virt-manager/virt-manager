@@ -28,6 +28,10 @@ DEVFEDORA_URL = "http://download.fedoraproject.org/pub/fedora/linux/development/
 OLD_FEDORA_URL = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/%s/Fedora/%s/os/"
 FEDORA_URL = "http://download.fedoraproject.org/pub/fedora/linux/releases/%s/Fedora/%s/os/"
 
+(WARN_RHEL4,
+ WARN_RHEL5,
+ WARN_LATEST) = range(1, 4)
+
 
 def prompt():
     sys.stdout.write("(press enter to continue)")
@@ -35,10 +39,12 @@ def prompt():
 
 
 class Distro(object):
-    def __init__(self, name, url, ks2=False, virtio=True):
+    def __init__(self, name, url, warntype=WARN_LATEST,
+                 ks2=False, virtio=True):
         self.name = name
         self.url = url
         self.virtio = virtio
+        self.warntype = warntype
 
         self.ks = "tests/inject-data/old-kickstart.ks"
         if ks2:
@@ -48,24 +54,22 @@ class Distro(object):
         self.initrd = None
 
 
-
-
 def _add(*args, **kwargs):
     _d = Distro(*args, **kwargs)
     _alldistros[_d.name] = _d
 
 
 _add("centos-4.9", "http://vault.centos.org/4.9/os/x86_64",
-     ks2=True, virtio=False)
-_add("centos-5-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/5/os/x86_64/")
-_add("centos-6-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/6/os/x86_64/")
-_add("fedora-14", OLD_FEDORA_URL % ("14", "x86_64"))
-_add("fedora-15", OLD_FEDORA_URL % ("15", "x86_64"))
-_add("fedora-16", OLD_FEDORA_URL % ("16", "x86_64"))
-_add("fedora-17", OLD_FEDORA_URL % ("17", "x86_64"))
-_add("fedora-18", FEDORA_URL % ("18", "x86_64"), ks2=True)
+     warntype=WARN_RHEL4, ks2=True, virtio=False)
+_add("centos-5-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/5/os/x86_64/",
+     warntype=WARN_RHEL5)
+_add("centos-6-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/6/os/x86_64/",
+     warntype=WARN_RHEL5)
+_add("centos-7-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/7/os/x86_64/",
+     ks2=True)
 _add("fedora-19", FEDORA_URL % ("19", "x86_64"), ks2=True)
-_add("fedora-20", DEVFEDORA_URL % ("20", "x86_64"), ks2=True)
+_add("fedora-20", FEDORA_URL % ("20", "x86_64"), ks2=True)
+_add("fedora-21", DEVFEDORA_URL % ("21", "x86_64"), ks2=True)
 
 
 def exit_cleanup():
@@ -97,6 +101,19 @@ def _fetch_distro(distro):
 
 
 def _test_distro(distro):
+    os.system("clear")
+    print "\n"
+    if distro.warntype == WARN_RHEL4:
+        print "RHEL4: Makes its way to the text installer, then chokes "
+        print "on our bogus URI http://HEY-THIS-IS-OUR-BAD-KICKSTART-URL.com/"
+    elif distro.warntype == WARN_RHEL5:
+        print "RHEL5, RHEL6, Fedora < 17: You'll get an error about a "
+        print "bogus bootproto ITREADTHEKICKSTART. This means anaconda "
+        print "read our busted kickstart."
+    else:
+        print "RHEL7, Fedora >= 17: Chokes on the bogus URI in the early "
+        print "console screen when fetching the installer squashfs image."
+
     originitrd = distro.initrd
     kernel = distro.kernel
     newinitrd = originitrd + ".copy"
@@ -146,23 +163,14 @@ class InjectTests(unittest.TestCase):
         global _printinitrd
         if _printinitrd:
             return
+
         print """
 
 
-
 Okay, we have all the media. We are going to perform the initrd injection
-of some stock kickstarts, then manually launch a qemu instance to verify
-it's working. How you know it's working depends on the distro (look at
-the qemu window title):
-
-RHEL4: Makes its way to the text installer, then chokes on our bogus URI
-http://HEY-THIS-IS-OUR-BAD-KICKSTART-URL.com/
-
-RHEL5, RHEL6, Fedora < 17: You'll get an error about a bogus bootproto
-ITREADTHEKICKSTART. This means anaconda read our busted kickstart.
-
-Fedora >= 17: Chokes on the bogus URI in the early console screen when
-fetching the installer squashfs image.
+of some broken kickstarts, then manually launch a qemu instance to verify
+the kickstart is detected. How you know it's working depends on the distro.
+When each test launches, we will print the manual verification instructions.
 
 """
         prompt()
