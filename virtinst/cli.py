@@ -766,9 +766,8 @@ class _VirtCLIArgument(object):
             if self.lookup_cb:
                 return self.lookup_cb(opts, inst, self.cliname, val)
             else:
-                # pylint: disable=eval-used
-                return eval("inst." + self.attrname) == val
-                # pylint: enable=eval-used
+                return eval(  # pylint: disable=eval-used
+                    "inst." + self.attrname) == val
         elif self.setter_cb:
             self.setter_cb(opts, inst, self.cliname, val)
         else:
