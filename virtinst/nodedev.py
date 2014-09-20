@@ -53,11 +53,6 @@ class NodeDevice(XMLBuilder):
     CAPABILITY_TYPE_SCSIBUS = "scsi_host"
     CAPABILITY_TYPE_SCSIDEV = "scsi"
 
-    (HOSTDEV_ADDR_TYPE_LIBVIRT,
-    HOSTDEV_ADDR_TYPE_PCI,
-    HOSTDEV_ADDR_TYPE_USB_BUSADDR,
-    HOSTDEV_ADDR_TYPE_USB_VENPRO) = range(1, 5)
-
     @staticmethod
     def lookupNodedevFromString(conn, idstring):
         """
@@ -103,8 +98,6 @@ class NodeDevice(XMLBuilder):
         instantiate = kwargs.pop("allow_node_instantiate", False)
         if self.__class__ is NodeDevice and not instantiate:
             raise RuntimeError("Can not instantiate NodeDevice directly")
-
-        self.addr_type = None
 
         XMLBuilder.__init__(self, *args, **kwargs)
 
@@ -339,14 +332,13 @@ class SCSIBus(NodeDevice):
     wwpn = XMLProperty("./capability/capability[@type='fc_host']/wwpn")
 
 
-def _isAddressString(addrstr):
-    cmp_func = None
-    addr_type = None
+def _AddressStringToHostdev(conn, addrstr):
+    from .devicehostdev import VirtualHostDevice
+    hostdev = VirtualHostDevice(conn)
 
     try:
         # Determine addrstr type
         if addrstr.count(":") in [1, 2] and addrstr.count("."):
-            devtype = NodeDevice.CAPABILITY_TYPE_PCI
             addrstr, func = addrstr.split(".", 1)
             addrstr, slot = addrstr.rsplit(":", 1)
             domain = "0"
@@ -355,67 +347,53 @@ def _isAddressString(addrstr):
             else:
                 bus = addrstr
 
-            func = int(func, 16)
-            slot = int(slot, 16)
-            domain = int(domain, 16)
-            bus = int(bus, 16)
-
-            def pci_cmp(nodedev):
-                return ((int(nodedev.domain) == domain) and
-                        (int(nodedev.function) == func) and
-                        (int(nodedev.bus) == bus) and
-                        (int(nodedev.slot) == slot))
-            cmp_func = pci_cmp
-            addr_type = NodeDevice.HOSTDEV_ADDR_TYPE_PCI
+            hostdev.type = "pci"
+            hostdev.domain = "0x%.4X" % int(domain, 16)
+            hostdev.function = "0x%.2X" % int(func, 16)
+            hostdev.slot = "0x%.2X" % int(slot, 16)
+            hostdev.bus = "0x%.2X" % int(bus, 16)
 
         elif addrstr.count(":"):
-            devtype = NodeDevice.CAPABILITY_TYPE_USBDEV
             vendor, product = addrstr.split(":")
-            vendor = int(vendor, 16)
-            product = int(product, 16)
 
-            def usbprod_cmp(nodedev):
-                return ((int(nodedev.vendor_id, 16) == vendor) and
-                        (int(nodedev.product_id, 16) == product))
-            cmp_func = usbprod_cmp
-            addr_type = NodeDevice.HOSTDEV_ADDR_TYPE_USB_VENPRO
+            hostdev.type = "usb"
+            hostdev.vendor = "0x%.4X" % int(vendor, 16)
+            hostdev.product = "0x%.4X" % int(product, 16)
 
         elif addrstr.count("."):
-            devtype = NodeDevice.CAPABILITY_TYPE_USBDEV
-            bus, addr = addrstr.split(".", 1)
-            bus = int(bus)
-            addr = int(addr)
+            bus, device = addrstr.split(".", 1)
 
-            def usbaddr_cmp(nodedev):
-                return ((int(nodedev.bus) == bus) and
-                        (int(nodedev.device) == addr))
-            cmp_func = usbaddr_cmp
-            addr_type = NodeDevice.HOSTDEV_ADDR_TYPE_USB_BUSADDR
+            hostdev.type = "usb"
+            hostdev.bus = bus
+            hostdev.device = device
         else:
             raise RuntimeError("Unknown address type")
     except:
         logging.debug("Error parsing node device string.", exc_info=True)
         raise
 
-    return cmp_func, devtype, addr_type
+    return hostdev
 
 
 def _AddressStringToNodedev(conn, addrstr):
-    cmp_func, devtype, addr_type = _isAddressString(addrstr)
+    hostdev = _AddressStringToHostdev(conn, addrstr)
 
     # Iterate over node devices and compare
     count = 0
     nodedev = None
 
+    devtype = hostdev.type
+    if devtype == "usb":
+        devtype = "usb_device"
+
     for xmlobj in conn.fetch_all_nodedevs():
         if xmlobj.device_type != devtype:
             continue
-        if cmp_func(xmlobj):
+        if xmlobj.compare_to_hostdev(hostdev):
             nodedev = xmlobj
             count += 1
 
     if count == 1:
-        nodedev.addr_type = addr_type
         return nodedev
     elif count > 1:
         raise ValueError(_("%s corresponds to multiple node devices") %

@@ -32,10 +32,6 @@ class VirtualHostDevice(VirtualDevice):
             command line, or if virt-manager detects a dup USB device
             and we need to differentiate
         """
-        if (use_full_usb is None and
-            nodedev.addr_type == nodedev.HOSTDEV_ADDR_TYPE_USB_BUSADDR):
-            use_full_usb = True
-
         if nodedev.device_type == NodeDevice.CAPABILITY_TYPE_PCI:
             self.type = "pci"
             self.domain = nodedev.domain
