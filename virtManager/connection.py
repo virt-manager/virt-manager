@@ -164,6 +164,9 @@ class vmmConnection(vmmGObject):
         self._backend.cb_fetch_all_pools = (
             lambda: [obj.get_xmlobj(refresh_if_nec=False)
                      for obj in self._pools.values()])
+        self._backend.cb_fetch_all_nodedevs = (
+            lambda: [obj.get_xmlobj(refresh_if_nec=False)
+                     for obj in self._nodedevs.values()])
 
         def fetch_all_vols():
             ret = []

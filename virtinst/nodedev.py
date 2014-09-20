@@ -19,26 +19,12 @@
 
 import logging
 
-import libvirt
-
 from .xmlbuilder import XMLBuilder
 from .xmlbuilder import XMLProperty as _XMLProperty
 
 
 class XMLProperty(_XMLProperty):
     _track = False
-
-
-def _lookupNodeName(conn, name):
-    try:
-        nodedev = conn.nodeDeviceLookupByName(name)
-    except libvirt.libvirtError, e:
-        raise libvirt.libvirtError(
-            _("Did not find node device '%s': %s" %
-            (name, str(e))))
-
-    xml = nodedev.XMLDesc(0)
-    return NodeDevice.parse(conn, xml)
 
 
 def _intify(val, do_hex=False):
@@ -73,7 +59,7 @@ class NodeDevice(XMLBuilder):
     HOSTDEV_ADDR_TYPE_USB_VENPRO) = range(1, 5)
 
     @staticmethod
-    def lookupNodeName(conn, name):
+    def lookupNodedevFromString(conn, idstring):
         """
         Convert the passed libvirt node device name to a NodeDevice
         instance, with proper error reporting. If the name is name is not
@@ -81,8 +67,11 @@ class NodeDevice(XMLBuilder):
         devAddressToNodeDev
 
         @param conn: libvirt.virConnect instance to perform the lookup on
-        @param name: libvirt node device name to lookup, or address for
-                     _devAddressToNodedev
+        @param idstring: libvirt node device name to lookup, or address
+            of the form:
+            - bus.addr (ex. 001.003 for a usb device)
+            - vendor:product (ex. 0x1234:0x5678 for a usb device
+            - (domain:)bus:slot.func (ex. 00:10.0 for a pci device)
 
         @rtype: L{NodeDevice} instance
         """
@@ -90,15 +79,19 @@ class NodeDevice(XMLBuilder):
             raise ValueError(_("Connection does not support host device "
                                "enumeration."))
 
-        try:
-            return _lookupNodeName(conn, name)
-        except libvirt.libvirtError, e:
-            try:
-                _isAddressStr(name)
-            except:
-                raise e
+        # First try and see if this is a libvirt nodedev name
+        for nodedev in conn.fetch_all_nodedevs():
+            if nodedev.name == idstring:
+                return nodedev
 
-            return _devAddressToNodedev(conn, name)
+        try:
+            return _AddressStringToNodedev(conn, idstring)
+        except:
+            logging.debug("Error looking up nodedev from idstring=%s",
+                idstring, exc_info=True)
+            raise RuntimeError(_("Did not find node device matching '%s'" %
+                idstring))
+
 
     @staticmethod
     def parse(conn, xml):
@@ -346,7 +339,7 @@ class SCSIBus(NodeDevice):
     wwpn = XMLProperty("./capability/capability[@type='fc_host']/wwpn")
 
 
-def _isAddressStr(addrstr):
+def _isAddressString(addrstr):
     cmp_func = None
     addr_type = None
 
@@ -401,40 +394,24 @@ def _isAddressStr(addrstr):
         else:
             raise RuntimeError("Unknown address type")
     except:
-        logging.exception("Error parsing node device string.")
+        logging.debug("Error parsing node device string.", exc_info=True)
         raise
 
     return cmp_func, devtype, addr_type
 
 
-def _devAddressToNodedev(conn, addrstr):
-    """
-    Look up the passed host device address string as a libvirt node device,
-    parse its xml, and return a NodeDevice instance.
-
-    @param conn: libvirt.virConnect instance to perform the lookup on
-    @param addrstr: host device string to parse and lookup
-        - bus.addr (ex. 001.003 for a usb device)
-        - vendor:product (ex. 0x1234:0x5678 for a usb device
-        - (domain:)bus:slot.func (ex. 00:10.0 for a pci device)
-    @param addrstr: C{str}
-    """
-    try:
-        ret = _isAddressStr(addrstr)
-    except:
-        raise ValueError(_("Could not determine format of '%s'") % addrstr)
-
-    cmp_func, devtype, addr_type = ret
+def _AddressStringToNodedev(conn, addrstr):
+    cmp_func, devtype, addr_type = _isAddressString(addrstr)
 
     # Iterate over node devices and compare
     count = 0
     nodedev = None
 
-    nodenames = conn.listDevices(devtype, 0)
-    for name in nodenames:
-        tmpnode = _lookupNodeName(conn, name)
-        if cmp_func(tmpnode):
-            nodedev = tmpnode
+    for xmlobj in conn.fetch_all_nodedevs():
+        if xmlobj.device_type != devtype:
+            continue
+        if cmp_func(xmlobj):
+            nodedev = xmlobj
             count += 1
 
     if count == 1:

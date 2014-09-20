@@ -28,6 +28,7 @@ from . import util
 from . import capabilities as CapabilitiesParser
 from .cli import VirtOptionString
 from .guest import Guest
+from .nodedev import NodeDevice
 from .storage import StoragePool, StorageVolume
 
 _virtinst_uri_magic = "__virtinst_test__"
@@ -96,6 +97,7 @@ class VirtualConnection(object):
         self.cb_fetch_all_guests = None
         self.cb_fetch_all_pools = None
         self.cb_fetch_all_vols = None
+        self.cb_fetch_all_nodedevs = None
         self.cb_clear_cache = None
 
 
@@ -162,9 +164,27 @@ class VirtualConnection(object):
             self._uri = self._libvirtconn.getURI()
             self._urisplits = util.uri_split(self._uri)
 
+    def set_keep_alive(self, interval, count):
+        if hasattr(self._libvirtconn, "setKeepAlive"):
+            self._libvirtconn.setKeepAlive(interval, count)
+
+
+    ####################
+    # Polling routines #
+    ####################
+
     _FETCH_KEY_GUESTS = "vms"
     _FETCH_KEY_POOLS = "pools"
     _FETCH_KEY_VOLS = "vols"
+    _FETCH_KEY_NODEDEVS = "nodedevs"
+
+    def clear_cache(self, pools=False):
+        if self.cb_clear_cache:
+            self.cb_clear_cache(pools=pools)  # pylint: disable=not-callable
+            return
+
+        if pools:
+            self._fetch_cache.pop(self._FETCH_KEY_POOLS, None)
 
     def _fetch_all_guests_cached(self):
         key = self._FETCH_KEY_GUESTS
@@ -199,10 +219,6 @@ class VirtualConnection(object):
         if self.cache_object_fetch:
             self._fetch_cache[key] = ret
         return ret
-
-    def set_keep_alive(self, interval, count):
-        if hasattr(self._libvirtconn, "setKeepAlive"):
-            self._libvirtconn.setKeepAlive(interval, count)
 
     def fetch_all_pools(self):
         """
@@ -242,13 +258,26 @@ class VirtualConnection(object):
             return self.cb_fetch_all_vols()  # pylint: disable=not-callable
         return self._fetch_all_vols_cached()
 
-    def clear_cache(self, pools=False):
-        if self.cb_clear_cache:
-            self.cb_clear_cache(pools=pools)  # pylint: disable=not-callable
-            return
+    def _fetch_all_nodedevs_cached(self):
+        key = self._FETCH_KEY_NODEDEVS
+        if key in self._fetch_cache:
+            return self._fetch_cache[key]
 
-        if pools:
-            self._fetch_cache.pop(self._FETCH_KEY_POOLS, None)
+        ignore, ignore, ret = pollhelpers.fetch_nodedevs(
+            self, {}, lambda obj, ignore: obj)
+        ret = [NodeDevice.parse(weakref.ref(self), obj.XMLDesc(0))
+               for obj in ret.values()]
+        if self.cache_object_fetch:
+            self._fetch_cache[key] = ret
+        return ret
+
+    def fetch_all_nodedevs(self):
+        """
+        Returns a list of NodeDevice() objects
+        """
+        if self.cb_fetch_all_nodedevs:
+            return self.cb_fetch_all_nodedevs()  # pylint: disable=not-callable
+        return self._fetch_all_nodedevs_cached()
 
 
     #########################

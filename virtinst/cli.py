@@ -2057,7 +2057,7 @@ class ParserHostdev(VirtCLIParser):
         def set_name_cb(opts, inst, cliname, val):
             ignore = opts
             ignore = cliname
-            val = NodeDevice.lookupNodeName(inst.conn, val)
+            val = NodeDevice.lookupNodedevFromString(inst.conn, val)
             inst.set_from_nodedev(val)
 
         self.set_param(None, "name", setter_cb=set_name_cb)

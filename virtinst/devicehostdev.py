@@ -53,8 +53,13 @@ class VirtualHostDevice(VirtualDevice):
                 self.device = nodedev.device
 
         elif nodedev.device_type == nodedev.CAPABILITY_TYPE_NET:
-            parentnode = nodedev.lookupNodeName(self.conn, nodedev.parent)
-            self.set_from_nodedev(parentnode, use_full_usb=use_full_usb)
+            founddev = None
+            for checkdev in self.conn.fetch_all_nodedevs():
+                if checkdev.name == nodedev.parent:
+                    founddev = checkdev
+                    break
+
+            self.set_from_nodedev(founddev, use_full_usb=use_full_usb)
 
         else:
             raise ValueError("Unknown node device type %s" % nodedev)
