@@ -1741,9 +1741,8 @@ class vmmAddHardware(vmmGObjectUI):
             dev = virtinst.VirtualHostDevice(self.conn.get_backend())
             # Hostdev collision
             names  = []
-            vms = self.conn.get_backend().fetch_all_guests()
-            for vm in vms:
-                for hostdev in vm.get_devices("hostdev"):
+            for vm in self.conn.list_vms():
+                for hostdev in vm.get_hostdev_devices():
                     if nodedev.compare_to_hostdev(hostdev):
                         names.append(vm.name)
             if names:
