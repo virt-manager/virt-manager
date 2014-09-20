@@ -86,7 +86,7 @@ class vmmLibvirtObject(vmmGObject):
         # Used for changing the backing object after a rename
         self._backend = newbackend
 
-    def _define_name_helper(self, objtype, rename_cb, newname):
+    def define_name(self, newname):
         oldname = self.get_xmlobj().name
         self._invalidate_xml()
         xmlobj = self._get_xmlobj_to_define()
@@ -94,13 +94,17 @@ class vmmLibvirtObject(vmmGObject):
             return
 
         logging.debug("Changing %s name from %s to %s",
-                      objtype, oldname, newname)
+                      self.__class__, oldname, newname)
         origxml = xmlobj.get_xml_config()
         xmlobj.name = newname
         newxml = xmlobj.get_xml_config()
 
         try:
-            rename_cb(self, origxml, newxml)
+            self._key = newname
+            self.conn.rename_object(self, origxml, newxml, oldname, newname)
+        except:
+            self._key = oldname
+            raise
         finally:
             self._invalidate_xml()
 

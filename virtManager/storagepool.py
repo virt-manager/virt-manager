@@ -189,10 +189,6 @@ class vmmStoragePool(vmmLibvirtObject):
     def get_last_refresh_time(self):
         return self._last_refresh_time
 
-    def define_name(self, newname):
-        return self._define_name_helper("storagepool",
-                                        self.conn.rename_pool,
-                                        newname)
 
     ###################
     # Volume handling #

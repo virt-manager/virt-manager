@@ -133,12 +133,6 @@ class vmmNetwork(vmmLibvirtObject):
         return self.is_active()
 
 
-    def define_name(self, newname):
-        return self._define_name_helper("network",
-                                        self.conn.rename_network,
-                                        newname)
-
-
     ###############
     # XML parsing #
     ###############

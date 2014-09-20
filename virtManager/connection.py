@@ -684,44 +684,56 @@ class vmmConnection(vmmGObject):
     def define_interface(self, xml):
         return self._backend.interfaceDefineXML(xml, 0)
 
-    def _rename_helper(self, objtype, define_cb, obj, origxml, newxml):
+    def rename_object(self, obj, origxml, newxml, oldname, newname):
+        if str(obj.__class__).endswith("vmmDomain'>"):
+            objlabel = "domain"
+            define_cb = self.define_domain
+            objlist = self._vms
+        elif str(obj.__class__).endswith("vmmStoragePool'>"):
+            objlabel = "storagepool"
+            define_cb = self.define_pool
+            objlist = self._pools
+        elif str(obj.__class__).endswith("vmmNetwork'>"):
+            objlabel = "network"
+            define_cb = self.define_network
+            objlist = self._nets
+        else:
+            raise RuntimeError("programming error: rename_object "
+                "helper doesn't support object class %s" % obj.__class__)
+
         # Undefine the original object
         obj.delete(force=False)
 
         newobj = None
+        success = False
         try:
+            # Redefine new domain
+            newobj = define_cb(newxml)
+            success = True
+        except Exception, renameerr:
             try:
-                # Redefine new domain
-                newobj = define_cb(newxml)
-            except Exception, renameerr:
-                try:
-                    logging.debug("Error defining new name %s XML", objtype,
-                        exc_info=True)
-                    newobj = define_cb(origxml)
-                except Exception, fixerr:
-                    logging.debug("Failed to redefine original %s!", objtype,
-                        exc_info=True)
-                    raise RuntimeError(
-                        _("%s rename failed. Attempting to recover also "
-                          "failed.\n\n"
-                          "Original error: %s\n\n"
-                          "Recover error: %s" %
-                          (objtype, str(renameerr), str(fixerr))))
-                raise
+                logging.debug("Error defining new name %s XML", objlabel,
+                    exc_info=True)
+                newobj = define_cb(origxml)
+            except Exception, fixerr:
+                logging.debug("Failed to redefine original %s!", objlabel,
+                    exc_info=True)
+                raise RuntimeError(
+                    _("%s rename failed. Attempting to recover also "
+                      "failed.\n\n"
+                      "Original error: %s\n\n"
+                      "Recover error: %s" %
+                      (objlabel, str(renameerr), str(fixerr))))
+            raise
         finally:
             if newobj:
                 # Reinsert handle into new obj
                 obj.change_name_backend(newobj)
 
-    def rename_vm(self, obj, origxml, newxml):
-        return self._rename_helper("domain", self.define_domain,
-                                   obj, origxml, newxml)
-    def rename_network(self, obj, origxml, newxml):
-        return self._rename_helper("network", self.define_network,
-                                   obj, origxml, newxml)
-    def rename_pool(self, obj, origxml, newxml):
-        return self._rename_helper("storagepool", self.define_pool,
-                                   obj, origxml, newxml)
+        if success:
+            objlist.pop(oldname)
+            objlist[newname] = obj
+
 
     #########################
     # Domain event handling #

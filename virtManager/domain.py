@@ -629,11 +629,6 @@ class vmmDomain(vmmLibvirtObject):
                 guest.maxmemory = int(maxmem)
         return self._redefine(change)
 
-    def define_name(self, newname):
-        return self._define_name_helper("domain",
-                                        self.conn.rename_vm,
-                                        newname)
-
     def define_overview(self, machine=_SENTINEL, description=_SENTINEL,
         title=_SENTINEL, idmap_list=_SENTINEL, loader=_SENTINEL):
         def change(guest):
