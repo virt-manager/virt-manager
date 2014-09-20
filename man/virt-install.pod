@@ -1486,13 +1486,14 @@ a graphical client.
        --os-variant fedora13
 
 Install a Fedora 9 plain QEMU guest, using LVM partition, virtual networking,
-booting from PXE, using VNC server/viewer
+booting from PXE, using VNC server/viewer, with virtio-scsi disk
 
   # virt-install \
        --connect qemu:///system \
        --name demo \
        --memory 500 \
-       --disk path=/dev/HostVG/DemoVM \
+       --disk path=/dev/HostVG/DemoVM,bus=scsi \
+       --controller virtio-scsi \
        --network network=default \
        --virt-type qemu
        --graphics vnc \
