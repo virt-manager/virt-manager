@@ -675,9 +675,10 @@ def start_install(guest, continue_inst, options):
     # waiting.  Otherwise, we can exit before the domain has finished
     # installing. Passing --wait will give the above semantics.
     #
-    wait_on_install = continue_inst
-    wait_time = -1
-    if options.wait is not None:
+    if options.wait is None:
+        wait_on_install = continue_inst
+        wait_time = -1
+    else:
         wait_on_install = True
         wait_time = options.wait * 60
 
@@ -686,10 +687,25 @@ def start_install(guest, continue_inst, options):
     # expires
     wait_on_console = not wait_on_install
 
-    # --wait 0 implies --noautoconsole
-    options.autoconsole = (wait_time != 0) and options.autoconsole or False
+    if wait_time == 0:
+        # --wait 0 implies --noautoconsole
+        autoconsole = False
+    else:
+        autoconsole = options.autoconsole
 
-    conscb = options.autoconsole and cli.show_console_for_guest or None
+    conscb = None
+    if autoconsole:
+        conscb = cli.get_console_cb(guest)
+        if not conscb:
+            # If there isn't any console to actually connect up,
+            # default to --wait -1 to get similarish behavior
+            autoconsole = False
+            if options.wait is None:
+                logging.warning(_("No console to launch for the guest, "
+                    "defaulting to --wait -1"))
+                wait_on_install = True
+                wait_time = -1
+
     meter = (options.quiet and
              progress.BaseMeter() or
              progress.TextMeter(fo=sys.stdout))
@@ -790,9 +806,9 @@ def check_domain(guest, dom, conscb, wait_for_install, wait_time, start_time):
         sys.exit(0)
 
     timestr = (not wait_forever and
-               _("%d minutes ") % (int(wait_time) / 60) or "")
+               _(" %d minutes") % (int(wait_time) / 60) or "")
     print_stdout(
-        _("Domain installation still in progress. Waiting "
+        _("Domain installation still in progress. Waiting"
           "%(time_string)s for installation to complete.") %
         {"time_string": timestr})
 

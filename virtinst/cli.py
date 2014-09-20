@@ -383,12 +383,8 @@ def _gfx_console(guest):
             "--connect", guest.conn.uri,
             "--wait", guest.name]
 
-    if not os.path.exists(args[0]):
-        logging.warn(_("Unable to connect to graphical console: "
-                       "virt-viewer not installed. Please install "
-                       "the 'virt-viewer' package."))
-        return None
-
+    logging.debug("Launching virt-viewer for graphics type '%s'",
+        guest.get_devices("graphics")[0].type)
     return _run_console(args)
 
 
@@ -397,6 +393,7 @@ def _txt_console(guest):
             "--connect", guest.conn.uri,
             "console", guest.name]
 
+    logging.debug("Connecting to text console")
     return _run_console(args)
 
 
@@ -419,21 +416,30 @@ def connect_console(guest, consolecb, wait):
         logging.debug("waitpid: %s: %s", e.errno, e.message)
 
 
-def show_console_for_guest(guest):
-    gdev = guest.get_devices("graphics")
-    if not gdev:
-        logging.debug("Connecting to text console")
-        return _txt_console(guest)
+def get_console_cb(guest):
+    gdevs = guest.get_devices("graphics")
+    if not gdevs:
+        return _txt_console
 
-    gtype = gdev[0].type
-    if gtype in ["default",
-                 VirtualGraphics.TYPE_VNC,
-                 VirtualGraphics.TYPE_SPICE]:
-        logging.debug("Launching virt-viewer for graphics type '%s'", gtype)
-        return _gfx_console(guest)
-    else:
+    gtype = gdevs[0].type
+    if gtype not in ["default",
+        VirtualGraphics.TYPE_VNC,
+        VirtualGraphics.TYPE_SPICE]:
         logging.debug("No viewer to launch for graphics type '%s'", gtype)
+        return
+
+    if not os.path.exists("/usr/bin/virt-viewer"):
+        logging.warn(_("Unable to connect to graphical console: "
+                       "virt-viewer not installed. Please install "
+                       "the 'virt-viewer' package."))
         return None
+
+    if not os.environ.get("DISPLAY", ""):
+        logging.warn(_("Graphics requested but DISPLAY is not set. "
+                       "Not running virt-viewer."))
+        return None
+
+    return _gfx_console
 
 
 ###########################

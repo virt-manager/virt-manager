@@ -96,7 +96,6 @@ def main(conn=None):
         options.dry = True
         options.quiet = True
 
-    conscb = options.autoconsole and cli.show_console_for_guest or None
     print_cb = print_stdout
     if options.quiet:
         print_cb = None
@@ -108,6 +107,10 @@ def main(conn=None):
             destdir=options.destination, dry=options.dry)
 
         guest = converter.get_guest()
+
+        conscb = None
+        if options.autoconsole:
+            conscb = cli.get_console_cb(guest) or None
 
         if options.xmlonly:
             print_stdout(guest.start_install(return_xml=True)[1],
