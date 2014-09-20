@@ -15,12 +15,15 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
+import fileinput
 import fnmatch
+import glob
 import imp
 import importlib
 import os
 import sys
 import unittest
+import xml.etree.ElementTree as ET
 
 _badmodules = ["gi.repository.Gtk", "gi.repository.Gdk"]
 
@@ -91,24 +94,29 @@ class TestMisc(unittest.TestCase):
 
 
     def test_ui_minimum_version(self):
-        import glob
-        import xml.etree.ElementTree as ET
         failures = []
         for filename in glob.glob("ui/*.ui"):
-            root = ET.parse(filename).getroot()
+            required_version = None
+            for line in fileinput.input(filename):
+                # This is much faster than XML parsing the whole file
+                if not line.strip().startswith('<requires '):
+                    continue
 
-            req = root[0]
-            if req.tag != "requires":
-                continue
+                req = ET.fromstring(line)
+                if (req.tag != "requires" or
+                    req.attrib.get("lib") != "gtk+"):
+                    continue
+                required_version = req.attrib["version"]
 
-            if req.attrib.get("lib") != "gtk+":
-                continue
-            version = req.attrib["version"]
-            if (int(version.split(".")[0]) > 3 or
-                int(version.split(".")[1]) > 8):
-                failures.append((filename, req.attrib["version"]))
+            if required_version is None:
+                raise AssertionError("ui file=%s doesn't have a <requires> "
+                    "tag for gtk+, it should say 3.8")
+
+            if (int(required_version.split(".")[0]) != 3 or
+                int(required_version.split(".")[1]) != 8):
+                failures.append((filename, required_version))
 
         if failures:
-            raise AssertionError("The following files require a gtk version "
-                "higher than our target of gtk-3.8:\n" +
+            raise AssertionError("The following files should require gtk "
+                "version of gtk-3.8, which is what we target:\n" +
                 "\n".join([("%s version=%s" % tup) for tup in failures]))
