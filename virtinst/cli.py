@@ -1012,15 +1012,23 @@ class VirtCLIParser(object):
         ret = []
 
         for inst in devlist:
-            opts = VirtOptionString(optstr, self._params, self.remove_first)
-            valid = True
-            for param in self._params:
-                if param.parse(opts, inst,
-                               support_cb=None, lookup=True) is False:
-                    valid = False
-                    break
-            if valid:
-                ret.append(inst)
+            try:
+                opts = VirtOptionString(optstr, self._params,
+                                        self.remove_first)
+                valid = True
+                for param in self._params:
+                    if param.parse(opts, inst,
+                                   support_cb=None, lookup=True) is False:
+                        valid = False
+                        break
+                if valid:
+                    ret.append(inst)
+            except Exception, e:
+                logging.debug("Exception parsing inst=%s optstr=%s",
+                              inst, optstr, exc_info=True)
+                fail(_("Error: --%(cli_arg_name)s %(options)s: %(err)s") %
+                        {"cli_arg_name": self.cli_arg_name,
+                         "options": optstr, "err": str(e)})
 
         return ret
 
