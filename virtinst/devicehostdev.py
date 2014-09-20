@@ -60,6 +60,34 @@ class VirtualHostDevice(VirtualDevice):
         else:
             raise ValueError("Unknown node device type %s" % nodedev)
 
+    def pretty_name(self):
+        def dehex(val):
+            if val.startswith("0x"):
+                val = val[2:]
+            return val
+
+        def safeint(val, fmt="%.3d"):
+            try:
+                int(val)
+            except:
+                return str(val)
+            return fmt % int(val)
+
+        label = self.type.upper()
+
+        if self.vendor and self.product:
+            label += " %s:%s" % (dehex(self.vendor), dehex(self.product))
+
+        elif self.bus and self.device:
+            label += " %s:%s" % (safeint(self.bus), safeint(self.device))
+
+        elif self.bus and self.slot and self.function and self.domain:
+            label += (" %s:%s:%s.%s" %
+                      (dehex(self.domain), dehex(self.bus),
+                       dehex(self.slot), dehex(self.function)))
+
+        return label
+
 
     _XML_PROP_ORDER = ["mode", "type", "managed", "vendor", "product",
                        "domain", "bus", "slot", "function"]

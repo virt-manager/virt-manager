@@ -159,59 +159,6 @@ remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
  DETAILS_PAGE_SNAPSHOTS) = range(3)
 
 
-def _build_hostdev_label(hostdev):
-    # String shown in the devices details section
-    srclabel = ""
-    # String shown in the VMs hardware list
-    hwlabel = ""
-
-    typ = hostdev.type
-    vendor = hostdev.vendor
-    product = hostdev.product
-    addrbus = hostdev.bus
-    addrdev = hostdev.device
-    addrslt = hostdev.slot
-    addrfun = hostdev.function
-    addrdom = hostdev.domain
-
-    def dehex(val):
-        if val.startswith("0x"):
-            val = val[2:]
-        return val
-
-    hwlabel = typ.upper()
-    srclabel = typ.upper()
-
-    if vendor and product:
-        # USB by vendor + product
-        devstr = " %s:%s" % (dehex(vendor), dehex(product))
-        srclabel += devstr
-        hwlabel += devstr
-
-    elif addrbus and addrdev:
-        def safeint(val, fmt="%.3d"):
-            try:
-                int(val)
-            except:
-                return str(val)
-            return fmt % int(val)
-
-        # USB by bus + dev
-        srclabel += (" Bus %s Device %s" %
-                     (safeint(addrbus), safeint(addrdev)))
-        hwlabel += " %s:%s" % (safeint(addrbus), safeint(addrdev))
-
-    elif addrbus and addrslt and addrfun and addrdom:
-        # PCI by bus:slot:function
-        devstr = (" %s:%s:%s.%s" %
-                  (dehex(addrdom), dehex(addrbus),
-                   dehex(addrslt), dehex(addrfun)))
-        srclabel += devstr
-        hwlabel += devstr
-
-    return srclabel, hwlabel
-
-
 def _label_for_device(dev):
     devtype = dev.virtual_device_type
 
@@ -267,7 +214,7 @@ def _label_for_device(dev):
     if devtype == "redirdev":
         return _("%s Redirector %s") % (dev.bus.upper(), dev.vmmindex + 1)
     if devtype == "hostdev":
-        return _build_hostdev_label(dev)[1]
+        return dev.pretty_name()
     if devtype == "sound":
         return _("Sound: %s" % dev.model)
     if devtype == "video":
@@ -2986,7 +2933,7 @@ class vmmDetails(vmmGObjectUI):
         if nodedev:
             pretty_name = nodedev.pretty_name()
         if not pretty_name:
-            pretty_name = _build_hostdev_label(hostdev)[0] or "-"
+            pretty_name = hostdev.pretty_name()
 
         uiutil.set_grid_row_visible(
             self.widget("hostdev-rombar"), hostdev.type == "pci")
