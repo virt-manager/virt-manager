@@ -33,6 +33,12 @@ from virtinst import util as util
 from virtinst import cli as virtinstcli
 from virtcli import cliconfig
 
+# This is massively heavy handed, but I can't figure out any way to shut
+# up the slew of gtk deprecation warnings that clog up our very useful
+# stdout --debug output. Of course we could drop use of deprecated APIs,
+# but it's a serious quantity of churn
+import warnings
+warnings.simplefilter("ignore")
 
 try:
     # Avoid a deprecation warning about threads_init
