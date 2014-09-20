@@ -477,6 +477,7 @@ class vmmCloneVM(vmmGObjectUI):
             info_label = Gtk.Label()
             info_label.set_alignment(0, .5)
             info_label.set_markup("<span size='small'>%s</span>" % failinfo)
+            info_label.set_line_wrap(True)
         if not is_default:
             disk_label += (definfo and " (%s)" % definfo or "")
 
