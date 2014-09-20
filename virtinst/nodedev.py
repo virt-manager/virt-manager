@@ -27,20 +27,19 @@ class XMLProperty(_XMLProperty):
     _track = False
 
 
-def _intify(val, do_hex=False):
-    try:
-        if do_hex:
-            return int(val or '0x00', 16)
-        else:
-            return int(val)
-    except:
-        return -1
+def _compare_int(nodedev_val, hostdev_val):
+    def _intify(val):
+        try:
+            if "0x" in str(val):
+                return int(val or '0x00', 16)
+            else:
+                return int(val)
+        except:
+            return -1
 
-
-def _attrVal(node, attr):
-    if not hasattr(node, attr):
-        return None
-    return getattr(node, attr)
+    nodedev_val = _intify(nodedev_val)
+    hostdev_val = _intify(hostdev_val)
+    return (nodedev_val == hostdev_val or hostdev_val == -1)
 
 
 class NodeDevice(XMLBuilder):
@@ -81,11 +80,11 @@ class NodeDevice(XMLBuilder):
 
         try:
             return _AddressStringToNodedev(conn, idstring)
-        except:
+        except Exception, e:
             logging.debug("Error looking up nodedev from idstring=%s",
                 idstring, exc_info=True)
-            raise RuntimeError(_("Did not find node device matching '%s'" %
-                idstring))
+            raise RuntimeError(_("Did not find node device matching '%s': %s" %
+                (idstring, e)))
 
 
     @staticmethod
@@ -180,22 +179,10 @@ class PCIDevice(NodeDevice):
         if hostdev.type != self.device_type:
             return False
 
-        h_bus = h_dev = h_dom = h_slot = h_func = None
-
-        h_dom = _intify(hostdev.domain, True)
-        h_bus = _intify(hostdev.bus, True)
-        h_slot = _intify(hostdev.slot, True)
-        h_func = _intify(hostdev.function, True)
-        n_dev = _intify(_attrVal(self, "device"))
-        n_bus = _intify(_attrVal(self, "bus"))
-        n_dom = _intify(_attrVal(self, "domain"))
-        n_func = _intify(_attrVal(self, "function"))
-        n_slot = _intify(_attrVal(self, "slot"))
-
-        if ((n_dev == h_dev and n_bus == h_bus) or
-            (n_dom == h_dom and n_func == h_func and
-             n_bus == h_bus and n_slot == h_slot)):
-            return True
+        return (_compare_int(self.domain, hostdev.domain) and
+            _compare_int(self.bus, hostdev.bus) and
+            _compare_int(self.slot, hostdev.slot) and
+            _compare_int(self.function, hostdev.function))
 
 
 class USBDevice(NodeDevice):
@@ -247,18 +234,10 @@ class USBDevice(NodeDevice):
         if devtype != self.device_type:
             return False
 
-        h_vid = h_pid = h_bus = h_dev = None
-
-        h_vid = hostdev.vendor or -1
-        h_pid = hostdev.product or -1
-        h_bus = _intify(hostdev.bus)
-        h_dev = _intify(hostdev.device)
-
-        if ((_attrVal(self, "product_id") == h_pid or h_pid == -1) and
-            (_attrVal(self, "vendor_id") == h_vid or h_vid == -1) and
-            (_intify(_attrVal(self, "bus")) == h_bus or h_bus == -1) and
-            (_intify(_attrVal(self, "device")) == h_dev or h_dev == -1)):
-            return True
+        return (_compare_int(self.product_id, hostdev.product) and
+            _compare_int(self.vendor_id, hostdev.vendor) and
+            _compare_int(self.bus, hostdev.bus) and
+            _compare_int(self.device, hostdev.device))
 
 
 class StorageDevice(NodeDevice):
@@ -382,13 +361,7 @@ def _AddressStringToNodedev(conn, addrstr):
     count = 0
     nodedev = None
 
-    devtype = hostdev.type
-    if devtype == "usb":
-        devtype = "usb_device"
-
     for xmlobj in conn.fetch_all_nodedevs():
-        if xmlobj.device_type != devtype:
-            continue
         if xmlobj.compare_to_hostdev(hostdev):
             nodedev = xmlobj
             count += 1
