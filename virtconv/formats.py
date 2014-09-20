@@ -187,6 +187,7 @@ class VirtConverter(object):
         if input_name:
             parser = _find_parser_by_name(input_name)
 
+        input_file = os.path.abspath(input_file)
         logging.debug("converter __init__ with input=%s parser=%s",
             input_file, parser)
 
