@@ -695,12 +695,12 @@ class vmmConnection(vmmGObject):
                 newobj = define_cb(newxml)
             except Exception, renameerr:
                 try:
-                    logging.exception("Error defining new name %s XML",
-                                      objtype)
+                    logging.debug("Error defining new name %s XML", objtype,
+                        exc_info=True)
                     newobj = define_cb(origxml)
                 except Exception, fixerr:
-                    logging.exception("Failed to redefine original %s!",
-                                      objtype)
+                    logging.debug("Failed to redefine original %s!", objtype,
+                        exc_info=True)
                     raise RuntimeError(
                         _("%s rename failed. Attempting to recover also "
                           "failed.\n\n"
