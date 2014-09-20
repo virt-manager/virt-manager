@@ -58,10 +58,6 @@ def cdrom_specified(guest, disk=None):
     return False
 
 
-def storage_specified(disks, nodisks, filesystems):
-    return bool(disks or nodisks or filesystems)
-
-
 def supports_pxe(guest):
     """
     Return False if we are pretty sure the config doesn't support PXE
@@ -126,10 +122,7 @@ def convert_old_init(options):
     logging.debug("Converted old --init to --boot %s", options.boot)
 
 
-def convert_old_disks(options):
-    if options.disk or options.nodisks:
-        return
-
+def _do_convert_old_disks(options):
     paths = virtinst.util.listify(options.file_paths)
     sizes = virtinst.util.listify(options.disksize)
 
@@ -158,9 +151,30 @@ def convert_old_disks(options):
         opts.append(optstr)
 
     options.disk = opts
-    options.file_paths = []
-    options.disksize = None
-    options.sparse = True
+
+
+def convert_old_disks(options):
+    if options.nodisks and (options.file_paths or
+                            options.disk or
+                            options.disksize):
+        fail(_("Cannot specify storage and use --nodisks"))
+
+    if ((options.file_paths or options.disksize or not options.sparse) and
+        options.disk):
+        fail(_("Cannot mix --file, --nonsparse, or --file-size with --disk "
+               "options. Use --disk PATH[,size=SIZE][,sparse=yes|no]"))
+
+    if not options.disk:
+        if options.nodisks:
+            options.disk = ["none"]
+        else:
+            _do_convert_old_disks(options)
+
+    del(options.file_paths)
+    del(options.disksize)
+    del(options.sparse)
+    del(options.nodisks)
+    logging.debug("Distilled --disk options: %s", options.disk)
 
 
 def convert_old_os_options(options):
@@ -400,11 +414,9 @@ def validate_required_options(options, guest):
         msg += "\n" + _("--memory amount in MiB is required")
 
     if (not guest.os.is_container() and
-        not storage_specified(options.disk,
-                              options.nodisks,
-                              options.filesystem)):
+        not (options.disk or options.filesystem)):
         msg += "\n" + (
-            _("--disk storage must be specified (override with --nodisks)"))
+            _("--disk storage must be specified (override with --disk none)"))
 
     if (not guest.os.is_container() and
         not (options.xmlonly or options.xmlstep) and
@@ -424,17 +436,6 @@ _cdrom_location_man_page = _("See the man page for examples of "
 
 
 def check_option_collisions(options, guest):
-    # Disk collisions
-    if options.nodisks and (options.file_paths or
-                            options.disk or
-                            options.disksize):
-        fail(_("Cannot specify storage and use --nodisks"))
-
-    if ((options.file_paths or options.disksize or not options.sparse) and
-        options.disk):
-        fail(_("Cannot mix --file, --nonsparse, or --file-size with --disk "
-               "options. Use --disk PATH[,size=SIZE][,sparse=yes|no]"))
-
     # Install collisions
     if sum([bool(l) for l in [options.pxe, options.location,
                       options.cdrom, options.import_install]]) > 1:
@@ -934,8 +935,7 @@ def parse_args():
 
     stog = parser.add_argument_group(_("Storage Configuration"))
     cli.add_disk_option(stog)
-    stog.add_argument("--nodisks", action="store_true",
-                    help=_("Don't set up any disks for the guest."))
+    stog.add_argument("--nodisks", action="store_true", help=argparse.SUPPRESS)
     cli.add_fs_option(stog)
 
     # Deprecated storage options

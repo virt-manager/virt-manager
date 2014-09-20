@@ -36,7 +36,7 @@ argument, example: virt-install --disk=?
 =head1 OPTIONS
 
 Most options are not required. Minimum requirements are --name, --memory,
-guest storage (--disk, --filesystem or --nodisks), and an install option.
+guest storage (--disk or --filesystem), and an install option.
 
 =over 2
 
@@ -383,7 +383,7 @@ C<--disk> or C<--filesystem>.
 
 Specify that the installation media is a live CD and thus the guest
 needs to be configured to boot off the CDROM device permanently. It
-may be desirable to also use the C<--nodisks> flag in combination.
+may be desirable to also use the C<--disk none> flag in combination.
 
 =item  -x EXTRA, --extra-args=EXTRA
 
@@ -655,7 +655,7 @@ possible values in L<http://www.libvirt.org/formatdomain.html#elementsDisks>
 =back
 
 See the examples section for some uses. This option deprecates -f/--file,
--s/--file-size, and --nonsparse.
+-s/--file-size, --nonsparse, and --nodisks.
 
 Use --disk=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsDisks>
 
@@ -696,11 +696,6 @@ The mount location to use in the guest.
 =back
 
 Use --filesystem=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsFilesystems>
-
-=item --nodisks
-
-Request a virtual machine without any local disk storage, typically used for
-running 'Live CD' images or installing to network storage (iSCSI or NFS root).
 
 =back
 
@@ -1505,7 +1500,7 @@ Run a Live CD image under Xen fullyvirt, in diskless environment
        --hvm \
        --name demo \
        --memory 500 \
-       --nodisks \
+       --disks none \
        --livecd \
        --graphics vnc \
        --cdrom /root/fedora7live.iso

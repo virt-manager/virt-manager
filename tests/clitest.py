@@ -505,9 +505,9 @@ c.add_compare("--disk %(EXISTIMG1)s --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-
 c.add_compare("--connect %(XENIA64URI)s --disk %(EXISTIMG1)s --import", "xen-ia64-default")  # ia64 default
 c.add_compare("--connect %(XENIA64URI)s --disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt", "xen-ia64-pv")  # ia64 pv
 c.add_compare("--connect %(XENIA64URI)s --disk %(EXISTIMG1)s --location %(TREEDIR)s --hvm", "xen-ia64-hvm")  # ia64 hvm
-c.add_valid("--nodisks --cdrom %(EXISTIMG1)s --livecd --hvm")  # HVM
-c.add_valid("--nodisks --boot hd --paravirt")  # PV
-c.add_valid("--nodisks --boot hd --paravirt --arch i686")  # 32 on 64 xen
+c.add_valid("--disk none --cdrom %(EXISTIMG1)s --livecd --hvm")  # HVM
+c.add_valid("--disk none --boot hd --paravirt")  # PV
+c.add_valid("--disk none --boot hd --paravirt --arch i686")  # 32 on 64 xen
 
 
 c = vinst.add_category("kvm", "--connect %(KVMURI)s --noautoconsole")
@@ -522,10 +522,10 @@ c.add_compare("--os-variant fedora20 --nodisks --boot fd --graphics sdl --arch s
 c.add_compare("--arch armv7l --machine vexpress-a9 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,extra_args=\"console=ttyAMA0 rw root=/dev/mmcblk0p3\" --disk %(EXISTIMG1)s --nographics", "arm-vexpress-plain", skip_check=support.SUPPORT_CONN_DISK_SD)
 c.add_compare("--arch armv7l --machine vexpress-a15 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,kernel_args=\"console=ttyAMA0 rw root=/dev/vda3\",extra_args=foo --disk %(EXISTIMG1)s --nographics --os-variant fedora19", "arm-vexpress-f19", skip_check=support.SUPPORT_CONN_VIRTIO_MMIO)
 c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none", "ppc64-pseries-f20")
-c.add_compare("--nodisks --location /tmp/fake.iso --nonetworks", "location-iso")  # Using --location iso mounting
+c.add_compare("--disk none --location /tmp/fake.iso --nonetworks", "location-iso")  # Using --location iso mounting
 c.add_valid("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --sound")  # HVM windows install with disk
 c.add_valid("--os-variant fedora20 --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --sound")  # F14 Directory tree URL install with extra-args
-c.add_invalid("--nodisks --boot network --machine foobar")  # Unknown machine type
+c.add_invalid("--disk none --boot network --machine foobar")  # Unknown machine type
 c.add_invalid("--nodisks --boot network --arch mips --virt-type kvm")  # Invalid domain type for arch
 c.add_invalid("--nodisks --boot network --paravirt --arch mips")  # Invalid arch/virt combo
 

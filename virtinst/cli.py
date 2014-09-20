@@ -1554,6 +1554,9 @@ class ParserDisk(VirtCLIParser):
 
 
     def _parse(self, opts, inst):
+        if opts.fullopts == "none":
+            return
+
         def parse_size(val):
             if val is None:
                 return None
