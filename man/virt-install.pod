@@ -993,31 +993,31 @@ proper device (if needed).  This applies to all PCI devices.
 
 Use --controller=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsControllers>
 
-=item --host-device=HOSTDEV
+=item --hostdev=HOSTDEV, --host-device=HOSTDEV
 
 Attach a physical host device to the guest. Some example values for HOSTDEV:
 
 =over 2
 
-=item B<--host-device pci_0000_00_1b_0>
+=item B<--hostdev pci_0000_00_1b_0>
 
 A node device name via libvirt, as shown by 'virsh nodedev-list'
 
-=item B<--host-device 001.003>
+=item B<--hostdev 001.003>
 
 USB by bus, device (via lsusb).
 
-=item B<--host-device 0x1234:0x5678>
+=item B<--hostdev 0x1234:0x5678>
 
 USB by vendor, product (via lsusb).
 
-=item B<--host-device 1f.01.02>
+=item B<--hostdev 1f.01.02>
 
 PCI device (via lspci).
 
 =back
 
-Use --host-device=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsHostDev>
+Use --hostdev=? to see a list of all available sub options. Complete details at L<http://libvirt.org/formatdomain.html#elementsHostDev>
 
 =item --sound MODEL
 

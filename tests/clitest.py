@@ -559,7 +559,7 @@ c.add_compare("""--hvm --pxe \
 --blkiotune weight=200,device_path=/dev/sdc,device_weight=300 \
 --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10 \
 --boot loader=/foo/bar \
---host-device net_00_1c_25_10_b1_e4,boot_order=4,rom_bar=off \
+--hostdev net_00_1c_25_10_b1_e4,boot_order=4,rom_bar=off \
 --features acpi=off,eoi=on,privnet=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=1234 \
 --clock offset=localtime,hpet_present=no,rtc_tickpolicy=merge \
 --pm suspend_to_mem=yes,suspend_to_disk=no \
@@ -729,7 +729,7 @@ c.add_valid("--redirdev usb,type=tcp,server=127.0.0.1:4002")  # Different host s
 
 c = vinst.add_category("hostdev", "--noautoconsole --nographics --nodisks --pxe")
 c.add_valid("--host-device usb_device_781_5151_2004453082054CA1BEEE")  # Host dev by libvirt name
-c.add_valid("--host-device 001.003 --host-device 15:0.1 --host-device 2:15:0.2 --host-device 0:15:0.3 --host-device 0x0781:0x5151,driver_name=vfio --host-device 04b3:4485")  # Many hostdev parsing types
+c.add_valid("--host-device 001.003 --hostdev 15:0.1 --host-device 2:15:0.2 --hostdev 0:15:0.3 --host-device 0x0781:0x5151,driver_name=vfio --host-device 04b3:4485")  # Many hostdev parsing types
 c.add_invalid("--host-device 1d6b:2")  # multiple USB devices with identical vendorId and productId
 c.add_invalid("--host-device pci_8086_2850_scsi_host_scsi_host")  # Unsupported hostdev type
 c.add_invalid("--host-device foobarhostdev")  # Unknown hostdev

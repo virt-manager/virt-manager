@@ -204,7 +204,7 @@ Before defining or updating the domain, show the generated XML diff and interact
 
 =item --console
 
-=item --host-device
+=item --hostdev
 
 =item --sound
 
@@ -299,11 +299,11 @@ Change disk 'hda' IO to native and use startup policy as 'optional'.
 Change all host devices to use driver_name=vfio for VM 'fedora20' on the remote connection
 
   # virt-xml --connect qemu+ssh://remotehost/system \
-             fedora20 --edit all --host-device driver_name=vfio
+             fedora20 --edit all --hostdev driver_name=vfio
 
 Hotplug host USB device 001.003 to running domain 'fedora19':
 
-  # virt-xml f19 --add-device --host-device 001.003 --update
+  # virt-xml f19 --add-device --hostdev 001.003 --update
 
 Add a spicevmc channel to the domain 'winxp', that will be available after the next VM shutdown.
 

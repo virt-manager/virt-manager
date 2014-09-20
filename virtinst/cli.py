@@ -562,9 +562,12 @@ def add_device_options(devg, sound_back_compat=False):
     devg.add_argument("--console", action="append",
                     help=_("Configure a text console connection between "
                            "the guest and host"))
-    devg.add_argument("--host-device", action="append",
-                    help=_("Configure physical host devices attached to the "
-                           "guest"))
+    devg.add_argument("--hostdev", action="append",
+                    help=_("Configure physical USB/PCI/etc host devices "
+                           "to be shared with the guest"))
+    # Back compat name
+    devg.add_argument("--host-device", action="append", dest="hostdev",
+                    help=argparse.SUPPRESS)
 
     # --sound used to be a boolean option, hence the nargs handling
     sound_kwargs = {
@@ -904,7 +907,7 @@ class VirtCLIParser(object):
         These values should be set by subclasses in _init_params
 
         @cli_arg_name: The command line argument this maps to, so
-            "host-device" for --host-device
+            "hostdev" for --hostdev
         @guest: Will be set parse(), the toplevel Guest object
         @remove_first: Passed to VirtOptionString
         @check_none: If the parsed option string is just 'none', return None
@@ -2060,7 +2063,7 @@ class ParserSound(VirtCLIParser):
 
 
 #########################
-# --host-device parsing #
+# --hostdev parsing #
 #########################
 
 class ParserHostdev(VirtCLIParser):
@@ -2152,7 +2155,7 @@ def build_parser_map(options, skip=None, only=None):
     register_parser("filesystem", ParserFilesystem)
     register_parser("video", ParserVideo)
     register_parser("sound", ParserSound)
-    register_parser("host-device", ParserHostdev)
+    register_parser("hostdev", ParserHostdev)
     register_parser("panic", ParserPanic)
 
     return parsermap
