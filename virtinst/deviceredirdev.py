@@ -33,6 +33,14 @@ class VirtualRedirDevice(VirtualDevice):
     TYPE_DEFAULT = "default"
     TYPES = ["tcp", "spicevmc", TYPE_DEFAULT]
 
+    @staticmethod
+    def pretty_type(typ):
+        if typ == "tcp":
+            return "TCP"
+        if typ == "spicevmc":
+            return "SpiceVMC"
+        return typ and typ.capitalize()
+
     def parse_friendly_server(self, serverstr):
         if serverstr.count(":") != 1:
             raise ValueError(_("Could not determine or unsupported "

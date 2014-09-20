@@ -5368,14 +5368,12 @@ if you know what you are doing.&lt;/small&gt;</property>
                                 <property name="top_padding">3</property>
                                 <property name="left_padding">12</property>
                                 <child>
-                                  <object class="GtkTable" id="table51">
+                                  <object class="GtkGrid" id="table51">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="border_width">3</property>
-                                    <property name="n_rows">2</property>
-                                    <property name="n_columns">2</property>
-                                    <property name="column_spacing">8</property>
                                     <property name="row_spacing">4</property>
+                                    <property name="column_spacing">8</property>
                                     <child>
                                       <object class="GtkLabel" id="label516">
                                         <property name="visible">True</property>
@@ -5385,8 +5383,8 @@ if you know what you are doing.&lt;/small&gt;</property>
                                         <property name="use_underline">True</property>
                                       </object>
                                       <packing>
-                                        <property name="x_options">GTK_FILL</property>
-                                        <property name="y_options"/>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">0</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -5397,10 +5395,8 @@ if you know what you are doing.&lt;/small&gt;</property>
                                         <property name="label" translatable="yes">Address:</property>
                                       </object>
                                       <packing>
+                                        <property name="left_attach">0</property>
                                         <property name="top_attach">1</property>
-                                        <property name="bottom_attach">2</property>
-                                        <property name="x_options">GTK_FILL</property>
-                                        <property name="y_options"/>
                                       </packing>
                                     </child>
                                     <child>
@@ -5412,11 +5408,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
-                                        <property name="right_attach">2</property>
                                         <property name="top_attach">1</property>
-                                        <property name="bottom_attach">2</property>
-                                        <property name="x_options">GTK_FILL</property>
-                                        <property name="y_options"/>
                                       </packing>
                                     </child>
                                     <child>
@@ -5428,9 +5420,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
-                                        <property name="right_attach">2</property>
-                                        <property name="x_options">GTK_FILL</property>
-                                        <property name="y_options">GTK_FILL</property>
+                                        <property name="top_attach">0</property>
                                       </packing>
                                     </child>
                                   </object>

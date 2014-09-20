@@ -159,56 +159,6 @@ remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
  DETAILS_PAGE_SNAPSHOTS) = range(3)
 
 
-def _prettyify_disk_bus(bus):
-    if bus in ["ide", "sata", "scsi", "usb", "sd"]:
-        return bus.upper()
-
-    if bus in ["xen"]:
-        return bus.capitalize()
-
-    if bus == "virtio":
-        return "VirtIO"
-
-    if bus == "spapr-vscsi":
-        return "vSCSI"
-
-    return bus
-
-
-def safeint(val, fmt="%.3d"):
-    try:
-        int(val)
-    except:
-        return str(val)
-    return fmt % int(val)
-
-
-def prettyify_bytes(val):
-    if val > (1024 * 1024 * 1024):
-        return "%2.2f GiB" % (val / (1024.0 * 1024.0 * 1024.0))
-    else:
-        return "%2.2f MiB" % (val / (1024.0 * 1024.0))
-
-
-def _build_redir_label(redirdev):
-    # String shown in the devices details section
-    addrlabel = ""
-    # String shown in the VMs hardware list
-    hwlabel = ""
-
-    if redirdev.type == 'spicevmc':
-        addrlabel = None
-    elif redirdev.type == 'tcp':
-        addrlabel += _("%s:%s") % (redirdev.host, redirdev.service)
-    else:
-        raise RuntimeError("unhandled redirection kind: %s" % redirdev.type)
-
-    hwlabel = _("%s Redirector %s") % (redirdev.bus.upper(),
-        redirdev.vmmindex + 1)
-
-    return addrlabel, hwlabel
-
-
 def _build_hostdev_label(hostdev):
     # String shown in the devices details section
     srclabel = ""
@@ -239,6 +189,13 @@ def _build_hostdev_label(hostdev):
         hwlabel += devstr
 
     elif addrbus and addrdev:
+        def safeint(val, fmt="%.3d"):
+            try:
+                int(val)
+            except:
+                return str(val)
+            return fmt % int(val)
+
         # USB by bus + dev
         srclabel += (" Bus %s Device %s" %
                      (safeint(addrbus), safeint(addrdev)))
@@ -255,23 +212,6 @@ def _build_hostdev_label(hostdev):
     return srclabel, hwlabel
 
 
-def lookup_nodedev(vmmconn, hostdev):
-    devtype = hostdev.type
-    found_dev = None
-
-    # For USB we want a device, not a bus
-    if devtype == 'usb':
-        devtype    = 'usb_device'
-
-    devs = vmmconn.get_nodedevs(devtype, None)
-    for dev in devs:
-        if dev.compare_to_hostdev(hostdev):
-            found_dev = dev
-            break
-
-    return found_dev
-
-
 def _label_for_device(dev):
     devtype = dev.virtual_device_type
 
@@ -280,7 +220,7 @@ def _label_for_device(dev):
         if dev.address.type == "spapr-vio":
             bus = "spapr-vscsi"
 
-        busstr = _prettyify_disk_bus(bus) or ""
+        busstr = virtinst.VirtualDisk.pretty_disk_bus(bus) or ""
 
         if dev.device == "floppy":
             devstr = "Floppy"
@@ -325,7 +265,7 @@ def _label_for_device(dev):
     if devtype == "graphics":
         return _("Display %s") % dev.pretty_type_simple(dev.type)
     if devtype == "redirdev":
-        return _build_redir_label(dev)[1]
+        return _("%s Redirector %s") % (dev.bus.upper(), dev.vmmindex + 1)
     if devtype == "hostdev":
         return _build_hostdev_label(dev)[1]
     if devtype == "sound":
@@ -2712,7 +2652,10 @@ class vmmDetails(vmmGObjectUI):
             elif not self.conn.is_remote():
                 ignore, val = virtinst.VirtualDisk.stat_local_path(path)
                 if val != 0:
-                    size = prettyify_bytes(val)
+                    if val > (1024 * 1024 * 1024):
+                        size = "%2.2f GiB" % (val / (1024.0 * 1024.0 * 1024.0))
+                    else:
+                        size = "%2.2f MiB" % (val / (1024.0 * 1024.0))
 
         is_cdrom = (devtype == virtinst.VirtualDisk.DEVICE_CDROM)
         is_floppy = (devtype == virtinst.VirtualDisk.DEVICE_FLOPPY)
@@ -2846,13 +2789,16 @@ class vmmDetails(vmmGObjectUI):
         if not rd:
             return
 
-        address = _build_redir_label(rd)[0] or "-"
+        address = None
+        if rd.type == 'tcp':
+            address = _("%s:%s") % (rd.host, rd.service)
 
-        devlabel = "<b>%s Redirector</b>" % rd.bus.upper()
-        self.widget("redir-title").set_markup(devlabel)
-        self.widget("redir-address").set_text(address)
+        self.widget("redir-title").set_markup(_label_for_device(rd))
+        self.widget("redir-type").set_text(rd.pretty_type(rd.type))
 
-        self.widget("redir-type").set_text(rd.type)
+        self.widget("redir-address").set_text(address or "")
+        uiutil.set_grid_row_visible(
+            self.widget("redir-address"), bool(address))
 
     def refresh_tpm_page(self):
         tpmdev = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -3027,8 +2973,16 @@ class vmmDetails(vmmGObjectUI):
         if rom_bar is None:
             rom_bar = True
 
+        devtype = hostdev.type
+        if hostdev.type == 'usb':
+            devtype = 'usb_device'
+
+        nodedev = None
+        for trydev in self.vm.conn.get_nodedevs(devtype, None):
+            if trydev.compare_to_hostdev(hostdev):
+                nodedev = trydev
+
         pretty_name = None
-        nodedev = lookup_nodedev(self.vm.conn, hostdev)
         if nodedev:
             pretty_name = nodedev.pretty_name()
         if not pretty_name:

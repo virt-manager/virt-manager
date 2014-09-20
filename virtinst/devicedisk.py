@@ -217,6 +217,18 @@ class VirtualDisk(VirtualDevice):
         return "file"
 
     @staticmethod
+    def pretty_disk_bus(bus):
+        if bus in ["ide", "sata", "scsi", "usb", "sd"]:
+            return bus.upper()
+        if bus in ["xen"]:
+            return bus.capitalize()
+        if bus == "virtio":
+            return "VirtIO"
+        if bus == "spapr-vscsi":
+            return "vSCSI"
+        return bus
+
+    @staticmethod
     def path_exists(conn, path):
         """
         Check if path exists. If we can't determine, return False
