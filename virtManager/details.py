@@ -1910,10 +1910,6 @@ class vmmDetails(vmmGObjectUI):
         kwargs = {}
         hotplug_args = {}
 
-        if self.edited(EDIT_NAME):
-            # Renaming is pretty convoluted, so do it here synchronously
-            self.vm.define_name(self.widget("overview-name").get_text())
-
         if self.edited(EDIT_TITLE):
             kwargs["title"] = self.widget("overview-title").get_text()
             hotplug_args["title"] = kwargs["title"]
@@ -1948,6 +1944,15 @@ class vmmDetails(vmmGObjectUI):
             else:
                 idmap_list = None
             kwargs["idmap_list"] = idmap_list
+
+        # This needs to be last
+        if self.edited(EDIT_NAME):
+            # Renaming is pretty convoluted, so do it here synchronously
+            self.vm.define_name(self.widget("overview-name").get_text())
+
+            if not kwargs and not hotplug_args:
+                # Saves some useless redefine attempts
+                return
 
         return vmmAddHardware.change_config_helper(self.vm.define_overview,
                                           kwargs, self.vm, self.err,
