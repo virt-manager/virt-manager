@@ -19,7 +19,6 @@
 
 import argparse
 import logging
-import os
 import re
 import sys
 import time
@@ -240,10 +239,6 @@ def _determine_default_graphics(guest, default_override):
     elif default_override is False:
         guest.skip_default_graphics = True
         return
-
-    if "DISPLAY" not in os.environ.keys():
-        logging.debug("DISPLAY is not set: defaulting to nographics.")
-        guest.skip_default_graphics = True
 
 
 def convert_old_graphics(guest, options, default_override=None):
