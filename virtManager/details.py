@@ -1511,7 +1511,7 @@ class vmmDetails(vmmGObjectUI):
         text = cpu_list.get_child().get_text()
 
         if self.widget("cpu-copy-host").get_active():
-            return virtinst.CPU.SPECIAL_MODE_HOST_COPY
+            return virtinst.CPU.SPECIAL_MODE_HOST_MODEL
 
         key = None
         for row in cpu_list.get_model():
@@ -2533,19 +2533,7 @@ class vmmDetails(vmmGObjectUI):
                 self.widget("cpu-model"),
                 virtinst.CPU.SPECIAL_MODE_HV_DEFAULT, 2)
 
-        # Determine if CPU definition is just the host copy
-        hostcpu = self.conn.caps.host.cpu
-        is_host = False
-        if (hostcpu.model and
-            cpu.model == hostcpu.model and
-            len(cpu.features) == len(hostcpu.features.names())):
-            is_host = True
-            for feature in cpu.features:
-                if (feature.policy != "require" or
-                    feature.name not in hostcpu.features.names()):
-                    is_host = False
-                    break
-
+        is_host = (cpu.mode == "host-model")
         self.widget("cpu-copy-host").set_active(bool(is_host))
         self.on_cpu_copy_host_clicked(self.widget("cpu-copy-host"))
 
