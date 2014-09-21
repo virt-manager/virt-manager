@@ -452,7 +452,7 @@ c.add_valid("--vcpus 4,cores=1")  # Topology auto-fill
 c.add_valid("--vcpus sockets=2,threads=2")  # Topology only
 c.add_valid("--cpu somemodel")  # Simple --cpu
 c.add_valid("--cpu foobar,+x2apic,+x2apicagain,-distest,forbid=foo,forbid=bar,disable=distest2,optional=opttest,require=reqtest,match=strict,vendor=meee")  # Crazy --cpu
-c.add_valid("--numatune 1,2,3,5-7,^6")  # Simple --numatune
+c.add_valid("--cpu host --numatune 1,2,3,5-7,^6")  # Simple --numatune
 c.add_valid("--numatune 1-3,4,mode=strict")  # More complex, parser should do the right thing here
 c.add_valid("--blkiotune weight=100,device_path=/home/test/1.img,device_weight=200")  # --blkiotune
 c.add_valid("--memtune hard_limit=10,soft_limit=20,swap_hard_limit=30,min_guarantee=40")  # --memtune
@@ -462,7 +462,6 @@ c.add_valid("--resource partition=/virtualmachines/production")  # --resource
 c.add_compare("--connect %(DEFAULTURI)s --cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
 c.add_invalid("--vcpus 32 --cpuset=969-1000")  # Bogus cpuset
 c.add_invalid("--vcpus 32 --cpuset=autofoo")  # Bogus cpuset
-c.add_invalid("--cpu host")  # --cpu host, but no host CPU in caps
 c.add_invalid("--clock foo_tickpolicy=merge")  # Unknown timer
 
 
