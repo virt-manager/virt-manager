@@ -25,6 +25,8 @@ from datetime import datetime
 from gi.repository import Libosinfo as libosinfo
 from inspect import isfunction
 
+# This is only for back compatibility with pre-libosinfo support.
+# This should never change.
 _aliases = {
     "altlinux" : "altlinux1.0",
     "debianetch" : "debian4",

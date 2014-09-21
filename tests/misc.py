@@ -120,3 +120,12 @@ class TestMisc(unittest.TestCase):
             raise AssertionError("The following files should require gtk "
                 "version of gtk-3.8, which is what we target:\n" +
                 "\n".join([("%s version=%s" % tup) for tup in failures]))
+
+    def test_libosinfo_aliases_ro(self):
+        from virtinst import osdict
+        aliases = getattr(osdict, "_aliases")
+
+        if len(aliases) != 39:
+            raise AssertionError(_("osdict._aliases changed size. It "
+                "should never be extended, since it is only for back "
+                "compat with pre-libosinfo osdict."))
