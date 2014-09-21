@@ -931,8 +931,18 @@ class vmmCreateInterface(vmmGObjectUI):
             if (itype == Interface.INTERFACE_TYPE_BRIDGE or
                 itype == Interface.INTERFACE_TYPE_BOND):
                 for row in ifaces:
-                    child = Interface(self.conn.get_backend(),
-                        parsexml=row[INTERFACE_ROW_KEY].get_xml_config())
+                    if row[INTERFACE_ROW_IS_DEFINED]:
+                        vmmiface = self.conn.get_interface(
+                            row[INTERFACE_ROW_NAME])
+
+                        # Use the inactive XML, which drops a bunch
+                        # elements that might cause netcf to choke on
+                        # for a sub-interface
+                        xml = vmmiface.get_xml(inactive=True)
+                    else:
+                        xml = row[INTERFACE_ROW_KEY].get_xml_config()
+
+                    child = Interface(self.conn.get_backend(), parsexml=xml)
                     iobj.add_interface(child)
                 check_conflict = True
 
