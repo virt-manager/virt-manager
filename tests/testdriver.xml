@@ -44,6 +44,7 @@
   <memory>8388608</memory>
   <currentMemory>2097152</currentMemory>
   <vcpu>2</vcpu>
+  <cpu mode='host-passthrough'/>
   <os>
     <type arch="i686">hvm</type>
     <kernel>/dev/default-pool/test-arm-kernel</kernel>
@@ -421,6 +422,7 @@ test-many-devices, like an alternate RNG.
   <memory>8388608</memory>
   <currentMemory>2097152</currentMemory>
   <vcpu>2</vcpu>
+  <cpu mode='host-model'/>
   <os>
     <type arch='i686'>hvm</type>
     <boot dev='hd'/>
