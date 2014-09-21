@@ -157,5 +157,5 @@ class vmmInterface(vmmLibvirtObject):
             return []
         return [proto.dhcp, proto.autoconf, ips]
 
-    def get_protocol_xml(self):
-        return self.get_xmlobj().protocols[:]
+    def get_protocol_xml(self, inactive=False):
+        return self.get_xmlobj(inactive=inactive).protocols[:]

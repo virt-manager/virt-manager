@@ -789,9 +789,14 @@ class vmmCreateInterface(vmmGObjectUI):
         ipv6 = None
 
         if not is_manual:
-            if copy_row[1] and copy_row[2]:
-                copy_name = copy_row[1].get_name()
-                proto_xml = copy_row[1].get_protocol_xml()
+            copy_vmmiface = copy_row[1]
+            copy_cancopy = copy_row[2]
+            if copy_vmmiface and copy_cancopy:
+                copy_name = copy_vmmiface.get_name()
+                # We always want the inactive protocol XML, which
+                # will list the on disk config, not the run time config,
+                # which doesn't list DHCP
+                proto_xml = copy_vmmiface.get_protocol_xml(inactive=True)
 
         else:
             # Build IPv4 Info
