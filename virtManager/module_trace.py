@@ -50,7 +50,7 @@ def generate_wrapper(origfunc, name):
             name.endswith(".connect") or
             name.startswith("libvirtError"))
 
-        if not is_non_network_libvirt_call:
+        if not is_non_network_libvirt_call and is_main_thread:
             tb = ""
             if is_main_thread:
                 tb = "\n%s" % "".join(traceback.format_stack())
