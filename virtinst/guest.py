@@ -968,7 +968,10 @@ class Guest(XMLBuilder):
         if not self.conn.check_support(self.conn.SUPPORT_CONN_USBREDIR):
             return
 
-        for ignore in range(4):
+        # If we use 4 devices here, we fill up all the emulated USB2 slots,
+        # and directly assigned devices are forced to fall back to USB1
+        # https://bugzilla.redhat.com/show_bug.cgi?id=1135488
+        for ignore in range(2):
             dev = VirtualRedirDevice(self.conn)
             dev.bus = "usb"
             dev.type = "spicevmc"
