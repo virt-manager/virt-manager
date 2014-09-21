@@ -398,6 +398,14 @@ def set_install_media(guest, location, cdpath, distro_variant):
         fail(_("Error validating install location: %s" % str(e)))
 
 
+def do_test_media_detection(conn, url):
+    (capsguest, capsdomain) = conn.caps.guest_lookup()
+    guest = conn.caps.build_virtinst_guest(conn, capsguest, capsdomain)
+    guest.installer = virtinst.DistroInstaller(conn)
+    guest.installer.location = url
+    print_stdout(guest.installer.detect_distro(guest), do_force=True)
+
+
 #############################
 # General option validation #
 #############################
@@ -921,6 +929,9 @@ def parse_args():
     insg.add_argument("--initrd-inject", action="append",
                     help=_("Add given file to root of initrd from --location"))
 
+    # Takes a URL and just prints to stdout the detected distro name
+    insg.add_argument("--test-media-detection", help=argparse.SUPPRESS)
+
     insg.add_argument("--os-type", dest="distro_type", help=argparse.SUPPRESS)
     insg.add_argument("--os-variant", dest="distro_variant",
         help=_("The OS variant being installed guests, "
@@ -1008,7 +1019,8 @@ def main(conn=None):
     options = parse_args()
 
     # Default setup options
-    options.quiet = options.xmlstep or options.xmlonly or options.quiet
+    options.quiet = (options.xmlstep or options.xmlonly or
+        options.test_media_detection or options.quiet)
 
     cli.setupLogging("virt-install", options.debug, options.quiet)
 
@@ -1023,6 +1035,10 @@ def main(conn=None):
 
     if conn is None:
         conn = cli.getConnection(options.connect)
+
+    if options.test_media_detection:
+        do_test_media_detection(conn, options.test_media_detection)
+        return 0
 
     if options.xmlstep not in [None, "1", "2", "3", "all"]:
         fail(_("--print-step must be 1, 2, 3, or all"))
