@@ -612,9 +612,7 @@ class vmmDetails(vmmGObjectUI):
             return
 
         self.topwin.hide()
-        if (self.console.viewer and
-            self.console.viewer.display and
-            self.console.viewer.display.get_visible()):
+        if self.console.viewer and self.console.viewer.get_visible():
             try:
                 self.console.close_viewer()
             except:
