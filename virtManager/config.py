@@ -286,11 +286,11 @@ class vmmConfig(object):
         return self.conf.notify_add("/console/grab-keys", cb)
 
     # This key is not intended to be exposed in the UI yet
-    def get_grab_keyboard(self):
+    def get_keyboard_grab_default(self):
         return self.conf.get("/console/grab-keyboard")
-    def set_grab_keyboard(self, val):
+    def set_keyboard_grab_default(self, val):
         self.conf.set("/console/grab-keyboard", val)
-    def on_grab_keyboard_changed(self, cb):
+    def on_keyboard_grab_default_changed(self, cb):
         return self.conf.notify_add("/console/grab-keyboard", cb)
 
     # Confirmation preferences
