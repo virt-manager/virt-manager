@@ -325,10 +325,14 @@ class _OsVariant(_OsVariantType):
         if not self._os:
             return _SENTINEL
 
+        if self.name.split(".")[0] in ["rhel7", "rhel6", "centos7", "centos6"]:
+            return True
+
         if self._os.get_distro() == "fedora":
             if self._os.get_version() == "unknown":
                 return _SENTINEL
             return int(self._os.get_version()) >= 18 or _SENTINEL
+
         return _SENTINEL
 
     def _is_hyperv_features(self):

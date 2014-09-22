@@ -523,6 +523,9 @@ c.add_compare("--arch armv7l --machine vexpress-a9 --boot kernel=/f19-arm.kernel
 c.add_compare("--arch armv7l --machine vexpress-a15 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,kernel_args=\"console=ttyAMA0 rw root=/dev/vda3\",extra_args=foo --disk %(EXISTIMG1)s --nographics --os-variant fedora19", "arm-vexpress-f19", skip_check=support.SUPPORT_CONN_VIRTIO_MMIO)
 c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none", "ppc64-pseries-f20")
 c.add_compare("--disk none --location /tmp/fake.iso --nonetworks", "location-iso")  # Using --location iso mounting
+c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults
+c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7")  # RHEL7 defaults
+c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7")  # Centos 7 defaults
 c.add_valid("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --sound")  # HVM windows install with disk
 c.add_valid("--os-variant fedora20 --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --sound")  # F14 Directory tree URL install with extra-args
 c.add_invalid("--disk none --boot network --machine foobar")  # Unknown machine type
