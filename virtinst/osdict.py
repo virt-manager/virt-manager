@@ -19,11 +19,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
-_SENTINEL = -1234
-_allvariants = {}
 from datetime import datetime
-from gi.repository import Libosinfo as libosinfo
 from inspect import isfunction
+import re
+
+from gi.repository import Libosinfo as libosinfo
+
 
 # This is only for back compatibility with pre-libosinfo support.
 # This should never change.
@@ -69,9 +70,49 @@ _aliases = {
     "windows" : "winxp",
     "solaris" : "solaris10",
 }
+_SENTINEL = -1234
+_allvariants = {}
 
 
-def _sort(tosort, sortpref=None):
+def _remove_older_point_releases(distro_list):
+    ret = distro_list[:]
+
+    def _get_minor_version(osobj):
+        return int(osobj.name.rsplit(".", 1)[-1])
+
+    def _find_latest(prefix):
+        """
+        Given a prefix like 'rhel4', find the latest 'rhel4.X',
+        and remove the rest from the os list
+        """
+        latest_os = None
+        first_id = None
+        for osobj in ret[:]:
+            if not re.match("%s\.\d+" % prefix, osobj.name):
+                continue
+
+            if first_id is None:
+                first_id = ret.index(osobj)
+            ret.remove(osobj)
+
+            if (latest_os and
+                _get_minor_version(latest_os) > _get_minor_version(osobj)):
+                continue
+            latest_os = osobj
+
+        if latest_os:
+            ret.insert(first_id, latest_os)
+
+    _find_latest("rhel4")
+    _find_latest("rhel5")
+    _find_latest("rhel6")
+    _find_latest("rhel7")
+    _find_latest("freebsd9")
+    _find_latest("freebsd10")
+    return ret
+
+
+def _sort(tosort, sortpref=None, limit_point_releases=False):
     sortby_mappings = {}
     distro_mappings = {}
     retlist = []
@@ -114,6 +155,9 @@ def _sort(tosort, sortpref=None):
         for key in distro_list:
             orig_key = sortby_mappings[key]
             retlist.append(tosort[orig_key])
+
+    if limit_point_releases:
+        retlist = _remove_older_point_releases(retlist)
 
     return retlist
 
@@ -539,6 +583,8 @@ def list_os(list_types=False, typename=None,
         if only_supported and not osinfo.supported:
             continue
         sortmap[key] = osinfo
+
+    kwargs["limit_point_releases"] = only_supported
     return _sort(sortmap, **kwargs)
 
 
