@@ -664,7 +664,7 @@ class Guest(XMLBuilder):
         self._set_video_defaults()
         self._set_sound_defaults()
 
-    def _is_os_container(self):
+    def _is_full_os_container(self):
         if not self.os.is_container():
             return False
         for fs in self.get_devices("filesystem"):
@@ -674,7 +674,7 @@ class Guest(XMLBuilder):
 
     def _set_osxml_defaults(self):
         if self.os.is_container() and not self.os.init:
-            if self._is_os_container():
+            if self._is_full_os_container():
                 self.os.init = "/sbin/init"
             self.os.init = self.os.init or "/bin/sh"
 
@@ -770,7 +770,7 @@ class Guest(XMLBuilder):
             self.features.acpi = None
             self.features.apic = None
             self.features.pae = None
-            if self._is_os_container():
+            if self._is_full_os_container():
                 self.features.privnet = True
             return
 
