@@ -797,7 +797,11 @@ class VirtOptionString(object):
         """
         self.fullopts = optstr
 
-        virtargmap = dict((arg.cliname, arg) for arg in virtargs)
+        virtargmap = {}
+        for arg in virtargs:
+            virtargmap[arg.cliname] = arg
+            for alias in arg.aliases:
+                virtargmap[alias] = arg
 
         # @opts: A dictionary of the mapping {cliname: val}
         # @orderedopts: A list of tuples (cliname: val), in the order
@@ -1290,7 +1294,8 @@ class ParserBoot(VirtCLIParser):
         self.set_param("os.loader_type", "loader_type")
         self.set_param("os.nvram", "nvram")
         self.set_param("os.nvram_template", "nvram_template")
-        self.set_param("os.kernel_args", "kernel_args", aliases=["extra_args"])
+        self.set_param("os.kernel_args", "kernel_args",
+            aliases=["extra_args"], can_comma=True)
         self.set_param("os.init", "init")
         self.set_param("os.arch", "arch")
         self.set_param("type", "domain_type")
