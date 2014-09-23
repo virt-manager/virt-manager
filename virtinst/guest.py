@@ -686,9 +686,6 @@ class Guest(XMLBuilder):
         if self.os.kernel or self.os.init:
             self.os.bootorder = []
 
-        if (self.os.machine is None and self.os.is_ppc64()):
-            self.os.machine = "pseries"
-
     def _set_clock_defaults(self):
         if not self.os.is_hvm():
             return

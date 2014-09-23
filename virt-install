@@ -360,7 +360,6 @@ def get_guest(conn, options):
                         typ=req_hv_type,
                         machine=options.machine)
         guest = conn.caps.build_virtinst_guest(conn, capsguest, capsdomain)
-        guest.os.machine = options.machine
     except Exception, e:
         fail(e)
 

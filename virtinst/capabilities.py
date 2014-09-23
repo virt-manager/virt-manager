@@ -360,10 +360,15 @@ class Guest(object):
     def bestDomainType(self, dtype=None, machine=None):
         domains = []
         for d in self.domains:
+            d.set_recommended_machine(None)
+
             if dtype and d.hypervisor_type != dtype.lower():
                 continue
             if machine and machine not in d.machines:
                 continue
+
+            if machine:
+                d.set_recommended_machine(machine)
             domains.append(d)
 
         return self._favoredDomain(domains)
@@ -378,9 +383,30 @@ class Domain(object):
         self.loader = loader
         self.machines = machines
 
+        self._recommended_machine = None
+
         if node is not None:
             self.parseXML(node)
 
+    def get_recommended_machine(self, conn, capsguest):
+        if self._recommended_machine:
+            return self._recommended_machine
+
+        if not conn.is_test() and not conn.is_qemu():
+            return None
+
+        if capsguest.arch == "ppc64" and "pseries" in self.machines:
+            return "pseries"
+        if capsguest.arch in ["armv7l", "aarch64"]:
+            if "virt" in self.machines:
+                return "virt"
+            if "vexpress-a15" in self.machines:
+                return "vexpress-a15"
+
+        return None
+
+    def set_recommended_machine(self, machine):
+        self._recommended_machine = machine
 
     def parseXML(self, node):
         child = node.children
@@ -695,5 +721,6 @@ class Capabilities(object):
         gobj.os.arch = guest.arch
         gobj.os.loader = domain.loader
         gobj.emulator = domain.emulator
+        gobj.os.machine = domain.get_recommended_machine(conn, guest)
 
         return gobj

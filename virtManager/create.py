@@ -717,12 +717,11 @@ class vmmCreate(vmmGObjectUI):
 
         defmachine = None
         prios = []
-        if self.capsguest.arch == "armv7l":
-            defmachine = "vexpress-a9"
-            prios = ["vexpress-a9", "vexpress-a15", "highbank", "midway"]
-        elif self.capsguest.arch == "ppc64":
-            defmachine = "pseries"
-            prios = ["pseries"]
+        recommended_machine = self.capsdomain.get_recommended_machine(
+            self.conn.get_backend(), self.capsguest)
+        if recommended_machine:
+            defmachine = recommended_machine
+            prios = [defmachine]
 
         for p in prios[:]:
             if p not in machines:

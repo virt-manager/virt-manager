@@ -5,7 +5,7 @@
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <os>
-    <type arch="armv7l">hvm</type>
+    <type arch="armv7l" machine="virt">hvm</type>
     <kernel>/f19-arm.kernel</kernel>
     <initrd>/f19-arm.initrd</initrd>
     <cmdline>console=ttyAMA0,1234 rw root=/dev/vda3</cmdline>
@@ -24,11 +24,12 @@
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/testvol1.img"/>
-      <target dev="sda" bus="sd"/>
+      <target dev="vda" bus="virtio"/>
     </disk>
     <interface type="bridge">
       <source bridge="eth0"/>
       <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
     </interface>
     <console type="pty"/>
   </devices>
