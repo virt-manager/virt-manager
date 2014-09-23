@@ -7,8 +7,8 @@
   <os>
     <type arch="ia64">hvm</type>
     <loader>/usr/lib/xen/boot/hvmloader</loader>
-    <kernel>./virtinst-vmlinuz.</kernel>
-    <initrd>./virtinst-initrd.img.</initrd>
+    <kernel>/tmp/virtinst-vmlinuz.</kernel>
+    <initrd>/tmp/virtinst-initrd.img.</initrd>
     <cmdline>method=tests/cli-test-xml/faketree</cmdline>
   </os>
   <features>

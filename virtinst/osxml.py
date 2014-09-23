@@ -92,10 +92,10 @@ class OSXML(XMLBuilder):
     enable_bootmenu = XMLProperty("./bootmenu/@enable", is_yesno=True)
     useserial = XMLProperty("./bios/@useserial", is_yesno=True)
 
-    kernel = XMLProperty("./kernel")
-    initrd = XMLProperty("./initrd")
+    kernel = XMLProperty("./kernel", do_abspath=True)
+    initrd = XMLProperty("./initrd", do_abspath=True)
+    dtb = XMLProperty("./dtb", do_abspath=True)
     kernel_args = XMLProperty("./cmdline")
-    dtb = XMLProperty("./dtb")
 
     init = XMLProperty("./init")
     loader = XMLProperty("./loader")

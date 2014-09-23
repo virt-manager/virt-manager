@@ -334,7 +334,8 @@ class XMLProperty(property):
     def __init__(self, xpath=None, name=None, doc=None,
                  set_converter=None, validate_cb=None, make_xpath_cb=None,
                  is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
-                 clear_first=None, default_cb=None, default_name=None):
+                 clear_first=None, default_cb=None, default_name=None,
+                 do_abspath=False):
         """
         Set a XMLBuilder class property that represents a value in the
         <domain> XML. For example
@@ -374,6 +375,7 @@ class XMLProperty(property):
             first explicit 'set'.
         @param default_name: If the user does a set and passes in this
             value, instead use the value of default_cb()
+        @param do_abspath: If True, run os.path.abspath on the passed value
         """
 
         self._xpath = xpath
@@ -386,6 +388,7 @@ class XMLProperty(property):
         self._is_int = is_int
         self._is_yesno = is_yesno
         self._is_onoff = is_onoff
+        self._do_abspath = do_abspath
 
         self._make_xpath_cb = make_xpath_cb
         self._validate_cb = validate_cb
@@ -487,6 +490,8 @@ class XMLProperty(property):
     def _convert_set_value(self, xmlbuilder, val):
         if self._default_name and val == self._default_name:
             val = self._default_cb(xmlbuilder)
+        elif self._do_abspath and val is not None:
+            val = os.path.abspath(val)
         elif self._is_onoff and val is not None:
             val = bool(val) and "on" or "off"
         elif self._is_yesno and val is not None:

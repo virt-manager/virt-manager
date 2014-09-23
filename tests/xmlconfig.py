@@ -354,8 +354,8 @@ class TestXMLConfig(unittest.TestCase):
         g = utils.get_basic_fullyvirt_guest(installer=i)
 
         g.add_device(utils.get_filedisk())
-        g.os.kernel = "kernel"
-        g.os.initrd = "initrd"
+        g.os.kernel = "/kernel"
+        g.os.initrd = "/initrd"
         g.os.kernel_args = "my kernel args"
 
         self._compare(g, "install-fullyvirt-import-kernel", False)
@@ -940,7 +940,7 @@ class TestXMLConfig(unittest.TestCase):
     def testFullKVMRHEL6(self):
         utils.set_conn(_plainkvm)
         i = utils.make_distro_installer(
-                                  location="tests/cli-test-xml/fakerhel6tree")
+            location="tests/cli-test-xml/fakerhel6tree")
         g = utils.get_basic_fullyvirt_guest("kvm", installer=i)
         g.add_device(utils.get_floppy())
         g.add_device(utils.get_filedisk("/dev/default-pool/rhel6.img", fake=False))

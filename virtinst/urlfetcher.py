@@ -68,7 +68,7 @@ class _ImageFetcher(object):
 
         prefix = "virtinst-" + prefix
         if "VIRTINST_TEST_SUITE" in os.environ:
-            fn = os.path.join(".", prefix)
+            fn = os.path.join("/tmp", prefix)
             fd = os.open(fn, os.O_RDWR | os.O_CREAT, 0640)
         else:
             (fd, fn) = tempfile.mkstemp(prefix=prefix,

@@ -266,8 +266,8 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(guest.os)
         check("bootorder", ['hd', 'fd', 'cdrom', 'network'], ["cdrom"])
         check("enable_bootmenu", False, True)
-        check("kernel", None, "foo.img")
-        check("initrd", None, "bar.img")
+        check("kernel", None, "/foo.img")
+        check("initrd", None, "/bar.img")
         check("dtb", None, "/baz.dtb")
         check("kernel_args", None, "ks=foo.ks")
 
