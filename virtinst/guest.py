@@ -766,6 +766,9 @@ class Guest(XMLBuilder):
         elif self.os.is_x86() and self.type == "kvm":
             if self.os.arch != self.conn.caps.host.cpu.arch:
                 return
+
+            # We need this check to handle the user setting --cpu none on
+            # the CLI to override our defaults
             if self.cpu.special_mode_was_set:
                 return
             self.cpu.set_special_mode(self.x86_cpu_default)
