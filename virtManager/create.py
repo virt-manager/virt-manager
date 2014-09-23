@@ -1633,7 +1633,7 @@ class vmmCreate(vmmGObjectUI):
             self.addstorage.check_path_search(
                 self, self.conn, path)
 
-        res = virtinst.osdict.get_recommended_resources(variant, self.capsguest.arch)
+        res = virtinst.osdict.get_recommended_resources(variant, self.guest)
 
         # Change the default values suggested to the user.
         ram_size = DEFAULT_MEM

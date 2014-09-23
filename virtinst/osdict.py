@@ -484,7 +484,7 @@ class _OsVariant(_OsVariantType):
 
         return None
 
-    def get_recommended_resources(self, arch):
+    def get_recommended_resources(self, guest):
         ret = {}
         def read_resource(resources, minimum, arch):
             # If we are reading the "minimum" block, allocate more
@@ -505,9 +505,14 @@ class _OsVariant(_OsVariantType):
         # in this case read first the minimum resources (if present)
         # and use them.
         read_resource(self._os.get_minimum_resources(), True, "all")
-        read_resource(self._os.get_minimum_resources(), True, arch)
+        read_resource(self._os.get_minimum_resources(), True, guest.os.arch)
         read_resource(self._os.get_recommended_resources(), False, "all")
-        read_resource(self._os.get_recommended_resources(), False, arch)
+        read_resource(self._os.get_recommended_resources(),
+            False, guest.os.arch)
+
+        # machvirt doesn't allow smp in non-kvm mode
+        if guest.type != "kvm" and guest.os.is_arm_machvirt():
+            ret["n-cpus"] = 1
 
         return ret
 
@@ -607,13 +612,13 @@ def lookup_osdict_key(variant, key, default):
     return val
 
 
-def get_recommended_resources(variant, arch):
+def get_recommended_resources(variant, guest):
     _load_os_data()
     v = _allvariants.get(variant)
     if v is None:
         return None
 
-    return v.get_recommended_resources(arch)
+    return v.get_recommended_resources(guest)
 
 
 def lookup_os_by_media(location):
