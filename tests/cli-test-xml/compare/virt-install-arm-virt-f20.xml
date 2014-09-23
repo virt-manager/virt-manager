@@ -1,0 +1,35 @@
+<domain type="qemu">
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch="armv7l" machine="virt">hvm</type>
+    <kernel>/f19-arm.kernel</kernel>
+    <initrd>/f19-arm.initrd</initrd>
+    <cmdline>console=ttyAMA0,1234 rw root=/dev/vda3</cmdline>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/bin/qemu-system-arm</emulator>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2"/>
+      <source file="/dev/default-pool/testvol1.img"/>
+      <target dev="sda" bus="sd"/>
+    </disk>
+    <interface type="bridge">
+      <source bridge="eth0"/>
+      <mac address="00:11:22:33:44:55"/>
+    </interface>
+    <console type="pty"/>
+  </devices>
+</domain>
