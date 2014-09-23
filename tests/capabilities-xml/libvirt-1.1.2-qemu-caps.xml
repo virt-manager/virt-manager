@@ -86,6 +86,7 @@
       <machine maxCpus='4'>vexpress-a9</machine>
       <machine maxCpus='1'>versatileab</machine>
       <machine maxCpus='1'>versatilepb</machine>
+      <machine maxCpus='4'>virt</machine>
       <machine maxCpus='1'>tosa</machine>
       <machine maxCpus='1'>lm3s6965evb</machine>
       <machine maxCpus='1'>lm3s811evb</machine>
@@ -118,6 +119,57 @@
     </arch>
     <features>
       <deviceboot/>
+    </features>
+  </guest>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name='aarch64'>
+      <wordsize>64</wordsize>
+      <emulator>/bin/qemu-system-aarch64</emulator>
+      <machine maxCpus='1'>integratorcp</machine>
+      <machine maxCpus='2'>nuri</machine>
+      <machine maxCpus='1'>verdex</machine>
+      <machine maxCpus='2'>smdkc210</machine>
+      <machine maxCpus='1'>collie</machine>
+      <machine maxCpus='4'>virt</machine>
+      <machine maxCpus='1'>spitz</machine>
+      <machine maxCpus='4'>realview-pbx-a9</machine>
+      <machine maxCpus='1'>realview-eb</machine>
+      <machine maxCpus='1'>versatilepb</machine>
+      <machine maxCpus='1'>realview-pb-a8</machine>
+      <machine maxCpus='1'>musicpal</machine>
+      <machine maxCpus='1'>z2</machine>
+      <machine maxCpus='1'>akita</machine>
+      <machine maxCpus='1'>kzm</machine>
+      <machine maxCpus='4'>realview-eb-mpcore</machine>
+      <machine maxCpus='1'>sx1</machine>
+      <machine maxCpus='1'>sx1-v1</machine>
+      <machine maxCpus='1'>cubieboard</machine>
+      <machine maxCpus='4'>highbank</machine>
+      <machine maxCpus='1'>terrier</machine>
+      <machine maxCpus='1'>n810</machine>
+      <machine maxCpus='1'>mainstone</machine>
+      <machine maxCpus='4'>midway</machine>
+      <machine maxCpus='1'>cheetah</machine>
+      <machine maxCpus='1'>tosa</machine>
+      <machine maxCpus='1'>borzoi</machine>
+      <machine maxCpus='1'>versatileab</machine>
+      <machine maxCpus='1'>lm3s6965evb</machine>
+      <machine maxCpus='1'>n800</machine>
+      <machine maxCpus='1'>connex</machine>
+      <machine maxCpus='1'>xilinx-zynq-a9</machine>
+      <machine maxCpus='4'>vexpress-a9</machine>
+      <machine maxCpus='4'>vexpress-a15</machine>
+      <machine maxCpus='1'>canon-a1100</machine>
+      <machine maxCpus='1'>lm3s811evb</machine>
+      <domain type='qemu'>
+      </domain>
+    </arch>
+    <features>
+      <cpuselection/>
+      <deviceboot/>
+      <disksnapshot default='on' toggle='no'/>
     </features>
   </guest>
 
