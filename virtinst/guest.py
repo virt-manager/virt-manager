@@ -837,11 +837,17 @@ class Guest(XMLBuilder):
     def _can_virtio(self, key):
         if not self.conn.is_qemu():
             return False
+
+        if self.os.is_arm_machvirt():
+            # Only supports virtio
+            return True
+
         if not self._lookup_osdict_key(key, False):
             return False
 
         if self.os.is_x86():
             return True
+
         if (self.os.is_arm_vexpress() and
             self.os.dtb and
             self._lookup_osdict_key("virtiommio", False) and

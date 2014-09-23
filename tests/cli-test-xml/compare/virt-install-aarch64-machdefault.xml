@@ -24,7 +24,7 @@
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/testvol1.img"/>
-      <target dev="hda" bus="ide"/>
+      <target dev="sda" bus="sd"/>
     </disk>
     <interface type="bridge">
       <source bridge="eth0"/>

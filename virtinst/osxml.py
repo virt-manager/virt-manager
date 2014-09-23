@@ -50,10 +50,18 @@ class OSXML(XMLBuilder):
 
     def is_x86(self):
         return self.arch == "x86_64" or self.arch == "i686"
-    def is_arm(self):
+
+    def is_arm32(self):
         return self.arch == "armv7l"
+    def is_arm64(self):
+        return self.arch == "aarch64"
+    def is_arm(self):
+        return self.is_arm32() or self.is_arm64()
     def is_arm_vexpress(self):
         return self.is_arm() and str(self.machine).startswith("vexpress-")
+    def is_arm_machvirt(self):
+        return self.is_arm() and self.machine == "virt"
+
     def is_ppc64(self):
         return self.arch == "ppc64"
     def is_pseries(self):
