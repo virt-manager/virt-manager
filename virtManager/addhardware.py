@@ -1744,7 +1744,7 @@ class vmmAddHardware(vmmGObjectUI):
             for vm in self.conn.list_vms():
                 for hostdev in vm.get_hostdev_devices():
                     if nodedev.compare_to_hostdev(hostdev):
-                        names.append(vm.name)
+                        names.append(vm.get_name())
             if names:
                 res = self.err.yes_no(
                         _('The device is already in use by other guests %s') %
