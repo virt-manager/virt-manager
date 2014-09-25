@@ -564,7 +564,8 @@ class vmmEngine(vmmGObject):
         show_errmsg = True
 
         if conn.is_remote():
-            logging.debug(conn.get_transport())
+            logging.debug("connect_error: conn transport=%s",
+                conn.get_transport())
             if re.search(r"nc: .* -- 'U'", tb):
                 hint += _("The remote host requires a version of netcat/nc\n"
                           "which supports the -U option.")
