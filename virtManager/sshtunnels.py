@@ -254,7 +254,7 @@ class _Tunnel(object):
             self._outfds[1].close()
             self._errfds[1].close()
 
-        logging.debug("Open  tunnel PID=%d OUTFD=%d ERRFD=%d",
+        logging.debug("Opened tunnel PID=%d OUTFD=%d ERRFD=%d",
                       pid, self._outfds[0].fileno(), self._errfds[0].fileno())
         self._errfds[0].setblocking(0)
 
