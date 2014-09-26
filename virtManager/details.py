@@ -2559,6 +2559,7 @@ class vmmDetails(vmmGObjectUI):
             return
 
         path = disk.path
+        source_pool = disk.sourcePool
         devtype = disk.device
         ro = disk.read_only
         share = disk.shareable
@@ -2584,7 +2585,13 @@ class vmmDetails(vmmGObjectUI):
         if not path:
             size = "-"
         else:
-            vol = self.conn.get_vol_by_path(path)
+            if source_pool:
+                pool = self.conn.get_pool(source_pool)
+                if pool:
+                    vol = pool.get_volume(path)
+            else:
+                vol = self.conn.get_vol_by_path(path)
+
             if vol:
                 size = vol.get_pretty_capacity()
             elif not self.conn.is_remote():
