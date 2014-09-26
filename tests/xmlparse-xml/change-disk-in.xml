@@ -62,6 +62,12 @@
       <source dev="/dev/null"/>
       <target dev="vda" bus="virtio"/>
     </disk>
+    <disk type='volume' device='disk'>
+      <driver name='qemu'/>
+      <source pool='defaultPool' volume='foobar'/>
+      <target dev='vda' bus='virtio'/>
+      <readonly/>
+    </disk>
     <input type="mouse" bus="ps2"/>
     <graphics type="vnc" display=":3.4" xauth="/tmp/.Xauthority"/>
     <console type="pty"/>

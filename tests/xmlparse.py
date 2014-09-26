@@ -331,6 +331,7 @@ class XMLParseTest(unittest.TestCase):
         disk3.size = 1
         disk6 = disks[5]
         disk6.size = 1
+        disk9 = disks[8]
 
         check = self._make_checker(disk1)
         check("path", "/tmp/test.img", "/dev/null")
@@ -369,6 +370,9 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(disk6.boot)
         check("order", None, 7, None)
+
+        check = self._make_checker(disk9)
+        check("sourcePool", "defaultPool", "anotherPool")
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

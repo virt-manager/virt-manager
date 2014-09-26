@@ -182,7 +182,8 @@ class VirtualDisk(VirtualDevice):
     TYPE_FILE = "file"
     TYPE_BLOCK = "block"
     TYPE_DIR = "dir"
-    types = [TYPE_FILE, TYPE_BLOCK, TYPE_DIR]
+    TYPE_VOLUME = "volume"
+    types = [TYPE_FILE, TYPE_BLOCK, TYPE_DIR, TYPE_VOLUME]
 
     IO_MODE_NATIVE = "native"
     IO_MODE_THREADS = "threads"
@@ -214,6 +215,8 @@ class VirtualDisk(VirtualDevice):
             return "dev"
         elif disk_type == VirtualDisk.TYPE_DIR:
             return "dir"
+        elif disk_type == VirtualDisk.TYPE_VOLUME:
+            return "volume"
         return "file"
 
     @staticmethod
@@ -606,6 +609,7 @@ class VirtualDisk(VirtualDevice):
                            clear_first=["./source/@" + target for target in
                                         _TARGET_PROPS])
 
+    sourcePool = XMLProperty("./source/@pool")
     sourceStartupPolicy = XMLProperty("./source/@startupPolicy")
     device = XMLProperty("./@device",
                          default_cb=lambda s: s.DEVICE_DISK)

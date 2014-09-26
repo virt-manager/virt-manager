@@ -5,8 +5,8 @@
        <boot order="1"/>
 +      <readonly/>
      </disk>
-     <disk type="block" device="disk">
-       <source dev="/dev/default-pool/overlay.img"/>
+     <disk type="volume" device="disk">
+       <driver name="qemu"/>
 
 Domain 'test-many-devices' defined successfully.
 Changes will take effect after the next domain shutdown.
