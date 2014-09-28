@@ -603,6 +603,8 @@ setup(
         ]),
         ("share/glib-2.0/schemas",
          ["data/org.virt-manager.virt-manager.gschema.xml"]),
+        ("share/GConf/gsettings",
+         ["data/org.virt-manager.virt-manager.convert"]),
         ("share/virt-manager/ui", glob.glob("ui/*.ui")),
 
         ("share/man/man1", [
