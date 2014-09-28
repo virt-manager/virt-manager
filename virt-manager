@@ -168,12 +168,12 @@ def main():
         # Ignore SIGHUP, otherwise a serial console closing drops the whole app
         signal.signal(signal.SIGHUP, signal.SIG_IGN)
 
-    # The never ending fork+gconf/gsettings problems now require
-    # us to import Gtk _after_ the fork. This creates a funny race,
-    # since we need to parse the command line arguments to know if
-    # we need to fork, but need to import Gtk before cli processing
-    # so it can handle --g-fatal-args. We strip out our flags first
-    # and pass the left overs to gtk
+    # The never ending fork+gsettings problems now require us to
+    # import Gtk _after_ the fork. This creates a funny race, since we
+    # need to parse the command line arguments to know if we need to
+    # fork, but need to import Gtk before cli processing so it can
+    # handle --g-fatal-args. We strip out our flags first and pass the
+    # left overs to gtk
     origargv = sys.argv
     try:
         sys.argv = origargv[:1] + leftovers[:]

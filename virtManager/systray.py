@@ -75,7 +75,7 @@ class vmmSystray(vmmGObject):
 
         self.init_systray_menu()
 
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_view_system_tray_changed(self.show_systray))
 
         self.show_systray()

@@ -371,16 +371,16 @@ class vmmDomain(vmmLibvirtObject):
         self.snapshots_supported()
 
         # Hook up listeners that need to be cleaned up
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_stats_enable_cpu_poll_changed(
                 self.toggle_sample_cpu_stats))
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_stats_enable_net_poll_changed(
                 self.toggle_sample_network_traffic))
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_stats_enable_disk_poll_changed(
                 self.toggle_sample_disk_io))
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_stats_enable_memory_poll_changed(
                 self.toggle_sample_mem_stats))
 

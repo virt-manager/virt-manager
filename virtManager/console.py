@@ -199,7 +199,7 @@ class VNCViewer(Viewer):
             try:
                 keys = [int(k) for k in keys.split(',')]
             except:
-                logging.debug("Error in grab_keys configuration in GConf",
+                logging.debug("Error in grab_keys configuration in Gsettings",
                               exc_info=True)
                 return
 
@@ -359,7 +359,7 @@ class SpiceViewer(Viewer):
             try:
                 keys = [int(k) for k in keys.split(',')]
             except:
-                logging.debug("Error in grab_keys configuration in GConf",
+                logging.debug("Error in grab_keys configuration in Gsettings",
                               exc_info=True)
                 return
 
@@ -632,21 +632,21 @@ class vmmConsolePages(vmmGObjectUI):
         # or it changes will be overwritten
 
         self.refresh_scaling_from_settings()
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.vm.on_console_scaling_changed(
                 self.refresh_scaling_from_settings))
         self.refresh_resizeguest_from_settings()
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.vm.on_console_resizeguest_changed(
                 self.refresh_resizeguest_from_settings))
 
         scroll = self.widget("console-gfx-scroll")
         scroll.connect("size-allocate", self.scroll_size_allocate)
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_console_accels_changed(self.set_enable_accel))
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_keys_combination_changed(self.grab_keys_changed))
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_keyboard_grab_default_changed(
             self.keyboard_grab_default_changed))
 

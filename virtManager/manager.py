@@ -250,34 +250,34 @@ class vmmManager(vmmGObjectUI):
     ################
 
     def init_stats(self):
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_vmlist_guest_cpu_usage_visible_changed(
                                 self.toggle_guest_cpu_usage_visible_widget))
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_vmlist_host_cpu_usage_visible_changed(
                                 self.toggle_host_cpu_usage_visible_widget))
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_vmlist_memory_usage_visible_changed(
                                 self.toggle_memory_usage_visible_widget))
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_vmlist_disk_io_visible_changed(
                                 self.toggle_disk_io_visible_widget))
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_vmlist_network_traffic_visible_changed(
                                 self.toggle_network_traffic_visible_widget))
 
         # Register callbacks with the global stats enable/disable values
         # that disable the associated vmlist widgets if reporting is disabled
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_stats_enable_cpu_poll_changed(
                 self.enable_polling, COL_GUEST_CPU))
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_stats_enable_disk_poll_changed(
                 self.enable_polling, COL_DISK))
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_stats_enable_net_poll_changed(
                 self.enable_polling, COL_NETWORK))
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_stats_enable_memory_poll_changed(
                 self.enable_polling, COL_MEM))
 

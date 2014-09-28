@@ -1652,7 +1652,7 @@ class vmmCreate(vmmGObjectUI):
         self.addstorage.widget("config-storage-size").set_value(storage_size)
 
         # Validation passed, store the install path (if there is one) in
-        # gconf
+        # gsettings
         self.get_config_local_media(store_media=True)
         self.get_config_url_info(store_media=True)
         return True

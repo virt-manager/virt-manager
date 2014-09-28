@@ -188,7 +188,7 @@ class vmmConfig(object):
         except:
             return False
 
-    # General app wide helpers (gconf agnostic)
+    # General app wide helpers (gsettings agnostic)
 
     def get_appname(self):
         return self.appname
@@ -493,9 +493,9 @@ class vmmConfig(object):
 
 
     # URL/Media path history
-    def _url_add_helper(self, gconf_path, url):
+    def _url_add_helper(self, gsettings_path, url):
         maxlength = 10
-        urls = self.conf.get(gconf_path)
+        urls = self.conf.get(gsettings_path)
         if urls is None:
             urls = []
 
@@ -504,7 +504,7 @@ class vmmConfig(object):
             urls.insert(0, url)
             if len(urls) > maxlength:
                 del urls[len(urls) - 1]
-            self.conf.set(gconf_path, urls)
+            self.conf.set(gsettings_path, urls)
 
     def add_media_url(self, url):
         self._url_add_helper("/urls/urls", url)

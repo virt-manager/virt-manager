@@ -54,7 +54,7 @@ class vmmGObject(GObject.GObject):
 
         self._gobject_handles = []
         self._gobject_timeouts = []
-        self._gconf_handles = []
+        self._gsettings_handles = []
 
         self._signal_id_map = {}
         self._next_signal_id = 1
@@ -69,8 +69,8 @@ class vmmGObject(GObject.GObject):
         # Do any cleanup required to drop reference counts so object is
         # actually reaped by python. Usually means unregistering callbacks
         try:
-            for h in self._gconf_handles[:]:
-                self.remove_gconf_handle(h)
+            for h in self._gsettings_handles[:]:
+                self.remove_gsettings_handle(h)
             for h in self._gobject_handles[:]:
                 if GObject.GObject.handler_is_connected(self, h):
                     self.disconnect(h)
@@ -97,11 +97,11 @@ class vmmGObject(GObject.GObject):
         self._gobject_handles.remove(handle)
         return ret
 
-    def add_gconf_handle(self, handle):
-        self._gconf_handles.append(handle)
-    def remove_gconf_handle(self, handle):
+    def add_gsettings_handle(self, handle):
+        self._gsettings_handles.append(handle)
+    def remove_gsettings_handle(self, handle):
         self.config.remove_notifier(handle)
-        self._gconf_handles.remove(handle)
+        self._gsettings_handles.remove(handle)
 
     def add_gobject_timeout(self, handle):
         self._gobject_timeouts.append(handle)

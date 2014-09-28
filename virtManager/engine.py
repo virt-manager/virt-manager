@@ -113,9 +113,9 @@ class vmmEngine(vmmGObject):
 
         self.init_systray()
 
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_stats_update_interval_changed(self.reschedule_timer))
-        self.add_gconf_handle(
+        self.add_gsettings_handle(
             self.config.on_view_system_tray_changed(self.system_tray_changed))
 
         self.schedule_timer()

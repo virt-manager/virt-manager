@@ -215,7 +215,7 @@ class vmmErrorDialog(vmmGObject):
         @dialog_type: Maps to FileChooserDialog 'action'
         @confirm_func: Optional callback function if file is chosen.
         @browse_reason: The vmmConfig.CONFIG_DIR* reason we are browsing.
-            If set, this will override the 'folder' parameter with the gconf
+            If set, this will override the 'folder' parameter with the gsettings
             value, and store the user chosen path.
         """
         import os
@@ -280,7 +280,7 @@ class vmmErrorDialog(vmmGObject):
             ret = fcdialog.get_filename()
         fcdialog.destroy()
 
-        # Store the chosen directory in gconf if necessary
+        # Store the chosen directory in gsettings if necessary
         if ret and browse_reason and not ret.startswith("/dev"):
             self.config.set_default_directory(
                 os.path.dirname(ret), browse_reason)
