@@ -1537,8 +1537,7 @@ options:
        --paravirt \
        --name demo \
        --memory 500 \
-       --file /var/lib/xen/images/demo.img \
-       --file-size 6 \
+       --disk /var/lib/xen/images/demo.img,size=6 \
        --graphics none \
        --location http://download.fedora.redhat.com/pub/fedora/linux/core/6/x86_64/os/
 
