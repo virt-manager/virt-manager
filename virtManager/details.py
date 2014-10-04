@@ -273,7 +273,7 @@ def _icon_for_device(dev):
         "rng": "system-run",
         "tpm": "device_cpu",
         "smartcard": "device_serial",
-        "filesystem": Gtk.STOCK_DIRECTORY,
+        "filesystem": "folder",
         "controller": "device_pci",
         "panic": "system-run",
     }

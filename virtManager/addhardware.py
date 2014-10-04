@@ -383,7 +383,7 @@ class vmmAddHardware(vmmGObjectUI):
         add_hw_option("Watchdog", "device_pci", PAGE_WATCHDOG,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."))
-        add_hw_option("Filesystem", Gtk.STOCK_DIRECTORY, PAGE_FILESYSTEM,
+        add_hw_option("Filesystem", "folder", PAGE_FILESYSTEM,
                       self.conn.check_support(
                         self.conn.SUPPORT_CONN_FILESYSTEM) and
                       not self.vm.stable_defaults(),
