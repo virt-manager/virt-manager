@@ -2586,9 +2586,11 @@ class vmmDetails(vmmGObjectUI):
             size = "-"
         else:
             if source_pool:
-                pool = self.conn.get_pool(source_pool)
-                if pool:
+                try:
+                    pool = self.conn.get_pool(source_pool)
                     vol = pool.get_volume(path)
+                except KeyError:
+                    vol = None
             else:
                 vol = self.conn.get_vol_by_path(path)
 
