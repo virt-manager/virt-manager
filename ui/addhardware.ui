@@ -1732,12 +1732,13 @@
                             <property name="row_spacing">6</property>
                             <property name="column_spacing">6</property>
                             <child>
-                              <object class="GtkLabel" id="label14">
+                              <object class="GtkLabel" id="panic-type-label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Address _Type:</property>
                                 <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">panic-type</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -1755,12 +1756,13 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label16">
+                              <object class="GtkLabel" id="panic-iobase-label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_IO Base:</property>
                                 <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">panic-iobase</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
