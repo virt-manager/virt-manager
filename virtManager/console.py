@@ -377,6 +377,13 @@ class SpiceViewer(Viewer):
         self._display.set_property("grab-keyboard",
             self.config.get_keyboard_grab_default())
 
+    def _close_main_channel(self):
+        for i in self._main_channel_hids:
+            self.main_channel.handler_disconnect(i)
+        self._main_channel_hids = []
+
+        self.main_channel = None
+
     def close(self):
         if self.spice_session is not None:
             self.spice_session.disconnect()
@@ -387,11 +394,7 @@ class SpiceViewer(Viewer):
         self._display = None
         self._display_channel = None
 
-        for i in self._main_channel_hids:
-            self.main_channel.handler_disconnect(i)
-        self._main_channel_hids = []
-
-        self.main_channel = None
+        self._close_main_channel()
         self.usbdev_manager = None
 
     def is_open(self):
@@ -405,6 +408,7 @@ class SpiceViewer(Viewer):
             self.console.disconnected()
         elif event == SpiceClientGLib.ChannelEvent.ERROR_AUTH:
             self.console.activate_auth_page()
+            self._close_main_channel()
         elif event in [SpiceClientGLib.ChannelEvent.ERROR_CONNECT,
                        SpiceClientGLib.ChannelEvent.ERROR_IO,
                        SpiceClientGLib.ChannelEvent.ERROR_LINK,
