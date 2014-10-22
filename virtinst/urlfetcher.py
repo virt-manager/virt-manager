@@ -888,6 +888,8 @@ class DebianDistro(Distro):
             self._treeArch = "i386"
         elif self.uri.count("amd64"):
             self._treeArch = "amd64"
+        elif self.uri.count("ppc64el"):
+            self._treeArch = "ppc64el"
         else:
             self._treeArch = "i386"
 
@@ -905,7 +907,10 @@ class DebianDistro(Distro):
                                          self._installer_name,
                                          self._treeArch)
         xenroot = "%s/netboot/xen/" % self._prefix
-        self._hvm_kernel_paths = [(hvmroot + "linux", hvmroot + "initrd.gz")]
+        if self._treeArch == "ppc64el":
+            self._hvm_kernel_paths = [(hvmroot + "vmlinux", hvmroot + "initrd.gz")]
+        else:
+            self._hvm_kernel_paths = [(hvmroot + "linux", hvmroot + "initrd.gz")]
         self._xen_kernel_paths = [(xenroot + "vmlinuz",
                                     xenroot + "initrd.gz")]
 
