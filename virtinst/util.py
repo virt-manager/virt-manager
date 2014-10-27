@@ -226,7 +226,7 @@ def default_bridge(conn):
 
     # New style peth0 == phys dev, eth0 == bridge, eth0 == default route
     if os.path.exists("/sys/class/net/%s/bridge" % dev):
-        return ["bridge", dev]
+        return dev
 
     # Old style, peth0 == phys dev, eth0 == netloop, xenbr0 == bridge,
     # vif0.0 == netloop enslaved, eth0 == default route
@@ -238,7 +238,7 @@ def default_bridge(conn):
     if (defn >= 0 and
         os.path.exists("/sys/class/net/peth%d/brport" % defn) and
         os.path.exists("/sys/class/net/xenbr%d/bridge" % defn)):
-        return ["bridge", "xenbr%d" % defn]
+        return "xenbr%d"
     return None
 
 
@@ -311,11 +311,11 @@ def default_route():
 
 def default_network(conn):
     ret = default_bridge(conn)
-    if not ret:
-        # FIXME: Check that this exists
-        ret = ["network", "default"]
+    if ret:
+        return ["bridge", ret]
 
-    return ret
+    # FIXME: Check that this exists
+    return ["network", "default"]
 
 
 def is_blktap_capable(conn):

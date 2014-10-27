@@ -966,7 +966,7 @@ class TestXMLConfig(unittest.TestCase):
             origfunc = util.default_bridge
 
             def newbridge(ignore_conn):
-                return ["bridge", "bzz0"]
+                return "bzz0"
             util.default_bridge = newbridge
 
             dev1 = virtinst.VirtualNetworkInterface(utils.get_conn())

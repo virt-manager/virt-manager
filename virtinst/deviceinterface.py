@@ -148,7 +148,7 @@ class VirtualNetworkInterface(VirtualDevice):
             ret = False
             default = util.default_bridge(self.conn)
             if default:
-                ret = default[1]
+                ret = default
 
         self._default_bridge = ret
         return ret or None

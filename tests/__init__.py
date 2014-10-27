@@ -38,7 +38,7 @@ from tests import utils
 
 # Force certain helpers to return consistent values
 virtinst.util.is_blktap_capable = lambda ignore: False
-virtinst.util.default_bridge = lambda ignore1: ["bridge", "eth0"]
+virtinst.util.default_bridge = lambda ignore1: "eth0"
 
 # Setup logging
 rootLogger = logging.getLogger()
