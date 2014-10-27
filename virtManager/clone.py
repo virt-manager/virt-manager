@@ -378,6 +378,7 @@ class vmmCloneVM(vmmGObjectUI):
                                              devtype)
 
             def storage_add(failinfo=None):
+                # pylint: disable=cell-var-from-loop
                 storage_row[STORAGE_INFO_DEFINFO] = definfo
                 storage_row[STORAGE_INFO_DO_DEFAULT] = default
                 storage_row[STORAGE_INFO_CAN_SHARE] = bool(definfo)

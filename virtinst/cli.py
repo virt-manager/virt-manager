@@ -1850,6 +1850,7 @@ class ParserRNG(VirtCLIParser):
         def set_backend_cb(opts, inst, cliname, val):
             ignore = opts
             ignore = inst
+            # pylint: disable=attribute-defined-outside-init
             if cliname == "backend_mode":
                 self._cli_backend_mode = val
             elif cliname == "backend_type":

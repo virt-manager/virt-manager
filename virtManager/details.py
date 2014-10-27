@@ -289,7 +289,7 @@ def _chipset_label_from_machine(machine):
 def _warn_cpu_thread_topo(threads, cpu_model):
     if (threads < 2):
         return False
-        
+
     non_ht_cpus = ["athlon", "phenom", "opteron"]
 
     for cpu in non_ht_cpus:
@@ -297,6 +297,7 @@ def _warn_cpu_thread_topo(threads, cpu_model):
             return True
 
     return False
+
 
 def _firmware_label_from_loader(vm, loader, force_uefi=False):
     domcaps = vm.get_domain_capabilities()
@@ -1671,7 +1672,7 @@ class vmmDetails(vmmGObjectUI):
             self.widget("cpu-model"), not src.get_active())
         self.enable_apply(EDIT_CPU)
 
-    def config_cpu_model_changed(self, opque):
+    def config_cpu_model_changed(self, ignore):
         # Warn about hyper-threading setting
         cpu_model = self.get_config_cpu_model()
         threads = self.widget("cpu-threads").get_value()
