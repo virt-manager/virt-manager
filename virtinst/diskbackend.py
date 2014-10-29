@@ -426,7 +426,7 @@ class StorageBackend(_StorageBase):
             self._path = None
         elif self._pool_object is not None:
             if self._path is None:
-                raise ValueError("path must be specified is backend is "
+                raise ValueError("path must be specified if backend is "
                                  "pool object.")
 
         # Cached bits
