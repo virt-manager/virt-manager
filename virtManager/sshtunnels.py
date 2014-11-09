@@ -153,10 +153,7 @@ class _Tunnel(object):
                       self.outfd and self.outfd.fileno() or self._outfds,
                       self.errfd and self.errfd.fileno() or self._errfds)
 
-        if self.outfd:
-            self.outfd.close()
-        elif self._outfds:
-            self._outfds[0].close()
+        if self._outfds:
             self._outfds[1].close()
         self.outfd = None
         self._outfds = None
