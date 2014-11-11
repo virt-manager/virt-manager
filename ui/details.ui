@@ -2134,7 +2134,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">Model:</property>
+                                            <property name="label" translatable="yes">M_odel:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">combobox-entry33</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -2143,13 +2145,14 @@ if you know what you are doing.&lt;/small&gt;</property>
                                         </child>
                                         <child>
                                           <object class="GtkCheckButton" id="cpu-copy-host">
-                                            <property name="label" translatable="yes">Copy host CPU configuration</property>
+                                            <property name="label" translatable="yes">Copy host CP_U configuration</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="clicked" handler="on_cpu_copy_host_clicked" swapped="no"/>
+                                            <property name="use_underline">True</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -2182,8 +2185,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                   <object class="GtkLabel" id="label49">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">&lt;b&gt;Configuration&lt;/b&gt;</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Configu_ration&lt;/b&gt;</property>
                                     <property name="use_markup">True</property>
+                                    <property name="use_underline">True</property>
                                   </object>
                                 </child>
                               </object>
@@ -2210,7 +2214,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                         <property name="spacing">4</property>
                                         <child>
                                           <object class="GtkCheckButton" id="cpu-topology-enable">
-                                            <property name="label" translatable="yes">Manually set CPU topology</property>
+                                            <property name="label" translatable="yes">Manuall_y set CPU topology</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
@@ -2218,6 +2222,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="active">True</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="on_cpu_topology_enable_toggled" swapped="no"/>
+                                            <property name="use_underline">True</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -2249,7 +2254,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
                                                         <property name="xalign">0</property>
-                                                        <property name="label" translatable="yes">Threads:</property>
+                                                        <property name="label" translatable="yes">Thread_s:</property>
+                                                        <property name="use_underline">True</property>
+                                                        <property name="mnemonic_widget">cpu-threads</property>
                                                       </object>
                                                       <packing>
                                                         <property name="top_attach">2</property>
@@ -2263,7 +2270,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
                                                         <property name="xalign">0</property>
-                                                        <property name="label" translatable="yes">Cores:</property>
+                                                        <property name="label" translatable="yes">Cor_es:</property>
+                                                        <property name="use_underline">True</property>
+                                                        <property name="mnemonic_widget">cpu-cores</property>
                                                       </object>
                                                       <packing>
                                                         <property name="top_attach">1</property>
@@ -2277,7 +2286,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
                                                         <property name="xalign">0</property>
-                                                        <property name="label" translatable="yes">Sockets:</property>
+                                                        <property name="label" translatable="yes">Socke_ts:</property>
+                                                        <property name="use_underline">True</property>
+                                                        <property name="mnemonic_widget">cpu-sockets</property>
                                                       </object>
                                                       <packing>
                                                         <property name="x_options">GTK_FILL</property>
@@ -2400,8 +2411,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                   <object class="GtkLabel" id="label62">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">&lt;b&gt;Topology&lt;/b&gt;</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;To_pology&lt;/b&gt;</property>
                                     <property name="use_markup">True</property>
+                                    <property name="use_underline">True</property>
                                   </object>
                                 </child>
                               </object>
@@ -2440,7 +2452,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="xalign">1</property>
-                                                <property name="label" translatable="yes">Default _pinning:</property>
+                                                <property name="label" translatable="yes">Default p_inning:</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="mnemonic_widget">config-vcpupin</property>
                                               </object>
@@ -2584,8 +2596,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                   <object class="GtkLabel" id="label9">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">&lt;b&gt;Pinning&lt;/b&gt;</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Pinnin_g&lt;/b&gt;</property>
                                     <property name="use_markup">True</property>
+                                    <property name="use_underline">True</property>
                                   </object>
                                 </child>
                               </object>
