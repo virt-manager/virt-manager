@@ -2981,10 +2981,11 @@ if you know what you are doing.&lt;/small&gt;</property>
                                         <property name="spacing">6</property>
                                         <child>
                                           <object class="GtkCheckButton" id="boot-kernel-enable">
-                                            <property name="label" translatable="yes">Enable direct kernel boot</property>
+                                            <property name="label" translatable="yes">Ena_ble direct kernel boot</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="use_underline">True</property>
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="on_boot_kernel_enable_toggled" swapped="no"/>
@@ -3013,7 +3014,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="xalign">0</property>
                                                     <property name="ypad">8</property>
-                                                    <property name="label" translatable="yes">Kernel path:</property>
+                                                    <property name="label" translatable="yes">Ke_rnel path:</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="mnemonic_widget">boot-kernel</property>
                                                   </object>
                                                   <packing>
                                                     <property name="x_options">GTK_FILL</property>
@@ -3026,7 +3029,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="xalign">0</property>
                                                     <property name="ypad">8</property>
-                                                    <property name="label" translatable="yes">Initrd path:</property>
+                                                    <property name="label" translatable="yes">_Initrd path:</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="mnemonic_widget">boot-initrd</property>
                                                   </object>
                                                   <packing>
                                                     <property name="top_attach">1</property>
@@ -3121,7 +3126,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="xalign">0</property>
                                                     <property name="ypad">8</property>
-                                                    <property name="label" translatable="yes">Kernel args:</property>
+                                                    <property name="label" translatable="yes">Kernel ar_gs:</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="mnemonic_widget">boot-kernel-args</property>
                                                   </object>
                                                   <packing>
                                                     <property name="top_attach">3</property>
@@ -3152,7 +3159,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="xalign">0</property>
                                                     <property name="ypad">8</property>
-                                                    <property name="label" translatable="yes">DTB Path:</property>
+                                                    <property name="label" translatable="yes">D_TB Path:</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="mnemonic_widget">boot-dtb</property>
                                                   </object>
                                                   <packing>
                                                     <property name="top_attach">2</property>
@@ -3238,8 +3247,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                   <object class="GtkLabel" id="label37">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">&lt;b&gt;Direct kernel boot&lt;/b&gt;</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Dir_ect kernel boot&lt;/b&gt;</property>
                                     <property name="use_markup">True</property>
+                                    <property name="use_underline">True</property>
                                   </object>
                                 </child>
                               </object>
