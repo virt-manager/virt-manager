@@ -1738,8 +1738,65 @@ ba</description>
   </source>
 </pool>
 
+<pool type='sheepdog'>
+  <name>myshpool</name>
+  <uuid>581381f8-a13f-4f7c-89b5-9c9b71c64834</uuid>
+  <capacity unit='bytes'>107374182400</capacity>
+  <allocation unit='bytes'>53687091200</allocation>
+  <available unit='bytes'>53687091200</available>
+  <source>
+    <host name='localhost' port='7000'/>
+    <name>mysheeppool</name>
+  </source>
+  <volume type='network'>
+  <name>vol_sheepdog</name>
+  <key>sheep/vol_sheepdog</key>
+  <capacity unit='bytes'>1024</capacity>
+  <allocation unit='bytes'>0</allocation>
+  <target>
+    <path>sheepdog:vol_sheepdog</path>
+    <format type='unknown'/>
+    <permissions>
+      <mode>0600</mode>
+      <owner>4294967295</owner>
+      <group>4294967295</group>
+    </permissions>
+    </target>
+  </volume>
+</pool>
 
-
+<pool type='gluster'>
+  <name>gluster-pool</name>
+  <uuid>7b83ef6d-28da-44f1-841f-2011320f13b0</uuid>
+  <capacity unit='bytes'>492258959360</capacity>
+  <allocation unit='bytes'>16975638528</allocation>
+  <available unit='bytes'>475283320832</available>
+  <source>
+    <host name='192.168.1.100'/>
+    <dir path='/'/>
+    <name>test-volume</name>
+  </source>
+  <volume type='network'>
+  <name>test-gluster.raw</name>
+  <key>gluster://192.168.1.100/test-volume/test-gluster.raw</key>
+  <capacity unit='bytes'>10737418240</capacity>
+  <allocation unit='bytes'>2489327616</allocation>
+  <target>
+    <path>gluster://192.168.1.100/test-volume/test-gluster.raw</path>
+    <format type='raw'/>
+    <permissions>
+      <mode>0666</mode>
+      <owner>0</owner>
+      <group>0</group>
+    </permissions>
+    <timestamps>
+      <atime>1413881655.870313004</atime>
+      <mtime>1411649104.965642390</mtime>
+      <ctime>1412163870.190503958</ctime>
+    </timestamps>
+  </target>
+  </volume>
+</pool>
 
 
 
