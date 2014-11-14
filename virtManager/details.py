@@ -185,7 +185,10 @@ def _label_for_device(dev):
         return "%s %s" % (ret, dev.disk_bus_index)
 
     if devtype == "interface":
-        return "NIC %s" % dev.macaddr[-9:]
+        if dev.macaddr:
+            return "NIC %s" % dev.macaddr[-9:]
+        else:
+            return "NIC"
 
     if devtype == "input":
         if dev.type == "tablet":
@@ -2702,7 +2705,11 @@ class vmmDetails(vmmGObjectUI):
         vmmAddHardware.populate_network_model_combo(
             self.vm, self.widget("network-model"))
         uiutil.set_combo_entry(self.widget("network-model"), net.model)
-        self.widget("network-mac-address").set_text(net.macaddr)
+
+        uiutil.set_grid_row_visible(self.widget("network-mac-address"),
+                                    bool(net.macaddr))
+        if net.macaddr:
+            self.widget("network-mac-address").set_text(net.macaddr)
 
         self.netlist.set_dev(net)
 
