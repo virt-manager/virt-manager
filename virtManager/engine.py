@@ -904,6 +904,7 @@ class vmmEngine(vmmGObject):
         if not vm:
             src.err.show_err("%s does not have VM '%s'" %
                 (uri, clistr), modal=True)
+            self.exit_app(src.err)
             return
 
         self._show_vm_helper(src, uri, vm, page, True)
