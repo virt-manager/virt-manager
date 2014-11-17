@@ -69,6 +69,7 @@ _aliases = {
     "linux" : "generic",
     "windows" : "winxp",
     "solaris" : "solaris10",
+    "virtio26": "fedora10",
 }
 _SENTINEL = -1234
 _allvariants = {}

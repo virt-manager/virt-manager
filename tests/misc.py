@@ -125,7 +125,7 @@ class TestMisc(unittest.TestCase):
         from virtinst import osdict
         aliases = getattr(osdict, "_aliases")
 
-        if len(aliases) != 39:
+        if len(aliases) != 40:
             raise AssertionError(_("osdict._aliases changed size. It "
                 "should never be extended, since it is only for back "
                 "compat with pre-libosinfo osdict."))
