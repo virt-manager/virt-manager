@@ -1,10 +1,6 @@
   HACKING
   =======
 
-We use glade-3 for building virt-manager's UI. It is recommended you have
-a fairly recent version of glade-3: if a small UI change seems to rewrite the
-entire glade file, you likely have a too old (or too new :) glade version.
-
 The following commands will be useful for anyone writing patches:
 
     python setup.py test      : Run local unit test suite
@@ -35,6 +31,10 @@ Also, there's a few standalone specialty tests:
 
     python setup.py test_urls       : Test fetching media from distro URLs
     python setup.py test_initrd_inject: Test --initrd-inject
+
+We use glade-3 for building virt-manager's UI. It is recommended you have
+a fairly recent version of glade-3: if a small UI change seems to rewrite the
+entire glade file, you likely have a too old (or too new :) glade version.
 
 
   Submitting patches
