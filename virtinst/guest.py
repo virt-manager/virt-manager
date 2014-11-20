@@ -655,9 +655,9 @@ class Guest(XMLBuilder):
 
         for dev in self.get_all_devices():
             dev.set_defaults(self)
-        self._add_implied_controllers()
         self._check_address_multi()
         self._set_disk_defaults()
+        self._add_implied_controllers()
         self._set_net_defaults()
         self._set_input_defaults()
         self._set_graphics_defaults()
@@ -809,16 +809,39 @@ class Guest(XMLBuilder):
                 self.features.hyperv_spinlocks_retries = 8191
 
     def _add_implied_controllers(self):
-        for dev in self.get_all_devices():
-            # Add spapr-vio controller if needed
-            if (dev.address.type == "spapr-vio" and
-                dev.virtual_device_type == "disk" and
-                not any([cont.address.type == "spapr-vio" for cont in
-                        self.get_devices("controller")])):
-                ctrl = VirtualController(self.conn)
-                ctrl.type = "scsi"
-                ctrl.address.set_addrstr("spapr-vio")
-                self.add_device(ctrl)
+        has_spapr_scsi = False
+        has_virtio_scsi = False
+        has_any_scsi = False
+        for dev in self.get_devices("controller"):
+            if dev.type == "scsi":
+                has_any_scsi = True
+                if dev.address.type == "spapr-vio":
+                    has_spapr_scsi = True
+                if dev.model == "virtio":
+                    has_virtio_scsi = True
+
+        # Add spapr-vio controller if needed
+        if not has_spapr_scsi:
+            for dev in self.get_devices("disk"):
+                if dev.address.type == "spapr-vio":
+                    ctrl = VirtualController(self.conn)
+                    ctrl.type = "scsi"
+                    ctrl.address.set_addrstr("spapr-vio")
+                    self.add_device(ctrl)
+                    break
+
+        # Add virtio-scsi controller if needed
+        if (self.os.is_arm_machvirt() and
+            not has_any_scsi and
+            not has_virtio_scsi):
+            for dev in self.get_devices("disk"):
+                if dev.bus == "scsi":
+                    ctrl = VirtualController(self.conn)
+                    ctrl.type = "scsi"
+                    ctrl.model = "virtio-scsi"
+                    self.add_device(ctrl)
+                    break
+
 
     def _check_address_multi(self):
         addresses = {}
@@ -879,6 +902,8 @@ class Guest(XMLBuilder):
             if self._can_virtio("virtiodisk") and d.is_disk():
                 d.bus = "virtio"
             elif self.os.is_pseries():
+                d.bus = "scsi"
+            elif self.os.is_arm_machvirt() and d.is_cdrom():
                 d.bus = "scsi"
             elif self.os.is_arm():
                 d.bus = "sd"
