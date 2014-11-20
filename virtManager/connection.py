@@ -382,10 +382,6 @@ class vmmConnection(vmmGObject):
             transport = scheme.split("+")[1]
             scheme = scheme.split("+")[0]
 
-        if hostname.count(":"):
-            port = hostname.split(":")[1]
-            hostname = hostname.split(":")[0]
-
         if hostname:
             if show_user and username:
                 hostname = username + "@" + hostname
