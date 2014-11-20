@@ -901,11 +901,12 @@ class Guest(XMLBuilder):
                 d.bus = "ide"
                 return
 
-            if self._can_virtio("virtiodisk") and d.is_disk():
+            if self.os.is_arm_machvirt():
+                # We prefer virtio-scsi for machvirt, gets us hotplug
+                d.bus = "scsi"
+            elif self._can_virtio("virtiodisk") and d.is_disk():
                 d.bus = "virtio"
             elif self.os.is_pseries():
-                d.bus = "scsi"
-            elif self.os.is_arm_machvirt() and d.is_cdrom():
                 d.bus = "scsi"
             elif self.os.is_arm():
                 d.bus = "sd"

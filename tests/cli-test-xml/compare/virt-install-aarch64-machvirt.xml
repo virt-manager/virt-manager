@@ -27,8 +27,9 @@
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/testvol1.img"/>
-      <target dev="vda" bus="virtio"/>
+      <target dev="sda" bus="scsi"/>
     </disk>
+    <controller type="scsi" index="0" model="virtio-scsi"/>
     <interface type="bridge">
       <source bridge="eth0"/>
       <mac address="00:11:22:33:44:55"/>

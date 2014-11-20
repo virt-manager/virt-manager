@@ -28,12 +28,12 @@
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/testvol1.img"/>
-      <target dev="vda" bus="virtio"/>
+      <target dev="sda" bus="scsi"/>
     </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/testvol2.img"/>
-      <target dev="sda" bus="scsi"/>
+      <target dev="sdb" bus="scsi"/>
       <readonly/>
     </disk>
     <controller type="scsi" index="0" model="virtio-scsi"/>
@@ -74,10 +74,10 @@
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/testvol1.img"/>
-      <target dev="vda" bus="virtio"/>
+      <target dev="sda" bus="scsi"/>
     </disk>
     <disk type="block" device="cdrom">
-      <target dev="sda" bus="scsi"/>
+      <target dev="sdb" bus="scsi"/>
       <readonly/>
     </disk>
     <controller type="scsi" index="0" model="virtio-scsi"/>
