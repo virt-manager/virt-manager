@@ -469,7 +469,7 @@ def check_option_collisions(options, guest):
 
     cdrom_err = ""
     if guest.installer.cdrom:
-        cdrom_err = _cdrom_location_man_page
+        cdrom_err = " " + _cdrom_location_man_page
     if not options.location and options.extra_args:
         fail(_("--extra-args only work if specified with --location.") +
              cdrom_err)
@@ -484,10 +484,14 @@ def _show_nographics_warnings(options, guest):
     if not options.autoconsole:
         return
 
-    if guest.installer.cdrom:
+    if (guest.installer.cdrom and not
+        guest.os.is_arm_machvirt()):
+        # Later arm kernels figure out console= automatically, so don't
+        # warn about it.
         logging.warn(_("CDROM media does not print to the text console "
             "by default, so you likely will not see text install output. "
-            "You might want to use --location.") + _cdrom_location_man_page)
+            "You might want to use --location.") + " " +
+            _cdrom_location_man_page)
         return
 
     if not options.location:
