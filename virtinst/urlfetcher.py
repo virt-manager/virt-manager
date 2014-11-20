@@ -748,10 +748,19 @@ class RHELDistro(RedHatDistro):
 
     def _variantFromVersion(self):
         ver = self.treeinfo.get("general", "version")
+        name = None
+        if self.treeinfo.has_option("general", "name"):
+            name = self.treeinfo.get("general", "name")
         if not ver:
             return
 
-        version, update = self._parseTreeinfoVersion(ver)
+        if name and name.startswith("Red Hat Enterprise Linux Server for ARM"):
+            # Kind of a hack, but good enough for the time being
+            version = 7
+            update = 0
+        else:
+            version, update = self._parseTreeinfoVersion(ver)
+
         self._version_number = version
         self._setRHELVariant(version, update)
 
