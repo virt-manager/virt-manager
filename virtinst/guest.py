@@ -865,8 +865,6 @@ class Guest(XMLBuilder):
         return False
 
     def _set_disk_defaults(self):
-        os_disk_bus = self._lookup_osdict_key("diskbus", None)
-
         def set_disk_bus(d):
             if d.is_floppy():
                 d.bus = "fdc"
@@ -880,8 +878,6 @@ class Guest(XMLBuilder):
 
             if self._can_virtio("virtiodisk") and d.is_disk():
                 d.bus = "virtio"
-            elif os_disk_bus and d.is_disk():
-                d.bus = os_disk_bus
             elif self.os.is_pseries():
                 d.bus = "scsi"
             elif self.os.is_arm():
