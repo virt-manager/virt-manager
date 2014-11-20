@@ -937,6 +937,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.widget("console-gfx-scroll").queue_resize()
 
     def auth_login(self, ignore):
+        self.widget("console-pages").set_current_page(CONSOLE_PAGE_UNAVAILABLE)
         self.set_credentials()
         self.activate_viewer_page()
 
