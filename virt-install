@@ -483,11 +483,12 @@ def _show_nographics_warnings(options, guest):
         return
     if not options.autoconsole:
         return
-
-    if (guest.installer.cdrom and not
-        guest.os.is_arm_machvirt()):
+    if guest.os.is_arm_machvirt():
         # Later arm kernels figure out console= automatically, so don't
         # warn about it.
+        return
+
+    if guest.installer.cdrom:
         logging.warn(_("CDROM media does not print to the text console "
             "by default, so you likely will not see text install output. "
             "You might want to use --location.") + " " +
