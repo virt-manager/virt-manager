@@ -1361,7 +1361,13 @@ class vmmDetails(vmmGObjectUI):
 
     def activate_performance_page(self):
         self.widget("details-pages").set_current_page(DETAILS_PAGE_DETAILS)
-        self.set_hw_selection(HW_LIST_TYPE_STATS)
+        index = 0
+        model = self.widget("hw-list").get_model()
+        for i in range(len(model)):
+            if model[i][HW_LIST_COL_TYPE] == HW_LIST_TYPE_STATS:
+                index = i
+                break
+        self.set_hw_selection(index)
 
     def activate_config_page(self):
         self.widget("details-pages").set_current_page(DETAILS_PAGE_DETAILS)
