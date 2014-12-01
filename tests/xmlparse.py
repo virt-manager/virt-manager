@@ -628,6 +628,7 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev3)
         check("model", "cirrus", "cirrus", "qxl")
         check("ram", None, 100)
+        check("vgamem", None, 8192)
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

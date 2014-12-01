@@ -860,6 +860,7 @@ class vmmDomain(vmmLibvirtObject):
             editdev.vram = None
             editdev.heads = None
             editdev.ram = None
+            editdev.vgamem = None
 
         return self._redefine_device(change, devobj, use_live_device)
 

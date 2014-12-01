@@ -35,14 +35,14 @@ class VirtualVideoDevice(VirtualDevice):
             return model.upper()
         return model.capitalize()
 
-
-    _XML_PROP_ORDER = ["model", "vram", "heads"]
+    _XML_PROP_ORDER = ["model", "vram", "heads", "vgamem"]
     model = XMLProperty("./model/@type",
                         default_cb=lambda s: "cirrus",
                         default_name=MODEL_DEFAULT)
     vram = XMLProperty("./model/@vram", is_int=True)
     ram = XMLProperty("./model/@ram", is_int=True)
     heads = XMLProperty("./model/@heads", is_int=True)
+    vgamem = XMLProperty("./model/@vgamem", is_int=True)
 
 
 VirtualVideoDevice.register_type()
