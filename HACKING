@@ -13,10 +13,11 @@ Our pylint script uses a blacklist rather than a whitelist approach,
 so it could throw some false positives or useless messages. If you think
 your patch exposes one of these, bring it up on the mailing list.
 
-If 'python-coverage' is installed, you can run 'coverage -r' after 'test'
-to see a code coverage report.
+If 'python-coverage' is installed, you can run 'coverage -r' after
+'python setup.py test' finished to see a code coverage report.
 
 'test*' have a --debug option if you are hitting problems.
+For more options, use 'python setup.py test --help'.
 
 One useful way to manually test virt-manager's UI is using libvirt's
 unit test driver. From the source directory, Launch virt-manager like:
@@ -45,7 +46,7 @@ release. The git repo is at
 
   git://git.fedorahosted.org/git/virt-manager.git
 
-For an web view, see:
+For a web view, see:
 
   https://git.fedorahosted.org/cgit/virt-manager.git/
 
@@ -58,4 +59,6 @@ format-patch output is fine too.
   ============
 
 For translations, please sign up for transifex.com and contribute to the
-virt-manager project.
+virt-manager project, see:
+
+  https://www.transifex.com/projects/p/virt-manager/
