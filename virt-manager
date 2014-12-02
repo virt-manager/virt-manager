@@ -26,6 +26,7 @@ import signal
 import sys
 import traceback
 
+import gi
 from gi.repository import GObject
 from gi.repository import LibvirtGLib
 
@@ -42,7 +43,6 @@ warnings.simplefilter("ignore")
 
 try:
     # Avoid a deprecation warning about threads_init
-    import gi
     gi.check_version("3.9.1")
 except (ValueError, AttributeError):
     GObject.threads_init()
@@ -177,6 +177,7 @@ def main():
     origargv = sys.argv
     try:
         sys.argv = origargv[:1] + leftovers[:]
+        gi.require_version('Gtk', '3.0')
         from gi.repository import Gtk
         leftovers = sys.argv[1:]
 
