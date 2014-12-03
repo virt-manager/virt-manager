@@ -1436,7 +1436,7 @@ class vmmCreate(vmmGObjectUI):
     def validate(self, pagenum):
         try:
             if pagenum == PAGE_NAME:
-                return self.validate_name_page()
+                return self.validate_intro_page()
             elif pagenum == PAGE_INSTALL:
                 return self.validate_install_page()
             elif pagenum == PAGE_MEM:
@@ -1450,7 +1450,7 @@ class vmmCreate(vmmGObjectUI):
                                 "parameters: %s") % str(e))
             return
 
-    def validate_name_page(self):
+    def validate_intro_page(self):
         # We just set this here because it's needed soon after for distro
         # detection. But the 'real' self.guest is created in validate_install,
         # and it just uses build_guest, so don't ever add any other guest
