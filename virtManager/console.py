@@ -769,7 +769,7 @@ class vmmConsolePages(vmmGObjectUI):
     def _init_menus(self):
         # Serial list menu
         smenu = Gtk.Menu()
-        smenu.connect("show", self.populate_serial_menu)
+        smenu.connect("show", self._populate_serial_menu)
         self.widget("details-menu-view-serial-list").set_submenu(smenu)
 
     def change_title(self, ignore1=None):
@@ -1353,46 +1353,16 @@ class vmmConsolePages(vmmGObjectUI):
         if self.vm.get_graphics_devices() or not self.vm.get_serial_devs():
             return
 
-        # Show serial console
-        devs = self.build_serial_list()
-        for name, ignore, sensitive, ignore, cb, serialidx in devs:
-            if not sensitive or not cb:
-                continue
+        self._populate_serial_menu()
+        menu = self.widget("details-menu-view-serial-list").get_submenu()
+        for child in menu.get_children():
+            if isinstance(child, Gtk.SeparatorMenuItem):
+                break
+            if child.get_sensitive():
+                child.toggled()
+                break
 
-            self._show_serial_tab(name, serialidx)
-            break
-
-    def build_serial_list(self):
-        ret = []
-
-        def add_row(text, err, sensitive, do_radio, cb, serialidx):
-            ret.append([text, err, sensitive, do_radio, cb, serialidx])
-
-        devs = self.vm.get_serial_devs()
-        if len(devs) == 0:
-            add_row(_("No text console available"),
-                    None, False, False, None, None)
-
-        def build_desc(dev):
-            if dev.virtual_device_type == "console":
-                return "Text Console %d" % (dev.vmmindex + 1)
-            return "Serial %d" % (dev.vmmindex + 1)
-
-        for dev in devs:
-            desc = build_desc(dev)
-            idx = dev.vmmindex
-
-            err = vmmSerialConsole.can_connect(self.vm, dev)
-            sensitive = not bool(err)
-
-            def cb(src):
-                return self.control_serial_tab(src, desc, idx)
-
-            add_row(desc, err, sensitive, True, cb, idx)
-
-        return ret
-
-    def current_serial_dev(self):
+    def _selected_serial_dev(self):
         current_page = self.widget("console-pages").get_current_page()
         if not current_page >= CONSOLE_PAGE_OFFSET:
             return
@@ -1403,14 +1373,21 @@ class vmmConsolePages(vmmGObjectUI):
 
         return self.serial_tabs[serial_idx]
 
-    def control_serial_tab(self, src_ignore, name, target_port):
-        self.widget("details-pages").set_current_page(DETAILS_PAGE_CONSOLE)
-        if name == "graphics":
-            self.widget("console-pages").set_current_page(self.last_gfx_page)
-        else:
-            self._show_serial_tab(name, target_port)
+    def _make_serial_menu_label(self, dev):
+        if dev.virtual_device_type == "console":
+            return "Text Console %d" % (dev.vmmindex + 1)
+        return "Serial %d" % (dev.vmmindex + 1)
 
-    def _show_serial_tab(self, name, target_port):
+    def _console_menu_toggled(self, src, dev):
+        ignore = src
+        self.widget("details-pages").set_current_page(DETAILS_PAGE_CONSOLE)
+
+        if dev.virtual_device_type == "graphics":
+            self.widget("console-pages").set_current_page(self.last_gfx_page)
+            return
+
+        target_port = dev.vmmindex
+        name = self._make_serial_menu_label(dev)
         serial = None
         for s in self.serial_tabs:
             if s.name == name:
@@ -1432,64 +1409,71 @@ class vmmConsolePages(vmmGObjectUI):
         page_idx = self.serial_tabs.index(serial) + CONSOLE_PAGE_OFFSET
         self.widget("console-pages").set_current_page(page_idx)
 
-    def populate_serial_menu(self, src):
-        for ent in src:
-            src.remove(ent)
+    def _build_serial_menu_items(self, menu_item_cb):
+        showing_serial_dev = self._selected_serial_dev()
+        devs = self.vm.get_serial_devs()
 
-        serial_page_dev = self.current_serial_dev()
+        if len(devs) == 0:
+            menu_item_cb(_("No text console available"),
+                         radio=False, sensitive=False)
+            return
+
+        for dev in devs:
+            label = self._make_serial_menu_label(dev)
+            tooltip = vmmSerialConsole.can_connect(self.vm, dev)
+            sensitive = not bool(tooltip)
+
+            active = (sensitive and
+                showing_serial_dev and
+                showing_serial_dev.name == label)
+
+            menu_item_cb(label, sensitive=sensitive, active=active,
+                tooltip=tooltip, cb=self._console_menu_toggled, cbdata=dev)
+
+    def _build_graphical_menu_items(self, menu_item_cb):
         showing_graphics = (
             self.widget("console-pages").get_current_page() ==
             CONSOLE_PAGE_VIEWER)
 
-        # Populate serial devices
-        group = None
-        itemlist = self.build_serial_list()
-        for msg, err, sensitive, do_radio, cb, ignore in itemlist:
-            if do_radio:
-                item = Gtk.RadioMenuItem(group)
-                item.set_label(msg)
-                if group is None:
-                    group = item
-            else:
-                item = Gtk.MenuItem.new_with_label(msg)
-
-            item.set_sensitive(sensitive)
-
-            if err and not sensitive:
-                item.set_tooltip_text(err)
-
-            if cb:
-                item.connect("toggled", cb)
-
-            # Tab is already open, make sure marked as such
-            if (sensitive and
-                serial_page_dev and
-                serial_page_dev.name == msg):
-                item.set_active(True)
-
-            src.add(item)
-
-        src.add(Gtk.SeparatorMenuItem())
-
         # Populate graphical devices
         devs = self.vm.get_graphics_devices()
         if len(devs) == 0:
-            item = Gtk.MenuItem.new_with_label(
-                _("No graphical console available"))
-            item.set_sensitive(False)
-            src.add(item)
-        else:
-            dev = devs[0]
-            item = Gtk.RadioMenuItem(group)
-            item.set_label(_("Graphical Console %s") %
-                           dev.pretty_type_simple(dev.type))
-            if group is None:
-                group = item
+            menu_item_cb(_("No graphical console available"),
+                         radio=False, sensitive=False)
+            return
 
-            if showing_graphics:
+        # Only one graphical device supported for now
+        dev = devs[0]
+        label = _("Graphical Console %s") % dev.pretty_type_simple(dev.type)
+        menu_item_cb(label, active=showing_graphics,
+                     cb=self._console_menu_toggled, cbdata=dev)
+
+    def _populate_serial_menu(self, ignore=None):
+        src = self.widget("details-menu-view-serial-list").get_submenu()
+        for child in src:
+            src.remove(child)
+
+        def menu_item_cb(label, sensitive=True, active=False,
+                         radio=True, tooltip=None, cb=None, cbdata=None):
+            if radio:
+                item = Gtk.RadioMenuItem(menu_item_cb.radio_group)
+                if menu_item_cb.radio_group is None:
+                    menu_item_cb.radio_group = item
+                item.set_label(label)
+            else:
+                item = Gtk.MenuItem.new_with_label(label)
+
+            item.set_sensitive(sensitive)
+            if active:
                 item.set_active(True)
-            item.connect("toggled", self.control_serial_tab,
-                         dev.virtual_device_type, dev.type)
+            if tooltip:
+                item.set_tooltip_text(tooltip)
+            if cb:
+                item.connect("toggled", cb, cbdata)
             src.add(item)
+        menu_item_cb.radio_group = None
 
+        self._build_serial_menu_items(menu_item_cb)
+        src.add(Gtk.SeparatorMenuItem())
+        self._build_graphical_menu_items(menu_item_cb)
         src.show_all()
