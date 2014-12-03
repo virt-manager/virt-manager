@@ -1443,10 +1443,22 @@ class vmmConsolePages(vmmGObjectUI):
             return
 
         # Only one graphical device supported for now
-        dev = devs[0]
-        label = _("Graphical Console %s") % dev.pretty_type_simple(dev.type)
-        menu_item_cb(label, active=showing_graphics,
-                     cb=self._console_menu_toggled, cbdata=dev)
+        for idx, dev in enumerate(devs):
+
+            label = (_("Graphical Console") + " " +
+                     dev.pretty_type_simple(dev.type))
+
+            sensitive = True
+            tooltip = None
+            if idx > 0:
+                label += " %s" % (idx + 1)
+                sensitive = False
+                tooltip = _("virt-manager does not support more "
+                            "that one graphical console")
+
+            menu_item_cb(label, active=showing_graphics,
+                sensitive=sensitive, tooltip=tooltip,
+                cb=self._console_menu_toggled, cbdata=dev)
 
     def _populate_serial_menu(self, ignore=None):
         src = self.widget("details-menu-view-serial-list").get_submenu()
@@ -1468,7 +1480,7 @@ class vmmConsolePages(vmmGObjectUI):
                 item.set_active(True)
             if tooltip:
                 item.set_tooltip_text(tooltip)
-            if cb:
+            if cb and sensitive:
                 item.connect("toggled", cb, cbdata)
             src.add(item)
         menu_item_cb.radio_group = None
