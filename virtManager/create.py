@@ -917,7 +917,13 @@ class vmmCreate(vmmGObjectUI):
         if disks:
             disk = disks[0]
             storage = "%s" % self.pretty_storage(disk.get_size())
-            storage += " " + (storagetmpl % disk.path)
+
+            # default storage is dependent on the VM name which the user
+            # can change on the last page,  so this label can get out of date.
+            # We could dynamically update it if user changes things, but
+            # not sure if anyone cares.
+            if not self.is_default_storage():
+                storage += " " + (storagetmpl % disk.path)
         elif len(self.guest.get_devices("filesystem")):
             fs = self.guest.get_devices("filesystem")[0]
             storage = storagetmpl % fs.source
