@@ -108,9 +108,6 @@ class vmmAddStorage(vmmGObjectUI):
         hd_label = ("<span color='#484848'>%s</span>" % hd_label)
         widget.set_markup(hd_label)
 
-    def _is_default_storage(self):
-        return bool(self.widget("config-storage-create").get_active())
-
     def _check_default_pool_active(self):
         default_pool = self.conn.get_default_pool()
         if default_pool and not default_pool.is_active():
@@ -257,8 +254,7 @@ class vmmAddStorage(vmmGObjectUI):
         return path
 
     def is_default_storage(self):
-        return self.widget("config-storage-create").is_visible() and \
-               self.widget("config-storage-create").get_active()
+        return self.widget("config-storage-create").get_active()
 
     def _check_ideal_path(self, path, vmname, collidelist):
         # See if the ideal disk path (/default/pool/vmname.img)

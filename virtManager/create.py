@@ -1062,9 +1062,8 @@ class vmmCreate(vmmGObjectUI):
         return self.addstorage.get_default_path(name)
 
     def is_default_storage(self):
-        usedef = self.addstorage.is_default_storage()
-        isimport = (self.get_config_install_page() == INSTALL_PAGE_IMPORT)
-        return usedef and not isimport
+        return (self.addstorage.is_default_storage() and
+                not self.skip_disk_page())
 
     def get_config_customize(self):
         return self.widget("summary-customize").get_active()
@@ -1718,6 +1717,8 @@ class vmmCreate(vmmGObjectUI):
         if name != self.guest.name:
             self.guest.name = name
             if self.is_default_storage():
+                logging.debug("User changed VM name and using default storage,"
+                    "re-validating with new default storage path.")
                 # User changed the name and we are using default storage
                 # which depends on the VM name. Revalidate things
                 if not self.validate_storage_page():
