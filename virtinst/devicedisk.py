@@ -158,8 +158,9 @@ class VirtualDisk(VirtualDevice):
     DRIVER_TAP_QCOW = "qcow"
     DRIVER_TAP_VMDK = "vmdk"
     DRIVER_TAP_VDISK = "vdisk"
+    DRIVER_TAP_QED = "qed"
     driver_types = [DRIVER_TAP_RAW, DRIVER_TAP_QCOW,
-        DRIVER_TAP_VMDK, DRIVER_TAP_VDISK]
+        DRIVER_TAP_VMDK, DRIVER_TAP_VDISK, DRIVER_TAP_QED]
 
     CACHE_MODE_NONE = "none"
     CACHE_MODE_WRITETHROUGH = "writethrough"
