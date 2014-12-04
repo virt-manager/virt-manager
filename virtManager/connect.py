@@ -115,6 +115,10 @@ class vmmConnect(vmmGObjectUI):
                 return "qemu:///system"
             else:
                 return "qemu:///session"
+
+        if (os.path.exists("/usr/lib/libvirt/libvirt_lxc") or
+            os.path.exists("/usr/lib64/libvirt/libvirt_lxc")):
+            return "lxc:///"
         return None
 
     def cancel(self, ignore1=None, ignore2=None):
