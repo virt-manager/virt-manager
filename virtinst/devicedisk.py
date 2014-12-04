@@ -624,8 +624,9 @@ class VirtualDisk(VirtualDevice):
         propname = self._disk_type_to_object_prop_name()
         return setattr(self, propname, val)
 
-    sourcePool = XMLProperty("./source/@pool")
-    sourceStartupPolicy = XMLProperty("./source/@startupPolicy")
+    source_pool = XMLProperty("./source/@pool")
+    startup_policy = XMLProperty("./source/@startupPolicy")
+
     device = XMLProperty("./@device",
                          default_cb=lambda s: s.DEVICE_DISK)
     type = XMLProperty("./@type", default_cb=_get_default_type)

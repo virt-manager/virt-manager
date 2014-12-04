@@ -2601,7 +2601,7 @@ class vmmDetails(vmmGObjectUI):
             return
 
         path = disk.path
-        source_pool = disk.sourcePool
+        source_pool = disk.source_pool
         devtype = disk.device
         ro = disk.read_only
         share = disk.shareable

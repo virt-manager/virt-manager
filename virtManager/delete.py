@@ -233,9 +233,9 @@ def populate_storage_list(storage_list, vm, conn):
     model.clear()
 
     def get_path(disk):
-        if disk.sourcePool:
+        if disk.source_pool:
             try:
-                pool = conn.get_pool(disk.sourcePool)
+                pool = conn.get_pool(disk.source_pool)
                 vol = pool.get_volume(disk.path)
                 return vol.get_target_path()
             except KeyError:

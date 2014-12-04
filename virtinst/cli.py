@@ -1539,7 +1539,7 @@ class ParserDisk(VirtCLIParser):
         self.set_param("error_policy", "error_policy")
         self.set_param("serial", "serial")
         self.set_param("target", "target")
-        self.set_param("sourceStartupPolicy", "startup_policy")
+        self.set_param("startup_policy", "startup_policy")
         self.set_param("read_only", "readonly", is_onoff=True)
         self.set_param("shareable", "shareable", is_onoff=True)
         self.set_param("boot.order", "boot_order")

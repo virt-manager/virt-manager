@@ -355,7 +355,7 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(disk6)
         check("path", None, "/dev/default-pool/default-vol")
         disk6.sync_path_props()
-        check("sourceStartupPolicy", None, "optional")
+        check("startup_policy", None, "optional")
         check("shareable", False, True)
         check("driver_cache", None, "writeback")
         check("driver_io", None, "threads")
@@ -372,7 +372,7 @@ class XMLParseTest(unittest.TestCase):
         check("order", None, 7, None)
 
         check = self._make_checker(disk9)
-        check("sourcePool", "defaultPool", "anotherPool")
+        check("source_pool", "defaultPool", "anotherPool")
 
         self._alter_compare(guest.get_xml_config(), outfile)
 
