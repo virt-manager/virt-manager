@@ -62,7 +62,7 @@ Edit the specified XML block. EDIT-OPTIONS tell B<virt-xml> which block to edit.
 
 Certain XML options only ever map to a single XML block, like --cpu, --security, --boot, --clock, and a few others. In those cases, B<virt-xml> will not complain if a corresponding XML block does not already exist, it will create it for you.
 
-Every XML option has a special value 'clearxml=yes'. When combined with --edit, it will completely blank out the XML block being edited before applying the requested changes. This allows completely rebuilding an XML block. See EXAMPLES for some usage.
+Some XML option support a special value 'clearxml=yes'. When combined with --edit, it will completely blank out the XML block being edited before applying the requested changes. This allows completely rebuilding an XML block. See EXAMPLES for some usage.
 
 EDIT-OPTIONS examples:
 
@@ -229,8 +229,6 @@ These options alter the XML for a single class of XML elements. More complete do
 Generally these options map pretty straightforwardly to the libvirt XML, documented at L<http://libvirt.org/formatdomain.html>
 
 Option strings are in the format of: --option opt=val,opt2=val2,...  example: --disk path=/tmp/foo,shareable=on. Properties can be used with '--option opt=,', so to clear a disks cache setting you could use '--disk cache=,'
-
-Every XML option has a special value 'clearxml=yes'. When combined with --edit, it will completely blank out the XML block being edited before applying the requested changes. This allows completely rebuilding an XML block. See EXAMPLES for some usage.
 
 For any option, use --option=? to see a list of all available sub options, example: --disk=?  or  --boot=?
 

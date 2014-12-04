@@ -948,16 +948,12 @@ class VirtCLIParser(object):
     def __init_global_params(self):
         def set_clearxml_cb(opts, inst, cliname, val):
             ignore = opts = cliname
-            if not self.clear_attr and not self.devclass:
+            if not self.clear_attr:
                 raise RuntimeError("Don't know how to clearxml --%s" %
                                    self.cli_arg_name)
-
-            clearobj = inst
-            if self.clear_attr:
-                clearobj = getattr(inst, self.clear_attr)
             if val is not True:
                 return
-            clearobj.clear()
+            getattr(inst, self.clear_attr).clear()
 
         self.set_param(None, "clearxml",
                        setter_cb=set_clearxml_cb, is_onoff=True)
