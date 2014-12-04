@@ -301,6 +301,7 @@ SUPPORT_CONN_LOADER_ROM = _make(version="1.2.9")
 SUPPORT_CONN_DOMAIN_CAPABILITIES = _make(
     function="virConnect.getDomainCapabilities",
     run_args=(None, None, None, None))
+SUPPORT_CONN_VIDEO_NEW_RAM_OUTPUT = _make(version="1.2.11")
 
 
 # Domain checks
