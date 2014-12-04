@@ -181,6 +181,38 @@
       <readonly/>
     </disk>
 
+    <!-- Network disks -->
+    <disk type='network' device='disk'>
+      <driver name='qemu' type='raw'/>
+      <source protocol='http' name='/my-file.img'>
+        <host name='example.org'/>
+      </source>
+      <target dev='vdaa' bus='virtio'/>
+    </disk>
+    <disk type='network' device='disk'>
+      <driver name='qemu' type='raw'/>
+      <source protocol='nbd'>
+        <host transport='unix' socket='/var/run/nbdsock'/>
+      </source>
+      <target dev='vdab' bus='virtio'/>
+    </disk>
+    <disk type='network' device='disk'>
+      <driver name='qemu' type='raw'/>
+      <source protocol='rbd' name='pool/image'>
+        <host name='mon1.example.org' port='6321'/>
+        <host name='mon2.example.org' port='6322'/>
+        <host name='mon3.example.org' port='6322'/>
+      </source>
+      <target dev='vdac' bus='virtio'/>
+    </disk>
+    <disk type='network' device='disk'>
+      <driver name='qemu' type='raw'/>
+      <source protocol='sheepdog' name='image,with,commas'>
+        <host name='example.org' port='6000'/>
+      </source>
+      <target dev='vdad' bus='virtio'/>
+    </disk>
+
 
     <!-- interfaces -->
     <interface type='network'>
@@ -1736,7 +1768,28 @@ ba</description>
     <host name='ceph-mon-3.example.com' port='6789'/>
     <name>rbd</name>
   </source>
+
+  <volume>
+    <name>vol1</name>
+    <key>rbd/vol1</key>
+    <capacity unit='bytes'>8302592</capacity>
+    <allocation unit='bytes'>8388608</allocation>
+    <target>
+      <path>rbd/vol1</path>
+    </target>
+  </volume>
+
+  <volume>
+    <name>some-rbd-vol</name>
+    <key>rbd/some-rbd-vol</key>
+    <capacity unit='bytes'>104857600</capacity>
+    <allocation unit='bytes'>104857600</allocation>
+    <target>
+      <path>rbd/some-rbd-vol</path>
+    </target>
+  </volume>
 </pool>
+
 
 <pool type='sheepdog'>
   <name>myshpool</name>
@@ -1748,22 +1801,24 @@ ba</description>
     <host name='localhost' port='7000'/>
     <name>mysheeppool</name>
   </source>
+
   <volume type='network'>
-  <name>vol_sheepdog</name>
-  <key>sheep/vol_sheepdog</key>
-  <capacity unit='bytes'>1024</capacity>
-  <allocation unit='bytes'>0</allocation>
-  <target>
-    <path>sheepdog:vol_sheepdog</path>
-    <format type='unknown'/>
-    <permissions>
-      <mode>0600</mode>
-      <owner>4294967295</owner>
-      <group>4294967295</group>
-    </permissions>
+    <name>vol_sheepdog</name>
+    <key>sheep/vol_sheepdog</key>
+    <capacity unit='bytes'>1024</capacity>
+    <allocation unit='bytes'>0</allocation>
+    <target>
+      <path>sheepdog:vol_sheepdog</path>
+      <format type='unknown'/>
+      <permissions>
+        <mode>0600</mode>
+        <owner>4294967295</owner>
+        <group>4294967295</group>
+      </permissions>
     </target>
   </volume>
 </pool>
+
 
 <pool type='gluster'>
   <name>gluster-pool</name>
@@ -1776,25 +1831,26 @@ ba</description>
     <dir path='/'/>
     <name>test-volume</name>
   </source>
+
   <volume type='network'>
-  <name>test-gluster.raw</name>
-  <key>gluster://192.168.1.100/test-volume/test-gluster.raw</key>
-  <capacity unit='bytes'>10737418240</capacity>
-  <allocation unit='bytes'>2489327616</allocation>
-  <target>
-    <path>gluster://192.168.1.100/test-volume/test-gluster.raw</path>
-    <format type='raw'/>
-    <permissions>
-      <mode>0666</mode>
-      <owner>0</owner>
-      <group>0</group>
-    </permissions>
-    <timestamps>
-      <atime>1413881655.870313004</atime>
-      <mtime>1411649104.965642390</mtime>
-      <ctime>1412163870.190503958</ctime>
-    </timestamps>
-  </target>
+    <name>test-gluster.raw</name>
+    <key>gluster://192.168.1.100/test-volume/test-gluster.raw</key>
+    <capacity unit='bytes'>10737418240</capacity>
+    <allocation unit='bytes'>2489327616</allocation>
+    <target>
+      <path>gluster://192.168.1.100/test-volume/test-gluster.raw</path>
+      <format type='raw'/>
+      <permissions>
+        <mode>0666</mode>
+        <owner>0</owner>
+        <group>0</group>
+      </permissions>
+      <timestamps>
+        <atime>1413881655.870313004</atime>
+        <mtime>1411649104.965642390</mtime>
+        <ctime>1412163870.190503958</ctime>
+      </timestamps>
+    </target>
   </volume>
 </pool>
 
