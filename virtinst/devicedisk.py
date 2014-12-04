@@ -139,9 +139,6 @@ def _distill_storage(conn, do_create, nomanaged,
     return backend, creator
 
 
-_TARGET_PROPS = ["file", "dev", "dir"]
-
-
 class VirtualDisk(VirtualDevice):
     virtual_device_type = VirtualDevice.VIRTUAL_DEV_DISK
 
@@ -202,22 +199,6 @@ class VirtualDisk(VirtualDevice):
             return "phy"
         elif disk_type == VirtualDisk.TYPE_FILE:
             return "file"
-        return "file"
-
-    @staticmethod
-    def disk_type_to_target_prop(disk_type):
-        """
-        Convert a value of VirtualDisk.type to it's associated XML
-        target property name
-        """
-        if disk_type == VirtualDisk.TYPE_FILE:
-            return "file"
-        elif disk_type == VirtualDisk.TYPE_BLOCK:
-            return "dev"
-        elif disk_type == VirtualDisk.TYPE_DIR:
-            return "dir"
-        elif disk_type == VirtualDisk.TYPE_VOLUME:
-            return "volume"
         return "file"
 
     @staticmethod
@@ -515,7 +496,8 @@ class VirtualDisk(VirtualDevice):
         "type", "device",
         "driver_name", "driver_type",
         "driver_cache", "driver_discard", "driver_io", "error_policy",
-        "_xmlpath", "target", "bus",
+        "_source_file", "_source_dev", "_source_dir", "_source_volume",
+        "target", "bus",
     ]
 
     def __init__(self, *args, **kwargs):
@@ -541,7 +523,7 @@ class VirtualDisk(VirtualDevice):
             raise ValueError("Can't change disk path if storage creation info "
                              "has been set.")
         self._change_backend(val, None)
-        self._xmlpath = self.path
+        self._set_xmlpath(self.path)
     path = property(_get_path, _set_path)
 
 
@@ -603,12 +585,44 @@ class VirtualDisk(VirtualDevice):
     # XML properties #
     ##################
 
-    def _make_source_xpath(self):
-        return "./source/@" + self.disk_type_to_target_prop(self.type)
-    _xmlpath = XMLProperty(name="disk path",
-                           make_xpath_cb=_make_source_xpath,
-                           clear_first=["./source/@" + target for target in
-                                        _TARGET_PROPS])
+    _source_file = XMLProperty("./source/@file")
+    _source_dev = XMLProperty("./source/@dev")
+    _source_dir = XMLProperty("./source/@dir")
+    _source_volume = XMLProperty("./source/@volume")
+
+    def _disk_type_to_object_prop_name(self):
+        disk_type = self.type
+        if disk_type == VirtualDisk.TYPE_BLOCK:
+            return "_source_dev"
+        elif disk_type == VirtualDisk.TYPE_DIR:
+            return "_source_dir"
+        elif disk_type == VirtualDisk.TYPE_VOLUME:
+            return "_source_volume"
+        else:
+            return "_source_file"
+    def _get_xmlpath(self):
+        # Hack to avoid an ordering problem when building XML.
+        # If both path and type are unset, but we try to read back disk.path,
+        # it triggers default_type->storage_backend->path->default_type...
+        # loop
+        if (not self._storage_creator and
+            not self.__storage_backend and
+            not self._source_file and
+            not self._source_dev and
+            not self._source_dir and
+            not self._source_volume):
+            return None
+
+        propname = self._disk_type_to_object_prop_name()
+        return getattr(self, propname)
+    def _set_xmlpath(self, val):
+        self._source_dev = None
+        self._source_dir = None
+        self._source_volume = None
+        self._source_file = None
+
+        propname = self._disk_type_to_object_prop_name()
+        return setattr(self, propname, val)
 
     sourcePool = XMLProperty("./source/@pool")
     sourceStartupPolicy = XMLProperty("./source/@startupPolicy")
@@ -648,9 +662,8 @@ class VirtualDisk(VirtualDevice):
 
     def _get_storage_backend(self):
         if self.__storage_backend is None:
-            self.__storage_backend = diskbackend.StorageBackend(self.conn,
-                                                                self._xmlpath,
-                                                                None, None)
+            self.__storage_backend = diskbackend.StorageBackend(
+                self.conn, self._get_xmlpath(), None, None)
         return self.__storage_backend
     def _set_storage_backend(self, val):
         self.__storage_backend = val
@@ -709,7 +722,7 @@ class VirtualDisk(VirtualDevice):
         self._storage_creator = creator
         if self._storage_creator:
             self._storage_creator.fake = bool(fake)
-            self._xmlpath = self.path
+            self._set_xmlpath(self.path)
         else:
             if (vol_install or clone_path):
                 raise RuntimeError("Need storage creation but it "
@@ -739,9 +752,14 @@ class VirtualDisk(VirtualDevice):
         the associated backing storage. This needs to be manually called
         if changing an existing disk's media.
         """
+        path = self._get_xmlpath()
+
         self.type = self._get_default_type()
         self.driver_name = self._get_default_driver_name()
         self.driver_type = self._get_default_driver_type()
+
+        # Need to retrigger this if self.type changed
+        self._set_xmlpath(path)
 
     def __managed_storage(self):
         """
