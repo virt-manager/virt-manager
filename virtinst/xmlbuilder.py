@@ -334,8 +334,7 @@ class XMLProperty(property):
     def __init__(self, xpath=None, name=None, doc=None,
                  set_converter=None, validate_cb=None, make_xpath_cb=None,
                  is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
-                 clear_first=None, default_cb=None, default_name=None,
-                 do_abspath=False):
+                 default_cb=None, default_name=None, do_abspath=False):
         """
         Set a XMLBuilder class property that represents a value in the
         <domain> XML. For example
@@ -366,9 +365,6 @@ class XMLProperty(property):
         @param is_int: Whether this is an integer property in the XML
         @param is_yesno: Whether this is a yes/no property in the XML
         @param is_onoff: Whether this is an on/off property in the XML
-        @param clear_first: List of xpaths to unset before any 'set' operation.
-            For those weird interdependent XML props like disk source type and
-            path attribute.
         @param default_cb: If building XML from scratch, and this property
             is never explicitly altered, this function is called for setting
             a default value in the XML, and for any 'get' call before the
@@ -393,7 +389,6 @@ class XMLProperty(property):
         self._make_xpath_cb = make_xpath_cb
         self._validate_cb = validate_cb
         self._convert_value_for_setter_cb = set_converter
-        self._setter_clear_these_first = clear_first or []
         self._default_cb = default_cb
         self._default_name = default_name
 
@@ -449,25 +444,6 @@ class XMLProperty(property):
         """
         nodes = _get_xpath_node(xmlbuilder._xmlstate.xml_ctx, xpath)
         return util.listify(nodes)
-
-    def _build_clear_list(self, xmlbuilder, setternode):
-        """
-        Build a list of nodes that we should erase first before performing
-        a set operation. But we don't want to unset a node that we are
-        just going to 'set' on top of afterwards, so skip those ones.
-        """
-        clear_nodes = []
-
-        for cpath in self._setter_clear_these_first:
-            cpath = xmlbuilder.fix_relative_xpath(cpath)
-            cnode = _get_xpath_node(xmlbuilder._xmlstate.xml_ctx, cpath)
-            if not cnode:
-                continue
-            if setternode and setternode.nodePath() == cnode.nodePath():
-                continue
-            clear_nodes.append(cnode)
-        return clear_nodes
-
 
     def _convert_get_value(self, val):
         if self._default_name and val == self._default_name:
@@ -634,27 +610,20 @@ class XMLProperty(property):
             ctx = _make_xml_context(root_node)
 
         xpath = self._make_xpath(xmlbuilder)
+
+        if setval is None or setval is False:
+            _remove_xpath_node(ctx, xpath)
+            return
+
         node = _get_xpath_node(xmlbuilder._xmlstate.xml_ctx, xpath)
-        clearlist = self._build_clear_list(xmlbuilder, node)
+        if not node:
+            node = _build_xpath_node(root_node, xpath)
 
-        node_map = []
-        if clearlist:
-            node_map += _tuplify_lists(clearlist, None,
-                                       [n.nodePath() for n in clearlist])
-        node_map += [(node, setval, xpath)]
+        if setval is True:
+            # Boolean property, creating the node is enough
+            return
 
-        for node, val, use_xpath in node_map:
-            if val is None or val is False:
-                _remove_xpath_node(ctx, use_xpath)
-                continue
-
-            if not node:
-                node = _build_xpath_node(root_node, use_xpath)
-
-            if val is True:
-                # Boolean property, creating the node is enough
-                continue
-            node.setContent(util.xml_escape(str(val)))
+        node.setContent(util.xml_escape(str(setval)))
 
 
 class _XMLState(object):
