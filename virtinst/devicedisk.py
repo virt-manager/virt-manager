@@ -105,7 +105,6 @@ def _distill_storage(conn, do_create, nomanaged,
     Validates and updates params when the backing storage is changed
     """
     pool = None
-    path_is_pool = False
     storage_capable = conn.check_support(conn.SUPPORT_CONN_STORAGE)
 
     if vol_object:
@@ -114,12 +113,11 @@ def _distill_storage(conn, do_create, nomanaged,
         pass
     elif path and not nomanaged:
         path = os.path.abspath(path)
-        (vol_object, pool, path_is_pool) = diskbackend.manage_path(conn, path)
+        (vol_object, pool) = diskbackend.manage_path(conn, path)
 
 
     creator = None
-    backend = diskbackend.StorageBackend(conn, path, vol_object,
-                                         path_is_pool and pool or None)
+    backend = diskbackend.StorageBackend(conn, path, vol_object)
     if not do_create:
         return backend, None
 
@@ -664,7 +662,7 @@ class VirtualDisk(VirtualDevice):
     def _get_storage_backend(self):
         if self.__storage_backend is None:
             self.__storage_backend = diskbackend.StorageBackend(
-                self.conn, self._get_xmlpath(), None, None)
+                self.conn, self._get_xmlpath(), None)
         return self.__storage_backend
     def _set_storage_backend(self, val):
         self.__storage_backend = val

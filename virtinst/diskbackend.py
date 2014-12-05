@@ -110,8 +110,9 @@ def manage_path(conn, path):
     If path is not managed, try to create a storage pool to probe the path
     """
     vol, pool, path_is_pool = check_if_path_managed(conn, path)
+    ignore = path_is_pool
     if vol or pool or not _can_auto_manage(path):
-        return vol, pool, path_is_pool
+        return vol, pool
 
     dirname = os.path.dirname(path)
     poolname = os.path.basename(dirname).replace(" ", "_")
@@ -133,7 +134,7 @@ def manage_path(conn, path):
             vol = pool.storageVolLookupByName(checkvol)
             break
 
-    return vol, pool, False
+    return vol, pool
 
 
 def build_vol_install(conn, path, pool, size, sparse):
@@ -413,24 +414,17 @@ class StorageBackend(_StorageBase):
     Class that carries all the info about any existing storage that
     the disk references
     """
-    def __init__(self, conn, path, vol_object, pool_object):
+    def __init__(self, conn, path, vol_object):
         _StorageBase.__init__(self)
 
         self._conn = conn
         self._vol_object = vol_object
-        self._pool_object = pool_object
         self._path = path
 
         if self._vol_object is not None:
-            self._pool_object = None
             self._path = None
-        elif self._pool_object is not None:
-            if self._path is None:
-                raise ValueError("path must be specified if backend is "
-                                 "pool object.")
 
         # Cached bits
-        self._pool_xml = None
         self._vol_xml = None
         self._exists = None
         self._size = None
@@ -440,12 +434,6 @@ class StorageBackend(_StorageBase):
     ################
     # Internal API #
     ################
-
-    def _get_pool_xml(self):
-        if self._pool_xml is None:
-            self._pool_xml = StoragePool(self._conn,
-                parsexml=self._pool_object.XMLDesc(0))
-        return self._pool_xml
 
     def _get_vol_xml(self):
         if self._vol_xml is None:
@@ -475,8 +463,6 @@ class StorageBackend(_StorageBase):
             ret = 0
             if self._vol_object:
                 ret = self._get_vol_xml().capacity
-            elif self._pool_object:
-                ret = self._get_pool_xml().capacity
             elif self._path:
                 ignore, ret = util.stat_disk(self.path)
             self._size = (float(ret) / 1024.0 / 1024.0 / 1024.0)
@@ -486,7 +472,7 @@ class StorageBackend(_StorageBase):
         if self._exists is None:
             if self.path is None:
                 self._exists = True
-            elif self._vol_object or self._pool_object:
+            elif self._vol_object:
                 self._exists = True
             elif not self._conn.is_remote() and os.path.exists(self._path):
                 self._exists = True
@@ -516,9 +502,6 @@ class StorageBackend(_StorageBase):
                 else:
                     self._dev_type = "file"
 
-            elif self._pool_object:
-                self._dev_type = self._get_pool_xml().get_vm_disk_type()
-
             elif self._path and not self._conn.is_remote():
                 if os.path.isdir(self._path):
                     self._dev_type = "dir"
@@ -537,4 +520,4 @@ class StorageBackend(_StorageBase):
         return None
 
     def is_managed(self):
-        return bool(self._vol_object or self._pool_object)
+        return bool(self._vol_object)

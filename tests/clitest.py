@@ -701,7 +701,7 @@ c.add_valid("--disk %(SHARE)s,perms=sh")  # Colliding shareable storage
 c.add_valid("--disk path=%(EXISTIMG1)s,device=cdrom --disk path=%(EXISTIMG1)s,device=cdrom")  # Two IDE cds
 c.add_valid("--disk %(DIR)s,device=floppy")  # Dir with a floppy dev
 c.add_valid("--disk %(EXISTIMG1)s,driver_name=qemu,driver_type=qcow2")  # Driver name and type options
-c.add_valid("--disk /dev/hda")  # Using a storage pool source as a disk
+c.add_valid("--disk /dev/zero")  # Referencing a local unmanaged /dev node
 c.add_valid("--disk pool=default,size=.00001")  # Building 'default' pool
 c.add_valid("--disk path=%(EXISTIMG1)s,bus=usb")  # Existing USB disk
 c.add_valid("--disk path=%(EXISTIMG1)s,bus=usb,removable=on")  # Existing USB disk as removable
