@@ -28,61 +28,86 @@ from . import util
 from .storage import StoragePool, StorageVolume
 
 
-def check_if_path_managed(conn, path):
+def _lookup_pool_by_dirname(conn, path):
     """
-    Determine if we can use libvirt storage APIs to create or lookup
-    the passed path. If we can't, throw an error
+    Try to find the parent pool for the passed path.
+    If found, and the pool isn't running, attempt to start it up.
+
+    return pool, or None if not found
     """
-    vol = None
-    pool = None
-    verr = None
-
-    def lookup_vol_by_path():
-        try:
-            vol = conn.storageVolLookupByPath(path)
-            vol.info()
-            return vol, None
-        except libvirt.libvirtError, e:
-            if (hasattr(libvirt, "VIR_ERR_NO_STORAGE_VOL")
-                and e.get_error_code() != libvirt.VIR_ERR_NO_STORAGE_VOL):
-                raise
-            return None, e
-
-    def lookup_vol_name(name):
-        try:
-            name = os.path.basename(path)
-            if pool and name in pool.listVolumes():
-                return pool.lookupByName(name)
-        except:
-            pass
+    pool = StoragePool.lookup_pool_by_path(conn, os.path.dirname(path))
+    if not pool:
         return None
 
-    vol = lookup_vol_by_path()[0]
-    if not vol:
-        pool = StoragePool.lookup_pool_by_path(conn, os.path.dirname(path))
+    # Ensure pool is running
+    if pool.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
+        pool.create(0)
+    return pool
 
-        # Ensure pool is running
-        if pool and pool.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
-            pool.create(0)
 
-    # Attempt to lookup path as a storage volume
-    if pool and not vol:
-        try:
-            # Pool may need to be refreshed, but if it errors,
-            # invalidate it
-            pool.refresh(0)
-            vol, verr = lookup_vol_by_path()
-            if verr:
-                vol = lookup_vol_name(os.path.basename(path))
-        except Exception, e:
-            vol = None
-            pool = None
-            verr = str(e)
+def _lookup_vol_by_path(conn, path):
+    """
+    Try to find a volume matching the full passed path. Call info() on
+    it to ensure the volume wasn't removed behind libvirt's back
+    """
+    try:
+        vol = conn.storageVolLookupByPath(path)
+        vol.info()
+        return vol, None
+    except libvirt.libvirtError, e:
+        if (hasattr(libvirt, "VIR_ERR_NO_STORAGE_VOL")
+            and e.get_error_code() != libvirt.VIR_ERR_NO_STORAGE_VOL):
+            raise
+        return None, e
+
+
+def _lookup_vol_by_basename(pool, path):
+    """
+    Try to lookup a volume for 'path' in parent 'pool' by it's filename.
+    This sometimes works in cases where full volume path lookup doesn't,
+    since not all libvirt storage backends implement path lookup.
+    """
+    name = os.path.basename(path)
+    if name in pool.listVolumes():
+        return pool.lookupByName(name)
+
+
+def check_if_path_managed(conn, path):
+    """
+    Try to lookup storage objects for the passed path.
+
+    Returns (volume, parent pool). Only one is returned at a time.
+    """
+    vol, ignore = _lookup_vol_by_path(conn, path)
+    if vol:
+        return vol, None
+
+    pool = _lookup_pool_by_dirname(conn, path)
+    if not pool:
+        return None, None
+
+    # We have the parent pool, but didn't find a volume on first lookup
+    # attempt. Refresh the pool and try again, incase we were just out
+    # of date.
+    try:
+        pool.refresh(0)
+        vol, verr = _lookup_vol_by_path(conn, path)
+        if verr:
+            try:
+                vol = _lookup_vol_by_basename(pool, path)
+            except:
+                pass
+    except Exception, e:
+        vol = None
+        pool = None
+        verr = str(e)
 
     if not vol and not pool and verr:
         raise ValueError(_("Cannot use storage %(path)s: %(err)s") %
             {'path' : path, 'err' : verr})
 
+    if vol:
+        pool = None
     return vol, pool
 
 
@@ -118,12 +143,7 @@ def manage_path(conn, path):
     pool = poolxml.install(build=False, create=True, autostart=True)
     conn.clear_cache(pools=True)
 
-    vol = None
-    for checkvol in pool.listVolumes():
-        if checkvol == os.path.basename(path):
-            vol = pool.storageVolLookupByName(checkvol)
-            break
-
+    vol = _lookup_vol_by_basename(pool, path)
     return vol, pool
 
 
