@@ -212,9 +212,17 @@ class VirtualDisk(VirtualDevice):
         return bus
 
     @staticmethod
-    def path_exists(conn, path):
+    def path_definitely_exists(conn, path):
         """
-        Check if path exists. If we can't determine, return False
+        Check if path exists.
+
+        return True if we are certain, False otherwise. Path may in fact
+        exist if we return False, but we can't exhaustively know in all
+        cases.
+
+        (In fact if cached storage volume data is out of date, the volume
+         may have disappeared behind out back, but that shouldn't have bad
+         effects in practice.)
         """
         if path is None:
             return False

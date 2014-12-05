@@ -267,7 +267,7 @@ class vmmAddStorage(vmmGObjectUI):
         do_exist = False
         ret = True
         try:
-            do_exist = virtinst.VirtualDisk.path_exists(conn, ideal)
+            do_exist = virtinst.VirtualDisk.path_definitely_exists(conn, ideal)
             ret = virtinst.VirtualDisk.path_in_use_by(conn, ideal)
         except:
             logging.exception("Error checking default path usage")

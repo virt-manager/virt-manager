@@ -701,8 +701,8 @@ class vmmCloneVM(vmmGObjectUI):
 
         new_path = self.widget("change-storage-new").get_text()
 
-        if virtinst.VirtualDisk.path_exists(self.clone_design.conn,
-                                            new_path):
+        if virtinst.VirtualDisk.path_definitely_exists(self.clone_design.conn,
+                                                       new_path):
             res = self.err.yes_no(_("Cloning will overwrite the existing "
                                     "file"),
                                     _("Using an existing image will overwrite "

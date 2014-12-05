@@ -554,7 +554,8 @@ class vmmConnection(vmmGObject):
 
     def get_vol_by_path(self, path):
         # path_exists will handle stuff like refreshing a busted pool
-        if not virtinst.VirtualDisk.path_exists(self.get_backend(), path):
+        if not virtinst.VirtualDisk.path_definitely_exists(self.get_backend(),
+                                                           path):
             return None
 
         for pool in self._pools.values():

@@ -2621,7 +2621,8 @@ class vmmDetails(vmmGObjectUI):
         iotune_wis = (disk.iotune_wis or 0)
 
         show_format = (not self.is_customize_dialog or
-                       disk.path_exists(disk.conn, disk.path))
+                       virtinst.VirtualDisk.path_definitely_exists(
+                            disk.conn, disk.path))
 
         size = _("Unknown")
         if not path:

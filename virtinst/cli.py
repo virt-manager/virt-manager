@@ -329,7 +329,7 @@ def validate_disk(dev, warn_overwrite=False):
         """
         if not warn_overwrite:
             return
-        if VirtualDisk.path_exists(dev.conn, dev.path):
+        if VirtualDisk.path_definitely_exists(dev.conn, dev.path):
             _optional_fail(
                 _("This will overwrite the existing path '%s'" % dev.path))
 

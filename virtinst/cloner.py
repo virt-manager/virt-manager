@@ -476,7 +476,7 @@ class Cloner(object):
         clonebase = os.path.join(dirname, clonebase)
         return util.generate_name(
                     clonebase,
-                    lambda p: VirtualDisk.path_exists(self.conn, p),
+                    lambda p: VirtualDisk.path_definitely_exists(self.conn, p),
                     suffix,
                     lib_collision=False)
 
