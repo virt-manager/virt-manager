@@ -220,11 +220,10 @@ class VirtualDisk(VirtualDevice):
             return False
 
         try:
-            (vol, pool, path_is_pool) = diskbackend.check_if_path_managed(
-                conn, path)
+            (vol, pool) = diskbackend.check_if_path_managed(conn, path)
             ignore = pool
 
-            if vol or path_is_pool:
+            if vol:
                 return True
 
             if not conn.is_remote():

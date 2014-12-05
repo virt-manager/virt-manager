@@ -236,30 +236,20 @@ class StoragePool(_StorageObject):
 
 
     @staticmethod
-    def lookup_pool_by_path(conn, path, use_source=False):
+    def lookup_pool_by_path(conn, path):
         """
         Return the first pool with matching matching target path.
         return the first we find, active or inactive. This iterates over
         all pools and dumps their xml, so it is NOT quick.
-
-        @use_source: If true, compare against pool source path, not
-            target path.
 
         @returns: virStoragePool object if found, None otherwise
         """
         if not conn.check_support(conn.SUPPORT_CONN_STORAGE):
             return None
 
-        def check_pool(pool, path):
-            if use_source:
-                xml_path = pool.source_path
-            else:
-                xml_path = pool.target_path
-            if xml_path is not None and os.path.abspath(xml_path) == path:
-                return True
-
         for pool in conn.fetch_all_pools():
-            if check_pool(pool, path):
+            xml_path = pool.target_path
+            if xml_path is not None and os.path.abspath(xml_path) == path:
                 return conn.storagePoolLookupByName(pool.name)
         return None
 

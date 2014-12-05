@@ -36,7 +36,6 @@ def check_if_path_managed(conn, path):
     vol = None
     pool = None
     verr = None
-    path_is_pool = False
 
     def lookup_vol_by_path():
         try:
@@ -84,15 +83,7 @@ def check_if_path_managed(conn, path):
         raise ValueError(_("Cannot use storage %(path)s: %(err)s") %
             {'path' : path, 'err' : verr})
 
-    if not vol:
-        # See if path is a pool source, and allow it through
-        trypool = StoragePool.lookup_pool_by_path(
-            conn, path, use_source=True)
-        if trypool:
-            path_is_pool = True
-            pool = trypool
-
-    return vol, pool, path_is_pool
+    return vol, pool
 
 
 def _can_auto_manage(path):
@@ -109,8 +100,7 @@ def manage_path(conn, path):
     """
     If path is not managed, try to create a storage pool to probe the path
     """
-    vol, pool, path_is_pool = check_if_path_managed(conn, path)
-    ignore = path_is_pool
+    vol, pool = check_if_path_managed(conn, path)
     if vol or pool or not _can_auto_manage(path):
         return vol, pool
 
