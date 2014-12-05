@@ -236,6 +236,9 @@ class VirtualConnection(object):
         ret = []
         for xmlobj in self.fetch_all_pools():
             pool = self._libvirtconn.storagePoolLookupByName(xmlobj.name)
+            if pool.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
+                continue
+
             ignore, ignore, vols = pollhelpers.fetch_volumes(
                 self, pool, {}, lambda obj, ignore: obj)
 
