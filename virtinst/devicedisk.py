@@ -97,44 +97,33 @@ def _is_dir_searchable(uid, username, path):
     return bool(re.search("user:%s:..x" % username, out))
 
 
-def _distill_storage(conn, do_create, nomanaged,
-                     path, vol_object, vol_install,
-                     clone_path, backing_store,
-                     *args):
-    """
-    Validates and updates params when the backing storage is changed
-    """
-    pool = None
-    storage_capable = conn.check_support(conn.SUPPORT_CONN_STORAGE)
-
-    if vol_object:
-        pass
-    elif not storage_capable:
-        pass
-    elif path and not nomanaged:
+def _make_storage_backend(conn, nomanaged, path, vol_object):
+    parent_pool = None
+    if (conn.check_support(conn.SUPPORT_CONN_STORAGE) and
+        not vol_object and path and not nomanaged):
         path = os.path.abspath(path)
-        (vol_object, pool) = diskbackend.manage_path(conn, path)
+        (vol_object, parent_pool) = diskbackend.manage_path(conn, path)
 
-
-    creator = None
     backend = diskbackend.StorageBackend(conn, path, vol_object)
-    if not do_create:
-        return backend, None
+    return backend, parent_pool
 
-    if backend.exists(auto_check=False) and path is not None:
+
+def _make_storage_creator(conn, backend,
+                          parent_pool, vol_install, clone_path,                                           *creator_args):
+    if backend.exists(auto_check=False) and backend.path is not None:
         if not clone_path:
-            return backend, None
+            return
 
-    if path and not (vol_install or pool or clone_path):
+    if backend.path and not (vol_install or parent_pool or clone_path):
         raise RuntimeError(_("Don't know how to create storage for "
             "path '%s'. Use libvirt APIs to manage the parent directory "
-            "as a pool first.") % path)
+            "as a pool first.") % backend.path)
 
-    if path or vol_install or pool or clone_path:
-        creator = diskbackend.StorageCreator(conn, path, pool,
-                                             vol_install, clone_path,
-                                             backing_store, *args)
-    return backend, creator
+    if not (backend.path or vol_install or parent_pool or clone_path):
+        return
+
+    return diskbackend.StorageCreator(conn, backend.path,
+        parent_pool, vol_install, clone_path, *creator_args)
 
 
 class VirtualDisk(VirtualDevice):
@@ -720,10 +709,12 @@ class VirtualDisk(VirtualDevice):
         if fake and size is None:
             size = .000001
 
-        ignore, creator = _distill_storage(
-            self.conn, True, self.nomanaged, path, None,
-            vol_install, clone_path, backing_store,
-            size, sparse, fmt)
+        backend, parent_pool = _make_storage_backend(self.conn,
+            self.nomanaged, path, None)
+        creator_args = (backing_store, size, sparse, fmt)
+        creator = _make_storage_creator(self.conn, backend, parent_pool,
+                                        vol_install, clone_path,
+                                        *creator_args)
 
         self._storage_creator = creator
         if self._storage_creator:
@@ -747,9 +738,9 @@ class VirtualDisk(VirtualDevice):
         return self.is_floppy() or self.is_cdrom()
 
     def _change_backend(self, path, vol_object):
-        backend, ignore = _distill_storage(
-                                self.conn, False, self.nomanaged,
-                                path, vol_object, None, None, None)
+        backend, pool = _make_storage_backend(self.conn, self.nomanaged,
+                                              path, vol_object)
+        ignore = pool
         self._storage_backend = backend
 
     def sync_path_props(self):
