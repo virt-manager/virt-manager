@@ -147,17 +147,20 @@ def manage_path(conn, path):
     return vol, pool
 
 
-def build_vol_install(conn, path, pool, size, sparse):
-    # Path wasn't a volume. See if base of path is a managed
-    # pool, and if so, setup a StorageVolume object
+def build_vol_install(conn, volname, poolobj, size, sparse,
+                      fmt=None, backing_store=None):
+    """
+    Helper for building a StorageVolume instance to pass to VirtualDisk
+    for eventual storage creation.
+
+    :param volname: name of the volume to be created
+    :param size: size in bytes
+    """
     if size is None:
         raise ValueError(_("Size must be specified for non "
-                           "existent volume path '%s'" % path))
+                           "existent volume '%s'" % volname))
 
-    logging.debug("Path '%s' is target for pool '%s'. "
-                  "Creating volume '%s'.",
-                  os.path.dirname(path), pool.name(),
-                  os.path.basename(path))
+    logging.debug("Creating volume '%s' on pool '%s'", volname, poolobj.name())
 
     cap = (size * 1024 * 1024 * 1024)
     if sparse:
@@ -166,10 +169,18 @@ def build_vol_install(conn, path, pool, size, sparse):
         alloc = cap
 
     volinst = StorageVolume(conn)
-    volinst.pool = pool
-    volinst.name = os.path.basename(path)
+    volinst.pool = poolobj
+    volinst.name = volname
     volinst.capacity = cap
     volinst.allocation = alloc
+    volinst.backing_store = backing_store
+
+    if fmt:
+        if not volinst.supports_property("format"):
+            raise ValueError(_("Format attribute not supported for this "
+                               "volume type"))
+        volinst.format = fmt
+
     return volinst
 
 
@@ -201,10 +212,18 @@ class StorageCreator(_StorageBase):
         self.fake = False
 
         if not self._vol_install and self._pool:
-            self._vol_install = build_vol_install(conn, path, pool,
-                                                   size, sparse)
-        self._set_format(fmt)
-        self._set_backing_store(backing_store)
+            self._vol_install = build_vol_install(conn,
+                                                  os.path.basename(path), pool,
+                                                  size, sparse, fmt=fmt,
+                                                  backing_store=backing_store)
+
+        if not self._vol_install:
+            if backing_store:
+                raise RuntimeError(_("Cannot set backing store for unmanaged "
+                                     "storage."))
+            if fmt and fmt != "raw":
+                raise RuntimeError(_("Format cannot be specified for "
+                                     "unmanaged storage."))
 
         if self._vol_install:
             self._path = None
@@ -212,34 +231,6 @@ class StorageCreator(_StorageBase):
 
         # Cached bits
         self._dev_type = None
-
-
-    ###############
-    # Private API #
-    ###############
-
-    def _set_format(self, val):
-        if val is None:
-            return
-
-        if self._vol_install:
-            if not self._vol_install.supports_property("format"):
-                raise ValueError(_("Storage type does not support format "
-                                   "parameter."))
-            if self._vol_install.format != val:
-                self._vol_install.format = val
-
-        elif val != "raw":
-            raise RuntimeError(_("Format cannot be specified for "
-                                 "unmanaged storage."))
-
-    def _set_backing_store(self, val):
-        if val is None:
-            return
-        if not self._vol_install:
-            raise RuntimeError(_("Cannot set backing store for unmanaged "
-                                 "storage."))
-        self._vol_install.backing_store = val
 
 
     ##############
@@ -256,8 +247,6 @@ class StorageCreator(_StorageBase):
 
     def get_vol_install(self):
         return self._vol_install
-    def get_sparse(self):
-        return self._sparse
 
     def get_size(self):
         if self._size is None:

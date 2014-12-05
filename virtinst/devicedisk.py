@@ -424,20 +424,6 @@ class VirtualDisk(VirtualDevice):
             return (True, 0)
 
     @staticmethod
-    def lookup_vol_object(conn, name_tuple):
-        """
-        Return a volume instance from a pool name, vol name tuple
-        """
-        if not conn.check_support(conn.SUPPORT_CONN_STORAGE):
-            raise ValueError(_("Connection does not support storage lookup."))
-
-        try:
-            pool = conn.storagePoolLookupByName(name_tuple[0])
-            return pool.storageVolLookupByName(name_tuple[1])
-        except Exception, e:
-            raise ValueError(_("Couldn't lookup volume object: %s" % str(e)))
-
-    @staticmethod
     def build_vol_install(*args, **kwargs):
         return diskbackend.build_vol_install(*args, **kwargs)
 
@@ -520,11 +506,9 @@ class VirtualDisk(VirtualDevice):
         self._set_xmlpath(self.path)
     path = property(_get_path, _set_path)
 
-
-    def get_sparse(self):
-        if self._storage_creator:
-            return self._storage_creator.get_sparse()
-        return None
+    def set_vol_object(self, vol_object):
+        self._change_backend(None, vol_object)
+        self._set_xmlpath(self.path)
 
     def get_vol_object(self):
         return self._storage_backend.get_vol_object()

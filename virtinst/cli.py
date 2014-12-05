@@ -1447,68 +1447,25 @@ def _default_image_file_format(conn):
     return "raw"
 
 
-def _parse_disk_source(guest, path, pool, vol, size, fmt, sparse):
-    abspath = None
-    volinst = None
-    volobj = None
+def _get_default_image_format(conn, poolobj):
+    tmpvol = StorageVolume(conn)
+    tmpvol.pool = poolobj
 
-    # Strip media type
-    optcount = sum([bool(p) for p in [path, pool, vol]])
-    if optcount > 1:
-        fail(_("Cannot specify more than 1 storage path"))
-    if optcount == 0 and size:
-        # Saw something like --disk size=X, have it imply pool=default
-        pool = "default"
+    if tmpvol.file_type != StorageVolume.TYPE_FILE:
+        return None
+    return _default_image_file_format(conn)
 
-    if path:
-        abspath = os.path.abspath(path)
-        if os.path.dirname(abspath) == "/var/lib/libvirt/images":
-            StoragePool.build_default_pool(guest.conn)
 
-    elif pool:
-        if not size:
-            raise ValueError(_("Size must be specified with all 'pool='"))
-        if pool == "default":
-            StoragePool.build_default_pool(guest.conn)
+def _generate_new_volume_name(guest, poolobj, fmt):
+    collidelist = []
+    for disk in guest.get_devices("disk"):
+        if (disk.get_vol_install() and
+            disk.get_vol_install().pool.name() == poolobj.name()):
+            collidelist.append(os.path.basename(disk.path))
 
-        poolobj = guest.conn.storagePoolLookupByName(pool)
-        collidelist = []
-        for disk in guest.get_devices("disk"):
-            if (disk.get_vol_install() and
-                disk.get_vol_install().pool.name() == poolobj.name()):
-                collidelist.append(os.path.basename(disk.path))
-
-        tmpvol = StorageVolume(guest.conn)
-        tmpvol.pool = poolobj
-        if fmt is None and tmpvol.file_type == tmpvol.TYPE_FILE:
-            fmt = _default_image_file_format(guest.conn)
-
-        ext = StorageVolume.get_file_extension_for_format(fmt)
-        vname = StorageVolume.find_free_name(
-            poolobj, guest.name, suffix=ext, collidelist=collidelist)
-
-        volinst = VirtualDisk.build_vol_install(
-                guest.conn, vname, poolobj, size, sparse)
-        if fmt:
-            if not volinst.supports_property("format"):
-                raise ValueError(_("Format attribute not supported for this "
-                                   "volume type"))
-            volinst.format = fmt
-
-    elif vol:
-        if not vol.count("/"):
-            raise ValueError(_("Storage volume must be specified as "
-                               "vol=poolname/volname"))
-        vollist = vol.split("/")
-        voltuple = (vollist[0], vollist[1])
-        logging.debug("Parsed volume: as pool='%s' vol='%s'",
-                      voltuple[0], voltuple[1])
-        if voltuple[0] == "default":
-            StoragePool.build_default_pool(guest.conn)
-
-        volobj = VirtualDisk.lookup_vol_object(guest.conn, voltuple)
-
-    return abspath, volinst, volobj
+    ext = StorageVolume.get_file_extension_for_format(fmt)
+    return StorageVolume.find_free_name(
+        poolobj, guest.name, suffix=ext, collidelist=collidelist)
 
 
 class ParserDisk(VirtCLIParser):
@@ -1576,31 +1533,55 @@ class ParserDisk(VirtCLIParser):
                 pass
             else:
                 fail(_("Unknown '%s' value '%s'" % ("perms", val)))
-        convert_perms(opts.get_opt_param("perms"))
 
-        path = opts.get_opt_param("path")
-        had_path = path is not None
+        has_path = "path" in opts.opts
         backing_store = opts.get_opt_param("backing_store")
-        pool = opts.get_opt_param("pool")
-        vol = opts.get_opt_param("vol")
+        poolname = opts.get_opt_param("pool")
+        volname = opts.get_opt_param("vol")
         size = parse_size(opts.get_opt_param("size"))
         fmt = opts.get_opt_param("format")
         sparse = _on_off_convert("sparse", opts.get_opt_param("sparse"))
+        convert_perms(opts.get_opt_param("perms"))
 
-        abspath, volinst, volobj = _parse_disk_source(
-            self.guest, path, pool, vol, size, fmt, sparse)
+        optcount = sum([bool(p) for p in [has_path, poolname, volname]])
+        if optcount > 1:
+            fail(_("Cannot specify more than 1 storage path"))
+        if optcount == 0 and size:
+            # Saw something like --disk size=X, have it imply pool=default
+            poolname = "default"
 
-        path = volobj and volobj.path() or abspath
-        if had_path or path:
-            opts.opts["path"] = path or ""
+        if volname:
+            if volname.count("/") != 1:
+                raise ValueError(_("Storage volume must be specified as "
+                                   "vol=poolname/volname"))
+            poolname, volname = volname.split("/")
+            logging.debug("Parsed volume: as pool='%s' vol='%s'",
+                          poolname, volname)
+
+        if poolname:
+            if poolname == "default":
+                StoragePool.build_default_pool(self.guest.conn)
+            poolobj = self.guest.conn.storagePoolLookupByName(poolname)
+
+        vol_install = None
+        vol_object = None
+        if volname:
+            vol_object = poolobj.storageVolLookupByName(volname)
+        elif poolname:
+            if not fmt:
+                fmt = _get_default_image_format(self.guest.conn, poolobj)
+            vname = _generate_new_volume_name(self.guest, poolobj, fmt)
+            vol_install = VirtualDisk.build_vol_install(
+                    self.guest.conn, vname, poolobj, size, sparse,
+                    fmt=fmt, backing_store=backing_store)
 
         inst = VirtCLIParser._parse(self, opts, inst)
 
-        create_kwargs = {"size": size, "fmt": fmt, "sparse": sparse,
-            "vol_install": volinst, "backing_store": backing_store}
-        if any(create_kwargs.values()):
-            inst.set_create_storage(**create_kwargs)
-        inst.cli_size = size
+        if vol_object:
+            inst.set_vol_object(vol_object)
+        elif size or fmt or sparse or vol_install:
+            inst.set_create_storage(size=size, fmt=fmt,
+                vol_install=vol_install, sparse=sparse)
 
         if not inst.target:
             skip_targets = [d.target for d in self.guest.get_devices("disk")]
@@ -1608,9 +1589,6 @@ class ParserDisk(VirtCLIParser):
             inst.cli_set_target = True
 
         return inst
-
-
-parse_disk = ParserDisk("disk").parse
 
 
 #####################
