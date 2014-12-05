@@ -786,44 +786,26 @@ class VirtualDisk(VirtualDevice):
 
             return True
 
-        storage_capable = self.conn.check_support(
-                                        self.conn.SUPPORT_CONN_STORAGE)
-
-        if self.conn.is_remote():
-            if not storage_capable:
-                raise ValueError(_("Connection doesn't support remote "
-                                   "storage."))
-
-        # The main distinctions from this point forward:
-        # - Are we doing storage API operations or local media checks?
-        # - Do we need to create the storage?
-
-        managed_storage = self.__managed_storage()
-        create_media = self.creating_storage()
-
-        # If not creating the storage, our job is easy
-        if not create_media:
+        if not self.creating_storage():
             if not self._storage_backend.exists():
                 raise ValueError(
                     _("Must specify storage creation parameters for "
                       "non-existent path '%s'.") % self.path)
 
-            # Make sure we have access to the local path
-            if not managed_storage:
-                if (os.path.isdir(self.path) and not self.is_floppy()):
-                    raise ValueError(_("The path '%s' must be a file or a "
-                                       "device, not a directory") % self.path)
-
+            if (self.type == self.TYPE_DIR and
+                not self.is_floppy()):
+                raise ValueError(_("The path '%s' must be a file or a "
+                                   "device, not a directory") % self.path)
             return True
 
         self._storage_creator.validate(self.device, self.type)
 
         # Applicable for managed or local storage
-        ret = self.is_size_conflict()
-        if ret[0]:
-            raise ValueError(ret[1])
-        elif ret[1]:
-            logging.warn(ret[1])
+        err, msg = self.is_size_conflict()
+        if err:
+            raise ValueError(msg)
+        if msg:
+            logging.warn(msg)
 
 
     def setup(self, meter=None):
