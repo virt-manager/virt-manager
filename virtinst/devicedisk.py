@@ -614,21 +614,13 @@ class VirtualDisk(VirtualDevice):
         return None
 
     def _get_xmlpath(self):
-        # Hack to avoid an ordering problem when building XML.
-        # If both path and type are unset, but we try to read back disk.path,
-        # it triggers default_type->storage_backend->path->default_type...
-        # loop
-        if (not self._storage_creator and
-            not self.__storage_backend and
-            not self._source_file and
-            not self._source_dev and
-            not self._source_dir):
-            return None
-
-        propname = self._disk_type_to_object_prop_name()
-        if not propname:
-            return None
-        return getattr(self, propname)
+        if self._source_file:
+            return self._source_file
+        if self._source_dev:
+            return self._source_dev
+        if self._source_dir:
+            return self._source_dir
+        return None
 
     def _set_xmlpath(self, val):
         self._clear_source_xml()
