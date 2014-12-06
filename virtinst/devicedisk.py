@@ -410,6 +410,12 @@ class VirtualDisk(VirtualDevice):
             raise ValueError(_("Size must be specified for non "
                                "existent volume '%s'" % volname))
 
+        # This catches --disk /dev/idontexist,size=1 if /dev is unmanaged
+        if not poolobj:
+            raise RuntimeError(_("Don't know how to create storage for "
+                "path '%s'. Use libvirt APIs to manage the parent directory "
+                "as a pool first.") % volname)
+
         logging.debug("Creating volume '%s' on pool '%s'",
                       volname, poolobj.name())
 
@@ -710,9 +716,7 @@ class VirtualDisk(VirtualDevice):
         If true, this disk needs storage creation parameters or things
         will error.
         """
-        return (self.path and
-                not self._storage_backend.exists() and
-                self.get_parent_pool())
+        return self.path and not self._storage_backend.exists()
 
     def __managed_storage(self):
         """
