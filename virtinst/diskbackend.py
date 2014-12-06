@@ -220,19 +220,26 @@ class _StorageCreator(_StorageBase):
     def is_managed(self):
         return bool(self._vol_install)
 
-    def validate(self, device, devtype):
-        if device in ["floppy", "cdrom"]:
+    def validate(self, disk):
+        if disk.device in ["floppy", "cdrom"]:
             raise ValueError(_("Cannot create storage for %s device.") %
-                               device)
+                             disk.device)
 
         if self.is_managed():
-            return self._vol_install.validate()
-        if devtype == "block":
-            raise ValueError(_("Local block device path '%s' must "
-                               "exist.") % self.path)
-        if self._size is None:
-            raise ValueError(_("size is required for non-existent disk "
-                               "'%s'" % self.path))
+            self._vol_install.validate()
+        else:
+            if disk.type == "block":
+                raise ValueError(_("Local block device path '%s' must "
+                                   "exist.") % self.path)
+            if self._size is None:
+                raise ValueError(_("size is required for non-existent disk "
+                                   "'%s'" % self.path))
+
+        err, msg = self.is_size_conflict()
+        if err:
+            raise ValueError(msg)
+        if msg:
+            logging.warn(msg)
 
     def is_size_conflict(self):
         raise NotImplementedError()
@@ -424,7 +431,7 @@ class StorageBackend(_StorageBase):
             self._size = (float(ret) / 1024.0 / 1024.0 / 1024.0)
         return self._size
 
-    def exists(self, auto_check=True):
+    def exists(self):
         if self._exists is None:
             if self.path is None:
                 self._exists = True
@@ -434,8 +441,7 @@ class StorageBackend(_StorageBase):
                 self._exists = True
             elif self._parent_pool:
                 self._exists = False
-            elif (auto_check and
-                  self._conn.is_remote() and
+            elif (self._conn.is_remote() and
                   not _can_auto_manage(self._path)):
                 # This allows users to pass /dev/sdX and we don't try to
                 # validate it exists on the remote connection, since

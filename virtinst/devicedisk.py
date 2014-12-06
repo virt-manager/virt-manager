@@ -730,39 +730,26 @@ class VirtualDisk(VirtualDevice):
         return bool(self._storage_creator)
 
     def validate(self):
-        """
-        function to validate all the complex interaction between the various
-        disk parameters.
-        """
-        # No storage specified for a removable device type (CDROM, floppy)
         if self.path is None:
             if not self.can_be_empty():
                 raise ValueError(_("Device type '%s' requires a path") %
                                  self.device)
 
-            return True
+            return
 
-        if not self.creating_storage():
-            if not self._storage_backend.exists():
-                raise ValueError(
-                    _("Must specify storage creation parameters for "
-                      "non-existent path '%s'.") % self.path)
+        if (self.type == VirtualDisk.TYPE_DIR and
+            not self.is_floppy()):
+            raise ValueError(_("The path '%s' must be a file or a "
+                               "device, not a directory") % self.path)
 
-            if (self.type == self.TYPE_DIR and
-                not self.is_floppy()):
-                raise ValueError(_("The path '%s' must be a file or a "
-                                   "device, not a directory") % self.path)
-            return True
+        if (not self.creating_storage() and
+            not self._storage_backend.exists()):
+            raise ValueError(
+                _("Must specify storage creation parameters for "
+                  "non-existent path '%s'.") % self.path)
 
-        self._storage_creator.validate(self.device, self.type)
-
-        # Applicable for managed or local storage
-        err, msg = self.is_size_conflict()
-        if err:
-            raise ValueError(msg)
-        if msg:
-            logging.warn(msg)
-
+        if self._storage_creator:
+            self._storage_creator.validate(self)
 
     def setup(self, meter=None):
         """
