@@ -486,7 +486,6 @@ class VirtualDisk(VirtualDevice):
         self._storage_creator = None
 
         self.nomanaged = False
-        self.transient = False
 
 
     #############################

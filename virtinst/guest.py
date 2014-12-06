@@ -632,13 +632,15 @@ class Guest(XMLBuilder):
             # But only if we are a distro that doesn't have a multi
             # stage install (aka not Windows)
             return (d.is_cdrom() and
-                    d.transient and
+                    getattr(d, "installer_media", False) and
                     not install and
                     not self.get_continue_inst())
 
         def do_skip_disk(d):
             # Skip transient labeled non-media disks
-            return (d.is_disk() and d.transient and not install)
+            return (d.is_disk() and
+                    getattr(d, "installer_media", False) and
+                    not install)
 
         for dev in self.get_devices("disk"):
             if do_skip_disk(dev):

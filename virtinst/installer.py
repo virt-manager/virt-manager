@@ -107,7 +107,7 @@ class Installer(object):
         dev.path = path
         dev.device = dev.DEVICE_CDROM
         dev.read_only = True
-        dev.transient = transient
+        setattr(dev, "installer_media", transient)
 
         dev.validate()
         return dev
