@@ -248,7 +248,15 @@ class Command(object):
                     file(filename, "w").write(output)
 
                 if "--print-diff" in self.argv and output.count("\n") > 3:
-                    output = "\n".join(output.splitlines()[3:])
+                    # 1) Strip header
+                    # 2) Simplify context lines to reduce churn when
+                    #    libvirt or testdriver changes
+                    newlines = []
+                    for line in output.splitlines()[3:]:
+                        if line.startswith("@@"):
+                            line = "@@"
+                        newlines.append(line)
+                    output = "\n".join(newlines)
 
                 utils.diff_compare(output, filename)
 
