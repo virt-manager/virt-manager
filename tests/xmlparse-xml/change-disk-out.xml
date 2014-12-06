@@ -36,9 +36,12 @@
       <source dev="/dev/null"/>
       <target dev="hdd" bus="ide"/>
     </disk>
-    <disk type="block" device="cdrom">
+    <disk type="network" device="cdrom">
       <target dev="sda" bus="scsi"/>
       <readonly/>
+      <source protocol="http" name="/my/file">
+        <host name="exaaaaample.com"/>
+      </source>
     </disk>
     <disk type="file" device="floppy">
       <target dev="fda" bus="fdc"/>
@@ -66,9 +69,25 @@
     </disk>
     <disk type="volume" device="disk">
       <driver name="qemu"/>
-      <source pool="anotherPool" volume="foobar"/>
+      <source pool="anotherPool" volume="newvol"/>
       <target dev="vdb" bus="virtio"/>
       <readonly/>
+    </disk>
+    <disk type="network" device="disk">
+      <driver name="qemu" type="raw"/>
+      <source protocol="gluster" name="new-val/vol">
+        <host name="diff.example.org" port="1234"/>
+        <host name="mon2.example.org" port="6322"/>
+        <host name="mon3.example.org" port="6322"/>
+      </source>
+      <target dev="vdc" bus="virtio"/>
+    </disk>
+    <disk type="network" device="disk">
+      <driver name="qemu" type="raw"/>
+      <source protocol="nbd">
+        <host transport="unix" socket="/var/run/nbdsock"/>
+      </source>
+      <target dev="vdd" bus="virtio"/>
     </disk>
     <input type="mouse" bus="ps2"/>
     <graphics type="vnc" display=":3.4" xauth="/tmp/.Xauthority"/>

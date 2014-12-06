@@ -347,6 +347,14 @@ class XMLParseTest(unittest.TestCase):
         check("bus", "ide", "fdc")
         check("error_policy", "stop", None)
 
+        disk = _get_disk("sda")
+        check = self._make_checker(disk)
+        check("source_protocol", None, "http")
+        check("source_name", None, "/my/file")
+        check("source_host_name", None, "exaaaaample.com")
+        disk.sync_path_props()
+        check("path", "http://exaaaaample.com/my/file")
+
         disk = _get_disk("fda")
         check = self._make_checker(disk)
         check("path", None, "/dev/default-pool/default-vol")
@@ -369,6 +377,22 @@ class XMLParseTest(unittest.TestCase):
         disk = _get_disk("vdb")
         check = self._make_checker(disk)
         check("source_pool", "defaultPool", "anotherPool")
+        check("source_volume", "foobar", "newvol")
+
+        disk = _get_disk("vdc")
+        check = self._make_checker(disk)
+        check("source_protocol", "rbd", "gluster")
+        check("source_name", "pool/image", "new-val/vol")
+        check("source_host_name", "mon1.example.org", "diff.example.org")
+        check("source_host_port", 6321, 1234)
+        check("path", "gluster://diff.example.org:1234/new-val/vol")
+
+        disk = _get_disk("vdd")
+        check = self._make_checker(disk)
+        check("source_protocol", "nbd")
+        check("source_host_transport", "unix")
+        check("source_host_socket", "/var/run/nbdsock")
+        check("path", "nbd+unix:///var/run/nbdsock")
 
         self._alter_compare(guest.get_xml_config(), outfile)
 

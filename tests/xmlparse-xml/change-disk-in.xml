@@ -68,6 +68,22 @@
       <target dev='vdb' bus='virtio'/>
       <readonly/>
     </disk>
+    <disk type='network' device='disk'>
+      <driver name='qemu' type='raw'/>
+      <source protocol='rbd' name='pool/image'>
+        <host name='mon1.example.org' port='6321'/>
+        <host name='mon2.example.org' port='6322'/>
+        <host name='mon3.example.org' port='6322'/>
+      </source>
+      <target dev='vdc' bus='virtio'/>
+    </disk>
+    <disk type='network' device='disk'>
+      <driver name='qemu' type='raw'/>
+      <source protocol='nbd'>
+        <host transport='unix' socket='/var/run/nbdsock'/>
+      </source>
+      <target dev='vdd' bus='virtio'/>
+    </disk>
     <input type="mouse" bus="ps2"/>
     <graphics type="vnc" display=":3.4" xauth="/tmp/.Xauthority"/>
     <console type="pty"/>

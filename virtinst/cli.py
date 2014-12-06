@@ -1486,6 +1486,13 @@ class ParserDisk(VirtCLIParser):
 
         self.set_param("source_pool", "source_pool")
         self.set_param("source_volume", "source_volume")
+        self.set_param("source_name", "source_name")
+        self.set_param("source_protocol", "source_protocol")
+        self.set_param("source_host_name", "source_host_name")
+        self.set_param("source_host_port", "source_host_port")
+        self.set_param("source_host_socket", "source_host_socket")
+        self.set_param("source_host_transport", "source_host_transport")
+
         self.set_param("path", "path")
         self.set_param("device", "device")
         self.set_param("bus", "bus")

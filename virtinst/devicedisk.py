@@ -139,7 +139,8 @@ class VirtualDisk(VirtualDevice):
     TYPE_BLOCK = "block"
     TYPE_DIR = "dir"
     TYPE_VOLUME = "volume"
-    types = [TYPE_FILE, TYPE_BLOCK, TYPE_DIR, TYPE_VOLUME]
+    TYPE_NETWORK = "network"
+    types = [TYPE_FILE, TYPE_BLOCK, TYPE_DIR, TYPE_NETWORK]
 
     IO_MODE_NATIVE = "native"
     IO_MODE_THREADS = "threads"
@@ -490,7 +491,9 @@ class VirtualDisk(VirtualDevice):
         "driver_name", "driver_type",
         "driver_cache", "driver_discard", "driver_io", "error_policy",
         "_source_file", "_source_dev", "_source_dir",
-        "source_volume", "source_pool",
+        "source_volume", "source_pool", "source_protocol", "source_name",
+        "source_host_name", "source_host_port",
+        "source_host_transport", "source_host_socket",
         "target", "bus",
     ]
 
@@ -506,6 +509,10 @@ class VirtualDisk(VirtualDevice):
     #############################
 
     def _get_path(self):
+        if self.type == VirtualDisk.TYPE_NETWORK:
+            # Fill in a completed URL for virt-manager UI, path comparison, etc
+            return self._url_from_network_source()
+
         if self._storage_creator:
             return self._storage_creator.path
         return self._storage_backend.path
@@ -585,11 +592,42 @@ class VirtualDisk(VirtualDevice):
     source_pool = XMLProperty("./source/@pool")
     source_volume = XMLProperty("./source/@volume")
 
-    def _get_default_type(self):
+    source_name = XMLProperty("./source/@name")
+    source_protocol = XMLProperty("./source/@protocol")
+    # Technically multiple host lines can be listed
+    source_host_name = XMLProperty("./source/host/@name")
+    source_host_port = XMLProperty("./source/host/@port", is_int=True)
+    source_host_transport = XMLProperty("./source/host/@transport")
+    source_host_socket = XMLProperty("./source/host/@socket")
+
+    def _url_from_network_source(self):
+        ret = self.source_protocol
+        if self.source_host_transport:
+            ret += "+%s" % self.source_host_transport
+        ret += "://"
+        if self.source_host_name:
+            ret += self.source_host_name
+            if self.source_host_port:
+                ret += ":" + str(self.source_host_port)
+        if self.source_name:
+            if not self.source_name.startswith("/"):
+                ret += "/"
+            ret += self.source_name
+        elif self.source_host_socket:
+            if not self.source_host_socket.startswith("/"):
+                ret += "/"
+            ret += self.source_host_socket
+        return ret
+
+    def _get_default_type(self, skip_backend=False):
         if self.source_pool or self.source_volume:
             return VirtualDisk.TYPE_VOLUME
+        if self.source_protocol:
+            return VirtualDisk.TYPE_NETWORK
         if self._storage_creator:
             return self._storage_creator.get_dev_type()
+        if not self.__storage_backend and skip_backend:
+            return self.TYPE_FILE
         return self._storage_backend.get_dev_type()
     type = XMLProperty("./@type", default_cb=_get_default_type)
 
@@ -602,6 +640,12 @@ class VirtualDisk(VirtualDevice):
         self._source_dir = None
         self.source_volume = None
         self.source_pool = None
+        self.source_name = None
+        self.source_protocol = None
+        self.source_host_name = None
+        self.source_host_port = None
+        self.source_host_transport = None
+        self.source_host_socket = None
 
     def _disk_type_to_object_prop_name(self):
         disk_type = self.type
@@ -673,8 +717,11 @@ class VirtualDisk(VirtualDevice):
         path = None
         vol_object = None
         parent_pool = None
+        is_network = False
+        typ = self._get_default_type(skip_backend=True)
+        is_network = (typ == VirtualDisk.TYPE_NETWORK)
 
-        if self.source_pool and self.source_volume:
+        if typ == VirtualDisk.TYPE_VOLUME:
             conn = self.conn
             is_weak = "weakref" in str(type(conn))
             if is_weak:
@@ -695,7 +742,7 @@ class VirtualDisk(VirtualDevice):
             path = self._get_xmlpath()
 
         return diskbackend.StorageBackend(self.conn, path,
-                                          vol_object, parent_pool)
+            vol_object, parent_pool, is_network=is_network)
 
     def _get_storage_backend(self):
         if self.__storage_backend is None:
@@ -747,7 +794,8 @@ class VirtualDisk(VirtualDevice):
         self.driver_type = self._get_default_driver_type()
 
         # Need to retrigger this if self.type changed
-        self._set_xmlpath(path)
+        if path:
+            self._set_xmlpath(path)
 
     def wants_storage_creation(self):
         """

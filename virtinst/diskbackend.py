@@ -373,12 +373,14 @@ class StorageBackend(_StorageBase):
     Class that carries all the info about any existing storage that
     the disk references
     """
-    def __init__(self, conn, path, vol_object, parent_pool):
+    def __init__(self, conn, path, vol_object, parent_pool,
+                 is_network=False):
         _StorageBase.__init__(self, conn)
 
         self._vol_object = vol_object
         self._parent_pool = parent_pool
         self._path = path
+        self._is_network = is_network
 
         if self._vol_object is not None:
             self._path = None
@@ -437,10 +439,14 @@ class StorageBackend(_StorageBase):
                 self._exists = True
             elif self._vol_object:
                 self._exists = True
-            elif not self._conn.is_remote() and os.path.exists(self._path):
+            elif (not self._is_network and
+                  not self._conn.is_remote() and
+                  os.path.exists(self._path)):
                 self._exists = True
             elif self._parent_pool:
                 self._exists = False
+            elif self._is_network:
+                self._exists = True
             elif (self._conn.is_remote() and
                   not _can_auto_manage(self._path)):
                 # This allows users to pass /dev/sdX and we don't try to
@@ -466,7 +472,9 @@ class StorageBackend(_StorageBase):
                 else:
                     self._dev_type = "file"
 
-            elif self._path and not self._conn.is_remote():
+            elif (not self._is_network and
+                  self._path and
+                  not self._conn.is_remote()):
                 if os.path.isdir(self._path):
                     self._dev_type = "dir"
                 elif util.stat_disk(self._path)[0]:

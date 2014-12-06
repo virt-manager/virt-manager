@@ -562,6 +562,8 @@ c.add_compare("""--hvm --pxe \
 --disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,total_bytes_sec=10,total_iops_sec=20,write_bytes_sec=5,write_iops_sec=6 \
 --disk size=1 \
 --disk source_pool=rbd-ceph,source_volume=some-rbd-vol \
+--disk source_protocol=http,source_host_name=example.com,source_host_port=8000,source_name=/path/to/my/file,bus=scsi \
+--disk source_protocol=nbd,source_host_transport=unix,source_host_socket=/tmp/socket,bus=scsi \
 --serial tcp,host=:2222,mode=bind,protocol=telnet \
 --filesystem /source,/target,mode=squash \
 --network user,mac=12:34:56:78:11:22,portgroup=foo \
