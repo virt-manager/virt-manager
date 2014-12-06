@@ -328,8 +328,13 @@ class vmmAddStorage(vmmGObjectUI):
             disk.path = path or None
             disk.read_only = readonly
             disk.device = device
-            disk.set_create_storage(size=size, sparse=sparse,
-                                    fmt=fmt or None)
+
+            if disk.wants_storage_creation():
+                pool = disk.get_parent_pool()
+                vol_install = virtinst.VirtualDisk.build_vol_install(
+                    disk.conn, os.path.basename(disk.path), pool,
+                    size, sparse, fmt=fmt or None)
+                disk.set_vol_install(vol_install)
 
             if not fmt:
                 fmt = self.conn.get_default_storage_format()

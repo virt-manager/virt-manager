@@ -753,7 +753,9 @@ class VirtualDisk(VirtualDevice):
         If true, this disk needs storage creation parameters or things
         will error.
         """
-        return self.path and not self._storage_backend.exists()
+        return (self.path and
+                not self._storage_backend.exists() and
+                self.get_parent_pool())
 
     def __managed_storage(self):
         """
