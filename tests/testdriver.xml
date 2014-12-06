@@ -128,7 +128,12 @@
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
 
 
-    <!-- disk devices -->
+    <!-- disk devices
+         Keep these ordered in the same order as libvirt. Which
+         is by bus: fdc, ide, scsi, virtio, usb, xen
+      -->
+
+    <!-- bus fdc -->
     <disk type='block' device='floppy'>
       <source dev='/dev/null'/>
       <target dev='fda' bus='fdc'/>
@@ -138,6 +143,8 @@
       <source dir='/tmp'/>
       <target dev='fdb' bus='fdc'/>
     </disk>
+
+    <!-- bus ide -->
     <disk type='file' device='disk'>
       <source file='/tmp/foobar'/>
       <target dev='hda' bus='ide'/>
@@ -146,42 +153,35 @@
         <total_iops_sec>50</total_iops_sec>
       </iotune>
     </disk>
+    <disk type='file' device='cdrom'>
+      <source startupPolicy='requisite'/>
+      <target dev='hdb' bus='ide'/>
+    </disk>
     <disk type='block' device='disk'>
       <driver cache='none' type="raw"/>
       <source dev='/dev/null'/>
       <target dev='hdc' bus='ide'/>
     </disk>
+
+    <!-- bus scsi -->
     <disk type='block' device='cdrom'>
       <target dev='sdb' bus='scsi'/>
     </disk>
+
+    <!-- bus virtio -->
     <disk type='file' device='disk'>
       <driver name="qemu" type="qcow2" cache="none"/>
       <source file='/tmp/foobar2'/>
-      <target dev='vdc' bus='virtio'/>
+      <target dev='vda' bus='virtio'/>
       <boot order='1'/>
       <shareable/>
-    </disk>
-    <disk type='block' device='disk'>
-      <source dev='/dev/default-pool/overlay.img'/>
-      <target dev='sdd' bus='usb'/>
-    </disk>
-    <disk type='file' device='disk'>
-      <driver name='tap' type='qcow' cache="writethrough"/>
-      <source file='/tmp/foobar4'/>
-      <target dev='xvdc' bus='xen'/>
-    </disk>
-    <disk type='file' device='cdrom'>
-      <source startupPolicy='requisite'/>
-      <target dev='hdb' bus='ide'/>
     </disk>
     <disk type="volume" device="disk">
       <driver name="qemu"/>
       <source pool="pool" volume="foobarvolume"/>
-      <target dev="hdc" bus="virtio"/>
+      <target dev="vdb" bus="virtio"/>
       <readonly/>
     </disk>
-
-    <!-- Network disks -->
     <disk type='network' device='disk'>
       <driver name='qemu' type='raw'/>
       <source protocol='http' name='/my-file.img'>
@@ -211,6 +211,19 @@
         <host name='example.org' port='6000'/>
       </source>
       <target dev='vdad' bus='virtio'/>
+    </disk>
+
+    <!-- bus usb -->
+    <disk type='block' device='disk'>
+      <source dev='/dev/default-pool/overlay.img'/>
+      <target dev='sdd' bus='usb'/>
+    </disk>
+
+    <!-- bus xen -->
+    <disk type='file' device='disk'>
+      <driver name='tap' type='qcow' cache="writethrough"/>
+      <source file='/tmp/foobar4'/>
+      <target dev='xvdc' bus='xen'/>
     </disk>
 
 
