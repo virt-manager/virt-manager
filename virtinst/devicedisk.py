@@ -489,7 +489,8 @@ class VirtualDisk(VirtualDevice):
         "type", "device",
         "driver_name", "driver_type",
         "driver_cache", "driver_discard", "driver_io", "error_policy",
-        "_source_file", "_source_dev", "_source_dir", "_source_volume",
+        "_source_file", "_source_dev", "_source_dir",
+        "source_volume", "source_pool",
         "target", "bus",
     ]
 
@@ -546,11 +547,6 @@ class VirtualDisk(VirtualDevice):
     # Internal defaults helpers #
     #############################
 
-    def _get_default_type(self):
-        if self._storage_creator:
-            return self._storage_creator.get_dev_type()
-        return self._storage_backend.get_dev_type()
-
     def _get_default_driver_name(self):
         if not self.path:
             return None
@@ -578,14 +574,34 @@ class VirtualDisk(VirtualDevice):
         return _qemu_sanitize_drvtype(self.type, drvtype)
 
 
-    ##################
-    # XML properties #
-    ##################
+    #############################
+    # XML source media handling #
+    #############################
 
     _source_file = XMLProperty("./source/@file")
     _source_dev = XMLProperty("./source/@dev")
     _source_dir = XMLProperty("./source/@dir")
-    _source_volume = XMLProperty("./source/@volume")
+
+    source_pool = XMLProperty("./source/@pool")
+    source_volume = XMLProperty("./source/@volume")
+
+    def _get_default_type(self):
+        if self.source_pool or self.source_volume:
+            return VirtualDisk.TYPE_VOLUME
+        if self._storage_creator:
+            return self._storage_creator.get_dev_type()
+        return self._storage_backend.get_dev_type()
+    type = XMLProperty("./@type", default_cb=_get_default_type)
+
+    def _clear_source_xml(self):
+        """
+        Unset all XML properties that describe the actual source media
+        """
+        self._source_file = None
+        self._source_dev = None
+        self._source_dir = None
+        self.source_volume = None
+        self.source_pool = None
 
     def _disk_type_to_object_prop_name(self):
         disk_type = self.type
@@ -593,10 +609,10 @@ class VirtualDisk(VirtualDevice):
             return "_source_dev"
         elif disk_type == VirtualDisk.TYPE_DIR:
             return "_source_dir"
-        elif disk_type == VirtualDisk.TYPE_VOLUME:
-            return "_source_volume"
-        else:
+        elif disk_type == VirtualDisk.TYPE_FILE:
             return "_source_file"
+        return None
+
     def _get_xmlpath(self):
         # Hack to avoid an ordering problem when building XML.
         # If both path and type are unset, but we try to read back disk.path,
@@ -606,27 +622,29 @@ class VirtualDisk(VirtualDevice):
             not self.__storage_backend and
             not self._source_file and
             not self._source_dev and
-            not self._source_dir and
-            not self._source_volume):
+            not self._source_dir):
             return None
 
         propname = self._disk_type_to_object_prop_name()
+        if not propname:
+            return None
         return getattr(self, propname)
+
     def _set_xmlpath(self, val):
-        self._source_dev = None
-        self._source_dir = None
-        self._source_volume = None
-        self._source_file = None
+        self._clear_source_xml()
 
         propname = self._disk_type_to_object_prop_name()
+        if not propname:
+            return
         return setattr(self, propname, val)
 
-    source_pool = XMLProperty("./source/@pool")
-    startup_policy = XMLProperty("./source/@startupPolicy")
+
+    ##################
+    # XML properties #
+    ##################
 
     device = XMLProperty("./@device",
                          default_cb=lambda s: s.DEVICE_DISK)
-    type = XMLProperty("./@type", default_cb=_get_default_type)
     driver_name = XMLProperty("./driver/@name",
                               default_cb=_get_default_driver_name)
     driver_type = XMLProperty("./driver/@type",
@@ -645,6 +663,7 @@ class VirtualDisk(VirtualDevice):
 
     error_policy = XMLProperty("./driver/@error_policy")
     serial = XMLProperty("./serial")
+    startup_policy = XMLProperty("./source/@startupPolicy")
 
     iotune_rbs = XMLProperty("./iotune/read_bytes_sec", is_int=True)
     iotune_ris = XMLProperty("./iotune/read_iops_sec", is_int=True)
@@ -658,10 +677,37 @@ class VirtualDisk(VirtualDevice):
     # Validation assistance methods #
     #################################
 
+    def _make_default_storage_backend(self):
+        path = None
+        vol_object = None
+        parent_pool = None
+
+        if self.source_pool and self.source_volume:
+            conn = self.conn
+            is_weak = "weakref" in str(type(conn))
+            if is_weak:
+                conn = conn()
+
+            try:
+                parent_pool = conn.storagePoolLookupByName(self.source_pool)
+                vol_object = parent_pool.storageVolLookupByName(
+                    self.source_volume)
+            except:
+                if not is_weak:
+                    # User explicitly requested these bits, so error
+                    raise
+                logging.debug("Error fetching source pool=%s vol=%s",
+                    self.source_pool, self.source_volume, exc_info=True)
+
+        if not vol_object:
+            path = self._get_xmlpath()
+
+        return diskbackend.StorageBackend(self.conn, path,
+                                          vol_object, parent_pool)
+
     def _get_storage_backend(self):
         if self.__storage_backend is None:
-            self.__storage_backend = diskbackend.StorageBackend(
-                self.conn, self._get_xmlpath(), None, None)
+            self.__storage_backend = self._make_default_storage_backend()
         return self.__storage_backend
     def _set_storage_backend(self, val):
         self.__storage_backend = val

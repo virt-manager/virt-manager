@@ -1484,6 +1484,8 @@ class ParserDisk(VirtCLIParser):
         self.set_param(None, "format", setter_cb=noset_cb)
         self.set_param(None, "sparse", setter_cb=noset_cb)
 
+        self.set_param("source_pool", "source_pool")
+        self.set_param("source_volume", "source_volume")
         self.set_param("path", "path")
         self.set_param("device", "device")
         self.set_param("bus", "bus")

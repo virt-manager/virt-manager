@@ -178,7 +178,7 @@
     </disk>
     <disk type="volume" device="disk">
       <driver name="qemu"/>
-      <source pool="pool" volume="foobarvolume"/>
+      <source pool="rbd-ceph" volume="vol1"/>
       <target dev="vdb" bus="virtio"/>
       <readonly/>
     </disk>

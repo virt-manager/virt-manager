@@ -73,6 +73,10 @@
       <source file="/var/lib/libvirt/images/foobar.qcow2"/>
       <target dev="hdc" bus="ide"/>
     </disk>
+    <disk type="volume" device="disk">
+      <source volume="some-rbd-vol" pool="rbd-ceph"/>
+      <target dev="hdd" bus="ide"/>
+    </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>
     </controller>
@@ -217,6 +221,10 @@
     <disk type="file" device="disk">
       <source file="/var/lib/libvirt/images/foobar.qcow2"/>
       <target dev="hdc" bus="ide"/>
+    </disk>
+    <disk type="volume" device="disk">
+      <source volume="some-rbd-vol" pool="rbd-ceph"/>
+      <target dev="hdd" bus="ide"/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>
