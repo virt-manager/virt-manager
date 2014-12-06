@@ -41,16 +41,6 @@ DISKPOOL = "/dev/disk-pool"
 local_files = [FILE1, FILE2]
 
 clonexml_dir = os.path.join(os.getcwd(), "tests/clone-xml")
-clone_files = []
-
-for tmpf in os.listdir(clonexml_dir):
-    black_list = ["managed-storage", "cross-pool", "force", "skip",
-                   "fullpool"]
-    if tmpf.endswith("-out.xml"):
-        tmpf = tmpf[0:(len(tmpf) - len("-out.xml"))]
-        if tmpf not in clone_files and tmpf not in black_list:
-            clone_files.append(tmpf)
-
 conn = utils.open_testdriver()
 
 
@@ -114,32 +104,6 @@ class TestClone(unittest.TestCase):
         outfile = os.path.join(clonexml_dir, filebase + "-out.xml")
         outxml = utils.read_file(outfile)
         utils.test_create(conn, outxml)
-
-
-    # Skip this test, since libvirt can add new XML elements to the defined
-    # XML (<video>) that make roundtrip a pain
-    def notestCloneGuestLookup(self):
-        """Test using a vm name lookup for cloning"""
-        for base in clone_files:
-            infile = os.path.join(clonexml_dir, base + "-in.xml")
-
-            vm = None
-            try:
-                vm = conn.defineXML(utils.read_file(infile))
-
-                cloneobj = Cloner(conn)
-                cloneobj.original_guest = ORIG_NAME
-
-                cloneobj = self._default_clone_values(cloneobj)
-                self._clone_compare(cloneobj, base)
-            finally:
-                if vm:
-                    vm.undefine()
-
-    def testCloneFromFile(self):
-        """Test using files for input and output"""
-        for base in clone_files:
-            self._clone_helper(base)
 
     def testRemoteNoStorage(self):
         """Test remote clone where VM has no storage that needs cloning"""

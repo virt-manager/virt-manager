@@ -151,45 +151,10 @@ def manage_path(conn, path):
     return vol, pool
 
 
-def build_vol_install(conn, volname, poolobj, size, sparse,
-                      fmt=None, backing_store=None):
-    """
-    Helper for building a StorageVolume instance to pass to VirtualDisk
-    for eventual storage creation.
-
-    :param volname: name of the volume to be created
-    :param size: size in bytes
-    """
-    if size is None:
-        raise ValueError(_("Size must be specified for non "
-                           "existent volume '%s'" % volname))
-
-    logging.debug("Creating volume '%s' on pool '%s'", volname, poolobj.name())
-
-    cap = (size * 1024 * 1024 * 1024)
-    if sparse:
-        alloc = 0
-    else:
-        alloc = cap
-
-    volinst = StorageVolume(conn)
-    volinst.pool = poolobj
-    volinst.name = volname
-    volinst.capacity = cap
-    volinst.allocation = alloc
-    volinst.backing_store = backing_store
-
-    if fmt:
-        if not volinst.supports_property("format"):
-            raise ValueError(_("Format attribute not supported for this "
-                               "volume type"))
-        volinst.format = fmt
-
-    return volinst
-
-
-
 class _StorageBase(object):
+    def __init__(self, conn):
+        self._conn = conn
+
     def get_size(self):
         raise NotImplementedError()
     def get_dev_type(self):
@@ -200,46 +165,23 @@ class _StorageBase(object):
         raise NotImplementedError()
 
 
-class StorageCreator(_StorageBase):
-    def __init__(self, conn, path, pool,
-                 vol_install, clone_path, backing_store,
-                 size, sparse, fmt):
-        _StorageBase.__init__(self)
+class _StorageCreator(_StorageBase):
+    def __init__(self, conn):
+        _StorageBase.__init__(self, conn)
 
-        self._conn = conn
-        self._pool = pool
-        self._vol_install = vol_install
-        self._path = path
-        self._size = size
-        self._sparse = sparse
-        self._clone_path = clone_path
-        self.fake = False
-
-        if not self._vol_install and self._pool:
-            self._vol_install = build_vol_install(conn,
-                                                  os.path.basename(path), pool,
-                                                  size, sparse, fmt=fmt,
-                                                  backing_store=backing_store)
-
-        if not self._vol_install:
-            if backing_store:
-                raise RuntimeError(_("Cannot set backing store for unmanaged "
-                                     "storage."))
-            if fmt and fmt != "raw":
-                raise RuntimeError(_("Format cannot be specified for "
-                                     "unmanaged storage."))
-
-        if self._vol_install:
-            self._path = None
-            self._size = None
-
-        # Cached bits
+        self._pool = None
+        self._vol_install = None
+        self._path = None
+        self._size = None
         self._dev_type = None
 
 
     ##############
     # Public API #
     ##############
+
+    def create(self, progresscb):
+        raise NotImplementedError()
 
     def _get_path(self):
         if self._vol_install and not self._path:
@@ -293,9 +235,20 @@ class StorageCreator(_StorageBase):
                                "'%s'" % self.path))
 
     def is_size_conflict(self):
-        if self._vol_install:
-            return self._vol_install.is_size_conflict()
+        raise NotImplementedError()
 
+
+class CloneStorageCreator(_StorageCreator):
+    def __init__(self, conn, output_path, input_path, size, sparse):
+        _StorageCreator.__init__(self, conn)
+
+        self._path = output_path
+        self._output_path = output_path
+        self._input_path = input_path
+        self._size = size
+        self._sparse = sparse
+
+    def is_size_conflict(self):
         ret = False
         msg = None
         vfs = os.statvfs(os.path.dirname(self._path))
@@ -316,55 +269,36 @@ class StorageCreator(_StorageBase):
                         ((need / (1024 * 1024)), (avail / (1024 * 1024))))
         return (ret, msg)
 
-
-    #############################
-    # Storage creation routines #
-    #############################
-
     def create(self, progresscb):
-        if self.fake:
-            raise RuntimeError("Storage creator is fake but creation "
-                               "requested.")
-
-        # If a clone_path is specified, but not vol_install.input_vol,
-        # that means we are cloning unmanaged -> managed, so skip this
-        if (self._vol_install and
-            (not self._clone_path or self._vol_install.input_vol)):
-            return self._vol_install.install(meter=progresscb)
-
-        if not self._clone_path:
-            raise RuntimeError("Local storage creation requested, "
-                "this shouldn't happen.")
-
         text = (_("Cloning %(srcfile)s") %
-                {'srcfile' : os.path.basename(self._clone_path)})
+                {'srcfile' : os.path.basename(self._input_path)})
 
         size_bytes = long(self.get_size() * 1024L * 1024L * 1024L)
-        progresscb.start(filename=self._path, size=long(size_bytes),
+        progresscb.start(filename=self._output_path, size=long(size_bytes),
                          text=text)
 
         # Plain file clone
         self._clone_local(progresscb, size_bytes)
 
     def _clone_local(self, meter, size_bytes):
-        if self._clone_path == "/dev/null":
+        if self._input_path == "/dev/null":
             # Not really sure why this check is here,
             # but keeping for compat
             logging.debug("Source dev was /dev/null. Skipping")
             return
-        if self._clone_path == self._path:
+        if self._input_path == self._output_path:
             logging.debug("Source and destination are the same. Skipping.")
             return
 
         # if a destination file exists and sparse flg is True,
         # this priority takes a existing file.
 
-        if (not os.path.exists(self._path) and self._sparse):
+        if (not os.path.exists(self._output_path) and self._sparse):
             clone_block_size = 4096
             sparse = True
             fd = None
             try:
-                fd = os.open(self._path, os.O_WRONLY | os.O_CREAT, 0640)
+                fd = os.open(self._output_path, os.O_WRONLY | os.O_CREAT, 0640)
                 os.ftruncate(fd, size_bytes)
             finally:
                 if fd:
@@ -374,15 +308,17 @@ class StorageCreator(_StorageBase):
             sparse = False
 
         logging.debug("Local Cloning %s to %s, sparse=%s, block_size=%s",
-                      self._clone_path, self._path, sparse, clone_block_size)
+                      self._input_path, self._output_path,
+                      sparse, clone_block_size)
 
         zeros = '\0' * 4096
 
         src_fd, dst_fd = None, None
         try:
             try:
-                src_fd = os.open(self._clone_path, os.O_RDONLY)
-                dst_fd = os.open(self._path, os.O_WRONLY | os.O_CREAT, 0640)
+                src_fd = os.open(self._input_path, os.O_RDONLY)
+                dst_fd = os.open(self._output_path,
+                                 os.O_WRONLY | os.O_CREAT, 0640)
 
                 i = 0
                 while 1:
@@ -404,12 +340,25 @@ class StorageCreator(_StorageBase):
                         meter.update(i)
             except OSError, e:
                 raise RuntimeError(_("Error cloning diskimage %s to %s: %s") %
-                                   (self._clone_path, self._path, str(e)))
+                                (self._input_path, self._output_path, str(e)))
         finally:
             if src_fd is not None:
                 os.close(src_fd)
             if dst_fd is not None:
                 os.close(dst_fd)
+
+
+class ManagedStorageCreator(_StorageCreator):
+    def __init__(self, conn, vol_install):
+        _StorageCreator.__init__(self, conn)
+
+        self._pool = vol_install.pool
+        self._vol_install = vol_install
+
+    def create(self, progresscb):
+        return self._vol_install.install(meter=progresscb)
+    def is_size_conflict(self):
+        return self._vol_install.is_size_conflict()
 
 
 class StorageBackend(_StorageBase):
@@ -418,9 +367,8 @@ class StorageBackend(_StorageBase):
     the disk references
     """
     def __init__(self, conn, path, vol_object, parent_pool):
-        _StorageBase.__init__(self)
+        _StorageBase.__init__(self, conn)
 
-        self._conn = conn
         self._vol_object = vol_object
         self._parent_pool = parent_pool
         self._path = path
@@ -484,6 +432,8 @@ class StorageBackend(_StorageBase):
                 self._exists = True
             elif not self._conn.is_remote() and os.path.exists(self._path):
                 self._exists = True
+            elif self._parent_pool:
+                self._exists = False
             elif (auto_check and
                   self._conn.is_remote() and
                   not _can_auto_manage(self._path)):

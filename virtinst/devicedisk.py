@@ -97,34 +97,6 @@ def _is_dir_searchable(uid, username, path):
     return bool(re.search("user:%s:..x" % username, out))
 
 
-def _make_storage_backend(conn, nomanaged, path, vol_object):
-    parent_pool = None
-    if (not vol_object and path and not nomanaged):
-        (vol_object, parent_pool) = diskbackend.manage_path(conn, path)
-
-    backend = diskbackend.StorageBackend(conn, path, vol_object, parent_pool)
-    return backend
-
-
-def _make_storage_creator(conn, backend, vol_install, clone_path,
-                          *creator_args):
-    parent_pool = backend.get_parent_pool()
-    if backend.exists(auto_check=False) and backend.path is not None:
-        if not clone_path:
-            return
-
-    if backend.path and not (vol_install or parent_pool or clone_path):
-        raise RuntimeError(_("Don't know how to create storage for "
-            "path '%s'. Use libvirt APIs to manage the parent directory "
-            "as a pool first.") % backend.path)
-
-    if not (backend.path or vol_install or parent_pool or clone_path):
-        return
-
-    return diskbackend.StorageCreator(conn, backend.path,
-        parent_pool, vol_install, clone_path, *creator_args)
-
-
 class VirtualDisk(VirtualDevice):
     virtual_device_type = VirtualDevice.VIRTUAL_DEV_DISK
 
@@ -423,8 +395,44 @@ class VirtualDisk(VirtualDevice):
             return (True, 0)
 
     @staticmethod
-    def build_vol_install(*args, **kwargs):
-        return diskbackend.build_vol_install(*args, **kwargs)
+    def build_vol_install(conn, volname, poolobj, size, sparse,
+                          fmt=None, backing_store=None):
+        """
+        Helper for building a StorageVolume instance to pass to VirtualDisk
+        for eventual storage creation.
+
+        :param volname: name of the volume to be created
+        :param size: size in bytes
+        """
+        from .storage import StorageVolume
+
+        if size is None:
+            raise ValueError(_("Size must be specified for non "
+                               "existent volume '%s'" % volname))
+
+        logging.debug("Creating volume '%s' on pool '%s'",
+                      volname, poolobj.name())
+
+        cap = (size * 1024 * 1024 * 1024)
+        if sparse:
+            alloc = 0
+        else:
+            alloc = cap
+
+        volinst = StorageVolume(conn)
+        volinst.pool = poolobj
+        volinst.name = volname
+        volinst.capacity = cap
+        volinst.allocation = alloc
+        volinst.backing_store = backing_store
+
+        if fmt:
+            if not volinst.supports_property("format"):
+                raise ValueError(_("Format attribute not supported for this "
+                                   "volume type"))
+            volinst.format = fmt
+
+        return volinst
 
     @staticmethod
     def num_to_target(num):
@@ -485,8 +493,6 @@ class VirtualDisk(VirtualDevice):
         self.__storage_backend = None
         self._storage_creator = None
 
-        self.nomanaged = False
-
 
     #############################
     # Public property-esque API #
@@ -509,8 +515,8 @@ class VirtualDisk(VirtualDevice):
         self._set_xmlpath(self.path)
 
     def set_vol_install(self, vol_install):
-        self._storage_creator = diskbackend.StorageCreator(self.conn,
-            None, None, vol_install, None, None, None, None, None)
+        self._storage_creator = diskbackend.ManagedStorageCreator(
+            self.conn, vol_install)
         self._set_xmlpath(self.path)
 
     def get_vol_object(self):
@@ -655,68 +661,12 @@ class VirtualDisk(VirtualDevice):
         self.__storage_backend = val
     _storage_backend = property(_get_storage_backend, _set_storage_backend)
 
-    def set_create_storage(self, size=None, sparse=True,
-                           fmt=None, vol_install=None,
-                           clone_path=None, backing_store=None,
-                           fake=False):
+    def set_local_disk_to_clone(self, disk, sparse):
         """
-        Function that sets storage creation parameters. If this isn't
-        called, we assume that no storage creation is taking place and
-        will error accordingly.
-
-        @size is in gigs
-        @fake: If true, make like we are creating storage but fail
-            if we ever asked to do so.
+        Set a path to manually clone (as in, not through libvirt)
         """
-        def _validate_path(p):
-            if p is None:
-                return
-            try:
-                d = VirtualDisk(self.conn)
-                d.path = p
-
-                # If this disk isn't managed, make sure we only perform
-                # non-managed lookup.
-                if (self._storage_creator or
-                    (self.path and self._storage_backend.exists())):
-                    d.nomanaged = not self.__managed_storage()
-                d.set_create_storage(fake=True)
-                d.validate()
-            except Exception, e:
-                raise ValueError(_("Error validating path %s: %s") % (p, e))
-
-        path = self.path
-
-        # Validate clone_path
-        if clone_path is not None:
-            clone_path = os.path.abspath(clone_path)
-        if backing_store is not None:
-            backing_store = os.path.abspath(backing_store)
-
-        if not fake:
-            _validate_path(clone_path)
-            _validate_path(backing_store)
-
-        if fake and size is None:
-            size = .000001
-
-        backend = _make_storage_backend(self.conn,
-            self.nomanaged, path, None)
-        creator_args = (backing_store, size, sparse, fmt)
-        creator = _make_storage_creator(self.conn, backend,
-                                        vol_install, clone_path,
-                                        *creator_args)
-
-        self._storage_creator = creator
-        if self._storage_creator:
-            self._storage_creator.fake = bool(fake)
-            self._set_xmlpath(self.path)
-        else:
-            if (vol_install or clone_path):
-                raise RuntimeError("Need storage creation but it "
-                                   "didn't happen.")
-            if fmt and self.driver_name == self.DRIVER_QEMU:
-                self.driver_type = fmt
+        self._storage_creator = diskbackend.CloneStorageCreator(self.conn,
+            self.path, disk.path, disk.get_size(), sparse)
 
     def is_cdrom(self):
         return self.device == self.DEVICE_CDROM
@@ -729,8 +679,15 @@ class VirtualDisk(VirtualDevice):
         return self.is_floppy() or self.is_cdrom()
 
     def _change_backend(self, path, vol_object):
-        backend = _make_storage_backend(self.conn, self.nomanaged,
-                                        path, vol_object)
+        # User explicitly changed 'path', so try to lookup its storage
+        # object since we may need it
+        parent_pool = None
+        if path and not vol_object:
+            (vol_object, parent_pool) = diskbackend.manage_path(self.conn,
+                                                                path)
+
+        backend = diskbackend.StorageBackend(self.conn, path,
+                                             vol_object, parent_pool)
         self._storage_backend = backend
 
     def sync_path_props(self):

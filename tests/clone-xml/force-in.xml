@@ -18,7 +18,7 @@
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type='file' device='disk'>
-      <source file='/tmp/virtinst-test1.img'/>
+      <source file='/dev/default-pool/default-vol'/>
       <target dev='hda' bus='ide'/>
     </disk>
     <disk type='file' device='floppy'>

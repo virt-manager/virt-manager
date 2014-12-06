@@ -136,12 +136,12 @@ class Cloner(object):
                 disk.path = path
                 disk.device = device
 
-                if path and not self.preserve_dest_disks:
-                    # We fake storage creation params for now, but we will
-                    # update it later. Just use any clone_path to make sure
-                    # validation doesn't trip up
-                    clone_path = "/foo/bar"
-                    disk.set_create_storage(fake=True, clone_path=clone_path)
+                if (not self.preserve_dest_disks and
+                    disk.wants_storage_creation()):
+                    vol_install = VirtualDisk.build_vol_install(
+                        self.conn, os.path.basename(disk.path),
+                        disk.get_parent_pool(), .000001, False)
+                    disk.set_vol_install(vol_install)
                 disk.validate()
                 disklist.append(disk)
             except Exception, e:
@@ -323,11 +323,6 @@ class Cloner(object):
                     _("Clone onto existing storage volume is not "
                       "currently supported: '%s'") % clone_disk.path)
 
-        # Sync 'size' between the two
-        size = orig_disk.get_size()
-        vol_install = None
-        clone_path = None
-
         # Setup proper cloning inputs for the new virtual disks
         if (orig_disk.get_vol_object() and
             clone_disk.get_vol_install()):
@@ -347,11 +342,11 @@ class Cloner(object):
                 # Deliberately don't sync input_vol params here
                 clone_vol_install.input_vol = orig_disk.get_vol_object()
                 vol_install = clone_vol_install
-        else:
-            clone_path = orig_disk.path
 
-        clone_disk.set_create_storage(
-                size=size, vol_install=vol_install, clone_path=clone_path)
+            clone_disk.set_vol_install(vol_install)
+        elif orig_disk.path:
+            clone_disk.set_local_disk_to_clone(orig_disk, self.clone_sparse)
+
         clone_disk.validate()
 
 
@@ -533,8 +528,7 @@ class Cloner(object):
                 newd.driver_type = disk.driver_type
                 newd.target = disk.target
                 if validate:
-                    newd.set_create_storage(fake=True)
-                    if newd.creating_storage() and disk.path is not None:
+                    if newd.wants_storage_creation():
                         raise ValueError("Disk path '%s' does not exist." %
                                          newd.path)
             except Exception, e:
