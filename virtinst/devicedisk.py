@@ -509,6 +509,11 @@ class VirtualDisk(VirtualDevice):
         self._change_backend(None, vol_object)
         self._set_xmlpath(self.path)
 
+    def set_vol_install(self, vol_install):
+        self._storage_creator = diskbackend.StorageCreator(self.conn,
+            None, None, vol_install, None, None, None, None, None)
+        self._set_xmlpath(self.path)
+
     def get_vol_object(self):
         return self._storage_backend.get_vol_object()
     def get_vol_install(self):

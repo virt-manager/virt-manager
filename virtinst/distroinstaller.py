@@ -106,9 +106,6 @@ def _upload_file(conn, meter, destpool, src):
     # Build placeholder volume
     size = os.path.getsize(src)
     basename = os.path.basename(src)
-    xmlobj = StoragePool(conn, parsexml=destpool.XMLDesc(0))
-    poolpath = xmlobj.target_path
-
     name = StorageVolume.find_free_name(destpool, basename)
     if name != basename:
         logging.debug("Generated non-colliding volume name %s", name)
@@ -117,8 +114,7 @@ def _upload_file(conn, meter, destpool, src):
                     (float(size) / 1024.0 / 1024.0 / 1024.0), True)
 
     disk = VirtualDisk(conn)
-    disk.path = os.path.join(poolpath, name)
-    disk.set_create_storage(vol_install=vol_install)
+    disk.set_vol_install(vol_install)
     disk.validate()
 
     disk.setup(meter=meter)

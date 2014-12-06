@@ -1585,7 +1585,7 @@ class ParserDisk(VirtCLIParser):
             vol_install = VirtualDisk.build_vol_install(
                     self.guest.conn, newvolname, poolobj, size, sparse,
                     fmt=fmt, backing_store=backing_store)
-            inst.set_create_storage(vol_install=vol_install)
+            inst.set_vol_install(vol_install)
 
         if not inst.target:
             skip_targets = [d.target for d in self.guest.get_devices("disk")]
