@@ -1568,7 +1568,7 @@ class ParserDisk(VirtCLIParser):
                 StoragePool.build_default_pool(self.guest.conn)
             poolobj = self.guest.conn.storagePoolLookupByName(poolname)
 
-        if inst.path and not inst.source_exists():
+        if inst.wants_storage_creation():
             newvolname = os.path.basename(inst.path)
             poolobj = inst.get_parent_pool()
         elif volname:

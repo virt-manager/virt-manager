@@ -298,10 +298,10 @@ def make_pxe_installer():
     return virtinst.PXEInstaller(_conn)
 
 
-def build_win_kvm(path=None, fake=True):
+def build_win_kvm(path=None):
     g = get_basic_fullyvirt_guest("kvm")
     g.os_variant = "winxp"
-    g.add_device(get_filedisk(path, fake=fake))
+    g.add_device(get_filedisk(path))
     g.add_device(get_blkdisk())
     g.add_device(get_virtual_network())
     g.add_device(VirtualAudio(g.conn))
@@ -320,15 +320,18 @@ def get_floppy(path=None):
     return d
 
 
-def get_filedisk(path=None, fake=True):
+def get_filedisk(path=None):
     if not path:
         path = "/dev/default-pool/new-test-suite.img"
     d = VirtualDisk(_conn)
     d.path = path
-    size = None
-    if not fake:
-        size = .000001
-    d.set_create_storage(fake=fake, size=size)
+
+    if d.wants_storage_creation():
+        parent_pool = d.get_parent_pool()
+        vol_install = VirtualDisk.build_vol_install(_conn,
+            os.path.basename(path), parent_pool, .0000001, True)
+        d.set_vol_install(vol_install)
+
     d.validate()
     return d
 

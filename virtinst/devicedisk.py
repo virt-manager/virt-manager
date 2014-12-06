@@ -749,8 +749,12 @@ class VirtualDisk(VirtualDevice):
         # Need to retrigger this if self.type changed
         self._set_xmlpath(path)
 
-    def source_exists(self):
-        return self._storage_backend.exists()
+    def wants_storage_creation(self):
+        """
+        If true, this disk needs storage creation parameters or things
+        will error.
+        """
+        return self.path and not self._storage_backend.exists()
 
     def __managed_storage(self):
         """

@@ -943,7 +943,7 @@ class TestXMLConfig(unittest.TestCase):
             location="tests/cli-test-xml/fakerhel6tree")
         g = utils.get_basic_fullyvirt_guest("kvm", installer=i)
         g.add_device(utils.get_floppy())
-        g.add_device(utils.get_filedisk("/dev/default-pool/rhel6.img", fake=False))
+        g.add_device(utils.get_filedisk("/dev/default-pool/rhel6.img"))
         g.add_device(utils.get_blkdisk())
         g.add_device(utils.get_virtual_network())
         g.add_device(VirtualAudio(g.conn))
@@ -954,7 +954,7 @@ class TestXMLConfig(unittest.TestCase):
 
     def testFullKVMWinxp(self):
         utils.set_conn(_plainkvm)
-        g = utils.build_win_kvm("/dev/default-pool/winxp.img", fake=False)
+        g = utils.build_win_kvm("/dev/default-pool/winxp.img")
         self._testInstall(g, "winxp-kvm-stage1",
                           "winxp-kvm-stage3", "winxp-kvm-stage2")
 
