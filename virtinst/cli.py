@@ -1558,30 +1558,34 @@ class ParserDisk(VirtCLIParser):
             logging.debug("Parsed volume: as pool='%s' vol='%s'",
                           poolname, volname)
 
+        inst = VirtCLIParser._parse(self, opts, inst)
+
+        # Generate and fill in the disk source info
+        newvolname = None
+        poolobj = None
         if poolname:
             if poolname == "default":
                 StoragePool.build_default_pool(self.guest.conn)
             poolobj = self.guest.conn.storagePoolLookupByName(poolname)
 
-        vol_install = None
-        vol_object = None
-        if volname:
+        if inst.path and not inst.source_exists():
+            newvolname = os.path.basename(inst.path)
+            poolobj = inst.get_parent_pool()
+        elif volname:
             vol_object = poolobj.storageVolLookupByName(volname)
-        elif poolname:
+            inst.set_vol_object(vol_object)
+            poolobj = None
+
+        if poolobj and (fmt or size or sparse or backing_store):
             if not fmt:
                 fmt = _get_default_image_format(self.guest.conn, poolobj)
-            vname = _generate_new_volume_name(self.guest, poolobj, fmt)
+            if newvolname is None:
+                newvolname = _generate_new_volume_name(self.guest, poolobj,
+                                                       fmt)
             vol_install = VirtualDisk.build_vol_install(
-                    self.guest.conn, vname, poolobj, size, sparse,
+                    self.guest.conn, newvolname, poolobj, size, sparse,
                     fmt=fmt, backing_store=backing_store)
-
-        inst = VirtCLIParser._parse(self, opts, inst)
-
-        if vol_object:
-            inst.set_vol_object(vol_object)
-        elif size or fmt or sparse or vol_install:
-            inst.set_create_storage(size=size, fmt=fmt,
-                vol_install=vol_install, sparse=sparse)
+            inst.set_create_storage(vol_install=vol_install)
 
         if not inst.target:
             skip_targets = [d.target for d in self.guest.get_devices("disk")]

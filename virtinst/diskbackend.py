@@ -125,6 +125,10 @@ def manage_path(conn, path):
     """
     If path is not managed, try to create a storage pool to probe the path
     """
+    if not conn.check_support(conn.SUPPORT_CONN_STORAGE):
+        return None, None
+
+    path = os.path.abspath(path)
     vol, pool = check_if_path_managed(conn, path)
     if vol or pool or not _can_auto_manage(path):
         return vol, pool
@@ -413,11 +417,12 @@ class StorageBackend(_StorageBase):
     Class that carries all the info about any existing storage that
     the disk references
     """
-    def __init__(self, conn, path, vol_object):
+    def __init__(self, conn, path, vol_object, parent_pool):
         _StorageBase.__init__(self)
 
         self._conn = conn
         self._vol_object = vol_object
+        self._parent_pool = parent_pool
         self._path = path
 
         if self._vol_object is not None:
@@ -453,6 +458,10 @@ class StorageBackend(_StorageBase):
 
     def get_vol_object(self):
         return self._vol_object
+    def get_parent_pool(self):
+        if not self._parent_pool and self._vol_object:
+            self._parent_pool = self._vol_object.storagePoolLookupByVolume()
+        return self._parent_pool
 
     def get_size(self):
         """

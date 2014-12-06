@@ -512,7 +512,7 @@ c.add_valid("--disk none --boot hd --paravirt --arch i686")  # 32 on 64 xen
 c = vinst.add_category("kvm", "--connect %(KVMURI)s --noautoconsole")
 c.add_compare("--os-variant fedora20 --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host --channel none --console none --sound none --redirdev none", "kvm-f14-url")  # F14 Directory tree URL install with extra-args
 c.add_compare("--test-media-detection %(TREEDIR)s", "test-url-detection")
-c.add_compare("--os-variant fedora20 --disk %(NEWIMG1)s,size=.01 --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url")  # Quiet URL install should make no noise
+c.add_compare("--os-variant fedora20 --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url")  # Quiet URL install should make no noise
 c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --wait 0 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--os-variant fedora20 --nodisks --boot hd --paravirt --cpu pentium2", "kvm-xenner")  # xenner
 c.add_compare("--os-variant ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn", "qemu-plain")  # plain qemu

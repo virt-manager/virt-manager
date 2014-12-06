@@ -99,17 +99,16 @@ def _is_dir_searchable(uid, username, path):
 
 def _make_storage_backend(conn, nomanaged, path, vol_object):
     parent_pool = None
-    if (conn.check_support(conn.SUPPORT_CONN_STORAGE) and
-        not vol_object and path and not nomanaged):
-        path = os.path.abspath(path)
+    if (not vol_object and path and not nomanaged):
         (vol_object, parent_pool) = diskbackend.manage_path(conn, path)
 
-    backend = diskbackend.StorageBackend(conn, path, vol_object)
-    return backend, parent_pool
+    backend = diskbackend.StorageBackend(conn, path, vol_object, parent_pool)
+    return backend
 
 
-def _make_storage_creator(conn, backend,
-                          parent_pool, vol_install, clone_path,                                           *creator_args):
+def _make_storage_creator(conn, backend, vol_install, clone_path,
+                          *creator_args):
+    parent_pool = backend.get_parent_pool()
     if backend.exists(auto_check=False) and backend.path is not None:
         if not clone_path:
             return
@@ -516,6 +515,10 @@ class VirtualDisk(VirtualDevice):
         if not self._storage_creator:
             return None
         return self._storage_creator.get_vol_install()
+    def get_parent_pool(self):
+        if self.get_vol_install():
+            return self.get_vol_install().pool
+        return self._storage_backend.get_parent_pool()
 
     def get_size(self):
         if self._storage_creator:
@@ -642,7 +645,7 @@ class VirtualDisk(VirtualDevice):
     def _get_storage_backend(self):
         if self.__storage_backend is None:
             self.__storage_backend = diskbackend.StorageBackend(
-                self.conn, self._get_xmlpath(), None)
+                self.conn, self._get_xmlpath(), None, None)
         return self.__storage_backend
     def _set_storage_backend(self, val):
         self.__storage_backend = val
@@ -693,10 +696,10 @@ class VirtualDisk(VirtualDevice):
         if fake and size is None:
             size = .000001
 
-        backend, parent_pool = _make_storage_backend(self.conn,
+        backend = _make_storage_backend(self.conn,
             self.nomanaged, path, None)
         creator_args = (backing_store, size, sparse, fmt)
-        creator = _make_storage_creator(self.conn, backend, parent_pool,
+        creator = _make_storage_creator(self.conn, backend,
                                         vol_install, clone_path,
                                         *creator_args)
 
@@ -722,9 +725,8 @@ class VirtualDisk(VirtualDevice):
         return self.is_floppy() or self.is_cdrom()
 
     def _change_backend(self, path, vol_object):
-        backend, pool = _make_storage_backend(self.conn, self.nomanaged,
-                                              path, vol_object)
-        ignore = pool
+        backend = _make_storage_backend(self.conn, self.nomanaged,
+                                        path, vol_object)
         self._storage_backend = backend
 
     def sync_path_props(self):
@@ -741,6 +743,9 @@ class VirtualDisk(VirtualDevice):
 
         # Need to retrigger this if self.type changed
         self._set_xmlpath(path)
+
+    def source_exists(self):
+        return self._storage_backend.exists()
 
     def __managed_storage(self):
         """
