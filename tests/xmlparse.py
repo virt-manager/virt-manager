@@ -321,40 +321,36 @@ class XMLParseTest(unittest.TestCase):
         """
         guest, outfile = self._get_test_content("change-disk")
 
-        # Set size up front. VirtualDisk validation is kind of
-        # convoluted. If trying to change a non-existing one and size wasn't
-        # already specified, we will error out.
-        disks = guest.get_devices("disk")
-        disk1 = disks[0]
-        disk1.size = 1
-        disk3 = disks[2]
-        disk3.size = 1
-        disk6 = disks[5]
-        disk6.size = 1
-        disk9 = disks[8]
+        def _get_disk(target):
+            for disk in guest.get_devices("disk"):
+                if disk.target == target:
+                    return disk
 
-        check = self._make_checker(disk1)
+        disk = _get_disk("hda")
+        check = self._make_checker(disk)
         check("path", "/tmp/test.img", "/dev/null")
-        disk1.sync_path_props()
+        disk.sync_path_props()
         check("driver_name", None, "test")
         check("driver_type", None, "raw")
         check("serial", "WD-WMAP9A966149", "frob")
         check("bus", "ide", "usb")
         check("removable", None, False, True)
 
-        check = self._make_checker(disk3)
+        disk = _get_disk("hdc")
+        check = self._make_checker(disk)
         check("type", "block", "dir", "file", "block")
         check("path", "/dev/null", None)
-        disk3.sync_path_props()
+        disk.sync_path_props()
         check("device", "cdrom", "floppy")
         check("read_only", True, False)
         check("target", "hdc", "fde")
         check("bus", "ide", "fdc")
         check("error_policy", "stop", None)
 
-        check = self._make_checker(disk6)
+        disk = _get_disk("fda")
+        check = self._make_checker(disk)
         check("path", None, "/dev/default-pool/default-vol")
-        disk6.sync_path_props()
+        disk.sync_path_props()
         check("startup_policy", None, "optional")
         check("shareable", False, True)
         check("driver_cache", None, "writeback")
@@ -367,11 +363,11 @@ class XMLParseTest(unittest.TestCase):
         check("iotune_wbs", 4, 0)
         check("iotune_tis", None, 5)
         check("iotune_tbs", None, 6)
-
-        check = self._make_checker(disk6.boot)
+        check = self._make_checker(disk.boot)
         check("order", None, 7, None)
 
-        check = self._make_checker(disk9)
+        disk = _get_disk("vdb")
+        check = self._make_checker(disk)
         check("source_pool", "defaultPool", "anotherPool")
 
         self._alter_compare(guest.get_xml_config(), outfile)
