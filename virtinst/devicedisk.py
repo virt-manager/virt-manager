@@ -657,6 +657,10 @@ class VirtualDisk(VirtualDevice):
             return "_source_file"
         return None
 
+
+    # _xmlpath is an abstraction for source file/block/dir paths, since
+    # they don't have any special properties aside from needing to match
+    # 'type' value with the source property used.
     def _get_xmlpath(self):
         if self._source_file:
             return self._source_file
@@ -665,7 +669,6 @@ class VirtualDisk(VirtualDevice):
         if self._source_dir:
             return self._source_dir
         return None
-
     def _set_xmlpath(self, val):
         self._clear_source_xml()
 
