@@ -151,7 +151,14 @@ def manage_path(conn, path):
     return vol, pool
 
 
+##############################################
+# Classes for tracking storage media details #
+##############################################
+
 class _StorageBase(object):
+    """
+    Storage base class, defining the API used by VirtualDisk
+    """
     def __init__(self, conn):
         self._conn = conn
 
@@ -166,6 +173,9 @@ class _StorageBase(object):
 
 
 class _StorageCreator(_StorageBase):
+    """
+    Base object for classes that will actually create storage on disk
+    """
     def __init__(self, conn):
         _StorageBase.__init__(self, conn)
 
@@ -246,6 +256,12 @@ class _StorageCreator(_StorageBase):
 
 
 class CloneStorageCreator(_StorageCreator):
+    """
+    Handles manually copying local files for Cloner
+
+    Many clone scenarios will use libvirt storage APIs, which will use
+    the ManagedStorageCreator
+    """
     def __init__(self, conn, output_path, input_path, size, sparse):
         _StorageCreator.__init__(self, conn)
 
@@ -356,6 +372,11 @@ class CloneStorageCreator(_StorageCreator):
 
 
 class ManagedStorageCreator(_StorageCreator):
+    """
+    Handles storage creation via libvirt APIs. All the actual creation
+    logic lives in StorageVolume, this is mostly about pulling out bits
+    from that class and mapping them to VirtualDisk elements
+    """
     def __init__(self, conn, vol_install):
         _StorageCreator.__init__(self, conn)
 
