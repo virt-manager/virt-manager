@@ -166,8 +166,6 @@ class _StorageBase(object):
         raise NotImplementedError()
     def get_dev_type(self):
         raise NotImplementedError()
-    def is_managed(self):
-        raise NotImplementedError()
     def get_driver_type(self):
         raise NotImplementedError()
     def get_vol_install(self):
@@ -241,15 +239,12 @@ class _StorageCreator(_StorageBase):
                 return self._vol_install.format
         return "raw"
 
-    def is_managed(self):
-        return bool(self._vol_install)
-
     def validate(self, disk):
         if disk.device in ["floppy", "cdrom"]:
             raise ValueError(_("Cannot create storage for %s device.") %
                              disk.device)
 
-        if self.is_managed():
+        if self._vol_install:
             self._vol_install.validate()
         else:
             if disk.type == "block":
@@ -533,9 +528,6 @@ class StorageBackend(_StorageBase):
         if self._vol_object:
             return self._get_vol_xml().format
         return None
-
-    def is_managed(self):
-        return bool(self._vol_object)
 
     def validate(self, disk):
         ignore = disk

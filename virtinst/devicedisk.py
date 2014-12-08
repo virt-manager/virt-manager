@@ -500,7 +500,7 @@ class VirtualDisk(VirtualDevice):
     def __init__(self, *args, **kwargs):
         VirtualDevice.__init__(self, *args, **kwargs)
 
-        self.__storage_backend = None
+        self._storage_backend = None
 
 
     #############################
@@ -508,21 +508,34 @@ class VirtualDisk(VirtualDevice):
     #############################
 
     def _get_path(self):
-        if self.type == VirtualDisk.TYPE_NETWORK:
-            # Fill in a completed URL for virt-manager UI, path comparison, etc
-            return self._url_from_network_source()
+        if self._storage_backend:
+            return self._storage_backend.path
 
+        xmlpath = self._get_xmlpath()
+        if xmlpath:
+            return xmlpath
+
+        self._storage_backend = self._make_default_storage_backend()
         return self._storage_backend.path
     def _set_path(self, val):
-        if self._storage_backend.will_create_storage():
+        if (self._storage_backend and
+            self._storage_backend.will_create_storage()):
             raise ValueError("Can't change disk path if storage creation info "
                              "has been set.")
-        self._change_backend(val, None)
+
+        # User explicitly changed 'path', so try to lookup its storage
+        # object since we may need it
+        parent_pool = None
+        vol_object = None
+        if val:
+            (vol_object, parent_pool) = diskbackend.manage_path(self.conn, val)
+
+        self._change_backend(val, vol_object, parent_pool)
         self._set_xmlpath(self.path)
     path = property(_get_path, _set_path)
 
     def set_vol_object(self, vol_object):
-        self._change_backend(None, vol_object)
+        self._change_backend(None, vol_object, None)
         self._set_xmlpath(self.path)
 
     def set_vol_install(self, vol_install):
@@ -609,12 +622,12 @@ class VirtualDisk(VirtualDevice):
             ret += self.source_host_socket
         return ret
 
-    def _get_default_type(self, skip_backend=False):
+    def _get_default_type(self):
         if self.source_pool or self.source_volume:
             return VirtualDisk.TYPE_VOLUME
         if self.source_protocol:
             return VirtualDisk.TYPE_NETWORK
-        if not self.__storage_backend and skip_backend:
+        if not self._storage_backend:
             return self.TYPE_FILE
         return self._storage_backend.get_dev_type()
     type = XMLProperty("./@type", default_cb=_get_default_type)
@@ -709,8 +722,12 @@ class VirtualDisk(VirtualDevice):
         vol_object = None
         parent_pool = None
         is_network = False
-        typ = self._get_default_type(skip_backend=True)
+        typ = self._get_default_type()
         is_network = (typ == VirtualDisk.TYPE_NETWORK)
+
+        if self.type == VirtualDisk.TYPE_NETWORK:
+            # Fill in a completed URL for virt-manager UI, path comparison, etc
+            path = self._url_from_network_source()
 
         if typ == VirtualDisk.TYPE_VOLUME:
             conn = self.conn
@@ -729,19 +746,11 @@ class VirtualDisk(VirtualDevice):
                 logging.debug("Error fetching source pool=%s vol=%s",
                     self.source_pool, self.source_volume, exc_info=True)
 
-        if not vol_object:
+        if vol_object is None and path is None:
             path = self._get_xmlpath()
 
         return diskbackend.StorageBackend(self.conn, path,
             vol_object, parent_pool, is_network=is_network)
-
-    def _get_storage_backend(self):
-        if self.__storage_backend is None:
-            self.__storage_backend = self._make_default_storage_backend()
-        return self.__storage_backend
-    def _set_storage_backend(self, val):
-        self.__storage_backend = val
-    _storage_backend = property(_get_storage_backend, _set_storage_backend)
 
     def set_local_disk_to_clone(self, disk, sparse):
         """
@@ -760,14 +769,7 @@ class VirtualDisk(VirtualDevice):
     def can_be_empty(self):
         return self.is_floppy() or self.is_cdrom()
 
-    def _change_backend(self, path, vol_object):
-        # User explicitly changed 'path', so try to lookup its storage
-        # object since we may need it
-        parent_pool = None
-        if path and not vol_object:
-            (vol_object, parent_pool) = diskbackend.manage_path(self.conn,
-                                                                path)
-
+    def _change_backend(self, path, vol_object, parent_pool):
         backend = diskbackend.StorageBackend(self.conn, path,
                                              vol_object, parent_pool)
         self._storage_backend = backend
@@ -793,14 +795,8 @@ class VirtualDisk(VirtualDevice):
         If true, this disk needs storage creation parameters or things
         will error.
         """
-        return self.path and not self._storage_backend.exists()
-
-    def __managed_storage(self):
-        """
-        Return bool representing if managed storage parameters have
-        been explicitly specified or filled in
-        """
-        return self._storage_backend.is_managed()
+        return (self._storage_backend and
+                not self._storage_backend.exists())
 
     def validate(self):
         if self.path is None:
@@ -814,6 +810,9 @@ class VirtualDisk(VirtualDevice):
             not self.is_floppy()):
             raise ValueError(_("The path '%s' must be a file or a "
                                "device, not a directory") % self.path)
+
+        if not self._storage_backend:
+            return
 
         if (not self._storage_backend.will_create_storage() and
             not self._storage_backend.exists()):
@@ -840,7 +839,7 @@ class VirtualDisk(VirtualDevice):
 
         volobj = self._storage_backend.create(meter)
         if volobj:
-            self._change_backend(None, volobj)
+            self._change_backend(None, volobj, None)
 
     def set_defaults(self, guest):
         if self.is_cdrom():
