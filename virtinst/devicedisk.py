@@ -515,7 +515,7 @@ class VirtualDisk(VirtualDevice):
         if xmlpath:
             return xmlpath
 
-        self._storage_backend = self._make_default_storage_backend()
+        self._set_default_storage_backend()
         return self._storage_backend.path
     def _set_path(self, val):
         if (self._storage_backend and
@@ -717,7 +717,7 @@ class VirtualDisk(VirtualDevice):
     # Validation assistance methods #
     #################################
 
-    def _make_default_storage_backend(self):
+    def _set_default_storage_backend(self):
         path = None
         vol_object = None
         parent_pool = None
@@ -749,8 +749,7 @@ class VirtualDisk(VirtualDevice):
         if vol_object is None and path is None:
             path = self._get_xmlpath()
 
-        return diskbackend.StorageBackend(self.conn, path,
-            vol_object, parent_pool, is_network=is_network)
+        self._change_backend(path, vol_object, parent_pool)
 
     def set_local_disk_to_clone(self, disk, sparse):
         """

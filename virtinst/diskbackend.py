@@ -20,6 +20,7 @@
 
 import logging
 import os
+import re
 import statvfs
 
 import libvirt
@@ -149,6 +150,15 @@ def manage_path(conn, path):
 
     vol = _lookup_vol_by_basename(pool, path)
     return vol, pool
+
+
+def path_is_url(path):
+    """
+    Detect if path is a URL
+    """
+    if not path:
+        return False
+    return bool(re.match("[a-zA-Z]+(\+[a-zA-Z]+)?://.*", path))
 
 
 ##############################################
@@ -411,14 +421,12 @@ class StorageBackend(_StorageBase):
     Class that carries all the info about any existing storage that
     the disk references
     """
-    def __init__(self, conn, path, vol_object, parent_pool,
-                 is_network=False):
+    def __init__(self, conn, path, vol_object, parent_pool):
         _StorageBase.__init__(self, conn)
 
         self._vol_object = vol_object
         self._parent_pool = parent_pool
         self._path = path
-        self._is_network = is_network
 
         if self._vol_object is not None:
             self._path = None
@@ -440,6 +448,10 @@ class StorageBackend(_StorageBase):
                 parsexml=self._vol_object.XMLDesc(0))
         return self._vol_xml
 
+    def _is_network(self):
+        if self._path:
+            return path_is_url(self._path)
+        return False
 
     ##############
     # Public API #
@@ -477,13 +489,13 @@ class StorageBackend(_StorageBase):
                 self._exists = True
             elif self._vol_object:
                 self._exists = True
-            elif (not self._is_network and
+            elif (not self._is_network() and
                   not self._conn.is_remote() and
                   os.path.exists(self._path)):
                 self._exists = True
             elif self._parent_pool:
                 self._exists = False
-            elif self._is_network:
+            elif self._is_network():
                 self._exists = True
             elif (self._conn.is_remote() and
                   not _can_auto_manage(self._path)):
@@ -510,7 +522,7 @@ class StorageBackend(_StorageBase):
                 else:
                     self._dev_type = "file"
 
-            elif (not self._is_network and
+            elif (not self._is_network() and
                   self._path and
                   not self._conn.is_remote()):
                 if os.path.isdir(self._path):
