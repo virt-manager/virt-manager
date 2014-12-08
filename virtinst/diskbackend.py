@@ -170,6 +170,20 @@ class _StorageBase(object):
         raise NotImplementedError()
     def get_driver_type(self):
         raise NotImplementedError()
+    def get_vol_install(self):
+        raise NotImplementedError()
+    def get_vol_object(self):
+        raise NotImplementedError()
+    def validate(self, disk):
+        raise NotImplementedError()
+
+    # Storage creation routines
+    def is_size_conflict(self):
+        raise NotImplementedError()
+    def create(self, progresscb):
+        raise NotImplementedError()
+    def will_create_storage(self):
+        raise NotImplementedError()
 
 
 class _StorageCreator(_StorageBase):
@@ -251,8 +265,16 @@ class _StorageCreator(_StorageBase):
         if msg:
             logging.warn(msg)
 
-    def is_size_conflict(self):
-        raise NotImplementedError()
+    def will_create_storage(self):
+        return True
+    def get_vol_object(self):
+        return None
+    def get_parent_pool(self):
+        if self._vol_install:
+            return self._vol_install.pool
+        return None
+    def exists(self):
+        return False
 
 
 class CloneStorageCreator(_StorageCreator):
@@ -514,3 +536,17 @@ class StorageBackend(_StorageBase):
 
     def is_managed(self):
         return bool(self._vol_object)
+
+    def validate(self, disk):
+        ignore = disk
+        return
+    def get_vol_install(self):
+        return None
+    def is_size_conflict(self):
+        return (False, None)
+    def will_create_storage(self):
+        return False
+    def create(self, progresscb):
+        ignore = progresscb
+        raise RuntimeError("programming error: %s can't create storage" %
+            self.__class__.__name__)

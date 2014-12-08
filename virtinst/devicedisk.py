@@ -501,7 +501,6 @@ class VirtualDisk(VirtualDevice):
         VirtualDevice.__init__(self, *args, **kwargs)
 
         self.__storage_backend = None
-        self._storage_creator = None
 
 
     #############################
@@ -513,11 +512,9 @@ class VirtualDisk(VirtualDevice):
             # Fill in a completed URL for virt-manager UI, path comparison, etc
             return self._url_from_network_source()
 
-        if self._storage_creator:
-            return self._storage_creator.path
         return self._storage_backend.path
     def _set_path(self, val):
-        if self._storage_creator:
+        if self._storage_backend.will_create_storage():
             raise ValueError("Can't change disk path if storage creation info "
                              "has been set.")
         self._change_backend(val, None)
@@ -529,24 +526,20 @@ class VirtualDisk(VirtualDevice):
         self._set_xmlpath(self.path)
 
     def set_vol_install(self, vol_install):
-        self._storage_creator = diskbackend.ManagedStorageCreator(
+        self._storage_backend = diskbackend.ManagedStorageCreator(
             self.conn, vol_install)
         self._set_xmlpath(self.path)
 
     def get_vol_object(self):
         return self._storage_backend.get_vol_object()
     def get_vol_install(self):
-        if not self._storage_creator:
-            return None
-        return self._storage_creator.get_vol_install()
+        return self._storage_backend.get_vol_install()
     def get_parent_pool(self):
         if self.get_vol_install():
             return self.get_vol_install().pool
         return self._storage_backend.get_parent_pool()
 
     def get_size(self):
-        if self._storage_creator:
-            return self._storage_creator.get_size()
         return self._storage_backend.get_size()
 
 
@@ -574,10 +567,7 @@ class VirtualDisk(VirtualDevice):
         if self.driver_name != self.DRIVER_QEMU:
             return None
 
-        if self._storage_creator:
-            drvtype = self._storage_creator.get_driver_type()
-        else:
-            drvtype = self._storage_backend.get_driver_type()
+        drvtype = self._storage_backend.get_driver_type()
         return _qemu_sanitize_drvtype(self.type, drvtype)
 
 
@@ -624,8 +614,6 @@ class VirtualDisk(VirtualDevice):
             return VirtualDisk.TYPE_VOLUME
         if self.source_protocol:
             return VirtualDisk.TYPE_NETWORK
-        if self._storage_creator:
-            return self._storage_creator.get_dev_type()
         if not self.__storage_backend and skip_backend:
             return self.TYPE_FILE
         return self._storage_backend.get_dev_type()
@@ -759,7 +747,7 @@ class VirtualDisk(VirtualDevice):
         """
         Set a path to manually clone (as in, not through libvirt)
         """
-        self._storage_creator = diskbackend.CloneStorageCreator(self.conn,
+        self._storage_backend = diskbackend.CloneStorageCreator(self.conn,
             self.path, disk.path, disk.get_size(), sparse)
 
     def is_cdrom(self):
@@ -812,15 +800,7 @@ class VirtualDisk(VirtualDevice):
         Return bool representing if managed storage parameters have
         been explicitly specified or filled in
         """
-        if self._storage_creator:
-            return self._storage_creator.is_managed()
         return self._storage_backend.is_managed()
-
-    def creating_storage(self):
-        """
-        Return True if the user requested us to create a device
-        """
-        return bool(self._storage_creator)
 
     def validate(self):
         if self.path is None:
@@ -835,14 +815,13 @@ class VirtualDisk(VirtualDevice):
             raise ValueError(_("The path '%s' must be a file or a "
                                "device, not a directory") % self.path)
 
-        if (not self.creating_storage() and
+        if (not self._storage_backend.will_create_storage() and
             not self._storage_backend.exists()):
             raise ValueError(
                 _("Must specify storage creation parameters for "
                   "non-existent path '%s'.") % self.path)
 
-        if self._storage_creator:
-            self._storage_creator.validate(self)
+        self._storage_backend.validate(self)
 
     def setup(self, meter=None):
         """
@@ -856,11 +835,10 @@ class VirtualDisk(VirtualDevice):
         """
         if not meter:
             meter = progress.BaseMeter()
-        if not self._storage_creator:
+        if not self._storage_backend.will_create_storage():
             return
 
-        volobj = self._storage_creator.create(meter)
-        self._storage_creator = None
+        volobj = self._storage_backend.create(meter)
         if volobj:
             self._change_backend(None, volobj)
 
@@ -899,9 +877,7 @@ class VirtualDisk(VirtualDevice):
         Non fatal conflicts (sparse disk exceeds available space) will
         return (False, "description of collision")
         """
-        if not self._storage_creator:
-            return (False, None)
-        return self._storage_creator.is_size_conflict()
+        return self._storage_backend.is_size_conflict()
 
     def is_conflict_disk(self, conn=None):
         """
