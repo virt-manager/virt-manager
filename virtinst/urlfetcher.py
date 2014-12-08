@@ -127,11 +127,6 @@ class _URIImageFetcher(_ImageFetcher):
     def hasFile(self, filename):
         raise NotImplementedError
 
-    def prepareLocation(self):
-        if not self.hasFile(""):
-            raise ValueError(_("Opening URL %s failed.") %
-                              (self.location))
-
 
 class _HTTPImageFetcher(_URIImageFetcher):
     def hasFile(self, filename):
