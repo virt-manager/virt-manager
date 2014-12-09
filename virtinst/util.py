@@ -365,41 +365,6 @@ def xml_escape(xml):
     return xml
 
 
-def uri_split(uri):
-    """
-    Parse a libvirt hypervisor uri into it's individual parts
-    @returns: tuple of the form (scheme (ex. 'qemu', 'xen+ssh'), username,
-                                 hostname, path (ex. '/system'), query,
-                                 fragment)
-    """
-    def splitnetloc(url, start=0):
-        for c in '/?#':  # the order is important!
-            delim = url.find(c, start)
-            if delim >= 0:
-                break
-        else:
-            delim = len(url)
-        return url[start:delim], url[delim:]
-
-    username = netloc = query = fragment = ''
-    i = uri.find(":")
-    if i > 0:
-        scheme, uri = uri[:i].lower(), uri[i + 1:]
-        if uri[:2] == '//':
-            netloc, uri = splitnetloc(uri, 2)
-            offset = netloc.find("@")
-            if offset > 0:
-                username = netloc[0:offset]
-                netloc = netloc[offset + 1:]
-        if '#' in uri:
-            uri, fragment = uri.split('#', 1)
-        if '?' in uri:
-            uri, query = uri.split('?', 1)
-    else:
-        scheme = uri.lower()
-    return scheme, username, netloc, uri, query, fragment
-
-
 def is_error_nosupport(err):
     """
     Check if passed exception indicates that the called libvirt command isn't

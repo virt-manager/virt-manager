@@ -22,7 +22,6 @@ from gi.repository import GObject
 
 import logging
 import os
-import re
 import socket
 import time
 import traceback
@@ -359,36 +358,17 @@ class vmmConnection(vmmGObject):
         @show_kvm: Show hv as QEMU/KVM. Only works if connection is
             active though
         """
-        def match_whole_string(orig, reg):
-            match = re.match(reg, orig)
-            if not match:
-                return False
+        uriinfo = virtinst.URISplit(self.get_uri())
 
-            return ((match.end() - match.start()) == len(orig))
-
-        def is_ip_addr(orig):
-            return match_whole_string(orig, "[0-9.]+")
-
-        (scheme, username, hostname,
-         path, ignore, ignore) = util.uri_split(self.get_uri())
-        hostname, port = self.get_backend().get_uri_host_port()
-        port = port or ""
-
-        hv = ""
         rest = ""
-        transport = ""
-        port = ""
-        if scheme.count("+"):
-            transport = scheme.split("+")[1]
-            scheme = scheme.split("+")[0]
+        if uriinfo.hostname:
+            hostname = uriinfo.hostname
+            if show_user and uriinfo.username:
+                hostname = uriinfo.username + "@" + hostname
+            if uriinfo.port:
+                hostname += ":" + uriinfo.port
 
-        if hostname:
-            if show_user and username:
-                hostname = username + "@" + hostname
-            if port:
-                hostname += ":" + port
-
-            if shorthost and not is_ip_addr(hostname):
+            if shorthost and not uriinfo.host_is_ipv4_string:
                 rest = hostname.split(".")[0]
             else:
                 rest = hostname
@@ -411,21 +391,21 @@ class vmmConnection(vmmGObject):
             "xenapi"    : "XenAPI",
         }
 
-        hv = scheme
-        if scheme in pretty_map:
-            hv = pretty_map[scheme]
+        hv = uriinfo.scheme
+        if hv in pretty_map:
+            hv = pretty_map[hv]
 
         if hv == "QEMU" and show_kvm and self.caps.is_kvm_available():
             hv += "/KVM"
 
-        if show_transport and transport:
-            hv += "+" + transport
+        if show_transport and uriinfo.transport:
+            hv += "+" + uriinfo.transport
 
-        if path and path != "/system" and path != "/":
-            if path == "/session":
+        if uriinfo.path and uriinfo.path != "/system" and uriinfo.path != "/":
+            if uriinfo.path == "/session":
                 hv += " Usermode"
             else:
-                hv += " %s" % os.path.basename(path)
+                hv += " %s" % os.path.basename(uriinfo.path)
 
         if self._backend.fake_name():
             hv = self._backend.fake_name()

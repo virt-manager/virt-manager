@@ -26,6 +26,7 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 
 from virtinst import util
+from virtinst import URISplit
 
 from . import vmmenu
 from . import uiutil
@@ -703,8 +704,8 @@ class vmmManager(vmmGObjectUI):
         connrows = [row for row in self.rows.values() if row[ROW_IS_CONN]]
         for row in connrows:
             conn = row[ROW_HANDLE]
-            connsplit = util.uri_split(conn.get_uri())
-            scheme = connsplit[0]
+            connuriinfo = URISplit(conn.get_uri())
+            scheme = connuriinfo.scheme
 
             show_transport = False
             show_user = False
@@ -713,15 +714,15 @@ class vmmManager(vmmGObjectUI):
                 checkconn = checkrow[ROW_HANDLE]
                 if conn is checkconn:
                     continue
-                checkconnsplit = util.uri_split(checkconn.get_uri())
-                checkscheme = checkconnsplit[0]
+                checkuriinfo = URISplit(checkconn.get_uri())
+                checkscheme = checkuriinfo.scheme
 
-                if ((scheme.split("+")[0] == checkscheme.split("+")[0]) and
-                    connsplit[2] == checkconnsplit[2] and
-                    connsplit[3] == checkconnsplit[3]):
+                if (scheme == checkscheme and
+                    connuriinfo.hostname == checkuriinfo.hostname and
+                    connuriinfo.path == checkuriinfo.path):
                     show_transport = True
-                    if ("+" in scheme and "+" in checkscheme and
-                        scheme.split("+")[1] == checkscheme.split("+")[1]):
+                    if (connuriinfo.transport and
+                        connuriinfo.transport == checkuriinfo.transport):
                         show_user = True
 
             newname = conn.get_pretty_desc(

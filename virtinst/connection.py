@@ -26,6 +26,7 @@ from . import pollhelpers
 from . import support
 from . import util
 from . import capabilities as CapabilitiesParser
+from . import URISplit
 from .cli import VirtOptionString
 from .guest import Guest
 from .nodedev import NodeDevice
@@ -81,7 +82,7 @@ class VirtualConnection(object):
             self._test_opts = {}
 
         self._libvirtconn = None
-        self._urisplits = util.uri_split(self._uri)
+        self._urisplits = URISplit(self._uri)
         self._caps = None
 
         self._support_cache = {}
@@ -162,7 +163,7 @@ class VirtualConnection(object):
         self._libvirtconn = conn
         if not self._open_uri:
             self._uri = self._libvirtconn.getURI()
-            self._urisplits = util.uri_split(self._uri)
+            self._urisplits = URISplit(self._uri)
 
     def set_keep_alive(self, interval, count):
         if hasattr(self._libvirtconn, "setKeepAlive"):
@@ -335,56 +336,40 @@ class VirtualConnection(object):
 
     def is_remote(self):
         return (hasattr(self, "_virtinst__fake_conn_remote") or
-            self._urisplits[2])
+            self._urisplits.hostname)
 
     def get_uri_hostname(self):
-        return self._urisplits[2] or "localhost"
+        return self._urisplits.hostname or "localhost"
 
     def get_uri_host_port(self):
-        hostname = self.get_uri_hostname()
-        port = None
-
-        if hostname.startswith("[") and "]" in hostname:
-            if "]:" in hostname:
-                hostname, port = hostname.rsplit(":", 1)
-            hostname = "".join(hostname[1:].split("]", 1))
-        elif ":" in hostname:
-            hostname, port = hostname.split(":", 1)
-        return hostname, port
+        return self.get_uri_hostname(), self._urisplits.port
 
     def get_uri_transport(self):
-        scheme = self._urisplits[0]
-        username = self._urisplits[1]
-        offset = scheme.find("+")
-        if offset != -1:
-            return [scheme[offset + 1:], username]
+        if self._urisplits.transport:
+            return [self._urisplits.transport, self._urisplits.username]
         return [None, None]
 
     def get_uri_driver(self):
-        scheme = self._urisplits[0]
-        offset = scheme.find("+")
-        if offset > 0:
-            return scheme[:offset]
-        return scheme
+        return self._urisplits.scheme
 
     def is_session_uri(self):
-        return self._urisplits[3] == "/session"
+        return self._urisplits.path == "/session"
     def is_qemu(self):
-        return self._urisplits[0].startswith("qemu")
+        return self._urisplits.scheme.startswith("qemu")
     def is_qemu_system(self):
-        return (self.is_qemu() and self._urisplits[3] == "/system")
+        return (self.is_qemu() and self._urisplits.path == "/system")
     def is_qemu_session(self):
         return (self.is_qemu() and self.is_session_uri())
 
     def is_test(self):
-        return self._urisplits[0].startswith("test")
+        return self._urisplits.scheme.startswith("test")
     def is_xen(self):
-        return (self._urisplits[0].startswith("xen") or
-                self._urisplits[0].startswith("libxl"))
+        return (self._urisplits.scheme.startswith("xen") or
+                self._urisplits.scheme.startswith("libxl"))
     def is_lxc(self):
-        return self._urisplits[0].startswith("lxc")
+        return self._urisplits.scheme.startswith("lxc")
     def is_openvz(self):
-        return self._urisplits[0].startswith("openvz")
+        return self._urisplits.scheme.startswith("openvz")
     def is_container(self):
         return self.is_lxc() or self.is_openvz()
 

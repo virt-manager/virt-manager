@@ -28,23 +28,12 @@ from gi.repository import Gtk
 
 import libvirt
 from virtinst import util
+from virtinst import URISplit
 
 from . import uiutil
 from .baseclass import vmmGObjectUI
 from .asyncjob import vmmAsyncJob
 from .domain import vmmDomain
-
-
-def uri_join(uri_tuple):
-    scheme, user, host, path, query, fragment = uri_tuple
-
-    user = (user and (user + "@") or "")
-    host = host or ""
-    path = path or "/"
-    query = (query and ("?" + query) or "")
-    fragment = (fragment and ("#" + fragment) or "")
-
-    return "%s://%s%s%s%s%s" % (scheme, user, host, path, fragment, query)
 
 
 class vmmMigrateDialog(vmmGObjectUI):
@@ -267,16 +256,11 @@ class vmmMigrateDialog(vmmGObjectUI):
         return self.edit_uri(srcuri, desthost, None)
 
     def edit_uri(self, uri, hostname, port):
-        split = list(util.uri_split(uri))
+        uriinfo = URISplit(uri)
 
-        hostname = hostname or split[2]
-        if port:
-            if hostname.count(":"):
-                hostname = hostname.split(":")[0]
-            hostname += ":%s" % port
-
-        split[2] = hostname
-        return uri_join(tuple(split))
+        uriinfo.hostname = hostname or uriinfo.hostname
+        uriinfo.port = port or uriinfo.port
+        return uriinfo.rebuild_uri()
 
     def build_migrate_uri(self, destconn, srcuri):
         conn = self.conn
