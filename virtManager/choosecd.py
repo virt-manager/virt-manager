@@ -149,8 +149,7 @@ class vmmChooseCD(vmmGObjectUI):
     def _browse_file(self):
         if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(self.conn)
-            self.storage_browser.connect("storage-browse-finish",
-                                         self.set_storage_path)
+            self.storage_browser.set_finish_cb(self.set_storage_path)
 
         self.storage_browser.stable_defaults = self.vm.stable_defaults()
 

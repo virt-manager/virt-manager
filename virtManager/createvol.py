@@ -344,7 +344,7 @@ class vmmCreateVolume(vmmGObjectUI):
 
             from .storagebrowse import vmmStorageBrowser
             self.storage_browser = vmmStorageBrowser(self.conn)
-            self.storage_browser.connect("storage-browse-finish", cb)
+            self.storage_browser.set_finish_cb(cb)
             self.storage_browser.topwin.set_modal(self.topwin.get_modal())
             self.storage_browser.can_new_volume = False
             self.storage_browser.set_browse_reason(

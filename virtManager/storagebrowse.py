@@ -20,7 +20,6 @@
 
 import logging
 
-from gi.repository import GObject
 from gi.repository import Gtk
 
 from . import host
@@ -31,18 +30,14 @@ from . import uiutil
 
 
 class vmmStorageBrowser(vmmGObjectUI):
-    __gsignals__ = {
-        "storage-browse-finish": (GObject.SignalFlags.RUN_FIRST, None, [str]),
-    }
-
     def __init__(self, conn):
         vmmGObjectUI.__init__(self, "storagebrowse.ui", "vmm-storage-browse")
         self.conn = conn
 
         self.conn_signal_ids = []
-        self.finish_cb_id = None
         self.can_new_volume = True
         self._first_run = False
+        self._finish_cb = None
 
         # Add Volume wizard
         self.addvol = None
@@ -103,9 +98,7 @@ class vmmStorageBrowser(vmmGObjectUI):
             self.conn.disconnect(i)
 
     def set_finish_cb(self, callback):
-        if self.finish_cb_id:
-            self.disconnect(self.finish_cb_id)
-        self.finish_cb_id = self.connect("storage-browse-finish", callback)
+        self._finish_cb = callback
 
     def set_browse_reason(self, reason):
         self.browse_reason = reason
@@ -376,7 +369,8 @@ class vmmStorageBrowser(vmmGObjectUI):
     def _do_finish(self, path=None):
         if not path:
             path = self.current_vol().get_target_path()
-        self.emit("storage-browse-finish", path)
+        if self._finish_cb:
+            self._finish_cb(self, path)
         self.close()
 
 

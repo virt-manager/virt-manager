@@ -40,7 +40,6 @@ class vmmAddStorage(vmmGObjectUI):
         vmmGObjectUI.__init__(self, "addstorage.ui", None,
                               builder=builder, topwin=topwin)
         self.conn = conn
-        self.storage_browser = None
 
         self.builder.connect_signals({
             "on_config_storage_browse_clicked": self._browse_storage,

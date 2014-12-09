@@ -834,6 +834,6 @@ class vmmCloneVM(vmmGObjectUI):
 
         if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(self.conn)
-            self.storage_browser.connect("storage-browse-finish", callback)
+            self.storage_browser.set_finish_cb(callback)
 
         self.storage_browser.show(self.topwin, self.conn)
