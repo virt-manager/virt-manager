@@ -1,0 +1,14 @@
+<pool type="rbd">
+  <name>rbd-pool</name>
+  <uuid>4bcd023e-990e-fcf6-d95c-52dd0cd938c8</uuid>
+  <capacity unit="bytes">47256127143936</capacity>
+  <allocation unit="bytes">5537792235090</allocation>
+  <available unit="bytes">35978000121856</available>
+  <source>
+    <host name="ceph-mon-1.example.com" port="1234"/>
+    <host name="foo.bar" port="6789"/>
+    <host name="ceph-mon-3.example.com" port="1000"/>
+    <name>rbd</name>
+    <host name="frobber" port="5555"/>
+  </source>
+</pool>

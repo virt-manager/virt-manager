@@ -69,8 +69,8 @@ def createPool(conn, ptype, poolname=None, fmt=None, target_path=None,
     pool_inst.type = ptype
     pool_inst.uuid = uuid
 
-    if pool_inst.supports_property("host"):
-        pool_inst.host = "some.random.hostname"
+    if pool_inst.supports_property("hosts"):
+        pool_inst.add_host("some.random.hostname")
     if pool_inst.supports_property("source_path"):
         pool_inst.source_path = source_path or "/some/source/path"
     if pool_inst.supports_property("target_path"):
@@ -220,6 +220,11 @@ class TestStorage(unittest.TestCase):
                 "libvirt version.")
 
         createPool(self.conn, StoragePool.TYPE_GLUSTER, "pool-gluster")
+
+
+    ##############################
+    # Tests for pool-sources API #
+    ##############################
 
     def _enumerateCompare(self, name, pool_list):
         for pool in pool_list:

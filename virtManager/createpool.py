@@ -253,18 +253,23 @@ class vmmCreatePool(vmmGObjectUI):
 
         src = self._pool.supports_property("source_path")
         src_b = src and not self.conn.is_remote()
-        src_name = self._pool.type == StoragePool.TYPE_GLUSTER
         tgt = self._pool.supports_property("target_path")
         tgt_b = tgt and not self.conn.is_remote()
-        host = self._pool.supports_property("host")
+        host = self._pool.supports_property("hosts")
         fmt = self._pool.supports_property("formats")
         iqn = self._pool.supports_property("iqn")
         builddef, buildsens = self.get_build_default()
 
+        # We don't show source_name for logical pools, since we use
+        # pool-sources to avoid the need for it
+        src_name = (self._pool.supports_property("source_name") and
+                    self._pool.type != self._pool.TYPE_LOGICAL)
+
         # Source path browsing is meaningless for net pools
         if self._pool.type in [StoragePool.TYPE_NETFS,
                                StoragePool.TYPE_ISCSI,
-                               StoragePool.TYPE_SCSI]:
+                               StoragePool.TYPE_SCSI,
+                               StoragePool.TYPE_GLUSTER]:
             src_b = False
 
         show_row("pool-target", tgt)
@@ -502,7 +507,7 @@ class vmmCreatePool(vmmGObjectUI):
         try:
             self._pool.target_path = target
             if host:
-                self._pool.host = host
+                self._pool.add_host(host)
             if source:
                 self._pool.source_path = source
             if fmt:

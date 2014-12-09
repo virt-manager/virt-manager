@@ -1097,7 +1097,6 @@ class XMLParseTest(unittest.TestCase):
         check("capacity", 984373075968, 200000)
         check("allocation", 756681687040, 150000)
         check("available", 227691388928, 50000)
-        check("source_dir", None, None)
 
         check("format", "auto", "ext3")
         check("source_path", "/some/source/path", "/dev/foo/bar")
@@ -1114,8 +1113,9 @@ class XMLParseTest(unittest.TestCase):
         pool = virtinst.StoragePool(conn, parsexml=file(infile).read())
 
         check = self._make_checker(pool)
-        check("host", "some.random.hostname", "my.host")
         check("iqn", "foo.bar.baz.iqn", "my.iqn")
+        check = self._make_checker(pool.hosts[0])
+        check("name", "some.random.hostname", "my.host")
 
         utils.diff_compare(pool.get_xml_config(), outfile)
         utils.test_create(conn, pool.get_xml_config(), "storagePoolDefineXML")
@@ -1131,8 +1131,29 @@ class XMLParseTest(unittest.TestCase):
         pool = virtinst.StoragePool(conn, parsexml=file(infile).read())
 
         check = self._make_checker(pool)
-        check("host", "some.random.hostname", "my.host")
-        check("source_dir", None, "/foo")
+        check("source_path", "/some/source/path", "/foo")
+        check = self._make_checker(pool.hosts[0])
+        check("name", "some.random.hostname", "my.host")
+
+        utils.diff_compare(pool.get_xml_config(), outfile)
+        utils.test_create(conn, pool.get_xml_config(), "storagePoolDefineXML")
+
+    def testRBDPool(self):
+        basename = "pool-rbd"
+        infile = "tests/xmlparse-xml/%s.xml" % basename
+        outfile = "tests/xmlparse-xml/%s-out.xml" % basename
+        pool = virtinst.StoragePool(conn, parsexml=file(infile).read())
+
+        check = self._make_checker(pool.hosts[0])
+        check("name", "ceph-mon-1.example.com")
+        check("port", 6789, 1234)
+        check = self._make_checker(pool.hosts[1])
+        check("name", "ceph-mon-2.example.com", "foo.bar")
+        check("port", 6789)
+        check = self._make_checker(pool.hosts[2])
+        check("name", "ceph-mon-3.example.com")
+        check("port", 6789, 1000)
+        pool.add_host("frobber", "5555")
 
         utils.diff_compare(pool.get_xml_config(), outfile)
         utils.test_create(conn, pool.get_xml_config(), "storagePoolDefineXML")
@@ -1144,6 +1165,7 @@ class XMLParseTest(unittest.TestCase):
         vol = virtinst.StorageVolume(conn, parsexml=file(infile).read())
 
         check = self._make_checker(vol)
+        check("type", None, "file")
         check("key", None, "fookey")
         check("capacity", 10737418240, 2000)
         check("allocation", 5368709120, 1000)
