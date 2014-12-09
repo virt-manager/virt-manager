@@ -581,6 +581,13 @@ c.add_compare("""--hvm --pxe \
 --clock offset=localtime,hpet_present=no,rtc_tickpolicy=merge \
 --pm suspend_to_mem=yes,suspend_to_disk=no \
 """, "many-devices")  # Lots of devices
+c.add_compare("""--hvm --pxe --noautoconsole --nographics \
+--connect %(KVMURI)s --os-variant fedora20 \
+--disk %(NEWIMG1)s,size=1 \
+--disk /iscsi-pool/diskvol1 \
+--disk /dev/default-pool/iso-vol \
+--disk /dev/default-pool/iso-vol,format=qcow2 \
+""", "disk-kvm-defaults")
 c.add_valid("--hvm --disk path=%(EXISTIMG1)s,device=cdrom")  # Specifying cdrom media via --disk
 c.add_valid("--hvm --import --disk path=%(EXISTIMG1)s")  # FV Import install
 c.add_valid("--hvm --import --disk path=%(EXISTIMG1)s --prompt --force")  # Working scenario w/ prompt shouldn't ask anything
@@ -767,7 +774,7 @@ c.add_valid("--paravirt --location %(TREEDIR)s")  # Paravirt location
 c.add_valid("--paravirt --location %(TREEDIR)s --os-variant none")  # Paravirt location with --os-variant none
 c.add_valid("--hvm --location %(TREEDIR)s --os-variant fedora12")  # URL install with manual os-variant
 c.add_valid("--hvm --pxe --boot menu=on")  # Boot menu
-c.add_valid("--hvm --pxe --boot kernel=/tmp/foo1.img,initrd=/tmp/foo2.img,dtb=/tmp/foo2.dtb,extra_args='ro quiet console=/dev/ttyS0,456'")  # Kernel params
+c.add_valid("--hvm --boot kernel=/tmp/foo1.img,initrd=/tmp/foo2.img,dtb=/tmp/foo2.dtb,extra_args='ro quiet console=/dev/ttyS0,456'")  # Kernel params
 c.add_valid("--hvm --pxe --boot cdrom,fd,hd,network,menu=off")  # Boot order
 c.add_valid("--hvm --boot network,hd,menu=on")  # Boot w/o other install option
 c.add_invalid("--hvm --pxe --virt-type bogus")  # Bogus virt-type

@@ -430,10 +430,6 @@ class DistroInstaller(Installer):
     def _prepare(self, guest, meter):
         mediatype = self._get_media_type()
 
-        # Test suite manually injected a boot kernel
-        if self._install_kernel and not self.scratchdir_required():
-            return
-
         if mediatype == MEDIA_CDROM_IMPLIED:
             return
 
@@ -471,9 +467,6 @@ class DistroInstaller(Installer):
         return not self.livecd
 
     def scratchdir_required(self):
-        if not self.location:
-            return False
-
         mediatype = self._get_media_type()
         return mediatype in [MEDIA_CDROM_URL, MEDIA_LOCATION_URL,
                              MEDIA_LOCATION_DIR, MEDIA_LOCATION_CDROM]

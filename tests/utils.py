@@ -23,10 +23,6 @@ import libvirt
 
 import virtinst
 import virtinst.cli
-from virtinst import VirtualAudio
-from virtinst import VirtualDisk
-from virtinst import VirtualGraphics
-from virtinst import VirtualVideoDevice
 
 # DON'T EDIT THIS. Use 'setup.py test --regenerate-output'
 REGENERATE_OUTPUT = False
@@ -128,36 +124,13 @@ def open_plainkvm(connver=None, libver=None):
     return openconn(_make_uri(uriqemu, connver, libver))
 
 
-def open_plainxen(connver=None, libver=None):
-    return openconn(_make_uri(urixen, connver, libver))
-
-
 def open_test_remote():
     return openconn(uriremote)
 
-_default_conn = open_testdriver()
-_conn = None
 
-
-def set_conn(newconn):
-    global _conn
-    _conn = newconn
-
-
-def reset_conn():
-    set_conn(_default_conn)
-
-
-def get_conn():
-    return _conn
-reset_conn()
-
-# Register libvirt handler
-
-
-def libvirt_callback(ignore, err):
+def _libvirt_callback(ignore, err):
     logging.warn("libvirt errmsg: %s", err[2])
-libvirt.registerErrorHandler(f=libvirt_callback, ctx=None)
+libvirt.registerErrorHandler(f=_libvirt_callback, ctx=None)
 
 
 def sanitize_xml_for_define(xml):
@@ -222,130 +195,3 @@ def diff_compare(actual_out, filename=None, expect_out=None):
                                         tofile="Generated Output"))
     if diff:
         raise AssertionError("Conversion outputs did not match.\n%s" % diff)
-
-
-def get_basic_paravirt_guest(installer=None):
-    g = virtinst.Guest(_conn)
-    g.type = "xen"
-    g.name = "TestGuest"
-    g.memory = int(200 * 1024)
-    g.maxmemory = int(400 * 1024)
-    g.uuid = "12345678-1234-1234-1234-123456789012"
-    gdev = VirtualGraphics(_conn)
-    gdev.type = "vnc"
-    gdev.keymap = "ja"
-    g.add_device(gdev)
-    g.vcpus = 5
-
-    if installer:
-        g.installer = installer
-    else:
-        g.installer._install_kernel = "/boot/vmlinuz"
-        g.installer._install_initrd = "/boot/initrd"
-
-    g.add_default_input_device()
-    g.add_default_console_device()
-
-    return g
-
-
-def get_basic_fullyvirt_guest(typ="xen", installer=None):
-    g = virtinst.Guest(_conn)
-    g.type = typ
-    g.name = "TestGuest"
-    g.memory = int(200 * 1024)
-    g.maxmemory = int(400 * 1024)
-    g.uuid = "12345678-1234-1234-1234-123456789012"
-    g.installer.location = "/dev/null"
-    g.installer.cdrom = True
-    gdev = VirtualGraphics(_conn)
-    gdev.type = "vnc"
-    gdev.keymap = "ja"
-    g.add_device(gdev)
-    g.features.pae = False
-    g.vcpus = 5
-    if installer:
-        g.installer = installer
-    g.emulator = "/usr/lib/xen/bin/qemu-dm"
-    g.os.arch = "i686"
-    g.os.os_type = "hvm"
-
-    g.add_default_input_device()
-    g.add_default_console_device()
-
-    return g
-
-
-def make_import_installer():
-    return virtinst.ImportInstaller(_conn)
-
-
-def make_distro_installer(location="/dev/default-pool/default-vol"):
-    inst = virtinst.DistroInstaller(_conn)
-    inst.location = location
-    return inst
-
-
-def make_live_installer(location="/dev/null"):
-    inst = virtinst.DistroInstaller(_conn)
-    inst.location = location
-    inst.livecd = True
-    inst.cdrom = True
-    return inst
-
-
-def make_pxe_installer():
-    return virtinst.PXEInstaller(_conn)
-
-
-def build_win_kvm(path=None):
-    g = get_basic_fullyvirt_guest("kvm")
-    g.os_variant = "winxp"
-    g.add_device(get_filedisk(path))
-    g.add_device(get_blkdisk())
-    g.add_device(get_virtual_network())
-    g.add_device(VirtualAudio(g.conn))
-    g.add_device(VirtualVideoDevice(g.conn))
-
-    return g
-
-
-def get_floppy(path=None):
-    if not path:
-        path = "/dev/default-pool/testvol1.img"
-    d = VirtualDisk(_conn)
-    d.path = path
-    d.device = d.DEVICE_FLOPPY
-    d.validate()
-    return d
-
-
-def get_filedisk(path=None):
-    if not path:
-        path = "/dev/default-pool/new-test-suite.img"
-    d = VirtualDisk(_conn)
-    d.path = path
-
-    if d.wants_storage_creation():
-        parent_pool = d.get_parent_pool()
-        vol_install = VirtualDisk.build_vol_install(_conn,
-            os.path.basename(path), parent_pool, .0000001, True)
-        d.set_vol_install(vol_install)
-
-    d.validate()
-    return d
-
-
-def get_blkdisk(path="/dev/disk-pool/diskvol1"):
-    d = VirtualDisk(_conn)
-    d.path = path
-    d.validate()
-    return d
-
-
-def get_virtual_network():
-    dev = virtinst.VirtualNetworkInterface(_conn)
-    dev.macaddr = "22:22:33:44:55:66"
-    dev.type = virtinst.VirtualNetworkInterface.TYPE_VIRTUAL
-    dev.source = "default"
-    return dev
