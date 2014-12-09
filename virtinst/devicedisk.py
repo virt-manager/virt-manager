@@ -605,7 +605,7 @@ class VirtualDisk(VirtualDevice):
     source_host_transport = XMLProperty("./source/host/@transport")
     source_host_socket = XMLProperty("./source/host/@socket")
 
-    def _set_source_from_url(self, uri):
+    def _set_source_network_from_url(self, uri):
         uriinfo = URISplit(uri)
         if uriinfo.scheme:
             self.source_protocol = uriinfo.scheme
@@ -620,6 +620,29 @@ class VirtualDisk(VirtualDevice):
                 self.source_host_socket = uriinfo.path
             else:
                 self.source_name = uriinfo.path
+                if self.source_name.startswith("/"):
+                    self.source_name = self.source_name[1:]
+
+    def _set_source_network_from_storage(self, volxml, poolxml):
+        self.source_protocol = poolxml.type
+        if poolxml.hosts:
+            self.source_host_name = poolxml.hosts[0].name
+            self.source_host_port = poolxml.hosts[0].port
+
+        path = ""
+        if poolxml.source_name:
+            path += poolxml.source_name + "/"
+        path += volxml.name
+        self.source_name = path
+
+    def _set_network_source_from_backend(self):
+        if (self._storage_backend.get_vol_object() or
+            self._storage_backend.get_vol_install()):
+            volxml = self._storage_backend.get_vol_xml()
+            poolxml = self._storage_backend.get_parent_pool_xml()
+            self._set_source_network_from_storage(volxml, poolxml)
+        elif self._storage_backend.get_path():
+            self._set_source_network_from_url(self._storage_backend.get_path())
 
     def _build_url_from_network_source(self):
         ret = self.source_protocol
@@ -692,7 +715,7 @@ class VirtualDisk(VirtualDevice):
         self._clear_source_xml()
 
         if self._storage_backend.get_dev_type() == "network":
-            self._set_source_from_url(val)
+            self._set_network_source_from_backend()
             return
 
         propname = self._disk_type_to_object_prop_name()

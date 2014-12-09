@@ -561,6 +561,7 @@ c.add_compare("""--hvm --pxe \
 --disk gluster://192.168.1.100/test-volume/test-gluster.qcow2,bus=scsi \
 --disk qemu+nbd:///var/foo/bar/socket,bus=scsi \
 --disk path=http://[1:2:3:4:1:2:3:4]:5522/my/path?query=foo,bus=scsi \
+--disk vol=gluster-pool/test-gluster.raw,bus=scsi \
 --serial tcp,host=:2222,mode=bind,protocol=telnet \
 --filesystem /source,/target,mode=squash \
 --network user,mac=12:34:56:78:11:22,portgroup=foo \

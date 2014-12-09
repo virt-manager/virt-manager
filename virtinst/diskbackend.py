@@ -171,6 +171,7 @@ class _StorageBase(object):
     """
     def __init__(self, conn):
         self._conn = conn
+        self._parent_pool_xml = None
 
     def get_size(self):
         raise NotImplementedError()
@@ -182,6 +183,13 @@ class _StorageBase(object):
         raise NotImplementedError()
     def get_vol_object(self):
         raise NotImplementedError()
+    def get_parent_pool(self):
+        raise NotImplementedError()
+    def get_parent_pool_xml(self):
+        if not self._parent_pool_xml and self.get_parent_pool():
+            self._parent_pool_xml = StoragePool(self._conn,
+                parsexml=self.get_parent_pool().XMLDesc(0))
+        return self._parent_pool_xml
     def validate(self, disk):
         raise NotImplementedError()
     def get_path(self):
@@ -274,6 +282,8 @@ class _StorageCreator(_StorageBase):
     def will_create_storage(self):
         return True
     def get_vol_object(self):
+        return None
+    def get_vol_xml(self):
         return None
     def get_parent_pool(self):
         if self._vol_install:
@@ -438,20 +448,11 @@ class StorageBackend(_StorageBase):
 
         # Cached bits
         self._vol_xml = None
+        self._parent_pool_xml = None
         self._exists = None
         self._size = None
         self._dev_type = None
 
-
-    ################
-    # Internal API #
-    ################
-
-    def _get_vol_xml(self):
-        if self._vol_xml is None:
-            self._vol_xml = StorageVolume(self._conn,
-                parsexml=self._vol_object.XMLDesc(0))
-        return self._vol_xml
 
     ##############
     # Public API #
@@ -459,14 +460,18 @@ class StorageBackend(_StorageBase):
 
     def get_path(self):
         if self._vol_object:
-            return self._get_vol_xml().target_path
+            return self.get_vol_xml().target_path
         return self._path
 
     def get_vol_object(self):
         return self._vol_object
+    def get_vol_xml(self):
+        if self._vol_xml is None:
+            self._vol_xml = StorageVolume(self._conn,
+                parsexml=self._vol_object.XMLDesc(0))
+        return self._vol_xml
+
     def get_parent_pool(self):
-        if not self._parent_pool and self._vol_object:
-            self._parent_pool = self._vol_object.storagePoolLookupByVolume()
         return self._parent_pool
 
     def get_size(self):
@@ -476,7 +481,7 @@ class StorageBackend(_StorageBase):
         if self._size is None:
             ret = 0
             if self._vol_object:
-                ret = self._get_vol_xml().capacity
+                ret = self.get_vol_xml().capacity
             elif self._path:
                 ignore, ret = util.stat_disk(self._path)
             self._size = (float(ret) / 1024.0 / 1024.0 / 1024.0)
@@ -513,8 +518,8 @@ class StorageBackend(_StorageBase):
         """
         if self._dev_type is None:
             if self._vol_object:
-                if self._get_vol_xml().type:
-                    self._dev_type = self._get_vol_xml().type
+                if self.get_vol_xml().type:
+                    self._dev_type = self.get_vol_xml().type
                 else:
                     t = self._vol_object.info()[0]
                     if t == StorageVolume.TYPE_FILE:
@@ -543,7 +548,7 @@ class StorageBackend(_StorageBase):
 
     def get_driver_type(self):
         if self._vol_object:
-            return self._get_vol_xml().format
+            return self.get_vol_xml().format
         return None
 
     def validate(self, disk):
