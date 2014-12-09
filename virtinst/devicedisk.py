@@ -536,8 +536,8 @@ class VirtualDisk(VirtualDevice):
         self._set_xmlpath(self.path)
     path = property(_get_path, _set_path)
 
-    def set_vol_object(self, vol_object):
-        self._change_backend(None, vol_object, None)
+    def set_vol_object(self, vol_object, parent_pool):
+        self._change_backend(None, vol_object, parent_pool)
         self._set_xmlpath(self.path)
 
     def set_vol_install(self, vol_install):
@@ -856,9 +856,12 @@ class VirtualDisk(VirtualDevice):
         if not self._storage_backend.will_create_storage():
             return
 
-        volobj = self._storage_backend.create(meter)
-        if volobj:
-            self._change_backend(None, volobj, None)
+        vol_object = self._storage_backend.create(meter)
+        if not vol_object:
+            return
+
+        parent_pool = self.get_vol_install().pool
+        self._change_backend(None, vol_object, parent_pool)
 
     def set_defaults(self, guest):
         if self.is_cdrom():

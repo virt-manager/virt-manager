@@ -81,7 +81,7 @@ def check_if_path_managed(conn, path):
     """
     vol, ignore = _lookup_vol_by_path(conn, path)
     if vol:
-        return vol, None
+        return vol, vol.storagePoolLookupByVolume()
 
     pool = _lookup_pool_by_dirname(conn, path)
     if not pool:
@@ -107,8 +107,6 @@ def check_if_path_managed(conn, path):
         raise ValueError(_("Cannot use storage %(path)s: %(err)s") %
             {'path' : path, 'err' : verr})
 
-    if vol:
-        pool = None
     return vol, pool
 
 
@@ -434,6 +432,9 @@ class StorageBackend(_StorageBase):
         if self._vol_object is not None:
             self._path = None
 
+        if self._vol_object and not self._parent_pool:
+            raise RuntimeError(
+                "programming error: parent_pool must be specified")
 
         # Cached bits
         self._vol_xml = None

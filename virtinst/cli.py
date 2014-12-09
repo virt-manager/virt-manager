@@ -1579,7 +1579,7 @@ class ParserDisk(VirtCLIParser):
 
         if volname:
             vol_object = poolobj.storageVolLookupByName(volname)
-            inst.set_vol_object(vol_object)
+            inst.set_vol_object(vol_object, poolobj)
             poolobj = None
 
         if ((poolobj or inst.wants_storage_creation()) and
