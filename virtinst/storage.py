@@ -443,16 +443,6 @@ class StoragePool(_StorageObject):
             StoragePool.TYPE_DISK,
             StoragePool.TYPE_RBD, StoragePool.TYPE_SHEEPDOG]
 
-    def get_vm_disk_type(self):
-        """
-        Return the /disk/@type value if the pool source is used as
-        VirtualDisk path
-        """
-        xpath = self._make_source_xpath()
-        if "/dir/" in xpath:
-            return "dir"
-        return "block"
-
 
     ##################
     # Build routines #
