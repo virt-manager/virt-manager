@@ -361,6 +361,8 @@ class VirtualConnection(object):
     def is_qemu_session(self):
         return (self.is_qemu() and self.is_session_uri())
 
+    def is_really_test(self):
+        return URISplit(self._open_uri).scheme.startswith("test")
     def is_test(self):
         return self._urisplits.scheme.startswith("test")
     def is_xen(self):

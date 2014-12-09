@@ -710,7 +710,7 @@ class StorageVolume(_StorageObject):
         createflags = 0
         if (self.format == "qcow2" and
             not self.backing_store and
-            not self.conn.is_test() and
+            not self.conn.is_really_test() and
             self.conn.check_support(
                 self.conn.SUPPORT_POOL_METADATA_PREALLOC, self.pool)):
             createflags |= libvirt.VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA
