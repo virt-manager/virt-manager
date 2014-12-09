@@ -349,11 +349,8 @@ class XMLParseTest(unittest.TestCase):
 
         disk = _get_disk("sda")
         check = self._make_checker(disk)
-        check("source_protocol", None, "http")
-        check("source_name", None, "/my/file")
-        check("source_host_name", None, "exaaaaample.com")
+        check("path", None, "http://[1:2:3:4:5:6:7:8]:1122/my/file")
         disk.sync_path_props()
-        check("path", "http://exaaaaample.com/my/file")
 
         disk = _get_disk("fda")
         check = self._make_checker(disk)

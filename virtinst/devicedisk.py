@@ -31,6 +31,7 @@ import urlgrabber.progress as progress
 from . import diskbackend
 from . import util
 from .device import VirtualDevice
+from .uri import URISplit
 from .xmlbuilder import XMLProperty
 
 
@@ -216,6 +217,8 @@ class VirtualDisk(VirtualDevice):
         if conn.is_remote():
             return []
         if username == "root":
+            return []
+        if diskbackend.path_is_url(path):
             return []
 
         try:
@@ -517,20 +520,21 @@ class VirtualDisk(VirtualDevice):
 
         self._set_default_storage_backend()
         return self._storage_backend.path
-    def _set_path(self, val):
+    def _set_path(self, newpath):
         if (self._storage_backend and
             self._storage_backend.will_create_storage()):
             raise ValueError("Can't change disk path if storage creation info "
                              "has been set.")
 
-        # User explicitly changed 'path', so try to lookup its storage
-        # object since we may need it
         parent_pool = None
         vol_object = None
-        if val:
-            (vol_object, parent_pool) = diskbackend.manage_path(self.conn, val)
+        if newpath:
+            # User explicitly changed 'path', so try to lookup its storage
+            # object since we may need it
+            (vol_object, parent_pool) = diskbackend.manage_path(
+                self.conn, newpath)
 
-        self._change_backend(val, vol_object, parent_pool)
+        self._change_backend(newpath, vol_object, parent_pool)
         self._set_xmlpath(self.path)
     path = property(_get_path, _set_path)
 
@@ -603,7 +607,23 @@ class VirtualDisk(VirtualDevice):
     source_host_transport = XMLProperty("./source/host/@transport")
     source_host_socket = XMLProperty("./source/host/@socket")
 
-    def _url_from_network_source(self):
+    def _set_source_from_url(self, uri):
+        uriinfo = URISplit(uri)
+        if uriinfo.scheme:
+            self.source_protocol = uriinfo.scheme
+        if uriinfo.transport:
+            self.source_host_transport = uriinfo.transport
+        if uriinfo.hostname:
+            self.source_host_name = uriinfo.hostname
+        if uriinfo.port:
+            self.source_host_port = uriinfo.port
+        if uriinfo.path:
+            if self.source_host_transport:
+                self.source_host_socket = uriinfo.path
+            else:
+                self.source_name = uriinfo.path
+
+    def _build_url_from_network_source(self):
         ret = self.source_protocol
         if self.source_host_transport:
             ret += "+%s" % self.source_host_transport
@@ -673,6 +693,10 @@ class VirtualDisk(VirtualDevice):
     def _set_xmlpath(self, val):
         self._clear_source_xml()
 
+        if self._storage_backend.is_network():
+            self._set_source_from_url(val)
+            return
+
         propname = self._disk_type_to_object_prop_name()
         if not propname:
             return
@@ -721,13 +745,11 @@ class VirtualDisk(VirtualDevice):
         path = None
         vol_object = None
         parent_pool = None
-        is_network = False
         typ = self._get_default_type()
-        is_network = (typ == VirtualDisk.TYPE_NETWORK)
 
         if self.type == VirtualDisk.TYPE_NETWORK:
             # Fill in a completed URL for virt-manager UI, path comparison, etc
-            path = self._url_from_network_source()
+            path = self._build_url_from_network_source()
 
         if typ == VirtualDisk.TYPE_VOLUME:
             conn = self.conn

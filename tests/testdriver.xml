@@ -1858,11 +1858,22 @@ ba</description>
         <owner>0</owner>
         <group>0</group>
       </permissions>
-      <timestamps>
-        <atime>1413881655.870313004</atime>
-        <mtime>1411649104.965642390</mtime>
-        <ctime>1412163870.190503958</ctime>
-      </timestamps>
+    </target>
+  </volume>
+
+  <volume type='network'>
+    <name>test-gluster.qcow2</name>
+    <key>gluster://192.168.1.100/test-volume/test-gluster.qcow2</key>
+    <capacity unit='bytes'>10737418240</capacity>
+    <allocation unit='bytes'>2489327616</allocation>
+    <target>
+      <path>gluster://192.168.1.100/test-volume/test-gluster.qcow2</path>
+      <format type='qcow2'/>
+      <permissions>
+        <mode>0666</mode>
+        <owner>0</owner>
+        <group>0</group>
+      </permissions>
     </target>
   </volume>
 </pool>

@@ -558,6 +558,9 @@ c.add_compare("""--hvm --pxe \
 --disk source_pool=rbd-ceph,source_volume=some-rbd-vol \
 --disk source_protocol=http,source_host_name=example.com,source_host_port=8000,source_name=/path/to/my/file,bus=scsi \
 --disk source_protocol=nbd,source_host_transport=unix,source_host_socket=/tmp/socket,bus=scsi \
+--disk gluster://192.168.1.100/test-volume/test-gluster.qcow2,bus=scsi \
+--disk qemu+nbd:///var/foo/bar/socket,bus=scsi \
+--disk path=http://[1:2:3:4:1:2:3:4]:5522/my/path?query=foo,bus=scsi \
 --serial tcp,host=:2222,mode=bind,protocol=telnet \
 --filesystem /source,/target,mode=squash \
 --network user,mac=12:34:56:78:11:22,portgroup=foo \

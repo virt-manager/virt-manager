@@ -89,6 +89,24 @@
       </source>
       <target dev="sdc" bus="scsi"/>
     </disk>
+    <disk type="network" device="disk">
+      <source protocol="gluster" name="/test-volume/test-gluster.qcow2">
+        <host name="192.168.1.100"/>
+      </source>
+      <target dev="sdd" bus="scsi"/>
+    </disk>
+    <disk type="network" device="disk">
+      <source protocol="qemu">
+        <host transport="nbd" socket="/var/foo/bar/socket"/>
+      </source>
+      <target dev="sde" bus="scsi"/>
+    </disk>
+    <disk type="network" device="disk">
+      <source protocol="http" name="/my/path">
+        <host name="1:2:3:4:1:2:3:4" port="5522"/>
+      </source>
+      <target dev="sdf" bus="scsi"/>
+    </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>
     </controller>
@@ -249,6 +267,24 @@
         <host transport="unix" socket="/tmp/socket"/>
       </source>
       <target dev="sdc" bus="scsi"/>
+    </disk>
+    <disk type="network" device="disk">
+      <source protocol="gluster" name="/test-volume/test-gluster.qcow2">
+        <host name="192.168.1.100"/>
+      </source>
+      <target dev="sdd" bus="scsi"/>
+    </disk>
+    <disk type="network" device="disk">
+      <source protocol="qemu">
+        <host transport="nbd" socket="/var/foo/bar/socket"/>
+      </source>
+      <target dev="sde" bus="scsi"/>
+    </disk>
+    <disk type="network" device="disk">
+      <source protocol="http" name="/my/path">
+        <host name="1:2:3:4:1:2:3:4" port="5522"/>
+      </source>
+      <target dev="sdf" bus="scsi"/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>

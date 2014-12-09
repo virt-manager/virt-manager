@@ -128,6 +128,8 @@ def manage_path(conn, path):
     """
     if not conn.check_support(conn.SUPPORT_CONN_STORAGE):
         return None, None
+    if path_is_url(path):
+        return None, None
 
     path = os.path.abspath(path)
     vol, pool = check_if_path_managed(conn, path)
@@ -452,14 +454,14 @@ class StorageBackend(_StorageBase):
                 parsexml=self._vol_object.XMLDesc(0))
         return self._vol_xml
 
-    def _is_network(self):
-        if self._path:
-            return path_is_url(self._path)
-        return False
-
     ##############
     # Public API #
     ##############
+
+    def is_network(self):
+        if self._path:
+            return path_is_url(self._path)
+        return False
 
     def _get_path(self):
         if self._vol_object:
@@ -493,13 +495,13 @@ class StorageBackend(_StorageBase):
                 self._exists = True
             elif self._vol_object:
                 self._exists = True
-            elif (not self._is_network() and
+            elif (not self.is_network() and
                   not self._conn.is_remote() and
                   os.path.exists(self._path)):
                 self._exists = True
             elif self._parent_pool:
                 self._exists = False
-            elif self._is_network():
+            elif self.is_network():
                 self._exists = True
             elif (self._conn.is_remote() and
                   not _can_auto_manage(self._path)):
@@ -526,7 +528,7 @@ class StorageBackend(_StorageBase):
                 else:
                     self._dev_type = "file"
 
-            elif (not self._is_network() and
+            elif (not self.is_network() and
                   self._path and
                   not self._conn.is_remote()):
                 if os.path.isdir(self._path):
