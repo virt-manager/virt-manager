@@ -186,7 +186,7 @@ class _StorageBase(object):
         raise NotImplementedError()
     def validate(self, disk):
         raise NotImplementedError()
-    def is_network(self):
+    def get_path(self):
         raise NotImplementedError()
 
     # Storage creation routines
@@ -219,13 +219,12 @@ class _StorageCreator(_StorageBase):
     def create(self, progresscb):
         raise NotImplementedError()
 
-    def _get_path(self):
+    def get_path(self):
         if self._vol_install and not self._path:
             xmlobj = StoragePool(self._conn,
                 parsexml=self._vol_install.pool.XMLDesc(0))
             self._path = (xmlobj.target_path + "/" + self._vol_install.name)
         return self._path
-    path = property(_get_path)
 
     def get_vol_install(self):
         return self._vol_install
@@ -263,10 +262,10 @@ class _StorageCreator(_StorageBase):
         else:
             if disk.type == "block":
                 raise ValueError(_("Local block device path '%s' must "
-                                   "exist.") % self.path)
+                                   "exist.") % self.get_path())
             if self._size is None:
                 raise ValueError(_("size is required for non-existent disk "
-                                   "'%s'" % self.path))
+                                   "'%s'" % self.get_path()))
 
         err, msg = self.is_size_conflict()
         if err:
@@ -283,8 +282,6 @@ class _StorageCreator(_StorageBase):
             return self._vol_install.pool
         return None
     def exists(self):
-        return False
-    def is_network(self):
         return False
 
 
@@ -437,6 +434,7 @@ class StorageBackend(_StorageBase):
         if self._vol_object is not None:
             self._path = None
 
+
         # Cached bits
         self._vol_xml = None
         self._exists = None
@@ -458,16 +456,10 @@ class StorageBackend(_StorageBase):
     # Public API #
     ##############
 
-    def is_network(self):
-        if self._path:
-            return path_is_url(self._path)
-        return False
-
-    def _get_path(self):
+    def get_path(self):
         if self._vol_object:
             return self._get_vol_xml().target_path
         return self._path
-    path = property(_get_path)
 
     def get_vol_object(self):
         return self._vol_object
@@ -485,23 +477,23 @@ class StorageBackend(_StorageBase):
             if self._vol_object:
                 ret = self._get_vol_xml().capacity
             elif self._path:
-                ignore, ret = util.stat_disk(self.path)
+                ignore, ret = util.stat_disk(self._path)
             self._size = (float(ret) / 1024.0 / 1024.0 / 1024.0)
         return self._size
 
     def exists(self):
         if self._exists is None:
-            if self.path is None:
+            if self._path is None:
                 self._exists = True
             elif self._vol_object:
                 self._exists = True
-            elif (not self.is_network() and
+            elif (not self.get_dev_type() == "network" and
                   not self._conn.is_remote() and
                   os.path.exists(self._path)):
                 self._exists = True
             elif self._parent_pool:
                 self._exists = False
-            elif self.is_network():
+            elif self.get_dev_type() == "network":
                 self._exists = True
             elif (self._conn.is_remote() and
                   not _can_auto_manage(self._path)):
@@ -521,16 +513,19 @@ class StorageBackend(_StorageBase):
         if self._dev_type is None:
             if self._vol_object:
                 t = self._vol_object.info()[0]
-                if t == libvirt.VIR_STORAGE_VOL_FILE:
+                if t == StorageVolume.TYPE_FILE:
                     self._dev_type = "file"
-                elif t == libvirt.VIR_STORAGE_VOL_BLOCK:
+                elif t == StorageVolume.TYPE_BLOCK:
                     self._dev_type = "block"
+                elif t == StorageVolume.TYPE_NETWORK:
+                    self._dev_type = "network"
                 else:
                     self._dev_type = "file"
 
-            elif (not self.is_network() and
-                  self._path and
-                  not self._conn.is_remote()):
+            elif self._path and path_is_url(self._path):
+                self._dev_type = "network"
+
+            elif self._path and not self._conn.is_remote():
                 if os.path.isdir(self._path):
                     self._dev_type = "dir"
                 elif util.stat_disk(self._path)[0]:

@@ -511,15 +511,13 @@ class VirtualDisk(VirtualDevice):
     #############################
 
     def _get_path(self):
-        if self._storage_backend:
-            return self._storage_backend.path
+        if not self._storage_backend:
+            xmlpath = self._get_xmlpath()
+            if xmlpath:
+                return xmlpath
 
-        xmlpath = self._get_xmlpath()
-        if xmlpath:
-            return xmlpath
-
-        self._set_default_storage_backend()
-        return self._storage_backend.path
+            self._set_default_storage_backend()
+        return self._storage_backend.get_path()
     def _set_path(self, newpath):
         if (self._storage_backend and
             self._storage_backend.will_create_storage()):
@@ -645,11 +643,11 @@ class VirtualDisk(VirtualDevice):
     def _get_default_type(self):
         if self.source_pool or self.source_volume:
             return VirtualDisk.TYPE_VOLUME
+        if self._storage_backend:
+            return self._storage_backend.get_dev_type()
         if self.source_protocol:
             return VirtualDisk.TYPE_NETWORK
-        if not self._storage_backend:
-            return self.TYPE_FILE
-        return self._storage_backend.get_dev_type()
+        return self.TYPE_FILE
     type = XMLProperty("./@type", default_cb=_get_default_type)
 
     def _clear_source_xml(self):
@@ -693,7 +691,7 @@ class VirtualDisk(VirtualDevice):
     def _set_xmlpath(self, val):
         self._clear_source_xml()
 
-        if self._storage_backend.is_network():
+        if self._storage_backend.get_dev_type() == "network":
             self._set_source_from_url(val)
             return
 
