@@ -44,7 +44,7 @@ class URISplit(object):
         elif ":" in self.hostname:
             self.hostname, self.port = self.hostname.split(":", 1)
 
-        self.host_is_ipv4_string = bool(re.match(self.hostname, "[0-9.]+"))
+        self.host_is_ipv4_string = bool(re.match("^[0-9.]+$", self.hostname))
 
 
     ###################
@@ -61,7 +61,7 @@ class URISplit(object):
                 delim = len(url)
             return url[start:delim], url[delim:]
 
-        username = netloc = query = fragment = ''
+        scheme = username = netloc = query = fragment = ''
         i = uri.find(":")
         if i > 0:
             scheme, uri = uri[:i].lower(), uri[i + 1:]
@@ -75,8 +75,6 @@ class URISplit(object):
                 uri, fragment = uri.split('#', 1)
             if '?' in uri:
                 uri, query = uri.split('?', 1)
-        else:
-            scheme = uri.lower()
         return scheme, username, netloc, uri, query, fragment
 
 
@@ -87,7 +85,7 @@ class URISplit(object):
     def rebuild_uri(self):
         ret = self.scheme
         if self.transport:
-            ret += "+" % self.transport
+            ret += "+" + self.transport
         ret += "://"
         if self.username:
             ret += self.username + "@"
@@ -98,6 +96,8 @@ class URISplit(object):
             ret += host
             if self.port:
                 ret += ":" + self.port
+        if self.path:
+            ret += self.path
         if self.query:
             ret += "?" + self.query
         if self.fragment:

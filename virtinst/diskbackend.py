@@ -184,6 +184,8 @@ class _StorageBase(object):
         raise NotImplementedError()
     def validate(self, disk):
         raise NotImplementedError()
+    def is_network(self):
+        raise NotImplementedError()
 
     # Storage creation routines
     def is_size_conflict(self):
@@ -279,6 +281,8 @@ class _StorageCreator(_StorageBase):
             return self._vol_install.pool
         return None
     def exists(self):
+        return False
+    def is_network(self):
         return False
 
 
