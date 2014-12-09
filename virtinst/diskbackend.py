@@ -297,8 +297,8 @@ class CloneStorageCreator(_StorageCreator):
             logging.debug("Source and destination are the same. Skipping.")
             return
 
-        # if a destination file exists and sparse flg is True,
-        # this priority takes a existing file.
+        # If a destination file exists and sparse flag is True,
+        # this priority takes an existing file.
 
         if (not os.path.exists(self._output_path) and self._sparse):
             clone_block_size = 4096
