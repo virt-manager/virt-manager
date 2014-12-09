@@ -1334,7 +1334,7 @@ ba</description>
     </permissions>
   </target>
 
-  <volume>
+  <volume type='file'>
     <name>default-vol</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1347,7 +1347,7 @@ ba</description>
       </permissions>
     </target>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>iso-vol</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1360,7 +1360,7 @@ ba</description>
       </permissions>
     </target>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>bochs-vol</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1373,7 +1373,7 @@ ba</description>
       </permissions>
     </target>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>testvol1.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1386,7 +1386,7 @@ ba</description>
       </permissions>
     </target>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>testvol2.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1399,7 +1399,7 @@ ba</description>
       </permissions>
     </target>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>UPPER</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1411,7 +1411,7 @@ ba</description>
       </permissions>
     </target>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>test-clone-simple.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1423,19 +1423,19 @@ ba</description>
       </permissions>
     </target>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>collidevol1.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
     <target/>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>sharevol.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
     <target/>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>backingl3.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1443,7 +1443,7 @@ ba</description>
       <format type='raw'/>
     </target>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>backingl2.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1454,7 +1454,7 @@ ba</description>
       <path>/dev/default-pool/backingl3.img</path>
     </backingStore>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>backingl1.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1465,7 +1465,7 @@ ba</description>
       <path>/dev/default-pool/backingl2.img</path>
     </backingStore>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>overlay.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1479,7 +1479,7 @@ ba</description>
 
 
   <!-- fake arm media -->
-  <volume>
+  <volume type='file'>
     <name>test-arm-kernel</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1487,7 +1487,7 @@ ba</description>
       <format type='raw'/>
     </target>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>test-arm-initrd</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1495,7 +1495,7 @@ ba</description>
       <format type='raw'/>
     </target>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>test-arm-dtb</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1523,25 +1523,25 @@ ba</description>
     </permissions>
   </target>
 
-  <volume>
+  <volume type='file'>
     <name>default-vol</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
     <target/>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>testvol1.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
     <target/>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>testvol2.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
     <target/>
   </volume>
-  <volume>
+  <volume type='file'>
     <name>collidevol1.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1567,7 +1567,7 @@ ba</description>
     </permissions>
   </target>
 
-  <volume>
+  <volume type='file'>
     <name>inactive-vol</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1599,7 +1599,8 @@ ba</description>
       <group>10736</group>
     </permissions>
   </target>
-  <volume>
+
+  <volume type='file'>
     <name>testvol1.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1611,7 +1612,8 @@ ba</description>
       </permissions>
     </target>
   </volume>
-  <volume>
+
+  <volume type='file'>
     <name>testvol2.img</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1643,7 +1645,8 @@ ba</description>
       <group>10736</group>
     </permissions>
   </target>
-  <volume>
+
+  <volume type='block'>
     <name>testvol1.img</name>
     <capacity>1000</capacity>
     <allocation>1000</allocation>
@@ -1655,7 +1658,8 @@ ba</description>
       </permissions>
     </target>
   </volume>
-  <volume>
+
+  <volume type='block'>
     <name>testvol2.img</name>
     <capacity>1000</capacity>
     <allocation>1000</allocation>
@@ -1686,7 +1690,8 @@ ba</description>
       <group>10736</group>
     </permissions>
   </target>
-  <volume>
+
+  <volume type='file'>
     <name>testvol1.img</name>
     <capacity>107374182400</capacity>
     <allocation>107374182400</allocation>
@@ -1719,7 +1724,7 @@ ba</description>
     </permissions>
   </target>
 
-  <volume>
+  <volume type='block'>
     <name>diskvol1</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1753,7 +1758,7 @@ ba</description>
     </permissions>
   </target>
 
-  <volume>
+  <volume type='block'>
     <name>diskvol1</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
@@ -1782,7 +1787,7 @@ ba</description>
     <name>rbd</name>
   </source>
 
-  <volume>
+  <volume type='network'>
     <name>vol1</name>
     <key>rbd/vol1</key>
     <capacity unit='bytes'>8302592</capacity>
@@ -1792,7 +1797,7 @@ ba</description>
     </target>
   </volume>
 
-  <volume>
+  <volume type='network'>
     <name>some-rbd-vol</name>
     <key>rbd/some-rbd-vol</key>
     <capacity unit='bytes'>104857600</capacity>

@@ -513,15 +513,18 @@ class StorageBackend(_StorageBase):
         """
         if self._dev_type is None:
             if self._vol_object:
-                t = self._vol_object.info()[0]
-                if t == StorageVolume.TYPE_FILE:
-                    self._dev_type = "file"
-                elif t == StorageVolume.TYPE_BLOCK:
-                    self._dev_type = "block"
-                elif t == StorageVolume.TYPE_NETWORK:
-                    self._dev_type = "network"
+                if self._get_vol_xml().type:
+                    self._dev_type = self._get_vol_xml().type
                 else:
-                    self._dev_type = "file"
+                    t = self._vol_object.info()[0]
+                    if t == StorageVolume.TYPE_FILE:
+                        self._dev_type = "file"
+                    elif t == StorageVolume.TYPE_BLOCK:
+                        self._dev_type = "block"
+                    elif t == StorageVolume.TYPE_NETWORK:
+                        self._dev_type = "network"
+                    else:
+                        self._dev_type = "file"
 
             elif self._path and path_is_url(self._path):
                 self._dev_type = "network"
