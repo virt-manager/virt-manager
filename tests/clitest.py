@@ -45,9 +45,6 @@ image_prefix = "/tmp/__virtinst_cli_"
 xmldir = "tests/cli-test-xml"
 treedir = "%s/faketree" % xmldir
 vcdir = "%s/virtconv" % xmldir
-ro_dir = image_prefix + "clitest_rodir"
-ro_img = "%s/cli_exist3ro.img" % ro_dir
-ro_noexist_img = "%s/idontexist.img" % ro_dir
 compare_xmldir = "%s/compare" % xmldir
 virtconv_out = "/tmp/__virtinst_tests__virtconv-outdir"
 
@@ -65,7 +62,6 @@ new_images = [
 exist_images = [
     image_prefix + "exist1.img",
     image_prefix + "exist2.img",
-    ro_img,
 ]
 
 # Fake iso for --location iso mounting
@@ -73,7 +69,7 @@ fake_iso = ["/tmp/fake.iso"]
 
 exist_files = exist_images + fake_iso
 new_files   = new_images
-clean_files = (new_images + exist_images + [ro_dir] + fake_iso)
+clean_files = (new_images + exist_images + fake_iso)
 
 promptlist = []
 
@@ -99,8 +95,6 @@ test_files = {
     'EXISTIMG1'         : "/dev/default-pool/testvol1.img",
     'EXISTIMG2'         : "/dev/default-pool/testvol2.img",
     'EXISTUPPER'        : "/dev/default-pool/UPPER",
-    'ROIMG'             : ro_img,
-    'ROIMGNOEXIST'      : ro_noexist_img,
     'POOL'              : "default-pool",
     'VOL'               : "testvol1.img",
     'DIR'               : os.getcwd(),
@@ -927,8 +921,6 @@ c.add_invalid("--original-xml %(CLONE_DISK_XML)s --file virt-install --file %(EX
 c.add_invalid("--original-xml %(CLONE_DISK_XML)s --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=hdc")  # XML w/ disks, force copy but not enough disks passed
 c.add_invalid("--original-xml %(CLONE_STORAGE_XML)s --file /tmp/clonevol")  # XML w/ managed storage, specify unmanaged path (should fail)
 c.add_invalid("--original-xml %(CLONE_NOEXIST_XML)s --file %(EXISTIMG1)s")  # XML w/ non-existent storage, WITHOUT --preserve
-c.add_invalid("--original-xml %(CLONE_DISK_XML)s --file %(ROIMG)s --file %(ROIMG)s --force")  # XML w/ managed storage, specify RO image without preserve
-c.add_invalid("--original-xml %(CLONE_DISK_XML)s --file %(ROIMG)s --file %(ROIMGNOEXIST)s --force")  # XML w/ managed storage, specify RO non existent
 
 
 
@@ -956,14 +948,8 @@ def setup():
     """
     Create initial test files/dirs
     """
-    os.system("mkdir %s" % ro_dir)
-
     for i in exist_files:
         os.system("touch %s" % i)
-
-    # Set ro_img to readonly
-    os.system("chmod 444 %s" % ro_img)
-    os.system("chmod 555 %s" % ro_dir)
 
 
 def cleanup():
