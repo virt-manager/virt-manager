@@ -771,8 +771,7 @@ class VirtualDisk(VirtualDevice):
 
         if typ == VirtualDisk.TYPE_VOLUME:
             conn = self.conn
-            is_weak = "weakref" in str(type(conn))
-            if is_weak:
+            if "weakref" in str(type(conn)):
                 conn = conn()
 
             try:
@@ -780,9 +779,6 @@ class VirtualDisk(VirtualDevice):
                 vol_object = parent_pool.storageVolLookupByName(
                     self.source_volume)
             except:
-                if not is_weak:
-                    # User explicitly requested these bits, so error
-                    raise
                 logging.debug("Error fetching source pool=%s vol=%s",
                     self.source_pool, self.source_volume, exc_info=True)
 

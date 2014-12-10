@@ -182,6 +182,12 @@
       <target dev="vdb" bus="virtio"/>
       <readonly/>
     </disk>
+    <disk type="volume" device="disk">
+      <driver name="qemu"/>
+      <source pool="idontexist" volume="vol1"/>
+      <target dev="vdc" bus="virtio"/>
+      <readonly/>
+    </disk>
     <disk type='network' device='disk'>
       <driver name='qemu' type='raw'/>
       <source protocol='http' name='/my-file.img'>
