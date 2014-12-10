@@ -40,7 +40,7 @@ def get_clone_name(new_name, auto_clone, design):
 
     if not new_name:
         fail(_("A name is required for the new virtual machine,"
-            " use '-n NAME' to specify one."))
+            " use '--name NEW_VM_NAME' to specify one."))
     design.clone_name = new_name
 
 
@@ -58,8 +58,8 @@ def get_original_guest(guest_name, origfile, design):
             fail(e)
 
     if not guest_name:
-        fail(_("An original machine name or xml file is required.\n"
-            "Try '-o ORIGINAL_GUEST' or '--original-xml=ORIGINAL_XML'."))
+        fail(_("An original machine name is required,"
+            " use '--original ORIGINAL_GUEST' and try again."))
     design.original_guest = guest_name
 
 
