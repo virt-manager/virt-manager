@@ -529,7 +529,7 @@ c.add_compare(""" \
 --disk /iscsi-pool/diskvol1 \
 --disk /dev/default-pool/iso-vol \
 --disk /dev/default-pool/iso-vol,format=qcow2 \
---disk source_pool=rbd-ceph,source_volume=some-rbd-vol \
+--disk source_pool=rbd-ceph,source_volume=some-rbd-vol,size=.1 \
 --disk source_protocol=http,source_host_name=example.com,source_host_port=8000,source_name=/path/to/my/file \
 --disk source_protocol=nbd,source_host_transport=unix,source_host_socket=/tmp/socket,bus=scsi \
 --disk gluster://192.168.1.100/test-volume/test-gluster.qcow2 \

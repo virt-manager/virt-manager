@@ -1551,8 +1551,12 @@ class ParserDisk(VirtCLIParser):
         fmt = opts.get_opt_param("format")
         sparse = _on_off_convert("sparse", opts.get_opt_param("sparse"))
         convert_perms(opts.get_opt_param("perms"))
+        has_type_volume = ("source_pool" in opts.opts or
+                           "source_volume" in opts.opts)
+        has_type_network = ("source_protocol" in opts.opts)
 
-        optcount = sum([bool(p) for p in [has_path, poolname, volname]])
+        optcount = sum([bool(p) for p in [has_path, poolname, volname,
+                                          has_type_volume, has_type_network]])
         if optcount > 1:
             fail(_("Cannot specify more than 1 storage path"))
         if optcount == 0 and size:
