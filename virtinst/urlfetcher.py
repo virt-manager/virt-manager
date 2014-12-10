@@ -357,11 +357,20 @@ def getDistroStore(guest, fetcher):
                           store.name, store.os_variant)
             return store
 
+    # No distro was detected. See if the URL even resolves, and if not
+    # give the user a hint that maybe they mistyped. This won't always
+    # be true since some webservers don't allow directory listing.
+    # http://www.redhat.com/archives/virt-tools-list/2014-December/msg00048.html
+    extramsg = ""
+    if not fetcher.hasFile(""):
+        extramsg = (": " +
+            _("The URL could not be accessed, maybe you mistyped?"))
+
     raise ValueError(
-        _("Could not find an installable distribution at '%s'\n"
+        _("Could not find an installable distribution at '%s'%s\n\n"
           "The location must be the root directory of an install tree.\n"
           "See virt-install man page for various distro examples." %
-          fetcher.location))
+          (fetcher.location, extramsg)))
 
 
 ##################
