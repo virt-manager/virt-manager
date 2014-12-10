@@ -72,7 +72,7 @@
       <target dev="vdf" bus="virtio"/>
     </disk>
     <disk type="volume" device="disk">
-      <driver name="qemu" type="unknown"/>
+      <driver name="qemu"/>
       <source volume="some-rbd-vol" pool="rbd-ceph"/>
       <target dev="vdg" bus="virtio"/>
     </disk>
