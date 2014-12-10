@@ -78,10 +78,17 @@
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu"/>
+      <source protocol="rbd" name="rbd/foobar">
+        <host name="ceph-mon-1.example.com" port="6789"/>
+      </source>
+      <target dev="vdh" bus="virtio"/>
+    </disk>
+    <disk type="network" device="disk">
+      <driver name="qemu"/>
       <source protocol="http" name="/path/to/my/file">
         <host name="example.com" port="8000"/>
       </source>
-      <target dev="vdh" bus="virtio"/>
+      <target dev="vdi" bus="virtio"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu"/>
@@ -95,7 +102,7 @@
       <source protocol="gluster" name="test-volume/test-gluster.qcow2">
         <host name="192.168.1.100"/>
       </source>
-      <target dev="vdi" bus="virtio"/>
+      <target dev="vdj" bus="virtio"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu"/>
@@ -109,14 +116,14 @@
       <source protocol="http" name="my/path">
         <host name="1:2:3:4:1:2:3:4" port="5522"/>
       </source>
-      <target dev="vdj" bus="virtio"/>
+      <target dev="vdk" bus="virtio"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu" type="raw"/>
       <source protocol="gluster" name="test-volume/test-gluster.raw" startupPolicy="optional">
         <host name="192.168.1.100"/>
       </source>
-      <target dev="vdk" bus="virtio"/>
+      <target dev="vdl" bus="virtio"/>
     </disk>
     <disk type="dir" device="floppy">
       <driver name="qemu"/>

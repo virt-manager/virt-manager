@@ -233,10 +233,16 @@ class _StorageCreator(_StorageBase):
         if self._vol_install and not self._path:
             xmlobj = StoragePool(self._conn,
                 parsexml=self._vol_install.pool.XMLDesc(0))
-            self._path = (xmlobj.target_path + "/" + self._vol_install.name)
+            if self.get_dev_type() == "network":
+                self._path = self._vol_install.name
+            else:
+                self._path = (xmlobj.target_path + "/" +
+                              self._vol_install.name)
         return self._path
 
     def get_vol_install(self):
+        return self._vol_install
+    def get_vol_xml(self):
         return self._vol_install
 
     def get_size(self):
@@ -250,6 +256,9 @@ class _StorageCreator(_StorageBase):
             if self._vol_install:
                 if self._vol_install.file_type == libvirt.VIR_STORAGE_VOL_FILE:
                     self._dev_type = "file"
+                elif (self._vol_install.file_type ==
+                      libvirt.VIR_STORAGE_VOL_NETWORK):
+                    self._dev_type = "network"
                 else:
                     self._dev_type = "block"
             else:
@@ -286,8 +295,6 @@ class _StorageCreator(_StorageBase):
     def will_create_storage(self):
         return True
     def get_vol_object(self):
-        return None
-    def get_vol_xml(self):
         return None
     def get_parent_pool(self):
         if self._vol_install:

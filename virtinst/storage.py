@@ -547,8 +547,8 @@ class StorageVolume(_StorageObject):
     TYPE_FILE = getattr(libvirt, "VIR_STORAGE_VOL_FILE", 0)
     TYPE_BLOCK = getattr(libvirt, "VIR_STORAGE_VOL_BLOCK", 1)
     TYPE_DIR = getattr(libvirt, "VIR_STORAGE_VOL_DIR", 2)
-    TYPE_NETWORK = getattr(libvirt, "VIR_STORAGE_VOL_DIR", 3)
-    TYPE_NETDIR = getattr(libvirt, "VIR_STORAGE_VOL_DIR", 4)
+    TYPE_NETWORK = getattr(libvirt, "VIR_STORAGE_VOL_NETWORK", 3)
+    TYPE_NETDIR = getattr(libvirt, "VIR_STORAGE_VOL_NETDIR", 4)
 
 
     def __init__(self, *args, **kwargs):

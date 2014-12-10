@@ -630,6 +630,7 @@ class VirtualDisk(VirtualDevice):
             path += poolxml.source_name + "/"
         path += volxml.name
         self.source_name = path
+        self.type = "network"
 
     def _set_network_source_from_backend(self):
         if (self._storage_backend.get_vol_object() or
