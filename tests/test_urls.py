@@ -40,9 +40,10 @@ from virtinst.urlfetcher import MandrivaDistro
 # pylint: disable=protected-access
 # Access to protected member, needed to unittest stuff
 
-OLD_FEDORA_URL = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/%s/Fedora/%s/os/"
+ARCHIVE_FEDORA_URL = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/%s/Fedora/%s/os/"
+OLD_FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Fedora/%s/os/"
 DEVFEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/development/%s/%s/os/"
-FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Fedora/%s/os/"
+FEDORA_URL = "http://dl.fedoraproject.org/pub/fedora/linux/releases/%s/Server/%s/os/"
 
 OLD_CENTOS_URL = "http://vault.centos.org/%s/os/%s"
 CENTOS_URL = "http://mirrors.mit.edu/centos/%s/os/%s/"
@@ -105,16 +106,16 @@ def _add(*args, **kwargs):
 
 _set_distro(FedoraDistro)
 # One old Fedora
-_add(OLD_FEDORA_URL % ("14", "x86_64"), "fedora14",
-     i686=OLD_FEDORA_URL % ("14", "i386"))
+_add(ARCHIVE_FEDORA_URL % ("14", "x86_64"), "fedora14",
+     i686=ARCHIVE_FEDORA_URL % ("14", "i386"))
 # 2 Latest releases
-_add(FEDORA_URL % ("19", "x86_64"), "fedora19")
-_add(FEDORA_URL % ("20", "x86_64"), "fedora20")
+_add(OLD_FEDORA_URL % ("19", "x86_64"), "fedora19")
+_add(OLD_FEDORA_URL % ("20", "x86_64"), "fedora20")
 # Any Dev release
-_add(DEVFEDORA_URL % ("21", "x86_64"), "fedora20", name="fedora21")
-_add(
-"https://dl.fedoraproject.org/pub/alt/stage/21_Alpha_TC6/Server/x86_64/os/",
-"fedora20", name="fedora21-tc")
+_add(FEDORA_URL % ("21", "x86_64"), "fedora21", name="fedora21")
+#_add(
+#"https://dl.fedoraproject.org/pub/alt/stage/21_Alpha_TC6/Server/x86_64/os/",
+#"fedora21", name="fedora21-tc")
 # Rawhide w/ i686 test
 # XXX: Nowadays rawhide isn't a full install tree
 # _add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora20",
