@@ -212,6 +212,13 @@
       </source>
       <target dev='vdad' bus='virtio'/>
     </disk>
+    <disk type='network' device='disk'>
+      <driver name='qemu' type='raw'/>
+      <source protocol='gluster' name='test-volume/test-gluster2.raw'>
+        <host name='192.168.1.100'/>
+      </source>
+      <target dev='vdae' bus='virtio'/>
+    </disk>
 
     <!-- bus usb -->
     <disk type='block' device='disk'>
@@ -1857,6 +1864,22 @@ ba</description>
     <allocation unit='bytes'>2489327616</allocation>
     <target>
       <path>gluster://192.168.1.100/test-volume/test-gluster.raw</path>
+      <format type='raw'/>
+      <permissions>
+        <mode>0666</mode>
+        <owner>0</owner>
+        <group>0</group>
+      </permissions>
+    </target>
+  </volume>
+
+  <volume type='network'>
+    <name>test-gluster2.raw</name>
+    <key>gluster://192.168.1.100/test-volume/test-gluster2.raw</key>
+    <capacity unit='bytes'>10737418240</capacity>
+    <allocation unit='bytes'>2489327616</allocation>
+    <target>
+      <path>gluster://192.168.1.100/test-volume/test-gluster2.raw</path>
       <format type='raw'/>
       <permissions>
         <mode>0666</mode>
