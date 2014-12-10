@@ -114,6 +114,9 @@ def _can_auto_manage(path):
     path = path or ""
     skip_prefixes = ["/dev", "/sys", "/proc"]
 
+    if path_is_url(path):
+        return False
+
     for prefix in skip_prefixes:
         if path.startswith(prefix + "/") or path == prefix:
             return False
@@ -126,10 +129,11 @@ def manage_path(conn, path):
     """
     if not conn.check_support(conn.SUPPORT_CONN_STORAGE):
         return None, None
-    if path_is_url(path):
+    if not path:
         return None, None
 
-    path = os.path.abspath(path)
+    if not path_is_url(path):
+        path = os.path.abspath(path)
     vol, pool = check_if_path_managed(conn, path)
     if vol or pool or not _can_auto_manage(path):
         return vol, pool

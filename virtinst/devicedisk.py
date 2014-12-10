@@ -524,13 +524,9 @@ class VirtualDisk(VirtualDevice):
             raise ValueError("Can't change disk path if storage creation info "
                              "has been set.")
 
-        parent_pool = None
-        vol_object = None
-        if newpath:
-            # User explicitly changed 'path', so try to lookup its storage
-            # object since we may need it
-            (vol_object, parent_pool) = diskbackend.manage_path(
-                self.conn, newpath)
+        # User explicitly changed 'path', so try to lookup its storage
+        # object since we may need it
+        (vol_object, parent_pool) = diskbackend.manage_path(self.conn, newpath)
 
         self._change_backend(newpath, vol_object, parent_pool)
         self._set_xmlpath(self.path)
