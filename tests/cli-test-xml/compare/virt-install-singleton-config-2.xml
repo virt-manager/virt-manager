@@ -1,0 +1,240 @@
+<domain type="kvm">
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <title>my-title</title>
+  <description>my-description</description>
+  <memory>1048576</memory>
+  <currentMemory>524288</currentMemory>
+  <blkiotune>
+    <weight>100</weight>
+    <device>
+      <path>/home/test/1.img</path>
+      <weight>200</weight>
+    </device>
+  </blkiotune>
+  <memtune>
+    <hard_limit>10</hard_limit>
+    <soft_limit>20</soft_limit>
+    <swap_hard_limit>30</swap_hard_limit>
+    <min_guarantee>40</min_guarantee>
+  </memtune>
+  <memoryBacking>
+    <nosharepages/>
+    <locked/>
+    <hugepages>
+      <page size="1" unit="G" nodeset="1,2-5"/>
+    </hugepages>
+  </memoryBacking>
+  <vcpu>4</vcpu>
+  <numatune>
+    <memory mode="strict" nodeset="1-3,4"/>
+  </numatune>
+  <os>
+    <type arch="x86_64">hvm</type>
+    <loader>/foo/bar</loader>
+    <boot dev="cdrom"/>
+    <boot dev="fd"/>
+    <boot dev="hd"/>
+    <boot dev="network"/>
+    <bootmenu enable="no"/>
+  </os>
+  <idmap>
+    <uid start="0" target="1000" count="10"/>
+    <gid start="0" target="1000" count="10"/>
+  </idmap>
+  <features>
+    <apic eoi="on"/>
+    <pae/>
+    <privnet/>
+    <hyperv>
+      <spinlocks state="on" retries="1234"/>
+    </hyperv>
+  </features>
+  <cpu mode="custom" match="strict">
+    <model>foobar</model>
+    <vendor>meee</vendor>
+    <topology sockets="2" cores="2" threads="2"/>
+    <feature policy="force" name="x2apic"/>
+    <feature policy="force" name="x2apicagain"/>
+    <feature policy="require" name="reqtest"/>
+    <feature policy="optional" name="opttest"/>
+    <feature policy="disable" name="distest2"/>
+    <feature policy="disable" name="distest"/>
+    <feature policy="forbid" name="foo"/>
+    <feature policy="forbid" name="bar"/>
+  </cpu>
+  <clock offset="utc">
+    <timer name="rtc" tickpolicy="merge"/>
+    <timer name="hpet" present="no"/>
+  </clock>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>destroy</on_reboot>
+  <on_crash>destroy</on_crash>
+  <resource>
+    <partition>/virtualmachines/production</partition>
+  </resource>
+  <pm>
+    <suspend-to-mem enabled="yes"/>
+    <suspend-to-disk enabled="no"/>
+  </pm>
+  <devices>
+    <emulator>/usr/bin/qemu-kvm</emulator>
+    <controller type="usb" index="0" model="nec-xhci"/>
+    <controller type="virtio-scsi" index="0"/>
+    <filesystem>
+      <source dir="/foo/source"/>
+      <target dir="/bar/target"/>
+    </filesystem>
+    <interface type="bridge">
+      <source bridge="eth0"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+    </interface>
+    <input type="tablet" bus="usb"/>
+    <graphics type="vnc" port="-1"/>
+    <console type="pty"/>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
+    <watchdog model="ib700" action="pause"/>
+    <memballoon model="virtio"/>
+    <tpm model="tpm-tis">
+      <backend type="passthrough">
+        <device path="/dev/tpm0"/>
+      </backend>
+    </tpm>
+    <rng model="virtio">
+      <backend model="egd" type="udp">
+        <source mode="bind" host="127.0.0.1" service="8000"/>
+        <source mode="connect" host="foo" service="708"/>
+      </backend>
+    </rng>
+    <panic>
+      <address iobase="0x506" type="isa"/>
+    </panic>
+  </devices>
+  <seclabel type="static" model="selinux" relabel="yes">
+    <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>
+  </seclabel>
+</domain>
+<domain type="kvm">
+  <name>foobar</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <title>my-title</title>
+  <description>my-description</description>
+  <memory>1048576</memory>
+  <currentMemory>524288</currentMemory>
+  <blkiotune>
+    <weight>100</weight>
+    <device>
+      <path>/home/test/1.img</path>
+      <weight>200</weight>
+    </device>
+  </blkiotune>
+  <memtune>
+    <hard_limit>10</hard_limit>
+    <soft_limit>20</soft_limit>
+    <swap_hard_limit>30</swap_hard_limit>
+    <min_guarantee>40</min_guarantee>
+  </memtune>
+  <memoryBacking>
+    <nosharepages/>
+    <locked/>
+    <hugepages>
+      <page size="1" unit="G" nodeset="1,2-5"/>
+    </hugepages>
+  </memoryBacking>
+  <vcpu>4</vcpu>
+  <numatune>
+    <memory mode="strict" nodeset="1-3,4"/>
+  </numatune>
+  <os>
+    <type arch="x86_64">hvm</type>
+    <loader>/foo/bar</loader>
+    <boot dev="cdrom"/>
+    <boot dev="fd"/>
+    <boot dev="hd"/>
+    <boot dev="network"/>
+    <bootmenu enable="no"/>
+  </os>
+  <idmap>
+    <uid start="0" target="1000" count="10"/>
+    <gid start="0" target="1000" count="10"/>
+  </idmap>
+  <features>
+    <apic eoi="on"/>
+    <pae/>
+    <privnet/>
+    <hyperv>
+      <spinlocks state="on" retries="1234"/>
+    </hyperv>
+  </features>
+  <cpu mode="custom" match="strict">
+    <model>foobar</model>
+    <vendor>meee</vendor>
+    <topology sockets="2" cores="2" threads="2"/>
+    <feature policy="force" name="x2apic"/>
+    <feature policy="force" name="x2apicagain"/>
+    <feature policy="require" name="reqtest"/>
+    <feature policy="optional" name="opttest"/>
+    <feature policy="disable" name="distest2"/>
+    <feature policy="disable" name="distest"/>
+    <feature policy="forbid" name="foo"/>
+    <feature policy="forbid" name="bar"/>
+  </cpu>
+  <clock offset="utc">
+    <timer name="rtc" tickpolicy="merge"/>
+    <timer name="hpet" present="no"/>
+  </clock>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <resource>
+    <partition>/virtualmachines/production</partition>
+  </resource>
+  <pm>
+    <suspend-to-mem enabled="yes"/>
+    <suspend-to-disk enabled="no"/>
+  </pm>
+  <devices>
+    <emulator>/usr/bin/qemu-kvm</emulator>
+    <controller type="usb" index="0" model="nec-xhci"/>
+    <controller type="virtio-scsi" index="0"/>
+    <filesystem>
+      <source dir="/foo/source"/>
+      <target dir="/bar/target"/>
+    </filesystem>
+    <interface type="bridge">
+      <source bridge="eth0"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+    </interface>
+    <input type="tablet" bus="usb"/>
+    <graphics type="vnc" port="-1"/>
+    <console type="pty"/>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
+    <watchdog model="ib700" action="pause"/>
+    <memballoon model="virtio"/>
+    <tpm model="tpm-tis">
+      <backend type="passthrough">
+        <device path="/dev/tpm0"/>
+      </backend>
+    </tpm>
+    <rng model="virtio">
+      <backend model="egd" type="udp">
+        <source mode="bind" host="127.0.0.1" service="8000"/>
+        <source mode="connect" host="foo" service="708"/>
+      </backend>
+    </rng>
+    <panic>
+      <address iobase="0x506" type="isa"/>
+    </panic>
+  </devices>
+  <seclabel type="static" model="selinux" relabel="yes">
+    <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>
+  </seclabel>
+</domain>

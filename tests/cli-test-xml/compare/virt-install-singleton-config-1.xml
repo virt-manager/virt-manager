@@ -1,19 +1,28 @@
 <domain type="kvm">
   <name>foobar</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
-  <memory>65536</memory>
-  <currentMemory>65536</currentMemory>
-  <vcpu>1</vcpu>
+  <description>foobar &amp; baz</description>
+  <memory>1048576</memory>
+  <currentMemory>1048576</currentMemory>
+  <memoryBacking>
+    <hugepages/>
+  </memoryBacking>
+  <vcpu cpuset="1,3-5">4</vcpu>
+  <numatune>
+    <memory nodeset="1,2,3,5-7,^6"/>
+  </numatune>
   <os>
-    <type arch="x86_64" machine="pc">hvm</type>
-    <boot dev="fd"/>
+    <type arch="x86_64">hvm</type>
+    <boot dev="network"/>
+    <boot dev="hd"/>
+    <bootmenu enable="yes"/>
   </os>
   <features>
     <acpi/>
-    <apic/>
     <pae/>
   </features>
-  <clock offset="utc">
+  <cpu mode="host-model"/>
+  <clock offset="localtime">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
     <timer name="hpet" present="no"/>
@@ -21,14 +30,11 @@
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>
+  <resource>
+    <partition>/virtualmachines/production</partition>
+  </resource>
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
-    <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2"/>
-      <source file="/dev/default-pool/testvol1.img"/>
-      <target dev="sda" bus="scsi"/>
-    </disk>
-    <controller type="virtio-scsi" index="0"/>
     <controller type="usb" index="0" model="ich9-ehci1"/>
     <controller type="usb" index="0" model="ich9-uhci1">
       <master startport="0"/>
@@ -39,14 +45,8 @@
     <controller type="usb" index="0" model="ich9-uhci3">
       <master startport="4"/>
     </controller>
-    <interface type="bridge">
-      <source bridge="eth0"/>
-      <mac address="00:11:22:33:44:55"/>
-      <model type="virtio"/>
-    </interface>
     <input type="tablet" bus="usb"/>
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes"/>
-    <console type="pty"/>
     <channel type="unix">
       <source mode="bind"/>
       <target type="virtio" name="org.qemu.guest_agent.0"/>
@@ -54,11 +54,22 @@
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
-    <sound model="ich6"/>
     <video>
-      <model type="qxl"/>
+      <model type="vga"/>
     </video>
-    <redirdev bus="usb" type="spicevmc"/>
-    <redirdev bus="usb" type="spicevmc"/>
+    <watchdog model="i6300esb" action="reset"/>
+    <memballoon model="none"/>
+    <tpm model="tpm-tis">
+      <backend type="passthrough">
+        <device path="/dev/tpm0"/>
+      </backend>
+    </tpm>
+    <rng model="virtio">
+      <backend model="random">/dev/random</backend>
+    </rng>
+    <panic>
+      <address type="isa" iobase="0x505"/>
+    </panic>
   </devices>
+  <seclabel type="dynamic" model="selinux"/>
 </domain>
