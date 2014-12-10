@@ -540,6 +540,10 @@ Specifying a non-existent path implies attempting to create the new storage,
 and will require specifying a 'size' value. Even for remote hosts, virt-install
 will try to use libvirt storage APIs to automatically create the given path.
 
+If the hypervisor supports it, B<path> can also be a network URL, like
+http://example.com/some-disk.img . For network paths, they hypervisor will
+directly access the storage, nothing is downloaded locally.
+
 =item B<pool>
 
 An existing libvirt storage pool name to create new storage on. Requires
