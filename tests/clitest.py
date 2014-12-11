@@ -97,7 +97,7 @@ test_files = {
     'EXISTUPPER'        : "/dev/default-pool/UPPER",
     'POOL'              : "default-pool",
     'VOL'               : "testvol1.img",
-    'DIR'               : os.getcwd(),
+    'DIR'               : "/var",
     'TREEDIR'           : treedir,
     'MANAGEDNEW1'       : "/dev/default-pool/clonevol",
     'MANAGEDDISKNEW1'   : "/dev/disk-pool/newvol1.img",
