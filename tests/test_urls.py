@@ -113,9 +113,6 @@ _add(OLD_FEDORA_URL % ("19", "x86_64"), "fedora19")
 _add(OLD_FEDORA_URL % ("20", "x86_64"), "fedora20")
 # Any Dev release
 _add(FEDORA_URL % ("21", "x86_64"), "fedora21", name="fedora21")
-#_add(
-#"https://dl.fedoraproject.org/pub/alt/stage/21_Alpha_TC6/Server/x86_64/os/",
-#"fedora21", name="fedora21-tc")
 # Rawhide w/ i686 test
 # XXX: Nowadays rawhide isn't a full install tree
 # _add(DEVFEDORA_URL % ("rawhide", "x86_64"), "fedora20",
