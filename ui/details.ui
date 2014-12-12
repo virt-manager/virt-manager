@@ -752,7 +752,9 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">Title:</property>
+                                            <property name="label" translatable="yes">T_itle:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">overview-title</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -812,7 +814,9 @@
                                             <property name="can_focus">False</property>
                                             <property name="xalign">0</property>
                                             <property name="yalign">0</property>
-                                            <property name="label" translatable="yes">Description:</property>
+                                            <property name="label" translatable="yes">_Description:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">overview-description</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -2149,10 +2153,10 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="use_underline">True</property>
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="clicked" handler="on_cpu_copy_host_clicked" swapped="no"/>
-                                            <property name="use_underline">True</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -2218,11 +2222,11 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="use_underline">True</property>
                                             <property name="xalign">0.5</property>
                                             <property name="active">True</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="on_cpu_topology_enable_toggled" swapped="no"/>
-                                            <property name="use_underline">True</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -3690,6 +3694,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                         <property name="ypad">4</property>
                                                         <property name="label" translatable="yes">Storage forma_t:</property>
                                                         <property name="use_underline">True</property>
+                                                        <property name="mnemonic_widget">storage-format-combobox-entry</property>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">0</property>
@@ -3703,6 +3708,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                         <property name="xalign">1</property>
                                                         <property name="label" translatable="yes">Disk b_us:</property>
                                                         <property name="use_underline">True</property>
+                                                        <property name="mnemonic_widget">disk-bus-combobox-entry</property>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">0</property>
@@ -3729,7 +3735,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                         <property name="has_entry">True</property>
                                                         <signal name="changed" handler="on_disk_bus_combo_changed" swapped="no"/>
                                                         <child internal-child="entry">
-                                                          <object class="GtkEntry" id="combobox-entry">
+                                                          <object class="GtkEntry" id="disk-bus-combobox-entry">
                                                             <property name="can_focus">True</property>
                                                           </object>
                                                         </child>
@@ -3744,8 +3750,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
                                                         <property name="xalign">1</property>
-                                                        <property name="label" translatable="yes">Serial num_ber:</property>
+                                                        <property name="label" translatable="yes">Seria_l number:</property>
                                                         <property name="use_underline">True</property>
+                                                        <property name="mnemonic_widget">disk-serial</property>
                                                       </object>
                                                       <packing>
                                                         <property name="left_attach">0</property>
@@ -3765,7 +3772,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                             <property name="has_entry">True</property>
                                                             <signal name="changed" handler="on_disk_format_changed" swapped="no"/>
                                                             <child internal-child="entry">
-                                                            <object class="GtkEntry" id="combobox-entry9">
+                                                            <object class="GtkEntry" id="storage-format-combobox-entry">
                                                             <property name="can_focus">True</property>
                                                             </object>
                                                             </child>
@@ -3845,6 +3852,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                             <property name="xalign">1</property>
                                                             <property name="label" translatable="yes">Cac_he mode:</property>
                                                             <property name="use_underline">True</property>
+                                                            <property name="mnemonic_widget">cachemode-entry-box</property>
                                                           </object>
                                                           <packing>
                                                             <property name="left_attach">0</property>
@@ -3858,7 +3866,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                             <property name="has_entry">True</property>
                                                             <signal name="changed" handler="on_disk_cache_combo_changed" swapped="no"/>
                                                             <child internal-child="entry">
-                                                            <object class="GtkEntry" id="combobox-entry3">
+                                                            <object class="GtkEntry" id="cachemode-entry-box">
                                                             <property name="can_focus">True</property>
                                                             </object>
                                                             </child>
@@ -3875,7 +3883,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                             <property name="has_entry">True</property>
                                                             <signal name="changed" handler="on_disk_io_combo_changed" swapped="no"/>
                                                             <child internal-child="entry">
-                                                            <object class="GtkEntry" id="combobox-entry4">
+                                                            <object class="GtkEntry" id="iomode-entry-box">
                                                             <property name="can_focus">True</property>
                                                             </object>
                                                             </child>
@@ -3892,6 +3900,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                             <property name="xalign">1</property>
                                                             <property name="label" translatable="yes">_IO mode:</property>
                                                             <property name="use_underline">True</property>
+                                                            <property name="mnemonic_widget">iomode-entry-box</property>
                                                           </object>
                                                           <packing>
                                                             <property name="left_attach">0</property>
@@ -3931,8 +3940,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="xalign">1</property>
-                                                            <property name="label" translatable="yes">Read:</property>
+                                                            <property name="label" translatable="yes">Re_ad:</property>
                                                             <property name="use_underline">True</property>
+                                                            <property name="mnemonic_widget">disk-iotune-rbs</property>
                                                           </object>
                                                           <packing>
                                                             <property name="left_attach">0</property>
@@ -4087,8 +4097,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="xalign">1</property>
-                                                            <property name="label" translatable="yes">Total:</property>
+                                                            <property name="label" translatable="yes">Total_:</property>
                                                             <property name="use_underline">True</property>
+                                                            <property name="mnemonic_widget">disk-iotune-tbs</property>
                                                           </object>
                                                           <packing>
                                                             <property name="left_attach">0</property>
@@ -4100,8 +4111,9 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">False</property>
                                                             <property name="xalign">1</property>
-                                                            <property name="label" translatable="yes">Write:</property>
+                                                            <property name="label" translatable="yes">_Write:</property>
                                                             <property name="use_underline">True</property>
+                                                            <property name="mnemonic_widget">disk-iotune-wbs</property>
                                                           </object>
                                                           <packing>
                                                             <property name="left_attach">0</property>
@@ -4117,7 +4129,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                                       <object class="GtkLabel" id="label83">
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">False</property>
-                                                        <property name="label" translatable="yes">IO _Tuning</property>
+                                                        <property name="label" translatable="yes">IO Tu_ning</property>
                                                         <property name="use_underline">True</property>
                                                       </object>
                                                     </child>
@@ -4240,6 +4252,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="yalign">0.47999998927116394</property>
                                             <property name="label" translatable="yes">Device mode_l:</property>
                                             <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">network-model-combobox</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -4268,7 +4281,7 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="has_entry">True</property>
                                             <signal name="changed" handler="on_network_model_combo_changed" swapped="no"/>
                                             <child internal-child="entry">
-                                              <object class="GtkEntry" id="combobox-entry7">
+                                              <object class="GtkEntry" id="network-model-combobox">
                                                 <property name="can_focus">True</property>
                                               </object>
                                             </child>
@@ -4549,8 +4562,8 @@ if you know what you are doing.&lt;/small&gt;</property>
                                             <property name="can_focus">False</property>
                                             <property name="xalign">0</property>
                                             <property name="label" translatable="yes">Device m_odel:</property>
-                                            <property name="mnemonic_widget">combobox-entry12</property>
                                             <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">combobox-entry12</property>
                                           </object>
                                           <packing>
                                             <property name="x_options">GTK_FILL</property>

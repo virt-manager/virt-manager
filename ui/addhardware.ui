@@ -156,6 +156,7 @@
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">_Device type:</property>
                                     <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">config-storage-devtype</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -227,8 +228,9 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">S_torage format:</property>
+                                        <property name="label" translatable="yes">Stor_age format:</property>
                                         <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">storage-format-combobox-entry</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -255,7 +257,7 @@
                                         <property name="can_focus">False</property>
                                         <property name="has_entry">True</property>
                                         <child internal-child="entry">
-                                          <object class="GtkEntry" id="combobox-entry2">
+                                          <object class="GtkEntry" id="storage-format-combobox-entry">
                                             <property name="can_focus">False</property>
                                           </object>
                                         </child>
@@ -323,6 +325,7 @@
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Type:</property>
                                 <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">controller-type</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -336,6 +339,7 @@
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Model:</property>
                                 <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">controller-model</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -574,6 +578,7 @@
                                 <property name="xalign">1</property>
                                 <property name="label" translatable="yes">_Type:</property>
                                 <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">input-type</property>
                               </object>
                               <packing>
                                 <property name="x_options">GTK_FILL</property>
@@ -927,7 +932,7 @@
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Bind Host:</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">char-bind-host</property>
+                                <property name="mnemonic_widget">char-mode</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -1006,6 +1011,7 @@
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Name:</property>
                                 <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">combobox-entry</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -1065,6 +1071,7 @@
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Channel:</property>
                                 <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">char-channel</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -1433,7 +1440,9 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Device Path:</property>
+                                <property name="label" translatable="yes">Device _Path:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">tpm-device-path</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -1494,7 +1503,7 @@
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Type:</property>
                                 <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">tpm-type</property>
+                                <property name="mnemonic_widget">rng-type</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -1517,7 +1526,9 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Backend Type:</property>
+                                <property name="label" translatable="yes">_Backend Type:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">rng-backend-type</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -1540,7 +1551,9 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Backend Mode:</property>
+                                <property name="label" translatable="yes">Backend _Mode:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">rng-backend-mode</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -1563,8 +1576,9 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Host:</property>
+                                <property name="label" translatable="yes">_Host:</property>
                                 <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">rng-connect-host</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -1595,7 +1609,7 @@
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">_Port:</property>
                                     <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">char-port</property>
+                                    <property name="mnemonic_widget">rng-connect-service</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -1627,8 +1641,9 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Bind Host:</property>
+                                <property name="label" translatable="yes">B_ind Host:</property>
                                 <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">rng-bind-host</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -1657,9 +1672,9 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Port:</property>
+                                    <property name="label" translatable="yes">P_ort:</property>
                                     <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">char-port</property>
+                                    <property name="mnemonic_widget">rng-bind-service</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -1691,7 +1706,9 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Device:</property>
+                                <property name="label" translatable="yes">_Device:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">rng-device</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
