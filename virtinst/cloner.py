@@ -205,7 +205,7 @@ class Cloner(object):
     def get_preserve_dest_disks(self):
         return not self.preserve
     preserve_dest_disks = property(get_preserve_dest_disks,
-                           doc="It true, preserve ALL disk devices for the "
+                           doc="If true, preserve ALL disk devices for the "
                                "NEW guest. This means no storage cloning. "
                                "This is a convenience access for "
                                "(not Cloner.preserve)")
