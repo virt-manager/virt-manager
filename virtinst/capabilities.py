@@ -395,7 +395,7 @@ class Domain(object):
         if not conn.is_test() and not conn.is_qemu():
             return None
 
-        if capsguest.arch == "ppc64" and "pseries" in self.machines:
+        if capsguest.arch in ["ppc64", "ppc64le"] and "pseries" in self.machines:
             return "pseries"
         if capsguest.arch in ["armv7l", "aarch64"]:
             if "virt" in self.machines:

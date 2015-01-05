@@ -63,7 +63,7 @@ class OSXML(XMLBuilder):
         return self.is_arm() and self.machine == "virt"
 
     def is_ppc64(self):
-        return self.arch == "ppc64"
+        return self.arch == "ppc64" or self.arch == "ppc64le"
     def is_pseries(self):
         return self.is_ppc64 and self.machine == "pseries"
 

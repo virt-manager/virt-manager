@@ -614,7 +614,7 @@ class Guest(XMLBuilder):
             return
         if self.os.is_container():
             return
-        if self.os.arch not in ["x86_64", "i686", "ppc64", "ia64"]:
+        if self.os.arch not in ["x86_64", "i686", "ppc64", "ppc64le", "ia64"]:
             return
         self.add_device(VirtualGraphics(self.conn))
 
