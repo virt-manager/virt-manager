@@ -183,8 +183,8 @@ class vmmConfig(object):
         try:
             # Check we can open the Python guestfs module.
             from guestfs import GuestFS  # pylint: disable=import-error
-            GuestFS(close_on_exit=False)
-            return True
+            g = GuestFS(close_on_exit=False)
+            return bool(getattr(g, "add_libvirt_dom", None))
         except:
             return False
 
