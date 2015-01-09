@@ -471,6 +471,7 @@ c.add_compare(""" \
 \
 --disk none \
 --console none \
+--channel none \
 --network none \
 --controller usb2 \
 --graphics spice \
