@@ -174,7 +174,7 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         devnames = []
         for nodedev in self.conn.get_nodedevs("net"):
-            devnames.append(nodedev.name)
+            devnames.append(nodedev.interface)
         for iface in self.conn.list_interfaces():
             if iface.get_name() not in devnames:
                 devnames.append(iface.get_name())
