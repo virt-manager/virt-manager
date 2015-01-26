@@ -728,7 +728,8 @@ class Guest(XMLBuilder):
         hpet.present = False
 
         if (self._lookup_osdict_key("hyperv_features", False) and
-            self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK)):
+            self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_CLOCK) and
+            self._hv_supported()):
             hyperv = self.clock.add_timer()
             hyperv.name = "hypervclock"
             hyperv.present = True
@@ -775,6 +776,12 @@ class Guest(XMLBuilder):
                 return
             self.cpu.set_special_mode(self.x86_cpu_default)
 
+    def _hv_supported(self):
+        if (self.os.loader_type == "pflash" and
+            self.os_variant in ("win2k8r2", "win7")):
+            return False
+        return True
+
     def _set_feature_defaults(self):
         if self.os.is_container():
             self.features.acpi = None
@@ -800,6 +807,7 @@ class Guest(XMLBuilder):
             self.features.pae = self.conn.caps.support_pae()
 
         if (self._lookup_osdict_key("hyperv_features", False) and
+            self._hv_supported() and
             self.conn.check_support(self.conn.SUPPORT_CONN_HYPERV_VAPIC)):
             if self.features.hyperv_relaxed is None:
                 self.features.hyperv_relaxed = True
