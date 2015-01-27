@@ -1345,9 +1345,14 @@ class vmmDetails(vmmGObjectUI):
 
     def activate_default_console_page(self):
         pages = self.widget("details-pages")
-        if pages.get_current_page() != DETAILS_PAGE_CONSOLE:
-            return
+
+        # console.activate_default_console_page() will as a side effect
+        # switch to DETAILS_PAGE_CONSOLE. However this code path is triggered
+        # when the user runs a VM while they are focused on the details page,
+        # and we don't want to switch pages out from under them.
+        origpage = pages.get_current_page()
         self.console.activate_default_console_page()
+        pages.set_current_page(origpage)
 
     # activate_* are called from engine.py via CLI options
     def activate_default_page(self):
