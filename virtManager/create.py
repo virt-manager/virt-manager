@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2008, 2013, 2014 Red Hat, Inc.
+# Copyright (C) 2008, 2013, 2014, 2015 Red Hat, Inc.
 # Copyright (C) 2008 Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -1651,7 +1651,7 @@ class vmmCreate(vmmGObjectUI):
             n_cpus = res["n-cpus"]
         self.widget("config-cpus").set_value(n_cpus)
 
-        storage_size = 8
+        storage_size = 20
         if res and res.get("storage"):
             storage_size = int(res["storage"]) / (1024 ** 3)
         self.addstorage.widget("config-storage-size").set_value(storage_size)
