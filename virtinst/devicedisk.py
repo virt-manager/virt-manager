@@ -633,7 +633,11 @@ class VirtualDisk(VirtualDevice):
 
         path = ""
         if poolxml.source_name:
-            path += poolxml.source_name + "/"
+            path += poolxml.source_name
+            if poolxml.source_path:
+                path += poolxml.source_path
+            if not path.endswith('/'):
+                path += "/"
         path += volxml.name
         self.source_name = path
         self.type = "network"

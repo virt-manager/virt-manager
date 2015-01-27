@@ -534,7 +534,7 @@ c.add_compare(""" \
 --disk pool=rbd-ceph,size=.1 \
 --disk source_protocol=http,source_host_name=example.com,source_host_port=8000,source_name=/path/to/my/file \
 --disk source_protocol=nbd,source_host_transport=unix,source_host_socket=/tmp/socket,bus=scsi \
---disk gluster://192.168.1.100/test-volume/test-gluster.qcow2 \
+--disk gluster://192.168.1.100/test-volume/some/dir/test-gluster.qcow2 \
 --disk qemu+nbd:///var/foo/bar/socket,bus=usb,removable=on \
 --disk path=http://[1:2:3:4:1:2:3:4]:5522/my/path?query=foo \
 --disk vol=gluster-pool/test-gluster.raw,startup_policy=optional \

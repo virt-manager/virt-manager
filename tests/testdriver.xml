@@ -1859,17 +1859,17 @@ ba</description>
   <available unit='bytes'>475283320832</available>
   <source>
     <host name='192.168.1.100'/>
-    <dir path='/'/>
+    <dir path='/some/dir'/>
     <name>test-volume</name>
   </source>
 
   <volume type='network'>
     <name>test-gluster.raw</name>
-    <key>gluster://192.168.1.100/test-volume/test-gluster.raw</key>
+    <key>gluster://192.168.1.100/test-volume/some/dir/test-gluster.raw</key>
     <capacity unit='bytes'>10737418240</capacity>
     <allocation unit='bytes'>2489327616</allocation>
     <target>
-      <path>gluster://192.168.1.100/test-volume/test-gluster.raw</path>
+      <path>gluster://192.168.1.100/test-volume/some/dir/test-gluster.raw</path>
       <format type='raw'/>
       <permissions>
         <mode>0666</mode>
@@ -1881,11 +1881,11 @@ ba</description>
 
   <volume type='network'>
     <name>test-gluster2.raw</name>
-    <key>gluster://192.168.1.100/test-volume/test-gluster2.raw</key>
+    <key>gluster://192.168.1.100/test-volume/some/dir/test-gluster2.raw</key>
     <capacity unit='bytes'>10737418240</capacity>
     <allocation unit='bytes'>2489327616</allocation>
     <target>
-      <path>gluster://192.168.1.100/test-volume/test-gluster2.raw</path>
+      <path>gluster://192.168.1.100/test-volume/some/dir/test-gluster2.raw</path>
       <format type='raw'/>
       <permissions>
         <mode>0666</mode>

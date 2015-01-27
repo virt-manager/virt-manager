@@ -98,8 +98,8 @@
       <target dev="sdb" bus="scsi"/>
     </disk>
     <disk type="network" device="disk">
-      <driver name="qemu" type="qcow2"/>
-      <source protocol="gluster" name="test-volume/test-gluster.qcow2">
+      <driver name="qemu"/>
+      <source protocol="gluster" name="test-volume/some/dir/test-gluster.qcow2">
         <host name="192.168.1.100"/>
       </source>
       <target dev="vdj" bus="virtio"/>
@@ -120,7 +120,7 @@
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu" type="raw"/>
-      <source protocol="gluster" name="test-volume/test-gluster.raw" startupPolicy="optional">
+      <source protocol="gluster" name="test-volume/some/dir/test-gluster.raw" startupPolicy="optional">
         <host name="192.168.1.100"/>
       </source>
       <target dev="vdl" bus="virtio"/>
