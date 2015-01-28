@@ -878,8 +878,9 @@
                                       <object class="GtkLabel" id="label27">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">&lt;b&gt;IPv4 configuration&lt;/b&gt;</property>
+                                        <property name="label" translatable="yes">&lt;b&gt;_IPv4 configuration&lt;/b&gt;</property>
                                         <property name="use_markup">True</property>
+                                        <property name="use_underline">True</property>
                                       </object>
                                     </child>
                                   </object>
@@ -1050,10 +1051,11 @@
                                         <property name="orientation">vertical</property>
                                         <child>
                                           <object class="GtkCheckButton" id="net-qos-inbound-enable">
-                                            <property name="label" translatable="yes">Enable inbound QoS</property>
+                                            <property name="label" translatable="yes">Enable i_nbound QoS</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="use_underline">True</property>
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="on_net_qos_inbound_enable_toggled" swapped="no"/>
@@ -1148,10 +1150,11 @@
                                         </child>
                                         <child>
                                           <object class="GtkCheckButton" id="net-qos-outbound-enable">
-                                            <property name="label" translatable="yes">Enable outbound QoS</property>
+                                            <property name="label" translatable="yes">Enable ou_tbound QoS</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="use_underline">True</property>
                                             <property name="xalign">0</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="on_net_qos_outbound_enable_toggled" swapped="no"/>
@@ -1250,8 +1253,9 @@
                                       <object class="GtkLabel" id="label38">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">&lt;b&gt;QoS configuration&lt;/b&gt;</property>
+                                        <property name="label" translatable="yes">&lt;b&gt;_QoS configuration&lt;/b&gt;</property>
                                         <property name="use_markup">True</property>
+                                        <property name="use_underline">True</property>
                                       </object>
                                     </child>
                                   </object>
