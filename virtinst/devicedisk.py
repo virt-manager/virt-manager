@@ -533,10 +533,16 @@ class VirtualDisk(VirtualDevice):
     path = property(_get_path, _set_path)
 
     def set_vol_object(self, vol_object, parent_pool):
+        logging.debug("disk.set_vol_object: volxml=\n%s",
+            vol_object.XMLDesc(0))
+        logging.debug("disk.set_vol_object: poolxml=\n%s",
+            parent_pool.XMLDesc(0))
         self._change_backend(None, vol_object, parent_pool)
         self._set_xmlpath(self.path)
 
     def set_vol_install(self, vol_install):
+        logging.debug("disk.set_vol_install: name=%s poolxml=\n%s",
+            vol_install.name, vol_install.pool.XMLDesc(0))
         self._storage_backend = diskbackend.ManagedStorageCreator(
             self.conn, vol_install)
         self._set_xmlpath(self.path)
