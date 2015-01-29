@@ -1568,7 +1568,7 @@ class ParserDisk(VirtCLIParser):
                 raise ValueError(_("Storage volume must be specified as "
                                    "vol=poolname/volname"))
             poolname, volname = volname.split("/")
-            logging.debug("Parsed volume: as pool='%s' vol='%s'",
+            logging.debug("Parsed --disk volume as: pool=%s vol=%s",
                           poolname, volname)
 
         inst = VirtCLIParser._parse(self, opts, inst)
