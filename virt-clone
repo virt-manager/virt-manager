@@ -120,6 +120,8 @@ def parse_args():
     geng.add_argument("-n", "--name", dest="new_name",
                     help=_("Name for the new guest"))
     geng.add_argument("-u", "--uuid", dest="new_uuid", help=argparse.SUPPRESS)
+    geng.add_argument("--reflink", action="store_true", dest="reflink",
+            help=_("use btrfs COW lightweight copy"))
 
     stog = parser.add_argument_group(_("Storage Configuration"))
     stog.add_argument("-f", "--file", dest="new_diskfile", action="append",
@@ -178,6 +180,8 @@ def main(conn=None):
     get_clone_macaddr(options.new_mac, design)
     if options.new_uuid is not None:
         design.clone_uuid = options.new_uuid
+    if options.reflink is True:
+        design.reflink = True
     for i in options.target or []:
         design.force_target = i
     design.clone_sparse = options.sparse

@@ -557,6 +557,7 @@ class StorageVolume(_StorageObject):
         self._input_vol = None
         self._pool = None
         self._pool_xml = None
+        self._reflink = False
 
         # Indicate that the volume installation has finished. Used to
         # definitively tell the storage progress thread to stop polling.
@@ -596,6 +597,17 @@ class StorageVolume(_StorageObject):
     input_vol = property(_get_input_vol, _set_input_vol,
                          doc=_("virStorageVolume pointer to clone/use as "
                                "input."))
+
+    def _get_reflink(self):
+        return self._reflink
+    def _set_reflink(self, reflink):
+        if not self.conn.check_support(self.conn.SUPPORT_POOL_REFLINK):
+            raise ValueError(_("Creating storage by btrfs COW copy is"
+                " not supported by this libvirt version."))
+
+        self._reflink = reflink
+    reflink = property(_get_reflink, _set_reflink,
+            doc="flags for VIR_STORAGE_VOL_CREATE_REFLINK")
 
     def sync_input_vol(self):
         # Pull parameters from input vol into this class
@@ -747,6 +759,9 @@ class StorageVolume(_StorageObject):
             self.conn.check_support(
                 self.conn.SUPPORT_POOL_METADATA_PREALLOC, self.pool)):
             createflags |= libvirt.VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA
+
+        if self.reflink:
+            cloneflags |= libvirt.VIR_STORAGE_VOL_CREATE_REFLINK
 
 
         try:

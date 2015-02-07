@@ -340,6 +340,9 @@ SUPPORT_POOL_LISTALLVOLUMES = _make(
 SUPPORT_POOL_METADATA_PREALLOC = _make(
     flag="VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA",
     version="1.0.1")
+SUPPORT_POOL_REFLINK = _make(
+    flag="VIR_STORAGE_VOL_CREATE_REFLINK",
+    version="1.2.13")
 
 
 # Interface checks

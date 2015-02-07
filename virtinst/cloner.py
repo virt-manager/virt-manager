@@ -63,6 +63,7 @@ class Cloner(object):
         self._preserve = True
         self._clone_running = False
         self._replace = False
+        self._reflink = False
 
         # Default clone policy for back compat: don't clone readonly,
         # shareable, or empty disks
@@ -259,6 +260,13 @@ class Cloner(object):
     replace = property(_get_replace, _set_replace,
                        doc="If enabled, don't check for clone name collision, "
                            "simply undefine any conflicting guest.")
+    def _get_reflink(self):
+        return self._reflink
+    def _set_reflink(self, reflink):
+        self._reflink = reflink
+    reflink = property(_get_reflink, _set_reflink,
+            doc="If true, use COW lightweight copy")
+
     # Functional methods
 
     def setup_original(self):
@@ -343,6 +351,7 @@ class Cloner(object):
                 clone_vol_install.input_vol = orig_disk.get_vol_object()
                 vol_install = clone_vol_install
 
+            vol_install.reflink = self.reflink
             clone_disk.set_vol_install(vol_install)
         elif orig_disk.path:
             clone_disk.set_local_disk_to_clone(orig_disk, self.clone_sparse)
