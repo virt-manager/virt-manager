@@ -563,22 +563,11 @@ class SpiceViewer(Viewer):
                          modal=True)
 
     def get_usb_widget(self):
-
-        # The @format positional parameters are the following:
-        # 1 '%s' manufacturer
-        # 2 '%s' product
-        # 3 '%s' descriptor (a [vendor_id:product_id] string)
-        # 4 '%d' bus
-        # 5 '%d' address
-
-        usb_device_description_fmt = _("%s %s %s at %d-%d")
-
         if not self.spice_session:
             return
 
-        usbwidget = SpiceClientGtk.UsbDeviceWidget.new(
-                                                self.spice_session,
-                                                usb_device_description_fmt)
+        usbwidget = SpiceClientGtk.UsbDeviceWidget.new(self.spice_session,
+            None)
         usbwidget.connect("connect-failed", self._usbdev_redirect_error)
         return usbwidget
 

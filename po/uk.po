@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-11 12:50-0500\n"
+"POT-Creation-Date: 2015-02-11 13:13-0500\n"
 "PO-Revision-Date: 2015-01-03 08:59+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/projects/p/virt-manager/"
@@ -1439,70 +1439,59 @@ msgstr "Помилка під час відкриття шляху до соке
 msgid "USB redirection error"
 msgstr "Помилка переспрямування USB"
 
-#. The @format positional parameters are the following:
-#. 1 '%s' manufacturer
-#. 2 '%s' product
-#. 3 '%s' descriptor (a [vendor_id:product_id] string)
-#. 4 '%d' bus
-#. 5 '%d' address
-#: ../virtManager/console.py:574
-#, python-format
-msgid "%s %s %s at %d-%d"
-msgstr "%s %s %s на %d-%d"
-
-#: ../virtManager/console.py:728
+#: ../virtManager/console.py:717
 msgid "Leave fullscreen"
 msgstr "Вийти з повноекранного режиму"
 
-#: ../virtManager/console.py:749
+#: ../virtManager/console.py:738
 msgid "Send key combination"
 msgstr "Надіслати комбінацію ключів"
 
-#: ../virtManager/console.py:776 ../ui/details.ui.h:1
+#: ../virtManager/console.py:765 ../ui/details.ui.h:1
 msgid "Virtual Machine"
 msgstr "Віртуальна машина"
 
-#: ../virtManager/console.py:780
+#: ../virtManager/console.py:769
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "Натисніть %s, щоб вивільнити вказівник."
 
-#: ../virtManager/console.py:863
+#: ../virtManager/console.py:852
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr ""
 "Типом графіки «%s» не передбачено підтримки автоматичної зміни розмірів."
 
-#: ../virtManager/console.py:866
+#: ../virtManager/console.py:855
 msgid "Guest agent is not available."
 msgstr "Агент гостьової системи недоступний."
 
 #. Guest isn't running, schedule another try
-#: ../virtManager/console.py:1006 ../virtManager/console.py:1210
+#: ../virtManager/console.py:995 ../virtManager/console.py:1199
 msgid "Guest not running"
 msgstr "Гостьову систему не запущено"
 
-#: ../virtManager/console.py:1009
+#: ../virtManager/console.py:998
 msgid "Guest has crashed"
 msgstr "Гостьова система аварійно завершила роботу"
 
-#: ../virtManager/console.py:1148
+#: ../virtManager/console.py:1137
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
 msgstr ""
 "Помилка: відмовлено у з’єднанні або розірвано з’єднання переглядача з "
 "основною системою гіпервізора!"
 
-#: ../virtManager/console.py:1229
+#: ../virtManager/console.py:1218
 msgid "Graphical console not configured for guest"
 msgstr "Для гостьової систем не налаштовано графічної консолі"
 
-#: ../virtManager/console.py:1236
+#: ../virtManager/console.py:1225
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Неможливо показати дані графічної консолі типу «%s»"
 
-#: ../virtManager/console.py:1244
+#: ../virtManager/console.py:1233
 #, python-format
 msgid ""
 "Guest is on a remote host with transport '%s'\n"
@@ -1515,31 +1504,31 @@ msgstr ""
 "Встановіть з’єднання за допомогою каналу «ssh» або змініть адресу\n"
 "очікування на дані гостьової системи."
 
-#: ../virtManager/console.py:1252
+#: ../virtManager/console.py:1241
 msgid "Graphical console is not yet active for guest"
 msgstr "Графічну консоль гостьової системи ще не активовано"
 
-#: ../virtManager/console.py:1257
+#: ../virtManager/console.py:1246
 msgid "Connecting to graphical console for guest"
 msgstr "З’єднання з графічною консоллю гостьової системи"
 
-#: ../virtManager/console.py:1274
+#: ../virtManager/console.py:1263
 msgid "Error connecting to graphical console"
 msgstr "Помилка під час спроби з’єднання з графічною консоллю"
 
-#: ../virtManager/console.py:1417
+#: ../virtManager/console.py:1406
 msgid "No text console available"
 msgstr "Текстова консоль недоступна"
 
-#: ../virtManager/console.py:1441
+#: ../virtManager/console.py:1430
 msgid "No graphical console available"
 msgstr "Графічна консоль недоступна"
 
-#: ../virtManager/console.py:1448
+#: ../virtManager/console.py:1437
 msgid "Graphical Console"
 msgstr "Графічна консоль"
 
-#: ../virtManager/console.py:1456
+#: ../virtManager/console.py:1445
 msgid "virt-manager does not support more that one graphical console"
 msgstr ""
 "У virt-manager передбачено підтримку не більше однієї графічної консолі"
@@ -7661,3 +7650,6 @@ msgstr "_Локальний огляд"
 #: ../ui/storagebrowse.ui.h:5
 msgid "Choose _Volume"
 msgstr "Вибрати _том"
+
+#~ msgid "%s %s %s at %d-%d"
+#~ msgstr "%s %s %s на %d-%d"

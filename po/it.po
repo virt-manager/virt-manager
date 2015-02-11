@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-11 12:50-0500\n"
+"POT-Creation-Date: 2015-02-11 13:13-0500\n"
 "PO-Revision-Date: 2015-01-02 20:44+0000\n"
 "Last-Translator: Cole Robinson <crobinso@redhat.com>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/virt-manager/"
@@ -1345,69 +1345,58 @@ msgstr "Errore nell'apertura del percorso del socket '%s'"
 msgid "USB redirection error"
 msgstr "Errore redirezione USB"
 
-#. The @format positional parameters are the following:
-#. 1 '%s' manufacturer
-#. 2 '%s' product
-#. 3 '%s' descriptor (a [vendor_id:product_id] string)
-#. 4 '%d' bus
-#. 5 '%d' address
-#: ../virtManager/console.py:574
-#, python-format
-msgid "%s %s %s at %d-%d"
-msgstr "%s %s %s a %d-%d"
-
-#: ../virtManager/console.py:728
+#: ../virtManager/console.py:717
 msgid "Leave fullscreen"
 msgstr "Lasciare a schermo intero"
 
-#: ../virtManager/console.py:749
+#: ../virtManager/console.py:738
 msgid "Send key combination"
 msgstr "Invia combinazione di tasti"
 
-#: ../virtManager/console.py:776 ../ui/details.ui.h:1
+#: ../virtManager/console.py:765 ../ui/details.ui.h:1
 msgid "Virtual Machine"
 msgstr "Macchina virtuale"
 
-#: ../virtManager/console.py:780
+#: ../virtManager/console.py:769
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "Premere %s per rilasciare il puntatore del mouse."
 
-#: ../virtManager/console.py:863
+#: ../virtManager/console.py:852
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr ""
 
-#: ../virtManager/console.py:866
+#: ../virtManager/console.py:855
 msgid "Guest agent is not available."
 msgstr ""
 
 #. Guest isn't running, schedule another try
-#: ../virtManager/console.py:1006 ../virtManager/console.py:1210
+#: ../virtManager/console.py:995 ../virtManager/console.py:1199
 msgid "Guest not running"
 msgstr "Guest non in esecuzione"
 
-#: ../virtManager/console.py:1009
+#: ../virtManager/console.py:998
 msgid "Guest has crashed"
 msgstr "Il guest è andato in crash"
 
-#: ../virtManager/console.py:1148
+#: ../virtManager/console.py:1137
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
 msgstr ""
 "Errore: la connessione all'host dell'hypervisor è stata rifiutata o "
 "interrotta!"
 
-#: ../virtManager/console.py:1229
+#: ../virtManager/console.py:1218
 msgid "Graphical console not configured for guest"
 msgstr "Console grafica non configurata per il guest"
 
-#: ../virtManager/console.py:1236
+#: ../virtManager/console.py:1225
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Impossibile mostrare la console grafica di tipo '%s'"
 
-#: ../virtManager/console.py:1244
+#: ../virtManager/console.py:1233
 #, python-format
 msgid ""
 "Guest is on a remote host with transport '%s'\n"
@@ -1416,31 +1405,31 @@ msgid ""
 "guest's listen address."
 msgstr ""
 
-#: ../virtManager/console.py:1252
+#: ../virtManager/console.py:1241
 msgid "Graphical console is not yet active for guest"
 msgstr "La console grafica non è ancora attiva per il guest"
 
-#: ../virtManager/console.py:1257
+#: ../virtManager/console.py:1246
 msgid "Connecting to graphical console for guest"
 msgstr "Connessione alla console grafica per il guest"
 
-#: ../virtManager/console.py:1274
+#: ../virtManager/console.py:1263
 msgid "Error connecting to graphical console"
 msgstr "Errore durante la connessione alla console grafica"
 
-#: ../virtManager/console.py:1417
+#: ../virtManager/console.py:1406
 msgid "No text console available"
 msgstr "Nessuna console di testo disponibile"
 
-#: ../virtManager/console.py:1441
+#: ../virtManager/console.py:1430
 msgid "No graphical console available"
 msgstr "Nessuna console grafica disponibile"
 
-#: ../virtManager/console.py:1448
+#: ../virtManager/console.py:1437
 msgid "Graphical Console"
 msgstr ""
 
-#: ../virtManager/console.py:1456
+#: ../virtManager/console.py:1445
 msgid "virt-manager does not support more that one graphical console"
 msgstr ""
 
@@ -7438,3 +7427,6 @@ msgstr "_Sfoglia in locale"
 #: ../ui/storagebrowse.ui.h:5
 msgid "Choose _Volume"
 msgstr "Seleziona _Volume"
+
+#~ msgid "%s %s %s at %d-%d"
+#~ msgstr "%s %s %s a %d-%d"
