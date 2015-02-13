@@ -607,9 +607,12 @@ Path to a disk to use as the backing store for the newly created image.
 =item B<cache>
 
 The cache mode to be used. The host pagecache provides cache memory.
-The cache value can be 'none', 'writethrough', or 'writeback'.
+The cache value can be 'none', 'writethrough', 'directsync', 'unsafe'
+or 'writeback'.
 'writethrough' provides read caching. 'writeback' provides
-read and write caching.
+read and write caching. 'directsync' bypasses the host page
+cache. 'unsafe' may cache all content and ignore flush requests from
+the guest.
 
 =item B<discard>
 
