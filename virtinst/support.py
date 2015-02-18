@@ -53,16 +53,16 @@ def _get_flag(flag_name):
 
 # Try to call the passed function, and look for signs that libvirt or driver
 # doesn't support it
-def _try_command(func, args, check_all_error=False):
+def _try_command(func, run_args, check_all_error=False):
     try:
-        func(*args)
+        func(*run_args)
     except libvirt.libvirtError, e:
         if util.is_error_nosupport(e):
             return False
 
         if check_all_error:
             return False
-    except Exception:
+    except Exception, e:
         # Other python exceptions likely mean the bindings are horked
         return False
     return True
@@ -80,7 +80,7 @@ def _split_function_name(function):
         return (output[0], output[1])
 
 
-def _check_function(function, flag, args, data):
+def _check_function(function, flag, run_args, data):
     object_name, function_name = _split_function_name(function)
     if not function_name:
         return None
@@ -98,7 +98,7 @@ def _check_function(function, flag, args, data):
             return False
         flag_tuple = (found_flag,)
 
-    if args is None:
+    if run_args is None:
         return None
 
     # If function requires an object, make sure the passed obj
@@ -113,7 +113,7 @@ def _check_function(function, flag, args, data):
     cmd = _get_command(function_name, obj=data)
 
     # Function with args specified is all the proof we need
-    return _try_command(cmd, args + flag_tuple,
+    return _try_command(cmd, run_args + flag_tuple,
                         check_all_error=bool(flag_tuple))
 
 
