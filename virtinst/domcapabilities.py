@@ -18,6 +18,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 
+import re
+
 from .xmlbuilder import XMLBuilder, XMLChildProperty
 from .xmlbuilder import XMLProperty as _XMLProperty
 
@@ -76,6 +78,58 @@ class _Devices(_CapsBlock):
 
 
 class DomainCapabilities(XMLBuilder):
+    @staticmethod
+    def build_from_guest(guest):
+        if not guest.conn.check_support(
+            guest.conn.SUPPORT_CONN_DOMAIN_CAPABILITIES):
+            # If not supported, just use a stub object
+            return DomainCapabilities(guest.conn)
+
+        xml = guest.conn.getDomainCapabilities(
+            guest.emulator, guest.os.arch, guest.os.machine, guest.type)
+        return DomainCapabilities(guest.conn, parsexml=xml)
+
+    # Mapping of UEFI binary names to their associated architectures. We
+    # only use this info to do things automagically for the user, it shouldn't
+    # validate anything the user explicitly enters.
+    _uefi_arch_patterns = {
+        "x86_64": [
+            ".*OVMF_CODE\.fd",  # RHEL
+            ".*ovmf-x64/OVMF.*\.fd",  # gerd's firmware repo
+        ],
+        "aarch64": [
+            ".*AAVMF_CODE\.fd",  # RHEL
+            ".*aarch64/QEMU_EFI.*",  # gerd's firmware repo
+        ],
+    }
+
+    def find_uefi_path_for_arch(self, arch):
+        """
+        Search the loader paths for one that matches the passed arch
+        """
+        if not self.arch_can_uefi(arch):
+            return
+
+        patterns = self._uefi_arch_patterns.get(arch)
+        for pattern in patterns:
+            for path in [v.value for v in self.os.loader.values]:
+                if re.match(pattern, path):
+                    return path
+
+    def arch_can_uefi(self, arch):
+        """
+        Return True if we know how to setup UEFI for the passed arch
+        """
+        return arch in self._uefi_arch_patterns.keys()
+
+    def supports_uefi_xml(self):
+        """
+        Return True if libvirt advertises support for proper UEFI setup
+        """
+        return ("readonly" in self.os.loader.enum_names() and
+                "yes" in self.os.loader.get_enum("readonly").get_values())
+
+
     _XML_ROOT_NAME = "domainCapabilities"
     os = XMLChildProperty(_OS, is_single=True)
     devices = XMLChildProperty(_Devices, is_single=True)

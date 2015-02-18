@@ -803,8 +803,7 @@ class vmmDetails(vmmGObjectUI):
             uefipath = domcaps.os.loader.values[0].value
 
         warn_icon = self.widget("overview-firmware-warn")
-        hv_supports_uefi = ("readonly" in domcaps.os.loader.enum_names() and
-            "yes" in domcaps.os.loader.get_enum("readonly").get_values())
+        hv_supports_uefi = domcaps.supports_uefi_xml()
         if not hv_supports_uefi:
             warn_icon.set_tooltip_text(
                 _("Libvirt or hypervisor does not support UEFI."))
@@ -826,7 +825,7 @@ class vmmDetails(vmmGObjectUI):
         self.widget("overview-firmware-label").set_visible(
             not self.is_customize_dialog)
         show_firmware = ((self.conn.is_qemu() or self.conn.is_test_conn()) and
-            arch in ["i686", "x86_64"] and
+            domcaps.arch_can_uefi(arch) and
             not self.vm.is_management_domain())
         uiutil.set_grid_row_visible(
             self.widget("overview-firmware-title"), show_firmware)

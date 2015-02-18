@@ -46,6 +46,7 @@ from .domainmemorybacking import DomainMemorybacking
 from .domainmemorytune import DomainMemorytune
 from .domainnumatune import DomainNumatune
 from .domainresource import DomainResource
+from .domcapabilities import DomainCapabilities
 from .idmap import IdMap
 from .osxml import OSXML
 from .pm import PM
@@ -527,6 +528,35 @@ class Guest(XMLBuilder):
         @returns: dict value, or None if os_type/variant wasn't set
         """
         return osdict.lookup_osdict_key(self.os_variant, key, default)
+
+
+    ###########################
+    # XML convenience helpers #
+    ###########################
+
+    def set_uefi_default(self):
+        """
+        Configure UEFI for the VM, but only if libvirt is advertising
+        a known UEFI binary path.
+        """
+        domcaps = DomainCapabilities.build_from_guest(self)
+
+        if not domcaps.supports_uefi_xml():
+            raise RuntimeError(_("Libvirt version does not support UEFI."))
+
+        if not domcaps.arch_can_uefi(self.os.arch):
+            raise RuntimeError(
+                _("Don't know how to setup UEFI for arch '%s'") %
+                self.os.arch)
+
+        path = domcaps.find_uefi_path_for_arch(self.os.arch)
+        if not path:
+            raise RuntimeError(_("Did not find any UEFI binary path for "
+                "arch '%s'") % self.os.arch)
+
+        self.os.loader_ro = True
+        self.os.loader_type = "pflash"
+        self.os.loader = path
 
 
     ###################

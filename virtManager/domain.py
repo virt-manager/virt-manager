@@ -508,17 +508,9 @@ class vmmDomain(vmmLibvirtObject):
                      "image allocated to the guest.")
 
     def get_domain_capabilities(self):
-        if not self.conn.check_support(
-            self.conn.SUPPORT_CONN_DOMAIN_CAPABILITIES):
-            self._domain_caps = DomainCapabilities(self.conn.get_backend())
-
         if not self._domain_caps:
-            xml = self.conn.get_backend().getDomainCapabilities(
-                self.get_xmlobj().emulator, self.get_xmlobj().os.arch,
-                self.get_xmlobj().os.machine, self.get_xmlobj().type)
-            self._domain_caps = DomainCapabilities(self.conn.get_backend(),
-                parsexml=xml)
-
+            self._domain_caps = DomainCapabilities.build_from_guest(
+                self.get_xmlobj())
         return self._domain_caps
 
 

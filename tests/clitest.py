@@ -460,7 +460,7 @@ c.add_compare(""" \
 --vcpus 4 --cpuset=1,3-5 \
 --cpu host \
 --description \"foobar & baz\" \
---boot network,hd,menu=on \
+--boot uefi \
 --security type=dynamic \
 --numatune 1,2,3,5-7,^6 \
 --memorybacking hugepages=on \
@@ -675,6 +675,8 @@ c.add_invalid("--graphics spice,tlsport=5")  # Invalid port
 c.add_invalid("--serial unix")  # Unix with no path
 c.add_invalid("--serial null,path=/tmp/foo")  # Path where it doesn't belong
 c.add_invalid("--channel pty,target_type=guestfwd")  # --channel guestfwd without target_address
+c.add_invalid("--boot uefi")  # URI doesn't support UEFI bits
+c.add_invalid("--connect %(KVMURI)s --boot uefi,arch=ppc64")  # unsupported arch for UEFI
 
 
 

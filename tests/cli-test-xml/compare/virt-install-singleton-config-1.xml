@@ -13,9 +13,8 @@
   </numatune>
   <os>
     <type arch="x86_64">hvm</type>
-    <boot dev="network"/>
+    <loader readonly="yes" type="pflash">/usr/share/OVMF/OVMF_CODE.fd</loader>
     <boot dev="hd"/>
-    <bootmenu enable="yes"/>
   </os>
   <features>
     <acpi/>

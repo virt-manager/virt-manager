@@ -696,7 +696,7 @@ class _VirtCLIArgument(object):
                  setter_cb=None, ignore_default=False,
                  can_comma=False, aliases=None,
                  is_list=False, is_onoff=False,
-                 lookup_cb=None):
+                 lookup_cb=None, is_novalue=False):
         """
         A single subargument passed to compound command lines like --disk,
         --network, etc.
@@ -722,6 +722,8 @@ class _VirtCLIArgument(object):
             it to true/false.
         @lookup_cb: If specified, use this function for performing match
             lookups.
+        @is_novalue: If specified, the parameter is not expected in the
+            form FOO=BAR, but just FOO.
         """
         self.attrname = attrname
         self.cliname = cliname
@@ -733,6 +735,7 @@ class _VirtCLIArgument(object):
         self.is_list = is_list
         self.is_onoff = is_onoff
         self.lookup_cb = lookup_cb
+        self.is_novalue = is_novalue
 
 
     def parse(self, opts, inst, support_cb=None, lookup=False):
@@ -740,7 +743,7 @@ class _VirtCLIArgument(object):
         for cliname in self.aliases + [self.cliname]:
             # We iterate over all values unconditionally, so they are
             # removed from opts
-            foundval = opts.get_opt_param(cliname)
+            foundval = opts.get_opt_param(cliname, self.is_novalue)
             if foundval is not None:
                 val = foundval
         if val is None:
@@ -809,12 +812,16 @@ class VirtOptionString(object):
         self.opts, self.orderedopts = self._parse_optstr(
             virtargmap, remove_first)
 
-    def get_opt_param(self, key):
+    def get_opt_param(self, key, is_novalue=False):
         if key not in self.opts:
             return None
+
         ret = self.opts.pop(key)
         if ret is None:
-            raise RuntimeError("Option '%s' had no value set." % key)
+            if not is_novalue:
+                raise RuntimeError("Option '%s' had no value set." % key)
+            ret = ""
+
         return ret
 
     def check_leftover_opts(self):
@@ -1280,6 +1287,19 @@ class ParserBoot(VirtCLIParser):
     def _init_params(self):
         self.clear_attr = "os"
 
+        # UEFI depends on these bits, so set them first
+        self.set_param("os.arch", "arch")
+        self.set_param("type", "domain_type")
+        self.set_param("os.os_type", "os_type")
+        self.set_param("emulator", "emulator")
+
+        def set_uefi(opts, inst, cliname, val):
+            ignore = opts
+            ignore = cliname
+            ignore = val
+            inst.set_uefi_default()
+        self.set_param(None, "uefi", setter_cb=set_uefi, is_novalue=True)
+
         self.set_param("os.useserial", "useserial", is_onoff=True)
         self.set_param("os.enable_bootmenu", "menu", is_onoff=True)
         self.set_param("os.kernel", "kernel")
@@ -1293,11 +1313,7 @@ class ParserBoot(VirtCLIParser):
         self.set_param("os.kernel_args", "kernel_args",
             aliases=["extra_args"], can_comma=True)
         self.set_param("os.init", "init")
-        self.set_param("os.arch", "arch")
-        self.set_param("type", "domain_type")
         self.set_param("os.machine", "machine")
-        self.set_param("os.os_type", "os_type")
-        self.set_param("emulator", "emulator")
 
         def set_initargs_cb(opts, inst, cliname, val):
             ignore = opts
