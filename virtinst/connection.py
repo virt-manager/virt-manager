@@ -452,6 +452,17 @@ class VirtualConnection(object):
             capsxml = file(opts.pop("caps")).read()
             conn.getCapabilities = lambda: capsxml
 
+        # Fake domcapabilities. This is insufficient since output should
+        # vary per type/arch/emulator combo, but it can be expanded later
+        # if needed
+        if "domcaps" in opts:
+            domcapsxml = file(opts.pop("domcaps")).read()
+            def fake_domcaps(*args, **kwargs):
+                ignore = args
+                ignore = kwargs
+                return domcapsxml
+            conn.getDomainCapabilities = fake_domcaps
+
         if ("qemu" in opts) or ("xen" in opts) or ("lxc" in opts):
             opts.pop("qemu", None)
             opts.pop("xen", None)

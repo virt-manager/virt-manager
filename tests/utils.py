@@ -31,6 +31,7 @@ REGENERATE_OUTPUT = False
 # Access to protected member, needed to unittest stuff
 
 _capsprefix  = ",caps=%s/tests/capabilities-xml/" % os.getcwd()
+_domcapsprefix  = ",domcaps=%s/tests/capabilities-xml/" % os.getcwd()
 defaulturi = "__virtinst_test__test:///default,predictable"
 testuri = "__virtinst_test__test:///%s/tests/testdriver.xml,predictable" % os.getcwd()
 uriremote = testuri + ",remote"
@@ -38,7 +39,8 @@ uriqemu = "%s,qemu" % testuri
 urixen = "%s,xen" % testuri
 urixencaps = testuri + _capsprefix + "rhel5.4-xen-caps-virt-enabled.xml,xen"
 urixenia64 = testuri + _capsprefix + "xen-ia64-hvm.xml,xen"
-urikvm = uriqemu + _capsprefix + "libvirt-1.1.2-qemu-caps.xml"
+urikvm = (uriqemu + _capsprefix + "libvirt-1.1.2-qemu-caps.xml" +
+          _domcapsprefix + "domcapabilities-1.2.12-aavmf.xml")
 urilxc = testuri + _capsprefix + "capabilities-lxc.xml,lxc"
 
 
