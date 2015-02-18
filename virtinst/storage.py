@@ -601,7 +601,8 @@ class StorageVolume(_StorageObject):
     def _get_reflink(self):
         return self._reflink
     def _set_reflink(self, reflink):
-        if not self.conn.check_support(self.conn.SUPPORT_POOL_REFLINK):
+        if (reflink and not
+            self.conn.check_support(self.conn.SUPPORT_POOL_REFLINK)):
             raise ValueError(_("Creating storage by btrfs COW copy is"
                 " not supported by this libvirt version."))
 
