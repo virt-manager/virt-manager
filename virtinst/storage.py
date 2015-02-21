@@ -762,7 +762,8 @@ class StorageVolume(_StorageObject):
             createflags |= libvirt.VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA
 
         if self.reflink:
-            cloneflags |= libvirt.VIR_STORAGE_VOL_CREATE_REFLINK
+            cloneflags |= getattr(libvirt,
+                "VIR_STORAGE_VOL_CREATE_REFLINK", 1)
 
 
         try:
