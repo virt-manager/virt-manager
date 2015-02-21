@@ -39,8 +39,9 @@ uriqemu = "%s,qemu" % testuri
 urixen = "%s,xen" % testuri
 urixencaps = testuri + _capsprefix + "rhel5.4-xen-caps-virt-enabled.xml,xen"
 urixenia64 = testuri + _capsprefix + "xen-ia64-hvm.xml,xen"
-urikvm = (uriqemu + _capsprefix + "libvirt-1.1.2-qemu-caps.xml" +
-          _domcapsprefix + "domcapabilities-1.2.12-aavmf.xml")
+urikvm_nodomcaps = (uriqemu + _capsprefix + "libvirt-1.1.2-qemu-caps.xml")
+urikvm = (urikvm_nodomcaps +
+    _domcapsprefix + "domcapabilities-1.2.12-aavmf.xml")
 urilxc = testuri + _capsprefix + "capabilities-lxc.xml,lxc"
 
 

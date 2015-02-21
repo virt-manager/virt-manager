@@ -625,6 +625,20 @@ def build_guest_instance(conn, options, parsermap):
 
     guest.add_default_devices()
 
+    # Default to UEFI for aarch64
+    if (guest.os.is_arm64() and
+        not guest.os.kernel and
+        not guest.os.loader and
+        guest.os.loader_ro is None and
+        guest.os.nvram is None):
+        try:
+            guest.set_uefi_default()
+        except Exception, e:
+            logging.debug("Error setting UEFI default for aarch64",
+                exc_info=True)
+            logging.warn("Couldn't configure UEFI: %s", e)
+            logging.warn("Your aarch64 VM may not boot successfully.")
+
     # Various little validations about option collisions. Need to do
     # this after setting guest.installer at least
     check_option_collisions(options, guest)

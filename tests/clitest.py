@@ -78,6 +78,7 @@ test_files = {
     'DEFAULTURI'        : utils.defaulturi,
     'REMOTEURI'         : utils.uriremote,
     'KVMURI'            : utils.urikvm,
+    'KVMURI_NODOMCAPS'  : utils.urikvm_nodomcaps,
     'XENURI'            : utils.urixencaps,
     'XENIA64URI'        : utils.urixenia64,
     'LXCURI'            : utils.urilxc,
@@ -677,6 +678,7 @@ c.add_invalid("--serial null,path=/tmp/foo")  # Path where it doesn't belong
 c.add_invalid("--channel pty,target_type=guestfwd")  # --channel guestfwd without target_address
 c.add_invalid("--boot uefi")  # URI doesn't support UEFI bits
 c.add_invalid("--connect %(KVMURI)s --boot uefi,arch=ppc64")  # unsupported arch for UEFI
+c.add_valid("--connect %(KVMURI_NODOMCAPS)s --arch aarch64 --nodisks")  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
 
 
 
@@ -763,6 +765,7 @@ c.add_compare("--arch aarch64 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.init
 c.add_compare("--arch aarch64 --cdrom %(EXISTIMG2)s --boot loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s", "aarch64-cdrom")
 c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none", "ppc64-pseries-f20")
 c.add_compare("--arch ppc64 --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none", "ppc64-machdefault-f20")
+c.add_compare("--arch aarch64 --nodisks", "aarch64-default-uefi")  # ensure aarch64 defaults to UEFI
 c.add_compare("--disk none --location /tmp/fake.iso --nonetworks", "location-iso")  # Using --location iso mounting
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel6.4", "kvm-rhel6")  # RHEL6 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-rhel7")  # RHEL7 defaults
