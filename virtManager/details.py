@@ -780,13 +780,18 @@ class vmmDetails(vmmGObjectUI):
 
         show_machine = (arch not in ["i686", "x86_64"] and
                         not self.vm.is_management_domain())
-        uiutil.set_grid_row_visible(self.widget("machine-type"), show_machine)
+        uiutil.set_grid_row_visible(self.widget("machine-type-title"),
+            show_machine)
 
         if show_machine:
             for machine in machines:
                 if machine == "none":
                     continue
                 machtype_model.append([machine])
+
+        self.widget("machine-type").set_visible(self.is_customize_dialog)
+        self.widget("machine-type-label").set_visible(
+            not self.is_customize_dialog)
 
         # Firmware
         combo = self.widget("overview-firmware")
@@ -2405,10 +2410,13 @@ class vmmDetails(vmmGObjectUI):
 
         # Machine settings
         machtype = self.vm.get_machtype()
-        if arch not in ["i686", "x86_64"]:
-            if machtype is not None:
-                uiutil.set_combo_entry(self.widget("machine-type"), machtype)
+        if self.widget("machine-type").is_visible():
+            uiutil.set_combo_entry(
+                self.widget("machine-type"), machtype)
+        elif self.widget("machine-type-label").is_visible():
+            self.widget("machine-type-label").set_text(machtype)
 
+        # Chipset
         chipset = _chipset_label_from_machine(machtype)
         if self.widget("overview-chipset").is_visible():
             uiutil.set_combo_entry(
